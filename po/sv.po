@@ -8,7 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2004-03-01 22:45+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-04-26 22:03+0200\n"
 "PO-Revision-Date: 2004-03-01 22:45+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -658,7 +659,7 @@ msgid "Download Manager"
 msgstr "Hämtningshanterare"
 
 #: data/glade/epiphany.glade.h:8 data/ui/nautilus-epiphany-view.xml.h:11
-#: src/ephy-window.c:951
+#: src/ephy-window.c:1014
 msgid "Find"
 msgstr "Sök"
 
@@ -674,7 +675,7 @@ msgstr "Hanterare för personlig data"
 msgid "Text Encoding"
 msgstr "Textkodning"
 
-#: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:388
+#: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:389
 msgid "Use the encoding specified by the document"
 msgstr "Använd kodningen som är angiven i dokumentet"
 
@@ -819,7 +820,7 @@ msgid "_Add..."
 msgstr "_Lägg till..."
 
 #: data/glade/prefs-dialog.glade.h:34
-#: src/bookmarks/ephy-bookmark-properties.c:371
+#: src/bookmarks/ephy-bookmark-properties.c:370
 msgid "_Address:"
 msgstr "_Adress:"
 
@@ -855,7 +856,7 @@ msgstr "A_cceptera aldrig"
 msgid "_Remove"
 msgstr "_Ta bort"
 
-#: data/glade/prefs-dialog.glade.h:43 src/ephy-window.c:191
+#: data/glade/prefs-dialog.glade.h:43 src/ephy-window.c:198
 msgid "_Up"
 msgstr "_Upp"
 
@@ -940,7 +941,7 @@ msgid "Paper"
 msgstr "Papper"
 
 #: data/glade/print.glade.h:23 data/ui/nautilus-epiphany-view.xml.h:23
-#: src/ephy-window.c:947
+#: src/ephy-window.c:1010
 msgid "Print"
 msgstr "Skriv ut"
 
@@ -1131,7 +1132,7 @@ msgstr "Använd bild som bakgrund"
 
 #: data/ui/nautilus-epiphany-view.xml.h:33
 #: src/bookmarks/ephy-bookmarks-editor.c:162 src/ephy-history-window.c:152
-#: src/ephy-window.c:77
+#: src/ephy-window.c:84
 msgid "_Edit"
 msgstr "_Redigera"
 
@@ -1139,15 +1140,15 @@ msgstr "_Redigera"
 #. Toplevel
 #: data/ui/nautilus-epiphany-view.xml.h:34
 #: src/bookmarks/ephy-bookmarks-editor.c:161 src/ephy-history-window.c:151
-#: src/ephy-window.c:76
+#: src/ephy-window.c:83
 msgid "_File"
 msgstr "_Arkiv"
 
-#: data/ui/nautilus-epiphany-view.xml.h:35 src/ephy-window.c:134
+#: data/ui/nautilus-epiphany-view.xml.h:35 src/ephy-window.c:141
 msgid "_Find..."
 msgstr "_Sök..."
 
-#: data/ui/nautilus-epiphany-view.xml.h:36 src/ephy-window.c:105
+#: data/ui/nautilus-epiphany-view.xml.h:36 src/ephy-window.c:112
 msgid "_Print..."
 msgstr "Skriv _ut..."
 
@@ -1166,7 +1167,7 @@ msgid "_Resume"
 msgstr "_Återuppta"
 
 #: embed/downloader-view.c:343 lib/widgets/ephy-cell-renderer-progress.c:35
-#: src/ephy-window.c:1132
+#: src/ephy-window.c:1195
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -1596,7 +1597,7 @@ msgid "Local files"
 msgstr "Lokala filer"
 
 #: embed/mozilla/ContentHandler.cpp:134
-#: embed/mozilla/EphyHeaderSniffer.cpp:365
+#: embed/mozilla/EphyHeaderSniffer.cpp:362
 msgid "Save"
 msgstr "Spara"
 
@@ -1650,8 +1651,8 @@ msgstr ""
 "installerat som kan öppna den. Du kan spara den istället."
 
 #: embed/mozilla/EphyHeaderSniffer.cpp:331
-#: src/bookmarks/ephy-bookmarks-import.c:251 src/ephy-toolbars-model.c:201
-#: src/window-commands.c:342
+#: src/bookmarks/ephy-bookmarks-import.c:252 src/ephy-toolbars-model.c:201
+#: src/window-commands.c:343
 msgid "Untitled"
 msgstr "Namnlös"
 
@@ -1673,27 +1674,27 @@ msgstr ""
 "\n"
 "Vill du prova med standardalternativet i GNOME?"
 
-#: embed/mozilla/FilePicker.cpp:163
+#: embed/mozilla/FilePicker.cpp:162
 msgid "All files"
 msgstr "Alla filer"
 
-#: embed/mozilla/FilePicker.cpp:168
+#: embed/mozilla/FilePicker.cpp:167
 msgid "HTML files"
 msgstr "HTML-filer"
 
-#: embed/mozilla/FilePicker.cpp:173
+#: embed/mozilla/FilePicker.cpp:172
 msgid "Text files"
 msgstr "Textfiler"
 
-#: embed/mozilla/FilePicker.cpp:178
+#: embed/mozilla/FilePicker.cpp:177
 msgid "Image files"
 msgstr "Bildfiler"
 
-#: embed/mozilla/FilePicker.cpp:183
+#: embed/mozilla/FilePicker.cpp:182
 msgid "XML files"
 msgstr "XML-filer"
 
-#: embed/mozilla/FilePicker.cpp:188
+#: embed/mozilla/FilePicker.cpp:187
 msgid "XUL files"
 msgstr "XUL-filer"
 
@@ -2011,19 +2012,15 @@ msgstr ""
 "  %s\n"
 "Alla ytterligare fel visas endast i terminalen"
 
-#: lib/eel-gconf-extensions.c:90
-msgid "GConf Error"
-msgstr "GConf-fel"
-
-#: lib/egg/egg-editable-toolbar.c:510
+#: lib/egg/egg-editable-toolbar.c:512
 msgid "_Remove Toolbar"
 msgstr "_Ta bort verktygsrad"
 
-#: lib/egg/egg-toolbar-editor.c:552
+#: lib/egg/egg-toolbar-editor.c:559
 msgid "Separator"
 msgstr "Avskiljare"
 
-#: lib/egg/egg-toolbar-editor.c:582
+#: lib/egg/egg-toolbar-editor.c:589
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
@@ -2032,26 +2029,26 @@ msgstr ""
 "verktygsraderna i objekttabellen för att ta bort det."
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:72 src/prefs-dialog.c:1107
+#: lib/ephy-file-helpers.c:75 src/prefs-dialog.c:1108
 msgid "Downloads"
 msgstr "Hämtningar"
 
-#: lib/ephy-file-helpers.c:149
+#: lib/ephy-file-helpers.c:164
 #, c-format
 msgid "Failed to find %s"
 msgstr "Misslyckades med att hitta %s"
 
-#: lib/ephy-file-helpers.c:214
+#: lib/ephy-file-helpers.c:229
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s finns, flytta den först."
 
-#: lib/ephy-file-helpers.c:217
+#: lib/ephy-file-helpers.c:232
 #, c-format
 msgid "Failed to create directory %s."
 msgstr "Misslyckades med att skapa katalogen %s."
 
-#: lib/ephy-gui.c:90
+#: lib/ephy-gui.c:95
 #, c-format
 msgid ""
 "File %s will be overwritten.\n"
@@ -2064,7 +2061,7 @@ msgstr ""
 "\n"
 "Vill du fortsätta?"
 
-#: lib/ephy-gui.c:121
+#: lib/ephy-gui.c:127
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Kunde inte visa hjälp: %s"
@@ -2169,7 +2166,7 @@ msgstr "400%"
 msgid "Failed"
 msgstr "Misslyckades"
 
-#: src/bookmarks/ephy-bookmark-action.c:221
+#: src/bookmarks/ephy-bookmark-action.c:248
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -2179,27 +2176,27 @@ msgstr "%s:"
 msgid "%s Properties"
 msgstr "Egenskaper för %s"
 
-#: src/bookmarks/ephy-bookmark-properties.c:352
+#: src/bookmarks/ephy-bookmark-properties.c:351
 #: src/bookmarks/ephy-new-bookmark.c:215
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:394
+#: src/bookmarks/ephy-bookmark-properties.c:393
 #: src/bookmarks/ephy-new-bookmark.c:238
 msgid "To_pics:"
 msgstr "_Ämnen:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:403
+#: src/bookmarks/ephy-bookmark-properties.c:402
 msgid "_Show in bookmarks bar"
 msgstr "_Visa i bokmärkesraden"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:163 src/ephy-history-window.c:153
-#: src/ephy-window.c:78
+#: src/ephy-window.c:85
 msgid "_View"
 msgstr "_Visa"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:164 src/ephy-history-window.c:154
-#: src/ephy-window.c:83
+#: src/ephy-window.c:90
 msgid "_Help"
 msgstr "_Hjälp"
 
@@ -2214,7 +2211,7 @@ msgstr "Skapa ett nytt ämne"
 
 #. File Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:171
-#: src/bookmarks/ephy-bookmarks-editor.c:977 src/ephy-history-window.c:158
+#: src/bookmarks/ephy-bookmarks-editor.c:988 src/ephy-history-window.c:158
 #: src/ephy-history-window.c:738
 msgid "_Open in New Window"
 msgstr "_Öppna i nytt fönster"
@@ -2224,7 +2221,7 @@ msgid "Open the selected bookmark in a new window"
 msgstr "Öppna det markerade bokmärket i ett nytt fönster"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:174
-#: src/bookmarks/ephy-bookmarks-editor.c:978 src/ephy-history-window.c:161
+#: src/bookmarks/ephy-bookmarks-editor.c:989 src/ephy-history-window.c:161
 #: src/ephy-history-window.c:739
 msgid "Open in New _Tab"
 msgstr "Öppna i ny _flik"
@@ -2266,7 +2263,7 @@ msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Importera bokmärken från en annan webbläsare eller en bokmärkesfil"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:188 src/ephy-history-window.c:170
-#: src/ephy-window.c:111
+#: src/ephy-window.c:118
 msgid "_Close"
 msgstr "S_täng"
 
@@ -2276,28 +2273,28 @@ msgstr "Stäng bokmärkesfönstret"
 
 #. Edit Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:193 src/ephy-history-window.c:175
-#: src/ephy-window.c:122
+#: src/ephy-window.c:129
 msgid "Cu_t"
 msgstr "Klipp _ut"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:194 src/ephy-history-window.c:176
-#: src/ephy-window.c:123
+#: src/ephy-window.c:130
 msgid "Cut the selection"
 msgstr "Klipp ut markeringen"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:196
-#: src/bookmarks/ephy-bookmarks-editor.c:987 src/ephy-history-window.c:178
-#: src/ephy-history-window.c:748 src/ephy-window.c:125
+#: src/bookmarks/ephy-bookmarks-editor.c:998 src/ephy-history-window.c:178
+#: src/ephy-history-window.c:748 src/ephy-window.c:132
 msgid "_Copy"
 msgstr "_Kopiera"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:197 src/ephy-history-window.c:179
-#: src/ephy-window.c:126
+#: src/ephy-window.c:133
 msgid "Copy the selection"
 msgstr "Kopiera markeringen"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:199 src/ephy-history-window.c:181
-#: src/ephy-window.c:128
+#: src/ephy-window.c:135
 msgid "_Paste"
 msgstr "Klistra _in"
 
@@ -2306,7 +2303,7 @@ msgid "Paste the clipboard"
 msgstr "Klistra in från urklipp"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:202 src/ephy-history-window.c:184
-#: src/ephy-window.c:131
+#: src/ephy-window.c:138
 msgid "Select _All"
 msgstr "Markera _allt"
 
@@ -2316,7 +2313,7 @@ msgstr "Markera alla bokmärken eller text"
 
 #. Help Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:192
-#: src/ephy-window.c:222
+#: src/ephy-window.c:229
 msgid "_Contents"
 msgstr "_Innehåll"
 
@@ -2325,12 +2322,12 @@ msgid "Display bookmarks help"
 msgstr "Visa hjälp för bokmärken"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:195
-#: src/ephy-window.c:225
+#: src/ephy-window.c:232
 msgid "_About"
 msgstr "_Om"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:211 src/ephy-history-window.c:196
-#: src/ephy-window.c:226
+#: src/ephy-window.c:233
 msgid "Display credits for the web browser creators"
 msgstr "Visa tack till webbläsarens författare"
 
@@ -2364,68 +2361,68 @@ msgstr "Visa både titel- och adresskolumnerna"
 msgid "Type a topic"
 msgstr "Ange ett ämne"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:547
+#: src/bookmarks/ephy-bookmarks-editor.c:558
 msgid "Import bookmarks from file"
 msgstr "Importera bokmärken från fil"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:580
+#: src/bookmarks/ephy-bookmarks-editor.c:591
 msgid "Import Bookmarks"
 msgstr "Importera bokmärken"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:600
+#: src/bookmarks/ephy-bookmarks-editor.c:611
 msgid "Choose the bookmarks source:"
 msgstr "Välj bokmärkeskällan:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:618
+#: src/bookmarks/ephy-bookmarks-editor.c:629
 msgid "Mozilla bookmarks"
 msgstr "Mozilla-bokmärken"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:620
+#: src/bookmarks/ephy-bookmarks-editor.c:631
 msgid "Firebird bookmarks"
 msgstr "Firebird-bokmärken"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:622
+#: src/bookmarks/ephy-bookmarks-editor.c:633
 msgid "Galeon bookmarks"
 msgstr "Galeon-bokmärken"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:624
+#: src/bookmarks/ephy-bookmarks-editor.c:635
 msgid "Konqueror bookmarks"
 msgstr "Konqueror-bokmärken"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:628
+#: src/bookmarks/ephy-bookmarks-editor.c:639
 msgid "Import from a file"
 msgstr "Importera från en fil"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:972 src/ephy-history-window.c:733
+#: src/bookmarks/ephy-bookmarks-editor.c:983 src/ephy-history-window.c:733
 msgid "_Open in New Windows"
 msgstr "_Öppna i nya fönster"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:973 src/ephy-history-window.c:734
+#: src/bookmarks/ephy-bookmarks-editor.c:984 src/ephy-history-window.c:734
 msgid "Open in New _Tabs"
 msgstr "Öppna i nya _flikar"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:983 src/ephy-history-window.c:744
+#: src/bookmarks/ephy-bookmarks-editor.c:994 src/ephy-history-window.c:744
 msgid "_Copy Address"
 msgstr "_Kopiera adress"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1224 src/ephy-history-window.c:1038
+#: src/bookmarks/ephy-bookmarks-editor.c:1235 src/ephy-history-window.c:1038
 msgid "_Search:"
 msgstr "_Sök:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1357
-#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:953
+#: src/bookmarks/ephy-bookmarks-editor.c:1365
+#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:1016
 msgid "Bookmarks"
 msgstr "Bokmärken"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1440
+#: src/bookmarks/ephy-bookmarks-editor.c:1448
 msgid "Topics"
 msgstr "Ämnen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1502 src/ephy-history-window.c:1318
+#: src/bookmarks/ephy-bookmarks-editor.c:1510 src/ephy-history-window.c:1318
 msgid "Title"
 msgstr "Titel"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1509 src/ephy-history-window.c:1324
+#: src/bookmarks/ephy-bookmarks-editor.c:1517 src/ephy-history-window.c:1324
 msgid "Address"
 msgstr "Adress"
 
@@ -2501,15 +2498,15 @@ msgstr "Tom"
 msgid "Encodings"
 msgstr "Kodningar"
 
-#: src/ephy-encoding-menu.c:379
+#: src/ephy-encoding-menu.c:380
 msgid "_Other..."
 msgstr "_Annan..."
 
-#: src/ephy-encoding-menu.c:380
+#: src/ephy-encoding-menu.c:381
 msgid "Other encodings"
 msgstr "Andra kodningar"
 
-#: src/ephy-encoding-menu.c:387
+#: src/ephy-encoding-menu.c:388
 msgid "_Automatic"
 msgstr "_Automatisk"
 
@@ -2569,15 +2566,15 @@ msgstr "Visa endast adresskolumnen"
 msgid "Clear History"
 msgstr "Töm historik"
 
-#: src/ephy-history-window.c:278
+#: src/ephy-history-window.c:276
 msgid "C_lear"
 msgstr "T_öm"
 
-#: src/ephy-history-window.c:301
+#: src/ephy-history-window.c:300
 msgid "Clear browsing history?"
 msgstr "Töm bläddringshistorik?"
 
-#: src/ephy-history-window.c:308
+#: src/ephy-history-window.c:307
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2606,69 +2603,69 @@ msgstr "Historik"
 msgid "Sites"
 msgstr "Webbplatser"
 
-#: src/ephy-main.c:55
+#: src/ephy-main.c:56
 msgid "Open a new tab in an existing Epiphany window"
 msgstr "Öppna en ny flik i ett befintligt Epiphany-fönster"
 
-#: src/ephy-main.c:58
+#: src/ephy-main.c:59
 msgid "Run Epiphany in full screen mode"
 msgstr "Kör Epiphany i helskärmsläge"
 
-#: src/ephy-main.c:61
+#: src/ephy-main.c:62
 msgid "Load the given session file"
 msgstr "Läs in den angivna sessionsfilen"
 
-#: src/ephy-main.c:62 src/ephy-main.c:68
+#: src/ephy-main.c:63 src/ephy-main.c:69
 msgid "FILE"
 msgstr "FIL"
 
-#: src/ephy-main.c:64
+#: src/ephy-main.c:65
 msgid "Add a bookmark (don't open any window)"
 msgstr "Lägg till ett bokmärke (öppna inget fönster)"
 
-#: src/ephy-main.c:65
+#: src/ephy-main.c:66
 msgid "URL"
 msgstr "URL"
 
-#: src/ephy-main.c:67
+#: src/ephy-main.c:68
 msgid "Import bookmarks from the given file"
 msgstr "Importera bokmärken från den angivna filen"
 
-#: src/ephy-main.c:70
+#: src/ephy-main.c:71
 msgid "Launch the bookmarks editor"
 msgstr "Starta bokmärkesredigeraren"
 
-#: src/ephy-main.c:73
+#: src/ephy-main.c:74
 msgid "Used internally by the bonobo interface"
 msgstr "Används internt av bonobo-gränssnittet"
 
-#: src/ephy-main.c:108
+#: src/ephy-main.c:109
 msgid "Epiphany Web Browser"
 msgstr "Webbläsaren Epiphany"
 
-#: src/ephy-main.c:112
+#: src/ephy-main.c:113
 msgid "Ephy"
 msgstr "Epiphany"
 
-#: src/ephy-session.c:299
+#: src/ephy-session.c:301
 msgid "Crash Recovery"
 msgstr "Kraschåterställning"
 
-#: src/ephy-session.c:301
+#: src/ephy-session.c:303
 msgid "_Don't Recover"
 msgstr "_Återställ inte"
 
-#: src/ephy-session.c:302
+#: src/ephy-session.c:304
 msgid "_Recover"
 msgstr "_Återställ"
 
-#: src/ephy-session.c:332
+#: src/ephy-session.c:335
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
 "Epiphany verkar ha kraschat eller blivit dödat den senaste gången det kördes."
 
-#: src/ephy-session.c:338
+#: src/ephy-session.c:341
 msgid "You can recover the opened tabs and windows."
 msgstr "Du kan återställa de öppnade flikarna och fönstren."
 
@@ -2698,510 +2695,510 @@ msgstr ""
 "Epiphany kan inte användas just nu på grund av ett oväntat fel från Bonobo "
 "vid försök att lokalisera automatiseringsobjektet."
 
-#: src/ephy-tab.c:365 src/ephy-tab.c:1194 src/ephy-tab.c:1367
+#: src/ephy-tab.c:369 src/ephy-tab.c:1208 src/ephy-tab.c:1378
 msgid "Blank page"
 msgstr "Tom sida"
 
-#: src/ephy-tab.c:770
+#: src/ephy-tab.c:774
 msgid "site"
 msgstr "webbplats"
 
-#: src/ephy-tab.c:794
+#: src/ephy-tab.c:798
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Omdirigerar till %s..."
 
-#: src/ephy-tab.c:798
+#: src/ephy-tab.c:802
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Överför data från %s..."
 
-#: src/ephy-tab.c:802
+#: src/ephy-tab.c:806
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Väntar på auktorisering från %s..."
 
-#: src/ephy-tab.c:810
+#: src/ephy-tab.c:814
 #, c-format
 msgid "Loading %s..."
 msgstr "Läser in %s..."
 
-#: src/ephy-window.c:79
+#: src/ephy-window.c:86
 msgid "_Bookmarks"
 msgstr "_Bokmärken"
 
-#: src/ephy-window.c:80
+#: src/ephy-window.c:87
 msgid "_Go"
 msgstr "_Gå"
 
-#: src/ephy-window.c:81
+#: src/ephy-window.c:88
 msgid "T_ools"
 msgstr "V_erktyg"
 
-#: src/ephy-window.c:82
+#: src/ephy-window.c:89
 msgid "_Tabs"
 msgstr "_Flikar"
 
 #. File menu
-#: src/ephy-window.c:87
+#: src/ephy-window.c:94
 msgid "_New Window"
 msgstr "_Nytt fönster"
 
-#: src/ephy-window.c:88
+#: src/ephy-window.c:95
 msgid "Open a new window"
 msgstr "Öppna ett nytt fönster"
 
-#: src/ephy-window.c:90
+#: src/ephy-window.c:97
 msgid "New _Tab"
 msgstr "Ny _flik"
 
-#: src/ephy-window.c:91
+#: src/ephy-window.c:98
 msgid "Open a new tab"
 msgstr "Öppna en ny flik"
 
-#: src/ephy-window.c:93
+#: src/ephy-window.c:100
 msgid "_Open..."
 msgstr "_Öppna..."
 
-#: src/ephy-window.c:94
+#: src/ephy-window.c:101
 msgid "Open a file"
 msgstr "Öppna en fil"
 
-#: src/ephy-window.c:96
+#: src/ephy-window.c:103
 msgid "Save _As..."
 msgstr "Spara so_m..."
 
-#: src/ephy-window.c:97
+#: src/ephy-window.c:104
 msgid "Save the current page"
 msgstr "Spara den aktuella sidan"
 
-#: src/ephy-window.c:99
+#: src/ephy-window.c:106
 msgid "Print Set_up..."
 msgstr "Utskrifts_konfiguration..."
 
-#: src/ephy-window.c:100
+#: src/ephy-window.c:107
 msgid "Setup the page settings for printing"
 msgstr "Konfigurera sidinställningarna för utskrift"
 
-#: src/ephy-window.c:102
+#: src/ephy-window.c:109
 msgid "Print Pre_view"
 msgstr "Förhands_granskning"
 
-#: src/ephy-window.c:103
+#: src/ephy-window.c:110
 msgid "Print preview"
 msgstr "Förhandsgranskning"
 
-#: src/ephy-window.c:106
+#: src/ephy-window.c:113
 msgid "Print the current page"
 msgstr "Skriv ut den aktuella sidan"
 
-#: src/ephy-window.c:108
+#: src/ephy-window.c:115
 msgid "S_end To..."
 msgstr "S_kicka till..."
 
-#: src/ephy-window.c:109
+#: src/ephy-window.c:116
 msgid "Send a link of the current page"
 msgstr "Skicka en länk till den aktuella sidan"
 
-#: src/ephy-window.c:112
+#: src/ephy-window.c:119
 msgid "Close this window"
 msgstr "Stäng detta fönster"
 
 #. Edit menu
-#: src/ephy-window.c:116
+#: src/ephy-window.c:123
 msgid "_Undo"
 msgstr "_Ångra"
 
-#: src/ephy-window.c:117
+#: src/ephy-window.c:124
 msgid "Undo the last action"
 msgstr "Ångra den senaste åtgärden"
 
-#: src/ephy-window.c:119
+#: src/ephy-window.c:126
 msgid "Re_do"
 msgstr "_Gör om"
 
-#: src/ephy-window.c:120
+#: src/ephy-window.c:127
 msgid "Redo the last undone action"
 msgstr "Gör om den senast ångrade åtgärden"
 
-#: src/ephy-window.c:129
+#: src/ephy-window.c:136
 msgid "Paste clipboard"
 msgstr "Klistra in urklipp"
 
-#: src/ephy-window.c:132
+#: src/ephy-window.c:139
 msgid "Select the entire page"
 msgstr "Markera hela sidan"
 
-#: src/ephy-window.c:135
+#: src/ephy-window.c:142
 msgid "Find a word or phrase in the page"
 msgstr "Sök efter ett ord eller ett uttryck på sidan"
 
-#: src/ephy-window.c:137
+#: src/ephy-window.c:144
 msgid "Find Ne_xt"
 msgstr "Sök n_ästa"
 
-#: src/ephy-window.c:138
+#: src/ephy-window.c:145
 msgid "Find next occurrence of the word or phrase"
 msgstr "Sök nästa förekomst av strängen eller uttrycket"
 
-#: src/ephy-window.c:140
+#: src/ephy-window.c:147
 msgid "Find Pre_vious"
 msgstr "Sök före_gående"
 
-#: src/ephy-window.c:141
+#: src/ephy-window.c:148
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Sök föregående förekomst av strängen eller uttrycket"
 
-#: src/ephy-window.c:143
+#: src/ephy-window.c:150
 msgid "P_ersonal Data"
 msgstr "_Personlig data"
 
-#: src/ephy-window.c:144
+#: src/ephy-window.c:151
 msgid "View and remove cookies and passwords"
 msgstr "Visa och ta bort kakor och lösenord"
 
-#: src/ephy-window.c:146
+#: src/ephy-window.c:153
 msgid "T_oolbars"
 msgstr "V_erktygsrader"
 
-#: src/ephy-window.c:147
+#: src/ephy-window.c:154
 msgid "Customize toolbars"
 msgstr "Anpassa verktygsrader"
 
-#: src/ephy-window.c:149
+#: src/ephy-window.c:156
 msgid "P_references"
 msgstr "I_nställningar"
 
-#: src/ephy-window.c:150
+#: src/ephy-window.c:157
 msgid "Configure the web browser"
 msgstr "Konfigurera webbläsaren"
 
 #. View menu
-#: src/ephy-window.c:154
+#: src/ephy-window.c:161
 msgid "_Stop"
 msgstr "_Stopp"
 
-#: src/ephy-window.c:155
+#: src/ephy-window.c:162
 msgid "Stop current data transfer"
 msgstr "Stoppa den aktuella dataöverföringen"
 
-#: src/ephy-window.c:157
+#: src/ephy-window.c:164
 msgid "_Reload"
 msgstr "_Läs om"
 
-#: src/ephy-window.c:158
+#: src/ephy-window.c:165
 msgid "Display the latest content of the current page"
 msgstr "Visa det senaste innehållet på den aktuella sidan"
 
-#: src/ephy-window.c:160
+#: src/ephy-window.c:167
 msgid "Zoom _In"
 msgstr "Zooma _in"
 
-#: src/ephy-window.c:161
+#: src/ephy-window.c:168
 msgid "Increase the text size"
 msgstr "Öka textstorleken"
 
-#: src/ephy-window.c:163
+#: src/ephy-window.c:170
 msgid "Zoom _Out"
 msgstr "Zooma _ut"
 
-#: src/ephy-window.c:164
+#: src/ephy-window.c:171
 msgid "Decrease the text size"
 msgstr "Minska textstorleken"
 
-#: src/ephy-window.c:166
+#: src/ephy-window.c:173
 msgid "_Normal Size"
 msgstr "_Normal storlek"
 
-#: src/ephy-window.c:167
+#: src/ephy-window.c:174
 msgid "Use the normal text size"
 msgstr "Använd den normala textstorleken"
 
-#: src/ephy-window.c:169
+#: src/ephy-window.c:176
 msgid "Text _Encoding"
 msgstr "Text_kodning"
 
-#: src/ephy-window.c:170
+#: src/ephy-window.c:177
 msgid "Change the text encoding"
 msgstr "Ändra textkodningen"
 
-#: src/ephy-window.c:172
+#: src/ephy-window.c:179
 msgid "_Page Source"
 msgstr "Sidk_älla"
 
-#: src/ephy-window.c:173
+#: src/ephy-window.c:180
 msgid "View the source code of the page"
 msgstr "Visa källkoden för sidan"
 
 #. Bookmarks menu
-#: src/ephy-window.c:177
+#: src/ephy-window.c:184
 msgid "_Add Bookmark..."
 msgstr "_Lägg till bokmärke..."
 
-#: src/ephy-window.c:178 src/ephy-window.c:257
+#: src/ephy-window.c:185 src/ephy-window.c:264
 msgid "Add a bookmark for the current page"
 msgstr "Lägg till bokmärke för den aktuella sidan"
 
-#: src/ephy-window.c:180
+#: src/ephy-window.c:187
 msgid "_Edit Bookmarks"
 msgstr "_Redigera bokmärken"
 
-#: src/ephy-window.c:181
+#: src/ephy-window.c:188
 msgid "Open the bookmarks window"
 msgstr "Öppna bokmärkesfönstret"
 
 #. Go menu
-#: src/ephy-window.c:185
+#: src/ephy-window.c:192
 msgid "_Back"
 msgstr "_Bakåt"
 
-#: src/ephy-window.c:186
+#: src/ephy-window.c:193
 msgid "Go to the previous visited page"
 msgstr "Gå till till den tidigare besökta sidan"
 
-#: src/ephy-window.c:188
+#: src/ephy-window.c:195
 msgid "_Forward"
 msgstr "_Framåt"
 
-#: src/ephy-window.c:189
+#: src/ephy-window.c:196
 msgid "Go to the next visited page"
 msgstr "Gå till den nästa besökta sidan"
 
-#: src/ephy-window.c:192
+#: src/ephy-window.c:199
 msgid "Go up one level"
 msgstr "Gå upp en nivå"
 
-#: src/ephy-window.c:194
+#: src/ephy-window.c:201
 msgid "_Home"
 msgstr "_Hem"
 
-#: src/ephy-window.c:195
+#: src/ephy-window.c:202
 msgid "Go to the home page"
 msgstr "Gå till hemsidan"
 
-#: src/ephy-window.c:197
+#: src/ephy-window.c:204
 msgid "_Location..."
 msgstr "_Adress..."
 
-#: src/ephy-window.c:198
+#: src/ephy-window.c:205
 msgid "Go to a specified location"
 msgstr "Gå till en angiven adress"
 
-#: src/ephy-window.c:200
+#: src/ephy-window.c:207
 msgid "H_istory"
 msgstr "H_istorik"
 
-#: src/ephy-window.c:201
+#: src/ephy-window.c:208
 msgid "Open the history window"
 msgstr "Öppna historikfönstret"
 
 #. Tabs menu
-#: src/ephy-window.c:205
+#: src/ephy-window.c:212
 msgid "_Previous Tab"
 msgstr "_Föregående flik"
 
-#: src/ephy-window.c:206
+#: src/ephy-window.c:213
 msgid "Activate previous tab"
 msgstr "Aktivera föregående flik"
 
-#: src/ephy-window.c:208
+#: src/ephy-window.c:215
 msgid "_Next Tab"
 msgstr "_Nästa flik"
 
-#: src/ephy-window.c:209
+#: src/ephy-window.c:216
 msgid "Activate next tab"
 msgstr "Aktivera nästa flik"
 
-#: src/ephy-window.c:211
+#: src/ephy-window.c:218
 msgid "Move Tab _Left"
 msgstr "Flytta flik till _vänster"
 
-#: src/ephy-window.c:212
+#: src/ephy-window.c:219
 msgid "Move current tab to left"
 msgstr "Flytta den aktuella fliken till vänster"
 
-#: src/ephy-window.c:214
+#: src/ephy-window.c:221
 msgid "Move Tab _Right"
 msgstr "Flytta flik till _höger"
 
-#: src/ephy-window.c:215
+#: src/ephy-window.c:222
 msgid "Move current tab to right"
 msgstr "Flytta den aktuella fliken till höger"
 
-#: src/ephy-window.c:217
+#: src/ephy-window.c:224
 msgid "_Detach Tab"
 msgstr "_Ta loss flik"
 
-#: src/ephy-window.c:218
+#: src/ephy-window.c:225
 msgid "Detach current tab"
 msgstr "Ta loss den aktuella fliken"
 
-#: src/ephy-window.c:223
+#: src/ephy-window.c:230
 msgid "Display web browser help"
 msgstr "Visa hjälp för webbläsaren"
 
 #. View Menu
-#: src/ephy-window.c:234
+#: src/ephy-window.c:241
 msgid "_Toolbar"
 msgstr "_Verktygsrad"
 
-#: src/ephy-window.c:235
+#: src/ephy-window.c:242
 msgid "Show or hide toolbar"
 msgstr "Visa eller dölj verktygsrad"
 
-#: src/ephy-window.c:237
+#: src/ephy-window.c:244
 msgid "_Bookmarks Bar"
 msgstr "_Bokmärkesrad"
 
-#: src/ephy-window.c:238
+#: src/ephy-window.c:245
 msgid "Show or hide bookmarks bar"
 msgstr "Visa eller dölj bokmärkesraden"
 
-#: src/ephy-window.c:240
+#: src/ephy-window.c:247
 msgid "St_atusbar"
 msgstr "St_atusrad"
 
-#: src/ephy-window.c:241
+#: src/ephy-window.c:248
 msgid "Show or hide statusbar"
 msgstr "Visa eller dölj statusrad"
 
-#: src/ephy-window.c:243
+#: src/ephy-window.c:250
 msgid "_Fullscreen"
 msgstr "_Helskärm"
 
-#: src/ephy-window.c:244
+#: src/ephy-window.c:251
 msgid "Browse at full screen"
 msgstr "Surfa i helskärmsläge"
 
-#: src/ephy-window.c:246
+#: src/ephy-window.c:253
 msgid "Selection Caret"
 msgstr "Markeringsmarkör"
 
 #. Document
-#: src/ephy-window.c:254
+#: src/ephy-window.c:261
 msgid "_Save Background As..."
 msgstr "_Spara bakgrund som..."
 
-#: src/ephy-window.c:256
+#: src/ephy-window.c:263
 msgid "Add Boo_kmark..."
 msgstr "Lägg till bo_kmärke..."
 
 #. Framed document
-#: src/ephy-window.c:261
+#: src/ephy-window.c:268
 msgid "_Open Frame"
 msgstr "_Öppna ram"
 
-#: src/ephy-window.c:263
+#: src/ephy-window.c:270
 msgid "Open Frame in _New Window"
 msgstr "Öppna ram i _nytt fönster"
 
-#: src/ephy-window.c:265
+#: src/ephy-window.c:272
 msgid "Open Frame in New _Tab"
 msgstr "Öppna ram i ny _flik"
 
 #. Links
-#: src/ephy-window.c:269
+#: src/ephy-window.c:276
 msgid "_Open Link"
 msgstr "_Öppna länk"
 
-#: src/ephy-window.c:271
+#: src/ephy-window.c:278
 msgid "Open Link in _New Window"
 msgstr "Öppna länk i _nytt fönster"
 
-#: src/ephy-window.c:273
+#: src/ephy-window.c:280
 msgid "Open Link in New _Tab"
 msgstr "Öppna länk i ny _flik"
 
-#: src/ephy-window.c:275
+#: src/ephy-window.c:282
 msgid "_Download Link"
 msgstr "_Hämta länk"
 
-#: src/ephy-window.c:277
+#: src/ephy-window.c:284
 msgid "_Save Link As..."
 msgstr "_Spara länk som..."
 
-#: src/ephy-window.c:279
+#: src/ephy-window.c:286
 msgid "_Bookmark Link..."
 msgstr "_Lägg till bokmärke för länk..."
 
-#: src/ephy-window.c:281
+#: src/ephy-window.c:288
 msgid "_Copy Link Address"
 msgstr "_Kopiera länkadress"
 
 #. Images
-#: src/ephy-window.c:285
+#: src/ephy-window.c:292
 msgid "Open _Image"
 msgstr "Öppna _bild"
 
-#: src/ephy-window.c:287
+#: src/ephy-window.c:294
 msgid "Open Image in New _Window"
 msgstr "Öppna bild i nytt _fönster"
 
-#: src/ephy-window.c:289
+#: src/ephy-window.c:296
 msgid "Open Image in New T_ab"
 msgstr "Öppna bild i ny f_lik"
 
-#: src/ephy-window.c:291
+#: src/ephy-window.c:298
 msgid "_Save Image As..."
 msgstr "_Spara bild som..."
 
-#: src/ephy-window.c:293
+#: src/ephy-window.c:300
 msgid "_Use Image As Background"
 msgstr "_Använd bild som bakgrund"
 
-#: src/ephy-window.c:295
+#: src/ephy-window.c:302
 msgid "Copy I_mage Address"
 msgstr "Kopiera _bildadress"
 
-#: src/ephy-window.c:584
+#: src/ephy-window.c:547
 msgid "Exit Fullscreen"
 msgstr "Avsluta helskärmsläge"
 
-#: src/ephy-window.c:658
+#: src/ephy-window.c:621
 msgid "_Close document"
 msgstr "S_täng dokument"
 
-#: src/ephy-window.c:685
+#: src/ephy-window.c:648
 msgid "There are unsubmitted changes to form elements."
 msgstr "Det finns oskickade ändringar i tabellelement."
 
-#: src/ephy-window.c:686
+#: src/ephy-window.c:649
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Om du ändå stänger dokumentet kommer du att förlora den informationen."
 
-#: src/ephy-window.c:943 src/window-commands.c:395
+#: src/ephy-window.c:1006 src/window-commands.c:396
 msgid "Open"
 msgstr "Öppna"
 
-#: src/ephy-window.c:945 src/window-commands.c:420
+#: src/ephy-window.c:1008 src/window-commands.c:421
 msgid "Save As"
 msgstr "Spara som"
 
-#: src/ephy-window.c:949
+#: src/ephy-window.c:1012
 msgid "Bookmark"
 msgstr "Bokmärke"
 
-#: src/ephy-window.c:1135
+#: src/ephy-window.c:1198
 msgid "Insecure"
 msgstr "Osäker"
 
-#: src/ephy-window.c:1138
+#: src/ephy-window.c:1201
 msgid "Broken"
 msgstr "Trasig"
 
-#: src/ephy-window.c:1141
+#: src/ephy-window.c:1204
 msgid "Medium"
 msgstr "Mellan"
 
-#: src/ephy-window.c:1145
+#: src/ephy-window.c:1208
 msgid "Low"
 msgstr "Låg"
 
-#: src/ephy-window.c:1149
+#: src/ephy-window.c:1212
 msgid "High"
 msgstr "Hög"
 
-#: src/ephy-window.c:1159
+#: src/ephy-window.c:1222
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3210,7 +3207,7 @@ msgstr ""
 "Säkerhetsnivå: %s\n"
 "%s"
 
-#: src/ephy-window.c:1165
+#: src/ephy-window.c:1228
 #, c-format
 msgid "Security level: %s"
 msgstr "Säkerhetsnivå: %s"
@@ -3478,7 +3475,7 @@ msgstr "Vietnamesiska"
 msgid "Walloon"
 msgstr "Vallonska"
 
-#: src/prefs-dialog.c:1057
+#: src/prefs-dialog.c:1058
 #, c-format
 msgid "Custom [%s]"
 msgstr "Anpassat [%s]"
@@ -3487,15 +3484,15 @@ msgstr "Anpassat [%s]"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1102
+#: src/prefs-dialog.c:1103
 msgid "Home"
 msgstr "Hem"
 
-#: src/prefs-dialog.c:1111
+#: src/prefs-dialog.c:1112
 msgid "Desktop"
 msgstr "Skrivbord"
 
-#: src/prefs-dialog.c:1322
+#: src/prefs-dialog.c:1321
 msgid "Select a directory"
 msgstr "Välj en katalog"
 
@@ -3548,29 +3545,32 @@ msgstr "Favoritikon"
 msgid "Go to the address entered in the address entry"
 msgstr "Gå till adressen som är angiven i adressfältet"
 
-#: src/window-commands.c:168
+#: src/window-commands.c:169
 msgid "Check this out!"
 msgstr "Kolla här!"
 
-#: src/window-commands.c:881
+#: src/window-commands.c:854
 msgid "Toolbar Editor"
 msgstr "Verktygsradsredigerare"
 
-#: src/window-commands.c:903
+#: src/window-commands.c:876
 msgid "_Add a New Toolbar"
 msgstr "_Lägg till en ny verktygsrad"
 
 #. Translator credits
-#: src/window-commands.c:955
+#: src/window-commands.c:927
 msgid "translator-credits"
 msgstr ""
 "Christian Rose\n"
 "Dennis Persson\n"
 "Skicka synpunkter på översättningen till sv@li.org"
 
-#: src/window-commands.c:985
+#: src/window-commands.c:957
 msgid "A GNOME browser based on Mozilla"
 msgstr "En GNOME-webbläsare, baserad på Mozilla"
+
+#~ msgid "GConf Error"
+#~ msgstr "GConf-fel"
 
 #~ msgid "The bookmark information shown in the editor view"
 #~ msgstr "Bokmärkesinformationen som visas i redigerarvyn"

@@ -9,13 +9,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.gnome-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-17 14:12+0100\n"
+"POT-Creation-Date: 2004-04-26 22:03+0200\n"
 "PO-Revision-Date: 2004-03-17 17:37+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: data/GNOME_Epiphany_Automation.server.in.h:1
 msgid "Epiphany automation"
@@ -110,7 +110,8 @@ msgid ""
 "Disables loading of content from unsafe protocols. Safe protocols are http: "
 "and https:."
 msgstr ""
-"Disables loading of content from unsafe protocols. Найдвартай протоколууд бол http: ба https:."
+"Disables loading of content from unsafe protocols. Найдвартай протоколууд "
+"бол http: ба https:."
 
 #: data/epiphany-lockdown.schemas.in.h:15
 msgid "Hide menubar by default"
@@ -642,7 +643,7 @@ msgid "Download Manager"
 msgstr "Файл татах менежер"
 
 #: data/glade/epiphany.glade.h:8 data/ui/nautilus-epiphany-view.xml.h:11
-#: src/ephy-window.c:951
+#: src/ephy-window.c:1014
 msgid "Find"
 msgstr "Хайх"
 
@@ -658,7 +659,7 @@ msgstr "Хувийн өгөгдлийн менежер"
 msgid "Text Encoding"
 msgstr "Текст кодчилол"
 
-#: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:388
+#: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:389
 msgid "Use the encoding specified by the document"
 msgstr "Документэд тодорхойлсон кодчилол хэрэглэх"
 
@@ -803,7 +804,7 @@ msgid "_Add..."
 msgstr "_Нэмэх..."
 
 #: data/glade/prefs-dialog.glade.h:34
-#: src/bookmarks/ephy-bookmark-properties.c:367
+#: src/bookmarks/ephy-bookmark-properties.c:370
 msgid "_Address:"
 msgstr "Хаяг:"
 
@@ -839,7 +840,7 @@ msgstr "Хэзээ ч хүлээн авахгүй"
 msgid "_Remove"
 msgstr "_Устгах"
 
-#: data/glade/prefs-dialog.glade.h:43 src/ephy-window.c:191
+#: data/glade/prefs-dialog.glade.h:43 src/ephy-window.c:198
 msgid "_Up"
 msgstr "Дээшлэх"
 
@@ -924,7 +925,7 @@ msgid "Paper"
 msgstr "Цаас"
 
 #: data/glade/print.glade.h:23 data/ui/nautilus-epiphany-view.xml.h:23
-#: src/ephy-window.c:947
+#: src/ephy-window.c:1010
 msgid "Print"
 msgstr "Хэвлэх"
 
@@ -1115,22 +1116,22 @@ msgstr "Зургийг арын дэвсгэр болгон ашиглах"
 
 #: data/ui/nautilus-epiphany-view.xml.h:33
 #: src/bookmarks/ephy-bookmarks-editor.c:162 src/ephy-history-window.c:152
-#: src/ephy-window.c:77
+#: src/ephy-window.c:84
 msgid "_Edit"
 msgstr "Засварлах"
 
 #. Toplevel
 #: data/ui/nautilus-epiphany-view.xml.h:34
 #: src/bookmarks/ephy-bookmarks-editor.c:161 src/ephy-history-window.c:151
-#: src/ephy-window.c:76
+#: src/ephy-window.c:83
 msgid "_File"
 msgstr "Файл"
 
-#: data/ui/nautilus-epiphany-view.xml.h:35 src/ephy-window.c:134
+#: data/ui/nautilus-epiphany-view.xml.h:35 src/ephy-window.c:141
 msgid "_Find..."
 msgstr "Хайх"
 
-#: data/ui/nautilus-epiphany-view.xml.h:36 src/ephy-window.c:105
+#: data/ui/nautilus-epiphany-view.xml.h:36 src/ephy-window.c:112
 msgid "_Print..."
 msgstr "Хэвлэх..."
 
@@ -1149,24 +1150,30 @@ msgid "_Resume"
 msgstr "Эхлэх"
 
 #: embed/downloader-view.c:343 lib/widgets/ephy-cell-renderer-progress.c:35
-#: src/ephy-window.c:1132
+#: src/ephy-window.c:1195
 msgid "Unknown"
 msgstr "Үл мэдэгдэх"
 
 #: embed/downloader-view.c:394
-#, c-format
+#, fuzzy, c-format
 msgid "About %d second left"
-msgstr "Ойролцоогоор %d секунт өнгөрлөө"
+msgid_plural "About %d seconds left"
+msgstr[0] "Ойролцоогоор %d секунт өнгөрлөө"
+msgstr[1] "Ойролцоогоор %d секунт өнгөрлөө"
 
 #: embed/downloader-view.c:402
-#, c-format
+#, fuzzy, c-format
 msgid "About %d minute left"
-msgstr "Ойролцоогоор·%d·минут·өнгөрлөө"
+msgid_plural "About %d minutes left"
+msgstr[0] "Ойролцоогоор·%d·минут·өнгөрлөө"
+msgstr[1] "Ойролцоогоор·%d·минут·өнгөрлөө"
 
 #: embed/downloader-view.c:409
-#, c-format
+#, fuzzy, c-format
 msgid "%d download"
-msgstr "%d Татац"
+msgid_plural "%d downloads"
+msgstr[0] "%d Татац"
+msgstr[1] "%d Татац"
 
 #: embed/downloader-view.c:515
 msgid "%"
@@ -1603,7 +1610,8 @@ msgid ""
 "It's not possible to view this file type directly in the browser. You can "
 "open it with another application or save it."
 msgstr ""
-"Энэ төрлийн файлуудыг та хөтөчөөр харах боломжгүй. Та үүнийг өөр програмаар нээх эсвэл түүнийг хадгалаж чадна."
+"Энэ төрлийн файлуудыг та хөтөчөөр харах боломжгүй. Та үүнийг өөр програмаар "
+"нээх эсвэл түүнийг хадгалаж чадна."
 
 #: embed/mozilla/ContentHandler.cpp:303
 msgid "Download the file?"
@@ -1617,7 +1625,7 @@ msgstr ""
 
 #: embed/mozilla/EphyHeaderSniffer.cpp:331
 #: src/bookmarks/ephy-bookmarks-import.c:252 src/ephy-toolbars-model.c:201
-#: src/window-commands.c:342
+#: src/window-commands.c:343
 msgid "Untitled"
 msgstr "Гарчиглагдаагүй"
 
@@ -1639,27 +1647,27 @@ msgstr ""
 "\n"
 "Та GNOME тухайн сонголтыг ашиглах уу?"
 
-#: embed/mozilla/FilePicker.cpp:163
+#: embed/mozilla/FilePicker.cpp:162
 msgid "All files"
 msgstr "Бүх файлууд"
 
-#: embed/mozilla/FilePicker.cpp:168
+#: embed/mozilla/FilePicker.cpp:167
 msgid "HTML files"
 msgstr "HTML файлууд"
 
-#: embed/mozilla/FilePicker.cpp:173
+#: embed/mozilla/FilePicker.cpp:172
 msgid "Text files"
 msgstr "Текст файлууд"
 
-#: embed/mozilla/FilePicker.cpp:178
+#: embed/mozilla/FilePicker.cpp:177
 msgid "Image files"
 msgstr "Зургийн файлууд"
 
-#: embed/mozilla/FilePicker.cpp:183
+#: embed/mozilla/FilePicker.cpp:182
 msgid "XML files"
 msgstr "XML файлууд"
 
-#: embed/mozilla/FilePicker.cpp:188
+#: embed/mozilla/FilePicker.cpp:187
 msgid "XUL files"
 msgstr "XUL файлууд"
 
@@ -1700,7 +1708,8 @@ msgstr ""
 #: embed/mozilla/GtkNSSDialogs.cpp:300
 #, c-format
 msgid "You should only accept the security information if you trust %s and %s."
-msgstr "Хэрвээ та  %s ба %s-д итгэж байвал л хамгаалалтын мэдээллийг зөвшөөрөөрэй."
+msgstr ""
+"Хэрвээ та  %s ба %s-д итгэж байвал л хамгаалалтын мэдээллийг зөвшөөрөөрэй."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:305
 msgid "Accept incorrect security information?"
@@ -1898,8 +1907,7 @@ msgstr ""
 #: embed/mozilla/GtkNSSDialogs.cpp:1305
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
-msgstr ""
-"Энэ үнэмлэхийг баталж чадсангүй. Учир нь CA үнэмлэх хүчингүй."
+msgstr "Энэ үнэмлэхийг баталж чадсангүй. Учир нь CA үнэмлэх хүчингүй."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1310
 msgid "Could not verify this certificate for unknown reasons."
@@ -1913,7 +1921,8 @@ msgstr "Хувийн түлхүүр үүсгэж байна."
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
-msgstr "Хувийн түлхүүр үүсгэгдэх хүртэл хүлээнэ үү. Энэ хэдэн минут үргэлжилж болно."
+msgstr ""
+"Хувийн түлхүүр үүсгэгдэх хүртэл хүлээнэ үү. Энэ хэдэн минут үргэлжилж болно."
 
 #: embed/mozilla/mozilla-embed-single.cpp:501
 msgid ""
@@ -1962,10 +1971,6 @@ msgstr ""
 "  %s\n"
 "Бүх алдаанууд зөвхөн терминалд харагдана"
 
-#: lib/eel-gconf-extensions.c:90
-msgid "GConf Error"
-msgstr "GConf алдаа"
-
 #: lib/egg/egg-editable-toolbar.c:512
 msgid "_Remove Toolbar"
 msgstr "Товчны самбарыг авч хаях"
@@ -1981,7 +1986,7 @@ msgid ""
 msgstr "Товчыг самбар руу чирч оруулж нэмэх, мөн чирч гаргаад хасаж болно."
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:75 src/prefs-dialog.c:1107
+#: lib/ephy-file-helpers.c:75 src/prefs-dialog.c:1108
 msgid "Downloads"
 msgstr "Татацууд"
 
@@ -2000,7 +2005,7 @@ msgstr "%s байна, өөр газар зөөнө үү."
 msgid "Failed to create directory %s."
 msgstr "%s нэртэй каталог үүсгэж чадсангүй."
 
-#: lib/ephy-gui.c:90
+#: lib/ephy-gui.c:95
 #, c-format
 msgid ""
 "File %s will be overwritten.\n"
@@ -2013,7 +2018,7 @@ msgstr ""
 "\n"
 "Та үргэлжлүүлэх үү?"
 
-#: lib/ephy-gui.c:121
+#: lib/ephy-gui.c:127
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Туслажийг харуулж чадсангүй: %s"
@@ -2128,27 +2133,27 @@ msgstr "%s:"
 msgid "%s Properties"
 msgstr "%s шинжүүд"
 
-#: src/bookmarks/ephy-bookmark-properties.c:348
+#: src/bookmarks/ephy-bookmark-properties.c:351
 #: src/bookmarks/ephy-new-bookmark.c:215
 msgid "_Title:"
 msgstr "Гарчиг:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:390
+#: src/bookmarks/ephy-bookmark-properties.c:393
 #: src/bookmarks/ephy-new-bookmark.c:238
 msgid "To_pics:"
 msgstr "Гарчгууд:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:399
+#: src/bookmarks/ephy-bookmark-properties.c:402
 msgid "_Show in bookmarks bar"
 msgstr "Хавчуургын самбарт харуулах"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:163 src/ephy-history-window.c:153
-#: src/ephy-window.c:78
+#: src/ephy-window.c:85
 msgid "_View"
 msgstr "Харах"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:164 src/ephy-history-window.c:154
-#: src/ephy-window.c:83
+#: src/ephy-window.c:90
 msgid "_Help"
 msgstr "Тусламж"
 
@@ -2163,7 +2168,7 @@ msgstr "Шинэ гарчиг үүсгэх"
 
 #. File Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:171
-#: src/bookmarks/ephy-bookmarks-editor.c:977 src/ephy-history-window.c:158
+#: src/bookmarks/ephy-bookmarks-editor.c:988 src/ephy-history-window.c:158
 #: src/ephy-history-window.c:738
 msgid "_Open in New Window"
 msgstr "Шинэ цонх нээх"
@@ -2173,7 +2178,7 @@ msgid "Open the selected bookmark in a new window"
 msgstr "Сонгогдсон тэмдэглэгээг шинэ цонхонд нээх"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:174
-#: src/bookmarks/ephy-bookmarks-editor.c:978 src/ephy-history-window.c:161
+#: src/bookmarks/ephy-bookmarks-editor.c:989 src/ephy-history-window.c:161
 #: src/ephy-history-window.c:739
 msgid "Open in New _Tab"
 msgstr "Шинэ таб нээх"
@@ -2215,7 +2220,7 @@ msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Тэмдэглэгээг өөр хөтөч эсвэл файлаас оруулж ирэх"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:188 src/ephy-history-window.c:170
-#: src/ephy-window.c:111
+#: src/ephy-window.c:118
 msgid "_Close"
 msgstr "Хаах"
 
@@ -2225,28 +2230,28 @@ msgstr "Хавчуургын цонхыг хаах"
 
 #. Edit Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:193 src/ephy-history-window.c:175
-#: src/ephy-window.c:122
+#: src/ephy-window.c:129
 msgid "Cu_t"
 msgstr "Хайчлах"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:194 src/ephy-history-window.c:176
-#: src/ephy-window.c:123
+#: src/ephy-window.c:130
 msgid "Cut the selection"
 msgstr "Сонголтыг хайчлах"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:196
-#: src/bookmarks/ephy-bookmarks-editor.c:987 src/ephy-history-window.c:178
-#: src/ephy-history-window.c:748 src/ephy-window.c:125
+#: src/bookmarks/ephy-bookmarks-editor.c:998 src/ephy-history-window.c:178
+#: src/ephy-history-window.c:748 src/ephy-window.c:132
 msgid "_Copy"
 msgstr "Хуулах"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:197 src/ephy-history-window.c:179
-#: src/ephy-window.c:126
+#: src/ephy-window.c:133
 msgid "Copy the selection"
 msgstr "Сонголтыг хуулах"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:199 src/ephy-history-window.c:181
-#: src/ephy-window.c:128
+#: src/ephy-window.c:135
 msgid "_Paste"
 msgstr "Тавих"
 
@@ -2255,7 +2260,7 @@ msgid "Paste the clipboard"
 msgstr "Буферт тавих"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:202 src/ephy-history-window.c:184
-#: src/ephy-window.c:131
+#: src/ephy-window.c:138
 msgid "Select _All"
 msgstr "Бүгдийн сонгох"
 
@@ -2264,9 +2269,8 @@ msgid "Select all bookmarks or text"
 msgstr "Бүх тэмдэглэгээ эсвэл текстийг сонгох"
 
 #. Help Menu
-#. Help menu
 #: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:192
-#: src/ephy-window.c:222
+#: src/ephy-window.c:229
 msgid "_Contents"
 msgstr "Агуулга"
 
@@ -2275,12 +2279,12 @@ msgid "Display bookmarks help"
 msgstr "Тэмдэглэгээний тусламжийг харах"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:195
-#: src/ephy-window.c:225
+#: src/ephy-window.c:232
 msgid "_About"
 msgstr "Тухай"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:211 src/ephy-history-window.c:196
-#: src/ephy-window.c:226
+#: src/ephy-window.c:233
 msgid "Display credits for the web browser creators"
 msgstr "Веб хөтчийг зохиогчдын тухай харуулах"
 
@@ -2314,68 +2318,68 @@ msgstr "Гарчиг болон хаягны баганыг зэрэг хару�
 msgid "Type a topic"
 msgstr "Гарчиг оруулах"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:547
+#: src/bookmarks/ephy-bookmarks-editor.c:558
 msgid "Import bookmarks from file"
 msgstr "Файлаас хавчуурга оруулах"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:580
+#: src/bookmarks/ephy-bookmarks-editor.c:591
 msgid "Import Bookmarks"
 msgstr "Тэмдэглэгээг оруулах"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:600
+#: src/bookmarks/ephy-bookmarks-editor.c:611
 msgid "Choose the bookmarks source:"
 msgstr "Тэмдэглэгээг сонгох"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:618
+#: src/bookmarks/ephy-bookmarks-editor.c:629
 msgid "Mozilla bookmarks"
 msgstr "Mozilla-гийн тэмдэглэгээ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:620
+#: src/bookmarks/ephy-bookmarks-editor.c:631
 msgid "Firebird bookmarks"
 msgstr "Firebird Хавчуурууд"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:622
+#: src/bookmarks/ephy-bookmarks-editor.c:633
 msgid "Galeon bookmarks"
 msgstr "Galeon-ний тэмдэглэгээ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:624
+#: src/bookmarks/ephy-bookmarks-editor.c:635
 msgid "Konqueror bookmarks"
 msgstr "Konqueror-ийн тэмдэглэгээ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:628
+#: src/bookmarks/ephy-bookmarks-editor.c:639
 msgid "Import from a file"
 msgstr "Файлаас импортлох"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:972 src/ephy-history-window.c:733
+#: src/bookmarks/ephy-bookmarks-editor.c:983 src/ephy-history-window.c:733
 msgid "_Open in New Windows"
 msgstr "Шинэ цонхонд нээх"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:973 src/ephy-history-window.c:734
+#: src/bookmarks/ephy-bookmarks-editor.c:984 src/ephy-history-window.c:734
 msgid "Open in New _Tabs"
 msgstr "Шинэ таб нээх"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:983 src/ephy-history-window.c:744
+#: src/bookmarks/ephy-bookmarks-editor.c:994 src/ephy-history-window.c:744
 msgid "_Copy Address"
 msgstr "Хаягыг хуулах"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1224 src/ephy-history-window.c:1038
+#: src/bookmarks/ephy-bookmarks-editor.c:1235 src/ephy-history-window.c:1038
 msgid "_Search:"
 msgstr "Хайх:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1354
-#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:953
+#: src/bookmarks/ephy-bookmarks-editor.c:1365
+#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:1016
 msgid "Bookmarks"
 msgstr "Тэмдэглэгээ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1437
+#: src/bookmarks/ephy-bookmarks-editor.c:1448
 msgid "Topics"
 msgstr "Гарчигууд"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1499 src/ephy-history-window.c:1318
+#: src/bookmarks/ephy-bookmarks-editor.c:1510 src/ephy-history-window.c:1318
 msgid "Title"
 msgstr "Гарчиг"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1506 src/ephy-history-window.c:1324
+#: src/bookmarks/ephy-bookmarks-editor.c:1517 src/ephy-history-window.c:1324
 msgid "Address"
 msgstr "Хаяг"
 
@@ -2450,15 +2454,15 @@ msgstr "Хоосон"
 msgid "Encodings"
 msgstr "Кодчлол"
 
-#: src/ephy-encoding-menu.c:379
+#: src/ephy-encoding-menu.c:380
 msgid "_Other..."
 msgstr "_Бусад..."
 
-#: src/ephy-encoding-menu.c:380
+#: src/ephy-encoding-menu.c:381
 msgid "Other encodings"
 msgstr "Бусад кодчлол"
 
-#: src/ephy-encoding-menu.c:387
+#: src/ephy-encoding-menu.c:388
 msgid "_Automatic"
 msgstr "_Автоматаар"
 
@@ -2518,15 +2522,15 @@ msgstr "Зөвхөн гарчгийн баганыг харах"
 msgid "Clear History"
 msgstr "Түүх цэвэрлэх"
 
-#: src/ephy-history-window.c:278
+#: src/ephy-history-window.c:276
 msgid "C_lear"
 msgstr "Цэвэрлэх"
 
-#: src/ephy-history-window.c:301
+#: src/ephy-history-window.c:300
 msgid "Clear browsing history?"
 msgstr "Түүхийг цэвэрлэх үү?"
 
-#: src/ephy-history-window.c:308
+#: src/ephy-history-window.c:307
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2539,9 +2543,11 @@ msgstr "Өнөөдөр"
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
 #: src/ephy-history-window.c:1048 src/ephy-history-window.c:1051
 #: src/ephy-history-window.c:1055
-#, c-format
+#, fuzzy, c-format
 msgid "Last %d day"
-msgstr "Сүүлийн %d өдөр"
+msgid_plural "Last %d days"
+msgstr[0] "Сүүлийн %d өдөр"
+msgstr[1] "Сүүлийн %d өдөр"
 
 #: src/ephy-history-window.c:1192
 msgid "History"
@@ -2622,7 +2628,9 @@ msgid ""
 "use bonobo-activation-sysconf to configure the search path for bonobo server "
 "files."
 msgstr ""
-"Bonobo GNOME_Epiphany_Automation.server файлыг байрлуулж чадахгүй байна. Та bonobo·сервер файлуудыг хайх замыг тохируулахдаа bonobo-activation-sysconf хэрэглэж болно."
+"Bonobo GNOME_Epiphany_Automation.server файлыг байрлуулж чадахгүй байна. Та "
+"bonobo·сервер файлуудыг хайх замыг тохируулахдаа bonobo-activation-sysconf "
+"хэрэглэж болно."
 
 #: src/ephy-shell.c:364
 msgid ""
@@ -2636,510 +2644,510 @@ msgid ""
 "attempting to locate the automation object."
 msgstr ""
 
-#: src/ephy-tab.c:367 src/ephy-tab.c:1200 src/ephy-tab.c:1370
+#: src/ephy-tab.c:369 src/ephy-tab.c:1208 src/ephy-tab.c:1378
 msgid "Blank page"
 msgstr "Хоосон хуудас"
 
-#: src/ephy-tab.c:772
+#: src/ephy-tab.c:774
 msgid "site"
 msgstr "сайт"
 
-#: src/ephy-tab.c:796
+#: src/ephy-tab.c:798
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "%s руу шилжих..."
 
-#: src/ephy-tab.c:800
+#: src/ephy-tab.c:802
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "%s аас мэдээлэл дамжуулж байна..."
 
-#: src/ephy-tab.c:804
+#: src/ephy-tab.c:806
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "%s аас зөвшөөрөл хүлээж байна..."
 
-#: src/ephy-tab.c:812
+#: src/ephy-tab.c:814
 #, c-format
 msgid "Loading %s..."
 msgstr "%s ачаалж байна..."
 
-#: src/ephy-window.c:79
+#: src/ephy-window.c:86
 msgid "_Bookmarks"
 msgstr "Тэмдэглэгээ"
 
-#: src/ephy-window.c:80
+#: src/ephy-window.c:87
 msgid "_Go"
 msgstr "Нээх"
 
-#: src/ephy-window.c:81
+#: src/ephy-window.c:88
 msgid "T_ools"
 msgstr "_Хэрэгсэл"
 
-#: src/ephy-window.c:82
+#: src/ephy-window.c:89
 msgid "_Tabs"
 msgstr "Табууд"
 
 #. File menu
-#: src/ephy-window.c:87
+#: src/ephy-window.c:94
 msgid "_New Window"
 msgstr "Шинэ цонх"
 
-#: src/ephy-window.c:88
+#: src/ephy-window.c:95
 msgid "Open a new window"
 msgstr "Шинэ цонх нээх"
 
-#: src/ephy-window.c:90
+#: src/ephy-window.c:97
 msgid "New _Tab"
 msgstr "Шинэ таб"
 
-#: src/ephy-window.c:91
+#: src/ephy-window.c:98
 msgid "Open a new tab"
 msgstr "Шинэ таб нээх"
 
-#: src/ephy-window.c:93
+#: src/ephy-window.c:100
 msgid "_Open..."
 msgstr "Нээх..."
 
-#: src/ephy-window.c:94
+#: src/ephy-window.c:101
 msgid "Open a file"
 msgstr "Файл нээх"
 
-#: src/ephy-window.c:96
+#: src/ephy-window.c:103
 msgid "Save _As..."
 msgstr "Нэрээр хадгалах..."
 
-#: src/ephy-window.c:97
+#: src/ephy-window.c:104
 msgid "Save the current page"
 msgstr "Тухайн хуудсыг хадгалах"
 
-#: src/ephy-window.c:99
+#: src/ephy-window.c:106
 msgid "Print Set_up..."
 msgstr "Хэвлэх _тохируулга..."
 
-#: src/ephy-window.c:100
+#: src/ephy-window.c:107
 msgid "Setup the page settings for printing"
 msgstr "Хэвлэхэд зориулж хуудас тохируулах"
 
-#: src/ephy-window.c:102
+#: src/ephy-window.c:109
 msgid "Print Pre_view"
 msgstr "Хэвлэхэд тольдох"
 
-#: src/ephy-window.c:103
+#: src/ephy-window.c:110
 msgid "Print preview"
 msgstr "Хэвлэх тольдолт"
 
-#: src/ephy-window.c:106
+#: src/ephy-window.c:113
 msgid "Print the current page"
 msgstr "Тухайн хуудсыг хэвлэх"
 
-#: src/ephy-window.c:108
+#: src/ephy-window.c:115
 msgid "S_end To..."
 msgstr "Илгээх ..."
 
-#: src/ephy-window.c:109
+#: src/ephy-window.c:116
 msgid "Send a link of the current page"
 msgstr "Тухайн хуудсны линкийг илгээх"
 
-#: src/ephy-window.c:112
+#: src/ephy-window.c:119
 msgid "Close this window"
 msgstr "Тухайн цонхыг хаах"
 
 #. Edit menu
-#: src/ephy-window.c:116
+#: src/ephy-window.c:123
 msgid "_Undo"
 msgstr "_Гэдрэг"
 
-#: src/ephy-window.c:117
+#: src/ephy-window.c:124
 msgid "Undo the last action"
 msgstr "Сүүлийн үйлдлээ буцаах"
 
-#: src/ephy-window.c:119
+#: src/ephy-window.c:126
 msgid "Re_do"
 msgstr "Г_удраг"
 
-#: src/ephy-window.c:120
+#: src/ephy-window.c:127
 msgid "Redo the last undone action"
 msgstr "Сүүлийг гэдрэг үйлдлийг буцаах"
 
-#: src/ephy-window.c:129
+#: src/ephy-window.c:136
 msgid "Paste clipboard"
 msgstr "Тавих"
 
-#: src/ephy-window.c:132
+#: src/ephy-window.c:139
 msgid "Select the entire page"
 msgstr "Хуудсыг бүхэлд нь сонгох"
 
-#: src/ephy-window.c:135
+#: src/ephy-window.c:142
 msgid "Find a word or phrase in the page"
 msgstr "Хуудснаас үг хайх"
 
-#: src/ephy-window.c:137
+#: src/ephy-window.c:144
 msgid "Find Ne_xt"
 msgstr "Дахиж хайх"
 
-#: src/ephy-window.c:138
+#: src/ephy-window.c:145
 msgid "Find next occurrence of the word or phrase"
 msgstr "Үгийг дахиж хайх"
 
-#: src/ephy-window.c:140
+#: src/ephy-window.c:147
 msgid "Find Pre_vious"
 msgstr "Өмнөхийг хайх"
 
-#: src/ephy-window.c:141
+#: src/ephy-window.c:148
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Үг эсвэл хэсгийн өмнөх тохиолдлыг ол"
 
-#: src/ephy-window.c:143
+#: src/ephy-window.c:150
 msgid "P_ersonal Data"
 msgstr "_Хувийн мэдээлэл"
 
-#: src/ephy-window.c:144
+#: src/ephy-window.c:151
 msgid "View and remove cookies and passwords"
 msgstr "Сookies болон нууц үгнүүдийг харах, устгах "
 
-#: src/ephy-window.c:146
+#: src/ephy-window.c:153
 msgid "T_oolbars"
 msgstr "Самбарууд"
 
-#: src/ephy-window.c:147
+#: src/ephy-window.c:154
 msgid "Customize toolbars"
 msgstr "Самбаруудыг тохируулах"
 
-#: src/ephy-window.c:149
+#: src/ephy-window.c:156
 msgid "P_references"
 msgstr "Тохиргоо"
 
-#: src/ephy-window.c:150
+#: src/ephy-window.c:157
 msgid "Configure the web browser"
 msgstr "Веб хөтчийг тохируулах"
 
 #. View menu
-#: src/ephy-window.c:154
+#: src/ephy-window.c:161
 msgid "_Stop"
 msgstr "Зогсоох"
 
-#: src/ephy-window.c:155
+#: src/ephy-window.c:162
 msgid "Stop current data transfer"
 msgstr "Тухайн өгөдөл дамжууллыг зогсоох"
 
-#: src/ephy-window.c:157
+#: src/ephy-window.c:164
 msgid "_Reload"
 msgstr "Дахиж ачаалах"
 
-#: src/ephy-window.c:158
+#: src/ephy-window.c:165
 msgid "Display the latest content of the current page"
 msgstr "Display the latest content of the current page"
 
-#: src/ephy-window.c:160
+#: src/ephy-window.c:167
 msgid "Zoom _In"
 msgstr "Багасгах"
 
-#: src/ephy-window.c:161
+#: src/ephy-window.c:168
 msgid "Increase the text size"
 msgstr "Текстийн хэмжээг багасгах"
 
-#: src/ephy-window.c:163
+#: src/ephy-window.c:170
 msgid "Zoom _Out"
 msgstr "Томруулах"
 
-#: src/ephy-window.c:164
+#: src/ephy-window.c:171
 msgid "Decrease the text size"
 msgstr "Текстийн хэмжээг ихэсгэх"
 
-#: src/ephy-window.c:166
+#: src/ephy-window.c:173
 msgid "_Normal Size"
 msgstr "Энгийн хэмжээ"
 
-#: src/ephy-window.c:167
+#: src/ephy-window.c:174
 msgid "Use the normal text size"
 msgstr "Энгийн текстийн хэмжээг хэрэглэх"
 
-#: src/ephy-window.c:169
+#: src/ephy-window.c:176
 msgid "Text _Encoding"
 msgstr "Текст _кодчлол"
 
-#: src/ephy-window.c:170
+#: src/ephy-window.c:177
 msgid "Change the text encoding"
 msgstr "Текст кодчилолыг өөрчилөх"
 
-#: src/ephy-window.c:172
+#: src/ephy-window.c:179
 msgid "_Page Source"
 msgstr "Хуудасны код"
 
-#: src/ephy-window.c:173
+#: src/ephy-window.c:180
 msgid "View the source code of the page"
 msgstr "Хуудасны кодыг харах"
 
 #. Bookmarks menu
-#: src/ephy-window.c:177
+#: src/ephy-window.c:184
 msgid "_Add Bookmark..."
 msgstr "Тэмдэглэгээ нэмэх..."
 
-#: src/ephy-window.c:178 src/ephy-window.c:257
+#: src/ephy-window.c:185 src/ephy-window.c:264
 msgid "Add a bookmark for the current page"
 msgstr "Тухайн хуудсны хувьд тэмдэглэгээ нэмэх"
 
-#: src/ephy-window.c:180
+#: src/ephy-window.c:187
 msgid "_Edit Bookmarks"
 msgstr "Тэмдэглэгээг засварлах"
 
-#: src/ephy-window.c:181
+#: src/ephy-window.c:188
 msgid "Open the bookmarks window"
 msgstr "Тэмдэглэгээний цонхыг нээх"
 
 #. Go menu
-#: src/ephy-window.c:185
+#: src/ephy-window.c:192
 msgid "_Back"
 msgstr "Буцах"
 
-#: src/ephy-window.c:186
+#: src/ephy-window.c:193
 msgid "Go to the previous visited page"
 msgstr "Өмнөх хуудсанд очих"
 
-#: src/ephy-window.c:188
+#: src/ephy-window.c:195
 msgid "_Forward"
 msgstr "Урьд хуудсанд очих"
 
-#: src/ephy-window.c:189
+#: src/ephy-window.c:196
 msgid "Go to the next visited page"
 msgstr "Дараагийн урьдийн хуудсанд очих"
 
-#: src/ephy-window.c:192
+#: src/ephy-window.c:199
 msgid "Go up one level"
 msgstr "Нэг түвшин дээшлэх"
 
-#: src/ephy-window.c:194
+#: src/ephy-window.c:201
 msgid "_Home"
 msgstr "Home"
 
-#: src/ephy-window.c:195
+#: src/ephy-window.c:202
 msgid "Go to the home page"
 msgstr "Go to the home page"
 
-#: src/ephy-window.c:197
+#: src/ephy-window.c:204
 msgid "_Location..."
 msgstr "Зам..."
 
-#: src/ephy-window.c:198
+#: src/ephy-window.c:205
 msgid "Go to a specified location"
 msgstr "Замаар очих"
 
-#: src/ephy-window.c:200
+#: src/ephy-window.c:207
 msgid "H_istory"
 msgstr "Түүх"
 
-#: src/ephy-window.c:201
+#: src/ephy-window.c:208
 msgid "Open the history window"
 msgstr "Түүхийн цонхыг нээх"
 
 #. Tabs menu
-#: src/ephy-window.c:205
+#: src/ephy-window.c:212
 msgid "_Previous Tab"
 msgstr "Өмнөх таб"
 
-#: src/ephy-window.c:206
+#: src/ephy-window.c:213
 msgid "Activate previous tab"
 msgstr "Өмнөх табыг идэвхижүүлэх"
 
-#: src/ephy-window.c:208
+#: src/ephy-window.c:215
 msgid "_Next Tab"
 msgstr "Дараагийн таб"
 
-#: src/ephy-window.c:209
+#: src/ephy-window.c:216
 msgid "Activate next tab"
 msgstr "Дараагийн табыг идэвхижүүлэх"
 
-#: src/ephy-window.c:211
+#: src/ephy-window.c:218
 msgid "Move Tab _Left"
 msgstr "Табыг зүүн зөөх"
 
-#: src/ephy-window.c:212
+#: src/ephy-window.c:219
 msgid "Move current tab to left"
 msgstr "Тухайн табыг зүүн зөөх"
 
-#: src/ephy-window.c:214
+#: src/ephy-window.c:221
 msgid "Move Tab _Right"
 msgstr "Табыг баруун зөөх"
 
-#: src/ephy-window.c:215
+#: src/ephy-window.c:222
 msgid "Move current tab to right"
 msgstr "Тухайн табыг баруун зөөх"
 
-#: src/ephy-window.c:217
+#: src/ephy-window.c:224
 msgid "_Detach Tab"
 msgstr "_Detach Tab"
 
-#: src/ephy-window.c:218
+#: src/ephy-window.c:225
 msgid "Detach current tab"
 msgstr "Detach идэвхитэй ТАВ"
 
-#: src/ephy-window.c:223
+#: src/ephy-window.c:230
 msgid "Display web browser help"
 msgstr "Веб хөтөчийн тусламжийг харуулах"
 
 #. View Menu
-#: src/ephy-window.c:234
+#: src/ephy-window.c:241
 msgid "_Toolbar"
 msgstr "Самбар"
 
-#: src/ephy-window.c:235
+#: src/ephy-window.c:242
 msgid "Show or hide toolbar"
 msgstr "Самбарыг харуулах эсвэл нуух"
 
-#: src/ephy-window.c:237
+#: src/ephy-window.c:244
 msgid "_Bookmarks Bar"
 msgstr "Тэмдэглэгээний самбар"
 
-#: src/ephy-window.c:238
+#: src/ephy-window.c:245
 msgid "Show or hide bookmarks bar"
 msgstr "Тэмдэглэгээний самбарыг харуулах эсвэл нуух"
 
-#: src/ephy-window.c:240
+#: src/ephy-window.c:247
 msgid "St_atusbar"
 msgstr "Төлөвийн мөр"
 
-#: src/ephy-window.c:241
+#: src/ephy-window.c:248
 msgid "Show or hide statusbar"
 msgstr "Төлөвийн мөрийг харуулах эсвэл нуух"
 
-#: src/ephy-window.c:243
+#: src/ephy-window.c:250
 msgid "_Fullscreen"
 msgstr "Дэлгэцийг дүүрэн"
 
-#: src/ephy-window.c:244
+#: src/ephy-window.c:251
 msgid "Browse at full screen"
 msgstr "Дэлгэц дүүрэн ажиллах"
 
-#: src/ephy-window.c:246
+#: src/ephy-window.c:253
 msgid "Selection Caret"
 msgstr "Caret Сонголт "
 
 #. Document
-#: src/ephy-window.c:254
+#: src/ephy-window.c:261
 msgid "_Save Background As..."
 msgstr "_Дэвсгэрээр хадгалах..."
 
-#: src/ephy-window.c:256
+#: src/ephy-window.c:263
 msgid "Add Boo_kmark..."
 msgstr "Тэмдэглэгээ нэмэх..."
 
 #. Framed document
-#: src/ephy-window.c:261
+#: src/ephy-window.c:268
 msgid "_Open Frame"
 msgstr "Фраймыг нээх"
 
-#: src/ephy-window.c:263
+#: src/ephy-window.c:270
 msgid "Open Frame in _New Window"
 msgstr "Фраймыг шинэ цонхонд нээх"
 
-#: src/ephy-window.c:265
+#: src/ephy-window.c:272
 msgid "Open Frame in New _Tab"
 msgstr "Фраймыг шинэ табд нээх"
 
 #. Links
-#: src/ephy-window.c:269
+#: src/ephy-window.c:276
 msgid "_Open Link"
 msgstr "Линкийг нээх"
 
-#: src/ephy-window.c:271
+#: src/ephy-window.c:278
 msgid "Open Link in _New Window"
 msgstr "Линкийг шинэ цонхонд нээх"
 
-#: src/ephy-window.c:273
+#: src/ephy-window.c:280
 msgid "Open Link in New _Tab"
 msgstr "Линкийг шинэ табд нээх"
 
-#: src/ephy-window.c:275
+#: src/ephy-window.c:282
 msgid "_Download Link"
 msgstr "Холбоосыг _татах"
 
-#: src/ephy-window.c:277
+#: src/ephy-window.c:284
 msgid "_Save Link As..."
 msgstr "Холбоосыг ...р _хадгалах"
 
-#: src/ephy-window.c:279
+#: src/ephy-window.c:286
 msgid "_Bookmark Link..."
 msgstr "Линкийг тэмдэглэх..."
 
-#: src/ephy-window.c:281
+#: src/ephy-window.c:288
 msgid "_Copy Link Address"
 msgstr "Линкийн замыг хуулах"
 
 #. Images
-#: src/ephy-window.c:285
+#: src/ephy-window.c:292
 msgid "Open _Image"
 msgstr "Зургийг нээх"
 
-#: src/ephy-window.c:287
+#: src/ephy-window.c:294
 msgid "Open Image in New _Window"
 msgstr "Зургийг шинэ цонхонд нээх"
 
-#: src/ephy-window.c:289
+#: src/ephy-window.c:296
 msgid "Open Image in New T_ab"
 msgstr "Зургийг шинэ табд нээх"
 
-#: src/ephy-window.c:291
+#: src/ephy-window.c:298
 msgid "_Save Image As..."
 msgstr "Зургийг нэрээр хадгалах..."
 
-#: src/ephy-window.c:293
+#: src/ephy-window.c:300
 msgid "_Use Image As Background"
 msgstr "Зургийг арын дэвсгэр болгон ашиглах"
 
-#: src/ephy-window.c:295
+#: src/ephy-window.c:302
 msgid "Copy I_mage Address"
 msgstr "Зургийн замыг хуулах"
 
-#: src/ephy-window.c:584
+#: src/ephy-window.c:547
 msgid "Exit Fullscreen"
 msgstr "Дүүрэн дэлгэцний горимоос гарах"
 
-#: src/ephy-window.c:658
+#: src/ephy-window.c:621
 msgid "_Close document"
 msgstr "_Баримтыг хаах"
 
-#: src/ephy-window.c:685
+#: src/ephy-window.c:648
 msgid "There are unsubmitted changes to form elements."
 msgstr "Хэлбэржүүлэлтийн элементүүдэд илгээгдээгүй өөрчилөлтүүд байна."
 
-#: src/ephy-window.c:686
+#: src/ephy-window.c:649
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Хэрвээ та баримтыг заавал хаах бол мэдээлэл устана."
 
-#: src/ephy-window.c:943 src/window-commands.c:395
+#: src/ephy-window.c:1006 src/window-commands.c:396
 msgid "Open"
 msgstr "Нээх"
 
-#: src/ephy-window.c:945 src/window-commands.c:420
+#: src/ephy-window.c:1008 src/window-commands.c:421
 msgid "Save As"
 msgstr "Нэрээр хадгалах"
 
-#: src/ephy-window.c:949
+#: src/ephy-window.c:1012
 msgid "Bookmark"
 msgstr "Тэмдэглэгээ"
 
-#: src/ephy-window.c:1135
+#: src/ephy-window.c:1198
 msgid "Insecure"
 msgstr "Нууцлагдаагүй"
 
-#: src/ephy-window.c:1138
+#: src/ephy-window.c:1201
 msgid "Broken"
 msgstr "Тасарсан"
 
-#: src/ephy-window.c:1141
+#: src/ephy-window.c:1204
 msgid "Medium"
 msgstr "Дунд зэрэг"
 
-#: src/ephy-window.c:1145
+#: src/ephy-window.c:1208
 msgid "Low"
 msgstr "Бага"
 
-#: src/ephy-window.c:1149
+#: src/ephy-window.c:1212
 msgid "High"
 msgstr "Өндөр"
 
-#: src/ephy-window.c:1159
+#: src/ephy-window.c:1222
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3148,7 +3156,7 @@ msgstr ""
 "Нууцлалын түвшин: %s\n"
 "%s"
 
-#: src/ephy-window.c:1165
+#: src/ephy-window.c:1228
 #, c-format
 msgid "Security level: %s"
 msgstr "Нууцлалын түвшин: %s"
@@ -3416,7 +3424,7 @@ msgstr "Вьетнам"
 msgid "Walloon"
 msgstr "Валлон"
 
-#: src/prefs-dialog.c:1057
+#: src/prefs-dialog.c:1058
 #, c-format
 msgid "Custom [%s]"
 msgstr "Хэрэглэгчийн [%s]"
@@ -3425,15 +3433,15 @@ msgstr "Хэрэглэгчийн [%s]"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1102
+#: src/prefs-dialog.c:1103
 msgid "Home"
 msgstr "Гэр"
 
-#: src/prefs-dialog.c:1111
+#: src/prefs-dialog.c:1112
 msgid "Desktop"
 msgstr "Ажлын тавцан"
 
-#: src/prefs-dialog.c:1322
+#: src/prefs-dialog.c:1321
 msgid "Select a directory"
 msgstr "Лавлах сонгох"
 
@@ -3485,27 +3493,31 @@ msgstr "Favicon"
 msgid "Go to the address entered in the address entry"
 msgstr "Хаягын тэмдэглэлд байгаа хаягаар очих"
 
-#: src/window-commands.c:168
+#: src/window-commands.c:169
 msgid "Check this out!"
 msgstr "Шалгах"
 
-#: src/window-commands.c:881
+#: src/window-commands.c:854
 msgid "Toolbar Editor"
 msgstr "Командын самбарын тохируулагч"
 
-#: src/window-commands.c:903
+#: src/window-commands.c:876
 msgid "_Add a New Toolbar"
 msgstr "Шинэ командын самбар нэмэх"
 
 #. Translator credits
-#: src/window-commands.c:954
+#: src/window-commands.c:927
 msgid "translator-credits"
-msgstr "Эрнар <ernar_k@yahoo.com> \n"
+msgstr ""
+"Эрнар <ernar_k@yahoo.com> \n"
 "Санлигийн Бадрал <badral@openmn.org>"
 
-#: src/window-commands.c:984
+#: src/window-commands.c:957
 msgid "A GNOME browser based on Mozilla"
 msgstr "GNOME -ийн Mozilla дээр тулгуурласан веб хөтөч"
+
+#~ msgid "GConf Error"
+#~ msgstr "GConf алдаа"
 
 #~ msgid "_Zoom"
 #~ msgstr "Томруулах"
