@@ -4,7 +4,16 @@ SUBDIRS = ui art glade
 @INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_SCHEMAS_RULE@
 
-dist_pkgdata_DATA = default-prefs.js
+default_prefs_in_FILES = \
+	default-prefs-common.js		\
+	default-prefs-mozilla.js	\
+	default-prefs-toolkit.js
+
+default-prefs.js: $(default_prefs_in_FILES)
+	cat $(srcdir)/default-prefs-common.js $(srcdir)/default-prefs-$(MOZILLA_FLAVOUR).js > $(top_builddir)/$(subdir)/default-prefs.js
+
+default_prefsdir = $(pkgdatadir)
+default_prefs_DATA = default-prefs.js
 
 server_in_files = GNOME_Epiphany_Automation.server.in
 server_DATA = GNOME_Epiphany_Automation.server
@@ -53,6 +62,7 @@ EXTRA_DIST = \
 	     $(mimepermission_DATA)	\
 	     $(extensionschema_DATA)	\
 	     $(pkgconfig_DATA)		\
+	     $(default_prefs_in_FILES)	\
 	     check-mime.py
 
 DISTCLEANFILES = \
@@ -60,4 +70,5 @@ DISTCLEANFILES = \
 	$(Applications_DATA)	\
 	$(schema_DATA)		\
 	$(pkgconfig_DATA)	\
+	$(default_prefs_DATA)	\
 	$(DESKTOP_FILES)

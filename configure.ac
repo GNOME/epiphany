@@ -152,13 +152,18 @@ elif test "x$with_mozilla" != "xmozilla" -a "x$with_mozilla" != "xfirefox" -a "x
   AC_MSG_ERROR([unknown mozilla name ($MOZILLA)])
 fi
 
+AC_SUBST(MOZILLA)
+
 AC_MSG_RESULT([$MOZILLA])
 
 case "$MOZILLA" in
-mozilla) min_version=1.7 ;;
-firefox) min_version=0.10 ;;
-thunderbird) min_version=0.8 ;;
+mozilla) min_version=1.7 flavour=mozilla ;;
+firefox) min_version=0.10 flavour=toolkit ;;
+thunderbird) min_version=0.8 flavour=toolkit ;;
 esac
+
+MOZILLA_FLAVOUR=$flavour
+AC_SUBST(MOZILLA_FLAVOUR)
 
 PKG_CHECK_MODULES(MOZILLA_COMPONENT, $MOZILLA-gtkmozembed >= $min_version $MOZILLA-xpcom >= $min_version)
 AC_SUBST(MOZILLA_COMPONENT_CFLAGS)
