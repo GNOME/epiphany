@@ -172,9 +172,14 @@ toolbar_get_action (EphyEditableToolbar *etoolbar,
 			gtk_widget_destroy (new_bookmark);
 		}
 
-		g_return_val_if_fail (id != 0, NULL);
-
-		action = get_bookmark_action (t, bookmarks, id);
+		if (id != 0)
+		{
+			action = get_bookmark_action (t, bookmarks, id);
+		}
+		else
+		{
+			action = NULL;
+		}
 
 		g_list_foreach (uris, (GFunc)g_free, NULL);
 		g_list_free (uris);

@@ -225,11 +225,14 @@ drag_data_received_cb (GtkWidget *widget,
 	}
 
 	action = ephy_editable_toolbar_get_action (etoolbar, type, selection_data->data);
-	ephy_toolbars_group_add_item (etoolbar->priv->group, parent, sibling,
-				      action->name);
+	if (action)
+	{
+		ephy_toolbars_group_add_item (etoolbar->priv->group, parent, sibling,
+					      action->name);
 
-	etoolbar->priv->toolbars_dirty = TRUE;
-	queue_ui_update (etoolbar);
+		etoolbar->priv->toolbars_dirty = TRUE;
+		queue_ui_update (etoolbar);
+	}
 }
 
 static void

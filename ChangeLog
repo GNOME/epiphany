@@ -1,5 +1,13 @@
 2003-02-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/widgets/ephy-editable-toolbar.c: (drag_data_received_cb):
+	* src/toolbar.c: (toolbar_get_action):
+
+	Dont crash when dragging a new bookmark on the toolbar and
+	then click cancel.
+
+2003-02-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/widgets/ephy-toolbars-group.c:
 	(ephy_toolbars_group_to_string),
 	(ephy_toolbars_group_remove_toolbar),
