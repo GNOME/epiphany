@@ -49,9 +49,21 @@ struct EphyToolbarsModelClass
 			      char *action_name);
 };
 
-GType		   ephy_toolbars_model_get_type      (void);
+GType		   ephy_toolbars_model_get_type        (void);
 
-EphyToolbarsModel *ephy_toolbars_model_new	     (void);
+EphyToolbarsModel *ephy_toolbars_model_new	       (void);
+
+void		   ephy_toolbars_model_add_bookmark    (EphyToolbarsModel *model,
+				                        gboolean topic,
+				                        gulong id);
+
+gboolean	   ephy_toolbars_model_has_bookmark    (EphyToolbarsModel *model,
+				                        gboolean topic,
+				                        gulong id);
+
+void               ephy_toolbars_model_remove_bookmark (EphyToolbarsModel *model,
+				                        gboolean topic,
+				                        gulong id);
 
 G_END_DECLS
 

@@ -54,6 +54,8 @@ struct EphyBookmarkPropertiesPrivate
 	GtkWidget *title_entry;
 	GtkWidget *location_entry;
 	GtkWidget *topics_selector;
+
+	EphyToolbarsModel *tb_model;
 };
 
 enum
@@ -215,22 +217,6 @@ bookmark_properties_response_cb (GtkDialog *dialog,
 }
 
 static void
-update_checkbox (EphyBookmarkProperties *props, GtkWidget *checkbox, gulong prop)
-{
-	GValue value = { 0, };
-	gboolean state;
-
-	state = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbox));
-
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, state);
-	ephy_node_set_property (props->priv->bookmark,
-			        prop,
-			        &value);
-	g_value_unset (&value);
-}
-
-static void
 update_entry (EphyBookmarkProperties *props, GtkWidget *entry, guint prop)
 {
 	GValue value = { 0, };
@@ -276,7 +262,23 @@ location_entry_changed_cb (GtkWidget *entry, EphyBookmarkProperties *props)
 static void
 toolbar_checkbox_changed_cb (GtkWidget *checkbox, EphyBookmarkProperties *props)
 {
-	update_checkbox (props, checkbox, EPHY_NODE_BMK_PROP_SHOW_IN_TOOLBAR);
+	gboolean state;
+	gulong id;
+
+	state = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbox));
+
+	id = ephy_node_get_id (props->priv->bookmark);
+
+	if (state)
+	{
+		ephy_toolbars_model_add_bookmark
+			(props->priv->tb_model, FALSE, id);
+	}
+	else
+	{
+		ephy_toolbars_model_remove_bookmark
+			(props->priv->tb_model, FALSE, id);
+	}
 }
 
 static void
@@ -317,6 +319,7 @@ build_ui (EphyBookmarkProperties *editor)
 	char *str;
 	const char *tmp;
 	gboolean state;
+	gulong id;
 
 	g_signal_connect (G_OBJECT (editor),
 			  "response",
@@ -403,8 +406,8 @@ build_ui (EphyBookmarkProperties *editor)
 			  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
 
 	checkbox = gtk_check_button_new_with_mnemonic (_("_Show in the bookmarks toolbar"));
-	state = ephy_node_get_property_boolean (editor->priv->bookmark,
-					        EPHY_NODE_BMK_PROP_SHOW_IN_TOOLBAR);
+	id = ephy_node_get_id (editor->priv->bookmark);
+	state = ephy_toolbars_model_has_bookmark (editor->priv->tb_model, FALSE, id);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbox), state);
 	g_signal_connect (checkbox, "toggled",
 			  G_CALLBACK (toolbar_checkbox_changed_cb), editor);
@@ -429,6 +432,7 @@ ephy_bookmark_properties_init (EphyBookmarkProperties *editor)
 	editor->priv = g_new0 (EphyBookmarkPropertiesPrivate, 1);
 
 	editor->priv->bookmark = NULL;
+	editor->priv->tb_model = ephy_shell_get_toolbars_model (ephy_shell);
 }
 
 GtkWidget *

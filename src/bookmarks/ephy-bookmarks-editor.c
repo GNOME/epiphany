@@ -123,6 +123,7 @@ struct EphyBookmarksEditorPrivate
 	EggMenuMerge *ui_merge;
 	EggActionGroup *action_group;
 	int priority_col;
+	EphyToolbarsModel *tb_model;
 };
 
 enum
@@ -253,18 +254,20 @@ cmd_show_in_the_toolbar (EggAction *action,
 {
 	EphyNode *node;
 	GList *selection;
-	GValue value = { 0, };
-	gboolean state;
+	gboolean state, topic;
+	gulong id;
 
 	if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->bm_view)))
 	{
 		selection = ephy_node_view_get_selection
 			(EPHY_NODE_VIEW (editor->priv->bm_view));
+		topic = FALSE;
 	}
 	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->key_view)))
 	{
 		selection = ephy_node_view_get_selection
 			(EPHY_NODE_VIEW (editor->priv->key_view));
+		topic = TRUE;
 	}
 	else
 	{
@@ -272,15 +275,19 @@ cmd_show_in_the_toolbar (EggAction *action,
 	}
 
 	node = EPHY_NODE (selection->data);
-
+	id = ephy_node_get_id (node);
 	state = EGG_TOGGLE_ACTION (action)->active;
 
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, state);
-	ephy_node_set_property (node,
-			        EPHY_NODE_BMK_PROP_SHOW_IN_TOOLBAR,
-			        &value);
-	g_value_unset (&value);
+	if (state)
+	{
+		ephy_toolbars_model_add_bookmark
+			(editor->priv->tb_model, topic, id);
+	}
+	else
+	{
+		ephy_toolbars_model_remove_bookmark
+			(editor->priv->tb_model, topic, id);
+	}
 
 	g_list_free (selection);
 }
@@ -349,14 +356,14 @@ cmd_delete (EggAction *action,
 	{
 		EphyNodeViewPriority priority;
 		GList *selected;
-		EphyNode *node; 
-		
+		EphyNode *node;
+
 		selected = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->key_view));
 		node = EPHY_NODE (selected->data);
 		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 
 		if (priority == -1) priority = EPHY_NODE_VIEW_NORMAL_PRIORITY;
-		
+
 		if (priority == EPHY_NODE_VIEW_NORMAL_PRIORITY)
 		{
 			ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->key_view));
@@ -629,14 +636,16 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	{
 		EphyNode *node = EPHY_NODE (selected->data);
 		EphyNodeViewPriority priority;
+		gulong id;
+
+		id = ephy_node_get_id (node);
+		show_in_toolbar = ephy_toolbars_model_has_bookmark
+			(editor->priv->tb_model, TRUE, id);
 
 		priority = ephy_node_get_property_int
 			(node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 		if (priority == -1) priority = EPHY_NODE_VIEW_NORMAL_PRIORITY;
 		key_normal = (priority == EPHY_NODE_VIEW_NORMAL_PRIORITY);
-
-		show_in_toolbar = ephy_node_get_property_boolean
-			(node, EPHY_NODE_BMK_PROP_SHOW_IN_TOOLBAR);
 
 		g_list_free (selected);
 	}
@@ -645,9 +654,11 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	if (bmk_focus && selected)
 	{
 		EphyNode *node = EPHY_NODE (selected->data);
+		gulong id;
 
-		show_in_toolbar = ephy_node_get_property_boolean
-			(node, EPHY_NODE_BMK_PROP_SHOW_IN_TOOLBAR);
+		id = ephy_node_get_id (node);
+		show_in_toolbar = ephy_toolbars_model_has_bookmark
+			(editor->priv->tb_model, FALSE, id);
 
 		g_list_free (selected);
 	}
@@ -706,7 +717,16 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	g_object_set (action, "sensitive", select_all, NULL);
 	action = egg_action_group_get_action (action_group, "ShowInToolbar");
 	g_object_set (action, "sensitive", can_show_in_toolbar, NULL);
+
+	g_signal_handlers_block_by_func
+		(G_OBJECT (EGG_TOGGLE_ACTION (action)),
+		 G_CALLBACK (cmd_show_in_the_toolbar),
+		 editor);
 	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action), show_in_toolbar);
+	g_signal_handlers_unblock_by_func
+		(G_OBJECT (EGG_TOGGLE_ACTION (action)),
+		 G_CALLBACK (cmd_show_in_the_toolbar),
+		 editor);
 }
 
 static void
@@ -1242,4 +1262,6 @@ static void
 ephy_bookmarks_editor_init (EphyBookmarksEditor *editor)
 {
 	editor->priv = g_new0 (EphyBookmarksEditorPrivate, 1);
+
+	editor->priv->tb_model = ephy_shell_get_toolbars_model (ephy_shell);
 }

@@ -109,6 +109,8 @@ static gboolean egg_toolbar_focus          (GtkWidget        *widget,
 					    GtkDirectionType  dir);
 static void     egg_toolbar_screen_changed (GtkWidget        *widget,
 					    GdkScreen        *previous_screen);
+static void     egg_toolbar_map            (GtkWidget        *widget);
+static void     egg_toolbar_unmap          (GtkWidget        *widget);
 
 static void     egg_toolbar_drag_leave  (GtkWidget      *widget,
 					 GdkDragContext *context,
@@ -269,7 +271,9 @@ egg_toolbar_class_init (EggToolbarClass *klass)
   widget_class->screen_changed = egg_toolbar_screen_changed;
   widget_class->realize = egg_toolbar_realize;
   widget_class->unrealize = egg_toolbar_unrealize;
-
+  widget_class->map = egg_toolbar_map;
+  widget_class->unmap = egg_toolbar_unmap;
+  
   widget_class->drag_leave = egg_toolbar_drag_leave;
   widget_class->drag_motion = egg_toolbar_drag_motion;
   
@@ -558,6 +562,28 @@ egg_toolbar_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+egg_toolbar_map (GtkWidget *widget)
+{
+  EggToolbarPrivate *priv = EGG_TOOLBAR_GET_PRIVATE (widget);
+
+  GTK_WIDGET_CLASS (parent_class)->map (widget);
+
+  if (priv->event_window)
+    gdk_window_show_unraised (priv->event_window);
+}
+
+static void
+egg_toolbar_unmap (GtkWidget *widget)
+{
+  EggToolbarPrivate *priv = EGG_TOOLBAR_GET_PRIVATE (widget);
+
+  if (priv->event_window)
+    gdk_window_hide (priv->event_window);
+
+  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
 }
 
 static void
@@ -910,6 +936,15 @@ egg_toolbar_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
   gtk_widget_style_get (widget, "internal_padding", &border_width, NULL);
   border_width += GTK_CONTAINER (toolbar)->border_width;
 
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gdk_window_move_resize (priv->event_window,
+                              allocation->x + border_width,
+                              allocation->y + border_width,
+                              allocation->width - border_width * 2,
+                              allocation->height - border_width * 2);
+    }
+  
   gtk_widget_get_child_requisition (GTK_WIDGET (priv->arrow_button),
 				    &arrow_requisition);
   
@@ -1326,7 +1361,7 @@ style_change_notify (EggToolbar *toolbar)
 
 static void
 icon_size_change_notify (EggToolbar *toolbar)
-{
+{ 
   if (!toolbar->icon_size_set)
     {
       /* pretend it was set, then unset, thus reverting to new default */
@@ -1549,7 +1584,6 @@ egg_toolbar_drag_motion (GtkWidget      *widget,
     }
 
   gdk_window_show (priv->drag_highlight);
-  gdk_window_raise (priv->drag_highlight);
 
   gdk_drag_status (context, context->suggested_action, time_);
 
@@ -2176,9 +2210,11 @@ egg_toolbar_unset_icon_size (EggToolbar *toolbar)
       GtkSettings *settings = toolbar_get_settings (toolbar);
 
       if (settings)
-	g_object_get (settings,
-		      "gtk-toolbar-icon-size", &size,
-		      NULL);
+	{
+	  g_object_get (settings,
+			"gtk-toolbar-icon-size", &size,
+			NULL);
+	}
       else
 	size = DEFAULT_ICON_SIZE;
 

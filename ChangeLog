@@ -1,3 +1,26 @@
+2003-04-25  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/egg/egg-toolbars-model.c:
+	* lib/egg/eggtoolbar.c:
+
+	Update.
+
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(toolbar_checkbox_changed_cb), (build_ui),
+	(ephy_bookmark_properties_init):
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_show_in_the_toolbar),
+	(cmd_delete), (ephy_bookmarks_editor_update_menu),
+	(ephy_bookmarks_editor_init):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/ephy-toolbars-model.c: (ephy_toolbars_model_new),
+	(get_item_pos), (get_action_name), (get_toolbar_pos),
+	(ephy_toolbars_model_remove_bookmark),
+	(ephy_toolbars_model_add_bookmark),
+	(ephy_toolbars_model_has_bookmark):
+	* src/ephy-toolbars-model.h:
+
+	Implement the checkbox to add bookmarks to the toolbar.
+
 2003-04-25  David Bordoley <bordoley@msu.edu>
 
 	* src/ephy-history-window.c: (cmd_bookmark_page):

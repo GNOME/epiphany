@@ -22,6 +22,8 @@
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 
+#include <string.h>
+
 static void ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass);
 static void ephy_toolbars_model_init       (EphyToolbarsModel *t);
 static void ephy_toolbars_model_finalize   (GObject *object);
@@ -167,4 +169,132 @@ ephy_toolbars_model_new (void)
 	g_return_val_if_fail (t->priv != NULL, NULL);
 
 	return t;
+}
+
+static int
+get_item_pos (EphyToolbarsModel *model,
+	      int toolbar_pos,
+	      const char *name)
+{
+	int i, n_items;
+
+	n_items = egg_toolbars_model_n_items
+		(EGG_TOOLBARS_MODEL (model), toolbar_pos);
+
+	for (i = 0; i < n_items; i++)
+	{
+		const char *i_name;
+		gboolean is_separator;
+
+		i_name = egg_toolbars_model_item_nth
+			(EGG_TOOLBARS_MODEL (model), toolbar_pos, i,
+			 &is_separator);
+		if (!is_separator && strcmp (name, i_name) == 0)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+static char *
+get_action_name (gboolean topic, gulong id)
+{
+	char *action_name;
+
+	if (topic)
+	{
+		action_name = g_strdup_printf ("GoTopicId%ld", id);
+	}
+	else
+	{
+		action_name = g_strdup_printf ("GoBookmarkId%ld", id);
+	}
+
+	return action_name;
+}
+
+static int
+get_toolbar_pos (EphyToolbarsModel *model,
+		 const char *name)
+{
+	int i, n_toolbars;
+
+	n_toolbars = egg_toolbars_model_n_toolbars
+		(EGG_TOOLBARS_MODEL (model));
+
+	for (i = 0; i < n_toolbars; i++)
+	{
+		const char *t_name;
+
+		t_name = egg_toolbars_model_toolbar_nth
+			(EGG_TOOLBARS_MODEL (model), i);
+		if (strcmp (name, t_name) == 0)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+void
+ephy_toolbars_model_remove_bookmark (EphyToolbarsModel *model,
+				     gboolean topic,
+				     gulong id)
+{
+	char *action_name;
+	int toolbar_position, position;
+
+	action_name = get_action_name (topic, id);
+
+	toolbar_position = get_toolbar_pos (model, "BookmarksToolbar");
+	g_return_if_fail (toolbar_position != -1);
+
+	position = get_item_pos (model, toolbar_position, action_name);
+
+	egg_toolbars_model_remove_item (EGG_TOOLBARS_MODEL (model),
+				        toolbar_position, position);
+
+	g_free (action_name);
+}
+
+void
+ephy_toolbars_model_add_bookmark (EphyToolbarsModel *model,
+				  gboolean topic,
+				  gulong id)
+{
+	char *action_name;
+	int toolbar_position;
+
+	action_name = get_action_name (topic, id);
+
+	toolbar_position = get_toolbar_pos (model, "BookmarksToolbar");
+	g_return_if_fail (toolbar_position != -1);
+
+	egg_toolbars_model_add_item (EGG_TOOLBARS_MODEL (model),
+				     toolbar_position, -1,
+				     0, action_name);
+
+	g_free (action_name);
+}
+
+gboolean
+ephy_toolbars_model_has_bookmark (EphyToolbarsModel *model,
+				  gboolean topic,
+				  gulong id)
+{
+	char *action_name;
+	int toolbar_position, position;
+
+	action_name = get_action_name (topic, id);
+
+	toolbar_position = get_toolbar_pos (model, "BookmarksToolbar");
+	g_return_val_if_fail (toolbar_position != -1, FALSE);
+	position = get_item_pos (model, toolbar_position, action_name);
+
+	g_free (action_name);
+
+	return (position != -1);
 }

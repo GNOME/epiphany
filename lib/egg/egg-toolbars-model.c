@@ -223,6 +223,7 @@ impl_add_item (EggToolbarsModel    *t,
   GNode *parent_node;
   GNode *node;
   EggToolbarsItem *item;
+  int real_position;
 
   g_return_val_if_fail (IS_EGG_TOOLBARS_MODEL (t), NULL);
   g_return_val_if_fail (name != NULL, NULL);
@@ -232,8 +233,10 @@ impl_add_item (EggToolbarsModel    *t,
   node = g_node_new (item);
   g_node_insert (parent_node, position, node);
 
+  real_position = g_node_child_position (parent_node, node);
+
   g_signal_emit (G_OBJECT (t), egg_toolbars_model_signals[ITEM_ADDED], 0,
-		 toolbar_position, position);
+		 toolbar_position, real_position);
 
   return item->action_name;
 }
