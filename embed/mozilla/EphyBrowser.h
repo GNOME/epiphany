@@ -156,11 +156,13 @@ private:
 	nsCOMPtr<nsIDOMDocument> mTargetDocument;
 	nsCOMPtr<nsIDOMEventTarget> mEventTarget;
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;
-	nsCOMPtr<nsISecureBrowserUI> mSecurityInfo;
 	EphyFaviconEventListener *mFaviconEventListener;
 	EphyPopupBlockEventListener *mPopupBlockEventListener;
 	EphyModalAlertEventListener *mModalAlertListener;
 	PRBool mInitialized;
+#ifdef HAVE_MOZILLA_PSM
+	nsCOMPtr<nsISecureBrowserUI> mSecurityInfo;
+#endif
 
 	nsresult GetListener (void);
 	nsresult AttachListeners (void);
@@ -171,4 +173,4 @@ private:
 	PRBool   CompareFormsText (nsAString &aDefaultText, nsAString &aUserText);
 };
 
-#endif
+#endif /* !EPHY_BROWSER_H */
