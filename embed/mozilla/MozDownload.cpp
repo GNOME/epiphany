@@ -81,7 +81,11 @@ MozDownload::~MozDownload()
 	NS_ASSERTION (!mEphyDownload, "MozillaDownload still alive!");
 }
 
+#ifdef HAVE_NSITRANSFER_H
+NS_IMPL_ISUPPORTS1(MozDownload, nsITransfer)
+#else
 NS_IMPL_ISUPPORTS3(MozDownload, nsIDownload, nsITransfer, nsIWebProgressListener)
+#endif
 
 NS_IMETHODIMP
 MozDownload::InitForEmbed (nsIURI *aSource, nsIURI *aTarget, const PRUnichar *aDisplayName,
@@ -153,6 +157,7 @@ MozDownload::GetSource(nsIURI **aSource)
 	return NS_OK;
 }
 
+#ifndef HAVE_NSITRANSFER_H
 NS_IMETHODIMP
 MozDownload::GetTarget(nsIURI **aTarget)
 {
@@ -161,6 +166,7 @@ MozDownload::GetTarget(nsIURI **aTarget)
 
 	return NS_OK;
 }
+#endif
 
 NS_IMETHODIMP
 MozDownload::GetTargetFile (nsILocalFile** aTargetFile)
@@ -177,6 +183,7 @@ MozDownload::GetTargetFile (nsILocalFile** aTargetFile)
 	return rv;
 }
 
+#ifndef HAVE_NSITRANSFER_H
 NS_IMETHODIMP
 MozDownload::GetPersist(nsIWebBrowserPersist **aPersist)
 {
@@ -185,6 +192,7 @@ MozDownload::GetPersist(nsIWebBrowserPersist **aPersist)
 
 	return NS_OK;
 }
+#endif
 
 NS_IMETHODIMP
 MozDownload::GetPercentComplete(PRInt32 *aPercentComplete)
@@ -195,6 +203,7 @@ MozDownload::GetPercentComplete(PRInt32 *aPercentComplete)
  	return NS_OK;
 }
 
+#ifndef HAVE_NSITRANSFER_H
 #ifdef MOZ_NSIDOWNLOAD_GETSIZE
 /* readonly attribute PRUint64 amountTransferred; */
 NS_IMETHODIMP
@@ -209,7 +218,30 @@ MozDownload::GetSize(PRUint64 *aSize)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
-#endif /* MOZ_NSIDOWNLOAD_GETSIZE */
+
+#endif  /* MOZ_NSIDOWNLOAD_GETSIZE */
+
+NS_IMETHODIMP
+MozDownload::GetStartTime(PRInt64 *aStartTime)
+{
+	NS_ENSURE_ARG_POINTER(aStartTime);
+	*aStartTime = mStartTime;
+
+	return NS_OK;
+}
+
+NS_IMETHODIMP
+MozDownload::GetDisplayName(PRUnichar * *aDisplayName)
+{
+	return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+NS_IMETHODIMP
+MozDownload::SetDisplayName(const PRUnichar * aDisplayName)
+{
+	return NS_ERROR_NOT_IMPLEMENTED;
+}
+#endif /* !HAVE_NSITRANSFER_H */
 
 NS_IMETHODIMP
 MozDownload::GetTotalProgress(PRInt32 *aTotalProgress)
@@ -234,27 +266,6 @@ MozDownload::GetState(EphyDownloadState *aDownloadState)
 {
 	NS_ENSURE_ARG_POINTER(aDownloadState);
 	*aDownloadState = mDownloadState;
-
-	return NS_OK;
-}
-
-NS_IMETHODIMP
-MozDownload::GetDisplayName(PRUnichar * *aDisplayName)
-{
-	return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-NS_IMETHODIMP
-MozDownload::SetDisplayName(const PRUnichar * aDisplayName)
-{
-	return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-NS_IMETHODIMP
-MozDownload::GetStartTime(PRInt64 *aStartTime)
-{
-	NS_ENSURE_ARG_POINTER(aStartTime);
-	*aStartTime = mStartTime;
 
 	return NS_OK;
 }
@@ -318,7 +329,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 	if (aStateFlags & STATE_STOP)
 	{
 		/* Keep us alive */
-		nsCOMPtr<nsIDownload> kungFuDeathGrip(this);
+		nsCOMPtr<nsITransfer> kungFuDeathGrip(this);
 
 		mDownloadState = NS_SUCCEEDED (aStatus) ? EPHY_DOWNLOAD_COMPLETED : EPHY_DOWNLOAD_FAILED;
 		if (mEphyDownload)
