@@ -27,13 +27,6 @@
 #include <glib/ghash.h>
 #include <gtk/gtktypeutils.h>
 
-#define EPHY_EMBED_EVENT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventPrivate))
-
-struct EphyEmbedEventPrivate
-{
-	GHashTable *props;
-};
-
 static void ephy_embed_event_base_init (gpointer g_class);
 
 GType
