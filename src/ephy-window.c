@@ -1589,7 +1589,7 @@ ephy_window_load_url (EphyWindow *window,
         g_return_if_fail (url != NULL);
 
         ephy_embed_load_url (embed, url);
-	gtk_widget_grab_focus (GTK_BIN (embed)->child);
+	ephy_embed_activate (embed);
 }
 
 void ephy_window_activate_location (EphyWindow *window)
