@@ -23,6 +23,7 @@
 #define EPHY_BOOKMARKS_H
 
 #include <glib-object.h>
+#include <gtk/gtkwidget.h>
 
 #include "ephy-node.h"
 
@@ -95,6 +96,11 @@ void		  ephy_bookmarks_set_address    	(EphyBookmarks *eb,
 char		 *ephy_bookmarks_solve_smart_url	 (EphyBookmarks *eb,
 							 const char *smart_url,
 							 const char *content);
+
+GtkWidget      *ephy_bookmarks_show_bookmark_properties (EphyBookmarks *bookmarks,
+							 EphyNode *bookmark,
+							 GtkWidget *parent_window);
+							
 
 /* Keywords */
 

@@ -53,7 +53,7 @@ GType		     ephy_bookmark_properties_get_type        (void);
 
 GtkWidget	    *ephy_bookmark_properties_new             (EphyBookmarks *bookmarks,
 							       EphyNode *bookmark,
-							       GtkWindow *parent_window);
+							       GtkWidget *parent_window);
 
 EphyNode            *ephy_bookmark_properties_get_node        (EphyBookmarkProperties *properties);
 

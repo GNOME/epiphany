@@ -1,5 +1,25 @@
 2004-11-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmark-action.c: (properties_activate_cb),
+	(bookmark_destroy_cb), (ephy_bookmark_action_finalize),
+	(ephy_bookmark_action_init):
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(ephy_bookmark_properties_new),
+	(ephy_bookmark_properties_get_node):
+	* src/bookmarks/ephy-bookmark-properties.h:
+	* src/bookmarks/ephy-bookmarks-editor.c: (show_properties_dialog),
+	(ephy_bookmarks_editor_finalize), (ephy_bookmarks_editor_init):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init),
+	(ephy_bookmarks_finalize), (ephy_bookmarks_add_keyword),
+	(prop_dialog_destroy_cb), (bookmark_destroyed_cb),
+	(ephy_bookmarks_show_bookmark_properties):
+	* src/bookmarks/ephy-bookmarks.h:
+
+	Make sure there's only one bookmark properties dialogue for each
+	bookmark. Fixes bug #148398 and also bug #155880 (merged from HEAD).
+
+2004-11-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-node.c: (callback), (remove_invalidated_signals),
 	(ephy_node_emit_signal), (signal_object_weak_notify),
 	(ephy_node_new_with_id), (ephy_node_signal_connect_object),

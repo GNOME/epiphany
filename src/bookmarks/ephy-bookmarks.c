@@ -34,6 +34,7 @@
 #include "ephy-bookmarksbar-model.h"
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
+#include "ephy-bookmark-properties.h"
 #include "ephy-prefs.h"
 
 #include "eel-gconf-extensions.h"
@@ -65,7 +66,7 @@ struct EphyBookmarksPrivate
 	EphyNode *smartbookmarks;
 	EphyNode *lower_fav;
 	double lower_score;
-
+	GHashTable *props_dialogs;
 	guint disable_bookmark_editing_notifier_id;
 };
 
@@ -691,6 +692,9 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 					       "bookmarks.rdf",
 					       NULL);
 
+	eb->priv->props_dialogs = g_hash_table_new (g_direct_hash,
+						    g_direct_equal);
+
 	/* Bookmarks */
 	eb->priv->bookmarks = ephy_node_new_with_id (db, BOOKMARKS_NODE_ID);
 	g_value_init (&value, G_TYPE_STRING);
@@ -801,6 +805,8 @@ ephy_bookmarks_finalize (GObject *object)
 	EphyBookmarks *eb = EPHY_BOOKMARKS (object);
 
 	eel_gconf_notification_remove (eb->priv->disable_bookmark_editing_notifier_id);
+
+	g_hash_table_destroy (eb->priv->props_dialogs);
 
 	if (eb->priv->save_timeout_id != 0)
 	{
@@ -1164,6 +1170,58 @@ ephy_bookmarks_add_keyword (EphyBookmarks *eb,
 	ephy_node_add_child (eb->priv->keywords, key);
 
 	return key;
+}
+
+
+static void
+prop_dialog_destroy_cb (EphyBookmarkProperties *dialog,
+			EphyBookmarks *bookmarks)
+{
+	EphyNode *bookmark;
+
+	bookmark = ephy_bookmark_properties_get_node (dialog);
+  	
+	g_hash_table_remove (bookmarks->priv->props_dialogs, bookmark);
+}
+
+static void
+bookmark_destroyed_cb (EphyNode *bookmark,
+		       GtkWidget *dialog)
+{
+	gtk_widget_destroy (dialog);
+}		 
+
+GtkWidget *
+ephy_bookmarks_show_bookmark_properties (EphyBookmarks *bookmarks,
+					 EphyNode *bookmark,
+				         GtkWidget *parent)
+{
+	GtkWidget *dialog = NULL;
+
+	g_return_val_if_fail (EPHY_IS_BOOKMARKS (bookmarks), NULL);
+	g_return_val_if_fail (EPHY_IS_NODE (bookmark), NULL);
+
+	dialog = g_hash_table_lookup (bookmarks->priv->props_dialogs, bookmark);
+
+	
+	if (dialog == NULL)
+	{
+		dialog = ephy_bookmark_properties_new (bookmarks, bookmark, parent);
+
+		ephy_node_signal_connect_object (bookmark,
+						 EPHY_NODE_DESTROY,
+						 (EphyNodeCallback) bookmark_destroyed_cb,
+						 G_OBJECT (dialog));
+
+		g_signal_connect (dialog, "destroy",
+				  G_CALLBACK (prop_dialog_destroy_cb), bookmarks);
+		g_hash_table_insert (bookmarks->priv->props_dialogs,
+				     bookmark, dialog);
+	}
+
+	gtk_window_present (GTK_WINDOW (dialog));
+
+	return dialog;
 }
 
 void
