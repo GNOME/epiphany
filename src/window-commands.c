@@ -983,6 +983,8 @@ window_cmd_help_about (GtkAction *action,
 	gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (window));
 	gtk_window_set_destroy_with_parent (GTK_WINDOW (about), TRUE);
 
+	gtk_window_set_icon_name (GTK_WINDOW (about), "web-browser");
+
 	ptr = &about;
 	g_object_add_weak_pointer (G_OBJECT (about), (gpointer *)ptr);
 
