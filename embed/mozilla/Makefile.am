@@ -5,6 +5,7 @@ INCLUDES = \
 	$(WARN_CFLAGS)					\
 	$(MOZILLA_COMPONENT_CFLAGS)			\
 	-I$(MOZILLA_INCLUDE_ROOT)/appcomps		\
+	-I$(MOZILLA_INCLUDE_ROOT)/chrome		\
 	-I$(MOZILLA_INCLUDE_ROOT)/content		\
 	-I$(MOZILLA_INCLUDE_ROOT)/cookie		\
 	-I$(MOZILLA_INCLUDE_ROOT)/docshell		\
@@ -14,6 +15,7 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/gfx			\
 	-I$(MOZILLA_INCLUDE_ROOT)/helperAppDlg		\
 	-I$(MOZILLA_INCLUDE_ROOT)/layout		\
+	-I$(MOZILLA_INCLUDE_ROOT)/locale		\
 	-I$(MOZILLA_INCLUDE_ROOT)/mimetype		\
 	-I$(MOZILLA_INCLUDE_ROOT)/necko			\
 	-I$(MOZILLA_INCLUDE_ROOT)/nkcache		\
