@@ -139,6 +139,13 @@ ephy_bookmarks_editor_dispose (GObject *object)
 	if (editor->priv->key_view != NULL)
 	{
 		selection = ephy_node_view_get_selection (editor->priv->key_view);
+		if (selection == NULL || selection->data == NULL)
+		{
+			editor->priv->key_view = NULL;
+			G_OBJECT_CLASS (parent_class)->dispose (object);
+			return;
+		}
+		
 		selected_id = ephy_node_get_id (EPHY_NODE (selection->data));
 		if (selected_id > 0)
 		{
