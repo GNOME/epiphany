@@ -124,9 +124,9 @@ item_parent_set_cb (GtkWidget *item, GtkWidget *previous_parent)
 
 	toolbar = EGG_TOOLBAR (item->parent);
 
-	g_signal_connect (toolbar, "style_changed",
-			  G_CALLBACK (toolbar_style_sync),
-			  item);
+	g_signal_connect_object (toolbar, "style_changed",
+			         G_CALLBACK (toolbar_style_sync),
+			         item, 0);
 
 	style = egg_toolbar_get_style (toolbar);
 	toolbar_style_sync (toolbar, style, item);
@@ -138,9 +138,9 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
 	g_signal_connect_object (action, "notify::throbbing",
 				 G_CALLBACK (ephy_spinner_action_sync_throbbing),
 				 proxy, 0);
-	g_signal_connect (proxy, "parent_set",
-			  G_CALLBACK (item_parent_set_cb),
-			  NULL);
+	g_signal_connect_object (proxy, "parent_set",
+			         G_CALLBACK (item_parent_set_cb),
+			         proxy, 0);
 
 	(* EGG_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 }
