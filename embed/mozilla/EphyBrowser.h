@@ -33,6 +33,7 @@
 #include <nsIDOMDocument.h>
 #include <nsIDOMWindow.h>
 #include <nsIPrintSettings.h>
+#include <nsIRequest.h>
 
 #ifdef ALLOW_PRIVATE_API
 #include <nsIDocShell.h>
@@ -126,12 +127,16 @@ public:
 
 	nsresult GetHasModifiedForms (PRBool *modified);
 
+	nsresult SetSecurityInfo (nsIRequest *aRequest);
+	nsresult GetSecurityDescription (nsACString &aDescription);
+
 	nsCOMPtr<nsIWebBrowser> mWebBrowser;
 
 private:
 	nsCOMPtr<nsIDOMDocument> mTargetDocument;
 	nsCOMPtr<nsIDOMEventReceiver> mEventReceiver;
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;
+	nsCOMPtr<nsISupports> mSecurityInfo;
 	EphyFaviconEventListener *mFaviconEventListener;
 	EphyPopupBlockEventListener *mPopupBlockEventListener;
 	PRBool mInitialized;

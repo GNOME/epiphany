@@ -38,15 +38,9 @@
 #include <nsEmbedString.h>
 #include <nsMemory.h>
 #include <nsIURI.h>
-#include <nsIChannel.h>
 #include <nsIRequest.h>
 #include <nsIWebProgressListener.h>
 #include <nsGfxCIID.h>
-
-#ifdef ALLOW_PRIVATE_API
-/* not sure about this one */
-#include <nsITransportSecurityInfo.h>
-#endif
 
 static void	mozilla_embed_class_init	(MozillaEmbedClass *klass);
 static void	mozilla_embed_init		(MozillaEmbed *gs);
@@ -92,8 +86,7 @@ typedef enum
 struct MozillaEmbedPrivate
 {
 	EphyBrowser *browser;
-	nsCOMPtr<nsIRequest> request;
-	gint security_state;
+	guint security_state;
 	MozillaEmbedLoadState load_state;
 };
 
@@ -321,8 +314,6 @@ mozilla_embed_finalize (GObject *object)
         	delete embed->priv->browser;
 	       	embed->priv->browser = nsnull;
 	}
-
-	embed->priv->request = nsnull;
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -644,41 +635,19 @@ impl_get_security_level (EphyEmbed *embed,
                          EmbedSecurityLevel *level,
                          char **description)
 {
-	nsresult result;
+	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
 
 	g_return_if_fail (description != NULL && level != NULL);
 
 	*description = NULL;
 	*level = STATE_IS_UNKNOWN;
 
-        nsCOMPtr<nsIChannel> channel;
-	channel = do_QueryInterface (MOZILLA_EMBED(embed)->priv->request, 
-				     &result);
-        if (NS_FAILED (result)) return;
+	nsresult rv;
+	nsEmbedCString desc;
+	rv = mpriv->browser->GetSecurityDescription (desc);
+	if (NS_FAILED (rv)) return;
 
-        nsCOMPtr<nsISupports> info;
-        result = channel->GetSecurityInfo(getter_AddRefs(info));
-        if (NS_FAILED (result)) return;
-
-	if (info)
-	{
-		nsCOMPtr<nsITransportSecurityInfo> secInfo(do_QueryInterface(info));
-		if (!secInfo) return;
-
-		PRUnichar *tooltip;
-		result = secInfo->GetShortSecurityDescription(&tooltip);
-		if (NS_FAILED (result)) return;
-
-		if (tooltip)
-		{
-			nsEmbedCString cTooltip;
-			NS_UTF16ToCString (nsEmbedString(tooltip),
-					   NS_CSTRING_ENCODING_UTF8, cTooltip);
-			*description = g_strdup (cTooltip.get());
-			nsMemory::Free (tooltip);
-		}
-	}
-	
+	*description = g_strdup (desc.get());
 	*level = mozilla_embed_security_level (MOZILLA_EMBED (embed));
 }
 
@@ -1107,13 +1076,13 @@ mozilla_embed_new_window_cb (GtkMozEmbed *embed,
 
 static void
 mozilla_embed_security_change_cb (GtkMozEmbed *embed, 
-				  gpointer request,
-                                  guint state, 
+				  gpointer requestptr,
+				  guint state, 
 				  MozillaEmbed *membed)
 {
 	EmbedSecurityLevel level;
 
-	membed->priv->request = static_cast<nsIRequest*>(request);
+	membed->priv->browser->SetSecurityInfo (static_cast<nsIRequest*>(requestptr));
 	membed->priv->security_state = state;
 	level = mozilla_embed_security_level (membed);
 

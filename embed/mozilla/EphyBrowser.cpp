@@ -65,9 +65,16 @@
 #include "nsIDOMWindow2.h"
 #include "nsEmbedString.h"
 #include "nsMemory.h"
+#include "nsIServiceManager.h"
+#include "nsIChannel.h"
+#include "nsIInterfaceRequestor.h"
 
 #ifdef ALLOW_PRIVATE_API
 #include "nsIMarkupDocumentViewer.h"
+#ifdef HAVE_MOZILLA_PSM
+/* not sure about this one: */
+#include <nsITransportSecurityInfo.h>
+#endif
 #endif
 
 static PRUnichar DOMLinkAdded[] = { 'D', 'O', 'M', 'L', 'i', 'n', 'k',
@@ -937,4 +944,46 @@ nsresult EphyBrowser::GetHasModifiedForms (PRBool *modified)
 	}
 
 	return NS_OK;
+}
+
+nsresult
+EphyBrowser::SetSecurityInfo (nsIRequest *aRequest)
+{
+#ifdef HAVE_MOZILLA_PSM
+	/* clear previous security info */
+	mSecurityInfo = nsnull;
+
+	nsCOMPtr<nsIChannel> channel (do_QueryInterface (aRequest));
+	NS_ENSURE_TRUE (channel, NS_ERROR_FAILURE);
+
+	channel->GetSecurityInfo (getter_AddRefs (mSecurityInfo));
+
+	return NS_OK;
+#else
+	return NS_ERROR_NOT_IMPLEMENTED;
+#endif
+}
+
+nsresult
+EphyBrowser::GetSecurityDescription (nsACString &aDescription)
+{
+#ifdef HAVE_MOZILLA_PSM
+	if (!mSecurityInfo) return NS_ERROR_FAILURE;
+
+	nsCOMPtr<nsITransportSecurityInfo> tsInfo (do_QueryInterface (mSecurityInfo));
+	NS_ENSURE_TRUE (tsInfo, NS_ERROR_FAILURE);
+
+	nsresult rv;
+	PRUnichar *tooltip = nsnull;
+	rv = tsInfo->GetShortSecurityDescription (&tooltip);
+	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && tooltip, NS_ERROR_FAILURE);
+
+	NS_UTF16ToCString (nsEmbedString (tooltip),
+			   NS_CSTRING_ENCODING_UTF8, aDescription);
+	if (tooltip) nsMemory::Free (tooltip);
+
+	return NS_OK;
+#else
+	return NS_ERROR_NOT_IMPLEMENTED;
+#endif
 }
