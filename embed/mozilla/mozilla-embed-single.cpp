@@ -945,8 +945,6 @@ impl_show_file_picker (EphyEmbedSingle *shell,
         }
         else
         {
-                if (*ret_fullpath)
-                        g_free (*ret_fullpath);
                 nsCOMPtr<nsILocalFile> file;
                 filePicker->GetFile (getter_AddRefs(file));
 		nsCAutoString tempFullPathStr;

@@ -160,13 +160,13 @@ ephy_embed_utils_save (GtkWidget *window,
 
                 g_free (retDir);
                 gnome_vfs_uri_unref (uri);
+	        g_free (retPath);
         }
 
 	g_object_unref (G_OBJECT(persist));
 
         g_free (dirName);
         g_free (fileName);
-        g_free (retPath);
 }
 
 static void

@@ -287,7 +287,7 @@ window_cmd_file_open (EggAction *action,
 		      EphyWindow *window)
 {
 	gchar *dir, *retDir;
-        gchar *file = NULL;
+        gchar *file;
         GnomeVFSURI *uri;
 	GtkWidget *wmain;
 	EphyEmbedShell *embed_shell;
@@ -327,10 +327,10 @@ window_cmd_file_open (EggAction *action,
                         g_free (retDir);
                         gnome_vfs_uri_unref (uri);
                 }
+	        g_free (file);
         }
 
         g_free (dir);
-        g_free (file);
 }
 
 void

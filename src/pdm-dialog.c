@@ -471,6 +471,31 @@ pdm_dialog_passwords_free (PdmActionInfo *info,
 	ephy_embed_single_free_passwords (single, l);
 }
 
+/* Group all Properties and Remove buttons in the same size group to avoid the
+ * little jerk you get otherwise when switching pages because one set of
+ * buttons is wider than another. */
+static void
+group_button_allocations (EphyDialog *dialog)
+{
+       const gint props[] =
+       {
+               PROP_COOKIES_REMOVE,
+               PROP_COOKIES_PROPERTIES,
+               PROP_PASSWORDS_REMOVE
+       };
+       GtkSizeGroup *size_group;
+       guint i;
+
+       size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+
+       for (i = 0; i < G_N_ELEMENTS (props); ++i)
+       {
+               GtkWidget *w;
+               w = ephy_dialog_get_control (dialog, props[i]);
+               gtk_size_group_add_widget (size_group,  w);
+       }
+}
+
 static void
 pdm_dialog_init (PdmDialog *dialog)
 {
@@ -491,6 +516,8 @@ pdm_dialog_init (PdmDialog *dialog)
                                properties,
                                "epiphany.glade",
                                "pdm_dialog");
+
+	group_button_allocations (EPHY_DIALOG (dialog));
 
 	cookies_tv = setup_cookies_treeview (dialog);
 	passwords_tv = setup_passwords_treeview (dialog);
