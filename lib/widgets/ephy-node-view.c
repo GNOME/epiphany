@@ -218,6 +218,11 @@ ephy_node_view_finalize (GObject *object)
 		gtk_target_list_unref (view->priv->source_target_list);
 	}
 
+	if (view->priv->drag_targets)
+	{
+		gtk_target_list_unref (view->priv->drag_targets);
+	}
+
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
