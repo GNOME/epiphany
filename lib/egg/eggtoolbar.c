@@ -33,7 +33,7 @@
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtktoolbar.h>
 
-#define DEFAULT_IPADDING 0
+#define DEFAULT_IPADDING 2
 #define DEFAULT_SPACE_SIZE  5
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
 
@@ -716,10 +716,7 @@ egg_toolbar_size_allocate (GtkWidget     *widget,
   total_size = 0;
   number_expandable = 0;
   space_size = get_space_size (toolbar);
-  
-  gtk_widget_style_get (widget, "internal_padding", &ipadding, NULL);
-  border_width += ipadding;
-  
+
   available_width  = allocation->width  - 2 * border_width;
   available_height = allocation->height - 2 * border_width;
   if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
