@@ -710,8 +710,41 @@ void
 ephy_node_view_remove (EphyNodeView *view)
 {
 	GList *list;
+	EphyNode *node;
+	GtkTreeIter iter, iter2;
+	GtkTreePath *path;
+
+	/* Before removing we try to select the next node in the view. If that is
+	 * not available we try with the previous one, and if that is absent too,
+	 * we do not select anything (which equals to select the topic "All")
+	 */
 
 	list = ephy_node_view_get_selection (view);
+	g_return_if_fail (list != NULL);
+	node = EPHY_NODE ((g_list_last (list))->data);
+	ephy_tree_model_node_iter_from_node (EPHY_TREE_MODEL_NODE (view->priv->nodemodel),
+					     node, &iter);
+	egg_tree_model_filter_convert_child_iter_to_iter (EGG_TREE_MODEL_FILTER (view->priv->filtermodel),
+							  &iter2, &iter);
+	gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT (view->priv->sortmodel),
+							&iter, &iter2);
+	iter2 = iter;
+	
+	if (gtk_tree_model_iter_next (GTK_TREE_MODEL (view->priv->sortmodel), &iter))
+	{
+		path = gtk_tree_model_get_path (GTK_TREE_MODEL (view->priv->sortmodel), &iter);
+		gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), path, NULL, FALSE);
+		gtk_tree_path_free (path);
+	}
+	else
+	{
+		path = gtk_tree_model_get_path (GTK_TREE_MODEL (view->priv->sortmodel), &iter2);
+		if (gtk_tree_path_prev (path))
+		{
+			gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), path, NULL, FALSE);
+		}
+		gtk_tree_path_free (path);
+	}
 
 	for (; list != NULL; list = list->next)
 	{
