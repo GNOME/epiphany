@@ -476,7 +476,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				info->context = EMBED_CONTEXT_NONE;
 				return NS_OK;
 			}
-			if (g_ascii_strcasecmp (tag.get(), "area") == 0)
+			else if (g_ascii_strcasecmp (tag.get(), "area") == 0)
 			{
 				info->context |= EMBED_CONTEXT_LINK;
 				nsCOMPtr <nsIDOMHTMLAreaElement> area =
@@ -514,8 +514,6 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
                                                 return NS_ERROR_FAILURE;
 					SetStringProperty ("background_image",
 						           bgimg.get());
-					if (NS_FAILED (rv))
-						return NS_ERROR_FAILURE;
 
 					has_background = PR_TRUE;
 				}
