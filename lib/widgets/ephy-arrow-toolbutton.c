@@ -76,14 +76,33 @@ ephy_arrow_toolbutton_get_type (void)
         return ephy_arrow_toolbutton_type;
 }
 
+
+static gboolean
+ephy_arrow_toolbutton_set_tooltip (EggToolItem *tool_item,
+				   GtkTooltips *tooltips,
+				   const char *tip_text,
+				   const char *tip_private)
+{
+	EphyArrowToolButton *button = EPHY_ARROW_TOOLBUTTON (tool_item);
+
+	g_return_val_if_fail (IS_EPHY_ARROW_TOOLBUTTON (button), FALSE);
+
+	gtk_tooltips_set_tip (tooltips, button->priv->button, tip_text, tip_private);
+
+	return TRUE;
+}
+
 static void
 ephy_arrow_toolbutton_class_init (EphyArrowToolButtonClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	EggToolItemClass *tool_item_class = EGG_TOOL_ITEM_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_arrow_toolbutton_finalize;
+
+	tool_item_class->set_tooltip = ephy_arrow_toolbutton_set_tooltip;
 
 	EphyArrowToolButtonSignals[EPHY_ARROW_TOOL_BUTTON_MENU_ACTIVATED] =
 		g_signal_new

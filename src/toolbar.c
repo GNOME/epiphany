@@ -300,6 +300,7 @@ toolbar_setup_actions (Toolbar *t)
 			       "name", "NavigationBack",
 			       "label", _("Back"),
 			       "stock_id", GTK_STOCK_GO_BACK,
+			       "tooltip", _("Go back"),
 			       "window", t->priv->window,
 			       "direction", EPHY_NAVIGATION_DIRECTION_BACK,
 			       NULL);
@@ -312,6 +313,7 @@ toolbar_setup_actions (Toolbar *t)
 			       "name", "NavigationForward",
 			       "label", _("Forward"),
 			       "stock_id", GTK_STOCK_GO_FORWARD,
+			       "tooltip", _("Go forward"),
 			       "window", t->priv->window,
 			       "direction", EPHY_NAVIGATION_DIRECTION_FORWARD,
 			       NULL);
@@ -323,9 +325,10 @@ toolbar_setup_actions (Toolbar *t)
 	action = g_object_new (EPHY_TYPE_NAVIGATION_ACTION,
 			       "name", "NavigationUp",
 			       "label", _("Up"),
+			       "stock_id", GTK_STOCK_GO_UP,
+			       "tooltip", _("Go up"),
 			       "window", t->priv->window,
 			       "direction", EPHY_NAVIGATION_DIRECTION_UP,
-			       "stock_id", GTK_STOCK_GO_UP,
 			       NULL);
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (window_cmd_go_up), t->priv->window);
@@ -356,6 +359,7 @@ toolbar_setup_actions (Toolbar *t)
 	action = g_object_new (EPHY_TYPE_ZOOM_ACTION,
 			       "name", "Zoom",
 			       "label", _("Zoom"),
+			       "tooltip", _("Zoom"),
 			       "zoom", 1.0,
 			       NULL);
 	g_signal_connect (action, "zoom_to_level",
@@ -375,6 +379,7 @@ toolbar_setup_actions (Toolbar *t)
 			       "name", "ToolbarGo",
 			       "label", _("Go"),
 			       "stock_id", GTK_STOCK_JUMP_TO,
+			       "tooltip", _("Go to the address entered in the location entry."),
 			       NULL);
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (window_cmd_load_location), t->priv->window);
