@@ -29,6 +29,7 @@ NOINST_H_FILES = \
 
 INST_H_FILES = \
 	ephy-command-manager.h		\
+	ephy-cookie-manager.h		\
 	ephy-embed.h			\
 	ephy-embed-event.h		\
 	ephy-embed-persist.h		\
@@ -36,11 +37,14 @@ INST_H_FILES = \
 	ephy-embed-single.h		\
 	ephy-embed-shell.h		\
 	ephy-encodings.h		\
-	ephy-history.h
+	ephy-history.h			\
+	ephy-password-manager.h		\
+	ephy-permission-manager.h
 
 libephyembed_la_SOURCES = \
 	downloader-view.c		\
 	ephy-command-manager.c		\
+	ephy-cookie-manager.c		\
 	ephy-download.c			\
 	ephy-embed.c			\
 	ephy-embed-dialog.c		\
@@ -52,7 +56,11 @@ libephyembed_la_SOURCES = \
 	ephy-encodings.c		\
 	ephy-favicon-cache.c		\
 	ephy-history.c			\
+	ephy-password-manager.c		\
+	ephy-permission-manager.c	\
 	find-dialog.c			\
 	print-dialog.c			\
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
+
+libephyembed_la_LIBADD = $(top_builddir)/embed/mozilla/libephymozillaembed.la

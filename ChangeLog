@@ -1,3 +1,50 @@
+2003-11-21  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/Makefile.am:
+	* embed/ephy-cookie-manager.c: (ephy_cookie_get_type),
+	(ephy_cookie_new), (ephy_cookie_copy), (ephy_cookie_free),
+	(ephy_cookie_manager_get_type), (ephy_cookie_manager_base_init),
+	(ephy_cookie_manager_list_cookies),
+	(ephy_cookie_manager_remove_cookie), (ephy_cookie_manager_clear):
+	* embed/ephy-cookie-manager.h:
+	* embed/ephy-embed-single.c: (ephy_embed_single_get_type),
+	(ephy_embed_single_class_init), (ephy_embed_single_clear_cache),
+	(ephy_embed_single_set_offline_mode),
+	(ephy_embed_single_load_proxy_autoconf),
+	(ephy_embed_single_get_font_list):
+	* embed/ephy-embed-single.h:
+	* embed/ephy-password-manager.c: (ephy_password_info_get_type),
+	(ephy_password_info_new), (ephy_password_info_copy),
+	(ephy_password_info_free), (ephy_password_manager_get_type),
+	(ephy_password_manager_add), (ephy_password_manager_remove),
+	(ephy_password_manager_list):
+	* embed/ephy-password-manager.h:
+	* embed/ephy-permission-manager.c: (ephy_permission_info_get_type),
+	(ephy_permission_info_new), (ephy_permission_info_copy),
+	(ephy_permission_info_free), (ephy_permission_manager_get_type),
+	(ephy_permission_manager_base_init), (ephy_permission_manager_add),
+	(ephy_permission_manager_remove), (ephy_permission_manager_clear),
+	(ephy_permission_manager_test), (ephy_permission_manager_list):
+	* embed/ephy-permission-manager.h:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed-single.h:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* src/Makefile.am:
+	* src/pdm-dialog.c: (pdm_dialog_get_type), (pdm_dialog_cookie_add),
+	(pdm_dialog_password_add), (pdm_dialog_cookie_remove),
+	(pdm_dialog_password_remove), (pdm_dialog_cookies_free),
+	(pdm_dialog_passwords_free), (pdm_dialog_init), (pdm_dialog_new),
+	(show_cookies_properties),
+	(pdm_dialog_cookies_properties_button_clicked_cb):
+	* src/pdm-dialog.h:
+
+	New interfaces: EphyCookieManager, EphyPermissionManager,
+	EphyPasswordManager.
+	Port all callers to new interfaces.
+	Change linking order to make it link.
+
+	Only set autoconf proxy url if it's non-empty.
+
 2003-11-21  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* lib/ephy-stock-icons.c: (ephy_stock_icons_init):

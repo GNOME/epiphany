@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2000-2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,8 +22,8 @@
 #ifndef MOZILLA_EMBED_SINGLE_H
 #define MOZILLA_EMBED_SINGLE_H
 
-#include "glib.h"
-#include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
+
 #include <glib-object.h>
 
 G_BEGIN_DECLS
@@ -34,20 +35,21 @@ G_BEGIN_DECLS
 #define MOZILLA_IS_EMBED_SINGLE_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), MOZILLA_TYPE_EMBED_SINGLE))
 #define MOZILLA_EMBED_SINGLE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), MOZILLA_TYPE_EMBED_SINGLE, MozillaEmbedSingleClass))
 
-typedef struct MozillaEmbedSingle MozillaEmbedSingle;
-typedef struct MozillaEmbedSinglePrivate MozillaEmbedSinglePrivate;
+typedef struct MozillaEmbedSingle		MozillaEmbedSingle;
+typedef struct MozillaEmbedSingleClass		MozillaEmbedSingleClass;
+typedef struct MozillaEmbedSinglePrivate	MozillaEmbedSinglePrivate;
 
 struct MozillaEmbedSingle
 {
-	EphyEmbedSingle parent;
+	GObject parent;
 
 	/*< private >*/
-        MozillaEmbedSinglePrivate *priv;
+	MozillaEmbedSinglePrivate *priv;
 };
 
 struct MozillaEmbedSingleClass
 {
-        EphyEmbedSingleClass parent_class;
+	GObjectClass parent_class;
 };
 
 GType             mozilla_embed_single_get_type	     (void);

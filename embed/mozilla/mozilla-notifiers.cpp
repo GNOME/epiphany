@@ -351,7 +351,7 @@ mozilla_proxy_autoconfig_notifier (GConfClient *client,
 
 	url = eel_gconf_get_string (entry->key);
 
-	if (url)
+	if (url && url[0] != '\0')
 	{
 		ephy_embed_single_load_proxy_autoconf (single, url);
 	}

@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2000-2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,11 +23,16 @@
 #include "config.h"
 #endif
 
+#include "mozilla-embed-single.h"
+
+#include "ephy-cookie-manager.h"
+#include "ephy-password-manager.h"
+#include "ephy-permission-manager.h"
+
 #include "glib.h"
 #include "ephy-debug.h"
 #include "gtkmozembed.h"
 #include "mozilla-embed.h"
-#include "mozilla-embed-single.h"
 #include "ephy-file-helpers.h"
 #include "mozilla-notifiers.h"
 #include "ephy-langs.h"
@@ -34,7 +40,6 @@
 #include "ephy-embed-prefs.h"
 #include "MozRegisterComponents.h"
 
-#include <time.h>
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <nsICacheService.h>
@@ -48,7 +53,9 @@
 #include <nsIFontEnumerator.h>
 #include <nsISupportsPrimitives.h>
 #include <nsReadableUtils.h>
+#include <nsICookie2.h>
 #include <nsICookieManager.h>
+#include <nsIPassword.h>
 #include <nsIPasswordManager.h>
 #include <nsIPassword.h>
 #include <nsICookie.h>
@@ -58,8 +65,12 @@
 #include <nsCCookieManager.h>
 #endif
 #include <nsCPasswordManager.h>
+#include <nsIPermission.h>
+#include <nsIPermissionManager.h>
 #include <nsString.h>
 #include <nsILocalFile.h>
+#include <nsIURI.h>
+#include <nsNetUtil.h>
 
 // FIXME: For setting the locale. hopefully gtkmozembed will do itself soon
 #include <nsIChromeRegistry.h>
@@ -69,13 +80,6 @@
 #define MOZILLA_PROFILE_NAME "epiphany"
 #define MOZILLA_PROFILE_FILE "prefs.js"
 #define DEFAULT_PROFILE_FILE SHARE_DIR"/default-prefs.js"
-
-static void
-mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass);
-static void
-mozilla_embed_single_init (MozillaEmbedSingle *ges);
-static void
-mozilla_embed_single_finalize (GObject *object);
 
 #define MOZILLA_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED_SINGLE, MozillaEmbedSinglePrivate))
 
@@ -87,14 +91,21 @@ struct MozillaEmbedSinglePrivate
 	GtkWidget *theme_window;
 };
 
+static void mozilla_embed_single_class_init	(MozillaEmbedSingleClass *klass);
+static void ephy_embed_single_iface_init	(EphyEmbedSingleClass *iface);
+static void ephy_cookie_manager_iface_init	(EphyCookieManagerIFace *iface);
+static void ephy_password_manager_iface_init	(EphyPasswordManagerIFace *iface);
+static void ephy_permission_manager_iface_init	(EphyPermissionManagerIFace *iface);
+static void mozilla_embed_single_init		(MozillaEmbedSingle *ges);
+
 static GObjectClass *parent_class = NULL;
 
 GType
 mozilla_embed_single_get_type (void)
 {
-       static GType mozilla_embed_single_type = 0;
+       static GType type = 0;
 
-        if (mozilla_embed_single_type == 0)
+        if (type == 0)
         {
                 static const GTypeInfo our_info =
                 {
@@ -109,12 +120,57 @@ mozilla_embed_single_get_type (void)
                         (GInstanceInitFunc) mozilla_embed_single_init
                 };
 
-                mozilla_embed_single_type = g_type_register_static (EPHY_TYPE_EMBED_SINGLE,
-								   "MozillaEmbedSingle",
-								   &our_info, (GTypeFlags)0);
-        }
+		static const GInterfaceInfo embed_single_info =
+		{
+			(GInterfaceInitFunc) ephy_embed_single_iface_init,
+			NULL,
+			NULL
+		};
 
-        return mozilla_embed_single_type;
+		static const GInterfaceInfo cookie_manager_info =
+		{
+			(GInterfaceInitFunc) ephy_cookie_manager_iface_init,
+			NULL,
+			NULL
+		};
+
+		static const GInterfaceInfo password_manager_info =
+		{
+			(GInterfaceInitFunc) ephy_password_manager_iface_init,
+			NULL,
+			NULL
+		};
+
+		static const GInterfaceInfo permission_manager_info =
+		{
+			(GInterfaceInitFunc) ephy_permission_manager_iface_init,
+			NULL,
+			NULL
+		};
+
+		type = g_type_register_static (G_TYPE_OBJECT,
+					       "MozillaEmbedSingle",
+					       &our_info,
+					       (GTypeFlags)0);
+
+		g_type_add_interface_static (type,
+					     EPHY_TYPE_EMBED_SINGLE,
+					     &embed_single_info);
+
+		g_type_add_interface_static (type,
+					     EPHY_TYPE_COOKIE_MANAGER,
+					     &cookie_manager_info);
+
+		g_type_add_interface_static (type,
+					     EPHY_TYPE_PASSWORD_MANAGER,
+					     &password_manager_info);
+
+		g_type_add_interface_static (type,
+					     EPHY_TYPE_PERMISSION_MANAGER,
+					     &permission_manager_info);
+	}
+
+        return type;
 }
 
 EphyEmbedSingle *
@@ -495,8 +551,9 @@ static void
 impl_load_proxy_autoconf (EphyEmbedSingle *shell,
 			  const char* url)
 {
-	nsresult rv;
+	g_assert (url != NULL);
 
+	nsresult rv;
         nsCOMPtr<nsIProtocolProxyService> pps =
                 do_GetService ("@mozilla.org/network/protocol-proxy-service;1",
                                &rv);
@@ -537,174 +594,376 @@ impl_get_font_list (EphyEmbedSingle *shell,
 	return g_list_reverse (l);
 }
 
-static GList *
-impl_list_cookies (EphyEmbedSingle *shell)
+static EphyCookie *
+mozilla_cookie_to_ephy_cookie (nsICookie2 *keks)
 {
-        nsresult result;
-	GList *cookies = NULL;
+	EphyCookie *cookie;
 
-        nsCOMPtr<nsICookieManager> cookieManager = 
-                        do_CreateInstance (NS_COOKIEMANAGER_CONTRACTID);
-        nsCOMPtr<nsISimpleEnumerator> cookieEnumerator;
-        result = 
-            cookieManager->GetEnumerator (getter_AddRefs(cookieEnumerator));
-        if (NS_FAILED(result)) return NULL;
-	
-        PRBool enumResult;
-        for (cookieEnumerator->HasMoreElements(&enumResult) ;
-             enumResult == PR_TRUE ;
-             cookieEnumerator->HasMoreElements(&enumResult))
-        {
-                CookieInfo *c;
-        
-                nsCOMPtr<nsICookie> nsCookie;
-                result = cookieEnumerator->GetNext (getter_AddRefs(nsCookie));
-                if (NS_FAILED(result)) return NULL;
+	cookie = ephy_cookie_new ();
 
-                c = g_new0 (CookieInfo, 1);
+	nsCAutoString transfer;
 
-                nsCAutoString transfer;
+	keks->GetHost (transfer);
+	cookie->domain = g_strdup (transfer.get());
+	keks->GetName (transfer);
+	cookie->name = g_strdup (transfer.get());
+	keks->GetValue (transfer);
+	cookie->value = g_strdup (transfer.get());
+	keks->GetPath (transfer);
+	cookie->path = g_strdup (transfer.get());
 
-                nsCookie->GetHost (transfer);
-                c->domain = g_strdup (transfer.get());
-                nsCookie->GetName (transfer);
-                c->name = g_strdup (transfer.get());
-                nsCookie->GetValue (transfer);
-                c->value = g_strdup (transfer.get());
-                nsCookie->GetPath (transfer);
-                c->path = g_strdup (transfer.get());
+	PRBool isSecure;
+	keks->GetIsSecure (&isSecure);
+	cookie->is_secure = isSecure != PR_FALSE;
 
-		PRBool isSecure;
-                nsCookie->GetIsSecure (&isSecure);
-                if (isSecure == PR_TRUE) 
-                        c->secure = g_strdup (_("Yes"));
-                else 
-                        c->secure = g_strdup (_("No"));
+	PRUint64 dateTime;
+	keks->GetExpires (&dateTime);
+	cookie->expires = dateTime;
 
-                PRUint64 dateTime;
-                nsCookie->GetExpires (&dateTime);
-		if(dateTime == 0)
-			c->expire = g_strdup (_("End of current session"));
-		else
-	                c->expire = g_strdup_printf ("%s",ctime((time_t*)&dateTime));
-                
-                cookies = g_list_prepend (cookies, c);
-        }       
+	PRInt64 expiry;
+	keks->GetExpiry (&expiry);
+	cookie->real_expires = expiry;
 
-	return g_list_reverse (cookies);
+	nsCookieStatus status;
+	keks->GetStatus (&status);
+	cookie->p3p_state = status;
+
+	nsCookiePolicy policy;
+	keks->GetPolicy (&policy);
+	cookie->p3p_policy = policy;
+
+	PRBool isSession;
+	keks->GetIsSession (&isSession);
+	cookie->is_session = isSession != PR_FALSE;
+
+	return cookie;
 }
 
-static void
-impl_remove_cookies (EphyEmbedSingle *shell,
-		     GList *cookies)
+static GList *
+impl_list_cookies (EphyCookieManager *manager)
 {
 	nsresult result;
-	GList *cl;
-        nsCOMPtr<nsICookieManager> cookieManager =
-                        do_CreateInstance (NS_COOKIEMANAGER_CONTRACTID);
-
-	for (cl = cookies; cl != NULL; cl = cl->next)
-        {
-                CookieInfo *c = (CookieInfo *)cl->data;
-
-                result = cookieManager->Remove (nsDependentCString(c->domain),
-                                                nsDependentCString(c->name),
-                                                nsDependentCString(c->path),
-                                                PR_FALSE);
-        };
-}
+	GList *cookies = NULL;
 	
-static GList *
-impl_list_passwords (EphyEmbedSingle *shell,
-		     PasswordType type)
-{
-        nsresult result = NS_ERROR_FAILURE;
-	GList *passwords = NULL;
+	nsCOMPtr<nsICookieManager> cookieManager = 
+			do_CreateInstance (NS_COOKIEMANAGER_CONTRACTID);
+	nsCOMPtr<nsISimpleEnumerator> cookieEnumerator;
+	result = cookieManager->GetEnumerator (getter_AddRefs(cookieEnumerator));
+	if (NS_FAILED(result) || !cookieEnumerator) return NULL;
+	
+	PRBool enumResult;
+	for (cookieEnumerator->HasMoreElements(&enumResult) ;
+	     enumResult == PR_TRUE ;
+	     cookieEnumerator->HasMoreElements(&enumResult))
+	{
+		nsCOMPtr<nsICookie> keks;
+		result = cookieEnumerator->GetNext (getter_AddRefs(keks));
+		if (NS_FAILED (result) || !keks) continue;
 
-        nsCOMPtr<nsIPasswordManager> passwordManager =
-                        do_CreateInstance (NS_PASSWORDMANAGER_CONTRACTID);
-        nsCOMPtr<nsISimpleEnumerator> passwordEnumerator;
-        if (type == PASSWORD_PASSWORD)
-                result = passwordManager->GetEnumerator 
-                                (getter_AddRefs(passwordEnumerator));
-        else if (type == PASSWORD_REJECT)
-                result = passwordManager->GetRejectEnumerator 
-                                (getter_AddRefs(passwordEnumerator));
-        if (NS_FAILED(result)) return NULL;      
+		nsCOMPtr<nsICookie2> keks2 = do_QueryInterface (keks, &result);
+		if (NS_FAILED (result) || !keks2) continue;
 
-        PRBool enumResult;
-        for (passwordEnumerator->HasMoreElements(&enumResult) ;
-             enumResult == PR_TRUE ;
-             passwordEnumerator->HasMoreElements(&enumResult))
-        {
-                nsCOMPtr<nsIPassword> nsPassword;
-                result = passwordEnumerator->GetNext 
-                                        (getter_AddRefs(nsPassword));
-                if (NS_FAILED(result)) return NULL;
-
-                PasswordInfo *p = g_new0 (PasswordInfo, 1);
-
-                nsCAutoString transfer;
-                nsPassword->GetHost (transfer);
-                p->host = g_strdup (transfer.get());
-
-                if (type == PASSWORD_PASSWORD)
-                {
-                        nsAutoString unicodeName;
-                        nsPassword->GetUser (unicodeName);
-                        p->username = g_strdup(NS_ConvertUCS2toUTF8(unicodeName).get());
-                }
-
-		passwords = g_list_prepend (passwords, p);
-        }       
-
-	return g_list_reverse (passwords);
+		EphyCookie *cookie = mozilla_cookie_to_ephy_cookie (keks2);
+		if (cookie != NULL)
+		{			
+			cookies = g_list_prepend (cookies, cookie);
+		}
+	}       
+	
+	return cookies;
 }
 
 static void
-impl_remove_passwords (EphyEmbedSingle *shell,
-		       GList *passwords, 
-		       PasswordType type)
+impl_remove_cookie (EphyCookieManager *manager,
+		    EphyCookie *cookie)
 {
-	nsresult result = NS_ERROR_FAILURE;
-        nsCOMPtr<nsIPasswordManager> passwordManager =
-                        do_CreateInstance (NS_PASSWORDMANAGER_CONTRACTID);
-	GList *l;
+	nsresult rv;
+	nsCOMPtr<nsICookieManager> cookieManager =
+		do_CreateInstance (NS_COOKIEMANAGER_CONTRACTID, &rv);
+	if (NS_FAILED (rv) || !cookieManager) return;
 
-	for (l = passwords; l != NULL; l = l->next)
-        {
-                PasswordInfo *p = (PasswordInfo *)l->data;
-                if (type == PASSWORD_PASSWORD)
-                {
-                        result = passwordManager->RemoveUser (NS_LITERAL_CSTRING(p->host),
-                                                              NS_ConvertUTF8toUCS2(nsDependentCString(p->username)));
-                }
-                else if (type == PASSWORD_REJECT)
-                {
-                        result = passwordManager->RemoveReject
-                                        (nsDependentCString(p->host));
-                };
-        };
+	cookieManager->Remove (nsDependentCString(cookie->domain),
+			       nsDependentCString(cookie->name),
+			       nsDependentCString(cookie->path),
+			       PR_FALSE /* block */);
+}
+
+static void
+impl_clear_cookies (EphyCookieManager *manager)
+{
+	nsresult rv;
+	nsCOMPtr<nsICookieManager> cookieManager =
+		do_CreateInstance (NS_COOKIEMANAGER_CONTRACTID, &rv);
+	if (NS_SUCCEEDED (rv))
+	{
+		cookieManager->RemoveAll ();
+	}
+}
+	
+static GList *
+impl_list_passwords (EphyPasswordManager *manager)
+{
+	GList *passwords = NULL;
+
+	nsresult result;
+	nsCOMPtr<nsIPasswordManager> passwordManager =
+			do_CreateInstance (NS_PASSWORDMANAGER_CONTRACTID);
+	if (!passwordManager) return NULL;
+
+	nsCOMPtr<nsISimpleEnumerator> passwordEnumerator;
+	result = passwordManager->GetEnumerator 
+				(getter_AddRefs(passwordEnumerator));
+	if (NS_FAILED(result) || !passwordEnumerator) return NULL;      
+
+	PRBool enumResult;
+	for (passwordEnumerator->HasMoreElements(&enumResult) ;
+	     enumResult == PR_TRUE ;
+	     passwordEnumerator->HasMoreElements(&enumResult))
+	{
+		nsCOMPtr<nsIPassword> nsPassword;
+		result = passwordEnumerator->GetNext 
+					(getter_AddRefs(nsPassword));
+		if (NS_FAILED(result) || !nsPassword) continue;
+
+		EphyPasswordInfo *p = g_new0 (EphyPasswordInfo, 1);
+
+		nsCAutoString transfer;
+		nsPassword->GetHost (transfer);
+		p->host = g_strdup (transfer.get());
+
+		nsAutoString unicodeName;
+		nsPassword->GetUser (unicodeName);
+		p->username = g_strdup(NS_ConvertUCS2toUTF8(unicodeName).get());
+
+		p->password = NULL;
+
+		passwords = g_list_prepend (passwords, p);
+	}       
+	
+	return passwords;
+}
+
+static void
+impl_remove_password (EphyPasswordManager *manager,
+		      EphyPasswordInfo *info)
+{
+        nsCOMPtr<nsIPasswordManager> pm =
+                        do_CreateInstance (NS_PASSWORDMANAGER_CONTRACTID);
+	if (pm)
+	{
+		pm->RemoveUser (nsDependentCString(info->host),
+				NS_ConvertUTF8toUCS2(nsDependentCString(info->username)));
+	}
+}
+
+static const char *permission_type_string [] =
+{
+	"cookie",
+	"image",
+	"popup"
+};
+
+void
+impl_permission_manager_add (EphyPermissionManager *manager,
+			     const char *host,
+			     EphyPermissionType type,
+			     gboolean allow)
+{
+	nsresult result;
+        nsCOMPtr<nsIPermissionManager> pm
+		(do_CreateInstance (NS_PERMISSIONMANAGER_CONTRACTID, &result));
+	if (NS_FAILED (result) || !pm) return;
+
+	nsCOMPtr<nsIURI> uri;
+        result = NS_NewURI(getter_AddRefs(uri), host);
+        if (NS_FAILED(result) || !uri) return;
+
+	pm->Add (uri,
+#if MOZILLA_SNAPSHOT >= 10
+		 permission_type_string [type],
+#else
+		 type,
+#endif
+		 allow ? (PRUint32) nsIPermissionManager::ALLOW_ACTION :
+			 (PRUint32) nsIPermissionManager::DENY_ACTION);
+}
+
+void
+impl_permission_manager_remove (EphyPermissionManager *manager,
+				const char *host,
+				EphyPermissionType type)
+{
+	nsresult result;
+        nsCOMPtr<nsIPermissionManager> pm
+		(do_CreateInstance (NS_PERMISSIONMANAGER_CONTRACTID, &result));
+	if (NS_SUCCEEDED (result))
+	{
+#if MOZILLA_SNAPSHOT >= 10
+		pm->Remove (nsDependentCString (host), permission_type_string [type]);
+#else
+		pm->Remove (nsDependentCString (host), type);
+#endif
+	}
+}
+
+void
+impl_permission_manager_clear (EphyPermissionManager *manager)
+{
+	nsresult result;
+        nsCOMPtr<nsIPermissionManager> pm
+		(do_CreateInstance (NS_PERMISSIONMANAGER_CONTRACTID, &result));
+	if (NS_SUCCEEDED (result))
+	{
+		pm->RemoveAll ();
+	}
+}
+
+gboolean
+impl_permission_manager_test (EphyPermissionManager *manager,
+			      const char *host,
+			      EphyPermissionType type)
+{
+	nsresult result;
+        nsCOMPtr<nsIPermissionManager> pm
+		(do_CreateInstance (NS_PERMISSIONMANAGER_CONTRACTID, &result));
+	if (NS_FAILED (result) || !pm) return FALSE;
+
+	nsCOMPtr<nsIURI> uri;
+        result = NS_NewURI(getter_AddRefs(uri), host);
+        if (NS_FAILED(result) || !uri) return FALSE;
+
+	PRUint32 action;
+#if MOZILLA_SNAPSHOT >= 10
+	result = pm->TestPermission (uri, permission_type_string [type], &action);
+#else
+	result = pm->TestPermission (uri, type, &action);
+#endif
+	if (NS_FAILED (result)) return FALSE;
+
+	gboolean allow;
+	switch (action)
+	{
+		case nsIPermissionManager::ALLOW_ACTION:
+			allow = TRUE;
+			break;
+		case nsIPermissionManager::DENY_ACTION:
+		case nsIPermissionManager::UNKNOWN_ACTION:
+		default:
+			allow = FALSE;
+			break;
+	}
+
+	return allow;
+}
+
+GList *
+impl_permission_manager_list (EphyPermissionManager *manager,
+			      EphyPermissionType type)
+{
+	GList *list = NULL;
+
+	nsresult result;
+        nsCOMPtr<nsIPermissionManager> pm
+		(do_CreateInstance (NS_PERMISSIONMANAGER_CONTRACTID, &result));
+	if (NS_FAILED (result) || !pm) return NULL;
+
+	nsCOMPtr<nsISimpleEnumerator> pe;
+	result = pm->GetEnumerator(getter_AddRefs(pe));
+	if (NS_FAILED(result) || !pe) return NULL;
+	
+	PRBool more;
+	for (pe->HasMoreElements (&more); more == PR_TRUE; pe->HasMoreElements (&more))
+	{
+		nsCOMPtr<nsIPermission> perm;
+		result = pe->GetNext(getter_AddRefs(perm));
+		if (NS_FAILED(result) || !perm) continue;
+
+#if MOZILLA_SNAPSHOT >= 10
+		nsCAutoString str;
+		result = perm->GetType(str);
+		if (NS_FAILED (result)) continue;
+
+		if (str.Equals(permission_type_string[type]))
+#else
+		PRUint32 num;
+		result = perm->GetType(&num);
+		if (NS_FAILED (result)) continue;
+
+		if ((PRUint32) num == (PRUint32) type)
+#endif
+		{
+			EphyPermissionInfo *info = g_new0 (EphyPermissionInfo, 1);
+
+			info->type = type;
+
+			nsCString host;
+			perm->GetHost(host);
+			info->host = g_strdup (host.get());
+
+			PRUint32 cap;
+			perm->GetCapability(&cap);
+			switch (cap)
+			{
+				case nsIPermissionManager::ALLOW_ACTION :
+					info->allowed = TRUE;
+					break;
+				case nsIPermissionManager::DENY_ACTION :
+					/* fallthrough */
+				default :
+					info->allowed = FALSE;
+					break;
+			}
+
+			list = g_list_prepend (list, info);
+		}
+	}
+
+	return list;
 }
 
 static void
 mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	EphyEmbedSingleClass *shell_class = EPHY_EMBED_SINGLE_CLASS (klass);
-	
-	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
-	
-        object_class->finalize = mozilla_embed_single_finalize;
 
-	shell_class->clear_cache = impl_clear_cache;
-	shell_class->set_offline_mode = impl_set_offline_mode;
-	shell_class->load_proxy_autoconf = impl_load_proxy_autoconf;
-	shell_class->get_font_list = impl_get_font_list;
-	shell_class->list_cookies = impl_list_cookies;
-	shell_class->remove_cookies = impl_remove_cookies;
-	shell_class->list_passwords = impl_list_passwords;
-	shell_class->remove_passwords = impl_remove_passwords;
+	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
+
+	object_class->finalize = mozilla_embed_single_finalize;
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedSinglePrivate));
+}
+
+static void
+ephy_embed_single_iface_init (EphyEmbedSingleClass *iface)
+{
+	iface->clear_cache = impl_clear_cache;
+	iface->set_offline_mode = impl_set_offline_mode;
+	iface->load_proxy_autoconf = impl_load_proxy_autoconf;
+	iface->get_font_list = impl_get_font_list;
+}
+
+static void
+ephy_cookie_manager_iface_init (EphyCookieManagerIFace *iface)
+{
+	iface->list = impl_list_cookies;
+	iface->remove = impl_remove_cookie;
+	iface->clear = impl_clear_cookies;
+}
+
+static void
+ephy_password_manager_iface_init (EphyPasswordManagerIFace *iface)
+{
+	iface->add = NULL; /* not implemented yet */
+	iface->remove = impl_remove_password;
+	iface->list = impl_list_passwords;
+}
+
+static void
+ephy_permission_manager_iface_init (EphyPermissionManagerIFace *iface)
+{
+	iface->add = impl_permission_manager_add;
+	iface->remove = impl_permission_manager_remove;
+	iface->clear = impl_permission_manager_clear;
+	iface->test = impl_permission_manager_test;
+	iface->list = impl_permission_manager_list;
 }
