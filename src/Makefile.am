@@ -18,6 +18,8 @@ INCLUDES += -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED \
 	-DGNOME_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED $(WARN_CFLAGS)
 endif
 
+noinst_LTLIBRARIES = libephymain.la
+
 bin_PROGRAMS = epiphany-bin
 bin_SCRIPTS = epiphany
 
@@ -78,7 +80,7 @@ INST_H_FILES = 				    		\
 	ephy-tab.h					\
 	ephy-window.h
 
-epiphany_bin_SOURCES = 				    	\
+libephymain_la_SOURCES =				\
 	$(CORBA_SOURCE)				 	\
 	$(nautilus_view_sources)			\
 	ephy-automation.c				\
@@ -93,7 +95,6 @@ epiphany_bin_SOURCES = 				    	\
 	ephy-go-action.c				\
 	ephy-history-window.c				\
 	ephy-location-action.c				\
-	ephy-main.c					\
 	ephy-navigation-action.c			\
 	ephy-notebook.c					\
 	ephy-session.c					\
@@ -115,10 +116,16 @@ epiphany_bin_SOURCES = 				    	\
 	$(INST_H_FILES)					\
 	$(NOINST_H_FILES)
 
+epiphany_bin_SOURCES = ephy-main.c
+
 epiphany_bin_LDADD = \
-	$(top_builddir)/embed/libephyembed.la \
-	$(top_builddir)/lib/libephy.la \
+	$(top_builddir)/src/libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
+	$(top_builddir)/embed/libephyembed.la \
+	$(top_builddir)/embed/mozilla/libephymozillaembed.la \
+	$(top_builddir)/lib/widgets/libephywidgets.la \
+	$(top_builddir)/lib/libephymisc.la \
+	$(top_builddir)/lib/egg/libegg.la \
 	$(MOZILLA_COMPONENT_LIBS)	\
 	$(EPIPHANY_DEPENDENCY_LIBS) \
 	$(INTLLIBS)

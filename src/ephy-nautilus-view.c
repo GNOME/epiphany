@@ -46,7 +46,6 @@ static void		gnv_embed_new_window_cb			(EphyEmbed *embed,
 								 EmbedChromeMask chromemask,
 								 EphyNautilusView *view);
 static void		gnv_embed_link_message_cb 		(EphyEmbed *embed, 
-								 const char *message,
 								 EphyNautilusView *view);
 static gint		gnv_embed_dom_mouse_click_cb		(EphyEmbed *embed,
 								 EphyEmbedEvent *event,

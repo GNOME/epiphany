@@ -9,7 +9,7 @@ INCLUDES += -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED \
 	-DGNOME_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED $(WARN_CFLAGS)
 endif
 
-noinst_LTLIBRARIES = libephy.la
+noinst_LTLIBRARIES = libephymisc.la
 
 headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
 header_DATA = $(INST_H_FILES)
@@ -40,7 +40,7 @@ INST_H_FILES = \
 	ephy-node.h				\
 	ephy-node-db.h
 
-libephy_la_SOURCES = \
+libephymisc_la_SOURCES = \
 	eel-gconf-extensions.c			\
 	ephy-bonobo-extensions.c		\
 	ephy-debug.c				\
@@ -68,10 +68,6 @@ libephy_la_SOURCES = \
 	ephy-zoom.c				\
 	$(INST_H_FILES)				\
 	$(NOINST_H_FILES)
-
-libephy_la_LIBADD = \
-	$(top_builddir)/lib/widgets/libephywidgets.la	\
-	$(top_builddir)/lib/egg/libegg.la
 
 BUILT_SOURCES=ephy-marshal.c ephy-marshal.h
 

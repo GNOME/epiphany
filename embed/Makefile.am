@@ -56,6 +56,3 @@ libephyembed_la_SOURCES = \
 	print-dialog.c			\
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
-
-libephyembed_la_LIBADD = \
-	$(top_builddir)/embed/mozilla/libephymozillaembed.la

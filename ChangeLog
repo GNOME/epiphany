@@ -1,3 +1,28 @@
+2003-11-19  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* doc/reference/.cvsignore:
+	* doc/reference/Makefile.am:
+	* doc/reference/epiphany-docs.sgml:
+	* doc/reference/epiphany.types:
+	* doc/reference/tmpl/config.sgml:
+	* doc/reference/tmpl/ephy-session.sgml:
+	* doc/reference/tmpl/ephy-shell.sgml:
+
+	Complete docs base implementation. Should work
+	more or less.
+
+	* embed/Makefile.am:
+	* lib/Makefile.am:
+	* src/Makefile.am:
+
+	Cleanup a bit libs build and use a static lib
+	also for the src/ code so that we can use it
+	for documents.
+
+	* src/ephy-nautilus-view.c:
+
+	Bad chpe forgot to modify func signature.
+
 2003-11-19  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/ephy-embed.c:
