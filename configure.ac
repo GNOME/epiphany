@@ -487,30 +487,30 @@ dnl ***************
 
 AC_CHECK_HEADERS([X11/XF86keysym.h])
 
-dnl ***********************************
-dnl Check for DBUS and DBUS net monitor
-dnl ***********************************
+dnl ****
+dnl DBUS
+dnl ****
 
 AC_MSG_CHECKING([whether DBUS support is requested])
 
 enable_dbus=no
 AC_ARG_ENABLE([dbus],
 	AS_HELP_STRING([--enable-dbus],[Enable DBUS (default=no)]),
-	[enable_dbus=yes],
+	[enable_dbus=$enableval],
 	[enable_dbus=no])
+
+AC_MSG_RESULT([$enable_dbus])
 
 DBUS_REQUIRED=0.22
 DBUS_GLIB_REQUIRED=0.22
 
-if test x"$enable_dbus" = "xyes" ; then
+if test "x$enable_dbus" = "xyes" ; then
 	AC_DEFINE([ENABLE_DBUS],[1],[Define if DBUS support is enabled (default=disabled)])
 
 	PKG_CHECK_MODULES([DBUS], [dbus-1 >= $DBUS_REQUIRED dbus-glib-1 >= $DBUS_GLIB_REQUIRED])
 fi
 
 AM_CONDITIONAL([ENABLE_DBUS], [test "x$enable_dbus" = "xyes"])
-
-AC_MSG_RESULT([$enable_dbus])
 
 dnl *******************************
 dnl Add warning flags
