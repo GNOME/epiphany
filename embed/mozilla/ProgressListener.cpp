@@ -24,6 +24,7 @@
 
 #include "eel-gconf-extensions.h"
 #include "ephy-file-helpers.h"
+#include "mozilla-embed-persist.h"
 
 #include <unistd.h>
 #include <libgnome/gnome-exec.h>
@@ -385,8 +386,9 @@ NS_IMETHODIMP GProgressListener::OnStateChange (nsIWebProgress *aWebProgress,
 			{
 				LaunchHandler (handler);
 			}
-			
-			g_signal_emit_by_name (mEphyPersist, "completed");
+		
+			mozilla_embed_persist_completed
+				(MOZILLA_EMBED_PERSIST (mEphyPersist));	
 		}
 		
 		if (!mNoDialog)
