@@ -1018,7 +1018,7 @@ mozilla_embed_new_window_cb (GtkMozEmbed *embed,
 		{ 0, EMBED_CHROME_NONE }
 	};
 
-	if (chromemask && GTK_MOZ_EMBED_FLAG_OPENASCHROME)
+	if (chromemask & GTK_MOZ_EMBED_FLAG_OPENASCHROME)
 	{
 		*newEmbed = _mozilla_embed_new_xul_dialog ();
 		return;

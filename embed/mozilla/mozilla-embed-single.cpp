@@ -232,7 +232,7 @@ mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
 					  guint chrome_mask,
                            		  EphyEmbedSingle *shell)
 {
- 	g_assert (chrome_mask && GTK_MOZ_EMBED_FLAG_OPENASCHROME);
+ 	g_assert (chrome_mask & GTK_MOZ_EMBED_FLAG_OPENASCHROME);
 
 	*retval = _mozilla_embed_new_xul_dialog ();
 }
