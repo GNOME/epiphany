@@ -936,6 +936,9 @@ ephy_tab_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
 	EphyTab *new_tab;
 	EphyWindow *window;
 
+	LOG ("ephy_tab_new_window_cb tab %p with parent %p chrome %d",
+	     tab, ((GtkWidget *) tab)->parent, chromemask)
+
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME))
 	{
 		window = ephy_window_new ();
@@ -965,6 +968,9 @@ static void
 ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 			EphyTab *tab)
 {
+	LOG ("ephy_tab_visibility_cb tab %p visibility %d",
+	     tab, visibility)
+
 	if (visibility)
 	{
 		gtk_widget_show (GTK_WIDGET (tab));
@@ -986,6 +992,9 @@ ephy_tab_destroy_brsr_cb (EphyEmbed *embed, EphyTab *tab)
 	GtkWidget *notebook;
 
 	g_return_if_fail (EPHY_IS_TAB (tab));
+
+	LOG ("ephy_tab_destroy_browser_cb tab %p parent %p",
+	     tab, ((GtkWidget *) tab)->parent)
 
 	window = ephy_tab_get_window (tab);
 	g_return_if_fail (window != NULL);
