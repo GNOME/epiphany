@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "egg-toolbar-editor.h"
@@ -511,7 +513,7 @@ update_editor_sheet (EggToolbarEditor *editor)
 
   x = y = 0;
   width = 4;
-  height = (g_list_length (to_drag) - 1) / width + 1;
+  height = (g_list_length (to_drag)) / width + 1;
   gtk_table_resize (GTK_TABLE (editor->priv->table), height, width);
 
   for (l = to_drag; l != NULL; l = l->next)
