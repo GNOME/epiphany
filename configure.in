@@ -46,7 +46,6 @@ AC_PROG_CC
 AC_PROG_CXX
 AM_PROG_CC_STDC
 AC_HEADER_STDC
-AC_PROG_INTLTOOL
 AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
 
 AC_SUBST(AM_CXXFLAGS)
@@ -208,7 +207,8 @@ case "$MOZILLA_VERSION" in
 1.7.3) MOZILLA_SNAPSHOT=17 ;;
 1.7.4) MOZILLA_SNAPSHOT=18 ;;
 1.7.5) MOZILLA_SNAPSHOT=18 ;;
-branch1.7) MOZILLA_SNAPSHOT=18 ;;
+1.7.6) MOZILLA_SNAPSHOT=19 ;;
+branch1.7) MOZILLA_SNAPSHOT=19 ;;
 trunk) MOZILLA_SNAPSHOT=21 ;;
     *) AC_ERROR([
 *****************************************************************************
