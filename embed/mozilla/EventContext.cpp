@@ -527,7 +527,12 @@ nsresult EventContext::GetMouseEventInfo (EphyEmbedEvent *info)
 	nsresult result;
 	nsIDOMMouseEvent *aMouseEvent = (nsIDOMMouseEvent*)mEvent;
 
-	aMouseEvent->GetButton ((PRUint16*)&info->mouse_button);
+	/* casting 32-bit guint* to PRUint16* below will break on big-endian */
+	PRUint16 btn;
+	aMouseEvent->GetButton (&btn);
+	info->mouse_button = (guint)btn;
+
+	/* OTOH, casting only between (un)signedness is safe */
 	aMouseEvent->GetScreenX ((PRInt32*)&info->mouse_x);
 	aMouseEvent->GetScreenY ((PRInt32*)&info->mouse_y);
 
