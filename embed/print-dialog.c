@@ -230,6 +230,7 @@ ephy_print_get_print_info (void)
 				g_free (converted);
 			}
 		}
+		g_free (filename);
 
 		/* fallback */
 		if (fname == NULL)
