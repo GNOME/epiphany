@@ -826,13 +826,12 @@ mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 	}
 
 	nsCOMPtr<nsIDOMKeyEvent> ev = static_cast<nsIDOMKeyEvent*>(dom_event);
-	if (!ev)
-	{
-		return FALSE;
-	}
+	NS_ENSURE_TRUE (ev, FALSE);
+	nsCOMPtr<nsIDOMEvent> dev = do_QueryInterface (ev);
+	NS_ENSURE_TRUE (dev, FALSE);
 
 	MozillaEmbedEvent *info;
-	info = mozilla_embed_event_new (dom_event);
+	info = mozilla_embed_event_new (NS_STATIC_CAST (gpointer, dev));
 
 	gboolean ret = FALSE;
 
@@ -892,12 +891,15 @@ mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event,
 		return FALSE;
 	}
 
-	info = mozilla_embed_event_new (dom_event);
-	
+	nsCOMPtr<nsIDOMMouseEvent> ev = static_cast<nsIDOMMouseEvent*>(dom_event);
+	NS_ENSURE_TRUE (ev, FALSE);
+	nsCOMPtr<nsIDOMEvent> dev = do_QueryInterface (ev);
+	NS_ENSURE_TRUE (dev, FALSE);
+
+	info = mozilla_embed_event_new (NS_STATIC_CAST (gpointer, dev));
+
 	event_context.Init (mpriv->browser);
-        result = event_context.GetMouseEventInfo
-		(static_cast<nsIDOMMouseEvent*>(dom_event),
-		 MOZILLA_EMBED_EVENT (info));
+        result = event_context.GetMouseEventInfo (ev, MOZILLA_EMBED_EVENT (info));
 
 	if (NS_SUCCEEDED(result))
 	{
@@ -938,12 +940,15 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 		return FALSE;
 	}
 
-	info = mozilla_embed_event_new (dom_event);
-	
+	nsCOMPtr<nsIDOMMouseEvent> ev = static_cast<nsIDOMMouseEvent*>(dom_event);
+	NS_ENSURE_TRUE (ev, FALSE);
+	nsCOMPtr<nsIDOMEvent> dev = do_QueryInterface (ev);
+	NS_ENSURE_TRUE (dev, FALSE);
+
+	info = mozilla_embed_event_new (NS_STATIC_CAST (gpointer, dev));
+
 	event_context.Init (mpriv->browser);
-        result = event_context.GetMouseEventInfo
-		(static_cast<nsIDOMMouseEvent*>(dom_event),
-		 MOZILLA_EMBED_EVENT (info));
+        result = event_context.GetMouseEventInfo (ev, MOZILLA_EMBED_EVENT (info));
 	if (NS_FAILED (result)) return FALSE;
 
 	type = ephy_embed_event_get_event_type ((EphyEmbedEvent *) info);
