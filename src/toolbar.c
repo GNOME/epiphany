@@ -686,11 +686,11 @@ toolbar_update_navigation_actions (Toolbar *t, gboolean back, gboolean forward, 
 
 	action_group = t->priv->action_group;
 	action = egg_action_group_get_action (action_group, "NavigationBack");
-	g_object_set (action, "sensitive", !back, NULL);
+	g_object_set (action, "sensitive", back, NULL);
 	action = egg_action_group_get_action (action_group, "NavigationForward");
-	g_object_set (action, "sensitive", !forward, NULL);
+	g_object_set (action, "sensitive", forward, NULL);
 	action = egg_action_group_get_action (action_group, "NavigationUp");
-	g_object_set (action, "sensitive", !up, NULL);
+	g_object_set (action, "sensitive", up, NULL);
 }
 
 void

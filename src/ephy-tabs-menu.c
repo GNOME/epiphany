@@ -241,6 +241,10 @@ tab_set_action_accelerator (EggActionGroup *action_group,
 						    accel_mods, TRUE);
 		}
 	}
+	else
+	{
+		gtk_accel_map_change_entry (accel_path, 0, 0, TRUE);
+	}
 
 	action->accel_quark = g_quark_from_string (accel_path);
 	g_free (accel_path);

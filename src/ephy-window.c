@@ -281,6 +281,7 @@ struct EphyWindowPrivate
 	EphyDialog *find_dialog;
 	EmbedChromeMask chrome_mask;
 	gboolean closing;
+	guint num_tabs;
 };
 
 static void
@@ -296,10 +297,6 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 				     GtkNotebookPage *page,
 				     guint page_num,
 				     EphyWindow *window);
-
-static void
-ephy_window_tab_detached_cb	(EphyNotebook *notebook, gint page,
-				 gint x, gint y, gpointer data);
 
 static GObjectClass *parent_class = NULL;
 
@@ -430,6 +427,14 @@ menu_activate_cb (GtkWidget *widget,
 }
 
 static void
+ephy_window_destroy_cb (GtkWidget *widget, EphyWindow *window)
+{
+	LOG ("EphyWindow destroy %p", window)
+
+	window->priv->closing = TRUE;
+}
+
+static void
 setup_window (EphyWindow *window)
 {
 	EggActionGroup *action_group;
@@ -503,6 +508,376 @@ setup_window (EphyWindow *window)
 			  "selection-received",
 			  G_CALLBACK (ephy_window_selection_received_cb),
 			  window);
+	g_signal_connect (window, "destroy",
+			  G_CALLBACK (ephy_window_destroy_cb),
+			  window);
+}
+
+static void
+sync_tab_address (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+{
+	const char *address;
+
+	if (window->priv->closing) return;
+
+	address = ephy_tab_get_location (tab);
+
+	if (address == NULL)
+	{
+		address = "";
+	}
+
+	toolbar_set_location (window->priv->toolbar, address);
+}
+
+static void
+sync_tab_icon (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+{
+	const char *address;
+	EphyFaviconCache *cache;
+	GdkPixbuf *pixbuf = NULL;
+
+	if (window->priv->closing) return;
+
+	cache = ephy_embed_shell_get_favicon_cache
+			(EPHY_EMBED_SHELL (ephy_shell));
+
+	address = ephy_tab_get_icon_address (tab);
+	
+	if (address)
+	{
+		pixbuf = ephy_favicon_cache_get (cache, address);
+	}
+
+	gtk_window_set_icon (GTK_WINDOW (window), pixbuf);
+
+	toolbar_update_favicon (window->priv->toolbar);
+
+	if (pixbuf)
+	{
+		g_object_unref (pixbuf);
+	}
+}
+
+static void
+sync_tab_load_progress (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+{
+	if (window->priv->closing) return;
+
+	statusbar_set_progress (STATUSBAR (window->priv->statusbar),
+				ephy_tab_get_load_percent (tab));			       
+}
+
+static void
+sync_tab_load_status (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+{
+	gboolean spin = FALSE;
+	GList *tabs, *l;
+
+	if (window->priv->closing) return;
+	
+	tabs = ephy_window_get_tabs (window);
+	for (l = tabs; l != NULL; l = l->next)
+	{
+		EphyTab *tab = EPHY_TAB(l->data);
+		g_return_if_fail (IS_EPHY_TAB(tab));
+
+		if (ephy_tab_get_load_status (tab))
+		{
+			spin = TRUE;
+			break;
+		}
+	}
+	g_list_free (tabs);
+
+	if (spin)
+	{
+		toolbar_spinner_start (window->priv->toolbar);
+	}
+	else
+	{
+		toolbar_spinner_stop (window->priv->toolbar);
+	}
+}
+
+static void
+sync_tab_message (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+{
+	if (window->priv->closing) return;
+
+	statusbar_set_message (STATUSBAR (window->priv->statusbar),
+			       ephy_tab_get_status_message (tab));
+}
+
+static void
+sync_tab_navigation (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+{
+	TabNavigationFlags flags;
+	EggActionGroup *action_group;
+	EggAction *action;
+	gboolean up = FALSE, back = FALSE, forward = FALSE;
+
+	if (window->priv->closing) return;
+
+	flags = ephy_tab_get_navigation_flags (tab);
+
+	if (flags & TAB_NAV_UP)
+	{
+		up = TRUE;
+	}
+	if (flags & TAB_NAV_BACK)
+	{
+		back = TRUE;
+	}
+	if (flags & TAB_NAV_FORWARD)
+	{
+		forward = TRUE;
+	}
+
+	action_group = window->priv->action_group;
+	action = egg_action_group_get_action (action_group, "GoUp");
+	g_object_set (action, "sensitive", up, NULL);
+	action = egg_action_group_get_action (action_group, "GoBack");
+	g_object_set (action, "sensitive", back, NULL);
+	action = egg_action_group_get_action (action_group, "GoForward");
+	g_object_set (action, "sensitive", forward, NULL);
+
+	toolbar_update_navigation_actions (window->priv->toolbar,
+					   back, forward, up);
+}
+
+static void
+sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+{
+	EphyEmbed *embed;
+	EmbedSecurityLevel level;
+	char *description = NULL;
+	char *state = NULL;
+	gboolean secure;
+	char *tooltip;
+
+	if (window->priv->closing) return;
+
+	embed = ephy_tab_get_embed (tab);
+
+	if (ephy_embed_get_security_level (embed, &level, &description) != G_OK)
+	{
+		level = STATE_IS_UNKNOWN;
+		description = NULL;
+	}
+
+	if (level != ephy_tab_get_security_level (tab))
+	{
+		/* something is VERY wrong here! */
+		level = STATE_IS_UNKNOWN;
+		description = NULL;
+	}
+
+	secure = FALSE;
+	switch (level)
+	{
+		case STATE_IS_UNKNOWN:
+			state = _("Unknown");
+			break;
+		case STATE_IS_INSECURE:
+			state = _("Insecure");
+			break;
+		case STATE_IS_BROKEN:
+			state = _("Broken");
+			break;
+		case STATE_IS_SECURE_MED:
+			state = _("Medium");
+			secure = TRUE;
+			break;
+		case STATE_IS_SECURE_LOW:
+			state = _("Low");
+			secure = TRUE;
+			break;
+		case STATE_IS_SECURE_HIGH:
+			state = _("High");
+			secure = TRUE;
+			break;
+		default:
+			g_assert_not_reached ();
+			break;
+	}
+
+	if (description != NULL)
+	{
+		tooltip = g_strdup_printf (_("Security level: %s\n%s"),
+					   state, description);
+		g_free (description);
+	}
+	else
+	{
+		tooltip = g_strdup_printf (_("Security level: %s"), state);
+
+	}
+
+	statusbar_set_security_state (STATUSBAR (window->priv->statusbar),
+			              secure, tooltip);
+	g_free (tooltip);
+
+}
+
+static void
+sync_tab_stop (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+{
+	EggAction *action;
+
+	if (window->priv->closing) return;
+
+	action = egg_action_group_get_action (window->priv->action_group, "ViewStop");
+
+	g_object_set (action, "sensitive", ephy_tab_get_load_status (tab), NULL);
+}
+
+static void
+sync_tab_title (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+{
+	const char *title;
+
+	if (window->priv->closing) return;
+
+	title = ephy_tab_get_title (tab);
+
+	if (title)
+	{
+		gtk_window_set_title (GTK_WINDOW(window),
+				      title);
+	}
+}
+
+static void
+sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+{
+	EggActionGroup *action_group;
+	EggAction *action;
+	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
+	float zoom;
+
+	if (window->priv->closing) return;
+
+	zoom = ephy_tab_get_zoom (tab);
+
+	if (zoom >= ZOOM_MAXIMAL)
+	{
+		can_zoom_in = FALSE;
+	}
+	if (zoom <= ZOOM_MINIMAL)
+	{
+		can_zoom_out = FALSE;
+	}
+	if (zoom != 1.0)
+	{
+		can_zoom_normal = TRUE;
+	}
+
+	toolbar_update_zoom (window->priv->toolbar, zoom);
+
+	action_group = window->priv->action_group;
+	action = egg_action_group_get_action (action_group, "ViewZoomIn");
+	g_object_set (action, "sensitive", can_zoom_in, NULL);
+	action = egg_action_group_get_action (action_group, "ViewZoomOut");
+	g_object_set (action, "sensitive", can_zoom_out, NULL);
+	action = egg_action_group_get_action (action_group, "ViewZoomNormal");
+	g_object_set (action, "sensitive", can_zoom_normal, NULL);
+}
+
+static void
+ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
+{
+	EphyTab *old_tab;
+
+	g_return_if_fail (IS_EPHY_WINDOW (window));
+	if (ephy_tab_get_window (new_tab) != window) return;
+
+	old_tab = window->priv->active_tab;
+
+	if (old_tab == new_tab) return;
+
+	if (old_tab)
+	{
+		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+						      G_CALLBACK (sync_tab_address),
+						      window);
+		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+						      G_CALLBACK (sync_tab_icon),
+						      window);
+		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+						      G_CALLBACK (sync_tab_load_progress),
+						      window);
+		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+						      G_CALLBACK (sync_tab_stop),
+						      window);
+		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+						      G_CALLBACK (sync_tab_message),
+						      window);
+		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+						      G_CALLBACK (sync_tab_navigation),
+						      window);
+		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+						      G_CALLBACK (sync_tab_security),
+						      window);
+		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+						      G_CALLBACK (sync_tab_title),
+						      window);
+		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+						      G_CALLBACK (sync_tab_zoom),
+						      window);
+	}
+
+	window->priv->active_tab = new_tab;
+
+	if (new_tab)
+	{
+		sync_tab_address	(new_tab, NULL, window);
+		sync_tab_icon		(new_tab, NULL, window);
+		sync_tab_load_progress	(new_tab, NULL, window);
+		sync_tab_stop		(new_tab, NULL, window);
+		sync_tab_message	(new_tab, NULL, window);
+		sync_tab_navigation	(new_tab, NULL, window);
+		sync_tab_security	(new_tab, NULL, window);
+		sync_tab_title		(new_tab, NULL, window);
+		sync_tab_zoom		(new_tab, NULL, window);
+
+		g_signal_connect_object (G_OBJECT (new_tab),
+					 "notify::address",
+					 G_CALLBACK (sync_tab_address),
+					 window, 0);
+		g_signal_connect_object (G_OBJECT (new_tab),
+					 "notify::icon",
+					 G_CALLBACK (sync_tab_icon),
+					 window, 0);
+		g_signal_connect_object (G_OBJECT (new_tab),
+					 "notify::load-progress",
+					 G_CALLBACK (sync_tab_load_progress),
+					 window, 0);
+		g_signal_connect_object (G_OBJECT (new_tab),
+					 "notify::load-status",
+					 G_CALLBACK (sync_tab_stop),
+					 window, 0);
+		g_signal_connect_object (G_OBJECT (new_tab),
+					 "notify::message",
+					 G_CALLBACK (sync_tab_message),
+					 window, 0);
+		g_signal_connect_object (G_OBJECT (new_tab),
+					 "notify::navigation",
+					 G_CALLBACK (sync_tab_navigation),
+					 window, 0);
+		g_signal_connect_object (G_OBJECT (new_tab),
+					 "notify::security-level",
+					 G_CALLBACK (sync_tab_security),
+					 window, 0);
+		g_signal_connect_object (G_OBJECT (new_tab),
+					 "notify::title",
+					 G_CALLBACK (sync_tab_title),
+					 window, 0);
+		g_signal_connect_object (G_OBJECT (new_tab),
+					 "notify::zoom",
+					 G_CALLBACK (sync_tab_zoom),
+					 window, 0);
+	}
 }
 
 static void
@@ -537,10 +912,74 @@ update_tabs_menu_sensitivity (EphyWindow *window)
 }
 
 static void
-ephy_window_tabs_changed_cb (EphyNotebook *notebook, EphyWindow *window)
+update_tabs_menu (EphyWindow *window)
 {
 	update_tabs_menu_sensitivity (window);
 	ephy_tabs_menu_update (window->priv->tabs_menu);
+}
+
+static void
+tab_added_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
+{
+	EphyTab *tab;
+
+	g_return_if_fail (IS_EPHY_EMBED (child));
+	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
+
+	window->priv->num_tabs++;
+
+	update_tabs_menu (window);
+
+	sync_tab_load_status (tab, NULL, window);
+	g_signal_connect_object (G_OBJECT (tab), "notify::load-status",
+				 G_CALLBACK (sync_tab_load_status), window, 0);
+}
+
+static void
+tab_removed_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
+{
+	EphyTab *tab;
+
+	g_return_if_fail (IS_EPHY_EMBED (child));
+	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
+
+	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
+					      G_CALLBACK (sync_tab_load_status),
+					      window);	
+
+	window->priv->num_tabs--;
+
+	if (window->priv->num_tabs == 0)
+	{
+		/* removed the last tab, close the window */
+		gtk_widget_destroy (GTK_WIDGET (window));
+	}
+	else
+	{
+		update_tabs_menu (window);
+	}
+}
+
+static void
+tab_detached_cb (EphyNotebook *notebook, GtkWidget *child,
+		 gpointer data)
+{
+	EphyWindow *window;
+
+	g_return_if_fail (IS_EPHY_NOTEBOOK (notebook));
+	g_return_if_fail (IS_EPHY_EMBED (child));
+
+	window = ephy_window_new ();
+	ephy_notebook_move_page (notebook,
+				 EPHY_NOTEBOOK (ephy_window_get_notebook (window)),
+				 child, 0);
+	gtk_widget_show (GTK_WIDGET (window));
+}
+
+static void
+tabs_reordered_cb (EphyNotebook *notebook, EphyWindow *window)
+{
+	update_tabs_menu (window);
 }
 
 static GtkNotebook *
@@ -558,12 +997,14 @@ setup_notebook (EphyWindow *window)
 				ephy_window_notebook_switch_page_cb),
 				window);
 
+	g_signal_connect (G_OBJECT (notebook), "tab_added",
+			  G_CALLBACK (tab_added_cb), window);
+	g_signal_connect (G_OBJECT (notebook), "tab_removed",
+			  G_CALLBACK (tab_removed_cb), window);
 	g_signal_connect (G_OBJECT (notebook), "tab_detached",
-			  G_CALLBACK (ephy_window_tab_detached_cb),
-			  NULL);
-	g_signal_connect (G_OBJECT (notebook), "tabs_changed",
-			  G_CALLBACK (ephy_window_tabs_changed_cb),
-			  window);
+			  G_CALLBACK (tab_detached_cb), NULL);
+	g_signal_connect (G_OBJECT (notebook), "tabs_reordered",
+			  G_CALLBACK (tabs_reordered_cb), window);
 
 	gtk_widget_show (GTK_WIDGET (notebook));
 
@@ -575,6 +1016,8 @@ ephy_window_init (EphyWindow *window)
 {
 	Session *session;
 
+	LOG ("EphyWindow initialising %p", window)
+
 	session = ephy_shell_get_session (ephy_shell);
 
         window->priv = g_new0 (EphyWindowPrivate, 1);
@@ -583,6 +1026,7 @@ ephy_window_init (EphyWindow *window)
 	window->priv->closing = FALSE;
 	window->priv->ppview_toolbar = NULL;
 	window->priv->exit_fullscreen_popup = NULL;
+	window->priv->num_tabs = 0;
 
 	/* Setup the window and connect verbs */
 	setup_window (window);
@@ -936,8 +1380,6 @@ ephy_window_add_tab (EphyWindow *window,
 	g_return_if_fail (IS_EPHY_WINDOW (window));
 	g_return_if_fail (IS_EPHY_TAB (tab));
 
-	ephy_tab_set_window (tab, window);
-
 	widget = GTK_WIDGET(ephy_tab_get_embed (tab));
 
 	ephy_notebook_insert_page (EPHY_NOTEBOOK (window->priv->notebook),
@@ -960,31 +1402,23 @@ ephy_window_jump_to_tab (EphyWindow *window,
 }
 
 static EphyTab *
-get_tab_from_page_num (GtkNotebook *notebook, gint page_num)
+real_get_active_tab (EphyWindow *window, int page_num)
 {
 	EphyTab *tab;
 	GtkWidget *embed_widget;
 
-	if (page_num < 0) return NULL;
-
-	embed_widget = gtk_notebook_get_nth_page (notebook, page_num);
-
-	g_return_val_if_fail (GTK_IS_WIDGET (embed_widget), NULL);
-	tab = g_object_get_data (G_OBJECT (embed_widget), "EphyTab");
-	g_return_val_if_fail (IS_EPHY_TAB (G_OBJECT (tab)), NULL);
-
-	return tab;
-}
-
-static EphyTab *
-real_get_active_tab (EphyWindow *window, int page_num)
-{
 	if (page_num == -1)
 	{
 		page_num = gtk_notebook_get_current_page (window->priv->notebook);
 	}
+	embed_widget = gtk_notebook_get_nth_page (window->priv->notebook,
+						  page_num);
 
-	return get_tab_from_page_num (window->priv->notebook, page_num);
+	g_return_val_if_fail (GTK_IS_WIDGET (embed_widget), NULL);
+	tab = g_object_get_data (G_OBJECT (embed_widget), "EphyTab");
+	g_return_val_if_fail (IS_EPHY_TAB (tab), NULL);
+
+	return tab;
 }
 
 void
@@ -996,9 +1430,7 @@ ephy_window_remove_tab (EphyWindow *window,
 	g_return_if_fail (IS_EPHY_WINDOW (window));
 	g_return_if_fail (IS_EPHY_TAB (tab));
 
-	window->priv->active_tab = NULL;
-
-	embed  = GTK_WIDGET (ephy_tab_get_embed (tab));
+	embed = GTK_WIDGET (ephy_tab_get_embed (tab));
 
 	ephy_notebook_remove_page (EPHY_NOTEBOOK (window->priv->notebook),
 				  embed);
@@ -1063,238 +1495,9 @@ ephy_window_show (GtkWidget *widget)
 }
 
 static void
-update_status_message (EphyWindow *window)
-{
-	const char *message;
-	EphyTab *tab;
-
-	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab != NULL);
-
-	message = ephy_tab_get_status_message (tab);
-	g_return_if_fail (message != NULL);
-
-	statusbar_set_message (STATUSBAR(window->priv->statusbar),
-			       message);
-}
-
-static void
-update_progress (EphyWindow *window)
-{
-	EphyTab *tab;
-	int load_percent;
-
-	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab != NULL);
-
-	load_percent = ephy_tab_get_load_percent (tab);
-
-	statusbar_set_progress (STATUSBAR(window->priv->statusbar),
-			        load_percent);
-}
-
-static void
-update_security (EphyWindow *window)
-{
-	EphyEmbed *embed;
-	EmbedSecurityLevel level;
-	char *description;
-	char *state = NULL;
-	gboolean secure;
-	char *tooltip;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	if (ephy_embed_get_security_level (embed, &level, &description) != G_OK)
-	{
-		level = STATE_IS_UNKNOWN;
-		description = NULL;
-	}
-
-	secure = FALSE;
-	switch (level)
-	{
-	case STATE_IS_UNKNOWN:
-		state = _("Unknown");
-		break;
-	case STATE_IS_INSECURE:
-		state = _("Insecure");
-		break;
-	case STATE_IS_BROKEN:
-		state = _("Broken");
-		break;
-	case STATE_IS_SECURE_MED:
-		state = _("Medium");
-		secure = TRUE;
-		break;
-	case STATE_IS_SECURE_LOW:
-		state = _("Low");
-		secure = TRUE;
-		break;
-	case STATE_IS_SECURE_HIGH:
-		state = _("High");
-		secure = TRUE;
-		break;
-	default:
-		g_assert_not_reached ();
-		break;
-	}
-
-	if (description != NULL)
-	{
-		tooltip = g_strdup_printf (_("Security level: %s\n%s"),
-					   state, description);
-		g_free (description);
-	}
-	else
-	{
-		tooltip = g_strdup_printf (_("Security level: %s"), state);
-
-	}
-
-	statusbar_set_security_state (STATUSBAR (window->priv->statusbar),
-			              secure, tooltip);
-	g_free (tooltip);
-}
-
-static void
-update_nav_control (EphyWindow *window)
-{
-	gresult back, forward, up, stop;
-	EphyEmbed *embed;
-	EphyTab *tab;
-	EggActionGroup *action_group;
-	EggAction *action;
-
-	g_return_if_fail (window != NULL);
-
-	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab != NULL);
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	back = ephy_embed_can_go_back (embed);
-	forward = ephy_embed_can_go_forward (embed);
-	up = ephy_embed_can_go_up (embed);
-	stop = ephy_tab_get_load_status (tab) & TAB_LOAD_STARTED;
-
-	action_group = window->priv->action_group;
-	action = egg_action_group_get_action (action_group, "GoBack");
-	g_object_set (action, "sensitive", !back, NULL);
-	action = egg_action_group_get_action (action_group, "GoForward");
-	g_object_set (action, "sensitive", !forward, NULL);
-	action = egg_action_group_get_action (action_group, "GoUp");
-	g_object_set (action, "sensitive", !up, NULL);
-	action = egg_action_group_get_action (action_group, "ViewStop");
-	g_object_set (action, "sensitive", stop, NULL);
-
-	toolbar_update_navigation_actions (window->priv->toolbar,
-					   back, forward, up);
-}
-
-static void
-update_zoom_control (EphyWindow *window)
-{
-	EphyEmbed *embed;
-	EggActionGroup *action_group;
-	EggAction *action;
-	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
-	float zoom = 1.0;
-	gresult rv;
-
-	g_return_if_fail (window != NULL);
-	
-	embed = ephy_window_get_active_embed (window);	
-	g_return_if_fail (embed != NULL);
-
-	rv = ephy_embed_zoom_get (embed, &zoom);
-	if (rv == G_OK)
-	{
-		if (zoom >= ZOOM_MAXIMAL) can_zoom_in = FALSE; 
-		if (zoom <= ZOOM_MINIMAL) can_zoom_out = FALSE; 
-		if (zoom != 1.0) can_zoom_normal = TRUE;
-	}
-
-	toolbar_update_zoom (window->priv->toolbar, zoom);
-
-	action_group = window->priv->action_group;
-	action = egg_action_group_get_action (action_group, "ViewZoomIn");
-	g_object_set (action, "sensitive", can_zoom_in, NULL);
-	action = egg_action_group_get_action (action_group, "ViewZoomOut");
-	g_object_set (action, "sensitive", can_zoom_out, NULL);
-	action = egg_action_group_get_action (action_group, "ViewZoomNormal");
-	g_object_set (action, "sensitive", can_zoom_normal, NULL);
-}
-
-static void
-update_title_control (EphyWindow *window)
-{
-	EphyTab *tab;
-	const char *title;
-
-	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab != NULL);
-
-	title = ephy_tab_get_title (tab);
-
-	if (title)
-	{
-		gtk_window_set_title (GTK_WINDOW(window),
-				      title);
-	}
-}
-
-static void
-update_location_control (EphyWindow *window)
-{
-	EphyTab *tab;
-	const char *location;
-
-	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab != NULL);
-
-	location = ephy_tab_get_location (tab);
-
-	if (!location) location = "";
-
-	toolbar_set_location (window->priv->toolbar, location);
-}
-
-static void
 update_favorites_control (EphyWindow *window)
 {
 	ephy_favorites_menu_update (window->priv->fav_menu);
-}
-
-static void
-update_favicon_control (EphyWindow *window)
-{
-	const char *location;
-	EphyFaviconCache *cache;
-	GdkPixbuf *pixbuf = NULL;
-	EphyTab *tab;
-
-	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab != NULL);
-
-	cache = ephy_embed_shell_get_favicon_cache
-		(EPHY_EMBED_SHELL (ephy_shell));
-
-	location = ephy_tab_get_icon_address (tab);
-	if (location)
-	{
-		pixbuf = ephy_favicon_cache_get (cache, location);
-	}
-	gtk_window_set_icon (GTK_WINDOW (window), pixbuf);
-
-	toolbar_update_favicon (window->priv->toolbar);
-
-	if (pixbuf)
-	{
-		g_object_unref (pixbuf);
-	}
 }
 
 static void
@@ -1341,35 +1544,6 @@ update_window_visibility (EphyWindow *window)
 	}
 }
 
-static void
-update_spinner_control (EphyWindow *window)
-{
-	GList *l, *tabs;
-	gboolean spin = FALSE;
-
-	tabs = ephy_window_get_tabs (window);
-	for (l = tabs; l != NULL; l = l->next)
-	{
-		EphyTab *tab = EPHY_TAB(l->data);
-		g_return_if_fail (IS_EPHY_TAB(tab));
-
-		if (ephy_tab_get_load_status (tab) & TAB_LOAD_STARTED)
-		{
-			spin = TRUE;
-		}
-	}
-	g_list_free (tabs);
-
-	if (spin)
-	{
-		toolbar_spinner_start (window->priv->toolbar);
-	}
-	else
-	{
-		toolbar_spinner_stop (window->priv->toolbar);
-	}
-}
-
 void
 ephy_window_update_control (EphyWindow *window,
 			      ControlID control)
@@ -1378,40 +1552,11 @@ ephy_window_update_control (EphyWindow *window,
 
 	switch (control)
 	{
-	case StatusbarMessageControl:
-		update_status_message (window);
-		break;
-	case StatusbarProgressControl:
-		update_progress (window);
-		break;
-	case StatusbarSecurityControl:
-		update_security (window);
-		break;
 	case FindControl:
 		update_find_control (window);
 		break;
-	case ZoomControl:
-		 /* the zoom control is updated at the same time than the navigation
-		    controls. This keeps it synched most of the time, but not always,
-		    because we don't get a notification when zoom changes */
-		update_zoom_control (window);
-	case NavControl:
-		update_nav_control (window);
-		break;
-	case TitleControl:
-		update_title_control (window);
-		break;
 	case WindowVisibilityControl:
 		update_window_visibility (window);
-		break;
-	case SpinnerControl:
-		update_spinner_control (window);
-		break;
-	case LocationControl:
-		update_location_control (window);
-		break;
-	case FaviconControl:
-		update_favicon_control (window);
 		break;
 	case FavoritesControl:
 		update_favorites_control (window);
@@ -1429,16 +1574,7 @@ ephy_window_update_all_controls (EphyWindow *window)
 
 	if (ephy_window_get_active_tab (window) != NULL)
 	{
-		update_nav_control (window);
-		update_title_control (window);
-		update_location_control (window);
-		update_favicon_control (window);
-		update_status_message (window);
-		update_progress (window);
-		update_security (window);
 		update_find_control (window);
-		update_spinner_control (window);
-		update_zoom_control (window);
 	}
 }
 
@@ -1446,6 +1582,7 @@ EphyTab *
 ephy_window_get_active_tab (EphyWindow *window)
 {
 	g_return_val_if_fail (IS_EPHY_WINDOW (window), NULL);
+	g_return_val_if_fail (window->priv->active_tab != NULL, NULL);
 
 	return window->priv->active_tab;
 }
@@ -1455,15 +1592,16 @@ ephy_window_get_active_embed (EphyWindow *window)
 {
 	EphyTab *tab;
 
+	g_return_val_if_fail (IS_EPHY_WINDOW (window), NULL);
+
 	tab = ephy_window_get_active_tab (window);
 
 	if (tab)
 	{
-		g_return_val_if_fail (IS_EPHY_WINDOW (G_OBJECT (window)),
-				      NULL);
 		return ephy_tab_get_embed (tab);
 	}
-	else return NULL;
+
+	return NULL;
 }
 
 GList *
@@ -1533,13 +1671,11 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 	if (old_tab && tab != old_tab)
 	{
 		g_return_if_fail (IS_EPHY_TAB (G_OBJECT (old_tab)));
-		ephy_tab_set_is_active (old_tab, FALSE);
 		save_old_embed_status (old_tab, window);
 	}
 
 	/* update new tab */
-	window->priv->active_tab = tab;
-	ephy_tab_set_is_active (tab, TRUE);
+	ephy_window_set_active_tab (window, tab);
 
 	update_embed_dialogs (window, tab);
 
@@ -1613,22 +1749,3 @@ ephy_window_get_toolbar (EphyWindow *window)
 {
 	return window->priv->toolbar;
 }
-
-static void
-ephy_window_tab_detached_cb (EphyNotebook *notebook, gint page,
-			     gint x, gint y, gpointer data)
-{
-	EphyTab *tab;
-	EphyWindow *window;
-	GtkWidget *src_page;
-
-	src_page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page);
-	tab = get_tab_from_page_num (GTK_NOTEBOOK (notebook), page);
-	window = ephy_window_new ();
-	ephy_notebook_move_page (notebook,
-				EPHY_NOTEBOOK (ephy_window_get_notebook (window)),
-				src_page, 0);
-	ephy_tab_set_window (tab, window);
-	gtk_widget_show (GTK_WIDGET (window));
-}
-

@@ -59,15 +59,13 @@ struct EphyNotebookClass
         GtkNotebookClass parent_class;
 
 	/* Signals */
-	void (* tab_dropped)       (EphyNotebook *dest,
-				    GtkWidget *widget,
-				    EphyNotebook *src,
-				    gint src_page);
-	void (* tab_detached)      (EphyNotebook *dest,
-				    gint cur_page,
-				    gint root_x, gint root_y);
-	void (* tabs_changed)	   (EphyNotebook *nb);
-
+	void (* tab_added)      (EphyNotebook *notebook,
+				 GtkWidget *child);
+	void (* tab_removed)    (EphyNotebook *notebook,
+				 GtkWidget *child);
+	void (* tab_detached)   (EphyNotebook *notebook,
+				 GtkWidget *child);
+	void (* tabs_reordered) (EphyNotebook *notebook);
 };
 
 GType		ephy_notebook_get_type		(void);
@@ -87,18 +85,6 @@ void            ephy_notebook_move_page         (EphyNotebook *src,
 						 GtkWidget *src_page,
 						 gint dest_page);
 
-void		ephy_notebook_set_page_status	(EphyNotebook *nb,
-						 GtkWidget *child,
-						 EphyNotebookPageLoadStatus status);
-
-void		ephy_notebook_set_page_title	(EphyNotebook *nb,
-						 GtkWidget *child,
-						 const char *title);
-
-void		ephy_notebook_set_page_icon	(EphyNotebook *nb,
-						 GtkWidget *child,
-						 GdkPixbuf *icon);
-
-G_END_DECLS;
+G_END_DECLS
 
 #endif /* EPHY_NOTEBOOK_H */

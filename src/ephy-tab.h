@@ -41,10 +41,10 @@ typedef struct EphyTabPrivate EphyTabPrivate;
 
 typedef enum
 {
-	TAB_LOAD_NONE,
-	TAB_LOAD_STARTED,
-	TAB_LOAD_COMPLETED
-} TabLoadStatus;
+	TAB_NAV_UP	= 1 << 0,
+	TAB_NAV_BACK	= 1 << 1,
+	TAB_NAV_FORWARD	= 1 << 2,
+} TabNavigationFlags;
 
 struct EphyTab
 {
@@ -77,13 +77,7 @@ EphyWindow *	ephy_tab_get_window		(EphyTab *tab);
 
 const char *	ephy_tab_get_icon_address	(EphyTab *tab);
 
-void		ephy_tab_set_is_active		(EphyTab *tab,
-						 gboolean is_active);
-
-gboolean	ephy_tab_get_is_active		(EphyTab *tab);
-
-
-TabLoadStatus	ephy_tab_get_load_status	(EphyTab *tab);
+gboolean	ephy_tab_get_load_status	(EphyTab *tab);
 
 const char *	ephy_tab_get_link_message	(EphyTab *tab);
 
@@ -94,6 +88,8 @@ void		ephy_tab_set_location		(EphyTab *tab,
 						 const char *location);
 
 const char *	ephy_tab_get_location		(EphyTab *tab);
+
+TabNavigationFlags	ephy_tab_get_navigation_flags	(EphyTab *tab);
 						 
 EmbedSecurityLevel	ephy_tab_get_security_level	(EphyTab *tab);
 

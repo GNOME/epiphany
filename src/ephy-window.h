@@ -62,20 +62,8 @@ typedef enum
 
 typedef enum
 {
-	NavControl,
 	FindControl,
-	ZoomControl,
-	EncodingsControl,
-	TitleControl,
-	LocationControl,
-	FaviconControl,
-	StatusbarSecurityControl,
-	StatusbarMessageControl,
-	StatusbarProgressControl,
-	SpinnerControl,
 	WindowVisibilityControl,
-	BMAndHistoryControl,
-	TabsAppeareanceControl,
 	FavoritesControl
 } ControlID;
 

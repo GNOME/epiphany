@@ -52,8 +52,6 @@ struct EphyTabPrivate
 	EphyEmbed *embed;
 	EphyWindow *window;
 	EphyEmbedEvent *event;
-	gboolean is_active;
-	TabLoadStatus load_status;
 	char *status_message;
 	char *link_message;
 	char *icon_address;
@@ -61,6 +59,7 @@ struct EphyTabPrivate
 	char *title;
 	int load_percent;
 	gboolean visibility;
+	gboolean load_status;
 	int cur_requests;
 	int total_requests;
 	int width;
@@ -68,12 +67,12 @@ struct EphyTabPrivate
 	EggAction *action;
 	float zoom;
 	EmbedSecurityLevel security_level;
+	TabNavigationFlags nav_flags;
 };
 
 static void ephy_tab_class_init		(EphyTabClass *klass);
 static void ephy_tab_init		(EphyTab *tab);
 static void ephy_tab_finalize		(GObject *object);
-static void ephy_tab_update_color	(EphyTab *tab);
 
 enum
 {
@@ -83,6 +82,7 @@ enum
 	PROP_LOAD_PROGRESS,
 	PROP_LOAD_STATUS,
 	PROP_MESSAGE,
+	PROP_NAVIGATION,
 	PROP_SECURITY,
 	PROP_TITLE,
 	PROP_WINDOW,
@@ -94,19 +94,20 @@ static GObjectClass *parent_class = NULL;
 static gulong tab_id = 0;
 
 /* internal functions, accessible only from this file */
-void		ephy_tab_set_icon_address	(EphyTab *tab,
+static void	ephy_tab_set_icon_address	(EphyTab *tab,
 						 const char *location);
-void		ephy_tab_set_load_status	(EphyTab *tab,
-						 TabLoadStatus status);
-void		ephy_tab_set_link_message	(EphyTab *tab,
+static void	ephy_tab_set_load_status	(EphyTab *tab,
+						 gboolean status);
+static void	ephy_tab_set_link_message	(EphyTab *tab,
 						 const char *message);
-void		ephy_tab_set_load_percent	(EphyTab *tab,
+static void	ephy_tab_set_load_percent	(EphyTab *tab,
 						 int percent);
-void		ephy_tab_set_security_level	(EphyTab *tab,
+static void	ephy_tab_update_navigation_flags(EphyTab *tab);
+static void	ephy_tab_set_security_level	(EphyTab *tab,
 						 EmbedSecurityLevel level);
-void		ephy_tab_set_title		(EphyTab *tab,
+static void	ephy_tab_set_title		(EphyTab *tab,
 						 const char *new_title);
-void		ephy_tab_set_zoom		(EphyTab *tab,
+static void	ephy_tab_set_zoom		(EphyTab *tab,
 						 float zoom);
 
 /* Class functions */
@@ -160,6 +161,7 @@ ephy_tab_set_property (GObject *object,
 		case PROP_LOAD_PROGRESS:
 		case PROP_LOAD_STATUS:
 		case PROP_MESSAGE:
+		case PROP_NAVIGATION:
 		case PROP_SECURITY:
 		case PROP_TITLE:
 		case PROP_ZOOM:
@@ -188,10 +190,13 @@ ephy_tab_get_property (GObject *object,
 			g_value_set_int (value, tab->priv->load_percent);
 			break;
 		case PROP_LOAD_STATUS:
-			g_value_set_int (value, tab->priv->load_status);
+			g_value_set_boolean (value, tab->priv->load_status);
 			break;
 		case PROP_MESSAGE:
 			g_value_set_string (value, ephy_tab_get_status_message (tab));
+			break;
+		case PROP_NAVIGATION:
+			g_value_set_int (value, tab->priv->nav_flags);
 			break;
 		case PROP_SECURITY:
 			g_value_set_int (value, tab->priv->security_level);
@@ -255,13 +260,11 @@ ephy_tab_class_init (EphyTabClass *class)
 
 	g_object_class_install_property (object_class,
 					 PROP_LOAD_STATUS,
-					 g_param_spec_int ("load-status",
-							   "Load status",
-							   "The tab's load status",
-							    TAB_LOAD_NONE,
-							    TAB_LOAD_COMPLETED,
-							    TAB_LOAD_NONE,
-							    G_PARAM_READABLE));
+					 g_param_spec_boolean ("load-status",
+							       "Load status",
+							       "The tab's load status",
+							       FALSE,
+							       G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
 					 PROP_MESSAGE,
@@ -270,6 +273,18 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "The tab's statusbar message",
 							      NULL,
 							      G_PARAM_READABLE));
+
+	g_object_class_install_property (object_class,
+					 PROP_NAVIGATION,
+					 g_param_spec_int ("navigation",
+							   "Navigation flags",
+							   "The tab's navigation flags",
+							    0,
+							    TAB_NAV_UP |
+							    TAB_NAV_BACK |
+							    TAB_NAV_FORWARD,
+							    0,
+							    G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
 					 PROP_LOAD_STATUS,
@@ -317,10 +332,8 @@ ephy_tab_parent_set_cb (GtkWidget *widget, GtkWidget *previous_parent,
 	if (widget->parent == NULL) return;
 
 	toplevel = gtk_widget_get_toplevel (widget);
-
-	tab->priv->window = EPHY_WINDOW (toplevel);
+	ephy_tab_set_window (tab, EPHY_WINDOW (toplevel));
 }
-
 static void
 ephy_tab_embed_destroy_cb (GtkWidget *widget, EphyTab *tab)
 {
@@ -376,41 +389,25 @@ ephy_tab_new (void)
 	return tab;
 }
 
-void
-ephy_tab_set_load_status (EphyTab *tab,
-			  TabLoadStatus status)
+static void
+ephy_tab_set_load_status (EphyTab *tab, gboolean status)
 {
-	if (status == TAB_LOAD_COMPLETED)
-	{
-		Session *s;
-		s = ephy_shell_get_session (ephy_shell);
-		session_save (s, SESSION_CRASHED);
-	}
+	g_return_if_fail (IS_EPHY_TAB (tab));
 
-	if (ephy_tab_get_is_active (tab) &&
-	    status == TAB_LOAD_COMPLETED)
-	{
-		tab->priv->load_status = TAB_LOAD_NONE;
-	}
-	else
-	{
-		tab->priv->load_status = status;
-	}
-
-	ephy_tab_update_color (tab);
+	tab->priv->load_status = status;
 
 	g_object_notify (G_OBJECT (tab), "load-status");
 }
 
-TabLoadStatus
+gboolean
 ephy_tab_get_load_status (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), TAB_LOAD_NONE);
+	g_return_val_if_fail (IS_EPHY_TAB (tab), FALSE);
 
 	return tab->priv->load_status;
 }
 
-void
+static void
 ephy_tab_set_link_message (EphyTab *tab, const char *message)
 {
 	g_return_if_fail (IS_EPHY_TAB (tab));
@@ -443,7 +440,12 @@ ephy_tab_set_window (EphyTab *tab, EphyWindow *window)
 	g_return_if_fail (IS_EPHY_TAB (tab));
 	if (window) g_return_if_fail (IS_EPHY_WINDOW (window));
 
-	tab->priv->window = window;	
+	if (window != tab->priv->window)
+	{
+		tab->priv->window = window;
+	
+		g_object_notify (G_OBJECT (tab), "window");
+	}
 }
 
 EphyWindow *
@@ -457,55 +459,9 @@ ephy_tab_get_window (EphyTab *tab)
 EphyEmbedEvent *
 ephy_tab_get_event (EphyTab *tab)
 {
+	g_return_val_if_fail (IS_EPHY_TAB (tab), NULL);
+
 	return tab->priv->event;
-}
-
-static void
-ephy_tab_update_color (EphyTab *tab)
-{
-	TabLoadStatus status = ephy_tab_get_load_status (tab);
-	EphyNotebookPageLoadStatus page_status = 0;
-	GtkWidget *nb;
-
-	nb = ephy_window_get_notebook (tab->priv->window);
-
-	switch (status)
-	{
-		case TAB_LOAD_NONE:
-			page_status = EPHY_NOTEBOOK_TAB_LOAD_NORMAL;
-		break;
-		case TAB_LOAD_STARTED:
-			page_status = EPHY_NOTEBOOK_TAB_LOAD_LOADING;
-		break;
-		case TAB_LOAD_COMPLETED:
-			page_status = EPHY_NOTEBOOK_TAB_LOAD_COMPLETED;
-			break;
-	}
-
-	ephy_notebook_set_page_status (EPHY_NOTEBOOK (nb),
-				      GTK_WIDGET (tab->priv->embed),
-				      page_status);
-}
-
-void
-ephy_tab_set_is_active (EphyTab *tab, gboolean is_active)
-{
-	g_return_if_fail (IS_EPHY_TAB (tab));
-
-	tab->priv->is_active = is_active;
-
-	if (tab->priv->load_status == TAB_LOAD_COMPLETED)
-	{
-		ephy_tab_set_load_status (tab, TAB_LOAD_NONE);
-	}
-}
-
-gboolean
-ephy_tab_get_is_active (EphyTab *tab)
-{
-	g_return_val_if_fail (IS_EPHY_TAB (tab), FALSE);
-
-	return tab->priv->is_active;
 }
 
 void
@@ -536,59 +492,32 @@ ephy_tab_set_visibility (EphyTab *tab,
 }
 
 static void
-ephy_tab_set_favicon (EphyTab *tab,
-		      GdkPixbuf *favicon)
-{
-	GtkWidget *nb;
-
-	nb = ephy_window_get_notebook (tab->priv->window);
-	ephy_notebook_set_page_icon (EPHY_NOTEBOOK (nb),
-				     GTK_WIDGET (tab->priv->embed),
-				     favicon);
-}
-
-static void
 ephy_tab_icon_cache_changed_cb (EphyFaviconCache *cache,
 				const char *address,
 				EphyTab *tab)
 {
-	GdkPixbuf *pixbuf = NULL;
+	g_return_if_fail (address != NULL);
 
 	/* is this for us? */
-	if (tab->priv->icon_address == NULL ||
-	    strcmp (tab->priv->icon_address, address) != 0) return;
-
-	/* notify */
-	g_object_notify (G_OBJECT (tab), "icon");
-	
-	/* set favicon */
-	if (tab->priv->icon_address)
+	if (tab->priv->icon_address != NULL &&
+	    strcmp (tab->priv->icon_address, address) != 0)
 	{
-		pixbuf = ephy_favicon_cache_get (cache, tab->priv->icon_address);
-		ephy_tab_set_favicon (tab, pixbuf);
-
-		if (pixbuf)
-		{
-			g_object_unref (pixbuf);
-		}
+		/* notify */
+		g_object_notify (G_OBJECT (tab), "icon");
 	}
 }
 
-void
+static void
 ephy_tab_set_icon_address (EphyTab *tab, const char *address)
 {
 	EphyBookmarks *eb;
 	EphyHistory *history;
-	EphyFaviconCache *cache;
-	GdkPixbuf *pixbuf = NULL;
 
 	g_return_if_fail (IS_EPHY_TAB (tab));
 
 	g_free (tab->priv->icon_address);
-	tab->priv->icon_address = g_strdup (address);
 
-	cache = ephy_embed_shell_get_favicon_cache
-		(EPHY_EMBED_SHELL (ephy_shell));
+	tab->priv->icon_address = g_strdup (address);
 
 	if (tab->priv->icon_address)
 	{
@@ -599,23 +528,7 @@ ephy_tab_set_icon_address (EphyTab *tab, const char *address)
 				         tab->priv->icon_address);
 		ephy_history_set_icon (history, tab->priv->address,
 				       tab->priv->icon_address);
-
-		pixbuf = ephy_favicon_cache_get (cache, tab->priv->icon_address);
-
-		ephy_tab_set_favicon (tab, pixbuf);
-
-		if (pixbuf)
-		{
-			g_object_unref (pixbuf);
-		}
 	}
-	else
-	{
-		ephy_tab_set_favicon (tab, NULL);
-	}
-
-	ephy_window_update_control (tab->priv->window,
-				    FaviconControl);
 
 	g_object_notify (G_OBJECT (tab), "icon");
 }
@@ -623,7 +536,7 @@ ephy_tab_set_icon_address (EphyTab *tab, const char *address)
 const char *
 ephy_tab_get_icon_address (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), "");
+	g_return_val_if_fail (IS_EPHY_TAB (tab), NULL);
 
 	return tab->priv->icon_address;
 }
@@ -643,12 +556,7 @@ ephy_tab_link_message_cb (EphyEmbed *embed,
 			  const gchar *message,
 			  EphyTab *tab)
 {
-	if (!tab->priv->is_active) return;
-
 	ephy_tab_set_link_message (tab, message);
-
-	ephy_window_update_control (tab->priv->window,
-				    StatusbarMessageControl);
 }
 
 static void
@@ -662,24 +570,13 @@ ephy_tab_address_cb (EphyEmbed *embed, EphyTab *tab)
 
 	ephy_tab_set_link_message (tab, NULL);
 	ephy_tab_set_icon_address (tab, NULL);
-
-	if (tab->priv->is_active)
-	{
-		ephy_window_update_control (tab->priv->window, LocationControl);
-		ephy_window_update_control (tab->priv->window, NavControl);
-		ephy_window_update_control (tab->priv->window, FaviconControl);
-	}
+	ephy_tab_update_navigation_flags (tab);
 }
 
 static void
 ephy_tab_zoom_changed_cb (EphyEmbed *embed, float zoom, EphyTab *tab)
 {
 	ephy_tab_set_zoom (tab, zoom);
-
-	if (tab->priv->is_active)
-	{
-		ephy_window_update_control (tab->priv->window, ZoomControl);
-	}
 }
 
 static void
@@ -815,7 +712,6 @@ ensure_address (EphyTab *tab, const char *address)
 	if (tab->priv->address == NULL)
 	{
 		ephy_tab_set_location (tab, address);
-		ephy_window_update_control (tab->priv->window, LocationControl);
 	}
 }
 
@@ -828,43 +724,32 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 
 	g_object_notify (G_OBJECT (tab), "message");
 
-	ephy_window_update_control (tab->priv->window, StatusbarMessageControl);
-
 	if (state & EMBED_STATE_IS_NETWORK)
 	{
 		if (state & EMBED_STATE_START)
 		{
 			tab->priv->total_requests = 0;
 			tab->priv->cur_requests = 0;
-			ephy_tab_set_load_percent (tab, 0);
-
 			ensure_address (tab, uri);
 
-			ephy_tab_set_load_status (tab, TAB_LOAD_STARTED);
-
-			ephy_window_update_control (tab->priv->window,
-						      NavControl);
-			ephy_window_update_control (tab->priv->window,
-						      SpinnerControl);
+			ephy_tab_set_load_percent (tab, 0);
+			ephy_tab_set_load_status (tab, TRUE);
+			ephy_tab_update_navigation_flags (tab);
 		}
 		else if (state & EMBED_STATE_STOP)
 		{
+			/* tab load completed, save in session */	
+			Session *s;
+			s = ephy_shell_get_session (ephy_shell);
+			session_save (s, SESSION_CRASHED);
+
 			ephy_tab_set_load_percent (tab, 0);
-
-			ephy_tab_set_load_status (tab, TAB_LOAD_COMPLETED);
-
-			ephy_window_update_control (tab->priv->window,
-						      NavControl);
-			ephy_window_update_control (tab->priv->window,
-						      SpinnerControl);
-			ephy_tab_update_color (tab);
+			ephy_tab_set_load_status (tab, FALSE);
+			ephy_tab_update_navigation_flags (tab);
 		}
 	}
 
 	build_progress_from_requests (tab, state);
-
-	ephy_window_update_control (tab->priv->window,
-				      StatusbarProgressControl);
 }
 
 static void
@@ -914,14 +799,10 @@ ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 static void
 ephy_tab_destroy_brsr_cb (EphyEmbed *embed, EphyTab *tab)
 {
-	EphyWindow *window;
-
 	g_return_if_fail (IS_EPHY_TAB (tab));
 	g_return_if_fail (tab->priv->window != NULL);
 
-	window = ephy_tab_get_window (tab);
-
-	ephy_window_remove_tab (window, tab);
+	ephy_window_remove_tab (tab->priv->window, tab);
 
 	ephy_embed_shell_remove_embed (EPHY_EMBED_SHELL (ephy_shell),
 				       tab->priv->embed);
@@ -1113,11 +994,6 @@ ephy_tab_security_change_cb (EphyEmbed *embed, EmbedSecurityLevel level,
 			       EphyTab *tab)
 {
 	ephy_tab_set_security_level (tab, level);
-
-	if (!tab->priv->is_active) return;
-
-	ephy_window_update_control (tab->priv->window,
-				      StatusbarSecurityControl);
 }
 
 static void
@@ -1137,13 +1013,20 @@ ephy_tab_init (EphyTab *tab)
 
 	tab->priv->window = NULL;
 	tab->priv->event = NULL;
-	tab->priv->is_active = FALSE;
 	tab->priv->status_message = NULL;
 	tab->priv->link_message = NULL;
 	tab->priv->total_requests = 0;
 	tab->priv->cur_requests = 0;
 	tab->priv->width = -1;
 	tab->priv->height = -1;
+	tab->priv->address = NULL;
+	tab->priv->icon_address = NULL;
+	tab->priv->load_percent = 0;
+	tab->priv->load_status = FALSE;
+	tab->priv->link_message = NULL;
+	tab->priv->security_level = STATE_IS_UNKNOWN;
+	tab->priv->status_message = NULL;
+	tab->priv->zoom = 1.0;	
 
 	tab->priv->embed = ephy_embed_new (G_OBJECT(single));
 	ephy_embed_shell_add_embed (EPHY_EMBED_SHELL (ephy_shell),
@@ -1225,9 +1108,12 @@ ephy_tab_set_load_percent (EphyTab *tab, int percent)
 {
 	g_return_if_fail (IS_EPHY_TAB (tab));
 
-	tab->priv->load_percent = percent;
+	if (percent != tab->priv->load_percent)
+	{
+		tab->priv->load_percent = percent;
 
-	g_object_notify (G_OBJECT (tab), "load-progress");
+		g_object_notify (G_OBJECT (tab), "load-progress");
+	}
 }
 
 int
@@ -1238,12 +1124,51 @@ ephy_tab_get_load_percent (EphyTab *tab)
 	return tab->priv->load_percent;
 }
 
+static void
+ephy_tab_update_navigation_flags (EphyTab *tab)
+{
+	EphyEmbed *embed;
+	TabNavigationFlags flags = 0;
+
+	embed = tab->priv->embed;
+
+	if (ephy_embed_can_go_up (embed) == G_OK)
+	{
+		flags |= TAB_NAV_UP;
+	}
+
+	if (ephy_embed_can_go_back (embed) == G_OK)
+	{
+		flags |= TAB_NAV_BACK;
+	}
+
+	if (ephy_embed_can_go_forward (embed) == G_OK)
+	{
+		flags |= TAB_NAV_FORWARD;
+	}
+
+	if (flags != tab->priv->nav_flags)
+	{
+		tab->priv->nav_flags = flags;
+		
+		g_object_notify (G_OBJECT (tab), "navigation");
+	}	
+}
+
+TabNavigationFlags
+ephy_tab_get_navigation_flags (EphyTab *tab)
+{
+	g_return_val_if_fail (IS_EPHY_TAB (tab), 0);
+
+	return tab->priv->nav_flags;
+}
+
 const char *
 ephy_tab_get_status_message (EphyTab *tab)
 {
 	g_return_val_if_fail (IS_EPHY_TAB (tab), "");
 
-	if (tab->priv->link_message)
+	if (tab->priv->link_message && tab->priv->link_message[0] != '\0')
 	{
 		return tab->priv->link_message;
 	}
@@ -1259,10 +1184,9 @@ ephy_tab_get_status_message (EphyTab *tab)
 
 #define MAX_LABEL_LENGTH	32
 	
-void
+static void
 ephy_tab_set_title (EphyTab *tab, const char *new_title)
 {
-	GtkWidget *nb;
 	GnomeVFSURI *uri;
 	char *title_short = NULL;
 	char *title = NULL;
@@ -1310,19 +1234,6 @@ ephy_tab_set_title (EphyTab *tab, const char *new_title)
 
 	g_free (title_short);
 
-	if (tab->priv->window != NULL)
-	{
-		nb = ephy_window_get_notebook (tab->priv->window);
-		ephy_notebook_set_page_title (EPHY_NOTEBOOK (nb),
-					      GTK_WIDGET (tab->priv->embed),
-					      tab->priv->title);
-
-		if (tab->priv->is_active)
-		{
-			ephy_window_update_control (tab->priv->window, TitleControl);
-		}
-	}
-
 	g_object_notify (G_OBJECT (tab), "title");
 }
 
@@ -1354,7 +1265,7 @@ ephy_tab_set_location (EphyTab *tab,
 	g_object_notify (G_OBJECT (tab), "address");
 }
 
-void
+static void
 ephy_tab_set_security_level (EphyTab *tab, EmbedSecurityLevel level)
 {
 	g_return_if_fail (IS_EPHY_TAB (tab));
@@ -1372,7 +1283,7 @@ ephy_tab_get_security_level (EphyTab *tab)
 	return tab->priv->security_level;
 }
 
-void
+static void
 ephy_tab_set_zoom (EphyTab *tab, float zoom)
 {
 	g_return_if_fail (IS_EPHY_TAB (tab));

@@ -1,3 +1,67 @@
+2003-06-13  Christian Persch  <chpe@cvs.gnome.org>
+
+	The Friday the 13th Mega Patch. Beware!
+
+	* src/ephy-notebook.h:
+	* src/ephy-notebook.c: (ephy_notebook_class_init),
+	(ephy_notebook_move_page), (drag_stop), (ephy_notebook_init),
+	(ephy_notebook_set_page_status), (sync_load_status),
+	(ephy_notebook_set_page_icon), (sync_icon),
+	(ephy_notebook_set_page_title), (sync_label), (build_tab_label),
+	(update_tabs_visibility), (ephy_notebook_insert_page),
+	(ephy_notebook_remove_page):
+
+	Reworked notebook signals. Now we have tab_added, tab_removed,
+	tab_detached and tabs_reordered; emit them at appropriate times.
+	Don't offer the ephy_notebook_set_x functions anymore; instead we
+	sync on the tab's gobject properties.
+
+	* src/ephy-tab.h:
+	* src/ephy-tab.c: (ephy_tab_update_color), (ephy_tab_set_property),
+	(ephy_tab_get_property), (ephy_tab_set_load_status),
+	(ephy_tab_set_link_message), (ephy_tab_set_is_active),
+	(ephy_tab_get_is_active), (ephy_tab_set_favicon),
+	(ephy_tab_icon_cache_changed_cb), (ephy_tab_set_icon_address),
+	(ephy_tab_link_message_cb), (ephy_tab_address_cb),
+	(ephy_tab_zoom_changed_cb), (ensure_address), (ephy_tab_net_state_cb),
+	(ephy_tab_security_change_cb), (ephy_tab_init),
+	(ephy_tab_set_load_percent), (ephy_tab_update_navigation_flags),
+	(ephy_tab_get_navigation_flags), (ephy_tab_get_status_message),
+	(ephy_tab_set_title):
+
+	Removed the is_active flag. Made load-status property boolean (true
+	means loading), removing the TAB_LOAD_NONE/TAB_LOAD_COMPLETED
+	distinction. Add navigation flags object property. Remove all calls to
+	ephy_window_update_x, instead let the window sync on object properties.
+	Fix statusbar message bug.
+
+	* src/ephy-tabs-menu.c: (tab_set_action_accelerator):
+
+	Fix accelerator for tabs with position > 10.
+
+	* src/ephy-window.h:
+	* src/ephy-window.c: (ephy_window_destroy_cb), (setup_window),
+	(sync_tab_address), (sync_tab_icon), (sync_tab_load_progress),
+	(sync_tab_load_status), (sync_tab_message), (sync_tab_navigation),
+	(sync_tab_security), (sync_tab_stop), (sync_tab_title),
+	(sync_tab_zoom), (ephy_window_set_active_tab), (update_tabs_menu),
+	(tab_added_cb), (tab_removed_cb), (tab_detached_cb),
+	(tabs_reordered_cb), (setup_notebook), (ephy_window_init),
+	(ephy_window_add_tab), (real_get_active_tab), (ephy_window_remove_tab),
+	(update_status_message), (update_progress), (update_security),
+	(update_nav_control), (update_zoom_control), (update_title_control),
+	(update_location_control), (update_favicon_control),
+	(update_spinner_control), (ephy_window_update_control),
+	(ephy_window_get_active_tab), (ephy_window_get_active_embed),
+	(ephy_window_notebook_switch_page_cb), (ephy_window_tab_detached_cb):
+
+	Sync on the active tab's object properties, and sync on the load
+	status of all tabs for the spinner.
+
+	* src/toolbar.c: (toolbar_update_navigation_actions):
+
+	Correct inverted logic.
+
 2003-06-13  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/mozilla/ProgressListener.cpp:
