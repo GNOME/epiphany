@@ -212,16 +212,17 @@ language_editor_remove_button_clicked_cb (GtkButton *button,
 
 	for (r = rlist; r != NULL; r = r->next)
 	{
-		GtkTreePath *node;
+		GtkTreePath *path;
 
-		node = gtk_tree_row_reference_get_path
+		path = gtk_tree_row_reference_get_path
 			((GtkTreeRowReference *)r->data);
 
-		gtk_tree_model_get_iter (model, &iter, node);
+		gtk_tree_model_get_iter (model, &iter, path);
 
 		gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
 
 		gtk_tree_row_reference_free ((GtkTreeRowReference *)r->data);
+		gtk_tree_path_free (path);
 	}
 
 	g_list_foreach (llist, (GFunc)gtk_tree_path_free, NULL);

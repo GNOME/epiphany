@@ -180,6 +180,8 @@ ephy_tree_model_sort_multi_row_draggable (EggTreeMultiDragSource *drag_source, G
 			       ephy_tree_model_sort_signals[NODE_FROM_ITER],
 			       0, &iter, &node);
 
+		gtk_tree_path_free (path);
+
 		if (node == NULL)
 		{
 			return FALSE;
@@ -215,14 +217,18 @@ each_url_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 	for (i = path_list; i != NULL; i = i->next)
 	{
 		GtkTreeIter iter;
-		GtkTreePath *path = gtk_tree_row_reference_get_path (i->data);
+		GtkTreePath *path = NULL;
 		EphyNode *node = NULL;
 		const char *value;
+
+		path = gtk_tree_row_reference_get_path (i->data);
 
 		gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path);
 		g_signal_emit (G_OBJECT (model),
 			       ephy_tree_model_sort_signals[NODE_FROM_ITER],
 			       0, &iter, &node);
+
+		gtk_tree_path_free (path);
 
 		if (node == NULL)
 			return;
@@ -248,15 +254,18 @@ each_node_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 	for (i = path_list; i != NULL; i = i->next)
 	{
 		GtkTreeIter iter;
-		GtkTreePath *path = gtk_tree_row_reference_get_path (i->data);
+		GtkTreePath *path = NULL;
 		EphyNode *node = NULL;
 		EphyNodeDb *db;
 		char *value;
 
+		path = gtk_tree_row_reference_get_path (i->data);
 		gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path);
 		g_signal_emit (G_OBJECT (model),
 			       ephy_tree_model_sort_signals[NODE_FROM_ITER],
 			       0, &iter, &node);
+		gtk_tree_path_free (path);
+
 		if (node == NULL)
 			return;
 

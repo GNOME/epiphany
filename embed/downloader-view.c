@@ -459,7 +459,7 @@ downloader_view_set_download_info (DownloaderViewPrivate *priv,
 				   GtkTreeIter *iter)
 {
 	gchar buffer[50];
-	GtkTreePath *path;
+	GtkTreePath *path = NULL;
 	GtkTreePath *selected_path = NULL;
 	GtkTreeIter selected_iter;
 	GtkTreeSelection *selection;
@@ -550,6 +550,9 @@ downloader_view_set_download_info (DownloaderViewPrivate *priv,
 	{
 		downloader_view_update_details (priv, details);
 	}
+
+	gtk_tree_path_free (path);
+	gtk_tree_path_free (selected_path);
 }
 
 static void
@@ -630,15 +633,17 @@ downloader_view_remove_download (DownloaderView *dv,
 				 gpointer persist_object)
 {
 	DownloadDetails *details;
+	GtkTreePath *path = NULL;
 	GtkTreeIter iter;
 
 	details = g_hash_table_lookup (dv->priv->details_hash,
 				       persist_object);
 	g_return_if_fail (details);
 
+	path = gtk_tree_row_reference_get_path (details->ref);
+
 	gtk_tree_model_get_iter (GTK_TREE_MODEL (dv->priv->model),
-				 &iter,
-				 gtk_tree_row_reference_get_path (details->ref));
+				 &iter, path);
 
 	gtk_list_store_remove (GTK_LIST_STORE (dv->priv->model), &iter);
 
@@ -646,6 +651,8 @@ downloader_view_remove_download (DownloaderView *dv,
 			     persist_object);
 
 	ensure_selected_row (dv);
+
+	gtk_tree_path_free (path);
 }
 
 void
@@ -659,6 +666,7 @@ downloader_view_set_download_progress (DownloaderView *dv,
 				       gpointer persist_object)
 {
 	DownloadDetails *details;
+	GtkTreePath *path = NULL;
 	GtkTreeIter iter;
 
 	details = g_hash_table_lookup (dv->priv->details_hash,
@@ -672,11 +680,14 @@ downloader_view_set_download_progress (DownloaderView *dv,
 	details->size_done = size_done;
 	details->progress = progress;
 
+	path = gtk_tree_row_reference_get_path (details->ref);
+
 	gtk_tree_model_get_iter (GTK_TREE_MODEL (dv->priv->model),
-				 &iter,
-				 gtk_tree_row_reference_get_path (details->ref));
+				 &iter, path);
 
 	downloader_view_set_download_info (dv->priv, details, &iter);
+
+	gtk_tree_path_free (path);
 }
 
 void
@@ -685,6 +696,7 @@ downloader_view_set_download_status (DownloaderView *dv,
 				     gpointer persist_object)
 {
 	DownloadDetails *details;
+	GtkTreePath *path = NULL;
 	GtkTreeIter iter;
 
 	details = g_hash_table_lookup (dv->priv->details_hash,
@@ -693,9 +705,10 @@ downloader_view_set_download_status (DownloaderView *dv,
 
 	details->status = status;
 
+	path = gtk_tree_row_reference_get_path (details->ref);
+
 	gtk_tree_model_get_iter (GTK_TREE_MODEL (dv->priv->model),
-				 &iter,
-				 gtk_tree_row_reference_get_path (details->ref));
+				 &iter, path);
 
 	downloader_view_set_download_info (dv->priv, details, &iter);
 	downloader_view_update_controls (dv->priv);
@@ -704,6 +717,8 @@ downloader_view_set_download_status (DownloaderView *dv,
 	{
 		downloader_view_remove_download (dv, persist_object);
 	}*/
+
+	gtk_tree_path_free (path);
 }
 
 static void
@@ -872,13 +887,15 @@ download_dialog_abort_cb (GtkButton *button, DownloaderView *dv)
         for (r = rlist; r != NULL; r = r->next)
         {
                 GtkTreeRowReference *node = r->data;
+		GtkTreePath *path = NULL;
 		GValue val = {0, };
 		gpointer *persist_object;
 		GtkTreeIter iter;
 		DownloadDetails *details;
 
-                gtk_tree_model_get_iter (model, &iter,
-                                         gtk_tree_row_reference_get_path (node));
+		path = gtk_tree_row_reference_get_path (node);
+
+                gtk_tree_model_get_iter (model, &iter, path);
 
 		gtk_tree_model_get_value (model, &iter,
 					  COL_PERSIST_OBJECT, &val);
@@ -893,6 +910,7 @@ download_dialog_abort_cb (GtkButton *button, DownloaderView *dv)
 		downloader_view_remove_download (dv, persist_object);
 
                 gtk_tree_row_reference_free (node);
+		gtk_tree_path_free (path);
         }
 
 	g_list_foreach (llist, (GFunc)gtk_tree_path_free, NULL);

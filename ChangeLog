@@ -1,5 +1,17 @@
 2003-07-13  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/language-editor.c: (language_editor_remove_button_clicked_cb):
+	* embed/downloader-view.c: (downloader_view_set_download_info),
+	(downloader_view_remove_download),
+	(downloader_view_set_download_progress),
+	(downloader_view_set_download_status), (download_dialog_abort_cb):
+	* lib/widgets/ephy-tree-model-sort.c:
+	(ephy_tree_model_sort_multi_row_draggable):
+
+	Fix mem leaks.
+
+2003-07-13  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-node.c: (ephy_node_finalize):
 
 	Fix mem leaks.
