@@ -1,3 +1,28 @@
+2003-07-14  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/egg/eggtreemultidnd.c:
+	(egg_tree_multi_drag_button_press_event):
+
+	Update
+
+	* embed/ephy-embed-popup-control.c: (save_property_url),
+	(embed_popup_download_link_cmd), (embed_popup_save_image_as_cmd),
+	(save_url), (embed_popup_save_page_as_cmd),
+	(embed_popup_save_background_as_cmd):
+	* src/popup-commands.c: (save_property_url),
+	(popup_cmd_download_link), (popup_cmd_save_image_as),
+	(popup_cmd_save_background_as):
+	* src/window-commands.c: (window_cmd_file_open),
+	(window_cmd_file_save_as):
+	
+	Higgy titles for file pickers.
+
+	* embed/ephy-embed-utils.c: (ephy_embed_utils_save):
+	* embed/ephy-embed-utils.h:
+
+	Allow to pass a title to _save.
+	Show an error message when saving doesnt succeed.
+
 2003-07-14  Xan Lopez  <xan@masilla.org>
 
 	* lib/widgets/ephy-node-view.c: (ephy_node_view_remove):

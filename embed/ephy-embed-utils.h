@@ -27,6 +27,7 @@
 G_BEGIN_DECLS
 
 void ephy_embed_utils_save			(GtkWidget *window,
+						 const char *title,
 						 const char *default_dir_pref,
 						 gboolean ask_dest,
 						 gboolean with_content,

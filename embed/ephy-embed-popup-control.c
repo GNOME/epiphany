@@ -26,6 +26,7 @@
 #include <gtk/gtkmain.h>
 #include <string.h>
 #include <bonobo/bonobo-ui-component.h>
+#include <bonobo/bonobo-i18n.h>
 #include <gtk/gtkclipboard.h>
 #include <libgnome/gnome-exec.h>
 
@@ -481,6 +482,7 @@ embed_popup_copy_link_location_cmd (BonoboUIComponent *uic,
 
 static void
 save_property_url (EphyEmbedPopupControl *popup,
+		   const char *title,
 		   gboolean ask_dest,
 		   gboolean show_progress,
 		   const char *property)
@@ -509,11 +511,9 @@ save_property_url (EphyEmbedPopupControl *popup,
 					      EMBED_PERSIST_SHOW_PROGRESS);
 	}
 
-	ephy_embed_utils_save (window,
+	ephy_embed_utils_save (window, title,
 			       CONF_STATE_DOWNLOADING_DIR,
-			       ask_dest,
-                               FALSE,
-                               persist);
+			       ask_dest, FALSE, persist);
 }
 
 /* commands */
@@ -540,6 +540,7 @@ embed_popup_download_link_cmd (BonoboUIComponent *uic,
                                const char* verbname)
 {
 	save_property_url (popup,
+			   _("Download Link"),
 		           eel_gconf_get_boolean
 		           (CONF_ASK_DOWNLOAD_DEST),
 		           TRUE, "link");
@@ -550,7 +551,7 @@ embed_popup_save_image_as_cmd (BonoboUIComponent *uic,
 			       EphyEmbedPopupControl *popup,
                                const char* verbname)
 {
-	save_property_url (popup, TRUE, FALSE, "image");
+	save_property_url (popup, _("Save Image As"), TRUE, FALSE, "image");
 }
 
 #define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
@@ -629,6 +630,7 @@ embed_popup_copy_image_location_cmd (BonoboUIComponent *uic,
 
 static void
 save_url (EphyEmbedPopupControl *popup,
+	  const char *title,
 	  gboolean ask_dest,
 	  gboolean show_progress,
 	  const char *url)
@@ -649,11 +651,9 @@ save_url (EphyEmbedPopupControl *popup,
 						EMBED_PERSIST_SHOW_PROGRESS);
 	}
 
-	ephy_embed_utils_save (window,
+	ephy_embed_utils_save (window, title,
 			       CONF_STATE_DOWNLOADING_DIR,
-			       ask_dest,
-                               FALSE,
-                               persist);
+			       ask_dest, FALSE, persist);
 }
 
 static void
@@ -665,7 +665,7 @@ embed_popup_save_page_as_cmd (BonoboUIComponent *uic,
 
 	ephy_embed_get_location (popup->priv->embed,
 				   FALSE, &location);
-	save_url (popup, TRUE, FALSE, location);
+	save_url (popup, _("Save Page As"), TRUE, FALSE, location);
 	g_free (location);
 }
 
@@ -674,7 +674,8 @@ embed_popup_save_background_as_cmd (BonoboUIComponent *uic,
 				    EphyEmbedPopupControl *popup,
                                     const char* verbname)
 {
-	save_property_url (popup, TRUE, FALSE, "background_image");
+	save_property_url (popup, _("Save Background As"),
+			   TRUE, FALSE, "background_image");
 }
 
 static void

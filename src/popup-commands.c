@@ -26,6 +26,7 @@
 #include "ephy-file-helpers.h"
 
 #include <string.h>
+#include <bonobo/bonobo-i18n.h>
 
 static EphyEmbedEvent *
 get_event_info (EphyWindow *window)
@@ -249,6 +250,7 @@ popup_cmd_copy_link_address (EggAction *action,
 
 static void
 save_property_url (EggAction *action,
+		   const char *title,
 		   EphyWindow *window,
 		   gboolean ask_dest,
 		   gboolean show_progress,
@@ -280,11 +282,9 @@ save_property_url (EggAction *action,
 					      EMBED_PERSIST_SHOW_PROGRESS);
 	}
 
-	ephy_embed_utils_save (GTK_WIDGET (window),
+	ephy_embed_utils_save (GTK_WIDGET (window), title,
 			       CONF_STATE_DOWNLOADING_DIR,
-			       ask_dest,
-                               FALSE,
-                               persist);
+			       ask_dest, FALSE, persist);
 
 	g_object_unref (G_OBJECT(persist));
 }
@@ -312,7 +312,7 @@ void
 popup_cmd_download_link (EggAction *action,
 			 EphyWindow *window)
 {
-	save_property_url (action, window,
+	save_property_url (action, _("Download link"), window,
 		           eel_gconf_get_boolean
 		           (CONF_ASK_DOWNLOAD_DEST),
 		           TRUE, "link");
@@ -322,7 +322,8 @@ void
 popup_cmd_save_image_as (EggAction *action,
 			 EphyWindow *window)
 {
-	save_property_url (action, window, TRUE, FALSE, "image");
+	save_property_url (action, _("Save Image As"),
+			   window, TRUE, FALSE, "image");
 }
 
 #define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
@@ -409,7 +410,8 @@ void
 popup_cmd_save_background_as (EggAction *action,
 			      EphyWindow *window)
 {
-	save_property_url (action, window, TRUE, FALSE, "background_image");
+	save_property_url (action, _("Save Background As"),
+			   window, TRUE, FALSE, "background_image");
 }
 
 void

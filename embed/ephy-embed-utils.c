@@ -38,6 +38,7 @@
 /**
  * ephy_embed_utils_save:
  * @window: the referrer window. Used to parent the dialogs.
+ * @title: title of the file picker
  * @default_dir_pref: the gconf path to persist the directory selected by the user.
  * @ask_dest: ask the user the destination path
  * @ask_content: show the user an option to save the content
@@ -48,6 +49,7 @@
  **/
 void
 ephy_embed_utils_save (GtkWidget *window,
+		       const char *title,
 		       const char *default_dir_pref,
 		       gboolean ask_dest,
 		       gboolean with_content,
@@ -134,8 +136,7 @@ ephy_embed_utils_save (GtkWidget *window,
 	{
 		/* show the file picker */
 		ret = ephy_embed_single_show_file_picker
-					(single, window,
-                                         _("Select the destination filename"),
+					(single, window, title,
                                          dirName, fileName, modeSave, &retPath,
                                          NULL, NULL);
 	}
@@ -154,7 +155,20 @@ ephy_embed_utils_save (GtkWidget *window,
 
 		ephy_embed_persist_set_dest (persist, retPath);
 
-		ephy_embed_persist_save (persist);
+		if (ephy_embed_persist_save (persist) == G_FAILED)
+		{
+			GtkWidget *dialog;
+
+			dialog = gtk_message_dialog_new
+				(GTK_WINDOW (window),
+	                         GTK_DIALOG_MODAL,
+	                         GTK_MESSAGE_ERROR,
+	                         GTK_BUTTONS_CLOSE,
+	                         _("The file has not been saved."));
+			gtk_dialog_run (GTK_DIALOG (dialog));
+			gtk_widget_destroy (dialog);
+		}
+
 	}
 
 	/* set default save dir */

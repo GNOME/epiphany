@@ -327,7 +327,7 @@ window_cmd_file_open (EggAction *action,
 
 	result = ephy_embed_single_show_file_picker
 		(single, wmain,
-		 _("Select the file to open"),
+		 _("Open"),
                  dir, NULL, modeOpen,
                  &file, NULL, NULL);
 
@@ -368,6 +368,7 @@ window_cmd_file_save_as (EggAction *action,
 				      EMBED_PERSIST_MAINDOC);
 
 	ephy_embed_utils_save (GTK_WIDGET(window),
+			       _("Save As"),
 			       CONF_STATE_SAVE_DIR,
 			       TRUE,
 			       TRUE,
