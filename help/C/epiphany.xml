@@ -536,34 +536,40 @@
           </para>
         </sect2>
 	<sect2 id="to-open-link">
-          <title>To Open a Link</title>
+          <title>To Open Links</title>
           <para>
             Web pages contain links to other web pages, often (but not always)
             indicated by an underline. To follow a link, left click it.
           </para>
-          <note>
-            The web page defines whether the link opens in the current or a new 
-            window.
-          </note>
-        </sect2>
-	<sect2 id="to-open-link-in-window">
-          <title>To Open a Link in a New window</title>
-          <para>
-            To open a link in a new window, right click it and select 
-            <guimenuitem>Open Link in New Window</guimenuitem>.
-          </para>
-        </sect2>
-	<sect2 id="to-open-link-in-tab">
-          <title>To Open a Link in a New Tab</title>
-          <para>
-            To open a link in a new tab, right click it and select 
-            <guimenuitem>Open Link in New Tab</guimenuitem>.
-          </para>
-          <tip>
-            You can also open a link in a new tab by middle clicking it, if you 
-            have a three button mouse, or clicking with both buttons, if you 
-            have a two button mouse.
-          </tip>
+          <variablelist>
+            <varlistentry>
+              <term>To open a link as the page specifies</term>
+              <listitem>
+                <para>
+                  Left-click a link. The link may open in the current window or 
+                  a new window according to what the page author specified.
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>To open a link in a new tab</term>
+              <listitem>
+                <para>
+                  Right click it and select <guimenuitem>Open Link in New Tab</guimenuitem>, click 
+                  with the middle mouse button.
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>To open a link in a new window</term>
+              <listitem>
+                <para>
+                  Right-click it and select <guimenuitem>Open Link in 
+                  New Window</guimenuitem>.
+                </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
         </sect2>
 	<sect2 id="to-download-link">
           <title>To Download a Link</title>
@@ -1190,7 +1196,7 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
       </para>
       <variablelist>
         <varlistentry>
-          <term>Value</term>
+          <term>Content</term>
           <listitem>
             <para>
               The content of the cookie.
@@ -1201,7 +1207,7 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
           <term>Path</term>
           <listitem>
             <para>
-              The folder within the domain for which the cookies is valid.
+              The path within the domain for which the cookie is valid.
             </para>
           </listitem>
         </varlistentry>
@@ -1209,12 +1215,13 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
           <term>Secure</term>
           <listitem>
             <para>
-              Whether the cookie originates from a secure or insecure server.
+              When <guilabel>Yes</guilabel>, the cookie will only be 
+              sent if the connection is encrypted.
             </para>
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term>Expire</term>
+          <term>Expires</term>
           <listitem>
             <para>
               The date and time at which the cookie is no longer valid.
@@ -1262,12 +1269,8 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
           <para>
             The <guilabel>Filename</guilabel> is the name of the downloading file. The folder 
             which the file is downloaded to can be specified in <xref linkend="general-preferences"/>.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            <guilabel>Size</guilabel> shows how big the file is. 
-            1MB is equivilent to 1024kB.
+            This column also shows the amount of the file downloaded and its total size. 1MB is 
+            equivilent to 1024kB.
           </para>
         </listitem>
         <listitem>
@@ -1285,6 +1288,160 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
       <note>
         Once all downloads have finished, or been cancelled, the download manager will close.
       </note>
+  </sect1>
+
+<!-- ============= Certificates and Online Security =============== -->
+
+  <sect1 id="ephy-certificates">
+    <title>Certificates &amp; Online Security</title>
+    <para>
+      When using sites which require you to login, or when using online
+      shopping, it is important to know that the information you submit 
+      is secure. &fr; offers a number of features to help you do this.
+    </para>
+    <sect2 id="identifying-secure-sites">
+      <title>Identifying Secure Sites</title>
+      <para>
+        When viewing web pages, &fr; displays a lock icon in the status bar
+        which shows you whether the current site is secure.
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>An unlocked padlock</term>
+          <listitem>
+            <para>
+              Indicates that this site is insecure.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>A locked padlock</term>
+          <listitem>
+            <para>
+              Indicates that this site is secure.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>A broken padlock</term>
+          <listitem>
+            <para>
+              Indicates that some parts of this page are secure, and others
+              are not.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </sect2>
+    <sect2 id="using-certificate-viewer">
+      <title>Using Certificate Viewer</title>
+      <para>
+        The certificate viewer presents the details held within the certificate. 
+        The <guilabel>General</guilabel> tab provides the following details:
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>Common Name</term>
+          <listitem>
+            <para>
+              Shows either who issued the certificate, or the domain to which 
+              it was issued.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Organisation</term>
+          <listitem>
+            <para>
+              Shows the name of the issuing company, or the name of the company 
+              to which is was issued.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Organisational Unit</term>
+          <listitem>
+            <para>
+              Shows the division of the company which issued or received the certificate.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Serial Number</term>
+          <listitem>
+            <para>
+              A unique identifier for this certificate.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Issued On</term>
+          <listitem>
+            <para>
+              The date the certificate was issued.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Expires On</term>
+          <listitem>
+            <para>
+              The date the certificate expires.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>SHA1 Fingerprint</term>
+          <listitem>
+            <para>
+              An identifying string for this certificate. You can check with the 
+              issuing company that this string matches the certificate on their records.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>MD5 Fingerprint</term>
+          <listitem>
+            <para>
+              An identifying string for this certificate. You can check with the 
+              issuing company that this string matches the certificate on their records.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <para>
+        The <guilabel>Details</guilabel> tab shows the following information:
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>Certificate Hierarchy</term>
+          <listitem>
+            <para>
+              Some certificates are signed by intermediate authorities who are in
+              turn signed by an authority at a higher level. This list displays
+              the complete certificate chain.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Certificate Fields</term>
+          <listitem>
+            <para>
+              Displays the fields as they appear in the certificate for the selected
+              certificate in the hierarchy.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Field Value</term>
+          <listitem>
+            <para>
+              Displays the value for the selected certificate field.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </sect2>
   </sect1>
 
 <!-- ============= Customizing Epiphany =========================== -->
@@ -1328,12 +1485,12 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
             <para>
               You can choose different font styles and sizes depending on the language 
               that a page is written in. First select the language you want to configure 
-              from the <guilabel>For language</guilabel> drop down combination box. To 
+              from the <guilabel>For language</guilabel> drop-down list. To 
               set the font for standard text, where the width of characters varies, 
-              use the <guilabel>Variable width</guilabel> drop down combination box 
+              use the <guilabel>Variable width</guilabel> drop down list 
               and spin box. To set the font for fixed width text, where the width of 
               characters is always the same, use the <guilabel>Fixed width</guilabel> 
-              drop down combination box and spin box.
+              drop down list and spin box.
             </para>
             <para>
               You can also set a minimum size for web page fonts by using the <guilabel>
@@ -1425,11 +1582,11 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
             <para>
               The encoding of a page specifies the set of characters that are used in it.
               The <guilabel>Encodings</guilabel> section configures how &fr; identifies
-              this set. The <guilabel>Default</guilabel> drop down combination box allows 
+              this set. The <guilabel>Default</guilabel> drop-down list allows 
               you to set an encoding to fall back to when the page doesn't specify one.
             </para>
             <para>
-              The <guilabel>Autodetect</guilabel> drop down combination box allows you to 
+              The <guilabel>Autodetect</guilabel> drop-down list allows you to 
               select a group of encodings from which &fr; will try to select to right 
               encoding for the page if one is not specified. For example, if you normally 
               visit Chinese pages, for which these may be several different encodings, 
@@ -1439,7 +1596,7 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
             <para>
               Some web sites have pages which are available in a number of different 
               languages. You can set your prefered language by selecting an entry from
-              the <guilabel>Language</guilabel> drop down combination box. If you would
+              the <guilabel>Language</guilabel> drop down list. If you would
               like to set one or more fall back languages, in case your prefered 
               language isn't available, click <guibutton>More</guibutton> and add 
               your back up languages to the list. Entries are listed in the order 
@@ -1525,6 +1682,448 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
              </listitem>
            </itemizedlist>
         </sect2>
+  </sect1>
+
+<!-- ============= Keyboard Shortcuts ============================= -->
+
+  <sect1 id="keyboard-shortcuts">
+    <title>Keyboard Shortcuts</title>
+    <para>
+    </para>
+   <table frame="topbot" id="epiphany-TBL-3">
+      <title>General Shortcuts</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>
+                Shortcut
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Description
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-O</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Open a file from a local folder.
+              </para>
+            </entry>
+          </row>
+	  <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Shift-Ctrl-S</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Save the current document to a local folder.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-P</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Print the current document.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-W</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Close the current tab or window.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>F1</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Show help.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-D</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Bookmark current page.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-B</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Show bookmarks manager.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-H</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Show history manager.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Shift-Ctrl-T</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Toggle toolbar display.
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>   
+   <para>
+   </para>
+   <table frame="topbot" id="epiphany-TBL-4">
+      <title>Navigation Shortcuts</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>
+                Shortcut
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Description
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-N</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Open a new window.
+              </para>
+            </entry>
+          </row>
+	  <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-T</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Open a new tab.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-L</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Focus the address bar.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Alt-Left</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Go back.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Alt-Right</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Go forward.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Alt-Up</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Go up a level.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Alt-Home</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Go to your home page.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Esc</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Stop page loading.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>F6</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Switch to next frame.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Shift-F6</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Switch to previous frame.
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+   <para>
+   </para>
+   <table frame="topbot" id="epiphany-TBL-5">
+      <title>Tabbed Browsing Shortcuts</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>
+                Shortcut
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Description
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody> 
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-Page Up</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Focus next tab.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-Page Down</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Focus previous tab.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Shift-Ctrl-Page Up</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Move tab left.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Shift-Ctrl-Page Down</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Move tab right.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Shift-Ctrl-M</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Detach tab.
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+  <para>
+  </para>
+  <table frame="topbot" id="epiphany-TBL-6">
+      <title>Page Viewing Shortcuts</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>
+                Shortcut
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Description
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody> 
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>F11</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Toggle fullscreen mode.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-+</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Zoom text larger.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl--</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Zoom text smaller.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-U</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                View page source.
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>   
   </sect1>
 
 <!-- ============= About ========================================== -->
