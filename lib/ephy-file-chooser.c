@@ -85,6 +85,7 @@ current_folder_changed_cb (GtkFileChooser *chooser, EphyFileChooser *dialog)
 		char *dir, *converted;
 
 		dir = gtk_file_chooser_get_current_folder (chooser);
+
 		if (dir != NULL)
 		{
 			converted = g_filename_to_utf8 (dir, -1, NULL, NULL, NULL);
@@ -104,9 +105,6 @@ ephy_file_chooser_init (EphyFileChooser *dialog)
 
 	dialog->priv->persist_key = NULL;
 
-	g_signal_connect (dialog, "current-folder-changed",
-			  G_CALLBACK (current_folder_changed_cb), dialog);
-
 	ephy_state_add_window (GTK_WIDGET (dialog), "file_chooser",
 			       400, 300,
 			       EPHY_STATE_WINDOW_SAVE_SIZE |
@@ -125,37 +123,45 @@ ephy_file_chooser_finalize (GObject *object)
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-static void
+void
 ephy_file_chooser_set_persist_key (EphyFileChooser *dialog, const char *key)
 {
+	char *dir, *expanded, *converted;
+
+	g_return_if_fail (key != NULL && key[0] != '\0');
+
 	dialog->priv->persist_key = g_strdup (key);
 
-	if (key != NULL)
+	dir = eel_gconf_get_string (key);
+	if (dir != NULL)
 	{
-		char *dir;
+		converted = g_filename_from_utf8
+			(dir, -1, NULL, NULL, NULL);
 
-		dir = eel_gconf_get_string (key);
+		expanded = gnome_vfs_expand_initial_tilde (converted);
 
-		if (dir != NULL)
+		if (expanded != NULL)
 		{
-			char *expanded, *converted;
-
-			converted = g_filename_from_utf8
-				(dir, -1, NULL, NULL, NULL);
-
-			expanded = gnome_vfs_expand_initial_tilde (converted);
-
-			if (expanded != NULL)
-			{
-				gtk_file_chooser_set_current_folder
-					(GTK_FILE_CHOOSER (dialog), expanded);
-			}
-
-			g_free (expanded);
-			g_free (converted);
-			g_free (dir);
+			gtk_file_chooser_set_current_folder
+				(GTK_FILE_CHOOSER (dialog), expanded);
 		}
+
+		g_free (expanded);
+		g_free (converted);
+		g_free (dir);
 	}
+
+	g_signal_connect (dialog, "current-folder-changed",
+			  G_CALLBACK (current_folder_changed_cb), dialog);
+
+}
+
+const char *
+ephy_file_chooser_get_persist_key (EphyFileChooser *dialog)
+{
+	g_return_val_if_fail (EPHY_IS_FILE_CHOOSER (dialog), NULL);
+
+	return dialog->priv->persist_key;
 }
 
 static void
@@ -185,7 +191,7 @@ ephy_file_chooser_get_property (GObject *object,
 	switch (prop_id)
 	{
 		case PROP_PERSIST_KEY:
-			g_value_set_string (value, dialog->priv->persist_key);
+			g_value_set_string (value, ephy_file_chooser_get_persist_key (dialog));
 			break;
 	}
 }
@@ -207,8 +213,7 @@ ephy_file_chooser_class_init (EphyFileChooserClass *klass)
 							      "Persist Key",
 							      "The gconf key to which to persist the selected directory",
 							      NULL,
-							      G_PARAM_READWRITE |
-							      G_PARAM_CONSTRUCT_ONLY));
+							      G_PARAM_READWRITE));
 
 	g_type_class_add_private (object_class, sizeof (EphyFileChooserPrivate));
 }
@@ -222,11 +227,17 @@ ephy_file_chooser_new (const char *title,
 	EphyFileChooser *dialog;
 
 	dialog = EPHY_FILE_CHOOSER (g_object_new (EPHY_TYPE_FILE_CHOOSER,
-				    "local-only", TRUE,
-				    "title", title,
-				    "action", action,
-				    "persist-key", persist_key,
-				    NULL));
+						  "title", title,
+						  "action", action,
+						  NULL));
+
+	/* NOTE: We cannot set this property on object construction time.
+	 * This is because GtkFileChooserDialog overrides the gobject
+	 * constructor; the GtkFileChooser delegate will only be set
+	 * _after_ our instance_init and construct-param setters will have
+	 * run.
+	 */
+	ephy_file_chooser_set_persist_key (dialog, persist_key);
 
 	if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	{
@@ -234,6 +245,8 @@ ephy_file_chooser_new (const char *title,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					GTK_STOCK_OPEN, EPHY_RESPONSE_OPEN,
 					NULL);
+		gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+						 EPHY_RESPONSE_OPEN);
 	}
 	else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	{
@@ -241,9 +254,15 @@ ephy_file_chooser_new (const char *title,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					GTK_STOCK_SAVE, EPHY_RESPONSE_SAVE,
 					NULL);
+		gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+						 EPHY_RESPONSE_SAVE);
 	}
 
-	gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+	if (parent != NULL)
+	{
+		gtk_window_set_transient_for (GTK_WINDOW (dialog),
+					      GTK_WINDOW (parent));
+	}
 
 	return dialog;
 }

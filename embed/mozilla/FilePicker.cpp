@@ -68,9 +68,9 @@ GFilePicker::GFilePicker()
 
 	LOG ("GFilePicker constructor")
 
-	mDialog = EPHY_FILE_CHOOSER (g_object_new (EPHY_TYPE_FILE_CHOOSER,
-						   "persist-key", CONF_STATE_UPLOAD_DIR,
-						   NULL));
+	mDialog = EPHY_FILE_CHOOSER (g_object_new (EPHY_TYPE_FILE_CHOOSER, NULL));
+
+	ephy_file_chooser_set_persist_key (mDialog, CONF_STATE_UPLOAD_DIR);
 
 	mMode = nsIFilePicker::modeOpen;
 }
@@ -112,6 +112,8 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 						GTK_STOCK_OPEN, EPHY_RESPONSE_OPEN,
 						NULL);
+			gtk_dialog_set_default_response (GTK_DIALOG (mDialog), EPHY_RESPONSE_OPEN);
+
 			break;
 		case nsIFilePicker::modeSave:
 			gtk_file_chooser_set_action (GTK_FILE_CHOOSER (mDialog),
@@ -121,6 +123,10 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 						GTK_STOCK_SAVE, EPHY_RESPONSE_SAVE,
 						NULL);
+			gtk_dialog_set_default_response (GTK_DIALOG (mDialog), EPHY_RESPONSE_SAVE);
+			break;
+		default:
+			g_assert_not_reached ();
 			break;
 	}
 

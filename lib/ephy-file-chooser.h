@@ -54,12 +54,17 @@ typedef struct
 	GtkFileChooserDialogClass parent_class;
 } EphyFileChooserClass;
 
-GType		 ephy_file_chooser_get_type	(void);
+GType		 ephy_file_chooser_get_type		(void);
 
-EphyFileChooser	*ephy_file_chooser_new		(const char *title,
-						 GtkWidget *parent,
-						 GtkFileChooserAction action,
-						 const char *persist_key);
+EphyFileChooser	*ephy_file_chooser_new			(const char *title,
+							 GtkWidget *parent,
+							 GtkFileChooserAction action,
+							 const char *persist_key);
+
+void		 ephy_file_chooser_set_persist_key	(EphyFileChooser *dialog,
+							 const char *key);
+
+const char	*ephy_file_chooser_get_persist_key	(EphyFileChooser *dialog);
 
 G_END_DECLS
 

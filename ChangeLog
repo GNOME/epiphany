@@ -1,3 +1,16 @@
+2003-11-01  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/FilePicker.cpp:
+	* lib/ephy-file-chooser.c: (current_folder_changed_cb),
+	(ephy_file_chooser_init), (ephy_file_chooser_set_persist_key),
+	(ephy_file_chooser_get_persist_key),
+	(ephy_file_chooser_get_property), (ephy_file_chooser_class_init),
+	(ephy_file_chooser_new):
+	* lib/ephy-file-chooser.h:
+
+	Don't set the persist key on object construction time.
+	Fixes bug #125589.
+
 2003-10-31  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/MozillaPrivate.cpp:
