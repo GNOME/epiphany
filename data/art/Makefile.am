@@ -9,6 +9,7 @@ art_DATA = \
 	epiphany-new-tab.png	\
 	epiphany-viewsource.png \
 	epiphany-send-link.png	\
+	epiphany-bookmarks.png \
 	epiphany-tab-loading.gif
 
 appicon_DATA = epiphany.png epiphany-bookmarks.png
