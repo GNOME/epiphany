@@ -43,8 +43,6 @@
 
 #ifdef HAVE_MOZILLA_PSM
 
-#include "mozilla-version.h"
-
 #include "MozillaPrivate.h"
 
 #include <nsIServiceManager.h>
@@ -95,9 +93,7 @@ public:
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIDOMWINDOWINTERNAL
 	NS_DECL_NSIDOMWINDOW
-#if !MOZILLA_IS_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 	NS_DECL_NSIDOMWINDOW2
-#endif
 
 	KeyPairHelperWindow();
 	virtual ~KeyPairHelperWindow();
@@ -105,11 +101,7 @@ public:
 	gboolean close_called;
 };
 
-#if !MOZILLA_IS_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 NS_IMPL_ISUPPORTS3(KeyPairHelperWindow, nsIDOMWindowInternal, nsIDOMWindow, nsIDOMWindow2)
-#else
-NS_IMPL_ISUPPORTS2(KeyPairHelperWindow, nsIDOMWindowInternal, nsIDOMWindow)
-#endif
 
 KeyPairHelperWindow::KeyPairHelperWindow()
 {
@@ -716,13 +708,9 @@ NS_IMETHODIMP KeyPairHelperWindow::SizeToContent()
     MOZ_NOT_IMPLEMENTED
 }
 
-#if !MOZILLA_IS_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
-
 NS_IMETHODIMP KeyPairHelperWindow::GetWindowRoot(nsIDOMEventTarget * *aWindowRoot)
 {
     MOZ_NOT_IMPLEMENTED
 }
-
-#endif
 
 #endif

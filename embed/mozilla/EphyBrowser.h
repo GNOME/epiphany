@@ -25,8 +25,6 @@
 #include "config.h"
 #endif
 
-#include "mozilla-version.h"
-
 #include "ephy-encodings.h"
 #include "ephy-embed.h"
 
@@ -112,7 +110,7 @@ public:
 	nsresult GetSHUrlAtIndex (PRInt32 index, nsACString &url);
 	nsresult GoToHistoryIndex (PRInt16 index);
 
-#if (!MOZILLA_IS_BRANCH (1, 7) || !MOZILLA_CHECK_VERSION3 (1, 7, 4)) && !MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
+#ifdef GTKMOZEMBED_BROKEN_RELOAD
 	enum ReloadType { RELOAD_NORMAL		 = 0,
 			  RELOAD_FORCE		 = 1,
 			  RELOAD_ENCODING_CHANGE = 2 };

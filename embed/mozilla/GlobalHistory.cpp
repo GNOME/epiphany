@@ -25,8 +25,6 @@
 #include "config.h"
 #endif
 
-#include "mozilla-version.h"
-
 #include "ephy-embed-shell.h"
 
 #include "GlobalHistory.h"
@@ -133,7 +131,7 @@ NS_IMETHODIMP MozGlobalHistory::HidePage(nsIURI *aURI)
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#if (MOZILLA_IS_BRANCH (1, 7) && MOZILLA_CHECK_VERSION3 (1, 7, 4)) || MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
+#ifdef MOZ_NSIGLOBALHISTORY_NSIURIP
 /* void removePage (in nsIURI aURI); */
 NS_IMETHODIMP MozGlobalHistory::RemovePage(nsIURI *aURI)
 {
@@ -179,7 +177,7 @@ NS_IMETHODIMP MozGlobalHistory::GetCount(PRUint32 *aCount)
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#if (MOZILLA_IS_BRANCH (1, 7) && MOZILLA_CHECK_VERSION3 (1, 7, 4)) || MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
+#ifdef MOZ_NSIGLOBALHISTORY_NSIURIP
 /* void markPageAsTyped (in AUTF8String aURI) */
 NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(nsIURI *aURI)
 {
@@ -190,5 +188,13 @@ NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(nsIURI *aURI)
 NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(const char *url)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
+}
+#endif
+
+#ifdef MOZ_NSIBROWSERHISTORY_ADDPAGEWITHDETAILS
+/* void addPageWithDetails (in nsIURI aURI, in wstring aTitle, in long long aLastVisited); */
+NS_IMETHODIMP MozGlobalHistory::AddPageWithDetails(nsIURI *aURI, const PRUnichar *aTitle, PRInt64 aLastVisited)
+{
+	return NS_ERROR_NOT_IMPLEMENTED;
 }
 #endif

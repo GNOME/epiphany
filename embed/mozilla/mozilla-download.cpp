@@ -25,7 +25,6 @@
 #endif
 
 #include "mozilla-download.h"
-#include "mozilla-version.h"
 
 #include "ephy-debug.h"
 
@@ -191,7 +190,7 @@ impl_get_mime (EphyDownload *download)
 	mozDownload->GetMIMEInfo (getter_AddRefs(mime));
         if (!mime) return g_strdup ("application/octet-stream");
 
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
         mime->GetMIMEType(mimeType);
 #else
 	char *tmp = nsnull;

@@ -25,8 +25,6 @@
 #include "config.h"
 #endif
 
-#include "mozilla-version.h"
-
 #include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
 #include "mozilla-notifiers.h"
@@ -370,7 +368,7 @@ mozilla_proxy_autoconfig_notifier (GConfClient *client,
 	char *url = eel_gconf_get_string (entry->key);
 	if (url && url[0] != '\0')
 	{
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 2)
+#ifdef MOZ_NSIPROTOCOLPROXYSERVICE_NSACSTRING_
 	        pps->ConfigureFromPAC (nsEmbedCString (url));
 #else
 	        pps->ConfigureFromPAC (url);
