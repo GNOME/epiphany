@@ -21,22 +21,21 @@
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkstock.h>
 
-#define CONF_PRINT_BOTTOM_MARGIN "/apps/epiphany/print/bottom_margin"
-#define CONF_PRINT_TOP_MARGIN "/apps/epiphany/print/top_margin"
-#define CONF_PRINT_LEFT_MARGIN "/apps/epiphany/print/left_margin"
-#define CONF_PRINT_RIGHT_MARGIN "/apps/epiphany/print/right_margin"
-#define CONF_PRINT_PAGE_TITLE "/apps/epiphany/print/page_title_toggle"
-#define CONF_PRINT_PAGE_URL "/apps/epiphany/print/page_url_toggle"
-#define CONF_PRINT_DATE "/apps/epiphany/print/date_toggle"
-#define CONF_PRINT_PAGE_NUMBERS "/apps/epiphany/print/page_numbers_toggle"
-#define CONF_PRINT_PRINTER "/apps/epiphany/print/printer"
-#define CONF_PRINT_FILE "/apps/epiphany/print/file"
-#define CONF_PRINT_PRINTON "/apps/epiphany/print/printon"
-#define CONF_PRINT_PAPER "/apps/epiphany/print/paper"
-#define CONF_PRINT_ALL_PAGES "/apps/epiphany/print/all_pages"
-#define CONF_PRINT_START_FROM_LAST "/apps/epiphany/print/start_from_last"
-#define CONF_PRINT_COLOR "/apps/epiphany/print/color"
-#define CONF_PRINT_ORIENTATION "/apps/epiphany/print/orientation"
+#define CONF_PRINT_BOTTOM_MARGIN "/apps/epiphany/dialogs/print_bottom_margin"
+#define CONF_PRINT_TOP_MARGIN "/apps/epiphany/dialogs/print_top_margin"
+#define CONF_PRINT_LEFT_MARGIN "/apps/epiphany/dialogs/print_left_margin"
+#define CONF_PRINT_RIGHT_MARGIN "/apps/epiphany/dialogs/print_right_margin"
+#define CONF_PRINT_PAGE_TITLE "/apps/epiphany/dialogs/print_page_title"
+#define CONF_PRINT_PAGE_URL "/apps/epiphany/dialogs/print_page_url"
+#define CONF_PRINT_DATE "/apps/epiphany/dialogs/print_date"
+#define CONF_PRINT_PAGE_NUMBERS "/apps/epiphany/dialogs/print_page_numbers"
+#define CONF_PRINT_PRINTER "/apps/epiphany/dialogs/print_printer"
+#define CONF_PRINT_FILE "/apps/epiphany/dialogs/print_file"
+#define CONF_PRINT_PRINTON "/apps/epiphany/dialogs/print_on"
+#define CONF_PRINT_PAPER "/apps/epiphany/dialogs/print_paper"
+#define CONF_PRINT_ALL_PAGES "/apps/epiphany/dialogs/print_all_pages"
+#define CONF_PRINT_COLOR "/apps/epiphany/dialogs/print_color"
+#define CONF_PRINT_ORIENTATION "/apps/epiphany/dialogs/print_orientation"
 
 static void print_dialog_class_init (PrintDialogClass *klass);
 static void print_dialog_init (PrintDialog *dialog);

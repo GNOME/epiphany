@@ -19,8 +19,8 @@
 #include "ephy-dialog.h"
 #include "ephy-glade.h"
 #include "ephy-state.h"
-#include "ephy-prefs-utils.h"
 #include "ephy-gui.h"
+#include "eel-gconf-extensions.h"
 
 #include <string.h>
 #include <gtk/gtktogglebutton.h>
@@ -95,6 +95,7 @@ typedef struct
 	const char *pref;
 	int *sg;
 	PropertyType type;
+	GList *string_enum;
 } PropertyInfo;
 
 struct EphyDialogPrivate
@@ -108,6 +109,7 @@ struct EphyDialogPrivate
 
 	int spin_item_id;
 	GTimer *spin_timer;
+	gboolean initialized;
 };
 
 #define SPIN_DELAY 0.20
@@ -175,6 +177,282 @@ ephy_dialog_class_init (EphyDialogClass *klass)
                                                                "Modal dialog",
                                                                FALSE,
                                                                G_PARAM_READWRITE));
+}
+
+static void
+set_config_from_editable (GtkWidget *editable, const char *config_name)
+{
+	GConfValue *gcvalue = eel_gconf_get_value (config_name);
+	GConfValueType value_type;
+	char *value;
+	gint ivalue;
+	gfloat fvalue;
+
+	if (gcvalue == NULL) {
+		/* ugly hack around what appears to be a gconf bug
+		 * it returns a NULL GConfValue for a valid string pref
+		 * which is "" by default */
+		value_type = GCONF_VALUE_STRING;
+	} else {
+		value_type = gcvalue->type;
+		gconf_value_free (gcvalue);
+	}
+
+	/* get all the text into a new string */
+	value = gtk_editable_get_chars (GTK_EDITABLE(editable), 0, -1);
+
+	switch (value_type) {
+	case GCONF_VALUE_STRING:
+		eel_gconf_set_string (config_name,
+				      value);
+		break;
+	/* FIXME : handle possible errors in the input for int and float */
+	case GCONF_VALUE_INT:
+		ivalue = atoi (value);
+		eel_gconf_set_integer (config_name, ivalue);
+		break;
+	case GCONF_VALUE_FLOAT:
+		fvalue = strtod (value, (char**)NULL);
+		eel_gconf_set_float (config_name, fvalue);
+		break;
+	default:
+		break;
+	}
+
+	/* free the allocated strings */
+	g_free (value);
+}
+
+static void
+set_config_from_optionmenu (GtkWidget *optionmenu, const char *config_name, GList *senum)
+{
+	int index = gtk_option_menu_get_history (GTK_OPTION_MENU (optionmenu));
+
+	if (senum)
+	{
+		eel_gconf_set_string (config_name, g_list_nth_data (senum, index));
+	}
+	else
+	{
+		eel_gconf_set_integer (config_name, index);
+	}
+}
+
+static void
+set_config_from_radiobuttongroup (GtkWidget *radiobutton, const char *config_name, GList *senum)
+{
+	gint index;
+
+	/* get value from radio button group */
+	index = ephy_gui_gtk_radio_button_get (GTK_RADIO_BUTTON (radiobutton));
+
+	if (senum)
+	{
+		eel_gconf_set_string (config_name, g_list_nth_data (senum, index));
+	}
+	else
+	{
+		eel_gconf_set_integer (config_name, index);
+	}
+}
+
+static void
+set_config_from_spin_button (GtkWidget *spinbutton, const char *config_name)
+{
+	gdouble value;
+	gboolean use_int;
+
+	/* read the value as an integer */
+	value = gtk_spin_button_get_value (GTK_SPIN_BUTTON(spinbutton));
+
+	use_int = (gtk_spin_button_get_digits (GTK_SPIN_BUTTON(spinbutton)) == 0);
+
+	if (use_int)
+	{
+		eel_gconf_set_integer (config_name, value);
+	}
+	else
+	{
+		eel_gconf_set_float (config_name, value);
+	}
+}
+
+static void
+set_config_from_togglebutton (GtkWidget *togglebutton, const char *config_name)
+{
+	gboolean value;
+
+	/* read the value */
+	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(togglebutton));
+
+	eel_gconf_set_boolean (config_name, value);
+}
+
+static void
+set_config_from_color (GtkWidget *colorpicker, const char *config_name)
+{
+	guint8 r, g, b, a;
+	gchar color_string[9];
+
+	/* get color values from color picker */
+	gnome_color_picker_get_i8 (GNOME_COLOR_PICKER (colorpicker),
+				   &r, &g, &b, &a);
+
+	/* write into string (bounded size) */
+	snprintf (color_string, 9, "#%02X%02X%02X", r, g, b);
+
+	/* set the configuration value */
+	eel_gconf_set_string (config_name, color_string);
+}
+
+static void
+set_editable_from_config (GtkWidget *editable, const char *config_name)
+{
+	GConfValue *gcvalue = eel_gconf_get_value (config_name);
+	GConfValueType value_type;
+	gchar *value;
+
+	if (gcvalue == NULL)
+	{
+		/* ugly hack around what appears to be a gconf bug
+		 * it returns a NULL GConfValue for a valid string pref
+		 * which is "" by default */
+		value_type = GCONF_VALUE_STRING;
+	}
+	else
+	{
+		value_type = gcvalue->type;
+		gconf_value_free (gcvalue);
+	}
+
+	switch (value_type)
+	{
+	case GCONF_VALUE_STRING:
+		value = eel_gconf_get_string (config_name);
+		break;
+	case GCONF_VALUE_INT:
+		value = g_strdup_printf ("%d",eel_gconf_get_integer (config_name));
+		break;
+	case GCONF_VALUE_FLOAT:
+		value = g_strdup_printf ("%.2f",eel_gconf_get_float (config_name));
+		break;
+	default:
+		value = NULL;
+	}
+
+	/* set this string value in the widget */
+	if (value)
+	{
+		gtk_entry_set_text(GTK_ENTRY(editable), value);
+	}
+
+
+	/* free the allocated string */
+	g_free (value);
+}
+
+static void
+set_optionmenu_from_config (GtkWidget *optionmenu, const char *config_name, GList *senum)
+{
+	int index;
+
+	if (senum)
+	{
+		char *val;
+		GList *s;
+
+		val = eel_gconf_get_string (config_name);
+
+		s = g_list_find_custom (senum, val, (GCompareFunc)strcmp);
+
+		index = g_list_position (senum, s);
+	}
+	else
+	{
+		index = eel_gconf_get_integer (config_name);
+	}
+
+	gtk_option_menu_set_history (GTK_OPTION_MENU (optionmenu), index);
+}
+
+static void
+set_radiobuttongroup_from_config (GtkWidget *radiobutton, const char *config_name, GList *senum)
+{
+	int index;
+
+	if (senum)
+	{
+		char *val;
+		GList *s;
+
+		val = eel_gconf_get_string (config_name);
+
+		s = g_list_find_custom (senum, val, (GCompareFunc)strcmp);
+
+		index = g_list_position (senum, s);
+	}
+	else
+	{
+		index = eel_gconf_get_integer (config_name);
+	}
+
+	/* set it (finds the group for us) */
+	ephy_gui_gtk_radio_button_set (GTK_RADIO_BUTTON (radiobutton), index);
+}
+
+static void
+set_spin_button_from_config (GtkWidget *spinbutton, const char *config_name)
+{
+	gdouble value;
+	gint use_int;
+
+	use_int = (gtk_spin_button_get_digits (GTK_SPIN_BUTTON(spinbutton)) == 0);
+
+	if (use_int)
+	{
+		/* get the current value from the configuration space */
+		value = eel_gconf_get_integer (config_name);
+	}
+	else
+	{
+		/* get the current value from the configuration space */
+		value = eel_gconf_get_float (config_name);
+	}
+
+	/* set this option value in the widget */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinbutton), value);
+}
+
+static void
+set_togglebutton_from_config (GtkWidget *togglebutton, const char *config_name)
+{
+	gboolean value;
+
+	/* get the current value from the configuration space */
+	value = eel_gconf_get_boolean (config_name);
+
+	/* set this option value in the widget */
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (togglebutton), value);
+}
+
+static void
+set_color_from_config (GtkWidget *colorpicker, const char *config_name)
+{
+	gchar *color_string;
+	guint r, g, b;
+
+	/* get the string from config */
+	color_string = eel_gconf_get_string (config_name);
+
+	if (color_string)
+	{
+		/* parse it and setup the color picker */
+		sscanf (color_string, "#%2X%2X%2X", &r, &g, &b);
+		gnome_color_picker_set_i8 (GNOME_COLOR_PICKER (colorpicker),
+					   r, g, b, 0);
+		/* free the string */
+		g_free (color_string);
+	}
 }
 
 static PrefType
@@ -279,7 +557,7 @@ prefs_togglebutton_clicked_cb (GtkWidget *widget, PropertyInfo *pi)
 {
 	if (pi->type == PT_AUTOAPPLY)
 	{
-		ephy_pu_set_config_from_togglebutton (widget, pi->pref);
+		set_config_from_togglebutton (widget, pi->pref);
 	}
 
 	prefs_set_group_sensitivity (widget, pi->type, pi->sg);
@@ -295,7 +573,7 @@ prefs_radiobutton_clicked_cb (GtkWidget *widget, PropertyInfo *pi)
 
 	if (pi->type == PT_AUTOAPPLY)
 	{
-		ephy_pu_set_config_from_radiobuttongroup (widget, pi->pref);
+		set_config_from_radiobuttongroup (widget, pi->pref, pi->string_enum);
 	}
 
 	prefs_set_group_sensitivity (widget, pi->type, pi->sg);
@@ -325,8 +603,7 @@ prefs_spinbutton_timeout_cb (EphyDialog *dialog)
 		gtk_spin_button_update (GTK_SPIN_BUTTON(pi.widget));
 
 		/* set */
-                ephy_pu_set_config_from_spin_button (pi.widget,
-						     pi.pref);
+                set_config_from_spin_button (pi.widget, pi.pref);
 
                 /* done now */
                 return FALSE;
@@ -367,7 +644,7 @@ prefs_color_changed_cb (GtkWidget *widget, guint r, guint g,
 {
 	if (pi->type == PT_AUTOAPPLY)
 	{
-		ephy_pu_set_config_from_color (widget,  pi->pref);
+		set_config_from_color (widget,  pi->pref);
 	}
 }
 
@@ -376,7 +653,7 @@ prefs_entry_changed_cb (GtkWidget *widget, PropertyInfo *pi)
 {
 	if (pi->type == PT_AUTOAPPLY)
 	{
-		ephy_pu_set_config_from_editable (widget,  pi->pref);
+		set_config_from_editable (widget,  pi->pref);
 	}
 }
 
@@ -385,7 +662,7 @@ prefs_optionmenu_selected_cb (GtkWidget *widget, PropertyInfo *pi)
 {
 	if (pi->type == PT_AUTOAPPLY)
 	{
-		ephy_pu_set_config_from_optionmenu (widget, pi->pref);
+		set_config_from_optionmenu (widget, pi->pref, pi->string_enum);
 	}
 }
 
@@ -468,6 +745,7 @@ ephy_dialog_init (EphyDialog *dialog)
 	dialog->priv->props = NULL;
 	dialog->priv->spin_timer = NULL;
 	dialog->priv->name = NULL;
+	dialog->priv->initialized = FALSE;
 }
 
 static void
@@ -504,33 +782,35 @@ load_props (PropertyInfo *props)
 
 		if (GTK_IS_SPIN_BUTTON(props[i].widget))
 		{
-			ephy_pu_set_spin_button_from_config (props[i].widget,
-							     props[i].pref);
+			set_spin_button_from_config (props[i].widget,
+						     props[i].pref);
 		}
 		else if (GTK_IS_RADIO_BUTTON(props[i].widget))
 		{
-			ephy_pu_set_radiobuttongroup_from_config (props[i].widget,
-						                  props[i].pref);
+			set_radiobuttongroup_from_config (props[i].widget,
+						          props[i].pref,
+							  props[i].string_enum);
 		}
 		else if (GTK_IS_TOGGLE_BUTTON(props[i].widget))
 		{
-			 ephy_pu_set_togglebutton_from_config (props[i].widget,
-							       props[i].pref);
+			 set_togglebutton_from_config (props[i].widget,
+						       props[i].pref);
 		}
 		else if (GTK_IS_EDITABLE(props[i].widget))
 		{
-			ephy_pu_set_editable_from_config (props[i].widget,
-						          props[i].pref);
+			set_editable_from_config (props[i].widget,
+						  props[i].pref);
 		}
 		else if (GTK_IS_OPTION_MENU(props[i].widget))
 		{
-			ephy_pu_set_optionmenu_from_config (props[i].widget,
-						            props[i].pref);
+			set_optionmenu_from_config (props[i].widget,
+						    props[i].pref,
+						    props[i].string_enum);
 		}
 		else if (GNOME_IS_COLOR_PICKER(props[i].widget))
 		{
-			ephy_pu_set_color_from_config (props[i].widget,
-						       props[i].pref);
+			set_color_from_config (props[i].widget,
+					       props[i].pref);
 		}
 	}
 
@@ -549,34 +829,48 @@ save_props (PropertyInfo *props)
 
 		if (GTK_IS_SPIN_BUTTON(props[i].widget))
 		{
-			ephy_pu_set_config_from_spin_button (props[i].widget,
-						             props[i].pref);
+			set_config_from_spin_button (props[i].widget,
+						     props[i].pref);
 		}
 		else if (GTK_IS_RADIO_BUTTON(props[i].widget))
 		{
-			ephy_pu_set_config_from_radiobuttongroup (props[i].widget,
-								  props[i].pref);
+			set_config_from_radiobuttongroup (props[i].widget,
+							  props[i].pref,
+							  props[i].string_enum);
 		}
 		else if (GTK_IS_TOGGLE_BUTTON(props[i].widget))
 		{
-			 ephy_pu_set_config_from_togglebutton (props[i].widget,
-							       props[i].pref);
+			 set_config_from_togglebutton (props[i].widget,
+						       props[i].pref);
 		}
 		else if (GTK_IS_EDITABLE(props[i].widget))
 		{
-			ephy_pu_set_config_from_editable (props[i].widget,
-						          props[i].pref);
+			set_config_from_editable (props[i].widget,
+						  props[i].pref);
 		}
 		else if (GTK_IS_OPTION_MENU(props[i].widget))
 		{
-			ephy_pu_set_config_from_optionmenu (props[i].widget,
-						            props[i].pref);
+			set_config_from_optionmenu (props[i].widget,
+						    props[i].pref,
+						    props[i].string_enum);
 		}
 		else if (GNOME_IS_COLOR_PICKER(props[i].widget))
 		{
-			ephy_pu_set_config_from_color (props[i].widget,
-						       props[i].pref);
+			set_config_from_color (props[i].widget,
+					       props[i].pref);
 		}
+	}
+}
+
+static void
+free_props (PropertyInfo *properties)
+{
+	int i;
+
+	for (i = 0; properties[i].string_enum != NULL; i++)
+	{
+		g_list_foreach (properties[i].string_enum, (GFunc)g_free, NULL);
+		g_list_free (properties[i].string_enum);
 	}
 }
 
@@ -596,6 +890,8 @@ ephy_dialog_finalize (GObject *object)
 	{
 		ephy_dialog_destruct (dialog);
 	}
+
+	free_props (dialog->priv->props);
 
 	g_free (dialog->priv->name);
 	g_free (dialog->priv->props);
@@ -669,21 +965,21 @@ ephy_dialog_new_with_parent (GtkWidget *parent_window)
 					    NULL));
 }
 
-void ephy_dialog_show_embedded (EphyDialog *dialog,
-				  GtkWidget *container)
-{
-	dialog->priv->container = container;
-	gtk_container_add (GTK_CONTAINER(container),
-			   dialog->priv->dialog);
-	gtk_widget_show (dialog->priv->dialog);
-}
-
 void
-ephy_dialog_remove_embedded (EphyDialog *dialog)
+ephy_dialog_add_enum (EphyDialog *dialog,
+		      int id,
+		      guint n_items,
+		      const char **items)
 {
-	g_object_ref (G_OBJECT(dialog->priv->dialog));
-	gtk_container_remove (GTK_CONTAINER(dialog->priv->container),
-			      dialog->priv->dialog);
+	int i = 0;
+	GList *l = NULL;
+
+	for (i = 0; i < n_items; i++)
+	{
+		l = g_list_append (l, g_strdup (items[i]));
+	}
+
+	dialog->priv->props[id].string_enum = l;
 }
 
 static PropertyInfo *
@@ -704,6 +1000,7 @@ init_props (const EphyDialogProperty *properties, GladeXML *gxml)
 		props[i].pref = properties[i].state_pref;
 		props[i].sg = properties[i].sg;
 		props[i].type = properties[i].type;
+		props[i].string_enum = NULL;
 	}
 
 	props[i].id = -1;
@@ -711,6 +1008,7 @@ init_props (const EphyDialogProperty *properties, GladeXML *gxml)
 	props[i].pref = NULL;
 	props[i].sg = NULL;
 	props[i].type = 0;
+	props[i].string_enum = NULL;
 
 	return props;
 }
@@ -765,13 +1063,6 @@ impl_construct (EphyDialog *dialog,
 	g_object_weak_ref (G_OBJECT(dialog->priv->dialog),
 			   (GWeakNotify)dialog_destruction_notify,
 			   dialog);
-
-	if (dialog->priv->props)
-	{
-		load_props (dialog->priv->props);
-		prefs_connect_signals (dialog);
-		prefs_set_sensitivity (dialog->priv->props);
-	}
 }
 
 static void
@@ -857,6 +1148,14 @@ impl_run (EphyDialog *dialog)
 static void
 impl_show (EphyDialog *dialog)
 {
+	if (dialog->priv->props && !dialog->priv->initialized)
+	{
+		load_props (dialog->priv->props);
+		prefs_connect_signals (dialog);
+		prefs_set_sensitivity (dialog->priv->props);
+		dialog->priv->initialized = TRUE;
+	}
+
 	setup_default_size (dialog);
 
 	if (dialog->priv->parent)

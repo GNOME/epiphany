@@ -83,9 +83,9 @@ struct EphyDialogClass
 
 GType         ephy_dialog_get_type		(void);
 
-EphyDialog *ephy_dialog_new			(void);
+EphyDialog   *ephy_dialog_new			(void);
 
-EphyDialog *ephy_dialog_new_with_parent		(GtkWidget *parent_window);
+EphyDialog   *ephy_dialog_new_with_parent	(GtkWidget *parent_window);
 
 void	      ephy_dialog_construct		(EphyDialog *dialog,
 						 const EphyDialogProperty *properties,
@@ -93,6 +93,11 @@ void	      ephy_dialog_construct		(EphyDialog *dialog,
 						 const char *name);
 
 void	      ephy_dialog_destruct		(EphyDialog *dialog);
+
+void	      ephy_dialog_add_enum		(EphyDialog *dialog,
+						 int id,
+						 guint n_items,
+						 const char **items);
 
 gint          ephy_dialog_run			(EphyDialog *dialog);
 

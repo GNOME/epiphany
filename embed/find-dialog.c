@@ -23,9 +23,9 @@
 #include "ephy-embed.h"
 #include <gtk/gtk.h>
 
-#define CONF_FIND_MATCH_CASE "/apps/epiphany/find/match_case"
-#define CONF_FIND_AUTOWRAP "/apps/epiphany/find/autowrap"
-#define CONF_FIND_WORD "/apps/epiphany/find/word"
+#define CONF_FIND_MATCH_CASE "/apps/epiphany/dialogs/find_match_case"
+#define CONF_FIND_AUTOWRAP "/apps/epiphany/dialogs/find_autowrap"
+#define CONF_FIND_WORD "/apps/epiphany/dialogs/find_word"
 
 static void find_dialog_class_init (FindDialogClass *klass);
 static void find_dialog_init (FindDialog *dialog);

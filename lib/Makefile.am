@@ -46,8 +46,6 @@ libephy_la_SOURCES = \
 	ephy-node-db.c				\
 	ephy-node-db.h				\
 	ephy-prefs.h				\
-	ephy-prefs-utils.c			\
-	ephy-prefs-utils.h			\
 	ephy-state.c				\
 	ephy-state.h				\
 	ephy-string.c				\

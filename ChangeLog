@@ -1,3 +1,36 @@
+2003-06-13  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/ephy-dialog.c: (set_config_from_editable),
+	(set_config_from_optionmenu), (set_config_from_radiobuttongroup),
+	(set_config_from_spin_button), (set_config_from_togglebutton),
+	(set_config_from_color), (set_editable_from_config),
+	(set_optionmenu_from_config), (set_radiobuttongroup_from_config),
+	(set_spin_button_from_config), (set_togglebutton_from_config),
+	(set_color_from_config), (prefs_togglebutton_clicked_cb),
+	(prefs_radiobutton_clicked_cb), (prefs_spinbutton_timeout_cb),
+	(prefs_color_changed_cb), (prefs_entry_changed_cb),
+	(prefs_optionmenu_selected_cb), (ephy_dialog_init), (load_props),
+	(save_props), (free_props), (ephy_dialog_finalize),
+	(ephy_dialog_add_enum), (init_props), (impl_construct),
+	(impl_show):
+
+	Add support for string enums.
+
+	* lib/ephy-dialog.h:
+	* lib/ephy-prefs.h:
+	* src/prefs-dialog.c: (prefs_dialog_init):
+	* data/epiphany.schemas.in:
+	* embed/downloader-view.c:
+	* embed/ephy-embed-prefs.h:
+	* embed/find-dialog.c:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* embed/print-dialog.c:
+	* lib/Makefile.am:
+
+	Cleanup gconf prefs. This breaks compatibility
+	but better now that later.
+
 2003-06-13  Christian Persch  <chpe@cvs.gnome.org>
 
 	The Friday the 13th Mega Patch. Beware!

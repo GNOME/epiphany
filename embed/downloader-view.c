@@ -40,6 +40,8 @@
 #include <gtk/gtkprogressbar.h>
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
+#define CONF_DOWNLOADING_SHOW_DETAILS "/apps/epiphany/dialogs/downloader_show_details"
+
 enum
 {
 	DOWNLOAD_REMOVE,

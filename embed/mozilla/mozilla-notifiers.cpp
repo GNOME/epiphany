@@ -35,8 +35,6 @@
 #include <locale.h>
 #include <libgnome/gnome-i18n.h>
 #include <stdlib.h>
-#include <sys/utsname.h>
-#include "nsBuildID.h"
 #include "nsCOMPtr.h"
 #include "nsIPrefService.h"
 #include "nsIServiceManager.h"
@@ -85,12 +83,6 @@ mozilla_language_notifier(GConfClient *client,
 			  EphyEmbedSingle *single);
 
 static void
-mozilla_default_font_notifier(GConfClient *client,
-			      guint cnxn_id,
-			      GConfEntry *entry,
-			      EphyEmbedSingle *single);
-
-static void
 mozilla_proxy_mode_notifier (GConfClient *client,
 			     guint cnxn_id,
 			     GConfEntry *entry,
@@ -100,12 +92,21 @@ mozilla_proxy_autoconfig_notifier (GConfClient *client,
 			           guint cnxn_id,
 			           GConfEntry *entry,
 			           EphyEmbedSingle *single);
-
 static void
-mozilla_user_agent_notifier(GConfClient *client,
-			    guint cnxn_id,
-			    GConfEntry *entry,
-			    EphyEmbedSingle *single);
+mozilla_proxy_mode_notifier (GConfClient *client,
+		             guint cnxn_id,
+		             GConfEntry *entry,
+		             EphyEmbedSingle *single);
+static void
+mozilla_cookies_accept_notifier (GConfClient *client,
+		                 guint cnxn_id,
+		                 GConfEntry *entry,
+		                 char *pref);
+static void
+mozilla_cache_compare_notifier (GConfClient *client,
+		                guint cnxn_id,
+		                GConfEntry *entry,
+		                char *pref);
 
 /* Keeps the list of the notifiers we installed for mozilla prefs */
 /* to be able to remove them when exiting */
@@ -129,7 +130,6 @@ conversion_table [] =
 {
 	{ CONF_SECURITY_JAVA_ENABLED, BOOL_PREF, "security.enable_java"},
 	{ CONF_SECURITY_JAVASCRIPT_ENABLED, BOOL_PREF, "javascript.enabled"},
-	{ CONF_RENDERING_UNDERLINE_LINKS, BOOL_PREF, "browser.underline_anchors"},
 	{ CONF_NETWORK_PROXY_AUTO_URL, STRING_PREF, "network.proxy.autoconfig_url"},
 	{ CONF_NETWORK_HTTP_PROXY, STRING_PREF, "network.proxy.http"},
 	{ CONF_NETWORK_FTP_PROXY, STRING_PREF, "network.proxy.ftp"},
@@ -137,10 +137,10 @@ conversion_table [] =
 	{ CONF_NETWORK_HTTP_PROXY_PORT, INT_PREF, "network.proxy.http_port"},
 	{ CONF_NETWORK_FTP_PROXY_PORT, INT_PREF, "network.proxy.ftp_port"},
 	{ CONF_NETWORK_SSL_PROXY_PORT, INT_PREF, "network.proxy.ssl_port"},
-	{ CONF_NETWORK_CACHE_COMPARE, INT_PREF, "browser.cache.check_doc_frequency"},
-	{ CONF_SECURITY_COOKIES_ACCEPT, BOOL_PREF, "network.cookie.warnAboutCookies"},
 	{ CONF_LANGUAGE_DEFAULT_ENCODING, STRING_PREF, "intl.charset.default" },
 	{ CONF_LANGUAGE_AUTODETECT_ENCODING, STRING_PREF, "intl.charset.detector" },
+	{ CONF_RENDERING_DEFAULT_FONT, STRING_PREF, "font.default" },
+
 	{ NULL, 0, NULL }
 };
  
@@ -151,8 +151,6 @@ static const struct
 }
 custom_notifiers [] =
 {
-	{ CONF_NETWORK_USER_AGENT, 
-	  (GConfClientNotifyFunc) mozilla_user_agent_notifier },
 	{ CONF_RENDERING_USE_OWN_COLORS, 
 	  (GConfClientNotifyFunc) mozilla_own_colors_notifier },
 	{ CONF_RENDERING_USE_OWN_FONTS, 
@@ -161,15 +159,18 @@ custom_notifiers [] =
 	  (GConfClientNotifyFunc) mozilla_allow_popups_notifier },
 	{ CONF_RENDERING_LANGUAGE, 
 	  (GConfClientNotifyFunc) mozilla_language_notifier },
-	{ CONF_RENDERING_DEFAULT_FONT, 
-	  (GConfClientNotifyFunc) mozilla_default_font_notifier },
 	{ CONF_NETWORK_PROXY_MODE,
 	  (GConfClientNotifyFunc) mozilla_proxy_mode_notifier },
 	{ CONF_NETWORK_PROXY_AUTO_URL,
 	  (GConfClientNotifyFunc) mozilla_proxy_autoconfig_notifier },
 	{ CONF_NETWORK_CACHE_SIZE,
           (GConfClientNotifyFunc) mozilla_cache_size_notifier },
-	{NULL, NULL}
+	{ CONF_NETWORK_CACHE_COMPARE,
+	  (GConfClientNotifyFunc) mozilla_cache_compare_notifier },
+	{ CONF_SECURITY_COOKIES_ACCEPT,
+	  (GConfClientNotifyFunc) mozilla_cookies_accept_notifier },
+
+	{ NULL, NULL }
 };
 
 static gboolean
@@ -277,6 +278,64 @@ mozilla_proxy_mode_notifier (GConfClient *client,
 	}
 
 	mozilla_prefs_set_int ("network.proxy.type", mozilla_mode);
+}
+
+static void
+mozilla_cookies_accept_notifier (GConfClient *client,
+		                 guint cnxn_id,
+		                 GConfEntry *entry,
+		                 char *pref)
+{
+	const char *mode;
+	int mozilla_mode = 0;
+	
+	mode = gconf_value_get_string(entry->value);
+	
+	if (strcmp (mode, "anywhere") == 0)
+	{
+		mozilla_mode = 0;
+	}
+	else if (strcmp (mode, "current site") == 0)
+	{
+		mozilla_mode = 1;
+	}
+	else if (strcmp (mode, "nowhere") == 0)
+	{
+		mozilla_mode = 2;
+	}
+
+	mozilla_prefs_set_int ("network.cookie.cookieBehavior", mozilla_mode);
+}
+
+static void
+mozilla_cache_compare_notifier (GConfClient *client,
+		                guint cnxn_id,
+		                GConfEntry *entry,
+		                char *pref)
+{
+	const char *mode;
+	int mozilla_mode = 0;
+	
+	mode = gconf_value_get_string(entry->value);
+	
+	if (strcmp (mode, "once per session") == 0)
+	{
+		mozilla_mode = 0;
+	}
+	else if (strcmp (mode, "every time") == 0)
+	{
+		mozilla_mode = 1;
+	}
+	else if (strcmp (mode, "never") == 0)
+	{
+		mozilla_mode = 2;
+	}
+	else if (strcmp (mode, "automatic") == 0)
+	{
+		mozilla_mode = 3;
+	}
+
+	mozilla_prefs_set_int ("browser.cache.check_doc_frequency", mozilla_mode);
 }
 
 static void
@@ -619,92 +678,4 @@ mozilla_language_notifier(GConfClient *client,
 	
 	g_slist_foreach (languages, (GFunc) g_free, NULL);
 	g_slist_free (languages);
-}
-
-static void
-mozilla_default_font_notifier(GConfClient *client,
-			      guint cnxn_id,
-			      GConfEntry *entry,
-			      EphyEmbedSingle *single)
-{
-	const gchar *font_types [] = {"serif","sans-serif"};
-	int default_font;
-
-	default_font = eel_gconf_get_integer (CONF_RENDERING_DEFAULT_FONT);
-	if (default_font < 0 || 
-	    default_font >= (int)(sizeof(font_types) / sizeof(font_types[0])))
-	{
-		g_warning ("mozilla_default_font_notifier: "
-			   "unsupported value: %d", default_font);
-		return;
-	}
-	mozilla_prefs_set_string ("font.default", font_types[default_font]);
-}
-
-static void
-mozilla_prefs_set_user_agent ()
-{
-        static gchar *default_user_agent = NULL;
-        gchar *value;
-        gchar *user_agent = NULL;
-        struct utsname name;
-        gchar *system;
-
-        if (!default_user_agent)
-        {
-                if (uname (&name) == 0)
-                {
-                        system = g_strdup_printf ("%s %s",
-                                                  name.sysname, 
-                                                  name.machine);
-                }
-                else
-                {
-                        system = g_strdup ("Unknown");
-                }
-                
-                default_user_agent = g_strdup_printf
-                        ("Mozilla/5.0 (X11; U; %s) Gecko/%d Epiphany/" VERSION, 
-                         system,
-                         NS_BUILD_ID/100);
-
-                g_free (system);
-        }
-
-        value = eel_gconf_get_string (CONF_NETWORK_USER_AGENT);
-        
-        /* now, build a valid user agent string */
-        if (!value || !strcmp ("", value) 
-                   || !strcmp ("default", value) 
-                   || !strcmp ("Ephy", value)
-                   || !strcmp (_("Default (recommended)"), value)
-                   || !strcmp ("Default (recommended)", value))
-        {
-                user_agent = g_strdup (default_user_agent);
-        }
-        else
-        {
-                user_agent = g_strdup (value);
-        }
-
-	mozilla_prefs_set_string ("general.useragent.override", user_agent);
-	g_free (user_agent);
-}
-
-static void
-mozilla_user_agent_notifier (GConfClient *client,
-			     guint cnxn_id,
-			     GConfEntry *entry,
-			     EphyEmbedSingle *single)
-{
-	switch (entry->value->type)
-	{
-		case GCONF_VALUE_STRING:
-			mozilla_prefs_set_user_agent ();
-			break;
-
-		default:	
-			g_warning ("Unsupported variable type");
-			break;
-	}
 }

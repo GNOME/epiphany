@@ -37,6 +37,8 @@
 #include <time.h>
 #include <libgnome/gnome-i18n.h>
 #include <string.h>
+#include <sys/utsname.h>
+#include "nsBuildID.h"
 #include <nsICacheService.h>
 #include <nsCOMPtr.h>
 #include <nsIPrefService.h>
@@ -322,6 +324,34 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 	shell_class->show_file_picker = impl_show_file_picker;
 }
 
+static char *
+build_user_agent ()
+{
+        static char *user_agent;
+        struct utsname name;
+        char *system;
+
+	if (uname (&name) == 0)
+	{
+		system = g_strdup_printf ("%s %s",
+					  name.sysname, 
+					  name.machine);
+	}
+	else
+	{
+		system = g_strdup ("Unknown");
+	}
+                
+	user_agent = g_strdup_printf
+                        ("Mozilla/5.0 (X11; U; %s) Gecko/%d Epiphany/" VERSION, 
+                         system,
+                         NS_BUILD_ID/100);
+
+	g_free (system);
+
+	return user_agent;
+}
+
 static void
 mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 {
@@ -392,6 +422,13 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 
 	/* Enable Image Auto-Resizing */
 	pref->SetBoolPref ("browser.enable_automatic_image_resizing", PR_TRUE);
+
+	/* User agent */
+	char *user_agent;
+
+	user_agent = build_user_agent ();	
+	pref->SetCharPref ("general.useragent.override", user_agent);
+	g_free (user_agent);
 }
 
 static char *

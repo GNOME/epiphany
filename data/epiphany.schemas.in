@@ -1,20 +1,19 @@
 <gconfschemafile>
     <schemalist>
       <schema>
-        <key>/schemas/apps/epiphany/general/start_page</key>
-        <applyto>/apps/epiphany/general/start_page</applyto>
+        <key>/schemas/apps/epiphany/general/homepage</key>
+        <applyto>/apps/epiphany/general/homepage</applyto>
         <owner>epiphany</owner>
         <type>string</type>
         <default>http://www.google.com</default>
         <locale name="C">
         <short>Home page</short>
-        <long>Address of the user's home page that is displayed when 
-	opening a new window or tab</long>
+        <long>Address of the user's home page</long>
         </locale>
       </schema>
      <schema>
-        <key>/schemas/apps/epiphany/find/match_case</key>
-        <applyto>/apps/epiphany/find/match_case</applyto>
+        <key>/schemas/apps/epiphany/dialogs/find_match_case</key>
+        <applyto>/apps/epiphany/dialogs/find_atch_case</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>0</default>
@@ -24,8 +23,8 @@
         </locale>
       </schema>
      <schema>
-        <key>/schemas/apps/epiphany/find/autowrap</key>
-        <applyto>/apps/epiphany/find/autowrap</applyto>
+        <key>/schemas/apps/epiphany/dialogs/find_autowrap</key>
+        <applyto>/apps/epiphany/dialogs/find_autowrap</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>1</default>
@@ -36,8 +35,8 @@
         </locale>
       </schema>
      <schema>
-        <key>/schemas/apps/epiphany/rendering/use_own_colors</key>
-        <applyto>/apps/epiphany/rendering/use_own_colors</applyto>
+        <key>/schemas/apps/epiphany/web/use_own_colors</key>
+        <applyto>/apps/epiphany/web/use_own_colors</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>false</default>
@@ -48,8 +47,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/rendering/use_own_fonts</key>
-        <applyto>/apps/epiphany/rendering/use_own_fonts</applyto>
+        <key>/schemas/apps/epiphany/web/use_own_fonts</key>
+        <applyto>/apps/epiphany/web/use_own_fonts</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>false</default>
@@ -60,19 +59,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/rendering/underline_links</key>
-        <applyto>/apps/epiphany/rendering/underline_links</applyto>
-        <owner>epiphany</owner>
-        <type>bool</type>
-        <default>true</default>
-        <locale name="C">
-        <short>Underline links</short>
-        <long>Underline links.</long>
-        </locale>
-      </schema>
-      <schema>
-        <key>/schemas/apps/epiphany/interface/ask_download_dest</key>
-        <applyto>/apps/epiphany/interface/ask_download_dest</applyto>
+        <key>/schemas/apps/epiphany/general/ask_download_dest</key>
+        <applyto>/apps/epiphany/general/ask_download_dest</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>true</default>
@@ -82,8 +70,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/interface/open_in_tab</key>
-        <applyto>/apps/epiphany/interface/open_in_tab</applyto>
+        <key>/schemas/apps/epiphany/general/open_in_tab</key>
+        <applyto>/apps/epiphany/general/open_in_tab</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>false</default>
@@ -93,8 +81,8 @@
         </locale>
       </schema>
      <schema>
-        <key>/schemas/apps/epiphany/interface/middle_click_open_url</key>
-        <applyto>/apps/epiphany/interface/middle_click_open_url</applyto>
+        <key>/schemas/apps/epiphany/general/middle_click_open_url</key>
+        <applyto>/apps/epiphany/general/middle_click_open_url</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>0</default>
@@ -104,8 +92,8 @@
         </locale>
       </schema> 
       <schema>
-        <key>/schemas/apps/epiphany/interface/show_toolbars</key>
-        <applyto>/apps/epiphany/interface/show_toolbars</applyto>
+        <key>/schemas/apps/epiphany/general/show_toolbars</key>
+        <applyto>/apps/epiphany/general/show_toolbars</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>1</default>
@@ -115,8 +103,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/interface/show_bookmarks_bar</key>
-        <applyto>/apps/epiphany/interface/show_bookmarks_bar</applyto>
+        <key>/schemas/apps/epiphany/general/show_bookmarks_bar</key>
+        <applyto>/apps/epiphany/general/show_bookmarks_bar</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>0</default>
@@ -126,8 +114,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/interface/show_statusbar</key>
-        <applyto>/apps/epiphany/interface/show_statusbar</applyto>
+        <key>/schemas/apps/epiphany/general/show_statusbar</key>
+        <applyto>/apps/epiphany/general/show_statusbar</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>1</default>
@@ -137,8 +125,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/rendering/default_encoding</key>
-        <applyto>/apps/epiphany/rendering/default_encoding</applyto>
+        <key>/schemas/apps/epiphany/web/default_encoding</key>
+        <applyto>/apps/epiphany/web/default_encoding</applyto>
         <owner>epiphany</owner>
         <type>string</type>
         <default>ISO-8859-1</default>
@@ -164,20 +152,19 @@
         </locale>
       </schema>
      <schema>
-        <key>/schemas/apps/epiphany/rendering/default_font</key>
-        <applyto>/apps/epiphany/rendering/default_font</applyto>
+        <key>/schemas/apps/epiphany/web/default_font_type</key>
+        <applyto>/apps/epiphany/web/default_font_type</applyto>
         <owner>epiphany</owner>
-        <type>int</type>
-        <default>0</default>
+        <type>string</type>
+        <default>serif</default>
         <locale name="C">
         <short>Default font type</short>
-        <long>Default font type.  Possible values are 0 (serif), 1
-        (sans-serif)</long>
+        <long>Default font type.  Possible values are serif and sans-serif</long>
         </locale>
       </schema>
      <schema>
-        <key>/schemas/apps/epiphany/downloader/show_details</key>
-        <applyto>/apps/epiphany/downloader/show_details</applyto>
+        <key>/schemas/apps/epiphany/dialogs/downloader_show_details</key>
+        <applyto>/apps/epiphany/dialogs/downloader_show_details</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>false</default>
@@ -187,20 +174,8 @@
         </locale>
       </schema>
      <schema>
-        <key>/schemas/apps/epiphany/network/no_proxies_for</key>
-        <applyto>/apps/epiphany/network/no_proxies_for</applyto>
-        <owner>epiphany</owner>
-        <type>string</type>
-        <default></default>
-        <locale name="C">
-        <short>No proxy for</short>
-        <long>List of domains for wherefore not to use the proxy, comma
-        delimited</long>
-        </locale>
-      </schema>
-     <schema>
-        <key>/schemas/apps/epiphany/network/cache_size</key>
-        <applyto>/apps/epiphany/network/cache_size</applyto>
+        <key>/schemas/apps/epiphany/web/cache_size</key>
+        <applyto>/apps/epiphany/web/cache_size</applyto>
         <owner>epiphany</owner>
         <type>int</type>
         <default>50</default>
@@ -210,20 +185,20 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/network/cache_compare</key>
-        <applyto>/apps/epiphany/network/cache_compare</applyto>
+        <key>/schemas/apps/epiphany/web/cache_compare</key>
+        <applyto>/apps/epiphany/web/cache_compare</applyto>
         <owner>epiphany</owner>
-        <type>int</type>
-        <default>3</default>
+        <type>string</type>
+        <default>automatic</default>
         <locale name="C">
         <short>When to compare cached copy</short>
-        <long>When to compare cached copy to web copy.  Possible values are 0
-        (once per session), 1 (every time), 2 (never), 3 (automatic).</long>
+        <long>When to compare cached copy to web copy.  Possible values are
+        once per session, every time, never, automatic.</long>
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/rendering/lang</key>
-        <applyto>/apps/epiphany/rendering/lang</applyto>
+        <key>/schemas/apps/epiphany/web/language</key>
+        <applyto>/apps/epiphany/web/language</applyto>
         <owner>epiphany</owner>
         <type>list</type>
         <list_type>string</list_type>
@@ -234,8 +209,8 @@
         </locale>
       </schema>
      <schema>
-        <key>/schemas/apps/epiphany/print/top_margin</key>
-        <applyto>/apps/epiphany/print/top_margin</applyto>
+        <key>/schemas/apps/epiphany/dialogs/print_top_margin</key>
+        <applyto>/apps/epiphany/dialogs/print_top_margin</applyto>
         <owner>epiphany</owner>
         <type>float</type>
         <default>0.5</default>
@@ -245,8 +220,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/print/bottom_margin</key>
-        <applyto>/apps/epiphany/print/bottom_margin</applyto>
+        <key>/schemas/apps/epiphany/dialogs/print_bottom_margin</key>
+        <applyto>/apps/epiphany/dialogs/print_bottom_margin</applyto>
         <owner>epiphany</owner>
         <type>float</type>
         <default>0.5</default>
@@ -256,8 +231,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/print/left_margin</key>
-        <applyto>/apps/epiphany/print/left_margin</applyto>
+        <key>/schemas/apps/epiphany/dialogs/print_left_margin</key>
+        <applyto>/apps/epiphany/dialogs/print_left_margin</applyto>
         <owner>epiphany</owner>
         <type>float</type>
         <default>0.5</default>
@@ -267,8 +242,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/print/right_margin</key>
-        <applyto>/apps/epiphany/print/right_margin</applyto>
+        <key>/schemas/apps/epiphany/dialogs/print_right_margin</key>
+        <applyto>/apps/epiphany/dialogs/print_right_margin</applyto>
         <owner>epiphany</owner>
         <type>float</type>
         <default>0.5</default>
@@ -278,8 +253,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/print/page_title_toggle</key>
-        <applyto>/apps/epiphany/print/page_title_toggle</applyto>
+        <key>/schemas/apps/epiphany/dialogs/print_page_title</key>
+        <applyto>/apps/epiphany/dialogs/print_page_title</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>true</default>
@@ -289,8 +264,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/print/page_url_toggle</key>
-        <applyto>/apps/epiphany/print/page_url_toggle</applyto>
+        <key>/schemas/apps/epiphany/dialogs/print_page_url</key>
+        <applyto>/apps/epiphany/dialogs/print_page_url</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>true</default>
@@ -300,8 +275,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/print/date_toggle</key>
-        <applyto>/apps/epiphany/print/date_toggle</applyto>
+        <key>/schemas/apps/epiphany/dialogs/print_date</key>
+        <applyto>/apps/epiphany/dialogs/print_date</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>true</default>
@@ -311,8 +286,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/print/page_numbers_toggle</key>
-        <applyto>/apps/epiphany/print/page_numbers_toggle</applyto>
+        <key>/schemas/apps/epiphany/dialogs/print_page_numbers</key>
+        <applyto>/apps/epiphany/dialogs/print_page_numbers</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>true</default>
@@ -322,8 +297,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/print/printer</key>
-        <applyto>/apps/epiphany/print/printer</applyto>
+        <key>/schemas/apps/epiphany/dialogs/print_printer</key>
+        <applyto>/apps/epiphany/dialogs/print_printer</applyto>
         <owner>epiphany</owner>
         <type>string</type>
         <default>lpr</default>
@@ -333,8 +308,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/print/file</key>
-        <applyto>/apps/epiphany/print/file</applyto>
+        <key>/schemas/apps/epiphany/dialogs/print_file</key>
+        <applyto>/apps/epiphany/dialogs/print_file</applyto>
         <owner>epiphany</owner>
         <type>string</type>
         <locale name="C">
@@ -343,25 +318,14 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/print/printon</key>
-        <applyto>/apps/epiphany/print/printon</applyto>
-        <owner>epiphany</owner>
-        <type>int</type>
-        <default>0</default>
-        <locale name="C">
-        <short>Print range</short>
-        <long>Print range: 0 (all pages), 1 (specific range).</long>
-        </locale>
-      </schema>
-      <schema>
-        <key>/schemas/apps/epiphany/print/paper</key>
-        <applyto>/apps/epiphany/print/paper</applyto>
+        <key>/schemas/apps/epiphany/dialogs/print_paper</key>
+        <applyto>/apps/epiphany/dialogs/print_paper</applyto>
         <owner>epiphany</owner>
         <type>int</type>
         <default>0</default>
         <locale name="C">
         <short>Paper type</short>
-        <long>Paper type: 0 (Letter), 1 (Legal), 2 (Executive), 3 (A4).</long>
+        <long>Paper type: letter, legal, executive, A4.</long>
         </locale>
       </schema>
      <schema>
@@ -392,8 +356,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/directories/downloading</key>
-        <applyto>/apps/epiphany/directories/downloading</applyto>
+        <key>/schemas/apps/epiphany/directories/download</key>
+        <applyto>/apps/epiphany/directories/download</applyto>
         <owner>epiphany</owner>
         <type>string</type>
         <default>~</default>
@@ -401,8 +365,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/rendering/autodetect_encoding</key>
-        <applyto>/apps/epiphany/rendering/autodetect_encoding</applyto>
+        <key>/schemas/apps/epiphany/web/autodetect_encoding</key>
+        <applyto>/apps/epiphany/web/autodetect_encoding</applyto>
         <owner>epiphany</owner>
         <type>string</type>
         <default></default>
@@ -421,20 +385,20 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/security/cookie_accept</key>
-        <applyto>/apps/epiphany/security/cookie_accept</applyto>
+        <key>/schemas/apps/epiphany/web/cookie_accept</key>
+        <applyto>/apps/epiphany/web/cookie_accept</applyto>
         <owner>epiphany</owner>
-        <type>int</type>
-        <default>0</default>
+        <type>string</type>
+        <default>anywhere</default>
         <locale name="C">
         <short>Cookie accept</short>
-        <long>Where to accept cookies from.  Possible values are 0 (anywhere), 
-        1 (from current server only), 2 (nowhere)</long>
+        <long>Where to accept cookies from.  Possible values are anywhere, 
+        current site, nowhere</long>
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/security/allow_popups</key>
-        <applyto>/apps/epiphany/security/allow_popups</applyto>
+        <key>/schemas/apps/epiphany/web/allow_popups</key>
+        <applyto>/apps/epiphany/web/allow_popups</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>true</default>
@@ -445,8 +409,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/security/java_enabled</key>
-        <applyto>/apps/epiphany/security/java_enabled</applyto>
+        <key>/schemas/apps/epiphany/web/java_enabled</key>
+        <applyto>/apps/epiphany/web/java_enabled</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>1</default>
@@ -456,8 +420,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/security/javascript_enabled</key>
-        <applyto>/apps/epiphany/security/javascript_enabled</applyto>
+        <key>/schemas/apps/epiphany/web/javascript_enabled</key>
+        <applyto>/apps/epiphany/web/javascript_enabled</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>1</default>

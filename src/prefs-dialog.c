@@ -156,6 +156,27 @@ static EncodingAutodetectorInfo encoding_autodetector[] =
 };
 static guint n_encoding_autodetectors = G_N_ELEMENTS (encoding_autodetector);
 
+static const
+char *cookies_accept_enum [] =
+{
+	"anywhere", "current site", "nowhere"
+};
+static guint n_cookies_accept_enum = G_N_ELEMENTS (cookies_accept_enum);
+
+static const
+char *cache_compare_enum [] =
+{
+	"once per session", "every time", "never", "automatic"
+};
+static guint n_cache_compare_enum = G_N_ELEMENTS (cache_compare_enum);
+
+static const
+char *proportional_enum [] =
+{
+	"serif", "sans-serif"
+};
+static guint n_proportional_enum = G_N_ELEMENTS (proportional_enum);
+
 enum
 {
 	FONT_TYPE_SERIF,
@@ -1033,6 +1054,13 @@ prefs_dialog_init (PrefsDialog *pd)
 			       properties,
 			       "prefs-dialog.glade",
 			       "prefs_dialog");
+
+	ephy_dialog_add_enum (EPHY_DIALOG (pd), CACHE_COMPARE_PROP,
+			      n_cache_compare_enum, cache_compare_enum);
+	ephy_dialog_add_enum (EPHY_DIALOG (pd), ACCEPT_COOKIES_PROP,
+			      n_cookies_accept_enum, cookies_accept_enum);
+	ephy_dialog_add_enum (EPHY_DIALOG (pd), PROPORTIONAL_PROP,
+			      n_proportional_enum, proportional_enum);
 
 	pd->priv->window = ephy_dialog_get_control (dialog, WINDOW_PROP);
 	pd->priv->notebook = ephy_dialog_get_control (dialog, NOTEBOOK_PROP);

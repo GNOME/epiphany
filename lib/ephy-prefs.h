@@ -22,24 +22,19 @@
 G_BEGIN_DECLS
 
 /* General */
-#define CONF_GENERAL_HOMEPAGE "/apps/epiphany/general/start_page"
-
-/* Interface */
-#define CONF_TABS_TABBED "/apps/epiphany/interface/open_in_tab"
-#define CONF_WINDOWS_SHOW_TOOLBARS "/apps/epiphany/interface/show_toolbars"
-#define CONF_WINDOWS_SHOW_BOOKMARKS_BAR "/apps/epiphany/interface/show_bookmarks_bar"
-#define CONF_WINDOWS_SHOW_STATUSBAR "/apps/epiphany/interface/show_statusbar"
-#define CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL "/apps/epiphany/interface/middle_click_open_url"
-#define CONF_ASK_DOWNLOAD_DEST "/apps/epiphany/interface/ask_download_dest"
-
-/* Downloader */
-#define CONF_DOWNLOADING_SHOW_DETAILS "/apps/epiphany/downloader/show_details"
+#define CONF_GENERAL_HOMEPAGE "/apps/epiphany/general/homepage"
+#define CONF_ASK_DOWNLOAD_DEST "/apps/epiphany/general/ask_download_dest"
+#define CONF_TABS_TABBED "/apps/epiphany/general/open_in_tab"
+#define CONF_WINDOWS_SHOW_TOOLBARS "/apps/epiphany/general/show_toolbars"
+#define CONF_WINDOWS_SHOW_BOOKMARKS_BAR "/apps/epiphany/general/show_bookmarks_bar"
+#define CONF_WINDOWS_SHOW_STATUSBAR "/apps/epiphany/general/show_statusbar"
+#define CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL "/apps/epiphany/general/middle_click_open_url"
 
 /* Directories */
 #define CONF_STATE_SAVE_DIR           "/apps/epiphany/directories/save"
 #define CONF_STATE_SAVE_IMAGE_DIR     "/apps/epiphany/directories/saveimage"
 #define CONF_STATE_OPEN_DIR           "/apps/epiphany/directories/open"
-#define CONF_STATE_DOWNLOADING_DIR    "/apps/epiphany/directories/downloading"
+#define CONF_STATE_DOWNLOADING_DIR    "/apps/epiphany/directories/download"
 
 /* System prefs */
 #define CONF_DESKTOP_FTP_HANDLER "/desktop/gnome/url-handlers/ftp/command"
