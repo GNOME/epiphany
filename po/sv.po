@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2003-05-20 16:27+0200\n"
-"PO-Revision-Date: 2003-05-20 16:27+0200\n"
+"POT-Creation-Date: 2003-05-21 13:10+0200\n"
+"PO-Revision-Date: 2003-05-21 13:11+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -457,7 +457,7 @@ msgstr "_Behåll dialogfönstret öppet"
 msgid "_Next"
 msgstr "_Nästa"
 
-#: data/glade/epiphany.glade.h:23 embed/downloader-view.c:368
+#: data/glade/epiphany.glade.h:23 embed/downloader-view.c:370
 msgid "_Pause"
 msgstr "_Paus"
 
@@ -1126,47 +1126,59 @@ msgstr "_Sök..."
 msgid "_Print..."
 msgstr "Skriv _ut..."
 
-#: embed/downloader-view.c:364
+#. Hours, Minutes, Seconds
+#: embed/downloader-view.c:215
+#, c-format
+msgid "%u:%02u.%02u"
+msgstr "%u.%02u.%02u"
+
+#. Minutes, Seconds
+#: embed/downloader-view.c:220
+#, c-format
+msgid "%02u.%02u"
+msgstr "%02u.%02u"
+
+#: embed/downloader-view.c:366
 msgid "_Resume"
 msgstr "_Återuppta"
 
-#: embed/downloader-view.c:386
+#: embed/downloader-view.c:388
 #, c-format
 msgid "%.1f of %.1f MB"
 msgstr "%.1f av %.1f MB"
 
-#: embed/downloader-view.c:392
+#: embed/downloader-view.c:394
 #, c-format
 msgid "%d of %d KB"
 msgstr "%d av %d kB"
 
-#: embed/downloader-view.c:398
+#: embed/downloader-view.c:400
 #, c-format
 msgid "%d KB"
 msgstr "%d kB"
 
-#: embed/downloader-view.c:502 embed/downloader-view.c:520
+#: embed/downloader-view.c:504 embed/downloader-view.c:522
 #: src/ephy-window.c:1017
 msgid "Unknown"
 msgstr "Okänd"
 
-#: embed/downloader-view.c:756
+#: embed/downloader-view.c:758
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:766
+#: embed/downloader-view.c:768
 msgid "Filename"
 msgstr "Filnamn"
 
-#: embed/downloader-view.c:777
+#: embed/downloader-view.c:779
 msgid "Size"
 msgstr "Storlek"
 
-#: embed/downloader-view.c:788
+#: embed/downloader-view.c:790
 msgid "Remaining"
 msgstr "Återstår"
 
-#: embed/downloader-view.c:981
+#: embed/downloader-view.c:983
 msgid "Cancel all pending downloads?"
 msgstr "Avbryt alla återstående hämtningar?"
 
@@ -2953,6 +2965,15 @@ msgstr ""
 #: src/window-commands.c:759
 msgid "A GNOME browser based on Mozilla"
 msgstr "En GNOME-webbläsare, baserad på Mozilla"
+
+#~ msgid "%u.%02u.%02u"
+#~ msgstr "%u.%02u.%02u"
+
+#~ msgid "%u:%02u:%02u"
+#~ msgstr "%u.%02u.%02u"
+
+#~ msgid "%02u:%02u"
+#~ msgstr "%02u.%02u"
 
 #~ msgid "Allow popup windows"
 #~ msgstr "Tillåt popupfönster"
