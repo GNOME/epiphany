@@ -22,7 +22,11 @@ if [ ! -d $HOME/.gnome2/epiphany/mozilla/epiphany -a -d $HOME/.galeon/mozilla/ga
 	|| :
 fi
 
-LD_LIBRARY_PATH=$MOZILLA_HOME:$LD_LIBRARY_PATH
+if [ -n "$LD_LIBRARY_PATH" ]; then
+  LD_LIBRARY_PATH=$MOZILLA_HOME:$LD_LIBRARY_PATH
+else
+  LD_LIBRARY_PATH=$MOZILLA_HOME
+fi
 export LD_LIBRARY_PATH
 
 MOZILLA_FIVE_HOME=$MOZILLA_HOME
