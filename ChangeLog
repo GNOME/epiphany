@@ -1,3 +1,14 @@
+2003-08-20  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-node-view.c: (get_node_from_path),
+	(gtk_tree_view_vertical_autoscroll), (scroll_timeout),
+	(remove_scroll_timeout), (set_drag_dest_row),
+	(clear_drag_dest_row), (get_drag_data), (free_drag_data),
+	(drag_motion_cb), (drag_leave_cb), (drag_data_received_cb),
+	(drag_drop_cb), (ephy_node_view_enable_drag_dest):
+
+	Fix drag dest implementation getting some code from nautilus.
+
 2003-08-20  Paul Duffy <dubhthach@Frink.nuigalway.ie>
 
         * configure.in: Added "ga" to ALL_LINGUAS

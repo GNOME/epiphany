@@ -74,6 +74,11 @@ struct EphyNodeViewPrivate
 	int drag_x;
         int drag_y;
 	GtkTargetList *source_target_list;
+
+	gboolean drop_occurred;                                                                                          
+	gboolean have_drag_data;
+	GtkSelectionData *drag_data;
+	guint scroll_id;
 };
 
 enum
@@ -91,6 +96,8 @@ enum
 	PROP_ROOT,
 	PROP_FILTER
 };
+
+#define AUTO_SCROLL_MARGIN 20
 
 static GObjectClass *parent_class = NULL;
 
@@ -224,6 +231,8 @@ get_node_from_path (EphyNodeView *view, GtkTreePath *path)
 	EphyNode *node;
 	GtkTreeIter iter, iter2;
 
+	if (path == NULL) return NULL;
+
 	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
 	gtk_tree_model_sort_convert_iter_to_child_iter
 		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
@@ -234,99 +243,270 @@ get_node_from_path (EphyNodeView *view, GtkTreePath *path)
 	return node;
 }
 
-static gboolean
-drag_motion_cb (GtkWidget *widget,
-                GdkDragContext *context,
-                gint x,
-                gint y,
-                guint time,
-	        EphyNodeView *view)
+static void
+gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
 {
-	EphyNode *node;
-	GtkTreePath *path = NULL;
-	GtkTreeViewDropPosition pos;
-	gboolean res;
-	EphyNodeViewPriority priority;
+	GdkRectangle visible_rect;
+	GtkAdjustment *vadjustment;
+	GdkWindow *window;
+	int y;
+	int offset;
+	float value;
+	
+	window = gtk_tree_view_get_bin_window (tree_view);
+	vadjustment = gtk_tree_view_get_vadjustment (tree_view);
+	
+	gdk_window_get_pointer (window, NULL, &y, NULL);
+	
+	y += vadjustment->value;
 
-	res = gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
-					         x, y, &path, &pos);
-	if (!res) return TRUE;
-
-	node = get_node_from_path (view, path);
-
-	priority = ephy_node_get_property_int (node, view->priv->priority_prop_id);
-
-	if (priority != EPHY_NODE_VIEW_ALL_PRIORITY &&
-	    priority != EPHY_NODE_VIEW_SPECIAL_PRIORITY)
-
+	gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
+	
+	offset = y - (visible_rect.y + 2 * AUTO_SCROLL_MARGIN);
+	if (offset > 0)
 	{
-		gtk_tree_view_set_drag_dest_row (GTK_TREE_VIEW (widget), path,
-						 GTK_TREE_VIEW_DROP_INTO_OR_AFTER);
-		gdk_drag_status (context, context->suggested_action, time);
+		offset = y - (visible_rect.y + visible_rect.height - 2 * AUTO_SCROLL_MARGIN);
+		if (offset < 0)
+		{
+			return;
+		}
+	}
+
+	value = CLAMP (vadjustment->value + offset, 0.0,
+		       vadjustment->upper - vadjustment->page_size);
+	gtk_adjustment_set_value (vadjustment, value);
+}
+
+static int
+scroll_timeout (gpointer data)
+{
+	GtkTreeView *tree_view = GTK_TREE_VIEW (data);
+	
+	gtk_tree_view_vertical_autoscroll (tree_view);
+
+	return TRUE;
+}
+
+static void
+remove_scroll_timeout (EphyNodeView *view)
+{
+	if (view->priv->scroll_id)
+	{
+		g_source_remove (view->priv->scroll_id);
+		view->priv->scroll_id = 0;
+	}
+}
+
+static void
+set_drag_dest_row (EphyNodeView *view,
+		   GtkTreePath *path)
+{
+	if (path)
+	{
+		gtk_tree_view_set_drag_dest_row
+			(GTK_TREE_VIEW (view),
+			 path,
+			 GTK_TREE_VIEW_DROP_INTO_OR_BEFORE);
 	}
 	else
 	{
-		gdk_drag_status (context, 0, time);
+		gtk_tree_view_set_drag_dest_row (GTK_TREE_VIEW (view), 
+						 NULL, 
+						 0);
+	}
+}
+
+static void
+clear_drag_dest_row (EphyNodeView *view)
+{
+	gtk_tree_view_set_drag_dest_row (GTK_TREE_VIEW (view), NULL, 0);
+}
+
+static void
+get_drag_data (EphyNodeView *view,
+	       GdkDragContext *context, 
+	       guint32 time)
+{
+	GdkAtom target;
+	
+	target = gtk_drag_dest_find_target (GTK_WIDGET (view), 
+					    context, 
+					    NULL);
+
+	gtk_drag_get_data (GTK_WIDGET (view),
+			   context, target, time);
+}
+
+static void
+free_drag_data (EphyNodeView *view)
+{
+	view->priv->have_drag_data = FALSE;
+
+	if (view->priv->drag_data)
+	{
+		gtk_selection_data_free (view->priv->drag_data);
+		view->priv->drag_data = NULL;
+	}
+}
+
+static gboolean
+drag_motion_cb (GtkWidget *widget,
+		GdkDragContext *context,
+		int x,
+		int y,
+		guint32 time,
+		EphyNodeView *view)
+{
+	EphyNode *node;
+	GtkTreePath *path;
+	GtkTreeViewDropPosition pos;
+	guint action = 0;
+	int priority;
+
+	gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
+					   x, y, &path, &pos);
+	
+	if (!view->priv->have_drag_data)
+	{
+		get_drag_data (view, context, time);
 	}
 
-	gtk_tree_path_free (path);
+	node = get_node_from_path (view, path);
+
+	if (node)
+	{
+		priority = ephy_node_get_property_int
+				(node, view->priv->priority_prop_id);
+
+		if (priority != EPHY_NODE_VIEW_ALL_PRIORITY &&
+		    priority != EPHY_NODE_VIEW_SPECIAL_PRIORITY)
+		{
+			action = context->suggested_action;
+		}
+	}
+	
+	if (action)
+	{
+		set_drag_dest_row (view, path);
+	}
+	else
+	{
+		clear_drag_dest_row (view);
+	}
+	
+	if (path)
+	{
+		gtk_tree_path_free (path);
+	}
+	
+	if (view->priv->scroll_id == 0)
+	{
+		view->priv->scroll_id = 
+			g_timeout_add (150, 
+				       scroll_timeout, 
+				       GTK_TREE_VIEW (view));
+	}
+
+	gdk_drag_status (context, action, time);
+
+	return TRUE;
+}
+
+static void
+drag_leave_cb (GtkWidget *widget,
+	       GdkDragContext *context,
+	       guint32 time,
+	       EphyNodeView *view)
+{
+	clear_drag_dest_row (view);
+
+	free_drag_data (view);
+
+	remove_scroll_timeout (view);
+}
+
+static gboolean
+drag_data_received_cb (GtkWidget *widget,
+		       GdkDragContext *context,
+		       int x,
+		       int y,
+		       GtkSelectionData *selection_data,
+		       guint info,
+		       guint32 time,
+		       EphyNodeView *view)
+{
+	GtkTreePath *path;
+	GtkTreeViewDropPosition pos;
+	gboolean on_row;
+
+	if (selection_data->length <= 0 || selection_data->data == NULL)
+	{
+		return FALSE;
+	}
+	
+	on_row = gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
+					            x, y, &path, &pos);
+
+	if (!view->priv->have_drag_data)
+	{
+		view->priv->have_drag_data = TRUE;
+		view->priv->drag_data = 
+			gtk_selection_data_copy (selection_data);
+	}
+
+	if (view->priv->drop_occurred)
+	{
+		EphyNode *node;
+		GList *uris;
+		gboolean success = FALSE;
+
+		g_return_val_if_fail (on_row || path != NULL, FALSE);
+
+		node = get_node_from_path (view, path);
+
+		uris = gnome_vfs_uri_list_parse (selection_data->data);
+	
+		if (uris != NULL)
+		{
+			/* FIXME fill success */
+			g_signal_emit (G_OBJECT (view),
+				       ephy_node_view_signals[NODE_DROPPED], 0,
+				       node, uris);
+			gnome_vfs_uri_list_free (uris);
+		}
+
+		view->priv->drop_occurred = FALSE;
+		free_drag_data (view);
+		gtk_drag_finish (context, success, FALSE, time);
+	}
+
+	if (path)
+	{
+		gtk_tree_path_free (path);
+	}
+
+	/* appease GtkTreeView by preventing its drag_data_receive
+	 * from being called */
+	g_signal_stop_emission_by_name (GTK_TREE_VIEW (view),
+					"drag_data_received");
 
 	return TRUE;
 }
 
 static gboolean
 drag_drop_cb (GtkWidget *widget,
-              GdkDragContext *context,
-              gint x,
-              gint y,
-              guint time,
+	      GdkDragContext *context,
+	      int x, 
+	      int y,
+	      guint32 time,
 	      EphyNodeView *view)
 {
-	GdkAtom target;
+	view->priv->drop_occurred = TRUE;
 
-	target = gtk_drag_dest_find_target (widget, context,
-					    view->priv->drag_targets);
-
-	if (target != GDK_NONE)
-	{
-		gtk_drag_get_data (widget, context, target, time);
-	}
-
-	return TRUE;
-}
-
-static gboolean
-drag_data_received_cb (GtkWidget *widget,
-                       GdkDragContext *context,
-                       gint x,
-                       gint y,
-	               GtkSelectionData *selection_data,
-                       guint info,
-                       guint time,
-	               EphyNodeView *view)
-{
-	GtkTreePath *path = NULL;
-	GtkTreeViewDropPosition pos;
-
-	if (gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
-					       x, y, &path, &pos))
-	{
-		EphyNode *node;
-		GList *uris;
-
-		node = get_node_from_path (view, path);
-
-		uris = gnome_vfs_uri_list_parse (selection_data->data);
-		g_signal_emit (G_OBJECT (view),
-			       ephy_node_view_signals[NODE_DROPPED], 0,
-			       node, uris);
-		gnome_vfs_uri_list_free (uris);
-
-		gtk_tree_path_free (path);
-	}
-
-	g_signal_stop_emission_by_name (widget, "drag_data_received");
-
+	get_drag_data (view, context, time);
+	remove_scroll_timeout (view);
+	clear_drag_dest_row (view);
+	
 	return TRUE;
 }
 
@@ -352,6 +532,8 @@ ephy_node_view_enable_drag_dest (EphyNodeView *view,
 			  G_CALLBACK (drag_drop_cb), view);
 	g_signal_connect (treeview, "drag_motion",
 			  G_CALLBACK (drag_motion_cb), view);
+	g_signal_connect (treeview, "drag_leave",
+			  G_CALLBACK (drag_leave_cb), view);
 }
 
 static void
