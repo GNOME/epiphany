@@ -165,7 +165,6 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 
 EphyBrowser::EphyBrowser ()
 : mFaviconEventListener(nsnull)
-, mPopupEventListener(nsnull)
 , mInitialized(PR_FALSE)
 {
 }
