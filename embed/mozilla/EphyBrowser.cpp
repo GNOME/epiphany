@@ -415,7 +415,7 @@ nsresult EphyBrowser::GoToHistoryIndex (PRInt16 index)
 /* Workaround for broken reload with frames, see mozilla bug
  * http://bugzilla.mozilla.org/show_bug.cgi?id=246392
  */
-nsresult EphyBrowser::Reload (PRUint32 flags)
+nsresult EphyBrowser::Reload (ReloadType flags)
 {
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 

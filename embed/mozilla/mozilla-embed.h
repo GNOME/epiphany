@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000-2003 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2004 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,13 +37,15 @@ G_BEGIN_DECLS
 #define MOZILLA_IS_EMBED_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), MOZILLA_TYPE_EMBED))
 #define MOZILLA_EMBED_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), MOZILLA_TYPE_EMBED, MozillaEmbedClass))
 
-typedef struct MozillaEmbedClass MozillaEmbedClass;
-typedef struct MozillaEmbed MozillaEmbed;
-typedef struct MozillaEmbedPrivate MozillaEmbedPrivate;
+typedef struct MozillaEmbedClass	MozillaEmbedClass;
+typedef struct MozillaEmbed		MozillaEmbed;
+typedef struct MozillaEmbedPrivate	MozillaEmbedPrivate;
 
 struct MozillaEmbed
 {
         GtkMozEmbed parent;
+
+	/*< private >*/
         MozillaEmbedPrivate *priv;
 };
 

@@ -1,6 +1,6 @@
 /*  vim:set ts=8 noet sw=8:
- *  Copyright (C) 2000-2003 Marco Pesenti Gritti
- *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2000-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -307,9 +307,9 @@ mozilla_setup_colors (MozillaEmbedSingle *mes)
 
 static void 
 mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
-                      		          GtkMozEmbed **retval, 
-					  guint chrome_mask,
-                           		  EphyEmbedSingle *shell)
+					   GtkMozEmbed **retval, 
+					   guint chrome_mask,
+					   EphyEmbedSingle *shell)
 {
  	g_assert (chrome_mask & GTK_MOZ_EMBED_FLAG_OPENASCHROME);
 
