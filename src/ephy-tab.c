@@ -455,13 +455,14 @@ ephy_tab_set_favicon (EphyTab *tab,
 				     GTK_WIDGET (tab->priv->embed),
 				     favicon);
 
-	if (!tab->priv->is_active) return;
-
-	eb = ephy_shell_get_bookmarks (ephy_shell);
-	ephy_bookmarks_set_icon (eb, tab->priv->location,
-			         tab->priv->favicon_url);
-	ephy_window_update_control (tab->priv->window,
-				    FaviconControl);
+	if (tab->priv->favicon_url[0] != '\0')
+	{
+		eb = ephy_shell_get_bookmarks (ephy_shell);
+		ephy_bookmarks_set_icon (eb, tab->priv->location,
+				         tab->priv->favicon_url);
+		ephy_window_update_control (tab->priv->window,
+					    FaviconControl);
+	}
 }
 
 /* Private callbacks for embed signals */
