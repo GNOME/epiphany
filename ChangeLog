@@ -1,3 +1,16 @@
+2005-01-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/default-prefs-common.js:
+	* embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:
+	* embed/mozilla/GtkNSSSecurityWarningDialogs.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozRegisterComponents.cpp:
+
+	Override the default security warning dialogues implementation with our own
+	class which follows HIG and our interface design. Fixes bug #163371.
+	Also show the entering-secure dialogue once, to inform about the
+	lock icon in the statusbar.
+
 2005-01-08  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/Makefile.am:

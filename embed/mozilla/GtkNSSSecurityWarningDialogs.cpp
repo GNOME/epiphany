@@ -1,0 +1,276 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is mozilla.org code.
+ *
+ * The Initial Developer of the Original Code is
+ * Netscape Communications Corporation.
+ * Portions created by the Initial Developer are Copyright (C) 2001
+ * the Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *   Terry Hayes <thayes@netscape.com>
+ *   Javier Delgadillo <javi@netscape.com>
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK *****
+ *
+ *  Copyright (C) 2005 Christian Persch
+ *
+ *  $Id$
+ */
+
+#include "mozilla-config.h"
+
+#include "config.h"
+
+#include "GtkNSSSecurityWarningDialogs.h"
+#include "EphyUtils.h"
+
+#include <nsCOMPtr.h>
+#include <nsIPrefBranch.h>
+#include <nsIPrefService.h>
+#include <nsIServiceManager.h>
+#include <nsIInterfaceRequestor.h>
+#include <nsIInterfaceRequestorUtils.h>
+#include <nsIDOMWindow.h>
+
+#include <glib/gi18n.h>
+#include <gtk/gtkdialog.h>
+#include <gtk/gtkbutton.h>
+#include <gtk/gtktogglebutton.h>
+#include <gtk/gtkcheckbutton.h>
+#include <gtk/gtkbox.h>
+#include <gtk/gtkhbox.h>
+#include <gtk/gtkvbox.h>
+#include <gtk/gtklabel.h>
+
+/* FIXME why threadsafe? it's proxied by nsSecureBrowserImpl */
+/* NS_IMPL_THREADSAFE_ISUPPORTS1 (GtkNSSSecurityWarningDialogs, nsISecurityWarningDialogs) */
+NS_IMPL_ISUPPORTS1 (GtkNSSSecurityWarningDialogs, nsISecurityWarningDialogs)
+
+#define ENTER_SITE_PREF      "security.warn_entering_secure"
+#define WEAK_SITE_PREF       "security.warn_entering_weak"
+#define MIXEDCONTENT_PREF    "security.warn_viewing_mixed"
+#define INSECURE_SUBMIT_PREF "security.warn_submit_insecure"
+
+GtkNSSSecurityWarningDialogs::GtkNSSSecurityWarningDialogs()
+{
+}
+
+GtkNSSSecurityWarningDialogs::~GtkNSSSecurityWarningDialogs()
+{
+}
+
+NS_IMETHODIMP 
+GtkNSSSecurityWarningDialogs::ConfirmEnteringSecure (nsIInterfaceRequestor *aContext,
+						     PRBool *_retval)
+{
+	DoDialog (aContext,
+		  ENTER_SITE_PREF,
+		  GTK_MESSAGE_INFO,
+		  GTK_BUTTONS_OK,
+		  _("Security Notice"),
+		  _("This page is loaded over a secure connection."),
+		  _("You can always see the security status of a page from "
+		    "the icon on the left side of the statusbar."),
+		  nsnull, _retval);
+
+	*_retval = PR_TRUE;
+	return NS_OK;
+}
+
+NS_IMETHODIMP 
+GtkNSSSecurityWarningDialogs::ConfirmEnteringWeak (nsIInterfaceRequestor *aContext,
+						   PRBool *_retval)
+{
+	DoDialog (aContext,
+		  WEAK_SITE_PREF,
+		  GTK_MESSAGE_WARNING,
+		  GTK_BUTTONS_OK,
+		  _("Security Warning"),
+		  _("This page is loaded over a low security connection."),
+		  _("Any information you see or enter on this page could "
+		    "easily be intercepted by a third party."),
+		  nsnull, _retval);
+
+	*_retval = PR_TRUE;
+	return NS_OK;
+}
+
+NS_IMETHODIMP 
+GtkNSSSecurityWarningDialogs::ConfirmLeavingSecure (nsIInterfaceRequestor *aContext,
+						    PRBool *_retval)
+{
+	/* don't prompt */
+	*_retval = PR_TRUE;
+	return NS_OK;
+}
+
+NS_IMETHODIMP 
+GtkNSSSecurityWarningDialogs::ConfirmMixedMode (nsIInterfaceRequestor *aContext,
+						PRBool *_retval)
+{
+	DoDialog (aContext,
+		  MIXEDCONTENT_PREF,
+		  GTK_MESSAGE_WARNING,
+		  GTK_BUTTONS_OK,
+		  _("Security Warning"),
+		  _("Some parts of this page are loaded over an unencrypted connection."),
+		  _("Some information you see or enter will be sent over an unencrypted "
+		    "connection, and could easily be intercepted by a third party."),
+		  nsnull, _retval);
+
+	*_retval = PR_TRUE;
+	return NS_OK;
+}
+
+NS_IMETHODIMP 
+GtkNSSSecurityWarningDialogs::ConfirmPostToInsecure (nsIInterfaceRequestor *aContext,
+						     PRBool* _retval)
+{
+	DoDialog (aContext,
+		  INSECURE_SUBMIT_PREF,
+		  GTK_MESSAGE_WARNING,
+		  GTK_BUTTONS_OK,
+		  _("Security Warning"),
+		  _("Send this information over an unencrypted connection?"),
+		  _("The information you have entered will be sent over an "
+		    "unencrypted connection, and could easily be intercepted "
+		    "by a third party."),
+		  _("Send anyway"),
+		  _retval);
+
+	*_retval = PR_TRUE;
+	return NS_OK;
+}
+
+NS_IMETHODIMP 
+GtkNSSSecurityWarningDialogs::ConfirmPostToInsecureFromSecure (nsIInterfaceRequestor *aContext,
+							       PRBool* _retval)
+{
+	DoDialog (aContext,
+		  nsnull, /* No preference for this one - it's too important */
+		  GTK_MESSAGE_WARNING,
+		  GTK_BUTTONS_CANCEL,
+		  _("Security Warning"),
+		  _("Send this information over an unencrypted connection?"),
+		  _("Although this page was loaded over an encrypted connection, "
+		    "the information you have entered will be sent over an "
+		    "unencrypted connection, and could easily be intercepted by "
+		    "a third party."),
+		  _("Send anyway"),
+		  _retval);
+
+	return NS_OK;
+}
+
+void
+GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
+					const char *aPrefName,
+					GtkMessageType aType,
+					GtkButtonsType aButtons,
+					const char *aTitle,
+					const char *aPrimary,
+					const char *aSecondary,
+					const char *aButtonText,
+					PRBool *_retval)
+{
+	*_retval = PR_FALSE;
+
+	nsresult rv;
+	PRBool show = PR_TRUE;
+	nsCOMPtr<nsIPrefBranch> prefBranch
+		(do_GetService (NS_PREFSERVICE_CONTRACTID));
+	if (prefBranch && aPrefName)
+	{
+		rv = prefBranch->GetBoolPref (aPrefName, &show);
+		if (NS_FAILED(rv)) show = PR_TRUE;
+	}
+
+	char *showOncePref = NULL;
+	PRBool showOnce = PR_FALSE;
+	if (prefBranch && aPrefName)
+	{
+		showOncePref = g_strconcat (aPrefName, ".show_once", NULL);
+		rv = prefBranch->GetBoolPref (showOncePref, &showOnce);
+		if (NS_FAILED (rv)) showOnce = PR_TRUE;
+	}
+
+	if (!show && !showOnce)
+	{
+		g_free (showOncePref);
+		*_retval = PR_TRUE;
+		return;
+	}
+	
+	/* Didn't you know it, mozilla SUCKS!
+	 * the "aContext" interface requestor is made from a nsIDOMWindow,
+	 * but can only give out a nsIPrompt, from where there's no way to get
+	 * the nsIDOMWindow back! Therefore we cannot display this dialogue with
+	 * a parent, and HAVE TO make it modal.
+	 * https://bugzilla.mozilla.org/show_bug.cgi?id=277587
+	 */
+	/* domWin will be always nsnull, until the mozilla bug is fixed */
+	nsCOMPtr<nsIDOMWindow> domWin (do_GetInterface (aContext));
+	GtkWidget *parent = EphyUtils::FindGtkParent (domWin);
+
+	GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
+						    GTK_DIALOG_MODAL, aType,
+						    aButtons, aPrimary);
+
+	if (aSecondary)
+	{
+		gtk_message_dialog_format_secondary_markup
+			(GTK_MESSAGE_DIALOG (dialog), aSecondary);
+	}
+
+	if (aButtonText)
+	{
+		gtk_dialog_add_button (GTK_DIALOG (dialog), aButtonText,
+				       GTK_RESPONSE_ACCEPT);
+		gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+						 GTK_RESPONSE_CANCEL);
+	}
+	else
+	{
+		gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+						 GTK_RESPONSE_OK);
+	}
+
+	gtk_window_set_title (GTK_WINDOW (dialog), aTitle);
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
+	int response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+	*_retval = response == GTK_RESPONSE_ACCEPT;
+
+	if (prefBranch && showOncePref && showOnce)
+	{
+		prefBranch->SetBoolPref (showOncePref, PR_FALSE);
+	}
+
+	gtk_widget_destroy (dialog);
+	g_free (showOncePref);
+}

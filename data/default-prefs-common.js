@@ -36,6 +36,7 @@ pref("keyword.enabled", true);
 
 // disable usless security warnings
 pref("security.warn_entering_secure", false);
+pref("security.warn_entering_secure.show_once", true);
 pref("security.warn_leaving_secure", false);
 pref("security.warn_submit_insecure", false);
 

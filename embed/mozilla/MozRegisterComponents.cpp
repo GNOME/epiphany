@@ -38,6 +38,7 @@
 #include "GtkNSSClientAuthDialogs.h"
 #include "GtkNSSDialogs.h"
 #include "GtkNSSKeyPairDialogs.h"
+#include "GtkNSSSecurityWarningDialogs.h"
 #endif
 
 #include <nsMemory.h>
@@ -66,6 +67,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GFilePicker)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSClientAuthDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSKeyPairDialogs)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSSecurityWarningDialogs)
 #endif
  
 static NS_METHOD
@@ -141,6 +143,12 @@ static const nsModuleComponentInfo sAppComps[] = {
 		GTK_NSSKEYPAIRDIALOGS_CID,
 		NS_GENERATINGKEYPAIRINFODIALOGS_CONTRACTID,
 		GtkNSSKeyPairDialogsConstructor
+	},
+	{
+		GTK_NSSSECURITYWARNINGDIALOGS_CLASSNAME,
+		GTK_NSSSECURITYWARNINGDIALOGS_CID,
+		NS_SECURITYWARNINGDIALOGS_CONTRACTID,
+		GtkNSSSecurityWarningDialogsConstructor
 	},
 #endif
 	{

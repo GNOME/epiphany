@@ -55,7 +55,9 @@ libephymozillaembed_la_SOURCES += 	\
 	GtkNSSDialogs.cpp		\
 	GtkNSSDialogs.h			\
 	GtkNSSKeyPairDialogs.cpp	\
-	GtkNSSKeyPairDialogs.h
+	GtkNSSKeyPairDialogs.h		\
+	GtkNSSSecurityWarningDialogs.cpp\
+	GtkNSSSecurityWarningDialogs.h
 endif
 
 mozilla_include_subdirs = \
