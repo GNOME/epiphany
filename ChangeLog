@@ -1,3 +1,36 @@
+2003-05-17 David Bordoley <bordoley@msu.edu>
+	   Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/ui/epiphany-ui.xml.in:
+	* src/Makefile.am:
+	* src/bookmarks/ephy-bookmark-action.c: (create_tool_item):
+	* src/ephy-notebook.c: (ephy_notebook_class_init),
+	(ephy_notebook_move_page), (move_tab),
+	(notebook_drag_data_received_cb), (ephy_notebook_init),
+	(ephy_notebook_set_page_status), (update_tabs_visibility),
+	(ephy_notebook_insert_page), (ephy_notebook_remove_page),
+	(ephy_notebook_set_page_title):
+	* src/ephy-notebook.h:
+	* src/ephy-tabs-menu.c: (ephy_tabs_menu_class_init),
+	(ephy_tabs_menu_init), (ephy_tabs_menu_clean),
+	(ephy_tabs_menu_finalize_impl), (ephy_tabs_menu_set_property),
+	(ephy_tabs_menu_get_property), (ephy_tabs_menu_new),
+	(ephy_tabs_menu_verb_cb), (ephy_tabs_menu_set_action_accelerator),
+	(ephy_tabs_menu_rebuild), (ephy_tabs_menu_update):
+	* src/ephy-tabs-menu.h:
+	* src/ephy-window.c: (setup_window),
+	(update_tabs_menu_sensitivity), (ephy_window_tabs_changed_cb),
+	(setup_notebook), (ephy_window_init), (ephy_window_finalize),
+	(ephy_window_update_control), (ephy_window_update_all_controls),
+	(ephy_window_notebook_switch_page_cb):
+	* src/ephy-window.h:
+	* src/window-commands.c: (window_cmd_tabs_move_left),
+	(window_cmd_tabs_move_right), (window_cmd_tabs_detach):
+
+	Implement a list of tabs at the bottom of tabs menu.
+	Add a changed signal to the notebook and use it to update
+	list and sensitivity.
+
 2003-05-16  Christian Persch  <chpe+gnomebugz@stud.uni-saarland.de>
 
 	* lib/ephy-string.h: (ephy_string_shorten):

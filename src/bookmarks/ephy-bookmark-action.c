@@ -107,6 +107,7 @@ create_tool_item (EggAction *action)
 		GtkWidget *entry;
 
 		entry = gtk_entry_new ();
+		gtk_widget_set_size_request (entry, 120, -1);
 		gtk_widget_show (entry);
 		gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
 		g_object_set_data (G_OBJECT (item), "entry", entry);

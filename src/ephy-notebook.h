@@ -66,6 +66,7 @@ struct EphyNotebookClass
 	void (* tab_detached)      (EphyNotebook *dest,
 				    gint cur_page,
 				    gint root_x, gint root_y);
+	void (* tabs_changed)	   (EphyNotebook *nb);
 
 };
 

@@ -62,7 +62,6 @@ typedef enum
 
 typedef enum
 {
-	TabsControl,
 	NavControl,
 	FindControl,
 	ZoomControl,

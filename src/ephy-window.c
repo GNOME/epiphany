@@ -36,6 +36,7 @@
 #include "toolbar.h"
 #include "popup-commands.h"
 #include "ephy-encoding-menu.h"
+#include "ephy-tabs-menu.h"
 #include "ephy-stock-icons.h"
 
 #include <string.h>
@@ -261,6 +262,7 @@ struct EphyWindowPrivate
 	EggActionGroup *popups_action_group;
 	EphyFavoritesMenu *fav_menu;
 	EphyEncodingMenu *enc_menu;
+	EphyTabsMenu *tabs_menu;
 	PPViewToolbar *ppview_toolbar;
 	GtkNotebook *notebook;
 	EphyTab *active_tab;
@@ -284,9 +286,8 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 				     EphyWindow *window);
 
 static void
-ephy_window_tab_detached_cb    (EphyNotebook *notebook, gint page,
-				gint x, gint y, gpointer data);
-
+ephy_window_tab_detached_cb	(EphyNotebook *notebook, gint page,
+				 gint x, gint y, gpointer data);
 
 static GObjectClass *parent_class = NULL;
 
@@ -328,34 +329,6 @@ ephy_window_class_init (EphyWindowClass *klass)
         object_class->finalize = ephy_window_finalize;
 
 	widget_class->show = ephy_window_show;
-}
-
-static gboolean
-ephy_window_key_press_event_cb (GtkWidget *widget,
-				GdkEventKey *event,
-				EphyWindow *window)
-{
-        int page;
-
-	if ((event->state & GDK_Shift_L) || (event->state & GDK_Shift_R))
-                return FALSE;
-
-        if ((event->state & GDK_Alt_L) || (event->state & GDK_Alt_R))
-        {
-                page = event->keyval - GDK_0 -1;
-
-                if (page == -1) page = 9;
-
-                if (page>=-1 && page<=9)
-                {
-                        gtk_notebook_set_current_page
-				(GTK_NOTEBOOK (window->priv->notebook),
-                                 page == -1 ? -1 : page);
-                        return TRUE;
-                }
-        }
-
-        return FALSE;
 }
 
 static void
@@ -521,14 +494,50 @@ setup_window (EphyWindow *window)
 			    GTK_WIDGET (window->priv->toolbar),
 			    FALSE, FALSE, 0);
 
-	g_signal_connect(window,
-			 "key-press-event",
-                         G_CALLBACK(ephy_window_key_press_event_cb),
-                         window);
 	g_signal_connect (window,
 			  "selection-received",
 			  G_CALLBACK (ephy_window_selection_received_cb),
 			  window);
+}
+
+static void
+update_tabs_menu_sensitivity (EphyWindow *window)
+{
+	gboolean prev_tab, next_tab, move_left, move_right, detach;
+	EggActionGroup *action_group;
+	EggAction *action;
+	int current;
+	int last;
+
+	current = gtk_notebook_get_current_page
+		(GTK_NOTEBOOK (window->priv->notebook));
+	last = gtk_notebook_get_n_pages
+		(GTK_NOTEBOOK (window->priv->notebook)) - 1;
+	prev_tab = move_left = (current > 0);
+	next_tab = move_right = (current < last);
+	detach = gtk_notebook_get_n_pages
+		(GTK_NOTEBOOK (window->priv->notebook)) > 1;
+
+	action_group = window->priv->action_group;
+	action = egg_action_group_get_action (action_group, "TabsPrevious");
+	g_object_set (action, "sensitive", prev_tab, NULL);
+	action = egg_action_group_get_action (action_group, "TabsNext");
+	g_object_set (action, "sensitive", next_tab, NULL);
+	action = egg_action_group_get_action (action_group, "TabsMoveLeft");
+	g_object_set (action, "sensitive", move_left, NULL);
+	action = egg_action_group_get_action (action_group, "TabsMoveRight");
+	g_object_set (action, "sensitive", move_right, NULL);
+	action = egg_action_group_get_action (action_group, "TabsDetach");
+	g_object_set (action, "sensitive", detach, NULL);
+
+	ephy_tabs_menu_update (window->priv->tabs_menu);
+}
+
+static void
+ephy_window_tabs_changed_cb (EphyNotebook *notebook, EphyWindow *window)
+{
+	update_tabs_menu_sensitivity (window);
+	ephy_tabs_menu_update (window->priv->tabs_menu);
 }
 
 static GtkNotebook *
@@ -549,6 +558,9 @@ setup_notebook (EphyWindow *window)
 	g_signal_connect (G_OBJECT (notebook), "tab_detached",
 			  G_CALLBACK (ephy_window_tab_detached_cb),
 			  NULL);
+	g_signal_connect (G_OBJECT (notebook), "tabs_changed",
+			  G_CALLBACK (ephy_window_tabs_changed_cb),
+			  window);
 
 	gtk_widget_show (GTK_WIDGET (notebook));
 
@@ -571,9 +583,6 @@ ephy_window_init (EphyWindow *window)
 	/* Setup the window and connect verbs */
 	setup_window (window);
 
-	window->priv->fav_menu = ephy_favorites_menu_new (window);
-	window->priv->enc_menu = ephy_encoding_menu_new (window);
-
 	/* Setup window contents */
 	window->priv->notebook = setup_notebook (window);
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
@@ -587,6 +596,11 @@ ephy_window_init (EphyWindow *window)
 			    FALSE, TRUE, 0);
 
 	g_object_ref (ephy_shell);
+
+	/* Initializ the menus */
+	window->priv->tabs_menu = ephy_tabs_menu_new (window);
+	window->priv->fav_menu = ephy_favorites_menu_new (window);
+	window->priv->enc_menu = ephy_encoding_menu_new (window);
 
 	/* Once window is fully created, add it to the session list*/
 	session_add_window (session, window);
@@ -645,6 +659,7 @@ ephy_window_finalize (GObject *object)
 
 	g_object_unref (window->priv->fav_menu);
 	g_object_unref (window->priv->enc_menu);
+	g_object_unref (window->priv->tabs_menu);
 
 	if (window->priv->ppview_toolbar)
 	{
@@ -1207,37 +1222,6 @@ update_find_control (EphyWindow *window)
 }
 
 static void
-update_tabs (EphyWindow *window)
-{
-	gboolean prev_tab, next_tab, move_left, move_right, detach;
-	EggActionGroup *action_group;
-	EggAction *action;
-	int current;
-	int last;
-
-	current = gtk_notebook_get_current_page
-		(GTK_NOTEBOOK (window->priv->notebook));
-	last = gtk_notebook_get_n_pages
-		(GTK_NOTEBOOK (window->priv->notebook)) - 1;
-	prev_tab = move_left = (current > 0);
-	next_tab = move_right = (current < last);
-	detach = gtk_notebook_get_n_pages
-		(GTK_NOTEBOOK (window->priv->notebook)) > 1;
-
-	action_group = window->priv->action_group;
-	action = egg_action_group_get_action (action_group, "TabsPrevious");
-	g_object_set (action, "sensitive", prev_tab, NULL);
-	action = egg_action_group_get_action (action_group, "TabsNext");
-	g_object_set (action, "sensitive", next_tab, NULL);
-	action = egg_action_group_get_action (action_group, "TabsMoveLeft");
-	g_object_set (action, "sensitive", move_left, NULL);
-	action = egg_action_group_get_action (action_group, "TabsMoveRight");
-	g_object_set (action, "sensitive", move_right, NULL);
-	action = egg_action_group_get_action (action_group, "TabsDetach");
-	g_object_set (action, "sensitive", detach, NULL);
-}
-
-static void
 update_window_visibility (EphyWindow *window)
 {
 	GList *l, *tabs;
@@ -1292,9 +1276,6 @@ ephy_window_update_control (EphyWindow *window,
 
 	switch (control)
 	{
-	case TabsControl:
-		update_tabs (window);
-		break;
 	case StatusbarMessageControl:
 		update_status_message (window);
 		break;
@@ -1354,7 +1335,6 @@ ephy_window_update_all_controls (EphyWindow *window)
 		update_security (window);
 		update_find_control (window);
 		update_spinner_control (window);
-		update_tabs (window);
 	}
 }
 
@@ -1461,6 +1441,7 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 
 	/* update window controls */
 	ephy_window_update_all_controls (window);
+	update_tabs_menu_sensitivity (window);
 }
 
 static void
@@ -1525,7 +1506,7 @@ ephy_window_get_toolbar (EphyWindow *window)
 	return window->priv->toolbar;
 }
 
-void
+static void
 ephy_window_tab_detached_cb (EphyNotebook *notebook, gint page,
 			     gint x, gint y, gpointer data)
 {
@@ -1542,3 +1523,4 @@ ephy_window_tab_detached_cb (EphyNotebook *notebook, gint page,
 	ephy_tab_set_window (tab, window);
 	gtk_widget_show (GTK_WIDGET (window));
 }
+
