@@ -53,7 +53,7 @@ IGNORE_HFILES = \
 	ephy-zoom.h \
 	ephy-arrow-toolbutton.h \
 	ephy-cell-renderer-progress.h \
-	ephy-ellipsizing-label.h \
+	ephy-label.h \
 	ephy-location-entry.h \
 	ephy-node-view.h \
 	ephy-search-entry.h \
