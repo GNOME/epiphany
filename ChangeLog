@@ -1,5 +1,24 @@
 2004-01-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/downloader-view.c: (downloader_view_build_ui):
+	* embed/find-dialog.c: (find_dialog_init):
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/print-dialog.c: (ephy_print_dialog_new),
+	(ephy_print_setup_dialog_new):
+	* lib/ephy-dialog.c: (impl_construct), (ephy_dialog_construct):
+	* lib/ephy-dialog.h:
+	* lib/ephy-glade.c: (ephy_glade_widget_new):
+	* lib/ephy-glade.h:
+	* src/ephy-encoding-dialog.c: (ephy_encoding_dialog_init):
+	* src/pdm-dialog.c: (pdm_dialog_init):
+	* src/prefs-dialog.c: (setup_add_language_dialog),
+	(prefs_dialog_init):
+
+	Allow passing the translation domain to ephy_dialog_construct,
+	to make extension's dialogues translatable. Fix all callers.
+
+2004-01-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.in:
 
 	We really depend on gtk+ >= 2.3.2.
