@@ -12,6 +12,6 @@ xml_DATA = \
 
 @INTLTOOL_XML_RULE@
 
-EXTRA_DIST = $(uixml_in_files)
+EXTRA_DIST = $(uixml_in_files) $(xml_DATA)
 
 CLEANFILES = $(uixml_DATA)
