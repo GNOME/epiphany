@@ -180,7 +180,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "ViewZoomOut", GTK_STOCK_ZOOM_OUT, N_("Zoom _Out"), "<control>minus",
 	  N_("Decrease the text size"),
 	  G_CALLBACK (window_cmd_view_zoom_out) },
-	{ "ViewZoomNormal", GTK_STOCK_ZOOM_100, N_("_Normal Size"), NULL,
+	{ "ViewZoomNormal", GTK_STOCK_ZOOM_100, N_("_Normal Size"), "<control>0",
 	  N_("Use the normal text size"),
 	  G_CALLBACK (window_cmd_view_zoom_normal) },
 	{ "ViewEncoding", NULL, N_("Text _Encoding"), NULL,
