@@ -38,6 +38,7 @@ AC_SUBST(LIBGNOMEUI_REQUIRED)
 AC_ENABLE_SHARED(yes)
 AC_ENABLE_STATIC(no)
 
+AC_LIBTOOL_DLOPEN
 AM_PROG_LIBTOOL
 
 AC_ISC_POSIX
@@ -209,6 +210,7 @@ branch1.7) MOZILLA_SNAPSHOT=17 ;;
 1.8a1) MOZILLA_SNAPSHOT=18 ;;
 1.8a2) MOZILLA_SNAPSHOT=19 ;;
 1.8a3) MOZILLA_SNAPSHOT=20 ;;
+1.8a4) MOZILLA_SNAPSHOT=20 ;;
  1.8b) MOZILLA_SNAPSHOT=20 ;;
 1.8rc1) MOZILLA_SNAPSHOT=20 ;;
   1.8) MOZILLA_SNAPSHOT=20 ;;
@@ -217,7 +219,7 @@ trunk) MOZILLA_SNAPSHOT=20 ;;
     *) AC_ERROR([
 *****************************************************************************
 Epiphany can be built using Mozilla 1.4, 1.4.1, 1.4.2, 1.5, 1.5.1, 1.6,  1.7,
-1.7.1, 1.7.2, 1.8a2 or trunk, but the version available is $MOZILLA_VERSION.  
+1.7.1, 1.7.2, 1.8a2, 1.8a3, or trunk, but the version available is $MOZILLA_VERSION.  
 *****************************************************************************])
 esac
 

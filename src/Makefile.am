@@ -120,6 +120,8 @@ libephymain_la_SOURCES =				\
 
 epiphany_bin_SOURCES = ephy-main.c
 
+epiphany_bin_LDFLAGS = -dlopen self
+
 epiphany_bin_LDADD = \
 	$(top_builddir)/src/libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
