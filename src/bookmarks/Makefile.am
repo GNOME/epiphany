@@ -8,12 +8,7 @@ INCLUDES = \
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
 	-DSHARE_DIR=\"$(pkgdatadir)\" 	\
 	-DDATADIR=\""$(datadir)"\" 	\
-	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
-	-DG_DISABLE_DEPRECATED		\
-	-DGDK_DISABLE_DEPRECATED	\
-	-DGTK_DISABLE_DEPRECATED	\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
-	-DGNOME_DISABLE_DEPRECATED
+	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"
 
 noinst_LTLIBRARIES = libephybookmarks.la
 

@@ -34,11 +34,6 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/windowwatcher		\
 	$(GCONF_CFLAGS)					\
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 			\
-	-DG_DISABLE_DEPRECATED          		\
-        -DGDK_DISABLE_DEPRECATED        		\
-        -DGTK_DISABLE_DEPRECATED        		\
-        -DGDK_PIXBUF_DISABLE_DEPRECATED 		\
-        -DGNOME_DISABLE_DEPRECATED			\
 	-DSHARE_DIR=\"$(pkgdatadir)\"   		\
 	-include $(MOZILLA_INCLUDE_ROOT)/mozilla-config.h
 

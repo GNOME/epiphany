@@ -6,12 +6,7 @@ INCLUDES = \
 	-I$(top_srcdir)/lib   		\
 	-I$(top_srcdir)/src/bookmarks   \
 	$(EPIPHANY_DEPENDENCY_CFLAGS)	\
-	-DSHARE_DIR=\"$(pkgdatadir)\"	\
-	-DG_DISABLE_DEPRECATED		\
-	-DGDK_DISABLE_DEPRECATED	\
-	-DGTK_DISABLE_DEPRECATED	\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
-	-DGNOME_DISABLE_DEPRECATED
+	-DSHARE_DIR=\"$(pkgdatadir)\"
 
 plugin_LTLIBRARIES = libsample.la
 
