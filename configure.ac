@@ -36,7 +36,7 @@ AM_MAINTAINER_MODE
 if test "x$enable_maintainer_mode" = "xyes"; then
 	AC_DEFINE([MAINTAINER_MODE],[1],[Define to enable 'maintainer-only' behaviour])
 	enable_debug=yes
-	MORE_WARN_FLAGS="-Wdeclaration-after-statement"
+	MORE_WARN_FLAGS=
         DEPRECATION_FLAGS="-DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGCONF_DISABLE_DEPRECATED -DGNOME_VFS_DISABLE_DEPRECATED -DBONOBO_UI_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED -DLIBGLADE_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED"
 	MOZILLA_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
 fi
@@ -134,6 +134,30 @@ dnl Portability checks
 dnl ******************
 
 AC_CHECK_FUNCS([mkdtemp])
+
+dnl Check for -Wdeclaration-after-statement (since gcc 3.4)
+
+if test "x$enable_maintainer_mode" = "xyes"; then
+
+	AC_LANG_PUSH([C])
+	FLAGS="-Wdeclaration-after-statement"
+	_SAVE_AM_CFLAGS=$AM_CFLAGS
+	AM_CFLAGS="$AM_CFLAGS $FLAGS"
+
+	AC_CACHE_CHECK([for compiler $FLAGS option],
+		ac_cv_have_declaration_after_statement,
+		[AC_COMPILE_IFELSE(
+			[AC_LANG_SOURCE([[int main () { return 0; }]])],
+			[ac_cv_have_declaration_after_statement="yes"],
+			[ac_cv_have_declaration_after_statement="no"],
+			[ac_cv_have_declaration_after_statement="maybe"])])
+	
+	if test "x$ac_cv_have_declaration_after_statement" = "xyes"; then
+		MORE_WARN_FLAGS="$MORE_WARN_FLAGS $FLAGS"
+	fi
+	AM_CFLAGS="$_SAVE_AM_CFLAGS"
+	AC_LANG_POP([C])
+fi
 
 dnl ******************
 dnl Mozilla name check
@@ -494,6 +518,7 @@ AM_CXXFLAGS="$AM_CXXFLAGS $WARN_CXXFLAGS $MOZILLA_WARN_CXXFLAGS"
 AC_SUBST([AM_CPPFLAGS])
 AC_SUBST([AM_CFLAGS])
 AC_SUBST([AM_CXXFLAGS])
+AC_SUBST([AM_LDFLAGS])
 
 dnl *******************************
 dnl Internationalization
