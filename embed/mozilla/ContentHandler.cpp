@@ -232,8 +232,7 @@ release_cb (GContentHandler *data)
 NS_METHOD GContentHandler::MIMEConfirmAction ()
 {
 	GtkWidget *dialog;
-	const char *action_label, *primary, *secondary;
-	//int response;
+	const char *action_label;
 
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (mContext);
 	GtkWindow *parentWindow = GTK_WINDOW (EphyUtils::FindGtkParent(parentDOMWindow));
@@ -244,36 +243,43 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 
 	if (mPermission == EPHY_MIME_PERMISSION_UNSAFE && mHelperApp)
 	{
-		primary = _("Download the unsafe file?");
-		secondary = _("This type of file could potentially damage "
-			      "your documents or invade your privacy. "
-			      "It's not safe to open it directly. "
-			      "You can save it instead.");
+		dialog = gtk_message_dialog_new
+			(parentWindow, GTK_DIALOG_DESTROY_WITH_PARENT,
+			 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
+			 _("Download the unsafe file?"));
+		gtk_message_dialog_format_secondary_text
+			(GTK_MESSAGE_DIALOG (dialog),
+			 _("This type of file could potentially damage "
+			    "your documents or invade your privacy. "
+			    "It's not safe to open it directly. "
+			    "You can save it instead."));
 	}
-	else if (mAction == CONTENT_ACTION_OPEN_TMP)
+	else if (mAction == CONTENT_ACTION_OPEN_TMP && mHelperApp)
 	{
-		primary = _("Open the file in another application?");
-		secondary = _("It's not possible to view this file type "
-			      "directly in the browser. You can open it with "
-			      "another application or save it.");
+		dialog = gtk_message_dialog_new
+			(parentWindow, GTK_DIALOG_DESTROY_WITH_PARENT,
+			 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
+			 _("Open the file in another application?"));
+		gtk_message_dialog_format_secondary_markup
+			(GTK_MESSAGE_DIALOG (dialog),
+			 /* translators: this %s is the name of the application */
+			 _("It's not possible to view this file type "
+			   "directly in the browser. You can open it with "
+			   "<tt>%s</tt> or save it."),
+			   mHelperApp->name);
 	}
 	else
 	{
-		primary = _("Download the file?");
-		secondary = _("It's not possible to view this file because "
-			      "there is no application installed that can open"
-			      " it. You can save it instead.");
+		dialog = gtk_message_dialog_new
+			(parentWindow, GTK_DIALOG_DESTROY_WITH_PARENT,
+			 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
+			 _("Download the file?"));
+		gtk_message_dialog_format_secondary_text
+			(GTK_MESSAGE_DIALOG (dialog),
+			 _("It's not possible to view this file because "
+			   "there is no application installed that can open"
+			   " it. You can save it instead."));
 	}
-
-	dialog = gtk_message_dialog_new
-		(parentWindow,
-		 GTK_DIALOG_DESTROY_WITH_PARENT,
-		 GTK_MESSAGE_WARNING,
-		 GTK_BUTTONS_NONE,	
-		 primary);
-
-	gtk_message_dialog_format_secondary_text
-		(GTK_MESSAGE_DIALOG (dialog), secondary);
 
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
 			       _("_Save As..."), CONTENT_ACTION_SAVEAS);
