@@ -33,12 +33,12 @@ G_BEGIN_DECLS
 #endif
 
 #ifdef DISABLE_LOGGING
-#define LOG(msg, ...)
+#define LOG(msg, args...)
 #else
-#define LOG(msg, ...)						\
+#define LOG(msg, args...)						\
 g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,				\
        "[ %s ] " msg,						\
-       __FILE__, ##__VA_ARGS__);
+       __FILE__, ## args);
 #endif
 
 #ifdef DISABLE_PROFILING
