@@ -27,6 +27,8 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_STATE_WINDOW_FLAGS	(ephy_state_window_flags_get_type ())
+
 typedef enum
 {
 	EPHY_STATE_WINDOW_SAVE_NONE = 0,
@@ -34,22 +36,24 @@ typedef enum
 	EPHY_STATE_WINDOW_SAVE_POSITION = 1 << 1
 } EphyStateWindowFlags;
 
-void ephy_state_add_window	(GtkWidget *window,
+GType ephy_state_window_flags_get_type	(void); 
+
+void  ephy_state_add_window	(GtkWidget *window,
 				 const char *name,
 				 int default_width,
 				 int default_heigth,
 				 gboolean maximize,
 				 EphyStateWindowFlags flags);
 
-void ephy_state_add_paned	(GtkWidget *paned,
+void  ephy_state_add_paned	(GtkWidget *paned,
 				 const char *name,
 				 int default_width);
 
-void ephy_state_add_expander	(GtkWidget *expander,
+void  ephy_state_add_expander	(GtkWidget *expander,
 				 const char *name,
 				 gboolean default_state);
 
-void ephy_state_save		(void);
+void  ephy_state_save		(void);
 
 G_END_DECLS
 
