@@ -260,7 +260,7 @@ ephy_shell_init (EphyShell *gs)
 
 	/* FIXME listen on icon changes */
 	icon_theme = gtk_icon_theme_get_default ();
-	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "web-browser", -1, -1);
+	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "web-browser", -1, 0);
 
 	if (icon_info)
 	{

@@ -463,7 +463,7 @@ ephy_spinner_load_images (EphySpinner *spinner)
 
 	/* Load the rest icon */
 	icon_info = gtk_icon_theme_lookup_icon (spinner->details->icon_theme,
-					        "gnome-spinner-rest", -1, -1);
+					        "gnome-spinner-rest", -1, 0);
 	if (icon == NULL) {
 		g_warning ("Throbber rest icon not found");
 		return;
