@@ -109,22 +109,6 @@ NS_IMETHODIMP MozGlobalHistory::GetCount(PRUint32 *aCount)
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#if MOZILLA_SNAPSHOT <= 7
- 
-/* void startBatchUpdate (); */
-NS_IMETHODIMP MozGlobalHistory::StartBatchUpdate()
-{
-    return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-/* void endBatchUpdate (); */
-NS_IMETHODIMP MozGlobalHistory::EndBatchUpdate()
-{
-    return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-#endif
-
 /* void markPageAsTyped (in string url); */
 NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(const char *url)
 {

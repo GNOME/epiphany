@@ -1,4 +1,71 @@
 ==============
+Epiphany 0.8.2
+==============
+
+Code changes
+
+	* Improve toolbar editor api for costum items (Marco)
+	* Rework find implementation to integrate better
+          with type ahead and to simplify the code (Marco)
+	* Usual memory leaks fixes (Christian Persch)
+	* Add some comments for translators (Christian Persch, Marco)
+	* Use string valid also externally for drag and drop
+	  Url for bookmarks, a special uri for topics (Marco)
+	* Cleanup toolbars model (Marco)
+	* Set a version on the toolbar xml and make it low disk safe (Marco)
+
+Interface improvements
+
+	* Allow drag and drop of urls on the bookmarks toolbar (Xan Lopez)
+	* Disable smooth scroll and image autoresize (Marco)
+	* Remove useless icons from the print dialog (Marco)
+	* Fix incosistency between all topic on the toolbar and bookmarks menu (Marco)
+	* If the page is about:blank, set title to "Blank page" (Christian Persch)
+	* More friendly description for cache preferences (Marco)
+	* Add a show in bookmarks toolbar item on the bookmarks editor
+	  context menu (Marco)
+	* Always open bookmarks and history pages in new window/tab according
+	  to pref on double click (Marco)
+
+Bugfixes
+
+	* Fix a crash when mozilla returns no system fonts on enumeration (Marco)
+	* Remove bookmarks from the toolbar also when no windows are open (Marco)
+	* If there are invalid bookmarks in the toolbar dont crash on startup
+	  but remove them (Marco)
+	* Support mozilla language packs (Christian Persch)
+	* Fix type ahead/normal find interaction (Marco)
+	* Fixes transparency issue on tab label and site icon (Christian Persch)
+	* Do not try to open javascript links in new tab with
+	  middle click (Marco)
+	* Fix crash when deleting all bookmarks/cookies (Christian Persch)
+	* Fix session management, typo in the executable name (Nikolai Weibull)
+	* Fix dialogs properties persistance (Marco)
+	* Fix a crash when clicking on bookmarks while exiting fullscreen (Marco)
+
+Translations
+
+	* Dutch manual (Reinout van Schouwen)
+
+	* be (Dmitry G. Mastrukov)
+	* cy (Keith Willoughby)
+	* cs (Miloslav Trmac)
+	* de (Christian Neumair)
+	* el (Nikos Charonitakis)
+	* en_GB (Christian Persch)
+	* es (Francisco Javier Fernandez)
+	* fi (Pauli Virtanen)
+	* ms (Hasbullah Bin Pit)
+	* nl (Vincent van Adrighem)
+	* pl (Artur Flinta)
+	* pt (Duarte Loreto)
+	* pt_BR (Evandro Fernandes Giovanini)
+	* sr (Danilo Segan)
+	* sr@Latn (Danilo Segan)
+	* sv (Christian Rose)
+	* zh_CN (Wang Jian)
+
+==============
 Epiphany 0.8.0
 ==============
 
