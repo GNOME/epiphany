@@ -1,4 +1,130 @@
 ==============
+Epiphany 1.5.1
+==============
+
+New features
+
+	* Load and unload extensions on user demand
+
+Interface improvements
+
+	* Separate context menu for email links [#144244]
+	* Select the topic when adding it [#151925]
+	* Better positioning of context menus for treeviews [#152431]
+	* Install a placeholder for the view toggles group [#153767]
+	* Add tooltips for context menus [#151764]
+	* Support multiple printers in the print dialog
+	* Add tooltips on the navigation history arrows, and fix the tooltip
+	  on the "Up" button to be consistent with nautilus [#155825]
+	* Add tooltip on the drag handle [#155827]
+	* Add tooltip on close button [#155828]
+	* Use new gtk+ HIG message dialogue API [#130232]
+	* Make the confirm-close-with-form-data dialogue window modal
+	* When showing a modal alert put up by a web page, switch the window
+	  to that tab
+
+Code changes
+
+	* Adapt to mozilla API changes
+	* Use ellipsisation support in GtkLabel
+	* Use new gtk+ GtkCellRendererProgress
+	* Use more icons from icon theme
+	* Use the gtk setting for the menubar accel instead of hardcoding F10
+	* Use new GtkMenuToolButton
+	* Just pass a GType to ephy_embed_factory_new_object()
+	* Add another mimetype to import types file filter
+	* Install ephy-embed-factory.h
+	* Add ephy_window_get_ui_manager(), and remove the manager
+	  from the public EphyWindow struct
+	* Use GtkAboutDialog
+	* Make ephy-state.h public [#153809]
+	* Improved debugging support [#153805]
+	* Don't reference private objects from public headers [#153766]
+	* Split the default prefs into the common part, and mozilla/new toolkit
+	  specific parts.
+	* Use gtk_window_set_default_icon_name()
+	* Recognise "Desktop" special downloads directory [#152926]
+	* Notify when entering or leaving print preview mode [#154591]
+	* Initialize plugins path env var for backward compatibility
+	* Allow to set the default window state to maximize, default to maximise
+	* Read extension descriptions from .xml, load them with the specified
+	  loader (for now, just only .so is supported)
+	* Add extensions-manager-ui as default active extension
+	* Validate extension XML files against an XSD Schema
+	* Add varargs version of ephy_dialog_get_control to get more than one widget
+	  at a time
+	* Remove ephy_string_parse_uri_list, and use new glib function
+	  g_uri_list_extract_uris() instead
+	* Only multiplex [attach|detach]_window to extensions implementing the
+	  EphyExtension interface
+	* Annotate "if (type == 0)" in get_type functions with G_UNLIKELY
+	* Add EPHY_NODE_CHANGED signal [Peter Harvey]
+	* Save tons of strdups in bookmarks menu
+	* Unset the use-underline label property instead of doubling the underscores
+	* Use named icon for the logo in about dialogue
+	* Use gtk_entry_set_width_chars() to set the smart bookmark entry width
+	* Use ellipsising labels to shorten the bookmarks and topics titles [#147765]
+	* Avoid strdups in entry completion func [Peter Harvey]
+	* Make bookmarks menu take a configurable path where to merge its UI
+
+Bug fixes
+
+	* Remove -s switch which was used by now-gone nautilus view
+	* Use a small custom icon for tabs close button [#144772]
+	* Fix navigation and Go button proxy menu items [#151648, #141548]
+	* Use rm -f as remove command, not rm -r
+	* Use SAME_APP flag for drag destination [#152388]
+	* Keep popup position synced with his size requisition [#143585]
+	* Enable conversion for favicon downloads [#152866]
+	* Fix download progress indicator in downloader view
+	* Fix overflow in remaining time calculation [#153136, Jhon Spray]
+	* Initialise position passed to gtk_editable_insert_text()
+	* Fix some mem leaks
+	* Remove explicit PAC autoconf call, it works perfectly ok without it
+	* Don't size-allocate unmapped tabs, fixing slow resizes [#128191]
+	* Fix print preview and fullscreen mode interaction [#154456]
+	* Don't allow activation of the hidden menubar in ppv mode
+	* Grammar fix in schema [#154605]
+	* Fix crash in bookmarks menu [#154805]
+	* Remove duplicate AM_PROG_INTLTOOL [#155028]
+	* Fix EphyNode callback data destruction [#152718, Peter Harvey]
+	* Fix import of bookmarks in root folder [#152443]
+	* Activate tray with double-click, as per HIG [#152899]
+	* Always chain up to parent's dispose handler
+	* Fix return type of tab_delete slot
+	* Move window destruction after tab-removed signal emission [#151607]
+	* De-couple instantiation and initialisation of the extensions manager
+	* Correctly change the statusbar children's frams's shadow type when
+	  the statusbar shadow type changes
+	* Don't open all bookmarks in tabs [#156843]
+	* Depend on libxml >= 2.6.12, for its fix of bug #150647
+	* Fix restoring window size on crash recovery [#156881]
+
+Documentation updates
+
+	* Document EPHY_DEBUG_BREAK
+	* Add manpage [#156067, Jordi Mallach]
+
+Translation updates
+
+	* Abdulaziz Al-Arfaj (ar)
+	* Vladimir Petkov (bg)
+	* Miloslav Trmac (cs)
+	* Marie Lund (da)
+	* Adam Weinberger (en_CA)
+	* David Lodge (en_GB)
+	* Francisco Javier F. Serrador (es)
+	* Meelad Zakaria (fa)
+	* Olivier Cortes (fr)
+	* Žygimantas Beručka (lt)
+	* Hasbullah Bin Pit (ms)
+	* Reinout van Schouwen (nl)
+	* Marcel Telka (sk)
+	* Laurent Dhima (sq)
+	* Danilo Segan (sr)
+
+
+==============
 Epiphany 1.4.0
 ==============
 
