@@ -35,6 +35,7 @@
 #include "ephy-debug.h"
 #include "ephy-new-bookmark.h"
 #include "ephy-toolbars-group.h"
+#include "ephy-stock-icons.h"
 
 #include <string.h>
 
@@ -312,6 +313,7 @@ toolbar_setup_actions (Toolbar *t)
 	action = g_object_new (EPHY_TYPE_LOCATION_ACTION,
 			       "name", "Location",
 			       "label", "Location",
+			       "stock_id", EPHY_STOCK_ENTRY,
 			       NULL);
 	g_signal_connect (action, "go_location",
 			  G_CALLBACK (go_location_cb), t->priv->window);
