@@ -821,23 +821,9 @@ ephy_window_set_chrome (EphyWindow *window,
 		gtk_widget_hide (window->priv->menubar);
 	}
 
-	if (flags & EMBED_CHROME_PERSONALTOOLBARON)
-	{
-	}
-	else
-	{
-	}
-
-	if (flags & EMBED_CHROME_TOOLBARON)
-	{
-/*		egg_editable_toolbar_show
-			(EGG_EDITABLE_TOOLBAR (window->priv->toolbar));*/
-	}
-	else
-	{
-/*		egg_editable_toolbar_hide
-			(EGG_EDITABLE_TOOLBAR (window->priv->toolbar));*/
-	}
+	toolbar_set_visibility (window->priv->toolbar,
+				flags & EMBED_CHROME_TOOLBARON,
+				flags & EMBED_CHROME_PERSONALTOOLBARON);
 
 	if (flags & EMBED_CHROME_STATUSBARON)
 	{

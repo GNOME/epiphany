@@ -585,3 +585,54 @@ egg_editable_toolbar_show (EggEditableToolbar *etoolbar,
       }
     }
 }
+
+void
+egg_editable_toolbar_hide (EggEditableToolbar *etoolbar,
+			   const char         *name)
+{
+  int i, n_toolbars;
+  EggToolbarsModel *model = etoolbar->priv->model;
+
+  g_return_if_fail (model != NULL);
+
+  n_toolbars = egg_toolbars_model_n_toolbars (model);
+  for (i = 0; i < n_toolbars; i++)
+    {
+      const char *toolbar_name;
+
+      toolbar_name = egg_toolbars_model_toolbar_nth (model, i);
+      if (strcmp (toolbar_name, name) == 0)
+      {
+        gtk_widget_hide (get_toolbar_nth (etoolbar, i));
+      }
+    }
+}
+
+void
+egg_editable_toolbar_set_drag_dest (EggEditableToolbar   *etoolbar,
+				    const GtkTargetEntry *targets,
+				    gint                  n_targets,
+				    const char           *toolbar_name)
+{
+  int i, n_toolbars;
+  EggToolbarsModel *model = etoolbar->priv->model;
+
+  g_return_if_fail (model != NULL);
+
+  n_toolbars = egg_toolbars_model_n_toolbars (model);
+  for (i = 0; i < n_toolbars; i++)
+    {
+      const char *name;
+
+      name = egg_toolbars_model_toolbar_nth (model, i);
+      if (strcmp (toolbar_name, name) == 0)
+      {
+        GtkWidget *widget = get_toolbar_nth (etoolbar, i);
+        gtk_drag_dest_unset (widget);
+        gtk_drag_dest_set (widget, GTK_DEST_DEFAULT_DROP,
+                           targets, n_targets,
+                           GDK_ACTION_MOVE | GDK_ACTION_COPY);
+      }
+    }
+}
+

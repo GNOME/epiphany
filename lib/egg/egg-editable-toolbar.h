@@ -53,17 +53,18 @@ struct EggEditableToolbarClass
 };
 
 GType               egg_editable_toolbar_get_type        (void);
-GtkWidget	   *egg_editable_toolbar_new		 (EggMenuMerge       *merge,
-							  EggToolbarsModel   *model);
-void		    egg_editable_toolbar_set_edit_mode	 (EggEditableToolbar *etoolbar,
-							  gboolean mode);
-void		    egg_editable_toolbar_show		 (EggEditableToolbar *etoolbar,
-							  const char         *name);
-void		    egg_editable_toolbar_hide		 (EggEditableToolbar *etoolbar,
-							  const char         *name);
-void		    egg_editable_toolbar_add_drag_type   (EggEditableToolbar *etoolbar,
-							  const char         *drag_type,
-							  const char         *toolbar_name);
+GtkWidget	   *egg_editable_toolbar_new		 (EggMenuMerge         *merge,
+							  EggToolbarsModel     *model);
+void		    egg_editable_toolbar_set_edit_mode	 (EggEditableToolbar   *etoolbar,
+							  gboolean              mode);
+void		    egg_editable_toolbar_show		 (EggEditableToolbar   *etoolbar,
+							  const char           *name);
+void		    egg_editable_toolbar_hide		 (EggEditableToolbar   *etoolbar,
+							  const char           *name);
+void		    egg_editable_toolbar_set_drag_dest   (EggEditableToolbar   *etoolbar,
+							  const GtkTargetEntry *targets,
+							  gint                  n_targets,
+							  const char           *toolbar_name);
 
 G_END_DECLS
 

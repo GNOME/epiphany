@@ -36,7 +36,10 @@
 #include "ephy-new-bookmark.h"
 #include "egg-toggle-action.h"
 #include "egg-editable-toolbar.h"
+#include "egg-toolbar-editor.h"
+#include "ephy-file-helpers.h"
 #include "toolbar.h"
+#include "ephy-state.h"
 
 #include <string.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -638,19 +641,41 @@ window_cmd_edit_prefs (EggAction *action,
 	gtk_widget_show (GTK_WIDGET(dialog));
 }
 
+static void
+toolbar_editor_destroy_cb (GtkWidget *tbe,
+			   Toolbar *t)
+{
+	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR (t), FALSE);
+}
+
 void
 window_cmd_edit_toolbar (EggAction *action,
 			 EphyWindow *window)
 {
-	Toolbar *toolbar;
+	GtkWidget *editor;
+	EphyToolbarsModel *model;
+	Toolbar *t;
 
-	toolbar = ephy_window_get_toolbar (window);
-/*
-	egg_editable_toolbar_edit (EGG_EDITABLE_TOOLBAR (toolbar),
-				   GTK_WIDGET (window));*/
+	model = ephy_shell_get_toolbars_model (ephy_shell);
+	t = ephy_window_get_toolbar (window);
+
+	editor = egg_toolbar_editor_new
+		(EGG_MENU_MERGE (window->ui_merge),
+		 EGG_TOOLBARS_MODEL (model));
+	ephy_state_add_window (editor,
+			       "toolbar_editor",
+		               500, 330);
+	g_signal_connect (editor, "destroy",
+			  G_CALLBACK (toolbar_editor_destroy_cb),
+			  t);
+	egg_toolbar_editor_load_actions (EGG_TOOLBAR_EDITOR (editor),
+					 ephy_file ("epiphany-toolbar.xml"));
+	gtk_widget_show (editor);
+
+	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR (t), TRUE);
 }
 
-void 
+void
 window_cmd_help_contents (EggAction *action,
 			 EphyWindow *window)
 {

@@ -1,3 +1,29 @@
+2003-04-25  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/ui/epiphany-toolbar.xml.in:
+	* data/ui/epiphany-ui.xml.in:
+	* lib/egg/egg-editable-toolbar.c: (egg_editable_toolbar_hide),
+	(egg_editable_toolbar_set_drag_dest):
+	* lib/egg/egg-editable-toolbar.h:
+	* src/bookmarks/ephy-topic-action.c: (create_tool_item):
+	* src/ephy-shell.c: (save_toolbars), (ephy_shell_finalize),
+	(ephy_shell_get_toolbars_model):
+	* src/ephy-toolbars-model.c: (impl_add_item),
+	(ephy_toolbars_model_class_init):
+	* src/ephy-toolbars-model.h:
+	* src/ephy-window.c: (ephy_window_set_chrome):
+	* src/toolbar.c: (ensure_bookmark_action), (toolbar_ensure_action),
+	(action_added_cb), (init_bookmarks_toolbar), (toolbar_set_window),
+	(toolbar_new), (toolbar_set_visibility):
+	* src/toolbar.h:
+	* src/window-commands.c: (toolbar_editor_destroy_cb),
+	(window_cmd_edit_toolbar):
+
+	Get back toolbar editing functionalities.
+	More work on the bookmarks toolbars implementation.
+	The toolbars context menus are regressed but it's not my fault :/
+	The signal on EggToolbar is borked.
+
 2003-04-25  David Bordoley <bordoley@msu.edu>
 	
 	* src/bookmarks/ephy-topic-action.c: (button_toggled_cb),

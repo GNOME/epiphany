@@ -26,6 +26,14 @@ static void ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass);
 static void ephy_toolbars_model_init       (EphyToolbarsModel *t);
 static void ephy_toolbars_model_finalize   (GObject *object);
 
+enum
+{
+  ACTION_ADDED,
+  LAST_SIGNAL
+};
+
+static guint ephy_toolbars_model_signals[LAST_SIGNAL] = { 0 };
+
 static GObjectClass *parent_class = NULL;
 
 struct EphyToolbarsModelPrivate
@@ -68,7 +76,10 @@ impl_add_item (EggToolbarsModel *t,
 	       const char *name)
 {
 	EphyBookmarks *bookmarks;
-	char *res = NULL;
+	char *action_name = NULL;
+	const char *res;
+
+	LOG ("Add item %s", name)
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
@@ -79,24 +90,27 @@ impl_add_item (EggToolbarsModel *t,
 
 		nodes = ephy_dnd_node_list_extract_nodes (name);
 		id = ephy_node_get_id (EPHY_NODE (nodes->data));
-		res = g_strdup_printf ("GoTopicId%d", id);
+		action_name = g_strdup_printf ("GoTopicId%d", id);
 		g_list_free (nodes);
 	}
-	else if (gdk_atom_intern (EPHY_DND_TOPIC_TYPE, FALSE) == type)
+	else if (gdk_atom_intern (EPHY_DND_BOOKMARK_TYPE, FALSE) == type)
 	{
 		GList *nodes;
 		int id;
 
 		nodes = ephy_dnd_node_list_extract_nodes (name);
 		id = ephy_node_get_id (EPHY_NODE (nodes->data));
-		res = g_strdup_printf ("GoBookmarkId%d", id);
+		action_name = g_strdup_printf ("GoBookmarkId%d", id);
 		g_list_free (nodes);
 	}
-	else
-	{
-		EGG_TOOLBARS_MODEL_CLASS (parent_class)->add_item
-			(t, toolbar_position, position, type, name);
-	}
+
+	res = action_name ? action_name : name;
+
+	g_signal_emit (G_OBJECT (t),
+		       ephy_toolbars_model_signals[ACTION_ADDED], 0, res);
+
+	EGG_TOOLBARS_MODEL_CLASS (parent_class)->add_item
+		(t, toolbar_position, position, type, res);
 
 	return res;
 }
@@ -114,6 +128,14 @@ ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass)
 	object_class->finalize = ephy_toolbars_model_finalize;
 
 	etm_class->add_item = impl_add_item;
+
+	ephy_toolbars_model_signals[ACTION_ADDED] =
+	g_signal_new ("action_added",
+		      G_OBJECT_CLASS_TYPE (object_class),
+		      G_SIGNAL_RUN_LAST,
+		      G_STRUCT_OFFSET (EphyToolbarsModelClass, action_added),
+		      NULL, NULL, g_cclosure_marshal_VOID__STRING,
+		      G_TYPE_NONE, 1, G_TYPE_STRING);
 }
 
 static void

@@ -294,6 +294,18 @@ ephy_shell_init (EphyShell *gs)
 }
 
 static void
+save_toolbars (EggToolbarsModel *model)
+{
+	char *xml_file;
+
+	xml_file = g_build_filename (ephy_dot_dir (),
+                                     "toolbar.xml",
+                                     NULL);
+	egg_toolbars_model_save (model, xml_file);
+	g_free (xml_file);
+}
+
+static void
 ephy_shell_finalize (GObject *object)
 {
         EphyShell *gs;
@@ -306,6 +318,13 @@ ephy_shell_finalize (GObject *object)
         g_return_if_fail (gs->priv != NULL);
 
 	g_assert (ephy_shell == NULL);
+
+	LOG ("Unref toolbars model")
+	if (gs->priv->toolbars_model)
+	{
+		save_toolbars (EGG_TOOLBARS_MODEL (gs->priv->toolbars_model));
+		g_object_unref (G_OBJECT (gs->priv->toolbars_model));
+	}
 
 	LOG ("Unref session")
 	if (gs->priv->session)
@@ -648,8 +667,6 @@ ephy_shell_get_toolbars_model (EphyShell *gs)
 	if (gs->priv->toolbars_model == NULL)
 	{
 		gs->priv->toolbars_model = ephy_toolbars_model_new ();
-		egg_toolbars_model_load (EGG_TOOLBARS_MODEL (gs->priv->toolbars_model),
-					 ephy_file ("epiphany-toolbar.xml"));
 	}
 
 	return gs->priv->toolbars_model;

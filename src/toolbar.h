@@ -74,6 +74,10 @@ void	      toolbar_update_navigation_actions (Toolbar *t,
 						 gboolean forward,
 						 gboolean up);
 
+void	      toolbar_set_visibility		(Toolbar *t,
+						 gboolean normal_toolbars,
+						 gboolean bmk_toolbars);
+
 G_END_DECLS
 
 #endif
