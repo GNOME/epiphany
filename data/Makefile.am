@@ -24,6 +24,9 @@ schema_DATA = epiphany.schemas
 aboutdir = $(pkgdatadir)
 about_DATA = epiphany.xhtml conspiracy.xhtml
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = epiphany-1.0.pc
+
 install-data-local:
 	if test -z "$(DESTDIR)" ; then \
 	for p in $(schema_DATA) ; do \
@@ -35,6 +38,8 @@ EXTRA_DIST = $(server_in_files)     	\
 	     $(schema_in_files)         \
 	     $(DESKTOP_IN_FILES)	\
 	     $(about_DATA)		\
-	     $(applications_DATA)
+	     $(applications_DATA)	\
+	     $(pkgconfig_DATA)
 
-DISTCLEANFILES = $(server_DATA) $(Applications_DATA) $(schema_DATA) $(DESKTOP_FILES)
+
+DISTCLEANFILES = $(server_DATA) $(Applications_DATA) $(schema_DATA) $(pkgconfig_DATA) $(DESKTOP_FILES)
