@@ -60,6 +60,7 @@
 #define MOZILLA_STRICT_API
 #include <nsEmbedString.h>
 #undef MOZILLA_STRICT_API
+#include <nsMemory.h>
 
 #include <errno.h>
 #include <stdlib.h>
@@ -379,8 +380,8 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 			nsEmbedCString cDesc;
 			NS_UTF16ToCString (description, NS_CSTRING_ENCODING_UTF8, cDesc);
 #else
-			char *mimeType;
-			rv = mMIMEInfo->GetMIMEType (&mimeType);
+			char *mime;
+			rv = mMIMEInfo->GetMIMEType (&mime);
 			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 			if (mime)
