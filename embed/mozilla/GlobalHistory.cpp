@@ -25,6 +25,8 @@
 #include "config.h"
 #endif
 
+#include "mozilla-version.h"
+
 #include "ephy-embed-shell.h"
 
 #include "GlobalHistory.h"
