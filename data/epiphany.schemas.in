@@ -401,20 +401,22 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/directories/download</key>
-        <applyto>/apps/epiphany/directories/download</applyto>
-        <owner>epiphany</owner>
-        <type>string</type>
-        <default>~/Downloads</default>
-        <locale name="C">
-        </locale>
-      </schema>
-      <schema>
         <key>/schemas/apps/epiphany/directories/upload</key>
         <applyto>/apps/epiphany/directories/upload</applyto>
         <owner>epiphany</owner>
         <type>string</type>
         <default>~</default>
+        <locale name="C">
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/directories/downloads_folder</key>
+        <applyto>/apps/epiphany/directories/downloads_folder</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>~/Downloads</default>
+	<short>The downloads folder</short>
+	<long>The path of the folder where downloads are saved.</long>
         <locale name="C">
         </locale>
       </schema>

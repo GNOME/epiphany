@@ -1064,7 +1064,7 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	/* shift+click saves the link target */
 	else if (is_link && is_left_click && with_shift)
 	{
-		save_property_url (embed, event, "link", CONF_STATE_DOWNLOAD_DIR);
+		save_property_url (embed, event, "link", CONF_STATE_SAVE_DIR);
 	}
 	/* shift+click saves the non-link image
 	 * Note: pressing enter to submit a form synthesizes a mouse click event
