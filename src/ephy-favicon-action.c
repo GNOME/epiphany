@@ -94,7 +94,6 @@ each_url_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 {
 	const char *title;
 	char *location;
-	char *netscape_url;
 	EphyTab *tab;
 	EphyEmbed *embed;
 	EphyWindow *window = EPHY_WINDOW(iterator_context);
@@ -104,11 +103,8 @@ each_url_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 	ephy_embed_get_location (embed, TRUE, &location);
 	title = ephy_tab_get_title (tab);
 
-	netscape_url = g_strconcat (location, "\n", title, NULL);
+	iteratee (location, title, data);
 
-	iteratee (netscape_url, -1, -1, -1, -1, data);
-
-	g_free (netscape_url);
 	g_free (location);
 }
 

@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 #define EPHY_DND_TOPIC_TYPE		"ephy_topic_node"
 
 typedef void (* EphyDragEachSelectedItemDataGet)    (const char *url,
-                                                     int x, int y, int w, int h,
+                                                     const char *title,
                                                      gpointer data);
 
 typedef void (* EphyDragEachSelectedItemIterator)   (EphyDragEachSelectedItemDataGet iteratee,
