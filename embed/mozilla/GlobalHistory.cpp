@@ -30,13 +30,11 @@
 #include <nsString.h>
 #include <nsIURI.h>
 
-NS_IMPL_ISUPPORTS2(MozGlobalHistory,
 #if MOZILLA_SNAPSHOT > 13
-		   nsIGlobalHistory2,
+NS_IMPL_ISUPPORTS2(MozGlobalHistory, nsIGlobalHistory2, nsIBrowserHistory)
 #else
-		   nsIGlobalHistory,
+NS_IMPL_ISUPPORTS2(MozGlobalHistory, nsIGlobalHistory, nsIBrowserHistory)
 #endif
-		   nsIBrowserHistory)
 
 MozGlobalHistory::MozGlobalHistory ()
 {
