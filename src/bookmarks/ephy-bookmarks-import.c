@@ -104,6 +104,10 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 	{
 		return ephy_bookmarks_import_xbel (bookmarks, filename);
 	}
+	else if (strcmp (type, "text/rdf") == 0)
+	{
+		return ephy_bookmarks_import_rdf (bookmarks, filename);
+	}
 	else if (strstr (filename, MOZILLA_BOOKMARKS_DIR) != NULL ||
                  strstr (filename, FIREBIRD_BOOKMARKS_DIR) != NULL ||
 		 strstr (filename, FIREFOX_BOOKMARKS_DIR) != NULL)
