@@ -34,6 +34,9 @@ schema_DATA = epiphany.schemas
 aboutdir = $(pkgdatadir)
 about_DATA = epiphany.xhtml conspiracy.xhtml
 
+mimepermissiondir = $(pkgdatadir)
+mimepermission_DATA = mime-types-permissions.xml
+
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = epiphany-1.0.pc
 
@@ -50,7 +53,8 @@ EXTRA_DIST = $(NAUTILUS_VIEW_SERVER)	\
 	     $(DESKTOP_IN_FILES)	\
 	     $(about_DATA)		\
 	     $(applications_DATA)	\
-	     $(pkgconfig_DATA)
+	     $(pkgconfig_DATA)		\
+	     check_mime.py
 
 DISTCLEANFILES = \
 	$(nautilus_server_DATA) \
