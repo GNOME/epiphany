@@ -26,6 +26,7 @@ INST_H_FILES = \
 	ephy-embed-prefs.h		\
 	ephy-embed-single.h		\
 	ephy-embed-shell.h		\
+	ephy-embed-type-builtins.h	\
 	ephy-history.h			\
 	ephy-password-manager.h		\
 	ephy-permission-manager.h

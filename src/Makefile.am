@@ -55,6 +55,7 @@ INST_H_FILES = \
 	ephy-shell.h			\
 	ephy-statusbar.h		\
 	ephy-tab.h			\
+	ephy-type-builtins.h		\
 	ephy-window.h
 
 libephymain_la_SOURCES = \
