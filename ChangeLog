@@ -16,6 +16,13 @@
 	Reimplement ephystate using xml and make it easier to use.
 	-> remove some duplicate code
 
+2003-03-18  Xan Lopez  <xan@masilla.org>
+
+	* src/ephy-window.c: (ephy_window_selection_received_cb):
+
+	URL pasting should not open new tab if current tab is blank,
+	fixes #108103, patch by Alisdair McDiarmid <gnome@wasters.org>
+
 2003-03-17  Jon Svendsen  <jon-sven@frisurf.no>
 
 	* lib/ephy-state.c: (ephy_state_save_window):
