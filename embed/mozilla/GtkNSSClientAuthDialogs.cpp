@@ -141,7 +141,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	GtkListStore *store;
 	GtkTreeIter iter;
 	GtkCellRenderer *renderer;
-	char *msg, *tt_cn, *markup_text;
+	char *msg, *markup_text;
 	PRUint32 i;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
@@ -198,16 +198,14 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	nsEmbedCString utf8_cn;
 	NS_UTF16ToCString (nsEmbedString (cn),
 			   NS_CSTRING_ENCODING_UTF8, utf8_cn);
-	tt_cn = g_markup_printf_escaped ("\"<tt>%s</tt>\"", utf8_cn.get());
 
-	msg = g_strdup_printf (_("Choose a certificate to present as identification to %s."),
-			       tt_cn);
+	msg = g_markup_printf_escaped (_("Choose a certificate to present as identification to \"%s\"."),
+				       utf8_cn.get());
 	markup_text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
 				       _("Select a certificate to identify yourself."),
 				       msg);
 	gtk_label_set_markup (GTK_LABEL (label), markup_text);
 	g_free (msg);
-	g_free (tt_cn);
 	g_free (markup_text);
 
         /* Create and populate the combo */

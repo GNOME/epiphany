@@ -199,24 +199,24 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent,
 		return TRUE;
 	}
 
-	display_name = g_filename_display_name (filename);
+	display_name = g_filename_display_basename (filename);
 
 	dialog = gtk_message_dialog_new
 		(parent ? GTK_WINDOW (parent) : NULL,
 		 GTK_DIALOG_DESTROY_WITH_PARENT,
-		 GTK_MESSAGE_WARNING,
+		 GTK_MESSAGE_QUESTION,
 		 GTK_BUTTONS_CANCEL,
-		 _("A file %s already exists."), display_name);
+		 _("Overwrite \"%s\"?"), display_name);
 
 	gtk_message_dialog_format_secondary_text
 		(GTK_MESSAGE_DIALOG (dialog),
-		 _("If you choose to overwrite this file, "
-		   "the contents will be lost."));
+		 _("A file with this name already exists. If you choose to "
+		   "overwrite this file, the contents will be lost."));
 
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
 			       _("_Overwrite"), GTK_RESPONSE_ACCEPT);
 
-	gtk_window_set_title (GTK_WINDOW (dialog), _("Overwrite File"));
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Overwrite File?"));
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);

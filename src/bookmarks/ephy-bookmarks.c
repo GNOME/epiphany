@@ -538,16 +538,16 @@ redirect_cb (EphyHistory *history,
 	gtk_message_dialog_format_secondary_markup
 		(GTK_MESSAGE_DIALOG (dialog),
 		/* translators: the %s is a URL */
-		_("The bookmarked page has moved to <tt>%s</tt>."),
+		_("The bookmarked page has moved to \"%s\"."),
 		to_uri);
 
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
-				_("_Don't update bookmark"), GTK_RESPONSE_REJECT);
+				_("_Don't Update"), GTK_RESPONSE_REJECT);
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
-				_("_Update bookmark"), GTK_RESPONSE_ACCEPT);
+				_("_Update"), GTK_RESPONSE_ACCEPT);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_REJECT);
 
-	gtk_window_set_title (GTK_WINDOW (dialog), _("Update bookmark?"));
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Update Bookmark?"));
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	g_object_set_data_full (G_OBJECT (dialog), UPDATE_URI_DATA_KEY,

@@ -1,3 +1,20 @@
+2005-01-15  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+
+	Don't use <tt> in the strings. Fixes bug #163378.
+
+	* lib/ephy-gui.c: (ephy_gui_confirm_overwrite_file):
+	* src/bookmarks/ephy-bookmarks.c: (redirect_cb):
+
+	Fix button text and capitalisation in the confirm-redirect-update
+	dialogue. Fixes bug #164131.
+
+	* src/ephy-window.c: (confirm_close_with_modified_forms):
+
+	Fix primary text of confirm-close command not to have a period.
+
 2005-01-15  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* src/ephy-shell.c (ephy_shell_get_default): 

@@ -659,7 +659,7 @@ confirm_close_with_modified_forms (EphyWindow *window)
 		 GTK_DIALOG_MODAL,
 		 GTK_MESSAGE_WARNING,
 		 GTK_BUTTONS_CANCEL,
-		 _("There are unsubmitted changes to form elements."));
+		 _("There are unsubmitted changes to form elements"));
 
 	gtk_message_dialog_format_secondary_text
 		(GTK_MESSAGE_DIALOG (dialog),

@@ -288,7 +288,7 @@ GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,
                                       const nsACString &targetURL,
                                       nsIX509Cert *cert, PRBool *_retval)
 {
-	char *ttTargetUrl, *ttCommonName, *first, *second, *msg;
+	char *first, *second, *msg;
 	int res;
 
 	nsEmbedString commonName;
@@ -298,20 +298,17 @@ GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
- 	ttTargetUrl = g_markup_printf_escaped ("\"<tt>%s</tt>\"", 
-                                               nsEmbedCString(targetURL).get());
+	nsEmbedCString cTargetUrl (targetURL);
 
-	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", cCommonName.get());
+        first = g_markup_printf_escaped (_("The site \"%s\" returned security information for "
+					   "\"%s\". It is possible that someone is intercepting "
+					   "your communication to obtain your confidential "
+					   "information."),
+					 cTargetUrl.get(), cCommonName.get());
 
-        first = g_strdup_printf (_("The site %s returned security information for "
-				   "%s. It is possible that someone is intercepting "
-				   "your communication to obtain your confidential "
-				   "information."),
-				 ttTargetUrl, ttCommonName);
-
-        second = g_strdup_printf (_("You should only accept the security information if you "
-                                    "trust %s and %s."),
-                                  ttTargetUrl, ttCommonName);
+        second = g_markup_printf_escaped (_("You should only accept the security information if you "
+					    "trust \"%s\" and \"%s\"."),
+					  cTargetUrl.get(), cCommonName.get());
 	
 	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n\n%s",
 			       _("Accept incorrect security information?"),
@@ -319,8 +316,6 @@ GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,
  
 	res = display_cert_warning_box (ctx, cert, msg, NULL, NULL, NULL);
  
-	g_free (ttTargetUrl);
-	g_free (ttCommonName);
         g_free (second);
         g_free (first);
         g_free (msg);
@@ -336,7 +331,7 @@ GtkNSSDialogs::ConfirmUnknownIssuer (nsIInterfaceRequestor *ctx,
                                      PRBool *_retval)
 {
 	gboolean accept_perm = FALSE;
-	char *ttCommonName, *secondary, *tertiary, *msg;
+	char *secondary, *tertiary, *msg;
 	int res;
 
 	nsEmbedString commonName;
@@ -346,18 +341,16 @@ GtkNSSDialogs::ConfirmUnknownIssuer (nsIInterfaceRequestor *ctx,
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
-	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", cCommonName.get());
-
-	secondary = g_strdup_printf
-		           (_("It was not possible to automatically trust %s. "
+	secondary = g_markup_printf_escaped
+		           (_("It was not possible to automatically trust \"%s\". "
 			      "It is possible that someone is intercepting your "
 			      "communication to obtain your confidential information."),
-			      ttCommonName);
+			      cCommonName.get());
 
-        tertiary = g_strdup_printf
+        tertiary = g_markup_printf_escaped
 		           (_("You should only connect to the site if you are certain "
-			      "you are connected to %s."),
-			    ttCommonName);
+			      "you are connected to \"%s\"."),
+			    cCommonName.get());
 
 	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n\n%s",
 			       _("Connect to untrusted site?"),
@@ -366,7 +359,6 @@ GtkNSSDialogs::ConfirmUnknownIssuer (nsIInterfaceRequestor *ctx,
 	res = display_cert_warning_box (ctx, cert, msg, 
  					_("_Don't show this message again for this site"),
  					&accept_perm, _("Co_nnect"));
-	g_free (ttCommonName);
         g_free (tertiary);
         g_free (secondary);
         g_free (msg);
@@ -409,7 +401,7 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 	char formattedDate[128];
 	char *fdate;
 	const char *primary, *text;
-	char *ttCommonName, *secondary, *msg;
+	char *secondary, *msg;
 
 	*_retval = PR_FALSE;
 	
@@ -426,14 +418,14 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 	if (LL_CMP(now, >, notAfter))
 	{
 		primary = _("Accept expired security information?");
-		text    = _("The security information for %s "
+		text    = _("The security information for \"%s\" "
 			    "expired on %s.");
 		timeToUse = notAfter;
 	} 
 	else
 	{
 		primary = _("Accept not yet valid security information?");
-		text    = _("The security information for %s isn't valid until %s.");
+		text    = _("The security information for \"%s\" isn't valid until %s.");
 		timeToUse = notBefore;
 	}
 	
@@ -453,9 +445,7 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 		  localtime_r (&t, &tm));
 	fdate = g_locale_to_utf8 (formattedDate, -1, NULL, NULL, NULL);
 
-	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", cCommonName.get());
-
-	secondary = g_strdup_printf (text, ttCommonName, fdate);
+	secondary = g_markup_printf_escaped (text, cCommonName.get(), fdate);
 
 	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n\n%s",
 			       primary, secondary, 
@@ -466,7 +456,6 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 	g_free (fdate);
 	g_free (msg);
 	g_free (secondary);
-	g_free (ttCommonName);
 
 	*_retval = (res == GTK_RESPONSE_ACCEPT);
 	
@@ -480,7 +469,7 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 				    const nsACString & targetURL, nsIX509Cert *cert)
 {
 	GtkWidget *dialog, *label;
-	char *ttCommonName, *ttTargetUrl, *msg, *primary, *secondary;
+	char *msg, *primary, *secondary;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
@@ -504,17 +493,14 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
-	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", cCommonName.get());
+	nsEmbedCString cTargetUrl (targetURL);
 
-	ttTargetUrl = g_markup_printf_escaped ("\"<tt>%s</tt>\"",
-				               nsEmbedCString(targetURL).get());
+	primary = g_markup_printf_escaped (_("Cannot establish connection to \"%s\"."),
+					   cTargetUrl.get());
 
-	primary = g_strdup_printf (_("Cannot establish connection to %s."),
-				   ttTargetUrl);
-
-	secondary = g_strdup_printf (_("The certificate revocation list (CRL) from %s "
-				       "needs to be updated."),
-				     ttCommonName);
+	secondary = g_markup_printf_escaped (_("The certificate revocation list (CRL) from \"%s\" "
+					       "needs to be updated."),
+					     cCommonName.get());
 	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n\n%s",
 			       primary, secondary,
 			       _("Please ask your system administrator for assistance."));
@@ -524,8 +510,6 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 	g_free (primary);
 	g_free (secondary);
 	g_free (msg);
-	g_free (ttCommonName);
-	g_free (ttTargetUrl);
 
 	gtk_widget_show_all (dialog);
 
@@ -545,7 +529,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 {
 	GtkWidget *dialog, *label, *content_vbox, *vbox;
 	GtkWidget *check_ssl, *check_software;
-	char *ttCommonName, *msg, *tertiary;
+	char *msg, *tertiary;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
@@ -577,10 +561,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
-	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"",  cCommonName.get());
-
-	tertiary = g_strdup_printf (_("Trust %s to identify:"), ttCommonName);
-	g_free (ttCommonName);
+	tertiary = g_markup_printf_escaped (_("Trust \"%s\" to identify:"), cCommonName.get());
 
 	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n\n%s",
 			       _("Trust new Certificate Authority?"),
