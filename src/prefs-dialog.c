@@ -701,9 +701,14 @@ create_fonts_language_menu (PrefsDialog *dialog)
 	gtk_option_menu_set_menu (GTK_OPTION_MENU(optionmenu), menu);
 
 	lang_codes = g_new0 (char *, n_fonts_languages);
-	for (i = 0; i < n_fonts_languages; i++)
+	i = 0;
+	for (l = dialog->priv->fonts_languages; l != NULL; l = l->next)
 	{
-		lang_codes[i] = fonts_language[i].code;
+		FontsLanguageInfo *info = (FontsLanguageInfo *) l->data;
+
+		lang_codes[i] = info->code;
+		
+		i++;
 	}
 	ephy_dialog_add_enum (EPHY_DIALOG (dialog), FONTS_LANGUAGE_PROP,
 			      n_fonts_languages, (const char **) lang_codes);
