@@ -160,7 +160,7 @@ GtkNSSSecurityWarningDialogs::ConfirmPostToInsecure (nsIInterfaceRequestor *aCon
 		  _("The information you have entered will be sent over an "
 		    "insecure connection, and could easily be intercepted "
 		    "by a third party."),
-		  _("Send"),
+		  _("_Send"),
 		  _retval);
 
 	return NS_OK;
@@ -181,7 +181,7 @@ GtkNSSSecurityWarningDialogs::ConfirmPostToInsecureFromSecure (nsIInterfaceReque
 		    "the information you have entered will be sent over an "
 		    "insecure connection, and could easily be intercepted by "
 		    "a third party."),
-		  _("Send"),
+		  _("_Send"),
 		  _retval);
 
 	return NS_OK;
