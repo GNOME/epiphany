@@ -352,6 +352,7 @@ downloader_view_build_ui (DownloaderView *dv)
 
 	gtk_tree_view_set_model (GTK_TREE_VIEW(priv->treeview),
 				 GTK_TREE_MODEL (liststore));
+	g_object_unref (liststore);
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(priv->treeview),
 					   TRUE);
 

@@ -267,6 +267,7 @@ language_editor_set_view (LanguageEditor *ge,
 
         gtk_tree_view_set_model (GTK_TREE_VIEW(ge->priv->treeview),
                                  ge->priv->model);
+	g_object_unref (ge->priv->model);
         gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ge->priv->treeview),
                                            FALSE);
 
