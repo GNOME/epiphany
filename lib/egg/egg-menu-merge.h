@@ -86,7 +86,7 @@ GtkWidget    *egg_menu_merge_get_widget          (EggMenuMerge *self,
  * interface */
 guint         egg_menu_merge_add_ui_from_string  (EggMenuMerge *self,
 						  const gchar *buffer,
-						  guint length,
+						  glong length,
 						  GError **error);
 guint         egg_menu_merge_add_ui_from_file    (EggMenuMerge *self,
 						  const gchar *filename,
