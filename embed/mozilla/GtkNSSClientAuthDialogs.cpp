@@ -30,6 +30,7 @@
 #include "nsIInterfaceRequestor.h"
 #include "nsIInterfaceRequestorUtils.h"
 
+#include <gtk/gtkversion.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkstock.h>
@@ -44,6 +45,14 @@
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkexpander.h>
+#if GTK_CHECK_VERSION (2,3,0)
+#include <gtk/gtkliststore.h>
+#include <gtk/gtktreemodel.h>
+#include <gtk/gtkcelllayout.h>
+#include <gtk/gtkcellrenderer.h>
+#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtkcombobox.h>
+#endif
 #include <glib/gi18n.h>
 
 #include "GtkNSSClientAuthDialogs.h"
@@ -84,6 +93,37 @@ higgy_indent_widget (GtkWidget *widget)
 	return hbox;
 }
 
+#if GTK_CHECK_VERSION(2,3,0)
+
+static void
+combo_changed_cb (GtkComboBox *combo, GtkTextView *textview)
+{
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	GtkTextBuffer *buffer;
+	int index;
+
+	model = gtk_combo_box_get_model (combo);
+	index = gtk_combo_box_get_active (combo);
+	buffer = gtk_text_view_get_buffer (textview);
+
+	if (gtk_tree_model_iter_nth_child (model, &iter, NULL, index))
+	{
+		char *text;
+
+		gtk_tree_model_get (model, &iter, 1, &text, -1);
+
+		gtk_text_buffer_set_text (buffer, text, -1);
+
+		g_free (text);
+	}
+	else
+	{
+		gtk_text_buffer_set_text (buffer, "", -1);
+	}
+}
+
+#else
 
 static void
 option_menu_changed_cb (GtkOptionMenu *optionmenu, GtkTextView *textview)
@@ -106,6 +146,8 @@ option_menu_changed_cb (GtkOptionMenu *optionmenu, GtkTextView *textview)
 	gtk_text_buffer_set_text (buffer, PromiseFlatCString(certnick).get(), -1);
 }
 
+#endif
+
 NS_IMETHODIMP
 GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 					    const PRUnichar *cn, 
@@ -116,8 +158,16 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 					    PRUint32 count, PRInt32 *selectedIndex,
 					    PRBool *canceled)
 {
-	GtkWidget *dialog, *label, *vbox, *optionmenu, *textview, *menu;
+	GtkWidget *dialog, *label, *vbox, *textview;
 	GtkWidget *details, *expander, *hbox, *image;
+#if GTK_CHECK_VERSION(2,3,0)
+	GtkWidget *combo;
+	GtkListStore *store;
+	GtkTreeIter iter;
+	GtkCellRenderer *renderer;
+#else
+	GtkWidget *menu, *optionmenu;
+#endif
 	char *msg, *tt_cn, *markup_text;
 	PRUint32 i;
 	gboolean showDetails;
@@ -180,6 +230,31 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	g_free (markup_text);
 
         /* Create and populate the option menu */
+#if GTK_CHECK_VERSION (2,3,0)
+	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+	for (i = 0; i < count; i++)
+	{
+		const nsACString &certnick = NS_ConvertUCS2toUTF8(certNickList[i]);
+		const nsACString &certdetail = NS_ConvertUCS2toUTF8(certDetailsList[i]);
+
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter,
+				    0, PromiseFlatCString(certnick).get(),
+				    1, PromiseFlatCString(certdetail).get(),
+				    -1);
+	}
+
+	combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
+
+        renderer = gtk_cell_renderer_text_new ();
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
+                                        "text", 0,
+                                        NULL);
+
+	gtk_widget_show (combo);
+	gtk_box_pack_start (GTK_BOX (vbox), combo, FALSE, TRUE, 0);
+#else
 	optionmenu = gtk_option_menu_new ();
 	menu = gtk_menu_new ();
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), menu);
@@ -195,7 +270,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 		g_object_set_data (G_OBJECT (item), "details", (void*)certDetailsList[i]);
 		gtk_widget_show (item);
 	}
-
+#endif
 
 	expander = gtk_expander_new_with_mnemonic (_("Certificate _Details"));
 	ephy_state_add_expander (GTK_WIDGET (expander), "client-auth-dialog-expander", FALSE);
@@ -224,18 +299,30 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 
 	gtk_container_add (GTK_CONTAINER (expander), details);
 
+#if GTK_CHECK_VERSION(2,3,0)
+	g_signal_connect (G_OBJECT (combo), "changed",
+			  G_CALLBACK (combo_changed_cb),
+			  textview);
+
+	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+#else
 	g_signal_connect (G_OBJECT (optionmenu), "changed",
 			  G_CALLBACK (option_menu_changed_cb),
 			  textview);
 
 	gtk_option_menu_set_history (GTK_OPTION_MENU (optionmenu), 0);
+#endif
 
 	/* run the dialog */
 	int res = gtk_dialog_run (GTK_DIALOG (dialog));
 	if (res == GTK_RESPONSE_OK)
 	{
 		*canceled = PR_FALSE;
+#if GTK_CHECK_VERSION(2,3,0)
+		*selectedIndex = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
+#else
 		*selectedIndex = gtk_option_menu_get_history (GTK_OPTION_MENU (optionmenu));
+#endif
 	} 
 	else
 	{
