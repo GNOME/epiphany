@@ -1335,8 +1335,8 @@ mozilla_embed_emit_mouse_signal (MozillaEmbed *membed,
 	wrapper = MOZILLA_EMBED(membed)->priv->wrapper;
 	g_return_val_if_fail (wrapper != NULL, G_FAILED);
 	
-	event_context.Init ((nsIDOMEvent*)dom_event, wrapper);
-        result = event_context.GetMouseEventInfo (info);
+	event_context.Init (wrapper);
+        result = event_context.GetMouseEventInfo (static_cast<nsIDOMMouseEvent*>(dom_event), info);
 	if (NS_SUCCEEDED(result))
 	{
 		nsCOMPtr<nsIDOMDocument> domDoc;

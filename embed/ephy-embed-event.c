@@ -136,11 +136,11 @@ ephy_embed_event_get_mouse_button (EphyEmbedEvent *event,
 }
 
 gresult
-ephy_embed_event_get_mouse_coords (EphyEmbedEvent *event,
-				   guint *x, guint *y)
+ephy_embed_event_get_coords (EphyEmbedEvent *event,
+			     guint *x, guint *y)
 {
-	*x = event->mouse_x;
-	*y = event->mouse_y;
+	*x = event->x;
+	*y = event->y;
 	return G_OK;
 }
 

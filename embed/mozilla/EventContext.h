@@ -42,16 +42,17 @@ public:
 	EventContext();
 	~EventContext();
 
-	nsresult Init (nsIDOMEvent *event, EphyWrapper *wrapper);
+	nsresult Init (EphyWrapper *wrapper);
 
-	nsresult GetMouseEventInfo (EphyEmbedEvent *info);
+	nsresult GetMouseEventInfo (nsIDOMMouseEvent *event, EphyEmbedEvent *info);
 	nsresult GetTargetDocument (nsIDOMDocument **domDoc);
 
 private:
-	nsIDOMEvent *mEvent;
 	EphyWrapper *mWrapper;
 	nsCOMPtr<nsIDOMDocument> mDOMDocument;
 
+	nsresult ResolveBaseURL (nsIDocument *doc, const nsAString &relurl, nsACString &url);
+	nsresult ResolveDocumentURL (nsIDocument *doc, const nsAString &relurl, nsACString &url);
 	nsresult GetEventContext (nsIDOMEventTarget *EventTarget,
 				  EphyEmbedEvent *info);
 	nsresult GetCSSBackground (nsIDOMNode *node, nsAutoString& url);

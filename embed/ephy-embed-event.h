@@ -59,7 +59,7 @@ struct EphyEmbedEvent
 	guint modifier;
 	guint mouse_button;
 	guint context;
-	guint mouse_x, mouse_y;
+	guint x, y;
 };
 
 struct EphyEmbedEventClass
@@ -76,7 +76,7 @@ guint		  ephy_embed_event_get_modifier		(EphyEmbedEvent *event);
 gresult		  ephy_embed_event_get_mouse_button	(EphyEmbedEvent *event,
 							 guint *mouse_button);
 
-gresult		  ephy_embed_event_get_mouse_coords	(EphyEmbedEvent *event,
+gresult		  ephy_embed_event_get_coords		(EphyEmbedEvent *event,
 							 guint *x, guint *y);
 
 gresult		  ephy_embed_event_get_context		(EphyEmbedEvent *event,

@@ -50,13 +50,36 @@ EventContext::~EventContext ()
 {
 }
 
-nsresult EventContext::Init (nsIDOMEvent *event, EphyWrapper *wrapper)
+nsresult EventContext::Init (EphyWrapper *wrapper)
 {
-	mEvent = event;
 	mWrapper = wrapper;
 	mDOMDocument = nsnull;
 
 	return NS_OK;
+}
+
+nsresult EventContext::ResolveBaseURL (nsIDocument *doc, const nsAString &relurl, nsACString &url)
+{
+	nsresult rv;
+	nsCOMPtr<nsIURI> base;
+#if MOZILLA_SNAPSHOT > 9
+	rv = doc->GetBaseURL (getter_AddRefs(base));
+#else
+	rv = doc->GetBaseURL (*getter_AddRefs(base));
+#endif
+	if (NS_FAILED(rv)) return rv;
+
+	return base->Resolve (NS_ConvertUCS2toUTF8(relurl), url);
+}
+
+nsresult EventContext::ResolveDocumentURL (nsIDocument *doc, const nsAString &relurl, nsACString &url)
+{
+	nsresult rv;
+	nsCOMPtr<nsIURI> uri;
+	rv = doc->GetDocumentURL(getter_AddRefs(uri));
+	if (NS_FAILED(rv)) return rv;
+
+	return uri->Resolve (NS_ConvertUCS2toUTF8(relurl), url);
 }
 
 nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
@@ -131,15 +154,10 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			if (NS_SUCCEEDED(rv) && !img.IsEmpty())
 			{
 				nsCAutoString imglongdesc;
-				const nsACString &src = NS_ConvertUCS2toUTF8(img);
-
-				nsCOMPtr<nsIURI> uri;
-				doc->GetDocumentURL(getter_AddRefs(uri));
-
-				rv = uri->Resolve (src, imglongdesc);
-
-				SetStringProperty ("image_long_desc",
-						   NS_ConvertUTF8toUCS2(imglongdesc));
+                                rv = ResolveDocumentURL (doc, img, imglongdesc);
+                                                                                                                
+                                SetStringProperty ("image_long_desc",
+                                                   NS_ConvertUTF8toUCS2(imglongdesc));
 			}
 
 			int imgwidth, imgheight;
@@ -179,15 +197,10 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
 				nsCAutoString cImg;
-				const nsACString &src = NS_ConvertUCS2toUTF8(img);
-
-				nsCOMPtr<nsIURI> uri;
-				doc->GetDocumentURL(getter_AddRefs(uri));
-                                rv = uri->Resolve (src, cImg);
+				rv = ResolveDocumentURL (doc, img, cImg);
+                                if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 				SetStringProperty ("image",
 						   NS_ConvertUTF8toUCS2(cImg));
-
-				if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 			}
 			else if (!value.Equals(NS_LITERAL_STRING("radio"),
 					       nsCaseInsensitiveStringComparator()) &&
@@ -234,15 +247,10 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 				
 				nsCAutoString cImg;
-				const nsACString &src = NS_ConvertUCS2toUTF8(img);
+				rv = ResolveDocumentURL (doc, img, cImg);
+                                if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
-				nsCOMPtr<nsIURI> uri;
-				doc->GetDocumentURL(getter_AddRefs(uri));
-				rv = uri->Resolve (src, cImg);
-				SetStringProperty ("image",
-						   NS_ConvertUTF8toUCS2(cImg));
-
-				if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+				SetStringProperty ("image", cImg.get());
 			}
 			else
 			{
@@ -407,16 +415,11 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			if (!value.IsEmpty())
 			{
 				nsCAutoString bgimg;
-				const nsACString &tmp =
-					NS_ConvertUCS2toUTF8(value);
 
-				nsCOMPtr<nsIURI> uri;
-				doc->GetDocumentURL(getter_AddRefs(uri));
-				rv = uri->Resolve (tmp, bgimg);
-				if (NS_FAILED (rv))
-					return NS_ERROR_FAILURE;
-				SetStringProperty ("background_image",
-						   NS_ConvertUTF8toUCS2(bgimg));
+				rv = ResolveDocumentURL (doc, value, bgimg);
+                                if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
+
+				SetStringProperty ("background_image", bgimg.get());
 			}
 			else
 			{
@@ -430,17 +433,13 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					if (!value.IsEmpty())
 					{
 						nsCAutoString bgimg;
-						const nsACString &tmp =
-							NS_ConvertUCS2toUTF8(value);
 
-						nsIURI *uri;
-						doc->GetBaseURL(uri);
-						rv = uri->Resolve 
-							(tmp, bgimg);
+						rv = ResolveBaseURL (doc, value, bgimg);
+                                                if (NS_FAILED(rv))
+                                                        return NS_ERROR_FAILURE;
+
 						SetStringProperty ("background_image",
-						   NS_ConvertUTF8toUCS2(bgimg));
-						if (NS_FAILED (rv))
-							return NS_ERROR_FAILURE;
+						   bgimg.get());
 						has_background = PR_TRUE;
 					}
 				}
@@ -453,15 +452,12 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				if (NS_SUCCEEDED (rv))
 				{
 					nsCAutoString bgimg;
-					const nsACString &tmp =
-						NS_ConvertUCS2toUTF8(cssurl);
 
-					nsIURI *uri;
-					doc->GetBaseURL(uri);
-					rv = uri->Resolve 
-						(tmp, bgimg);
+                                        rv = ResolveBaseURL (doc, cssurl, bgimg);
+                                        if (NS_FAILED (rv))
+                                                return NS_ERROR_FAILURE;
 					SetStringProperty ("background_image",
-						   NS_ConvertUTF8toUCS2(bgimg));
+						           bgimg.get());
 					if (NS_FAILED (rv))
 						return NS_ERROR_FAILURE;
 				}
@@ -522,10 +518,9 @@ nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAutoString& url)
 	return NS_OK;
 }
 
-nsresult EventContext::GetMouseEventInfo (EphyEmbedEvent *info)
+nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, EphyEmbedEvent *info)
 {
 	nsresult result;
-	nsIDOMMouseEvent *aMouseEvent = (nsIDOMMouseEvent*)mEvent;
 
 	/* casting 32-bit guint* to PRUint16* below will break on big-endian */
 	PRUint16 btn;
@@ -533,8 +528,8 @@ nsresult EventContext::GetMouseEventInfo (EphyEmbedEvent *info)
 	info->mouse_button = (guint)btn;
 
 	/* OTOH, casting only between (un)signedness is safe */
-	aMouseEvent->GetScreenX ((PRInt32*)&info->mouse_x);
-	aMouseEvent->GetScreenY ((PRInt32*)&info->mouse_y);
+	aMouseEvent->GetScreenX ((PRInt32*)&info->x);
+	aMouseEvent->GetScreenY ((PRInt32*)&info->y);
 
 	/* be sure we are not clicking on the scroolbars */
 
@@ -652,19 +647,5 @@ nsresult EventContext::SetStringProperty (const char *name, const char *value)
 
 nsresult EventContext::SetStringProperty (const char *name, const nsAString &value)
 {
-	GValue *val = g_new0 (GValue, 1);;
-	char *tmp;
-	
-	tmp = ToNewCString (NS_ConvertUCS2toUTF8(value));
-	
-	g_value_init (val, G_TYPE_STRING);
-
-	g_value_set_string (val, tmp);
-	
-	ephy_embed_event_set_property (mEmbedEvent, 
-			     	       name,
-			     	       val);
-	nsMemory::Free (tmp);
-
-	return NS_OK;
+	return SetStringProperty (name, NS_ConvertUCS2toUTF8(value).get());
 }
