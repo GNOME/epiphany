@@ -4,10 +4,17 @@
 <submenu name="FileMenu" verb="File">
         <menuitem name="FileOpenInWindow" verb="OpenInWindow"/>
 	<menuitem name="FileOpenInTab" verb="OpenInTab"/>
-	<separator name="FileSep2"/>
-	<menuitem name="FileClear" verb="Clear"/>
-	<separator name="FileSep3"/>
+	<separator name="FileSep1"/>
 	<menuitem name="FileClose" verb="Close"/>
+</submenu>
+
+<submenu name="EditMenu" verb="Edit">
+	<menuitem name="EditCut" verb="Cut"/>
+	<menuitem name="EditCopy" verb="Copy"/>
+	<menuitem name="EditPaste" verb="Paste"/>
+	<menuitem name="EditSelectAll" verb="SelectAll"/>
+	<separator name="EditSep1"/>
+	<menuitem name="EditClear" verb="Clear"/>
 </submenu>
 
 <submenu name="HelpMenu" verb="Help">
@@ -22,6 +29,7 @@
 <popup name="EphyHistoryWindowPopup" verb="FakeToplevel">
 	<menuitem name="OpenInWindowBMK" verb="OpenInWindow"/>
 	<menuitem name="OpenInTabBMK" verb="OpenInTab"/>
+	<menuitem name="CopyBMK" verb="Copy"/>
 </popup>
 
 </popups>

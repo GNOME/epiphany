@@ -72,6 +72,14 @@ static void cmd_clear			  (EggAction *action,
 				           EphyHistoryWindow *editor);
 static void cmd_close			  (EggAction *action,
 					   EphyHistoryWindow *editor);
+static void cmd_cut			  (EggAction *action,
+					   EphyHistoryWindow *editor);
+static void cmd_copy			  (EggAction *action,
+					   EphyHistoryWindow *editor);
+static void cmd_paste			  (EggAction *action,
+					   EphyHistoryWindow *editor);
+static void cmd_select_all		  (EggAction *action,
+					   EphyHistoryWindow *editor);
 static void cmd_help_contents		  (EggAction *action,
 					   EphyHistoryWindow *editor);
 
@@ -99,6 +107,7 @@ static GObjectClass *parent_class = NULL;
 static EggActionGroupEntry ephy_history_ui_entries [] = {
 	/* Toplevel */
 	{ "File", N_("_File"), NULL, NULL, NULL, NULL, NULL },
+	{ "Edit", N_("_Edit"), NULL, NULL, NULL, NULL, NULL },
 	{ "Help", N_("_Help"), NULL, NULL, NULL, NULL, NULL },
 	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL },
 
@@ -108,11 +117,23 @@ static EggActionGroupEntry ephy_history_ui_entries [] = {
 	{ "OpenInTab", N_("Open in New _Tab"), NULL, "<shift><control>O",
 	  NULL, G_CALLBACK (cmd_open_bookmarks_in_tabs), NULL },
 
-	{ "Clear", N_("Clea_r"), GTK_STOCK_CLEAR, NULL,
+	{ "Clear", N_("C_lear History"), GTK_STOCK_CLEAR, NULL,
 	  NULL, G_CALLBACK (cmd_clear), NULL },
 
 	{ "Close", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
 	  NULL, G_CALLBACK (cmd_close), NULL },
+
+	{ "Cut", N_("Cu_t"), GTK_STOCK_CUT, "<control>X",
+	  NULL, G_CALLBACK (cmd_cut), NULL },
+
+	{ "Copy", N_("_Copy"), GTK_STOCK_COPY, "<control>C",
+	  NULL, G_CALLBACK (cmd_copy), NULL },
+
+	{ "Paste", N_("_Paste"), GTK_STOCK_PASTE, "<control>V",
+	  NULL, G_CALLBACK (cmd_paste), NULL },
+
+	{ "SelectAll", N_("Select _All"), NULL, "<control>A",
+	  NULL, G_CALLBACK (cmd_select_all), NULL },
 
 	{ "HelpContents", N_("_Contents"), GTK_STOCK_HELP, "F1",
 	  NULL, G_CALLBACK (cmd_help_contents), NULL },
@@ -200,6 +221,79 @@ cmd_open_bookmarks_in_browser (EggAction *action,
 	}
 
 	g_list_free (selection);
+}
+
+static void
+cmd_cut (EggAction *action,
+	 EphyHistoryWindow *editor)
+{
+	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (editor));
+
+	if (GTK_IS_EDITABLE (widget))
+	{
+		gtk_editable_cut_clipboard (GTK_EDITABLE (widget));
+	}
+}
+
+static void
+cmd_copy (EggAction *action,
+	  EphyHistoryWindow *editor)
+{
+	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (editor));
+
+	if (GTK_IS_EDITABLE (widget))
+	{
+		gtk_editable_copy_clipboard (GTK_EDITABLE (widget));
+	}
+
+	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->pages_view)))
+	{
+		GList *selection;
+	
+		selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->pages_view));
+
+		if (g_list_length (selection) == 1)
+		{
+			const char *tmp;
+			EphyNode *node = EPHY_NODE (selection->data);
+			tmp = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_LOCATION);	
+			gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), tmp, -1);
+		}
+
+		g_free (selection);
+	}
+}
+
+static void
+cmd_paste (EggAction *action,
+	   EphyHistoryWindow *editor)
+{
+	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (editor));
+
+	if (GTK_IS_EDITABLE (widget))
+	{
+		gtk_editable_paste_clipboard (GTK_EDITABLE (widget));
+	}
+}
+
+static void
+cmd_select_all (EggAction *action,
+		EphyHistoryWindow *editor)
+{
+	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (editor));
+	GtkWidget *pages_view = editor->priv->pages_view;
+
+	if (GTK_IS_EDITABLE (widget))
+	{
+		gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
+	}
+	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (pages_view)))
+	{
+		GtkTreeSelection *sel;
+
+		sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (pages_view));
+		gtk_tree_selection_select_all (sel);
+	}
 }
 
 static void
@@ -320,17 +414,43 @@ static void
 ephy_history_window_update_menu (EphyHistoryWindow *editor)
 {
 	gboolean open_in_window, open_in_tab;
+	gboolean cut, copy, paste, select_all;
 	gboolean pages_focus, pages_selection;
 	gboolean pages_multiple_selection;
 	EggActionGroup *action_group;
 	EggAction *action;
-	char *open_in_window_label, *open_in_tab_label;
+	char *open_in_window_label, *open_in_tab_label, *copy_label;
+	GtkWidget *focus_widget;
 
 	pages_focus = ephy_node_view_is_target
 		(EPHY_NODE_VIEW (editor->priv->pages_view));
 	pages_selection = ephy_node_view_has_selection
 		(EPHY_NODE_VIEW (editor->priv->pages_view),
 		 &pages_multiple_selection);
+	focus_widget = gtk_window_get_focus (GTK_WINDOW (editor));
+	
+	if (GTK_IS_EDITABLE (focus_widget))
+	{
+		gboolean has_selection;
+		gboolean clipboard_contains_text;
+
+		has_selection = gtk_editable_get_selection_bounds
+			(GTK_EDITABLE (focus_widget), NULL, NULL);
+		clipboard_contains_text = gtk_clipboard_wait_is_text_available 
+			(gtk_clipboard_get (GDK_SELECTION_CLIPBOARD));
+
+		cut = has_selection;
+		copy = has_selection;
+		paste = clipboard_contains_text;
+		select_all = TRUE;
+	}
+	else
+	{
+		cut = FALSE;
+		copy = (pages_focus && !pages_multiple_selection && pages_selection);
+		paste = FALSE;
+		select_all = pages_focus;
+	}
 
 	if (pages_multiple_selection)
 	{
@@ -343,6 +463,16 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 		open_in_tab_label = _("Open in New _Tab");
 	}
 
+	if (pages_focus)
+	{
+		copy_label = _("_Copy Location");
+	}
+	else
+	{
+		copy_label = _("_Copy");
+	}
+
+
 	open_in_window = (pages_focus && pages_selection);
 	open_in_tab = (pages_focus && pages_selection);
 
@@ -353,6 +483,15 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 	action = egg_action_group_get_action (action_group, "OpenInTab");
 	g_object_set (action, "sensitive", open_in_tab, NULL);
 	g_object_set (action, "label", open_in_tab_label, NULL);
+	action = egg_action_group_get_action (action_group, "Cut");
+	g_object_set (action, "sensitive", cut, NULL);
+	action = egg_action_group_get_action (action_group, "Copy");
+	g_object_set (action, "sensitive", copy, NULL);
+	g_object_set (action, "label", copy_label, NULL);
+	action = egg_action_group_get_action (action_group, "Paste");
+	g_object_set (action, "sensitive", paste, NULL);
+	action = egg_action_group_get_action (action_group, "SelectAll");
+	g_object_set (action, "sensitive", select_all, NULL);
 }
 
 static void
@@ -581,6 +720,8 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 
 	/* Update menu sensitivity before showing them */
 	menu = egg_menu_merge_get_widget (ui_merge, "/menu/FileMenu");
+	g_signal_connect (menu, "activate", G_CALLBACK (menu_activate_cb), editor);
+	menu = egg_menu_merge_get_widget (ui_merge, "/menu/EditMenu");
 	g_signal_connect (menu, "activate", G_CALLBACK (menu_activate_cb), editor);
 
 	hpaned = gtk_hpaned_new ();

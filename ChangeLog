@@ -1,3 +1,27 @@
+2003-04-19  David Bordoley <bordoley@msu.edu>
+
+	* data/ui/epiphany-bookmark-editor-ui.xml.in:
+	
+	Add copy to the bookmark context menu.
+	
+	* data/ui/epiphany-history-window-ui.xml.in:
+
+	Add an edit menu. Add copy to history item context menu.
+
+	* src/ephy-history-window.c: (cmd_cut), (cmd_copy),
+	(cmd_paste), (cmd_select_all), (ephy_history_window_update_menu),
+	(ephy_history_window_construct):
+
+	Add edit menu actions. Update the edit menu when activated. 
+	Support copying the location of a history item and change
+	the label to "Copy Location".
+
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_copy),
+	(ephy_bookmarks_editor_update_menu):
+	
+	Support copying the location of a bookmark and change
+	the label to "Copy Location".
+
 2003-04-19  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/ephy-window.c: (menu_activate_cb), (setup_window):

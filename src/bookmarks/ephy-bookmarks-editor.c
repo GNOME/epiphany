@@ -333,6 +333,23 @@ cmd_copy (EggAction *action,
 	{
 		gtk_editable_copy_clipboard (GTK_EDITABLE (widget));
 	}
+
+	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->bm_view)))
+	{
+		GList *selection;
+	
+		selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->bm_view));
+
+		if (g_list_length (selection) == 1)
+		{
+			const char *tmp;
+			EphyNode *node = EPHY_NODE (selection->data);
+			tmp = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);	
+			gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), tmp, -1);
+		}
+
+		g_free (selection);
+	}
 }
 
 static void
@@ -487,7 +504,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 {
 	gboolean open_in_window, open_in_tab,
 		 rename, delete, properties;
-	const gchar *open_in_window_label, *open_in_tab_label;
+	const gchar *open_in_window_label, *open_in_tab_label, *copy_label;
 	gboolean bmk_focus, key_focus;
 	gboolean key_selection, bmk_selection;
 	gboolean key_normal = FALSE;
@@ -502,33 +519,35 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		(EPHY_NODE_VIEW (editor->priv->bm_view));
 	key_focus = ephy_node_view_is_target
 		(EPHY_NODE_VIEW (editor->priv->key_view));
-
 	focus_widget = gtk_window_get_focus (GTK_WINDOW (editor));
-
-	if (GTK_IS_EDITABLE (focus_widget))
-	{
-		gboolean has_selection;
-
-		has_selection = gtk_editable_get_selection_bounds
-			(GTK_EDITABLE (focus_widget), NULL, NULL);
-
-		select_all = paste = TRUE;
-		cut = has_selection;
-		copy = has_selection;
-	}
-	else
-	{
-		select_all = bmk_focus;
-		cut = FALSE;
-		copy = FALSE;
-		paste = FALSE;
-	}
-
 	bmk_selection = ephy_node_view_has_selection
 		(EPHY_NODE_VIEW (editor->priv->bm_view),
 		 &bmk_multiple_selection);
 	key_selection = ephy_node_view_has_selection
 		(EPHY_NODE_VIEW (editor->priv->key_view), NULL);
+
+	if (GTK_IS_EDITABLE (focus_widget))
+	{
+		gboolean has_selection;
+		gboolean clipboard_contains_text;
+
+		has_selection = gtk_editable_get_selection_bounds
+			(GTK_EDITABLE (focus_widget), NULL, NULL);
+		clipboard_contains_text = gtk_clipboard_wait_is_text_available 
+			(gtk_clipboard_get (GDK_SELECTION_CLIPBOARD));
+
+		cut = has_selection;
+		copy = has_selection;
+		paste = clipboard_contains_text;
+		select_all = TRUE;
+	}
+	else
+	{
+		cut = FALSE;
+		copy = (bmk_focus && !bmk_multiple_selection && bmk_selection);
+		paste = FALSE;
+		select_all = bmk_focus;
+	}
 
 	selected = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->key_view));
 	if (key_focus && selected)
@@ -552,6 +571,15 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	{
 		open_in_window_label = _("_Open in New Window");
 		open_in_tab_label = _("Open in New _Tab");
+	}
+
+	if (bmk_focus)
+	{
+		copy_label = _("_Copy Location");
+	}
+	else
+	{
+		copy_label = _("_Copy");
 	}
 
 	open_in_window = (bmk_focus && bmk_selection);
@@ -579,6 +607,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	g_object_set (action, "sensitive", cut, NULL);
 	action = egg_action_group_get_action (action_group, "Copy");
 	g_object_set (action, "sensitive", copy, NULL);
+	g_object_set (action, "label", copy_label, NULL);
 	action = egg_action_group_get_action (action_group, "Paste");
 	g_object_set (action, "sensitive", paste, NULL);
 	action = egg_action_group_get_action (action_group, "SelectAll");
