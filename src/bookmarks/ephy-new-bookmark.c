@@ -265,7 +265,7 @@ ephy_new_bookmark_construct (EphyNewBookmark *editor)
 {
 	ephy_state_add_window (GTK_WIDGET(editor),
 			       "new_bookmark",
-		               280, 240,
+		               280, 240, FALSE,
 			       EPHY_STATE_WINDOW_SAVE_SIZE);
 
 	gtk_window_set_title (GTK_WINDOW (editor),

@@ -321,7 +321,7 @@ build_ui (EphyBookmarkProperties *editor)
 
 	ephy_state_add_window (GTK_WIDGET(editor),
 			       "bookmark_properties",
-		               290, 280,
+		               290, 280, FALSE,
 			       EPHY_STATE_WINDOW_SAVE_SIZE);
 
 	update_window_title (editor);

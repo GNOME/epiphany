@@ -1592,7 +1592,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 
 	ephy_state_add_window (GTK_WIDGET(editor),
 			       "bookmarks_editor",
-		               450, 400,
+		               450, 400, FALSE,
 			       EPHY_STATE_WINDOW_SAVE_SIZE | EPHY_STATE_WINDOW_SAVE_POSITION);
 	ephy_state_add_paned  (GTK_WIDGET (hpaned),
 			       "bookmarks_paned",
