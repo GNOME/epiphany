@@ -148,7 +148,7 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	  N_("Show the contents at the normal size"),
 	  G_CALLBACK (window_cmd_view_zoom_normal), NULL },
 	{ "ViewEncoding", N_("_Encoding"), NULL, NULL, NULL, NULL, NULL },
-	{ "ViewPageSource", N_("_Page Source"), EPHY_STOCK_VIEWSOURCE, NULL,
+	{ "ViewPageSource", N_("_Page Source"), EPHY_STOCK_VIEWSOURCE, "<control>U",
 	  N_("View the source code of the page"),
 	  G_CALLBACK (window_cmd_view_page_source), NULL },
 
