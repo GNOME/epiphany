@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -298,29 +300,6 @@ activate_cb (GtkWidget *widget, GtkAction *action)
 	g_free (text);
 }
 
-static gboolean
-create_menu_proxy (GtkToolItem *item, GtkAction *action)
-{
-	EphyBookmarkAction *bm_action = EPHY_BOOKMARK_ACTION (action);
-	GtkWidget *menu_item;
-	char *menu_id;
-
-	LOG ("create_menu_proxy item %p, action %p", item, action);
-
-	menu_item = GTK_ACTION_GET_CLASS (action)->create_menu_item (action);
-
-	GTK_ACTION_GET_CLASS (action)->connect_proxy (action, menu_item);
-
-	menu_id = g_strdup_printf ("ephy-bookmark-action-%d-menu-id",
-				   bm_action->priv->bookmark_id);
-
-	gtk_tool_item_set_proxy_menu_item (item, menu_id, menu_item);
-
-	g_free (menu_id);
-
-	return TRUE;	
-}
-
 static void
 connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
@@ -349,8 +328,6 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 		entry = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "entry"));
 		g_signal_connect (entry, "activate", G_CALLBACK (activate_cb), action);
-
-		g_signal_connect (proxy, "create_menu_proxy", G_CALLBACK (create_menu_proxy), action);
 	}
 	else if (GTK_IS_MENU_ITEM (proxy))
 	{

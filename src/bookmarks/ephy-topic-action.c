@@ -481,26 +481,6 @@ create_menu_item (GtkAction *action)
 	return menu_item;
 }
 
-static gboolean
-create_menu_proxy (GtkToolItem *item, GtkAction *action)
-{
-	GtkWidget *menu_item;
-	char *menu_id;
-
-	LOG ("create_menu_proxy item %p, action %p", item, action)
-
-	menu_item = create_menu_item (action);
-
-	menu_id = g_strdup_printf ("ephy-topic-action-%d-menu-id",
-				   EPHY_TOPIC_ACTION (action)->priv->topic_id);
-
-	gtk_tool_item_set_proxy_menu_item (item, menu_id, menu_item);
-
-	g_free (menu_id);
-
-	return TRUE;
-}
-
 static void
 connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
@@ -516,10 +496,6 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
-		g_signal_connect_object (proxy, "create_menu_proxy",
-					 G_CALLBACK (create_menu_proxy),
-					 action, 0);
-
 		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
 		g_signal_connect (button, "toggled",
 				  G_CALLBACK (button_toggled_cb), action);
