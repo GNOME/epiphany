@@ -26,7 +26,6 @@
 
 #include "EphyBrowser.h"
 #include "EphyUtils.h"
-#include "MozillaPrivate.h"
 #include "ephy-embed.h"
 #include "ephy-string.h"
 #include "ephy-debug.h"
@@ -330,7 +329,7 @@ nsresult EphyBrowser::SetPrintPreviewMode (PRBool previewMode)
 		print->GetGlobalPrintSettings (getter_AddRefs(settings));
 
 		info = ephy_print_get_print_info ();
-		MozillaCollatePrintSettings (info, settings, TRUE);
+		EphyUtils::CollatePrintSettings (info, settings, TRUE);
 		ephy_print_info_free (info);
 
 		rv = print->PrintPreview (nsnull, mDOMWindow, nsnull);

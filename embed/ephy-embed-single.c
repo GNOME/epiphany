@@ -213,3 +213,10 @@ ephy_embed_single_open_window (EphyEmbedSingle *single,
 	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
 	return iface->open_window (single, parent, address, name, features);
 }
+
+GList *
+ephy_embed_single_get_printer_list (EphyEmbedSingle *single)
+{
+	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
+	return iface->get_printer_list (single);
+}

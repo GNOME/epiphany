@@ -30,7 +30,7 @@
 #include "print-dialog.h"
 #include "ephy-embed.h"
 #include "ephy-command-manager.h"
-#include "MozillaPrivate.h"
+#include "EphyUtils.h"
 #include "PrintingPromptService.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
@@ -63,13 +63,13 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 		return NS_ERROR_ABORT;
 	}
 
-	EphyEmbed *embed = EPHY_EMBED (MozillaFindEmbed (parent));
+	EphyEmbed *embed = EPHY_EMBED (EphyUtils::FindEmbed (parent));
 	NS_ENSURE_TRUE (embed, NS_ERROR_FAILURE);
 
 	if (!(eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) ||
 	      eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE)))
 	{
-		GtkWidget *gtkParent = MozillaFindGtkParent(parent);
+		GtkWidget *gtkParent = EphyUtils::FindGtkParent(parent);
 		NS_ENSURE_TRUE (gtkParent, NS_ERROR_FAILURE);
 
 		dialog = ephy_print_dialog_new (gtkParent, embed);
@@ -96,7 +96,7 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 		info->pages = 0;
 	}
 
-	MozillaCollatePrintSettings (info, printSettings, FALSE);
+	EphyUtils::CollatePrintSettings (info, printSettings, FALSE);
 
 	ephy_print_info_free (info);
 

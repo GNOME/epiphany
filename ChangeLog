@@ -1,3 +1,36 @@
+2004-10-10  Marco Pesenti Gritti  <marco@gnome.org>
+
+	reviewed by: Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/glade/print.glade:
+	* embed/ephy-embed-single.c: (ephy_embed_single_get_printer_list):
+	* embed/ephy-embed-single.h:
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EphyUtils.cpp:
+	* embed/mozilla/EphyUtils.h:
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/mozilla/GtkNSSKeyPairDialogs.cpp:
+	* embed/mozilla/MozillaPrivate.cpp:
+	* embed/mozilla/MozillaPrivate.h:
+	* embed/mozilla/PrintingPromptService.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* embed/print-dialog.c: (ephy_print_dialog_new):
+	* lib/ephy-dialog.c: (set_combo_box_from_value):
+
+	Move current MozillaPrivate helpers to EphyUtils.
+	Use MozillaPrivate for stuff that needs mozilla
+	internal strings.
+
+	Support multiple printers in the print dialog.
+	This is actually a bug fix because on several
+	distributions using hardcoded Poscript/default
+	will simply not work at all.
+
 2004-10-10  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.ac:

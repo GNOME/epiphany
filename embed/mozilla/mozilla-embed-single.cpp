@@ -627,6 +627,12 @@ impl_get_offline_mode (EphyEmbedSingle *shell)
 }
 
 static GList *
+impl_get_printer_list (EphyEmbedSingle *shell)
+{
+	return MozillaPrivate::GetPrinterList ();
+}
+
+static GList *
 impl_get_font_list (EphyEmbedSingle *shell,
 		    const char *langGroup)
 {
@@ -958,7 +964,7 @@ impl_open_window (EphyEmbedSingle *single,
 	wWatch->OpenWindow (domWindow, address, name, features, nsnull,
 			    getter_AddRefs (newWindow));
 
-	return MozillaFindEmbed (newWindow);
+	return EphyUtils::FindEmbed (newWindow);
 }
 
 static void
@@ -983,6 +989,7 @@ ephy_embed_single_iface_init (EphyEmbedSingleIface *iface)
 	iface->get_offline_mode = impl_get_offline_mode;
 	iface->get_font_list = impl_get_font_list;
 	iface->open_window = impl_open_window;
+	iface->get_printer_list = impl_get_printer_list;
 }
 
 static void

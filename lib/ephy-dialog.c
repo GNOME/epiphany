@@ -587,13 +587,7 @@ set_combo_box_from_value (PropertyInfo *info, const  GValue *value)
 		}
 		else
 		{
-			char *v;
-
-			gtk_combo_box_set_active (GTK_COMBO_BOX (info->widget), -1);
-
-			v = g_strdup_value_contents (value);
-			g_warning ("Value '%s' not found in model for combo %s\n", v, info->id);
-			g_free (v);
+			gtk_combo_box_set_active (GTK_COMBO_BOX (info->widget), 0);
 		}
 
 		info->sane_state = found;

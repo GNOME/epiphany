@@ -25,6 +25,8 @@
 
 #include "print-dialog.h"
 #include "ephy-embed-dialog.h"
+#include "ephy-embed-single.h"
+#include "ephy-embed-shell.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-stock-icons.h"
@@ -36,10 +38,13 @@
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkcombobox.h>
+#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtkcelllayout.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
 
-#define CONF_PRINT_PRINTER	"/apps/epiphany/dialogs/print_printer"
+#define CONF_PRINT_PRINTER	"/apps/epiphany/dialogs/print_printer_name"
 #define CONF_PRINT_FILE		"/apps/epiphany/dialogs/print_file"
 #define CONF_PRINT_DIR		"/apps/epiphany/directories/print_to_file"
 #define CONF_PRINT_PRINTON	"/apps/epiphany/dialogs/print_on"
@@ -72,12 +77,18 @@ enum
 	FROM_PROP
 };
 
+enum
+{
+	COL_PRINTER_DISPLAY_NAME,
+	COL_PRINTER_NAME
+};
+
 static const
 EphyDialogProperty print_props [] =
 {
 	{ "print_dialog",			NULL,			  PT_NORMAL,    0 },
 	{ "printer_radiobutton",		CONF_PRINT_PRINTON,	  PT_AUTOAPPLY, 0 },
-	{ "printer_entry",			CONF_PRINT_PRINTER,	  PT_AUTOAPPLY, 0 },
+	{ "printer_combobox",			CONF_PRINT_PRINTER,	  PT_AUTOAPPLY, G_TYPE_STRING },
 	{ "file_entry",				CONF_PRINT_FILE,	  PT_AUTOAPPLY, 0 },
 	{ "browse_button",			NULL,			  PT_NORMAL,	0 },
 	{ "all_pages_radiobutton",		CONF_PRINT_ALL_PAGES,	  PT_AUTOAPPLY, 0 },
@@ -356,7 +367,12 @@ ephy_print_dialog_new (GtkWidget *parent,
 		       EphyEmbed *embed)
 {
 	EphyDialog *dialog;
-	GtkWidget *window, *button;
+	GtkWidget *widget;
+	GList *printers, *l;
+	GtkListStore *store;
+	GtkTreeIter iter;
+	GtkCellRenderer *renderer;
+	EphyEmbedSingle *single;
 
 	dialog =  EPHY_DIALOG (g_object_new (EPHY_TYPE_EMBED_DIALOG,
 					     "embed", embed,
@@ -373,11 +389,38 @@ ephy_print_dialog_new (GtkWidget *parent,
 			       "print_dialog",
 			       NULL);
 
-	window = ephy_dialog_get_control (dialog, print_props[WINDOW_PROP].id);
-	gtk_window_set_icon_name (GTK_WINDOW (window), GTK_STOCK_PRINT);
+	widget = ephy_dialog_get_control (dialog, print_props[WINDOW_PROP].id);
+	gtk_window_set_icon_name (GTK_WINDOW (widget), GTK_STOCK_PRINT);
 
-	button = ephy_dialog_get_control (dialog, print_props[BROWSE_PROP].id);
-	gtk_widget_set_sensitive (button, eel_gconf_key_is_writable (CONF_PRINT_FILE));
+	widget = ephy_dialog_get_control (dialog, print_props[BROWSE_PROP].id);
+	gtk_widget_set_sensitive (widget, eel_gconf_key_is_writable (CONF_PRINT_FILE));
+
+	widget = ephy_dialog_get_control (dialog, print_props[PRINTER_PROP].id);
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
+	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+
+	printers = ephy_embed_single_get_printer_list (single);
+	for (l = printers; l != NULL; l = l->next)
+	{
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter,
+				    COL_PRINTER_DISPLAY_NAME, l->data,
+				    COL_PRINTER_NAME, l->data,
+				    -1);
+	}
+	g_list_foreach (printers, (GFunc)g_free, NULL);
+	g_list_free (printers);
+
+	gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
+	g_object_unref (store);
+
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), renderer, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), renderer,
+					"text", COL_PRINTER_DISPLAY_NAME,
+					NULL);
+	ephy_dialog_set_data_column (dialog, print_props[PRINTER_PROP].id,
+				     COL_PRINTER_NAME);
 
 	return dialog;
 }

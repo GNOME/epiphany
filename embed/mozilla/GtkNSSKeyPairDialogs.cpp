@@ -43,7 +43,7 @@
 
 #ifdef HAVE_MOZILLA_PSM
 
-#include "MozillaPrivate.h"
+#include "EphyUtils.h"
 
 #include <nsIServiceManager.h>
 #include <nsIInterfaceRequestor.h>
@@ -169,7 +169,7 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWidget *gparent = MozillaFindGtkParent (parent);
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
 	dialog = gtk_dialog_new_with_buttons ("", GTK_WINDOW (gparent),
 					      GTK_DIALOG_NO_SEPARATOR, NULL);

@@ -54,8 +54,8 @@
 #include "eel-gconf-extensions.h"
 
 #include "ContentHandler.h"
-#include "MozillaPrivate.h"
 #include "MozDownload.h"
+#include "EphyUtils.h"
 
 class GContentHandler;
 
@@ -143,7 +143,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	}
 
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (aWindowContext);
-	GtkWidget *parentWindow = GTK_WIDGET (MozillaFindGtkParent (parentDOMWindow));
+	GtkWidget *parentWindow = GTK_WIDGET (EphyUtils::FindGtkParent (parentDOMWindow));
 
 	dialog = ephy_file_chooser_new (_("Save"), parentWindow,
 					GTK_FILE_CHOOSER_ACTION_SAVE,
@@ -267,7 +267,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	int response;
 
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (mContext);
-	GtkWindow *parentWindow = GTK_WINDOW (MozillaFindGtkParent(parentDOMWindow));
+	GtkWindow *parentWindow = GTK_WINDOW (EphyUtils::FindGtkParent(parentDOMWindow));
 
 	action_label =  (mAction == CONTENT_ACTION_OPEN) ||
 			(mAction == CONTENT_ACTION_OPEN_TMP) ?
