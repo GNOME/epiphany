@@ -253,7 +253,7 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 	gtk_widget_show (label);
 
 	label = gtk_label_new (_("Clearing the browsing history will cause all"
-				 " history items to be permanently deleted."));
+				 " history links to be permanently deleted."));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
