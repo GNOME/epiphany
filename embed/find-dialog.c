@@ -206,7 +206,7 @@ ensure_constructed (FindDialog *dialog)
 }
 
 static void
-sync_page_change (EphyEmbed *embed, FindDialog *dialog)
+sync_page_change (EphyEmbed *embed, const char *address, FindDialog *dialog)
 {
 	g_return_if_fail (IS_EPHY_EMBED (embed));
 

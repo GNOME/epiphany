@@ -1,3 +1,15 @@
+2003-06-29  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-nautilus-view.c: (gnv_embed_location_cb):
+	* src/ephy-tab.c: (ephy_tab_address_cb):
+	* embed/find-dialog.c: (sync_page_change):
+
+	Fix callbacks for new signature of ge_location embed signal.
+
+	* src/ephy-tab.c: (ephy_tab_icon_cache_changed_cb):
+
+	Fix logic to update the site icon.
+
 2003-06-29  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/egg/egg-action.c: (egg_action_init), (egg_action_finalize),

@@ -502,7 +502,7 @@ ephy_tab_icon_cache_changed_cb (EphyFaviconCache *cache,
 
 	/* is this for us? */
 	if (tab->priv->icon_address != NULL &&
-	    strcmp (tab->priv->icon_address, address) != 0)
+	    strcmp (tab->priv->icon_address, address) == 0)
 	{
 		/* notify */
 		g_object_notify (G_OBJECT (tab), "icon");
@@ -555,14 +555,14 @@ ephy_tab_favicon_cb (EphyEmbed *embed,
 
 static void
 ephy_tab_link_message_cb (EphyEmbed *embed,
-			  const gchar *message,
+			  const char *message,
 			  EphyTab *tab)
 {
 	ephy_tab_set_link_message (tab, message);
 }
 
 static void
-ephy_tab_address_cb (EphyEmbed *embed, char *address, EphyTab *tab)
+ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 {
 	if (tab->priv->address_expire == TAB_ADDRESS_EXPIRE_NOW)
 	{

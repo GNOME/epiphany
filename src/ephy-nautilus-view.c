@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2001, 2002 Ricardo Fernández Pascual
+ *  Copyright (C) 2001, 2002 Ricardo FernÃ¡ndez Pascual
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +32,8 @@
 #include "ephy-zoom.h"
 #include "ephy-debug.h"
 
-static void		gnv_embed_location_cb 			(EphyEmbed *embed, 
+static void		gnv_embed_location_cb 			(EphyEmbed *embed,
+								 const char *new_uri,
 								 EphyNautilusView *view);
 static void		gnv_embed_title_cb 			(EphyEmbed *embed, 
 								 EphyNautilusView *view);
@@ -334,33 +335,25 @@ gnv_embed_link_message_cb (EphyEmbed *embed, const char *message, EphyNautilusVi
 }
 
 static void
-gnv_embed_location_cb (EphyEmbed *embed, EphyNautilusView *view)
+gnv_embed_location_cb (EphyEmbed *embed, const char *new_uri, EphyNautilusView *view)
 {
-	EphyNautilusViewPrivate *p;
-	const gchar *prefixes_to_ignore[] = 
+	const char *prefixes_to_ignore[] = 
 		{
 			"about:",
 			"javascript:",
 			NULL 
 		};
 	int i = 0;
-	gchar *new_uri;
 
  	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
-	p = view->priv;
 	g_return_if_fail (view->priv->embed == embed);
-
-	ephy_embed_get_location (embed, TRUE, &new_uri);
-
  	g_return_if_fail (new_uri != NULL);
-
 
 	/* don't inform nautilus about uris that it can't understand */
 	while (prefixes_to_ignore[i] != NULL)
 	{
-		if (!strncmp (prefixes_to_ignore[i], new_uri, strlen (prefixes_to_ignore[i])))
+		if (strncmp (prefixes_to_ignore[i], new_uri, strlen (prefixes_to_ignore[i])) == 0)
 		{
-			g_free (new_uri);
 			return;
 		}
 		++i;
@@ -368,8 +361,8 @@ gnv_embed_location_cb (EphyEmbed *embed, EphyNautilusView *view)
 
 	nautilus_view_report_location_change (NAUTILUS_VIEW (view), new_uri, NULL, new_uri);
 
-	g_free (p->location);
-	p->location = new_uri;
+	g_free (view->priv->location);
+	view->priv->location = g_strdup (new_uri);
 }
 
 static void
