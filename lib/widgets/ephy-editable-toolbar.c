@@ -23,6 +23,7 @@
 #include "ephy-dnd.h"
 #include "eggtoolitem.h"
 #include "eggtoolbar.h"
+#include "eggseparatortoolitem.h"
 
 #include <libgnome/gnome-i18n.h>
 #include <string.h>
@@ -50,9 +51,9 @@ static void	ephy_editable_toolbar_class_init (EphyEditableToolbarClass *klass);
 static void	ephy_editable_toolbar_init	 (EphyEditableToolbar *t);
 static void	ephy_editable_toolbar_finalize	 (GObject *object);
 static void	do_merge			 (EphyEditableToolbar *t);
-static void	setup_editor			 (EphyEditableToolbar *etoolbar);
+static void	setup_editor			 (EphyEditableToolbar *etoolbar,
+						  GtkWidget *window);
 static void	update_editor_sheet		 (EphyEditableToolbar *etoolbar);
-static gboolean update_editor_position		 (EphyEditableToolbar *etoolbar);
 
 enum
 {
@@ -79,7 +80,6 @@ struct EphyEditableToolbarPrivate
 	guint ui_id;
 
 	gboolean toolbars_dirty;
-	gboolean editor_pos_dirty;
 	gboolean editor_sheet_dirty;
 	gboolean edit_mode;
 
@@ -177,13 +177,6 @@ ui_update (gpointer data)
 		LOG ("Update ui: editor sheet")
 		update_editor_sheet (etoolbar);
 		etoolbar->priv->editor_sheet_dirty = FALSE;
-	}
-
-	if (etoolbar->priv->editor_pos_dirty)
-	{
-		LOG ("Update ui: editor position (in idle)")
-		g_idle_add ((GSourceFunc)update_editor_position, etoolbar);
-		etoolbar->priv->editor_pos_dirty = FALSE;
 	}
 
 	return FALSE;
@@ -609,7 +602,6 @@ ephy_editable_toolbar_init (EphyEditableToolbar *t)
 	t->priv->editor = NULL;
 	t->priv->ui_id = 0;
 	t->priv->toolbars_dirty = FALSE;
-	t->priv->editor_pos_dirty = FALSE;
 	t->priv->editor_sheet_dirty = FALSE;
 	t->priv->edit_mode = FALSE;
 	t->priv->actions_list = NULL;
@@ -650,71 +642,6 @@ ephy_editable_toolbar_new (EggMenuMerge *merge)
 }
 
 static void
-editor_get_dimensions (EphyEditableToolbar *etoolbar, GtkWidget *toolbar,
-		       int *x, int *y, int *width, int *height)
-{
-	GtkWidget *vbox;
-	GtkBin *popwin;
-	GtkWidget *widget;
-	GtkWidget *table;
-	GtkWidget *label_zone;
-	GtkWidget *action_zone;
-	GtkWidget *popup;
-	GtkRequisition requisition;
-	int avail_height;
-	int avail_width;
-	int work_height;
-	int work_width;
-
-	widget = toolbar;
-	popup  = etoolbar->priv->scrolled_window;
-	popwin = GTK_BIN (etoolbar->priv->editor);
-	vbox = etoolbar->priv->main_box;
-	table = etoolbar->priv->table;
-	action_zone = etoolbar->priv->action_zone;
-	label_zone = etoolbar->priv->label_zone;
-
-	gdk_window_get_origin (toolbar->window, x, y);
-
-	*y += toolbar->allocation.y + toolbar->allocation.height;
-
-	avail_height = gdk_screen_height () - *y;
-	avail_width = gdk_screen_width () - *x;
-
-	gtk_widget_size_request (table, &requisition);
-
-	*width = MIN (avail_width, requisition.width);
-	*height = MIN (avail_height, requisition.height);
-
-	work_width = (2 * GTK_BIN (popwin)->child->style->xthickness +
-		      2 * GTK_CONTAINER (popwin)->border_width +
-		      2 * GTK_CONTAINER (popwin->child)->border_width +
-		      2 * GTK_CONTAINER (vbox)->border_width +
-		      2 * GTK_CONTAINER (popup)->border_width +
-		      2 * GTK_CONTAINER (GTK_BIN (popup)->child)->border_width +
-		      2 * GTK_BIN (popup)->child->style->xthickness);
-	*width += work_width;
-
-	work_height = (2 * GTK_BIN (popwin)->child->style->ythickness +
-		       2 * GTK_CONTAINER (popwin)->border_width +
-		       2 * GTK_CONTAINER (popwin->child)->border_width +
-		       2 * GTK_CONTAINER (vbox)->border_width +
-		       2 * GTK_CONTAINER (popup)->border_width +
-		       2 * GTK_CONTAINER (GTK_BIN (popup)->child)->border_width +
-		       2 * GTK_BIN (popup)->child->style->ythickness);
-	*height += work_height;
-
-	gtk_widget_size_request (label_zone, &requisition);
-	*height += requisition.height;
-	gtk_widget_size_request (action_zone, &requisition);
-	*height += requisition.height;
-	/* Vbox spacing */
-	*height += 2 * 12;
-
-	*x += (toolbar->allocation.x + toolbar->allocation.width)/2 - (*width / 2);
-}
-
-static void
 hide_editor (EphyEditableToolbar *etoolbar)
 {
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
@@ -744,7 +671,6 @@ editor_add_toolbar_cb (GtkWidget *button, EphyEditableToolbar *etoolbar)
 	ephy_toolbars_group_add_toolbar (etoolbar->priv->group);
 
 	etoolbar->priv->toolbars_dirty = TRUE;
-	etoolbar->priv->editor_pos_dirty = TRUE;
 	queue_ui_update (etoolbar);
 }
 
@@ -761,7 +687,6 @@ editor_drag_data_received_cb (GtkWidget *widget,
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 
 	etoolbar->priv->editor_sheet_dirty = TRUE;
-	etoolbar->priv->editor_pos_dirty = TRUE;
 	queue_ui_update (etoolbar);
 }
 
@@ -773,12 +698,11 @@ editor_drag_data_delete_cb (GtkWidget *widget,
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 
 	etoolbar->priv->editor_sheet_dirty = TRUE;
-	etoolbar->priv->editor_pos_dirty = TRUE;
 	queue_ui_update (etoolbar);
 }
 
 static void
-setup_editor (EphyEditableToolbar *etoolbar)
+setup_editor (EphyEditableToolbar *etoolbar, GtkWidget *window)
 {
 	GtkWidget *editor;
 	GtkWidget *scrolled_window;
@@ -792,7 +716,9 @@ setup_editor (EphyEditableToolbar *etoolbar)
 
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 
-	editor = gtk_window_new (GTK_WINDOW_POPUP);
+	editor = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	gtk_widget_set_size_request (GTK_WIDGET (editor), 500, 330);
+	gtk_window_set_transient_for (GTK_WINDOW (editor), GTK_WINDOW (window));
 	etoolbar->priv->editor = editor;
 	frame = gtk_frame_new (NULL);
 	gtk_widget_show (frame);
@@ -843,7 +769,6 @@ setup_editor (EphyEditableToolbar *etoolbar)
 	gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
 	update_editor_sheet (etoolbar);
-	update_editor_position (etoolbar);
 }
 
 static void
@@ -874,8 +799,6 @@ update_editor_sheet (EphyEditableToolbar *etoolbar)
 	table = gtk_table_new (0, 0, TRUE);
 	etoolbar->priv->table = table;
 	gtk_container_set_border_width (GTK_CONTAINER (table), 12);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 12);
 	gtk_widget_show (table);
 	gtk_scrolled_window_add_with_viewport
 		(GTK_SCROLLED_WINDOW (etoolbar->priv->scrolled_window), table);
@@ -937,7 +860,7 @@ update_editor_sheet (EphyEditableToolbar *etoolbar)
 		gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
 
 		gtk_table_attach_defaults (GTK_TABLE (etoolbar->priv->table),
-					   event_box, x, x + 1, y, y + 1);
+				           event_box, x, x + 1, y, y + 1);
 
 		x ++;
 		if (x >= width)
@@ -948,25 +871,6 @@ update_editor_sheet (EphyEditableToolbar *etoolbar)
 	}
 
 	g_list_free (to_drag);
-}
-
-static gboolean
-update_editor_position (EphyEditableToolbar *etoolbar)
-{
-	GtkWidget *editor;
-	int x, y, height, width;
-
-	g_return_val_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar), FALSE);
-
-	editor_get_dimensions (etoolbar, etoolbar->priv->last_toolbar,
-			       &x, &y, &width, &height);
-	editor = etoolbar->priv->editor;
-	gtk_widget_set_size_request (GTK_WIDGET (editor), width, height);
-	gtk_window_move (GTK_WINDOW (editor), x, y);
-
-	LOG ("Editor moved to %d %d %d %d", x, y, width, height)
-
-	return FALSE;
 }
 
 static gboolean
@@ -1030,7 +934,7 @@ set_action_sensitive (EphyToolbarsItem *item, EphyEditableToolbar *etoolbar)
 }
 
 void
-ephy_editable_toolbar_edit (EphyEditableToolbar *etoolbar)
+ephy_editable_toolbar_edit (EphyEditableToolbar *etoolbar, GtkWidget *window)
 {
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 
@@ -1041,7 +945,7 @@ ephy_editable_toolbar_edit (EphyEditableToolbar *etoolbar)
 	ephy_toolbars_group_foreach_item (etoolbar->priv->group,
 					  (EphyToolbarsGroupForeachItemFunc)
 				          set_action_sensitive, etoolbar);
-	setup_editor (etoolbar);
+	setup_editor (etoolbar, window);
 	show_editor (etoolbar);
 }
 

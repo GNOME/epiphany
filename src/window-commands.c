@@ -626,7 +626,8 @@ window_cmd_edit_toolbar (EggAction *action,
 
 	toolbar = ephy_window_get_toolbar (window);
 
-	ephy_editable_toolbar_edit (EPHY_EDITABLE_TOOLBAR (toolbar));
+	ephy_editable_toolbar_edit (EPHY_EDITABLE_TOOLBAR (toolbar),
+				    GTK_WIDGET (window));
 }
 
 void 
