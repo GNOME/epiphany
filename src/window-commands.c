@@ -695,18 +695,25 @@ window_cmd_edit_toolbar (EggAction *action,
 		 EGG_TOOLBARS_MODEL (model));
 	egg_toolbar_editor_load_actions (EGG_TOOLBAR_EDITOR (editor),
 					 ephy_file ("epiphany-toolbar.xml"));
+	gtk_container_set_border_width (GTK_CONTAINER (EGG_TOOLBAR_EDITOR (editor)), 5);
+	gtk_box_set_spacing (GTK_BOX (EGG_TOOLBAR_EDITOR (editor)), 5);
 	gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), editor);
 	g_signal_connect (editor, "destroy",
 			  G_CALLBACK (toolbar_editor_destroy_cb),
 			  t);
 	gtk_widget_show (editor);
+	
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 2);
 
+	gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)), 5);
+	
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
 			       _("_Add a New Toolbar"), RESPONSE_ADD_TOOLBAR);
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
 			       GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
 			       GTK_STOCK_HELP, GTK_RESPONSE_HELP);
+	
 	g_signal_connect (G_OBJECT (dialog), "response",
 			  G_CALLBACK (toolbar_editor_response_cb), NULL);
 	ephy_state_add_window (dialog,

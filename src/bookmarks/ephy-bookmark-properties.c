@@ -335,12 +335,13 @@ build_ui (EphyBookmarkProperties *editor)
 	set_window_icon (editor);
 
 	gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (editor), 6);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (editor)->vbox), 12);
+	gtk_container_set_border_width (GTK_CONTAINER (editor), 5);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (editor)->vbox), 2);
 
 	table = gtk_table_new (2, 2, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 6);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+	gtk_container_set_border_width (GTK_CONTAINER (GTK_TABLE (table)), 5);
 	gtk_widget_show (table);
 
 	entry = gtk_entry_new ();

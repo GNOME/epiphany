@@ -601,7 +601,7 @@ show_cookies_properties (PdmDialog *dialog,
 					  PROP_DIALOG);
 
 	gdialog = gtk_dialog_new_with_buttons
-		 (_("Cookie properties"),
+		 (_("Cookie Properties"),
 		  GTK_WINDOW(parent),
 		  GTK_DIALOG_MODAL,
 		  GTK_STOCK_CLOSE, 0, NULL);
@@ -609,9 +609,9 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_container_set_border_width (GTK_CONTAINER(gdialog), 6);
 
 	table = gtk_table_new (2, 4, FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER(table), 6);
-	gtk_table_set_row_spacings (GTK_TABLE(table), 10);
-	gtk_table_set_col_spacings (GTK_TABLE(table), 10);
+	gtk_container_set_border_width (GTK_CONTAINER(table), 5);
+	gtk_table_set_row_spacings (GTK_TABLE(table), 6);
+	gtk_table_set_col_spacings (GTK_TABLE(table), 12);
 	gtk_widget_show (table);
 
 	str = g_strconcat ("<b>", _("Value:"), "</b>", NULL);

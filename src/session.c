@@ -197,10 +197,11 @@ crashed_resume_dialog (Session *session)
 		 NULL);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (dialog), 6);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 12);
+	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);
 
 	hbox = gtk_hbox_new (FALSE, 6);
+	gtk_container_set_border_width (GTK_CONTAINER (GTK_BOX (hbox)), 5);
 	gtk_widget_show (hbox);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
 			    TRUE, TRUE, 0);

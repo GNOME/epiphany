@@ -207,7 +207,8 @@ build_editing_table (EphyNewBookmark *editor)
 
 	table = gtk_table_new (2, 2, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 6);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+	gtk_container_set_border_width (GTK_CONTAINER (GTK_TABLE (table)), 5);
 	gtk_widget_show (table);
 
 
@@ -273,16 +274,17 @@ ephy_new_bookmark_construct (EphyNewBookmark *editor)
 	g_object_unref(icon);
 
 	gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (editor), 6);
+	gtk_container_set_border_width (GTK_CONTAINER (editor), 5);
 	g_signal_connect (G_OBJECT (editor),
 			  "response",
 			  G_CALLBACK (response_cb),
 			  editor);
 
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (editor)->vbox), 12);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (editor)->vbox), 2);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (editor)->vbox),
 			    build_editing_table (editor),
 			    TRUE, TRUE, 0);
+
 	gtk_dialog_add_button (GTK_DIALOG (editor),
 			       GTK_STOCK_HELP,
 			       GTK_RESPONSE_HELP);
@@ -308,15 +310,16 @@ duplicate_dialog_construct (GtkWindow *parent,
 	 * so we build our own. See bug 65501.
 	 */
 
-	dialog = gtk_dialog_new_with_buttons (_("Duplicated bookmark"),
+	dialog = gtk_dialog_new_with_buttons (_("Duplicated Bookmark"),
 					      GTK_WINDOW (parent),
 					      GTK_DIALOG_NO_SEPARATOR,
 					      GTK_STOCK_OK,
 					      GTK_RESPONSE_OK,
 					      NULL);
 	
-	gtk_container_set_border_width (GTK_CONTAINER (dialog), 6);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 12);
+	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);
 
 	hbox = gtk_hbox_new (FALSE, 6);
 	gtk_widget_show (hbox);
