@@ -36,12 +36,12 @@
 #include "prefs-dialog.h"
 #include "ephy-debug.h"
 #include "ephy-extensions-manager.h"
-#include "toolbar.h"
 #include "ephy-session.h"
 #include "downloader-view.h"
 #include "egg-toolbars-model.h"
 #include "eggtypebuiltins.h"
 #include "ephy-toolbars-model.h"
+#include "ephy-toolbar.h"
 #include "ephy-automation.h"
 #include "print-dialog.h"
 
@@ -551,7 +551,7 @@ ephy_shell_new_tab (EphyShell *shell,
 	EphyEmbed *previous_embed = NULL;
 	GtkWidget *nb;
 	int position = -1;
-	Toolbar *toolbar;
+	EphyToolbar *toolbar;
 
 	if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
 	if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;
@@ -597,7 +597,7 @@ ephy_shell_new_tab (EphyShell *shell,
 	    flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
 		ephy_tab_set_location (tab, "", EPHY_TAB_ADDRESS_EXPIRE_NEXT);
-		toolbar_activate_location (toolbar);
+		ephy_toolbar_activate_location (toolbar);
 		load_homepage (embed);
 	}
 	else if (flags & EPHY_NEW_TAB_OPEN_PAGE)

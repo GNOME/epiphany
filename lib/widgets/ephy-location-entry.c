@@ -1,8 +1,8 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright (C) 2002  Ricardo Fernández Pascual
- *  Copyright (C) 2003  Marco Pesenti Gritti
- *  Copyright (C) 2003  Christian Persch
+ *  Copyright (C) 2003, 2004  Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004, 2005  Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

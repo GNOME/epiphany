@@ -116,18 +116,48 @@
 	<menuitem name="BookmarkPageDP" action="ContextBookmarkPage"/>
 </popup>
 
+<popup name="EphyFullscreenDocumentPopup" action="PopupAction">
+	<menuitem name="GoBackFSDP" action="GoBack"/>
+	<menuitem name="GoForwardFSDP" action="GoForward"/>
+	<menuitem name="GoReloadFSDP" action="ViewReload"/>
+	<separator />
+	<menuitem name="EditCopyFSDP" action="EditCopy"/>
+	<separator />
+	<menuitem name="SavePageAsFSDP" action="FileSaveAs"/>
+	<menuitem name="SaveBackgroundAsFSDP" action="SaveBackgroundAs"/>
+	<menuitem name="BookmarkPageFSDP" action="ContextBookmarkPage"/>
+	<separator />
+	<menuitem name="ViewToolbarFSDP" action="ViewToolbar"/>
+</popup>
+
 <popup name="EphyFramedDocumentPopup" action="PopupAction">
 	<menuitem name="GoBackFDP" action="GoBack"/>
 	<menuitem name="GoForwardFDP" action="GoForward"/>
 	<menuitem name="GoReloadFDP" action="ViewReload"/>
-	<separator name="FDPSep1"/>
+	<separator />
 	<menuitem name="EditCopyFDP" action="EditCopy"/>
-	<separator name="FDPSep2"/>
+	<separator />
 	<menuitem name="SavePageAsFDP" action="FileSaveAs"/>
 	<menuitem name="SaveBackgroundAsFDP" action="SaveBackgroundAs"/>
 	<menuitem name="BookmarkPageFDP" action="ContextBookmarkPage"/>
-	<separator name="FDBSep3"/>
+	<separator />
 	<menuitem name="OpenFrameFDP" action="OpenFrame"/>
+</popup>
+
+<popup name="EphyFullscreenFramedDocumentPopup" action="PopupAction">
+	<menuitem name="GoBackFSFDP" action="GoBack"/>
+	<menuitem name="GoForwardFSFDP" action="GoForward"/>
+	<menuitem name="GoReloadFSFDP" action="ViewReload"/>
+	<separator />
+	<menuitem name="EditCopyFSFDP" action="EditCopy"/>
+	<separator />
+	<menuitem name="SavePageAsFSFDP" action="FileSaveAs"/>
+	<menuitem name="SaveBackgroundAsFSFDP" action="SaveBackgroundAs"/>
+	<menuitem name="BookmarkPageFSFDP" action="ContextBookmarkPage"/>
+	<separator />
+	<menuitem name="OpenFrameFSFDP" action="OpenFrame"/>
+	<separator />
+	<menuitem name="ViewToolbarFSFDP" action="ViewToolbar"/>
 </popup>
 
 <popup name="EphyLinkPopup" action="PopupAction">

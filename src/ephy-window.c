@@ -44,7 +44,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-statusbar.h"
 #include "egg-editable-toolbar.h"
-#include "toolbar.h"
+#include "ephy-toolbar.h"
 #include "ephy-bookmarksbar.h"
 #include "popup-commands.h"
 #include "ephy-encoding-menu.h"
@@ -55,6 +55,7 @@
 #include "ephy-link.h"
 #include "ephy-gui.h"
 #include "ephy-notebook.h"
+#include "ephy-fullscreen-popup.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -85,6 +86,12 @@ static void ephy_window_view_toolbar_cb         (GtkAction *action,
 static void ephy_window_view_bookmarksbar_cb    (GtkAction *action,
 			                         EphyWindow *window);
 static void ephy_window_view_popup_windows_cb	(GtkAction *action,
+						 EphyWindow *window);
+static void sync_tab_load_status		(EphyTab *tab,
+						 GParamSpec *pspec,
+						 EphyWindow *window);
+static void sync_tab_security			(EphyTab *tab,
+						 GParamSpec *pspec,
 						 EphyWindow *window);
 static void sync_tab_zoom			(EphyTab *tab,
 						 GParamSpec *pspec,
@@ -356,8 +363,8 @@ struct _EphyWindowPrivate
 {
 	GtkWidget *main_vbox;
 	GtkWidget *menu_dock;
-	GtkWidget *exit_fullscreen_popup;
-	Toolbar *toolbar;
+	GtkWidget *fullscreen_popup;
+	EphyToolbar *toolbar;
 	GtkWidget *bookmarksbar;
 	GtkWidget *statusbar;
 	GtkUIManager *manager;
@@ -433,56 +440,12 @@ ephy_window_get_type (void)
 }
 
 static void
-update_fullscreen_popup (EphyWindow *window)
+destroy_fullscreen_popup (EphyWindow *window)
 {
-	GtkWidget *popup = window->priv->exit_fullscreen_popup;
-	int popup_width, popup_height;
-	GdkRectangle screen_rect;
-
-	g_return_if_fail (popup != NULL);
-
-	popup_width = popup->requisition.width;
-	popup_height = popup->requisition.height;
-
-	/* FIXME multihead */
-	gdk_screen_get_monitor_geometry (gdk_screen_get_default (),
-                        gdk_screen_get_monitor_at_window
-                        (gdk_screen_get_default (),
-                         GTK_WIDGET (window)->window),
-                         &screen_rect);
-
-	if (gtk_widget_get_direction (popup) == GTK_TEXT_DIR_RTL)
+	if (window->priv->fullscreen_popup != NULL)
 	{
-		gtk_window_move (GTK_WINDOW (popup),
-				 screen_rect.x + screen_rect.width - popup_width,
-				 screen_rect.height - popup_height);
-	}
-	else
-	{
-		gtk_window_move (GTK_WINDOW (popup),
-                	        screen_rect.x, screen_rect.height - popup_height);
-	}
-}
-
-static void
-screen_size_changed_cb (GdkScreen *screen,
-			EphyWindow *window)
-{
-	update_fullscreen_popup (window);
-}
-
-static void
-destroy_exit_fullscreen_popup (EphyWindow *window)
-{
-	if (window->priv->exit_fullscreen_popup != NULL)
-	{
-		/* FIXME multihead */
-		g_signal_handlers_disconnect_by_func
-			(gdk_screen_get_default (),
-			 G_CALLBACK (screen_size_changed_cb), window);
-
-		gtk_widget_destroy (window->priv->exit_fullscreen_popup);
-		window->priv->exit_fullscreen_popup = NULL;
+		gtk_widget_destroy (window->priv->fullscreen_popup);
+		window->priv->fullscreen_popup = NULL;
 	}
 }
 
@@ -505,7 +468,7 @@ ephy_window_destroy (GtkObject *gtkobject)
 		ephy_extension_detach_window (manager, window);
 	}
 
-	destroy_exit_fullscreen_popup (window);
+	destroy_fullscreen_popup (window);
 
 	popups = gtk_ui_manager_get_toplevels (window->priv->manager, GTK_UI_MANAGER_POPUP);
 	g_slist_foreach (popups, (GFunc) gtk_menu_shell_deactivate, NULL);
@@ -524,7 +487,7 @@ add_widget (GtkUIManager *manager,
 }
 
 static void
-exit_fullscreen_button_clicked_cb (GtkWidget *button, EphyWindow *window)
+exit_fullscreen_clicked_cb (EphyWindow *window)
 {
 	GtkAction *action;
 
@@ -533,6 +496,13 @@ exit_fullscreen_button_clicked_cb (GtkWidget *button, EphyWindow *window)
 
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), FALSE);
 }
+
+static gboolean
+get_toolbar_visibility (EphyWindow *window)
+{
+	return ((window->priv->chrome & EPHY_EMBED_CHROME_TOOLBAR) != 0) &&
+	       !window->priv->ppv_mode;
+}			
 
 static void
 get_chromes_visibility (EphyWindow *window, gboolean *show_menubar,
@@ -562,6 +532,7 @@ get_chromes_visibility (EphyWindow *window, gboolean *show_menubar,
 static void
 sync_chromes_visibility (EphyWindow *window)
 {
+	EphyWindowPrivate *priv = window->priv;
 	GtkWidget *menubar;
 	gboolean show_statusbar, show_menubar, show_toolbar, show_bookmarksbar;
 
@@ -572,22 +543,22 @@ sync_chromes_visibility (EphyWindow *window)
 	menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");
 	g_assert (menubar != NULL);
 
-	g_object_set (G_OBJECT (menubar), "visible", show_menubar, NULL);
-	g_object_set (G_OBJECT (window->priv->toolbar), "visible", show_toolbar, NULL);
-	g_object_set (G_OBJECT (window->priv->bookmarksbar), "visible", show_bookmarksbar, NULL);
-	g_object_set (G_OBJECT (window->priv->statusbar), "visible", show_statusbar, NULL);
-}
+	g_object_set (menubar, "visible", show_menubar, NULL);
+	g_object_set (priv->toolbar, "visible", show_toolbar, NULL);
+	g_object_set (priv->bookmarksbar, "visible", show_bookmarksbar, NULL);
+	g_object_set (priv->statusbar, "visible", show_statusbar, NULL);
 
-static void
-fullscreen_popup_size_request_cb (GtkWidget *popup, GtkRequisition *req, EphyWindow *window)
-{
-	update_fullscreen_popup (window);
+	if (priv->fullscreen_popup != NULL)
+	{
+		g_object_set (priv->fullscreen_popup, "visible", !show_toolbar, NULL);
+	}
 }
 
 static void
 ephy_window_fullscreen (EphyWindow *window)
 {
-	GtkWidget *popup, *button, *icon, *label, *hbox;
+	GtkWidget *popup;
+	EphyTab *tab;
 
 	window->priv->fullscreen_mode = TRUE;
 
@@ -599,44 +570,27 @@ ephy_window_fullscreen (EphyWindow *window)
 		return;
 	}
 
-	popup = gtk_window_new (GTK_WINDOW_POPUP);
-	window->priv->exit_fullscreen_popup = popup;
+	popup = ephy_fullscreen_popup_new (window);
+	window->priv->fullscreen_popup = popup;
+	g_signal_connect_swapped (popup, "exit-clicked",
+				  G_CALLBACK (exit_fullscreen_clicked_cb), window);
 
-	button = gtk_button_new ();
-	g_signal_connect (button, "clicked",
-			  G_CALLBACK (exit_fullscreen_button_clicked_cb),
-			  window);
-	gtk_widget_show (button);
-	gtk_container_add (GTK_CONTAINER (popup), button);
+	/* sync status */
+	tab = ephy_window_get_active_tab (window);
+	sync_tab_load_status (tab, NULL, window);
+	sync_tab_security (tab, NULL, window);
 
-	hbox = gtk_hbox_new (FALSE, 2);
-	gtk_widget_show (hbox);
-	gtk_container_add (GTK_CONTAINER (button), hbox);
-
-	icon = gtk_image_new_from_stock (GTK_STOCK_QUIT, GTK_ICON_SIZE_BUTTON);
-	gtk_widget_show (icon);
-	gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0);
-
-	label = gtk_label_new (_("Exit Fullscreen"));
-	gtk_widget_show (label);
-	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-
-	gtk_window_set_resizable (GTK_WINDOW (popup), FALSE);
-
-	/* FIXME multihead */
-	g_signal_connect (gdk_screen_get_default (), "size-changed",
-			  G_CALLBACK (screen_size_changed_cb), window);
-	g_signal_connect (popup, "size_request",
-			  G_CALLBACK (fullscreen_popup_size_request_cb), window);
-
-	update_fullscreen_popup (window);
-
-	gtk_widget_show (popup);
+	if (get_toolbar_visibility (window) == FALSE)
+	{
+		gtk_widget_show (popup);
+	}
 
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
 		 EGG_TOOLBARS_MODEL (
 		 	ephy_shell_get_toolbars_model (ephy_shell, TRUE)));
+
+	ephy_toolbar_set_fullscreen_mode (window->priv->toolbar, TRUE);
 }
 
 static void
@@ -644,7 +598,9 @@ ephy_window_unfullscreen (EphyWindow *window)
 {
 	window->priv->fullscreen_mode = FALSE;
 
-	destroy_exit_fullscreen_popup (window);
+	destroy_fullscreen_popup (window);
+
+	ephy_toolbar_set_fullscreen_mode (window->priv->toolbar, FALSE);
 
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
@@ -1208,7 +1164,7 @@ sync_tab_address (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 		address = "";
 	}
 
-	toolbar_set_location (window->priv->toolbar, address);
+	ephy_toolbar_set_location (window->priv->toolbar, address);
 }
 
 static void
@@ -1263,7 +1219,7 @@ sync_tab_icon (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	gtk_window_set_icon (GTK_WINDOW (window), pixbuf);
 
-	toolbar_update_favicon (window->priv->toolbar, address);
+	ephy_toolbar_set_favicon (window->priv->toolbar, address);
 
 	if (pixbuf)
 	{
@@ -1340,8 +1296,8 @@ sync_tab_navigation (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	action = gtk_action_group_get_action (action_group, "GoForward");
 	g_object_set (action, "sensitive", forward, NULL);
 
-	toolbar_update_navigation_actions (window->priv->toolbar,
-					   back, forward, up);
+	ephy_toolbar_set_navigation_actions (window->priv->toolbar,
+					     back, forward, up);
 }
 
 static void
@@ -1353,6 +1309,7 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	char *state = NULL;
 	char *tooltip;
 	const char *stock_id = STOCK_LOCK_INSECURE;
+	gboolean show_lock = FALSE;
 
 	if (window->priv->closing) return;
 
@@ -1373,6 +1330,7 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 		case EPHY_EMBED_STATE_IS_BROKEN:
 			state = _("Broken");
 			stock_id = STOCK_LOCK_BROKEN;
+			show_lock = TRUE;
 			g_free (description);
 			description = NULL;
 			break;
@@ -1387,6 +1345,7 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 		case EPHY_EMBED_STATE_IS_SECURE_HIGH:
 			state = _("High");
 			stock_id = STOCK_LOCK_SECURE;
+			show_lock = TRUE;
 			break;
 		default:
 			g_assert_not_reached ();
@@ -1405,8 +1364,18 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	ephy_statusbar_set_security_state (EPHY_STATUSBAR (window->priv->statusbar),
 					   stock_id, tooltip);
-	g_free (tooltip);
 
+	ephy_toolbar_set_security_state (window->priv->toolbar,
+					 show_lock, stock_id, tooltip);
+
+	if (window->priv->fullscreen_popup != NULL)
+	{
+		ephy_fullscreen_popup_set_security_state
+			(EPHY_FULLSCREEN_POPUP (window->priv->fullscreen_popup),
+			 show_lock, stock_id, tooltip);
+	}
+
+	g_free (tooltip);
 }
 
 static void
@@ -1483,13 +1452,13 @@ sync_tab_load_status (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	/* disable print while loading, see bug #116344 */
 	update_print_actions (window, !status);
 
-	if (status)
+	ephy_toolbar_set_spinning (window->priv->toolbar, status);
+
+	if (window->priv->fullscreen_popup)
 	{
-		toolbar_spinner_start (window->priv->toolbar);
-	}
-	else
-	{
-		toolbar_spinner_stop (window->priv->toolbar);
+		ephy_fullscreen_popup_set_spinning
+			 (EPHY_FULLSCREEN_POPUP (window->priv->fullscreen_popup),
+			  status);
 	}
 }
 
@@ -1569,7 +1538,7 @@ sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 		can_zoom_normal = TRUE;
 	}
 
-	toolbar_update_zoom (window->priv->toolbar, can_zoom, zoom);
+	ephy_toolbar_set_zoom (window->priv->toolbar, can_zoom, zoom);
 
 	action_group = window->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "ViewZoomIn");
@@ -1790,6 +1759,12 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	{
 		popup = "/EphyInputPopup";
 		update_edit_actions_sensitivity (window, FALSE);
+	}
+	else if (window->priv->fullscreen_mode)
+	{
+		popup = framed ? "/EphyFullscreenFramedDocumentPopup" :
+				 "/EphyFullscreenDocumentPopup";
+		update_edit_actions_sensitivity (window, TRUE);
 	}
 	else
 	{
@@ -2045,7 +2020,7 @@ modal_alert_cb (EphyEmbed *embed,
 
 	/* make sure the location entry shows the real URL of the tab's page */
 	address = ephy_embed_get_location (embed, TRUE);
-	toolbar_set_location (window->priv->toolbar, address);
+	ephy_toolbar_set_location (window->priv->toolbar, address);
 	g_free (address);
 
 	/* don't suppress alert */
@@ -2334,26 +2309,30 @@ ephy_window_get_property (GObject *object,
 }
 
 static gboolean
-ephy_window_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
+ephy_window_focus_in_event (GtkWidget *widget,
+			    GdkEventFocus *event)
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
+	EphyWindowPrivate *priv = window->priv;
 
-	if (window->priv->exit_fullscreen_popup)
+	if (priv->fullscreen_popup && !get_toolbar_visibility (window))
 	{
-		gtk_widget_show (window->priv->exit_fullscreen_popup);
+		gtk_widget_show (priv->fullscreen_popup);
 	}
 
 	return GTK_WIDGET_CLASS (parent_class)->focus_in_event (widget, event);
 }
 
 static gboolean
-ephy_window_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
+ephy_window_focus_out_event (GtkWidget *widget,
+			     GdkEventFocus *event)
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
+	EphyWindowPrivate *priv = window->priv;
 
-	if (window->priv->exit_fullscreen_popup)
+	if (priv->fullscreen_popup)
 	{
-		gtk_widget_hide (window->priv->exit_fullscreen_popup);
+		gtk_widget_hide (priv->fullscreen_popup);
 	}
 
 	return GTK_WIDGET_CLASS (parent_class)->focus_out_event (widget, event);
@@ -2579,9 +2558,11 @@ ephy_window_init (EphyWindow *window)
 	model= EGG_TOOLBARS_MODEL (ephy_shell_get_toolbars_model (ephy_shell, FALSE));
 
 	/* create the toolbars */
-	window->priv->toolbar = toolbar_new (window);
+	window->priv->toolbar = ephy_toolbar_new (window);
 	g_signal_connect (window->priv->toolbar, "open-link",
 			  G_CALLBACK (open_link_cb), window);
+	g_signal_connect_swapped (window->priv->toolbar, "exit-clicked",
+				  G_CALLBACK (exit_fullscreen_clicked_cb), window);
 	window->priv->bookmarksbar = ephy_bookmarksbar_new (window);
 	g_signal_connect (window->priv->bookmarksbar, "open-link",
 			  G_CALLBACK (open_link_cb), window);
@@ -3028,7 +3009,12 @@ ephy_window_load_url (EphyWindow *window,
 void
 ephy_window_activate_location (EphyWindow *window)
 {
-	toolbar_activate_location (window->priv->toolbar);
+	if (window->priv->fullscreen_popup)
+	{
+		gtk_widget_hide (window->priv->fullscreen_popup);
+	}
+
+	ephy_toolbar_activate_location (window->priv->toolbar);
 }
 
 static void

@@ -38,7 +38,7 @@
 #include "ephy-new-bookmark.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
-#include "toolbar.h"
+#include "ephy-toolbar.h"
 #include "ephy-state.h"
 #include "ephy-gui.h"
 #include "ephy-zoom.h"
@@ -916,11 +916,11 @@ void
 window_cmd_load_location (GtkAction *action,
 			  EphyWindow *window)
 {
-	Toolbar *toolbar;
+	EphyToolbar *toolbar;
 	const char *location;
 
 	toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
-	location = toolbar_get_location (toolbar);
+	location = ephy_toolbar_get_location (toolbar);
 
 	if (location)
 	{

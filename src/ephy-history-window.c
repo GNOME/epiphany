@@ -59,7 +59,6 @@
 #include "ephy-new-bookmark.h"
 #include "ephy-stock-icons.h"
 #include "ephy-gui.h"
-#include "toolbar.h"
 #include "ephy-stock-icons.h"
 #include "ephy-search-entry.h"
 #include "ephy-session.h"

@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2003-2004 Marco Pesenti Gritti
- *  Copyright (C) 2004 Christian Persch
+ *  Copyright (C) 2003, 2004  Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004, 2005  Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,8 +32,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct EggEditableToolbarClass EggEditableToolbarClass;
-
 #define EGG_TYPE_EDITABLE_TOOLBAR             (egg_editable_toolbar_get_type ())
 #define EGG_EDITABLE_TOOLBAR(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), EGG_TYPE_EDITABLE_TOOLBAR, EggEditableToolbar))
 #define EGG_EDITABLE_TOOLBAR_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EGG_TYPE_EDITABLE_TOOLBAR, EggEditableToolbarClass))
@@ -41,11 +39,11 @@ typedef struct EggEditableToolbarClass EggEditableToolbarClass;
 #define EGG_IS_EDITABLE_TOOLBAR_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EGG_TYPE_EDITABLE_TOOLBAR))
 #define EGG_EDITABLE_TOOLBAR_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EGG_TYPE_EDITABLE_TOOLBAR, EggEditableToolbarClass))
 
+typedef struct _EggEditableToolbar        EggEditableToolbar;
+typedef struct _EggEditableToolbarPrivate EggEditableToolbarPrivate;
+typedef struct _EggEditableToolbarClass   EggEditableToolbarClass;
 
-typedef struct EggEditableToolbar EggEditableToolbar;
-typedef struct EggEditableToolbarPrivate EggEditableToolbarPrivate;
-
-struct EggEditableToolbar
+struct _EggEditableToolbar
 {
   GtkVBox parent_object;
 
@@ -53,7 +51,7 @@ struct EggEditableToolbar
   EggEditableToolbarPrivate *priv;
 };
 
-struct EggEditableToolbarClass
+struct _EggEditableToolbarClass
 {
   GtkVBoxClass parent_class;
 
@@ -80,7 +78,7 @@ void		    egg_editable_toolbar_set_drag_dest   (EggEditableToolbar   *etoolbar,
 							  gint                  n_targets,
 							  const char           *toolbar_name);
 void		    egg_editable_toolbar_set_fixed       (EggEditableToolbar   *etoolbar,
-							  GtkToolItem          *fixed);
+							  GtkToolbar           *fixed_toolbar);
 
 
 /* Private Functions */

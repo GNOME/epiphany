@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2003-2004 Marco Pesenti Gritti
- *  Copyright (C) 2004 Christian Persch
+ *  Copyright (C) 2003, 2004  Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004, 2005  Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -71,13 +71,12 @@ static GObjectClass *parent_class = NULL;
 
 #define EGG_EDITABLE_TOOLBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EGG_TYPE_EDITABLE_TOOLBAR, EggEditableToolbarPrivate))
 
-struct EggEditableToolbarPrivate
+struct _EggEditableToolbarPrivate
 {
   GtkUIManager *manager;
   EggToolbarsModel *model;
   gboolean edit_mode;
   GtkWidget *selected_toolbar;
-  GtkToolItem *fixed;
   GtkWidget *fixed_toolbar;
 
   gboolean pending;
@@ -723,7 +722,8 @@ static void
 set_fixed_style (EggEditableToolbar *t, GtkToolbarStyle style)
 {
   g_return_if_fail (GTK_IS_TOOLBAR (t->priv->fixed_toolbar));
-  gtk_toolbar_set_style (GTK_TOOLBAR (t->priv->fixed_toolbar), style);
+  gtk_toolbar_set_style (GTK_TOOLBAR (t->priv->fixed_toolbar),
+  			 style == GTK_TOOLBAR_ICONS ? GTK_TOOLBAR_BOTH_HORIZ : style);
 }
 
 static void
@@ -806,7 +806,7 @@ update_fixed (EggEditableToolbar *t)
     {
       gtk_box_pack_end (GTK_BOX (dock), toolbar, FALSE, TRUE, 0);
 
-      gtk_widget_show_all (toolbar);
+      gtk_widget_show (toolbar);
     }
 }
 
@@ -1260,35 +1260,27 @@ egg_editable_toolbar_hide (EggEditableToolbar *etoolbar,
 
 void
 egg_editable_toolbar_set_fixed (EggEditableToolbar *toolbar,
-				GtkToolItem        *fixed)
+				GtkToolbar         *fixed_toolbar)
 {
   g_return_if_fail (EGG_IS_EDITABLE_TOOLBAR (toolbar));
-  g_return_if_fail (!fixed || GTK_IS_TOOL_ITEM (fixed));
+  g_return_if_fail (!fixed_toolbar || GTK_IS_TOOLBAR (fixed_toolbar));
 
-  if (!toolbar->priv->fixed_toolbar)
+  if (toolbar->priv->fixed_toolbar)
     {
-      toolbar->priv->fixed_toolbar = gtk_toolbar_new ();
-      gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar->priv->fixed_toolbar), FALSE);
-      g_object_ref (toolbar->priv->fixed_toolbar);
-      gtk_object_sink (GTK_OBJECT (toolbar->priv->fixed_toolbar));
+      unparent_fixed (toolbar);
+      g_object_unref (toolbar->priv->fixed_toolbar);
+      toolbar->priv->fixed_toolbar = NULL;
     }
 
-  if (toolbar->priv->fixed)
+  if (fixed_toolbar)
     {
-      gtk_container_remove (GTK_CONTAINER (toolbar->priv->fixed_toolbar),
-	    		    GTK_WIDGET (toolbar->priv->fixed));
-      g_object_unref (toolbar->priv->fixed);
+      toolbar->priv->fixed_toolbar = GTK_WIDGET (fixed_toolbar);
+      gtk_toolbar_set_show_arrow (fixed_toolbar, FALSE);
+      g_object_ref (fixed_toolbar);
+      gtk_object_sink (GTK_OBJECT (fixed_toolbar));
     }
 
-  toolbar->priv->fixed = fixed;
-
-  if (fixed)
-    {
-      g_object_ref (fixed);
-      gtk_object_sink (GTK_OBJECT (fixed));
-
-      gtk_toolbar_insert (GTK_TOOLBAR (toolbar->priv->fixed_toolbar), fixed, 0);
-    }
+  update_fixed (toolbar);
 }
 
 void

@@ -29,6 +29,7 @@ NOINST_H_FILES = \
 	ephy-automation.h		\
 	ephy-encoding-dialog.h		\
 	ephy-encoding-menu.h		\
+	ephy-fullscreen-popup.h		\
 	ephy-go-action.h		\
 	ephy-history-window.h		\
 	ephy-home-action.h		\
@@ -38,12 +39,12 @@ NOINST_H_FILES = \
 	ephy-navigation-action.h	\
 	ephy-tabs-menu.h		\
 	ephy-toolbars-model.h		\
+	ephy-toolbar.h			\
 	ephy-toolbar-editor.h		\
 	pdm-dialog.h			\
 	popup-commands.h		\
 	prefs-dialog.h			\
 	ppview-toolbar.h		\
-	toolbar.h			\
 	window-commands.h
 
 INST_H_FILES = \
@@ -65,6 +66,7 @@ libephymain_la_SOURCES = \
 	ephy-encoding-menu.c		\
 	ephy-extension.c		\
 	ephy-extensions-manager.c	\
+	ephy-fullscreen-popup.c		\
 	ephy-go-action.c		\
 	ephy-home-action.c		\
 	ephy-history-window.c		\
@@ -80,13 +82,13 @@ libephymain_la_SOURCES = \
 	ephy-tab.h			\
 	ephy-tabs-menu.c		\
 	ephy-toolbars-model.c		\
+	ephy-toolbar.c			\
 	ephy-toolbar-editor.c		\
 	ephy-window.c			\
 	pdm-dialog.c			\
 	popup-commands.c		\
 	prefs-dialog.c			\
 	ppview-toolbar.c		\
-	toolbar.c			\
 	window-commands.c		\
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)

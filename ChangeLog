@@ -1,3 +1,47 @@
+2005-01-12  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/ui/epiphany-ui.xml:
+
+	Add Toolbar toggle to document context menu in fullscreen mode.
+
+	* lib/egg/egg-editable-toolbar.c: (set_fixed_style),
+	(update_fixed), (egg_editable_toolbar_set_fixed):
+	* lib/egg/egg-editable-toolbar.h:
+
+	Changed to allow setting a toolbar as fixed, not just one item.
+
+	* lib/widgets/ephy-search-entry.h:
+
+	Add _ prefixed struct declarations.
+
+	* po/POTFILES.in:
+
+	Updated.
+
+	* src/Makefile.am:
+	A src/ephy-fullscreen-popup.c:
+	A src/ephy-fullscreen-popup.h:
+	* src/ephy-history-window.c:
+	* src/ephy-shell.c: (ephy_shell_new_tab):
+	A src/ephy-toolbar.c: 
+	A src/ephy-toolbar.h:
+	* src/ephy-window.c: (destroy_fullscreen_popup),
+	(ephy_window_destroy), (exit_fullscreen_clicked_cb),
+	(get_toolbar_visibility), (sync_chromes_visibility),
+	(ephy_window_fullscreen), (ephy_window_unfullscreen),
+	(sync_tab_address), (sync_tab_icon), (sync_tab_navigation),
+	(sync_tab_security), (sync_tab_load_status), (sync_tab_zoom),
+	(show_embed_popup), (modal_alert_cb), (ephy_window_focus_in_event),
+	(ephy_window_focus_out_event), (ephy_window_init),
+	(ephy_window_activate_location):
+	R src/toolbar.c:
+	R src/toolbar.h:
+	* src/window-commands.c: (window_cmd_load_location):
+
+	Implemented in-toolbar exit button, and integrated status indicator in
+	the exit fullscreen popup. Moved toolbar.[ch] to ephy-toolbar.[ch] for
+	namespace correcness, and much-needed code cleanup.
+
 2005-01-12  Matthew Schick  <matt@breakmygentoo.net>
 
 	* configure.ac:

@@ -25,29 +25,31 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_SEARCH_ENTRY         (ephy_search_entry_get_type ())
-#define EPHY_SEARCH_ENTRY(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_SEARCH_ENTRY, EphySearchEntry))
-#define EPHY_SEARCH_ENTRY_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_SEARCH_ENTRY, EphySearchEntryClass))
-#define EPHY_IS_SEARCH_ENTRY(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_SEARCH_ENTRY))
-#define EPHY_IS_SEARCH_ENTRY_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SEARCH_ENTRY))
-#define EPHY_SEARCH_ENTRY_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SEARCH_ENTRY, EphySearchEntryClass))
+#define EPHY_TYPE_SEARCH_ENTRY		(ephy_search_entry_get_type ())
+#define EPHY_SEARCH_ENTRY(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_SEARCH_ENTRY, EphySearchEntry))
+#define EPHY_SEARCH_ENTRY_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_SEARCH_ENTRY, EphySearchEntryClass))
+#define EPHY_IS_SEARCH_ENTRY(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_SEARCH_ENTRY))
+#define EPHY_IS_SEARCH_ENTRY_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SEARCH_ENTRY))
+#define EPHY_SEARCH_ENTRY_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SEARCH_ENTRY, EphySearchEntryClass))
 
-typedef struct _EphySearchEntryPrivate EphySearchEntryPrivate;
+typedef struct _EphySearchEntry		EphySearchEntry;
+typedef struct _EphySearchEntryPrivate	EphySearchEntryPrivate;
+typedef struct _EphySearchEntryClass	EphySearchEntryClass;
 
-typedef struct
+struct _EphySearchEntry
 {
 	GtkEntry parent;
 
 	/*< private >*/
 	EphySearchEntryPrivate *priv;
-} EphySearchEntry;
+};
 
-typedef struct
+struct _EphySearchEntryClass
 {
 	GtkEntryClass parent;
 
 	void (*search) (EphySearchEntry *view, const char *text);
-} EphySearchEntryClass;
+};
 
 GType            ephy_search_entry_get_type (void);
 
