@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -27,17 +29,12 @@
 #include "ephy-string.h"
 #include "ephy-debug.h"
 
-//#include <libxml/entities.h>
 #include <glib/gprintf.h>
 #include <glib/gi18n.h>
 #include <gtk/gtkuimanager.h>
 
 #define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"
 
-/**
- * Private data
- */
- 
 #define EPHY_BOOKMARKS_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS_MENU, EphyBookmarksMenuPrivate))
 
 struct _EphyBookmarksMenuPrivate
@@ -50,9 +47,6 @@ struct _EphyBookmarksMenuPrivate
 	guint update_tag;
 };
 
-/**
- * Private functions, only availble from this file
- */
 static void	ephy_bookmarks_menu_class_init	  (EphyBookmarksMenuClass *klass);
 static void	ephy_bookmarks_menu_init	  (EphyBookmarksMenu *menu);
 static void	ephy_bookmarks_menu_finalize      (GObject *o);
@@ -63,14 +57,14 @@ enum
 	PROP_EPHY_WINDOW
 };
 
-static gpointer parent_class;
+static GObjectClass *parent_class = NULL;
 
 GType
 ephy_bookmarks_menu_get_type (void)
 {
-        static GType ephy_bookmarks_menu_type = 0;
+        static GType type = 0;
 
-        if (ephy_bookmarks_menu_type == 0)
+        if (type == 0)
         {
                 static const GTypeInfo our_info =
                 {
@@ -85,11 +79,12 @@ ephy_bookmarks_menu_get_type (void)
                         (GInstanceInitFunc) ephy_bookmarks_menu_init
                 };
 
-                ephy_bookmarks_menu_type = g_type_register_static (G_TYPE_OBJECT,
-							           "EphyBookmarksMenu",
-							           &our_info, 0);
+                type = g_type_register_static (G_TYPE_OBJECT,
+					       "EphyBookmarksMenu",
+					       &our_info, 0);
         }
-        return ephy_bookmarks_menu_type;
+
+        return type;
 }
 
 static void
@@ -399,20 +394,66 @@ bookmarks_tree_changed_cb (EphyBookmarks *bookmarks, EphyBookmarksMenu *menu)
 }
 
 static void
+sync_topic_properties (GtkAction *action, EphyNode *bmk)
+{
+	const char *tmp;
+	char *title;
+	int priority;
+
+	priority = ephy_node_get_property_int 
+		(bmk, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+
+	tmp = ephy_node_get_property_string
+       	        (bmk, EPHY_NODE_KEYWORD_PROP_NAME);
+
+	title = ephy_string_double_underscores (tmp);
+
+	g_object_set (action, "label", title, NULL);
+
+	g_free (title);
+}
+
+static void
+topic_child_changed_cb (EphyNode *node, EphyNode *child, EphyBookmarksMenu *menu)
+{
+	GtkAction *action;
+	char name[64];
+
+	if (menu->priv->update_tag != 0 || menu->priv->action_group == NULL)
+	{
+		return;
+	}
+
+	g_snprintf (name, sizeof (name), "OpenTopic%ld", ephy_node_get_id (child));
+
+	action = gtk_action_group_get_action (menu->priv->action_group, name);
+
+	if (action != NULL)
+	{
+		sync_topic_properties (action, child);
+	}
+}
+
+static void
 ephy_bookmarks_menu_init (EphyBookmarksMenu *menu)
 {
 	EphyBookmarksMenuPrivate *p = EPHY_BOOKMARKS_MENU_GET_PRIVATE (menu);
+	EphyNode *node;
 
 	menu->priv = p;
+	menu->priv->ui_id = 0;
+	menu->priv->action_group = NULL;
+	menu->priv->update_tag = 0;
 
 	menu->priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	g_signal_connect_object (menu->priv->bookmarks, "tree_changed",
 			         G_CALLBACK (bookmarks_tree_changed_cb),
 			         menu, 0);
 
-	menu->priv->ui_id = 0;
-	menu->priv->action_group = NULL;
-	menu->priv->update_tag = 0;
+	node = ephy_bookmarks_get_keywords (menu->priv->bookmarks);
+	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_CHANGED,
+				         (EphyNodeCallback) topic_child_changed_cb,
+				         G_OBJECT (menu));
 }
 
 static void
