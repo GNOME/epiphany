@@ -602,7 +602,7 @@ create_node_combo (EphyDialog *dialog,
 
 	combo = GTK_COMBO_BOX (ephy_dialog_get_control (dialog, properties[prop].id));
 
-	nodemodel = ephy_tree_model_node_new (node, NULL);
+	nodemodel = ephy_tree_model_node_new (node);
 
 	title_col = ephy_tree_model_node_add_prop_column
 			(nodemodel, G_TYPE_STRING, EPHY_NODE_ENCODING_PROP_TITLE_ELIDED);

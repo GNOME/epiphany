@@ -54,7 +54,7 @@ struct EphyNodeViewPrivate
 	GtkTreeModel *sortmodel;
 	GtkCellRenderer *editable_renderer;
 	GtkTreeViewColumn *editable_column;
-	EphyTreeModelNodeColumn editable_node_column;
+	int editable_node_column;
 
 	EphyNodeFilter *filter;
 
@@ -546,6 +546,9 @@ filter_changed_cb (EphyNodeFilter *filter,
 		/* no flush: this will cause the cursor to be reset
 		 * only when the UI is free again */
 	}
+
+	gtk_tree_model_filter_refilter
+			(GTK_TREE_MODEL_FILTER (view->priv->filtermodel));
 }
 
 static void
@@ -841,6 +844,32 @@ ephy_node_view_button_press_cb (GtkWidget *treeview,
 }
 
 static void
+ephy_node_view_set_filter (EphyNodeView *view, EphyNodeFilter *filter)
+{
+	gboolean refilter = FALSE;
+
+	if (view->priv->filter)
+	{
+		g_object_unref (view->priv->filter);
+		refilter = TRUE;
+	}
+
+	if (filter)
+	{
+		view->priv->filter = g_object_ref (filter);
+		g_signal_connect_object (G_OBJECT (view->priv->filter),
+				         "changed", G_CALLBACK (filter_changed_cb),
+					 G_OBJECT (view), 0);
+	}
+
+	if (refilter)
+	{
+		gtk_tree_model_filter_refilter
+				(GTK_TREE_MODEL_FILTER (view->priv->filtermodel));
+	}
+}
+
+static void
 ephy_node_view_set_property (GObject *object,
 			     guint prop_id,
 			     const GValue *value,
@@ -854,16 +883,7 @@ ephy_node_view_set_property (GObject *object,
 		view->priv->root = g_value_get_pointer (value);
 		break;
 	case PROP_FILTER:
-		view->priv->filter = g_value_get_object (value);
-
-		if (view->priv->filter != NULL)
-		{
-			g_signal_connect_object (G_OBJECT (view->priv->filter),
-					         "changed",
-					         G_CALLBACK (filter_changed_cb),
-					         G_OBJECT (view),
-						 0);
-		}
+		ephy_node_view_set_filter (view, g_value_get_object (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1255,6 +1275,7 @@ ephy_node_view_init (EphyNodeView *view)
 {
 	view->priv = EPHY_NODE_VIEW_GET_PRIVATE (view);
 
+	view->priv->filter = NULL;
 	view->priv->editable_renderer = NULL;
 	view->priv->editing = TRUE;
 	view->priv->searchable_data_column = -1;
@@ -1370,19 +1391,11 @@ ephy_node_view_select_node (EphyNodeView *view,
 			    EphyNode *node)
 {
 	GtkTreeIter iter, iter2;
-	GValue val = { 0, };
-	gboolean visible;
 
 	g_return_if_fail (node != NULL);
 
 	ephy_tree_model_node_iter_from_node (EPHY_TREE_MODEL_NODE (view->priv->nodemodel),
 					     node, &iter);
-	gtk_tree_model_get_value (GTK_TREE_MODEL (view->priv->nodemodel), &iter,
-				  EPHY_TREE_MODEL_NODE_COL_VISIBLE, &val);
-	visible = g_value_get_boolean (&val);
-	g_value_unset (&val);
-	if (visible == FALSE) return;
-
 	gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (view->priv->filtermodel),
 							  &iter2, &iter);
 	gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT (view->priv->sortmodel),
@@ -1479,6 +1492,22 @@ ephy_node_view_has_selection (EphyNodeView *view, gboolean *multiple)
 	return rows > 0;
 }
 
+static gboolean
+filter_visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
+{
+	EphyNode *node;
+	EphyNodeView *view = EPHY_NODE_VIEW (data);
+
+	if (view->priv->filter)
+	{
+		node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, iter);
+
+		return ephy_node_filter_evaluate (view->priv->filter, node);
+	}
+
+	return TRUE;
+}
+
 static GObject *
 ephy_node_view_constructor (GType type, guint n_construct_properties,
                             GObjectConstructParam *construct_params)
@@ -1494,11 +1523,11 @@ ephy_node_view_constructor (GType type, guint n_construct_properties,
 	view = EPHY_NODE_VIEW (object);
 	priv = EPHY_NODE_VIEW_GET_PRIVATE (object);
 
-	priv->nodemodel = ephy_tree_model_node_new (priv->root, priv->filter);
+	priv->nodemodel = ephy_tree_model_node_new (priv->root);
 	priv->filtermodel = gtk_tree_model_filter_new (GTK_TREE_MODEL (priv->nodemodel),
 						       NULL);
-	gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER (priv->filtermodel),
-						  EPHY_TREE_MODEL_NODE_COL_VISIBLE);
+	gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (priv->filtermodel),
+						filter_visible_func, view, NULL);
 	priv->sortmodel = ephy_tree_model_sort_new (priv->filtermodel);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (object), GTK_TREE_MODEL (priv->sortmodel));
 	g_signal_connect_object (object, "button_press_event",
@@ -1545,7 +1574,7 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 							      "Filter object",
 							      "Filter object",
 							      EPHY_TYPE_NODE_FILTER,
-							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							      G_PARAM_READWRITE));
 
 	ephy_node_view_signals[NODE_ACTIVATED] =
 		g_signal_new ("node_activated",

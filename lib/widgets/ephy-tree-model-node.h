@@ -24,7 +24,6 @@
 #include <gtk/gtktreemodel.h>
 
 #include "ephy-node.h"
-#include "ephy-node-filter.h"
 
 G_BEGIN_DECLS
 
@@ -34,12 +33,6 @@ G_BEGIN_DECLS
 #define EPHY_IS_TREE_MODEL_NODE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_TREE_MODEL_NODE))
 #define EPHY_IS_TREE_MODEL_NODE_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TREE_MODEL_NODE))
 #define EPHY_TREE_MODEL_NODE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TREE_MODEL_NODE, EphyTreeModelNodeClass))
-
-typedef enum
-{
-	EPHY_TREE_MODEL_NODE_COL_VISIBLE,
-	EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS
-} EphyTreeModelNodeColumn;
 
 typedef void (*EphyTreeModelNodeValueFunc) (EphyNode *node, GValue *value, gpointer user_data);
 
@@ -60,8 +53,7 @@ typedef struct
 
 GType              ephy_tree_model_node_get_type         (void);
 
-EphyTreeModelNode *ephy_tree_model_node_new              (EphyNode *root,
-						          EphyNodeFilter *filter);
+EphyTreeModelNode *ephy_tree_model_node_new              (EphyNode *root);
 
 int                ephy_tree_model_node_add_prop_column  (EphyTreeModelNode *model,
 						          GType value_type,

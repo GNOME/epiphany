@@ -1,5 +1,24 @@
 2004-07-23  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* lib/widgets/ephy-node-view.c: (filter_changed_cb),
+	(ephy_node_view_set_filter), (ephy_node_view_set_property),
+	(ephy_node_view_init), (ephy_node_view_select_node),
+	(filter_visible_func), (ephy_node_view_constructor),
+	(ephy_node_view_class_init):
+	* lib/widgets/ephy-tree-model-node.c:
+	(ephy_tree_model_node_set_property),
+	(ephy_tree_model_node_get_property),
+	(ephy_tree_model_node_class_init), (ephy_tree_model_node_init),
+	(ephy_tree_model_node_new), (ephy_tree_model_node_get_column_type),
+	(ephy_tree_model_node_get_value):
+	* lib/widgets/ephy-tree-model-node.h:
+	* src/prefs-dialog.c: (create_node_combo):
+
+	Simplify node view filtering code and make it a normal
+	property (no more constructor only)
+
+2004-07-23  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* lib/widgets/ephy-node-view.c: (ephy_node_view_new),
 	(ephy_node_view_constructor), (ephy_node_view_class_init):
 
