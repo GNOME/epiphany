@@ -1,4 +1,16 @@
 2003-09-24  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/ephy-string.c: (ephy_string_double_underscores):
+	* lib/ephy-string.h:
+	* src/bookmarks/ephy-bookmark-action.c: (sync_bookmark_properties):
+	* src/bookmarks/ephy-bookmarks-menu.c:
+	(ephy_bookmarks_menu_rebuild):
+	* src/bookmarks/ephy-topic-action.c: (create_menu_item),
+	(sync_topic_properties):
+
+	Do not use _ as accellerators in bookmarks menus.
+
+2003-09-24  Marco Pesenti Gritti  <marco@gnome.org>
 	    Dave Bordoley <bordoley@msu.edu>
 
 	* src/ephy-tab.c: (ephy_tab_action_activate_cb), (ephy_tab_init):

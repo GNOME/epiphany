@@ -484,17 +484,19 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 static void
 sync_bookmark_properties (GtkAction *action, EphyNode *bmk)
 {
-	const char *title, *location, *icon;
+	const char *tmp, *location, *icon;
+	char *title;
 	gboolean smart_url;
 
 	icon = ephy_node_get_property_string
 		(bmk, EPHY_NODE_BMK_PROP_ICON);
-	title = ephy_node_get_property_string
-		(bmk, EPHY_NODE_BMK_PROP_TITLE);
 	location = ephy_node_get_property_string
 		(bmk, EPHY_NODE_BMK_PROP_LOCATION);
 	smart_url = ephy_node_get_property_boolean
 		(bmk, EPHY_NODE_BMK_PROP_HAS_SMART_ADDRESS);
+	tmp = ephy_node_get_property_string
+		(bmk, EPHY_NODE_BMK_PROP_TITLE);
+	title = ephy_string_double_underscores (tmp);
 
 	g_object_set (action,
 		      "label", title,
@@ -502,6 +504,8 @@ sync_bookmark_properties (GtkAction *action, EphyNode *bmk)
 		      "smarturl", smart_url,
 		      "icon", icon,
 		      NULL);
+
+	g_free (title);
 }
 
 static void

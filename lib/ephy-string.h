@@ -34,6 +34,8 @@ char		*ephy_string_shorten			(const gchar *str,
 
 char		*ephy_string_elide_underscores		(const gchar *original);
 
+char            *ephy_string_double_underscores         (const char *string);
+
 G_END_DECLS
 
 #endif

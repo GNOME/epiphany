@@ -24,6 +24,7 @@
 #include "ephy-bookmark-action.h"
 #include "ephy-shell.h"
 #include "ephy-node-common.h"
+#include "ephy-string.h"
 #include "ephy-debug.h"
 
 //#include <libxml/entities.h>
@@ -296,13 +297,16 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 	for (l = node_list; l != NULL; l = l->next)
 	{
 		char verb[30], name[30], path[60];
-		const char *title;
+		const char *tmp;
+		char *title;
 		EphyNode *child;
 		GtkAction *action;
 
 		child = l->data;
-		title = ephy_node_get_property_string (child, EPHY_NODE_KEYWORD_PROP_NAME);
 
+		tmp = ephy_node_get_property_string (child, EPHY_NODE_KEYWORD_PROP_NAME);
+		title = ephy_string_double_underscores (tmp);
+		
 		g_sprintf (verb, "OpenTopic%ld", ephy_node_get_id (child));
 		g_sprintf (name, "%sName", verb);
 		g_sprintf (path, "%s/%s", BOOKMARKS_MENU_PATH, name);
@@ -313,6 +317,7 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 				       NULL);
 		gtk_action_group_add_action (p->action_group, action);
 		g_object_unref (action);
+		g_free (title);
 
 		gtk_ui_manager_add_ui (p->merge, p->ui_id,
 				       BOOKMARKS_MENU_PATH,
