@@ -1,3 +1,11 @@
+2005-01-27  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* src/ephy-extensions-manager.c: (unload_extension):
+
+	Extension manager owns only one ref on extensions which
+	don't implement EphyExtension interface. Only their loader has 
+	to unref them.
+
 2005-01-26  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-fullscreen-popup.c:
