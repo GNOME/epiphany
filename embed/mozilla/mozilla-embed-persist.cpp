@@ -139,6 +139,9 @@ impl_save (EphyEmbedPersist *persist)
 	long max_size;
 	EphyEmbed *embed;
 	EmbedPersistFlags flags;
+	EphyEmbedSingle *single;
+
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
 
 	g_object_ref (persist);
 	
@@ -249,7 +252,7 @@ impl_save (EphyEmbedPersist *persist)
 
 		EphyHeaderSniffer* sniffer = new EphyHeaderSniffer
 			(webPersist, MOZILLA_EMBED_PERSIST (persist),
-			 tmpFile, inURI, DOMDocument, postData);
+			 tmpFile, inURI, DOMDocument, postData, single);
 		if (!sniffer) return FALSE;
  
 		webPersist->SetProgressListener(sniffer);
