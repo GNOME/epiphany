@@ -1317,17 +1317,19 @@ delete_event_cb (EphyBookmarksEditor *editor)
 }
 
 static void
-node_dropped_cb (EphyNodeView *view, EphyNode *node,
-		 GList *nodes, EphyBookmarksEditor *editor)
+node_dropped_cb (EphyNodeView *view,
+		 EphyNode *node,
+		 const char * const *uris,
+		 EphyBookmarksEditor *editor)
 {
-	GList *l;
+	EphyNode *bmk;
+	int i;
 
-	for (l = nodes; l != NULL; l = l->next)
+	g_return_if_fail (uris != NULL);
+
+	for (i = 0; uris[i] != NULL; i++)
 	{
-		const char *url = (const char *) l->data;
-		EphyNode *bmk;
-
-		bmk = ephy_bookmarks_find_bookmark (editor->priv->bookmarks, url);
+		bmk = ephy_bookmarks_find_bookmark (editor->priv->bookmarks, uris[i]);
 
 		if (bmk != NULL)
 		{

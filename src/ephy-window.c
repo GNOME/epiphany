@@ -2978,11 +2978,12 @@ ephy_window_set_zoom (EphyWindow *window,
 void
 ephy_window_load_in_tabs (EphyWindow *window,
 			  EphyTab *tab,
-			  GList *uri_list)
+			  char **uris)
 {
 	EphyEmbed *embed = NULL;
-	GList *l;
-	guint num = 0;
+	guint num;
+
+	g_return_if_fail (uris != NULL);
 
 	if (tab != NULL)
 	{
@@ -2990,11 +2991,10 @@ ephy_window_load_in_tabs (EphyWindow *window,
 		g_return_if_fail (EPHY_IS_EMBED (embed));
 	}
 
-	l = uri_list;
-	while (l != NULL && num < INSANE_NUMBER_OF_URLS)
+	for (num = 0; uris[num] != NULL && num < INSANE_NUMBER_OF_URLS; num++)
 	{
-		const char *url = l->data;
-
+		const char *url = uris[num];
+	
 		if (num == 0 && embed != NULL)
 		{
 			/**
@@ -3012,9 +3012,6 @@ ephy_window_load_in_tabs (EphyWindow *window,
 						  (tab ? EPHY_NEW_TAB_APPEND_AFTER :
 							 EPHY_NEW_TAB_APPEND_LAST));
 		}
-
-		l = l->next;
-		++num;
 	}
 }
 

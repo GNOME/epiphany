@@ -593,8 +593,7 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 				gint x, gint y, GtkSelectionData *selection_data,
 				guint info, guint time, EphyTab *tab)
 {
-	GList *uri_list = NULL;
-	gchar **tmp;
+	EphyWindow *window;
 
 	g_signal_stop_emission_by_name (widget, "drag_data_received");
 
@@ -602,36 +601,38 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 
 	if (selection_data->length <= 0 || selection_data->data == NULL) return;
 
+	window = EPHY_WINDOW (gtk_widget_get_toplevel (widget));
+
 	if (selection_data->target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE))
 	{
-		/* URL_TYPE has format: url \n title */
-		tmp = g_strsplit (selection_data->data, "\n", 2);
-		if (tmp != NULL && tmp[0] != NULL)
-		{
-			uri_list = g_list_prepend (uri_list, g_strdup (tmp[0]));
-		}
+		char *uris[2] = { NULL, NULL };
+		char **split;
 
-		g_strfreev (tmp);
+		/* URL_TYPE has format: url \n title */
+		split = g_strsplit (selection_data->data, "\n", 2);
+		if (split != NULL && split[0] != NULL)
+		{
+			uris[0] = split[0];
+			ephy_window_load_in_tabs (window, tab, uris);
+		}
+		g_strfreev (split);
 	}
 	else if (selection_data->target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE))
 	{
-		uri_list = ephy_string_parse_uri_list (selection_data->data);
+		char **uris;
+
+		uris = g_uri_list_extract_uris (selection_data->data);
+
+		if (uris != NULL)
+		{
+			ephy_window_load_in_tabs (window, tab, uris);
+
+			g_strfreev (uris);
+		}
 	}
 	else
 	{
 		g_return_if_reached ();
-	}
-
-	if (uri_list != NULL)
-	{
-		EphyWindow *window;
-
-		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (widget)));
-
-		ephy_window_load_in_tabs (window, tab, uri_list);
-
-		g_list_foreach (uri_list, (GFunc) g_free, NULL);
-		g_list_free (uri_list);
 	}
 }
 

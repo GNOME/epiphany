@@ -1,5 +1,18 @@
 2004-10-22  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-string.c: (ephy_string_double_underscores):
+	* lib/ephy-string.h:
+	* lib/widgets/ephy-node-view.c: (drag_data_received_cb):
+	* src/bookmarks/ephy-bookmarks-editor.c: (node_dropped_cb):
+	* src/ephy-notebook.c: (notebook_drag_data_received_cb):
+	* src/ephy-window.c: (ephy_window_load_in_tabs):
+	* src/ephy-window.h:
+
+	Remove ephy_string_parse_uri_list, and use new glib function
+	g_uri_list_extract_uris() instead.
+
+2004-10-22  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-notebook.c: (build_tab_label):
 
 	Add tooltip on close button. Thanks to spark for the string review;

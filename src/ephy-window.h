@@ -91,7 +91,7 @@ void		  ephy_window_load_url		  (EphyWindow *window,
 
 void		  ephy_window_load_in_tabs	  (EphyWindow *window,
 						   EphyTab *first_tab,
-						   GList *uri_list);
+						   char **uris);
 
 void		  ephy_window_set_zoom		  (EphyWindow *window,
 						   float zoom);

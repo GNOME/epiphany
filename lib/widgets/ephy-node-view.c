@@ -389,7 +389,7 @@ drag_data_received_cb (GtkWidget *widget,
 	if (view->priv->drop_occurred)
 	{
 		EphyNode *node;
-		GList *uris;
+		char **uris;
 		gboolean success = FALSE;
 		GtkTreePath *path;
 
@@ -400,7 +400,7 @@ drag_data_received_cb (GtkWidget *widget,
 
 		node = get_node_from_path (view, path);
 
-		uris = ephy_string_parse_uri_list (selection_data->data);
+		uris = g_uri_list_extract_uris (selection_data->data);
 
 		if (uris != NULL)
 		{
@@ -408,8 +408,8 @@ drag_data_received_cb (GtkWidget *widget,
 			g_signal_emit (G_OBJECT (view),
 				       ephy_node_view_signals[NODE_DROPPED], 0,
 				       node, uris);
-			g_list_foreach (uris, (GFunc) g_free, NULL);
-			g_list_free (uris);
+			g_strfreev (uris);
+
 		}
 
 		view->priv->drop_occurred = FALSE;
