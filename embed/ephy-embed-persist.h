@@ -69,9 +69,13 @@ struct EphyEmbedPersistClass
 
 	gresult (* set_source)   (EphyEmbedPersist *persist,
 				  const char *url);
+
 	gresult (* set_dest)     (EphyEmbedPersist *persist,
 				  const char *dir);
+
 	gresult (* save)         (EphyEmbedPersist *persist);
+
+	gresult (* cancel)       (EphyEmbedPersist *persist);
 
 	gresult (* set_max_size) (EphyEmbedPersist *persist,
 				  int max_size);
@@ -123,6 +127,8 @@ gresult		    ephy_embed_persist_get_flags   (EphyEmbedPersist *persist,
 						    EmbedPersistFlags *flags);
 
 gresult		    ephy_embed_persist_save        (EphyEmbedPersist *persist);
+
+gresult		    ephy_embed_persist_cancel      (EphyEmbedPersist *persist);
 
 G_END_DECLS
 

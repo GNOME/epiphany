@@ -1,3 +1,14 @@
+2003-01-11  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_cancel):
+	* embed/ephy-embed-persist.h:
+	* embed/mozilla/ProgressListener.cpp:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed-persist.h:
+
+	Implement a cancel api. Fix refcount to really destroy
+	the WebPersist object when done.
+
 2003-01-10  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_insert_from_url):

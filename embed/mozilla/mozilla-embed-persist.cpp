@@ -36,10 +36,13 @@ mozilla_embed_persist_finalize (GObject *object);
 
 static gresult 
 impl_save (EphyEmbedPersist *persist);
+static gresult 
+impl_cancel (EphyEmbedPersist *persist);
 
 struct MozillaEmbedPersistPrivate
 {
-	gpointer dummy;
+	nsCOMPtr<nsIWebBrowserPersist> mPersist;
+	GProgressListener *mProgress;
 };
 
 static GObjectClass *parent_class = NULL;
@@ -85,12 +88,14 @@ mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass)
         object_class->finalize = mozilla_embed_persist_finalize;
 
 	persist_class->save = impl_save;
+	persist_class->cancel = impl_cancel;
 }
 
 static void
 mozilla_embed_persist_init (MozillaEmbedPersist *persist)
 {
         persist->priv = g_new0 (MozillaEmbedPersistPrivate, 1);
+      	persist->priv->mPersist = do_CreateInstance (NS_WEBBROWSERPERSIST_CONTRACTID);
 }
 
 static void
@@ -103,11 +108,32 @@ mozilla_embed_persist_finalize (GObject *object)
 
         persist = MOZILLA_EMBED_PERSIST (object);
 
+	persist->priv->mPersist->SetProgressListener (nsnull);
+	persist->priv->mPersist = nsnull;
+	
         g_return_if_fail (persist->priv != NULL);
 
 	g_free (persist->priv);
 	
         G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+void
+mozilla_embed_persist_completed (MozillaEmbedPersist *persist)
+{
+	g_signal_emit_by_name (persist, "completed");
+}
+
+static gresult 
+impl_cancel (EphyEmbedPersist *persist)
+{
+	nsCOMPtr<nsIWebBrowserPersist> bpersist =
+	MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
+	if (!bpersist) return G_FAILED;
+
+	bpersist->CancelSave ();
+
+	return G_OK;
 }
 
 static gresult 
@@ -132,6 +158,10 @@ impl_save (EphyEmbedPersist *persist)
 	
 	g_return_val_if_fail (filename != NULL, G_FAILED);
 	
+	nsCOMPtr<nsIWebBrowserPersist> bpersist =
+		MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
+	if (!bpersist) return G_FAILED;
+
 	nsCOMPtr<nsIURI> linkURI;
 	linkURI = nsnull;
 	if (uri)
@@ -140,10 +170,6 @@ impl_save (EphyEmbedPersist *persist)
 	      	rv = NS_NewURI(getter_AddRefs(linkURI), s);
       		if (NS_FAILED(rv) || !linkURI) return G_FAILED;
 	}
-
-	nsCOMPtr<nsIWebBrowserPersist> bpersist = 
-      	do_CreateInstance(NS_WEBBROWSERPERSIST_CONTRACTID, &rv);
-        if (NS_FAILED(rv) || !persist) return G_FAILED;
 
         nsCOMPtr<nsILocalFile> file;
        	NS_NewLocalFile(NS_ConvertUTF8toUCS2(filename), PR_TRUE, getter_AddRefs(file)); 
@@ -194,6 +220,7 @@ impl_save (EphyEmbedPersist *persist)
 	}
 
 	GProgressListener *aProgress = new GProgressListener ();
+	MOZILLA_EMBED_PERSIST (persist)->priv->mProgress = aProgress;
 
 	if (uri == NULL)
 	{

@@ -364,6 +364,13 @@ ephy_embed_persist_set_dest (EphyEmbedPersist *persist,
 }
 
 gresult
+ephy_embed_persist_cancel (EphyEmbedPersist *persist)
+{
+	EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
+	return klass->cancel (persist);
+}
+
+gresult
 ephy_embed_persist_save (EphyEmbedPersist *persist)
 {
 	EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);

@@ -38,7 +38,7 @@ typedef struct MozillaEmbedPersistClass MozillaEmbedPersistClass;
 typedef struct MozillaEmbedPersist MozillaEmbedPersist;
 typedef struct MozillaEmbedPersistPrivate MozillaEmbedPersistPrivate;
 
-struct MozillaEmbedPersist 
+struct MozillaEmbedPersist
 {
         EphyEmbedPersist parent;
         MozillaEmbedPersistPrivate *priv;
@@ -50,6 +50,8 @@ struct MozillaEmbedPersistClass
 };
 
 GType               mozilla_embed_persist_get_type   (void);
+
+void		    mozilla_embed_persist_completed  (MozillaEmbedPersist *persist);
 
 G_END_DECLS
 
