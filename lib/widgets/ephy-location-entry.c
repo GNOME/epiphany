@@ -50,7 +50,6 @@ struct _EphyLocationEntryPrivate {
 	gboolean user_changed;
 
 	char *autocompletion_key;
-	char *last_action_target;
 };
 
 #define AUTOCOMPLETION_DELAY 10
@@ -216,7 +215,6 @@ ephy_location_entry_init (EphyLocationEntry *w)
 
 	p = g_new0 (EphyLocationEntryPrivate, 1);
 	w->priv = p;
-	p->last_action_target = NULL;
 	p->before_completion = NULL;
 	p->user_changed = TRUE;
 	p->autocompletion_key = NULL;
@@ -511,14 +509,6 @@ ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, Ep
         return FALSE;
 }
 
-static gboolean
-ephy_location_entry_content_is_text (const char *content)
-{
-	return ((g_strrstr (content, ".") == NULL) &&
-		(g_strrstr (content, "/") == NULL) &&
-		(g_strrstr (content, ":") == NULL));
-}
-
 static void
 ephy_location_entry_activate_cb (GtkEntry *entry, EphyLocationEntry *w)
 {
@@ -526,18 +516,9 @@ ephy_location_entry_activate_cb (GtkEntry *entry, EphyLocationEntry *w)
 	char *target = NULL;
 
 	content = gtk_editable_get_chars (GTK_EDITABLE(entry), 0, -1);
-	if (w->priv->last_action_target &&
-	    ephy_location_entry_content_is_text (content))
-	{
-		target = g_strdup (w->priv->last_action_target);
-	}
-	else
-	{
-		target = content;
-		content = NULL;
-		g_free ( w->priv->last_action_target);
-		w->priv->last_action_target = NULL;
-	}
+
+	target = content;
+	content = NULL;
 
 	ephy_location_entry_autocompletion_hide_alternatives (w);
 
@@ -669,13 +650,7 @@ ephy_location_entry_autocompletion_window_url_activated_cb (EphyAutocompletionWi
 {
 	char *content;
 
-	if (action)
-	{
-		if (w->priv->last_action_target)
-			g_free (w->priv->last_action_target);
-		w->priv->last_action_target = g_strdup (target);
-	}
-	else
+	if (!action)
 	{
 		ephy_location_entry_set_location (w, target);
 	}
