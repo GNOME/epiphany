@@ -938,9 +938,25 @@ ephy_window_show (GtkWidget *widget)
 	    !(window->priv->chrome_mask & EMBED_CHROME_OPENASFULLSCREEN) &&
 	    !GTK_WIDGET_VISIBLE (widget))
 	{
-		ephy_state_add_window (GTK_WIDGET(window),
+		ephy_state_add_window (widget,
 				       "main_window",
 			               600, 500);
+	}
+
+	if ((window->priv->chrome_mask & EMBED_CHROME_OPENASPOPUP) &&
+	    !GTK_WIDGET_VISIBLE (widget))
+	{
+		EphyTab *tab;
+		int width, height;
+
+		tab = ephy_window_get_active_tab (EPHY_WINDOW (window));
+		g_return_if_fail (tab != NULL);
+
+		ephy_tab_get_size (tab, &width, &height);
+		if (width == -1 && height == -1)
+		{
+			gtk_window_resize (GTK_WINDOW (window), 600, 500);
+		}
 	}
 
 	GTK_WIDGET_CLASS (parent_class)->show (widget);

@@ -752,17 +752,33 @@ drag_motion_cb (GtkWidget *widget,
                 guint time,
 	        EphyNodeView *view)
 {
+	EphyNode *node;
 	GtkTreePath *path = NULL;
 	GtkTreeViewDropPosition pos;
+	gboolean res;
+	EphyBookmarksKeywordPriority priority;
 
 	g_signal_stop_emission_by_name (widget, "drag_motion");
 
-	if (gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
-					       x, y, &path, &pos))
+	res = gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
+					         x, y, &path, &pos);
+	if (!res) return TRUE;
+
+	node = get_node_from_path (view, path);
+
+	priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+
+	if (priority != EPHY_BOOKMARKS_KEYWORD_ALL_PRIORITY &&
+	    priority != EPHY_BOOKMARKS_KEYWORD_SPECIAL_PRIORITY)
+
 	{
 		gtk_tree_view_set_drag_dest_row (GTK_TREE_VIEW (widget), path,
 						 GTK_TREE_VIEW_DROP_INTO_OR_AFTER);
 		gdk_drag_status (context, context->suggested_action, time);
+	}
+	else
+	{
+		gdk_drag_status (context, 0, time);
 	}
 
 	return TRUE;
@@ -778,6 +794,8 @@ drag_drop_cb (GtkWidget *widget,
 {
 	GdkAtom target;
 
+	g_signal_stop_emission_by_name (widget, "drag_drop");
+
 	target = gtk_drag_dest_find_target (widget, context,
 					    view->priv->drag_targets);
 
@@ -785,8 +803,6 @@ drag_drop_cb (GtkWidget *widget,
 	{
 		gtk_drag_get_data (widget, context, target, time);
 	}
-
-	g_signal_stop_emission_by_name (widget, "drag_drop");
 
 	return TRUE;
 }
@@ -822,6 +838,7 @@ drag_data_received_cb (GtkWidget *widget,
 			       node, src_nodes);
 
 		g_list_free (src_nodes);
+
 	}
 
 	return TRUE;

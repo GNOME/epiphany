@@ -52,7 +52,7 @@ typedef enum
 	EPHY_BOOKMARKS_KEYWORD_ALL_PRIORITY,
 	EPHY_BOOKMARKS_KEYWORD_SPECIAL_PRIORITY,
 	EPHY_BOOKMARKS_KEYWORD_NORMAL_PRIORITY
-} EphBookmarksKeywordPriority;
+} EphyBookmarksKeywordPriority;
 
 struct EphyBookmarks
 {
