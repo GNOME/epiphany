@@ -401,11 +401,67 @@ add_widget (EggMenuMerge *merge, GtkWidget *widget, EphyWindow *window)
 }
 
 static void
+menu_activate_cb (GtkWidget *widget,
+	          EphyWindow *window)
+{
+	gboolean cut, copy, paste, select_all;
+	EggActionGroup *action_group;
+	EggAction *action;
+	GtkWidget *focus_widget;
+	EphyEmbed *embed;
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (embed != NULL);
+
+	focus_widget = gtk_window_get_focus (GTK_WINDOW (window));
+
+
+	if (GTK_IS_EDITABLE (focus_widget))
+	{
+		gboolean has_selection;
+
+		has_selection = gtk_editable_get_selection_bounds
+			(GTK_EDITABLE (focus_widget), NULL, NULL);
+		paste = gtk_clipboard_wait_is_text_available
+			(gtk_clipboard_get (GDK_SELECTION_CLIPBOARD));
+		select_all = TRUE;
+		cut = has_selection;
+		copy = has_selection;
+	}
+	else if (focus_widget == GTK_WIDGET (embed) ||
+		 gtk_widget_get_ancestor (GTK_WIDGET (embed), EPHY_EMBED_TYPE))
+	{
+		paste = (ephy_embed_can_paste (embed) == G_OK);
+		cut = (ephy_embed_selection_can_cut (embed) == G_OK);
+		copy = (ephy_embed_selection_can_copy (embed) == G_OK);
+		select_all = TRUE;
+	}
+	else
+	{
+		paste = FALSE;
+		cut = FALSE;
+		copy = FALSE;
+		select_all = FALSE;
+	}
+
+	action_group = window->priv->action_group;
+	action = egg_action_group_get_action (action_group, "EditCut");
+	g_object_set (action, "sensitive", cut, NULL);
+	action = egg_action_group_get_action (action_group, "EditCopy");
+	g_object_set (action, "sensitive", copy, NULL);
+	action = egg_action_group_get_action (action_group, "EditPaste");
+	g_object_set (action, "sensitive", paste, NULL);
+	action = egg_action_group_get_action (action_group, "EditSelectAll");
+	g_object_set (action, "sensitive", select_all, NULL);
+}
+
+static void
 setup_window (EphyWindow *window)
 {
 	EggActionGroup *action_group;
 	EggAction *action;
 	EggMenuMerge *merge;
+	GtkWidget *menu;
 	int i;
 
 	window->priv->main_vbox = gtk_vbox_new (FALSE, 0);
@@ -444,7 +500,7 @@ setup_window (EphyWindow *window)
 	g_object_set (action, "short_label", N_("Print"), NULL);
 	action = egg_action_group_get_action (action_group, "FileBookmarkPage");
 	g_object_set (action, "short_label", N_("Bookmark"), NULL);
-	
+
 	action_group = egg_action_group_new ("PopupsActions");
 	egg_action_group_add_actions (action_group, ephy_popups_entries,
 				      ephy_popups_n_entries);
@@ -456,6 +512,10 @@ setup_window (EphyWindow *window)
 	egg_menu_merge_add_ui_from_file
 		(merge, ephy_file ("epiphany-ui.xml"), NULL);
 	gtk_window_add_accel_group (GTK_WINDOW (window), merge->accel_group);
+	egg_menu_merge_ensure_update (merge);
+
+	menu = egg_menu_merge_get_widget (merge, "/menu/EditMenu");
+	g_signal_connect (menu, "activate", G_CALLBACK (menu_activate_cb), window);
 
 	window->priv->toolbar = toolbar_new (window);
 
