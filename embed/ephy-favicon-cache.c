@@ -221,7 +221,7 @@ remove_obsolete_icons (EphyFaviconCache *eb)
 			path = g_build_filename (eb->priv->directory,
 						 filename, NULL);
 			gnome_vfs_unlink (path);
-			g_object_unref (kid);
+			ephy_node_unref (kid);
 		}
 	}
 }
@@ -324,7 +324,7 @@ kill_download (gpointer key,
 	icon = g_hash_table_lookup (cache->priv->icons_hash, (char *)key);
 	g_static_rw_lock_reader_unlock (cache->priv->icons_hash_lock);
 
-	g_object_unref (icon);
+	ephy_node_unref (icon);
 
 	return TRUE;
 }

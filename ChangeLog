@@ -1,5 +1,12 @@
 2003-05-21  Xan Lopez  <xan@masilla.org>
 
+	* embed/ephy-favicon-cache.c: (remove_obsolete_icons),
+	(kill_download):
+
+	s/g_object_unref/ephy_node_unref/ on EphyNodes.
+
+2003-05-21  Xan Lopez  <xan@masilla.org>
+
 	* src/ephy-tab.c: (ephy_tab_dom_mouse_click_cb):
 	* src/session.c: (parse_embed):
 
