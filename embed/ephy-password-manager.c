@@ -106,6 +106,8 @@ ephy_password_info_free (EphyPasswordInfo *info)
 
 /* EphyPasswordManager */
 
+static void ephy_password_manager_base_init (gpointer g_class);
+
 GType
 ephy_password_manager_get_type (void)
 {
@@ -116,7 +118,7 @@ ephy_password_manager_get_type (void)
 		static const GTypeInfo our_info =
 		{
 			sizeof (EphyPasswordManagerIface),
-			NULL,
+			ephy_password_manager_base_init,
 			NULL,
 		};
 		
@@ -127,6 +129,33 @@ ephy_password_manager_get_type (void)
 	}
 
 	return type;
+}
+
+static void
+ephy_password_manager_base_init (gpointer g_class)
+{
+	static gboolean initialised = FALSE;
+
+	if (initialised == FALSE)
+	{
+	/**
+	 * EphyPasswordManager::changed
+	 * @manager: the #EphyPermissionManager
+	 *
+	 * The ::passwords-changed signal is emitted when the list of passwords
+	 * has changed.
+	 */
+	g_signal_new ("passwords-changed",
+		      EPHY_TYPE_PASSWORD_MANAGER,
+		      G_SIGNAL_RUN_FIRST,
+		      G_STRUCT_OFFSET (EphyPasswordManagerIface, changed),
+		      NULL, NULL,
+		      g_cclosure_marshal_VOID__VOID,
+		      G_TYPE_NONE,
+		      0);
+
+	initialised = TRUE;
+	}
 }
 
 /**

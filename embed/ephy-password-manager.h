@@ -50,6 +50,9 @@ struct EphyPasswordManagerIface
 {
 	GTypeInterface base_iface;
 
+	/* Signals */
+	void	(* changed)	(EphyPasswordManager *manager);
+
 	/* Methods */
 	void	(* add)		(EphyPasswordManager *manager,
 				 EphyPasswordInfo *info);

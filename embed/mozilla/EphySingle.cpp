@@ -60,6 +60,7 @@ EphySingle::Init (EphyEmbedSingle *aOwner)
 	rv |= mObserverService->AddObserver (this, "cookie-rejected", PR_FALSE);
 	rv |= mObserverService->AddObserver (this, "perm-changed", PR_FALSE);
 	rv |= mObserverService->AddObserver (this, "network:offline-status-changed", PR_FALSE);
+	rv |= mObserverService->AddObserver (this, "signonChanged", PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	mOwner = aOwner;
@@ -79,6 +80,7 @@ EphySingle::Detach ()
 		mObserverService->RemoveObserver (this, "cookie-changed");
 		mObserverService->RemoveObserver (this, "cookie-rejected");
 		mObserverService->RemoveObserver (this, "perm-changed");
+		mObserverService->RemoveObserver (this, "signonChanged");
 		mObserverService->RemoveObserver (this, "network:offline-status-changed");
 	}
 
@@ -213,6 +215,14 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 		{
 			g_warning ("EphySingle unexpected data!\n");
 			rv = NS_ERROR_FAILURE;
+		}
+	}
+	else if (strcmp (aTopic, "signonChanged") == 0)
+	{
+		/* aData can be PRUnichar[] "signons", "rejects", "nocaptures" and "nopreviews" */
+		if (aData[0] == 's')
+		{
+			g_signal_emit_by_name (mOwner, "passwords-changed");
 		}
 	}
 	else if (strcmp (aTopic, "network:offline-status-changed") == 0)

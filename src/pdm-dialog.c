@@ -540,19 +540,10 @@ cookies_cleared_cb (EphyCookieManager *manager,
 		    PdmDialog *dialog)
 {
 	PdmActionInfo *info = dialog->priv->cookies;
-	GtkTreeIter iter;
-	gboolean valid;
 
 	LOG ("cookies_cleared_cb")
 
-	valid = gtk_tree_model_get_iter_first (info->model, &iter);
-
-	while (valid)
-	{
-		gtk_list_store_remove (GTK_LIST_STORE (info->model), &iter);		
-
-		valid = gtk_tree_model_iter_next (info->model, &iter);
-	}
+	gtk_list_store_clear (GTK_LIST_STORE (info->model));
 }
 
 static void
@@ -579,14 +570,14 @@ pdm_dialog_fill_cookies_list (PdmActionInfo *info)
 	info->filled = TRUE;
 
 	/* Now connect the callbacks on the EphyCookieManager */
-	g_signal_connect_object (manager, "cookie-added",
-				 G_CALLBACK (cookie_added_cb), info->dialog, 0);
-	g_signal_connect_object (manager, "cookie-changed",
-				 G_CALLBACK (cookie_changed_cb), info->dialog, 0);
-	g_signal_connect_object (manager, "cookie-deleted",
-				 G_CALLBACK (cookie_deleted_cb), info->dialog, 0);
-	g_signal_connect_object (manager, "cookies-cleared",
-			  	 G_CALLBACK (cookies_cleared_cb), info->dialog, 0);
+	g_signal_connect (manager, "cookie-added",
+			 G_CALLBACK (cookie_added_cb), info->dialog);
+	g_signal_connect (manager, "cookie-changed",
+			 G_CALLBACK (cookie_changed_cb), info->dialog);
+	g_signal_connect (manager, "cookie-deleted",
+			 G_CALLBACK (cookie_deleted_cb), info->dialog);
+	g_signal_connect (manager, "cookies-cleared",
+			 G_CALLBACK (cookies_cleared_cb), info->dialog);
 }
 
 static void
@@ -695,12 +686,24 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 }
 
 static void
+passwords_changed_cb (EphyPasswordManager *manager,
+		      PdmDialog *dialog)
+{
+	LOG ("passwords changed")
+
+	/* since the callback doesn't carry any information about what
+	 * exactly has changed, we have to rebuild the list from scratch.
+	 */
+	gtk_list_store_clear (GTK_LIST_STORE (dialog->priv->passwords->model));
+
+	dialog->priv->passwords->fill (dialog->priv->passwords);
+}
+
+static void
 pdm_dialog_fill_passwords_list (PdmActionInfo *info)
 {
 	EphyPasswordManager *manager;
 	GList *list, *l;
-
-	g_assert (info->filled == FALSE);
 
 	manager = EPHY_PASSWORD_MANAGER (ephy_embed_shell_get_embed_single
 			(EPHY_EMBED_SHELL (ephy_shell)));
@@ -714,6 +717,13 @@ pdm_dialog_fill_passwords_list (PdmActionInfo *info)
 
 	/* the element data has been consumed, so we need only to free the list */
 	g_list_free (list);
+
+	/* Let's get notified when the list changes */
+	if (info->filled == FALSE)
+	{
+		g_signal_connect (manager, "passwords-changed",
+				  G_CALLBACK (passwords_changed_cb), info->dialog);
+	}
 
 	info->filled = TRUE;
 }
@@ -757,7 +767,18 @@ pdm_dialog_password_remove (PdmActionInfo *info,
 	manager = EPHY_PASSWORD_MANAGER (ephy_embed_shell_get_embed_single
 			(EPHY_EMBED_SHELL (ephy_shell)));
 
+	/* we don't remove the password from the liststore in the callback
+	 * like we do for cookies, since the callback doesn't carry that
+	 * information, and we'd have to reload the whole list, losing the
+	 * selection in the process.
+	 */
+	g_signal_handlers_block_by_func
+		(manager, G_CALLBACK (passwords_changed_cb), info);
+
 	ephy_password_manager_remove (manager, pinfo);
+
+	g_signal_handlers_unblock_by_func
+		(manager, G_CALLBACK (passwords_changed_cb), info);
 }
 
 /* common routines */
@@ -847,6 +868,12 @@ static void
 pdm_dialog_finalize (GObject *object)
 {
 	PdmDialog *dialog = EPHY_PDM_DIALOG (object);
+	GObject *single;
+
+	single = ephy_embed_shell_get_embed_single (embed_shell);
+
+	g_signal_handlers_disconnect_matched
+		(single, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, object);
 
 	dialog->priv->cookies->destruct (dialog->priv->cookies);
 	dialog->priv->passwords->destruct (dialog->priv->passwords);

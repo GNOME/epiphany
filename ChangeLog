@@ -1,5 +1,20 @@
 2004-08-21  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-password-manager.c: (ephy_password_manager_get_type),
+	(ephy_password_manager_base_init):
+	* embed/ephy-password-manager.h:
+	* embed/mozilla/EphySingle.cpp:
+	* src/pdm-dialog.c: (cookies_cleared_cb),
+	(pdm_dialog_fill_cookies_list), (passwords_changed_cb),
+	(pdm_dialog_fill_passwords_list), (pdm_dialog_password_remove),
+	(pdm_dialog_finalize):
+
+	Keep the passwords list in the pdm dialogue up-to-date wrt.
+	new passwords saved from web pages.
+	Fixes bug #150296.
+
+2004-08-21  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.c:
 
 	Set accel for normal zoom, as per HIG.
