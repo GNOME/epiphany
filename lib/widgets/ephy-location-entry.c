@@ -480,18 +480,28 @@ static gboolean
 ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, EphyLocationEntry *w)
 {
 	EphyLocationEntryPrivate *p = w->priv;
+	GtkWidget *window;
 
 	switch (event->keyval)
         {
         case GDK_Left:
         case GDK_Right:
 		ephy_location_entry_autocompletion_hide_alternatives (w);
-                return FALSE;
+                break;
 	case GDK_Escape:
 		ephy_location_entry_set_location (w, p->before_completion);
 		gtk_editable_set_position (GTK_EDITABLE (p->entry), -1);
 		ephy_location_entry_autocompletion_hide_alternatives (w);
-                return FALSE;
+                break;
+	case GDK_Tab:
+	case GDK_KP_Tab:
+		if (p->autocompletion_window_visible)
+		{
+			ephy_location_entry_autocompletion_hide_alternatives (w);
+			window = gtk_widget_get_toplevel (entry);
+			g_signal_emit_by_name (window, "move_focus", 1);
+		}
+		break;
         default:
                 break;
         }

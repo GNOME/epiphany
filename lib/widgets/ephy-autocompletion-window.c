@@ -750,11 +750,9 @@ ephy_autocompletion_window_key_press_cb (GtkWidget *widget,
 					 GdkEventKey *event,
 					 EphyAutocompletionWindow *aw)
 {
-	GdkEventKey tmp_event;
 	EphyAutocompletionWindowPrivate *p = aw->priv;
-	GtkWidget *dest_widget;
+	GdkEventKey tmp_event;
 
-	/* allow keyboard navigation in the alternatives clist */
 	if (event->keyval == GDK_Up || event->keyval == GDK_Down
 	    || event->keyval == GDK_Page_Up ||  event->keyval == GDK_Page_Down
 	    || ((event->keyval == GDK_space || event->keyval == GDK_Return)
@@ -763,23 +761,11 @@ ephy_autocompletion_window_key_press_cb (GtkWidget *widget,
 		return ephy_autocompletion_window_key_press_hack
 			(aw, event->keyval);
 	}
-	else
-	{
-		dest_widget = p->parent;
-	}
 
-	if (dest_widget != widget)
-	{
-		tmp_event = *event;
-		gtk_widget_event (dest_widget, (GdkEvent *)&tmp_event);
+	tmp_event = *event;
+	gtk_widget_event (p->parent, (GdkEvent *)&tmp_event);
 
-		return TRUE;
-	}
-	else
-	{
-		return FALSE;
-	}
-
+	return TRUE;
 }
 
 void

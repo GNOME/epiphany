@@ -1,6 +1,19 @@
 2003-07-07  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/widgets/ephy-autocompletion-window.c:
+	(ephy_autocompletion_window_key_press_cb):
+
+	Cleanup.
+
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_key_press_event_cb):
+
+	Handle Tab key binding. The window binding doesnt
+	work because of the grab.
+
+2003-07-07  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/ephy-autocompletion-window.c:
 	(ephy_autocompletion_window_finalize_impl),
 	(ephy_autocompletion_window_show), (move_selection),
 	(ephy_autocompletion_window_key_press_hack),
