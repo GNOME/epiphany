@@ -712,12 +712,17 @@ build_progress_from_requests (EphyTab *tab, EmbedState state)
 }
 
 static void
-ensure_address (EphyTab *tab, const char *address)
+ensure_page_info (EphyTab *tab, const char *address)
 {
 	if (tab->priv->address == NULL &&
 	    tab->priv->address_expire == TAB_ADDRESS_EXPIRE_NOW)
         {
 		ephy_tab_set_location (tab, address, TAB_ADDRESS_EXPIRE_NOW);
+	}
+
+	if (tab->priv->title == NULL)
+	{
+		ephy_tab_set_title (tab, NULL);
 	}
 }
 
@@ -742,9 +747,8 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 		{
 			tab->priv->total_requests = 0;
 			tab->priv->cur_requests = 0;
-			ensure_address (tab, uri);
+			ensure_page_info (tab, uri);
 
-			ephy_tab_set_title (tab, NULL);
 			ephy_tab_set_load_percent (tab, 0);
 			ephy_tab_set_load_status (tab, TRUE);
 			ephy_tab_update_navigation_flags (tab);
@@ -942,7 +946,7 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->cur_requests = 0;
 	tab->priv->width = -1;
 	tab->priv->height = -1;
-	tab->priv->title = g_strdup (_("Loading..."));
+	tab->priv->title = NULL;
 	tab->priv->address = NULL;
 	tab->priv->icon_address = NULL;
 	tab->priv->load_percent = 0;
