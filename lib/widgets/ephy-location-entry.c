@@ -35,6 +35,12 @@
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcelllayout.h>
 #include <gtk/gtktreemodelsort.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtkimagemenuitem.h>
+#include <gtk/gtkseparatormenuitem.h>
+#include <glib/gi18n.h>
+
 #include <string.h>
 
 #define EPHY_LOCATION_ENTRY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LOCATION_ENTRY, EphyLocationEntryPrivate))
@@ -328,6 +334,46 @@ entry_drag_drop_cb (GtkWidget          *widget,
 }
 
 static void
+entry_clear_activate_cb (GtkMenuItem *item,
+			 EphyLocationEntry *entry)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+
+	priv->user_changed = FALSE;
+	gtk_entry_set_text (GTK_ENTRY (priv->entry), "");
+	priv->user_changed = TRUE;
+}
+
+static void
+entry_populate_popup_cb (GtkEntry *entry,
+			 GtkMenu *menu,
+			 EphyLocationEntry *lentry)
+{
+	GtkWidget *image;
+	GtkWidget *menuitem;
+
+	menuitem = gtk_separator_menu_item_new ();
+	gtk_widget_show (menuitem);
+	gtk_menu_shell_prepend (GTK_MENU_SHELL(menu), menuitem);
+
+	/* Clear and Copy mnemonics conflict, make custom menuitem */
+	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image);
+
+	/* To translators: the mnemonic shouldn't conflict with any of the
+	 * stock items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
+	 * and Insert Unicode control character.) */
+	menuitem = gtk_image_menu_item_new_with_mnemonic (_("Cl_ear"));
+	gtk_widget_show (menuitem);
+
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM(menuitem), image);
+	gtk_menu_shell_prepend (GTK_MENU_SHELL(menu), menuitem);
+
+	g_signal_connect (menuitem , "activate",
+			  G_CALLBACK (entry_clear_activate_cb), lentry);
+}
+
+static void
 ephy_location_entry_construct_contents (EphyLocationEntry *le)
 {
 	EphyLocationEntryPrivate *p = le->priv;
@@ -339,6 +385,8 @@ ephy_location_entry_construct_contents (EphyLocationEntry *le)
 	gtk_container_add (GTK_CONTAINER (le), p->entry);
 	gtk_widget_show (p->entry);
 
+	g_signal_connect (p->entry, "populate_popup",
+			  G_CALLBACK (entry_populate_popup_cb), le);
 	g_signal_connect (p->entry, "button_press_event",
 			  G_CALLBACK (entry_button_press_cb), le);
 	g_signal_connect (p->entry, "changed",
