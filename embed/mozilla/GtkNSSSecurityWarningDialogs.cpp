@@ -94,7 +94,7 @@ GtkNSSSecurityWarningDialogs::ConfirmEnteringSecure (nsIInterfaceRequestor *aCon
 		  _("Security Notice"),
 		  _("This page is loaded over a secure connection."),
 		  _("You can always see the security status of a page from "
-		    "the icon on the left side of the statusbar."),
+		    "the padlock icon on the statusbar."),
 		  nsnull, _retval);
 
 	*_retval = PR_TRUE;
@@ -137,8 +137,8 @@ GtkNSSSecurityWarningDialogs::ConfirmMixedMode (nsIInterfaceRequestor *aContext,
 		  GTK_MESSAGE_WARNING,
 		  GTK_BUTTONS_OK,
 		  _("Security Warning"),
-		  _("Some parts of this page are loaded over an unencrypted connection."),
-		  _("Some information you see or enter will be sent over an unencrypted "
+		  _("Some parts of this page are loaded over an insecure connection."),
+		  _("Some information you see or enter will be sent over an insecure "
 		    "connection, and could easily be intercepted by a third party."),
 		  nsnull, _retval);
 
@@ -153,13 +153,13 @@ GtkNSSSecurityWarningDialogs::ConfirmPostToInsecure (nsIInterfaceRequestor *aCon
 	DoDialog (aContext,
 		  INSECURE_SUBMIT_PREF,
 		  GTK_MESSAGE_WARNING,
-		  GTK_BUTTONS_OK,
+		  GTK_BUTTONS_CANCEL,
 		  _("Security Warning"),
-		  _("Send this information over an unencrypted connection?"),
+		  _("Send this information over an insecure connection?"),
 		  _("The information you have entered will be sent over an "
-		    "unencrypted connection, and could easily be intercepted "
+		    "insecure connection, and could easily be intercepted "
 		    "by a third party."),
-		  _("Send anyway"),
+		  _("Send"),
 		  _retval);
 
 	*_retval = PR_TRUE;
@@ -175,12 +175,12 @@ GtkNSSSecurityWarningDialogs::ConfirmPostToInsecureFromSecure (nsIInterfaceReque
 		  GTK_MESSAGE_WARNING,
 		  GTK_BUTTONS_CANCEL,
 		  _("Security Warning"),
-		  _("Send this information over an unencrypted connection?"),
-		  _("Although this page was loaded over an encrypted connection, "
+		  _("Send this information over an insecure connection?"),
+		  _("Although this page was loaded over a secure connection, "
 		    "the information you have entered will be sent over an "
-		    "unencrypted connection, and could easily be intercepted by "
+		    "insecure connection, and could easily be intercepted by "
 		    "a third party."),
-		  _("Send anyway"),
+		  _("Send"),
 		  _retval);
 
 	return NS_OK;
