@@ -31,6 +31,7 @@
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 #include "ephy-favicon-cache.h"
+#include "ephy-event-box.h"
 
 #include <gtk/gtk.h>
 #include <glib-object.h>
@@ -895,7 +896,7 @@ build_tab_label (EphyNotebook *nb, GtkWidget *child)
 	gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0);
 
 	/* setup label */
-	label_ebox = gtk_event_box_new ();
+	label_ebox = ephy_event_box_new ();
         label = gtk_label_new ("");
 	gtk_misc_set_alignment (GTK_MISC (label), 0.00, 0.5);
         gtk_misc_set_padding (GTK_MISC (label), 4, 0);

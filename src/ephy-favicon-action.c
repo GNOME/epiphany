@@ -23,6 +23,7 @@
 #include "ephy-dnd.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
+#include "ephy-event-box.h"
 #include "ephy-debug.h"
 
 static GtkTargetEntry url_drag_types [] =
@@ -128,7 +129,7 @@ create_tool_item (EggAction *action)
 
 	item = GTK_WIDGET (egg_tool_item_new ());
 
-	ebox = gtk_event_box_new ();
+	ebox = ephy_event_box_new ();
 	image = gtk_image_new ();
 	gtk_container_add (GTK_CONTAINER (ebox), image);
 	gtk_container_set_border_width (GTK_CONTAINER (ebox), 2);
