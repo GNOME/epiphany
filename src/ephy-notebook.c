@@ -52,7 +52,7 @@
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 
-#define TAB_WIDTH_N_CHARS 20
+#define TAB_WIDTH_N_CHARS 15
 
 #define AFTER_ALL_TABS -1
 #define NOT_IN_APP_WINDOWS -2
@@ -823,7 +823,7 @@ tab_label_style_set_cb (GtkWidget *label,
 			                     label->style->font_desc,
 					     pango_context_get_language (context));
 
-	char_width = pango_font_metrics_get_approximate_char_width (metrics);
+	char_width = pango_font_metrics_get_approximate_digit_width (metrics);
 	pango_font_metrics_unref (metrics);
 
 	LOG ("tab_label_size_request_cb label %p char_width %d total %d",
