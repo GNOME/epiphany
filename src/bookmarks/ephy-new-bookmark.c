@@ -298,11 +298,16 @@ duplicate_dialog_construct (GtkWindow *parent,
 	GtkWidget *hbox, *vbox, *label, *image;
 	char *str;
 
+	/* FIXME: We "should" use gtk_message dialog here
+	 * but it doesn't support markup of text yet
+	 * so we build our own. See bug 65501.
+	 */
+
 	dialog = gtk_dialog_new_with_buttons (_("Duplicated bookmark"),
 					      GTK_WINDOW (parent),
 					      GTK_DIALOG_NO_SEPARATOR,
 					      GTK_STOCK_OK,
-					      GTK_RESPONSE_ACCEPT,
+					      GTK_RESPONSE_OK,
 					      NULL);
 	
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 6);
@@ -336,6 +341,19 @@ duplicate_dialog_construct (GtkWindow *parent,
 	return dialog;
 }
 
+static void
+duplicate_bookmark_response_cb (EphyNewBookmark *new_bookmark,
+	     			int response_id,
+	     			gpointer user_data)
+{
+	switch (response_id)
+	{
+		case GTK_RESPONSE_OK:
+			gtk_widget_destroy (GTK_WIDGET (new_bookmark));
+			break;
+	}
+}
+
 gboolean
 ephy_new_bookmark_is_unique (EphyBookmarks *bookmarks,
 				 GtkWindow *parent,
@@ -352,9 +370,11 @@ ephy_new_bookmark_is_unique (EphyBookmarks *bookmarks,
 		title = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
 		dialog = duplicate_dialog_construct (parent, title);
 		gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
-		gtk_dialog_run (GTK_DIALOG (dialog));
-		gtk_widget_destroy (dialog);
-
+		g_signal_connect (G_OBJECT (dialog),
+			  	  "response",
+			  	  G_CALLBACK (duplicate_bookmark_response_cb),
+			  	  dialog);
+		gtk_widget_show (GTK_WIDGET (dialog));
 		return FALSE;
 	}
 
