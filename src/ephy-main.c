@@ -77,6 +77,13 @@ shell_weak_notify (gpointer data,
 	gtk_main_quit ();
 }
 
+static gboolean
+idle_unref (GObject *object)
+{
+	g_object_unref (object);
+	return FALSE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -178,9 +185,8 @@ main (int argc, char *argv[])
 	}
 	else if (new_instance)
 	{
-		g_object_unref (ephy_shell);
-
 		g_object_weak_ref (G_OBJECT (ephy_shell), shell_weak_notify, NULL);
+		g_idle_add ((GSourceFunc) idle_unref, ephy_shell);
 
 		gtk_main ();
 	}

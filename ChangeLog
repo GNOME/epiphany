@@ -1,3 +1,11 @@
+2004-11-11  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-main.c: (idle_unref), (main):
+
+	Don't unref, then weak ref, then enter main loop; this won't work
+	when refcount was 1. Instead weakref and unref on idle.
+	Fixes bug #136170.
+
 2004-11-11  James Henstridge  <james@jamesh.id.au>
 
 	* src/ephy-extensions-manager.c (load_file_from_monitor): make len
