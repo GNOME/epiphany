@@ -211,7 +211,7 @@ nsresult EphyWrapper::PrintPreviewClose (void)
 	if (NS_FAILED(rv) || !print) return NS_ERROR_FAILURE;
 
 	rv = print->GetDoingPrintPreview(&isPreview);
-	if (isPreview == PR_TRUE)
+	if (NS_SUCCEEDED (rv) && isPreview == PR_TRUE)
 	{
 		rv = print->ExitPrintPreview();
 	}

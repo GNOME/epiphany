@@ -394,16 +394,23 @@ static void
 toolbar_cmd_ppv_close (EggMenuMerge *merge,
 		       PPViewToolbar *t)
 {
-	EphyWindow *window = t->priv->window;
+	EphyWindow *window;
 	EphyEmbed *embed;
 	GtkWidget *notebook;
 
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
+	g_return_if_fail (IS_PPVIEW_TOOLBAR (t));
 
-	ephy_window_set_chrome (t->priv->window, t->priv->original_mask);
+	window = t->priv->window;
+	g_return_if_fail (IS_EPHY_WINDOW (window));
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (IS_EPHY_EMBED (embed));
+
+	ephy_window_set_chrome (window, t->priv->original_mask);
 
 	notebook = ephy_window_get_notebook (window);
+	g_return_if_fail (IS_EPHY_NOTEBOOK (notebook));
+
 	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (notebook), TRUE);
 
 	ephy_embed_print_preview_close (embed);
