@@ -22,7 +22,6 @@
 #include "ephy-prefs.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-stock-icons.h"
-#include "ephy-filesystem-autocompletion.h"
 #include "ephy-window.h"
 #include "ephy-file-helpers.h"
 #include "ephy-thread-helpers.h"
