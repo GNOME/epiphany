@@ -272,7 +272,7 @@ static GtkActionEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_link_in_new_window) },
 	{ "OpenLinkInNewTab", NULL, N_("Open Link in New _Tab"),
 	  NULL, NULL, G_CALLBACK (popup_cmd_link_in_new_tab) },
-	{ "DownloadLink", NULL, N_("_Download Link"), NULL,
+	{ "DownloadLink", EPHY_STOCK_DOWNLOAD, N_("_Download Link"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_download_link) },
 	{ "DownloadLinkAs", GTK_STOCK_SAVE_AS, N_("_Save Link As..."), NULL,
 	  NULL, G_CALLBACK (popup_cmd_download_link_as) },
