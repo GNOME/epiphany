@@ -53,6 +53,7 @@
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <libgnomeui/gnome-stock-icons.h>
+#include <libgnomeui/gnome-about.h>
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkmain.h>

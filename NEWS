@@ -11,12 +11,32 @@ Changes
 	* Don't open all bookmarks in new tabs [#156843]
 	* When showing a modal alert put up by a web page,
 	  switch the window to that tab
-	* Emit ::tab-removed after the tab has been removed[ 151607]
+	* Emit ::tab-removed after the tab has been removed [#151607]
 	* Fix disconnect on node destroy [Peter Harvey]
 	* Fix node signal [dis]connection while signal emission is running
 	* Make sure there's only one properties diaogue per bookmark [#148398]
 	* Fix crash when removing bookmark with open properties dialogue [#155880]
 	* Fix toolbar activation [#155650]
+	* Check favicon urls with script sec manager and content policy
+	* Fix zoom control so that it shows tooltips again [#155826]
+	* Make the tooltip on the zoom control also work on Ctrl-F1
+	* When popping up the context menu with keyboard, select the first item [#154907]
+	* Sanitise the embed popup position [#157162]
+	* Fix button sensitivity setting in language editor not to first
+	* Fix history date filter to work correctly in time zones != UTC
+	* Better positioning for the context menu popup in a treeview (Crispin Flowerday)
+	* Fix opening content with external content handlers (Marco)
+	* Remove remaining time tooltip from tray icon [#145955]
+	* Fix hang after importing bookmarks from command line [#136170]
+	* Fix crash when no tool windows are open when the session manager
+	  sends us the "die" signal
+	* Fix opening anchored links in new tabs [#156854]
+	* Adapted to Mozilla API changes
+	* Fix a freed memory read
+
+Documentation translations
+
+	* Add manual translation into Finnish, by Pauli Virtanen
 
 Translation updates
 
