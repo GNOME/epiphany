@@ -105,7 +105,7 @@ NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
         options->SetMarginLeft (MM_TO_INCH (info->left_margin));
         options->SetMarginRight (MM_TO_INCH (info->right_margin));
 
-	PRUnichar postscript[] = { 'P', 'o', 's', 't', 's', 'c', 'r', 'i',
+	PRUnichar postscript[] = { 'P', 'o', 's', 't', 'S', 'c', 'r', 'i',
 				   'p', 't', '/', 'd', 'e', 'f', 'a', 'u',
 				   'l', 't', '\0' };
         options->SetPrinterName(postscript);
