@@ -249,7 +249,7 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	GtkTreeIter iter;
 	EphyDownloadState state;
 	long total, current, remaining_secs;
-	char *remaining, *file, *cur_progress;
+	char *remaining, *file, *cur_progress, *name;
 	struct tm;
 	int percent;
 
@@ -283,22 +283,20 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 
 	cur_progress = gnome_vfs_format_file_size_for_display (current);
 
+	name = ephy_download_get_name (download);
+
 	if (total != -1)
 	{
-		char *total_progress, *name;
+		char *total_progress;
 
-		name = ephy_download_get_name (download);
 		total_progress = gnome_vfs_format_file_size_for_display (total);
 		file = g_strdup_printf ("%s\n%s of %s", name,
 					cur_progress, total_progress);
-		g_free (name);
 		g_free (total_progress);
 	}
 	else
 	{
-		file = g_strdup_printf ("%s\n%s",
-					ephy_download_get_name (download),
-					cur_progress);
+		file = g_strdup_printf ("%s\n%s", name, cur_progress);
 	}
 
 	if (remaining_secs < 0)
@@ -320,6 +318,7 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 			    -1);
 	gtk_tree_path_free (path);
 
+	g_free (name);
 	g_free (cur_progress);
 	g_free (file);
 	g_free (remaining);
