@@ -68,9 +68,9 @@ struct EphyToolbarsModelPrivate
 GType
 ephy_toolbars_model_get_type (void)
 {
-	static GType ephy_toolbars_model_type = 0;
+	static GType type = 0;
 
-	if (ephy_toolbars_model_type == 0)
+	if (type == 0)
 	{
 		static const GTypeInfo our_info = {
 		sizeof (EphyToolbarsModelClass),
@@ -84,12 +84,12 @@ ephy_toolbars_model_get_type (void)
 		(GInstanceInitFunc) ephy_toolbars_model_init
 	};
 
-	ephy_toolbars_model_type = g_type_register_static (EGG_TOOLBARS_MODEL_TYPE,
-							   "EphyToolbarsModel",
-							   &our_info, 0);
+	type = g_type_register_static (EGG_TYPE_TOOLBARS_MODEL,
+				       "EphyToolbarsModel",
+				       &our_info, 0);
 	}
 
-	return ephy_toolbars_model_type;
+	return type;
 }
 
 char *
@@ -320,13 +320,40 @@ connect_item (EphyToolbarsModel *model,
 }
 
 static void
+update_toolbar_removeable_flag (EggToolbarsModel *model)
+{
+	int i, n_toolbars;
+	int flag = 0;
+
+	n_toolbars = egg_toolbars_model_n_toolbars (model);
+
+	/* If there is only one toolbar and the bookmarks bar */
+	if (n_toolbars <= 2)
+	{
+		flag = EGG_TB_MODEL_NOT_REMOVABLE;
+	}
+
+	for (i = 0; i < n_toolbars; i++)
+	{
+		const char *t_name;
+
+		t_name = egg_toolbars_model_toolbar_nth (model, i);
+		g_return_if_fail (t_name != NULL);
+
+		if (!(strcmp (t_name, "BookmarksBar") == 0))
+		{
+			egg_toolbars_model_set_flags (model, flag, i);
+		}
+	}
+}
+
+static void
 ephy_toolbars_model_set_bookmarks (EphyToolbarsModel *model, EphyBookmarks *bookmarks)
 {
 	EggToolbarsModel *egg_model = EGG_TOOLBARS_MODEL (model);
 	gboolean success = FALSE;
 
-	model->priv->bookmarks = bookmarks;
-	g_object_ref (model->priv->bookmarks);
+	model->priv->bookmarks = g_object_ref (bookmarks);
 
 	model->priv->loading = TRUE;
 
@@ -451,12 +478,14 @@ static void
 toolbar_added (EphyToolbarsModel *model, int position)
 {
 	save_changes (model);
+	update_toolbar_removeable_flag (EGG_TOOLBARS_MODEL (model));
 }
 
 static void
 toolbar_removed (EphyToolbarsModel *model, int position)
 {
 	save_changes (model);
+	update_toolbar_removeable_flag (EGG_TOOLBARS_MODEL (model));
 }
 
 static void
@@ -493,15 +522,9 @@ ephy_toolbars_model_finalize (GObject *object)
 EphyToolbarsModel *
 ephy_toolbars_model_new (EphyBookmarks *bookmarks)
 {
-	EphyToolbarsModel *t;
-
-	t = EPHY_TOOLBARS_MODEL (g_object_new (EPHY_TYPE_TOOLBARS_MODEL,
-					       "bookmarks", bookmarks,
-					       NULL));
-
-	g_return_val_if_fail (t->priv != NULL, NULL);
-
-	return t;
+	return EPHY_TOOLBARS_MODEL (g_object_new (EPHY_TYPE_TOOLBARS_MODEL,
+						  "bookmarks", bookmarks,
+						  NULL));
 }
 
 static int
@@ -582,44 +605,4 @@ ephy_toolbars_model_has_bookmark (EphyToolbarsModel *model,
 	g_free (action_name);
 
 	return found;
-}
-
-void
-ephy_toolbars_model_set_flag (EphyToolbarsModel *model,
-			      EggTbModelFlags flags)
-{
-	EggToolbarsModel *t = EGG_TOOLBARS_MODEL (model);
-	int i, n_toolbars;
-
-	n_toolbars = egg_toolbars_model_n_toolbars
-		(EGG_TOOLBARS_MODEL (model));
-
-	for (i = 0; i < n_toolbars; i++)
-	{
-		EggTbModelFlags old_flags;
-
-		old_flags = egg_toolbars_model_get_flags (t, i);
-
-		egg_toolbars_model_set_flags (t, old_flags | flags, i);
-	}
-}
-
-void
-ephy_toolbars_model_unset_flag (EphyToolbarsModel *model,
-			        EggTbModelFlags flags)
-{
-	EggToolbarsModel *t = EGG_TOOLBARS_MODEL (model);
-	int i, n_toolbars;
-
-	n_toolbars = egg_toolbars_model_n_toolbars
-		(EGG_TOOLBARS_MODEL (model));
-
-	for (i = 0; i < n_toolbars; i++)
-	{
-		EggTbModelFlags old_flags;
-
-		old_flags = egg_toolbars_model_get_flags (t, i);
-
-		egg_toolbars_model_set_flags (t, old_flags ^ flags, i);
-	}
 }

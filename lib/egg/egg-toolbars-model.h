@@ -27,12 +27,12 @@ G_BEGIN_DECLS
 
 typedef struct EggToolbarsModelClass EggToolbarsModelClass;
 
-#define EGG_TOOLBARS_MODEL_TYPE             (egg_toolbars_model_get_type ())
-#define EGG_TOOLBARS_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), EGG_TOOLBARS_MODEL_TYPE, EggToolbarsModel))
-#define EGG_TOOLBARS_MODEL_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EGG_TOOLBARS_MODEL_TYPE, EggToolbarsModelClass))
-#define IS_EGG_TOOLBARS_MODEL(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EGG_TOOLBARS_MODEL_TYPE))
-#define IS_EGG_TOOLBARS_MODEL_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EGG_TOOLBARS_MODEL_TYPE))
-#define EGG_TOOLBARS_MODEL_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EGG_TOOLBARS_MODEL_TYPE, EggToolbarsModelClass))
+#define EGG_TYPE_TOOLBARS_MODEL             (egg_toolbars_model_get_type ())
+#define EGG_TOOLBARS_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), EGG_TYPE_TOOLBARS_MODEL, EggToolbarsModel))
+#define EGG_TOOLBARS_MODEL_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EGG_TYPE_TOOLBARS_MODEL, EggToolbarsModelClass))
+#define EGG_IS_TOOLBARS_MODEL(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EGG_TYPE_TOOLBARS_MODEL))
+#define EGG_IS_TOOLBARS_MODEL_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EGG_TYPE_TOOLBARS_MODEL))
+#define EGG_TOOLBARS_MODEL_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EGG_TYPE_TOOLBARS_MODEL, EggToolbarsModelClass))
 
 typedef struct EggToolbarsModel EggToolbarsModel;
 typedef struct EggToolbarsModelPrivate EggToolbarsModelPrivate;

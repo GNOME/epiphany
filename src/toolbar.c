@@ -20,7 +20,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "toolbar.h"
@@ -116,7 +116,7 @@ toolbar_get_type (void)
                         (GInstanceInitFunc) toolbar_init
                 };
 
-                toolbar_type = g_type_register_static (EGG_EDITABLE_TOOLBAR_TYPE,
+                toolbar_type = g_type_register_static (EGG_TYPE_EDITABLE_TOOLBAR,
 						       "Toolbar",
 						       &our_info, 0);
         }
@@ -454,50 +454,13 @@ init_bookmarks_toolbar (Toolbar *t)
 }
 
 static void
-update_toolbar_remove_flag (EphyToolbarsModel *model, gpointer data)
-{
-	int i, n_toolbars;
-	int not_removable = 0;
-
-	n_toolbars = egg_toolbars_model_n_toolbars
-		(EGG_TOOLBARS_MODEL (model));
-
-	/* If there is only one toolbar and the bookmarks bar */
-	if (n_toolbars <= 2)
-	{
-		not_removable = EGG_TB_MODEL_NOT_REMOVABLE;
-	}
-
-	for (i = 0; i < n_toolbars; i++)
-	{
-		const char *t_name;
-
-		t_name = egg_toolbars_model_toolbar_nth
-			(EGG_TOOLBARS_MODEL (model), i);
-		g_return_if_fail (t_name != NULL);
-
-		if (!(strcmp (t_name, "BookmarksBar") == 0))
-		{
-			egg_toolbars_model_set_flags
-				(EGG_TOOLBARS_MODEL (model),
-				 not_removable, i);
-		}
-	}
-}
-
-static void
 init_normal_mode (Toolbar *t)
 {
 	EphyToolbarsModel *model;
 
 	model = EPHY_TOOLBARS_MODEL
 		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
-	g_signal_connect (EGG_TOOLBARS_MODEL (model), "toolbar_added",
-			  G_CALLBACK (update_toolbar_remove_flag),
-			  NULL);
-	g_signal_connect (EGG_TOOLBARS_MODEL (model), "toolbar_removed",
-			  G_CALLBACK (update_toolbar_remove_flag),
-			  NULL);
+
 	g_object_set (G_OBJECT (t),
 		      "ToolbarsModel", model,
 		      NULL);

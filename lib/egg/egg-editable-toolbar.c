@@ -68,6 +68,8 @@ static guint egg_editable_toolbar_signals[LAST_SIGNAL] = { 0 };
 
 static GObjectClass *parent_class = NULL;
 
+#define EGG_EDITABLE_TOOLBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EGG_TYPE_EDITABLE_TOOLBAR, EggEditableToolbarPrivate))
+
 struct EggEditableToolbarPrivate
 {
   GtkUIManager *merge;
@@ -174,7 +176,7 @@ find_action (EggEditableToolbar *t,
 
   l = gtk_ui_manager_get_action_groups (t->priv->merge);
 
-  g_return_val_if_fail (IS_EGG_EDITABLE_TOOLBAR (t), NULL);
+  g_return_val_if_fail (EGG_IS_EDITABLE_TOOLBAR (t), NULL);
   g_return_val_if_fail (name != NULL, NULL);
 
   for (; l != NULL; l = l->next)
@@ -196,7 +198,7 @@ drag_data_delete_cb (GtkWidget          *widget,
 {
   int pos, toolbar_pos;
 
-  g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (etoolbar));
+  g_return_if_fail (EGG_IS_EDITABLE_TOOLBAR (etoolbar));
 
   pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (widget->parent),
 				    GTK_TOOL_ITEM (widget));
@@ -233,7 +235,7 @@ drag_data_get_cb (GtkWidget          *widget,
   GtkAction *action;
   const char *target;
 
-  g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (etoolbar));
+  g_return_if_fail (EGG_IS_EDITABLE_TOOLBAR (etoolbar));
 
   action = GTK_ACTION (g_object_get_data (G_OBJECT (widget), "gtk-action"));
 
@@ -896,12 +898,28 @@ static void
 egg_editable_toolbar_set_model (EggEditableToolbar *t,
 				EggToolbarsModel   *model)
 {
-  g_return_if_fail (IS_EGG_TOOLBARS_MODEL (model));
-  g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (t));
+  g_return_if_fail (EGG_IS_TOOLBARS_MODEL (model));
+  g_return_if_fail (EGG_IS_EDITABLE_TOOLBAR (t));
 
   if (t->priv->model == model) return;
 
-  t->priv->model = model;
+  if (t->priv->model)
+    {
+       g_signal_handlers_disconnect_by_func
+         (t->priv->model, G_CALLBACK (item_added_cb), t);
+       g_signal_handlers_disconnect_by_func
+         (t->priv->model, G_CALLBACK (item_removed_cb), t);
+       g_signal_handlers_disconnect_by_func
+         (t->priv->model, G_CALLBACK (toolbar_added_cb), t);
+       g_signal_handlers_disconnect_by_func
+         (t->priv->model, G_CALLBACK (toolbar_removed_cb), t);
+       g_signal_handlers_disconnect_by_func
+         (t->priv->model, G_CALLBACK (toolbar_changed_cb), t);
+
+       g_object_unref (t->priv->model);
+    }
+
+  t->priv->model = g_object_ref (model);
 
   toolbars_clean (t);
   egg_editable_toolbar_construct (t);
@@ -923,16 +941,20 @@ egg_editable_toolbar_set_merge (EggEditableToolbar *t,
 				GtkUIManager       *merge)
 {
   g_return_if_fail (GTK_IS_UI_MANAGER (merge));
-  g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (t));
+  g_return_if_fail (EGG_IS_EDITABLE_TOOLBAR (t));
 
-  if (t->priv->merge != merge)
+  if (t->priv->merge == merge) return;
+
+  if (t->priv->merge)
     {
-      t->priv->merge = merge;
+      g_object_unref (t->priv->merge);
+    }
 
-      if (t->priv->model != NULL)
-        {
-          egg_editable_toolbar_construct (t);
-        }
+  t->priv->merge = g_object_ref (merge);
+
+  if (t->priv->model != NULL)
+    {
+      egg_editable_toolbar_construct (t);
     }
 }
 
@@ -1005,14 +1027,16 @@ egg_editable_toolbar_class_init (EggEditableToolbarClass *klass)
 				   g_param_spec_object ("ToolbarsModel",
 							"ToolbarsModel",
 							"Toolbars Model",
-							EGG_TOOLBARS_MODEL_TYPE,
+							EGG_TYPE_TOOLBARS_MODEL,
 							G_PARAM_READWRITE));
+
+  g_type_class_add_private (object_class, sizeof (EggEditableToolbarPrivate));
 }
 
 static void
 egg_editable_toolbar_init (EggEditableToolbar *t)
 {
-  t->priv = g_new0 (EggEditableToolbarPrivate, 1);
+  t->priv = EGG_EDITABLE_TOOLBAR_GET_PRIVATE (t);
 
   t->priv->merge = NULL;
   t->priv->edit_mode = FALSE;
@@ -1023,15 +1047,20 @@ egg_editable_toolbar_finalize (GObject *object)
 {
   EggEditableToolbar *t = EGG_EDITABLE_TOOLBAR (object);
 
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (object));
-
   if (t->priv->fixed_toolbar)
     {
       g_object_unref (t->priv->fixed_toolbar);
     }
 
-  g_free (t->priv);
+  if (t->priv->merge)
+    {
+      g_object_unref (t->priv->merge);
+    }
+
+  if (t->priv->model)
+    {
+      g_object_unref (t->priv->model);
+    }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -1040,15 +1069,10 @@ GtkWidget *
 egg_editable_toolbar_new (GtkUIManager     *merge,
 			  EggToolbarsModel *model)
 {
-  EggEditableToolbar *t;
-
-  t = EGG_EDITABLE_TOOLBAR (g_object_new (EGG_EDITABLE_TOOLBAR_TYPE,
-					  "ToolbarsModel", model,
-					  "MenuMerge", merge, NULL));
-
-  g_return_val_if_fail (t->priv != NULL, NULL);
-
-  return GTK_WIDGET (t);
+  return GTK_WIDGET (g_object_new (EGG_TYPE_EDITABLE_TOOLBAR,
+				   "ToolbarsModel", model,
+				   "MenuMerge", merge,
+				   NULL));
 }
 
 void

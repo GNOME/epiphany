@@ -55,6 +55,8 @@ enum
 
 static GObjectClass *parent_class = NULL;
 
+#define EGG_TOOLBAR_EDITOR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EGG_TYPE_TOOLBAR_EDITOR, EggToolbarEditorPrivate))
+
 struct EggToolbarEditorPrivate
 {
   GtkUIManager *merge;
@@ -133,7 +135,7 @@ find_action (EggToolbarEditor *t,
 
   l = gtk_ui_manager_get_action_groups (t->priv->merge);
 
-  g_return_val_if_fail (IS_EGG_TOOLBAR_EDITOR (t), NULL);
+  g_return_val_if_fail (EGG_IS_TOOLBAR_EDITOR (t), NULL);
   g_return_val_if_fail (name != NULL, NULL);
 
   for (; l != NULL; l = l->next)
@@ -153,18 +155,18 @@ egg_toolbar_editor_set_merge (EggToolbarEditor *t,
 			      GtkUIManager     *merge)
 {
   g_return_if_fail (GTK_IS_UI_MANAGER (merge));
-  g_return_if_fail (IS_EGG_TOOLBAR_EDITOR (t));
+  g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (t));
 
-  t->priv->merge = merge;
+  t->priv->merge = g_object_ref (merge);
 }
 
 static void
 egg_toolbar_editor_set_model (EggToolbarEditor *t,
 			      EggToolbarsModel *model)
 {
-  g_return_if_fail (IS_EGG_TOOLBAR_EDITOR (t));
+  g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (t));
 
-  t->priv->model = model;
+  t->priv->model = g_object_ref (model);
 }
 
 static void
@@ -228,19 +230,26 @@ egg_toolbar_editor_class_init (EggToolbarEditorClass *klass)
 				  g_param_spec_object ("ToolbarsModel",
 						       "ToolbarsModel",
 						       "Toolbars Model",
-						       EGG_TOOLBARS_MODEL_TYPE,
+						       EGG_TYPE_TOOLBARS_MODEL,
 						       G_PARAM_READWRITE));
+
+  g_type_class_add_private (object_class, sizeof (EggToolbarEditorPrivate));
 }
 
 static void
 egg_toolbar_editor_finalize (GObject *object)
 {
-  EggToolbarEditor *t = EGG_TOOLBAR_EDITOR (object);
+  EggToolbarEditor *editor = EGG_TOOLBAR_EDITOR (object);
 
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (IS_EGG_TOOLBAR_EDITOR (object));
+  if (editor->priv->merge)
+    {
+      g_object_unref (editor->priv->merge);
+    }
 
-  g_free (t->priv);
+  if (editor->priv->model)
+    {
+      g_object_unref (editor->priv->model);
+    }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -249,16 +258,10 @@ GtkWidget *
 egg_toolbar_editor_new (GtkUIManager *merge,
 			EggToolbarsModel *model)
 {
-  EggToolbarEditor *t;
-
-  t = EGG_TOOLBAR_EDITOR (g_object_new (EGG_TOOLBAR_EDITOR_TYPE,
-					"MenuMerge", merge,
-					"ToolbarsModel", model,
-					NULL));
-
-  g_return_val_if_fail (t->priv != NULL, NULL);
-
-  return GTK_WIDGET (t);
+  return GTK_WIDGET (g_object_new (EGG_TYPE_TOOLBAR_EDITOR,
+				   "MenuMerge", merge,
+				   "ToolbarsModel", model,
+				   NULL));
 }
 
 static void
@@ -287,7 +290,7 @@ editor_drag_data_received_cb (GtkWidget          *widget,
 {
   GtkAction *action;
 
-  g_return_if_fail (IS_EGG_TOOLBAR_EDITOR (editor));
+  g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (editor));
   g_return_if_fail (selection_data != NULL);
 
   action = find_action (editor, (const char *)selection_data->data);
@@ -309,7 +312,7 @@ editor_drag_data_delete_cb (GtkWidget          *widget,
 			    EggToolbarEditor *editor)
 {
   GtkAction *action;
-  g_return_if_fail (IS_EGG_TOOLBAR_EDITOR (editor));
+  g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (editor));
 
   action = GTK_ACTION (g_object_get_data (G_OBJECT (widget), "egg-action"));
   if (action)
@@ -470,7 +473,7 @@ update_editor_sheet (EggToolbarEditor *editor)
   GtkWidget *item;
   GtkWidget *icon;
 
-  g_return_if_fail (IS_EGG_TOOLBAR_EDITOR (editor));
+  g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (editor));
 
   viewport = GTK_BIN (editor->priv->scrolled_window)->child;
   if (viewport)
@@ -543,7 +546,7 @@ setup_editor (EggToolbarEditor *editor)
   GtkWidget *image;
   GtkWidget *label;
 
-  g_return_if_fail (IS_EGG_TOOLBAR_EDITOR (editor));
+  g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (editor));
 
   gtk_container_set_border_width (GTK_CONTAINER (editor), 12);
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
@@ -569,7 +572,7 @@ setup_editor (EggToolbarEditor *editor)
 static void
 egg_toolbar_editor_init (EggToolbarEditor *t)
 {
-  t->priv = g_new0 (EggToolbarEditorPrivate, 1);
+  t->priv = EGG_TOOLBAR_EDITOR_GET_PRIVATE (t);
 
   t->priv->merge = NULL;
   t->priv->default_actions_list = NULL;
@@ -578,7 +581,7 @@ egg_toolbar_editor_init (EggToolbarEditor *t)
   setup_editor (t);
 }
 
-static void
+void
 egg_toolbar_editor_add_action (EggToolbarEditor *editor,
 			       const char       *action_name)
 {

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2002-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,6 +55,8 @@ static guint egg_toolbars_model_signals[LAST_SIGNAL] = { 0 };
 
 static GObjectClass *parent_class = NULL;
 
+#define EGG_TOOLBARS_MODEL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EGG_TYPE_TOOLBARS_MODEL, EggToolbarsModelPrivate))
+
 struct EggToolbarsModelPrivate
 {
   GNode *toolbars;
@@ -94,7 +96,7 @@ egg_toolbars_model_to_xml (EggToolbarsModel *t)
   GNode *l1, *l2, *tl;
   xmlDocPtr doc;
 
-  g_return_val_if_fail (IS_EGG_TOOLBARS_MODEL (t), NULL);
+  g_return_val_if_fail (EGG_IS_TOOLBARS_MODEL (t), NULL);
 
   tl = t->priv->toolbars;
 
@@ -199,7 +201,7 @@ egg_toolbars_model_save (EggToolbarsModel *t,
   xmlDocPtr doc;
   xmlNodePtr root;
 
-  g_return_if_fail (IS_EGG_TOOLBARS_MODEL (t));
+  g_return_if_fail (EGG_IS_TOOLBARS_MODEL (t));
 
   doc = egg_toolbars_model_to_xml (t);
   root = xmlDocGetRootElement (doc);
@@ -301,7 +303,7 @@ egg_toolbars_model_add_separator (EggToolbarsModel *t,
   EggToolbarsItem *item;
   int real_position;
 
-  g_return_if_fail (IS_EGG_TOOLBARS_MODEL (t));
+  g_return_if_fail (EGG_IS_TOOLBARS_MODEL (t));
 
   parent_node = g_node_nth_child (t->priv->toolbars, toolbar_position);
   item = toolbars_item_new ("separator", "separator", TRUE);
@@ -326,7 +328,7 @@ impl_add_item (EggToolbarsModel    *t,
   EggToolbarsItem *item;
   int real_position;
 
-  g_return_val_if_fail (IS_EGG_TOOLBARS_MODEL (t), FALSE);
+  g_return_val_if_fail (EGG_IS_TOOLBARS_MODEL (t), FALSE);
   g_return_val_if_fail (id != NULL, FALSE);
   g_return_val_if_fail (type != NULL, FALSE);
 
@@ -388,7 +390,7 @@ egg_toolbars_model_add_toolbar (EggToolbarsModel *t,
   GNode *node;
   int real_position;
 
-  g_return_val_if_fail (IS_EGG_TOOLBARS_MODEL (t), -1);
+  g_return_val_if_fail (EGG_IS_TOOLBARS_MODEL (t), -1);
 
   node = g_node_new (toolbars_toolbar_new (name));
   g_node_insert (t->priv->toolbars, position, node);
@@ -438,7 +440,7 @@ egg_toolbars_model_load (EggToolbarsModel *t,
   xmlDocPtr doc;
   xmlNodePtr root;
 
-  g_return_val_if_fail (IS_EGG_TOOLBARS_MODEL (t), FALSE);
+  g_return_val_if_fail (EGG_IS_TOOLBARS_MODEL (t), FALSE);
 
   doc = xmlParseFile (xml_file);
   if (doc == NULL)
@@ -543,12 +545,14 @@ egg_toolbars_model_class_init (EggToolbarsModelClass *klass)
 		  G_STRUCT_OFFSET (EggToolbarsModelClass, toolbar_changed),
 		  NULL, NULL, g_cclosure_marshal_VOID__INT,
 		  G_TYPE_NONE, 1, G_TYPE_INT);
+
+  g_type_class_add_private (object_class, sizeof (EggToolbarsModelPrivate));
 }
 
 static void
 egg_toolbars_model_init (EggToolbarsModel *t)
 {
-  t->priv = g_new0 (EggToolbarsModelPrivate, 1);
+  t->priv =EGG_TOOLBARS_MODEL_GET_PRIVATE (t);
 
   t->priv->toolbars = NULL;
 }
@@ -558,13 +562,8 @@ egg_toolbars_model_finalize (GObject *object)
 {
   EggToolbarsModel *t = EGG_TOOLBARS_MODEL (object);
 
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (IS_EGG_TOOLBARS_MODEL (object));
-
   /* FIXME free nodes */
   g_node_destroy (t->priv->toolbars);
-
-  g_free (t->priv);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -572,13 +571,7 @@ egg_toolbars_model_finalize (GObject *object)
 EggToolbarsModel *
 egg_toolbars_model_new (void)
 {
-  EggToolbarsModel *t;
-
-  t = EGG_TOOLBARS_MODEL (g_object_new (EGG_TOOLBARS_MODEL_TYPE, NULL));
-
-  g_return_val_if_fail (t->priv != NULL, NULL);
-
-  return t;
+  return EGG_TOOLBARS_MODEL (g_object_new (EGG_TYPE_TOOLBARS_MODEL, NULL));
 }
 
 void
@@ -588,7 +581,7 @@ egg_toolbars_model_remove_toolbar (EggToolbarsModel   *t,
   GNode *node;
   EggTbModelFlags flags;
 
-  g_return_if_fail (IS_EGG_TOOLBARS_MODEL (t));
+  g_return_if_fail (EGG_IS_TOOLBARS_MODEL (t));
 
   flags = egg_toolbars_model_get_flags (t, position);
 
@@ -612,7 +605,7 @@ egg_toolbars_model_remove_item (EggToolbarsModel *t,
 {
   GNode *node, *toolbar;
 
-  g_return_if_fail (IS_EGG_TOOLBARS_MODEL (t));
+  g_return_if_fail (EGG_IS_TOOLBARS_MODEL (t));
 
   toolbar = g_node_nth_child (t->priv->toolbars, toolbar_position);
   g_return_if_fail (toolbar != NULL);

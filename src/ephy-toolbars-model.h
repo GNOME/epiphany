@@ -68,12 +68,6 @@ char              *ephy_toolbars_model_get_action_name (EphyToolbarsModel *model
 EphyNode	  *ephy_toolbars_model_get_node        (EphyToolbarsModel *model,
 			                                const char *action_name);
 
-void		   ephy_toolbars_model_set_flag        (EphyToolbarsModel *model,
-							EggTbModelFlags flags);
-
-void		   ephy_toolbars_model_unset_flag      (EphyToolbarsModel *model,
-							EggTbModelFlags flags);
-
 G_END_DECLS
 
 #endif

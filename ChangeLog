@@ -1,3 +1,40 @@
+2003-12-27  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c: (find_action),
+	(drag_data_delete_cb), (drag_data_get_cb),
+	(egg_editable_toolbar_set_model), (egg_editable_toolbar_set_merge),
+	(egg_editable_toolbar_class_init), (egg_editable_toolbar_init),
+	(egg_editable_toolbar_finalize), (egg_editable_toolbar_new):
+	* lib/egg/egg-editable-toolbar.h:
+	* lib/egg/egg-toolbar-editor.c: (find_action),
+	(egg_toolbar_editor_set_merge), (egg_toolbar_editor_set_model),
+	(egg_toolbar_editor_class_init), (egg_toolbar_editor_finalize),
+	(egg_toolbar_editor_new), (editor_drag_data_received_cb),
+	(editor_drag_data_delete_cb), (update_editor_sheet),
+	(setup_editor), (egg_toolbar_editor_init):
+	* lib/egg/egg-toolbar-editor.h:
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_to_xml),
+	(egg_toolbars_model_save), (egg_toolbars_model_add_separator),
+	(impl_add_item), (egg_toolbars_model_add_toolbar),
+	(egg_toolbars_model_load), (egg_toolbars_model_class_init),
+	(egg_toolbars_model_init), (egg_toolbars_model_finalize),
+	(egg_toolbars_model_new), (egg_toolbars_model_remove_toolbar),
+	(egg_toolbars_model_remove_item):
+	* lib/egg/egg-toolbars-model.h:
+
+	Brought type macros in line with the rest of libegg; and use
+	gobject instance private data.
+
+	* src/ephy-toolbars-model.c: (ephy_toolbars_model_get_type),
+	(update_toolbar_removeable_flag),
+	(ephy_toolbars_model_set_bookmarks), (toolbar_added),
+	(toolbar_removed), (ephy_toolbars_model_new),
+	(ephy_toolbars_model_has_bookmark):
+	* src/ephy-toolbars-model.h:
+	* src/toolbar.c: (toolbar_get_type), (init_normal_mode):
+
+	Fix crasher bug #129991.
+
 2003-12-26  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/prefs-dialog.c: (prefs_dialog_finalize),

@@ -30,12 +30,12 @@ G_BEGIN_DECLS
 
 typedef struct EggEditableToolbarClass EggEditableToolbarClass;
 
-#define EGG_EDITABLE_TOOLBAR_TYPE             (egg_editable_toolbar_get_type ())
-#define EGG_EDITABLE_TOOLBAR(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), EGG_EDITABLE_TOOLBAR_TYPE, EggEditableToolbar))
-#define EGG_EDITABLE_TOOLBAR_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EGG_EDITABLE_TOOLBAR_TYPE, EggEditableToolbarClass))
-#define IS_EGG_EDITABLE_TOOLBAR(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EGG_EDITABLE_TOOLBAR_TYPE))
-#define IS_EGG_EDITABLE_TOOLBAR_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EGG_EDITABLE_TOOLBAR_TYPE))
-#define EGG_EDITABLE_TOOLBAR_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EGG_EDITABLE_TOOLBAR_TYPE, EggEditableToolbarClass))
+#define EGG_TYPE_EDITABLE_TOOLBAR             (egg_editable_toolbar_get_type ())
+#define EGG_EDITABLE_TOOLBAR(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), EGG_TYPE_EDITABLE_TOOLBAR, EggEditableToolbar))
+#define EGG_EDITABLE_TOOLBAR_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EGG_TYPE_EDITABLE_TOOLBAR, EggEditableToolbarClass))
+#define EGG_IS_EDITABLE_TOOLBAR(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EGG_TYPE_EDITABLE_TOOLBAR))
+#define EGG_IS_EDITABLE_TOOLBAR_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EGG_TYPE_EDITABLE_TOOLBAR))
+#define EGG_EDITABLE_TOOLBAR_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EGG_TYPE_EDITABLE_TOOLBAR, EggEditableToolbarClass))
 
 
 typedef struct EggEditableToolbar EggEditableToolbar;
