@@ -1,3 +1,28 @@
+2003-06-19  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/ephy-embed-types.h:
+	* lib/ephy-state.c: (window_configure_event_cb),
+	(window_state_event_cb):
+	* src/ephy-window.c: (ephy_window_destroy),
+	(ephy_window_class_init), (update_exit_fullscreen_popup_position),
+	(size_changed_cb), (exit_fullscreen_button_clicked_cb),
+	(update_chromes_visibility), (ephy_window_fullscreen),
+	(ephy_window_unfullscreen), (ephy_window_state_event_cb),
+	(setup_window), (sync_tab_icon), (sync_tab_load_progress),
+	(sync_tab_load_status), (ephy_window_init), (save_window_chrome),
+	(translate_default_chrome), (update_layout_toggles),
+	(ephy_window_set_chrome), (ephy_window_show):
+	* src/window-commands.c: (window_cmd_view_fullscreen):
+
+	With the gtk fullscreen api things can be cleaner:
+	use the api instead of chromes to handle fullscreen,
+	dont persist window state when it's fullscreen.
+	Destroy exit fullscreen button on window destroy.
+
+	* src/ephy-shell.c: (ephy_shell_new_tab):
+
+	Give up on cloning until we find a good way to do it :/
+
 2003-06-18  Xan Lopez  <xan@masilla.org>
 
 	* embed/downloader-view.c: (downloader_view_update_details):

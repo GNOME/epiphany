@@ -570,19 +570,13 @@ void
 window_cmd_view_fullscreen (EggAction *action,
 			    EphyWindow *window)
 {
-	EmbedChromeMask mask;
-	gboolean active;
-	gboolean current_state;
-
-	mask = ephy_window_get_chrome (window);
-	active = EGG_TOGGLE_ACTION (action)->active;
-	current_state = (mask & EMBED_CHROME_OPENASFULLSCREEN) > 0;
-
-	if (active != current_state)
+	if (EGG_TOGGLE_ACTION (action)->active)
 	{
-		mask ^= EMBED_CHROME_OPENASFULLSCREEN;
-		mask |= EMBED_CHROME_DEFAULT;
-		ephy_window_set_chrome (window, mask);
+		gtk_window_fullscreen (GTK_WINDOW (window));
+	}
+	else
+	{
+		gtk_window_unfullscreen (GTK_WINDOW (window));
 	}
 }
 

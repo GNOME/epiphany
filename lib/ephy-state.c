@@ -286,8 +286,16 @@ window_configure_event_cb (GtkWidget *widget,
 			   GdkEventConfigure *event,
 			   EphyNode *node)
 {
-	ephy_state_window_save_size (widget, node);
-	ephy_state_window_save_position (widget, node);
+	GdkWindowState state;
+
+	state = gdk_window_get_state (widget->window);
+
+	if (!(state & GDK_WINDOW_STATE_FULLSCREEN))
+	{
+		ephy_state_window_save_size (widget, node);
+		ephy_state_window_save_position (widget, node);
+	}
+
 	return FALSE;
 }
 
@@ -296,8 +304,12 @@ window_state_event_cb (GtkWidget *widget,
 		       GdkEventWindowState *event,
 		       EphyNode *node)
 {
-	ephy_state_window_save_size (widget, node);
-	ephy_state_window_save_position (widget, node);
+	if (!(event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN))
+	{
+		ephy_state_window_save_size (widget, node);
+		ephy_state_window_save_position (widget, node);
+	}
+
 	return FALSE;
 }
 
