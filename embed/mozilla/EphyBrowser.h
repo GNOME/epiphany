@@ -24,21 +24,20 @@
 #include "ephy-encodings.h"
 #include "ephy-embed.h"
 
-#include "nsIDOMEventListener.h"
-#include "nsIDocShell.h"
-#include "nsIWebNavigation.h"
-#include "nsIWebPageDescriptor.h"
-#include "nsISHistory.h"
-#include "nsIWebBrowser.h"
-#include "nsIWebProgressListener.h"
-#include "nsCOMPtr.h"
-#include "nsIDOMEventReceiver.h"
-#include "nsIDOMDocument.h"
-#include "nsIDOMWindow.h"
-#include "nsPIDOMWindow.h"
 #include <gtkmozembed.h>
+#include <nsCOMPtr.h>
+#include <nsIDOMEventListener.h>
+#include <nsIWebNavigation.h>
+#include <nsISHistory.h>
+#include <nsIWebBrowser.h>
+#include <nsIDOMDocument.h>
+#include <nsIDOMWindow.h>
+#include <nsIPrintSettings.h>
 
-#include "nsIPrintSettings.h"
+#ifdef ALLOW_PRIVATE_API
+#include <nsIDocShell.h>
+#include <nsIDOMEventReceiver.h>
+#endif
 
 class EphyEventListener : public nsIDOMEventListener
 {
@@ -119,7 +118,6 @@ public:
 
 private:
 	nsCOMPtr<nsIDOMDocument> mTargetDocument;
-	nsCOMPtr<nsIWebProgressListener> mProgress;
 	nsCOMPtr<nsIDOMEventReceiver> mEventReceiver;
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;
 	EphyFaviconEventListener *mFaviconEventListener;
