@@ -153,9 +153,9 @@ languages [] =
 	{ N_("Turkish"), "tr" },
 	{ N_("Ukrainian"), "uk" },
 	{ N_("Vietnamian"), "vi" },
-	{ N_("Walloon"), "wa" },
-	{ NULL, NULL }
+	{ N_("Walloon"), "wa" }
 };
+static guint n_languages = G_N_ELEMENTS (languages);
 
 enum
 {
@@ -260,10 +260,19 @@ EphyDialogProperty properties [] =
 	{ -1, NULL, NULL }
 };
 
+typedef struct
+{
+	gchar *name;
+	gchar *key;
+	gchar *code;
+} EphyLangItem;
+
 struct PrefsDialogPrivate
 {
 	GtkWidget *notebook;
 	GtkWidget *window;
+
+	GList *langs;
 
 	int language;
 	gboolean switching;
@@ -323,6 +332,17 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 }
 
 static void
+free_lang_item (EphyLangItem *item, gpointer user_data)
+{
+	if (item == NULL) return;
+		
+	g_free (item->name);
+	g_free (item->key);
+	g_free (item->code);
+	g_free (item);
+}
+
+static void
 prefs_dialog_finalize (GObject *object)
 {
         PrefsDialog *pd;
@@ -333,6 +353,9 @@ prefs_dialog_finalize (GObject *object)
 	pd = PREFS_DIALOG (object);
 
         g_return_if_fail (pd->priv != NULL);
+
+	g_list_foreach (pd->priv->langs, (GFunc) free_lang_item, NULL);
+	g_list_free (pd->priv->langs);
 
         g_free (pd->priv);
 
@@ -663,24 +686,90 @@ create_default_charset_menu (PrefsDialog *dialog)
 	g_list_free (l);
 }
 
+static gint
+compare_lang_items (const EphyLangItem *i1, const EphyLangItem *i2)
+{
+	return strcmp (i1->key, i2->key);
+}
+
+static gint
+find_lang_code (const EphyLangItem *i1, const gchar *code)
+{
+	return strcmp (i1->code, code);
+}
+
+static void
+create_languages_list (PrefsDialog *dialog)
+{
+	GList *list = NULL, *lang;
+	GSList *pref_list, *l;
+	EphyLangItem *item;
+	const gchar *code;
+	guint i;
+
+	for (i = 0; i < n_languages; i++)
+	{		
+		item = g_new0 (EphyLangItem, 1);
+
+		item->name = g_strdup (_(languages[i].name));
+		item->key  = g_utf8_collate_key (item->name, -1);
+		item->code = g_strdup (languages[i].code);
+
+		list = g_list_prepend (list, item);
+	}
+
+	/* add custom languages */
+	pref_list = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
+
+	for (l = pref_list; l != NULL; l = l->next)
+	{
+		code = (const gchar*) l->data;
+
+		lang = g_list_find_custom (list, code,
+					   (GCompareFunc) find_lang_code);
+
+		if (lang == NULL)
+		{
+			/* not found in list */
+			item = g_new0 (EphyLangItem, 1);
+
+			item->name = g_strdup_printf (_("Custom [%s]"), code);
+			item->key  = g_utf8_collate_key (item->name, -1);
+			item->code = g_strdup (code);
+
+			list = g_list_prepend (list, item);
+		}
+	}
+
+	if (pref_list)
+	{
+		g_slist_foreach (pref_list, (GFunc) g_free, NULL);
+		g_slist_free (pref_list);
+	}
+
+	list = g_list_sort (list, (GCompareFunc) compare_lang_items);
+
+	dialog->priv->langs = list;
+}
+
 static GtkWidget *
 general_prefs_new_language_menu (PrefsDialog *dialog)
 {
-	int i;
+	GList *l;
 	GtkWidget *menu;
+	EphyLangItem *li;
 
 	menu = gtk_menu_new ();
 
-	for (i = 0; languages[i].name != NULL; i++)
+	for (l = dialog->priv->langs; l != NULL; l = l->next)
 	{
 		GtkWidget *item;
 
-		item = gtk_menu_item_new_with_label (_(languages[i].name));
-		gtk_menu_shell_append (GTK_MENU_SHELL(menu),
-				       item);
+		li = (EphyLangItem*) l->data;
+		item = gtk_menu_item_new_with_label (li->name);
+		gtk_menu_shell_append (GTK_MENU_SHELL(menu), item);
 		gtk_widget_show (item);
-		g_object_set_data (G_OBJECT(item), "desc",
-				   _(languages[i].name));
+		g_object_set_data (G_OBJECT (item), "desc", li->name);
 	}
 
 	return menu;
@@ -690,20 +779,30 @@ static void
 language_menu_changed_cb (GtkOptionMenu *option_menu,
 		          gpointer data)
 {
-	GSList *list;
-	GSList *l = NULL;
-	int history;
+	gint i;
+	GSList *list = NULL;
+	GList *lang = NULL;
+
+	g_return_if_fail (IS_PREFS_DIALOG (data));
 
 	list = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
-	l = g_slist_copy (list);
+	g_return_if_fail (list != NULL);
 
 	/* Subst the first item according to the optionmenu */
-	history = gtk_option_menu_get_history (option_menu);
-	l->data = languages [history].code;
+	i = gtk_option_menu_get_history (option_menu);
 
-	eel_gconf_set_string_list (CONF_RENDERING_LANGUAGE, l);
+	lang = g_list_nth (PREFS_DIALOG (data)->priv->langs, i);
 
-	g_slist_free (l);
+	if (lang)
+	{
+		g_free (list->data);
+		list->data = g_strdup (((EphyLangItem *) lang->data)->code);
+
+		eel_gconf_set_string_list (CONF_RENDERING_LANGUAGE, list);
+	}
+
+	g_slist_foreach (list, (GFunc) g_free, NULL);
+	g_slist_free (list);
 }
 
 static void
@@ -711,9 +810,10 @@ create_language_menu (PrefsDialog *dialog)
 {
 	GtkWidget *optionmenu;
 	GtkWidget *menu;
-	const char *value;
-	int i;
+	const gchar *code;
+	gint i = 0;
 	GSList *list;
+	GList *lang;
 
 	optionmenu = ephy_dialog_get_control (EPHY_DIALOG (dialog),
 					      LANGUAGE_PROP);
@@ -722,22 +822,27 @@ create_language_menu (PrefsDialog *dialog)
 
 	gtk_option_menu_set_menu (GTK_OPTION_MENU(optionmenu), menu);
 
-	/* init value */
+	/* init value from first element of the list */
 	list = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
-	g_return_if_fail (list != NULL);
-	value = (const char *)list->data;
+	g_return_if_fail (list != NULL); /* FIXME: doesn't connect the handler! */
 
-	i = 0;
-	while (languages[i].code && strcmp (languages[i].code, value) != 0)
+	code = (const gchar *) list->data;
+	lang = g_list_find_custom (dialog->priv->langs, code,
+				   (GCompareFunc)find_lang_code);
+
+	if (lang)
 	{
-		i++;
+		i = g_list_position (dialog->priv->langs, lang);
 	}
 
 	gtk_option_menu_set_history (GTK_OPTION_MENU(optionmenu), i);
 
+	g_slist_foreach (list, (GFunc) g_free, NULL);
+	g_slist_free (list);
+
 	g_signal_connect (optionmenu, "changed",
 			  G_CALLBACK (language_menu_changed_cb),
-			  NULL);
+			  dialog);
 }
 
 static void
@@ -771,7 +876,7 @@ prefs_dialog_init (PrefsDialog *pd)
 
 	pd->priv->window = ephy_dialog_get_control (dialog, WINDOW_PROP);
 	pd->priv->notebook = ephy_dialog_get_control (dialog, NOTEBOOK_PROP);
-
+	pd->priv->langs = NULL;
 
 	icon = gtk_widget_render_icon (pd->priv->window,
 				       GTK_STOCK_PREFERENCES,
@@ -785,6 +890,7 @@ prefs_dialog_init (PrefsDialog *pd)
 	setup_size_controls (pd);
 	attach_fonts_signals (pd);
 	attach_size_controls_signals (pd);
+	create_languages_list (pd);
 	create_default_charset_menu (pd);
 	create_language_menu (pd);
 }
@@ -869,28 +975,36 @@ prefs_homepage_blank_button_clicked_cb (GtkWidget *button,
 }
 
 static void
-fill_language_editor (LanguageEditor *le)
+fill_language_editor (LanguageEditor *le, PrefsDialog *dialog)
 {
 	GSList *strings;
 	GSList *tmp;
-	int i;
+	GList *lang;
+	gint i;
+	const gchar *code;
+	EphyLangItem *li;
 
-	/* Fill the list */
 	strings = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
+	g_return_if_fail (strings != NULL);
 
 	for (tmp = strings; tmp != NULL; tmp = g_slist_next (tmp))
 	{
-		char *value = (char *)tmp->data;
+		code = (const gchar *) tmp->data;
 
-		i = 0;
-		while (languages[i].code && strcmp (languages[i].code, value) != 0)
+		lang = g_list_find_custom (dialog->priv->langs, code,
+					   (GCompareFunc) find_lang_code);
+
+		if (lang)
 		{
-			i++;
+			i = g_list_position (dialog->priv->langs, lang);
+			li = (EphyLangItem *) lang->data;
+			
+			language_editor_add (le, li->name, i);
 		}
-
-		/* FIXME unsafe, bad prefs could cause it to access random memory */
-		language_editor_add (le, _(languages[i].name), i);
 	}
+	
+	g_slist_foreach (strings, (GFunc) g_free, NULL);
+	g_slist_free (strings);
 }
 
 static void
@@ -901,6 +1015,9 @@ language_dialog_changed_cb (LanguageEditor *le,
 	GtkWidget *optionmenu;
 	const GSList *l;
 	GSList *langs = NULL;
+	GList *lang;
+	gint i;
+	EphyLangItem *li;
 
 	optionmenu = ephy_dialog_get_control (EPHY_DIALOG (dialog),
 						LANGUAGE_PROP);
@@ -909,8 +1026,15 @@ language_dialog_changed_cb (LanguageEditor *le,
 
 	for (l = list; l != NULL; l = l->next)
 	{
-		int i = GPOINTER_TO_INT (l->data);
-		langs = g_slist_append (langs, languages[i].code);
+		i = GPOINTER_TO_INT (l->data);
+		lang = g_list_nth (dialog->priv->langs, i);
+
+		if (lang)
+		{
+			li = (EphyLangItem *) lang->data;
+
+			langs = g_slist_append (langs, li->code);
+		}
 	}
 
 	eel_gconf_set_string_list (CONF_RENDERING_LANGUAGE, langs);
@@ -930,7 +1054,7 @@ prefs_language_more_button_clicked_cb (GtkWidget *button,
 	toplevel = gtk_widget_get_toplevel (button);
 	editor = language_editor_new (toplevel);
 	language_editor_set_menu (editor, menu);
-	fill_language_editor (editor);
+	fill_language_editor (editor, PREFS_DIALOG (dialog));
 	ephy_dialog_set_modal (EPHY_DIALOG(editor), TRUE);
 
 	g_signal_connect (editor, "changed",
