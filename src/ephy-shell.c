@@ -580,11 +580,11 @@ ephy_shell_new_tab (EphyShell *shell,
 		    flags & EPHY_NEW_TAB_APPEND_GROUPED)) &&
 		  !(flags & EPHY_NEW_TAB_APPEND_LAST);
 
-	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_embed != NULL)
+	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_tab != NULL)
 	{
 		nb = ephy_window_get_notebook (window);
 		position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
-						  GTK_WIDGET (previous_embed)) + 1;
+						  GTK_WIDGET (previous_tab)) + 1;
 	}
 	else
 	{
