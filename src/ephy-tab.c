@@ -719,8 +719,14 @@ static void
 ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 		       EmbedState state, EphyTab *tab)
 {
-	g_free (tab->priv->status_message);
-	tab->priv->status_message = build_net_state_message (uri, state);
+	char *new_msg;
+
+	new_msg = build_net_state_message (uri, state);
+	if (new_msg)
+	{
+		g_free (tab->priv->status_message);
+		tab->priv->status_message = new_msg;
+	}
 
 	g_object_notify (G_OBJECT (tab), "message");
 
@@ -1019,6 +1025,7 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->cur_requests = 0;
 	tab->priv->width = -1;
 	tab->priv->height = -1;
+	tab->priv->title = g_strdup (_("Loading..."));
 	tab->priv->address = NULL;
 	tab->priv->icon_address = NULL;
 	tab->priv->load_percent = 0;
