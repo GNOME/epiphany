@@ -452,13 +452,19 @@ delete_topic_dialog_construct (GtkWindow *parent, const char *topic)
 {
 	GtkWidget *dialog;
 	GtkWindowGroup *group;
+	char *str;
 
+	str = g_strdup_printf (_("Delete topic %s?"), topic);
+	
 	dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
 					 GTK_DIALOG_MODAL,
 					 GTK_MESSAGE_WARNING,
 					 GTK_BUTTONS_CANCEL,
-					 _("Delete topic?"));
+					 str);
 	
+	g_free (str);
+	
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Delete this topic?"));
 	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 			_("Deleting this topic will cause all its bookmarks to become "
 			"uncategorized, unless they also belong to other topics. "
@@ -505,20 +511,29 @@ cmd_delete (GtkAction *action,
 			GtkWidget *dialog;
 			const char *title;
 			int response;
-
-			title = ephy_node_get_property_string (node, EPHY_NODE_KEYWORD_PROP_NAME);
-			dialog = delete_topic_dialog_construct (GTK_WINDOW (editor), title);
-
+			GPtrArray *children;
 			
-			response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-			gtk_widget_destroy (dialog);
-
-			if (response == GTK_RESPONSE_ACCEPT)
+			children = ephy_node_get_children(node);
+			
+			/* Do not warn if the topic is empty */
+			if (children->len == 0)
 			{
 				ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->key_view));
 			}
+			else
+			{
+				title = ephy_node_get_property_string (node, EPHY_NODE_KEYWORD_PROP_NAME);
+				dialog = delete_topic_dialog_construct (GTK_WINDOW (editor), title);
 				
+				response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+				gtk_widget_destroy (dialog);
+
+				if (response == GTK_RESPONSE_ACCEPT)
+				{
+					ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->key_view));
+				}
+			}
 		}
 		g_list_free (selected);
 	}
