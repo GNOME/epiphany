@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-20 23:49+0900\n"
-"PO-Revision-Date: 2004-02-20 23:49+0900\n"
+"POT-Creation-Date: 2004-03-09 22:28+0900\n"
+"PO-Revision-Date: 2004-03-09 18:55+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -821,7 +821,7 @@ msgid "_Add..."
 msgstr "追加(_A)..."
 
 #: data/glade/prefs-dialog.glade.h:34
-#: src/bookmarks/ephy-bookmark-properties.c:371
+#: src/bookmarks/ephy-bookmark-properties.c:367
 msgid "_Address:"
 msgstr "アドレス(_A):"
 
@@ -1192,15 +1192,15 @@ msgid_plural "%d downloads"
 msgstr[0] "%d 個ダウンロード"
 msgstr[1] "%d 個ダウンロード"
 
-#: embed/downloader-view.c:513
+#: embed/downloader-view.c:515
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:524
+#: embed/downloader-view.c:526
 msgid "File"
 msgstr "ファイル"
 
-#: embed/downloader-view.c:538
+#: embed/downloader-view.c:540
 msgid "Remaining"
 msgstr "残り"
 
@@ -1579,7 +1579,7 @@ msgstr "ウクライナ語"
 msgid "Unknown (%s)"
 msgstr "不明 (%s)"
 
-#: embed/ephy-history.c:487 src/bookmarks/ephy-bookmarks.c:612
+#: embed/ephy-history.c:487 src/bookmarks/ephy-bookmarks.c:645
 msgid "All"
 msgstr "全て"
 
@@ -1591,22 +1591,22 @@ msgstr "その他"
 msgid "Local files"
 msgstr "ローカル・ファイル"
 
-#: embed/mozilla/ContentHandler.cpp:135
-#: embed/mozilla/EphyHeaderSniffer.cpp:316
+#: embed/mozilla/ContentHandler.cpp:134
+#: embed/mozilla/EphyHeaderSniffer.cpp:362
 msgid "Save"
 msgstr "保存"
 
 #: embed/mozilla/ContentHandler.cpp:265
-msgid "_Save As..."
-msgstr "別名で保存(_S)..."
-
-#: embed/mozilla/ContentHandler.cpp:268
 msgid "_Open"
 msgstr "開く(_O)"
 
-#: embed/mozilla/ContentHandler.cpp:268
+#: embed/mozilla/ContentHandler.cpp:265
 msgid "_Download"
 msgstr "ダウンロード(_D)"
+
+#: embed/mozilla/ContentHandler.cpp:269
+msgid "_Save As..."
+msgstr "別名で保存(_S)..."
 
 #: embed/mozilla/ContentHandler.cpp:286
 msgid "Download the unsafe file?"
@@ -1644,9 +1644,8 @@ msgstr ""
 "このファイルを開くことが可能なアプリケーションがインストールされていないの"
 "で、表示することはできません。そのかわり保存することは可能です。"
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:291
-#: src/bookmarks/ephy-bookmarks-import.c:247
-#: src/bookmarks/ephy-bookmarks-import.c:373 src/ephy-toolbars-model.c:201
+#: embed/mozilla/EphyHeaderSniffer.cpp:331
+#: src/bookmarks/ephy-bookmarks-import.c:252 src/ephy-toolbars-model.c:201
 #: src/window-commands.c:342
 msgid "Untitled"
 msgstr "名前なし"
@@ -1668,44 +1667,44 @@ msgstr ""
 "指定されたプロトコルを認識できません。\n"
 "GNOME のデフォルト・アクションを試してみますか？"
 
-#: embed/mozilla/FilePicker.cpp:156
+#: embed/mozilla/FilePicker.cpp:163
 msgid "All files"
 msgstr "全てのファイル"
 
-#: embed/mozilla/FilePicker.cpp:161
+#: embed/mozilla/FilePicker.cpp:168
 msgid "HTML files"
 msgstr "HTML ファイル"
 
-#: embed/mozilla/FilePicker.cpp:166
+#: embed/mozilla/FilePicker.cpp:173
 msgid "Text files"
 msgstr "テキスト・ファイル"
 
-#: embed/mozilla/FilePicker.cpp:171
+#: embed/mozilla/FilePicker.cpp:178
 msgid "Image files"
 msgstr "画像ファイル"
 
-#: embed/mozilla/FilePicker.cpp:176
+#: embed/mozilla/FilePicker.cpp:183
 msgid "XML files"
 msgstr "XML ファイル"
 
-#: embed/mozilla/FilePicker.cpp:181
+#: embed/mozilla/FilePicker.cpp:188
 msgid "XUL files"
 msgstr "XUL ファイル"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:182
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:185
 msgid "_Select Certificate"
 msgstr "証明書の選択(_S)"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:221
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:224
 #, c-format
 msgid "Choose a certificate to present as identification to %s."
 msgstr "%s の身元情報を提供する証明書を選択して下さい。"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:224
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:227
 msgid "Select a certificate to identify yourself."
 msgstr "あなた自身を識別する証明書を選択して下さい。"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:274
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:277
 msgid "Certificate _Details"
 msgstr "証明書の詳細"
 
@@ -1941,11 +1940,11 @@ msgstr "この証明書は CA 証明書が不正なので、正しいものか�
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "この証明書は不明な理由で正しいものか確認できませんでした。"
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:181
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:183
 msgid "Generating Private Key."
 msgstr "秘密鍵を生成しています。"
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:182
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:184
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
@@ -1974,7 +1973,7 @@ msgstr ""
 #.
 #: embed/mozilla/mozilla-notifiers.cpp:737
 msgid "system-language"
-msgstr "システムの言語"
+msgstr "ja"
 
 #: embed/print-dialog.c:289
 msgid "Print to"
@@ -2008,11 +2007,11 @@ msgstr "GConf エラー"
 msgid "_Remove Toolbar"
 msgstr "ツールバーの削除(_R)"
 
-#: lib/egg/egg-toolbar-editor.c:552
+#: lib/egg/egg-toolbar-editor.c:559
 msgid "Separator"
 msgstr "区切り"
 
-#: lib/egg/egg-toolbar-editor.c:582
+#: lib/egg/egg-toolbar-editor.c:589
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
@@ -2021,26 +2020,26 @@ msgstr ""
 "バーからドラッグして下さい。"
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:72 src/prefs-dialog.c:1107
+#: lib/ephy-file-helpers.c:75 src/prefs-dialog.c:1107
 msgid "Downloads"
 msgstr "ダウンロード"
 
-#: lib/ephy-file-helpers.c:149
+#: lib/ephy-file-helpers.c:164
 #, c-format
 msgid "Failed to find %s"
 msgstr "%s の検索に失敗しました"
 
-#: lib/ephy-file-helpers.c:214
+#: lib/ephy-file-helpers.c:229
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s は存在します。別の場所に移動して下さい。"
 
-#: lib/ephy-file-helpers.c:217
+#: lib/ephy-file-helpers.c:232
 #, c-format
 msgid "Failed to create directory %s."
 msgstr "フォルダ %s を作成できませんでした。"
 
-#: lib/ephy-gui.c:88
+#: lib/ephy-gui.c:90
 #, c-format
 msgid ""
 "File %s will be overwritten.\n"
@@ -2053,7 +2052,7 @@ msgstr ""
 "\n"
 "続行しますか？"
 
-#: lib/ephy-gui.c:119
+#: lib/ephy-gui.c:121
 #, c-format
 msgid "Could not display help: %s"
 msgstr "ヘルプを表示できませんでした: %s"
@@ -2158,7 +2157,7 @@ msgstr "400%"
 msgid "Failed"
 msgstr "失敗"
 
-#: src/bookmarks/ephy-bookmark-action.c:221
+#: src/bookmarks/ephy-bookmark-action.c:248
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -2168,17 +2167,17 @@ msgstr "%s:"
 msgid "%s Properties"
 msgstr "%s のプロパティ"
 
-#: src/bookmarks/ephy-bookmark-properties.c:352
+#: src/bookmarks/ephy-bookmark-properties.c:348
 #: src/bookmarks/ephy-new-bookmark.c:215
 msgid "_Title:"
 msgstr "タイトル(_T):"
 
-#: src/bookmarks/ephy-bookmark-properties.c:394
+#: src/bookmarks/ephy-bookmark-properties.c:390
 #: src/bookmarks/ephy-new-bookmark.c:238
 msgid "To_pics:"
 msgstr "トピック(_P):"
 
-#: src/bookmarks/ephy-bookmark-properties.c:403
+#: src/bookmarks/ephy-bookmark-properties.c:399
 msgid "_Show in bookmarks bar"
 msgstr "ブックマーク・バーで表示(_S)"
 
@@ -2404,20 +2403,20 @@ msgstr "アドレスのコピー(_C)"
 msgid "_Search:"
 msgstr "検索(_S):"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1357
+#: src/bookmarks/ephy-bookmarks-editor.c:1354
 #: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:953
 msgid "Bookmarks"
 msgstr "ブックマーク"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1440
+#: src/bookmarks/ephy-bookmarks-editor.c:1437
 msgid "Topics"
 msgstr "トピック"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1502 src/ephy-history-window.c:1318
+#: src/bookmarks/ephy-bookmarks-editor.c:1499 src/ephy-history-window.c:1318
 msgid "Title"
 msgstr "タイトル"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1509 src/ephy-history-window.c:1324
+#: src/bookmarks/ephy-bookmarks-editor.c:1506 src/ephy-history-window.c:1324
 msgid "Address"
 msgstr "アドレス"
 
@@ -2458,11 +2457,11 @@ msgstr "旅行"
 msgid "Work"
 msgstr "仕事"
 
-#: src/bookmarks/ephy-bookmarks.c:647
+#: src/bookmarks/ephy-bookmarks.c:680
 msgid "Most Visited"
 msgstr "訪問数上位"
 
-#: src/bookmarks/ephy-bookmarks.c:664
+#: src/bookmarks/ephy-bookmarks.c:697
 msgid "Not Categorized"
 msgstr "未分類"
 
@@ -2595,68 +2594,68 @@ msgstr "履歴"
 msgid "Sites"
 msgstr "サイト"
 
-#: src/ephy-main.c:55
+#: src/ephy-main.c:56
 msgid "Open a new tab in an existing Epiphany window"
 msgstr "既存の Epiphany ウィンドウの中に新しいタブを開く"
 
-#: src/ephy-main.c:58
+#: src/ephy-main.c:59
 msgid "Run Epiphany in full screen mode"
 msgstr "Epiphany をフルスクリーン・モードで起動する"
 
-#: src/ephy-main.c:61
+#: src/ephy-main.c:62
 msgid "Load the given session file"
 msgstr "指定したセッションを読み込む"
 
-#: src/ephy-main.c:62 src/ephy-main.c:68
+#: src/ephy-main.c:63 src/ephy-main.c:69
 msgid "FILE"
 msgstr "FILE"
 
-#: src/ephy-main.c:64
+#: src/ephy-main.c:65
 msgid "Add a bookmark (don't open any window)"
 msgstr "ブックマークを追加する (ウィンドウは開かない)"
 
-#: src/ephy-main.c:65
+#: src/ephy-main.c:66
 msgid "URL"
 msgstr "URL"
 
-#: src/ephy-main.c:67
+#: src/ephy-main.c:68
 msgid "Import bookmarks from the given file"
 msgstr "指定されたファイルからブックマークをインポートする"
 
-#: src/ephy-main.c:70
+#: src/ephy-main.c:71
 msgid "Launch the bookmarks editor"
 msgstr "ブックマーク・エディタを起動する"
 
-#: src/ephy-main.c:73
+#: src/ephy-main.c:74
 msgid "Used internally by the bonobo interface"
 msgstr "bonobo インタフェースが内部で使用する"
 
-#: src/ephy-main.c:108
+#: src/ephy-main.c:109
 msgid "Epiphany Web Browser"
 msgstr "Epiphany ウェブ・ブラウザ"
 
-#: src/ephy-main.c:112
+#: src/ephy-main.c:113
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-session.c:299
+#: src/ephy-session.c:301
 msgid "Crash Recovery"
 msgstr "Epiphany クラッシュ・リカバリ"
 
-#: src/ephy-session.c:301
+#: src/ephy-session.c:303
 msgid "_Don't Recover"
 msgstr "復活させない(_D)"
 
-#: src/ephy-session.c:302
+#: src/ephy-session.c:304
 msgid "_Recover"
 msgstr "復活させる(_R)"
 
-#: src/ephy-session.c:332
+#: src/ephy-session.c:335
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr "Epiphany が前回の実行中にクラッシュしたか強制終了したようです。"
 
-#: src/ephy-session.c:338
+#: src/ephy-session.c:341
 msgid "You can recover the opened tabs and windows."
 msgstr "開いていたタブやウインドウを復活させることができます。"
 
@@ -2686,30 +2685,30 @@ msgstr ""
 "Bonobo がオートメーション・オブジェクトの場所を特定する際に予期しないエラーが"
 "発生したため、現在、Epiphany は利用できません。"
 
-#: src/ephy-tab.c:327 src/ephy-tab.c:1172 src/ephy-tab.c:1354
+#: src/ephy-tab.c:367 src/ephy-tab.c:1200 src/ephy-tab.c:1370
 msgid "Blank page"
 msgstr "空のページ"
 
-#: src/ephy-tab.c:748
+#: src/ephy-tab.c:772
 msgid "site"
 msgstr "サイト"
 
-#: src/ephy-tab.c:772
+#: src/ephy-tab.c:796
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "%s へリダイレクト中..."
 
-#: src/ephy-tab.c:776
+#: src/ephy-tab.c:800
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "%s からデータの転送中..."
 
-#: src/ephy-tab.c:780
+#: src/ephy-tab.c:804
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "%s からの認証待ちです..."
 
-#: src/ephy-tab.c:788
+#: src/ephy-tab.c:812
 #, c-format
 msgid "Loading %s..."
 msgstr "%s の読み込み中..."
@@ -3157,11 +3156,11 @@ msgstr "フォームに提出されていない変更点があります。"
 msgid "If you close the document anyway, you will lose that information."
 msgstr "いずれにしろドキュメントを閉じると、その情報は失われます。"
 
-#: src/ephy-window.c:943 src/window-commands.c:392
+#: src/ephy-window.c:943 src/window-commands.c:395
 msgid "Open"
 msgstr "開く"
 
-#: src/ephy-window.c:945 src/window-commands.c:417
+#: src/ephy-window.c:945 src/window-commands.c:420
 msgid "Save As"
 msgstr "別名で保存(_A)..."
 
@@ -3539,16 +3538,16 @@ msgstr "アドレス・エントリに入力されたアドレスに移動しま
 msgid "Check this out!"
 msgstr "Check this out!"
 
-#: src/window-commands.c:879
+#: src/window-commands.c:881
 msgid "Toolbar Editor"
 msgstr "ツールバー・エディタ"
 
-#: src/window-commands.c:901
+#: src/window-commands.c:903
 msgid "_Add a New Toolbar"
 msgstr "新しいツールバーの追加(_A)"
 
 #. Translator credits
-#: src/window-commands.c:953
+#: src/window-commands.c:954
 msgid "translator-credits"
 msgstr ""
 "相花 毅 <aihana@gnome.gr.jp>\n"
@@ -3558,6 +3557,6 @@ msgstr ""
 "Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "日本GNOMEユーザー会 <http://www.gnome.gr.jp>"
 
-#: src/window-commands.c:983
+#: src/window-commands.c:984
 msgid "A GNOME browser based on Mozilla"
 msgstr "Mozilla ベースの GNOME ブラウザです"
