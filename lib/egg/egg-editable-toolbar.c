@@ -837,6 +837,11 @@ toolbar_removed_cb (EggToolbarsModel   *model,
 {
   GtkWidget *toolbar;
 
+  if (position == 0 && t->priv->fixed_toolbar != NULL)
+    {
+      unparent_fixed (t);
+    }
+
   toolbar = get_dock_nth (t, position);
   gtk_widget_destroy (toolbar);
 
