@@ -369,9 +369,9 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader)
 	}
 
 	/* tag all bookmarks in the list with keyword %title */
-	if (title == NULL)
+	if (title == NULL || title[0] == '\0')
 	{
-		title = xmlStrdup (_("Untitled"));
+		return list;
 	}
 
 	keyword = ephy_bookmarks_find_keyword (eb, title, FALSE);
@@ -669,7 +669,10 @@ ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
 	}
 	
 	reader = xmlNewTextReaderFilename (filename);
-	g_return_val_if_fail (reader != NULL, FALSE);
+	if (reader == NULL)
+	{
+		return FALSE;
+	}
 
 	list = xbel_parse_folder (bookmarks, reader);
 

@@ -1,3 +1,11 @@
+2004-02-28  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmarks-import.c: (xbel_parse_folder),
+	(ephy_bookmarks_import_xbel):
+
+	If a folder has no name, don't tag its bookmarks with "Untitled"
+	keyword, just skip it.
+
 2004-02-28  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/mozilla/ContentHandler.cpp:
