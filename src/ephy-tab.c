@@ -52,6 +52,7 @@ struct EphyTabPrivate
 	gboolean is_active;
 	TabLoadStatus load_status;
 	char status_message[255];
+	char link_message[255];
 	char *title;
 	char *location;
 	int load_percent;
@@ -79,10 +80,6 @@ static void
 ephy_tab_link_message_cb (EphyEmbed *embed,
 			  const char *message,
 			  EphyTab *tab);
-static void
-ephy_tab_js_status_cb (EphyEmbed *embed,
-		       const char *status,
-		       EphyTab *tab);
 static void
 ephy_tab_location_cb (EphyEmbed *embed, EphyTab *tab);
 static void
@@ -201,6 +198,7 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->window = NULL;
 	tab->priv->is_active = FALSE;
 	*tab->priv->status_message = '\0';
+	*tab->priv->link_message = '\0';
 	tab->priv->load_status = TAB_LOAD_NONE;
 	tab->priv->load_percent = 0;
 	tab->priv->title = NULL;
@@ -225,9 +223,6 @@ ephy_tab_init (EphyTab *tab)
 			  tab);
 	g_signal_connect (embed, "ge_link_message",
 			  GTK_SIGNAL_FUNC (ephy_tab_link_message_cb),
-			  tab);
-	g_signal_connect (embed, "ge_js_status",
-			  GTK_SIGNAL_FUNC (ephy_tab_js_status_cb),
 			  tab);
 	g_signal_connect (embed, "ge_location",
 			  GTK_SIGNAL_FUNC (ephy_tab_location_cb),
@@ -435,23 +430,8 @@ ephy_tab_link_message_cb (EphyEmbed *embed,
 {
 	if (!tab->priv->is_active) return;
 
-	g_strlcpy (tab->priv->status_message,
+	g_strlcpy (tab->priv->link_message,
 		   message, 255);
-
-	ephy_window_update_control (tab->priv->window,
-				      StatusbarMessageControl);
-}
-
-static void
-ephy_tab_js_status_cb (EphyEmbed *embed,
-			 const char *status,
-			 EphyTab *tab)
-{
-	if (!tab->priv->is_active)
-		return;
-
-	g_strlcpy (tab->priv->status_message,
-		   status, 255);
 
 	ephy_window_update_control (tab->priv->window,
 				    StatusbarMessageControl);
@@ -895,13 +875,13 @@ ephy_tab_get_load_percent (EphyTab *tab)
 const char *
 ephy_tab_get_status_message (EphyTab *tab)
 {
-	if (tab->priv->status_message)
+	if (*tab->priv->link_message)
 	{
-		return tab->priv->status_message;
+		return tab->priv->link_message;
 	}
 	else
 	{
-		return " ";
+		return tab->priv->status_message;
 	}
 }
 

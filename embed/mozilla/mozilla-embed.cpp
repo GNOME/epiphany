@@ -382,6 +382,7 @@ static void
 mozilla_embed_destroy (GtkObject *object)
 {
 	int i;
+	MozillaEmbed *embed = MOZILLA_EMBED (object);
 	
 	for (i = 0; signal_connections[i].event != NULL; i++)
         {
@@ -390,6 +391,13 @@ mozilla_embed_destroy (GtkObject *object)
                          (gpointer)signal_connections[i].func, 
                          (void *)object);
         }
+
+	if (embed->priv->wrapper)
+	{
+		embed->priv->wrapper->Destroy();
+        	delete embed->priv->wrapper;
+        	embed->priv->wrapper = NULL;
+	}
 	
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
@@ -406,14 +414,7 @@ mozilla_embed_finalize (GObject *object)
 	
 	g_return_if_fail (embed->priv != NULL);
 	
-	if (embed->priv->wrapper)
-	{
-		embed->priv->wrapper->Destroy();
-        	delete embed->priv->wrapper;
-        	embed->priv->wrapper = NULL;
-	}
-
-	delete embed->priv;
+	g_free (embed->priv);
 	
         G_OBJECT_CLASS (parent_class)->finalize (object);
 

@@ -112,11 +112,10 @@ private:
 	nsCOMPtr<nsIWebProgressListener> mProgress;
 	nsCOMPtr<nsIDOMEventReceiver> mEventReceiver;
 	EphyEventListener *mEventListener;
-	PRBool mListenersAttached;
 
-	void GetListener (void);
-	void AttachListeners (void);
-	void DetachListeners (void);
+	nsresult GetListener (void);
+	nsresult AttachListeners (void);
+	nsresult DetachListeners (void);
 	nsresult SetZoomOnDocshell (float aZoom, nsIDocShell *DocShell);
 	nsresult GetDocShell (nsIDocShell **aDocShell);
 	nsresult GetCSSBackground (nsIDOMNode *node, nsAutoString& url);

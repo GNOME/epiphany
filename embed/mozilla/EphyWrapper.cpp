@@ -27,7 +27,6 @@
 #include <unistd.h>
 
 #include "nsIContentViewer.h"
-#include "nsIPermissionManager.h"
 #include "nsIGlobalHistory.h"
 #include "nsIDocShellHistory.h"
 #include "nsIWebBrowserFind.h"
@@ -41,14 +40,10 @@
 #include "nsIPresShell.h"
 #include "nsIMarkupDocumentViewer.h"
 #include "nsIComponentManager.h"
-#include "nsIDOMElement.h"
-#include "nsIDOMNodeList.h"
 #include "nsIScriptGlobalObject.h"
 #include "nsIScriptContext.h"
 
 #include "nsIDOMWindowInternal.h"
-#include "nsICharsetConverterManager.h"
-#include "nsICharsetConverterManager2.h"
 #include "nsIInterfaceRequestor.h"
 #include "nsIFocusController.h"
 #include "nsIWebBrowserPersist.h"
@@ -73,9 +68,6 @@
 #include "nsIDOMHTMLDocument.h"
 #include "nsIDOMHTMLCollection.h"
 #include "nsIDOMHTMLElement.h"
-#include "nsIDOMHTMLImageElement.h"
-#include "nsIDOMHTMLFormElement.h"
-#include "nsIDOMHTMLAnchorElement.h"
 #include "caps/nsIPrincipal.h"
 #include "nsIDeviceContext.h"
 #include "nsIPresContext.h"
@@ -86,6 +78,8 @@
 
 EphyWrapper::EphyWrapper ()
 {
+	mEventListener = nsnull;
+	mEventReceiver = nsnull;	
 }
 
 EphyWrapper::~EphyWrapper ()
@@ -130,10 +124,10 @@ nsresult EphyWrapper::Init (GtkMozEmbed *mozembed)
 	return dsHistory->SetGlobalHistory(inst);
 }
 
-void
+nsresult
 EphyWrapper::GetListener (void)
 {
-  	if (mEventReceiver) return;
+  	if (mEventReceiver) return NS_ERROR_FAILURE;
 
   	nsCOMPtr<nsIDOMWindow> domWindowExternal;
   	mWebBrowser->GetContentDOMWindow(getter_AddRefs(domWindowExternal));
@@ -142,38 +136,39 @@ EphyWrapper::GetListener (void)
         domWindow = do_QueryInterface(domWindowExternal);
 	
 	nsCOMPtr<nsPIDOMWindow> piWin(do_QueryInterface(domWindow));
-  	if (!piWin) return;
+  	if (!piWin) return NS_ERROR_FAILURE;
 
   	nsCOMPtr<nsIChromeEventHandler> chromeHandler;
   	piWin->GetChromeEventHandler(getter_AddRefs(chromeHandler));
 
   	mEventReceiver = do_QueryInterface(chromeHandler);
+	if (!mEventReceiver) return NS_ERROR_FAILURE;
+
+	return NS_OK;
 }
 
-void
+nsresult
 EphyWrapper::AttachListeners(void)
 {
-  	if (!mEventReceiver || mListenersAttached)
-    		return;
+  	if (!mEventReceiver) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIDOMEventTarget> target;
 	target = do_QueryInterface (mEventReceiver);
 
-	target->AddEventListener(NS_LITERAL_STRING("DOMLinkAdded"), mEventListener, PR_FALSE);
-
-  	mListenersAttached = PR_TRUE;
+	return target->AddEventListener(NS_LITERAL_STRING("DOMLinkAdded"),
+			                mEventListener, PR_FALSE);
 }
 
-void
+nsresult
 EphyWrapper::DetachListeners(void)
 {
-  	if (!mListenersAttached || !mEventReceiver)
-    		return;
-
+	if (!mEventReceiver) return NS_ERROR_FAILURE;
+	
 	nsCOMPtr<nsIDOMEventTarget> target;
 	target = do_QueryInterface (mEventReceiver);
 
-	target->RemoveEventListener(NS_LITERAL_STRING("DOMLinkAdded"), mEventListener, PR_FALSE);
+	return target->RemoveEventListener(NS_LITERAL_STRING("DOMLinkAdded"),
+					   mEventListener, PR_FALSE);
 }
 
 nsresult EphyWrapper::GetDocShell (nsIDocShell **aDocShell)
