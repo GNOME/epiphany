@@ -1,4 +1,72 @@
 ==============
+Epiphany 1.1.8
+==============
+
+Code changes
+
+	* Use gnome-common to generate help makefiles (Marco)
+
+Interface improvements
+
+	* Use title capitalisation in the clear history dialog (Piers Cornwell)
+	* Use a default width/height for dialogs with treeviews
+	  that don't have a fixed requisition (Biggest Flake Ever)
+	* Set a default height/width for the encoding dialog (Dave)
+	* Don't show Find, Add Language, and Encodings dialogue in
+          window list.
+	* Now that GtkComboBox supports mnemonic activation,
+          set the focus target of the combos labels (Christian)
+	* Make resume dialog warning message selectable
+	  per HIG (Piers Cornwell)
+	* Make columns resizable (Marco Pesenti Gritti)
+
+Bugfixes
+
+	* Fix a lot of memleaks (Christian)
+	* Fix toolbar overflow menus creation (Christian)
+	* Honour the --with-gconf-schema-file-dir and
+	  --disable-schemas-install configure options
+	  (Julio M. Merino Vidal)
+	* Fixup completion matching and priority calculation (Marco)
+	* Put the serial numbers in duplicated filenames just before
+          the last dot so we won't confuse apps like file-roller. (Xan)
+	* In downloader when open is explicitly requested from
+	  the dialog use a temporary file (Marco)
+	* Sync with mozilla 1.7a api (Christian)
+	* Reenable indentation of node xml (Christian)
+	* Fix numerous places where we weren't properly
+	  converting between UTF-8 and filename encoding. (Christian)
+	* Unify fallback downloads dir to get the
+	  home directory (Christian)
+	* Don't set entries insensitive, only set the non-editable when the
+          gconf key isn't writable. (Christian)
+	* Changed .pc file version to 1.2 (Christian)
+	* Make statusbar api public for plugins (Christian)
+	* Fix several problems in the safe/unsafe downloads logic (Marco)
+
+Translations
+
+	* Ales Nyakhaychyk (be)
+	* Arafat Medini (ar)
+	* Changwoo Ryu (ko)
+	* Christian Neumair (de)
+	* Christophe Merlet (RedFox) (fr)
+	* Danilo Segan (sr)
+	* Duarte Loreto (pt)
+	* Francisco Javier F. Serrador (es)
+	* Funda Wang (zh_CN)
+	* GNOME PL Team (pl)
+	* Hasbullah Bin Pit (ms)
+	* John C Barstow (mi)
+	* Kjartan Maraas (no)
+	* Kostas Papadimas (el)
+	* Laurent Dhima (sq)
+	* Maxim Dziumanenko (uk)
+	* Miloslav Trmac (cs)
+	* Pauli Virtanen (fi)
+	* Žygimantas Beručka (lt)
+
+==============
 Epiphany 1.1.6
 ==============
 

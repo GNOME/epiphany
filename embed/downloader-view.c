@@ -40,7 +40,6 @@
 #include <glib/gi18n.h>
 
 #define CONF_DOWNLOADING_SHOW_DETAILS "/apps/epiphany/dialogs/downloader_show_details"
-#define DIALOG_MINIMUM_DISPLAY_TIMEOUT 5000
 
 enum
 {
@@ -471,12 +470,6 @@ selection_changed (GtkTreeSelection *selection, DownloaderView *dv)
 	update_buttons (dv);
 }
 
-static gboolean unref_return_false (void *data)
-{
-	g_object_unref (data);
-	return FALSE;
-}
-
 static void
 downloader_view_build_ui (DownloaderView *dv)
 {
@@ -562,9 +555,6 @@ downloader_view_build_ui (DownloaderView *dv)
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
 	g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), dv);
-
-	g_object_ref (dv);
-	g_timeout_add (DIALOG_MINIMUM_DISPLAY_TIMEOUT, unref_return_false, dv);
 }
 
 void
