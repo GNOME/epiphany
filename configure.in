@@ -3,6 +3,8 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT([epiphany], [1.2.6],
        [http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany])
 
+GNOME_COMMON_INIT
+
 EPIPHANY_MAJOR=1.2
 AC_SUBST(EPIPHANY_MAJOR)
 
@@ -14,9 +16,6 @@ AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_MAINTAINER_MODE
 
 AC_PROG_INTLTOOL([0.29])
-
-dnl put the ACLOCAL flags in the Makefile
-ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
 GLIB_REQUIRED=2.4.1
 GTK_REQUIRED=2.4.0
