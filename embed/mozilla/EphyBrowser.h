@@ -23,8 +23,8 @@
 
 #include "config.h"
 
-#include "ephy-encodings.h"
 #include "ephy-embed.h"
+#include <gtk/gtkwidget.h>
 
 #include <gtkmozembed.h>
 #include <nsCOMPtr.h>
@@ -46,13 +46,15 @@
 #include <nsISecureBrowserUI.h>
 #endif
 
+class EphyBrowser;
+
 class EphyEventListener : public nsIDOMEventListener
 {
 public:
 	EphyEventListener();
 	virtual ~EphyEventListener();
 
-	nsresult Init(EphyEmbed *aOwner);
+	nsresult Init (EphyBrowser *aOwner);
 
 	NS_DECL_ISUPPORTS
 
@@ -61,7 +63,7 @@ public:
 	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent) = 0;
 
 protected:
-	EphyEmbed *mOwner;
+	EphyBrowser *mOwner;
 };
 
 class EphyFaviconEventListener : public EphyEventListener
@@ -84,6 +86,10 @@ public:
 
 class EphyBrowser
 {
+friend class EphyEventListener;
+friend class EphyFaviconEventListener;
+friend class EphyPopupBlockEventListener;
+friend class EphyModalAlertEventListener;
 public:
 	EphyBrowser();
 	~EphyBrowser();
@@ -142,8 +148,9 @@ public:
 	nsresult ShowCertificate ();
 
 	nsCOMPtr<nsIWebBrowser> mWebBrowser;
-
 private:
+	GtkWidget *mEmbed;
+
 	nsCOMPtr<nsIDOMDocument> mTargetDocument;
 	nsCOMPtr<nsIDOMEventTarget> mEventTarget;
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;

@@ -118,7 +118,7 @@ EphyEventListener::~EphyEventListener()
 NS_IMPL_ISUPPORTS1(EphyEventListener, nsIDOMEventListener)
 
 nsresult
-EphyEventListener::Init(EphyEmbed *aOwner)
+EphyEventListener::Init (EphyBrowser *aOwner)
 {
 	mOwner = aOwner;
 	return NS_OK;
@@ -160,6 +160,23 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 		nsCOMPtr<nsIDOMDocument> domDoc;
 		node->GetOwnerDocument(getter_AddRefs(domDoc));
 		NS_ENSURE_TRUE (domDoc, NS_ERROR_FAILURE);
+
+		nsCOMPtr<nsIDOMDocumentView> docView (do_QueryInterface (domDoc));
+		NS_ENSURE_TRUE (docView, NS_ERROR_FAILURE);
+
+		nsCOMPtr<nsIDOMAbstractView> abstractView;
+		docView->GetDefaultView (getter_AddRefs (abstractView));
+
+		nsCOMPtr<nsIDOMWindow> domWin (do_QueryInterface (abstractView));
+		NS_ENSURE_TRUE (domWin, NS_ERROR_FAILURE);
+
+		nsCOMPtr<nsIDOMWindow> topDomWin;
+		domWin->GetTop (getter_AddRefs (topDomWin));
+
+		nsCOMPtr<nsISupports> domWinAsISupports (do_QueryInterface (domWin));
+		nsCOMPtr<nsISupports> topDomWinAsISupports (do_QueryInterface (topDomWin));
+		/* disallow subframes to set favicon */
+		if (domWinAsISupports != topDomWinAsISupports) return NS_OK;
 
 		nsCOMPtr<nsIDOM3Document> doc = do_QueryInterface (domDoc);
 		NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
@@ -219,14 +236,14 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 		PRBool shouldLoad = PR_FALSE;
 		rv = policy->ShouldLoad (nsIContentPolicy::IMAGE,
 					 favUri, eventTarget,
-					 nsnull /* FIXME: DOM window*/,
+					 mOwner->mDOMWindow,
 					 &shouldLoad);
 		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 		if (!shouldLoad) return NS_OK;
 #endif
 
 		/* ok, we accept this as a valid favicon for this site */
-		g_signal_emit_by_name (mOwner, "ge_favicon", faviconUrl.get());
+		g_signal_emit_by_name (mOwner->mEmbed, "ge_favicon", faviconUrl.get());
 	}
 
 	return NS_OK;
@@ -235,8 +252,6 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 NS_IMETHODIMP
 EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 {
-	NS_ENSURE_TRUE (mOwner != NULL, NS_ERROR_FAILURE);
-
 	nsCOMPtr<nsIDOMPopupBlockedEvent> popupEvent =
 		do_QueryInterface (aDOMEvent);
 	NS_ENSURE_TRUE (popupEvent, NS_ERROR_FAILURE);
@@ -259,7 +274,7 @@ EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 			   NS_CSTRING_ENCODING_UTF8,
 			   popupWindowFeaturesString);
 
-	g_signal_emit_by_name(mOwner, "ge_popup_blocked",
+	g_signal_emit_by_name(mOwner->mEmbed, "ge_popup_blocked",
 			      popupWindowURIString.get(),
 			      popupWindowFeaturesString.get());
 
@@ -292,7 +307,7 @@ EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 	if (strcmp (cType.get(), "DOMWillOpenModalDialog") == 0)
 	{
 		gboolean retval = FALSE;
-		g_signal_emit_by_name (mOwner, "ge-modal-alert", &retval);
+		g_signal_emit_by_name (mOwner->mEmbed, "ge-modal-alert", &retval);
 
 		/* suppress alert */
 		if (retval)
@@ -303,7 +318,7 @@ EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 	}
 	else if (strcmp (cType.get(), "DOMModalDialogClosed") == 0)
 	{
-		g_signal_emit_by_name (mOwner, "ge-modal-alert-closed");
+		g_signal_emit_by_name (mOwner->mEmbed, "ge-modal-alert-closed");
 	}
 #endif
 
@@ -328,6 +343,8 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 {
 	if (mInitialized) return NS_OK;
 
+	mEmbed = GTK_WIDGET (mozembed);
+
 	gtk_moz_embed_get_nsIWebBrowser (mozembed,
 					 getter_AddRefs(mWebBrowser));
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
@@ -344,22 +361,25 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 	mFaviconEventListener = new EphyFaviconEventListener();
 	if (!mFaviconEventListener) return NS_ERROR_OUT_OF_MEMORY;
 
-	rv = mFaviconEventListener->Init (EPHY_EMBED (mozembed));
+	rv = mFaviconEventListener->Init (this);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	mPopupBlockEventListener = new EphyPopupBlockEventListener();
 	if (!mPopupBlockEventListener) return NS_ERROR_OUT_OF_MEMORY;
 
-	rv = mPopupBlockEventListener->Init (EPHY_EMBED (mozembed));
+	rv = mPopupBlockEventListener->Init (this);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	mModalAlertListener = new EphyModalAlertEventListener ();
 	if (!mModalAlertListener) return NS_ERROR_OUT_OF_MEMORY;
 
-	rv = mModalAlertListener->Init (EPHY_EMBED (mozembed));
+	rv = mModalAlertListener->Init (this);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
  	rv = GetListener();
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+	rv = AttachListeners();
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 #ifdef HAVE_MOZILLA_PSM
@@ -374,7 +394,7 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 
 	mInitialized = PR_TRUE;
 
-	return AttachListeners();
+	return NS_OK;
 }
 
 nsresult
@@ -524,6 +544,7 @@ nsresult EphyBrowser::Destroy ()
       	mWebBrowser = nsnull;
 	mDOMWindow = nsnull;
 	mEventTarget = nsnull;
+	mEmbed = nsnull;
 
 	mInitialized = PR_FALSE;
 
