@@ -134,7 +134,6 @@ proxy_menu_activate_cb (GtkMenuItem *menu_item, EphyZoomAction *action)
 
 	if (zoom != action->priv->zoom)
 	{
-	g_print ("zoom_to_level emit, to %f from %f\n", zoom, action->priv->zoom);
 		g_signal_emit (action, signals[ZOOM_TO_LEVEL_SIGNAL], 0, zoom);
 	}
 }
