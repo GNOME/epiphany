@@ -804,7 +804,15 @@ ephy_bookmarks_import_rdf (EphyBookmarks *bookmarks,
 		return FALSE;
 
 	doc = xmlParseFile (filename);
-	g_assert (doc != NULL);
+	if (doc == NULL)
+	{
+		/* FIXME: maybe put up a warning dialogue here, because this
+		 * is a severe dataloss?
+		 */
+		g_warning ("Failed to re-import the bookmarks. All bookmarks lost!\n");
+		return FALSE;
+	}
+
 	root = xmlDocGetRootElement (doc);
 
 	child = root->children;
