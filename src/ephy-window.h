@@ -102,8 +102,6 @@ GList		 *ephy_window_get_tabs		  (EphyWindow *window);
 
 void		  ephy_window_find		  (EphyWindow *window);
 
-void		  ephy_window_print		  (EphyWindow *window);
-
 G_END_DECLS
 
 #endif
