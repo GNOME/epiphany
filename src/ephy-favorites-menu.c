@@ -85,10 +85,11 @@ ephy_favorites_menu_clean (EphyFavoritesMenu *wrhm)
 	EphyFavoritesMenuPrivate *p = wrhm->priv;
 	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
 
-	if (p->ui_id >= 0)
+	if (p->ui_id > 0)
 	{
 		egg_menu_merge_remove_ui (merge, p->ui_id);
 		egg_menu_merge_ensure_update (merge);
+		p->ui_id = 0;
 	}
 
 	if (p->action_group != NULL)
@@ -119,7 +120,9 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 	GPtrArray *children;
 	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
 
-	LOG ("Rebuilding recent history menu")
+	LOG ("Rebuilding favorites menu")
+
+	START_PROFILER ("Rebuild favorites menu")
 
 	ephy_favorites_menu_clean (wrhm);
 
@@ -169,6 +172,8 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 	}
 
 	g_string_free (xml, TRUE);
+
+	STOP_PROFILER ("Rebuild favorites menu")
 }
 
 static void
@@ -232,7 +237,7 @@ ephy_favorites_menu_init (EphyFavoritesMenu *wrhm)
 	wrhm->priv = p;
 
 	wrhm->priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	wrhm->priv->ui_id = -1;
+	wrhm->priv->ui_id = 0;
 	wrhm->priv->action_group = NULL;
 }
 

@@ -93,10 +93,11 @@ ephy_bookmarks_menu_clean (EphyBookmarksMenu *menu)
 	EphyBookmarksMenuPrivate *p = menu->priv;
 	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
 
-	if (p->ui_id >= 0)
+	if (p->ui_id > 0)
 	{
 		egg_menu_merge_remove_ui (merge, p->ui_id);
 		egg_menu_merge_ensure_update (merge);
+		p->ui_id = 0;
 	}
 
 	if (p->action_group != NULL)
@@ -248,7 +249,9 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 	GList *node_list = NULL, *l;
 	EggAction *empty;
 
-	LOG ("Rebuilding recent history menu")
+	LOG ("Rebuilding bookmarks menu")
+
+	START_PROFILER ("Rebuilding bookmarks menu")
 
 	ephy_bookmarks_menu_clean (menu);
 
@@ -340,6 +343,8 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 
 	g_string_free (xml, TRUE);
 	g_list_free (node_list);
+
+	STOP_PROFILER ("Rebuilding bookmarks menu")
 }
 
 static void
@@ -427,7 +432,7 @@ ephy_bookmarks_menu_init (EphyBookmarksMenu *menu)
 			  G_CALLBACK (bookmarks_tree_changed_cb),
 			  menu);
 
-	menu->priv->ui_id = -1;
+	menu->priv->ui_id = 0;
 	menu->priv->action_group = NULL;
 	menu->priv->update_tag = 0;
 }
