@@ -24,7 +24,7 @@
 
 #include "EphyWrapper.h"
 #include "GlobalHistory.h"
-#include "ProgressListener.h"
+//#include "ProgressListener.h"
 #include "ephy-embed.h"
 #include "ephy-string.h"
 

@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
- #pragma once
+#include "mozilla-embed-persist.h"
 
 #include "nsString.h"
 #include "nsIWebProgressListener.h"
@@ -46,23 +46,14 @@
 #include "nsIInputStream.h"
 #include "nsIDOMDocument.h"
 
-
-typedef enum
-{
-  eSaveFormatUnspecified = 0,
-  eSaveFormatPlainText,       // items should match the MENU in resources
-  eSaveFormatHTML,
-  eSaveFormatHTMLComplete
-} ESaveFormat;
-
 // Implementation of a header sniffer class that is used when saving Web pages and images.
 class EphyHeaderSniffer : public nsIWebProgressListener
 {
 public:
-    EphyHeaderSniffer(nsIWebBrowserPersist* aPersist, nsIFile* aFile, nsIURI* aURL,
-                    nsIDOMDocument* aDocument, nsIInputStream* aPostData,
-                    const nsAString& aSuggestedFilename, PRBool aBypassCache,
-                    ESaveFormat aSaveFormat = eSaveFormatUnspecified);
+    EphyHeaderSniffer(nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
+		      nsIFile* aFile, nsIURI* aURL,
+                      nsIDOMDocument* aDocument, nsIInputStream* aPostData,
+                      const nsAString& aSuggestedFilename, PRBool aBypassCache);
     virtual ~EphyHeaderSniffer();
 
     NS_DECL_ISUPPORTS
@@ -70,19 +61,19 @@ public:
   
 protected:
 
-    nsresult  PerformSave(nsIURI* inOriginalURI, const ESaveFormat inSaveFormat);
+    nsresult  PerformSave(nsIURI* inOriginalURI);
     nsresult  InitiateDownload(nsISupports* inSourceData, nsILocalFile* inDestFile, nsIURI* inOriginalURI);
 
 private:
 
     nsIWebBrowserPersist*     mPersist; // Weak. It owns us as a listener.
+    MozillaEmbedPersist      *mEmbedPersist;
     nsCOMPtr<nsIFile>         mTmpFile;
     nsCOMPtr<nsIURI>          mURL;
     nsCOMPtr<nsIDOMDocument>  mDocument;
     nsCOMPtr<nsIInputStream>  mPostData;
     nsString                  mDefaultFilename;
     PRBool                    mBypassCache;
-    ESaveFormat               mSaveFormat;
     nsCString                 mContentType;
     nsCString                 mContentDisposition;
 };

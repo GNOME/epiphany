@@ -16,6 +16,8 @@ libephywidgets_la_SOURCES = \
 	ephy-arrow-toolbutton.h			\
 	ephy-ellipsizing-label.c		\
 	ephy-ellipsizing-label.h		\
+	ephy-cell-renderer-progress.h		\
+	ephy-cell-renderer-progress.c		\
 	ephy-location-entry.c			\
 	ephy-location-entry.h			\
 	ephy-node-view.c			\

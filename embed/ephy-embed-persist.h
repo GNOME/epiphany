@@ -39,11 +39,9 @@ typedef struct EphyEmbedPersistPrivate EphyEmbedPersistPrivate;
 
 typedef enum
 {
-	EMBED_PERSIST_SHOW_PROGRESS = 1 << 0,
-	EMBED_PERSIST_SAVE_CONTENT = 1 << 1,
-	EMBED_PERSIST_FROMCACHE = 1 << 2,
-	EMBED_PERSIST_BYPASSCACHE = 1 << 3,
-	EMBED_PERSIST_MAINDOC = 1 << 4
+	EMBED_PERSIST_BYPASSCACHE = 1 << 0,
+	EMBED_PERSIST_MAINDOC = 1 << 1,
+	EMBED_PERSIST_NO_VIEW = 1 << 2
 } EmbedPersistFlags;
 
 typedef struct

@@ -189,6 +189,308 @@
 
 	Merge fixes from branch and clean up.
 
+2003-10-16  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/mozilla/ContentHandler.cpp:
+
+	pass handler with full path, not only
+	exec name. I dont get how it worked before.
+
+2003-10-16  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-cell-renderer-progress.c:
+	(ephy_cell_renderer_progress_init),
+	(ephy_cell_renderer_progress_set_value),
+	(ephy_cell_renderer_progress_set_property), (compute_dimensions),
+	(ephy_cell_renderer_progress_get_size),
+	(ephy_cell_renderer_progress_render),
+	(ephy_cell_renderer_progress_finalize),
+	(ephy_cell_renderer_progress_class_init):
+	* lib/widgets/ephy-cell-renderer-progress.h:
+
+	fix for unknown/failed states
+
+2003-10-16  Xan Lopez  <xan@masilla.org>
+
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+
+	Unbreak for real.
+
+2003-10-16  Xan Lopez  <xan@masilla.org>
+
+	* TODO:
+	* embed/downloader-view.c:
+	* embed/mozilla/MozDownload.cpp:
+
+	Evil marco loves to break my changes, ahem.
+
+2003-10-16  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* TODO:
+	* embed/downloader-view.c: (downloader_view_init),
+	(get_row_from_download), (download_changed_cb),
+	(downloader_view_add_download), (downloader_view_build_ui),
+	(download_dialog_pause_cb), (downloader_view_remove_download),
+	(download_dialog_abort_cb):
+	* embed/ephy-download.c: (ephy_download_get_state):
+	* embed/ephy-download.h:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+	* embed/mozilla/mozilla-download.cpp:
+
+	Implement state.
+
+2003-10-16  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* data/glade/epiphany.glade:
+
+	Remove details
+
+	* embed/downloader-view.c:
+
+	Remove details button leftover
+
+2003-10-16  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/mozilla/MozDownload.cpp:
+
+	Fix some bugs
+
+2003-10-16  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/ephy-embed-persist.h:
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_download):
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+
+	Implement no_view downloads and use for favicons.
+
+2003-10-15  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/mozilla/MozDownload.cpp:
+
+	Fix reference problem when using persist.
+
+2003-10-15  Xan Lopez  <xan@masilla.org>
+
+	* data/glade/epiphany.glade:
+	* embed/downloader-view.c: (downloader_view_init),
+	(downloader_view_finalize), (download_changed_cb),
+	(downloader_view_add_download), (downloader_view_build_ui),
+	(download_dialog_pause_cb), (downloader_view_remove_download),
+	(download_dialog_abort_cb), (download_dialog_delete_cb):
+
+	Re-add abort UI, drop details
+	Serious glade cleanup is left as an exercise for the reader
+
+2003-10-15  Xan Lopez  <xan@masilla.org>
+
+	* data/glade/epiphany.glade:
+	* embed/downloader-view.c: (downloader_view_add_download),
+	(download_dialog_pause_cb), (download_dialog_abort_cb):
+	* embed/downloader-view.h:
+	
+	Fix stop button (UI not updated yet)
+	
+	* embed/mozilla/MozDownload.cpp:
+
+	Init mEmbedPersist to nsnull (Marco)
+
+2003-10-14  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/downloader-view.c: (format_interval),
+	(download_changed_cb), (downloader_view_build_ui):
+	* embed/ephy-download.c: (ephy_download_get_remaining_time),
+	(ephy_download_get_current_progress),
+	(ephy_download_get_total_progress), (ephy_download_get_percent),
+	(ephy_download_get_elapsed_time):
+	* embed/ephy-download.h:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+	* embed/mozilla/mozilla-download.cpp:
+	* lib/widgets/Makefile.am:
+
+	Get back the treeview info to work. Use
+	procman progress renderer for percent.
+
+2003-10-14  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/downloader-view.c: (download_changed_cb),
+	(downloader_view_add_download):
+
+	Fix percent/filenamee
+
+2003-10-14  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/downloader-view.c: (download_changed_cb),
+	(downloader_view_add_download), (downloader_view_build_ui),
+	(downloader_treeview_selection_changed_cb):
+	* embed/ephy-download.c: (ephy_download_class_init),
+	(ephy_download_new), (ephy_download_get_name):
+	* embed/ephy-download.h:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+
+	Implement a download changed signal and try to update
+	percent in the treeview.
+
+2003-10-14  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/ephy-download.c: (ephy_download_get_source),
+	(ephy_download_get_target), (ephy_download_get_percent):
+	* embed/ephy-download.h:
+	* embed/mozilla/mozilla-download.cpp:
+
+	Implement basic download info getters.
+
+2003-10-14  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/Makefile.am:
+	* embed/downloader-view.c: (destroy_details_cb),
+	(downloader_view_update_controls),
+	(downloader_view_update_details),
+	(downloader_view_set_download_info),
+	(downloader_view_add_download), (downloader_view_build_ui),
+	(download_dialog_pause_cb), (download_dialog_abort_cb),
+	(downloader_treeview_selection_changed_cb),
+	(download_dialog_delete_cb), (open_selection_foreach),
+	(download_dialog_open_cb):
+	* embed/downloader-view.h:
+	* embed/ephy-download.c: (ephy_download_get_type),
+	(ephy_download_class_init), (ephy_download_init),
+	(ephy_download_new), (ephy_download_cancel), (ephy_download_pause),
+	(ephy_download_resume):
+	* embed/ephy-download.h:
+	* embed/ephy-embed-shell.c: (impl_get_downloader_view):
+	* embed/mozilla/EphyDownload.cpp:
+	* embed/mozilla/EphyDownload.h:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* embed/mozilla/mozilla-download.cpp:
+	* embed/mozilla/mozilla-download.h:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* lib/Makefile.am:
+	* lib/widgets/Makefile.am:
+	* src/Makefile.am:
+	* src/bookmarks/Makefile.am:
+
+	Big architectural changes. Now I think it make sense,
+	but we need to rewrite a lot of ui code.
+
+2003-10-14  Xan Lopez  <xan@masilla.org>
+
+	* embed/downloader-view.c: (downloader_view_class_init),
+	(download_dialog_pause_cb), (delete_pending_foreach):
+	* embed/mozilla/mozilla-downloader-view.cpp:
+	* embed/mozilla/mozilla-downloader-view.h:
+
+	Some cleanups.
+
+2003-10-14  Xan Lopez  <xan@masilla.org>
+
+	* embed/downloader-view.c: (download_dialog_abort_cb),
+	(downloader_cancel_download):
+	* embed/mozilla/mozilla-downloader-view.cpp:
+
+	Evil stuff.
+
+2003-10-14  Xan Lopez  <xan@masilla.org>
+
+	* embed/ephy-embed-shell.c: (impl_get_downloader_view):
+	* embed/mozilla/mozilla-downloader-view.cpp:
+	* embed/mozilla/mozilla-downloader-view.h:
+
+	And More.
+
+2003-10-13  Xan Lopez  <xan@masilla.org>
+
+	* embed/mozilla/EphyDownload.h:
+
+	Cleanup
+	
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/mozilla-downloader-view.cpp:
+	* embed/mozilla/mozilla-downloader-view.h:
+
+	Yet More Work.
+
+2003-10-13  Xan Lopez  <xan@masilla.org>
+
+	* embed/downloader-view.c: (downloader_view_class_init),
+	(download_dialog_pause_cb), (download_dialog_abort_cb),
+	(delete_pending_foreach), (downloader_cancel_download),
+	(downloader_pause_download), (downloader_resume_download):
+	* embed/downloader-view.h:
+
+	More work.
+
+2003-10-07  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+
+	Fix crash when download start
+
+2003-10-07  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/ephy-embed-persist.h:
+	* embed/ephy-embed-popup-control.c: (save_property_url),
+	(embed_popup_download_link_cmd), (embed_popup_save_image_as_cmd),
+	(save_url), (embed_popup_save_page_as_cmd),
+	(embed_popup_save_background_as_cmd):
+	* embed/ephy-embed-utils.c: (ephy_embed_utils_save):
+	* embed/ephy-embed-utils.h:
+	* embed/mozilla/EphyDownload.cpp:
+	* embed/mozilla/EphyDownload.h:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EphyHeaderSniffer.h:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* src/popup-commands.c: (save_property_url),
+	(popup_cmd_download_link), (popup_cmd_save_image_as),
+	(popup_cmd_save_background_as):
+	* src/window-commands.c: (window_cmd_file_save_as):
+
+	Make embed-persist use nsIDownload and cleanup api a bit.
+
+2003-10-06  Xan Lopez  <xan@masilla.org>
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/EphyWrapper.cpp:
+	* embed/mozilla/EphyWrapper.h:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/GlobalHistory.h:
+	* embed/mozilla/ProgressListener.cpp:
+	* embed/mozilla/ProgressListener.h:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+
+	Remove ProgressListener again, hopefully everything
+	compiles without it now.
+
+2003-10-06  Xan Lopez  <xan@masilla.org>
+
+	* embed/mozilla/EphyDownload.cpp:
+	* embed/mozilla/EphyDownload.h:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EphyHeaderSniffer.h:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* embed/mozilla/ProgressListener.cpp:
+	* embed/mozilla/ProgressListener.h:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+
+	Cleanups.
+
+2003-10-06  Xan Lopez  <xan@masilla.org>
+
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+
+	Make it work, behold the all new EphyDownload.
+
 2003-10-06  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-notebook.c: (find_notebook_at_pointer),

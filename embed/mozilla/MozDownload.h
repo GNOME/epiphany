@@ -36,10 +36,10 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#ifndef EphyDownload_h__
-#define EphyDownload_h__
-//#pragma once
+#ifndef MozDownload_h__
+#define MozDownload_h__
 
+#include "mozilla-embed-persist.h"
 #include "nsIDownload.h"
 #include "nsIWebProgressListener.h"
 #include "nsIHelperAppLauncherDialog.h"
@@ -50,12 +50,11 @@
 #include "nsIWebBrowserPersist.h"
 
 #include "downloader-view.h"
+#include "ephy-download.h"
 #include "ephy-embed-shell.h"
 
-//class ADownloadProgressView;
-
 //*****************************************************************************
-// EphyDownload
+// MozDownload
 //
 // Holds information used to display a single download in the UI. This object is
 // created in one of two ways:
@@ -67,7 +66,7 @@
 //     nsIDownload are controlled by the implementation of nsIWebBrowserPersist.
 //*****************************************************************************   
 
-#define EPHY_DOWNLOAD_CID                \
+#define MOZ_DOWNLOAD_CID                \
 { /* d2a2f743-f126-4f1f-1234-d4e50490f112 */         \
     0xd2a2f743,                                      \
     0xf126,                                          \
@@ -75,122 +74,55 @@
     {0x12, 0x34, 0xd4, 0xe5, 0x04, 0x90, 0xf1, 0x12} \
 }
 
-#define EPHY_DOWNLOAD_CLASSNAME "Ephy's Download Progress Dialog"
-//#define EPHY_DOWNLOAD_CONTRACTID "@mozilla.org/progressdialog;1"
+#define MOZ_DOWNLOAD_CLASSNAME "Ephy's Download Progress Dialog"
 
-class EphyDownload : public nsIDownload,
+class MozDownload : public nsIDownload,
                      public nsIWebProgressListener
-//                     public LBroadcaster
 {
 public:
-    
-    // Messages we broadcast to listeners.
-    enum {
-        msg_OnDLStart           = 57723,    // param is EphyDownload*
-        msg_OnDLComplete,                   // param is EphyDownload*
-        msg_OnDLProgressChange              // param is MsgOnDLProgressChangeInfo*
-    };
-       
-/*    struct MsgOnDLProgressChangeInfo
-    {
-        MsgOnDLProgressChangeInfo(EphyDownload* broadcaster, PRInt32 curProgress, PRInt32 maxProgress) :
-            mBroadcaster(broadcaster), mCurProgress(curProgress), mMaxProgress(maxProgress)
-            { }
-        
-        EphyDownload *mBroadcaster;      
-        PRInt32 mCurProgress, mMaxProgress;
-    };*/
-
-                            EphyDownload();
-    virtual                 ~EphyDownload();
+                            MozDownload();
+    virtual                 ~MozDownload();
     
     NS_DECL_ISUPPORTS
     NS_DECL_NSIDOWNLOAD
     NS_DECL_NSIWEBPROGRESSLISTENER
-    
+
     virtual void            Cancel();
     virtual void	    Pause();
     virtual void	    Resume();
-    virtual void            GetStatus(nsresult& aStatus)
-                            { aStatus = mStatus; }
 
-//protected:
- //   void                    EnsureProgressView()
- //                           {
- //                               if (!sProgressView)
- //                                   CreateProgressView();
- //                           }
- //   virtual void            CreateProgressView();
-    // sProgressView is a singleton. This will only be called once.
-    
+    nsresult GetState           (EphyDownloadState *aDownloadState);
+    nsresult GetCurrentProgress (PRInt32 *aCurrentProgress);
+    nsresult GetTotalProgress   (PRInt32 *aTProgress);
+    nsresult GetElapsedTime     (PRInt64 *aTProgress);
+    nsresult InitForEmbed       (nsIURI *aSource, nsILocalFile *aTarget,
+				 const PRUnichar *aDisplayName, nsIMIMEInfo *aMIMEInfo,
+				 PRInt64 startTime, nsIWebBrowserPersist *aPersist,
+				 MozillaEmbedPersist *aEmbedPersist);
+
 protected:
     nsCOMPtr<nsIURI>        mSource;
     nsCOMPtr<nsILocalFile>  mDestination;
+    PRInt64		    mLastUpdate;
     PRInt64                 mStartTime;
     PRInt64		    mElapsed;
+    PRInt32		    mInterval;
     PRInt32                 mPercentComplete;
-    
+    PRInt32                 mTotalProgress;
+    PRInt32                 mCurrentProgress;
+
     bool                    mGotFirstStateChange, mIsNetworkTransfer;
     bool                    mUserCanceled;
-    bool 		    mIsPaused;
     nsresult                mStatus;
     
     // These two are mutually exclusive.
     nsCOMPtr<nsIWebBrowserPersist> mWebPersist;
     nsCOMPtr<nsIHelperAppLauncher> mHelperAppLauncher;
-    
-    PRFloat64 mPriorKRate;
-    PRInt32 mRateChanges;
-    PRInt32 mRateChangeLimit;
-    PRInt64 mLastUpdate;
-    PRInt32 mInterval;
+
+    EphyDownload   *mEphyDownload;
     DownloaderView *mDownloaderView;
-   // static ADownloadProgressView *sProgressView;
+    MozillaEmbedPersist *mEmbedPersist;
+    EphyDownloadState mDownloadState;
 };
 
-//*****************************************************************************
-// CHelperAppLauncherDialog
-//
-// The implementation of nsIExternalHelperAppService in Gecko creates one of
-// these at the beginning of the download and calls its Show() method. Typically,
-// this will create a non-modal dialog in which the user can decide whether to
-// save the file to disk or open it with an application. This implementation
-// just saves the file to disk unconditionally. The user can decide what they
-// wish to do with the download from the progress dialog.
-//*****************************************************************************   
-
-/*class CHelperAppLauncherDialog : public nsIHelperAppLauncherDialog
-{
-public:
-                            CHelperAppLauncherDialog();
-    virtual                 ~CHelperAppLauncherDialog();
-    
-    NS_DECL_ISUPPORTS
-    NS_DECL_NSIHELPERAPPLAUNCHERDIALOG
-
-protected:
-
-};*/
-
-
-//*****************************************************************************
-// ADownloadProgressView
-//
-// An abstract class which handles the display and interaction with a download.
-// Typically, it presents a progress dialog.
-//*****************************************************************************
-
-/*class ADownloadProgressView
-{
-    friend class EphyDownload;
-    
-    virtual void AddDownloadItem(EphyDownload *aDownloadItem) = 0;
-    // A download is beginning. Initialize the UI for this download.
-    // Throughout the download process, the EphyDownload will broadcast
-    // status messages. The UI needs to call LBroadcaster::AddListener()
-    // on the EphyDownload at this point in order to get the messages.
-    
-};*/
-
-
-#endif // EphyDownload_h__
+#endif // MozDownload_h__

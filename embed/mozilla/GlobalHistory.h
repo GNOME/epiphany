@@ -22,6 +22,7 @@
 #include "nsError.h"
 #include "nsIGlobalHistory.h"
 #include "nsIBrowserHistory.h"
+#include "ephy-history.h"
 
 #define EPHY_GLOBALHISTORY_CLASSNAME \
  "Epiphany's Global History Implementation"

@@ -159,7 +159,6 @@ extern "C" {
 #include "ephy-gui.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
-#include "ProgressListener.h"
 #include "ContentHandler.h"
 
 #include <gtk/gtkentry.h>
@@ -189,9 +188,10 @@ extern "C" {
 #include "nsIPrefService.h"
 #include "nsIDOMWindow.h"
 #include "nsIDOMWindowInternal.h"
+#include "nsIMIMEInfo.h"
 
 class GContentHandler;
-class GDownloadProgressListener;
+//class GDownloadProgressListener;
 struct MimeAskActionDialog;
 struct HelperAppChooserDialog;
 
@@ -454,15 +454,20 @@ NS_METHOD GContentHandler::SetHelperApp(GnomeVFSMimeApplication *aHelperApp,
 NS_METHOD GContentHandler::SynchroniseMIMEInfo (void)
 {
 	nsresult rv;
+	char *command_with_path;
+
 	nsCOMPtr<nsIMIMEInfo> mimeInfo;
 	rv = mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
 	if(NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
+	command_with_path = g_find_program_in_path (mHelperApp->command);
+	if (command_with_path == NULL) return NS_ERROR_FAILURE;
 	nsCOMPtr<nsILocalFile> helperFile;
-	rv = NS_NewNativeLocalFile(nsDependentCString(mHelperApp->command),
+	rv = NS_NewNativeLocalFile(nsDependentCString(command_with_path),
 				   PR_TRUE,
 				   getter_AddRefs(helperFile));
 	if(NS_FAILED(rv)) return NS_ERROR_FAILURE;
+	g_free (command_with_path);
 
 	rv = mimeInfo->SetPreferredApplicationHandler(helperFile);
 	if(NS_FAILED(rv)) return NS_ERROR_FAILURE;	

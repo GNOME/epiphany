@@ -18,8 +18,8 @@
  *  $Id$
  */
 
-#include "ProgressListener.h"
 #include "EphyWrapper.h"
+#include "EphyHeaderSniffer.h"
 #include "mozilla-embed.h"
 #include "mozilla-embed-persist.h"
 
@@ -28,6 +28,8 @@
 #include <nsString.h>
 #include <nsCWebBrowserPersist.h>
 #include <nsNetUtil.h>
+#include <nsIHistoryEntry.h>
+#include <nsISHEntry.h>
 
 static void
 mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass);
@@ -46,7 +48,7 @@ impl_cancel (EphyEmbedPersist *persist);
 struct MozillaEmbedPersistPrivate
 {
 	nsCOMPtr<nsIWebBrowserPersist> mPersist;
-	GProgressListener *mProgress;
+//	GProgressListener *mProgress;
 };
 
 static GObjectClass *parent_class = NULL;
@@ -109,7 +111,6 @@ mozilla_embed_persist_finalize (GObject *object)
 {
         MozillaEmbedPersist *persist = MOZILLA_EMBED_PERSIST (object);
 
-	persist->priv->mPersist->SetProgressListener (nsnull);
 	persist->priv->mPersist = nsnull;
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -152,8 +153,9 @@ impl_save (EphyEmbedPersist *persist)
 	int max_size;
 	EphyEmbed *embed;
 	EmbedPersistFlags flags;
-	EphyWrapper *wrapper = NULL;
 	PRUint32 persistFlags = 0;
+
+	/* FIXME implement max size */
 
 	g_object_ref (persist);
 	
@@ -167,76 +169,48 @@ impl_save (EphyEmbedPersist *persist)
 	
 	g_return_val_if_fail (filename != NULL, G_FAILED);
 	
-	nsCOMPtr<nsIWebBrowserPersist> bpersist =
+	nsCOMPtr<nsIWebBrowserPersist> webPersist =
 		MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
-	if (!bpersist) return G_FAILED;
+	if (!webPersist) return G_FAILED;
 
-	nsCOMPtr<nsIURI> linkURI;
-	linkURI = nsnull;
+	/* Get a temp filename to save to */
+	nsCOMPtr<nsIProperties> dirService(do_GetService(NS_DIRECTORY_SERVICE_CONTRACTID, &rv));
+	if (!dirService) return G_FAILED;
+	nsCOMPtr<nsIFile> tmpFile;
+	dirService->Get("TmpD", NS_GET_IID(nsIFile), getter_AddRefs(tmpFile));
+	static short unsigned int tmpRandom = 0;
+	nsAutoString tmpNo;
+	tmpNo.AppendInt(tmpRandom++);
+	nsAutoString saveFile(NS_LITERAL_STRING("-sav"));
+	saveFile += tmpNo;
+	saveFile += NS_LITERAL_STRING("tmp");
+	tmpFile->Append(saveFile);
+
+	/* Get the uri to save to */
+	nsCOMPtr<nsIURI> inURI;
 	if (uri)
 	{
+		nsAutoString s;
         	s.AssignWithConversion(uri);
-	      	rv = NS_NewURI(getter_AddRefs(linkURI), s);
-      		if (NS_FAILED(rv) || !linkURI) return G_FAILED;
+	      	rv = NS_NewURI(getter_AddRefs(inURI), s);
+      		if (NS_FAILED(rv) || !inURI) return G_FAILED;
 	}
 
-        nsCOMPtr<nsILocalFile> file;
-       	rv = NS_NewLocalFile(NS_ConvertUTF8toUCS2(filename), PR_TRUE, getter_AddRefs(file)); 
-        if (NS_FAILED(rv) || !file) return G_FAILED;
+	/* Filename to save to */
+	nsAutoString inFilename;
+	inFilename.AssignWithConversion (filename);
 
-	nsCOMPtr<nsILocalFile> path;
-        if (flags & EMBED_PERSIST_SAVE_CONTENT)
+	nsCOMPtr<nsIDOMDocument> DOMDocument;
+	nsCOMPtr<nsIInputStream> postData;
+	if (!uri)
 	{
-		char *datapath;
-		datapath = g_strconcat (filename, ".content", NULL);
-                NS_NewLocalFile(NS_ConvertUTF8toUCS2(datapath), PR_TRUE, getter_AddRefs(path));
-		g_free (datapath);
-	}
-        else
-	{
-                path = nsnull;
-	}
-	
-	nsCOMPtr<nsIDOMWindow> parent;
-	parent = nsnull;
-	
-	if (embed)
-	{
+		EphyWrapper *wrapper;
+
+		g_return_val_if_fail (embed != NULL, G_FAILED);
 	        wrapper = (EphyWrapper *) mozilla_embed_get_ephy_wrapper (MOZILLA_EMBED(embed));
-		g_return_val_if_fail (wrapper != NULL, G_FAILED);	
-		wrapper->GetDOMWindow (getter_AddRefs (parent));
-	}
-
-	persistFlags = nsIWebBrowserPersist::PERSIST_FLAGS_REPLACE_EXISTING_FILES;
-
-	size_t len = strlen(filename);
-	if((filename[len-1] == 'z' && filename[len-2] == 'g') ||
-	   (filename[len-1] == 'Z' && filename[len-2] == 'G'))
-	{
-                persistFlags |= nsIWebBrowserPersist::PERSIST_FLAGS_NO_CONVERSION;
-	}
-
-	if (flags & EMBED_PERSIST_BYPASSCACHE)
-	{
-		persistFlags |= nsIWebBrowserPersist::PERSIST_FLAGS_BYPASS_CACHE;
-	}
-
-	if (flags & EMBED_PERSIST_FROMCACHE)
-	{
-		persistFlags |= nsIWebBrowserPersist::PERSIST_FLAGS_FROM_CACHE;
-	}
-
-	bpersist->SetPersistFlags (persistFlags);
-
-	GProgressListener *aProgress = new GProgressListener ();
-	MOZILLA_EMBED_PERSIST (persist)->priv->mProgress = aProgress;
-
-	if (uri == NULL)
-	{
 		g_return_val_if_fail (wrapper != NULL, G_FAILED);
 		
-		nsCOMPtr<nsIDOMDocument> DOMDocument;
-
+		/* Get the DOM document */
 		if (flags & EMBED_PERSIST_MAINDOC)
 		{
                 	rv = wrapper->GetMainDOMDocument (getter_AddRefs(DOMDocument));
@@ -247,35 +221,32 @@ impl_save (EphyEmbedPersist *persist)
 		}
         	if (NS_FAILED(rv) || !DOMDocument) return G_FAILED;
 
-		nsCOMPtr<nsIDocument> document =
-                                do_QueryInterface (DOMDocument, &rv);
-        	if (NS_FAILED(rv) || !document) return G_FAILED;
+		nsCOMPtr<nsIWebNavigation> webNav(do_QueryInterface(wrapper->mWebBrowser));
+		nsCOMPtr<nsISHistory> sessionHistory;
+		webNav->GetSessionHistory(getter_AddRefs(sessionHistory));
+		nsCOMPtr<nsIHistoryEntry> entry;
 
-	        nsCOMPtr<nsIURI> uri;
-        	rv = document->GetDocumentURL (getter_AddRefs(uri));
-        	if (NS_FAILED(rv) || !uri) return G_FAILED;
-
-        	aProgress->InitForPersist (bpersist, parent,
-                   	                   uri, file, 
-                           	           ACTION_OBJECT_NOTIFY,
-					   persist,
-					   (flags & EMBED_PERSIST_SHOW_PROGRESS));
-
-		rv = bpersist->SaveDocument (DOMDocument, file, path, nsnull, 0, 0);
-		if (NS_FAILED(rv)) return G_FAILED;
+		/* Get post data */
+		PRInt32 sindex;
+		sessionHistory->GetIndex(&sindex);
+		sessionHistory->GetEntryAtIndex(sindex, PR_FALSE, getter_AddRefs(entry));
+		nsCOMPtr<nsISHEntry> shEntry(do_QueryInterface(entry));
+		if (shEntry)
+		{
+			shEntry->GetPostData(getter_AddRefs(postData));
+		}
 	}
-	else
-	{
-        	aProgress->InitForPersist (bpersist, parent,
-                 	                   linkURI, file,
-                         	           ACTION_OBJECT_NOTIFY,
-                                 	   persist, 
-					   (flags & EMBED_PERSIST_SHOW_PROGRESS));
 
-		rv = bpersist->SaveURI (linkURI, nsnull, nsnull, nsnull, nsnull, file);
-		if (NS_FAILED(rv)) return G_FAILED;
-	}
-	
+	EphyHeaderSniffer* sniffer = new EphyHeaderSniffer
+		(webPersist, MOZILLA_EMBED_PERSIST (persist),
+		 tmpFile, inURI, DOMDocument, postData,
+		 inFilename, flags & EMBED_PERSIST_BYPASSCACHE);
+	if (!sniffer) return G_FAILED;
+ 
+	webPersist->SetProgressListener(sniffer);
+                                                                                                                             
+	rv = webPersist->SaveURI(inURI, nsnull, nsnull, nsnull, nsnull, tmpFile);
+	if (NS_FAILED (rv)) return G_FAILED;
+
 	return G_OK;
 }
-

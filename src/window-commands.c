@@ -383,9 +383,7 @@ window_cmd_file_save_as (GtkAction *action,
 	ephy_embed_utils_save (GTK_WIDGET(window),
 			       _("Save As"),
 			       CONF_STATE_SAVE_DIR,
-			       TRUE,
-			       TRUE,
-			       persist);
+			       TRUE, persist);
 
 	g_object_unref (G_OBJECT(persist));
 }

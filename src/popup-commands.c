@@ -262,7 +262,6 @@ save_property_url (GtkAction *action,
 		   const char *title,
 		   EphyWindow *window,
 		   gboolean ask_dest,
-		   gboolean show_progress,
 		   const char *property)
 {
 	EphyEmbedEvent *info;
@@ -285,15 +284,9 @@ save_property_url (GtkAction *action,
 
 	ephy_embed_persist_set_source (persist, location);
 
-	if (show_progress)
-	{
-		ephy_embed_persist_set_flags (persist,
-					      EMBED_PERSIST_SHOW_PROGRESS);
-	}
-
 	ephy_embed_utils_save (GTK_WIDGET (window), title,
 			       CONF_STATE_DOWNLOADING_DIR,
-			       ask_dest, FALSE, persist);
+			       ask_dest, persist);
 
 	g_object_unref (G_OBJECT(persist));
 }
@@ -324,7 +317,7 @@ popup_cmd_download_link (GtkAction *action,
 	save_property_url (action, _("Download link"), window,
 		           eel_gconf_get_boolean
 		           (CONF_ASK_DOWNLOAD_DEST),
-		           TRUE, "link");
+		           "link");
 }
 
 void
@@ -332,7 +325,7 @@ popup_cmd_save_image_as (GtkAction *action,
 			 EphyWindow *window)
 {
 	save_property_url (action, _("Save Image As"),
-			   window, TRUE, FALSE, "image");
+			   window, TRUE, "image");
 }
 
 #define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
@@ -420,7 +413,7 @@ popup_cmd_save_background_as (GtkAction *action,
 			      EphyWindow *window)
 {
 	save_property_url (action, _("Save Background As"),
-			   window, TRUE, FALSE, "background_image");
+			   window, TRUE, "background_image");
 }
 
 void
