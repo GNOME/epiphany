@@ -47,6 +47,13 @@ enum
 	EPHY_NODE_KEYWORD_PROP_PRIORITY = 8
 };
 
+typedef enum
+{
+	EPHY_BOOKMARKS_KEYWORD_ALL_PRIORITY,
+	EPHY_BOOKMARKS_KEYWORD_SPECIAL_PRIORITY,
+	EPHY_BOOKMARKS_KEYWORD_NORMAL_PRIORITY
+} EphBookmarksKeywordPriority;
+
 struct EphyBookmarks
 {
         GObject parent;

@@ -27,6 +27,7 @@
 #include <libgnome/gnome-i18n.h>
 
 #include "ephy-new-bookmark.h"
+#include "ephy-state.h"
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"
 #include "ephy-stock-icons.h"
@@ -231,12 +232,16 @@ ephy_new_bookmark_construct (EphyNewBookmark *editor)
 {
 	GdkPixbuf *icon;
 
+	ephy_state_add_window (GTK_WIDGET(editor),
+			       "new_bookmark",
+		               280, 240);
+
 	gtk_window_set_title (GTK_WINDOW (editor),
 			      _("New Bookmark"));
-	icon = gtk_widget_render_icon (GTK_WIDGET (editor), 
-						      EPHY_STOCK_BOOKMARK_PAGE,
-						      GTK_ICON_SIZE_MENU,
-						      NULL);
+	icon = gtk_widget_render_icon (GTK_WIDGET (editor),
+				       EPHY_STOCK_BOOKMARK_PAGE,
+				       GTK_ICON_SIZE_MENU,
+				       NULL);
 	gtk_window_set_icon (GTK_WINDOW (editor), icon);
 	g_object_unref(icon);
 

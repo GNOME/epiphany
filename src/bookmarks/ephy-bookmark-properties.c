@@ -285,7 +285,11 @@ build_ui (EphyBookmarkProperties *editor)
 			  "response",
 			  G_CALLBACK (bookmark_properties_response_cb),
 			  editor);
-	
+
+	ephy_state_add_window (GTK_WIDGET(editor),
+			       "bookmark_properties",
+		               290, 280);
+
 	update_window_title (editor);
 	set_window_icon (editor);
 

@@ -203,7 +203,7 @@ fill_model (EphyTopicsSelector *editor)
 		EphyNode *kid;
 		const char *name;
 		gboolean has_keyword = FALSE;
-		gboolean real_topic;
+		int priority;
 		GtkTreeIter iter;
 
 		kid = g_ptr_array_index (children, i);
@@ -218,10 +218,11 @@ fill_model (EphyTopicsSelector *editor)
 				 editor->priv->bookmark);
 		}
 
-		real_topic = !ephy_node_get_property_boolean
+		priority = ephy_node_get_property_int
 			(kid, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+		if (priority == -1) priority = EPHY_BOOKMARKS_KEYWORD_NORMAL_PRIORITY;
 
-		if (real_topic)
+		if (priority == EPHY_BOOKMARKS_KEYWORD_NORMAL_PRIORITY)
 		{
 			gtk_list_store_append (model, &iter);
 			gtk_list_store_set (model, &iter,

@@ -511,8 +511,8 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 	case EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT:
 		g_value_init (value, G_TYPE_INT);
 		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-		if (priority == EPHY_TREE_MODEL_ALL_PRIORITY || 
-		    priority == EPHY_TREE_MODEL_SPECIAL_PRIORITY)
+		if (priority == EPHY_BOOKMARKS_KEYWORD_ALL_PRIORITY ||
+		    priority == EPHY_BOOKMARKS_KEYWORD_SPECIAL_PRIORITY)
 			g_value_set_int (value, PANGO_WEIGHT_BOLD);
 		else
 			g_value_set_int (value, PANGO_WEIGHT_NORMAL);
@@ -520,11 +520,11 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 	case EPHY_TREE_MODEL_NODE_COL_PRIORITY:
 		g_value_init (value, G_TYPE_INT);
 		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-		if (priority == EPHY_TREE_MODEL_ALL_PRIORITY || 
-		    priority == EPHY_TREE_MODEL_SPECIAL_PRIORITY)
+		if (priority == EPHY_BOOKMARKS_KEYWORD_ALL_PRIORITY ||
+		    priority == EPHY_BOOKMARKS_KEYWORD_SPECIAL_PRIORITY)
 			g_value_set_int (value, priority);
 		else
-			g_value_set_int (value, EPHY_TREE_MODEL_NORMAL_PRIORITY);
+			g_value_set_int (value, EPHY_BOOKMARKS_KEYWORD_NORMAL_PRIORITY);
 		break;
 	default:
 		g_assert_not_reached ();

@@ -39,6 +39,7 @@
 #include "egg-action-group.h"
 #include "egg-menu-merge.h"
 #include "popup-commands.h"
+#include "ephy-state.h"
 
 static void ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass);
 static void ephy_bookmarks_editor_init (EphyBookmarksEditor *editor);
@@ -570,8 +571,12 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	const char *icon_path;
 	int i;
 
+	ephy_state_add_window (GTK_WIDGET(editor),
+			       "bookmarks_editor",
+		               450, 400);
+
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
-	
+
 	icon_path =  ephy_file ("epiphany-bookmarks.png");
 	gtk_window_set_icon_from_file (GTK_WINDOW (editor), icon_path, NULL);
 
@@ -595,8 +600,9 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	egg_menu_merge_insert_action_group (ui_merge,
 					    action_group, 0);
 	egg_menu_merge_add_ui_from_file (ui_merge,
-				ephy_file ("epiphany-bookmark-editor-ui.xml"),
-				NULL);
+				         ephy_file ("epiphany-bookmark-editor-ui.xml"),
+				         NULL);
+	gtk_window_add_accel_group (GTK_WINDOW (editor), ui_merge->accel_group);
 	egg_menu_merge_ensure_update (ui_merge);
 	editor->priv->ui_merge = ui_merge;
 	editor->priv->action_group = action_group;
