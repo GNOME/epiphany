@@ -444,7 +444,7 @@ setup_font_menu (PrefsDialog *dialog,
 		 GtkWidget *combo)
 {
 	char *default_font;
-	GList *fonts;
+	GList *fonts = NULL;
 	gchar *name;
 	char key[255];
 	GtkWidget *entry = GTK_COMBO(combo)->entry;

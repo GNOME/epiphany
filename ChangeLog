@@ -1,3 +1,10 @@
+2003-07-16  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* src/prefs-dialog.c: (setup_font_menu):
+
+	Initiliaze font list to NULL. Otherwise if Enumerate fails
+	we crash.
+
 2003-07-15  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed-single.cpp: (impl_get_font_list):
