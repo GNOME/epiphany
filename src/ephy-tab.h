@@ -79,11 +79,6 @@ EphyEmbed              *ephy_tab_get_embed		(EphyTab *tab);
 
 EphyTab		       *ephy_tab_for_embed		(EphyEmbed *embed);
 
-void			ephy_tab_set_window		(EphyTab *tab,
-							 EphyWindow *window);
-
-EphyWindow             *ephy_tab_get_window		(EphyTab *tab);
-
 const char             *ephy_tab_get_icon_address	(EphyTab *tab);
 
 gboolean		ephy_tab_get_load_status	(EphyTab *tab);

@@ -64,7 +64,6 @@
 
 struct EphyTabPrivate
 {
-	EphyWindow *window;
 	char *status_message;
 	char *link_message;
 	char *icon_address;
@@ -101,7 +100,6 @@ enum
 	PROP_SECURITY,
 	PROP_TITLE,
 	PROP_VISIBLE,
-	PROP_WINDOW,
 	PROP_ZOOM
 };
 
@@ -173,9 +171,6 @@ ephy_tab_set_property (GObject *object,
 			ephy_tab_set_location (tab, g_value_get_string (value),
 					       TAB_ADDRESS_EXPIRE_NOW);
 			break;
-		case PROP_WINDOW:
-			ephy_tab_set_window (tab, g_value_get_object (value));
-			break;
 		case PROP_ICON:
 		case PROP_LOAD_PROGRESS:
 		case PROP_LOAD_STATUS:
@@ -227,9 +222,6 @@ ephy_tab_get_property (GObject *object,
 		case PROP_VISIBLE:
 			g_value_set_boolean (value, tab->priv->visibility);
 			break;
-		case PROP_WINDOW:
-			g_value_set_object (value, tab->priv->window);
-			break;
 		case PROP_ZOOM:
 			g_value_set_float (value, tab->priv->zoom);
 			break;
@@ -252,33 +244,31 @@ ephy_tab_size_allocate (GtkWidget *widget,
 	}
 }
 
-static void
-ephy_tab_parent_set (GtkWidget *widget,
-		     GtkWidget *previous_parent)
+static EphyWindow *
+ephy_tab_get_window (EphyTab *tab)
 {
-	if (widget->parent)
-	{
-		GtkWidget *toplevel;
-		toplevel = gtk_widget_get_toplevel (widget);
+	GtkWidget *toplevel;
 
-		ephy_tab_set_window (EPHY_TAB (widget), EPHY_WINDOW (toplevel));
-	}
+	toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tab));
+	g_return_val_if_fail (toplevel != NULL, NULL);
 
-	if (GTK_WIDGET_CLASS (parent_class)->parent_set)
-	{
-		GTK_WIDGET_CLASS (parent_class)->parent_set (widget, previous_parent);
-	}
+	return EPHY_WINDOW (toplevel);
 }
 
 static void
 ephy_tab_action_activate_cb (GtkAction *action, EphyTab *tab)
 {
+	EphyWindow *window;
+
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
+	window = ephy_tab_get_window (tab);
+	g_return_if_fail (window != NULL);
+
 	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)) &&
-	    ephy_window_get_active_tab (tab->priv->window) != tab)
+	    ephy_window_get_active_tab (window) != tab)
 	{
-		ephy_window_jump_to_tab (tab->priv->window, tab);
+		ephy_window_jump_to_tab (window, tab);
 	}
 }
 
@@ -295,7 +285,6 @@ ephy_tab_class_init (EphyTabClass *class)
 	object_class->set_property = ephy_tab_set_property;
 
 	widget_class->size_allocate = ephy_tab_size_allocate;
-	widget_class->parent_set = ephy_tab_parent_set;
 	
 	g_object_class_install_property (object_class,
 					 PROP_ADDRESS,
@@ -376,14 +365,6 @@ ephy_tab_class_init (EphyTabClass *class)
 							       "The tab's visibility",
 							       TRUE,
 							       G_PARAM_READABLE));
-
-	g_object_class_install_property (object_class,
-					 PROP_WINDOW,
-					 g_param_spec_object ("window",
-							      "Window",
-							      "The tab's parent window",
-							      EPHY_TYPE_WINDOW,
-							      G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class,
 					 PROP_ZOOM,
@@ -504,7 +485,8 @@ ephy_tab_set_link_message (EphyTab *tab, char *message)
  * The message returned has a limited lifetime, and so should be copied with
  * g_strdup() if it must be stored.
  *
- * Listen to "notify::message" to be notified when the message property changes.
+ * Listen to the "link_message" signal on the @tab's #EphyEmbed to be notified
+ * when the link message changes.
  *
  * Return value: The current link statusbar message
  **/
@@ -551,43 +533,6 @@ ephy_tab_for_embed (EphyEmbed *embed)
 	g_return_val_if_fail (parent != NULL, NULL);
 
 	return EPHY_TAB (parent);
-}
-
-/**
- * ephy_tab_set_window:
- * @tab: an #EphyTab
- * @window: @tab's #EphyWindow
- *
- * FIXME: DO NOT USE
- **/
-void
-ephy_tab_set_window (EphyTab *tab, EphyWindow *window)
-{
-	g_return_if_fail (EPHY_IS_TAB (tab));
-	if (window) g_return_if_fail (EPHY_IS_WINDOW (window));
-
-	if (window != tab->priv->window)
-	{
-		tab->priv->window = window;
-
-		g_object_notify (G_OBJECT (tab), "window");
-	}
-}
-
-/**
- * ephy_tab_get_window:
- * @tab: an #EphyTab\
- *
- * Returns the #EphyWindow which holds @tab in its #GtkNotebook.
- *
- * Return value: @tab's #EphyWindow
- **/
-EphyWindow *
-ephy_tab_get_window (EphyTab *tab)
-{
-	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
-
-	return tab->priv->window;
 }
 
 /**
@@ -1037,14 +982,17 @@ ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 static void
 ephy_tab_destroy_brsr_cb (EphyEmbed *embed, EphyTab *tab)
 {
+	EphyWindow *window;
 	GtkWidget *notebook;
 
 	g_return_if_fail (EPHY_IS_TAB (tab));
-	g_return_if_fail (tab->priv->window != NULL);
+
+	window = ephy_tab_get_window (tab);
+	g_return_if_fail (window != NULL);
 
 	/* Do not use ephy_window_remove_tab because it will
 	   check for unsubmitted forms */
-	notebook = ephy_window_get_notebook (tab->priv->window);
+	notebook = ephy_window_get_notebook (window);
 	ephy_notebook_remove_tab (EPHY_NOTEBOOK (notebook), tab);
 }
 
@@ -1055,10 +1003,12 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 	GtkWidget *notebook;
 	EphyWindow *window;
 
+	LOG ("ephy_tab_size_to_cb tab %p width %d height %d", tab, width, height)
+
 	tab->priv->width = width;
 	tab->priv->height = height;
 
-	window = tab->priv->window;
+	window = ephy_tab_get_window (tab);
 	notebook = ephy_window_get_notebook (window);
 
 	/* Do not resize window with multiple tabs.
@@ -1157,7 +1107,6 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 {
 	EphyEmbedEventType type;
 	EmbedEventContext context;
-	EphyWindow *window;
 	guint modifier;
 	gboolean handled = TRUE;
 	gboolean with_control, with_shift, is_left_click, is_middle_click;
@@ -1166,9 +1115,6 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	gboolean is_input;
 
 	g_return_val_if_fail (EPHY_IS_EMBED_EVENT(event), FALSE);
-
-	window = ephy_tab_get_window (tab);
-	g_return_val_if_fail (window != NULL, FALSE);
 
 	type = ephy_embed_event_get_event_type (event);
 	context = ephy_embed_event_get_context (event);
@@ -1262,7 +1208,6 @@ ephy_tab_init (EphyTab *tab)
 
 	tab->priv = EPHY_TAB_GET_PRIVATE (tab);
 
-	tab->priv->window = NULL;
 	tab->priv->status_message = NULL;
 	tab->priv->link_message = NULL;
 	tab->priv->total_requests = 0;

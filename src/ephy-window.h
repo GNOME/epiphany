@@ -22,6 +22,7 @@
 #define EPHY_WINDOW_H
 
 #include "ephy-embed.h"
+#include "ephy-tab.h"
 #include "ephy-dialog.h"
 
 #include <glib-object.h>
@@ -57,7 +58,6 @@ struct EphyWindowClass
 };
 
 /* Include the header down here to resolve circular dependency */
-#include "ephy-tab.h"
 #include "ephy-notebook.h"
 
 GType		  ephy_window_get_type		  (void);

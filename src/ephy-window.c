@@ -1466,9 +1466,6 @@ tab_context_menu_cb (EphyEmbed *embed,
 	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
 	g_return_val_if_fail (window->priv->active_tab == tab, FALSE);
 
-	window = ephy_tab_get_window (tab);
-	g_return_val_if_fail (window != NULL, FALSE);
-
 	show_embed_popup (window, tab, event);
 
 	return FALSE;
@@ -1482,7 +1479,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 	GtkToggleAction *action;
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
-	if (ephy_tab_get_window (new_tab) != window) return;
+	g_return_if_fail (gtk_widget_get_toplevel (GTK_WIDGET (new_tab)) == GTK_WIDGET (window));
 
 	old_tab = window->priv->active_tab;
 

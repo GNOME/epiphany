@@ -1,5 +1,19 @@
 2004-03-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-tab.c: (ephy_tab_set_property), (ephy_tab_get_property),
+	(ephy_tab_get_window), (ephy_tab_action_activate_cb),
+	(ephy_tab_class_init), (ephy_tab_destroy_brsr_cb),
+	(ephy_tab_size_to_cb), (ephy_tab_dom_mouse_click_cb),
+	(ephy_tab_init):
+	* src/ephy-tab.h:
+	* src/ephy-window.c: (tab_context_menu_cb),
+	(ephy_window_set_active_tab):
+	* src/ephy-window.h:
+
+	Get rid of ephy_tab_[get|set]_window().
+
+2004-03-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-tab.c: (ephy_tab_visibility_cb):
 
 	Fix the build, bad noda :P
