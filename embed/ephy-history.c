@@ -481,7 +481,8 @@ ephy_history_host_set_title (EphyHistory *eh,
 	host_url = ephy_node_get_property_string
 		(host, EPHY_NODE_PAGE_PROP_LOCATION);
 
-	if (strcmp (real_url, host_url) == 0)
+	if (real_url && host_url &&
+	    strcmp (real_url, host_url) == 0)
 	{
 
 		g_value_init (&value, G_TYPE_STRING);
