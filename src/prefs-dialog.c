@@ -117,7 +117,7 @@ languages [] =
 	{ N_("Macedonian"), "mk" },
 	{ N_("Malay"), "ms" },
 	{ N_("Norwegian/Nynorsk"), "nn" },
-	{ N_("Norwegian/Bokmaal"), "nb" },
+	{ N_("Norwegian/Bokmal"), "nb" },
 	{ N_("Norwegian"), "no" },
 	{ N_("Polish"), "pl" },
 	{ N_("Portuguese"), "pt" },
@@ -218,11 +218,8 @@ enum
 	/* General */
 	OPEN_IN_TABS_PROP,
 	HOMEPAGE_ENTRY_PROP,
-	AUTO_ENCODING_PROP,
-	DEFAULT_ENCODING_PROP,
-	LANGUAGE_PROP,
 
-	/* Appeareance */
+	/* Fonts and Colors */
 	FONTS_LANGUAGE_PROP,
 	SERIF_PROP,
 	SANSSERIF_PROP,
@@ -243,7 +240,9 @@ enum
 	/* Advanced */
 	CACHE_COMPARE_PROP,
 	DISK_CACHE_PROP,
-	MEMORY_CACHE_PROP
+	AUTO_ENCODING_PROP,
+	DEFAULT_ENCODING_PROP,
+	LANGUAGE_PROP,
 };
 
 #define CONF_FONTS_FOR_LANGUAGE	"/apps/epiphany/dialogs/preferences_font_language"
@@ -257,11 +256,8 @@ EphyDialogProperty properties [] =
 	/* General */
 	{ OPEN_IN_TABS_PROP, "open_in_tabs_checkbutton", CONF_TABS_TABBED, PT_AUTOAPPLY, NULL },
 	{ HOMEPAGE_ENTRY_PROP, "homepage_entry", CONF_GENERAL_HOMEPAGE, PT_AUTOAPPLY, NULL },
-	{ AUTO_ENCODING_PROP, "auto_encoding_optionmenu", NULL, PT_NORMAL, NULL },
-	{ DEFAULT_ENCODING_PROP, "default_encoding_optionmenu", NULL, PT_NORMAL, NULL },
-	{ LANGUAGE_PROP, "language_optionmenu", NULL, PT_NORMAL, NULL },
 
-	/* Appeareance */
+	/* Fonts and Colors */
 	{ FONTS_LANGUAGE_PROP, "fonts_language_optionmenu", CONF_FONTS_FOR_LANGUAGE, PT_AUTOAPPLY, NULL },
 	{ SERIF_PROP, "serif_combo", NULL, PT_NORMAL, NULL },
 	{ SANSSERIF_PROP, "sansserif_combo", NULL, PT_NORMAL, NULL },
@@ -282,6 +278,9 @@ EphyDialogProperty properties [] =
 	/* Advanced */
 	{ CACHE_COMPARE_PROP, "cache_compare_radiobutton", CONF_NETWORK_CACHE_COMPARE, PT_AUTOAPPLY, NULL },
 	{ DISK_CACHE_PROP, "disk_cache_spin", CONF_NETWORK_CACHE_SIZE, PT_AUTOAPPLY, NULL },
+	{ AUTO_ENCODING_PROP, "auto_encoding_optionmenu", NULL, PT_NORMAL, NULL },
+	{ DEFAULT_ENCODING_PROP, "default_encoding_optionmenu", NULL, PT_NORMAL, NULL },
+	{ LANGUAGE_PROP, "language_optionmenu", NULL, PT_NORMAL, NULL },
 
 	{ -1, NULL, NULL }
 };
