@@ -1367,7 +1367,7 @@ create_language_section (EphyDialog *dialog)
 
 #else /* !HAVE_ISO_CODES */
 
-		int i;
+		int i, n_languages = G_N_ELEMENTS (languages);
 
 		for (i = 0; i < n_languages; i++)
 		{
