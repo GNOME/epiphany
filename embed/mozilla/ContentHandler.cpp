@@ -135,7 +135,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 
 	dialog = ephy_file_chooser_new (_("Save"), parentWindow,
 					GTK_FILE_CHOOSER_ACTION_SAVE,
-					CONF_STATE_DOWNLOAD_DIR);
+					CONF_STATE_SAVE_DIR);
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
 					   NS_ConvertUCS2toUTF8 (aDefaultFile).get());
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
@@ -143,8 +143,12 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	if (response == EPHY_RESPONSE_SAVE)
 	{
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-		BuildDownloadPath (filename, _retval);
+
+		nsCOMPtr <nsILocalFile> destFile (do_CreateInstance(NS_LOCAL_FILE_CONTRACTID));
+		destFile->InitWithNativePath (nsDependentCString (filename));
 		g_free (filename);
+
+		NS_IF_ADDREF (*_retval = destFile);
 
 		gtk_widget_destroy (GTK_WIDGET (dialog));
 

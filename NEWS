@@ -1,4 +1,60 @@
 ==============
+Epiphany 1.1.4
+==============
+
+Code changes
+
+	* Make EphyEmbedEvent abstract, implemented by MozillaEmbedEvent (Christian)
+	* Api to get the page content into a string (Lee Willis)
+	* Use ngettext for number of downloads and remaining minutes display in
+	  the tooltip of the tray icon. (Piers Cornwell)
+	* Allow to open glade files not inside epiphany dirs (Adam Hooper)
+	* Make Cancel safe against non active downloads (Xan)
+	* Allow passing the translation domain to ephy_dialog_construct,
+          to make extension's dialogues translatable. (Christian)
+
+Interface improvements
+
+	* Allow to  show/hide downloader clicking on tray icon (Xan)
+	* Show help for menu items in the statusbar (Christian)
+	* Use a Downloads folder on the desktop by default (Marco)
+	* Allow to disable automatic downloads (Marco)
+	* Re-enable fonts language font filtering (Christian)
+	* Better string for history disabling lockdown pref (Marco)
+	* Delete UTF-7 from our list of known encodings (Christian)
+	* Persist downloader position (Marco)
+
+Bugfixes
+
+	* Fix crash closing windows/tabs (Christian)
+	* Actually save the file in downloads dir and then
+          open it (Marco)
+	* Create an epiphany temp dir in /tmp so that we can have
+	  the right permissions on it (Christopher James Lahey)
+	* Work around a bug in mozilla where  0xa0 (NBSP) are
+	  converted to spaces (Christian)
+	* Fix force reload (Christian)
+	* Do not use the same pref of 1.0 for the download dir,
+	  they are different things (Marco)
+	* Do not use the downloader folder key to persist
+	  Save As actions (Marco)
+
+Translations
+
+	* Miloslav Trmac (cs)
+	* Christian Neumair (de)
+	* Nikos Charonitakis (el)
+	* Francisco Javier F. Serrador (es)
+	* Alastair McKinstry (ga)
+	* Changwoo Ryu (ko)
+	* Hasbullah Bin Pit (ms)
+	* Vincent van Adrighem (nl)
+	* Kjartan Maraas (no)
+	* Artur Flinta (pl)
+	* Danilo Šegan  (sr, sr@Latn)
+	* Laurent Dhima (sq)
+
+==============
 Epiphany 1.1.3
 ==============
 
