@@ -1,4 +1,3 @@
-# Remove appcomps dir when 1.4 is deprecated
 INCLUDES = \
 	-I$(top_srcdir)/lib	    			\
 	-I$(top_srcdir)/embed	    			\
