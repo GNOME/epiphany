@@ -44,14 +44,16 @@
 #endif
 
 #include "EphyAboutRedirector.h"
-#include "nsNetCID.h"
-#include "nsIIOService.h"
-#include "nsIServiceManager.h"
-#include "nsCOMPtr.h"
-#include "nsIURI.h"
-#include "nsXPIDLString.h"
-#include "nsString.h"
-#include "plstr.h"
+
+#include <nsNetCID.h>
+#include <nsIIOService.h>
+#include <nsIServiceManager.h>
+#include <nsCOMPtr.h>
+#include <nsIURI.h>
+
+#ifdef ALLOW_PRIVATE_STRINGS
+#include <nsString.h>
+#endif
 
 static NS_DEFINE_CID(kIOServiceCID, NS_IOSERVICE_CID);
 
@@ -81,7 +83,7 @@ EphyAboutRedirector::NewChannel(nsIURI *aURI, nsIChannel **result)
 
 	for (int i = 0; i< kRedirTotal; i++) 
 	{
-		if (!PL_strcasecmp(path.get(), kRedirMap[i].id))
+		if (strcmp(path.get(), kRedirMap[i].id) == 0)
 		{
 			nsCOMPtr<nsIChannel> tempChannel;
 			ioService->NewChannel(nsDependentCString(kRedirMap[i].url),

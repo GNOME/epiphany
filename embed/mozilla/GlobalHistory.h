@@ -26,10 +26,9 @@
 #include "config.h"
 #endif
 
-#include "nsError.h"
-#include "nsIBrowserHistory.h"
 #include "ephy-history.h"
 
+#include <nsIBrowserHistory.h>
 #if MOZILLA_SNAPSHOT > 13
 #include <nsIGlobalHistory2.h>
 #else

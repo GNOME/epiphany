@@ -27,12 +27,15 @@
 
 #include "ephy-debug.h"
 
-#include <nsString.h>
 #include <nsIURI.h>
 #include <nsIPermissionManager.h>
 #include <nsICookieManager.h>
 #include <nsIServiceManager.h>
 #include <nsICookie2.h>
+
+#ifdef ALLOW_PRIVATE_STRINGS
+#include <nsString.h>
+#endif
 
 NS_IMPL_ISUPPORTS1(EphySingle, nsIObserver)
 

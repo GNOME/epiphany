@@ -34,19 +34,22 @@
 
 #include "MozillaPrivate.h"
 
-#include "nsIX509Cert.h"
-#include "nsCOMPtr.h"
-#include "nsIServiceManager.h"
-#include "nsIInterfaceRequestor.h"
-#include "nsIInterfaceRequestorUtils.h"
-#include "nsIX509CertValidity.h"
-#include "nsIX509CertDB.h"
-#include "nsIASN1Object.h"
-#include "nsIASN1Sequence.h"
-#include "nsICRLInfo.h"
-#include "nsISimpleEnumerator.h"
-#include "nsIArray.h"
-#include "nsReadableUtils.h"
+#include <nsCOMPtr.h>
+#include <nsIServiceManager.h>
+#include <nsIInterfaceRequestor.h>
+#include <nsIInterfaceRequestorUtils.h>
+#include <nsIX509Cert.h>
+#include <nsIX509CertValidity.h>
+#include <nsIX509CertDB.h>
+#include <nsIASN1Object.h>
+#include <nsIASN1Sequence.h>
+#include <nsICRLInfo.h>
+#include <nsISimpleEnumerator.h>
+#include <nsIArray.h>
+
+#ifdef ALLOW_PRIVATE_STRINGS
+#include <nsReadableUtils.h>
+#endif
 
 #include <gconf/gconf-client.h>
 #include <gtk/gtkdialog.h>
@@ -70,15 +73,13 @@
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextview.h>
 #include <gtk/gtkprogressbar.h>
-
 #include <libgnome/gnome-i18n.h>
+#include <time.h>
 
 #include "GtkNSSDialogs.h"
 #include "ephy-file-helpers.h"
 #include "ephy-glade.h"
 #include "ephy-gui.h"
-
-#include <time.h>
 
 NS_DEFINE_CID (kX509CertCID, NS_IX509CERT_IID);
 NS_DEFINE_CID (kASN1ObjectCID, NS_IASN1OBJECT_IID);

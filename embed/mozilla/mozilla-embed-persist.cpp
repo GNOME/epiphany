@@ -31,14 +31,18 @@
 #include "MozDownload.h"
 
 #include <stddef.h>
+
 #include <nsIWebBrowserPersist.h>
-#include <nsString.h>
 #include <nsCWebBrowserPersist.h>
-#include <nsNetUtil.h>
 #include <nsIHistoryEntry.h>
 #include <nsISHEntry.h>
+
+#ifdef ALLOW_PRIVATE_STRINGS
+#include <nsString.h>
+#include <nsNetUtil.h>
 #include <nsIDocumentEncoder.h>
 #include <nsIDocument.h>
+#endif
 
 static void
 mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass);

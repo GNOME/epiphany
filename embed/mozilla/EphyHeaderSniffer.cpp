@@ -44,10 +44,8 @@
 #endif
 
 #include "MozillaPrivate.h"
-
 #include "MozDownload.h"
 #include "EphyHeaderSniffer.h"
-#include "netCore.h"
 
 #include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
@@ -57,20 +55,18 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 
-#include "nsReadableUtils.h"
-#include "nsIChannel.h"
-#include "nsIHttpChannel.h"
-#include "nsIURL.h"
-#include "nsIStringEnumerator.h"
-#include "nsIPrefService.h"
-#include "nsIMIMEService.h"
-#include "nsIMIMEInfo.h"
-#include "nsIDOMHTMLDocument.h"
-#include "nsIDownload.h"
-#include  "nsIMIMEHeaderParam.h"
-
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
+
+#include <nsIChannel.h>
+#include <nsIHttpChannel.h>
+#include <nsIURL.h>
+#include <nsIPrefService.h>
+#include <nsIMIMEService.h>
+#include <nsIMIMEInfo.h>
+#include <nsIDOMHTMLDocument.h>
+#include <nsIDownload.h>
+#include <nsIMIMEHeaderParam.h>
 
 EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
 		nsIFile* aFile, nsIURI* aURL, nsIDOMDocument* aDocument, nsIInputStream* aPostData)
@@ -229,7 +225,6 @@ filechooser_response_cb (EphyFileChooser *dialog, gint response, EphyHeaderSniff
 nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 {
 	nsresult rv;
-	char *path, *download_dir;
 	EmbedPersistFlags flags;
 	PRBool askDownloadDest;
 
@@ -337,7 +332,6 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		EphyFileChooser *dialog;
 		GtkWindow *window;
 		const char *title;
-		int response;
 
 		title = ephy_embed_persist_get_fc_title (EPHY_EMBED_PERSIST (mEmbedPersist));
 		window = ephy_embed_persist_get_fc_parent (EPHY_EMBED_PERSIST (mEmbedPersist));

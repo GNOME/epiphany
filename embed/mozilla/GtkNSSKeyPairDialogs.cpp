@@ -43,12 +43,15 @@
 
 #include "MozillaPrivate.h"
 
-#include "nsIServiceManager.h"
-#include "nsIInterfaceRequestor.h"
-#include "nsIInterfaceRequestorUtils.h"
-#include "nsIKeygenThread.h"
+#include <nsIServiceManager.h>
+#include <nsIInterfaceRequestor.h>
+#include <nsIInterfaceRequestorUtils.h>
+#include <nsIKeygenThread.h>
+#include <nsIDOMWindow.h>
+
+#ifdef ALLOW_PRIVATE_API
 #include "nsIDOMWindowInternal.h"
-#include "nsIDOMWindow.h"
+#endif
 
 #include "gtk/gtkdialog.h"
 #include "gtk/gtkprogressbar.h"

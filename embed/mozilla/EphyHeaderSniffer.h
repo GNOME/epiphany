@@ -41,15 +41,18 @@
 
 #include "mozilla-embed-persist.h"
 
-#include "nsString.h"
-#include "nsIWebProgressListener.h"
-#include "nsIWebBrowserPersist.h"
-#include "nsIURI.h"
-#include "nsILocalFile.h"
-#include "nsIInputStream.h"
-#include "nsIDOMDocument.h"
-#include "nsIAuthPrompt.h"
-#include "nsIPromptService.h"
+#include <nsIWebProgressListener.h>
+#include <nsIWebBrowserPersist.h>
+#include <nsIURI.h>
+#include <nsILocalFile.h>
+#include <nsIInputStream.h>
+#include <nsIDOMDocument.h>
+#include <nsIAuthPrompt.h>
+#include <nsIPromptService.h>
+
+#ifdef ALLOW_PRIVATE_STRINGS
+#include <nsString.h>
+#endif
 
 class EphyHeaderSniffer : public nsIWebProgressListener,
 			  public nsIAuthPrompt

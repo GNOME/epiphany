@@ -42,7 +42,7 @@
 #ifndef EphyAboutRedirector_h__
 #define EphyAboutRedirector_h__
 
-#include "nsIAboutModule.h"
+#include <nsIAboutModule.h>
 
 class EphyAboutRedirector : public nsIAboutModule
 {

@@ -25,25 +25,6 @@
 #include "config.h"
 #endif
 
-#include "ContentHandler.h"
-#include "MozillaPrivate.h"
-#include "MozDownload.h"
-
-#include "nsCOMPtr.h"
-#include "nsString.h"
-#include "nsIURL.h"
-#include "nsILocalFile.h"
-#include "nsIMIMEInfo.h"
-#include "nsIInterfaceRequestorUtils.h"
-
-#include "ephy-prefs.h"
-#include "eel-gconf-extensions.h"
-#include "ephy-embed-single.h"
-#include "ephy-embed-shell.h"
-#include "ephy-file-chooser.h"
-#include "ephy-stock-icons.h"
-#include "ephy-debug.h"
-
 #include <gtk/gtkimage.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
@@ -53,6 +34,24 @@
 #include <libgnomevfs/gnome-vfs-mime.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
+
+#include <nsIURL.h>
+#include <nsILocalFile.h>
+#include <nsIMIMEInfo.h>
+#include <nsIInterfaceRequestorUtils.h>
+#include "nsCExternalHandlerService.h"
+
+#include "ephy-prefs.h"
+#include "ephy-embed-single.h"
+#include "ephy-embed-shell.h"
+#include "ephy-file-chooser.h"
+#include "ephy-stock-icons.h"
+#include "ephy-debug.h"
+#include "eel-gconf-extensions.h"
+
+#include "ContentHandler.h"
+#include "MozillaPrivate.h"
+#include "MozDownload.h"
 
 class GContentHandler;
 
@@ -170,7 +169,6 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 
 NS_METHOD GContentHandler::LaunchHelperApp (void)
 {
-	nsresult rv;
 	nsCOMPtr<nsIExternalHelperAppService> helperService;
 
 	helperService = do_GetService (NS_EXTERNALHELPERAPPSERVICE_CONTRACTID);
@@ -340,7 +338,6 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 
 NS_METHOD GContentHandler::MIMEDoAction (void)
 {
-	nsresult rv;
 	gboolean auto_downloads;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK)) return NS_OK;

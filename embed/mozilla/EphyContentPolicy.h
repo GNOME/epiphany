@@ -24,8 +24,8 @@
 
 #include <glib.h>
 
-#include "nsISupports.h"
-#include "nsIContentPolicy.h"
+#include <nsISupports.h>
+#include <nsIContentPolicy.h>
 
 #define EPHY_CONTENT_POLICY_CONTRACTID	"@gnome.org/projects/epiphany/epiphany-content-policy;1"
 #define EPHY_CONTENT_POLICY_CLASSNAME	"Epiphany Content Policy Class"

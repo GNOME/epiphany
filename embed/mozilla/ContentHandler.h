@@ -24,21 +24,17 @@
 #include "ephy-embed-shell.h"
 
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
-#include "nsIHelperAppLauncherDialog.h"
-#include "nsIExternalHelperAppService.h"
-#include "nsCExternalHandlerService.h"
-#include "nsIWebProgressListener.h"
 
-#include "nsString.h"
-#include "nsIURI.h"
-#include "nsILocalFile.h"
+#include <nsCOMPtr.h>
+#include <nsISupports.h>
+#include <nsIURI.h>
+#include <nsIFile.h>
 
-#include "nsCRT.h"
-#include "nsWeakReference.h"
+#include <nsIHelperAppLauncherDialog.h>
 
-#include "nsCOMPtr.h"
-#include "nsISupports.h"
-#include "nsError.h"
+#ifdef ALLOW_PRIVATE_STRINGS
+#include <nsString.h>
+#endif
 
 typedef enum
 {

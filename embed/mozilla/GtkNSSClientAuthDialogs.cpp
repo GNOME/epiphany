@@ -28,9 +28,9 @@
 
 #include "MozillaPrivate.h"
 
-#include "nsIServiceManager.h"
-#include "nsIInterfaceRequestor.h"
-#include "nsIInterfaceRequestorUtils.h"
+#include <nsIServiceManager.h>
+#include <nsIInterfaceRequestor.h>
+#include <nsIInterfaceRequestorUtils.h>
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkimage.h>

@@ -1,6 +1,41 @@
 2004-04-29  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* configure.in:
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/ContentHandler.h:
+	* embed/mozilla/EphyAboutRedirector.cpp:
+	* embed/mozilla/EphyAboutRedirector.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyContentPolicy.cpp:
+	* embed/mozilla/EphyContentPolicy.h:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EphyHeaderSniffer.h:
+	* embed/mozilla/EphySingle.cpp:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/GlobalHistory.cpp:
+	* embed/mozilla/GlobalHistory.h:
+	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
+	* embed/mozilla/GtkNSSClientAuthDialogs.h:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/mozilla/GtkNSSDialogs.h:
+	* embed/mozilla/GtkNSSKeyPairDialogs.cpp:
+	* embed/mozilla/GtkNSSKeyPairDialogs.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	More defines work, still lack EventContext and
+	EmbedPrivate.
+	Use mozilla like warning flags instead of those gnome
+	macros. Remove several unused variables.
+
+2004-04-29  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* configure.in:
 	* embed/mozilla/EphyBrowser.cpp:
 	* embed/mozilla/EphyBrowser.h:
 	* embed/mozilla/Makefile.am:

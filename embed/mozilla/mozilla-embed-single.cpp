@@ -43,17 +43,12 @@
 
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
-#include <nsICacheService.h>
+
 #include <nsCOMPtr.h>
 #include <nsIPrefService.h>
-#include <nsNetCID.h>
 #include <nsIServiceManager.h>
 #include <nsIIOService.h>
-#include <nsIProtocolProxyService.h>
-#include <nsIAtom.h>
-#include <nsIFontEnumerator.h>
 #include <nsISupportsPrimitives.h>
-#include <nsReadableUtils.h>
 #include <nsICookieManager.h>
 #include <nsIPassword.h>
 #include <nsIPasswordManager.h>
@@ -63,15 +58,24 @@
 #include <nsCPasswordManager.h>
 #include <nsIPermission.h>
 #include <nsIPermissionManager.h>
-#include <nsString.h>
 #include <nsILocalFile.h>
 #include <nsIURI.h>
-#include <nsNetUtil.h>
-#include <nsIHttpAuthManager.h>
 
+#ifdef ALLOW_PRIVATE_API
 // FIXME: For setting the locale. hopefully gtkmozembed will do itself soon
 #include <nsIChromeRegistry.h>
 #include <nsILocaleService.h>
+#include <nsIProtocolProxyService.h>
+#include <nsIHttpAuthManager.h>
+#include <nsICacheService.h>
+#include <nsIFontEnumerator.h>
+#endif
+
+#ifdef ALLOW_PRIVATE_STRINGS
+#include <nsString.h>
+#include <nsReadableUtils.h>
+#include <nsNetUtil.h>
+#endif
 
 #define MOZILLA_PROFILE_DIR  "/mozilla"
 #define MOZILLA_PROFILE_NAME "epiphany"

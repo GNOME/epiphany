@@ -27,8 +27,11 @@
 
 #include "GlobalHistory.h"
 
-#include <nsString.h>
 #include <nsIURI.h>
+
+#ifdef ALLOW_PRIVATE_STRINGS
+#include <nsString.h>
+#endif
 
 #if MOZILLA_SNAPSHOT > 13
 NS_IMPL_ISUPPORTS2(MozGlobalHistory, nsIGlobalHistory2, nsIBrowserHistory)

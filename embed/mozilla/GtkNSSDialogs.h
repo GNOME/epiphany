@@ -10,9 +10,8 @@
 #ifndef GTKNSSDIALOGS_H
 #define GTKNSSDIALOGS_H 1
 
-#include <nsError.h>
-#include "nsIBadCertListener.h"
-#include "nsICertificateDialogs.h"
+#include <nsIBadCertListener.h>
+#include <nsICertificateDialogs.h>
 
 // 7a50a10d-9425-4e12-84b1-5822edacd8ce
 #define GTK_NSSDIALOGS_CID	\

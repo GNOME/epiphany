@@ -10,8 +10,7 @@
 #ifndef GTKNSSCLIENTAUTHDIALOGS_H
 #define GTKNSSCLIENTAUTHDIALOGS_H 1
 
-#include <nsError.h>
-#include "nsIClientAuthDialogs.h"
+#include <nsIClientAuthDialogs.h>
 
 // 55b3837e-dbde-4c24-9247-f328e3012485
 #define GTK_NSSCLIENTAUTHDIALOGS_CID	\

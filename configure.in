@@ -47,7 +47,6 @@ AC_SUBST(AM_CXXFLAGS)
 
 GNOME_DEBUG_CHECK
 GNOME_COMPILE_WARNINGS(error)
-GNOME_CXX_WARNINGS(yes, yes)
 
 PKG_CHECK_MODULES(EPIPHANY_DEPENDENCY, \
 		  glib-2.0 >= $GLIB_REQUIRED \
@@ -73,7 +72,7 @@ AC_SUBST(LIBBONOBO_IDL)
 BONOBO_ACTIVATION_IDL="`$PKG_CONFIG --variable=idldir bonobo-activation-2.0`"
 AC_SUBST(BONOBO_ACTIVATION_IDL)
 
-PKG_CHECK_MODULES(MOZILLA_COMPONENT, mozilla-gtkmozembed)
+PKG_CHECK_MODULES(MOZILLA_COMPONENT, mozilla-gtkmozembed mozilla-xpcom)
 AC_SUBST(MOZILLA_COMPONENT_CFLAGS)
 AC_SUBST(MOZILLA_COMPONENT_LIBS)
 
@@ -174,6 +173,8 @@ AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/pipnss/nsIX509Cert.h],
 	[AC_DEFINE(HAVE_MOZILLA_PSM, 1,
 		   [Define if you have the mozilla psm headers installed])])
 
+MOZILLA_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
+AC_SUBST(MOZILLA_WARN_CXXFLAGS)
 
 dnl *******************************
 dnl Internationalization

@@ -365,8 +365,6 @@ nsresult EphyBrowser::Destroy ()
 
 nsresult EphyBrowser::GoToHistoryIndex (PRInt16 index)
 {
-	nsresult result;
-
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebNavigation> ContentNav = do_QueryInterface (mWebBrowser);
@@ -581,8 +579,6 @@ nsresult EphyBrowser::Find (PRBool backwards,
 
 nsresult EphyBrowser::GetPageDescriptor(nsISupports **aPageDescriptor)
 {
-	nsresult rv;
-
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDocShell> ds = do_GetInterface (mWebBrowser);

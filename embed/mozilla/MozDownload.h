@@ -43,23 +43,24 @@
 #define MozDownload_h__
 
 #include "mozilla-embed-persist.h"
-#include "nsIDownload.h"
-#include "nsIWebProgressListener.h"
-#include "nsIHelperAppLauncherDialog.h"
-#include "nsIExternalHelperAppService.h"
-#include "nsIDOMDocument.h"
-
-#include "nsString.h"
-#include "nsIURI.h"
-#include "nsILocalFile.h"
-#include "nsIWebBrowserPersist.h"
-#include "nsIObserver.h"
-#include "nsIRequest.h"
-#include "nsIMIMEInfo.h"
-
 #include "downloader-view.h"
 #include "ephy-download.h"
 #include "ephy-embed-shell.h"
+
+#include <nsIDownload.h>
+#include <nsIWebProgressListener.h>
+#include <nsIDOMDocument.h>
+#include <nsIURI.h>
+#include <nsILocalFile.h>
+#include <nsIWebBrowserPersist.h>
+#include <nsIObserver.h>
+#include <nsIRequest.h>
+#include <nsIMIMEInfo.h>
+
+#ifdef ALLOW_PRIVATE_API
+#include <nsString.h>
+#endif
+
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
 /* MozDownload

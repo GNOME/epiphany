@@ -145,7 +145,6 @@ nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsString& aResult)
 
 nsresult EventContext::ResolveBaseURL (nsIDocument *doc, const nsAString &relurl, nsACString &url)
 {
-	nsresult rv;
 #if MOZILLA_SNAPSHOT > 13
 	nsIURI *base;
 	base = doc->GetBaseURI ();
@@ -161,7 +160,6 @@ nsresult EventContext::ResolveBaseURL (nsIDocument *doc, const nsAString &relurl
 
 nsresult EventContext::ResolveDocumentURL (nsIDocument *doc, const nsAString &relurl, nsACString &url)
 {
-	nsresult rv;
 #if MOZILLA_SNAPSHOT > 13
 	nsIURI *uri;
 	uri = doc->GetDocumentURI ();

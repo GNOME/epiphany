@@ -37,7 +37,10 @@
 
 #include <nsCOMPtr.h>
 #include <nsIURI.h>
+
+#ifdef ALLOW_PRIVATE_STRINGS
 #include <nsString.h>
+#endif
 
 #define CONF_LOCKDOWN_DISABLE_UNSAFE_PROTOCOLS	"/apps/epiphany/lockdown/disable_unsafe_protocols"
 #define CONF_LOCKDOWN_ADDITIONAL_SAFE_PROTOCOLS	"/apps/epiphany/lockdown/additional_safe_protocols"

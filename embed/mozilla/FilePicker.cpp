@@ -24,29 +24,25 @@
 #endif
 
 #include "FilePicker.h"
-
-#include "nsCRT.h"
-#include "nsCOMPtr.h"
-#include "nsISupportsArray.h"
-#include "nsIServiceManager.h"
-
-#include "nsString.h"
-#include "nsXPIDLString.h"
-#include "nsIPrefService.h"
-#include "nsIURI.h"
-#include "nsIFileURL.h"
-#include "nsIChannel.h"
-#include "nsIFileChannel.h"
-#include "nsNetCID.h"
-#include "nsILocalFile.h"
-#include "nsIPromptService.h"
-#include "nsReadableUtils.h"
-#include "nsIDOMWindow.h"
-#include "nsIDOMWindowInternal.h"
-#include "nsCOMPtr.h"
-#include "nsString.h"
-#include "nsILocalFile.h"
 #include "MozillaPrivate.h"
+
+#include <nsCOMPtr.h>
+#include <nsIServiceManager.h>
+#include <nsIURI.h>
+#include <nsIFileURL.h>
+#include <nsILocalFile.h>
+#include <nsIPromptService.h>
+#include <nsIDOMWindow.h>
+#include <nsNetCID.h>
+
+#ifdef ALLOW_PRIVATE_STRINGS
+#include <nsString.h>
+#include <nsReadableUtils.h>
+#endif
+
+#if MOZILLA_SNAPSHOT < 16
+#include <nsIDOMWindowInternal.h>
+#endif
 
 #include "ephy-string.h"
 #include "ephy-prefs.h"

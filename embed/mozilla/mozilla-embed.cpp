@@ -34,16 +34,22 @@
 #include "EventContext.h"
 
 #include <gtkmozembed.h>
-#include <nsIWindowWatcher.h>
 #include <nsIURI.h>
 #include <nsIURL.h>
-#include <nsNetUtil.h>
-#include <nsString.h>
 #include <nsIRequest.h>
 #include <nsIWebProgressListener.h>
-#include <nsITransportSecurityInfo.h>
 #include <nsIPrintOptions.h>
 #include <nsGfxCIID.h>
+
+#ifdef ALLOW_PRIVATE_API
+/* not sure about this one */
+#include <nsITransportSecurityInfo.h>
+#endif
+
+#ifdef ALLOW_PRIVATE_STRINGS
+#include <nsNetUtil.h>
+#include <nsString.h>
+#endif
 
 static void	mozilla_embed_class_init	(MozillaEmbedClass *klass);
 static void	mozilla_embed_init		(MozillaEmbed *gs);

@@ -10,8 +10,7 @@
 #ifndef GTKNSSKEYPAIRDIALOGS_H
 #define GTKNSSKEYPAIRDIALOGS_H 1
 
-#include <nsError.h>
-#include "nsIGenKeypairInfoDlg.h"
+#include <nsIGenKeypairInfoDlg.h>
 
 // 6a8b1aff-ae8b-4751-982e-4ce5ad544100
 #define GTK_NSSKEYPAIRDIALOGS_CID	\
