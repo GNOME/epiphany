@@ -33,6 +33,8 @@
 #include "window-commands.h"
 #include "find-dialog.h"
 #include "print-dialog.h"
+#include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
 #include "ephy-shell.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
@@ -243,6 +245,11 @@ static guint ephy_menu_n_entries = G_N_ELEMENTS (ephy_menu_entries);
 
 static GtkToggleActionEntry ephy_menu_toggle_entries [] =
 {
+	/* File Menu */
+	{ "FileWorkOffline", NULL, N_("_Work Off-Line"), NULL,
+	  N_("Toggle network status"),
+	  G_CALLBACK (window_cmd_file_work_offline), FALSE },
+
 	/* View Menu */
 	{ "ViewToolbar", NULL, N_("_Toolbar"), "<shift><control>T",
 	  N_("Show or hide toolbar"),
@@ -1368,6 +1375,22 @@ sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
+network_status_changed (EphyEmbedSingle *single,
+			gboolean offline,
+			EphyWindow *window)
+{
+	GtkAction *action;
+
+	action = gtk_action_group_get_action (window->priv->action_group,
+					      "FileWorkOffline");
+	g_signal_handlers_block_by_func
+		(action, G_CALLBACK (window_cmd_file_work_offline), window);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), offline);
+	g_signal_handlers_unblock_by_func
+		(action, G_CALLBACK (window_cmd_file_work_offline), window);	
+}
+
+static void
 popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
 		      gpointer user_data)
 {
@@ -1935,6 +1958,7 @@ static void
 ephy_window_init (EphyWindow *window)
 {
 	EphyExtension *manager;
+	EphyEmbedSingle *single;
 
 	LOG ("EphyWindow initialising %p", window)
 
@@ -2057,6 +2081,14 @@ ephy_window_init (EphyWindow *window)
 		(CONF_BROWSE_WITH_CARET,
 		 (GConfClientNotifyFunc)browse_with_caret_notifier, window);
 
+	/* network status */
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
+	network_status_changed (single,
+			        ephy_embed_single_get_offline_mode (single),
+				window);
+	g_signal_connect (single, "network-status",
+			  G_CALLBACK (network_status_changed), window);
+
 	/* ensure the UI is updated */
 	gtk_ui_manager_ensure_update (GTK_UI_MANAGER (window->ui_merge));
 
@@ -2067,6 +2099,11 @@ static void
 ephy_window_finalize (GObject *object)
 {
         EphyWindow *window = EPHY_WINDOW (object);
+	GObject *single;
+
+	single = ephy_embed_shell_get_embed_single (embed_shell);
+	g_signal_handlers_disconnect_by_func
+		(single, G_CALLBACK (network_status_changed), window);
 
 	eel_gconf_notification_remove (window->priv->disable_arbitrary_url_notifier_id);
 	eel_gconf_notification_remove (window->priv->disable_bookmark_editing_notifier_id);

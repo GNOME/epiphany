@@ -37,10 +37,9 @@
 NS_IMPL_ISUPPORTS1(EphySingle, nsIObserver)
 
 EphySingle::EphySingle()
+: mOwner(nsnull)
 {
-	LOG ("EphySingle constructor")
-
-	mOwner = nsnull;
+	LOG ("EphySingle ctor")
 }
 
 nsresult
@@ -48,14 +47,17 @@ EphySingle::Init (EphyEmbedSingle *aOwner)
 {
 	LOG ("EphySingle::Init")
 
-	mOwner = aOwner;
-
 	mObserverService = do_GetService ("@mozilla.org/observer-service;1");
 	NS_ENSURE_TRUE (mObserverService, NS_ERROR_FAILURE);
 
-	mObserverService->AddObserver (this, "cookie-changed", PR_FALSE);
-	mObserverService->AddObserver (this, "cookie-rejected", PR_FALSE);
-	mObserverService->AddObserver (this, "perm-changed", PR_FALSE);
+	nsresult rv;
+	rv = mObserverService->AddObserver (this, "cookie-changed", PR_TRUE);
+	rv |= mObserverService->AddObserver (this, "cookie-rejected", PR_TRUE);
+	rv |= mObserverService->AddObserver (this, "perm-changed", PR_TRUE);
+	rv |= mObserverService->AddObserver (this, "network:offline-status-changed", PR_TRUE);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+	mOwner = aOwner;
 
 	return NS_OK;
 }
@@ -63,11 +65,14 @@ EphySingle::Init (EphyEmbedSingle *aOwner)
 nsresult
 EphySingle::Detach ()
 {
+	LOG ("EphySingle::Detach")
+
 	if (mObserverService)
 	{
 		mObserverService->RemoveObserver (this, "cookie-changed");
 		mObserverService->RemoveObserver (this, "cookie-rejected");
 		mObserverService->RemoveObserver (this, "perm-changed");
+		mObserverService->RemoveObserver (this, "network:offline-status-changed");
 	}
 
 	return NS_OK;
@@ -75,9 +80,8 @@ EphySingle::Detach ()
 
 EphySingle::~EphySingle()
 {
-	LOG ("EphySingle destructor")
+	LOG ("EphySingle dtor")
 
-	Detach();
 	mOwner = nsnull;
 }
 
@@ -202,9 +206,18 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 			rv = NS_ERROR_FAILURE;
 		}
 	}
+	else if (strcmp (aTopic, "network:offline-status-changed") == 0)
+	{
+		/* aData is either (PRUnichar[]) "offline" or "online" */
+		gboolean offline;
+
+		offline = (aData[1] == 'f');
+
+		g_signal_emit_by_name (mOwner, "network-status", offline);
+	}
 	else
 	{
-		g_warning ("EphySingle observed unknown topic!\n");
+		g_warning ("EphySingle observed unknown topic '%s'!\n", aTopic);
 		rv = NS_ERROR_FAILURE;
 	}
 

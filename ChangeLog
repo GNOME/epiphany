@@ -1,3 +1,21 @@
+2004-06-26  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/ui/epiphany-ui.xml:
+	* embed/ephy-embed-single.c: (ephy_embed_single_iface_init),
+	(ephy_embed_single_set_offline_mode),
+	(ephy_embed_single_get_offline_mode):
+	* embed/ephy-embed-single.h:
+	* embed/mozilla/EphySingle.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* src/ephy-window.c: (network_status_changed), (ephy_window_init),
+	(ephy_window_finalize):
+	* src/window-commands.c: (window_cmd_file_save_as),
+	(window_cmd_file_work_offline):
+	* src/window-commands.h:
+
+	Implement File->Work Off-Line command and backend.
+	No DBUS/HAL/whatever integration yet.
+
 2004-06-26  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-import.c: (ephy_bookmarks_import),

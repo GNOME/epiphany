@@ -45,40 +45,46 @@ struct _EphyEmbedSingleIface
 				     char *mime_type,
 				     char *uri);
 
+	void	 (* network_status) (EphyEmbedSingle *single,
+				     gboolean offline);
+
 	/* Methods */
 
-	void	(* open_window)		(EphyEmbedSingle *single,
-					 EphyEmbed *parent,
-					 const char *address,
-					 const char *features);
-	void	(* clear_cache)         (EphyEmbedSingle *shell);
-	void	(* clear_auth_cache)	(EphyEmbedSingle *shell);
-	void	(* set_offline_mode)    (EphyEmbedSingle *shell,
-					 gboolean offline);
-	void	(* load_proxy_autoconf) (EphyEmbedSingle *shell,
-					 const char* url);
-	GList *	(* get_font_list)	(EphyEmbedSingle *shell,
-					 const char *langGroup);
+	void	 (* open_window)	 (EphyEmbedSingle *single,
+					  EphyEmbed *parent,
+					  const char *address,
+					  const char *features);
+	void	 (* clear_cache)         (EphyEmbedSingle *shell);
+	void	 (* clear_auth_cache)	 (EphyEmbedSingle *shell);
+	void	 (* set_offline_mode)    (EphyEmbedSingle *shell,
+					  gboolean offline);
+	gboolean (* get_offline_mode)	 (EphyEmbedSingle *single);
+	void	 (* load_proxy_autoconf) (EphyEmbedSingle *shell,
+					  const char* url);
+	GList *	 (* get_font_list)	 (EphyEmbedSingle *shell,
+					  const char *langGroup);
 };
 
-GType	ephy_embed_single_get_type		(void);
+GType	 ephy_embed_single_get_type		(void);
 
-void	ephy_embed_single_open_window		(EphyEmbedSingle *single,
+void	 ephy_embed_single_open_window		(EphyEmbedSingle *single,
 						 EphyEmbed *parent,
 						 const char *address,
 						 const char *features);
 
-void	ephy_embed_single_clear_cache		(EphyEmbedSingle *single);
+void	 ephy_embed_single_clear_cache		(EphyEmbedSingle *single);
 
-void	ephy_embed_single_clear_auth_cache	(EphyEmbedSingle *single);
+void	 ephy_embed_single_clear_auth_cache	(EphyEmbedSingle *single);
 
-void	ephy_embed_single_set_offline_mode	(EphyEmbedSingle *single,
+void	 ephy_embed_single_set_offline_mode	(EphyEmbedSingle *single,
 						 gboolean offline);
 
-void	ephy_embed_single_load_proxy_autoconf	(EphyEmbedSingle *single,
+gboolean ephy_embed_single_get_offline_mode	(EphyEmbedSingle *single);
+
+void	 ephy_embed_single_load_proxy_autoconf	(EphyEmbedSingle *single,
 						 const char* url);
 
-GList  *ephy_embed_single_get_font_list		(EphyEmbedSingle *single,
+GList	*ephy_embed_single_get_font_list		(EphyEmbedSingle *single,
 						 const char *lang_group);
 
 G_END_DECLS

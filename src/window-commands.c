@@ -22,6 +22,8 @@
 #include "config.h"
 #endif
 
+#include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
 #include "ephy-shell.h"
 #include "ephy-embed-factory.h"
 #include "ephy-embed-persist.h"
@@ -428,6 +430,19 @@ window_cmd_file_save_as (GtkAction *action,
 	ephy_embed_persist_save (persist);
 
 	g_object_unref (G_OBJECT(persist));
+}
+
+
+void
+window_cmd_file_work_offline (GtkAction *action,
+		              EphyWindow *window)
+{
+	EphyEmbedSingle *single;
+	gboolean offline;
+
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
+	offline = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
+	ephy_embed_single_set_offline_mode (single, offline);
 }
 
 void

@@ -85,6 +85,9 @@ void window_cmd_file_print	(GtkAction *action,
 void window_cmd_file_send_to	(GtkAction *action,
 				 EphyWindow *window);
 
+void window_cmd_file_work_offline (GtkAction *action,
+				   EphyWindow *window);
+
 void window_cmd_file_close_window (GtkAction *action,
 				    EphyWindow *window);
 

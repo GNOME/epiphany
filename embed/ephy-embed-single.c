@@ -81,6 +81,23 @@ ephy_embed_single_iface_init (gpointer g_class)
 		      G_TYPE_STRING,
 		      G_TYPE_STRING);
 
+/**
+ * EphyEmbedSingle::network-status:
+ * @single:
+ * @offline: the network status
+ *
+ * The ::network-status signal is emitted when the network status changes.
+ **/
+	g_signal_new ("network-status",
+		      EPHY_TYPE_EMBED_SINGLE,
+		      G_SIGNAL_RUN_LAST,
+		      G_STRUCT_OFFSET (EphyEmbedSingleIface, network_status),
+		      NULL, NULL,
+		      g_cclosure_marshal_VOID__BOOLEAN,
+		      G_TYPE_NONE,
+		      1,
+		      G_TYPE_BOOLEAN);
+
 	initialised = TRUE;
 	}
 }
@@ -132,6 +149,19 @@ ephy_embed_single_set_offline_mode (EphyEmbedSingle *single,
 {
 	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
 	iface->set_offline_mode (single, offline);
+}
+
+/**
+ * ephy_embed_single_get_offline_mode:
+ * @single: the #EphyEmbedSingle
+ * 
+ * Gets the state of the network connection.
+ **/
+gboolean
+ephy_embed_single_get_offline_mode (EphyEmbedSingle *single)
+{
+	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
+	return iface->get_offline_mode (single);
 }
 
 /**

@@ -414,11 +414,17 @@ mozilla_init_chrome (void)
 static void
 mozilla_init_observer (MozillaEmbedSingle *single)
 {
-	single->priv->mSingleObserver = new EphySingle ();
+	EphySingle *observer;
 
-	if (single->priv->mSingleObserver)
+	observer = new EphySingle ();
+
+	if (observer)
 	{
-		single->priv->mSingleObserver->Init (EPHY_EMBED_SINGLE (single));
+		nsresult rv;
+		rv = observer->Init (EPHY_EMBED_SINGLE (single));
+		if (NS_FAILED (rv)) return;
+
+		NS_ADDREF (single->priv->mSingleObserver = observer);
 	}
 }
 
@@ -492,6 +498,19 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 }
 
 static void
+mozilla_embed_single_dispose (GObject *object)
+{
+	MozillaEmbedSingle *single = MOZILLA_EMBED_SINGLE (object);
+
+	if (single->priv->mSingleObserver)
+	{
+		single->priv->mSingleObserver->Detach ();
+		NS_RELEASE (single->priv->mSingleObserver);
+		single->priv->mSingleObserver = nsnull;
+	}
+}
+
+static void
 mozilla_embed_single_finalize (GObject *object)
 {
 	MozillaEmbedSingle *mes = MOZILLA_EMBED_SINGLE (object);
@@ -540,6 +559,20 @@ impl_set_offline_mode (EphyEmbedSingle *shell,
 	if (!io) return;
 
 	io->SetOffline(offline);
+}
+
+static gboolean
+impl_get_offline_mode (EphyEmbedSingle *shell)
+{
+	nsCOMPtr<nsIIOService> io = do_GetService(NS_IOSERVICE_CONTRACTID);
+	if (!io) return FALSE; /* no way to check the state, assume offline */
+
+	PRBool isOffline;
+	nsresult rv;
+	rv = io->GetOffline(&isOffline);
+	NS_ENSURE_SUCCESS (rv, FALSE);
+
+	return isOffline;
 }
 
 static void
@@ -868,6 +901,7 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
+	object_class->dispose = mozilla_embed_single_dispose;
 	object_class->finalize = mozilla_embed_single_finalize;
 
 	g_type_class_add_private (object_class, sizeof (MozillaEmbedSinglePrivate));
@@ -879,6 +913,7 @@ ephy_embed_single_iface_init (EphyEmbedSingleIface *iface)
 	iface->clear_cache = impl_clear_cache;
 	iface->clear_auth_cache = impl_clear_auth_cache;
 	iface->set_offline_mode = impl_set_offline_mode;
+	iface->get_offline_mode = impl_get_offline_mode;
 	iface->load_proxy_autoconf = impl_load_proxy_autoconf;
 	iface->get_font_list = impl_get_font_list;
 	iface->open_window = impl_open_window;
