@@ -65,7 +65,6 @@ IGNORE_HFILES = \
 	ephy-zoom-action.h \
 	ephy-zoom-control.h \
 	downloader-view.h \
-	ephy-command-manager.h \
 	ephy-download.h \
 	ephy-embed-dialog.h \
 	ephy-embed-event.h \

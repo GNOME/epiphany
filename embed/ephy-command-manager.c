@@ -57,6 +57,15 @@ ephy_command_manager_base_init (gpointer g_class)
 
 	if (!initialized)
 	{
+/**
+ * EphyCommandManager::command-changed:
+ * @manager:
+ * @command: The command whose avalability has changed
+ *
+ * The ::command-changed signal is emitted when @command has changed from being
+ * available to unavailable, or vice-versa. The new availability can be tested
+ * with ephy_command_manager_can_do_command().
+ **/
 		g_signal_new ("command_changed",
 			      EPHY_TYPE_COMMAND_MANAGER,
 			      G_SIGNAL_RUN_FIRST,
@@ -71,6 +80,13 @@ ephy_command_manager_base_init (gpointer g_class)
 	}
 }
 
+/**
+ * ephy_command_manager_do_command:
+ * @manager: an #EphyCommandManager
+ * @command: the command
+ *
+ * Performs @command.
+ **/
 void
 ephy_command_manager_do_command (EphyCommandManager *manager,
 				 const char *command)
@@ -79,6 +95,15 @@ ephy_command_manager_do_command (EphyCommandManager *manager,
 	iface->do_command (manager, command);
 }
 
+/**
+ * ephy_command_manager_can_do_command:
+ * @manager: an #EphyCommandManager
+ * @command: the command
+ *
+ * Returns %TRUE if @command can be performed.
+ *
+ * Return value: %TRUE if @command can be performed.
+ **/
 gboolean
 ephy_command_manager_can_do_command (EphyCommandManager *manager,
 					const char *command)

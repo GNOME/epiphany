@@ -33,10 +33,10 @@ G_BEGIN_DECLS
 #define EPHY_IS_COMMAND_MANAGER_IFACE(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_COMMAND_MANAGER))
 #define EPHY_COMMAND_MANAGER_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_COMMAND_MANAGER, EphyCommandManagerIface))
 
-typedef struct EphyCommandManager	EphyCommandManager;
-typedef struct EphyCommandManagerIface	EphyCommandManagerIface;
+typedef struct _EphyCommandManager	EphyCommandManager;
+typedef struct _EphyCommandManagerIface	EphyCommandManagerIface;
 
-struct EphyCommandManagerIface
+struct _EphyCommandManagerIface
 {
 	GTypeInterface base_iface;
 
