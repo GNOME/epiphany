@@ -226,7 +226,11 @@ select_spinner_image (EphySpinner *spinner)
 	GList *element;
 
 	if (spinner->details->timer_task == 0) {
-		return g_object_ref (spinner->details->quiescent_pixbuf);
+		if (spinner->details->quiescent_pixbuf) {
+			return g_object_ref (spinner->details->quiescent_pixbuf);
+		} else {
+			return NULL;
+		}
 	}
 
 	if (spinner->details->image_list == NULL) {
