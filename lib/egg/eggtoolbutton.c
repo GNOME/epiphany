@@ -513,6 +513,15 @@ egg_tool_button_finalize (GObject *object)
   g_free (button->stock_id);
   button->stock_id = NULL;
 
+  g_free (button->label_text);
+  button->label_text = NULL;
+
+  if (button->label_widget)
+    g_object_unref (G_OBJECT (button->label_widget));
+
+  if (button->icon_widget)
+    g_object_unref (G_OBJECT (button->icon_widget));
+
   parent_class->finalize (object);
 }
 
