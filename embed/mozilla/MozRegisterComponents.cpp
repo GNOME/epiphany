@@ -47,11 +47,8 @@
 #include <nsCOMPtr.h>
 #include <nsILocalFile.h>
 #include <nsNetCID.h>
-#if MOZILLA_SNAPSHOT > 13
-#include <nsDocShellCID.h>
-#endif
 
-#include <glib.h>
+#include <glib/gmessages.h>
 
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyAboutRedirector)
 NS_GENERIC_FACTORY_CONSTRUCTOR(MozDownload)	
