@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2004-02-20 17:18+0100\n"
-"PO-Revision-Date: 2004-02-20 17:18+0100\n"
+"POT-Creation-Date: 2004-03-01 19:33+0100\n"
+"PO-Revision-Date: 2004-03-01 19:34+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1191,15 +1191,15 @@ msgid_plural "%d downloads"
 msgstr[0] "%d hämtning"
 msgstr[1] "%d hämtningar"
 
-#: embed/downloader-view.c:513
+#: embed/downloader-view.c:515
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:524
+#: embed/downloader-view.c:526
 msgid "File"
 msgstr "Fil"
 
-#: embed/downloader-view.c:538
+#: embed/downloader-view.c:540
 msgid "Remaining"
 msgstr "Återstår"
 
@@ -1593,22 +1593,22 @@ msgstr "Andra"
 msgid "Local files"
 msgstr "Lokala filer"
 
-#: embed/mozilla/ContentHandler.cpp:135
-#: embed/mozilla/EphyHeaderSniffer.cpp:316
+#: embed/mozilla/ContentHandler.cpp:134
+#: embed/mozilla/EphyHeaderSniffer.cpp:365
 msgid "Save"
 msgstr "Spara"
 
 #: embed/mozilla/ContentHandler.cpp:265
-msgid "_Save As..."
-msgstr "Spara so_m..."
-
-#: embed/mozilla/ContentHandler.cpp:268
 msgid "_Open"
 msgstr "_Öppna"
 
-#: embed/mozilla/ContentHandler.cpp:268
+#: embed/mozilla/ContentHandler.cpp:265
 msgid "_Download"
 msgstr "_Hämta"
+
+#: embed/mozilla/ContentHandler.cpp:269
+msgid "_Save As..."
+msgstr "Spara so_m..."
 
 #: embed/mozilla/ContentHandler.cpp:286
 msgid "Download the unsafe file?"
@@ -1647,9 +1647,8 @@ msgstr ""
 "Det är inte möjligt att visa denna fil eftersom det inte finns något program "
 "installerat som kan öppna den. Du kan spara den istället."
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:291
-#: src/bookmarks/ephy-bookmarks-import.c:247
-#: src/bookmarks/ephy-bookmarks-import.c:373 src/ephy-toolbars-model.c:201
+#: embed/mozilla/EphyHeaderSniffer.cpp:331
+#: src/bookmarks/ephy-bookmarks-import.c:248 src/ephy-toolbars-model.c:201
 #: src/window-commands.c:342
 msgid "Untitled"
 msgstr "Namnlös"
@@ -1672,44 +1671,44 @@ msgstr ""
 "\n"
 "Vill du prova med standardalternativet i GNOME?"
 
-#: embed/mozilla/FilePicker.cpp:156
+#: embed/mozilla/FilePicker.cpp:163
 msgid "All files"
 msgstr "Alla filer"
 
-#: embed/mozilla/FilePicker.cpp:161
+#: embed/mozilla/FilePicker.cpp:168
 msgid "HTML files"
 msgstr "HTML-filer"
 
-#: embed/mozilla/FilePicker.cpp:166
+#: embed/mozilla/FilePicker.cpp:173
 msgid "Text files"
 msgstr "Textfiler"
 
-#: embed/mozilla/FilePicker.cpp:171
+#: embed/mozilla/FilePicker.cpp:178
 msgid "Image files"
 msgstr "Bildfiler"
 
-#: embed/mozilla/FilePicker.cpp:176
+#: embed/mozilla/FilePicker.cpp:183
 msgid "XML files"
 msgstr "XML-filer"
 
-#: embed/mozilla/FilePicker.cpp:181
+#: embed/mozilla/FilePicker.cpp:188
 msgid "XUL files"
 msgstr "XUL-filer"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:182
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:185
 msgid "_Select Certificate"
 msgstr "_Välj certifikat"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:221
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:224
 #, c-format
 msgid "Choose a certificate to present as identification to %s."
 msgstr "Välj ett certifikat att presentera som identifiering till %s."
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:224
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:227
 msgid "Select a certificate to identify yourself."
 msgstr "Välj ett certifikat för att identifiera dig själv."
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:274
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:277
 msgid "Certificate _Details"
 msgstr "Certifikat_detaljer"
 
@@ -1951,11 +1950,11 @@ msgstr ""
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Kunde inte verifiera detta certifikat på grund av okända orsaker."
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:181
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:183
 msgid "Generating Private Key."
 msgstr "Genererar privat nyckel."
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:182
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:184
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
@@ -2050,7 +2049,7 @@ msgstr "%s finns, flytta den först."
 msgid "Failed to create directory %s."
 msgstr "Misslyckades med att skapa katalogen %s."
 
-#: lib/ephy-gui.c:88
+#: lib/ephy-gui.c:90
 #, c-format
 msgid ""
 "File %s will be overwritten.\n"
@@ -2063,7 +2062,7 @@ msgstr ""
 "\n"
 "Vill du fortsätta?"
 
-#: lib/ephy-gui.c:119
+#: lib/ephy-gui.c:121
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Kunde inte visa hjälp: %s"
@@ -2697,30 +2696,30 @@ msgstr ""
 "Epiphany kan inte användas just nu på grund av ett oväntat fel från Bonobo "
 "vid försök att lokalisera automatiseringsobjektet."
 
-#: src/ephy-tab.c:327 src/ephy-tab.c:1172 src/ephy-tab.c:1354
+#: src/ephy-tab.c:365 src/ephy-tab.c:1194 src/ephy-tab.c:1367
 msgid "Blank page"
 msgstr "Tom sida"
 
-#: src/ephy-tab.c:748
+#: src/ephy-tab.c:770
 msgid "site"
 msgstr "webbplats"
 
-#: src/ephy-tab.c:772
+#: src/ephy-tab.c:794
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Omdirigerar till %s..."
 
-#: src/ephy-tab.c:776
+#: src/ephy-tab.c:798
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Överför data från %s..."
 
-#: src/ephy-tab.c:780
+#: src/ephy-tab.c:802
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Väntar på auktorisering från %s..."
 
-#: src/ephy-tab.c:788
+#: src/ephy-tab.c:810
 #, c-format
 msgid "Loading %s..."
 msgstr "Läser in %s..."
@@ -2784,11 +2783,11 @@ msgstr "Konfigurera sidinställningarna för utskrift"
 
 #: src/ephy-window.c:102
 msgid "Print Pre_view"
-msgstr "Förhands_visning"
+msgstr "Förhands_granskning"
 
 #: src/ephy-window.c:103
 msgid "Print preview"
-msgstr "Förhandsvisning"
+msgstr "Förhandsgranskning"
 
 #: src/ephy-window.c:106
 msgid "Print the current page"
@@ -3168,11 +3167,11 @@ msgstr "Det finns oskickade ändringar i tabellelement."
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Om du ändå stänger dokumentet kommer du att förlora den informationen."
 
-#: src/ephy-window.c:943 src/window-commands.c:392
+#: src/ephy-window.c:943 src/window-commands.c:395
 msgid "Open"
 msgstr "Öppna"
 
-#: src/ephy-window.c:945 src/window-commands.c:417
+#: src/ephy-window.c:945 src/window-commands.c:420
 msgid "Save As"
 msgstr "Spara som"
 
@@ -3288,7 +3287,7 @@ msgstr "Stäng"
 
 #: src/ppview-toolbar.c:109
 msgid "Close print preview"
-msgstr "Stäng förhandsvisning"
+msgstr "Stäng förhandsgranskning"
 
 #. *
 #. * please translate like this: "<your language> (System setting)"
@@ -3551,23 +3550,23 @@ msgstr "Gå till adressen som är angiven i adressfältet"
 msgid "Check this out!"
 msgstr "Kolla här!"
 
-#: src/window-commands.c:879
+#: src/window-commands.c:881
 msgid "Toolbar Editor"
 msgstr "Verktygsradsredigerare"
 
-#: src/window-commands.c:901
+#: src/window-commands.c:903
 msgid "_Add a New Toolbar"
 msgstr "_Lägg till en ny verktygsrad"
 
 #. Translator credits
-#: src/window-commands.c:953
+#: src/window-commands.c:955
 msgid "translator-credits"
 msgstr ""
 "Christian Rose\n"
 "Dennis Persson\n"
 "Skicka synpunkter på översättningen till sv@li.org"
 
-#: src/window-commands.c:983
+#: src/window-commands.c:985
 msgid "A GNOME browser based on Mozilla"
 msgstr "En GNOME-webbläsare, baserad på Mozilla"
 
