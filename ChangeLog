@@ -1,5 +1,17 @@
 2003-06-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/ephy-favicon-action.c: (each_url_get_data_binder):
+
+	Use the embed url, the tab one can make no sense if the user
+	edited it.
+
+	* src/toolbar.c: (location_user_changed_cb), (toolbar_set_window),
+	(toolbar_init), (toolbar_set_location):
+
+	Block location updating when setting tab title on user_changed.
+
+2003-06-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/widgets/ephy-location-entry.c:
 	(ephy_location_entry_autocompletion_window_url_selected_cb):
 

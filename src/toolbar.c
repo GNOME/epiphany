@@ -81,6 +81,7 @@ struct ToolbarPrivate
 	EggMenuMerge *ui_merge;
 	EggActionGroup *action_group;
 	gboolean visibility;
+	gboolean can_set_location;
 	GtkWidget *spinner;
 	GtkWidget *favicon;
 	GtkWidget *go;
@@ -471,17 +472,19 @@ get_location_entry (Toolbar *t)
 }
 
 static void
-location_user_changed_cb (GtkWidget *entry, EphyWindow *window)
+location_user_changed_cb (GtkWidget *entry, Toolbar *t)
 {
 	EphyTab *tab;
 	char *address;
 
-	tab = ephy_window_get_active_tab (window);
+	tab = ephy_window_get_active_tab (t->priv->window);
 	g_return_if_fail (IS_EPHY_TAB (tab));
 
+	t->priv->can_set_location = FALSE;
 	address = ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (entry));
 	ephy_tab_set_location (tab, address, TAB_ADDRESS_EXPIRE_CURRENT);
 	g_free (address);
+	t->priv->can_set_location = TRUE;
 }
 
 static void
@@ -517,7 +520,7 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 
 	g_signal_connect_object (get_location_entry (t), "user_changed",
 			         G_CALLBACK (location_user_changed_cb),
-			         window, 0);
+			         t, 0);
 }
 
 static void
@@ -528,6 +531,7 @@ toolbar_init (Toolbar *t)
 	t->priv->window = NULL;
 	t->priv->ui_merge = NULL;
 	t->priv->visibility = TRUE;
+	t->priv->can_set_location = TRUE;
 }
 
 static void
@@ -631,12 +635,15 @@ toolbar_set_location (Toolbar *t,
 {
 	GtkWidget *location;
 
-	location = get_location_entry (t);
-	g_return_if_fail (location != NULL);
+	if (t->priv->can_set_location)
+	{
+		location = get_location_entry (t);
+		g_return_if_fail (location != NULL);
 
-	ephy_location_entry_set_location
-		(EPHY_LOCATION_ENTRY (location),
-		 alocation ? alocation : "");
+		ephy_location_entry_set_location
+			(EPHY_LOCATION_ENTRY (location),
+			 alocation ? alocation : "");
+	}
 }
 
 void

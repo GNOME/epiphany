@@ -84,14 +84,18 @@ static void
 each_url_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 			  gpointer iterator_context, gpointer data)
 {
-	const char *location;
+	char *location;
 	EphyTab *tab;
+	EphyEmbed *embed;
 	EphyWindow *window = EPHY_WINDOW(iterator_context);
 
 	tab = ephy_window_get_active_tab (window);
-	location = ephy_tab_get_location (tab);
+	embed = ephy_tab_get_embed (tab);
+	ephy_embed_get_location (embed, TRUE, &location);
 
 	iteratee (location, -1, -1, -1, -1, data);
+
+	g_free (location);
 }
 
 static void
