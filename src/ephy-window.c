@@ -478,9 +478,8 @@ exit_fullscreen_button_clicked_cb (GtkWidget *button, EphyWindow *window)
 }
 
 static void
-update_chromes_visibility (EphyWindow *window)
+update_chromes_visibility (EphyWindow *window, EmbedChromeMask flags)
 {
-	EmbedChromeMask flags = window->priv->chrome_mask;
 	gboolean fullscreen;
 
 	fullscreen = window->priv->is_fullscreen;
@@ -565,7 +564,7 @@ ephy_window_fullscreen (EphyWindow *window)
                           "size-changed", G_CALLBACK (size_changed_cb),
 			  popup);
 
-	update_chromes_visibility (window);
+	update_chromes_visibility (window, window->priv->chrome_mask);
 }
 
 static void
@@ -585,7 +584,7 @@ ephy_window_unfullscreen (EphyWindow *window)
 	gtk_widget_destroy (window->priv->exit_fullscreen_popup);
 	window->priv->exit_fullscreen_popup = NULL;
 
-	update_chromes_visibility (window);
+	update_chromes_visibility (window, window->priv->chrome_mask);
 }
 
 static gboolean
@@ -1580,9 +1579,9 @@ ephy_window_set_chrome (EphyWindow *window,
 		translate_default_chrome (&flags);
 	}
 
-	window->priv->chrome_mask = flags;
+	update_chromes_visibility (window, flags);
 
-	update_chromes_visibility (window);
+	window->priv->chrome_mask = flags;
 
 	update_layout_toggles (window);
 
