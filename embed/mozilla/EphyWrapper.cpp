@@ -16,6 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "EphyWrapper.h"
 #include "GlobalHistory.h"
 #include "ProgressListener.h"
@@ -68,6 +72,7 @@
 #include "nsIPresContext.h"
 #include "ContentHandler.h"
 #include "EphyEventListener.h"
+#include "nsPromiseFlatString.h"
 
 EphyWrapper::EphyWrapper ()
 {
@@ -582,8 +587,13 @@ nsresult EphyWrapper::GetMainDocumentUrl (nsCString &url)
 	nsCOMPtr<nsIDocument> doc = do_QueryInterface(DOMDocument);
 	if(!doc) return NS_ERROR_FAILURE;
 
+#if MOZILLA_SNAPSHOT > 11
+	nsIURI *uri;
+	uri = doc->GetDocumentURL ();
+#else
 	nsCOMPtr<nsIURI> uri;
 	doc->GetDocumentURL(getter_AddRefs(uri));
+#endif
 	if (!uri) return NS_ERROR_FAILURE;
 
 	return uri->GetSpec (url);
@@ -601,8 +611,13 @@ nsresult EphyWrapper::GetDocumentUrl (nsCString &url)
         nsCOMPtr<nsIDocument> doc = do_QueryInterface(DOMDocument);
         if(!doc) return NS_ERROR_FAILURE;
 
-        nsCOMPtr<nsIURI> uri;
+#if MOZILLA_SNAPSHOT > 11
+	nsIURI *uri;
+	uri = doc->GetDocumentURL ();
+#else
+	nsCOMPtr<nsIURI> uri;
         doc->GetDocumentURL(getter_AddRefs(uri));
+#endif
 	if (!uri) return NS_ERROR_FAILURE;
 
         return uri->GetSpec (url);

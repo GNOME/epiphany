@@ -14,10 +14,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "glib.h"
@@ -49,12 +51,14 @@
 #include <nsIFontEnumerator.h>
 #include <nsISupportsPrimitives.h>
 #include <nsReadableUtils.h>
-#include <nsICookieManager.h>
 #include <nsIPasswordManager.h>
 #include <nsIPassword.h>
 #include <nsICookie.h>
-#include <nsCCookieManager.h>
 #include <nsCPasswordManager.h>
+#include <nsICookieManager.h>
+#if MOZILLA_SNAPSHOT < 13
+#include <nsCCookieManager.h>
+#endif
 
 // FIXME: For setting the locale. hopefully gtkmozembed will do itself soon
 #include <nsIChromeRegistry.h>
@@ -553,9 +557,14 @@ getUILang (nsAString& aUILang)
 		return NS_ERROR_FAILURE;
 	}
 
+#if MOZILLA_SNAPSHOT >= 12
+	result = localeService->GetLocaleComponentForUserAgent (aUILang);
+#else
 	nsXPIDLString uiLang;
 	result = localeService->GetLocaleComponentForUserAgent (getter_Copies(uiLang));
 	aUILang = uiLang;
+#endif
+
 	if (NS_FAILED (result))
 	{
 		g_warning ("Could not determine locale!\n");

@@ -1087,10 +1087,12 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	{
 		popup = "EphyImagePopup";
 	}
-/*	else if (context & EMBED_CONTEXT_INPUT)
+#if MOZILLA_SNAPSHOT > 12
+	else if (context & EMBED_CONTEXT_INPUT)
 	{
 		popup = "EphyInputPopup";
-	}*/
+	}
+#endif
 	else
 	{
 		popup = framed ? "EphyFramedDocumentPopup" :

@@ -159,14 +159,14 @@ AC_MSG_RESULT($MOZILLA_VERSION$autodetect)
 case "$MOZILLA_VERSION" in
   1.4) MOZILLA_SNAPSHOT=8 ;;
 1.4.1) MOZILLA_SNAPSHOT=9 ;;
- 1.5a) MOZILLA_SNAPSHOT=10 ;;
- 1.5b) MOZILLA_SNAPSHOT=11 ;;
- 1.5) MOZILLA_SNAPSHOT=11 ;;
- 1.6a) MOZILLA_SNAPSHOT=12 ;;
-trunk) MOZILLA_SNAPSHOT=12 ;;
+1.4.2) MOZILLA_SNAPSHOT=9 ;;
+  1.5) MOZILLA_SNAPSHOT=11 ;;
+ 1.6b) MOZILLA_SNAPSHOT=13 ;;
+  1.6) MOZILLA_SNAPSHOT=13 ;;
+trunk) MOZILLA_SNAPSHOT=13 ;;
     *) AC_ERROR([
 *****************************************************************************
-Epiphany can be built using Mozilla 1.4, 1.5a, 1.5b, 1.5 or 
+Epiphany can be built using Mozilla 1.4, 1.4.1, 1.5, or 1.6 or
 trunk snapshot, but the version available is $MOZILLA_VERSION.  
 
 When using Mozilla trunk snapshot, a successful build is not guaranteed due 

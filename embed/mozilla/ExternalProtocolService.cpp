@@ -17,8 +17,10 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
+
+#if MOZILLA_SNAPSHOT < 12
 
 #include <gtk/gtk.h>
 #include <libgnome/gnome-exec.h>
@@ -155,3 +157,5 @@ NS_IMETHODIMP GExternalProtocolService::LoadUrl(nsIURI *aURL)
 
 	return NS_OK;
 }
+
+#endif /* MOZILLA_SNAPSHOT < 12 */
