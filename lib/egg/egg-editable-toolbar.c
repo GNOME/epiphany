@@ -61,19 +61,6 @@ static void egg_editable_toolbar_remove_cb	(EggAction          *action,
 static void egg_editable_toolbar_edit_cb	(EggAction          *action,
 						 EggEditableToolbar *etoolbar);
 
-static EggActionGroupEntry egg_toolbar_popups[] = {
-  /* Toplevel */
-  {"FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL},
-
-  /* Popups */
-  {"RemoveToolbarPopup", N_("_Remove Toolbar"), GTK_STOCK_REMOVE, NULL,
-   NULL, G_CALLBACK (egg_editable_toolbar_remove_cb), NULL},
-  {"EditToolbarPopup", N_("_Edit Toolbars..."), GTK_STOCK_PREFERENCES, NULL,
-   NULL, G_CALLBACK (egg_editable_toolbar_edit_cb), NULL},
-};
-
-static guint egg_toolbar_popups_n_entries = G_N_ELEMENTS (egg_toolbar_popups);
-
 enum
 {
   PROP_0,
@@ -100,9 +87,6 @@ struct EggEditableToolbarPrivate
   gboolean edit_mode;
 
   EggToolbarsGroup *group;
-
-  EggMenuMerge *popup_merge;
-  EggActionGroup *popup_action_group;
 
   GList *actions_list;
 
@@ -140,20 +124,6 @@ egg_editable_toolbar_get_type (void)
     }
 
   return egg_editable_toolbar_type;
-}
-
-static void
-update_popup_menu (EggEditableToolbar *t)
-{
-  EggAction *action;
-
-  action = egg_action_group_get_action (t->priv->popup_action_group,
-					"EditToolbarPopup");
-  g_object_set (G_OBJECT (action), "visible", !t->priv->edit_mode, NULL);
-
-  action = egg_action_group_get_action (t->priv->popup_action_group,
-					"RemoveToolbarPopup");
-  g_object_set (G_OBJECT (action), "visible", t->priv->edit_mode, NULL);
 }
 
 static EggAction *
@@ -502,6 +472,10 @@ connect_toolbar_drag_source (EggToolbarsToolbar *t,
 
       g_object_set_data (G_OBJECT (tb), "toolbar_drag_data", t);
 
+      gtk_drag_source_set (tb, GDK_BUTTON1_MASK,
+			   source_drag_types, n_source_drag_types,
+			   GDK_ACTION_MOVE);
+
       g_signal_connect (tb, "drag_data_get",
 			G_CALLBACK (toolbar_drag_data_get_cb), etoolbar);
       g_signal_connect (tb, "drag_data_delete",
@@ -527,6 +501,8 @@ disconnect_toolbar_drag_source (EggToolbarsToolbar *t,
       g_object_set_data (G_OBJECT (tb), "drag_source_set",
 			 GINT_TO_POINTER (FALSE));
 
+      gtk_drag_source_unset (tb);
+
       g_signal_handlers_disconnect_by_func (tb,
 					    G_CALLBACK
 					    (toolbar_drag_data_get_cb),
@@ -542,16 +518,40 @@ static void
 popup_toolbar_context_menu (EggToolbar      *toolbar,
 			    ContextMenuData *data)
 {
-  GtkWidget *widget;
+  GtkWidget *menu;
+  GtkWidget *item;
+  GtkWidget *image;
+  EggEditableToolbar *etoolbar = EGG_EDITABLE_TOOLBAR (data->etoolbar);
 
-  widget = egg_menu_merge_get_widget (data->etoolbar->priv->popup_merge,
-				      "/popups/EggToolbarPopup");
+  menu = gtk_menu_new ();
 
-  g_object_set_data (G_OBJECT (data->etoolbar), "popup_toolbar", data->t);
+  if (etoolbar->priv->edit_mode)
+  {
+    item = gtk_image_menu_item_new_with_mnemonic (_("_Remove Toolbar"));
+    gtk_widget_show (item);
+    image = gtk_image_new_from_stock (GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU);
+    gtk_widget_show (image);
+    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+    g_object_set_data (G_OBJECT (etoolbar), "popup_toolbar", data->t);
+    g_signal_connect (item, "activate",
+		      G_CALLBACK (egg_editable_toolbar_remove_cb),
+		      etoolbar);
+  }
+  else
+  {
+    item = gtk_image_menu_item_new_with_mnemonic (_("_Edit Toolbars..."));
+    gtk_widget_show (item);
+    image = gtk_image_new_from_stock (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
+    gtk_widget_show (image);
+    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+    g_signal_connect (item, "activate",
+		      G_CALLBACK (egg_editable_toolbar_edit_cb),
+		      etoolbar);
+  }
 
-  g_return_if_fail (widget != NULL);
-
-  gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 2,
 		  gtk_get_current_event_time ());
 }
 
@@ -814,8 +814,6 @@ egg_editable_toolbar_class_init (EggEditableToolbarClass *klass)
 static void
 egg_editable_toolbar_init (EggEditableToolbar *t)
 {
-  int i;
-
   t->priv = g_new0 (EggEditableToolbarPrivate, 1);
 
   t->priv->merge = NULL;
@@ -828,26 +826,6 @@ egg_editable_toolbar_init (EggEditableToolbar *t)
   t->priv->drag_types = NULL;
 
   egg_editable_toolbar_add_drag_type (t, EGG_TOOLBAR_ITEM_TYPE);
-
-  for (i = 0; i < egg_toolbar_popups_n_entries; i++)
-    {
-      egg_toolbar_popups[i].user_data = t;
-    }
-
-  t->priv->popup_merge = egg_menu_merge_new ();
-
-  t->priv->popup_action_group = egg_action_group_new ("ToolbarPopupActions");
-  egg_action_group_add_actions (t->priv->popup_action_group,
-				egg_toolbar_popups,
-				egg_toolbar_popups_n_entries);
-  egg_menu_merge_insert_action_group (t->priv->popup_merge,
-				      t->priv->popup_action_group, 0);
-/* FIXME
-	egg_menu_merge_add_ui_from_file (t->priv->popup_merge,
-				egg_file ("epiphany-toolbar-popup-ui.xml"),
-				NULL);
-*/
-  update_popup_menu (t);
 }
 
 static void
@@ -868,11 +846,6 @@ egg_editable_toolbar_finalize (GObject *object)
       g_list_foreach (t->priv->drag_types, (GFunc)g_free, NULL);
       g_list_free (t->priv->drag_types);
     }
-
-  g_object_unref (t->priv->popup_action_group);
-  egg_menu_merge_remove_action_group (t->priv->popup_merge,
-				      t->priv->popup_action_group);
-  g_object_unref (t->priv->popup_merge);
 
   g_free (t->priv);
 
@@ -942,8 +915,6 @@ editor_close (EggEditableToolbar * etoolbar)
 				      (EggToolbarsGroupForeachToolbarFunc)
 				      disconnect_toolbar_drag_source,
 				      etoolbar);
-
-  update_popup_menu (etoolbar);
   hide_editor (etoolbar);
 }
 
@@ -1186,8 +1157,6 @@ egg_editable_toolbar_edit (EggEditableToolbar *etoolbar,
   egg_toolbars_group_foreach_toolbar (etoolbar->priv->group,
 				      (EggToolbarsGroupForeachToolbarFunc)
 				      connect_toolbar_drag_source, etoolbar);
-
-  update_popup_menu (etoolbar);
 
   setup_editor (etoolbar, window);
   show_editor (etoolbar);

@@ -88,8 +88,8 @@ struct _EggToolbar
 
   GtkTooltips     *tooltips;
   
-  gint             button_maxw;
-  gint             button_maxh;
+  gint             button_maxw;		/* maximum width of homogeneous children */
+  gint             button_maxh;		/* maximum height of homogeneous children */
 
   guint            style_set_connection;
   guint            icon_size_connection;
