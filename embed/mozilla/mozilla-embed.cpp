@@ -891,7 +891,11 @@ mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 	EventContext ctx;
 	ctx.Init (mpriv->browser);
 	rv = ctx.GetKeyEventInfo (ev, info);
-	if (NS_FAILED (rv)) return ret;
+	if (NS_FAILED (rv))
+	{
+		g_object_unref (info);
+		return ret;
+	}
 
 	if ((info->keycode == nsIDOMKeyEvent::DOM_VK_F10 &&
 	    (info->modifier == GDK_SHIFT_MASK ||
