@@ -433,7 +433,7 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 
 		g_return_if_fail (col != NULL);
 
-		if (col->prop_id > 0)
+		if (col->prop_id >= 0)
 		{
 			ephy_node_get_property (node,
 					        col->prop_id,

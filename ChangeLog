@@ -1,5 +1,26 @@
 2003-04-17  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* data/ui/Makefile.am:
+	* embed/ephy-history.c: (ephy_history_init):
+	* embed/ephy-history.h:
+	* lib/widgets/ephy-tree-model-node.c:
+	(ephy_tree_model_node_get_value):
+	* src/Makefile.am:
+	* src/ephy-shell.c: (ephy_shell_init), (ephy_shell_finalize),
+	(ephy_shell_show_bookmarks_editor), (history_window_hide_cb),
+	(ephy_shell_show_history_window):
+	* src/ephy-shell.h:
+	* src/ephy-window.c: (ephy_window_finalize),
+	(update_embed_dialogs), (ephy_window_get_find_dialog):
+	* src/ephy-window.h:
+	* src/window-commands.c: (window_cmd_go_history):
+
+	New history dialog implementation. More similar
+	to bookmarks. Yeah it still sucks ... but the hard
+	part is done.
+
+2003-04-17  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/widgets/Makefile.am:
 	* lib/widgets/ephy-node-view.c:
 	* lib/widgets/ephy-node-view.h:

@@ -94,7 +94,9 @@ EphyAutocompletion *ephy_shell_get_autocompletion  (EphyShell *gs);
 
 EphyBookmarks      *ephy_shell_get_bookmarks       (EphyShell *gs);
 
-void 		    ephy_shell_show_bookmarks_editor (EphyShell *gs);
+void		    ephy_shell_show_bookmarks_editor (EphyShell *gs);
+
+void		    ephy_shell_show_history_window   (EphyShell *gs);
 
 G_END_DECLS
 

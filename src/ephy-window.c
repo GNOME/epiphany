@@ -27,7 +27,6 @@
 #include "ppview-toolbar.h"
 #include "window-commands.h"
 #include "find-dialog.h"
-#include "history-dialog.h"
 #include "ephy-shell.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
@@ -265,8 +264,6 @@ struct EphyWindowPrivate
 	EphyTab *active_tab;
 	GtkWidget *sidebar;
 	EphyDialog *find_dialog;
-	EphyDialog *history_dialog;
-	EphyDialog *history_sidebar;
 	EmbedChromeMask chrome_mask;
 	gboolean closing;
 };
@@ -588,13 +585,6 @@ ephy_window_finalize (GObject *object)
 	if (window->priv->find_dialog)
 	{
 		g_object_unref (G_OBJECT (window->priv->find_dialog));
-	}
-
-	if (window->priv->history_dialog)
-	{
-		g_object_remove_weak_pointer
-                        (G_OBJECT(window->priv->history_dialog),
-                         (gpointer *)&window->priv->history_dialog);
 	}
 
 	g_object_unref (window->priv->fav_menu);
@@ -1359,8 +1349,6 @@ update_embed_dialogs (EphyWindow *window,
 {
 	EphyEmbed *embed;
 	EphyDialog *find_dialog = window->priv->find_dialog;
-	EphyDialog *history_dialog = window->priv->history_dialog;
-	EphyDialog *history_sidebar = window->priv->history_sidebar;
 
 	embed = ephy_tab_get_embed (tab);
 
@@ -1368,20 +1356,6 @@ update_embed_dialogs (EphyWindow *window,
 	{
 		ephy_embed_dialog_set_embed
 			(EPHY_EMBED_DIALOG(find_dialog),
-			 embed);
-	}
-
-	if (history_dialog)
-	{
-		ephy_embed_dialog_set_embed
-			(EPHY_EMBED_DIALOG(history_dialog),
-			 embed);
-	}
-
-	if (history_sidebar)
-	{
-		ephy_embed_dialog_set_embed
-			(EPHY_EMBED_DIALOG(history_sidebar),
 			 embed);
 	}
 }
@@ -1448,25 +1422,6 @@ ephy_window_get_find_dialog (EphyWindow *window)
 	window->priv->find_dialog = dialog;
 
 	return dialog;
-}
-
-void
-ephy_window_show_history (EphyWindow *window)
-{
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	window->priv->history_dialog = history_dialog_new_with_parent
-						(GTK_WIDGET(window),
-						 embed,
-						 FALSE);
-	g_object_add_weak_pointer
-                        (G_OBJECT(window->priv->history_dialog),
-                         (gpointer *)&window->priv->history_dialog);
-
-	ephy_dialog_show (window->priv->history_dialog);
 }
 
 void

@@ -32,6 +32,7 @@
 #include "ephy-thread-helpers.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-bookmarks-editor.h"
+#include "ephy-history-window.h"
 #include "ephy-debug.h"
 #include "toolbar.h"
 
@@ -58,6 +59,7 @@ struct EphyShellPrivate
 	EphyAutocompletion *autocompletion;
 	EphyBookmarks *bookmarks;
 	GtkWidget *bme;
+	GtkWidget *history_window;
 };
 
 enum
@@ -260,6 +262,7 @@ ephy_shell_init (EphyShell *gs)
 	gs->priv->session = NULL;
 	gs->priv->bookmarks = NULL;
 	gs->priv->bme = NULL;
+	gs->priv->history_window = NULL;
 
 	ephy_shell = gs;
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
@@ -322,6 +325,12 @@ ephy_shell_finalize (GObject *object)
 	if (gs->priv->bme)
 	{
 		gtk_widget_destroy (GTK_WIDGET (gs->priv->bme));
+	}
+
+	LOG ("Unref History Window");
+	if (gs->priv->history_window)
+	{
+		gtk_widget_destroy (GTK_WIDGET (gs->priv->history_window));
 	}
 
 	LOG ("Unref bookmarks")
@@ -636,7 +645,7 @@ void
 ephy_shell_show_bookmarks_editor (EphyShell *gs)
 {
 	EphyBookmarks *bookmarks;
-	
+
 	if (gs->priv->bme == NULL)
 	{
 		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
@@ -653,5 +662,36 @@ ephy_shell_show_bookmarks_editor (EphyShell *gs)
 	}
 
 	gtk_window_present (GTK_WINDOW (gs->priv->bme));
+}
+
+static void
+history_window_hide_cb (GtkWidget *widget, gpointer data)
+{
+	LOG ("Unref shell for history window")
+	g_object_unref (ephy_shell);
+}
+
+void
+ephy_shell_show_history_window (EphyShell *gs)
+{
+	EphyHistory *history;
+
+	if (gs->priv->history_window == NULL)
+	{
+		history = ephy_embed_shell_get_global_history
+			(EPHY_EMBED_SHELL (ephy_shell));
+		g_assert (history != NULL);
+		gs->priv->history_window = ephy_history_window_new (history);
+		g_signal_connect (gs->priv->history_window, "hide",
+				  G_CALLBACK (history_window_hide_cb), NULL);
+	}
+
+	if (!GTK_WIDGET_VISIBLE (gs->priv->history_window))
+	{
+		LOG ("Ref shell for history window")
+		g_object_ref (ephy_shell);
+	}
+
+	gtk_window_present (GTK_WINDOW (gs->priv->history_window));
 }
 

@@ -130,8 +130,6 @@ Toolbar		 *ephy_window_get_toolbar	  (EphyWindow *window);
 
 EphyDialog       *ephy_window_get_find_dialog	  (EphyWindow *window);
 
-void		  ephy_window_show_history	  (EphyWindow *window);
-
 G_END_DECLS
 
 #endif

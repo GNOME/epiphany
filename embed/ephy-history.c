@@ -21,6 +21,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-autocompletion-source.h"
 #include "ephy-debug.h"
+#include "ephy-node-view.h"
 
 #include <time.h>
 #include <string.h>
@@ -372,6 +373,8 @@ periodic_save_cb (EphyHistory *eh)
 static void
 ephy_history_init (EphyHistory *eb)
 {
+	GValue value = { 0, };
+
         eb->priv = g_new0 (EphyHistoryPrivate, 1);
 
 	eb->priv->xml_file = g_build_filename (ephy_dot_dir (),
@@ -391,6 +394,21 @@ ephy_history_init (EphyHistory *eb)
 	/* Pages */
 	eb->priv->pages = ephy_node_new_with_id (PAGES_NODE_ID);
 	ephy_node_ref (eb->priv->pages);
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, _("All"));
+	ephy_node_set_property (eb->priv->pages,
+			        EPHY_NODE_PAGE_PROP_LOCATION,
+			        &value);
+	ephy_node_set_property (eb->priv->pages,
+			        EPHY_NODE_PAGE_PROP_TITLE,
+			        &value);
+	g_value_unset (&value);
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, EPHY_NODE_VIEW_ALL_PRIORITY);
+	ephy_node_set_property (eb->priv->pages,
+			        EPHY_NODE_PAGE_PROP_PRIORITY,
+			        &value);
+	g_value_unset (&value);
 	g_signal_connect_object (G_OBJECT (eb->priv->pages),
 				 "child_added",
 				 G_CALLBACK (pages_added_cb),
@@ -415,6 +433,8 @@ ephy_history_init (EphyHistory *eb)
 				 G_CALLBACK (hosts_removed_cb),
 				 G_OBJECT (eb),
 				 0);
+
+	ephy_node_add_child (eb->priv->hosts, eb->priv->pages);
 
 	ephy_history_load (eb);
 	ephy_history_emit_data_changed (eb);

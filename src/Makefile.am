@@ -55,8 +55,8 @@ epiphany_bin_SOURCES = 				    	\
 	ephy-go-action.h				\
 	ephy-favorites-menu.c				\
 	ephy-favorites-menu.h				\
-	ephy-history-model.c				\
-	ephy-history-model.h				\
+	ephy-history-window.c				\
+	ephy-history-window.h				\
 	ephy-location-action.c				\
 	ephy-location-action.h				\
 	ephy-main.c					\
@@ -72,8 +72,6 @@ epiphany_bin_SOURCES = 				    	\
 	ephy-window.h					\
 	general-prefs.c					\
 	general-prefs.h					\
-	history-dialog.c				\
-	history-dialog.h				\
 	language-editor.c				\
 	language-editor.h				\
 	pdm-dialog.c					\

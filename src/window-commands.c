@@ -591,7 +591,7 @@ void
 window_cmd_go_history (EggAction *action,
 		       EphyWindow *window)
 {
-	ephy_window_show_history (window);
+	ephy_shell_show_history_window (ephy_shell);
 }
 
 void
