@@ -18,7 +18,7 @@ AC_PROG_INTLTOOL([0.29])
 dnl put the ACLOCAL flags in the Makefile
 ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
-GLIB_REQUIRED=2.4.0
+GLIB_REQUIRED=2.4.1
 GTK_REQUIRED=2.4.0
 LIBBONOBOUI_REQUIRED=2.1.1
 LIBXML_REQUIRED=2.6.6
@@ -196,8 +196,8 @@ case "$MOZILLA_VERSION" in
 branch1.7) MOZILLA_SNAPSHOT=16 ;;
  1.8a) MOZILLA_SNAPSHOT=18 ;;
 1.8a1) MOZILLA_SNAPSHOT=18 ;;
-1.8a2) MOZILLA_SNAPSHOT=18 ;;
-trunk) MOZILLA_SNAPSHOT=18 ;;
+1.8a2) MOZILLA_SNAPSHOT=19 ;;
+trunk) MOZILLA_SNAPSHOT=19 ;;
     *) AC_ERROR([
 *****************************************************************************
 Epiphany can be built using Mozilla 1.4, 1.4.1, 1.4.2, 1.5, 1.6 or 1.7,
