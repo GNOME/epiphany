@@ -1,3 +1,42 @@
+2003-01-24  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* NEWS:
+	* configure.in:
+	* data/ui/epiphany-toolbar.xml.in:
+	* lib/egg/Makefile.am:
+	* lib/widgets/Makefile.am:
+	* lib/widgets/ephy-editable-toolbar.c:
+	(ephy_editable_toolbar_get_type), (find_action),
+	(add_action_to_list), (parse_item_list), (parse_toolbars),
+	(load_defaults), (load_toolbar), (toolbar_list_to_xml),
+	(toolbar_list_to_string), (do_merge),
+	(ephy_editable_toolbar_set_merge),
+	(ephy_editable_toolbar_set_property),
+	(ephy_editable_toolbar_get_property),
+	(ephy_editable_toolbar_class_init), (ephy_editable_toolbar_init),
+	(ephy_editable_toolbar_save), (ephy_editable_toolbar_finalize),
+	(ephy_editable_toolbar_new):
+	* lib/widgets/ephy-editable-toolbar.h:
+	* src/Makefile.am:
+	* src/bookmarks/Makefile.am:
+	* src/bookmarks/ephy-bookmark-action.c:
+	(ephy_bookmark_action_get_type), (create_tool_item),
+	(ephy_bookmark_action_sync_label), (connect_proxy),
+	(ephy_bookmark_action_set_property),
+	(ephy_bookmark_action_get_property),
+	(ephy_bookmark_action_class_init), (ephy_bookmark_action_init),
+	(ephy_bookmark_action_new):
+	* src/bookmarks/ephy-bookmark-action.h:
+	* src/ephy-tab.c: (ephy_tab_finalize), (ephy_tab_set_location):
+	* src/toolbar.c: (toolbar_get_type), (toolbar_set_window),
+	(editable_toolbar_request_action), (toolbar_init),
+	(toolbar_finalize):
+	* src/toolbar.h:
+
+	Implement the data part of the toolbar editor.
+	Partial implementation of Bookmark action.
+	Try to fix crashes when switching tabs.
+
 2003-01-23  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* TODO:
