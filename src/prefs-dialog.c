@@ -1323,6 +1323,8 @@ prefs_download_path_button_clicked_cb (GtkWidget *button,
 					    GTK_WIDGET (parent),
 					    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
 					    NULL, EPHY_FILE_FILTER_NONE);
+		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fc),
+						     g_get_home_dir ());
 
 		g_signal_connect (GTK_DIALOG (fc), "response",
 				    G_CALLBACK (download_path_response_cb),
