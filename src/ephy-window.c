@@ -284,19 +284,24 @@ static GtkActionEntry ephy_popups_entries [] = {
 
 	/* Framed document */
 	{ "OpenFrame", NULL, N_("_Open Frame"), NULL,
-	  NULL, G_CALLBACK (popup_cmd_open_frame) },
+	  N_("Open frame in this window"),
+	  G_CALLBACK (popup_cmd_open_frame) },
 
 	/* Links */
-	{ "OpenLink", GTK_STOCK_OPEN, N_("_Open Link"),
-	  NULL, NULL, G_CALLBACK (popup_cmd_open_link) },
+	{ "OpenLink", GTK_STOCK_OPEN, N_("_Open Link"), NULL,
+	  N_("Open link in this window"),
+	  G_CALLBACK (popup_cmd_open_link) },
 	{ "OpenLinkInNewWindow", NULL, N_("Open Link in _New Window"), NULL,
-	  NULL, G_CALLBACK (popup_cmd_link_in_new_window) },
-	{ "OpenLinkInNewTab", NULL, N_("Open Link in New _Tab"),
-	  NULL, NULL, G_CALLBACK (popup_cmd_link_in_new_tab) },
+	  N_("Open link in a new window"),
+	  G_CALLBACK (popup_cmd_link_in_new_window) },
+	{ "OpenLinkInNewTab", NULL, N_("Open Link in New _Tab"), NULL,
+	  N_("Open link in a new tab"),
+	  G_CALLBACK (popup_cmd_link_in_new_tab) },
 	{ "DownloadLink", EPHY_STOCK_DOWNLOAD, N_("_Download Link"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_download_link) },
 	{ "DownloadLinkAs", GTK_STOCK_SAVE_AS, N_("_Save Link As..."), NULL,
-	  NULL, G_CALLBACK (popup_cmd_download_link_as) },
+	  N_("Save link with a different name"),
+	  G_CALLBACK (popup_cmd_download_link_as) },
 	{ "BookmarkLink", STOCK_ADD_BOOKMARK, N_("_Bookmark Link..."),
 	  NULL, NULL, G_CALLBACK (popup_cmd_bookmark_link) },
 	{ "CopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
@@ -1570,6 +1575,116 @@ hide_embed_popup_cb (GtkWidget *popup,
 		(popup, G_CALLBACK (hide_embed_popup_cb), window);
 }
 
+static char *
+get_name_from_address_value (const GValue *value)
+{
+	GnomeVFSURI *uri;
+	char *name = NULL;
+
+	uri = gnome_vfs_uri_new (g_value_get_string (value));
+	if (uri)
+	{
+		name = gnome_vfs_uri_extract_short_name (uri);
+		gnome_vfs_uri_unref (uri);
+	}
+
+	return name;
+}
+
+static void
+update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
+{
+	EmbedEventContext context;
+	GtkActionGroup *group = window->priv->popups_action_group;
+	const GValue *value;
+	GtkAction *action;
+	char *tooltip, *name;
+
+	if (ephy_embed_event_has_property (event, "background_image"))
+	{
+		ephy_embed_event_get_property (event, "background_image", &value);
+
+		action = gtk_action_group_get_action (group, "SaveBackgroundAs");
+		name = get_name_from_address_value (value);
+		tooltip = g_strdup_printf (_("Save background image '%s'"), name);
+		g_object_set (action, "tooltip", tooltip, NULL);
+		g_free (name);
+		g_free (tooltip);
+	}
+
+	context = ephy_embed_event_get_context (event);
+
+	if (context & EMBED_CONTEXT_IMAGE)
+	{
+		ephy_embed_event_get_property (event, "image", &value);
+		name = get_name_from_address_value (value);
+
+		action = gtk_action_group_get_action (group, "OpenImage");
+		tooltip = g_strdup_printf (_("Open image '%s'"), name);
+		g_object_set (action, "tooltip", tooltip, NULL);
+		g_free (tooltip);
+
+		action = gtk_action_group_get_action (group, "SetImageAsBackground");
+		tooltip = g_strdup_printf (_("Use as desktop background '%s'"), name);
+		g_object_set (action, "tooltip", tooltip, NULL);
+		g_free (tooltip);
+
+		action = gtk_action_group_get_action (group, "SaveImageAs");
+		tooltip = g_strdup_printf (_("Save image '%s'"), name);
+		g_object_set (action, "tooltip", tooltip, NULL);
+		g_free (tooltip);
+
+		action = gtk_action_group_get_action (group, "CopyImageLocation");
+		tooltip = g_strdup_printf (_("Copy image address '%s'"),
+					   g_value_get_string (value));
+		g_object_set (action, "tooltip", tooltip, NULL);
+		g_free (tooltip);		
+
+		g_free (name);
+	}
+
+	if (context & EMBED_CONTEXT_EMAIL_LINK)
+	{
+		ephy_embed_event_get_property (event, "link", &value);
+
+		action = gtk_action_group_get_action (group, "SendEmail");
+		tooltip = g_strdup_printf (_("Send email to address '%s'"),
+					   g_value_get_string (value));
+		g_object_set (action, "tooltip", tooltip, NULL);
+		g_free (tooltip);
+
+		action = gtk_action_group_get_action (group, "CopyEmailAddress");
+		tooltip = g_strdup_printf (_("Copy email address '%s'"),
+					   g_value_get_string (value));
+		g_object_set (action, "tooltip", tooltip, NULL);
+		g_free (tooltip);
+	}
+
+	if (context & EMBED_CONTEXT_LINK)
+	{
+		ephy_embed_event_get_property (event, "link", &value);
+
+		action = gtk_action_group_get_action (group, "DownloadLink");
+		name = get_name_from_address_value (value);
+		tooltip = g_strdup_printf (_("Save link '%s'"), name);
+		g_object_set (action, "tooltip", tooltip, NULL);
+		g_free (name);
+		g_free (tooltip);
+
+		action = gtk_action_group_get_action (group, "BookmarkLink");
+		tooltip = g_strdup_printf (_("Bookmark link '%s'"),
+					   g_value_get_string (value));
+		g_object_set (action, "tooltip", tooltip, NULL);
+		g_free (tooltip);
+
+		action = gtk_action_group_get_action (group, "CopyLinkAddress");
+		tooltip = g_strdup_printf (_("Copy link's address '%s'"),
+					   g_value_get_string (value));
+		g_object_set (action, "tooltip", tooltip, NULL);
+		g_free (tooltip);
+	}
+}
+
 static void
 show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 {
@@ -1633,6 +1748,8 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 				 "/EphyDocumentPopup";
 		update_edit_actions_sensitivity (window, TRUE);
 	}
+
+	update_popups_tooltips (window, event);
 
 	widget = gtk_ui_manager_get_widget (window->priv->manager, popup);
 	g_return_if_fail (widget != NULL);
