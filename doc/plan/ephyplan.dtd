@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT plan (item*)>
+
+<!ELEMENT item (title,description,status,responsible)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT status EMPTY>
+<!ELEMENT responsible (#PCDATA)>
+
+<!ATTLIST plan version CDATA #REQUIRED>
+<!ATTLIST status id (completed|delayed|designed|implementing|orphan|pending) #REQUIRED>
+<!ATTLIST responsible email CDATA #REQUIRED>
