@@ -64,8 +64,6 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyUtils.h			\
 	EventContext.cpp                \
 	EventContext.h                  \
-	FilePicker.cpp			\
-	FilePicker.h                    \
 	GlobalHistory.cpp               \
 	GlobalHistory.h                 \
 	GtkNSSClientAuthDialogs.cpp	\
@@ -94,3 +92,9 @@ libephymozillaembed_la_SOURCES = 	\
 	mozilla-embed-single.h	        \
 	mozilla-notifiers.cpp		\
 	mozilla-notifiers.h
+
+if ENABLE_FILEPICKER
+libephymozillaembed_la_SOURCES += 	\
+	FilePicker.cpp			\
+	FilePicker.h
+endif
