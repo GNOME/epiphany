@@ -101,13 +101,14 @@ epiphany_bin_LDADD = \
 	$(EPIPHANY_DEPENDENCY_LIBS) \
 	$(INTLLIBS)
 
+CLEAN_FILES = \
+	$(ephy_automation_interface_idl_sources) \
+	ephy_automation_interface_idl_stamp
 
-BUILT_SOURCES=	\
-	EphyAutomation.h EphyAutomation-common.c EphyAutomation-stubs.c EphyAutomation-skels.c
+$(ephy_automation_interface_idl_sources): ephy_automation_interface_idl_stamp
 
-CLEAN_FILES = $(BUILT_SOURCES)
-
-EphyAutomation-common.c EphyAutomation-stubs.c EphyAutomation-skels.c EphyAutomation.h: $(top_srcdir)/idl/EphyAutomation.idl
-	$(ORBIT_IDL) -I $(LIBBONOBO_IDL) -I $(BONOBO_ACTIVATION_IDL) $(top_srcdir)/idl/EphyAutomation.idl
+ephy_automation_interface_idl_stamp: $(top_srcdir)/idl/EphyAutomation.idl $(ORBIT_IDL)
+	$(ORBIT_IDL) -I $(LIBBONOBO_IDL) -I $(BONOBO_ACTIVATION_IDL) -I$(top_srcdir) $<
+	touch $@
 
 EXTRA_DIST = $(top_srcdir)/idl/EphyAutomation.idl
