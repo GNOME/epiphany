@@ -318,6 +318,7 @@ struct EphyWindowPrivate
 	gboolean is_ppview;
 	gboolean has_size;
 	guint num_tabs;
+	guint tab_message_cid;
 
 	guint disable_js_chrome_notifier_id;
 	guint show_toolbars_notifier_id;
@@ -882,10 +883,19 @@ sync_tab_load_progress (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 static void
 sync_tab_message (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
+	GtkStatusbar *s = GTK_STATUSBAR (window->priv->statusbar);
+	const char *message;
+
 	if (window->priv->closing) return;
 
-	statusbar_set_message (EPHY_STATUSBAR (window->priv->statusbar),
-			       ephy_tab_get_status_message (tab));
+	message = ephy_tab_get_status_message (tab);
+
+	gtk_statusbar_pop (s, window->priv->tab_message_cid);
+
+	if (message)
+	{
+		gtk_statusbar_push (s, window->priv->tab_message_cid, message);
+	}
 }
 
 static void
@@ -1614,6 +1624,8 @@ ephy_window_init (EphyWindow *window)
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
 			    GTK_WIDGET (window->priv->statusbar),
 			    FALSE, TRUE, 0);
+	window->priv->tab_message_cid = gtk_statusbar_get_context_id
+		(GTK_STATUSBAR (window->priv->statusbar), "tab_message");
 
 	g_object_ref (ephy_shell);
 

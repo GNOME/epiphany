@@ -58,9 +58,6 @@ void          statusbar_set_security_state   (Statusbar *s,
 void          statusbar_set_progress         (Statusbar *s,
 					      int progress);
 
-void          statusbar_set_message          (Statusbar *s,
-					      const gchar *message);
-
 G_END_DECLS
 
 #endif

@@ -745,11 +745,11 @@ get_host_name_from_uri (const char *uri)
 	return result;
 }
 
-static char *
-build_net_state_message (const char *uri, EmbedState flags)
+static void
+update_net_state_message (EphyTab *tab, const char *uri, EmbedState flags)
 {
 	const char *msg = NULL;
-	char *host, *message = NULL;
+	char *host;
 
 	host = get_host_name_from_uri (uri);
 
@@ -779,14 +779,22 @@ build_net_state_message (const char *uri, EmbedState flags)
                 }
         }
 
-	if (msg)
+	if ((flags & EMBED_STATE_IS_NETWORK) &&
+	    (flags & EMBED_STATE_STOP))
+        {
+		g_free (tab->priv->status_message);
+		tab->priv->status_message = NULL;
+		g_object_notify (G_OBJECT (tab), "message");
+
+	}
+	else if (msg)
 	{
-		message = g_strdup_printf (msg, host); 
+		g_free (tab->priv->status_message);
+		tab->priv->status_message = g_strdup_printf (msg, host);
+		g_object_notify (G_OBJECT (tab), "message");
 	}
 
 	g_free (host);
-
-	return message;
 }
 
 static void
@@ -833,16 +841,7 @@ static void
 ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 		       EmbedState state, EphyTab *tab)
 {
-	char *new_msg;
-
-	new_msg = build_net_state_message (uri, state);
-	if (tab->priv->status_message)
-	{
-		g_free (tab->priv->status_message);
-	}
-	tab->priv->status_message = new_msg;
-
-	g_object_notify (G_OBJECT (tab), "message");
+	update_net_state_message (tab, uri, state);
 
 	if (state & EMBED_STATE_IS_NETWORK)
 	{
