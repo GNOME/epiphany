@@ -1,3 +1,10 @@
+2003-08-02  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* src/ephy-notebook.c: (find_tab_num_at_pos), (button_press_cb):
+
+	Work around for a gtk issue. Do not assert if a click outside the notebook
+	is reported in button_press, just ignore.
+
 2003-08-02  Christian Persch
 
 	* src/ephy-encodings-menu.c: (build_group):

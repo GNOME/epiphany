@@ -238,7 +238,12 @@ find_tab_num_at_pos (EphyNotebook *notebook, gint abs_x, gint abs_y)
 		return AFTER_ALL_TABS;
 	}
 
-	g_assert (is_in_notebook_window(notebook, abs_x, abs_y));
+	/* For some reason unfullscreen + quick click can
+	   cause a wrong click event to be reported to the tab */
+	if (!is_in_notebook_window(notebook, abs_x, abs_y))
+	{
+		return NOT_IN_APP_WINDOWS;
+	}
 
 	while ((page = gtk_notebook_get_nth_page (nb, page_num)))
 	{
@@ -549,7 +554,7 @@ button_press_cb (EphyNotebook *notebook,
 	}
 
 	if ((event->button == 1) && (event->type == GDK_BUTTON_PRESS)
-	    && (tab_clicked != -1))
+	    && (tab_clicked >= 0))
 	{
 		notebook->priv->x_start = event->x_root;
 		notebook->priv->y_start = event->y_root;
