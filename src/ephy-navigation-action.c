@@ -70,28 +70,21 @@ ephy_navigation_action_get_type (void)
 #define MAX_LENGTH 60
 
 static GtkWidget *
-new_history_menu_item (gchar *origtext,
-                       const GdkPixbuf *ico)
+new_history_menu_item (char *origtext,
+                       GdkPixbuf *icon)
 {
-	GtkWidget *item, *hb, *label;
+	GtkWidget *item, *image;
 	char *short_text;
 
-	item = gtk_image_menu_item_new ();
-	hb = gtk_hbox_new (FALSE, 0);
-
 	short_text = ephy_string_shorten (origtext, MAX_LENGTH);
-	label = gtk_label_new (short_text);
+	item = gtk_image_menu_item_new_with_label (short_text);
 	g_free (short_text);
 
-        gtk_box_pack_start (GTK_BOX (hb), label, FALSE, FALSE, 0);
-        gtk_container_add (GTK_CONTAINER (item), hb);
+	image = gtk_image_new_from_pixbuf (icon);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	gtk_widget_show (item);
 
-        gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
-                                       gtk_image_new_from_pixbuf ((GdkPixbuf *) ico));
-
-        gtk_widget_show_all (item);
-
-        return item;
+	return item;
 }
 
 static void
