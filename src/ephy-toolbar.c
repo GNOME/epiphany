@@ -448,13 +448,10 @@ ephy_toolbar_activate_location (EphyToolbar *toolbar)
 		entry = GTK_WIDGET (proxies->data);
 	}
 
-	if (entry == NULL)
-	{
-		/* happens when the user has removed the location entry from
-		 * the toolbars.
-		 */
-		return;
-	}
+	/* happens when the user has removed the location entry from
+	  * the toolbars, or when it's overflown
+	  */
+	if (entry == NULL || !GTK_WIDGET_REALIZED (entry)) return;
 
 	g_object_get (G_OBJECT (toolbar), "visible", &visible, NULL);
 	if (visible == FALSE)
