@@ -76,7 +76,6 @@ struct EphyShellPrivate
 	GtkWidget *history_window;
 	GObject *pdm_dialog;
 	GObject *prefs_dialog;
-	GObject *print_setup_dialog;
 	GList *del_on_exit;
 	guint server_timeout;
 };
@@ -192,7 +191,6 @@ ephy_shell_init (EphyShell *shell)
 	shell->priv->bme = NULL;
 	shell->priv->history_window = NULL;
 	shell->priv->pdm_dialog = NULL;
-	shell->priv->print_setup_dialog = NULL;
 	shell->priv->toolbars_model = NULL;
 	shell->priv->fs_toolbars_model = NULL;
 	shell->priv->extensions_manager = NULL;
@@ -481,12 +479,6 @@ ephy_shell_finalize (GObject *object)
 	if (shell->priv->prefs_dialog)
 	{
 		g_object_unref (shell->priv->prefs_dialog);
-	}
-
-	LOG ("Unref print setup dialog")
-	if (shell->priv->print_setup_dialog)
-	{
-		g_object_unref (shell->priv->print_setup_dialog);
 	}
 
 	LOG ("Unref bookmarks")
@@ -813,18 +805,4 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 	}
 
 	return shell->priv->prefs_dialog;
-}
-
-GObject *
-ephy_shell_get_print_setup_dialog (EphyShell *shell)
-{
-	if (shell->priv->print_setup_dialog == NULL)
-	{
-		shell->priv->print_setup_dialog = G_OBJECT (ephy_print_setup_dialog_new ());
-
-		g_object_add_weak_pointer (shell->priv->print_setup_dialog,
-					   (gpointer *) &shell->priv->print_setup_dialog);
-	}
-
-	return shell->priv->print_setup_dialog;
 }

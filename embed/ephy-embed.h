@@ -76,43 +76,6 @@ typedef enum
 	EMBED_RELOAD_FORCE	= 1 << 1
 } EmbedReloadFlags;
 
-typedef struct
-{
-	gboolean print_to_file;
-	char *printer;
-	char *file;
-	char *paper;
-	int top_margin;
-	int bottom_margin;
-	int left_margin;
-	int right_margin;
-	int pages;
-	int from_page;
-	int to_page;
-	int frame_type;
-	int orientation;
-	gboolean print_color;
-	gboolean preview;
-
-	/*
-	 * &T - title
-	 * &U - Document URL
-	 * &D - Date/Time
-	 * &P - Page Number
-	 * &PT - Page Number with total Number of Pages (example: 1 of 34)
-	 *
-	 * So, if headerLeftStr = "&T" the title and the document URL
-	 * will be printed out on the top left-hand side of each page.
-	 */
-	char *header_left_string;
-	char *header_center_string;
-	char *header_right_string;
-	char *footer_left_string;
-	char *footer_center_string;
-	char *footer_right_string;
-}
-EmbedPrintInfo;
-
 typedef enum
 {
 	PRINTPREVIEW_GOTO_PAGENUM	= 0,
@@ -216,9 +179,9 @@ struct EphyEmbedIface
 	void		   (* set_encoding)		(EphyEmbed *embed,
 							 const char *encoding);
 	EphyEncodingInfo * (* get_encoding_info)	(EphyEmbed *embed);
-	void		   (* print)			(EphyEmbed *embed,
-							 EmbedPrintInfo *info);
-	void		   (* print_preview_close)	(EphyEmbed *embed);
+	void		   (* print)			(EphyEmbed *embed);
+	void		   (* set_print_preview_mode)	(EphyEmbed *embed,
+							 gboolean mode);
 	int		   (* print_preview_n_pages)	(EphyEmbed *embed);
 	void		   (* print_preview_navigate)	(EphyEmbed *embed,
 							 EmbedPrintPreviewNavType type,
@@ -304,10 +267,10 @@ void		  ephy_embed_set_encoding		(EphyEmbed *embed,
 EphyEncodingInfo *ephy_embed_get_encoding_info		(EphyEmbed *embed);
 
 /* Print */
-void		  ephy_embed_print			(EphyEmbed *embed,
-							 EmbedPrintInfo *info);
+void		  ephy_embed_print			(EphyEmbed *embed);
 
-void		  ephy_embed_print_preview_close	(EphyEmbed *embed);
+void		  ephy_embed_set_print_preview_mode	(EphyEmbed *embed,
+							 gboolean preview_mode);
 
 int		  ephy_embed_print_preview_n_pages	(EphyEmbed *embed);
 

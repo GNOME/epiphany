@@ -56,6 +56,7 @@ struct EphyEmbedSingleIface
 					 const char* url);
 	GList *	(* get_font_list)	(EphyEmbedSingle *shell,
 					 const char *langGroup);
+	void	(* print_setup)		(EphyEmbedSingle *single);
 };
 
 GType	ephy_embed_single_get_type		(void);
@@ -72,6 +73,8 @@ void	ephy_embed_single_load_proxy_autoconf	(EphyEmbedSingle *shell,
 
 GList  *ephy_embed_single_get_font_list		(EphyEmbedSingle *shell,
 						 const char *langGroup);
+
+void	ephy_embed_single_print_setup		(EphyEmbedSingle *single);
 
 G_END_DECLS
 

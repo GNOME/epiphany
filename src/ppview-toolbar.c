@@ -392,6 +392,6 @@ toolbar_cmd_ppv_close (GtkUIManager *merge,
 
 	ephy_window_set_print_preview (window, FALSE);
 
-	ephy_embed_print_preview_close (embed);
+	ephy_embed_set_print_preview_mode (embed, FALSE);
 }
 

@@ -71,7 +71,7 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 		GtkWidget *gtkParent = MozillaFindGtkParent(parent);
 		NS_ENSURE_TRUE (gtkParent, NS_ERROR_FAILURE);
 
-		dialog = ephy_print_dialog_new (gtkParent, embed, TRUE);
+		dialog = ephy_print_dialog_new (gtkParent, embed);
 		ephy_dialog_set_modal (dialog, TRUE);
 
 		int ret = ephy_dialog_run (dialog);
@@ -95,7 +95,7 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 		info->pages = 0;
 	}
 
-	MozillaCollatePrintSettings (info, printSettings);
+	MozillaCollatePrintSettings (info, printSettings, FALSE);
 
 	ephy_print_info_free (info);
 
@@ -125,7 +125,12 @@ NS_IMETHODIMP GPrintingPromptService::ShowPageSetup(nsIDOMWindow *parent, nsIPri
 	dialog = ephy_print_setup_dialog_new ();
 	ephy_dialog_set_modal (dialog, TRUE);
 
-	int ret = ephy_dialog_run (dialog);
+	int ret;
+	do
+	{
+		ret = ephy_dialog_run (dialog);
+	} while (ret == GTK_RESPONSE_HELP);
+
 	if (ret == GTK_RESPONSE_OK)
 	{
 		rv = NS_OK;

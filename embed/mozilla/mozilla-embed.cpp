@@ -686,39 +686,19 @@ impl_get_security_level (EphyEmbed *embed,
 }
 
 static void
-impl_print (EphyEmbed *embed,
-            EmbedPrintInfo *info)
+impl_print (EphyEmbed *embed)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-	nsresult result;
-
-        nsCOMPtr<nsIPrintSettings> options;
-        result = mpriv->browser->GetPrintSettings(getter_AddRefs(options));
-        if (NS_FAILED (result) || !options) return;
-
-	/* work around mozilla bug which borks when printing selection without having one */
-	if (info->pages == 2 && ephy_command_manager_can_do_command
-		(EPHY_COMMAND_MANAGER (embed), "cmd_copy") == FALSE)
-	{
-		info->pages = 0;
-	}
-
-	MozillaCollatePrintSettings(info, options);
-
-        options->SetPrintSilent (PR_TRUE);
-
-	result = mpriv->browser->Print(options, info->preview);
-
-	/* Workaround for bug 125984 */
-        options->SetPrintSilent (PR_FALSE);
+ 
+	mpriv->browser->Print ();
 }
 
 static void
-impl_print_preview_close (EphyEmbed *embed)
+impl_set_print_preview_mode (EphyEmbed *embed, gboolean preview_mode)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
-	mpriv->browser->PrintPreviewClose();
+	mpriv->browser->SetPrintPreviewMode (preview_mode);
 }
 
 static int
@@ -1140,7 +1120,7 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->set_encoding = impl_set_encoding;
 	iface->get_encoding_info = impl_get_encoding_info;
 	iface->print = impl_print;
-	iface->print_preview_close = impl_print_preview_close;
+	iface->set_print_preview_mode = impl_set_print_preview_mode;
 	iface->print_preview_n_pages = impl_print_preview_n_pages;
 	iface->print_preview_navigate = impl_print_preview_navigate;
 	iface->has_modified_forms = impl_has_modified_forms;

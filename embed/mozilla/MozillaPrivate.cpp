@@ -76,7 +76,8 @@ GtkWidget *MozillaFindGtkParent (nsIDOMWindow *aDOMWindow)
 #define MM_TO_INCH(x)		(((double) x) / 25.4)
 
 NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
-					  nsIPrintSettings *options)
+				       nsIPrintSettings *options,
+				       gboolean preview)
 {
 	const static int frame_types[] = {
                 nsIPrintSettings::kFramesAsIs,
@@ -129,7 +130,7 @@ NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
 	 * in print preview mode if we set "print to file" to true.
 	 * See epiphany bug #119818.
 	 */
-	if (info->preview)
+	if (preview)
 	{
 		options->SetPrintToFile (PR_FALSE);
 	}

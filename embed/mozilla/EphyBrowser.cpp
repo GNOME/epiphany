@@ -83,6 +83,8 @@
 #include "nsPromiseFlatString.h"
 #include "nsString.h"
 #include "ContentHandler.h"
+#include "MozillaPrivate.h"
+#include "print-dialog.h"
 
 EphyEventListener::EphyEventListener(void)
 : mOwner(nsnull)
@@ -301,43 +303,49 @@ EphyBrowser::DetachListeners(void)
 	return NS_OK;
 }
 
-nsresult EphyBrowser::Print (nsIPrintSettings *options, PRBool preview)
+nsresult EphyBrowser::Print ()
 {
-	nsresult result;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
+	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
+
+	return  print->Print (nsnull, nsnull);
+}
+
+nsresult EphyBrowser::SetPrintPreviewMode (PRBool previewMode)
+{
+	nsresult rv;
 
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
 	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
 
-	if (!preview)
+	if (previewMode)
 	{
-		result = print->Print (options, nsnull);
+		EmbedPrintInfo *info;
+
+		nsCOMPtr<nsIPrintSettings> settings;
+		print->GetGlobalPrintSettings (getter_AddRefs(settings));
+
+		info = ephy_print_get_print_info ();
+		MozillaCollatePrintSettings (info, settings, TRUE);
+		ephy_print_info_free (info);
+
+		rv = print->PrintPreview (nsnull, mDOMWindow, nsnull);
 	}
 	else
 	{
-		result = print->PrintPreview(options, nsnull, nsnull);
-	}
+		PRBool isPreview = PR_FALSE;
 
-	return result;
-}
+		rv = print->GetDoingPrintPreview(&isPreview);
+		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-nsresult EphyBrowser::PrintPreviewClose (void)
-{
-	nsresult rv;
-	PRBool isPreview = PR_FALSE;
-
-	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
-	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
-
-	rv = print->GetDoingPrintPreview(&isPreview);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-	if (isPreview == PR_TRUE)
-	{
-		rv = print->ExitPrintPreview();
+		if (isPreview == PR_TRUE)
+		{
+			rv = print->ExitPrintPreview();
+		}
 	}
 
 	return rv;
@@ -361,16 +369,6 @@ nsresult EphyBrowser::PrintPreviewNavigate(PRInt16 navType, PRInt32 pageNum)
 	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
 
 	return print->PrintPreviewNavigate(navType, pageNum);
-}
-
-nsresult EphyBrowser::GetPrintSettings (nsIPrintSettings **options)
-{
-	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
-	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
-
-	return print->GetGlobalPrintSettings(options);
 }
 
 nsresult EphyBrowser::GetSHistory (nsISHistory **aSHistory)

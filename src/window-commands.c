@@ -22,6 +22,8 @@
 #include "config.h"
 #endif
 
+#include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
 #include "ephy-shell.h"
 #include "ephy-embed-factory.h"
 #include "ephy-embed-persist.h"
@@ -73,12 +75,10 @@ void
 window_cmd_file_print_setup (GtkAction *action,
 			     EphyWindow *window)
 {
-	EphyDialog *dialog;
+	EphyEmbedSingle *single;
 
-	dialog = EPHY_DIALOG (ephy_shell_get_print_setup_dialog (ephy_shell));
-	ephy_dialog_set_parent (dialog, GTK_WIDGET (window));
-
-	ephy_dialog_show (dialog);
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
+	ephy_embed_single_print_setup (single);
 }
 
 void
@@ -86,18 +86,11 @@ window_cmd_file_print_preview (GtkAction *action,
 			       EphyWindow *window)
 {
 	EphyEmbed *embed;
-	EmbedPrintInfo *info;
 
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	info = ephy_print_get_print_info ();
-	info->preview = TRUE;
-
-	ephy_embed_print (embed, info);
-
-	ephy_print_info_free (info);
-
+	ephy_embed_set_print_preview_mode (embed, TRUE);
 	ephy_window_set_print_preview (window, TRUE);
 }
 
@@ -105,7 +98,12 @@ void
 window_cmd_file_print (GtkAction *action,
 		       EphyWindow *window)
 {
-	ephy_window_print (window);
+	EphyEmbed *embed;
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (EPHY_IS_EMBED (embed));
+
+	ephy_embed_print (embed);
 }
 
 void

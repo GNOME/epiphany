@@ -88,9 +88,8 @@ public:
 	nsresult SetZoom (float aTextZoom, PRBool reflow);
 	nsresult GetZoom (float *aTextZoom);
 
-	nsresult Print (nsIPrintSettings *options, PRBool preview);
-	nsresult GetPrintSettings (nsIPrintSettings * *options);
-	nsresult PrintPreviewClose (void);
+	nsresult Print ();
+	nsresult SetPrintPreviewMode (PRBool previewMode);
 	nsresult PrintPreviewNumPages (int *numPages);
 	nsresult PrintPreviewNavigate(PRInt16 navType, PRInt32 pageNum);
 

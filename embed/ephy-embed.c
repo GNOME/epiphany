@@ -379,18 +379,18 @@ ephy_embed_get_encoding_info (EphyEmbed *embed)
 }
 
 void
-ephy_embed_print (EphyEmbed *embed,
-		  EmbedPrintInfo *info)
+ephy_embed_print (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->print (embed, info);
+	iface->print (embed);
 }
 
 void
-ephy_embed_print_preview_close (EphyEmbed *embed)
+ephy_embed_set_print_preview_mode (EphyEmbed *embed,
+				   gboolean preview_mode)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->print_preview_close (embed);
+	iface->set_print_preview_mode (embed, preview_mode);
 }
 
 int

@@ -134,8 +134,6 @@ GObject        *ephy_shell_get_pdm_dialog		(EphyShell *shell);
 
 GObject        *ephy_shell_get_prefs_dialog		(EphyShell *shell);
 
-GObject	       *ephy_shell_get_print_setup_dialog	(EphyShell *shell);
-
 G_END_DECLS
 
 #endif

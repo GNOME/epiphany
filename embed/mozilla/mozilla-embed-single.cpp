@@ -76,6 +76,9 @@
 #include <nsIURI.h>
 #include <nsNetUtil.h>
 #include <nsIHttpAuthManager.h>
+#include <nsIPrintSettings.h>
+#include <nsIPrintSettingsService.h>
+#include <nsIPrintingPromptService.h>
 
 // FIXME: For setting the locale. hopefully gtkmozembed will do itself soon
 #include <nsIChromeRegistry.h>
@@ -591,6 +594,24 @@ impl_get_font_list (EphyEmbedSingle *shell,
 	return g_list_reverse (l);
 }
 
+static void
+impl_print_setup (EphyEmbedSingle *single)
+{
+	nsCOMPtr<nsIPrintSettingsService> pss
+		(do_GetService ("@mozilla.org/gfx/printsettings-service;1"));
+	if (!pss) return;
+
+	nsCOMPtr<nsIPrintSettings> settings;
+	pss->GetGlobalPrintSettings (getter_AddRefs (settings));
+	if (!settings) return;
+
+	nsCOMPtr<nsIPrintingPromptService> prompt
+		(do_GetService ("@mozilla.org/embedcomp/printingprompt-service;1"));
+	if (!prompt) return;
+
+	prompt->ShowPageSetup (nsnull, settings, nsnull);
+}
+
 static GList *
 impl_list_cookies (EphyCookieManager *manager)
 {
@@ -873,6 +894,7 @@ ephy_embed_single_iface_init (EphyEmbedSingleIface *iface)
 	iface->set_offline_mode = impl_set_offline_mode;
 	iface->load_proxy_autoconf = impl_load_proxy_autoconf;
 	iface->get_font_list = impl_get_font_list;
+	iface->print_setup = impl_print_setup;
 }
 
 static void

@@ -1,3 +1,35 @@
+2004-07-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.in:
+	* data/glade/print.glade:
+	* embed/ephy-embed-single.c: (ephy_embed_single_print_setup):
+	* embed/ephy-embed-single.h:
+	* embed/ephy-embed.c: (ephy_embed_print),
+	(ephy_embed_set_print_preview_mode):
+	* embed/ephy-embed.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/MozillaPrivate.cpp:
+	* embed/mozilla/MozillaPrivate.h:
+	* embed/mozilla/PrintingPromptService.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* embed/print-dialog.c: (ephy_print_get_print_info),
+	(ephy_print_dialog_response_cb),
+	(ephy_print_setup_dialog_help_button_cb), (ephy_print_dialog_new):
+	* embed/print-dialog.h:
+	* src/ephy-shell.c: (ephy_shell_init), (ephy_shell_finalize),
+	(ephy_shell_get_prefs_dialog):
+	* src/ephy-shell.h:
+	* src/ephy-window.c: (ephy_window_delete_event_cb),
+	(ephy_window_finalize), (update_embed_dialogs), (ephy_window_find):
+	* src/ppview-toolbar.c: (toolbar_cmd_ppv_close):
+	* src/window-commands.c: (window_cmd_file_print_setup),
+	(window_cmd_file_print_preview), (window_cmd_file_print):
+
+	Make print and print setup go trough nsIPrintingPromptService
+	(backported from HEAD).
+
 2004-07-09  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.in:

@@ -156,3 +156,10 @@ ephy_embed_single_get_font_list (EphyEmbedSingle *single,
 	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
 	return iface->get_font_list (single, langGroup);
 }
+
+void
+ephy_embed_single_print_setup (EphyEmbedSingle *single)
+{
+	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
+	iface->print_setup (single);
+}
