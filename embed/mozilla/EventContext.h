@@ -34,7 +34,7 @@
 #include "EphyBrowser.h"
 
 #include "ephy-embed.h"
-#include "ephy-embed-event.h"
+#include "mozilla-embed-event.h"
 
 class EventContext
 {
@@ -44,8 +44,8 @@ public:
 
 	nsresult Init (EphyBrowser *wrapper);
 
-	nsresult GetMouseEventInfo (nsIDOMMouseEvent *event, EphyEmbedEvent *info);
-	nsresult GetKeyEventInfo (nsIDOMKeyEvent *event, EphyEmbedEvent *info);
+	nsresult GetMouseEventInfo (nsIDOMMouseEvent *event, MozillaEmbedEvent *info);
+	nsresult GetKeyEventInfo (nsIDOMKeyEvent *event, MozillaEmbedEvent *info);
 	nsresult GetTargetDocument (nsIDOMDocument **domDoc);
 
 private:
@@ -56,14 +56,14 @@ private:
 	nsresult ResolveBaseURL (nsIDocument *doc, const nsAString &relurl, nsACString &url);
 	nsresult ResolveDocumentURL (nsIDocument *doc, const nsAString &relurl, nsACString &url);
 	nsresult GetEventContext (nsIDOMEventTarget *EventTarget,
-				  EphyEmbedEvent *info);
+				  MozillaEmbedEvent *info);
 	nsresult GetCSSBackground (nsIDOMNode *node, nsAutoString& url);
 	nsresult IsPageFramed (nsIDOMNode *node, PRBool *Framed);
 	nsresult CheckLinkScheme (const nsAString &link);
 	nsresult SetIntProperty (const char *name, int value);
 	nsresult SetStringProperty (const char *name, const char *value);
 	nsresult SetStringProperty (const char *name, const nsAString &value);
-	EphyEmbedEvent *mEmbedEvent;
+	MozillaEmbedEvent *mEmbedEvent;
 };
 
 #endif

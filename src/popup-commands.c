@@ -243,19 +243,22 @@ popup_cmd_copy_link_address (GtkAction *action,
 			     EphyWindow *window)
 {
 	EphyEmbedEvent *event;
+	EmbedEventContext context;
 	const char *address;
 	const GValue *value;
 
 	event = get_event_info (window);
 	g_return_if_fail (EPHY_IS_EMBED_EVENT (event));
 
-	if (event->context & EMBED_CONTEXT_EMAIL_LINK)
+	context = ephy_embed_event_get_context (event);
+
+	if (context & EMBED_CONTEXT_EMAIL_LINK)
 	{
 		ephy_embed_event_get_property (event, "email", &value);
 		address = g_value_get_string (value);
 		popup_cmd_copy_to_clipboard (window, address);
 	}
-	else if (event->context & EMBED_CONTEXT_LINK)
+	else if (context & EMBED_CONTEXT_LINK)
 	{
 		ephy_embed_event_get_property (event, "link", &value);
 		address = g_value_get_string (value);

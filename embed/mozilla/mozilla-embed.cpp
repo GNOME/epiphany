@@ -19,6 +19,7 @@
  */
 
 #include "mozilla-embed.h"
+#include "mozilla-embed-event.h"
 #include "ephy-embed-shell.h"
 #include "ephy-command-manager.h"
 #include "ephy-string.h"
@@ -29,7 +30,6 @@
 #include "EventContext.h"
 
 #include <gtkmozembed.h>
-#include <gtkmozembed_internal.h>
 #include <nsIWindowWatcher.h>
 #include <nsIURI.h>
 #include <nsIURL.h>
@@ -864,8 +864,8 @@ mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 		return FALSE;
 	}
 
-	EphyEmbedEvent *info;
-	info = ephy_embed_event_new ();
+	MozillaEmbedEvent *info;
+	info = mozilla_embed_event_new (dom_event);
 
 	gboolean ret = FALSE;
 
@@ -913,7 +913,7 @@ static gint
 mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event, 
 				  MozillaEmbed *membed)
 {
-	EphyEmbedEvent *info;
+	MozillaEmbedEvent *info;
 	EventContext event_context;
 	gint return_value = FALSE;
 	nsresult result;
@@ -925,10 +925,12 @@ mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event,
 		return FALSE;
 	}
 
-	info = ephy_embed_event_new ();
+	info = mozilla_embed_event_new (dom_event);
 	
 	event_context.Init (mpriv->browser);
-        result = event_context.GetMouseEventInfo (static_cast<nsIDOMMouseEvent*>(dom_event), info);
+        result = event_context.GetMouseEventInfo
+		(static_cast<nsIDOMMouseEvent*>(dom_event),
+		 MOZILLA_EMBED_EVENT (info));
 
 	if (NS_SUCCEEDED(result))
 	{
@@ -956,7 +958,7 @@ static gint
 mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event, 
 				 MozillaEmbed *membed)
 {
-	EphyEmbedEvent *info;
+	MozillaEmbedEvent *info;
 	EventContext event_context;
 	gint return_value = FALSE;
 	nsresult result;
@@ -969,13 +971,15 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 		return FALSE;
 	}
 
-	info = ephy_embed_event_new ();
+	info = mozilla_embed_event_new (dom_event);
 	
 	event_context.Init (mpriv->browser);
-        result = event_context.GetMouseEventInfo (static_cast<nsIDOMMouseEvent*>(dom_event), info);
+        result = event_context.GetMouseEventInfo
+		(static_cast<nsIDOMMouseEvent*>(dom_event),
+		 MOZILLA_EMBED_EVENT (info));
 	if (NS_FAILED (result)) return FALSE;
 
-	type = ephy_embed_event_get_event_type (info);
+	type = ephy_embed_event_get_event_type ((EphyEmbedEvent *) info);
 		
 	nsCOMPtr<nsIDOMDocument> domDoc;
 	result = event_context.GetTargetDocument (getter_AddRefs(domDoc));

@@ -87,6 +87,8 @@ libephymozillaembed_la_SOURCES = 	\
 	mozilla-download.h		\
 	mozilla-embed.cpp	        \
 	mozilla-embed.h			\
+	mozilla-embed-event.cpp		\
+	mozilla-embed-event.h		\
 	mozilla-embed-persist.cpp       \
 	mozilla-embed-persist.h		\
 	mozilla-embed-single.cpp	\

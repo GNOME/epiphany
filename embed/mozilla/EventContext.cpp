@@ -188,7 +188,7 @@ nsresult EventContext::ResolveDocumentURL (nsIDocument *doc, const nsAString &re
 }
 
 nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
-					EphyEmbedEvent *info)
+					MozillaEmbedEvent *info)
 {
 	nsresult rv;
 
@@ -635,7 +635,7 @@ nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAutoString& url)
 	return NS_OK;
 }
 
-nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, EphyEmbedEvent *info)
+nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, MozillaEmbedEvent *info)
 {
 	nsresult result;
 
@@ -718,7 +718,7 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, EphyEmb
 	return NS_OK;
 }
 
-nsresult EventContext::GetKeyEventInfo (nsIDOMKeyEvent *aKeyEvent, EphyEmbedEvent *info)
+nsresult EventContext::GetKeyEventInfo (nsIDOMKeyEvent *aKeyEvent, MozillaEmbedEvent *info)
 {
 	nsresult rv;
 
@@ -838,9 +838,7 @@ nsresult EventContext::SetIntProperty (const char *name, int value)
 	
 	g_value_set_int (val, value);
 
-	ephy_embed_event_set_property (mEmbedEvent, 
-			     	       name,
-			     	       val);
+	mozilla_embed_event_set_property (mEmbedEvent, name, val);
 
 	return NS_OK;
 }
@@ -853,9 +851,7 @@ nsresult EventContext::SetStringProperty (const char *name, const char *value)
 	
 	g_value_set_string (val, value);
 			 
-	ephy_embed_event_set_property (mEmbedEvent, 
-			     	       name,
-			     	       val);
+	mozilla_embed_event_set_property (mEmbedEvent, name, val);
 
 	return NS_OK;
 }

@@ -1234,10 +1234,10 @@ static void
 popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
 		      gpointer user_data)
 {
-	EphyEmbedEvent *event = user_data;
+	EphyEmbedEvent *event = (EphyEmbedEvent *) user_data;
 
-	*x = event->x;
-	*y = event->y;
+	ephy_embed_event_get_coords (event, x, y);
+
 	*push_in = TRUE;
 }
 

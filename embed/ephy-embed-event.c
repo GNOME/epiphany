@@ -30,122 +30,66 @@ struct EphyEmbedEventPrivate
 	GHashTable *props;
 };
 
-static void
-ephy_embed_event_class_init (EphyEmbedEventClass *klass);
-static void
-ephy_embed_event_init (EphyEmbedEvent *ges);
-static void
-ephy_embed_event_finalize (GObject *object);
-
-static GObjectClass *parent_class = NULL;
+static void ephy_embed_event_base_init (gpointer g_class);
 
 GType
 ephy_embed_event_get_type (void)
 {
-       static GType ephy_embed_event_type = 0;
+       static GType type = 0;
 
-	if (ephy_embed_event_type == 0)
+	if (type == 0)
 	{
 		static const GTypeInfo our_info =
 		{
-			sizeof (EphyEmbedEventClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_embed_event_class_init,
-			NULL, /* class_finalize */
-			NULL, /* class_data */
-			sizeof (EphyEmbedEvent),
-			0,    /* n_preallocs */
-			(GInstanceInitFunc) ephy_embed_event_init
+			sizeof (EphyEmbedEventIFace),
+			ephy_embed_event_base_init,
+			NULL,
 		};
 
-		ephy_embed_event_type = g_type_register_static (G_TYPE_OBJECT,
-								"EphyEmbedEvent",
-								&our_info, 0);
+		type = g_type_register_static (G_TYPE_INTERFACE,
+					       "EphyEmbedEvent",
+					       &our_info,
+					       (GTypeFlags) 0);
 	}
 
-	return ephy_embed_event_type;
+	return type;
 }
 
 static void
-ephy_embed_event_class_init (EphyEmbedEventClass *klass)
+ephy_embed_event_base_init (gpointer g_class)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	static gboolean initialised = FALSE;
 
-	parent_class = g_type_class_peek_parent (klass);
-
-	object_class->finalize = ephy_embed_event_finalize;
-
-	g_type_class_add_private (object_class, sizeof(EphyEmbedEventPrivate));
-}
-
-static void
-free_g_value (gpointer value)
-{
-	g_value_unset (value);
-	g_free (value);
-}
-
-static void
-ephy_embed_event_init (EphyEmbedEvent *event)
-{
-	event->priv = EPHY_EMBED_EVENT_GET_PRIVATE (event);
-
-	event->priv->props = g_hash_table_new_full (g_str_hash, g_str_equal,
-						    g_free, free_g_value);
-}
-
-static void
-ephy_embed_event_finalize (GObject *object)
-{
-	EphyEmbedEvent *event = EPHY_EMBED_EVENT (object);
-
-	g_hash_table_destroy (event->priv->props);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-
-EphyEmbedEvent *
-ephy_embed_event_new (void)
-{
-	return EPHY_EMBED_EVENT (g_object_new (EPHY_TYPE_EMBED_EVENT, NULL));
-}
-
-guint
-ephy_embed_event_get_modifier (EphyEmbedEvent *event)
-{
-	return event->modifier;
+	initialised = TRUE;
 }
 
 EphyEmbedEventType
 ephy_embed_event_get_event_type (EphyEmbedEvent *event)
 {
-	return event->type;
+	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	return iface->get_type (event);
+}
+
+EmbedEventContext
+ephy_embed_event_get_context (EphyEmbedEvent *event)
+{
+	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	return iface->get_context (event);
+}
+
+guint
+ephy_embed_event_get_modifier (EphyEmbedEvent *event)
+{
+	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	return iface->get_modifier (event);
 }
 
 void
 ephy_embed_event_get_coords (EphyEmbedEvent *event,
 			     guint *x, guint *y)
 {
-	*x = event->x;
-	*y = event->y;
-}
-
-EmbedEventContext
-ephy_embed_event_get_context (EphyEmbedEvent *event)
-{
-	return event->context;
-}
-
-void
-ephy_embed_event_set_property (EphyEmbedEvent *event,
-			       const char *name,
-			       GValue *value)
-{
-	g_hash_table_insert (event->priv->props,
-			     g_strdup (name),
-			     value);
+	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	iface->get_coordinates (event, x, y);
 }
 
 void
@@ -153,17 +97,21 @@ ephy_embed_event_get_property	(EphyEmbedEvent *event,
 				 const char *name,
 				 const GValue **value)
 {
-	*value = g_hash_table_lookup (event->priv->props, name);
+	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	iface->get_property (event, name, value);
 }
 
 gboolean
 ephy_embed_event_has_property	(EphyEmbedEvent *event,
 				 const char *name)
 {
-	gpointer tmp;
+	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	return iface->has_property (event, name);
+}
 
-	tmp = g_hash_table_lookup (event->priv->props,
-				   name);
-
-	return tmp != NULL;
+gpointer
+ephy_embed_event_get_dom_event (EphyEmbedEvent *event)
+{
+	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	return iface->get_dom_event (event);
 }

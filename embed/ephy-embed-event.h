@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
+ *  Copyright (C) 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +15,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef EPHY_EMBED_EVENT_H
@@ -24,16 +27,15 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_EMBED_EVENT		(ephy_embed_event_get_type ())
-#define EPHY_EMBED_EVENT(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_EVENT, EphyEmbedEvent))
-#define EPHY_EMBED_EVENT_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventClass))
-#define EPHY_IS_EMBED_EVENT(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_EVENT))
-#define EPHY_IS_EMBED_EVENT_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_EVENT))
-#define EPHY_EMBED_EVENT_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventClass))
+#define EPHY_TYPE_EMBED_EVENT			(ephy_embed_event_get_type ())
+#define EPHY_EMBED_EVENT(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_EVENT, EphyEmbedEvent))
+#define EPHY_EMBED_EVENT_IFACE(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventIFace))
+#define EPHY_IS_EMBED_EVENT(o)			(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_EVENT))
+#define EPHY_IS_EMBED_EVENT_IFACE(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_EVENT))
+#define EPHY_EMBED_EVENT_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventIFace))
 
-typedef struct EphyEmbedEventClass EphyEmbedEventClass;
-typedef struct EphyEmbedEvent EphyEmbedEvent;
-typedef struct EphyEmbedEventPrivate EphyEmbedEventPrivate;
+typedef struct EphyEmbedEventIFace	EphyEmbedEventIFace;
+typedef struct EphyEmbedEvent		EphyEmbedEvent;
 
 typedef enum
 {
@@ -55,42 +57,37 @@ typedef enum
 	EPHY_EMBED_EVENT_KEY
 } EphyEmbedEventType;
 
-struct EphyEmbedEvent
+struct EphyEmbedEventIFace
 {
-        GObject parent;
+	GTypeInterface parent_iface;
 
-	/*< private >*/
-        EphyEmbedEventPrivate *priv;
-
-	/* Public to the embed implementations */
-	guint modifier;
-	EphyEmbedEventType type;
-	guint context;
-	guint x, y;
-	guint keycode;
-};
-
-struct EphyEmbedEventClass
-{
-        GObjectClass parent_class;
+	/* Methods */
+	EphyEmbedEventType	(* get_type)		(EphyEmbedEvent *event);
+	EmbedEventContext	(* get_context)		(EphyEmbedEvent *event);
+	guint			(* get_modifier)	(EphyEmbedEvent *event);
+	void			(* get_coordinates)	(EphyEmbedEvent *event,
+							 guint *x,
+							 guint *y);
+	void			(* get_property)	(EphyEmbedEvent *event,
+							 const char *name,
+							 const GValue **value);
+	gboolean		(* has_property)	(EphyEmbedEvent *event,
+							 const char *name);
+	gpointer		(* get_dom_event)	(EphyEmbedEvent *event);
 };
 
 GType			ephy_embed_event_get_type	(void);
 
-EphyEmbedEvent	       *ephy_embed_event_new		(void);
+EphyEmbedEventType	ephy_embed_event_get_event_type	(EphyEmbedEvent *event);
+
+EmbedEventContext	ephy_embed_event_get_context	(EphyEmbedEvent *event);
 
 guint			ephy_embed_event_get_modifier	(EphyEmbedEvent *event);
 
-EphyEmbedEventType	ephy_embed_event_get_event_type	(EphyEmbedEvent *event);
 
 void			ephy_embed_event_get_coords	(EphyEmbedEvent *event,
 							 guint *x, guint *y);
 
-EmbedEventContext	ephy_embed_event_get_context	(EphyEmbedEvent *event);
-
-void			ephy_embed_event_set_property	(EphyEmbedEvent *event,
-							 const char *name,
-							 GValue *value);
 
 void			ephy_embed_event_get_property	(EphyEmbedEvent *event,
 							 const char *name,
@@ -98,6 +95,8 @@ void			ephy_embed_event_get_property	(EphyEmbedEvent *event,
 
 gboolean		ephy_embed_event_has_property	(EphyEmbedEvent *event,
 							 const char *name);
+
+gpointer		ephy_embed_event_get_dom_event	(EphyEmbedEvent *event);
 
 G_END_DECLS
 

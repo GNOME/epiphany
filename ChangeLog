@@ -1,3 +1,25 @@
+2004-01-15  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-embed-event.c: (ephy_embed_event_get_type),
+	(ephy_embed_event_base_init), (ephy_embed_event_get_event_type),
+	(ephy_embed_event_get_context), (ephy_embed_event_get_modifier),
+	(ephy_embed_event_get_coords), (ephy_embed_event_get_property),
+	(ephy_embed_event_has_property), (ephy_embed_event_get_dom_event):
+	* embed/ephy-embed-event.h:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/EventContext.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/mozilla-embed-event.cpp:
+	* embed/mozilla/mozilla-embed-event.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-window.c: (popup_menu_at_coords):
+	* src/popup-commands.c: (popup_cmd_copy_link_address):
+
+	Make EphyEmbedEvent abstract, implemented by MozillaEmbedEvent.
+	Port callers to the new api.
+	Fix some callers in src/ which were using private fields of
+	EphyEmbedEvent struct.
+
 2004-01-14  Xan Lopez  <xan@gnome.org>
 
 	* embed/mozilla/ContentHandler.cpp:
