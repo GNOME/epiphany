@@ -53,76 +53,71 @@
 #include "ephy-download.h"
 #include "ephy-embed-shell.h"
 
-//*****************************************************************************
-// MozDownload
-//
-// Holds information used to display a single download in the UI. This object is
-// created in one of two ways:
-// (1) By nsExternalHelperAppHandler when Gecko encounters a  MIME type which
-//     it doesn't itself handle. In this case, the notifications sent to
-//     nsIDownload are controlled by nsExternalHelperAppHandler.
-// (2) By the embedding app's file saving code when saving a web page or a link
-//     target. See CHeaderSniffer.cpp. In this case, the notifications sent to
-//     nsIDownload are controlled by the implementation of nsIWebBrowserPersist.
-//*****************************************************************************   
+/* MozDownload
+   Holds information used to display a single download in the UI. This object is 
+   created in one of two ways:
+   (1) By nsExternalHelperAppHandler when Gecko encounters a  MIME type which
+       it doesn't itself handle. In this case, the notifications sent to
+       nsIDownload are controlled by nsExternalHelperAppHandler.
+   (2) By the embedding app's file saving code when saving a web page or a link
+       target. See CHeaderSniffer.cpp. In this case, the notifications sent to
+       nsIDownload are controlled by the implementation of nsIWebBrowserPersist.
+*/
 
 #define MOZ_DOWNLOAD_CID                \
 { /* d2a2f743-f126-4f1f-1234-d4e50490f112 */         \
-    0xd2a2f743,                                      \
-    0xf126,                                          \
-    0x4f1f,                                          \
-    {0x12, 0x34, 0xd4, 0xe5, 0x04, 0x90, 0xf1, 0x12} \
+	0xd2a2f743,                                      \
+	0xf126,                                          \
+	0x4f1f,                                          \
+	{0x12, 0x34, 0xd4, 0xe5, 0x04, 0x90, 0xf1, 0x12} \
 }
 
 #define MOZ_DOWNLOAD_CLASSNAME "Ephy's Download Progress Dialog"
 
 class MozDownload : public nsIDownload,
-                     public nsIWebProgressListener
+                    public nsIWebProgressListener
 {
 public:
-                            MozDownload();
-    virtual                 ~MozDownload();
+        MozDownload();
+	virtual ~MozDownload();
     
-    NS_DECL_ISUPPORTS
-    NS_DECL_NSIDOWNLOAD
-    NS_DECL_NSIWEBPROGRESSLISTENER
+	NS_DECL_ISUPPORTS
+	NS_DECL_NSIDOWNLOAD
+	NS_DECL_NSIWEBPROGRESSLISTENER
 
-    virtual void            Cancel();
-    virtual void	    Pause();
-    virtual void	    Resume();
+	virtual void Cancel();
+	virtual void Pause();
+	virtual void Resume();
 
-    nsresult GetState           (EphyDownloadState *aDownloadState);
-    nsresult GetCurrentProgress (PRInt32 *aCurrentProgress);
-    nsresult GetTotalProgress   (PRInt32 *aTProgress);
-    nsresult GetElapsedTime     (PRInt64 *aTProgress);
-    nsresult InitForEmbed       (nsIURI *aSource, nsILocalFile *aTarget,
-				 const PRUnichar *aDisplayName, nsIMIMEInfo *aMIMEInfo,
-				 PRInt64 startTime, nsIWebBrowserPersist *aPersist,
-				 MozillaEmbedPersist *aEmbedPersist);
+	nsresult GetState           (EphyDownloadState *aDownloadState);
+	nsresult GetCurrentProgress (PRInt32 *aCurrentProgress);
+	nsresult GetTotalProgress   (PRInt32 *aTProgress);
+ 	nsresult GetElapsedTime     (PRInt64 *aTProgress);
+	nsresult InitForEmbed       (nsIURI *aSource, nsILocalFile *aTarget,
+				     const PRUnichar *aDisplayName, nsIMIMEInfo *aMIMEInfo,
+				     PRInt64 startTime, nsIWebBrowserPersist *aPersist,
+				     MozillaEmbedPersist *aEmbedPersist);
 
 protected:
-    nsCOMPtr<nsIURI>        mSource;
-    nsCOMPtr<nsILocalFile>  mDestination;
-    PRInt64		    mLastUpdate;
-    PRInt64                 mStartTime;
-    PRInt64		    mElapsed;
-    PRInt32		    mInterval;
-    PRInt32                 mPercentComplete;
-    PRInt32                 mTotalProgress;
-    PRInt32                 mCurrentProgress;
+	nsCOMPtr<nsIURI>        mSource;
+	nsCOMPtr<nsILocalFile>  mDestination;
+	PRInt64		    	mLastUpdate;
+	PRInt64                 mStartTime;
+	PRInt64		    	mElapsed;
+	PRInt32		    	mInterval;
+	PRInt32                 mPercentComplete;
+	PRInt32                 mTotalProgress;
+	PRInt32                 mCurrentProgress;
 
-    bool                    mGotFirstStateChange, mIsNetworkTransfer;
-    bool                    mUserCanceled;
-    nsresult                mStatus;
-    
-    // These two are mutually exclusive.
-    nsCOMPtr<nsIWebBrowserPersist> mWebPersist;
-    nsCOMPtr<nsIHelperAppLauncher> mHelperAppLauncher;
-
-    EphyDownload   *mEphyDownload;
-    DownloaderView *mDownloaderView;
-    MozillaEmbedPersist *mEmbedPersist;
-    EphyDownloadState mDownloadState;
+	bool                    mGotFirstStateChange, mIsNetworkTransfer;
+	bool                    mUserCanceled;
+	nsresult                mStatus;
+   
+	nsCOMPtr<nsIWebBrowserPersist>  mWebPersist;
+	EphyDownload                   *mEphyDownload;
+	DownloaderView                 *mDownloaderView;
+	MozillaEmbedPersist            *mEmbedPersist;
+	EphyDownloadState               mDownloadState;
 };
 
 #endif // MozDownload_h__
