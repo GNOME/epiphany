@@ -284,7 +284,7 @@ ephy_nautilus_view_finalize (GObject *object)
 static void
 ephy_nautilus_view_class_init (EphyNautilusViewClass *class)
 {
-	GObjectClas *object_class = G_OBJECT_CLASS (class);
+	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
 	object_class->finalize = ephy_nautilus_view_finalize;
 
