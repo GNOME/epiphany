@@ -239,6 +239,8 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 	g_free (keyword);
         xmlFreeDoc (doc);
 
+	ephy_bookmarks_save (bookmarks);
+
 	return TRUE;
 }
 
@@ -260,6 +262,8 @@ ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
 	xbel_parse_bookmarks (bookmarks, child, default_keyword);
 
 	xmlFreeDoc (doc);
+
+	ephy_bookmarks_save (bookmarks);
 
 	return TRUE;
 }

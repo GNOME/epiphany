@@ -69,6 +69,8 @@ EphyBookmarks  *ephy_bookmarks_new		(void);
 
 /* Bookmarks */
 
+void		ephy_bookmarks_save		(EphyBookmarks *eb);
+
 EphyNode       *ephy_bookmarks_add		(EphyBookmarks *eb,
 						 const char *title,
 						 const char *url,

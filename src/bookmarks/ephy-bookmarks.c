@@ -247,6 +247,8 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 		id = ephy_bookmarks_get_bookmark_id (eb, default_bookmarks[i].location);
 		ephy_toolbars_model_add_bookmark (model, FALSE, id);
 	}
+
+	ephy_bookmarks_save (eb);
 }
 
 static gboolean
@@ -280,7 +282,7 @@ ephy_bookmarks_load (EphyBookmarks *eb)
 	return TRUE;
 }
 
-static void
+void
 ephy_bookmarks_save (EphyBookmarks *eb)
 {
 	xmlDocPtr doc;
@@ -326,6 +328,7 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 	ephy_node_thaw (eb->priv->bookmarks);
 
 	xmlSaveFormatFile (eb->priv->xml_file, doc, 1);
+	xmlFreeDoc(doc);
 }
 
 static double
@@ -721,7 +724,6 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	ephy_node_add_child (eb->priv->notcategorized, bm);
 
 	ephy_bookmarks_emit_data_changed (eb);
-	ephy_bookmarks_save (eb);
 
 	return bm;
 }
