@@ -87,7 +87,20 @@ NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
 
 	options->SetPrintCommand (NS_ConvertUTF8toUCS2(info->printer).get());
 
-       	options->SetPrintToFile (info->print_to_file);
+	/**
+	 * Work around a mozilla bug where paper size & orientation are ignored
+	 * and the specified file is created (containing invalid postscript)
+	 * in print preview mode if we set "print to file" to true.
+	 * See epiphany bug #119818.
+	 */
+	if (info->preview)
+	{
+		options->SetPrintToFile (PR_FALSE);
+	}
+	else
+	{
+		options->SetPrintToFile (info->print_to_file);
+	}
 
 	/* native paper size formats. Our dialog does not support custom yet */
 	options->SetPaperSize (nsIPrintSettings::kPaperSizeNativeData);
