@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-19 15:22+0100\n"
+"POT-Creation-Date: 2004-01-02 20:37+0100\n"
 "PO-Revision-Date: 2003-09-30 10:50+0200\n"
 "Last-Translator: Christian Persch <chpe@cvs.gnome.org>\n"
 "Language-Team: British English\n"
@@ -579,12 +579,12 @@ msgid "*"
 msgstr "*"
 
 #: data/glade/epiphany.glade.h:3
-msgid "<b>Use a different _encoding:</b>"
-msgstr "<b>Use a different _encoding:</b>"
-
-#: data/glade/epiphany.glade.h:4
 msgid "<b>_Automatic</b>"
 msgstr "<b>_Automatic</b>"
+
+#: data/glade/epiphany.glade.h:4
+msgid "<b>_Use a different encoding:</b>"
+msgstr "<b>_Use a different encoding:</b>"
 
 #: data/glade/epiphany.glade.h:5
 msgid "C_ase sensitive"
@@ -615,7 +615,7 @@ msgstr "Personal Data Manager"
 msgid "Text Encoding"
 msgstr "Text Encoding"
 
-#: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:394
+#: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:389
 msgid "Use the encoding specified by the document"
 msgstr "Use the encoding specified by the document"
 
@@ -915,7 +915,7 @@ msgstr "_File:"
 
 #: data/glade/print.glade.h:31
 msgid "_Grayscale"
-msgstr "_Grayscale"
+msgstr "_Greyscale"
 
 #: data/glade/print.glade.h:32
 msgid "_Left:"
@@ -1117,6 +1117,10 @@ msgstr "File"
 #: embed/downloader-view.c:457
 msgid "Remaining"
 msgstr "Remaining"
+
+#: embed/downloader-view.c:501
+msgid "_Resume"
+msgstr "_Resume"
 
 #: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:334
 msgid "Save Image As"
@@ -1466,7 +1470,7 @@ msgstr "Universal"
 msgid "Ukrainian"
 msgstr "Ukrainian"
 
-#: embed/ephy-history.c:401 src/bookmarks/ephy-bookmarks.c:526
+#: embed/ephy-history.c:401 src/bookmarks/ephy-bookmarks.c:523
 msgid "All"
 msgstr "All"
 
@@ -1478,14 +1482,14 @@ msgstr "Others"
 msgid "Local files"
 msgstr "Local files"
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:287
+#: embed/mozilla/EphyHeaderSniffer.cpp:289
 #: src/bookmarks/ephy-bookmarks-import.c:236
-#: src/bookmarks/ephy-bookmarks-import.c:362 src/ephy-toolbars-model.c:199
+#: src/bookmarks/ephy-bookmarks-import.c:362 src/ephy-toolbars-model.c:201
 #: src/window-commands.c:339
 msgid "Untitled"
 msgstr "Untitled"
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:312
+#: embed/mozilla/EphyHeaderSniffer.cpp:314
 msgid "Save"
 msgstr "Save"
 
@@ -1799,7 +1803,7 @@ msgstr ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
 
-#: embed/mozilla/mozilla-embed-single.cpp:507
+#: embed/mozilla/mozilla-embed-single.cpp:508
 msgid ""
 "Epiphany can't be used now. Mozilla initialization failed. Check your "
 "MOZILLA_FIVE_HOME environmental variable."
@@ -1818,11 +1822,11 @@ msgstr ""
 #. * "zh_CN" translation: "zh-cn,zh"
 #. * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
 #.
-#: embed/mozilla/mozilla-notifiers.cpp:730
+#: embed/mozilla/mozilla-notifiers.cpp:736
 msgid "system-language"
 msgstr "en-gb,en"
 
-#: embed/print-dialog.c:276
+#: embed/print-dialog.c:277
 msgid "Print to"
 msgstr "Print to"
 
@@ -1850,15 +1854,15 @@ msgstr ""
 msgid "GConf Error"
 msgstr "GConf Error"
 
-#: lib/egg/egg-editable-toolbar.c:501
+#: lib/egg/egg-editable-toolbar.c:503
 msgid "_Remove Toolbar"
 msgstr "_Remove Toolbar"
 
-#: lib/egg/egg-toolbar-editor.c:532
+#: lib/egg/egg-toolbar-editor.c:535
 msgid "Separator"
 msgstr "Separator"
 
-#: lib/egg/egg-toolbar-editor.c:562
+#: lib/egg/egg-toolbar-editor.c:565
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
@@ -1881,7 +1885,7 @@ msgstr "%s exists, please move it out of the way."
 msgid "Failed to create directory %s."
 msgstr "Failed to create directory %s."
 
-#: lib/ephy-gui.c:76
+#: lib/ephy-gui.c:88
 #, c-format
 msgid ""
 "File %s will be overwritten.\n"
@@ -1894,7 +1898,7 @@ msgstr ""
 "\n"
 "Do you want to continue?"
 
-#: lib/ephy-gui.c:107
+#: lib/ephy-gui.c:119
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Could not display help: %s"
@@ -2049,7 +2053,7 @@ msgstr "Create a new topic"
 #. File Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:171
 #: src/bookmarks/ephy-bookmarks-editor.c:977 src/ephy-history-window.c:158
-#: src/ephy-history-window.c:742
+#: src/ephy-history-window.c:738
 msgid "_Open in New Window"
 msgstr "_Open in New Window"
 
@@ -2059,7 +2063,7 @@ msgstr "Open the selected bookmark in a new window"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:174
 #: src/bookmarks/ephy-bookmarks-editor.c:978 src/ephy-history-window.c:161
-#: src/ephy-history-window.c:743
+#: src/ephy-history-window.c:739
 msgid "Open in New _Tab"
 msgstr "Open in New _Tab"
 
@@ -2121,7 +2125,7 @@ msgstr "Cut the selection"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:196
 #: src/bookmarks/ephy-bookmarks-editor.c:987 src/ephy-history-window.c:178
-#: src/ephy-history-window.c:752 src/ephy-window.c:121
+#: src/ephy-history-window.c:748 src/ephy-window.c:121
 msgid "_Copy"
 msgstr "_Copy"
 
@@ -2230,19 +2234,19 @@ msgstr "Konqueror bookmarks"
 msgid "Import from a file"
 msgstr "Import from a file"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:972 src/ephy-history-window.c:737
+#: src/bookmarks/ephy-bookmarks-editor.c:972 src/ephy-history-window.c:733
 msgid "_Open in New Windows"
 msgstr "_Open in New Windows"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:973 src/ephy-history-window.c:738
+#: src/bookmarks/ephy-bookmarks-editor.c:973 src/ephy-history-window.c:734
 msgid "Open in New _Tabs"
 msgstr "Open in New _Tabs"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:983 src/ephy-history-window.c:748
+#: src/bookmarks/ephy-bookmarks-editor.c:983 src/ephy-history-window.c:744
 msgid "_Copy Address"
 msgstr "_Copy Address"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1226 src/ephy-history-window.c:1042
+#: src/bookmarks/ephy-bookmarks-editor.c:1226 src/ephy-history-window.c:1038
 msgid "_Search:"
 msgstr "_Search:"
 
@@ -2255,11 +2259,11 @@ msgstr "Bookmarks"
 msgid "Topics"
 msgstr "Topics"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1503 src/ephy-history-window.c:1325
+#: src/bookmarks/ephy-bookmarks-editor.c:1503 src/ephy-history-window.c:1317
 msgid "Title"
 msgstr "Title"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1510 src/ephy-history-window.c:1331
+#: src/bookmarks/ephy-bookmarks-editor.c:1510 src/ephy-history-window.c:1323
 msgid "Address"
 msgstr "Address"
 
@@ -2267,44 +2271,44 @@ msgstr "Address"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: src/bookmarks/ephy-bookmarks.c:78
+#: src/bookmarks/ephy-bookmarks.c:79
 msgid "Search the web"
 msgstr "Search the web"
 
-#: src/bookmarks/ephy-bookmarks.c:78
+#: src/bookmarks/ephy-bookmarks.c:79
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.co.uk/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: src/bookmarks/ephy-bookmarks.c:84
+#: src/bookmarks/ephy-bookmarks.c:85
 msgid "Entertainment"
 msgstr "Entertainment"
 
-#: src/bookmarks/ephy-bookmarks.c:85
+#: src/bookmarks/ephy-bookmarks.c:86
 msgid "News"
 msgstr "News"
 
-#: src/bookmarks/ephy-bookmarks.c:86
+#: src/bookmarks/ephy-bookmarks.c:87
 msgid "Shopping"
 msgstr "Shopping"
 
-#: src/bookmarks/ephy-bookmarks.c:87
+#: src/bookmarks/ephy-bookmarks.c:88
 msgid "Sports"
 msgstr "Sports"
 
-#: src/bookmarks/ephy-bookmarks.c:88
+#: src/bookmarks/ephy-bookmarks.c:89
 msgid "Travel"
 msgstr "Travel"
 
-#: src/bookmarks/ephy-bookmarks.c:89
+#: src/bookmarks/ephy-bookmarks.c:90
 msgid "Work"
 msgstr "Work"
 
-#: src/bookmarks/ephy-bookmarks.c:561
+#: src/bookmarks/ephy-bookmarks.c:558
 msgid "Most Visited"
 msgstr "Most Visited"
 
-#: src/bookmarks/ephy-bookmarks.c:578
+#: src/bookmarks/ephy-bookmarks.c:575
 msgid "Not Categorized"
 msgstr "Not Categorised"
 
@@ -2334,15 +2338,15 @@ msgstr "Empty"
 msgid "Encodings"
 msgstr "Encodings"
 
-#: src/ephy-encoding-menu.c:385
+#: src/ephy-encoding-menu.c:380
 msgid "_Other..."
 msgstr "_Other..."
 
-#: src/ephy-encoding-menu.c:386
+#: src/ephy-encoding-menu.c:381
 msgid "Other encodings"
 msgstr "Other encodings"
 
-#: src/ephy-encoding-menu.c:393
+#: src/ephy-encoding-menu.c:388
 msgid "_Automatic"
 msgstr "_Automatic"
 
@@ -2418,24 +2422,24 @@ msgstr ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 
-#: src/ephy-history-window.c:1051
+#: src/ephy-history-window.c:1047
 msgid "Today"
 msgstr "Today"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: src/ephy-history-window.c:1052 src/ephy-history-window.c:1055
-#: src/ephy-history-window.c:1059
+#: src/ephy-history-window.c:1048 src/ephy-history-window.c:1051
+#: src/ephy-history-window.c:1055
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "Last %d day"
 msgstr[1] "Last %d days"
 
-#: src/ephy-history-window.c:1195
+#: src/ephy-history-window.c:1191
 msgid "History"
 msgstr "History"
 
-#: src/ephy-history-window.c:1267
+#: src/ephy-history-window.c:1263
 msgid "Sites"
 msgstr "Sites"
 
@@ -2531,30 +2535,30 @@ msgstr ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
 
-#: src/ephy-tab.c:324 src/ephy-tab.c:1122 src/ephy-tab.c:1304
+#: src/ephy-tab.c:326 src/ephy-tab.c:1136 src/ephy-tab.c:1318
 msgid "Blank page"
 msgstr "Blank page"
 
-#: src/ephy-tab.c:730
+#: src/ephy-tab.c:744
 msgid "site"
 msgstr "site"
 
-#: src/ephy-tab.c:754
+#: src/ephy-tab.c:768
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Redirecting to %s..."
 
-#: src/ephy-tab.c:758
+#: src/ephy-tab.c:772
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Transferring data from %s..."
 
-#: src/ephy-tab.c:762
+#: src/ephy-tab.c:776
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Waiting for authorisation from %s..."
 
-#: src/ephy-tab.c:770
+#: src/ephy-tab.c:784
 #, c-format
 msgid "Loading %s..."
 msgstr "Loading %s..."
@@ -3287,16 +3291,24 @@ msgstr "Vietnamese"
 msgid "Walloon"
 msgstr "Walloon"
 
-#: src/prefs-dialog.c:1047
+#: src/prefs-dialog.c:1054
 #, c-format
 msgid "Custom [%s]"
 msgstr "User Defined [%s]"
 
-#: src/prefs-dialog.c:1088
+#: src/prefs-dialog.c:1098
 msgid "Desktop"
 msgstr "Desktop"
 
-#: src/prefs-dialog.c:1296
+#. Note that this does NOT refer to the home page but to a
+#. * user's home folder. It should be translated by the same
+#. * term as GTK+'s "Home" string to be consistent with the
+#. * filechooser
+#: src/prefs-dialog.c:1107
+msgid "Home"
+msgstr "Home"
+
+#: src/prefs-dialog.c:1317
 msgid "Select a directory"
 msgstr "Select a directory"
 
@@ -3424,9 +3436,6 @@ msgstr "A GNOME web browser based on Mozilla"
 
 #~ msgid "Choose a file to print to"
 #~ msgstr "Choose a file to print to"
-
-#~ msgid "_Resume"
-#~ msgstr "_Resume"
 
 #~ msgid "%.1f of %.1f MB"
 #~ msgstr "%.1f of %.1f MB"
