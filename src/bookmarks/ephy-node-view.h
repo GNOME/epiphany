@@ -49,9 +49,10 @@ typedef struct
 {
 	GtkScrolledWindowClass parent;
 
-	void (*node_activated) (EphyNodeView *view, EphyNode *node);
-	void (*node_selected)  (EphyNodeView *view, EphyNode *node);
-	void (*show_popup)     (EphyNodeView *view);
+	void (*node_activated)      (EphyNodeView *view, EphyNode *node);
+	void (*node_selected)       (EphyNodeView *view, EphyNode *node);
+	void (*node_dropped)        (EphyNodeView *view, EphyNode *node, GList *nodes);
+	void (*show_popup)          (EphyNodeView *view);
 } EphyNodeViewClass;
 
 GType         ephy_node_view_get_type                 (void);
@@ -87,6 +88,10 @@ void	      ephy_node_view_enable_drag_source       (EphyNodeView *view,
 						       GtkTargetEntry *types,
 						       int n_types,
 						       guint prop_id);
+
+void	      ephy_node_view_enable_drag_dest	      (EphyNodeView *view,
+						       GtkTargetEntry *types,
+						       int n_types);
 
 void	      ephy_node_view_set_hinted		      (EphyNodeView *view,
 						       gboolean hinted);

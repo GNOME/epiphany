@@ -25,6 +25,14 @@
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 
+static GtkTargetEntry url_drag_types [] =
+{
+        { EPHY_DND_URI_LIST_TYPE,   0, 0 },
+        { EPHY_DND_TEXT_TYPE,       0, 1 },
+        { EPHY_DND_URL_TYPE,        0, 2 }
+};
+static int n_url_drag_types = G_N_ELEMENTS (url_drag_types);
+
 struct EphyFaviconActionPrivate
 {
 	EphyWindow *window;
@@ -156,7 +164,11 @@ ephy_favicon_action_sync_icon (EggAction *action, GParamSpec *pspec,
 static void
 connect_proxy (EggAction *action, GtkWidget *proxy)
 {
-	ephy_dnd_url_drag_source_set (proxy);
+	gtk_drag_source_set (proxy,
+                             GDK_BUTTON1_MASK,
+                             url_drag_types,
+                             n_url_drag_types,
+                             GDK_ACTION_COPY);
 	ephy_favicon_action_sync_icon (action, NULL, proxy);
 	g_signal_connect (proxy,
 			  "drag_data_get",

@@ -17,24 +17,12 @@
  */
 
 #include "ephy-dnd.h"
+#include "ephy-string.h"
+#include "ephy-node.h"
 
 #include <gtk/gtkselection.h>
 #include <gtk/gtktreeview.h>
 #include <string.h>
-
-typedef enum {
-        EPHY_DND_URI_LIST,
-        EPHY_DND_TEXT,
-        EPHY_DND_URL
-} EphyIconDndTargetType;
-
-static GtkTargetEntry url_drag_types [] =
-{
-        { EPHY_DND_URI_LIST_TYPE,   0, EPHY_DND_URI_LIST },
-        { EPHY_DND_TEXT_TYPE,       0, EPHY_DND_TEXT },
-        { EPHY_DND_URL_TYPE,        0, EPHY_DND_URL }
-};
-static int n_url_drag_types = G_N_ELEMENTS (url_drag_types);
 
 /* Encode a "_NETSCAPE_URL_" selection.
  * As far as I can tell, Netscape is expecting a single
@@ -64,6 +52,17 @@ add_one_uri (const char *uri, int x, int y, int w, int h, gpointer data)
         g_string_append (result, "\r\n");
 }
 
+static void
+add_one_node (const char *uri, int x, int y, int w, int h, gpointer data)
+{
+        GString *result;
+
+        result = (GString *) data;
+
+        g_string_append (result, uri);
+        g_string_append (result, ";");
+}
+
 gboolean
 ephy_dnd_drag_data_get (GtkWidget *widget,
                         GdkDragContext *context,
@@ -73,21 +72,32 @@ ephy_dnd_drag_data_get (GtkWidget *widget,
                         gpointer container_context,
                         EphyDragEachSelectedItemIterator each_selected_item_iterator)
 {
-        GString *result;
+        GString *result = NULL;
+	GdkAtom target;
 
-        switch (info) {
-        case EPHY_DND_URI_LIST:
-        case EPHY_DND_TEXT:
+	target = selection_data->target;
+
+	if (target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE) ||
+	    target == gdk_atom_intern (EPHY_DND_TEXT_TYPE, FALSE))
+	{
 		result = g_string_new (NULL);
                 (* each_selected_item_iterator) (add_one_uri, container_context, result);
-                break;
-        case EPHY_DND_URL:
+	}
+	else if (target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE))
+	{
 		result = g_string_new (NULL);
                 (* each_selected_item_iterator) (add_one_netscape_url, container_context, result);
-                break;
-        default:
-                return FALSE;
-        }
+	}
+	else if (target == gdk_atom_intern (EPHY_DND_TOPIC_TYPE, FALSE) ||
+	         target == gdk_atom_intern (EPHY_DND_BOOKMARK_TYPE, FALSE))
+	{
+		result = g_string_new (NULL);
+                (* each_selected_item_iterator) (add_one_node, container_context, result);
+	}
+	else
+	{
+		g_assert_not_reached ();
+	}
 
         gtk_selection_data_set (selection_data,
                                 selection_data->target,
@@ -96,23 +106,30 @@ ephy_dnd_drag_data_get (GtkWidget *widget,
         return TRUE;
 }
 
-void
-ephy_dnd_url_drag_source_set (GtkWidget *widget)
+GList *
+ephy_dnd_node_list_extract_nodes (const char *node_list)
 {
-	gtk_drag_source_set (widget,
-                             GDK_BUTTON1_MASK,
-			     url_drag_types,
-			     n_url_drag_types,
-                             GDK_ACTION_COPY);
-}
+	GList *result = NULL;
+	char **nodes;
+	int i;
 
-void
-ephy_dnd_enable_model_drag_source (GtkWidget *treeview)
-{
-	gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (treeview),
-						GDK_BUTTON1_MASK,
-						url_drag_types, n_url_drag_types,
-						GDK_ACTION_COPY);
+	nodes = g_strsplit (node_list, ";", -1);
+
+	for (i = 0; nodes[i] != NULL; i++)
+	{
+		gulong id;
+
+		if (ephy_str_to_int (nodes[i], &id))
+		{
+			EphyNode *node;
+
+			node = ephy_node_get_from_id (id);
+			g_return_val_if_fail (node != NULL, NULL);
+			result = g_list_append (result, node);
+		}
+	}
+
+	return result;
 }
 
 GList *

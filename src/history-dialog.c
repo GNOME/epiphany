@@ -35,6 +35,14 @@
 #include <gtk/gtkcellrenderertext.h>
 #include <bonobo/bonobo-i18n.h>
 
+static GtkTargetEntry url_drag_types [] =
+{
+        { EPHY_DND_URI_LIST_TYPE,   0, 0 },
+        { EPHY_DND_TEXT_TYPE,       0, 1 },
+        { EPHY_DND_URL_TYPE,        0, 2 }
+};
+static int n_url_drag_types = G_N_ELEMENTS (url_drag_types);
+
 #define CONF_HISTORY_SEARCH_TEXT "/apps/epiphany/history/search_text"
 #define CONF_HISTORY_SEARCH_TIME "/apps/epiphany/history/search_time"
 
@@ -290,7 +298,10 @@ history_dialog_setup_view (HistoryDialog *dialog)
 				 GTK_TREE_MODEL (dialog->priv->sortmodel));
 
 	egg_tree_multi_drag_add_drag_support (GTK_TREE_VIEW (dialog->priv->treeview));
-	ephy_dnd_enable_model_drag_source (GTK_WIDGET (dialog->priv->treeview));
+	gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (dialog->priv->treeview),
+						GDK_BUTTON1_MASK,
+						url_drag_types, n_url_drag_types,
+						GDK_ACTION_COPY);
 
 	add_column (dialog, _("Title"), EPHY_HISTORY_MODEL_COL_TITLE);
 	add_column (dialog, _("Location"), EPHY_HISTORY_MODEL_COL_LOCATION);
@@ -300,7 +311,7 @@ history_dialog_setup_view (HistoryDialog *dialog)
 			  "row_activated",
 			  G_CALLBACK (history_view_row_activated_cb),
 			  dialog);
-	
+
 	g_signal_connect (gtk_tree_view_get_selection (dialog->priv->treeview),
 			"changed",
 			G_CALLBACK (history_view_selection_changed_cb),

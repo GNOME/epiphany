@@ -1,5 +1,32 @@
 2003-03-29  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/ephy-dnd.c: (add_one_node), (ephy_dnd_drag_data_get),
+	(ephy_dnd_node_list_extract_nodes):
+	* lib/ephy-dnd.h:
+	* lib/ephy-marshal.list:
+	* lib/widgets/ephy-tree-model-sort.c: (each_node_get_data_binder),
+	(ephy_tree_model_sort_multi_drag_data_get):
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_rename),
+	(cmd_select_all), (ephy_bookmarks_editor_show_popup_cb),
+	(keyword_node_show_popup_cb), (node_dropped_cb),
+	(ephy_bookmarks_editor_construct),
+	(ephy_bookmarks_editor_update_menu):
+	* src/bookmarks/ephy-node-view.c: (ephy_node_view_class_init),
+	(ephy_node_view_button_press_cb), (ephy_node_view_has_focus),
+	(get_node_from_path), (drag_motion_cb), (drag_drop_cb),
+	(drag_data_received_cb), (ephy_node_view_enable_drag_dest),
+	(ephy_node_view_enable_drag_source):
+	* src/bookmarks/ephy-node-view.h:
+	* src/ephy-favicon-action.c: (connect_proxy):
+	* src/history-dialog.c: (history_dialog_setup_view):
+	* src/toolbar.c: (toolbar_get_action_name):
+
+	Make dnd code smarter, so it can support more than
+	just urls types.
+	Implement drag of bookmarks on topics in bme. What a pain !
+
+2003-03-29  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/bookmarks/ephy-topic-action.c: (create_tool_item),
 	(menu_deactivate_cb), (menu_activate_cb), (build_topics_menu),
 	(button_press_cb), (ephy_topic_action_set_property),

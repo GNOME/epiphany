@@ -147,7 +147,13 @@ toolbar_get_action_name (EphyEditableToolbar *etoolbar,
 
 	if (drag_type && (strcmp (drag_type, EPHY_DND_TOPIC_TYPE) == 0))
 	{
-		res = g_strdup_printf ("GoTopicId%s", data);
+		GList *nodes;
+		int id;
+
+		nodes = ephy_dnd_node_list_extract_nodes (data);
+		id = ephy_node_get_id (EPHY_NODE (nodes->data));
+		res = g_strdup_printf ("GoTopicId%d", id);
+		g_list_free (nodes);
 	}
 	else if (drag_type && (strcmp (drag_type, EPHY_DND_URL_TYPE) == 0))
 	{

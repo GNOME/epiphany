@@ -41,6 +41,28 @@
 #include "popup-commands.h"
 #include "ephy-state.h"
 
+static GtkTargetEntry topic_drag_dest_types [] =
+{
+	{ EPHY_DND_BOOKMARK_TYPE,   0, 0 }
+};
+
+static int n_topic_drag_dest_types = G_N_ELEMENTS (topic_drag_dest_types);
+
+static GtkTargetEntry bmk_drag_types [] =
+{
+        { EPHY_DND_URI_LIST_TYPE,   0, 0 },
+        { EPHY_DND_TEXT_TYPE,       0, 1 },
+        { EPHY_DND_URL_TYPE,        0, 2 },
+	{ EPHY_DND_BOOKMARK_TYPE,   0, 3 }
+};
+static int n_bmk_drag_types = G_N_ELEMENTS (bmk_drag_types);
+
+static GtkTargetEntry topic_drag_types [] =
+{
+	{ EPHY_DND_TOPIC_TYPE,      0, 0 }
+};
+static int n_topic_drag_types = G_N_ELEMENTS (topic_drag_types);
+
 static void ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass);
 static void ephy_bookmarks_editor_init (EphyBookmarksEditor *editor);
 static void ephy_bookmarks_editor_finalize (GObject *object);
@@ -61,7 +83,7 @@ static void cmd_open_bookmarks_in_tabs    (EggAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_open_bookmarks_in_browser (EggAction *action,
 					   EphyBookmarksEditor *editor);
-static void cmd_delete  		  (EggAction *action,
+static void cmd_delete			  (EggAction *action,
 				           EphyBookmarksEditor *editor);
 static void cmd_bookmark_properties	  (EggAction *action,
 					   EphyBookmarksEditor *editor);
@@ -99,12 +121,6 @@ enum
 	PROP_BOOKMARKS
 };
 
-static GtkTargetEntry topic_drag_types [] =
-{
-        { EPHY_DND_TOPIC_TYPE, 0, 0 }
-};
-static int n_topic_drag_types = G_N_ELEMENTS (topic_drag_types);
-
 static GObjectClass *parent_class = NULL;
 
 static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
@@ -124,7 +140,7 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 
 	{ "Cut", N_("Cu_t"), GTK_STOCK_CUT, "<control>X",
 	  NULL, G_CALLBACK (cmd_cut), NULL },
-	
+
 	{ "Copy", N_("_Copy"), GTK_STOCK_COPY, "<control>C",
 	  NULL, G_CALLBACK (cmd_copy), NULL },
 
@@ -170,7 +186,7 @@ cmd_close (EggAction *action,
 static void
 cmd_rename (EggAction *action,
 	    EphyBookmarksEditor *editor)
-{	
+{
 	if (ephy_node_view_has_focus (editor->priv->bm_view))
 	{
 		ephy_node_view_edit (editor->priv->bm_view);
@@ -335,7 +351,7 @@ cmd_select_all (EggAction *action,
 	{
 		gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
 	}
-	else if (ephy_node_view_has_focus (editor->priv->bm_view)) 
+	else if (ephy_node_view_has_focus (editor->priv->bm_view))
 	{
 		ephy_node_view_select_all (editor->priv->bm_view);
 	}
@@ -470,12 +486,12 @@ ephy_bookmarks_editor_show_popup_cb (GtkWidget *view,
 				     EphyBookmarksEditor *editor)
 {
 	GtkWidget *widget;
-	
+
 	widget = egg_menu_merge_get_widget (editor->priv->ui_merge,
 					    "/popups/EphyBookmarkEditorPopup");
 	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
 			gtk_get_current_event_time ());
-}	
+}
 
 static void
 ephy_bookmarks_editor_node_activated_cb (GtkWidget *view,
@@ -559,7 +575,7 @@ keyword_node_show_popup_cb (GtkWidget *view, EphyBookmarksEditor *editor)
 	GtkWidget *widget;
 
 	widget = egg_menu_merge_get_widget (editor->priv->ui_merge,
-			   		   "/popups/EphyBookmarkKeywordPopup");
+					   "/popups/EphyBookmarkKeywordPopup");
 	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
 			gtk_get_current_event_time ());
 }
@@ -639,6 +655,22 @@ delete_event_cb (EphyBookmarksEditor *editor)
 }
 
 static void
+node_dropped_cb (EphyNodeView *view, EphyNode *node,
+		 GList *nodes, EphyBookmarksEditor *editor)
+{
+	GList *l;
+
+	g_return_if_fail (EPHY_IS_NODE (node));
+
+	for (l = nodes; l != NULL; l = l->next)
+	{
+		EphyNode *bmk = EPHY_NODE (l->data);
+
+		ephy_bookmarks_set_keyword (editor->priv->bookmarks, node, bmk);
+	}
+}
+
+static void
 ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 {
 	GtkWidget *hbox, *vbox;
@@ -692,7 +724,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);
 	gtk_container_add (GTK_CONTAINER (editor->priv->menu_dock), hbox);
 	gtk_widget_show (hbox);
-	
+
 	g_assert (editor->priv->bookmarks);
 
 	node = ephy_bookmarks_get_keywords (editor->priv->bookmarks);
@@ -703,6 +735,9 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 					   topic_drag_types,
 				           n_topic_drag_types,
 					   -1);
+	ephy_node_view_enable_drag_dest (key_view,
+					 topic_drag_dest_types,
+				         n_topic_drag_dest_types);
 	ephy_node_view_set_browse_mode (key_view);
 	ephy_node_view_add_column (key_view, _("Topics"),
 			           EPHY_TREE_MODEL_NODE_COL_KEYWORD, TRUE, TRUE);
@@ -722,7 +757,11 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			  "show_popup",
 			  G_CALLBACK (keyword_node_show_popup_cb),
 			  editor);
-	
+	g_signal_connect (G_OBJECT (key_view),
+			  "node_dropped",
+			  G_CALLBACK (node_dropped_cb),
+			  editor);
+
 	vbox = gtk_vbox_new (FALSE, 6);
 	gtk_box_pack_start (GTK_BOX (hbox),
 			    vbox, TRUE, TRUE, 0);
@@ -738,7 +777,10 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	/* Bookmarks View */
 	bm_view = ephy_node_view_new (node, editor->priv->bookmarks_filter);
 	ephy_node_view_set_hinted (bm_view, TRUE);
-	ephy_node_view_enable_drag_source (bm_view, NULL, 0, EPHY_NODE_BMK_PROP_LOCATION);
+	ephy_node_view_enable_drag_source (bm_view,
+					   bmk_drag_types,
+				           n_bmk_drag_types,
+					   EPHY_NODE_BMK_PROP_LOCATION);
 	ephy_node_view_add_icon_column (bm_view, EPHY_TREE_MODEL_NODE_COL_ICON);
 	ephy_node_view_add_column (bm_view, _("Title"),
 				   EPHY_TREE_MODEL_NODE_COL_BOOKMARK, TRUE, TRUE);
@@ -869,10 +911,10 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor,
 	EggAction *action;
 	EggActionGroup *action_group;
 	GList *selection;
-	
+
 	g_return_if_fail (editor != NULL);
 	g_return_if_fail (node != NULL);
-	
+
 	priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 
 	if (priority == EPHY_BOOKMARKS_KEYWORD_ALL_PRIORITY ||
@@ -897,4 +939,3 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor,
 	action = egg_action_group_get_action (action_group, "Delete");
 	g_object_set (action, "sensitive", !delete, NULL);
 }
-	

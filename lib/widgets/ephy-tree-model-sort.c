@@ -19,6 +19,7 @@
  */
 
 #include <gtk/gtkmarshal.h>
+#include <gtk/gtktreednd.h>
 #include <string.h>
 
 #include "ephy-node.h"
@@ -236,17 +237,58 @@ each_url_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 	}
 }
 
+static void
+each_node_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
+			   gpointer iterator_context, gpointer data)
+{
+	gpointer *context = (gpointer *) iterator_context;
+	GList *path_list = (GList *) (context[0]);
+	GList *i;
+	GtkTreeModel *model = GTK_TREE_MODEL (context[1]);
+
+	for (i = path_list; i != NULL; i = i->next)
+	{
+		GtkTreeIter iter;
+		GtkTreePath *path = gtk_tree_row_reference_get_path (i->data);
+		EphyNode *node = NULL;
+		char *value;
+
+		gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path);
+		g_signal_emit (G_OBJECT (model),
+			       ephy_tree_model_sort_signals[NODE_FROM_ITER],
+			       0, &iter, &node);
+		if (node == NULL)
+			return;
+
+		value = g_strdup_printf ("%ld", ephy_node_get_id (node));
+		iteratee (value, -1, -1, -1, -1, data);
+		g_free (value);
+	}
+}
+
 static gboolean
 ephy_tree_model_sort_multi_drag_data_get (EggTreeMultiDragSource *drag_source,
 					  GList *path_list,
 					  guint info,
 					  GtkSelectionData *selection_data)
 {
-	EphyTreeModelSort *ms = EPHY_TREE_MODEL_SORT (drag_source);
+	GdkAtom target;
 
-	/* FIXME use the target type here, not property_id */
+	target = selection_data->target;
 
-	if (ms->priv->drag_property_id != -1)
+	if (target == gdk_atom_intern (EPHY_DND_BOOKMARK_TYPE, FALSE) ||
+	    target == gdk_atom_intern (EPHY_DND_TOPIC_TYPE, FALSE))
+	{
+		gpointer icontext[2];
+
+		icontext[0] = path_list;
+		icontext[1] = drag_source;
+
+		ephy_dnd_drag_data_get (NULL, NULL, selection_data,
+			info, 0, &icontext, each_node_get_data_binder);
+
+	}
+	else
 	{
 		gpointer icontext[2];
 
@@ -255,25 +297,6 @@ ephy_tree_model_sort_multi_drag_data_get (EggTreeMultiDragSource *drag_source,
 
 		ephy_dnd_drag_data_get (NULL, NULL, selection_data,
 			info, 0, &icontext, each_url_get_data_binder);
-	}
-	else
-	{
-		GtkTreeIter iter;
-		GtkTreePath *path = gtk_tree_row_reference_get_path (path_list->data);
-		EphyNode *node = NULL;
-		char *data;
-
-		gtk_tree_model_get_iter (GTK_TREE_MODEL (drag_source), &iter, path);
-		g_signal_emit (G_OBJECT (drag_source),
-			       ephy_tree_model_sort_signals[NODE_FROM_ITER],
-			       0, &iter, &node);
-
-		/* FIXME free */
-		data = g_strdup_printf ("%ld", ephy_node_get_id (node));
-
-	        gtk_selection_data_set (selection_data,
-					selection_data->target,
-					8, data, strlen (data));
 	}
 
 	return TRUE;
