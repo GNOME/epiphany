@@ -1,5 +1,14 @@
 2004-07-22  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-debug.c: (ephy_profiler_dump):
+
+	Ignore the microseconds part
+        of the g_timer_elapsed call, its redundant information,
+        and breaks when the timer is over a second.
+	(ported from galeon).
+
+2004-07-22  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-embed-single.c:
 	* embed/ephy-embed-single.h:
 	* embed/mozilla/mozilla-embed-single.cpp:

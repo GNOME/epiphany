@@ -137,16 +137,15 @@ ephy_should_profile (const char *module)
 static void
 ephy_profiler_dump (EphyProfiler *profiler)
 {
-	long elapsed;
 	double seconds;
 
 	g_return_if_fail (profiler != NULL);
 
-	seconds = g_timer_elapsed (profiler->timer, &elapsed);
+	seconds = g_timer_elapsed (profiler->timer, NULL);
 
-	g_print ("[ %s ] %s %ld ms (%f s) elapsed\n",
+	g_print ("[ %s ] %s %f s elapsed\n",
 		 profiler->module, profiler->name,
-		 elapsed / (G_USEC_PER_SEC / 1000), seconds);
+		 seconds);
 }
 
 static void
