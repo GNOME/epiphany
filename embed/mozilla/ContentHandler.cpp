@@ -394,25 +394,11 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 
 	if (mAction == CONTENT_ACTION_OPEN)
 	{
-		if (mAppSupportScheme)
-		{
-			LaunchHelperApp ();
-		}
-		else
-		{
-			mLauncher->SaveToDisk (nsnull, PR_FALSE);
-		}
+		mLauncher->SaveToDisk (nsnull, PR_FALSE);
 	}
 	else if (mAction == CONTENT_ACTION_OPEN_TMP)
 	{
-		if (mAppSupportScheme)
-		{
-			LaunchHelperApp ();
-		}
-		else
-		{
-			mLauncher->LaunchWithApplication (nsnull, PR_FALSE);
-		}
+		mLauncher->LaunchWithApplication (nsnull, PR_FALSE);
 	}
 	else if (mAction == CONTENT_ACTION_NONE)
 	{
