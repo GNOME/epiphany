@@ -803,16 +803,13 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	if (GTK_IS_EDITABLE (focus_widget))
 	{
 		gboolean has_selection;
-		gboolean clipboard_contains_text;
 
 		has_selection = gtk_editable_get_selection_bounds
 			(GTK_EDITABLE (focus_widget), NULL, NULL);
-		clipboard_contains_text = gtk_clipboard_wait_is_text_available
-			(gtk_clipboard_get (GDK_SELECTION_CLIPBOARD));
 
 		cut = has_selection;
 		copy = has_selection;
-		paste = clipboard_contains_text;
+		paste = TRUE;
 		select_all = TRUE;
 	}
 	else

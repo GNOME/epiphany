@@ -543,9 +543,20 @@ ephy_history_window_get_type (void)
 }
 
 static void
+ephy_history_window_show (GtkWidget *widget)
+{
+	EphyHistoryWindow *window = EPHY_HISTORY_WINDOW (widget);
+
+	gtk_widget_grab_focus (window->priv->search_entry);
+
+	GTK_WIDGET_CLASS (parent_class)->show (widget);
+}
+
+static void
 ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
@@ -554,6 +565,8 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	object_class->set_property = ephy_history_window_set_property;
 	object_class->get_property = ephy_history_window_get_property;
 	object_class->dispose  = ephy_history_window_dispose;
+
+	widget_class->show = ephy_history_window_show;
 
 	g_object_class_install_property (object_class,
 					 PROP_HISTORY,
@@ -636,16 +649,13 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 	if (GTK_IS_EDITABLE (focus_widget))
 	{
 		gboolean has_selection;
-		gboolean clipboard_contains_text;
 
 		has_selection = gtk_editable_get_selection_bounds
 			(GTK_EDITABLE (focus_widget), NULL, NULL);
-		clipboard_contains_text = gtk_clipboard_wait_is_text_available
-			(gtk_clipboard_get (GDK_SELECTION_CLIPBOARD));
 
 		cut = has_selection;
 		copy = has_selection;
-		paste = clipboard_contains_text;
+		paste = TRUE;
 		select_all = TRUE;
 	}
 	else
