@@ -1,3 +1,34 @@
+2003-04-29  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_add_column):
+	* lib/widgets/ephy-node-view.h:
+	
+	Remove add_icon_column func and add the functionality to the 
+	normal add_column. The icon will be packed in the same column.
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(entry_selection_changed_cb), (add_entry_monitor),
+	(add_text_renderer_monitor), (cmd_add_topic), (cmd_rename),
+	(build_search_box), (ephy_bookmarks_editor_construct),
+	(toolbar_items_changed_cb), (ephy_bookmarks_editor_init):
+
+	Fix for api change.
+
+	Deal with 2 more sensitivity cases:
+	bookmarks added by dnd to the toolbar and treeview text
+	renderers.
+
+	Remove hints until we have more columns.
+
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+
+	Fix for new api
+
+	* src/ephy-toolbars-model.c: (impl_add_item):
+
+	Dont check if normal items are already in the toolbar:
+	fix warnings.
+
 2003-04-28  David Bordoley  <bordoley@msu.edu>
 
 	* po/POTFILES.in:

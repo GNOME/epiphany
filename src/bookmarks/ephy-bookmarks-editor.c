@@ -82,6 +82,7 @@ static void ephy_bookmarks_editor_get_property (GObject *object,
 						guint prop_id,
 						GValue *value,
 						GParamSpec *pspec);
+static void ephy_bookmarks_editor_update_menu  (EphyBookmarksEditor *editor);
 
 static void search_entry_changed_cb       (GtkWidget *entry,
 					   EphyBookmarksEditor *editor);
@@ -204,6 +205,36 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 static guint ephy_bookmark_popup_n_entries = G_N_ELEMENTS (ephy_bookmark_popup_entries);
 
 static void
+entry_selection_changed_cb (GtkWidget *widget, GParamSpec *pspec, EphyBookmarksEditor *editor)
+{
+	ephy_bookmarks_editor_update_menu (editor);
+}
+
+static void
+add_entry_monitor (EphyBookmarksEditor *editor, GtkWidget *entry)
+{
+        g_signal_connect (G_OBJECT (entry),
+                          "notify::selection-bound",
+                          G_CALLBACK (entry_selection_changed_cb),
+                          editor);
+        g_signal_connect (G_OBJECT (entry),
+                          "notify::cursor-position",
+                          G_CALLBACK (entry_selection_changed_cb),
+                          editor);
+}
+
+static void
+add_text_renderer_monitor (EphyBookmarksEditor *editor)
+{
+	GtkWidget *entry;
+
+	entry = gtk_window_get_focus (GTK_WINDOW (editor));
+	g_return_if_fail (GTK_IS_EDITABLE (entry));
+
+	add_entry_monitor (editor, entry);
+}
+
+static void
 cmd_add_topic (EggAction *action,
 	       EphyBookmarksEditor *editor)
 {
@@ -213,6 +244,7 @@ cmd_add_topic (EggAction *action,
 				           _("Type a topic"));
 	ephy_node_view_select_node (EPHY_NODE_VIEW (editor->priv->key_view), node);
 	ephy_node_view_edit (EPHY_NODE_VIEW (editor->priv->key_view));
+	add_text_renderer_monitor (editor);
 }
 
 static void
@@ -234,6 +266,7 @@ cmd_rename (EggAction *action,
 	{
 		ephy_node_view_edit (EPHY_NODE_VIEW (editor->priv->key_view));
 	}
+	add_text_renderer_monitor (editor);
 }
 
 static GtkWidget *
@@ -937,12 +970,6 @@ search_entry_changed_cb (GtkWidget *entry, EphyBookmarksEditor *editor)
 	g_free (search_text);
 }
 
-static void
-search_selection_changed_cb (GtkWidget *widget, GParamSpec *pspec, EphyBookmarksEditor *editor)
-{
-	ephy_bookmarks_editor_update_menu (editor);
-}
-
 static GtkWidget *
 build_search_box (EphyBookmarksEditor *editor)
 {
@@ -960,14 +987,7 @@ build_search_box (EphyBookmarksEditor *editor)
 	g_signal_connect (G_OBJECT (entry), "changed",
 			  G_CALLBACK (search_entry_changed_cb),
 			  editor);
-        g_signal_connect (G_OBJECT (entry),
-                          "notify::selection-bound",
-                          G_CALLBACK (search_selection_changed_cb),
-                          editor);
-        g_signal_connect (G_OBJECT (entry),
-                          "notify::cursor-position",
-                          G_CALLBACK (search_selection_changed_cb),
-                          editor);
+	add_entry_monitor (editor, entry);
 
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -1139,7 +1159,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 				   EPHY_NODE_KEYWORD_PROP_NAME,
 				   EPHY_NODE_KEYWORD_PROP_PRIORITY,
 				   EPHY_NODE_VIEW_AUTO_SORT |
-				   EPHY_NODE_VIEW_EDITABLE);
+				   EPHY_NODE_VIEW_EDITABLE, NULL);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), key_view);
 	gtk_widget_set_size_request (key_view, 130, -1);
 	gtk_widget_show (key_view);
@@ -1186,16 +1206,15 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	/* Bookmarks View */
 	bm_view = ephy_node_view_new (node, editor->priv->bookmarks_filter);
 	add_focus_monitor (editor, bm_view);
-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (bm_view), TRUE);
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (bm_view),
 					   bmk_drag_types,
 				           n_bmk_drag_types,
 					   EPHY_NODE_BMK_PROP_LOCATION);
-	ephy_node_view_add_icon_column (EPHY_NODE_VIEW (bm_view), provide_favicon);
 	ephy_node_view_add_column (EPHY_NODE_VIEW (bm_view), _("Title"),
 				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_TITLE, -1,
 				   EPHY_NODE_VIEW_AUTO_SORT |
-				   EPHY_NODE_VIEW_EDITABLE);
+				   EPHY_NODE_VIEW_EDITABLE,
+				   provide_favicon);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), bm_view);
 	gtk_widget_show (bm_view);
 	editor->priv->bm_view = bm_view;
@@ -1216,7 +1235,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			  "changed",
 			  G_CALLBACK (view_selection_changed_cb),
 			  editor);
-	
+
 	ephy_state_add_window (GTK_WIDGET(editor),
 			       "bookmarks_editor",
 		               450, 400);
@@ -1316,9 +1335,23 @@ ephy_bookmarks_editor_get_property (GObject *object,
 }
 
 static void
+toolbar_items_changed_cb (EphyToolbarsModel *model,
+			  int toolbar_position,
+			  int position,
+			  EphyBookmarksEditor *editor)
+{
+	ephy_bookmarks_editor_update_menu (editor);
+}
+
+static void
 ephy_bookmarks_editor_init (EphyBookmarksEditor *editor)
 {
 	editor->priv = g_new0 (EphyBookmarksEditorPrivate, 1);
 
 	editor->priv->tb_model = ephy_shell_get_toolbars_model (ephy_shell);
+
+	g_signal_connect (editor->priv->tb_model, "item_added",
+			  G_CALLBACK (toolbar_items_changed_cb), editor);
+	g_signal_connect (editor->priv->tb_model, "item_removed",
+			  G_CALLBACK (toolbar_items_changed_cb), editor);
 }

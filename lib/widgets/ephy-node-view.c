@@ -739,11 +739,14 @@ ephy_node_view_add_column (EphyNodeView *view,
 			   GType value_type,
 			   int prop_id,
 			   int priority_prop_id,
-			   EphyNodeViewFlags flags)
+			   EphyNodeViewFlags flags,
+			   EphyTreeModelNodeValueFunc icon_func)
+
 {
 	GtkTreeViewColumn *gcolumn;
 	GtkCellRenderer *renderer;
 	int column;
+	int icon_column;
 
 	g_return_val_if_fail (!(flags & EPHY_NODE_VIEW_EDITABLE) ||
 			      view->priv->editable_renderer == NULL, NULL);
@@ -752,6 +755,19 @@ ephy_node_view_add_column (EphyNodeView *view,
 		(view->priv->nodemodel, value_type, prop_id);
 
 	gcolumn = (GtkTreeViewColumn *) gtk_tree_view_column_new ();
+
+	if (icon_func)
+	{
+		icon_column = ephy_tree_model_node_add_func_column
+	                 (view->priv->nodemodel, GDK_TYPE_PIXBUF, icon_func, NULL);
+
+		renderer = gtk_cell_renderer_pixbuf_new ();
+		gtk_tree_view_column_pack_start (gcolumn, renderer, FALSE);
+		gtk_tree_view_column_set_attributes (gcolumn, renderer,
+						     "pixbuf", icon_column,
+						     NULL);
+	}
+
 	renderer = gtk_cell_renderer_text_new ();
 
 	if (flags & EPHY_NODE_VIEW_EDITABLE)
@@ -767,6 +783,7 @@ ephy_node_view_add_column (EphyNodeView *view,
 	gtk_tree_view_column_set_attributes (gcolumn, renderer,
 					     "text", column,
 					     NULL);
+
 	if (priority_prop_id >= 0)
 	{
 		int wcol;
@@ -822,29 +839,6 @@ ephy_node_view_add_column (EphyNodeView *view,
 	}
 
 	return gcolumn;
-}
-
-void
-ephy_node_view_add_icon_column (EphyNodeView *view,
-			        EphyTreeModelNodeValueFunc func)
-{
-	GtkTreeViewColumn *gcolumn;
-	GtkCellRenderer *renderer;
-	int column;
-
-	column = ephy_tree_model_node_add_func_column
-                 (view->priv->nodemodel, GDK_TYPE_PIXBUF, func, NULL);
-
-	gcolumn = (GtkTreeViewColumn *) gtk_tree_view_column_new ();
-	renderer = gtk_cell_renderer_pixbuf_new ();
-	gtk_tree_view_column_pack_start (gcolumn, renderer, TRUE);
-	gtk_tree_view_column_set_attributes (gcolumn, renderer,
-					     "pixbuf", column,
-					     NULL);
-	gtk_tree_view_column_set_sizing (gcolumn,
-					 GTK_TREE_VIEW_COLUMN_GROW_ONLY);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (view),
-				     gcolumn);
 }
 
 static void

@@ -78,7 +78,7 @@ impl_add_item (EggToolbarsModel *t,
 	EphyBookmarks *bookmarks;
 	char *action_name = NULL;
 	const char *res;
-	gboolean topic = FALSE;
+	gboolean topic = FALSE, normal_item = FALSE;
 	int id = -1;
 
 	LOG ("Add item %s", name)
@@ -88,7 +88,7 @@ impl_add_item (EggToolbarsModel *t,
 	if (gdk_atom_intern (EPHY_DND_TOPIC_TYPE, FALSE) == type)
 	{
 		GList *nodes;
-		
+
 		topic = TRUE;
 		nodes = ephy_dnd_node_list_extract_nodes (name);
 		id = ephy_node_get_id (EPHY_NODE (nodes->data));
@@ -99,16 +99,20 @@ impl_add_item (EggToolbarsModel *t,
 	{
 		GList *nodes;
 
-		topic = FALSE;
 		nodes = ephy_dnd_node_list_extract_nodes (name);
 		id = ephy_node_get_id (EPHY_NODE (nodes->data));
 		action_name = g_strdup_printf ("GoBookmarkId%d", id);
 		g_list_free (nodes);
 	}
+	else
+	{
+		normal_item = TRUE;
+	}
 
 	res = action_name ? action_name : name;
 
-	if (!ephy_toolbars_model_has_bookmark (EPHY_TOOLBARS_MODEL (t), topic, id))
+	if (normal_item ||
+	    !ephy_toolbars_model_has_bookmark (EPHY_TOOLBARS_MODEL (t), topic, id))
 	{
 		EGG_TOOLBARS_MODEL_CLASS (parent_class)->add_item
 			(t, toolbar_position, position, type, res);

@@ -81,10 +81,8 @@ GtkTreeViewColumn *ephy_node_view_add_column	      (EphyNodeView *view,
 						       GType value_type,
 						       int prop_id,
 						       int priority_prop_id,
-						       EphyNodeViewFlags flags);
-
-void	           ephy_node_view_add_icon_column     (EphyNodeView *view,
-					               EphyTreeModelNodeValueFunc func);
+						       EphyNodeViewFlags flags,
+						       EphyTreeModelNodeValueFunc icon_func);
 
 void		   ephy_node_view_remove              (EphyNodeView *view);
 
