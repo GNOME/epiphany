@@ -1,6 +1,7 @@
 SUBDIRS = widgets egg
 
 INCLUDES = \
+	-I$(top_builddir)/lib \
         $(EPIPHANY_DEPENDENCY_CFLAGS)	\
 	-DSHARE_DIR=\"$(pkgdatadir)\"
 
@@ -70,12 +71,13 @@ libephymisc_la_SOURCES = \
 BUILT_SOURCES=ephy-marshal.c ephy-marshal.h
 
 CLEAN_FILES = $(BUILT_SOURCES)
+DISTCLEAN_FILES = $(BUILT_SOURCES)
 
 ephy-marshal.c: ephy-marshal.list
-	@GLIB_GENMARSHAL@ --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header --body > ephy-marshal.c
+	$(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header --body > ephy-marshal.c
 
 ephy-marshal.h: ephy-marshal.list
-	@GLIB_GENMARSHAL@ --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header > ephy-marshal.h
+	$(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header > ephy-marshal.h
 
 EXTRA_DIST = 			\
 	ephy-marshal.list
