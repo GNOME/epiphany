@@ -27,6 +27,7 @@
 #include "ephy-file-helpers.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-state.h"
+#include "ephy-gui.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtkstock.h>
