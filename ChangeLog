@@ -1,3 +1,23 @@
+2004-10-27  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmark-action.c: (create_tool_item),
+	(ephy_bookmark_action_sync_label), (connect_proxy),
+	(bookmark_changed_cb):
+	* src/bookmarks/ephy-bookmarks-menu.c: (connect_proxy_cb),
+	(ensure_bookmark_actions), (ephy_bookmarks_menu_rebuild):
+	* src/bookmarks/ephy-favorites-menu.c: (connect_proxy_cb),
+	(ephy_favorites_menu_rebuild):
+	* src/bookmarks/ephy-topic-action.c:
+	(ephy_topic_action_sync_label), (append_bookmarks_menu),
+	(build_topics_menu), (connect_proxy), (topic_changed_cb):
+
+	Use ellipsising labels to shorten the bookmarks and topics titles in
+	menus, instead of chopping the strings off at the end. 
+	Fixes bug #147765.
+
+	Use gtk_entry_set_width_chars() to set the smart bookmark entry width,
+	not gtk_widget_set_size_request().
+
 2004-10-26  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-session.c: (offer_to_resume):

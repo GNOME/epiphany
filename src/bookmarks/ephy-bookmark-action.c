@@ -35,13 +35,11 @@
 #include "ephy-bookmark-properties.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
-#include "ephy-string.h"
 #include "ephy-debug.h"
+#include "ephy-string.h"
 #include "ephy-gui.h"
 
 #include <string.h>
-
-#define MAX_LABEL_LENGTH 32
 
 static void ephy_bookmark_action_init       (EphyBookmarkAction *action);
 static void ephy_bookmark_action_class_init (EphyBookmarkActionClass *class);
@@ -114,6 +112,9 @@ ephy_bookmark_action_get_type (void)
 	return type;
 }
 
+/* FIXME tweak this, or make it configurable? (bug 148093) */
+#define ENTRY_WIDTH_CHARS	16
+
 static GtkWidget *
 create_tool_item (GtkAction *action)
 {
@@ -135,7 +136,7 @@ create_tool_item (GtkAction *action)
 	g_object_set_data (G_OBJECT (item), "button", button);
 
 	entry = gtk_entry_new ();
-	gtk_widget_set_size_request (entry, 120, -1);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), ENTRY_WIDTH_CHARS);
 	gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
 	g_object_set_data (G_OBJECT (item), "entry", entry);
 
@@ -264,45 +265,48 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 	}
 }
 
+#define MAX_LABEL_LENGTH	32
+
 static void
-ephy_bookmark_action_sync_label (GtkAction *action, GParamSpec *pspec, GtkWidget *proxy)
+ephy_bookmark_action_sync_label (GtkAction *gaction,
+				 GParamSpec *pspec,
+				 GtkWidget *proxy)
 {
-	GtkWidget *label = NULL;
-	GValue value = { 0, };
+	EphyBookmarkAction *action = EPHY_BOOKMARK_ACTION (gaction);
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_object_get_property (G_OBJECT (action), "label", &value);
+	g_return_if_fail (EPHY_IS_NODE (action->priv->node));
 
-	if (EPHY_BOOKMARK_ACTION (action)->priv->smart_url
-	    && GTK_IS_TOOL_ITEM (proxy))
+	/* note that we cannot use ellipsizing label with defined width,
+	 * since that makes the label exactly that wide, even if the
+	 * text takes less space. So we have to shorten the string.
+	 */
+	if (GTK_IS_TOOL_ITEM (proxy))
 	{
-		char *label_text;
-
-		label_text = g_strdup_printf (_("%s:"), g_value_get_string (&value));
+		GtkWidget *label = NULL;
+		const char *title;
+		char *title_short, *label_text;
 
 		label = g_object_get_data (G_OBJECT (proxy), "label");
 		g_return_if_fail (label != NULL);
 
-		gtk_label_set_label (GTK_LABEL (label), label_text);
-		g_free (label_text);
-	}
-	else
-	{
-		if (GTK_IS_TOOL_ITEM (proxy))
-		{
-			label = g_object_get_data (G_OBJECT (proxy), "label");
-			g_return_if_fail (label != NULL);
-		}
-		else if (GTK_IS_MENU_ITEM (proxy))
-		{
-			label = GTK_BIN (proxy)->child;
-		}
-		g_return_if_fail (label != NULL);
+		title = ephy_node_get_property_string
+			(action->priv->node, EPHY_NODE_BMK_PROP_TITLE);
+		title_short = ephy_string_shorten (title, MAX_LABEL_LENGTH);
 
-		gtk_label_set_label (GTK_LABEL (label), g_value_get_string (&value));
-	}
+		if (EPHY_BOOKMARK_ACTION (action)->priv->smart_url)
+		{
+			label_text = g_strdup_printf (_("%s:"), title_short);
+	
+			gtk_label_set_label (GTK_LABEL (label), label_text);
+			g_free (label_text);
+		}
+		else
+		{
+			gtk_label_set_label (GTK_LABEL (label), title_short);
+		}
 
-	g_value_unset (&value);
+		g_free (title_short);
+	}
 }
 
 static void
@@ -671,10 +675,6 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 
-	ephy_bookmark_action_sync_label (action, NULL, proxy);
-	g_signal_connect_object (action, "notify::label",
-			         G_CALLBACK (ephy_bookmark_action_sync_label), proxy, 0);
-
 	ephy_bookmark_action_sync_icon (action, NULL, proxy);
 	g_signal_connect_object (action, "notify::icon",
 			         G_CALLBACK (ephy_bookmark_action_sync_icon), proxy, 0);
@@ -685,6 +685,10 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
+		ephy_bookmark_action_sync_label (action, NULL, proxy);
+		g_signal_connect_object (action, "notify::label",
+					 G_CALLBACK (ephy_bookmark_action_sync_label), proxy, 0);
+
 		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
 		g_signal_connect (button, "clicked", G_CALLBACK (activate_cb), action);
 		g_signal_connect (button, "popup_menu",
@@ -720,15 +724,12 @@ bookmark_changed_cb (EphyNode *node,
 	{
 		GValue value = { 0, };
 		const char *title;
-		char *short_title;
 
 		title = ephy_node_get_property_string
-			(action->priv->node, EPHY_NODE_BMK_PROP_TITLE);
-		short_title = ephy_string_shorten (title, MAX_LABEL_LENGTH);
-
+				(node, EPHY_NODE_BMK_PROP_TITLE);
 		g_value_init (&value, G_TYPE_STRING);
-		g_value_take_string (&value, short_title);
-		g_object_set (G_OBJECT (action), "label", short_title, NULL);
+		g_value_set_static_string (&value, title);
+		g_object_set_property (G_OBJECT (action), "label", &value);
 		g_value_unset (&value);
 	}
 	else if (property_id == EPHY_NODE_BMK_PROP_ICON)

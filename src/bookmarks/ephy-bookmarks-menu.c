@@ -71,6 +71,7 @@ struct _EphyBookmarksMenuPrivate
 
 #define GAZILLION	200
 #define UPDATE_DELAY	5000 /* ms */
+#define LABEL_WIDTH_CHARS	32
 
 enum
 {
@@ -109,6 +110,21 @@ ephy_bookmarks_menu_get_type (void)
         }
 
         return type;
+}
+
+static void
+connect_proxy_cb (GtkActionGroup *action_group,
+                  GtkAction *action,
+                  GtkWidget *proxy)
+{
+        if (GTK_IS_MENU_ITEM (proxy))
+        {
+		GtkLabel *label;
+
+		label = (GtkLabel *) ((GtkBin *) proxy)->child;
+		gtk_label_set_width_chars (label, LABEL_WIDTH_CHARS);
+		gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+        }
 }
 
 static void
@@ -208,6 +224,9 @@ ensure_bookmark_actions (EphyBookmarksMenu *menu)
 	menu->priv->bmk_actions = gtk_action_group_new ("BmkActions");
 	gtk_ui_manager_insert_action_group (menu->priv->manager,
 					    menu->priv->bmk_actions, -1);
+
+	g_signal_connect (menu->priv->bmk_actions, "connect-proxy",
+			  G_CALLBACK (connect_proxy_cb), NULL);
 
 	bookmarks = ephy_bookmarks_get_bookmarks (menu->priv->bookmarks);
 	children = ephy_node_get_children (bookmarks);
@@ -427,6 +446,9 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 	ensure_bookmark_actions (menu);
 	p->folder_actions = gtk_action_group_new ("FolderActions");
 	gtk_ui_manager_insert_action_group (p->manager, p->folder_actions, -1);
+
+	g_signal_connect (p->folder_actions, "connect-proxy",
+			  G_CALLBACK (connect_proxy_cb), NULL);
 
 	p->ui_id = gtk_ui_manager_new_merge_id (p->manager);
 

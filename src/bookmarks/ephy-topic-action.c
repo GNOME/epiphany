@@ -42,6 +42,8 @@
 static void ephy_topic_action_init       (EphyTopicAction *action);
 static void ephy_topic_action_class_init (EphyTopicActionClass *class);
 
+#define LABEL_WIDTH_CHARS 32
+
 #define EPHY_TOPIC_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOPIC_ACTION, EphyTopicActionPrivate))
 
 static GtkTargetEntry drag_targets[] =
@@ -173,40 +175,38 @@ menu_activate_cb (GtkWidget *item, GtkAction *action)
 	}
 }
 
+#define MAX_LABEL_LENGTH	32
+
 static void
-ephy_topic_action_sync_label (GtkAction *action, GParamSpec *pspec, GtkWidget *proxy)
+ephy_topic_action_sync_label (GtkAction *gaction,
+			      GParamSpec *pspec,
+			      GtkWidget *proxy)
 {
-	GtkWidget *label = NULL;
-	GValue value = { 0, };
-	const char *label_text;
+	EphyTopicAction *action = EPHY_TOPIC_ACTION (gaction);
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_object_get_property (G_OBJECT (action), "label", &value);
+	g_return_if_fail (EPHY_IS_NODE (action->priv->topic_node));
 
-	label_text = g_value_get_string (&value);
-
+	/* note that we cannot use ellipsizing label with defined width,
+	 * since that makes the label exactly that wide, even if the
+	 * text takes less space. So we have to shorten the string.
+	 */
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
-		label = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "label"));
-	}
-	else if (GTK_IS_MENU_ITEM (proxy))
-	{
-		label = GTK_BIN (proxy)->child;
-	}
-	else
-	{
-		g_warning ("Unknown widget");
-		return;
-	}
+		GtkWidget *label = NULL;
+		const char *title;
+		char *title_short;
 
-	g_return_if_fail (label != NULL);
+		label = g_object_get_data (G_OBJECT (proxy), "label");
+		g_return_if_fail (label != NULL);
 
-	if (label_text)
-	{
-		gtk_label_set_label (GTK_LABEL (label), label_text);
+		title = ephy_node_get_property_string
+			(action->priv->topic_node, EPHY_NODE_KEYWORD_PROP_NAME);
+		title_short = ephy_string_shorten (title, MAX_LABEL_LENGTH);
+
+		gtk_label_set_label (GTK_LABEL (label), title_short);
+
+		g_free (title_short);
 	}
-
-	g_value_unset (&value);
 }
 
 static int
@@ -259,6 +259,7 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 {
         EphyFaviconCache *cache;
 	GtkWidget *item;
+	GtkLabel *label;
 	GPtrArray *children;
 
         cache = EPHY_FAVICON_CACHE
@@ -294,7 +295,6 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 			EphyNode *kid;
 			const char *icon_location;
 			const char *title;
-			char *title_short;
 
 			kid = (EphyNode*)l->data;
 
@@ -303,10 +303,12 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 			title = ephy_node_get_property_string
 				(kid, EPHY_NODE_BMK_PROP_TITLE);
 			if (title == NULL) continue;
-			title_short = ephy_string_shorten (title, MAX_LENGTH);
-			LOG ("Create menu for bookmark %s", title_short)
 
-			item = gtk_image_menu_item_new_with_label (title_short);
+			item = gtk_image_menu_item_new_with_label (title);
+			label = (GtkLabel *) ((GtkBin *) item)->child;
+			gtk_label_set_width_chars (label, LABEL_WIDTH_CHARS);
+			gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+
 			if (icon_location)
 			{
 				GdkPixbuf *icon;
@@ -328,8 +330,6 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 					  G_CALLBACK (menu_activate_cb), action);
 			gtk_widget_show (item);
 			gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-			g_free (title_short);
 		}
 
 		g_list_free (node_list);
@@ -545,15 +545,18 @@ build_topics_menu (EphyTopicAction *action)
 		EphyNode *kid;
 		const char *title;
 		GtkWidget *bmk_menu;
+		GtkLabel *label;
 
 		kid = (EphyNode*)l->data;
 		if (kid == all) continue;
 
 		title = ephy_node_get_property_string
 			(kid, EPHY_NODE_KEYWORD_PROP_NAME);
-		LOG ("Create menu for topic %s", title);
 
 		item = gtk_image_menu_item_new_with_label (title);
+		label = (GtkLabel *) ((GtkBin *) item)->child;
+		gtk_label_set_width_chars (label, LABEL_WIDTH_CHARS);
+		gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
 
 		gtk_widget_show (item);
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
@@ -835,12 +838,12 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 
-	ephy_topic_action_sync_label (action, NULL, proxy);
-	g_signal_connect_object (action, "notify::label",
-			         G_CALLBACK (ephy_topic_action_sync_label), proxy, 0);
-
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
+		ephy_topic_action_sync_label (action, NULL, proxy);
+		g_signal_connect_object (action, "notify::label",
+					 G_CALLBACK (ephy_topic_action_sync_label), proxy, 0);
+
 		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
 		g_signal_connect (button, "toggled",
 				  G_CALLBACK (button_toggled_cb), action);
@@ -883,7 +886,7 @@ topic_changed_cb (EphyNode *node,
 		}
 
 		g_value_init(&value, G_TYPE_STRING);
-		g_value_set_string (&value, title);
+		g_value_set_static_string (&value, title);
 		g_object_set_property (G_OBJECT (action), "label", &value);
 		g_value_unset (&value);
 	}

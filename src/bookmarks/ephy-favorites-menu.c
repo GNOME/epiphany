@@ -31,6 +31,8 @@
 #include <gtk/gtkuimanager.h>
 #include <glib/gprintf.h>
 
+#define LABEL_WIDTH_CHARS	32
+
 #define EPHY_FAVORITES_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FAVORITES_MENU, EphyFavoritesMenuPrivate))
 
 struct _EphyFavoritesMenuPrivate
@@ -108,6 +110,21 @@ open_bookmark_cb (GtkAction *action, char *location, EphyWindow *window)
 }
 
 static void
+connect_proxy_cb (GtkActionGroup *action_group,
+                  GtkAction *action,
+                  GtkWidget *proxy)
+{
+        if (GTK_IS_MENU_ITEM (proxy))
+        {
+		GtkLabel *label;
+
+		label = (GtkLabel *) ((GtkBin *) proxy)->child;
+		gtk_label_set_width_chars (label, LABEL_WIDTH_CHARS);
+		gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+        }
+}
+
+static void
 ephy_favorites_menu_rebuild (EphyFavoritesMenu *menu)
 {
 	EphyFavoritesMenuPrivate *p = menu->priv;
@@ -126,7 +143,10 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *menu)
 	children = ephy_node_get_children (fav);
 
 	p->action_group = gtk_action_group_new ("FavoritesActions");
-	gtk_ui_manager_insert_action_group (merge, p->action_group, 0);
+	gtk_ui_manager_insert_action_group (merge, p->action_group, -1);
+	g_signal_connect (p->action_group, "connect-proxy",
+			  G_CALLBACK (connect_proxy_cb), NULL);
+
 	p->ui_id = gtk_ui_manager_new_merge_id (merge);
 
 	for (i = 0; i < children->len; i++)
