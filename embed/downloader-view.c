@@ -30,6 +30,7 @@
 #include "ephy-cell-renderer-progress.h"
 #include "ephy-stock-icons.h"
 
+#include <libgnomevfs/gnome-vfs-utils.h>
 #include <eggstatusicon.h>
 #include <eggtraymanager.h>
 #include <gtk/gtktreeview.h>
@@ -269,21 +270,24 @@ download_changed_cb (EphyDownload *download, DownloaderView *dv)
 		break;
 	}
 
-	total = ephy_download_get_total_progress (download)/1024;
-	if (total <= 1024)
+	total = ephy_download_get_total_progress (download);
+	if (total == -1)
 	{
-		size = g_strdup_printf ("%ld kB", total);
-	} 
-	else if (total <= 1024*1024)
-	{
-		size = g_strdup_printf ("%ld MB", total/1024);
+		size = g_strdup (_("Unknown"));
 	}
 	else
 	{
-		size = g_strdup_printf ("%ld GB", total/(1024*1024));
+		size = gnome_vfs_format_file_size_for_display (total);
 	}
 
-	remaining = format_interval (remaining_secs);
+	if (remaining_secs < 0)
+	{
+		remaining = g_strdup (_("Unknown"));
+	}
+	else
+	{
+		remaining = format_interval (remaining_secs);
+	}
 
 	path = gtk_tree_row_reference_get_path (row_ref);
 	gtk_tree_model_get_iter (dv->priv->model, &iter, path);
