@@ -30,6 +30,9 @@
 #include "ephy-prefs.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-langs.h"
+#include "ephy-node.h"
+#include "ephy-encodings.h"
+#include "ephy-embed-shell.h"
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
@@ -55,6 +58,7 @@ typedef struct
 	char *gconf_key;
 	char *mozilla_pref;
 	PrefValueTransformFunc func;
+	gpointer user_data;
 	guint cnxn_id;
 } PrefData;
 
@@ -68,7 +72,8 @@ free_pref_data (PrefData *data)
 
 static gboolean
 transform_accept_languages_list (GConfValue *gcvalue,
-				 GValue *value)
+				 GValue *value,
+				 gpointer user_data)
 {
 	GArray *array;
 	GSList *languages, *l;
@@ -113,7 +118,8 @@ transform_accept_languages_list (GConfValue *gcvalue,
 
 static gboolean
 transform_cache_size (GConfValue *gcvalue,
-		      GValue *value)
+		      GValue *value,
+		      gpointer user_data)
 {
 	if (gcvalue->type != GCONF_VALUE_INT) return FALSE;
 
@@ -125,7 +131,9 @@ transform_cache_size (GConfValue *gcvalue,
 
 static gboolean
 transform_cookies_accept_mode (GConfValue *gcvalue,
-			       GValue *value)
+			       GValue *value,
+			       gpointer user_data)
+
 {
 	const char *mode;
 	int mozilla_mode = 0;
@@ -155,8 +163,37 @@ transform_cookies_accept_mode (GConfValue *gcvalue,
 }
 
 static gboolean
+transform_encoding (GConfValue *gcvalue,
+		    GValue *value,
+		    gpointer user_data)
+{
+	EphyEncodings *encodings;
+	EphyNode *node;
+	const char *code;
+	gboolean is_autodetector;
+
+	if (gcvalue->type != GCONF_VALUE_STRING) return FALSE;
+
+	code = gconf_value_get_string (gcvalue);
+	if (code == NULL) return FALSE;
+
+	encodings = EPHY_ENCODINGS (ephy_embed_shell_get_encodings (embed_shell));
+	node = ephy_encodings_get_node (encodings, code, FALSE);
+	if (node == NULL) return FALSE;
+
+	is_autodetector = ephy_node_get_property_boolean (node, EPHY_NODE_ENCODING_PROP_IS_AUTODETECTOR);
+	if (is_autodetector != GPOINTER_TO_INT (user_data)) return FALSE;
+
+	g_value_init (value, G_TYPE_STRING);
+	g_value_set_string (value, code);
+
+	return TRUE;
+}
+
+static gboolean
 transform_font_size (GConfValue *gcvalue,
-		     GValue *value)
+		     GValue *value,
+		     gpointer user_data)
 {
 	if (gcvalue->type != GCONF_VALUE_INT) return FALSE;
 
@@ -168,7 +205,8 @@ transform_font_size (GConfValue *gcvalue,
 
 static gboolean
 transform_proxy_ignore_list (GConfValue *gcvalue,
-			     GValue *value)
+			     GValue *value,
+			     gpointer user_data)
 {
 	GArray *array;
 	GSList *hosts, *l;
@@ -206,7 +244,8 @@ transform_proxy_ignore_list (GConfValue *gcvalue,
 
 static gboolean
 transform_proxy_mode (GConfValue *gcvalue,
-		      GValue *value)
+		      GValue *value,
+		      gpointer user_data)
 {
 	const char *mode;
 	int mozilla_mode = 0;
@@ -233,7 +272,8 @@ transform_proxy_mode (GConfValue *gcvalue,
 
 static gboolean
 transform_use_own_fonts (GConfValue *gcvalue,
-			 GValue *value)
+			 GValue *value,
+			 gpointer user_data)
 {
 	if (gcvalue->type != GCONF_VALUE_BOOL) return FALSE;
 
@@ -245,7 +285,8 @@ transform_use_own_fonts (GConfValue *gcvalue,
 
 extern "C" gboolean
 mozilla_notifier_transform_bool (GConfValue *gcvalue,
-				 GValue *value)
+				 GValue *value,
+				 gpointer user_data)
 {
 	if (gcvalue->type != GCONF_VALUE_BOOL) return FALSE;
 
@@ -257,7 +298,8 @@ mozilla_notifier_transform_bool (GConfValue *gcvalue,
 
 extern "C" gboolean
 mozilla_notifier_transform_bool_invert (GConfValue *gcvalue,
-					GValue *value)
+					GValue *value,
+					gpointer user_data)
 {
 	if (gcvalue->type != GCONF_VALUE_BOOL) return FALSE;
 
@@ -269,7 +311,8 @@ mozilla_notifier_transform_bool_invert (GConfValue *gcvalue,
 
 extern "C" gboolean
 mozilla_notifier_transform_int (GConfValue *gcvalue,
-				GValue *value)
+				GValue *value,
+				gpointer user_data)
 {
 	if (gcvalue->type != GCONF_VALUE_INT) return FALSE;
 
@@ -281,7 +324,8 @@ mozilla_notifier_transform_int (GConfValue *gcvalue,
 
 extern "C" gboolean
 mozilla_notifier_transform_string (GConfValue *gcvalue,
-				   GValue *value)
+				   GValue *value,
+				   gpointer user_data)
 {
 	const char *str;
 
@@ -318,10 +362,12 @@ static const PrefData notifier_entries[] =
 	  transform_accept_languages_list },
 	{ CONF_LANGUAGE_DEFAULT_ENCODING,
 	  "intl.charset.default",
-	  mozilla_notifier_transform_string },
+	  transform_encoding,
+	  GINT_TO_POINTER (FALSE) },
 	{ CONF_LANGUAGE_AUTODETECT_ENCODING,
 	  "intl.charset.detector",
-	  mozilla_notifier_transform_string },
+	  transform_encoding,
+	  GINT_TO_POINTER (TRUE) },
 	{ CONF_SECURITY_JAVA_ENABLED,
 	  "security.enable_java",
 	  mozilla_notifier_transform_bool },
@@ -418,7 +464,7 @@ notify_cb (GConfClient *client,
 	/* happens on initial notify if the key doesn't exist */
 	if (gcvalue == NULL) return;
 
-	if (data->func (gcvalue, &value))
+	if (data->func (gcvalue, &value, data->user_data))
 	{
 		mozilla_set_pref (data->mozilla_pref, &value);
 		g_value_unset (&value);
@@ -428,7 +474,8 @@ notify_cb (GConfClient *client,
 extern "C" guint
 mozilla_notifier_add (const char *gconf_key,
 		      const char *mozilla_pref,
-		      PrefValueTransformFunc func)
+		      PrefValueTransformFunc func,
+		      gpointer user_data)
 {
 	GConfClient *client;
 	PrefData *data;
@@ -446,6 +493,7 @@ mozilla_notifier_add (const char *gconf_key,
 	data->gconf_key = g_strdup (gconf_key);
 	data->mozilla_pref = g_strdup (mozilla_pref);
 	data->func = func;
+	data->user_data = user_data;
 
 	cnxn_id = gconf_client_notify_add (client, gconf_key,
 					   (GConfClientNotifyFunc) notify_cb,
@@ -573,7 +621,8 @@ mozilla_notifiers_init (void)
 	{
 		mozilla_notifier_add (notifier_entries[i].gconf_key,
 				      notifier_entries[i].mozilla_pref,
-				      notifier_entries[i].func);
+				      notifier_entries[i].func,
+				      notifier_entries[i].user_data);
 	}
 
 	/* fonts notifiers */
@@ -598,7 +647,7 @@ mozilla_notifiers_init (void)
 				    types[k], code);
 
 			mozilla_notifier_add (key, pref,
-					      mozilla_notifier_transform_string);
+					      mozilla_notifier_transform_string, NULL);
 		}
 
 #ifdef MIGRATE_PIXEL_SIZE
@@ -633,7 +682,7 @@ mozilla_notifiers_init (void)
 		g_snprintf (key, sizeof (key), "%s_%s",
 			    CONF_RENDERING_FONT_MIN_SIZE, code);
 		g_snprintf (pref, sizeof (pref), "font.minimum-size.%s", code);
-		mozilla_notifier_add (key, pref, transform_font_size);
+		mozilla_notifier_add (key, pref, transform_font_size, NULL);
 
 #ifdef MIGRATE_PIXEL_SIZE
 		if (migrate_size)
@@ -647,7 +696,7 @@ mozilla_notifiers_init (void)
 		g_snprintf (key, sizeof (key), "%s_%s",
 			    CONF_RENDERING_FONT_FIXED_SIZE, code);
 		g_snprintf (pref, sizeof (pref), "font.size.fixed.%s", code);
-		mozilla_notifier_add (key, pref, transform_font_size);
+		mozilla_notifier_add (key, pref, transform_font_size, NULL);
 
 #ifdef MIGRATE_PIXEL_SIZE
 		if (migrate_size)
@@ -661,7 +710,7 @@ mozilla_notifiers_init (void)
 		g_snprintf (key, sizeof (key), "%s_%s",
 			    CONF_RENDERING_FONT_VAR_SIZE, code);
 		g_snprintf (pref, sizeof (pref), "font.size.variable.%s", code);
-		mozilla_notifier_add (key, pref, transform_font_size);
+		mozilla_notifier_add (key, pref, transform_font_size, NULL);
 
 #ifdef MIGRATE_PIXEL_SIZE
 		if (migrate_size)
