@@ -1,5 +1,13 @@
 2004-11-11  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-history.c: (remove_obsolete_pages):
+	* src/bookmarks/ephy-bookmarks.c: (clear_favorites):
+
+	Fix signed/unsigned int confusion when iterating over
+	a GPtrArray.
+
+2004-11-11  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-history.c: (remove_pages_from_host_cb),
 	(connect_page_removed_from_host), (ephy_history_get_host):
 	* src/ephy-history-window.c: (cmd_delete),
