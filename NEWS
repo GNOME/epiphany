@@ -1,4 +1,43 @@
 ==============
+Epiphany 1.5.7
+==============
+
+Code changes
+
+	* Implement nsIWebProgressListener in MozDownload [#165328]
+	* Remove ephy_tab_get_action()
+	* Launch applications and handlers with user time
+
+Bug fixes
+	* Move style notifier to ephy-toolbars-model, and apply	the flags to new toolbars
+	* Move all the stuff from EphyWindow::finalize to dispose
+	* Keep a ref on the tray icon [#166143]
+	* Fix mixing up workspaces of windows when restoring session [#130990]
+	* Use event time when grabbing the pointer [#167473]
+	* Unparent the fixed toolbar before destroying the dock
+	* Unset size request if the fixed toolbar is present
+	* Don't activate startup notification with the recovery dialogue
+	* Don't switch tabs to modal alerts in ppv mode
+	* Fix bookmarks import [#163341]
+	* Don't assert if we don't have a new embed in new_window callback [#165445]
+	* Check the favicon file type and only allow ico, gif & png [#163886]
+	* Fix compress_tilde to only look at the prefix
+
+Contributors:
+Piers Cornwell, Xan Lopez, Carlos Garnacho Parro, Christian Persch
+and Jean-François Rameau; and the translators Vladimir Petkov (bg),
+Jordi Mallach (ca), Miloslav Trmac (cs), Ole Laursen (da),
+Hendrik Richter (de), Nikos Charonitakis (el), Adam Weinberger (en_CA),
+David Lodge (en_GB), Francisco Javier F. Serrador (es), Priit Laes (et),
+Pauli Virtanen (fi), Vincent Carriere (fr), Ankit Patel (gu),
+Takeshi AIHANA (ja), Changwoo Ryu (ko), Žygimantas Beručka (lt),
+Kjartan Maraas (nb), Reinout van Schouwen (nl), Kjartan Maraas (no),
+GNOME PL Team (pl), Afonso Celso Medina (pt_BR), Duarte Loreto (pt),
+Leonid Kanter (ru), Marcel Telka (sk), Laurent Dhima (sq),
+Christian Rose (sv) and Maxim Dziumanenko (uk)
+
+
+==============
 Epiphany 1.5.6
 ==============
 
