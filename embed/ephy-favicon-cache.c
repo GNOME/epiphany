@@ -482,6 +482,8 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 
 	g_hash_table_lookup (cache->priv->icons_hash, url);
 
+	LOG ("Create pixbuf for %s", pix_file)
+
 	pixbuf = gdk_pixbuf_new_from_file (pix_file, NULL);
 
 	if (pixbuf &&

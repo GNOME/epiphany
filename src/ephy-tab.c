@@ -429,11 +429,16 @@ ephy_tab_favicon_cb (EphyEmbed *embed,
 		     const char *url,
 		     EphyTab *tab)
 {
+	EphyBookmarks *eb;
+
 	g_strlcpy (tab->priv->favicon_url,
 		   url, 255);
 
 	if (!tab->priv->is_active) return;
 
+	eb = ephy_shell_get_bookmarks (ephy_shell);
+	ephy_bookmarks_set_icon (eb, tab->priv->location,
+			         tab->priv->favicon_url);
 	ephy_window_update_control (tab->priv->window,
 				    FaviconControl);
 }

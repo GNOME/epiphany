@@ -21,6 +21,7 @@
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtkcellrendererpixbuf.h>
 #include <libgnome/gnome-i18n.h>
 
 #include "eggtreemodelfilter.h"
@@ -418,6 +419,25 @@ ephy_node_view_add_column (EphyNodeView *view,
 	{
 		gtk_tree_view_column_set_sort_column_id (gcolumn, column);
 	}
+}
+
+void
+ephy_node_view_add_icon_column (EphyNodeView *view,
+			        EphyTreeModelNodeColumn column)
+{
+	GtkTreeViewColumn *gcolumn;
+	GtkCellRenderer *renderer;
+
+	gcolumn = (GtkTreeViewColumn *) gtk_tree_view_column_new ();
+	renderer = gtk_cell_renderer_pixbuf_new ();
+	gtk_tree_view_column_pack_start (gcolumn, renderer, TRUE);
+	gtk_tree_view_column_set_attributes (gcolumn, renderer,
+					     "pixbuf", column,
+					     NULL);
+	gtk_tree_view_column_set_sizing (gcolumn,
+					 GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (view->priv->treeview),
+				     gcolumn);
 }
 
 static void

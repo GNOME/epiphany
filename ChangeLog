@@ -1,5 +1,33 @@
 2003-01-13  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* TODO:
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_get):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_set_icon):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_finalize),
+	(ephy_new_bookmark_add), (ephy_new_bookmark_init),
+	(ephy_new_bookmark_set_smarturl), (ephy_new_bookmark_set_icon):
+	* src/bookmarks/ephy-new-bookmark.h:
+	* src/bookmarks/ephy-node-view.c: (ephy_node_view_add_column),
+	(ephy_node_view_add_icon_column):
+	* src/bookmarks/ephy-node-view.h:
+	* src/bookmarks/ephy-tree-model-node.c:
+	(ephy_tree_model_node_get_column_type), (get_icon_pixbuf),
+	(ephy_tree_model_node_get_value),
+	(ephy_tree_model_node_column_get_type):
+	* src/bookmarks/ephy-tree-model-node.h:
+	* src/ephy-history-model.c: (ephy_history_model_get_value):
+	* src/ephy-navigation-button.c: (setup_back_or_forward_menu):
+	* src/ephy-tab.c: (ephy_tab_favicon_cb):
+	* src/window-commands.c: (window_cmd_bookmarks_add_default):
+
+	Use favicons in bookmarks.
+	Use titles for session history when possible.
+
+2003-01-13  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/ephy-window.c: (update_favicon_control):
 
 	correctly update window icon when the page doesnt

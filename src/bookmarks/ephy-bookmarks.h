@@ -42,7 +42,8 @@ enum
 	EPHY_NODE_BMK_PROP_LOCATION = 3,
 	EPHY_NODE_BMK_PROP_KEYWORDS = 4,
 	EPHY_NODE_KEYWORD_PROP_NAME = 5,
-	EPHY_NODE_BMK_PROP_SMART_LOCATION = 6
+	EPHY_NODE_BMK_PROP_SMART_LOCATION = 6,
+	EPHY_NODE_BMK_PROP_ICON = 7
 };
 
 struct EphyBookmarks
@@ -67,6 +68,10 @@ EphyNode       *ephy_bookmarks_add		(EphyBookmarks *eb,
 						 const char *url,
 						 const char *smart_url,
 						 const char *keywords);
+
+void		 ephy_bookmarks_set_icon	(EphyBookmarks *eb,
+						 const char *url,
+						 const char *icon);
 
 char		*ephy_bookmarks_solve_smart_url (EphyBookmarks *eb,
 						 const char *smart_url,

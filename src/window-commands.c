@@ -330,6 +330,7 @@ window_cmd_bookmarks_add_default (BonoboUIComponent *uic,
 	EphyBookmarks *bookmarks;
 	GtkWidget *new_bookmark;
 	const char *location;
+	const char *icon;
 	char *title;
 
 	tab = ephy_window_get_active_tab (window);
@@ -344,11 +345,15 @@ window_cmd_bookmarks_add_default (BonoboUIComponent *uic,
 		title = _("Untitled");
 	}
 
+	icon = ephy_tab_get_favicon_url (tab);
+
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	new_bookmark = ephy_new_bookmark_new
 		(bookmarks, GTK_WINDOW (window), location);
 	ephy_new_bookmark_set_title
 		(EPHY_NEW_BOOKMARK (new_bookmark), title);
+	ephy_new_bookmark_set_icon
+		(EPHY_NEW_BOOKMARK (new_bookmark), icon);
 	gtk_widget_show (new_bookmark);
 }
 

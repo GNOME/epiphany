@@ -91,7 +91,7 @@ ephy_navigation_button_class_init (EphyNavigationButtonClass *klass)
 	ephy_tb_item_class = g_type_class_peek_parent (klass);
 }
 
-static void 
+static void
 ephy_navigation_button_init (EphyNavigationButton *tbi)
 {
 	EphyNavigationButtonPrivate *p = g_new0 (EphyNavigationButtonPrivate, 1);
@@ -528,7 +528,7 @@ setup_back_or_forward_menu (EphyWindow *window, GtkMenuShell *ms, EphyNavigation
 		char *title, *url;
 		GtkWidget *item;
 		ephy_embed_shistory_get_nth (embed, start, FALSE, &url, &title);
-		item = new_history_menu_item (url, NULL);
+		item = new_history_menu_item (title ? title : url, NULL);
 		gtk_menu_shell_append (ms, item);
 		g_object_set_data (G_OBJECT (item), "go_nth", GINT_TO_POINTER (start));
 		g_signal_connect (item, "activate",

@@ -442,6 +442,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	editor->priv->bookmarks_filter = ephy_node_filter_new ();
 	bm_view = ephy_node_view_new (node, editor->priv->bookmarks_filter);
 	ephy_node_view_enable_drag_source (bm_view);
+	ephy_node_view_add_icon_column (bm_view, EPHY_TREE_MODEL_NODE_COL_ICON);
 	ephy_node_view_add_column (bm_view, _("Title"),
 				   EPHY_TREE_MODEL_NODE_COL_BOOKMARK, TRUE);
 	ephy_node_view_add_column (bm_view, _("Location"),

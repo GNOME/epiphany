@@ -657,6 +657,29 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	return bm;
 }
 
+void
+ephy_bookmarks_set_icon	(EphyBookmarks *eb,
+			 const char *url,
+			 const char *icon)
+{
+	EphyNode *node;
+	GValue value = { 0, };
+
+	g_return_if_fail (icon != NULL);
+
+	g_static_rw_lock_reader_lock (eb->priv->bookmarks_hash_lock);
+	node = g_hash_table_lookup (eb->priv->bookmarks_hash, url);
+	g_static_rw_lock_reader_unlock (eb->priv->bookmarks_hash_lock);
+
+	if (node == NULL) return;
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, icon);
+	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_ICON,
+			        &value);
+	g_value_unset (&value);
+}
+
 static gchar *
 options_skip_spaces (const gchar *str)
 {

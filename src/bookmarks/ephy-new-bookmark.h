@@ -57,6 +57,9 @@ GtkWidget	    *ephy_new_bookmark_new          (EphyBookmarks *bookmarks,
 void		     ephy_new_bookmark_set_title    (EphyNewBookmark *bookmark,
 						     const char *title);
 
+void		     ephy_new_bookmark_set_icon     (EphyNewBookmark *bookmark,
+						     const char *icon);
+
 void		     ephy_new_bookmark_set_smarturl (EphyNewBookmark *bookmark,
 						     const char *url);
 

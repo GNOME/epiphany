@@ -30,6 +30,8 @@
 #include "ephy-tree-model-node.h"
 #include "ephy-stock-icons.h"
 #include "ephy-node.h"
+#include "ephy-shell.h"
+#include "ephy-debug.h"
 
 static void ephy_tree_model_node_class_init (EphyTreeModelNodeClass *klass);
 static void ephy_tree_model_node_init (EphyTreeModelNode *model);
@@ -361,6 +363,8 @@ ephy_tree_model_node_get_column_type (GtkTreeModel *tree_model,
 			return G_TYPE_STRING;
 		case EPHY_TREE_MODEL_NODE_COL_VISIBLE:
 			return G_TYPE_BOOLEAN;
+		case EPHY_TREE_MODEL_NODE_COL_ICON:
+			return GDK_TYPE_PIXBUF;
 	default:
 		g_assert_not_reached ();
 		return G_TYPE_INVALID;
@@ -431,6 +435,28 @@ ephy_tree_model_node_get_path (GtkTreeModel *tree_model,
 }
 
 static void
+get_icon_pixbuf (EphyNode *node, GValue *value)
+{
+	EphyFaviconCache *cache;
+	const char *icon_location;
+	GdkPixbuf *pixbuf = NULL;
+
+	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
+	icon_location = ephy_node_get_property_string
+		(node, EPHY_NODE_BMK_PROP_ICON);
+
+	LOG ("Get favicon for %s", icon_location ? icon_location : "None")
+
+	if (icon_location)
+	{
+		pixbuf = ephy_favicon_cache_get (cache, icon_location);
+	}
+
+	g_value_init (value, GDK_TYPE_PIXBUF);
+	g_value_set_object (value, pixbuf);
+}
+
+static void
 ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 			        GtkTreeIter *iter,
 			        int column,
@@ -467,6 +493,10 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 				        EPHY_NODE_KEYWORD_PROP_NAME,
 				        value);
 		break;
+	case EPHY_TREE_MODEL_NODE_COL_ICON:
+		get_icon_pixbuf (node, value);
+	break;
+
 	case EPHY_TREE_MODEL_NODE_COL_VISIBLE:
 		g_value_init (value, G_TYPE_BOOLEAN);
 
@@ -689,6 +719,7 @@ ephy_tree_model_node_column_get_type (void)
 			{ EPHY_TREE_MODEL_NODE_COL_BOOKMARK, "EPHY_TREE_MODEL_NODE_COL_BOOKMARK", "bookmark" },
 			{ EPHY_TREE_MODEL_NODE_COL_LOCATION, "EPHY_TREE_MODEL_NODE_COL_LOCATION", "location" },
 			{ EPHY_TREE_MODEL_NODE_COL_KEYWORD,  "EPHY_TREE_MODEL_NODE_COL_KEYWORD", "keyword" },
+			{ EPHY_TREE_MODEL_NODE_COL_ICON,     "EPHY_TREE_MODEL_NODE_COL_ICON", "icon" },
 			{ EPHY_TREE_MODEL_NODE_COL_VISIBLE,  "EPHY_TREE_MODEL_NODE_COL_VISIBLE", "visible" },
 
 			{ 0, 0, 0 }

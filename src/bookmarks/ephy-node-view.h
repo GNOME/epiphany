@@ -66,6 +66,9 @@ void	      ephy_node_view_add_column		      (EphyNodeView *view,
 						       EphyTreeModelNodeColumn column,
 						       gboolean sortable);
 
+void	      ephy_node_view_add_icon_column	      (EphyNodeView *view,
+						       EphyTreeModelNodeColumn column);
+
 void	      ephy_node_view_remove		      (EphyNodeView *view);
 
 GList        *ephy_node_view_get_selection            (EphyNodeView *view);

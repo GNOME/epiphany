@@ -47,6 +47,7 @@ struct EphyNewBookmarkPrivate
 	EphyBookmarks *bookmarks;
 	char *location;
 	char *smarturl;
+	char *icon;
 
 	GtkWidget *title_entry;
 	GtkWidget *keywords_entry;
@@ -131,6 +132,7 @@ ephy_new_bookmark_finalize (GObject *object)
 
 	g_free (editor->priv->location);
 	g_free (editor->priv->smarturl);
+	g_free (editor->priv->icon);
 
 	g_free (editor->priv);
 
@@ -150,6 +152,13 @@ ephy_new_bookmark_add (EphyNewBookmark *new_bookmark)
 	ephy_bookmarks_add (new_bookmark->priv->bookmarks, title,
 			    new_bookmark->priv->location,
 			    new_bookmark->priv->smarturl, keywords);
+
+	if (new_bookmark->priv->icon)
+	{
+		ephy_bookmarks_set_icon (new_bookmark->priv->bookmarks,
+					 new_bookmark->priv->location,
+					 new_bookmark->priv->icon);
+	}
 }
 
 static void
@@ -324,6 +333,7 @@ ephy_new_bookmark_init (EphyNewBookmark *editor)
 	editor->priv = g_new0 (EphyNewBookmarkPrivate, 1);
 	editor->priv->location = NULL;
 	editor->priv->smarturl = NULL;
+	editor->priv->icon = NULL;
 }
 
 void
@@ -341,5 +351,13 @@ ephy_new_bookmark_set_smarturl (EphyNewBookmark *bookmark,
 {
 	g_free (bookmark->priv->smarturl);
 	bookmark->priv->smarturl = g_strdup (url);
+}
+
+void
+ephy_new_bookmark_set_icon (EphyNewBookmark *bookmark,
+			    const char *icon)
+{
+	g_free (bookmark->priv->icon);
+	bookmark->priv->icon = icon ? g_strdup (icon) : NULL;
 }
 
