@@ -929,8 +929,6 @@ window_cmd_help_about (GtkAction *action,
 {
 	static GtkWidget *about = NULL;
 	GtkWidget** ptr;
-	GdkPixbuf *icon = NULL;
-	int size = 48;
 
 	static char *authors[] = {
 		"Marco Pesenti Gritti <marco@gnome.org>",
@@ -954,15 +952,6 @@ window_cmd_help_about (GtkAction *action,
 		return;
 	}
 
-	/* FIXME multihead: use the icon theme for the correct screen, not for the default screen */
-	gtk_icon_size_lookup_for_settings (gtk_settings_get_default (),
-					   GTK_ICON_SIZE_DIALOG, &size, NULL);
-	icon = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
-					 "web-browser", size, 0 , NULL);
-	if (icon == NULL)
-	{
-		g_warning ("Web browser gnome icon not found");
-	}
 
 	about = g_object_new (GTK_TYPE_ABOUT_DIALOG,
 			      "name", _("Epiphany"),
@@ -971,20 +960,15 @@ window_cmd_help_about (GtkAction *action,
 			      "authors", authors,
 			      "documenters", documenters,
 			      "translator-credits", _("translator-credits"),
-			      "logo", icon,
+			      "logo-icon-name", "web-browser",
 			      NULL);
 
-	if (icon != NULL)
-	{
-		g_object_unref (icon);
-	}
+	gtk_window_set_icon_name (GTK_WINDOW (about), "web-browser");
 
 	g_signal_connect (about, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 
 	gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (window));
 	gtk_window_set_destroy_with_parent (GTK_WINDOW (about), TRUE);
-
-	gtk_window_set_icon_name (GTK_WINDOW (about), "web-browser");
 
 	ptr = &about;
 	g_object_add_weak_pointer (G_OBJECT (about), (gpointer *)ptr);
