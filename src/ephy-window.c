@@ -51,9 +51,6 @@
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <gtk/gtk.h>
-#include <X11/X.h>
-#include <X11/Xlib.h>
-#include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
 #include "egg-action-group.h"
 #include "egg-menu-merge.h"
