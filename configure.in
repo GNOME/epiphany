@@ -267,7 +267,7 @@ AC_COMPILE_IFELSE(
 		  nsIURI *arg1;
 		  p->RemovePage(arg1);]]
 	)],
-	[AC_DEFINE([MOZ_NSIGLOBALHISTORY_NSIURIP],[1],[dummy]) result=yes],
+	[AC_DEFINE([MOZ_NSIGLOBALHISTORY_NSIURIP],[1],[Define if nsIBrowserHistory methods expect nsIURI*]) result=yes],
 	[result=no])
 
 AC_MSG_RESULT([$result])
@@ -285,7 +285,7 @@ AC_COMPILE_IFELSE(
 		[[nsIBrowserHistory *p;
 		  p->AddPageWithDetails(nsnull,nsnull,0);]]
 	)],
-	[AC_DEFINE([MOZ_NSIBROWSERHISTORY_ADDPAGEWITHDETAILS],[1],[dummy]) result=yes],
+	[AC_DEFINE([MOZ_NSIBROWSERHISTORY_ADDPAGEWITHDETAILS],[1],[Define if nsIBrowserHistory::AddPageWithDetails exists]) result=yes],
 	[result=no])
 
 AC_MSG_RESULT([$result])
@@ -303,7 +303,7 @@ AC_COMPILE_IFELSE(
 		[[nsIBrowserHistory *p;
 		  p->AddURI(nsnull,PR_FALSE,PR_FALSE,nsnull);]]
 	)],
-	[AC_DEFINE([MOZ_NSIBROWSERHISTORY_ADDURI_WITH_REFERRER],[1],[dummy]) result=yes],
+	[AC_DEFINE([MOZ_NSIBROWSERHISTORY_ADDURI_WITH_REFERRER],[1],[Define if nsIGlobalHistory2::AddURI takes a referrer]) result=yes],
 	[result=no])
 
 AC_MSG_RESULT([$result])
@@ -319,7 +319,7 @@ AC_COMPILE_IFELSE(
 		[[nsIXULChromeRegistry *p;
 		  p->SelectSkin (nsEmbedCString(), PR_FALSE);]]
 	)],
-	[AC_DEFINE([MOZ_NSIXULCHROMEREGISTRY_SELECTSKIN],[1],[dummy]) result=yes],
+	[AC_DEFINE([MOZ_NSIXULCHROMEREGISTRY_SELECTSKIN],[1],[Define if nsIXULChromeRegistry::SelectSkin exists]) result=yes],
 	[result=no])
 
 AC_MSG_RESULT([$result])
@@ -339,7 +339,25 @@ AC_COMPILE_IFELSE(
 		[[nsIDOMNSEvent *p;
 		  p->GetIsTrusted (nsnull);]]
 	)],
-	[AC_DEFINE([MOZ_NSIDOMNSEVENT_GETISTRUSTED],[1],[dummy]) result=yes],
+	[AC_DEFINE([MOZ_NSIDOMNSEVENT_GETISTRUSTED],[1],[Define if nsIDOMNSEvent::GetIsTrusted exists]) result=yes],
+	[result=no])
+
+AC_MSG_RESULT([$result])
+
+dnl Added in 1.8a6 on trunk
+dnl https://bugzilla.mozilla.org/show_bug.cgi?id=223310
+AC_MSG_CHECKING([whether nsIKeygenThread takes an nsIObserver])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+		[[#include <pipnss/nsIKeygenThread.h>
+		  #include <nsIObserver.h>]],
+		[[nsIKeygenThread *p;
+		  nsIObserver *obs;
+		  p->StartKeyGeneration (obs);]]
+	)],
+	[AC_DEFINE([HAVE_NSIKEYGENTHREAD_NSIOBSERVER],[1],
+		   [Define if nsIKeygenThread::StartKeyGeneration takes an nsIObserver]) result=yes],
 	[result=no])
 
 AC_MSG_RESULT([$result])
