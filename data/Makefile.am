@@ -7,6 +7,12 @@ server_in_files = GNOME_Epiphany_Automation.server.in GNOME_Epiphany_NautilusVie
 server_DATA = GNOME_Epiphany_Automation.server GNOME_Epiphany_NautilusView.server
 serverdir = $(libdir)/bonobo/servers
 
+DESKTOP_IN_FILES=epiphany.desktop.in
+DESKTOP_FILES=$(DESKTOP_IN_FILES:.desktop.in=.desktop)
+
+Applicationsdir = $(datadir)/applications
+Applications_DATA = $(DESKTOP_FILES)
+
 schemadir = $(sysconfdir)/gconf/schemas
 schema_DATA = epiphany.schemas
 
@@ -22,8 +28,10 @@ install-data-local:
 	done \
         fi
 
-CLEANFILES = GNOME_Epiphany_Automation.server
+CLEANFILES = $(server_DATA) $(Applications_DATA) 
 
-EXTRA_DIST = $(server_in_files)     \
-	     $(schema_DATA)         \
-	     $(starthere_DATA)
+EXTRA_DIST = $(server_in_files)     	\
+	     $(schema_DATA)         	\
+	     $(starthere_DATA)	    	\
+	     $(DESKTOP_IN_FILES)
+
