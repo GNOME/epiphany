@@ -1,3 +1,11 @@
+2004-05-11  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Destroy browser on destroy, but delete it on finalize. Fix for
+	bug #142184, merged from HEAD.
+
 2004-05-09  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-window.c:

@@ -394,7 +394,10 @@ nsresult EphyBrowser::Destroy ()
 	DetachListeners ();
 
       	mWebBrowser = nsnull;
-	
+	mDOMWindow = nsnull;
+
+	mInitialized = PR_FALSE;
+
 	return NS_OK;
 }
 
@@ -410,7 +413,7 @@ nsresult EphyBrowser::GoToHistoryIndex (PRInt16 index)
 
 nsresult EphyBrowser::SetZoom (float aZoom, PRBool reflow)
 {
-	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
+	if (!mWebBrowser) return NS_ERROR_FAILURE;
 
 	if (reflow)
 	{
@@ -484,6 +487,8 @@ nsresult EphyBrowser::GetContentViewer (nsIContentViewer **aViewer)
 
 nsresult EphyBrowser::GetZoom (float *aZoom)
 {
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
+
 	nsCOMPtr<nsIContentViewer> contentViewer;	
 	GetContentViewer (getter_AddRefs(contentViewer));
 	NS_ENSURE_TRUE (contentViewer, NS_ERROR_FAILURE);
@@ -533,6 +538,8 @@ nsresult EphyBrowser::GetTargetDocument (nsIDOMDocument **aDOMDocument)
 
 nsresult EphyBrowser::GetSHInfo (PRInt32 *count, PRInt32 *index)
 {
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
+
 	nsCOMPtr<nsISHistory> SessionHistory;
 	GetSHistory (getter_AddRefs(SessionHistory));
 	NS_ENSURE_TRUE (SessionHistory, NS_ERROR_FAILURE);
@@ -545,6 +552,8 @@ nsresult EphyBrowser::GetSHInfo (PRInt32 *count, PRInt32 *index)
 
 nsresult EphyBrowser::GetSHTitleAtIndex (PRInt32 index, PRUnichar **title)
 {
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
+
 	nsCOMPtr<nsISHistory> SessionHistory;
 	GetSHistory (getter_AddRefs(SessionHistory));
 	NS_ENSURE_TRUE (SessionHistory, NS_ERROR_FAILURE);
@@ -563,6 +572,8 @@ nsresult EphyBrowser::GetSHTitleAtIndex (PRInt32 index, PRUnichar **title)
 
 nsresult EphyBrowser::GetSHUrlAtIndex (PRInt32 index, nsCString &url)
 {
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
+
 	nsCOMPtr<nsISHistory> SessionHistory;
 	GetSHistory (getter_AddRefs(SessionHistory));
 	NS_ENSURE_TRUE (SessionHistory, NS_ERROR_FAILURE);
@@ -629,7 +640,7 @@ nsresult EphyBrowser::GetPageDescriptor(nsISupports **aPageDescriptor)
 
 nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
 {
-	if (!mDOMWindow) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mDOMWindow, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMDocument> DOMDocument;
 	mDOMWindow->GetDocument (getter_AddRefs(DOMDocument));
@@ -655,6 +666,8 @@ nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
 
 nsresult EphyBrowser::GetTargetDocumentUrl (nsCString &url)
 {
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
+
         nsCOMPtr<nsIDOMDocument> DOMDocument;
 	GetTargetDocument (getter_AddRefs(DOMDocument));
 	NS_ENSURE_TRUE (DOMDocument, NS_ERROR_FAILURE);
@@ -679,6 +692,8 @@ nsresult EphyBrowser::GetTargetDocumentUrl (nsCString &url)
 
 nsresult EphyBrowser::ForceEncoding (const char *encoding) 
 {
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
+
 	nsCOMPtr<nsIContentViewer> contentViewer;	
 	GetContentViewer (getter_AddRefs(contentViewer));
 	NS_ENSURE_TRUE (contentViewer, NS_ERROR_FAILURE);
@@ -714,6 +729,8 @@ nsresult EphyBrowser::GetEncodingInfo (EphyEncodingInfo **infoptr)
 {
 	nsresult result;
 	EphyEncodingInfo *info;
+
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMDocument> domDoc;
 	GetTargetDocument (getter_AddRefs(domDoc));
@@ -836,10 +853,9 @@ nsresult EphyBrowser::GetEncodingInfo (EphyEncodingInfo **infoptr)
 
 nsresult EphyBrowser::DoCommand (const char *command)
 {
-	nsCOMPtr<nsICommandManager> cmdManager;
-
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
+	nsCOMPtr<nsICommandManager> cmdManager;
 	cmdManager = do_GetInterface (mWebBrowser);
 	NS_ENSURE_TRUE (cmdManager, NS_ERROR_FAILURE);
 
@@ -848,10 +864,9 @@ nsresult EphyBrowser::DoCommand (const char *command)
 
 nsresult EphyBrowser::GetCommandState (const char *command, PRBool *enabled)
 {
-	nsCOMPtr<nsICommandManager> cmdManager;
-
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
+	nsCOMPtr<nsICommandManager> cmdManager;
 	cmdManager = do_GetInterface (mWebBrowser);
 	NS_ENSURE_TRUE (cmdManager, NS_ERROR_FAILURE);
 
@@ -961,6 +976,8 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 nsresult EphyBrowser::GetHasModifiedForms (PRBool *modified)
 {
 	*modified = PR_FALSE;
+
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDocShell> rootDocShell = do_GetInterface (mWebBrowser);
 	NS_ENSURE_TRUE (rootDocShell, NS_ERROR_FAILURE);

@@ -48,6 +48,7 @@
 static void	mozilla_embed_class_init	(MozillaEmbedClass *klass);
 static void	mozilla_embed_init		(MozillaEmbed *gs);
 static void	mozilla_embed_destroy		(GtkObject *object);
+static void	mozilla_embed_finalize		(GObject *object);
 static void	ephy_embed_iface_init		(EphyEmbedIface *iface);
 
 static void mozilla_embed_connect_signals	(MozillaEmbed *membed);
@@ -238,6 +239,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
 	object_class->constructor = mozilla_embed_constructor;
+	object_class->finalize = mozilla_embed_finalize;
 
 	gtk_object_class->destroy = mozilla_embed_destroy;
 
@@ -251,22 +253,8 @@ mozilla_embed_init (MozillaEmbed *embed)
 {
         embed->priv = MOZILLA_EMBED_GET_PRIVATE (embed);
 	embed->priv->browser = new EphyBrowser ();
-	embed->priv->security_state = -1;
+	embed->priv->security_state = STATE_IS_UNKNOWN;
 
-	mozilla_embed_connect_signals (embed);
-}
-
-gpointer
-_mozilla_embed_get_ephy_browser (MozillaEmbed *embed)
-{
-	g_return_val_if_fail (embed->priv->browser != NULL, NULL);
-	
-	return embed->priv->browser;
-}
-
-static void 
-mozilla_embed_connect_signals (MozillaEmbed *embed)
-{
 	g_signal_connect_object (G_OBJECT (embed), "location",
 				 G_CALLBACK (mozilla_embed_location_changed_cb),
 				 embed, (GConnectFlags) 0);
@@ -290,6 +278,14 @@ mozilla_embed_connect_signals (MozillaEmbed *embed)
 				 embed, (GConnectFlags) 0);
 }
 
+gpointer
+_mozilla_embed_get_ephy_browser (MozillaEmbed *embed)
+{
+	g_return_val_if_fail (embed->priv->browser != NULL, NULL);
+	
+	return embed->priv->browser;
+}
+
 static void
 mozilla_embed_destroy (GtkObject *object)
 {
@@ -298,11 +294,25 @@ mozilla_embed_destroy (GtkObject *object)
 	if (embed->priv->browser)
 	{
 		embed->priv->browser->Destroy();
-        	delete embed->priv->browser;
-        	embed->priv->browser = NULL;
 	}
 	
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
+}
+
+static void
+mozilla_embed_finalize (GObject *object)
+{
+	MozillaEmbed *embed = MOZILLA_EMBED (object);
+
+	if (embed->priv->browser)
+	{
+        	delete embed->priv->browser;
+	       	embed->priv->browser = nsnull;
+	}
+
+	embed->priv->request = nsnull;
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
@@ -445,7 +455,10 @@ impl_go_up (EphyEmbed *embed)
 	char *parent_uri;
 
 	uri = ephy_embed_get_location (embed, TRUE);
-	g_return_if_fail (uri != NULL);
+	if (uri == NULL)
+	{
+		return;
+	}
 	
 	parent_uri = mozilla_embed_get_uri_parent (uri);
 	g_free (uri);
@@ -513,8 +526,7 @@ impl_reload (EphyEmbed *embed,
 		mflags = GTK_MOZ_EMBED_FLAG_RELOADBYPASSPROXYANDCACHE;
 	}
 	
-	gtk_moz_embed_reload (GTK_MOZ_EMBED(embed),
-			      mflags);
+	gtk_moz_embed_reload (GTK_MOZ_EMBED(embed), mflags);
 }
 
 static void
@@ -589,9 +601,16 @@ impl_shistory_get_nth (EphyEmbed *embed,
 
 	rv = mpriv->browser->GetSHTitleAtIndex(nth, &title);
 
-	*aTitle = g_strdup (NS_ConvertUCS2toUTF8(title).get());
+	if (title)
+	{
+		*aTitle = g_strdup (NS_ConvertUCS2toUTF8(title).get());
 
-	nsMemory::Free (title);
+		nsMemory::Free (title);
+	}
+	else
+	{
+		*aTitle = NULL;
+	}
 }
 
 static int
@@ -622,7 +641,8 @@ impl_get_security_level (EphyEmbed *embed,
 {
 	nsresult result;
 
-	g_return_if_fail (description != NULL || level != NULL);
+	g_return_if_fail (description != NULL && level != NULL);
+
 	*description = NULL;
 	*level = STATE_IS_UNKNOWN;
 
