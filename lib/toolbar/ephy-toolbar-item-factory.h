@@ -23,8 +23,10 @@
 
 G_BEGIN_DECLS
 
+typedef EphyTbItem *(*EphyTbItemConstructor) (void);
+
 EphyTbItem *	ephy_toolbar_item_create_from_string	(const gchar *str);
-GSList *	ephy_toolbar_list_item_types		(void);
+void            ephy_toolbar_item_register_type         (const gchar *type, EphyTbItemConstructor constructor);
 
 G_END_DECLS
 

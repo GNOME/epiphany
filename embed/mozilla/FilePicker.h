@@ -16,8 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef FILE_PICKER_H
-#define FILE_PICKER_H
+#ifndef __FilePicker_h
+#define __FilePicker_h
 
 #include "nsIFilePicker.h"
 #include "nsError.h"
@@ -47,21 +47,20 @@ extern nsresult NS_NewFilePickerFactory(nsIFactory** aFactory);
 /* Header file */
 class GFilePicker : public nsIFilePicker
 {
-	friend void filePicker_save_content_cb(GtkToggleButton *aButton,
-						GFilePicker *aFilePicker);
   public:
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIFILEPICKER
-	enum {   returnOK = nsIFilePicker::returnOK,
+	enum {  returnOK = nsIFilePicker::returnOK,
 		returnCancel = nsIFilePicker::returnCancel,
 		returnReplace = nsIFilePicker::returnReplace,
 		returnOKSaveContent = 256 };
 
-	GFilePicker(PRBool aShowContentCheck = PR_FALSE, FileFormat *aFileFormats = NULL);
+	GFilePicker(PRBool aShowContentCheck = PR_FALSE,
+		    FileFormat *aFileFormats = nsnull);
 	virtual ~GFilePicker();
 
 	/* additional members */
-	NS_METHOD InitWithGtkWidget(GtkWidget *aParentWidget,
+	NS_METHOD InitWithGtkWidget(GtkWidget *aParentWidget, 
 				    const char *aTitle, PRInt16 aMode);
 	NS_METHOD SanityCheck(PRBool *retIsSane);
 
@@ -82,11 +81,11 @@ class GFilePicker : public nsIFilePicker
 	PRInt16 mMode;
 
 	PRBool mShowContentCheck;
-	PRBool mSaveContent;
 
-	GtkWidget *mParentWidget;
+	GtkWidget *mParentWidget;	
 	GtkWidget *mFileSelector;
 	GtkWidget *mFormatChooser;
+	GtkWidget *mSaveContentCheck;
 
 	FileFormat *mFileFormats;
 };

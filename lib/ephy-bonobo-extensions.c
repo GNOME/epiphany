@@ -677,3 +677,19 @@ ephy_bonobo_clear_path (BonoboUIComponent *uic,
 		g_free (remove_wildcard);
 	}
 }
+
+void
+ephy_bonobo_add_numbered_widget (BonoboUIComponent *uic, GtkWidget *w,
+				 guint index, const char *container_path)
+{
+	gchar *path = ephy_bonobo_get_numbered_menu_item_path (uic, container_path, index);
+	gchar *item_name = get_numbered_menu_item_name (index);
+	gchar *xml_string = g_strdup_printf ("<control name=\"%s\"/>", item_name);
+
+	bonobo_ui_component_set (uic, container_path, xml_string, NULL);
+	bonobo_ui_component_widget_set (uic, path, w, NULL);
+
+	g_free (path);
+	g_free (item_name);
+	g_free (xml_string);
+}

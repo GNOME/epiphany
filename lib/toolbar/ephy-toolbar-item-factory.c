@@ -35,25 +35,41 @@
 //#define DEBUG_MSG(x) g_print x
 #define DEBUG_MSG(x)
 
-typedef EphyTbItem *(EphyTbItemConstructor) (void);
-
 typedef struct
 {
 	const char *type_name;
-	EphyTbItemConstructor *constructor;
+	EphyTbItemConstructor constructor;
 } EphyTbItemTypeInfo;
 
-static EphyTbItemTypeInfo ephy_tb_item_known_types[] =
+static EphyTbItemTypeInfo ephy_tb_item_default_types[] =
 {
-	{ "std_toolitem",		(EphyTbItemConstructor *) ephy_tbi_std_toolitem_new },
-	{ "navigation_history",		(EphyTbItemConstructor *) ephy_tbi_navigation_history_new },
-	{ "zoom",			(EphyTbItemConstructor *) ephy_tbi_zoom_new },
-	{ "location",			(EphyTbItemConstructor *) ephy_tbi_location_new },
-	{ "spinner",			(EphyTbItemConstructor *) ephy_tbi_spinner_new },
-	{ "favicon",			(EphyTbItemConstructor *) ephy_tbi_favicon_new },
-	{ "separator",			(EphyTbItemConstructor *) ephy_tbi_separator_new },
+	{ "std_toolitem",		(EphyTbItemConstructor) ephy_tbi_std_toolitem_new },
+	{ "navigation_history",		(EphyTbItemConstructor) ephy_tbi_navigation_history_new },
+	{ "zoom",			(EphyTbItemConstructor) ephy_tbi_zoom_new },
+	{ "location",			(EphyTbItemConstructor) ephy_tbi_location_new },
+	{ "spinner",			(EphyTbItemConstructor) ephy_tbi_spinner_new },
+	{ "favicon",			(EphyTbItemConstructor) ephy_tbi_favicon_new },
+	{ "separator",			(EphyTbItemConstructor) ephy_tbi_separator_new },
 	{ NULL,				NULL }
 };
+
+static GHashTable *ephy_tb_item_known_types = NULL;
+
+static void
+ephy_tb_item_factory_init (void)
+{
+	if (ephy_tb_item_known_types == NULL)
+	{
+		int i;
+		ephy_tb_item_known_types = g_hash_table_new (g_str_hash, g_str_equal);
+
+		for (i = 0; ephy_tb_item_default_types[i].type_name; ++i)
+		{
+			ephy_toolbar_item_register_type (ephy_tb_item_default_types[i].type_name,
+							 ephy_tb_item_default_types[i].constructor);
+		}
+	}
+}
 
 EphyTbItem *
 ephy_toolbar_item_create_from_string (const gchar *str)
@@ -66,7 +82,9 @@ ephy_toolbar_item_create_from_string (const gchar *str)
 	const gchar *lpar;
 	const gchar *rpar;
 	const gchar *eq;
-	int i;
+	EphyTbItemConstructor constructor;
+
+	ephy_tb_item_factory_init ();
 
 	rest = str;
 
@@ -104,21 +122,20 @@ ephy_toolbar_item_create_from_string (const gchar *str)
 		props = NULL;
 	}
 
-	DEBUG_MSG (("ephytoolbar_item_create_from_string id=%s type=%s props=%s\n", id, type, props));
+	DEBUG_MSG (("ephy_toolbar_item_create_from_string id=%s type=%s props=%s\n", id, type, props));
 
-	for (i = 0; ephy_tb_item_known_types[i].type_name; ++i)
+	constructor = g_hash_table_lookup (ephy_tb_item_known_types, type);
+
+	if (constructor)
 	{
-		if (!strcmp (type, ephy_tb_item_known_types[i].type_name))
+		ret = constructor ();
+		if (id)
 		{
-			ret = ephy_tb_item_known_types[i].constructor ();
-			if (id)
-			{
-				ephy_tb_item_set_id (ret, id);
-			}
-			if (props)
-			{
-				ephy_tb_item_parse_properties (ret, props);
-			}
+			ephy_tb_item_set_id (ret, id);
+		}
+		if (props)
+		{
+			ephy_tb_item_parse_properties (ret, props);
 		}
 	}
 
@@ -143,16 +160,9 @@ ephy_toolbar_item_create_from_string (const gchar *str)
 	return ret;
 }
 
-GSList *
-ephy_toolbar_list_item_types (void)
+void
+ephy_toolbar_item_register_type (const gchar *type, EphyTbItemConstructor constructor)
 {
-	int i;
-	GSList *ret = NULL;
-	for (i = 0; ephy_tb_item_known_types[i].type_name; ++i)
-	{
-		ret = g_slist_prepend (ret,
-				       (gchar *) ephy_tb_item_known_types[i].type_name);
-	}
-	return ret;
+	ephy_tb_item_factory_init ();
+	g_hash_table_insert (ephy_tb_item_known_types, g_strdup (type), constructor);
 }
-

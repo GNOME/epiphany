@@ -36,6 +36,7 @@
 #include "ephy-gui.h"
 #include "eel-gconf-extensions.h"
 
+#include <glib/gconvert.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkmenu.h>
@@ -74,20 +75,17 @@
 #include "FilePicker.h"
 #include "MozillaPrivate.h"
 
-void filePicker_save_content_cb(GtkToggleButton *aButton,
-				GFilePicker *aFilePicker);
-
 /* Implementation file */
 NS_IMPL_ISUPPORTS1(GFilePicker, nsIFilePicker)
 
-GFilePicker::GFilePicker(PRBool showContentCheck, FileFormat *fileFormats) :
-			mSaveContent(PR_FALSE)
+GFilePicker::GFilePicker(PRBool aShowContentCheck, FileFormat *aFileFormats) :
+			mShowContentCheck(aShowContentCheck),
+			mSaveContentCheck(NULL),
+			mFileFormats(aFileFormats)
 {
 	NS_INIT_ISUPPORTS();
-	/* member initializers and constructor code */
 
-	mShowContentCheck = showContentCheck;
-	mFileFormats = fileFormats;
+	/* member initializers and constructor code */
 	mFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
 	mDisplayDirectory = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
 	mDisplayDirectory->InitWithNativePath(nsDependentCString(g_get_home_dir()));
@@ -147,13 +145,28 @@ NS_IMETHODIMP GFilePicker::SetFilterIndex(PRInt32 aFilterIndex)
 /* attribute wstring defaultString; */
 NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar * *aDefaultString)
 {
-	*aDefaultString = ToNewUnicode(NS_ConvertUTF8toUCS2(mDefaultString));
+	guint bytesRead(0), bytesWritten(0);
+	gchar *utf8DefaultString = g_filename_to_utf8(mDefaultString.get(), -1,
+						      &bytesRead,
+						      &bytesWritten, NULL);
+
+	*aDefaultString = ToNewUnicode(NS_ConvertUTF8toUCS2(utf8DefaultString));
+	g_free(utf8DefaultString);
+
 	return NS_OK;
 }
 NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
 {
 	if (aDefaultString)
-		mDefaultString = NS_ConvertUCS2toUTF8(aDefaultString);
+	{
+		guint bytesRead(0), bytesWritten(0);
+		gchar *localeDefaultString =
+			g_filename_from_utf8(NS_ConvertUCS2toUTF8(aDefaultString).get(),
+					     -1, &bytesRead,
+					     &bytesWritten, NULL);
+		mDefaultString = localeDefaultString;					     
+		g_free(localeDefaultString);
+	}
 	else
 		mDefaultString = "";
 	return NS_OK;
@@ -244,14 +257,10 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
         	gtk_box_pack_end(GTK_BOX(GTK_FILE_SELECTION(mFileSelector)->action_area),
 				 bbox, TRUE, TRUE, 0);
 
-		GtkWidget *saveContent = 
+		mSaveContentCheck = 
 			gtk_check_button_new_with_label(_("Save with content"));
-		g_signal_connect(G_OBJECT(saveContent),
-				 "clicked",
-				 G_CALLBACK(filePicker_save_content_cb),
-				 (gpointer)this);
 
-		gtk_box_pack_start(GTK_BOX(bbox), saveContent,
+		gtk_box_pack_start(GTK_BOX(bbox), mSaveContentCheck,
 				   FALSE, FALSE, 0);
 
 		gtk_widget_show_all(bbox);
@@ -447,25 +456,28 @@ NS_METHOD GFilePicker::HandleFilePickerResult(PRInt16 *retval)
 
 	if (mFormatChooser)
 	{
-		gint i = 0;		
 		GtkWidget *menu = gtk_option_menu_get_menu 
 			(GTK_OPTION_MENU(mFormatChooser));
-		GList *iterator = GTK_MENU_SHELL(menu)->children;
 		GtkWidget *selected = gtk_menu_get_active (GTK_MENU(menu));
 
-		while (iterator)
+		gint i(0);
+		for (GList *iterator = GTK_MENU_SHELL(menu)->children ;
+		     iterator ; iterator = iterator->next, i++)
 		{
 			if (iterator->data == selected) 
 			{
 				mSelectedFileFormat = i;
 				break;
 			}
-			iterator = iterator->next;
-			i++;
 		}
 	}
 
-	*retval = mSaveContent ? returnOKSaveContent : returnOK;
+	if (GTK_IS_TOGGLE_BUTTON(mSaveContentCheck))
+		*retval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mSaveContentCheck)) ?
+			  returnOKSaveContent : returnOK;
+	else
+		*retval = returnOK;
+
 	return NS_OK;
 }
 
@@ -492,14 +504,3 @@ nsresult NS_NewFilePickerFactory(nsIFactory** aFactory)
 
 	return NS_OK;
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// begin FileSelector callbacks.
-////////////////////////////////////////////////////////////////////////////////
-
-void filePicker_save_content_cb(GtkToggleButton *aButton,
-				GFilePicker *aFilePicker)
-{
-	aFilePicker->mSaveContent = gtk_toggle_button_get_active (aButton) ?
-				    PR_TRUE : PR_FALSE;
-}	

@@ -38,4 +38,6 @@ libephytoolbar_la_SOURCES = \
 	ephy-toolbar-tree-model.h		\
 	ephy-toolbar-tree-model.c		\
 	ephy-toolbar-editor.h			\
-	ephy-toolbar-editor.c
+	ephy-toolbar-editor.c			\
+	ephy-tb-button.c			\
+	ephy-tb-button.h

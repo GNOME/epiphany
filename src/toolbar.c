@@ -32,8 +32,10 @@
 #include "ephy-embed-favicon.h"
 #include "ephy-dnd.h"
 #include "ephy-toolbar-bonobo-view.h"
+#include "ephy-toolbar-item-factory.h"
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
+#include "ephy-navigation-button.h"
 
 #include <string.h>
 #include <bonobo/bonobo-i18n.h>
@@ -45,18 +47,13 @@
 #include <gtk/gtkmenu.h>
 
 #define DEFAULT_TOOLBAR_SETUP \
-	"back=std_toolitem(item=back);" \
-	"back_history=navigation_history(direction=back);" \
-	"up=std_toolitem(item=up);" \
-	"up_history=navigation_history(direction=up);" \
-	"forward=std_toolitem(item=forward);" \
-	"forward_history=navigation_history(direction=forward);" \
+	"back_menu=navigation_button(direction=back,arrow=TRUE);" \
+	"forward_menu=navigation_button(direction=forward,arrow=TRUE);" \
 	"stop=std_toolitem(item=stop);" \
 	"reload=std_toolitem(item=reload);" \
 	"home=std_toolitem(item=home);" \
 	"favicon=favicon;" \
 	"location=location;" \
-	"zoom=zoom;" \
 	"spinner=spinner;"
 
 #define ZOOM_DELAY 50
@@ -102,13 +99,8 @@ struct ToolbarPrivate
 
 	GtkWidget *spinner;
 	gboolean visibility;
-	/* This field is unused... what is it?
-	  GdkPixbufAnimation *animation;
-	*/
-	GtkWidget *back_button;
-	GtkWidget *forward_button;
-	GtkWidget *up_button;
 	GtkWidget *location_entry;
+	GSList *navigation_buttons;
 	GtkTooltips *tooltips;
 	GtkWidget *favicon;
 	GtkWidget *favicon_ebox;
@@ -165,6 +157,8 @@ toolbar_class_init (ToolbarClass *klass)
                                                               "Parent window",
                                                               EPHY_WINDOW_TYPE,
                                                               G_PARAM_READWRITE));
+	ephy_toolbar_item_register_type
+		("navigation_button", (EphyTbItemConstructor) ephy_navigation_button_new);
 }
 
 static void
@@ -177,9 +171,9 @@ toolbar_set_property (GObject *object,
 
         switch (prop_id)
         {
-                case PROP_EPHY_WINDOW:
-                        toolbar_set_window (t, g_value_get_object (value));
-                        break;
+		case PROP_EPHY_WINDOW:
+		toolbar_set_window (t, g_value_get_object (value));
+		break;
         }
 }
 
@@ -198,247 +192,6 @@ toolbar_get_property (GObject *object,
                         break;
         }
 }
-
-static GtkWidget *
-new_history_menu_item (gint num, gchar *origtext, gboolean lettersok,
-                       GtkWidget *menu, const GdkPixbuf *ico)
-{
-        GtkWidget *item = gtk_image_menu_item_new ();
-        GtkWidget *hb = gtk_hbox_new (FALSE, 0);
-        GtkWidget *label = gtk_label_new (origtext);
-
-        gtk_box_pack_start (GTK_BOX (hb), label, FALSE, FALSE, 0);
-        gtk_container_add (GTK_CONTAINER (item), hb);
-
-        gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
-                                       gtk_image_new_from_pixbuf ((GdkPixbuf *) ico));
-
-        gtk_widget_show_all (item);
-
-        return item;
-}
-
-static void
-activate_back_or_forward_menu_item_cb (GtkWidget *menu, EphyWindow *window)
-{
-	EphyEmbed *embed;
-	int go_nth;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	go_nth = (int)g_object_get_data (G_OBJECT(menu), "go_nth");
-
-	ephy_embed_shistory_go_nth (embed, go_nth);
-}
-
-static void
-activate_up_menu_item_cb (GtkWidget *menu, EphyWindow *window)
-{
-	EphyEmbed *embed;
-	int go_nth;
-	GSList *l;
-	gchar *url;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	go_nth = (int)g_object_get_data (G_OBJECT(menu), "go_nth");
-
-	ephy_embed_get_go_up_list (embed, &l);
-
-	url = g_slist_nth_data (l, go_nth);
-	if (url)
-	{
-		ephy_embed_load_url (embed, url);
-	}
-
-	g_slist_foreach (l, (GFunc) g_free, NULL);
-	g_slist_free (l);
-}
-
-static gboolean
-back_or_forward_button_pressed_callback (GtkWidget *widget,
-					 GdkEventButton *event,
-					 gpointer *user_data)
-{
-	Toolbar *t;
-	GtkWidget *menu;
-	int pos, count;
-	EphyEmbed *embed;
-	int start, end, accell_count = 0;
-
-	g_return_val_if_fail (GTK_IS_BUTTON (widget), FALSE);
-
-	t = TOOLBAR (user_data);
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-	embed = ephy_window_get_active_embed (t->priv->window);
-	g_return_val_if_fail (embed != NULL, FALSE);
-
-	ephy_embed_shistory_get_pos (embed, &pos);
-	ephy_embed_shistory_count (embed, &count);
-
-	if (count == 0) return FALSE;
-
-	if (widget == t->priv->back_button)
-	{
-		start = pos - 1;
-		end = -1;
-	}
-	else
-	{
-		start = pos + 1;
-		end = count;
-	}
-
-	menu = gtk_menu_new ();
-
-	while (start != end)
-	{
-		char *title, *url;
-		GtkWidget *item;
-		ephy_embed_shistory_get_nth (embed, start, FALSE,
-					       &url, &title);
-		item = new_history_menu_item (accell_count, url, TRUE,
-					      menu, NULL);
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-		g_object_set_data (G_OBJECT(item), "go_nth", GINT_TO_POINTER (start));
-		g_signal_connect (item, "activate",
-                                  G_CALLBACK (activate_back_or_forward_menu_item_cb),
-                                  t->priv->window);
-		gtk_widget_show_all (item);
-
-		g_free (url);
-		g_free (title);
-
-		accell_count++;
-		if (start < end) start++;
-		else start--;
-	}
-
-
-	gnome_popup_menu_do_popup_modal (menu,
-					 ephy_gui_menu_position_under_widget, widget, event, widget, widget);
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-	return TRUE;
-}
-
-static gboolean
-up_button_pressed_callback (GtkWidget *widget,
-			    GdkEventButton *event,
-			    gpointer *user_data)
-{
-	Toolbar *t;
-	GtkWidget *menu;
-	EphyEmbed *embed;
-	int accell_count = 0;
-	GSList *l;
-	GSList *li;
-
-	g_return_val_if_fail (GTK_IS_BUTTON (widget), FALSE);
-
-	t = TOOLBAR (user_data);
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-	embed = ephy_window_get_active_embed (t->priv->window);
-	g_return_val_if_fail (embed != NULL, FALSE);
-
-	ephy_embed_get_go_up_list (embed, &l);
-
-	if (l == NULL) return FALSE;
-
-	menu = gtk_menu_new ();
-
-	for (li = l; li; li = li->next)
-	{
-		char *url = li->data;
-		GtkWidget *item;
-		item = new_history_menu_item (accell_count, url, TRUE,
-					      menu, NULL);
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-		g_object_set_data (G_OBJECT(item), "go_nth", GINT_TO_POINTER (accell_count));
-		g_signal_connect (item, "activate",
-                                  G_CALLBACK (activate_up_menu_item_cb),
-                                  t->priv->window);
-		gtk_widget_show_all (item);
-
-		accell_count++;
-	}
-
-	g_slist_foreach (l, (GFunc) g_free, NULL);
-	g_slist_free (l);
-
-	gnome_popup_menu_do_popup_modal (menu,
-					 ephy_gui_menu_position_under_widget, widget, event, widget, widget);
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-	return TRUE;
-}
-
-static gboolean
-back_or_forward_key_pressed_callback (GtkWidget *widget,
-				      GdkEventKey *event,
-				      gpointer *user_data)
-{
-	if (event->keyval == GDK_space ||
-	    event->keyval == GDK_KP_Space ||
-	    event->keyval == GDK_Return ||
-	    event->keyval == GDK_KP_Enter)
-	{
-		back_or_forward_button_pressed_callback (widget, NULL, user_data);
-	}
-
-	return FALSE;
-}
-
-static gboolean
-up_key_pressed_callback (GtkWidget *widget,
-			 GdkEventKey *event,
-			 gpointer *user_data)
-{
-	if (event->keyval == GDK_space ||
-	    event->keyval == GDK_KP_Space ||
-	    event->keyval == GDK_Return ||
-	    event->keyval == GDK_KP_Enter)
-	{
-		up_button_pressed_callback (widget, NULL, user_data);
-	}
-
-	return FALSE;
-}
-
-static void
-toolbar_setup_navigation_button (Toolbar *t, GtkWidget *w, const char *tooltip)
-{
-	g_signal_connect_object (w, "key_press_event",
-				 G_CALLBACK (back_or_forward_key_pressed_callback),
-				 t, 0);
-	g_signal_connect_object (w, "button_press_event",
-				 G_CALLBACK (back_or_forward_button_pressed_callback),
-				 t, 0);
-
-	gtk_tooltips_set_tip (t->priv->tooltips, w, tooltip, NULL);
-}
-
-static void
-toolbar_setup_up_button (Toolbar *t, GtkWidget *w, const char *tooltip)
-{
-	g_signal_connect_object (w, "key_press_event",
-				 G_CALLBACK (up_key_pressed_callback),
-				 t, 0);
-	g_signal_connect_object (w, "button_press_event",
-				 G_CALLBACK (up_button_pressed_callback),
-				 t, 0);
-
-	gtk_tooltips_set_tip (t->priv->tooltips, w, tooltip, NULL);
-}
-
 
 static void
 toolbar_location_url_activate_cb (EphyLocationEntry *entry,
@@ -607,6 +360,9 @@ toolbar_get_widgets (Toolbar *t)
 	ToolbarPrivate *p;
 	EphyToolbar *gt;
 	EphyTbItem *it;
+	GSList *li;
+	const gchar *nav_buttons_ids[] = {"back", "back_menu", "up", "up_menu", "forward", "forward_menu" };
+	guint i;
 
 	DEBUG_MSG (("in toolbar_get_widgets\n"));
 
@@ -617,23 +373,12 @@ toolbar_get_widgets (Toolbar *t)
 
 	/* release all the widgets */
 
-	if (p->back_button)
+	for (li = p->navigation_buttons; li; li = li->next)
 	{
-		g_object_unref (p->back_button);
-		p->back_button = NULL;
+		g_object_unref (li->data);
 	}
-
-	if (p->forward_button)
-	{
-		g_object_unref (p->forward_button);
-		p->forward_button = NULL;
-	}
-
-	if (p->up_button)
-	{
-		g_object_unref (p->up_button);
-		p->up_button = NULL;
-	}
+	g_slist_free (p->navigation_buttons);
+	p->navigation_buttons = NULL;
 
 	if (p->favicon_ebox)
 	{
@@ -667,34 +412,26 @@ toolbar_get_widgets (Toolbar *t)
 
 	gt = EPHY_TOOLBAR (t);
 
-	it = ephy_toolbar_get_item_by_id (gt, "back_history");
-	if (it)
+	for (i = 0; i < G_N_ELEMENTS (nav_buttons_ids); ++i)
 	{
-		p->back_button = ephy_tb_item_get_widget (it);
-		g_object_ref (p->back_button);
-		toolbar_setup_navigation_button (t, p->back_button, _("Go back a number of pages"));
-
-		DEBUG_MSG (("    got a back_history button\n"));
-	}
-
-	it = ephy_toolbar_get_item_by_id (gt, "forward_history");
-	if (it)
-	{
-		p->forward_button = ephy_tb_item_get_widget (it);
-		g_object_ref (p->forward_button);
-		toolbar_setup_navigation_button (t, p->forward_button, _("Go forward a number of pages"));
-
-		DEBUG_MSG (("    got a forward_history button\n"));
-	}
-
-	it = ephy_toolbar_get_item_by_id (gt, "up_history");
-	if (it)
-	{
-		p->up_button = ephy_tb_item_get_widget (it);
-		g_object_ref (p->up_button);
-		toolbar_setup_up_button (t, p->up_button, _("Go up a number of levels"));
-
-		DEBUG_MSG (("    got a up_history button\n"));
+		it = ephy_toolbar_get_item_by_id (gt, nav_buttons_ids[i]);
+		if (it)
+		{
+			if (EPHY_IS_NAVIGATION_BUTTON (it))
+			{
+				DEBUG_MSG (("    got a navigation button\n"));
+				p->navigation_buttons = g_slist_prepend (p->navigation_buttons, g_object_ref (it));
+				if (p->window)
+				{
+					ephy_tbi_set_window (EPHY_TBI (it), p->window);
+				}
+			}
+			else
+			{
+				g_warning ("An unexpected button has been found in your toolbar. "
+					   "Maybe your setup is too old.");
+			}
+		}
 	}
 
 	it = ephy_toolbar_get_item_by_id (gt, "location");
@@ -748,6 +485,7 @@ toolbar_init (Toolbar *t)
 
 	t->priv->window = NULL;
 	t->priv->ui_component = NULL;
+	t->priv->navigation_buttons = NULL;
 	t->priv->visibility = TRUE;
 	t->priv->tooltips = gtk_tooltips_new ();
 	g_object_ref (t->priv->tooltips);
@@ -785,6 +523,7 @@ toolbar_finalize (GObject *object)
 {
 	Toolbar *t;
 	ToolbarPrivate *p;
+	GSList *li;
 
         g_return_if_fail (object != NULL);
         g_return_if_fail (IS_TOOLBAR (object));
@@ -795,9 +534,6 @@ toolbar_finalize (GObject *object)
         g_return_if_fail (p != NULL);
 
 	if (p->location_entry) g_object_unref (p->location_entry);
-	if (p->back_button) g_object_unref (p->back_button);
-	if (p->forward_button) g_object_unref (p->forward_button);
-	if (p->up_button) g_object_unref (p->up_button);
 	if (p->favicon_ebox) g_object_unref (p->favicon_ebox);
 	if (p->favicon) g_object_unref (p->favicon);
 	if (p->spinner) g_object_unref (p->spinner);
@@ -807,6 +543,12 @@ toolbar_finalize (GObject *object)
 	{
 		g_source_remove (p->zoom_timeout_id);
 	}
+
+	for (li = t->priv->navigation_buttons; li; li = li->next)
+	{
+		g_object_unref (li->data);
+	}
+	g_slist_free (t->priv->navigation_buttons);
 
 	g_object_unref (t->priv->bview);
 
@@ -869,6 +611,22 @@ toolbar_spinner_stop (Toolbar *t)
 	}
 }
 
+static void
+toolbar_navigation_button_set_sensitive (Toolbar *t, EphyNavigationDirection d, gboolean sensitivity)
+{
+	GSList *li;
+	ToolbarPrivate *p = t->priv;
+
+	for (li = p->navigation_buttons; li; li = li->next)
+	{
+		EphyNavigationButton *b = EPHY_NAVIGATION_BUTTON (li->data);
+		if (ephy_navigation_button_get_direction (b) == d)
+		{
+			ephy_navigation_button_set_sensitive (b, sensitivity);
+		}
+	}
+}
+
 void
 toolbar_button_set_sensitive (Toolbar *t,
 			      ToolbarButtonID id,
@@ -877,39 +635,18 @@ toolbar_button_set_sensitive (Toolbar *t,
 	switch (id)
 	{
 	case TOOLBAR_BACK_BUTTON:
-		ephy_bonobo_set_sensitive (t->priv->ui_component,
-					  "/commands/GoBack",
-					  sensitivity);
-		if (t->priv->back_button)
-		{
-			gtk_widget_set_sensitive (t->priv->back_button,
-						  sensitivity);
-		}
+		toolbar_navigation_button_set_sensitive (t, EPHY_NAVIGATION_DIRECTION_BACK, sensitivity);
 		break;
 	case TOOLBAR_FORWARD_BUTTON:
-		ephy_bonobo_set_sensitive (t->priv->ui_component,
-					  "/commands/GoForward",
-					  sensitivity);
-		if (t->priv->forward_button)
-		{
-			gtk_widget_set_sensitive (t->priv->forward_button,
-						  sensitivity);
-		}
+		toolbar_navigation_button_set_sensitive (t, EPHY_NAVIGATION_DIRECTION_FORWARD, sensitivity);
+		break;
+	case TOOLBAR_UP_BUTTON:
+		toolbar_navigation_button_set_sensitive (t, EPHY_NAVIGATION_DIRECTION_UP, sensitivity);
 		break;
 	case TOOLBAR_STOP_BUTTON:
 		ephy_bonobo_set_sensitive (t->priv->ui_component,
 					  "/commands/GoStop",
 					  sensitivity);
-		break;
-	case TOOLBAR_UP_BUTTON:
-		ephy_bonobo_set_sensitive (t->priv->ui_component,
-					  "/commands/GoUp",
-					  sensitivity);
-		if (t->priv->up_button)
-		{
-			gtk_widget_set_sensitive (t->priv->up_button,
-						  sensitivity);
-		}
 		break;
 	}
 }

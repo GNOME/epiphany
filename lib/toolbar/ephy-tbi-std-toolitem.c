@@ -97,7 +97,7 @@ ephy_tbi_std_toolitem_init (EphyTbiStdToolitem *tb)
 	EphyTbiStdToolitemPrivate *p = g_new0 (EphyTbiStdToolitemPrivate, 1);
 	tb->priv = p;
 
-	p->item = EPHY_TBI_STD_TOOLITEM_BACK;
+	p->item = EPHY_TBI_STD_TOOLITEM_STOP;
 }
 
 EphyTbiStdToolitem *
@@ -137,31 +137,16 @@ ephy_tbi_std_toolitem_get_icon_impl (EphyTbItem *i)
 {
 	EphyTbiStdToolitemPrivate *p = EPHY_TBI_STD_TOOLITEM (i)->priv;
 
-	static GdkPixbuf *pb_up = NULL;
-	static GdkPixbuf *pb_back = NULL;
-	static GdkPixbuf *pb_forward = NULL;
 	static GdkPixbuf *pb_stop = NULL;
 	static GdkPixbuf *pb_reload = NULL;
 	static GdkPixbuf *pb_home = NULL;
 	static GdkPixbuf *pb_go = NULL;
 	static GdkPixbuf *pb_new = NULL;
-	
-	if (!pb_up)
+
+	if (!pb_stop)
 	{
 		/* what's the easier way? */
 		GtkWidget *b = gtk_spin_button_new_with_range (0, 1, 0.5);
-		pb_up = gtk_widget_render_icon (b,
-						GTK_STOCK_GO_UP,
-						GTK_ICON_SIZE_SMALL_TOOLBAR,
-						NULL);
-		pb_back = gtk_widget_render_icon (b,
-						  GTK_STOCK_GO_BACK,
-						  GTK_ICON_SIZE_SMALL_TOOLBAR,
-						  NULL);
-		pb_forward = gtk_widget_render_icon (b,
-						     GTK_STOCK_GO_FORWARD,
-						     GTK_ICON_SIZE_SMALL_TOOLBAR,
-						     NULL);
 		pb_stop = gtk_widget_render_icon (b,
 						  GTK_STOCK_STOP,
 						  GTK_ICON_SIZE_SMALL_TOOLBAR,
@@ -187,15 +172,6 @@ ephy_tbi_std_toolitem_get_icon_impl (EphyTbItem *i)
 
 	switch (p->item)
 	{
-	case EPHY_TBI_STD_TOOLITEM_BACK:
-		return g_object_ref (pb_back);
-		break;
-	case EPHY_TBI_STD_TOOLITEM_FORWARD:
-		return g_object_ref (pb_forward);
-		break;
-	case EPHY_TBI_STD_TOOLITEM_UP:
-		return g_object_ref (pb_up);
-		break;
 	case EPHY_TBI_STD_TOOLITEM_STOP:
 		return g_object_ref (pb_stop);
 		break;
@@ -211,6 +187,9 @@ ephy_tbi_std_toolitem_get_icon_impl (EphyTbItem *i)
 	case EPHY_TBI_STD_TOOLITEM_NEW:
 		return g_object_ref (pb_new);
 		break;
+	case EPHY_TBI_STD_TOOLITEM_ERROR:
+		return NULL;
+		break;
 	default:
 		g_assert_not_reached ();
 		return NULL;
@@ -225,15 +204,6 @@ ephy_tbi_std_toolitem_get_name_human_impl (EphyTbItem *i)
 
 	switch (p->item)
 	{
-	case EPHY_TBI_STD_TOOLITEM_BACK:
-		ret = _("Back");
-		break;
-	case EPHY_TBI_STD_TOOLITEM_FORWARD:
-		ret = _("Forward");
-		break;
-	case EPHY_TBI_STD_TOOLITEM_UP:
-		ret = _("Up");
-		break;
 	case EPHY_TBI_STD_TOOLITEM_STOP:
 		ret = _("Stop");
 		break;
@@ -248,6 +218,9 @@ ephy_tbi_std_toolitem_get_name_human_impl (EphyTbItem *i)
 		break;
 	case EPHY_TBI_STD_TOOLITEM_NEW:
 		ret = _("New");
+		break;
+	case EPHY_TBI_STD_TOOLITEM_ERROR:
+		ret = "Erroneous button";
 		break;
 	default:
 		g_assert_not_reached ();
@@ -267,15 +240,6 @@ ephy_tbi_std_toolitem_to_string_impl (EphyTbItem *i)
 
 	switch (p->item)
 	{
-	case EPHY_TBI_STD_TOOLITEM_BACK:
-		sitem = "back";
-		break;
-	case EPHY_TBI_STD_TOOLITEM_FORWARD:
-		sitem = "forward";
-		break;
-	case EPHY_TBI_STD_TOOLITEM_UP:
-		sitem = "up";
-		break;
 	case EPHY_TBI_STD_TOOLITEM_STOP:
 		sitem = "stop";
 		break;
@@ -290,6 +254,9 @@ ephy_tbi_std_toolitem_to_string_impl (EphyTbItem *i)
 		break;
 	case EPHY_TBI_STD_TOOLITEM_NEW:
 		sitem = "new";
+		break;
+	case EPHY_TBI_STD_TOOLITEM_ERROR:
+		sitem = "error";
 		break;
 	default:
 		g_assert_not_reached ();
@@ -330,28 +297,6 @@ ephy_tbi_std_toolitem_add_to_bonobo_tb_impl (EphyTbItem *i, BonoboUIComponent *u
 
 	switch (p->item)
 	{
-	case EPHY_TBI_STD_TOOLITEM_BACK:
-		xml_item = g_strdup_printf  
-			("<toolitem name=\"Back\" "
-			 "label=\"%s\" "
-			 "pixtype=\"stock\" pixname=\"gtk-go-back\" "
-			 "priority=\"1\" "
-			 "verb=\"GoBack\"/>", _("Back"));;
-		break;
-	case EPHY_TBI_STD_TOOLITEM_FORWARD:
-		xml_item = g_strdup_printf 
-			("<toolitem name=\"Forward\" "
-			 "label=\"%s\" "
-			 "pixtype=\"stock\" pixname=\"gtk-go-forward\" "
-			 "verb=\"GoForward\"/>", _("Forward"));
-		break;
-	case EPHY_TBI_STD_TOOLITEM_UP:
-		xml_item = g_strdup_printf
-			("<toolitem name=\"Up\" "
-			 "label=\"%s\" "
-			 "pixtype=\"stock\" pixname=\"gtk-go-up\" "
-			 "verb=\"GoUp\"/>", _("Up"));;
-		break;
 	case EPHY_TBI_STD_TOOLITEM_STOP:
 		xml_item = g_strdup_printf 
 			("<toolitem name=\"Stop\" "
@@ -388,7 +333,14 @@ ephy_tbi_std_toolitem_add_to_bonobo_tb_impl (EphyTbItem *i, BonoboUIComponent *u
 			 "pixtype=\"stock\" pixname=\"gtk-new\" "
 			 "verb=\"FileNew\"/>", _("New"));;
 		break;
-
+	case EPHY_TBI_STD_TOOLITEM_ERROR:
+		xml_item = g_strdup_printf
+			("<toolitem name=\"Error\" "
+			 "label=\"%s\" "
+			 "pixtype=\"stock\" pixname=\"gtk-cancel\" "
+			 "priority=\"1\" "
+			 "verb=\"ErrorVerb\"/>", "Erroneous button");
+		break;
 	default:
 		g_assert_not_reached ();
 		xml_item = g_strdup ("");
@@ -412,19 +364,7 @@ ephy_tbi_std_toolitem_parse_properties_impl (EphyTbItem *it, const gchar *props)
 	if (item_prop)
 	{
 		item_prop += strlen ("item=");
-		if (!strncmp (item_prop, "back", 4))
-		{
-			ephy_tbi_std_toolitem_set_item (a, EPHY_TBI_STD_TOOLITEM_BACK);
-		}
-		else if (!strncmp (item_prop, "forward", 4))
-		{
-			ephy_tbi_std_toolitem_set_item (a, EPHY_TBI_STD_TOOLITEM_FORWARD);
-		}
-		else if (!strncmp (item_prop, "up", 2))
-		{
-			ephy_tbi_std_toolitem_set_item (a, EPHY_TBI_STD_TOOLITEM_UP);
-		}
-		else if (!strncmp (item_prop, "stop", 4))
+		if (!strncmp (item_prop, "stop", 4))
 		{
 			ephy_tbi_std_toolitem_set_item (a, EPHY_TBI_STD_TOOLITEM_STOP);
 		}
@@ -444,7 +384,10 @@ ephy_tbi_std_toolitem_parse_properties_impl (EphyTbItem *it, const gchar *props)
 		{
 			ephy_tbi_std_toolitem_set_item (a, EPHY_TBI_STD_TOOLITEM_NEW);
 		}
-
+		else
+		{
+			ephy_tbi_std_toolitem_set_item (a, EPHY_TBI_STD_TOOLITEM_ERROR);
+		}
 	}
 }
 
@@ -453,10 +396,7 @@ ephy_tbi_std_toolitem_set_item (EphyTbiStdToolitem *a, EphyTbiStdToolitemItem i)
 {
 	EphyTbiStdToolitemPrivate *p = a->priv;
 
-	g_return_if_fail (i == EPHY_TBI_STD_TOOLITEM_UP
-			  || i == EPHY_TBI_STD_TOOLITEM_BACK
-			  || i == EPHY_TBI_STD_TOOLITEM_FORWARD
-			  || i == EPHY_TBI_STD_TOOLITEM_STOP
+	g_return_if_fail (i == EPHY_TBI_STD_TOOLITEM_STOP
 			  || i == EPHY_TBI_STD_TOOLITEM_RELOAD
 			  || i == EPHY_TBI_STD_TOOLITEM_GO
 			  || i == EPHY_TBI_STD_TOOLITEM_HOME

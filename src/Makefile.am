@@ -79,7 +79,11 @@ epiphany_SOURCES = 				    	\
 	ephy-favorites-menu.c				\
 	ephy-favorites-menu.h				\
 	ephy-history-model.c				\
-	ephy-history-model.h
+	ephy-history-model.h				\
+	ephy-tbi.c					\
+	ephy-tbi.h					\
+	ephy-navigation-button.c			\
+	ephy-navigation-button.h
 
 epiphany_LDADD = \
 	$(top_builddir)/embed/libephyembed.la \

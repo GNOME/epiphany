@@ -1064,7 +1064,7 @@ impl_show_file_picker (EphyEmbedShell *shell,
 
         nsCOMPtr<nsILocalFile> dir = 
                                 do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-        dir->InitWithPath (NS_ConvertUTF8toUCS2(expanded_directory));
+        dir->InitWithNativePath (nsDependentCString(expanded_directory));
         g_free (expanded_directory);
 
         filePicker->InitWithGtkWidget (parentWidget, title, mode);
@@ -1097,9 +1097,9 @@ impl_show_file_picker (EphyEmbedShell *shell,
                         g_free (*ret_fullpath);
                 nsCOMPtr<nsILocalFile> file;
                 filePicker->GetFile (getter_AddRefs(file));
-		nsAutoString tempFullPathStr;
-                file->GetPath (tempFullPathStr);
-                *ret_fullpath = g_strdup (NS_ConvertUCS2toUTF8(tempFullPathStr).get());
+		nsCAutoString tempFullPathStr;
+                file->GetNativePath (tempFullPathStr);
+                *ret_fullpath = g_strdup (tempFullPathStr.get());
                 delete filePicker;
                 return G_OK;
         }

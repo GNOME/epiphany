@@ -41,13 +41,12 @@
 #include <gtk/gtkeditable.h>
 
 #define AVAILABLE_TOOLBAR_ITEMS \
-	"new=std_toolitem(item=new);" \
-	"back=std_toolitem(item=back);" \
-	"back_history=navigation_history(direction=back);" \
-	"up=std_toolitem(item=up);" \
-	"up_history=navigation_history(direction=up);" \
-	"forward=std_toolitem(item=forward);" \
-	"forward_history=navigation_history(direction=forward);" \
+	"back=navigation_button(direction=back,arrow=FALSE);" \
+	"back_menu=navigation_button(direction=back,arrow=TRUE);" \
+	"forward=navigation_button(direction=forward,arrow=FALSE);" \
+	"forward_menu=navigation_button(direction=forward,arrow=TRUE);" \
+	"up=navigation_button(direction=up,arrow=FALSE);" \
+	"up_menu=navigation_button(direction=up,arrow=TRUE);" \
 	"stop=std_toolitem(item=stop);" \
 	"reload=std_toolitem(item=reload);" \
 	"home=std_toolitem(item=home);" \
@@ -57,8 +56,6 @@
 	"zoom=zoom;" \
 	"spinner=spinner;" \
 	"separator;"
-
-
 
 void
 window_cmd_edit_find (BonoboUIComponent *uic,

@@ -1,5 +1,41 @@
 2002-12-31  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/FilePicker.h:
+	* embed/mozilla/mozilla-embed-shell.cpp:
+
+	Resync with galeon.
+
+	* data/epiphany.schemas.in:
+	* lib/ephy-bonobo-extensions.c: (ephy_bonobo_add_numbered_widget):
+	* lib/ephy-bonobo-extensions.h:
+	* lib/toolbar/Makefile.am:
+	* lib/toolbar/ephy-tbi-std-toolitem.c:
+	(ephy_tbi_std_toolitem_init),
+	(ephy_tbi_std_toolitem_get_icon_impl),
+	(ephy_tbi_std_toolitem_get_name_human_impl),
+	(ephy_tbi_std_toolitem_to_string_impl),
+	(ephy_tbi_std_toolitem_add_to_bonobo_tb_impl),
+	(ephy_tbi_std_toolitem_parse_properties_impl),
+	(ephy_tbi_std_toolitem_set_item):
+	* lib/toolbar/ephy-tbi-std-toolitem.h:
+	* lib/toolbar/ephy-toolbar-item-factory.c:
+	(ephy_tb_item_factory_init),
+	(ephy_toolbar_item_create_from_string),
+	(ephy_toolbar_item_register_type):
+	* lib/toolbar/ephy-toolbar-item-factory.h:
+	* src/Makefile.am:
+	* src/toolbar.c: (toolbar_class_init), (toolbar_set_property),
+	(toolbar_get_widgets), (toolbar_init), (toolbar_finalize),
+	(toolbar_navigation_button_set_sensitive),
+	(toolbar_button_set_sensitive):
+	* src/window-commands.c:
+
+	Resync with galeon. Now we use a widget for navigation
+	buttons.
+
+2002-12-31  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* data/glade/prefs-dialog.glade:
 	
 	Remove hidden filtering page.

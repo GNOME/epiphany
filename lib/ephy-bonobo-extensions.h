@@ -117,5 +117,7 @@ void		ephy_bonobo_clear_path				(BonoboUIComponent *uic,
 void		ephy_bonobo_replace_path			(BonoboUIComponent *uic,
 								 const gchar *path_src,
 								 const char *path_dst);
+void		ephy_bonobo_add_numbered_widget			(BonoboUIComponent *uic, GtkWidget *w,
+								 guint index, const char *container_path);
 
 #endif /* EPHY_BONOBO_EXTENSIONS_H */
