@@ -24,12 +24,12 @@
 #include "ephy-dnd.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
-#include "ephy-event-box.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtktoolitem.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkeventbox.h>
 
 static GtkTargetEntry url_drag_types [] =
 {
@@ -136,7 +136,8 @@ create_tool_item (GtkAction *action)
 
 	item = GTK_WIDGET (gtk_tool_item_new ());
 
-	ebox = ephy_event_box_new ();
+	ebox = gtk_event_box_new ();
+	gtk_event_box_set_visible_window (GTK_EVENT_BOX (ebox), FALSE);
 	image = gtk_image_new ();
 	gtk_container_add (GTK_CONTAINER (ebox), image);
 	gtk_container_set_border_width (GTK_CONTAINER (ebox), 2);

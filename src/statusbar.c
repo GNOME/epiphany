@@ -98,6 +98,8 @@ create_statusbar_security_icon (Statusbar *s)
 
         s->priv->security_icon = gtk_image_new ();
         s->priv->security_evbox = gtk_event_box_new ();
+	gtk_event_box_set_visible_window (GTK_EVENT_BOX (s->priv->security_evbox),
+					  FALSE);
         gtk_container_add (GTK_CONTAINER (security_frame),
                            GTK_WIDGET (s->priv->security_evbox));
         gtk_container_add (GTK_CONTAINER (s->priv->security_evbox),

@@ -34,10 +34,19 @@
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 #include "ephy-favicon-cache.h"
-#include "ephy-event-box.h"
 
-#include <gtk/gtk.h>
 #include <glib-object.h>
+#include <gtk/gtkeventbox.h>
+#include <gtk/gtknotebook.h>
+#include <gtk/gtkhbox.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkwidget.h>
+#include <gtk/gtktooltips.h>
+#include <gtk/gtkmain.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtkbutton.h>
+#include <gtk/gtkiconfactory.h>
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 
@@ -907,7 +916,8 @@ build_tab_label (EphyNotebook *nb, GtkWidget *child)
 	gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0);
 
 	/* setup label */
-	label_ebox = ephy_event_box_new ();
+	label_ebox = gtk_event_box_new ();
+	gtk_event_box_set_visible_window (GTK_EVENT_BOX (label_ebox), FALSE);
         label = gtk_label_new ("");
 	gtk_misc_set_alignment (GTK_MISC (label), 0.00, 0.5);
         gtk_misc_set_padding (GTK_MISC (label), 4, 0);

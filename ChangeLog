@@ -1,3 +1,15 @@
+2003-09-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/widgets/Makefile.am:
+	* lib/widgets/ephy-event-box.c:
+	* lib/widgets/ephy-event-box.h:
+	* src/ephy-favicon-action.c: (create_tool_item):
+	* src/ephy-notebook.c: (build_tab_label):
+	* src/statusbar.c: (create_statusbar_security_icon):
+
+	gtk+ now supports invisible event boxes. Remove our custom implementation
+	and use gtk+ api instead.
+
 2003-09-08  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* po/POTFILES.in:

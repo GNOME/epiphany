@@ -19,8 +19,6 @@ libephywidgets_la_SOURCES = \
 	ephy-autocompletion-window.h		\
 	ephy-ellipsizing-label.c		\
 	ephy-ellipsizing-label.h		\
-	ephy-event-box.c			\
-	ephy-event-box.h			\
 	ephy-location-entry.c			\
 	ephy-location-entry.h			\
 	ephy-node-view.c			\
