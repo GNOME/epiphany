@@ -75,7 +75,7 @@
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextview.h>
 #include <gtk/gtkprogressbar.h>
-#include <libgnome/gnome-i18n.h>
+#include <glib/gi18n.h>
 #include <time.h>
 
 #include "GtkNSSDialogs.h"
