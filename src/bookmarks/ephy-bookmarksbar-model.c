@@ -330,7 +330,10 @@ impl_get_item_id (EggToolbarsModel *eggmodel,
 		gchar **netscape_url;
 
 		netscape_url = g_strsplit (name, "\n", 2);
-		if (!netscape_url || !netscape_url[URL]) return NULL;
+		if (!netscape_url || !netscape_url[URL]) {
+			g_strfreev (netscape_url);
+			return NULL;
+		}
 
 		node = ephy_bookmarks_find_bookmark (bookmarks, netscape_url[URL]);
 
