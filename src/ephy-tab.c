@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -136,8 +138,8 @@ ephy_tab_get_type (void)
                 };
 
                 ephy_tab_type = g_type_register_static (G_TYPE_OBJECT,
-							  "EphyTab",
-							  &our_info, 0);
+							"EphyTab",
+							&our_info, 0);
         }
 
         return ephy_tab_type;
@@ -820,7 +822,7 @@ ephy_tab_destroy_brsr_cb (EphyEmbed *embed, EphyTab *tab)
 
 static gint
 ephy_tab_open_uri_cb (EphyEmbed *embed, const char *uri,
-			EphyTab *tab)
+		      EphyTab *tab)
 {
 	LOG ("ephy_tab_open_uri_cb %s", uri)
 

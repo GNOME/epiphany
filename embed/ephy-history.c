@@ -823,6 +823,26 @@ ephy_history_set_page_title (EphyHistory *gh,
 	g_value_unset (&value);
 }
 
+const char*
+ephy_history_get_icon (EphyHistory *gh,
+		       const char *url)
+{
+	EphyNode *node, *host;
+	int host_id;
+
+	node = ephy_history_get_page (gh, url);
+	if (node == NULL) return NULL;
+	
+	host_id = ephy_node_get_property_int (node, EPHY_NODE_PAGE_PROP_HOST_ID);
+	g_return_val_if_fail (host_id >= 0, NULL);
+
+	host = ephy_node_db_get_node_from_id (gh->priv->db, host_id);
+	g_return_val_if_fail (host != NULL, NULL);
+
+	return ephy_node_get_property_string (host, EPHY_NODE_PAGE_PROP_ICON);
+}	
+	
+		       
 void
 ephy_history_set_icon (EphyHistory *gh,
 		       const char *url,

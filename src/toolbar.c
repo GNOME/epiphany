@@ -15,6 +15,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -66,6 +68,7 @@ static GtkTargetEntry drag_targets[] = {
   { EGG_TOOLBAR_ITEM_TYPE, 0, 0 },
   { EPHY_DND_TOPIC_TYPE, 0, 1 },
   { EPHY_DND_BOOKMARK_TYPE, 0, 2 },
+  { EPHY_DND_URL_TYPE, 0, 3 },
 };
 static int n_drag_targets = G_N_ELEMENTS (drag_targets);
 

@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "ephy-toolbars-model.h"
@@ -32,14 +34,20 @@ static void ephy_toolbars_model_finalize   (GObject *object);
 
 enum
 {
-  ACTION_ADDED,
-  LAST_SIGNAL
+  	ACTION_ADDED,
+  	LAST_SIGNAL
 };
 
 enum
 {
 	PROP_0,
 	PROP_BOOKMARKS
+};
+
+enum
+{
+	URL,
+	NAME
 };
 
 static GObjectClass *parent_class = NULL;
@@ -147,6 +155,39 @@ impl_add_item (EggToolbarsModel *t,
 		action_name = ephy_toolbars_model_get_action_name
 			(EPHY_TOOLBARS_MODEL (t), FALSE, id);
 		g_list_free (nodes);
+	}
+	else if (gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE) == type)
+	{
+		EphyNode *node = NULL;
+		EphyBookmarks *bookmarks;
+		gchar **netscape_url;
+		
+		netscape_url = g_strsplit (name, "\n", 2);
+		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+		node = ephy_bookmarks_find_bookmark (bookmarks, netscape_url[URL]); 
+
+		if (!node)
+		{
+			/* Create the bookmark, it does not exist */
+			EphyHistory *gh;
+			const char *icon;
+
+			node = ephy_bookmarks_add (bookmarks, netscape_url[NAME], netscape_url[URL]);
+			g_return_val_if_fail (node != NULL, NULL);
+
+			gh = ephy_embed_shell_get_global_history (EPHY_EMBED_SHELL (ephy_shell));
+			icon = ephy_history_get_icon (gh, netscape_url[URL]);
+		
+			if (icon)
+			{
+				ephy_bookmarks_set_icon (bookmarks, netscape_url[URL], icon);
+			}
+		}
+
+		id = ephy_node_get_id (node);
+		action_name = ephy_toolbars_model_get_action_name
+			(EPHY_TOOLBARS_MODEL (t), FALSE, id);
+		g_strfreev (netscape_url);
 	}
 	else
 	{

@@ -90,6 +90,8 @@ const char     *ephy_history_get_last_page	(EphyHistory *gh);
 void		ephy_history_set_icon           (EphyHistory *gh,
 						 const char *url,
 						 const char *icon);
+const char     *ephy_history_get_icon		(EphyHistory *gh,
+						 const char *url);
 
 void            ephy_history_clear              (EphyHistory *gh);
 
