@@ -255,7 +255,7 @@ EphyDialogProperty properties [] =
 	{ "homepage_entry",			CONF_GENERAL_HOMEPAGE,	  PT_AUTOAPPLY,	G_TYPE_STRING },
 	{ "homepage_current_button",		NULL,			  PT_NORMAL,	0 },
 	{ "homepage_blank_button",		NULL,			  PT_NORMAL,	0 },
-	{ "auto_open_downloads_checkbutton",	CONF_AUTO_OPEN_DOWNLOADS, PT_AUTOAPPLY,	0 },
+	{ "automatic_downloads_checkbutton",	CONF_AUTO_DOWNLOADS,      PT_AUTOAPPLY,	0 },
 	{ "download_path_button",		NULL,			  PT_NORMAL,	0 },
 
 	/* Fonts and Colors */
@@ -1081,6 +1081,7 @@ static char*
 get_download_button_label ()
 {
 	char *label, *key, *desktop_path, *home_path, *tmp;
+	char *downloads_path;
 
 	key = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
 
@@ -1088,6 +1089,8 @@ get_download_button_label ()
 	desktop_path = g_filename_to_utf8 (tmp, -1, NULL, NULL, NULL);
 	home_path = g_filename_to_utf8 (g_get_home_dir (), -1, NULL, NULL, NULL);
 	g_free (tmp);
+
+	downloads_path = g_build_filename (g_get_home_dir (), "Downloads", NULL);
 
 	if (g_utf8_collate (key, desktop_path) == 0)
 	{
@@ -1102,6 +1105,11 @@ get_download_button_label ()
 		 * term as GTK+'s "Home" string to be consistent with the
 		 * filechooser */
 		label = g_strdup (_("Home"));
+	}
+	else if (g_utf8_collate (key, downloads_path) == 0)
+	{
+		g_free (key);
+		label = g_strdup (_("Downloads"));
 	}
 	else
 	{

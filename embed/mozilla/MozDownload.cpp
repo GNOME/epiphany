@@ -491,7 +491,7 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 static char*
 GetFilePath (const char *filename)
 {
-	char *path, *download_dir;
+	char *path, *download_dir, *expanded;
 
 	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
 	if (!download_dir)
@@ -500,31 +500,10 @@ GetFilePath (const char *filename)
 		download_dir = g_strdup (g_get_home_dir ());
 	}
 
-	if (!strcmp (download_dir, "Desktop"))
-	{
-		if (eel_gconf_get_boolean (CONF_DESKTOP_IS_HOME_DIR))
-		{
-			path = g_build_filename 
-				(g_get_home_dir (),
-				 filename,
-				 NULL);
-		}
-		else
-		{
-			path = g_build_filename 
-				(g_get_home_dir (), "Desktop",
-				 filename,
-				 NULL);
-		}
-	}
-	else
-	{
-		char *expanded;
+	expanded = gnome_vfs_expand_initial_tilde (download_dir);
+	path = g_build_filename (expanded, filename, NULL);
+	g_free (expanded);
 
-		expanded = gnome_vfs_expand_initial_tilde (download_dir);
-		path = g_build_filename (expanded, filename, NULL);
-		g_free (expanded);
-	}
 	g_free (download_dir);
 
 	return path;

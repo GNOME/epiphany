@@ -132,15 +132,16 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/general/auto_open_downloads</key>
-        <applyto>/apps/epiphany/general/auto_open_downloads</applyto>
+        <key>/schemas/apps/epiphany/general/automatic_downloads</key>
+        <applyto>/apps/epiphany/general/automatic_downloads</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
         <default>true</default>
         <locale name="C">
-        <short>Auto open downloads</short>
-        <long>Automatically open downloaded files which are "safe" to open,
-	like videos, images, text documents, compressed files, etc.</long>
+        <short>Automatic downloads</short>
+        <long>When files cannot be opened by the browser they are
+	      automatically downloaded to the download folder and opened
+	      with the appropriate application.</long>
         </locale>
       </schema>
      <schema>
@@ -404,7 +405,7 @@
         <applyto>/apps/epiphany/directories/download</applyto>
         <owner>epiphany</owner>
         <type>string</type>
-        <default>Desktop</default>
+        <default>~/Downloads</default>
         <locale name="C">
         </locale>
       </schema>

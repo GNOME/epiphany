@@ -40,6 +40,14 @@
 #include "nsISupports.h"
 #include "nsError.h"
 
+typedef enum
+{
+	CONTENT_ACTION_OPEN,
+	CONTENT_ACTION_DOWNLOAD,
+	CONTENT_ACTION_SAVEAS,
+	CONTENT_ACTION_NONE
+} ContentAction;
+
 #define G_CONTENTHANDLER_CID			     \
 { /* 16072c4a-23a6-4996-9beb-9335c06bbeae */         \
     0x16072c4a,                                      \
@@ -59,18 +67,19 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	GContentHandler();
 	virtual ~GContentHandler();
 
-	NS_METHOD FindHelperApp (void);
-	NS_METHOD LaunchHelperApp (void);
+  private:
+
+	NS_METHOD Init ();
+	NS_METHOD ProcessMimeInfo ();
+	NS_METHOD FindHelperApp ();
+	NS_METHOD LaunchHelperApp ();
 
 	NS_METHOD GetLauncher (nsIHelperAppLauncher * *_retval);
 	NS_METHOD SetHelperApp(GnomeVFSMimeApplication *mHelperApp,
 			       PRBool alwaysUse);
-	NS_METHOD SynchroniseMIMEInfo (void);
-	NS_METHOD MIMEAskAction (void);
-  private:
-	/* additional members */
-	NS_METHOD Init (void);
-	NS_METHOD ProcessMimeInfo (void);
+	NS_METHOD SynchroniseMIMEInfo ();
+	NS_METHOD MIMEConfirmAction ();
+	NS_METHOD MIMEDoAction ();
 	
 	nsCOMPtr<nsIHelperAppLauncher> mLauncher;
 
@@ -80,7 +89,9 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	char *mMimeType;	
 	PRBool mUrlHelper;
 	GnomeVFSMimeApplication *mHelperApp;
-	
+	ContentAction mAction;
+	EphyMimePermission mPermission;
+
 	nsCString mUrl;
 	nsCString mScheme;
 };

@@ -42,6 +42,7 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
+#include "ephy-file-chooser.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtkimage.h>
@@ -76,98 +77,6 @@ GContentHandler::~GContentHandler()
 // begin nsIHelperAppLauncher impl
 ////////////////////////////////////////////////////////////////////////////////
 
-/* This is copied verbatim from nsDocShell.h in Mozilla, we should keep it synced */
-/* http://lxr.mozilla.org/mozilla/source/docshell/base/nsDocShell.h */
-
-#define MAKE_LOAD_TYPE(type, flags) ((type) | (flags << 16))
-
-enum LoadType {
-    LOAD_NORMAL = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_NORMAL, nsIWebNavigation::LOAD_FLAGS_NONE),
-    LOAD_NORMAL_REPLACE = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_NORMAL, nsIWebNavigation::LOAD_FLAGS_REPLACE_HISTORY),
-    LOAD_HISTORY = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_HISTORY, nsIWebNavigation::LOAD_FLAGS_NONE),
-    LOAD_RELOAD_NORMAL = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_RELOAD, nsIWebNavigation::LOAD_FLAGS_NONE),
-    LOAD_RELOAD_BYPASS_CACHE = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_RELOAD, nsIWebNavigation::LOAD_FLAGS_BYPASS_CACHE),
-    LOAD_RELOAD_BYPASS_PROXY = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_RELOAD, nsIWebNavigation::LOAD_FLAGS_BYPASS_PROXY),
-    LOAD_RELOAD_BYPASS_PROXY_AND_CACHE = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_RELOAD, nsIWebNavigation::LOAD_FLAGS_BYPASS_CACHE | nsIWebNavigation::LOAD_FLAGS_BYPASS_PROXY),
-    LOAD_LINK = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_NORMAL, nsIWebNavigation::LOAD_FLAGS_IS_LINK),
-    LOAD_REFRESH = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_NORMAL, nsIWebNavigation::LOAD_FLAGS_IS_REFRESH),
-    LOAD_RELOAD_CHARSET_CHANGE = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_RELOAD, nsIWebNavigation::LOAD_FLAGS_CHARSET_CHANGE),
-    LOAD_BYPASS_HISTORY = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_NORMAL, nsIWebNavigation::LOAD_FLAGS_BYPASS_HISTORY)
-};
-
-static GtkWidget*
-ch_unrequested_dialog_construct (GtkWindow *parent, const char *title)
-{
-	GtkWidget *dialog;
-	GtkWidget *hbox, *vbox, *label, *image;
-	char *str, *tmp_str, *tmp_title;
-
-	dialog = gtk_dialog_new_with_buttons ("",
-					      GTK_WINDOW (parent),
-					      GTK_DIALOG_NO_SEPARATOR,
-					      GTK_STOCK_CANCEL,
-					      GTK_RESPONSE_CANCEL,
-					      GTK_STOCK_OK,
-					      GTK_RESPONSE_OK,
-					      NULL);
-	
-	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);
-
-	hbox = gtk_hbox_new (FALSE, 6);
-	gtk_widget_show (hbox);
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
-			    TRUE, TRUE, 0);
-
-	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
-					  GTK_ICON_SIZE_DIALOG);
-	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
-	gtk_widget_show (image);
-	gtk_box_pack_start (GTK_BOX (hbox), image, TRUE, TRUE, 0);
-
-	vbox = gtk_vbox_new (FALSE, 6);
-	gtk_widget_show (vbox);
-	gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-
-	label = gtk_label_new (NULL);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-	tmp_title = g_strconcat ("<b>", title, "</b>", NULL);
-	tmp_str = g_strdup_printf (_("An unrequested download (%s) has been started.\n Would you like to continue it and open the file?"),
-			           tmp_title);
-	str = g_strconcat ("<big>", tmp_str, "</big>", NULL);
-	gtk_label_set_markup (GTK_LABEL (label), str);
-	g_free (tmp_title);
-	g_free (tmp_str);
-	g_free (str);
-	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
-	gtk_widget_show (label);
-
-	return dialog;
-}
-
-static void
-ch_unrequested_dialog_cb (GtkWidget *dialog,
-			  int response_id,
-			  gpointer user_data)
-{
-	switch (response_id) 
-	{
-		case GTK_RESPONSE_OK:
-			((GContentHandler*)user_data)->MIMEAskAction ();
-			break;
-		case GTK_RESPONSE_CANCEL:
-			nsCOMPtr<nsIHelperAppLauncher> launcher;
-		
-			((GContentHandler*)user_data)->GetLauncher (getter_AddRefs(launcher));
-			launcher->Cancel ();
-			break;
-	}
-	
-	gtk_widget_destroy (GTK_WIDGET (dialog));
-}
-
 #if MOZILLA_SNAPSHOT > 9
 /* void show (in nsIHelperAppLauncher aLauncher, in nsISupports aContext); */
 NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
@@ -194,21 +103,9 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 	PRUint32 eLoadType;
 	eDocShell->GetLoadType (&eLoadType);
 	
-	/* We ask the user what to do if he has not explicitely started the download
-	 * (LoadType == LOAD_LINK) */
-	
-	if (eLoadType != LOAD_LINK) {
-		GtkWidget *dialog;
-		dialog = ch_unrequested_dialog_construct (NULL, mUrl.get()); 
-		g_signal_connect (G_OBJECT (dialog),
-				  "response",
-				  G_CALLBACK (ch_unrequested_dialog_cb),
-				  this);
-		gtk_widget_show (dialog);
-	}
-	else if (!handled)
+	if (!handled)
 	{
-		MIMEAskAction ();
+		MIMEDoAction ();
 	}
 	else
 	{
@@ -228,8 +125,35 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 				    const PRUnichar *aSuggestedFileExtension,
 				    nsILocalFile **_retval)
 {
-	return BuildDownloadPath (NS_ConvertUCS2toUTF8 (aDefaultFile).get(),
-				  _retval);
+	EphyFileChooser *dialog;
+	gint response;
+	char *filename;
+
+	if (mAction != CONTENT_ACTION_SAVEAS)
+	{
+		return BuildDownloadPath (NS_ConvertUCS2toUTF8 (aDefaultFile).get(),
+					  _retval);
+	}
+
+	dialog = ephy_file_chooser_new (_("Save"), NULL,
+					GTK_FILE_CHOOSER_ACTION_SAVE,
+					CONF_STATE_DOWNLOAD_DIR);
+	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
+					   NS_ConvertUCS2toUTF8 (aDefaultFile).get());
+	response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+	if (response == EPHY_RESPONSE_SAVE)
+	{
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+		BuildDownloadPath (filename, _retval);
+		g_free (filename);
+
+		return NS_OK;
+	}
+	else
+	{
+		return NS_ERROR_FAILURE;
+	}
 }
 
 #if MOZILLA_SNAPSHOT < 10
@@ -432,32 +356,117 @@ NS_METHOD GContentHandler::ProcessMimeInfo (void)
 	return NS_OK;
 }
 
-NS_METHOD GContentHandler::MIMEAskAction (void)
+NS_METHOD GContentHandler::MIMEConfirmAction ()
 {
-	nsresult rv;
-	gboolean auto_open;
+	GtkWidget *dialog;
+	GtkWidget *hbox, *vbox, *label, *image;
+	char *text;
+	int response;
 
-	auto_open = eel_gconf_get_boolean (CONF_AUTO_OPEN_DOWNLOADS);
-	GnomeVFSMimeApplication *DefaultApp = gnome_vfs_mime_get_default_application(mMimeType);
-
-	EphyMimePermission permission;
-	permission = ephy_embed_shell_check_mime (embed_shell, mMimeType);
+	dialog = gtk_dialog_new_with_buttons
+		("", NULL, GTK_DIALOG_NO_SEPARATOR,
+		 _("Save As..."), CONTENT_ACTION_SAVEAS,
+		 GTK_STOCK_CANCEL, CONTENT_ACTION_NONE,
+		 _("Open"), CONTENT_ACTION_OPEN,
+		 NULL);
 	
-	if (!auto_open || !DefaultApp || permission != EPHY_MIME_PERMISSION_SAFE)
+	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);
+
+	hbox = gtk_hbox_new (FALSE, 6);
+	gtk_widget_show (hbox);
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
+			    TRUE, TRUE, 0);
+
+	if (mPermission != EPHY_MIME_PERMISSION_SAFE)
 	{
-		if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK)) return NS_OK;
-
-		nsCOMPtr<nsIHelperAppLauncher> launcher;
-		GetLauncher (getter_AddRefs(launcher));
-		NS_ENSURE_TRUE (launcher, NS_ERROR_FAILURE);
-
-		launcher->SaveToDisk (nsnull,PR_FALSE);
+		text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
+					_("Do you really want to download the file?"),
+					_("This type of file could potentially damage your documents"
+					  "or invade your privacy."
+					  "It's not safe to open it directly. You"
+					  "can save it instead."));
+	}
+	if (mAction == CONTENT_ACTION_OPEN)
+	{
+		text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
+					_("Open the file in another application?"),
+					_("It's not possible to view this file type directly "
+					  "in the browser. You can open it with another "
+					  "application or save it."));
 	}
 	else
 	{
+		text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
+					_("Download the file?"),
+					_("It's not possible to view this file because there is no"
+					  "application installed that can open it."
+					  "You can save it instead."));
+	}
+
+	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
+					  GTK_ICON_SIZE_DIALOG);
+	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
+	gtk_widget_show (image);
+	gtk_box_pack_start (GTK_BOX (hbox), image, TRUE, TRUE, 0);
+
+	vbox = gtk_vbox_new (FALSE, 6);
+	gtk_widget_show (vbox);
+	gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
+
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	gtk_label_set_markup (GTK_LABEL (label), text);
+	g_free (text);
+
+	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+	gtk_widget_show (label);
+
+	mAction = (ContentAction) gtk_dialog_run (GTK_DIALOG (dialog));
+
+	gtk_widget_destroy (dialog);
+
+	return NS_OK;
+}
+
+NS_METHOD GContentHandler::MIMEDoAction (void)
+{
+	nsresult rv;
+	gboolean auto_downloads;
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK)) return NS_OK;
+
+	auto_downloads = eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS);
+	GnomeVFSMimeApplication *DefaultApp = gnome_vfs_mime_get_default_application(mMimeType);
+
+	mPermission = ephy_embed_shell_check_mime (embed_shell, mMimeType);
+
+	mAction = CONTENT_ACTION_OPEN;
+
+	if (mPermission != EPHY_MIME_PERMISSION_SAFE)
+	{
+		mAction = CONTENT_ACTION_DOWNLOAD;
+	}
+
+	if (!auto_downloads)
+	{
+		MIMEConfirmAction ();
+	}
+	
+	if (mAction == CONTENT_ACTION_DOWNLOAD ||
+	    mAction == CONTENT_ACTION_SAVEAS)
+	{
+		nsCOMPtr<nsIHelperAppLauncher> launcher;
+		GetLauncher (getter_AddRefs(launcher));
+		NS_ENSURE_TRUE (launcher, NS_ERROR_FAILURE);
+		launcher->SaveToDisk (nsnull,PR_FALSE);
+	}
+	else if (mAction == CONTENT_ACTION_OPEN)
+	{
 		rv = SetHelperApp (DefaultApp, FALSE);
 		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
 		rv = FindHelperApp ();
 		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 	}
