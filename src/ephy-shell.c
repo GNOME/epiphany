@@ -358,6 +358,9 @@ ephy_shell_finalize (GObject *object)
 
 	if (gs->priv->automation_factory)
 	{
+		bonobo_activation_unregister_active_server
+			(AUTOMATION_FACTORY_IID, BONOBO_OBJREF (gs->priv->automation_factory));
+
 		bonobo_object_unref (gs->priv->automation_factory);
 	}
 

@@ -1,5 +1,12 @@
 2003-11-13  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* src/ephy-shell.c: (ephy_shell_finalize):
+
+	Looks like we need to unregister factory since
+	we initialized it by ourself.
+
+2003-11-13  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* embed/mozilla/mozilla-notifiers.cpp:
 	* src/ephy-main.c: (main):
 	* src/ephy-shell.c: (ephy_shell_init), (ephy_shell_startup),
