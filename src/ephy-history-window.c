@@ -243,7 +243,7 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 	GtkWidget *align;
 	char *str;
 
-	dialog = gtk_dialog_new_with_buttons (_("Clear history"),
+	dialog = gtk_dialog_new_with_buttons (_("Clear History"),
 					     GTK_WINDOW (editor),
 					     GTK_DIALOG_DESTROY_WITH_PARENT |
 					     GTK_DIALOG_NO_SEPARATOR,
