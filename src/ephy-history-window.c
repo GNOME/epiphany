@@ -992,6 +992,7 @@ search_entry_search_cb (GtkWidget *entry, char *search_text, EphyHistoryWindow *
 		 G_CALLBACK (site_node_selected_cb),
 		 editor);
 	all = ephy_history_get_pages (editor->priv->history);
+	editor->priv->selected_site = all;
 	ephy_node_view_select_node (EPHY_NODE_VIEW (editor->priv->sites_view),
 				    all);
 	g_signal_handlers_unblock_by_func

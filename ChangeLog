@@ -1,5 +1,12 @@
 2003-10-06  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* src/ephy-history-window.c: (search_entry_search_cb):
+	
+	update priv->select_node, signals are blocked so it would
+	not be updated otherwise
+
+2003-10-06  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* lib/widgets/ephy-node-view.c: (did_not_drag):
 
 	Do not unselect all on single selection mode, to not generate
