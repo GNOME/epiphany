@@ -34,23 +34,23 @@
 
 static const EphyFontsLanguageInfo font_languages [] =
 {
-	{ N_("Arabic"),					"ar" },
-	{ N_("Baltic"),					"x-baltic" },
-	{ N_("Central European"),			"x-central-euro" },
-	{ N_("Cyrillic"),				"x-cyrillic" },
-	{ N_("Devanagari"),				"x-devanagari" },
-	{ N_("Greek"),					"el" },
-	{ N_("Hebrew"),					"he" },
-	{ N_("Japanese"),				"ja" },
-	{ N_("Korean"),					"ko" },
-	{ N_("Simplified Chinese"),			"zh-CN" },
-	{ N_("Tamil"),					"x-tamil" },
-	{ N_("Thai"),					"th" },
-	{ N_("Traditional Chinese"),			"zh-TW" },
-	{ N_("Traditional Chinese (Hong Kong)"),	"zh-HK" },
-	{ N_("Turkish"),				"tr" },
-	{ N_("Unicode"),				"x-unicode" },
-	{ N_("Western"),				"x-western" }
+	{ N_("select fonts for|Arabic"),				"ar" },
+	{ N_("select fonts for|Baltic"),				"x-baltic" },
+	{ N_("select fonts for|Central European"),			"x-central-euro" },
+	{ N_("select fonts for|Cyrillic"),				"x-cyrillic" },
+	{ N_("select fonts for|Devanagari"),				"x-devanagari" },
+	{ N_("select fonts for|Greek"),					"el" },
+	{ N_("select fonts for|Hebrew"),				"he" },
+	{ N_("select fonts for|Japanese"),				"ja" },
+	{ N_("select fonts for|Korean"),				"ko" },
+	{ N_("select fonts for|Simplified Chinese"),			"zh-CN" },
+	{ N_("select fonts for|Tamil"),					"x-tamil" },
+	{ N_("select fonts for|Thai"),					"th" },
+	{ N_("select fonts for|Traditional Chinese"),			"zh-TW" },
+	{ N_("select fonts for|Traditional Chinese (Hong Kong)"),	"zh-HK" },
+	{ N_("select fonts for|Turkish"),				"tr" },
+	{ N_("select fonts for|Unicode"),				"x-unicode" },
+	{ N_("select fonts for|Western"),				"x-western" }
 };
 static const guint n_font_languages = G_N_ELEMENTS (font_languages);
 

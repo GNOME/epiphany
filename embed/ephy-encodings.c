@@ -140,16 +140,16 @@ encoding_entries [] =
 	{ N_("Unicode (UTF-_32 BE)"),               "UTF-32BE",              0,			FALSE },
 	{ N_("Unicode (UTF-3_2 LE)"),               "UTF-32LE",              0,			FALSE },
 
-	{ N_("Off"),		 		    "",				   LG_NONE,								TRUE },
-	{ N_("Chinese"),			    "zh_parallel_state_machine",   LG_CHINESE_TRAD | LG_CHINESE_SIMP,					TRUE },
-	{ N_("Chinese Simplified"),		    "zhcn_parallel_state_machine", LG_CHINESE_SIMP,							TRUE },
-	{ N_("Chinese Traditional"),		    "zhtw_parallel_state_machine", LG_CHINESE_TRAD,							TRUE },
-	{ N_("East Asian"),			    "cjk_parallel_state_machine",  LG_CHINESE_TRAD | LG_CHINESE_SIMP | LG_JAPANESE | LG_KOREAN,		TRUE },
-	{ N_("Japanese"),			    "ja_parallel_state_machine",   LG_JAPANESE,								TRUE },
-	{ N_("Korean"),				    "ko_parallel_state_machine",   LG_KOREAN,								TRUE },
-	{ N_("Russian"),			    "ruprob",			   LG_CYRILLIC | LG_UKRAINIAN,						TRUE },
-	{ N_("Universal"),	   		    "universal_charset_detector",  LG_ALL,								TRUE },
-	{ N_("Ukrainian"),	   		    "ukprob",			   LG_UKRAINIAN,							TRUE }
+	{ N_("autodetectors|Off"),						    "",				   LG_NONE,								TRUE },
+	{ N_("automatically detect ... character encodings|Chinese"),		    "zh_parallel_state_machine",   LG_CHINESE_TRAD | LG_CHINESE_SIMP,					TRUE },
+	{ N_("automatically detect ... character encodings|Simplified Chinese"),    "zhcn_parallel_state_machine", LG_CHINESE_SIMP,							TRUE },
+	{ N_("automatically detect ... character encodings|Traditional Chinese"),   "zhtw_parallel_state_machine", LG_CHINESE_TRAD,							TRUE },
+	{ N_("automatically detect ... character encodings|East Asian"),	    "cjk_parallel_state_machine",  LG_CHINESE_TRAD | LG_CHINESE_SIMP | LG_JAPANESE | LG_KOREAN,		TRUE },
+	{ N_("automatically detect ... character encodings|Japanese"),		    "ja_parallel_state_machine",   LG_JAPANESE,								TRUE },
+	{ N_("automatically detect ... character encodings|Korean"),		    "ko_parallel_state_machine",   LG_KOREAN,								TRUE },
+	{ N_("automatically detect ... character encodings|Russian"),		    "ruprob",			   LG_CYRILLIC | LG_UKRAINIAN,						TRUE },
+	{ N_("automatically detect ... character encodings|Universal"),	   	    "universal_charset_detector",  LG_ALL,								TRUE },
+	{ N_("automatically detect ... character encodings|Ukrainian"),	   	    "ukprob",			   LG_UKRAINIAN,							TRUE }
 };
 static const guint n_encoding_entries = G_N_ELEMENTS (encoding_entries);
 
@@ -478,7 +478,9 @@ ephy_encodings_init (EphyEncodings *encodings)
 	for (i = 0; i < n_encoding_entries; i++)
 	{
 		add_encoding (encodings,
-			      _(encoding_entries[i].title),
+			      encoding_entries[i].is_autodetector
+			      	? Q_(encoding_entries[i].title)
+			 	: _(encoding_entries[i].title),
 			      encoding_entries[i].code,
 			      encoding_entries[i].groups,
 			      encoding_entries[i].is_autodetector);

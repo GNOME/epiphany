@@ -739,7 +739,7 @@ create_fonts_language_menu (EphyDialog *dialog)
 	{
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
-				    COL_FONTS_LANG_NAME, _(fonts_languages[i].title),
+				    COL_FONTS_LANG_NAME, Q_(fonts_languages[i].title),
 				    COL_FONTS_LANG_CODE, fonts_languages[i].code,
 				    -1);
 	}
