@@ -43,7 +43,6 @@ impl_show (EphyDialog *dialog);
 void find_close_button_clicked_cb (GtkWidget *button, EphyDialog *dialog);
 void find_next_button_clicked_cb (GtkWidget *button, EphyDialog *dialog);
 void find_prev_button_clicked_cb (GtkWidget *button, EphyDialog *dialog);
-void find_entry_activate_cb (GtkWidget *editable, EphyDialog *dialog);
 void find_entry_changed_cb  (GtkWidget *editable, EphyDialog *dialog);
 void find_check_toggled_cb (GtkWidget *toggle, EphyDialog *dialog);
 
@@ -204,6 +203,51 @@ impl_destruct (EphyDialog *dialog)
 }
 
 static void
+find_get_info (EphyDialog *dialog)
+{
+        EmbedFindInfo *properties;
+        char *search_string;
+	GValue word = {0, };
+	GValue match_case = {0, };
+	GValue wrap = {0, };
+	FindDialog *find_dialog = FIND_DIALOG(dialog);
+
+        /* get the search string from the entry field */
+	ephy_dialog_get_value (dialog, WORD_PROP, &word);
+        search_string = g_strdup(g_value_get_string (&word));
+	g_value_unset (&word);
+
+        /* don't do null searches */
+        if (search_string[0] == '\0')
+        {
+		find_dialog->priv->can_go_prev = FALSE;
+		find_dialog->priv->can_go_next = FALSE;
+                return;
+        }
+
+	if (find_dialog->priv->properties != NULL)
+	{
+		g_free (find_dialog->priv->properties->search_string);
+		g_free (find_dialog->priv->properties);
+	}
+
+        /* build search structure */
+        properties = g_new0 (EmbedFindInfo,1);
+        properties->search_string = search_string;
+
+	ephy_dialog_get_value (dialog, MATCH_CASE_PROP, &match_case);
+        properties->match_case = g_value_get_boolean (&match_case);
+
+	ephy_dialog_get_value (dialog, AUTOWRAP_PROP, &wrap);
+        properties->wrap = g_value_get_boolean (&wrap);
+
+        properties->entire_word = FALSE;
+	properties->search_frames = TRUE;
+
+	find_dialog->priv->properties = properties;
+}
+
+static void
 impl_show (EphyDialog *dialog)
 {
 	FindDialog *find_dialog = FIND_DIALOG(dialog);
@@ -211,6 +255,7 @@ impl_show (EphyDialog *dialog)
 
 	find_dialog->priv->can_go_prev = TRUE;
 	find_dialog->priv->can_go_next = TRUE;
+	find_get_info (dialog);
 	find_update_nav (dialog);
 
 	/* Focus the text entry.  This will correctly select or leave
@@ -331,48 +376,6 @@ find_dialog_go_prev (FindDialog *dialog,
 	find_update_nav (EPHY_DIALOG(dialog));
 }
 
-static void
-find_get_info (EphyDialog *dialog)
-{
-        EmbedFindInfo *properties;
-        char *search_string;
-	GValue word = {0, };
-	GValue match_case = {0, };
-	GValue wrap = {0, };
-	FindDialog *find_dialog = FIND_DIALOG(dialog);
-
-        /* get the search string from the entry field */
-	ephy_dialog_get_value (dialog, WORD_PROP, &word);
-        search_string = g_strdup(g_value_get_string (&word));
-
-        /* don't do null searches */
-        if (search_string[0] == '\0')
-        {
-                return;
-        }
-
-	if (find_dialog->priv->properties != NULL)
-	{
-		g_free (find_dialog->priv->properties->search_string);
-		g_free (find_dialog->priv->properties);
-	}
-
-        /* build search structure */
-        properties = g_new0 (EmbedFindInfo,1);
-        properties->search_string = search_string;
-
-	ephy_dialog_get_value (dialog, MATCH_CASE_PROP, &match_case);
-        properties->match_case = g_value_get_boolean (&match_case);
-
-	ephy_dialog_get_value (dialog, AUTOWRAP_PROP, &wrap);
-        properties->wrap = g_value_get_boolean (&wrap);
-
-        properties->entire_word = FALSE;
-	properties->search_frames = TRUE;
-
-	find_dialog->priv->properties = properties;
-}
-
 void
 find_close_button_clicked_cb (GtkWidget *button,
 			      EphyDialog *dialog)
@@ -392,14 +395,6 @@ find_prev_button_clicked_cb (GtkWidget *button,
 			     EphyDialog *dialog)
 {
 	find_dialog_go_prev (FIND_DIALOG(dialog), TRUE);
-}
-
-void
-find_entry_activate_cb (GtkWidget *editable,
-			EphyDialog *dialog)
-{
-	find_dialog_go_next (FIND_DIALOG(dialog), TRUE);
-	find_update_nav (dialog);
 }
 
 void
