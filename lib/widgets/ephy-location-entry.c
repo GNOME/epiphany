@@ -54,15 +54,19 @@ struct _EphyLocationEntryPrivate
 	guint relevance_col;
 };
 
-static char *web_prefixes [] =
+static const struct
 {
-	"http://www.",
-        "http://",
-        "https://www.",
-        "https://",
-        "www."
+	const char *prefix;
+	int len;
+}
+web_prefixes [] =
+{
+	{ "http://www.", 11 },
+	{ "http://", 7 },
+	{ "https://www.", 12 },
+	{ "https://", 8 },
+	{ "www.", 4 }
 };
-static int n_web_prefixes = G_N_ELEMENTS (web_prefixes);
 
 static void ephy_location_entry_class_init (EphyLocationEntryClass *klass);
 static void ephy_location_entry_init (EphyLocationEntry *le);
@@ -236,7 +240,7 @@ completion_func (GtkEntryCompletion *completion,
 		 GtkTreeIter *iter,
 		 gpointer data)
 {
-	int i;
+	int i, len_key, len_prefix;
 	char *item = NULL;
 	char *keywords = NULL;
 	gboolean ret = FALSE;
@@ -250,7 +254,8 @@ completion_func (GtkEntryCompletion *completion,
 			    le->priv->keywords_col, &keywords,
 			    -1);
 
-	if (!strncmp (key, item, strlen (key)))
+	len_key = strlen (key);
+	if (!strncmp (key, item, len_key))
 	{
 		ret = TRUE;
 	}
@@ -260,21 +265,15 @@ completion_func (GtkEntryCompletion *completion,
 	}
 	else
 	{
-		for (i = 0; i < n_web_prefixes; i++)
+		for (i = 0; i < G_N_ELEMENTS (web_prefixes); i++)
 		{
-			char *key_prefixed;
-
-			key_prefixed = g_strconcat (web_prefixes[i], key, NULL);
-
-			if (!strncmp (key_prefixed, item, strlen (key_prefixed)))
+			len_prefix = web_prefixes[i].len;
+			if (!strncmp (web_prefixes[i].prefix, item, len_prefix) &&
+			    !strncmp (key, item + len_prefix, len_key))
 			{
-				g_free (key_prefixed);
-
 				ret = TRUE;
 				break;
 			}
-
-			g_free (key_prefixed);
 		}
 	}
 
