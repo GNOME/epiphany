@@ -266,11 +266,31 @@ ephy_tab_size_allocate (GtkWidget *widget,
 	widget->allocation = *allocation;
 
 	child = GTK_BIN (widget)->child;
+	g_return_if_fail (child != NULL);
 
-	if (child && GTK_WIDGET_VISIBLE (child))
+	/* only resize if we're mapped (which means we're drawable) */
+	if (GTK_WIDGET_MAPPED (child))
 	{
 		gtk_widget_size_allocate (child, allocation);
 	}
+}
+
+static void
+ephy_tab_map (GtkWidget *widget)
+{
+	GtkWidget *child;
+
+	g_return_if_fail (GTK_WIDGET_REALIZED (widget));
+
+	child = GTK_BIN (widget)->child;
+	g_return_if_fail (child != NULL);
+
+	/* we do this since the window might have been resized while this
+	 * tab wasn't mapped (i.e. was a non-active tab during the resize).
+	 */
+	gtk_widget_size_allocate (child, &widget->allocation);
+
+	GTK_WIDGET_CLASS (parent_class)->map (widget);	
 }
 
 static EphyWindow *
@@ -314,7 +334,8 @@ ephy_tab_class_init (EphyTabClass *class)
 	object_class->set_property = ephy_tab_set_property;
 
 	widget_class->size_allocate = ephy_tab_size_allocate;
-	
+	widget_class->map = ephy_tab_map;
+
 	g_object_class_install_property (object_class,
 					 PROP_ADDRESS,
 					 g_param_spec_string ("address",

@@ -1,5 +1,13 @@
 2004-10-05  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-tab.c: (ephy_tab_size_allocate), (ephy_tab_map),
+	(ephy_tab_class_init):
+
+	Don't size-allocate unmapped tabs, fixing slow resizes.
+	Fixes bug #128191.
+
+2004-10-05  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-file-chooser.c: (ephy_file_chooser_constructor):
 	* lib/ephy-gui.c: (ephy_gui_confirm_overwrite_file),
 	(ephy_gui_is_middle_click), (ephy_gui_set_default_window_icon):
