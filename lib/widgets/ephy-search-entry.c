@@ -125,34 +125,29 @@ ephy_search_entry_changed_cb (GtkEditable *editable,
 	entry->priv->timeout = g_timeout_add (300, (GSourceFunc) ephy_search_entry_timeout_cb, entry);
 }
 
-static gboolean
-ephy_search_entry_focus_out_event_cb (GtkWidget *widget,
-				      GdkEventFocus *event,
-				      EphySearchEntry *entry)
+static void
+ephy_search_entry_destroy_cb (GtkEditable *editable,
+			      EphySearchEntry *entry)
 {
-	if (entry->priv->timeout == 0)
-		return FALSE;
-
-	g_source_remove (entry->priv->timeout);
-	entry->priv->timeout = 0;
-
-	g_signal_emit (G_OBJECT (entry), ephy_search_entry_signals[SEARCH], 0,
-		       gtk_entry_get_text (GTK_ENTRY (entry)));
-
-	return FALSE;
+	if (entry->priv->timeout)
+	{
+		g_source_remove (entry->priv->timeout);
+		entry->priv->timeout = 0;
+	}
 }
+
 static void
 ephy_search_entry_init (EphySearchEntry *entry)
 {
 	entry->priv = g_new0 (EphySearchEntryPrivate, 1);
 
 	g_signal_connect (G_OBJECT (entry),
-			  "changed",
-			  G_CALLBACK (ephy_search_entry_changed_cb),
+			  "destroy",
+			  G_CALLBACK (ephy_search_entry_destroy_cb),
 			  entry);
 	g_signal_connect (G_OBJECT (entry),
-			  "focus_out_event",
-			  G_CALLBACK (ephy_search_entry_focus_out_event_cb),
+			  "changed",
+			  G_CALLBACK (ephy_search_entry_changed_cb),
 			  entry);
 }
 
