@@ -109,17 +109,18 @@ struct _EggToolbarClass
 {
   GtkContainerClass parent_class;
 
+  /* signals */
   void (* orientation_changed) (EggToolbar       *toolbar,
 				GtkOrientation    orientation);
   void (* style_changed)       (EggToolbar       *toolbar,
 				GtkToolbarStyle   style);
   void (* popup_context_menu)  (EggToolbar       *toolbar);
 
-  /* these should go away/become padding when we become part of gtk+ */
+  /* keybinding signals -- these should go away/become padding when we become part of gtk+ */
   gboolean (* move_focus)          (EggToolbar       *toolbar,
 				    GtkDirectionType  dir);
-  gboolean (* focus_home)          (EggToolbar       *toolbar);
-  gboolean (* focus_end)           (EggToolbar       *toolbar);
+  gboolean (* focus_ends)          (EggToolbar       *toolbar,
+				    gboolean          home);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -128,10 +129,6 @@ struct _EggToolbarClass
 GType           egg_toolbar_get_type        (void) G_GNUC_CONST;
 GtkWidget*      egg_toolbar_new             (void);
 
-void            egg_toolbar_append           (EggToolbar      *toolbar,
-					      EggToolItem     *item);
-void            egg_toolbar_prepend          (EggToolbar      *toolbar,
-					      EggToolItem     *item);
 void            egg_toolbar_insert           (EggToolbar      *toolbar,
 					      EggToolItem     *item,
 					      gint             pos);
@@ -147,13 +144,6 @@ void            egg_toolbar_set_show_arrow   (EggToolbar      *toolbar,
 					      gboolean         show_arrow);
 void            egg_toolbar_set_orientation  (EggToolbar      *toolbar,
 					      GtkOrientation   orientation);
-/* FIXME: shouldn't these be deprecated? */
-void            egg_toolbar_set_style        (EggToolbar      *toolbar,
-					      GtkToolbarStyle  style);
-void            egg_toolbar_set_icon_size    (EggToolbar      *toolbar,
-					      GtkIconSize      icon_size);
-void            egg_toolbar_unset_style      (EggToolbar      *toolbar);
-/* -------- */
 void            egg_toolbar_set_tooltips     (EggToolbar      *toolbar,
 					      gboolean         enable);
 void            egg_toolbar_unset_icon_size  (EggToolbar      *toolbar);
@@ -166,28 +156,33 @@ GtkReliefStyle  egg_toolbar_get_relief_style (EggToolbar      *toolbar);
 
 #ifndef EGG_DISABLE_DEPRECATED
 /* Simple button items */
-GtkWidget* egg_toolbar_append_item     (EggToolbar      *toolbar,
-					const char      *text,
-					const char      *tooltip_text,
-					const char      *tooltip_private_text,
-					GtkWidget       *icon,
-					GtkSignalFunc    callback,
-					gpointer         user_data);
-GtkWidget* egg_toolbar_prepend_item    (EggToolbar      *toolbar,
-					const char      *text,
-					const char      *tooltip_text,
-					const char      *tooltip_private_text,
-					GtkWidget       *icon,
-					GtkSignalFunc    callback,
-					gpointer         user_data);
-GtkWidget* egg_toolbar_insert_item     (EggToolbar      *toolbar,
-					const char      *text,
-					const char      *tooltip_text,
-					const char      *tooltip_private_text,
-					GtkWidget       *icon,
-					GtkSignalFunc    callback,
-					gpointer         user_data,
-					gint             position);
+void       egg_toolbar_set_style     (EggToolbar      *toolbar,
+				      GtkToolbarStyle  style);
+void       egg_toolbar_set_icon_size (EggToolbar      *toolbar,
+				      GtkIconSize      icon_size);
+void       egg_toolbar_unset_style   (EggToolbar      *toolbar);
+GtkWidget* egg_toolbar_append_item   (EggToolbar      *toolbar,
+				      const char      *text,
+				      const char      *tooltip_text,
+				      const char      *tooltip_private_text,
+				      GtkWidget       *icon,
+				      GtkSignalFunc    callback,
+				      gpointer         user_data);
+GtkWidget* egg_toolbar_prepend_item  (EggToolbar      *toolbar,
+				      const char      *text,
+				      const char      *tooltip_text,
+				      const char      *tooltip_private_text,
+				      GtkWidget       *icon,
+				      GtkSignalFunc    callback,
+				      gpointer         user_data);
+GtkWidget* egg_toolbar_insert_item   (EggToolbar      *toolbar,
+				      const char      *text,
+				      const char      *tooltip_text,
+				      const char      *tooltip_private_text,
+				      GtkWidget       *icon,
+				      GtkSignalFunc    callback,
+				      gpointer         user_data,
+				      gint             position);
 
 /* Stock Items */
 GtkWidget* egg_toolbar_insert_stock    (EggToolbar      *toolbar,

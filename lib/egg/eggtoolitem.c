@@ -46,8 +46,9 @@ enum {
 
 static void egg_tool_item_init       (EggToolItem *toolitem);
 static void egg_tool_item_class_init (EggToolItemClass *class);
-static void egg_tool_item_finalize (GObject *object);
-
+static void egg_tool_item_finalize    (GObject *object);
+static void egg_tool_item_parent_set   (GtkWidget   *toolitem,
+				        GtkWidget   *parent);
 static void egg_tool_item_set_property (GObject         *object,
 					guint            prop_id,
 					const GValue    *value,
@@ -56,7 +57,6 @@ static void egg_tool_item_get_property (GObject         *object,
 					guint            prop_id,
 					GValue          *value,
 					GParamSpec      *pspec);
-
 static void egg_tool_item_realize       (GtkWidget      *widget);
 static void egg_tool_item_unrealize     (GtkWidget      *widget);
 static void egg_tool_item_map           (GtkWidget      *widget);
@@ -65,10 +65,10 @@ static void egg_tool_item_size_request  (GtkWidget      *widget,
 					 GtkRequisition *requisition);
 static void egg_tool_item_size_allocate (GtkWidget      *widget,
 					 GtkAllocation  *allocation);
-static void egg_tool_item_real_set_tooltip (EggToolItem *tool_item,
-					    GtkTooltips *tooltips,
-					    const gchar *tip_text,
-					    const gchar *tip_private);
+static gboolean egg_tool_item_real_set_tooltip (EggToolItem *tool_item,
+						GtkTooltips *tooltips,
+						const gchar *tip_text,
+						const gchar *tip_private);
 
 static gboolean egg_tool_item_create_menu_proxy (EggToolItem *item);
 
@@ -140,6 +140,7 @@ egg_tool_item_class_init (EggToolItemClass *klass)
   widget_class->unmap         = egg_tool_item_unmap;
   widget_class->size_request  = egg_tool_item_size_request;
   widget_class->size_allocate = egg_tool_item_size_allocate;
+  widget_class->parent_set    = egg_tool_item_parent_set;
 
   klass->create_menu_proxy = egg_tool_item_create_menu_proxy;
   klass->set_tooltip       = egg_tool_item_real_set_tooltip;
@@ -181,9 +182,11 @@ egg_tool_item_class_init (EggToolItemClass *klass)
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (EggToolItemClass, set_tooltip),
-		  NULL, NULL,
-		  _egg_marshal_VOID__OBJECT_STRING_STRING,
-		  G_TYPE_NONE, 3,
+		  egg_boolean_handled_accumulator, NULL, /* FIXME: use gtk_boolean_handled() when
+							  * we are added to gtk+
+							  */
+		  _egg_marshal_BOOLEAN__OBJECT_STRING_STRING,
+		  G_TYPE_BOOLEAN, 3,
 		  GTK_TYPE_TOOLTIPS,
 		  G_TYPE_STRING,
 		  G_TYPE_STRING);		  
@@ -197,6 +200,7 @@ egg_tool_item_init (EggToolItem *toolitem)
   toolitem->visible_horizontal = TRUE;
   toolitem->visible_vertical = TRUE;
   toolitem->homogeneous = FALSE;
+  toolitem->expand = FALSE;
 }
 
 static void
@@ -209,6 +213,13 @@ egg_tool_item_finalize (GObject *object)
   
   if (G_OBJECT_CLASS (parent_class)->finalize)
     G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+egg_tool_item_parent_set   (GtkWidget   *toolitem,
+			    GtkWidget   *prev_parent)
+{
+  egg_tool_item_toolbar_reconfigured (EGG_TOOL_ITEM (toolitem));
 }
 
 static void
@@ -299,18 +310,25 @@ egg_tool_item_realize (GtkWidget *widget)
 }
 
 static void
-egg_tool_item_unrealize (GtkWidget *widget)
+destroy_drag_window (EggToolItem *toolitem)
 {
-  EggToolItem *toolitem;
-
-  toolitem = EGG_TOOL_ITEM (widget);
-
   if (toolitem->drag_window)
     {
       gdk_window_set_user_data (toolitem->drag_window, NULL);
       gdk_window_destroy (toolitem->drag_window);
       toolitem->drag_window = NULL;
     }
+}
+
+static void
+egg_tool_item_unrealize (GtkWidget *widget)
+{
+  EggToolItem *toolitem;
+
+  toolitem = EGG_TOOL_ITEM (widget);
+
+  destroy_drag_window (toolitem);
+  
   GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
 }
 
@@ -340,12 +358,12 @@ static void
 egg_tool_item_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
-  GtkBin *bin = GTK_BIN (widget);
+  GtkWidget *child = GTK_BIN (widget)->child;
   gint xthickness = widget->style->xthickness;
   gint ythickness = widget->style->ythickness;
 
-  if (bin->child)
-    gtk_widget_size_request (bin->child, requisition);
+  if (child)
+    gtk_widget_size_request (child, requisition);
   
   requisition->width += (xthickness + GTK_CONTAINER (widget)->border_width) * 2;
   requisition->height += (ythickness + GTK_CONTAINER (widget)->border_width) * 2;  
@@ -358,19 +376,18 @@ egg_tool_item_size_allocate (GtkWidget     *widget,
   EggToolItem *toolitem = EGG_TOOL_ITEM (widget);
   GtkAllocation child_allocation;
   gint border_width;
-  GtkWidget *child;
+  GtkWidget *child = GTK_BIN (widget)->child;
 
   widget->allocation = *allocation;
   border_width = GTK_CONTAINER (widget)->border_width;
 
-  if (toolitem->drag_window && GTK_WIDGET_REALIZED (widget))
+  if (toolitem->drag_window)
     gdk_window_move_resize (toolitem->drag_window,
                             widget->allocation.x + border_width,
                             widget->allocation.y + border_width,
                             widget->allocation.width - border_width * 2,
                             widget->allocation.height - border_width * 2);
   
-  child = GTK_BIN (toolitem)->child;
   if (child && GTK_WIDGET_VISIBLE (child))
     {
       gint xthickness = widget->style->xthickness;
@@ -391,15 +408,9 @@ egg_tool_item_create_menu_proxy (EggToolItem *item)
   GtkWidget *menu_item = NULL;
 
   if (!GTK_BIN (item)->child)
-    {
-      menu_item = gtk_separator_menu_item_new();
-      g_object_ref (menu_item);
-      gtk_object_sink (GTK_OBJECT (menu_item));
-    }
+    menu_item = gtk_separator_menu_item_new();
 
   egg_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
-  if (menu_item)
-    g_object_unref (menu_item);
   
   return TRUE;
 }
@@ -526,7 +537,7 @@ egg_tool_item_set_homogeneous (EggToolItem *tool_item,
     }
 }
 
-static void
+static gboolean
 egg_tool_item_real_set_tooltip (EggToolItem *tool_item,
 				GtkTooltips *tooltips,
 				const gchar *tip_text,
@@ -535,6 +546,8 @@ egg_tool_item_real_set_tooltip (EggToolItem *tool_item,
   GtkBin *bin = GTK_BIN (tool_item);
 
   gtk_tooltips_set_tip (tooltips, bin->child, tip_text, tip_private);
+
+  return TRUE;
 }
 
 void
@@ -543,10 +556,12 @@ egg_tool_item_set_tooltip (EggToolItem *tool_item,
 			   const gchar *tip_text,
 			   const gchar *tip_private)
 {
+  gboolean retval;
+  
   g_return_if_fail (EGG_IS_TOOL_ITEM (tool_item));
 
   g_signal_emit (tool_item, toolitem_signals[SET_TOOLTIP], 0,
-		 tooltips, tip_text, tip_private);
+		 tooltips, tip_text, tip_private, &retval);
 }
 
 void
@@ -572,12 +587,7 @@ egg_tool_item_set_use_drag_window (EggToolItem *toolitem,
 	}
       else
 	{
-	  if (toolitem->drag_window)
-	    {
-	      gdk_window_set_user_data (toolitem->drag_window, NULL);
-	      gdk_window_destroy (toolitem->drag_window);
-	      toolitem->drag_window = NULL;
-	    }
+	  destroy_drag_window (toolitem);
 	}
     }
 }
@@ -675,7 +685,11 @@ egg_tool_item_set_proxy_menu_item (EggToolItem *tool_item,
     g_free (tool_item->menu_item_id);
 
   if (menu_item)
-    g_object_ref (G_OBJECT (menu_item));
+    {
+      g_object_ref (menu_item);
+      gtk_object_sink (GTK_OBJECT (menu_item));
+    }
+  
   tool_item->menu_item = menu_item;
   
   tool_item->menu_item_id = g_strdup (menu_item_id);

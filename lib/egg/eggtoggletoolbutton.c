@@ -148,9 +148,6 @@ egg_toggle_tool_button_create_menu_proxy (EggToolItem *item)
   else
     menu_item = gtk_check_menu_item_new_with_label (label);
 
-  g_object_ref (menu_item);
-  gtk_object_sink (GTK_OBJECT (menu_item));
-  
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
 				  toggle_tool_button->active);
 
@@ -161,8 +158,6 @@ egg_toggle_tool_button_create_menu_proxy (EggToolItem *item)
 				  FALSE);
 
   egg_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
-
-  g_object_unref (menu_item);
   
   return TRUE;
 }
@@ -172,7 +167,7 @@ menu_item_activated (GtkWidget           *menu_item,
 		     EggToggleToolButton *toggle_tool_button)
 {
   EggToolButton *tool_button = EGG_TOOL_BUTTON (toggle_tool_button);
-  gboolean menu_active = GTK_CHECK_MENU_ITEM (menu_item)->active;
+  gboolean menu_active = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menu_item));
 
   if (toggle_tool_button->active != menu_active)
     {

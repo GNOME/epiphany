@@ -103,6 +103,33 @@ egg_radio_tool_button_new_from_stock (GSList      *group,
   return EGG_TOOL_ITEM (button);
 }
 
+EggToolItem *
+egg_radio_tool_button_new_from_widget (GtkWidget   *group,
+				       const gchar *stock_id)
+{
+  GSList *list = NULL;
+  
+  g_return_val_if_fail (EGG_IS_RADIO_TOOL_BUTTON (group), NULL);
+
+  if (group)
+    list = egg_radio_tool_button_get_group (EGG_RADIO_TOOL_BUTTON (group));
+  
+  return egg_radio_tool_button_new_from_stock (list, stock_id);
+}
+
+EggToolItem *
+egg_radio_tool_button_new_with_stock_from_widget (GtkWidget *group)
+{
+  GSList *list = NULL;
+  
+  g_return_val_if_fail (EGG_IS_RADIO_TOOL_BUTTON (group), NULL);
+
+  if (group)
+    list = egg_radio_tool_button_get_group (EGG_RADIO_TOOL_BUTTON (group));
+  
+  return egg_radio_tool_button_new (list);
+}
+
 GSList *
 egg_radio_tool_button_get_group (EggRadioToolButton *button)
 {

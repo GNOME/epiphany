@@ -54,13 +54,13 @@ noinst_HEADERS = \
   eggmarshalers.h \
   eggintl.h
 
-eggmarshalers.h:
+eggmarshalers.h: eggmarshalers.list
 	cd $(srcdir) \
 	&& $(GLIB_GENMARSHAL) --prefix=_egg_marshal eggmarshalers.list --header > xgen-emh \
 	&& cp xgen-emh eggmarshalers.h \
 	&& rm -f xgen-emh xgen-emh~
 
-eggmarshalers.c:
+eggmarshalers.c: eggmarshalers.list
 	cd $(srcdir) \
 	&& $(GLIB_GENMARSHAL) --prefix=_egg_marshal eggmarshalers.list --body > xgen-emc \
 	&& cp xgen-emc eggmarshalers.c \

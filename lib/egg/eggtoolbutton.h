@@ -55,9 +55,10 @@ struct _EggToolButton
 struct _EggToolButtonClass
 {
   EggToolItemClass parent_class;
-
+ 
   GType button_type;
 
+  /* signal */
   void       (* clicked)             (EggToolButton    *tool_item);
 };
 
