@@ -370,7 +370,7 @@ toolbar_setup_actions (Toolbar *t)
 			       "name", "Location",
 			       "label", _("Address Entry"),
 			       "stock_id", EPHY_STOCK_ENTRY,
-			       "tooltip", _("Enter a web address to open, or a phrase to search for on the web."),
+			       "tooltip", _("Enter a web address to open, or a phrase to search for on the web"),
 			       NULL);
 	g_signal_connect (action, "go_location",
 			  G_CALLBACK (go_location_cb), t->priv->window);
@@ -380,7 +380,7 @@ toolbar_setup_actions (Toolbar *t)
 	action = g_object_new (EPHY_TYPE_ZOOM_ACTION,
 			       "name", "Zoom",
 			       "label", _("Zoom"),
-			       "tooltip", _("Zoom"),
+			       "tooltip", _("Adjust the text size"),
 			       "zoom", 1.0,
 			       NULL);
 	g_signal_connect (action, "zoom_to_level",
@@ -400,7 +400,7 @@ toolbar_setup_actions (Toolbar *t)
 			       "name", "ToolbarGo",
 			       "label", _("Go"),
 			       "stock_id", GTK_STOCK_JUMP_TO,
-			       "tooltip", _("Go to the address entered in the location entry."),
+			       "tooltip", _("Go to the address entered in the address entry"),
 			       NULL);
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (window_cmd_load_location), t->priv->window);
