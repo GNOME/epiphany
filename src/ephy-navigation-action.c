@@ -19,6 +19,7 @@
 #include "ephy-navigation-action.h"
 #include "ephy-arrow-toolbutton.h"
 #include "ephy-window.h"
+#include "ephy-string.h"
 #include "ephy-debug.h"
 
 static void ephy_navigation_action_init       (EphyNavigationAction *action);
@@ -66,13 +67,21 @@ ephy_navigation_action_get_type (void)
 	return type;
 }
 
+#define MAX_LENGTH 60
+
 static GtkWidget *
 new_history_menu_item (gchar *origtext,
                        const GdkPixbuf *ico)
 {
-        GtkWidget *item = gtk_image_menu_item_new ();
-        GtkWidget *hb = gtk_hbox_new (FALSE, 0);
-        GtkWidget *label = gtk_label_new (origtext);
+	GtkWidget *item, *hb, *label;
+	char *short_text;
+
+	item = gtk_image_menu_item_new ();
+	hb = gtk_hbox_new (FALSE, 0);
+
+	short_text = ephy_string_shorten (origtext, MAX_LENGTH);
+	label = gtk_label_new (short_text);
+	g_free (short_text);
 
         gtk_box_pack_start (GTK_BOX (hb), label, FALSE, FALSE, 0);
         gtk_container_add (GTK_CONTAINER (item), hb);
