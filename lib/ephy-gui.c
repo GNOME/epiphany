@@ -17,7 +17,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "ephy-gui.h"
@@ -47,15 +47,27 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 	GtkWidget *w = GTK_WIDGET (user_data);
 	gint screen_width, screen_height;
 	GtkRequisition requisition;
+	gboolean rtl;
+
+	rtl = (gtk_widget_get_direction (w) == GTK_TEXT_DIR_RTL);
 
 	gdk_window_get_origin (w->window, x, y);
-	*x += w->allocation.x;
-	*y += w->allocation.y + w->allocation.height;
-
 	gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
 
+	/* FIXME multihead */
 	screen_width = gdk_screen_width ();
 	screen_height = gdk_screen_height ();
+
+	if (rtl)
+	{
+		*x += w->allocation.x + w->allocation.width - requisition.width;
+	}
+	else
+	{
+		*x += w->allocation.x;
+	}
+
+	*y += w->allocation.y + w->allocation.height;
 
 	*x = CLAMP (*x, 0, MAX (0, screen_width - requisition.width));
 	*y = CLAMP (*y, 0, MAX (0, screen_height - requisition.height));
