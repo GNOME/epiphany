@@ -50,9 +50,6 @@ GType         toolbar_get_type			(void);
 
 Toolbar      *toolbar_new			(EphyWindow *window);
 
-void          toolbar_set_visibility		(Toolbar *t,
-						 gboolean visibility);
-
 void          toolbar_spinner_start		(Toolbar *t);
 
 void          toolbar_spinner_stop		(Toolbar *t);

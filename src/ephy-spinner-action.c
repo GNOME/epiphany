@@ -95,7 +95,7 @@ create_tool_item (EggAction *action)
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (item), button);
 	spinner = ephy_spinner_new ();
-	ephy_spinner_set_small_mode (spinner, TRUE);
+	ephy_spinner_set_small_mode (EPHY_SPINNER (spinner), TRUE);
 	gtk_container_add (GTK_CONTAINER (button), spinner);
 	egg_tool_item_set_pack_end (EGG_TOOL_ITEM (item), TRUE);
 	egg_tool_item_set_homogeneous (EGG_TOOL_ITEM (item), FALSE);

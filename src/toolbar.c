@@ -156,11 +156,6 @@ toolbar_setup_widgets (Toolbar *t)
 }
 
 static void
-add_widget (EggMenuMerge *merge, GtkWidget *widget, EphyWindow *window)
-{
-}
-
-static void
 go_location_cb (EggAction *action, char *location, EphyWindow *window)
 {
 	EphyEmbed *embed;
@@ -243,8 +238,6 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 
 	t->priv->window = window;
 	t->priv->ui_merge = EGG_MENU_MERGE (window->ui_merge);
-	g_signal_connect (t->priv->ui_merge, "add_widget",
-			  G_CALLBACK (add_widget), t);
 
 	toolbar_setup_actions (t);
 	egg_menu_merge_insert_action_group (t->priv->ui_merge,
@@ -295,11 +288,6 @@ toolbar_new (EphyWindow *window)
 	g_return_val_if_fail (t->priv != NULL, NULL);
 
 	return t;
-}
-
-void
-toolbar_set_visibility (Toolbar *t, gboolean visibility)
-{
 }
 
 void

@@ -37,6 +37,7 @@
 #include "statusbar.h"
 #include "toolbar.h"
 #include "popup-commands.h"
+#include "egg-toggle-action.h"
 
 #include <string.h>
 #include <libgnome/gnome-i18n.h>
@@ -139,10 +140,13 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "ViewReload", N_("_Reload"), GTK_STOCK_REFRESH, "<control>R",
 	  N_("Display the latest content of the current page"),
 	  G_CALLBACK (window_cmd_view_reload), NULL },
+	{ "ViewToolbar", N_("_Toolbar"), NULL, "<shift><control>T",
+	  N_("Show or hide toolbar"),
+	  G_CALLBACK (window_cmd_view_toolbar), NULL, TOGGLE_ACTION },
 	{ "ViewStatusbar", N_("St_atusbar"), NULL, NULL,
 	  N_("Show or hide statusbar"),
 	  G_CALLBACK (window_cmd_view_statusbar), NULL, TOGGLE_ACTION },
-	{ "ViewFullscreen", N_("_Fullscreen"), NULL, NULL,
+	{ "ViewFullscreen", N_("_Fullscreen"), NULL, "F11",
 	  N_("Browse at full screen"),
 	  G_CALLBACK (window_cmd_view_fullscreen), NULL, TOGGLE_ACTION},
 	{ "ViewZoomIn", N_("Zoom _In"), GTK_STOCK_ZOOM_IN, "<control>plus",
@@ -260,6 +264,7 @@ struct EphyWindowPrivate
 	GtkWidget *main_vbox;
 	GtkWidget *menubar;
 	Toolbar *toolbar;
+	GList *toolbars;
 	GtkWidget *statusbar;
 	EggActionGroup *action_group;
 	EggActionGroup *popups_action_group;
@@ -272,7 +277,6 @@ struct EphyWindowPrivate
 	EphyDialog *history_dialog;
 	EphyDialog *history_sidebar;
 	EmbedChromeMask chrome_mask;
-	gboolean ignore_layout_toggles;
 	gboolean has_default_size;
 	gboolean closing;
 };
@@ -419,10 +423,14 @@ add_widget (EggMenuMerge *merge, GtkWidget *widget, EphyWindow *window)
 	{
 		window->priv->menubar = widget;
 	}
+	else
+	{
+		window->priv->toolbars = g_list_append
+			(window->priv->toolbars, widget);
+	}
 
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
 			    widget, FALSE, FALSE, 0);
-	gtk_widget_show (widget);
 }
 
 static void
@@ -523,10 +531,10 @@ ephy_window_init (EphyWindow *window)
         window->priv = g_new0 (EphyWindowPrivate, 1);
 	window->priv->active_tab = NULL;
 	window->priv->chrome_mask = 0;
-	window->priv->ignore_layout_toggles = FALSE;
 	window->priv->closing = FALSE;
 	window->priv->has_default_size = FALSE;
 	window->priv->ppview_toolbar = NULL;
+	window->priv->toolbars = NULL;
 
 	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
 	g_signal_connect_object (G_OBJECT (cache),
@@ -626,6 +634,11 @@ ephy_window_finalize (GObject *object)
 	if (window->priv->ppview_toolbar)
 	{
 		g_object_unref (window->priv->ppview_toolbar);
+	}
+
+	if (window->priv->toolbars)
+	{
+		g_list_free (window->priv->toolbars);
 	}
 
 	g_free (window->priv);
@@ -740,6 +753,26 @@ translate_default_chrome (EmbedChromeMask *chrome_mask)
 	}
 }
 
+static void
+update_layout_toggles (EphyWindow *window)
+{
+	EggActionGroup *action_group = EGG_ACTION_GROUP (window->priv->action_group);
+	EmbedChromeMask mask = window->priv->chrome_mask;
+	EggAction *action;
+
+	action = egg_action_group_get_action (action_group, "ViewToolbar");
+	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action),
+				      mask & EMBED_CHROME_TOOLBARON);
+
+	action = egg_action_group_get_action (action_group, "ViewStatusbar");
+	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action),
+				      mask & EMBED_CHROME_STATUSBARON);
+
+	action = egg_action_group_get_action (action_group, "ViewFullscreen");
+	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action),
+				      mask & EMBED_CHROME_OPENASFULLSCREEN);
+}
+
 void
 ephy_window_set_chrome (EphyWindow *window,
 			EmbedChromeMask flags)
@@ -758,8 +791,16 @@ ephy_window_set_chrome (EphyWindow *window,
 		gtk_widget_hide (window->priv->menubar);
 	}
 
-	toolbar_set_visibility (window->priv->toolbar,
-				flags & EMBED_CHROME_TOOLBARON);
+	if (flags & EMBED_CHROME_TOOLBARON)
+	{
+		g_list_foreach (window->priv->toolbars,
+				(GFunc)gtk_widget_show, NULL);
+	}
+	else
+	{
+		g_list_foreach (window->priv->toolbars,
+				(GFunc)gtk_widget_hide, NULL);
+	}
 
 	if (flags & EMBED_CHROME_STATUSBARON)
 	{
@@ -795,6 +836,8 @@ ephy_window_set_chrome (EphyWindow *window,
 	}
 
 	window->priv->chrome_mask = flags;
+
+	update_layout_toggles (window);
 
 	save_window_chrome (window);
 }

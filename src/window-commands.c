@@ -28,6 +28,7 @@
 #include "pdm-dialog.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-new-bookmark.h"
+#include "egg-toggle-action.h"
 
 #include <string.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -494,15 +495,61 @@ window_cmd_edit_find_prev (EggAction *action,
 }
 
 void
+window_cmd_view_toolbar (EggAction *action,
+			 EphyWindow *window)
+{
+	EmbedChromeMask mask;
+	gboolean active;
+	gboolean current_state;
+
+	mask = ephy_window_get_chrome (window);
+	active = EGG_TOGGLE_ACTION (action)->active;
+	current_state = (mask & EMBED_CHROME_TOOLBARON) > 0;
+
+	if (active != current_state)
+	{
+		mask ^= EMBED_CHROME_TOOLBARON;
+		ephy_window_set_chrome (window, mask);
+	}
+}
+
+void
 window_cmd_view_statusbar (EggAction *action,
 			   EphyWindow *window)
 {
+	EmbedChromeMask mask;
+	gboolean active;
+	gboolean current_state;
+
+	mask = ephy_window_get_chrome (window);
+	active = EGG_TOGGLE_ACTION (action)->active;
+	current_state = (mask & EMBED_CHROME_STATUSBARON) > 0;
+
+	if (active != current_state)
+	{
+		mask ^= EMBED_CHROME_STATUSBARON;
+		ephy_window_set_chrome (window, mask);
+	}
 }
 
 void
 window_cmd_view_fullscreen (EggAction *action,
 			    EphyWindow *window)
 {
+	EmbedChromeMask mask;
+	gboolean active;
+	gboolean current_state;
+
+	mask = ephy_window_get_chrome (window);
+	active = EGG_TOGGLE_ACTION (action)->active;
+	current_state = (mask & EMBED_CHROME_OPENASFULLSCREEN) > 0;
+
+	if (active != current_state)
+	{
+		mask ^= EMBED_CHROME_OPENASFULLSCREEN;
+		mask |= EMBED_CHROME_DEFAULT;
+		ephy_window_set_chrome (window, mask);
+	}
 }
 
 void

@@ -1273,8 +1273,6 @@ do_updates(EggMenuMerge *self)
    *    is created and added to the parent container).
    */
 
-  g_message("do_updates");
-
   update_node (self, self->root_node);
 
   self->update_tag = 0;
