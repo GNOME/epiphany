@@ -256,10 +256,6 @@ static void mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
 					              guint chrome_mask,
                            		              EphyEmbedSingle *shell);
 
-#ifdef GNOME_ENABLE_DEBUG
-static gresult control_encodings_list (void);
-#endif
-
 struct MozillaEmbedSinglePrivate
 {
 	char *user_prefs;
@@ -608,9 +604,6 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 
 	mozilla_register_external_protocols ();
 
-#ifdef GNOME_ENABLE_DEBUG
-	control_encodings_list ();
-#endif
 	/* FIXME alert if fails */
 }
 
@@ -732,90 +725,6 @@ impl_load_proxy_autoconf (EphyEmbedSingle *shell,
 	
 	return G_OK;
 }
-
-#ifdef GNOME_ENABLE_DEBUG
-static gresult
-control_encodings_list (void)
-{
-	nsresult rv;
-	char *tmp;
-        PRUint32 cscount;
-        char *encoding_str, *encoding_title_str;
-	gresult ret = G_OK;
-
-        nsCOMPtr<nsIAtom> docCharsetAtom;
-        nsCOMPtr<nsICharsetConverterManager2> ccm2 =
-                do_GetService (NS_CHARSETCONVERTERMANAGER_CONTRACTID, &rv);
-        if (!NS_SUCCEEDED(rv)) return G_FAILED;
-
-        nsCOMPtr <nsISupportsArray> cs_list;
-        rv = ccm2->GetDecoderList (getter_AddRefs(cs_list));
-        if (!NS_SUCCEEDED(rv)) return G_FAILED;
-
-        rv = cs_list->Count(&cscount);
-	for (PRUint32 i = 0; i < cscount; i++)
-        {
-                nsCOMPtr<nsISupports> cssupports =
-                                        (dont_AddRef)(cs_list->ElementAt(i));
-                nsCOMPtr<nsIAtom> csatom ( do_QueryInterface(cssupports) );
-                nsAutoString encoding_ns, encoding_title_ns;
-
-                /* encoding name */
-		rv = csatom->ToString(encoding_ns);
-                tmp = ToNewCString (encoding_ns);
-                if (tmp == NULL || strlen (tmp) == 0)
-                {
-                        continue;
-                }
-		encoding_str = g_strdup (tmp);
-		nsMemory::Free (tmp);
-		tmp = nsnull;
-
-                /* encoding readable title */
-                rv = ccm2->GetCharsetTitle2(csatom, &encoding_title_ns);
-                tmp = ToNewCString (encoding_title_ns);
-                if (tmp == NULL || 
-                    strlen (tmp) == 0)
-                {
-                        encoding_title_str = g_strdup (encoding_str);
-                }
-		else
-		{
-			encoding_title_str = g_strdup (tmp);
-		}
-
-		if (tmp) nsMemory::Free (tmp);
-		tmp = nsnull;
-
-		gboolean found = FALSE;
-		for (PRUint32 j = 0; j < n_encodings; j++)
-                {
-                        if (g_ascii_strcasecmp (
-                                encoding_str, 
-                                encodings[j].name) == 0)
-                        {
-				LOG ("Mozilla reported encoding %s with title %s found in our list.",
-				     encoding_str, encoding_title_str)
-
-				found = TRUE;
-                                break;
-                        }
-                }
-
-		if (found == FALSE)
-		{
-			g_warning ("Mozilla reported encoding %s with title %s NOT found in our list!",
-				   encoding_str, encoding_title_str);
-			ret = G_FAILED;
-		}
-
-		g_free (encoding_str);
-		g_free (encoding_title_str);
-        }
-
-	return ret;
-}
-#endif
 
 static gint
 encoding_info_cmp (const EncodingInfo *i1, const EncodingInfo *i2)
