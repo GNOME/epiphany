@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-03 23:08+0100\n"
-"PO-Revision-Date: 2004-10-03 23:10+0100\n"
+"POT-Creation-Date: 2004-10-06 19:34+0100\n"
+"PO-Revision-Date: 2004-10-06 19:34+0100\n"
 "Last-Translator: David Lodge <dave@cirt.net>\n"
 "Language-Team: English/GB <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -322,12 +322,12 @@ msgid "Size of disk cache, in MB."
 msgstr "Size of disk cache, in MB."
 
 #: data/epiphany.schemas.in.h:53
-msgid "The bookmark informations shown in the editor view"
-msgstr "The bookmark informations shown in the editor view"
+msgid "The bookmark information shown in the editor view"
+msgstr "The bookmark information shown in the editor view"
 
 #: data/epiphany.schemas.in.h:54
-msgid "The bookmark informations shown in the editor view. Valid values in the list are \"address\" and \"title\"."
-msgstr "The bookmark informations shown in the editor view. Valid values in the list are \"address\" and \"title\"."
+msgid "The bookmark information shown in the editor view. Valid values in the list are \"address\" and \"title\"."
+msgstr "The bookmark information shown in the editor view. Valid values in the list are \"address\" and \"title\"."
 
 #: data/epiphany.schemas.in.h:55
 msgid "The currently selected fonts language"
@@ -350,12 +350,12 @@ msgid "The encoding autodetector. Valid entries are \"\" (autodetectors off), \"
 msgstr "The encoding autodetector. Valid entries are \"\" (autodetectors off), \"cjk_parallel_state_machine\" (autodetect east asian encodings), \"ja_parallel_state_machine\" (autodetect japanese encodings), \"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), \"zhcn_parallel_state_machine\" (autodetect simplified chinese encodings), \"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) and \"universal_charset_detector\" (autodetect most encodings)."
 
 #: data/epiphany.schemas.in.h:60
-msgid "The page informations shown in the history view"
-msgstr "The page informations shown in the history view"
+msgid "The page information shown in the history view"
+msgstr "The page information shown in the history view"
 
 #: data/epiphany.schemas.in.h:61
-msgid "The page informations shown in the history view. Valid values in the list are \"address\", \"title\"."
-msgstr "The page informations shown in the history view. Valid values in the list are \"address\", \"title\"."
+msgid "The page information shown in the history view. Valid values in the list are \"address\", \"title\"."
+msgstr "The page information shown in the history view. Valid values in the list are \"address\", \"title\"."
 
 #: data/epiphany.schemas.in.h:62
 msgid "The path of the folder where downloads are saved."
@@ -489,7 +489,7 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5 Fingerprint:"
 
 #: data/glade/certificate-dialogs.glade.h:16
-#: embed/mozilla/GtkNSSDialogs.cpp:988
+#: embed/mozilla/GtkNSSDialogs.cpp:1002
 msgid "Organization:"
 msgstr "Organisation:"
 
@@ -536,7 +536,7 @@ msgid "Download Manager"
 msgstr "Download Manager"
 
 #: data/glade/epiphany.glade.h:8
-#: src/ephy-window.c:1151
+#: src/ephy-window.c:1154
 msgid "Find"
 msgstr "Find"
 
@@ -700,7 +700,7 @@ msgid "_Add..."
 msgstr "_Add..."
 
 #: data/glade/prefs-dialog.glade.h:34
-#: src/bookmarks/ephy-bookmark-properties.c:373
+#: src/bookmarks/ephy-bookmark-properties.c:371
 msgid "_Address:"
 msgstr "_Address:"
 
@@ -822,7 +822,7 @@ msgid "Paper"
 msgstr "Paper"
 
 #: data/glade/print.glade.h:23
-#: src/ephy-window.c:1147
+#: src/ephy-window.c:1150
 msgid "Print"
 msgstr "Print"
 
@@ -905,7 +905,7 @@ msgid "_Resume"
 msgstr "_Resume"
 
 #: embed/downloader-view.c:350
-#: src/ephy-window.c:1324
+#: src/ephy-window.c:1327
 msgid "Unknown"
 msgstr "Unknown"
 
@@ -916,26 +916,30 @@ msgid_plural "About %d seconds left"
 msgstr[0] "About %d second left"
 msgstr[1] "About %d seconds left"
 
+#: embed/downloader-view.c:410
 #, c-format
 msgid "About %d minute left"
 msgid_plural "About %d minutes left"
 msgstr[0] "About %d minute left"
 msgstr[1] "About %d minutes left"
 
+#: embed/downloader-view.c:417
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d download"
 msgstr[1] "%d downloads"
 
+#: embed/downloader-view.c:594
+#: src/bookmarks/ephy-bookmarks-editor.c:675
 msgid "File"
 msgstr "File"
 
-#: embed/downloader-view.c:619
+#: embed/downloader-view.c:616
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:630
+#: embed/downloader-view.c:627
 msgid "Remaining"
 msgstr "Remaining"
 
@@ -1360,13 +1364,13 @@ msgstr "Untitled"
 
 #: embed/mozilla/FilePicker.cpp:143
 #: embed/print-dialog.c:328
-#: lib/ephy-file-chooser.c:376
+#: lib/ephy-file-chooser.c:378
 #: src/bookmarks/ephy-bookmarks-editor.c:600
 msgid "All files"
 msgstr "All files"
 
 #: embed/mozilla/FilePicker.cpp:148
-#: lib/ephy-file-chooser.c:360
+#: lib/ephy-file-chooser.c:362
 msgid "Web pages"
 msgstr "Web pages"
 
@@ -1375,7 +1379,7 @@ msgid "Text files"
 msgstr "Text files"
 
 #: embed/mozilla/FilePicker.cpp:161
-#: lib/ephy-file-chooser.c:368
+#: lib/ephy-file-chooser.c:370
 msgid "Images"
 msgstr "Images"
 
@@ -1391,239 +1395,239 @@ msgstr "XUL files"
 msgid "_Select Certificate"
 msgstr "_Select Certificate"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:196
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:198
 #, c-format
 msgid "Choose a certificate to present as identification to %s."
 msgstr "Choose a certificate to present as identification to %s."
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:199
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:201
 msgid "Select a certificate to identify yourself."
 msgstr "Select a certificate to identify yourself."
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:237
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:239
 msgid "Certificate _Details"
 msgstr "Certificate _Details"
 
 #. Add the buttons
-#: embed/mozilla/GtkNSSDialogs.cpp:226
-#: embed/mozilla/GtkNSSDialogs.cpp:549
+#: embed/mozilla/GtkNSSDialogs.cpp:228
+#: embed/mozilla/GtkNSSDialogs.cpp:553
 msgid "_View Certificate"
 msgstr "_View Certificate"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:234
+#: embed/mozilla/GtkNSSDialogs.cpp:236
 msgid "_Accept"
 msgstr "_Accept"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:301
+#: embed/mozilla/GtkNSSDialogs.cpp:303
 #, c-format
 msgid "The site %s returned security information for %s. It is possible that someone is intercepting your communication to obtain your confidential information."
 msgstr "The site %s returned security information for %s. It is possible that someone is intercepting your communication to obtain your confidential information."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:307
+#: embed/mozilla/GtkNSSDialogs.cpp:309
 #, c-format
 msgid "You should only accept the security information if you trust %s and %s."
 msgstr "You should only accept the security information if you trust %s and %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:312
+#: embed/mozilla/GtkNSSDialogs.cpp:314
 msgid "Accept incorrect security information?"
 msgstr "Accept incorrect security information?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:347
+#: embed/mozilla/GtkNSSDialogs.cpp:349
 #, c-format
 msgid "Your browser was unable to trust %s. It is possible that someone is intercepting your communication to obtain your confidential information."
 msgstr "Your browser was unable to trust %s. It is possible that someone is intercepting your communication to obtain your confidential information."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:353
+#: embed/mozilla/GtkNSSDialogs.cpp:355
 #, c-format
 msgid "You should only connect to the site if you are certain you are connected to %s."
 msgstr "You should only connect to the site if you are certain you are connected to %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:358
+#: embed/mozilla/GtkNSSDialogs.cpp:360
 msgid "Connect to untrusted site?"
 msgstr "Connect to untrusted site?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:362
+#: embed/mozilla/GtkNSSDialogs.cpp:364
 msgid "_Don't show this message again for this site"
 msgstr "_Don't show this message again for this site"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:363
+#: embed/mozilla/GtkNSSDialogs.cpp:365
 msgid "Co_nnect"
 msgstr "Co_nnect"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:423
+#: embed/mozilla/GtkNSSDialogs.cpp:425
 msgid "Accept expired security information?"
 msgstr "Accept expired security information?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:424
+#: embed/mozilla/GtkNSSDialogs.cpp:426
 #, c-format
 msgid "The security information for %s expired on %s."
 msgstr "The security information for %s expired on %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:430
+#: embed/mozilla/GtkNSSDialogs.cpp:432
 msgid "Accept not yet valid security information?"
 msgstr "Accept not yet valid security information?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:431
+#: embed/mozilla/GtkNSSDialogs.cpp:433
 #, c-format
 msgid "The security information for %s isn't valid until %s."
 msgstr "The security information for %s isn't valid until %s."
 
 #. To translators: this a time format that is used while displaying the
 #. * strftime(3)
-#: embed/mozilla/GtkNSSDialogs.cpp:447
+#: embed/mozilla/GtkNSSDialogs.cpp:449
 msgid "%a %d %b %Y"
 msgstr "%a %d %b %Y"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:457
+#: embed/mozilla/GtkNSSDialogs.cpp:459
 msgid "You should ensure that your computer's time is correct."
 msgstr "You should ensure that your computer's time is correct."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:505
+#: embed/mozilla/GtkNSSDialogs.cpp:509
 #, c-format
 msgid "Cannot establish connection to %s."
 msgstr "Cannot establish connection to %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:508
+#: embed/mozilla/GtkNSSDialogs.cpp:512
 #, c-format
 msgid "The certificate revocation list (CRL) from %s needs to be updated."
 msgstr "The certificate revocation list (CRL) from %s needs to be updated."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:513
+#: embed/mozilla/GtkNSSDialogs.cpp:517
 msgid "Please ask your system administrator for assistance."
 msgstr "Please ask your system administrator for assistance."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:552
+#: embed/mozilla/GtkNSSDialogs.cpp:556
 msgid "_Trust CA"
 msgstr "_Trust CA"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:568
+#: embed/mozilla/GtkNSSDialogs.cpp:574
 #, c-format
 msgid "Trust %s to identify:"
 msgstr "Trust %s to identify:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:572
+#: embed/mozilla/GtkNSSDialogs.cpp:578
 msgid "Trust new Certificate Authority?"
 msgstr "Trust new Certificate Authority?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:573
+#: embed/mozilla/GtkNSSDialogs.cpp:579
 msgid "Before trusting a Certificate Authority (CA) you should verify the certificate is authentic."
 msgstr "Before trusting a Certificate Authority (CA) you should verify the certificate is authentic."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:583
+#: embed/mozilla/GtkNSSDialogs.cpp:589
 msgid "_Web sites"
 msgstr "_Web sites"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:588
+#: embed/mozilla/GtkNSSDialogs.cpp:594
 msgid "_Software developers"
 msgstr "_Software developers"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:654
+#: embed/mozilla/GtkNSSDialogs.cpp:662
 msgid "Certificate already exists."
 msgstr "Certificate already exists."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:655
+#: embed/mozilla/GtkNSSDialogs.cpp:663
 msgid "The certificate has already been imported."
 msgstr "The certificate has already been imported."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:774
+#: embed/mozilla/GtkNSSDialogs.cpp:784
 msgid "_Backup Certificate"
 msgstr "_Backup Certificate"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:781
+#: embed/mozilla/GtkNSSDialogs.cpp:791
 msgid "Select password."
 msgstr "Select password."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:782
+#: embed/mozilla/GtkNSSDialogs.cpp:792
 msgid "Select a password to protect this certificate."
 msgstr "Select a password to protect this certificate."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:794
-#: embed/mozilla/GtkNSSDialogs.cpp:897
+#: embed/mozilla/GtkNSSDialogs.cpp:804
+#: embed/mozilla/GtkNSSDialogs.cpp:909
 msgid "_Password:"
 msgstr "_Password:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:808
+#: embed/mozilla/GtkNSSDialogs.cpp:818
 msgid "Con_firm password:"
 msgstr "Con_firm password:"
 
 #. TODO: We need a better password quality meter
-#: embed/mozilla/GtkNSSDialogs.cpp:820
+#: embed/mozilla/GtkNSSDialogs.cpp:830
 msgid "Password quality:"
 msgstr "Password quality:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:878
+#: embed/mozilla/GtkNSSDialogs.cpp:888
 msgid "I_mport Certificate"
 msgstr "I_mport Certificate"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:886
+#: embed/mozilla/GtkNSSDialogs.cpp:898
 msgid "Password required."
 msgstr "Password required."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:887
+#: embed/mozilla/GtkNSSDialogs.cpp:899
 msgid "Enter the password for this certificate."
 msgstr "Enter the password for this certificate."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:966
+#: embed/mozilla/GtkNSSDialogs.cpp:980
 msgid "Certificate Revocation list successfully imported."
 msgstr "Certificate Revocation list successfully imported."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:967
+#: embed/mozilla/GtkNSSDialogs.cpp:981
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "Certificate Revocation list (CRL) imported:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:993
+#: embed/mozilla/GtkNSSDialogs.cpp:1007
 msgid "Unit:"
 msgstr "Unit:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:998
+#: embed/mozilla/GtkNSSDialogs.cpp:1012
 msgid "Next Update:"
 msgstr "Next Update:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1025
+#: embed/mozilla/GtkNSSDialogs.cpp:1039
 msgid "Not part of certificate"
 msgstr "Not part of certificate"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1304
+#: embed/mozilla/GtkNSSDialogs.cpp:1320
 msgid "Certificate Properties"
 msgstr "Certificate Properties"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1326
+#: embed/mozilla/GtkNSSDialogs.cpp:1342
 msgid "This certificate has been verified for the following uses:"
 msgstr "This certificate has been verified for the following uses:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1329
+#: embed/mozilla/GtkNSSDialogs.cpp:1345
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Could not verify this certificate because it has been revoked."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1332
+#: embed/mozilla/GtkNSSDialogs.cpp:1348
 msgid "Could not verify this certificate because it has expired."
 msgstr "Could not verify this certificate because it has expired."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1335
+#: embed/mozilla/GtkNSSDialogs.cpp:1351
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Could not verify this certificate because it is not trusted."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1338
+#: embed/mozilla/GtkNSSDialogs.cpp:1354
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr "Could not verify this certificate because the issuer is not trusted."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1341
+#: embed/mozilla/GtkNSSDialogs.cpp:1357
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Could not verify this certificate because the issuer is unknown."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1344
+#: embed/mozilla/GtkNSSDialogs.cpp:1360
 msgid "Could not verify this certificate because the CA certificate is invalid."
 msgstr "Could not verify this certificate because the CA certificate is invalid."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1349
+#: embed/mozilla/GtkNSSDialogs.cpp:1365
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Could not verify this certificate for unknown reasons."
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:191
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:193
 msgid "Generating Private Key."
 msgstr "Generating Private Key."
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:192
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:194
 msgid "Please wait while a new private key is generated. This process could take a few minutes."
 msgstr "Please wait while a new private key is generated. This process could take a few minutes."
 
@@ -1639,7 +1643,7 @@ msgstr "Files"
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.co.uk/search?ie=UTF-8&oe=UTF-8&q="
 
-#: embed/mozilla/mozilla-embed-single.cpp:523
+#: embed/mozilla/mozilla-embed-single.cpp:525
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphany can't be used now. Mozilla initialisation failed."
 
@@ -1680,7 +1684,7 @@ msgstr "Separator"
 msgid "Drag an item onto the toolbars above to add it, from the toolbars in the items table to remove it."
 msgstr "Drag an item onto the toolbars above to add it, from the toolbars in the items table to remove it."
 
-#: lib/ephy-file-chooser.c:349
+#: lib/ephy-file-chooser.c:351
 msgid "All supported types"
 msgstr "All supported types"
 
@@ -1705,24 +1709,24 @@ msgstr "%s exists, please move it out of the way."
 msgid "Failed to create directory %s."
 msgstr "Failed to create directory %s."
 
-#: lib/ephy-gui.c:150
+#: lib/ephy-gui.c:151
 #, c-format
 msgid "A file %s already exists."
 msgstr "A file %s already exists."
 
-#: lib/ephy-gui.c:154
+#: lib/ephy-gui.c:155
 msgid "If you choose to overwrite this file, the contents will be lost."
 msgstr "If you choose to overwrite this file, the contents will be lost."
 
-#: lib/ephy-gui.c:157
+#: lib/ephy-gui.c:158
 msgid "Overwrite File"
 msgstr "Overwrite File"
 
-#: lib/ephy-gui.c:162
+#: lib/ephy-gui.c:163
 msgid "_Overwrite"
 msgstr "_Overwrite"
 
-#: lib/ephy-gui.c:207
+#: lib/ephy-gui.c:210
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Could not display help: %s"
@@ -1803,14 +1807,14 @@ msgid "Popup Windows"
 msgstr "Popup Windows"
 
 #: lib/ephy-stock-icons.c:59
-#: src/ephy-history-window.c:1201
+#: src/ephy-history-window.c:1200
 msgid "History"
 msgstr "History"
 
 #: lib/ephy-stock-icons.c:60
-#: src/bookmarks/ephy-bookmarks-editor.c:1419
+#: src/bookmarks/ephy-bookmarks-editor.c:1418
 #: src/bookmarks/ephy-topic-action.c:990
-#: src/ephy-window.c:1153
+#: src/ephy-window.c:1156
 msgid "Bookmarks"
 msgstr "Bookmarks"
 
@@ -1891,17 +1895,17 @@ msgstr "Move Ri_ght"
 msgid "%s Properties"
 msgstr "%s Properties"
 
-#: src/bookmarks/ephy-bookmark-properties.c:354
+#: src/bookmarks/ephy-bookmark-properties.c:352
 #: src/bookmarks/ephy-new-bookmark.c:228
 msgid "_Title:"
 msgstr "_Title:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:396
+#: src/bookmarks/ephy-bookmark-properties.c:394
 #: src/bookmarks/ephy-new-bookmark.c:251
 msgid "To_pics:"
 msgstr "To_pics:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:405
+#: src/bookmarks/ephy-bookmark-properties.c:403
 msgid "_Show in bookmarks bar"
 msgstr "_Show in bookmarks bar"
 
@@ -1932,7 +1936,7 @@ msgstr "_Help"
 
 #. File Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:175
-#: src/bookmarks/ephy-new-bookmark.c:298
+#: src/bookmarks/ephy-new-bookmark.c:291
 msgid "_New Topic"
 msgstr "_New Topic"
 
@@ -2173,18 +2177,18 @@ msgstr "_Copy Address"
 msgid "_Search:"
 msgstr "_Search:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1502
+#: src/bookmarks/ephy-bookmarks-editor.c:1496
 #: src/bookmarks/ephy-topics-selector.c:197
 msgid "Topics"
 msgstr "Topics"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1567
-#: src/ephy-history-window.c:1331
+#: src/bookmarks/ephy-bookmarks-editor.c:1561
+#: src/ephy-history-window.c:1325
 msgid "Title"
 msgstr "Title"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1573
-#: src/ephy-history-window.c:1337
+#: src/bookmarks/ephy-bookmarks-editor.c:1567
+#: src/ephy-history-window.c:1331
 msgid "Address"
 msgstr "Address"
 
@@ -2231,17 +2235,17 @@ msgstr "Most Visited"
 msgid "Not Categorized"
 msgstr "Not Categorised"
 
-#: src/bookmarks/ephy-new-bookmark.c:274
+#: src/bookmarks/ephy-new-bookmark.c:272
 msgid "Add Bookmark"
 msgstr "Add Bookmark"
 
 #. FIXME: We "should" use gtk_message dialog here
 #. * so we build our own. See bug 65501.
-#: src/bookmarks/ephy-new-bookmark.c:322
+#: src/bookmarks/ephy-new-bookmark.c:315
 msgid "Duplicated Bookmark"
 msgstr "Duplicated Bookmark"
 
-#: src/bookmarks/ephy-new-bookmark.c:352
+#: src/bookmarks/ephy-new-bookmark.c:347
 #, c-format
 msgid "A bookmark titled %s already exists for this page."
 msgstr "A bookmark titled %s already exists for this page."
@@ -2354,6 +2358,7 @@ msgid_plural "Last %d days"
 msgstr[0] "Last %d day"
 msgstr[1] "Last %d days"
 
+#: src/ephy-history-window.c:1267
 msgid "Sites"
 msgstr "Sites"
 
@@ -2426,32 +2431,32 @@ msgstr "Epiphany can't be used now, due to an unexpected error from Bonobo when 
 msgid "Epiphany can't be used now, due to an unexpected error from Bonobo when attempting to locate the automation object."
 msgstr "Epiphany can't be used now, due to an unexpected error from Bonobo when attempting to locate the automation object."
 
-#: src/ephy-tab.c:405
-#: src/ephy-tab.c:1569
-#: src/ephy-tab.c:1783
+#: src/ephy-tab.c:426
+#: src/ephy-tab.c:1590
+#: src/ephy-tab.c:1804
 msgid "Blank page"
 msgstr "Blank page"
 
-#: src/ephy-tab.c:1113
+#: src/ephy-tab.c:1134
 msgid "site"
 msgstr "site"
 
-#: src/ephy-tab.c:1137
+#: src/ephy-tab.c:1158
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Redirecting to %s..."
 
-#: src/ephy-tab.c:1141
+#: src/ephy-tab.c:1162
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Transferring data from %s..."
 
-#: src/ephy-tab.c:1145
+#: src/ephy-tab.c:1166
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Waiting for authorisation from %s..."
 
-#: src/ephy-tab.c:1153
+#: src/ephy-tab.c:1174
 #, c-format
 msgid "Loading %s..."
 msgstr "Loading %s..."
@@ -2904,57 +2909,57 @@ msgstr "_Use Image As Background"
 msgid "Copy I_mage Address"
 msgstr "Copy I_mage Address"
 
-#: src/ephy-window.c:594
+#: src/ephy-window.c:589
 msgid "Exit Fullscreen"
 msgstr "Exit Full Screen"
 
-#: src/ephy-window.c:679
+#: src/ephy-window.c:674
 msgid "Close _Document"
 msgstr "Close _Document"
 
-#: src/ephy-window.c:707
+#: src/ephy-window.c:704
 msgid "There are unsubmitted changes to form elements."
 msgstr "There are unsubmitted changes to form elements."
 
-#: src/ephy-window.c:708
+#: src/ephy-window.c:705
 msgid "If you close the document anyway, you will lose that information."
 msgstr "If you close the document anyway, you will lose that information."
 
-#: src/ephy-window.c:1143
+#: src/ephy-window.c:1146
 #: src/window-commands.c:397
 msgid "Open"
 msgstr "Open"
 
-#: src/ephy-window.c:1145
+#: src/ephy-window.c:1148
 #: src/window-commands.c:423
 msgid "Save As"
 msgstr "Save As"
 
-#: src/ephy-window.c:1149
+#: src/ephy-window.c:1152
 msgid "Bookmark"
 msgstr "Bookmark"
 
-#: src/ephy-window.c:1327
+#: src/ephy-window.c:1330
 msgid "Insecure"
 msgstr "Insecure"
 
-#: src/ephy-window.c:1330
+#: src/ephy-window.c:1333
 msgid "Broken"
 msgstr "Broken"
 
-#: src/ephy-window.c:1334
+#: src/ephy-window.c:1337
 msgid "Medium"
 msgstr "Medium"
 
-#: src/ephy-window.c:1338
+#: src/ephy-window.c:1341
 msgid "Low"
 msgstr "Low"
 
-#: src/ephy-window.c:1342
+#: src/ephy-window.c:1345
 msgid "High"
 msgstr "High"
 
-#: src/ephy-window.c:1352
+#: src/ephy-window.c:1355
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2963,18 +2968,19 @@ msgstr ""
 "Security level: %s\n"
 "%s"
 
-#: src/ephy-window.c:1358
+#: src/ephy-window.c:1361
 #, c-format
 msgid "Security level: %s"
 msgstr "Security level: %s"
 
-#: src/ephy-window.c:1382
+#: src/ephy-window.c:1385
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "Allow popup _windows"
 msgstr[1] "%d hidden popup windows"
 
+#: src/pdm-dialog.c:416
 msgid "Domain"
 msgstr "Domain"
 
@@ -2990,35 +2996,35 @@ msgstr "Host"
 msgid "User Name"
 msgstr "User Name"
 
-#: src/pdm-dialog.c:901
+#: src/pdm-dialog.c:905
 msgid "Cookie Properties"
 msgstr "Cookie Properties"
 
-#: src/pdm-dialog.c:916
+#: src/pdm-dialog.c:920
 msgid "Content:"
 msgstr "Content:"
 
-#: src/pdm-dialog.c:931
+#: src/pdm-dialog.c:935
 msgid "Path:"
 msgstr "Path:"
 
-#: src/pdm-dialog.c:946
+#: src/pdm-dialog.c:950
 msgid "Send for:"
 msgstr "Send for:"
 
-#: src/pdm-dialog.c:955
+#: src/pdm-dialog.c:959
 msgid "Encrypted connections only"
 msgstr "Encrypted connections only"
 
-#: src/pdm-dialog.c:955
+#: src/pdm-dialog.c:959
 msgid "Any type of connection"
 msgstr "Any type of connection"
 
-#: src/pdm-dialog.c:961
+#: src/pdm-dialog.c:965
 msgid "Expires:"
 msgstr "Expires:"
 
-#: src/pdm-dialog.c:972
+#: src/pdm-dialog.c:976
 msgid "End of current session"
 msgstr "End of current session"
 
@@ -3277,7 +3283,7 @@ msgstr "Home"
 msgid "Desktop"
 msgstr "Desktop"
 
-#: src/prefs-dialog.c:1324
+#: src/prefs-dialog.c:1317
 msgid "Select a directory"
 msgstr "Select a directory"
 
@@ -3333,15 +3339,15 @@ msgstr "Check this out!"
 msgid "Toolbar Editor"
 msgstr "Toolbar Editor"
 
-#: src/window-commands.c:900
+#: src/window-commands.c:901
 msgid "_Add a New Toolbar"
 msgstr "_Add a New Toolbar"
 
-#: src/window-commands.c:967
+#: src/window-commands.c:968
 msgid "Epiphany"
 msgstr "Epiphany"
 
-#: src/window-commands.c:972
+#: src/window-commands.c:973
 msgid "translator-credits"
 msgstr ""
 "Christian Persch <chpe@gnome.org>\n"
