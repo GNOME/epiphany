@@ -912,3 +912,25 @@ window_cmd_browse_with_caret (GtkAction *action,
 	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
 	eel_gconf_set_boolean (CONF_BROWSE_WITH_CARET, active);
 }
+
+#ifdef HAVE_X11_XF86KEYSYM_H
+void
+window_cmd_go_home (GtkAction *action,
+		    EphyWindow *window)
+{
+	char *location;
+
+	location = eel_gconf_get_string (CONF_GENERAL_HOMEPAGE);
+
+	if (location == NULL || location[0] == '\0')
+	{
+		g_free (location);
+
+		location = g_strdup ("about:blank");
+	}
+
+	ephy_window_load_url (window, location);
+
+	g_free (location);
+}
+#endif /* HAVE_X11_XF86KEYSYM_H */

@@ -70,6 +70,10 @@
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
 
+#ifdef HAVE_X11_XF86KEYSYM_H
+#include <X11/XF86keysym.h>
+#endif
+
 static void ephy_window_class_init		(EphyWindowClass *klass);
 static void ephy_window_link_iface_init		(EphyLinkIface *iface);
 static void ephy_window_init			(EphyWindow *gs);
@@ -355,6 +359,31 @@ static GtkActionEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_copy_image_location) },
 };
 static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
+
+#ifdef HAVE_X11_XF86KEYSYM_H
+static const struct
+{
+	const char *name;
+	guint keyval;
+	GCallback callback;
+} const multimedia_actions [] = {
+	{ "XFKeyHomePage", 	XF86XK_HomePage,	G_CALLBACK (window_cmd_go_home ) },
+	{ "XFKeyBack",		XF86XK_Back,		G_CALLBACK (window_cmd_go_back ) },
+	{ "XFKeyForward",	XF86XK_Forward,		G_CALLBACK (window_cmd_go_forward ) },
+	{ "XFKeyStop", 		XF86XK_Stop,		G_CALLBACK (window_cmd_view_stop ) },
+	{ "XFKeyRefresh", 	XF86XK_Refresh, 	G_CALLBACK (window_cmd_view_reload ) },
+	{ "XFKeyFavorites", 	XF86XK_Favorites,	G_CALLBACK (window_cmd_go_bookmarks ) },
+	{ "XFKeyHistory", 	XF86XK_History, 	G_CALLBACK (window_cmd_go_history ) },
+	{ "XFKeyOpenURL", 	XF86XK_OpenURL, 	G_CALLBACK (window_cmd_go_location ) },
+	{ "XFKeyAddFavorite", 	XF86XK_AddFavorite, 	G_CALLBACK (window_cmd_file_bookmark_page ) },
+	{ "XFKeyGo", 		XF86XK_Go,	 	G_CALLBACK (window_cmd_go_location ) },
+	{ "XFKeyReload", 	XF86XK_Reload,	 	G_CALLBACK (window_cmd_view_reload ) },
+	{ "XFKeySendTo", 	XF86XK_Send,	 	G_CALLBACK (window_cmd_file_send_to) },
+	{ "XFKeyZoomIn", 	XF86XK_ZoomIn,	 	G_CALLBACK (window_cmd_view_zoom_in ) },
+	{ "XFKeyZoomOut", 	XF86XK_ZoomOut,	 	G_CALLBACK (window_cmd_view_zoom_out) }
+	/* FIXME: what about ScrollUp, ScrollDown, Menu*, Option, LogOff, Save,.. any others? */
+};
+#endif /* HAVE_X11_XF86KEYSYM_H */
 
 #define CONF_LOCKDOWN_HIDE_MENUBAR "/apps/epiphany/lockdown/hide_menubar"
 #define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
@@ -711,7 +740,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 	{
 		menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");
 		g_return_val_if_fail (menubar != NULL , FALSE);
-	
+
 		if (!GTK_WIDGET_VISIBLE (menubar))
 		{
 			g_signal_connect (menubar, "deactivate",
@@ -1069,6 +1098,35 @@ update_actions_sensitivity (EphyWindow *window)
 	update_print_actions (window, TRUE);
 }
 
+#ifdef HAVE_X11_XF86KEYSYM_H
+static void
+setup_multimedia_key_actions (EphyWindow *window)
+{
+	GtkActionGroup *action_group = window->priv->action_group;
+	GtkAction *action;
+	const char *agname, *name;
+	char *accel_path;
+	guint i;
+
+	agname = gtk_action_group_get_name (action_group);
+
+	for (i = 0; i < G_N_ELEMENTS (multimedia_actions); i++)
+	{
+		name = multimedia_actions[i].name;
+
+		action = g_object_new (GTK_TYPE_ACTION, "name", name, NULL);
+		g_signal_connect (action, "activate",
+				  multimedia_actions[i].callback, window);
+
+		accel_path = g_strconcat ("<Actions>/", agname, "/", name, NULL);
+		gtk_action_set_accel_path (action, accel_path);
+		gtk_accel_map_add_entry (accel_path, multimedia_actions[i].keyval, 0);
+		gtk_action_group_add_action (action_group, action);
+		g_free (accel_path);
+	}
+}
+#endif /* HAVE_X11_XF86KEYSYM_H */
+
 static void
 setup_ui_manager (EphyWindow *window)
 {
@@ -1136,6 +1194,10 @@ setup_ui_manager (EphyWindow *window)
 	g_signal_connect (manager, "add_widget", G_CALLBACK (add_widget), window);
 	gtk_window_add_accel_group (GTK_WINDOW (window),
 				    gtk_ui_manager_get_accel_group (manager));
+
+#ifdef HAVE_X11_XF86KEYSYM_H
+	setup_multimedia_key_actions (window);
+#endif				    
 }
 
 static void

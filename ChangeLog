@@ -1,5 +1,15 @@
 2005-03-14  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/ui/epiphany-ui.xml:
+	* src/ephy-window.c: (ephy_window_key_press_event),
+	(setup_multimedia_key_actions), (setup_ui_manager):
+	* src/window-commands.c: (window_cmd_go_home):
+	* src/window-commands.h:
+
+	Support "Multimedia" keys. Fixes bug #162748.
+
+2005-03-14  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-tabs-menu.c: (tab_added_cb):
 
 	Use connect_object, to guard against "title" signal emitted

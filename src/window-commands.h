@@ -165,3 +165,8 @@ void window_cmd_load_location   (GtkAction *action,
 
 void window_cmd_browse_with_caret (GtkAction *action,
 				   EphyWindow *window);
+
+#ifdef HAVE_X11_XF86KEYSYM_H
+void window_cmd_go_home		(GtkAction *action,
+				 EphyWindow *window);
+#endif
