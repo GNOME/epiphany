@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (C) 2002-2004 Marco Pesenti Gritti <mpeseng@tin.it>
  *
@@ -24,6 +25,7 @@
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
+#include <gtk/gtktreeselection.h>
 
 static void ephy_topics_selector_class_init (EphyTopicsSelectorClass *klass);
 static void ephy_topics_selector_init (EphyTopicsSelector *editor);
@@ -182,6 +184,7 @@ ephy_topics_selector_constructor (GType type,
 	GObject *object;
 	EphyTopicsSelector *selector;
 	EphyTopicsSelectorPrivate *priv;
+	GtkTreeSelection *selection;
 
 	object = parent_class->constructor (type, n_construct_properties,
                                             construct_params);
@@ -200,6 +203,9 @@ ephy_topics_selector_constructor (GType type,
 				   EPHY_NODE_VIEW_SEARCHABLE, NULL);
 	ephy_node_view_set_sort (EPHY_NODE_VIEW (selector), G_TYPE_STRING,
 				 EPHY_NODE_KEYWORD_PROP_NAME, GTK_SORT_ASCENDING);
+
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (selector));
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 
 	return object;
 }
