@@ -104,8 +104,11 @@ IGNORE_HFILES = \
 	egg-editable-toolbar.h \
 	eggintl.h \
 	eggmarshalers.h \
+	eggstatusicon.h \
 	egg-toolbar-editor.h \
 	egg-toolbars-model.h \
+	eggtrayicon.h \
+	eggtraymanager.h \
 	eggtreemultidnd.h \
 	ephy-bookmark-action.h \
 	ephy-bookmark-properties.h \
