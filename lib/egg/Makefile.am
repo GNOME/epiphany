@@ -35,6 +35,8 @@ noinst_HEADERS = \
   eggmarshalers.h \
   eggintl.h
 
+BUILT_SOURCES = eggmarshalers.h eggmarshalers.c
+
 eggmarshalers.h: eggmarshalers.list
 	$(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --header > eggmarshalers.h
 
