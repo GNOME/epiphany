@@ -1,14 +1,10 @@
 art_DATA = \
 	epiphany-secure.png	\
 	epiphany-unsecure.png	\
-	epiphany-fullscreen.png	\
 	epiphany-bookmark-page.png   \
 	epiphany-entry.png \
 	epiphany-download.png \
 	epiphany-history.png	\
-	epiphany-new-tab.png	\
-	epiphany-viewsource.png \
-	epiphany-send-link.png	\
 	epiphany-bookmarks.png \
 	epiphany-tab-loading.gif \
 	hand-open.png
