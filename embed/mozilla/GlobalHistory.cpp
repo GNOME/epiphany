@@ -45,7 +45,8 @@ MozGlobalHistory::~MozGlobalHistory ()
 NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aToplevel)
 {
 	nsresult rv;
-	NS_ENSURE_ARG_POINTER(aURI);
+
+	NS_ENSURE_ARG (aURI);
 
 	PRBool isJavascript;
 	rv = aURI->SchemeIs("javascript", &isJavascript);
@@ -98,6 +99,8 @@ NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aT
 /* boolean isVisited (in nsIURI aURI); */
 NS_IMETHODIMP MozGlobalHistory::IsVisited(nsIURI *aURI, PRBool *_retval)
 {
+	NS_ENSURE_ARG (aURI);
+
 	nsEmbedCString spec;
 	aURI->GetSpec(spec);
 
@@ -109,6 +112,8 @@ NS_IMETHODIMP MozGlobalHistory::IsVisited(nsIURI *aURI, PRBool *_retval)
 /* void setPageTitle (in nsIURI aURI, in AString aTitle); */
 NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI, const nsAString & aTitle)
 {
+	NS_ENSURE_ARG (aURI);
+
 	nsEmbedCString title;
 	NS_UTF16ToCString (nsEmbedString (aTitle),
 			   NS_CSTRING_ENCODING_UTF8, title);
@@ -122,9 +127,22 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI, const nsAString & aTi
 }
 
 /* void hidePage (in nsIURI url); */
-NS_IMETHODIMP MozGlobalHistory::HidePage(nsIURI *url)
+NS_IMETHODIMP MozGlobalHistory::HidePage(nsIURI *aURI)
 {
-	return NS_ERROR_NOT_IMPLEMENTED;
+	NS_ENSURE_ARG (aURI);
+
+	nsEmbedCString spec;
+	aURI->GetSpec(spec);
+
+	EphyNode *page;
+	page = ephy_history_get_page (mGlobalHistory, spec.get());
+
+	if (page)
+	{
+		ephy_node_unref (page);
+	}
+
+	return NS_OK;
 }
 
 /* void removePage (in string aURL); */
