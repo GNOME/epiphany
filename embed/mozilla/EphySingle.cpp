@@ -278,11 +278,11 @@ mozilla_cookie_to_ephy_cookie (nsICookie *cookie)
 
 	nsCookieStatus status;
 	cookie->GetStatus (&status);
-	info->p3p_state = status;
+	info->p3p_state = (EphyCookieP3PState) status;
 
 	nsCookiePolicy policy;
 	cookie->GetPolicy (&policy);
-	info->p3p_policy = policy;
+	info->p3p_policy = (EphyCookieP3PPolicy) policy;
 
 	PRUint64 dateTime;
 	cookie->GetExpires (&dateTime);

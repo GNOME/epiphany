@@ -66,10 +66,10 @@ typedef struct
 	char *path;
 	gulong expires;
 	glong real_expires;
-	guint is_secure : 1;
-	guint is_session : 1;
-	guint p3p_state : 3;
-	guint p3p_policy : 3;
+	EphyCookieP3PState p3p_state;
+	EphyCookieP3PPolicy p3p_policy;
+        guint is_secure : 1;
+        guint is_session : 1;
 } EphyCookie;
 
 struct _EphyCookieManagerIface
