@@ -987,8 +987,11 @@ delete_pending_foreach  (gpointer persist_object,
 			 DownloadDetails *details,
 			 DownloaderView *dv)
 {
-	g_signal_emit (G_OBJECT (dv), downloader_view_signals[DOWNLOAD_REMOVE],
-		       0, persist_object);
+	if (details->status != DOWNLOAD_STATUS_COMPLETED)
+        {
+		g_signal_emit (G_OBJECT (dv), downloader_view_signals[DOWNLOAD_REMOVE],
+			       0, persist_object);
+	}
 
 	return TRUE;
 }
