@@ -172,7 +172,8 @@ struct EphyEmbedClass
 				  const char *link);
 	void (* js_status)       (EphyEmbed *embed,
 				  const char *status);
-	void (* location)        (EphyEmbed *embed);
+	void (* location)        (EphyEmbed *embed,
+				  const char *location);
 	void (* title)           (EphyEmbed *embed);
 	void (* progress)        (EphyEmbed *embed,
 				  const char *uri,

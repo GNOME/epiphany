@@ -304,8 +304,7 @@ void
 window_cmd_file_open (EggAction *action,
 		      EphyWindow *window)
 {
-	gchar *dir, *retDir;
-        gchar *file;
+	char *dir, *retDir, *file, *uri_spec;
         GnomeVFSURI *uri;
 	GtkWidget *wmain;
 	EphyEmbedShell *embed_shell;
@@ -328,15 +327,20 @@ window_cmd_file_open (EggAction *action,
                  dir, NULL, modeOpen,
                  &file, NULL, NULL);
 
-	uri = gnome_vfs_uri_new (file);
+	uri_spec = gnome_vfs_make_uri_from_input (file);
+	uri = gnome_vfs_uri_new (uri_spec);
 	if (uri)
 	{
+		char *unescaped_dir;
+
 		retDir = gnome_vfs_uri_extract_dirname (uri);
+		unescaped_dir = gnome_vfs_unescape_string (retDir, "/");
 
 		/* set default open dir */
 		eel_gconf_set_string (CONF_STATE_OPEN_DIR,
-				      retDir);
+				      unescaped_dir);
 
+		g_free (unescaped_dir);
 		g_free (retDir);
 		gnome_vfs_uri_unref (uri);
 
@@ -346,6 +350,7 @@ window_cmd_file_open (EggAction *action,
 	        }
 	}
 
+	g_free (uri_spec);
 	g_free (file);
         g_free (dir);
 }

@@ -562,15 +562,11 @@ ephy_tab_link_message_cb (EphyEmbed *embed,
 }
 
 static void
-ephy_tab_address_cb (EphyEmbed *embed, EphyTab *tab)
+ephy_tab_address_cb (EphyEmbed *embed, char *address, EphyTab *tab)
 {
 	if (tab->priv->address_expire == TAB_ADDRESS_EXPIRE_NOW)
 	{
-		char *address;
-
-		ephy_embed_get_location (embed, TRUE, &address);
 		ephy_tab_set_location (tab, address, TAB_ADDRESS_EXPIRE_NOW);
-		g_free (address);
 	}
 
 	ephy_tab_set_link_message (tab, NULL);

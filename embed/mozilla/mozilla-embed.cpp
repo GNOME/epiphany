@@ -704,8 +704,9 @@ impl_get_location (EphyEmbed *embed,
 	
 	if (toplevel)
 	{
-		l = gtk_moz_embed_get_location 
-			(GTK_MOZ_EMBED(embed));
+		rv = wrapper->GetMainDocumentUrl (url);
+		l = (NS_SUCCEEDED (rv) && !url.IsEmpty()) ?
+		     g_strdup (url.get()) : NULL;	   	
 	}
 	else
 	{
@@ -1187,7 +1188,11 @@ mozilla_embed_location_changed_cb (GtkMozEmbed *embed,
 	 * to know about it. */
 	if (membed->priv->no_page != 0)
 	{
-		g_signal_emit_by_name (membed, "ge_location");
+		char *location;
+
+		location = gtk_moz_embed_get_location (embed);
+		g_signal_emit_by_name (membed, "ge_location", location);
+		g_free (location);
 	}
 
 	membed->priv->no_page = -1;

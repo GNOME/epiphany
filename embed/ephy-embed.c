@@ -144,9 +144,10 @@ ephy_embed_base_init (gpointer g_class)
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, location),
                               NULL, NULL,
-                              g_cclosure_marshal_VOID__VOID,
+                              ephy_marshal_VOID__STRING,
                               G_TYPE_NONE,
-                              0);
+                              1,
+			      G_TYPE_STRING);
 	ephy_embed_signals[TITLE] =
                 g_signal_new ("ge_title",
                               EPHY_EMBED_TYPE,
