@@ -174,7 +174,7 @@ window_cmd_file_send_to	(GtkAction *action,
                            "?Subject=", title,
                            "&Body=", location, NULL);
 
-	ephy_embed_load_url (embed, url);
+	gnome_vfs_url_show (url);
 
 	g_free (title);
 	g_free (location);
