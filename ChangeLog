@@ -1,3 +1,11 @@
+2004-03-14  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c: (drag_data_received_cb),
+	(toolbar_drag_motion_cb), (egg_editable_toolbar_init):
+
+	Deal with the case where data_received signal is emitted
+	asyncrounously.
+
 2004-03-13  Alexander Shopov  <ash@contact.bg>
 
 	* configure.in: Added bg to ALL_LINGUAS.

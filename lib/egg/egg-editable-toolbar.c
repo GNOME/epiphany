@@ -450,6 +450,8 @@ drag_data_received_cb (GtkWidget          *widget,
       etoolbar->priv->pending = FALSE;
       etoolbar->priv->dragged_item =
         create_item_from_action (etoolbar, id, data_is_separator (id), NULL);
+      g_object_ref (etoolbar->priv->dragged_item);
+      gtk_object_sink (GTK_OBJECT (etoolbar->priv->dragged_item));
     }
   else
     {
@@ -595,23 +597,16 @@ toolbar_drag_motion_cb (GtkWidget          *widget,
 
       etoolbar->priv->target_toolbar = toolbar;
 
-      /* The handler will make sure the item is created */
       gtk_drag_get_data (widget, context, target, time);
-
-      g_assert (!etoolbar->priv->pending);
-
-      if (etoolbar->priv->dragged_item == NULL) {
-	return TRUE;
-      }
-
-      g_object_ref (etoolbar->priv->dragged_item);
-      gtk_object_sink (GTK_OBJECT (etoolbar->priv->dragged_item));
     }
 
-  item = GTK_TOOL_ITEM (etoolbar->priv->dragged_item);
+  if (etoolbar->priv->dragged_item != NULL)
+    {
+      item = GTK_TOOL_ITEM (etoolbar->priv->dragged_item);
 
-  index = gtk_toolbar_get_drop_index (toolbar, x, y);
-  gtk_toolbar_set_drop_highlight_item (toolbar, item, index);
+      index = gtk_toolbar_get_drop_index (toolbar, x, y);
+      gtk_toolbar_set_drop_highlight_item (toolbar, item, index);
+    }
 
   gdk_drag_status (context, context->suggested_action, time);
 
@@ -1053,6 +1048,7 @@ egg_editable_toolbar_init (EggEditableToolbar *t)
 
   t->priv->merge = NULL;
   t->priv->edit_mode = FALSE;
+  t->priv->dragged_item = NULL;
 }
 
 static void
