@@ -616,6 +616,23 @@ bookmark_added_cb (EphyNode *bookmarks,
 
 	if (menu->priv->bmk_actions != NULL)
 	{
+		/* If the new bookmark has the node ID of one scheduled to
+		 * be removed, remove the old one first then add new one.
+		 * This works since the action name depends only on the
+		 * node ID. See bug #154805.
+		 */
+		GSList *l;
+
+		l = g_slist_find (menu->priv->removed_bmks,
+				 GUINT_TO_POINTER (ephy_node_get_id (bmk)));
+		if (l != NULL)
+		{
+			remove_action (l->data, menu->priv->bmk_actions);
+
+			menu->priv->removed_bmks = g_slist_delete_link
+				(menu->priv->removed_bmks, l);
+		}
+
 		add_action_for_bookmark (menu, bmk);
 
 		ephy_bookmarks_menu_maybe_update (menu);

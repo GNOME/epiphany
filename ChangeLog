@@ -1,3 +1,11 @@
+2004-10-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmarks-menu.c: (bookmark_added_cb):
+
+	When adding a bookmark, check if it has same node ID as one
+	scheduled for removal, and if so, process the removal immediately.
+	Fixes bug #154805.
+
 2004-10-08  Marco Pesenti Gritti  <marco@gnome.org>
 
 	reviewed by: Christian Persch  <chpe@cvs.gnome.org>
