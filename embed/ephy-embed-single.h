@@ -90,6 +90,14 @@ struct EphyEmbedSingleClass
 {
 	GObjectClass parent_class;
 
+	/* Signals */
+
+	gboolean (* handle_content) (EphyEmbedSingle *shell,
+				     char *mime_type,
+				     char *uri);
+
+	/* Methods */
+
 	void	(* clear_cache)         (EphyEmbedSingle *shell);
 	void	(* set_offline_mode)    (EphyEmbedSingle *shell,
 					 gboolean offline);

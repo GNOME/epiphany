@@ -1,5 +1,17 @@
 2003-11-20  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* embed/ephy-embed-single.c: (ephy_embed_single_class_init):
+	* embed/ephy-embed-single.h:
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EphyHeaderSniffer.h:
+	* lib/ephy-marshal.list:
+
+	Implement an handle_content signal to allow to write
+	plugins to support external download managers.
+
+2003-11-20  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* embed/ephy-command-manager.c: (ephy_command_manager_base_init):
 	* embed/ephy-embed-persist.c: (ephy_embed_persist_class_init):
 	* embed/ephy-embed.c: (ephy_embed_base_init):

@@ -82,6 +82,17 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
 
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
+	g_signal_new ("handle_content",
+		      EPHY_TYPE_EMBED_SINGLE,
+		      G_SIGNAL_RUN_LAST,
+		      G_STRUCT_OFFSET (EphyEmbedSingleClass, handle_content),
+		      g_signal_accumulator_true_handled, NULL,
+		      ephy_marshal_BOOLEAN__STRING_STRING,
+		      G_TYPE_BOOLEAN,
+		      2,
+		      G_TYPE_STRING,
+		      G_TYPE_STRING);
+
 	g_type_class_add_private (object_class, sizeof(EphyEmbedSinglePrivate));
 }
 

@@ -73,17 +73,26 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 				    nsISupports *aContext)
 #endif
 {
-	/* aForced reflects if the content being sent is normally viewable
-	 * in mozilla or not. That fact doesn't affect us, so ignore it
-         */
-
 	nsresult rv;
+	EphyEmbedSingle *single;
+	gboolean handled = FALSE;
 
 	mLauncher = aLauncher;
 	rv = Init ();
 	if (NS_FAILED (rv)) return rv;
-	
-	MIMEAskAction ();
+
+	single = ephy_embed_shell_get_embed_single (embed_shell);
+	g_signal_emit_by_name (single, "handle_content", mMimeType,
+			       mUrl.get(), &handled);
+
+	if (!handled)
+	{
+		MIMEAskAction ();
+	}
+	else
+	{
+		mLauncher->Cancel ();
+	}
 
 	return NS_OK;
 }

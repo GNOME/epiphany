@@ -91,6 +91,23 @@ EphyHeaderSniffer::~EphyHeaderSniffer()
 
 NS_IMPL_ISUPPORTS2(EphyHeaderSniffer, nsIWebProgressListener, nsIAuthPrompt)
 
+NS_IMETHODIMP
+EphyHeaderSniffer::HandleContent ()
+{
+	EphyEmbedSingle *single;
+	gboolean handled = FALSE;
+	nsCString uriSpec;
+
+	if (mPostData) return NS_ERROR_FAILURE;
+
+	mURL->GetSpec (uriSpec);	
+	single = ephy_embed_shell_get_embed_single (embed_shell);
+	g_signal_emit_by_name (single, "handle_content", mContentType.get(),
+			       uriSpec.get(), &handled);
+
+	return handled ? NS_OK : NS_ERROR_FAILURE;
+}
+
 NS_IMETHODIMP 
 EphyHeaderSniffer::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest, PRUint32 aStateFlags, 
                                   PRUint32 aStatus)
@@ -125,6 +142,9 @@ EphyHeaderSniffer::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aReq
 		{
 			mTmpFile->Remove(PR_FALSE);
 		}
+
+		rv = HandleContent ();
+		if (NS_SUCCEEDED (rv)) return NS_OK;
 
 		rv = PerformSave(origURI);
 		if (NS_FAILED(rv))

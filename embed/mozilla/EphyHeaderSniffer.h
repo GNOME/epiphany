@@ -65,6 +65,7 @@ public:
 
 protected:
 	nsresult PerformSave (nsIURI* inOriginalURI);
+	nsresult HandleContent ();
 
 private:
 	nsIWebBrowserPersist*      mPersist; /* Weak. It owns us as a listener. */
