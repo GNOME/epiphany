@@ -618,23 +618,27 @@ build_search_box (EphyBookmarksEditor *editor)
 	box = gtk_hbox_new (FALSE, 6);
 	gtk_widget_show (box);
 
-	label = gtk_label_new (NULL);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	str = g_strconcat ("<b>", _("Search:"), "</b>", NULL);
-	gtk_label_set_markup (GTK_LABEL (label), str);
-	g_free (str);
-	gtk_widget_show (label);
-	gtk_box_pack_start (GTK_BOX (box),
-			    label, FALSE, TRUE, 0);
-
 	entry = gtk_entry_new ();
 	editor->priv->search_entry = entry;
 	gtk_widget_show (entry);
-	gtk_box_pack_start (GTK_BOX (box),
-			    entry, TRUE, TRUE, 0);
 	g_signal_connect (G_OBJECT (entry), "changed",
 			  G_CALLBACK (search_entry_changed_cb),
 			  editor);
+	
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	str = g_strconcat ("<b>", _("_Search:"), "</b>", NULL);
+	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), str);
+	g_free (str);
+	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);	
+	gtk_widget_show (label);
+
+        
+	gtk_box_pack_start (GTK_BOX (box),
+			    label, FALSE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (box),
+			    entry, TRUE, TRUE, 0);
+
 	return box;
 }
 
