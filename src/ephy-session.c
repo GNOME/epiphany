@@ -512,7 +512,6 @@ ephy_session_save (EphySession *session,
 
 	/* FIXME: do we want to turn on compression? */
 	writer = xmlNewTextWriterFilename (tmp_file, 0);
-	g_free (tmp_file);
 	if (writer == NULL)
 	{
 		return FALSE;
@@ -565,6 +564,7 @@ out:
 	}
 
 	g_free (save_to);
+	g_free (tmp_file);
 
 	STOP_PROFILER ("Saving session")
 
