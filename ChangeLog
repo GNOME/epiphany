@@ -1,5 +1,12 @@
 2004-07-07  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/print-dialog.c: (ephy_print_get_print_info):
+
+	Don't convert filename encoding here, since we use it
+	as UTF-8 in MozillaPrivate.
+
+2004-07-07  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/EventContext.cpp:
 	* embed/mozilla/EventContext.h:
 	* embed/mozilla/Makefile.am:
