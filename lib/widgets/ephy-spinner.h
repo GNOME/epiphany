@@ -65,9 +65,8 @@ GtkType       ephy_spinner_get_type       (void);
 GtkWidget    *ephy_spinner_new            (void);
 void          ephy_spinner_start          (EphySpinner *throbber);
 void          ephy_spinner_stop           (EphySpinner *throbber);
-void          ephy_spinner_set_small_mode (EphySpinner *throbber,
+void	      ephy_spinner_set_small_mode (EphySpinner *spinner,
 					   gboolean new_mode);
-
 GList	     *ephy_spinner_list_spinners  (void);
 void	      ephy_spinner_info_free      (EphySpinnerInfo *info);
 

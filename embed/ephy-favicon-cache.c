@@ -335,6 +335,8 @@ ephy_favicon_cache_finalize (GObject *object)
 {
 	EphyFaviconCache *cache;
 
+	LOG ("Finalize favicon cache")
+
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (EPHY_IS_FAVICON_CACHE (object));
 

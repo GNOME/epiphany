@@ -64,7 +64,7 @@ NS_IMETHODIMP GBaseProtocolContentHandler::NewChannel(nsIURI *aURI,
 
 	nsCOMPtr<nsIChannel> channel;
 	rv = NS_NewInputStreamChannel(getter_AddRefs(channel), aURI,
-				      iStream, mMimeType, NS_LITERAL_CSTRING(""), 0);
+				      iStream, mMimeType, NS_LITERAL_CSTRING(""));
 	if (NS_FAILED(rv)) return rv;
 
 	NS_IF_ADDREF (*_retval = channel);

@@ -500,6 +500,8 @@ ephy_history_host_visited (EphyHistory *eh,
 	GValue value = { 0, };
 	int visits;
 
+	LOG ("Host visited")
+
 	visits = ephy_node_get_property_int
 		(host, EPHY_NODE_PAGE_PROP_VISITS);
 	if (visits < 0) visits = 0;
@@ -762,20 +764,21 @@ ephy_history_set_page_title (EphyHistory *gh,
 {
 	EphyNode *node;
 	guint host_id;
+	GValue value = { 0, };
+
+	LOG ("Set page title")
 
 	node = ephy_history_get_page (gh, url);
-	if (node)
-	{
-		GValue value = { 0, };
+	if (!node) return;
 
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, title);
-		ephy_node_set_property
-			(node, EPHY_NODE_PAGE_PROP_TITLE, &value);
-		g_value_unset (&value);
-	}
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, title);
+	ephy_node_set_property
+		(node, EPHY_NODE_PAGE_PROP_TITLE, &value);
+	g_value_unset (&value);
 
-	host_id = ephy_node_get_property_int (node, EPHY_NODE_PAGE_PROP_HOST_ID);
+	host_id = ephy_node_get_property_int
+		(node, EPHY_NODE_PAGE_PROP_HOST_ID);
 	if (host_id >= 0)
 	{
 		ephy_history_host_set_title (gh, ephy_node_get_from_id  (host_id),
@@ -827,6 +830,8 @@ ephy_history_remove (EphyHistory *gh, EphyNode *node)
 {
 	EphyNode *host;
 	int host_id;
+
+	LOG ("Remove history item")
 
 	host_id = ephy_node_get_property_int (node, EPHY_NODE_PAGE_PROP_HOST_ID);
 	if (host_id < 0)

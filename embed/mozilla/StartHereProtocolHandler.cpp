@@ -160,17 +160,13 @@ NS_IMETHODIMP GStartHereProtocolHandler::NewChannel(nsIURI *aURI,
 	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIInputStream> iStream;
-	PRUint32 size;  
-    
-	rv = sStream->GetLength(&size);
-	if (NS_FAILED(rv)) return rv;
 	
 	rv = sStream->NewInputStream(0, getter_AddRefs(iStream));
 	if (NS_FAILED(rv)) return rv;
 	
 	rv = NS_NewInputStreamChannel(getter_AddRefs(mChannel), uri,
 				      iStream, NS_LITERAL_CSTRING("text/xml"),
-				      NS_LITERAL_CSTRING("utf-8"), size);
+				      NS_LITERAL_CSTRING("utf-8"));
 	
 	g_free (buf);
 	g_object_unref (sh);

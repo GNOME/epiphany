@@ -231,6 +231,7 @@ ephy_shell_finalize (GObject *object)
 
 	g_assert (ephy_shell == NULL);
 
+	LOG ("Unref session")
 	if (gs->priv->session)
 	{
 		g_return_if_fail (IS_SESSION(gs->priv->session));
@@ -240,11 +241,13 @@ ephy_shell_finalize (GObject *object)
 		g_object_unref (G_OBJECT (gs->priv->session));
 	}
 
+	LOG ("Unref autocompletion")
 	if (gs->priv->autocompletion)
 	{
 		g_object_unref (gs->priv->autocompletion);
 	}
 
+	LOG ("Unref bookmarks")
 	if (gs->priv->bookmarks)
 	{
 		g_object_unref (gs->priv->bookmarks);
@@ -510,20 +513,13 @@ ephy_shell_get_autocompletion (EphyShell *gs)
 
 		EphyHistory *gh = ephy_embed_shell_get_global_history (EPHY_EMBED_SHELL (gs));
 		EphyBookmarks *bmk = ephy_shell_get_bookmarks (gs);
-		EphyFilesystemAutocompletion *fa = ephy_filesystem_autocompletion_new ();
 		p->autocompletion = ephy_autocompletion_new ();
 		ephy_autocompletion_set_prefixes (p->autocompletion, prefixes);
 
 		ephy_autocompletion_add_source (p->autocompletion,
 						EPHY_AUTOCOMPLETION_SOURCE (gh));
 		ephy_autocompletion_add_source (p->autocompletion,
-						EPHY_AUTOCOMPLETION_SOURCE (fa));
-		ephy_autocompletion_add_source (p->autocompletion,
 						EPHY_AUTOCOMPLETION_SOURCE (bmk));
-
-		g_object_unref (gh);
-		g_object_unref (fa);
-		g_object_unref (gs->priv->bookmarks);
 	}
 	return p->autocompletion;
 }

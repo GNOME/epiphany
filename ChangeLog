@@ -1,3 +1,25 @@
+2003-01-21  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/mozilla/BaseProtocolContentHandler.cpp:
+	* embed/mozilla/StartHereProtocolHandler.cpp:
+
+	Api changes.
+
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_finalize):
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_finalize):
+	* embed/ephy-history.c: (ephy_history_host_visited),
+	(ephy_history_set_page_title), (ephy_history_remove):
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_expose),
+	(ephy_spinner_size_request):
+	* lib/widgets/ephy-spinner.h:
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_finalize):
+	* src/ephy-shell.c: (ephy_shell_finalize),
+	(ephy_shell_get_autocompletion):
+	* src/ephy-spinner-action.c: (create_tool_item):
+
+	Nicer spinner size. Fix references problem
+	and a lot of logs to make it easy to debug it.
+
 2003-01-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/ephy-window.c: (update_nav_control):

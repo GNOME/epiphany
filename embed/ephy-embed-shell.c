@@ -21,8 +21,8 @@
 #include "ephy-embed-shell.h"
 #include "ephy-marshal.h"
 #include "ephy-favicon-cache.h"
-
 #include "mozilla-embed-shell.h"
+#include "ephy-debug.h"
 
 #include <string.h>
 
@@ -155,11 +155,13 @@ ephy_embed_shell_finalize (GObject *object)
 
         g_return_if_fail (ges->priv != NULL);
 
+	LOG ("Unref history")
 	if (ges->priv->global_history)
 	{
 		g_object_unref (ges->priv->global_history);
 	}
 
+	LOG ("Unref downloader")
 	if (ges->priv->downloader_view)
 	{
 		g_object_remove_weak_pointer
@@ -168,6 +170,7 @@ ephy_embed_shell_finalize (GObject *object)
 		g_object_unref (ges->priv->downloader_view);
 	}
 
+	LOG ("Unref favicon cache")
 	if (ges->priv->favicon_cache)
 	{
 		g_object_unref (G_OBJECT (ges->priv->favicon_cache));
