@@ -587,7 +587,10 @@ nsresult EphyWrapper::GetMainDocumentUrl (nsCString &url)
 	nsCOMPtr<nsIDocument> doc = do_QueryInterface(DOMDocument);
 	if(!doc) return NS_ERROR_FAILURE;
 
-#if MOZILLA_SNAPSHOT > 11
+#if MOZILLA_SNAPSHOT > 13
+	nsIURI *uri;
+	uri = doc->GetDocumentURI ();
+#elif MOZILLA_SNAPSHOT > 11
 	nsIURI *uri;
 	uri = doc->GetDocumentURL ();
 #else
@@ -611,7 +614,10 @@ nsresult EphyWrapper::GetDocumentUrl (nsCString &url)
         nsCOMPtr<nsIDocument> doc = do_QueryInterface(DOMDocument);
         if(!doc) return NS_ERROR_FAILURE;
 
-#if MOZILLA_SNAPSHOT > 11
+#if MOZILLA_SNAPSHOT > 13
+	nsIURI *uri;
+	uri = doc->GetDocumentURI ();
+#elif MOZILLA_SNAPSHOT > 11
 	nsIURI *uri;
 	uri = doc->GetDocumentURL ();
 #else

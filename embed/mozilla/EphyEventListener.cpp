@@ -84,7 +84,11 @@ EphyEventListener::HandleFaviconLink (nsIDOMNode *node)
 		nsCOMPtr<nsIDocument> doc = do_QueryInterface (domDoc);
 		if(!doc) return NS_ERROR_FAILURE;
 
-#if MOZILLA_SNAPSHOT > 11
+#if MOZILLA_SNAPSHOT > 13
+		nsIURI *uri;
+		uri = doc->GetDocumentURI ();
+		if (!uri) return NS_ERROR_FAILURE;
+#elif MOZILLA_SNAPSHOT > 11
 		nsIURI *uri;
 		uri = doc->GetDocumentURL ();
 		if (uri == NULL) return NS_ERROR_FAILURE;

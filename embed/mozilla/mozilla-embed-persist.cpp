@@ -254,7 +254,11 @@ impl_save (EphyEmbedPersist *persist)
                                 do_QueryInterface (DOMDocument, &rv);
         	if (NS_FAILED(rv) || !document) return G_FAILED;
 
-#if MOZILLA_SNAPSHOT > 11
+#if MOZILLA_SNAPSHOT > 13
+		nsIURI *uri;
+		uri = document->GetDocumentURI ();
+		if (!uri) return G_FAILED;
+#elif MOZILLA_SNAPSHOT > 11
 		nsIURI *uri;
 		uri = document->GetDocumentURL ();
 		if (!uri) return G_FAILED;
