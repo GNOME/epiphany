@@ -71,7 +71,6 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 
 	NS_METHOD MIMEConfirmAction ();
 	NS_METHOD MIMEDoAction ();
-	NS_METHOD CheckAppSupportScheme ();
 
 	nsCOMPtr<nsIHelperAppLauncher> mLauncher;
 	nsCOMPtr<nsIURI> mUri;

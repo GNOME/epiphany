@@ -207,30 +207,6 @@ NS_METHOD GContentHandler::LaunchHelperApp (void)
 	return NS_OK;
 }
 
-NS_METHOD GContentHandler::CheckAppSupportScheme (void)
-{
-	GList *l;
-
-	mAppSupportScheme = PR_FALSE;	
-
-	if (!mHelperApp) return NS_OK;
-
-	if (mHelperApp->expects_uris != GNOME_VFS_MIME_APPLICATION_ARGUMENT_TYPE_URIS)
-		return NS_OK;
-	
-	for (l = mHelperApp->supported_uri_schemes; l != NULL; l = l->next)
-	{
-		char *uri_scheme = (char *)l->data;
-
-		if (strcmp (mScheme.get(), uri_scheme) == 0)
-		{
-			mAppSupportScheme = PR_TRUE;
-		}
-	}
-
-	return NS_OK;
-}
-
 NS_METHOD GContentHandler::Init (void)
 {
 	nsresult rv;
@@ -366,8 +342,6 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType);
 	mPermission = ephy_embed_shell_check_mime (embed_shell, mMimeType);
 #endif
-
-	CheckAppSupportScheme ();
 
 	if (auto_downloads)
 	{
