@@ -3,7 +3,7 @@ INCLUDES = \
 	-I$(top_srcdir)/lib	    			\
 	-I$(top_srcdir)/embed	    			\
 	-I$(top_srcdir)		    			\
-	$(WARN_CFLAGS)					\
+	$(WARN_CXXFLAGS)				\
 	$(MOZILLA_COMPONENT_CFLAGS)			\
 	-I$(MOZILLA_INCLUDE_ROOT)/appcomps		\
 	-I$(MOZILLA_INCLUDE_ROOT)/chrome		\
