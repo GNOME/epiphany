@@ -38,13 +38,11 @@ gboolean mozilla_notifier_transform_int		(GConfValue *, GValue *);
 
 gboolean mozilla_notifier_transform_string	(GConfValue *, GValue *);
 
-void	 mozilla_notifier_add		(const char *gconf_key,
+guint	 mozilla_notifier_add		(const char *gconf_key,
 					 const char *mozilla_pref,
 					 PrefValueTransformFunc func);
 
-void	 mozilla_notifier_remove	(const char *gconf_key,
-					 const char *mozilla_pref,
-					 PrefValueTransformFunc func);
+void	 mozilla_notifier_remove	(guint id);
 
 void	 mozilla_notifiers_init		(void);
 

@@ -78,7 +78,7 @@ transform_accept_languages_list (GConfValue *gcvalue,
 	char **langs;
 
 	if (gcvalue->type != GCONF_VALUE_LIST ||
-	gconf_value_get_list_type (gcvalue) != GCONF_VALUE_STRING) return FALSE;
+	    gconf_value_get_list_type (gcvalue) != GCONF_VALUE_STRING) return FALSE;
 
 	languages = gconf_value_get_list (gcvalue);
 
@@ -178,7 +178,7 @@ transform_proxy_ignore_list (GConfValue *gcvalue,
 	char **strings;
 
 	if (gcvalue->type != GCONF_VALUE_LIST ||
-	gconf_value_get_list_type (gcvalue) != GCONF_VALUE_STRING) return FALSE;
+	    gconf_value_get_list_type (gcvalue) != GCONF_VALUE_STRING) return FALSE;
 
 	hosts = gconf_value_get_list (gcvalue);
 
@@ -201,7 +201,7 @@ transform_proxy_ignore_list (GConfValue *gcvalue,
 	g_value_init (value, G_TYPE_STRING);
 	g_value_take_string (value, g_strjoinv (",", strings));
 
-	/* individual strings are const */
+	/* the strings themselves are const */
 	g_free (strings);
 
 	return TRUE;
@@ -428,7 +428,7 @@ notify_cb (GConfClient *client,
 	}
 }
 
-extern "C" void
+extern "C" guint
 mozilla_notifier_add (const char *gconf_key,
 		      const char *mozilla_pref,
 		      PrefValueTransformFunc func)
@@ -438,12 +438,12 @@ mozilla_notifier_add (const char *gconf_key,
 	GError *error = NULL;
 	guint cnxn_id;
 
-	g_return_if_fail (gconf_key != NULL);
-	g_return_if_fail (mozilla_pref != NULL);
-	g_return_if_fail (func);
+	g_return_val_if_fail (gconf_key != NULL, 0);
+	g_return_val_if_fail (mozilla_pref != NULL, 0);
+	g_return_val_if_fail (func, 0);
 
 	client = eel_gconf_client_get_global ();
-	g_return_if_fail (client != NULL);
+	g_return_val_if_fail (client != NULL, 0);
 
 	data = g_new (PrefData, 1);
 	data->gconf_key = g_strdup (gconf_key);
@@ -451,9 +451,9 @@ mozilla_notifier_add (const char *gconf_key,
 	data->func = func;
 
 	cnxn_id = gconf_client_notify_add (client, gconf_key,
-					(GConfClientNotifyFunc) notify_cb,
-					data, (GFreeFunc) free_pref_data,
-					&error);
+					   (GConfClientNotifyFunc) notify_cb,
+					   data, (GFreeFunc) free_pref_data,
+					   &error);
 	if (eel_gconf_handle_error (&error))
 	{
 		if (cnxn_id != EEL_GCONF_UNDEFINED_CONNECTION)
@@ -461,51 +461,37 @@ mozilla_notifier_add (const char *gconf_key,
 			gconf_client_notify_remove (client, cnxn_id);
 		}
 
-		return;
+		return 0;
 	}
 
 	data->cnxn_id = cnxn_id;
 	notifiers = g_list_prepend (notifiers, data);
 
 	gconf_client_notify (client, gconf_key);
+
+	return cnxn_id;
 }
 
 static int
 find_data (const PrefData *a,
-	   const PrefData *b)
+	   gconstpointer idptr)
 {
-	return strcmp (a->gconf_key, b->gconf_key) != 0 ||
-	strcmp (a->mozilla_pref, b->mozilla_pref) != 0 ||
-	a->func != b->func;
+	return a->cnxn_id != GPOINTER_TO_UINT (idptr);
 }
 
 extern "C" void
-mozilla_notifier_remove	(const char *gconf_key,
-			 const char *mozilla_pref,
-			 PrefValueTransformFunc func)
+mozilla_notifier_remove	(guint id)
 {
-	PrefData sdata, *data;
 	GList *l;
 
-	g_return_if_fail (gconf_key != NULL);
-	g_return_if_fail (mozilla_pref != NULL);
-	g_return_if_fail (func);
+	g_return_if_fail (id != 0);
 
-	sdata.gconf_key = (char *) gconf_key;
-	sdata.mozilla_pref = (char *) mozilla_pref;
-	sdata.func = func;
-
-	l = g_list_find_custom (notifiers, &sdata, (GCompareFunc) find_data);
+	l = g_list_find_custom (notifiers, GUINT_TO_POINTER (id),
+				(GCompareFunc) find_data);
 	g_return_if_fail (l != NULL);
 
-	data = (PrefData *) l->data;
-
-	g_return_if_fail (strcmp (data->gconf_key, gconf_key) == 0);
-	g_return_if_fail (strcmp (data->mozilla_pref, mozilla_pref) == 0);
-	g_return_if_fail (data->func == func);
-
 	notifiers = g_list_delete_link (notifiers, l);
-	eel_gconf_notification_remove (data->cnxn_id);
+	eel_gconf_notification_remove (id);
 }
 
 #ifdef MIGRATE_PIXEL_SIZE
