@@ -1,3 +1,22 @@
+2003-02-10  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/ephy-toolbars-group.c:
+	(ephy_toolbars_group_get_type), (ephy_toolbars_group_to_xml),
+	(toolbars_group_save), (toolbars_toolbar_new), (toolbars_item_new),
+	(free_toolbar_node), (free_item_node), (add_action),
+	(ephy_toolbars_group_add_item), (parse_item_list), (add_toolbar),
+	(ephy_toolbars_group_add_toolbar), (parse_toolbars),
+	(load_defaults), (load_toolbar), (ephy_toolbars_group_to_string),
+	(ephy_toolbars_group_class_init), (ephy_toolbars_group_init),
+	(ephy_toolbars_group_finalize), (ephy_toolbars_group_new),
+	(ephy_toolbars_group_set_source),
+	(ephy_toolbars_group_foreach_available),
+	(ephy_toolbars_group_foreach_toolbar),
+	(ephy_toolbars_group_foreach_item):
+	* lib/widgets/ephy-toolbars-group.h:
+
+	Split data out of EditableToolbar, still unused
+
 2003-02-10  Fatih Demir <kabalak@gtranslator.org>
 
 	* configure.in: Added "tr" (Turkish) to the languages' list.
