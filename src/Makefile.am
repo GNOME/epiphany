@@ -68,7 +68,6 @@ NOINST_H_FILES =					\
 	popup-commands.h				\
 	prefs-dialog.h					\
 	ppview-toolbar.h				\
-	statusbar.h					\
 	toolbar.h					\
 	window-commands.h
 
@@ -78,7 +77,8 @@ INST_H_FILES = 				    		\
 	ephy-session.h					\
 	ephy-shell.h					\
 	ephy-tab.h					\
-	ephy-window.h
+	ephy-window.h					\
+	statusbar.h
 
 libephymain_la_SOURCES =				\
 	$(CORBA_SOURCE)				 	\

@@ -283,7 +283,8 @@ ephy_permission_manager_test (EphyPermissionManager *manager,
  * @manager: the #EphyPermissionManager
  * @type: a #EphyPermissionType
  * 
- * Lists all permission entries of type @type in the permissions database.
+ * Lists all permission entries of type @type in the permissions database, each
+ * as its own #EphyPermissionInfo
  * 
  * Return value: the list of permission entries
  **/

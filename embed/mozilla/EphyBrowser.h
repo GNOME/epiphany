@@ -22,7 +22,9 @@
 #define EPHY_BROWSER_H
 
 #include "ephy-encodings.h"
+#include "ephy-embed.h"
 
+#include "nsIDOMEventListener.h"
 #include "nsIDocShell.h"
 #include "nsIWebNavigation.h"
 #include "nsIWebPageDescriptor.h"
@@ -38,7 +40,38 @@
 
 #include "nsIPrintSettings.h"
 
-class EphyEventListener;
+class EphyEventListener : public nsIDOMEventListener
+{
+public:
+	EphyEventListener();
+	virtual ~EphyEventListener();
+
+	nsresult Init(EphyEmbed *aOwner);
+
+	NS_DECL_ISUPPORTS
+
+	// nsIDOMEventListener
+
+	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent) = 0;
+
+protected:
+	EphyEmbed *mOwner;
+};
+
+class EphyFaviconEventListener : public EphyEventListener
+{
+public:
+	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
+
+private:
+	nsresult HandleFaviconLink (nsIDOMNode *node);
+};
+
+class EphyPopupEventListener : public EphyEventListener
+{
+public:
+	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
+};
 
 class EphyBrowser
 {
@@ -93,7 +126,8 @@ private:
 	nsCOMPtr<nsIWebProgressListener> mProgress;
 	nsCOMPtr<nsIDOMEventReceiver> mEventReceiver;
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;
-	EphyEventListener *mEventListener;
+	EphyFaviconEventListener *mFaviconEventListener;
+	EphyPopupEventListener *mPopupEventListener;
 
 	nsresult GetListener (void);
 	nsresult AttachListeners (void);

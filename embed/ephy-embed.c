@@ -125,6 +125,14 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_BOOLEAN,
 			      1,
 			      G_TYPE_POINTER);
+		g_signal_new ("ge_popup_blocked",
+			      EPHY_TYPE_EMBED,
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (EphyEmbedClass, popup_blocked),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
 		g_signal_new ("ge_security_change",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_LAST,

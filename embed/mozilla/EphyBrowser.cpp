@@ -52,7 +52,13 @@
 #include "nsCWebBrowserPersist.h"
 #include "nsNetUtil.h"
 #include "nsIChromeEventHandler.h"
+#include "nsIDOMDocument.h"
 #include "nsIDOMDocumentStyle.h"
+#include "nsIDOMEvent.h"
+#include "nsIDOMEventTarget.h"
+#include "nsIDOMNode.h"
+#include "nsIDOMElement.h"
+#include "nsIDOMPopupBlockedEvent.h"
 #include "nsIDocShellTreeItem.h"
 #include "nsIDocShellTreeNode.h"
 #include "nsIDocShellTreeOwner.h"
@@ -73,12 +79,122 @@
 #include "nsIAtom.h"
 #include "nsIDocumentCharsetInfo.h"
 #include "nsPromiseFlatString.h"
+#include "nsString.h"
+#include "nsUnicharUtils.h"
 #include "ContentHandler.h"
-#include "EphyEventListener.h"
+
+EphyEventListener::EphyEventListener(void)
+{
+	mOwner = nsnull;
+}
+
+EphyEventListener::~EphyEventListener()
+{
+}
+
+NS_IMPL_ISUPPORTS1(EphyEventListener, nsIDOMEventListener)
+
+nsresult
+EphyEventListener::Init(EphyEmbed *aOwner)
+{
+	mOwner = aOwner;
+	return NS_OK;
+}
+
+nsresult
+EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
+{
+	nsresult result;
+
+	nsCOMPtr<nsIDOMElement> linkElement;
+	linkElement = do_QueryInterface (node);
+	if (!linkElement) return NS_ERROR_FAILURE;
+
+	NS_NAMED_LITERAL_STRING(attr_rel, "rel");
+	nsAutoString value;
+	result = linkElement->GetAttribute (attr_rel, value);
+	if (NS_FAILED(result)) return NS_ERROR_FAILURE;
+
+	if (value.Equals(NS_LITERAL_STRING("SHORTCUT ICON"),
+			 nsCaseInsensitiveStringComparator()) ||
+	    value.Equals(NS_LITERAL_STRING("ICON"),
+	    		 nsCaseInsensitiveStringComparator()))
+	{
+		NS_NAMED_LITERAL_STRING(attr_href, "href");
+		nsAutoString value;
+		result = linkElement->GetAttribute (attr_href, value);
+		if (NS_FAILED (result) || value.IsEmpty())
+			return NS_ERROR_FAILURE;
+
+		nsCOMPtr<nsIDOMDocument> domDoc;
+		result = node->GetOwnerDocument(getter_AddRefs(domDoc));
+		if (NS_FAILED(result) || !domDoc) return NS_ERROR_FAILURE;
+
+		nsCOMPtr<nsIDocument> doc = do_QueryInterface (domDoc);
+		if(!doc) return NS_ERROR_FAILURE;
+
+#if MOZILLA_SNAPSHOT > 11
+		nsIURI *uri;
+		uri = doc->GetDocumentURL ();
+		if (uri == NULL) return NS_ERROR_FAILURE;
+#else
+		nsCOMPtr<nsIURI> uri;
+		result = doc->GetDocumentURL(getter_AddRefs(uri));
+		if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+#endif
+
+		const nsACString &link = NS_ConvertUCS2toUTF8(value);
+		nsCAutoString favicon_url;
+		result = uri->Resolve (link, favicon_url);
+		if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+		
+		char *url = g_strdup (favicon_url.get());
+		g_signal_emit_by_name (mOwner, "ge_favicon", url);
+		g_free (url);
+	}
+
+	return NS_OK;
+}	
+
+NS_IMETHODIMP
+EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
+{
+	nsCOMPtr<nsIDOMEventTarget> eventTarget;
+
+	aDOMEvent->GetTarget(getter_AddRefs(eventTarget));
+
+	nsresult result;
+	nsCOMPtr<nsIDOMNode> node = do_QueryInterface(eventTarget, &result);
+	if (NS_FAILED(result) || !node) return NS_ERROR_FAILURE;
+
+	HandleFaviconLink (node);
+
+	return NS_OK;
+}
+
+NS_IMETHODIMP
+EphyPopupEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
+{
+	nsresult rv;
+
+	nsCOMPtr<nsIDOMPopupBlockedEvent> popupEvent =
+		do_QueryInterface(aDOMEvent, &rv);
+
+	if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
+
+	if (popupEvent)
+	{
+		g_signal_emit_by_name (mOwner, "ge_popup_blocked");
+	}
+
+	return NS_OK;
+}
+
 
 EphyBrowser::EphyBrowser ()
 {
-	mEventListener = nsnull;
+	mFaviconEventListener = nsnull;
+	mPopupEventListener = nsnull;
 	mEventReceiver = nsnull;	
 }
 
@@ -101,9 +217,13 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 	rv = mDOMWindow->GetDocument (getter_AddRefs (domDocument));
 	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
-	mEventListener = new EphyEventListener();
+	mFaviconEventListener = new EphyFaviconEventListener();
+	mPopupEventListener = new EphyPopupEventListener();
 
-	rv = mEventListener->Init (EPHY_EMBED (mozembed));
+	rv = mFaviconEventListener->Init (EPHY_EMBED (mozembed));
+	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+
+	rv = mPopupEventListener->Init (EPHY_EMBED (mozembed));
 	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
  	rv = GetListener();
@@ -138,25 +258,37 @@ EphyBrowser::GetListener (void)
 nsresult
 EphyBrowser::AttachListeners(void)
 {
+	nsresult rv;
+
   	if (!mEventReceiver) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIDOMEventTarget> target;
 	target = do_QueryInterface (mEventReceiver);
 
-	return target->AddEventListener(NS_LITERAL_STRING("DOMLinkAdded"),
-			                mEventListener, PR_FALSE);
+	rv = target->AddEventListener(NS_LITERAL_STRING("DOMLinkAdded"),
+				      mFaviconEventListener, PR_FALSE);
+	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+
+	return target->AddEventListener(NS_LITERAL_STRING("DOMPopupBlocked"),
+					mPopupEventListener, PR_FALSE);
 }
 
 nsresult
 EphyBrowser::DetachListeners(void)
 {
+	nsresult rv;
+
 	if (!mEventReceiver) return NS_ERROR_FAILURE;
 	
 	nsCOMPtr<nsIDOMEventTarget> target;
 	target = do_QueryInterface (mEventReceiver);
 
-	return target->RemoveEventListener(NS_LITERAL_STRING("DOMLinkAdded"),
-					   mEventListener, PR_FALSE);
+	rv = target->RemoveEventListener(NS_LITERAL_STRING("DOMLinkAdded"),
+					 mFaviconEventListener, PR_FALSE);
+	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+
+	return target->RemoveEventListener(NS_LITERAL_STRING("DOMPopupBlocked"),
+					   mPopupEventListener, PR_FALSE);
 }
 
 nsresult EphyBrowser::Print (nsIPrintSettings *options, PRBool preview)

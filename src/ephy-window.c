@@ -1719,6 +1719,14 @@ ephy_window_get_notebook (EphyWindow *window)
 	return GTK_WIDGET (window->priv->notebook);
 }
 
+GtkWidget *
+ephy_window_get_statusbar (EphyWindow *window)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+
+	return GTK_WIDGET (window->priv->statusbar);
+}
+
 void
 ephy_window_add_tab (EphyWindow *window,
 		     EphyTab *tab,

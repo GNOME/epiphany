@@ -80,6 +80,8 @@ void		  ephy_window_set_print_preview	  (EphyWindow *window,
 
 GtkWidget	 *ephy_window_get_notebook	  (EphyWindow *window);
 
+GtkWidget	 *ephy_window_get_statusbar	  (EphyWindow *window);
+
 void		  ephy_window_add_tab		  (EphyWindow *window,
 						   EphyTab *tab,
 						   gint position,
