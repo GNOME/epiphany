@@ -865,7 +865,8 @@ nsresult EphyBrowser::GetCommandState (const char *command, PRBool *enabled)
 nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUint32 *aNumTextFields, PRBool *aHasTextArea)
 {
 	nsCOMPtr<nsIDOMHTMLDocument> htmlDoc = do_QueryInterface(aDomDoc);
-	NS_ENSURE_TRUE (htmlDoc, NS_ERROR_FAILURE);
+	/* it's okay not to be a HTML doc (happens for XUL documents, like about:config) */
+	if (!htmlDoc) return NS_OK;
 
 	nsCOMPtr<nsIDOMHTMLCollection> forms;
 	htmlDoc->GetForms (getter_AddRefs (forms));

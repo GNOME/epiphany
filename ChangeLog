@@ -1,5 +1,12 @@
 2004-03-05  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EphyBrowser.cpp:
+
+	Don't return an error when a DOM document isn't a HTML document, it's ok
+	not to be one (happens for XUL docs, like about:config).
+
+2004-03-05  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-file-helpers.c: (ephy_file_downloads_dir):
 
 	Don't assume Desktop directory location, check the gconf key if it's
