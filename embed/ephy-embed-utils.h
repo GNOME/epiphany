@@ -35,7 +35,7 @@ typedef struct
 void ephy_embed_utils_save			(GtkWidget *window,
 						 const char *default_dir_pref,
 						 gboolean ask_dest,
-						 gboolean ask_content,
+						 gboolean with_content,
 						 EphyEmbedPersist *persist);
 
 void ephy_embed_utils_build_charsets_submenu    (BonoboUIComponent *ui_component,

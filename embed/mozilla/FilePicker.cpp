@@ -76,9 +76,7 @@
 /* Implementation file */
 NS_IMPL_ISUPPORTS1(GFilePicker, nsIFilePicker)
 
-GFilePicker::GFilePicker(PRBool aShowContentCheck, FileFormat *aFileFormats) :
-			mShowContentCheck(aShowContentCheck),
-			mSaveContentCheck(NULL),
+GFilePicker::GFilePicker(FileFormat *aFileFormats) :
 			mFileFormats(aFileFormats)
 {
 	NS_INIT_ISUPPORTS();
@@ -245,24 +243,6 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 	if (mParentWidget)
 		gtk_window_set_transient_for(GTK_WINDOW(mFileSelector),
 					     GTK_WINDOW(mParentWidget));
-
-	if (mShowContentCheck)
-	{
-		GtkWidget *bbox = gtk_hbutton_box_new ();
-		gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox),
-					  GTK_BUTTONBOX_END);
-		gtk_box_set_spacing(GTK_BOX(bbox), 0);
-        	gtk_box_pack_end(GTK_BOX(GTK_FILE_SELECTION(mFileSelector)->action_area),
-				 bbox, TRUE, TRUE, 0);
-
-		mSaveContentCheck = 
-			gtk_check_button_new_with_label(_("Save with content"));
-
-		gtk_box_pack_start(GTK_BOX(bbox), mSaveContentCheck,
-				   FALSE, FALSE, 0);
-
-		gtk_widget_show_all(bbox);
-	}
 
 	if (mFileFormats)
 	{
@@ -482,11 +462,7 @@ NS_METHOD GFilePicker::HandleFilePickerResult(PRInt16 *retval)
 		}
 	}
 
-	if (GTK_IS_TOGGLE_BUTTON(mSaveContentCheck))
-		*retval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mSaveContentCheck)) ?
-			  returnOKSaveContent : returnOK;
-	else
-		*retval = returnOK;
+	*retval = returnOK;
 
 	return NS_OK;
 }

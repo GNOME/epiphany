@@ -161,7 +161,6 @@ struct EphyEmbedSingleClass
 						 const char* file,
 						 FilePickerMode mode,
 						 char **ret_fullpath,
-						 gboolean *ret_save_content,
 						 FileFormat *file_formats,
 						 gint *ret_file_format);
 };
@@ -222,7 +221,6 @@ gresult           ephy_embed_single_show_file_picker    (EphyEmbedSingle *shell,
 							 const char *file,
 							 FilePickerMode mode,
 							 char **ret_fullpath,
-							 gboolean *ret_save_content,
 							 FileFormat *file_formats,
 							 int *ret_file_format);
 

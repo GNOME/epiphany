@@ -1,5 +1,23 @@
 2003-04-23  David Bordoley <bordoley@msu.edu>
 
+	* embed/ephy-embed-single.c: (ephy_embed_single_show_file_picker):
+	* embed/ephy-embed-single.h: 
+	* embed/ephy-embed-utils.c: (ephy_embed_utils_save):
+	* embed/ephy-embed-utils.h: 
+	* embed/mozilla/FilePicker.cpp: (GFilePicker::GFilePicker),
+	(GFilePicker::Show), (GFilePicker::HandleFilePickerR):
+	* embed/mozilla/FilePicker.h:
+	* embed/mozilla/mozilla-embed-persist.cpp: (impl_save):
+	* embed/mozilla/mozilla-embed-single.cpp: (impl_show_file_picker):
+	* src/window-commands.c: (window_cmd_file_open):
+	
+	Always save a page's content if there i content to be saved. 
+	Remove the checkbox from the save as dialog.
+
+	Patch from Christian Persch <chpe+gnomebugz@stud.uni-saarland.de>
+
+2003-04-23  David Bordoley <bordoley@msu.edu>
+
 	* src/bookmarks/ephy-topic-action.c: (create_tool_item):
 	
 	Set spacing between a topic and the arrow to 6px.

@@ -190,7 +190,7 @@ impl_save (EphyEmbedPersist *persist)
         if (flags & EMBED_PERSIST_SAVE_CONTENT)
 	{
 		char *datapath;
-		datapath = g_strconcat (filename, "content", NULL);
+		datapath = g_strconcat (filename, ".content", NULL);
                 NS_NewLocalFile(NS_ConvertUTF8toUCS2(datapath), PR_TRUE, getter_AddRefs(path));
 		g_free (datapath);
 	}

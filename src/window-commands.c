@@ -309,7 +309,7 @@ window_cmd_file_open (EggAction *action,
 		(single, wmain,
 		 _("Select the file to open"),
                  dir, NULL, modeOpen,
-                 &file, NULL, NULL, NULL);
+                 &file, NULL, NULL);
 
 	if (result == G_OK)
 	{

@@ -255,14 +255,13 @@ ephy_embed_single_show_file_picker (EphyEmbedSingle *shell,
 		                   const char *file,
 				   FilePickerMode mode,
 				   char **ret_fullpath,
-				   gboolean *ret_save_content,
 				   FileFormat *file_formats,
 				   int *ret_file_format)
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
         return klass->show_file_picker (shell, parentWidget, title,
 					directory, file, mode,
-					ret_fullpath, ret_save_content,
+					ret_fullpath,
 					file_formats, ret_file_format);
 }
 

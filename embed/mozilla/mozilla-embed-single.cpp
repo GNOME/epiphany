@@ -108,7 +108,6 @@ impl_show_file_picker (EphyEmbedSingle *shell,
 		       const char *file, 
 		       FilePickerMode mode,
                        char **ret_fullpath, 
-		       gboolean *ret_save_content, 
                        FileFormat *file_formats, 
 		       int *ret_file_format);
 
@@ -887,20 +886,12 @@ impl_show_file_picker (EphyEmbedSingle *shell,
 		       const char *file, 
 		       FilePickerMode mode,
                        char **ret_fullpath, 
-		       gboolean *ret_save_content, 
                        FileFormat *file_formats, 
 		       int *ret_file_format)
 {
-	PRBool showContentCheck;
-        gchar *expanded_directory;
+	gchar *expanded_directory;
 
-        if (ret_save_content == NULL)
-                showContentCheck = PR_FALSE;
-        else
-                showContentCheck = PR_TRUE;
-
-        GFilePicker *filePicker = new GFilePicker (showContentCheck, 
-                                                   file_formats);
+        GFilePicker *filePicker = new GFilePicker (file_formats);
 
 	/* FIXME sane path: expand tilde ... */
         expanded_directory = g_strdup (directory);
@@ -926,13 +917,6 @@ impl_show_file_picker (EphyEmbedSingle *shell,
         PRInt16 retval;
         filePicker->Show (&retval);
 
-        if (ret_save_content != NULL)
-        {
-                if (retval == GFilePicker::returnOKSaveContent)
-                        *ret_save_content = TRUE;
-                else
-                        *ret_save_content = FALSE;
-        }
         if (ret_file_format != NULL)
         {
                 *ret_file_format = filePicker->mSelectedFileFormat;

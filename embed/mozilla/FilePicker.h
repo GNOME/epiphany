@@ -52,11 +52,9 @@ class GFilePicker : public nsIFilePicker
 	NS_DECL_NSIFILEPICKER
 	enum {  returnOK = nsIFilePicker::returnOK,
 		returnCancel = nsIFilePicker::returnCancel,
-		returnReplace = nsIFilePicker::returnReplace,
-		returnOKSaveContent = 256 };
+		returnReplace = nsIFilePicker::returnReplace };
 
-	GFilePicker(PRBool aShowContentCheck = PR_FALSE,
-		    FileFormat *aFileFormats = nsnull);
+	GFilePicker(FileFormat *aFileFormats = nsnull);
 	virtual ~GFilePicker();
 
 	/* additional members */
@@ -80,12 +78,9 @@ class GFilePicker : public nsIFilePicker
 
 	PRInt16 mMode;
 
-	PRBool mShowContentCheck;
-
 	GtkWidget *mParentWidget;	
 	GtkWidget *mFileSelector;
 	GtkWidget *mFormatChooser;
-	GtkWidget *mSaveContentCheck;
 
 	FileFormat *mFileFormats;
 };

@@ -44,7 +44,8 @@
 void
 ephy_embed_utils_save (GtkWidget *window,
 		       const char *default_dir_pref,
-		       gboolean ask_dest, gboolean ask_content,
+		       gboolean ask_dest,
+		       gboolean with_content,
 		       EphyEmbedPersist *persist)
 {
 	GnomeVFSURI *uri;
@@ -57,7 +58,6 @@ ephy_embed_utils_save (GtkWidget *window,
         gresult ret;
 	EphyEmbed *embed;
 	EmbedPersistFlags flags;
-	gboolean content;
 	EphyEmbedSingle *single;
 
 	single = ephy_embed_shell_get_embed_single
@@ -132,7 +132,6 @@ ephy_embed_utils_save (GtkWidget *window,
 					(single, window,
                                          _("Select the destination filename"),
                                          dirName, fileName, modeSave, &retPath,
-                                         ask_content ? &content : NULL,
                                          NULL, NULL);
 	}
 
@@ -143,12 +142,8 @@ ephy_embed_utils_save (GtkWidget *window,
 
                 retDir = gnome_vfs_uri_extract_dirname (uri);
 
-                if (ask_content && content)
-		{
-			flags |= EMBED_PERSIST_SAVE_CONTENT;
-			ephy_embed_persist_set_flags (persist,
-						      flags);
-		}
+		if (with_content) flags |= EMBED_PERSIST_SAVE_CONTENT;
+		ephy_embed_persist_set_flags (persist, flags);
 
 		ephy_embed_persist_set_dest (persist, retPath);
 
