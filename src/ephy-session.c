@@ -368,11 +368,12 @@ offer_to_resume (EphySession *session)
 		 GTK_DIALOG_MODAL,
 		 GTK_MESSAGE_WARNING,
 		 GTK_BUTTONS_NONE,
-		 _("Epiphany appears to have crashed or been killed the last time it was run."));
+		 _("Recover previous browser windows and tabs?"));
 
 	gtk_message_dialog_format_secondary_text
 		(GTK_MESSAGE_DIALOG (dialog),
-		 _("You can recover the opened tabs and windows."));
+		 _("Epiphany appears to have exited unexpectedly the last time "
+		   "it was run. You can recover the opened windows and tabs."));
 	
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
 			       _("_Don't Recover"), GTK_RESPONSE_CANCEL);
