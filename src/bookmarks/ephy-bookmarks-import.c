@@ -169,11 +169,8 @@ xbel_parse_folder (EphyBookmarks *bookmarks,
 					   child->children,
 					   keyword);
 
-			if (keyword)
-			{
-				g_free (keyword);
-				keyword = NULL;
-			}
+			g_free (keyword);
+			keyword = g_strdup (default_keyword);
 		}
 		
 		child = child->next;
@@ -194,20 +191,8 @@ xbel_parse_bookmarks (EphyBookmarks *bookmarks,
 	{
 		if (xmlStrEqual (child->name, "xbel"))
 		{
-			xbel_parse_bookmarks (bookmarks,
-					      child->children,
-					      default_keyword);
-		}
-		else if (xmlStrEqual (child->name, "folder"))
-		{
 			xbel_parse_folder (bookmarks,
 					   child->children,
-					   default_keyword);
-		}
-		else if (xmlStrEqual (child->name, "bookmark"))
-		{
-			xbel_parse_folder (bookmarks,
-					   child,
 					   default_keyword);
 		}
 
