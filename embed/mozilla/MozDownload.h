@@ -52,6 +52,7 @@
 #include "nsIWebBrowserPersist.h"
 #include "nsIObserver.h"
 #include "nsIRequest.h"
+#include "nsIMIMEInfo.h"
 
 #include "downloader-view.h"
 #include "ephy-download.h"
