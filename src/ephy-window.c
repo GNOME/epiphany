@@ -779,7 +779,7 @@ sync_tab_load_progress (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
-sync_tab_load_status (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_load_status (EphyTab *dummy, GParamSpec *pspec, EphyWindow *window)
 {
 	gboolean spin = FALSE;
 	GList *tabs, *l;
@@ -1326,6 +1326,8 @@ tab_removed_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
 					      window);	
 
 	window->priv->num_tabs--;
+
+	sync_tab_load_status (NULL, NULL, window);
 
 	if (window->priv->num_tabs == 0)
 	{
