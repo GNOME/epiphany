@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.nl\n"
-"POT-Creation-Date: 2003-05-28 03:54+0200\n"
-"PO-Revision-Date: 2003-05-28 13:46+0100\n"
+"POT-Creation-Date: 2003-05-30 03:58+0200\n"
+"PO-Revision-Date: 2003-05-30 11:36+0100\n"
 "Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -96,15 +96,44 @@ msgstr "Doorzoeken na document-einde"
 msgid "Cookie accept"
 msgstr "Cookie accepteren"
 
-# ui/preferences.glade.h:232
+# ui/preferences.glade.h:248
 #: data/epiphany.schemas.in.h:6
-msgid "Default charset"
-msgstr "Standaard tekenset"
+msgid "Default encoding"
+msgstr "Standaardcodering"
 
-# ui/preferences.glade.h:232
 #: data/epiphany.schemas.in.h:7
-msgid "Default charset."
-msgstr "Standaard tekenset."
+msgid ""
+"Default encoding. Accepted values are: armscii-8, Big5, Big5-HKSCS, EUC-JP, "
+"EUC-KR, gb18030, GB2312, geostd8, HZ-GB-2312, IBM850, IBM852, IBM855, "
+"IBM857, IBM862, IBM864, IBM864i, IBM866, ISO-2022-CN, ISO-2022-JP, ISO-2022-"
+"KR, ISO-8859-1, ISO-8859-10, ISO-8859-13, ISO-8859-14, ISO-8859-15, ISO-8859-"
+"16, ISO-8859-2, ISO-8859-3, ISO-8859-4, ISO-8859-5, ISO-8859-6, ISO-8859-6-"
+"E, ISO-8859-6-I, ISO-8859-7, ISO-8859-8, ISO-8859-8-E, ISO-8859-8-I, ISO-"
+"8859-9, ISO-IR-111, KOI8-R, KOI8-U, Shift_JIS, T.61-8bit, TIS-620, us-ascii, "
+"UTF-16BE, UTF-16LE, UTF-32BE, UTF-32LE, UTF-7, UTF-8, VISCII, windows-1250, "
+"windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, "
+"windows-1256, windows-1257, windows-1258, windows-936, x-euc-tw, x-gbk, x-"
+"imap4-modified-utf7, x-johab, x-mac-arabic, x-mac-ce, x-mac-croatian, x-mac-"
+"cyrillic, x-mac-devanagari, x-mac-farsi, x-mac-greek, x-mac-gujarati, x-mac-"
+"gurmukhi, x-mac-hebrew, x-mac-icelandic, x-mac-roman, x-mac-romanian, x-mac-"
+"turkish, x-mac-ukrainian, x-u-escaped, x-user-defined, x-viet-tcvn5712, x-"
+"viet-vps and x-windows-949."
+msgstr ""
+"Standaardcodering. Geldige waardes zijn: armscii-8, Big5, Big5-HKSCS, EUC-"
+"JP, EUC-KR, gb18030, GB2312, geostd8, HZ-GB-2312, IBM850, IBM852, IBM855, "
+"IBM857, IBM862, IBM864, IBM864i, IBM866, ISO-2022-CN, ISO-2022-JP, ISO-2022-"
+"KR, ISO-8859-1, ISO-8859-10, ISO-8859-13, ISO-8859-14, ISO-8859-15, ISO-8859-"
+"16, ISO-8859-2, ISO-8859-3, ISO-8859-4, ISO-8859-5, ISO-8859-6, ISO-8859-6-"
+"E, ISO-8859-6-I, ISO-8859-7, ISO-8859-8, ISO-8859-8-E, ISO-8859-8-I, ISO-"
+"8859-9, ISO-IR-111, KOI8-R, KOI8-U, Shift_JIS, T.61-8bit, TIS-620, us-ascii, "
+"UTF-16BE, UTF-16LE, UTF-32BE, UTF-32LE, UTF-7, UTF-8, VISCII, windows-1250, "
+"windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, "
+"windows-1256, windows-1257, windows-1258, windows-936, x-euc-tw, x-gbk, x-"
+"imap4-modified-utf7, x-johab, x-mac-arabic, x-mac-ce, x-mac-croatian, x-mac-"
+"cyrillic, x-mac-devanagari, x-mac-farsi, x-mac-greek, x-mac-gujarati, x-mac-"
+"gurmukhi, x-mac-hebrew, x-mac-icelandic, x-mac-roman, x-mac-romanian, x-mac-"
+"turkish, x-mac-ukrainian, x-u-escaped, x-user-defined, x-viet-tcvn5712, x-"
+"viet-vps and x-windows-949."
 
 # ui/preferences.glade.h:233
 #: data/epiphany.schemas.in.h:8
@@ -332,46 +361,72 @@ msgstr "Geheugenbuffergrootte"
 msgid "Size of memory cache, in KB."
 msgstr "Geheugenbuffergrootte, in KB."
 
-# ui/preferences.glade.h:199
 #: data/epiphany.schemas.in.h:55
+msgid "The charset autodetector. Empty string means autodetect is off"
+msgstr "De tekenset autodetectie. Een lege tekenreeks zet de autodetectie uit"
+
+#: data/epiphany.schemas.in.h:56
+msgid ""
+"The charset autodetector. Valid entries are <empty string> (autodetectors "
+"off), cjk_parallel_state_machine (autodetect east asian encodings), "
+"ja_parallel_state_machine (autodetect japanese encodings), "
+"ko_parallel_state_machine (autodetect korean encodings), ruprob (autodetect "
+"russian encodings), ukprob (autodetect ukrainian encodings), "
+"zh_parallel_state_machine (autodetect chinese encodings), "
+"zhcn_parallel_state_machine (autodetect simplified chinese encodings) and "
+"zhtw_parallel_state_machine (autodetect traditional chinese encodings)."
+msgstr ""
+"De tekenset autodetectie. Geldige waardes zijn <lege tekenreeks> (geen "
+"autodetectie), cjk_parallel_state_machine (autodetectie van oostaziatische "
+"coderingen), ja_parallel_state_machine (autodetecttie van japanse "
+"coderingen), ko_parallel_state_machine (autodetectie van koreaanse "
+"coderingen), ruprob (autodetectie van russische coderingen), ukprob "
+"(autodetectie van oekraïnse coderingen), zh_parallel_state_machine "
+"(autodetectie van chinese coderingen), zhcn_parallel_state_machine "
+"(autodetectie van eenvoudige chinese coderingen) en "
+"zhtw_parallel_state_machine (autodetectie van traditionele chinese "
+"coderingen)."
+
+# ui/preferences.glade.h:199
+#: data/epiphany.schemas.in.h:57
 msgid "Underline links"
 msgstr "Verwijzingen onderstrepen"
 
 # ui/preferences.glade.h:199
-#: data/epiphany.schemas.in.h:56
+#: data/epiphany.schemas.in.h:58
 msgid "Underline links."
 msgstr "Verwijzingen onderstrepen."
 
 # src/menubar.c:401
-#: data/epiphany.schemas.in.h:57
+#: data/epiphany.schemas.in.h:59
 msgid "Use own colors"
 msgstr "Eigen kleuren gebruiken"
 
 # src/menubar.c:396
-#: data/epiphany.schemas.in.h:58
+#: data/epiphany.schemas.in.h:60
 msgid "Use own fonts"
 msgstr "Eigen lettertypen gebruiken"
 
 # src/menubar.c:54
-#: data/epiphany.schemas.in.h:59
+#: data/epiphany.schemas.in.h:61
 msgid "Use tabs"
 msgstr "Tabbladen gebruiken"
 
 # src/menubar.c:402
-#: data/epiphany.schemas.in.h:60
+#: data/epiphany.schemas.in.h:62
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Eigen kleuren gebruiken i.p.v door document aangegeven kleuren."
 
 # src/menubar.c:397
-#: data/epiphany.schemas.in.h:61
+#: data/epiphany.schemas.in.h:63
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Gebruik eigen lettertypen i.p.v door document aangegeven lettertypen."
 
-#: data/epiphany.schemas.in.h:62
+#: data/epiphany.schemas.in.h:64
 msgid "When to compare cached copy"
 msgstr "Wanneer de gebufferde kopie vergeleken moet worden"
 
-#: data/epiphany.schemas.in.h:63
+#: data/epiphany.schemas.in.h:65
 msgid ""
 "When to compare cached copy to web copy. Possible values are 0 (once per "
 "session), 1 (every time), 2 (never), 3 (automatic)."
@@ -379,7 +434,7 @@ msgstr ""
 "Wanneer de gebufferde kopie vergeleken moet worden. Mogelijke waarden zijn 0 "
 "(eens per sessie), 1 (iedere keer), 2 (nooit), 3 (automagisch)."
 
-#: data/epiphany.schemas.in.h:64
+#: data/epiphany.schemas.in.h:66
 msgid ""
 "Where to accept cookies from. Possible values are 0 (anywhere), 1 (from "
 "current server only), 2 (nowhere)"
@@ -387,20 +442,20 @@ msgstr ""
 "Wanneer cookies toegestaan moeten worden. Mogelijke waarden zijn 0 (altijd), "
 "1 (alleen van huidige server), 2 (nooit)"
 
-#: data/epiphany.schemas.in.h:65
+#: data/epiphany.schemas.in.h:67
 msgid "Whether to print the date in the footer."
 msgstr "Of de datum moet worden afgedrukt in de voettekst."
 
-#: data/epiphany.schemas.in.h:66
+#: data/epiphany.schemas.in.h:68
 msgid "Whether to print the page address in the header"
 msgstr "Of het adres van de pagina moet worden afgedrukt in de koptekst."
 
-#: data/epiphany.schemas.in.h:67
+#: data/epiphany.schemas.in.h:69
 msgid "Whether to print the page numbers (x of total) in the footer."
 msgstr ""
 "Of de paginanummering (x van totaal) moet worden afgedrukt in de voettekst."
 
-#: data/epiphany.schemas.in.h:68
+#: data/epiphany.schemas.in.h:70
 msgid "Whether to print the page title in the header."
 msgstr "Of de paginatitel moet worden afgedrukt in de koptekst."
 
@@ -594,306 +649,187 @@ msgstr "Altijd de_ze lettertypen gebruiken"
 msgid "Appearance"
 msgstr "Uiterlijk"
 
-# src/mozilla_i18n.c:26
-# ui/preferences.glade.h:20
-#: data/glade/prefs-dialog.glade.h:17
-#: embed/mozilla/mozilla-embed-single.cpp:88 src/prefs-dialog.c:86
-msgid "Arabic"
-msgstr "Arabisch"
-
 # ui/preferences.glade.h:28
-#: data/glade/prefs-dialog.glade.h:18
+#: data/glade/prefs-dialog.glade.h:17
 msgid "Autodetec_t encoding:"
 msgstr "_Tekenset-detectie:"
 
-# src/mozilla_i18n.c:27
-# ui/preferences.glade.h:32
-#: data/glade/prefs-dialog.glade.h:19
-#: embed/mozilla/mozilla-embed-single.cpp:89
-msgid "Baltic"
-msgstr "Baltisch"
-
-# src/mozilla_i18n.c:28
-# ui/preferences.glade.h:41
-#: data/glade/prefs-dialog.glade.h:20
-#: embed/mozilla/mozilla-embed-single.cpp:90
-msgid "Central European"
-msgstr "Centraal Europees"
-
-# src/mozilla_i18n.c:29
-# ui/preferences.glade.h:43
-#: data/glade/prefs-dialog.glade.h:21
-#: embed/mozilla/mozilla-embed-single.cpp:91 src/prefs-dialog.c:93
-msgid "Chinese"
-msgstr "Chinees"
-
 # ui/preferences.glade.h:46
-#: data/glade/prefs-dialog.glade.h:22
+#: data/glade/prefs-dialog.glade.h:18
 msgid "Clear _Disk Cache"
 msgstr "Schij_fbuffer leegmaken"
 
 # ui/preferences.glade.h:47
-#: data/glade/prefs-dialog.glade.h:23
+#: data/glade/prefs-dialog.glade.h:19
 msgid "Clear _Memory Cache"
 msgstr "G_eheugenbuffer leegmaken"
 
 # ui/preferences.glade.h:229
-#: data/glade/prefs-dialog.glade.h:24
+#: data/glade/prefs-dialog.glade.h:20
 msgid "Compare page:"
 msgstr "Pagina vergelijken:"
 
-# src/mozilla_i18n.c:30
-# ui/preferences.glade.h:53
-#: data/glade/prefs-dialog.glade.h:25
-#: embed/mozilla/mozilla-embed-single.cpp:92
-msgid "Cyrillic"
-msgstr "Cyrillisch"
-
 # ui/preferences.glade.h:59
-#: data/glade/prefs-dialog.glade.h:26
+#: data/glade/prefs-dialog.glade.h:21
 msgid "Dis_k cache:"
 msgstr "_Schijfbuffer:"
 
 # ui/preferences.glade.h:68
-#: data/glade/prefs-dialog.glade.h:27
+#: data/glade/prefs-dialog.glade.h:22
 msgid "E_very time"
 msgstr "Elke _keer"
 
-# ui/preferences.glade.h:63
-#: data/glade/prefs-dialog.glade.h:28
-msgid "East asian"
-msgstr "Oost-Aziatisch"
-
 # src/menubar.c:411
 # ui/preferences.glade.h:12
-#: data/glade/prefs-dialog.glade.h:29
+#: data/glade/prefs-dialog.glade.h:23
 msgid "Enable Java_Script"
 msgstr "Java_script gebruiken"
 
-#: data/glade/prefs-dialog.glade.h:30
+#: data/glade/prefs-dialog.glade.h:24
 msgid "Enable _Java"
 msgstr "_Java gebruiken"
 
 # src/prefs.c:363
-#: data/glade/prefs-dialog.glade.h:31 data/glade/print.glade.h:16
+#: data/glade/prefs-dialog.glade.h:25 data/glade/print.glade.h:16
 msgid "General"
 msgstr "Algemeen"
 
-# src/mozilla_i18n.c:31
-# ui/preferences.glade.h:81
-#: data/glade/prefs-dialog.glade.h:32
-#: embed/mozilla/mozilla-embed-single.cpp:93 src/prefs-dialog.c:106
-msgid "Greek"
-msgstr "Grieks"
-
-# src/mozilla_i18n.c:32
-# ui/preferences.glade.h:84
-#: data/glade/prefs-dialog.glade.h:33
-#: embed/mozilla/mozilla-embed-single.cpp:94 src/prefs-dialog.c:107
-msgid "Hebrew"
-msgstr "Hebreeuws"
-
-# src/mozilla_i18n.c:34
-# ui/preferences.glade.h:98
-#: data/glade/prefs-dialog.glade.h:34
-#: embed/mozilla/mozilla-embed-single.cpp:96 src/prefs-dialog.c:113
-msgid "Japanese"
-msgstr "Japans"
-
-# src/mozilla_i18n.c:35
-# ui/preferences.glade.h:101
-#: data/glade/prefs-dialog.glade.h:35
-#: embed/mozilla/mozilla-embed-single.cpp:97 src/prefs-dialog.c:114
-msgid "Korean"
-msgstr "Koreaans"
-
 # src/prefs.c:397
 # ui/preferences.glade.h:103
-#: data/glade/prefs-dialog.glade.h:36
+#: data/glade/prefs-dialog.glade.h:26
 msgid "Lan_guage:"
 msgstr "_Taal:"
 
 # src/prefs.c:397
 # ui/preferences.glade.h:103
-#: data/glade/prefs-dialog.glade.h:37
+#: data/glade/prefs-dialog.glade.h:27
 msgid "Language Editor"
 msgstr "Talen bewerken"
 
 # src/prefs.c:397
 # ui/preferences.glade.h:103
-#: data/glade/prefs-dialog.glade.h:38
+#: data/glade/prefs-dialog.glade.h:28
 msgid "Language:"
 msgstr "Taal:"
 
 # ui/preferences.glade.h:112
-#: data/glade/prefs-dialog.glade.h:39
+#: data/glade/prefs-dialog.glade.h:29
 msgid "Memor_y cache:"
 msgstr "_Geheugenbuffer:"
 
-#: data/glade/prefs-dialog.glade.h:40
+#: data/glade/prefs-dialog.glade.h:30
 msgid "Min_imum font size:"
 msgstr "Minimum letter_grootte:"
 
-# ui/preferences.glade.h:122
-#: data/glade/prefs-dialog.glade.h:41
-msgid "Off"
-msgstr "Uit"
-
 # ui/preferences.glade.h:125
-#: data/glade/prefs-dialog.glade.h:42
+#: data/glade/prefs-dialog.glade.h:31
 msgid "Once per _session"
 msgstr "Eens per _sessie"
 
 # ui/preferences.glade.h:19
-#: data/glade/prefs-dialog.glade.h:43
+#: data/glade/prefs-dialog.glade.h:32
 msgid "Open in _tabs by default"
 msgstr "Standaard in _tabbladen openen"
 
 # ui/preferences.glade.h:142
-#: data/glade/prefs-dialog.glade.h:44
+#: data/glade/prefs-dialog.glade.h:33
 msgid "Preferences"
 msgstr "Voorkeuren"
 
-# ui/preferences.glade.h:150
-#: data/glade/prefs-dialog.glade.h:45 src/prefs-dialog.c:126
-msgid "Russian"
-msgstr "Russisch"
-
 # ui/preferences.glade.h:152
-#: data/glade/prefs-dialog.glade.h:46
+#: data/glade/prefs-dialog.glade.h:34
 msgid "S_ans serif:"
 msgstr "S_ans Serif:"
 
 # ui/preferences.glade.h:153
-#: data/glade/prefs-dialog.glade.h:47
+#: data/glade/prefs-dialog.glade.h:35
 msgid "Sans Serif"
 msgstr "Sans Serif"
 
-#: data/glade/prefs-dialog.glade.h:48
+#: data/glade/prefs-dialog.glade.h:36
 msgid "Security"
 msgstr "Beveiliging"
 
 # ui/preferences.glade.h:159
-#: data/glade/prefs-dialog.glade.h:49
+#: data/glade/prefs-dialog.glade.h:37
 msgid "Serif"
 msgstr "Serif"
 
 # ui/preferences.glade.h:161
-#: data/glade/prefs-dialog.glade.h:50
+#: data/glade/prefs-dialog.glade.h:38
 msgid "Set to Current _Page"
 msgstr "Instellen op _huidige pagina"
 
 # ui/preferences.glade.h:161
-#: data/glade/prefs-dialog.glade.h:51
+#: data/glade/prefs-dialog.glade.h:39
 msgid "Set to _Blank Page"
 msgstr "_Blanco pagina gebruiken"
 
 # ui/epiphany.glade.h:110
-#: data/glade/prefs-dialog.glade.h:52
+#: data/glade/prefs-dialog.glade.h:40
 msgid "Si_ze:"
 msgstr "_Grootte:"
 
-# ui/preferences.glade.h:178
-#: data/glade/prefs-dialog.glade.h:53
-msgid "Simplified Chinese"
-msgstr "Vereenvoudigd Chinees"
-
 # ui/epiphany.glade.h:110
-#: data/glade/prefs-dialog.glade.h:54
+#: data/glade/prefs-dialog.glade.h:41
 msgid "Siz_e:"
 msgstr "_Grootte:"
 
-# ui/preferences.glade.h:192
-#: data/glade/prefs-dialog.glade.h:55
-msgid "Thai"
-msgstr "Thais"
-
-# ui/preferences.glade.h:196
-#: data/glade/prefs-dialog.glade.h:56
-msgid "Traditional Chinese"
-msgstr "Traditioneel Chinees"
-
-# src/mozilla_i18n.c:36
-# ui/preferences.glade.h:197
-#: data/glade/prefs-dialog.glade.h:57
-#: embed/mozilla/mozilla-embed-single.cpp:98 src/prefs-dialog.c:134
-msgid "Turkish"
-msgstr "Turks"
-
-# ui/preferences.glade.h:200
-#: data/glade/prefs-dialog.glade.h:58 src/prefs-dialog.c:135
-msgid "Ukrainian"
-msgstr "Ukrainisch"
-
-# src/mozilla_i18n.c:37
-# ui/preferences.glade.h:202
-#: data/glade/prefs-dialog.glade.h:59
-#: embed/mozilla/mozilla-embed-single.cpp:99
-msgid "Unicode"
-msgstr "Unicode"
-
-# src/mozilla_i18n.c:39
-# ui/preferences.glade.h:212
-#: data/glade/prefs-dialog.glade.h:60
-#: embed/mozilla/mozilla-embed-single.cpp:101
-msgid "Western"
-msgstr "Westers"
-
-#: data/glade/prefs-dialog.glade.h:61
+#: data/glade/prefs-dialog.glade.h:42
 #: src/bookmarks/ephy-bookmark-properties.c:378
 msgid "_Address:"
 msgstr "_Adres:"
 
-#: data/glade/prefs-dialog.glade.h:62
+#: data/glade/prefs-dialog.glade.h:43
 msgid "_Always accept"
 msgstr "_Altijd accepteren"
 
 # ui/preferences.glade.h:29
-#: data/glade/prefs-dialog.glade.h:63
+#: data/glade/prefs-dialog.glade.h:44
 msgid "_Automatically"
 msgstr "_Automagisch"
 
 # ui/preferences.glade.h:248
-#: data/glade/prefs-dialog.glade.h:64
+#: data/glade/prefs-dialog.glade.h:45
 msgid "_Default encoding:"
 msgstr "_Standaardcodering:"
 
 # ui/preferences.glade.h:248
-#: data/glade/prefs-dialog.glade.h:65
+#: data/glade/prefs-dialog.glade.h:46
 msgid "_Language encoding:"
 msgstr "_Taalcodering:"
 
 # ui/preferences.glade.h:253
-#: data/glade/prefs-dialog.glade.h:66
+#: data/glade/prefs-dialog.glade.h:47
 msgid "_Monospace:"
 msgstr "_Gelijke breedte:"
 
-#: data/glade/prefs-dialog.glade.h:67
+#: data/glade/prefs-dialog.glade.h:48
 msgid "_More..."
 msgstr "_Meer..."
 
 # ui/preferences.glade.h:118
-#: data/glade/prefs-dialog.glade.h:68
+#: data/glade/prefs-dialog.glade.h:49
 msgid "_Never"
 msgstr "_Nooit"
 
 # ui/preferences.glade.h:118
-#: data/glade/prefs-dialog.glade.h:69
+#: data/glade/prefs-dialog.glade.h:50
 msgid "_Never accept"
 msgstr "_Nooit accepteren"
 
 # ui/preferences.glade.h:144
-#: data/glade/prefs-dialog.glade.h:70
+#: data/glade/prefs-dialog.glade.h:51
 msgid "_Proportional:"
 msgstr "_Proportioneel:"
 
 # ui/preferences.glade.h:268
-#: data/glade/prefs-dialog.glade.h:71
+#: data/glade/prefs-dialog.glade.h:52
 msgid "_Serif:"
 msgstr "_Serif:"
 
 # ui/preferences.glade.h:292
-#: data/glade/prefs-dialog.glade.h:72
+#: data/glade/prefs-dialog.glade.h:53
 msgid "kB"
 msgstr "kB"
 
@@ -1352,6 +1288,7 @@ msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
 #  Minutes, Seconds
+#. Minutes, Seconds
 #: embed/downloader-view.c:219
 #, c-format
 msgid "%02u.%02u"
@@ -1382,7 +1319,7 @@ msgstr "%d KB"
 # src/prefs_callbacks.c:237
 # src/prefs_callbacks.c:407
 #: embed/downloader-view.c:517 embed/downloader-view.c:535
-#: src/ephy-window.c:1020
+#: src/ephy-window.c:1018
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -1415,11 +1352,11 @@ msgid "Cancel all pending downloads?"
 msgstr "Alle wachtende downloads stoppen?"
 
 # src/downloader.c:86
-#: embed/ephy-embed-utils.c:137 embed/mozilla/ContentHandler.cpp:300
+#: embed/ephy-embed-utils.c:138 embed/mozilla/ContentHandler.cpp:300
 msgid "Select the destination filename"
 msgstr "Kies doel betsandsnaam"
 
-#: embed/ephy-embed-utils.c:316
+#: embed/ephy-embed-utils.c:282
 msgid "No available applications to open the specified file."
 msgstr "Geen toepassingen beschikbaar om te openen."
 
@@ -1477,455 +1414,530 @@ msgstr "Er is een bestand geselecteerd terwijl een map verwacht werd."
 msgid "A folder was selected when a file was expected."
 msgstr "Er is een map geselecteerd terwijl een bestand verwacht werd."
 
+# src/mozilla_i18n.c:26
+# ui/preferences.glade.h:20
+#: embed/mozilla/mozilla-embed-single.cpp:74 src/prefs-dialog.c:87
+msgid "Arabic"
+msgstr "Arabisch"
+
+# src/mozilla_i18n.c:27
+# ui/preferences.glade.h:32
+#: embed/mozilla/mozilla-embed-single.cpp:75
+msgid "Baltic"
+msgstr "Baltisch"
+
+# src/mozilla_i18n.c:28
+# ui/preferences.glade.h:41
+#: embed/mozilla/mozilla-embed-single.cpp:76
+msgid "Central European"
+msgstr "Centraal Europees"
+
+# src/mozilla_i18n.c:29
+# ui/preferences.glade.h:43
+#: embed/mozilla/mozilla-embed-single.cpp:77 src/prefs-dialog.c:94
+#: src/prefs-dialog.c:151
+msgid "Chinese"
+msgstr "Chinees"
+
+# src/mozilla_i18n.c:30
+# ui/preferences.glade.h:53
+#: embed/mozilla/mozilla-embed-single.cpp:78
+msgid "Cyrillic"
+msgstr "Cyrillisch"
+
+# src/mozilla_i18n.c:31
+# ui/preferences.glade.h:81
+#: embed/mozilla/mozilla-embed-single.cpp:79 src/prefs-dialog.c:107
+msgid "Greek"
+msgstr "Grieks"
+
+# src/mozilla_i18n.c:32
+# ui/preferences.glade.h:84
+#: embed/mozilla/mozilla-embed-single.cpp:80 src/prefs-dialog.c:108
+msgid "Hebrew"
+msgstr "Hebreeuws"
+
 # src/mozilla_i18n.c:33
-#: embed/mozilla/mozilla-embed-single.cpp:95
+#: embed/mozilla/mozilla-embed-single.cpp:81
 msgid "Indian"
 msgstr "Indiaas"
 
+# src/mozilla_i18n.c:34
+# ui/preferences.glade.h:98
+#: embed/mozilla/mozilla-embed-single.cpp:82 src/prefs-dialog.c:114
+#: src/prefs-dialog.c:153
+msgid "Japanese"
+msgstr "Japans"
+
+# src/mozilla_i18n.c:35
+# ui/preferences.glade.h:101
+#: embed/mozilla/mozilla-embed-single.cpp:83 src/prefs-dialog.c:115
+#: src/prefs-dialog.c:154
+msgid "Korean"
+msgstr "Koreaans"
+
+# src/mozilla_i18n.c:36
+# ui/preferences.glade.h:197
+#: embed/mozilla/mozilla-embed-single.cpp:84 src/prefs-dialog.c:135
+msgid "Turkish"
+msgstr "Turks"
+
+# src/mozilla_i18n.c:37
+# ui/preferences.glade.h:202
+#: embed/mozilla/mozilla-embed-single.cpp:85
+msgid "Unicode"
+msgstr "Unicode"
+
 # src/mozilla_i18n.c:38
-#: embed/mozilla/mozilla-embed-single.cpp:100
+#: embed/mozilla/mozilla-embed-single.cpp:86
 msgid "Vietnamese"
 msgstr "Vietnamees"
 
+# src/mozilla_i18n.c:39
+# ui/preferences.glade.h:212
+#: embed/mozilla/mozilla-embed-single.cpp:87
+msgid "Western"
+msgstr "Westers"
+
 # src/history.c:860
 # src/mozilla_i18n.c:40
-#: embed/mozilla/mozilla-embed-single.cpp:102
+#: embed/mozilla/mozilla-embed-single.cpp:88
 msgid "Other"
 msgstr "Anders"
 
 # src/mozilla_i18n.c:44
-#: embed/mozilla/mozilla-embed-single.cpp:116
+#: embed/mozilla/mozilla-embed-single.cpp:106
 msgid "Arabic (IBM-864)"
 msgstr "Arabisch (IBM-864)"
 
 # src/mozilla_i18n.c:45
-#: embed/mozilla/mozilla-embed-single.cpp:117
+#: embed/mozilla/mozilla-embed-single.cpp:107
 msgid "Arabic (IBM-864-I)"
 msgstr "Arabisch (IBM-864-I)"
 
 # src/mozilla_i18n.c:46
-#: embed/mozilla/mozilla-embed-single.cpp:118
+#: embed/mozilla/mozilla-embed-single.cpp:108
 msgid "Arabic (ISO-8859-6)"
 msgstr "Arabisch (ISO-8859-6)"
 
 # src/mozilla_i18n.c:47
-#: embed/mozilla/mozilla-embed-single.cpp:119
+#: embed/mozilla/mozilla-embed-single.cpp:109
 msgid "Arabic (ISO-8859-6-E)"
 msgstr "Arabisch (ISO-8859-6-E)"
 
 # src/mozilla_i18n.c:48
-#: embed/mozilla/mozilla-embed-single.cpp:120
+#: embed/mozilla/mozilla-embed-single.cpp:110
 msgid "Arabic (ISO-8859-6-I)"
 msgstr "Arabisch (ISO-8859-6-I)"
 
 # src/mozilla_i18n.c:49
-#: embed/mozilla/mozilla-embed-single.cpp:121
+#: embed/mozilla/mozilla-embed-single.cpp:111
 msgid "Arabic (MacArabic)"
 msgstr "Arabisch (MacArabic)"
 
 # src/mozilla_i18n.c:50
-#: embed/mozilla/mozilla-embed-single.cpp:122
+#: embed/mozilla/mozilla-embed-single.cpp:112
 msgid "Arabic (Windows-1256)"
 msgstr "Arabisch (Windows-1256)"
 
 # src/mozilla_i18n.c:51
 # ui/preferences.glade.h:22
-#: embed/mozilla/mozilla-embed-single.cpp:123
+#: embed/mozilla/mozilla-embed-single.cpp:113
 msgid "Armenian (ARMSCII-8)"
 msgstr "Armeniaans (ARMSCII-8)"
 
 # src/mozilla_i18n.c:52
-#: embed/mozilla/mozilla-embed-single.cpp:124
+#: embed/mozilla/mozilla-embed-single.cpp:114
 msgid "Baltic (ISO-8859-13)"
 msgstr "Baltisch (ISO-8859-13)"
 
 # src/mozilla_i18n.c:53
-#: embed/mozilla/mozilla-embed-single.cpp:125
+#: embed/mozilla/mozilla-embed-single.cpp:115
 msgid "Baltic (ISO-8859-4)"
 msgstr "Baltisch (ISO-8859-4)"
 
 # src/mozilla_i18n.c:54
-#: embed/mozilla/mozilla-embed-single.cpp:126
+#: embed/mozilla/mozilla-embed-single.cpp:116
 msgid "Baltic (Windows-1257)"
 msgstr "Baltisch (Windows-1257)"
 
 # src/mozilla_i18n.c:55
-#: embed/mozilla/mozilla-embed-single.cpp:127
+#: embed/mozilla/mozilla-embed-single.cpp:117
 msgid "Celtic (ISO-8859-14)"
 msgstr "Celtisch (ISO-8859-14)"
 
 # src/mozilla_i18n.c:56
-#: embed/mozilla/mozilla-embed-single.cpp:128
+#: embed/mozilla/mozilla-embed-single.cpp:118
 msgid "Central European (IBM-852)"
 msgstr "Centraal Europees (IBM-852)"
 
 # src/mozilla_i18n.c:57
-#: embed/mozilla/mozilla-embed-single.cpp:129
+#: embed/mozilla/mozilla-embed-single.cpp:119
 msgid "Central European (ISO-8859-2)"
 msgstr "Centraal Europees (ISO-8859-2)"
 
 # src/mozilla_i18n.c:58
-#: embed/mozilla/mozilla-embed-single.cpp:130
+#: embed/mozilla/mozilla-embed-single.cpp:120
 msgid "Central European (MacCE)"
 msgstr "Centraal Europees (MacCE)"
 
 # src/mozilla_i18n.c:59
-#: embed/mozilla/mozilla-embed-single.cpp:131
+#: embed/mozilla/mozilla-embed-single.cpp:121
 msgid "Central European (Windows-1250)"
 msgstr "Centraal Europees  (Windows-1250)"
 
 # src/mozilla_i18n.c:60
-#: embed/mozilla/mozilla-embed-single.cpp:132
+#: embed/mozilla/mozilla-embed-single.cpp:122
 msgid "Chinese Simplified (GB18030)"
 msgstr "Vereenvoudigd Chinees (GB18030)"
 
 # src/mozilla_i18n.c:61
-#: embed/mozilla/mozilla-embed-single.cpp:133
+#: embed/mozilla/mozilla-embed-single.cpp:123
 msgid "Chinese Simplified (GB2312)"
 msgstr "Vereenvoudigd Chinees (GB2312)"
 
 # src/mozilla_i18n.c:62
-#: embed/mozilla/mozilla-embed-single.cpp:134
+#: embed/mozilla/mozilla-embed-single.cpp:124
 msgid "Chinese Simplified (GBK)"
 msgstr "Vereenvoudigd Chinees (GBK)"
 
 # src/mozilla_i18n.c:63
-#: embed/mozilla/mozilla-embed-single.cpp:135
+#: embed/mozilla/mozilla-embed-single.cpp:125
 msgid "Chinese Simplified (HZ)"
 msgstr "Vereenvoudigd Chinees (HZ)"
 
 # src/mozilla_i18n.c:61
-#: embed/mozilla/mozilla-embed-single.cpp:136
+#: embed/mozilla/mozilla-embed-single.cpp:126
 msgid "Chinese Simplified (ISO-2022-CN)"
 msgstr "Vereenvoudigd Chinees (ISO-2022-CN)"
 
 # src/mozilla_i18n.c:64
-#: embed/mozilla/mozilla-embed-single.cpp:137
+#: embed/mozilla/mozilla-embed-single.cpp:127
 msgid "Chinese Simplified (Windows-936)"
 msgstr "Vereenvoudigd Chinees (Windows-936)"
 
 # src/mozilla_i18n.c:65
-#: embed/mozilla/mozilla-embed-single.cpp:138
+#: embed/mozilla/mozilla-embed-single.cpp:128
 msgid "Chinese Traditional (Big5)"
 msgstr "Traditioneel Chinees (Big5)"
 
 # src/mozilla_i18n.c:66
-#: embed/mozilla/mozilla-embed-single.cpp:139
+#: embed/mozilla/mozilla-embed-single.cpp:129
 msgid "Chinese Traditional (Big5-HKSCS)"
 msgstr "Traditioneel Chinees (Big5-HKSCS)"
 
 # src/mozilla_i18n.c:67
-#: embed/mozilla/mozilla-embed-single.cpp:140
+#: embed/mozilla/mozilla-embed-single.cpp:130
 msgid "Chinese Traditional (EUC-TW)"
 msgstr "Traditioneel Chinees (EUC-TW)"
 
 # src/mozilla_i18n.c:68
-#: embed/mozilla/mozilla-embed-single.cpp:141
+#: embed/mozilla/mozilla-embed-single.cpp:131
 msgid "Croatian (MacCroatian)"
 msgstr "Kroatisch (MacCroatian)"
 
 # src/mozilla_i18n.c:69
-#: embed/mozilla/mozilla-embed-single.cpp:142
+#: embed/mozilla/mozilla-embed-single.cpp:132
 msgid "Cyrillic (IBM-855)"
 msgstr "Cyrillisch (IBM-855)"
 
 # src/mozilla_i18n.c:70
-#: embed/mozilla/mozilla-embed-single.cpp:143
+#: embed/mozilla/mozilla-embed-single.cpp:133
 msgid "Cyrillic (ISO-8859-5)"
 msgstr "Cyrillisch (ISO-8859-5)"
 
 # src/mozilla_i18n.c:71
-#: embed/mozilla/mozilla-embed-single.cpp:144
+#: embed/mozilla/mozilla-embed-single.cpp:134
 msgid "Cyrillic (ISO-IR-111)"
 msgstr "Cyrillisch (ISO-IR-111)"
 
 # src/mozilla_i18n.c:72
-#: embed/mozilla/mozilla-embed-single.cpp:145
+#: embed/mozilla/mozilla-embed-single.cpp:135
 msgid "Cyrillic (KOI8-R)"
 msgstr "Cyrillisch (KOI8-R)"
 
 # src/mozilla_i18n.c:73
-#: embed/mozilla/mozilla-embed-single.cpp:146
+#: embed/mozilla/mozilla-embed-single.cpp:136
 msgid "Cyrillic (MacCyrillic)"
 msgstr "Cyrillisch (MacCyrillic)"
 
 # src/mozilla_i18n.c:74
-#: embed/mozilla/mozilla-embed-single.cpp:147
+#: embed/mozilla/mozilla-embed-single.cpp:137
 msgid "Cyrillic (Windows-1251)"
 msgstr "Cyrillisch (Windows-1251)"
 
 # src/mozilla_i18n.c:75
-#: embed/mozilla/mozilla-embed-single.cpp:148
+#: embed/mozilla/mozilla-embed-single.cpp:138
 msgid "Cyrillic/Russian (CP-866)"
 msgstr "Cyrillisch/Russisch (CP-866)"
 
 # src/mozilla_i18n.c:76
-#: embed/mozilla/mozilla-embed-single.cpp:149
+#: embed/mozilla/mozilla-embed-single.cpp:139
 msgid "Cyrillic/Ukrainian (KOI8-U)"
 msgstr "Cyrillisch/Oekraïns (KOI8-U)"
 
 # src/mozilla_i18n.c:77
-#: embed/mozilla/mozilla-embed-single.cpp:150
+#: embed/mozilla/mozilla-embed-single.cpp:140
 msgid "Cyrillic/Ukrainian (MacUkrainian)"
 msgstr "Cyrillisch/Oekraïns (MacUkrainian)"
 
 # src/mozilla_i18n.c:78
-#: embed/mozilla/mozilla-embed-single.cpp:151
+#: embed/mozilla/mozilla-embed-single.cpp:141
 msgid "English (US-ASCII)"
 msgstr "Engels (US-ASCII)"
 
 # src/mozilla_i18n.c:79
-#: embed/mozilla/mozilla-embed-single.cpp:152
+#: embed/mozilla/mozilla-embed-single.cpp:142
 msgid "Farsi (MacFarsi)"
 msgstr "Farsi (MacFarsi)"
 
-#: embed/mozilla/mozilla-embed-single.cpp:153
+#: embed/mozilla/mozilla-embed-single.cpp:143
 msgid "Georgian (GEOSTD8)"
 msgstr "Georgisch (GEOSTD8)"
 
 # src/mozilla_i18n.c:80
-#: embed/mozilla/mozilla-embed-single.cpp:154
+#: embed/mozilla/mozilla-embed-single.cpp:144
 msgid "Greek (ISO-8859-7)"
 msgstr "Grieks (ISO-8859-7)"
 
 # src/mozilla_i18n.c:81
-#: embed/mozilla/mozilla-embed-single.cpp:155
+#: embed/mozilla/mozilla-embed-single.cpp:145
 msgid "Greek (MacGreek)"
 msgstr "Grieks (MacGreek)"
 
 # src/mozilla_i18n.c:82
-#: embed/mozilla/mozilla-embed-single.cpp:156
+#: embed/mozilla/mozilla-embed-single.cpp:146
 msgid "Greek (Windows-1253)"
 msgstr "Grieks (Windows-1253)"
 
 # src/mozilla_i18n.c:83
-#: embed/mozilla/mozilla-embed-single.cpp:157
+#: embed/mozilla/mozilla-embed-single.cpp:147
 msgid "Gujarati (MacGujarati)"
 msgstr "Gujarati (MacGujarati)"
 
 # src/mozilla_i18n.c:84
-#: embed/mozilla/mozilla-embed-single.cpp:158
+#: embed/mozilla/mozilla-embed-single.cpp:148
 msgid "Gurmukhi (MacGurmukhi)"
 msgstr "Gurmukhi (MacGurmukhi)"
 
 # src/mozilla_i18n.c:85
-#: embed/mozilla/mozilla-embed-single.cpp:159
+#: embed/mozilla/mozilla-embed-single.cpp:149
 msgid "Hebrew (IBM-862)"
 msgstr "Hebreeuws (IBM-862)"
 
 # src/mozilla_i18n.c:86
-#: embed/mozilla/mozilla-embed-single.cpp:160
+#: embed/mozilla/mozilla-embed-single.cpp:150
 msgid "Hebrew (ISO-8859-8-E)"
 msgstr "Hebreeuws (ISO-8859-8-E)"
 
 # src/mozilla_i18n.c:87
-#: embed/mozilla/mozilla-embed-single.cpp:161
+#: embed/mozilla/mozilla-embed-single.cpp:151
 msgid "Hebrew (ISO-8859-8-I)"
 msgstr "Hebreeuws (ISO-8859-8-I)"
 
 # src/mozilla_i18n.c:88
-#: embed/mozilla/mozilla-embed-single.cpp:162
+#: embed/mozilla/mozilla-embed-single.cpp:152
 msgid "Hebrew (MacHebrew)"
 msgstr "Hebreeuws (MacHebrew)"
 
 # src/mozilla_i18n.c:89
-#: embed/mozilla/mozilla-embed-single.cpp:163
+#: embed/mozilla/mozilla-embed-single.cpp:153
 msgid "Hebrew (Windows-1255)"
 msgstr "Hebreeuws (Windows-1255)"
 
 # src/mozilla_i18n.c:90
-#: embed/mozilla/mozilla-embed-single.cpp:164
+#: embed/mozilla/mozilla-embed-single.cpp:154
 msgid "Hindi (MacDevanagari)"
 msgstr "Hindi (MacDevanagari)"
 
 # src/mozilla_i18n.c:91
-#: embed/mozilla/mozilla-embed-single.cpp:165
+#: embed/mozilla/mozilla-embed-single.cpp:155
 msgid "Icelandic (MacIcelandic)"
 msgstr "IJslands"
 
 # src/mozilla_i18n.c:92
-#: embed/mozilla/mozilla-embed-single.cpp:166
+#: embed/mozilla/mozilla-embed-single.cpp:156
 msgid "Japanese (EUC-JP)"
 msgstr "Japans (EUC-JP)"
 
 # src/mozilla_i18n.c:93
-#: embed/mozilla/mozilla-embed-single.cpp:167
+#: embed/mozilla/mozilla-embed-single.cpp:157
 msgid "Japanese (ISO-2022-JP)"
 msgstr "Japans (ISO-2022-JP)"
 
 # src/mozilla_i18n.c:94
-#: embed/mozilla/mozilla-embed-single.cpp:168
+#: embed/mozilla/mozilla-embed-single.cpp:158
 msgid "Japanese (Shift_JIS)"
 msgstr "Japans (Shift_JIS)"
 
 # src/mozilla_i18n.c:95
-#: embed/mozilla/mozilla-embed-single.cpp:169
+#: embed/mozilla/mozilla-embed-single.cpp:159
 msgid "Korean (EUC-KR)"
 msgstr "Koreaans (EUC-KR)"
 
 # src/mozilla_i18n.c:96
-#: embed/mozilla/mozilla-embed-single.cpp:170
+#: embed/mozilla/mozilla-embed-single.cpp:160
 msgid "Korean (ISO-2022-KR)"
 msgstr "Koreaans (ISO-2022-KR)"
 
 # src/mozilla_i18n.c:97
-#: embed/mozilla/mozilla-embed-single.cpp:171
+#: embed/mozilla/mozilla-embed-single.cpp:161
 msgid "Korean (JOHAB)"
 msgstr "Koreaans (JOHAB)"
 
 # src/mozilla_i18n.c:98
-#: embed/mozilla/mozilla-embed-single.cpp:172
+#: embed/mozilla/mozilla-embed-single.cpp:162
 msgid "Korean (UHC)"
 msgstr "Koreaans (UHC)"
 
 # src/mozilla_i18n.c:99
-#: embed/mozilla/mozilla-embed-single.cpp:173
+#: embed/mozilla/mozilla-embed-single.cpp:163
 msgid "Nordic (ISO-8859-10)"
 msgstr "Noors (ISO-8859-10)"
 
 # src/mozilla_i18n.c:100
-#: embed/mozilla/mozilla-embed-single.cpp:174
+#: embed/mozilla/mozilla-embed-single.cpp:164
 msgid "Romanian (MacRomanian)"
 msgstr "Romaans (MacRomanian)"
 
 # src/mozilla_i18n.c:101
-#: embed/mozilla/mozilla-embed-single.cpp:175
+#: embed/mozilla/mozilla-embed-single.cpp:165
 msgid "Romanian (ISO-8859-16)"
 msgstr "Roemeens (ISO-8859-16)"
 
 # src/mozilla_i18n.c:102
-#: embed/mozilla/mozilla-embed-single.cpp:176
+#: embed/mozilla/mozilla-embed-single.cpp:166
 msgid "South European (ISO-8859-3)"
 msgstr "Zuid Europees (ISO-8859-3)"
 
 # src/mozilla_i18n.c:103
-#: embed/mozilla/mozilla-embed-single.cpp:177
+#: embed/mozilla/mozilla-embed-single.cpp:167
 msgid "Thai (TIS-620)"
 msgstr "Thais (TIS-620)"
 
 # src/mozilla_i18n.c:104
-#: embed/mozilla/mozilla-embed-single.cpp:178
+#: embed/mozilla/mozilla-embed-single.cpp:168
 msgid "Turkish (IBM-857)"
 msgstr "Turks (IBM-857)"
 
 # src/mozilla_i18n.c:105
-#: embed/mozilla/mozilla-embed-single.cpp:179
+#: embed/mozilla/mozilla-embed-single.cpp:169
 msgid "Turkish (ISO-8859-9)"
 msgstr "Turks (ISO-8859-9)"
 
 # src/mozilla_i18n.c:106
-#: embed/mozilla/mozilla-embed-single.cpp:180
+#: embed/mozilla/mozilla-embed-single.cpp:170
 msgid "Turkish (MacTurkish)"
 msgstr "Turks (MacTurkish)"
 
 # src/mozilla_i18n.c:107
-#: embed/mozilla/mozilla-embed-single.cpp:181
+#: embed/mozilla/mozilla-embed-single.cpp:171
 msgid "Turkish (Windows-1254)"
 msgstr "Turks (Windows-1254)"
 
 # src/mozilla_i18n.c:108
-#: embed/mozilla/mozilla-embed-single.cpp:182
+#: embed/mozilla/mozilla-embed-single.cpp:172
 msgid "Unicode (UTF-7)"
 msgstr "Unicode (UTF-7)"
 
 # src/mozilla_i18n.c:109
-#: embed/mozilla/mozilla-embed-single.cpp:183
+#: embed/mozilla/mozilla-embed-single.cpp:173
 msgid "Unicode (UTF-8)"
 msgstr "Unicode (UTF-8)"
 
 # src/mozilla_i18n.c:110
-#: embed/mozilla/mozilla-embed-single.cpp:184
+#: embed/mozilla/mozilla-embed-single.cpp:174
 msgid "Unicode (UTF-16BE)"
 msgstr "Unicode (UTF-16BE)"
 
 # src/mozilla_i18n.c:111
-#: embed/mozilla/mozilla-embed-single.cpp:185
+#: embed/mozilla/mozilla-embed-single.cpp:175
 msgid "Unicode (UTF-16LE)"
 msgstr "Unicode (UTF-16LE)"
 
 # src/mozilla_i18n.c:112
-#: embed/mozilla/mozilla-embed-single.cpp:186
+#: embed/mozilla/mozilla-embed-single.cpp:176
 msgid "Unicode (UTF-32BE)"
 msgstr "Unicode (UTF-32BE)"
 
 # src/mozilla_i18n.c:113
-#: embed/mozilla/mozilla-embed-single.cpp:187
+#: embed/mozilla/mozilla-embed-single.cpp:177
 msgid "Unicode (UTF-32LE)"
 msgstr "Unicode (UTF-32LE)"
 
 # src/mozilla_i18n.c:114
-#: embed/mozilla/mozilla-embed-single.cpp:188
+#: embed/mozilla/mozilla-embed-single.cpp:178
 msgid "User Defined"
 msgstr "Gedefinieerd door Gebruiker"
 
 # src/mozilla_i18n.c:115
-#: embed/mozilla/mozilla-embed-single.cpp:189
+#: embed/mozilla/mozilla-embed-single.cpp:179
 msgid "Vietnamese (TCVN)"
 msgstr "Vietnamees (TCVN)"
 
 # src/mozilla_i18n.c:116
-#: embed/mozilla/mozilla-embed-single.cpp:190
+#: embed/mozilla/mozilla-embed-single.cpp:180
 msgid "Vietnamese (VISCII)"
 msgstr "Vietnamees (VISCII)"
 
 # src/mozilla_i18n.c:117
-#: embed/mozilla/mozilla-embed-single.cpp:191
+#: embed/mozilla/mozilla-embed-single.cpp:181
 msgid "Vietnamese (VPS)"
 msgstr "Vietnamees (VPS)"
 
 # src/mozilla_i18n.c:118
-#: embed/mozilla/mozilla-embed-single.cpp:192
+#: embed/mozilla/mozilla-embed-single.cpp:182
 msgid "Vietnamese (Windows-1258)"
 msgstr "Vietnamees (Windows-1258)"
 
 # src/mozilla_i18n.c:119
-#: embed/mozilla/mozilla-embed-single.cpp:193
+#: embed/mozilla/mozilla-embed-single.cpp:183
 msgid "Visual Hebrew (ISO-8859-8)"
 msgstr "Visueel Hebreeuws (ISO-8859-8)"
 
 # src/mozilla_i18n.c:120
-#: embed/mozilla/mozilla-embed-single.cpp:194
+#: embed/mozilla/mozilla-embed-single.cpp:184
 msgid "Western (IBM-850)"
 msgstr "Westers (IBM-850)"
 
 # src/mozilla_i18n.c:121
-#: embed/mozilla/mozilla-embed-single.cpp:195
+#: embed/mozilla/mozilla-embed-single.cpp:185
 msgid "Western (ISO-8859-1)"
 msgstr "Westers (ISO-8859-1)"
 
 # src/mozilla_i18n.c:122
-#: embed/mozilla/mozilla-embed-single.cpp:196
+#: embed/mozilla/mozilla-embed-single.cpp:186
 msgid "Western (ISO-8859-15)"
 msgstr "Westers (ISO-8859-15)"
 
 # src/mozilla_i18n.c:123
-#: embed/mozilla/mozilla-embed-single.cpp:197
+#: embed/mozilla/mozilla-embed-single.cpp:187
 msgid "Western (MacRoman)"
 msgstr "Westers (MacRoman)"
 
 # src/mozilla_i18n.c:124
-#: embed/mozilla/mozilla-embed-single.cpp:198
+#: embed/mozilla/mozilla-embed-single.cpp:188
 msgid "Western (Windows-1252)"
 msgstr "Westers (Windows-1252)"
 
 # src/mozilla/mozilla.cpp:940
-#: embed/mozilla/mozilla-embed-single.cpp:873
+#: embed/mozilla/mozilla-embed-single.cpp:889
 msgid "Yes"
 msgstr "Ja"
 
 # src/mozilla/mozilla.cpp:942
-#: embed/mozilla/mozilla-embed-single.cpp:875
+#: embed/mozilla/mozilla-embed-single.cpp:891
 msgid "No"
 msgstr "Nee"
 
 # ui/preferences.glade.h:249
-#: embed/mozilla/mozilla-embed-single.cpp:880
+#: embed/mozilla/mozilla-embed-single.cpp:896
 msgid "End of current session"
 msgstr "Einde van huidige sessie"
 
 # src/mozilla_prefs.c:284
 # ui/preferences.glade.h:56
-#: embed/mozilla/mozilla-notifiers.cpp:724
+#: embed/mozilla/mozilla-notifiers.cpp:715
 msgid "Default (recommended)"
 msgstr "Standaard (aanbevolen)"
 
@@ -2586,11 +2598,11 @@ msgstr "Ephy"
 msgid "Ephy already running, using existing process"
 msgstr "Ephy is al gestart, het bestaande proces wordt gebruikt"
 
-#: src/ephy-nautilus-view.c:736
+#: src/ephy-nautilus-view.c:739
 msgid "name of icon for the mozilla view"
 msgstr "pictogramnaam voor de mozilla weergave"
 
-#: src/ephy-nautilus-view.c:739
+#: src/ephy-nautilus-view.c:742
 msgid "mozilla summary info"
 msgstr "mozilla overzicht info"
 
@@ -3172,31 +3184,31 @@ msgstr "Opslaan als"
 msgid "Bookmark"
 msgstr "Bladwijzer"
 
-#: src/ephy-window.c:1023
+#: src/ephy-window.c:1021
 msgid "Insecure"
 msgstr "Onveilig"
 
 # src/mozilla/mozilla.cpp:996
 # src/persistent_data_manager.c:374
 # src/persistent_data_manager.c:609
-#: src/ephy-window.c:1026
+#: src/ephy-window.c:1024
 msgid "Broken"
 msgstr "Gebroken"
 
-#: src/ephy-window.c:1029
+#: src/ephy-window.c:1027
 msgid "Medium"
 msgstr "Gemiddeld"
 
-#: src/ephy-window.c:1033
+#: src/ephy-window.c:1031
 msgid "Low"
 msgstr "Laag"
 
 # src/mozilla/mozilla.cpp:1982
-#: src/ephy-window.c:1037
+#: src/ephy-window.c:1035
 msgid "High"
 msgstr "Hoog"
 
-#: src/ephy-window.c:1047
+#: src/ephy-window.c:1045
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3205,7 +3217,7 @@ msgstr ""
 "Beveiligingsniveau: %s\n"
 "%s"
 
-#: src/ephy-window.c:1053
+#: src/ephy-window.c:1051
 #, c-format
 msgid "Security level: %s"
 msgstr "Beveiligingsniveau: %s"
@@ -3288,209 +3300,219 @@ msgstr "Afdrukvoorbeeld sluiten"
 
 # src/prefs.c:397
 # ui/preferences.glade.h:103
-#: src/prefs-dialog.c:83
+#: src/prefs-dialog.c:84
 msgid "System language"
 msgstr "Systeemtaal"
 
-#: src/prefs-dialog.c:84
+#: src/prefs-dialog.c:85
 msgid "Afrikaans"
 msgstr "Afrikaans"
 
 # ui/bookmarks.glade.h:2
-#: src/prefs-dialog.c:85
+#: src/prefs-dialog.c:86
 msgid "Albanian"
 msgstr "Albanees"
 
-#: src/prefs-dialog.c:87
+#: src/prefs-dialog.c:88
 msgid "Azerbaijani"
 msgstr "Azerbeidjaans"
 
-#: src/prefs-dialog.c:88
+#: src/prefs-dialog.c:89
 msgid "Basque"
 msgstr "Baskisch"
 
 # src/mozilla/mozilla.cpp:996
 # src/persistent_data_manager.c:374
 # src/persistent_data_manager.c:609
-#: src/prefs-dialog.c:89
+#: src/prefs-dialog.c:90
 msgid "Breton"
 msgstr "Bretons"
 
-#: src/prefs-dialog.c:90
+#: src/prefs-dialog.c:91
 msgid "Bulgarian"
 msgstr "Bulgaars"
 
 # ui/preferences.glade.h:150
-#: src/prefs-dialog.c:91
+#: src/prefs-dialog.c:92
 msgid "Byelorussian"
 msgstr "Byelorussisch"
 
-#: src/prefs-dialog.c:92
+#: src/prefs-dialog.c:93
 msgid "Catalan"
 msgstr "Catalaans"
 
 # ui/epiphany.glade.h:85
-#: src/prefs-dialog.c:94
+#: src/prefs-dialog.c:95
 msgid "Croatian"
 msgstr "Kroatisch"
 
-#: src/prefs-dialog.c:95
+#: src/prefs-dialog.c:96
 msgid "Czech"
 msgstr "Tsjechisch"
 
-#: src/prefs-dialog.c:96
+#: src/prefs-dialog.c:97
 msgid "Danish"
 msgstr "Deens"
 
-#: src/prefs-dialog.c:97
+#: src/prefs-dialog.c:98
 msgid "Dutch"
 msgstr "Nederlands"
 
-#: src/prefs-dialog.c:98
+#: src/prefs-dialog.c:99
 msgid "English"
 msgstr "Engels"
 
 # ui/epiphany.glade.h:126
 # ui/prompts.glade.h:3
-#: src/prefs-dialog.c:99
+#: src/prefs-dialog.c:100
 msgid "Esperanto"
 msgstr "Esperanto"
 
 # ui/preferences.glade.h:63
-#: src/prefs-dialog.c:100
+#: src/prefs-dialog.c:101
 msgid "Estonian"
 msgstr "Ests"
 
 # src/prefs.c:1082
 # src/prefs_callbacks.c:239
 # src/prefs_callbacks.c:463
-#: src/prefs-dialog.c:101
+#: src/prefs-dialog.c:102
 msgid "Faeroese"
 msgstr "Faroees"
 
-#: src/prefs-dialog.c:102
+#: src/prefs-dialog.c:103
 msgid "Finnish"
 msgstr "Fins"
 
-#: src/prefs-dialog.c:103
+#: src/prefs-dialog.c:104
 msgid "French"
 msgstr "Frans"
 
-#: src/prefs-dialog.c:104
+#: src/prefs-dialog.c:105
 msgid "Galician"
 msgstr "Galiciaans"
 
 # src/prefs.c:363
-#: src/prefs-dialog.c:105
+#: src/prefs-dialog.c:106
 msgid "German"
 msgstr "Duits"
 
-#: src/prefs-dialog.c:108
+#: src/prefs-dialog.c:109
 msgid "Hungarian"
 msgstr "Hongaars"
 
-#: src/prefs-dialog.c:109
+#: src/prefs-dialog.c:110
 msgid "Icelandic"
 msgstr "Ijslands"
 
 # src/mozilla_i18n.c:33
-#: src/prefs-dialog.c:110
+#: src/prefs-dialog.c:111
 msgid "Indonesian"
 msgstr "Indonesisch"
 
 # src/mozilla_i18n.c:36
 # ui/preferences.glade.h:197
-#: src/prefs-dialog.c:111
+#: src/prefs-dialog.c:112
 msgid "Irish"
 msgstr "Iers"
 
 # src/mozilla_i18n.c:33
-#: src/prefs-dialog.c:112
+#: src/prefs-dialog.c:113
 msgid "Italian"
 msgstr "Italiaans"
 
 # ui/epiphany.glade.h:85
-#: src/prefs-dialog.c:115
+#: src/prefs-dialog.c:116
 msgid "Latvian"
 msgstr "Lets"
 
-#: src/prefs-dialog.c:116
+#: src/prefs-dialog.c:117
 msgid "Lithuanian"
 msgstr "Litouws"
 
-#: src/prefs-dialog.c:117
+#: src/prefs-dialog.c:118
 msgid "Macedonian"
 msgstr "Macedonisch"
 
-#: src/prefs-dialog.c:118
+#: src/prefs-dialog.c:119
 msgid "Malay"
 msgstr "Maleis"
 
-#: src/prefs-dialog.c:119
+#: src/prefs-dialog.c:120
 msgid "Norwegian/Nynorsk"
 msgstr "Noors/Nynorsk"
 
-#: src/prefs-dialog.c:120
+#: src/prefs-dialog.c:121
 msgid "Norwegian/Bokmaal"
 msgstr "Noors/Bokmaal"
 
 # src/mozilla_i18n.c:35
 # ui/preferences.glade.h:101
-#: src/prefs-dialog.c:121
+#: src/prefs-dialog.c:122
 msgid "Norwegian"
 msgstr "Noors"
 
-#: src/prefs-dialog.c:122
+#: src/prefs-dialog.c:123
 msgid "Polish"
 msgstr "Pools"
 
 # ui/preferences.glade.h:144
-#: src/prefs-dialog.c:123
+#: src/prefs-dialog.c:124
 msgid "Portuguese"
 msgstr "Portugees"
 
-#: src/prefs-dialog.c:124
+#: src/prefs-dialog.c:125
 msgid "Portuguese of Brazil"
 msgstr "Braziliaans Portugees"
 
 # ui/preferences.glade.h:207
-#: src/prefs-dialog.c:125
+#: src/prefs-dialog.c:126
 msgid "Romanian"
 msgstr "Roemeens"
 
+# ui/preferences.glade.h:150
+#: src/prefs-dialog.c:127 src/prefs-dialog.c:155
+msgid "Russian"
+msgstr "Russisch"
+
 # ui/bookmarks.glade.h:50
-#: src/prefs-dialog.c:127
+#: src/prefs-dialog.c:128
 msgid "Scottish"
 msgstr "Schots"
 
 # ui/preferences.glade.h:159
-#: src/prefs-dialog.c:128
+#: src/prefs-dialog.c:129
 msgid "Serbian"
 msgstr "Servisch"
 
-#: src/prefs-dialog.c:129
+#: src/prefs-dialog.c:130
 msgid "Slovak"
 msgstr "Slowaaks"
 
-#: src/prefs-dialog.c:130
+#: src/prefs-dialog.c:131
 msgid "Slovenian"
 msgstr "Sloveens"
 
-#: src/prefs-dialog.c:131
+#: src/prefs-dialog.c:132
 msgid "Spanish"
 msgstr "Spaans"
 
-#: src/prefs-dialog.c:132
+#: src/prefs-dialog.c:133
 msgid "Swedish"
 msgstr "Zweeds"
 
 # ui/preferences.glade.h:192
-#: src/prefs-dialog.c:133
+#: src/prefs-dialog.c:134
 msgid "Tamil"
 msgstr "Tamil"
 
+# ui/preferences.glade.h:200
+#: src/prefs-dialog.c:136 src/prefs-dialog.c:158
+msgid "Ukrainian"
+msgstr "Ukrainisch"
+
 # src/mozilla_i18n.c:38
-#: src/prefs-dialog.c:136
+#: src/prefs-dialog.c:137
 msgid "Vietnamian"
 msgstr "Vietnamees"
 
@@ -3500,11 +3522,31 @@ msgstr "Vietnamees"
 # src/mozilla/PromptService.cpp:666
 # src/window.c:191
 # ui/epiphany.glade.h:50
-#: src/prefs-dialog.c:137
+#: src/prefs-dialog.c:138
 msgid "Walloon"
 msgstr "Walloons"
 
-#: src/prefs-dialog.c:717
+# ui/preferences.glade.h:122
+#: src/prefs-dialog.c:150
+msgid "Off"
+msgstr "Uit"
+
+# ui/preferences.glade.h:63
+#: src/prefs-dialog.c:152
+msgid "East asian"
+msgstr "Oost-Aziatisch"
+
+# ui/preferences.glade.h:178
+#: src/prefs-dialog.c:156
+msgid "Simplified Chinese"
+msgstr "Vereenvoudigd Chinees"
+
+# ui/preferences.glade.h:196
+#: src/prefs-dialog.c:157
+msgid "Traditional Chinese"
+msgstr "Traditioneel Chinees"
+
+#: src/prefs-dialog.c:895
 #, c-format
 msgid "Custom [%s]"
 msgstr "Aangepast [%s]"
