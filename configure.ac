@@ -142,7 +142,9 @@ if test "x$enable_maintainer_mode" = "xyes"; then
 	AC_LANG_PUSH([C])
 	FLAGS="-Wdeclaration-after-statement"
 	_SAVE_AM_CFLAGS=$AM_CFLAGS
+	_SAVE_CFLAGS=$CFLAGS
 	AM_CFLAGS="$AM_CFLAGS $FLAGS"
+	CFLAGS="$CFLAGS $AM_CFLAGS"
 
 	AC_CACHE_CHECK([for compiler $FLAGS option],
 		ac_cv_have_declaration_after_statement,
@@ -156,6 +158,7 @@ if test "x$enable_maintainer_mode" = "xyes"; then
 		MORE_WARN_FLAGS="$MORE_WARN_FLAGS $FLAGS"
 	fi
 	AM_CFLAGS="$_SAVE_AM_CFLAGS"
+	CFLAGS="$_SAVE_CFLAGS"
 	AC_LANG_POP([C])
 fi
 
