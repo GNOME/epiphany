@@ -16,6 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#include <gtk/gtk.h>
 #include <libxml/tree.h>
 #include <libgnome/gnome-i18n.h>
 #include <string.h>
@@ -303,21 +304,71 @@ attach_content (EphyStartHere *sh, xmlNodePtr node, xmlChar *id)
 	}
 }
 
+static char *
+color_to_string (GdkColor color)
+{
+	return g_strdup_printf ("#%.2x%.2x%.2x",
+			       color.red >> 8,
+			       color.green >> 8,
+			       color.blue >> 8);
+}
+
 static void
 build_content (EphyStartHere *sh, xmlNodePtr node)
 {
 	while (node)
 	{
 		xmlChar *id;
-		xmlNodePtr next;
-
-		next = node->next;
 
 		id = xmlGetProp (node, "id");
 		if (id)
 		{
 			attach_content (sh, node, id);
 			xmlFree (id);
+		}
+
+		if (xmlStrEqual (node->name, "section"))
+		{
+			GtkWidget *widget, *window;
+			GdkColor color;
+			char *str;
+
+			/* create a random widget that we will use to get
+			 * the current style
+			 */
+			window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+			widget = gtk_label_new ("");
+			gtk_container_add (GTK_CONTAINER (window), widget);
+			gtk_widget_realize (window);
+			gtk_widget_realize (widget);
+			gtk_widget_ensure_style (widget);
+
+			color = widget->style->bg[GTK_STATE_NORMAL];
+			str = color_to_string (color);
+			xmlSetProp (node, "bg", str);
+			g_free (str);
+
+			color = widget->style->text[GTK_STATE_SELECTED];
+			str = color_to_string (color);
+			xmlSetProp (node, "title", str);
+			g_free (str);
+
+			color = widget->style->bg[GTK_STATE_ACTIVE];
+			str = color_to_string (color);
+			xmlSetProp (node, "title-bg", str);
+			g_free (str);
+
+			color = widget->style->bg[GTK_STATE_SELECTED];
+			str = color_to_string (color);
+			xmlSetProp (node, "link", str);
+			g_free (str);
+
+			color = widget->style->text[GTK_STATE_NORMAL];
+			str = color_to_string (color);
+			xmlSetProp (node, "text", str);
+			g_free (str);
+
+			gtk_widget_destroy (window);
 		}
 
 		build_content (sh, node->children);

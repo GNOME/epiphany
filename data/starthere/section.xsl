@@ -10,7 +10,45 @@
 <xsl:template match="section">
 <html>
   <head>
-  <link rel="stylesheet" href="section.css" type="text/css"/>
+  <style type="text/css">
+    body {
+	    margin-left: 150;
+	    margin-right: 150;
+	    background: <xsl:value-of select="@bg"/>;
+	    color:      <xsl:value-of select="@text"/>;
+	    font-family: Verdana, Helvetica, Arial, sans-serif; 
+	    font-size: 14px; 
+    }
+
+    div.topbar {
+	    height: 25px; 
+	    padding: 7px; 
+	    color: <xsl:value-of select="@title"/>;
+	    background-color: <xsl:value-of select="@title-bg"/>;
+	    font-weight: bold;
+	    margin-bottom: 50;
+    }
+
+    div.topbar a {
+	    margin-right: 15;
+	    font-size: 20px;
+	    font-weight: bold;
+	    color: <xsl:value-of select="@title"/>;
+    }
+
+    h2 {
+	    color: <xsl:value-of select="@headings"/>;
+	    font-size: 18px;
+    }
+
+    a {
+	    color: <xsl:value-of select="@link"/>
+    }
+
+    a.visited {
+	    color: <xsl:value-of select="@link"/>
+    }
+  </style>
   </head>
   <body>
     <xsl:apply-templates/>
