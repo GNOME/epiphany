@@ -1,8 +1,19 @@
+2004-04-18  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/ephy-embed.c: (ephy_embed_chrome_get_type):
+	* embed/ephy-embed.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-window.c: (ephy_window_set_chrome),
+	(ephy_window_set_property), (ephy_window_class_init):
+
+        Fix chrome for new windows opened from _blank target.
+        Fixes bug #139512.
+
 2004-04-17  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/mozilla/MozDownload.cpp:
 
-	Do not uncompress when the type is not html.
+	Do not uncompress when the type is not html. Fixes bug #131778.
 
 2004-04-17  Marco Pesenti Gritti  <marco@gnome.org>
 
