@@ -1374,6 +1374,9 @@ hide_embed_popup_cb (GtkWidget *popup,
 			EphyWindow *window)
 {
 	enable_edit_actions_sensitivity (window);
+
+	g_signal_handlers_disconnect_by_func
+		(popup, G_CALLBACK (hide_embed_popup_cb), window);
 }
 
 static void

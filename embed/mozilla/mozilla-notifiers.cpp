@@ -98,11 +98,6 @@ mozilla_proxy_mode_notifier (GConfClient *client,
 			     GConfEntry *entry,
 			     EphyEmbedSingle *single);
 static void
-mozilla_proxy_autoconfig_notifier (GConfClient *client,
-			           guint cnxn_id,
-			           GConfEntry *entry,
-			           EphyEmbedSingle *single);
-static void
 mozilla_proxy_mode_notifier (GConfClient *client,
 		             guint cnxn_id,
 		             GConfEntry *entry,
@@ -173,8 +168,6 @@ custom_notifiers [] =
 	  (GConfClientNotifyFunc) mozilla_language_notifier },
 	{ CONF_NETWORK_PROXY_MODE,
 	  (GConfClientNotifyFunc) mozilla_proxy_mode_notifier },
-	{ CONF_NETWORK_PROXY_AUTO_URL,
-	  (GConfClientNotifyFunc) mozilla_proxy_autoconfig_notifier },
 	{ CONF_NETWORK_CACHE_SIZE,
           (GConfClientNotifyFunc) mozilla_cache_size_notifier },
 	{ CONF_SECURITY_COOKIES_ACCEPT,
@@ -346,24 +339,6 @@ mozilla_font_notifier (GConfClient *client,
 		mozilla_prefs_set_string (key, name);
 		g_free (name);
 	}
-}
-
-static void
-mozilla_proxy_autoconfig_notifier (GConfClient *client,
-		       	           guint cnxn_id,
-		       		   GConfEntry *entry,
-		       		   EphyEmbedSingle *single)
-{
-	char *url;
-
-	url = eel_gconf_get_string (entry->key);
-
-	if (url && url[0] != '\0')
-	{
-		ephy_embed_single_load_proxy_autoconf (single, url);
-	}
-
-	g_free (url);
 }
 
 static void
