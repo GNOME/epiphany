@@ -372,7 +372,8 @@ enum
 {
 	PROP_0,
 	PROP_ACTIVE_TAB,
-	PROP_CHROME
+	PROP_CHROME,
+	PROP_PPV_MODE
 };
 
 static GObjectClass *parent_class = NULL;
@@ -2009,6 +2010,9 @@ ephy_window_set_property (GObject *object,
 		case PROP_CHROME:
 			ephy_window_set_chrome (window, g_value_get_flags (value));
 			break;
+		case PROP_PPV_MODE:
+			ephy_window_set_print_preview (window, g_value_get_boolean (value));
+			break;
 	}
 }
 
@@ -2027,6 +2031,9 @@ ephy_window_get_property (GObject *object,
 			break;
 		case PROP_CHROME:
 			g_value_set_flags (value, window->priv->chrome);
+			break;
+		case PROP_PPV_MODE:
+			g_value_set_boolean (value, window->priv->ppv_mode);
 			break;
 	}
 }
@@ -2095,7 +2102,15 @@ ephy_window_class_init (EphyWindowClass *klass)
 							     G_PARAM_CONSTRUCT_ONLY |
 							     G_PARAM_READWRITE));
 
-	g_type_class_add_private (object_class, sizeof(EphyWindowPrivate));
+	g_object_class_install_property (object_class,
+					 PROP_PPV_MODE,
+					 g_param_spec_boolean ("print-preview-mode",
+							       "Print preview mode",
+							       "Whether the window is in print preview mode",
+							       FALSE,
+							       G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof (EphyWindowPrivate));
 }
 
 static void
@@ -2438,6 +2453,8 @@ ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
 		window->priv->ppview_toolbar = NULL;
 		gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 	}
+
+	g_object_notify (G_OBJECT (window), "print-preview-mode");
 }
 
 /**
