@@ -1001,22 +1001,11 @@ void
 ephy_notebook_remove_tab (EphyNotebook *nb,
 			  EphyTab *tab)
 {
-	int num, position, curr;
+	int position, curr;
 	GtkWidget *label, *ebox;
 
 	g_return_if_fail (EPHY_IS_NOTEBOOK (nb));
 	g_return_if_fail (EPHY_IS_TAB (tab));
-
-	num = gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb));
-	if (num <= 1)
-	{
-		GtkWidget *window;
-		window = gtk_widget_get_toplevel (GTK_WIDGET (nb));
-
-		g_signal_emit (G_OBJECT (nb), signals[TAB_REMOVED], 0, tab);
-		gtk_widget_destroy (window);
-		return;
-	}
 
 	/* Remove the page from the focused pages list */
 	nb->priv->focused_pages =  g_list_remove (nb->priv->focused_pages,
@@ -1054,4 +1043,10 @@ ephy_notebook_remove_tab (EphyNotebook *nb,
 	g_signal_emit (G_OBJECT (nb), signals[TAB_REMOVED], 0, tab);
 
 	g_object_unref (tab);
+
+	/* if that was the last tab, destroy the window */
+	if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb)) == 0)
+	{
+		gtk_widget_destroy (gtk_widget_get_toplevel (GTK_WIDGET (nb)));
+	}
 }

@@ -1,3 +1,11 @@
+2004-10-31  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-notebook.c: (ephy_notebook_remove_tab):
+	* src/ephy-window.c: (ephy_window_show),
+	(ephy_window_get_active_tab):
+
+	Emit ::tab-removed after the tab has been removed. Fixes bug 151607.
+
 2004-10-30  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-state.c: (ephy_state_window_set_size):
