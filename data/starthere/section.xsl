@@ -10,6 +10,7 @@
 <xsl:template match="section">
 <html>
   <head>
+  <title><xsl:value-of select="@name"/></title>
   <style type="text/css">
     body {
 	    margin-left: 150;
@@ -93,7 +94,7 @@
 </xsl:template>
 
 <xsl:template match="action">
-<a href="start-here:{@id}?{@param}">
+<a href="home:{@id}?{@param}">
   <xsl:apply-templates/>
 </a><br/>
 </xsl:template>

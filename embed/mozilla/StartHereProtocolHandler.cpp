@@ -49,7 +49,7 @@ GStartHereProtocolHandler::~GStartHereProtocolHandler()
 /* readonly attribute string scheme; */
 NS_IMETHODIMP GStartHereProtocolHandler::GetScheme(nsACString &aScheme)
 {
-	aScheme = NS_LITERAL_CSTRING("start-here");
+	aScheme = NS_LITERAL_CSTRING("home");
 	return NS_OK;
 }
 

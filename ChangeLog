@@ -1,3 +1,18 @@
+2003-04-14  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/epiphany.schemas.in:
+	* data/starthere/index.xml.in:
+	* data/starthere/section.xsl:
+	* data/starthere/smartbookmarks.xml.in:
+	* embed/mozilla/StartHereProtocolHandler.cpp:
+	* embed/mozilla/StartHereProtocolHandler.h:
+
+	Use home:, have titles.
+
+	* lib/ephy-node.c: (ephy_node_get_from_id):
+
+	Do not assert on 0 id. It's valid.
+
 2003-04-14  David Bordoley <bordoley@msu.edu>
 	
 	* src/bookmarks/ephy-bookmark-properties.c: 

@@ -31,7 +31,7 @@
     0x431d,						\
     {0x87, 0xe6, 0x3b, 0xef, 0x8e, 0x7a, 0xda, 0x51}	\
 }
-#define G_START_HERE_PROTOCOLHANDLER_CONTRACTID NS_NETWORK_PROTOCOL_CONTRACTID_PREFIX "start-here"
+#define G_START_HERE_PROTOCOLHANDLER_CONTRACTID NS_NETWORK_PROTOCOL_CONTRACTID_PREFIX "home"
 #define G_START_HERE_PROTOCOLHANDLER_CLASSNAME "Epiphany's start here protocol handler"
 
 class GStartHereProtocolHandler : public nsIProtocolHandler

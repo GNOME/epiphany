@@ -438,8 +438,6 @@ ephy_node_get_from_id (gulong id)
 {
 	EphyNode *ret = NULL;
 
-	g_return_val_if_fail (id > 0, NULL);
-
 	g_static_rw_lock_reader_lock (id_to_node_lock);
 
 	ret = node_from_id_real (id);
