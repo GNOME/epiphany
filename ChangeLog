@@ -1,3 +1,17 @@
+2004-02-28  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c:
+	(egg_editable_toolbar_get_edit_mode):
+	* lib/egg/egg-editable-toolbar.h:
+	* lib/widgets/ephy-location-entry.c: (toolbar_is_editable),
+	(entry_drag_motion_cb), (entry_drag_drop_cb),
+	(ephy_location_entry_construct_contents):
+
+	Sucky but not intrusive hack to make dnd on the address
+	entry work when editing toolbar. A better solution
+	will be found when the toolbar editor will get in gtk.
+	Based on a patch from Søren Sandmann, bug 132467.
+
 2004-02-28  Xan Lopez  <xan@gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-import.c: (ephy_bookmarks_import):

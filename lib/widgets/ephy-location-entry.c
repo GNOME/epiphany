@@ -25,6 +25,7 @@
 #include "ephy-location-entry.h"
 #include "ephy-marshal.h"
 #include "ephy-debug.h"
+#include "egg-editable-toolbar.h"
 
 #include <gtk/gtktoolbar.h>
 #include <gtk/gtkentry.h>
@@ -298,6 +299,52 @@ match_selected_cb (GtkEntryCompletion *completion,
 	return TRUE;
 }
 
+static gboolean
+toolbar_is_editable (GtkWidget *widget)
+{
+	GtkWidget *etoolbar;
+
+	etoolbar = gtk_widget_get_ancestor (widget, EGG_TYPE_EDITABLE_TOOLBAR);
+
+	if (etoolbar)
+	{
+		return egg_editable_toolbar_get_edit_mode
+			(EGG_EDITABLE_TOOLBAR (etoolbar));
+	}
+
+	return FALSE;
+}
+
+static gboolean
+entry_drag_motion_cb (GtkWidget        *widget,
+		      GdkDragContext   *context,
+		      gint              x,
+		      gint              y,
+		      guint             time)
+{
+	if (toolbar_is_editable (widget))
+	{
+		g_signal_stop_emission_by_name (widget, "drag_motion");
+	}
+    
+	return FALSE;
+}
+
+static gboolean
+entry_drag_drop_cb (GtkWidget          *widget,
+		    GdkDragContext     *context,
+		    gint                x,
+		    gint                y,
+		    guint               time)
+{
+	if (toolbar_is_editable (widget))
+	{
+		g_signal_stop_emission_by_name (widget, "drag_drop");
+	}
+
+	return FALSE;
+}
+
 static void
 ephy_location_entry_construct_contents (EphyLocationEntry *le)
 {
@@ -306,6 +353,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *le)
 	LOG ("EphyLocationEntry constructing contents %p", le)
 
 	p->entry = gtk_entry_new ();
+	
 	gtk_container_add (GTK_CONTAINER (le), p->entry);
 	gtk_widget_show (p->entry);
 
@@ -313,6 +361,10 @@ ephy_location_entry_construct_contents (EphyLocationEntry *le)
 			  G_CALLBACK (entry_button_press_cb), le);
 	g_signal_connect (p->entry, "changed",
 			  G_CALLBACK (editable_changed_cb), le);
+	g_signal_connect (p->entry, "drag_motion",
+			  G_CALLBACK (entry_drag_motion_cb), le);
+	g_signal_connect (p->entry, "drag_drop",
+			  G_CALLBACK (entry_drag_drop_cb), le);
 }
 
 static void

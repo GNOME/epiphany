@@ -1088,6 +1088,12 @@ egg_editable_toolbar_new (GtkUIManager     *merge,
 				   NULL));
 }
 
+gboolean
+egg_editable_toolbar_get_edit_mode (EggEditableToolbar *etoolbar)
+{
+	return etoolbar->priv->edit_mode;
+}
+
 void
 egg_editable_toolbar_set_edit_mode (EggEditableToolbar *etoolbar,
 				    gboolean            mode)

@@ -62,6 +62,7 @@ GtkWidget	   *egg_editable_toolbar_new		 (GtkUIManager         *merge,
 							  EggToolbarsModel     *model);
 void		    egg_editable_toolbar_set_edit_mode	 (EggEditableToolbar   *etoolbar,
 							  gboolean              mode);
+gboolean	    egg_editable_toolbar_get_edit_mode	 (EggEditableToolbar   *etoolbar);
 void		    egg_editable_toolbar_show		 (EggEditableToolbar   *etoolbar,
 							  const char           *name);
 void		    egg_editable_toolbar_hide		 (EggEditableToolbar   *etoolbar,
