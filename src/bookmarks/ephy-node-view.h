@@ -64,7 +64,8 @@ void	      ephy_node_view_enable_dnd		      (EphyNodeView *view);
 void	      ephy_node_view_add_column		      (EphyNodeView *view,
 						       const char  *title,
 						       EphyTreeModelNodeColumn column,
-						       gboolean sortable);
+						       gboolean sortable,
+						       gboolean editable);
 
 void	      ephy_node_view_add_icon_column	      (EphyNodeView *view,
 						       EphyTreeModelNodeColumn column);
@@ -82,6 +83,8 @@ void	      ephy_node_view_enable_drag_source       (EphyNodeView *view);
 
 void	      ephy_node_view_set_hinted		      (EphyNodeView *view,
 						       gboolean hinted);
+
+void	      ephy_node_view_edit		      (EphyNodeView *view);
 
 G_END_DECLS
 

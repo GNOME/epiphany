@@ -770,6 +770,12 @@ ephy_bookmarks_add_keyword (EphyBookmarks *eb,
 	return key;
 }
 
+void ephy_bookmarks_remove_keyword (EphyBookmarks *eb,
+				    EphyNode *keyword)
+{
+	ephy_node_remove_child (eb->priv->keywords, keyword);
+}
+
 EphyNode *
 ephy_bookmarks_find_keyword (EphyBookmarks *eb,
 			     const char *name,

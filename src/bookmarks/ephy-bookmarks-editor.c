@@ -67,6 +67,10 @@ static void cmd_remove_topic		  (EggAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_rename_bookmark		  (EggAction *action,
 					   EphyBookmarksEditor *editor);
+static void cmd_rename_topic		  (EggAction *action,
+					   EphyBookmarksEditor *editor);
+static void cmd_close			  (EggAction *action,
+					   EphyBookmarksEditor *editor);
 
 struct EphyBookmarksEditorPrivate
 {
@@ -98,6 +102,7 @@ static GObjectClass *parent_class = NULL;
 static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	/* Toplevel */
 	{ "File", N_("_File"), NULL, NULL, NULL, NULL, NULL },
+	{ "Edit", N_("_Edit"), NULL, NULL, NULL, NULL, NULL },
 	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL },
 
 	{ "NewTopic", N_("_New Topic"), GTK_STOCK_NEW, NULL,
@@ -112,6 +117,9 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	{ "RenameBookmark", N_("_Rename Bookmark"), NULL, NULL,
 	  NULL, G_CALLBACK (cmd_rename_bookmark), NULL },
 
+	{ "RenameTopic", N_("R_ename Topic"), NULL, NULL,
+	  NULL, G_CALLBACK (cmd_rename_topic), NULL },
+
 	{ "RemoveBookmark", N_("_Delete Bookmark"), GTK_STOCK_DELETE, NULL,
 	  NULL, G_CALLBACK (cmd_remove_bookmarks), NULL },
 
@@ -120,6 +128,9 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 
 	{ "Properties", N_("_Properties"), GTK_STOCK_PROPERTIES, NULL,
 	  NULL, G_CALLBACK (cmd_bookmark_properties), NULL },
+
+	{ "Close", N_("_Close"), GTK_STOCK_CLOSE, NULL,
+	  NULL, G_CALLBACK (cmd_close), NULL },
 };
 static guint ephy_bookmark_popup_n_entries = G_N_ELEMENTS (ephy_bookmark_popup_entries);
 
@@ -127,18 +138,48 @@ static void
 cmd_add_topic (EggAction *action,
 	       EphyBookmarksEditor *editor)
 {
+	EphyNode *node;
+
+	node = ephy_bookmarks_add_keyword (editor->priv->bookmarks,
+				           _("Type a topic"));
+	ephy_node_view_select_node (editor->priv->key_view, node);
+	ephy_node_view_edit (editor->priv->key_view);
 }
 
 static void
 cmd_remove_topic (EggAction *action,
 		  EphyBookmarksEditor *editor)
 {
+	GList *selection;
+
+	selection = ephy_node_view_get_selection (editor->priv->key_view);
+	if (selection)
+	{
+		EphyNode *node = EPHY_NODE (selection->data);
+		ephy_bookmarks_remove_keyword (editor->priv->bookmarks, node);
+		g_list_free (selection);
+	}
+}
+
+static void
+cmd_close (EggAction *action,
+	   EphyBookmarksEditor *editor)
+{
+	gtk_widget_hide (GTK_WIDGET (editor));
+}
+
+static void
+cmd_rename_topic (EggAction *action,
+		  EphyBookmarksEditor *editor)
+{
+	ephy_node_view_edit (editor->priv->key_view);
 }
 
 static void
 cmd_rename_bookmark (EggAction *action,
 		     EphyBookmarksEditor *editor)
 {
+	ephy_node_view_edit (editor->priv->bm_view);
 }
 
 static GtkWidget *
@@ -571,7 +612,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	ephy_node_view_enable_drag_source (key_view);
 	ephy_node_view_set_browse_mode (key_view);
 	ephy_node_view_add_column (key_view, _("Topics"),
-			           EPHY_TREE_MODEL_NODE_COL_KEYWORD, TRUE);
+			           EPHY_TREE_MODEL_NODE_COL_KEYWORD, TRUE, TRUE);
 	gtk_box_pack_start (GTK_BOX (hbox), GTK_WIDGET (key_view), FALSE, TRUE, 0);
 	gtk_widget_set_size_request (GTK_WIDGET (key_view), 130, -1);
 	gtk_widget_show (GTK_WIDGET (key_view));
@@ -599,7 +640,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	ephy_node_view_enable_drag_source (bm_view);
 	ephy_node_view_add_icon_column (bm_view, EPHY_TREE_MODEL_NODE_COL_ICON);
 	ephy_node_view_add_column (bm_view, _("Bookmarks"),
-				   EPHY_TREE_MODEL_NODE_COL_BOOKMARK, TRUE);
+				   EPHY_TREE_MODEL_NODE_COL_BOOKMARK, TRUE, TRUE);
 	gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (bm_view), TRUE, TRUE, 0);
 	gtk_widget_show (GTK_WIDGET (bm_view));
 	editor->priv->bm_view = bm_view;

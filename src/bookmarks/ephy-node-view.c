@@ -25,6 +25,7 @@
 #include <libgnome/gnome-i18n.h>
 
 #include "eggtreemodelfilter.h"
+#include "ephy-bookmarks.h"
 #include "ephy-tree-model-node.h"
 #include "ephy-node-view.h"
 #include "ephy-tree-model-sort.h"
@@ -51,6 +52,9 @@ struct EphyNodeViewPrivate
 	EphyTreeModelNode *nodemodel;
 	GtkTreeModel *filtermodel;
 	GtkTreeModel *sortmodel;
+	GtkCellRenderer *editable_renderer;
+	GtkTreeViewColumn *editable_column;
+	EphyTreeModelNodeColumn editable_node_column;
 
 	EphyNodeFilter *filter;
 
@@ -493,18 +497,75 @@ set_sort_column_id (EphyNodeView *view)
 
 	return FALSE;
 }
-	
+
+static void
+cell_renderer_edited (GtkCellRendererText *cell,
+                      const char *path_str,
+                      const char *new_text,
+                      EphyNodeView *view)
+{
+	GValue value = { 0, };
+	GtkTreePath *path;
+	GtkTreeIter iter, iter2;
+	EphyNode *node;
+
+	g_object_set (G_OBJECT (view->priv->editable_renderer),
+                      "editable", FALSE,
+                      NULL);
+
+	path = gtk_tree_path_new_from_string (path_str);
+	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
+	gtk_tree_model_sort_convert_iter_to_child_iter
+		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
+	egg_tree_model_filter_convert_iter_to_child_iter
+		(EGG_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
+	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, new_text);
+
+	switch (view->priv->editable_node_column)
+	{
+	case EPHY_TREE_MODEL_NODE_COL_BOOKMARK:
+		ephy_node_set_property (node,
+				        EPHY_NODE_BMK_PROP_TITLE,
+				        &value);
+		break;
+	case EPHY_TREE_MODEL_NODE_COL_KEYWORD:
+		ephy_node_set_property (node,
+				        EPHY_NODE_KEYWORD_PROP_NAME,
+				        &value);
+		break;
+	default:
+		break;
+	}
+
+	g_value_unset (&value);
+}
+
 void
 ephy_node_view_add_column (EphyNodeView *view,
 			   const char  *title,
 			   EphyTreeModelNodeColumn column,
-			   gboolean sortable)
+			   gboolean sortable,
+			   gboolean editable)
 {
 	GtkTreeViewColumn *gcolumn;
 	GtkCellRenderer *renderer;
 
+	g_return_if_fail (!editable || view->priv->editable_renderer == NULL);
+
 	gcolumn = (GtkTreeViewColumn *) gtk_tree_view_column_new ();
 	renderer = gtk_cell_renderer_text_new ();
+
+	if (editable)
+	{
+		view->priv->editable_renderer = renderer;
+		view->priv->editable_column = gcolumn;
+		view->priv->editable_node_column = column;
+		g_signal_connect (renderer, "edited", G_CALLBACK (cell_renderer_edited), view);
+	}
+
 	gtk_tree_view_column_pack_start (gcolumn, renderer, TRUE);
 	gtk_tree_view_column_set_attributes (gcolumn, renderer,
 					     "text", column,
@@ -545,6 +606,7 @@ static void
 ephy_node_view_init (EphyNodeView *view)
 {
 	view->priv = g_new0 (EphyNodeViewPrivate, 1);
+	view->priv->editable_renderer = NULL;
 }
 
 static void
@@ -655,10 +717,38 @@ ephy_node_view_enable_drag_source (EphyNodeView *view)
 	ephy_dnd_enable_model_drag_source (GTK_WIDGET (view->priv->treeview));
 }
 
-void 
+void
 ephy_node_view_set_hinted (EphyNodeView *view, gboolean hinted)
 {
 	g_return_if_fail (view != NULL);
 
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view->priv->treeview), hinted);
 }
+
+void
+ephy_node_view_edit (EphyNodeView *view)
+{
+	GtkTreeSelection *selection;
+	GList *rows;
+	GtkTreeModel *model;
+
+	g_return_if_fail (view->priv->editable_renderer != NULL);
+
+	selection = gtk_tree_view_get_selection
+		(GTK_TREE_VIEW (view->priv->treeview));
+	rows = gtk_tree_selection_get_selected_rows (selection, &model);
+	if (rows == NULL) return;
+
+	g_object_set (G_OBJECT (view->priv->editable_renderer),
+                      "editable", TRUE,
+                      NULL);
+
+	gtk_tree_view_set_cursor (GTK_TREE_VIEW (view->priv->treeview),
+                                  (GtkTreePath *)rows->data,
+                                  view->priv->editable_column,
+                                  TRUE);
+
+	g_list_foreach (rows, (GFunc)gtk_tree_path_free, NULL);
+        g_list_free (rows);
+}
+
