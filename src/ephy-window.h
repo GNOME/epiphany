@@ -38,16 +38,15 @@ G_BEGIN_DECLS
 #define EPHY_WINDOW_GET_CLASS(o)(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_WINDOW, EphyWindowClass))
 
 typedef struct EphyWindowClass EphyWindowClass;
-typedef struct EphyWindow EphyWindow;
+typedef struct _EphyWindow EphyWindow;
 typedef struct EphyWindowPrivate EphyWindowPrivate;
 
-struct EphyWindow
+struct _EphyWindow
 {
         GtkWindow parent;
 	/*< private >*/
         EphyWindowPrivate *priv;
 
-	/* Public to toolbar and statusbar, dont use outside */
 	/*< public >*/
 	GObject *ui_merge;
 };

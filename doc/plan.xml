@@ -79,9 +79,14 @@
   </item>
   
   <item>
-    <title>Extensions: Loading/Unloading</title>
+    <title>Extensions Lifecycle</title>
     <description>
-      Dynamic loading/unloading of extensions.
+      Right now the startup process is: &quot;startup -&gt; get session -&gt;
+      get extensions manager -&gt; load extensions -&gt; get session&quot;. We
+      should make the extensions manager load extensions *later*, so that the
+      session is created for them by the time they need it.
+
+      This should pave the way for dynamic loading/unloading of extensions.
     </description>
     <status id="pending"/>
     <responsible email="adamh@densi.com">Adam Hooper</responsible>

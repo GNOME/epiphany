@@ -138,7 +138,6 @@ IGNORE_HFILES = \
 	ephy-tab.h \
 	ephy-tabs-menu.h \
 	ephy-toolbars-model.h \
-	ephy-window.h \
 	language-editor.h \
 	pdm-dialog.h \
 	popup-commands.h \

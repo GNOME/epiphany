@@ -36,9 +36,6 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_PERMISSION_INFO		(ephy_permission_info_get_type ())
 
-typedef struct EphyPermissionManager		EphyPermissionManager;
-typedef struct EphyPermissionManagerIface	EphyPermissionManagerIface;
-
 typedef enum
 {
 	EPT_COOKIE,
@@ -53,12 +50,17 @@ typedef enum
 	EPHY_PERMISSION_DEFAULT
 } EphyPermission;
 
-typedef struct
+typedef struct _EphyPermissionInfo		EphyPermissionInfo;
+
+typedef struct EphyPermissionManager		EphyPermissionManager;
+typedef struct EphyPermissionManagerIface	EphyPermissionManagerIface;
+
+struct _EphyPermissionInfo
 {
 	char *host;
 	EphyPermissionType type;
 	EphyPermission permission;
-} EphyPermissionInfo;
+};
 
 struct EphyPermissionManagerIface
 {

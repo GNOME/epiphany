@@ -2062,12 +2062,28 @@ ephy_window_finalize (GObject *object)
 	g_object_unref (ephy_shell);
 }
 
+/**
+ * ephy_window_new:
+ *
+ * Equivalent to g_object_new() but returns an #EphyWindow so you don't have
+ * to cast it.
+ *
+ * Return value: a new #EphyWindow
+ **/
 EphyWindow *
 ephy_window_new (void)
 {
 	return EPHY_WINDOW (g_object_new (EPHY_TYPE_WINDOW, NULL));
 }
 
+/**
+ * ephy_window_new_with_chrome:
+ * @chrome: an #EphyEmbedChrome
+ *
+ * Identical to ephy_window_new(), but allows you to specify a chrome.
+ *
+ * Return value: a new #EphyWindow
+ **/
 EphyWindow *
 ephy_window_new_with_chrome (EphyEmbedChrome chrome)
 {
@@ -2076,6 +2092,13 @@ ephy_window_new_with_chrome (EphyEmbedChrome chrome)
 					  NULL));
 }
 
+/**
+ * ephy_window_set_print_preview:
+ * @window: an #EphyWindow
+ * @enabled: %TRUE to enable print preview mode
+ *
+ * Sets whether the window is in print preview mode.
+ **/
 void
 ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
 {
@@ -2111,6 +2134,16 @@ ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
 	}
 }
 
+/**
+ * ephy_window_get_toolbar:
+ * @window: an #EphyWindow
+ *
+ * Returns this window's toolbar as an #EggEditableToolbar. Note that this
+ * toolbar is uneditable outside of Epiphany itself (i.e., extensions should not
+ * access it).
+ *
+ * Return value: an #EggEditableToolbar
+ **/
 GtkWidget *
 ephy_window_get_toolbar (EphyWindow *window)
 {
@@ -2119,6 +2152,14 @@ ephy_window_get_toolbar (EphyWindow *window)
 	return GTK_WIDGET (window->priv->toolbar);
 }
 
+/**
+ * ephy_window_get_notebook:
+ * @window: an #EphyWindow
+ *
+ * Returns the #GtkNotebook used by this window.
+ *
+ * Return value: the @window's #GtkNotebook
+ **/
 GtkWidget *
 ephy_window_get_notebook (EphyWindow *window)
 {
@@ -2127,6 +2168,14 @@ ephy_window_get_notebook (EphyWindow *window)
 	return GTK_WIDGET (window->priv->notebook);
 }
 
+/**
+ * ephy_window_get_statusbar:
+ * @window: an #EphyWindow
+ *
+ * Returns this window's statusbar as an #EphyStatusbar.
+ *
+ * Return value: This window's statusbar
+ **/
 GtkWidget *
 ephy_window_get_statusbar (EphyWindow *window)
 {
@@ -2135,6 +2184,15 @@ ephy_window_get_statusbar (EphyWindow *window)
 	return GTK_WIDGET (window->priv->statusbar);
 }
 
+/**
+ * ephy_window_add_tab:
+ * @window: an #EphyWindow
+ * @tab: an #EphyTab
+ * @position: the position in @window's #GtkNotebook
+ * @jump_to: %TRUE to switch to @tab's new notebook page after insertion
+ *
+ * Inserts @tab into @window.
+ **/
 void
 ephy_window_add_tab (EphyWindow *window,
 		     EphyTab *tab,
@@ -2152,6 +2210,13 @@ ephy_window_add_tab (EphyWindow *window,
 				  tab, position, jump_to);
 }
 
+/**
+ * ephy_window_jump_to_tab:
+ * @window: an #EphyWindow
+ * @tab: an #EphyTab inside @window
+ *
+ * Switches @window's #GtkNotebook to open @tab as its current page.
+ **/
 void
 ephy_window_jump_to_tab (EphyWindow *window,
 			 EphyTab *tab)
@@ -2180,6 +2245,13 @@ real_get_active_tab (EphyWindow *window, int page_num)
 	return EPHY_TAB (tab);
 }
 
+/**
+ * ephy_window_remove_tab:
+ * @window: an #EphyWindow
+ * @tab: an #EphyTab
+ *
+ * Removes @tab from @window.
+ **/
 void
 ephy_window_remove_tab (EphyWindow *window,
 		        EphyTab *tab)
@@ -2209,8 +2281,8 @@ ephy_window_remove_tab (EphyWindow *window,
  * @window: a #EphyWindow
  * @url: the url to load
  *
- * Load a new url in the active tab of the window.
- * Unlike ephy_embed_load_url this function activate
+ * Loads a new url in the active tab of @window.
+ * Unlike ephy_embed_load_url(), this function activates
  * the embed.
  *
  **/
@@ -2229,11 +2301,24 @@ ephy_window_load_url (EphyWindow *window,
 	ephy_embed_activate (embed);
 }
 
-void ephy_window_activate_location (EphyWindow *window)
+/**
+ * ephy_window_activate_location:
+ * @window: an #EphyWindow
+ *
+ * Activates the location entry on @window's toolbar.
+ **/
+void
+ephy_window_activate_location (EphyWindow *window)
 {
 	toolbar_activate_location (window->priv->toolbar);
 }
 
+/**
+ * ephy_window_show:
+ * @widget: an #EphyWindow
+ *
+ * Shows @widget if it is hidden.
+ **/
 void
 ephy_window_show (GtkWidget *widget)
 {
@@ -2260,6 +2345,14 @@ ephy_window_show (GtkWidget *widget)
 	GTK_WIDGET_CLASS (parent_class)->show (widget);
 }
 
+/**
+ * ephy_window_get_active_tab:
+ * @window: an #EphyWindow
+ *
+ * Returns @window's active #EphyTab.
+ *
+ * Return value: @window's active tab
+ **/
 EphyTab *
 ephy_window_get_active_tab (EphyWindow *window)
 {
@@ -2269,6 +2362,15 @@ ephy_window_get_active_tab (EphyWindow *window)
 	return window->priv->active_tab;
 }
 
+/**
+ * ephy_window_get_active_embed:
+ * @window: an #EphyWindow
+ *
+ * Return @window's active #EphyEmbed. This is identical to calling
+ * ephy_window_get_active_tab() followed by ephy_tab_get_embed().
+ *
+ * Return value: @window's active embed
+ **/
 EphyEmbed *
 ephy_window_get_active_embed (EphyWindow *window)
 {
@@ -2288,6 +2390,7 @@ ephy_window_get_active_embed (EphyWindow *window)
  *
  * Returns the list of #EphyTab:s in the window.
  *
+ * Return value: a list of #EphyTab:s
  */
 GList *
 ephy_window_get_tabs (EphyWindow *window)
@@ -2354,6 +2457,12 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 	update_tabs_menu_sensitivity (window);
 }
 
+/**
+ * ephy_window_find:
+ * @window: an #EphyWindow
+ *
+ * Displays @window's Find dialog.
+ **/
 void
 ephy_window_find (EphyWindow *window)
 {
@@ -2376,6 +2485,12 @@ ephy_window_find (EphyWindow *window)
 	ephy_dialog_show (window->priv->find_dialog);
 }
 
+/**
+ * ephy_window_print:
+ * @window: an #EphyWindow
+ *
+ * Displays @window's Print dialog.
+ **/
 void
 ephy_window_print (EphyWindow *window)
 {
@@ -2418,6 +2533,14 @@ ephy_window_print (EphyWindow *window)
 	ephy_dialog_show (window->priv->print_dialog);
 }
 
+/**
+ * ephy_window_set_zoom:
+ * @window: an #EphyWindow
+ * @zoom: the desired zoom level
+ *
+ * Sets the zoom on @window's active #EphyEmbed. A @zoom of 1.0 corresponds to
+ * 100% zoom (normal size).
+ **/
 void
 ephy_window_set_zoom (EphyWindow *window,
 		      float zoom)

@@ -47,7 +47,7 @@ ephy_permission_info_get_type (void)
 /**
  * ephy_permission_info_new:
  * @host: a host name
- * @type: a #EphyPermissionType
+ * @type: an #EphyPermissionType
  * @allowed: whether @host should be allowed to do what @type specifies
  *
  * Return value: the new #EphyPermissionInfo
@@ -68,7 +68,7 @@ ephy_permission_info_new (const char *host,
 
 /**
  * ephy_permission_info_copy:
- * @info: a #EphyPermissionInfo
+ * @info: an #EphyPermissionInfo
  *
  * Return value: a copy of @info
  **/
@@ -86,7 +86,7 @@ ephy_permission_info_copy (const EphyPermissionInfo *info)
 
 /**
  * ephy_permission_info_free:
- * @info: a #EphyPermissionInfo
+ * @info: an #EphyPermissionInfo
  *
  * Frees @info.
  **/
@@ -211,12 +211,11 @@ ephy_permission_manager_base_init (gpointer g_class)
 /**
  * ephy_permission_manager_add:
  * @manager: the #EphyPermissionManager
- * @host: a host name
- * @type: a #EphyPermissionType
- * @permission: either #EPHY_PERMISSION_ALLOWED or #EPHY_PERMISSION_DENIED
+ * @host: a website URL
+ * @type: an #EphyPermissionType
+ * @permission: either %EPHY_PERMISSION_ALLOWED or %EPHY_PERMISSION_DENIED
  * 
- * Adds the permission @allow of type @type for host @host to the permissions
- * database.
+ * Adds the specified permission to the permissions database.
  **/
 void
 ephy_permission_manager_add (EphyPermissionManager *manager,
@@ -231,11 +230,12 @@ ephy_permission_manager_add (EphyPermissionManager *manager,
 /**
  * ephy_permission_manager_remove:
  * @manager: the #EphyPermissionManager
- * @host: a host name
- * @type: a #EphyPermissionType
+ * @host: a website URL
+ * @type: an #EphyPermissionType
  * 
- * Removes the permission of type @type for host @host from the permissions
- * database.
+ * Removes the specified permission from the permissions database. This implies
+ * that the browser should use defaults when next visiting the specified
+ * @host's web pages.
  **/
 void
 ephy_permission_manager_remove (EphyPermissionManager *manager,
@@ -250,7 +250,7 @@ ephy_permission_manager_remove (EphyPermissionManager *manager,
  * ephy_permission_manager_clear:
  * @manager: the #EphyPermissionManager
  * 
- * Clears the permissions database.
+ * Clears the permissions database. This cannot be undone.
  **/
 void
 ephy_permission_manager_clear (EphyPermissionManager *manager)
@@ -262,11 +262,13 @@ ephy_permission_manager_clear (EphyPermissionManager *manager)
 /**
  * ephy_permission_manager_test:
  * @manager: the #EphyPermissionManager
- * @host: a host name
- * @type: a #EphyPermissionType
+ * @host: a website URL
+ * @type: an #EphyPermissionType
  * 
- * Gets the permission of @host for type @type. If there is no entry
- * for this type for @host, it will return #EPHY_PERMISSION_DEFAULT.
+ * Retrieves an #EphyPermissionType from the permissions database. If there is
+ * no entry for this @type and @host, it will return %EPHY_PERMISSION_DEFAULT.
+ * In that case, the caller may need to determine the appropriate default
+ * behavior.
  *
  * Return value: the permission of type #EphyPermission
  **/
@@ -282,12 +284,13 @@ ephy_permission_manager_test (EphyPermissionManager *manager,
 /**
  * ephy_permission_manager_list:
  * @manager: the #EphyPermissionManager
- * @type: a #EphyPermissionType
+ * @type: an #EphyPermissionType
  * 
  * Lists all permission entries of type @type in the permissions database, each
- * as its own #EphyPermissionInfo
+ * as its own #EphyPermissionInfo. These entries must be freed using
+ * ephy_permission_info_free().
  * 
- * Return value: the list of permission entries
+ * Return value: the list of permission database entries
  **/
 GList *
 ephy_permission_manager_list (EphyPermissionManager *manager,
