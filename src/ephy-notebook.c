@@ -780,6 +780,8 @@ ephy_notebook_finalize (GObject *object)
 	g_free (notebook->priv);
 
 	LOG ("EphyNotebook finalised %p", object)
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
