@@ -1,5 +1,14 @@
 2003-06-15  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/mozilla-embed-single: (control_encodings_list):
+	* embed/mozilla/EventContext.cpp: (EventContext::SetIntProperty),
+	(EventContext::SetStringProperty (const char*, const char*)),
+	(EventContext::SetStringProperty (const char*, const nsACString&)):
+
+	Fix mem leaks.
+
+2003-06-15  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/find-dialog.h:
 	* embed/find-dialog.c: (set_navigation_flags),
 	(ephy_find_dialog_get_property), (find_dialog_class_init),

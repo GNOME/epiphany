@@ -629,7 +629,7 @@ nsresult EventContext::SetIntProperty (const char *name, int value)
 	g_value_set_int (val, value);
 
 	ephy_embed_event_set_property (mEmbedEvent, 
-			     	       g_strdup (name),
+			     	       name,
 			     	       val);
 
 	return NS_OK;
@@ -644,7 +644,7 @@ nsresult EventContext::SetStringProperty (const char *name, const char *value)
 	g_value_set_string (val, value);
 			 
 	ephy_embed_event_set_property (mEmbedEvent, 
-			     	       g_strdup (name),
+			     	       name,
 			     	       val);
 
 	return NS_OK;
@@ -662,7 +662,7 @@ nsresult EventContext::SetStringProperty (const char *name, const nsAString &val
 	g_value_set_string (val, tmp);
 	
 	ephy_embed_event_set_property (mEmbedEvent, 
-			     	       g_strdup (name),
+			     	       name,
 			     	       val);
 	nsMemory::Free (tmp);
 

@@ -808,6 +808,9 @@ control_encodings_list (void)
 				   encoding_str, encoding_title_str);
 			ret = G_FAILED;
 		}
+
+		g_free (encoding_str);
+		g_free (encoding_title_str);
         }
 
 	return ret;
