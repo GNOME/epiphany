@@ -71,6 +71,7 @@ protected:
 		       const char *aPrefName,
 		       GtkMessageType aType,
 		       GtkButtonsType aButtons,
+		       int aDefaultResponse,
 		       const char *aTitle,
 		       const char *aPrimary,
 		       const char *aSecondary,

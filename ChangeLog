@@ -1,6 +1,16 @@
 2005-01-09  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:
+	* embed/mozilla/GtkNSSSecurityWarningDialogs.h:
+
+	Set default response to ACCEPT in send-to-insecure dialogue,
+	only write back show_once pref when not shown by default,
+	and add the dialogue to its parent's window group
+	(note that there isn't a parent without a mozilla patch, currently).
+
+2005-01-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:
 
 	Improve dialogue wording. Thanks to spark for his help.
 

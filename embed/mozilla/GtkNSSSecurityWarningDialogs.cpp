@@ -91,6 +91,7 @@ GtkNSSSecurityWarningDialogs::ConfirmEnteringSecure (nsIInterfaceRequestor *aCon
 		  ENTER_SITE_PREF,
 		  GTK_MESSAGE_INFO,
 		  GTK_BUTTONS_OK,
+		  GTK_RESPONSE_OK,
 		  _("Security Notice"),
 		  _("This page is loaded over a secure connection."),
 		  _("You can always see the security status of a page from "
@@ -109,6 +110,7 @@ GtkNSSSecurityWarningDialogs::ConfirmEnteringWeak (nsIInterfaceRequestor *aConte
 		  WEAK_SITE_PREF,
 		  GTK_MESSAGE_WARNING,
 		  GTK_BUTTONS_OK,
+		  GTK_RESPONSE_OK,
 		  _("Security Warning"),
 		  _("This page is loaded over a low security connection."),
 		  _("Any information you see or enter on this page could "
@@ -136,6 +138,7 @@ GtkNSSSecurityWarningDialogs::ConfirmMixedMode (nsIInterfaceRequestor *aContext,
 		  MIXEDCONTENT_PREF,
 		  GTK_MESSAGE_WARNING,
 		  GTK_BUTTONS_OK,
+		  GTK_RESPONSE_OK,
 		  _("Security Warning"),
 		  _("Some parts of this page are loaded over an insecure connection."),
 		  _("Some information you see or enter will be sent over an insecure "
@@ -154,6 +157,7 @@ GtkNSSSecurityWarningDialogs::ConfirmPostToInsecure (nsIInterfaceRequestor *aCon
 		  INSECURE_SUBMIT_PREF,
 		  GTK_MESSAGE_WARNING,
 		  GTK_BUTTONS_CANCEL,
+		  GTK_RESPONSE_ACCEPT,
 		  _("Security Warning"),
 		  _("Send this information over an insecure connection?"),
 		  _("The information you have entered will be sent over an "
@@ -162,7 +166,6 @@ GtkNSSSecurityWarningDialogs::ConfirmPostToInsecure (nsIInterfaceRequestor *aCon
 		  _("Send"),
 		  _retval);
 
-	*_retval = PR_TRUE;
 	return NS_OK;
 }
 
@@ -174,6 +177,7 @@ GtkNSSSecurityWarningDialogs::ConfirmPostToInsecureFromSecure (nsIInterfaceReque
 		  nsnull, /* No preference for this one - it's too important */
 		  GTK_MESSAGE_WARNING,
 		  GTK_BUTTONS_CANCEL,
+		  GTK_RESPONSE_CANCEL,
 		  _("Security Warning"),
 		  _("Send this information over an insecure connection?"),
 		  _("Although this page was loaded over a secure connection, "
@@ -191,6 +195,7 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 					const char *aPrefName,
 					GtkMessageType aType,
 					GtkButtonsType aButtons,
+					int aDefaultResponse,
 					const char *aTitle,
 					const char *aPrimary,
 					const char *aSecondary,
@@ -211,7 +216,7 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 
 	char *showOncePref = NULL;
 	PRBool showOnce = PR_FALSE;
-	if (prefBranch && aPrefName)
+	if (!show && prefBranch && aPrefName)
 	{
 		showOncePref = g_strconcat (aPrefName, ".show_once", NULL);
 		rv = prefBranch->GetBoolPref (showOncePref, &showOnce);
@@ -240,6 +245,12 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 						    GTK_DIALOG_MODAL, aType,
 						    aButtons, aPrimary);
 
+	if (parent && GTK_WINDOW (parent)->group)
+	{
+		gtk_window_group_add_window (GTK_WINDOW (parent)->group,
+					     GTK_WINDOW (dialog));
+	}
+
 	if (aSecondary)
 	{
 		gtk_message_dialog_format_secondary_markup
@@ -250,14 +261,9 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 	{
 		gtk_dialog_add_button (GTK_DIALOG (dialog), aButtonText,
 				       GTK_RESPONSE_ACCEPT);
-		gtk_dialog_set_default_response (GTK_DIALOG (dialog),
-						 GTK_RESPONSE_CANCEL);
 	}
-	else
-	{
-		gtk_dialog_set_default_response (GTK_DIALOG (dialog),
-						 GTK_RESPONSE_OK);
-	}
+
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), aDefaultResponse);
 
 	gtk_window_set_title (GTK_WINDOW (dialog), aTitle);
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
