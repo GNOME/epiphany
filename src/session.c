@@ -133,9 +133,10 @@ session_class_init (SessionClass *klass)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (SessionClass, close_window),
 			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
+			      g_cclosure_marshal_VOID__OBJECT,
 			      G_TYPE_NONE,
-			      0);
+			      1,
+			      G_TYPE_OBJECT);
 }
 
 static char *
@@ -681,11 +682,15 @@ void
 session_remove_window (Session *session,
 		       EphyWindow *window)
 {
-	g_signal_emit (G_OBJECT (session),
-		       session_signals[CLOSE_WINDOW],
-		       0);
+	g_object_ref (window);
 
 	session->priv->windows = g_list_remove (session->priv->windows, window);
+
+	g_signal_emit (G_OBJECT (session),
+		       session_signals[CLOSE_WINDOW],
+		       0, window);
+
+	g_object_unref (window);
 
 	/* autodestroy of the session, necessay to avoid
 	 * conflicts with the nautilus view */

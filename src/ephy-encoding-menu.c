@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2002  Ricardo Fern·ndez Pascual
+ *  Copyright (C) 2002  Ricardo Fern√°ndez Pascual
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -221,7 +221,7 @@ build_group (EggActionGroup *action_group,
 	egg_action_group_add_action (action_group, action);
 	g_object_unref (action);
 
-	tmp = g_strdup_printf ("<submenu name=\"%sItem\" name=\"%s\">\n",
+	tmp = g_strdup_printf ("<submenu name=\"%sItem\" verb=\"%s\">\n",
 			       verb, verb);
 	xml_string = g_string_append (xml_string, tmp);
 	g_free (tmp);

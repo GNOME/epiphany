@@ -1,3 +1,22 @@
+2003-08-02  Christian Persch
+
+	* src/ephy-encodings-menu.c: (build_group):
+
+	Fix ui xml string.
+
+	* src/ephy-tabs-menu.c: (ephy_tabs_menu_update):
+
+	Fix mem leak.
+
+	* src/ephy-window.c: (remove_from_session), (ephy_window_destroy),
+	(ephy_window_finalize):
+	* src/session.h:
+	* src/session.c: (session_class_init), (session_remove_window):
+
+	Move up the removal of the window from the session to when it's still
+	valid and non-finalised. Include the window as parameter in the
+	close signal of the session.
+
 2003-08-02  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-menu.c:

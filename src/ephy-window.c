@@ -332,13 +332,29 @@ ephy_window_get_type (void)
 }
 
 static void
+remove_from_session (EphyWindow *window)
+{
+	Session *session;
+
+	session = SESSION (ephy_shell_get_session (ephy_shell));
+	g_return_if_fail (session != NULL);
+
+	session_remove_window (session, window);
+}
+
+static void
 ephy_window_destroy (GtkObject *gtkobject)
 {
 	EphyWindow *window = EPHY_WINDOW (gtkobject);
 
 	LOG ("EphyWindow destroy %p", window)
 
-	window->priv->closing = TRUE;
+	if (window->priv->closing == FALSE)
+	{
+		window->priv->closing = TRUE;
+
+		remove_from_session (window);
+	}
 
 	if (window->priv->exit_fullscreen_popup)
 	{
@@ -1435,17 +1451,6 @@ save_window_chrome (EphyWindow *window)
 }
 
 static void
-remove_from_session (EphyWindow *window)
-{
-	Session *session;
-
-	session = SESSION (ephy_shell_get_session (ephy_shell));
-	g_return_if_fail (session != NULL);
-
-	session_remove_window (session, window);
-}
-
-static void
 ephy_window_finalize (GObject *object)
 {
         EphyWindow *window;
@@ -1455,8 +1460,6 @@ ephy_window_finalize (GObject *object)
 	window = EPHY_WINDOW (object);
 
         g_return_if_fail (window->priv != NULL);
-
-	remove_from_session (window);
 
 	if (window->priv->find_dialog)
 	{

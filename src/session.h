@@ -52,7 +52,8 @@ struct SessionClass
 
 	void ( *new_window)         (Session *session,
 				     EphyWindow *window);
-	void ( *close_window)       (Session *session);
+	void ( *close_window)       (Session *session,
+				     EphyWindow *window);
 };
 
 GType         session_get_type		(void);

@@ -304,6 +304,8 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 		++i;
 	}
 
+	g_list_free (tabs);
+
 	g_string_append (xml, "</placeholder></submenu></menu></Root>");
 
 	egg_menu_merge_insert_action_group (merge, p->action_group, 0);
