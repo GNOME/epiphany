@@ -356,7 +356,8 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 		char *total_progress;
 
 		total_progress = gnome_vfs_format_file_size_for_display (total);
-		file = g_strdup_printf ("%s\n%s of %s", name,
+		/* translators: first %s is filename, "%s of %s" is current/total file size */
+		file = g_strdup_printf (_("%s\n%s of %s"), name,
 					cur_progress, total_progress);
 		g_free (total_progress);
 	}
