@@ -218,7 +218,7 @@ fi
 AC_DEFINE_UNQUOTED(MOZILLA_TYPE, $type, [Define to the Mozilla release type.])
 AC_DEFINE_UNQUOTED(MOZILLA_MICRO, $micro, [Define to the Mozilla micro version.])
 
-if test "$1" -lt 1 -o \( "$1" -eq 1 -a "$2" -lt 7 \) ; then
+if test "$1" -lt 1 -o \( "$1" -eq 1 -a "$2" -lt 7 \) -o \( "$1" -eq 1 -a "$2" -eq 7 -a "$type" -lt 4 \); then
     AC_ERROR([
 *****************************************************************************
 Epiphany can be built using Mozilla 1.7, 1.8a1, 1.8a2 or trunk
