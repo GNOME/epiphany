@@ -34,8 +34,6 @@ typedef enum
 	EPHY_STATE_WINDOW_SAVE_POSITION = 1 << 1
 } EphyStateWindowFlags;
 
-GType ephy_state_window_flags_get_type	(void); 
-
 void  ephy_state_add_window	(GtkWidget *window,
 				 const char *name,
 				 int default_width,
