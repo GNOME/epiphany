@@ -75,7 +75,7 @@ ephy_password_info_new (const char *host,
  * Return value: a copy of @info
  **/
 EphyPasswordInfo *
-ephy_password_info_copy (EphyPasswordInfo *info)
+ephy_password_info_copy (const EphyPasswordInfo *info)
 {
 	EphyPasswordInfo *copy = g_new0 (EphyPasswordInfo, 1);
 

@@ -1,3 +1,24 @@
+2003-11-26  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-cookie-manager.c: (ephy_cookie_copy),
+	(ephy_cookie_manager_remove_cookie):
+	* embed/ephy-cookie-manager.h:
+	* embed/ephy-password-manager.c: (ephy_password_info_copy):
+	* embed/ephy-password-manager.h:
+	* embed/ephy-permission-manager.c: (ephy_permission_info_copy):
+	* embed/ephy-permission-manager.h:
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Mark parameters "const" where appropriate.
+
+	* src/pdm-dialog.c: (pdm_cmd_delete_selection), (compare_cookies),
+	(cookie_to_iter), (cookie_added_cb), (cookie_changed_cb),
+	(cookie_deleted_cb), (cookies_cleared_cb),
+	(pdm_dialog_fill_cookies_list), (pdm_dialog_fill_passwords_list),
+	(pdm_dialog_init):
+
+	Make the cookies list auto-updating.
+
 2003-11-26  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* data/ui/epiphany-ui.xml:

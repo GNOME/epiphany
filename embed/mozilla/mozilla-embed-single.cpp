@@ -638,7 +638,7 @@ impl_list_cookies (EphyCookieManager *manager)
 
 static void
 impl_remove_cookie (EphyCookieManager *manager,
-		    EphyCookie *cookie)
+		    const EphyCookie *cookie)
 {
 	nsresult rv;
 	nsCOMPtr<nsICookieManager> cookieManager =

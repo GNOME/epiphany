@@ -38,6 +38,7 @@
 #include <glib/gi18n.h>
 
 #include <time.h>
+#include <string.h>
 
 typedef struct PdmActionInfo PdmActionInfo;
 	
@@ -59,6 +60,7 @@ struct PdmActionInfo
 	int remove_id;
 	int data_col;
 	gboolean filled;
+	gboolean delete_row_on_remove;
 };
 
 #define EPHY_PDM_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_PDM_DIALOG, PdmDialogPrivate))
@@ -271,7 +273,11 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 		action->remove (action, g_value_get_boxed (&val));
 		g_value_unset (&val);
 
-		gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
+		/* for cookies we delete from callback, for passwords right here */
+		if (action->delete_row_on_remove)
+		{
+			gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
+		}
 
 		gtk_tree_row_reference_free ((GtkTreeRowReference *)r->data);
 		gtk_tree_path_free (path);
@@ -425,35 +431,118 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 	setup_action (info);
 }
 
+static gboolean
+compare_cookies (const EphyCookie *cookie1,
+		 const EphyCookie *cookie2)
+{
+	g_return_val_if_fail (cookie1 != NULL || cookie2 != NULL, FALSE);
+
+	return (strcmp (cookie1->domain, cookie2->domain) == 0
+		&& strcmp (cookie2->path, cookie2->path) == 0
+		&& strcmp (cookie2->name, cookie2->name) == 0);
+}
+
+static gboolean
+cookie_to_iter (GtkTreeModel *model,
+		const EphyCookie *cookie,
+		GtkTreeIter *iter)
+{
+	gboolean valid;
+	gboolean found = FALSE;
+
+	valid = gtk_tree_model_get_iter_first (model, iter);
+
+	while (valid)
+	{
+		EphyCookie *data;
+
+		gtk_tree_model_get (model, iter,
+				    COL_COOKIES_DATA, &data,
+				    -1);
+
+		found = compare_cookies (cookie, data);
+
+		ephy_cookie_free (data);
+
+		if (found) break;
+
+		valid = gtk_tree_model_iter_next (model, iter);
+	}
+
+	return found;
+}
+
 static void
 cookie_added_cb (EphyCookieManager *manager,
-		 gpointer data,
+		 const EphyCookie *cookie,
 		 PdmDialog *dialog)
 {
+	PdmActionInfo *info = dialog->priv->cookies;
+	
 	LOG ("cookie_added_cb")
+
+	info->add (info, (gpointer) ephy_cookie_copy (cookie));
 }
 
 static void
 cookie_changed_cb (EphyCookieManager *manager,
-		   gpointer data,
+		   const EphyCookie *cookie,
 		   PdmDialog *dialog)
 {
+	PdmActionInfo *info = dialog->priv->cookies;
+	GtkTreeIter iter;
+
 	LOG ("cookie_changed_cb")
+
+	if (cookie_to_iter (info->model, cookie, &iter))
+	{
+		gtk_list_store_remove (GTK_LIST_STORE (info->model), &iter);		
+		info->add (info, (gpointer) ephy_cookie_copy (cookie));
+	}
+	else
+	{
+		g_warning ("Unable to find changed cookie in list!\n");
+	}
 }
 
 static void
 cookie_deleted_cb (EphyCookieManager *manager,
-		   gpointer data,
+		   const EphyCookie *cookie,
 		   PdmDialog *dialog)
 {
+	PdmActionInfo *info = dialog->priv->cookies;
+	GtkTreeIter iter;
+
 	LOG ("cookie_deleted_cb")
+
+	if (cookie_to_iter (info->model, cookie, &iter))
+	{
+		gtk_list_store_remove (GTK_LIST_STORE (info->model), &iter);		
+	}
+	else
+	{
+		g_warning ("Unable to find deleted cookie in list!\n");
+	}
 }
 
 static void
 cookies_cleared_cb (EphyCookieManager *manager,
 		    PdmDialog *dialog)
 {
+	PdmActionInfo *info = dialog->priv->cookies;
+	GtkTreeIter iter;
+	gboolean valid;
+
 	LOG ("cookies_cleared_cb")
+
+	valid = gtk_tree_model_get_iter_first (info->model, &iter);
+
+	while (valid)
+	{
+		gtk_list_store_remove (GTK_LIST_STORE (info->model), &iter);		
+
+		valid = gtk_tree_model_iter_next (info->model, &iter);
+	}
 }
 
 static void
@@ -480,13 +569,13 @@ pdm_dialog_fill_cookies_list (PdmActionInfo *info)
 	info->filled = TRUE;
 
 	/* Now connect the callbacks on the EphyCookieManager */
-	g_signal_connect_object (manager, "added",
+	g_signal_connect_object (manager, "cookie-added",
 				 G_CALLBACK (cookie_added_cb), info->dialog, 0);
-	g_signal_connect_object (manager, "changed",
+	g_signal_connect_object (manager, "cookie-changed",
 				 G_CALLBACK (cookie_changed_cb), info->dialog, 0);
-	g_signal_connect_object (manager, "deleted",
+	g_signal_connect_object (manager, "cookie-deleted",
 				 G_CALLBACK (cookie_deleted_cb), info->dialog, 0);
-	g_signal_connect_object (manager, "cleared",
+	g_signal_connect_object (manager, "cookies-cleared",
 			  	 G_CALLBACK (cookies_cleared_cb), info->dialog, 0);
 }
 
@@ -596,37 +685,6 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 }
 
 static void
-password_added_cb (EphyPasswordManager *manager,
-		   gpointer data,
-		   PdmDialog *dialog)
-{
-	LOG ("password_added_cb")
-}
-
-static void
-password_changed_cb (EphyPasswordManager *manager,
-		     gpointer data,
-		     PdmDialog *dialog)
-{
-	LOG ("password_changed_cb")
-}
-
-static void
-password_deleted_cb (EphyPasswordManager *manager,
-		     gpointer data,
-		     PdmDialog *dialog)
-{
-	LOG ("password_deleted_cb")
-}
-
-static void
-passwords_cleared_cb (EphyPasswordManager *manager,
-		      PdmDialog *dialog)
-{
-	LOG ("password_cleared_cb")
-}
-
-static void
 pdm_dialog_fill_passwords_list (PdmActionInfo *info)
 {
 	EphyPasswordManager *manager;
@@ -648,16 +706,6 @@ pdm_dialog_fill_passwords_list (PdmActionInfo *info)
 	g_list_free (list);
 
 	info->filled = TRUE;
-
-	/* now connect the callbacks on the EphyPasswordManager */
-	g_signal_connect_object (manager, "added",
-				 G_CALLBACK (password_added_cb), info->dialog, 0);
-	g_signal_connect_object (manager, "changed",
-				 G_CALLBACK (password_changed_cb), info->dialog, 0);
-	g_signal_connect_object (manager, "deleted",
-				 G_CALLBACK (password_deleted_cb), info->dialog, 0);
-	g_signal_connect_object (manager, "cleared",
-				 G_CALLBACK (passwords_cleared_cb), info->dialog, 0);
 }
 
 static void
@@ -762,6 +810,7 @@ pdm_dialog_init (PdmDialog *dialog)
 	cookies->remove_id = PROP_COOKIES_REMOVE;
 	cookies->data_col = COL_COOKIES_DATA;
 	cookies->filled = FALSE;
+	cookies->delete_row_on_remove = FALSE;
 
 	passwords = g_new0 (PdmActionInfo, 1);
 	passwords->construct = pdm_dialog_passwords_construct;
@@ -773,6 +822,7 @@ pdm_dialog_init (PdmDialog *dialog)
 	passwords->remove_id = PROP_PASSWORDS_REMOVE;
 	passwords->data_col = COL_PASSWORDS_DATA;
 	passwords->filled = FALSE;
+	passwords->delete_row_on_remove = TRUE;
 
 	dialog->priv->cookies = cookies;
 	dialog->priv->passwords = passwords;

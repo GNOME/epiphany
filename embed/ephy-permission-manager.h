@@ -90,7 +90,7 @@ EphyPermissionInfo     *ephy_permission_info_new	(const char *host,
 							 EphyPermissionType type,
 							 gboolean allowed);
 
-EphyPermissionInfo     *ephy_permission_info_copy	(EphyPermissionInfo *info);
+EphyPermissionInfo     *ephy_permission_info_copy	(const EphyPermissionInfo *info);
 
 void			ephy_permission_info_free	(EphyPermissionInfo *info);
 

@@ -90,7 +90,7 @@ struct EphyCookieManagerIFace
 	/* Methods */
 	GList *	(* list)	(EphyCookieManager *manager);
 	void	(* remove)	(EphyCookieManager *manager,
-				 EphyCookie *cookie);
+				 const EphyCookie *cookie);
 	void	(* clear)	(EphyCookieManager *manager);
 };
 
@@ -100,7 +100,7 @@ GType		ephy_cookie_get_type	(void);
 
 EphyCookie     *ephy_cookie_new		(void);
 
-EphyCookie     *ephy_cookie_copy	(EphyCookie *cookie);
+EphyCookie     *ephy_cookie_copy	(const EphyCookie *cookie);
 
 void		ephy_cookie_free	(EphyCookie *cookie);
 
@@ -111,7 +111,7 @@ GType 		ephy_cookie_manager_get_type		(void);
 GList *		ephy_cookie_manager_list_cookies	(EphyCookieManager *manager);
 
 void		ephy_cookie_manager_remove_cookie	(EphyCookieManager *manager,
-							 EphyCookie *cookie);
+							 const EphyCookie *cookie);
 
 void		ephy_cookie_manager_clear		(EphyCookieManager *manager);
 

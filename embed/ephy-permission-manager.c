@@ -73,7 +73,7 @@ ephy_permission_info_new (const char *host,
  * Return value: a copy of @info
  **/
 EphyPermissionInfo *
-ephy_permission_info_copy (EphyPermissionInfo *info)
+ephy_permission_info_copy (const EphyPermissionInfo *info)
 {
 	EphyPermissionInfo *copy = g_new0 (EphyPermissionInfo, 1);
 

@@ -66,7 +66,7 @@ EphyPasswordInfo       *ephy_password_info_new		(const char *host,
 							 const char *username,
 							 const char *password);
 
-EphyPasswordInfo       *ephy_password_info_copy		(EphyPasswordInfo *info);
+EphyPasswordInfo       *ephy_password_info_copy		(const EphyPasswordInfo *info);
 
 void			ephy_password_info_free		(EphyPasswordInfo *info);
 

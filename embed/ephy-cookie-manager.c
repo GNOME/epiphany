@@ -58,7 +58,7 @@ ephy_cookie_new (void)
  * Return value: a copy of @cookie.
  **/
 EphyCookie *
-ephy_cookie_copy (EphyCookie *cookie)
+ephy_cookie_copy (const EphyCookie *cookie)
 {
 	EphyCookie *copy = g_new0 (EphyCookie, 1);
 
@@ -242,7 +242,7 @@ ephy_cookie_manager_list_cookies (EphyCookieManager *manager)
  **/
 void
 ephy_cookie_manager_remove_cookie (EphyCookieManager *manager,
-				   EphyCookie *cookie)
+				   const EphyCookie *cookie)
 {
 	EphyCookieManagerIFace *iface = EPHY_COOKIE_MANAGER_GET_CLASS (manager);
 	iface->remove (manager, cookie);
