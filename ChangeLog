@@ -1,5 +1,12 @@
 2003-12-19  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-encoding-dialog.c: (sync_embed_cb):
+	* src/ephy-encoding-menu.c: (update_encoding_menu_cb):
+
+	Use return, not g_return_if_fail.
+
+2003-12-19  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/print-dialog.c: (ephy_print_dialog_browse_button_cb):
 
 	EphyFileChooser now destroys with parent, don't set the flag again here.

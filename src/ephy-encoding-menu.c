@@ -186,11 +186,6 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	enc_node = ephy_encodings_get_node (p->encodings, encoding);
 	if (!EPHY_IS_NODE (enc_node))
 	{
-		g_warning ("Encountered unknown encoding '%s'"
-			   ". Please file a bug at http://bugzilla.gnome.o"
-			   "rg/enter_bug.cgi?product=epiphany\n",
-			   encoding);
-
 		goto build_menu;
 	}
 
