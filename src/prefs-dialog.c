@@ -1080,24 +1080,16 @@ create_language_section (EphyDialog *dialog)
 static char*
 get_download_button_label ()
 {
-	char *label, *key, *desktop_path, *home_path, *tmp;
-	char *downloads_path;
+	char *key, *label;
 
 	key = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
 
-	tmp = g_build_filename (g_get_home_dir (), "Desktop", NULL);
-	desktop_path = g_filename_to_utf8 (tmp, -1, NULL, NULL, NULL);
-	home_path = g_filename_to_utf8 (g_get_home_dir (), -1, NULL, NULL, NULL);
-	g_free (tmp);
-
-	downloads_path = g_build_filename (g_get_home_dir (), "Downloads", NULL);
-
-	if (g_utf8_collate (key, desktop_path) == 0)
+	if (g_utf8_collate (key, "~/Desktop") == 0)
 	{
 		g_free (key);
 		label = g_strdup (_("Desktop")); 
 	}
-	else if (g_utf8_collate (key, home_path) == 0)
+	else if (g_utf8_collate (key, "~") == 0)
 	{
 		g_free (key);
 		/* Note that this does NOT refer to the home page but to a
@@ -1106,7 +1098,7 @@ get_download_button_label ()
 		 * filechooser */
 		label = g_strdup (_("Home"));
 	}
-	else if (g_utf8_collate (key, downloads_path) == 0)
+	else if (g_utf8_collate (key, "~/Downloads") == 0)
 	{
 		g_free (key);
 		label = g_strdup (_("Downloads"));
@@ -1116,8 +1108,6 @@ get_download_button_label ()
 		label = key;
 	}
 
-	g_free (desktop_path);
-	g_free (home_path);
 	return label;
 }
 	
@@ -1288,17 +1278,15 @@ download_path_response_cb (GtkDialog *fc, gint response, EphyDialog *dialog)
 		if (dir != NULL)
 		{
 			GtkWidget *button;
-			char *label, *converted;
+			char *label;
 
-			converted = g_filename_to_utf8 (dir, -1, NULL, NULL, NULL);
-			eel_gconf_set_string (CONF_STATE_DOWNLOAD_DIR, converted);
+			eel_gconf_set_path (CONF_STATE_DOWNLOAD_DIR, dir);
 			
 			button = ephy_dialog_get_control (dialog, properties[DOWNLOAD_PATH_BUTTON_PROP].id);
 			label = get_download_button_label ();
 			ephy_ellipsizing_label_set_text ((EphyEllipsizingLabel*) GTK_BIN (button)->child,
 							  label);
 
-			g_free (converted);
 			g_free (dir);
 			g_free (label);
 		}

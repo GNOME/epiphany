@@ -55,6 +55,7 @@
 #include "nsDirectoryServiceDefs.h"
 #include "nsDirectoryServiceUtils.h"
 #include "nsIRequest.h"
+#include "nsIMIMEInfo.h"
 #include "netCore.h"
 
 const char* const persistContractID = "@mozilla.org/embedding/browser/nsWebBrowserPersist;1";
@@ -88,6 +89,7 @@ MozDownload::Init(nsIURI *aSource, nsILocalFile *aTarget, const PRUnichar *aDisp
 		   nsIMIMEInfo *aMIMEInfo, PRInt64 startTime, nsIWebBrowserPersist *aPersist)
 {
 	PRBool addToView = PR_TRUE;
+	nsresult rv;
 
 	if (mEmbedPersist)
 	{
@@ -106,6 +108,7 @@ MozDownload::Init(nsIURI *aSource, nsILocalFile *aTarget, const PRUnichar *aDisp
 	mPercentComplete = 0;
 	mInterval = 4000; /* in ms */
 	mLastUpdate = mStartTime;
+	mMIMEInfo = aMIMEInfo;
 
 	if (aPersist)
 	{
@@ -262,6 +265,8 @@ NS_IMETHODIMP
 MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 			    PRUint32 aStateFlags, nsresult aStatus)
 {
+	nsresult rv;
+
 	/* For a file download via the external helper app service, we will never get a start
            notification. The helper app service has gotten that notification before it created us. */
 	if (!mGotFirstStateChange)
@@ -301,6 +306,41 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 			{
 				mozilla_embed_persist_cancelled (mEmbedPersist);
 			}
+		}
+		else if (NS_SUCCEEDED (aStatus))
+		{
+			GnomeVFSMimeApplication *helperApp;
+			char *mimeType;	
+
+			rv = mMIMEInfo->GetMIMEType (&mimeType);
+			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+			helperApp = gnome_vfs_mime_get_default_application (mimeType); 
+
+			PRUnichar *description;
+			mMIMEInfo->GetApplicationDescription (&description);
+
+			/* HACK we use the application description to decide
+			   if we have to open the saved file */
+			if ((strcmp (NS_ConvertUCS2toUTF8 (description).get(), "gnome-default") == 0) &&
+			    helperApp)
+			{
+				GList *params = NULL;
+				char *param;
+				nsCAutoString aDest;
+
+				mDestination->GetNativePath (aDest);
+
+				param = g_strdup (aDest.get ());
+				params = g_list_append (params, param);
+				gnome_vfs_mime_application_launch (helperApp, params);
+				g_free (param);
+
+				g_list_free (params);
+			}
+
+			nsMemory::Free (mimeType);
+			gnome_vfs_mime_application_free (helperApp);
 		}
 	}
         

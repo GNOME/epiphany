@@ -72,6 +72,8 @@ void         eel_gconf_value_set_string_list (GConfValue             *value,
 void         eel_gconf_set_float             (const char             *key,
 			                      gfloat                  float_value);
 gfloat       eel_gconf_get_float             (const char             *key);
+void         eel_gconf_set_path              (const char             *key,
+					      const char             *value);
 
 G_END_DECLS
 

@@ -1,5 +1,27 @@
 2004-01-19  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* lib/eel-gconf-extensions.c: (tilde_compress),
+	(eel_gconf_set_path):
+	* lib/eel-gconf-extensions.h:
+
+	Add a way to store paths.
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/ContentHandler.h:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+
+	Actually save the file in downloads dir and then
+	open it. It doesnt seem to open it but it's prolly
+	a gnome-vfs bug.
+
+	* src/prefs-dialog.c: (get_download_button_label),
+	(download_path_response_cb):
+
+	Simplify the label logic using ~.
+
+2004-01-19  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* data/epiphany.schemas.in:
 	* data/glade/prefs-dialog.glade:
 	* embed/mozilla/ContentHandler.cpp:

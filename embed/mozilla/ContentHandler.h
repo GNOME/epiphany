@@ -70,24 +70,19 @@ class GContentHandler : public nsIHelperAppLauncherDialog
   private:
 
 	NS_METHOD Init ();
-	NS_METHOD ProcessMimeInfo ();
-	NS_METHOD FindHelperApp ();
 	NS_METHOD LaunchHelperApp ();
 
-	NS_METHOD GetLauncher (nsIHelperAppLauncher * *_retval);
-	NS_METHOD SetHelperApp(GnomeVFSMimeApplication *mHelperApp,
-			       PRBool alwaysUse);
-	NS_METHOD SynchroniseMIMEInfo ();
 	NS_METHOD MIMEConfirmAction ();
 	NS_METHOD MIMEDoAction ();
-	
+	NS_METHOD CheckAppSupportScheme ();
+
 	nsCOMPtr<nsIHelperAppLauncher> mLauncher;
 
 	nsCOMPtr<nsIURI> mUri;
 	nsCOMPtr<nsIFile> mTempFile;
 
 	char *mMimeType;	
-	PRBool mUrlHelper;
+	PRBool mAppSupportScheme;
 	GnomeVFSMimeApplication *mHelperApp;
 	ContentAction mAction;
 	EphyMimePermission mPermission;

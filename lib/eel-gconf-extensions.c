@@ -687,3 +687,65 @@ eel_gconf_get_float (const char *key)
 
 	return result;
 }
+
+static char *
+tilde_compress (const char *path)
+{
+	const char *home_dir = g_get_home_dir();
+	int         home_dir_l = strlen (home_dir);
+	int         ntilde = 0;
+	const char *scan;
+	int         path_l, result_l;
+	char       *result, *scan2;
+
+	if (path == NULL)
+		return NULL;
+
+	path_l = strlen (path);
+	for (scan = path; scan != NULL; scan++) {
+		if (path_l - (scan - path) < home_dir_l)
+			break;
+		if (strncmp (scan, home_dir, home_dir_l) == 0)
+			ntilde++;
+	}
+	
+	if (ntilde == 0)
+		return g_strdup (path);
+	
+	result_l = strlen (path) + ntilde - (ntilde * home_dir_l);
+	result = g_new (char, result_l + 1);
+
+	for (scan = path, scan2 = result; scan != NULL; scan2++) {
+		if (path_l - (scan - path) < home_dir_l) {
+			strcpy (scan2, scan);
+			scan2 += strlen (scan);
+			break;
+		}
+		if (strncmp (scan, home_dir, home_dir_l) == 0) {
+			*scan2 = '~';
+			scan += home_dir_l;
+		} else {
+			*scan2 = *scan;
+			scan++;
+		} 
+	}
+	*scan2 = 0;
+
+	return result;
+}
+
+void
+eel_gconf_set_path (const char *key,
+		    const char *value)
+{
+	char *tilde_path;
+	char *converted;
+	
+	converted = g_filename_to_utf8 (value, -1, NULL, NULL, NULL);
+
+	tilde_path = tilde_compress (converted);
+	eel_gconf_set_string (key, tilde_path);
+
+	g_free (tilde_path);
+	g_free (converted);
+}

@@ -35,7 +35,6 @@
 #include "nsILocalFile.h"
 #include "nsIMIMEInfo.h"
 
-#include "nsIDocShell.h"
 #include "nsIWebNavigation.h" // Needed to create the LoadType flag
 
 #include "ephy-prefs.h"
@@ -59,8 +58,7 @@ class GContentHandler;
 
 NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 
-GContentHandler::GContentHandler() : mMimeType(nsnull),
-				     mUrlHelper(PR_FALSE)
+GContentHandler::GContentHandler() : mMimeType(nsnull)
 {
 	LOG ("GContentHandler ctor")
 }
@@ -98,10 +96,6 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
 	g_signal_emit_by_name (single, "handle_content", mMimeType,
 			       mUrl.get(), &handled);
-
-	nsCOMPtr<nsIDocShell> eDocShell = do_QueryInterface(aContext);
-	PRUint32 eLoadType;
-	eDocShell->GetLoadType (&eLoadType);
 	
 	if (!handled)
 	{
@@ -165,135 +159,50 @@ NS_METHOD GContentHandler::ShowProgressDialog(nsIHelperAppLauncher *aLauncher,
 }
 #endif
 
-NS_METHOD GContentHandler::FindHelperApp (void)
-{
-	if (mUrlHelper)
-	{
-		return LaunchHelperApp ();
-	}
-
-	nsresult rv;
-	rv = SynchroniseMIMEInfo();
-	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
-
-	return mLauncher->LaunchWithApplication (nsnull, PR_FALSE);
-}
-
 NS_METHOD GContentHandler::LaunchHelperApp (void)
 {
-	if (mMimeType)
-	{
-		nsresult rv;
-		nsCOMPtr<nsIExternalHelperAppService> helperService =
-			do_GetService (NS_EXTERNALHELPERAPPSERVICE_CONTRACTID);
-		NS_ENSURE_TRUE (helperService, NS_ERROR_FAILURE);
+	nsresult rv;
+	nsCOMPtr<nsIExternalHelperAppService> helperService;
 
-		nsCOMPtr<nsPIExternalAppLauncher> appLauncher =
-			do_QueryInterface (helperService);
-		if (appLauncher)
-		{
-			appLauncher->DeleteTemporaryFileOnExit(mTempFile);
-		}
+	helperService = do_GetService (NS_EXTERNALHELPERAPPSERVICE_CONTRACTID);
+	NS_ENSURE_TRUE (helperService, NS_ERROR_FAILURE);
 
-		nsString uFileName;
-		mTempFile->GetPath(uFileName);
-		const nsCString &aFileName = NS_ConvertUCS2toUTF8(uFileName);
+	nsCOMPtr<nsPIExternalAppLauncher> appLauncher = do_QueryInterface (helperService);
+	NS_ENSURE_TRUE (appLauncher, NS_ERROR_FAILURE);
+	appLauncher->DeleteTemporaryFileOnExit(mTempFile);
 
-		const nsCString &document = (mUrlHelper) ? mUrl : aFileName;
+	char *param = g_strdup (mUrl.get());
+	GList *params = NULL;
+	params = g_list_append (params, param);
+	gnome_vfs_mime_application_launch (mHelperApp, params);
+	g_free (param);
+	g_list_free (params);
 
-		char *param = g_strdup (document.get());
-		GList *params = NULL;
-		params = g_list_append (params, param);
-		gnome_vfs_mime_application_launch (mHelperApp, params);
-		g_free (param);
-		g_list_free (params);
-
-		if (mUrlHelper)
-		{
-			mLauncher->Cancel();
-		}
-	}
-	else
-	{
-		mLauncher->Cancel ();
-	}
+	mLauncher->Cancel();
 
 	return NS_OK;
 }
 
-NS_METHOD GContentHandler::GetLauncher (nsIHelperAppLauncher * *_retval)
-{
-	NS_IF_ADDREF (*_retval = mLauncher);
-	return NS_OK;
-}
-
-static gboolean 
-application_support_scheme (GnomeVFSMimeApplication *app, const nsCString &aScheme)
+NS_METHOD GContentHandler::CheckAppSupportScheme (void)
 {
 	GList *l;
 
-	g_return_val_if_fail (app != NULL, FALSE);
-	g_return_val_if_fail (!aScheme.IsEmpty(), FALSE);
+	mAppSupportScheme = PR_FALSE;	
+
+	if (!mHelperApp) return NS_OK;
+
+	if (mHelperApp->expects_uris != GNOME_VFS_MIME_APPLICATION_ARGUMENT_TYPE_URIS)
+		return NS_OK;
 	
-	if (app->expects_uris != GNOME_VFS_MIME_APPLICATION_ARGUMENT_TYPE_URIS)
-		return FALSE;
-	
-	for (l = app->supported_uri_schemes; l != NULL; l = l->next)
+	for (l = mHelperApp->supported_uri_schemes; l != NULL; l = l->next)
 	{
 		char *uri_scheme = (char *)l->data;
-		g_return_val_if_fail (uri_scheme != NULL, FALSE);
-		if (aScheme.Equals (uri_scheme)) return TRUE;
+
+		if (mScheme.Equals (uri_scheme))
+		{
+			mAppSupportScheme = PR_TRUE;
+		}
 	}
-
-	return FALSE;
-}
-
-NS_METHOD GContentHandler::SetHelperApp(GnomeVFSMimeApplication *aHelperApp,
-					PRBool alwaysUse)
-{
-	mHelperApp = aHelperApp;
-	mUrlHelper = application_support_scheme (aHelperApp, mScheme);
-
-	return NS_OK;
-}
-
-NS_METHOD GContentHandler::SynchroniseMIMEInfo (void)
-{
-	nsresult rv;
-	char *command_with_path;
-
-	NS_ENSURE_TRUE (mLauncher, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIMIMEInfo> mimeInfo;
-	mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
-	NS_ENSURE_TRUE (mimeInfo, NS_ERROR_FAILURE);
-
-	command_with_path = g_find_program_in_path (mHelperApp->command);
-	if (command_with_path == NULL) return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsILocalFile> helperFile;
-	NS_NewNativeLocalFile (nsDependentCString(command_with_path),
-			       PR_TRUE,
-			       getter_AddRefs(helperFile));
-	NS_ENSURE_TRUE (helperFile, NS_ERROR_FAILURE);
-
-	g_free (command_with_path);
-
-	rv = mimeInfo->SetPreferredApplicationHandler(helperFile);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-	nsMIMEInfoHandleAction mimeInfoAction;
-	mimeInfoAction = nsIMIMEInfo::useHelperApp;
-
-	if(mHelperApp->requires_terminal) //Information passing kludge!
-	{
-		rv = mimeInfo->SetApplicationDescription
-				(NS_LITERAL_STRING("runInTerminal").get());
-		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-	}
-
-	rv = mimeInfo->SetPreferredAction(mimeInfoAction);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	return NS_OK;
 }
@@ -325,34 +234,6 @@ NS_METHOD GContentHandler::Init (void)
 	rv = mUri->GetSpec (mUrl);
 	rv = mUri->GetScheme (mScheme);
 
-	ProcessMimeInfo ();
-
-	return NS_OK;
-}
-
-NS_METHOD GContentHandler::ProcessMimeInfo (void)
-{
-	if (mMimeType == NULL ||
-	    !nsCRT::strcmp(mMimeType, "application/octet-stream"))
-	{
-		/* FIXME: we leak the old value of mMimeType */
-		
-		nsresult rv;
-		nsCOMPtr<nsIURL> url = do_QueryInterface(mUri, &rv);
-		if (NS_SUCCEEDED(rv) && url)
-		{
-			nsCAutoString uriFileName;
-			url->GetFileName(uriFileName);
-			mMimeType = g_strdup
-					(gnome_vfs_mime_type_from_name
-						(uriFileName.get()));
-		}
-		else
-		{
-			mMimeType = g_strdup ("application/octet-stream");
-		}
-	}
-
 	return NS_OK;
 }
 
@@ -367,7 +248,8 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 		("", NULL, GTK_DIALOG_NO_SEPARATOR,
 		 _("Save As..."), CONTENT_ACTION_SAVEAS,
 		 GTK_STOCK_CANCEL, CONTENT_ACTION_NONE,
-		 _("Open"), CONTENT_ACTION_OPEN,
+		 mAction == CONTENT_ACTION_OPEN ?
+		 _("Open") : _("Download"), mAction,
 		 NULL);
 	
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
@@ -382,13 +264,13 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	if (mPermission != EPHY_MIME_PERMISSION_SAFE)
 	{
 		text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
-					_("Do you really want to download the file?"),
-					_("This type of file could potentially damage your documents"
-					  "or invade your privacy."
-					  "It's not safe to open it directly. You"
+					_("Download the unsafe file?"),
+					_("This type of file could potentially damage your documents "
+					  "or invade your privacy. "
+					  "It's not safe to open it directly. You "
 					  "can save it instead."));
 	}
-	if (mAction == CONTENT_ACTION_OPEN)
+	else if (mAction == CONTENT_ACTION_OPEN)
 	{
 		text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
 					_("Open the file in another application?"),
@@ -400,7 +282,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	{
 		text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
 					_("Download the file?"),
-					_("It's not possible to view this file because there is no"
+					_("It's not possible to view this file because there is no "
 					  "application installed that can open it."
 					  "You can save it instead."));
 	}
@@ -439,8 +321,9 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK)) return NS_OK;
 
 	auto_downloads = eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS);
-	GnomeVFSMimeApplication *DefaultApp = gnome_vfs_mime_get_default_application(mMimeType);
 
+	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType); 
+	CheckAppSupportScheme ();
 	mPermission = ephy_embed_shell_check_mime (embed_shell, mMimeType);
 
 	mAction = CONTENT_ACTION_OPEN;
@@ -454,21 +337,31 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	{
 		MIMEConfirmAction ();
 	}
-	
-	if (mAction == CONTENT_ACTION_DOWNLOAD ||
-	    mAction == CONTENT_ACTION_SAVEAS)
+
+	nsCOMPtr<nsIMIMEInfo> mimeInfo;
+	mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
+	NS_ENSURE_TRUE (mimeInfo, NS_ERROR_FAILURE);
+
+	if (mAction == CONTENT_ACTION_OPEN)
 	{
-		nsCOMPtr<nsIHelperAppLauncher> launcher;
-		GetLauncher (getter_AddRefs(launcher));
-		NS_ENSURE_TRUE (launcher, NS_ERROR_FAILURE);
-		launcher->SaveToDisk (nsnull,PR_FALSE);
+		/* HACK we use the application description to ask
+		   MozDownload to open the file when download
+		   is finished */
+		mimeInfo->SetApplicationDescription
+			(NS_LITERAL_STRING ("gnome-default").get());
 	}
-	else if (mAction == CONTENT_ACTION_OPEN)
+	else
 	{
-		rv = SetHelperApp (DefaultApp, FALSE);
-		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-		rv = FindHelperApp ();
-		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+		mimeInfo->SetApplicationDescription (nsnull);
+	}
+
+	if (mAction == CONTENT_ACTION_OPEN && mAppSupportScheme)
+	{
+		LaunchHelperApp ();
+	}
+	else if (mAction != CONTENT_ACTION_NONE)
+	{
+		mLauncher->SaveToDisk (nsnull,PR_FALSE);
 	}
 
 	return NS_OK;

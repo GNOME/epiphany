@@ -56,6 +56,7 @@
 #include "downloader-view.h"
 #include "ephy-download.h"
 #include "ephy-embed-shell.h"
+#include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
 /* MozDownload
    Holds information used to display a single download in the UI. This object is 
@@ -111,6 +112,7 @@ public:
 protected:
 	nsCOMPtr<nsIURI>        mSource;
 	nsCOMPtr<nsILocalFile>  mDestination;
+	nsCOMPtr<nsIMIMEInfo>   mMIMEInfo;
 	PRInt64		    	mLastUpdate;
 	PRInt64                 mStartTime;
 	PRInt64		    	mElapsed;
