@@ -385,7 +385,7 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 		g_warning ("Couldn't read '%s' data\n", identifier);
 		return;
 	}
-
+#if 0
 	/* Validate the extension description */
 	if (manager->priv->schema_ctxt)
 	{
@@ -397,7 +397,7 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 			return;
 		}
 	}
-
+#endif
 	/* Now parse it */
 	reader = xmlReaderWalker (doc);
 	g_return_if_fail (reader != NULL);
