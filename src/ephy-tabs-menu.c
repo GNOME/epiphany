@@ -191,7 +191,7 @@ tab_removed_cb (EphyNotebook *notebook,
 		(tab, G_CALLBACK (sync_tab_title), action);
 
 	g_signal_handlers_disconnect_by_func
-		(action, G_CALLBACK (tab_action_activate_cb), tab);
+		(action, G_CALLBACK (tab_action_activate_cb), menu);
 
 	g_object_set_data (G_OBJECT (tab), DATA_KEY, NULL);
  	gtk_action_group_remove_action (priv->action_group, action);
