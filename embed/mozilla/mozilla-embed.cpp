@@ -786,6 +786,18 @@ impl_get_encoding_info (EphyEmbed *embed)
 	return info;
 }
 
+static gboolean
+impl_has_modified_forms (EphyEmbed *embed)
+{
+	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
+	nsresult result;
+
+	PRBool modified;
+	result = mpriv->browser->GetHasModifiedForms (&modified);
+
+	return modified == PR_TRUE ? TRUE : FALSE;
+}
+
 static void
 mozilla_embed_location_changed_cb (GtkMozEmbed *embed, 
 				   MozillaEmbed *membed)
@@ -1121,6 +1133,7 @@ ephy_embed_iface_init (EphyEmbedIFace *iface)
 	iface->print_preview_close = impl_print_preview_close;
 	iface->print_preview_n_pages = impl_print_preview_n_pages;
 	iface->print_preview_navigate = impl_print_preview_navigate;
+	iface->has_modified_forms = impl_has_modified_forms;
 }
 
 void

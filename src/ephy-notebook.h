@@ -70,6 +70,8 @@ struct EphyNotebookClass
 	void (* tab_detached)   (EphyNotebook *notebook,
 				 GtkWidget *child);
 	void (* tabs_reordered) (EphyNotebook *notebook);
+	void (* tab_delete)	(EphyNotebook *notebook,
+				 GtkWidget *child);
 };
 
 GType		ephy_notebook_get_type		(void);

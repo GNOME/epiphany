@@ -1,3 +1,26 @@
+2004-01-04  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-embed.c: (ephy_embed_has_modified_forms):
+	* embed/ephy-embed.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Add API to check if an EphyEmbed has forms with user input in them.
+	Currently it required one modified textarea, or two modified text
+	fields.
+
+	* src/ephy-notebook.c: (ephy_notebook_class_init),
+	(close_button_clicked_cb):
+	* src/ephy-notebook.h:
+	* src/ephy-window.c: (confirm_close_with_modified_forms),
+	(ephy_window_delete_event_cb), (tab_delete_cb), (setup_notebook),
+	(ephy_window_init), (ephy_window_remove_tab):
+
+	When closing a window or tab, check if there is unsubmitted user
+	input in form fields, and if so, warn the user before closing.
+	Fixes bug #119857.
+
 2004-01-03  Michael Terry <mterry@fastmail.fm> 
 
 	* data/ui/epiphany-ui.xml:

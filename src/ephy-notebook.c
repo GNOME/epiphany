@@ -20,7 +20,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "ephy-notebook.h"
@@ -92,12 +92,13 @@ enum
 	TAB_REMOVED,
 	TABS_REORDERED,
 	TAB_DETACHED,
+	TAB_DELETE,
 	LAST_SIGNAL
 };
 
-static GObjectClass *parent_class = NULL;
-
 static guint signals[LAST_SIGNAL] = { 0 };
+
+static GObjectClass *parent_class = NULL;
 
 GType
 ephy_notebook_get_type (void)
@@ -175,6 +176,16 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE,
 			      0);
+	signals[TAB_DELETE] =
+		g_signal_new ("tab_delete",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyNotebookClass, tab_delete),
+			      g_signal_accumulator_true_handled, NULL,
+			      ephy_marshal_BOOLEAN__OBJECT,
+			      G_TYPE_BOOLEAN,
+			      1,
+			      GTK_TYPE_WIDGET);
 
 	g_type_class_add_private (object_class, sizeof(EphyNotebookPrivate));
 }
@@ -852,9 +863,15 @@ static void
 close_button_clicked_cb (GtkWidget *widget, GtkWidget *child)
 {
 	EphyNotebook *notebook;
+	gboolean inhibited = FALSE;
 
 	notebook = EPHY_NOTEBOOK (gtk_widget_get_parent (child));
-	ephy_notebook_remove_page (notebook, child);
+	g_signal_emit (G_OBJECT (notebook), signals[TAB_DELETE], 0, child, &inhibited);
+
+	if (inhibited == FALSE)
+	{
+		ephy_notebook_remove_page (notebook, child);
+	}
 }
 
 static GtkWidget *

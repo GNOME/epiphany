@@ -74,6 +74,9 @@
 #include "nsIDOMHTMLDocument.h"
 #include "nsIDOMHTMLCollection.h"
 #include "nsIDOMHTMLElement.h"
+#include "nsIDOMHTMLFormElement.h"
+#include "nsIDOMHTMLInputElement.h"
+#include "nsIDOMHTMLTextAreaElement.h"
 #include "nsIDeviceContext.h"
 #include "nsIPresContext.h"
 #include "nsIAtom.h"
@@ -498,7 +501,6 @@ nsresult EphyBrowser::GetZoom (float *aZoom)
 
 nsresult EphyBrowser::GetDocument (nsIDOMDocument **aDOMDocument)
 {
-	nsCOMPtr<nsIDOMDocument> domDocument;
 	return mDOMWindow->GetDocument (aDOMDocument);
 }
 
@@ -866,4 +868,128 @@ nsresult EphyBrowser::GetCommandState (const char *command, PRBool *enabled)
 	if (!cmdManager) return NS_ERROR_FAILURE;
 
 	return cmdManager->IsCommandEnabled (command, nsnull, enabled);
+}
+
+#define NUM_MODIFIED_TEXTFIELDS_REQUIRED	2
+
+nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUint32 *aNumTextFields, PRBool *aHasTextArea)
+{
+	nsCOMPtr<nsIDOMHTMLDocument> htmlDoc = do_QueryInterface(aDomDoc);
+	NS_ENSURE_TRUE (htmlDoc, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIDOMHTMLCollection> forms;
+	htmlDoc->GetForms (getter_AddRefs (forms));
+	if (!forms) return NS_OK; /* it's ok not to have any forms */
+
+	PRUint32 formNum;
+	forms->GetLength (&formNum);
+
+	/* check all forms */
+	for (PRUint32 formIndex = 0; formIndex < formNum; formIndex++)
+	{
+		nsCOMPtr<nsIDOMNode> formNode;
+		forms->Item (formIndex, getter_AddRefs (formNode));
+		if (!formNode) continue;
+
+		nsCOMPtr<nsIDOMHTMLFormElement> formElement = do_QueryInterface (formNode);
+		if (!formElement) continue;
+
+		nsCOMPtr<nsIDOMHTMLCollection> formElements;
+		formElement->GetElements (getter_AddRefs (formElements));
+		if (!formElements) continue;
+
+		PRUint32 elementNum;
+		formElements->GetLength (&elementNum);
+
+		/* check all input elements in the form for user input */
+		for (PRUint32 elementIndex = 0; elementIndex < elementNum; elementIndex++)
+		{
+			nsCOMPtr<nsIDOMNode> domNode;
+			formElements->Item (elementIndex, getter_AddRefs (domNode));
+			if (!domNode) continue;
+
+			nsCOMPtr<nsIDOMHTMLTextAreaElement> areaElement = do_QueryInterface (domNode);
+			if (areaElement)
+			{
+				nsAutoString default_text, user_text;
+				areaElement->GetDefaultValue (default_text);
+				areaElement->GetValue (user_text);
+				if (Compare (user_text, default_text) != 0)
+				{
+					*aHasTextArea = PR_TRUE;
+					return NS_OK;
+				}
+
+				continue;
+			}
+
+			nsCOMPtr<nsIDOMHTMLInputElement> inputElement = do_QueryInterface(domNode);
+			if (!inputElement) continue;
+	
+			nsAutoString type;
+			inputElement->GetType(type);
+
+			if (type.EqualsIgnoreCase("text"))
+			{
+				nsAutoString default_text, user_text;
+				inputElement->GetDefaultValue (default_text);
+				inputElement->GetValue (user_text);
+				if (Compare (user_text, default_text) != 0)
+				{
+					(*aNumTextFields)++;
+					if (*aNumTextFields >= NUM_MODIFIED_TEXTFIELDS_REQUIRED)
+					{
+						return NS_OK;
+					}
+				}
+			}
+		}
+	}
+
+	return NS_OK;
+}
+
+nsresult EphyBrowser::GetHasModifiedForms (PRBool *modified)
+{
+	*modified = PR_FALSE;
+
+	nsCOMPtr<nsIDocShell> rootDocShell = do_GetInterface (mWebBrowser);
+	NS_ENSURE_TRUE (rootDocShell, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsISimpleEnumerator> enumerator;
+	rootDocShell->GetDocShellEnumerator(nsIDocShellTreeItem::typeContent,
+					    nsIDocShell::ENUMERATE_FORWARDS,
+					    getter_AddRefs(enumerator));
+	NS_ENSURE_TRUE (enumerator, NS_ERROR_FAILURE);
+
+	PRBool hasMore;
+	PRBool hasTextArea = PR_FALSE;
+	PRUint32 numTextFields = 0;
+	while (NS_SUCCEEDED(enumerator->HasMoreElements(&hasMore)) && hasMore)
+	{
+		nsCOMPtr<nsISupports> element;
+		enumerator->GetNext (getter_AddRefs(element));
+		if (!element) continue;
+
+		nsCOMPtr<nsIDocShell> docShell = do_QueryInterface (element);
+		if (!docShell) continue;
+
+		nsCOMPtr<nsIContentViewer> contentViewer;
+		docShell->GetContentViewer (getter_AddRefs(contentViewer));
+		if (!contentViewer) continue;
+
+		nsCOMPtr<nsIDOMDocument> domDoc;
+		contentViewer->GetDOMDocument (getter_AddRefs (domDoc));
+
+		nsresult result;
+		result = GetDocumentHasModifiedForms (domDoc, &numTextFields, &hasTextArea);
+		if (NS_SUCCEEDED (result) &&
+		    (numTextFields >= NUM_MODIFIED_TEXTFIELDS_REQUIRED || hasTextArea))
+		{
+			*modified = PR_TRUE;
+			break;
+		}
+	}
+
+	return NS_OK;
 }

@@ -386,3 +386,10 @@ ephy_embed_print_preview_navigate (EphyEmbed *embed,
 	EphyEmbedIFace *iface = EPHY_EMBED_GET_IFACE (embed);
 	return iface->print_preview_navigate (embed, type, page);
 }
+
+gboolean
+ephy_embed_has_modified_forms (EphyEmbed *embed)
+{
+	EphyEmbedIFace *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->has_modified_forms (embed);
+}

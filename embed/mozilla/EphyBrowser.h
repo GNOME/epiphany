@@ -119,6 +119,8 @@ public:
 	nsresult GetDocumentUrl (nsCString &url);
 	nsresult GetTargetDocumentUrl (nsCString &url);
 
+	nsresult GetHasModifiedForms (PRBool *modified);
+
 	nsCOMPtr<nsIWebBrowser> mWebBrowser;
 
 private:
@@ -135,6 +137,7 @@ private:
 	nsresult SetZoomOnDocshell (float aZoom, nsIDocShell *DocShell);
 	nsresult GetSHistory (nsISHistory **aSHistory);
 	nsresult GetContentViewer (nsIContentViewer **aViewer);
+	nsresult GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUint32 *aNumTextFields, PRBool *aHasTextArea);
 };
 
 #endif

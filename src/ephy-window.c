@@ -57,6 +57,8 @@
 #include <gtk/gtktoggleaction.h>
 #include <gtk/gtkuimanager.h>
 #include <gtk/gtktoggleaction.h>
+#include <gtk/gtkdialog.h>
+#include <gtk/gtkmessagedialog.h>
 
 static void ephy_window_class_init		(EphyWindowClass *klass);
 static void ephy_window_init			(EphyWindow *gs);
@@ -636,6 +638,116 @@ ephy_window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, EphyW
 	return FALSE;
 }
 
+static gboolean
+confirm_close_with_modified_forms (EphyWindow *window)
+{
+	GtkWidget *dialog;
+	GtkWidget *hbox, *vbox, *label, *image;
+	GtkWindowGroup *group;
+	char *text;
+	int response;
+
+	dialog = gtk_dialog_new_with_buttons ("",
+					      GTK_WINDOW (window),
+					      GTK_DIALOG_NO_SEPARATOR | GTK_DIALOG_MODAL,
+					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					      _("_Close document"), GTK_RESPONSE_OK,
+					      NULL);
+	
+	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);
+
+	hbox = gtk_hbox_new (FALSE, 6);
+	gtk_widget_show (hbox);
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
+			    TRUE, TRUE, 0);
+
+	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
+					  GTK_ICON_SIZE_DIALOG);
+	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
+	gtk_widget_show (image);
+	gtk_box_pack_start (GTK_BOX (hbox), image, TRUE, TRUE, 0);
+
+	vbox = gtk_vbox_new (FALSE, 6);
+	gtk_widget_show (vbox);
+	gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
+
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+
+	text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
+				_("There are unsubmitted changes to form elements."),
+				_("If you close the document anyway, you will lose that information."));
+	gtk_label_set_markup (GTK_LABEL (label), text);
+	g_free (text);
+
+	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+	gtk_widget_show (label);
+
+	group = GTK_WINDOW (window)->group;
+	if (group == NULL)
+	{
+		group = gtk_window_group_new ();
+		gtk_window_group_add_window (group, GTK_WINDOW (window));
+		g_object_unref (group);
+	}
+	
+	gtk_window_group_add_window (group, GTK_WINDOW (dialog));
+
+	response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+	gtk_widget_destroy (dialog);
+
+	return response == GTK_RESPONSE_OK;
+}
+
+static gboolean
+ephy_window_delete_event_cb (GtkWidget *widget, GdkEvent *event, EphyWindow *window)
+{
+	EphyTab *modified_tab = NULL;
+	GList *tabs, *l;
+	gboolean modified = FALSE;
+
+	tabs = ephy_window_get_tabs (window);
+	for (l = tabs; l != NULL; l = l->next)
+	{
+		EphyTab *tab = (EphyTab *) l->data;
+		EphyEmbed *embed;
+
+		g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
+
+		embed = ephy_tab_get_embed (tab);
+		g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
+
+		if (ephy_embed_has_modified_forms (embed))
+		{
+			modified = TRUE;
+			modified_tab = tab;
+			break;
+		}
+	}
+	g_list_free (tabs);
+
+	if (modified)
+	{
+		/* jump to the first tab with modified forms */
+		ephy_window_jump_to_tab (window, modified_tab);
+
+		if (confirm_close_with_modified_forms (window) == FALSE)
+		{
+			/* stop window close */
+			return TRUE;
+		}
+	}
+	
+	/* See bug #114689 */
+	gtk_widget_hide (widget);
+
+	/* proceed with window close */
+	return FALSE;
+}
 
 static void
 update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
@@ -1445,6 +1557,19 @@ tabs_reordered_cb (EphyNotebook *notebook, EphyWindow *window)
 	ephy_tabs_menu_update (window->priv->tabs_menu);
 }
 
+static gboolean
+tab_delete_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED (child), FALSE);
+
+	if (ephy_embed_has_modified_forms (EPHY_EMBED (child)))
+	{
+		return !confirm_close_with_modified_forms (window);
+	}
+
+	return FALSE;
+}
+
 static GtkNotebook *
 setup_notebook (EphyWindow *window)
 {
@@ -1468,6 +1593,8 @@ setup_notebook (EphyWindow *window)
 			  G_CALLBACK (tab_detached_cb), NULL);
 	g_signal_connect (G_OBJECT (notebook), "tabs_reordered",
 			  G_CALLBACK (tabs_reordered_cb), window);
+	g_signal_connect (G_OBJECT (notebook), "tab_delete",
+			  G_CALLBACK (tab_delete_cb), window);
 
 	return notebook;
 }
@@ -1662,6 +1789,9 @@ ephy_window_init (EphyWindow *window)
 	g_signal_connect (window, "window-state-event",
 			  G_CALLBACK (ephy_window_state_event_cb),
 			  window);
+	g_signal_connect (window, "delete-event",
+			  G_CALLBACK (ephy_window_delete_event_cb),
+			  window);
 
 	/* lockdown pref notifiers */
 	window->priv->disable_js_chrome_notifier_id = eel_gconf_notification_add
@@ -1834,15 +1964,25 @@ void
 ephy_window_remove_tab (EphyWindow *window,
 		        EphyTab *tab)
 {
-	GtkWidget *embed;
+	EphyEmbed *embed;
+	gboolean modified;
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
-	embed = GTK_WIDGET (ephy_tab_get_embed (tab));
+	embed = ephy_tab_get_embed (tab);
+	g_return_if_fail (EPHY_IS_EMBED (embed));
+
+	modified = ephy_embed_has_modified_forms (embed);
+	if (ephy_embed_has_modified_forms (embed)
+	    && confirm_close_with_modified_forms (window) == FALSE)
+	{
+		/* don't close the tab */
+		return;
+	}
 
 	ephy_notebook_remove_page (EPHY_NOTEBOOK (window->priv->notebook),
-				  embed);
+				   GTK_WIDGET (embed));
 }
 
 /**
