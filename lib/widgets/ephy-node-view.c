@@ -544,7 +544,6 @@ ephy_node_view_construct (EphyNodeView *view)
 {
 	GtkTreeSelection *selection;
 
-
 	view->priv->nodemodel = ephy_tree_model_node_new (view->priv->root,
 							  view->priv->filter);
 	view->priv->filtermodel = egg_tree_model_filter_new (GTK_TREE_MODEL (view->priv->nodemodel),
@@ -953,10 +952,7 @@ ephy_node_view_select_node (EphyNodeView *view,
 	GtkTreeIter iter, iter2;
 	GValue val = { 0, };
 	gboolean visible;
-	GtkTreeSelection *selection;
 	GtkTreePath *path;
-
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
 
 	g_return_if_fail (node != NULL);
 
