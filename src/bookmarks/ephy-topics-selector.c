@@ -215,8 +215,7 @@ topic_destroy_cb (EphyNode *node,
 }
 
 static void
-node_toggled_cb (EphyTopicsSelector *selector, EphyNode *node,
-		 gboolean checked, gpointer data)
+toggle_topic (EphyTopicsSelector *selector, EphyNode *node, gboolean checked)
 {
 	if (selector->priv->bookmark)
 	{
@@ -249,6 +248,13 @@ node_toggled_cb (EphyTopicsSelector *selector, EphyNode *node,
 					(selector->priv->topics, node);
 		}
 	}
+}
+
+static void
+node_toggled_cb (EphyTopicsSelector *selector, EphyNode *node,
+		 gboolean checked, gpointer data)
+{
+	toggle_topic (selector, node, checked);
 }
 
 static void
@@ -309,6 +315,7 @@ ephy_topics_selector_new_topic (EphyTopicsSelector *selector)
 
 	node = ephy_bookmarks_add_keyword
 			(selector->priv->bookmarks, _("Type a topic"));
+	toggle_topic (selector, node, TRUE);
 	ephy_node_view_select_node (EPHY_NODE_VIEW (selector), node);
 	ephy_node_view_edit (EPHY_NODE_VIEW (selector), TRUE);
 }
