@@ -5,12 +5,10 @@ Epiphany 1.1.1
 Code changes
 
 	* Adapt to mozilla API changes (Marco, Xan, Christian)
-	* Rewritten downloads backend (Marco, Xan)
 	* Sync gtk+ NSS dialogues from galeon (Marco)
-	* Commands interface for clipboard commands (Marco)
+	* Embed commands interface for clipboard commands (Marco)
 	* Re-sync egg-editable-toolbar with gtk+ toolbar api changes (Marco)
 	* New file chooser wrapper class (Christian)
-	* Listen on icon theme changes (Marco)
 	* Re-sync nautilus view with nautilus api changes (Marco)
 	* Cleanup of EphyWrapper to use higher-level mozilla api (Marco)
 	* Initialize EphyWrapper on realize (Marco)
@@ -68,7 +66,6 @@ Code changes
 	
 New features
 
-	* Improved downloader (Marco, Xan)
 	* Persist zoom setting per host (Christian)
 	* Undo/Redo in forms (Dave, Marco)
 	* Gtk+ NSS Auth Dialogues (Crispin Flowerday, from galeon)
@@ -77,21 +74,20 @@ New features
 
 Interface improvements
 
+	* Improved downloader interface (Marco, Xan)
 	* Move the spinner in its own mini-toolbar (Marco)
 	* New hand cursor adapted from eog (Dave)
 	* Use hand cursor in toolbar editor (Marco)
 	* Made encodings dialogue auto-apply (Christian)
 	* Don't pollute statusbar with the "done" mesage (Dave)
-	* Remove close button and auto-close downloader when no more items
+	* Auto-close downloader when no more items
 	  left (Xan)
 	* Use new gtk+ file chooser (Christian)
 	* Better sorting of encoding autodetectors (Christian)
 	* Implement smart selection in downloader view (Xan)
 	* Smoother toolbar drag highlighting (Soren Sandmann)
 	* Update commands sensitivity in menus (Marco)
-	* Auto-open of downloads (Marco, Xan)
-	* Implement UI for download folder and auto-open (Xan)
-	* New layout for downloader (Marco)
+	* Implement UI for download folder (Xan)
 	* Make prefs and PDM dialogues global (Christian)
 	* Improved cookie properties dialogue (Piers Cornwell)
 	* Split print into print setup and print (Christian)
@@ -109,7 +105,6 @@ Bugfixes
 	* Fix spinner refcounting (Christian)
 	* Fix fullscreen toolbar visibility (Marco)
 	* Force encoding on changes, so we can go back to automatic (Christian)
-	* Fix page cloning (Marco)
 	* Build nautilus server only when view is enabled (Marco)
 	* Fix leak of liststores from combo boxes (Marco)
 	* Fix dnd data provided by drag handle (Marco)
@@ -124,11 +119,9 @@ Bugfixes
 	  error dialogue (Christian)
 	* EphyDialog needs to be initialised when run, too (Christian)
 	* Use signal accumulators for boolean-return signals (Christian)
-	* Show only paste in context menu since it's the only one which works
-	  due to mozilla problems (Marco)
-	* Fix sensitivity of "Paste" context menu item (Marco)
-	* Removed unused includes (Marco)
-	* Only allow printing the selection if there really i8s one (Christian)
+	* Do not try to set sensitivity "Paste" menu items, the wait api
+	  cause bad crashes (Marco)
+	* Only allow printing the selection if there really is one (Christian)
 	* Use show() when run()ning an EphyDialog (Christian)
 	* Fix completion model crash on deleting a bookmark (Marco)
 	* Fix ephy location entry finalisation (Christian)
@@ -139,13 +132,11 @@ Bugfixes
 	* Fix conversion on saving, fixes view-source (Marco)
 	* Fix recovery from corrupt toolbar layout file (Christian)
 	* Fix completion model column use (Marco)
-	* Deja-vu (Xan)
 	* Import gtk NSS dialogues glade file from galeon, too (Christian)
 	* Build XUL dialogues with a gtkmozembed in a gtkwindow (Marco)
 	* Fix warning when showing the encodings dialogue (Christian)
 	* Link up toolbar editor help (Christian)
 	* Fix some typos (Marco)
-	* Unref factory (Marco)
 	* Unref on timeout when in server mode (Marco)
 	* Expand cmd line args (Marco)
 	* Nautilus view refcounting bug fix (Marco)
@@ -155,7 +146,6 @@ Bugfixes
 	* Make encodings dialogue transient (Christian)
 	* Remove unused enum values (Christian)
 	* Mark EphyFooPriv structs as private for gtk-doc (Christian)
-	* Linking fixes (Marco)
 	* Don't assert, return instead in impl_go_up (Marco)
 	* Fix context menu leak (Marco)
 	* Make session saving low disk safe (Marco)
