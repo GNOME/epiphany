@@ -763,6 +763,8 @@ window_cmd_view_page_source (GtkAction *action,
 	{
 		save_temp_source (embed);
 	}
+
+	g_free (address);
 }
 
 void
