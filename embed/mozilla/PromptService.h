@@ -29,7 +29,7 @@
     {0x8f, 0x74, 0xae, 0x89, 0x15, 0x3e, 0xe6, 0xc2} \
 }
 
-#define G_PROMPTSERVICE_CLASSNAME "Galeon's Prompt Service"
+#define G_PROMPTSERVICE_CLASSNAME "Epiphany's Prompt Service"
 #define G_PROMPTSERVICE_CONTRACTID "@mozilla.org/embedcomp/prompt-service;1"
 
 class nsIFactory;

@@ -38,7 +38,7 @@
 }
 
 #define G_FILEPICKER_CONTRACTID "@mozilla.org/filepicker;1"
-#define G_FILEPICKER_CLASSNAME "Galeon's File Picker Implementation"
+#define G_FILEPICKER_CLASSNAME "Epiphany's File Picker Implementation"
 
 class nsIFactory;
 

@@ -652,7 +652,7 @@ set_title (GtkWidget *dialog, const PRUnichar *title)
 
 	/* set it */
 	gtk_window_set_title (GTK_WINDOW (dialog), 
-			      (title == NULL ? N_("Galeon") :
+			      (title == NULL ? N_("Epiphany") :
 			      PromiseFlatCString(utf8string).get()));
 }
 

@@ -29,7 +29,7 @@
     {0xb4, 0xbb, 0x4e, 0x7a, 0xbd, 0x0d, 0x35, 0xe0} \
 }
 
-#define G_PRINTINGPROMPTSERVICE_CLASSNAME "Galeon's Printing Prompt Service"
+#define G_PRINTINGPROMPTSERVICE_CLASSNAME "Epiphany's Printing Prompt Service"
 #define G_PRINTINGPROMPTSERVICE_CONTRACTID "@mozilla.org/embedcomp/printingprompt-service;1"
 class nsIFactory;
 

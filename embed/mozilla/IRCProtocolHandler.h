@@ -31,10 +31,10 @@
     {0x87, 0xe7, 0x43, 0xe4, 0x54, 0x1a, 0xce, 0x4e} \
 }
 #define G_IRC_PROTOCOL_CONTRACTID NS_NETWORK_PROTOCOL_CONTRACTID_PREFIX "irc"
-#define G_IRC_PROTOCOL_CLASSNAME "Galeon's irc Protocol Handler"
+#define G_IRC_PROTOCOL_CLASSNAME "Epiphany's irc Protocol Handler"
 #define G_IRC_CONTENT_CONTRACTID NS_CONTENT_HANDLER_CONTRACTID_PREFIX \
 				 "application-x-gnome-irc"
-#define G_IRC_CONTENT_CLASSNAME "Galeon's irc Content Handler"
+#define G_IRC_CONTENT_CLASSNAME "Epiphany's irc Content Handler"
 
 class nsIFactory;
 

@@ -31,10 +31,10 @@
     {0xb0, 0x73, 0x0f, 0xc3, 0xbe, 0xe8, 0xe6, 0x70} \
 }
 #define G_FTP_PROTOCOL_CONTRACTID NS_NETWORK_PROTOCOL_CONTRACTID_PREFIX "ftp"
-#define G_FTP_PROTOCOL_CLASSNAME "Galeon's FTP Protocol Handler"
+#define G_FTP_PROTOCOL_CLASSNAME "Epiphany's FTP Protocol Handler"
 #define G_FTP_CONTENT_CONTRACTID NS_CONTENT_HANDLER_CONTRACTID_PREFIX \
 				 "application-x-gnome-ftp"
-#define G_FTP_CONTENT_CLASSNAME "Galeon's FTP Content Handler"
+#define G_FTP_CONTENT_CLASSNAME "Epiphany's FTP Content Handler"
 
 #define NS_FTPPROTOCOLHANDLER_CID \
 {							\

@@ -41,7 +41,7 @@ class GExternalProtocolService : public nsIExternalProtocolService
     0x4f1f,                                          \
     {0x89, 0x21, 0xd4, 0xe5, 0x04, 0x90, 0xf1, 0x12} \
 }
-#define G_EXTERNALPROTOCOLSERVICE_CLASSNAME "Galeon's ExternalProtocolService"
+#define G_EXTERNALPROTOCOLSERVICE_CLASSNAME "Epiphany's ExternalProtocolService"
 
 class nsIFactory;
 

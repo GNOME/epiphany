@@ -31,10 +31,10 @@
     {0x87, 0xe7, 0x43, 0xe4, 0x54, 0x1a, 0xce, 0x4d} \
 }
 #define G_MAILTO_PROTOCOL_CONTRACTID NS_NETWORK_PROTOCOL_CONTRACTID_PREFIX "mailto"
-#define G_MAILTO_PROTOCOL_CLASSNAME "Galeon's mailto Protocol Handler"
+#define G_MAILTO_PROTOCOL_CLASSNAME "Epiphany's mailto Protocol Handler"
 #define G_MAILTO_CONTENT_CONTRACTID NS_CONTENT_HANDLER_CONTRACTID_PREFIX \
 				 "application-x-gnome-mailto"
-#define G_MAILTO_CONTENT_CLASSNAME "Galeon's mailto Content Handler"
+#define G_MAILTO_CONTENT_CLASSNAME "Epiphany's mailto Content Handler"
 
 class nsIFactory;
 
