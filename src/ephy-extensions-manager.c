@@ -223,9 +223,6 @@ ephy_extensions_manager_register (EphyExtensionsManager *manager,
 	g_return_if_fail (EPHY_IS_EXTENSIONS_MANAGER (manager));
 	g_return_if_fail (EPHY_IS_EXTENSION (object));
 
-	LOG ("Registering internal extension of type %s",
-	     g_type_name (((GTypeClass *) object)->g_type))
-
 	manager->priv->extensions = g_list_prepend (manager->priv->extensions,
 						    g_object_ref (object));
 }
