@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 21:46+0100\n"
-"PO-Revision-Date: 2004-12-16 21:48+0100\n"
+"POT-Creation-Date: 2004-12-18 08:55+0100\n"
+"PO-Revision-Date: 2004-12-18 08:59+0100\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -116,7 +116,7 @@ msgstr "Štandardne skryť lištu menu."
 msgid "Browse the web"
 msgstr "Prehliadať internet"
 
-#: data/epiphany.desktop.in.h:2 src/ephy-main.c:116
+#: data/epiphany.desktop.in.h:2 src/ephy-main.c:139
 msgid "Epiphany Web Browser"
 msgstr "WWW prehliadač Zjavenie"
 
@@ -665,7 +665,7 @@ msgstr "_Nájsť:"
 msgid "_Next"
 msgstr "Ď_alší"
 
-#: data/glade/epiphany.glade.h:13 embed/downloader-view.c:283
+#: data/glade/epiphany.glade.h:13 embed/downloader-view.c:313
 msgid "_Pause"
 msgstr "_Pauza"
 
@@ -986,25 +986,29 @@ msgstr "_pre:"
 msgid "fr_om:"
 msgstr "_od:"
 
-#: embed/downloader-view.c:228
+#: embed/downloader-view.c:180
+msgid "_Show Downloader..."
+msgstr "_Zobraziť sťahovač..."
+
+#: embed/downloader-view.c:258
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#: embed/downloader-view.c:232
+#: embed/downloader-view.c:262
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: embed/downloader-view.c:283
+#: embed/downloader-view.c:313
 msgid "_Resume"
 msgstr "_Pokračovať"
 
-#: embed/downloader-view.c:340 src/ephy-window.c:1332
+#: embed/downloader-view.c:370 src/ephy-window.c:1332
 msgid "Unknown"
 msgstr "Neznámy"
 
-#: embed/downloader-view.c:374
+#: embed/downloader-view.c:404
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -1012,15 +1016,15 @@ msgstr[0] "%d stiahnutí"
 msgstr[1] "%d stiahnutie"
 msgstr[2] "%d stiahnutia"
 
-#: embed/downloader-view.c:550 src/bookmarks/ephy-bookmarks-editor.c:804
+#: embed/downloader-view.c:580 src/bookmarks/ephy-bookmarks-editor.c:804
 msgid "File"
 msgstr "Súbor"
 
-#: embed/downloader-view.c:572
+#: embed/downloader-view.c:602
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:583
+#: embed/downloader-view.c:613
 msgid "Remaining"
 msgstr "Zostáva"
 
@@ -1823,24 +1827,24 @@ msgstr "%s existuje. Prosím, presunte ho preč."
 msgid "Failed to create directory %s."
 msgstr "Vytváranie priečinka %s zlyhalo."
 
-#: lib/ephy-gui.c:158
+#: lib/ephy-gui.c:192
 #, c-format
 msgid "A file %s already exists."
 msgstr "Súbor %s už existuje."
 
-#: lib/ephy-gui.c:162
+#: lib/ephy-gui.c:196
 msgid "If you choose to overwrite this file, the contents will be lost."
 msgstr "Ak si zvolíte prepísanie tohoto súboru, jeho obsah bude stratený."
 
-#: lib/ephy-gui.c:166
+#: lib/ephy-gui.c:200
 msgid "_Overwrite"
 msgstr "_Prepísať"
 
-#: lib/ephy-gui.c:168
+#: lib/ephy-gui.c:202
 msgid "Overwrite File"
 msgstr "Prepísať súbor"
 
-#: lib/ephy-gui.c:198
+#: lib/ephy-gui.c:232
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Nepodarilo sa zobraziť pomocníka: %s"
@@ -2531,39 +2535,39 @@ msgstr[2] "Posledné %d dni"
 msgid "Sites"
 msgstr "Miesta"
 
-#: src/ephy-main.c:52
+#: src/ephy-main.c:54
 msgid "Open a new tab in an existing Epiphany window"
 msgstr "Otvoriť novú kartu v existujúcom okne Zjavenia"
 
-#: src/ephy-main.c:55
+#: src/ephy-main.c:57
 msgid "Run Epiphany in full screen mode"
 msgstr "Spustiť Zjavenie v celoobrazovkovom režime"
 
-#: src/ephy-main.c:58
+#: src/ephy-main.c:60
 msgid "Load the given session file"
 msgstr "Načítať daný súbor sedenia"
 
-#: src/ephy-main.c:59 src/ephy-main.c:65
+#: src/ephy-main.c:61 src/ephy-main.c:67
 msgid "FILE"
 msgstr "SÚBOR"
 
-#: src/ephy-main.c:61
+#: src/ephy-main.c:63
 msgid "Add a bookmark (don't open any window)"
 msgstr "Pridať záložku (neotvárať žiadne okno)"
 
-#: src/ephy-main.c:62
+#: src/ephy-main.c:64
 msgid "URL"
 msgstr "URL"
 
-#: src/ephy-main.c:64
+#: src/ephy-main.c:66
 msgid "Import bookmarks from the given file"
 msgstr "Importovať záložky zo zadaného súboru"
 
-#: src/ephy-main.c:67
+#: src/ephy-main.c:69
 msgid "Launch the bookmarks editor"
 msgstr "Spustiť editor záložiek"
 
-#: src/ephy-main.c:112
+#: src/ephy-main.c:135
 msgid "Ephy"
 msgstr "Zjav"
 
@@ -3408,8 +3412,8 @@ msgid "Irish"
 msgstr "Írsky"
 
 #: src/prefs-dialog.c:300
-msgid "Scottish"
-msgstr "Škótsky"
+msgid "Scots Gaelic"
+msgstr "Gaelská škótština"
 
 #: src/prefs-dialog.c:301
 msgid "Galician"
@@ -3610,10 +3614,10 @@ msgstr "Editor lišty nástrojov"
 msgid "_Add a New Toolbar"
 msgstr "_Pridať novú lištu nástrojov"
 
-#: src/window-commands.c:909
+#: src/window-commands.c:898
 msgid "Epiphany"
 msgstr "Zjavenie"
 
-#: src/window-commands.c:914
+#: src/window-commands.c:903
 msgid "translator-credits"
 msgstr "Marcel Telka <marcel@telka.sk>"
