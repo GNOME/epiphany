@@ -1,3 +1,26 @@
+2003-04-09  Xan Lopez  <xan@masilla.org>
+
+	* data/Makefile.am:
+	* data/art/Makefile.am:
+	* idl/EphyAutomation.idl:
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_node_activated_cb),
+	(ephy_bookmarks_editor_update_menu),
+	(ephy_bookmarks_editor_construct):
+	* src/ephy-automation.c: (impl_ephy_automation_loadurl),
+	(impl_ephy_automation_add_bookmark), (impl_ephy_automation_quit),
+	(impl_ephy_automation_load_session),
+	(impl_ephy_automation_open_bookmarks_editor),
+	(ephy_automation_class_init):
+	* src/ephy-main.c: (ephy_main_start):
+	* src/ephy-shell.c: (ephy_shell_init), (ephy_shell_finalize),
+	(bookmarks_hide_cb), (ephy_shell_show_bookmarks_editor):
+	* src/ephy-shell.h:
+	* src/window-commands.c: (window_cmd_go_bookmarks):
+
+	Allow to launch the BME alone, rework some CORBA code, add a .desktop
+	file for the BME. Fixes #102477.
+
 2003-04-09  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-editor.c: (add_focus_monitor),

@@ -55,6 +55,7 @@ static gchar   *bookmark_url          = NULL;   /* the temp bookmark to add     
 static gboolean close_option          = FALSE;  /* --close                      */
 static gboolean quit_option           = FALSE;  /* --quit                       */
 static gboolean ephy_server_mode    = FALSE;
+static gboolean open_as_bookmarks_editor = FALSE; /* --bookmarks-editor	*/
 static gboolean open_as_nautilus_view = FALSE;
 
 static BonoboObject *automation_object;
@@ -104,6 +105,9 @@ static struct poptOption popt_options[] =
 	  NULL },
 	{ "nautilus-view", 'v', POPT_ARG_NONE, &open_as_nautilus_view, 0,
 	  N_("Used internally by the nautilus view"),
+	  NULL },
+	{ "bookmarks-editor", 'b', POPT_ARG_NONE, &open_as_bookmarks_editor, 0,
+	  N_("Launch the bookmarks editor"),
 	  NULL },
 
 	/* terminator, must be last */
@@ -201,6 +205,12 @@ ephy_main_start (gpointer data)
 	else if (ephy_server_mode)
 	{
 		g_object_ref (G_OBJECT(ephy_shell));
+	}
+	/* Launch the bookmarks editor */
+	else if (open_as_bookmarks_editor)
+	{
+		GNOME_EphyAutomation_openBookmarksEditor
+			(gaserver, &corba_env);
 	}
 	/* load the session if requested */
 	else if (session_filename)

@@ -25,6 +25,7 @@
 #include <gtk/gtkvbox.h>
 #include <gdk/gdkkeysyms.h>
 #include <libgnome/gnome-i18n.h>
+#include <libgnome/gnome-program.h>
 #include <string.h>
 
 #include "ephy-bookmarks-editor.h"
@@ -446,17 +447,25 @@ ephy_bookmarks_editor_node_activated_cb (GtkWidget *view,
 					 EphyBookmarksEditor *editor)
 {
 	const char *location;
-	GtkWindow *window;
+	EphyWindow *window;
 
 	g_return_if_fail (EPHY_IS_NODE (node));
 	location = ephy_node_get_property_string
 		(node, EPHY_NODE_BMK_PROP_LOCATION);
 	g_return_if_fail (location != NULL);
 
-	window = GTK_WINDOW (get_target_window (editor));
-	g_return_if_fail (IS_EPHY_WINDOW (window));
-	ephy_window_load_url (EPHY_WINDOW (window), location);
-	gtk_window_present (GTK_WINDOW (window));
+	window = EPHY_WINDOW (get_target_window (editor));
+	if (window != NULL)
+	{
+		ephy_window_load_url (EPHY_WINDOW (window), location);
+		gtk_window_present (GTK_WINDOW (window));
+	}
+	else
+	{
+		/* We have to create a browser window */
+		ephy_shell_new_tab (ephy_shell, NULL, NULL, location,
+				    EPHY_NEW_TAB_IN_NEW_WINDOW);
+	}
 }
 
 static void
@@ -770,7 +779,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
 
-	icon_path =  ephy_file ("epiphany-bookmarks.png");
+	icon_path = gnome_program_locate_file (NULL, GNOME_FILE_DOMAIN_APP_PIXMAP,
+					       "epiphany-bookmarks.png", TRUE, NULL);
 	gtk_window_set_icon_from_file (GTK_WINDOW (editor), icon_path, NULL);
 
 	g_signal_connect (editor, "delete_event",

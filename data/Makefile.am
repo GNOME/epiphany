@@ -8,7 +8,7 @@ server_in_files = GNOME_Epiphany_Automation.server.in GNOME_Epiphany_NautilusVie
 server_DATA = GNOME_Epiphany_Automation.server GNOME_Epiphany_NautilusView.server
 serverdir = $(libdir)/bonobo/servers
 
-DESKTOP_IN_FILES= epiphany.desktop.in
+DESKTOP_IN_FILES= epiphany.desktop.in bme.desktop.in
 DESKTOP_FILES= $(DESKTOP_IN_FILES:.desktop.in=.desktop)
 
 Applicationsdir = $(datadir)/applications

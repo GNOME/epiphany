@@ -239,47 +239,11 @@ window_cmd_file_new_tab (EggAction *action,
 			      EPHY_NEW_TAB_JUMP);
 }
 
-static void
-bookmarks_hide_cb (GtkWidget *widget, gpointer data)
-{
-	LOG ("Unref shell for bookmarks editor")
-	g_object_unref (ephy_shell);
-}
-
-static void
-shell_weak_notify_cb (gpointer data, GObject *object)
-{
-	LOG ("Bookmarks editor destroyed")
-	gtk_widget_destroy (GTK_WIDGET (data));
-}
-
 void
 window_cmd_go_bookmarks (EggAction *action,
 			 EphyWindow *window)
 {
-	static GtkWidget *dialog = NULL;
-	EphyBookmarks *bookmarks;
-
-	if (dialog == NULL)
-	{
-		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-		g_assert (bookmarks != NULL);
-		dialog = ephy_bookmarks_editor_new (bookmarks);
-		g_object_weak_ref (G_OBJECT (ephy_shell),
-				   shell_weak_notify_cb, dialog);
-		g_signal_connect (dialog, "hide",
-				  G_CALLBACK (bookmarks_hide_cb), NULL);
-	}
-
-	if (!GTK_WIDGET_VISIBLE (dialog))
-	{
-		LOG ("Ref shell for bookmarks editor")
-		g_object_ref (ephy_shell);
-	}
-
-	ephy_bookmarks_editor_set_parent (EPHY_BOOKMARKS_EDITOR (dialog),
-					  GTK_WIDGET (window));
-	gtk_window_present (GTK_WINDOW (dialog));
+	ephy_shell_show_bookmarks_editor (ephy_shell);
 }
 
 void

@@ -27,15 +27,15 @@
 #include <bonobo/bonobo-main.h>
 #include <bonobo/bonobo-context.h>
 
-static CORBA_boolean
+static void
 impl_ephy_automation_add_bookmark (PortableServer_Servant _servant,
 				   const CORBA_char * url,
 				   CORBA_Environment * ev);
-static CORBA_boolean
+static void
 impl_ephy_automation_quit (PortableServer_Servant _servant,
                            const CORBA_boolean disableServer,
                            CORBA_Environment * ev);
-static CORBA_boolean
+static void
 impl_ephy_automation_load_session (PortableServer_Servant _servant,
 				   const CORBA_char * filename,
 				   CORBA_Environment * ev);
@@ -80,7 +80,7 @@ ephy_automation_new (void)
 	return BONOBO_OBJECT (factory);
 }
 
-static CORBA_boolean
+static void
 impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 			      const CORBA_char * url,
 			      const CORBA_char * geometry,
@@ -105,7 +105,7 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 		res = session_autoresume (session);
 		/* no need to open the homepage,
 		 * we did already open session windows */
-		if (res && *url == '\0') return TRUE;
+		if (res && *url == '\0') return;
 	}
 
 	window = ephy_shell_get_active_window (ephy_shell);
@@ -113,7 +113,7 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 	if (open_in_existing_tab && window != NULL)
 	{
 		ephy_window_load_url (window, url);
-		return TRUE;
+		return;
 	}
 
 	if (*url == '\0')
@@ -142,47 +142,43 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 
 	ephy_shell_new_tab (ephy_shell, window, NULL, load_page,
 			    flags);
-
-	return TRUE;
 }
 
-static CORBA_boolean
+static void
 impl_ephy_automation_add_bookmark (PortableServer_Servant _servant,
 				   const CORBA_char * url,
 				   CORBA_Environment * ev)
 {
-	CORBA_boolean retval = TRUE;
-	return retval;
 }
 
-static CORBA_boolean
+static void
 impl_ephy_automation_quit (PortableServer_Servant _servant,
                            const CORBA_boolean disableServer,
                            CORBA_Environment * ev)
 {
-	CORBA_boolean retval = TRUE;
-
 	Session *session;
 
 	session = ephy_shell_get_session (ephy_shell);
 
 	session_close (session);
-
-	return retval;
 }
 
-static CORBA_boolean
+static void
 impl_ephy_automation_load_session (PortableServer_Servant _servant,
 				   const CORBA_char * filename,
 				   CORBA_Environment * ev)
 {
-	CORBA_boolean retval = TRUE;
 	Session *session;
 
 	session = ephy_shell_get_session (ephy_shell);
 	session_load (session, filename);
+}
 
-	return retval;
+static void
+impl_ephy_automation_open_bookmarks_editor (PortableServer_Servant _servant,
+					    CORBA_Environment * ev)
+{
+	ephy_shell_show_bookmarks_editor (ephy_shell);
 }
 
 static void
@@ -200,6 +196,7 @@ ephy_automation_class_init (EphyAutomationClass *klass)
 	epv->addBookmark = impl_ephy_automation_add_bookmark;
 	epv->quit = impl_ephy_automation_quit;
 	epv->loadSession = impl_ephy_automation_load_session;
+	epv->openBookmarksEditor = impl_ephy_automation_open_bookmarks_editor;
 }
 
 static void

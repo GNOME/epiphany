@@ -3,7 +3,7 @@
 module GNOME {
 
 	interface EphyAutomation : Bonobo::Unknown {
-		boolean loadurl  (in string  url, 
+		void loadurl  (in string  url, 
 				  in string  geometry, 
 				  in boolean fullscreen,
 				  in boolean open_in_existing_tab,
@@ -11,7 +11,7 @@ module GNOME {
 				  in boolean open_in_new_window,
 				  in boolean raise);
 
-		boolean addBookmark (in string url);
+		void addBookmark (in string url);
 
 		/**
 		 * Closes all opened windows. 
@@ -19,9 +19,11 @@ module GNOME {
 		 * server mode is disbaled 
 		 * (and Epiphany exits)
 		 */
-		boolean quit (in boolean disableServer);
+		void quit (in boolean disableServer);
 		
-		boolean loadSession (in string filename);
+		void loadSession (in string filename);
+
+		void openBookmarksEditor ();
 	};
 };
 
