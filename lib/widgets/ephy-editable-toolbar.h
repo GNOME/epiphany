@@ -54,6 +54,8 @@ GType			ephy_editable_toolbar_get_type	(void);
 
 EphyEditableToolbar    *ephy_editable_toolbar_new	(EggMenuMerge *merge);
 
+void			ephy_editable_toolbar_edit	(EphyEditableToolbar *etoolbar);
+
 G_END_DECLS
 
 #endif

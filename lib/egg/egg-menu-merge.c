@@ -193,6 +193,8 @@ egg_menu_merge_get_widget (EggMenuMerge *self, const gchar *path)
   egg_menu_merge_ensure_update(self);
 
   node = egg_menu_merge_get_node(self, path, EGG_MENU_MERGE_UNDECIDED, FALSE);
+  g_return_val_if_fail (node != NULL, NULL);
+
   return NODE_INFO(node)->proxy;
 }
 
@@ -221,12 +223,6 @@ get_child_node(EggMenuMerge *self, GNode *parent,
 		  if (NODE_INFO(child)->type == EGG_MENU_MERGE_UNDECIDED)
 		    NODE_INFO(child)->type = node_type;
 		  
-		  /* warn about type mismatch */
-		  if (NODE_INFO(child)->type != EGG_MENU_MERGE_UNDECIDED &&
-		      NODE_INFO(child)->type != node_type)
-		    g_warning("node type doesn't match %d (%s is type %d)",
-			      node_type, NODE_INFO(child)->name,
-			      NODE_INFO(child)->type);
 		  
 		  return child;
 		}

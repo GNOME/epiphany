@@ -29,6 +29,7 @@
 #include "ephy-bookmarks-editor.h"
 #include "ephy-new-bookmark.h"
 #include "egg-toggle-action.h"
+#include "ephy-editable-toolbar.h"
 
 #include <string.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -639,6 +640,11 @@ void
 window_cmd_edit_toolbar (EggAction *action,
 			 EphyWindow *window)
 {
+	Toolbar *toolbar;
+
+	toolbar = ephy_window_get_toolbar (window);
+
+	ephy_editable_toolbar_edit (EPHY_EDITABLE_TOOLBAR (toolbar));
 }
 
 void

@@ -417,8 +417,15 @@ add_widget (EggMenuMerge *merge, GtkWidget *widget, EphyWindow *window)
 	}
 	else
 	{
+		GtkWidget *event_box;
+
 		window->priv->toolbars = g_list_append
 			(window->priv->toolbars, widget);
+
+		event_box = gtk_event_box_new ();
+		gtk_widget_show (event_box);
+		gtk_container_add (GTK_CONTAINER (event_box), widget);
+		widget = event_box;
 	}
 
 	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock),
