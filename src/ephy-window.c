@@ -2456,18 +2456,9 @@ ephy_window_get_active_embed (EphyWindow *window)
 GList *
 ephy_window_get_tabs (EphyWindow *window)
 {
-	GtkNotebook *notebook;
-	GList *list = NULL;
-	int i, num;
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
-	notebook = GTK_NOTEBOOK (window->priv->notebook);
-	num = gtk_notebook_get_n_pages (notebook);
-	for (i = 0; i < num; i++)
-	{
-		list = g_list_prepend (list, gtk_notebook_get_nth_page (notebook, i));
-	}
-
-	return g_list_reverse (list);
+	return gtk_container_get_children (GTK_CONTAINER (window->priv->notebook));
 }
 
 static void
