@@ -502,6 +502,7 @@ downloader_view_add_download (DownloaderView *dv,
 	gtk_icon_info_free (icon_info);
 	
 	pixbuf = gdk_pixbuf_new_from_file_at_size (icon_name, width, height, NULL);
+	g_free (icon_name);
 	gtk_list_store_set (GTK_LIST_STORE (dv->priv->model),
 			    &iter, COL_IMAGE, pixbuf, -1);
 	if (pixbuf)
