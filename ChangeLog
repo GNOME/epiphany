@@ -1,3 +1,9 @@
+2003-07-13  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-node.c: (ephy_node_finalize):
+
+	Fix mem leaks.
+
 2003-07-13  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* Makefile.am:
@@ -6260,7 +6266,7 @@
 
 	Keep a ref on EmbedPersist while save is in progress.
 
-2003-03-15  Christian Persch <christian@hpersch.de>
+2003-03-15  Christian Persch <chpe@cvs.gnome.org>
 
 	* embed/ephy-embed-utils.c: (ephy_embed_utils_save):
 	* src/popup-commands.c: (save_property_url):

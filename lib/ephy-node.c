@@ -200,11 +200,11 @@ ephy_node_finalize (EphyNode *node)
 			g_free (val);
 		}
 	}
-	g_ptr_array_free (node->properties, FALSE);
+	g_ptr_array_free (node->properties, TRUE);
 
 	g_hash_table_destroy (node->parents);
 
-	g_ptr_array_free (node->children, FALSE);
+	g_ptr_array_free (node->children, TRUE);
 
 	g_static_rw_lock_free (node->lock);
 	g_free (node->lock);
