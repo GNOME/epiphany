@@ -673,12 +673,8 @@ window_cmd_help_about (EggAction *action,
 	}
 
 	about = gnome_about_new(
-		       _("Epiphany"), VERSION,
-		       /* Translators: Please change the (C) to a real
-			* copyright character if your character set allows it
-			* (Hint: iso-8859-1 is one of the character sets that
-			* has this symbol). */
-		       _("Copyright (C) 2002 Marco Pesenti Gritti"),
+		       "Epiphany", VERSION,
+		       "Copyright \xc2\xa9 2002-2003 Marco Pesenti Gritti",
 		       _("A GNOME browser based on Mozilla"),
 		       (const char **)authors,
 		       (const char **)documenters,
