@@ -80,12 +80,6 @@ mozilla_language_notifier(GConfClient *client,
 			  EphyEmbedSingle *single);
 
 static void
-mozilla_autodetect_encoding_notifier(GConfClient *client,
-				     guint cnxn_id,
-				     GConfEntry *entry,
-				     EphyEmbedSingle *single);
-
-static void
 mozilla_default_font_notifier(GConfClient *client,
 			      guint cnxn_id,
 			      GConfEntry *entry,
@@ -108,11 +102,6 @@ mozilla_user_agent_notifier(GConfClient *client,
 			    GConfEntry *entry,
 			    EphyEmbedSingle *single);
 
-static void 
-mozilla_default_encoding_notifier (GConfClient *client,
-				   guint cnxn_id,
-				   GConfEntry *entry,
-				   EphyEmbedSingle *single);
 static void
 mozilla_socks_version_notifier (GConfClient *client,
 				guint cnxn_id,
@@ -156,9 +145,11 @@ conversion_table [] =
 	{ CONF_NETWORK_DISK_CACHE, INT_PREF, "browser.cache.disk.capacity"},
 	{ CONF_NETWORK_CACHE_COMPARE, INT_PREF, "browser.cache.check_doc_frequency"},
 	{ CONF_SECURITY_COOKIES_ACCEPT, BOOL_PREF, "network.cookie.warnAboutCookies"},
+	{ CONF_LANGUAGE_DEFAULT_ENCODING, STRING_PREF, "intl.charset.default" },
+	{ CONF_LANGUAGE_AUTODETECT_ENCODING, STRING_PREF, "intl.charset.detector" },
 	{ NULL, 0, NULL }
 };
-
+ 
 static const struct 
 {
 	const char *gconf_key;
@@ -174,12 +165,8 @@ custom_notifiers [] =
 	  (GConfClientNotifyFunc) mozilla_own_fonts_notifier },
 	{ CONF_SECURITY_ALLOW_POPUPS, 
 	  (GConfClientNotifyFunc) mozilla_allow_popups_notifier },
-	{ CONF_LANGUAGE_DEFAULT_ENCODING, 
-	  (GConfClientNotifyFunc) mozilla_default_encoding_notifier },
 	{ CONF_RENDERING_LANGUAGE, 
 	  (GConfClientNotifyFunc) mozilla_language_notifier },
-	{ CONF_LANGUAGE_AUTODETECT_ENCODING, 
-	  (GConfClientNotifyFunc) mozilla_autodetect_encoding_notifier },
 	{ CONF_RENDERING_DEFAULT_FONT, 
 	  (GConfClientNotifyFunc) mozilla_default_font_notifier },
 	{ CONF_NETWORK_SOCKS_PROXY_VERSION, 
@@ -526,23 +513,6 @@ generic_mozilla_bool_notifier(GConfClient *client,
 	}
 }
 
-static void 
-mozilla_default_encoding_notifier(GConfClient *client,
-				  guint cnxn_id,
-				  GConfEntry *entry,
-				  EphyEmbedSingle *single)
-{
-	gchar *encoding;
-
-	encoding = eel_gconf_get_string (CONF_LANGUAGE_DEFAULT_ENCODING);
-	if (encoding == NULL) encoding = g_strdup ("ISO-8859-1");
-
-	mozilla_prefs_set_string ("intl.charset.default", encoding);
-
-	g_free (encoding);
-}
-
-
 static void
 mozilla_own_colors_notifier(GConfClient *client,
 			    guint cnxn_id,
@@ -638,22 +608,6 @@ mozilla_language_notifier(GConfClient *client,
 	
 	g_slist_foreach (languages, (GFunc) g_free, NULL);
 	g_slist_free (languages);
-}
-
-static void
-mozilla_autodetect_encoding_notifier(GConfClient *client,
-				    guint cnxn_id,
-				    GConfEntry *entry,
-				    EphyEmbedSingle *single)
-{
-	gchar *detector;
-
-	detector = eel_gconf_get_string (CONF_LANGUAGE_AUTODETECT_ENCODING);
-	if (detector == NULL) detector = g_strdup (""); // Off
-
-	mozilla_prefs_set_string ("intl.charset.detector",  detector);
-
-	g_free (detector);
 }
 
 static void
