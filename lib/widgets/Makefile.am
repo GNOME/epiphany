@@ -28,5 +28,8 @@ libephywidgets_la_SOURCES = \
 	ephy-tree-model-node.c			\
 	ephy-tree-model-node.h			\
 	ephy-tree-model-sort.c			\
-	ephy-tree-model-sort.h
-
+	ephy-tree-model-sort.h			\
+	ephy-zoom-action.h			\
+	ephy-zoom-action.c			\
+	ephy-zoom-control.c			\
+	ephy-zoom-control.h

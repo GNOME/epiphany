@@ -73,6 +73,8 @@ void	      toolbar_update_navigation_actions (Toolbar *t,
 						 gboolean back,
 						 gboolean forward,
 						 gboolean up);
+void	      toolbar_update_zoom		(Toolbar *t,
+						 float zoom);
 
 void	      toolbar_set_visibility		(Toolbar *t,
 						 gboolean normal_toolbars,

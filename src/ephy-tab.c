@@ -407,7 +407,7 @@ ephy_tab_location_cb (EphyEmbed *embed, EphyTab *tab)
 }
 
 static void
-ephy_tab_zoom_changed_cb (EphyEmbed *embed, gint zoom, EphyTab *tab)
+ephy_tab_zoom_changed_cb (EphyEmbed *embed, float zoom, EphyTab *tab)
 {
 	if (tab->priv->is_active)
 	{

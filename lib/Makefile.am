@@ -56,7 +56,9 @@ libephy_la_SOURCES = \
 	ephy-stock-icons.h			\
 	ephy-thread-helpers.c			\
 	ephy-thread-helpers.h			\
-	ephy-types.h
+	ephy-types.h				\
+	ephy-zoom.h				\
+	ephy-zoom.c
 
 libephy_la_LIBADD = \
 	$(top_builddir)/lib/widgets/libephywidgets.la	\

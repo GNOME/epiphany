@@ -30,6 +30,7 @@
 #include "ephy-shell.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
+#include "ephy-zoom.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "statusbar.h"
@@ -469,8 +470,6 @@ setup_window (EphyWindow *window)
 	g_object_set (action, "short_label", _("Print"), NULL);
 	action = egg_action_group_get_action (action_group, "FileBookmarkPage");
 	g_object_set (action, "short_label", _("Bookmark"), NULL);
-	action = egg_action_group_get_action (action_group, "ViewZoomNormal");
-	g_object_set (action, "sensitive", FALSE, NULL);
 
 	action_group = egg_action_group_new ("PopupsActions");
 	egg_action_group_add_actions (action_group, ephy_popups_entries,
@@ -1094,6 +1093,40 @@ update_nav_control (EphyWindow *window)
 }
 
 static void
+update_zoom_control (EphyWindow *window)
+{
+	EphyEmbed *embed;
+	EggActionGroup *action_group;
+	EggAction *action;
+	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
+	float zoom = 1.0;
+	gresult rv;
+
+	g_return_if_fail (window != NULL);
+	
+	embed = ephy_window_get_active_embed (window);	
+	g_return_if_fail (embed != NULL);
+
+	rv = ephy_embed_zoom_get (embed, &zoom);
+	if (rv == G_OK)
+	{
+		if (zoom >= ZOOM_MAXIMAL) can_zoom_in = FALSE; 
+		if (zoom <= ZOOM_MINIMAL) can_zoom_out = FALSE; 
+		if (zoom != 1.0) can_zoom_normal = TRUE;
+	}
+
+	toolbar_update_zoom (window->priv->toolbar, zoom);
+
+	action_group = window->priv->action_group;
+	action = egg_action_group_get_action (action_group, "ViewZoomIn");
+	g_object_set (action, "sensitive", can_zoom_in, NULL);
+	action = egg_action_group_get_action (action_group, "ViewZoomOut");
+	g_object_set (action, "sensitive", can_zoom_out, NULL);
+	action = egg_action_group_get_action (action_group, "ViewZoomNormal");
+	g_object_set (action, "sensitive", can_zoom_normal, NULL);
+}
+
+static void
 update_title_control (EphyWindow *window)
 {
 	EphyTab *tab;
@@ -1247,6 +1280,7 @@ ephy_window_update_control (EphyWindow *window,
 		 /* the zoom control is updated at the same time than the navigation
 		    controls. This keeps it synched most of the time, but not always,
 		    because we don't get a notification when zoom changes */
+		update_zoom_control (window);
 	case NavControl:
 		update_nav_control (window);
 		break;
@@ -1290,6 +1324,7 @@ ephy_window_update_all_controls (EphyWindow *window)
 		update_security (window);
 		update_find_control (window);
 		update_spinner_control (window);
+		update_zoom_control (window);
 	}
 }
 
@@ -1432,27 +1467,31 @@ ephy_window_get_find_dialog (EphyWindow *window)
 
 void
 ephy_window_set_zoom (EphyWindow *window,
-		      gint zoom)
+		      float zoom)
 {
 	EphyEmbed *embed;
-	gboolean zoom_out, zoom_normal;
-	EggActionGroup *action_group;
-	EggAction *action;
+	float current_zoom = 1.0;
 
         g_return_if_fail (IS_EPHY_WINDOW (window));
 
 	embed = ephy_window_get_active_embed (window);
         g_return_if_fail (embed != NULL);
 
-        ephy_embed_zoom_set (embed, zoom, TRUE);
+	ephy_embed_zoom_get (embed, &current_zoom);
 
-	zoom_normal = (zoom != 100);
-	zoom_out = (zoom > 0);
-	action_group = window->priv->action_group;
-	action = egg_action_group_get_action (action_group, "ViewZoomOut");
-	g_object_set (action, "sensitive", zoom_out, NULL);
-	action = egg_action_group_get_action (action_group, "ViewZoomNormal");
-	g_object_set (action, "sensitive", zoom_normal, NULL);
+	if (zoom == ZOOM_IN)
+	{
+		zoom = ephy_zoom_get_changed_zoom_level (current_zoom, 1);
+	}
+	else if (zoom == ZOOM_OUT)
+	{
+		zoom = ephy_zoom_get_changed_zoom_level (current_zoom, -1);
+	}
+
+	if (zoom != current_zoom)
+	{
+		ephy_embed_zoom_set (embed, zoom, TRUE);
+	}
 }
 
 Toolbar *

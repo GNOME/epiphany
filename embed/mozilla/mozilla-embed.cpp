@@ -25,6 +25,7 @@
 #include "MozillaPrivate.h"
 #include "EphyWrapper.h"
 #include "EventContext.h"
+#include "ephy-debug.h"
 
 #include <nsIWindowWatcher.h>
 #include <nsIURI.h>
@@ -36,8 +37,6 @@
 #include <nsITransportSecurityInfo.h>
 #include <nsIPrintOptions.h>
 #include <nsGfxCIID.h>
-
-#include <math.h>
 
 static void
 mozilla_embed_class_init (MozillaEmbedClass *klass);
@@ -104,11 +103,11 @@ impl_copy_page (EphyEmbed *dest,
 		EmbedDisplayType display_type);
 static gresult
 impl_zoom_set (EphyEmbed *embed, 
-               int zoom, 
+               float zoom, 
                gboolean reflow);
 static gresult
 impl_zoom_get (EphyEmbed *embed,
-               int *zoom);
+               float *zoom);
 static gresult 
 impl_selection_can_cut (EphyEmbed *embed);
 static gresult 
@@ -772,7 +771,7 @@ impl_copy_page (EphyEmbed *dest,
 
 static gresult
 impl_zoom_set (EphyEmbed *embed, 
-               int zoom, 
+               float zoom, 
                gboolean reflow)
 {
 	EphyWrapper *wrapper;
@@ -781,7 +780,7 @@ impl_zoom_set (EphyEmbed *embed,
 	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
 	g_return_val_if_fail (wrapper != NULL, G_FAILED);
 
-	result = wrapper->SetZoom ((float)(zoom) / 100, reflow);
+	result = wrapper->SetZoom (zoom, reflow);
 
 	if (NS_SUCCEEDED (result))
 	{
@@ -793,7 +792,7 @@ impl_zoom_set (EphyEmbed *embed,
 
 static gresult
 impl_zoom_get (EphyEmbed *embed,
-               int *zoom)
+               float *zoom)
 {
 	float f;
 	EphyWrapper *wrapper;
@@ -801,15 +800,17 @@ impl_zoom_get (EphyEmbed *embed,
 	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
 	if (!wrapper)
 	{
-		*zoom = 100;
-		return G_OK;
+		LOG ("impl_zoom_get: wrapper == NULL")
+		
+		*zoom = 1.0;
+		return G_FAILED;
 	}
 	
 	nsresult result = wrapper->GetZoom (&f);
 	
 	if (NS_SUCCEEDED (result))
 	{
-		*zoom = (int) rint (f * 100);
+		*zoom = f;
 
 		return G_OK;
 	}

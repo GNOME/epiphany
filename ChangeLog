@@ -1,3 +1,51 @@
+2003-05-19  Christian Persch <chpe+gnomebugz@stud.uni-saarland.de>
+
+ 	Simplified and reorganised zoom. Implement a zoom control for the
+ 	toolbar.
+ 
+ 	* lib/widgets/ephy-zoom-action.h:
+ 	* lib/widgets/ephy-zoom-action.c:
+ 	* lib/widgets/ephy-zoom-control.h:
+ 	* lib/widgets/ephy-zoom-control.c:
+ 
+ 	New. A simple zoom control and a corresponding egg action.
+ 
+ 	* lib/ephy-zoom.h:
+ 	* lib/ephy-zoom.c:
+ 
+ 	New. Define the supported zoom levels, plus some helper functions.
+ 
+ 	* data/ui/epiphany-toolbar.xml.in:
+ 	* src/toolbar.h:
+ 	* src/toolbar.c: (toolbar_update_zoom_control),
+ 	(zoom_to_level_cb), (toolbar_setup_actions):
+ 
+ 	Hook up zoom control.
+ 
+ 	* src/ephy-window.c: (toolbar_update_zoom_control):
+ 
+ 	New. Updates toolbar zoom control and menu item sensitivity.
+ 
+ 	* embed/mozilla/mozilla-embed.c: (impl_zoom_set, impl_zoom_get):
+ 	* embed/ephy-embed.[ch]: (zoom_set), (zoom_get), (ephy_embed_zoom_set),
+ 	(ephy_embed_zoom_get):
+ 	* lib/ephy-marshal.list:
+ 	* src/ephy-nautilus-view.c: (gnv_embed_zoom_change_cb),
+ 	(gnv_zoomable_set_zoom_level_cb):
+ 	* src/ephy-tab.c: (ephy_tab_zoom_changed_cb):
+ 	* src/ephy-window.c: (ephy_window_set_zoom):
+ 
+ 	Use float zoom factor instead of int percent for zoom.
+ 
+ 	* src/ephy-nautilus-view.c: (ephy_nautilus_view_instance_init),
+ 	(ephy_nautilus_view_class_init), (gnv_zoomable_set_zoom_level_cb),
+ 	(gnv_zoomable_zoom_in_cb), (gnv_zoomable_zoom_out_cb),
+ 	(gnv_zoomable_zoom_to_default_cb), (gnv_embed_zoom_change_cb):
+ 	* src/window-commands.c: (window_cmd_view_zoom_in),
+ 	(window_cmd_view_zoom_out), (window_cmd_view_zoom_normal):
+ 
+ 	Simplified; use ephy-zoom.h where appropriate.
+
 2003-05-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/downloader-view.c: (downloader_view_build_ui):

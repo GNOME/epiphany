@@ -245,10 +245,10 @@ ephy_embed_base_init (gpointer g_class)
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (EphyEmbedClass, zoom_change),
                               NULL, NULL,
-                              g_cclosure_marshal_VOID__INT,
+                              g_cclosure_marshal_VOID__FLOAT,
                               G_TYPE_NONE,
                               1,
-			      G_TYPE_INT);
+			      G_TYPE_FLOAT);
 	initialized = TRUE;
 	}
 }
@@ -411,7 +411,7 @@ ephy_embed_copy_page (EphyEmbed *dest,
 
 gresult
 ephy_embed_zoom_set (EphyEmbed *embed,
-                     int zoom,
+                     float zoom,
                      gboolean reflow)
 {
 	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
@@ -420,7 +420,7 @@ ephy_embed_zoom_set (EphyEmbed *embed,
 
 gresult
 ephy_embed_zoom_get (EphyEmbed *embed,
-                     int *zoom)
+                     float *zoom)
 {
 	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
         return klass->zoom_get (embed, zoom);

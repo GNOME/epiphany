@@ -235,10 +235,10 @@ struct EphyEmbedClass
 					    EphyEmbed *source,
 					    EmbedDisplayType display_type);
 	gresult   (* zoom_set)             (EphyEmbed *embed,
-					    int zoom,
+					    float zoom,
 					    gboolean reflow);
 	gresult   (* zoom_get)             (EphyEmbed *embed,
-				            int *zoom);
+				            float *zoom);
 	gresult   (* selection_can_cut)    (EphyEmbed *embed);
 	gresult   (* selection_can_copy)   (EphyEmbed *embed);
 	gresult   (* can_paste)            (EphyEmbed *embed);
@@ -337,11 +337,11 @@ gresult	      ephy_embed_copy_page	      (EphyEmbed *dest,
 
 /* Zoom */
 gresult       ephy_embed_zoom_set             (EphyEmbed *embed,
-					       int zoom,
+					       float zoom,
 					       gboolean reflow);
 
 gresult       ephy_embed_zoom_get             (EphyEmbed *embed,
-					       int *zoom);
+					       float *zoom);
 
 /* Clipboard */
 gresult       ephy_embed_selection_can_cut    (EphyEmbed *embed);

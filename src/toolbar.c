@@ -35,6 +35,7 @@
 #include "ephy-go-action.h"
 #include "ephy-navigation-action.h"
 #include "ephy-bookmark-action.h"
+#include "ephy-zoom-action.h"
 #include "window-commands.h"
 #include "ephy-string.h"
 #include "ephy-debug.h"
@@ -126,6 +127,11 @@ go_location_cb (EggAction *action, char *location, EphyWindow *window)
 	ephy_embed_load_url (embed, location);
 }
 
+static void
+zoom_to_level_cb (EggAction *action, float zoom, EphyWindow *window)
+{
+	ephy_window_set_zoom (window, zoom);
+}
 
 static EggAction *
 ensure_bookmark_action (Toolbar *t, EphyBookmarks *bookmarks, gulong id, const char *action_name)
@@ -299,6 +305,16 @@ toolbar_setup_actions (Toolbar *t)
 			       NULL);
 	g_signal_connect (action, "go_location",
 			  G_CALLBACK (go_location_cb), t->priv->window);
+	egg_action_group_add_action (t->priv->action_group, action);
+	g_object_unref (action);
+
+	action = g_object_new (EPHY_TYPE_ZOOM_ACTION,
+			       "name", "Zoom",
+			       "label", _("Zoom"),
+			       "zoom", 1.0,
+			       NULL);
+	g_signal_connect (action, "zoom_to_level",
+			  G_CALLBACK (zoom_to_level_cb), t->priv->window);
 	egg_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 
@@ -753,4 +769,15 @@ toolbar_set_visibility (Toolbar *t,
 			}
 		}
 	}
+}
+
+void
+toolbar_update_zoom (Toolbar *t, float zoom)
+{
+	EggActionGroup *action_group;
+	EggAction *action;
+
+	action_group = t->priv->action_group;
+	action = egg_action_group_get_action (action_group, "Zoom");
+	g_object_set (action, "zoom", zoom, NULL);
 }

@@ -36,6 +36,7 @@
 #include "toolbar.h"
 #include "ephy-state.h"
 #include "ephy-gui.h"
+#include "ephy-zoom.h"
 
 #include <string.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -565,38 +566,21 @@ void
 window_cmd_view_zoom_in	(EggAction *action,
 			 EphyWindow *window)
 {
-	EphyEmbed *embed;
-	int zoom;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	ephy_embed_zoom_get (embed, &zoom);
-	ephy_window_set_zoom (window, zoom + 10);
+	ephy_window_set_zoom (window, ZOOM_IN);
 }
 
 void
 window_cmd_view_zoom_out (EggAction *action,
 			  EphyWindow *window)
 {
-	EphyEmbed *embed;
-	int zoom;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	ephy_embed_zoom_get (embed, &zoom);
-	if (zoom >= 10)
-	{
-		ephy_window_set_zoom (window, zoom - 10);
-	}
+	ephy_window_set_zoom (window, ZOOM_OUT);
 }
 
 void
 window_cmd_view_zoom_normal (EggAction *action,
 			     EphyWindow *window)
 {
-	ephy_window_set_zoom (window, 100);
+	ephy_window_set_zoom (window, 1.0);
 }
 
 void

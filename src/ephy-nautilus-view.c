@@ -29,6 +29,7 @@
 #include "find-dialog.h"
 #include "print-dialog.h"
 #include "ephy-prefs.h"
+#include "ephy-zoom.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 
@@ -47,7 +48,7 @@ static gint		gnv_embed_dom_mouse_down_cb		(EphyEmbed *embed,
 								 EphyEmbedEvent *event,
 								 EphyNautilusView *view);
 static void		gnv_embed_zoom_change_cb 		(EphyNautilusView *embed,
-								 guint new_zoom, 
+								 float new_zoom, 
 								 EphyNautilusView *view);
 
 
@@ -97,34 +98,6 @@ static void 		gnv_popup_cmd_frame_in_new_window	(BonoboUIComponent *uic,
 								 EphyEmbedPopup *popup, 
 								 const char* verbname);
 
-
-static float preferred_zoom_levels[] = {
-	0.2, 0.4, 0.6, 0.8,
-	1.0, 1.2, 1.4, 1.6, 1.8,
-	2.0, 2.2, 2.4, 2.6, 2.8,
-	3.0, 3.2, 3.4, 3.6, 3.8,
-	4.0, 4.2, 4.4, 4.6, 4.8,
-	5.0, 5.2, 5.4, 5.6, 5.8,
-	6.0, 6.2, 6.4, 6.6, 6.8,
-	7.0, 7.2, 7.4, 7.6, 7.8,
-	8.0, 8.2, 8.4, 8.6, 8.8,
-	9.0, 9.2, 9.4, 9.6, 9.8,
-};
-
-static const gchar *preferred_zoom_level_names[] = {
-	"20%", "40%", "60%", "80%",
-	"100%", "120%", "140%", "160%", "180%",
-	"200%", "220%", "240%", "260%", "280%",
-	"300%", "320%", "340%", "360%", "380%",
-	"400%", "420%", "440%", "460%", "480%",
-	"500%", "520%", "540%", "560%", "580%",
-	"600%", "620%", "640%", "660%", "680%",
-	"700%", "720%", "740%", "760%", "780%",
-	"800%", "820%", "840%", "860%", "880%",
-	"900%", "920%", "940%", "960%", "980%",
-};
-#define NUM_ZOOM_LEVELS (sizeof (preferred_zoom_levels) / sizeof (float))
-
 struct EphyNautilusViewPrivate {
 	EphyEmbed *embed;
 	char *title;
@@ -170,6 +143,9 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 	GtkWidget *w;
 	EphyNautilusViewPrivate *p = g_new0 (EphyNautilusViewPrivate, 1);
 	EphyEmbedSingle *single;
+	float *levels;
+	gchar **names;
+	guint i;
 
 	single = ephy_embed_shell_get_embed_single
 		(EPHY_EMBED_SHELL (ephy_shell));
@@ -250,14 +226,26 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 	bonobo_object_add_interface (BONOBO_OBJECT (view),
 				     BONOBO_OBJECT (view->priv->zoomable));
 
+	/* get zoom levels */
+	levels = g_new0 (float, n_zoom_levels);
+	names = g_new0 (gchar *, n_zoom_levels);
+	for (i = 0; i < n_zoom_levels; i++)
+	{
+		levels[i] = zoom_levels[i].level;
+		names[i] = zoom_levels[i].name;
+	}
+
 	bonobo_zoomable_set_parameters_full (view->priv->zoomable,
 					     1.0,
-					     preferred_zoom_levels [0],
-					     preferred_zoom_levels [NUM_ZOOM_LEVELS - 1],
+					     levels [0],
+					     levels [n_zoom_levels-1],
 					     FALSE, FALSE, TRUE,
-					     preferred_zoom_levels,
-					     preferred_zoom_level_names,
-					     NUM_ZOOM_LEVELS);
+					     levels,
+					     (const gchar **) names,
+					     n_zoom_levels);
+
+	g_free (levels);
+	g_free (names);
 
 	bonobo_object_add_interface (BONOBO_OBJECT (view),
 				     BONOBO_OBJECT (view->priv->zoomable));
@@ -613,33 +601,41 @@ gnv_zoomable_set_zoom_level_cb (BonoboZoomable *zoomable,
 				float level,
 				EphyNautilusView *view)
 {
-	gint zoom = level * 100;
 	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
-	if (zoom < 10) return;
-	if (zoom > 1000) return;
-	ephy_embed_zoom_set (view->priv->embed, zoom, TRUE);
+	ephy_embed_zoom_set (view->priv->embed,
+			     ephy_zoom_get_nearest_zoom_level (level), TRUE);
 }
 
 static void
 gnv_zoomable_zoom_in_cb (BonoboZoomable *zoomable,
 			 EphyNautilusView *view)
 {
-	gint zoom;
+	float zoom, new_zoom;
+	gresult rv;
+	
 	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
-	ephy_embed_zoom_get (view->priv->embed, &zoom);
-	if (zoom > 990) return;
-	ephy_embed_zoom_set (view->priv->embed, zoom + 10, TRUE);
+
+	rv = ephy_embed_zoom_get (view->priv->embed, &zoom);
+	if (rv == G_FAILED) return;
+
+	new_zoom = ephy_zoom_get_changed_zoom_level (zoom, 1);
+	ephy_embed_zoom_set (view->priv->embed, new_zoom, TRUE);
 }
 
 static void
 gnv_zoomable_zoom_out_cb (BonoboZoomable *zoomable,
 			  EphyNautilusView *view)
 {
-	gint zoom;
+	float zoom, new_zoom;
+	gresult rv;
+		
 	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
-	ephy_embed_zoom_get (view->priv->embed, &zoom);
-	if (zoom < 20) return;
-	ephy_embed_zoom_set (view->priv->embed, zoom - 10, TRUE);
+
+	rv = ephy_embed_zoom_get (view->priv->embed, &zoom);
+	if (rv == G_FAILED) return;
+
+	new_zoom = ephy_zoom_get_changed_zoom_level (zoom, -1);
+	ephy_embed_zoom_set (view->priv->embed, new_zoom, TRUE);
 }
 
 static void
@@ -654,22 +650,18 @@ gnv_zoomable_zoom_to_default_cb	(BonoboZoomable *zoomable,
 				 EphyNautilusView *view)
 {
 	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
-	ephy_embed_zoom_set (view->priv->embed, 100, TRUE);
+	ephy_embed_zoom_set (view->priv->embed, 1.0, TRUE);
 }
 
 static void
 gnv_embed_zoom_change_cb (EphyNautilusView *embed,
-			  guint new_zoom, 
+			  float new_zoom, 
 			  EphyNautilusView *view)
 {
-	float flevel;
 	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
 	
-	flevel = ((float) new_zoom) / 100.0;
-	
 	bonobo_zoomable_report_zoom_level_changed (view->priv->zoomable,
-						   flevel, NULL);
-	
+						   new_zoom, NULL);
 }
 
 

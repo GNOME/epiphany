@@ -108,7 +108,7 @@ void		  ephy_window_load_url		  (EphyWindow *window,
 						   const char *url);
 
 void		  ephy_window_set_zoom		  (EphyWindow *window,
-						   gint zoom);
+						   float zoom);
 
 void		  ephy_window_activate_location	  (EphyWindow *window);
 
