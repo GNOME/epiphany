@@ -1,5 +1,13 @@
 2004-02-17  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/egg/egg-editable-toolbar.c: (item_added_cb),
+	(item_removed_cb), (egg_editable_toolbar_construct):
+
+	Remove the toolbar height contraint when the first item is added
+	to it. Fixes bug #131181.
+
+2004-02-17  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-extension.c: (ephy_extension_get_type),
 	(ephy_extension_attach_window), (ephy_extension_detach_window):
 	* src/ephy-extension.h:

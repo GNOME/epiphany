@@ -784,15 +784,19 @@ item_added_cb (EggToolbarsModel   *model,
 	       int                 position,
 	       EggEditableToolbar *t)
 {
+  GtkWidget *dock;
   GtkWidget *toolbar;
   GtkWidget *item;
   GtkAction *action;
 
   toolbar = get_toolbar_nth (t, toolbar_position);
-  gtk_widget_set_size_request (toolbar, -1, -1);
   item = create_item (t, model, toolbar_position, position, &action);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
 		      GTK_TOOL_ITEM (item), position);
+
+  dock = get_dock_nth (t, toolbar_position);
+  gtk_widget_set_size_request (dock, -1, -1);
+  gtk_widget_queue_resize_no_redraw (dock);
 
   /* FIXME Hack to make tooltip work from gtk */
   if (action)
@@ -818,7 +822,6 @@ item_removed_cb (EggToolbarsModel   *model,
 
   if (egg_toolbars_model_n_items (model, toolbar_position) == 0)
     {
-      gtk_widget_set_size_request (toolbar, -1, MIN_TOOLBAR_HEIGHT);
       egg_toolbars_model_remove_toolbar (model, toolbar_position);
     }
 }
@@ -897,7 +900,7 @@ egg_editable_toolbar_construct (EggEditableToolbar *t)
 
       if (n_items == 0)
         {
-            gtk_widget_set_size_request (toolbar, -1, MIN_TOOLBAR_HEIGHT);
+            gtk_widget_set_size_request (dock, -1, MIN_TOOLBAR_HEIGHT);
         }
     }
 
