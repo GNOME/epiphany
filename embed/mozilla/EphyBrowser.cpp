@@ -90,7 +90,7 @@
 #include "MozillaPrivate.h"
 #include "print-dialog.h"
 
-#if MOZILLA_SNAPSHOT >= 17
+#if (MOZILLA_SNAPSHOT == 17) || (MOZILLA_SNAPSHOT >= 19)
 #include "nsIDOMWindow2.h"
 #endif
 
@@ -258,7 +258,7 @@ EphyBrowser::GetListener (void)
   	nsCOMPtr<nsIDOMWindow> domWindowExternal;
   	mWebBrowser->GetContentDOMWindow(getter_AddRefs(domWindowExternal));
 
-#if MOZILLA_SNAPSHOT >= 17
+#if (MOZILLA_SNAPSHOT == 17) || (MOZILLA_SNAPSHOT >= 19)
 	nsCOMPtr<nsIDOMWindow2> domWindow (do_QueryInterface (domWindowExternal));
 	NS_ENSURE_TRUE (domWindow, NS_ERROR_FAILURE);
 
