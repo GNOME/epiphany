@@ -554,6 +554,11 @@ ephy_window_fullscreen (EphyWindow *window)
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN))
 	{
+		egg_editable_toolbar_set_model
+			(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
+			 EGG_TOOLBARS_MODEL (
+				ephy_shell_get_toolbars_model (ephy_shell, TRUE)));
+
 		/* no need to show "exit fullscreen" button */
 		return;
 	}
