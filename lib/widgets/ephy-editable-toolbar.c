@@ -288,6 +288,21 @@ drag_data_get_cb (GtkWidget *widget,
 				8, target, strlen (target));
 }
 
+static GtkWidget *
+get_item_widget (EphyEditableToolbar *t, gpointer data)
+{
+	GtkWidget *widget;
+	char *path;
+
+	path = ephy_toolbars_group_get_path (t->priv->group, data);
+	g_return_val_if_fail (path != NULL, NULL);
+
+	widget = egg_menu_merge_get_widget (t->priv->merge, path);
+	g_free (path);
+
+	return widget;
+}
+
 static void
 connect_item_drag_source (EphyToolbarsItem *item, EphyEditableToolbar *etoolbar)
 {
@@ -296,7 +311,7 @@ connect_item_drag_source (EphyToolbarsItem *item, EphyEditableToolbar *etoolbar)
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 	g_return_if_fail (item != NULL);
 
-	toolitem = item->widget;
+	toolitem = get_item_widget (etoolbar, item);
 
 	if (!g_object_get_data (G_OBJECT (toolitem), "drag_source_set"))
 	{
@@ -320,7 +335,7 @@ disconnect_item_drag_source (EphyToolbarsItem *item, EphyEditableToolbar *etoolb
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 	g_return_if_fail (item != NULL);
 
-	toolitem = item->widget;
+	toolitem = get_item_widget (etoolbar, item);
 
 	if (g_object_get_data (G_OBJECT (toolitem), "drag_source_set"))
 	{
@@ -340,22 +355,16 @@ static void
 setup_toolbar (EphyToolbarsToolbar *toolbar, EphyEditableToolbar *etoolbar)
 {
 	GtkWidget *widget;
-	char *path;
 
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 	g_return_if_fail (toolbar != NULL);
 
-	path = ephy_toolbars_group_get_path (etoolbar->priv->group, toolbar);
-	g_return_if_fail (path != NULL);
-
-	widget = egg_menu_merge_get_widget (etoolbar->priv->merge, path);
+	widget = get_item_widget (etoolbar, toolbar);
 	g_object_set_data (G_OBJECT (widget), "toolbar_data", toolbar);
-	g_return_if_fail (toolbar != NULL);
-	toolbar->widget = widget;
 
 	if (!g_object_get_data (G_OBJECT (widget), "drag_dest_set"))
 	{
-		LOG ("Setup drag dest for toolbar %s", path)
+		LOG ("Setup drag dest for toolbar %s", toolbar->id)
 		g_object_set_data (G_OBJECT (widget), "drag_dest_set",
 				   GINT_TO_POINTER (TRUE));
 		gtk_drag_dest_set (widget, GTK_DEST_DEFAULT_ALL,
@@ -367,8 +376,6 @@ setup_toolbar (EphyToolbarsToolbar *toolbar, EphyEditableToolbar *etoolbar)
 	}
 
 	etoolbar->priv->last_toolbar = widget;
-
-	g_free (path);
 }
 
 static void
@@ -383,10 +390,7 @@ setup_item (EphyToolbarsItem *item, EphyEditableToolbar *etoolbar)
 	path = ephy_toolbars_group_get_path (etoolbar->priv->group, item);
 	g_return_if_fail (path != NULL);
 
-	toolitem = egg_menu_merge_get_widget (etoolbar->priv->merge, path);
-	g_return_if_fail (toolitem != NULL);
-	item->widget = toolitem;
-
+	toolitem = get_item_widget (etoolbar, item);
 	g_object_set_data (G_OBJECT (toolitem), "item_data", item);
 
 	LOG ("Setup drag dest for toolbar item %s %p", path, toolitem);
@@ -414,7 +418,7 @@ ensure_toolbar_min_size (EphyToolbarsToolbar *toolbar, EphyEditableToolbar *t)
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (t));
 	g_return_if_fail (toolbar != NULL);
 
-	widget = toolbar->widget;
+	widget = get_item_widget (t, toolbar);
 
 	if (EGG_TOOLBAR (widget)->num_children == 0)
 	{

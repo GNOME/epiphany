@@ -1,3 +1,16 @@
+2003-02-21  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/egg/egg-action.c: (egg_action_remove_proxy):
+	* lib/widgets/ephy-editable-toolbar.c: (get_item_widget),
+	(connect_item_drag_source), (disconnect_item_drag_source),
+	(setup_toolbar), (setup_item), (ensure_toolbar_min_size):
+	* lib/widgets/ephy-toolbars-group.c: (toolbars_toolbar_new),
+	(toolbars_item_new), (free_toolbar_node), (free_item_node),
+	(ephy_toolbars_group_to_string), (ephy_toolbars_group_get_path):
+	* lib/widgets/ephy-toolbars-group.h:
+
+	Fix crashes with multiple windows open
+
 2003-02-21 Pekka Lampila <medar@kapina.org>
 
 	* lib/widgets/ephy-toolbars-group.c: (load_defaults),

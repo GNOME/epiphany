@@ -39,14 +39,14 @@ typedef struct EphyToolbarsGroupPrivate EphyToolbarsGroupPrivate;
 
 typedef struct
 {
-	GtkWidget *widget;
+	char *id;
 } EphyToolbarsToolbar;
 
 typedef struct
 {
+	char *id;
 	gboolean separator;
 	char *action;
-	GtkWidget *widget;
 	EphyToolbarsToolbar *parent;
 } EphyToolbarsItem;
 

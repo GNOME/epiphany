@@ -129,9 +129,12 @@ static EphyToolbarsToolbar *
 toolbars_toolbar_new (void)
 {
 	EphyToolbarsToolbar *toolbar;
+	static int id = 0;
 
 	toolbar = g_new0 (EphyToolbarsToolbar, 1);
-	toolbar->widget = NULL;
+	toolbar->id = g_strdup_printf ("Toolbar%d", id);
+
+	id++;
 
 	return toolbar;
 }
@@ -140,13 +143,16 @@ static EphyToolbarsItem *
 toolbars_item_new (const char *action, gboolean separator)
 {
 	EphyToolbarsItem *item;
+	static int id = 0;
 
 	g_return_val_if_fail (action != NULL, NULL);
 
 	item = g_new0 (EphyToolbarsItem, 1);
 	item->action = g_strdup (action);
 	item->separator = separator;
-	item->widget = NULL;
+	item->id = g_strdup_printf ("TI%d", id);
+
+	id++;
 
 	return item;
 }
@@ -156,6 +162,7 @@ free_toolbar_node (EphyToolbarsToolbar *toolbar)
 {
 	g_return_if_fail (toolbar != NULL);
 
+	g_free (toolbar->id);
 	g_free (toolbar);
 }
 
@@ -165,6 +172,7 @@ free_item_node (EphyToolbarsItem *item)
 	g_return_if_fail (item != NULL);
 
 	g_free (item->action);
+	g_free (item->id);
 	g_free (item);
 }
 
@@ -382,16 +390,16 @@ ephy_toolbars_group_to_string (EphyToolbarsGroup *t)
 			{
 				g_string_append_printf
 					(s, "<placeholder name=\"PlaceHolder%d-%d\">"
-					 "<separator name=\"TS\"/>"
-					 "</placeholder>\n", i, k);
+					 "<separator name=\"%s\"/>"
+					 "</placeholder>\n", i, k, item->id);
 			}
 			else
 			{
 				g_string_append_printf
 					(s, "<placeholder name=\"PlaceHolder%d-%d\">"
-					 "<toolitem name=\"TI%s\" verb=\"%s\"/>"
+					 "<toolitem name=\"%s\" verb=\"%s\"/>"
 					 "</placeholder>\n",
-					 i, k, item->action, item->action);
+					 i, k, item->id, item->action);
 			}
 			i++;
 		}
@@ -617,27 +625,27 @@ ephy_toolbars_group_get_path (EphyToolbarsGroup *t,
 	GNode *node;
 	char *path = NULL;
 	EphyToolbarsItem *titem;
+	EphyToolbarsToolbar *toolbar;
 
 	g_return_val_if_fail (IS_EPHY_TOOLBARS_GROUP (t), NULL);
 
 	node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, item);
 	g_return_val_if_fail (node != NULL, NULL);
 	titem = (EphyToolbarsItem *)node->data;
+	toolbar = (EphyToolbarsToolbar *)node->data;
 
 	switch (g_node_depth (node))
 	{
 		case 2:
-			path = g_strdup_printf ("/Toolbar%d",
-				                g_node_child_position (node->parent, node));
+			path = g_strdup_printf ("/%s", toolbar->id);
 			break;
 		case 3:
 			path = g_strdup_printf
-				("/Toolbar%d/PlaceHolder%d-%d/%s%s",
+				("/Toolbar%d/PlaceHolder%d-%d/%s",
 				 g_node_child_position (node->parent->parent, node->parent),
 				 g_node_child_position (node->parent, node),
 				 g_node_child_position (node->parent->parent, node->parent),
-				 titem->separator ? "TS" : "TI",
-				 titem->separator ? "" : titem->action);
+				 titem->id);
 			break;
 		default:
 			g_assert_not_reached ();
