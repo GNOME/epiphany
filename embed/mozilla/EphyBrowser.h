@@ -107,6 +107,12 @@ public:
 	nsresult GetSHUrlAtIndex (PRInt32 index, nsCString &url);
 	nsresult GoToHistoryIndex (PRInt16 index);
 
+	enum { RELOAD_NORMAL = 0 };
+	enum { RELOAD_FORCE = 1 };
+	enum { RELOAD_ENCODING_CHANGE = 2 };
+
+	nsresult Reload (PRUint32 flags);
+
 	nsresult ForceEncoding (const char *encoding);
 
 	nsresult GetEncodingInfo (EphyEncodingInfo **infoptr);

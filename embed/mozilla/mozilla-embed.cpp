@@ -51,7 +51,6 @@ static void	mozilla_embed_destroy		(GtkObject *object);
 static void	mozilla_embed_finalize		(GObject *object);
 static void	ephy_embed_iface_init		(EphyEmbedIface *iface);
 
-static void mozilla_embed_connect_signals	(MozillaEmbed *membed);
 static void mozilla_embed_location_changed_cb	(GtkMozEmbed *embed,
 						 MozillaEmbed *membed);
 static void mozilla_embed_net_state_all_cb	(GtkMozEmbed *embed,
@@ -517,16 +516,29 @@ static void
 impl_reload (EphyEmbed *embed, 
              EmbedReloadFlags flags)
 {
-	guint32 mflags;
+	/* Workaround for broken reload with frames, see mozilla bug
+	 * http://bugzilla.mozilla.org/show_bug.cgi?id=246392
+	 * Replace #if 0 with appropriate MOZILLA_CHECK_VERSION4 once the bug
+	 * has been fixed
+	 */
+	gboolean force;
 
-	mflags = GTK_MOZ_EMBED_FLAG_RELOADNORMAL;
+	force = (flags == EMBED_RELOAD_FORCE);
+#if 0
+	guint mflags = 0;
 
-	if (flags & EMBED_RELOAD_FORCE)
+	if (force)
 	{
 		mflags = GTK_MOZ_EMBED_FLAG_RELOADBYPASSPROXYANDCACHE;
 	}
-	
+
 	gtk_moz_embed_reload (GTK_MOZ_EMBED(embed), mflags);
+#else
+	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
+
+	mpriv->browser->Reload (force ? (PRUint32) EphyBrowser::RELOAD_FORCE :
+					(PRUint32) EphyBrowser::RELOAD_NORMAL);
+#endif
 }
 
 static void
@@ -742,8 +754,17 @@ impl_set_encoding (EphyEmbed *embed,
 	result = mpriv->browser->ForceEncoding (encoding);
 	if (NS_FAILED (result)) return;
 
+	/* Workaround for broken reload with frames, see mozilla bug
+	 * http://bugzilla.mozilla.org/show_bug.cgi?id=246392
+	 * Replace #if 0 with appropriate MOZILLA_CHECK_VERSION4 once the bug
+	 * has been fixed
+	 */
+#if 0
 	gtk_moz_embed_reload (GTK_MOZ_EMBED (embed),
 			      GTK_MOZ_EMBED_FLAG_RELOADCHARSETCHANGE);
+#else
+	mpriv->browser->Reload (EphyBrowser::RELOAD_ENCODING_CHANGE);
+#endif
 }
 
 static EphyEncodingInfo *
