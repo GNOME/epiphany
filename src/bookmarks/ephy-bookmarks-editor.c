@@ -1505,6 +1505,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 		               130);
 
 	set_columns_visibility (editor, details_value);
+
+	gtk_widget_grab_focus (editor->priv->search_entry);
 }
 
 void
