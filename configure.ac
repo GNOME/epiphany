@@ -594,8 +594,6 @@ fi
 if test "x$have_iso_codes" = "xyes"; then
 	AC_DEFINE_UNQUOTED([ISO_CODES_PREFIX],["`$PKG_CONFIG --variable=prefix iso-codes`"],[ISO codes prefix])
 	AC_DEFINE([HAVE_ISO_CODES],[1],[Define if you have the iso-codes package])
-else
-	AC_MSG_ERROR([iso-codes is required])
 fi
 
 dnl Translators: new languages must be added to the po/LINGUAS file
