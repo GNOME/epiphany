@@ -17,6 +17,7 @@
  */
 
 #include <libxml/tree.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
 
 #include "ephy-bookmarks-export.h"
 #include "ephy-node-common.h"
@@ -29,7 +30,7 @@ add_topics_list (EphyNode *topics, EphyNode *bmk, xmlNodePtr parent)
 	GPtrArray *children;
 	int i;
 	GList *bmks = NULL, *l;
-	xmlNodePtr xml_node, bag_node, item_node;
+	xmlNodePtr xml_node;
 
 	children = ephy_node_get_children (topics);
 	for (i = 0; i < children->len; i++)
@@ -52,18 +53,15 @@ add_topics_list (EphyNode *topics, EphyNode *bmk, xmlNodePtr parent)
 
 	if (bmks == NULL) return;
 
-	xml_node = xmlNewChild (parent, NULL, "dc:subject", NULL);
-	bag_node = xmlNewChild (xml_node, NULL, "rdf:Bag", NULL);
-
 	for (l = bmks; l != NULL; l = l->next)
 	{
 		const char *name;
 		EphyNode *node = l->data;
 
+		xml_node = xmlNewChild (parent, NULL, "dc:subject", NULL);
 		name = ephy_node_get_property_string
 			(node, EPHY_NODE_KEYWORD_PROP_NAME);
-		item_node = xmlNewChild (bag_node, NULL, "rdf:li", NULL);
-		xmlNodeSetContent (item_node, name);
+		xmlNodeSetContent (xml_node, name);
 	}
 
 	g_list_free (bmks);
@@ -77,6 +75,7 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 	EphyNode *topics;
 	xmlDocPtr doc;
 	xmlNodePtr root, xml_node, channel_node, channel_seq_node;
+	char *uri;
 	GPtrArray *children;
 	int i;
 
@@ -92,7 +91,9 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 	xmlSetProp (root, "xmlns:dc", "http://purl.org/dc/elements/1.1/");
 
 	channel_node = xmlNewChild (root, NULL, "channel", NULL);
-	xmlSetProp (channel_node, "rdf:about", "http://epiphany.mozdev.org/bookmarks");
+	uri = gnome_vfs_get_uri_from_local_path (filename);
+	xmlSetProp (channel_node, "rdf:about", uri);
+	g_free (uri);
 
 	xml_node = xmlNewChild (channel_node, NULL, "title", NULL);
 	xmlNodeSetContent (xml_node, "Epiphany bookmarks");
