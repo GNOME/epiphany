@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-06-30 00:07+0200\n"
-"PO-Revision-Date: 2003-06-30 00:07+0200\n"
+"POT-Creation-Date: 2003-07-02 11:47+0200\n"
+"PO-Revision-Date: 2003-07-02 11:51+0200\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -349,15 +349,7 @@ msgid ""
 "\"zhcn_parallel_state_machine\" (autodetect simplified chinese encodings), "
 "\"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) "
 "and \"universal_charset_detector\" (autodetect all encodings)."
-msgstr ""
-"Kodningsgætteren. Gyldige værdier er \"\" (gæt ikke), "
-"\"cjk_parallel_state_machine\" (gæt øst-asiatiske kodninger), "
-"\"ja_parallel_state_machine\" (gæt japanske kodninger), "
-"\"ko_parallel_state_machine\" (gæt koreanske kodninger), \"ruprob\" (gæt "
-"russiske kodninger), \"ukprob\" (gæt ukrainske kodninger), "
-"\"zh_parallel_state_machine\" (gæt kinesiske kodninger), "
-"\"zhcn_parallel_state_machine\" (gæt forenklede kinesiske kodninger) og "
-"\"zhtw_parallel_state_machine\" (gæt traditionelle kinesiske kodninger)."
+msgstr "Kodningsgætteren. Gyldige værdier er \"\" (gæt ikke), \"cjk_parallel_state_machine\" (gæt øst-asiatiske kodninger), \"ja_parallel_state_machine\" (gæt japanske kodninger), \"ko_parallel_state_machine\" (gæt koreanske kodninger), \"ruprob\" (gæt russiske kodninger), \"ukprob\" (gæt ukrainske kodninger), \"zh_parallel_state_machine\" (gæt kinesiske kodninger), \"zhcn_parallel_state_machine\" (gæt forenklede kinesiske kodninger) og \"zhtw_parallel_state_machine\" (gæt traditionelle kinesiske kodninger) og \"universal_charset_detector\" (gæt alle kodninger)."
 
 #: data/epiphany.schemas.in.h:53
 msgid "Use own colors"
@@ -381,19 +373,6 @@ msgstr ""
 "Benyt de selvvalgte skrifttyper i stedet for de farver som siden beder om."
 
 #: data/epiphany.schemas.in.h:58
-msgid "When to compare cached copy"
-msgstr "Hvornår mellemlagrede kopier sammenlignes"
-
-#: data/epiphany.schemas.in.h:59
-msgid ""
-"When to compare cached copy to web copy. Possible values are once per "
-"session, every time, never, automatic."
-msgstr ""
-"Hvornår mellemlagrede kopier sammenlignes med udgaverne på internettet. "
-"Mulige værdier er \"once per session\", \"every time\", \"never\", "
-"\"automatic\"."
-
-#: data/epiphany.schemas.in.h:60
 msgid ""
 "Where to accept cookies from. Possible values are anywhere, current site, "
 "nowhere"
@@ -401,23 +380,23 @@ msgstr ""
 "Hvor infokager skal accepteres fra. Mulige værdier er \"anywhere\", "
 "\"current site\", \"nowhere\"."
 
-#: data/epiphany.schemas.in.h:61
+#: data/epiphany.schemas.in.h:59
 msgid "Whether to print the date in the footer."
 msgstr "Om datoen skal udskrives i sidefoden."
 
-#: data/epiphany.schemas.in.h:62
+#: data/epiphany.schemas.in.h:60
 msgid "Whether to print the page address in the header"
 msgstr "Om sidens adresse skal udskrives i sidehovedet"
 
-#: data/epiphany.schemas.in.h:63
+#: data/epiphany.schemas.in.h:61
 msgid "Whether to print the page numbers (x of total) in the footer."
 msgstr "Om sidetallet (x af total) skal udskrives i sidefoden."
 
-#: data/epiphany.schemas.in.h:64
+#: data/epiphany.schemas.in.h:62
 msgid "Whether to print the page title in the header."
 msgstr "Om sidetitlen skal udskrives i sidehovedet."
 
-#: data/epiphany.schemas.in.h:65
+#: data/epiphany.schemas.in.h:63
 msgid "x-western"
 msgstr "x-western"
 
@@ -482,6 +461,7 @@ msgid "Download _Details"
 msgstr "Overførings_detaljer"
 
 #: data/glade/epiphany.glade.h:16 data/ui/nautilus-epiphany-view.xml.in.h:11
+#: src/ephy-window.c:665
 msgid "Find"
 msgstr "Søg"
 
@@ -524,8 +504,8 @@ msgid "    "
 msgstr "    "
 
 #: data/glade/prefs-dialog.glade.h:3
-msgid "<b>Caches</b>"
-msgstr "<b>Mellemlagere</b>"
+msgid "<b>Cache</b>"
+msgstr "<b>Mellemlager</b>"
 
 #: data/glade/prefs-dialog.glade.h:4 data/glade/print.glade.h:3
 msgid "<b>Colors</b>"
@@ -536,28 +516,28 @@ msgid "<b>Cookies</b>"
 msgstr "<b>Infokager</b>"
 
 #: data/glade/prefs-dialog.glade.h:6
+msgid "<b>Encodings</b>"
+msgstr "<b>Kodninger</b>"
+
+#: data/glade/prefs-dialog.glade.h:7
 msgid "<b>Fonts</b>"
 msgstr "<b>Skrifttyper</b>"
 
-#: data/glade/prefs-dialog.glade.h:7
+#: data/glade/prefs-dialog.glade.h:8
 msgid "<b>Home page</b>"
 msgstr "<b>Startside</b>"
 
-#: data/glade/prefs-dialog.glade.h:8
-msgid "<b>Language</b>"
+#: data/glade/prefs-dialog.glade.h:9
+msgid "<b>Languages</b>"
 msgstr "<b>Sprog</b>"
 
-#: data/glade/prefs-dialog.glade.h:9
+#: data/glade/prefs-dialog.glade.h:10
 msgid "<b>Tabs</b>"
 msgstr "<b>Faneblade</b>"
 
-#: data/glade/prefs-dialog.glade.h:10
+#: data/glade/prefs-dialog.glade.h:11
 msgid "<b>Web Content</b>"
 msgstr "<b>Indhold</b>"
-
-#: data/glade/prefs-dialog.glade.h:11
-msgid "Advanced"
-msgstr "Avanceret"
 
 #: data/glade/prefs-dialog.glade.h:12
 msgid "Al_ways use the desktop theme colors"
@@ -572,143 +552,127 @@ msgid "Always use _these fonts"
 msgstr "Benyt altid _disse skrifttyper"
 
 #: data/glade/prefs-dialog.glade.h:15
-msgid "Autodetec_t encoding:"
-msgstr "_Gæt automatisk kodning:"
+msgid "Autodetec_t:"
+msgstr "_Gæt automatisk:"
 
 #: data/glade/prefs-dialog.glade.h:16
 msgid "Cl_ear Cache"
 msgstr "_Ryd mellemlager"
 
 #: data/glade/prefs-dialog.glade.h:17
-msgid "Compare page:"
-msgstr "Sammenlign side:"
-
-#: data/glade/prefs-dialog.glade.h:18
-msgid "E_very time"
-msgstr "H_ver gang"
-
-#: data/glade/prefs-dialog.glade.h:19
 msgid "Enable Java_Script"
 msgstr "Tillad Java_script"
 
-#: data/glade/prefs-dialog.glade.h:20
+#: data/glade/prefs-dialog.glade.h:18
 msgid "Enable _Java"
 msgstr "Tillad _Java"
 
-#: data/glade/prefs-dialog.glade.h:21
+#: data/glade/prefs-dialog.glade.h:19
 msgid "Fonts and Colors"
 msgstr "Skrifttyper og farver"
 
-#: data/glade/prefs-dialog.glade.h:22 data/glade/print.glade.h:16
+#: data/glade/prefs-dialog.glade.h:20 data/glade/print.glade.h:16
 msgid "General"
 msgstr "Generelt"
 
-#: data/glade/prefs-dialog.glade.h:23
+#: data/glade/prefs-dialog.glade.h:21
+msgid "Language"
+msgstr "Sprog"
+
+#: data/glade/prefs-dialog.glade.h:22
 msgid "Language Editor"
 msgstr "Sprogtilpasning"
 
-#: data/glade/prefs-dialog.glade.h:24
+#: data/glade/prefs-dialog.glade.h:23
 msgid "MB"
 msgstr "Mb"
 
-#: data/glade/prefs-dialog.glade.h:25
+#: data/glade/prefs-dialog.glade.h:24
 msgid "Min_imum font size:"
 msgstr "Mini_mum skriftstørrelse:"
 
-#: data/glade/prefs-dialog.glade.h:26
+#: data/glade/prefs-dialog.glade.h:25
 msgid "Mo_re..."
 msgstr "Me_re..."
 
-#: data/glade/prefs-dialog.glade.h:27
-msgid "Once per _session"
-msgstr "En gang pr. _session"
-
-#: data/glade/prefs-dialog.glade.h:28
+#: data/glade/prefs-dialog.glade.h:26
 msgid "Only _from sites you visit"
 msgstr "Kun _fra sider du besøger"
 
-#: data/glade/prefs-dialog.glade.h:29
+#: data/glade/prefs-dialog.glade.h:27
 msgid "Open in _tabs by default"
 msgstr "Åbn som standard i _faneblade"
 
-#: data/glade/prefs-dialog.glade.h:30
+#: data/glade/prefs-dialog.glade.h:28
 msgid "Preferences"
 msgstr "Indstillinger"
 
-#: data/glade/prefs-dialog.glade.h:31
+#: data/glade/prefs-dialog.glade.h:29
+msgid "Privacy"
+msgstr "Beskyttelse af privatliv"
+
+#: data/glade/prefs-dialog.glade.h:30
 msgid "S_ans serif:"
 msgstr "S_ans serif:"
 
-#: data/glade/prefs-dialog.glade.h:32
+#: data/glade/prefs-dialog.glade.h:31
 msgid "Sans Serif"
 msgstr "Sans serif"
 
-#: data/glade/prefs-dialog.glade.h:33
-msgid "Security"
-msgstr "Sikkerhed"
-
-#: data/glade/prefs-dialog.glade.h:34
+#: data/glade/prefs-dialog.glade.h:32
 msgid "Serif"
 msgstr "Serif"
 
-#: data/glade/prefs-dialog.glade.h:35
+#: data/glade/prefs-dialog.glade.h:33
 msgid "Set to Current _Page"
 msgstr "Sæt til n_uværende side"
 
-#: data/glade/prefs-dialog.glade.h:36
+#: data/glade/prefs-dialog.glade.h:34
 msgid "Set to _Blank Page"
 msgstr "Sæt til _tom side"
 
-#: data/glade/prefs-dialog.glade.h:37
+#: data/glade/prefs-dialog.glade.h:35
 msgid "Si_ze:"
 msgstr "Stø_rrelse:"
 
-#: data/glade/prefs-dialog.glade.h:38
+#: data/glade/prefs-dialog.glade.h:36
 msgid "Siz_e:"
 msgstr "Størr_else:"
 
-#: data/glade/prefs-dialog.glade.h:39
+#: data/glade/prefs-dialog.glade.h:37
 #: src/bookmarks/ephy-bookmark-properties.c:384
 msgid "_Address:"
 msgstr "_Adresse:"
 
-#: data/glade/prefs-dialog.glade.h:40
+#: data/glade/prefs-dialog.glade.h:38
 msgid "_Always accept"
 msgstr "Acceptér _altid"
 
-#: data/glade/prefs-dialog.glade.h:41
-msgid "_Automatically"
-msgstr "_Automatisk"
+#: data/glade/prefs-dialog.glade.h:39
+msgid "_Default:"
+msgstr "_Standard:"
 
-#: data/glade/prefs-dialog.glade.h:42
-msgid "_Default encoding:"
-msgstr "_Standardkodning:"
-
-#: data/glade/prefs-dialog.glade.h:43
+#: data/glade/prefs-dialog.glade.h:40
 msgid "_Language encoding:"
 msgstr "Sprog_kodning:"
 
-#: data/glade/prefs-dialog.glade.h:44
+#: data/glade/prefs-dialog.glade.h:41
 msgid "_Language:"
 msgstr "_Sprog:"
 
-#: data/glade/prefs-dialog.glade.h:45
+#: data/glade/prefs-dialog.glade.h:42
 msgid "_Monospace:"
 msgstr "_Fast bredde:"
 
-#: data/glade/prefs-dialog.glade.h:46
-msgid "_Never"
-msgstr "_Aldrig"
-
-#: data/glade/prefs-dialog.glade.h:47
+#: data/glade/prefs-dialog.glade.h:43
 msgid "_Never accept"
 msgstr "_Acceptér aldrig"
 
-#: data/glade/prefs-dialog.glade.h:48
+#: data/glade/prefs-dialog.glade.h:44
 msgid "_Proportional:"
 msgstr "_Proportional:"
 
-#: data/glade/prefs-dialog.glade.h:49
+#: data/glade/prefs-dialog.glade.h:45
 msgid "_Serif:"
 msgstr "_Serif:"
 
@@ -1027,7 +991,7 @@ msgid "%s at %.1f KB/s"
 msgstr "%s ved %.1f Kb/s"
 
 #: embed/downloader-view.c:523 embed/downloader-view.c:541
-#: src/ephy-window.c:888
+#: src/ephy-window.c:890
 msgid "Unknown"
 msgstr "Ukendt"
 
@@ -1484,7 +1448,7 @@ msgstr "Slut på den aktuelle session"
 #. * for your locale, as specified by RFC 2616, 14.4.
 #. * for example for en_NZ locale this could be "en-nz,en-au,en-gb,en"
 #.
-#: embed/mozilla/mozilla-notifiers.cpp:630
+#: embed/mozilla/mozilla-notifiers.cpp:592
 msgid "system-language"
 msgstr "da-dk,da"
 
@@ -1890,7 +1854,7 @@ msgstr "_Kopiér adresse"
 msgid "_Search:"
 msgstr "_Søg:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1204 src/ephy-window.c:665
+#: src/bookmarks/ephy-bookmarks-editor.c:1204 src/ephy-window.c:667
 msgid "Bookmarks"
 msgstr "Bogmærker"
 
@@ -1903,7 +1867,7 @@ msgid "Title"
 msgstr "Titel"
 
 #: src/bookmarks/ephy-bookmarks-menu.c:268
-#: src/bookmarks/ephy-topic-action.c:190
+#: src/bookmarks/ephy-topic-action.c:206
 msgid "Empty"
 msgstr "Tøm"
 
@@ -1969,7 +1933,7 @@ msgstr "Duplikeret bogmærke"
 msgid "A bookmark titled %s already exists for this page."
 msgstr "Et bogmærke ved navn %s eksisterer allerede for denne adresse."
 
-#: src/ephy-go-action.c:78 src/toolbar.c:375
+#: src/ephy-go-action.c:78 src/toolbar.c:376
 msgid "Go"
 msgstr "Kør"
 
@@ -2045,37 +2009,37 @@ msgstr "Steder"
 msgid "Address"
 msgstr "Adresse"
 
-#: src/ephy-main.c:71
+#: src/ephy-main.c:72
 msgid "Open a new tab in an existing Epiphany window"
 msgstr "Åbn et nyt faneblad i et eksisterende Epiphany-vindue"
 
-#: src/ephy-main.c:74
+#: src/ephy-main.c:75
 msgid "Open a new window in an existing Epiphany process"
 msgstr "Åbn et nyt vindue i en eksisterende Epiphany-proces"
 
-#: src/ephy-main.c:77
+#: src/ephy-main.c:78
 msgid ""
 "Do not raise the window when opening a page in an existing Epiphany process"
 msgstr ""
 "Hæv ikke vinduet ved åbning af en side i en eksisterende Epiphany-proces"
 
-#: src/ephy-main.c:80
+#: src/ephy-main.c:81
 msgid "Run Epiphany in full screen mode"
 msgstr "Kør Epiphany i fuldskærmstilstand"
 
-#: src/ephy-main.c:83
+#: src/ephy-main.c:84
 msgid "Attempt to load URL in existing Epiphany window"
 msgstr "Forsøg at indlæse adresse i eksisterende Epiphany-vindue"
 
-#: src/ephy-main.c:86
+#: src/ephy-main.c:87
 msgid "Load the given session file"
 msgstr "Indlæs den angivne sessionsfil"
 
-#: src/ephy-main.c:87
+#: src/ephy-main.c:88
 msgid "FILE"
 msgstr "FIL"
 
-#: src/ephy-main.c:89
+#: src/ephy-main.c:90
 msgid ""
 "Don't open any windows; instead act as a server for quick startup of new "
 "Epiphany instances"
@@ -2083,39 +2047,39 @@ msgstr ""
 "Åbn ikke nogen vinduer; betjen i stedet andre Epiphany-processer så de "
 "starter hurtigt"
 
-#: src/ephy-main.c:93
+#: src/ephy-main.c:94
 msgid "Add a bookmark (don't open any window)"
 msgstr "Tilføj et bogmærke (åbn ikke noget vindue)"
 
-#: src/ephy-main.c:94
+#: src/ephy-main.c:95
 msgid "URL"
 msgstr "Adresse"
 
-#: src/ephy-main.c:96
+#: src/ephy-main.c:97
 msgid "Close all Epiphany windows"
 msgstr "Luk alle Epiphany-vinduer"
 
-#: src/ephy-main.c:99
+#: src/ephy-main.c:100
 msgid "Same as --close, but exits server mode too"
 msgstr "Samme som --close, men afslutter også servertilstanden"
 
-#: src/ephy-main.c:102
+#: src/ephy-main.c:103
 msgid "Used internally by the nautilus view"
 msgstr "Bruges internt af Nautilus-visningen"
 
-#: src/ephy-main.c:105
+#: src/ephy-main.c:106
 msgid "Launch the bookmarks editor"
 msgstr "Start bogmærkeredigeringen"
 
-#: src/ephy-main.c:126
+#: src/ephy-main.c:127
 msgid "Epiphany Web Browser"
 msgstr "Epiphany - internetsurfning"
 
-#: src/ephy-main.c:131
+#: src/ephy-main.c:132
 msgid "Ephy"
 msgstr "Epiphany"
 
-#: src/ephy-main.c:189
+#: src/ephy-main.c:201
 msgid ""
 "Epiphany can't be used now. Running the command \"bonobo-slay\" from the "
 "console may fix the problem. If not, you can try rebooting the computer or "
@@ -2129,7 +2093,7 @@ msgstr ""
 "\n"
 "Bonobo kunne ikke finde GNOME_Epiphany_Automation.server."
 
-#: src/ephy-tab.c:310 src/ephy-tab.c:967 src/ephy-tab.c:1149
+#: src/ephy-tab.c:310 src/ephy-tab.c:962 src/ephy-tab.c:1144
 msgid "Blank page"
 msgstr "Tom side"
 
@@ -2560,27 +2524,27 @@ msgstr "Gem som"
 msgid "Bookmark"
 msgstr "Bogmærk"
 
-#: src/ephy-window.c:891
+#: src/ephy-window.c:893
 msgid "Insecure"
 msgstr "Usikker"
 
-#: src/ephy-window.c:894
+#: src/ephy-window.c:896
 msgid "Broken"
 msgstr "Ødelagt"
 
-#: src/ephy-window.c:897
+#: src/ephy-window.c:899
 msgid "Medium"
 msgstr "Mellem"
 
-#: src/ephy-window.c:901
+#: src/ephy-window.c:903
 msgid "Low"
 msgstr "Lav"
 
-#: src/ephy-window.c:905
+#: src/ephy-window.c:907
 msgid "High"
 msgstr "Høj"
 
-#: src/ephy-window.c:915
+#: src/ephy-window.c:917
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2589,7 +2553,7 @@ msgstr ""
 "Sikkerhedsniveau: %s\n"
 "%s"
 
-#: src/ephy-window.c:921
+#: src/ephy-window.c:923
 #, c-format
 msgid "Security level: %s"
 msgstr "Sikkerhedsniveau: %s"
@@ -2858,7 +2822,7 @@ msgstr "Østasiatisk"
 msgid "Universal"
 msgstr "Universelt"
 
-#: src/prefs-dialog.c:936
+#: src/prefs-dialog.c:942
 #, c-format
 msgid "Custom [%s]"
 msgstr "Brugerdefineret [%s]"
@@ -2906,44 +2870,83 @@ msgstr "Aktivitetsikon"
 msgid "Address Entry"
 msgstr "Adresseindtastning"
 
-#: src/toolbar.c:357
+#: src/toolbar.c:349
+msgid "Enter a web address to open, or a phrase to search for on the web."
+msgstr "Indtast en internetadresse der skal vises, eller nogle ord for at søge på internettet."
+
+#: src/toolbar.c:358
 msgid "Zoom"
 msgstr "Zoom"
 
 # det er en slags ikon som forskellige steder på nettet kan angive,
 # f.eks. /. til Slashdot 
-#: src/toolbar.c:367
+#: src/toolbar.c:368
 msgid "Favicon"
 msgstr "Sideikon"
 
-#: src/window-commands.c:129
+#: src/window-commands.c:130
 msgid "Check this out!"
 msgstr "Se dette!"
 
-#: src/window-commands.c:281
+#: src/window-commands.c:282
 msgid "Untitled"
 msgstr "Unavngiven"
 
-#: src/window-commands.c:327
+#: src/window-commands.c:328
 msgid "Select the file to open"
 msgstr "Vælg en fil der skal åbnes"
 
-#: src/window-commands.c:673
+#: src/window-commands.c:674
 msgid "Toolbar Editor"
 msgstr "Værktøjslinjetilpasning"
 
-#: src/window-commands.c:695
+#: src/window-commands.c:696
 msgid "_Add a New Toolbar"
 msgstr "_Tilføj en ny værktøjslinje"
 
 #. Translator credits
-#: src/window-commands.c:744
+#: src/window-commands.c:746
 msgid "translator_credits"
 msgstr "Ole Laursen <olau@hardworking.dk>"
 
-#: src/window-commands.c:761
+#: src/window-commands.c:774
 msgid "A GNOME browser based on Mozilla"
 msgstr "Et surfningsprogram til Gnome baseret på Mozilla."
+
+#~ msgid "When to compare cached copy"
+#~ msgstr "Hvornår mellemlagrede kopier sammenlignes"
+
+#~ msgid ""
+#~ "When to compare cached copy to web copy. Possible values are once per "
+#~ "session, every time, never, automatic."
+#~ msgstr ""
+#~ "Hvornår mellemlagrede kopier sammenlignes med udgaverne på internettet. "
+#~ "Mulige værdier er \"once per session\", \"every time\", \"never\", "
+#~ "\"automatic\"."
+
+#~ msgid "Advanced"
+#~ msgstr "Avanceret"
+
+#~ msgid "Compare page:"
+#~ msgstr "Sammenlign side:"
+
+#~ msgid "E_very time"
+#~ msgstr "H_ver gang"
+
+#~ msgid "Once per _session"
+#~ msgstr "En gang pr. _session"
+
+#~ msgid "Security"
+#~ msgstr "Sikkerhed"
+
+#~ msgid "_Automatically"
+#~ msgstr "_Automatisk"
+
+#~ msgid "_Default encoding:"
+#~ msgstr "_Standardkodning:"
+
+#~ msgid "_Never"
+#~ msgstr "_Aldrig"
 
 #~ msgid ""
 #~ "Address of the user's home page that is displayed when opening a new "
@@ -3306,9 +3309,6 @@ msgstr "Et surfningsprogram til Gnome baseret på Mozilla."
 
 #~ msgid "<b>On New Page</b>"
 #~ msgstr "<b>Ved ny side</b>"
-
-#~ msgid "Language"
-#~ msgstr "Sprog"
 
 #~ msgid "Pick the background color"
 #~ msgstr "Vælg baggrundsfarve"
