@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-06 14:26+0100\n"
-"PO-Revision-Date: 2004-01-06 16:53+0100\n"
+"POT-Creation-Date: 2004-01-07 03:19+0100\n"
+"PO-Revision-Date: 2004-01-07 19:29+0100\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -617,7 +617,7 @@ msgstr "Správce osobních dat"
 msgid "Text Encoding"
 msgstr "Kódování textu"
 
-#: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:389
+#: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:388
 msgid "Use the encoding specified by the document"
 msgstr "Používat kódování určené dokumentem"
 
@@ -1436,45 +1436,76 @@ msgstr "Západní (_MacRoman)"
 msgid "Western (_Windows-1252)"
 msgstr "Západní (_Windows-1252)"
 
-#: embed/ephy-encodings.c:140
+#. the following encodings are so rarely used that we don't want to pollute the "related"
+#. * part of the encodings menu with them, so we set the language group to 0 here
+#.
+#: embed/ephy-encodings.c:143
+msgid "English (_US-ASCII)"
+msgstr "Anglické (_US-ASCII)"
+
+#: embed/ephy-encodings.c:144
+msgid "Unicode (UTF-_16 BE)"
+msgstr "Unicode (UTF-_16 BE)"
+
+#: embed/ephy-encodings.c:145
+msgid "Unicode (UTF-1_6 LE)"
+msgstr "Unicode (UTF-1_6 LE)"
+
+#: embed/ephy-encodings.c:146
+msgid "Unicode (UTF-_32 BE)"
+msgstr "Unicode (UTF-_32 BE)"
+
+#: embed/ephy-encodings.c:147
+msgid "Unicode (UTF-3_2 LE)"
+msgstr "Unicode (UTF-3_2 LE)"
+
+#: embed/ephy-encodings.c:149
 msgid "Off"
 msgstr "Vypnuto"
 
-#: embed/ephy-encodings.c:141 src/prefs-dialog.c:116
+#: embed/ephy-encodings.c:150 src/prefs-dialog.c:116
 msgid "Chinese"
 msgstr "Čínské"
 
-#: embed/ephy-encodings.c:142
+#: embed/ephy-encodings.c:151
 msgid "Chinese Simplified"
 msgstr "Zjednodušené čínské"
 
-#: embed/ephy-encodings.c:143
+#: embed/ephy-encodings.c:152
 msgid "Chinese Traditional"
 msgstr "Tradiční čínské"
 
-#: embed/ephy-encodings.c:144
+#: embed/ephy-encodings.c:153
 msgid "East Asian"
 msgstr "Východoasijské"
 
-#: embed/ephy-encodings.c:145 lib/ephy-langs.c:38 src/prefs-dialog.c:136
+#: embed/ephy-encodings.c:154 lib/ephy-langs.c:38 src/prefs-dialog.c:136
 msgid "Japanese"
 msgstr "Japonské"
 
-#: embed/ephy-encodings.c:146 lib/ephy-langs.c:39 src/prefs-dialog.c:137
+#: embed/ephy-encodings.c:155 lib/ephy-langs.c:39 src/prefs-dialog.c:137
 msgid "Korean"
 msgstr "Korejské"
 
-#: embed/ephy-encodings.c:147 src/prefs-dialog.c:149
+#: embed/ephy-encodings.c:156 src/prefs-dialog.c:149
 msgid "Russian"
 msgstr "Ruské"
 
-#: embed/ephy-encodings.c:148
+#: embed/ephy-encodings.c:157
 msgid "Universal"
 msgstr "Univerzální"
 
-#: embed/ephy-encodings.c:149 src/prefs-dialog.c:158
+#: embed/ephy-encodings.c:158 src/prefs-dialog.c:158
 msgid "Ukrainian"
 msgstr "Ukrajinské"
+
+#. translators: this is the title that an unknown encoding will
+#. * be displayed as.
+#.
+#: embed/ephy-encodings.c:321
+#, c-format
+msgid "Unknown (%s)"
+msgstr "Neznámé (%s)"
 
 #: embed/ephy-history.c:401 src/bookmarks/ephy-bookmarks.c:523
 msgid "All"
@@ -2338,15 +2369,15 @@ msgstr "Prázdný"
 msgid "Encodings"
 msgstr "Kódování"
 
-#: src/ephy-encoding-menu.c:380
+#: src/ephy-encoding-menu.c:379
 msgid "_Other..."
 msgstr "_Jiné..."
 
-#: src/ephy-encoding-menu.c:381
+#: src/ephy-encoding-menu.c:380
 msgid "Other encodings"
 msgstr "Jiná kódování"
 
-#: src/ephy-encoding-menu.c:388
+#: src/ephy-encoding-menu.c:387
 msgid "_Automatic"
 msgstr "_Automatické"
 
@@ -3630,9 +3661,6 @@ msgstr "GNOME prohlížeč založený na Mozille"
 
 #~ msgid "Chinese Simplified (_Windows-936)"
 #~ msgstr "Zjednodušené čínské (_Windows-936)"
-
-#~ msgid "English (_US-ASCII)"
-#~ msgstr "Anglické (_US-ASCII)"
 
 #~ msgid "Hebrew (I_SO-8859-8-E)"
 #~ msgstr "Hebrejské (I_SO-8859-8-E)"
