@@ -70,10 +70,11 @@ GType		  ephy_window_get_type		  (void);
 
 EphyWindow	 *ephy_window_new		  (void);
 
-void		  ephy_window_set_chrome	  (EphyWindow *window,
+void		  ephy_window_request_chrome	  (EphyWindow *window,
 						   EmbedChromeMask chrome_flags);
 
-EmbedChromeMask   ephy_window_get_chrome	  (EphyWindow *window);
+void		  ephy_window_set_print_preview	  (EphyWindow *window,
+						   gboolean enabled);
 
 GtkWidget	 *ephy_window_get_notebook	  (EphyWindow *window);
 

@@ -556,57 +556,30 @@ void
 window_cmd_view_bookmarks_bar (GtkAction *action,
 			       EphyWindow *window)
 {
-	EmbedChromeMask mask;
 	gboolean active;
-	gboolean current_state;
 
-	mask = ephy_window_get_chrome (window);
 	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
-	current_state = (mask & EMBED_CHROME_BOOKMARKSBARON) > 0;
-
-	if (active != current_state)
-	{
-		mask ^= EMBED_CHROME_BOOKMARKSBARON;
-		ephy_window_set_chrome (window, mask);
-	}
+	eel_gconf_set_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR, active);
 }
 
 void
 window_cmd_view_toolbar (GtkAction *action,
 			 EphyWindow *window)
 {
-	EmbedChromeMask mask;
 	gboolean active;
-	gboolean current_state;
 
-	mask = ephy_window_get_chrome (window);
 	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
-	current_state = (mask & EMBED_CHROME_TOOLBARON) > 0;
-
-	if (active != current_state)
-	{
-		mask ^= EMBED_CHROME_TOOLBARON;
-		ephy_window_set_chrome (window, mask);
-	}
+	eel_gconf_set_boolean (CONF_WINDOWS_SHOW_TOOLBARS, active);
 }
 
 void
 window_cmd_view_statusbar (GtkAction *action,
 			   EphyWindow *window)
 {
-	EmbedChromeMask mask;
 	gboolean active;
-	gboolean current_state;
 
-	mask = ephy_window_get_chrome (window);
 	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
-	current_state = (mask & EMBED_CHROME_STATUSBARON) > 0;
-
-	if (active != current_state)
-	{
-		mask ^= EMBED_CHROME_STATUSBARON;
-		ephy_window_set_chrome (window, mask);
-	}
+	eel_gconf_set_boolean (CONF_WINDOWS_SHOW_STATUSBAR, active);
 }
 
 void

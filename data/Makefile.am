@@ -28,8 +28,8 @@ applicationsdir = $(datadir)/application-registry
 applications_DATA = epiphany.applications
 
 schemadir = $(sysconfdir)/gconf/schemas
-schema_in_files = epiphany.schemas.in
-schema_DATA = epiphany.schemas
+schema_in_files = epiphany.schemas.in epiphany-lockdown.schemas.in
+schema_DATA = epiphany.schemas epiphany-lockdown.schemas
 
 aboutdir = $(pkgdatadir)
 about_DATA = epiphany.xhtml conspiracy.xhtml

@@ -157,6 +157,7 @@ main (int argc, char *argv[])
 	ephy_file_helpers_init ();
 	ephy_stock_icons_init ();
 	eel_gconf_monitor_add ("/apps/epiphany/general");
+	eel_gconf_monitor_add ("/apps/epiphany/lockdown");
 	bonobo_activate ();
 
 	ephy_shell = ephy_shell_new ();
@@ -182,6 +183,7 @@ main (int argc, char *argv[])
 	}
 
 	eel_gconf_monitor_remove ("/apps/epiphany/general");
+	eel_gconf_monitor_remove ("/apps/epiphany/lockdown");
 	ephy_state_save ();
 	ephy_file_helpers_shutdown ();
 	gnome_vfs_shutdown ();

@@ -870,7 +870,7 @@ ephy_tab_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
 	EphyWindow *window;
 
 	window = ephy_window_new ();
-	ephy_window_set_chrome (window, chromemask);
+	ephy_window_request_chrome (window, chromemask);
 
 	new_tab = ephy_tab_new ();
         ephy_window_add_tab (window, new_tab, EPHY_NOTEBOOK_INSERT_GROUPED, FALSE);
@@ -928,7 +928,6 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 	GtkWidget *notebook;
 	EphyWindow *window;
 	GtkWidget *widget;
-	EmbedChromeMask chromemask;
 
 	tab->priv->width = width;
 	tab->priv->height = height;
@@ -936,7 +935,6 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 	window = tab->priv->window;
 	notebook = ephy_window_get_notebook (window);
 	widget = GTK_WIDGET (embed);
-	chromemask = ephy_window_get_chrome (window);
 
 	/* Do not resize window with multiple tabs.
 	 * Do not resize window already showed because

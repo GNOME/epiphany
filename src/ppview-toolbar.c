@@ -61,7 +61,6 @@ static GObjectClass *parent_class = NULL;
 struct PPViewToolbarPrivate
 {
 	EphyWindow *window;
-	EmbedChromeMask original_mask;
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
 	guint ui_id;
@@ -240,8 +239,6 @@ ppview_toolbar_set_window (PPViewToolbar *t, EphyWindow *window)
 	t->priv->window = window;
 	t->priv->ui_merge = GTK_UI_MANAGER (t->priv->window->ui_merge);
 
-	t->priv->original_mask = ephy_window_get_chrome (window);
-
 	t->priv->action_group = gtk_action_group_new ("PPViewActions");
 	gtk_action_group_set_translation_domain (t->priv->action_group, NULL);
 	gtk_action_group_add_actions (t->priv->action_group, entries,	
@@ -384,7 +381,6 @@ toolbar_cmd_ppv_close (GtkUIManager *merge,
 {
 	EphyWindow *window;
 	EphyEmbed *embed;
-	GtkWidget *notebook;
 
 	g_return_if_fail (EPHY_IS_PPVIEW_TOOLBAR (t));
 
@@ -394,12 +390,7 @@ toolbar_cmd_ppv_close (GtkUIManager *merge,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	ephy_window_set_chrome (window, t->priv->original_mask);
-
-	notebook = ephy_window_get_notebook (window);
-	g_return_if_fail (EPHY_IS_NOTEBOOK (notebook));
-
-	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (notebook), TRUE);
+	ephy_window_set_print_preview (window, FALSE);
 
 	ephy_embed_print_preview_close (embed);
 }

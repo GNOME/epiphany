@@ -1,3 +1,26 @@
+2003-11-30 Chris Lahey <clahey@ximian.com>
+	   Marco Pesenti Gritti  <marco@gnome.org>
+
+	* data/Makefile.am:
+	* data/epiphany-lockdown.schemas.in:
+	* src/ephy-main.c: (main):
+	* src/ephy-tab.c: (ephy_tab_new_window_cb), (ephy_tab_size_to_cb):
+	* src/ephy-window.c: (update_chromes_visibility), (update_chrome),
+	(ephy_window_fullscreen), (ephy_window_unfullscreen),
+	(show_embed_popup), (update_layout_toggles), (chrome_notifier),
+	(ephy_window_init), (ephy_window_finalize),
+	(ephy_window_request_chrome), (ephy_window_set_print_preview),
+	(ephy_window_show), (print_dialog_preview_cb):
+	* src/ephy-window.h:
+	* src/ppview-toolbar.c: (ppview_toolbar_set_window),
+	(toolbar_cmd_ppv_close):
+	* src/window-commands.c: (window_cmd_view_bookmarks_bar),
+	(window_cmd_view_toolbar), (window_cmd_view_statusbar):
+
+	Implement lockdown pref to not allow javascript to modify
+	chromes. Do necessary changes to chromes code to make
+	it possible.
+
 2003-11-28  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/downloader-view.c: (status_icon_activated),
