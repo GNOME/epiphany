@@ -117,6 +117,8 @@ ephy_history_set_enabled (EphyHistory *history,
 {
 	LOG ("ephy_history_set_enabled %d", enabled)
 
+	history->priv->enabled = enabled;
+
 	ephy_node_db_set_immutable (history->priv->db, !enabled);
 
 	if (enabled == FALSE)
@@ -462,6 +464,7 @@ ephy_history_init (EphyHistory *eb)
 
         eb->priv = EPHY_HISTORY_GET_PRIVATE (eb);
 	eb->priv->update_hosts_idle = 0;
+	eb->priv->enabled = TRUE;
 
 	db = ephy_node_db_new (EPHY_NODE_DB_HISTORY);
 	eb->priv->db = db;
