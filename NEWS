@@ -1,6 +1,197 @@
-===============
+==============
+Epiphany 1.3.0
+==============
+
+[up to and including
+	2004-05-29  Christian Rose  <menthos@menthos.com>
+	* configure.in: Added "tk" to ALL_LINGUAS.
+]
+
+New features
+
+	* NONE ???
+
+Removed features
+
+	* Dropped support for mozilla < 1.6 (Christian)
+	* Removed nautilus view (Christian)
+
+Interface improvements
+
+	* Fix duplicate accesskey, use correct case for button text and make
+	  message selectable in the confirm-close dialogue (Piers)
+	* Use verb for action button and various minor tidy ups on the import
+	  dialogue (Piers)
+	* Add "Save Link As..." to Image/Link popup (Christian) [#138207]
+	* Remove "Open Image in New [Tab|Window]" from the context menu
+	  (Christian)
+	* Remove extraneous separators in context menus (Christian) [#115897]
+	* Use right capitalisation for fonts lang label in prefs (Piers)
+	* Make buttons the same size in Industrial theme and make text 
+	  selectable in history confirm-clear dialogue (Piers)
+	* Make prefs, pdm and print setup dialogues transient to their parent
+	  and destroy with parent (Christian) [#139124]
+	* Make warning message selectable in content handler dialogue (Piers)
+	* Sort the actions in the location entry autocompletion dropdown 
+	  (Christian) [#139575]
+	* Add Ctrl+S as an alternate accel for "Save As" (Piers) [#139415]
+	* Add "Downloads" folder shortcut to our file chooser dialogues 
+	  (Christian)
+	* HIGified confirm-overwrite dialogue (Patanjali Somayaji, Piers) 
+	  [#133152]
+	* Make Escape cancel overwrite dialog (Piers)
+	* Add some filters to the file chooser dialogues (Christian) [#139418]
+	* Jump to new tabs created from command lines (Christian) [#141168]
+	* Fix accelerator for OpenImage action (Christian)
+	* Statusbar re-design: Move lock icon to left; hide progress bar when
+	  no activity (Christian) [#137845]
+	* Simplify context menu wrt. frames (Christian) [#138442]
+	* Open bookmark in new tab on middle-click (Christian) [#106250]
+
+Code changes
+
+	* Made sure every file includes config.h (Christian)
+	* Use more efficient mozilla string conversion routines (Christian)
+	* Adapt to various mozilla API changes (Marco, Christian, Xan, Piers,
+	  )
+	* Improve chrome handling (Marco)
+	* Cleanup after making EphyTab a GtkBin (Christian)
+	* Some API cleanups (Adam)
+	* Some comment cleanups (Adam)
+	* Register stock icons (Christian)
+	* Added/improved some debug output (Christian)
+	* Get rid of #if GTK_CHECK_VERSION() stuff and remove optionmenu code
+	  in the Gtk NSS dialogues (Christian)
+	* Synchronise editable toolbar changes from galeon, this fixes simple
+	  usage, stops crashes when dragging items to and from other
+	  applications, and adds the ability to override the toolbar style
+	  (Crispin Flowerday)
+	* Track the active window with focus events (Christian)
+	* Eliminate ExternalProtocolHandlers in favor of setting prefs to make
+	  Mozilla not handle the protocols internally (Christian Biesinger)
+	* Add defines for private mozilla api usage to make it easier to track
+	  what we need to port to embed string and what we need to be using only
+	  public api (Marco)
+	* Make the statusbar's GtkTooltips publicly accessibly (Christian)
+	* Clean up encoding handling (Christian)
+	* Allow compilation without mozilla wallet extension (Christian)
+	* Some fixes for compilation with gcc 2.95 (Christian)
+	* Backport changed from the new gtkcellrendererprogress which
+	  was based on ephy's, to support RTL and fix overflow bug (Christian)
+
+Bug fixes
+
+	* Remove unnecessary g_object_notify()s (Marco)
+	* Fix test for toolbar removability (Christian)
+	* Don't crash when draggin a toolbar separator around (Christian)
+	* Make location entry not have a proxy menu item (Christian)
+	* Make select-by-key support unsorted lists (Xan) [#137054]
+	* Don't unref NULL icons (Christian) [#137715]
+	* Fix content policy contract-ID (Christian)
+	* Set window border icon on the about dialogue (Christian) [#137806]
+	* Fix width of "Add" button in PDM dialogue with some themes
+	  (Christian) [#137811]
+	* Fix XBEL mime type for import (Marco)
+	* Fixes to API documentation build (Adam, Christian)
+	* Make the "Go" button actually work (Christian)
+	* Fix arg type of dom_* signals to match the closure (Christian)
+	* Use stock icon for "Open" on content handler dialogue 
+	  (Christian) [#135765]
+	* Use stock icon for "Download" on content handler dialogue (Christian)
+	* Fix proxy tool item disconnection on location entry (Christian)
+	* Fix opening of bookmarks in new tabs when there is no existing window
+	  (Christian) [#138343]
+	* Fix context menu on anchors without href attribute (Christian) [#138200]
+	* Make startup script work on older solarises (Christian) [#138088]
+	* Fix filechooser response codes (Federico Mena Quintero) [#138263]
+	* Fix compilation with -fdata-sections (Christian) [#136878]
+	* Don't allow a font size less than 1 (Piers)
+	* Fix bookmarks toolbar visibility in fullscreen and print preview mode
+	  as well as for javascript popups (Christian) [#138520]
+	* Fix link drag-and-drop to empty space on notebook (Christian) [#138902]
+	* Don't abort on gconf errors, just display a message on console
+	  (Christian) [#139247]
+	* Make ephy-node refcount initialize to 1 and not 0 (Adam)
+	* Fix various filename encoding bugs (Christian)
+	* Don't quit the filechooser when selecting "No" from the confirm-
+	  overwrite dialoge (Christian) [#139400]
+	* Set the action's accel_path, fixes crash when dynamically assigning
+	  accels (Christian) [#139641]
+	* Fix saving of linked content. Don't create the directory; mozilla
+	  will do it for us if necessary (Christian)
+	* Make the "Files" suffix translatable (Christian)
+	* Removed the ge_popup_blocked signal on EphyEmbed (Adam)
+	* Do not uncompress when the type is not html (Marco) [#131778]
+	* Fix chrome for new windows opened from _blank target (Marco) [#139512]
+	* Fix font selection combo box issues (Christian) [#138560]
+	* Fix encoding of saved content (Marco) [#141050]
+	* Exit print preview mode before closing a window; fixes a crash
+	  (Christian) [galeon #121298]
+	* Fix crash when trying to get URL from unrealizes EphyEmbed (Marco)
+	* Fix some mem and refcount leaks (Christian)
+	* Always pass the cache key to the persist object so we don't re-fetch
+	  the page on save (Christian) [#141652]
+	* Forward download nsIAuthPrompt interface to the single sign-on prompt
+	  (Christian)
+	* Destroy the EphyBrowser in destroy handler, but delete it only on
+	  finalize. Make public EphyBrowser methods safe for calling after
+	  Destroy (Christian) [#142184]
+	* Fix LD_LIBRARY_PATH in startup script never to (implicitly) include
+	  current dir (Christian) [#141576]
+	* Fix observer topic check for cookie "cleared" notification (Christian)
+	* Fix capitalisation in filechoose filter names (Christian)
+	* Emit the "tab_removed" signal also for the window's last tab
+	  (Christian) [#142078]
+	* Fix stupid bug which prevented compilation with gcc 3.4 (Christian)
+	* Elimiate indeterminate progress (Christian) [#142303, #142305]
+	* Fix toolbar editor drag icon theming bug (Crispin Flowerday)
+
+Documentation
+
+	* xml docs validity fixes (Piers)
+	* xml docs validity fixes (Sebastian Heinlein) [#140918]
+	* Improve description of 'secure' cookies (Piers) [#136443]
+	* API documentation (Adam)
+	* Maintenance of 1.4 plan (Piers, Marco)
+	* Update screenshots (Piers)
+	* Updated Smart Bookmarks help content (Matthew Gatto) [#139616]
+	* Minor updates to match UI (Piers)
+
+Documentation translations
+
+	* Francisco F. Serrador (es)
+	* Hizkuntza Politikarako Sailburuordetza (eu)
+
+Translations
+
+	* عرفات المديني، تونس (ar)
+	* Владимир Петков (bg)
+	* Xavier Conde Rueda (ca)
+	* Miloslav Trmač (cs)
+	* Alexander Winston (en_CA)
+	* Gareth Owen (en_GB)
+	* Iñaki Larrañaga Murgoitio (eu)
+	* Francisco Javier F. Serrador (es)
+	* Alastair McKinstry (ga)
+	* નીરવ, અંકિત, અંકુર, અતિત, ભાવિન, કાર્તિક, ખુશ્બુ, શ્વેતા (gu)
+	* Dvornik László (hu)
+	* helgi (is)
+	* Žygimantas Beručka (lt)
+	* Åsmund Skjæveland" (nn)
+	* ਅਮਨਪ੍ੀਤ ਸਿੰਘ ਅਾਲਮ (pa)
+	* Duarte Loreto (pt)
+	* Дмитрий Мастрюков (ru)
+	* Marcel Telka (sk)
+	* Laurent Dhima (sq)
+	* Ma SivaKumar (ta)
+	* อิสริยะ ไพรีพ่ายฤทธิ์ (th)
+	* Pablo Saratxaga (wa)
+	* Liu Songhe (zh_CN)
+
+
+==============
 Epiphany 1.2.0
-===============
+==============
 
 Bug fixes:
 	* Fix a crash when dragging an url from an external application to
