@@ -52,6 +52,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GPrintingPromptService)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GIRCProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GFtpProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GNewsProtocolHandler)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GMailtoProtocolHandler)
 
 #if MOZILLA_SNAPSHOT < 12
 NS_GENERIC_FACTORY_CONSTRUCTOR(GExternalProtocolService)
@@ -181,21 +182,7 @@ static const nsModuleComponentInfo sAppComps[] = {
 		EPHY_ABOUT_REDIRECTOR_CID,
 		EPHY_ABOUT_REDIRECTOR_MARCO_CONTRACTID,
 		EphyAboutRedirectorConstructor
-	}
-};
-
-static const int sNumAppComps = sizeof(sAppComps) / sizeof(nsModuleComponentInfo);
-
-static const nsModuleComponentInfo sFtpComps = {
-	G_FTP_PROTOCOL_CLASSNAME,
-	G_FTP_PROTOCOL_CID,
-	G_FTP_PROTOCOL_CONTRACTID,
-	GFtpProtocolHandlerConstructor
-};
-
-NS_GENERIC_FACTORY_CONSTRUCTOR(GMailtoProtocolHandler)
-
-static const nsModuleComponentInfo sMailtoComps[] = {
+	},
 	{
 		G_MAILTO_PROTOCOL_CLASSNAME,
 		G_MAILTO_PROTOCOL_CID,
@@ -210,14 +197,13 @@ static const nsModuleComponentInfo sMailtoComps[] = {
 	}
 };
 
-static const int sNumMailtoComps = sizeof(sMailtoComps) / sizeof(nsModuleComponentInfo);
+static const int sNumAppComps = sizeof(sAppComps) / sizeof(nsModuleComponentInfo);
 
-static const nsModuleComponentInfo sModuleComps[] = {
-	{
-		 G_EXTERNALPROTOCOLSERVICE_CLASSNAME,
-		 G_EXTERNALPROTOCOLSERVICE_CID,
-		 NS_EXTERNALPROTOCOLSERVICE_CONTRACTID
-	}
+static const nsModuleComponentInfo sFtpComps = {
+	G_FTP_PROTOCOL_CLASSNAME,
+	G_FTP_PROTOCOL_CID,
+	G_FTP_PROTOCOL_CONTRACTID,
+	GFtpProtocolHandlerConstructor
 };
 
 static NS_DEFINE_CID(knsFtpProtocolHandlerCID, NS_FTPPROTOCOLHANDLER_CID);
@@ -317,38 +303,4 @@ mozilla_unregister_FtpProtocolHandler (void)
 
 	ftpRegistered = PR_FALSE;
         return NS_SUCCEEDED (rv) ? TRUE : FALSE;
-}
-
-/**
- * mozilla_register_MailtoProtocolHandler: Register Mailto Protocol Handler
- */
-gboolean 
-mozilla_register_MailtoProtocolHandler (void)
-{
-	gboolean retVal = TRUE;
-        nsresult rv;
-
-	nsCOMPtr<nsIComponentRegistrar> cr;
-	rv = NS_GetComponentRegistrar(getter_AddRefs(cr));
-	if (NS_FAILED(rv) || !cr) return FALSE;
-
-	for (int i = 0; i < sNumMailtoComps; i++)
-	{
-		nsCOMPtr<nsIGenericFactory> componentFactory;
-		rv = NS_NewGenericFactory(getter_AddRefs(componentFactory),
-					  &(sMailtoComps[i]));
-		if (NS_FAILED(rv))
-		{
-			retVal = FALSE;
-			continue;  // don't abort registering other components
-		}
-
-		rv = cr->RegisterFactory(sMailtoComps[i].mCID,
-					 sMailtoComps[i].mDescription,
-					 sMailtoComps[i].mContractID,
-					 componentFactory);
-		if (NS_FAILED(rv))
-			retVal = FALSE;
-	}
-	return retVal;
 }

@@ -368,8 +368,6 @@ mozilla_register_external_protocols (void)
 	{
 		mozilla_unregister_FtpProtocolHandler ();
 	}
-
-	mozilla_register_MailtoProtocolHandler ();
 }
 
 static nsresult
