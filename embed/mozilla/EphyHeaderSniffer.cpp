@@ -328,8 +328,9 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	}
 	/* FIXME: how to inform user of failed save ? */
 
-	nsILocalFile *destFile;
-	BuildDownloadPath (NS_ConvertUCS2toUTF8 (defaultFileName).get(), &destFile);
+	nsCOMPtr<nsILocalFile> destFile;
+	BuildDownloadPath (NS_ConvertUCS2toUTF8 (defaultFileName).get(), getter_AddRefs (destFile));
+	NS_ENSURE_TRUE (destFile, NS_ERROR_FAILURE);
 
 	return InitiateDownload (destFile);
 }
