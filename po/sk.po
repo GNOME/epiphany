@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-05 23:13+0200\n"
-"PO-Revision-Date: 2004-10-05 23:15+0200\n"
+"POT-Creation-Date: 2004-10-10 18:43+0200\n"
+"PO-Revision-Date: 2004-10-10 18:47+0200\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -657,7 +657,7 @@ msgstr "Koláčiky"
 msgid "Download Manager"
 msgstr "Správca sťahovania"
 
-#: data/glade/epiphany.glade.h:8 src/ephy-window.c:1153
+#: data/glade/epiphany.glade.h:8 src/ephy-window.c:1159
 msgid "Find"
 msgstr "Nájsť"
 
@@ -938,7 +938,7 @@ msgstr "Čísla strá_n"
 msgid "Paper"
 msgstr "Papier"
 
-#: data/glade/print.glade.h:23 src/ephy-window.c:1149
+#: data/glade/print.glade.h:23 src/ephy-window.c:1155
 msgid "Print"
 msgstr "Tlač"
 
@@ -1002,10 +1002,6 @@ msgstr "_pre:"
 msgid "fr_om:"
 msgstr "_od:"
 
-#: data/glade/print.glade.h:39
-msgid "lpr"
-msgstr "lpr"
-
 #: embed/downloader-view.c:238
 #, c-format
 msgid "%u:%02u.%02u"
@@ -1020,7 +1016,7 @@ msgstr "%02u:%02u"
 msgid "_Resume"
 msgstr "_Pokračovať"
 
-#: embed/downloader-view.c:350 src/ephy-window.c:1326
+#: embed/downloader-view.c:350 src/ephy-window.c:1332
 msgid "Unknown"
 msgstr "Neznámy"
 
@@ -1436,7 +1432,7 @@ msgid "Local files"
 msgstr "Miestne súbory"
 
 #: embed/mozilla/ContentHandler.cpp:148
-#: embed/mozilla/EphyHeaderSniffer.cpp:360
+#: embed/mozilla/EphyHeaderSniffer.cpp:359
 msgid "Save"
 msgstr "Uložiť"
 
@@ -1481,13 +1477,13 @@ msgstr ""
 "Nie je možné zobraziť tento súbor, pretože nemáte nainštalovanú aplikáciu, "
 "ktorá ho môže otvoriť. Môžete ho namiesto toho uložiť."
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:323
+#: embed/mozilla/EphyHeaderSniffer.cpp:322
 #: src/bookmarks/ephy-bookmarks-import.c:252
 #: src/bookmarks/ephy-bookmarksbar-model.c:349 src/window-commands.c:344
 msgid "Untitled"
 msgstr "Nepomenované"
 
-#: embed/mozilla/FilePicker.cpp:143 embed/print-dialog.c:328
+#: embed/mozilla/FilePicker.cpp:143 embed/print-dialog.c:339
 #: lib/ephy-file-chooser.c:378 src/bookmarks/ephy-bookmarks-editor.c:600
 msgid "All files"
 msgstr "Všetky súbory"
@@ -1794,7 +1790,7 @@ msgstr "Súbory"
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?hl=sk&ie=UTF-8&oe=UTF-8&q="
 
-#: embed/mozilla/mozilla-embed-single.cpp:525
+#: embed/mozilla/mozilla-embed-single.cpp:543
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Zjavenie teraz nemôže byť použité. Mozilla inicializácia zlyhala."
 
@@ -1813,11 +1809,11 @@ msgstr "Zjavenie teraz nemôže byť použité. Mozilla inicializácia zlyhala."
 msgid "system-language"
 msgstr "sk"
 
-#: embed/print-dialog.c:320
+#: embed/print-dialog.c:331
 msgid "Print to"
 msgstr "Tlačiť na"
 
-#: embed/print-dialog.c:325
+#: embed/print-dialog.c:336
 msgid "Postscript files"
 msgstr "Postskriptové súbory"
 
@@ -1965,7 +1961,7 @@ msgid "History"
 msgstr "História"
 
 #: lib/ephy-stock-icons.c:60 src/bookmarks/ephy-bookmarks-editor.c:1418
-#: src/bookmarks/ephy-topic-action.c:990 src/ephy-window.c:1155
+#: src/bookmarks/ephy-topic-action.c:990 src/ephy-window.c:1161
 msgid "Bookmarks"
 msgstr "Záložky"
 
@@ -2993,110 +2989,130 @@ msgstr "Pridať zálož_ku..."
 msgid "_Open Frame"
 msgstr "_Otvoriť rám"
 
+#: src/ephy-window.c:287
+msgid "Open frame in this window"
+msgstr "Otvoriť rám v tomto okne"
+
 #. Links
-#: src/ephy-window.c:290
+#: src/ephy-window.c:291
 msgid "_Open Link"
 msgstr "_Otvoriť odkaz"
 
 #: src/ephy-window.c:292
+msgid "Open link in this window"
+msgstr "Otvoriť odkaz v tomto okne"
+
+#: src/ephy-window.c:294
 msgid "Open Link in _New Window"
 msgstr "Otvoriť odkaz v _novom okne"
 
-#: src/ephy-window.c:294
+#: src/ephy-window.c:295
+msgid "Open link in a new window"
+msgstr "Otvoriť odkaz v novom okne"
+
+#: src/ephy-window.c:297
 msgid "Open Link in New _Tab"
 msgstr "Otvoriť odkaz na novej kar_te"
 
-#: src/ephy-window.c:296
+#: src/ephy-window.c:298
+msgid "Open link in a new tab"
+msgstr "Otvoriť odkaz na novej karte"
+
+#: src/ephy-window.c:300
 msgid "_Download Link"
 msgstr "_Stiahnuť odkaz"
 
-#: src/ephy-window.c:298
+#: src/ephy-window.c:302
 msgid "_Save Link As..."
 msgstr "_Uložiť odkaz ako..."
 
-#: src/ephy-window.c:300
+#: src/ephy-window.c:303
+msgid "Save link with a different name"
+msgstr "Uložiť odkaz pod iným menom"
+
+#: src/ephy-window.c:305
 msgid "_Bookmark Link..."
 msgstr "Uložiť odkaz medzi _záložky..."
 
-#: src/ephy-window.c:302
+#: src/ephy-window.c:307
 msgid "_Copy Link Address"
 msgstr "_Kopírovať adresu odkazu"
 
 #. Email links
-#: src/ephy-window.c:306
+#: src/ephy-window.c:311
 msgid "_Send Email..."
 msgstr "_Odoslať elektronickú poštu..."
 
-#: src/ephy-window.c:308
+#: src/ephy-window.c:313
 msgid "_Copy Email Address"
 msgstr "_Kopírovať adresu elektronickej pošty"
 
 #. Images
-#: src/ephy-window.c:312
+#: src/ephy-window.c:317
 msgid "Open _Image"
 msgstr "Otvoriť _obrázok"
 
-#: src/ephy-window.c:314
+#: src/ephy-window.c:319
 msgid "_Save Image As..."
 msgstr "_Uložiť obrázok ako..."
 
-#: src/ephy-window.c:316
+#: src/ephy-window.c:321
 msgid "_Use Image As Background"
 msgstr "_Použiť obrázok ako pozadie"
 
-#: src/ephy-window.c:318
+#: src/ephy-window.c:323
 msgid "Copy I_mage Address"
 msgstr "Kopírovať adresu _obrázka"
 
-#: src/ephy-window.c:588
+#: src/ephy-window.c:594
 msgid "Exit Fullscreen"
 msgstr "Ukončiť celoobrazovkový režim"
 
-#: src/ephy-window.c:673
+#: src/ephy-window.c:679
 msgid "Close _Document"
 msgstr "Zatvoriť _dokument"
 
-#: src/ephy-window.c:703
+#: src/ephy-window.c:709
 msgid "There are unsubmitted changes to form elements."
 msgstr "Sú tam neodoslané zmeny v položkách formulára."
 
-#: src/ephy-window.c:704
+#: src/ephy-window.c:710
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Ak aj napriek tomu dokument zatvoríte, tie informácie stratíte."
 
-#: src/ephy-window.c:1145 src/window-commands.c:397
+#: src/ephy-window.c:1151 src/window-commands.c:397
 msgid "Open"
 msgstr "Otvoriť"
 
-#: src/ephy-window.c:1147 src/window-commands.c:423
+#: src/ephy-window.c:1153 src/window-commands.c:423
 msgid "Save As"
 msgstr "Uložiť ako"
 
-#: src/ephy-window.c:1151
+#: src/ephy-window.c:1157
 msgid "Bookmark"
 msgstr "Záložka"
 
-#: src/ephy-window.c:1329
+#: src/ephy-window.c:1335
 msgid "Insecure"
 msgstr "Nie bezpečné"
 
-#: src/ephy-window.c:1332
+#: src/ephy-window.c:1338
 msgid "Broken"
 msgstr "Porušené"
 
-#: src/ephy-window.c:1336
+#: src/ephy-window.c:1342
 msgid "Medium"
 msgstr "Stredné"
 
-#: src/ephy-window.c:1340
+#: src/ephy-window.c:1346
 msgid "Low"
 msgstr "Nízke"
 
-#: src/ephy-window.c:1344
+#: src/ephy-window.c:1350
 msgid "High"
 msgstr "Vysoké"
 
-#: src/ephy-window.c:1354
+#: src/ephy-window.c:1360
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3105,18 +3121,68 @@ msgstr ""
 "Bezpečnostná úroveň: %s\n"
 "%s"
 
-#: src/ephy-window.c:1360
+#: src/ephy-window.c:1366
 #, c-format
 msgid "Security level: %s"
 msgstr "Bezpečnostná úroveň: %s"
 
-#: src/ephy-window.c:1384
+#: src/ephy-window.c:1390
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d skrytých vyskakovacích okien"
 msgstr[1] "%d skryté vyskakovacie okno"
 msgstr[2] "%d skryté vyskakovacie okná"
+
+#: src/ephy-window.c:1609
+#, c-format
+msgid "Save background image '%s'"
+msgstr "Uložiť obrázok pozadia '%s'"
+
+#: src/ephy-window.c:1623
+#, c-format
+msgid "Open image '%s'"
+msgstr "Otvoriť obrázok '%s'"
+
+#: src/ephy-window.c:1628
+#, c-format
+msgid "Use as desktop background '%s'"
+msgstr "Použiť ako obrázok pozadia '%s'"
+
+#: src/ephy-window.c:1633
+#, c-format
+msgid "Save image '%s'"
+msgstr "Uložiť obrázok '%s'"
+
+#: src/ephy-window.c:1638
+#, c-format
+msgid "Copy image address '%s'"
+msgstr "Kopírovať adresu obrázka '%s'"
+
+#: src/ephy-window.c:1651
+#, c-format
+msgid "Send email to address '%s'"
+msgstr "Odoslať elektronickú poštu na adresu '%s'"
+
+#: src/ephy-window.c:1657
+#, c-format
+msgid "Copy email address '%s'"
+msgstr "Kopírovať adresu elektronickej pošty '%s'"
+
+#: src/ephy-window.c:1669
+#, c-format
+msgid "Save link '%s'"
+msgstr "Uložiť odkaz '%s'"
+
+#: src/ephy-window.c:1675
+#, c-format
+msgid "Bookmark link '%s'"
+msgstr "Uložiť odkaz medzi záložky '%s'"
+
+#: src/ephy-window.c:1681
+#, c-format
+msgid "Copy link's address '%s'"
+msgstr "Kopírovať adresu odkazu '%s'"
 
 #: src/pdm-dialog.c:416
 msgid "Domain"
@@ -3138,31 +3204,31 @@ msgstr "Meno používateľa"
 msgid "Cookie Properties"
 msgstr "Vlastnosti koláčikov"
 
-#: src/pdm-dialog.c:920
+#: src/pdm-dialog.c:921
 msgid "Content:"
 msgstr "Obsah:"
 
-#: src/pdm-dialog.c:935
+#: src/pdm-dialog.c:936
 msgid "Path:"
 msgstr "Cesta:"
 
-#: src/pdm-dialog.c:950
+#: src/pdm-dialog.c:951
 msgid "Send for:"
 msgstr "Poslať pre:"
 
-#: src/pdm-dialog.c:959
+#: src/pdm-dialog.c:960
 msgid "Encrypted connections only"
 msgstr "Len šifrované spojenia"
 
-#: src/pdm-dialog.c:959
+#: src/pdm-dialog.c:960
 msgid "Any type of connection"
 msgstr "Ľubovoľný typ spojenia"
 
-#: src/pdm-dialog.c:965
+#: src/pdm-dialog.c:966
 msgid "Expires:"
 msgstr "Ukončí platnosť:"
 
-#: src/pdm-dialog.c:976
+#: src/pdm-dialog.c:977
 msgid "End of current session"
 msgstr "Koniec aktuálneho sedenia"
 
@@ -3488,10 +3554,10 @@ msgstr "Editor lišty nástrojov"
 msgid "_Add a New Toolbar"
 msgstr "_Pridať novú lištu nástrojov"
 
-#: src/window-commands.c:968
+#: src/window-commands.c:967
 msgid "Epiphany"
 msgstr "Zjavenie"
 
-#: src/window-commands.c:973
+#: src/window-commands.c:972
 msgid "translator-credits"
 msgstr "Marcel Telka <marcel@telka.sk>"
