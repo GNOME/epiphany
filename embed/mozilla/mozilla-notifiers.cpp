@@ -521,6 +521,34 @@ mozilla_notifiers_init (EphyEmbedSingle *single)
 			font_infos = g_list_prepend (font_infos, info);
 		}
 
+#ifdef MIGRATE_PIXEL_SIZE
+                if (migrate_size)
+                {
+			char *type;
+
+			type = eel_gconf_get_string (CONF_RENDERING_FONT_TYPE_OLD);
+			if (type && (strcmp (type, "serif") == 0 ||
+				     strcmp (type, "sans-serif") == 0))
+			{
+				char *family;
+
+				g_snprintf (old_key, 255, "%s_%s_%s",
+					    CONF_RENDERING_FONT, type, code);
+				g_snprintf (key, 255, "%s_%s_%s",
+					    CONF_RENDERING_FONT, "variable", code);
+
+				family = eel_gconf_get_string (old_key);
+				if (family)
+				{
+					eel_gconf_set_string (key, family);
+					g_free (family);
+				}
+			}
+
+			g_free (type);
+		}
+#endif
+
 		g_snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_MIN_SIZE, code);
 		info = g_strconcat ("minimum-size", ".", code, NULL);
 		add_notification_and_notify (client, key,

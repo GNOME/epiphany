@@ -27,7 +27,8 @@
 #define CONF_NETWORK_PROXY_AUTO_URL "/system/proxy/autoconfig_url"
 #define CONF_NETWORK_PROXY_IGNORE_HOSTS "/system/http_proxy/ignore_hosts"
 
-/* Deprecated, we migrate them */
+/* DEPRECATED, we migrate them */
 #define CONF_RENDERING_FONT_VAR_SIZE_OLD "/apps/epiphany/web/font_var_size"
 #define CONF_RENDERING_FONT_FIXED_SIZE_OLD "/apps/epiphany/web/font_fixed_size"
 #define CONF_RENDERING_FONT_MIN_SIZE_OLD "/apps/epiphany/web/font_min_size"
+#define CONF_RENDERING_FONT_TYPE_OLD "/apps/epiphany/web/default_font_type"
