@@ -94,7 +94,6 @@ popup_cmd_bookmark_link (GtkAction *action,
 	GtkWidget *new_bookmark;
 	EphyBookmarks *bookmarks;
 	EphyEmbedEvent *info;
-	EphyEmbed *embed;
 	const GValue *link_title;
 	const GValue *link_rel;
 	const GValue *link;
@@ -106,7 +105,6 @@ popup_cmd_bookmark_link (GtkAction *action,
 	gboolean is_smart;
 
 	info = get_event_info (window);
-	embed = ephy_window_get_active_embed (window);
 
 	ephy_embed_event_get_property (info, "link_is_smart", &link_is_smart);
 	ephy_embed_event_get_property (info, "link", &link);
@@ -332,10 +330,6 @@ popup_cmd_copy_image_location (GtkAction *action,
 	EphyEmbedEvent *info;
 	const char *location;
 	const GValue *value;
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
 
 	info = get_event_info (window);
 	ephy_embed_event_get_property (info, "image", &value);
