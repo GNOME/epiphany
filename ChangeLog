@@ -1,3 +1,16 @@
+2004-04-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/FilePicker.cpp:
+
+	Don't quit the filechooser when selecting "No" from the confirm-
+	overwrite dialoge. Fixes bug #139400.
+
+	* lib/ephy-gui.c: (ephy_gui_confirm_overwrite_file):
+
+	Convert the filename to UTF-8 before showing it in the confirm
+	dialogue.
+
 2004-04-09  Piers Cornwell  <piers@gnome.org>
 
 	* src/ephy-window.c:
