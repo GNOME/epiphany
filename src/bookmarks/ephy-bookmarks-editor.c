@@ -53,6 +53,7 @@
 #include "ephy-debug.h"
 #include "ephy-gui.h"
 #include "ephy-stock-icons.h"
+#include "ephy-search-entry.h"
 
 static GtkTargetEntry topic_drag_dest_types [] =
 {
@@ -90,8 +91,6 @@ static void ephy_bookmarks_editor_get_property (GObject *object,
 						GParamSpec *pspec);
 static void ephy_bookmarks_editor_update_menu  (EphyBookmarksEditor *editor);
 
-static void search_entry_changed_cb       (GtkWidget *entry,
-					   EphyBookmarksEditor *editor);
 static void cmd_open_bookmarks_in_tabs    (EggAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_open_bookmarks_in_browser (EggAction *action,
@@ -925,20 +924,6 @@ key_pressed_cb (EphyNodeView *view,
 }
 
 static void
-reset_search_entry (EphyBookmarksEditor *editor)
-{
-	g_signal_handlers_block_by_func
-		(G_OBJECT (editor->priv->search_entry),
-		 G_CALLBACK (search_entry_changed_cb),
-		 editor);
-	gtk_entry_set_text (GTK_ENTRY (editor->priv->search_entry), "");
-	g_signal_handlers_unblock_by_func
-		(G_OBJECT (editor->priv->search_entry),
-		 G_CALLBACK (search_entry_changed_cb),
-		 editor);
-}
-
-static void
 keyword_node_selected_cb (EphyNodeView *view,
 			  EphyNode *node,
 			  EphyBookmarksEditor *editor)
@@ -952,7 +937,7 @@ keyword_node_selected_cb (EphyNodeView *view,
 	}
 	else
 	{
-		reset_search_entry (editor);
+		ephy_search_entry_clear (EPHY_SEARCH_ENTRY (editor->priv->search_entry));
 		bookmarks_filter (editor, node);
 	}
 }
@@ -969,10 +954,9 @@ keyword_node_show_popup_cb (GtkWidget *view, EphyBookmarksEditor *editor)
 }
 
 static void
-search_entry_changed_cb (GtkWidget *entry, EphyBookmarksEditor *editor)
+search_entry_search_cb (GtkWidget *entry, const char *search_text, EphyBookmarksEditor *editor)
 {
 	EphyNode *all;
-	char *search_text;
 
 	g_signal_handlers_block_by_func
 		(G_OBJECT (editor->priv->key_view),
@@ -1004,8 +988,6 @@ search_entry_changed_cb (GtkWidget *entry, EphyBookmarksEditor *editor)
 	ephy_node_filter_done_changing (editor->priv->bookmarks_filter);
 
 	GDK_THREADS_LEAVE ();
-
-	g_free (search_text);
 }
 
 static GtkWidget *
@@ -1020,11 +1002,11 @@ build_search_box (EphyBookmarksEditor *editor)
 	gtk_container_set_border_width (GTK_CONTAINER (box), 6);
 	gtk_widget_show (box);
 
-	entry = gtk_entry_new ();
+	entry = ephy_search_entry_new ();
 	editor->priv->search_entry = entry;
 	gtk_widget_show (entry);
-	g_signal_connect (G_OBJECT (entry), "changed",
-			  G_CALLBACK (search_entry_changed_cb),
+	g_signal_connect (G_OBJECT (entry), "search",
+			  G_CALLBACK (search_entry_search_cb),
 			  editor);
 	add_entry_monitor (editor, entry);
 	add_focus_monitor (editor, entry);

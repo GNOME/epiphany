@@ -1,0 +1,201 @@
+/* 
+ *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
+ */
+
+#include <gtk/gtklabel.h>
+#include <config.h>
+#include <libgnome/gnome-i18n.h>
+#include <string.h>
+
+#include "ephy-search-entry.h"
+
+static void ephy_search_entry_class_init (EphySearchEntryClass *klass);
+static void ephy_search_entry_init (EphySearchEntry *entry);
+static void ephy_search_entry_finalize (GObject *object);
+
+struct EphySearchEntryPrivate
+{
+	gboolean clearing;
+
+	guint timeout;
+};
+
+enum
+{
+	SEARCH,
+	LAST_SIGNAL
+};
+
+static GObjectClass *parent_class = NULL;
+
+static guint ephy_search_entry_signals[LAST_SIGNAL] = { 0 };
+
+GType
+ephy_search_entry_get_type (void)
+{
+	static GType ephy_search_entry_type = 0;
+
+	if (ephy_search_entry_type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphySearchEntryClass),
+			NULL,
+			NULL,
+			(GClassInitFunc) ephy_search_entry_class_init,
+			NULL,
+			NULL,
+			sizeof (EphySearchEntry),
+			0,
+			(GInstanceInitFunc) ephy_search_entry_init
+		};
+
+		ephy_search_entry_type = g_type_register_static (GTK_TYPE_ENTRY,
+							         "EphySearchEntry",
+							         &our_info, 0);
+	}
+
+	return ephy_search_entry_type;
+}
+
+static void
+ephy_search_entry_class_init (EphySearchEntryClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	parent_class = g_type_class_peek_parent (klass);
+
+	object_class->finalize = ephy_search_entry_finalize;
+
+	ephy_search_entry_signals[SEARCH] =
+		g_signal_new ("search",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphySearchEntryClass, search),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_STRING);
+}
+
+static gboolean
+ephy_search_entry_timeout_cb (EphySearchEntry *entry)
+{
+	gdk_threads_enter ();
+
+	g_signal_emit (G_OBJECT (entry), ephy_search_entry_signals[SEARCH], 0,
+		       gtk_entry_get_text (GTK_ENTRY (entry)));
+	entry->priv->timeout = 0;
+
+	gdk_threads_leave ();
+
+	return FALSE;
+}
+
+static void
+ephy_search_entry_changed_cb (GtkEditable *editable,
+			      EphySearchEntry *entry)
+{
+	if (entry->priv->clearing == TRUE)
+		return;
+
+	if (entry->priv->timeout != 0)
+	{
+		g_source_remove (entry->priv->timeout);
+		entry->priv->timeout = 0;
+	}
+
+	entry->priv->timeout = g_timeout_add (300, (GSourceFunc) ephy_search_entry_timeout_cb, entry);
+}
+
+static gboolean
+ephy_search_entry_focus_out_event_cb (GtkWidget *widget,
+				      GdkEventFocus *event,
+				      EphySearchEntry *entry)
+{
+	if (entry->priv->timeout == 0)
+		return FALSE;
+
+	g_source_remove (entry->priv->timeout);
+	entry->priv->timeout = 0;
+
+	g_signal_emit (G_OBJECT (entry), ephy_search_entry_signals[SEARCH], 0,
+		       gtk_entry_get_text (GTK_ENTRY (entry)));
+
+	return FALSE;
+}
+static void
+ephy_search_entry_init (EphySearchEntry *entry)
+{
+	entry->priv = g_new0 (EphySearchEntryPrivate, 1);
+
+	g_signal_connect (G_OBJECT (entry),
+			  "changed",
+			  G_CALLBACK (ephy_search_entry_changed_cb),
+			  entry);
+	g_signal_connect (G_OBJECT (entry),
+			  "focus_out_event",
+			  G_CALLBACK (ephy_search_entry_focus_out_event_cb),
+			  entry);
+}
+
+static void
+ephy_search_entry_finalize (GObject *object)
+{
+	EphySearchEntry *entry;
+
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (EPHY_IS_SEARCH_ENTRY (object));
+
+	entry = EPHY_SEARCH_ENTRY (object);
+
+	g_return_if_fail (entry->priv != NULL);
+
+	g_free (entry->priv);
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+GtkWidget *
+ephy_search_entry_new (void)
+{
+	GtkWidget *entry;
+
+	entry = GTK_WIDGET (g_object_new (EPHY_TYPE_SEARCH_ENTRY,
+					  NULL));
+
+	return entry;
+}
+
+void
+ephy_search_entry_clear (EphySearchEntry *entry)
+{
+	if (entry->priv->timeout != 0)
+	{
+		g_source_remove (entry->priv->timeout);
+		entry->priv->timeout = 0;
+	}
+
+	entry->priv->clearing = TRUE;
+
+	gtk_entry_set_text (GTK_ENTRY (entry), "");
+
+	entry->priv->clearing = FALSE;
+}

@@ -107,12 +107,6 @@ mozilla_user_agent_notifier(GConfClient *client,
 			    GConfEntry *entry,
 			    EphyEmbedSingle *single);
 
-static void
-mozilla_socks_version_notifier (GConfClient *client,
-				guint cnxn_id,
-				GConfEntry *entry,
-				EphyEmbedSingle *single);
-
 /* Keeps the list of the notifiers we installed for mozilla prefs */
 /* to be able to remove them when exiting */
 GList *mozilla_notifiers = NULL;
@@ -709,16 +703,4 @@ mozilla_user_agent_notifier (GConfClient *client,
 			g_warning ("Unsupported variable type");
 			break;
 	}
-}
-
-static void
-mozilla_socks_version_notifier (GConfClient *client,
-				guint cnxn_id,
-				GConfEntry *entry,
-				EphyEmbedSingle *single)
-{
-	int version;
-	version = gconf_value_get_int(entry->value) + 4;
-	mozilla_prefs_set_int ("network.proxy.socks_version", 
-			       version);
 }

@@ -37,7 +37,6 @@
 #include "ephy-history-window.h"
 #include "ephy-shell.h"
 #include "ephy-dnd.h"
-#include "ephy-prefs.h"
 #include "egg-action-group.h"
 #include "egg-toggle-action.h"
 #include "egg-menu-merge.h"
@@ -50,6 +49,7 @@
 #include "ephy-gui.h"
 #include "toolbar.h"
 #include "ephy-stock-icons.h"
+#include "ephy-search-entry.h"
 
 static GtkTargetEntry page_drag_types [] =
 {
@@ -73,8 +73,6 @@ static void ephy_history_window_get_property (GObject *object,
 					      GParamSpec *pspec);
 static void ephy_history_window_dispose      (GObject *object);
 
-static void search_entry_changed_cb       (GtkWidget *entry,
-					   EphyHistoryWindow *editor);
 static void cmd_open_bookmarks_in_tabs    (EggAction *action,
 					   EphyHistoryWindow *editor);
 static void cmd_open_bookmarks_in_browser (EggAction *action,
@@ -782,20 +780,6 @@ key_pressed_cb (EphyNodeView *view,
 }
 
 static void
-reset_search_entry (EphyHistoryWindow *editor)
-{
-	g_signal_handlers_block_by_func
-		(G_OBJECT (editor->priv->search_entry),
-		 G_CALLBACK (search_entry_changed_cb),
-		 editor);
-	gtk_entry_set_text (GTK_ENTRY (editor->priv->search_entry), "");
-	g_signal_handlers_unblock_by_func
-		(G_OBJECT (editor->priv->search_entry),
-		 G_CALLBACK (search_entry_changed_cb),
-		 editor);
-}
-
-static void
 site_node_selected_cb (EphyNodeView *view,
 		       EphyNode *node,
 		       EphyHistoryWindow *editor)
@@ -809,16 +793,15 @@ site_node_selected_cb (EphyNodeView *view,
 	}
 	else
 	{
-		reset_search_entry (editor);
+		ephy_search_entry_clear (EPHY_SEARCH_ENTRY (editor->priv->search_entry));
 		pages_filter (editor, node);
 	}
 }
 
 static void
-search_entry_changed_cb (GtkWidget *entry, EphyHistoryWindow *editor)
+search_entry_search_cb (GtkWidget *entry, char *search_text, EphyHistoryWindow *editor)
 {
 	EphyNode *all;
-	char *search_text;
 
 	g_signal_handlers_block_by_func
 		(G_OBJECT (editor->priv->sites_view),
@@ -831,8 +814,6 @@ search_entry_changed_cb (GtkWidget *entry, EphyHistoryWindow *editor)
 		(G_OBJECT (editor->priv->sites_view),
 		 G_CALLBACK (site_node_selected_cb),
 		 editor);
-
-	search_text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
 
 	GDK_THREADS_ENTER ();
 
@@ -850,8 +831,6 @@ search_entry_changed_cb (GtkWidget *entry, EphyHistoryWindow *editor)
 	ephy_node_filter_done_changing (editor->priv->pages_filter);
 
 	GDK_THREADS_LEAVE ();
-
-	g_free (search_text);
 }
 
 static GtkWidget *
@@ -866,13 +845,13 @@ build_search_box (EphyHistoryWindow *editor)
 	gtk_container_set_border_width (GTK_CONTAINER (box), 6);
 	gtk_widget_show (box);
 
-	entry = gtk_entry_new ();
+	entry = ephy_search_entry_new ();
 	add_focus_monitor (editor, entry);
 	add_entry_monitor (editor, entry);
 	editor->priv->search_entry = entry;
 	gtk_widget_show (entry);
-	g_signal_connect (G_OBJECT (entry), "changed",
-			  G_CALLBACK (search_entry_changed_cb),
+	g_signal_connect (G_OBJECT (entry), "search",
+			  G_CALLBACK (search_entry_search_cb),
 			  editor);
 
 	label = gtk_label_new (NULL);

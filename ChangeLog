@@ -1,5 +1,29 @@
 2003-06-07  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/mozilla/mozilla-notifiers.cpp:
+
+	Remove some leftovers.
+
+	* lib/widgets/Makefile.am:
+	* lib/widgets/ephy-search-entry.c: (ephy_search_entry_get_type),
+	(ephy_search_entry_class_init), (ephy_search_entry_timeout_cb),
+	(ephy_search_entry_changed_cb),
+	(ephy_search_entry_focus_out_event_cb), (ephy_search_entry_init),
+	(ephy_search_entry_finalize), (ephy_search_entry_new),
+	(ephy_search_entry_clear):
+	* lib/widgets/ephy-search-entry.h:
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(keyword_node_selected_cb), (search_entry_search_cb),
+	(build_search_box):
+	* src/ephy-history-window.c: (site_node_selected_cb),
+	(search_entry_search_cb), (build_search_box):
+
+	Implement a search entry that delays searches a bit after
+	the user pressed key, to have autoapply but make it interactive
+	enough. (Based on rhythmbox one)
+
+2003-06-07  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* data/epiphany.schemas.in:
 	* data/glade/prefs-dialog.glade:
 	* embed/ephy-embed-prefs.h:
