@@ -1,5 +1,32 @@
 2004-09-07  Christian Persch  <chpe@cvs.gnome.org>
 
+	* configure.ac:
+
+	Fix "trunk" version number.
+
+	* lib/egg/eggdropdowntoolbutton.c:
+	(egg_dropdown_tool_button_set_arrow_tooltip), (menu_position_func),
+	(egg_dropdown_tool_button_set_menu),
+	(egg_dropdown_tool_button_get_menu):
+	* lib/egg/eggdropdowntoolbutton.h:
+
+	Fix menu positioning, menu ownership and remove unnecessary functions
+	from the .h.
+
+	* lib/widgets/Makefile.am:
+	R lib/widgets/ephy-arrow-toolbutton.c:
+	R lib/widgets/ephy-arrow-toolbutton.h:
+
+	Remove EphyArrowToolButton.
+
+	* src/ephy-navigation-action.c: (menu_activated_cb),
+	(connect_proxy), (ephy_navigation_action_class_init),
+	(ephy_navigation_action_init):
+
+	Port to EggDropdownToolButton.
+
+2004-09-07  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/egg/Makefile.am:
 	R lib/egg/eggmarshalers.c:
 	R lib/egg/eggmarshalers.h:

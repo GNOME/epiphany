@@ -99,6 +99,15 @@ egg_dropdown_tool_button_set_tooltip (GtkToolItem *tool_item,
 }
 
 static void
+egg_dropdown_tool_button_set_arrow_tooltip (EggDropdownToolButton *button,
+                                            GtkTooltips *tooltips,
+                                            const gchar *tip_text,
+                                            const gchar *tip_private)
+{
+  gtk_tooltips_set_tip (tooltips, button->priv->arrow_button, tip_text, tip_private);
+}
+
+static void
 egg_dropdown_tool_button_class_init (EggDropdownToolButtonClass *klass)
 {
   GObjectClass *object_class;
@@ -168,24 +177,26 @@ menu_position_func (GtkMenu               *menu,
 		    EggDropdownToolButton *button)
 {
   EggDropdownToolButtonPrivate *priv;
+  GtkWidget *widget;
   GtkRequisition menu_requisition;
   int max_x, max_y;
 
   priv = button->priv;
+  widget = GTK_WIDGET (button);
 
-  gdk_window_get_origin (GTK_WIDGET (button)->window, x, y);
+  gdk_window_get_origin (widget->window, x, y);
+  gtk_widget_size_request (GTK_WIDGET (priv->menu), &menu_requisition);
 
-  if (gtk_widget_get_direction (GTK_WIDGET (button)) == GTK_TEXT_DIR_RTL)
-    *x += GTK_WIDGET (button)->allocation.x +
-          GTK_WIDGET (button)->allocation.width -
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    *x += widget->allocation.x +
+          widget->allocation.width -
           menu_requisition.width;
   else
-    *x += GTK_WIDGET (button)->allocation.x;
+    *x += widget->allocation.x;
 
-  *y += GTK_WIDGET (button)->allocation.height;
+  *y += widget->allocation.y + widget->allocation.height;
 
   /* Make sure we are on the screen.  */
-  gtk_widget_size_request (GTK_WIDGET (priv->menu), &menu_requisition);
   max_x = MAX (0, gdk_screen_width () - menu_requisition.width);
   max_y = MAX (0, gdk_screen_height () - menu_requisition.height);
 
@@ -383,6 +394,7 @@ egg_dropdown_tool_button_set_menu (EggDropdownToolButton *button,
       priv->menu = GTK_MENU (menu);
 
       g_object_ref (priv->menu);
+      gtk_object_sink (GTK_OBJECT (priv->menu));
 
       g_signal_connect (button->priv->menu, "deactivate",
                         G_CALLBACK (menu_deactivate_cb), button);
@@ -394,15 +406,3 @@ egg_dropdown_tool_button_get_menu (EggDropdownToolButton *button)
 {
   return GTK_MENU_SHELL (button->priv->menu);
 }
-
-void
-egg_dropdown_tool_button_set_arrow_tooltip (EggDropdownToolButton *button,
-                                            GtkTooltips *tooltips,
-                                            const gchar *tip_text,
-                                            const gchar *tip_private)
-{
-  g_return_if_fail (EGG_IS_DROPDOWN_TOOL_BUTTON (button));
-
-  gtk_tooltips_set_tip (tooltips, button->priv->arrow_button, tip_text, tip_private);
-}
-

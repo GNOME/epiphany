@@ -23,16 +23,19 @@
 #endif
 
 #include "ephy-navigation-action.h"
-#include "ephy-arrow-toolbutton.h"
 #include "ephy-window.h"
 #include "ephy-string.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
 #include "ephy-embed-shell.h"
+#include "eggdropdowntoolbutton.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtkimage.h>
+#include <gtk/gtkmenuitem.h>
 #include <gtk/gtkimagemenuitem.h>
+#include <gtk/gtkmenushell.h>
+#include <gtk/gtkmenu.h>
 
 static void ephy_navigation_action_init       (EphyNavigationAction *action);
 static void ephy_navigation_action_class_init (EphyNavigationActionClass *class);
@@ -247,22 +250,14 @@ setup_up_menu (EphyWindow *window, GtkMenuShell *ms)
 }
 
 static void
-menu_activated_cb (EphyArrowToolButton *w, EphyNavigationAction *b)
+menu_activated_cb (EggDropdownToolButton *button,
+		   EphyNavigationAction *action)
 {
-	EphyNavigationActionPrivate *p = b->priv;
-	GtkMenuShell *ms = ephy_arrow_toolbutton_get_menu (w);
-	EphyWindow *win = b->priv->window;
-	GList *children;
-	GList *li;
+	EphyNavigationActionPrivate *p = action->priv;
+	GtkMenuShell *ms = GTK_MENU_SHELL (gtk_menu_new ());
+	EphyWindow *win = action->priv->window;
 
 	LOG ("Show navigation menu")
-
-	children = gtk_container_get_children (GTK_CONTAINER (ms));
-	for (li = children; li; li = li->next)
-	{
-		gtk_container_remove (GTK_CONTAINER (ms), li->data);
-	}
-	g_list_free (children);
 
 	switch (p->direction)
 	{
@@ -277,6 +272,8 @@ menu_activated_cb (EphyArrowToolButton *w, EphyNavigationAction *b)
 		g_assert_not_reached ();
 		break;
 	}
+
+	egg_dropdown_tool_button_set_menu (button, ms);
 }
 
 static void
@@ -284,7 +281,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	LOG ("Connect navigation action proxy")
 
-	if (EPHY_IS_ARROW_TOOLBUTTON (proxy))
+	if (EGG_IS_DROPDOWN_TOOL_BUTTON (proxy))
 	{
 		g_signal_connect (proxy, "menu-activated",
 				  G_CALLBACK (menu_activated_cb), action);
@@ -346,7 +343,7 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 
 	parent_class = g_type_class_peek_parent (class);
 
-	action_class->toolbar_item_type = EPHY_TYPE_ARROW_TOOLBUTTON;
+	action_class->toolbar_item_type = EGG_TYPE_DROPDOWN_TOOL_BUTTON;
 	action_class->connect_proxy = connect_proxy;
 
 	g_object_class_install_property (object_class,
@@ -366,7 +363,7 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
                                                               G_TYPE_OBJECT,
                                                               G_PARAM_READWRITE));
 
-	g_type_class_add_private (object_class, sizeof(EphyNavigationActionPrivate));
+	g_type_class_add_private (object_class, sizeof (EphyNavigationActionPrivate));
 }
 
 static void
@@ -374,5 +371,3 @@ ephy_navigation_action_init (EphyNavigationAction *action)
 {
         action->priv = EPHY_NAVIGATION_ACTION_GET_PRIVATE (action);
 }
-
-

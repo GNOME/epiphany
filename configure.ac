@@ -182,7 +182,7 @@ AC_MSG_RESULT([$MOZILLA_VERSION$autodetect])
 
 dnl Test for the "trunk" version
 if test $MOZILLA_VERSION = "trunk"; then
-	MOZILLA_VERSION=99.0 # use a high number
+	MOZILLA_VERSION=9.0 # use a high number
 fi
 
 dnl Split up the version string ( 1.7rc1 -> 1 7 rc 1 )
@@ -270,7 +270,7 @@ dnl Internationalization
 dnl ******************************* 
 dnl Add the languages which your application supports here.
 
-ALL_LINGUAS="am ar az be bg bn bs ca cs cy da de el en_CA en_GB es et eu fa fi fr ga gu he hi hr hu id is it ja ko li lt mi mk ml mn ms nb nl nn no pa pl pt pt_BR ro ru sk sl sq sr sr@Latn sv ta th tk tr uk vi wa zh_CN zh_TW"
+ALL_LINGUAS="am ar az be bg bn bs ca cs cy da de el en_CA en_GB es et eu fa fi fr ga gu he hi hr hu id is it ja ko li lt mi mk ml mn ms nb ne nl nn no pa pl pt pt_BR ro ru sk sl sq sr sr@Latn sv ta th tk tr uk vi wa zh_CN zh_TW"
 GETTEXT_PACKAGE=epiphany
 AC_SUBST([GETTEXT_PACKAGE])
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [Gettext package])
