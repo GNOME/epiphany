@@ -341,7 +341,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							    G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
-					 PROP_LOAD_STATUS,
+					 PROP_SECURITY,
 					 g_param_spec_int ("security-level",
 							   "Security Level",
 							   "The tab's security level",
@@ -359,7 +359,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							      G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
-					 PROP_LOAD_STATUS,
+					 PROP_VISIBLE,
 					 g_param_spec_boolean ("visible",
 							       "Visibility",
 							       "The tab's visibility",
