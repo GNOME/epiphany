@@ -473,7 +473,7 @@ ephy_window_destroy (GtkObject *gtkobject)
 
 	destroy_exit_fullscreen_popup (window);
 
-	popups = gtk_ui_manager_get_toplevels (window->priv->manager, GTK_UI_MANAGER_POPUP);
+	popups = gtk_ui_manager_get_toplevels (GTK_UI_MANAGER (window->ui_merge), GTK_UI_MANAGER_POPUP);
 	g_slist_foreach (popups, (GFunc) gtk_menu_shell_deactivate, NULL);
 	g_slist_free (popups);
 
