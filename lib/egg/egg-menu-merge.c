@@ -938,17 +938,11 @@ update_node (EggMenuMerge *self, GNode *node)
   EggMenuMergeNode *info;
   GNode *child;
   EggAction *action;
-  GList *tmp;
 
   g_return_if_fail (node != NULL);
   g_return_if_fail (NODE_INFO(node) != NULL);
 
   info = NODE_INFO(node);
-
-  for (tmp = info->uifiles; tmp != NULL; tmp = tmp->next)
-    {
-      NodeUIReference *ref = tmp->data;
-    }
 
   if (NODE_INFO(node)->dirty)
     {
