@@ -157,18 +157,21 @@ ephy_bookmark_action_sync_smart_url (GtkAction *action, GParamSpec *pspec, GtkWi
 {
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
-		GtkWidget *entry;
+		GtkWidget *entry, *icon;
 		gboolean smart_url;
 
 		smart_url = EPHY_BOOKMARK_ACTION (action)->priv->smart_url;
 		entry = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "entry"));
+		icon = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "icon"));
 
 		if (smart_url)
 		{
+			gtk_widget_hide (icon);
 			gtk_widget_show (entry);
 		}
 		else
 		{
+			gtk_widget_show (icon);
 			gtk_widget_hide (entry);
 		}
 	}
