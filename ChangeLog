@@ -1,3 +1,16 @@
+2004-08-23  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.in:
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_class_init),
+	(ephy_node_view_key_press_cb), (ephy_node_view_button_press_cb):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_show_popup_cb),
+	(keyword_node_show_popup_cb), (ephy_bookmarks_editor_construct):
+	* src/ephy-history-window.c: (ephy_history_window_show_popup_cb),
+	(ephy_history_window_construct), (ephy_history_window_dispose):
+
+	Just use the popup_menu signal. Fixes bug #150830.
+
 2004-08-21  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.in:

@@ -89,7 +89,6 @@ enum
 	NODE_ACTIVATED,
 	NODE_SELECTED,
 	NODE_DROPPED,
-	SHOW_POPUP,
 	LAST_SIGNAL
 };
 
@@ -191,15 +190,6 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 			      2,
 			      G_TYPE_POINTER,
 			      G_TYPE_POINTER);
-	ephy_node_view_signals[SHOW_POPUP] =
-		g_signal_new ("show_popup",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNodeViewClass, show_popup),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
 
 	g_type_class_add_private (object_class, sizeof (EphyNodeViewPrivate));
 }
@@ -713,15 +703,8 @@ ephy_node_view_key_press_cb (GtkTreeView *treeview,
 			     GdkEventKey *event,
 			     EphyNodeView *view)
 {
-	if ((event->state & GDK_SHIFT_MASK) &&
-	    (event->keyval == GDK_F10))
-	{
-		g_signal_emit (G_OBJECT (view), ephy_node_view_signals[SHOW_POPUP], 0);
-
-		return TRUE;
-	}
-	else if (view->priv->searchable_data_column != -1 &&
-		 gdk_keyval_to_unicode (event->keyval))
+	if (view->priv->searchable_data_column != -1 &&
+	    gdk_keyval_to_unicode (event->keyval))
 	{
 		return ephy_node_view_select_node_by_key (view, event);
 	}
@@ -939,7 +922,9 @@ ephy_node_view_button_press_cb (GtkWidget *treeview,
 
 		if (event->button == 3)
 		{
-			g_signal_emit (G_OBJECT (view), ephy_node_view_signals[SHOW_POPUP], 0);
+			gboolean retval;
+
+			g_signal_emit_by_name (view, "popup_menu", &retval);
 		}
 		else if (event->button == 1)
 		{

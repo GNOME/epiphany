@@ -1075,7 +1075,7 @@ remove_focus_monitor (EphyBookmarksEditor *editor, GtkWidget *widget)
                                              editor);
 }
 
-static void
+static gboolean
 ephy_bookmarks_editor_show_popup_cb (GtkWidget *view,
 				     EphyBookmarksEditor *editor)
 {
@@ -1085,6 +1085,8 @@ ephy_bookmarks_editor_show_popup_cb (GtkWidget *view,
 					    "/EphyBookmarkEditorPopup");
 	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
 			gtk_get_current_event_time ());
+
+	return TRUE;
 }
 
 static void
@@ -1167,7 +1169,7 @@ keyword_node_selected_cb (EphyNodeView *view,
 	}
 }
 
-static void
+static gboolean
 keyword_node_show_popup_cb (GtkWidget *view, EphyBookmarksEditor *editor)
 {
 	GtkWidget *widget;
@@ -1176,6 +1178,8 @@ keyword_node_show_popup_cb (GtkWidget *view, EphyBookmarksEditor *editor)
 					   "/EphyBookmarkKeywordPopup");
 	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
 			gtk_get_current_event_time ());
+
+	return TRUE;
 }
 
 static void
@@ -1469,7 +1473,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			  G_CALLBACK (node_dropped_cb),
 			  editor);
 	g_signal_connect (G_OBJECT (key_view),
-			  "show_popup",
+			  "popup_menu",
 			  G_CALLBACK (keyword_node_show_popup_cb),
 			  editor);
 
@@ -1529,7 +1533,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			  G_CALLBACK (ephy_bookmarks_editor_node_activated_cb),
 			  editor);
 	g_signal_connect (G_OBJECT (bm_view),
-			  "show_popup",
+			  "popup_menu",
 			  G_CALLBACK (ephy_bookmarks_editor_show_popup_cb),
 			  editor);
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (bm_view));
