@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2000-2003 Marco Pesenti Gritti
- *
+ *  Copyright (C) 2000-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2, or (at your option)
@@ -35,7 +35,6 @@
 #include "nsNetUtil.h"
 #include "nsIDOMNSDocument.h"
 #include "nsReadableUtils.h"
-#include "nsUnicharUtils.h"
 #include "nsGUIEvent.h"
 #include "nsIDOMNSEvent.h"
 #include "nsIDOMCharacterData.h"
@@ -235,8 +234,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 		rv = element->GetTagName(tag);
 		if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
-		if (tag.Equals(NS_LITERAL_STRING("img"),
-			       nsCaseInsensitiveStringComparator()))
+		if (tag.EqualsIgnoreCase("img"))
 		{
 			info->context |= EMBED_CONTEXT_IMAGE;
 
@@ -278,8 +276,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 						   img);
 			}
 		}
-		else if (tag.Equals(NS_LITERAL_STRING("input"),
-				    nsCaseInsensitiveStringComparator()))
+		else if (tag.EqualsIgnoreCase("input"))
 		{
 			nsCOMPtr<nsIDOMElement> element;
 			element = do_QueryInterface (node);
@@ -289,8 +286,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			nsAutoString value;
 			element->GetAttribute (attr, value);
 
-			if (value.Equals(NS_LITERAL_STRING("image"),
-					 nsCaseInsensitiveStringComparator()))
+			if (value.EqualsIgnoreCase("image"))
 			{
 				info->context |= EMBED_CONTEXT_IMAGE;
 				nsCOMPtr<nsIDOMHTMLInputElement> input;
@@ -307,29 +303,21 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				SetStringProperty ("image",
 						   NS_ConvertUTF8toUCS2(cImg));
 			}
-			else if (!value.Equals(NS_LITERAL_STRING("radio"),
-					       nsCaseInsensitiveStringComparator()) &&
-				 !value.Equals(NS_LITERAL_STRING("submit"),
-					       nsCaseInsensitiveStringComparator()) &&
-				 !value.Equals(NS_LITERAL_STRING("reset"),
-					       nsCaseInsensitiveStringComparator()) &&
-				 !value.Equals(NS_LITERAL_STRING("hidden"),
-					       nsCaseInsensitiveStringComparator()) &&
-				 !value.Equals(NS_LITERAL_STRING("button"),
-					       nsCaseInsensitiveStringComparator()) &&
-				 !value.Equals(NS_LITERAL_STRING("checkbox"),
-					       nsCaseInsensitiveStringComparator()))
+			else if (!value.EqualsIgnoreCase("radio")  &&
+				 !value.EqualsIgnoreCase("submit") &&
+				 !value.EqualsIgnoreCase("reset")  &&
+				 !value.EqualsIgnoreCase("hidden") &&
+				 !value.EqualsIgnoreCase("button") &&
+				 !value.EqualsIgnoreCase("checkbox"))
 			{
 				info->context |= EMBED_CONTEXT_INPUT;
 			}
 		}
-		else if (tag.Equals(NS_LITERAL_STRING("textarea"),
-				    nsCaseInsensitiveStringComparator()))
+		else if (tag.EqualsIgnoreCase("textarea"))
 		{
 			info->context |= EMBED_CONTEXT_INPUT;
 		}
-		else if (tag.Equals(NS_LITERAL_STRING("object"),
-				    nsCaseInsensitiveStringComparator()))
+		else if (tag.EqualsIgnoreCase("object"))
 		{
 			nsCOMPtr<nsIDOMHTMLObjectElement> object;
 			object = do_QueryInterface (node);
@@ -338,11 +326,8 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			nsAutoString value;
 			object->GetType(value);
 
-			//Forming a substring and confirming it's contents
-			//is quicker than doing a Find on the full string
-			//and then checking that "image/" is at the beginning
-			if (Substring(value, 0, 6).Equals(NS_LITERAL_STRING("image/"),
-			    nsCaseInsensitiveStringComparator()))
+			// MIME types are always lower case
+			if (Substring (value, 0, 6).Equals(NS_LITERAL_STRING("image/")))
 			{
 				info->context |= EMBED_CONTEXT_IMAGE;
 				
@@ -382,8 +367,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			nsAutoString value;
 			dom_elem->GetAttributeNS (nspace, localname_type, value);
 
-			if (value.Equals(NS_LITERAL_STRING("simple"),
-					 nsCaseInsensitiveStringComparator()))
+			if (value.EqualsIgnoreCase("simple"))
 			{
 				info->context |= EMBED_CONTEXT_LINK;
 				NS_NAMED_LITERAL_STRING (localname_href, "href");
@@ -406,8 +390,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
 			/* Link */
-			if (tag.Equals(NS_LITERAL_STRING("a"),
-				       nsCaseInsensitiveStringComparator()))
+			if (tag.EqualsIgnoreCase("a"))
 			{
 				nsAutoString tmp;
 
@@ -421,8 +404,16 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				if (NS_FAILED(rv))
 					return NS_ERROR_FAILURE;
 
-				if (Substring(tmp, 0, 7).Equals(NS_LITERAL_STRING("mailto:"),
-			    	    nsCaseInsensitiveStringComparator()))
+				nsCOMPtr<nsIURI> uri;
+				NS_NewURI (getter_AddRefs (uri), tmp);
+				if (!uri) return NS_ERROR_FAILURE;
+			
+				nsresult rv;
+				nsCAutoString scheme;
+				rv = uri->GetScheme (scheme);
+				if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+
+				if (scheme.EqualsIgnoreCase("mailto"))
 				{
 					info->context |= EMBED_CONTEXT_EMAIL_LINK;
 					const nsAString &address = Substring(tmp, 7, tmp.Length()-7);
@@ -454,8 +445,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					if (NS_SUCCEEDED(rv))
 						SetStringProperty ("link_type", tmp);
 
-					if (tmp.Equals(NS_LITERAL_STRING("text/smartbookmark"),
-						       nsCaseInsensitiveStringComparator()))
+					if (tmp.EqualsIgnoreCase("text/smartbookmark"))
 					{
 						SetIntProperty ("link_is_smart", TRUE);
 						
@@ -484,14 +474,12 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				}
 			
 			}
-			else if (tag.Equals(NS_LITERAL_STRING("option"),
-					    nsCaseInsensitiveStringComparator()))
+			else if (tag.EqualsIgnoreCase("option"))
 			{
 				info->context = EMBED_CONTEXT_NONE;
 				return NS_OK;
 			}
-			if (tag.Equals(NS_LITERAL_STRING("area"),
-				       nsCaseInsensitiveStringComparator()))
+			if (tag.EqualsIgnoreCase("area"))
 			{
 				info->context |= EMBED_CONTEXT_LINK;
 				nsCOMPtr <nsIDOMHTMLAreaElement> area =
@@ -507,10 +495,8 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					CheckLinkScheme (href);
 				}
 			}
-			else if (tag.Equals(NS_LITERAL_STRING("textarea"),
-					    nsCaseInsensitiveStringComparator()) ||
-				 tag.Equals(NS_LITERAL_STRING("input"),
-					    nsCaseInsensitiveStringComparator()))
+			else if (tag.EqualsIgnoreCase("textarea") ||
+				 tag.EqualsIgnoreCase("input"))
 			{
 				info->context |= EMBED_CONTEXT_INPUT;
 			}
@@ -674,16 +660,11 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, Mozilla
 	nsAutoString nodename;
 	OriginalNode->GetNodeName(nodename);
 
-	if (nodename.Equals(NS_LITERAL_STRING("xul:scrollbarbutton"),
-			    nsCaseInsensitiveStringComparator()) ||
-	    nodename.Equals(NS_LITERAL_STRING("xul:thumb"),
-			    nsCaseInsensitiveStringComparator()) ||
-	    nodename.Equals(NS_LITERAL_STRING("xul:vbox"),
-			    nsCaseInsensitiveStringComparator()) ||
-	    nodename.Equals(NS_LITERAL_STRING("xul:spacer"),
-			    nsCaseInsensitiveStringComparator()) ||
-	    nodename.Equals(NS_LITERAL_STRING("xul:slider"),
-			    nsCaseInsensitiveStringComparator()))
+	if (nodename.EqualsIgnoreCase("xul:scrollbarbutton") ||
+	    nodename.EqualsIgnoreCase("xul:thumb")	     ||
+	    nodename.EqualsIgnoreCase("xul:vbox")	     ||
+	    nodename.EqualsIgnoreCase("xul:spacer")	     ||
+	    nodename.EqualsIgnoreCase("xul:slider"))
 		return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIDOMEventTarget> EventTarget;
@@ -813,12 +794,13 @@ nsresult EventContext::CheckLinkScheme (const nsAString &link)
 	rv = uri->GetScheme (scheme);
 	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
-	if (scheme.EqualsIgnoreCase ("http")  ||
-	    scheme.EqualsIgnoreCase ("https") ||
-	    scheme.EqualsIgnoreCase ("ftp")   ||
-	    scheme.EqualsIgnoreCase ("file")  ||
-	    scheme.EqualsIgnoreCase ("data")  ||
-	    scheme.EqualsIgnoreCase ("about") ||
+	if (scheme.EqualsIgnoreCase ("http")	 ||
+	    scheme.EqualsIgnoreCase ("https")	 ||
+	    scheme.EqualsIgnoreCase ("ftp")	 ||
+	    scheme.EqualsIgnoreCase ("file")	 ||
+	    scheme.EqualsIgnoreCase ("data")	 ||
+	    scheme.EqualsIgnoreCase ("resource") ||
+	    scheme.EqualsIgnoreCase ("about")	 ||
 	    scheme.EqualsIgnoreCase ("gopher"))
 	{
 		SetIntProperty ("link-has-web-scheme", TRUE);

@@ -81,7 +81,6 @@
 #include "nsIDocumentCharsetInfo.h"
 #include "nsPromiseFlatString.h"
 #include "nsString.h"
-#include "nsUnicharUtils.h"
 #include "ContentHandler.h"
 
 EphyEventListener::EphyEventListener(void)
@@ -116,10 +115,8 @@ EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 	result = linkElement->GetAttribute (attr_rel, value);
 	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
 
-	if (value.Equals(NS_LITERAL_STRING("SHORTCUT ICON"),
-			 nsCaseInsensitiveStringComparator()) ||
-	    value.Equals(NS_LITERAL_STRING("ICON"),
-	    		 nsCaseInsensitiveStringComparator()))
+	if (value.EqualsIgnoreCase("SHORTCUT ICON") ||
+	    value.EqualsIgnoreCase("ICON"))
 	{
 		NS_NAMED_LITERAL_STRING(attr_href, "href");
 		nsAutoString value;

@@ -1,3 +1,14 @@
+2004-02-20  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/EphyBrowser.cpp:
+	R embed/mozilla/nsUnicharUtils.h:
+	R embed/mozilla/nsUnicharUtils.cpp:
+
+	Adapt to changed mozilla string APIs by getting rid of
+	nsUnicharUtils, and using EqualsIgnoreCase instead of
+	Equal with nsCaseInsensitiveStringComparator().
+
 2004-02-20  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/ephy-completion-model.c: (is_base_address),
