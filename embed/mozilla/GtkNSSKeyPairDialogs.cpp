@@ -86,7 +86,7 @@ public:
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIDOMWINDOWINTERNAL
 	NS_DECL_NSIDOMWINDOW
-#if MOZILLA_SNAPSHOT >= 19
+#if MOZILLA_SNAPSHOT == 17 || MOZILLA_SNAPSHOT >= 19
 	NS_DECL_NSIDOMWINDOW2
 #endif
 
@@ -96,7 +96,7 @@ public:
 	gboolean close_called;
 };
 
-#if MOZILLA_SNAPSHOT >= 19
+#if MOZILLA_SNAPSHOT == 17 || MOZILLA_SNAPSHOT >= 19
 NS_IMPL_ISUPPORTS3(KeyPairHelperWindow, nsIDOMWindowInternal, nsIDOMWindow, nsIDOMWindow2)
 #else
 NS_IMPL_ISUPPORTS2(KeyPairHelperWindow, nsIDOMWindowInternal, nsIDOMWindow)
@@ -244,7 +244,7 @@ NS_IMETHODIMP KeyPairHelperWindow::GetWindow(nsIDOMWindowInternal * *aWindow)
     MOZ_NOT_IMPLEMENTED
 }
 
-#if MOZILLA_SNAPSHOT >= 19
+#if MOZILLA_SNAPSHOT == 17 || MOZILLA_SNAPSHOT >= 19
 NS_IMETHODIMP KeyPairHelperWindow::GetWindowRoot(nsIDOMEventTarget * *aEvent)
 {
     MOZ_NOT_IMPLEMENTED
