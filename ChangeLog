@@ -1,3 +1,11 @@
+2003-09-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-main.c: (ephy_main_start):
+
+	Print a warning when starting ephy in --server mode;
+	using server mode is known to crash on logout from
+	gnome session, so use at your own risk. [Bug #123047].
+
 2003-09-24  Xan Lopez  <xan@masilla.org>
 
 	* configure.in:

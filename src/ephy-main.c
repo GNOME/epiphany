@@ -213,6 +213,7 @@ ephy_main_start (gpointer data)
 	/* Server mode */
 	else if (ephy_server_mode)
 	{
+		g_warning ("Server mode is deprecated and known to crash when logging out. Use at your own risk!\n");
 		g_object_ref (G_OBJECT(ephy_shell));
 	}
 	/* Launch the bookmarks editor */
