@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2003-05-29 00:12+0200\n"
-"PO-Revision-Date: 2003-05-29 00:13+0200\n"
+"POT-Creation-Date: 2003-05-30 02:04+0200\n"
+"PO-Revision-Date: 2003-05-30 02:05+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -328,38 +328,66 @@ msgid "Size of memory cache, in KB."
 msgstr "Storlek på minnescache, i kB."
 
 #: data/epiphany.schemas.in.h:55
+msgid "The charset autodetector. Empty string means autodetect is off"
+msgstr ""
+"Autodetekteraren för teckenkodning. Tom sträng betyder att automatisk "
+"detektering är av"
+
+#: data/epiphany.schemas.in.h:56
+msgid ""
+"The charset autodetector. Valid entries are <empty string> (autodetectors "
+"off), cjk_parallel_state_machine (autodetect east asian encodings), "
+"ja_parallel_state_machine (autodetect japanese encodings), "
+"ko_parallel_state_machine (autodetect korean encodings), ruprob (autodetect "
+"russian encodings), ukprob (autodetect ukrainian encodings), "
+"zh_parallel_state_machine (autodetect chinese encodings), "
+"zhcn_parallel_state_machine (autodetect simplified chinese encodings) and "
+"zhtw_parallel_state_machine (autodetect traditional chinese encodings)."
+msgstr ""
+"Autodetekteraren för teckenkodning. Giltiga poster är <tom sträng> "
+"(autodetektorer av), cjk_parallel_state_machine (detektera automatiskt "
+"östasiatiska kodningar), ja_parallel_state_machine (detektera automatiskt "
+"japanska kodningar), ko_parallel_state_machine (detektera automatiskt "
+"koreanska kodningar), ruprob (detektera automatiskt koreanska kodningar), "
+"ukprob (detektera automatiskt ukrainska kodningar), "
+"zh_parallel_state_machine (detektera automatiskt kinesiska kodningar), "
+"zhcn_parallel_state_machine (detektera automatiskt kodningar för förenklad "
+"kinesiska) och zhtw_parallel_state_machine (detektera automatiskt kodningar "
+"för traditionell kinesiska)."
+
+#: data/epiphany.schemas.in.h:57
 msgid "Underline links"
 msgstr "Stryk under länkar"
 
-#: data/epiphany.schemas.in.h:56
+#: data/epiphany.schemas.in.h:58
 msgid "Underline links."
 msgstr "Stryk under länkar."
 
-#: data/epiphany.schemas.in.h:57
+#: data/epiphany.schemas.in.h:59
 msgid "Use own colors"
 msgstr "Använd egna färger"
 
-#: data/epiphany.schemas.in.h:58
+#: data/epiphany.schemas.in.h:60
 msgid "Use own fonts"
 msgstr "Använd egna typsnitt"
 
-#: data/epiphany.schemas.in.h:59
+#: data/epiphany.schemas.in.h:61
 msgid "Use tabs"
 msgstr "Använd flikar"
 
-#: data/epiphany.schemas.in.h:60
+#: data/epiphany.schemas.in.h:62
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Använd dina egna färger istället för de färger som sidan begär."
 
-#: data/epiphany.schemas.in.h:61
+#: data/epiphany.schemas.in.h:63
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Använd dina egna typsnitt istället för de typsnitt som sidan begär."
 
-#: data/epiphany.schemas.in.h:62
+#: data/epiphany.schemas.in.h:64
 msgid "When to compare cached copy"
 msgstr "När cachad kopia ska jämföras"
 
-#: data/epiphany.schemas.in.h:63
+#: data/epiphany.schemas.in.h:65
 msgid ""
 "When to compare cached copy to web copy. Possible values are 0 (once per "
 "session), 1 (every time), 2 (never), 3 (automatic)."
@@ -367,7 +395,7 @@ msgstr ""
 "När cachad kopia ska jämföras med webbkopia. Möjliga värden är 0 (en gång "
 "per session), 1 (varje gång), 2 (aldrig), 3 (automatisk)."
 
-#: data/epiphany.schemas.in.h:64
+#: data/epiphany.schemas.in.h:66
 msgid ""
 "Where to accept cookies from. Possible values are 0 (anywhere), 1 (from "
 "current server only), 2 (nowhere)"
@@ -375,19 +403,19 @@ msgstr ""
 "Var kakor ska accepteras ifrån. Möjliga värden är 0 (varsomhelst), 1 (endast "
 "från aktuell server), 2 (ingenstans ifrån)"
 
-#: data/epiphany.schemas.in.h:65
+#: data/epiphany.schemas.in.h:67
 msgid "Whether to print the date in the footer."
 msgstr "Huruvida datumet ska skrivas ut i sidfoten."
 
-#: data/epiphany.schemas.in.h:66
+#: data/epiphany.schemas.in.h:68
 msgid "Whether to print the page address in the header"
 msgstr "Huruvida sidans adress ska skrivas ut i sidhuvudet"
 
-#: data/epiphany.schemas.in.h:67
+#: data/epiphany.schemas.in.h:69
 msgid "Whether to print the page numbers (x of total) in the footer."
 msgstr "Huruvida sidnumren (x av totalt) ska skrivas ut i sidfoten."
 
-#: data/epiphany.schemas.in.h:68
+#: data/epiphany.schemas.in.h:70
 msgid "Whether to print the page title in the header."
 msgstr "Huruvida sidans titel ska skrivas ut i sidhuvudet."
 
@@ -548,242 +576,151 @@ msgid "Appearance"
 msgstr "Utseende"
 
 #: data/glade/prefs-dialog.glade.h:17
-#: embed/mozilla/mozilla-embed-single.cpp:74 src/prefs-dialog.c:87
-msgid "Arabic"
-msgstr "Arabisk"
-
-#: data/glade/prefs-dialog.glade.h:18
 msgid "Autodetec_t encoding:"
 msgstr "_Upptäck teckenkodning automatiskt:"
 
-#: data/glade/prefs-dialog.glade.h:19
-#: embed/mozilla/mozilla-embed-single.cpp:75
-msgid "Baltic"
-msgstr "Baltisk"
-
-#: data/glade/prefs-dialog.glade.h:20
-#: embed/mozilla/mozilla-embed-single.cpp:76
-msgid "Central European"
-msgstr "Centraleuropeisk"
-
-#: data/glade/prefs-dialog.glade.h:21
-#: embed/mozilla/mozilla-embed-single.cpp:77 src/prefs-dialog.c:94
-msgid "Chinese"
-msgstr "Kinesisk"
-
-#: data/glade/prefs-dialog.glade.h:22
+#: data/glade/prefs-dialog.glade.h:18
 msgid "Clear _Disk Cache"
 msgstr "Töm _diskcache"
 
-#: data/glade/prefs-dialog.glade.h:23
+#: data/glade/prefs-dialog.glade.h:19
 msgid "Clear _Memory Cache"
 msgstr "_Töm minnescache"
 
-#: data/glade/prefs-dialog.glade.h:24
+#: data/glade/prefs-dialog.glade.h:20
 msgid "Compare page:"
 msgstr "Jämför sida:"
 
-#: data/glade/prefs-dialog.glade.h:25
-#: embed/mozilla/mozilla-embed-single.cpp:78
-msgid "Cyrillic"
-msgstr "Kyrillisk"
-
-#: data/glade/prefs-dialog.glade.h:26
+#: data/glade/prefs-dialog.glade.h:21
 msgid "Dis_k cache:"
 msgstr "Dis_kcache:"
 
-#: data/glade/prefs-dialog.glade.h:27
+#: data/glade/prefs-dialog.glade.h:22
 msgid "E_very time"
 msgstr "A_lltid"
 
-#: data/glade/prefs-dialog.glade.h:28
-msgid "East asian"
-msgstr "Östasiatisk"
-
-#: data/glade/prefs-dialog.glade.h:29
+#: data/glade/prefs-dialog.glade.h:23
 msgid "Enable Java_Script"
 msgstr "Använd Java_Script"
 
-#: data/glade/prefs-dialog.glade.h:30
+#: data/glade/prefs-dialog.glade.h:24
 msgid "Enable _Java"
 msgstr "Använd _Java"
 
-#: data/glade/prefs-dialog.glade.h:31 data/glade/print.glade.h:16
+#: data/glade/prefs-dialog.glade.h:25 data/glade/print.glade.h:16
 msgid "General"
 msgstr "Allmänt"
 
-#: data/glade/prefs-dialog.glade.h:32
-#: embed/mozilla/mozilla-embed-single.cpp:79 src/prefs-dialog.c:107
-msgid "Greek"
-msgstr "Grekisk"
-
-#: data/glade/prefs-dialog.glade.h:33
-#: embed/mozilla/mozilla-embed-single.cpp:80 src/prefs-dialog.c:108
-msgid "Hebrew"
-msgstr "Hebreisk"
-
-#: data/glade/prefs-dialog.glade.h:34
-#: embed/mozilla/mozilla-embed-single.cpp:82 src/prefs-dialog.c:114
-msgid "Japanese"
-msgstr "Japansk"
-
-#: data/glade/prefs-dialog.glade.h:35
-#: embed/mozilla/mozilla-embed-single.cpp:83 src/prefs-dialog.c:115
-msgid "Korean"
-msgstr "Koreansk"
-
-#: data/glade/prefs-dialog.glade.h:36
+#: data/glade/prefs-dialog.glade.h:26
 msgid "Lan_guage:"
 msgstr "Spr_åk:"
 
-#: data/glade/prefs-dialog.glade.h:37
+#: data/glade/prefs-dialog.glade.h:27
 msgid "Language Editor"
 msgstr "Språkredigerare"
 
-#: data/glade/prefs-dialog.glade.h:38
+#: data/glade/prefs-dialog.glade.h:28
 msgid "Language:"
 msgstr "Språk:"
 
-#: data/glade/prefs-dialog.glade.h:39
+#: data/glade/prefs-dialog.glade.h:29
 msgid "Memor_y cache:"
 msgstr "Minnes_cache:"
 
-#: data/glade/prefs-dialog.glade.h:40
+#: data/glade/prefs-dialog.glade.h:30
 msgid "Min_imum font size:"
 msgstr "Mi_nsta typsnittsstorlek:"
 
-#: data/glade/prefs-dialog.glade.h:41
-msgid "Off"
-msgstr "Av"
-
-#: data/glade/prefs-dialog.glade.h:42
+#: data/glade/prefs-dialog.glade.h:31
 msgid "Once per _session"
 msgstr "En gång per _session"
 
-#: data/glade/prefs-dialog.glade.h:43
+#: data/glade/prefs-dialog.glade.h:32
 msgid "Open in _tabs by default"
 msgstr "Öppna i _flikar som standard"
 
-#: data/glade/prefs-dialog.glade.h:44
+#: data/glade/prefs-dialog.glade.h:33
 msgid "Preferences"
 msgstr "Inställningar"
 
-# Detta används både som substantiv och adjektiv. Felrapporterat som
-# http://bugzilla.gnome.org/show_bug.cgi?id=97482.
-#: data/glade/prefs-dialog.glade.h:45 src/prefs-dialog.c:127
-msgid "Russian"
-msgstr "Ryska"
-
-#: data/glade/prefs-dialog.glade.h:46
+#: data/glade/prefs-dialog.glade.h:34
 msgid "S_ans serif:"
 msgstr "S_ans serif:"
 
-#: data/glade/prefs-dialog.glade.h:47
+#: data/glade/prefs-dialog.glade.h:35
 msgid "Sans Serif"
 msgstr "Sans serif"
 
-#: data/glade/prefs-dialog.glade.h:48
+#: data/glade/prefs-dialog.glade.h:36
 msgid "Security"
 msgstr "Säkerhet"
 
-#: data/glade/prefs-dialog.glade.h:49
+#: data/glade/prefs-dialog.glade.h:37
 msgid "Serif"
 msgstr "Serif"
 
-#: data/glade/prefs-dialog.glade.h:50
+#: data/glade/prefs-dialog.glade.h:38
 msgid "Set to Current _Page"
 msgstr "Sätt till aktuell _sida"
 
-#: data/glade/prefs-dialog.glade.h:51
+#: data/glade/prefs-dialog.glade.h:39
 msgid "Set to _Blank Page"
 msgstr "Sätt till _tom sida"
 
-#: data/glade/prefs-dialog.glade.h:52
+#: data/glade/prefs-dialog.glade.h:40
 msgid "Si_ze:"
 msgstr "Sto_rlek:"
 
-#: data/glade/prefs-dialog.glade.h:53
-msgid "Simplified Chinese"
-msgstr "Förenklad kinesisk"
-
-#: data/glade/prefs-dialog.glade.h:54
+#: data/glade/prefs-dialog.glade.h:41
 msgid "Siz_e:"
 msgstr "Storl_ek:"
 
-#: data/glade/prefs-dialog.glade.h:55
-msgid "Thai"
-msgstr "Thailändsk"
-
-#: data/glade/prefs-dialog.glade.h:56
-msgid "Traditional Chinese"
-msgstr "Traditionell kinesisk"
-
-#: data/glade/prefs-dialog.glade.h:57
-#: embed/mozilla/mozilla-embed-single.cpp:84 src/prefs-dialog.c:135
-msgid "Turkish"
-msgstr "Turkisk"
-
-# Felrapporterat
-#: data/glade/prefs-dialog.glade.h:58 src/prefs-dialog.c:136
-msgid "Ukrainian"
-msgstr "Ukrainsk"
-
-#: data/glade/prefs-dialog.glade.h:59
-#: embed/mozilla/mozilla-embed-single.cpp:85
-msgid "Unicode"
-msgstr "Unicode"
-
-#: data/glade/prefs-dialog.glade.h:60
-#: embed/mozilla/mozilla-embed-single.cpp:87
-msgid "Western"
-msgstr "Västlig"
-
-#: data/glade/prefs-dialog.glade.h:61
+#: data/glade/prefs-dialog.glade.h:42
 #: src/bookmarks/ephy-bookmark-properties.c:378
 msgid "_Address:"
 msgstr "_Adress:"
 
-#: data/glade/prefs-dialog.glade.h:62
+#: data/glade/prefs-dialog.glade.h:43
 msgid "_Always accept"
 msgstr "_Acceptera alltid"
 
-#: data/glade/prefs-dialog.glade.h:63
+#: data/glade/prefs-dialog.glade.h:44
 msgid "_Automatically"
 msgstr "_Automatiskt"
 
-#: data/glade/prefs-dialog.glade.h:64
+#: data/glade/prefs-dialog.glade.h:45
 msgid "_Default encoding:"
 msgstr "_Standardkodning:"
 
-#: data/glade/prefs-dialog.glade.h:65
+#: data/glade/prefs-dialog.glade.h:46
 msgid "_Language encoding:"
 msgstr "_Språkkodning:"
 
-#: data/glade/prefs-dialog.glade.h:66
+#: data/glade/prefs-dialog.glade.h:47
 msgid "_Monospace:"
 msgstr "_Fast breddsteg:"
 
-#: data/glade/prefs-dialog.glade.h:67
+#: data/glade/prefs-dialog.glade.h:48
 msgid "_More..."
 msgstr "_Mer..."
 
-#: data/glade/prefs-dialog.glade.h:68
+#: data/glade/prefs-dialog.glade.h:49
 msgid "_Never"
 msgstr "_Aldrig"
 
-#: data/glade/prefs-dialog.glade.h:69
+#: data/glade/prefs-dialog.glade.h:50
 msgid "_Never accept"
 msgstr "A_cceptera aldrig"
 
-#: data/glade/prefs-dialog.glade.h:70
+#: data/glade/prefs-dialog.glade.h:51
 msgid "_Proportional:"
 msgstr "_Proportionell:"
 
-#: data/glade/prefs-dialog.glade.h:71
+#: data/glade/prefs-dialog.glade.h:52
 msgid "_Serif:"
 msgstr "_Serif:"
 
-#: data/glade/prefs-dialog.glade.h:72
+#: data/glade/prefs-dialog.glade.h:53
 msgid "kB"
 msgstr "kB"
 
@@ -1181,7 +1118,7 @@ msgid "%d KB"
 msgstr "%d kB"
 
 #: embed/downloader-view.c:517 embed/downloader-view.c:535
-#: src/ephy-window.c:1020
+#: src/ephy-window.c:1018
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -1259,13 +1196,64 @@ msgstr "En fil valdes när en mapp förväntades."
 msgid "A folder was selected when a file was expected."
 msgstr "En mapp valdes när en fil förväntades."
 
+#: embed/mozilla/mozilla-embed-single.cpp:74 src/prefs-dialog.c:87
+msgid "Arabic"
+msgstr "Arabisk"
+
+#: embed/mozilla/mozilla-embed-single.cpp:75
+msgid "Baltic"
+msgstr "Baltisk"
+
+#: embed/mozilla/mozilla-embed-single.cpp:76
+msgid "Central European"
+msgstr "Centraleuropeisk"
+
+#: embed/mozilla/mozilla-embed-single.cpp:77 src/prefs-dialog.c:94
+#: src/prefs-dialog.c:151
+msgid "Chinese"
+msgstr "Kinesisk"
+
+#: embed/mozilla/mozilla-embed-single.cpp:78
+msgid "Cyrillic"
+msgstr "Kyrillisk"
+
+#: embed/mozilla/mozilla-embed-single.cpp:79 src/prefs-dialog.c:107
+msgid "Greek"
+msgstr "Grekisk"
+
+#: embed/mozilla/mozilla-embed-single.cpp:80 src/prefs-dialog.c:108
+msgid "Hebrew"
+msgstr "Hebreisk"
+
 #: embed/mozilla/mozilla-embed-single.cpp:81
 msgid "Indian"
 msgstr "Indisk"
 
+#: embed/mozilla/mozilla-embed-single.cpp:82 src/prefs-dialog.c:114
+#: src/prefs-dialog.c:153
+msgid "Japanese"
+msgstr "Japansk"
+
+#: embed/mozilla/mozilla-embed-single.cpp:83 src/prefs-dialog.c:115
+#: src/prefs-dialog.c:154
+msgid "Korean"
+msgstr "Koreansk"
+
+#: embed/mozilla/mozilla-embed-single.cpp:84 src/prefs-dialog.c:135
+msgid "Turkish"
+msgstr "Turkisk"
+
+#: embed/mozilla/mozilla-embed-single.cpp:85
+msgid "Unicode"
+msgstr "Unicode"
+
 #: embed/mozilla/mozilla-embed-single.cpp:86
 msgid "Vietnamese"
 msgstr "Vietnamesisk"
+
+#: embed/mozilla/mozilla-embed-single.cpp:87
+msgid "Western"
+msgstr "Västlig"
 
 #: embed/mozilla/mozilla-embed-single.cpp:88
 msgid "Other"
@@ -1615,7 +1603,7 @@ msgstr "Nej"
 msgid "End of current session"
 msgstr "slut på aktuell session"
 
-#: embed/mozilla/mozilla-notifiers.cpp:724
+#: embed/mozilla/mozilla-notifiers.cpp:715
 msgid "Default (recommended)"
 msgstr "Standard (rekommenderas)"
 
@@ -2645,27 +2633,27 @@ msgstr "Spara som"
 msgid "Bookmark"
 msgstr "Bokmärke"
 
-#: src/ephy-window.c:1023
+#: src/ephy-window.c:1021
 msgid "Insecure"
 msgstr "Osäker"
 
-#: src/ephy-window.c:1026
+#: src/ephy-window.c:1024
 msgid "Broken"
 msgstr "Trasig"
 
-#: src/ephy-window.c:1029
+#: src/ephy-window.c:1027
 msgid "Medium"
 msgstr "Mellan"
 
-#: src/ephy-window.c:1033
+#: src/ephy-window.c:1031
 msgid "Low"
 msgstr "Låg"
 
-#: src/ephy-window.c:1037
+#: src/ephy-window.c:1035
 msgid "High"
 msgstr "Hög"
 
-#: src/ephy-window.c:1047
+#: src/ephy-window.c:1045
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2674,7 +2662,7 @@ msgstr ""
 "Säkerhetsnivå: %s\n"
 "%s"
 
-#: src/ephy-window.c:1053
+#: src/ephy-window.c:1051
 #, c-format
 msgid "Security level: %s"
 msgstr "Säkerhetsnivå: %s"
@@ -2887,6 +2875,12 @@ msgstr "Brasiliansk portugisiska"
 msgid "Romanian"
 msgstr "Rumänska"
 
+# Detta används både som substantiv och adjektiv. Felrapporterat som
+# http://bugzilla.gnome.org/show_bug.cgi?id=97482.
+#: src/prefs-dialog.c:127 src/prefs-dialog.c:155
+msgid "Russian"
+msgstr "Ryska"
+
 #: src/prefs-dialog.c:128
 msgid "Scottish"
 msgstr "Skotska"
@@ -2915,6 +2909,11 @@ msgstr "Svenska"
 msgid "Tamil"
 msgstr "Tamil"
 
+# Felrapporterat
+#: src/prefs-dialog.c:136 src/prefs-dialog.c:158
+msgid "Ukrainian"
+msgstr "Ukrainsk"
+
 #: src/prefs-dialog.c:137
 msgid "Vietnamian"
 msgstr "Vietnamesiska"
@@ -2923,7 +2922,23 @@ msgstr "Vietnamesiska"
 msgid "Walloon"
 msgstr "Vallonska"
 
-#: src/prefs-dialog.c:707
+#: src/prefs-dialog.c:150
+msgid "Off"
+msgstr "Av"
+
+#: src/prefs-dialog.c:152
+msgid "East asian"
+msgstr "Östasiatisk"
+
+#: src/prefs-dialog.c:156
+msgid "Simplified Chinese"
+msgstr "Förenklad kinesisk"
+
+#: src/prefs-dialog.c:157
+msgid "Traditional Chinese"
+msgstr "Traditionell kinesisk"
+
+#: src/prefs-dialog.c:895
 #, c-format
 msgid "Custom [%s]"
 msgstr "Anpassat [%s]"
@@ -3001,6 +3016,9 @@ msgstr ""
 #: src/window-commands.c:783
 msgid "A GNOME browser based on Mozilla"
 msgstr "En GNOME-webbläsare, baserad på Mozilla"
+
+#~ msgid "Thai"
+#~ msgstr "Thailändsk"
 
 #~ msgid "_Default encoding"
 #~ msgstr "_Standardkodning"
