@@ -254,11 +254,9 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 	GtkUIManager *merge;
 	EphyTab *tab;
 	GtkAction *action;
-	GString *xml;
 	guint i = 0;
 	guint num = 0;
 	GList *tabs = NULL, *l;
-	GError *error = NULL;
 
 	g_return_if_fail (EPHY_IS_TABS_MENU (menu));
 	p = menu->priv;
@@ -276,43 +274,32 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 	if (num == 0) return;
 
 	p->action_group = gtk_action_group_new ("TabsActions");
-
-	/* it's faster to preallocate, MIN is sanity check */
-	xml = g_string_sized_new (44 * MIN (num, 64) + 105);
-
-	g_string_append (xml, "<ui><menubar><menu name=\"TabsMenu\">"
-			      "<placeholder name=\"TabsOpen\">");
+	p->ui_id = gtk_ui_manager_new_merge_id (merge);
 
 	for (l = tabs; l != NULL; l = l->next)
 	{
 		const char *action_name;
+		char *name;
+
 
 		tab = (EphyTab *) l->data;
 		action = GTK_ACTION (ephy_tab_get_action (tab));
 		action_name = gtk_action_get_name (action);
+		name = g_strdup_printf ("%sMenu", action_name);
 
 		tab_set_action_accelerator (p->action_group, action, i);
 
 		gtk_action_group_add_action (p->action_group, action);
 
-		g_string_append (xml, "<menuitem name=\"");
-		g_string_append (xml, action_name);
-		g_string_append (xml, "Menu\" action=\"");
-		g_string_append (xml, action_name);
-		g_string_append (xml, "\"/>\n");
-
-		++i;
+		gtk_ui_manager_add_ui (merge, p->ui_id,
+				       "/menubar/TabsMenu/TabsOpen",
+				       name, action_name);
+		g_free (name);
 	}
 
 	g_list_free (tabs);
 
-	g_string_append (xml, "</placeholder></menu></menubar></ui>");
-
 	gtk_ui_manager_insert_action_group (merge, p->action_group, 0);
-	p->ui_id = gtk_ui_manager_add_ui_from_string
-				(merge, xml->str, -1, &error);	
-
-	g_string_free (xml, TRUE);
 
 	STOP_PROFILER ("Rebuilding tabs menu")
 }

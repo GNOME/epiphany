@@ -28,6 +28,7 @@
 #include "ephy-debug.h"
 
 #include <gtk/gtkuimanager.h>
+#include <glib/gprintf.h>
 
 /**
  * Private data
@@ -115,7 +116,6 @@ static void
 ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 {
 	EphyFavoritesMenuPrivate *p = wrhm->priv;
-	GString *xml;
 	gint i;
 	EphyNode *fav;
 	GPtrArray *children;
@@ -130,21 +130,19 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 	fav = ephy_bookmarks_get_favorites (p->bookmarks);
 	children = ephy_node_get_children (fav);
 
-	xml = g_string_new (NULL);
-	g_string_append (xml, "<ui><menubar><menu name=\"GoMenu\">"
-			      "<placeholder name=\"GoFavorites\">"
-			      "<separator name=\"GoSep3\"/>");
-
 	p->action_group = gtk_action_group_new ("FavoritesActions");
 	gtk_ui_manager_insert_action_group (merge, p->action_group, 0);
+	p->ui_id = gtk_ui_manager_new_merge_id (merge);
 
 	for (i = 0; i < children->len; i++)
 	{
-		char *verb;
+		char verb[20];
+		char name[20];
 		EphyNode *node;
 		GtkAction *action;
 
-		verb = g_strdup_printf ("GoFav%d", i);
+		g_sprintf (verb, "GoFav%d", i);
+		g_sprintf (name, "GoFav%dMenu", i);
 
 		node = g_ptr_array_index (children, i);
 
@@ -155,28 +153,11 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 		g_signal_connect (action, "go_location",
 				  G_CALLBACK (go_location_cb), p->window);
 
-		g_string_append (xml, "<menuitem name=\"");
-		g_string_append (xml, verb);
-		g_string_append (xml, "Menu");
-		g_string_append (xml, "\" action=\"");
-		g_string_append (xml, verb);
-		g_string_append (xml, "\"/>\n");
-
-		g_free (verb);
+		gtk_ui_manager_add_ui (merge, p->ui_id,
+				       "/menubar/GoMenu/GoFavorites",
+				       name, verb);
 	}
 	ephy_node_thaw (fav);
-
-	g_string_append (xml, "</placeholder></menu></menubar></ui>");
-
-	if (children->len > 0)
-	{
-		GError *error = NULL;
-		LOG ("Merging ui\n%s",xml->str);
-		p->ui_id = gtk_ui_manager_add_ui_from_string
-			(merge, xml->str, -1, &error);
-	}
-
-	g_string_free (xml, TRUE);
 
 	STOP_PROFILER ("Rebuild favorites menu")
 }
