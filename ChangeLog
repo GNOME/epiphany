@@ -1,5 +1,11 @@
 2004-02-12  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/mozilla-embed.cpp: (mozilla_embed_security_change_cb):
+
+	Use static_cast<>, don't cast directly.
+
+2004-02-12  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-dialog.c: (set_sensitivity):
 
 	Don't set entries insensitive, only set the non-editable when the

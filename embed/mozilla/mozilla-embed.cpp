@@ -1028,7 +1028,7 @@ mozilla_embed_security_change_cb (GtkMozEmbed *embed,
 {
 	EmbedSecurityLevel level;
 
-	membed->priv->request = (nsIRequest *) request;
+	membed->priv->request = static_cast<nsIRequest*>(request);
 	membed->priv->security_state = state;
 	level = mozilla_embed_security_level (membed);
 
