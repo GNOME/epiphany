@@ -156,14 +156,7 @@ downloader_view_class_init (DownloaderViewClass *klass)
 static void
 status_icon_activated (EggStatusIcon *icon, DownloaderView *dv)
 {
-	if (GTK_WIDGET_VISIBLE (dv->priv->window))
-	{
-		gtk_widget_hide (dv->priv->window);
-	}
-	else
-	{
-		gtk_window_present (GTK_WINDOW (dv->priv->window));
-	}
+	gtk_window_present (GTK_WINDOW (dv->priv->window));
 }
 
 static void
@@ -447,7 +440,7 @@ downloader_view_build_ui (DownloaderView *dv)
 	priv->abort_button = ephy_dialog_get_control (d, properties[PROP_ABORT_BUTTON].id);
 
 	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview)),
-				     GTK_SELECTION_SINGLE);
+				     GTK_SELECTION_BROWSE);
 
 	liststore = gtk_list_store_new (4,
 					G_TYPE_INT,
