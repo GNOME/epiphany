@@ -19,7 +19,6 @@
  */
 
 #include "ephy-glade.h"
-#include "ephy-file-helpers.h"
 
 #include <glade/glade-xml.h>
 #include <gtk/gtkmenu.h>

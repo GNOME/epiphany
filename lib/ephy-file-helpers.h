@@ -22,7 +22,6 @@
 #define EPHY_FILE_HELPERS_H
 
 #include <glib.h>
-#include <libxml/tree.h>
 
 G_BEGIN_DECLS
 

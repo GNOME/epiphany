@@ -25,13 +25,13 @@
 #include <gtk/gtk.h>
 #include <glade/glade-xml.h>
 
+G_BEGIN_DECLS
+
 typedef struct
 {
         const gchar *name;
         GtkWidget **ptr;
 } WidgetLookup;
-
-G_BEGIN_DECLS
 
 GladeXML   *ephy_glade_widget_new	(const char *file,
 					 const char *widget_name,
