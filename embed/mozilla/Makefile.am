@@ -85,6 +85,7 @@ mozilla_include_subdirs = \
 	sidebar			\
 	uriloader		\
 	uconv			\
+	wallet			\
 	webbrowserpersist	\
 	webbrwsr		\
 	widget			\
