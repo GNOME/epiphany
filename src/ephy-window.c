@@ -63,9 +63,9 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "Help", N_("_Help"), NULL, NULL, NULL, NULL, NULL },
 
 	/* File menu */
-	{ "FileNewBrowser", N_("_New Browser"), GTK_STOCK_NEW, "<control>N",
-	  N_("Create a new browser"),
-	  G_CALLBACK (window_cmd_file_new_browser), NULL },
+	{ "FileNewWindow", N_("_New Window"), GTK_STOCK_NEW, "<control>N",
+	  N_("Create a new window"),
+	  G_CALLBACK (window_cmd_file_new_window), NULL },
 	{ "FileNewTab", N_("New _Tab"), EPHY_STOCK_NEW_TAB, "<control>T",
 	  N_("Create a new tab"),
 	  G_CALLBACK (window_cmd_file_new_tab), NULL },
@@ -84,9 +84,9 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "FileBookmarkPage", N_("Boo_kmark Page..."), NULL, "<control>D",
 	  N_("Add a bookmark for the current page"),
 	  G_CALLBACK (window_cmd_file_bookmark_page), NULL },
-	{ "FileCloseBrowser", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
-	  N_("Close this browser"),
-	  G_CALLBACK (window_cmd_file_close_browser), NULL },
+	{ "FileCloseWindow", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
+	  N_("Close this window"),
+	  G_CALLBACK (window_cmd_file_close_window), NULL },
 
 	/* Edit menu */
 	{ "EditCut", N_("Cu_t"), GTK_STOCK_CUT, "<control>X",
@@ -218,16 +218,16 @@ static EggActionGroupEntry ephy_popups_entries [] = {
 	/* Framed document */
 	{ "OpenFrame", N_("_Open Frame"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_open_frame), NULL },
-	{ "OpenFrameInNewBrowser", N_("Open Frame in _New Browser"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_frame_in_new_browser), NULL },
+	{ "OpenFrameInNewWindow", N_("Open Frame in _New Window"), NULL, NULL,
+	  NULL, G_CALLBACK (popup_cmd_frame_in_new_window), NULL },
 	{ "OpenFrameInNewTab", N_("Open Frame in New _Tab"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_frame_in_new_tab), NULL },
 
 	/* Links */
 	{ "OpenLink", N_("_Open Link"), GTK_STOCK_OPEN, NULL,
 	  NULL, G_CALLBACK (popup_cmd_open_link), NULL },
-	{ "OpenLinkInNewBrowser", N_("Open Link in _New Browser"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_link_in_new_browser), NULL },
+	{ "OpenLinkInNewWindow", N_("Open Link in _New Window"), NULL, NULL,
+	  NULL, G_CALLBACK (popup_cmd_link_in_new_window), NULL },
 	{ "OpenLinkInNewTab", N_("Open Link in New _Tab"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_link_in_new_tab), NULL },
 	{ "DownloadLink", N_("_Download Link"), GTK_STOCK_SAVE, NULL,
@@ -242,8 +242,8 @@ static EggActionGroupEntry ephy_popups_entries [] = {
 	/* Images */
 	{ "OpenImage", N_("_Open Image"), GTK_STOCK_OPEN, NULL,
 	  NULL, G_CALLBACK (popup_cmd_open_image), NULL },
-	{ "OpenImageInNewBrowser", N_("Open Image in _New Browser"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_image_in_new_browser), NULL },
+	{ "OpenImageInNewWindow", N_("Open Image in _New Window"), NULL, NULL,
+	  NULL, G_CALLBACK (popup_cmd_image_in_new_window), NULL },
 	{ "OpenImageInNewTab", N_("Open Image in New _Tab"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_image_in_new_tab), NULL },
 	{ "SaveImageAs", N_("_Save Image As..."), GTK_STOCK_SAVE_AS, NULL,

@@ -43,7 +43,7 @@ get_event_info (EphyWindow *window)
 }
 
 void
-popup_cmd_link_in_new_browser (EggAction *action,
+popup_cmd_link_in_new_window (EggAction *action,
 		              EphyWindow *window)
 {
 	EphyEmbedEvent *info;
@@ -100,7 +100,7 @@ popup_cmd_image_in_new_tab (EggAction *action,
 }
 
 void
-popup_cmd_image_in_new_browser (EggAction *action,
+popup_cmd_image_in_new_window (EggAction *action,
 			       EphyWindow *window)
 {
 	EphyEmbedEvent *info;
@@ -188,7 +188,7 @@ popup_cmd_frame_in_new_tab (EggAction *action,
 }
 
 void
-popup_cmd_frame_in_new_browser (EggAction *action,
+popup_cmd_frame_in_new_window (EggAction *action,
 			       EphyWindow *window)
 {
 	EphyTab *tab;

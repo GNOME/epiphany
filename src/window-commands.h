@@ -56,7 +56,7 @@ void window_cmd_view_reload	(EggAction *action,
 void window_cmd_new		(EggAction *action,
 				 EphyWindow *window);
 
-void window_cmd_file_new_browser	(EggAction *action,
+void window_cmd_file_new_window	(EggAction *action,
 				 EphyWindow *window);
 
 void window_cmd_file_new_tab	(EggAction *action,
@@ -77,7 +77,7 @@ void window_cmd_file_save_as    (EggAction *action,
 void window_cmd_file_send_to	(EggAction *action,
 				 EphyWindow *window);
 
-void window_cmd_file_close_browser (EggAction *action,
+void window_cmd_file_close_window (EggAction *action,
 				    EphyWindow *window);
 
 void window_cmd_edit_cut	(EggAction *action,

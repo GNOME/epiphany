@@ -222,7 +222,7 @@ window_cmd_view_reload (EggAction *action,
 }
 
 void
-window_cmd_file_new_browser (EggAction *action,
+window_cmd_file_new_window (EggAction *action,
 		            EphyWindow *window)
 {
 	EphyTab *tab;
@@ -374,7 +374,7 @@ window_cmd_file_save_as (EggAction *action,
 }
 
 void
-window_cmd_file_close_browser (EggAction *action,
+window_cmd_file_close_window (EggAction *action,
 		               EphyWindow *window)
 {
 	EphyTab *tab;
