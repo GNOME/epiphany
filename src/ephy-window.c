@@ -1192,7 +1192,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	}
 }
 
-static gint
+static gboolean
 tab_context_menu_cb (EphyEmbed *embed,
 		     EphyEmbedEvent *event,
 		     EphyWindow *window)
@@ -1201,7 +1201,7 @@ tab_context_menu_cb (EphyEmbed *embed,
 
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), FALSE);
 	g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
-	g_assert (EPHY_IS_EMBED_EVENT(event));
+	g_return_val_if_fail (EPHY_IS_EMBED_EVENT(event), FALSE);
 
 	tab = EPHY_TAB (g_object_get_data (G_OBJECT (embed), "EphyTab"));
 	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);

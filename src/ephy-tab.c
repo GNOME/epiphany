@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,6 +35,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-zoom.h"
 #include "ephy-favicon-cache.h"
+#include "ephy-embed-persist.h"
 
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -970,25 +972,71 @@ open_link_in_new_tab (EphyTab *tab,
 	}
 }
 
-static gint
-ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
-			      EphyEmbedEvent *event,
-			      EphyTab *tab)
+static void
+save_property_url (EphyEmbed *embed,
+		   EphyEmbedEvent *event,
+		   const char *property,
+		   const char *key)
+{
+	const char *location;
+	const GValue *value;
+	EphyEmbedPersist *persist;
+
+	ephy_embed_event_get_property (event, property, &value);
+	location = g_value_get_string (value);
+
+	persist = EPHY_EMBED_PERSIST
+		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
+
+	ephy_embed_persist_set_embed (persist, embed);
+	ephy_embed_persist_set_flags (persist, 0);
+	ephy_embed_persist_set_persist_key (persist, key);
+	ephy_embed_persist_set_source (persist, location);
+
+	ephy_embed_persist_save (persist);
+
+	g_object_unref (G_OBJECT(persist));
+}
+
+static gboolean
+ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
+			     EphyEmbedEvent *event,
+			     EphyTab *tab)
 {
 	EphyEmbedEventType type;
 	EmbedEventContext context;
 	EphyWindow *window;
+	guint modifier;
+	gboolean handled = TRUE;
+	gboolean with_control, with_shift, is_left_click, is_middle_click;
+	gboolean is_link, is_image, is_middle_clickable;
+	gboolean middle_click_opens;
+
+	g_return_val_if_fail (EPHY_IS_EMBED_EVENT(event), FALSE);
 
 	window = ephy_tab_get_window (tab);
 	g_return_val_if_fail (window != NULL, FALSE);
 
-	g_assert (EPHY_IS_EMBED_EVENT(event));
-
 	type = ephy_embed_event_get_event_type (event);
 	context = ephy_embed_event_get_context (event);
+	modifier = ephy_embed_event_get_modifier (event);
 
-	if (type == EPHY_EMBED_EVENT_MOUSE_BUTTON2
-	    && (context & EMBED_CONTEXT_LINK))
+	with_control = (modifier & GDK_CONTROL_MASK) != 0;
+	with_shift = (modifier & GDK_SHIFT_MASK) != 0;
+	is_left_click = (type == EPHY_EMBED_EVENT_MOUSE_BUTTON1);
+	is_middle_click = (type == EPHY_EMBED_EVENT_MOUSE_BUTTON2);
+
+	middle_click_opens = eel_gconf_get_boolean
+				(CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL);
+
+	is_link = (context & EMBED_CONTEXT_LINK) != 0;
+	is_image = (context & EMBED_CONTEXT_IMAGE) != 0;
+	is_middle_clickable = !((context & EMBED_CONTEXT_LINK)
+				|| (context & EMBED_CONTEXT_INPUT)
+				|| (context & EMBED_CONTEXT_EMAIL_LINK));
+
+	/* ctrl+click or middle click opens the link in new tab */
+	if (is_link && ((is_left_click && with_control) || is_middle_click))
 	{
 		const GValue *value;
 		const char *link_address;
@@ -997,20 +1045,31 @@ ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
 		link_address = g_value_get_string (value);
 		open_link_in_new_tab (tab, link_address);
 	}
-	else if (type == EPHY_EMBED_EVENT_MOUSE_BUTTON2 &&
-		 eel_gconf_get_boolean (CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL) &&
-		 !(context & EMBED_CONTEXT_LINK
-		   || context & EMBED_CONTEXT_EMAIL_LINK
-		   || context & EMBED_CONTEXT_INPUT))
+	/* shift+click saves the link target */
+	else if (is_link && is_left_click && with_shift)
 	{
-		/* paste url */
+		save_property_url (embed, event, "link", CONF_STATE_DOWNLOAD_DIR);
+	}
+	/* shift+click saves the non-link image */
+	else if (is_image && is_left_click && with_shift)
+	{
+		save_property_url (embed, event, "image", CONF_STATE_SAVE_IMAGE_DIR);
+	}
+	/* middle click opens the selection url */
+	else if (is_middle_clickable && is_middle_click && middle_click_opens)
+	{
 		gtk_selection_convert (GTK_WIDGET (window),
 				       GDK_SELECTION_PRIMARY,
 				       GDK_SELECTION_TYPE_STRING,
 				       GDK_CURRENT_TIME);
 	}
+	/* we didn't handle the event */
+	else
+	{
+		handled = FALSE;
+	}
 
-	return FALSE;
+	return handled;
 }
 
 static void

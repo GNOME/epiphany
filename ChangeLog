@@ -1,3 +1,15 @@
+2003-12-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-tab.c: (save_property_url),
+	(ephy_tab_dom_mouse_click_cb):
+
+	Make ctrl-click equivalent of middle click on links. Make shift-click
+	save the link. Fixes bug #110786.
+
+	* src/ephy-window.c: (tab_context_menu_cb):
+
+	Fix context_menu function return value type.
+
 2003-12-07  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* Makefile.am:
