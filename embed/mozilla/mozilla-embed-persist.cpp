@@ -266,6 +266,9 @@ impl_save (EphyEmbedPersist *persist)
 		if (NS_FAILED (rv)) return FALSE;
 	}
 
+	g_free (uri);
+	g_free (filename);
+
 	return TRUE;
 }
 
