@@ -71,7 +71,7 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 	}
 	else
 	{
-		rv = NS_ERROR_FAILURE;
+		rv = NS_ERROR_ABORT;
 	}
 
 	g_object_unref (dialog);
