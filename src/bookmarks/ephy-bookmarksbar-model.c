@@ -278,7 +278,7 @@ update_flags_and_save_changes (EphyBookmarksBarModel *model)
 		t_name = egg_toolbars_model_toolbar_nth (eggmodel, i);
 		g_return_if_fail (t_name != NULL);
 
-		egg_toolbars_model_set_flags (eggmodel, flag, i);
+		egg_toolbars_model_set_flags (eggmodel, i, flag);
 	}
 
 	save_changes (model);

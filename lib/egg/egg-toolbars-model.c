@@ -279,8 +279,8 @@ egg_toolbars_model_get_flags (EggToolbarsModel *t,
 
 void
 egg_toolbars_model_set_flags (EggToolbarsModel *t,
-			      EggTbModelFlags   flags,
-			      int               toolbar_position)
+			      int               toolbar_position,
+			      EggTbModelFlags   flags)
 {
   GNode *toolbar_node;
   EggToolbarsToolbar *toolbar;

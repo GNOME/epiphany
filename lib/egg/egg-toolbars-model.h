@@ -104,8 +104,8 @@ int               egg_toolbars_model_add_toolbar    (EggToolbarsModel *t,
 EggTbModelFlags   egg_toolbars_model_get_flags      (EggToolbarsModel *t,
 						     int               toolbar_position);
 void              egg_toolbars_model_set_flags      (EggToolbarsModel *t,
-						     EggTbModelFlags   flags,
-						     int               toolbar_position);
+						     int	       toolbar_position,
+						     EggTbModelFlags   flags);
 void              egg_toolbars_model_add_separator  (EggToolbarsModel *t,
 						     int               toolbar_position,
 						     int               position);
