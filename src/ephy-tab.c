@@ -942,10 +942,15 @@ ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 static void
 ephy_tab_destroy_brsr_cb (EphyEmbed *embed, EphyTab *tab)
 {
+	GtkWidget *notebook;
+
 	g_return_if_fail (EPHY_IS_TAB (tab));
 	g_return_if_fail (tab->priv->window != NULL);
 
-	ephy_window_remove_tab (tab->priv->window, tab);
+	/* Do not use ephy_window_remove_tab because it will
+	   check for unsubmitted forms */
+	notebook = ephy_window_get_notebook (tab->priv->window);
+	ephy_notebook_remove_tab (EPHY_NOTEBOOK (notebook), tab);
 }
 
 static void
