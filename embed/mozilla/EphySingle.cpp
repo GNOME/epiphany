@@ -79,7 +79,6 @@ EphySingle::~EphySingle()
 {
 	LOG ("EphySingle destructor")
 
-	Detach();
 	mOwner = nsnull;
 }
 

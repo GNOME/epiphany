@@ -422,11 +422,16 @@ mozilla_init_chrome (void)
 static void
 mozilla_init_observer (MozillaEmbedSingle *single)
 {
-	single->priv->mSingleObserver = new EphySingle ();
+	EphySingle *es;
 
-	if (single->priv->mSingleObserver)
+	es = new EphySingle ();
+	NS_ADDREF (single->priv->mSingleObserver = es);
+
+	nsresult rv;
+	rv = es->Init (EPHY_EMBED_SINGLE (single));
+	if (NS_FAILED (rv))
 	{
-		single->priv->mSingleObserver->Init (EPHY_EMBED_SINGLE (single));
+		g_warning ("Failed to initialised EphySingle!\n");
 	}
 }
 
@@ -497,6 +502,19 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 
 		exit (0);
 	}
+}
+
+static void
+mozilla_embed_single_dispose (GObject *object)
+{
+	MozillaEmbedSingle *single = MOZILLA_EMBED_SINGLE (object);
+
+	if (single->priv->mSingleObserver)
+	{
+		single->priv->mSingleObserver->Detach ();
+		NS_RELEASE (single->priv->mSingleObserver);
+		single->priv->mSingleObserver = nsnull;
+	}		
 }
 
 static void
@@ -885,6 +903,7 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
+	object_class->dispose = mozilla_embed_single_dispose;
 	object_class->finalize = mozilla_embed_single_finalize;
 
 	g_type_class_add_private (object_class, sizeof (MozillaEmbedSinglePrivate));
