@@ -232,7 +232,7 @@ mozilla_cache_size_notifier (GConfClient *client,
 {
 	int cache_size;
 
-	cache_size = gconf_value_get_int(entry->value) * 1024;
+	cache_size = eel_gconf_get_integer (entry->key) * 1024;
 
 	mozilla_prefs_set_int ("browser.cache.disk.capacity", cache_size);
 }
@@ -247,7 +247,7 @@ mozilla_font_size_notifier (GConfClient *client,
 	
 	sprintf (key, "font.%s", pref);
 
-	mozilla_prefs_set_int (key, gconf_value_get_int(entry->value));
+	mozilla_prefs_set_int (key, eel_gconf_get_integer (entry->key));
 }
 
 static void
@@ -256,10 +256,11 @@ mozilla_proxy_mode_notifier (GConfClient *client,
 		             GConfEntry *entry,
 		             EphyEmbedSingle *single)
 {
-	const char *mode;
+	char *mode;
 	int mozilla_mode = 0;
 	
-	mode = gconf_value_get_string(entry->value);
+	mode = eel_gconf_get_string (entry->key);
+	if (mode == NULL) return;
 	
 	if (strcmp (mode, "manual") == 0)
 	{
@@ -271,6 +272,8 @@ mozilla_proxy_mode_notifier (GConfClient *client,
 	}
 
 	mozilla_prefs_set_int ("network.proxy.type", mozilla_mode);
+
+	g_free (mode);
 }
 
 static void
@@ -279,10 +282,11 @@ mozilla_cookies_accept_notifier (GConfClient *client,
 		                 GConfEntry *entry,
 		                 char *pref)
 {
-	const char *mode;
+	char *mode;
 	int mozilla_mode = 0;
 	
-	mode = gconf_value_get_string(entry->value);
+	mode = eel_gconf_get_string (entry->key);
+	if (mode == NULL) return;
 	
 	if (strcmp (mode, "anywhere") == 0)
 	{
@@ -298,6 +302,8 @@ mozilla_cookies_accept_notifier (GConfClient *client,
 	}
 
 	mozilla_prefs_set_int ("network.cookie.cookieBehavior", mozilla_mode);
+
+	g_free (mode);
 }
 
 static void
@@ -307,10 +313,16 @@ mozilla_font_notifier (GConfClient *client,
 		       char *pref)
 {
 	char key[255];
+	char *name;
 	
 	sprintf (key, "font.name.%s", pref);
 
-	mozilla_prefs_set_string (key, gconf_value_get_string(entry->value));
+	name = eel_gconf_get_string (entry->key);
+	if (name)
+	{
+		mozilla_prefs_set_string (key, name);
+		g_free (name);
+	}
 }
 
 static void
@@ -319,8 +331,16 @@ mozilla_proxy_autoconfig_notifier (GConfClient *client,
 		       		   GConfEntry *entry,
 		       		   EphyEmbedSingle *single)
 {
-	ephy_embed_single_load_proxy_autoconf 
-		(single, gconf_value_get_string(entry->value));
+	char *url;
+
+	url = eel_gconf_get_string (entry->key);
+
+	if (url)
+	{
+		ephy_embed_single_load_proxy_autoconf (single, url);
+	}
+
+	g_free (url);
 }
 
 static void
@@ -353,10 +373,8 @@ add_notification_and_notify (GConfClient		*client,
 	}
 	g_return_if_fail (entry != NULL);
 
-	if (entry->value != NULL)
-	{
-		func (client, cnxn_id, entry, user_data);
-	}
+	func (client, cnxn_id, entry, user_data);
+
 	gconf_entry_free (entry);
 }
 
@@ -474,24 +492,14 @@ generic_mozilla_string_notifier(GConfClient *client,
 				GConfEntry *entry,
 				const char *pref_name)
 {
-	const gchar *value;
+	char *value;
 
-	/* determine type of gconf key, in order of likelyhood */
-	switch (entry->value->type)
+	value = eel_gconf_get_string (entry->key);
+	if (value)
 	{
-		case GCONF_VALUE_STRING:
-			value = gconf_value_get_string(entry->value);
-			if (value)
-			{
-				mozilla_prefs_set_string
-					(pref_name,
-					 gconf_value_get_string(entry->value));
-			}
-			break;
-
-		default:	
-			g_warning("Unsupported variable type");
-	} 
+		mozilla_prefs_set_string (pref_name, value);
+		g_free (value);
+	}
 }
 
 
@@ -505,20 +513,10 @@ generic_mozilla_int_notifier(GConfClient *client,
 			     GConfEntry *entry,
 			     const char *pref_name)
 {
-	/* determine type of gconf key, in order of likelyhood */
-	switch (entry->value->type)
-	{
-		case GCONF_VALUE_INT:	mozilla_prefs_set_int(pref_name,
-						gconf_value_get_int(entry->value));
-					break;
-		case GCONF_VALUE_BOOL:	mozilla_prefs_set_boolean(pref_name,
-						gconf_value_get_bool(entry->value));
-					break;
-		case GCONF_VALUE_STRING:	mozilla_prefs_set_string(pref_name,
-						gconf_value_get_string(entry->value));
-					break;
-		default:	g_warning("Unsupported variable type");
-	}
+	int value;
+
+	value = eel_gconf_get_integer (entry->key);
+	mozilla_prefs_set_int (pref_name, value);
 }
 
 
@@ -532,17 +530,10 @@ generic_mozilla_bool_notifier(GConfClient *client,
 			      GConfEntry *entry,
 			      const char *pref_name)
 {
-	/* determine type of gconf key, in order of likelyhood */
-	switch (entry->value->type)
-	{
-		case GCONF_VALUE_BOOL:	mozilla_prefs_set_boolean(pref_name,
-						gconf_value_get_bool(entry->value));
-					break;
-		case GCONF_VALUE_INT:	mozilla_prefs_set_int(pref_name,
-						gconf_value_get_int(entry->value));
-					break;
-		default:	g_warning("Unsupported variable type");
-	}
+	gboolean value;
+
+	value = eel_gconf_get_boolean (entry->key);
+	mozilla_prefs_set_boolean (pref_name, value);
 }
 
 static void
@@ -551,8 +542,10 @@ mozilla_own_colors_notifier(GConfClient *client,
 			    GConfEntry *entry,
 			    EphyEmbedSingle *single)
 {
-	mozilla_prefs_set_boolean("browser.display.use_document_colors",
-				       !gconf_value_get_bool(entry->value));
+	gboolean value;
+
+	value = eel_gconf_get_boolean (entry->key);
+	mozilla_prefs_set_boolean ("browser.display.use_document_colors", !value);
 }
 
 static void
@@ -563,7 +556,7 @@ mozilla_own_fonts_notifier(GConfClient *client,
 {
 	int value;
 
-	value = gconf_value_get_bool(entry->value) ? 0 : 1;
+	value = eel_gconf_get_boolean (entry->key) ? 0 : 1;
 	mozilla_prefs_set_int("browser.display.use_document_fonts", value);
 }
 
@@ -573,9 +566,10 @@ mozilla_allow_popups_notifier(GConfClient *client,
 			      GConfEntry *entry,
 			      EphyEmbedSingle *single)
 {
-	gboolean new_val = eel_gconf_get_boolean(CONF_SECURITY_ALLOW_POPUPS);
-	mozilla_prefs_set_boolean ("dom.disable_open_during_load", 
-					!new_val);
+	gboolean value;
+
+	value = eel_gconf_get_boolean (entry->key);
+	mozilla_prefs_set_boolean ("dom.disable_open_during_load", !value);
 }
 
 static char *
@@ -629,7 +623,7 @@ mozilla_language_notifier(GConfClient *client,
 	GString *result;
 
 	languages = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
-	g_return_if_fail (languages != NULL);
+	if (languages == NULL) return;
 
 	result = g_string_new ("");
 

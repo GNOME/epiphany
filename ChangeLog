@@ -1,3 +1,11 @@
+2003-08-07  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/mozilla/mozilla-notifiers.cpp:
+
+	Use ever eel_gconf to get values, otherwise we
+	ignore he schemas value.
+	Make all notifiers NULL safe.
+
 2003-08-06  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-nodebook.c: (notebook_drag_data_received_cb):
