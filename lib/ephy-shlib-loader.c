@@ -142,14 +142,6 @@ find_object (const LoaderData *data,
 	return data->object != object;
 }
 
-static gboolean
-idle_unref (GObject *object)
-{
-	g_object_unref (object);
-
-	return FALSE;
-}
-
 static GObject *
 impl_get_object (EphyLoader *eloader,
 		 GData **attributes)
@@ -224,12 +216,7 @@ impl_release_object (EphyLoader *eloader,
 	g_return_if_fail (l != NULL);
 	data = l->data;
 
-	/* FIXME: should we consider those extensions broken?
-	 * Only unref the extension in the idle loop; if the extension has its
-	 * own functions queued in the idle loop, the functions must exist in
-	 * memory before being called.
-	 */
-	g_idle_add ((GSourceFunc) idle_unref, data->object);
+	g_object_unref (data->object);
 	data->object = NULL;
 }
 

@@ -755,6 +755,14 @@ detach_window (EphyWindow *window,
 	ephy_extension_detach_window (extension, window);
 }
 
+static gboolean
+idle_unref (GObject *object)
+{
+	g_object_unref (object);
+
+	return FALSE;
+}
+
 static void
 unload_extension (EphyExtensionsManager *manager,
 		  ExtensionInfo *info)
@@ -776,8 +784,15 @@ unload_extension (EphyExtensionsManager *manager,
 			g_list_remove (manager->priv->extensions, info->extension);
 	}
 
+	/* we own two refs to the extension, the one we added when
+	 * we added it to the priv->extensions list, and the one returned
+	 * from get_object. Release object, and queue a unref, since if the
+	 * extension has its own functions queued in the idle loop, the
+	 * functions must exist in memory before being called.
+	 */
+	g_idle_add ((GSourceFunc) idle_unref, info->extension);
+
 	ephy_loader_release_object (info->loader, G_OBJECT (info->extension));
-	g_object_unref (info->extension);
 
 	info->info.active = FALSE;
 	info->extension = NULL;

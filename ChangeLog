@@ -1,3 +1,11 @@
+2004-10-30  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-shlib-loader.c: (impl_release_object):
+	* src/ephy-extensions-manager.c: (idle_unref), (unload_extension):
+
+	Move idle unreffing to extensions manager. Makes sure that extensions
+	are finalised.
+
 2004-10-29  Adam Hooper  <adamh@cvs.gnome.org>
 
 	* src/ephy-extensions-manager.c:
