@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 
@@ -264,6 +266,8 @@ ephy_nautilus_view_finalize (GObject *object)
 
 	if (p->find_dialog)
 	{
+		g_object_remove_weak_pointer (G_OBJECT (p->find_dialog),
+					      (gpointer *) &p->find_dialog);
 		g_object_unref (p->find_dialog);
 	}
 
@@ -533,7 +537,6 @@ gnv_cmd_file_print (BonoboUIComponent *uic,
 
 	ephy_dialog_set_modal (dialog, TRUE);
 	ephy_dialog_show (dialog);
-
 }
 
 static void
@@ -543,9 +546,11 @@ gnv_cmd_edit_find (BonoboUIComponent *uic,
 {
 	EphyNautilusViewPrivate *p = view->priv;
 
-	if (!p->find_dialog)
+	if (p->find_dialog == NULL)
 	{
 		p->find_dialog = find_dialog_new (p->embed);
+		g_object_add_weak_pointer (G_OBJECT (p->find_dialog),
+					   (gpointer *) &p->find_dialog);
 	}
 
 	ephy_dialog_show (p->find_dialog);
