@@ -515,10 +515,11 @@ GetFilePath (const char *filename)
 	}
 	else
 	{
-		path = g_build_filename
-			(gnome_vfs_expand_initial_tilde (download_dir),
-			 filename,
-			 NULL);
+		char *expanded;
+
+		expanded = gnome_vfs_expand_initial_tilde (download_dir);
+		path = g_build_filename (expanded, filename, NULL);
+		g_free (expanded);
 	}
 	g_free (download_dir);
 

@@ -164,6 +164,7 @@ ephy_print_get_print_info (void)
 
 		expanded = gnome_vfs_expand_initial_tilde (filename);
 		info->file = g_filename_to_utf8 (expanded, -1, NULL, NULL, NULL);
+		g_free (expanded);
 	}
 	else
 	{
