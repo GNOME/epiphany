@@ -586,14 +586,17 @@ show_context_menu (EphyBookmarkAction *action, GtkWidget *proxy,
 			gtk_get_current_event_time ());
 }
 
-static void
+static gboolean
 popup_menu_cb (GtkWidget *widget, EphyBookmarkAction *action)
 {
 	if (gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))
         {
                 show_context_menu (action, widget,
 				   ephy_gui_menu_position_under_widget);
+		return TRUE;
         }
+
+	return FALSE;
 }
 
 static gboolean
@@ -783,7 +786,7 @@ ephy_bookmark_action_finalize (GObject *object)
 	g_free (eba->priv->location);
 	g_free (eba->priv->icon);
 
-	LOG ("Bookmark action finalized")
+	LOG ("Bookmark action %p finalized", object)
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
