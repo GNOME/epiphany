@@ -27,6 +27,8 @@
 #include <gtk/gtktoolitem.h>
 
 #include "ephy-bookmark-action.h"
+#include "ephy-dnd.h"
+#include "ephy-bookmarksbar.h"
 #include "ephy-bookmarks.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
@@ -42,13 +44,23 @@ static void ephy_bookmark_action_class_init (EphyBookmarkActionClass *class);
 
 #define EPHY_BOOKMARK_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkActionPrivate))
 
+static GtkTargetEntry drag_targets[] =
+{
+	{ EPHY_DND_URL_TYPE, 0,	0 }
+};
+static int n_drag_targets = G_N_ELEMENTS (drag_targets);
+
 struct EphyBookmarkActionPrivate
 {
 	int bookmark_id;
 	char *location;
 	gboolean smart_url;
 	char *icon;
-	guint cache_connection;
+	guint cache_handler;
+
+	guint motion_handler;
+	gint drag_x;
+	gint drag_y;
 };
 
 enum
@@ -112,6 +124,7 @@ create_tool_item (GtkAction *action)
 	gtk_container_add (GTK_CONTAINER (item), hbox);
 
 	button = gtk_button_new ();
+	gtk_widget_add_events (GTK_WIDGET (button), GDK_BUTTON1_MOTION_MASK);
 	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (hbox), button);
@@ -122,7 +135,7 @@ create_tool_item (GtkAction *action)
 	gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
 	g_object_set_data (G_OBJECT (item), "entry", entry);
 
-	hbox = gtk_hbox_new (FALSE, 0);
+	hbox = gtk_hbox_new (FALSE, 3);
 	gtk_widget_show (hbox);
 	gtk_container_add (GTK_CONTAINER (button), hbox);
 
@@ -168,8 +181,8 @@ favicon_cache_changed_cb (EphyFaviconCache *cache,
 {
 	if (action->priv->icon && strcmp (icon, action->priv->icon) == 0)
 	{
-		g_signal_handler_disconnect (cache, action->priv->cache_connection);
-		action->priv->cache_connection = 0;
+		g_signal_handler_disconnect (cache, action->priv->cache_handler);
+		action->priv->cache_handler = 0;
 
 		g_object_notify (G_OBJECT (action), "icon");
 	}
@@ -192,9 +205,9 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 	{
 		pixbuf = ephy_favicon_cache_get (cache, icon_location);
 
-		if (pixbuf == NULL && bma->priv->cache_connection == 0)
+		if (pixbuf == NULL && bma->priv->cache_handler == 0)
 		{
-			bma->priv->cache_connection =
+			bma->priv->cache_handler =
 				g_signal_connect_object
 					(cache, "changed",
 					 G_CALLBACK (favicon_cache_changed_cb),
@@ -202,7 +215,11 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 		}
 	}
 
-	if (pixbuf == NULL) return;
+	if (pixbuf == NULL)
+	{
+		pixbuf = gtk_widget_render_icon (proxy, GTK_STOCK_JUMP_TO,
+					         GTK_ICON_SIZE_MENU, NULL);
+	}
 
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
@@ -325,14 +342,85 @@ activate_cb (GtkWidget *widget, GtkAction *action)
 	g_free (text);
 }
 
+static void
+stop_drag_check (EphyBookmarkAction *action, GtkWidget *widget)
+{
+	if (action->priv->motion_handler)
+	{
+		g_signal_handler_disconnect (widget, action->priv->motion_handler);
+		action->priv->motion_handler = 0;
+	}
+}
+
+static void
+drag_data_get_cb (GtkWidget *widget, GdkDragContext *context,
+		  GtkSelectionData *selection_data, guint info,
+		  guint32 time, EphyBookmarkAction *action)
+{
+	char *address = action->priv->location;
+
+	g_return_if_fail (address != NULL);
+
+	gtk_selection_data_set (selection_data, selection_data->target, 8,
+				address, strlen (address));
+}
+
+static void
+drag_data_delete_cb (GtkWidget *widget, GdkDragContext *context,
+		     EphyBookmarkAction *action)
+{
+	EphyBookmarks *bookmarks;
+	EggToolbarsModel *model;
+	GtkWidget *item, *toolbar;
+	int pos;
+
+	item = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM);
+	g_return_if_fail (item != NULL);
+
+	toolbar = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOLBAR);
+	g_return_if_fail (toolbar != NULL);
+
+	pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolbar),
+				          GTK_TOOL_ITEM (item));
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	model = ephy_bookmarks_get_toolbars_model (bookmarks);
+	egg_toolbars_model_remove_item (model, 0, pos);
+}
+
+static gboolean
+drag_motion_cb (GtkWidget *widget, GdkEventMotion *event, EphyBookmarkAction *action)
+{
+	if (gtk_drag_check_threshold (widget, action->priv->drag_x,
+				      action->priv->drag_y, event->x, event->y))
+	{
+		GtkTargetList *target_list;
+
+		target_list = gtk_target_list_new (drag_targets, n_drag_targets);
+
+		stop_drag_check (action, widget);
+		gtk_drag_begin (widget, target_list, GDK_ACTION_MOVE, 1, (GdkEvent*)event);
+	}
+
+	return TRUE;
+}
+
 static gboolean
 button_press_cb (GtkWidget *widget,
 		 GdkEventButton *event,
-		 gpointer dummy)
+		 EphyBookmarkAction *action)
 {
-	if (event->type == GDK_BUTTON_PRESS && event->button == 2)	
+	if (event->button == 2)	
 	{
 		gtk_button_pressed (GTK_BUTTON (widget));
+	}
+	else if (event->button == 1 &&
+		 gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))
+	{
+		action->priv->drag_x = event->x;
+		action->priv->drag_y = event->y;
+		action->priv->motion_handler = g_signal_connect
+			(widget, "motion_notify_event", G_CALLBACK (drag_motion_cb), action);
 	}
 
 	return FALSE;
@@ -341,13 +429,15 @@ button_press_cb (GtkWidget *widget,
 static gboolean
 button_release_cb (GtkWidget *widget,
                    GdkEventButton *event,
-		   gpointer dummy)
+		   EphyBookmarkAction *action)
 {
-	if (event->type == GDK_BUTTON_RELEASE && event->button == 2)	
+	if (event->button == 2)	
 	{
 		gtk_button_released (GTK_BUTTON (widget));
-
-		return TRUE;
+	}
+	else if (event->button == 1)
+	{
+		stop_drag_check (action, widget);
 	}
 
 	return FALSE;
@@ -379,9 +469,13 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
 		g_signal_connect (button, "clicked", G_CALLBACK (activate_cb), action);
 		g_signal_connect (button, "button-press-event",
-				  G_CALLBACK (button_press_cb), NULL);
+				  G_CALLBACK (button_press_cb), action);
 		g_signal_connect (button, "button-release-event",
-				  G_CALLBACK (button_release_cb), NULL);
+				  G_CALLBACK (button_release_cb), action);
+		g_signal_connect (button, "drag_data_get",
+				  G_CALLBACK (drag_data_get_cb), action);
+		g_signal_connect (button, "drag_data_delete",
+				  G_CALLBACK (drag_data_delete_cb), action);
 
 		entry = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "entry"));
 		g_signal_connect (entry, "activate", G_CALLBACK (activate_cb), action);
@@ -612,7 +706,8 @@ ephy_bookmark_action_init (EphyBookmarkAction *action)
 
 	action->priv->location = NULL;
 	action->priv->icon = NULL;
-	action->priv->cache_connection = 0;
+	action->priv->cache_handler = 0;
+	action->priv->motion_handler = 0;
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	node = ephy_bookmarks_get_bookmarks (bookmarks);

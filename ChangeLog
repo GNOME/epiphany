@@ -1,3 +1,16 @@
+2004-07-01  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* src/bookmarks/ephy-bookmark-action.c: (create_tool_item),
+	(favicon_cache_changed_cb), (ephy_bookmark_action_sync_icon),
+	(stop_drag_check), (drag_data_get_cb), (drag_data_delete_cb),
+	(drag_motion_cb), (button_press_cb), (button_release_cb),
+	(connect_proxy), (ephy_bookmark_action_init):
+
+	Allow to drag bookmarks around also when not in edit mode.
+	Use the default bookmark icon when there is not a specific
+	one, it acts as a separator. Put some space between the icon
+	and the text.
+
 2004-06-30  Adam Hooper  <adamh@cvs.gnome.org>
 
 	* data/art/Makefile.am:
