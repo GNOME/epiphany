@@ -65,7 +65,8 @@ class CPromptService: public nsIPromptService
 		nsresult AddButton (GtkWidget *dialog, 
 		   	   	    char type, 
 		   	   	    const PRUnichar *title,
-		   	   	    int id);
+		   	   	    int id,
+				    GtkWidget **widget);
 };
 
 NS_IMPL_ISUPPORTS1 (CPromptService, nsIPromptService)
@@ -223,7 +224,8 @@ NS_IMETHODIMP CPromptService::ConfirmCheck (nsIDOMWindow *parent,
 NS_IMETHODIMP CPromptService::AddButton (GtkWidget *dialog, 
 		   			 char type, 
 		   			 const PRUnichar *title,
-		   			 int id)
+		   			 int id,
+					 GtkWidget **widget)
 {
 	const char *btitle;
 	const nsACString &utf8string = NS_ConvertUCS2toUTF8 (title);
@@ -259,10 +261,10 @@ NS_IMETHODIMP CPromptService::AddButton (GtkWidget *dialog,
 			return NS_ERROR_FAILURE;
 	}
 
-	gtk_dialog_add_button (GTK_DIALOG(dialog),
-			       btitle ? btitle : 
-			       PromiseFlatCString(utf8string).get(),
-			       id);
+	*widget = gtk_dialog_add_button (GTK_DIALOG(dialog),
+			                 btitle ? btitle : 
+			                 PromiseFlatCString(utf8string).get(),
+			                 id);
 
 	return NS_OK;
 }
@@ -283,6 +285,7 @@ NS_IMETHODIMP CPromptService::ConfirmEx (nsIDOMWindow *parent,
 {
 	GtkWidget *dialog;
 	GtkWidget *gparent;
+	GtkWidget *default_button = NULL;
 	GtkWidget *check_button = NULL;
 	int ret;
 
@@ -300,25 +303,27 @@ NS_IMETHODIMP CPromptService::ConfirmEx (nsIDOMWindow *parent,
 	{
 		check_button = gtk_check_button_new_with_label ("");
 		gtk_widget_show (check_button);
-		gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->vbox), 
-				    check_button, FALSE, FALSE, 5);
+		gtk_box_pack_end (GTK_BOX (GTK_DIALOG(dialog)->vbox), 
+				  check_button, FALSE, FALSE, 5);
 
 		set_check_button_text (check_button, checkMsg);
 		set_check_button (check_button, checkValue);
 	}
 	
 	AddButton (dialog, (buttonFlags >> 16) & 0xFF, 
-		   button2Title, 2);
+		   button2Title, 2, &default_button);
 	AddButton (dialog, (buttonFlags >> 8) & 0xFF, 
-		   button1Title, 1);
+		   button1Title, 1, &default_button);
 	AddButton (dialog, buttonFlags & 0xFF, 
-		   button0Title, 0);
+		   button0Title, 0, &default_button);
 	
 	gtk_dialog_set_default_response (GTK_DIALOG(dialog), 0);
 
 	/* make a suitable sound */
 	gnome_triggers_vdo ("", "generic", NULL);
 
+	gtk_window_set_focus (GTK_WINDOW (dialog), default_button);
+	
 	/* run dialog and capture return values */
 	ret = gtk_dialog_run (GTK_DIALOG (dialog));
 	
