@@ -425,6 +425,7 @@ help/Makefile
 help/C/Makefile
 help/es/Makefile
 help/eu/Makefile
+help/fi/Makefile
 help/ja/Makefile
 po/Makefile.in
 ])
