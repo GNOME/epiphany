@@ -825,7 +825,6 @@ remove_focus_monitor (EphyBookmarksEditor *editor, GtkWidget *widget)
                                              editor);
 }
 
-
 static void
 ephy_bookmarks_editor_show_popup_cb (GtkWidget *view,
 				     EphyBookmarksEditor *editor)
@@ -1018,6 +1017,7 @@ build_search_box (EphyBookmarksEditor *editor)
 			  G_CALLBACK (search_entry_changed_cb),
 			  editor);
 	add_entry_monitor (editor, entry);
+	add_focus_monitor (editor, entry);
 
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);

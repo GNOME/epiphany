@@ -58,13 +58,14 @@ static void ephy_history_window_class_init (EphyHistoryWindowClass *klass);
 static void ephy_history_window_init (EphyHistoryWindow *editor);
 static void ephy_history_window_finalize (GObject *object);
 static void ephy_history_window_set_property (GObject *object,
-		                                guint prop_id,
-		                                const GValue *value,
-		                                GParamSpec *pspec);
+		                              guint prop_id,
+		                              const GValue *value,
+		                              GParamSpec *pspec);
 static void ephy_history_window_get_property (GObject *object,
-						guint prop_id,
-						GValue *value,
-						GParamSpec *pspec);
+					      guint prop_id,
+					      GValue *value,
+					      GParamSpec *pspec);
+static void ephy_history_window_dispose      (GObject *object);
 
 static void search_entry_changed_cb       (GtkWidget *entry,
 					   EphyHistoryWindow *editor);
@@ -123,52 +124,52 @@ static EggActionGroupEntry ephy_history_ui_entries [] = {
 
 	/* File Menu */
 	{ "OpenInWindow", N_("_Open in New Window"), GTK_STOCK_OPEN, "<control>O",
-	  N_("Open the selected history item in a new window"), 
+	  N_("Open the selected history item in a new window"),
 	  G_CALLBACK (cmd_open_bookmarks_in_browser), NULL },
 	{ "OpenInTab", N_("Open in New _Tab"), NULL, "<shift><control>O",
-	  N_("Open the selected history item in a new tab"), 
+	  N_("Open the selected history item in a new tab"),
 	  G_CALLBACK (cmd_open_bookmarks_in_tabs), NULL },
 	{ "Delete", N_("_Delete"), GTK_STOCK_DELETE, NULL,
-	  N_("Delete the selected history item"), 
+	  N_("Delete the selected history item"),
 	  G_CALLBACK (cmd_delete), NULL },
 	{ "BookmarkPage", N_("Boo_kmark Page..."), EPHY_STOCK_BOOKMARK_PAGE, "<control>D",
-	  N_("Bookmark the selected history item"), 
+	  N_("Bookmark the selected history item"),
 	  G_CALLBACK (cmd_bookmark_page), NULL },
 	{ "Close", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
-	  N_("Close the history window"), 
+	  N_("Close the history window"),
 	  G_CALLBACK (cmd_close), NULL },
-	
+
 	/* Edit Menu */
 	{ "Cut", N_("Cu_t"), GTK_STOCK_CUT, "<control>X",
-	  N_("Cut the selection"), 
+	  N_("Cut the selection"),
 	  G_CALLBACK (cmd_cut), NULL },
 	{ "Copy", N_("_Copy"), GTK_STOCK_COPY, "<control>C",
-	  N_("Copy the selection"), 
+	  N_("Copy the selection"),
 	  G_CALLBACK (cmd_copy), NULL },
 	{ "Paste", N_("_Paste"), GTK_STOCK_PASTE, "<control>V",
-	  N_("Paste the clipboard"), 
+	  N_("Paste the clipboard"),
 	  G_CALLBACK (cmd_paste), NULL },
 	{ "SelectAll", N_("Select _All"), NULL, "<control>A",
-	  N_("Select all history items or text"), 
+	  N_("Select all history items or text"),
 	  G_CALLBACK (cmd_select_all), NULL },
 	{ "Clear", N_("C_lear History"), GTK_STOCK_CLEAR, NULL,
-	  N_("Clear your browsing history"), 
+	  N_("Clear your browsing history"),
 	  G_CALLBACK (cmd_clear), NULL },
-	
+
 	/* View Menu */
 	{ "ViewTitle", N_("_Title"), NULL, NULL,
-	  N_("Show only the title column"), 
+	  N_("Show only the title column"),
 	  NULL, NULL, RADIO_ACTION, NULL },
 	{ "ViewLocation", N_("_Location"), NULL, NULL,
-	  N_("Show only the location column"), 
+	  N_("Show only the location column"),
 	  NULL, NULL, RADIO_ACTION, "ViewTitle" },
 	{ "ViewTitleLocation", N_("T_itle and Location"), NULL, NULL,
-	  N_("Show both the title and location columns"), 
+	  N_("Show both the title and location columns"),
 	  NULL, NULL, RADIO_ACTION, "ViewTitle" },
-		
-	/* Help Menu */	
+
+	/* Help Menu */
 	{ "HelpContents", N_("_Contents"), GTK_STOCK_HELP, "F1",
-	  N_("Display history help"), 
+	  N_("Display history help"),
 	  G_CALLBACK (cmd_help_contents), NULL },
 	{ "HelpAbout", N_("_About"), GNOME_STOCK_ABOUT, NULL,
 	  N_("Display credits for the web browser creators"),
@@ -182,15 +183,15 @@ confirmation_dialog_response_cb (GtkDialog *dialog, gint response,
 {
 	const GList *windows;
 	Session *session;
-	
+
 	gtk_widget_destroy (GTK_WIDGET (dialog));
-	
+
 	if (response != GTK_RESPONSE_OK)
 		return;
-	
+
 	session = ephy_shell_get_session (ephy_shell);
 	windows = session_get_windows (session);
-               
+
 	for (; windows != NULL; windows = windows->next)
 	{
 		Toolbar *t;
@@ -211,15 +212,15 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 	GtkWidget *hbox;
 	GtkWidget *image;
 	char *str;
-	
-	dialog = gtk_dialog_new_with_buttons (_("Clear history"), 
+
+	dialog = gtk_dialog_new_with_buttons (_("Clear history"),
 					     GTK_WINDOW (editor),
 					     GTK_DIALOG_DESTROY_WITH_PARENT |
 					     GTK_DIALOG_NO_SEPARATOR,
 					     GTK_STOCK_CANCEL,
 					     GTK_RESPONSE_CANCEL,
 					     GTK_STOCK_CLEAR,
-					     GTK_RESPONSE_OK, 
+					     GTK_RESPONSE_OK,
 					     NULL);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 6);
@@ -229,7 +230,7 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 	gtk_widget_show (hbox);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
 			    TRUE, TRUE, 0);
-	
+
 	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
 					  GTK_ICON_SIZE_DIALOG);
 	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
@@ -243,7 +244,7 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-	str = g_strconcat ("<b><big>", _("Clear browsing history?"), 
+	str = g_strconcat ("<b><big>", _("Clear browsing history?"),
 			   "</big></b>", NULL);
 	gtk_label_set_markup (GTK_LABEL (label), str);
 	g_free (str);
@@ -257,10 +258,10 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
 	gtk_widget_show (label);
 
-	g_signal_connect (dialog, "response", 
-			  G_CALLBACK (confirmation_dialog_response_cb), 
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (confirmation_dialog_response_cb),
 			  editor);
-	
+
 	return dialog;
 }
 
@@ -274,7 +275,7 @@ cmd_clear (EggAction *action,
 		g_object_add_weak_pointer (G_OBJECT(editor->priv->confirmation_dialog),
 					   (gpointer *)&editor->priv->confirmation_dialog);
 	}
-	
+
 	gtk_widget_show (editor->priv->confirmation_dialog);
 }
 
@@ -465,8 +466,8 @@ cmd_bookmark_page (EggAction *action,
 		ephy_new_bookmark_set_title
 			(EPHY_NEW_BOOKMARK (new_bookmark), title);
 		g_signal_connect (G_OBJECT (new_bookmark), "response",
-			  	  G_CALLBACK (ephy_new_bookmark_response_cb),
-			  	  NULL);
+				  G_CALLBACK (ephy_new_bookmark_response_cb),
+				  NULL);
 		gtk_widget_show (new_bookmark);
 	}
 	g_list_free (selection);
@@ -518,6 +519,7 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 
 	object_class->set_property = ephy_history_window_set_property;
 	object_class->get_property = ephy_history_window_get_property;
+	object_class->dispose  = ephy_history_window_dispose;
 
 	g_object_class_install_property (object_class,
 					 PROP_HISTORY,
@@ -678,6 +680,56 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 }
 
 static void
+entry_selection_changed_cb (GtkWidget *widget, GParamSpec *pspec, EphyHistoryWindow *editor)
+{
+	ephy_history_window_update_menu (editor);
+}
+
+static void
+add_entry_monitor (EphyHistoryWindow *editor, GtkWidget *entry)
+{
+        g_signal_connect (G_OBJECT (entry),
+                          "notify::selection-bound",
+                          G_CALLBACK (entry_selection_changed_cb),
+                          editor);
+        g_signal_connect (G_OBJECT (entry),
+                          "notify::cursor-position",
+                          G_CALLBACK (entry_selection_changed_cb),
+                          editor);
+}
+
+static gboolean
+view_focus_cb (EphyNodeView *view,
+               GdkEventFocus *event,
+               EphyHistoryWindow *editor)
+{
+       ephy_history_window_update_menu (editor);
+
+       return FALSE;
+}
+
+static void
+add_focus_monitor (EphyHistoryWindow *editor, GtkWidget *widget)
+{
+       g_signal_connect (G_OBJECT (widget),
+                         "focus_in_event",
+                         G_CALLBACK (view_focus_cb),
+                         editor);
+       g_signal_connect (G_OBJECT (widget),
+                         "focus_out_event",
+                         G_CALLBACK (view_focus_cb),
+                         editor);
+}
+
+static void
+remove_focus_monitor (EphyHistoryWindow *editor, GtkWidget *widget)
+{
+       g_signal_handlers_disconnect_by_func (G_OBJECT (widget),
+                                             G_CALLBACK (view_focus_cb),
+                                             editor);
+}
+
+static void
 ephy_history_window_show_popup_cb (GtkWidget *view,
 				   EphyHistoryWindow *editor)
 {
@@ -685,7 +737,6 @@ ephy_history_window_show_popup_cb (GtkWidget *view,
 
 	widget = egg_menu_merge_get_widget (editor->priv->ui_merge,
 					    "/popups/EphyHistoryWindowPopup");
-	ephy_history_window_update_menu (editor);
 	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
 			gtk_get_current_event_time ());
 }
@@ -807,6 +858,8 @@ build_search_box (EphyHistoryWindow *editor)
 	gtk_widget_show (box);
 
 	entry = gtk_entry_new ();
+	add_focus_monitor (editor, entry);
+	add_entry_monitor (editor, entry);
 	editor->priv->search_entry = entry;
 	gtk_widget_show (entry);
 	g_signal_connect (G_OBJECT (entry), "changed",
@@ -846,13 +899,6 @@ delete_event_cb (EphyHistoryWindow *editor)
 }
 
 static void
-menu_activate_cb (EphyNodeView *view,
-	          EphyHistoryWindow *editor)
-{
-	ephy_history_window_update_menu (editor);
-}
-
-static void
 provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 {
 	EphyFaviconCache *cache;
@@ -875,6 +921,12 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 }
 
 static void
+view_selection_changed_cb (GtkWidget *view, EphyHistoryWindow *editor)
+{
+	ephy_history_window_update_menu (editor);
+}
+
+static void
 ephy_history_window_construct (EphyHistoryWindow *editor)
 {
 	GtkTreeViewColumn *col;
@@ -882,7 +934,6 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	GtkWidget *vbox, *hpaned;
 	GtkWidget *pages_view, *sites_view;
 	GtkWidget *scrolled_window;
-	GtkWidget *menu;
 	EphyNode *node;
 	EggMenuMerge *ui_merge;
 	EggActionGroup *action_group;
@@ -922,12 +973,6 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	editor->priv->ui_merge = ui_merge;
 	editor->priv->action_group = action_group;
 
-	/* Update menu sensitivity before showing them */
-	menu = egg_menu_merge_get_widget (ui_merge, "/menu/FileMenu");
-	g_signal_connect (menu, "activate", G_CALLBACK (menu_activate_cb), editor);
-	menu = egg_menu_merge_get_widget (ui_merge, "/menu/EditMenu");
-	g_signal_connect (menu, "activate", G_CALLBACK (menu_activate_cb), editor);
-
 	/* Fixme: We should implement gconf prefs for monitoring this setting */
 	action = egg_action_group_get_action (action_group, "ViewTitle");
 	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action), TRUE);
@@ -951,6 +996,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	gtk_paned_add1 (GTK_PANED (hpaned), scrolled_window);
 	gtk_widget_show (scrolled_window);
 	sites_view = ephy_node_view_new (node, NULL);
+	add_focus_monitor (editor, sites_view);
 	ephy_node_view_select_node (EPHY_NODE_VIEW (sites_view),
 				    ephy_history_get_pages (editor->priv->history));
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (sites_view),
@@ -971,6 +1017,10 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	g_signal_connect (G_OBJECT (sites_view),
 			  "node_selected",
 			  G_CALLBACK (site_node_selected_cb),
+			  editor);
+	g_signal_connect (G_OBJECT (selection),
+			  "changed",
+			  G_CALLBACK (view_selection_changed_cb),
 			  editor);
 
 	vbox = gtk_vbox_new (FALSE, 0);
@@ -994,6 +1044,8 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	node = ephy_history_get_pages (editor->priv->history);
 	editor->priv->pages_filter = ephy_node_filter_new ();
 	pages_view = ephy_node_view_new (node, editor->priv->pages_filter);
+	add_focus_monitor (editor, pages_view);
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pages_view));
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (pages_view), TRUE);
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (pages_view),
 					   page_drag_types,
@@ -1021,6 +1073,10 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	g_signal_connect (G_OBJECT (pages_view),
 			  "key_press_event",
 			  G_CALLBACK (key_pressed_cb),
+			  editor);
+	g_signal_connect (G_OBJECT (selection),
+			  "changed",
+			  G_CALLBACK (view_selection_changed_cb),
 			  editor);
 
 	ephy_state_add_window (GTK_WIDGET (editor),
@@ -1110,3 +1166,26 @@ ephy_history_window_init (EphyHistoryWindow *editor)
 {
 	editor->priv = g_new0 (EphyHistoryWindowPrivate, 1);
 }
+
+static void
+ephy_history_window_dispose (GObject *object)
+{
+	EphyHistoryWindow *editor;
+
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (EPHY_IS_HISTORY_WINDOW (object));
+
+	editor = EPHY_HISTORY_WINDOW (object);
+
+	if (editor->priv->sites_view != NULL)
+	{
+		remove_focus_monitor (editor, editor->priv->pages_view);
+		remove_focus_monitor (editor, editor->priv->sites_view);
+		remove_focus_monitor (editor, editor->priv->search_entry);
+
+		editor->priv->sites_view = NULL;
+	}
+
+	G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+

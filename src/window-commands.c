@@ -653,18 +653,13 @@ static void
 toolbar_editor_destroy_cb (GtkWidget *tbe,
 			   Toolbar *t)
 {
-	GtkWidget *window;
-
-	window = gtk_widget_get_toplevel (GTK_WIDGET (t));
-
 	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR (t), FALSE);
-	ephy_window_update_all_controls (EPHY_WINDOW (window));
 }
 
 static void
-toolbar_editor_help_cb (GtkDialog          *dialog,
-			gint                response_id,
-			gpointer	    data)
+toolbar_editor_response_cb (GtkDialog  *dialog,
+			    gint response_id,
+			    gpointer data)
 {
 	EphyToolbarsModel *model;
 	int n;
@@ -673,6 +668,7 @@ toolbar_editor_help_cb (GtkDialog          *dialog,
 	{
 	case GTK_RESPONSE_CLOSE:
 		gtk_widget_destroy (GTK_WIDGET (dialog));
+		break;
 	case RESPONSE_ADD_TOOLBAR:
 		model = ephy_shell_get_toolbars_model (ephy_shell);
 		n = egg_toolbars_model_n_toolbars (EGG_TOOLBARS_MODEL (model));
@@ -721,7 +717,7 @@ window_cmd_edit_toolbar (EggAction *action,
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
 			       GTK_STOCK_HELP, GTK_RESPONSE_HELP);
 	g_signal_connect (G_OBJECT (dialog), "response",
-			  G_CALLBACK (toolbar_editor_help_cb), NULL);
+			  G_CALLBACK (toolbar_editor_response_cb), NULL);
 	ephy_state_add_window (dialog,
 			       "toolbar_editor",
 		               500, 330);
@@ -739,7 +735,7 @@ window_cmd_help_contents (EggAction *action,
 	err = NULL;
 	gnome_help_display ("epiphany", NULL, &err);
 
-	if (err != NULL) 
+	if (err != NULL)
 	{
 		GtkWidget *dialog;
 		dialog = gtk_message_dialog_new (GTK_WINDOW (window),
@@ -754,7 +750,7 @@ window_cmd_help_contents (EggAction *action,
 
 		gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 		gtk_widget_show (dialog);
-		g_error_free (err);	
+		g_error_free (err);
 	}
 }
 
