@@ -38,6 +38,7 @@
 #include "ephy-encodings.h"
 #include "ephy-debug.h"
 #include "ephy-ellipsizing-label.h"
+#include "ephy-file-chooser.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtkframe.h>
@@ -1004,15 +1005,16 @@ set_homepage_entry (EphyDialog *dialog,
 static char*
 get_download_button_label ()
 {
-	char *label, *key, *desktop_path;
+	char *label, *key, *desktop_path, *tmp;
 
 	key = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
-	desktop_path = g_build_filename (g_get_home_dir (), "Desktop", NULL);
-
-	if (!strcmp (key, desktop_path))
+	tmp = g_build_filename (g_get_home_dir (), "Desktop", NULL);
+	desktop_path = g_filename_to_utf8 (tmp, -1, NULL, NULL, NULL);
+	g_free (tmp);
+	if (!g_utf8_collate (key, desktop_path))
 	{
 		g_free (key);
-		label = g_strdup (_("Desktop"));
+		label = g_strdup (_("Desktop")); 
 	}
 	else
 	{
@@ -1262,7 +1264,7 @@ prefs_language_more_button_clicked_cb (GtkWidget *button,
 static void
 download_path_response_cb (GtkDialog *fc, gint response, EphyDialog *dialog)
 {
-	if (response == GTK_RESPONSE_ACCEPT)
+	if (response == EPHY_RESPONSE_OPEN)
 	{
 		char *dir;
 
@@ -1290,22 +1292,19 @@ void
 prefs_download_path_button_clicked_cb (GtkWidget *button,
 				       EphyDialog *dialog)
 {
-	GtkWidget *parent, *fc;
+	GtkWidget *parent;
+	EphyFileChooser *fc;
 	parent = ephy_dialog_get_control (dialog, WINDOW_PROP);
 
-	fc = gtk_file_chooser_dialog_new (_("Select a directory"),
-					    GTK_WINDOW (parent),
-					    GTK_FILE_CHOOSER_ACTION_OPEN,
-					    GTK_STOCK_CANCEL,
-					    GTK_RESPONSE_CANCEL,
-					    GTK_STOCK_OPEN,
-					    GTK_RESPONSE_ACCEPT,
-					    NULL);
+	fc = ephy_file_chooser_new (_("Select a directory"),
+             			    GTK_WIDGET (parent),
+				    GTK_FILE_CHOOSER_ACTION_OPEN,
+				    NULL);
 	gtk_file_chooser_set_folder_mode (GTK_FILE_CHOOSER (fc), TRUE);
 
 	g_signal_connect (GTK_DIALOG (fc), "response",
 			    G_CALLBACK (download_path_response_cb),
 			    dialog);
 
-	gtk_widget_show (fc);
+	gtk_widget_show (GTK_WIDGET (fc));
 }
