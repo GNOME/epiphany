@@ -42,15 +42,6 @@
 static void ephy_node_view_class_init (EphyNodeViewClass *klass);
 static void ephy_node_view_init (EphyNodeView *view);
 static void ephy_node_view_finalize (GObject *object);
-static void ephy_node_view_set_property (GObject *object,
-				         guint prop_id,
-				         const GValue *value,
-				         GParamSpec *pspec);
-static void ephy_node_view_get_property (GObject *object,
-				         guint prop_id,
-				         GValue *value,
-				         GParamSpec *pspec);
-
 
 #define EPHY_NODE_VIEW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NODE_VIEW, EphyNodeViewPrivate))
 
@@ -139,76 +130,6 @@ ephy_node_view_get_type (void)
 	}
 
 	return ephy_node_view_type;
-}
-
-static void
-ephy_node_view_class_init (EphyNodeViewClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
-
-	object_class->finalize = ephy_node_view_finalize;
-
-	object_class->set_property = ephy_node_view_set_property;
-	object_class->get_property = ephy_node_view_get_property;
-
-	g_object_class_install_property (object_class,
-					 PROP_ROOT,
-					 g_param_spec_pointer ("root",
-							       "Root node",
-							       "Root node",
-							       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-	g_object_class_install_property (object_class,
-					 PROP_FILTER,
-					 g_param_spec_object ("filter",
-							      "Filter object",
-							      "Filter object",
-							      EPHY_TYPE_NODE_FILTER,
-							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-	ephy_node_view_signals[NODE_ACTIVATED] =
-		g_signal_new ("node_activated",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNodeViewClass, node_activated),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__POINTER,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_POINTER);
-	ephy_node_view_signals[NODE_SELECTED] =
-		g_signal_new ("node_selected",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNodeViewClass, node_selected),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__POINTER,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_POINTER);
-	ephy_node_view_signals[NODE_DROPPED] =
-		g_signal_new ("node_dropped",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNodeViewClass, node_dropped),
-			      NULL, NULL,
-			      ephy_marshal_VOID__POINTER_POINTER,
-			      G_TYPE_NONE,
-			      2,
-			      G_TYPE_POINTER,
-			      G_TYPE_POINTER);
-	ephy_node_view_signals[SHOW_POPUP] =
-		g_signal_new ("show_popup",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNodeViewClass, show_popup),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
-
-	g_type_class_add_private (object_class, sizeof (EphyNodeViewPrivate));
 }
 
 static void
@@ -972,43 +893,6 @@ ephy_node_view_get_property (GObject *object,
 	}
 }
 
-static void
-ephy_node_view_construct (EphyNodeView *view)
-{
-	GtkTreeSelection *selection;
-
-	view->priv->nodemodel = ephy_tree_model_node_new (view->priv->root,
-							  view->priv->filter);
-	view->priv->filtermodel = gtk_tree_model_filter_new (GTK_TREE_MODEL (view->priv->nodemodel),
-							     NULL);
-	gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER (view->priv->filtermodel),
-						  EPHY_TREE_MODEL_NODE_COL_VISIBLE);
-	view->priv->sortmodel = ephy_tree_model_sort_new (view->priv->filtermodel);
-	gtk_tree_view_set_model (GTK_TREE_VIEW (view), GTK_TREE_MODEL (view->priv->sortmodel));
-	g_signal_connect_object (G_OBJECT (view),
-			         "button_press_event",
-			         G_CALLBACK (ephy_node_view_button_press_cb),
-			         view,
-				 0);
-	g_signal_connect_after (G_OBJECT (view),
-			         "key_press_event",
-			         G_CALLBACK (ephy_node_view_key_press_cb),
-			         view);
-	g_signal_connect_object (G_OBJECT (view),
-			         "row_activated",
-			         G_CALLBACK (ephy_node_view_row_activated_cb),
-			         view,
-				 0);
-
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-	g_signal_connect_object (G_OBJECT (selection),
-			         "changed",
-			         G_CALLBACK (ephy_node_view_selection_changed_cb),
-			         view,
-				 0);
-}
-
 GtkWidget *
 ephy_node_view_new (EphyNode *root,
 		    EphyNodeFilter *filter)
@@ -1019,8 +903,6 @@ ephy_node_view_new (EphyNode *root,
 					     "filter", filter,
 					     "root", root,
 					     NULL));
-
-	ephy_node_view_construct (view);
 
 	g_return_val_if_fail (view->priv != NULL, NULL);
 
@@ -1596,3 +1478,116 @@ ephy_node_view_has_selection (EphyNodeView *view, gboolean *multiple)
 
 	return rows > 0;
 }
+
+static GObject *
+ephy_node_view_constructor (GType type, guint n_construct_properties,
+                            GObjectConstructParam *construct_params)
+
+{
+	GObject *object;
+	EphyNodeView *view;
+	EphyNodeViewPrivate *priv;
+	GtkTreeSelection *selection;
+
+	object = parent_class->constructor (type, n_construct_properties,
+                                            construct_params);
+	view = EPHY_NODE_VIEW (object);
+	priv = EPHY_NODE_VIEW_GET_PRIVATE (object);
+
+	priv->nodemodel = ephy_tree_model_node_new (priv->root, priv->filter);
+	priv->filtermodel = gtk_tree_model_filter_new (GTK_TREE_MODEL (priv->nodemodel),
+						       NULL);
+	gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER (priv->filtermodel),
+						  EPHY_TREE_MODEL_NODE_COL_VISIBLE);
+	priv->sortmodel = ephy_tree_model_sort_new (priv->filtermodel);
+	gtk_tree_view_set_model (GTK_TREE_VIEW (object), GTK_TREE_MODEL (priv->sortmodel));
+	g_signal_connect_object (object, "button_press_event",
+			         G_CALLBACK (ephy_node_view_button_press_cb),
+			         view, 0);
+	g_signal_connect_after (object, "key_press_event",
+			        G_CALLBACK (ephy_node_view_key_press_cb),
+			        view);
+	g_signal_connect_object (object, "row_activated",
+			         G_CALLBACK (ephy_node_view_row_activated_cb),
+			         view, 0);
+
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+	g_signal_connect_object (G_OBJECT (selection), "changed",
+			         G_CALLBACK (ephy_node_view_selection_changed_cb),
+			         view, 0);
+
+	return object;
+}
+
+static void
+ephy_node_view_class_init (EphyNodeViewClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	parent_class = g_type_class_peek_parent (klass);
+
+	object_class->constructor = ephy_node_view_constructor;
+	object_class->finalize = ephy_node_view_finalize;
+
+	object_class->set_property = ephy_node_view_set_property;
+	object_class->get_property = ephy_node_view_get_property;
+
+	g_object_class_install_property (object_class,
+					 PROP_ROOT,
+					 g_param_spec_pointer ("root",
+							       "Root node",
+							       "Root node",
+							       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+	g_object_class_install_property (object_class,
+					 PROP_FILTER,
+					 g_param_spec_object ("filter",
+							      "Filter object",
+							      "Filter object",
+							      EPHY_TYPE_NODE_FILTER,
+							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+	ephy_node_view_signals[NODE_ACTIVATED] =
+		g_signal_new ("node_activated",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyNodeViewClass, node_activated),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_POINTER);
+	ephy_node_view_signals[NODE_SELECTED] =
+		g_signal_new ("node_selected",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyNodeViewClass, node_selected),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_POINTER);
+	ephy_node_view_signals[NODE_DROPPED] =
+		g_signal_new ("node_dropped",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyNodeViewClass, node_dropped),
+			      NULL, NULL,
+			      ephy_marshal_VOID__POINTER_POINTER,
+			      G_TYPE_NONE,
+			      2,
+			      G_TYPE_POINTER,
+			      G_TYPE_POINTER);
+	ephy_node_view_signals[SHOW_POPUP] =
+		g_signal_new ("show_popup",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyNodeViewClass, show_popup),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
+
+	g_type_class_add_private (object_class, sizeof (EphyNodeViewPrivate));
+}
+
