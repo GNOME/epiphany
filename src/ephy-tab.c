@@ -951,7 +951,7 @@ ephy_tab_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
 	new_tab = ephy_tab_new ();
 	gtk_widget_show (GTK_WIDGET (new_tab));
 
-        ephy_window_add_tab (window, new_tab, EPHY_NOTEBOOK_INSERT_GROUPED, FALSE);
+        ephy_window_add_tab (window, new_tab, EPHY_NOTEBOOK_ADD_LAST, FALSE);
 
 	*new_embed = ephy_tab_get_embed (new_tab);
 }

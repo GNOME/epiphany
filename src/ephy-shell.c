@@ -546,7 +546,6 @@ ephy_shell_new_tab (EphyShell *shell,
 	EphyTab *tab;
 	EphyEmbed *embed;
 	gboolean in_new_window = TRUE;
-	gboolean grouped;
 	gboolean jump_to;
 	EphyEmbed *previous_embed = NULL;
 	GtkWidget *nb;
@@ -574,10 +573,6 @@ ephy_shell_new_tab (EphyShell *shell,
 		previous_embed = ephy_tab_get_embed (previous_tab);
 	}
 
-	grouped = ((flags & EPHY_NEW_TAB_OPEN_PAGE ||
-		    flags & EPHY_NEW_TAB_APPEND_GROUPED)) &&
-		  !(flags & EPHY_NEW_TAB_APPEND_LAST);
-
 	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_embed != NULL)
 	{
 		nb = ephy_window_get_notebook (window);
@@ -586,7 +581,7 @@ ephy_shell_new_tab (EphyShell *shell,
 	}
 	else
 	{
-		position = grouped ? EPHY_NOTEBOOK_INSERT_GROUPED : EPHY_NOTEBOOK_INSERT_LAST;
+		position = EPHY_NOTEBOOK_ADD_LAST;
 	}
 
 	tab = ephy_tab_new ();

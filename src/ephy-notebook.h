@@ -43,8 +43,7 @@ typedef struct EphyNotebookPrivate	EphyNotebookPrivate;
 
 enum
 {
-	EPHY_NOTEBOOK_INSERT_LAST	= -1,
-	EPHY_NOTEBOOK_INSERT_GROUPED	= -2
+	EPHY_NOTEBOOK_ADD_LAST	= -1
 };
 
 struct EphyNotebook
@@ -75,7 +74,7 @@ GType		ephy_notebook_get_type		(void);
 
 GtkWidget      *ephy_notebook_new		(void);
 
-void		ephy_notebook_insert_tab	(EphyNotebook *nb,
+void		ephy_notebook_add_tab		(EphyNotebook *nb,
 						 EphyTab *tab,
 						 int position,
 						 gboolean jump_to);

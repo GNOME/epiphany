@@ -2256,8 +2256,8 @@ ephy_window_add_tab (EphyWindow *window,
 
 	widget = GTK_WIDGET(ephy_tab_get_embed (tab));
 
-	ephy_notebook_insert_tab (EPHY_NOTEBOOK (window->priv->notebook),
-				  tab, position, jump_to);
+	ephy_notebook_add_tab (EPHY_NOTEBOOK (window->priv->notebook),
+			       tab, position, jump_to);
 }
 
 /**

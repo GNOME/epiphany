@@ -1,5 +1,20 @@
 2004-06-19  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* src/ephy-notebook.c: (ephy_notebook_move_tab), (move_tab),
+	(ephy_notebook_switch_page_cb), (ephy_notebook_init),
+	(ephy_notebook_finalize), (ephy_notebook_add_tab),
+	(ephy_notebook_remove_tab):
+	* src/ephy-notebook.h:
+	* src/ephy-shell.c: (ephy_shell_new_tab):
+	* src/ephy-shell.h:
+	* src/ephy-tab.c: (ephy_tab_new_window_cb):
+	* src/ephy-window.c: (ephy_window_add_tab):
+
+	Append tabs at the end instead of grouping
+	them near the current one.
+
+2004-06-19  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* data/art/epiphany-tab-loading.gif:
 
 	Update from new winstripe theme of Firefox

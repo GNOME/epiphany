@@ -61,7 +61,6 @@
 struct EphyNotebookPrivate
 {
 	GList *focused_pages;
-	GList *opened_tabs;
 	GtkTooltips *title_tips;
 	guint tabs_vis_notifier_id;
 	gulong motion_notify_handler_id;
@@ -378,7 +377,7 @@ ephy_notebook_move_tab (EphyNotebook *src,
 		/* make sure the tab isn't destroyed while we move it */
 		g_object_ref (tab);
 		ephy_notebook_remove_tab (src, tab);
-		ephy_notebook_insert_tab (dest, tab, dest_position, TRUE);
+		ephy_notebook_add_tab (dest, tab, dest_position, TRUE);
 		g_object_unref (tab);
 	}
 }
@@ -438,10 +437,6 @@ move_tab (EphyNotebook *notebook,
 		ephy_notebook_move_tab (EPHY_NOTEBOOK (notebook), NULL,
 					EPHY_TAB (cur_tab),
 					dest_position);
-
-		/* Reset the list of newly opened tabs when moving tabs. */
-		g_list_free (notebook->priv->opened_tabs);
-		notebook->priv->opened_tabs = NULL;
 	}
 }
 
@@ -615,10 +610,6 @@ ephy_notebook_switch_page_cb (GtkNotebook *notebook,
 
 	nb->priv->focused_pages = g_list_append (nb->priv->focused_pages,
 						 child);
-
-	/* Reset the list of newly opened tabs when switching tabs. */
-	g_list_free (nb->priv->opened_tabs);
-	nb->priv->opened_tabs = NULL;
 }
 
 #define INSANE_NUMBER_OF_URLS	20
@@ -753,7 +744,6 @@ ephy_notebook_init (EphyNotebook *notebook)
 	notebook->priv->drag_in_progress = FALSE;
 	notebook->priv->motion_notify_handler_id = 0;
 	notebook->priv->focused_pages = NULL;
-	notebook->priv->opened_tabs = NULL;
 	notebook->priv->show_tabs = TRUE;
 
 	g_signal_connect (notebook, "button-press-event",
@@ -791,7 +781,6 @@ ephy_notebook_finalize (GObject *object)
 	{
 		g_list_free (notebook->priv->focused_pages);
 	}
-	g_list_free (notebook->priv->opened_tabs);
 	g_object_unref (notebook->priv->title_tips);
 
 	LOG ("EphyNotebook finalised %p", object)
@@ -980,10 +969,10 @@ ephy_notebook_set_show_tabs (EphyNotebook *nb, gboolean show_tabs)
 }
 
 void
-ephy_notebook_insert_tab (EphyNotebook *nb,
-			  EphyTab *tab,
-			  int position,
-			  gboolean jump_to)
+ephy_notebook_add_tab (EphyNotebook *nb,
+		       EphyTab *tab,
+		       int position,
+		       gboolean jump_to)
 {
 	GtkWidget *label;
 
@@ -992,29 +981,6 @@ ephy_notebook_insert_tab (EphyNotebook *nb,
 	label = build_tab_label (nb, tab);
 
 	update_tabs_visibility (nb, TRUE);
-
-	if (position == EPHY_NOTEBOOK_INSERT_GROUPED)
-	{
-		/* Keep a list of newly opened tabs, if the list is empty open the new
-		 * tab after the current one. If it's not, add it after the newly
-		 * opened tabs.
-		 */
-		if (nb->priv->opened_tabs != NULL)
-		{
-			GList *last = g_list_last (nb->priv->opened_tabs);
-			GtkWidget *last_tab = last->data;
-			position = gtk_notebook_page_num
-				    (GTK_NOTEBOOK (nb), last_tab) + 1;
-		}
-		else
-		{
-			position = gtk_notebook_get_current_page
-				    (GTK_NOTEBOOK (nb)) + 1;
-		}
-		nb->priv->opened_tabs =
-			g_list_append (nb->priv->opened_tabs, tab);
-	}
-
 
 	gtk_notebook_insert_page (GTK_NOTEBOOK (nb), GTK_WIDGET (tab),
 				  label, position);
@@ -1101,7 +1067,6 @@ ephy_notebook_remove_tab (EphyNotebook *nb,
 	/* Remove the page from the focused pages list */
 	nb->priv->focused_pages =  g_list_remove (nb->priv->focused_pages,
 						  tab);
-	nb->priv->opened_tabs = g_list_remove (nb->priv->opened_tabs, tab);
 
 	position = gtk_notebook_page_num (GTK_NOTEBOOK (nb), GTK_WIDGET (tab));
 	curr = gtk_notebook_get_current_page (GTK_NOTEBOOK (nb));
