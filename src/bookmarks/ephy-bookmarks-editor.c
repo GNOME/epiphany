@@ -47,6 +47,7 @@
 
 #include "ephy-bookmarks-editor.h"
 #include "ephy-bookmarks-import.h"
+#include "ephy-bookmarks-export.h"
 #include "ephy-node-common.h"
 #include "ephy-node-view.h"
 #include "ephy-window.h"
@@ -112,6 +113,8 @@ static void cmd_delete			  (GtkAction *action,
 static void cmd_bookmark_properties	  (GtkAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_bookmarks_import	  (GtkAction *action,
+					   EphyBookmarksEditor *editor);
+static void cmd_bookmarks_export	  (GtkAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_add_topic		  (GtkAction *action,
 					   EphyBookmarksEditor *editor);
@@ -189,6 +192,9 @@ static GtkActionEntry ephy_bookmark_popup_entries [] = {
 	{ "Import", NULL, N_("_Import Bookmarks..."), NULL,
 	  N_("Import bookmarks from another browser or a bookmarks file"), 
 	  G_CALLBACK (cmd_bookmarks_import) },
+	{ "Export", NULL, N_("_Export Bookmarks..."), NULL,
+	  N_("Export bookmarks to a file"), 
+	  G_CALLBACK (cmd_bookmarks_export) },	  
 	{ "Close", GTK_STOCK_CLOSE, N_("_Close"), "<control>W",
 	  N_("Close the bookmarks window"), 
 	  G_CALLBACK (cmd_close) },
@@ -658,6 +664,88 @@ import_dialog_response_cb (GtkDialog *dialog, gint response,
 	}
 
 	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
+cmd_bookmarks_export (GtkAction *action,
+		      EphyBookmarksEditor *editor)
+{
+	GtkWidget *dialog, *hbox, *label, *combo;
+	char *filename = NULL;
+	int response, format;
+
+	dialog = GTK_WIDGET (ephy_file_chooser_new (_("Export Bookmarks"),
+		GTK_WIDGET (editor),
+		GTK_FILE_CHOOSER_ACTION_SAVE,
+		NULL,
+		EPHY_FILE_FILTER_NONE));
+
+	gtk_file_chooser_set_current_folder
+		(GTK_FILE_CHOOSER (dialog), g_get_home_dir ());
+
+	gtk_file_chooser_set_current_name
+		(GTK_FILE_CHOOSER (dialog), _("Bookmarks"));
+
+	/* Make a format selection combo & label */
+	label = gtk_label_new (_("File format:"));
+
+	combo = gtk_combo_box_new_text ();
+	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Epiphany (RDF)"));
+	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Mozilla (HTML)"));
+	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 1);
+	
+	hbox = gtk_hbox_new (FALSE, 12);
+	gtk_box_pack_end (GTK_BOX (hbox), combo, TRUE, TRUE, 0);
+	gtk_box_pack_end (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+	gtk_widget_show_all (hbox);
+	
+	gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), hbox);
+
+	gtk_window_group_add_window (GTK_WINDOW (editor)->group, GTK_WINDOW (dialog));
+
+	do
+	{
+		char *basename, *strtmp;
+
+		g_free (filename);
+
+		response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+		format = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+		basename = g_path_get_basename (filename);
+		if (basename != NULL && strchr (basename, '.') == NULL)
+		{
+			strtmp = filename;
+			if (format == 0)
+			{
+				filename = g_strconcat (filename, ".rdf", NULL);
+			}
+			else if (format == 1)
+			{
+				filename = g_strconcat (filename, ".html", NULL);
+			}
+			g_free (strtmp);
+		}
+		g_free (basename);
+	}
+	while (response == GTK_RESPONSE_ACCEPT
+	       && !ephy_gui_confirm_overwrite_file (GTK_WIDGET (dialog), filename));
+
+	gtk_widget_destroy (dialog);
+
+	/* 0 for ephy RDF format, 1 for mozilla HTML format */
+
+	if (format == 0)
+	{
+		ephy_bookmarks_export_rdf (editor->priv->bookmarks, filename);
+	}
+	else if (format == 1)
+	{
+		ephy_bookmarks_export_mozilla (editor->priv->bookmarks, filename);
+	}
+
+	g_free (filename);
 }
 
 static void
@@ -1454,7 +1542,17 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	EphyNode *node;
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
+	GtkWindowGroup *group;
 	int col_id, details_value;
+
+	/* ensure window group */	
+	group = GTK_WINDOW (editor)->group;
+	if (group == NULL)
+	{
+		group = gtk_window_group_new ();
+		gtk_window_group_add_window (group, GTK_WINDOW (editor));
+		g_object_unref (group);
+	}
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
 	gtk_window_set_icon_name (GTK_WINDOW (editor), EPHY_STOCK_BOOKMARKS);

@@ -26,8 +26,12 @@
 #include "ephy-file-helpers.h"
 #include "ephy-debug.h"
 
+#include <libxml/globals.h>
 #include <libxml/tree.h>
 #include <libxml/xmlwriter.h>
+#include <libxslt/xslt.h>
+#include <libxslt/transform.h>
+#include <libxslt/xsltutils.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
@@ -81,37 +85,18 @@ write_topics_list (EphyNode *topics,
 	return ret >= 0 ? 0 : -1;
 }
 
-void
-ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
-			   const char *filename)
+static int
+write_rdf (EphyBookmarks *bookmarks,
+	   const char *filename,
+	   xmlTextWriterPtr writer)
 {
 	EphyNode *bmks, *topics, *smart_bmks;
-	xmlTextWriterPtr writer;
-	char *tmp_file;
 	GPtrArray *children;
 	char *file_uri;
 	int i, ret;
 
-	LOG ("Exporting as RDF to %s", filename)
+	START_PROFILER ("Writing RDF")
 
-	START_PROFILER ("Exporting as RDF")
-
-	tmp_file = g_strconcat (filename, ".tmp", NULL);
-
-	/* FIXME: do we want to turn on compression here? */
-	writer = xmlNewTextWriterFilename (tmp_file, 0);
-	if (writer == NULL)
-	{
-		g_free (tmp_file);
-		return;
-	}
-
-	ret = xmlTextWriterSetIndent (writer, 1);
-	if (ret < 0) goto out;
-
-	ret = xmlTextWriterSetIndentString (writer, (xmlChar *) "  ");
-	if (ret < 0) goto out;
-	
 	ret = xmlTextWriterStartDocument (writer, "1.0", NULL, NULL);
 	if (ret < 0) goto out;
 
@@ -331,8 +316,44 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 	ret = xmlTextWriterEndDocument (writer);
 
 out:
-	xmlFreeTextWriter (writer);
+	STOP_PROFILER ("Writing RDF")
 
+	return ret;
+}
+
+void
+ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
+			   const char *filename)
+{
+	xmlTextWriterPtr writer;
+	char *tmp_file;
+	int ret;
+
+	LOG ("Exporting as RDF to %s", filename)
+
+	START_PROFILER ("Exporting as RDF")
+
+	tmp_file = g_strconcat (filename, ".tmp", NULL);
+
+	/* FIXME: do we want to turn on compression here? */
+	writer = xmlNewTextWriterFilename (tmp_file, 0);
+	if (writer == NULL)
+	{
+		g_free (tmp_file);
+		return;
+	}
+
+	ret = xmlTextWriterSetIndent (writer, 1);
+	if (ret < 0) goto out;
+
+	ret = xmlTextWriterSetIndentString (writer, (xmlChar *) "  ");
+	if (ret < 0) goto out;
+	
+	ret = write_rdf (bookmarks, filename, writer);
+	if (ret < 0) goto out;
+
+	xmlFreeTextWriter (writer);
+out:
 	if (ret >= 0)
 	{
 		if (ephy_file_switch_temp_file (filename, tmp_file) == FALSE)
@@ -346,4 +367,66 @@ out:
 	STOP_PROFILER ("Exporting as RDF")
 
 	LOG ("Exporting as RDF %s.", ret >= 0 ? "succeeded" : "FAILED")
+}
+
+void
+ephy_bookmarks_export_mozilla (EphyBookmarks *bookmarks,
+			   const char *filename)
+{
+	xsltStylesheetPtr cur = NULL;
+	xmlTextWriterPtr writer;
+	xmlDocPtr doc = NULL, res;
+	char *tmp_file, *template;
+	int ret = -1;
+	
+	LOG ("Exporting as Mozilla to %s", filename)
+
+	template = g_build_filename (g_get_tmp_dir (),
+				     "export-bookmarks-XXXXXX", NULL);
+	tmp_file = ephy_file_tmp_filename (template, "rdf");
+	g_free (template);
+	if (tmp_file == NULL) return;
+
+	writer = xmlNewTextWriterDoc (&doc, 0);
+	if (writer == NULL || doc == NULL)
+	{
+		g_free (tmp_file);
+		return;
+	}
+
+	START_PROFILER ("Exporting as Mozilla")
+
+	ret = write_rdf (bookmarks, tmp_file, writer);
+	if (ret < 0) goto out;
+
+	/* Set up libxml stuff */
+	xmlLoadExtDtdDefaultValue = 1;
+	xmlSubstituteEntitiesDefault (1);
+	
+	cur = xsltParseStylesheetFile ((const xmlChar *) ephy_file ("epiphany-bookmarks-html.xsl"));
+	if (cur == NULL) goto out;
+
+	res = xsltApplyStylesheet (cur, doc, NULL);
+	if (res == NULL)
+	{
+		xsltFreeStylesheet (cur);
+		goto out;
+	}
+
+	ret = xsltSaveResultToFilename (filename, res, cur, FALSE);
+
+	xsltFreeStylesheet (cur);
+	xmlFreeDoc (res);
+
+	/* Clean up libxslt stuff */
+	xsltCleanupGlobals ();
+
+out:
+	xmlFreeTextWriter (writer);
+	xmlFreeDoc (doc);
+	g_free (tmp_file);
+
+	STOP_PROFILER ("Exporting as Mozilla")
+	
+	LOG ("Exporting as Mozilla %s.", ret >= 0 ? "succeeded" : "FAILED")
 }

@@ -3,6 +3,7 @@ SUBDIRS = ui art glade
 @INTLTOOL_SERVER_RULE@
 @INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_SCHEMAS_RULE@
+@INTLTOOL_XML_RULE@
 
 default_prefs_in_FILES = \
 	default-prefs-common.js		\
@@ -43,6 +44,9 @@ mimepermission_DATA = mime-types-permissions.xml
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = epiphany-1.6.pc
+
+xsldir = $(pkgdatadir)
+xsl_DATA = epiphany-bookmarks-html.xsl
 
 install-data-local:
 if GCONF_SCHEMAS_INSTALL

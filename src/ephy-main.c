@@ -196,6 +196,7 @@ main (int argc, char *argv[])
 	ephy_state_save ();
 	ephy_file_helpers_shutdown ();
 	gnome_vfs_shutdown ();
+	xmlCleanupParser ();
 	poptFreeContext (context);
 
 	return 0;
