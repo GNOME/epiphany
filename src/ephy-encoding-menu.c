@@ -283,7 +283,7 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *wrhm)
 			charset_index++;
 		}
 
-
+		g_list_foreach (charsets, (GFunc)g_free, NULL);
 		g_list_free (charsets);
 		g_string_append (xml, "</submenu>");
 		group_index++;

@@ -483,6 +483,7 @@ ephy_spinner_load_images (EphySpinner *spinner)
 	spinner->details->image_list = g_list_reverse (image_list);
 
 	g_free (image_theme);
+	g_free (path);
 }
 
 /*
