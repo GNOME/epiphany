@@ -263,6 +263,8 @@ drag_motion_cb (GtkWidget *widget,
 		gdk_drag_status (context, 0, time);
 	}
 
+	gtk_tree_path_free (path);
+
 	return TRUE;
 }
 
@@ -321,6 +323,7 @@ drag_data_received_cb (GtkWidget *widget,
 
 		g_list_free (src_nodes);
 
+		gtk_tree_path_free (path);
 	}
 
 	return TRUE;
