@@ -1,5 +1,15 @@
 2004-11-07  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-gui.c: (ephy_gui_sanitise_popup_position),
+	(ephy_gui_menu_position_tree_selection),
+	(ephy_gui_menu_position_under_widget):
+	* lib/ephy-gui.h:
+	* src/ephy-window.c: (popup_menu_at_coords), (show_embed_popup):
+
+	Sanitise the embed popup position. Fixes bug #157162.
+
+2004-11-07  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-session.c: (offer_to_resume):
 
 	Better wording for the crash recovery dialogue. Thanks to Spark
