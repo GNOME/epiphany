@@ -116,7 +116,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (EphyEmbedIface, new_window),
 			      ephy_signal_accumulator_object, ephy_embed_get_type,
-			      ephy_marshal_OBJECT__ENUM,
+			      ephy_marshal_OBJECT__FLAGS,
 			      G_TYPE_OBJECT,
 			      1,
 			      EPHY_TYPE_EMBED_CHROME_MASK);
