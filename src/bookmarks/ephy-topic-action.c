@@ -56,6 +56,7 @@ struct EphyTopicActionPrivate
 	EphyNode *topic_node;
 
 	guint motion_handler;
+	guint release_handler;
 	gint drag_x;
 	gint drag_y;
 };
@@ -632,7 +633,7 @@ drag_data_delete_cb (GtkWidget *widget, GdkDragContext *context,
 	remove_from_model (widget);
 }
 
-static gboolean
+static void
 stop_drag_check (EphyTopicAction *action, GtkWidget *widget)
 {
 	if (action->priv->motion_handler)
@@ -640,10 +641,9 @@ stop_drag_check (EphyTopicAction *action, GtkWidget *widget)
 		g_signal_handler_disconnect (widget, action->priv->motion_handler);
 		action->priv->motion_handler = 0;
 
-		return TRUE;
+		g_signal_handler_disconnect (widget, action->priv->release_handler);
+		action->priv->release_handler = 0;
 	}
-
-	return FALSE;
 }
 
 static gboolean
@@ -798,7 +798,12 @@ button_release_cb (GtkWidget *widget,
 	if (event->button == 1)
 	{
 		stop_drag_check (action, widget);
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+
+		if (GTK_IS_TOGGLE_BUTTON (widget))
+		{
+			gtk_toggle_button_set_active
+				(GTK_TOGGLE_BUTTON (widget), FALSE);
+		}
 	}
 
 	return FALSE;
@@ -827,7 +832,10 @@ button_press_cb (GtkWidget *widget,
 			action->priv->motion_handler = g_signal_connect
 				(menu, "motion_notify_event",
 				 G_CALLBACK (drag_motion_cb), action);
-			
+			action->priv->release_handler = g_signal_connect
+				(menu, "button_release_event",
+				 G_CALLBACK (button_release_cb), action);
+		
 			return TRUE;
 		}
 	}

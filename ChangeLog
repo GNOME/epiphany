@@ -1,5 +1,13 @@
 2004-07-11  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* src/bookmarks/ephy-topic-action.c: (stop_drag_check),
+	(button_release_cb), (button_press_cb):
+
+	Make sure we stop the drag check also when button
+	is released while the menu grab is still in effect.
+
+2004-07-11  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_move_item):
 	* lib/egg/egg-toolbars-model.h:
 
