@@ -286,7 +286,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	/* 5 One last case to handle about:blank and other untitled pages. */
 	if (defaultFileName.IsEmpty())
 	{
-		defaultFileName.AssignWithConversion(_("Untitled"));
+		defaultFileName = NS_ConvertUTF8toUCS2 (_("Untitled"));
 	}
         
 	/* Validate the file name to ensure legality. */
