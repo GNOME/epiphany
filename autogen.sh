@@ -16,4 +16,5 @@ which gnome-autogen.sh || {
     echo "You need to install gnome-common from the GNOME CVS"
     exit 1
 }
-REQUIRED_AUTOMAKE_VERSION=1.7 USE_GNOME2_MACROS=1 . gnome-autogen.sh
+
+USE_COMMON_DOC_BUILD=yes REQUIRED_AUTOMAKE_VERSION=1.7 USE_GNOME2_MACROS=1 . gnome-autogen.sh
