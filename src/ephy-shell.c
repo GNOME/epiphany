@@ -238,7 +238,7 @@ ephy_shell_new_window_cb (EphyEmbedShell *shell,
 	}
 
 	new_tab = ephy_tab_new ();
-	ephy_window_add_tab (window, new_tab, TRUE, FALSE);
+	ephy_window_add_tab (window, new_tab, EPHY_NOTEBOOK_INSERT_GROUPED, FALSE);
 	*new_embed = ephy_tab_get_embed (new_tab);
 }
 
@@ -491,6 +491,8 @@ ephy_shell_new_tab (EphyShell *shell,
 	gboolean grouped = FALSE;
 	gboolean jump_to;
 	EphyEmbed *previous_embed = NULL;
+	GtkWidget *nb;
+	gint position;
 
 	in_new_window = !eel_gconf_get_boolean (CONF_TABS_TABBED);
 
@@ -525,11 +527,22 @@ ephy_shell_new_tab (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_APPEND_GROUPED) grouped = TRUE;
 	if (flags & EPHY_NEW_TAB_APPEND_LAST) grouped = FALSE;
 
+	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_embed != NULL)
+	{
+		nb = ephy_window_get_notebook (window);
+		position = gtk_notebook_page_num (GTK_NOTEBOOK (nb), 
+						  GTK_WIDGET (previous_embed)) + 1;
+	}
+	else
+	{	
+		position = grouped ? EPHY_NOTEBOOK_INSERT_GROUPED : EPHY_NOTEBOOK_INSERT_LAST;
+	}
+
 	tab = ephy_tab_new ();
 	embed = ephy_tab_get_embed (tab);
 	gtk_widget_show (GTK_WIDGET(embed));
 	ephy_window_add_tab (window, tab,
-			     grouped,
+			     position,
 			     jump_to);
 
 	if (flags & EPHY_NEW_TAB_RAISE_WINDOW)

@@ -21,10 +21,15 @@
 #include "ephy-prefs.h"
 #include "ephy-marshal.h"
 #include "ephy-file-helpers.h"
+#include "ephy-dnd.h"
+#include "ephy-embed.h"
+#include "ephy-window.h"
+#include "ephy-shell.h"
 
 #include <gtk/gtk.h>
 #include <glib-object.h>
 #include <libgnome/gnome-i18n.h>
+#include <libgnomevfs/gnome-vfs-uri.h>
 
 #define AFTER_ALL_TABS -1
 #define NOT_IN_APP_WINDOWS -2
@@ -55,6 +60,12 @@ static void ephy_notebook_finalize     (GObject *object);
 static GdkCursor *cursor = NULL;
 static GList *notebooks  = NULL;
 
+static GtkTargetEntry url_drag_types [] = 
+{
+        { EPHY_DND_URI_LIST_TYPE,   0, 0 },
+        { EPHY_DND_URL_TYPE,        0, 1 }
+};
+static guint n_url_drag_types = G_N_ELEMENTS (url_drag_types);
 
 /* Local functions */
 static void drag_start (EphyNotebook *notebook,
@@ -585,6 +596,97 @@ ephy_notebook_switch_page_cb (GtkNotebook *notebook,
 	nb->priv->opened_tabs = NULL;
 }
 
+#define INSANE_NUMBER_OF_URLS	20
+
+static void
+notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
+				gint x, gint y, GtkSelectionData *selection_data,
+				guint info, guint time, GtkWidget *child)
+{
+	EphyEmbed *embed = NULL;
+	EphyWindow *window = NULL;
+	EphyTab *tab = NULL;
+	GtkWidget *toplevel;
+	GList *uris = NULL, *l;
+	GnomeVFSURI *uri;
+	gchar *url = NULL;
+	guint num = 0;
+	gchar **tmp;
+	
+	g_signal_stop_emission_by_name (widget, "drag_data_received");
+
+	if (selection_data->length <= 0 || selection_data->data == NULL) return;
+
+	if (selection_data->target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE))
+	{
+		/* URL_TYPE has format: url \n title */
+		tmp = g_strsplit (selection_data->data, "\n", 2);
+		if (tmp)
+		{
+			uri = gnome_vfs_uri_new (tmp[0]);
+			if (uri) uris = g_list_append (uris, uri);
+			g_strfreev (tmp);
+		}
+	}
+	else if (selection_data->target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE))
+	{
+		uris = gnome_vfs_uri_list_parse (selection_data->data);
+	}
+	else
+	{
+		g_assert_not_reached ();
+	}
+
+	if (uris == NULL) return;
+
+	toplevel = gtk_widget_get_toplevel (widget);
+	g_return_if_fail (IS_EPHY_WINDOW (toplevel));
+	window = EPHY_WINDOW (toplevel);
+
+	if (child)
+	{
+		embed = EPHY_EMBED (child);
+		tab = EPHY_TAB (g_object_get_data (G_OBJECT (embed), "EphyTab"));
+	}
+
+	l = uris;
+	while (l != NULL && num < INSANE_NUMBER_OF_URLS)
+	{
+		uri = (GnomeVFSURI*) l->data;
+		url = gnome_vfs_uri_to_string (uri, GNOME_VFS_URI_HIDE_NONE);
+
+		if (num == 0 && embed != NULL)
+		{
+			/**
+			 * The first url is special: if the drag was to an
+			 * existing tab, load it there
+			 */
+			ephy_embed_load_url (embed, url);			
+		}
+		else
+		{
+			tab = ephy_shell_new_tab (ephy_shell, window, 
+						  tab, url,
+						  EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+						  EPHY_NEW_TAB_APPEND_LAST |
+						  EPHY_NEW_TAB_APPEND_AFTER |
+						  EPHY_NEW_TAB_DONT_JUMP_TO);
+		}
+
+		if (num == 0 && eel_gconf_get_boolean (CONF_TABS_TABBED_AUTOJUMP))
+		{
+			ephy_window_jump_to_tab (window, tab);
+		}
+
+		g_free (url);
+		url = NULL;
+		l = l->next;
+		++num;
+	}
+
+	gnome_vfs_uri_list_free (uris);
+}
+
 static void
 ephy_notebook_init (EphyNotebook *notebook)
 {
@@ -610,6 +712,15 @@ ephy_notebook_init (EphyNotebook *notebook)
 	g_signal_connect_after (G_OBJECT (notebook), "switch_page",
                                 G_CALLBACK (ephy_notebook_switch_page_cb),
                                 NULL);
+	
+	/* Set up drag-and-drop target */
+	g_signal_connect (G_OBJECT(notebook), "drag_data_received",
+			  G_CALLBACK(notebook_drag_data_received_cb),
+			  NULL);
+        gtk_drag_dest_set (GTK_WIDGET(notebook), GTK_DEST_DEFAULT_MOTION |
+			   GTK_DEST_DEFAULT_DROP, 
+                           url_drag_types,n_url_drag_types,
+                           GDK_ACTION_MOVE | GDK_ACTION_COPY);
 }
 
 static void
@@ -834,6 +945,13 @@ ephy_notebook_insert_page (EphyNotebook *nb,
 	gtk_notebook_insert_page (GTK_NOTEBOOK (nb),
 				  child,
 				  tab_hbox, position);
+
+	/* Set up drag-and-drop target */
+	g_signal_connect (G_OBJECT(tab_hbox), "drag_data_received",
+			  G_CALLBACK(notebook_drag_data_received_cb), child);
+	gtk_drag_dest_set (tab_hbox, GTK_DEST_DEFAULT_ALL, 
+			   url_drag_types,n_url_drag_types,
+			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
 
 	if (jump_to)
 	{

@@ -1,3 +1,26 @@
+2003-05-05  Christian Persch  <chpe+gnomebugz@stud.uni-saarland.de>
+
+ 	* src/ephy-shell.c:
+ 	* src/ephy-shell.h: (ephy_shell_new_tab):
+ 
+ 	Implement the EPHY_NEW_TAB_APPEND_AFTER flag.
+ 
+ 	* src/ephy-window.c:
+ 	* src/ephy-window.h: (ephy_window_add_tab):
+ 
+ 	Changed parameter (gboolean) groupde to (gint) position, to support
+ 	specifying the position in the notebook to insert the new tab into.
+ 
+ 	* src/ephy-shell.c: (ephy_shell_new_window_cb):
+ 	* src/ephy-tab.c: (ephy_tab_new_window_cb):
+ 
+ 	Fix callers of ephy_window_add_tab for new parameter.
+ 	
+ 	* src/ephy-notebook.c: (notebook_drag_data_received_cb),
+ 	(ephy_notebook_init), (ephy_notebook_insert_page):
+ 
+ 	Implement drag-and-drop of links to tabs.
+
 2003-05-06  Christian Persch  <chpe+gnomebugz@stud.uni-saarland.de>
  
  	* embed/mozilla/EphyWrapper.cpp: (EphyWrapper::SetZoomOnDocshell):

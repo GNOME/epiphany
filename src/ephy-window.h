@@ -96,7 +96,7 @@ GtkWidget	 *ephy_window_get_notebook	  (EphyWindow *window);
 
 void		  ephy_window_add_tab		  (EphyWindow *window,
 						   EphyTab *tab,
-						   gboolean grouped,
+						   gint position,
 						   gboolean jump_to);
 
 void		  ephy_window_remove_tab	  (EphyWindow *window,
