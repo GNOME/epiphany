@@ -55,7 +55,7 @@ struct _EggMenuMergeClass {
 struct _EggMenuMergeNode {
   EggMenuMergeNodeType type;
 
-  const gchar *name;
+  gchar *name;
 
   GQuark action_name;
   EggAction *action;

@@ -1263,6 +1263,7 @@ update_node (EggMenuMerge *self, GNode *node)
 	   NODE_INFO(node)->type == EGG_MENU_MERGE_TOOLBAR_PLACEHOLDER) &&
 	  NODE_INFO(node)->extra)
 	gtk_widget_destroy(NODE_INFO(node)->extra);
+      g_free (NODE_INFO(node)->name);
       g_chunk_free(NODE_INFO(node), merge_node_chunk);
       g_node_destroy(node);
     }
