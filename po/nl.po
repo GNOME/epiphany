@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.nl\n"
-"POT-Creation-Date: 2003-05-30 03:58+0200\n"
+"POT-Creation-Date: 2003-05-31 11:58+0200\n"
 "PO-Revision-Date: 2003-05-30 11:36+0100\n"
 "Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -367,16 +367,16 @@ msgstr "De tekenset autodetectie. Een lege tekenreeks zet de autodetectie uit"
 
 #: data/epiphany.schemas.in.h:56
 msgid ""
-"The charset autodetector. Valid entries are <empty string> (autodetectors "
-"off), cjk_parallel_state_machine (autodetect east asian encodings), "
-"ja_parallel_state_machine (autodetect japanese encodings), "
+"The charset autodetector. Valid entries are \"\" (empty string, "
+"autodetectors off), cjk_parallel_state_machine (autodetect east asian "
+"encodings), ja_parallel_state_machine (autodetect japanese encodings), "
 "ko_parallel_state_machine (autodetect korean encodings), ruprob (autodetect "
 "russian encodings), ukprob (autodetect ukrainian encodings), "
 "zh_parallel_state_machine (autodetect chinese encodings), "
 "zhcn_parallel_state_machine (autodetect simplified chinese encodings) and "
 "zhtw_parallel_state_machine (autodetect traditional chinese encodings)."
 msgstr ""
-"De tekenset autodetectie. Geldige waardes zijn <lege tekenreeks> (geen "
+"De tekenset autodetectie. Geldige waardes zijn \"\" (lege tekenreeks), geen "
 "autodetectie), cjk_parallel_state_machine (autodetectie van oostaziatische "
 "coderingen), ja_parallel_state_machine (autodetecttie van japanse "
 "coderingen), ko_parallel_state_machine (autodetectie van koreaanse "
@@ -1416,19 +1416,20 @@ msgstr "Er is een map geselecteerd terwijl een bestand verwacht werd."
 
 # src/mozilla_i18n.c:26
 # ui/preferences.glade.h:20
-#: embed/mozilla/mozilla-embed-single.cpp:74 src/prefs-dialog.c:87
+#: embed/mozilla/mozilla-embed-single.cpp:74 lib/ephy-langs.h:76
+#: src/prefs-dialog.c:87
 msgid "Arabic"
 msgstr "Arabisch"
 
 # src/mozilla_i18n.c:27
 # ui/preferences.glade.h:32
-#: embed/mozilla/mozilla-embed-single.cpp:75
+#: embed/mozilla/mozilla-embed-single.cpp:75 lib/ephy-langs.h:77
 msgid "Baltic"
 msgstr "Baltisch"
 
 # src/mozilla_i18n.c:28
 # ui/preferences.glade.h:41
-#: embed/mozilla/mozilla-embed-single.cpp:76
+#: embed/mozilla/mozilla-embed-single.cpp:76 lib/ephy-langs.h:78
 msgid "Central European"
 msgstr "Centraal Europees"
 
@@ -1441,19 +1442,21 @@ msgstr "Chinees"
 
 # src/mozilla_i18n.c:30
 # ui/preferences.glade.h:53
-#: embed/mozilla/mozilla-embed-single.cpp:78
+#: embed/mozilla/mozilla-embed-single.cpp:78 lib/ephy-langs.h:79
 msgid "Cyrillic"
 msgstr "Cyrillisch"
 
 # src/mozilla_i18n.c:31
 # ui/preferences.glade.h:81
-#: embed/mozilla/mozilla-embed-single.cpp:79 src/prefs-dialog.c:107
+#: embed/mozilla/mozilla-embed-single.cpp:79 lib/ephy-langs.h:80
+#: src/prefs-dialog.c:107
 msgid "Greek"
 msgstr "Grieks"
 
 # src/mozilla_i18n.c:32
 # ui/preferences.glade.h:84
-#: embed/mozilla/mozilla-embed-single.cpp:80 src/prefs-dialog.c:108
+#: embed/mozilla/mozilla-embed-single.cpp:80 lib/ephy-langs.h:81
+#: src/prefs-dialog.c:108
 msgid "Hebrew"
 msgstr "Hebreeuws"
 
@@ -1464,27 +1467,28 @@ msgstr "Indiaas"
 
 # src/mozilla_i18n.c:34
 # ui/preferences.glade.h:98
-#: embed/mozilla/mozilla-embed-single.cpp:82 src/prefs-dialog.c:114
-#: src/prefs-dialog.c:153
+#: embed/mozilla/mozilla-embed-single.cpp:82 lib/ephy-langs.h:82
+#: src/prefs-dialog.c:114 src/prefs-dialog.c:153
 msgid "Japanese"
 msgstr "Japans"
 
 # src/mozilla_i18n.c:35
 # ui/preferences.glade.h:101
-#: embed/mozilla/mozilla-embed-single.cpp:83 src/prefs-dialog.c:115
-#: src/prefs-dialog.c:154
+#: embed/mozilla/mozilla-embed-single.cpp:83 lib/ephy-langs.h:83
+#: src/prefs-dialog.c:115 src/prefs-dialog.c:154
 msgid "Korean"
 msgstr "Koreaans"
 
 # src/mozilla_i18n.c:36
 # ui/preferences.glade.h:197
-#: embed/mozilla/mozilla-embed-single.cpp:84 src/prefs-dialog.c:135
+#: embed/mozilla/mozilla-embed-single.cpp:84 lib/ephy-langs.h:87
+#: src/prefs-dialog.c:135
 msgid "Turkish"
 msgstr "Turks"
 
 # src/mozilla_i18n.c:37
 # ui/preferences.glade.h:202
-#: embed/mozilla/mozilla-embed-single.cpp:85
+#: embed/mozilla/mozilla-embed-single.cpp:85 lib/ephy-langs.h:88
 msgid "Unicode"
 msgstr "Unicode"
 
@@ -1495,7 +1499,7 @@ msgstr "Vietnamees"
 
 # src/mozilla_i18n.c:39
 # ui/preferences.glade.h:212
-#: embed/mozilla/mozilla-embed-single.cpp:87
+#: embed/mozilla/mozilla-embed-single.cpp:87 lib/ephy-langs.h:89
 msgid "Western"
 msgstr "Westers"
 
@@ -2000,6 +2004,21 @@ msgstr ""
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Kon hulp niet weergeven: %s"
+
+# ui/preferences.glade.h:178
+#: lib/ephy-langs.h:84 src/prefs-dialog.c:156
+msgid "Simplified Chinese"
+msgstr "Vereenvoudigd Chinees"
+
+# ui/preferences.glade.h:192
+#: lib/ephy-langs.h:85
+msgid "Thai"
+msgstr "Thais"
+
+# ui/preferences.glade.h:196
+#: lib/ephy-langs.h:86 src/prefs-dialog.c:157
+msgid "Traditional Chinese"
+msgstr "Traditioneel Chinees"
 
 # src/bookmarks_editor.c:1111
 #: lib/ephy-start-here.c:279
@@ -3535,16 +3554,6 @@ msgstr "Uit"
 #: src/prefs-dialog.c:152
 msgid "East asian"
 msgstr "Oost-Aziatisch"
-
-# ui/preferences.glade.h:178
-#: src/prefs-dialog.c:156
-msgid "Simplified Chinese"
-msgstr "Vereenvoudigd Chinees"
-
-# ui/preferences.glade.h:196
-#: src/prefs-dialog.c:157
-msgid "Traditional Chinese"
-msgstr "Traditioneel Chinees"
 
 #: src/prefs-dialog.c:895
 #, c-format
