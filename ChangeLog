@@ -1,5 +1,18 @@
 2003-09-03  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-import.c: (xbel_parse_single_bookmark),
+	(xbel_parse_bookmark), (xbel_parse_folder), (xbel_parse_bookmarks),
+	(ephy_bookmarks_import_xbel):
+
+	Rewrote xbel bookmarks importer using xmlreader api. Should fix
+	bug 120803.
+
+	* configure.in:
+
+	Require libxml2 >= 2.5.9
+
+2003-09-03  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-bookmarks-editor.c: (add_bookmarks_source_menu),
 	(cmd_bookmarks_import):
 
