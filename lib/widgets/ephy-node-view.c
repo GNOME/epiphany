@@ -358,6 +358,7 @@ drag_motion_cb (GtkWidget *widget,
 		EphyNodeView *view)
 {
 	EphyNode *node;
+	GdkAtom target;
 	GtkTreePath *path;
 	GtkTreeViewDropPosition pos;
 	guint action = 0;
@@ -371,9 +372,10 @@ drag_motion_cb (GtkWidget *widget,
 		get_drag_data (view, context, time);
 	}
 
+	target = gtk_drag_dest_find_target (widget, context, NULL);
 	node = get_node_from_path (view, path);
 
-	if (node)
+	if (target != GDK_NONE && node != NULL)
 	{
 		priority = ephy_node_get_property_int
 				(node, view->priv->priority_prop_id);
@@ -435,17 +437,14 @@ drag_data_received_cb (GtkWidget *widget,
 		       guint32 time,
 		       EphyNodeView *view)
 {
-	GtkTreePath *path;
 	GtkTreeViewDropPosition pos;
-	gboolean on_row;
+
+	/* x and y here are valid only on drop ! */
 
 	if (selection_data->length <= 0 || selection_data->data == NULL)
 	{
 		return;
-	}
-	
-	on_row = gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
-					            x, y, &path, &pos);
+	}	
 
 	if (!view->priv->have_drag_data)
 	{
@@ -459,8 +458,12 @@ drag_data_received_cb (GtkWidget *widget,
 		EphyNode *node;
 		GList *uris;
 		gboolean success = FALSE;
+		GtkTreePath *path;
 
-		g_return_if_fail (on_row && path != NULL);
+		gtk_tree_view_get_dest_row_at_pos
+			(GTK_TREE_VIEW (widget), x, y, &path, &pos);
+
+		g_return_if_fail (path != NULL);
 
 		node = get_node_from_path (view, path);
 
@@ -478,12 +481,13 @@ drag_data_received_cb (GtkWidget *widget,
 		view->priv->drop_occurred = FALSE;
 		free_drag_data (view);
 		gtk_drag_finish (context, success, FALSE, time);
+
+		if (path)
+		{
+			gtk_tree_path_free (path);
+		}
 	}
 
-	if (path)
-	{
-		gtk_tree_path_free (path);
-	}
 
 	/* appease GtkTreeView by preventing its drag_data_receive
 	 * from being called */

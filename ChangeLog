@@ -1,4 +1,15 @@
-﻿2003-09-04  Sanlig Badral  <badral@openmn.org>
+2003-09-05  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-node-view.c: (drag_motion_cb),
+	(drag_data_received_cb):
+
+	Make sure that only valid dnd types are
+        accepted on thecostum drag and drop implementation
+	of the bookmarks topics treeview.
+	Use x and y in
+	drag_data_received only when a drop is occurred.
+
+2003-09-04  Sanlig Badral  <badral@openmn.org>
 
 	* configure.in: added 'mn' to ALL_LINGUAS
 
