@@ -1,5 +1,14 @@
 2004-03-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks.c: (backup_file),
+	(ephy_bookmarks_init):
+
+	If reading the bookmarks file, or re-importing the bookmarks from the
+	rdf file fails, back up those files so that the user can afterwards
+	try to manually recover his bookmarks. Fixes bug #128308.
+
+2004-03-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-bookmarks-import.c: (xbel_parse_folder),
 	(xbel_parse_xbel), (ephy_bookmarks_import_xbel):
 

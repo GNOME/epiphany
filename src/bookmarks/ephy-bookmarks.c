@@ -586,6 +586,34 @@ disable_bookmark_editing_notifier (GConfClient *client,
 }
 
 static void
+backup_file (const char *original_filename, const char *extension)
+{
+	char *template, *backup_filename;
+	int result = 0;
+
+	template = g_strconcat (original_filename, ".backup-XXXXXX", NULL);
+	backup_filename = ephy_file_tmp_filename (template, extension);
+
+	if (backup_filename != NULL)
+	{
+		result = rename (original_filename, backup_filename);
+	}
+
+	if (result >= 0)
+	{
+		g_message ("Your old bookmarks file was backed up as \"%s\".\n",
+			   backup_filename);
+	}
+	else
+	{
+		g_warning ("Backup failed! Your old bookmarks file was lost.\n");
+	}
+
+	g_free (template);
+	g_free (backup_filename);
+}
+
+static void
 ephy_bookmarks_init (EphyBookmarks *eb)
 {
 	GValue value = { 0, };
@@ -682,8 +710,20 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 					 EPHY_BOOKMARKS_XML_ROOT,
 					 EPHY_BOOKMARKS_XML_VERSION) == FALSE)
 	{
+		/* save the corrupted files so the user can late try to
+		 * manually recover them. See bug #128308.
+		 */
+
+		g_warning ("Could not read bookmarks file \"%s\", trying to "
+			   "re-import bookmarks from \"%s\"\n",
+			   eb->priv->xml_file, eb->priv->rdf_file);
+
+		backup_file (eb->priv->xml_file, "xml");
+
 		if (ephy_bookmarks_import_rdf (eb, eb->priv->rdf_file) == FALSE)
 		{
+			backup_file (eb->priv->rdf_file, "rdf");
+
 			eb->priv->init_defaults = TRUE;
 		}
 	}
