@@ -22,7 +22,10 @@
    Authors: Ramiro Estrugo <ramiro@eazel.com>
 */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "eel-gconf-extensions.h"
 
 #include <glib/gi18n.h>
