@@ -539,6 +539,7 @@ ephy_shell_finalize (GObject *object)
 	{
 		eel_gconf_notification_remove (shell->priv->toolbar_style_notifier_id);
 	}
+	if (shell->priv->toolbars_model)
 	{
 		g_object_unref (shell->priv->toolbars_model);
 	}

@@ -208,7 +208,7 @@ main (int argc, char *argv[])
 						GTK_MESSAGE_ERROR, err->message);
 		gtk_dialog_run (GTK_DIALOG (dialog));
 	}
-	else if (new_instance)
+	else if (new_instance && ephy_shell)
 	{
 		g_object_weak_ref (G_OBJECT (ephy_shell), shell_weak_notify, NULL);
 		g_idle_add ((GSourceFunc) idle_unref, ephy_shell);
