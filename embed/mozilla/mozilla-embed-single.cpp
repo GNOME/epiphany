@@ -26,7 +26,6 @@
 #endif
 
 #include "mozilla-embed-single.h"
-#include "mozilla-version.h"
 
 #include "ephy-cookie-manager.h"
 #include "ephy-password-manager.h"
@@ -404,6 +403,8 @@ getUILang (nsAString& aUILang)
 static nsresult
 mozilla_init_chrome (void)
 {
+/* FIXME: can we just omit this on new-toolkit ? */
+#ifdef MOZ_NSIXULCHROMEREGISTRY_SELECTSKIN
 	nsresult rv;
 	nsEmbedString uiLang;
 
@@ -425,6 +426,9 @@ mozilla_init_chrome (void)
 	NS_UTF16ToCString (uiLang, NS_CSTRING_ENCODING_UTF8, cUILang);
 
 	return chromeRegistry->SelectLocale (cUILang, PR_FALSE);
+#else
+	return NS_OK;
+#endif
 }
 
 static void

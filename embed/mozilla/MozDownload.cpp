@@ -47,8 +47,6 @@
 #include "config.h"
 #endif
 
-#include "mozilla-version.h"
-
 #include "mozilla-download.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
@@ -330,7 +328,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 		else if (NS_SUCCEEDED (aStatus))
 		{
 			GnomeVFSMimeApplication *helperApp;
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 			nsEmbedCString mimeType;
 			rv = mMIMEInfo->GetMIMEType (mimeType);
 			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);

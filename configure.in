@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([GNOME Web browser], [1.4.0.90],
+AC_INIT([GNOME Web browser], [1.4.0.91],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
@@ -78,16 +78,6 @@ AC_SUBST(LIBBONOBO_IDL)
 BONOBO_ACTIVATION_IDL="`$PKG_CONFIG --variable=idldir bonobo-activation-2.0`"
 AC_SUBST(BONOBO_ACTIVATION_IDL)
 
-PKG_CHECK_MODULES(MOZILLA_COMPONENT, mozilla-gtkmozembed mozilla-xpcom)
-AC_SUBST(MOZILLA_COMPONENT_CFLAGS)
-AC_SUBST(MOZILLA_COMPONENT_LIBS)
-
-MOZILLA_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir mozilla-gtkmozembed`"
-AC_SUBST(MOZILLA_INCLUDE_ROOT)
-
-MOZILLA_HOME="`$PKG_CONFIG --variable=libdir mozilla-gtkmozembed`"
-AC_SUBST(MOZILLA_HOME)
-
 dnl whether to build with DEBUG defined
 AC_ARG_WITH(mozilla-debug,
 	[  --with-mozilla-debug        Use a debug mozilla build],
@@ -118,6 +108,51 @@ dnl ******************
 
 AC_CHECK_FUNCS(mkdtemp)
 
+dnl ******************
+dnl Mozilla name check
+dnl ******************
+
+AC_MSG_CHECKING([which mozilla to use])
+
+MOZILLA=
+AC_ARG_WITH([mozilla],
+	AC_HELP_STRING([--with-mozilla@<:@=mozilla|firefox|thunderbird@:>@],
+		       [Whether to use mozilla, firefox or thunderbird gtkmozembed (default: mozilla)]),
+	[MOZILLA="$withval"])
+
+dnl try to autodetect: if mozilla exists, use it, else try firefox, then thunderbird
+if test "x$MOZILLA" = "x"; then
+  if pkg-config --exists mozilla-gtkmozembed; then
+    MOZILLA=mozilla
+  elif pkg-config --exists firefox-gtkmozembed; then
+    MOZILLA=firefox
+  elif pkg-config --exists thunderbird-gtkmozembed; then
+    MOZILLA=thunderbird
+  else
+    AC_MSG_ERROR([no mozilla installation found])
+  fi
+elif test "x$with_mozilla" != "xmozilla" -a "x$with_mozilla" != "xfirefox" -a "x$with_mozilla" != "xthunderbird"; then
+  AC_MSG_ERROR([unknown mozilla name ($MOZILLA)])
+fi
+
+AC_MSG_RESULT([$MOZILLA])
+
+case "$MOZILLA" in
+mozilla) min_version=1.7 ;;
+firefox) min_version=0.10 ;;
+thunderbird) min_version=0.8 ;;
+esac
+
+PKG_CHECK_MODULES(MOZILLA_COMPONENT, $MOZILLA-gtkmozembed >= $min_version $MOZILLA-xpcom >= $min_version)
+AC_SUBST(MOZILLA_COMPONENT_CFLAGS)
+AC_SUBST(MOZILLA_COMPONENT_LIBS)
+
+MOZILLA_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir $MOZILLA-gtkmozembed`"
+AC_SUBST(MOZILLA_INCLUDE_ROOT)
+
+MOZILLA_HOME="`$PKG_CONFIG --variable=libdir $MOZILLA-gtkmozembed`"
+AC_SUBST(MOZILLA_HOME)
+
 dnl *************************************************************************
 dnl This is from Mozilla's configure.in. They set almost all the config stuff
 dnl they need in mozilla-config.h Except for this compiler flag, which can't
@@ -146,104 +181,163 @@ AC_CACHE_CHECK(for compiler -fshort-wchar option,
 if test "$ac_cv_have_usable_wchar_option" != "yes"; then
     AM_CXXFLAGS=$_SAVE_AM_CXXFLAGS
 fi
+
+dnl **********************************
+dnl now tests for mozilla API variance
+dnl **********************************
+
+dnl FIXME find a m4/autoconf guru who can distill this into a nice macro
+
+CXXFLAGS="$_SAVE_CXXFLAGS $AM_CXXFLAGS -I$MOZILLA_INCLUDE_ROOT `pkg-config --cflags $MOZILLA-xpcom`"
+
+dnl Changed from PRUnichar* to nsAString& in 1.8a1 and on aviary branch
+
+AC_MSG_CHECKING([whether nsIFilePicker methods expect nsAString&])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+		[[#include <nsEmbedString.h>
+		  #include <widget/nsIFilePicker.h>]],
+		[[nsIFilePicker *p;
+		  p->SetDefaultString (nsEmbedString());]]
+	)],
+	[AC_DEFINE([MOZ_NSIFILEPICKER_NSASTRING_],[1],[Define if nsIFilePicker uses nsAString&]) result=yes],
+	[AC_DEFINE([MOZ_NSIFILEPICKER_PRUNICHARP],[1],[Define if nsIFilePicker uses PRUnichar*]) result=no])
+
+AC_MSG_RESULT([$result])
+
+dnl Changed from char* to nsAString& in 1.8a1
+
+AC_MSG_CHECKING([whether nsIMIMEInfo methods expect nsAString&])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+		[[#include <nsEmbedString.h>
+		  #include <mimetype/nsIMIMEInfo.h>]],
+		[[nsIMIMEInfo *p;
+		  p->SetDescription (nsEmbedString());]]
+	)],
+	[AC_DEFINE([MOZ_NSIMIMEINFO_NSACSTRING_],[1],[Define if nsIMIMEInfo uses nsAString&]) result=yes],
+	[result=no])
+
+AC_MSG_RESULT([$result])
+
+dnl Changed in 1.8a1 and again in 1.8a3 to its present form (variant 2);
+dnl variant 1 is on 1.7 branch. Aviary branch also has variant 2.
+
+AC_MSG_CHECKING([for nsIContentPolicy API])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+		[[#include <nsEmbedString.h>
+		  #include <nsIURI.h>
+		  #include <content/nsIContentPolicy.h>]],
+		[[nsIContentPolicy *p;
+		  nsISupports *arg4;
+		  p->ShouldLoad(0,nsnull,nsnull,arg4,nsEmbedCString(),nsnull,nsnull);]]
+	)],
+	[AC_DEFINE([MOZ_NSICONTENTPOLICY_VARIANT_2],[1],[dummy]) result=2],
+	[AC_DEFINE([MOZ_NSICONTENTPOLICY_VARIANT_1],[1],[dummy]) result=1])
+
+AC_MSG_RESULT([variant $result])
+
+dnl Changed from char* to nsIURI* in 1.7.4 on 1.7 branch,
+dnl in 1.8a3 on trunk and on aviary branch
+
+AC_MSG_CHECKING([whether nsIBrowserHistory methods expect nsIURI*])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+		[[#include <nsIURI.h>
+		  #include <nsIGlobalHistory.h>
+		  #include <docshell/nsIGlobalHistory2.h>
+		  #include <history/nsIBrowserHistory.h>]],
+		[[nsIBrowserHistory* p;
+		  nsIURI *arg1;
+		  p->RemovePage(arg1);]]
+	)],
+	[AC_DEFINE([MOZ_NSIGLOBALHISTORY_NSIURIP],[1],[dummy]) result=yes],
+	[AC_DEFINE([MOZ_NSIGLOBALHISTORY_CHARP],[1],[dummy]) result=no])
+
+AC_MSG_RESULT([$result])
+
+dnl This is only present in new-toolkit apps
+
+AC_MSG_CHECKING([for nsIBrowserHistory::AddPageWithDetails])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+		[[#include <nsIURI.h>
+		  #include <nsIGlobalHistory.h>
+		  #include <docshell/nsIGlobalHistory2.h>
+		  #include <history/nsIBrowserHistory.h>]],
+		[[nsIBrowserHistory *p;
+		  p->AddPageWithDetails(nsnull,nsnull,0);]]
+	)],
+	[AC_DEFINE([MOZ_NSIBROWSERHISTORY_ADDPAGEWITHDETAILS],[1],[dummy]) result=yes],
+	[result=no])
+
+AC_MSG_RESULT([$result])
+
+dnl Changed from char* to nsACString& in mozilla 1.8a2
+
+AC_MSG_CHECKING([whether nsIProtocolProxyService::ConfigureFromPAC expects nsACString&])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+		[[#include <nsEmbedString.h>
+		  #include <necko/nsIProtocolProxyService.h>]],
+		[[nsIProtocolProxyService *p;
+		  p->ConfigureFromPAC (nsEmbedCString());]]
+	)],
+	[AC_DEFINE([MOZ_NSIPROTOCOLPROXYSERVICE_NSACSTRING_],[1],[dummy]) result=yes],
+	[result=no])
+
+AC_MSG_RESULT([$result])
+
+dnl Firefox doesn't have this API (?)
+
+AC_MSG_CHECKING([for nsIXULChromeRegistry API])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+		[[#include <nsEmbedString.h>
+		  #include <content/nsIChromeRegistry.h>]],
+		[[nsIXULChromeRegistry *p;
+		  p->SelectSkin (nsEmbedCString(), PR_FALSE);]]
+	)],
+	[AC_DEFINE([MOZ_NSIXULCHROMEREGISTRY_SELECTSKIN],[1],[dummy]) result=yes],
+	[result=no])
+
+AC_MSG_RESULT([$result])
+
+dnl check for broken reload in GtkMozEmbed
+dnl FIXME: I have NO IDEA how to do this. For now, just always enable our workaround
+dnl
+dnl This is fixed since 1.7.4 on 1.7 branch, and since 1.8a3 on trunk
+
+AC_MSG_CHECKING([for broken reload])
+
+AC_DEFINE([GTKMOZEMBED_BROKEN_RELOAD],[1],[Define if GtkMozEmbed has broken reload])
+
+AC_MSG_RESULT([couldn't autodetect, assuming yes])
+
 CXXFLAGS=$_SAVE_CXXFLAGS
 AC_LANG_POP(C++)
-
-dnl *********************
-dnl Mozilla version check
-dnl *********************
-
-AC_MSG_CHECKING(for mozilla version)
-MOZILLA_VERSION="`$PKG_CONFIG --modversion mozilla-gtkmozembed`"
-
-AC_ARG_WITH(mozilla-snapshot,
-  AC_HELP_STRING([--with-mozilla-snapshot@<:@=1.7|1.8a1|1.8a2|trunk@:>@],
-		 [Which mozilla version to build against, guessed: @<:@guessed@:>@]),
-  [autodetect=" (guessed: $MOZILLA_VERSION)"; MOZILLA_VERSION="$withval"])
-
-AC_MSG_RESULT($MOZILLA_VERSION$autodetect)
-
-dnl Test for the "trunk" version
-if test $MOZILLA_VERSION = "trunk"; then
-	MOZILLA_VERSION=9.0 # use a high number
-fi
-
-dnl Split up the version string ( 1.7rc1 -> 1 7 rc 1 )
-version=$(echo $MOZILLA_VERSION | sed -e 's/\(@<:@0-9@:>@\+\|@<:@a-z@:>@\+\)/\1 /g' -e 's/\.//g')
-
-set -- $version;
-
-case $1 in 
-    @<:@0-9@:>@)
-        AC_DEFINE_UNQUOTED(MOZILLA_MAJOR, $1, [Define to the Mozilla major version.])
-	;;
-    *)		
-	AC_ERROR([Invalid mozilla major version component: $1])
-	;;
-esac
-
-case $2 in 
-    @<:@0-9@:>@)
-        AC_DEFINE_UNQUOTED(MOZILLA_MINOR, $2, [Define to the Mozilla minor version.])
-	;;
-    *)		
-	AC_ERROR([Invalid mozilla minor version component: $2])
-	;;
-esac
-
-micro=$3
-type=4
-case $3 in
-    @<:@0-9@:>@) # e.g. 1.4.1
-	;;
-    "")	# e.g. 1.7
-	micro=0	
-	;;
-    a)	type=1
-	micro=$4
-	;;
-
-    b)	type=2
-	micro=$4
-	;;
-
-    rc) type=3
-	micro=$4
-	;;
-    *)
-	AC_ERROR([Invalid mozilla version component: $3])
-esac
-
-if test "$micro" = "" ; then
-  micro=0
-fi
-
-if test "$5" != "" ; then
-  AC_ERROR([Unexpected mozilla version component: $5])
-fi
-
-AC_DEFINE_UNQUOTED(MOZILLA_TYPE, $type, [Define to the Mozilla release type.])
-AC_DEFINE_UNQUOTED(MOZILLA_MICRO, $micro, [Define to the Mozilla micro version.])
-
-if test "$1" -lt 1 -o \( "$1" -eq 1 -a "$2" -lt 7 \) -o \( "$1" -eq 1 -a "$2" -eq 7 -a "$type" -lt 4 \); then
-    AC_ERROR([
-*****************************************************************************
-Epiphany can be built using Mozilla 1.7, 1.7.x, 1.7 branch, 1.8a2, or trunk
-snapshot, but the version available is $MOZILLA_VERSION.  
-
-When using Mozilla trunk snapshot, a successful build is not guaranteed due 
-to the frequently changing state of the Mozilla interfaces and the limited
-resources of the Epiphany team to support non-release Mozilla snapshots.
-*****************************************************************************])
-fi
 
 AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/pipnss/nsIX509Cert.h],
 	[AC_DEFINE(HAVE_MOZILLA_PSM, 1,
 		   [Define if you have the mozilla psm headers installed])])
 
-AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsIPassword.h],
+if test "$MOZILLA" = "mozilla"; then
+    AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsIPassword.h],
 	[AC_DEFINE(HAVE_NSIPASSWORD_H, 1,
-		[Define if mozilla nsIPassword header is available])])
+	[Define if mozilla nsIPassword header is available])])
+else
+    AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/passwordmgr/nsIPassword.h],
+	[AC_DEFINE(HAVE_NSIPASSWORD_H, 1,
+	[Define if mozilla nsIPassword header is available])])
+fi
 
 MOZILLA_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
 AC_SUBST(MOZILLA_WARN_CXXFLAGS)

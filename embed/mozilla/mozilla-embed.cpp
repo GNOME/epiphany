@@ -503,7 +503,7 @@ static void
 impl_reload (EphyEmbed *embed, 
              gboolean force)
 {
-#if (MOZILLA_IS_BRANCH (1,7) && MOZILLA_CHECK_VERSION3 (1, 7, 4)) || MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
+#ifndef GTKMOZEMBED_BROKEN_RELOAD
 	guint32 mflags;
 
 	mflags = GTK_MOZ_EMBED_FLAG_RELOADNORMAL;
@@ -711,14 +711,12 @@ impl_set_encoding (EphyEmbed *embed,
 		if (NS_FAILED (rv)) return;
 	}
 
-#if (MOZILLA_IS_BRANCH (1,7) && MOZILLA_CHECK_VERSION3 (1, 7, 4)) || MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
+#ifndef GTKMOZEMBED_BROKEN_RELOAD
 	gtk_moz_embed_reload (GTK_MOZ_EMBED (embed),
 			      GTK_MOZ_EMBED_FLAG_RELOADCHARSETCHANGE);
 #else
 	/* Workaround for broken reload with frames, see mozilla bug
 	 * http://bugzilla.mozilla.org/show_bug.cgi?id=246392
-	 * Replace #if 0 with appropriate MOZILLA_CHECK_VERSION4 once the bug
-	 * has been fixed
 	 */
 	mpriv->browser->Reload (EphyBrowser::RELOAD_ENCODING_CHANGE);
 #endif

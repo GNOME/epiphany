@@ -61,7 +61,7 @@ class GContentHandler;
 
 NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 GContentHandler::GContentHandler()
 {
 	LOG ("GContentHandler ctor (%p)", this)
@@ -77,7 +77,7 @@ GContentHandler::~GContentHandler()
 {
 	LOG ("GContentHandler dtor (%p)", this)
 
-#if !MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifndef MOZ_NSIMIMEINFO_NSACSTRING_
 	nsMemory::Free (mMimeType);
 #endif
 }
@@ -101,7 +101,7 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 	g_signal_emit_by_name (single, "handle_content", mMimeType.get(),
 			       mUrl.get(), &handled);
 #else
@@ -241,7 +241,7 @@ NS_METHOD GContentHandler::Init (void)
 	mLauncher->GetMIMEInfo (getter_AddRefs(MIMEInfo));
 	NS_ENSURE_TRUE (MIMEInfo, NS_ERROR_FAILURE);
 
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 	rv = MIMEInfo->GetMIMEType (mMimeType);
 #else
 	rv = MIMEInfo->GetMIMEType (&mMimeType);
@@ -359,7 +359,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 
 	auto_downloads = eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS);
 
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType.get());
 	mPermission = ephy_embed_shell_check_mime (embed_shell, mMimeType.get());
 #else
@@ -402,7 +402,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 		/* HACK we use the application description to ask
 		   MozDownload to open the file when download
 		   is finished */
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 		mimeInfo->SetApplicationDescription (desc);
 #else
 		mimeInfo->SetApplicationDescription (desc.get());
@@ -410,7 +410,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	}
 	else
 	{
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 		mimeInfo->SetApplicationDescription (nsEmbedString ());
 #else
 		mimeInfo->SetApplicationDescription (nsnull);

@@ -19,6 +19,7 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/mimetype		\
 	-I$(MOZILLA_INCLUDE_ROOT)/necko			\
 	-I$(MOZILLA_INCLUDE_ROOT)/nkcache		\
+	-I$(MOZILLA_INCLUDE_ROOT)/passwordmgr		\
 	-I$(MOZILLA_INCLUDE_ROOT)/pipboot		\
 	-I$(MOZILLA_INCLUDE_ROOT)/pipnss		\
 	-I$(MOZILLA_INCLUDE_ROOT)/shistory		\
@@ -88,5 +89,4 @@ libephymozillaembed_la_SOURCES = 	\
 	mozilla-embed-single.cpp	\
 	mozilla-embed-single.h	        \
 	mozilla-notifiers.cpp		\
-	mozilla-notifiers.h		\
-	mozilla-version.h
+	mozilla-notifiers.h

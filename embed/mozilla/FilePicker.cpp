@@ -28,8 +28,6 @@
 #include "FilePicker.h"
 #include "MozillaPrivate.h"
 
-#include "mozilla-version.h"
-
 #include <nsCOMPtr.h>
 #include <nsEmbedString.h>
 #include <nsIServiceManager.h>
@@ -40,7 +38,7 @@
 #include <nsIDOMWindow.h>
 #include <nsNetCID.h>
 
-#if !MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifndef MOZ_NSIFILEPICKER_NSASTRING_
 #include <nsIDOMWindowInternal.h>
 #endif
 
@@ -76,7 +74,7 @@ GFilePicker::~GFilePicker()
 }
 
 /* void init (in nsIDOMWindow parent, in AString title, in short mode); */
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 NS_IMETHODIMP GFilePicker::Init(nsIDOMWindow *parent, const nsAString& title, PRInt16 mode)
 #else
 NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *title, PRInt16 mode)
@@ -85,12 +83,12 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 	LOG ("GFilePicker::Init")
 
 	GtkWidget *gtkparent = MozillaFindGtkParent (parent);
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#if defined(MOZ_NSIFILEPICKER_NSASTRING_)
 	NS_ENSURE_TRUE (gtkparent, NS_ERROR_FAILURE);
 #endif
 
 	nsEmbedCString cTitle;
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	NS_UTF16ToCString (title, NS_CSTRING_ENCODING_UTF8, cTitle);
 #else
 	NS_UTF16ToCString (nsEmbedString(title), NS_CSTRING_ENCODING_UTF8, cTitle);
@@ -181,7 +179,7 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 }
 
 /* void appendFilter (in AString title, in AString filter); */
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 NS_IMETHODIMP GFilePicker::AppendFilter(const nsAString& title, const nsAString& filter)
 #else
 NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar *filter)
@@ -191,14 +189,14 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar 
 
 	LOG ("GFilePicker::AppendFilter")
 
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	if (!filter.Length()) return NS_ERROR_FAILURE;
 #else
 	if (!filter) return NS_ERROR_FAILURE;
 #endif
 
 	nsEmbedCString pattern;
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	NS_UTF16ToCString (filter, NS_CSTRING_ENCODING_UTF8, pattern);
 #else
 	NS_UTF16ToCString (nsEmbedString(filter), NS_CSTRING_ENCODING_UTF8, pattern);
@@ -217,7 +215,7 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar 
 	}
 
 	nsEmbedCString cTitle;
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	NS_UTF16ToCString (title, NS_CSTRING_ENCODING_UTF8, cTitle);
 #else
 	NS_UTF16ToCString (nsEmbedString(title), NS_CSTRING_ENCODING_UTF8, cTitle);
@@ -233,7 +231,7 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar 
 }
 
 /* attribute AString defaultString; */
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 NS_IMETHODIMP GFilePicker::GetDefaultString(nsAString& aDefaultString)
 #else
 NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
@@ -243,7 +241,7 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 
 	LOG ("GFilePicker::GetDefaultString")
 
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	aDefaultString = mDefaultString;
 #else
 	*aDefaultString = NS_StringCloneData (mDefaultString);
@@ -252,7 +250,7 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 	return NS_OK;
 }
 
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 NS_IMETHODIMP GFilePicker::SetDefaultString(const nsAString& aDefaultString)
 #else
 NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
@@ -281,7 +279,7 @@ NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
 }
 
 /* attribute AString defaultExtension; */
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 NS_IMETHODIMP GFilePicker::GetDefaultExtension(nsAString& aDefaultExtension)
 #else
 NS_IMETHODIMP GFilePicker::GetDefaultExtension(PRUnichar **aDefaultExtension)
@@ -292,7 +290,7 @@ NS_IMETHODIMP GFilePicker::GetDefaultExtension(PRUnichar **aDefaultExtension)
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 NS_IMETHODIMP GFilePicker::SetDefaultExtension(const nsAString& aDefaultExtension)
 #else
 NS_IMETHODIMP GFilePicker::SetDefaultExtension(const PRUnichar *aDefaultExtension)
