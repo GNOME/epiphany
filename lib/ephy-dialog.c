@@ -938,6 +938,8 @@ ephy_dialog_set_parent (EphyDialog *dialog,
 
 	gtk_window_set_transient_for (GTK_WINDOW (dialog->priv->dialog),
                                       GTK_WINDOW (parent));
+
+	g_object_notify (G_OBJECT (dialog), "ParentWindow");
 }
 
 EphyDialog *

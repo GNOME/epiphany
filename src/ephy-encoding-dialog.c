@@ -77,12 +77,6 @@ void		ephy_encoding_dialog_response_cb	(GtkWidget *widget,
 							 gint response,
 							 EphyEncodingDialog *dialog);
 
-enum
-{
-	PROP_0,
-	PROP_WINDOW
-};
-
 static GObjectClass *parent_class = NULL;
 
 GType
@@ -186,8 +180,18 @@ sync_active_tab (EphyWindow *window, GParamSpec *pspec, EphyEncodingDialog *dial
 }
 
 static void
-ephy_encoding_dialog_set_window (EphyEncodingDialog *dialog, EphyWindow *window)
+sync_parent_window_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 {
+	EphyWindow *window;
+	GValue value = { 0, };
+
+	g_return_if_fail (dialog->priv->window == NULL);
+
+	g_value_init (&value, GTK_TYPE_WIDGET);
+	g_object_get_property (G_OBJECT (dialog), "ParentWindow", &value);
+	window = EPHY_WINDOW (g_value_get_object (&value));
+	g_value_unset (&value);
+
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
 	dialog->priv->window = window;
@@ -359,6 +363,8 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 
 	dialog->priv->enc_view = treeview;
 
+	g_signal_connect (G_OBJECT (dialog), "notify::ParentWindow",
+			  G_CALLBACK (sync_parent_window_cb), NULL);
 	g_signal_connect (G_OBJECT (dialog), "notify::embed",
 			  G_CALLBACK (sync_embed_cb), NULL);
 }
@@ -381,38 +387,6 @@ ephy_encoding_dialog_finalize (GObject *object)
 }
 
 static void
-ephy_encoding_dialog_set_property (GObject *object,
-				   guint prop_id,
-				   const GValue *value,
-				   GParamSpec *pspec)
-{
-	EphyEncodingDialog *dialog = EPHY_ENCODING_DIALOG (object);
-
-	switch (prop_id)
-	{
-		case PROP_WINDOW:
-			ephy_encoding_dialog_set_window (dialog, g_value_get_object (value));
-			break;
-	}
-}
-
-static void
-ephy_encoding_dialog_get_property (GObject *object,
-				   guint prop_id,
-				   GValue *value,
-				   GParamSpec *pspec)
-{
-	EphyEncodingDialog *dialog = EPHY_ENCODING_DIALOG (object);
-
-	switch (prop_id)
-	{
-		case PROP_WINDOW:
-			g_value_set_object (value, dialog->priv->window);
-			break;
-	}
-}
-
-static void
 ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -420,17 +394,6 @@ ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_encoding_dialog_finalize;
-	object_class->get_property = ephy_encoding_dialog_get_property;
-	object_class->set_property = ephy_encoding_dialog_set_property;
-
-	g_object_class_install_property (object_class,
-					 PROP_WINDOW,
-					 g_param_spec_object ("window",
-							      "Window",
-							      "Parent window",
-							      EPHY_TYPE_WINDOW,
-							      G_PARAM_READWRITE |
-							      G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof(EphyEncodingDialogPrivate));
 }
@@ -439,6 +402,6 @@ EphyEncodingDialog *
 ephy_encoding_dialog_new (EphyWindow *parent)
 {
 	return g_object_new (EPHY_TYPE_ENCODING_DIALOG,
-			     "window", parent,
+			     "ParentWindow", parent,
 			     NULL);
 }
