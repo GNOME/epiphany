@@ -481,7 +481,7 @@ setup_font_menu (PrefsDialog *dialog,
 
 		gtk_editable_delete_text (GTK_EDITABLE(entry), 0, -1);
 		gtk_editable_insert_text (GTK_EDITABLE(entry),
-					  name, g_utf8_strlen (name, -1),
+					  name, strlen (name),
 					  &pos);
 	}
 
@@ -1058,13 +1058,13 @@ set_homepage_entry (EphyDialog *dialog,
 		    const char *new_location)
 {
 	GtkWidget *entry;
-	int pos;
+	int pos = 0;
 
 	entry = ephy_dialog_get_control (dialog, HOMEPAGE_ENTRY_PROP);
 
 	gtk_editable_delete_text (GTK_EDITABLE (entry), 0, -1);
 	gtk_editable_insert_text (GTK_EDITABLE (entry), new_location,
-				  g_utf8_strlen (new_location, -1),
+				  strlen (new_location),
 				  &pos);
 }
 

@@ -1,3 +1,10 @@
+2003-07-05  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/prefs-dialog.c: (setup_font_menu), (set_homepage_entry):
+
+	gtk_editable_insert_text takes the number of bytes in the string,
+	not the number of characters.
+
 2003-07-05  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/mozilla/ContentHandler.cpp:
