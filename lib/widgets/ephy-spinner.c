@@ -68,46 +68,29 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_spinner_get_type (void)
 {
-        static GType type = 0;
+	static GType type = 0;
 
-        if (type == 0)
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (EphySpinnerClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ephy_spinner_class_init,
-                        NULL,
-                        NULL, /* class_data */
-                        sizeof (EphySpinner),
-                        0, /* n_preallocs */
-                        (GInstanceInitFunc) ephy_spinner_init
-                };
+	if (type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphySpinnerClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) ephy_spinner_class_init,
+			NULL,
+			NULL, /* class_data */
+			sizeof (EphySpinner),
+			0, /* n_preallocs */
+			(GInstanceInitFunc) ephy_spinner_init
+		};
 
-                type = g_type_register_static (GTK_TYPE_EVENT_BOX,
-                                               "EphySpinner",
-                                               &our_info, 0);
-        }
+		type = g_type_register_static (GTK_TYPE_EVENT_BOX,
+					       "EphySpinner",
+					       &our_info, 0);
+	}
 
-        return type;
-}
-
-/*
- * ephy_spinner_new:
- *
- * Create a new #EphySpinner. The spinner is a widget
- * that gives the user feedback about network status with
- * an animated image.
- *
- * Return Value: the spinner #GtkWidget
- **/
-GtkWidget *
-ephy_spinner_new (void)
-{
-	return GTK_WIDGET (g_object_new (EPHY_TYPE_SPINNER,
-					 "visible-window", FALSE,
-					 NULL));
+	return type;
 }
 
 static gboolean
@@ -459,7 +442,7 @@ ephy_spinner_load_images (EphySpinner *spinner)
 
 	/* Load the animation */
 	icon_info = gtk_icon_theme_lookup_icon (spinner->details->icon_theme,
-					        "gnome-spinner", -1, 0);
+						"gnome-spinner", -1, 0);
 	if (icon_info == NULL)
 	{
 		g_warning ("Throbber animation not found");
@@ -499,7 +482,7 @@ ephy_spinner_load_images (EphySpinner *spinner)
 
 	/* Load the rest icon */
 	icon_info = gtk_icon_theme_lookup_icon (spinner->details->icon_theme,
-					        "gnome-spinner-rest", -1, 0);
+						"gnome-spinner-rest", -1, 0);
 	if (icon_info == NULL)
 	{
 		g_warning ("Throbber rest icon not found");
@@ -594,4 +577,21 @@ ephy_spinner_class_init (EphySpinnerClass *class)
 	widget_class->size_request = ephy_spinner_size_request;
 
 	g_type_class_add_private (object_class, sizeof (EphySpinnerDetails));
+}
+
+/*
+ * ephy_spinner_new:
+ *
+ * Create a new #EphySpinner. The spinner is a widget
+ * that gives the user feedback about network status with
+ * an animated image.
+ *
+ * Return Value: the spinner #GtkWidget
+ **/
+GtkWidget *
+ephy_spinner_new (void)
+{
+	return GTK_WIDGET (g_object_new (EPHY_TYPE_SPINNER,
+					 "visible-window", FALSE,
+					 NULL));
 }

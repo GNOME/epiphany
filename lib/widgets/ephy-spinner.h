@@ -1,5 +1,4 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
-
 /*
  * Nautilus
  *
@@ -34,38 +33,40 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_SPINNER	  (ephy_spinner_get_type ())
-#define EPHY_SPINNER(o)		  (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_SPINNER, EphySpinner))
-#define EPHY_SPINNER_CLASS(k)	  (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_SPINNER, EphySpinnerClass))
-#define EPHY_IS_SPINNER(o)	  (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_SPINNER))
-#define EPHY_IS_SPINNER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SPINNER))
-#define EPHY_SPINNER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SPINNER, EphySpinnerClass))
+#define EPHY_TYPE_SPINNER		(ephy_spinner_get_type ())
+#define EPHY_SPINNER(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_SPINNER, EphySpinner))
+#define EPHY_SPINNER_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_SPINNER, EphySpinnerClass))
+#define EPHY_IS_SPINNER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_SPINNER))
+#define EPHY_IS_SPINNER_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SPINNER))
+#define EPHY_SPINNER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SPINNER, EphySpinnerClass))
 
-typedef struct EphySpinner EphySpinner;
-typedef struct EphySpinnerClass EphySpinnerClass;
-typedef struct EphySpinnerDetails EphySpinnerDetails;
+typedef struct EphySpinner		EphySpinner;
+typedef struct EphySpinnerClass		EphySpinnerClass;
+typedef struct EphySpinnerDetails	EphySpinnerDetails;
 
-struct EphySpinner {
+struct EphySpinner
+{
 	GtkEventBox parent;
 
 	/*< private >*/
 	EphySpinnerDetails *details;
 };
 
-struct EphySpinnerClass {
+struct EphySpinnerClass
+{
 	GtkEventBoxClass parent_class;
 };
 
-GType         ephy_spinner_get_type       (void);
+GType		ephy_spinner_get_type	(void);
 
-GtkWidget    *ephy_spinner_new            (void);
+GtkWidget      *ephy_spinner_new	(void);
 
-void          ephy_spinner_start          (EphySpinner *throbber);
+void		ephy_spinner_start	(EphySpinner *throbber);
 
-void          ephy_spinner_stop           (EphySpinner *throbber);
+void		ephy_spinner_stop	(EphySpinner *throbber);
 
-void	      ephy_spinner_set_size	  (EphySpinner *spinner,
-					   GtkIconSize size);
+void		ephy_spinner_set_size	(EphySpinner *spinner,
+					 GtkIconSize size);
 
 G_END_DECLS
 
