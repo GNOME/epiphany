@@ -100,7 +100,7 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 	                            _("If you choose to overwrite this file, "
 				      "the contents will be lost."));
 
-	dialog = gtk_dialog_new_with_buttons (_("Overwrite File"),
+	dialog = gtk_dialog_new_with_buttons (_(""),
                                         parent ? GTK_WINDOW (parent) : NULL,
                                         GTK_DIALOG_MODAL | GTK_DIALOG_NO_SEPARATOR,
                                         GTK_STOCK_CANCEL,
@@ -120,6 +120,7 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 	gtk_widget_show_all (hbox);
 
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+	gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
 	gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)), 6);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
         res = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) ? TRUE : FALSE;
