@@ -22,6 +22,7 @@
 #include <config.h>
 #endif
 
+#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -323,4 +324,44 @@ ephy_ensure_dir_exists (const char *dir)
 		if (mkdir (dir, 488) != 0)
 			g_error (_("Failed to create directory %s."), dir);
 	}
+}
+
+static void
+ephy_find_file_recursive (const char *path,
+			  const char *fname, GSList **l,
+			  gint depth, gint maxdepth)
+{
+	GDir *d = g_dir_open (path, 0, NULL);
+	const gchar *f;
+	if (d)
+	{
+		while ((f = g_dir_read_name (d)))
+		{
+			char *new_path = g_build_filename (path, f, NULL);
+			if (depth < maxdepth)
+			{
+				ephy_find_file_recursive (new_path, fname, l,
+							  depth + 1, maxdepth);
+			}
+			if (!strcmp (f, fname))
+			{
+				*l = g_slist_prepend (*l, new_path);
+			}
+			else
+			{
+				g_free (new_path);
+			}
+		}
+		g_dir_close (d);
+	}
+}
+
+GSList *
+ephy_file_find (const char *path,
+	        const char *fname,
+	        gint maxdepth)
+{
+	GSList *ret = NULL;
+	ephy_find_file_recursive (path, fname, &ret, 0, maxdepth);
+	return ret;
 }

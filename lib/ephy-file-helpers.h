@@ -42,6 +42,9 @@ char       *ephy_file_tmp_filename	 (const char *base,
 
 void	    ephy_ensure_dir_exists       (const char *dir);
 
+GSList     *ephy_file_find               (const char *path,
+	                                  const char *fname,
+	                                  gint maxdepth);
 
 G_END_DECLS
 

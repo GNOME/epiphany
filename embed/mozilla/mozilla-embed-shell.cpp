@@ -184,6 +184,39 @@ mozilla_embed_shell_class_init (MozillaEmbedShellClass *klass)
 }
 
 static void
+mozilla_load_language_prefs (MozillaEmbedShell *shell)
+{
+	GString *langs;
+	const GList *l;
+
+	langs = g_string_new (NULL);
+
+	l = gnome_i18n_get_language_list ("LC_MESSAGES");
+	for (; l != NULL; l = l->next)
+	{
+		char *lang = (char *)l->data;
+		int len;
+		char *lg, *enc;
+
+		g_print ("%s\n", lang);
+		
+		lg = strchr (lang, '_');
+		enc = strchr (lang, '.');
+
+		len = strlen (lang);
+		if (enc) len = enc - lang;
+		if (lg) len = lg - lang;
+
+		g_string_append (langs, ",");
+		g_string_append_len (langs, lang, len);
+	}
+	
+	mozilla_prefs_set_string ("intl.accept_languages", langs->str + 1);
+
+	g_string_free (langs, TRUE);
+}
+
+static void
 mozilla_load_proxy_prefs (MozillaEmbedShell *shell)
 {
 	char *tmp;
@@ -424,6 +457,8 @@ mozilla_embed_shell_init (MozillaEmbedShell *mes)
 	}
 
 	mozilla_load_proxy_prefs (mes);
+
+	mozilla_load_language_prefs (mes);
 	
 	mozilla_init_single (mes);
 	

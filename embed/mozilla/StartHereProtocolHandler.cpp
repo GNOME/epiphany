@@ -41,7 +41,6 @@ class GStartHereProtocolHandler : public nsIProtocolHandler
 	virtual ~GStartHereProtocolHandler();
 
 	nsCOMPtr<nsIChannel> mChannel;
-	nsCOMPtr<nsIURI> mURI;
 };
 
 /* Implementation file */
@@ -115,10 +114,9 @@ NS_IMETHODIMP GStartHereProtocolHandler::NewChannel(nsIURI *aURI,
 	nsresult rv;
 	EphyStartHere *sh;
 	char *buf;
+	const char *aBaseURI;
 	PRUint32 bytesWritten;
-	
-	mURI = aURI;
-
+		
 	nsCAutoString path;
 	rv = aURI->GetPath(path);
 	if (NS_FAILED(rv)) return rv;
@@ -134,9 +132,16 @@ NS_IMETHODIMP GStartHereProtocolHandler::NewChannel(nsIURI *aURI,
 
 	sh = ephy_start_here_new ();
 	buf = ephy_start_here_get_page (sh, "index");
-	rv = stream->Write (buf, strlen (buf), &bytesWritten);
-	g_free (buf);
+	aBaseURI = ephy_start_here_get_base_uri (sh);	
 	
+	rv = stream->Write (buf, strlen (buf), &bytesWritten);
+	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+
+	nsCOMPtr<nsIURI> uri;
+	nsCAutoString spec(aBaseURI);
+	rv = NS_NewURI(getter_AddRefs(uri), spec.get());
+	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+
 	nsCOMPtr<nsIInputStream> iStream;
 	PRUint32 size;  
     
@@ -146,9 +151,12 @@ NS_IMETHODIMP GStartHereProtocolHandler::NewChannel(nsIURI *aURI,
 	rv = sStream->NewInputStream(0, getter_AddRefs(iStream));
 	if (NS_FAILED(rv)) return rv;
 	
-	rv = NS_NewInputStreamChannel(getter_AddRefs(mChannel), mURI,
+	rv = NS_NewInputStreamChannel(getter_AddRefs(mChannel), uri,
 				      iStream, NS_LITERAL_CSTRING("text/xml"),
 				      NS_LITERAL_CSTRING("utf-8"), size);
+	
+	g_free (buf);
+	g_object_unref (sh);
 	
 	NS_IF_ADDREF (*_retval = mChannel);
 	

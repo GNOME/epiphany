@@ -54,6 +54,8 @@ EphyStartHere  *ephy_start_here_new		(void);
 char	       *ephy_start_here_get_page	(EphyStartHere *sh,
 						 const char *id);
 
+const char     *ephy_start_here_get_base_uri	(EphyStartHere *sh);
+
 G_END_DECLS
 
 #endif

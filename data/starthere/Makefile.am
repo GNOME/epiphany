@@ -4,9 +4,10 @@ xmldir = $(pkgdatadir)/starthere
 xml_in_files = index.xml.in
 xml_DATA = $(xml_in_files:.xml.in=.xml)
 
-xsldir = $(pkgdatadir)/starthere
-xsl_DATA = section.xsl
+pagedir = $(pkgdatadir)/starthere
+page_DATA = section.xsl section.css
 
 EXTRA_DIST = $(xml_DATA)	    	\
-	     $(xml_in_files)
+	     $(xml_in_files)		\
+	     $(page_DATA)
 

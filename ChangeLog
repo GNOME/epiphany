@@ -1,5 +1,24 @@
 2003-01-07  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* data/starthere/Makefile.am:
+	* data/starthere/index.xml.in:
+	* data/starthere/section.css:
+	* data/starthere/section.xsl:
+	* embed/mozilla/StartHereProtocolHandler.cpp:
+	* embed/mozilla/mozilla-embed-shell.cpp:
+	* lib/ephy-file-helpers.c: (ephy_ensure_dir_exists),
+	(ephy_find_file_recursive), (ephy_file_find):
+	* lib/ephy-file-helpers.h:
+	* lib/ephy-start-here.c: (ephy_start_here_init),
+	(ephy_start_here_finalize), (is_my_lang), (mozilla_bookmarks),
+	(attach_content), (build_content), (ephy_start_here_get_page),
+	(ephy_start_here_get_base_uri):
+	* lib/ephy-start-here.h:
+
+	More work on the start here page.
+
+2003-01-07  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* configure.in:
 	* data/Makefile.am:
 	* data/start_here.html:
