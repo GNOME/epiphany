@@ -1,3 +1,15 @@
+2003-08-11  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_finalize),
+	(ephy_node_view_enable_drag_dest), (selection_foreach),
+	(get_selection_refs), (ref_list_free), (stop_drag_check),
+	(drag_data_get_cb), (button_release_cb), (motion_notify_cb),
+	(button_event_modifies_selection),
+	(ephy_node_view_button_press_cb), (ephy_node_view_init),
+	(ephy_node_view_enable_drag_source):
+
+	Fix multiple rows dnd problems stealing some Nautilus code.
+
 2003-08-10  Xan Lopez  <xan@masilla.org>
 
 	* configure.in:
