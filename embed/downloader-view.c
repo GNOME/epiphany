@@ -589,6 +589,8 @@ downloader_view_build_ui (DownloaderView *dv)
 					   REMAINING_COL_POS);
 	gtk_tree_view_column_set_sort_column_id (column, COL_REMAINING);
 
+	gtk_tree_view_set_enable_search (GTK_TREE_VIEW (priv->treeview), FALSE);
+
 	priv->model = GTK_TREE_MODEL (liststore);
 
 	gtk_window_set_icon_name (GTK_WINDOW (priv->window), EPHY_STOCK_DOWNLOAD);
