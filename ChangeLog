@@ -1,5 +1,18 @@
 2005-01-19  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-file-helpers.c: (ephy_find_file_recursive):
+	* src/bookmarks/ephy-bookmarks-editor.c: (add_bookmarks_files),
+	(add_bookmarks_source), (import_dialog_response_cb),
+	(cmd_bookmarks_import):
+	* src/bookmarks/ephy-bookmarks-import.c: (ephy_bookmarks_import):
+	* src/bookmarks/ephy-bookmarks-import.h:
+
+	Show profile name for mozilla bookmarks, so we can distinguish between
+	different profiles. Don't show firefox bookmarks as mozilla bookmarks.
+	Fixes bug #143982.
+
+2005-01-19  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-langs.c:
 
 	More translator comments.

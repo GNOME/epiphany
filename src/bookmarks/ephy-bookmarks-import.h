@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004, 2005 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,8 +27,9 @@
 G_BEGIN_DECLS
 
 #define MOZILLA_BOOKMARKS_DIR	".mozilla"
-#define FIREBIRD_BOOKMARKS_DIR	".phoenix"
-#define FIREFOX_BOOKMARKS_DIR	".firefox"
+#define FIREFOX_BOOKMARKS_DIR_0	".phoenix"
+#define FIREFOX_BOOKMARKS_DIR_1	".firefox"
+#define FIREFOX_BOOKMARKS_DIR_2	".mozilla/firefox"
 #define GALEON_BOOKMARKS_DIR	".galeon"
 #define KDE_BOOKMARKS_DIR	".kde/share/apps/konqueror"
 

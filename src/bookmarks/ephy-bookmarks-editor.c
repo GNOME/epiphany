@@ -540,29 +540,74 @@ show_properties_dialog (EphyBookmarksEditor *editor,
 		(editor->priv->bookmarks, bookmark, GTK_WIDGET (editor));
 }
 
-static void
-add_bookmarks_source (GtkListStore *store,
-		      const char *desc,
-		      const char *dir,
-		      const char *filename,
-		      int max_depth)
+static GSList *
+add_bookmarks_files (const char *dir,
+		     const char *filename,
+		     int max_depth)
 {
-	GtkTreeIter iter;
-	GSList *l;
+	GSList *list;
 	char *path;
 
 	path = g_build_filename (g_get_home_dir (), dir, NULL);
-	l = ephy_file_find  (path, filename, max_depth);
+	list = ephy_file_find  (path, filename, max_depth);
 	g_free (path);
 
-	if (l)
+	return list;
+}
+
+static void
+add_bookmarks_source (const char *file,
+		      GtkListStore *store)
+{
+	GtkTreeIter iter;
+	char **path;
+	char *description = NULL;
+	int len, i;
+
+	path = g_strsplit (file, G_DIR_SEPARATOR_S, -1);
+	g_return_if_fail (path != NULL);
+
+	len = g_strv_length (path);
+
+	for (i = len - 2; i >= 0 && description == NULL; --i)
 	{
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter, 0, desc, 1, l->data, -1);
+		const char *p = (const char *) path[i];
+
+		g_return_if_fail (p != NULL);
+
+		if (strcmp (p, "firefox") == 0)
+		{
+			description = g_strdup (_("Firefox"));
+		}
+		else if (strcmp (p, ".firefox") == 0)
+		{
+			description = g_strdup (_("Firebird"));
+		}
+		else if (strcmp (p, ".phoenix") == 0)
+		{
+			description = g_strdup (_("Firebird"));
+		}
+		else if (strcmp (p, ".mozilla") == 0)
+		{
+			description = g_strdup_printf (_("Mozilla \"%s\" profile"), path[i+1]);
+		}
+		else if (strcmp (p, ".galeon") == 0)
+		{
+			description = g_strdup (_("Galeon"));
+		}
+		else if (strcmp (p, "konqueror") == 0)
+		{
+			description = g_strdup (_("Konqueror"));
+		}
 	}
 
-	g_slist_foreach (l, (GFunc) g_free, NULL);
-	g_slist_free (l);
+	if (description != NULL)
+	{
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter, 0, description, 1, file, -1);
+
+		g_free (description);
+	}
 }
 
 static void
@@ -587,25 +632,23 @@ import_from_file_response_cb (GtkDialog *dialog, gint response,
 }
 
 static void
-import_dialog_response_cb (GtkDialog *dialog, gint response,
+import_dialog_response_cb (GtkDialog *dialog,
+			   gint response,
 			   EphyBookmarksEditor *editor)
 {
 	if (response == GTK_RESPONSE_OK)
 	{
 		GtkTreeIter iter;
-		char *filename;
+		const char *filename;
 		GtkWidget *combo;
 		GtkTreeModel *model;
-		int active;
 		GValue value = { 0, };
 
 		combo = g_object_get_data (G_OBJECT (dialog), "combo_box");
 		model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
-		active = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
-		gtk_tree_model_iter_nth_child (model, &iter, NULL, active);
+		gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter);
 		gtk_tree_model_get_value (model, &iter, 1, &value);
-		filename = g_strdup (g_value_get_string (&value));
-		g_value_unset (&value);
+		filename = g_value_get_string (&value);
 
 		if (filename == NULL)
 		{
@@ -619,7 +662,7 @@ import_dialog_response_cb (GtkDialog *dialog, gint response,
 
 			ephy_file_chooser_add_mime_filter
 				(dialog,
-				 _("Firefox/Firebird/Mozilla bookmarks"),
+				 _("Firefox/Mozilla bookmarks"),
 				 "application/x-mozilla-bookmarks", NULL);
 
 			ephy_file_chooser_add_mime_filter
@@ -647,7 +690,7 @@ import_dialog_response_cb (GtkDialog *dialog, gint response,
 			ephy_bookmarks_import (editor->priv->bookmarks, filename);
 		}
 
-		g_free (filename);
+		g_value_unset (&value);
 	}
 
 	gtk_widget_destroy (GTK_WIDGET (dialog));
@@ -747,16 +790,17 @@ cmd_bookmarks_import (GtkAction *action,
 	GtkListStore *store;
 	GtkTreeIter iter;
 	GtkTreeModel *sortmodel;
+	GSList *files;
 
 	dialog = gtk_dialog_new_with_buttons (_("Import Bookmarks"),
-					     GTK_WINDOW (editor),
-					     GTK_DIALOG_DESTROY_WITH_PARENT |
-					     GTK_DIALOG_NO_SEPARATOR,
-					     GTK_STOCK_CANCEL,
-					     GTK_RESPONSE_CANCEL,
-					     _("I_mport"),
-					     GTK_RESPONSE_OK,
-					     NULL);
+					      GTK_WINDOW (editor),
+					      GTK_DIALOG_DESTROY_WITH_PARENT |
+					      GTK_DIALOG_NO_SEPARATOR,
+					      GTK_STOCK_CANCEL,
+					      GTK_RESPONSE_CANCEL,
+					      _("I_mport"),
+					      GTK_RESPONSE_OK,
+					      NULL);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
@@ -776,16 +820,16 @@ cmd_bookmarks_import (GtkAction *action,
 
         store = GTK_LIST_STORE (gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING));
 
-	add_bookmarks_source (store, _("Firebird"),
-			      FIREBIRD_BOOKMARKS_DIR, "bookmarks.html", 4);
-	add_bookmarks_source (store, _("Firefox"),
-                              FIREFOX_BOOKMARKS_DIR, "bookmarks.html", 4);
-	add_bookmarks_source (store, _("Galeon"),
-			      GALEON_BOOKMARKS_DIR, "bookmarks.xbel", 0);
-	add_bookmarks_source (store, _("Konqueror"),
-			      KDE_BOOKMARKS_DIR, "bookmarks.xml", 0);
-	add_bookmarks_source (store, _("Mozilla"),
-			      MOZILLA_BOOKMARKS_DIR, "bookmarks.html", 4);
+	files = add_bookmarks_files (FIREFOX_BOOKMARKS_DIR_0, "bookmarks.html", 2);
+	files = g_slist_concat (add_bookmarks_files (FIREFOX_BOOKMARKS_DIR_1, "bookmarks.html", 2), files);
+	/* FIREFOX_BOOKMARKS_DIR_2 is subdir of MOZILLA_BOOKMARKS_DIR, so don't search it twice */
+	files = g_slist_concat (add_bookmarks_files (MOZILLA_BOOKMARKS_DIR, "bookmarks.html", 2), files);
+	files = g_slist_concat (add_bookmarks_files (GALEON_BOOKMARKS_DIR, "bookmarks.xbel", 0), files);
+	files = g_slist_concat (add_bookmarks_files (KDE_BOOKMARKS_DIR, "bookmarks.xml", 0), files);
+	
+	g_slist_foreach (files, (GFunc) add_bookmarks_source, store);
+	g_slist_foreach (files, (GFunc) g_free, NULL);
+	g_slist_free (files);
 
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter, 0, _("File"), 1, NULL, -1);

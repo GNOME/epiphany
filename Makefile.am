@@ -13,6 +13,7 @@ EXTRA_DIST = 			\
 	xmldocs.make		\
 	omf.make		\
 	COPYING.README		\
+	HACKING			\
 	MAINTAINERS		\
 	ChangeLog-20030925	\
 	ChangeLog-20040912

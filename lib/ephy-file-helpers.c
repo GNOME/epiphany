@@ -268,31 +268,34 @@ ephy_ensure_dir_exists (const char *dir)
 
 static void
 ephy_find_file_recursive (const char *path,
-			  const char *fname, GSList **l,
-			  gint depth, gint maxdepth)
+			  const char *fname,
+			  GSList **list,
+			  gint depth,
+			  gint maxdepth)
 {
-	GDir *d = g_dir_open (path, 0, NULL);
-	const gchar *f;
-	if (d)
+	GDir *dir;
+	const gchar *file;
+
+	dir = g_dir_open (path, 0, NULL);
+	if (dir != NULL)
 	{
-		while ((f = g_dir_read_name (d)))
+		while ((file = g_dir_read_name (dir)))
 		{
-			char *new_path = g_build_filename (path, f, NULL);
 			if (depth < maxdepth)
 			{
-				ephy_find_file_recursive (new_path, fname, l,
+				char *new_path = g_build_filename (path, file, NULL);
+				ephy_find_file_recursive (new_path, fname, list,
 							  depth + 1, maxdepth);
-			}
-			if (!strcmp (f, fname))
-			{
-				*l = g_slist_prepend (*l, new_path);
-			}
-			else
-			{
 				g_free (new_path);
 			}
+			if (strcmp (file, fname) == 0)
+			{
+				char *new_path = g_build_filename (path, file, NULL);
+				*list = g_slist_prepend (*list, new_path);
+			}
 		}
-		g_dir_close (d);
+
+		g_dir_close (dir);
 	}
 }
 

@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
- *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2003, 2004, 2005 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -68,24 +68,20 @@ gboolean
 ephy_bookmarks_import (EphyBookmarks *bookmarks,
 		       const char *filename)
 {
-	GnomeVFSURI *uri;
 	const char *type;
 	gboolean success = FALSE;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
 
-	uri = gnome_vfs_uri_new (filename);
-	type = gnome_vfs_get_mime_type_common (uri);
+	type = gnome_vfs_get_file_mime_type (filename, NULL, FALSE);
 
-	LOG ("Importing bookmarks of type %s", type)
+	LOG ("Importing bookmarks of type %s", type ? type : "(null)")
 
 	if (type == NULL)
 	{
-		gnome_vfs_uri_unref (uri);
-		 return FALSE;
+		g_warning ("Couldn't determine the type of the bookmarks file %s!\n", filename);
 	}
-
-	if (strcmp (type, "application/x-mozilla-bookmarks") == 0)
+	else if (strcmp (type, "application/x-mozilla-bookmarks") == 0)
 	{
 		success = ephy_bookmarks_import_mozilla (bookmarks, filename);
 	}
@@ -99,8 +95,9 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 		success = ephy_bookmarks_import_rdf (bookmarks, filename);
 	}
 	else if (strstr (filename, MOZILLA_BOOKMARKS_DIR) != NULL ||
-                 strstr (filename, FIREBIRD_BOOKMARKS_DIR) != NULL ||
-		 strstr (filename, FIREFOX_BOOKMARKS_DIR) != NULL)
+                 strstr (filename, FIREFOX_BOOKMARKS_DIR_0) != NULL ||
+                 strstr (filename, FIREFOX_BOOKMARKS_DIR_1) != NULL ||
+		 strstr (filename, FIREFOX_BOOKMARKS_DIR_2) != NULL)
 	{
 		success = ephy_bookmarks_import_mozilla (bookmarks, filename);
 	}
@@ -110,8 +107,6 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 		success = ephy_bookmarks_import_xbel (bookmarks, filename);
 	}
 	/* else FIXME: put up some UI to warn user about unrecognised format? */
-
-	gnome_vfs_uri_unref (uri);
 
 	return success;
 }
