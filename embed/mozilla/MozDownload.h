@@ -108,6 +108,9 @@ public:
     
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIWEBPROGRESSLISTENER
+#ifdef HAVE_NSITRANSFER_H
+	NS_DECL_NSIWEBPROGRESSLISTENER2
+#endif
 	NS_DECL_NSITRANSFER
 #ifndef HAVE_NSITRANSFER_H
 	NS_DECL_NSIDOWNLOAD
@@ -125,8 +128,8 @@ public:
 	virtual void Resume();
 
 	nsresult GetState           (EphyDownloadState *aDownloadState);
-	nsresult GetCurrentProgress (PRInt32 *aCurrentProgress);
-	nsresult GetTotalProgress   (PRInt32 *aTProgress);
+	nsresult GetCurrentProgress (PRInt64 *aCurrentProgress);
+	nsresult GetTotalProgress   (PRInt64 *aTProgress);
  	nsresult GetElapsedTime     (PRInt64 *aTProgress);
 	nsresult InitForEmbed       (nsIURI *aSource, nsIURI *aTarget,
 				     const PRUnichar *aDisplayName, nsIMIMEInfo *aMIMEInfo,
@@ -143,9 +146,9 @@ protected:
 	PRInt64		    	mElapsed;
 	PRInt32		    	mInterval;
 	PRInt32                 mPercentComplete;
-	PRInt32                 mTotalProgress;
-	PRInt32                 mCurrentProgress;
-	PRInt32			mMaxSize;
+	PRInt64                 mTotalProgress;
+	PRInt64                 mCurrentProgress;
+	PRInt64			mMaxSize;
 
 	nsresult                mStatus;
 

@@ -27,9 +27,9 @@
 #include "EphyUtils.h"
 
 #include <nsCOMPtr.h>
-#define MOZILLA_STRICT_API
+#undef MOZILLA_INTERNAL_API
 #include <nsEmbedString.h>
-#undef MOZILLA_STRICT_API
+#define MOZILLA_INTERNAL_API 1
 #include <nsIServiceManager.h>
 #include <nsIURI.h>
 #include <nsIFileURL.h>

@@ -28,9 +28,9 @@
 #include "GlobalHistory.h"
 
 #include <nsIURI.h>
-#define MOZILLA_STRICT_API
+#undef MOZILLA_INTERNAL_API
 #include <nsEmbedString.h>
-#undef MOZILLA_STRICT_API
+#define MOZILLA_INTERNAL_API 1
 
 NS_IMPL_ISUPPORTS1 (MozGlobalHistory, nsIGlobalHistory2)
 

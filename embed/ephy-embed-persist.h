@@ -48,7 +48,7 @@ typedef enum
 	EPHY_EMBED_PERSIST_MAINDOC		= 1 << 1,
 	EPHY_EMBED_PERSIST_NO_VIEW		= 1 << 2,
 	EPHY_EMBED_PERSIST_ASK_DESTINATION	= 1 << 3,
-	EPHY_EMBED_PERSIST_DO_CONVERSION     = 1 << 4
+	EPHY_EMBED_PERSIST_DO_CONVERSION	= 1 << 4
 } EphyEmbedPersistFlags;
 
 struct _EphyEmbedPersist
@@ -98,7 +98,7 @@ void			 ephy_embed_persist_set_flags		(EphyEmbedPersist *persist,
 								 EphyEmbedPersistFlags value);
 
 void			 ephy_embed_persist_set_max_size	(EphyEmbedPersist *persist,
-								 long value);
+								 gint64 value);
 
 void			 ephy_embed_persist_set_persist_key	(EphyEmbedPersist *persist,
 								 const char *value);
@@ -118,7 +118,7 @@ GtkWindow		*ephy_embed_persist_get_fc_parent	(EphyEmbedPersist *persist);
 
 EphyEmbedPersistFlags	 ephy_embed_persist_get_flags		(EphyEmbedPersist *persist);
 
-long			 ephy_embed_persist_get_max_size	(EphyEmbedPersist *persist);
+gint64			 ephy_embed_persist_get_max_size	(EphyEmbedPersist *persist);
 
 const char 		*ephy_embed_persist_get_persist_key	(EphyEmbedPersist *persist);
 

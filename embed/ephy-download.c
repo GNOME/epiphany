@@ -185,14 +185,14 @@ ephy_download_get_target (EphyDownload *download)
 	return klass->get_target (download);
 }
 
-long
+gint64
 ephy_download_get_current_progress (EphyDownload *download)
 {
 	EphyDownloadClass *klass = EPHY_DOWNLOAD_GET_CLASS (download);
 	return klass->get_current_progress (download);
 }
 
-long
+gint64
 ephy_download_get_total_progress (EphyDownload *download)
 {
 	EphyDownloadClass *klass = EPHY_DOWNLOAD_GET_CLASS (download);

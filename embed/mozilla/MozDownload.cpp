@@ -57,9 +57,9 @@
 #include <glib/gi18n.h>
 
 #include <nsIFileURL.h>
-#define MOZILLA_STRICT_API
+#undef MOZILLA_INTERNAL_API
 #include <nsEmbedString.h>
-#undef MOZILLA_STRICT_API
+#define MOZILLA_INTERNAL_API 1
 #include <nsMemory.h>
 
 #include <errno.h>
@@ -68,6 +68,8 @@
 const char* const persistContractID = "@mozilla.org/embedding/browser/nsWebBrowserPersist;1";
 
 MozDownload::MozDownload() :
+	mTotalProgress(-1),
+	mCurrentProgress(0),
 	mMaxSize(-1),
 	mStatus(NS_OK),
 	mEmbedPersist(nsnull),
@@ -84,7 +86,7 @@ MozDownload::~MozDownload()
 }
 
 #ifdef HAVE_NSITRANSFER_H
-NS_IMPL_ISUPPORTS2(MozDownload, nsIWebProgressListener, nsITransfer)
+NS_IMPL_ISUPPORTS3(MozDownload, nsIWebProgressListener, nsIWebProgressListener2, nsITransfer)
 #else
 NS_IMPL_ISUPPORTS3(MozDownload, nsIWebProgressListener, nsIDownload, nsITransfer)
 #endif
@@ -246,7 +248,7 @@ MozDownload::SetDisplayName(const PRUnichar * aDisplayName)
 #endif /* !HAVE_NSITRANSFER_H */
 
 NS_IMETHODIMP
-MozDownload::GetTotalProgress(PRInt32 *aTotalProgress)
+MozDownload::GetTotalProgress(PRInt64 *aTotalProgress)
 {
 	NS_ENSURE_ARG_POINTER(aTotalProgress);
 	*aTotalProgress = mTotalProgress;
@@ -255,7 +257,7 @@ MozDownload::GetTotalProgress(PRInt32 *aTotalProgress)
 }
 
 NS_IMETHODIMP
-MozDownload::GetCurrentProgress(PRInt32 *aCurrentProgress)
+MozDownload::GetCurrentProgress(PRInt64 *aCurrentProgress)
 {
 	NS_ENSURE_ARG_POINTER(aCurrentProgress);
 	*aCurrentProgress = mCurrentProgress;
@@ -290,6 +292,7 @@ MozDownload::GetMIMEInfo(nsIMIMEInfo **aMIMEInfo)
 	return NS_OK;
 }
 
+#ifndef HAVE_NSITRANSFER_H
 NS_IMETHODIMP
 MozDownload::GetListener(nsIWebProgressListener **aListener)
 {
@@ -303,11 +306,15 @@ MozDownload::SetListener(nsIWebProgressListener *aListener)
 {
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
+#endif
 
 NS_IMETHODIMP
 MozDownload::GetObserver(nsIObserver **aObserver)
 {
-	return NS_ERROR_NOT_IMPLEMENTED;
+	*aObserver = mObserver;
+	NS_IF_ADDREF (*aObserver);
+
+	return NS_OK;
 }
 
 NS_IMETHODIMP
@@ -430,10 +437,38 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 	return NS_OK; 
 }
 
-NS_IMETHODIMP 
-MozDownload::OnProgressChange(nsIWebProgress *aWebProgress, nsIRequest *aRequest,
-			      PRInt32 aCurSelfProgress, PRInt32 aMaxSelfProgress,
-			      PRInt32 aCurTotalProgress, PRInt32 aMaxTotalProgress)
+#ifdef HAVE_NSITRANSFER_H
+NS_IMETHODIMP
+MozDownload::OnProgressChange (nsIWebProgress *aWebProgress,
+			       nsIRequest *aRequest,
+			       PRInt32 aCurSelfProgress,
+			       PRInt32 aMaxSelfProgress,
+			       PRInt32 aCurTotalProgress,
+			       PRInt32 aMaxTotalProgress)
+{
+	return OnProgressChange64 (aWebProgress, aRequest,
+				   aCurSelfProgress, aMaxSelfProgress,
+				   aCurTotalProgress, aMaxTotalProgress);
+}
+
+/* void onProgressChange64 (in nsIWebProgress aWebProgress, in nsIRequest aRequest, in long long aCurSelfProgress, in long long aMaxSelfProgress, in long long aCurTotalProgress,
+ in long long aMaxTotalProgress); */
+NS_IMETHODIMP
+MozDownload::OnProgressChange64 (nsIWebProgress *aWebProgress,
+				 nsIRequest *aRequest,
+				 PRInt64 aCurSelfProgress,
+				 PRInt64 aMaxSelfProgress,
+				 PRInt64 aCurTotalProgress,
+				 PRInt64 aMaxTotalProgress)
+#else /* !HAVE_NSITRANSFER_H */
+NS_IMETHODIMP
+MozDownload::OnProgressChange (nsIWebProgress *aWebProgress,
+			       nsIRequest *aRequest,
+			       PRInt32 aCurSelfProgress,
+			       PRInt32 aMaxSelfProgress,
+			       PRInt32 aCurTotalProgress,
+			       PRInt32 aMaxTotalProgress)
+#endif /* HAVE_NSITRANSFER_H */
 {
 	if (mMaxSize >= 0 &&
 	    ((aMaxTotalProgress > 0 && mMaxSize < aMaxTotalProgress) ||

@@ -23,6 +23,7 @@
 
 #include "ephy-embed-persist.h"
 #include "mozilla-embed-persist.h"
+#include "ephy-embed-type-builtins.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtkmain.h>
@@ -51,7 +52,7 @@ struct _EphyEmbedPersistPrivate
 	char *fc_title;
 	char *persist_key;
 	EphyEmbed *embed;
-	long max_size;
+	gint64 max_size;
 	EphyEmbedPersistFlags flags;
 	GtkWindow *fc_parent;
 	guint32 user_time;
@@ -201,7 +202,7 @@ ephy_embed_persist_set_flags (EphyEmbedPersist *persist,
  **/
 void
 ephy_embed_persist_set_max_size (EphyEmbedPersist *persist,
-				 long value)
+				 gint64 value)
 {
 	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
 
@@ -351,7 +352,7 @@ ephy_embed_persist_get_flags (EphyEmbedPersist *persist)
  *
  * Return value: the maximum size of @persist's requested download, in bytes
  **/
-long
+gint64
 ephy_embed_persist_get_max_size (EphyEmbedPersist *persist)
 {
 	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), 0);
@@ -432,10 +433,10 @@ ephy_embed_persist_set_property (GObject *object,
 			ephy_embed_persist_set_fc_parent (persist, g_value_get_object (value));
 			break;
 		case PROP_FLAGS:
-			ephy_embed_persist_set_flags (persist, g_value_get_int (value));
+			ephy_embed_persist_set_flags (persist, g_value_get_flags (value));
 			break;
 		case PROP_MAX_SIZE:
-			ephy_embed_persist_set_max_size (persist, g_value_get_long (value));
+			ephy_embed_persist_set_max_size (persist, g_value_get_int64 (value));
 			break;
 		case PROP_PERSISTKEY:
 			ephy_embed_persist_set_persist_key (persist, g_value_get_string (value));
@@ -472,10 +473,10 @@ ephy_embed_persist_get_property (GObject *object,
 			g_value_set_object (value, ephy_embed_persist_get_fc_parent (persist));
 			break;
 		case PROP_FLAGS:
-			g_value_set_int (value, ephy_embed_persist_get_flags (persist));
+			g_value_set_flags (value, ephy_embed_persist_get_flags (persist));
 			break;
 		case PROP_MAX_SIZE:
-			g_value_set_long (value, ephy_embed_persist_get_max_size (persist));
+			g_value_set_int64 (value, ephy_embed_persist_get_max_size (persist));
 			break;
 		case PROP_PERSISTKEY:
 			g_value_set_string (value, ephy_embed_persist_get_persist_key (persist));
@@ -601,22 +602,21 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 
 	g_object_class_install_property (object_class,
 					 PROP_FLAGS,
-					 g_param_spec_int    ("flags",
+					 g_param_spec_flags  ("flags",
 							      "Flags",
 							      "Flags",
-							      0,
-							      G_MAXINT,
+							      EPHY_TYPE_EMBED_PERSIST_FLAGS,
 							      0,
 							      G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class,
 					 PROP_MAX_SIZE,
-					 g_param_spec_long   ("max_size",
+					 g_param_spec_int64  ("max_size",
 							      "Maxsize",
 							      "Maximum size of the file",
-							      0,
-							      G_MAXLONG,
-							      0,
+							      -1,
+							      G_MAXINT64,
+							      -1,
 							      G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class,
