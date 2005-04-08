@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2000-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004, 2005 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -99,20 +100,15 @@
 #endif
 #endif
 
-static PRUnichar DOMLinkAdded[] = { 'D', 'O', 'M', 'L', 'i', 'n', 'k',
-				    'A', 'd', 'd', 'e', 'd', '\0' };
-static PRUnichar ContextMenu[] = { 'c', 'o', 'n', 't', 'e', 'x', 't', 'm',
-				   'e', 'n', 'u', '\0' };
-static PRUnichar DOMPopupBlocked[] = { 'D', 'O', 'M', 'P', 'o', 'p',
-				       'u', 'p', 'B', 'l', 'o', 'c',
-				       'k', 'e', 'd', '\0' };
-static PRUnichar DOMWillOpenModalDialog[] = { 'D', 'O', 'M', 'W', 'i', 'l', 'l',
-					      'O', 'p', 'e', 'n', 'M', 'o', 'd',
-					      'a', 'l', 'D', 'i', 'a', 'l', 'o',
-					      'g', '\0' };
-static PRUnichar DOMModalDialogClosed[] = { 'D', 'O', 'M', 'M', 'o', 'd', 'a',
-					    'l', 'D', 'i', 'a', 'l', 'o', 'g',
-					    'C', 'l', 'o', 's', 'e', 'd', '\0' };
+const static PRUnichar kDOMLinkAdded[]		 = { 'D', 'O', 'M', 'L', 'i', 'n', 'k', 'A', 'd', 'd', 'e', 'd', '\0' };
+const static PRUnichar kContextMenu[]		 = { 'c', 'o', 'n', 't', 'e', 'x', 't', 'm', 'e', 'n', 'u', '\0' };
+const static PRUnichar kDOMPopupBlocked[]	 = { 'D', 'O', 'M', 'P', 'o', 'p', 'u', 'p', 'B', 'l', 'o', 'c', 'k', 'e', 'd', '\0' };
+const static PRUnichar kDOMWillOpenModalDialog[] = { 'D', 'O', 'M', 'W', 'i', 'l', 'l', 'O', 'p', 'e', 'n', 'M', 'o', 'd', 'a', 'l', 'D', 'i', 'a', 'l', 'o', 'g', '\0' };
+const static PRUnichar kDOMModalDialogClosed[]	 = { 'D', 'O', 'M', 'M', 'o', 'd', 'a', 'l', 'D', 'i', 'a', 'l', 'o', 'g', 'C', 'l', 'o', 's', 'e', 'd', '\0' };
+const static PRUnichar kHrefAttr[]		 = { 'h', 'r', 'e', 'f', '\0' };
+const static PRUnichar kTypeAttr[]		 = { 't', 'y', 'p', 'e', '\0' };
+const static PRUnichar kTitleAttr[]		 = { 't', 'i', 't', 'l', 'e', '\0' };
+const static PRUnichar kRelAttr[]		 = { 'r', 'e', 'l', '\0' };
 
 EphyEventListener::EphyEventListener()
 : mOwner(nsnull)
@@ -135,22 +131,17 @@ EphyEventListener::Init (EphyBrowser *aOwner)
 }
 
 NS_IMETHODIMP
-EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
+EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 {
 	nsCOMPtr<nsIDOMEventTarget> eventTarget;
 	aDOMEvent->GetTarget(getter_AddRefs(eventTarget));
 
-	nsCOMPtr<nsIDOMNode> node = do_QueryInterface(eventTarget);
-	NS_ENSURE_TRUE (node, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIDOMElement> linkElement;
-	linkElement = do_QueryInterface (node);
+	nsCOMPtr<nsIDOMElement> linkElement (do_QueryInterface (eventTarget));
 	if (!linkElement) return NS_ERROR_FAILURE;
 
-	PRUnichar relAttr[] = { 'r', 'e', 'l', '\0' };
 	nsresult rv;
 	nsEmbedString value;
-	rv = linkElement->GetAttribute (nsEmbedString(relAttr), value);
+	rv = linkElement->GetAttribute (nsEmbedString(kRelAttr), value);
 	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
 	nsEmbedCString rel;
@@ -159,16 +150,8 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 	if (g_ascii_strcasecmp (rel.get(), "SHORTCUT ICON") == 0 ||
 	    g_ascii_strcasecmp (rel.get(), "ICON") == 0)
 	{
-		PRUnichar hrefAttr[] = { 'h', 'r', 'e', 'f', '\0' };
-		nsEmbedString hrefValue;
-		rv = linkElement->GetAttribute (nsEmbedString (hrefAttr), hrefValue);
-		if (NS_FAILED (rv) || !hrefValue.Length()) return NS_ERROR_FAILURE;
-
-		nsEmbedCString link;
-		NS_UTF16ToCString (hrefValue, NS_CSTRING_ENCODING_UTF8, link);
-
 		nsCOMPtr<nsIDOMDocument> domDoc;
-		node->GetOwnerDocument(getter_AddRefs(domDoc));
+		linkElement->GetOwnerDocument(getter_AddRefs(domDoc));
 		NS_ENSURE_TRUE (domDoc, NS_ERROR_FAILURE);
 
 		nsCOMPtr<nsIDOMDocumentView> docView (do_QueryInterface (domDoc));
@@ -188,22 +171,18 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 		/* disallow subframes to set favicon */
 		if (domWinAsISupports != topDomWinAsISupports) return NS_OK;
 
-		nsCOMPtr<nsIDOM3Document> doc (do_QueryInterface (domDoc));
-		NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
-
-		nsEmbedString spec;
-		rv = doc->GetDocumentURI (spec);
-		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-                nsEmbedCString encoding;
-                mOwner->GetEncoding (encoding);
-
 		nsCOMPtr<nsIURI> docUri;
-		EphyUtils::NewURI (getter_AddRefs(docUri), spec, encoding.get());
-		NS_ENSURE_TRUE (docUri, NS_ERROR_FAILURE);
+		rv = GetDocURI (linkElement, getter_AddRefs (docUri));
+		NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && docUri, NS_ERROR_FAILURE);
+
+		rv = linkElement->GetAttribute (nsEmbedString (kHrefAttr), value);
+		if (NS_FAILED (rv) || !value.Length()) return NS_ERROR_FAILURE;
+
+		nsEmbedCString cLink;
+		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cLink);
 
 		nsEmbedCString faviconUrl;
-		rv = docUri->Resolve (link, faviconUrl);
+		rv = docUri->Resolve (cLink, faviconUrl);
 		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 		nsCOMPtr<nsIURI> favUri;
@@ -228,15 +207,10 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 		NS_ENSURE_TRUE (policy, NS_OK);
 
 #if MOZ_NSICONTENTPOLICY_VARIANT == 2
-		/* FIXME: mozilla tabbrowser.xml passes
-		 * safeGetProperty(event.target, "type") as mimetype guess:
-		 */
-		PRUnichar typeAttr[] = { 't', 'y', 'p', 'e', '\0' };
-		nsEmbedString typeVal;
-		linkElement->GetAttribute (nsEmbedString (typeAttr), typeVal);
+		linkElement->GetAttribute (nsEmbedString (kTypeAttr), value);
 
 		nsEmbedCString cTypeVal;
-		NS_UTF16ToCString (typeVal, NS_CSTRING_ENCODING_UTF8, cTypeVal);
+		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cTypeVal);
 
 		PRInt16 decision = 0;
 		rv = policy->ShouldLoad (nsIContentPolicy::TYPE_IMAGE,
@@ -258,8 +232,63 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 		/* ok, we accept this as a valid favicon for this site */
 		g_signal_emit_by_name (mOwner->mEmbed, "ge_favicon", faviconUrl.get());
 	}
+	else if (g_ascii_strcasecmp (rel.get (), "alternate") == 0)
+	{
+		linkElement->GetAttribute (nsEmbedString (kTypeAttr), value);
+
+		nsEmbedCString cTypeVal;
+		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cTypeVal);
+
+		if (g_ascii_strcasecmp (cTypeVal.get (), "application/rss+xml") == 0 ||
+		    g_ascii_strcasecmp (cTypeVal.get (), "application/atom+xml") == 0)
+		{
+			rv = linkElement->GetAttribute (nsEmbedString (kHrefAttr), value);
+			if (NS_FAILED (rv) || !value.Length()) return NS_ERROR_FAILURE;
+
+			nsEmbedCString cLink;
+			NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cLink);
+
+			nsCOMPtr<nsIURI> docUri;
+			rv = GetDocURI (linkElement, getter_AddRefs (docUri));
+			NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && docUri, NS_ERROR_FAILURE);
+
+			nsEmbedCString resolvedLink;
+			rv = docUri->Resolve (cLink, resolvedLink);
+			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+			linkElement->GetAttribute (nsEmbedString (kTitleAttr), value);
+
+			nsEmbedCString cTitle;
+			NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cTitle);
+
+			g_signal_emit_by_name (mOwner->mEmbed, "ge_feed_link",
+					       cTypeVal.get(), cTitle.get(), resolvedLink.get());
+		}
+	}
 
 	return NS_OK;
+}
+
+nsresult
+EphyDOMLinkEventListener::GetDocURI (nsIDOMElement *aElement,
+				     nsIURI **aDocURI)
+{
+	nsCOMPtr<nsIDOMDocument> domDoc;
+	aElement->GetOwnerDocument (getter_AddRefs(domDoc));
+
+	nsCOMPtr<nsIDOM3Document> doc (do_QueryInterface (domDoc));
+	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
+
+	nsresult rv;
+	nsEmbedString spec;
+	rv = doc->GetDocumentURI (spec);
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	nsEmbedCString encoding;
+	rv = mOwner->GetEncoding (encoding);
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	return EphyUtils::NewURI (aDocURI, spec, encoding.get());
 }
 
 NS_IMETHODIMP
@@ -432,7 +461,7 @@ EphyContextMenuListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 }
 
 EphyBrowser::EphyBrowser ()
-: mFaviconEventListener(nsnull)
+: mDOMLinkEventListener(nsnull)
 , mPopupBlockEventListener(nsnull)
 , mModalAlertListener(nsnull)
 , mContextMenuListener(nsnull)
@@ -465,10 +494,10 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 	rv = mDOMWindow->GetDocument (getter_AddRefs (domDocument));
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-	mFaviconEventListener = new EphyFaviconEventListener();
-	if (!mFaviconEventListener) return NS_ERROR_OUT_OF_MEMORY;
+	mDOMLinkEventListener = new EphyDOMLinkEventListener();
+	if (!mDOMLinkEventListener) return NS_ERROR_OUT_OF_MEMORY;
 
-	rv = mFaviconEventListener->Init (this);
+	rv = mDOMLinkEventListener->Init (this);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	mPopupBlockEventListener = new EphyPopupBlockEventListener();
@@ -566,15 +595,15 @@ EphyBrowser::AttachListeners(void)
 	NS_ENSURE_TRUE (mEventTarget, NS_ERROR_FAILURE);
 
 	nsresult rv;
-	rv = mEventTarget->AddEventListener(nsEmbedString(DOMLinkAdded),
-					    mFaviconEventListener, PR_FALSE);
-	rv |= mEventTarget->AddEventListener(nsEmbedString(DOMPopupBlocked),
+	rv = mEventTarget->AddEventListener(nsEmbedString(kDOMLinkAdded),
+					    mDOMLinkEventListener, PR_FALSE);
+	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMPopupBlocked),
 					     mPopupBlockEventListener, PR_FALSE);
-	rv |= mEventTarget->AddEventListener(nsEmbedString(DOMWillOpenModalDialog),
+	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMWillOpenModalDialog),
 					     mModalAlertListener, PR_TRUE);
-	rv |= mEventTarget->AddEventListener(nsEmbedString(DOMModalDialogClosed),
+	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMModalDialogClosed),
 					     mModalAlertListener, PR_TRUE);
-	rv |= mEventTarget->AddEventListener(nsEmbedString(ContextMenu),
+	rv |= mEventTarget->AddEventListener(nsEmbedString(kContextMenu),
 					     mContextMenuListener, PR_TRUE /* capture */);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
@@ -587,15 +616,15 @@ EphyBrowser::DetachListeners(void)
 	if (!mEventTarget) return NS_OK;
 
 	nsresult rv;
-	rv = mEventTarget->RemoveEventListener(nsEmbedString(DOMLinkAdded),
-					       mFaviconEventListener, PR_FALSE);
-	rv |= mEventTarget->RemoveEventListener(nsEmbedString(DOMPopupBlocked),
+	rv = mEventTarget->RemoveEventListener(nsEmbedString(kDOMLinkAdded),
+					       mDOMLinkEventListener, PR_FALSE);
+	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMPopupBlocked),
 					        mPopupBlockEventListener, PR_FALSE);
-	rv |= mEventTarget->RemoveEventListener(nsEmbedString(DOMWillOpenModalDialog),
+	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMWillOpenModalDialog),
 						mModalAlertListener, PR_TRUE);
-	rv |= mEventTarget->RemoveEventListener(nsEmbedString(DOMModalDialogClosed),
+	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMModalDialogClosed),
 						mModalAlertListener, PR_TRUE);
-	rv |= mEventTarget->RemoveEventListener(nsEmbedString(ContextMenu),
+	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kContextMenu),
 					        mContextMenuListener, PR_TRUE /* capture */);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 

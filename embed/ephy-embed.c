@@ -128,7 +128,28 @@ ephy_embed_base_init (gpointer g_class)
 			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE,
 			      1,
-			      G_TYPE_STRING);
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+/**
+ * EphyEmbed::ge-feed-link:
+ * @embed:
+ * @type: the mime-type of the news feed
+ * @title: the title of the news feed
+ * @address: the URL to @embed's web site's news feed
+ *
+ * The ::ge_rss signal is emitted when @embed discovers that a news feed
+ * is available for the site it is visiting.
+ **/
+		g_signal_new ("ge_feed_link",
+			      EPHY_TYPE_EMBED,
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (EphyEmbedIface, feed_link),
+			      NULL, NULL,
+			      ephy_marshal_VOID__STRING_STRING_STRING,
+			      G_TYPE_NONE,
+			      3,
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
  * EphyEmbed::ge-location:
  * @embed:

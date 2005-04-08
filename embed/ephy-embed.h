@@ -116,6 +116,10 @@ struct _EphyEmbedIface
 					 EphyEmbedEvent *event);
 	void	 (* favicon)		(EphyEmbed *embed,
 					 const char *location);
+	void	 (* feed_link)		(EphyEmbed *embed,
+					 const char *type,
+					 const char *title,
+					 const char *address);
 	void	 (* location)		(EphyEmbed *embed,
 					 const char *location);
 	void	 (* net_state)		(EphyEmbed *embed,

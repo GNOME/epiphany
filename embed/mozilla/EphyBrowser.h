@@ -67,10 +67,14 @@ protected:
 	EphyBrowser *mOwner;
 };
 
-class EphyFaviconEventListener : public EphyEventListener
+class EphyDOMLinkEventListener : public EphyEventListener
 {
 public:
 	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
+private:
+	nsresult GetDocURI (nsIDOMElement *aElement,
+			    nsIURI **aDocURI);
+
 };
 
 class EphyPopupBlockEventListener : public EphyEventListener
@@ -107,7 +111,7 @@ protected:
 class EphyBrowser
 {
 friend class EphyEventListener;
-friend class EphyFaviconEventListener;
+friend class EphyDOMLinkEventListener;
 friend class EphyPopupBlockEventListener;
 friend class EphyModalAlertEventListener;
 friend class EphyContextMenuListener;
@@ -177,7 +181,7 @@ private:
 	nsCOMPtr<nsIDOMDocument> mTargetDocument;
 	nsCOMPtr<nsIDOMEventTarget> mEventTarget;
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;
-	EphyFaviconEventListener *mFaviconEventListener;
+	EphyDOMLinkEventListener *mDOMLinkEventListener;
 	EphyPopupBlockEventListener *mPopupBlockEventListener;
 	EphyModalAlertEventListener *mModalAlertListener;
 	EphyContextMenuListener *mContextMenuListener;
