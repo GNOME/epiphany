@@ -91,7 +91,7 @@ NS_IMPL_ISUPPORTS3(MozDownload, nsIWebProgressListener, nsIWebProgressListener2,
 NS_IMPL_ISUPPORTS3(MozDownload, nsIWebProgressListener, nsIDownload, nsITransfer)
 #endif
 
-NS_IMETHODIMP
+nsresult
 MozDownload::InitForEmbed (nsIURI *aSource, nsIURI *aTarget, const PRUnichar *aDisplayName,
 		           nsIMIMEInfo *aMIMEInfo, PRInt64 startTime, nsIWebBrowserPersist *aPersist,
 		           MozillaEmbedPersist *aEmbedPersist, PRInt32 aMaxSize)

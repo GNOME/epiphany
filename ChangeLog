@@ -1,5 +1,11 @@
 2005-04-08  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/MozDownload.cpp:
+
+	InitForEmbed isn't a NS_IMETHOD, so don't use NS_IMETHODIMP here.
+
+2005-04-08  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-cookie-manager.c: (ephy_cookie_manager_base_init):
 	* embed/ephy-embed-single.c: (ephy_embed_single_iface_init):
 	* embed/ephy-embed.c: (ephy_embed_base_init):
