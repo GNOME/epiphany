@@ -1,5 +1,19 @@
 2005-04-08  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_finalize):
+	* embed/ephy-history.c: (save_filter), (ephy_history_save):
+	* lib/ephy-node-db.c: (ephy_node_db_write_to_xml_valist):
+	* lib/ephy-node.h:
+	* lib/ephy-state.c: (ephy_states_save):
+	* src/bookmarks/ephy-bookmarks.c: (save_filter),
+	(ephy_bookmarks_save):
+
+	Implement a more flexible approach at saving a EphyNodeDb, by allowing
+	to specify a filter func to exclude certain nodes, instead of a fixed
+	list.
+
+2005-04-08  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-embed.c: (ephy_embed_base_init):
 	* embed/ephy-embed.h:
 	* embed/mozilla/EphyBrowser.cpp:

@@ -291,7 +291,8 @@ ephy_favicon_cache_finalize (GObject *object)
 		 EPHY_FAVICON_CACHE_XML_ROOT,
 		 EPHY_FAVICON_CACHE_XML_VERSION,
 		 NULL,
-		 cache->priv->icons, 0, NULL);
+		 cache->priv->icons, NULL, NULL,
+		 NULL);
 
 	g_free (cache->priv->xml_file);
 	g_free (cache->priv->directory);

@@ -67,7 +67,7 @@ ephy_states_save (void)
 		 EPHY_STATES_XML_ROOT,
 		 EPHY_STATES_XML_VERSION,
 		 NULL, /* comment */
-		 states, 0,
+		 states, NULL, NULL,
 		 NULL);
 
 	g_free (xml_file);	

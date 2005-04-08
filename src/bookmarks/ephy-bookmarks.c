@@ -309,6 +309,17 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
 	g_type_class_add_private (object_class, sizeof(EphyBookmarksPrivate));
 }
 
+static gboolean
+save_filter (EphyNode *node,
+	     EphyBookmarks *bookmarks)
+{
+	EphyBookmarksPrivate *priv = bookmarks->priv;
+
+	return node != priv->bookmarks &&
+	       node != priv->favorites &&
+	       node != priv->notcategorized;
+}
+
 static void
 ephy_bookmarks_save (EphyBookmarks *eb)
 {
@@ -321,10 +332,8 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 		 (xmlChar *) EPHY_BOOKMARKS_XML_ROOT,
 		 (xmlChar *) EPHY_BOOKMARKS_XML_VERSION,
 		 (xmlChar *) "Do not rely on this file, it's only for internal use. Use bookmarks.rdf instead.",
-		 eb->priv->keywords,
-		 3, eb->priv->bookmarks, eb->priv->favorites, eb->priv->notcategorized,
-		 eb->priv->bookmarks,
-		 0,
+		 eb->priv->keywords, (EphyNodeFilterFunc) save_filter, eb,
+		 eb->priv->bookmarks, NULL, NULL,
 		 NULL);
 
 	/* Export bookmarks in rdf */

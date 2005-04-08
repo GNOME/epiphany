@@ -256,6 +256,13 @@ remove_obsolete_pages (EphyHistory *eb)
 	}
 }
 
+static gboolean
+save_filter (EphyNode *node,
+	     EphyNode *page_node)
+{
+	return node != page_node;
+}
+
 static void
 ephy_history_save (EphyHistory *eb)
 {
@@ -275,8 +282,8 @@ ephy_history_save (EphyHistory *eb)
 		 EPHY_HISTORY_XML_VERSION,
 		 NULL, /* comment */
 		 eb->priv->hosts,
-		 1, eb->priv->pages,
-		 eb->priv->pages, 0,
+		 (EphyNodeFilterFunc) save_filter, eb->priv->pages,
+		 eb->priv->pages, NULL, NULL,
 		 NULL);
 
 	if (ret >=0)

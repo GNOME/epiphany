@@ -504,32 +504,27 @@ ephy_node_db_write_to_xml_valist (EphyNodeDb *db,
 	while (node != NULL)
 	{
 		GPtrArray *children;
-		guint n_exceptions, i;
-		GSList *exceptions = NULL;
+		EphyNodeFilterFunc filter;
+		gpointer user_data;
+		int i;
 
-		n_exceptions = va_arg (argptr, guint);
-		for (i=0; i < n_exceptions; i++)
-		{
-			exceptions = g_slist_prepend (exceptions,
-						      va_arg (argptr, EphyNode *));
-		}
+		filter = va_arg (argptr, EphyNodeFilterFunc);
+		user_data = va_arg (argptr, gpointer);
 
 		children = ephy_node_get_children (node);
-		for (i=0; i < children->len; i++)
+		for (i = 0; i < children->len; i++)
 		{
 			EphyNode *kid;
 		
 			kid = g_ptr_array_index (children, i);
 		
-			if (g_slist_find (exceptions, kid) == NULL)
+			if (!filter || filter (kid, user_data))
 			{
 				ret = ephy_node_write_to_xml (kid, writer);
 				if (ret < 0) break;
 			}
 		}
 		if (ret < 0) break;
-
-		g_slist_free (exceptions);
 
 		node = va_arg (argptr, EphyNode *);
 	}

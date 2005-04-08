@@ -47,6 +47,7 @@ typedef enum
 #include "ephy-node-db.h"
 
 typedef void (*EphyNodeCallback) (EphyNode *node, ...);
+typedef gboolean (*EphyNodeFilterFunc) (EphyNode *, gpointer);
 
 GType	    ephy_node_get_type		    (void) G_GNUC_CONST;
 
