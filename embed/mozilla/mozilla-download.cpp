@@ -162,7 +162,7 @@ impl_get_percent (EphyDownload *download)
 	return percent;
 }
 
-static long
+static gint64
 impl_get_elapsed_time (EphyDownload *download)
 {
 	MozDownload *mozDownload;

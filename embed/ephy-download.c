@@ -41,8 +41,8 @@ enum
 
 struct _EphyDownloadPrivate
 {
-	long remaining_time_last_update;
-	long remaining_time;
+	gint64 remaining_time_last_update;
+	gint64 remaining_time;
 };
 
 static GObjectClass *parent_class = NULL;
@@ -140,7 +140,7 @@ ephy_download_get_name (EphyDownload *download)
 static void
 update_remaining_time (EphyDownload *download)
 {
-	long elapsed_time, total, cur;
+	gint64 elapsed_time, total, cur;
 
 	total = ephy_download_get_total_progress (download);
 	cur = ephy_download_get_current_progress (download);
@@ -155,10 +155,10 @@ update_remaining_time (EphyDownload *download)
 	}
 }
 
-long
+gint64
 ephy_download_get_remaining_time (EphyDownload *download)
 {
-	long elapsed_time;
+	gint64 elapsed_time;
 
 	elapsed_time = ephy_download_get_elapsed_time (download);
 	if (elapsed_time - download->priv->remaining_time_last_update >=
@@ -206,7 +206,7 @@ ephy_download_get_percent (EphyDownload *download)
 	return klass->get_percent (download);
 }
 
-long
+gint64
 ephy_download_get_elapsed_time (EphyDownload *download)
 {
 	EphyDownloadClass *klass = EPHY_DOWNLOAD_GET_CLASS (download);

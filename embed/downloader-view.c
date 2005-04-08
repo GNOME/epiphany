@@ -245,16 +245,17 @@ downloader_view_new (void)
 }
 
 static char *
-format_interval (long interval)
+format_interval (gint64 interval)
 {
-	int secs, hours, mins;														     
-	secs = (int)(interval + .5);
-	hours = secs / 3600;
-	secs -= hours * 3600;
-	mins = secs / 60;
-	secs -= mins * 60;
+	int hours, mins, secs;
 
-	if (hours)
+	hours = (int) interval / 3600;
+	interval -= hours * 3600;
+	mins = (int) interval / 60;
+	interval -= mins * 60;
+	secs = (int) interval;
+
+	if (hours > 0)
 	{
 		return g_strdup_printf (_("%u:%02u.%02u"), hours, mins, secs);
 	}
@@ -321,8 +322,7 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	GtkTreePath *path;
 	GtkTreeIter iter;
 	EphyDownloadState state;
-	long remaining_secs = 0;
-	gint64 total, current;
+	gint64 remaining_secs = 0, total, current;
 	char *remaining, *file, *cur_progress, *name;
 	struct tm;
 	int percent = 0;
