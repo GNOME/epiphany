@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "mozilla-download.h"
+#include "MozDownload.h"
 
 #include "ephy-debug.h"
 
@@ -41,7 +42,7 @@ enum
 	PROP_MOZDOWNLOAD
 };
 
-struct MozillaDownloadPrivate
+struct _MozillaDownloadPrivate
 {
 	MozDownload *moz_download;
 };

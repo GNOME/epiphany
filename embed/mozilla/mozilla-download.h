@@ -21,12 +21,9 @@
 #ifndef MOZILLA_DOWNLOAD_H
 #define MOZILLA_DOWNLOAD_H
 
-#include "MozDownload.h"
-
 #include <glib-object.h>
 #include <glib.h>
-
-G_BEGIN_DECLS
+#include "ephy-download.h"
 
 #define MOZILLA_TYPE_DOWNLOAD		(mozilla_download_get_type ())
 #define MOZILLA_DOWNLOAD(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), MOZILLA_TYPE_DOWNLOAD, MozillaDownload))
@@ -35,17 +32,19 @@ G_BEGIN_DECLS
 #define MOZILLA_IS_DOWNLOAD_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), MOZILLA_TYPE_DOWNLOAD))
 #define MOZILLA_DOWNLOAD_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), MOZILLA_TYPE_DOWNLOAD, MozillaDownloadClass))
 
-typedef struct MozillaDownloadClass MozillaDownloadClass;
-typedef struct MozillaDownload MozillaDownload;
-typedef struct MozillaDownloadPrivate MozillaDownloadPrivate;
+typedef struct _MozillaDownloadClass	MozillaDownloadClass;
+typedef struct _MozillaDownload		MozillaDownload;
+typedef struct _MozillaDownloadPrivate	MozillaDownloadPrivate;
 
-struct MozillaDownload
+class MozDownload;
+
+struct _MozillaDownload
 {
 	EphyDownload parent;
 	MozillaDownloadPrivate *priv;
 };
 
-struct MozillaDownloadClass
+struct _MozillaDownloadClass
 {
 	EphyDownloadClass parent_class;
 };
@@ -53,7 +52,5 @@ struct MozillaDownloadClass
 GType		 mozilla_download_get_type	(void);
 
 EphyDownload	*mozilla_download_new		(MozDownload *download);
-
-G_END_DECLS
 
 #endif
