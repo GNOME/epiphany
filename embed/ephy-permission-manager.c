@@ -147,7 +147,7 @@ ephy_permission_manager_base_init (gpointer g_class)
 		      g_cclosure_marshal_VOID__BOXED,
 		      G_TYPE_NONE,
 		      1,
-		      EPHY_TYPE_PERMISSION_INFO);
+		      EPHY_TYPE_PERMISSION_INFO | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 	/**
 	 * EphyPermissionManager::permission-changed
@@ -165,7 +165,7 @@ ephy_permission_manager_base_init (gpointer g_class)
 		      g_cclosure_marshal_VOID__BOXED,
 		      G_TYPE_NONE,
 		      1,
-		      EPHY_TYPE_PERMISSION_INFO);
+		      EPHY_TYPE_PERMISSION_INFO | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 	/**
 	 * EphyPermissionManager::permission-deleted
@@ -183,7 +183,7 @@ ephy_permission_manager_base_init (gpointer g_class)
 		      g_cclosure_marshal_VOID__BOXED,
 		      G_TYPE_NONE,
 		      1,
-		      EPHY_TYPE_PERMISSION_INFO);
+		      EPHY_TYPE_PERMISSION_INFO | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 	/**
 	 * EphyPermissionManager::permissions-cleared

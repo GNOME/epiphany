@@ -137,8 +137,8 @@ ephy_embed_single_iface_init (gpointer g_class)
 		      ephy_marshal_BOOLEAN__STRING_STRING,
 		      G_TYPE_BOOLEAN,
 		      2,
-		      G_TYPE_STRING,
-		      G_TYPE_STRING);
+		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
  * EphyEmbedSingle::add-search-engine
@@ -158,9 +158,9 @@ ephy_embed_single_iface_init (gpointer g_class)
 		      ephy_marshal_BOOLEAN__STRING_STRING_STRING,
 		      G_TYPE_BOOLEAN,
 		      3,
-		      G_TYPE_STRING,
-		      G_TYPE_STRING,
-		      G_TYPE_STRING);
+		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
  * EphyEmbedSingle::check_content:

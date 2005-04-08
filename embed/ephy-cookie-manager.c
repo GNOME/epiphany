@@ -141,7 +141,7 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 		      g_cclosure_marshal_VOID__BOXED,
 		      G_TYPE_NONE,
 		      1,
-		      EPHY_TYPE_COOKIE);
+		      EPHY_TYPE_COOKIE | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 	/**
 	 * EphyCookieManager::cookie-changed
@@ -158,7 +158,7 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 		      g_cclosure_marshal_VOID__BOXED,
 		      G_TYPE_NONE,
 		      1,
-		      EPHY_TYPE_COOKIE);
+		      EPHY_TYPE_COOKIE | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 	/**
 	 * EphyCookieManager::cookie-deleted
@@ -175,7 +175,7 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 		      g_cclosure_marshal_VOID__BOXED,
 		      G_TYPE_NONE,
 		      1,
-		      EPHY_TYPE_COOKIE);
+		      EPHY_TYPE_COOKIE | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 	/**
 	 * EphyCookieManager::cookie-rejected
@@ -192,7 +192,7 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 		      g_cclosure_marshal_VOID__STRING,
 		      G_TYPE_NONE,
 		      1,
-		      G_TYPE_STRING);
+		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 	/**
 	 * EphyCookieManager::cookies-cleared

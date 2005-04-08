@@ -208,8 +208,8 @@ ephy_history_class_init (EphyHistoryClass *klass)
                               ephy_marshal_VOID__STRING_STRING,
                               G_TYPE_NONE,
                               2,
-			      G_TYPE_STRING,
-			      G_TYPE_STRING);
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 	g_type_class_add_private (object_class, sizeof (EphyHistoryPrivate));
 }

@@ -1,5 +1,16 @@
 2005-04-08  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-cookie-manager.c: (ephy_cookie_manager_base_init):
+	* embed/ephy-embed-single.c: (ephy_embed_single_iface_init):
+	* embed/ephy-embed.c: (ephy_embed_base_init):
+	* embed/ephy-history.c: (ephy_history_class_init):
+	* embed/ephy-permission-manager.c:
+	(ephy_permission_manager_base_init):
+
+	Add G_SIGNAL_TYPE_STATIC_SCOPE to many signals.
+
+2005-04-08  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_finalize):
 	* embed/ephy-history.c: (save_filter), (ephy_history_save):
 	* lib/ephy-node-db.c: (ephy_node_db_write_to_xml_valist):

@@ -92,8 +92,8 @@ ephy_embed_base_init (gpointer g_class)
 			      ephy_marshal_VOID__STRING_STRING,
 			      G_TYPE_NONE,
 			      2,
-			      G_TYPE_STRING,
-			      G_TYPE_STRING);
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
  * EphyEmbed::ge-context-menu:
  * @embed:
@@ -170,7 +170,7 @@ ephy_embed_base_init (gpointer g_class)
 			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE,
 			      1,
-			      G_TYPE_STRING);
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
  * EphyEmbed::ge-net-state:
  * @embed:
@@ -189,7 +189,7 @@ ephy_embed_base_init (gpointer g_class)
 			      ephy_marshal_VOID__STRING_FLAGS,
 			      G_TYPE_NONE,
 			      2,
-			      G_TYPE_STRING,
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
 			      EPHY_TYPE_EMBED_NET_STATE);
 /**
  * EphyEmbed::ge-dom-mouse-click:
@@ -281,7 +281,7 @@ ephy_embed_base_init (gpointer g_class)
 			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE,
 			      1,
-			      G_TYPE_STRING);
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
  * EphyEmbed::ge-modal-alert:
