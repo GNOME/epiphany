@@ -64,7 +64,7 @@ struct _EphyDownloadClass
 	int    		  (* get_percent)          (EphyDownload *download);
 	gint64 		  (* get_current_progress) (EphyDownload *download);
 	gint64 		  (* get_total_progress)   (EphyDownload *download);
-	long   		  (* get_elapsed_time)	   (EphyDownload *download);
+	gint64 		  (* get_elapsed_time)	   (EphyDownload *download);
 	void   		  (* cancel)               (EphyDownload *download);
 	void   		  (* pause)                (EphyDownload *download);
 	void   		  (* resume)               (EphyDownload *download);
@@ -96,9 +96,9 @@ gint64		   ephy_download_get_current_progress (EphyDownload *download);
 
 gint64		   ephy_download_get_total_progress   (EphyDownload *download);
 
-long		   ephy_download_get_elapsed_time     (EphyDownload *download);
+gint64		   ephy_download_get_elapsed_time     (EphyDownload *download);
 
-long		   ephy_download_get_remaining_time   (EphyDownload *download);
+gint64		   ephy_download_get_remaining_time   (EphyDownload *download);
 
 void		   ephy_download_cancel	      	      (EphyDownload *download);
 
