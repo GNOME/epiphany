@@ -46,7 +46,8 @@
 #include <gtk/gtkstock.h>
 #include <string.h>
 
-#define DATA_KEY	"EphyToolbarEditor"
+#define DATA_KEY		"EphyToolbarEditor"
+#define CONTROL_CENTRE_DOMAIN	"control-center-2.0"
 
 #define EPHY_TOOLBAR_EDITOR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOOLBAR_EDITOR, EphyToolbarEditorPrivate))
 
@@ -72,29 +73,18 @@ static const struct
 {
 	const char *text;
 	EggTbModelFlags flags;
+	gboolean cc_domain;
 }
 toolbar_styles [] =
 {
 	{ /* Translators: The text before the "|" is context to help you decide on
 	   * the correct translation. You MUST OMIT it in the translated string. */
-	  N_("toolbar style|Default"), 0 },
-	{ NULL /* separator row */, 0 },
-	{ /* Translators: The text before the "|" is context to help you decide on
-	   * the correct translation. You MUST OMIT it in the translated string. *
-	   * Translators: translate the same as in gnome-control-center */
-	  N_("toolbar style|Text below icons"), EGG_TB_MODEL_BOTH },
-	{ /* Translators: The text before the "|" is context to help you decide on
-	   * the correct translation. You MUST OMIT it in the translated string. *
-	   * Translators: translate the same as in gnome-control-center */
-	  N_("toolbar style|Text beside icons"), EGG_TB_MODEL_BOTH_HORIZ },
-	{ /* Translators: The text before the "|" is context to help you decide on
-	   * the correct translation. You MUST OMIT it in the translated string. *
-	   * Translators: translate the same as in gnome-control-center */
-	  N_("toolbar style|Icons only"), EGG_TB_MODEL_ICONS },
-	{ /* Translators: The text before the "|" is context to help you decide on
-	   * the correct translation. You MUST OMIT it in the translated string. *
-	   * Translators: translate the same as in gnome-control-center */
-	  N_("toolbar style|Text only"), EGG_TB_MODEL_TEXT }
+	  N_("toolbar style|Default"), 0, FALSE },
+	{ NULL /* separator row */, 0, FALSE },
+	{ "Text below icons", EGG_TB_MODEL_BOTH, TRUE },
+	{ "Text beside icons", EGG_TB_MODEL_BOTH_HORIZ, TRUE },
+	{ "Icons only", EGG_TB_MODEL_ICONS, TRUE },
+	{ "Text only", EGG_TB_MODEL_TEXT, TRUE }
 };
 
 enum
@@ -193,6 +183,12 @@ ephy_toolbar_editor_constructor (GType type,
         object = parent_class->constructor (type, n_construct_properties,
 					    construct_params);
 
+#ifdef ENABLE_NLS
+        /* Initialize the control centre domain */
+        bindtextdomain (CONTROL_CENTRE_DOMAIN, GNOMELOCALEDIR);
+        bind_textdomain_codeset(CONTROL_CENTRE_DOMAIN, "UTF-8");
+#endif
+
 	dialog = GTK_WIDGET (object);
 	priv = EPHY_TOOLBAR_EDITOR (object)->priv;
 
@@ -229,10 +225,20 @@ ephy_toolbar_editor_constructor (GType type,
 	for (i = 0; i < G_N_ELEMENTS (toolbar_styles); i++)
 	{
 		const char *text = toolbar_styles[i].text;
+		const char *tr_text = NULL;
+
+		if (toolbar_styles[i].cc_domain)
+		{
+			tr_text = dgettext (CONTROL_CENTRE_DOMAIN, text);
+		}
+		else if (text != NULL)
+		{
+			tr_text= Q_(text);
+		}
 
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
-				    COL_TEXT, text ? Q_(text) : NULL,
+				    COL_TEXT, tr_text,
 				    COL_FLAGS, toolbar_styles[i].flags,
 				    COL_IS_SEP, toolbar_styles[i].text == NULL,
 				    -1);
