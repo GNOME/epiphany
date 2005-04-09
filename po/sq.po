@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-15 11:43+0100\n"
-"PO-Revision-Date: 2005-02-15 12:39+0100\n"
+"POT-Creation-Date: 2005-03-07 21:23+0100\n"
+"PO-Revision-Date: 2005-04-09 16:45+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -107,8 +107,7 @@ msgid "Hide menubar by default"
 msgstr "E prezgjedhur fshehja e panelit me menu"
 
 #: data/epiphany-lockdown.schemas.in.h:16
-msgid ""
-"Hide the menubar by default. The menubar can still be accessed using F10."
+msgid "Hide the menubar by default. The menubar can still be accessed using F10."
 msgstr ""
 "E prezgjedhur fshehja e panelit me menu. Paneli mund të përdoret duke "
 "shtypur F10."
@@ -125,7 +124,7 @@ msgstr "Bllokon Epiphany në modalitetin me ekran të plotë."
 msgid "Browse the web"
 msgstr "Eksploro web-in"
 
-#: data/epiphany.desktop.in.h:2 src/ephy-main.c:177
+#: data/epiphany.desktop.in.h:2 src/ephy-main.c:234
 msgid "Epiphany Web Browser"
 msgstr "Epiphany - Shfletuesi Web"
 
@@ -146,8 +145,7 @@ msgid "Allow popups"
 msgstr "Lejo popups"
 
 #: data/epiphany.schemas.in.h:4
-msgid ""
-"Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
+msgid "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Lejo që sitet të hapin dritare të reja duke përdorur JavaScript (n.q.s. "
 "JavaScript është aktivuar)."
@@ -285,8 +283,7 @@ msgid "Match case for find in page."
 msgstr "Kryej dallim midis gërmave të mëdha/të vogla gjatë kërkimit në faqe."
 
 #: data/epiphany.schemas.in.h:28
-msgid ""
-"Middle click to open the web page pointed to by the currently selected text"
+msgid "Middle click to open the web page pointed to by the currently selected text"
 msgstr ""
 "Klik i pulsantit të mesëm për të hapur faqen web të treguar nga teksti i "
 "zgjedhur"
@@ -401,8 +398,7 @@ msgstr "Dimensioni i cache në disk, në MB."
 
 #: data/epiphany.schemas.in.h:53
 msgid "The bookmark information shown in the editor view"
-msgstr ""
-"Informacionet e shfaqura në paraqitjen editor në lidhje me libërshënuesin"
+msgstr "Informacionet e shfaqura në paraqitjen editor në lidhje me libërshënuesin"
 
 #: data/epiphany.schemas.in.h:54
 msgid ""
@@ -552,13 +548,11 @@ msgstr "Tregon nëse duhet printuar adresa e faqes në krye."
 
 #: data/epiphany.schemas.in.h:76
 msgid "Whether to print the page numbers (x of total) in the footer"
-msgstr ""
-"Tregon nëse duhet printuar numri i faqes (x nga gjithsej) në fund të faqes"
+msgstr "Tregon nëse duhet printuar numri i faqes (x nga gjithsej) në fund të faqes"
 
 #: data/epiphany.schemas.in.h:77
 msgid "Whether to print the page numbers (x of total) in the footer."
-msgstr ""
-"Tregon nëse duhet printuar numri i faqes (x nga gjithsej) në fund të faqes."
+msgstr "Tregon nëse duhet printuar numri i faqes (x nga gjithsej) në fund të faqes."
 
 #: data/epiphany.schemas.in.h:78
 msgid "Whether to print the page title in the header"
@@ -1459,16 +1453,16 @@ msgstr "Të tjerë"
 msgid "Local files"
 msgstr "Files lokalë"
 
-#: embed/mozilla/ContentHandler.cpp:147
-#: embed/mozilla/EphyHeaderSniffer.cpp:358
+#: embed/mozilla/ContentHandler.cpp:155
+#: embed/mozilla/EphyHeaderSniffer.cpp:365
 msgid "Save"
 msgstr "Ruaj"
 
-#: embed/mozilla/ContentHandler.cpp:258
+#: embed/mozilla/ContentHandler.cpp:269
 msgid "Download the unsafe file?"
 msgstr "Shkarkoj file e pasigurt?"
 
-#: embed/mozilla/ContentHandler.cpp:261
+#: embed/mozilla/ContentHandler.cpp:272
 msgid ""
 "This type of file could potentially damage your documents or invade your "
 "privacy. It's not safe to open it directly. You can save it instead."
@@ -1477,13 +1471,13 @@ msgstr ""
 "tuaj. Nuk është mirë t'a hapni direkt. Mund t'a ruani në vend që ta hapni."
 
 #. translators: %s is the name of the application
-#: embed/mozilla/ContentHandler.cpp:272
+#: embed/mozilla/ContentHandler.cpp:283
 #, c-format
 msgid "Open this file with \"%s\"?"
 msgstr "Hap këtë file me \"%s\"?"
 
 #. translators: %s is the name of the application
-#: embed/mozilla/ContentHandler.cpp:277
+#: embed/mozilla/ContentHandler.cpp:288
 #, c-format
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
@@ -1492,11 +1486,11 @@ msgstr ""
 "Shikimi i këtij lloj file direkt në shfletues është i pamundur. Mund t'a "
 "hapni atë me \"%s\" ose t'a ruani."
 
-#: embed/mozilla/ContentHandler.cpp:287
+#: embed/mozilla/ContentHandler.cpp:298
 msgid "Download the file?"
 msgstr "Shkarkoj file?"
 
-#: embed/mozilla/ContentHandler.cpp:290
+#: embed/mozilla/ContentHandler.cpp:301
 msgid ""
 "It's not possible to view this file because there is no application "
 "installed that can open it. You can save it instead."
@@ -1504,7 +1498,7 @@ msgstr ""
 "Shikimi i këtij file është i pamundur pasi nuk keni të instaluar asnjë "
 "program që mund ta hapë atë. Mund ta ruani në vend të hapjes."
 
-#: embed/mozilla/ContentHandler.cpp:295
+#: embed/mozilla/ContentHandler.cpp:306
 msgid "_Save As..."
 msgstr "_Ruaje si..."
 
@@ -1605,8 +1599,7 @@ msgstr ""
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
 "\"%s\"."
-msgstr ""
-"Duhet të lidheni me sitin vetëm nëse jeni i sigurt që jeni lidhur me \"%s\"."
+msgstr "Duhet të lidheni me sitin vetëm nëse jeni i sigurt që jeni lidhur me \"%s\"."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:356
 msgid "Connect to untrusted site?"
@@ -1657,8 +1650,7 @@ msgstr "I pamundur realizimi i lidhjes me \"%s\"."
 #: embed/mozilla/GtkNSSDialogs.cpp:501
 #, c-format
 msgid "The certificate revocation list (CRL) from \"%s\" needs to be updated."
-msgstr ""
-"Lista e skadimit të certifikatës (CRL) nga \"%s\" duhet të përditësohet."
+msgstr "Lista e skadimit të certifikatës (CRL) nga \"%s\" duhet të përditësohet."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:506
 msgid "Please ask your system administrator for assistance."
@@ -1789,10 +1781,8 @@ msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Kjo certifikatë nuk do të verifikohet pasi pronari është i panjohur."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1368
-msgid ""
-"Could not verify this certificate because the CA certificate is invalid."
-msgstr ""
-"Kjo certifikatë nuk do të verifikohet pasi certifikata CA është e pasaktë."
+msgid "Could not verify this certificate because the CA certificate is invalid."
+msgstr "Kjo certifikatë nuk do të verifikohet pasi certifikata CA është e pasaktë."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1373
 msgid "Could not verify this certificate for unknown reasons."
@@ -1885,7 +1875,7 @@ msgstr ""
 "kenishkruar do të përcillen me anë të një lidhje të pasigurt, dhe mund të "
 "kontrollohen me lehtësi nga të padëshiruar."
 
-#: embed/mozilla/MozDownload.cpp:604
+#: embed/mozilla/MozDownload.cpp:611
 msgid "Files"
 msgstr "Files"
 
@@ -1903,7 +1893,7 @@ msgstr "Files"
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
-#: embed/mozilla/mozilla-embed-single.cpp:561
+#: embed/mozilla/mozilla-embed-single.cpp:563
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphany nuk mund të përdoret tani. Nisja e Mozilla ka dështuar."
 
@@ -1937,31 +1927,31 @@ msgid "All supported types"
 msgstr "Të gjitha llojet e suportuara"
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:81 src/prefs-dialog.c:1446
+#: lib/ephy-file-helpers.c:89 src/prefs-dialog.c:1446
 msgid "Downloads"
 msgstr "Shkarkime"
 
-#: lib/ephy-file-helpers.c:182
+#: lib/ephy-file-helpers.c:190
 #, c-format
 msgid "Failed to find %s"
 msgstr "E pamundur gjetja e %s"
 
-#: lib/ephy-file-helpers.c:255
+#: lib/ephy-file-helpers.c:263
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s ekziston, çoje në ndonjë pozicion tjetër."
 
-#: lib/ephy-file-helpers.c:261
+#: lib/ephy-file-helpers.c:269
 #, c-format
 msgid "Failed to create directory %s."
 msgstr "I pamundur krijimi i directory %s."
 
-#: lib/ephy-gui.c:210
+#: lib/ephy-gui.c:223
 #, c-format
 msgid "Overwrite \"%s\"?"
 msgstr "Mbishkruan \"%s\"?"
 
-#: lib/ephy-gui.c:214
+#: lib/ephy-gui.c:227
 msgid ""
 "A file with this name already exists. If you choose to overwrite this file, "
 "the contents will be lost."
@@ -1969,15 +1959,15 @@ msgstr ""
 "Një file me këtë emër ekziston. Nëse zgjidhni mbishkrimin e këtij file, "
 "përmbajtja do t'i humbasë."
 
-#: lib/ephy-gui.c:218
+#: lib/ephy-gui.c:231
 msgid "_Overwrite"
 msgstr "_Mbishkruaj"
 
-#: lib/ephy-gui.c:220
+#: lib/ephy-gui.c:233
 msgid "Overwrite File?"
 msgstr "Mbishkruan file?"
 
-#: lib/ephy-gui.c:256
+#: lib/ephy-gui.c:269
 #, c-format
 msgid "Could not display help: %s"
 msgstr "E pamundur shfaqja e ndihmës: %s"
@@ -2278,8 +2268,7 @@ msgstr "_Importo libërshënues..."
 
 #: src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Import bookmarks from another browser or a bookmarks file"
-msgstr ""
-"Importo libërshënues nga një shfletues web apo file libërshënuesish tjetër"
+msgstr "Importo libërshënues nga një shfletues web apo file libërshënuesish tjetër"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:195
 msgid "_Export Bookmarks..."
@@ -2366,8 +2355,7 @@ msgstr "_Shfaqe tek paneli i libërshënuesit"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:230
 msgid "Show the selected bookmark or topic in the bookmarks bar"
-msgstr ""
-"Shfaq libërshënuesin apo argumentin e zgjedhur tek paneli i libërshënuesit"
+msgstr "Shfaq libërshënuesin apo argumentin e zgjedhur tek paneli i libërshënuesit"
 
 #. View Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:244 src/ephy-history-window.c:224
@@ -2639,7 +2627,7 @@ msgstr "Kodifikime të tjera"
 msgid "_Automatic"
 msgstr "_Automatik"
 
-#: src/ephy-fullscreen-popup.c:301 src/ephy-toolbar.c:666
+#: src/ephy-fullscreen-popup.c:292 src/ephy-toolbar.c:666
 msgid "Leave Fullscreen"
 msgstr "Largohu nga ekrani i plotë"
 
@@ -2732,51 +2720,51 @@ msgstr[1] "%d ditët e fundit"
 msgid "Sites"
 msgstr "Site"
 
-#: src/ephy-main.c:55
+#: src/ephy-main.c:57
 msgid "Open a new tab in an existing Epiphany window"
 msgstr "Hap një skedë të re në një dritare ekzisuese të Epiphany"
 
-#: src/ephy-main.c:58
+#: src/ephy-main.c:60
 msgid "Run Epiphany in full screen mode"
 msgstr "Zbaton Epiphany me ekran të plotë"
 
-#: src/ephy-main.c:61
+#: src/ephy-main.c:63
 msgid "Load the given session file"
 msgstr "Ngarko file e seancës së specifikuar"
 
-#: src/ephy-main.c:62 src/ephy-main.c:68
+#: src/ephy-main.c:64 src/ephy-main.c:70
 msgid "FILE"
 msgstr "FILE"
 
-#: src/ephy-main.c:64
+#: src/ephy-main.c:66
 msgid "Add a bookmark (don't open any window)"
 msgstr "Shto një libërshënues (nuk hap asnjë dritare të re)"
 
-#: src/ephy-main.c:65
+#: src/ephy-main.c:67
 msgid "URL"
 msgstr "URL"
 
-#: src/ephy-main.c:67
+#: src/ephy-main.c:69
 msgid "Import bookmarks from the given file"
 msgstr "Importo libërshënuesit nga file i dhënë"
 
-#: src/ephy-main.c:70
+#: src/ephy-main.c:72
 msgid "Launch the bookmarks editor"
 msgstr "Hap dritaren e ndryshimit të libërshënuesve"
 
-#: src/ephy-main.c:173
+#: src/ephy-main.c:226
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-notebook.c:892
+#: src/ephy-notebook.c:893
 msgid "Close tab"
 msgstr "Mbyll skedën"
 
-#: src/ephy-session.c:372
+#: src/ephy-session.c:388
 msgid "Recover previous browser windows and tabs?"
 msgstr "Rikoveron dritaret dhe skedat e mëparshme të shfletuesit?"
 
-#: src/ephy-session.c:376
+#: src/ephy-session.c:392
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -2785,15 +2773,15 @@ msgstr ""
 "është ekzekutuar. Mund të rekuperoni tani dritaret dhe skedat që kishit "
 "hapur."
 
-#: src/ephy-session.c:380
+#: src/ephy-session.c:396
 msgid "_Don't Recover"
 msgstr "_Mos rekupero"
 
-#: src/ephy-session.c:382
+#: src/ephy-session.c:398
 msgid "_Recover"
 msgstr "_Rekupero"
 
-#: src/ephy-session.c:384
+#: src/ephy-session.c:400
 msgid "Crash Recovery"
 msgstr "Rekuperimi i crash"
 
@@ -2835,26 +2823,26 @@ msgstr ""
 "Epiphany nuk mund të përdoret tani, për shkak të një difekti të papritur nga "
 "Bonobo gjatë përpjekjes për të gjetur objektin automatizues."
 
-#: src/ephy-tab.c:434 src/ephy-tab.c:1811
+#: src/ephy-tab.c:446 src/ephy-tab.c:1823
 msgid "Blank page"
 msgstr "Faqe bosh"
 
-#: src/ephy-tab.c:1187
+#: src/ephy-tab.c:1199
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Duke u ridrejtuar tek %s..."
 
-#: src/ephy-tab.c:1191
+#: src/ephy-tab.c:1203
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Duke transferuar të dhënat nga %s..."
 
-#: src/ephy-tab.c:1195
+#: src/ephy-tab.c:1207
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Në pritje të autorizimit nga %s..."
 
-#: src/ephy-tab.c:1203
+#: src/ephy-tab.c:1215
 #, c-format
 msgid "Loading %s..."
 msgstr "Duke ngarkuar %s..."
@@ -2875,7 +2863,7 @@ msgstr "I zakonshmi"
 #. * Translators: translate the same as in gnome-control-center
 #: src/ephy-toolbar-editor.c:85
 msgid "toolbar style|Text below icons"
-msgstr "Tekst nën ikona"
+msgstr "Tekst poshtë ikonave"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string. *
@@ -2889,7 +2877,7 @@ msgstr "Tekst anash ikonave"
 #. * Translators: translate the same as in gnome-control-center
 #: src/ephy-toolbar-editor.c:93
 msgid "toolbar style|Icons only"
-msgstr "Vetëm ikona"
+msgstr "Vetëm ikonat"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string. *
@@ -3446,8 +3434,7 @@ msgstr "Ka akoma ndryshime të pa dorëzuara tek elementët e formularit"
 
 #: src/ephy-window.c:647
 msgid "If you close the document anyway, you will lose that information."
-msgstr ""
-"Nëse këmbëngulni në mbylljen e dokumentit, ai informacion do të humbasë."
+msgstr "Nëse këmbëngulni në mbylljen e dokumentit, ai informacion do të humbasë."
 
 #: src/ephy-window.c:651
 msgid "Close _Document"
@@ -3591,19 +3578,19 @@ msgstr "Skadimi:"
 msgid "End of current session"
 msgstr "Përfundo seancën e tanishme"
 
-#: src/popup-commands.c:245
+#: src/popup-commands.c:246
 msgid "Download Link"
 msgstr "Adresa e Shkarkimit"
 
-#: src/popup-commands.c:253
+#: src/popup-commands.c:254
 msgid "Save Link As"
 msgstr "Ruaje Adresën Si"
 
-#: src/popup-commands.c:260
+#: src/popup-commands.c:261
 msgid "Save Image As"
 msgstr "Ruaj figurën si"
 
-#: src/popup-commands.c:355
+#: src/popup-commands.c:353
 msgid "Save Background As"
 msgstr "Ruaj sfondin si"
 
@@ -3917,7 +3904,7 @@ msgstr "Zgjidh një directory"
 msgid "Check this out!"
 msgstr "Kontrollo mirë!"
 
-#: src/window-commands.c:797
+#: src/window-commands.c:775
 msgid "Epiphany"
 msgstr "Epiphany"
 
@@ -3929,6 +3916,7 @@ msgstr "Epiphany"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:810
+#: src/window-commands.c:788
 msgid "translator-credits"
 msgstr "Laurent Dhima <laurenti@alblinux.net>"
+
