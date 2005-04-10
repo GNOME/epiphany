@@ -78,6 +78,8 @@ void		ephy_location_entry_set_location	(EphyLocationEntry *le,
 
 const char     *ephy_location_entry_get_location	(EphyLocationEntry *le);
 
+void		ephy_location_entry_restore_location	(EphyLocationEntry *le);
+
 void		ephy_location_entry_activate		(EphyLocationEntry *le);
 
 GtkWidget      *ephy_location_entry_get_entry		(EphyLocationEntry *entry);

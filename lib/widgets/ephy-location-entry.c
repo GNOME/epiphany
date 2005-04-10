@@ -32,6 +32,7 @@
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
+#include <gdk/gdkkeysyms.h>
 #include <gtk/gtktoolbar.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkwindow.h>
@@ -240,6 +241,23 @@ entry_button_press_cb (GtkWidget *entry, GdkEventButton *event, EphyLocationEntr
 	{
 		ephy_location_entry_activate (le);
 		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static gboolean
+entry_key_press_cb (GtkWidget *widget,
+		    GdkEventKey *event,
+		    EphyLocationEntry *entry)
+{
+	if (event->keyval == GDK_Escape)
+	{
+		ephy_location_entry_restore_location (entry);
+
+		/* Don't consume the keypress, since we want the default
+		 * action (close autocompletion popup) too.
+		 */
 	}
 
 	return FALSE;
@@ -586,6 +604,8 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 			  G_CALLBACK (entry_populate_popup_cb), entry);
 	g_signal_connect (priv->entry, "button_press_event",
 			  G_CALLBACK (entry_button_press_cb), entry);
+	g_signal_connect (priv->entry, "key-press-event",
+			  G_CALLBACK (entry_key_press_cb), entry);
 	g_signal_connect (priv->entry, "changed",
 			  G_CALLBACK (editable_changed_cb), entry);
 	g_signal_connect (priv->entry, "drag_motion",
@@ -699,6 +719,18 @@ const char *
 ephy_location_entry_get_location (EphyLocationEntry *le)
 {
 	return gtk_entry_get_text (GTK_ENTRY (le->priv->entry));
+}
+
+void
+ephy_location_entry_restore_location (EphyLocationEntry *entry)
+{
+	char *url = NULL;
+
+	g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
+
+	g_signal_emit (entry, signals[GET_LOCATION], 0, &url);
+	gtk_entry_set_text (GTK_ENTRY (entry->priv->entry), url ? url : "");
+	g_free (url);
 }
 
 void

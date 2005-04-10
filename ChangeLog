@@ -1,5 +1,15 @@
 2005-04-10  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/widgets/ephy-location-entry.c: (entry_key_press_cb),
+	(ephy_location_entry_construct_contents),
+	(ephy_location_entry_get_location),
+	(ephy_location_entry_restore_location):
+	* lib/widgets/ephy-location-entry.h:
+
+	Restore original URL when pressing ESC. Fixes bug #171179.
+
+2005-04-10  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-node-db.c: (ephy_node_db_get_property),
 	(ephy_node_db_set_property), (ephy_node_db_finalize),
 	(ephy_node_db_write_to_xml_safe), (ephy_node_db_class_init),
