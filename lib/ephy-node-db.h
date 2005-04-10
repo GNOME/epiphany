@@ -55,8 +55,6 @@ typedef struct
 
 GType         ephy_node_db_get_type		(void);
 
-EphyNodeDb   *ephy_node_db_get_by_name		(const char *name);
-
 EphyNodeDb   *ephy_node_db_new			(const char *name);
 
 gboolean      ephy_node_db_load_from_file	(EphyNodeDb *db,

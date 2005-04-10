@@ -32,10 +32,6 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-static void ephy_node_db_class_init (EphyNodeDbClass *klass);
-static void ephy_node_db_init (EphyNodeDb *node);
-static void ephy_node_db_finalize (GObject *object);
-
 /* FIXME I want to find a better way to deal with "root" nodes */
 #define RESERVED_IDS 30
 
@@ -58,50 +54,7 @@ struct _EphyNodeDbPrivate
 	GPtrArray *id_to_node;
 };
 
-static GHashTable *ephy_node_databases = NULL;
-
 static GObjectClass *parent_class = NULL;
-
-GType
-ephy_node_db_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		static const GTypeInfo our_info =
-		{
-			sizeof (EphyNodeDbClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_node_db_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyNodeDb),
-			0,
-			(GInstanceInitFunc) ephy_node_db_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyNodeDb",
-					       &our_info, 0);
-	}
-
-	return type;
-}
-
-static void
-ephy_node_db_set_name (EphyNodeDb *db, const char *name)
-{
-	db->priv->name = g_strdup (name);
-
-	if (ephy_node_databases == NULL)
-	{
-		ephy_node_databases = g_hash_table_new (g_str_hash, g_str_equal);
-	}
-
-	g_hash_table_insert (ephy_node_databases, db->priv->name, db);
-}
 
 static void
 ephy_node_db_get_property (GObject *object,
@@ -109,9 +62,7 @@ ephy_node_db_get_property (GObject *object,
                            GValue *value,
                            GParamSpec *pspec)
 {
-	EphyNodeDb *db;
-
-	db = EPHY_NODE_DB (object);
+	EphyNodeDb *db = EPHY_NODE_DB (object);
 
 	switch (prop_id)
 	{
@@ -130,49 +81,17 @@ ephy_node_db_set_property (GObject *object,
                            const GValue *value,
                            GParamSpec *pspec)
 {
-	EphyNodeDb *db;
-
-	db = EPHY_NODE_DB (object);
+	EphyNodeDb *db = EPHY_NODE_DB (object);
 
 	switch (prop_id)
 	{
 		case PROP_NAME:
-			ephy_node_db_set_name (db, g_value_get_string (value));
+			db->priv->name = g_value_dup_string (value);
 			break;
 		case PROP_IMMUTABLE:
 			ephy_node_db_set_immutable (db, g_value_get_boolean (value));
 			break;
 	}
-}
-
-static void
-ephy_node_db_class_init (EphyNodeDbClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
-
-	object_class->finalize = ephy_node_db_finalize;
-        object_class->set_property = ephy_node_db_set_property;
-        object_class->get_property = ephy_node_db_get_property;
-
-	g_object_class_install_property (object_class,
-                                         PROP_NAME,
-                                         g_param_spec_string  ("name",
-                                                               "Name",
-                                                               "Name",
-                                                               NULL,
-                                                               G_PARAM_READWRITE));
-
-	g_object_class_install_property (object_class,
-                                         PROP_IMMUTABLE,
-                                         g_param_spec_boolean  ("immutable",
-								"Immutable",
-								"Immutable",
-								FALSE,
-								G_PARAM_READWRITE));
-
-	g_type_class_add_private (object_class, sizeof (EphyNodeDbPrivate));
 }
 
 static void
@@ -192,35 +111,11 @@ ephy_node_db_finalize (GObject *object)
 {
 	EphyNodeDb *db = EPHY_NODE_DB (object);
 
-	g_hash_table_remove (ephy_node_databases, db->priv->name);
-	if (g_hash_table_size (ephy_node_databases) == 0)
-	{
-		g_hash_table_destroy (ephy_node_databases);
-	}
-
 	g_ptr_array_free (db->priv->id_to_node, TRUE);
 
 	g_free (db->priv->name);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-/**
- * ephy_node_db_get_by_name:
- * @name: the name of the desired #EphyNodeDb
- *
- * Returns the #EphyNodeDb named @name, or %NULL if no such database exists.
- *
- * Return value: an #EphyNodeDb
- **/
-EphyNodeDb *
-ephy_node_db_get_by_name (const char *name)
-{
-	EphyNodeDb *ret;
-
-	ret = g_hash_table_lookup (ephy_node_databases, name);
-
-	return ret;
 }
 
 /**
@@ -613,4 +508,63 @@ failed:
 	g_free (tmp_file);
 
 	return ret;
+}
+
+static void
+ephy_node_db_class_init (EphyNodeDbClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	parent_class = g_type_class_peek_parent (klass);
+
+	object_class->finalize = ephy_node_db_finalize;
+	object_class->set_property = ephy_node_db_set_property;
+	object_class->get_property = ephy_node_db_get_property;
+
+	g_object_class_install_property (object_class,
+					PROP_NAME,
+					g_param_spec_string  ("name",
+							      "Name",
+							      "Name",
+							      NULL,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+
+	g_object_class_install_property (object_class,
+					PROP_IMMUTABLE,
+					g_param_spec_boolean ("immutable",
+							      "Immutable",
+							      "Immutable",
+							      FALSE,
+							      G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof (EphyNodeDbPrivate));
+}
+
+GType
+ephy_node_db_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyNodeDbClass),
+			NULL,
+			NULL,
+			(GClassInitFunc) ephy_node_db_class_init,
+			NULL,
+			NULL,
+			sizeof (EphyNodeDb),
+			0,
+			(GInstanceInitFunc) ephy_node_db_init
+		};
+
+		type = g_type_register_static (G_TYPE_OBJECT,
+					       "EphyNodeDb",
+					       &our_info, 0);
+	}
+
+	return type;
 }
