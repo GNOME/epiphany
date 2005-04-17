@@ -445,6 +445,13 @@ AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsITransfer.h],
 	[AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/uriloader/nsITransfer.h],
 		[AC_DEFINE([HAVE_NSITRANSFER_H],[1],[Define if nsITransfer.h exists])])])
 
+dnl exists since 1.8b2
+
+AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsICancelable.h],
+	[AC_DEFINE([HAVE_NSICANCELABLE_H],[1],[Define if nsICancelable.h exists])],
+	[AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/necko/nsICancelable.h],
+		[AC_DEFINE([HAVE_NSICANCELABLE_H],[1],[Define if nsICancelable.h exists])])])
+
 dnl check for broken reload in GtkMozEmbed
 dnl This is fixed since 1.7.4 on 1.7 branch, and since 1.8a3 on trunk
 

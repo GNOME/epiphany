@@ -43,6 +43,7 @@
 #include <nsIMIMEInfo.h>
 #include <nsIInterfaceRequestorUtils.h>
 #include <nsCExternalHandlerService.h>
+#include <nsNetError.h>
 
 #ifdef ALLOW_PRIVATE_API
 #include <nsIServiceManager.h>
@@ -133,7 +134,11 @@ GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
 	}
 	else
 	{
+#ifdef HAVE_NSICANCELABLE_H
+		mLauncher->Cancel (NS_BINDING_ABORTED);
+#else
 		mLauncher->Cancel ();
+#endif
 	}
 
 	return NS_OK;
@@ -440,7 +445,11 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	}
 	else if (mAction == CONTENT_ACTION_NONE)
 	{
+#ifdef HAVE_NSICANCELABLE_H
+		mLauncher->Cancel (NS_BINDING_ABORTED);
+#else
 		mLauncher->Cancel ();
+#endif
 	}
 	else
 	{
