@@ -632,16 +632,18 @@ popups_manager_show_all (EphyTab *tab)
 static char *
 popups_manager_new_window_info (EphyWindow *window)
 {
+	EphyTab *tab;
 	EphyEmbedChrome chrome;
 	char *features;
-	int w, h;
 
 	g_object_get (window, "chrome", &chrome, NULL);
-	gtk_window_get_size (GTK_WINDOW (window), &w, &h);
+
+	tab = ephy_window_get_active_tab (window);
+	g_return_val_if_fail (tab != NULL, g_strdup (""));
 
 	features = g_strdup_printf
 		("width=%d,height=%d,menubar=%d,status=%d,toolbar=%d",
-		 w, h,
+		 tab->priv->width, tab->priv->height,
 		 (chrome & EPHY_EMBED_CHROME_MENUBAR) > 0,
 		 (chrome & EPHY_EMBED_CHROME_STATUSBAR) > 0,
 		 (chrome & EPHY_EMBED_CHROME_TOOLBAR) > 0);
