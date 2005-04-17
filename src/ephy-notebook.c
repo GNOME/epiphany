@@ -67,9 +67,12 @@ struct _EphyNotebookPrivate
 	GtkTooltips *title_tips;
 	guint tabs_vis_notifier_id;
 	gulong motion_notify_handler_id;
-	gint x_start, y_start;
-	gboolean drag_in_progress;
-	gboolean show_tabs;
+	int x_start;
+	int y_start;
+
+	guint drag_in_progress : 1;
+	guint show_tabs : 1;
+	guint dnd_enabled : 1;
 };
 
 static void ephy_notebook_init           (EphyNotebook *notebook);
@@ -89,6 +92,13 @@ static GtkTargetEntry url_drag_types [] =
         { EPHY_DND_URL_TYPE,        0, 1 }
 };
 static guint n_url_drag_types = G_N_ELEMENTS (url_drag_types);
+
+enum
+{
+	PROP_0,
+	PROP_DND_ENABLED,
+	PROP_SHOW_TABS
+};
 
 enum
 {
@@ -142,6 +152,57 @@ ephy_notebook_get_type (void)
 	return type;
 }
 
+void
+ephy_notebook_set_dnd_enabled (EphyNotebook *notebook,
+			       gboolean enabled)
+{
+	EphyNotebookPrivate *priv = notebook->priv;
+
+	priv->dnd_enabled = enabled;
+	/* FIXME abort any DNDs in progress */
+
+	g_object_notify (G_OBJECT (notebook), "dnd-enabled");
+}
+
+static void
+ephy_notebook_get_property (GObject *object,
+			    guint prop_id,
+			    GValue *value,
+			    GParamSpec *pspec)
+{
+	EphyNotebook *notebook = EPHY_NOTEBOOK (object);
+	EphyNotebookPrivate *priv = notebook->priv;
+
+	switch (prop_id)
+	{
+		case PROP_DND_ENABLED:
+			g_value_set_boolean (value, priv->dnd_enabled);
+			break;
+		case PROP_SHOW_TABS:
+			g_value_set_boolean (value, priv->show_tabs);
+			break;
+	}
+}
+
+static void
+ephy_notebook_set_property (GObject *object,
+			    guint prop_id,
+			    const GValue *value,
+			    GParamSpec *pspec)
+{
+	EphyNotebook *notebook = EPHY_NOTEBOOK (object);
+
+	switch (prop_id)
+	{
+		case PROP_DND_ENABLED:
+			ephy_notebook_set_dnd_enabled (notebook, g_value_get_boolean (value));
+			break;
+		case PROP_SHOW_TABS:
+			ephy_notebook_set_show_tabs (notebook, g_value_get_boolean (value));
+			break;
+	}
+}
+
 static void
 ephy_notebook_class_init (EphyNotebookClass *klass)
 {
@@ -150,6 +211,8 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_notebook_finalize;
+	object_class->get_property = ephy_notebook_get_property;
+	object_class->set_property = ephy_notebook_set_property;
 
 	signals[TAB_ADDED] =
 		g_signal_new ("tab_added",
@@ -201,7 +264,23 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 			      1,
 			      EPHY_TYPE_TAB);
 
-	g_type_class_add_private (object_class, sizeof(EphyNotebookPrivate));
+	g_object_class_install_property (object_class,
+					 PROP_DND_ENABLED,
+					 g_param_spec_boolean ("dnd-enabled",
+							       "DND enabled",
+							       "Whether the notebook allows tab reordering by DND",
+							       TRUE,
+							       G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_SHOW_TABS,
+					 g_param_spec_boolean ("show-tabs",
+							       "Show tabs",
+							       "Whether the notebook shows the tabs bar",
+							       TRUE,
+							       G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof (EphyNotebookPrivate));
 }
 
 static EphyNotebook *
@@ -476,6 +555,9 @@ move_tab_to_another_notebook (EphyNotebook *src,
 	g_assert (EPHY_IS_NOTEBOOK (dest));
 	g_assert (dest != src);
 
+	/* Check if the dest notebook can accept the drag */
+	if (!dest->priv->dnd_enabled) return;
+
 	cur_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (src));
 	tab = EPHY_TAB (gtk_notebook_get_nth_page (GTK_NOTEBOOK (src), cur_page));
 
@@ -543,10 +625,13 @@ button_press_cb (EphyNotebook *notebook,
 		 GdkEventButton *event,
 		 gpointer data)
 {
-	gint tab_clicked = find_tab_num_at_pos (notebook,
-						event->x_root,
-						event->y_root);
+	int tab_clicked;
 
+	if (!notebook->priv->dnd_enabled) return FALSE;
+
+	tab_clicked = find_tab_num_at_pos (notebook, event->x_root, event->y_root);
+
+	/* FIXME: how could there be a drag in progress!? */
 	if (notebook->priv->drag_in_progress)
 	{
 		return TRUE;
@@ -705,6 +790,7 @@ ephy_notebook_init (EphyNotebook *notebook)
 	gtk_object_sink (GTK_OBJECT (notebook->priv->title_tips));
 
 	notebook->priv->show_tabs = TRUE;
+	notebook->priv->dnd_enabled = TRUE;
 
 	g_signal_connect (notebook, "button-press-event",
 			  (GCallback)button_press_cb, NULL);

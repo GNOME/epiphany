@@ -1,5 +1,41 @@
 2005-04-17  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-automation.c:
+	(impl_ephy_automation_loadUrlWithStartupId):
+	* src/ephy-notebook.c: (ephy_notebook_set_dnd_enabled),
+	(ephy_notebook_get_property), (ephy_notebook_set_property),
+	(ephy_notebook_class_init), (move_tab_to_another_notebook),
+	(button_press_cb), (ephy_notebook_init):
+	* src/ephy-notebook.h:
+	* src/ephy-session.c: (ephy_session_get_active_window):
+	* src/ephy-shell.c: (ephy_shell_new_window_cb),
+	(ephy_shell_new_tab_full), (ephy_shell_new_tab):
+	* src/ephy-shell.h:
+	* src/ephy-tab.c: (ephy_tab_class_init),
+	(popups_manager_new_window_info), (ephy_tab_dispose),
+	(ephy_tab_finalize), (let_me_resize_hack), (ephy_tab_set_size),
+	(ephy_tab_init):
+	* src/ephy-tab.h:
+	* src/ephy-window.c: (get_chromes_visibility),
+	(sync_chromes_visibility), (update_chromes_actions),
+	(update_actions_sensitivity), (sync_tab_visibility),
+	(show_embed_popup), (let_me_resize_hack), (tab_size_to_cb),
+	(ephy_window_set_active_tab), (ephy_window_set_chrome),
+	(ephy_window_set_is_popup), (ephy_window_dispose),
+	(ephy_window_set_property), (ephy_window_get_property),
+	(ephy_window_class_init), (ephy_window_init),
+	(ephy_window_constructor), (ephy_window_new_with_chrome),
+	(ephy_window_set_print_preview), (ephy_window_add_tab),
+	(ephy_window_show), (ephy_window_view_popup_windows_cb),
+	(ephy_window_get_is_popup):
+	* src/ephy-window.h:
+
+	Rework popup windows. Introduce "is-popup" property on EphyWindow to
+	indicate a window who will only have one tab, and can be resized by 
+	javascript calls. Fixes bug #136288 and #155395.
+
+2005-04-17  Christian Persch  <chpe@cvs.gnome.org>
+
         * embed/mozilla/mozilla-embed-persist.cpp:
 	
         Add null check.

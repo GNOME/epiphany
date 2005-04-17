@@ -77,6 +77,9 @@
 static void ephy_window_class_init		(EphyWindowClass *klass);
 static void ephy_window_link_iface_init		(EphyLinkIface *iface);
 static void ephy_window_init			(EphyWindow *gs);
+static GObject *ephy_window_constructor		(GType type,
+						 guint n_construct_properties,
+						 GObjectConstructParam *construct_params);
 static void ephy_window_finalize		(GObject *object);
 static void ephy_window_show			(GtkWidget *widget);
 static EphyTab *ephy_window_open_link		(EphyLink *link,
@@ -415,6 +418,7 @@ struct _EphyWindowPrivate
 	guint tab_message_cid;
 	guint help_message_cid;
 	EphyEmbedChrome chrome;
+	guint idle_resize_handler;
 
 	guint disable_arbitrary_url_notifier_id;
 	guint disable_bookmark_editing_notifier_id;
@@ -432,6 +436,7 @@ struct _EphyWindowPrivate
 	guint fullscreen_mode : 1;
 	guint ppv_mode : 1;
 	guint should_save_chrome : 1;
+	guint is_popup : 1;
 };
 
 enum
@@ -439,7 +444,8 @@ enum
 	PROP_0,
 	PROP_ACTIVE_TAB,
 	PROP_CHROME,
-	PROP_PPV_MODE
+	PROP_PPV_MODE,
+	PROP_SINGLE_TAB_MODE
 };
 
 static GObjectClass *parent_class = NULL;
@@ -520,20 +526,29 @@ get_toolbar_visibility (EphyWindow *window)
 }			
 
 static void
-get_chromes_visibility (EphyWindow *window, gboolean *show_menubar,
-			gboolean *show_statusbar, gboolean *show_toolbar,
-			gboolean *show_bookmarksbar)
+get_chromes_visibility (EphyWindow *window,
+			gboolean *show_menubar,
+			gboolean *show_statusbar,
+			gboolean *show_toolbar,
+			gboolean *show_bookmarksbar,
+			gboolean *show_tabsbar)
 {
-	EphyEmbedChrome flags = window->priv->chrome;
+	EphyWindowPrivate *priv = window->priv;
+	EphyEmbedChrome flags = priv->chrome;
 
 	if (window->priv->ppv_mode)
 	{
-		*show_menubar = *show_statusbar = *show_toolbar = *show_bookmarksbar = FALSE;
+		*show_menubar = *show_statusbar
+			      = *show_toolbar
+			      = *show_bookmarksbar
+			      = *show_tabsbar
+			      = FALSE;
 	}
 	else if (window->priv->fullscreen_mode)
 	{
 		*show_toolbar = (flags & EPHY_EMBED_CHROME_TOOLBAR) != 0;
 		*show_menubar = *show_statusbar = *show_bookmarksbar = FALSE;
+		*show_tabsbar = !priv->is_popup;
 	}
 	else
 	{
@@ -541,6 +556,7 @@ get_chromes_visibility (EphyWindow *window, gboolean *show_menubar,
 		*show_statusbar = (flags & EPHY_EMBED_CHROME_STATUSBAR) != 0;
 		*show_toolbar = (flags & EPHY_EMBED_CHROME_TOOLBAR) != 0;
 		*show_bookmarksbar = (flags & EPHY_EMBED_CHROME_BOOKMARKSBAR) != 0;
+		*show_tabsbar = !priv->is_popup;
 	}
 }
 
@@ -549,13 +565,13 @@ sync_chromes_visibility (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
 	GtkWidget *menubar;
-	gboolean show_statusbar, show_menubar, show_toolbar, show_bookmarksbar;
+	gboolean show_statusbar, show_menubar, show_toolbar, show_bookmarksbar, show_tabsbar;
 
 	if (priv->closing) return;
 
 	get_chromes_visibility (window, &show_menubar,
 				&show_statusbar, &show_toolbar,
-				&show_bookmarksbar);
+				&show_bookmarksbar, &show_tabsbar);
 
 	menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");
 	g_assert (menubar != NULL);
@@ -566,6 +582,8 @@ sync_chromes_visibility (EphyWindow *window)
 	g_object_set (priv->statusbar, "visible", show_statusbar, NULL);
 
 	ephy_toolbar_set_lock_visibility (priv->toolbar, !show_statusbar);
+
+	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (priv->notebook), show_tabsbar);
 
 	if (priv->fullscreen_popup != NULL)
 	{
@@ -980,11 +998,11 @@ update_chromes_actions (EphyWindow *window)
 {
 	GtkActionGroup *action_group = window->priv->action_group;
 	GtkAction *action;
-	gboolean show_statusbar, show_menubar, show_toolbar, show_bookmarksbar;
+	gboolean show_statusbar, show_menubar, show_toolbar, show_bookmarksbar, show_tabsbar;
 
 	get_chromes_visibility (window, &show_menubar,
 				&show_statusbar, &show_toolbar,
-				&show_bookmarksbar);
+				&show_bookmarksbar, &show_tabsbar);
 
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
 	g_signal_handlers_block_by_func (G_OBJECT (action),
@@ -1038,10 +1056,14 @@ update_print_actions (EphyWindow *window,
 static void
 update_actions_sensitivity (EphyWindow *window)
 {
-	GtkActionGroup *action_group = window->priv->action_group;
-	GtkActionGroup *popups_action_group = window->priv->popups_action_group;
+	EphyWindowPrivate *priv = window->priv;
+	GtkActionGroup *action_group = priv->action_group;
+	GtkActionGroup *popups_action_group = priv->popups_action_group;
 	GtkAction *action;
 	gboolean bookmarks_editable, save_to_disk, fullscreen;
+
+	action = gtk_action_group_get_action (action_group, "FileNewTab");
+	g_object_set (action, "sensitive", !priv->is_popup, NULL);
 
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
 	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_TOOLBARS), NULL);
@@ -1528,12 +1550,15 @@ sync_tab_title (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
-sync_tab_visibility (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_visibility (EphyTab *tab,
+		     GParamSpec *pspec,
+		     EphyWindow *window)
 {
+	EphyWindowPrivate *priv = window->priv;
 	GList *l, *tabs;
 	gboolean visible = FALSE;
 
-	if (window->priv->closing) return;
+	if (priv->closing) return;
 
 	tabs = ephy_window_get_tabs (window);
 	for (l = tabs; l != NULL; l = l->next)
@@ -1549,14 +1574,7 @@ sync_tab_visibility (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	}
 	g_list_free (tabs);
 
-	if (visible)
-	{
-		gtk_widget_show (GTK_WIDGET(window));
-	}
-	else
-	{
-		gtk_widget_hide (GTK_WIDGET (window));
-	}
+	g_object_set (window, "visible", visible, NULL);
 }
 
 static void
@@ -1753,8 +1771,11 @@ update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 }
 
 static void
-show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
+show_embed_popup (EphyWindow *window,
+		  EphyTab *tab,
+		  EphyEmbedEvent *event)
 {
+	EphyWindowPrivate *priv = window->priv;
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	EphyEmbedEventContext context;
@@ -1765,7 +1786,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	guint button;
 
 	/* Do not show the menu in print preview mode */
-	if (window->priv->ppv_mode)
+	if (priv->ppv_mode)
 	{
 		return;
 	}
@@ -1824,7 +1845,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 
 	update_popups_tooltips (window, event);
 
-	widget = gtk_ui_manager_get_widget (window->priv->manager, popup);
+	widget = gtk_ui_manager_get_widget (priv->manager, popup);
 	g_return_if_fail (widget != NULL);
 
 	action_group = window->priv->popups_action_group;
@@ -1834,7 +1855,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewWindow");
 	g_object_set (action, "sensitive", can_open_in_new, FALSE);
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
-	g_object_set (action, "sensitive", can_open_in_new, FALSE);
+	g_object_set (action, "sensitive", can_open_in_new && !priv->is_popup, FALSE);
 
 	g_object_set_data_full (G_OBJECT (window), "context_event",
 				g_object_ref (event),
@@ -1875,6 +1896,70 @@ tab_context_menu_cb (EphyEmbed *embed,
 	return TRUE;
 }
 
+static gboolean
+let_me_resize_hack (EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+
+	gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
+
+	priv->idle_resize_handler = 0;
+	return FALSE;
+}
+
+static void
+tab_size_to_cb (EphyEmbed *embed,
+		int width,
+		int height,
+		EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkWidget *widget = GTK_WIDGET (window);
+	GtkWidget *embed_widget = GTK_WIDGET (embed);
+	GdkScreen *screen;
+	EphyTab *tab;
+	GdkRectangle rect;
+	int monitor;
+	int ww, wh, ew, eh, dw, dh;
+
+	LOG ("tab_size_to_cb window %p embed %p width %d height %d", window, embed, width, height);
+
+	tab = ephy_tab_for_embed (embed);
+	g_return_if_fail (tab != NULL);
+
+	/* FIXME: allow sizing also for non-popup single-tab windows? */
+	if (tab != ephy_window_get_active_tab (window) || !priv->is_popup) return;
+
+	/* contrain size so that the window will be fully contained within the screen */
+	screen = gtk_widget_get_screen (widget);
+	monitor = gdk_screen_get_monitor_at_window (screen, widget->window);
+	gdk_screen_get_monitor_geometry (screen, monitor, &rect);
+	/* FIXME: get and subtract the panel size */
+
+	gtk_window_get_size (GTK_WINDOW (window), &ww, &wh);
+
+	ew = embed_widget->allocation.width;
+	eh = embed_widget->allocation.height;
+
+	/* This should approximate the chrome extent */
+	dw = ww - ew; dw = MAX (dw, 0); dw = MIN (dw, rect.width - 1);
+	dh = wh - eh; dh = MAX (dh, 0); dh = MIN (dh, rect.height - 1);
+
+	width = MIN (rect.width - dw, width);
+	height = MIN (rect.height - dh, height);
+
+	/* FIXME: move window if this will place it partially outside the screen rect? */
+
+	gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+	ephy_tab_set_size (tab, width, height);
+
+	if (priv->idle_resize_handler == 0)
+	{
+		priv->idle_resize_handler =
+			g_idle_add ((GSourceFunc) let_me_resize_hack, window);
+	}
+}
+
 static void
 ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 {
@@ -1890,47 +1975,48 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 
 	if (old_tab != NULL)
 	{
-		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_address),
 						      window);
-		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_document_type),
 						      window);
-		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_icon),
 						      window);
-		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_load_progress),
 						      window);
-		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_load_status),
 						      window);
-		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_message),
 						      window);
-		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_navigation),
 						      window);
-		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_security),
 						      window);
-		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_popup_windows),
 						      window);
-		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_popups_allowed),
 						      window);
-		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_title),
 						      window);
-		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_zoom),
 						      window);
 
 		embed = ephy_tab_get_embed (old_tab);
-		g_signal_handlers_disconnect_by_func (G_OBJECT (embed),
-						      G_CALLBACK (tab_context_menu_cb),
-						      window);
+		g_signal_handlers_disconnect_by_func
+			(embed, G_CALLBACK (tab_context_menu_cb), window);
+		g_signal_handlers_disconnect_by_func
+			(embed, G_CALLBACK (tab_size_to_cb), window);
 	}
 
 	window->priv->active_tab = new_tab;
@@ -1950,59 +2036,50 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		sync_tab_title		(new_tab, NULL, window);
 		sync_tab_zoom		(new_tab, NULL, window);
 
-		g_signal_connect_object (G_OBJECT (new_tab),
-					 "notify::address",
+		g_signal_connect_object (new_tab, "notify::address",
 					 G_CALLBACK (sync_tab_address),
 					 window, 0);
-		g_signal_connect_object (G_OBJECT (new_tab),
-					 "notify::document-type",
+		g_signal_connect_object (new_tab, "notify::document-type",
 					 G_CALLBACK (sync_tab_document_type),
 					 window, 0);
-		g_signal_connect_object (G_OBJECT (new_tab),
-					 "notify::icon",
+		g_signal_connect_object (new_tab, "notify::icon",
 					 G_CALLBACK (sync_tab_icon),
 					 window, 0);
-		g_signal_connect_object (G_OBJECT (new_tab),
-					 "notify::load-progress",
+		g_signal_connect_object (new_tab, "notify::load-progress",
 					 G_CALLBACK (sync_tab_load_progress),
 					 window, 0);
-		g_signal_connect_object (G_OBJECT (new_tab),
-					 "notify::load-status",
+		g_signal_connect_object (new_tab, "notify::load-status",
 					 G_CALLBACK (sync_tab_load_status),
 					 window, 0);
-		g_signal_connect_object (G_OBJECT (new_tab),
-					 "notify::message",
+		g_signal_connect_object (new_tab, "notify::message",
 					 G_CALLBACK (sync_tab_message),
 					 window, 0);
-		g_signal_connect_object (G_OBJECT (new_tab),
-					 "notify::navigation",
+		g_signal_connect_object (new_tab, "notify::navigation",
 					 G_CALLBACK (sync_tab_navigation),
 					 window, 0);
-		g_signal_connect_object (G_OBJECT (new_tab),
-					 "notify::security-level",
+		g_signal_connect_object (new_tab, "notify::security-level",
 					 G_CALLBACK (sync_tab_security),
 					 window, 0);
-		g_signal_connect_object (G_OBJECT (new_tab),
-					 "notify::hidden-popup-count",
+		g_signal_connect_object (new_tab, "notify::hidden-popup-count",
 					 G_CALLBACK (sync_tab_popup_windows),
 					 window, 0);
-		g_signal_connect_object (G_OBJECT (new_tab),
-					 "notify::popups-allowed",
+		g_signal_connect_object (new_tab, "notify::popups-allowed",
 					 G_CALLBACK (sync_tab_popups_allowed),
 					 window, 0);
-		g_signal_connect_object (G_OBJECT (new_tab),
-					 "notify::title",
+		g_signal_connect_object (new_tab, "notify::title",
 					 G_CALLBACK (sync_tab_title),
 					 window, 0);
-		g_signal_connect_object (G_OBJECT (new_tab),
-					 "notify::zoom",
+		g_signal_connect_object (new_tab, "notify::zoom",
 					 G_CALLBACK (sync_tab_zoom),
 					 window, 0);
 
 		embed = ephy_tab_get_embed (new_tab);
-		g_signal_connect_object (embed, "ge_context_menu",
+		g_signal_connect_object (embed, "ge-context-menu",
 					 G_CALLBACK (tab_context_menu_cb),
 					 window, G_CONNECT_AFTER);
+		g_signal_connect_object (embed, "size-to",
+					 G_CALLBACK (tab_size_to_cb),
+					 window, 0);
 
 		g_object_notify (G_OBJECT (window), "active-tab");
 	}
@@ -2308,8 +2385,19 @@ ephy_window_set_chrome (EphyWindow *window, EphyEmbedChrome mask)
 
 	window->priv->chrome = chrome_mask;
 
-	sync_chromes_visibility (window);
 	update_chromes_actions (window);
+}
+
+static void
+ephy_window_set_is_popup (EphyWindow *window,
+				 gboolean is_popup)
+{
+	EphyWindowPrivate *priv = window->priv;
+
+	priv->is_popup = is_popup;
+	ephy_notebook_set_dnd_enabled (EPHY_NOTEBOOK (priv->notebook), !is_popup);
+
+	g_object_notify (G_OBJECT (window), "is-popup");
 }
 
 static void
@@ -2352,6 +2440,12 @@ ephy_window_dispose (GObject *object)
 		eel_gconf_notification_remove (priv->disable_command_line_notifier_id);
 		eel_gconf_notification_remove (priv->browse_with_caret_notifier_id);
 		eel_gconf_notification_remove (priv->allow_popups_notifier_id);
+
+		if (priv->idle_resize_handler != 0)
+		{
+			g_source_remove (priv->idle_resize_handler);
+			priv->idle_resize_handler = 0;
+		}
 
 		if (priv->find_dialog)
 		{
@@ -2408,6 +2502,9 @@ ephy_window_set_property (GObject *object,
 		case PROP_PPV_MODE:
 			ephy_window_set_print_preview (window, g_value_get_boolean (value));
 			break;
+		case PROP_SINGLE_TAB_MODE:
+			ephy_window_set_is_popup (window, g_value_get_boolean (value));
+			break;
 	}
 }
 
@@ -2429,6 +2526,9 @@ ephy_window_get_property (GObject *object,
 			break;
 		case PROP_PPV_MODE:
 			g_value_set_boolean (value, window->priv->ppv_mode);
+			break;
+		case PROP_SINGLE_TAB_MODE:
+			g_value_set_boolean (value, window->priv->is_popup);
 			break;
 	}
 }
@@ -2477,6 +2577,7 @@ ephy_window_class_init (EphyWindowClass *klass)
 
         parent_class = g_type_class_peek_parent (klass);
 
+	object_class->constructor = ephy_window_constructor;
 	object_class->dispose = ephy_window_dispose;
         object_class->finalize = ephy_window_finalize;
 	object_class->get_property = ephy_window_get_property;
@@ -2512,6 +2613,15 @@ ephy_window_class_init (EphyWindowClass *klass)
 							       "Whether the window is in print preview mode",
 							       FALSE,
 							       G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_SINGLE_TAB_MODE,
+					 g_param_spec_boolean ("is-popup",
+							       "Single Tab Mode",
+							       "Whether the window is in single tab mode",
+							       FALSE,
+							       G_PARAM_READWRITE |
+							       G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (EphyWindowPrivate));
 }
@@ -2737,8 +2847,6 @@ ephy_window_init (EphyWindow *window)
 			  GTK_WIDGET (window->priv->toolbar),
 			  FALSE, FALSE, 0);
 
-	update_actions_sensitivity (window);
-
 	/* Once the window is sufficiently created let the extensions attach to it */
 	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
 	ephy_extension_attach_window (manager, window);
@@ -2819,6 +2927,25 @@ ephy_window_init (EphyWindow *window)
 	init_menu_updaters (window);
 }
 
+static GObject *
+ephy_window_constructor (GType type,
+			 guint n_construct_properties,
+			 GObjectConstructParam *construct_params)
+{
+	GObject *object;
+	EphyWindow *window;
+
+	object = parent_class->constructor (type, n_construct_properties,
+					    construct_params);
+
+	window = EPHY_WINDOW (object);
+
+	update_actions_sensitivity (window);
+	sync_chromes_visibility (window);
+
+	return object;
+}
+
 static void
 ephy_window_finalize (GObject *object)
 {
@@ -2846,16 +2973,19 @@ ephy_window_new (void)
 /**
  * ephy_window_new_with_chrome:
  * @chrome: an #EphyEmbedChrome
+ * @is_popup: whether the new window is a popup window
  *
  * Identical to ephy_window_new(), but allows you to specify a chrome.
  *
  * Return value: a new #EphyWindow
  **/
 EphyWindow *
-ephy_window_new_with_chrome (EphyEmbedChrome chrome)
+ephy_window_new_with_chrome (EphyEmbedChrome chrome,
+			     gboolean is_popup)
 {
 	return EPHY_WINDOW (g_object_new (EPHY_TYPE_WINDOW,
 					  "chrome", chrome,
+					  "is-popup", is_popup,
 					  NULL));
 }
 
@@ -2878,7 +3008,6 @@ ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
 	window->priv->ppv_mode = enabled;
 
 	sync_chromes_visibility (window);
-	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (window->priv->notebook), !enabled);
 
 	if (enabled)
 	{
@@ -2998,6 +3127,8 @@ ephy_window_add_tab (EphyWindow *window,
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 	g_return_if_fail (EPHY_IS_TAB (tab));
+	g_return_if_fail (!window->priv->is_popup ||
+			  gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) < 1);
 
 	widget = GTK_WIDGET(ephy_tab_get_embed (tab));
 
@@ -3111,8 +3242,9 @@ static void
 ephy_window_show (GtkWidget *widget)
 {
 	EphyWindow *window = EPHY_WINDOW(widget);
+	EphyWindowPrivate *priv = window->priv;
 
-	if (!window->priv->has_size)
+	if (!priv->has_size)
 	{
 		EphyTab *tab;
 		int width, height;
@@ -3127,7 +3259,7 @@ ephy_window_show (GtkWidget *widget)
 					       TRUE, EPHY_STATE_WINDOW_SAVE_SIZE);
 		}
 
-		window->priv->has_size = TRUE;
+		priv->has_size = TRUE;
 	}
 
 	GTK_WIDGET_CLASS (parent_class)->show (widget);
@@ -3368,4 +3500,20 @@ ephy_window_view_popup_windows_cb (GtkAction *action,
 	}
 
 	g_object_set (G_OBJECT (tab), "popups-allowed", allow, NULL);
+}
+
+/**
+ * ephy_window_get_is_popup:
+ * @window: an #EphyWindow
+ *
+ * Returns whether this window is a popup window.
+ *
+ * Return value: %TRUE if it is a popup window
+ **/
+gboolean
+ephy_window_get_is_popup (EphyWindow *window)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), FALSE);
+
+	return window->priv->is_popup;
 }

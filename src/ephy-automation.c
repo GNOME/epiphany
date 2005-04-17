@@ -106,7 +106,7 @@ impl_ephy_automation_loadUrlWithStartupId (PortableServer_Servant _servant,
 	}
 
 	ephy_shell_new_tab_full (ephy_shell, window, NULL, url, flags,
-				 EPHY_EMBED_CHROME_ALL, user_time);
+				 EPHY_EMBED_CHROME_ALL, FALSE, user_time);
 }
 
 static void

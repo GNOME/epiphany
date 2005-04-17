@@ -58,7 +58,8 @@ GType		  ephy_window_get_type		  (void);
 
 EphyWindow	 *ephy_window_new		  (void);
 
-EphyWindow	 *ephy_window_new_with_chrome	  (EphyEmbedChrome chrome);
+EphyWindow	 *ephy_window_new_with_chrome	  (EphyEmbedChrome chrome,
+						   gboolean is_popup);
 
 void		  ephy_window_set_print_preview	  (EphyWindow *window,
 						   gboolean enabled);
@@ -99,6 +100,8 @@ EphyEmbed	 *ephy_window_get_active_embed	  (EphyWindow *window);
 GList		 *ephy_window_get_tabs		  (EphyWindow *window);
 
 void		  ephy_window_find		  (EphyWindow *window);
+
+gboolean	  ephy_window_get_is_popup	  (EphyWindow *window);
 
 G_END_DECLS
 

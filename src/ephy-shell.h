@@ -130,6 +130,7 @@ EphyTab	       *ephy_shell_new_tab_full			(EphyShell *shell,
 							 const char *url,
 							 EphyNewTabFlags flags,
 							 EphyEmbedChrome chrome,
+							 gboolean is_popup,
 							 guint32 user_time);
 
 GObject	       *ephy_shell_get_session			(EphyShell *shell);

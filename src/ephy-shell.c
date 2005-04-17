@@ -182,7 +182,7 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
 	new_tab = ephy_shell_new_tab_full
 		(shell,
 		 EPHY_IS_WINDOW (parent) ? EPHY_WINDOW (parent) : NULL,
-		 NULL, NULL, flags, chromemask, 0);
+		 NULL, NULL, flags, chromemask, TRUE, 0);
 
 	return ephy_tab_get_embed (new_tab);
 }
@@ -650,6 +650,7 @@ load_homepage (EphyEmbed *embed)
  * @previous_tab: the referrer tab or %NULL
  * @url: an url to load or %NULL
  * @chrome: a #EphyEmbedChrome mask to use if creating a new window
+ * @is_popup: whether the new window is a popup
  * @user_time: a timestamp, or 0
  *
  * Create a new tab and the parent window when necessary.
@@ -664,6 +665,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 			 const char *url,
 			 EphyNewTabFlags flags,
 			 EphyEmbedChrome chrome,
+			 gboolean is_popup,
 			 guint32 user_time)
 {
 	EphyWindow *window;
@@ -680,6 +682,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;
 
 	in_new_window = in_new_window && !eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
+	g_return_val_if_fail (in_new_window || !is_popup, NULL);
 
 	jump_to = (flags & EPHY_NEW_TAB_JUMP) != 0;
 
@@ -692,7 +695,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	}
 	else
 	{
-		window = ephy_window_new_with_chrome (chrome);
+		window = ephy_window_new_with_chrome (chrome, is_popup);
 	}
 
 	toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
@@ -764,7 +767,7 @@ ephy_shell_new_tab (EphyShell *shell,
 {
 	return ephy_shell_new_tab_full (shell, parent_window,
 					previous_tab, url, flags,
-					EPHY_EMBED_CHROME_ALL, 0);
+					EPHY_EMBED_CHROME_ALL, FALSE, 0);
 }
 
 /**

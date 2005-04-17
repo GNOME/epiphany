@@ -87,10 +87,12 @@ struct _EphyTabPrivate
 	GSList *shown_popups;
 	EphyTabNavigationFlags nav_flags;
 	EphyEmbedDocumentType document_type;
+	guint idle_resize_handler;
 };
 
 static void ephy_tab_class_init		(EphyTabClass *klass);
 static void ephy_tab_init		(EphyTab *tab);
+static void ephy_tab_dispose		(GObject *object);
 static void ephy_tab_finalize		(GObject *object);
 
 enum
@@ -343,7 +345,8 @@ ephy_tab_class_init (EphyTabClass *class)
 
         parent_class = g_type_class_peek_parent (class);
 
-        object_class->finalize = ephy_tab_finalize;
+	object_class->dispose = ephy_tab_dispose;
+	object_class->finalize = ephy_tab_finalize;
 	object_class->get_property = ephy_tab_get_property;
 	object_class->set_property = ephy_tab_set_property;
 
@@ -632,16 +635,20 @@ popups_manager_show_all (EphyTab *tab)
 static char *
 popups_manager_new_window_info (EphyWindow *window)
 {
+	EphyTab *tab;
 	EphyEmbedChrome chrome;
+	gboolean is_popup;
 	char *features;
-	int w, h;
 
-	g_object_get (window, "chrome", &chrome, NULL);
-	gtk_window_get_size (GTK_WINDOW (window), &w, &h);
+	g_object_get (window, "chrome", &chrome, "is-popup", &is_popup, NULL);
+	g_return_val_if_fail (is_popup, g_strdup (""));
+
+	tab = ephy_window_get_active_tab (window);
+	g_return_val_if_fail (tab != NULL, g_strdup (""));
 
 	features = g_strdup_printf
 		("width=%d,height=%d,menubar=%d,status=%d,toolbar=%d",
-		 w, h,
+		 tab->priv->width, tab->priv->height,
 		 (chrome & EPHY_EMBED_CHROME_MENUBAR) > 0,
 		 (chrome & EPHY_EMBED_CHROME_STATUSBAR) > 0,
 		 (chrome & EPHY_EMBED_CHROME_TOOLBAR) > 0);
@@ -746,17 +753,31 @@ popups_manager_reset (EphyTab *tab)
 }
 
 static void
+ephy_tab_dispose (GObject *object)
+{
+	EphyTab *tab = EPHY_TAB (object);
+	EphyTabPrivate *priv = tab->priv;
+
+	if (priv->idle_resize_handler != 0)
+	{
+		g_source_remove (priv->idle_resize_handler);
+		priv->idle_resize_handler = 0;
+	}
+
+	G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+
+static void
 ephy_tab_finalize (GObject *object)
 {
-        EphyTab *tab = EPHY_TAB (object);
+	EphyTab *tab = EPHY_TAB (object);
+	EphyTabPrivate *priv = tab->priv;
 
-	g_idle_remove_by_data (tab);
-
-	g_free (tab->priv->title);
-	g_free (tab->priv->address);
-	g_free (tab->priv->icon_address);
-	g_free (tab->priv->link_message);
-	g_free (tab->priv->status_message);
+	g_free (priv->title);
+	g_free (priv->address);
+	g_free (priv->icon_address);
+	g_free (priv->link_message);
+	g_free (priv->status_message);
 	popups_manager_reset (tab);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -780,6 +801,17 @@ address_has_web_scheme (const char *address)
 			  g_str_has_prefix (address, "gopher:"));
 
 	return has_web_scheme;
+}
+
+static gboolean
+let_me_resize_hack (EphyTab *tab)
+{
+	EphyTabPrivate *priv = tab->priv;
+
+	gtk_widget_set_size_request (GTK_WIDGET (tab), -1, -1);
+
+	priv->idle_resize_handler = 0;	
+	return FALSE;
 }
 
 /* Public functions */
@@ -934,6 +966,54 @@ ephy_tab_get_size (EphyTab *tab, int *width, int *height)
 	if (height != NULL)
 	{
 		*height = tab->priv->height;
+	}
+}
+
+/**
+ * ephy_tab_set_size:
+ * @tab: an #EphyTab
+ * @width:
+ * @height:
+ *
+ * Sets the size of @tab. This is not guaranteed to actually resize the tab.
+ **/
+void
+ephy_tab_set_size (EphyTab *tab,
+		   int width,
+		   int height)
+{
+	EphyTabPrivate *priv = tab->priv;
+	GtkWidget *widget = GTK_WIDGET (tab);
+	GtkAllocation allocation;
+
+	priv->width = width;
+	priv->height = height;
+
+	gtk_widget_set_size_request (widget, width, height);
+
+	/* HACK: When the web site changes both width and height,
+	 * we will first get a width change, then a height change,
+	 * without actually resizing the window in between (since
+	 * that happens only on idle).
+	 * If we don't set the allocation, GtkMozEmbed doesn't tell
+	 * mozilla the new width, so the height change sets the width
+	 * back to the old value!
+	 */
+	allocation.x = widget->allocation.x;
+	allocation.y = widget->allocation.y;
+	allocation.width = width;
+	allocation.height = height;
+	gtk_widget_size_allocate (widget, &allocation);
+
+	/* HACK: reset widget requisition after the container
+	 * has been resized. It appears to be the only way
+	 * to have the window sized according to embed
+	 * size correctly.
+	 */
+	if (priv->idle_resize_handler == 0)
+	{
+		priv->idle_resize_handler =
+			g_idle_add ((GSourceFunc) let_me_resize_hack, tab);
 	}
 }
 
@@ -1330,14 +1410,6 @@ ephy_tab_popup_blocked_cb (EphyEmbed *embed, const char *url,
 	popups_manager_add (tab, url, features);
 }
 
-static gboolean
-let_me_resize_hack (GtkWidget *tab)
-{
-	gtk_widget_set_size_request (tab, -1, -1);
-
-	return FALSE;
-}
-
 static void
 ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 			EphyTab *tab)
@@ -1378,42 +1450,6 @@ ephy_tab_destroy_brsr_cb (EphyEmbed *embed, EphyTab *tab)
 	notebook = ephy_window_get_notebook (window);
 	ephy_notebook_remove_tab (EPHY_NOTEBOOK (notebook), tab);
 }
-
-static void
-ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
-		     EphyTab *tab)
-{
-	GtkWidget *notebook;
-	EphyWindow *window;
-
-	LOG ("ephy_tab_size_to_cb tab %p width %d height %d", tab, width, height);
-
-	tab->priv->width = width;
-	tab->priv->height = height;
-
-	window = ephy_tab_get_window (tab);
-	notebook = ephy_window_get_notebook (window);
-
-	/* Do not resize window with multiple tabs.
-	 * Do not resize window already showed because
-	 * it's not possible to calculate a sensible window
-	 * size based on the embed size */
-	if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) == 1 &&
-	    !tab->priv->visibility)
-	{
-		gtk_widget_set_size_request
-			(GTK_WIDGET (tab), width, height);
-
-		/* HACK reset widget requisition after the container
-		 * has been resized. It appears to be the only way
-		 * to have the window sized according to embed
-		 * size correctly.
-		 */
-
-		g_idle_add ((GSourceFunc) let_me_resize_hack, tab);
-	}
-}
-
 
 static gboolean
 open_link_in_new_tab (EphyTab *tab,
@@ -1636,9 +1672,6 @@ ephy_tab_init (EphyTab *tab)
 				 tab, 0);
 	g_signal_connect_object (embed, "destroy_browser",
 				 G_CALLBACK (ephy_tab_destroy_brsr_cb),
-				 tab, 0);
-	g_signal_connect_object (embed, "size_to",
-				 G_CALLBACK (ephy_tab_size_to_cb),
 				 tab, 0);
 	g_signal_connect_object (embed, "ge_dom_mouse_click",
 				 G_CALLBACK (ephy_tab_dom_mouse_click_cb),

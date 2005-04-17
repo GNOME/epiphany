@@ -926,20 +926,22 @@ ephy_session_remove_window (EphySession *session,
  * need to take an action (like opening an url) on
  * a window but you dont have a target window.
  *
- * Return value: the current active browser window, or NULL of there is none.
+ * Return value: the current active non-popup browser window, or NULL of there is none.
  **/
 EphyWindow *
 ephy_session_get_active_window (EphySession *session)
 {
-	GList *first;
+	EphyWindow *window = NULL;
+	GList *l;
 
 	g_return_val_if_fail (EPHY_IS_SESSION (session), NULL);
 
-	first = session->priv->windows;
-	if (first != NULL)
+	for (l = session->priv->windows; l != NULL; l = l->next)
 	{
-		return EPHY_WINDOW (first->data);
+		window = EPHY_WINDOW (l->data);
+
+		if (ephy_window_get_is_popup (window) == FALSE) break;
 	}
 
-	return NULL;
+	return window;
 }

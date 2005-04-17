@@ -85,6 +85,9 @@ void            ephy_notebook_move_tab		(EphyNotebook *src,
 void		ephy_notebook_set_show_tabs	(EphyNotebook *nb,
 						 gboolean show_tabs);
 
+void		ephy_notebook_set_dnd_enabled	(EphyNotebook *nb,
+						 gboolean enabled);
+
 G_END_DECLS
 
 #endif /* EPHY_NOTEBOOK_H */
