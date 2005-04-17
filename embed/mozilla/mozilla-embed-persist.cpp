@@ -176,6 +176,8 @@ impl_save (EphyEmbedPersist *persist)
 	if (tmp_filename == NULL) return FALSE;
 
 	nsCOMPtr<nsILocalFile> tmpFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
+	NS_ENSURE_TRUE (tmpFile, FALSE);
+
 	tmpFile->InitWithNativePath (nsEmbedCString (tmp_filename));
 	g_free (tmp_filename);
 
