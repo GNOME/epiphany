@@ -643,42 +643,6 @@ ephy_window_unfullscreen (EphyWindow *window)
 }
 
 static gboolean
-ephy_window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, EphyWindow *window)
-{
-	if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
-	{
-		GtkActionGroup *action_group;
-		GtkAction *action;
-		gboolean fullscreen;
-
-		fullscreen = event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN;
-
-		if (fullscreen)
-		{
-			ephy_window_fullscreen (window);
-		}
-		else
-		{
-			ephy_window_unfullscreen (window);
-		}
-
-		action_group = window->priv->action_group;
-
-		action = gtk_action_group_get_action (action_group, "ViewFullscreen");
-		g_signal_handlers_block_by_func
-			(action, G_CALLBACK (window_cmd_view_fullscreen), window);
-		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), fullscreen);
-		g_signal_handlers_unblock_by_func
-			(action, G_CALLBACK (window_cmd_view_fullscreen), window);
-
-		action = gtk_action_group_get_action (action_group, "EditToolbar");
-		g_object_set (action, "sensitive", !fullscreen, NULL);
-	}
-
-	return FALSE;
-}
-
-static gboolean
 confirm_close_with_modified_forms (EphyWindow *window)
 {
 	GtkWidget *dialog;
@@ -2563,6 +2527,62 @@ ephy_window_focus_out_event (GtkWidget *widget,
 	return GTK_WIDGET_CLASS (parent_class)->focus_out_event (widget, event);
 }
 
+static gboolean
+ephy_window_state_event (GtkWidget *widget,
+			 GdkEventWindowState *event)
+{
+	EphyWindow *window = EPHY_WINDOW (widget);
+	EphyWindowPrivate *priv = window->priv;
+	gboolean (* window_state_event) (GtkWidget *, GdkEventWindowState *);
+
+	window_state_event = GTK_WIDGET_CLASS (parent_class)->window_state_event;
+	if (window_state_event)
+	{
+		window_state_event (widget, event);
+	}
+
+	if (event->changed_mask & (GDK_WINDOW_STATE_MAXIMIZED))
+	{
+		gboolean show;
+
+		show = (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) == 0;
+
+		gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (priv->statusbar), show);
+	}
+
+	if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
+	{
+		GtkActionGroup *action_group;
+		GtkAction *action;
+		gboolean fullscreen;
+
+		fullscreen = event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN;
+
+		if (fullscreen)
+		{
+			ephy_window_fullscreen (window);
+		}
+		else
+		{
+			ephy_window_unfullscreen (window);
+		}
+
+		action_group = priv->action_group;
+
+		action = gtk_action_group_get_action (action_group, "ViewFullscreen");
+		g_signal_handlers_block_by_func
+			(action, G_CALLBACK (window_cmd_view_fullscreen), window);
+		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), fullscreen);
+		g_signal_handlers_unblock_by_func
+			(action, G_CALLBACK (window_cmd_view_fullscreen), window);
+
+		action = gtk_action_group_get_action (action_group, "EditToolbar");
+		g_object_set (action, "sensitive", !fullscreen, NULL);
+	}
+
+	return FALSE;
+}
+
 static void
 ephy_window_link_iface_init (EphyLinkIface *iface)
 {
@@ -2587,6 +2607,7 @@ ephy_window_class_init (EphyWindowClass *klass)
 	widget_class->key_press_event = ephy_window_key_press_event;
 	widget_class->focus_in_event = ephy_window_focus_in_event;
 	widget_class->focus_out_event = ephy_window_focus_out_event;
+	widget_class->window_state_event = ephy_window_state_event;
 
 	g_object_class_install_property (object_class,
 					 PROP_ACTIVE_TAB,
@@ -2860,9 +2881,6 @@ ephy_window_init (EphyWindow *window)
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar), model);
 
-	g_signal_connect (window, "window-state-event",
-			  G_CALLBACK (ephy_window_state_event_cb),
-			  window);
 	g_signal_connect (window, "delete-event",
 			  G_CALLBACK (ephy_window_delete_event_cb),
 			  window);

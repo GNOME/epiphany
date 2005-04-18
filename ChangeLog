@@ -1,5 +1,13 @@
 2005-04-18  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-window.c: (ephy_window_state_event),
+	(ephy_window_class_init), (ephy_window_init):
+
+	Hide the statusbar's resize grip when the window is maximised.
+	Fixes bug #301048, patchy by Paolo Borelli.
+
+2005-04-18  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.c: (ephy_window_open_link):
 
 	Also disallow opening a new tab from EphyLink iface in popup mode.
