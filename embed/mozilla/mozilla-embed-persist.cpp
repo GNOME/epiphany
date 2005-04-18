@@ -136,7 +136,7 @@ impl_save (EphyEmbedPersist *persist)
 	nsresult rv;
 	char *filename;
 	char *uri;
-	long max_size;
+	gint64 max_size;
 	EphyEmbed *embed;
 	EphyEmbedPersistFlags flags;
 	EphyEmbedSingle *single;

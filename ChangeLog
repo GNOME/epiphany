@@ -1,5 +1,12 @@
 2005-04-18  Christian Persch  <chpe@cvs.gnome.org>
 
+        * embed/mozilla/mozilla-embed-persist.cpp:
+	
+        Fix crash on 64bit architectures when downloading.
+        Fixes bug #301093, patch by Sjoerd Simons.
+
+2005-04-18  Christian Persch  <chpe@cvs.gnome.org>
+
         * src/ephy-window.c: (setup_ui_manager):
 	
 	Constify the action entries. Fixes bug #301065, patch by
