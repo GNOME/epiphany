@@ -2705,6 +2705,7 @@ ephy_window_open_link (EphyLink *link,
 		       EphyLinkFlags flags)
 {
 	EphyWindow *window = EPHY_WINDOW (link);
+	EphyWindowPrivate *priv = window->priv;
 	EphyTab *new_tab;
 
 	g_return_val_if_fail (address != NULL, NULL);
@@ -2725,7 +2726,8 @@ ephy_window_open_link (EphyLink *link,
 		{
 			ntflags |= EPHY_NEW_TAB_JUMP;
 		}
-		if (flags & EPHY_LINK_NEW_WINDOW)
+		if (flags & EPHY_LINK_NEW_WINDOW ||
+		    (flags & EPHY_LINK_NEW_TAB && priv->is_popup))
 		{
 			ntflags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
 		}
