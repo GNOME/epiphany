@@ -108,7 +108,7 @@ static void sync_tab_zoom			(EphyTab *tab,
 						 GParamSpec *pspec,
 						 EphyWindow *window);
 
-static GtkActionEntry ephy_menu_entries [] = {
+static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* Toplevel */
 
@@ -273,9 +273,8 @@ static GtkActionEntry ephy_menu_entries [] = {
 	  N_("Display credits for the web browser creators"),
 	  G_CALLBACK (window_cmd_help_about) },
 };
-static guint ephy_menu_n_entries = G_N_ELEMENTS (ephy_menu_entries);
 
-static GtkToggleActionEntry ephy_menu_toggle_entries [] =
+static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 {
 	/* File Menu */
 
@@ -304,9 +303,8 @@ static GtkToggleActionEntry ephy_menu_toggle_entries [] =
 	  "",
 	  G_CALLBACK (window_cmd_browse_with_caret), FALSE }
 };
-static guint ephy_menu_n_toggle_entries = G_N_ELEMENTS (ephy_menu_toggle_entries);
 
-static GtkActionEntry ephy_popups_entries [] = {
+static const GtkActionEntry ephy_popups_entries [] = {
 	/* Document */
 
 	{ "SaveBackgroundAs", NULL, N_("_Save Background As..."), NULL,
@@ -361,7 +359,6 @@ static GtkActionEntry ephy_popups_entries [] = {
 	{ "CopyImageLocation", NULL, N_("Copy I_mage Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_image_location) },
 };
-static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
 
 #ifdef HAVE_X11_XF86KEYSYM_H
 static const struct
@@ -1141,10 +1138,10 @@ setup_ui_manager (EphyWindow *window)
 	action_group = gtk_action_group_new ("WindowActions");
 	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_menu_entries,
-				      ephy_menu_n_entries, window);
+				      G_N_ELEMENTS (ephy_menu_entries), window);
 	gtk_action_group_add_toggle_actions (action_group,
 					     ephy_menu_toggle_entries,
-					     ephy_menu_n_toggle_entries,
+					     G_N_ELEMENTS (ephy_menu_toggle_entries),
 					     window);
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
 	window->priv->action_group = action_group;
@@ -1172,7 +1169,7 @@ setup_ui_manager (EphyWindow *window)
 	action_group = gtk_action_group_new ("PopupsActions");
 	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_popups_entries,
-				      ephy_popups_n_entries, window);
+				      G_N_ELEMENTS (ephy_popups_entries), window);
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
 	window->priv->popups_action_group = action_group;
 
