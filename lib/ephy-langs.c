@@ -28,9 +28,7 @@
 
 #include <string.h>
 
-#ifdef HAVE_ISO_CODES
 #include <libxml/xmlreader.h>
-#endif
 
 static const EphyFontsLanguageInfo font_languages [] =
 {
@@ -220,8 +218,6 @@ ephy_langs_get_languages (void)
 
 	return (char **) g_array_free (array, FALSE);
 }
-
-#ifdef HAVE_ISO_CODES
 
 #define ISOCODESLOCALEDIR	ISO_CODES_PREFIX "/share/locale"
 
@@ -413,5 +409,3 @@ ephy_langs_iso_3166_table (void)
 
 	return table;
 }
-
-#endif /* HAVE_ISO_CODES */

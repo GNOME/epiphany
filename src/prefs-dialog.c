@@ -87,8 +87,7 @@ void language_editor_up_button_clicked_cb	(GtkWidget *button,
 void language_editor_down_button_clicked_cb	(GtkWidget *button,
 						 PrefsDialog *pd);
 
-#ifdef HAVE_ISO_CODES
-static const char *languages[] =
+static const char * const languages[] =
 {
 	/* If you're missing your language/locale combination, file a bug at
 	 * http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany
@@ -269,73 +268,6 @@ static const char *languages[] =
 	"zh-tw",
 	"zu"
 };
-#else
-static const
-struct
-{
-	char *code;
-	char *name;
-}
-languages [] =
-{
-	{ "af",		N_("Afrikaans") },
-	{ "ar",		N_("Arabic") },
-	{ "az",		N_("Azerbaijani") },
-	{ "be",		N_("Byelorussian") },
-	{ "bg",		N_("Bulgarian") },
-	{ "br",		N_("Breton") },
-	{ "ca",		N_("Catalan") },
-	{ "cs",		N_("Czech") },
-	{ "da",		N_("Danish") },
-	{ "de",		N_("German") },
-	{ "en",		N_("English") },
-	{ "el",		N_("Greek") },
-	{ "eo",		N_("Esperanto") },
-	{ "es",		N_("Spanish") },
-	{ "et",		N_("Estonian") },
-	{ "eu",		N_("Basque") },
-	{ "fi",		N_("Finnish") },
-	{ "fo",		N_("Faeroese") },
-	{ "fr",		N_("French") },
-	{ "ga",		N_("Irish") },
-	{ "gd",		N_("Scots Gaelic") },
-	{ "gl",		N_("Galician") },
-	{ "he",		N_("Hebrew") },
-	{ "hr",		N_("Croatian") },
-	{ "hu",		N_("Hungarian") },
-	{ "id",		N_("Indonesian") },
-	{ "is",		N_("Icelandic") },
-	{ "it",		N_("Italian") },
-	{ "ja",		N_("Japanese") },
-	{ "ko",		N_("Korean") },
-	{ "lt",		N_("Lithuanian") },
-	{ "lv",		N_("Latvian") },
-	{ "mk",		N_("Macedonian") },
-	{ "ms",		N_("Malay") },
-	{ "nl",		N_("Dutch") },
-	{ "nb",		N_("Norwegian/Bokmal") },
-	{ "nn",		N_("Norwegian/Nynorsk") },
-	{ "no",		N_("Norwegian") },
-	{ "pl",		N_("Polish") },
-	{ "pt",		N_("Portuguese") },
-	{ "pt-br",	N_("Portuguese of Brazil") },
-	{ "ro",		N_("Romanian") },
-	{ "ru",		N_("Russian") },
-	{ "sk",		N_("Slovak") },
-	{ "sl",		N_("Slovenian") },
-	{ "sq",		N_("Albanian") },
-	{ "sr",		N_("Serbian") },
-	{ "sv",		N_("Swedish") },
-	{ "ta",		N_("Tamil") },
-	{ "tr",		N_("Turkish") },
-	{ "uk",		N_("Ukrainian") },
-	{ "vi",		N_("Vietnamese") },
-	{ "wa",		N_("Walloon") },
-	{ "zh",		N_("Chinese") },
-	{ "zh-cn",	N_("Simplified Chinese") },
-	{ "zh-tw",	N_("Traditional Chinese") }
-};
-#endif /* HAVE_ISO_CODES */
 
 static const
 char *cookies_accept_enum [] =
@@ -512,10 +444,8 @@ struct PrefsDialogPrivate
 	GtkWidget *lang_remove_button;
 	GtkWidget *lang_up_button;
 	GtkWidget *lang_down_button;
-#ifdef HAVE_ISO_CODES
 	GHashTable *iso_639_table;
 	GHashTable *iso_3166_table;
-#endif
 };
 
 /* gtk+' gettext domain */
@@ -571,10 +501,8 @@ prefs_dialog_finalize (GObject *object)
 			 (gpointer *) &dialog->priv->download_dir_chooser);
 	}
 
-#ifdef HAVE_ISO_CODES
 	g_hash_table_destroy (dialog->priv->iso_639_table);
 	g_hash_table_destroy (dialog->priv->iso_3166_table);
-#endif
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -981,7 +909,6 @@ add_lang_dialog_response_cb (GtkWidget *widget,
 	g_object_unref (dialog);
 }
 
-#ifdef HAVE_ISO_CODES
 static char *
 get_name_for_lang_code (PrefsDialog *pd,
 			const char *code)
@@ -1039,7 +966,6 @@ get_name_for_lang_code (PrefsDialog *pd,
 
 	return name;
 }
-#endif /* HAVE_ISO_CODES */
 
 static void
 add_system_language_entry (GtkListStore *store)
@@ -1101,7 +1027,6 @@ setup_add_language_dialog (PrefsDialog *pd)
 
 	for (i = 0; i < G_N_ELEMENTS (languages); i++)
 	{
-#ifdef HAVE_ISO_CODES
 		const char *code = languages[i];
 		char *name;
 
@@ -1113,13 +1038,6 @@ setup_add_language_dialog (PrefsDialog *pd)
 				    COL_LANG_CODE, code,
 				    -1);
 		g_free (name);
-#else
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter,
-				    COL_LANG_NAME, _(languages[i].name),
-				    COL_LANG_CODE, languages[i].code,
-				    -1);
-#endif /* HAVE_ISO_CODES */
 	}
 
 	add_system_language_entry (store);
@@ -1289,10 +1207,8 @@ create_language_section (EphyDialog *dialog)
 	GtkTreeSelection *selection;
 	GSList *list, *l, *ulist = NULL;
 
-#ifdef HAVE_ISO_CODES
 	pd->priv->iso_639_table = ephy_langs_iso_639_table ();
 	pd->priv->iso_3166_table = ephy_langs_iso_3166_table ();
-#endif
 
 	ephy_dialog_get_controls
 		(dialog,
@@ -1360,7 +1276,6 @@ create_language_section (EphyDialog *dialog)
 	{
 		const char *code = (const char *) l->data;
 
-#ifdef HAVE_ISO_CODES
 		if (strcmp (code, "system") == 0)
 		{
 			add_system_language_entry (store);
@@ -1373,38 +1288,6 @@ create_language_section (EphyDialog *dialog)
 			language_editor_add (pd, code, text);
 			g_free (text);
 		}
-
-#else /* !HAVE_ISO_CODES */
-
-		int i, n_languages = G_N_ELEMENTS (languages);
-
-		for (i = 0; i < n_languages; i++)
-		{
-			if (strcmp (languages[i].code, code) == 0) break;
-		}
-
-		/* code isn't in stock list */
-		if (i == n_languages)
-		{
-			if (strcmp (code, "system") != 0)
-			{
-				char *text;
-	
-				text = g_strdup_printf (Q_("language|User defined (%s)"), code);
-	
-				language_editor_add (pd, code, text);
-				g_free (text);
-			}
-			else
-			{
-				add_system_language_entry (store);
-			}
-		}
-		else
-		{
-			language_editor_add (pd, code, _(languages[i].name));
-		}
-#endif /* HAVE_ISO_CODES */
 	}
 
 	language_editor_update_buttons (pd);
