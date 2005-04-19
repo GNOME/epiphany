@@ -212,13 +212,13 @@ toolbar_update_sensitivity (PPViewToolbar *t)
 	c_page = t->priv->current_page;
 
 	action = gtk_action_group_get_action (action_group, "PPVGoBack");
-	g_object_set (action, "sensitive", c_page > 1, NULL);
+	gtk_action_set_sensitive (action, c_page > 1);
 	action = gtk_action_group_get_action (action_group, "PPVGotoFirst");
-	g_object_set (action, "sensitive", c_page > 1, NULL);
+	gtk_action_set_sensitive (action, c_page > 1);
 	action = gtk_action_group_get_action (action_group, "PPVGoForward");
-	g_object_set (action, "sensitive", c_page < pages, NULL);
+	gtk_action_set_sensitive (action, c_page < pages);
 	action = gtk_action_group_get_action (action_group, "PPVGotoLast");
-	g_object_set (action, "sensitive", c_page < pages, NULL);
+	gtk_action_set_sensitive (action, c_page < pages);
 }
 
 static void

@@ -172,7 +172,7 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	action = gtk_action_group_get_action (p->action_group,
 					      "ViewEncodingAutomatic");
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), is_automatic);
-	g_object_set (G_OBJECT (action), "sensitive", !is_automatic, NULL);
+	gtk_action_set_sensitive (action, !is_automatic);
 
 	/* set the encodings group's active member */
 	g_snprintf (name, sizeof (name), "Encoding%s", encoding);

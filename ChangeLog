@@ -1,5 +1,20 @@
 2005-04-19  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_update_menu):
+	* src/ephy-encoding-menu.c: (update_encoding_menu_cb):
+	* src/ephy-history-window.c: (ephy_history_window_update_menu):
+	* src/ephy-toolbar.c: (ephy_toolbar_set_zoom):
+	* src/ephy-window.c: (update_edit_actions_sensitivity),
+	(enable_edit_actions_sensitivity), (sync_tab_load_status),
+	(sync_tab_zoom), (show_embed_popup),
+	(update_tabs_menu_sensitivity):
+	* src/ppview-toolbar.c: (toolbar_update_sensitivity):
+
+	Use gtk_action_set_[sensitive|visible] instead of g_object_set.
+
+2005-04-19  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-prefs.h:
 	* src/Makefile.am:
 	A src/ephy-action-helper.c:

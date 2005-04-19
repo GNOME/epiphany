@@ -515,10 +515,8 @@ ephy_toolbar_set_zoom (EphyToolbar *toolbar,
 {
 	EphyToolbarPrivate *priv = toolbar->priv;
 
-	g_object_set (priv->actions[ZOOM_ACTION],
-		      "zoom", can_zoom ? zoom : 1.0,
-		      "sensitive", can_zoom,
-		      NULL);
+	gtk_action_set_sensitive (priv->actions[ZOOM_ACTION], can_zoom);
+	g_object_set (priv->actions[ZOOM_ACTION], "zoom", can_zoom ? zoom : 1.0, NULL);
 }
 
 /* Class implementation */

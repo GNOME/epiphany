@@ -840,15 +840,20 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 	action_group = window->priv->action_group;
 
 	action = gtk_action_group_get_action (action_group, "EditCopy");
-	g_object_set (action, "sensitive", can_copy, "visible", !hide || can_copy, NULL);
+	gtk_action_set_sensitive (action, can_copy);
+	gtk_action_set_visible (action, !hide || can_copy);
 	action = gtk_action_group_get_action (action_group, "EditCut");
-	g_object_set (action, "sensitive", can_cut, "visible", !hide || can_cut, NULL);
+	gtk_action_set_sensitive (action, can_cut);
+	gtk_action_set_visible (action, !hide || can_cut);
 	action = gtk_action_group_get_action (action_group, "EditPaste");
-	g_object_set (action, "sensitive", can_paste, "visible", !hide || can_paste, NULL);
+	gtk_action_set_sensitive (action, can_paste);
+	gtk_action_set_visible (action,  !hide || can_paste);
 	action = gtk_action_group_get_action (action_group, "EditUndo");
-	g_object_set (action, "sensitive", can_undo, "visible", !hide || can_undo, NULL);
+	gtk_action_set_sensitive (action, can_undo);
+	gtk_action_set_visible (action,  !hide || can_undo);
 	action = gtk_action_group_get_action (action_group, "EditRedo");
-	g_object_set (action, "sensitive", can_redo, "visible", !hide || can_redo, NULL);
+	gtk_action_set_sensitive (action, can_redo);
+	gtk_action_set_visible (action, !hide || can_redo);
 }
 
 static void
@@ -860,15 +865,20 @@ enable_edit_actions_sensitivity (EphyWindow *window)
 	action_group = window->priv->action_group;
 
 	action = gtk_action_group_get_action (action_group, "EditCopy");
-	g_object_set (action, "sensitive", TRUE, "visible", TRUE, NULL);
+	gtk_action_set_sensitive (action, TRUE);
+	gtk_action_set_visible (action, TRUE);
 	action = gtk_action_group_get_action (action_group, "EditCut");
-	g_object_set (action, "sensitive", TRUE, "visible", TRUE, NULL);
+	gtk_action_set_sensitive (action, TRUE);
+	gtk_action_set_visible (action, TRUE);
 	action = gtk_action_group_get_action (action_group, "EditPaste");
-	g_object_set (action, "sensitive", TRUE, "visible", TRUE, NULL);
+	gtk_action_set_sensitive (action, TRUE);
+	gtk_action_set_visible (action, TRUE);
 	action = gtk_action_group_get_action (action_group, "EditUndo");
-	g_object_set (action, "sensitive", TRUE, "visible", TRUE, NULL);
+	gtk_action_set_sensitive (action, TRUE);
+	gtk_action_set_visible (action, TRUE);
 	action = gtk_action_group_get_action (action_group, "EditRedo");
-	g_object_set (action, "sensitive", TRUE, "visible", TRUE, NULL);
+	gtk_action_set_sensitive (action, TRUE);
+	gtk_action_set_visible (action, TRUE);
 }
 
 static void
@@ -1391,7 +1401,7 @@ sync_tab_load_status (EphyTab *tab,
 	loading = ephy_tab_get_load_status (tab);
 
 	action = gtk_action_group_get_action (action_group, "ViewStop");
-	g_object_set (action, "sensitive", loading, NULL);
+	gtk_action_set_sensitive (action, loading);
 
 	/* disable print while loading, see bug #116344 */
 	action = gtk_action_group_get_action (action_group, "FilePrintPreview");
@@ -1485,11 +1495,11 @@ sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	action_group = window->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "ViewZoomIn");
-	g_object_set (action, "sensitive", can_zoom_in && can_zoom, NULL);
+	gtk_action_set_sensitive (action, can_zoom_in && can_zoom);
 	action = gtk_action_group_get_action (action_group, "ViewZoomOut");
-	g_object_set (action, "sensitive", can_zoom_out && can_zoom, NULL);
+	gtk_action_set_sensitive (action, can_zoom_out && can_zoom);
 	action = gtk_action_group_get_action (action_group, "ViewZoomNormal");
-	g_object_set (action, "sensitive", can_zoom_normal && can_zoom, NULL);
+	gtk_action_set_sensitive (action, can_zoom_normal && can_zoom);
 }
 
 static void
@@ -1727,10 +1737,10 @@ show_embed_popup (EphyWindow *window,
 	action_group = window->priv->popups_action_group;
 	action = gtk_action_group_get_action (action_group, "SaveBackgroundAs");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !has_background);
-	g_object_set (action, "visible", has_background, NULL);
+	gtk_action_set_visible (action, has_background);
 
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewWindow");
-	g_object_set (action, "sensitive", can_open_in_new, FALSE);
+	gtk_action_set_sensitive (action, can_open_in_new);
 
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !can_open_in_new);
@@ -1983,13 +1993,13 @@ update_tabs_menu_sensitivity (EphyWindow *window)
 
 	action_group = window->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "TabsPrevious");
-	g_object_set (action, "sensitive", prev_tab, NULL);
+	gtk_action_set_sensitive (action, prev_tab);
 	action = gtk_action_group_get_action (action_group, "TabsNext");
-	g_object_set (action, "sensitive", next_tab, NULL);
+	gtk_action_set_sensitive (action, next_tab);
 	action = gtk_action_group_get_action (action_group, "TabsMoveLeft");
-	g_object_set (action, "sensitive", move_left, NULL);
+	gtk_action_set_sensitive (action, move_left);
 	action = gtk_action_group_get_action (action_group, "TabsMoveRight");
-	g_object_set (action, "sensitive", move_right, NULL);
+	gtk_action_set_sensitive (action, move_right);
 	action = gtk_action_group_get_action (action_group, "TabsDetach");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, !detach);
 }

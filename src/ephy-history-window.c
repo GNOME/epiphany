@@ -731,24 +731,24 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 
 	action_group = editor->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "OpenInWindow");
-	g_object_set (action, "sensitive", open_in_window,
-			      "label", open_in_window_label, NULL);
+	gtk_action_set_sensitive (action, open_in_window);
+	g_object_set (action, "label", open_in_window_label, NULL);
 	action = gtk_action_group_get_action (action_group, "OpenInTab");
-	g_object_set (action, "sensitive", open_in_tab,
-			      "label", open_in_tab_label, NULL);
+	gtk_action_set_sensitive (action, open_in_tab);
+	g_object_set (action, "label", open_in_tab_label, NULL);
 	action = gtk_action_group_get_action (action_group, "Cut");
-	g_object_set (action, "sensitive", cut, NULL);
+	gtk_action_set_sensitive (action, cut);
 	action = gtk_action_group_get_action (action_group, "Copy");
-	g_object_set (action, "sensitive", copy,
-			      "label", copy_label, NULL);
+	gtk_action_set_sensitive (action, copy);
+	g_object_set (action, "label", copy_label, NULL);
 	action = gtk_action_group_get_action (action_group, "Paste");
-	g_object_set (action, "sensitive", paste, NULL);
+	gtk_action_set_sensitive (action, paste);
 	action = gtk_action_group_get_action (action_group, "SelectAll");
-	g_object_set (action, "sensitive", select_all, NULL);
+	gtk_action_set_sensitive (action, select_all);
 	action = gtk_action_group_get_action (action_group, "Delete");
-	g_object_set (action, "sensitive", delete, NULL);
+	gtk_action_set_sensitive (action, delete);
 	action = gtk_action_group_get_action (action_group, "BookmarkLink");
-	g_object_set (action, "sensitive", bookmark_page, NULL);
+	gtk_action_set_sensitive (action, bookmark_page);
 }
 
 static void
