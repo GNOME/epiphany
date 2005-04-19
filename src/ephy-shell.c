@@ -38,6 +38,7 @@
 #include "ephy-debug.h"
 #include "ephy-extensions-manager.h"
 #include "ephy-session.h"
+#include "ephy-lockdown.h"
 #include "downloader-view.h"
 #include "egg-toolbars-model.h"
 #include "ephy-toolbars-model.h"
@@ -70,6 +71,7 @@ struct _EphyShellPrivate
 {
 	BonoboGenericFactory *automation_factory;
 	EphySession *session;
+	GObject *lockdown;
 	EphyBookmarks *bookmarks;
 	EggToolbarsModel *toolbars_model;
 	EggToolbarsModel *fs_toolbars_model;
@@ -543,6 +545,12 @@ ephy_shell_finalize (GObject *object)
 		g_object_unref (shell->priv->session);
 	}
 
+	LOG ("Unref lockdown controller");
+	if (shell->priv->lockdown)
+	{
+		g_object_unref (shell->priv->lockdown);
+	}
+
 	LOG ("Unref toolbars model");
 	if (shell->priv->toolbars_model)
 	{
@@ -798,6 +806,34 @@ ephy_shell_get_session (EphyShell *shell)
 	return G_OBJECT (shell->priv->session);
 }
 
+/**
+ * ephy_shell_get_lockdown:
+ * @shell: the #EphyShell
+ *
+ * Returns the lockdown controller.
+ *
+ * Return value: the lockdown controller
+ **/
+static GObject *
+ephy_shell_get_lockdown (EphyShell *shell)
+{
+	g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+	if (shell->priv->lockdown == NULL)
+	{
+		EphyExtensionsManager *manager;
+
+		shell->priv->lockdown = g_object_new (EPHY_TYPE_LOCKDOWN, NULL);
+
+		manager = EPHY_EXTENSIONS_MANAGER
+			(ephy_shell_get_extensions_manager (shell));
+		ephy_extensions_manager_register (manager,
+						  G_OBJECT (shell->priv->lockdown));
+	}
+
+	return G_OBJECT (shell->priv->session);
+}
+
 EphyBookmarks *
 ephy_shell_get_bookmarks (EphyShell *shell)
 {
@@ -869,6 +905,9 @@ ephy_shell_get_extensions_manager (EphyShell *es)
 			g_object_new (EPHY_TYPE_EXTENSIONS_MANAGER, NULL);
 
 		ephy_extensions_manager_startup (es->priv->extensions_manager);
+
+		/* FIXME */
+		ephy_shell_get_lockdown (es);
 	}
 
 	return G_OBJECT (es->priv->extensions_manager);

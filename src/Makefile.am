@@ -26,6 +26,7 @@ header_DATA = \
 	$(INST_H_FILES)
 
 NOINST_H_FILES = \
+	ephy-action-helper.h		\
 	ephy-automation.h		\
 	ephy-encoding-dialog.h		\
 	ephy-encoding-menu.h		\
@@ -34,6 +35,7 @@ NOINST_H_FILES = \
 	ephy-history-window.h		\
 	ephy-home-action.h		\
 	ephy-link-action.h		\
+	ephy-lockdown.h			\
 	ephy-location-action.h		\
 	ephy-navigation-action.h	\
 	ephy-tabs-menu.h		\
@@ -59,6 +61,7 @@ INST_H_FILES = \
 
 libephymain_la_SOURCES = \
 	$(BUILT_SOURCES)		\
+	ephy-action-helper.c		\
 	ephy-automation.c		\
 	ephy-completion-model.c		\
 	ephy-completion-model.h		\
@@ -73,6 +76,7 @@ libephymain_la_SOURCES = \
 	ephy-link.c			\
 	ephy-link-action.c		\
 	ephy-location-action.c		\
+	ephy-lockdown.c			\
 	ephy-navigation-action.c	\
 	ephy-notebook.c			\
 	ephy-session.c			\

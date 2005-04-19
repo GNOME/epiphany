@@ -262,8 +262,6 @@ popup_cmd_save_image_as (GtkAction *action,
 			   window, TRUE, "image");
 }
 
-#define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
-#define CONF_DESKTOP_BG_TYPE "/desktop/gnome/background/picture_options"
 #define GNOME_BACKGROUND_PREFERENCES "gnome-background-properties"
 
 static void

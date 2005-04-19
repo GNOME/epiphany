@@ -1916,7 +1916,7 @@ ephy_tab_set_location (EphyTab *tab,
 {
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
-	if (tab->priv->address) g_free (tab->priv->address);
+	g_free (tab->priv->address);
 	tab->priv->address = g_strdup (address);
 
 	if (expire == EPHY_TAB_ADDRESS_EXPIRE_CURRENT &&

@@ -35,8 +35,8 @@
 #include "ephy-dnd.h"
 #include "ephy-shell.h"
 #include "ephy-stock-icons.h"
+#include "ephy-action-helper.h"
 #include "window-commands.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
@@ -58,6 +58,11 @@ enum
 	LAST_ACTION
 };
 
+enum
+{
+	SENS_FLAG = 1 << 0
+};
+
 #define EPHY_TOOLBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOOLBAR, EphyToolbarPrivate))
 
 struct _EphyToolbarPrivate
@@ -65,28 +70,25 @@ struct _EphyToolbarPrivate
 	EphyWindow *window;
 	GtkActionGroup *action_group;
 	GtkAction *actions[LAST_ACTION];
-	gboolean updating_address;
 	GtkWidget *fixed_toolbar;
 	GtkWidget *spinner;
 	GtkToolItem *spinner_item;
 	GtkToolItem *sep_item;
 	GtkToolItem *exit_button;
-	guint disable_arbitrary_url_notifier_id;
 	gulong set_focus_handler;
+	gboolean updating_address;
 	gboolean show_lock;
 	gboolean lock_visible;
 	gboolean leave_fullscreen_visible;
 	gboolean spinning;
 };
 
-static GtkTargetEntry drag_targets[] =
+static const GtkTargetEntry drag_targets [] =
 {
 	{ EGG_TOOLBAR_ITEM_TYPE, GTK_TARGET_SAME_APP, 0 },
-	{ EPHY_DND_TOPIC_TYPE,   0,		   1 },
+	{ EPHY_DND_TOPIC_TYPE,   0,		      1 },
 	{ EPHY_DND_URL_TYPE,	 0,		      2 }
 };
-
-#define CONF_LOCKDOWN_DISABLE_ARBITRARY_URL  "/apps/epiphany/lockdown/disable_arbitrary_url"
 
 enum
 {
@@ -204,32 +206,6 @@ maybe_finish_activation_cb (EphyWindow *window,
 }
 
 static void
-update_location_editable (EphyToolbar *toolbar)
-{
-	EphyToolbarPrivate *priv = toolbar->priv;
-	EphyEmbed *embed;
-	char *address;
-	gboolean editable;
-
-	editable = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL);
-
-	g_object_set (priv->actions[LOCATION_ACTION], "editable", editable, NULL);
-
-	/* Restore the real web page address when disabling entry */
-	if (editable == FALSE)
-	{
-		embed = ephy_window_get_active_embed (priv->window);
-		/* embed is NULL on startup */
-		if (EPHY_IS_EMBED (embed))
-		{
-			address = ephy_embed_get_location (embed, TRUE);
-			ephy_toolbar_set_location (toolbar, address);
-			g_free (address);
-		}
-	}
-}
-
-static void
 sync_user_input_cb (EphyLocationAction *action,
 		    GParamSpec *pspec,
 		    EphyToolbar *toolbar)
@@ -265,15 +241,6 @@ zoom_to_level_cb (GtkAction *action,
 		  EphyToolbar *toolbar)
 {
 	ephy_window_set_zoom (toolbar->priv->window, zoom);
-}
-
-static void
-arbitrary_url_notifier (GConfClient *client,
-			guint cnxn_id,
-			GConfEntry *entry,
-			EphyToolbar *toolbar)
-{
-	update_location_editable (toolbar);
 }
 
 static void
@@ -367,7 +334,6 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 	g_signal_connect (action, "lock-clicked",
 			  G_CALLBACK (lock_clicked_cb), toolbar);
 	gtk_action_group_add_action (priv->action_group, action);
-	update_location_editable (toolbar);
 	g_object_unref (action);
 
 	action = priv->actions[ZOOM_ACTION] =
@@ -405,10 +371,6 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 				  G_CALLBACK (ephy_link_open), toolbar);
 	gtk_action_group_add_action_with_accel (priv->action_group, action, "<alt>Home");
 	g_object_unref (action);
-
-	priv->disable_arbitrary_url_notifier_id = eel_gconf_notification_add
-		(CONF_LOCKDOWN_DISABLE_ARBITRARY_URL,
-		 (GConfClientNotifyFunc) arbitrary_url_notifier, toolbar);
 }
 
 /* public functions */
@@ -500,9 +462,9 @@ ephy_toolbar_set_navigation_actions (EphyToolbar *toolbar,
 {
 	EphyToolbarPrivate *priv = toolbar->priv;
 
-	g_object_set (priv->actions[BACK_ACTION], "sensitive", back, NULL);
-	g_object_set (priv->actions[FORWARD_ACTION], "sensitive", forward, NULL);
-	g_object_set (priv->actions[UP_ACTION], "sensitive", up, NULL);
+	ephy_action_change_sensitivity_flags (priv->actions[BACK_ACTION], SENS_FLAG, !back);
+	ephy_action_change_sensitivity_flags (priv->actions[FORWARD_ACTION], SENS_FLAG, !forward);
+	ephy_action_change_sensitivity_flags (priv->actions[UP_ACTION], SENS_FLAG, !up);
 }
 
 void
@@ -688,8 +650,6 @@ ephy_toolbar_finalize (GObject *object)
 		g_signal_handler_disconnect (priv->window,
 					     priv->set_focus_handler);
 	}
-
-	eel_gconf_notification_remove (priv->disable_arbitrary_url_notifier_id);
 
 	g_signal_handlers_disconnect_by_func
 		(egg_editable_toolbar_get_model (etoolbar),

@@ -56,6 +56,7 @@
 #include "ephy-gui.h"
 #include "ephy-notebook.h"
 #include "ephy-fullscreen-popup.h"
+#include "ephy-action-helper.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -417,14 +418,6 @@ struct _EphyWindowPrivate
 	EphyEmbedChrome chrome;
 	guint idle_resize_handler;
 
-	guint disable_arbitrary_url_notifier_id;
-	guint disable_bookmark_editing_notifier_id;
-	guint disable_toolbar_editing_notifier_id;
-	guint disable_history_notifier_id;
-	guint disable_printing_notifier_id;
-	guint disable_print_setup_notifier_id;
-	guint disable_save_to_disk_notifier_id;
-	guint disable_command_line_notifier_id;
 	guint browse_with_caret_notifier_id;
 	guint allow_popups_notifier_id;
 
@@ -443,6 +436,16 @@ enum
 	PROP_CHROME,
 	PROP_PPV_MODE,
 	PROP_SINGLE_TAB_MODE
+};
+
+/* Make sure not to overlap with those in ephy-lockdown.c */
+enum
+{
+	SENS_FLAG_CHROME	= 1 << 0,
+	SENS_FLAG_CONTEXT	= 1 << 1,
+	SENS_FLAG_DOCUMENT	= 1 << 2,
+	SENS_FLAG_LOADING	= 1 << 3,
+	SENS_FLAG_NAVIGATION	= 1 << 4
 };
 
 static GObjectClass *parent_class = NULL;
@@ -993,94 +996,6 @@ update_chromes_actions (EphyWindow *window)
 		 			   window);
 }
 
-static void
-update_print_actions (EphyWindow *window,
-		      gboolean enable)
-{
-	GtkActionGroup *action_group = window->priv->action_group;
-	GtkAction *action;
-	gboolean printing, print_setup;
-
-	printing = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING);
-	print_setup = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) &&
-		!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE);
-
-	action = gtk_action_group_get_action (action_group, "FilePrintSetup");
-	g_object_set (action, "sensitive", printing && print_setup, NULL);
-	action = gtk_action_group_get_action (action_group, "FilePrintPreview");
-	g_object_set (action, "sensitive", enable && printing, NULL);
-	action = gtk_action_group_get_action (action_group, "FilePrint");
-	g_object_set (action, "sensitive", enable && printing, NULL);
-
-}
-
-static void
-update_actions_sensitivity (EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkActionGroup *action_group = priv->action_group;
-	GtkActionGroup *popups_action_group = priv->popups_action_group;
-	GtkAction *action;
-	gboolean bookmarks_editable, save_to_disk, fullscreen;
-
-	action = gtk_action_group_get_action (action_group, "FileNewTab");
-	g_object_set (action, "sensitive", !priv->is_popup, NULL);
-
-	action = gtk_action_group_get_action (action_group, "ViewToolbar");
-	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_TOOLBARS), NULL);
-
-	action = gtk_action_group_get_action (action_group, "ViewBookmarksBar");
-	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_BOOKMARKS_BAR), NULL);
-
-	action = gtk_action_group_get_action (action_group, "ViewStatusbar");
-	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_STATUSBAR), NULL);
-
-	action = gtk_action_group_get_action (action_group, "GoLocation");
-	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL), NULL);
-
-	action = gtk_action_group_get_action (action_group, "GoHistory");
-	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY), NULL);
-
-	bookmarks_editable = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING);
-	action = gtk_action_group_get_action (action_group, "GoBookmarks");
-	g_object_set (action, "sensitive", bookmarks_editable, NULL);
-	action = gtk_action_group_get_action (action_group, "FileBookmarkPage");
-	g_object_set (action, "sensitive", bookmarks_editable, NULL);
-	action = gtk_action_group_get_action (popups_action_group, "ContextBookmarkPage");
-	g_object_set (action, "sensitive", bookmarks_editable, NULL);
-	action = gtk_action_group_get_action (popups_action_group, "BookmarkLink");
-	g_object_set (action, "sensitive", bookmarks_editable, NULL);
-
-	save_to_disk = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK);
-	action = gtk_action_group_get_action (action_group, "FileSaveAs");
-	g_object_set (action, "sensitive", save_to_disk, NULL);
-	action = gtk_action_group_get_action (action_group, "FileSave");
-	g_object_set (action, "sensitive", save_to_disk, NULL);
-	action = gtk_action_group_get_action (popups_action_group, "DownloadLink");
-	g_object_set (action, "sensitive", save_to_disk, NULL);
-	action = gtk_action_group_get_action (popups_action_group, "DownloadLinkAs");
-	g_object_set (action, "sensitive", save_to_disk, NULL);
-	action = gtk_action_group_get_action (popups_action_group, "SaveBackgroundAs");
-	g_object_set (action, "sensitive", save_to_disk, NULL);
-	action = gtk_action_group_get_action (popups_action_group, "SaveImageAs");
-	g_object_set (action, "sensitive", save_to_disk, NULL);
-	action = gtk_action_group_get_action (popups_action_group, "SetImageAsBackground");
-	g_object_set (action, "sensitive", save_to_disk && eel_gconf_key_is_writable (CONF_DESKTOP_BG_PICTURE), NULL);
-
-	action = gtk_action_group_get_action (action_group, "EditToolbar");
-	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING), NULL);
-
-	fullscreen = eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
-	action = gtk_action_group_get_action (action_group, "FileNewWindow");
-	g_object_set (action, "sensitive", !fullscreen, NULL);
-	action = gtk_action_group_get_action (action_group, "ViewFullscreen");
-	g_object_set (action, "sensitive", !fullscreen, NULL);
-	action = gtk_action_group_get_action (action_group, "TabsDetach");
-	g_object_set (action, "sensitive", !fullscreen, NULL);
-
-	update_print_actions (window, TRUE);
-}
-
 #ifdef HAVE_X11_XF86KEYSYM_H
 static void
 setup_multimedia_key_actions (EphyWindow *window)
@@ -1207,26 +1122,26 @@ sync_tab_document_type (EphyTab *tab,
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	EphyEmbedDocumentType type;
-	gboolean can_find, enable;
+	gboolean can_find, disable;
 
 	/* update zoom actions */
 	sync_tab_zoom (tab, NULL, window);
 	
 	type = ephy_tab_get_document_type (tab);
 	can_find = (type != EPHY_EMBED_DOCUMENT_IMAGE);
-	enable = (type == EPHY_EMBED_DOCUMENT_HTML);
+	disable = (type != EPHY_EMBED_DOCUMENT_HTML);
 
 	action_group = window->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "ViewEncoding");
-	g_object_set (action, "sensitive", enable, NULL);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, disable);
 	action = gtk_action_group_get_action (action_group, "ViewPageSource");
-	g_object_set (action, "sensitive", enable, NULL);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, disable);
 	action = gtk_action_group_get_action (action_group, "EditFind");
-	g_object_set (action, "sensitive", can_find, NULL);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, !can_find);
 	action = gtk_action_group_get_action (action_group, "EditFindNext");
-	g_object_set (action, "sensitive", can_find, NULL);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, !can_find);
 	action = gtk_action_group_get_action (action_group, "EditFindPrev");
-	g_object_set (action, "sensitive", can_find, NULL);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, !can_find);
 }
 
 static void
@@ -1287,13 +1202,14 @@ sync_tab_message (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
-sync_tab_navigation (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_navigation (EphyTab *tab,
+		     GParamSpec *pspec,
+		     EphyWindow *window)
 {
 	EphyTabNavigationFlags flags;
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	gboolean up = FALSE, back = FALSE, forward = FALSE;
-	gboolean disable_arbitrary_url, disable_history;
 
 	if (window->priv->closing) return;
 
@@ -1312,21 +1228,13 @@ sync_tab_navigation (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 		forward = TRUE;
 	}
 
-	disable_arbitrary_url = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL);
-	disable_history = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY);
-
-	up = up && !disable_arbitrary_url;
-
-	back = back && !disable_history;
-	forward = forward && !disable_history;
-
 	action_group = window->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "GoUp");
-	g_object_set (action, "sensitive", up, NULL);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_NAVIGATION, !up);
 	action = gtk_action_group_get_action (action_group, "GoBack");
-	g_object_set (action, "sensitive", back, NULL);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_NAVIGATION, !back);
 	action = gtk_action_group_get_action (action_group, "GoForward");
-	g_object_set (action, "sensitive", forward, NULL);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_NAVIGATION, !forward);
 
 	ephy_toolbar_set_navigation_actions (window->priv->toolbar,
 					     back, forward, up);
@@ -1469,28 +1377,35 @@ sync_tab_popups_allowed (EphyTab *tab,
 }
 
 static void
-sync_tab_load_status (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_load_status (EphyTab *tab,
+		      GParamSpec *pspec,
+		      EphyWindow *window)
 {
+	EphyWindowPrivate *priv = window->priv;
+	GtkActionGroup *action_group = priv->action_group;
 	GtkAction *action;
-	gboolean status;
+	gboolean loading;
 
 	if (window->priv->closing) return;
 
-	action = gtk_action_group_get_action (window->priv->action_group, "ViewStop");
+	loading = ephy_tab_get_load_status (tab);
 
-	status = ephy_tab_get_load_status (tab);
-	g_object_set (action, "sensitive", status, NULL);
+	action = gtk_action_group_get_action (action_group, "ViewStop");
+	g_object_set (action, "sensitive", loading, NULL);
 
 	/* disable print while loading, see bug #116344 */
-	update_print_actions (window, !status);
+	action = gtk_action_group_get_action (action_group, "FilePrintPreview");
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_LOADING, loading);
+	action = gtk_action_group_get_action (action_group, "FilePrint");
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_LOADING, loading);
 
-	ephy_toolbar_set_spinning (window->priv->toolbar, status);
+	ephy_toolbar_set_spinning (priv->toolbar, loading);
 
-	if (window->priv->fullscreen_popup)
+	if (priv->fullscreen_popup)
 	{
 		ephy_fullscreen_popup_set_spinning
-			 (EPHY_FULLSCREEN_POPUP (window->priv->fullscreen_popup),
-			  status);
+			 (EPHY_FULLSCREEN_POPUP (priv->fullscreen_popup),
+			  loading);
 	}
 }
 
@@ -1811,12 +1726,14 @@ show_embed_popup (EphyWindow *window,
 
 	action_group = window->priv->popups_action_group;
 	action = gtk_action_group_get_action (action_group, "SaveBackgroundAs");
-	g_object_set (action, "sensitive", has_background,
-			      "visible", has_background, NULL);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !has_background);
+	g_object_set (action, "visible", has_background, NULL);
+
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewWindow");
 	g_object_set (action, "sensitive", can_open_in_new, FALSE);
+
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
-	g_object_set (action, "sensitive", can_open_in_new && !priv->is_popup, FALSE);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !can_open_in_new);
 
 	g_object_set_data_full (G_OBJECT (window), "context_event",
 				g_object_ref (event),
@@ -2074,7 +1991,7 @@ update_tabs_menu_sensitivity (EphyWindow *window)
 	action = gtk_action_group_get_action (action_group, "TabsMoveRight");
 	g_object_set (action, "sensitive", move_right, NULL);
 	action = gtk_action_group_get_action (action_group, "TabsDetach");
-	g_object_set (action, "sensitive", detach, NULL);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, !detach);
 }
 
 static gboolean
@@ -2351,12 +2268,19 @@ ephy_window_set_chrome (EphyWindow *window, EphyEmbedChrome mask)
 
 static void
 ephy_window_set_is_popup (EphyWindow *window,
-				 gboolean is_popup)
+			  gboolean is_popup)
 {
 	EphyWindowPrivate *priv = window->priv;
+	GtkAction *action;
 
 	priv->is_popup = is_popup;
 	ephy_notebook_set_dnd_enabled (EPHY_NOTEBOOK (priv->notebook), !is_popup);
+
+	action = gtk_action_group_get_action (priv->action_group, "FileNewTab");
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, is_popup);
+
+	action = gtk_action_group_get_action (priv->popups_action_group, "OpenLinkInNewTab");
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, is_popup);
 
 	g_object_notify (G_OBJECT (window), "is-popup");
 }
@@ -2391,14 +2315,6 @@ ephy_window_dispose (GObject *object)
 		g_signal_handlers_disconnect_by_func
 			(single, G_CALLBACK (network_status_changed), window);
 	
-		eel_gconf_notification_remove (priv->disable_arbitrary_url_notifier_id);
-		eel_gconf_notification_remove (priv->disable_bookmark_editing_notifier_id);
-		eel_gconf_notification_remove (priv->disable_toolbar_editing_notifier_id);
-		eel_gconf_notification_remove (priv->disable_history_notifier_id);
-		eel_gconf_notification_remove (priv->disable_printing_notifier_id);
-		eel_gconf_notification_remove (priv->disable_print_setup_notifier_id);
-		eel_gconf_notification_remove (priv->disable_save_to_disk_notifier_id);
-		eel_gconf_notification_remove (priv->disable_command_line_notifier_id);
 		eel_gconf_notification_remove (priv->browse_with_caret_notifier_id);
 		eel_gconf_notification_remove (priv->allow_popups_notifier_id);
 
@@ -2574,7 +2490,7 @@ ephy_window_state_event (GtkWidget *widget,
 			(action, G_CALLBACK (window_cmd_view_fullscreen), window);
 
 		action = gtk_action_group_get_action (action_group, "EditToolbar");
-		g_object_set (action, "sensitive", !fullscreen, NULL);
+		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, fullscreen);
 	}
 
 	return FALSE;
@@ -2635,41 +2551,13 @@ ephy_window_class_init (EphyWindowClass *klass)
 	g_object_class_install_property (object_class,
 					 PROP_SINGLE_TAB_MODE,
 					 g_param_spec_boolean ("is-popup",
-							       "Single Tab Mode",
-							       "Whether the window is in single tab mode",
+							       "Is Popup",
+							       "Whether the window is a popup",
 							       FALSE,
 							       G_PARAM_READWRITE |
 							       G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (EphyWindowPrivate));
-}
-
-static void
-update_navigation (EphyWindow *window)
-{
-	if (window->priv->active_tab)
-	{
-		sync_tab_navigation (window->priv->active_tab, NULL, window);
-	}
-}
-
-static void
-actions_notifier (GConfClient *client,
-		  guint cnxn_id,
-		  GConfEntry *entry,
-		  EphyWindow *window)
-{
-	update_actions_sensitivity (window);
-}
-
-static void
-navigation_notifier (GConfClient *client,
-		     guint cnxn_id,
-		     GConfEntry *entry,
-		     EphyWindow *window)
-{
-	update_navigation (window);
-	update_actions_sensitivity (window);
 }
 
 static void
@@ -2882,44 +2770,6 @@ ephy_window_init (EphyWindow *window)
 			  G_CALLBACK (ephy_window_delete_event_cb),
 			  window);
 
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN))
-	{
-		gtk_window_fullscreen (GTK_WINDOW (window));
-	}
-
-	/* lockdown pref notifiers */
-	window->priv->disable_arbitrary_url_notifier_id = eel_gconf_notification_add
-		(CONF_LOCKDOWN_DISABLE_ARBITRARY_URL,
-		 (GConfClientNotifyFunc)navigation_notifier, window);
-
-	window->priv->disable_bookmark_editing_notifier_id = eel_gconf_notification_add
-		(CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING,
-		 (GConfClientNotifyFunc)actions_notifier, window);
-
-	window->priv->disable_toolbar_editing_notifier_id = eel_gconf_notification_add
-		(CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING,
-		 (GConfClientNotifyFunc)actions_notifier, window);
-
-	window->priv->disable_history_notifier_id = eel_gconf_notification_add
-		(CONF_LOCKDOWN_DISABLE_HISTORY,
-		 (GConfClientNotifyFunc)navigation_notifier, window);
-
-	window->priv->disable_printing_notifier_id = eel_gconf_notification_add
-		(CONF_LOCKDOWN_DISABLE_PRINTING,
-		 (GConfClientNotifyFunc)actions_notifier, window);
-
-	window->priv->disable_print_setup_notifier_id = eel_gconf_notification_add
-		(CONF_LOCKDOWN_DISABLE_PRINT_SETUP,
-		 (GConfClientNotifyFunc)actions_notifier, window);
-
-	window->priv->disable_save_to_disk_notifier_id = eel_gconf_notification_add
-		(CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK,
-		 (GConfClientNotifyFunc)actions_notifier, window);
-
-	window->priv->disable_command_line_notifier_id = eel_gconf_notification_add
-		(CONF_LOCKDOWN_DISABLE_COMMAND_LINE,
-		 (GConfClientNotifyFunc)actions_notifier, window);
-
 	/* other notifiers */
 	browse_with_caret_notifier (NULL, 0, NULL, window);
 	window->priv->browse_with_caret_notifier_id = eel_gconf_notification_add
@@ -2957,7 +2807,6 @@ ephy_window_constructor (GType type,
 
 	window = EPHY_WINDOW (object);
 
-	update_actions_sensitivity (window);
 	sync_chromes_visibility (window);
 
 	return object;

@@ -1,3 +1,26 @@
+2005-04-19  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-prefs.h:
+	* src/Makefile.am:
+	A src/ephy-action-helper.c:
+	A src/ephy-action-helper.h:
+	A src/ephy-lockdown.c: 
+	A src/ephy-lockdown.h:
+	* src/ephy-shell.c: (ephy_shell_finalize),
+	(ephy_shell_get_lockdown), (ephy_shell_get_extensions_manager):
+	* src/ephy-tab.c: (ephy_tab_set_location):
+	* src/ephy-toolbar.c: (ephy_toolbar_set_window),
+	(ephy_toolbar_set_navigation_actions), (ephy_toolbar_finalize):
+	* src/ephy-window.c: (sync_tab_document_type),
+	(sync_tab_navigation), (sync_tab_load_status), (show_embed_popup),
+	(update_tabs_menu_sensitivity), (ephy_window_set_is_popup),
+	(ephy_window_dispose), (ephy_window_state_event),
+	(ephy_window_class_init), (ephy_window_init),
+	(ephy_window_constructor):
+	* src/popup-commands.c:
+
+	Move lockdown from EphyWindow into an internal extension.
+
 2005-04-18  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed-persist.cpp:

@@ -61,6 +61,8 @@ G_BEGIN_DECLS
 /* System prefs */
 #define CONF_DESKTOP_FTP_HANDLER	"/desktop/gnome/url-handlers/ftp/command"
 #define CONF_DESKTOP_TOOLBAR_STYLE	"/desktop/gnome/interface/toolbar_style"
+#define CONF_DESKTOP_BG_PICTURE		"/desktop/gnome/background/picture_filename"
+#define CONF_DESKTOP_BG_TYPE		"/desktop/gnome/background/picture_options"
 
 G_END_DECLS
 
