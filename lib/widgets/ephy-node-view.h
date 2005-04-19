@@ -112,13 +112,13 @@ void	   ephy_node_view_select_node         (EphyNodeView *view,
 			                       EphyNode *node);
 
 void	   ephy_node_view_enable_drag_source  (EphyNodeView *view,
-					       GtkTargetEntry *types,
+					       const GtkTargetEntry *types,
 					       int n_types,
 					       int base_drag_column_id,
 					       int extra_drag_column_id);
 
 void	   ephy_node_view_enable_drag_dest    (EphyNodeView *view,
-					       GtkTargetEntry *types,
+					       const GtkTargetEntry *types,
 					       int n_types);
 
 void	   ephy_node_view_edit		      (EphyNodeView *view,

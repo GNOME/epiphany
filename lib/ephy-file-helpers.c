@@ -165,9 +165,9 @@ const char *
 ephy_file (const char *filename)
 {
 	char *ret;
-	int i;
+	guint i;
 
-	static char *paths[] =
+	static const char * const paths[] =
 	{
 		SHARE_DIR "/",
 		SHARE_DIR "/glade/",
@@ -183,7 +183,7 @@ ephy_file (const char *filename)
 	if (ret != NULL)
 		return ret;
 
-	for (i = 0; i < (int) G_N_ELEMENTS (paths); i++)
+	for (i = 0; i < G_N_ELEMENTS (paths); i++)
 	{
 		ret = g_strconcat (paths[i], filename, NULL);
 		if (g_file_test (ret, G_FILE_TEST_EXISTS) == TRUE)
@@ -194,7 +194,7 @@ ephy_file (const char *filename)
 		g_free (ret);
 	}
 
-	g_warning (_("Failed to find %s"), filename);
+	g_warning ("Failed to find %s\n", filename);
 
 	return NULL;
 }

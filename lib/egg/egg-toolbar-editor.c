@@ -35,15 +35,13 @@
 #include <gtk/gtkstock.h>
 #include <gtk/gtkhbox.h>
 
-static GtkTargetEntry dest_drag_types[] = {
+static const GtkTargetEntry dest_drag_types[] = {
   {EGG_TOOLBAR_ITEM_TYPE, GTK_TARGET_SAME_APP, 0},
 };
-static int n_dest_drag_types = G_N_ELEMENTS (dest_drag_types);
 
-static GtkTargetEntry source_drag_types[] = {
+static const GtkTargetEntry source_drag_types[] = {
   {EGG_TOOLBAR_ITEM_TYPE, GTK_TARGET_SAME_APP, 0},
 };
-static int n_source_drag_types = G_N_ELEMENTS (source_drag_types);
 
 static void egg_toolbar_editor_class_init	(EggToolbarEditorClass *klass);
 static void egg_toolbar_editor_init		(EggToolbarEditor *t);
@@ -452,7 +450,7 @@ editor_create_item (EggToolbarEditor *editor,
   gtk_widget_show (event_box);
   gtk_drag_source_set (event_box,
 		       GDK_BUTTON1_MASK,
-		       source_drag_types, n_source_drag_types, action);
+		       source_drag_types, G_N_ELEMENTS (source_drag_types), action);
   g_signal_connect (event_box, "drag_data_get",
 		    G_CALLBACK (drag_data_get_cb), editor);
   g_signal_connect (event_box, "drag_data_delete",
@@ -509,7 +507,7 @@ update_editor_sheet (EggToolbarEditor *editor)
   gtk_scrolled_window_add_with_viewport
     (GTK_SCROLLED_WINDOW (editor->priv->scrolled_window), table);
   gtk_drag_dest_set (table, GTK_DEST_DEFAULT_ALL,
-		     dest_drag_types, n_dest_drag_types, GDK_ACTION_MOVE);
+		     dest_drag_types, G_N_ELEMENTS (dest_drag_types), GDK_ACTION_MOVE);
   g_signal_connect (table, "drag_data_received",
 		    G_CALLBACK (editor_drag_data_received_cb), editor);
 

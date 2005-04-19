@@ -87,13 +87,12 @@ web_prefixes [] =
 	{ "www.", 4 }
 };
 
-static GtkTargetEntry url_drag_types [] =
+static const GtkTargetEntry url_drag_types [] =
 {
 	{ EPHY_DND_URL_TYPE,        0, 0 },
 	{ EPHY_DND_URI_LIST_TYPE,   0, 1 },
 	{ EPHY_DND_TEXT_TYPE,       0, 2 }
 };
-static int n_url_drag_types = G_N_ELEMENTS (url_drag_types);
 
 static void ephy_location_entry_class_init (EphyLocationEntryClass *klass);
 static void ephy_location_entry_init (EphyLocationEntry *le);
@@ -568,7 +567,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 	gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->icon_ebox), FALSE);
 	gtk_box_pack_start (GTK_BOX (hbox), priv->icon_ebox, FALSE, FALSE, 2);
 	gtk_drag_source_set (priv->icon_ebox, GDK_BUTTON1_MASK,
-			     url_drag_types, n_url_drag_types,
+			     url_drag_types, G_N_ELEMENTS (url_drag_types),
 			     GDK_ACTION_ASK | GDK_ACTION_COPY | GDK_ACTION_LINK);
 	gtk_tooltips_set_tip (priv->tips, priv->icon_ebox,
 			      _("Drag and drop this icon to create a link to this page"), NULL);

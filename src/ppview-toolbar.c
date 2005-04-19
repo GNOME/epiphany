@@ -84,7 +84,7 @@ static void
 toolbar_cmd_ppv_close (GtkUIManager *merge,
 		       PPViewToolbar *t);
 
-static GtkActionEntry entries [] = {
+static const GtkActionEntry entries [] = {
 	{ "PPVGotoFirst", GTK_STOCK_GOTO_FIRST,
 	  N_("First"), NULL,
 	  N_("Go to the first page"),
@@ -109,13 +109,13 @@ static GtkActionEntry entries [] = {
 
 static const char ui_info[] =
 "<ui>"
-"  <toolbar name=\"PPViewToolbar\">"
-"    <toolitem name=\"PPVGotoFirstItem\" action=\"PPVGotoFirst\" />"
-"    <toolitem name=\"PPVGotoLastItem\" action=\"PPVGotoLast\" />"
-"    <toolitem name=\"PPVGoBackItem\" action=\"PPVGoBack\" />"
-"    <toolitem name=\"PPVGoForwardItem\" action=\"PPVGoForward\" />"
-"    <toolitem name=\"PPVCloseItem\" action=\"PPVClose\" />"
-"  </toolbar>\n"
+"<toolbar name=\"PPViewToolbar\">"
+"<toolitem name=\"PPVGotoFirstItem\" action=\"PPVGotoFirst\" />"
+"<toolitem name=\"PPVGotoLastItem\" action=\"PPVGotoLast\" />"
+"<toolitem name=\"PPVGoBackItem\" action=\"PPVGoBack\" />"
+"<toolitem name=\"PPVGoForwardItem\" action=\"PPVGoForward\" />"
+"<toolitem name=\"PPVCloseItem\" action=\"PPVClose\" />"
+"</toolbar>"
 "</ui>\n";
 
 GType

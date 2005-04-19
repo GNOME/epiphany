@@ -47,10 +47,9 @@ static void egg_editable_toolbar_finalize	(GObject *object);
 
 #define MIN_TOOLBAR_HEIGHT 20
 
-static GtkTargetEntry dest_drag_types[] = {
+static const GtkTargetEntry dest_drag_types[] = {
   {EGG_TOOLBAR_ITEM_TYPE, GTK_TARGET_SAME_APP, 0},
 };
-static int n_dest_drag_types = G_N_ELEMENTS (dest_drag_types);
 
 enum
 {
@@ -700,7 +699,7 @@ create_dock (EggEditableToolbar *t)
   gtk_box_pack_start (GTK_BOX (hbox), toolbar, TRUE, TRUE, 0);
 
   gtk_drag_dest_set (toolbar, 0,
-		     dest_drag_types, n_dest_drag_types,
+		     dest_drag_types, G_N_ELEMENTS (dest_drag_types),
 		     GDK_ACTION_MOVE | GDK_ACTION_COPY);
  
   g_signal_connect (toolbar, "drag_drop",

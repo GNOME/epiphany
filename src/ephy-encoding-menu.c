@@ -345,21 +345,19 @@ ephy_encoding_menu_automatic_cb (GtkAction *action, EphyEncodingMenu *menu)
 	ephy_embed_set_encoding (embed, "");
 }
 
-static GtkActionEntry menu_entries [] =
+static const GtkActionEntry menu_entries [] =
 {
 	{ "ViewEncodingOther", NULL, N_("_Other..."), NULL,
 	  N_("Other encodings"),
 	  G_CALLBACK (ephy_encoding_menu_view_dialog_cb) }
 };
-static guint n_menu_entries = G_N_ELEMENTS (menu_entries);
 
-static GtkToggleActionEntry toggle_menu_entries [] =
+static const GtkToggleActionEntry toggle_menu_entries [] =
 {
 	{ "ViewEncodingAutomatic", NULL, N_("_Automatic"), NULL,
 	  N_("Use the encoding specified by the document"),
 	  G_CALLBACK (ephy_encoding_menu_automatic_cb), FALSE }
 };
-static const guint n_toggle_menu_entries = G_N_ELEMENTS (toggle_menu_entries);
 
 static void
 ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
@@ -380,9 +378,9 @@ ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 	menu->priv->action_group = action_group;
 
 	gtk_action_group_add_actions (action_group, menu_entries,
-				      n_menu_entries, menu);
+				      G_N_ELEMENTS (menu_entries), menu);
 	gtk_action_group_add_toggle_actions (action_group, toggle_menu_entries,
-                                    	     n_toggle_menu_entries, menu);
+                                    	     G_N_ELEMENTS (toggle_menu_entries), menu);
 
 	/* add actions for the existing encodings */
 	encodings = ephy_encodings_get_all (menu->priv->encodings);

@@ -753,15 +753,14 @@ void
 window_cmd_help_about (GtkAction *action,
 		       GtkWidget *window)
 {
-	static char *authors[] = {
+	static const char * const authors[] = {
 		"Marco Pesenti Gritti <marco@gnome.org>",
 		"Xan Lopez <xan@gnome.org>",
 		"David Bordoley <bordoley@msu.edu>",
 		"Christian Persch <chpe@gnome.org>",
 		NULL
 	};
-
-	static char *documenters[] = {
+	static const char *const documenters[] = {
 		"Patanjali Somayaji <patanjali@codito.com>",
 		"David Bordoley <bordoley@msu.edu>",
 		"Piers Cornwell <piers@gnome.org>", 

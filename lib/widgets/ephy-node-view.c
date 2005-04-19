@@ -443,7 +443,7 @@ drag_drop_cb (GtkWidget *widget,
 
 void
 ephy_node_view_enable_drag_dest (EphyNodeView *view,
-				 GtkTargetEntry *types,
+				 const GtkTargetEntry *types,
 				 int n_types)
 {
 	GtkWidget *treeview;
@@ -1402,7 +1402,7 @@ ephy_node_view_select_node (EphyNodeView *view,
 
 void
 ephy_node_view_enable_drag_source (EphyNodeView *view,
-				   GtkTargetEntry *types,
+				   const GtkTargetEntry *types,
 				   int n_types,
 				   int base_drag_column,
 				   int extra_drag_column)

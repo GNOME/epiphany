@@ -47,9 +47,9 @@ static gboolean open_in_new_tab = FALSE;
 static gboolean open_fullscreen = FALSE;
 static gboolean open_as_bookmarks_editor = FALSE;
 
-static const char *session_filename = NULL;
-static const char *bookmark_url = NULL;
-static const char *bookmarks_file = NULL;
+static char *session_filename = NULL;
+static char *bookmark_url = NULL;
+static char *bookmarks_file = NULL;
 
 static struct poptOption popt_options[] =
 {

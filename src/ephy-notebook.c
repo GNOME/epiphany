@@ -86,12 +86,11 @@ static void move_tab_to_another_notebook (EphyNotebook *src,
 /* Local variables */
 static GdkCursor *cursor = NULL;
 
-static GtkTargetEntry url_drag_types [] = 
+static const GtkTargetEntry url_drag_types [] = 
 {
         { EPHY_DND_URI_LIST_TYPE,   0, 0 },
         { EPHY_DND_URL_TYPE,        0, 1 }
 };
-static guint n_url_drag_types = G_N_ELEMENTS (url_drag_types);
 
 enum
 {
@@ -808,7 +807,7 @@ ephy_notebook_init (EphyNotebook *notebook)
 			  NULL);
         gtk_drag_dest_set (GTK_WIDGET(notebook), GTK_DEST_DEFAULT_MOTION |
 			   GTK_DEST_DEFAULT_DROP,
-                           url_drag_types,n_url_drag_types,
+                           url_drag_types, G_N_ELEMENTS (url_drag_types),
                            GDK_ACTION_MOVE | GDK_ACTION_COPY);
 
 	notebook->priv->tabs_vis_notifier_id = eel_gconf_notification_add
@@ -1049,7 +1048,7 @@ ephy_notebook_add_tab (EphyNotebook *nb,
 	g_signal_connect (G_OBJECT(label), "drag_data_received",
 			  G_CALLBACK(notebook_drag_data_received_cb), tab);
 	gtk_drag_dest_set (label, GTK_DEST_DEFAULT_ALL,
-			   url_drag_types,n_url_drag_types,
+			   url_drag_types, G_N_ELEMENTS (url_drag_types),
 			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
 
 	sync_icon (tab, NULL, label);

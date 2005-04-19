@@ -68,13 +68,12 @@
 #include "ephy-node-common.h"
 #include "ephy-node-view.h"
 
-static GtkTargetEntry page_drag_types [] =
+static const GtkTargetEntry page_drag_types [] =
 {
         { EPHY_DND_URL_TYPE,        0, 0 },
         { EPHY_DND_URI_LIST_TYPE,   0, 1 },
         { EPHY_DND_TEXT_TYPE,       0, 2 }
 };
-static int n_page_drag_types = G_N_ELEMENTS (page_drag_types);
 
 static void ephy_history_window_class_init (EphyHistoryWindowClass *klass);
 static void ephy_history_window_init (EphyHistoryWindow *editor);
@@ -159,7 +158,7 @@ enum
 
 static GObjectClass *parent_class = NULL;
 
-static GtkActionEntry ephy_history_ui_entries [] = {
+static const GtkActionEntry ephy_history_ui_entries [] = {
 	/* Toplevel */
 	{ "File", NULL, N_("_File") },
 	{ "Edit", NULL, N_("_Edit") },
@@ -209,7 +208,6 @@ static GtkActionEntry ephy_history_ui_entries [] = {
 	  N_("Display credits for the web browser creators"),
 	  G_CALLBACK (window_cmd_help_about) },
 };
-static guint ephy_history_ui_n_entries = G_N_ELEMENTS (ephy_history_ui_entries);
 
 enum
 {
@@ -218,7 +216,7 @@ enum
 	VIEW_TITLE_AND_ADDRESS
 };
 
-static GtkRadioActionEntry ephy_history_radio_entries [] =
+static const GtkRadioActionEntry ephy_history_radio_entries [] =
 {
 	/* View Menu */
 	{ "ViewTitle", NULL, N_("_Title"), NULL,
@@ -229,7 +227,6 @@ static GtkRadioActionEntry ephy_history_radio_entries [] =
 	  N_("Show both the title and address columns"),
 	  VIEW_TITLE_AND_ADDRESS } 
 };
-static guint ephy_history_n_radio_entries = G_N_ELEMENTS (ephy_history_radio_entries);
 
 static void
 confirmation_dialog_response_cb (GtkWidget *dialog,
@@ -1208,12 +1205,12 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	action_group = gtk_action_group_new ("PopupActions");
 	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_history_ui_entries,
-				      ephy_history_ui_n_entries, editor);
+				      G_N_ELEMENTS (ephy_history_ui_entries), editor);
 
 	details_value = get_details_value ();
 	gtk_action_group_add_radio_actions (action_group,
 					    ephy_history_radio_entries,
-					    ephy_history_n_radio_entries,
+					    G_N_ELEMENTS (ephy_history_radio_entries),
 					    details_value,
 					    G_CALLBACK (cmd_view_columns), 
 					    editor);
@@ -1262,7 +1259,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 						  NULL);
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (sites_view),
 					   page_drag_types,
-				           n_page_drag_types,
+				           G_N_ELEMENTS (page_drag_types),
 					   url_col_id,
 					   title_col_id);
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (sites_view));
@@ -1329,7 +1326,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	editor->priv->address_col = col;
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (pages_view),
 					   page_drag_types,
-				           n_page_drag_types,
+				           G_N_ELEMENTS (page_drag_types),
 					   url_col_id, title_col_id);
 	ephy_node_view_set_sort (EPHY_NODE_VIEW (pages_view), G_TYPE_INT,
 				 EPHY_NODE_PAGE_PROP_LAST_VISIT,
