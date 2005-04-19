@@ -1767,9 +1767,9 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	g_object_set (action, "sensitive", has_background,
 			      "visible", has_background, NULL);
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewWindow");
-	g_object_set (action, "sensitive", can_open_in_new, FALSE);
+	g_object_set (action, "sensitive", can_open_in_new, NULL);
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
-	g_object_set (action, "sensitive", can_open_in_new, FALSE);
+	g_object_set (action, "sensitive", can_open_in_new, NULL);
 
 	g_object_set_data_full (G_OBJECT (window), "context_event",
 				g_object_ref (event),
