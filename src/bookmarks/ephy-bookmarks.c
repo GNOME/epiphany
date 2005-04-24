@@ -1238,11 +1238,13 @@ ephy_bookmarks_solve_smart_url (EphyBookmarks *eb,
 	escaped_arg = gnome_vfs_escape_string (arg);
 
 	t1 = smarturl_only;
-	t2 = strstr (t1, "%s");
-	g_return_val_if_fail (t2 != NULL, NULL);
-	g_string_append_len (s, t1, t2 - t1);
-	g_string_append (s, escaped_arg);
-	t1 = t2 + 2;
+	while ((t2 = strstr (t1, "%s")) != NULL)
+	{
+		g_string_append_len (s, t1, t2 - t1);
+		g_string_append (s, escaped_arg);
+		t1 = t2 + 2;
+	}
+
 	g_string_append (s, t1);
 	ret = g_string_free (s, FALSE);
 
