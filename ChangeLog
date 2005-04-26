@@ -1,3 +1,22 @@
+2005-04-26  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.ac:
+
+	Ged rid of all API checks which check for 1.8-only API, and introduce
+	a Gecko version check instead.
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/ContentHandler.h:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/GlobalHistory.cpp:
+	* embed/mozilla/GtkNSSKeyPairDialogs.cpp:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+	* embed/mozilla/mozilla-download.cpp:
+
+	Fix for mozilla API change, and use the new HAVE_GECKO_1_8 define
+	where appropriate.
+
 2005-04-24  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_solve_smart_url):

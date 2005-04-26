@@ -619,11 +619,13 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, Mozilla
 			info->button = 3;
 			break;
 
-#ifdef MOZ_BROKEN_CTX_MENU_EVENT
+#ifndef HAVE_GECKO_1_8
 		case 1729:
 			/* This only appears to happen when getting a mouse context menu
 			 * signal, so map it to button 3 (right mouse button)
-			 * http://bugzilla.mozilla.org/show_bug.cgi?id=258193 */
+			 * http://bugzilla.mozilla.org/show_bug.cgi?id=258193 
+			 * Fixed since 1.8a4
+			 */
 			info->button = 3;
 			break;
 #endif

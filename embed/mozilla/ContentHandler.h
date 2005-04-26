@@ -22,8 +22,6 @@
 #ifndef CONTENT_HANDLER_H
 #define CONTENT_HANDLER_H
 
-#include "config.h"
-
 #include "ephy-file-helpers.h"
 
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
@@ -79,7 +77,7 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	EphyMimePermission mPermission;
 
 	nsEmbedCString mUrl;
-#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
+#ifdef HAVE_GECKO_1_8
 	nsEmbedCString mMimeType;
 #else
 	char *mMimeType;

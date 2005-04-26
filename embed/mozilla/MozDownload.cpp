@@ -56,13 +56,18 @@
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
 
+#include <nsIDOMDocument.h>
+#include <nsILocalFile.h>
+#include <nsIWebBrowserPersist.h>
+#include <nsIObserver.h>
+#include <nsIRequest.h>
 #include <nsIFileURL.h>
 #undef MOZILLA_INTERNAL_API
 #include <nsEmbedString.h>
 #define MOZILLA_INTERNAL_API 1
 #include <nsMemory.h>
+#include <nsNetError.h>
 
-#include <errno.h>
 #include <stdlib.h>
 
 const char* const persistContractID = "@mozilla.org/embedding/browser/nsWebBrowserPersist;1";
@@ -85,26 +90,53 @@ MozDownload::~MozDownload()
 	NS_ASSERTION (!mEphyDownload, "MozillaDownload still alive!");
 }
 
-#ifdef HAVE_NSITRANSFER_H
+#ifdef HAVE_GECKO_1_8
 NS_IMPL_ISUPPORTS3(MozDownload, nsIWebProgressListener, nsIWebProgressListener2, nsITransfer)
 #else
 NS_IMPL_ISUPPORTS3(MozDownload, nsIWebProgressListener, nsIDownload, nsITransfer)
 #endif
 
+#ifdef HAVE_GECKO_1_8
+nsresult
+MozDownload::InitForEmbed (nsIURI *aSource, nsIURI *aTarget, const nsAString &aDisplayName,
+		           nsIMIMEInfo *aMIMEInfo, PRTime aStartTime, nsICancelable *aCancelable,
+		           MozillaEmbedPersist *aEmbedPersist, PRInt64 aMaxSize)
+{
+	mEmbedPersist = aEmbedPersist;
+	mMaxSize = aMaxSize;
+	return Init (aSource, aTarget, aDisplayName, aMIMEInfo, aStartTime, aCancelable);
+}
+#else
 nsresult
 MozDownload::InitForEmbed (nsIURI *aSource, nsIURI *aTarget, const PRUnichar *aDisplayName,
 		           nsIMIMEInfo *aMIMEInfo, PRInt64 startTime, nsIWebBrowserPersist *aPersist,
-		           MozillaEmbedPersist *aEmbedPersist, PRInt32 aMaxSize)
+		           MozillaEmbedPersist *aEmbedPersist, PRInt64 aMaxSize)
 {
 	mEmbedPersist = aEmbedPersist;
 	mMaxSize = aMaxSize;
 	return Init (aSource, aTarget, aDisplayName, aMIMEInfo, startTime, aPersist);
 }
+#endif
 
+#ifdef HAVE_GECKO_1_8
+/* void init (in nsIURI aSource, in nsIURI aTarget, in AString aDisplayName, in nsIMIMEInfo aMIMEInfo, in PRTime startTime, in nsICancelable aCancelable); */
+NS_IMETHODIMP
+MozDownload::Init (nsIURI *aSource,
+		   nsIURI *aTarget,
+		   const nsAString &aDisplayName,
+		   nsIMIMEInfo *aMIMEInfo,
+		   PRTime aStartTime,
+		   nsICancelable *aCancelable)
+#else
 /* void init (in nsIURI aSource, in nsIURI aTarget, in wstring aDisplayName, in nsIMIMEInfo aMIMEInfo, in long long startTime, in nsIWebBrowserPersist aPersist); */
 NS_IMETHODIMP
-MozDownload::Init(nsIURI *aSource, nsIURI *aTarget, const PRUnichar *aDisplayName,
-		  nsIMIMEInfo *aMIMEInfo, PRInt64 startTime, nsIWebBrowserPersist *aPersist)
+MozDownload::Init (nsIURI *aSource,
+		   nsIURI *aTarget,
+		   const PRUnichar *aDisplayName,
+		   nsIMIMEInfo *aMIMEInfo,
+		   PRInt64 aStartTime,
+		   nsIWebBrowserPersist *aPersist)
+#endif
 {
 	PRBool addToView = PR_TRUE;
 
@@ -119,7 +151,7 @@ MozDownload::Init(nsIURI *aSource, nsIURI *aTarget, const PRUnichar *aDisplayNam
 
 	mSource = aSource;
 	mDestination = aTarget;
-	mStartTime = startTime;
+	mStartTime = aStartTime;
 	mTotalProgress = 0;
 	mCurrentProgress = 0;
 	mPercentComplete = 0;
@@ -127,11 +159,16 @@ MozDownload::Init(nsIURI *aSource, nsIURI *aTarget, const PRUnichar *aDisplayNam
 	mLastUpdate = mStartTime;
 	mMIMEInfo = aMIMEInfo;
 
+#ifdef HAVE_GECKO_1_8
+	/* This will create a refcount cycle, which needs to be broken in ::OnStateChange */
+	mCancelable = aCancelable;
+#else
 	if (aPersist)
 	{
 		mWebPersist = aPersist;
 		aPersist->SetProgressListener(this);
         }
+#endif
 
 	if (addToView)
 	{ 
@@ -161,7 +198,7 @@ MozDownload::GetSource(nsIURI **aSource)
 	return NS_OK;
 }
 
-#ifndef HAVE_NSITRANSFER_H
+#ifndef HAVE_GECKO_1_8
 NS_IMETHODIMP
 MozDownload::GetTarget(nsIURI **aTarget)
 {
@@ -187,7 +224,7 @@ MozDownload::GetTargetFile (nsILocalFile** aTargetFile)
 	return rv;
 }
 
-#ifndef HAVE_NSITRANSFER_H
+#ifndef HAVE_GECKO_1_8
 NS_IMETHODIMP
 MozDownload::GetPersist(nsIWebBrowserPersist **aPersist)
 {
@@ -207,24 +244,7 @@ MozDownload::GetPercentComplete(PRInt32 *aPercentComplete)
  	return NS_OK;
 }
 
-#ifndef HAVE_NSITRANSFER_H
-#ifdef MOZ_NSIDOWNLOAD_GETSIZE
-/* readonly attribute PRUint64 amountTransferred; */
-NS_IMETHODIMP
-MozDownload::GetAmountTransferred(PRUint64 *aAmountTransferred)
-{
-    return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-/* readonly attribute PRUint64 size; */
-NS_IMETHODIMP
-MozDownload::GetSize(PRUint64 *aSize)
-{
-    return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-#endif  /* MOZ_NSIDOWNLOAD_GETSIZE */
-
+#ifndef HAVE_GECKO_1_8
 NS_IMETHODIMP
 MozDownload::GetStartTime(PRInt64 *aStartTime)
 {
@@ -245,7 +265,7 @@ MozDownload::SetDisplayName(const PRUnichar * aDisplayName)
 {
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
-#endif /* !HAVE_NSITRANSFER_H */
+#endif /* !HAVE_GECKO_1_8 */
 
 NS_IMETHODIMP
 MozDownload::GetTotalProgress(PRInt64 *aTotalProgress)
@@ -292,7 +312,7 @@ MozDownload::GetMIMEInfo(nsIMIMEInfo **aMIMEInfo)
 	return NS_OK;
 }
 
-#ifndef HAVE_NSITRANSFER_H
+#ifndef HAVE_GECKO_1_8
 NS_IMETHODIMP
 MozDownload::GetListener(nsIWebProgressListener **aListener)
 {
@@ -306,7 +326,6 @@ MozDownload::SetListener(nsIWebProgressListener *aListener)
 {
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
-#endif
 
 NS_IMETHODIMP
 MozDownload::GetObserver(nsIObserver **aObserver)
@@ -324,6 +343,7 @@ MozDownload::SetObserver(nsIObserver *aObserver)
 
 	return NS_OK;
 }
+#endif
 
 NS_IMETHODIMP 
 MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
@@ -334,7 +354,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 	if (NS_FAILED(aStatus) && NS_SUCCEEDED(mStatus))
         	mStatus = aStatus;
 
-	if (aStateFlags & EPHY_EMBED_STATE_START)
+	if (aStateFlags & STATE_START)
 	{
 		mDownloadState = EPHY_DOWNLOAD_DOWNLOADING;
 
@@ -345,7 +365,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 	}
 
 	/* We will get this even in the event of a cancel */
-	if (aStateFlags & EPHY_EMBED_STATE_STOP)
+	if (aStateFlags & STATE_STOP)
 	{
 		/* Keep us alive */
 		nsCOMPtr<nsITransfer> kungFuDeathGrip(this);
@@ -356,11 +376,16 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 			g_signal_emit_by_name (mEphyDownload, "changed");
 		}
 
+#ifdef HAVE_GECKO_1_8
+		/* break refcount cycle */
+		mCancelable = nsnull;
+#else
 	        if (mWebPersist)
 		{
 	            mWebPersist->SetProgressListener(nsnull);
 	            mWebPersist = nsnull;
 	        }
+#endif
 
 		if (mEmbedPersist)
 		{
@@ -377,7 +402,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 		{
 			GnomeVFSMimeApplication *helperApp;
 			nsEmbedCString mimeType;
-#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
+#ifdef HAVE_GECKO_1_8
 			rv = mMIMEInfo->GetMIMEType (mimeType);
 			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
@@ -437,7 +462,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 	return NS_OK; 
 }
 
-#ifdef HAVE_NSITRANSFER_H
+#ifdef HAVE_GECKO_1_8
 NS_IMETHODIMP
 MozDownload::OnProgressChange (nsIWebProgress *aWebProgress,
 			       nsIRequest *aRequest,
@@ -460,7 +485,7 @@ MozDownload::OnProgressChange64 (nsIWebProgress *aWebProgress,
 				 PRInt64 aMaxSelfProgress,
 				 PRInt64 aCurTotalProgress,
 				 PRInt64 aMaxTotalProgress)
-#else /* !HAVE_NSITRANSFER_H */
+#else /* !HAVE_GECKO_1_8 */
 NS_IMETHODIMP
 MozDownload::OnProgressChange (nsIWebProgress *aWebProgress,
 			       nsIRequest *aRequest,
@@ -468,7 +493,7 @@ MozDownload::OnProgressChange (nsIWebProgress *aWebProgress,
 			       PRInt32 aMaxSelfProgress,
 			       PRInt32 aCurTotalProgress,
 			       PRInt32 aMaxTotalProgress)
-#endif /* HAVE_NSITRANSFER_H */
+#endif /* HAVE_GECKO_1_8 */
 {
 	if (mMaxSize >= 0 &&
 	    ((aMaxTotalProgress > 0 && mMaxSize < aMaxTotalProgress) ||
@@ -536,7 +561,14 @@ MozDownload::Cancel()
 	{
 		return;
 	}
-	
+
+#ifdef HAVE_GECKO_1_8
+	if (mCancelable)
+	{
+		/* FIXME: error code? */
+		mCancelable->Cancel (NS_BINDING_ABORTED);
+	}
+#else
 	if (mWebPersist)
 	{
 		mWebPersist->CancelSave ();
@@ -545,7 +577,8 @@ MozDownload::Cancel()
 	if (mObserver)
 	{
 		mObserver->Observe (nsnull, "oncancel", nsnull);
-	}	
+	}
+#endif
 }
 
 void
@@ -572,7 +605,7 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 				  nsILocalFile* inDestFile, const char *contentType,
 				  nsIURI* inOriginalURI, MozillaEmbedPersist *embedPersist,
 				  nsIInputStream *postData, nsISupports *aCacheKey,
-				  PRInt32 aMaxSize)
+				  PRInt64 aMaxSize)
 {
 	nsresult rv = NS_OK;
 
@@ -584,7 +617,7 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 			 strcmp (contentType, "text/xml") == 0 ||
 			 strcmp (contentType, "application/xhtml+xml") == 0));
 
-	nsCOMPtr<nsIWebBrowserPersist> webPersist = do_CreateInstance(persistContractID, &rv);
+	nsCOMPtr<nsIWebBrowserPersist> webPersist (do_CreateInstance(persistContractID, &rv));
 	NS_ENSURE_SUCCESS (rv, rv);
   
 	PRInt64 timeNow = PR_Now();
@@ -601,8 +634,14 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 
 	MozDownload *downloader = new MozDownload ();
 	/* dlListener attaches to its progress dialog here, which gains ownership */
+	/* FIXME is that still true? */
+#ifdef HAVE_GECKO_1_8
+	rv = downloader->InitForEmbed (inOriginalURI, destURI, fileDisplayName,
+				       nsnull, timeNow, webPersist, embedPersist, aMaxSize);
+#else
 	rv = downloader->InitForEmbed (inOriginalURI, destURI, fileDisplayName.get(),
 				       nsnull, timeNow, webPersist, embedPersist, aMaxSize);
+#endif
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	PRInt32 flags = nsIWebBrowserPersist::PERSIST_FLAGS_REPLACE_EXISTING_FILES;

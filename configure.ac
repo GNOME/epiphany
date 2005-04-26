@@ -278,6 +278,30 @@ AC_RUN_IFELSE(
 
 AC_MSG_RESULT([$result])
 
+dnl Determine gecko version
+dnl We don't use the version from the .pc file, since that's the app version
+dnl and not the Gecko version
+
+AC_MSG_CHECKING([[for gecko version]])
+
+AC_PREPROC_IFELSE(
+	[AC_LANG_SOURCE(
+		[[#include <mozilla-config.h>
+		  #define _DECL_VERSION(major,minor) ((major << 8) + minor)
+		  #if (_DECL_VERSION(MOZILLA_VERSION_MAJOR,MOZILLA_VERSION_MINOR) < _DECL_VERSION(1,8))
+		  #error No
+		  #endif]]
+	)],
+	[have_gecko_1_8=yes gecko_version="1.8"],
+	[have_gecko_1_8=no gecko_version="1.7"])
+
+AC_MSG_RESULT([$gecko_version])
+
+if test "x$have_gecko_1_8" = "xyes"; then
+	AC_DEFINE([HAVE_GECKO_1_8],[1],[Define if we have gecko 1.8])
+fi
+AM_CONDITIONAL([HAVE_GECKO_1_8],[test "x$have_gecko_1_8" = "xyes"])
+
 dnl Changed from PRUnichar* to nsAString& in 1.8a1 and on aviary branch
 
 AC_MSG_CHECKING([whether nsIFilePicker methods expect nsAString&])
@@ -290,22 +314,6 @@ AC_COMPILE_IFELSE(
 		  p->SetDefaultString (nsEmbedString());]]
 	)],
 	[AC_DEFINE([MOZ_NSIFILEPICKER_NSASTRING_],[1],[Define if nsIFilePicker uses nsAString&]) result=yes],
-	[result=no])
-
-AC_MSG_RESULT([$result])
-
-dnl Changed from char* to nsAString& in 1.8a1
-
-AC_MSG_CHECKING([whether nsIMIMEInfo methods expect nsAString&])
-
-AC_COMPILE_IFELSE(
-	[AC_LANG_PROGRAM(
-		[[#include <nsEmbedString.h>
-		  #include <mimetype/nsIMIMEInfo.h>]],
-		[[nsIMIMEInfo *p;
-		  p->SetDescription (nsEmbedString());]]
-	)],
-	[AC_DEFINE([MOZ_NSIMIMEINFO_NSACSTRING_],[1],[Define if nsIMIMEInfo uses nsAString&]) result=yes],
 	[result=no])
 
 AC_MSG_RESULT([$result])
@@ -330,23 +338,6 @@ AC_COMPILE_IFELSE(
 AC_DEFINE_UNQUOTED([MOZ_NSICONTENTPOLICY_VARIANT], [$variant], [Define the nsIContentPolicy API variant])
 
 AC_MSG_RESULT([variant $variant])
-
-dnl changed in 1.8a4
-
-AC_MSG_CHECKING([for whether nsIGlobalHistory2::AddURI takes a referrer])
-
-AC_COMPILE_IFELSE(
-	[AC_LANG_PROGRAM(
-		[[#include <nsIURI.h>
-		  #include <nsIGlobalHistory.h>
-		  #include <docshell/nsIGlobalHistory2.h>]],
-		[[nsIGlobalHistory2 *p;
-		  p->AddURI(nsnull,PR_FALSE,PR_FALSE,nsnull);]]
-	)],
-	[AC_DEFINE([MOZ_NSIGLOBALHISTORY2_ADDURI_WITH_REFERRER],[1],[Define if nsIGlobalHistory2::AddURI takes a referrer]) result=yes],
-	[result=no])
-
-AC_MSG_RESULT([$result])
 
 dnl Firefox doesn't have this API (?)
 
@@ -384,80 +375,12 @@ AC_COMPILE_IFELSE(
 
 AC_MSG_RESULT([$result])
 
-dnl Added in 1.8a6 on trunk
-dnl https://bugzilla.mozilla.org/show_bug.cgi?id=223310
-
-AC_MSG_CHECKING([whether nsIKeygenThread::StartKeyGeneration takes an nsIObserver])
-
-AC_COMPILE_IFELSE(
-	[AC_LANG_PROGRAM(
-		[[#include <pipnss/nsIKeygenThread.h>
-		  #include <nsIObserver.h>]],
-		[[nsIKeygenThread *p;
-		  nsIObserver *obs;
-		  p->StartKeyGeneration (obs);]]
-	)],
-	[AC_DEFINE([HAVE_NSIKEYGENTHREAD_NSIOBSERVER],[1],
-		   [Define if nsIKeygenThread::StartKeyGeneration takes an nsIObserver]) result=yes],
-	[result=no])
-
-AC_MSG_RESULT([$result])
-
-dnl Since 1.8a6
-
-AC_MSG_CHECKING([for nsIDownload::GetSize])
-
-AC_COMPILE_IFELSE(
-	[AC_LANG_PROGRAM(
-		[[#include <uriloader/nsIDownload.h>]],
-		[[nsIDownload *p;
-		  p->GetSize(nsnull);]]
-	)],
-	[AC_DEFINE([MOZ_NSIDOWNLOAD_GETSIZE],[1],[Define if nsIDownload::GetSize exists]) result=yes],
-	[result=no])
-
-AC_MSG_RESULT([$result])
-
-dnl Changed from PRBool to PRUin32 in 1.8b2
-
-AC_MSG_CHECKING([for nsIHelperAppLauncherDialog::Show arguments])
-
-AC_COMPILE_IFELSE(
-	[AC_LANG_SOURCE(
-		[[#include <exthandler/nsIHelperAppLauncherDialog.h>
-
-		  class Test : public nsIHelperAppLauncherDialog
-		  	{ public: NS_DECL_NSIHELPERAPPLAUNCHERDIALOG };
-
-		  NS_IMETHODIMP Test::Show(nsIHelperAppLauncher *aLauncher, nsISupports *aContext, PRUint32 aReason)
-		  { return NS_ERROR_NOT_IMPLEMENTED; }
-		]]
-	)],
-	[AC_DEFINE([MOZ_NSIHELPERAPPLAUNCHERDIALOG_UNSIGNED],[1],[Define if nsIHelperAppLauncherDialog::Show takes unsigned integer]) result=unsigned],
-	[result=signed])
-
-AC_MSG_RESULT([$result])
-
-dnl exists since 1.8a6
-
-AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsITransfer.h],
-	[AC_DEFINE([HAVE_NSITRANSFER_H],[1],[Define if nsITransfer.h exists])],
-	[AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/uriloader/nsITransfer.h],
-		[AC_DEFINE([HAVE_NSITRANSFER_H],[1],[Define if nsITransfer.h exists])])])
-
-dnl exists since 1.8b2
-
-AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsICancelable.h],
-	[AC_DEFINE([HAVE_NSICANCELABLE_H],[1],[Define if nsICancelable.h exists])],
-	[AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/necko/nsICancelable.h],
-		[AC_DEFINE([HAVE_NSICANCELABLE_H],[1],[Define if nsICancelable.h exists])])])
-
 dnl check for broken reload in GtkMozEmbed
 dnl This is fixed since 1.7.4 on 1.7 branch, and since 1.8a3 on trunk
 
 AC_MSG_CHECKING([for broken reload])
 
-if $PKG_CONFIG --atleast-version 1.7.5 $MOZILLA-gtkmozembed; then
+if $PKG_CONFIG --atleast-version=1.7.5 $MOZILLA-gtkmozembed; then
 	broken_reload=no
 else
 	broken_reload="couldn't autodetect, assuming yes"
@@ -465,21 +388,6 @@ else
 fi
 
 AC_MSG_RESULT([$broken_reload])
-
-dnl check for broken contextmenu event
-dnl This is fixed since 1.8a4
-dnl https://bugzilla.mozilla.org/show_bug.cgi?id=258193
-
-AC_MSG_CHECKING([for broken context menu event])
-
-if $PKG_CONFIG --atleast-version 1.8 $MOZILLA-gtkmozembed; then
-	broken_context_event=no
-else
-	broken_context_event="couldn't autodetect, assuming yes"
-	AC_DEFINE([MOZ_BROKEN_CTX_MENU_EVENT],[1],[Define if mozilla has a broken context menu event])
-fi
-
-AC_MSG_RESULT([$broken_context_event])
 
 dnl changed location in 1.8a6
 
@@ -529,7 +437,7 @@ AC_MSG_CHECKING([whether to enable native gtk+ filepicker])
 AC_ARG_ENABLE([filepicker],
 	AS_HELP_STRING([--enable-filepicker],[Whether to enable the gtk+ native filepicker; not needed when the mozilla build itself has native gtk+ filepicker enabled (default:enabled)]),
 	[filepicker=$enableval],
-	[filepicker=yes])
+	[if test "x$have_gecko_1_8"; then filepicker=no; else filepicker=yes; fi])
 AC_MSG_RESULT([$filepicker])
 
 AM_CONDITIONAL([ENABLE_FILEPICKER],[test "x$filepicker" = "xyes"])
