@@ -30,6 +30,7 @@
 #undef MOZILLA_INTERNAL_API
 #include <nsEmbedString.h>
 #define MOZILLA_INTERNAL_API 1
+#include <nsILocalFile.h>
 #include <nsMemory.h>
 
 static void mozilla_download_class_init	(MozillaDownloadClass *klass);
@@ -187,7 +188,7 @@ impl_get_mime (EphyDownload *download)
 	mozDownload->GetMIMEInfo (getter_AddRefs(mime));
         if (!mime) return g_strdup ("application/octet-stream");
 
-#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
+#ifdef HAVE_GECKO_1_8
         mime->GetMIMEType(mimeType);
 #else
 	char *tmp = nsnull;

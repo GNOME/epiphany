@@ -65,7 +65,7 @@
 /* FIXME: we don't generally have a timestamp for the user action which initiated this
  * content handler.
  */
-#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
+#ifdef HAVE_GECKO_1_8
 GContentHandler::GContentHandler()
 : mUserTime(0)
 {
@@ -84,7 +84,7 @@ GContentHandler::~GContentHandler()
 {
 	LOG ("GContentHandler dtor (%p)", this);
 
-#ifndef MOZ_NSIMIMEINFO_NSACSTRING_
+#ifndef HAVE_GECKO_1_8
 	if (mMimeType)
 	{
 		nsMemory::Free (mMimeType);
@@ -94,7 +94,7 @@ GContentHandler::~GContentHandler()
 
 NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 
-#ifdef MOZ_NSIHELPERAPPLAUNCHERDIALOG_UNSIGNED
+#ifdef HAVE_GECKO_1_8
 /* void show (in nsIHelperAppLauncher aLauncher, in nsISupports aContext, in unsigned long aReason); */
 NS_IMETHODIMP
 GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
@@ -120,7 +120,7 @@ GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
-#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
+#ifdef HAVE_GECKO_1_8
 	g_signal_emit_by_name (single, "handle_content", mMimeType.get(),
 			       mUrl.get(), &handled);
 #else
@@ -134,7 +134,7 @@ GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
 	}
 	else
 	{
-#ifdef HAVE_NSICANCELABLE_H
+#ifdef HAVE_GECKO_1_8
 		mLauncher->Cancel (NS_BINDING_ABORTED);
 #else
 		mLauncher->Cancel ();
@@ -225,7 +225,7 @@ NS_METHOD GContentHandler::Init ()
 	mLauncher->GetMIMEInfo (getter_AddRefs(MIMEInfo));
 	NS_ENSURE_TRUE (MIMEInfo, NS_ERROR_FAILURE);
 
-#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
+#ifdef HAVE_GECKO_1_8
 	rv = MIMEInfo->GetMIMEType (mMimeType);
 #else
 	rv = MIMEInfo->GetMIMEType (&mMimeType);
@@ -356,7 +356,7 @@ NS_METHOD GContentHandler::MIMEInitiateAction (void)
 
 	auto_downloads = eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS);
 
-#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
+#ifdef HAVE_GECKO_1_8
 	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType.get());
 	mPermission = ephy_file_check_mime (mMimeType.get());
 #else
@@ -420,7 +420,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 		/* HACK we use the application description to ask
 		   MozDownload to open the file when download
 		   is finished */
-#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
+#ifdef HAVE_GECKO_1_8
 		mimeInfo->SetApplicationDescription (desc);
 #else
 		mimeInfo->SetApplicationDescription (desc.get());
@@ -428,7 +428,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	}
 	else
 	{
-#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
+#ifdef HAVE_GECKO_1_8
 		mimeInfo->SetApplicationDescription (nsEmbedString ());
 #else
 		mimeInfo->SetApplicationDescription (nsnull);
@@ -445,7 +445,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	}
 	else if (mAction == CONTENT_ACTION_NONE)
 	{
-#ifdef HAVE_NSICANCELABLE_H
+#ifdef HAVE_GECKO_1_8
 		mLauncher->Cancel (NS_BINDING_ABORTED);
 #else
 		mLauncher->Cancel ();

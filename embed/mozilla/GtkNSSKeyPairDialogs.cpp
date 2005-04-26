@@ -46,14 +46,14 @@
 #include <nsIInterfaceRequestorUtils.h>
 #include <nsIKeygenThread.h>
 
-#ifdef HAVE_NSIKEYGENTHREAD_NSIOBSERVER
+#ifdef HAVE_GECKO_1_8
 #include <nsIObserver.h>
-#else /* !HAVE_NSIKEYGENTHREAD_NSIOBSERVER */
+#else /* !HAVE_GECKO_1_8 */
 #include <nsIDOMWindow.h>
 #ifdef ALLOW_PRIVATE_API
 #include "nsIDOMWindowInternal.h"
 #endif /* ALLOW_PRIVATE_API */
-#endif /* HAVE_NSIKEYGENTHREAD_NSIOBSERVER */
+#endif /* HAVE_GECKO_1_8 */
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkprogressbar.h>
@@ -82,7 +82,7 @@ GtkNSSKeyPairDialogs::~GtkNSSKeyPairDialogs ()
 NS_IMPL_ISUPPORTS1 (GtkNSSKeyPairDialogs, 
 		    nsIGeneratingKeypairInfoDialogs)
 
-#ifdef HAVE_NSIKEYGENTHREAD_NSIOBSERVER
+#ifdef HAVE_GECKO_1_8
 
 class KeyPairObserver : public nsIObserver
 {
@@ -105,7 +105,7 @@ NS_IMETHODIMP KeyPairObserver::Observe (nsISupports *aSubject, const char *aTopi
        return NS_OK;
 }
 
-#else /* !HAVE_NSIKEYGENTHREAD_NSIOBSERVER */
+#else /* !HAVE_GECKO_1_8 */
 
 /* ------------------------------------------------------------
  * A dummy implementation of nsIDomWindowInternal so that
@@ -140,7 +140,7 @@ NS_IMETHODIMP KeyPairHelperWindow::Close()
 	return NS_OK;
 }
 
-#endif /* HAVE_NSIKEYGENTHREAD_NSIOBSERVER */
+#endif /* HAVE_GECKO_1_8 */
 
 /* ------------------------------------------------------------ */
 static void
@@ -167,11 +167,11 @@ struct KeyPairInfo
 {
 	GtkWidget *progress;
 	GtkWidget *dialog;
-#ifdef HAVE_NSIKEYGENTHREAD_NSIOBSERVER
+#ifdef HAVE_GECKO_1_8
 	KeyPairObserver *helper;
 #else
  	KeyPairHelperWindow *helper;
-#endif /* HAVE_NSIKEYGENTHREAD_NSIOBSERVER */
+#endif /* HAVE_GECKO_1_8 */
 };
 
 
@@ -238,7 +238,7 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 
 	/* Create a helper class that just waits for close events
 	 * from the other thread */
-#ifdef HAVE_NSIKEYGENTHREAD_NSIOBSERVER
+#ifdef HAVE_GECKO_1_8
        nsCOMPtr<KeyPairObserver> helper = new KeyPairObserver;
 #else
 	nsCOMPtr<KeyPairHelperWindow> helper = new KeyPairHelperWindow;
@@ -268,7 +268,7 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 	return NS_OK;
 }
 
-#ifndef HAVE_NSIKEYGENTHREAD_NSIOBSERVER
+#ifndef HAVE_GECKO_1_8
 
 /*************************************************************
  * Misc functions for the nsIDomWindowInternal implementation
@@ -756,4 +756,4 @@ NS_IMETHODIMP KeyPairHelperWindow::GetWindowRoot(nsIDOMEventTarget * *aWindowRoo
     MOZ_NOT_IMPLEMENTED
 }
 
-#endif /* !HAVE_NSIKEYGENTHREAD_NSIOBSERVER */
+#endif /* !HAVE_GECKO_1_8 */

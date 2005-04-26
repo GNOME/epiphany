@@ -42,29 +42,31 @@
 #ifndef MozDownload_h__
 #define MozDownload_h__
 
-#include "config.h"
-
 #include "mozilla-embed-persist.h"
 #include "downloader-view.h"
 #include "ephy-download.h"
 #include "ephy-embed-shell.h"
 
+#include <nsCOMPtr.h>
 #include <nsIWebProgressListener.h>
-#include <nsIDOMDocument.h>
 #include <nsIURI.h>
-#include <nsILocalFile.h>
-#include <nsIWebBrowserPersist.h>
-#include <nsIObserver.h>
-#include <nsIRequest.h>
 #include <nsIMIMEInfo.h>
 
-#ifdef HAVE_NSITRANSFER_H
+#ifdef HAVE_GECKO_1_8
+#include <nsICancelable.h>
 #include <nsITransfer.h>
 #else
 #include <nsIDownload.h>
 #endif
 
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
+
+class nsIDOMDocument;
+class nsILocalFile;
+class nsIWebBrowserPersist;
+class nsIObserver;
+class nsIRequest;
+class nsIInputStream;
 
 /* MozDownload
    Holds information used to display a single download in the UI. This object is 
@@ -91,11 +93,11 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceUri
 				  nsILocalFile* inDestFile, const char *contentType,
 				  nsIURI* inOriginalURI, MozillaEmbedPersist *embedPersist,
 				  nsIInputStream *postData, nsISupports *aCacheKey,
-				  PRInt32 aMaxSize);
+				  PRInt64 aMaxSize);
 nsresult BuildDownloadPath (const char *defaultFileName, nsILocalFile **_retval);
 
 class MozDownload :
-#ifdef HAVE_NSITRANSFER_H
+#ifdef HAVE_GECKO_1_8
 		    public nsITransfer
 #else
 		    public nsIDownload,
@@ -108,19 +110,17 @@ public:
     
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIWEBPROGRESSLISTENER
-#ifdef HAVE_NSITRANSFER_H
+#ifdef HAVE_GECKO_1_8
 	NS_DECL_NSIWEBPROGRESSLISTENER2
-#endif
 	NS_DECL_NSITRANSFER
-#ifndef HAVE_NSITRANSFER_H
-	NS_DECL_NSIDOWNLOAD
-#endif
 
-#ifdef HAVE_NSITRANSFER_H
 	nsresult GetMIMEInfo (nsIMIMEInfo **aMIMEInfo);
 	nsresult GetTargetFile (nsILocalFile **aFile);
 	nsresult GetSource(nsIURI * *aSource);
 	nsresult GetPercentComplete(PRInt32 *aPercentComplete);
+#else
+	NS_DECL_NSITRANSFER
+	NS_DECL_NSIDOWNLOAD
 #endif
 
 	virtual void Cancel();
@@ -131,18 +131,26 @@ public:
 	nsresult GetCurrentProgress (PRInt64 *aCurrentProgress);
 	nsresult GetTotalProgress   (PRInt64 *aTProgress);
  	nsresult GetElapsedTime     (PRInt64 *aTProgress);
+
+#ifdef HAVE_GECKO_1_8
+	nsresult InitForEmbed       (nsIURI *aSource, nsIURI *aTarget,
+				     const nsAString &aDisplayName, nsIMIMEInfo *aMIMEInfo,
+				     PRTime aStartTime, nsICancelable *aCancelable,
+				     MozillaEmbedPersist *aEmbedPersist, PRInt64 aMaxSize);
+#else
 	nsresult InitForEmbed       (nsIURI *aSource, nsIURI *aTarget,
 				     const PRUnichar *aDisplayName, nsIMIMEInfo *aMIMEInfo,
 				     PRInt64 startTime, nsIWebBrowserPersist *aPersist,
-				     MozillaEmbedPersist *aEmbedPersist, PRInt32 aMaxSize);
+				     MozillaEmbedPersist *aEmbedPersist, PRInt64 aMaxSize);
+#endif
 
 protected:
 	nsCOMPtr<nsIURI>        mSource;
 	nsCOMPtr<nsIURI>        mDestination;
 
 	nsCOMPtr<nsIMIMEInfo>   mMIMEInfo;
-	PRInt64		    	mLastUpdate;
-	PRInt64                 mStartTime;
+	PRTime                  mStartTime;
+	PRTime		    	mLastUpdate;
 	PRInt64		    	mElapsed;
 	PRInt32		    	mInterval;
 	PRInt32                 mPercentComplete;
@@ -152,8 +160,12 @@ protected:
 
 	nsresult                mStatus;
 
-	nsCOMPtr<nsIObserver>		mObserver;   
+#ifdef HAVE_GECKO_1_8
+	nsCOMPtr<nsICancelable>		mCancelable;
+#else
 	nsCOMPtr<nsIWebBrowserPersist>  mWebPersist;
+	nsCOMPtr<nsIObserver>		mObserver;
+#endif
 	nsCOMPtr<nsIRequest>		mRequest;
 	EphyDownload                   *mEphyDownload;
 	DownloaderView                 *mDownloaderView;
