@@ -437,7 +437,7 @@ AC_MSG_CHECKING([whether to enable native gtk+ filepicker])
 AC_ARG_ENABLE([filepicker],
 	AS_HELP_STRING([--enable-filepicker],[Whether to enable the gtk+ native filepicker; not needed when the mozilla build itself has native gtk+ filepicker enabled (default:enabled)]),
 	[filepicker=$enableval],
-	[if test "x$have_gecko_1_8"; then filepicker=no; else filepicker=yes; fi])
+	[if test "x$have_gecko_1_8" = "xyes"; then filepicker=no; else filepicker=yes; fi])
 AC_MSG_RESULT([$filepicker])
 
 AM_CONDITIONAL([ENABLE_FILEPICKER],[test "x$filepicker" = "xyes"])
