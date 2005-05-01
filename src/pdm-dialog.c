@@ -184,7 +184,7 @@ pdm_dialog_show_help (PdmDialog *pd)
 	GtkWidget *notebook, *window;
 	int id;
 
-	char *help_preferences[] = {
+	static char * const help_preferences[] = {
 		"managing-cookies",
 		"managing-passwords"
 	};

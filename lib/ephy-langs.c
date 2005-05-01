@@ -30,6 +30,9 @@
 
 #include <libxml/xmlreader.h>
 
+/* If you add more language codes here, remember also to add them in the default font size
+ * section in data/default-prefs-common.js.
+ */
 static const EphyFontsLanguageInfo font_languages [] =
 {
 	/* Translators: The text before the "|" is context to help you decide on
@@ -77,14 +80,42 @@ static const EphyFontsLanguageInfo font_languages [] =
 	/* Translators: The text before the "|" is context to help you decide on
 	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Turkish"),				"tr" },
+#ifdef HAVE_GECKO_1_8
 	/* Translators: The text before the "|" is context to help you decide on
 	 * the correct translation. You MUST OMIT it in the translated string. */
-	{ N_("select fonts for|Unicode"),				"x-unicode" },
+	{ N_("select fonts for|Armenian"),				"x-armn" },
 	/* Translators: The text before the "|" is context to help you decide on
 	 * the correct translation. You MUST OMIT it in the translated string. */
-	{ N_("select fonts for|Western"),				"x-western" }
+	{ N_("select fonts for|Bengali"),				"x-beng" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
+	{ N_("select fonts for|Unified Canadian Syllabics"),		"x-cans" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
+	{ N_("select fonts for|Ethiopic"),				"x-ethi" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
+	{ N_("select fonts for|Georgian"),				"x-geor" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
+	{ N_("select fonts for|Gujarati"),				"x-gujr" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
+	{ N_("select fonts for|Gurmukhi"),				"x-guru" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
+	{ N_("select fonts for|Khmer"),					"x-khmr" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
+	{ N_("select fonts for|Malayalam"),				"x-mlym" },
+#endif /* HAVE_GECKO_1_8 */
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
+	{ N_("select fonts for|Western"),				"x-western" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
+	{ N_("select fonts for|Other Scripts"),				"x-unicode" }
 };
-static const guint n_font_languages = G_N_ELEMENTS (font_languages);
 
 const EphyFontsLanguageInfo *
 ephy_font_languages (void)
@@ -95,7 +126,7 @@ ephy_font_languages (void)
 guint			 
 ephy_font_n_languages (void)
 {
-	return n_font_languages;
+	return G_N_ELEMENTS (font_languages);
 }
 
 /* sanitise the languages list according to the rules for HTTP accept-language
