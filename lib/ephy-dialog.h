@@ -94,7 +94,7 @@ void		ephy_dialog_construct		(EphyDialog *dialog,
 void		ephy_dialog_add_enum		(EphyDialog *dialog,
 						 const char *id,
 						 guint n_items,
-						 const char **items);
+						 const char * const *items);
 
 void		ephy_dialog_set_data_column	(EphyDialog *dialog,
 						 const char *id,

@@ -1,5 +1,24 @@
 2005-05-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/default-prefs-common.js:
+	* data/epiphany.schemas.in:
+	* lib/ephy-langs.c:
+	A src/languages.h:
+	* src/prefs-dialog.c: (prefs_dialog_show_help),
+	(create_language_section), (get_download_button_label),
+	(prefs_dialog_init):
+
+	Add more font languages, and generate the language list
+	from the unicode supplemental data.
+
+	* lib/ephy-dialog.c:
+	* lib/ephy-dialog.h:
+	* src/prefs-dialog.c:
+
+	Constification.
+
+2005-05-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/EphySidebar.cpp:
 	* embed/mozilla/EphySidebar.h:
 	* embed/mozilla/MozRegisterComponents.cpp:

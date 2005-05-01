@@ -1096,7 +1096,7 @@ void
 ephy_dialog_add_enum (EphyDialog *dialog,
 		      const char *id,
 		      guint n_items,
-		      const char **items)
+		      const char *const *items)
 {
 	PropertyInfo *info;
 	int i = 0;

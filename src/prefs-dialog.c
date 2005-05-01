@@ -87,194 +87,12 @@ void language_editor_up_button_clicked_cb	(GtkWidget *button,
 void language_editor_down_button_clicked_cb	(GtkWidget *button,
 						 PrefsDialog *pd);
 
-static const char * const languages[] =
-{
-	/* If you're missing your language/locale combination, file a bug at
-	 * http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany
-	 */
-	"af",
-	"am",
-	"an",
-	"ar",
-	"ar-ae",
-	"ar-bh",
-	"ar-dz",
-	"ar-eg",
-	"ar-iq",
-	"ar-jo",
-	"ar-kw",
-	"ar-lb",
-	"ar-ly",
-	"ar-ma",
-	"ar-om",
-	"ar-qa",
-	"ar-sa",
-	"ar-sy",
-	"ar-tn",
-	"ar-ye",
-	"ast",
-	"az",
-	"be",
-	"bg",
-	"bn",
-	"br",
-	"bs",
-	"ca",
-	"ce",
-	"ch",
-	"co",
-	"cs",
-	"cv",
-	"cy",
-	"da",
-	"de",
-	"de-at",
-	"de-ch",
-	"de-de",
-	"de-li",
-	"de-lu",
-	"el",
-	"en",
-	"en-au",
-	"en-bz",
-	"en-ca",
-	"en-gb",
-	"en-ie",
-	"en-jm",
-	"en-nz",
-	"en-ph",
-	"en-tt",
-	"en-us",
-	"en-za",
-	"en-zw",
-	"eo",
-	"es",
-	"es-ar",
-	"es-bo",
-	"es-cl",
-	"es-co",
-	"es-cr",
-	"es-do",
-	"es-ec",
-	"es-es",
-	"es-gt",
-	"es-hn",
-	"es-mx",
-	"es-ni",
-	"es-pa",
-	"es-pe",
-	"es-pr",
-	"es-py",
-	"es-sv",
-	"es-uy",
-	"es-ve",
-	"et",
-	"eu",
-	"fa",
-	"fi",
-	"fj",
-	"fo",
-	"fr",
-	"fr-be",
-	"fr-ca",
-	"fr-ch",
-	"fr-fr",
-	"fr-lu",
-	"fr-mc",
-	"fy",
-	"ga",
-	"gd",
-	"gl",
-	"gu",
-	"he",
-	"hsb",
-	"hi",
-	"hr",
-	"ht",
-	"hu",
-	"hy",
-	"ia",
-	"id",
-	"ie",
-	"is",
-	"it",
-	"it-ch",
-	"it-it",
-	"iu",
-	"ja",
-	"ka",
-	"kk",
-	"ko",
-	"ko-kp",
-	"ko-kr",
-	"ky",
-	"la",
-	"lb",
-	"li",
-	"lt",
-	"lv",
-	"mi",
-	"mk-mk",
-	"ml",
-	"mn",
-	"mo",
-	"mr",
-	"ms",
-	"nb",
-	"ne",
-	"ng",
-	"nl",
-	"nl-be",
-	"nn",
-	"no",
-	"nv",
-	"oc",
-	"om",
-	"pa",
-	"pl",
-	"pt",
-	"pt-br",
-	"qu",
-	"rm",
-	"ro",
-	"ru",
-	"sa",
-	"sc",
-	"sd",
-	"sg",
-	"sk",
-	"sl",
-	"so",
-	"sq",
-	"sr",
-	"sv",
-	"sv-fi",
-	"sw",
-	"ta",
-	"th",
-	"tk",
-	"tr",
-	"uk",
-	"ve",
-	"vi",
-	"vo",
-	"wa",
-	"xh",
-	"yi",
-	"zh",
-	"zh-cn",
-	"zh-hk",
-	"zh-sg",
-	"zh-tw",
-	"zu"
-};
+#include "languages.h"
 
-static const
-char *cookies_accept_enum [] =
+static const char * const cookies_accept_enum [] =
 {
 	"anywhere", "current site", "nowhere"
 };
-static guint n_cookies_accept_enum = G_N_ELEMENTS (cookies_accept_enum);
 
 enum
 {
@@ -282,8 +100,7 @@ enum
 	FONT_TYPE_MONOSPACE
 };
 
-const
-char *fonts_types[] =
+static const char * const fonts_types[] =
 {
 	"variable",
 	"monospace"
@@ -296,8 +113,7 @@ enum
 	FONT_SIZE_MIN
 };
 
-const
-char *size_prefs [] =
+static const char * const size_prefs [] =
 {
 	CONF_RENDERING_FONT_FIXED_SIZE,
 	CONF_RENDERING_FONT_VAR_SIZE,
@@ -450,6 +266,7 @@ struct PrefsDialogPrivate
 
 /* gtk+' gettext domain */
 #define GTK_DOMAIN "gtk20"
+#define DGETTEXT_GTK_(x) dgettext(GTK_DOMAIN, x)
 
 static GObjectClass *parent_class = NULL;
 
@@ -525,7 +342,7 @@ prefs_dialog_show_help (EphyDialog *dialog)
 	GtkWidget *window, *notebook;
 	int id;
 
-	char *help_preferences[] = {
+	static char * const help_preferences[] = {
 		"general-preferences",
 		"fonts-and-colors-preferences",
 		"privacy-preferences",
@@ -1236,7 +1053,7 @@ create_language_section (EphyDialog *dialog)
 	renderer = gtk_cell_renderer_text_new ();
 
 	gtk_tree_view_insert_column_with_attributes (treeview,
-						     0, "Language",
+						     0, _("Language"),
 						     renderer,
 						     "text", 0,
 						     NULL);
@@ -1321,7 +1138,7 @@ get_download_button_label (void)
 
 	if (key == NULL || g_utf8_collate (key, "~") == 0)
 	{
-		label = g_strdup (dgettext (GTK_DOMAIN, "Home"));
+		label = g_strdup (DGETTEXT_GTK_("Home"));
 	}
 	else if ((converted_dp != NULL && g_utf8_collate (key, converted_dp) == 0) ||
 		 g_utf8_collate (key, "Downloads") == 0)
@@ -1331,7 +1148,7 @@ get_download_button_label (void)
 	else if (g_utf8_collate (key, "~/Desktop") == 0 ||
 	         g_utf8_collate (key, "Desktop") == 0)
 	{
-		label = g_strdup (dgettext (GTK_DOMAIN, "Desktop"));
+		label = g_strdup (DGETTEXT_GTK_("Desktop"));
 	}
 	else
 	{
@@ -1382,7 +1199,7 @@ prefs_dialog_init (PrefsDialog *pd)
 			       NULL);
 
 	ephy_dialog_add_enum (dialog, properties[ACCEPT_COOKIES_PROP].id,
-			      n_cookies_accept_enum, cookies_accept_enum);
+			      G_N_ELEMENTS (cookies_accept_enum), cookies_accept_enum);
 
 	ephy_dialog_get_controls
 		(dialog,
