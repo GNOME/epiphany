@@ -36,8 +36,7 @@
 #include "ephy-embed-single.h"
 #include "ephy-debug.h"
 
-/* Implementation file */
-NS_IMPL_ISUPPORTS2(EphySidebar, nsISidebar, nsIClassInfo)
+NS_IMPL_ISUPPORTS1_CI(EphySidebar, nsISidebar)
 
 EphySidebar::EphySidebar()
 {
@@ -102,92 +101,4 @@ EphySidebar::AddSearchEngine (const char *aEngineURL,
 			       aEngineURL, aIconURL, title.get(), &result);
 
 	return NS_OK;
-}
-
-//------------------------------------------------------------------------------
-//nsIClassInfo Impl.
-//------------------------------------------------------------------------------
-
-/* void getInterfaces (out PRUint32 count, [array, size_is (count), retval] out nsIIDPtr array); */
-NS_IMETHODIMP EphySidebar::GetInterfaces(PRUint32 *aCount, nsIID * **aArray)
-{
-	PRUint32 count = 2;
-
-	*aCount = count;
-
-	*aArray = NS_STATIC_CAST(nsIID **, nsMemory::Alloc(count * sizeof(nsIID *)));
-	NS_ENSURE_TRUE(*aArray, NS_ERROR_OUT_OF_MEMORY);
-
-	  nsIID *iid = NS_STATIC_CAST(nsIID *,
-				      nsMemory::Clone(&(NS_GET_IID(nsISidebar)),
-				      sizeof(nsIID)));
-	if (!iid)
-	{
-		NS_FREE_XPCOM_ALLOCATED_POINTER_ARRAY(0, *aArray);
-
-		return NS_ERROR_OUT_OF_MEMORY;
-	}
-	(*aArray)[0] = iid;
-
-
-	iid = NS_STATIC_CAST(nsIID *,
-			     nsMemory::Clone(&(NS_GET_IID(nsIClassInfo)),
-			     sizeof(nsIID)));
-	if (!iid)
-	{
-		NS_FREE_XPCOM_ALLOCATED_POINTER_ARRAY(1, *aArray);
-
-		return NS_ERROR_OUT_OF_MEMORY;
-	}
-	(*aArray)[1] = iid;
-
-	return NS_OK;
-}
-
-/* nsISupports getHelperForLanguage (in PRUint32 language); */
-NS_IMETHODIMP EphySidebar::GetHelperForLanguage(PRUint32 language, nsISupports **_retval)
-{
-	*_retval = nsnull;
-	return NS_OK;
-}
-
-/* readonly attribute string contractID; */
-NS_IMETHODIMP EphySidebar::GetContractID(char * *aContractID)
-{
-	*aContractID = nsCRT::strdup(NS_SIDEBAR_CONTRACTID);
-	return NS_OK;
-}
-
-/* readonly attribute string classDescription; */
-NS_IMETHODIMP EphySidebar::GetClassDescription(char * *aClassDescription)
-{
-	*aClassDescription = nsCRT::strdup("Sidebar");
-	return NS_OK;
-}
-
-/* readonly attribute nsCIDPtr classID; */
-NS_IMETHODIMP EphySidebar::GetClassID(nsCID * *aClassID)
-{
-	*aClassID = nsnull;
-	return NS_OK;
-}
-
-/* readonly attribute PRUint32 implementationLanguage; */
-NS_IMETHODIMP EphySidebar::GetImplementationLanguage(PRUint32 *aImplementationLanguage)
-{
-	*aImplementationLanguage = nsIProgrammingLanguage::CPLUSPLUS;
-	return NS_OK;
-}
-
-/* readonly attribute PRUint32 flags; */
-NS_IMETHODIMP EphySidebar::GetFlags(PRUint32 *aFlags)
-{
-	*aFlags = nsIClassInfo::DOM_OBJECT;
-	return NS_OK;
-}
-
-/* [notxpcom] readonly attribute nsCID classIDNoAlloc; */
-NS_IMETHODIMP EphySidebar::GetClassIDNoAlloc(nsCID *aClassIDNoAlloc)
-{
-	return NS_ERROR_NOT_AVAILABLE;
 }

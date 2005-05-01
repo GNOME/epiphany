@@ -37,11 +37,10 @@
     {0xb1, 0x8e, 0x6e, 0xe5, 0xd8, 0x5a, 0x20, 0x2a} \
 }
 
-class EphySidebar : public nsISidebar, nsIClassInfo
+class EphySidebar : public nsISidebar
 {
   public:
 	NS_DECL_ISUPPORTS
-	NS_DECL_NSICLASSINFO
 	NS_DECL_NSISIDEBAR
 
 	EphySidebar();

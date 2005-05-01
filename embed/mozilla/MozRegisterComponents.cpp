@@ -70,7 +70,10 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSKeyPairDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSSecurityWarningDialogs)
 #endif
- 
+
+/* class information */ 
+NS_DECL_CLASSINFO(EphySidebar)
+
 static NS_METHOD
 RegisterContentPolicy(nsIComponentManager *aCompMgr, nsIFile *aPath,
 		      const char *registryLocation, const char *componentType,
@@ -186,7 +189,13 @@ static const nsModuleComponentInfo sAppComps[] = {
 		EPHY_SIDEBAR_CID,
 		NS_SIDEBAR_CONTRACTID,
 		EphySidebarConstructor,
-		RegisterSidebar
+		RegisterSidebar,
+		nsnull /* no unregister func */,
+		nsnull /* no factory destructor */,
+		NS_CI_INTERFACE_GETTER_NAME(EphySidebar),
+		nsnull /* no language helper */,
+		&NS_CLASSINFO_NAME(EphySidebar),
+		nsIClassInfo::DOM_OBJECT
 	},
 };
 
