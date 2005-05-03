@@ -479,24 +479,30 @@ impl_get_location (EphyEmbed *embed,
                    gboolean toplevel)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-	char *l;
 	nsresult rv;
-	nsEmbedCString url;
 
+	nsCOMPtr<nsIURI> uri;
 	if (toplevel)
 	{
-		rv = mpriv->browser->GetDocumentUrl (url);
-		l = (NS_SUCCEEDED (rv) && url.Length()) ?
-		     g_strdup (url.get()) : NULL;	   	
+		rv = mpriv->browser->GetDocumentURI (getter_AddRefs (uri));
 	}
 	else
 	{
-		rv = mpriv->browser->GetTargetDocumentUrl (url);
-		l = (NS_SUCCEEDED (rv) && url.Length()) ?
-		     g_strdup (url.get()) : NULL;	   	
+		rv = mpriv->browser->GetTargetDocumentURI (getter_AddRefs (uri));
 	}
 
-	return l;
+	if (NS_FAILED (rv)) return NULL;
+
+	nsCOMPtr<nsIURI> furi;
+	rv = uri->Clone (getter_AddRefs (furi));
+	if (NS_FAILED (rv)) return NULL;
+
+	furi->SetPassword (nsEmbedCString());
+
+	nsEmbedCString url;
+	furi->GetSpec (url);
+
+	return url.Length() ? g_strdup (url.get()) : NULL;
 }
 
 static void

@@ -159,8 +159,8 @@ public:
 
 	nsresult GetDocument (nsIDOMDocument **aDOMDocument);
 	nsresult GetTargetDocument (nsIDOMDocument **aDOMDocument);
-	nsresult GetDocumentUrl (nsACString &url);
-	nsresult GetTargetDocumentUrl (nsACString &url);
+	nsresult GetDocumentURI (nsIURI **aURI);
+	nsresult GetTargetDocumentURI (nsIURI **aURI);
 	nsresult GetDOMWindow (nsIDOMWindow **window);
 
 	nsresult GetHasModifiedForms (PRBool *modified);

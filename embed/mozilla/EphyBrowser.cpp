@@ -936,48 +936,38 @@ nsresult EphyBrowser::GetDOMWindow (nsIDOMWindow **aDOMWindow)
 	return NS_OK;
 }
 
-nsresult EphyBrowser::GetDocumentUrl (nsACString &url)
+nsresult EphyBrowser::GetDocumentURI (nsIURI **aURI)
 {
+	if (!mDOMWindow) return NS_ERROR_NOT_INITIALIZED;
+
 	nsresult rv;
-
-	NS_ENSURE_TRUE (mDOMWindow, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIDOMDocument> DOMDocument;
-	mDOMWindow->GetDocument (getter_AddRefs(DOMDocument));
-	NS_ENSURE_TRUE (DOMDocument, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIDOM3Document> doc = do_QueryInterface(DOMDocument);
-	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
-
-	nsEmbedString docURI;
-	rv = doc->GetDocumentURI (docURI);
+	nsCOMPtr<nsIWebNavigation> webNav (do_GetInterface (mDOMWindow, &rv));
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	NS_UTF16ToCString (docURI, NS_CSTRING_ENCODING_UTF8, url);
-
-	return NS_OK;
+	return webNav->GetCurrentURI (aURI);
 }
 
-nsresult EphyBrowser::GetTargetDocumentUrl (nsACString &url)
+nsresult EphyBrowser::GetTargetDocumentURI (nsIURI **aURI)
 {
+	if (!mWebBrowser) return NS_ERROR_NOT_INITIALIZED;
+
+        nsCOMPtr<nsIDOMDocument> domDoc;
+	GetTargetDocument (getter_AddRefs(domDoc));
+	NS_ENSURE_TRUE (domDoc, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIDOMDocumentView> docView (do_QueryInterface (domDoc));
+	NS_ENSURE_TRUE (docView, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIDOMAbstractView> abstractView;
+	docView->GetDefaultView (getter_AddRefs (abstractView));
+	NS_ENSURE_TRUE (abstractView, NS_ERROR_FAILURE);
+	/* the abstract view is really the DOM window */
+
 	nsresult rv;
-
-	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
-
-        nsCOMPtr<nsIDOMDocument> DOMDocument;
-	GetTargetDocument (getter_AddRefs(DOMDocument));
-	NS_ENSURE_TRUE (DOMDocument, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIDOM3Document> doc = do_QueryInterface(DOMDocument);
-	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
-
-	nsEmbedString docURI;
-	rv = doc->GetDocumentURI (docURI);
+	nsCOMPtr<nsIWebNavigation> webNav (do_GetInterface (abstractView, &rv));
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	NS_UTF16ToCString (docURI, NS_CSTRING_ENCODING_UTF8, url);
-
-	return NS_OK;
+	return webNav->GetCurrentURI (aURI);
 }
 
 nsresult EphyBrowser::ForceEncoding (const char *encoding) 
