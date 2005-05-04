@@ -183,19 +183,17 @@ impl_save (EphyEmbedPersist *persist)
 
 	/* Get the uri to save to */
 	nsCOMPtr<nsIURI> inURI;
-	nsEmbedCString sURI;
 	if (uri)
 	{
-		sURI.Assign (uri);
+		/* FIXME: origin charset!! */
+		rv = EphyUtils::NewURI (getter_AddRefs(inURI), nsEmbedCString(uri));
+		NS_ENSURE_SUCCESS (rv, FALSE);
 	}
 	else
 	{
-		rv = browser->GetDocumentUrl (sURI);
+		rv = browser->GetDocumentURI (getter_AddRefs (inURI));
 		NS_ENSURE_SUCCESS (rv, FALSE);
 	}
-
-	rv = EphyUtils::NewURI (getter_AddRefs(inURI), sURI);
-	NS_ENSURE_SUCCESS (rv, FALSE);
 
 	/* Get post data */
 	nsCOMPtr<nsIInputStream> postData;
@@ -245,7 +243,7 @@ impl_save (EphyEmbedPersist *persist)
 	 */
 	NS_ENSURE_TRUE (!(flags & EPHY_EMBED_PERSIST_COPY_PAGE) || pageDescriptor, FALSE);
 
-	if (filename == NULL)
+	if (filename == NULL || filename[0] == '\0')
 	{
 		/* Create an header sniffer and do the save */
 		nsCOMPtr<nsIWebBrowserPersist> webPersist =
