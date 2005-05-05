@@ -199,7 +199,7 @@ static const nsModuleComponentInfo sAppComps[] = {
 	},
 };
 
-#ifdef HAVE_MOZILLA_PSM
+#if defined(HAVE_MOZILLA_PSM) && !defined(HAVE_GECKO_1_8)
 /* 5999dfd3-571f-4fcf-964b-386879f5cded */
 #define NEW_CID { 0x5999dfd3, 0x571f, 0x4fcf, { 0x96, 0x4b, 0x38, 0x68, 0x79, 0xf5, 0xcd, 0xed } }
 
@@ -234,7 +234,7 @@ reregister_secure_browser_ui (nsIComponentManager *cm,
 
 	return rv;
 }
-#endif /* HAVE_MOZILLA_PSM */
+#endif /* defined(HAVE_MOZILLA_PSM) && !defined(HAVE_GECKO_1_8) */
 
 gboolean
 mozilla_register_components (void)
@@ -286,14 +286,14 @@ mozilla_register_components (void)
 		}
 	}
 
-#ifdef HAVE_MOZILLA_PSM
+#if defined(HAVE_MOZILLA_PSM) && !defined(HAVE_GECKO_1_8)
 	/* Workaround for http://bugzilla.gnome.org/show_bug.cgi?id=164670 */
 	rv = reregister_secure_browser_ui (cm, cr);
 	if (NS_FAILED (rv))
 	{
 		g_warning ("Failed to divert the nsISecureBrowserUI implementation!\n");
 	}
-#endif /* HAVE_MOZILLA_PSM */
+#endif /* defined(HAVE_MOZILLA_PSM) && !defined(HAVE_GECKO_1_8) */
 
 	return ret;
 }

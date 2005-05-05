@@ -525,6 +525,13 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 #ifdef HAVE_MOZILLA_PSM
+#ifdef HAVE_GECKO_1_8
+	nsCOMPtr<nsIDocShell> docShell (do_GetInterface (mWebBrowser, &rv));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	rv = docShell->GetSecurityUI (getter_AddRefs (mSecurityInfo));
+	NS_ENSURE_SUCCESS (rv, rv);
+#else
 	/* FIXME: mozilla sucks! nsWebBrowser already has an instance of this,
 	 * but we cannot get to it!
 	 * See https://bugzilla.mozilla.org/show_bug.cgi?id=94974
@@ -561,11 +568,12 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 			NS_ENSURE_SUCCESS (rv, rv);
 		}
 	}
+#endif /* HAVE_GECKO_1_8 */
 	if (!mSecurityInfo)
 	{
-		g_warning ("Failed to instantiate nsISecureBrowserUI!\n");
+		g_warning ("Failed to get nsISecureBrowserUI!\n");
  	}
-#endif
+#endif /* HAVE_MOZILLA_PSM */
 
 	mInitialized = PR_TRUE;
 
