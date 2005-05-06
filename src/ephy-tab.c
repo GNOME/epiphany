@@ -1031,9 +1031,12 @@ ephy_tab_link_message_cb (EphyEmbed *embed,
 }
 
 static void
-ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
+ephy_tab_address_cb (EphyEmbed *embed,
+		     const char *address,
+		     EphyTab *tab)
 {
 	const char *uv_address;
+	char *freeme = NULL;
 
 	LOG ("ephy_tab_address_cb tab %p address %s", tab, address);
 
@@ -1045,7 +1048,7 @@ ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 	}
 	else
 	{
-		uv_address = address;
+		uv_address = freeme = ephy_embed_get_location (embed, TRUE);
 	}
 
 	if (tab->priv->address_expire == EPHY_TAB_ADDRESS_EXPIRE_NOW)
@@ -1056,6 +1059,8 @@ ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 	ephy_tab_set_link_message (tab, NULL);
 	ephy_tab_set_icon_address (tab, NULL);
 	ephy_tab_update_navigation_flags (tab, embed);
+
+	g_free (freeme);
 }
 
 static void

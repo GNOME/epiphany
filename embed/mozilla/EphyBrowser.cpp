@@ -255,8 +255,14 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 		if (!shouldLoad) return NS_OK;
 #endif
 
+		/* Hide password part */
+		favUri->SetPassword (nsEmbedCString ());
+
+		nsEmbedCString spec;
+		favUri->GetSpec (spec);
+
 		/* ok, we accept this as a valid favicon for this site */
-		g_signal_emit_by_name (mOwner->mEmbed, "ge_favicon", faviconUrl.get());
+		g_signal_emit_by_name (mOwner->mEmbed, "ge_favicon", spec.get());
 	}
 
 	return NS_OK;
