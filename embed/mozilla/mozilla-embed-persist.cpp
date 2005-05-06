@@ -40,6 +40,7 @@
 #include <nsIDOMSerializer.h>
 #include <nsIIOService.h>
 #include <nsNetCID.h>
+#include <nsNetError.h>
 
 static void
 mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass);
@@ -122,10 +123,18 @@ impl_cancel (EphyEmbedPersist *persist)
 {
 	nsCOMPtr<nsIWebBrowserPersist> bpersist =
 		MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
+#ifdef HAVE_GECKO_1_8
+	nsCOMPtr<nsICancelable> cancelable (do_QueryInterface (bpersist));
+	if (cancelable)
+	{
+		cancelable->Cancel (NS_BINDING_ABORTED);
+	}
+#else
 	if (bpersist)
 	{
 		bpersist->CancelSave ();
 	}
+#endif
 
 	g_object_unref (persist);
 }
