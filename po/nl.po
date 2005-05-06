@@ -2,14 +2,14 @@
 # translation of epiphany.HEAD.nl.po to Dutch
 # Commentaar:
 # Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>, 2003.
-# Reinout van Schouwen <reinout@cs.vu.nl>, 2003, 2004 
+# Reinout van Schouwen <reinout@cs.vu.nl>, 2003-2005
 # Lode Vermeiren <lode@linu.cx>, 2004 (kleine aanpassingen).
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-04 05:06+0000\n"
+"POT-Creation-Date: 2005-05-06 13:13+0000\n"
 "PO-Revision-Date: 2004-12-29 21:57+0100\n"
 "Last-Translator: Reinout van Schouwen <reinout@cs.vu.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -464,42 +464,41 @@ msgstr ""
 "lijst zijn \"address\" (adres) en \"title\" (titel)."
 
 #: ../data/epiphany.schemas.in.h:55
-#, fuzzy
+msgid "The currently selected fonts language"
+msgstr "De taal van het op dit moment geselecteerde lettertype"
+
+#: ../data/epiphany.schemas.in.h:56
 msgid ""
-"The currently selected fonts language</short> <!-- FIXME complete the list "
-"with the gecko-1-8 new x-* names --> <long> The currently selected fonts "
-"language. Valid values are \"ar\" (arabic), \"x-baltic\" (baltic languages), "
-"\"x-central-euro\" (central european languages), \"x-cyrillic\" (languages "
-"written with cyrillic alphabet), \"el\" (greek), \"he\" (hebrew), \"ja"
-"\" (japanese), \"ko\" (korean), \"zh-CN\" (simplified chinese), \"th"
-"\" (thai), \"zh-TW\" (traditional chinese), \"tr\" (turkish), \"x-unicode"
-"\" (other languages), \"x-western\" (languages written in latin script), \"x-"
-"tamil\" (tamil) and \"x-devanagari\" (devanagari). </long> </locale> </"
-"schema> <schema> <key>/schemas/apps/epiphany/web/use_own_colors</key> "
-"<applyto>/apps/epiphany/web/use_own_colors</applyto> <owner>epiphany</owner> "
-"<type>bool</type> <default>false</default> <locale name=\"C\"> <short>Use "
-"own colors"
+"The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
+"baltic\" (baltic languages), \"x-central-euro\" (central european "
+"languages), \"x-cyrillic\" (languages written with cyrillic alphabet), \"el"
+"\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-CN"
+"\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional chinese), \"tr"
+"\" (turkish), \"x-unicode\" (other languages), \"x-western\" (languages "
+"written in latin script), \"x-tamil\" (tamil) and \"x-devanagari"
+"\" (devanagari)."
 msgstr ""
 "De taal van het op dit moment geselecteerde lettertype. Geldige waarden "
 "zijn: \"ar\" (arabisch), \"x-baltic\" (baltische talen), \"x-central-euro"
-"\" (centraaleuropese talen), \"x-cyrillic\" (talen geschreven in cyrillisch "
+"\" (centraal-europese talen), \"x-cyrillic\" (talen geschreven in cyrillisch "
 "alfabet), \"el\" (grieks), \"he\" (hebreeuws), \"ja\" (japans), \"ko"
 "\" (koreaans), \"zh-CN\" (vereenvoudigd chinees), \"th\" (thais), \"zh-TW"
-"\" (traditioneel chinees), \"tr\" (turks), \"x-unicode\" (overige talen) and "
-"\"x-western\" (talen in westeuropees schrift)."
+"\" (traditioneel chinees), \"tr\" (turks), \"x-unicode\" (overige talen), "
+"\"x-western\" (talen in westeuropees schrift), \"x-tamil\" (tamil) en "
+"\"x-devanagari\" (devanagari)."
 
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../data/epiphany.schemas.in.h:56
+#: ../data/epiphany.schemas.in.h:57
 msgid "The downloads folder"
 msgstr "De map voor downloads"
 
-#: ../data/epiphany.schemas.in.h:57
+#: ../data/epiphany.schemas.in.h:58
 msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr "De tekenset autodetectie. Een lege tekenreeks zet de autodetectie uit"
 
-#: ../data/epiphany.schemas.in.h:58
+#: ../data/epiphany.schemas.in.h:59
 msgid ""
 "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
 "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
@@ -522,11 +521,11 @@ msgstr ""
 "\" (autodetectie van traditionele chinese coderingen) en "
 "\"universal_charset_detector\" (meeste coderingen automatisch detecteren)."
 
-#: ../data/epiphany.schemas.in.h:59
+#: ../data/epiphany.schemas.in.h:60
 msgid "The page information shown in the history view"
 msgstr "De getoonde pagina-informatie in de geschiedenisweergave"
 
-#: ../data/epiphany.schemas.in.h:60
+#: ../data/epiphany.schemas.in.h:61
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"address\", \"title\"."
@@ -534,18 +533,21 @@ msgstr ""
 "De getoonde pagina-informatie in de geschiedenisweergave. Geldige waarden in "
 "de lijst zijn \"address\" (adres) en \"title\" (titel)."
 
-#: ../data/epiphany.schemas.in.h:61
+#: ../data/epiphany.schemas.in.h:62
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
 msgstr ""
+"Het pad naar de map waar bestanden naartoe gedownload dienen te worden; of "
+"\"Downloads\" om de standaard downloadsmap te gebruiken, of \"Desktop\" "
+"om de bureaubladmap te gebruiken."
 
 # src/menubar.c:150
-#: ../data/epiphany.schemas.in.h:62
+#: ../data/epiphany.schemas.in.h:63
 msgid "Toolbar style"
 msgstr "Werkbalkstijl"
 
-#: ../data/epiphany.schemas.in.h:63
+#: ../data/epiphany.schemas.in.h:64
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -556,27 +558,32 @@ msgstr ""
 "\"icons\", en \"text\"."
 
 # Cursorbladermodus??
-#: ../data/epiphany.schemas.in.h:64
+#: ../data/epiphany.schemas.in.h:65
 msgid "Use caret browsing mode."
 msgstr "Cursorbladermodus gebruiken."
 
+# src/menubar.c:401
+#: ../data/epiphany.schemas.in.h:66
+msgid "Use own colors"
+msgstr "Eigen kleuren gebruiken"
+
 # src/menubar.c:396
-#: ../data/epiphany.schemas.in.h:65
+#: ../data/epiphany.schemas.in.h:67
 msgid "Use own fonts"
 msgstr "Eigen lettertypen gebruiken"
 
 # src/menubar.c:402
-#: ../data/epiphany.schemas.in.h:66
+#: ../data/epiphany.schemas.in.h:68
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Eigen kleuren gebruiken i.p.v door document aangegeven kleuren."
 
 # src/menubar.c:397
-#: ../data/epiphany.schemas.in.h:67
+#: ../data/epiphany.schemas.in.h:69
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr ""
 "Eigen lettertypen gebruiken i.p.v door document aangegeven lettertypen."
 
-#: ../data/epiphany.schemas.in.h:68
+#: ../data/epiphany.schemas.in.h:70
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -584,7 +591,7 @@ msgstr ""
 "Wanneer de bestanden niet met de browser geopend kunnen worden, komen ze "
 "automatisch in de downloadmap terecht en opent de geschikte toepassing ze."
 
-#: ../data/epiphany.schemas.in.h:69
+#: ../data/epiphany.schemas.in.h:71
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -593,43 +600,43 @@ msgstr ""
 "\" (overal vandaan), \"current site\" (huidige website) en \"nowhere"
 "\" (nooit)."
 
-#: ../data/epiphany.schemas.in.h:70
+#: ../data/epiphany.schemas.in.h:72
 msgid "Whether to print the date in the footer"
 msgstr "Of de datum afgedrukt moet worden in de voettekst"
 
-#: ../data/epiphany.schemas.in.h:71
+#: ../data/epiphany.schemas.in.h:73
 msgid "Whether to print the date in the footer."
 msgstr "Of de datum moet worden afgedrukt in de voettekst."
 
-#: ../data/epiphany.schemas.in.h:72
+#: ../data/epiphany.schemas.in.h:74
 msgid "Whether to print the page address in the header"
 msgstr "Of het adres van de pagina moet worden afgedrukt in de koptekst."
 
-#: ../data/epiphany.schemas.in.h:73
+#: ../data/epiphany.schemas.in.h:75
 msgid "Whether to print the page address in the header."
 msgstr "Of het adres van de pagina afgedrukt moet worden in de koptekst."
 
-#: ../data/epiphany.schemas.in.h:74
+#: ../data/epiphany.schemas.in.h:76
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr ""
 "Of de paginanummering (x van totaal) afgedrukt moet worden in de voettekst"
 
-#: ../data/epiphany.schemas.in.h:75
+#: ../data/epiphany.schemas.in.h:77
 msgid "Whether to print the page numbers (x of total) in the footer."
 msgstr ""
 "Of de paginanummering (x van totaal) moet worden afgedrukt in de voettekst."
 
-#: ../data/epiphany.schemas.in.h:76
+#: ../data/epiphany.schemas.in.h:78
 msgid "Whether to print the page title in the header"
 msgstr "Of de paginatitel afgedrukt moet worden in de koptekst"
 
-#: ../data/epiphany.schemas.in.h:77
+#: ../data/epiphany.schemas.in.h:79
 msgid "Whether to print the page title in the header."
 msgstr "Of de paginatitel moet worden afgedrukt in de koptekst."
 
 # src/mozilla_i18n.c:39
 # ui/preferences.glade.h:212
-#: ../data/epiphany.schemas.in.h:78
+#: ../data/epiphany.schemas.in.h:80
 msgid "x-western"
 msgstr "x-western"
 
@@ -2380,66 +2387,57 @@ msgstr "Turks"
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:86
-#, fuzzy
 msgid "select fonts for|Armenian"
-msgstr "Koreaans"
+msgstr "Armeens"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:89
-#, fuzzy
 msgid "select fonts for|Bengali"
-msgstr "Baltisch"
+msgstr "Bengali"
 
 # ui/preferences.glade.h:178
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:92
-#, fuzzy
 msgid "select fonts for|Unified Canadian Syllabics"
-msgstr "Vereenvoudigd Chinees"
+msgstr "Verenigde Canadese syllaben"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:95
-#, fuzzy
 msgid "select fonts for|Ethiopic"
-msgstr "Baltisch"
+msgstr "Ethiopisch"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:98
-#, fuzzy
 msgid "select fonts for|Georgian"
-msgstr "Koreaans"
+msgstr "Georgisch"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:101
-#, fuzzy
 msgid "select fonts for|Gujarati"
-msgstr "Arabisch"
+msgstr "Gujarati"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:104
-#, fuzzy
 msgid "select fonts for|Gurmukhi"
-msgstr "Turks"
+msgstr "Gurmukhi"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:107
-#, fuzzy
 msgid "select fonts for|Khmer"
-msgstr "Koreaans"
+msgstr "Khmer"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:110
-#, fuzzy
 msgid "select fonts for|Malayalam"
-msgstr "Tamil"
+msgstr "Malayalam"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -2450,9 +2448,8 @@ msgstr "Westers"
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:117
-#, fuzzy
 msgid "select fonts for|Other Scripts"
-msgstr "Thais"
+msgstr "Overige schriften"
 
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
@@ -4382,15 +4379,8 @@ msgstr ""
 "\n"
 "Kijk voor meer info op http://nl.gnome.org/"
 
-#~ msgid "The currently selected fonts language"
-#~ msgstr "De taal van het op dit moment geselecteerde lettertype"
-
 #~ msgid "The path of the folder where downloads are saved."
 #~ msgstr "Het pad van de map waar downloads opgeslagen worden."
-
-# src/menubar.c:401
-#~ msgid "Use own colors"
-#~ msgstr "Eigen kleuren gebruiken"
 
 #~ msgid "Failed to find %s"
 #~ msgstr "Kan %s niet vinden"
