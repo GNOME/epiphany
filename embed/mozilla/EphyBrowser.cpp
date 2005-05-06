@@ -229,8 +229,14 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 		if (!shouldLoad) return NS_OK;
 #endif
 
+		/* Hide password part */
+		favUri->SetPassword (nsEmbedCString ());
+
+		nsEmbedCString spec;
+		favUri->GetSpec (spec);
+
 		/* ok, we accept this as a valid favicon for this site */
-		g_signal_emit_by_name (mOwner->mEmbed, "ge_favicon", faviconUrl.get());
+		g_signal_emit_by_name (mOwner->mEmbed, "ge_favicon", spec.get());
 	}
 	else if (g_ascii_strcasecmp (rel.get (), "alternate") == 0)
 	{
@@ -251,6 +257,9 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 			nsCOMPtr<nsIURI> docUri;
 			rv = GetDocURI (linkElement, getter_AddRefs (docUri));
 			NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && docUri, NS_ERROR_FAILURE);
+
+			/* Hide password part */
+			docUri->SetPassword (nsEmbedCString ());
 
 			nsEmbedCString resolvedLink;
 			rv = docUri->Resolve (cLink, resolvedLink);
