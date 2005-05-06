@@ -638,6 +638,9 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 #ifdef HAVE_GECKO_1_8
 	rv = downloader->InitForEmbed (inOriginalURI, destURI, fileDisplayName,
 				       nsnull, timeNow, webPersist, embedPersist, aMaxSize);
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	rv = webPersist->SetProgressListener (downloader);
 #else
 	rv = downloader->InitForEmbed (inOriginalURI, destURI, fileDisplayName.get(),
 				       nsnull, timeNow, webPersist, embedPersist, aMaxSize);
