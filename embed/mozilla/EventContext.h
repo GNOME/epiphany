@@ -35,6 +35,14 @@
 #include <nsIDOMHTMLAreaElement.h>
 #include <nsIDOMHTMLBodyElement.h>
 #include <nsIDOMDocument.h>
+#include <nsIURI.h>
+#undef MOZILLA_INTERNAL_API
+#include <nsEmbedString.h>
+#define MOZILLA_INTERNAL_API 1
+
+#ifdef ALLOW_PRIVATE_API
+#include <nsIDOMViewCSS.h>
+#endif
 
 class EventContext
 {
@@ -51,6 +59,9 @@ private:
 	EphyBrowser *mBrowser;
 	MozillaEmbedEvent *mEmbedEvent;
 	nsCOMPtr<nsIDOMDocument> mDOMDocument;
+	nsCOMPtr<nsIDOMViewCSS> mViewCSS;
+	nsCOMPtr<nsIURI> mBaseURI;
+	nsEmbedCString mCharset;
 
 	nsresult GetTargetCoords    (nsIDOMEventTarget *aTarget, PRInt32 *aX, PRInt32 *aY);
 	nsresult GatherTextUnder    (nsIDOMNode* aNode, nsAString& aResult);
@@ -65,6 +76,8 @@ private:
 	nsresult SetIntProperty     (const char *name, int value);
 	nsresult SetStringProperty  (const char *name, const char *value);
 	nsresult SetStringProperty  (const char *name, const nsAString &value);
+	nsresult SetURIProperty     (nsIDOMNode *node, const char *name, const nsAString &value);
+	nsresult SetURIProperty     (nsIDOMNode *node, const char *name, const nsACString &value);
 };
 
 #endif
