@@ -236,10 +236,17 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
                 g_warning ("failed to read user preferences, error: %x", rv);
         }
 
-	/* FIXME We need to do this because mozilla doesnt set product
-	sub for embedding apps */
+#ifdef HAVE_GECKO_1_8
+	/* FIXME: maybe only set the major version ("1.6", "1.8") here? */
+	pref->SetCharPref ("general.useragent.extra.epiphany", "Epiphany/" VERSION);
+
+	/* Unset old prefs, otherwise they end up in the user agent string too */
+	pref->ClearUserPref ("general.useragent.vendor");
+	pref->ClearUserPref ("general.useragent.vendorSub");
+#else
 	pref->SetCharPref ("general.useragent.vendor", "Epiphany");
 	pref->SetCharPref ("general.useragent.vendorSub", VERSION);
+#endif
 
 	/* Open ftp uris with an external handler if one is setup */
 	pref->SetBoolPref("network.protocol-handler.external.ftp",
