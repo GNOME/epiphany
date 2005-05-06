@@ -26,10 +26,12 @@
 
 #include "EventContext.h"
 #include "EphyUtils.h"
+#include "ephy-debug.h"
 
 #include <gdk/gdkkeysyms.h>
 
 #include <nsIInterfaceRequestor.h>
+#include <nsIInterfaceRequestorUtils.h>
 #include <nsIServiceManager.h>
 #undef MOZILLA_INTERNAL_API
 #include <nsEmbedString.h>
@@ -65,10 +67,12 @@
 
 EventContext::EventContext ()
 {
+	LOG ("EventContext ctor [%p]", this);
 }
 
 EventContext::~EventContext ()
 {
+	LOG ("EventContext dtor [%p]", this);
 }
 
 nsresult EventContext::Init (EphyBrowser *browser)
@@ -157,22 +161,15 @@ nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsAString& aResult)
 	return NS_OK;
 }
 
+/* FIXME: we should resolve against the element's base, not the document's base */
 nsresult EventContext::ResolveBaseURL (const nsAString &relurl, nsACString &url)
 {
 	nsresult rv;
 
-	nsCOMPtr<nsIDOM3Node> node(do_QueryInterface (mDOMDocument));
-	nsEmbedString spec;
-	node->GetBaseURI (spec);
-
-	nsCOMPtr<nsIURI> base;
-	rv = EphyUtils::NewURI (getter_AddRefs(base), spec);
-	if (!base) return NS_ERROR_FAILURE;
-
 	nsEmbedCString cRelURL;
 	NS_UTF16ToCString (relurl, NS_CSTRING_ENCODING_UTF8, cRelURL);	
 
-	return base->Resolve (cRelURL, url);
+	return mBaseURI->Resolve (cRelURL, url);
 }
 
 nsresult EventContext::Unescape (const nsACString &aEscaped, nsACString &aUnescaped)
@@ -227,14 +224,35 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 	rv = node->GetOwnerDocument(getter_AddRefs(domDoc));
 	if (NS_FAILED(rv) || !domDoc) return NS_ERROR_FAILURE;
 
-	mDOMDocument = domDoc;
-
 	nsCOMPtr<nsIDOMXULDocument> xul_document = do_QueryInterface(domDoc);
 	if (xul_document)
 	{
 		info->context = EPHY_EMBED_CONTEXT_NONE;
 		return NS_ERROR_FAILURE;
 	}
+
+	mDOMDocument = domDoc;
+
+	rv = mBrowser->GetEncoding (mCharset);
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	/* Get base URI and CSS view */
+	nsCOMPtr<nsIDOMDocumentView> docView (do_QueryInterface (domDoc));
+	NS_ENSURE_TRUE (docView, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIDOMAbstractView> abstractView;
+	docView->GetDefaultView (getter_AddRefs (abstractView));
+	NS_ENSURE_TRUE (abstractView, NS_ERROR_FAILURE);
+	/* the abstract view is really the DOM window */
+
+	mViewCSS = do_QueryInterface (abstractView);
+	NS_ENSURE_TRUE (mViewCSS, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIWebNavigation> webNav (do_GetInterface (abstractView, &rv));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	rv = webNav->GetCurrentURI (getter_AddRefs (mBaseURI));
+	NS_ENSURE_SUCCESS (rv, rv);
 
 	// Now we know that the page isn't a xul window, we can try and
 	// do something useful with it.
@@ -365,7 +383,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				dom_elem->GetAttributeNS (nsEmbedString(xlinknsLiteral),
 							  nsEmbedString(hrefLiteral), value);
 				
-				SetStringProperty ("link", value);
+				SetURIProperty (node, "link", value);
 				CheckLinkScheme (value);
 			}
 		}
@@ -421,7 +439,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				{
 					info->context |= EPHY_EMBED_CONTEXT_LINK;
 
-					SetStringProperty ("link", tmp);
+					SetURIProperty (node, "link", tmp);
 					CheckLinkScheme (tmp);
 					rv = anchor->GetHreflang (tmp);
 					if (NS_SUCCEEDED(rv))
@@ -491,7 +509,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					if (NS_FAILED(rv))
 						return NS_ERROR_FAILURE;
 					
-					SetStringProperty ("link", href);
+					SetURIProperty (node, "link", href);
 					CheckLinkScheme (href);
 				}
 			}
@@ -533,6 +551,8 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAString& url)
 {
+	if (!mViewCSS) return NS_ERROR_NOT_INITIALIZED;
+
 	nsresult rv;
 
 	const PRUnichar bgimage[] = {'b', 'a', 'c', 'k', 'g', 'r', 'o', 'u', 'n', 'd',
@@ -541,18 +561,9 @@ nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAString& url)
 	nsCOMPtr<nsIDOMElement> element = do_QueryInterface (node);
 	NS_ENSURE_TRUE (element, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIDOMDocumentView> docView = do_QueryInterface (mDOMDocument);
-	NS_ENSURE_TRUE (docView, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIDOMAbstractView> abstractView;
-	docView->GetDefaultView (getter_AddRefs (abstractView));
-
-	nsCOMPtr<nsIDOMViewCSS> viewCSS = do_QueryInterface (abstractView);
-	NS_ENSURE_TRUE (viewCSS, NS_ERROR_FAILURE);
-
 	nsCOMPtr<nsIDOMCSSStyleDeclaration> decl;
-	viewCSS->GetComputedStyle (element, nsEmbedString(),
-				   getter_AddRefs (decl));
+	mViewCSS->GetComputedStyle (element, nsEmbedString(),
+				    getter_AddRefs (decl));
 	NS_ENSURE_TRUE (decl, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMCSSValue> CSSValue;
@@ -883,4 +894,33 @@ nsresult EventContext::SetStringProperty (const char *name, const nsAString &val
 	nsEmbedCString cValue;
 	NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
 	return SetStringProperty (name, cValue.get());
+}
+
+nsresult EventContext::SetURIProperty (nsIDOMNode *node, const char *name, const nsACString &value)
+{
+	nsresult rv;
+	nsCOMPtr<nsIURI> uri;
+	rv = EphyUtils::NewURI (getter_AddRefs (uri), value, mCharset.Length () ? mCharset.get() : nsnull, mBaseURI);
+	if (NS_SUCCEEDED (rv) && uri)
+	{
+		/* Hide password part */
+		uri->SetPassword (nsEmbedCString());
+
+		nsEmbedCString spec;
+		uri->GetSpec (spec);
+		rv = SetStringProperty (name, spec.get());
+	}
+	else
+	{
+		rv = SetStringProperty (name, nsEmbedCString(value).get());
+	}
+
+	return rv;
+}
+
+nsresult EventContext::SetURIProperty (nsIDOMNode *node, const char *name, const nsAString &value)
+{
+	nsEmbedCString cValue;
+	NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
+	return SetURIProperty (node, name, cValue);
 }
