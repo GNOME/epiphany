@@ -40,7 +40,7 @@ enum
 	LOCKDOWN_FLAG = 1 << 31
 };
 
-static const char *keys [] =
+static const char * const keys [] =
 {
 	CONF_LOCKDOWN_DISABLE_ARBITRARY_URL,
 	CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING,
