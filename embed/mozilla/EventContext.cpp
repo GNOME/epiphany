@@ -164,8 +164,6 @@ nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsAString& aResult)
 /* FIXME: we should resolve against the element's base, not the document's base */
 nsresult EventContext::ResolveBaseURL (const nsAString &relurl, nsACString &url)
 {
-	nsresult rv;
-
 	nsEmbedCString cRelURL;
 	NS_UTF16ToCString (relurl, NS_CSTRING_ENCODING_UTF8, cRelURL);	
 
