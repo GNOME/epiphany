@@ -133,6 +133,15 @@ EphyEventListener::Init (EphyBrowser *aOwner)
 NS_IMETHODIMP
 EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 {
+#ifdef MOZ_NSIDOMNSEVENT_GETISTRUSTED
+	/* make sure the event is trusted */
+	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
+	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
+	PRBool isTrusted = PR_FALSE;
+	nsEvent->GetIsTrusted (&isTrusted);
+	if (!isTrusted) return NS_OK;
+#endif /* MOZ_NSIDOMNSEVENT_GETISTRUSTED */
+
 	nsCOMPtr<nsIDOMEventTarget> eventTarget;
 	aDOMEvent->GetTarget(getter_AddRefs(eventTarget));
 
@@ -303,6 +312,15 @@ EphyDOMLinkEventListener::GetDocURI (nsIDOMElement *aElement,
 NS_IMETHODIMP
 EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 {
+#ifdef MOZ_NSIDOMNSEVENT_GETISTRUSTED
+	/* make sure the event is trusted */
+	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
+	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
+	PRBool isTrusted = PR_FALSE;
+	nsEvent->GetIsTrusted (&isTrusted);
+	if (!isTrusted) return NS_OK;
+#endif /* MOZ_NSIDOMNSEVENT_GETISTRUSTED */
+
 	nsCOMPtr<nsIDOMPopupBlockedEvent> popupEvent =
 		do_QueryInterface (aDOMEvent);
 	NS_ENSURE_TRUE (popupEvent, NS_ERROR_FAILURE);

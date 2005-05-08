@@ -667,6 +667,13 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, Mozilla
 	nsCOMPtr<nsIDOMNSEvent> nsEvent = do_QueryInterface(aMouseEvent);
 	if (!nsEvent) return NS_ERROR_FAILURE;
 
+#ifdef MOZ_NSIDOMNSEVENT_GETISTRUSTED
+	/* make sure the event is trusted */
+	PRBool isTrusted = PR_FALSE;
+	nsEvent->GetIsTrusted (&isTrusted);
+	if (!isTrusted) return NS_ERROR_UNEXPECTED;
+#endif /* MOZ_NSIDOMNSEVENT_GETISTRUSTED */
+
 	nsresult rv;
 	nsCOMPtr<nsIDOMEventTarget> OriginalTarget;
 	rv = nsEvent->GetOriginalTarget(getter_AddRefs(OriginalTarget));
@@ -718,6 +725,17 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, Mozilla
 
 nsresult EventContext::GetKeyEventInfo (nsIDOMKeyEvent *aKeyEvent, MozillaEmbedEvent *info)
 {
+#ifdef MOZ_NSIDOMNSEVENT_GETISTRUSTED
+	/* make sure the event is trusted */
+	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aKeyEvent));
+	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
+
+	PRBool isTrusted = PR_FALSE;
+	nsEvent->GetIsTrusted (&isTrusted);
+	if (!isTrusted) return NS_ERROR_UNEXPECTED;
+#endif /* MOZ_NSIDOMNSEVENT_GETISTRUSTED */
+
+
 	info->button = 0;
 
 	nsresult rv;
