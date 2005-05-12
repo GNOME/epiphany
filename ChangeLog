@@ -1,3 +1,14 @@
+2005-05-12  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* embed/ephy-embed.h:
+	* embed/ephy-embed.c:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EventContext.cpp:
+
+	Add handling of DOMContentLoaded event from Gecko.
+	It is an event that Gecko throws when the dom’s content is loaded,
+	that is, before all the images and what not have loaded.
+
 2005-05-12  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/Makefile.am:

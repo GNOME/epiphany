@@ -101,6 +101,7 @@
 #endif
 
 const static PRUnichar kDOMLinkAdded[]		 = { 'D', 'O', 'M', 'L', 'i', 'n', 'k', 'A', 'd', 'd', 'e', 'd', '\0' };
+const static PRUnichar kDOMContentLoaded[]	 = { 'D', 'O', 'M', 'C', 'o', 'n', 't', 'e', 'n', 't', 'L', 'o', 'a', 'd', 'e', 'd', '\0' };
 const static PRUnichar kContextMenu[]		 = { 'c', 'o', 'n', 't', 'e', 'x', 't', 'm', 'e', 'n', 'u', '\0' };
 const static PRUnichar kDOMPopupBlocked[]	 = { 'D', 'O', 'M', 'P', 'o', 'p', 'u', 'p', 'B', 'l', 'o', 'c', 'k', 'e', 'd', '\0' };
 const static PRUnichar kDOMWillOpenModalDialog[] = { 'D', 'O', 'M', 'W', 'i', 'l', 'l', 'O', 'p', 'e', 'n', 'M', 'o', 'd', 'a', 'l', 'D', 'i', 'a', 'l', 'o', 'g', '\0' };
@@ -283,6 +284,25 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 					       cTypeVal.get(), cTitle.get(), resolvedLink.get());
 		}
 	}
+
+	return NS_OK;
+}
+
+NS_IMETHODIMP
+EphyDOMContentLoadedEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
+{
+	LOG ("DOMContentLoaded event fired up");
+
+#ifdef MOZ_NSIDOMNSEVENT_GETISTRUSTED
+	/* make sure the event is trusted */
+	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
+	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
+	PRBool isTrusted = PR_FALSE;
+	nsEvent->GetIsTrusted (&isTrusted);
+	if (!isTrusted) return NS_OK;
+#endif /* MOZ_NSIDOMNSEVENT_GETISTRUSTED */
+
+	g_signal_emit_by_name (mOwner->mEmbed, "dom_content_loaded", (gpointer)aDOMEvent);
 
 	return NS_OK;
 }
@@ -489,6 +509,7 @@ EphyContextMenuListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 
 EphyBrowser::EphyBrowser ()
 : mDOMLinkEventListener(nsnull)
+, mDOMContentLoadedEventListener(nsnull)
 , mPopupBlockEventListener(nsnull)
 , mModalAlertListener(nsnull)
 , mContextMenuListener(nsnull)
@@ -525,6 +546,12 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 	if (!mDOMLinkEventListener) return NS_ERROR_OUT_OF_MEMORY;
 
 	rv = mDOMLinkEventListener->Init (this);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+	mDOMContentLoadedEventListener = new EphyDOMContentLoadedEventListener();
+	if (!mDOMContentLoadedEventListener) return NS_ERROR_OUT_OF_MEMORY;
+
+	rv = mDOMContentLoadedEventListener->Init (this);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	mPopupBlockEventListener = new EphyPopupBlockEventListener();
@@ -632,6 +659,8 @@ EphyBrowser::AttachListeners(void)
 	nsresult rv;
 	rv = mEventTarget->AddEventListener(nsEmbedString(kDOMLinkAdded),
 					    mDOMLinkEventListener, PR_FALSE);
+	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMContentLoaded),
+					     mDOMContentLoadedEventListener, PR_FALSE);
 	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMPopupBlocked),
 					     mPopupBlockEventListener, PR_FALSE);
 	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMWillOpenModalDialog),
@@ -653,6 +682,8 @@ EphyBrowser::DetachListeners(void)
 	nsresult rv;
 	rv = mEventTarget->RemoveEventListener(nsEmbedString(kDOMLinkAdded),
 					       mDOMLinkEventListener, PR_FALSE);
+	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMContentLoaded),
+					        mDOMContentLoadedEventListener, PR_FALSE);
 	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMPopupBlocked),
 					        mPopupBlockEventListener, PR_FALSE);
 	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMWillOpenModalDialog),

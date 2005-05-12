@@ -332,6 +332,23 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_NONE,
 			      1,
 			      EPHY_TYPE_EMBED_DOCUMENT_TYPE);
+/**
+ * EphyEmbed::dom-content-loaded:
+ * @embed:
+ *
+ * The ::dom-content-loaded signal is emitted when 
+ * the document has been loaded (excluding images and other loads initiated by this document).
+ * That's true also for frameset and all the frames within it.
+ **/
+		g_signal_new ("dom_content_loaded",
+			      EPHY_TYPE_EMBED,
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (EphyEmbedIface, dom_content_loaded),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_POINTER);
 
 		initialized = TRUE;
 	}
