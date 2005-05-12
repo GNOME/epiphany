@@ -267,11 +267,11 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 		/* Hide password part */
 		favUri->SetPassword (nsEmbedCString ());
 
-		nsEmbedCString spec;
-		favUri->GetSpec (spec);
+		nsEmbedCString favUriSpec;
+		favUri->GetSpec (favUriSpec);
 
 		/* ok, we accept this as a valid favicon for this site */
-		g_signal_emit_by_name (mOwner->mEmbed, "ge_favicon", spec.get());
+		g_signal_emit_by_name (mOwner->mEmbed, "ge_favicon", favUriSpec.get());
 	}
 
 	return NS_OK;
