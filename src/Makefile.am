@@ -42,6 +42,7 @@ NOINST_H_FILES = \
 	ephy-toolbars-model.h		\
 	ephy-toolbar.h			\
 	ephy-toolbar-editor.h		\
+	languages.h			\
 	pdm-dialog.h			\
 	popup-commands.h		\
 	prefs-dialog.h			\
