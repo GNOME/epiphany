@@ -806,7 +806,7 @@ nsresult EphyBrowser::GoToHistoryIndex (PRInt16 index)
 	return ContentNav->GotoIndex (index);
 }
 
-#ifdef GTKMOZEMBED_BROKEN_RELOAD
+#ifndef HAVE_GECKO_1_8
 /* Workaround for broken reload with frames, see mozilla bug
  * http://bugzilla.mozilla.org/show_bug.cgi?id=246392
  */
@@ -844,7 +844,7 @@ nsresult EphyBrowser::Reload (ReloadType flags)
 
 	return webNavigation->Reload (reloadFlags);
 }
-#endif
+#endif /* !HAVE_GECKO_1_8 */
 
 nsresult EphyBrowser::SetZoom (float aZoom)
 {

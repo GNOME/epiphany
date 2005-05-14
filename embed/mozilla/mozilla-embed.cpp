@@ -509,7 +509,7 @@ static void
 impl_reload (EphyEmbed *embed, 
              gboolean force)
 {
-#ifndef GTKMOZEMBED_BROKEN_RELOAD
+#ifdef HAVE_GECKO_1_8
 	guint32 mflags;
 
 	mflags = GTK_MOZ_EMBED_FLAG_RELOADNORMAL;
@@ -724,7 +724,7 @@ impl_set_encoding (EphyEmbed *embed,
 		if (NS_FAILED (rv)) return;
 	}
 
-#ifndef GTKMOZEMBED_BROKEN_RELOAD
+#ifdef HAVE_GECKO_1_8
 	gtk_moz_embed_reload (GTK_MOZ_EMBED (embed),
 			      GTK_MOZ_EMBED_FLAG_RELOADCHARSETCHANGE);
 #else

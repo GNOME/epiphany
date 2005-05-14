@@ -153,7 +153,7 @@ public:
 	nsresult GetSHUrlAtIndex (PRInt32 index, nsACString &url);
 	nsresult GoToHistoryIndex (PRInt16 index);
 
-#ifdef GTKMOZEMBED_BROKEN_RELOAD
+#ifndef HAVE_GECKO_1_8
 	enum ReloadType { RELOAD_NORMAL		 = 0,
 			  RELOAD_FORCE		 = 1,
 			  RELOAD_ENCODING_CHANGE = 2 };
