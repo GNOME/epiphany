@@ -360,21 +360,6 @@ dnl changed from nsIXULChromeRegistry in 1.8a4
 AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/chrome/nsIChromeRegistrySea.h],
 	[AC_DEFINE([HAVE_CHROME_NSICHROMEREGISTRYSEA_H], [1], [Define if nsIChromeRegistrySea.h exists])])
 
-dnl added after 1.7.3, on aviary and in 1.8a5 on trunk
-
-AC_MSG_CHECKING([for nsIDOMNSEvent::GetIsTrusted])
-
-AC_COMPILE_IFELSE(
-	[AC_LANG_PROGRAM(
-		[[#include <dom/nsIDOMNSEvent.h>]],
-		[[nsIDOMNSEvent *p;
-		  p->GetIsTrusted (nsnull);]]
-	)],
-	[AC_DEFINE([MOZ_NSIDOMNSEVENT_GETISTRUSTED],[1],[Define if nsIDOMNSEvent::GetIsTrusted exists]) result=yes],
-	[result=no])
-
-AC_MSG_RESULT([$result])
-
 dnl changed location in 1.8a6
 
 AC_MSG_CHECKING([for mozilla security compoment])

@@ -134,14 +134,12 @@ EphyEventListener::Init (EphyBrowser *aOwner)
 NS_IMETHODIMP
 EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 {
-#ifdef MOZ_NSIDOMNSEVENT_GETISTRUSTED
 	/* make sure the event is trusted */
 	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
 	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
 	PRBool isTrusted = PR_FALSE;
 	nsEvent->GetIsTrusted (&isTrusted);
 	if (!isTrusted) return NS_OK;
-#endif /* MOZ_NSIDOMNSEVENT_GETISTRUSTED */
 
 	nsCOMPtr<nsIDOMEventTarget> eventTarget;
 	aDOMEvent->GetTarget(getter_AddRefs(eventTarget));
@@ -293,14 +291,12 @@ EphyDOMContentLoadedEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 {
 	LOG ("DOMContentLoaded event fired up");
 
-#ifdef MOZ_NSIDOMNSEVENT_GETISTRUSTED
 	/* make sure the event is trusted */
 	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
 	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
 	PRBool isTrusted = PR_FALSE;
 	nsEvent->GetIsTrusted (&isTrusted);
 	if (!isTrusted) return NS_OK;
-#endif /* MOZ_NSIDOMNSEVENT_GETISTRUSTED */
 
 	g_signal_emit_by_name (mOwner->mEmbed, "dom_content_loaded", (gpointer)aDOMEvent);
 
@@ -332,14 +328,12 @@ EphyDOMLinkEventListener::GetDocURI (nsIDOMElement *aElement,
 NS_IMETHODIMP
 EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 {
-#ifdef MOZ_NSIDOMNSEVENT_GETISTRUSTED
 	/* make sure the event is trusted */
 	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
 	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
 	PRBool isTrusted = PR_FALSE;
 	nsEvent->GetIsTrusted (&isTrusted);
 	if (!isTrusted) return NS_OK;
-#endif /* MOZ_NSIDOMNSEVENT_GETISTRUSTED */
 
 	nsCOMPtr<nsIDOMPopupBlockedEvent> popupEvent =
 		do_QueryInterface (aDOMEvent);
@@ -373,7 +367,6 @@ EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 NS_IMETHODIMP
 EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 {
-#ifdef MOZ_NSIDOMNSEVENT_GETISTRUSTED
 	NS_ENSURE_TRUE (mOwner, NS_ERROR_FAILURE);
 
 	/* make sure the event is trusted */
@@ -409,7 +402,6 @@ EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 	{
 		g_signal_emit_by_name (mOwner->mEmbed, "ge-modal-alert-closed");
 	}
-#endif
 
 	return NS_OK;
 }
