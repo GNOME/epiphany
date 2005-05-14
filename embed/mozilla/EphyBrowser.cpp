@@ -111,25 +111,7 @@ const static PRUnichar kTypeAttr[]		 = { 't', 'y', 'p', 'e', '\0' };
 const static PRUnichar kTitleAttr[]		 = { 't', 'i', 't', 'l', 'e', '\0' };
 const static PRUnichar kRelAttr[]		 = { 'r', 'e', 'l', '\0' };
 
-EphyEventListener::EphyEventListener()
-: mOwner(nsnull)
-{
-	LOG ("EphyEventListener ctor (%p)", this);
-}
-
-EphyEventListener::~EphyEventListener()
-{
-	LOG ("EphyEventListener dtor (%p)", this);
-}
-
 NS_IMPL_ISUPPORTS1(EphyEventListener, nsIDOMEventListener)
-
-nsresult
-EphyEventListener::Init (EphyBrowser *aOwner)
-{
-	mOwner = aOwner;
-	return NS_OK;
-}
 
 NS_IMETHODIMP
 EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
@@ -406,25 +388,7 @@ EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 	return NS_OK;
 }
 
-EphyContextMenuListener::EphyContextMenuListener()
-: mOwner(nsnull)
-{
-	LOG ("EphyContextMenuListener ctor (%p)", this);
-}
-
-EphyContextMenuListener::~EphyContextMenuListener()
-{
-	LOG ("EphyContextMenuListener dtor (%p)", this);
-}
-
 NS_IMPL_ISUPPORTS1(EphyContextMenuListener, nsIDOMContextMenuListener)
-
-nsresult
-EphyContextMenuListener::Init(EphyBrowser *aOwner)
-{
-	mOwner = aOwner;
-	return NS_OK;
-}
 
 NS_IMETHODIMP
 EphyContextMenuListener::ContextMenu (nsIDOMEvent* aDOMEvent)
@@ -534,35 +498,20 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 	rv = mDOMWindow->GetDocument (getter_AddRefs (domDocument));
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-	mDOMLinkEventListener = new EphyDOMLinkEventListener();
+	mDOMLinkEventListener = new EphyDOMLinkEventListener(this);
 	if (!mDOMLinkEventListener) return NS_ERROR_OUT_OF_MEMORY;
 
-	rv = mDOMLinkEventListener->Init (this);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-	mDOMContentLoadedEventListener = new EphyDOMContentLoadedEventListener();
+	mDOMContentLoadedEventListener = new EphyDOMContentLoadedEventListener(this);
 	if (!mDOMContentLoadedEventListener) return NS_ERROR_OUT_OF_MEMORY;
 
-	rv = mDOMContentLoadedEventListener->Init (this);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-	mPopupBlockEventListener = new EphyPopupBlockEventListener();
+	mPopupBlockEventListener = new EphyPopupBlockEventListener(this);
 	if (!mPopupBlockEventListener) return NS_ERROR_OUT_OF_MEMORY;
 
-	rv = mPopupBlockEventListener->Init (this);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-	mModalAlertListener = new EphyModalAlertEventListener ();
+	mModalAlertListener = new EphyModalAlertEventListener (this);
 	if (!mModalAlertListener) return NS_ERROR_OUT_OF_MEMORY;
 
-	rv = mModalAlertListener->Init (this);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-	mContextMenuListener = new EphyContextMenuListener();
+	mContextMenuListener = new EphyContextMenuListener(this);
 	if (!mContextMenuListener) return NS_ERROR_OUT_OF_MEMORY;
-
-	rv = mContextMenuListener->Init (this);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
  	rv = GetListener();
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);

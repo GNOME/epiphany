@@ -52,16 +52,13 @@ class EphyBrowser;
 class EphyEventListener : public nsIDOMEventListener
 {
 public:
-	EphyEventListener();
-	virtual ~EphyEventListener();
-
-	nsresult Init (EphyBrowser *aOwner);
-
 	NS_DECL_ISUPPORTS
 
 	// nsIDOMEventListener
-
 	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent) = 0;
+
+	EphyEventListener(EphyBrowser *aOwner) : mOwner(aOwner) { };
+	virtual ~EphyEventListener() { };
 
 protected:
 	EphyBrowser *mOwner;
@@ -71,6 +68,8 @@ class EphyDOMLinkEventListener : public EphyEventListener
 {
 public:
 	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
+
+	EphyDOMLinkEventListener(EphyBrowser *aOwner) : EphyEventListener(aOwner) { };
 private:
 	nsresult GetDocURI (nsIDOMElement *aElement,
 			    nsIURI **aDocURI);
@@ -81,18 +80,24 @@ class EphyPopupBlockEventListener : public EphyEventListener
 {
 public:
 	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
+
+	EphyPopupBlockEventListener(EphyBrowser *aOwner) : EphyEventListener(aOwner) { };
 };
 
 class EphyModalAlertEventListener : public EphyEventListener
 {
 public:
 	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
+
+	EphyModalAlertEventListener(EphyBrowser *aOwner) : EphyEventListener(aOwner) { };
 };
 
 class EphyDOMContentLoadedEventListener : public EphyEventListener
 {
 public:
 	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
+
+	EphyDOMContentLoadedEventListener(EphyBrowser *aOwner) : EphyEventListener(aOwner) { };
 };
 
 class EphyContextMenuListener : public nsIDOMContextMenuListener
@@ -100,15 +105,12 @@ class EphyContextMenuListener : public nsIDOMContextMenuListener
 public:
         NS_DECL_ISUPPORTS
 
-        EphyContextMenuListener();   
-        virtual ~EphyContextMenuListener();
-
-        nsresult Init(EphyBrowser *aOwner);
-
 	// nsIDOMContextMenuListener
-
         NS_IMETHOD ContextMenu(nsIDOMEvent *aEvent);
         NS_IMETHOD HandleEvent(nsIDOMEvent *aEvent);
+
+	EphyContextMenuListener(EphyBrowser *aOwner) : mOwner(aOwner) { };
+	virtual ~EphyContextMenuListener() { };
 
 protected:
         EphyBrowser *mOwner;
