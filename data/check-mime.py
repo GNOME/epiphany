@@ -17,7 +17,7 @@ def PrintIfAbsent(elements, elem):
 def ExtractTypes():
     dbdom = parse(dbfile)
     permissiondom = parse(permissionfile);
-    dbelements = dbdom.getElementsByTagName("mime-type");
+    dbelements = dbdom.getElementsByTagName("mime-type") + dbdom.getElementsByTagName("alias")
     permissionelements = permissiondom.getElementsByTagName("mime-type");
     print ("New types:");
     print ("----------\n");
