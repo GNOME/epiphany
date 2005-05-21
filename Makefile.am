@@ -1,6 +1,6 @@
-## Process this file with automake to produce Makefile.in
-
 SUBDIRS = lib embed idl src data po help doc
+
+ACLOCAL_AMFLAGS = -I m4
 
 distcleancheck_listfiles = find . -type f -print | grep -v 'omf\.out'
 

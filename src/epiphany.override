@@ -1,0 +1,392 @@
+/* -*- Mode: C; c-basic-offset: 4 -*-
+ * Copyright (C) 2005 Adam Hooper <adamh@cvs.gnome.org>
+ * Copyright (C) 2005 Christian Persch <chpe@cvs.gnome.org>
+ * Copyright (C) 2005 Crispin Flowerday <gnome@flowerday.cx>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+%%
+headers
+#include <Python.h>               
+#include <pygobject.h>
+#include <pygtk/pygtk.h>
+#include "ephy-bookmarks.h"
+#include "ephy-bookmarks-type-builtins.h"
+#include "ephy-command-manager.h"
+#include "ephy-cookie-manager.h"
+#include "ephy-dialog.h"
+#include "ephy-embed-event.h"
+#include "ephy-embed-factory.h"
+#include "ephy-embed.h"
+#include "ephy-embed-persist.h"
+#include "ephy-embed-prefs.h"
+#include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
+#include "ephy-embed-type-builtins.h"
+#include "ephy-extension.h"
+#include "ephy-extensions-manager.h"
+#include "ephy-history.h"
+#include "ephy-lib-type-builtins.h"
+#include "ephy-loader.h"
+#include "ephy-node-db.h"
+#include "ephy-node.h"
+#include "ephy-notebook.h"
+#include "ephy-password-manager.h"
+#include "ephy-permission-manager.h"
+#include "ephy-session.h"
+#include "ephy-shell.h"
+#include "ephy-state.h"
+#include "ephy-statusbar.h"
+#include "ephy-tab.h"
+#include "ephy-type-builtins.h"
+#include "ephy-window.h"
+#include "ephy-link.h"
+
+void pyepiphany_register_classes (PyObject *d); 
+void pyepiphany_add_constants (PyObject *module, const gchar *strip_prefix);
+
+static PyObject *
+_helper_wrap_string_glist (GList *list)
+{
+    GList *tmp;
+    PyObject *py_list;
+
+    if ((py_list = PyList_New(0)) == NULL) {
+        g_list_foreach(list, (GFunc)g_free, NULL);
+        g_list_free(list);
+        return NULL;
+    }
+    for (tmp = list; tmp != NULL; tmp = tmp->next) {
+        PyObject *str_obj =  PyString_FromString ((char*)tmp->data);
+
+        if (str_obj == NULL) {
+            g_list_foreach(list, (GFunc)g_free, NULL);
+            g_list_free(list);
+            Py_DECREF(py_list);
+            return NULL;
+        }
+        PyList_Append(py_list, str_obj);
+        Py_DECREF(str_obj);
+    }
+    g_list_foreach(list, (GFunc)g_free, NULL);
+    g_list_free(list);
+    return py_list;
+}
+
+static PyObject *
+_helper_wrap_gobject_glist (GList *list)
+{
+    PyObject *py_list;
+    GList *tmp;
+
+    if ((py_list = PyList_New(0)) == NULL) {
+        return NULL;
+    }
+    for (tmp = list; tmp != NULL; tmp = tmp->next) {
+        PyObject *py_obj = pygobject_new(G_OBJECT(tmp->data));
+
+        if (py_obj == NULL) {
+            Py_DECREF(py_list);
+            return NULL;
+        }
+        PyList_Append(py_list, py_obj);
+        Py_DECREF(py_obj);
+    }
+    return py_list;
+}
+
+static void
+free_boxed_type (gpointer data, gpointer type)
+{
+    g_boxed_free (GPOINTER_TO_INT(type), data);
+}
+
+
+static PyObject *
+_helper_wrap_boxed_glist (GType type, GList *list)
+{
+    GList *tmp;
+    PyObject *py_list;
+
+    if ((py_list = PyList_New(0)) == NULL) {
+        g_list_foreach(list, free_boxed_type, GINT_TO_POINTER(type));
+        g_list_free(list);
+        return NULL;
+    }
+    for (tmp = list; tmp != NULL; tmp = tmp->next) {
+        PyObject *obj = pyg_boxed_new (type, tmp->data, FALSE, TRUE);
+        PyList_Append(py_list, obj);
+        Py_DECREF(obj);
+    }
+    g_list_free(list);
+    return py_list;
+}
+
+static PyObject *
+_helper_wrap_boxed_gptrarray (GType type, GPtrArray *list, gboolean own_ref, gboolean dealloc)
+{
+    PyObject *py_list;
+    int i;
+
+    if ((py_list = PyList_New(0)) == NULL) {
+        return NULL;
+    }
+    for( i = 0; i < list->len; i++ ) {
+        PyObject *obj = pyg_boxed_new (type, g_ptr_array_index(list,i), FALSE, own_ref);
+        PyList_Append(py_list, obj);
+        Py_DECREF(obj);
+    }
+    if (dealloc) g_ptr_array_free (list, TRUE);
+    return py_list;
+}
+
+%%
+modulename epiphany                     
+%%
+import gtk.Bin as PyGtkBin_Type
+import gtk.Window as PyGtkWindow_Type
+import gtk.UIManager as PyGtkUIManager_Type
+import gtk.Widget as PyGtkWidget_Type
+import gtk.Statusbar as PyGtkStatusbar_Type
+import gtk.Notebook as PyGtkNotebook_Type
+import gobject.GObject as PyGObject_Type 
+%%
+ignore-glob
+  *_get_type
+%%
+ignore
+  ephy_embed_event_get_dom_event
+  ephy_tab_for_embed
+  ephy_shell_error_quark
+  ephy_shell_startup
+  ephy_shell_get_dbus_service
+%%
+override ephy_tab_get_size noargs
+static PyObject *
+_wrap_ephy_tab_get_size(PyGObject *self)
+{
+    gint width;
+    gint height;
+
+    ephy_tab_get_size(EPHY_TAB(self->obj), &width, &height);
+    return Py_BuildValue("(ii)", width, height);
+}
+%%
+override ephy_embed_event_get_coords noargs
+static PyObject *
+_wrap_ephy_embed_event_get_coords(PyGObject *self)
+{
+    gint x, y;
+
+    ephy_embed_event_get_coords (EPHY_EMBED_EVENT(self->obj), &x, &y);
+    return Py_BuildValue("(ii)", x, y);
+}
+%%
+override ephy_window_get_tabs noargs
+static PyObject *
+_wrap_ephy_window_get_tabs(PyGObject *self)
+{
+    GList *list;
+    PyObject *py_list;
+
+    list = ephy_window_get_tabs(EPHY_WINDOW (self->obj));
+
+    py_list = _helper_wrap_gobject_glist (list);
+
+    g_list_free(list);
+
+    return py_list;
+}
+%%
+override ephy_embed_shistory_get_nth kwargs
+static PyObject*
+_wrap_ephy_embed_shistory_get_nth (PyGObject *self,
+                                   PyObject *args, PyObject *kwargs)
+{
+    static char *kwlist[] = {"nth", "is_relative", NULL}; 
+    int nth, is_relative;
+    char *url, *title;
+    PyObject *py_url, *py_title;
+    PyObject *py_list;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs,    
+                                     "ii:EphyEmbed.shistory_get_nth", kwlist,
+                                     &nth, &is_relative)) {
+        return NULL;
+    }
+
+    ephy_embed_shistory_get_nth (EPHY_EMBED (self->obj), nth, is_relative,
+                                 &url, &title);
+
+    if (!url || !title) {
+        return Py_None;
+    }
+
+    if ((py_list = PyList_New(0)) == NULL) {
+        g_free (url);
+        g_free (title);
+        return NULL;
+    }
+
+    py_url   = PyString_FromString (url);
+    g_free (url);
+    if (!py_url) {
+        g_free (title);
+        Py_DECREF(py_list);
+        return NULL;
+    }
+
+    PyList_Append(py_list, py_url);
+    Py_DECREF(py_url);
+
+    py_title = PyString_FromString (title);
+    g_free (title);
+
+    if (!py_title) {
+        Py_DECREF(py_list);
+        return NULL;
+    }
+
+    PyList_Append(py_list, py_title);
+    Py_DECREF(py_title);
+    return py_list;
+}
+%%
+override ephy_embed_get_go_up_list noargs
+static PyObject*
+_wrap_ephy_embed_get_go_up_list (PyGObject *self)
+{
+    GSList *list, *tmp;
+    PyObject *py_list;
+
+    list = ephy_embed_get_go_up_list (EPHY_EMBED (self->obj));
+
+    if ((py_list = PyList_New(0)) == NULL) {
+        g_slist_foreach(list, (GFunc)g_free, NULL);
+        g_slist_free(list);
+        return NULL;
+    }
+    for (tmp = list; tmp != NULL; tmp = tmp->next) {
+        PyObject *str_obj =  PyString_FromString ((char*)tmp->data);
+
+        if (str_obj == NULL) {
+            g_slist_foreach(list, (GFunc)g_free, NULL);
+            g_slist_free(list);
+            Py_DECREF(py_list);
+            return NULL;
+        }
+        PyList_Append(py_list, str_obj);
+        Py_DECREF(str_obj);
+    }
+    g_slist_foreach(list, (GFunc)g_free, NULL);
+    g_slist_free(list);
+    return py_list;
+}
+%%
+override ephy_embed_single_get_printer_list noargs
+static PyObject*
+_wrap_ephy_embed_single_get_printer_list (PyGObject *self)
+{
+    GList *list;
+
+    list = ephy_embed_single_get_printer_list (EPHY_EMBED_SINGLE (self->obj));
+
+    return _helper_wrap_string_glist (list);
+}
+%%
+override ephy_embed_single_get_font_list kwargs
+static PyObject*
+_wrap_ephy_embed_single_get_font_list (PyGObject *self,
+                                       PyObject *args, PyObject *kwargs)
+{
+    static char *kwlist[] = {"font_group", NULL}; 
+    char *font_group;
+    GList *list;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, 
+                                     "s:EphyEmbedSingle.get_font_list", kwlist, &font_group))
+        return NULL;
+
+
+    list = ephy_embed_single_get_font_list (EPHY_EMBED_SINGLE (self->obj), font_group);
+
+    return _helper_wrap_string_glist (list);
+}
+%%
+override ephy_embed_event_get_property kwargs
+static PyObject*
+_wrap_ephy_embed_event_get_property (PyGObject *self,
+                                     PyObject *args, PyObject *kwargs)
+{
+    static char *kwlist[] = {"property", NULL}; 
+    char *prop;
+    const GValue *value;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, 
+                                     "s:EphyEmbedEvent.get_property", kwlist, &prop))
+        return NULL;
+
+    ephy_embed_event_get_property (EPHY_EMBED_EVENT (self->obj), prop, &value);
+
+    return pyg_value_as_pyobject(value, TRUE);
+}
+%%
+override ephy_password_manager_list_passwords noargs
+static PyObject*
+_wrap_ephy_password_manager_list_passwords (PyGObject *self)
+{
+    GList *list;
+
+    list = ephy_password_manager_list_passwords (EPHY_PASSWORD_MANAGER (self->obj));
+
+    return _helper_wrap_boxed_glist (EPHY_TYPE_PASSWORD_INFO, list);
+}
+%%
+override ephy_cookie_manager_list_cookies noargs
+static PyObject *
+_wrap_ephy_cookie_manager_list_cookies(PyGObject *self)
+{
+    GList *list;
+
+    list = ephy_cookie_manager_list_cookies(EPHY_COOKIE_MANAGER (self->obj));
+
+    return _helper_wrap_boxed_glist (EPHY_TYPE_COOKIE, list);
+}
+%%
+override ephy_node_get_children noargs
+static PyObject *
+_wrap_ephy_node_get_children (PyGObject *self)
+{
+    GPtrArray *list = ephy_node_get_children ((EphyNode *) (self->obj));
+
+    return _helper_wrap_boxed_gptrarray (EPHY_TYPE_NODE, list, FALSE, FALSE);
+}
+%%
+override ephy_session_get_windows noargs
+static PyObject *
+_wrap_ephy_session_get_windows (PyGObject *self)
+{    
+    GList *list;
+    PyObject *py_list;
+
+    list = ephy_session_get_windows (EPHY_SESSION (self->obj));
+
+    py_list = _helper_wrap_gobject_glist (list);
+
+    g_list_free(list);
+
+    return py_list;
+}

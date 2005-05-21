@@ -2,6 +2,10 @@ SUBDIRS = bookmarks
 
 noinst_LTLIBRARIES = libephymain.la
 
+if ENABLE_PYTHON
+noinst_LTLIBRARIES += libpyphany.la
+endif
+
 bin_PROGRAMS = epiphany
 
 CXXLD = $(CXX)
@@ -61,7 +65,8 @@ INST_H_FILES = \
 	ephy-window.h
 
 libephymain_la_SOURCES = \
-	$(BUILT_SOURCES)		\
+	$(CORBA_SOURCE)			\
+	$(TYPES_SOURCE)			\
 	ephy-action-helper.c		\
 	ephy-automation.c		\
 	ephy-completion-model.c		\
@@ -120,6 +125,61 @@ if ENABLE_DBUS
 libephymain_la_CFLAGS += $(DBUS_CFLAGS)
 endif
 
+if ENABLE_PYTHON
+NOINST_H_FILES += \
+	ephy-python.h		\
+	ephy-python-extension.h	\
+	ephy-python-loader.h
+
+PYPHANY_SOURCE = epiphany.c
+
+libpyphany_la_SOURCES = \
+	ephy-python.c		\
+	ephy-python.h		\
+	ephy-python-extension.c	\
+	ephy-python-extension.h	\
+	ephy-python-loader.c	\
+	ephy-python-loader.h	\
+	$(PYPHANY_SOURCE)	\
+	$(TYPES_SOURCE)
+
+libpyphany_la_CPPFLAGS = \
+	-I$(top_srcdir)/lib		\
+	-I$(top_srcdir)/lib/widgets	\
+	-I$(top_srcdir)/lib/egg		\
+	-I$(top_srcdir)/embed		\
+	-I$(top_srcdir)/embed/mozilla	\
+	-I$(top_srcdir)/src		\
+	-I$(top_srcdir)/src/bookmarks	\
+	-I$(top_builddir)/lib		\
+	-I$(top_builddir)/lib/widgets	\
+	-I$(top_builddir)/lib/egg	\
+	-I$(top_builddir)/embed		\
+	-I$(top_builddir)/embed/mozilla	\
+	-I$(top_builddir)/src		\
+	-I$(top_builddir)/src/bookmarks	\
+	$(PYTHON_INCLUDES)		\
+	-DEXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/extensions"\" 	\
+	-DLOADER_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/loaders"\"		\
+	-DDATADIR=\""$(datadir)"\" 	\
+	$(AM_CPPFLAGS)
+
+libpyphany_la_CFLAGS = \
+	$(EPIPHANY_DEPENDENCY_CFLAGS)	\
+	$(NO_STRICT_ALIASING_CFLAGS)	\
+	$(PYGTK_CFLAGS)			\
+	$(AM_CFLAGS)
+
+libpyphany_la_LDFLAGS = \
+	-export-symbols-regex ephy_python_init
+
+libpyphany_la_LIBADD = \
+	$(EPIPHANY_DEPENDENCY_LIBS)		\
+	$(PYTHON_LIB_LOC) $(PYTHON_LIBS)	\
+	$(PYTHON_EXTRA_LIBS)			\
+	$(PYGTK_LIBS)
+endif
+
 epiphany_SOURCES = ephy-main.c
 
 epiphany_CPPFLAGS = \
@@ -153,9 +213,26 @@ if ENABLE_DBUS
 epiphany_LDADD += $(DBUS_LIBS)
 endif
 
+if ENABLE_PYTHON
+epiphany_LDADD += \
+	libpyphany.la				\
+	$(PYTHON_LIB_LOC) $(PYTHON_LIBS)	\
+	$(PYTHON_EXTRA_LIBS)			\
+	$(PYGTK_LIBS)
+endif
+
+if ENABLE_PYTHON
+pydefsdir = $(datadir)/pygtk/2.0/defs
+pydefs_DATA = epiphany.defs
+
+EXTRA_DIST = \
+	$(pydefs_DATA)
+endif
+
 BUILT_SOURCES =	\
 	$(CORBA_SOURCE)	\
-	$(TYPES_SOURCE)
+	$(TYPES_SOURCE)	\
+	$(PYPHANY_SOURCE)
 
 TYPES_SOURCE = \
 	ephy-type-builtins.c	\
@@ -202,6 +279,16 @@ stamp-ephy-type-builtins.h: $(INST_H_FILES) $(NOINST_H_FILES)
 	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
+
+epiphany.c: epiphany.defs epiphany.override
+	( cd $(srcdir) && $(PYGTK_CODEGEN) \
+		--register $(PYGTK_DEFSDIR)/pango-types.defs \
+		--register $(PYGTK_DEFSDIR)/gdk-types.defs \
+		--register $(PYGTK_DEFSDIR)/gtk-types.defs \
+		--override $*.override \
+		--prefix py$* $(<F) ) > gen-$@ \
+	&& ( cmp -s gen-$@ $@ || cp gen-$@ $@ ) \
+	&& rm -f gen-$@
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)

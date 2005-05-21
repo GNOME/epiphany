@@ -52,6 +52,11 @@
 #include <libxml/xmlschemas.h>
 #endif
 
+#ifdef ENABLE_PYTHON
+#include "ephy-python-extension.h"
+#include "ephy-python-loader.h"
+#endif
+
 #define CONF_LOADED_EXTENSIONS	"/apps/epiphany/general/active_extensions"
 #define SCHEMA_FILE		"/epiphany-extension.xsd"
 
@@ -753,6 +758,19 @@ get_loader_for_type (EphyExtensionsManager *manager,
 
 		return g_object_ref (info->loader);
 	}
+#ifdef ENABLE_PYTHON
+	if (strcmp (type, "python") == 0)
+	{
+		info = g_new (LoaderInfo, 1);
+		info->type = g_strdup (type);
+		info->loader = g_object_new (EPHY_TYPE_PYTHON_LOADER, NULL);
+
+		manager->priv->factories =
+				g_list_append (manager->priv->factories, info);
+
+		return g_object_ref (info->loader);
+	}
+#endif
 
 	stype = sanitise_type (type);
 	name = g_strconcat ("lib", stype, "loader.", G_MODULE_SUFFIX, NULL);
