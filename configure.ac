@@ -424,6 +424,8 @@ dnl ****
 dnl DBUS
 dnl ****
 
+EPIPHANY_FEATURES=
+
 AC_MSG_CHECKING([whether DBUS support is requested])
 
 AC_ARG_ENABLE([dbus],
@@ -438,6 +440,7 @@ DBUS_GLIB_REQUIRED=0.22
 
 if test "x$enable_dbus" = "xyes" ; then
 	AC_DEFINE([ENABLE_DBUS],[1],[Define if DBUS support is enabled])
+	EPIPHANY_FEATURES="$EPIPHANY_FEATURES dbus"
 
 	PKG_CHECK_MODULES([DBUS], [dbus-1 >= $DBUS_REQUIRED dbus-glib-1 >= $DBUS_GLIB_REQUIRED])
 fi
@@ -558,9 +561,11 @@ if test "x$have_python" != "xyes"; then
 elif test "x$enable_python" != "xno"; then
 	enable_python=yes
 	AC_DEFINE([ENABLE_PYTHON],[1],[Define to compile with python support])
+	EPIPHANY_FEATURES="$EPIPHANY_FEATURES python"
 fi
 
 AM_CONDITIONAL([ENABLE_PYTHON],[test "x$enable_python" = "xyes"])
+AC_SUBST([EPIPHANY_FEATURES])
 
 dnl *******************************
 dnl Add warning flags
