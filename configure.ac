@@ -534,8 +534,13 @@ if test "x$have_python" != "xno"; then
 	PYGTK_CODEGEN="$PYTHON `$PKG_CONFIG --variable=codegendir pygtk-2.0`/codegen.py"
 	AC_MSG_RESULT([$PYGTK_CODEGEN])
 
+	AC_MSG_CHECKING([for pygtk h2def])
+	PYGTK_H2DEF="$PYTHON `$PKG_CONFIG --variable=codegendir pygtk-2.0`/h2def.py"
+	AC_MSG_RESULT([$PYGTK_H2DEF])
+	
 	AC_SUBST([PYGTK_DEFSDIR])
 	AC_SUBST([PYGTK_CODEGEN])
+	AC_SUBST([PYGTK_H2DEF])
 
 	dnl Check for -fno-strict-aliasing
 	FLAGS="-fno-strict-aliasing"
