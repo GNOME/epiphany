@@ -160,6 +160,7 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
 {
 	GtkWidget *parent = NULL;
 	EphyTab *new_tab;
+	gboolean is_popup;
 	EphyNewTabFlags flags = EPHY_NEW_TAB_DONT_SHOW_WINDOW |
 				EPHY_NEW_TAB_APPEND_LAST |
 				EPHY_NEW_TAB_IN_NEW_WINDOW |
@@ -181,10 +182,15 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
 		parent = gtk_widget_get_toplevel (GTK_WIDGET (parent_embed));
 	}
 
+	/* what's a popup ? ATM, any window opened with menubar toggled on 
+   	 * is *not* a popup 
+	 */
+	is_popup = (chromemask & EPHY_EMBED_CHROME_MENUBAR) == 0;
+
 	new_tab = ephy_shell_new_tab_full
 		(shell,
 		 EPHY_IS_WINDOW (parent) ? EPHY_WINDOW (parent) : NULL,
-		 NULL, NULL, flags, chromemask, TRUE, 0);
+		 NULL, NULL, flags, chromemask, is_popup, 0);
 
 	return ephy_tab_get_embed (new_tab);
 }
