@@ -52,7 +52,7 @@
 static NS_DEFINE_CID(kSimpleURICID, NS_SIMPLEURI_CID);
 static NS_DEFINE_CID(kInputStreamChannelCID, NS_INPUTSTREAMCHANNEL_CID);
 
-EphyProtocolHandler::EphyProtocolHandler (void)
+EphyProtocolHandler::EphyProtocolHandler()
 {
 	LOG ("EphyProtocolHandler ctor [%p]\n", this);
 }

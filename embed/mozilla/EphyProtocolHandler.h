@@ -48,7 +48,7 @@ class EphyProtocolHandler : public nsIProtocolHandler,
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIPROTOCOLHANDLER
 
-	EphyProtocolHandler (void);
+	EphyProtocolHandler();
 	virtual ~EphyProtocolHandler();
 
   private:
