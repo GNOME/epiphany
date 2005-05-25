@@ -7,6 +7,7 @@ distcleancheck_listfiles = find . -type f -print | grep -v 'omf\.out'
 distuninstallcheck_listfiles = find . -type f -print | grep -v '/var/scrollkeeper'
 
 EXTRA_DIST = 			\
+	autogen.sh		\
 	intltool-merge.in	\
 	intltool-update.in	\
 	intltool-extract.in	\

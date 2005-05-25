@@ -21,12 +21,15 @@
 #ifndef EPHY_UTILS_H
 #define EPHY_UTILS_H
 
-#include <nsIIOService.h>
-#include <nsIURI.h>
-#include <nsIDOMWindow.h>
+#include <nsError.h>
 #include <gtk/gtkwidget.h>
 
+class nsAString;
+class nsACString;
+class nsIDOMWindow;
+class nsIIOService;
 class nsIPrintSettings;
+class nsIURI;
 struct _EmbedPrintInfo;
 
 namespace EphyUtils

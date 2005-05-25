@@ -26,6 +26,7 @@
 
 #include "EphyUtils.h"
 
+#include <nsIDOMWindow.h>
 #include <nsIServiceManager.h>
 #include <nsIInterfaceRequestor.h>
 #include <nsIInterfaceRequestorUtils.h>

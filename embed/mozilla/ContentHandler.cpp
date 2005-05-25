@@ -43,6 +43,7 @@
 #include <nsIMIMEInfo.h>
 #include <nsIInterfaceRequestorUtils.h>
 #include <nsCExternalHandlerService.h>
+#include <nsIDOMWindow.h>
 #include <nsNetError.h>
 
 #ifdef ALLOW_PRIVATE_API

@@ -56,6 +56,8 @@
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
 
+#include <nsIIOService.h>
+#include <nsIURI.h>
 #include <nsIDOMDocument.h>
 #include <nsILocalFile.h>
 #include <nsIWebBrowserPersist.h>

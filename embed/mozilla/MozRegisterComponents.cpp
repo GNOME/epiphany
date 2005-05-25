@@ -42,6 +42,10 @@
 #include <nsISecureBrowserUI.h>
 #endif
 
+#ifdef HAVE_GECKO_1_8
+#include "EphyProtocolHandler.h"
+#endif
+
 #include <nsMemory.h>
 #include <nsDocShellCID.h>
 #include <nsIGenericFactory.h>
@@ -69,6 +73,10 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSClientAuthDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSKeyPairDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSSecurityWarningDialogs)
+#endif
+
+#ifdef HAVE_GECKO_1_8
+NS_GENERIC_FACTORY_CONSTRUCTOR(EphyProtocolHandler)
 #endif
 
 /* class information */ 
@@ -197,6 +205,20 @@ static const nsModuleComponentInfo sAppComps[] = {
 		&NS_CLASSINFO_NAME(EphySidebar),
 		nsIClassInfo::DOM_OBJECT
 	},
+#ifdef HAVE_GECKO_1_8
+{
+	EPHY_ABOUT_CLASSNAME,
+	EPHY_PROTOCOL_HANDLER_CID,
+	EPHY_ABOUT_CONTRACTID,
+	EphyProtocolHandlerConstructor
+},
+{
+	EPHY_PROTOCOL_HANDLER_CLASSNAME,
+	EPHY_PROTOCOL_HANDLER_CID,
+	EPHY_PROTOCOL_HANDLER_CONTRACTID,
+	EphyProtocolHandlerConstructor
+},
+#endif
 };
 
 #if defined(HAVE_MOZILLA_PSM) && !defined(HAVE_GECKO_1_8)

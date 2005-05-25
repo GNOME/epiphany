@@ -27,6 +27,9 @@
 #include "ephy-embed-single.h"
 #include "print-dialog.h"
 
+#include <nsIIOService.h>
+#include <nsIURI.h>
+#include <nsIDOMWindow.h>
 #include <nsIServiceManager.h>
 #undef MOZILLA_INTERNAL_API
 #include <nsEmbedString.h>

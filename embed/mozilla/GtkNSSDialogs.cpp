@@ -45,6 +45,7 @@
 #include <nsICRLInfo.h>
 #include <nsISimpleEnumerator.h>
 #include <nsIArray.h>
+#include <nsIDOMWindow.h>
 #undef MOZILLA_INTERNAL_API
 #include <nsEmbedString.h>
 #define MOZILLA_INTERNAL_API 1

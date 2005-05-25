@@ -45,13 +45,13 @@
 #include <nsIInterfaceRequestor.h>
 #include <nsIInterfaceRequestorUtils.h>
 #include <nsIKeygenThread.h>
+#include <nsIDOMWindow.h>
 
 #ifdef HAVE_GECKO_1_8
 #include <nsIObserver.h>
 #else /* !HAVE_GECKO_1_8 */
-#include <nsIDOMWindow.h>
 #ifdef ALLOW_PRIVATE_API
-#include "nsIDOMWindowInternal.h"
+#include <nsIDOMWindowInternal.h>
 #endif /* ALLOW_PRIVATE_API */
 #endif /* HAVE_GECKO_1_8 */
 
