@@ -1,0 +1,72 @@
+/*
+ *  Copyright (C) 2004  Tommi Komulainen
+ *  Copyright (C) 2004, 2005  Christian Persch
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ *  $Id$
+ */
+
+#ifndef EPHY_FIND_TOOLBAR_H
+#define EPHY_FIND_TOOLBAR_H
+
+#include <gtk/gtktoolbar.h>
+
+#include "ephy-window.h"
+
+G_BEGIN_DECLS
+
+#define EPHY_TYPE_FIND_TOOLBAR		(ephy_find_toolbar_get_type ())
+#define EPHY_FIND_TOOLBAR(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbar))
+#define EPHY_FIND_TOOLBAR_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbarClass))
+#define EPHY_IS_FIND_TOOLBAR(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_FIND_TOOLBAR))
+#define EPHY_IS_FIND_TOOLBAR_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_FIND_TOOLBAR))
+#define EPHY_FIND_TOOLBAR_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbarClass))
+
+typedef struct _EphyFindToolbar		EphyFindToolbar;
+typedef struct _EphyFindToolbarPrivate	EphyFindToolbarPrivate;
+typedef struct _EphyFindToolbarClass	EphyFindToolbarClass;
+
+struct _EphyFindToolbar
+{
+	GtkToolbar parent;
+
+	/*< private >*/
+	EphyFindToolbarPrivate *priv;
+};
+
+struct _EphyFindToolbarClass
+{
+	GtkToolbarClass parent_class;
+
+	/* Signals */
+	void (* next)		(EphyFindToolbar *toolbar);
+	void (* previous)	(EphyFindToolbar *toolbar);
+	void (* close)		(EphyFindToolbar *toolbar);
+};
+
+GType		 ephy_find_toolbar_get_type	(void) G_GNUC_CONST;
+
+EphyFindToolbar *ephy_find_toolbar_new		(void);
+
+const char	*ephy_find_toolbar_get_text	(EphyFindToolbar *toolbar);
+
+void		 ephy_find_toolbar_set_controls	(EphyFindToolbar *toolbar,
+						 gboolean next,
+						 gboolean previous);
+
+G_END_DECLS
+
+#endif /* EPHY_FIND_TOOLBAR_H */

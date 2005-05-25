@@ -31,8 +31,6 @@
 #include "ephy-state.h"
 #include "ppview-toolbar.h"
 #include "window-commands.h"
-#include "find-dialog.h"
-#include "print-dialog.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-shell.h"
@@ -57,6 +55,7 @@
 #include "ephy-notebook.h"
 #include "ephy-fullscreen-popup.h"
 #include "ephy-action-helper.h"
+#include "ephy-find-toolbar.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -411,7 +410,7 @@ struct _EphyWindowPrivate
 	PPViewToolbar *ppview_toolbar;
 	GtkNotebook *notebook;
 	EphyTab *active_tab;
-	EphyDialog *find_dialog;
+	EphyFindToolbar *find_toolbar;
 	guint num_tabs;
 	guint tab_message_cid;
 	guint help_message_cid;
@@ -1129,10 +1128,13 @@ sync_tab_document_type (EphyTab *tab,
 			GParamSpec *pspec,
 			EphyWindow *window)
 {
-	GtkActionGroup *action_group;
+	EphyWindowPrivate *priv = window->priv;
+	GtkActionGroup *action_group = priv->action_group;
 	GtkAction *action;
 	EphyEmbedDocumentType type;
 	gboolean can_find, disable;
+
+	if (priv->closing) return;
 
 	/* update zoom actions */
 	sync_tab_zoom (tab, NULL, window);
@@ -1141,7 +1143,6 @@ sync_tab_document_type (EphyTab *tab,
 	can_find = (type != EPHY_EMBED_DOCUMENT_IMAGE);
 	disable = (type != EPHY_EMBED_DOCUMENT_HTML);
 
-	action_group = window->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "ViewEncoding");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, disable);
 	action = gtk_action_group_get_action (action_group, "ViewPageSource");
@@ -1152,6 +1153,11 @@ sync_tab_document_type (EphyTab *tab,
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, !can_find);
 	action = gtk_action_group_get_action (action_group, "EditFindPrev");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, !can_find);
+
+	if (!can_find)
+	{
+		gtk_widget_hide (GTK_WIDGET (priv->find_toolbar));
+	}
 }
 
 static void
@@ -1784,6 +1790,18 @@ tab_context_menu_cb (EphyEmbed *embed,
 	return TRUE;
 }
 
+static void
+tab_content_changed_cb (EphyEmbed *embed,
+			const char *uri,
+		        EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+
+	if (priv->closing) return;
+
+	ephy_find_toolbar_set_controls (priv->find_toolbar, TRUE, TRUE);
+}
+
 static gboolean
 let_me_resize_hack (EphyWindow *window)
 {
@@ -1904,6 +1922,8 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_handlers_disconnect_by_func
 			(embed, G_CALLBACK (tab_context_menu_cb), window);
 		g_signal_handlers_disconnect_by_func
+			(embed, G_CALLBACK (tab_content_changed_cb), window);
+		g_signal_handlers_disconnect_by_func
 			(embed, G_CALLBACK (tab_size_to_cb), window);
 	}
 
@@ -1964,6 +1984,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		embed = ephy_tab_get_embed (new_tab);
 		g_signal_connect_object (embed, "ge-context-menu",
 					 G_CALLBACK (tab_context_menu_cb),
+					 window, G_CONNECT_AFTER);
+		g_signal_connect_object (embed, "ge-content-change",
+					 G_CALLBACK (tab_content_changed_cb),
 					 window, G_CONNECT_AFTER);
 		g_signal_connect_object (embed, "size-to",
 					 G_CALLBACK (tab_size_to_cb),
@@ -2334,12 +2357,6 @@ ephy_window_dispose (GObject *object)
 			priv->idle_resize_handler = 0;
 		}
 
-		if (priv->find_dialog)
-		{
-			g_object_unref (G_OBJECT (priv->find_dialog));
-			priv->find_dialog = NULL;
-		}
-	
 		g_object_unref (priv->fav_menu);
 		priv->fav_menu = NULL;
 
@@ -2673,8 +2690,66 @@ ephy_window_open_link (EphyLink *link,
 }
 
 static void
+sync_find_toolbar_text_cb (EphyFindToolbar *toolbar,
+			   GParamSpec *pspec,
+			   EphyWindow *window)
+{
+	EphyEmbed *embed;
+	const char *text;
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (embed != NULL);
+
+	text = ephy_find_toolbar_get_text (toolbar);
+	ephy_embed_find_set_properties (embed, text, FALSE, TRUE);
+	ephy_find_toolbar_set_controls (toolbar, TRUE, TRUE);
+}
+
+static void
+find_toolbar_find_next_cb (EphyFindToolbar *toolbar,
+			   EphyWindow *window)
+{
+	EphyEmbed *embed;
+	const char *text;
+	gboolean found;
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (embed != NULL);
+
+	text = ephy_find_toolbar_get_text (toolbar);
+	ephy_embed_find_set_properties (embed, text, FALSE, TRUE);
+	found = ephy_embed_find_next (embed, FALSE);
+	ephy_find_toolbar_set_controls (toolbar, found, found);
+}
+
+static void
+find_toolbar_find_previous_cb (EphyFindToolbar *toolbar,
+			        EphyWindow *window)
+{
+	EphyEmbed *embed;
+	const char *text;
+	gboolean found;
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (embed != NULL);
+
+	text = ephy_find_toolbar_get_text (toolbar);
+	ephy_embed_find_set_properties (embed, text, FALSE, TRUE);
+	found = ephy_embed_find_next (embed, TRUE);
+	ephy_find_toolbar_set_controls (toolbar, found, found);
+}
+
+static void
+find_toolbar_close_cb (EphyFindToolbar *toolbar,
+		       EphyWindow *window)
+{
+	gtk_widget_hide (GTK_WIDGET (toolbar));
+}
+
+static void
 ephy_window_init (EphyWindow *window)
 {
+	EphyWindowPrivate *priv;
 	EphyExtension *manager;
 	EphyEmbedSingle *single;
 	EggToolbarsModel *model;
@@ -2684,7 +2759,7 @@ ephy_window_init (EphyWindow *window)
 
 	g_object_ref (ephy_shell);
 
-	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
+	priv = window->priv = EPHY_WINDOW_GET_PRIVATE (window);
 
 	window->priv->chrome = EPHY_EMBED_CHROME_ALL;
 
@@ -2701,6 +2776,19 @@ ephy_window_init (EphyWindow *window)
 			    TRUE, TRUE, 0);
 	gtk_widget_show (GTK_WIDGET (window->priv->notebook));
 
+	priv->find_toolbar = ephy_find_toolbar_new ();
+	g_signal_connect (priv->find_toolbar, "notify::text",
+			  G_CALLBACK (sync_find_toolbar_text_cb), window);
+	g_signal_connect (priv->find_toolbar, "next",
+			  G_CALLBACK (find_toolbar_find_next_cb), window);
+	g_signal_connect (priv->find_toolbar, "previous",
+			  G_CALLBACK (find_toolbar_find_previous_cb), window);
+	g_signal_connect (priv->find_toolbar, "close",
+			  G_CALLBACK (find_toolbar_close_cb), window);
+	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
+			    GTK_WIDGET (priv->find_toolbar), FALSE, FALSE, 0);
+	gtk_widget_show (GTK_WIDGET (priv->find_toolbar));
+	
 	window->priv->statusbar = ephy_statusbar_new ();
 	gtk_box_pack_end (GTK_BOX (window->priv->main_vbox),
 			  GTK_WIDGET (window->priv->statusbar),
@@ -3196,32 +3284,15 @@ ephy_window_get_tabs (EphyWindow *window)
 }
 
 static void
-update_embed_dialogs (EphyWindow *window,
-		      EphyTab *tab)
-{
-	EphyEmbed *embed;
-	EphyDialog *find_dialog = window->priv->find_dialog;
-
-	embed = ephy_tab_get_embed (tab);
-
-	if (find_dialog)
-	{
-		ephy_embed_dialog_set_embed
-			(EPHY_EMBED_DIALOG(find_dialog),
-			 embed);
-	}
-}
-
-static void
 ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 				     GtkNotebookPage *page,
 				     guint page_num,
 				     EphyWindow *window)
 {
+	EphyWindowPrivate *priv = window->priv;
 	EphyTab *tab;
 
-	g_return_if_fail (EPHY_IS_WINDOW (window));
-	if (window->priv->closing) return;
+	if (priv->closing) return;
 
 	/* get the new tab */
 	tab = real_get_active_tab (window, page_num);
@@ -3229,7 +3300,7 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 	/* update new tab */
 	ephy_window_set_active_tab (window, tab);
 
-	update_embed_dialogs (window, tab);
+	ephy_find_toolbar_set_controls (priv->find_toolbar, TRUE, TRUE);
 
 	/* update window controls */
 	update_tabs_menu_sensitivity (window);
@@ -3244,23 +3315,11 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 void
 ephy_window_find (EphyWindow *window)
 {
-	EphyDialog *dialog;
-	EphyEmbed *embed;
+	EphyWindowPrivate *priv = window->priv;
+	GtkWidget *toolbar = GTK_WIDGET (priv->find_toolbar);
 
-	if (window->priv->find_dialog == NULL)
-	{
-		embed = ephy_window_get_active_embed (window);
-		g_return_if_fail (GTK_IS_WINDOW(window));
-
-		dialog = find_dialog_new_with_parent (GTK_WIDGET(window),
-						      embed);
-		window->priv->find_dialog = dialog;
-
-		g_object_add_weak_pointer(G_OBJECT (dialog),
-					  (gpointer *) &window->priv->find_dialog);
-	}
-
-	ephy_dialog_show (window->priv->find_dialog);
+	gtk_widget_show (toolbar);
+	gtk_widget_grab_focus (toolbar);
 }
 
 /**

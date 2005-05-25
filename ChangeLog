@@ -1,3 +1,20 @@
+2005-05-25  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/Makefile.am:
+	* embed/find-dialog.c:
+	* embed/find-dialog.h:
+	A src/ephy-find-toolbar.c:
+	A src/ephy-find-toolbar.h:
+	* src/ephy-window.c: (sync_tab_document_type),
+	(tab_content_changed_cb), (ephy_window_set_active_tab),
+	(ephy_window_dispose), (sync_find_toolbar_text_cb),
+	(find_toolbar_find_next_cb), (find_toolbar_find_previous_cb),
+	(find_toolbar_close_cb), (ephy_window_init),
+	(ephy_window_notebook_switch_page_cb), (ephy_window_find):
+
+	Replace the find dialogue with a find toolbar. Work in progress;
+	no typeaheadfind yet.
+
 2005-05-24  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/Makefile.am:
