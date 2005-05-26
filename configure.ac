@@ -108,18 +108,9 @@ AC_SUBST([LIBBONOBO_IDL])
 BONOBO_ACTIVATION_IDL="`$PKG_CONFIG --variable=idldir bonobo-activation-2.0`"
 AC_SUBST([BONOBO_ACTIVATION_IDL])
 
-dnl whether to build with DEBUG defined
-AC_ARG_WITH([mozilla-debug],
-	    AS_HELP_STRING([--mozilla-debug],[Whether mozilla is a debug build]),
-	    [AM_CXXFLAGS="-DDEBUG $AM_CXXFLAGS"])
-
-AC_ARG_ENABLE([cpp-rtti],
-	      AS_HELP_STRING([--enable-cpp-rtti],[Enable C++ RTTI]),[],
-	      [enable_cpp_rtti=no])
-
-if test "x$enable_cpp_rtti" = "xno"; then
-  AM_CXXFLAGS="-fno-rtti $AM_CXXFLAGS"
-fi
+dnl *****
+dnl GConf
+dnl *****
 
 dnl Specify the gconf configuration source, 
 dnl default to xml::$(sysconfdir)/gconf/gconf.xml.defaults
@@ -165,9 +156,9 @@ if test "x$enable_maintainer_mode" = "xyes"; then
 	AC_LANG_POP([C])
 fi
 
-dnl ******************
-dnl Mozilla name check
-dnl ******************
+dnl *******
+dnl Mozilla
+dnl *******
 
 AC_MSG_CHECKING([which mozilla to use])
 
@@ -217,6 +208,14 @@ AC_SUBST(MOZILLA_HOME)
 
 MOZILLA_PREFIX="`$PKG_CONFIG --variable=prefix $MOZILLA-gtkmozembed`"
 AC_SUBST(MOZILLA_PREFIX)
+
+AC_ARG_ENABLE([cpp-rtti],
+	      AS_HELP_STRING([--enable-cpp-rtti],[Enable C++ RTTI]),[],
+	      [enable_cpp_rtti=no])
+
+if test "x$enable_cpp_rtti" = "xno"; then
+  AM_CXXFLAGS="-fno-rtti $AM_CXXFLAGS"
+fi
 
 dnl *************************************************************************
 dnl This is from Mozilla's configure.in. They set almost all the config stuff
@@ -275,6 +274,22 @@ AC_RUN_IFELSE(
         [result=maybe])
 
 AC_MSG_RESULT([$result])
+
+dnl Check whether we have a mozilla debug build
+
+AC_MSG_CHECKING([[whether we have a mozilla debug build]])
+
+AC_PREPROC_IFELSE(
+	[AC_LANG_SOURCE(
+		[[#include <mozilla-config.h>
+		  #if !defined(MOZ_REFLOW_PERF) || !defined(MOZ_REFLOW_PERF_DSP)
+		  #error No
+		  #endif]]
+	)],
+	[AM_CXXFLAGS="-DDEBUG -D_DEBUG $AM_CXXFLAGS" have_mozilla_debug=yes],
+	[have_mozilla_debug=no])
+
+AC_MSG_RESULT([$have_mozilla_debug])
 
 dnl Determine gecko version
 dnl We don't use the version from the .pc file, since that's the app version
