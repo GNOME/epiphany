@@ -50,6 +50,10 @@ struct _EphyFindToolbarPrivate
 	GtkToolItem *next;
 	GtkToolItem *prev;
 	gulong set_focus_handler;
+	guint preedit_changed : 1;
+	guint prevent_activate : 1;
+	guint explicit_focus : 1;
+	guint links_only : 1;
 };
 
 enum
@@ -79,6 +83,8 @@ get_find (EphyFindToolbar *toolbar)
 
 	if (priv->find == NULL)
 	{
+		LOG ("Creating the finder now");
+
 		priv->find = EPHY_EMBED_FIND (ephy_embed_factory_new_object (EPHY_TYPE_EMBED_FIND));
 
 		g_return_val_if_fail (priv->embed == NULL || GTK_WIDGET_REALIZED (GTK_WIDGET (priv->embed)), priv->find);
@@ -108,6 +114,108 @@ tab_content_changed_cb (EphyEmbed *embed,
 	set_controls (toolbar, TRUE, TRUE);
 }
 
+/* Cut and paste from gtkwindow.c */
+static void
+send_focus_change (GtkWidget *widget,
+		   gboolean   in)
+{
+	GdkEvent *event;
+
+	event = gdk_event_new (GDK_FOCUS_CHANGE);
+
+	g_object_ref (widget);
+   
+	if (in)
+	{
+		GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
+	}
+	else
+	{
+		GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
+	}
+
+	event->focus_change.type = GDK_FOCUS_CHANGE;
+	event->focus_change.window = (GdkWindow *) g_object_ref (widget->window);
+	event->focus_change.in = in;
+  
+	gtk_widget_event (widget, event);
+  
+	g_object_notify (G_OBJECT (widget), "has_focus");
+
+	g_object_unref (widget);
+	gdk_event_free (event);
+}
+
+/* Code adapted from gtktreeview.c:gtk_tree_view_key_press() and
+ * gtk_tree_view_real_start_interactive_seach()
+ */
+static gboolean
+tab_dom_key_press_cb (EphyEmbed *embed,
+		      gpointer dom_event,
+		      EphyFindToolbar *toolbar)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+	GtkWidget *widget = (GtkWidget *) toolbar;
+	GtkEntry *entry = (GtkEntry *) priv->entry;
+	GdkWindow *event_window;
+	GdkEvent *event;
+	GdkEventKey *event_key;
+	gboolean retval = FALSE;
+	guint oldhash, newhash;
+
+	event = gtk_get_current_event ();
+	if (event == NULL) return FALSE; /* shouldn't happen! */
+
+	g_return_val_if_fail (GDK_KEY_PRESS == event->type, FALSE);
+
+	event_key = (GdkEventKey *) event;
+
+	/* check for / and ' which open the find toolbar in text resp. link mode */
+	if (event_key->keyval == GDK_slash)
+	{
+		ephy_find_toolbar_open (toolbar, FALSE);
+		gdk_event_free (event);
+		return TRUE;
+	}
+	else if (event_key->keyval == GDK_apostrophe)
+	{
+		ephy_find_toolbar_open (toolbar, TRUE);
+		gdk_event_free (event);
+		return TRUE;
+	}
+	
+	/* don't do anything if the find toolbar is hidden */
+	if (GTK_WIDGET_VISIBLE (widget) == FALSE ||
+	    event_key->keyval == GDK_Return ||
+	    event_key->keyval == GDK_KP_Enter)
+	{
+		gdk_event_free (event);
+		return FALSE;
+	}
+
+	oldhash = g_str_hash (gtk_entry_get_text (entry));
+	priv->preedit_changed = FALSE;
+
+	event_window = event_key->window;
+	event_key->window = priv->entry->window;
+
+	/* Send the event to the window.  If the preedit_changed signal is emitted
+	* during this event, we will set priv->imcontext_changed  */
+	priv->prevent_activate = TRUE;
+	retval = gtk_widget_event (priv->entry, event);
+	priv->prevent_activate = FALSE;
+
+	/* restore event window, else gdk_event_free below will crash */
+	event_key->window = event_window;
+
+	gdk_event_free (event);
+
+	newhash = g_str_hash (gtk_entry_get_text (entry));
+
+	/* FIXME: is this right? */
+	return (retval && oldhash != newhash) || priv->preedit_changed;
+}
+
 static void
 find_next_cb (EphyFindToolbar *toolbar)
 {
@@ -130,11 +238,18 @@ entry_changed_cb (GtkEntry *entry,
 
 	text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
 #ifdef HAVE_TYPEAHEADFIND
-	found = ephy_embed_find_find (get_find (toolbar), text, FALSE);
+	found = ephy_embed_find_find (get_find (toolbar), text, priv->links_only);
 #else
 	ephy_embed_find_set_properties (get_find (toolbar), text, FALSE);
 #endif
 	set_controls (toolbar, found, found);
+}
+
+static void
+entry_preedit_changed_cb (GtkIMContext *context,
+			  EphyFindToolbar *toolbar)
+{
+	toolbar->priv->preedit_changed = TRUE;
 }
 
 static gboolean
@@ -142,38 +257,28 @@ entry_key_press_event_cb (GtkEntry *entry,
 			  GdkEventKey *event,
 			  EphyFindToolbar *toolbar)
 {
-	//EphyFindToolbarPrivate *priv = toolbar->priv;
 	guint mask = gtk_accelerator_get_default_mod_mask ();
 	gboolean handled = FALSE;
 
 	/* Hide the toolbar when ESC is pressed */
-	if ((event->state & mask) == 0)
+	if ((event->state & mask) == 0 && event->keyval == GDK_Escape)
 	{
-		if (event->keyval == GDK_Escape)
-		{
-			g_signal_emit (toolbar, signals[CLOSE], 0);
-
-			handled = TRUE;
-		}
-#if 0
-		else if (event->keyval == GDK_Page_Up)
-		{
-			ephy_command_manager_do_command
-				(EPHY_COMMAND_MANAGER (priv->embed),
-				 "cmd_movePageUp");
-			handled = TRUE;
-		}
-		else if (event->keyval == GDK_Page_Down)
-		{
-			ephy_command_manager_do_command
-				(EPHY_COMMAND_MANAGER (priv->embed),
-				 "cmd_movePageDown");
-			handled = TRUE;
-		}
-#endif
+		g_signal_emit (toolbar, signals[CLOSE], 0);
+		handled = TRUE;
 	}
 
 	return handled;
+}
+
+static void
+entry_activate_cb (GtkWidget *entry,
+		   EphyFindToolbar *toolbar)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+
+	if (priv->prevent_activate) return;
+
+	g_signal_emit (toolbar, signals[NEXT], 0);
 }
 
 static void
@@ -181,6 +286,7 @@ set_focus_cb (EphyWindow *window,
 	      GtkWidget *widget,
 	      EphyFindToolbar *toolbar)
 {
+	EphyFindToolbarPrivate *priv = toolbar->priv;
 	GtkWidget *wtoolbar = GTK_WIDGET (toolbar);
 
 	while (widget != NULL && widget != wtoolbar)
@@ -188,12 +294,14 @@ set_focus_cb (EphyWindow *window,
 		widget = widget->parent;
 	}
 
-	/* if widget == toolbar, the new focus widget is in the toolbar, so we
-	 * don't deactivate.
-	 */
-	if (widget != wtoolbar)
+	/* if widget == toolbar, the new focus widget is in the toolbar */
+	if (widget == wtoolbar)
 	{
-		gtk_widget_hide (wtoolbar);
+		priv->explicit_focus = TRUE;
+	}
+	else if (priv->explicit_focus)
+	{
+		g_signal_emit (toolbar, signals[CLOSE], 0);
 	}
 }
 
@@ -221,6 +329,7 @@ ephy_find_toolbar_grab_focus (GtkWidget *widget)
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
 	gtk_widget_grab_focus (priv->entry);
+	g_return_if_fail (priv->explicit_focus);
 }
 
 static void
@@ -258,8 +367,6 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 	gtk_widget_show_all (GTK_WIDGET (item));
 
-	// FIXME padding
-
 	/* Next */
 	arrow = gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
 	label = gtk_label_new (_("Find Next"));
@@ -287,10 +394,10 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 			  G_CALLBACK (entry_key_press_event_cb), toolbar);
 	g_signal_connect_after (priv->entry, "changed",
 				G_CALLBACK (entry_changed_cb), toolbar);
-	//g_signal_connect (GTK_ENTRY (priv->entry)->im_context, "preedit-changed",
-	//		  G_CALLBACK (entry_preedit_changed_cb), toolbar);
-	g_signal_connect_swapped (priv->entry, "activate",
-				  G_CALLBACK (find_next_cb), toolbar);
+	g_signal_connect (GTK_ENTRY (priv->entry)->im_context, "preedit-changed",
+			  G_CALLBACK (entry_preedit_changed_cb), toolbar);
+	g_signal_connect (priv->entry, "activate",
+			  G_CALLBACK (entry_activate_cb), toolbar);
 	g_signal_connect_swapped (priv->next, "clicked",
 				  G_CALLBACK (find_next_cb), toolbar);
 	g_signal_connect_swapped (priv->prev, "clicked",
@@ -326,6 +433,7 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 
 	klass->next = ephy_find_toolbar_find_next;
 	klass->previous = ephy_find_toolbar_find_previous;
+	klass->close = ephy_find_toolbar_close;
 
 	signals[NEXT] =
 		g_signal_new ("next",
@@ -411,8 +519,8 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 
 	if (priv->embed != NULL)
 	{
-		g_signal_handlers_disconnect_by_func
-				(embed, G_CALLBACK (tab_content_changed_cb), toolbar);
+		g_signal_handlers_disconnect_matched (embed, G_SIGNAL_MATCH_DATA,
+						      0, 0, NULL, NULL, toolbar);
 	}
 
 	priv->embed = embed;
@@ -422,6 +530,9 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 		g_signal_connect_object (embed, "ge-content-change",
 					 G_CALLBACK (tab_content_changed_cb),
 					 toolbar, G_CONNECT_AFTER);
+		g_signal_connect_object (embed, "dom-key-press",
+					 G_CALLBACK (tab_dom_key_press_cb),
+					 toolbar, 0);
 
 		if (priv->find != NULL)
 		{
@@ -448,4 +559,37 @@ ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 
 	found = ephy_embed_find_find_again (get_find (toolbar), FALSE);
 	set_controls (toolbar, found, found);
+}
+
+void
+ephy_find_toolbar_open (EphyFindToolbar *toolbar,
+			gboolean links_only)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+
+	g_return_if_fail (priv->embed != NULL);
+
+	priv->links_only = links_only;
+	priv->explicit_focus = FALSE;
+
+	gtk_entry_set_text (GTK_ENTRY (priv->entry), "");
+
+	gtk_widget_show (GTK_WIDGET (toolbar));
+	ephy_embed_activate (priv->embed);
+
+	send_focus_change (priv->entry, TRUE);
+}
+
+void
+ephy_find_toolbar_close (EphyFindToolbar *toolbar)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+
+	g_return_if_fail (priv->embed != NULL);
+	
+	gtk_widget_hide (GTK_WIDGET (toolbar));
+
+	/* first unset explicit_focus, else we get infinite recursion */
+	priv->explicit_focus = FALSE;
+	ephy_embed_activate (priv->embed);
 }

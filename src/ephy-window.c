@@ -1156,7 +1156,7 @@ sync_tab_document_type (EphyTab *tab,
 
 	if (!can_find)
 	{
-		gtk_widget_hide (GTK_WIDGET (priv->find_toolbar));
+		ephy_find_toolbar_close (priv->find_toolbar);
 	}
 }
 
@@ -2715,7 +2715,7 @@ ephy_window_init (EphyWindow *window)
 			  G_CALLBACK (find_toolbar_close_cb), window);
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
 			    GTK_WIDGET (priv->find_toolbar), FALSE, FALSE, 0);
-	gtk_widget_show (GTK_WIDGET (priv->find_toolbar));
+	/* don't show the find toolbar here! */
 	
 	window->priv->statusbar = ephy_statusbar_new ();
 	gtk_box_pack_end (GTK_BOX (window->priv->main_vbox),
@@ -2889,8 +2889,10 @@ ephy_window_new_with_chrome (EphyEmbedChrome chrome,
  * Sets whether the window is in print preview mode.
  **/
 void
-ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
+ephy_window_set_print_preview (EphyWindow *window,
+			       gboolean enabled)
 {
+	EphyWindowPrivate *priv = window->priv;
 	GtkAccelGroup *accel_group;
 
 	accel_group = gtk_ui_manager_get_accel_group (window->priv->manager);
@@ -2907,6 +2909,8 @@ ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
 
 		window->priv->ppview_toolbar = ppview_toolbar_new (window);
 		gtk_window_remove_accel_group (GTK_WINDOW (window), accel_group);
+
+		ephy_find_toolbar_close (priv->find_toolbar);
 	}
 	else
 	{
@@ -3262,10 +3266,9 @@ void
 ephy_window_find (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	GtkWidget *toolbar = GTK_WIDGET (priv->find_toolbar);
 
-	gtk_widget_show (toolbar);
-	gtk_widget_grab_focus (toolbar);
+	ephy_find_toolbar_open (priv->find_toolbar, FALSE);
+	gtk_widget_grab_focus (GTK_WIDGET (priv->find_toolbar));
 }
 
 /**

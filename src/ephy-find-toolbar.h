@@ -70,6 +70,11 @@ void		 ephy_find_toolbar_find_next	 (EphyFindToolbar *toolbar);
 
 void		 ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar);
 
+void		 ephy_find_toolbar_open		 (EphyFindToolbar *toolbar,
+						  gboolean links_only);
+
+void		 ephy_find_toolbar_close	 (EphyFindToolbar *toolbar);
+
 G_END_DECLS
 
 #endif /* EPHY_FIND_TOOLBAR_H */

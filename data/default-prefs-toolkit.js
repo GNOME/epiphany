@@ -5,7 +5,7 @@ pref("plugin.default_plugin_disabled", true);
 pref("intl.locale.matchOS", true);
 
 // enable fixed-up typeaheadfind extension
-pref("accessibility.typeaheadfindsea", true);
+pref("accessibility.typeaheadfindsea", false);
 pref("accessibility.typeaheadfindsea.autostart", true);
 pref("accessibility.typeaheadfindsea.linksonly", true);
 

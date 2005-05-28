@@ -1,3 +1,25 @@
+2005-05-29  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/default-prefs-common.js:
+	* data/default-prefs-toolkit.js:
+
+	Disable mozilla's typeaheadfind.
+
+	* src/ephy-find-toolbar.c: (get_find), (send_focus_change),
+	(tab_dom_key_press_cb), (entry_changed_cb),
+	(entry_preedit_changed_cb), (entry_key_press_event_cb),
+	(entry_activate_cb), (set_focus_cb),
+	(ephy_find_toolbar_grab_focus), (ephy_find_toolbar_init),
+	(ephy_find_toolbar_class_init), (ephy_find_toolbar_set_embed),
+	(ephy_find_toolbar_find_previous), (ephy_find_toolbar_open),
+	(ephy_find_toolbar_close):
+	* src/ephy-find-toolbar.h:
+	* src/ephy-window.c: (sync_tab_document_type), (ephy_window_init),
+	(ephy_window_set_print_preview), (ephy_window_find):
+
+	Forward key events from the embed to the find toolbar. That way we can
+	typeaheadfind without losing focus.
+
 2005-05-28  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.ac:
