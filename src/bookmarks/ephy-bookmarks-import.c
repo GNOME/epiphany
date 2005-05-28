@@ -488,10 +488,12 @@ gul_general_read_line_from_file (FILE *f)
 	gchar *t;
 	gchar *buf = g_new0 (gchar, 256);
 	while ( ! ( strchr (buf, '\n') || feof (f) ) ) {
-		fgets(buf, 256, f);
-		t = line;
-		line = g_strconcat (line, buf, NULL);
-		g_free (t);
+		if (fgets(buf, 256, f))
+		{
+			t = line;
+			line = g_strconcat (line, buf, NULL);
+			g_free (t);
+		}
 	}
 	g_free (buf);
 	return line;
