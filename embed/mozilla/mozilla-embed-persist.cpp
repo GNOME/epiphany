@@ -177,19 +177,6 @@ impl_save (EphyEmbedPersist *persist)
 	/* we must have one of uri or browser */
 	g_assert (browser != NULL || uri != NULL);
 
-	/* Get a temp filename to save to */
-	char *tmp_filename, *base;
-	base = g_build_filename (g_get_tmp_dir (), "sav-XXXXXX", NULL);
-	tmp_filename = ephy_file_tmp_filename (base, "html");
-	g_free (base);
-	if (tmp_filename == NULL) return FALSE;
-
-	nsCOMPtr<nsILocalFile> tmpFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-	NS_ENSURE_TRUE (tmpFile, FALSE);
-
-	tmpFile->InitWithNativePath (nsEmbedCString (tmp_filename));
-	g_free (tmp_filename);
-
 	/* Get the uri to save to */
 	nsCOMPtr<nsIURI> inURI;
 	if (uri)
@@ -254,6 +241,19 @@ impl_save (EphyEmbedPersist *persist)
 
 	if (filename == NULL || filename[0] == '\0')
 	{
+		/* Get a temp filename to save to */
+		char *tmp_filename, *base;
+		base = g_build_filename (g_get_tmp_dir (), "sav-XXXXXX", NULL);
+		tmp_filename = ephy_file_tmp_filename (base, "html");
+		g_free (base);
+		if (tmp_filename == NULL) return FALSE;
+
+		nsCOMPtr<nsILocalFile> tmpFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
+		NS_ENSURE_TRUE (tmpFile, FALSE);
+
+		tmpFile->InitWithNativePath (nsEmbedCString (tmp_filename));
+		g_free (tmp_filename);
+
 		/* Create an header sniffer and do the save */
 		nsCOMPtr<nsIWebBrowserPersist> webPersist =
 			MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
@@ -263,7 +263,7 @@ impl_save (EphyEmbedPersist *persist)
 			(webPersist, MOZILLA_EMBED_PERSIST (persist),
 			 tmpFile, inURI, DOMDocument, postData, single);
 		if (!sniffer) return FALSE;
- 
+
 		webPersist->SetProgressListener(sniffer);
 		rv = webPersist->SaveURI(inURI, pageDescriptor, nsnull, nsnull, nsnull, tmpFile);
 		if (NS_FAILED (rv)) return FALSE;
