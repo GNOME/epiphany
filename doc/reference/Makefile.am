@@ -167,6 +167,14 @@ GTKDOC_LIBS = \
 	$(EPIPHANY_DEPENDENCY_LIBS) \
 	$(INTLLIBS)
 
+if ENABLE_PYTHON
+GTKDOC_LIBS += \
+	$(top_builddir)/src/libpyphany.la	\
+	$(PYTHON_LIB_LOC) $(PYTHON_LIBS)	\
+	$(PYTHON_EXTRA_LIBS)			\
+	$(PYGTK_LIBS)
+endif
+
 # If you need to override some of the declarations, place them in the
 # $(DOC_MODULE)-overrides.txt file and uncomment the second line here.
 DOC_OVERRIDES =
