@@ -172,39 +172,10 @@ mozilla_embed_get_type (void)
         return type;
 }
 
-static gboolean
-impl_find_next (EphyEmbed *embed, 
-                gboolean backwards)
-{
-	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-	nsresult rv;
-        PRBool didFind;
-
-        rv = mpriv->browser->Find (backwards, &didFind);
-	
-	return NS_SUCCEEDED (rv) ? didFind : FALSE;
-}
-
 static void
 impl_activate (EphyEmbed *embed) 
 {
 	gtk_widget_grab_focus (GTK_BIN (embed)->child);
-}
-
-static void
-impl_find_set_properties (EphyEmbed *embed, 
-                          const char *search_string,
-	                  gboolean case_sensitive,
-			  gboolean wrap_around)
-{
-	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-
-	nsEmbedString searchString;
-	NS_CStringToUTF16 (nsEmbedCString(search_string),
-			   NS_CSTRING_ENCODING_UTF8, searchString);
-
-	mpriv->browser->FindSetProperties (searchString.get(), case_sensitive,
-					   wrap_around); 
 }
 
 static void
@@ -1067,9 +1038,7 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->shistory_go_nth = impl_shistory_go_nth;
 	iface->get_security_level = impl_get_security_level;
 	iface->show_page_certificate = impl_show_page_certificate;
-	iface->find_next = impl_find_next;
 	iface->activate = impl_activate;
-	iface->find_set_properties = impl_find_set_properties;
 	iface->set_encoding = impl_set_encoding;
 	iface->get_encoding = impl_get_encoding;
 	iface->has_automatic_encoding = impl_has_automatic_encoding;

@@ -41,7 +41,6 @@
 #include "nsISimpleEnumerator.h"
 
 #include "nsIContentViewer.h"
-#include "nsIWebBrowserFind.h"
 #include "nsIWebBrowserFocus.h"
 #include "nsICommandManager.h"
 #include "nsIWebBrowserPrint.h"
@@ -917,35 +916,6 @@ nsresult EphyBrowser::GetSHUrlAtIndex (PRInt32 index, nsACString &url)
 	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && url.Length(), NS_ERROR_FAILURE);
 
 	return NS_OK;
-}
-
-nsresult EphyBrowser::FindSetProperties (const PRUnichar *search_string,
-			                 PRBool case_sensitive,
-					 PRBool wrap_around)
-{
-	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIWebBrowserFind> finder (do_GetInterface(mWebBrowser));
-	NS_ENSURE_TRUE (finder, NS_ERROR_FAILURE);
-
-	finder->SetSearchString (search_string);
-	finder->SetMatchCase (case_sensitive);
-	finder->SetWrapFind (wrap_around);
-
-	return NS_OK;
-}
-
-nsresult EphyBrowser::Find (PRBool backwards,
-			    PRBool *didFind)
-{
-	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIWebBrowserFind> finder (do_GetInterface(mWebBrowser));
-	NS_ENSURE_TRUE (finder, NS_ERROR_FAILURE);
-
-	finder->SetFindBackwards (backwards);
-
-	return finder->FindNext(didFind);
 }
 
 nsresult EphyBrowser::GetPageDescriptor(nsISupports **aPageDescriptor)

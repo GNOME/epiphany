@@ -714,43 +714,6 @@ ephy_embed_show_page_certificate (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_find_set_properties:
- * @embed: an #EphyEmbed
- * @search_string: the desired search string
- * @case_sensitive: %TRUE for "case sensitive" to be set
- * @wrap_around: %TRUE for "wrap around" to be set
- *
- * Sets the properties of @embed's "Find" dialog.
- **/
-void
-ephy_embed_find_set_properties  (EphyEmbed *embed,
-				 const char *search_string,
-				 gboolean case_sensitive,
-				 gboolean wrap_around)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->find_set_properties (embed, search_string, case_sensitive,
-				    wrap_around);
-}
-
-/**
- * ephy_embed_find_next:
- * @embed: an #EphyEmbed
- * @backwards: %FALSE to search forwards in the document
- *
- * Equivalent to pressing "Next" in @embed's Find dialog.
- *
- * Return value: %TRUE if a next match was found
- **/
-gboolean
-ephy_embed_find_next (EphyEmbed *embed,
-		      gboolean backwards)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->find_next (embed, backwards);
-}
-
-/**
  * ephy_embed_activate:
  * @embed: an #EphyEmbed
  *

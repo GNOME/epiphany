@@ -57,15 +57,18 @@ struct _EphyFindToolbarClass
 	void (* close)		(EphyFindToolbar *toolbar);
 };
 
-GType		 ephy_find_toolbar_get_type	(void) G_GNUC_CONST;
+GType		 ephy_find_toolbar_get_type	 (void) G_GNUC_CONST;
 
-EphyFindToolbar *ephy_find_toolbar_new		(void);
+EphyFindToolbar *ephy_find_toolbar_new		 (void);
 
-const char	*ephy_find_toolbar_get_text	(EphyFindToolbar *toolbar);
+const char	*ephy_find_toolbar_get_text	 (EphyFindToolbar *toolbar);
 
-void		 ephy_find_toolbar_set_controls	(EphyFindToolbar *toolbar,
-						 gboolean next,
-						 gboolean previous);
+void		 ephy_find_toolbar_set_embed	 (EphyFindToolbar *toolbar,
+						  EphyEmbed *embed);
+
+void		 ephy_find_toolbar_find_next	 (EphyFindToolbar *toolbar);
+
+void		 ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar);
 
 G_END_DECLS
 

@@ -22,6 +22,8 @@
 #include "config.h"
 
 #include "ephy-find-toolbar.h"
+#include "ephy-embed-find.h"
+#include "ephy-embed-factory.h"
 #include "ephy-debug.h"
 
 #include <gdk/gdkkeysyms.h>
@@ -34,6 +36,7 @@
 #include <gtk/gtkseparatortoolitem.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtktoolbutton.h>
+#include <gtk/gtkalignment.h>
 #include <gtk/gtkmain.h>
 #include <string.h>
 
@@ -41,7 +44,8 @@
 
 struct _EphyFindToolbarPrivate
 {
-	EphyWindow *window;
+	EphyEmbedFind *find;
+	EphyEmbed *embed;
 	GtkWidget *entry;
 	GtkToolItem *next;
 	GtkToolItem *prev;
@@ -66,20 +70,29 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static GObjectClass *parent_class = NULL;
 
-/* public functions */
+/* private functions */
 
-const char *
-ephy_find_toolbar_get_text (EphyFindToolbar *toolbar)
+static EphyEmbedFind *
+get_find (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
-	return gtk_entry_get_text (GTK_ENTRY (priv->entry));
+	if (priv->find == NULL)
+	{
+		priv->find = EPHY_EMBED_FIND (ephy_embed_factory_new_object (EPHY_TYPE_EMBED_FIND));
+
+		g_return_val_if_fail (priv->embed == NULL || GTK_WIDGET_REALIZED (GTK_WIDGET (priv->embed)), priv->find);
+
+		ephy_embed_find_set_embed (priv->find, priv->embed);
+	}
+
+	return priv->find;
 }
 
-void
-ephy_find_toolbar_set_controls (EphyFindToolbar *toolbar,
-				gboolean can_find_next,
-				gboolean can_find_prev)
+static void
+set_controls (EphyFindToolbar *toolbar,
+	      gboolean can_find_next,
+	      gboolean can_find_prev)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
@@ -87,7 +100,13 @@ ephy_find_toolbar_set_controls (EphyFindToolbar *toolbar,
 	gtk_widget_set_sensitive (GTK_WIDGET (priv->prev), can_find_prev);
 }
 
-/* private functions */
+static void
+tab_content_changed_cb (EphyEmbed *embed,
+			const char *uri,
+			EphyFindToolbar *toolbar)
+{
+	set_controls (toolbar, TRUE, TRUE);
+}
 
 static void
 find_next_cb (EphyFindToolbar *toolbar)
@@ -103,9 +122,19 @@ find_prev_cb (EphyFindToolbar *toolbar)
 
 static void
 entry_changed_cb (GtkEntry *entry,
-		  GObject *toolbar)
+		  EphyFindToolbar *toolbar)
 {
-	g_object_notify (toolbar, "text");
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+	const char *text;
+	gboolean found = TRUE;
+
+	text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
+#ifdef HAVE_TYPEAHEADFIND
+	found = ephy_embed_find_find (get_find (toolbar), text, FALSE);
+#else
+	ephy_embed_find_set_properties (get_find (toolbar), text, FALSE);
+#endif
+	set_controls (toolbar, found, found);
 }
 
 static gboolean
@@ -200,7 +229,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	EphyFindToolbarPrivate *priv;
 	GtkToolbar *gtoolbar;
 	GtkToolItem *item;
-	GtkWidget *arrow, *box, *label;
+	GtkWidget *alignment, *arrow, *box, *label;
 
 	priv = toolbar->priv = EPHY_FIND_TOOLBAR_GET_PRIVATE (toolbar);
 	gtoolbar = GTK_TOOLBAR (toolbar);
@@ -208,7 +237,11 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	gtk_toolbar_set_style (gtoolbar, GTK_TOOLBAR_BOTH_HORIZ);
 
 	/* Find: |_____| */
+	alignment = gtk_alignment_new (0.0, 0.5, 1.0, 0.0);
+	gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 2, 2);
+
 	box = gtk_hbox_new (FALSE, 12);
+	gtk_container_add (GTK_CONTAINER (alignment), box);
 
 	label = gtk_label_new (NULL);
 	gtk_label_set_markup (GTK_LABEL (label), _("Find:"));
@@ -220,7 +253,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	gtk_box_pack_start (GTK_BOX (box), priv->entry, TRUE, TRUE, 0);
 
 	item = gtk_tool_item_new ();
-	gtk_container_add (GTK_CONTAINER (item), box);
+	gtk_container_add (GTK_CONTAINER (item), alignment);
 	//gtk_tool_item_set_expand (item, TRUE);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 	gtk_widget_show_all (GTK_WIDGET (item));
@@ -265,52 +298,34 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 }
 
 static void
-ephy_find_toolbar_set_property (GObject *object,
-				guint prop_id,
-				const GValue *value,
-				GParamSpec *pspec)
+ephy_find_toolbar_finalize (GObject *object)
 {
 	EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (object);
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
-	switch (prop_id)
+	if (priv->find != NULL)
 	{
-		case PROP_TEXT:
-			gtk_entry_set_text (GTK_ENTRY (priv->entry),
-					    g_value_get_string (value));
-			break;
+		g_object_unref (priv->find);
 	}
-}
 
-static void
-ephy_find_toolbar_get_property (GObject *object,
-				guint prop_id,
-				GValue *value,
-				GParamSpec *pspec)
-{
-	EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (object);
-
-	switch (prop_id)
-	{
-		case PROP_TEXT:
-			g_value_set_string (value, ephy_find_toolbar_get_text (toolbar));
-			break;
-	}
+	parent_class->finalize (object);
 }
 
 static void
 ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 {
-        GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
         GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
         parent_class = g_type_class_peek_parent (klass);
 
-	object_class->set_property = ephy_find_toolbar_set_property;
-	object_class->get_property = ephy_find_toolbar_get_property;
+	object_class->finalize = ephy_find_toolbar_finalize;
 
 	widget_class->parent_set = ephy_find_toolbar_parent_set;
 	widget_class->grab_focus = ephy_find_toolbar_grab_focus;
+
+	klass->next = ephy_find_toolbar_find_next;
+	klass->previous = ephy_find_toolbar_find_previous;
 
 	signals[NEXT] =
 		g_signal_new ("next",
@@ -339,17 +354,10 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
 
-	g_object_class_install_property
-		(object_class,
-		 PROP_TEXT,
-		 g_param_spec_string ("text",
-				      "Search string",
-				      "Search string",
-				      "",
-				      G_PARAM_READWRITE));
-
 	g_type_class_add_private (klass, sizeof (EphyFindToolbarPrivate));
 }
+
+/* public functions */
 
 GType
 ephy_find_toolbar_get_type (void)
@@ -383,4 +391,61 @@ EphyFindToolbar *
 ephy_find_toolbar_new (void)
 {
 	return EPHY_FIND_TOOLBAR (g_object_new (EPHY_TYPE_FIND_TOOLBAR, NULL));
+}
+
+const char *
+ephy_find_toolbar_get_text (EphyFindToolbar *toolbar)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+
+	return gtk_entry_get_text (GTK_ENTRY (priv->entry));
+}
+
+void
+ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
+			     EphyEmbed *embed)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+
+	if (priv->embed == embed) return;
+
+	if (priv->embed != NULL)
+	{
+		g_signal_handlers_disconnect_by_func
+				(embed, G_CALLBACK (tab_content_changed_cb), toolbar);
+	}
+
+	priv->embed = embed;
+	if (embed != NULL)
+	{
+		set_controls (toolbar, TRUE, TRUE);
+		g_signal_connect_object (embed, "ge-content-change",
+					 G_CALLBACK (tab_content_changed_cb),
+					 toolbar, G_CONNECT_AFTER);
+
+		if (priv->find != NULL)
+		{
+			g_return_if_fail (GTK_WIDGET_REALIZED (GTK_WIDGET (priv->embed)));
+
+			ephy_embed_find_set_embed (priv->find, embed);
+		}
+	}
+}
+
+void
+ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
+{
+	gboolean found;
+
+	found = ephy_embed_find_find_again (get_find (toolbar), TRUE);
+	set_controls (toolbar, found, found);
+}
+
+void
+ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
+{
+	gboolean found;
+
+	found = ephy_embed_find_find_again (get_find (toolbar), FALSE);
+	set_controls (toolbar, found, found);
 }

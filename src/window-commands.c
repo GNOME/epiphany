@@ -44,6 +44,7 @@
 #include "ephy-zoom.h"
 #include "ephy-notebook.h"
 #include "ephy-toolbar-editor.h"
+#include "ephy-find-toolbar.h"
 
 #include <string.h>
 #include <glib.h>
@@ -559,24 +560,20 @@ void
 window_cmd_edit_find_next (GtkAction *action,
 			   EphyWindow *window)
 {
-	EphyEmbed *embed;
+	EphyFindToolbar *toolbar;
 
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	ephy_embed_find_next (embed, FALSE);
+	toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_find_toolbar (window));
+	ephy_find_toolbar_find_next (toolbar);
 }
 
 void
 window_cmd_edit_find_prev (GtkAction *action,
 			   EphyWindow *window)
 {
-	EphyEmbed *embed;
+	EphyFindToolbar *toolbar;
 
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	ephy_embed_find_next (embed, TRUE);
+	toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_find_toolbar (window));
+	ephy_find_toolbar_find_previous (toolbar);
 }
 
 void

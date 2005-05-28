@@ -182,12 +182,6 @@ struct _EphyEmbedIface
 	void		   (* set_zoom)			(EphyEmbed *embed,
 							 float zoom);
 	float		   (* get_zoom)			(EphyEmbed *embed);
-	void		   (* find_set_properties)	(EphyEmbed *embed,
-							 const char *search_string,
-							 gboolean case_sensitive,
-							 gboolean wrap_around);
-	gboolean	   (* find_next)		(EphyEmbed *embed,
-							 gboolean backwards);
 	char *		   (* get_encoding)		(EphyEmbed *embed);
 	gboolean	   (* has_automatic_encoding)	(EphyEmbed *embed);
 	void		   (* set_encoding)		(EphyEmbed *embed,
@@ -272,15 +266,6 @@ void		  ephy_embed_set_zoom			(EphyEmbed *embed,
 							 float zoom);
 
 float		  ephy_embed_get_zoom			(EphyEmbed *embed);
-
-/* Find */
-void		  ephy_embed_find_set_properties	(EphyEmbed *embed,
-							 const char *search_string,
-							 gboolean case_sensitive,
-							 gboolean wrap_around);
-
-gboolean	  ephy_embed_find_next			(EphyEmbed *embed,
-							 gboolean backwards);
 
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);

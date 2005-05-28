@@ -390,6 +390,21 @@ AC_MSG_RESULT([$have_psm])
 
 AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "x$have_psm" = "xyes"])
 
+dnl This is only present on toolkit
+
+AC_MSG_CHECKING([for toolkit's nsITypeAheadFind])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+		[[#include <fastfind/nsITypeAheadFind.h>]],
+		[[nsITypeAheadFind *p;
+		  p->SetDocShell(nsnull);]]
+	)],
+	[AC_DEFINE([HAVE_TYPEAHEADFIND],[1],[Define if we have tookit's typeaheadfind]) result=yes],
+	[result=no])
+
+AC_MSG_RESULT([$result])
+
 dnl restore flags
 CPPFLAGS=$_SAVE_CPPFLAGS
 CXXFLAGS=$_SAVE_CXXFLAGS
@@ -483,7 +498,7 @@ dnl ******
 dnl Python
 dnl ******
 
-AC_MSG_CHECKING([whether python support is requested])
+AC_MSG_CHECKING([whether Python support is requested])
 
 AC_ARG_ENABLE([python],
 	AS_HELP_STRING([--enable-python],[Enable python support]),

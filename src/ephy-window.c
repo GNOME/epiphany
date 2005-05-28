@@ -1790,18 +1790,6 @@ tab_context_menu_cb (EphyEmbed *embed,
 	return TRUE;
 }
 
-static void
-tab_content_changed_cb (EphyEmbed *embed,
-			const char *uri,
-		        EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-
-	if (priv->closing) return;
-
-	ephy_find_toolbar_set_controls (priv->find_toolbar, TRUE, TRUE);
-}
-
 static gboolean
 let_me_resize_hack (EphyWindow *window)
 {
@@ -1922,9 +1910,8 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_handlers_disconnect_by_func
 			(embed, G_CALLBACK (tab_context_menu_cb), window);
 		g_signal_handlers_disconnect_by_func
-			(embed, G_CALLBACK (tab_content_changed_cb), window);
-		g_signal_handlers_disconnect_by_func
 			(embed, G_CALLBACK (tab_size_to_cb), window);
+
 	}
 
 	window->priv->active_tab = new_tab;
@@ -1984,9 +1971,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		embed = ephy_tab_get_embed (new_tab);
 		g_signal_connect_object (embed, "ge-context-menu",
 					 G_CALLBACK (tab_context_menu_cb),
-					 window, G_CONNECT_AFTER);
-		g_signal_connect_object (embed, "ge-content-change",
-					 G_CALLBACK (tab_content_changed_cb),
 					 window, G_CONNECT_AFTER);
 		g_signal_connect_object (embed, "size-to",
 					 G_CALLBACK (tab_size_to_cb),
@@ -2690,56 +2674,6 @@ ephy_window_open_link (EphyLink *link,
 }
 
 static void
-sync_find_toolbar_text_cb (EphyFindToolbar *toolbar,
-			   GParamSpec *pspec,
-			   EphyWindow *window)
-{
-	EphyEmbed *embed;
-	const char *text;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	text = ephy_find_toolbar_get_text (toolbar);
-	ephy_embed_find_set_properties (embed, text, FALSE, TRUE);
-	ephy_find_toolbar_set_controls (toolbar, TRUE, TRUE);
-}
-
-static void
-find_toolbar_find_next_cb (EphyFindToolbar *toolbar,
-			   EphyWindow *window)
-{
-	EphyEmbed *embed;
-	const char *text;
-	gboolean found;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	text = ephy_find_toolbar_get_text (toolbar);
-	ephy_embed_find_set_properties (embed, text, FALSE, TRUE);
-	found = ephy_embed_find_next (embed, FALSE);
-	ephy_find_toolbar_set_controls (toolbar, found, found);
-}
-
-static void
-find_toolbar_find_previous_cb (EphyFindToolbar *toolbar,
-			        EphyWindow *window)
-{
-	EphyEmbed *embed;
-	const char *text;
-	gboolean found;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	text = ephy_find_toolbar_get_text (toolbar);
-	ephy_embed_find_set_properties (embed, text, FALSE, TRUE);
-	found = ephy_embed_find_next (embed, TRUE);
-	ephy_find_toolbar_set_controls (toolbar, found, found);
-}
-
-static void
 find_toolbar_close_cb (EphyFindToolbar *toolbar,
 		       EphyWindow *window)
 {
@@ -2777,12 +2711,6 @@ ephy_window_init (EphyWindow *window)
 	gtk_widget_show (GTK_WIDGET (window->priv->notebook));
 
 	priv->find_toolbar = ephy_find_toolbar_new ();
-	g_signal_connect (priv->find_toolbar, "notify::text",
-			  G_CALLBACK (sync_find_toolbar_text_cb), window);
-	g_signal_connect (priv->find_toolbar, "next",
-			  G_CALLBACK (find_toolbar_find_next_cb), window);
-	g_signal_connect (priv->find_toolbar, "previous",
-			  G_CALLBACK (find_toolbar_find_previous_cb), window);
 	g_signal_connect (priv->find_toolbar, "close",
 			  G_CALLBACK (find_toolbar_close_cb), window);
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
@@ -3057,6 +2985,22 @@ ephy_window_get_notebook (EphyWindow *window)
 }
 
 /**
+ * ephy_window_get_find_toolbar:
+ * @window: an #EphyWindow
+ *
+ * Returns the #EphyFindToolbar used by this window.
+ *
+ * Return value: the @window's #EphyFindToolbar
+ **/
+GtkWidget *
+ephy_window_get_find_toolbar (EphyWindow *window)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+
+	return GTK_WIDGET (window->priv->find_toolbar);
+}
+
+/**
  * ephy_window_get_statusbar:
  * @window: an #EphyWindow
  *
@@ -3291,16 +3235,18 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 {
 	EphyWindowPrivate *priv = window->priv;
 	EphyTab *tab;
+	EphyEmbed *embed;
 
 	if (priv->closing) return;
 
 	/* get the new tab */
 	tab = real_get_active_tab (window, page_num);
+	embed = ephy_tab_get_embed (tab);
 
 	/* update new tab */
 	ephy_window_set_active_tab (window, tab);
 
-	ephy_find_toolbar_set_controls (priv->find_toolbar, TRUE, TRUE);
+	ephy_find_toolbar_set_embed (priv->find_toolbar, embed);
 
 	/* update window controls */
 	update_tabs_menu_sensitivity (window);

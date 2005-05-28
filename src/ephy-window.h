@@ -72,6 +72,8 @@ GtkWidget	 *ephy_window_get_bookmarksbar	  (EphyWindow *window);
 
 GtkWidget	 *ephy_window_get_notebook	  (EphyWindow *window);
 
+GtkWidget        *ephy_window_get_find_toolbar    (EphyWindow *window);
+
 GtkWidget	 *ephy_window_get_statusbar	  (EphyWindow *window);
 
 void		  ephy_window_add_tab		  (EphyWindow *window,

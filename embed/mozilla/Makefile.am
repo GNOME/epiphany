@@ -9,6 +9,8 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyHeaderSniffer.h		\
 	EphyBrowser.cpp                 \
 	EphyBrowser.h	                \
+	EphyFind.cpp			\
+	EphyFind.h			\
 	EphyHistoryListener.cpp		\
 	EphyHistoryListener.h		\
 	EphySidebar.cpp			\
@@ -35,6 +37,8 @@ libephymozillaembed_la_SOURCES = 	\
 	mozilla-embed.h			\
 	mozilla-embed-event.cpp		\
 	mozilla-embed-event.h		\
+	mozilla-embed-find.cpp		\
+	mozilla-embed-find.h		\
 	mozilla-embed-persist.cpp       \
 	mozilla-embed-persist.h		\
 	mozilla-embed-single.cpp	\
@@ -75,6 +79,7 @@ mozilla_include_subdirs = \
 	docshell		\
 	dom			\
 	exthandler		\
+	fastfind		\
 	helperAppDlg		\
 	gfx			\
 	history			\
