@@ -1,3 +1,15 @@
+2005-05-28  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.ac:
+
+	Check for new DBUS API.
+	
+	* lib/ephy-dbus.c: (session_filter_func), (system_filter_func),
+	(ephy_dbus_connect_to_system_bus),
+	(ephy_dbus_connect_to_session_bus):
+
+	Adapt to new DBUS API. Patch by Thom May, fixes bug #301153.
+
 2005-05-26  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.ac:

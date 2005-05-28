@@ -450,10 +450,27 @@ AC_ARG_ENABLE([dbus],
 
 AC_MSG_RESULT([$enable_dbus])
 
-DBUS_REQUIRED=0.22
-DBUS_GLIB_REQUIRED=0.22
-
 if test "x$enable_dbus" = "xyes" ; then
+
+	AC_MSG_CHECKING([for new DBUS API])
+
+	_SAVE_LDFLAGS="$LDFLAGS"
+	LDFLAGS="$LDFLAGS `$PKG_CONFIG --libs dbus-1`"
+	AC_TRY_LINK_FUNC([dbus_message_iter_get_boolean],[have_new_dbus=no],[have_new_dbus=yes])
+	LDFLAGS="$_SAVE_LDFLAGS"
+
+	AC_MSG_RESULT([$have_new_dbus])
+
+	if test "x$have_new_dbus" = "xyes"; then
+		AC_DEFINE([HAVE_NEW_DBUS],[1],[Define if compiling with DBUS 0.3])
+
+		DBUS_REQUIRED=0.32
+		DBUS_GLIB_REQUIRED=0.32
+	else
+		DBUS_REQUIRED=0.22
+		DBUS_GLIB_REQUIRED=0.22
+	fi
+
 	AC_DEFINE([ENABLE_DBUS],[1],[Define if DBUS support is enabled])
 	EPIPHANY_FEATURES="$EPIPHANY_FEATURES dbus"
 
