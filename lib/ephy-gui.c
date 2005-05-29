@@ -193,27 +193,83 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent,
 				 const char *filename)
 {
 	GtkWidget *dialog;
-	char *display_name, *path;
-	gboolean retval, writable;
+	char *display_name;
+	gboolean retval;
 
 	if (filename == NULL) return FALSE;
 
 	if (!g_file_test (filename, G_FILE_TEST_EXISTS))
 	{
+		char *path = g_path_get_dirname (filename);
+		gboolean writable = access (path, W_OK) == 0;
+
 		/* check if path is writable to */
-		path = g_path_get_dirname (filename);
-		writable = access (path, W_OK) == 0;
+		if (!writable)
+		{
+			dialog = gtk_message_dialog_new (
+					parent ? GTK_WINDOW(parent) : NULL,
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_MESSAGE_ERROR,
+					GTK_BUTTONS_CLOSE,
+					_("Directory %s is not writable"), path);
+
+			gtk_message_dialog_format_secondary_text (
+					GTK_MESSAGE_DIALOG (dialog),
+					_("You do not have permission to "
+						"create files in this directory."));
+
+			gtk_window_set_title (GTK_WINDOW (dialog), _("Directory not writable"));
+			gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
+			if (parent != NULL)
+			{
+				gtk_window_group_add_window (
+						ephy_gui_ensure_window_group (GTK_WINDOW (parent)),
+						GTK_WINDOW (dialog));
+			}
+
+			gtk_dialog_run (GTK_DIALOG (dialog));
+
+			gtk_widget_destroy (dialog);		
+		}
+
 		g_free (path);
 
-		/* FIXME put up some UI to inform the user */
 		return writable;
 	}
 
-	/* check if file is writable */
-	/* FIXME put up some UI to inform the user */
-	if (access (filename, W_OK) != 0) return FALSE;
-
 	display_name = g_filename_display_basename (filename);
+
+	/* check if file is writable */
+	if (access (filename, W_OK) != 0)
+	{
+		dialog = gtk_message_dialog_new (
+				parent ? GTK_WINDOW(parent) : NULL,
+				GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_MESSAGE_ERROR,
+				GTK_BUTTONS_CLOSE,
+				_("File %s is not writable"), display_name);
+
+		gtk_message_dialog_format_secondary_text (
+				GTK_MESSAGE_DIALOG (dialog),
+				_("You do not have permission to overwrite this file."));
+
+		gtk_window_set_title (GTK_WINDOW (dialog), _("File not writable"));
+		gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
+		if (parent != NULL)
+		{
+			gtk_window_group_add_window (
+					ephy_gui_ensure_window_group (GTK_WINDOW (parent)),
+					GTK_WINDOW (dialog));
+		}
+
+		gtk_dialog_run (GTK_DIALOG (dialog));
+
+		gtk_widget_destroy (dialog);		
+
+		return FALSE;
+	}
 
 	dialog = gtk_message_dialog_new
 		(parent ? GTK_WINDOW (parent) : NULL,
