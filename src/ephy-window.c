@@ -1132,7 +1132,7 @@ sync_tab_document_type (EphyTab *tab,
 	GtkActionGroup *action_group = priv->action_group;
 	GtkAction *action;
 	EphyEmbedDocumentType type;
-	gboolean can_find, disable;
+	gboolean can_find, disable, is_image;
 
 	if (priv->closing) return;
 
@@ -1141,12 +1141,13 @@ sync_tab_document_type (EphyTab *tab,
 	
 	type = ephy_tab_get_document_type (tab);
 	can_find = (type != EPHY_EMBED_DOCUMENT_IMAGE);
+	is_image = type == EPHY_EMBED_DOCUMENT_IMAGE;
 	disable = (type != EPHY_EMBED_DOCUMENT_HTML);
 
 	action = gtk_action_group_get_action (action_group, "ViewEncoding");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, disable);
 	action = gtk_action_group_get_action (action_group, "ViewPageSource");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, disable);
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, is_image);
 	action = gtk_action_group_get_action (action_group, "EditFind");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, !can_find);
 	action = gtk_action_group_get_action (action_group, "EditFindNext");
