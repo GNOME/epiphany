@@ -1153,26 +1153,6 @@
   (return-type "float")
 )
 
-(define-method find_set_properties
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_find_set_properties")
-  (return-type "none")
-  (parameters
-    '("const-char*" "search_string")
-    '("gboolean" "case_sensitive")
-    '("gboolean" "wrap_around")
-  )
-)
-
-(define-method find_next
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_find_next")
-  (return-type "gboolean")
-  (parameters
-    '("gboolean" "backwards")
-  )
-)
-
 (define-method get_encoding
   (of-object "EphyEmbed")
   (c-name "ephy_embed_get_encoding")
@@ -2950,6 +2930,12 @@
 (define-method get_notebook
   (of-object "EphyWindow")
   (c-name "ephy_window_get_notebook")
+  (return-type "GtkWidget*")
+)
+
+(define-method get_find_toolbar
+  (of-object "EphyWindow")
+  (c-name "ephy_window_get_find_toolbar")
   (return-type "GtkWidget*")
 )
 
