@@ -114,6 +114,8 @@ tab_content_changed_cb (EphyEmbed *embed,
 	set_controls (toolbar, TRUE, TRUE);
 }
 
+#ifdef HAVE_TYPEAHEADFIND
+
 /* Cut and paste from gtkwindow.c */
 static void
 send_focus_change (GtkWidget *widget,
@@ -215,6 +217,8 @@ tab_dom_key_press_cb (EphyEmbed *embed,
 	/* FIXME: is this right? */
 	return (retval && oldhash != newhash) || priv->preedit_changed;
 }
+
+#endif /* HAVE_TYPEAHEADFIND */
 
 static void
 find_next_cb (EphyFindToolbar *toolbar)
@@ -530,9 +534,11 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 		g_signal_connect_object (embed, "ge-content-change",
 					 G_CALLBACK (tab_content_changed_cb),
 					 toolbar, G_CONNECT_AFTER);
+#ifdef HAVE_TYPEAHEADFIND
 		g_signal_connect_object (embed, "dom-key-press",
 					 G_CALLBACK (tab_dom_key_press_cb),
 					 toolbar, 0);
+#endif
 
 		if (priv->find != NULL)
 		{
@@ -577,7 +583,9 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 	gtk_widget_show (GTK_WIDGET (toolbar));
 	ephy_embed_activate (priv->embed);
 
+#ifdef HAVE_TYPEAHEADFIND
 	send_focus_change (priv->entry, TRUE);
+#endif
 }
 
 void

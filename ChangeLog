@@ -1,5 +1,12 @@
 2005-05-29  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-find-toolbar.c: (ephy_find_toolbar_set_embed),
+	(ephy_find_toolbar_open):
+
+	Only enable typeahead if we actually can do typeaheadfind.
+
+2005-05-29  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.c: (sync_tab_document_type):
 
 	Allow ViewSource for XML documents too. Fixes bug #305788.
