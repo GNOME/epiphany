@@ -1159,7 +1159,7 @@ sync_tab_document_type (EphyTab *tab,
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	EphyEmbedDocumentType type;
-	gboolean can_find, enable;
+	gboolean can_find, enable, is_image;
 
 	/* update zoom actions */
 	sync_tab_zoom (tab, NULL, window);
@@ -1167,12 +1167,13 @@ sync_tab_document_type (EphyTab *tab,
 	type = ephy_tab_get_document_type (tab);
 	can_find = (type != EPHY_EMBED_DOCUMENT_IMAGE);
 	enable = (type == EPHY_EMBED_DOCUMENT_HTML);
+	is_image = type == EPHY_EMBED_DOCUMENT_IMAGE;
 
 	action_group = window->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "ViewEncoding");
 	g_object_set (action, "sensitive", enable, NULL);
 	action = gtk_action_group_get_action (action_group, "ViewPageSource");
-	g_object_set (action, "sensitive", enable, NULL);
+	g_object_set (action, "sensitive", !is_image, NULL);
 	action = gtk_action_group_get_action (action_group, "EditFind");
 	g_object_set (action, "sensitive", can_find, NULL);
 	action = gtk_action_group_get_action (action_group, "EditFindNext");
