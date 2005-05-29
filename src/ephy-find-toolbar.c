@@ -178,17 +178,20 @@ tab_dom_key_press_cb (EphyEmbed *embed,
 	event_key = (GdkEventKey *) event;
 
 	/* check for / and ' which open the find toolbar in text resp. link mode */
-	if (event_key->keyval == GDK_slash)
+	if (GTK_WIDGET_VISIBLE (widget) == FALSE)
 	{
-		ephy_find_toolbar_open (toolbar, FALSE);
-		gdk_event_free (event);
-		return TRUE;
-	}
-	else if (event_key->keyval == GDK_apostrophe)
-	{
-		ephy_find_toolbar_open (toolbar, TRUE);
-		gdk_event_free (event);
-		return TRUE;
+		if (event_key->keyval == GDK_slash)
+		{
+			ephy_find_toolbar_open (toolbar, FALSE);
+			gdk_event_free (event);
+			return TRUE;
+		}
+		else if (event_key->keyval == GDK_apostrophe)
+		{
+			ephy_find_toolbar_open (toolbar, TRUE);
+			gdk_event_free (event);
+			return TRUE;
+		}
 	}
 	
 	/* don't do anything if the find toolbar is hidden */
