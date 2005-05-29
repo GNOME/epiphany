@@ -105,6 +105,8 @@ void		  ephy_window_find		  (EphyWindow *window);
 
 gboolean	  ephy_window_get_is_popup	  (EphyWindow *window);
 
+gboolean	  ephy_window_get_is_print_preview(EphyWindow *window);
+
 G_END_DECLS
 
 #endif

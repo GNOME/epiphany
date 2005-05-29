@@ -59,7 +59,7 @@ struct _EphyFindToolbarClass
 
 GType		 ephy_find_toolbar_get_type	 (void) G_GNUC_CONST;
 
-EphyFindToolbar *ephy_find_toolbar_new		 (void);
+EphyFindToolbar *ephy_find_toolbar_new		 (EphyWindow *window);
 
 const char	*ephy_find_toolbar_get_text	 (EphyFindToolbar *toolbar);
 

@@ -1,5 +1,20 @@
 2005-05-29  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-find-toolbar.c: (tab_dom_key_press_cb),
+	(entry_activate_cb), (sync_print_preview_mode),
+	(ephy_find_toolbar_set_window), (ephy_find_toolbar_get_property),
+	(ephy_find_toolbar_set_property), (ephy_find_toolbar_class_init),
+	(ephy_find_toolbar_new):
+	* src/ephy-find-toolbar.h:
+	* src/ephy-window.c: (ephy_window_init),
+	(ephy_window_set_print_preview), (ephy_window_get_is_popup),
+	(ephy_window_get_is_print_preview):
+	* src/ephy-window.h:
+
+	Deactivate typeaheadfind in print preview mode.
+
+2005-05-29  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-find-toolbar.c: (ephy_find_toolbar_set_embed),
 	(ephy_find_toolbar_open):
 

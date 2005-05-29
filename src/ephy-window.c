@@ -2711,7 +2711,7 @@ ephy_window_init (EphyWindow *window)
 			    TRUE, TRUE, 0);
 	gtk_widget_show (GTK_WIDGET (window->priv->notebook));
 
-	priv->find_toolbar = ephy_find_toolbar_new ();
+	priv->find_toolbar = ephy_find_toolbar_new (window);
 	g_signal_connect (priv->find_toolbar, "close",
 			  G_CALLBACK (find_toolbar_close_cb), window);
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
@@ -2898,27 +2898,25 @@ ephy_window_set_print_preview (EphyWindow *window,
 
 	accel_group = gtk_ui_manager_get_accel_group (window->priv->manager);
 
-	if (window->priv->ppv_mode == enabled) return;
+	if (priv->ppv_mode == enabled) return;
 
-	window->priv->ppv_mode = enabled;
+	priv->ppv_mode = enabled;
 
 	sync_chromes_visibility (window);
 
 	if (enabled)
 	{
-		g_return_if_fail (window->priv->ppview_toolbar == NULL);
+		g_return_if_fail (priv->ppview_toolbar == NULL);
 
-		window->priv->ppview_toolbar = ppview_toolbar_new (window);
+		priv->ppview_toolbar = ppview_toolbar_new (window);
 		gtk_window_remove_accel_group (GTK_WINDOW (window), accel_group);
-
-		ephy_find_toolbar_close (priv->find_toolbar);
 	}
 	else
 	{
-		g_return_if_fail (window->priv->ppview_toolbar != NULL);
+		g_return_if_fail (priv->ppview_toolbar != NULL);
 
-		g_object_unref (window->priv->ppview_toolbar);
-		window->priv->ppview_toolbar = NULL;
+		g_object_unref (priv->ppview_toolbar);
+		priv->ppview_toolbar = NULL;
 		gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 	}
 
@@ -3401,4 +3399,20 @@ ephy_window_get_is_popup (EphyWindow *window)
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), FALSE);
 
 	return window->priv->is_popup;
+}
+
+/**
+ * ephy_window_get_is_print_preview:
+ * @window: an #EphyWindow
+ *
+ * Returns whether this window is in print preview mode.
+ *
+ * Return value: %TRUE if it is in print preview mode
+ **/
+gboolean
+ephy_window_get_is_print_preview (EphyWindow *window)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), FALSE);
+
+	return window->priv->ppv_mode;
 }

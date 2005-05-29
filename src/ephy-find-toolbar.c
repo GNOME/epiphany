@@ -45,6 +45,7 @@
 struct _EphyFindToolbarPrivate
 {
 	EphyEmbedFind *find;
+	EphyWindow *window;
 	EphyEmbed *embed;
 	GtkWidget *entry;
 	GtkToolItem *next;
@@ -52,6 +53,7 @@ struct _EphyFindToolbarPrivate
 	gulong set_focus_handler;
 	guint preedit_changed : 1;
 	guint prevent_activate : 1;
+	guint activated : 1;
 	guint explicit_focus : 1;
 	guint links_only : 1;
 };
@@ -59,7 +61,7 @@ struct _EphyFindToolbarPrivate
 enum
 {
 	PROP_0,
-	PROP_TEXT
+	PROP_WINDOW
 };
 
 enum
@@ -165,6 +167,9 @@ tab_dom_key_press_cb (EphyEmbed *embed,
 	gboolean retval = FALSE;
 	guint oldhash, newhash;
 
+	/* don't do anything in PPV mode */
+	if (ephy_window_get_is_print_preview (priv->window)) return FALSE;
+
 	event = gtk_get_current_event ();
 	if (event == NULL) return FALSE; /* shouldn't happen! */
 
@@ -196,13 +201,13 @@ tab_dom_key_press_cb (EphyEmbed *embed,
 	}
 
 	oldhash = g_str_hash (gtk_entry_get_text (entry));
-	priv->preedit_changed = FALSE;
 
 	event_window = event_key->window;
 	event_key->window = priv->entry->window;
 
 	/* Send the event to the window.  If the preedit_changed signal is emitted
 	* during this event, we will set priv->imcontext_changed  */
+	priv->preedit_changed = priv->activated = FALSE;
 	priv->prevent_activate = TRUE;
 	retval = gtk_widget_event (priv->entry, event);
 	priv->prevent_activate = FALSE;
@@ -214,8 +219,8 @@ tab_dom_key_press_cb (EphyEmbed *embed,
 
 	newhash = g_str_hash (gtk_entry_get_text (entry));
 
-	/* FIXME: is this right? */
-	return (retval && oldhash != newhash) || priv->preedit_changed;
+	/* FIXME: is this correct? */
+	return retval && (oldhash != newhash || priv->preedit_changed) && !priv->activated;
 }
 
 #endif /* HAVE_TYPEAHEADFIND */
@@ -280,6 +285,7 @@ entry_activate_cb (GtkWidget *entry,
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
+	priv->activated = TRUE;
 	if (priv->prevent_activate) return;
 
 	g_signal_emit (toolbar, signals[NEXT], 0);
@@ -307,6 +313,30 @@ set_focus_cb (EphyWindow *window,
 	{
 		g_signal_emit (toolbar, signals[CLOSE], 0);
 	}
+}
+
+static void
+sync_print_preview_mode (EphyWindow *window,
+			 GParamSpec *pspec,
+			 EphyFindToolbar *toolbar)
+{
+	if (ephy_window_get_is_print_preview (window) && GTK_WIDGET_VISIBLE (GTK_WIDGET (toolbar)))
+	{
+		ephy_find_toolbar_close (toolbar);
+	}
+}
+
+static void
+ephy_find_toolbar_set_window (EphyFindToolbar *toolbar,
+			      EphyWindow *window)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+
+	priv->window = window;
+
+	sync_print_preview_mode (window, NULL, toolbar);
+	g_signal_connect (window, "notify::print-preview-mode",
+			  G_CALLBACK (sync_print_preview_mode), toolbar);
 }
 
 static void
@@ -423,6 +453,32 @@ ephy_find_toolbar_finalize (GObject *object)
 }
 
 static void
+ephy_find_toolbar_get_property (GObject *object,
+				guint prop_id,
+				GValue *value,
+				GParamSpec *pspec)
+{
+	/* no readable properties */
+	g_assert_not_reached ();
+}
+
+static void
+ephy_find_toolbar_set_property (GObject *object,
+				guint prop_id,
+				const GValue *value,
+				GParamSpec *pspec)
+{
+	EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (object);
+
+	switch (prop_id)
+	{
+		case PROP_WINDOW:
+			ephy_find_toolbar_set_window (toolbar, (EphyWindow *) g_value_get_object (value));
+			break;
+	}
+}
+
+static void
 ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -431,6 +487,8 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
         parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_find_toolbar_finalize;
+	object_class->get_property = ephy_find_toolbar_get_property;
+	object_class->set_property = ephy_find_toolbar_set_property;
 
 	widget_class->parent_set = ephy_find_toolbar_parent_set;
 	widget_class->grab_focus = ephy_find_toolbar_grab_focus;
@@ -466,6 +524,15 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
 
+	g_object_class_install_property
+		(object_class,
+		 PROP_WINDOW,
+		 g_param_spec_object ("window",
+				      "Window",
+				      "Parent window",
+				      EPHY_TYPE_WINDOW,
+				      (GParamFlags) (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY)));
+
 	g_type_class_add_private (klass, sizeof (EphyFindToolbarPrivate));
 }
 
@@ -500,9 +567,11 @@ ephy_find_toolbar_get_type (void)
 }
 
 EphyFindToolbar *
-ephy_find_toolbar_new (void)
+ephy_find_toolbar_new (EphyWindow *window)
 {
-	return EPHY_FIND_TOOLBAR (g_object_new (EPHY_TYPE_FIND_TOOLBAR, NULL));
+	return EPHY_FIND_TOOLBAR (g_object_new (EPHY_TYPE_FIND_TOOLBAR,
+				  		"window", window,
+						NULL));
 }
 
 const char *
