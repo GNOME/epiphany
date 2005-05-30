@@ -623,7 +623,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 
 		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_software)))
 		{
-			*_trust |= nsIX509CertDB::TRUSTED_SSL;
+			*_trust |= nsIX509CertDB::TRUSTED_OBJSIGN;
 		}
 		*_retval = PR_TRUE;
 	}
