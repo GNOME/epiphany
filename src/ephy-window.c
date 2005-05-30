@@ -358,6 +358,9 @@ static const GtkActionEntry ephy_popups_entries [] = {
 
 #define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"
 
+/* Until https://bugzilla.mozilla.org/show_bug.cgi?id=296002 is fixed */
+#define KEEP_TAB_IN_SAME_TOPLEVEL
+
 #define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
 
 struct _EphyWindowPrivate
@@ -1062,7 +1065,10 @@ update_actions_sensitivity (EphyWindow *window)
 	g_object_set (action, "sensitive", !fullscreen, NULL);
 	action = gtk_action_group_get_action (action_group, "TabsDetach");
 	g_object_set (action, "sensitive", !fullscreen, NULL);
-
+#ifdef KEEP_TAB_IN_SAME_TOPLEVEL
+	gtk_action_set_visible (action, FALSE);
+#endif
+	
 	update_print_actions (window, TRUE);
 }
 

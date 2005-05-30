@@ -59,6 +59,9 @@
 
 #define INSANE_NUMBER_OF_URLS 20
 
+/* Until https://bugzilla.mozilla.org/show_bug.cgi?id=296002 is fixed */
+#define KEEP_TAB_IN_SAME_TOPLEVEL
+
 #define EPHY_NOTEBOOK_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NOTEBOOK, EphyNotebookPrivate))
 
 struct _EphyNotebookPrivate
@@ -343,6 +346,7 @@ ephy_notebook_move_tab (EphyNotebook *src,
 			g_signal_emit (G_OBJECT (src), signals[TABS_REORDERED], 0);
 		}
 	}
+#ifndef KEEP_TAB_IN_SAME_TOPLEVEL
 	else
 	{
 		/* make sure the tab isn't destroyed while we move it */
@@ -351,6 +355,7 @@ ephy_notebook_move_tab (EphyNotebook *src,
 		ephy_notebook_add_tab (dest, tab, dest_position, TRUE);
 		g_object_unref (tab);
 	}
+#endif
 }
 
 static void
@@ -465,6 +470,7 @@ move_tab_to_another_notebook (EphyNotebook *src,
 			      GdkEventMotion *event,
 			      int dest_position)
 {
+#ifndef KEEP_TAB_IN_SAME_TOPLEVEL
 	EphyTab *tab;
 	int cur_page;
 
@@ -499,6 +505,7 @@ move_tab_to_another_notebook (EphyNotebook *src,
 				  NULL);
 
 	drag_start (dest, event->time);
+#endif /* KEEP_TAB_IN_SAME_TOPLEVEL */
 }
 
 static gboolean
@@ -516,6 +523,7 @@ button_release_cb (EphyNotebook *notebook,
 		cur_page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
 						      cur_page_num);
 
+#ifndef KEEP_TAB_IN_SAME_TOPLEVEL
 		if (!is_in_notebook_window (notebook, event->x_root, event->y_root)
 		    && gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) > 1)
 		{
@@ -523,6 +531,7 @@ button_release_cb (EphyNotebook *notebook,
 			g_signal_emit (G_OBJECT (notebook),
 				       signals[TAB_DETACHED], 0, cur_page);
 		}
+#endif
 
 		/* ungrab the pointer if it's grabbed */
 		if (gdk_pointer_is_grabbed ())
