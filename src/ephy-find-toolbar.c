@@ -182,13 +182,13 @@ tab_dom_key_press_cb (EphyEmbed *embed,
 	{
 		if (event_key->keyval == GDK_slash)
 		{
-			ephy_find_toolbar_open (toolbar, FALSE);
+			ephy_find_toolbar_open (toolbar, FALSE, TRUE);
 			gdk_event_free (event);
 			return TRUE;
 		}
 		else if (event_key->keyval == GDK_apostrophe)
 		{
-			ephy_find_toolbar_open (toolbar, TRUE);
+			ephy_find_toolbar_open (toolbar, TRUE, TRUE);
 			gdk_event_free (event);
 			return TRUE;
 		}
@@ -641,7 +641,8 @@ ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 
 void
 ephy_find_toolbar_open (EphyFindToolbar *toolbar,
-			gboolean links_only)
+			gboolean links_only,
+		        gboolean clear_search)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
@@ -650,7 +651,10 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 	priv->links_only = links_only;
 	priv->explicit_focus = FALSE;
 
-	gtk_entry_set_text (GTK_ENTRY (priv->entry), "");
+	if (clear_search)
+	{
+		gtk_entry_set_text (GTK_ENTRY (priv->entry), "");
+	}
 
 	gtk_widget_show (GTK_WIDGET (toolbar));
 	ephy_embed_activate (priv->embed);

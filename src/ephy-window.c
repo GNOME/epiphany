@@ -3266,7 +3266,7 @@ ephy_window_find (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
 
-	ephy_find_toolbar_open (priv->find_toolbar, FALSE);
+	ephy_find_toolbar_open (priv->find_toolbar, FALSE, FALSE);
 	gtk_widget_grab_focus (GTK_WIDGET (priv->find_toolbar));
 }
 
