@@ -1,3 +1,13 @@
+2005-05-31  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-notebook.c: (ephy_notebook_move_tab),
+	(move_tab_to_another_notebook), (button_release_cb):
+	* src/ephy-window.c: (update_tabs_menu_sensitivity):
+
+	Work around mozilla bug
+	https://bugzilla.mozilla.org/show_bug.cgi?id=296002 by disallowing
+	tabs moves to a different window. Bug #303922.
+
 2005-05-30  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/GtkNSSDialogs.cpp:

@@ -390,6 +390,9 @@ static const struct
 
 #define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"
 
+/* Until https://bugzilla.mozilla.org/show_bug.cgi?id=296002 is fixed */
+#define KEEP_TAB_IN_SAME_TOPLEVEL
+
 #define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
 
 struct _EphyWindowPrivate
@@ -2010,6 +2013,9 @@ update_tabs_menu_sensitivity (EphyWindow *window)
 	gtk_action_set_sensitive (action, move_right);
 	action = gtk_action_group_get_action (action_group, "TabsDetach");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, !detach);
+#ifdef KEEP_TAB_IN_SAME_TOPLEVEL
+	gtk_action_set_visible (action, FALSE);
+#endif
 }
 
 static gboolean
