@@ -529,7 +529,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 				    PRBool *_retval)
 {
 	GtkWidget *dialog, *label, *content_vbox, *vbox;
-	GtkWidget *check_ssl, *check_software;
+	GtkWidget *check_ssl;
 	char *msg, *tertiary;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
@@ -580,11 +580,6 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_ssl), TRUE);
 	gtk_box_pack_start (GTK_BOX(vbox), check_ssl, TRUE, TRUE, 0);
 
-	check_software = gtk_check_button_new_with_mnemonic 
-				  (_("_Software developers"));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_software), FALSE);
-	gtk_box_pack_start (GTK_BOX(vbox), check_software, TRUE, TRUE, 0);
-
 	gtk_box_pack_start (GTK_BOX (content_vbox), higgy_indent_widget (vbox), 
 			    FALSE, FALSE, 0);
 
@@ -615,10 +610,6 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 			*_trust |= nsIX509CertDB::TRUSTED_SSL;
 		}
 
-		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_software)))
-		{
-			*_trust |= nsIX509CertDB::TRUSTED_SSL;
-		}
 		*_retval = PR_TRUE;
 	}
 	gtk_widget_destroy (dialog);
