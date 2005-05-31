@@ -28,6 +28,7 @@
 #include "EventContext.h"
 #include "ephy-embed.h"
 #include "ephy-string.h"
+#include "ephy-zoom.h"
 #include "ephy-debug.h"
 #include "print-dialog.h"
 #include "mozilla-embed.h"
@@ -102,6 +103,7 @@
 const static PRUnichar kDOMLinkAdded[]		 = { 'D', 'O', 'M', 'L', 'i', 'n', 'k', 'A', 'd', 'd', 'e', 'd', '\0' };
 const static PRUnichar kDOMContentLoaded[]	 = { 'D', 'O', 'M', 'C', 'o', 'n', 't', 'e', 'n', 't', 'L', 'o', 'a', 'd', 'e', 'd', '\0' };
 const static PRUnichar kContextMenu[]		 = { 'c', 'o', 'n', 't', 'e', 'x', 't', 'm', 'e', 'n', 'u', '\0' };
+const static PRUnichar kDOMMouseScroll[]	 = { 'D', 'O', 'M', 'M', 'o', 'u', 's', 'e', 'S', 'c', 'r', 'o', 'l', 'l', '\0' };
 const static PRUnichar kDOMPopupBlocked[]	 = { 'D', 'O', 'M', 'P', 'o', 'p', 'u', 'p', 'B', 'l', 'o', 'c', 'k', 'e', 'd', '\0' };
 const static PRUnichar kDOMWillOpenModalDialog[] = { 'D', 'O', 'M', 'W', 'i', 'l', 'l', 'O', 'p', 'e', 'n', 'M', 'o', 'd', 'a', 'l', 'D', 'i', 'a', 'l', 'o', 'g', '\0' };
 const static PRUnichar kDOMModalDialogClosed[]	 = { 'D', 'O', 'M', 'M', 'o', 'd', 'a', 'l', 'D', 'i', 'a', 'l', 'o', 'g', 'C', 'l', 'o', 's', 'e', 'd', '\0' };
@@ -387,6 +389,49 @@ EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 	return NS_OK;
 }
 
+NS_IMETHODIMP
+EphyDOMScrollEventListener::HandleEvent (nsIDOMEvent * aEvent)
+{
+	/* make sure the event is trusted */
+	nsresult rv;
+	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aEvent, &rv));
+	NS_ENSURE_SUCCESS (rv, rv);
+	PRBool isTrusted = PR_FALSE;
+	nsEvent->GetIsTrusted (&isTrusted);
+	if (!isTrusted) return NS_OK;
+
+	nsCOMPtr<nsIDOMMouseEvent> mouseEvent (do_QueryInterface (aEvent, &rv));
+	NS_ENSURE_SUCCESS (rv, rv);
+		
+	PRBool isAlt = PR_FALSE, isControl = PR_FALSE, isShift = PR_FALSE;
+	mouseEvent->GetAltKey (&isAlt);
+	mouseEvent->GetCtrlKey (&isControl);
+	mouseEvent->GetShiftKey (&isShift);
+	/* GetMetaKey is always false on gtk2 mozilla */
+
+	if (isControl && !isAlt && !isShift)
+	{
+		PRInt32 detail = 0;
+		mouseEvent->GetDetail(&detail);
+
+		float zoom, new_zoom;
+		rv = mOwner->GetZoom (&zoom);
+		NS_ENSURE_SUCCESS (rv, rv);
+
+		zoom = ephy_zoom_get_changed_zoom_level (zoom, detail > 0 ? 1 : detail < 0 ? -1 : 0);
+		rv = mOwner->SetZoom (zoom);
+		if (NS_SUCCEEDED (rv))
+		{
+			g_signal_emit_by_name (mOwner->mEmbed, "ge_zoom_change", zoom);
+		}
+
+		/* we consumed the event */
+		aEvent->PreventDefault();	 
+	}
+	 
+	return NS_OK;
+}
+
 NS_IMPL_ISUPPORTS1(EphyContextMenuListener, nsIDOMContextMenuListener)
 
 NS_IMETHODIMP
@@ -465,6 +510,7 @@ EphyContextMenuListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 EphyBrowser::EphyBrowser ()
 : mDOMLinkEventListener(nsnull)
 , mDOMContentLoadedEventListener(nsnull)
+, mDOMScrollEventListener(nsnull)
 , mPopupBlockEventListener(nsnull)
 , mModalAlertListener(nsnull)
 , mContextMenuListener(nsnull)
@@ -502,6 +548,9 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 
 	mDOMContentLoadedEventListener = new EphyDOMContentLoadedEventListener(this);
 	if (!mDOMContentLoadedEventListener) return NS_ERROR_OUT_OF_MEMORY;
+
+	mDOMScrollEventListener = new EphyDOMScrollEventListener(this);
+	if (!mDOMScrollEventListener) return NS_ERROR_OUT_OF_MEMORY;
 
 	mPopupBlockEventListener = new EphyPopupBlockEventListener(this);
 	if (!mPopupBlockEventListener) return NS_ERROR_OUT_OF_MEMORY;
@@ -601,10 +650,14 @@ EphyBrowser::AttachListeners(void)
 					    mDOMLinkEventListener, PR_FALSE);
 	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMContentLoaded),
 					     mDOMContentLoadedEventListener, PR_FALSE);
+	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMMouseScroll),
+					     mDOMScrollEventListener, PR_TRUE); /* capture */
 	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMPopupBlocked),
 					     mPopupBlockEventListener, PR_FALSE);
 	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMWillOpenModalDialog),
 					     mModalAlertListener, PR_TRUE);
+	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMMouseScroll),
+					     mDOMScrollEventListener, PR_TRUE);
 	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMModalDialogClosed),
 					     mModalAlertListener, PR_TRUE);
 	rv |= mEventTarget->AddEventListener(nsEmbedString(kContextMenu),
@@ -624,6 +677,8 @@ EphyBrowser::DetachListeners(void)
 					       mDOMLinkEventListener, PR_FALSE);
 	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMContentLoaded),
 					        mDOMContentLoadedEventListener, PR_FALSE);
+	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMMouseScroll),
+						mDOMScrollEventListener, PR_TRUE); /* capture */
 	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMPopupBlocked),
 					        mPopupBlockEventListener, PR_FALSE);
 	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMWillOpenModalDialog),

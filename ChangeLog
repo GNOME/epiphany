@@ -1,5 +1,18 @@
 2005-05-31  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/default-prefs-common.js:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+
+	Add scroll event listener, and change zoom on scroll+wheel events.
+
+	* lib/ephy-zoom.c: (ephy_zoom_get_changed_zoom_level):
+	* lib/ephy-zoom.h:
+
+	Fix signed/unsigned integer problems (underflow).
+
+2005-05-31  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-notebook.c: (ephy_notebook_move_tab),
 	(move_tab_to_another_notebook), (button_release_cb):
 	* src/ephy-window.c: (update_tabs_menu_sensitivity):

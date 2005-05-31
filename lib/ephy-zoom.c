@@ -24,7 +24,7 @@
 
 #include <math.h>
 
-guint
+int
 ephy_zoom_get_zoom_level_index (float level)
 {
 	guint i;
@@ -47,12 +47,12 @@ ephy_zoom_get_zoom_level_index (float level)
 
 
 float
-ephy_zoom_get_changed_zoom_level (float level, gint steps)
+ephy_zoom_get_changed_zoom_level (float level, int steps)
 {
-	guint index;
+	int index;
 
 	index = ephy_zoom_get_zoom_level_index (level);
-	return zoom_levels[CLAMP(index + steps, 0, n_zoom_levels - 1)].level;
+	return zoom_levels[CLAMP(index + steps, 0, (int) n_zoom_levels - 1)].level;
 }
 
 float	ephy_zoom_get_nearest_zoom_level (float level)

@@ -100,6 +100,14 @@ public:
 	EphyDOMContentLoadedEventListener(EphyBrowser *aOwner) : EphyEventListener(aOwner) { };
 };
 
+class EphyDOMScrollEventListener : public EphyEventListener
+{
+public:
+	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
+
+	EphyDOMScrollEventListener(EphyBrowser *aOwner) : EphyEventListener(aOwner) { };
+};
+
 class EphyContextMenuListener : public nsIDOMContextMenuListener
 {
 public:
@@ -121,6 +129,7 @@ class EphyBrowser
 friend class EphyEventListener;
 friend class EphyDOMLinkEventListener;
 friend class EphyDOMContentLoadedEventListener;
+friend class EphyDOMScrollEventListener;
 friend class EphyPopupBlockEventListener;
 friend class EphyModalAlertEventListener;
 friend class EphyContextMenuListener;
@@ -186,6 +195,7 @@ private:
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;
 	EphyDOMLinkEventListener *mDOMLinkEventListener;
 	EphyDOMContentLoadedEventListener *mDOMContentLoadedEventListener;
+	EphyDOMScrollEventListener *mDOMScrollEventListener;
 	EphyPopupBlockEventListener *mPopupBlockEventListener;
 	EphyModalAlertEventListener *mModalAlertListener;
 	EphyContextMenuListener *mContextMenuListener;

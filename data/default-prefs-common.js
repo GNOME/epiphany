@@ -1,7 +1,10 @@
-// mouse wheel
-pref("mousewheel.withcontrolkey.action", 1);
+// mouse wheel: disable mozilla's ctrl+wheel zooming
+// bug: setting this to -1 does not disable the built-in action, but instead
+// prevents event delivery at all!
+pref("mousewheel.withcontrolkey.action", 0);
 pref("mousewheel.withcontrolkey.numlines", 1);
 pref("mousewheel.withcontrolkey.sysnumlines", false);
+
 // fix horizontal scroll with 2nd wheel, see bug #148557
 pref("mousewheel.horizscroll.withnokey.action", 0);
 pref("mousewheel.horizscroll.withnokey.sysnumlines", true);
