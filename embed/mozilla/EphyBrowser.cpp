@@ -414,7 +414,7 @@ EphyDOMScrollEventListener::HandleEvent (nsIDOMEvent * aEvent)
 		PRInt32 detail = 0;
 		mouseEvent->GetDetail(&detail);
 
-		float zoom, new_zoom;
+		float zoom;
 		rv = mOwner->GetZoom (&zoom);
 		NS_ENSURE_SUCCESS (rv, rv);
 
