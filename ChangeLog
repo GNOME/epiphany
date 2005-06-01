@@ -1,3 +1,17 @@
+2005-06-01  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c: (drag_data_get_cb),
+	(drag_data_received_cb):
+	* lib/egg/egg-toolbar-editor.c: (drag_data_get_cb),
+	(parse_item_list), (egg_toolbar_editor_load_actions):
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_to_xml),
+	(egg_toolbars_model_save), (parse_item_list), (parse_toolbars):
+	* src/ephy-notebook.c:
+	* src/ephy-window.c:
+
+	Fix more signed/unsigned problems with gcc 4.0. Patch by Martin
+	Kretzschmar, bug #306169.
+
 2005-05-31  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-notebook.c: (ephy_notebook_move_tab),

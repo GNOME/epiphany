@@ -250,7 +250,8 @@ drag_data_get_cb (GtkWidget          *widget,
     }
 
   gtk_selection_data_set (selection_data,
-			  selection_data->target, 8, target, strlen (target));
+                          selection_data->target, 8,
+                          (const guchar *)target, strlen (target));
 
   g_free (target);
 }
@@ -445,7 +446,8 @@ drag_data_received_cb (GtkWidget          *widget,
 	  
   target = gtk_drag_dest_find_target (widget, context, NULL);
   type = egg_toolbars_model_get_item_type (etoolbar->priv->model, target);
-  id = egg_toolbars_model_get_item_id (etoolbar->priv->model, type, selection_data->data);
+  id = egg_toolbars_model_get_item_id (etoolbar->priv->model, type,
+                                       (const char*)selection_data->data);
 
   /* This function can be called for two reasons
    *
@@ -481,7 +483,7 @@ drag_data_received_cb (GtkWidget          *widget,
       pos = gtk_toolbar_get_drop_index (GTK_TOOLBAR (widget), x, y);
       toolbar_pos = get_toolbar_position (etoolbar, widget);
 
-      if (data_is_separator (selection_data->data))
+      if (data_is_separator ((const char*)selection_data->data))
 	{
 	  egg_toolbars_model_add_separator (etoolbar->priv->model,
 					    toolbar_pos, pos);
