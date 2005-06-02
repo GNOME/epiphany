@@ -219,3 +219,16 @@ EphyUtils::CollatePrintSettings (const EmbedPrintInfo *info,
 
 	return NS_OK;
 }
+
+PRBool
+EphyUtils::StringEquals (nsAString &s1, nsAString &s2)
+{
+	if (s1.Length() != s2.Length())
+	{
+		return FALSE;
+	}
+
+	return (memcmp (s1.BeginReading(),
+		        s2.BeginReading(),
+		        s2.Length() * sizeof (PRUnichar)) == 0);
+}

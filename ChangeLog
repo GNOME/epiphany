@@ -1,3 +1,12 @@
+2005-06-02  Jean-François Rameau  <jframeau@cvs.gnome.org>
+	
+	* embed/mozilla/EphyUtils.h:
+	* embed/mozilla/EphyUtils.cpp:
+
+	nsEmbedString doesn't support Equals method. So add some bits
+	to test two nsEmbedString.
+	See https://bugzilla.mozilla.org/show_bug.cgi?id=296286
+
 2005-06-01  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/egg/egg-editable-toolbar.c: (drag_data_get_cb),
