@@ -43,9 +43,11 @@
 #include <nsIDOMElement.h>
 #include <nsIURI.h>
 #include <nsIDOMCharacterData.h>
+#include <nsIDOMHTMLAreaElement.h>
 #include <nsIDOMHTMLButtonElement.h>
 #include <nsIDOMHTMLLabelElement.h>
 #include <nsIDOMHTMLLegendElement.h>
+#include <nsIDOMHTMLMapElement.h>
 #include <nsIDOMHTMLTextAreaElement.h>
 #include <nsIDOMElementCSSInlineStyle.h>
 #include <nsIDOMCSSStyleDeclaration.h>
@@ -198,6 +200,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 	nsresult rv;
 
 	const PRUnichar hrefLiteral[] = {'h', 'r', 'e', 'f', '\0'};
+	const PRUnichar imgLiteral[] = {'i', 'm', 'g', '\0'};
 	const PRUnichar typeLiteral[] = {'t', 'y', 'p', 'e', '\0'};
 	const PRUnichar xlinknsLiteral[] = {'h', 't', 't', 'p', ':', '/', '/','w',
 				            'w', 'w', '.', 'w', '3', '.', 'o', 'r',
@@ -283,6 +286,66 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			rv = image->GetSrc (img);
 			if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 			SetStringProperty ("image", img);
+		}
+		else if (g_ascii_strcasecmp (tag.get(), "area") == 0)
+		{
+			nsCOMPtr <nsIDOMHTMLAreaElement> area = 
+						do_QueryInterface(node, &rv);
+			if (NS_FAILED(rv) || !area) return NS_ERROR_FAILURE;			
+
+			// Parent node is the map itself
+			nsCOMPtr<nsIDOMNode> parentNode;
+			node->GetParentNode (getter_AddRefs(parentNode));
+
+			nsCOMPtr <nsIDOMHTMLMapElement> map = 
+				do_QueryInterface(parentNode, &rv);
+			if (NS_FAILED(rv) || !area) return NS_ERROR_FAILURE;			
+
+			nsEmbedString mapName;
+			rv = map->GetName (mapName);
+			if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
+
+			// Now we are searching for all the images with a usemap attribute
+			nsCOMPtr<nsIDOMNodeList> imgs;
+			rv = mDOMDocument->GetElementsByTagName (nsEmbedString(imgLiteral), 	
+								 getter_AddRefs (imgs));
+			if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
+			
+			PRUint32 imgs_count;
+			rv = imgs->GetLength (&imgs_count);
+			if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+
+			for (PRUint32 i = 0; i < imgs_count; i++)
+			{
+				nsCOMPtr<nsIDOMNode> aNode;
+				rv = imgs->Item (i, getter_AddRefs (aNode));
+				if (NS_FAILED (rv)) continue;
+
+				nsCOMPtr<nsIDOMHTMLImageElement> img = 
+						do_QueryInterface(aNode, &rv);
+				if (NS_FAILED(rv) || !img) continue;
+			
+				nsEmbedString imgMapName;
+				rv = img->GetUseMap (imgMapName);
+				if (NS_FAILED (rv)) continue;
+
+				// usemap always starts with #
+				imgMapName.Cut (0,1);
+
+				// Check if the current image is attached to the map we are looking for
+				if (EphyUtils::StringEquals(imgMapName, mapName))
+				{
+					nsEmbedString imgSrc;
+					rv = img->GetSrc (imgSrc);
+					if (NS_FAILED(rv)) continue;
+
+					info->context |= EPHY_EMBED_CONTEXT_IMAGE;
+
+					SetStringProperty ("image", imgSrc);
+
+					break;
+				}
+			}
 		}
 		else if (g_ascii_strcasecmp (tag.get(), "input") == 0)
 		{
