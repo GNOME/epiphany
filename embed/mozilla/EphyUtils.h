@@ -50,6 +50,8 @@ namespace EphyUtils
 	nsresult        CollatePrintSettings	(const _EmbedPrintInfo *info,
 						 nsIPrintSettings *settings,
 						 gboolean preview);
+	PRBool          StringEquals            (nsAString &s1, 
+						 nsAString &s2);
 }
 
 #endif
