@@ -154,71 +154,59 @@ send_focus_change (GtkWidget *widget,
  * gtk_tree_view_real_start_interactive_seach()
  */
 static gboolean
-tab_dom_key_press_cb (EphyEmbed *embed,
-		      gpointer dom_event,
-		      EphyFindToolbar *toolbar)
+tab_search_key_press_cb (EphyEmbed *embed,
+			 GdkEventKey *event,
+			 EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	GtkWidget *widget = (GtkWidget *) toolbar;
 	GtkEntry *entry = (GtkEntry *) priv->entry;
 	GdkWindow *event_window;
-	GdkEvent *event;
-	GdkEventKey *event_key;
 	gboolean retval = FALSE;
 	guint oldhash, newhash;
+
+	g_return_val_if_fail (event != NULL, FALSE);
 
 	/* don't do anything in PPV mode */
 	if (ephy_window_get_is_print_preview (priv->window)) return FALSE;
 
-	event = gtk_get_current_event ();
-	if (event == NULL) return FALSE; /* shouldn't happen! */
-
-	g_return_val_if_fail (GDK_KEY_PRESS == event->type, FALSE);
-
-	event_key = (GdkEventKey *) event;
-
 	/* check for / and ' which open the find toolbar in text resp. link mode */
 	if (GTK_WIDGET_VISIBLE (widget) == FALSE)
 	{
-		if (event_key->keyval == GDK_slash)
+		if (event->keyval == GDK_slash)
 		{
 			ephy_find_toolbar_open (toolbar, FALSE, TRUE);
-			gdk_event_free (event);
 			return TRUE;
 		}
-		else if (event_key->keyval == GDK_apostrophe)
+		else if (event->keyval == GDK_apostrophe)
 		{
 			ephy_find_toolbar_open (toolbar, TRUE, TRUE);
-			gdk_event_free (event);
 			return TRUE;
 		}
 	}
 	
 	/* don't do anything if the find toolbar is hidden */
 	if (GTK_WIDGET_VISIBLE (widget) == FALSE ||
-	    event_key->keyval == GDK_Return ||
-	    event_key->keyval == GDK_KP_Enter)
+	    event->keyval == GDK_Return ||
+	    event->keyval == GDK_KP_Enter)
 	{
-		gdk_event_free (event);
 		return FALSE;
 	}
 
 	oldhash = g_str_hash (gtk_entry_get_text (entry));
 
-	event_window = event_key->window;
-	event_key->window = priv->entry->window;
+	event_window = event->window;
+	event->window = priv->entry->window;
 
 	/* Send the event to the window.  If the preedit_changed signal is emitted
 	* during this event, we will set priv->imcontext_changed  */
 	priv->preedit_changed = priv->activated = FALSE;
 	priv->prevent_activate = TRUE;
-	retval = gtk_widget_event (priv->entry, event);
+	retval = gtk_widget_event (priv->entry, (GdkEvent*) event);
 	priv->prevent_activate = FALSE;
 
 	/* restore event window, else gdk_event_free below will crash */
-	event_key->window = event_window;
-
-	gdk_event_free (event);
+	event->window = event_window;
 
 	newhash = g_str_hash (gtk_entry_get_text (entry));
 
@@ -607,8 +595,8 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 					 G_CALLBACK (tab_content_changed_cb),
 					 toolbar, G_CONNECT_AFTER);
 #ifdef HAVE_TYPEAHEADFIND
-		g_signal_connect_object (embed, "dom-key-press",
-					 G_CALLBACK (tab_dom_key_press_cb),
+		g_signal_connect_object (embed, "ge-search-key-press",
+					 G_CALLBACK (tab_search_key_press_cb),
 					 toolbar, 0);
 #endif
 

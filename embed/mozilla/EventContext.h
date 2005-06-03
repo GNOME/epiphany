@@ -55,6 +55,8 @@ public:
 	nsresult GetKeyEventInfo   (nsIDOMKeyEvent *event, MozillaEmbedEvent *info);
 	nsresult GetTargetDocument (nsIDOMDocument **domDoc);
 
+	static PRBool CheckKeyPress (nsIDOMKeyEvent *aEvent);
+
 private:
 	EphyBrowser *mBrowser;
 	MozillaEmbedEvent *mEmbedEvent;

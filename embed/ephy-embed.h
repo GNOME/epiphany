@@ -146,6 +146,8 @@ struct _EphyEmbedIface
 					 EphyEmbedDocumentType type);
 	void	 (* new_window)		(EphyEmbed *embed,
 					 EphyEmbed *new_embed);
+	gboolean (* search_key_press)	(EphyEmbed *embed,
+					 GdkEventKey *event);
 
 	/* Methods  */
 	void		   (* load_url)			(EphyEmbed *embed,

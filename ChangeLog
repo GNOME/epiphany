@@ -1,3 +1,28 @@
+2005-06-03  Christian Persch  <chpe@cvs.gnome.org>
+
+	Don't open search toolbar on / or ' over formfields:
+
+	* embed/ephy-embed.c: (ephy_embed_base_init):
+	* embed/ephy-embed.h:
+
+	New signal for searchable key presses.
+
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/EventContext.h:
+
+	Add static function to check if a keypress should be forwarded
+	to the search toolbar.
+
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Emit the signal here.
+
+	* lib/ephy-marshal.list:
+	* src/ephy-find-toolbar.c: (tab_search_key_press_cb),
+	(ephy_find_toolbar_set_embed):
+
+	Use the new signal instead of dom-key-press.
+
 2005-06-02  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* embed/mozilla/EventContext.cpp: (EventContext::GetEventContext):

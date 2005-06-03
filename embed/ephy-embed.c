@@ -350,6 +350,24 @@ ephy_embed_base_init (gpointer g_class)
 			      1,
 			      G_TYPE_POINTER);
 
+/**
+ * EphyEmbed::ge-search-key-press:
+ * @embed:
+ * @event: the #GdkEventKey which triggered this signal
+ *
+ * The ::ge-search-key-press signal is emitted for keypresses which
+ * should be used for find implementations.
+ **/
+		g_signal_new ("ge-search-key-press",
+			      EPHY_TYPE_EMBED,
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyEmbedIface, context_menu),
+			      g_signal_accumulator_true_handled, NULL,
+			      ephy_marshal_BOOLEAN__BOXED,
+			      G_TYPE_BOOLEAN,
+			      1,
+			      GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+
 		initialized = TRUE;
 	}
 }

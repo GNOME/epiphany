@@ -56,6 +56,8 @@
 #include <nsIDOMNodeList.h>
 #include <nsIDOMDocumentView.h>
 #include <nsIDOMAbstractView.h>
+#include <nsIDOMNSHTMLDocument.h>
+#include <nsIDOMNSUIEvent.h>
 
 #ifdef ALLOW_PRIVATE_API
 #include <nsITextToSubURI.h>
@@ -1002,4 +1004,70 @@ nsresult EventContext::SetURIProperty (nsIDOMNode *node, const char *name, const
 	nsEmbedCString cValue;
 	NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
 	return SetURIProperty (node, name, cValue);
+}
+
+/* static */
+PRBool
+EventContext::CheckKeyPress (nsIDOMKeyEvent *aEvent)
+{
+	PRBool retval = PR_FALSE;
+
+	/* check for alt/ctrl */
+	PRBool isCtrl = PR_FALSE, isAlt = PR_FALSE;
+	aEvent->GetCtrlKey (&isCtrl);
+	aEvent->GetAltKey (&isAlt);
+	if (isCtrl || isAlt) return retval;
+
+	nsCOMPtr<nsIDOMNSUIEvent> uiEvent (do_QueryInterface (aEvent));
+	NS_ENSURE_TRUE (uiEvent, retval);
+
+	/* check for already handled event */
+	PRBool isPrevented = PR_FALSE;
+	uiEvent->GetPreventDefault (&isPrevented);
+	if (isPrevented) return retval;
+
+	/* check for form controls */
+	nsresult rv;
+	nsCOMPtr<nsIDOMEventTarget> target;
+	rv = aEvent->GetTarget (getter_AddRefs (target));
+	NS_ENSURE_SUCCESS (rv, retval);
+
+	nsCOMPtr<nsIDOMHTMLElement> element (do_QueryInterface (target, &rv));
+	NS_ENSURE_SUCCESS (rv, retval);
+
+	PRUint16 type = 0;
+	element->GetNodeType(&type);
+	if (nsIDOMNode::ELEMENT_NODE != type) return retval;
+
+	nsEmbedString uTag;
+	rv = element->GetLocalName(uTag);
+	NS_ENSURE_SUCCESS (rv, retval);
+
+	nsEmbedCString tag;
+	NS_UTF16ToCString (uTag, NS_CSTRING_ENCODING_UTF8, tag);
+
+	if (g_ascii_strcasecmp (tag.get(), "input") == 0 ||
+	    g_ascii_strcasecmp (tag.get(), "textaread") == 0 ||
+	    g_ascii_strcasecmp (tag.get(), "select") == 0 ||
+	    g_ascii_strcasecmp (tag.get(), "button") == 0 ||
+	    g_ascii_strcasecmp (tag.get(), "isindex") == 0) return retval;
+
+	/* check for design mode */
+	nsCOMPtr<nsIDOMDocument> doc;
+	rv = element->GetOwnerDocument (getter_AddRefs (doc));
+	NS_ENSURE_SUCCESS (rv, retval);
+
+	nsCOMPtr<nsIDOMNSHTMLDocument> htmlDoc (do_QueryInterface (doc, &rv));
+	if (NS_FAILED (rv)) return retval; /* it's okay not to be a HTML document */
+
+	nsEmbedString uDesign;
+	rv = htmlDoc->GetDesignMode (uDesign);
+	NS_ENSURE_SUCCESS (rv, retval);
+
+	nsEmbedCString design;
+	NS_UTF16ToCString (uDesign, NS_CSTRING_ENCODING_UTF8, design);
+
+	retval = g_ascii_strcasecmp (design.get(), "on") != 0;
+
+	return retval;
 }

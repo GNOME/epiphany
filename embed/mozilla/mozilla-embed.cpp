@@ -64,6 +64,9 @@ static gboolean mozilla_embed_dom_mouse_click_cb(GtkMozEmbed *embed,
 static gboolean mozilla_embed_dom_mouse_down_cb	(GtkMozEmbed *embed,
 						 gpointer dom_event, 
 						 MozillaEmbed *membed);
+static gboolean mozilla_embed_dom_key_press_cb	(GtkMozEmbed *embed,
+						 gpointer dom_event, 
+						 MozillaEmbed *membed);
 static void mozilla_embed_new_window_cb		(GtkMozEmbed *embed, 
 						 GtkMozEmbed **newEmbed,
 						 guint chrome_mask,
@@ -241,6 +244,9 @@ mozilla_embed_init (MozillaEmbed *embed)
 				 embed, (GConnectFlags) 0);
 	g_signal_connect_object (G_OBJECT (embed), "dom_mouse_down",
 				 G_CALLBACK (mozilla_embed_dom_mouse_down_cb),
+				 embed, (GConnectFlags) 0);
+	g_signal_connect_object (G_OBJECT (embed), "dom-key-press",
+				 G_CALLBACK (mozilla_embed_dom_key_press_cb),
 				 embed, (GConnectFlags) 0);
 	g_signal_connect_object (G_OBJECT (embed), "new_window",
 				 G_CALLBACK (mozilla_embed_new_window_cb),
@@ -908,6 +914,33 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 {
 	return mozilla_embed_emit_mouse_signal (membed, dom_event,
 						"ge_dom_mouse_down");
+}
+
+static gint
+mozilla_embed_dom_key_press_cb (GtkMozEmbed *embed,
+				gpointer dom_event, 
+				MozillaEmbed *membed)
+{
+	MozillaEmbedPrivate *mpriv = membed->priv;
+	gint retval = FALSE;
+
+	if (dom_event == NULL) return FALSE;
+
+	nsCOMPtr<nsIDOMKeyEvent> ev = static_cast<nsIDOMKeyEvent*>(dom_event);
+	NS_ENSURE_TRUE (ev, FALSE);
+
+	if (!EventContext::CheckKeyPress (ev)) return FALSE;
+
+	GdkEvent *event = gtk_get_current_event ();
+	if (event == NULL) return FALSE; /* shouldn't happen! */
+
+	g_return_val_if_fail (GDK_KEY_PRESS == event->type, FALSE);
+
+	g_signal_emit_by_name (embed, "ge-search-key-press", event, &retval);
+
+	gdk_event_free (event);
+
+	return retval;
 }
 
 EphyEmbedChrome
