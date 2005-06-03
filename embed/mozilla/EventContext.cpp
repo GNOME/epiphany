@@ -1047,7 +1047,7 @@ EventContext::CheckKeyPress (nsIDOMKeyEvent *aEvent)
 	NS_UTF16ToCString (uTag, NS_CSTRING_ENCODING_UTF8, tag);
 
 	if (g_ascii_strcasecmp (tag.get(), "input") == 0 ||
-	    g_ascii_strcasecmp (tag.get(), "textaread") == 0 ||
+	    g_ascii_strcasecmp (tag.get(), "textarea") == 0 ||
 	    g_ascii_strcasecmp (tag.get(), "select") == 0 ||
 	    g_ascii_strcasecmp (tag.get(), "button") == 0 ||
 	    g_ascii_strcasecmp (tag.get(), "isindex") == 0) return retval;
