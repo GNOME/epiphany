@@ -214,6 +214,21 @@ tab_search_key_press_cb (EphyEmbed *embed,
 	return retval && (oldhash != newhash || priv->preedit_changed) && !priv->activated;
 }
 
+static gboolean
+tab_dom_mouse_click_cb (EphyEmbed *embed,
+			gpointer event,
+			EphyFindToolbar *toolbar)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+
+	if (!priv->explicit_focus)
+	{
+		ephy_find_toolbar_close (toolbar);
+	}
+
+	return FALSE;
+}
+
 #endif /* HAVE_TYPEAHEADFIND */
 
 static void
@@ -597,6 +612,9 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 #ifdef HAVE_TYPEAHEADFIND
 		g_signal_connect_object (embed, "ge-search-key-press",
 					 G_CALLBACK (tab_search_key_press_cb),
+					 toolbar, 0);
+		g_signal_connect_object (embed, "dom-mouse-click",
+					 G_CALLBACK (tab_dom_mouse_click_cb),
 					 toolbar, 0);
 #endif
 
