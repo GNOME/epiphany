@@ -983,7 +983,9 @@ nsresult EventContext::SetURIProperty (nsIDOMNode *node, const char *name, const
 	if (NS_SUCCEEDED (rv) && uri)
 	{
 		/* Hide password part */
-		uri->SetPassword (nsEmbedCString());
+		nsEmbedCString user;
+		uri->GetUsername (user);
+		uri->SetUserPass (user);
 
 		nsEmbedCString spec;
 		uri->GetSpec (spec);
