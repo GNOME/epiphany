@@ -188,11 +188,7 @@ ephy_dbus_connect_to_system_bus (EphyDbus *dbus)
 	dbus_connection_set_exit_on_disconnect (bus, FALSE);
 	dbus_connection_setup_with_g_main (bus, NULL);
 
-#ifdef HAVE_NEW_DBUS
-	dbus_bus_request_name (bus, epiphany_dbus_service, 0, &error);
-#else
 	dbus_connection_add_filter (bus, system_filter_func, dbus, NULL);
-#endif
 
 	dbus_bus_add_match (bus, 
                             "type='signal',interface='org.freedesktop.NetworkManager'", 
@@ -224,6 +220,8 @@ ephy_dbus_connect_to_session_bus (EphyDbus *dbus)
 		dbus_error_free (&error);
 		return;
 	}
+	dbus_connection_set_exit_on_disconnect (bus, FALSE);
+	dbus_connection_setup_with_g_main (bus, NULL);
 
 	dbus_connection_add_filter (bus, session_filter_func, dbus, NULL);
 
@@ -243,11 +241,6 @@ ephy_dbus_connect_to_session_bus (EphyDbus *dbus)
 					      epiphany_dbus_object_path,
 					      &call_vtable, dbus);
 
-	dbus_bus_acquire_service (bus, epiphany_dbus_service, 0, NULL);
-
-	dbus_connection_set_exit_on_disconnect (bus, FALSE);
-	dbus_connection_setup_with_g_main (bus, NULL);
-
 	dbus->priv->session_bus = bus;
 
 	g_signal_emit (dbus, signals[CONNECTED], 0, EPHY_DBUS_SESSION);
@@ -257,8 +250,11 @@ static void
 ephy_dbus_disconnect_bus (DBusConnection *bus)
 {
 	if (bus != NULL) {
-
+#ifdef HAVE_NEW_DBUS
+		dbus_connection_close (bus);
+#else
 		dbus_connection_disconnect (bus);
+#endif
 		dbus_connection_unref (bus);
 	}
 }
