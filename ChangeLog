@@ -1,3 +1,30 @@
+2005-06-05  Christian Persch  <chpe@cvs.gnome.org>
+
+	Version 1.7.1.
+
+	* Makefile.am:
+
+	Add --enable-python to distcheck configure flags.
+
+	* NEWS:
+	* configure.ac:
+
+	Updated for version 1.7.1.
+
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EventContext.cpp:
+
+	Fix warnings.
+
+	* src/ephy-extensions-manager.c: (get_loader_for_type),
+	(load_extension):
+
+	Fix --disable-python case.
+
+	* src/Makefile.am:
+
+	Fix make distcheck.
+
 2005-06-04  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-find-toolbar.c: (tab_dom_mouse_click_cb),

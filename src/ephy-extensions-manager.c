@@ -758,9 +758,9 @@ get_loader_for_type (EphyExtensionsManager *manager,
 
 		return g_object_ref (info->loader);
 	}
-#ifdef ENABLE_PYTHON
 	if (strcmp (type, "python") == 0)
 	{
+#ifdef ENABLE_PYTHON
 		info = g_new (LoaderInfo, 1);
 		info->type = g_strdup (type);
 		info->loader = g_object_new (EPHY_TYPE_PYTHON_LOADER, NULL);
@@ -769,8 +769,10 @@ get_loader_for_type (EphyExtensionsManager *manager,
 				g_list_append (manager->priv->factories, info);
 
 		return g_object_ref (info->loader);
-	}
+#else
+		return NULL;
 #endif
+	}
 
 	stype = sanitise_type (type);
 	name = g_strconcat ("lib", stype, "loader.", G_MODULE_SUFFIX, NULL);
@@ -838,7 +840,7 @@ load_extension (EphyExtensionsManager *manager,
 	loader = get_loader_for_type (manager, info->loader_type);
 	if (loader == NULL)
 	{
-		g_warning ("No loader found for extension '%s' of type '%s'\n",
+		g_message ("No loader found for extension '%s' of type '%s'\n",
 			   info->info.identifier, info->loader_type);
 		return;
 	}

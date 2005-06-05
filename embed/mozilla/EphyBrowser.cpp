@@ -219,9 +219,11 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 		if (!shouldLoad) return NS_OK;
 #endif
-
+		
 		/* Hide password part */
-		favUri->SetPassword (nsEmbedCString ());
+		nsEmbedCString user;
+		favUri->GetUsername (user);
+		favUri->SetUserPass (user);
 
 		nsEmbedCString spec;
 		favUri->GetSpec (spec);

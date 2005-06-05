@@ -228,6 +228,7 @@ pydefsdir = $(datadir)/pygtk/2.0/defs
 pydefs_DATA = epiphany.defs
 
 EXTRA_DIST = \
+	epiphany.override	\
 	$(pydefs_DATA)
 endif
 

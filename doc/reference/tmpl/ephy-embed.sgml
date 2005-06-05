@@ -42,6 +42,14 @@ be done by casting).
 </para>
 
 
+<!-- ##### SIGNAL EphyEmbed::dom-content-loaded ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL EphyEmbed::ge-content-change ##### -->
 <para>
 
@@ -92,6 +100,16 @@ be done by casting).
 
 @ephyembed: the object which received the signal.
 @arg1: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-feed-link ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
 
 <!-- ##### SIGNAL EphyEmbed::ge-location ##### -->
 <para>
@@ -227,7 +245,18 @@ be done by casting).
 @: 
 @:
 @: 
+@:
 @: 
+@: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-search-key-press ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@event: 
+@Returns: 
 
 <!-- ##### SIGNAL EphyEmbed::ge-security-change ##### -->
 <para>
@@ -253,10 +282,12 @@ be done by casting).
 @base_iface: 
 @context_menu: 
 @favicon: 
+@feed_link: 
 @location: 
 @net_state: 
 @dom_mouse_click: 
 @dom_mouse_down: 
+@dom_content_loaded: 
 @popup_blocked: 
 @security_change: 
 @zoom_change: 
@@ -265,6 +296,7 @@ be done by casting).
 @modal_alert_closed: 
 @document_type: 
 @new_window: 
+@search_key_press: 
 @load_url: 
 @stop_load: 
 @reload: 
@@ -287,8 +319,6 @@ be done by casting).
 @show_page_certificate: 
 @set_zoom: 
 @get_zoom: 
-@find_set_properties: 
-@find_next: 
 @get_encoding: 
 @has_automatic_encoding: 
 @set_encoding: 
@@ -513,20 +543,12 @@ windows opened with JavaScript often use a nonstandard chrome.
 
 </para>
 
-@embed: 
+@find: 
 @search_string: 
 @case_sensitive: 
-@wrap_around: 
-
-
-<!-- ##### FUNCTION ephy_embed_find_next ##### -->
-<para>
-
-</para>
-
+<!-- # Unused Parameters # -->
 @embed: 
-@backwards: 
-@Returns: 
+@wrap_around: 
 
 
 <!-- ##### FUNCTION ephy_embed_set_encoding ##### -->
