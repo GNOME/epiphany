@@ -921,7 +921,6 @@ mozilla_embed_dom_key_press_cb (GtkMozEmbed *embed,
 				gpointer dom_event, 
 				MozillaEmbed *membed)
 {
-	MozillaEmbedPrivate *mpriv = membed->priv;
 	gint retval = FALSE;
 
 	if (dom_event == NULL) return FALSE;
