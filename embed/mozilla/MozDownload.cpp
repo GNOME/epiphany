@@ -755,7 +755,7 @@ static const char*
 file_is_compressed (const char *filename)
 {
         int i;
-        const char *compression[] = {".gz", ".bz2", ".Z", ".lz", NULL};
+        static const char * const compression[] = {".gz", ".bz2", ".Z", ".lz", NULL};
 
         for (i = 0; compression[i] != NULL; i++)
         {
@@ -777,7 +777,7 @@ parse_extension (const char *filename)
         if (compression != NULL)
         {
                 int i;
-                const char *extensions[] = {"tar", "ps", "xcf", "dvi", "txt", "text", NULL};
+                static const char * const extensions[] = {"tar", "ps", "xcf", "dvi", "txt", "text", NULL};
 
                 for (i = 0; extensions[i] != NULL; i++)
                 {
