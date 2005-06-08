@@ -60,13 +60,6 @@
 #include <glib/gi18n.h>
 
 void
-window_cmd_edit_find (GtkAction *action,
-		      EphyWindow *window)
-{
-	ephy_window_find (window);
-}
-
-void
 window_cmd_file_print_setup (GtkAction *action,
 			     EphyWindow *window)
 {
@@ -554,6 +547,16 @@ window_cmd_edit_select_all (GtkAction *action,
 		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
 						 "cmd_selectAll");
 	}
+}
+
+void
+window_cmd_edit_find (GtkAction *action,
+		      EphyWindow *window)
+{
+	EphyFindToolbar *toolbar;
+	
+	toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_find_toolbar (window));
+	ephy_find_toolbar_open (toolbar, FALSE, FALSE);
 }
 
 void

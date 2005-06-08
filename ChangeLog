@@ -1,3 +1,14 @@
+2005-06-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-window.c:
+	* src/ephy-window.h:
+	* src/epiphany.defs:
+	* src/window-commands.c: (window_cmd_edit_select_all),
+	(window_cmd_edit_find):
+
+	Handle Ctrl-F like / to open the find bar without focusing it.
+	Fixes link activation while finding.
+
 2005-06-07  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* embed/mozilla/MozDownload.cpp: (file_is_compressed),

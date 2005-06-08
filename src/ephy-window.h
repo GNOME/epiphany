@@ -101,8 +101,6 @@ EphyEmbed	 *ephy_window_get_active_embed	  (EphyWindow *window);
 
 GList		 *ephy_window_get_tabs		  (EphyWindow *window);
 
-void		  ephy_window_find		  (EphyWindow *window);
-
 gboolean	  ephy_window_get_is_popup	  (EphyWindow *window);
 
 gboolean	  ephy_window_get_is_print_preview(EphyWindow *window);

@@ -3262,21 +3262,6 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 }
 
 /**
- * ephy_window_find:
- * @window: an #EphyWindow
- *
- * Displays @window's Find dialog.
- **/
-void
-ephy_window_find (EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-
-	ephy_find_toolbar_open (priv->find_toolbar, FALSE, FALSE);
-	gtk_widget_grab_focus (GTK_WIDGET (priv->find_toolbar));
-}
-
-/**
  * ephy_window_set_zoom:
  * @window: an #EphyWindow
  * @zoom: the desired zoom level
