@@ -1,3 +1,25 @@
+2005-06-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/Makefile.am:
+	* lib/ephy-object-helpers.c:
+	* lib/ephy-object-helpers.h:
+
+	Common helper function to unref a GObject from idle.
+	
+	* embed/downloader-view.c: (downloader_view_finalize):
+	* embed/mozilla/mozilla-embed-find.cpp:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-extensions-manager.c: (unload_extension):
+	* src/ephy-main.c: (main):
+	* src/ephy-shell.c: (toolwindow_hide_cb):
+	* src/ephy-window.c: (ephy_window_finalize):
+
+	Always unref the shell from idle, never directly. That's because
+	in case we hold the last reference, we would end up terminating
+	embedding/XPCOM from a mozilla callback. Fixes bug #151037,
+	and moz#236688.
+
 2005-06-06  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-dbus.c:

@@ -23,6 +23,7 @@
 
 #include "downloader-view.h"
 #include "ephy-file-helpers.h"
+#include "ephy-object-helpers.h"
 #include "ephy-embed-shell.h"
 #include "ephy-stock-icons.h"
 #include "ephy-gui.h"
@@ -229,9 +230,10 @@ downloader_view_finalize (GObject *object)
 
 	g_object_unref (dv->priv->status_icon);
 	g_hash_table_destroy (dv->priv->downloads_hash);
-	g_object_unref (embed_shell);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
+
+	ephy_object_idle_unref (embed_shell);
 }
 
 DownloaderView *

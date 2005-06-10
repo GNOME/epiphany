@@ -29,6 +29,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-command-manager.h"
 #include "ephy-string.h"
+#include "ephy-object-helpers.h"
 #include "ephy-debug.h"
 
 #include "EphyBrowser.h"
@@ -227,6 +228,8 @@ static GObject *
 mozilla_embed_constructor (GType type, guint n_construct_properties,
 			   GObjectConstructParam *construct_params)
 {
+	g_object_ref (embed_shell);
+
 	/* we depend on single because of mozilla initialization */
 	ephy_embed_shell_get_embed_single (embed_shell);
 
@@ -312,6 +315,8 @@ mozilla_embed_finalize (GObject *object)
 	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
+
+	ephy_object_idle_unref (embed_shell);
 }
 
 static void
@@ -1126,6 +1131,8 @@ _mozilla_embed_new_xul_dialog (void)
 {
 	GtkWidget *window, *embed;
 
+	g_object_ref (embed_shell);
+
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	embed = gtk_moz_embed_new ();
 	gtk_widget_show (embed);
@@ -1146,6 +1153,9 @@ _mozilla_embed_new_xul_dialog (void)
 	g_signal_connect_object (embed, "title",
 				 G_CALLBACK (xul_title_cb),
 				 window, (GConnectFlags) 0);
+
+	g_object_weak_ref (G_OBJECT (window),
+			   (GWeakNotify) ephy_object_idle_unref, embed_shell);
 
 	return GTK_MOZ_EMBED (embed);
 }

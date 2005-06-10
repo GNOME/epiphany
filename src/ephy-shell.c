@@ -46,6 +46,7 @@
 #include "print-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
+#include "ephy-object-helpers.h"
 
 #ifdef ENABLE_DBUS
 #include "ephy-dbus.h"
@@ -892,7 +893,8 @@ toolwindow_hide_cb (GtkWidget *widget, EphyShell *es)
 
 	session = EPHY_SESSION (ephy_shell_get_session (es));
 	ephy_session_remove_window (ephy_shell->priv->session, GTK_WINDOW (widget));
-	g_object_unref (ephy_shell);
+
+	ephy_object_idle_unref (ephy_shell);
 }
 
 GtkWidget *
