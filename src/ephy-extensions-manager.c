@@ -31,6 +31,7 @@
 #include "ephy-shell.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-file-helpers.h"
+#include "ephy-object-helpers.h"
 #include "ephy-debug.h"
 
 #include <libxml/tree.h>
@@ -891,14 +892,6 @@ detach_window (EphyWindow *window,
 	ephy_extension_detach_window (extension, window);
 }
 
-static gboolean
-idle_unref (GObject *object)
-{
-	g_object_unref (object);
-
-	return FALSE;
-}
-
 static void
 unload_extension (EphyExtensionsManager *manager,
 		  ExtensionInfo *info)
@@ -925,7 +918,7 @@ unload_extension (EphyExtensionsManager *manager,
 		 * extension has its own functions queued in the idle loop, the
 		 * functions must exist in memory before being called.
 		 */
-		g_idle_add ((GSourceFunc) idle_unref, info->extension);
+		ephy_object_idle_unref (info->extension);
 	}
 
 	ephy_loader_release_object (info->loader, G_OBJECT (info->extension));

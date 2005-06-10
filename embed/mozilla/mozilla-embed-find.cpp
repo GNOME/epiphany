@@ -28,6 +28,8 @@
 #include "mozilla-embed-find.h"
 #include "ephy-embed-find.h"
 #include "ephy-embed-shell.h"
+#include "ephy-object-helpers.h"
+#include "ephy-debug.h"
 
 #define MOZILLA_EMBED_FIND_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED_FIND, MozillaEmbedFindPrivate))
 
@@ -103,6 +105,7 @@ mozilla_embed_find_constructor (GType type, guint n_construct_properties,
 				GObjectConstructParam *construct_params)
 {
 	g_object_ref (embed_shell);
+
 	/* we depend on single because of mozilla initialization */
 	ephy_embed_shell_get_embed_single (embed_shell);
 
@@ -119,7 +122,7 @@ mozilla_embed_find_finalize (GObject *object)
 
 	parent_class->finalize (object);
 
-	g_object_unref (embed_shell);
+	ephy_object_idle_unref (embed_shell);
 }
 
 static void

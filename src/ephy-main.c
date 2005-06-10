@@ -22,6 +22,7 @@
 
 #include "ephy-shell.h"
 #include "ephy-file-helpers.h"
+#include "ephy-object-helpers.h"
 #include "ephy-state.h"
 #include "ephy-debug.h"
 #include "ephy-stock-icons.h"
@@ -133,13 +134,6 @@ shell_weak_notify (gpointer data,
                    GObject *where_the_object_was)
 {
 	gtk_main_quit ();
-}
-
-static gboolean
-idle_unref (GObject *object)
-{
-	g_object_unref (object);
-	return FALSE;
 }
 
 /* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
@@ -308,7 +302,7 @@ main (int argc, char *argv[])
 	else if (new_instance && ephy_shell)
 	{
 		g_object_weak_ref (G_OBJECT (ephy_shell), shell_weak_notify, NULL);
-		g_idle_add ((GSourceFunc) idle_unref, ephy_shell);
+		ephy_object_idle_unref (ephy_shell);
 
 		gtk_main ();
 	}
