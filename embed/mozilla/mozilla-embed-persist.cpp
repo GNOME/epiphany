@@ -26,7 +26,6 @@
 #include "mozilla-embed.h"
 #include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
-#include "ephy-object-helpers.h"
 #include "EphyBrowser.h"
 #include "EphyHeaderSniffer.h"
 #include "MozDownload.h"
@@ -103,8 +102,6 @@ mozilla_embed_persist_finalize (GObject *object)
 	persist->priv->mPersist = nsnull;
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
-
-	ephy_object_idle_unref (embed_shell);
 }
 
 void
@@ -342,8 +339,6 @@ static GObject *
 mozilla_embed_persist_constructor (GType type, guint n_construct_properties,
 			           GObjectConstructParam *construct_params)
 {
-	g_object_ref (embed_shell);
-
 	/* this will ensure that mozilla is started up */
 	ephy_embed_shell_get_embed_single (embed_shell);
 
