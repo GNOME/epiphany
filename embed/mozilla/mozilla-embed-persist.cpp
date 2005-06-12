@@ -304,10 +304,10 @@ impl_to_string (EphyEmbedPersist *persist)
 	              "embed", &embed,
 	              NULL);
 	g_object_unref (persist);
-	g_assert (embed != NULL);
+	g_return_val_if_fail (embed != NULL, NULL);
 
 	browser = (EphyBrowser *) _mozilla_embed_get_ephy_browser (MOZILLA_EMBED(embed));
-	g_assert (browser != NULL);
+	g_return_val_if_fail (browser != NULL, NULL);
 
 	if (flags & EPHY_EMBED_PERSIST_MAINDOC)
 	{
@@ -317,20 +317,23 @@ impl_to_string (EphyEmbedPersist *persist)
 	{
 		rv = browser->GetTargetDocument (getter_AddRefs(DOMDocument));
 	}
-	if (NS_FAILED(rv) || !DOMDocument) return NULL;
-
-	nsCOMPtr<nsIDOMNode> node = do_QueryInterface(DOMDocument);
-	if (!node) return NULL;
-
-	nsCOMPtr<nsIDOMSerializer> serializer;
-	serializer = do_CreateInstance(NS_XMLSERIALIZER_CONTRACTID, &rv);
-	NS_ENSURE_SUCCESS (rv, FALSE);
-
-	nsEmbedString outString;
-	serializer->SerializeToString(node, outString);
 
 	nsEmbedCString cOutString;
-	NS_UTF16ToCString (outString, NS_CSTRING_ENCODING_UTF8, cOutString);
+	nsCOMPtr<nsIDOMNode> node = do_QueryInterface(DOMDocument);
+	if (node)
+	{
+		nsEmbedString outString;
+		nsCOMPtr<nsIDOMSerializer> serializer;
+		serializer = do_CreateInstance(NS_XMLSERIALIZER_CONTRACTID, &rv);
+		if (serializer)
+		{
+			serializer->SerializeToString(node, outString);
+
+			NS_UTF16ToCString (outString, NS_CSTRING_ENCODING_UTF8, cOutString);
+		}
+	}
+
+	g_object_unref (embed);
 
 	return g_strdup (cOutString.get());
 }
