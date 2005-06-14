@@ -361,7 +361,7 @@ ephy_embed_base_init (gpointer g_class)
 		g_signal_new ("ge-search-key-press",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyEmbedIface, context_menu),
+			      G_STRUCT_OFFSET (EphyEmbedIface, search_key_press),
 			      g_signal_accumulator_true_handled, NULL,
 			      ephy_marshal_BOOLEAN__BOXED,
 			      G_TYPE_BOOLEAN,
