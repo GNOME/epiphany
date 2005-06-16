@@ -228,7 +228,7 @@ ephy_fullscreen_popup_constructor (GType type,
 	EphyFullscreenPopup *popup;
 	EphyFullscreenPopupPrivate *priv;
 	GtkWindow *window;
-	GtkWidget *hbox, *frame_hbox, *button_hbox, *icon, *label;
+	GtkWidget *hbox, *frame_hbox, *icon;
 
 	object = parent_class->constructor (type, n_construct_properties,
 					    construct_params);
@@ -275,23 +275,14 @@ ephy_fullscreen_popup_constructor (GType type,
 	gtk_widget_show (priv->lock_ebox);
 
 	/* exit button */
-	priv->button = gtk_button_new ();
+	priv->button = gtk_button_new_with_label (_("Leave Fullscreen"));
+	icon = gtk_image_new_from_stock (STOCK_LEAVE_FULLSCREEN, GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_image (GTK_BUTTON (priv->button), icon);
+	/* don't show the image! see bug #307818 */
 	g_signal_connect (priv->button, "clicked",
 			  G_CALLBACK (exit_button_clicked_cb), popup);
 	gtk_box_pack_start (GTK_BOX (hbox), priv->button, FALSE, FALSE, 0);
 	gtk_widget_show (priv->button);
-
-	button_hbox = gtk_hbox_new (FALSE, 2);
-	gtk_container_add (GTK_CONTAINER (priv->button), button_hbox);
-	gtk_widget_show (button_hbox);
-
-	icon = gtk_image_new_from_stock (STOCK_LEAVE_FULLSCREEN, GTK_ICON_SIZE_BUTTON);
-	gtk_box_pack_start (GTK_BOX (button_hbox), icon, FALSE, FALSE, 0);
-	gtk_widget_show (icon);
-
-	label = gtk_label_new (_("Leave Fullscreen"));
-	gtk_box_pack_start (GTK_BOX (button_hbox), label, FALSE, FALSE, 0);
-	gtk_widget_show (label);
 
 	ephy_fullscreen_popup_update_visibility (popup);
 
