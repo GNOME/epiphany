@@ -39,6 +39,7 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenutoolbutton.h>
 #include <gtk/gtktoolbar.h>
+#include <gtk/gtkstatusbar.h>
 
 #define NTH_DATA_KEY	"GoNTh"
 #define URL_DATA_KEY	"GoURL"
@@ -50,6 +51,7 @@ struct _EphyNavigationActionPrivate
 	EphyWindow *window;
 	EphyNavigationDirection direction;
 	char *arrow_tooltip;
+	guint statusbar_cid;
 };
 
 enum
@@ -151,6 +153,36 @@ activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
 }
 
 static void
+select_menu_item_cb (GtkWidget *menuitem,
+	             EphyNavigationAction *action)
+{
+	char *url;
+	GtkWidget *statusbar;
+
+	url = g_object_get_data (G_OBJECT (menuitem), URL_DATA_KEY);
+	g_return_if_fail (url != NULL);
+
+	statusbar = ephy_window_get_statusbar (action->priv->window);
+
+	gtk_statusbar_push (GTK_STATUSBAR (statusbar), action->priv->statusbar_cid, url);
+}
+
+static void
+deselect_menu_item_cb (GtkWidget *menuitem,
+	               EphyNavigationAction *action)
+{
+	char *url;
+	GtkWidget *statusbar;
+
+	url = g_object_get_data (G_OBJECT (menuitem), URL_DATA_KEY);
+	g_return_if_fail (url != NULL);
+
+	statusbar = ephy_window_get_statusbar (action->priv->window);
+
+	gtk_statusbar_pop (GTK_STATUSBAR (statusbar), action->priv->statusbar_cid);
+}
+
+static void
 activate_up_menu_item_cb (GtkWidget *menuitem,
 			  EphyNavigationAction *action)
 {
@@ -210,14 +242,22 @@ build_back_or_forward_menu (EphyNavigationAction *action)
 
 		g_object_set_data (G_OBJECT (item), NTH_DATA_KEY,
 				   GINT_TO_POINTER (start));
+		g_object_set_data_full (G_OBJECT (item), URL_DATA_KEY, url, 
+					(GDestroyNotify) g_free);
+
 		g_signal_connect (item, "activate",
 				  G_CALLBACK (activate_back_or_forward_menu_item_cb),
+				  action);
+		g_signal_connect (item, "select",
+				  G_CALLBACK (select_menu_item_cb),
+				  action);
+		g_signal_connect (item, "deselect",
+				  G_CALLBACK (deselect_menu_item_cb),
 				  action);
 
 		gtk_menu_shell_append (menu, item);
 		gtk_widget_show_all (item);
 
-		g_free (url);
 		g_free (title);
 
 		if (start < end)
@@ -262,6 +302,10 @@ build_up_menu (EphyNavigationAction *action)
 					(GDestroyNotify) g_free);
 		g_signal_connect (item, "activate",
 				  G_CALLBACK (activate_up_menu_item_cb), action);
+		g_signal_connect (item, "select",
+				  G_CALLBACK (select_menu_item_cb), action);
+		g_signal_connect (item, "deselect",
+				  G_CALLBACK (deselect_menu_item_cb), action);
 
 		gtk_menu_shell_append (menu, item);
 		gtk_widget_show (item);
@@ -370,7 +414,18 @@ ephy_navigation_action_set_property (GObject *object,
 			nav->priv->direction = g_value_get_int (value);
 			break;
 		case PROP_WINDOW:
-			nav->priv->window = EPHY_WINDOW (g_value_get_object (value));
+			{
+				GtkWidget *statusbar;
+
+				nav->priv->window = EPHY_WINDOW (g_value_get_object (value));
+
+				/* statusbar context to display current selected item */
+				statusbar = ephy_window_get_statusbar (nav->priv->window);
+
+				nav->priv->statusbar_cid = gtk_statusbar_get_context_id (
+								GTK_STATUSBAR (statusbar), 
+								"navigation_message");
+			}
 			break;
 	}
 }
