@@ -681,11 +681,11 @@ write_parent (guint id,
 	 */
 	if (data->ret < 0) return;
 
-	data->ret = xmlTextWriterStartElement (writer, "parent");
+	data->ret = xmlTextWriterStartElement (writer, (const xmlChar *)"parent");
 	if (data->ret < 0) return;
 
 	data->ret = xmlTextWriterWriteFormatAttribute
-			(writer, "id", "%ld", node_info->node->id);
+			(writer, (const xmlChar *)"id", "%ld", node_info->node->id);
 	if (data->ret < 0) return;
 
 	data->ret = xmlTextWriterEndElement (writer); /* parent */
@@ -705,11 +705,11 @@ ephy_node_write_to_xml(EphyNode *node,
 	g_return_val_if_fail (writer != NULL, -1);
 
 	/* start writing the node */
-	ret = xmlTextWriterStartElement (writer, "node");
+	ret = xmlTextWriterStartElement (writer, (const xmlChar *)"node");
 	if (ret < 0) goto out;
 
 	/* write node id */
-	ret = xmlTextWriterWriteFormatAttribute (writer, "id", "%ld", node->id);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"id", "%ld", node->id);
 	if (ret < 0) goto out;
 
 	/* write node properties */
@@ -721,21 +721,22 @@ ephy_node_write_to_xml(EphyNode *node,
 
 		if (value == NULL) continue;
 
-		ret = xmlTextWriterStartElement (writer, "property");
+		ret = xmlTextWriterStartElement (writer, (const xmlChar *)"property");
 		if (ret < 0) break;
 
-		ret = xmlTextWriterWriteFormatAttribute (writer, "id", "%d", i);
+		ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"id", "%d", i);
 		if (ret < 0) break;
 
 		ret = xmlTextWriterWriteAttribute
-			(writer, "value_type", g_type_name (G_VALUE_TYPE (value)));
+			(writer, (const xmlChar *)"value_type", 
+			 (const xmlChar *)g_type_name (G_VALUE_TYPE (value)));
 		if (ret < 0) break;
 
 		switch (G_VALUE_TYPE (value))
 		{
 		case G_TYPE_STRING:
 			ret = xmlTextWriterWriteString
-				(writer, g_value_get_string (value));
+				(writer, (const xmlChar *)g_value_get_string (value));
 			break;
 		case G_TYPE_BOOLEAN:
 			ret = xmlTextWriterWriteFormatString
@@ -750,12 +751,12 @@ ephy_node_write_to_xml(EphyNode *node,
 				(writer, "%ld", g_value_get_long (value));
 			break;
 		case G_TYPE_FLOAT:
-			g_ascii_dtostr (xml_buf, sizeof (xml_buf), 
+			g_ascii_dtostr ((gchar *)xml_buf, sizeof (xml_buf), 
 					g_value_get_float (value));
 			ret = xmlTextWriterWriteString (writer, xml_buf);
 			break;
 		case G_TYPE_DOUBLE:
-			g_ascii_dtostr (xml_buf, sizeof (xml_buf),
+			g_ascii_dtostr ((gchar *)xml_buf, sizeof (xml_buf),
 					g_value_get_double (value));
 			ret = xmlTextWriterWriteString (writer, xml_buf);
 			break;
@@ -814,7 +815,7 @@ ephy_node_new_from_xml (EphyNodeDb *db, xmlNodePtr xml_node)
 {
 	EphyNode *node;
 	xmlNodePtr xml_child;
-	char *xml;
+	xmlChar *xml;
 	long id;
 
 	g_return_val_if_fail (EPHY_IS_NODE_DB (db), NULL);
@@ -822,22 +823,22 @@ ephy_node_new_from_xml (EphyNodeDb *db, xmlNodePtr xml_node)
 
 	if (ephy_node_db_is_immutable (db)) return NULL; 
 
-	xml = xmlGetProp (xml_node, "id");
+	xml = xmlGetProp (xml_node, (const xmlChar *)"id");
 	if (xml == NULL)
 		return NULL;
-	id = atol (xml);
+	id = atol ((const char *)xml);
 	xmlFree (xml);
 
 	node = ephy_node_new_with_id (db, id);
 
 	for (xml_child = xml_node->children; xml_child != NULL; xml_child = xml_child->next) {
-		if (strcmp (xml_child->name, "parent") == 0) {
+		if (strcmp ((const char *)xml_child->name, "parent") == 0) {
 			EphyNode *parent;
 			long parent_id;
 
-			xml = xmlGetProp (xml_child, "id");
+			xml = xmlGetProp (xml_child, (const xmlChar *)"id");
 			g_assert (xml != NULL);
-			parent_id = atol (xml);
+			parent_id = atol ((const char *)xml);
 			xmlFree (xml);
 
 			parent = ephy_node_db_get_node_from_id (db, parent_id);
@@ -848,17 +849,17 @@ ephy_node_new_from_xml (EphyNodeDb *db, xmlNodePtr xml_node)
 
 				ephy_node_emit_signal (parent, EPHY_NODE_CHILD_ADDED, node);
 			}
-		} else if (strcmp (xml_child->name, "property") == 0) {
+		} else if (strcmp ((const char *)xml_child->name, "property") == 0) {
 			GType value_type;
 			GValue *value;
 			int property_id;
 
-			xml = xmlGetProp (xml_child, "id");
-			property_id = atoi (xml);
+			xml = xmlGetProp (xml_child, (const xmlChar *)"id");
+			property_id = atoi ((const char *)xml);
 			xmlFree (xml);
 
-			xml = xmlGetProp (xml_child, "value_type");
-			value_type = g_type_from_name (xml);
+			xml = xmlGetProp (xml_child, (const xmlChar *)"value_type");
+			value_type = g_type_from_name ((const gchar *)xml);
 			xmlFree (xml);
 
 			xml = xmlNodeGetContent (xml_child);
@@ -868,28 +869,28 @@ ephy_node_new_from_xml (EphyNodeDb *db, xmlNodePtr xml_node)
 			switch (value_type)
 			{
 			case G_TYPE_STRING:
-				g_value_set_string (value, xml);
+				g_value_set_string (value, (const gchar *)xml);
 				break;
 			case G_TYPE_INT:
-				g_value_set_int (value, atoi (xml));
+				g_value_set_int (value, atoi ((const char *)xml));
 				break;
 			case G_TYPE_BOOLEAN:
-				g_value_set_boolean (value, atoi (xml));
+				g_value_set_boolean (value, atoi ((const char *)xml));
 				break;
 			case G_TYPE_LONG:
-				g_value_set_long (value, atol (xml));
+				g_value_set_long (value, atol ((const char *)xml));
 				break;
 			case G_TYPE_FLOAT:
-				g_value_set_float (value, g_ascii_strtod (xml, NULL));
+				g_value_set_float (value, g_ascii_strtod ((const gchar *)xml, NULL));
 				break;
 			case G_TYPE_DOUBLE:
-				g_value_set_double (value, g_ascii_strtod (xml, NULL));
+				g_value_set_double (value, g_ascii_strtod ((const gchar *)xml, NULL));
 				break;
 			case G_TYPE_POINTER:
 			{
 				EphyNode *property_node;
 
-				property_node = ephy_node_db_get_node_from_id (db, atol (xml));
+				property_node = ephy_node_db_get_node_from_id (db, atol ((const char *)xml));
 
 				g_value_set_pointer (value, property_node);
 				break;

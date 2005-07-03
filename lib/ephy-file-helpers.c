@@ -416,19 +416,19 @@ load_mime_from_xml (void)
 		tag = xmlTextReaderConstName (reader);
 		type = xmlTextReaderNodeType (reader);
 
-		if (xmlStrEqual (tag, "safe") && type == XML_READER_TYPE_ELEMENT)
+		if (xmlStrEqual (tag, (const xmlChar *)"safe") && type == XML_READER_TYPE_ELEMENT)
 		{
 			permission = EPHY_MIME_PERMISSION_SAFE;
 		}
-		else if (xmlStrEqual (tag, "unsafe") && type == XML_READER_TYPE_ELEMENT)
+		else if (xmlStrEqual (tag, (const xmlChar *)"unsafe") && type == XML_READER_TYPE_ELEMENT)
 		{
 			permission = EPHY_MIME_PERMISSION_UNSAFE;
 		}
-		else if (xmlStrEqual (tag, "mime-type"))
+		else if (xmlStrEqual (tag, (const xmlChar *)"mime-type"))
 		{
 			xmlChar *type;
 
-			type = xmlTextReaderGetAttribute (reader, "type");
+			type = xmlTextReaderGetAttribute (reader, (const xmlChar *)"type");
 			g_hash_table_insert (mime_table, type,
 					     GINT_TO_POINTER (permission));
 		}

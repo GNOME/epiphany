@@ -174,7 +174,7 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
 		XChangeProperty (xdisplay, 
 				 xwindow, atom_name,
 				 atom_type,
-				 8, PropModeReplace, name, strlen (name));
+				 8, PropModeReplace, (unsigned char *)name, strlen (name));
 	}
 	
 	XWindowEvent (xdisplay,

@@ -392,7 +392,7 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 	 * put the schema validation on the Doc Tree and then pass that to the
 	 * reader. (maybe switch to RelaxNG?)
 	 */
-	doc = xmlParseDoc (xml);
+	doc = xmlParseDoc ((const xmlChar *)xml);
 
 	if (doc == NULL)
 	{
@@ -561,7 +561,7 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 		else if (state == STATE_URL &&
 			 type == XML_READER_TYPE_TEXT)
 		{
-			einfo->url = xmlTextReaderValue (reader);
+			einfo->url = (char *)xmlTextReaderValue (reader);
 		}
 		else if (state == STATE_AUTHOR &&
 			 type == XML_READER_TYPE_END_ELEMENT &&
@@ -648,8 +648,8 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 	xmlFreeDoc (doc);
 
 	/* assign localised strings */
-	einfo->description = description.string;
-	einfo->name = name.string;
+	einfo->description = (char *)description.string;
+	einfo->name = (char *)name.string;
 
 	/* sanity check */
 	if (ret < 0 || state != STATE_STOP ||
@@ -838,7 +838,7 @@ load_extension (EphyExtensionsManager *manager,
 	if (info->load_failed) return;
 
 	/* get a loader */
-	loader = get_loader_for_type (manager, info->loader_type);
+	loader = get_loader_for_type (manager, (const char *)info->loader_type);
 	if (loader == NULL)
 	{
 		g_message ("No loader found for extension '%s' of type '%s'\n",

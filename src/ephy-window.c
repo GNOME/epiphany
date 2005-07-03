@@ -1538,11 +1538,13 @@ popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
 {
 	GtkWidget *window = GTK_WIDGET (user_data);
 	EphyEmbedEvent *event;
+	guint ux, uy;
 
 	event = g_object_get_data (G_OBJECT (window), "context_event");
 	g_return_if_fail (event != NULL);
 
-	ephy_embed_event_get_coords (event, x, y);
+	ephy_embed_event_get_coords (event, &ux, &uy);
+	*x = ux; *y = uy;
 
 	/* FIXME: better position the popup within the window bounds? */
 	ephy_gui_sanitise_popup_position (menu, window, x, y);

@@ -36,8 +36,8 @@
 #include "ephy-node.h"
 #include "ephy-debug.h"
 
-#define EPHY_FAVICON_CACHE_XML_ROOT    "ephy_favicons_cache"
-#define EPHY_FAVICON_CACHE_XML_VERSION "1.1"
+#define EPHY_FAVICON_CACHE_XML_ROOT    (const xmlChar *)"ephy_favicons_cache"
+#define EPHY_FAVICON_CACHE_XML_VERSION (const xmlChar *)"1.1"
 
 #define EPHY_FAVICON_CACHE_OBSOLETE_DAYS 30
 
@@ -287,7 +287,7 @@ ephy_favicon_cache_finalize (GObject *object)
 	remove_obsolete_icons (cache);
 
 	ephy_node_db_write_to_xml_safe
-		(cache->priv->db, cache->priv->xml_file,
+		(cache->priv->db, (const xmlChar *)cache->priv->xml_file,
 		 EPHY_FAVICON_CACHE_XML_ROOT,
 		 EPHY_FAVICON_CACHE_XML_VERSION,
 		 NULL,

@@ -593,7 +593,9 @@ write_ephy_window (xmlTextWriterPtr writer,
 	role = gtk_window_get_role (GTK_WINDOW (window));
 	if (role != NULL)
 	{
-		ret = xmlTextWriterWriteAttribute (writer, "role", role);
+		ret = xmlTextWriterWriteAttribute (writer, 
+						   (const xmlChar *)"role", 
+						   (const xmlChar *)role);
 		if (ret < 0) return ret;
 	}
 

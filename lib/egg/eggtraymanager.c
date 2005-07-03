@@ -686,13 +686,13 @@ egg_tray_manager_get_child_title (EggTrayManager *manager,
       return NULL;
     }
 
-  if (!g_utf8_validate (val, nitems, NULL))
+  if (!g_utf8_validate ((const gchar *)val, nitems, NULL))
     {
       XFree (val);
       return NULL;
     }
 
-  retval = g_strndup (val, nitems);
+  retval = g_strndup ((const gchar *)val, nitems);
 
   XFree (val);
 

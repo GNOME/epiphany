@@ -303,7 +303,7 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 		name = xmlTextReaderConstName (reader);
 		type = xmlTextReaderNodeType (reader);
 
-		if (xmlStrEqual (name, "node")
+		if (xmlStrEqual (name, (const xmlChar *)"node")
 		    && type == XML_READER_TYPE_ELEMENT)
 		{
 			xmlNodePtr subtree;
@@ -324,7 +324,7 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 			xmlChar *version;
 
 			/* check version info */
-			version = xmlTextReaderGetAttribute (reader, "version");
+			version = xmlTextReaderGetAttribute (reader, (const xmlChar *)"version");
 			if (xmlStrEqual (version, xml_version) == FALSE)
 			{
 				success = FALSE;
@@ -368,7 +368,7 @@ ephy_node_db_write_to_xml_valist (EphyNodeDb *db,
 	START_PROFILER ("Saving node db")
 
 	/* FIXME: do we want to turn compression on ? */
-	writer = xmlNewTextWriterFilename (filename, 0);
+	writer = xmlNewTextWriterFilename ((const char *)filename, 0);
 	if (writer == NULL)
 	{
 		return -1;
@@ -377,7 +377,7 @@ ephy_node_db_write_to_xml_valist (EphyNodeDb *db,
 	ret = xmlTextWriterSetIndent (writer, 1);
 	if (ret < 0) goto out;
 
-	ret = xmlTextWriterSetIndentString (writer, "  ");
+	ret = xmlTextWriterSetIndentString (writer, (const xmlChar *)"  ");
 	if (ret < 0) goto out;
 
 	ret = xmlTextWriterStartDocument (writer, "1.0", NULL, NULL);
@@ -386,7 +386,7 @@ ephy_node_db_write_to_xml_valist (EphyNodeDb *db,
 	ret = xmlTextWriterStartElement (writer, root);
 	if (ret < 0) goto out;
 
-	ret = xmlTextWriterWriteAttribute (writer, "version", version);
+	ret = xmlTextWriterWriteAttribute (writer, (const xmlChar *)"version", version);
 	if (ret < 0) goto out;
 
 	if (comment != NULL)
@@ -484,12 +484,12 @@ ephy_node_db_write_to_xml_safe (EphyNodeDb *db,
 	int ret = 0;
 	char *tmp_file;
 
-	tmp_file = g_strconcat (filename, ".tmp", NULL);
+	tmp_file = g_strconcat ((const gchar *)filename, ".tmp", NULL);
 
 	va_start (argptr, node);
  
 	ret = ephy_node_db_write_to_xml_valist
-		(db, tmp_file, root, version, comment, node, argptr);
+		(db, (const xmlChar *)tmp_file, root, version, comment, node, argptr);
 
 	va_end (argptr);
 
@@ -499,7 +499,7 @@ ephy_node_db_write_to_xml_safe (EphyNodeDb *db,
 		goto failed;
 	}
 
-	if (ephy_file_switch_temp_file (filename, tmp_file) == FALSE)
+	if (ephy_file_switch_temp_file ((const char *)filename, tmp_file) == FALSE)
 	{
 		ret = -1;
 	}

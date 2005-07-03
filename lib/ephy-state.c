@@ -34,8 +34,8 @@
 #include <gtk/gtkexpander.h>
 
 #define EPHY_STATES_XML_FILE	"states.xml"
-#define EPHY_STATES_XML_ROOT    "ephy_states"
-#define EPHY_STATES_XML_VERSION "1.0"
+#define EPHY_STATES_XML_ROOT    (const xmlChar *)"ephy_states"
+#define EPHY_STATES_XML_VERSION (const xmlChar *)"1.0"
 
 enum
 {
@@ -63,7 +63,8 @@ ephy_states_save (void)
                                      NULL);
 
 	ephy_node_db_write_to_xml_safe
-		(states_db, xml_file,
+		(states_db, 
+		 (const xmlChar *)xml_file,
 		 EPHY_STATES_XML_ROOT,
 		 EPHY_STATES_XML_VERSION,
 		 NULL, /* comment */

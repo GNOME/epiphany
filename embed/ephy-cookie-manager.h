@@ -24,6 +24,7 @@
 
 #include <glib-object.h>
 #include <glib.h>
+#include <time.h>
 
 G_BEGIN_DECLS
 
@@ -45,7 +46,7 @@ typedef struct
 	char *value;
 	char *domain;
 	char *path;
-	gulong expires;
+	time_t expires;
 	glong real_expires;
         guint is_secure : 1;
         guint is_session : 1;
