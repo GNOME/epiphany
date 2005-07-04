@@ -29,6 +29,7 @@
 #include <time.h>
 #include <sys/stat.h>
 
+#include "ephy-embed-shell.h"
 #include "ephy-embed-persist.h"
 #include "ephy-embed-factory.h"
 #include "ephy-file-helpers.h"
@@ -44,6 +45,7 @@
 static void ephy_favicon_cache_class_init (EphyFaviconCacheClass *klass);
 static void ephy_favicon_cache_init	  (EphyFaviconCache *cache);
 static void ephy_favicon_cache_finalize	  (GObject *object);
+static gboolean kill_download		  (const char*, EphyEmbedPersist*, EphyFaviconCache*);
 
 #define EPHY_FAVICON_CACHE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FAVICON_CACHE, EphyFaviconCachePrivate))
 
@@ -205,6 +207,16 @@ remove_obsolete_icons (EphyFaviconCache *eb)
 }
 
 static void
+prepare_close_cb (EphyEmbedShell *shell,
+		  EphyFaviconCache *cache)
+{
+	EphyFaviconCachePrivate *priv = cache->priv;
+
+	g_hash_table_foreach_remove (priv->downloads_hash,
+				     (GHRFunc) kill_download, cache);
+}
+
+static void
 ephy_favicon_cache_init (EphyFaviconCache *cache)
 {
 	EphyNodeDb *db;
@@ -251,10 +263,14 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 	ephy_node_db_load_from_file (cache->priv->db, cache->priv->xml_file,
 				     EPHY_FAVICON_CACHE_XML_ROOT,
 				     EPHY_FAVICON_CACHE_XML_VERSION);
+
+	/* listen to prepare-close on the shell */
+	g_signal_connect_object (embed_shell, "prepare-close",
+				 G_CALLBACK (prepare_close_cb), cache, 0);
 }
 
 static gboolean
-kill_download (char *key,
+kill_download (const char *key,
 	       EphyEmbedPersist *persist,
 	       EphyFaviconCache *cache)
 {

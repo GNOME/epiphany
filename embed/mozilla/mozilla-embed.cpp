@@ -29,7 +29,6 @@
 #include "ephy-embed-shell.h"
 #include "ephy-command-manager.h"
 #include "ephy-string.h"
-#include "ephy-object-helpers.h"
 #include "ephy-debug.h"
 
 #include "EphyBrowser.h"
@@ -316,7 +315,7 @@ mozilla_embed_finalize (GObject *object)
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 
-	ephy_object_idle_unref (embed_shell);
+	g_object_unref (embed_shell);
 }
 
 static void
@@ -1134,6 +1133,13 @@ _mozilla_embed_new_xul_dialog (void)
 	g_object_ref (embed_shell);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	g_object_set_data_full (G_OBJECT (window), "EmbedShellRef",
+			        embed_shell,
+				(GDestroyNotify) g_object_unref);
+	g_signal_connect_object (embed_shell, "prepare_close",
+				 G_CALLBACK (gtk_widget_destroy), window,
+				 (GConnectFlags) G_CONNECT_SWAPPED);
+
 	embed = gtk_moz_embed_new ();
 	gtk_widget_show (embed);
 	gtk_container_add (GTK_CONTAINER (window), embed);
@@ -1153,9 +1159,6 @@ _mozilla_embed_new_xul_dialog (void)
 	g_signal_connect_object (embed, "title",
 				 G_CALLBACK (xul_title_cb),
 				 window, (GConnectFlags) 0);
-
-	g_object_weak_ref (G_OBJECT (window),
-			   (GWeakNotify) ephy_object_idle_unref, embed_shell);
 
 	return GTK_MOZ_EMBED (embed);
 }

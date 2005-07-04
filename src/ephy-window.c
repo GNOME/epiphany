@@ -56,7 +56,6 @@
 #include "ephy-gui.h"
 #include "ephy-notebook.h"
 #include "ephy-fullscreen-popup.h"
-#include "ephy-object-helpers.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -2769,7 +2768,7 @@ ephy_window_finalize (GObject *object)
 
 	LOG ("Ephy Window finalized %p", object);
 
-	ephy_object_idle_unref (ephy_shell);
+	g_object_unref (ephy_shell);
 }
 
 /**

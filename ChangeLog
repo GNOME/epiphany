@@ -1,3 +1,26 @@
+2005-07-04  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/downloader-view.c: (remove_download), (prepare_close_cb),
+	(downloader_view_init), (downloader_view_finalize),
+	(downloader_view_remove_download), (download_dialog_delete_cb):
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_prepare_close),
+	(ephy_embed_shell_class_init):
+	* embed/ephy-embed-shell.h:
+	* embed/ephy-favicon-cache.c: (prepare_close_cb),
+	(ephy_favicon_cache_init), (kill_download):
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* embed/mozilla/mozilla-notifiers.h:
+	* src/ephy-session.c: (ephy_session_init), (ephy_session_dispose),
+	(ephy_session_autoresume), (close_dialog), (ephy_session_close):
+	* src/ephy-shell.c: (ephy_shell_startup), (toolwindow_hide_cb):
+	* src/ephy-window.c: (ephy_window_finalize):
+
+	Better fix for bug #151037 to make session shutdown work again.
+	Also fix session shutdown while resuming, and preserve the session
+	in this case.
+
 2005-06-24  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/mime-types-permissions.xml:

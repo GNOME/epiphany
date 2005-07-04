@@ -46,7 +46,6 @@
 #include "print-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
-#include "ephy-object-helpers.h"
 
 #ifdef ENABLE_DBUS
 #include "ephy-dbus.h"
@@ -473,8 +472,13 @@ ephy_shell_startup (EphyShell *shell,
 				       "from Bonobo when attempting to locate the automation "
 				       "object."));
 			automation = NULL;
+			goto done;
 		}
-		else if (flags & EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR)
+
+		/* init the session manager up here so we can quit while the resume dialogue is on */
+		gnome_session_init (shell);
+
+		if (flags & EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR)
 		{
 			GNOME_EphyAutomation_openBookmarksEditorWithStartupId
 				(automation, user_time, &ev);
@@ -502,14 +506,10 @@ ephy_shell_startup (EphyShell *shell,
 				   flags & EPHY_SHELL_STARTUP_FULLSCREEN);
 		}
 
-		if (automation)
-		{
-			bonobo_object_release_unref (automation, &ev);
-		}
-
-		gnome_session_init (shell);
+		bonobo_object_release_unref (automation, &ev);
 	}
 
+done:
 	CORBA_exception_free (&ev);
 	gdk_notify_startup_complete ();
 
@@ -893,8 +893,7 @@ toolwindow_hide_cb (GtkWidget *widget, EphyShell *es)
 
 	session = EPHY_SESSION (ephy_shell_get_session (es));
 	ephy_session_remove_window (ephy_shell->priv->session, GTK_WINDOW (widget));
-
-	ephy_object_idle_unref (ephy_shell);
+	g_object_unref (ephy_shell);
 }
 
 GtkWidget *

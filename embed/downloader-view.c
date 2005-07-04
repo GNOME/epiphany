@@ -82,6 +82,8 @@ struct DownloaderViewPrivate
 	GtkWidget *abort_button;
 
 	EggStatusIcon *status_icon;
+
+	guint idle_unref : 1;
 };
 
 enum
@@ -207,33 +209,82 @@ show_status_icon (DownloaderView *dv)
 			  G_CALLBACK(status_icon_popup_menu_cb), dv);
 }
 
+static gboolean
+remove_download (EphyDownload *download,
+		 gpointer rowref,
+		 DownloaderView *view)
+{
+	g_signal_handlers_disconnect_matched
+		(download, G_SIGNAL_MATCH_DATA ,
+		 0, 0, NULL, NULL, view);
+	ephy_download_cancel (download);
+
+	g_object_unref (download);
+	return TRUE;
+}
+
+static void
+prepare_close_cb (EphyEmbedShell *shell,
+		  DownloaderView *view)
+{
+	DownloaderViewPrivate *priv = view->priv;
+
+	/* the downloader owns a ref to itself, no need for another ref */
+
+	/* hide window already */
+	gtk_widget_hide (priv->window);
+
+	priv->idle_unref = FALSE;
+
+	/* cancel pending downloads */
+	g_hash_table_foreach_remove (priv->downloads_hash,
+				     (GHRFunc) remove_download, view);
+
+	gtk_list_store_clear (GTK_LIST_STORE (priv->model));
+
+	/* drop the self reference */
+	g_object_unref (view);
+}
+
 static void
 downloader_view_init (DownloaderView *dv)
 {
+	g_object_ref (embed_shell);
+
 	dv->priv = EPHY_DOWNLOADER_VIEW_GET_PRIVATE (dv);
 
 	dv->priv->downloads_hash = g_hash_table_new_full
 		(g_direct_hash, g_direct_equal, NULL,
 		 (GDestroyNotify)gtk_tree_row_reference_free);
+	dv->priv->idle_unref = TRUE;
 
 	downloader_view_build_ui (dv);
 
 	show_status_icon (dv);
 
-	g_object_ref (embed_shell);
+	g_signal_connect_object (embed_shell, "prepare_close",
+				 G_CALLBACK (prepare_close_cb), dv, 0);
 }
 
 static void
 downloader_view_finalize (GObject *object)
 {
 	DownloaderView *dv = EPHY_DOWNLOADER_VIEW (object);
+	gboolean idle_unref = dv->priv->idle_unref;
 
 	g_object_unref (dv->priv->status_icon);
 	g_hash_table_destroy (dv->priv->downloads_hash);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 
-	ephy_object_idle_unref (embed_shell);
+	if (idle_unref)
+	{
+		ephy_object_idle_unref (embed_shell);
+	}
+	else
+	{
+		g_object_unref (embed_shell);
+	}
 }
 
 DownloaderView *
@@ -709,7 +760,7 @@ downloader_view_remove_download (DownloaderView *dv, EphyDownload *download)
 	gtk_tree_path_free (path);
 
 	/* Removal */
-	
+
 	gtk_list_store_remove (GTK_LIST_STORE (dv->priv->model), &iter2);
 	g_hash_table_remove (dv->priv->downloads_hash,
 			     download);
@@ -734,7 +785,9 @@ downloader_view_remove_download (DownloaderView *dv, EphyDownload *download)
 	/* Close the dialog if there are no more downloads */
 
 	if (!g_hash_table_size (dv->priv->downloads_hash))
-		g_object_unref (G_OBJECT (dv));
+	{
+		g_object_unref (dv);
+	}
 }
 
 void
@@ -765,6 +818,7 @@ gboolean
 download_dialog_delete_cb (GtkWidget *window, GdkEventAny *event,
 			   DownloaderView *dv)
 {
+	/* FIXME multi-head */
 	if (egg_tray_manager_check_running (gdk_screen_get_default ()))
 	{
 		gtk_widget_hide (dv->priv->window);

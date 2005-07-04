@@ -57,7 +57,8 @@ struct _EphySessionPrivate
 	GList *windows;
 	GList *tool_windows;
 	GtkWidget *resume_dialog;
-	gboolean dont_save;
+	guint dont_save : 1;
+	guint quit_while_resuming : 1;
 };
 
 #define BOOKMARKS_EDITOR_ID	"BookmarksEditor"
@@ -262,40 +263,28 @@ impl_detach_window (EphyExtension *extension,
 }
 
 static void
-ensure_session_directory (void)
-{
-	char *dir;
-
-	dir = g_build_filename (ephy_dot_dir (), "sessions", NULL);
-	if (g_file_test (dir, G_FILE_TEST_EXISTS) == FALSE)
-	{
-		if (mkdir (dir, 488) != 0)
-		{
-			g_error ("Unable to create session directory '%s'\n", dir);
-		}
-	}
-
-	g_free (dir);
-}
-
-static void
 ephy_session_init (EphySession *session)
 {
 	session->priv = EPHY_SESSION_GET_PRIVATE (session);
 
 	LOG ("EphySession initialising");
-
-	ensure_session_directory ();
 }
 
 static void
 ephy_session_dispose (GObject *object)
 {
 	EphySession *session = EPHY_SESSION(object);
+	EphySessionPrivate *priv = session->priv;
 
 	LOG ("EphySession disposing");
 
-	session_delete (session, SESSION_CRASHED);
+	/* Only remove the crashed session if we're not shutting down while
+	 * the session resume dialogue was still shown!
+	*/
+	if (priv->quit_while_resuming == FALSE)
+	{
+		session_delete (session, SESSION_CRASHED);
+	}
 
 	parent_class->dispose (object);
 }
@@ -462,12 +451,25 @@ ephy_session_autoresume (EphySession *session,
 
 	g_free (saved_session);
 
-	return retval;
+	/* ensure we don't open a blank window when quitting while resuming */
+	return retval || priv->quit_while_resuming;
+}
+
+static void
+close_dialog (GtkWidget *widget)
+{
+	if (GTK_IS_DIALOG (widget))
+	{
+		/* don't destroy them, someone might have a ref on them */
+		gtk_dialog_response (GTK_DIALOG (widget),
+				     GTK_RESPONSE_DELETE_EVENT);
+	}
 }
 
 void
 ephy_session_close (EphySession *session)
 {
+	EphySessionPrivate *priv = session->priv;
 	GList *windows;
 
 	LOG ("ephy_session_close");
@@ -476,7 +478,12 @@ ephy_session_close (EphySession *session)
 	 * destroying the windows and destroying the tool windows
 	 */
 	g_object_ref (ephy_shell);
-	session->priv->dont_save = TRUE;
+
+	priv->dont_save = TRUE;
+	/* need to set this up here while the dialogue hasn't been killed yet */
+	priv->quit_while_resuming = priv->resume_dialog != NULL;	
+
+	ephy_embed_shell_prepare_close (embed_shell);
 
 	windows	= ephy_session_get_windows (session);
 	g_list_foreach (windows, (GFunc) gtk_widget_destroy, NULL);
@@ -485,6 +492,17 @@ ephy_session_close (EphySession *session)
 	windows = g_list_copy (session->priv->tool_windows);
 	g_list_foreach (windows, (GFunc) gtk_widget_destroy, NULL);
 	g_list_free (windows);	
+
+	ephy_embed_shell_prepare_close (embed_shell);
+
+	/* there may still be windows open, like dialogues posed from
+	 * web pages, etc. Try to kill them, but be sure NOT to destroy
+	 * the gtkmozembed offscreen window!
+	 * Here, we just check if it's a dialogue and close it if it is one.
+	 */
+	windows = gtk_window_list_toplevels ();
+	g_list_foreach (windows, (GFunc) close_dialog, NULL);
+	g_list_free (windows);
 
 	session->priv->dont_save = FALSE;
 	g_object_unref (ephy_shell);
