@@ -43,6 +43,14 @@ struct _EphyEmbedShellPrivate
 	EphyEncodings *encodings;
 };
 
+enum
+{
+	PREPARE_CLOSE,
+	LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 static void ephy_embed_shell_class_init	(EphyEmbedShellClass *klass);
 static void ephy_embed_shell_init	(EphyEmbedShell *shell);
 
@@ -204,6 +212,14 @@ ephy_embed_shell_get_encodings (EphyEmbedShell *shell)
 	return G_OBJECT (shell->priv->encodings);
 }
 
+void
+ephy_embed_shell_prepare_close (EphyEmbedShell *shell)
+{
+	EphyEmbedShellPrivate *priv = shell->priv;
+
+	g_signal_emit (shell, signals[PREPARE_CLOSE], 0);
+}
+
 static void
 ephy_embed_shell_init (EphyEmbedShell *shell)
 {
@@ -225,5 +241,22 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 
 	klass->get_embed_single = impl_get_embed_single;
 
+/**
+ * EphyEmbed::prepare-close:
+ * @shell:
+ * 
+ * The ::prepare-close signal is emitted when epiphany is preparing to
+ * quit on command from the session manager. You can use it when you need
+ * to do something special (shut down a service, for example).
+ **/
+	signals[PREPARE_CLOSE] =
+		g_signal_new ("prepare-close",
+			      EPHY_TYPE_EMBED_SHELL,
+			      G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyEmbedShellClass, prepare_close),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
+	
 	g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
 }

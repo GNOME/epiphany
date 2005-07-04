@@ -28,7 +28,6 @@
 #include "mozilla-embed-find.h"
 #include "ephy-embed-find.h"
 #include "ephy-embed-shell.h"
-#include "ephy-object-helpers.h"
 #include "ephy-debug.h"
 
 #define MOZILLA_EMBED_FIND_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED_FIND, MozillaEmbedFindPrivate))
@@ -122,7 +121,7 @@ mozilla_embed_find_finalize (GObject *object)
 
 	parent_class->finalize (object);
 
-	ephy_object_idle_unref (embed_shell);
+	g_object_unref (embed_shell);
 }
 
 static void

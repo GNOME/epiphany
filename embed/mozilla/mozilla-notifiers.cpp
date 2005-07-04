@@ -412,8 +412,8 @@ static const PrefData notifier_entries[] =
 	  transform_cookies_accept_mode },
 };
 
-static gboolean
-mozilla_set_pref (const char *pref,
+gboolean
+mozilla_pref_set (const char *pref,
 		  const GValue *value)
 {
 	g_return_val_if_fail (pref != NULL, FALSE);
@@ -466,7 +466,7 @@ notify_cb (GConfClient *client,
 
 	if (data->func (gcvalue, &value, data->user_data))
 	{
-		mozilla_set_pref (data->mozilla_pref, &value);
+		mozilla_pref_set (data->mozilla_pref, &value);
 		g_value_unset (&value);
 	}
 }

@@ -51,6 +51,8 @@ struct _EphyEmbedShellClass
 {
 	GObjectClass parent_class;
 
+	void	  (* prepare_close)	(EphyEmbedShell *shell);
+
 	/*< private >*/
 	GObject * (* get_embed_single)  (EphyEmbedShell *shell);
 };
@@ -66,6 +68,8 @@ GObject		  *ephy_embed_shell_get_downloader_view	(EphyEmbedShell *shell);
 GObject		  *ephy_embed_shell_get_encodings	(EphyEmbedShell *shell);
 
 GObject		  *ephy_embed_shell_get_embed_single	(EphyEmbedShell *shell);
+
+void		   ephy_embed_shell_prepare_close	(EphyEmbedShell *shell);
 
 G_END_DECLS
 

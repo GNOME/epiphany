@@ -45,6 +45,9 @@ guint	 mozilla_notifier_add		(const char *gconf_key,
 
 void	 mozilla_notifier_remove	(guint id);
 
+gboolean mozilla_pref_set		(const char *pref,
+					 const GValue *value);
+
 void	 mozilla_notifiers_init		(void);
 
 void	 mozilla_notifiers_shutdown	(void);

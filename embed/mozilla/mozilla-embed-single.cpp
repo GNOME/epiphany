@@ -28,6 +28,7 @@
 #include "ephy-cookie-manager.h"
 #include "ephy-password-manager.h"
 #include "ephy-permission-manager.h"
+#include "ephy-embed-shell.h"
 
 #include "glib.h"
 #include "ephy-debug.h"
@@ -545,6 +546,20 @@ init_services (MozillaEmbedSingle *single)
 }
 
 static void
+prepare_close_cb (EphyEmbedShell *shell)
+{
+	GValue value = { 0, };
+
+	/* To avoid evil web sites posing an alert and thus inhibiting
+	 * shutdown, we just turn off javascript! :)
+	 */
+	g_value_init (&value, G_TYPE_BOOLEAN);
+	g_value_set_boolean (&value, FALSE);
+	mozilla_pref_set ("javascript.enabled", &value);
+	g_value_unset (&value);
+}
+
+static void
 mozilla_embed_single_init (MozillaEmbedSingle *mes)
 {
  	mes->priv = MOZILLA_EMBED_SINGLE_GET_PRIVATE (mes);
@@ -571,6 +586,10 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 
 		exit (0);
 	}
+
+	g_signal_connect_object (embed_shell, "prepare-close",
+				 G_CALLBACK (prepare_close_cb), mes,
+				 (GConnectFlags) 0);
 }
 
 static void
