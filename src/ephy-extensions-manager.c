@@ -392,7 +392,7 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 	 * put the schema validation on the Doc Tree and then pass that to the
 	 * reader. (maybe switch to RelaxNG?)
 	 */
-	doc = xmlParseDoc ((const xmlChar *)xml);
+	doc = xmlParseDoc ((xmlChar *) xml);
 
 	if (doc == NULL)
 	{
@@ -1318,7 +1318,7 @@ impl_attach_window (EphyExtension *extension,
 {
 	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (extension);
 
-	LOG ("Attach");
+	LOG ("Attach window %p", window);
 
 	g_list_foreach (manager->priv->extensions,
 			(GFunc) attach_extension_to_window, window);
@@ -1333,7 +1333,7 @@ impl_detach_window (EphyExtension *extension,
 	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (extension);
 	GList *tabs, *l;
 
-	LOG ("Detach");
+	LOG ("Detach window %p", window);
 
 	manager->priv->windows = g_list_remove (manager->priv->windows, window);
 
@@ -1363,7 +1363,7 @@ impl_attach_tab (EphyExtension *extension,
 	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (extension);
 	GList *l;
 
-	LOG ("Attach tab");
+	LOG ("Attach window %p tab %p", window, tab);
 
 	for (l = manager->priv->extensions; l; l = l->next)
 	{
@@ -1380,7 +1380,7 @@ impl_detach_tab (EphyExtension *extension,
 	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (extension);
 	GList *l;
 
-	LOG ("Detach Tab");
+	LOG ("Detach window %p tab %p", window, tab);
 
 	g_object_ref (window);
 	g_object_ref (tab);
