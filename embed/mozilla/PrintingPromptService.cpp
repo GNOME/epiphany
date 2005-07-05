@@ -64,8 +64,7 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 	EphyEmbed *embed = EPHY_EMBED (EphyUtils::FindEmbed (parent));
 	NS_ENSURE_TRUE (embed, NS_ERROR_FAILURE);
 
-	if (!(eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) ||
-	      eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE)))
+	if (!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP))
 	{
 		GtkWidget *gtkParent = EphyUtils::FindGtkParent(parent);
 		NS_ENSURE_TRUE (gtkParent, NS_ERROR_FAILURE);
@@ -115,8 +114,7 @@ NS_IMETHODIMP GPrintingPromptService::ShowPageSetup(nsIDOMWindow *parent, nsIPri
 	nsresult rv = NS_ERROR_ABORT;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING) ||
-	    eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) ||
-	    eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE))
+	    eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP))
 	{
 		return rv;
 	}
