@@ -1,8 +1,7 @@
-// mouse wheel: disable mozilla's ctrl+wheel zooming
-// bug: setting this to -1 does not disable the built-in action, but instead
-// prevents event delivery at all!
+// mouse wheel: disable mozilla's ctrl+wheel zooming, and enable our own
+// set numlines to -1 to reverse directions, see bug #306110
 pref("mousewheel.withcontrolkey.action", 0);
-pref("mousewheel.withcontrolkey.numlines", 1);
+pref("mousewheel.withcontrolkey.numlines", -1);
 pref("mousewheel.withcontrolkey.sysnumlines", false);
 
 // fix horizontal scroll with 2nd wheel, see bug #148557
