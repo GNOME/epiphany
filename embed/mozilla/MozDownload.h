@@ -135,8 +135,9 @@ public:
 #ifdef HAVE_GECKO_1_8
 	nsresult InitForEmbed       (nsIURI *aSource, nsIURI *aTarget,
 				     const nsAString &aDisplayName, nsIMIMEInfo *aMIMEInfo,
-				     PRTime aStartTime, nsICancelable *aCancelable,
-				     MozillaEmbedPersist *aEmbedPersist, PRInt64 aMaxSize);
+				     PRTime aStartTime, nsILocalFile *aTempFile,
+				     nsICancelable *aCancelable, MozillaEmbedPersist *aEmbedPersist,
+				     PRInt64 aMaxSize);
 #else
 	nsresult InitForEmbed       (nsIURI *aSource, nsIURI *aTarget,
 				     const PRUnichar *aDisplayName, nsIMIMEInfo *aMIMEInfo,
