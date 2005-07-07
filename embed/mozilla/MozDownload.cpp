@@ -99,12 +99,13 @@ NS_IMPL_ISUPPORTS3(MozDownload, nsIWebProgressListener, nsIDownload, nsITransfer
 #ifdef HAVE_GECKO_1_8
 nsresult
 MozDownload::InitForEmbed (nsIURI *aSource, nsIURI *aTarget, const nsAString &aDisplayName,
-		           nsIMIMEInfo *aMIMEInfo, PRTime aStartTime, nsICancelable *aCancelable,
-		           MozillaEmbedPersist *aEmbedPersist, PRInt64 aMaxSize)
+		           nsIMIMEInfo *aMIMEInfo, PRTime aStartTime, nsILocalFile *aTempFile,
+			   nsICancelable *aCancelable, MozillaEmbedPersist *aEmbedPersist,
+			   PRInt64 aMaxSize)
 {
 	mEmbedPersist = aEmbedPersist;
 	mMaxSize = aMaxSize;
-	return Init (aSource, aTarget, aDisplayName, aMIMEInfo, aStartTime, aCancelable);
+	return Init (aSource, aTarget, aDisplayName, aMIMEInfo, aStartTime, aTempFile, aCancelable);
 }
 #else
 nsresult
@@ -119,13 +120,14 @@ MozDownload::InitForEmbed (nsIURI *aSource, nsIURI *aTarget, const PRUnichar *aD
 #endif
 
 #ifdef HAVE_GECKO_1_8
-/* void init (in nsIURI aSource, in nsIURI aTarget, in AString aDisplayName, in nsIMIMEInfo aMIMEInfo, in PRTime startTime, in nsICancelable aCancelable); */
+/* void init (in nsIURI aSource, in nsIURI aTarget, in AString aDisplayName, in nsIMIMEInfo aMIMEInfo, in PRTime startTime, in nsILocalFile aTempFile, in nsICancelable aCancelable); */
 NS_IMETHODIMP
 MozDownload::Init (nsIURI *aSource,
 		   nsIURI *aTarget,
 		   const nsAString &aDisplayName,
 		   nsIMIMEInfo *aMIMEInfo,
 		   PRTime aStartTime,
+		   nsILocalFile *aTempFile,
 		   nsICancelable *aCancelable)
 #else
 /* void init (in nsIURI aSource, in nsIURI aTarget, in wstring aDisplayName, in nsIMIMEInfo aMIMEInfo, in long long startTime, in nsIWebBrowserPersist aPersist); */
@@ -637,7 +639,7 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 	/* FIXME is that still true? */
 #ifdef HAVE_GECKO_1_8
 	rv = downloader->InitForEmbed (inOriginalURI, destURI, fileDisplayName,
-				       nsnull, timeNow, webPersist, embedPersist, aMaxSize);
+				       nsnull, timeNow, nsnull, webPersist, embedPersist, aMaxSize);
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	rv = webPersist->SetProgressListener (downloader);
