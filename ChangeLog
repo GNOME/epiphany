@@ -1,5 +1,18 @@
 2005-07-08  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_save),
+	(periodic_save_cb), (ephy_favicon_cache_init),
+	(ephy_favicon_cache_finalize), (favicon_download_completed_cb),
+	(favicon_download_cancelled_cb), (ephy_favicon_cache_get):
+
+	Periodically save the favicon cache.
+
+	* embed/ephy-history.c:
+
+	Source ID is guint not int.
+
+2005-07-08  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_download),
 	(ephy_favicon_cache_get):
 

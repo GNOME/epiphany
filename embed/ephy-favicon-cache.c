@@ -44,6 +44,9 @@
 
 #define EPHY_FAVICON_CACHE_OBSOLETE_DAYS 30
 
+/* how often to save the cache, in milliseconds */
+#define CACHE_SAVE_INTERVAL	10 * 60 * 1000 /* ms */
+
 /* this is very generous, most files are 4k */
 #define EPHY_FAVICON_MAX_SIZE	64 * 1024 /* byte */
 
@@ -62,6 +65,8 @@ struct _EphyFaviconCachePrivate
 	EphyNode *icons;
 	GHashTable *icons_hash;
 	GHashTable *downloads_hash;
+	guint autosave_timeout;
+	guint dirty : 1;
 };
 
 enum
@@ -231,11 +236,42 @@ prepare_close_cb (EphyEmbedShell *shell,
 }
 
 static void
+ephy_favicon_cache_save (EphyFaviconCache *cache)
+{
+	EphyFaviconCachePrivate *priv = cache->priv;
+	int ret;
+
+	if (priv->dirty)
+	{
+		LOG ("Saving favicon cache\n");
+
+		ret = ephy_node_db_write_to_xml_safe
+			(cache->priv->db, (const xmlChar *) priv->xml_file,
+			 EPHY_FAVICON_CACHE_XML_ROOT,
+			 EPHY_FAVICON_CACHE_XML_VERSION,
+			 NULL,
+			 priv->icons, NULL, NULL,
+			 NULL);
+
+		/* still dirty if save failed */
+		priv->dirty = ret < 0;
+	}
+}
+
+static gboolean
+periodic_save_cb (EphyFaviconCache *cache)
+{
+	ephy_favicon_cache_save (cache);
+	return TRUE;
+}
+
+static void
 ephy_favicon_cache_init (EphyFaviconCache *cache)
 {
+	EphyFaviconCachePrivate *priv;
 	EphyNodeDb *db;
 
-	cache->priv = EPHY_FAVICON_CACHE_GET_PRIVATE (cache);
+	priv = cache->priv = EPHY_FAVICON_CACHE_GET_PRIVATE (cache);
 
 	db = ephy_node_db_new (EPHY_NODE_DB_SITEICONS);
 	cache->priv->db = db;
@@ -281,6 +317,10 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 	/* listen to prepare-close on the shell */
 	g_signal_connect_object (embed_shell, "prepare-close",
 				 G_CALLBACK (prepare_close_cb), cache, 0);
+
+	priv->autosave_timeout = g_timeout_add (CACHE_SAVE_INTERVAL,
+						(GSourceFunc) periodic_save_cb,
+						cache);
 }
 
 static gboolean
@@ -309,6 +349,7 @@ static void
 ephy_favicon_cache_finalize (GObject *object)
 {
 	EphyFaviconCache *cache = EPHY_FAVICON_CACHE (object);
+	EphyFaviconCachePrivate *priv = cache->priv;
 
 	LOG ("EphyFaviconCache finalising");
 
@@ -316,13 +357,12 @@ ephy_favicon_cache_finalize (GObject *object)
 				     (GHRFunc) kill_download, cache);
 	remove_obsolete_icons (cache);
 
-	ephy_node_db_write_to_xml_safe
-		(cache->priv->db, (const xmlChar *)cache->priv->xml_file,
-		 EPHY_FAVICON_CACHE_XML_ROOT,
-		 EPHY_FAVICON_CACHE_XML_VERSION,
-		 NULL,
-		 cache->priv->icons, NULL, NULL,
-		 NULL);
+	if (priv->autosave_timeout != 0)
+	{
+		g_source_remove (priv->autosave_timeout);
+	}
+
+	ephy_favicon_cache_save (cache);
 
 	g_free (cache->priv->xml_file);
 	g_free (cache->priv->directory);
@@ -350,6 +390,8 @@ favicon_download_completed_cb (EphyEmbedPersist *persist,
 	g_signal_emit (G_OBJECT (cache), signals[CHANGED], 0, url);
 
 	g_object_unref (persist);
+
+	cache->priv->dirty = TRUE;
 }
 
 static void
@@ -372,6 +414,8 @@ favicon_download_cancelled_cb (EphyEmbedPersist *persist,
 	/* FIXME: re-schedule to try again after n days? */
 
 	g_object_unref (persist);
+
+	cache->priv->dirty = TRUE;
 }
 
 static void
@@ -416,6 +460,7 @@ GdkPixbuf *
 ephy_favicon_cache_get (EphyFaviconCache *cache,
 			const char *url)
 {
+	EphyFaviconCachePrivate *priv = cache->priv;
 	GTime now;
 	EphyNode *icon;
 	GValue value = { 0, };
@@ -467,6 +512,8 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 	ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_LAST_USED,
 				&value);
 	g_value_unset (&value);
+
+	priv->dirty = TRUE;
 
 	if (g_hash_table_lookup (cache->priv->downloads_hash, url) != NULL)
 	{
