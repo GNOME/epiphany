@@ -35,12 +35,17 @@
 #include "ephy-file-helpers.h"
 #include "ephy-node-common.h"
 #include "ephy-node.h"
+#include <glib/gstdio.h>
+#include <libgnomeui/libgnomeui.h>
 #include "ephy-debug.h"
 
 #define EPHY_FAVICON_CACHE_XML_ROOT    "ephy_favicons_cache"
 #define EPHY_FAVICON_CACHE_XML_VERSION "1.1"
 
 #define EPHY_FAVICON_CACHE_OBSOLETE_DAYS 30
+
+/* this is very generous, most files are 4k */
+#define EPHY_FAVICON_MAX_SIZE	64 * 1024 /* byte */
 
 static void ephy_favicon_cache_class_init (EphyFaviconCacheClass *klass);
 static void ephy_favicon_cache_init	  (EphyFaviconCache *cache);
@@ -71,7 +76,16 @@ enum
 	EPHY_NODE_FAVICON_PROP_FILENAME	 = 3,
 	EPHY_NODE_FAVICON_PROP_LAST_USED = 4,
 	EPHY_NODE_FAVICON_PROP_STATE	 = 5,
-	EPHY_NODE_FAVICON_PROP_CHECKED	 = 6
+	EPHY_NODE_FAVICON_PROP_CHECKOLD  = 6,
+	EPHY_NODE_FAVICON_PROP_CHECKED	 = 7
+};
+
+enum
+{
+	NEEDS_TYPE_CHECK = 1 << 0,
+	NEEDS_RENAME	 = 1 << 1,
+	NEEDS_ICO_CHECK	 = 1 << 2,
+	NEEDS_MASK	 = 0x3f
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -319,21 +333,6 @@ ephy_favicon_cache_finalize (GObject *object)
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-static char *
-favicon_name_build (const char *url)
-{
-	char *result;
-
-	result = g_filename_from_utf8 (url, -1, NULL, NULL, NULL);
-
-	if (result == NULL)
-	{
-		return NULL;
-	}
-
-	return g_strdelimit (result, "/", '_');
-}
-
 static void
 favicon_download_completed_cb (EphyEmbedPersist *persist,
 			       EphyFaviconCache *cache)
@@ -396,7 +395,7 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 	ephy_embed_persist_set_dest (persist, dest);
 	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_NO_VIEW |
 					       EPHY_EMBED_PERSIST_DO_CONVERSION);
-	ephy_embed_persist_set_max_size (persist, 100 * 1024);
+	ephy_embed_persist_set_max_size (persist, EPHY_FAVICON_MAX_SIZE);
 	ephy_embed_persist_set_source (persist, favicon_url);
 
 	g_free (dest);
@@ -420,8 +419,8 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 	EphyNode *icon;
 	GValue value = { 0, };
 	char *pix_file;
-	GdkPixbuf *pixbuf;
-	gboolean valid = FALSE;
+	GdkPixbuf *pixbuf = NULL;
+	guint checklevel = NEEDS_MASK;
 
 	if (url == NULL) return NULL;
 
@@ -433,11 +432,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 	{
 		char *filename;
 
-		filename = favicon_name_build (url);
-		if (filename == NULL)
-		{
-			return NULL;
-		}
+		filename = gnome_thumbnail_md5 (url);
 
 		icon = ephy_node_new (cache->priv->db);
 		g_value_init (&value, G_TYPE_STRING);
@@ -452,6 +447,12 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 					&value);
 		g_value_unset (&value);
 
+		g_value_init (&value, G_TYPE_INT);
+		g_value_set_int (&value, (int) NEEDS_MASK & ~NEEDS_RENAME);
+		ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_CHECKED,
+					&value);
+		g_value_unset (&value);
+
 		ephy_node_add_child (cache->priv->icons, icon);
 
 		ephy_favicon_cache_download (cache, url, filename);
@@ -459,6 +460,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		g_free (filename);
 	}
 
+	/* update timestamp */
 	g_value_init (&value, G_TYPE_INT);
 	g_value_set_int (&value, now);
 	ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_LAST_USED,
@@ -476,15 +478,55 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		 ephy_node_get_property_string (icon, EPHY_NODE_FAVICON_PROP_FILENAME),
 		 NULL);
 
-	/* Check for supported icon types */
-	if (ephy_node_get_property (icon, EPHY_NODE_FAVICON_PROP_CHECKED, &value))
+	/* FIXME queue re-download? */
+	if (g_file_test (pix_file, G_FILE_TEST_EXISTS) == FALSE)
 	{
-		valid = g_value_get_boolean (&value);
+		g_free (pix_file);
+		return NULL;
+	}
+
+	/* Check for supported icon types */
+	if (ephy_node_get_property (icon, EPHY_NODE_FAVICON_PROP_CHECKED, &value) &&
+	    G_VALUE_HOLDS (&value, G_TYPE_INT))
+	{
+		checklevel = (guint) g_value_get_int (&value);
 		g_value_unset (&value);
 	}
-	else
+
+	/* First, update the filename */
+	if (checklevel & NEEDS_RENAME)
+	{
+		char *new_pix_file, *urlhash;
+
+		urlhash = gnome_thumbnail_md5 (url);
+		new_pix_file = g_build_filename (cache->priv->directory, urlhash, NULL);
+
+		g_value_init (&value, G_TYPE_STRING);
+		g_value_take_string (&value, urlhash);
+		ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_FILENAME, &value);
+		g_value_unset (&value);
+
+		/* rename the file */
+		g_rename (pix_file, new_pix_file);
+
+		g_free (pix_file);
+		pix_file = new_pix_file;
+
+		checklevel &= ~NEEDS_RENAME;
+		g_value_init (&value, G_TYPE_INT);
+		g_value_set_int (&value, (int) checklevel);
+		ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_CHECKED, &value);
+		g_value_unset (&value);
+	}
+
+	/* Now check the type. We renamed the file above, so gnome-vfs does NOT
+	 * fall back to extension checking if the slow mime check fails for 
+	 * whatever reason
+	 */
+	if (checklevel & NEEDS_TYPE_CHECK)
 	{
 		GnomeVFSFileInfo *info;
+		gboolean valid = FALSE, is_ao = FALSE;;
 
 		/* Sniff mime type and check if it's safe to open */
 		info = gnome_vfs_file_info_new ();
@@ -497,32 +539,77 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 			valid = strcmp (info->mime_type, "image/x-ico") == 0 ||
 				strcmp (info->mime_type, "image/png") == 0 ||
 				strcmp (info->mime_type, "image/gif") == 0;
+			is_ao = strcmp (info->mime_type, "application/octet-stream") == 0;
 		}
 		gnome_vfs_file_info_unref (info);
 
-		g_value_init (&value, G_TYPE_BOOLEAN);
-		g_value_set_boolean (&value, valid);
+		/* As a special measure, we try to load an application/octet-stream file
+		 * as an ICO file, since we cannot detect a ICO file without .ico extension
+		 * (the mime system has no magic for it).
+		 */
+		if (is_ao)
+		{
+			GdkPixbufLoader *loader;
+			char *buf = NULL;
+			gsize count = 0;
+
+			loader = gdk_pixbuf_loader_new_with_type ("ico", NULL);
+			if (loader != NULL)
+			{
+				if (g_file_get_contents (pix_file, &buf, &count, NULL))
+				{
+					gdk_pixbuf_loader_write (loader, buf, count, NULL);
+					g_free (buf);
+				}
+				
+				gdk_pixbuf_loader_close (loader, NULL);
+
+				pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
+				if (pixbuf != NULL)
+				{
+					g_object_ref (pixbuf);
+					valid = TRUE;
+				}
+	
+				g_object_unref (loader);
+			}
+		}
+
+		/* persist the check value */
+		if (valid)
+		{
+			checklevel &= ~NEEDS_TYPE_CHECK;
+		}
+		else
+		{
+			/* remove invalid file from cache */
+			/* gnome_vfs_unlink (pix_file); */
+		}
+
+		g_value_init (&value, G_TYPE_INT);
+		g_value_set_int (&value, (int) checklevel);
 		ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_CHECKED, &value);
 		g_value_unset (&value);
 
-		/* remove invalid files from cache */
-		if (valid == FALSE)
-		{
-			gnome_vfs_unlink (pix_file);
-		}
-
-		LOG ("%s icon file %s", valid ? "Validated" : "Invalidated", pix_file);
+		/* epiphany 1.6 compat */
+		g_value_init (&value, G_TYPE_BOOLEAN);
+		g_value_set_boolean (&value, valid);
+		ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_CHECKOLD, &value);
+		g_value_unset (&value);
 	}
 
-	if (valid == FALSE)
+	/* if it still needs the check, mime type couldn't be checked. Deny! */
+	if (checklevel & NEEDS_TYPE_CHECK)
 	{
 		g_free (pix_file);
 		return NULL;
 	}
 
-	LOG ("Create pixbuf for %s", pix_file);
-
-	pixbuf = gdk_pixbuf_new_from_file (pix_file, NULL);
+	/* we could already have a pixbuf from the application/octet-stream check */
+	if (pixbuf == NULL)
+	{
+		pixbuf = gdk_pixbuf_new_from_file (pix_file, NULL);
+	}
 
 	g_free (pix_file);
 
