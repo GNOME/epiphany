@@ -2,6 +2,7 @@
  *  Copyright (C) 2001 Matt Aubury, Philip Langdale
  *  Copyright (C) 2004 Crispin Flowerday
  *  Copyright (C) 2005 Christian Persch
+ *  Copyright (C) 2005 Adam Hooper
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,8 +32,6 @@
 #include <nsIChannel.h>
 #include <nsIOutputStream.h>
 #include <nsIInputStream.h>
-#include <nsILoadGroup.h>
-#include <nsIInterfaceRequestor.h>
 #include <nsIStorageStream.h>
 #include <nsIInputStreamChannel.h>
 #include <nsIScriptSecurityManager.h>
@@ -41,6 +40,7 @@
 #include <nsEscape.h>
 
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
 #include "EphyProtocolHandler.h"
 #include "EphyUtils.h"
@@ -117,13 +117,11 @@ EphyProtocolHandler::NewChannel(nsIURI *aURI,
 {
 	NS_ENSURE_ARG(aURI);
 
-#if 0
 	PRBool isEpiphany = PR_FALSE;
 	if (NS_SUCCEEDED (aURI->SchemeIs ("epiphany", &isEpiphany)) && isEpiphany)
 	{
 		return HandleEpiphany (aURI, _retval);
 	}
-#endif
 
 	PRBool isAbout = PR_FALSE;
 	if (NS_SUCCEEDED (aURI->SchemeIs ("about", &isAbout)) && isAbout)
@@ -147,8 +145,8 @@ EphyProtocolHandler::AllowPort(PRInt32 port,
 /* private functions */
 
 nsresult
-EphyProtocolHandler::Redirect (const nsACString &aURL,
-			       nsIChannel **_retval)
+EphyProtocolHandler::Redirect(const nsACString &aURL,
+			      nsIChannel **_retval)
 {
 	nsresult rv;
 	nsCOMPtr<nsIIOService> ioService;
@@ -173,9 +171,371 @@ EphyProtocolHandler::Redirect (const nsACString &aURL,
 	rv = securityManager->GetCodebasePrincipal(uri, getter_AddRefs(principal));
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	nsCOMPtr<nsISupports> owner (do_QueryInterface(principal));
-	rv = tempChannel->SetOwner(owner);
+	rv = tempChannel->SetOwner(principal);
+	NS_ENSURE_SUCCESS (rv, rv);
 
 	NS_ADDREF(*_retval = tempChannel);
+	return rv;
+}
+
+nsresult
+EphyProtocolHandler::ParseErrorURL(const char *aURL,
+				   nsACString &aError,
+				   nsACString &aOriginURL,
+				   nsACString &aOriginCharset)
+{
+	/* The error page URL is of the form "epiphany:error?e=<error>&u=<URL>&c=<charset>&d=<description>" */
+	const char *query = strstr (aURL, "?");
+	if (!query) return NS_ERROR_FAILURE;
+	
+	/* skip the '?' */
+	++query;
+	
+	char **params = g_strsplit (query, "&", -1);
+	if (!params) return NS_ERROR_FAILURE;
+	
+	for (PRUint32 i = 0; params[i] != NULL; ++i)
+	{
+		char *param = params[i];
+	
+		if (strlen (param) <= 2) continue;
+	
+		switch (param[0])
+		{
+			case 'e':
+				aError.Assign (nsUnescape (param + 2));
+				break;
+			case 'u':
+				aOriginURL.Assign (nsUnescape (param + 2));
+				break;
+			case 'c':
+				aOriginCharset.Assign (nsUnescape (param + 2));
+				break;
+			case 'd':
+				/* we don't need mozilla's description parameter */
+			default:
+				break;
+		}
+	}
+
+	g_strfreev (params);
+	
+	return NS_OK;
+}
+
+nsresult
+EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
+				     const char *aError,
+				     char **aPrimary,
+				     char **aSecondary)
+{
+	if (strcmp (aError, "protocolNotFound") == 0)
+	{
+		nsCAutoString scheme;
+		aURI->GetScheme (scheme);
+
+		*aPrimary = g_strdup (_("Unknown protocol"));
+		/* FIXME: get the list of supported protocols from necko */
+		*aSecondary = g_strdup_printf (_("The \"%s\" protocol could not be recognised. "
+						 "Epiphany supports \"http\", \"https\", \"ftp\", "
+						 "\"smb\" and \"sftp\"  protocols."),
+					       scheme.get());
+	}
+	else if (strcmp (aError, "fileNotFound") == 0)
+	{
+		nsCAutoString path;
+		aURI->GetPath (path);
+
+		*aPrimary = g_strdup (_("File not found"));
+		*aSecondary = g_strdup_printf (_("The file \"%s\" could not be found. "
+						 "Check the location of the file and try again."),
+					       path.get());
+	}
+	else if (strcmp (aError, "dnsNotFound") == 0)
+	{
+		nsCAutoString host;
+		aURI->GetHost (host);
+
+		*aPrimary = g_strdup (_("Address not found"));
+		*aSecondary = g_strdup_printf (_("\"%s\" could not be found. "
+						 "Check the address and try again."),
+					       host.get());
+	}
+	else if (strcmp (aError, "connectionFailure") == 0)
+	{
+		nsCAutoString hostport;
+		aURI->GetHostPort (hostport);
+
+		*aPrimary = g_strdup_printf (_("Could not connect to \"%s\""), hostport.get());
+		*aSecondary = g_strdup (_("The server refused the connection. "
+					  "Check the address and port and try again."));
+	}
+	else if (strcmp (aError, "netInterrupt") == 0)
+	{
+		nsCAutoString hostport;
+		aURI->GetHostPort (hostport);
+
+		*aPrimary = g_strdup (_("Connection interrupted"));
+		*aSecondary = g_strdup_printf (_(" The connection to \"%s\" was interrupted. "
+						 "The server may be very busy or you may have a "
+						 "network connection problem."),
+					       hostport.get());
+	}
+	else if (strcmp (aError, "netTimeout") == 0)
+	{
+		nsCAutoString host;
+		aURI->GetHost (host);
+
+		*aPrimary = g_strdup (_("Connection timed out"));
+		*aSecondary = g_strdup_printf (_("The connection to \"%s\" was lost because the "
+						 "server took too long to respond. The server "
+						 "may be very busy or you may have a network"),
+					       host.get());
+	}
+	else if (strcmp (aError, "malformedURI") == 0)
+	{
+		*aPrimary = g_strdup (_("Invalid address"));
+		*aSecondary = g_strdup (_("The address you entered is not valid."));
+	}
+	else if (strcmp (aError, "redirectLoop") == 0)
+	{
+		*aPrimary = g_strdup (_("Too many redirects"));
+		*aSecondary = g_strdup_printf (_("The server redirected too many times. "
+						 "The redirection has been stopped for "
+						 "security reasons."));
+	}
+	else if (strcmp (aError, "unknownSocketType") == 0)
+	{
+		*aPrimary = g_strdup (_("The document could not be loaded"));
+		*aSecondary = g_strdup (_("This document requires \"Personal "
+					  "Security Manager\" to be installed."));
+	}
+	else if (strcmp (aError, "netReset") == 0)
+	{
+		*aPrimary = g_strdup (_("Connection dropped by server"));
+		*aSecondary = g_strdup (_("Epiphany connected to the server, "
+					  "but the server dropped the connection "
+					  "before any data could be read."));
+	}
+	else if (strcmp (aError, "netOffline") == 0)
+	{
+		*aPrimary = g_strdup (_("Cannot load document in offline mode"));
+		*aSecondary = g_strdup (_("This document cannot be viewed in offline "
+					  "mode. Set Epiphany to \"online\" and try "
+					  "again."));
+	}
+	else if (strcmp (aError, "deniedPortAccess") == 0)
+	{
+		*aPrimary = g_strdup (_("FIXME"));
+		*aSecondary = g_strdup (_("FIXME"));
+	}
+	else if (strcmp (aError, "proxyResolveFailure") == 0 ||
+		 strcmp (aError, "proxyConnectFailure") == 0)
+	{
+		*aPrimary = g_strdup (_("Could not connect to proxy server"));
+		*aSecondary = g_strdup (_("Check you system wide proxy server settings. "
+					  "If the connection still fails, there may be "
+					  "a problem with your proxy server or your "
+					  "network connection."));
+	}
+	else
+	{
+		return NS_ERROR_ILLEGAL_VALUE;
+	}
+
+	return NS_OK;
+}
+
+nsresult
+EphyProtocolHandler::HandleEpiphany(nsIURI *aErrorURI,
+				     nsIChannel **_retval)
+{
+	NS_ENSURE_ARG (aErrorURI);
+
+	nsCAutoString spec;
+	aErrorURI->GetSpec (spec);
+
+	if (g_str_has_prefix (spec.get(), "epiphany:error?"))
+	{
+		return CreateErrorPage (aErrorURI, _retval);
+	}
+
+	return NS_ERROR_ILLEGAL_VALUE;
+}
+
+nsresult
+EphyProtocolHandler::CreateErrorPage(nsIURI *aErrorURI,
+				     nsIChannel **_retval)
+{
+        /* First parse the arguments */
+        nsresult rv = NS_ERROR_ILLEGAL_VALUE;
+        nsCAutoString spec;
+	rv = aErrorURI->GetSpec (spec);
+	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && !spec.IsEmpty(), rv);
+
+	nsCAutoString error, url, charset;
+	rv = ParseErrorURL (spec.get (), error, url, charset);
+	if (NS_FAILED (rv) || error.IsEmpty () || url.IsEmpty()) return rv;
+
+	nsCOMPtr<nsIURI> uri;
+	rv = EphyUtils::NewURI(getter_AddRefs (uri), url, charset.get());
+	/* FIXME can uri be NULL if the original url was invalid? */
+	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && uri, rv);
+
+	char *primary = NULL, *secondary = NULL;
+	rv = GetErrorMessage (uri, error.get(), &primary, &secondary);
+
+	/* we don't know about this error code; forward to mozilla's impl */
+	if (rv == NS_ERROR_ILLEGAL_VALUE)
+	{
+		nsCAutoString url(spec);
+
+		/* remove "epiphany:error" part and insert mozilla's error page url */
+		url.Cut(0, strlen ("epiphany:error"));
+		url.Insert("chrome://global/content/netError.xhtml", 0);
+
+		return Redirect (url, _retval);
+	}
+
+	NS_ENSURE_TRUE (primary && secondary, NS_ERROR_FAILURE);
+
+	/* open the rendering stream */
+	nsCOMPtr<nsIStorageStream> storageStream;
+	rv = NS_NewStorageStream(16384, (PRUint32) -1, getter_AddRefs (storageStream));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	nsCOMPtr<nsIOutputStream> stream;
+	rv = storageStream->GetOutputStream(0, getter_AddRefs (stream));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	char *language = g_strdup (pango_language_to_string (gtk_get_default_language ()));
+	g_strdelimit (language, "_-@", '\0');
+
+	Write (stream,
+	       "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+	       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+	       "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
+	       "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"");
+	Write (stream, language);
+	Write (stream,
+	       "\" xml:lang=\"");
+	Write (stream, language);
+	Write (stream,
+	       "\">\n"
+	       "<head>\n"
+		"<title>");
+	WriteHTMLEscape (stream, primary);
+	/* no favicon for now, it would pollute the favicon cache */
+	/* "<link rel=\"icon\" type=\"image/png\" href=\"moz-icon://stock/gtk-dialog-error?size=16\" />\n" */
+	Write (stream,
+		"</title>\n"
+		"<style type=\"text/css\">\n"
+		"html {\n"
+			"background-color: white;\n"
+			"color: WindowText;\n"
+		"}\n"
+
+		"body {\n"
+			"background-color: Window;\n"
+			"border: 1px solid black;\n"
+			"margin: 12px;\n"
+			"padding: 12px 12px 12px 72px;\n"
+		"}\n"
+
+		"h1 {\n"
+			"margin: 0;\n"
+			"font-size: 1.2em;\n"
+			"font-weight: bold;\n"
+		"}\n"
+
+		"div#img {\n"
+			"position: absolute;\n"
+			"top: 25px;\n"
+			"left: 25px;\n"
+		"}\n"
+
+		"p {\n"
+			"margin: 1em 0 0;\n"
+		"}\n"
+		"</style>\n"
+	       "</head>\n"
+	       "<body dir=\"");
+	Write (stream,
+	       gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL ? "rtl" : "ltr");
+	Write (stream,
+	       "\">\n"
+		"<div id=\"img\"><img src=\"moz-icon://stock/gtk-dialog-error?size=dialog\" alt=\"");
+
+	/* get alt text */
+	GtkStockItem item;
+	if (gtk_stock_lookup (GTK_STOCK_DIALOG_ERROR, &item) && item.label)
+	{
+		WriteHTMLEscape (stream, item.label);
+	}
+
+	Write (stream,
+		")\" /></div>\n"
+		"<div id=\"text\">\n"
+		"<h1>");
+	WriteHTMLEscape (stream, primary);
+	Write (stream,
+	       "</h1>\n"
+	       "<p>");
+	WriteHTMLEscape (stream, secondary);
+	Write (stream,
+		"</p>\n"
+		"</div>\n"
+	       "</body>\n"
+	       "</html>\n");
+
+	g_free (language);
+	g_free (primary);
+	g_free (secondary);
+ 
+	/* finish the rendering */
+	nsCOMPtr<nsIInputStream> inputStream;
+	rv = storageStream->NewInputStream(0, getter_AddRefs (inputStream));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	nsCOMPtr<nsIInputStreamChannel> channel (do_CreateInstance (kInputStreamChannelCID, &rv));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	rv |= channel->SetURI (aErrorURI);
+	rv |= channel->SetContentStream (inputStream);
+	rv |= channel->SetContentType (NS_LITERAL_CSTRING ("application/xhtml+xml"));
+	rv |= channel->SetContentCharset (NS_LITERAL_CSTRING ("utf-8"));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	nsCOMPtr<nsIScriptSecurityManager> securityManager 
+		(do_GetService(NS_SCRIPTSECURITYMANAGER_CONTRACTID, &rv));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	nsCOMPtr<nsIPrincipal> principal;
+	rv = securityManager->GetCodebasePrincipal (aErrorURI, getter_AddRefs (principal));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	rv = channel->SetOwner(principal);
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	NS_ADDREF(*_retval = channel);
+	return rv;
+}
+
+nsresult
+EphyProtocolHandler::Write(nsIOutputStream *aStream,
+			   const char *aText)
+{
+	PRUint32 bytesWritten;
+	return aStream->Write (aText, strlen (aText), &bytesWritten);
+}
+
+nsresult
+EphyProtocolHandler::WriteHTMLEscape(nsIOutputStream *aStream,
+				     const char *aText)
+{
+	char *text = g_markup_escape_text (aText, strlen (aText));
+	nsresult rv = Write (aStream, text);
+	g_free (text);
+
 	return rv;
 }
