@@ -1412,6 +1412,8 @@ new_pixbuf_from_widget (GtkWidget *widget)
   pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, icon_width, icon_height);
   gdk_pixbuf_get_from_drawable (pixbuf, pixmap, NULL, 0, 0, 0, 0, icon_width, icon_height);
 
+  gtk_widget_destroy (window);
+
   return pixbuf;
 }
 
@@ -1423,7 +1425,6 @@ new_separator_pixbuf ()
 
   separator = gtk_vseparator_new ();
   pixbuf = new_pixbuf_from_widget (separator);
-  gtk_widget_destroy (separator);
   return pixbuf;
 }
 

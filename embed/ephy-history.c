@@ -54,11 +54,11 @@ struct _EphyHistoryPrivate
 	EphyNode *last_page;
 	GHashTable *hosts_hash;
 	GHashTable *pages_hash;
-	int autosave_timeout;
+	guint autosave_timeout;
 	guint update_hosts_idle;
+	guint disable_history_notifier_id;
 	gboolean dirty;
 	gboolean enabled;
-	guint disable_history_notifier_id;
 };
 
 enum
