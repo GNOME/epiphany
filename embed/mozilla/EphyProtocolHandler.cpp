@@ -430,32 +430,25 @@ EphyProtocolHandler::CreateErrorPage(nsIURI *aErrorURI,
 	Write (stream,
 		"</title>\n"
 		"<style type=\"text/css\">\n"
-		"html {\n"
-			"background-color: white;\n"
-			"color: WindowText;\n"
-		"}\n"
+		"div#body {\n"
+			"position: absolute;\n"
+			"top: 12px;\n"
+			"right: 12px;\n"
+			"bottom: 12px;\n"
+			"left: 12px;\n"
+			"overflow: auto;\n"
 
-		"body {\n"
-			"background-color: Window;\n"
-			"border: 1px solid black;\n"
-			"margin: 12px;\n"
+			"background: -moz-dialog url('moz-icon://stock/gtk-dialog-error?size=dialog') no-repeat 12px 12px;\n"
+			"color: -moz-dialogtext;\n"
+			"font: message-box;\n"
+			"border: 1px solid -moz-dialogtext;\n"
+
 			"padding: 12px 12px 12px 72px;\n"
 		"}\n"
 
 		"h1 {\n"
 			"margin: 0;\n"
 			"font-size: 1.2em;\n"
-			"font-weight: bold;\n"
-		"}\n"
-
-		"div#img {\n"
-			"position: absolute;\n"
-			"top: 25px;\n"
-			"left: 25px;\n"
-		"}\n"
-
-		"p {\n"
-			"margin: 1em 0 0;\n"
 		"}\n"
 		"</style>\n"
 	       "</head>\n"
@@ -464,18 +457,7 @@ EphyProtocolHandler::CreateErrorPage(nsIURI *aErrorURI,
 	       gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL ? "rtl" : "ltr");
 	Write (stream,
 	       "\">\n"
-		"<div id=\"img\"><img src=\"moz-icon://stock/gtk-dialog-error?size=dialog\" alt=\"");
-
-	/* get alt text */
-	GtkStockItem item;
-	if (gtk_stock_lookup (GTK_STOCK_DIALOG_ERROR, &item) && item.label)
-	{
-		WriteHTMLEscape (stream, item.label);
-	}
-
-	Write (stream,
-		")\" /></div>\n"
-		"<div id=\"text\">\n"
+		"<div id=\"body\">"
 		"<h1>");
 	WriteHTMLEscape (stream, primary);
 	Write (stream,
