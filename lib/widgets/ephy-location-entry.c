@@ -316,7 +316,7 @@ completion_func (GtkEntryCompletion *completion,
 			    -1);
 
 	len_key = strlen (key);
-	if (!strncmp (key, item, len_key))
+	if (!strncasecmp (key, item, len_key))
 	{
 		ret = TRUE;
 	}
@@ -330,7 +330,7 @@ completion_func (GtkEntryCompletion *completion,
 		{
 			len_prefix = web_prefixes[i].len;
 			if (!strncmp (web_prefixes[i].prefix, item, len_prefix) &&
-			    !strncmp (key, item + len_prefix, len_key))
+			    !strncasecmp (key, item + len_prefix, len_key))
 			{
 				ret = TRUE;
 				break;
