@@ -1,5 +1,12 @@
 2005-07-09  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-find-toolbar.c: (ephy_find_toolbar_close):
+
+	Don't focus the embed on close on !typeaheadfind,
+	since it's a crash. Fixes bug #307675.
+
+2005-07-09  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/EphyProtocolHandler.cpp:
 
 	Make error page nicer; code by Adam Hooper.

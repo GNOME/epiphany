@@ -663,10 +663,13 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 	}
 
 	gtk_widget_show (GTK_WIDGET (toolbar));
-	ephy_embed_activate (priv->embed);
 
 #ifdef HAVE_TYPEAHEADFIND
+	ephy_embed_activate (priv->embed);
+
 	send_focus_change (priv->entry, TRUE);
+#else
+	gtk_widget_grab_focus (GTK_WIDGET (toolbar));
 #endif
 }
 
@@ -681,5 +684,7 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 
 	/* first unset explicit_focus, else we get infinite recursion */
 	priv->explicit_focus = FALSE;
+#ifndef HAVE_TYPEAHEADFIND
 	ephy_embed_activate (priv->embed);
+#endif
 }
