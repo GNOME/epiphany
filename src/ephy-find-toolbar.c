@@ -249,13 +249,21 @@ entry_changed_cb (GtkEntry *entry,
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	const char *text;
-	gboolean found = TRUE;
+	char *lowercase;
+	gboolean found = TRUE, case_sensitive;
 
 	text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
+
+	/* Search case-sensitively iff the string includes 
+	 * non-lowercase character.
+	 */
+	lowercase = g_utf8_strdown (text, -1);
+	case_sensitive = g_utf8_collate (text, lowercase) != 0;
+	g_free (lowercase);
+
+	ephy_embed_find_set_properties (get_find (toolbar), text, case_sensitive);
 #ifdef HAVE_TYPEAHEADFIND
 	found = ephy_embed_find_find (get_find (toolbar), text, priv->links_only);
-#else
-	ephy_embed_find_set_properties (get_find (toolbar), text, FALSE);
 #endif
 	set_controls (toolbar, found, found);
 }
