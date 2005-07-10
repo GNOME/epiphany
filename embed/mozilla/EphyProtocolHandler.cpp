@@ -181,6 +181,7 @@ EphyProtocolHandler::Redirect(const nsACString &aURL,
 nsresult
 EphyProtocolHandler::ParseErrorURL(const char *aURL,
 				   nsACString &aError,
+				   nsACString &aRawOriginURL,
 				   nsACString &aOriginURL,
 				   nsACString &aOriginCharset)
 {
@@ -206,6 +207,7 @@ EphyProtocolHandler::ParseErrorURL(const char *aURL,
 				aError.Assign (nsUnescape (param + 2));
 				break;
 			case 'u':
+				aRawOriginURL.Assign (param + 2);
 				aOriginURL.Assign (nsUnescape (param + 2));
 				break;
 			case 'c':
@@ -227,116 +229,151 @@ nsresult
 EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 				     const char *aError,
 				     char **aPrimary,
-				     char **aSecondary)
+				     char **aSecondary,
+				     char **aTertiary,
+				     char **aLinkIntro)
 {
 	if (strcmp (aError, "protocolNotFound") == 0)
 	{
 		nsCAutoString scheme;
 		aURI->GetScheme (scheme);
 
-		*aPrimary = g_strdup (_("Unknown protocol"));
+		*aPrimary = g_strdup_printf (_("“%s” protocol is not supported."), scheme.get());
 		/* FIXME: get the list of supported protocols from necko */
-		*aSecondary = g_strdup_printf (_("The \"%s\" protocol could not be recognised. "
-						 "Epiphany supports \"http\", \"https\", \"ftp\", "
-						 "\"smb\" and \"sftp\"  protocols."),
-					       scheme.get());
+		*aSecondary = _("Supported protocols are “http”, “https”, “ftp”, “file” “smb” "
+				"and “sftp”.");
 	}
 	else if (strcmp (aError, "fileNotFound") == 0)
 	{
 		nsCAutoString path;
 		aURI->GetPath (path);
 
-		*aPrimary = g_strdup (_("File not found"));
-		*aSecondary = g_strdup_printf (_("The file \"%s\" could not be found. "
-						 "Check the location of the file and try again."),
-					       path.get());
+		*aPrimary = g_markup_printf_escaped (_("File “%s” not found."), path.get());
+		*aSecondary = _("Check the location of the file and try again.");
 	}
 	else if (strcmp (aError, "dnsNotFound") == 0)
 	{
 		nsCAutoString host;
 		aURI->GetHost (host);
 
-		*aPrimary = g_strdup (_("Address not found"));
-		*aSecondary = g_strdup_printf (_("\"%s\" could not be found. "
-						 "Check the address and try again."),
-					       host.get());
+		*aPrimary = g_markup_printf_escaped (_("“%s” could not be found."),
+						     host.get());
+		*aSecondary = _("Check that you are connected to the internet, and "
+				"that the address is correct.");
+		*aLinkIntro = _("If this page used to exist, you may find an archived version:");
 	}
 	else if (strcmp (aError, "connectionFailure") == 0)
 	{
-		nsCAutoString hostport;
-		aURI->GetHostPort (hostport);
+		nsCAutoString host;
+		aURI->GetHost (host);
 
-		*aPrimary = g_strdup_printf (_("Could not connect to \"%s\""), hostport.get());
-		*aSecondary = g_strdup (_("The server refused the connection. "
-					  "Check the address and port and try again."));
+		*aPrimary = g_markup_printf_escaped
+				(_("“%s” refused the connection."),
+				 host.get());
+		*aSecondary = _("The server may be busy or you may have a "
+				"network connection problem. Try again later.");
+		*aLinkIntro = _("There may be an old version of the page you wanted:");
 	}
 	else if (strcmp (aError, "netInterrupt") == 0)
 	{
-		nsCAutoString hostport;
-		aURI->GetHostPort (hostport);
+		nsCAutoString host;
+		aURI->GetHost (host);
 
-		*aPrimary = g_strdup (_("Connection interrupted"));
-		*aSecondary = g_strdup_printf (_(" The connection to \"%s\" was interrupted. "
-						 "The server may be very busy or you may have a "
-						 "network connection problem."),
-					       hostport.get());
+		*aPrimary = g_markup_printf_escaped
+				(_("“%s” interrupted the connection."),
+				 host.get());
+		*aSecondary = _("The server may be busy or you may have a "
+				"network connection problem. Try again later.");
+		*aLinkIntro = _("There may be an old version of the page you wanted:");
 	}
 	else if (strcmp (aError, "netTimeout") == 0)
 	{
 		nsCAutoString host;
 		aURI->GetHost (host);
 
-		*aPrimary = g_strdup (_("Connection timed out"));
-		*aSecondary = g_strdup_printf (_("The connection to \"%s\" was lost because the "
-						 "server took too long to respond. The server "
-						 "may be very busy or you may have a network"),
-					       host.get());
+		*aPrimary = g_markup_printf_escaped
+				(_("“%s” is not responding."),
+				 host.get());
+		*aSecondary = _("The connection was lost because the "
+				"server took too long to respond.");
+		*aTertiary = _("The server may be busy or you may have a network"
+			        "connection problem. Try again later.");
+		*aLinkIntro = _("There may be an old version of the page you wanted:");
 	}
 	else if (strcmp (aError, "malformedURI") == 0)
 	{
-		*aPrimary = g_strdup (_("Invalid address"));
+		*aPrimary = g_strdup (_("Invalid address."));
 		*aSecondary = g_strdup (_("The address you entered is not valid."));
 	}
 	else if (strcmp (aError, "redirectLoop") == 0)
 	{
-		*aPrimary = g_strdup (_("Too many redirects"));
-		*aSecondary = g_strdup_printf (_("The server redirected too many times. "
-						 "The redirection has been stopped for "
-						 "security reasons."));
+		nsCAutoString host;
+		aURI->GetHost (host);
+
+		*aPrimary = g_markup_printf_escaped
+				(_("“%s” redirected too many times."),
+				 host.get());
+		*aSecondary = _("The redirection has been stopped for security reasons.");
+		*aLinkIntro = _("There may be an old version of the page you wanted:");
 	}
 	else if (strcmp (aError, "unknownSocketType") == 0)
 	{
-		*aPrimary = g_strdup (_("The document could not be loaded"));
-		*aSecondary = g_strdup (_("This document requires \"Personal "
-					  "Security Manager\" to be installed."));
+		nsCAutoString host;
+		aURI->GetHost (host);
+
+		*aPrimary = g_markup_printf_escaped
+				(_("“%s” requires an encrypted connection."),
+				 host.get());
+		*aSecondary = _("The document could not be loaded because "
+				"encryption support is not installed.");
+		*aLinkIntro = _("There may be an old version of the page you wanted:");
 	}
 	else if (strcmp (aError, "netReset") == 0)
 	{
-		*aPrimary = g_strdup (_("Connection dropped by server"));
-		*aSecondary = g_strdup (_("Epiphany connected to the server, "
-					  "but the server dropped the connection "
-					  "before any data could be read."));
+		nsCAutoString host;
+		aURI->GetHost (host);
+
+		*aPrimary = g_markup_printf_escaped
+				(_("“%s” dropped the connection."),
+				 host.get());
+		*aSecondary = _("The server dropped the connection "
+				 "before any data could be read.");
+		*aTertiary = _("The server may be busy or you may have a "
+			       "network connection problem. Try again later.");
+		*aLinkIntro = _("There may be an old version of the page you wanted:");
 	}
 	else if (strcmp (aError, "netOffline") == 0)
 	{
-		*aPrimary = g_strdup (_("Cannot load document in offline mode"));
-		*aSecondary = g_strdup (_("This document cannot be viewed in offline "
-					  "mode. Set Epiphany to \"online\" and try "
-					  "again."));
+		*aPrimary = g_strdup (_("Cannot load document in offline mode."));
+		*aSecondary = _("This document cannot be viewed in offline "
+				"mode. Set Epiphany to “online” "
+				"and try again.");
 	}
 	else if (strcmp (aError, "deniedPortAccess") == 0)
 	{
-		*aPrimary = g_strdup (_("FIXME"));
-		*aSecondary = g_strdup (_("FIXME"));
+		nsCAutoString host;
+		aURI->GetHost (host);
+
+		PRInt32 port = -1;
+		aURI->GetPort (&port);
+
+		*aPrimary = g_markup_printf_escaped
+				(_("“%s” denied access to port “%d”."),
+				 host.get(), port > 0 ? port : 80);
+		*aSecondary = g_strdup (_("The server dropped the connection "
+					  "before any data could be read."));
+		*aTertiary = _("The server may be busy or you may have a "
+			       "network connection problem. Try again later.");
+		*aLinkIntro = _("There may be an old version of the page you wanted:");
 	}
 	else if (strcmp (aError, "proxyResolveFailure") == 0 ||
 		 strcmp (aError, "proxyConnectFailure") == 0)
 	{
-		*aPrimary = g_strdup (_("Could not connect to proxy server"));
-		*aSecondary = g_strdup (_("Check you system wide proxy server settings. "
-					  "If the connection still fails, there may be "
-					  "a problem with your proxy server or your "
-					  "network connection."));
+		*aPrimary = g_strdup (_("Could not connect to proxy server."));
+		*aSecondary = _("Check you system wide proxy server settings. "
+				"If the connection still fails, there may be "
+				"a problem with your proxy server or your "
+				"network connection.");
 	}
 	else
 	{
@@ -373,8 +410,8 @@ EphyProtocolHandler::CreateErrorPage(nsIURI *aErrorURI,
 	rv = aErrorURI->GetSpec (spec);
 	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && !spec.IsEmpty(), rv);
 
-	nsCAutoString error, url, charset;
-	rv = ParseErrorURL (spec.get (), error, url, charset);
+	nsCAutoString error, rawurl, url, charset;
+	rv = ParseErrorURL (spec.get (), error, rawurl, url, charset);
 	if (NS_FAILED (rv) || error.IsEmpty () || url.IsEmpty()) return rv;
 
 	nsCOMPtr<nsIURI> uri;
@@ -382,8 +419,8 @@ EphyProtocolHandler::CreateErrorPage(nsIURI *aErrorURI,
 	/* FIXME can uri be NULL if the original url was invalid? */
 	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && uri, rv);
 
-	char *primary = NULL, *secondary = NULL;
-	rv = GetErrorMessage (uri, error.get(), &primary, &secondary);
+	char *primary = nsnull, *secondary = nsnull, *tertiary = nsnull, *linkintro = nsnull;
+	rv = GetErrorMessage (uri, error.get(), &primary, &secondary, &tertiary, &linkintro);
 
 	/* we don't know about this error code; forward to mozilla's impl */
 	if (rv == NS_ERROR_ILLEGAL_VALUE)
@@ -424,14 +461,13 @@ EphyProtocolHandler::CreateErrorPage(nsIURI *aErrorURI,
 	       "\">\n"
 	       "<head>\n"
 		"<title>");
-	WriteHTMLEscape (stream, primary);
+	Write (stream, primary);
 	/* no favicon for now, it would pollute the favicon cache */
 	/* "<link rel=\"icon\" type=\"image/png\" href=\"moz-icon://stock/gtk-dialog-error?size=16\" />\n" */
 	Write (stream,
 		"</title>\n"
 		"<style type=\"text/css\">\n"
 		"div#body {\n"
-			"position: absolute;\n"
 			"top: 12px;\n"
 			"right: 12px;\n"
 			"bottom: 12px;\n"
@@ -459,20 +495,49 @@ EphyProtocolHandler::CreateErrorPage(nsIURI *aErrorURI,
 	       "\">\n"
 		"<div id=\"body\">"
 		"<h1>");
-	WriteHTMLEscape (stream, primary);
+	Write (stream, primary);
 	Write (stream,
 	       "</h1>\n"
 	       "<p>");
-	WriteHTMLEscape (stream, secondary);
+	Write (stream, secondary);
+	if (tertiary)
+	{
+		Write (stream, " ");
+		Write (stream, tertiary);
+	}
 	Write (stream,
-		"</p>\n"
+		"</p>\n");
+
+	PRBool isHttp = PR_FALSE, isHttps = PR_FALSE;
+	uri->SchemeIs ("http", &isHttp);
+	uri->SchemeIs ("https", &isHttps);
+	if (linkintro && (isHttp || isHttps))
+	{
+		Write (stream, "<p>");
+		Write (stream, linkintro);
+		Write (stream, "<ul>\n");
+		Write (stream, "<li><a href=\"http://google.com/search?q=cache:");
+		Write (stream, rawurl.get());
+		Write (stream, "\">");
+		Write (stream, _("in the Google Cache"));
+		Write (stream, "</a></li>\n");
+
+		Write (stream, "<li><a href=\"http://web.archive.org/web/*/");
+		Write (stream, rawurl.get());
+		Write (stream, "\">");
+		Write (stream, _("in the Internet Archive"));
+		Write (stream, "</a></li>\n"
+			       "</ul>\n"
+			       "</p>");
+	}
+
+	Write (stream,
 		"</div>\n"
 	       "</body>\n"
 	       "</html>\n");
 
 	g_free (language);
 	g_free (primary);
-	g_free (secondary);
  
 	/* finish the rendering */
 	nsCOMPtr<nsIInputStream> inputStream;

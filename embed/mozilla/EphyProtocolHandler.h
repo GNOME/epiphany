@@ -53,12 +53,12 @@ class EphyProtocolHandler : public nsIProtocolHandler,
 
   private:
 	nsresult Redirect(const nsACString&, nsIChannel**);
-	nsresult ParseErrorURL(const char*, nsACString&, nsACString&, nsACString&);
-	nsresult GetErrorMessage(nsIURI *, const char *, char **, char **);
-	nsresult HandleEpiphany(nsIURI*, nsIChannel **);
-	nsresult CreateErrorPage(nsIURI*, nsIChannel **);
-	nsresult Write(nsIOutputStream*, const char *);
-	nsresult WriteHTMLEscape(nsIOutputStream *, const char *);
+	nsresult ParseErrorURL(const char*, nsACString&, nsACString&, nsACString&, nsACString&);
+	nsresult GetErrorMessage(nsIURI*, const char*, char**, char**, char**, char**);
+	nsresult HandleEpiphany(nsIURI*, nsIChannel**);
+	nsresult CreateErrorPage(nsIURI*, nsIChannel**);
+	nsresult Write(nsIOutputStream*, const char*);
+	nsresult WriteHTMLEscape(nsIOutputStream*, const char*);
 };
 
 #endif /* EPHY_PROTOCOL_HANDLER_H */
