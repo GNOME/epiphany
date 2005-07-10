@@ -519,13 +519,17 @@ EphyProtocolHandler::CreateErrorPage(nsIURI *aErrorURI,
 		Write (stream, "<li><a href=\"http://google.com/search?q=cache:");
 		Write (stream, rawurl.get());
 		Write (stream, "\">");
-		Write (stream, _("in the Google Cache"));
+		/* Translators: The text before the "|" is context to help you decide on
+		 * the correct translation. You MUST OMIT it in the translated string. */
+		Write (stream, Q_("You may find an old version:|in the Google Cache"));
 		Write (stream, "</a></li>\n");
 
 		Write (stream, "<li><a href=\"http://web.archive.org/web/*/");
 		Write (stream, rawurl.get());
 		Write (stream, "\">");
-		Write (stream, _("in the Internet Archive"));
+		/* Translators: The text before the "|" is context to help you decide on
+		 * the correct translation. You MUST OMIT it in the translated string. */
+		Write (stream, Q_("You may find an old version:|in the Internet Archive"));
 		Write (stream, "</a></li>\n"
 			       "</ul>\n"
 			       "</p>");
