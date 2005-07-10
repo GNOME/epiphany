@@ -309,7 +309,8 @@ drag_motion_cb (GtkWidget *widget,
 				(node, view->priv->priority_prop_id);
 
 		if (priority != EPHY_NODE_VIEW_ALL_PRIORITY &&
-		    priority != EPHY_NODE_VIEW_SPECIAL_PRIORITY)
+		    priority != EPHY_NODE_VIEW_SPECIAL_PRIORITY &&
+		    ephy_node_get_is_drag_source (node))
 		{
 			action = context->suggested_action;
 		}
@@ -374,6 +375,10 @@ drag_data_received_cb (GtkWidget *widget,
 		return;
 	}	
 
+	/* appease GtkTreeView by preventing its drag_data_receive
+	* from being called */
+	g_signal_stop_emission_by_name (view, "drag_data_received");
+
 	if (!view->priv->have_drag_data)
 	{
 		view->priv->have_drag_data = TRUE;
@@ -388,16 +393,18 @@ drag_data_received_cb (GtkWidget *widget,
 		gboolean success = FALSE;
 		GtkTreePath *path;
 
-		gtk_tree_view_get_dest_row_at_pos
-			(GTK_TREE_VIEW (widget), x, y, &path, &pos);
-
-		g_return_if_fail (path != NULL);
+		if (gtk_tree_view_get_dest_row_at_pos
+			(GTK_TREE_VIEW (widget), x, y, &path, &pos) == FALSE)
+		{
+			return;
+		}
 
 		node = get_node_from_path (view, path);
+		if (node == NULL) return;
 
 		uris = gtk_selection_data_get_uris (selection_data);
 
-		if (uris != NULL)
+		if (uris != NULL && ephy_node_get_is_drag_dest (node))
 		{
 			/* FIXME fill success */
 			g_signal_emit (G_OBJECT (view),
@@ -416,12 +423,6 @@ drag_data_received_cb (GtkWidget *widget,
 			gtk_tree_path_free (path);
 		}
 	}
-
-
-	/* appease GtkTreeView by preventing its drag_data_receive
-	 * from being called */
-	g_signal_stop_emission_by_name (GTK_TREE_VIEW (view),
-					"drag_data_received");
 }
 
 static gboolean

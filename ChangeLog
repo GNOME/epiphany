@@ -1,5 +1,34 @@
 2005-07-10  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-node-common.h:
+	* lib/ephy-node.c: (ephy_node_new_with_id),
+	(ephy_node_signal_disconnect), (ephy_node_set_is_drag_source),
+	(ephy_node_get_is_drag_source), (ephy_node_set_is_drag_dest),
+	(ephy_node_get_is_drag_dest):
+	* lib/ephy-node.h:
+	* lib/widgets/ephy-node-view.c: (drag_motion_cb),
+	(drag_data_received_cb):
+
+	Implement a way to disallow dragging from resp. dropping on certain
+	nodes.
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_update_menu):
+	* src/bookmarks/ephy-bookmarks.c: (save_filter),
+	(save_filter_local), (ephy_bookmarks_save),
+	(update_bookmark_keywords), (bookmark_is_categorized),
+	(resolve_cb), (browse_cb), (ephy_local_bookmarks_init),
+	(ephy_local_bookmarks_stop), (ephy_bookmarks_init),
+	(ephy_bookmarks_finalize), (ephy_bookmarks_get_topic_uri),
+	(ephy_bookmarks_find_keyword), (ephy_bookmarks_get_favorites),
+	(ephy_bookmarks_get_local):
+	* src/bookmarks/ephy-bookmarks.h:
+
+	Implement "Local Sites" topic, filled with zeroconf-discovered
+	bookmarks. Patch by Bastien Nocera, fixes bug #144969.
+
+2005-07-10  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-embed-shell.c: (ephy_embed_shell_prepare_close):
 
 	Fix build with -Werror.

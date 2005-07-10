@@ -129,6 +129,12 @@ EphyNode     *ephy_node_get_next_child      (EphyNode *node,
 					     EphyNode *child);
 EphyNode     *ephy_node_get_previous_child  (EphyNode *node,
 					     EphyNode *child);
+void	      ephy_node_set_is_drag_source  (EphyNode *node,
+					     gboolean allow);
+gboolean      ephy_node_get_is_drag_source  (EphyNode *node);
+void	      ephy_node_set_is_drag_dest    (EphyNode *node,
+					     gboolean allow);
+gboolean      ephy_node_get_is_drag_dest    (EphyNode *node);
 
 G_END_DECLS
 

@@ -69,6 +69,8 @@ struct _EphyNode
 	int signal_id;
 	guint emissions;
 	guint invalidated_signals;
+	guint is_drag_source : 1;
+	guint is_drag_dest : 1;
 
 	EphyNodeDb *db;
 };
@@ -365,6 +367,8 @@ ephy_node_new_with_id (EphyNodeDb *db, guint reserved_id)
 	node->signal_id = 0;
 	node->emissions = 0;
 	node->invalidated_signals = 0;
+	node->is_drag_source = TRUE;
+	node->is_drag_dest = TRUE;
 
 	_ephy_node_db_add_id (db, reserved_id, node);
 
@@ -1271,6 +1275,32 @@ ephy_node_signal_disconnect (EphyNode *node,
 		data->invalidated = TRUE;
 		node->invalidated_signals++;
 	}
+}
+
+void
+ephy_node_set_is_drag_source (EphyNode *node,
+			      gboolean allow)
+{
+	node->is_drag_source = allow != FALSE;
+}
+
+gboolean
+ephy_node_get_is_drag_source (EphyNode *node)
+{
+	return node->is_drag_source;
+}
+
+void
+ephy_node_set_is_drag_dest (EphyNode *node,
+			    gboolean allow)
+{
+	node->is_drag_dest = allow != FALSE;
+}
+
+gboolean
+ephy_node_get_is_drag_dest (EphyNode *node)
+{
+	return node->is_drag_dest;
 }
 
 GType

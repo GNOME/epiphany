@@ -41,14 +41,16 @@
 #include <string.h>
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
+#include <libgnomevfs/gnome-vfs-dns-sd.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkdialog.h>
 
 #define EPHY_BOOKMARKS_XML_ROOT    "ephy_bookmarks"
 #define EPHY_BOOKMARKS_XML_VERSION "1.03"
-#define BOOKMARKS_SAVE_DELAY (3 * 1000)
+#define BOOKMARKS_SAVE_DELAY (3 * 1000) /* ms */
 #define MAX_FAVORITES_NUM 10
 #define UPDATE_URI_DATA_KEY "updated-uri"
+#define SD_RESOLVE_TIMEOUT (3 * 1000) /* ms */
 
 #define EPHY_BOOKMARKS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS, EphyBookmarksPrivate))
 
@@ -70,6 +72,11 @@ struct _EphyBookmarksPrivate
 	double lower_score;
 	GHashTable *props_dialogs;
 	guint disable_bookmark_editing_notifier_id;
+
+	/* Local sites */
+	EphyNode *local;
+	GnomeVFSDNSSDBrowseHandle *browse_handle;
+	GList *resolve_list;
 };
 
 typedef struct
@@ -317,7 +324,17 @@ save_filter (EphyNode *node,
 
 	return node != priv->bookmarks &&
 	       node != priv->favorites &&
-	       node != priv->notcategorized;
+	       node != priv->notcategorized &&
+	       node != priv->local;
+}
+
+static gboolean
+save_filter_local (EphyNode *node,
+		   EphyBookmarks *bookmarks)
+{
+	EphyBookmarksPrivate *priv = bookmarks->priv;
+
+	return !ephy_node_has_child (priv->local, node);
 }
 
 static void
@@ -333,7 +350,7 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 		 (xmlChar *) EPHY_BOOKMARKS_XML_VERSION,
 		 (xmlChar *) "Do not rely on this file, it's only for internal use. Use bookmarks.rdf instead.",
 		 eb->priv->keywords, (EphyNodeFilterFunc) save_filter, eb,
-		 eb->priv->bookmarks, NULL, NULL,
+		 eb->priv->bookmarks, (EphyNodeFilterFunc) save_filter_local, eb,
 		 NULL);
 
 	/* Export bookmarks in rdf */
@@ -621,6 +638,7 @@ update_bookmark_keywords (EphyBookmarks *eb, EphyNode *bookmark)
 		if (kid != eb->priv->notcategorized && 
 		    kid != eb->priv->favorites &&
 		    kid != eb->priv->bookmarks &&
+		    kid != eb->priv->local &&
 		    ephy_node_has_child (kid, bookmark))
 		{
 			const char *topic;
@@ -689,6 +707,7 @@ bookmark_is_categorized (EphyBookmarks *eb, EphyNode *bookmark)
 		if (kid != eb->priv->notcategorized && 
 		    kid != eb->priv->favorites &&
 		    kid != eb->priv->bookmarks &&
+		    kid != eb->priv->local &&
 		    ephy_node_has_child (kid, bookmark))
 		{
 			return TRUE;
@@ -773,6 +792,154 @@ backup_file (const char *original_filename, const char *extension)
 
 	g_free (template);
 	g_free (backup_filename);
+}
+
+static void
+resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
+	    GnomeVFSResult result,
+	    const GnomeVFSDNSSDService *service,
+	    const char *host,
+	    int port,
+	    const GHashTable *text,
+	    int text_raw_len,
+	    const char *text_raw,
+	    gpointer callback_data)
+{
+	EphyBookmarks *bookmarks = (EphyBookmarks *) callback_data;
+	EphyBookmarksPrivate *priv = bookmarks->priv;
+	EphyNode *node;
+	GValue value = { 0, };
+	const char *path;
+	char *url;
+
+	priv->resolve_list = g_list_remove (priv->resolve_list, handle);
+
+	if (result != GNOME_VFS_OK) return;
+
+	if (text != NULL)
+	{
+		path = g_hash_table_lookup ((GHashTable *) text, "path");
+	}
+	else
+	{
+		path = "/";
+	}
+
+	url = g_strdup_printf ("http://%s:%d%s", host, port, path);
+
+	node = ephy_node_new (priv->db);
+	if (node == NULL) return;
+
+	/* don't allow dragging this node */
+	ephy_node_set_is_drag_source (node, FALSE);
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, service->name);
+	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_TITLE, &value);
+	g_value_unset (&value);
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_take_string (&value, url);
+	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_LOCATION, &value);
+	g_value_unset (&value);
+
+	g_value_init (&value, G_TYPE_BOOLEAN);
+	g_value_set_boolean (&value, TRUE);
+	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_IMMUTABLE, &value);
+	g_value_unset (&value);
+
+#if 0
+	/* FIXME what was that about ??? */
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, EPHY_NODE_SPECIAL_PRIORITY);
+	ephy_node_set_property (priv->local,
+				EPHY_NODE_KEYWORD_PROP_PRIORITY,
+				&value);
+	g_value_unset (&value);
+#endif
+
+	ephy_node_add_child (priv->bookmarks, node);
+	ephy_node_add_child (priv->local, node);
+}
+
+static void
+browse_cb (GnomeVFSDNSSDBrowseHandle *handle,
+	   GnomeVFSDNSSDServiceStatus status,
+	   const GnomeVFSDNSSDService *service,
+	   EphyBookmarks *bookmarks)
+{
+	EphyBookmarksPrivate *priv = bookmarks->priv;
+	GnomeVFSDNSSDResolveHandle *reshandle = NULL;
+	GPtrArray *children;
+	EphyNode *kid;
+	const char *title;
+	guint i;
+
+	if (status == GNOME_VFS_DNS_SD_SERVICE_REMOVED)
+	{
+		/* Find the bookmark to remove */
+		children = ephy_node_get_children (priv->local);
+		for (i = 0; i < children->len; i++)
+		{
+			kid = g_ptr_array_index (children, i);
+			title = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_TITLE);
+
+			if (g_str_equal (title, service->name))
+			{
+				ephy_node_remove_child (priv->local, kid);
+				break;
+			}
+		}
+
+		return;
+	}
+
+	/* status == GNOME_VFS_DNS_SD_SERVICE_ADDED */
+
+	if (gnome_vfs_dns_sd_resolve (&reshandle,
+				      service->name, service->type, service->domain,
+				      SD_RESOLVE_TIMEOUT,
+				      resolve_cb,
+				      bookmarks,
+				      NULL) == GNOME_VFS_OK)
+	{
+		priv->resolve_list =
+			g_list_prepend (priv->resolve_list, reshandle);
+	}
+}
+
+static void
+ephy_local_bookmarks_init (EphyBookmarks *bookmarks)
+{
+	EphyBookmarksPrivate *priv = bookmarks->priv;
+
+	if (gnome_vfs_dns_sd_browse (&priv->browse_handle,
+				     "local", "_http._tcp",
+				     (GnomeVFSDNSSDBrowseCallback) browse_cb,
+				     bookmarks,
+				     NULL) != GNOME_VFS_OK)
+	{
+		priv->browse_handle = NULL;
+		ephy_node_remove_child (priv->keywords, priv->local);
+	}
+}
+
+static void
+ephy_local_bookmarks_stop (EphyBookmarks *bookmarks)
+{
+	EphyBookmarksPrivate *priv = bookmarks->priv;
+
+	if (priv->browse_handle != NULL)
+	{
+		gnome_vfs_dns_sd_stop_browse (priv->browse_handle);
+		priv->browse_handle = NULL;
+		ephy_node_remove_child (priv->keywords, priv->local);
+	}
+
+	g_list_foreach (priv->resolve_list,
+			(GFunc) gnome_vfs_dns_sd_cancel_resolve, NULL);
+	g_list_free (priv->resolve_list);
+	priv->resolve_list = NULL;
 }
 
 static void
@@ -870,6 +1037,30 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	g_value_unset (&value);
 	ephy_node_add_child (eb->priv->keywords, eb->priv->notcategorized);
 
+	/* Local Websites */
+	eb->priv->local = ephy_node_new_with_id (db, BMKS_LOCAL_NODE_ID);
+
+	/* don't allow drags to this topic */
+	ephy_node_set_is_drag_dest (eb->priv->local, FALSE);
+
+	g_value_init (&value, G_TYPE_STRING);
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
+	/* Translators: this topic contains the local websites bookmarks */
+	g_value_set_string (&value, Q_("bookmarks|Local sites"));
+	ephy_node_set_property (eb->priv->local,
+			        EPHY_NODE_KEYWORD_PROP_NAME,
+			        &value);
+	g_value_unset (&value);
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, EPHY_NODE_SPECIAL_PRIORITY);
+	ephy_node_set_property (eb->priv->local,
+				EPHY_NODE_KEYWORD_PROP_PRIORITY,
+				&value);
+	g_value_unset (&value);
+	ephy_node_add_child (eb->priv->keywords, eb->priv->local);
+	ephy_local_bookmarks_init (eb);
+
 	/* Smart bookmarks */
 	eb->priv->smartbookmarks = ephy_node_new_with_id (db, SMARTBOOKMARKS_NODE_ID);
 
@@ -922,6 +1113,8 @@ ephy_bookmarks_finalize (GObject *object)
 	{
 		g_source_remove (eb->priv->save_timeout_id);
 	}
+
+	ephy_local_bookmarks_stop (eb);
 
 	ephy_bookmarks_save (eb);
 
@@ -1360,6 +1553,10 @@ ephy_bookmarks_get_topic_uri (EphyBookmarks *eb,
 	{
 		uri = g_strdup ("topic://Special/Favorites");
 	}
+	else if (ephy_bookmarks_get_local (eb) == node)
+	{
+		uri = g_strdup ("topic://Special/Local");
+	}
 	else
 	{
 		const char *name;
@@ -1404,6 +1601,10 @@ ephy_bookmarks_find_keyword (EphyBookmarks *eb,
 	else if (strcmp (name, "topic://Special/Favorites") == 0)
 	{
 		return ephy_bookmarks_get_favorites (eb);
+	}
+	else if (strcmp (name, "topic://Special/Local") == 0)
+	{
+		return ephy_bookmarks_get_local (eb);
 	}
 	else if (g_str_has_prefix (name, "topic://"))
 	{
@@ -1503,6 +1704,12 @@ EphyNode *
 ephy_bookmarks_get_favorites (EphyBookmarks *eb)
 {
 	return eb->priv->favorites;
+}
+
+EphyNode *
+ephy_bookmarks_get_local (EphyBookmarks *eb)
+{
+	return eb->priv->local;
 }
 
 EphyNode *

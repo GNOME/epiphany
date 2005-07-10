@@ -1157,6 +1157,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	gboolean key_normal = FALSE;
 	gboolean cut, copy, paste, select_all;
 	gboolean can_show_in_bookmarks_bar, show_in_bookmarks_bar = FALSE;
+	gboolean mutable = TRUE;
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	GList *selected;
@@ -1229,6 +1230,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		id = ephy_node_get_id (node);
 		show_in_bookmarks_bar = ephy_bookmarksbar_model_has_bookmark
 			(editor->priv->tb_model, id);
+		mutable = !ephy_node_get_property_boolean (node, EPHY_NODE_BMK_PROP_IMMUTABLE);
 
 		g_list_free (selected);
 	}
@@ -1251,11 +1253,11 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 
 	open_in_window = (bmk_focus && bmk_selection);
 	open_in_tab = (bmk_focus && bmk_selection);
-	rename = (bmk_focus && single_bmk_selected) ||
+	rename = (bmk_focus && single_bmk_selected && mutable) ||
 		 (key_selection && key_focus && key_normal);
 	delete = (bmk_focus && bmk_selection) ||
 		 (key_selection && key_focus && key_normal);
-	properties = (bmk_focus && single_bmk_selected);
+	properties = bmk_focus && single_bmk_selected && mutable;
 	can_show_in_bookmarks_bar = (bmk_focus && single_bmk_selected) ||
 		 (key_selection && key_focus);
 
