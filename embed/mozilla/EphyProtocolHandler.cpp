@@ -49,9 +49,6 @@
 
 #include <string.h>
 
-static NS_DEFINE_CID(kSimpleURICID, NS_SIMPLEURI_CID);
-static NS_DEFINE_CID(kInputStreamChannelCID, NS_INPUTSTREAMCHANNEL_CID);
-
 EphyProtocolHandler::EphyProtocolHandler()
 {
 	LOG ("EphyProtocolHandler ctor [%p]\n", this);
@@ -100,7 +97,7 @@ EphyProtocolHandler::NewURI(const nsACString &aSpec,
 			    nsIURI **_retval)
 {
 	nsresult rv;
-	nsCOMPtr<nsIURI> uri (do_CreateInstance(kSimpleURICID, &rv));
+	nsCOMPtr<nsIURI> uri (do_CreateInstance("@mozilla.org/network/simple-uri;1", &rv));
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	rv = uri->SetSpec (aSpec);
@@ -548,7 +545,7 @@ EphyProtocolHandler::CreateErrorPage(nsIURI *aErrorURI,
 	rv = storageStream->NewInputStream(0, getter_AddRefs (inputStream));
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	nsCOMPtr<nsIInputStreamChannel> channel (do_CreateInstance (kInputStreamChannelCID, &rv));
+	nsCOMPtr<nsIInputStreamChannel> channel (do_CreateInstance ("@mozilla.org/network/input-stream-channel;1", &rv));
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	rv |= channel->SetURI (aErrorURI);
