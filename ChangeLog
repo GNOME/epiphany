@@ -1,5 +1,19 @@
 2005-07-10  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_prepare_close):
+
+	Fix build with -Werror.
+
+	* src/ephy-tab.c: (ephy_tab_dispose),
+	(ephy_tab_file_monitor_cancel), (ephy_file_monitor_reload_cb),
+	(ephy_tab_file_monitor_cb), (ephy_tab_update_file_monitor),
+	(ephy_tab_address_cb):
+
+	Monitor local files for changes and reload them if they do change.
+	Fixes bug #300040; patch by Raphaël Slinckx.
+
+2005-07-10  Christian Persch  <chpe@cvs.gnome.org>
+
         * embed/mozilla/EphyProtocolHandler.cpp:
 	
 	Use contract IDs.

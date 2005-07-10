@@ -45,7 +45,6 @@
 #include "ephy-link.h"
 
 #include <glib/gi18n.h>
-#include <libgnomevfs/gnome-vfs-uri.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkstock.h>
@@ -59,6 +58,10 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkuimanager.h>
 #include <gtk/gtkclipboard.h>
+#include <libgnomevfs/gnome-vfs-result.h>
+#include <libgnomevfs/gnome-vfs-monitor.h>
+#include <libgnomevfs/gnome-vfs-ops.h>
+#include <libgnomevfs/gnome-vfs-uri.h>
 #include <string.h>
 
 #define EPHY_TAB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TAB, EphyTabPrivate))
@@ -88,6 +91,10 @@ struct _EphyTabPrivate
 	EphyTabNavigationFlags nav_flags;
 	EphyEmbedDocumentType document_type;
 	guint idle_resize_handler;
+
+	/* File watch */
+	GnomeVFSMonitorHandle *monitor;
+	guint reload_scheduled_id;	
 };
 
 static void ephy_tab_class_init		(EphyTabClass *klass);
@@ -143,6 +150,7 @@ static guint	popup_blocker_n_hidden		(EphyTab *tab);
 static gboolean	ephy_tab_get_popups_allowed	(EphyTab *tab);
 static void	ephy_tab_set_popups_allowed	(EphyTab *tab,
 						 gboolean allowed);
+static void	ephy_tab_file_monitor_cancel	(EphyTab *tab);
 
 /* Class functions */
 
@@ -764,6 +772,8 @@ ephy_tab_dispose (GObject *object)
 		priv->idle_resize_handler = 0;
 	}
 
+	ephy_tab_file_monitor_cancel (tab);
+
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
@@ -1075,6 +1085,124 @@ ephy_tab_set_icon_address (EphyTab *tab, const char *address)
 	g_object_notify (G_OBJECT (tab), "icon");
 }
 
+static void
+ephy_tab_file_monitor_cancel (EphyTab *tab)
+{
+	EphyTabPrivate *priv = tab->priv;
+
+	if (priv->monitor != NULL)
+	{
+		LOG ("Cancelling file monitor");
+
+		gnome_vfs_monitor_cancel (priv->monitor);
+		priv->monitor = NULL;
+	}
+
+	if (priv->reload_scheduled_id != 0)
+	{
+		LOG ("Cancelling scheduled reload");
+
+		g_source_remove (priv->reload_scheduled_id);
+		priv->reload_scheduled_id = 0;
+	}
+}
+
+static gboolean
+ephy_file_monitor_reload_cb (EphyTab *tab)
+{
+	EphyTabPrivate *priv = tab->priv;
+	EphyEmbed *embed;
+
+	LOG ("Reloading file '%s'\n", priv->address);
+
+	priv->reload_scheduled_id = 0;
+
+	embed = ephy_tab_get_embed (tab);
+	if (embed == NULL) return FALSE;
+
+	ephy_embed_reload (embed, TRUE);
+
+	/* don't run again */
+	return FALSE;
+}
+
+static void
+ephy_tab_file_monitor_cb (GnomeVFSMonitorHandle *handle,
+			  const gchar *monitor_uri,
+			  const gchar *info_uri,
+			  GnomeVFSMonitorEventType event_type,
+			  EphyTab *tab)
+{
+	EphyTabPrivate *priv = tab->priv;
+
+	LOG ("File '%s' has changed, scheduling reload", monitor_uri);
+
+	switch (event_type)
+	{
+		case GNOME_VFS_MONITOR_EVENT_CHANGED:
+		case GNOME_VFS_MONITOR_EVENT_CREATED:
+			/* We make a lot of assumptions here, but basically we know
+			 * that we just have to reload, by construction.
+			 * Delay the reload a little bit so we don't endlessly
+			 * reload while a file is written.
+			 */
+			if (priv->reload_scheduled_id != 0)
+			{
+				g_source_remove (priv->reload_scheduled_id);
+			}
+
+			priv->reload_scheduled_id =
+				g_timeout_add (100 /* ms */,
+					       (GSourceFunc) ephy_file_monitor_reload_cb,
+					       tab);
+			break;
+
+		case GNOME_VFS_MONITOR_EVENT_DELETED:
+		case GNOME_VFS_MONITOR_EVENT_STARTEXECUTING:
+		case GNOME_VFS_MONITOR_EVENT_STOPEXECUTING:
+		case GNOME_VFS_MONITOR_EVENT_METADATA_CHANGED:
+		default:
+			break;
+	}
+}
+
+static void
+ephy_tab_update_file_monitor (EphyTab *tab,
+			      const gchar *address)
+{
+	EphyTabPrivate *priv = tab->priv;
+	GnomeVFSMonitorHandle *handle = NULL;
+	GnomeVFSURI *uri;
+	gboolean local;
+
+	if (priv->address != NULL && address != NULL &&
+	    strcmp (priv->address, address) == 0)
+	{
+		/* same address, no change needed */
+		return;
+	}
+
+	ephy_tab_file_monitor_cancel (tab);
+
+	uri = gnome_vfs_uri_new (address);
+	if (uri == NULL) return;
+
+	local = gnome_vfs_uri_is_local (uri);
+	gnome_vfs_uri_unref (uri);
+
+	if (local == FALSE) return;
+	
+	if (gnome_vfs_monitor_add (&handle, address,
+				   GNOME_VFS_MONITOR_FILE,
+				   (GnomeVFSMonitorCallback) ephy_tab_file_monitor_cb,
+				   tab) == GNOME_VFS_OK)
+	{
+		LOG ("Installed monitor for file '%s'", address);
+
+		priv->monitor = handle;
+	}
+}
+
 /**
  * ephy_tab_get_icon_address:
  * @tab: an #EphyTab
@@ -1117,6 +1245,9 @@ ephy_tab_address_cb (EphyEmbed *embed,
 	char *freeme = NULL;
 
 	LOG ("ephy_tab_address_cb tab %p address %s", tab, address);
+
+	/* do this up here so we still have the old address around */
+	ephy_tab_update_file_monitor (tab, address);
 
 	/* Do not expose about:blank to the user, an empty address
 	   bar will do better */

@@ -215,8 +215,6 @@ ephy_embed_shell_get_encodings (EphyEmbedShell *shell)
 void
 ephy_embed_shell_prepare_close (EphyEmbedShell *shell)
 {
-	EphyEmbedShellPrivate *priv = shell->priv;
-
 	g_signal_emit (shell, signals[PREPARE_CLOSE], 0);
 }
 
