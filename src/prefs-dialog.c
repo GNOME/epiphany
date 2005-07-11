@@ -1192,6 +1192,12 @@ prefs_dialog_init (PrefsDialog *pd)
 
 	pd->priv = EPHY_PREFS_DIALOG_GET_PRIVATE (pd);
 
+#ifdef ENABLE_NLS
+        /* Initialize the control centre domain */
+        bindtextdomain (GTK_DOMAIN, GNOMELOCALEDIR);
+        bind_textdomain_codeset(GTK_DOMAIN, "UTF-8");
+#endif
+
 	ephy_dialog_construct (dialog,
 			       properties,
 			       ephy_file ("prefs-dialog.glade"),
