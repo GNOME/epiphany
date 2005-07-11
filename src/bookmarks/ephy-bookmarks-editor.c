@@ -1255,10 +1255,10 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	open_in_tab = (bmk_focus && bmk_selection);
 	rename = (bmk_focus && single_bmk_selected && mutable) ||
 		 (key_selection && key_focus && key_normal);
-	delete = (bmk_focus && bmk_selection) ||
+	delete = (bmk_focus && bmk_selection && mutable) ||
 		 (key_selection && key_focus && key_normal);
 	properties = bmk_focus && single_bmk_selected && mutable;
-	can_show_in_bookmarks_bar = (bmk_focus && single_bmk_selected) ||
+	can_show_in_bookmarks_bar = (bmk_focus && single_bmk_selected && mutable) ||
 		 (key_selection && key_focus);
 
 	action_group = editor->priv->action_group;
@@ -1391,10 +1391,17 @@ key_pressed_cb (EphyNodeView *view,
 		GdkEventKey *event,
 		EphyBookmarksEditor *editor)
 {
+	EphyBookmarksEditorPrivate *priv = editor->priv;
+	GtkAction *action;
+
 	if (event->keyval == GDK_Delete || event->keyval == GDK_KP_Delete)
 	{
-		cmd_delete (NULL, editor);
-		return TRUE;
+		action = gtk_action_group_get_action (priv->action_group, "Delete");
+		if (gtk_action_get_sensitive (action))
+		{
+			cmd_delete (NULL, editor);
+			return TRUE;
+		}
 	} 
 
 	return FALSE;

@@ -663,6 +663,42 @@ did_not_drag (EphyNodeView *view,
         }                                                                                                              
 }
 
+typedef struct
+{
+	EphyNodeView *view;
+	gboolean result;
+}
+ForeachData;
+
+static void
+check_node_is_drag_source (GtkTreeModel *model,
+			   GtkTreePath *path,
+			   GtkTreeIter *iter,
+			   ForeachData *data)
+{
+	EphyNode *node;
+
+	node = get_node_from_path (data->view, path);
+	data->result = data->result &&
+		       node != NULL &&
+		       ephy_node_get_is_drag_source (node);
+}
+
+static gboolean
+can_drag_selection (EphyNodeView *view)
+{
+	GtkTreeView *tree_view = GTK_TREE_VIEW (view);
+	GtkTreeSelection *selection;
+	ForeachData data = { view, TRUE };
+
+	selection = gtk_tree_view_get_selection (tree_view);
+	gtk_tree_selection_selected_foreach (selection,
+					     (GtkTreeSelectionForeachFunc) check_node_is_drag_source,
+					     &data);
+
+	return data.result;
+}
+
 static void
 drag_data_get_cb (GtkWidget *widget,
                   GdkDragContext *context,
@@ -707,6 +743,7 @@ button_release_cb (GtkWidget *widget,
                         did_not_drag (view, event);
                         return TRUE;
                 }
+		view->priv->drag_started = FALSE;
         }
         return FALSE;
 }
@@ -727,7 +764,8 @@ motion_notify_cb (GtkWidget *widget,
 	{
 		if (gtk_drag_check_threshold (widget, view->priv->drag_x,
                                               view->priv->drag_y, event->x,
-					      event->y))
+					      event->y)
+		    && can_drag_selection (view))
 		{
 			context = gtk_drag_begin
 				(widget, view->priv->source_target_list,

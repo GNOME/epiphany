@@ -1,3 +1,20 @@
+2005-07-11  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/widgets/ephy-node-view.c: (check_node_is_drag_source),
+	(can_drag_selection), (button_release_cb), (motion_notify_cb):
+
+	Check all selected nodes if they allow dragging.
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_update_menu), (key_pressed_cb):
+
+	Don't allow to delete or rename local sites, or to put them
+	on the bookmarks bar.
+
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init):
+
+	Fix capitalisation.
+
 2005-07-10  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-node-common.h:

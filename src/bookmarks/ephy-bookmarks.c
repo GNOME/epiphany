@@ -1047,7 +1047,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	/* Translators: The text before the "|" is context to help you decide on
 	 * the correct translation. You MUST OMIT it in the translated string. */
 	/* Translators: this topic contains the local websites bookmarks */
-	g_value_set_string (&value, Q_("bookmarks|Local sites"));
+	g_value_set_string (&value, Q_("bookmarks|Local Sites"));
 	ephy_node_set_property (eb->priv->local,
 			        EPHY_NODE_KEYWORD_PROP_NAME,
 			        &value);
