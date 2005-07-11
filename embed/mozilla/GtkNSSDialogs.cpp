@@ -528,14 +528,13 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 				    PRUint32 *_trust,
 				    PRBool *_retval)
 {
-	GtkWidget *dialog, *label, *content_vbox, *vbox;
-	GtkWidget *check_ssl;
-	char *msg, *tertiary;
+	GtkWidget *dialog, *label;
+	char *msg, *primary;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
 
-	dialog = gtk_dialog_new_with_buttons ("", gparent,
+	dialog = gtk_dialog_new_with_buttons (_("Trust new Certificate Authority?"), gparent,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      _("_View Certificate"),
 					      NSSDIALOG_RESPONSE_VIEW_CERT,
@@ -552,7 +551,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_WARNING,
-			    &label, &content_vbox);
+			    &label, NULL);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
 	nsEmbedString commonName;
@@ -562,26 +561,16 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
-	tertiary = g_markup_printf_escaped (_("Trust \"%s\" to identify:"), cCommonName.get());
+	primary = g_markup_printf_escaped (_("Trust new Certificate Authority \"%s\" to identify web sites?"),
+					   cCommonName.get());
 
-	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n\n%s",
-			       _("Trust new Certificate Authority?"),
+	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
+			       primary,
 			       _("Before trusting a Certificate Authority (CA) you should "
-				 "verify the certificate is authentic."),
-			       tertiary);
+				 "verify the certificate is authentic."));
 	gtk_label_set_markup (GTK_LABEL (label), msg);
-	g_free (tertiary);
+	g_free (primary);
 	g_free (msg);
-
-	vbox = gtk_vbox_new (FALSE, 6);
-
-	check_ssl = gtk_check_button_new_with_mnemonic 
-				  (_("_Web sites"));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_ssl), TRUE);
-	gtk_box_pack_start (GTK_BOX(vbox), check_ssl, TRUE, TRUE, 0);
-
-	gtk_box_pack_start (GTK_BOX (content_vbox), higgy_indent_widget (vbox), 
-			    FALSE, FALSE, 0);
 
 	gtk_widget_show_all (dialog);
 	int ret;
@@ -604,10 +593,13 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	}
 	else
 	{
-		*_trust = nsIX509CertDB::UNTRUSTED;
-		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_ssl)))
+		if (ret == GTK_RESPONSE_ACCEPT)
 		{
 			*_trust |= nsIX509CertDB::TRUSTED_SSL;
+		}
+		else
+		{
+			*_trust = nsIX509CertDB::UNTRUSTED;
 		}
 
 		*_retval = PR_TRUE;
