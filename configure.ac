@@ -160,7 +160,7 @@ dnl *******
 dnl Mozilla
 dnl *******
 
-AC_MSG_CHECKING([which mozilla to use])
+AC_MSG_CHECKING([which gecko to use])
 
 AC_ARG_WITH([mozilla],
 	AS_HELP_STRING([--with-mozilla@<:@=mozilla|firefox|thunderbird@:>@],
@@ -198,20 +198,20 @@ MOZILLA=$gecko
 AC_SUBST([MOZILLA])
 
 MOZILLA_FLAVOUR=$flavour
-AC_SUBST(MOZILLA_FLAVOUR)
+AC_SUBST([MOZILLA_FLAVOUR])
 
 PKG_CHECK_MODULES(MOZILLA_COMPONENT, $MOZILLA-gtkmozembed >= $min_version $MOZILLA-xpcom >= $min_version)
-AC_SUBST(MOZILLA_COMPONENT_CFLAGS)
-AC_SUBST(MOZILLA_COMPONENT_LIBS)
+AC_SUBST([MOZILLA_COMPONENT_CFLAGS])
+AC_SUBST([MOZILLA_COMPONENT_LIBS])
 
 MOZILLA_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir $MOZILLA-gtkmozembed`"
-AC_SUBST(MOZILLA_INCLUDE_ROOT)
+AC_SUBST([MOZILLA_INCLUDE_ROOT])
 
 MOZILLA_HOME="`$PKG_CONFIG --variable=libdir $MOZILLA-gtkmozembed`"
-AC_SUBST(MOZILLA_HOME)
+AC_SUBST([MOZILLA_HOME])
 
 MOZILLA_PREFIX="`$PKG_CONFIG --variable=prefix $MOZILLA-gtkmozembed`"
-AC_SUBST(MOZILLA_PREFIX)
+AC_SUBST([MOZILLA_PREFIX])
 
 AC_ARG_ENABLE([cpp-rtti],
 	      AS_HELP_STRING([--enable-cpp-rtti],[Enable C++ RTTI]),[],

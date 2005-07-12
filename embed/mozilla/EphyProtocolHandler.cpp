@@ -235,6 +235,7 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 		nsCAutoString scheme;
 		aURI->GetScheme (scheme);
 
+		/* Translators: %s is the name of a protocol, like "http" etc. */
 		*aPrimary = g_strdup_printf (_("“%s” protocol is not supported."), scheme.get());
 		/* FIXME: get the list of supported protocols from necko */
 		*aSecondary = _("Supported protocols are “http”, “https”, “ftp”, “file” “smb” "
@@ -245,6 +246,7 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 		nsCAutoString path;
 		aURI->GetPath (path);
 
+		/* Translators: %s is the path and filename, for example "/home/user/test.html" */
 		*aPrimary = g_markup_printf_escaped (_("File “%s” not found."), path.get());
 		*aSecondary = _("Check the location of the file and try again.");
 	}
@@ -253,6 +255,7 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 		nsCAutoString host;
 		aURI->GetHost (host);
 
+		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped (_("“%s” could not be found."),
 						     host.get());
 		*aSecondary = _("Check that you are connected to the internet, and "
@@ -264,6 +267,7 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 		nsCAutoString host;
 		aURI->GetHost (host);
 
+		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” refused the connection."),
 				 host.get());
@@ -276,6 +280,7 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 		nsCAutoString host;
 		aURI->GetHost (host);
 
+		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” interrupted the connection."),
 				 host.get());
@@ -288,6 +293,7 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 		nsCAutoString host;
 		aURI->GetHost (host);
 
+		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” is not responding."),
 				 host.get());
@@ -307,6 +313,7 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 		nsCAutoString host;
 		aURI->GetHost (host);
 
+		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” redirected too many times."),
 				 host.get());
@@ -318,6 +325,7 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 		nsCAutoString host;
 		aURI->GetHost (host);
 
+		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” requires an encrypted connection."),
 				 host.get());
@@ -330,6 +338,7 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 		nsCAutoString host;
 		aURI->GetHost (host);
 
+		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” dropped the connection."),
 				 host.get());
@@ -354,6 +363,7 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 		PRInt32 port = -1;
 		aURI->GetPort (&port);
 
+		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” denied access to port “%d”."),
 				 host.get(), port > 0 ? port : 80);

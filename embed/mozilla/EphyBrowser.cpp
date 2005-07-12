@@ -803,46 +803,6 @@ nsresult EphyBrowser::GoToHistoryIndex (PRInt16 index)
 	return ContentNav->GotoIndex (index);
 }
 
-#ifndef HAVE_GECKO_1_8
-/* Workaround for broken reload with frames, see mozilla bug
- * http://bugzilla.mozilla.org/show_bug.cgi?id=246392
- */
-nsresult EphyBrowser::Reload (ReloadType flags)
-{
-	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsISHistory> sessionHistory;
-	GetSHistory (getter_AddRefs (sessionHistory));
-
-	nsCOMPtr<nsIWebNavigation> webNavigation;
-	webNavigation = do_QueryInterface (sessionHistory);
-
-	if (!webNavigation)
-	{
-		webNavigation = do_QueryInterface (mWebBrowser);
-	}
-	NS_ENSURE_TRUE (webNavigation, NS_ERROR_FAILURE);
-
-	PRUint32 reloadFlags;
-	switch (flags)
-	{
-		case RELOAD_FORCE:
-			reloadFlags = nsIWebNavigation::LOAD_FLAGS_BYPASS_CACHE | 
-				      nsIWebNavigation::LOAD_FLAGS_BYPASS_PROXY;
-			break;
-		case RELOAD_ENCODING_CHANGE:
-			reloadFlags = nsIWebNavigation::LOAD_FLAGS_CHARSET_CHANGE;
-			break;
-		case RELOAD_NORMAL:
-		default:
-			reloadFlags = 0;
-			break;
-	}
-
-	return webNavigation->Reload (reloadFlags);
-}
-#endif /* !HAVE_GECKO_1_8 */
-
 nsresult EphyBrowser::SetZoom (float aZoom)
 {
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);

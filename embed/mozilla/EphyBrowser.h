@@ -158,14 +158,6 @@ public:
 	nsresult GetSHUrlAtIndex (PRInt32 index, nsACString &url);
 	nsresult GoToHistoryIndex (PRInt16 index);
 
-#ifndef HAVE_GECKO_1_8
-	enum ReloadType { RELOAD_NORMAL		 = 0,
-			  RELOAD_FORCE		 = 1,
-			  RELOAD_ENCODING_CHANGE = 2 };
-
-	nsresult Reload (ReloadType flags);
-#endif
-
 	nsresult ForceEncoding (const char *encoding);
 	nsresult GetEncoding (nsACString &encoding);
 	nsresult GetForcedEncoding (nsACString &encoding);
