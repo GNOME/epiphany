@@ -513,10 +513,7 @@ static void
 impl_reload (EphyEmbed *embed, 
              gboolean force)
 {
-#ifndef GTKMOZEMBED_BROKEN_RELOAD
-	guint32 mflags;
-
-	mflags = GTK_MOZ_EMBED_FLAG_RELOADNORMAL;
+	guint32 mflags = GTK_MOZ_EMBED_FLAG_RELOADNORMAL;
 
 	if (force)
 	{
@@ -524,15 +521,6 @@ impl_reload (EphyEmbed *embed,
 	}
 
 	gtk_moz_embed_reload (GTK_MOZ_EMBED(embed), mflags);
-#else
-	/* Workaround for broken reload with frames, see mozilla bug
-	 * http://bugzilla.mozilla.org/show_bug.cgi?id=246392
-	 */
-	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
-
-	mpriv->browser->Reload (force ? EphyBrowser::RELOAD_FORCE :
-					EphyBrowser::RELOAD_NORMAL);
-#endif
 }
 
 static void
@@ -728,15 +716,8 @@ impl_set_encoding (EphyEmbed *embed,
 		if (NS_FAILED (rv)) return;
 	}
 
-#ifndef GTKMOZEMBED_BROKEN_RELOAD
 	gtk_moz_embed_reload (GTK_MOZ_EMBED (embed),
 			      GTK_MOZ_EMBED_FLAG_RELOADCHARSETCHANGE);
-#else
-	/* Workaround for broken reload with frames, see mozilla bug
-	 * http://bugzilla.mozilla.org/show_bug.cgi?id=246392
-	 */
-	mpriv->browser->Reload (EphyBrowser::RELOAD_ENCODING_CHANGE);
-#endif
 }
 
 static char *

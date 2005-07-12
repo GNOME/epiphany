@@ -390,20 +390,6 @@ AC_COMPILE_IFELSE(
 
 AC_MSG_RESULT([$result])
 
-dnl check for broken reload in GtkMozEmbed
-dnl This is fixed since 1.7.4 on 1.7 branch, and since 1.8a3 on trunk
-
-AC_MSG_CHECKING([for broken reload])
-
-if $PKG_CONFIG --atleast-version=1.7.5 $MOZILLA-gtkmozembed; then
-	broken_reload=no
-else
-	broken_reload="couldn't autodetect, assuming yes"
-	AC_DEFINE([GTKMOZEMBED_BROKEN_RELOAD],[1],[Define if GtkMozEmbed has broken reload])
-fi
-
-AC_MSG_RESULT([$broken_reload])
-
 dnl changed location in 1.8a6
 
 AC_MSG_CHECKING([for mozilla security compoment])
