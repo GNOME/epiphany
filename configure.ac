@@ -190,9 +190,9 @@ AC_SUBST(MOZILLA)
 AC_MSG_RESULT([$MOZILLA])
 
 case "$MOZILLA" in
-mozilla) min_version=1.7 flavour=mozilla ;;
-firefox) min_version=0.10 flavour=toolkit ;;
-thunderbird) min_version=0.8 flavour=toolkit ;;
+mozilla) min_version=1.7.5 flavour=mozilla ;;
+firefox) min_version=1.0 flavour=toolkit ;;
+thunderbird) min_version=1.0 flavour=toolkit ;;
 esac
 
 MOZILLA_FLAVOUR=$flavour
