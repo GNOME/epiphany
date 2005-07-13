@@ -238,7 +238,7 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 		/* Translators: %s is the name of a protocol, like "http" etc. */
 		*aPrimary = g_strdup_printf (_("“%s” protocol is not supported."), scheme.get());
 		/* FIXME: get the list of supported protocols from necko */
-		*aSecondary = _("Supported protocols are “http”, “https”, “ftp”, “file” “smb” "
+		*aSecondary = _("Supported protocols are “http”, “https”, “ftp”, “file”, “smb” "
 				"and “sftp”.");
 	}
 	else if (strcmp (aError, "fileNotFound") == 0)
@@ -299,7 +299,7 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 				 host.get());
 		*aSecondary = _("The connection was lost because the "
 				"server took too long to respond.");
-		*aTertiary = _("The server may be busy or you may have a network"
+		*aTertiary = _("The server may be busy or you may have a network "
 			        "connection problem. Try again later.");
 		*aLinkIntro = _("There may be an old version of the page you wanted:");
 	}
@@ -377,7 +377,7 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 		 strcmp (aError, "proxyConnectFailure") == 0)
 	{
 		*aPrimary = g_strdup (_("Could not connect to proxy server."));
-		*aSecondary = _("Check you system wide proxy server settings. "
+		*aSecondary = _("Check the proxy server settings in Control Center. "
 				"If the connection still fails, there may be "
 				"a problem with your proxy server or your "
 				"network connection.");
