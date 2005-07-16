@@ -725,7 +725,7 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 		char **split;
 
 		/* URL_TYPE has format: url \n title */
-		split = g_strsplit ((const gchar *)selection_data->data, "\n", 1);
+		split = g_strsplit ((const gchar *)selection_data->data, "\n", 2);
 		if (split != NULL && split[0] != NULL && split[0][0] != '\0')
 		{
 			ephy_link_open (EPHY_LINK (notebook), split[0], tab,
