@@ -20,7 +20,7 @@ default_prefs_files += default-prefs-gecko-1-8.js
 endif
 
 default-prefs.js: $(default_prefs_files)
-	(cd $(srcdir) && cat $(default_prefs_files) ) > $@
+	cat $^ > $@
 
 default_prefsdir = $(pkgdatadir)
 default_prefs_DATA = default-prefs.js
