@@ -834,8 +834,6 @@ ephy_file_launch_desktop_file (const char *filename,
 
 	for (i = 0; dirs[i] != NULL; i++)
 	{
-		g_print ("Looking in path: %s\n", dirs[i]);
-
 		path = g_build_filename (dirs[i], "applications", filename, NULL);
 
 		if (g_file_test (path, G_FILE_TEST_IS_REGULAR)) break;
