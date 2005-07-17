@@ -1,3 +1,16 @@
+2005-07-17  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmark-action.c:
+	(ephy_bookmark_action_sync_smart_url):
+	* src/bookmarks/ephy-bookmarks.c: (resolve_cb), (browse_cb),
+	(ephy_bookmarks_init), (update_has_smart_address), (get_option),
+	(ephy_bookmarks_solve_smart_url),
+	(ephy_bookmarks_get_smart_bookmark_width):
+	* src/bookmarks/ephy-bookmarks.h:
+
+	Fix smart bookmark options parsing. Now encoding= really works,
+	and added width= for bug #116709. Also fixes bug #132761.
+
 2005-07-16  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-notebook.c: (notebook_drag_data_received_cb):

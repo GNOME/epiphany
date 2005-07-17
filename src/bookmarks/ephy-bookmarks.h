@@ -98,6 +98,8 @@ char		 *ephy_bookmarks_solve_smart_url	 (EphyBookmarks *eb,
 							 const char *smart_url,
 							 const char *content);
 
+guint		ephy_bookmarks_get_smart_bookmark_width (EphyNode *bookmark);
+
 GtkWidget      *ephy_bookmarks_show_bookmark_properties (EphyBookmarks *bookmarks,
 							 EphyNode *bookmark,
 							 GtkWidget *parent_window);

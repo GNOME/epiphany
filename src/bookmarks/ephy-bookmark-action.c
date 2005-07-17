@@ -53,8 +53,8 @@
 #include <string.h>
 
 /* FIXME tweak this, or make it configurable? (bug 148093) */
-#define ENTRY_WIDTH_CHARS	16
-#define TOOLITEM_WIDTH_CHARS	24
+#define ENTRY_WIDTH_CHARS	12
+#define TOOLITEM_WIDTH_CHARS	20
 
 static void ephy_bookmark_action_init       (EphyBookmarkAction *action);
 static void ephy_bookmark_action_class_init (EphyBookmarkActionClass *class);
@@ -163,27 +163,25 @@ create_tool_item (GtkAction *action)
 }
 
 static void
-ephy_bookmark_action_sync_smart_url (GtkAction *action, GParamSpec *pspec, GtkWidget *proxy)
+ephy_bookmark_action_sync_smart_url (GtkAction *gaction, GParamSpec *pspec, GtkWidget *proxy)
 {
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
+		EphyBookmarkAction *action = EPHY_BOOKMARK_ACTION (gaction);
+		EphyBookmarkActionPrivate *priv = action->priv;
+		gboolean is_smart_url = priv->smart_url;
 		GtkWidget *entry, *icon;
-		gboolean smart_url;
+		guint width;
 
-		smart_url = EPHY_BOOKMARK_ACTION (action)->priv->smart_url;
+		width = is_smart_url ? ephy_bookmarks_get_smart_bookmark_width (priv->node) : 0;
+
 		entry = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "entry"));
 		icon = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "icon"));
 
-		if (smart_url)
-		{
-			gtk_widget_hide (icon);
-			gtk_widget_show (entry);
-		}
-		else
-		{
-			gtk_widget_show (icon);
-			gtk_widget_hide (entry);
-		}
+		g_object_set (icon, "visible", !is_smart_url, NULL);
+		g_object_set (entry, "visible", is_smart_url, NULL);
+		gtk_entry_set_width_chars (GTK_ENTRY (entry),
+					   width > 0 ? width : ENTRY_WIDTH_CHARS);
 	}
 }
 

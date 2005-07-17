@@ -800,16 +800,15 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 	    const GnomeVFSDNSSDService *service,
 	    const char *host,
 	    int port,
-	    const GHashTable *text,
+	    /* const */ GHashTable *text,
 	    int text_raw_len,
 	    const char *text_raw,
-	    gpointer callback_data)
+	    EphyBookmarks *bookmarks)
 {
-	EphyBookmarks *bookmarks = (EphyBookmarks *) callback_data;
 	EphyBookmarksPrivate *priv = bookmarks->priv;
 	EphyNode *node;
 	GValue value = { 0, };
-	const char *path;
+	const char *path = NULL;
 	char *url;
 
 	priv->resolve_list = g_list_remove (priv->resolve_list, handle);
@@ -818,9 +817,9 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 
 	if (text != NULL)
 	{
-		path = g_hash_table_lookup ((GHashTable *) text, "path");
+		path = g_hash_table_lookup (text, "path");
 	}
-	else
+	if (path == NULL || path[0] == '\0')
 	{
 		path = "/";
 	}
@@ -847,16 +846,6 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 	g_value_set_boolean (&value, TRUE);
 	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_IMMUTABLE, &value);
 	g_value_unset (&value);
-
-#if 0
-	/* FIXME what was that about ??? */
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, EPHY_NODE_SPECIAL_PRIORITY);
-	ephy_node_set_property (priv->local,
-				EPHY_NODE_KEYWORD_PROP_PRIORITY,
-				&value);
-	g_value_unset (&value);
-#endif
 
 	ephy_node_add_child (priv->bookmarks, node);
 	ephy_node_add_child (priv->local, node);
@@ -899,7 +888,7 @@ browse_cb (GnomeVFSDNSSDBrowseHandle *handle,
 	if (gnome_vfs_dns_sd_resolve (&reshandle,
 				      service->name, service->type, service->domain,
 				      SD_RESOLVE_TIMEOUT,
-				      resolve_cb,
+				      (GnomeVFSDNSSDResolveCallback) resolve_cb,
 				      bookmarks,
 				      NULL) == GNOME_VFS_OK)
 	{
@@ -1046,7 +1035,8 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	g_value_init (&value, G_TYPE_STRING);
 	/* Translators: The text before the "|" is context to help you decide on
 	 * the correct translation. You MUST OMIT it in the translated string. */
-	/* Translators: this topic contains the local websites bookmarks */
+	/* Translators: this is an automatic topic containing local websites bookmarks
+	 * autodiscovered with zeroconf. */
 	g_value_set_string (&value, Q_("bookmarks|Local Sites"));
 	ephy_node_set_property (eb->priv->local,
 			        EPHY_NODE_KEYWORD_PROP_NAME,
@@ -1154,16 +1144,26 @@ static void
 update_has_smart_address (EphyBookmarks *bookmarks, EphyNode *bmk, const char *address)
 {
 	EphyNode *smart_bmks;
-	gboolean smart = FALSE;
+	gboolean smart = FALSE, with_options = FALSE;
 
 	smart_bmks = bookmarks->priv->smartbookmarks;
 
 	if (address)
 	{
 		smart = strstr (address, "%s") != NULL;
+		with_options = strstr (address, "%s%{") != NULL;
 	}
 
-	if (smart)
+	/* if we have a smart bookmark with width specification,
+	 * remove from smart bookmarks first to force an update
+	 * in the toolbar
+	 */
+	if (smart && with_options)
+	{
+		ephy_node_remove_child (smart_bmks, bmk);
+		ephy_node_add_child (smart_bmks, bmk);
+	}
+	else if (smart)
 	{
 		if (!ephy_node_has_child (smart_bmks, bmk))
 		{
@@ -1280,123 +1280,32 @@ ephy_bookmarks_set_icon	(EphyBookmarks *eb,
 	g_value_unset (&value);
 }
 
-static gchar *
-options_skip_spaces (const gchar *str)
-{
-	const gchar *ret = str;
-	while (*ret && g_ascii_isspace (*ret))
-	{
-		++ret;
-	}
-	return (gchar *) ret;
-}
-
+/* name must end with '=' */
 static char *
-options_find_value_end (const gchar *value_start)
+get_option (char *start,
+	    const char *name,
+	    char **optionsend)
 {
-	const gchar *value_end;
-	if (*value_start == '"')
-	{
-		for (value_end = value_start + 1;
-		     *value_end && (*value_end != '"' || *(value_end - 1) == '\\');
-		     ++value_end) ;
-	}
-	else
-	{
-		for (value_end = value_start;
-		     *value_end && ! (g_ascii_isspace (*value_end)
-				      || *value_end == ','
-				      || *value_end == ';');
-		     ++value_end) ;
-	}
-	return (gchar *) value_end;
-}
+	char *end;
 
-static char *
-options_find_next_option (const char *current)
-{
-	const gchar *value_start;
-	const gchar *value_end;
-	const gchar *ret;
-	value_start = strchr (current, '=');
-	if (!value_start) return NULL;
-	value_start = options_skip_spaces (value_start + 1);
-	value_end = options_find_value_end (value_start);
-	if (! (*value_end)) return NULL;
-	for (ret = value_end + 1;
-	     *ret && (g_ascii_isspace (*ret)
-		      || *ret == ','
-		      || *ret == ';');
-	     ++ret);
-	return (char *) ret;
-}
+	*optionsend = start;
 
-static char *
-options_find_first_option (const char *input)
-{
-	const char *start;
+	if (start == NULL || start[0] != '%' || start[1] != '{') return NULL;
+	start += 2;
 
-	if (!input) return NULL;
-	start = strrchr (input, '{');
-	if (!start || !(*start)) return NULL;
-	return options_skip_spaces (start+1);
-}
+	end = strstr (start, "}");
+	if (end == NULL) return NULL;
+	*optionsend = end + 1;
 
-/**
- * Very simple parser for option strings in the
- * form a=b,c=d,e="f g",...
- */
-static gchar *
-smart_url_options_get (const gchar *options, const gchar *option)
-{
-	gchar *ret = NULL;
-	gsize optionlen = strlen (option);
-	const gchar *current = options_find_first_option (options_skip_spaces (options));
+	start = strstr (start, name);
+	if (start == NULL) return NULL;
+	start += strlen (name);
 
-	while (current)
-	{
-		if (!strncmp (option, current, optionlen))
-		{
-			if (g_ascii_isspace (*(current + optionlen)) || *(current + optionlen) == '=')
-			{
-				const gchar *value_start;
-				const gchar *value_end;
-				value_start = strchr (current + optionlen, '=');
-				if (!value_start) continue;
-				value_start = options_skip_spaces (value_start + 1);
-				value_end = options_find_value_end (value_start);
-				if (*value_start == '"') value_start++;
-				if (value_end >= value_start)
-				{
-					ret = g_strndup (value_start, value_end - value_start);
-					break;
-				}
-			}
-		}
-		current = options_find_next_option (current);
-	}
+	/* Find end of option, either ',' or '}' */
+	end = strstr (start, ",");
+	if (end == NULL || end >= *optionsend) end = *optionsend - 1;
 
-	return ret;
-}
-
-static char *
-get_smarturl_only (const char *smarturl)
-{
-	const gchar *openbrace;
-	const gchar *closebrace;
-	const gchar *c;
-
-	openbrace = strchr (smarturl, '{');
-	if (!openbrace) return g_strdup (smarturl);
-	for (c = smarturl; c < openbrace; ++c)
-	{
-		if (!strchr (" \t\n", *c)) return g_strdup (smarturl);
-	}
-
-	closebrace = strchr (openbrace + 1, '}');
-	if (!closebrace) return g_strdup (smarturl);
-
-	return g_strdup (closebrace + 1);
+	return g_strndup (start, end - start);
 }
 
 char *
@@ -1404,49 +1313,80 @@ ephy_bookmarks_solve_smart_url (EphyBookmarks *eb,
 				const char *smart_url,
 				const char *content)
 {
-	gchar *ret;
-	GString *s;
-	gchar *t1;
-	gchar *t2;
-	gchar *encoding;
-	gchar *smarturl_only;
-	gchar *arg;
-	gchar *escaped_arg;
+	GString *result;
+	char *pos, *oldpos, *arg, *escaped_arg, *encoding, *optionsend;
 
-	g_return_val_if_fail (content != NULL, NULL);
+	if (content == NULL || smart_url == NULL) return NULL;
 
-	smarturl_only = get_smarturl_only (smart_url);
+	result = g_string_new_len (NULL, strlen (content) + strlen (smart_url));
 
-	s = g_string_new (NULL);
-
-	encoding = smart_url_options_get (smart_url, "encoding");
-	if (!encoding)
+	/* substitute %s's */
+	oldpos = (char*) smart_url;
+	while ((pos = strstr (oldpos, "%s")) != NULL)
 	{
-		encoding = g_strdup ("UTF-8");
+		g_string_append_len (result, oldpos, pos - oldpos);
+		pos += 2;
+
+		encoding = get_option (pos, "encoding=", &optionsend);
+		if (encoding != NULL)
+		{
+			GError *error = NULL;
+
+			arg = g_convert (content, strlen (content), encoding,
+					 "UTF-8", NULL, NULL, &error);
+			if (error != NULL)
+			{
+				g_warning ("Error when converting arg to encoding '%s': %s\n",
+					   encoding, error->message);
+				g_error_free (error);
+			}
+			else
+			{
+				escaped_arg = gnome_vfs_escape_string (arg);
+				g_string_append (result, escaped_arg);
+				g_free (escaped_arg);
+				g_free (arg);
+			}
+
+			g_free (encoding);
+		}
+		else
+		{
+			arg = gnome_vfs_escape_string (content);
+			g_string_append (result, arg);
+			g_free (arg);
+		}
+
+		oldpos = optionsend;
 	}
+	g_string_append (result, oldpos);
 
-	arg = g_convert (content, strlen (content),
-			 encoding, "UTF-8", NULL, NULL, NULL);
-	if (arg == NULL) return NULL;
-	escaped_arg = gnome_vfs_escape_string (arg);
+	return g_string_free (result, FALSE);
+}
 
-	t1 = smarturl_only;
-	while ((t2 = strstr (t1, "%s")) != NULL)
-	{
-		g_string_append_len (s, t1, t2 - t1);
-		g_string_append (s, escaped_arg);
-		t1 = t2 + 2;
-	}
+guint
+ephy_bookmarks_get_smart_bookmark_width (EphyNode *bookmark)
+{
+	const char *url;
+	char *option, *end, *number;
+	guint width;
 
-	g_string_append (s, t1);
-	ret = g_string_free (s, FALSE);
+	url = ephy_node_get_property_string (bookmark, EPHY_NODE_BMK_PROP_LOCATION);
+	if (url == NULL) return 0;
 
-	g_free (arg);
-	g_free (escaped_arg);
-	g_free (encoding);
-	g_free (smarturl_only);
+	/* this takes the first %s, but that's okay since we only support one text entry box */
+	option = strstr (url, "%s%{");
+	if (option == NULL) return 0;
+	option += 2;
 
-	return ret;
+	number = get_option (option, "width=", &end);
+	if (number == NULL) return 0;
+
+	width = atoi (number);
+	g_print ("Width %s -> %d\n", number, width);
+	g_free (number);
+
+	return width;
 }
 
 EphyNode *
