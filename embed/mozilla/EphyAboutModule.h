@@ -25,40 +25,36 @@
     
 #include <nsError.h>
 #include <nsIAboutModule.h>
-#include <nsIProtocolHandler.h>
 
 /* a9aea13e-21de-4be8-a07e-a05f11658c55 */
-#define EPHY_PROTOCOL_HANDLER_CID \
+#define EPHY_ABOUT_MODULE_CID \
 { 0xa9aea13e, 0x21de, 0x4be8, \
   { 0xa0, 0x7e, 0xa0, 0x5f, 0x11, 0x65, 0x8c, 0x55 } }
 
-#define EPHY_PROTOCOL_HANDLER_CONTRACTID	NS_NETWORK_PROTOCOL_CONTRACTID_PREFIX "epiphany"
-#define EPHY_PROTOCOL_HANDLER_CLASSNAME		"Epiphany Protocol Handler"
-#define EPHY_ABOUT_CONTRACTID			NS_ABOUT_MODULE_CONTRACTID_PREFIX "epiphany"
-#define EPHY_ABOUT_CLASSNAME			"Epiphany's about:epiphany"
+#define EPHY_ABOUT_NETERROR_CONTRACTID	NS_ABOUT_MODULE_CONTRACTID_PREFIX "neterror"
+#define EPHY_ABOUT_NETERROR_CLASSNAME	"Epiphany about:neterror module"
+#define EPHY_ABOUT_EPIPHANY_CONTRACTID	NS_ABOUT_MODULE_CONTRACTID_PREFIX "epiphany"
+#define EPHY_ABOUT_EPIPHANY_CLASSNAME	"Epiphany about:epiphany module"
 
 class nsIChannel;
 class nsIOutputStream;
 class nsIURI;
 
-class EphyProtocolHandler : public nsIProtocolHandler,
-			    public nsIAboutModule
+class EphyAboutModule : public nsIAboutModule
 {
   public:
 	NS_DECL_ISUPPORTS
-	NS_DECL_NSIPROTOCOLHANDLER
+	NS_DECL_NSIABOUTMODULE
 
-	EphyProtocolHandler();
-	virtual ~EphyProtocolHandler();
+	EphyAboutModule();
+	virtual ~EphyAboutModule();
 
   private:
 	nsresult Redirect(const nsACString&, nsIChannel**);
 	nsresult ParseErrorURL(const char*, nsACString&, nsACString&, nsACString&, nsACString&);
 	nsresult GetErrorMessage(nsIURI*, const char*, char**, char**, char**, char**);
-	nsresult HandleEpiphany(nsIURI*, nsIChannel**);
 	nsresult CreateErrorPage(nsIURI*, nsIChannel**);
 	nsresult Write(nsIOutputStream*, const char*);
-	nsresult WriteHTMLEscape(nsIOutputStream*, const char*);
 };
 
 #endif /* EPHY_PROTOCOL_HANDLER_H */

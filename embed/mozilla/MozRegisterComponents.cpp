@@ -43,7 +43,7 @@
 #endif
 
 #ifdef HAVE_GECKO_1_8
-#include "EphyProtocolHandler.h"
+#include "EphyAboutModule.h"
 #endif
 
 #include <nsMemory.h>
@@ -76,7 +76,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSSecurityWarningDialogs)
 #endif
 
 #ifdef HAVE_GECKO_1_8
-NS_GENERIC_FACTORY_CONSTRUCTOR(EphyProtocolHandler)
+NS_GENERIC_FACTORY_CONSTRUCTOR(EphyAboutModule)
 #endif
 
 /* class information */ 
@@ -207,16 +207,16 @@ static const nsModuleComponentInfo sAppComps[] = {
 	},
 #ifdef HAVE_GECKO_1_8
 {
-	EPHY_ABOUT_CLASSNAME,
-	EPHY_PROTOCOL_HANDLER_CID,
-	EPHY_ABOUT_CONTRACTID,
-	EphyProtocolHandlerConstructor
+	EPHY_ABOUT_EPIPHANY_CLASSNAME,
+	EPHY_ABOUT_MODULE_CID,
+	EPHY_ABOUT_EPIPHANY_CONTRACTID,
+	EphyAboutModuleConstructor
 },
 {
-	EPHY_PROTOCOL_HANDLER_CLASSNAME,
-	EPHY_PROTOCOL_HANDLER_CID,
-	EPHY_PROTOCOL_HANDLER_CONTRACTID,
-	EphyProtocolHandlerConstructor
+	EPHY_ABOUT_NETERROR_CLASSNAME,
+	EPHY_ABOUT_MODULE_CID,
+	EPHY_ABOUT_NETERROR_CONTRACTID,
+	EphyAboutModuleConstructor
 },
 #endif
 };

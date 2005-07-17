@@ -42,86 +42,41 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include "EphyProtocolHandler.h"
+#include "EphyAboutModule.h"
 #include "EphyUtils.h"
 
 #include "ephy-debug.h"
 
 #include <string.h>
 
-EphyProtocolHandler::EphyProtocolHandler()
+EphyAboutModule::EphyAboutModule()
 {
-	LOG ("EphyProtocolHandler ctor [%p]\n", this);
+	LOG ("EphyAboutModule ctor [%p]\n", this);
 }
 
-EphyProtocolHandler::~EphyProtocolHandler()
+EphyAboutModule::~EphyAboutModule()
 {
-	LOG ("EphyProtocolHandler dtor [%p]\n", this);
+	LOG ("EphyAboutModule dtor [%p]\n", this);
 }
 
-NS_IMPL_ISUPPORTS2 (EphyProtocolHandler, nsIProtocolHandler, nsIAboutModule)
-
-/* readonly attribute string scheme; */
-NS_IMETHODIMP
-EphyProtocolHandler::GetScheme(nsACString &aScheme)
-{
-	aScheme.Assign("epiphany");
-	return NS_OK;
-}
-
-/* readonly attribute long defaultPort; */
-NS_IMETHODIMP
-EphyProtocolHandler::GetDefaultPort(PRInt32 *aDefaultPort)
-{
-	NS_ENSURE_ARG_POINTER (aDefaultPort);
-
-	*aDefaultPort = -1;
-	return NS_OK;
-}
-
-/* readonly attribute short protocolFlags; */
-NS_IMETHODIMP
-EphyProtocolHandler::GetProtocolFlags(PRUint32 *aProtocolFlags)
-{
-	NS_ENSURE_ARG_POINTER (aProtocolFlags);
-
-	*aProtocolFlags = nsIProtocolHandler::URI_NORELATIVE | nsIProtocolHandler::URI_NOAUTH;
-	return NS_OK;
-} 
-
-/* nsIURI newURI (in string aSpec, in nsIURI aBaseURI); */
-NS_IMETHODIMP
-EphyProtocolHandler::NewURI(const nsACString &aSpec,
-			    const char *aOriginCharset,
-			    nsIURI *aBaseURI,
-			    nsIURI **_retval)
-{
-	nsresult rv;
-	nsCOMPtr<nsIURI> uri (do_CreateInstance("@mozilla.org/network/simple-uri;1", &rv));
-	NS_ENSURE_SUCCESS (rv, rv);
-
-	rv = uri->SetSpec (aSpec);
-	NS_ENSURE_SUCCESS (rv, rv);
-
-	NS_ADDREF(*_retval = uri);
-	return NS_OK;
-}
+NS_IMPL_ISUPPORTS1 (EphyAboutModule, nsIAboutModule)
 
 /* nsIChannel newChannel (in nsIURI aURI); */
 NS_IMETHODIMP
-EphyProtocolHandler::NewChannel(nsIURI *aURI,
-				nsIChannel **_retval)
+EphyAboutModule::NewChannel(nsIURI *aURI,
+			    nsIChannel **_retval)
 {
 	NS_ENSURE_ARG(aURI);
 
-	PRBool isEpiphany = PR_FALSE;
-	if (NS_SUCCEEDED (aURI->SchemeIs ("epiphany", &isEpiphany)) && isEpiphany)
+	nsCAutoString path;
+	aURI->GetPath (path);
+
+	if (strncmp (path.get(), "neterror", strlen ("neterror")) == 0)
 	{
-		return HandleEpiphany (aURI, _retval);
+		return CreateErrorPage (aURI, _retval);
 	}
 
-	PRBool isAbout = PR_FALSE;
-	if (NS_SUCCEEDED (aURI->SchemeIs ("about", &isAbout)) && isAbout)
+	if (strncmp (path.get (), "epiphany", strlen ("epiphany")) == 0)
 	{
 		return Redirect (nsDependentCString ("file://" SHARE_DIR "/epiphany.xhtml"), _retval);
 	}
@@ -129,21 +84,11 @@ EphyProtocolHandler::NewChannel(nsIURI *aURI,
 	return NS_ERROR_ILLEGAL_VALUE;
 }
 
-/* boolean allowPort (in long port, in string scheme); */
-NS_IMETHODIMP 
-EphyProtocolHandler::AllowPort(PRInt32 port,
-			       const char *scheme,
-			       PRBool *_retval)
-{
-	*_retval = PR_FALSE;
-	return NS_OK;
-}
-
 /* private functions */
 
 nsresult
-EphyProtocolHandler::Redirect(const nsACString &aURL,
-			      nsIChannel **_retval)
+EphyAboutModule::Redirect(const nsACString &aURL,
+			  nsIChannel **_retval)
 {
 	nsresult rv;
 	nsCOMPtr<nsIIOService> ioService;
@@ -176,11 +121,11 @@ EphyProtocolHandler::Redirect(const nsACString &aURL,
 }
 
 nsresult
-EphyProtocolHandler::ParseErrorURL(const char *aURL,
-				   nsACString &aError,
-				   nsACString &aRawOriginURL,
-				   nsACString &aOriginURL,
-				   nsACString &aOriginCharset)
+EphyAboutModule::ParseErrorURL(const char *aURL,
+			       nsACString &aError,
+			       nsACString &aRawOriginURL,
+			       nsACString &aOriginURL,
+			       nsACString &aOriginCharset)
 {
 	/* The error page URL is of the form "epiphany:error?e=<error>&u=<URL>&c=<charset>&d=<description>" */
 	const char *query = strstr (aURL, "?");
@@ -223,12 +168,12 @@ EphyProtocolHandler::ParseErrorURL(const char *aURL,
 }
 
 nsresult
-EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
-				     const char *aError,
-				     char **aPrimary,
-				     char **aSecondary,
-				     char **aTertiary,
-				     char **aLinkIntro)
+EphyAboutModule::GetErrorMessage(nsIURI *aURI,
+				 const char *aError,
+				 char **aPrimary,
+				 char **aSecondary,
+				 char **aTertiary,
+				 char **aLinkIntro)
 {
 	if (strcmp (aError, "protocolNotFound") == 0)
 	{
@@ -391,25 +336,8 @@ EphyProtocolHandler::GetErrorMessage(nsIURI *aURI,
 }
 
 nsresult
-EphyProtocolHandler::HandleEpiphany(nsIURI *aErrorURI,
-				     nsIChannel **_retval)
-{
-	NS_ENSURE_ARG (aErrorURI);
-
-	nsCAutoString spec;
-	aErrorURI->GetSpec (spec);
-
-	if (g_str_has_prefix (spec.get(), "epiphany:error?"))
-	{
-		return CreateErrorPage (aErrorURI, _retval);
-	}
-
-	return NS_ERROR_ILLEGAL_VALUE;
-}
-
-nsresult
-EphyProtocolHandler::CreateErrorPage(nsIURI *aErrorURI,
-				     nsIChannel **_retval)
+EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
+				 nsIChannel **_retval)
 {
         /* First parse the arguments */
         nsresult rv = NS_ERROR_ILLEGAL_VALUE;
@@ -429,13 +357,17 @@ EphyProtocolHandler::CreateErrorPage(nsIURI *aErrorURI,
 	char *primary = nsnull, *secondary = nsnull, *tertiary = nsnull, *linkintro = nsnull;
 	rv = GetErrorMessage (uri, error.get(), &primary, &secondary, &tertiary, &linkintro);
 
-	/* we don't know about this error code; forward to mozilla's impl */
+	/* we don't know about this error code.
+	 * FIXME: We'd like to forward to mozilla's about:neterror handler,
+	 * but I don't know how to. So just redirect to the same page that
+	 * mozilla's handler redirects to.
+	 */
 	if (rv == NS_ERROR_ILLEGAL_VALUE)
 	{
 		nsCAutoString url(spec);
 
-		/* remove "epiphany:error" part and insert mozilla's error page url */
-		url.Cut(0, strlen ("epiphany:error"));
+		/* remove "about:neterror" part and insert mozilla's error page url */
+		url.Cut(0, strlen ("about:neterror"));
 		url.Insert("chrome://global/content/netError.xhtml", 0);
 
 		return Redirect (url, _retval);
@@ -580,20 +512,9 @@ EphyProtocolHandler::CreateErrorPage(nsIURI *aErrorURI,
 }
 
 nsresult
-EphyProtocolHandler::Write(nsIOutputStream *aStream,
-			   const char *aText)
+EphyAboutModule::Write(nsIOutputStream *aStream,
+		       const char *aText)
 {
 	PRUint32 bytesWritten;
 	return aStream->Write (aText, strlen (aText), &bytesWritten);
-}
-
-nsresult
-EphyProtocolHandler::WriteHTMLEscape(nsIOutputStream *aStream,
-				     const char *aText)
-{
-	char *text = g_markup_escape_text (aText, strlen (aText));
-	nsresult rv = Write (aStream, text);
-	g_free (text);
-
-	return rv;
 }

@@ -1383,10 +1383,9 @@ ephy_bookmarks_get_smart_bookmark_width (EphyNode *bookmark)
 	if (number == NULL) return 0;
 
 	width = atoi (number);
-	g_print ("Width %s -> %d\n", number, width);
 	g_free (number);
 
-	return width;
+	return CLAMP (width, 1, 64);
 }
 
 EphyNode *
