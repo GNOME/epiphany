@@ -1,5 +1,13 @@
 2005-07-17  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks.c: (get_option),
+	(ephy_bookmarks_get_smart_bookmark_width):
+
+	Only allow alphanumeric option arguments, and limit length to 32
+	characters at most. Use g_ascii_strtoull.
+
+2005-07-17  Christian Persch  <chpe@cvs.gnome.org>
+
 	A embed/mozilla/EphyAboutModule.cpp:
 	A embed/mozilla/EphyAboutModule.h:
 	R embed/mozilla/EphyProtocolHandler.cpp:

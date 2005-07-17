@@ -1286,7 +1286,7 @@ get_option (char *start,
 	    const char *name,
 	    char **optionsend)
 {
-	char *end;
+	char *end, *p;
 
 	*optionsend = start;
 
@@ -1304,6 +1304,13 @@ get_option (char *start,
 	/* Find end of option, either ',' or '}' */
 	end = strstr (start, ",");
 	if (end == NULL || end >= *optionsend) end = *optionsend - 1;
+
+	/* limit option length and sanity-check it */
+	if (end - start > 32) return NULL;
+	for (p = start; p < end; ++p)
+	{
+		if (!g_ascii_isalnum (*p)) return NULL;
+	}
 
 	return g_strndup (start, end - start);
 }
@@ -1382,7 +1389,7 @@ ephy_bookmarks_get_smart_bookmark_width (EphyNode *bookmark)
 	number = get_option (option, "width=", &end);
 	if (number == NULL) return 0;
 
-	width = atoi (number);
+	width = (guint) g_ascii_strtoull (number, NULL, 10);
 	g_free (number);
 
 	return CLAMP (width, 1, 64);
