@@ -1298,7 +1298,7 @@ get_option (char *start,
 	*optionsend = end + 1;
 
 	start = strstr (start, name);
-	if (start == NULL) return NULL;
+	if (start == NULL || start > end) return NULL;
 	start += strlen (name);
 
 	/* Find end of option, either ',' or '}' */
