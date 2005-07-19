@@ -683,6 +683,7 @@ dnl *****************
 dnl API Documentation
 dnl *****************
 
+GNOME_DOC_INIT
 GTK_DOC_CHECK([1.0])
 
 dnl ************
@@ -707,12 +708,6 @@ embed/mozilla/Makefile
 src/Makefile
 src/bookmarks/Makefile
 help/Makefile
-help/C/Makefile
-help/es/Makefile
-help/eu/Makefile
-help/fi/Makefile
-help/ja/Makefile
-help/uk/Makefile
 po/Makefile.in
 ])
 

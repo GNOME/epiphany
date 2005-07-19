@@ -12,8 +12,7 @@ EXTRA_DIST = 			\
 	intltool-update.in	\
 	intltool-extract.in	\
 	po/LINGUAS		\
-	xmldocs.make		\
-	omf.make		\
+	gnome-doc-utils.make	\
 	COPYING.README		\
 	HACKING			\
 	MAINTAINERS		\
@@ -23,6 +22,7 @@ EXTRA_DIST = 			\
 DISTCLEANFILES = 		\
 	intltool-extract 	\
 	intltool-merge 		\
-	intltool-update
+	intltool-update		\
+	gnome-doc-utils.make
 
-DISTCHECK_CONFIGURE_FLAGS = --enable-python --enable-gtk-doc --disable-schemas-install --with-mozilla=$(MOZILLA)
+DISTCHECK_CONFIGURE_FLAGS = --enable-dbus --enable-python --enable-gtk-doc --disable-schemas-install --disable-scrollkeeper --with-mozilla=$(MOZILLA)
