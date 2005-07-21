@@ -234,12 +234,15 @@ endif
 
 BUILT_SOURCES =	\
 	$(CORBA_SOURCE)	\
-	$(TYPES_SOURCE)	\
-	$(PYPHANY_SOURCE)
+	$(TYPES_SOURCE)
 
 TYPES_SOURCE = \
 	ephy-type-builtins.c	\
 	ephy-type-builtins.h
+
+if ENABLE_PYTHON
+BUILT_SOURCES += $(PYPHANY_SOURCE)
+endif
 
 stamp_files = \
 	stamp-ephy-type-builtins.c	\
@@ -296,3 +299,143 @@ epiphany.c: epiphany.defs epiphany.override
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
+
+# update rules for python bindings
+if ENABLE_PYTHON
+
+BINDING_HEADERS_SRCDIR_IN = \
+	embed/ephy-command-manager.h			\
+	embed/ephy-cookie-manager.h			\
+	embed/ephy-embed-event.h			\
+	embed/ephy-embed-factory.h			\
+	embed/ephy-embed.h				\
+	embed/ephy-embed-persist.h			\
+	embed/ephy-embed-shell.h			\
+	embed/ephy-embed-single.h			\
+	embed/ephy-favicon-cache.h			\
+	embed/ephy-history.h				\
+	embed/ephy-password-manager.h			\
+	embed/ephy-permission-manager.h			\
+	lib/ephy-dialog.h				\
+	lib/ephy-file-chooser.h				\
+	lib/ephy-node-db.h				\
+	lib/ephy-node-filter.h				\
+	lib/ephy-node.h					\
+	lib/ephy-state.h				\
+	lib/widgets/ephy-node-view.h			\
+	lib/widgets/ephy-search-entry.h			\
+	lib/widgets/ephy-spinner.h			\
+	lib/widgets/ephy-tree-model-node.h		\
+	lib/widgets/ephy-tree-model-sort.h		\
+	src/bookmarks/ephy-bookmarksbar.h		\
+	src/bookmarks/ephy-bookmarksbar-model.h		\
+	src/bookmarks/ephy-bookmarks.h			\
+	src/ephy-extension.h				\
+	src/ephy-extensions-manager.h			\
+	src/ephy-link-action.h				\
+	src/ephy-link.h					\
+	src/ephy-location-action.h			\
+	src/ephy-notebook.h				\
+	src/ephy-session.h				\
+	src/ephy-shell.h				\
+	src/ephy-statusbar.h				\
+	src/ephy-tab.h					\
+	src/ephy-toolbar.h				\
+	src/ephy-toolbars-model.h			\
+	src/ephy-window.h
+
+BINDING_HEADERS_SRCDIR_IGNORE_IN = \
+	embed/ephy-download.h				\
+	embed/ephy-embed-dialog.h			\
+	embed/ephy-embed-find.h				\
+	embed/ephy-embed-prefs.h			\
+	embed/ephy-encodings.h				\
+	lib/ephy-debug.h				\
+	lib/ephy-dnd.h					\
+	lib/ephy-file-helpers.h				\
+	lib/ephy-glade.h				\
+	lib/ephy-gui.h					\
+	lib/ephy-langs.h				\
+	lib/ephy-loader.h				\
+	lib/ephy-module.h				\
+	lib/ephy-node-common.h				\
+	lib/ephy-object-helpers.h			\
+	lib/ephy-prefs.h				\
+	lib/ephy-shlib-loader.h				\
+	lib/ephy-signal-accumulator.h			\
+	lib/ephy-stock-icons.h				\
+	lib/ephy-string.h				\
+	lib/ephy-zoom.h					\
+	lib/widgets/ephy-location-entry.h		\
+	lib/widgets/ephy-zoom-action.h			\
+	lib/widgets/ephy-zoom-control.h			\
+	src/bookmarks/ephy-bookmark-action.h		\
+	src/bookmarks/ephy-bookmark-properties.h	\
+	src/bookmarks/ephy-bookmarks-editor.h		\
+	src/bookmarks/ephy-bookmarks-export.h		\
+	src/bookmarks/ephy-bookmarks-import.h		\
+	src/bookmarks/ephy-bookmarks-menu.h		\
+	src/bookmarks/ephy-favorites-menu.h		\
+	src/bookmarks/ephy-new-bookmark.h		\
+	src/bookmarks/ephy-topic-action.h		\
+	src/bookmarks/ephy-topics-selector.h		\
+	src/ephy-action-helper.h			\
+	src/ephy-automation.h				\
+	src/ephy-completion-model.h			\
+	src/ephy-encoding-dialog.h			\
+	src/ephy-encoding-menu.h			\
+	src/ephy-find-toolbar.h				\
+	src/ephy-fullscreen-popup.h			\
+	src/ephy-go-action.h				\
+	src/ephy-history-window.h			\
+	src/ephy-home-action.h				\
+	src/ephy-lockdown.h				\
+	src/ephy-navigation-action.h			\
+	src/ephy-python-extension.h			\
+	src/ephy-python.h				\
+	src/ephy-python-loader.h			\
+	src/ephy-tabs-menu.h				\
+	src/ephy-toolbar-editor.h
+
+if ENABLE_DBUS
+BINDING_HEADERS_SRCDIR_IN += \
+	lib/ephy-dbus.h
+else
+BINDING_HEADERS_SRCDIR_IGNORE_IN += \
+	lib/ephy-dbus.h
+endif
+
+BINDING_HEADERS_BUILDDIR_IN = \
+	embed/ephy-embed-type-builtins.h		\
+	lib/egg/eggtypebuiltins.h			\
+	lib/ephy-lib-type-builtins.h			\
+	src/bookmarks/ephy-bookmarks-type-builtins.h	\
+	src/ephy-type-builtins.h
+
+BINDING_HEADERS_BUILDDIR_IGNORE_IN = \
+	lib/ephy-marshal.h
+
+BINDING_HEADERS_SRCDIR		:= $(addprefix $(top_srcdir)/,$(BINDING_HEADERS_SRCDIR_IN))
+BINDING_HEADERS_SRCDIR_IGNORE	:= $(addprefix $(top_srcdir)/,$(BINDING_HEADERS_SRCDIR_IGNORE_IN))
+BINDING_HEADERS_BUILDDIR	:= $(addprefix $(top_builddir)/,$(BINDING_HEADERS_BUILDDIR_IN))
+BINDING_HEADERS_BUILDDIR_IGNORE	:= $(addprefix $(top_builddir)/,$(BINDING_HEADERS_BUILDDIR_IGNORE_IN))
+
+BINDING_HEADERS_ALL = $(find $(top_srcdir) $(top_builddir) -type f -name 'ephy-*.h' | sort | uniq )
+
+BINDING_HEADERS_ALL_KNOWN = \
+	$(BINDING_HEADERS_SRCDIR) 		\
+	$(BINDING_HEADERS_SRCDIR_IGNORE)	\
+ 	$(BINDING_HEADERS_BUILDDIR)		\
+	$(BINDING_HEADERS_BUILDDIR_IGNORE)
+ 
+BINDING_HEADERS_ALL_UNKNOWN = $(filter-out $(BINDING_HEADERS_ALL_KNOWN),$(BINDING_HEADERS_ALL))
+
+regenerate-python-binding:
+	$(PYGTK_H2DEF) $(sort $(BINDING_HEADERS_SRCDIR) $(BINDING_HEADERS_BUILDDIR)) > epiphany.defs.new
+
+check-python-binding:
+	test -z "$(BINDING_HEADERS_ALL_UNKNOWN)"
+
+check-local: check-python-binding
+
+endif
