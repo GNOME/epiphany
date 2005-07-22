@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany Web Browser\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-05 05:18+0000\n"
-"PO-Revision-Date: 2005-07-10 01:18+0300\n"
+"POT-Creation-Date: 2005-07-22 13:23+0000\n"
+"PO-Revision-Date: 2005-07-22 19:17+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -595,13 +595,13 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5 sõrmejälg:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:997
+#: ../embed/mozilla/GtkNSSDialogs.cpp:989
 msgid "Organization:"
 msgstr "Organisatsioon:"
 
 #: ../data/glade/certificate-dialogs.glade.h:16
 msgid "Organizational Unit:"
-msgstr ""
+msgstr "Organisatsiooniline üksus:"
 
 #: ../data/glade/certificate-dialogs.glade.h:17
 msgid "SHA1 Fingerprint:"
@@ -1429,7 +1429,7 @@ msgstr "Salvesta"
 
 #: ../embed/mozilla/ContentHandler.cpp:286
 msgid "Download the unsafe file?"
-msgstr ""
+msgstr "Kas seda potentsiaalselt ohtlikku faili võib alla laadida?"
 
 #: ../embed/mozilla/ContentHandler.cpp:289
 msgid ""
@@ -1441,7 +1441,7 @@ msgstr ""
 #: ../embed/mozilla/ContentHandler.cpp:300
 #, c-format
 msgid "Open this file with \"%s\"?"
-msgstr ""
+msgstr "Kas avada fail \"%s\" abil?"
 
 #. translators: %s is the name of the application
 #: ../embed/mozilla/ContentHandler.cpp:305
@@ -1464,6 +1464,158 @@ msgstr ""
 #: ../embed/mozilla/ContentHandler.cpp:323
 msgid "_Save As..."
 msgstr "Salvesta _kui..."
+
+#. Translators: %s is the name of a protocol, like "http" etc.
+#: ../embed/mozilla/EphyAboutModule.cpp:184
+#, c-format
+msgid "“%s” protocol is not supported."
+msgstr ""
+
+#. FIXME: get the list of supported protocols from necko
+#: ../embed/mozilla/EphyAboutModule.cpp:186
+msgid ""
+"Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
+msgstr ""
+
+#. Translators: %s is the path and filename, for example "/home/user/test.html"
+#: ../embed/mozilla/EphyAboutModule.cpp:195
+#, c-format
+msgid "File “%s” not found."
+msgstr "Faili “%s” ei leitud."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:196
+msgid "Check the location of the file and try again."
+msgstr "Kontrolli faili asukohta ja proovi uuesti."
+
+#. Translators: %s is the hostname, like "www.example.com"
+#: ../embed/mozilla/EphyAboutModule.cpp:204
+#, c-format
+msgid "“%s” could not be found."
+msgstr "“%s” pole võimalik leida."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:206
+msgid ""
+"Check that you are connected to the internet, and that the address is "
+"correct."
+msgstr ""
+
+#: ../embed/mozilla/EphyAboutModule.cpp:208
+msgid "If this page used to exist, you may find an archived version:"
+msgstr ""
+
+#: ../embed/mozilla/EphyAboutModule.cpp:217
+#, c-format
+msgid "“%s” refused the connection."
+msgstr ""
+
+#: ../embed/mozilla/EphyAboutModule.cpp:219
+#: ../embed/mozilla/EphyAboutModule.cpp:232
+#: ../embed/mozilla/EphyAboutModule.cpp:247
+#: ../embed/mozilla/EphyAboutModule.cpp:292
+#: ../embed/mozilla/EphyAboutModule.cpp:317
+msgid ""
+"The server may be busy or you may have a network connection problem. Try "
+"again later."
+msgstr ""
+
+#: ../embed/mozilla/EphyAboutModule.cpp:221
+#: ../embed/mozilla/EphyAboutModule.cpp:234
+#: ../embed/mozilla/EphyAboutModule.cpp:249
+#: ../embed/mozilla/EphyAboutModule.cpp:266
+#: ../embed/mozilla/EphyAboutModule.cpp:279
+#: ../embed/mozilla/EphyAboutModule.cpp:294
+#: ../embed/mozilla/EphyAboutModule.cpp:319
+msgid "There may be an old version of the page you wanted:"
+msgstr ""
+
+#: ../embed/mozilla/EphyAboutModule.cpp:230
+#, c-format
+msgid "“%s” interrupted the connection."
+msgstr "“%s” katkestas ühenduse."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:243
+#, c-format
+msgid "“%s” is not responding."
+msgstr "“%s” ei vasta."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:245
+msgid "The connection was lost because the server took too long to respond."
+msgstr ""
+
+#: ../embed/mozilla/EphyAboutModule.cpp:253
+msgid "Invalid address."
+msgstr "Vigane aadress"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:254
+msgid "The address you entered is not valid."
+msgstr "Sinu sisestatud aadress on vigane."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:263
+#, c-format
+msgid "“%s” redirected too many times."
+msgstr "“%s” suunati ümber liiga palju kordi."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:265
+msgid "The redirection has been stopped for security reasons."
+msgstr "Turvakaalutlustel ümbersuunamine lõpetati."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:275
+#, c-format
+msgid "“%s” requires an encrypted connection."
+msgstr "“%s” nõuab krüptitud ühendust."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:277
+msgid ""
+"The document could not be loaded because encryption support is not installed."
+msgstr ""
+
+#: ../embed/mozilla/EphyAboutModule.cpp:288
+#, c-format
+msgid "“%s” dropped the connection."
+msgstr ""
+
+#: ../embed/mozilla/EphyAboutModule.cpp:290
+#: ../embed/mozilla/EphyAboutModule.cpp:315
+msgid "The server dropped the connection before any data could be read."
+msgstr ""
+
+#: ../embed/mozilla/EphyAboutModule.cpp:298
+msgid "Cannot load document in offline mode."
+msgstr "Autonoomses režiimis pole võimalik dokumenti laadida."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:299
+msgid ""
+"This document cannot be viewed in offline mode. Set Epiphany to “online” and "
+"try again."
+msgstr ""
+
+#: ../embed/mozilla/EphyAboutModule.cpp:313
+#, c-format
+msgid "“%s” denied access to port “%d”."
+msgstr "“%s” keelab ligipääsu pordile “%d”."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:324
+msgid "Could not connect to proxy server."
+msgstr "Proksiserveriga pole võimalik ühenduda."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:325
+msgid ""
+"Check the proxy server settings in Control Center. If the connection still "
+"fails, there may be a problem with your proxy server or your network "
+"connection."
+msgstr ""
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/EphyAboutModule.cpp:463
+msgid "You may find an old version:|in the Google Cache"
+msgstr ""
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/EphyAboutModule.cpp:471
+msgid "You may find an old version:|in the Internet Archive"
+msgstr ""
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:321
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
@@ -1515,7 +1667,7 @@ msgstr "Sertifikaadi ü_ksikasjad"
 
 #. Add the buttons
 #: ../embed/mozilla/GtkNSSDialogs.cpp:232
-#: ../embed/mozilla/GtkNSSDialogs.cpp:540
+#: ../embed/mozilla/GtkNSSDialogs.cpp:539
 msgid "_View Certificate"
 msgstr "_Ava sertifikaat"
 
@@ -1612,17 +1764,17 @@ msgstr ""
 msgid "Please ask your system administrator for assistance."
 msgstr ""
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:543
+#: ../embed/mozilla/GtkNSSDialogs.cpp:537
+msgid "Trust new Certificate Authority?"
+msgstr ""
+
+#: ../embed/mozilla/GtkNSSDialogs.cpp:542
 msgid "_Trust CA"
 msgstr ""
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:565
+#: ../embed/mozilla/GtkNSSDialogs.cpp:564
 #, c-format
-msgid "Trust \"%s\" to identify:"
-msgstr ""
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:568
-msgid "Trust new Certificate Authority?"
+msgid "Trust new Certificate Authority \"%s\" to identify web sites?"
 msgstr ""
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:569
@@ -1631,113 +1783,109 @@ msgid ""
 "certificate is authentic."
 msgstr ""
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:579
-msgid "_Web sites"
-msgstr "_Veebisaidid"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:648
+#: ../embed/mozilla/GtkNSSDialogs.cpp:640
 msgid "Certificate already exists."
 msgstr "Sertifikaat on juba olemas."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:649
+#: ../embed/mozilla/GtkNSSDialogs.cpp:641
 msgid "The certificate has already been imported."
 msgstr "Sertifikaat on juba imporditud."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:774
+#: ../embed/mozilla/GtkNSSDialogs.cpp:766
 msgid "_Backup Certificate"
 msgstr ""
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:781
+#: ../embed/mozilla/GtkNSSDialogs.cpp:773
 msgid "Select password."
 msgstr "Vali parool."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:782
+#: ../embed/mozilla/GtkNSSDialogs.cpp:774
 msgid "Select a password to protect this certificate."
 msgstr "Parooli valimine selle sertifikaadi kaitsmiseks."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:794
-#: ../embed/mozilla/GtkNSSDialogs.cpp:904
+#: ../embed/mozilla/GtkNSSDialogs.cpp:786
+#: ../embed/mozilla/GtkNSSDialogs.cpp:896
 msgid "_Password:"
 msgstr "_Parool:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:808
+#: ../embed/mozilla/GtkNSSDialogs.cpp:800
 msgid "Con_firm password:"
 msgstr ""
 
 #. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:820
+#: ../embed/mozilla/GtkNSSDialogs.cpp:812
 msgid "Password quality:"
 msgstr "Parooli kvaliteet:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:877
+#: ../embed/mozilla/GtkNSSDialogs.cpp:869
 msgid "I_mport Certificate"
 msgstr "I_mpordi sertifikaat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:893
+#: ../embed/mozilla/GtkNSSDialogs.cpp:885
 msgid "Password required."
 msgstr ""
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:894
+#: ../embed/mozilla/GtkNSSDialogs.cpp:886
 msgid "Enter the password for this certificate."
 msgstr "Sisesta selle sertifikaadi jaoks parool."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:975
+#: ../embed/mozilla/GtkNSSDialogs.cpp:967
 msgid "Certificate Revocation list successfully imported."
 msgstr "Sertifikaatide tühistusnimekiri on edukalt imporditud."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:976
+#: ../embed/mozilla/GtkNSSDialogs.cpp:968
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "Sertifikaatide tühistusnimekiri (CRL) on imporditud:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1002
+#: ../embed/mozilla/GtkNSSDialogs.cpp:994
 msgid "Unit:"
 msgstr "Ühik:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1007
+#: ../embed/mozilla/GtkNSSDialogs.cpp:999
 msgid "Next Update:"
 msgstr "Järgmine uuendamine:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1034
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1026
 msgid "Not part of certificate"
 msgstr "Ei kuulu sertifikaadi juurde"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1320
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1312
 msgid "Certificate Properties"
 msgstr "Sertifikaadi omadused"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1342
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1334
 msgid "This certificate has been verified for the following uses:"
 msgstr ""
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1345
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1337
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Sertifikaati pole võimalik verifitseerida kuna see on tühistatud."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1348
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
 msgid "Could not verify this certificate because it has expired."
 msgstr "Sertifikaati pole võimalik verifitseerida kuna see on aegunud."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1351
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1343
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Sertifikaati pole võimalik verifitseerida kuna see pole usaldusväärne."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1354
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1346
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "Sertifikaati pole võimalik verifitseerida kuna selle väljaandja pole "
 "usaldusväärne."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1357
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1349
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr ""
 "Sertifikaati pole võimalik verifitseerida kuna selle väljaandja on tundmatu."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1360
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1352
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1357
 msgid "Could not verify this certificate for unknown reasons."
 msgstr ""
 
@@ -1817,7 +1965,7 @@ msgid ""
 "intercepted by a third party."
 msgstr ""
 
-#: ../embed/mozilla/MozDownload.cpp:690
+#: ../embed/mozilla/MozDownload.cpp:692
 msgid "Files"
 msgstr "Failid"
 
@@ -2104,7 +2252,7 @@ msgid "History"
 msgstr "Ajalugu"
 
 #: ../lib/ephy-stock-icons.c:59 ../src/bookmarks/ephy-bookmarks-editor.c:757
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1619
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1628
 #: ../src/bookmarks/ephy-topic-action.c:930 ../src/ephy-window.c:1089
 msgid "Bookmarks"
 msgstr "Järjehoidjad"
@@ -2157,14 +2305,14 @@ msgstr "400%"
 msgid "Drag and drop this icon to create a link to this page"
 msgstr ""
 
-#: ../src/bookmarks/ephy-bookmark-action.c:296
+#: ../src/bookmarks/ephy-bookmark-action.c:294
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:552
+#: ../src/bookmarks/ephy-bookmark-action.c:550
 #: ../src/bookmarks/ephy-bookmarks-editor.c:181
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1239
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1241
 #: ../src/bookmarks/ephy-topic-action.c:448 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:711
 msgid "Open in New _Tab"
@@ -2173,26 +2321,26 @@ msgstr[0] "A_va uues sakis"
 msgstr[1] "A_va uutes sakkides"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmark-action.c:558
+#: ../src/bookmarks/ephy-bookmark-action.c:556
 #: ../src/bookmarks/ephy-bookmarks-editor.c:178
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1236
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1238
 #: ../src/ephy-history-window.c:170 ../src/ephy-history-window.c:708
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "_Ava uues aknas"
 msgstr[1] "_Ava uutes akendes"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:579
+#: ../src/bookmarks/ephy-bookmark-action.c:577
 #: ../src/bookmarks/ephy-topic-action.c:770
 msgid "_Remove from Toolbar"
 msgstr "_Eemalda tööriistaribalt"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:592
+#: ../src/bookmarks/ephy-bookmark-action.c:590
 #: ../src/bookmarks/ephy-topic-action.c:783
 msgid "Move _Left"
 msgstr "Liiguta _vasakule"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:599
+#: ../src/bookmarks/ephy-bookmark-action.c:597
 #: ../src/bookmarks/ephy-topic-action.c:790
 msgid "Move Ri_ght"
 msgstr "Liiguta _paremale"
@@ -2318,7 +2466,7 @@ msgid "Cut the selection"
 msgstr "Lõika valik"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:206
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1249
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1251
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:721
 #: ../src/ephy-window.c:170
 msgid "_Copy"
@@ -2506,27 +2654,27 @@ msgstr "_Impordi"
 msgid "Import bookmarks from:"
 msgstr "Kustkohast järjehoidjaid imporditakse:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1245
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1247
 #: ../src/ephy-history-window.c:717
 msgid "_Copy Address"
 msgstr "_Kopeeri lehekülje aadress"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1486
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1495
 #: ../src/ephy-history-window.c:1033
 msgid "_Search:"
 msgstr "_Otsi:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1685
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1694
 #: ../src/bookmarks/ephy-topics-selector.c:198
 msgid "Topics"
 msgstr "Teemad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1755
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1764
 #: ../src/ephy-history-window.c:1316
 msgid "Title"
 msgstr "Pealkiri"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1761
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1770
 #: ../src/ephy-history-window.c:1322
 msgid "Address"
 msgstr "Aadress"
@@ -2535,80 +2683,91 @@ msgstr "Aadress"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: ../src/bookmarks/ephy-bookmarks.c:87
+#: ../src/bookmarks/ephy-bookmarks.c:94
 msgid "Search the web"
 msgstr "Otsi internetist"
 
-#: ../src/bookmarks/ephy-bookmarks.c:87
+#: ../src/bookmarks/ephy-bookmarks.c:94
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8&hl=et"
 
-#: ../src/bookmarks/ephy-bookmarks.c:93
+#: ../src/bookmarks/ephy-bookmarks.c:100
 msgid "Entertainment"
 msgstr "Meelelahutus"
 
-#: ../src/bookmarks/ephy-bookmarks.c:94
+#: ../src/bookmarks/ephy-bookmarks.c:101
 msgid "News"
 msgstr "Uudised"
 
-#: ../src/bookmarks/ephy-bookmarks.c:95
+#: ../src/bookmarks/ephy-bookmarks.c:102
 msgid "Shopping"
 msgstr "Šoppamine"
 
-#: ../src/bookmarks/ephy-bookmarks.c:96
+#: ../src/bookmarks/ephy-bookmarks.c:103
 msgid "Sports"
 msgstr "Sport"
 
-#: ../src/bookmarks/ephy-bookmarks.c:97
+#: ../src/bookmarks/ephy-bookmarks.c:104
 msgid "Travel"
 msgstr "Reisimine"
 
-#: ../src/bookmarks/ephy-bookmarks.c:98
+#: ../src/bookmarks/ephy-bookmarks.c:105
 msgid "Work"
 msgstr "Töö"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:550
+#: ../src/bookmarks/ephy-bookmarks.c:567
 #, c-format
 msgid "Update bookmark \"%s\"?"
 msgstr "Uuendada järjehoidjat \"%s\"?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:555
+#: ../src/bookmarks/ephy-bookmarks.c:572
 #, c-format
 msgid "The bookmarked page has moved to \"%s\"."
 msgstr ""
 
-#: ../src/bookmarks/ephy-bookmarks.c:559
+#: ../src/bookmarks/ephy-bookmarks.c:576
 msgid "_Don't Update"
 msgstr "Ä_ra uuenda"
 
-#: ../src/bookmarks/ephy-bookmarks.c:561
+#: ../src/bookmarks/ephy-bookmarks.c:578
 msgid "_Update"
 msgstr "_Uuenda"
 
-#: ../src/bookmarks/ephy-bookmarks.c:564
+#: ../src/bookmarks/ephy-bookmarks.c:581
 msgid "Update Bookmark?"
 msgstr "Uuendada järjehoidjat?"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/bookmarks/ephy-bookmarks.c:805
+#. Translators: this topic contains all bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:961
 msgid "bookmarks|All"
 msgstr "Kõik"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/bookmarks/ephy-bookmarks.c:841
+#. Translators: this topic contains the most used bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:997
 msgid "bookmarks|Most Visited"
 msgstr "Tihedamini külastatud"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/bookmarks/ephy-bookmarks.c:860
+#. Translators: this topic contains the not categorized bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1016
 msgid "bookmarks|Not Categorized"
 msgstr "Kategoriseerimata"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this is an automatic topic containing local websites bookmarks
+#. * autodiscovered with zeroconf.
+#: ../src/bookmarks/ephy-bookmarks.c:1040
+msgid "bookmarks|Local Sites"
+msgstr "bookmarks|Kohalikud saidid"
 
 #: ../src/bookmarks/ephy-new-bookmark.c:275
 msgid "Add Bookmark"
@@ -2648,23 +2807,23 @@ msgstr "Teised kodeeringud"
 msgid "_Automatic"
 msgstr "_Automaaselt"
 
-#: ../src/ephy-find-toolbar.c:396
+#: ../src/ephy-find-toolbar.c:404
 msgid "Find:"
 msgstr "Otsing:"
 
-#: ../src/ephy-find-toolbar.c:412 ../src/ephy-find-toolbar.c:413
+#: ../src/ephy-find-toolbar.c:420 ../src/ephy-find-toolbar.c:421
 msgid "Find Next"
 msgstr "Otsi järgmist"
 
-#: ../src/ephy-find-toolbar.c:416
+#: ../src/ephy-find-toolbar.c:424
 msgid "Find next occurrence of the search string"
 msgstr "Otsi otsingufraasi järgmist esinemist"
 
-#: ../src/ephy-find-toolbar.c:423 ../src/ephy-find-toolbar.c:424
+#: ../src/ephy-find-toolbar.c:431 ../src/ephy-find-toolbar.c:432
 msgid "Find Previous"
 msgstr "Otsi eelmist"
 
-#: ../src/ephy-find-toolbar.c:427
+#: ../src/ephy-find-toolbar.c:435
 msgid "Find previous occurrence of the search string"
 msgstr "Otsi otsingufraasi eelmist esinemist"
 
@@ -2851,26 +3010,26 @@ msgid ""
 "attempting to locate the automation object."
 msgstr ""
 
-#: ../src/ephy-tab.c:449 ../src/ephy-tab.c:1861
+#: ../src/ephy-tab.c:457 ../src/ephy-tab.c:1992
 msgid "Blank page"
 msgstr "Tühi lehekülg"
 
-#: ../src/ephy-tab.c:1284
+#: ../src/ephy-tab.c:1415
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Ümbersuunatud aadressile %s..."
 
-#: ../src/ephy-tab.c:1288
+#: ../src/ephy-tab.c:1419
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Andmete laadimine %s-st..."
 
-#: ../src/ephy-tab.c:1292
+#: ../src/ephy-tab.c:1423
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Volituste ootamine %s-lt..."
 
-#: ../src/ephy-tab.c:1300
+#: ../src/ephy-tab.c:1431
 #, c-format
 msgid "Loading %s..."
 msgstr "Laadimine: %s..."
@@ -2911,7 +3070,7 @@ msgstr "Liigu tagasi"
 #.
 #: ../src/ephy-toolbar.c:270
 msgid "Back history"
-msgstr ""
+msgstr "Ajaloos tagasi"
 
 #: ../src/ephy-toolbar.c:283
 msgid "Forward"
@@ -2926,7 +3085,7 @@ msgstr "Liigu edasi"
 #.
 #: ../src/ephy-toolbar.c:289
 msgid "Forward history"
-msgstr ""
+msgstr "Ajaloos edasi"
 
 #: ../src/ephy-toolbar.c:301
 msgid "Up"
@@ -3637,6 +3796,9 @@ msgstr "Sulge printimise eelvaade"
 #. * Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
 #. * "French (France)"
+#.
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
 #: ../src/prefs-dialog.c:760 ../src/prefs-dialog.c:768
 #, c-format
 msgid "language|%s (%s)"
@@ -3659,7 +3821,7 @@ msgid_plural "System languages (%s)"
 msgstr[0] "Süsteemne keel (%s)"
 msgstr[1] "Süsteemsed keeled (%s)"
 
-#: ../src/prefs-dialog.c:1351
+#: ../src/prefs-dialog.c:1357
 msgid "Select a directory"
 msgstr "Vali kataloog"
 
@@ -3685,3 +3847,5 @@ msgstr ""
 "Priit Laes <amd@tt.ee>, 2003-2005.\n"
 "Ivar Smolin <okul@linux.ee>, 2005."
 
+#~ msgid "_Web sites"
+#~ msgstr "_Veebisaidid"
