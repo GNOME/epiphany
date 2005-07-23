@@ -1,6 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen
  *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2005 Juerg Billeter
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,23 +30,25 @@
 #include <glib.h>
 #include <gtk/gtkwidget.h>
 
+/* for gnome_print_job_set_file */
+#define GNOME_PRINT_UNSTABLE_API
+#include <libgnomeprint/gnome-print-config.h>
+#include <libgnomeprintui/gnome-print-dialog.h>
+
 G_BEGIN_DECLS
 
 typedef struct _EmbedPrintInfo
 {
-	gboolean print_to_file;
-	char *printer;
-	char *file;
-	char *paper;
-	int top_margin;
-	int bottom_margin;
-	int left_margin;
-	int right_margin;
-	int pages;
+	GnomePrintConfig *config;
+	
+	char *tempfile;
+	guint print_idle_id;
+	gulong cancel_print_id;
+
+	GnomePrintDialogRangeFlags range;
 	int from_page;
 	int to_page;
 	int frame_type;
-	int orientation;
 	gboolean print_color;
 
 	/*
@@ -67,14 +70,18 @@ typedef struct _EmbedPrintInfo
 }
 EmbedPrintInfo;
 
-EphyDialog	*ephy_print_dialog_new		(GtkWidget *parent,
-						 EphyEmbed *embed);
+GtkWidget	*ephy_print_dialog_new		(GtkWidget *parent,
+						 EmbedPrintInfo *info);
 
 EphyDialog	*ephy_print_setup_dialog_new	(void);
 
 EmbedPrintInfo  *ephy_print_get_print_info	(void);
 
 void		 ephy_print_info_free		(EmbedPrintInfo *info);
+
+void		 ephy_print_do_print_and_free	(EmbedPrintInfo *info);
+
+gboolean	 ephy_print_verify_postscript	(GnomePrintDialog *print_dialog);
 
 G_END_DECLS
 

@@ -50,7 +50,7 @@ namespace EphyUtils
 
 	GtkWidget      *FindGtkParent		(nsIDOMWindow *aDOMWindow);
 
-	nsresult        CollatePrintSettings	(const _EmbedPrintInfo *info,
+	nsresult        CollatePrintSettings	(_EmbedPrintInfo *info,
 						 nsIPrintSettings *settings,
 						 gboolean preview);
 	PRBool          StringEquals            (nsAString &s1, 

@@ -26,6 +26,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "print-dialog.h"
+#include "ephy-file-helpers.h"
 
 #include <nsIIOService.h>
 #include <nsIURI.h>
@@ -124,10 +125,8 @@ EphyUtils::FindGtkParent (nsIDOMWindow *aDOMWindow)
 	return gtk_widget_get_toplevel (GTK_WIDGET (embed));
 }
 
-#define MM_TO_INCH(x)		(((double) x) / 25.4)
-
 nsresult
-EphyUtils::CollatePrintSettings (const EmbedPrintInfo *info,
+EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 				 nsIPrintSettings *options,
 				 gboolean preview)
 {
@@ -137,25 +136,64 @@ EphyUtils::CollatePrintSettings (const EmbedPrintInfo *info,
 		nsIPrintSettings::kEachFrameSep
 	};
 
-	switch (info->pages)
+	switch (info->range)
 	{
-		case 0:
+	case GNOME_PRINT_RANGE_ALL:
 		options->SetPrintRange (nsIPrintSettings::kRangeAllPages);
 		break;
-	case 1:
+	case GNOME_PRINT_RANGE_RANGE:
 		options->SetPrintRange (nsIPrintSettings::kRangeSpecifiedPageRange);
 		options->SetStartPageRange (info->from_page);
 		options->SetEndPageRange (info->to_page);
 		break;
-	case 2:
+	case GNOME_PRINT_RANGE_SELECTION:
 		options->SetPrintRange (nsIPrintSettings::kRangeSelection);
 		break;
 	}
+	
+	const GnomePrintUnit *unit, *inch, *mm;
+	double value;
+	
+	mm = gnome_print_unit_get_by_abbreviation ((const guchar *) "mm");
+	inch = gnome_print_unit_get_by_abbreviation ((const guchar *) "in");
+	g_assert (mm != NULL && inch != NULL);
 
-	options->SetMarginTop (MM_TO_INCH (info->top_margin));
-	options->SetMarginBottom (MM_TO_INCH (info->bottom_margin));
-	options->SetMarginLeft (MM_TO_INCH (info->left_margin));
-	options->SetMarginRight (MM_TO_INCH (info->right_margin));
+	/* top margin */
+	if (gnome_print_config_get_length (info->config,
+					   (const guchar *) GNOME_PRINT_KEY_PAGE_MARGIN_TOP,
+					   &value, &unit)
+	    && gnome_print_convert_distance (&value, unit, inch))
+	{
+		options->SetMarginTop (value);
+	}
+
+	/* bottom margin */
+	if (gnome_print_config_get_length (info->config,
+					   (const guchar *) GNOME_PRINT_KEY_PAGE_MARGIN_BOTTOM,
+					   &value, &unit)
+	    && gnome_print_convert_distance (&value, unit, inch))
+	{
+		options->SetMarginBottom (value);
+	}
+
+	/* left margin */
+	if (gnome_print_config_get_length (info->config,
+					   (const guchar *) GNOME_PRINT_KEY_PAGE_MARGIN_LEFT,
+					   &value, &unit)
+	    && gnome_print_convert_distance (&value, unit, inch))
+	{
+		options->SetMarginLeft (value);
+	}
+
+	/* right margin */
+	if (gnome_print_config_get_length (info->config,
+					   (const guchar *) GNOME_PRINT_KEY_PAGE_MARGIN_RIGHT,
+					   &value, &unit)
+	    && gnome_print_convert_distance (&value, unit, inch))
+	{
+		options->SetMarginRight (value);
+	}
+
 
 	nsEmbedString tmp;
 
@@ -183,38 +221,76 @@ EphyUtils::CollatePrintSettings (const EmbedPrintInfo *info,
 			   NS_CSTRING_ENCODING_UTF8, tmp);
 	options->SetFooterStrRight(tmp.get());
 
-	NS_CStringToUTF16 (nsEmbedCString(info->file),
-			   NS_CSTRING_ENCODING_UTF8, tmp);
-	options->SetToFileName (tmp.get());
-
-	NS_CStringToUTF16 (nsEmbedCString(info->printer),
-			   NS_CSTRING_ENCODING_UTF8, tmp);
-	options->SetPrinterName (tmp.get());
-
-	/**
-	 * Work around a mozilla bug where paper size & orientation are ignored
-	 * and the specified file is created (containing invalid postscript)
-	 * in print preview mode if we set "print to file" to true.
-	 * See epiphany bug #119818.
-	 */
-	if (preview)
+	options->SetPrintToFile (PR_FALSE);
+	
+	if (!preview)
 	{
-		options->SetPrintToFile (PR_FALSE);
+		char *cmd, *base;
+		const char *temp_dir;
+		
+		temp_dir = ephy_file_tmp_dir ();
+		base = g_build_filename (temp_dir, "printXXXXXX", NULL);
+		info->tempfile = ephy_file_tmp_filename (base, "ps");
+		g_free (base);
+		
+		/* use cat instead of print to file to avoid fflush to ensure
+		 * the file has been written completely and we don't need to
+		 * select a printer (i.e. should be printing backend independent)
+		 */
+		
+		cmd = g_strconcat ("cat > ", info->tempfile, NULL);
+		NS_CStringToUTF16 (nsEmbedCString(cmd),
+				   NS_CSTRING_ENCODING_UTF8, tmp);
+		options->SetPrintCommand (tmp.get());
+		g_free (cmd);
+	}
+
+	/* paper size */
+	options->SetPaperSize (nsIPrintSettings::kPaperSizeDefined);
+	options->SetPaperSizeUnit (nsIPrintSettings::kPaperSizeMillimeters);
+
+	if (gnome_print_config_get_length (info->config,
+					   (const guchar *) GNOME_PRINT_KEY_PAPER_WIDTH,
+					   &value, &unit)
+	   && gnome_print_convert_distance (&value, unit, mm))
+	{
+		options->SetPaperWidth (value);	
+	}
+
+	if (gnome_print_config_get_length (info->config,
+					   (const guchar *) GNOME_PRINT_KEY_PAPER_HEIGHT,
+					   &value, &unit)
+	   && gnome_print_convert_distance (&value, unit, mm))
+	{
+		options->SetPaperHeight (value);	
+	}
+	
+	char *string;
+
+	/* paper name */
+	string = (char *) gnome_print_config_get (info->config,
+						  (const guchar *) GNOME_PRINT_KEY_PAPER_SIZE);
+	NS_CStringToUTF16 (nsEmbedCString(string),
+			   NS_CSTRING_ENCODING_UTF8, tmp);
+	options->SetPaperName (tmp.get());
+	g_free (string);
+
+	/* paper orientation */
+	string = (char *) gnome_print_config_get (info->config,
+						  (const guchar *) GNOME_PRINT_KEY_ORIENTATION);
+	if (string == NULL) string = g_strdup ("R0");
+
+	if (strncmp (string, "R90", 3) == 0 || strncmp (string, "R270", 4) == 0)
+	{
+		options->SetOrientation (nsIPrintSettings::kLandscapeOrientation);
 	}
 	else
 	{
-		options->SetPrintToFile (info->print_to_file);
+		options->SetOrientation (nsIPrintSettings::kPortraitOrientation);
 	}
-
-	/* native paper size formats. Our dialog does not support custom yet */
-	options->SetPaperSize (nsIPrintSettings::kPaperSizeNativeData);
-
-	NS_CStringToUTF16 (nsEmbedCString(info->paper),
-			   NS_CSTRING_ENCODING_UTF8, tmp);
-	options->SetPaperName (tmp.get());
+	g_free (string);
 
 	options->SetPrintInColor (info->print_color);
-	options->SetOrientation (info->orientation);
 	options->SetPrintFrameType (frame_types[info->frame_type]);
 
 	return NS_OK;

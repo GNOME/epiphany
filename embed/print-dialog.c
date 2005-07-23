@@ -1,6 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen
  *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2005 Juerg Billeter
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +32,8 @@
 #include "ephy-debug.h"
 #include "ephy-gui.h"
 
+#include <unistd.h>
+#include <string.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkentry.h>
@@ -41,108 +44,44 @@
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
 
-#define CONF_PRINT_PRINTER	"/apps/epiphany/dialogs/print_printer_name"
-#define CONF_PRINT_FILE		"/apps/epiphany/dialogs/print_file"
-#define CONF_PRINT_DIR		"/apps/epiphany/directories/print_to_file"
-#define CONF_PRINT_PRINTON	"/apps/epiphany/dialogs/print_on"
-#define CONF_PRINT_ALL_PAGES	"/apps/epiphany/dialogs/print_all_pages"
-#define CONF_PRINT_FROM_PAGE	"/apps/epiphany/dialogs/print_from_page"
-#define CONF_PRINT_TO_PAGE	"/apps/epiphany/dialogs/print_to_page"
+#include <libgnomeprintui/gnome-print-paper-selector.h>
 
-#define CONF_PRINT_BOTTOM_MARGIN	"/apps/epiphany/dialogs/print_bottom_margin"
-#define CONF_PRINT_TOP_MARGIN		"/apps/epiphany/dialogs/print_top_margin"
-#define CONF_PRINT_LEFT_MARGIN		"/apps/epiphany/dialogs/print_left_margin"
-#define CONF_PRINT_RIGHT_MARGIN		"/apps/epiphany/dialogs/print_right_margin"
 #define CONF_PRINT_PAGE_TITLE		"/apps/epiphany/dialogs/print_page_title"
 #define CONF_PRINT_PAGE_URL		"/apps/epiphany/dialogs/print_page_url"
 #define CONF_PRINT_DATE			"/apps/epiphany/dialogs/print_date"
 #define CONF_PRINT_PAGE_NUMBERS		"/apps/epiphany/dialogs/print_page_numbers"
-#define CONF_PRINT_PAPER		"/apps/epiphany/dialogs/print_paper"
 #define CONF_PRINT_COLOR		"/apps/epiphany/dialogs/print_color"
-#define CONF_PRINT_ORIENTATION		"/apps/epiphany/dialogs/print_orientation"
 
-enum
-{
-	WINDOW_PROP,
-	PRINTON_PROP,
-	PRINTER_PROP,
-	FILE_PROP,
-	BROWSE_PROP,
-	ALL_PAGES_PROP,
-	SELECTION_PROP,
-	TO_PROP,
-	FROM_PROP
-};
-
-enum
-{
-	COL_PRINTER_DISPLAY_NAME,
-	COL_PRINTER_NAME
-};
-
-static const
-EphyDialogProperty print_props [] =
-{
-	{ "print_dialog",			NULL,			  PT_NORMAL,    0 },
-	{ "printer_radiobutton",		CONF_PRINT_PRINTON,	  PT_AUTOAPPLY, 0 },
-	{ "printer_combobox",			CONF_PRINT_PRINTER,	  PT_AUTOAPPLY, G_TYPE_STRING },
-	{ "file_entry",				CONF_PRINT_FILE,	  PT_AUTOAPPLY, 0 },
-	{ "browse_button",			NULL,			  PT_NORMAL,	0 },
-	{ "all_pages_radiobutton",		CONF_PRINT_ALL_PAGES,	  PT_AUTOAPPLY, 0 },
-	{ "selection_radiobutton",		NULL,			  PT_NORMAL,    0 },
-	{ "to_spinbutton",			CONF_PRINT_FROM_PAGE,	  PT_AUTOAPPLY, G_TYPE_INT },
-	{ "from_spinbutton",			CONF_PRINT_TO_PAGE,	  PT_AUTOAPPLY, G_TYPE_INT },
-
-	{ NULL }
-};
+#define PRINT_CONFIG_FILENAME "ephy-print-config.xml"
 
 enum
 {
 	SETUP_WINDOW_PROP,
-	PAPER_PROP,
-	TOP_PROP,
-	BOTTOM_PROP,
-	LEFT_PROP,
-	RIGHT_PROP,
 	PAGE_TITLE_PROP,
 	PAGE_URL_PROP,
 	PAGE_NUMBERS_PROP,
 	DATE_PROP,
 	COLOR_PROP,
-	ORIENTATION_PROP,
+	PAPER_SELECTOR_PROP,
 };
 
 static const
 EphyDialogProperty setup_props [] =
 {
 	{ "print_setup_dialog",			NULL,			  PT_NORMAL,    0 },
-	{ "A4_radiobutton",			CONF_PRINT_PAPER,	  PT_AUTOAPPLY, G_TYPE_STRING },
-	{ "top_spinbutton",			CONF_PRINT_TOP_MARGIN,	  PT_AUTOAPPLY, G_TYPE_INT },
-	{ "bottom_spinbutton",			CONF_PRINT_BOTTOM_MARGIN, PT_AUTOAPPLY, G_TYPE_INT },
-	{ "left_spinbutton",			CONF_PRINT_LEFT_MARGIN,	  PT_AUTOAPPLY, G_TYPE_INT },
-	{ "right_spinbutton",			CONF_PRINT_RIGHT_MARGIN,  PT_AUTOAPPLY, G_TYPE_INT },
 	{ "print_page_title_checkbutton",	CONF_PRINT_PAGE_TITLE,	  PT_AUTOAPPLY, 0 },
 	{ "print_page_url_checkbutton",		CONF_PRINT_PAGE_URL,	  PT_AUTOAPPLY, 0 },
 	{ "print_page_numbers_checkbutton",	CONF_PRINT_PAGE_NUMBERS,  PT_AUTOAPPLY, 0 },
 	{ "print_date_checkbutton",		CONF_PRINT_DATE,	  PT_AUTOAPPLY, 0 },
 	{ "print_color_radiobutton",		CONF_PRINT_COLOR,	  PT_AUTOAPPLY, 0 },
-	{ "orient_p_radiobutton",		CONF_PRINT_ORIENTATION,	  PT_AUTOAPPLY, 0 },
+	{ "print_paper_selector_hbox",		NULL,			  PT_NORMAL,    0 },
 
 	{ NULL }
 };
 
-static const
-char *paper_format_enum [] =
-{
-	"A4", "Letter", "Legal", "Executive"
-};
-static guint n_paper_format_enum = G_N_ELEMENTS (paper_format_enum);
-
-void ephy_print_dialog_response_cb		(GtkWidget *widget,
+void ephy_print_dialog_response_cb		(GtkDialog *dialog,
 						 int response,
-						 EphyDialog *dialog);
-void ephy_print_dialog_browse_button_cb		(GtkWidget *widget,
-						 EphyDialog *dialog);
+						 EmbedPrintInfo *info);
 void ephy_print_setup_dialog_close_button_cb	(GtkWidget *widget,
 						 EphyDialog *dialog);
 void ephy_print_setup_dialog_help_button_cb	(GtkWidget *widget,
@@ -152,10 +91,14 @@ void
 ephy_print_info_free (EmbedPrintInfo *info)
 {
 	g_return_if_fail (info != NULL);
+	
+	g_object_unref (info->config);
+	
+	g_free (info->tempfile);
+	
+	if (info->cancel_print_id != 0)
+		g_signal_handler_disconnect (embed_shell, info->cancel_print_id);
 
-	g_free (info->printer);
-	g_free (info->file);
-	g_free (info->paper);
 	g_free (info->header_left_string);
 	g_free (info->header_center_string);
 	g_free (info->header_right_string);
@@ -165,97 +108,73 @@ ephy_print_info_free (EmbedPrintInfo *info)
 	g_free (info);
 }
 
-static char *
-sanitize_filename (const char *input)
+static GnomePrintConfig *
+ephy_print_load_config_from_file (void)
 {
-	char *dir, *filename;
+	gchar *file_name;
+	gboolean res;
+	gchar *contents;
+	GnomePrintConfig *ephy_print_config;
 
-	if (input == NULL) return NULL;
-
-	if (g_path_is_absolute (input) == FALSE)
+	file_name = g_build_filename (ephy_dot_dir (), PRINT_CONFIG_FILENAME,
+				      NULL);
+	
+	res = g_file_get_contents (file_name, &contents, NULL, NULL);
+	g_free (file_name);
+	
+	if (res)
 	{
-		dir = eel_gconf_get_string (CONF_PRINT_DIR);
-		/* Fallback */
-		if (dir == NULL || g_path_is_absolute (dir) == FALSE)
-		{
-			g_free (dir);
-			dir = g_get_current_dir ();
-		}
-		/* Fallback */
-		if (dir == NULL)
-		{
-			dir = g_strdup (g_get_home_dir ());
-		}
-
-		filename = g_build_filename (dir, input, NULL);
-		g_free (dir);
+		ephy_print_config = gnome_print_config_from_string (contents, 0);
+		g_free (contents);
 	}
 	else
-	{
-		filename = g_strdup (input);
-	}
+		ephy_print_config = gnome_print_config_default ();
+	
+	return ephy_print_config;
+}
 
-	dir = g_path_get_dirname (filename);
-	if (dir == NULL || g_file_test (dir, G_FILE_TEST_IS_DIR) == FALSE)
-	{
-		g_free (filename);
-		filename = NULL;
-	}
-	g_free (dir);
+static void
+ephy_print_save_config_to_file (GnomePrintConfig *config)
+{
+	gchar *file_name;
+	gchar *str;
 
-	return filename;
+	g_return_if_fail (config != NULL);
+
+	str = gnome_print_config_to_string (config, 0);
+	if (str == NULL) return;
+
+	file_name = g_build_filename (ephy_dot_dir (), PRINT_CONFIG_FILENAME,
+				      NULL);
+	
+	g_file_set_contents (file_name, str, -1, NULL);
+
+	g_free (file_name);
+	g_free (str);
+}
+
+static void
+ephy_print_save_config_to_file_and_unref (GnomePrintConfig *config)
+{
+	ephy_print_save_config_to_file (config);
+	
+	g_object_unref (G_OBJECT (config));
 }
 
 EmbedPrintInfo *
 ephy_print_get_print_info (void)
 {
 	EmbedPrintInfo *info;
-	char *filename, *converted, *expanded, *fname = NULL;
 
 	info = g_new0 (EmbedPrintInfo, 1);
+	
+	info->config = ephy_print_load_config_from_file ();
+	
+	info->range = GNOME_PRINT_RANGE_ALL;
+	info->from_page = 1;
+	info->to_page = 1;
 
-	info->print_to_file = eel_gconf_get_integer (print_props[PRINTON_PROP].pref) == 1;
-
-	if (info->print_to_file)
-	{
-		filename = eel_gconf_get_string (print_props[FILE_PROP].pref);
-		if (filename != NULL)
-		{
-			converted = g_filename_from_utf8 (filename, -1, NULL, NULL, NULL);
-			if (converted != NULL)
-			{
-				expanded = gnome_vfs_expand_initial_tilde (filename);
-				fname = sanitize_filename (expanded);
-				g_free (expanded);
-				g_free (converted);
-			}
-		}
-		g_free (filename);
-
-		/* fallback */
-		if (fname == NULL)
-		{
-			fname = sanitize_filename ("output.ps");
-		}
-
-		info->file = g_filename_to_utf8 (fname, -1, NULL, NULL, NULL);
-		g_free (fname);
-	}
-
-	info->printer = eel_gconf_get_string (print_props[PRINTER_PROP].pref);
-
-	info->pages = eel_gconf_get_integer (print_props[ALL_PAGES_PROP].pref);
-	info->from_page = eel_gconf_get_integer (print_props[FROM_PROP].pref);
-	info->to_page = eel_gconf_get_integer (print_props[TO_PROP].pref);
-
-	info->paper = eel_gconf_get_string (setup_props[PAPER_PROP].pref);
-	info->orientation = eel_gconf_get_integer (setup_props[ORIENTATION_PROP].pref);
 	info->print_color = ! eel_gconf_get_integer (setup_props[COLOR_PROP].pref);
-
-	info->bottom_margin = eel_gconf_get_integer (setup_props[BOTTOM_PROP].pref);
-	info->top_margin = eel_gconf_get_integer (setup_props[TOP_PROP].pref);
-	info->left_margin = eel_gconf_get_integer (setup_props[LEFT_PROP].pref);
-	info->right_margin = eel_gconf_get_integer (setup_props[RIGHT_PROP].pref);
 
 	info->header_left_string = eel_gconf_get_boolean (setup_props[PAGE_TITLE_PROP].pref) ?
 				   g_strdup ("&T") : g_strdup ("");
@@ -274,76 +193,120 @@ ephy_print_get_print_info (void)
 }
 
 void
-ephy_print_dialog_response_cb (GtkWidget *widget,
+ephy_print_dialog_response_cb (GtkDialog *dialog,
 			       int response,
-			       EphyDialog *dialog)
+			       EmbedPrintInfo *info)
 {
-	switch (response)
+	if (response == GNOME_PRINT_DIALOG_RESPONSE_PRINT)
 	{
-		case GTK_RESPONSE_HELP:
-			ephy_gui_help (GTK_WINDOW (widget), "epiphany", "to-print-page");
-			return;
-		default:
-			break;
+		ephy_print_save_config_to_file (info->config);
+		
+		info->range = gnome_print_dialog_get_range_page (GNOME_PRINT_DIALOG (dialog),
+								 &info->from_page,
+								 &info->to_page);
 	}
+}
+
+static gboolean
+using_postscript_printer (GnomePrintConfig *config)
+{
+	const guchar *driver;
+	const guchar *transport;
+
+	driver = gnome_print_config_get (
+		config, (const guchar *)"Settings.Engine.Backend.Driver");
+
+	transport = gnome_print_config_get (
+		config, (const guchar *)"Settings.Transport.Backend");
+
+	if (driver)
+	{
+		if (strcmp ((const gchar *)driver, "gnome-print-ps") == 0)
+			return TRUE;
+		else
+			return FALSE;
+	}
+	else if (transport)
+	{
+		if (strcmp ((const gchar *)transport, "CUPS") == 0)
+			return TRUE;
+		else if (strcmp ((const gchar *)transport, "LPD") == 0)
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+gboolean
+ephy_print_verify_postscript (GnomePrintDialog *print_dialog)
+{
+	GnomePrintConfig *config;
+	GtkWidget *dialog;
+	
+	config = gnome_print_dialog_get_config (print_dialog);
+
+	if (using_postscript_printer (config))
+		return TRUE;
+	
+	dialog = gtk_message_dialog_new (
+		GTK_WINDOW (print_dialog), GTK_DIALOG_MODAL,
+		GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+		_("Printing is not supported on this printer."));
+	gtk_message_dialog_format_secondary_text (
+		GTK_MESSAGE_DIALOG (dialog),
+		_("You were trying to print to a printer using the \"%s\" driver. This program requires a PostScript printer driver."),
+		gnome_print_config_get (
+			config, (guchar *)"Settings.Engine.Backend.Driver"));
+
+	if (GTK_WINDOW (print_dialog)->group)
+		gtk_window_group_add_window (GTK_WINDOW (print_dialog)->group,
+					     GTK_WINDOW (dialog));
+
+	gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
+	
+	return FALSE;
 }
 
 static void
-print_filechooser_response_cb (GtkDialog *fc,
-			       int response,
-			       EphyDialog *dialog)
+cancel_print_cb (EphyEmbedShell *shell, EmbedPrintInfo *info)
 {
-	if (response == GTK_RESPONSE_ACCEPT)
-	{
-		char *filename;
+	g_source_remove (info->print_idle_id);
+	
+	ephy_print_info_free (info);
+}
 
-		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fc));
-		if (filename != NULL)
-		{
-			GtkWidget *entry;
-			char *converted;
+static gboolean
+ephy_print_do_print_idle_cb (EmbedPrintInfo *info)
+{
+	GnomePrintJob *job;
 
-			converted = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+	job = gnome_print_job_new (info->config);
 
-			entry = ephy_dialog_get_control (dialog, print_props[FILE_PROP].id);
-			gtk_entry_set_text (GTK_ENTRY (entry), converted);
+	gnome_print_job_set_file (job, info->tempfile);
+	gnome_print_job_print (job);
 
-			g_free (converted);
-			g_free (filename);
-		}
-	}
+	g_object_unref (job);
+	
+	unlink (info->tempfile);
 
-	gtk_widget_destroy (GTK_WIDGET (fc));
+	ephy_print_info_free (info);
+
+	return FALSE;
 }
 
 void
-ephy_print_dialog_browse_button_cb (GtkWidget *widget,
-				    EphyDialog *dialog)
+ephy_print_do_print_and_free (EmbedPrintInfo *info)
 {
-	GtkWidget *parent;
-	EphyFileChooser *fc;
-	GtkFileFilter *filter;
-
-	parent = ephy_dialog_get_control (dialog, print_props[WINDOW_PROP].id);
-
-	fc = ephy_file_chooser_new (_("Print to"),
-				    GTK_WIDGET (parent),
-				    GTK_FILE_CHOOSER_ACTION_SAVE,
-				    CONF_PRINT_DIR, EPHY_FILE_FILTER_NONE);
-
-	filter = ephy_file_chooser_add_mime_filter (fc, _("Postscript files"),
-					   "application/postscript", NULL);
-
-	ephy_file_chooser_add_pattern_filter (fc, _("All files"), "*", NULL);
-
-	gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (fc), filter);
-
-	g_signal_connect (GTK_DIALOG (fc), "response",
-			  G_CALLBACK (print_filechooser_response_cb),
-			  dialog);
-
-	gtk_window_set_modal (GTK_WINDOW (fc), TRUE);
-	gtk_widget_show (GTK_WIDGET (fc));
+	/* mozilla printing system hasn't really sent the data
+	 * to the printer when reporting that printing is done, it's
+	 * just ready to do it now
+	 */
+	info->print_idle_id = g_idle_add ((GSourceFunc) ephy_print_do_print_idle_cb,
+					  info);
+	info->cancel_print_id = g_signal_connect (embed_shell, "prepare-close",
+						  G_CALLBACK (cancel_print_cb),
+						  info);
 }
 
 void
@@ -360,58 +323,108 @@ ephy_print_setup_dialog_help_button_cb (GtkWidget *widget,
 	ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "using-print-setup");
 }
 
-EphyDialog *
-ephy_print_dialog_new (GtkWidget *parent,
-		       EphyEmbed *embed)
+static GtkWidget *
+ephy_print_paper_selector_new ()
 {
-	EphyDialog *dialog;
-	GtkWidget *widget;
-	GList *printers, *l;
-	GtkListStore *store;
-	GtkTreeIter iter;
-	GtkCellRenderer *renderer;
-	EphyEmbedSingle *single;
+	GtkWidget *paper_selector;
+	GnomePrintConfig *config;
+	
+	config = ephy_print_load_config_from_file ();
 
-	dialog =  ephy_dialog_new_with_parent (parent);
+	paper_selector = gnome_paper_selector_new_with_flags (config,
+						GNOME_PAPER_SELECTOR_MARGINS);
+	
+	g_object_set_data_full (G_OBJECT (paper_selector), "config", config,
+				(GDestroyNotify) ephy_print_save_config_to_file_and_unref);
+	
+	return paper_selector;
+}
 
-	ephy_dialog_construct (dialog, 
-			       print_props,
-			       ephy_file ("print.glade"),
-			       "print_dialog",
-			       NULL);
+/*
+ * A variant of gnome_print_dialog_construct_range_page that can be used when
+ * the total page count is unknown. It defaults to 1-1
+ */
+static void
+ephy_print_dialog_construct_range_page (GnomePrintDialog *gpd, gint flags,
+					const guchar *currentlabel, const guchar *rangelabel)
+{
+	GtkWidget *hbox;
 
-	widget = ephy_dialog_get_control (dialog, print_props[WINDOW_PROP].id);
-	gtk_window_set_icon_name (GTK_WINDOW (widget), GTK_STOCK_PRINT);
+	hbox = NULL;
 
-	widget = ephy_dialog_get_control (dialog, print_props[BROWSE_PROP].id);
-	gtk_widget_set_sensitive (widget, eel_gconf_key_is_writable (CONF_PRINT_FILE));
+	if (flags & GNOME_PRINT_RANGE_RANGE) {
+		GtkWidget *l, *sb;
+		GtkObject *a;
+		AtkObject *atko;
 
-	widget = ephy_dialog_get_control (dialog, print_props[PRINTER_PROP].id);
-	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
-	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+		hbox = gtk_hbox_new (FALSE, 3);
+		gtk_widget_show (hbox);
 
-	printers = ephy_embed_single_get_printer_list (single);
-	for (l = printers; l != NULL; l = l->next)
-	{
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter,
-				    COL_PRINTER_DISPLAY_NAME, l->data,
-				    COL_PRINTER_NAME, l->data,
-				    -1);
+		l = gtk_label_new_with_mnemonic (_("_From:"));
+		gtk_widget_show (l);
+		gtk_box_pack_start (GTK_BOX (hbox), l, FALSE, FALSE, 0);
+
+		a = gtk_adjustment_new (1, 1, 9999, 1, 10, 10);
+		g_object_set_data (G_OBJECT (hbox), "from", a);
+		sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1, 0.0);
+		gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (sb), TRUE);
+		gtk_widget_show (sb);
+		gtk_box_pack_start (GTK_BOX (hbox), sb, FALSE, FALSE, 0);
+		gtk_label_set_mnemonic_widget ((GtkLabel *) l, sb);
+
+		atko = gtk_widget_get_accessible (sb);
+		atk_object_set_description (atko, _("Sets the start of the range of pages to be printed"));
+
+		l = gtk_label_new_with_mnemonic (_("_To:"));
+		gtk_widget_show (l);
+		gtk_box_pack_start (GTK_BOX (hbox), l, FALSE, FALSE, 0);
+
+		a = gtk_adjustment_new (1, 1, 9999, 1, 10, 10);
+		g_object_set_data (G_OBJECT (hbox), "to", a);
+		sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1, 0.0);
+		gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (sb), TRUE);
+		gtk_widget_show (sb);
+		gtk_box_pack_start (GTK_BOX (hbox), sb, FALSE, FALSE, 0);
+		gtk_label_set_mnemonic_widget ((GtkLabel *) l, sb);
+
+		atko = gtk_widget_get_accessible (sb);
+		atk_object_set_description (atko, _("Sets the end of the range of pages to be printed"));
 	}
-	g_list_foreach (printers, (GFunc)g_free, NULL);
-	g_list_free (printers);
 
-	gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
-	g_object_unref (store);
+	gnome_print_dialog_construct_range_any (gpd, flags, hbox, currentlabel, rangelabel);
+}
 
-	renderer = gtk_cell_renderer_text_new ();
-	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), renderer, TRUE);
-	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), renderer,
-					"text", COL_PRINTER_DISPLAY_NAME,
-					NULL);
-	ephy_dialog_set_data_column (dialog, print_props[PRINTER_PROP].id,
-				     COL_PRINTER_NAME);
+GtkWidget *
+ephy_print_dialog_new (GtkWidget *parent,
+		       EmbedPrintInfo *info)
+{
+	GtkWidget *dialog;
+	
+	dialog = g_object_new (GNOME_TYPE_PRINT_DIALOG, "print_config",
+			       info->config, NULL);
+
+	gnome_print_dialog_construct (GNOME_PRINT_DIALOG (dialog), (const guchar *) _("Print"),
+				      GNOME_PRINT_DIALOG_RANGE |
+				      GNOME_PRINT_DIALOG_COPIES);
+	
+	ephy_print_dialog_construct_range_page (GNOME_PRINT_DIALOG (dialog),
+						GNOME_PRINT_RANGE_ALL |
+						GNOME_PRINT_RANGE_RANGE |
+						GNOME_PRINT_RANGE_SELECTION,
+						NULL, (const guchar *) _("Pages"));
+	
+	gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                           GNOME_PRINT_DIALOG_RESPONSE_PREVIEW,
+                                           FALSE);
+
+	g_signal_connect (G_OBJECT (dialog), "response",
+			  G_CALLBACK (ephy_print_dialog_response_cb), info);
+	
+	gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+	
+	if (GTK_WINDOW (parent)->group)
+		gtk_window_group_add_window (GTK_WINDOW (parent)->group,
+					     GTK_WINDOW (dialog));
 
 	return dialog;
 }
@@ -421,6 +434,7 @@ ephy_print_setup_dialog_new (void)
 {
 	EphyDialog *dialog;
 	GtkWidget *window;
+	GtkWidget *paper_selector_hbox;
 
 	dialog = EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG, NULL));
 
@@ -430,11 +444,14 @@ ephy_print_setup_dialog_new (void)
 			       "print_setup_dialog",
 			       NULL);
 
-	ephy_dialog_add_enum (dialog, setup_props[PAPER_PROP].id,
-			      n_paper_format_enum, paper_format_enum);
-
 	window = ephy_dialog_get_control (dialog, setup_props[SETUP_WINDOW_PROP].id);
 	gtk_window_set_icon_name (GTK_WINDOW (window), STOCK_PRINT_SETUP);
+	
+	paper_selector_hbox = ephy_dialog_get_control (dialog,
+						setup_props[PAPER_SELECTOR_PROP].id);
+	gtk_box_pack_start_defaults (GTK_BOX (paper_selector_hbox),
+			   ephy_print_paper_selector_new ());
+	gtk_widget_show_all (paper_selector_hbox);
 
 	return dialog;
 }

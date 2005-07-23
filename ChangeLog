@@ -1,3 +1,23 @@
+2005-07-22  Jürg Billeter  <j@bitron.ch>
+
+	* configure.ac:
+	* data/glade/print.glade:
+	* embed/mozilla/EphyUtils.cpp:
+	* embed/mozilla/EphyUtils.h:
+	* embed/mozilla/PrintingPromptService.cpp:
+	* embed/mozilla/PrintingPromptService.h:
+	* embed/print-dialog.c: (ephy_print_info_free),
+	(ephy_print_load_config_from_file),
+	(ephy_print_save_config_to_file), (ephy_print_get_print_info),
+	(ephy_print_dialog_response_cb), (ephy_print_do_print_idle_cb),
+	(ephy_print_do_print_and_free), (ephy_print_paper_selector_new),
+	(ephy_print_dialog_construct_range_page), (ephy_print_dialog_new),
+	(ephy_print_setup_dialog_new):
+	* embed/print-dialog.h:
+	
+	Use libgnomeprintui for the printing dialog and the paper part of the
+	printing setup dialog. Fixes bug #141241, bug #163255 and bug #301730.
+
 2005-07-21  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/Makefile.am:
