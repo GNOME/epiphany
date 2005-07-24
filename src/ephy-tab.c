@@ -892,6 +892,7 @@ ephy_tab_set_loading_title (EphyTab *tab,
 
 	if (title != NULL && title[0] != '\0')
 	{
+		/* translators: %s here is the address of the web page */
 		priv->loading_title = g_strdup_printf (_("Loading “%s”..."), title);
 	}
 	else
