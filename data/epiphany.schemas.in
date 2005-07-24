@@ -366,15 +366,22 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/dialogs/print_printer</key>
-        <applyto>/apps/epiphany/dialogs/print_printer</applyto>
+        <key>/schemas/apps/epiphany/dialogs/print_printer_name</key>
+        <applyto>/apps/epiphany/dialogs/print_printer_name</applyto>
         <owner>epiphany</owner>
         <type>string</type>
-        <default>lpr</default>
+        <default>PostScript/default</default>
         <locale name="C">
         <short>Printer name</short>
         <long>Printer name.</long>
         </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/dialogs/print_on</key>
+        <applyto>/apps/epiphany/dialogs/print_on</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>0</default>
       </schema>
       <schema>
         <key>/schemas/apps/epiphany/dialogs/print_file</key>
