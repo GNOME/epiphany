@@ -138,6 +138,8 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 
 	switch (info->range)
 	{
+	case GNOME_PRINT_RANGE_CURRENT:
+	case GNOME_PRINT_RANGE_SELECTION_UNSENSITIVE:
 	case GNOME_PRINT_RANGE_ALL:
 		options->SetPrintRange (nsIPrintSettings::kRangeAllPages);
 		break;

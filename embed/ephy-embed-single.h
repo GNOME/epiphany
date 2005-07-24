@@ -93,7 +93,6 @@ struct _EphyEmbedSingleIface
 	gboolean	  (* get_offline_mode)	(EphyEmbedSingle *single);
 	GList *		  (* get_font_list)	(EphyEmbedSingle *shell,
 						 const char *langGroup);
-	GList *		  (* get_printer_list)	(EphyEmbedSingle *shell);
 };
 
 GType		ephy_embed_single_get_type		(void);

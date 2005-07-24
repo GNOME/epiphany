@@ -22,5 +22,4 @@
 
 namespace MozillaPrivate
 {
-	GList   *GetPrinterList ();
 }
