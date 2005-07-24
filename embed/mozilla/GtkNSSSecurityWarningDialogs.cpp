@@ -250,7 +250,7 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 
 	if (aSecondary)
 	{
-		gtk_message_dialog_format_secondary_markup
+		gtk_message_dialog_format_secondary_text
 			(GTK_MESSAGE_DIALOG (dialog), aSecondary);
 	}
 

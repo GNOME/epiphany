@@ -299,7 +299,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			 /* translators: %s is the name of the application */
 			 _("Open this file with \"%s\"?"),
 			 mHelperApp->name);
-		gtk_message_dialog_format_secondary_markup
+		gtk_message_dialog_format_secondary_text
 			(GTK_MESSAGE_DIALOG (dialog),
 			 /* translators: %s is the name of the application */
 			 _("It's not possible to view this file type "

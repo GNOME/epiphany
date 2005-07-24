@@ -1,5 +1,14 @@
 2005-07-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks.c
+	* embed/mozilla/ContentHandler.cpp
+	* embed/mozilla/GtkNSSSecurityWarningDialogs.cpp
+
+	Don't use format_secondary_markup here, it's a) unnecessary
+	and b) doesn't do what we think it does.
+
+2005-07-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* data/epiphany.schemas.in:
 
 	Remove obsolete schema entries.
