@@ -1,3 +1,30 @@
+2005-07-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-lockdown.c: (update_location_editable):
+	* src/ephy-shell.c: (ephy_shell_new_tab_full):
+	* src/ephy-tab.c: (ephy_tab_set_property), (ephy_tab_get_property),
+	(ephy_tab_class_init), (get_title_from_address),
+	(ephy_tab_set_loading_title), (ephy_tab_set_address),
+	(ephy_tab_set_load_status), (ephy_tab_get_load_status),
+	(ephy_tab_open_uri_cb), (ephy_tab_address_cb),
+	(ephy_tab_content_change_cb), (ephy_tab_zoom_changed_cb),
+	(ephy_tab_title_cb), (ensure_page_info), (ephy_tab_net_state_cb),
+	(ephy_tab_init), (ephy_tab_set_title), (ephy_tab_get_title),
+	(ephy_tab_get_address), (ephy_tab_get_typed_address),
+	(ephy_tab_set_typed_address):
+	* src/ephy-tab.h:
+	* src/ephy-toolbar.c: (sync_user_input_cb):
+	* src/ephy-window.c: (sync_tab_typed_address), (sync_tab_title),
+	(ephy_window_set_active_tab):
+	* src/epiphany.defs:
+
+	Set title of loading page to the address, iff the page was blank
+	before. Fixes bug #115337 and bug #171622.
+
+	* src/ephy-session.c: (ephy_session_close):
+	
+	In ephy_session_close(), close open dialogues first.
+
 2005-07-23  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-bookmarks.c

@@ -485,6 +485,15 @@ ephy_session_close (EphySession *session)
 
 	ephy_embed_shell_prepare_close (embed_shell);
 
+	/* there may still be windows open, like dialogues posed from
+	* web pages, etc. Try to kill them, but be sure NOT to destroy
+	* the gtkmozembed offscreen window!
+	* Here, we just check if it's a dialogue and close it if it is one.
+	*/
+	windows = gtk_window_list_toplevels ();
+	g_list_foreach (windows, (GFunc) close_dialog, NULL);
+	g_list_free (windows);
+
 	windows	= ephy_session_get_windows (session);
 	g_list_foreach (windows, (GFunc) gtk_widget_destroy, NULL);
 	g_list_free (windows);
@@ -495,11 +504,7 @@ ephy_session_close (EphySession *session)
 
 	ephy_embed_shell_prepare_close (embed_shell);
 
-	/* there may still be windows open, like dialogues posed from
-	 * web pages, etc. Try to kill them, but be sure NOT to destroy
-	 * the gtkmozembed offscreen window!
-	 * Here, we just check if it's a dialogue and close it if it is one.
-	 */
+	/* Just to be really sure, do it again: */
 	windows = gtk_window_list_toplevels ();
 	g_list_foreach (windows, (GFunc) close_dialog, NULL);
 	g_list_free (windows);

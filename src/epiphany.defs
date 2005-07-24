@@ -398,17 +398,6 @@
   )
 )
 
-(define-enum TabAddressExpire
-  (in-module "Ephy")
-  (c-name "EphyTabAddressExpire")
-  (gtype-id "EPHY_TYPE_TAB_ADDRESS_EXPIRE")
-  (values
-    '("now" "EPHY_TAB_ADDRESS_EXPIRE_NOW")
-    '("next" "EPHY_TAB_ADDRESS_EXPIRE_NEXT")
-    '("current" "EPHY_TAB_ADDRESS_EXPIRE_CURRENT")
-  )
-)
-
 
 ;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-command-manager.h
 
@@ -2620,19 +2609,24 @@
   (return-type "int")
 )
 
-(define-method set_location
+(define-method set_typed_address
   (of-object "EphyTab")
-  (c-name "ephy_tab_set_location")
+  (c-name "ephy_tab_set_typed_address")
   (return-type "none")
   (parameters
-    '("const-char*" "location")
-    '("EphyTabAddressExpire" "expire")
+    '("const-char*" "address")
   )
 )
 
-(define-method get_location
+(define-method get_address
   (of-object "EphyTab")
-  (c-name "ephy_tab_get_location")
+  (c-name "ephy_tab_get_address")
+  (return-type "const-char*")
+)
+
+(define-method get_typed_address
+  (of-object "EphyTab")
+  (c-name "ephy_tab_get_typed_address")
   (return-type "const-char*")
 )
 

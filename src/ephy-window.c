@@ -1114,19 +1114,12 @@ setup_ui_manager (EphyWindow *window)
 }
 
 static void
-sync_tab_address (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_typed_address (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
-	const char *address;
-
 	if (window->priv->closing) return;
 
-	address = ephy_tab_get_location (tab);
-	if (address == NULL)
-	{
-		address = "";
-	}
-
-	ephy_toolbar_set_location (window->priv->toolbar, address);
+	ephy_toolbar_set_location (window->priv->toolbar,
+				   ephy_tab_get_typed_address (tab));
 }
 
 static void
@@ -1433,19 +1426,15 @@ sync_tab_load_status (EphyTab *tab,
 }
 
 static void
-sync_tab_title (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_title (EphyTab *tab,
+		GParamSpec *pspec,
+		EphyWindow *window)
 {
-	const char *title;
+	EphyWindowPrivate *priv = window->priv;
 
-	if (window->priv->closing) return;
+	if (priv->closing) return;
 
-	title = ephy_tab_get_title (tab);
-
-	if (title)
-	{
-		gtk_window_set_title (GTK_WINDOW(window),
-				      title);
-	}
+	gtk_window_set_title (GTK_WINDOW(window), ephy_tab_get_title (tab));
 }
 
 static void
@@ -1879,7 +1868,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 	if (old_tab != NULL)
 	{
 		g_signal_handlers_disconnect_by_func (old_tab,
-						      G_CALLBACK (sync_tab_address),
+						      G_CALLBACK (sync_tab_typed_address),
 						      window);
 		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_document_type),
@@ -1927,7 +1916,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 
 	if (new_tab != NULL)
 	{
-		sync_tab_address	(new_tab, NULL, window);
+		sync_tab_typed_address	(new_tab, NULL, window);
 		sync_tab_document_type	(new_tab, NULL, window);
 		sync_tab_icon		(new_tab, NULL, window);
 		sync_tab_load_progress	(new_tab, NULL, window);
@@ -1940,8 +1929,8 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		sync_tab_title		(new_tab, NULL, window);
 		sync_tab_zoom		(new_tab, NULL, window);
 
-		g_signal_connect_object (new_tab, "notify::address",
-					 G_CALLBACK (sync_tab_address),
+		g_signal_connect_object (new_tab, "notify::typed-address",
+					 G_CALLBACK (sync_tab_typed_address),
 					 window, 0);
 		g_signal_connect_object (new_tab, "notify::document-type",
 					 G_CALLBACK (sync_tab_document_type),

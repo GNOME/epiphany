@@ -46,13 +46,6 @@ typedef enum
 	EPHY_TAB_NAV_FORWARD	= 1 << 2
 } EphyTabNavigationFlags;
 
-typedef enum
-{
-	EPHY_TAB_ADDRESS_EXPIRE_NOW,
-	EPHY_TAB_ADDRESS_EXPIRE_NEXT,
-	EPHY_TAB_ADDRESS_EXPIRE_CURRENT
-} EphyTabAddressExpire;
-
 struct _EphyTab
 {
 	GtkBin parent;
@@ -85,11 +78,12 @@ const char             *ephy_tab_get_link_message	(EphyTab *tab);
 
 int			ephy_tab_get_load_percent	(EphyTab *tab);
 
-void			ephy_tab_set_location		(EphyTab *tab,
-							 const char *location,
-							 EphyTabAddressExpire expire);
+const char             *ephy_tab_get_address		(EphyTab *tab);
 
-const char             *ephy_tab_get_location		(EphyTab *tab);
+const char	       *ephy_tab_get_typed_address	(EphyTab *tab);
+
+void			ephy_tab_set_typed_address	(EphyTab *tab,
+							 const char *address);
 
 EphyTabNavigationFlags	ephy_tab_get_navigation_flags	(EphyTab *tab);
 

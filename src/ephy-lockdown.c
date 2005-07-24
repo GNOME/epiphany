@@ -108,7 +108,7 @@ update_location_editable (EphyWindow *window,
 
 			address = ephy_embed_get_location (embed, TRUE);
 			ephy_toolbar_set_location (EPHY_TOOLBAR (toolbar), address);
-			ephy_tab_set_location (tab, address, EPHY_TAB_ADDRESS_EXPIRE_CURRENT);
+			ephy_tab_set_typed_address (tab, NULL);
 			g_free (address);
 		}
 	}

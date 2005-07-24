@@ -748,7 +748,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
 	    flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
-		ephy_tab_set_location (tab, "", EPHY_TAB_ADDRESS_EXPIRE_NEXT);
 		ephy_toolbar_activate_location (toolbar);
 		load_homepage (embed);
 	}
