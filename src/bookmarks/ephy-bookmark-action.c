@@ -55,6 +55,7 @@
 /* FIXME tweak this, or make it configurable? (bug 148093) */
 #define ENTRY_WIDTH_CHARS	12
 #define TOOLITEM_WIDTH_CHARS	20
+#define LABEL_WIDTH_CHARS       32
 
 static void ephy_bookmark_action_init       (EphyBookmarkAction *action);
 static void ephy_bookmark_action_class_init (EphyBookmarkActionClass *class);
@@ -716,7 +717,11 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		GtkLabel *label;
 
 		label = (GtkLabel *) ((GtkBin *) proxy)->child;
+
 		gtk_label_set_use_underline (label, FALSE);
+		gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+		gtk_label_set_max_width_chars (label, LABEL_WIDTH_CHARS);
+
 		g_signal_connect (proxy, "activate", G_CALLBACK (activate_cb), action);
 	}
 }
