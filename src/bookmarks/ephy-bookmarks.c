@@ -540,7 +540,7 @@ redirect_cb (EphyHistory *history,
 				/* translators: the %s is the title of the bookmark */
 				_("Update bookmark \"%s\"?"),
 				title);
-	gtk_message_dialog_format_secondary_markup
+	gtk_message_dialog_format_secondary_text
 		(GTK_MESSAGE_DIALOG (dialog),
 		/* translators: the %s is a URL */
 		_("The bookmarked page has moved to \"%s\"."),
