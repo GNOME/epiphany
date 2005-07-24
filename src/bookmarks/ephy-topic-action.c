@@ -50,6 +50,7 @@
 
 #define TOOLITEM_WIDTH_CHARS	24
 #define MENUITEM_WIDTH_CHARS	32
+#define LABEL_WIDTH_CHARS       32
 
 #define EPHY_TOPIC_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOPIC_ACTION, EphyTopicActionPrivate))
 
@@ -295,8 +296,9 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 
 			item = gtk_image_menu_item_new_with_label (title);
 			label = (GtkLabel *) ((GtkBin *) item)->child;
-			gtk_label_set_max_width_chars (label, MENUITEM_WIDTH_CHARS);
+			gtk_label_set_max_width_chars (label, LABEL_WIDTH_CHARS);
 			gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+			gtk_label_set_use_underline (label, FALSE);
 
 			if (icon_location)
 			{
@@ -908,6 +910,16 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 				  G_CALLBACK (drag_data_get_cb), action);
 		g_signal_connect (button, "drag_data_delete",
 				  G_CALLBACK (drag_data_delete_cb), action);
+	}
+	else if (GTK_IS_MENU_ITEM (proxy))
+	{
+		GtkLabel *label;
+
+		label = (GtkLabel *) ((GtkBin *) proxy)->child;
+
+		gtk_label_set_use_underline (label, FALSE);
+		gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+		gtk_label_set_max_width_chars (label, LABEL_WIDTH_CHARS);
 	}
 }
 
