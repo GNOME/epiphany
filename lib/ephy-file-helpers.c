@@ -841,6 +841,7 @@ ephy_file_launch_desktop_file (const char *filename,
 		if (g_file_test (path, G_FILE_TEST_IS_REGULAR)) break;
 
 		g_free (path);
+		path = NULL;
 	}
 
 	if (path != NULL)
