@@ -208,6 +208,25 @@ ephy_print_dialog_response_cb (GtkDialog *dialog,
 }
 
 static gboolean
+using_pdf_printer (GnomePrintConfig *config)
+{
+	const guchar *driver;
+
+	driver = gnome_print_config_get (
+		config, (const guchar *)"Settings.Engine.Backend.Driver");
+
+	if (driver)
+        {
+		if (!strcmp ((const gchar *)driver, "gnome-print-pdf"))
+			return TRUE;
+		else
+			return FALSE;
+	}
+
+	return FALSE;
+}
+
+static gboolean
 using_postscript_printer (GnomePrintConfig *config)
 {
 	const guchar *driver;
@@ -226,7 +245,7 @@ using_postscript_printer (GnomePrintConfig *config)
 		else
 			return FALSE;
 	}
-	else if (transport)
+	else if (transport) /* these transports default to PostScript */
 	{
 		if (strcmp ((const gchar *)transport, "CUPS") == 0)
 			return TRUE;
@@ -248,15 +267,25 @@ ephy_print_verify_postscript (GnomePrintDialog *print_dialog)
 	if (using_postscript_printer (config))
 		return TRUE;
 	
-	dialog = gtk_message_dialog_new (
-		GTK_WINDOW (print_dialog), GTK_DIALOG_MODAL,
-		GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
-		_("Printing is not supported on this printer."));
-	gtk_message_dialog_format_secondary_text (
-		GTK_MESSAGE_DIALOG (dialog),
-		_("You were trying to print to a printer using the \"%s\" driver. This program requires a PostScript printer driver."),
-		gnome_print_config_get (
-			config, (guchar *)"Settings.Engine.Backend.Driver"));
+        if (using_pdf_printer (config))
+        {
+                dialog = gtk_message_dialog_new (
+                        GTK_WINDOW (print_dialog), GTK_DIALOG_MODAL,
+                        GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+                        _("Generating PDF is not supported"));
+        }
+        else
+        {
+                dialog = gtk_message_dialog_new (
+                        GTK_WINDOW (print_dialog), GTK_DIALOG_MODAL,
+                        GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+                        _("Printing is not supported on this printer."));
+                gtk_message_dialog_format_secondary_text (
+                        GTK_MESSAGE_DIALOG (dialog),
+                        _("You were trying to print to a printer using the \"%s\" driver. This program requires a PostScript printer driver."),
+                        gnome_print_config_get (
+                                config, (guchar *)"Settings.Engine.Backend.Driver"));
+        }
 
 	if (GTK_WINDOW (print_dialog)->group)
 		gtk_window_group_add_window (GTK_WINDOW (print_dialog)->group,
