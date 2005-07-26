@@ -161,15 +161,24 @@ menu_deactivate_cb (GtkMenuShell *ms, GtkWidget *button)
 static void
 menu_activate_cb (GtkWidget *item, GtkAction *action)
 {
+	EphyBookmarks *bookmarks;
 	EphyNode *node;
 	const char *location;
+	char *address;
 
 	node = g_object_get_data (G_OBJECT (item), "node");
 	location = ephy_node_get_property_string
 		(node, EPHY_NODE_BMK_PROP_LOCATION);
+	g_return_if_fail (location != NULL);
 
-	ephy_link_open (EPHY_LINK (action), location, NULL,
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
+	address = ephy_bookmarks_resolve_address (bookmarks, location, NULL);
+	g_return_if_fail (address != NULL);
+
+	ephy_link_open (EPHY_LINK (action), address, NULL,
 			ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
+
+	g_free (address);
 }
 
 static void
@@ -332,6 +341,7 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 static void
 open_in_tabs_activate_cb (GtkWidget *item, EphyTopicAction *action)
 {
+	EphyBookmarks *bookmarks;
 	EphyNode *node;
 	GPtrArray *children;
 	EphyTab *tab = NULL;
@@ -350,16 +360,24 @@ open_in_tabs_activate_cb (GtkWidget *item, EphyTopicAction *action)
 
 	node_list = g_list_sort (node_list, (GCompareFunc) sort_bookmarks);
 
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
+
 	for (l = node_list; l != NULL; l = l->next)
 	{
 		EphyNode *child = (EphyNode *) l->data;
-		const char *address;
+		const char *location;
+		char *address;
 
-		address = ephy_node_get_property_string
+		location = ephy_node_get_property_string
 			(child, EPHY_NODE_BMK_PROP_LOCATION);
+		g_return_if_fail (location != NULL);
+
+		address = ephy_bookmarks_resolve_address (bookmarks, location, NULL);
+		g_return_if_fail (address != NULL);
 
 		tab = ephy_link_open (EPHY_LINK (action), address, tab,
 				      tab ? EPHY_LINK_NEW_TAB : EPHY_LINK_NEW_WINDOW);
+		g_free (address);
 	}
 
 	g_list_free (node_list);

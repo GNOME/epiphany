@@ -1,5 +1,22 @@
 2005-07-26  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-marshal.list:
+	* src/bookmarks/ephy-bookmark-action.c: (open_in_tab_activate_cb),
+	(open_in_window_activate_cb), (activate_cb):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_class_init),
+	(impl_resolve_address), (ephy_bookmarks_resolve_address):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-topic-action.c: (menu_activate_cb),
+	(open_in_tabs_activate_cb):
+	* src/ephy-location-action.c: (action_activated_cb),
+	(entry_activate_cb):
+	* src/epiphany.defs:
+
+	Unify bookmarks/smart bookmarks address resolution, and add a signal
+	to EphyBookmarks for it.
+
+2005-07-26  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-topic-action.c: (button_toggled_cb):
 
 	Use connect_object to connect to the menu's deactivate

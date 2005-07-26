@@ -35,6 +35,8 @@
 #include "ephy-bookmarks-import.h"
 #include "ephy-bookmark-properties.h"
 #include "ephy-prefs.h"
+#include "ephy-marshal.h"
+#include "ephy-signal-accumulator.h"
 
 #include "eel-gconf-extensions.h"
 
@@ -116,6 +118,7 @@ enum
 enum
 {
 	TREE_CHANGED,
+	RESOLVE_ADDRESS,
 	LAST_SIGNAL
 };
 
@@ -124,6 +127,7 @@ static guint ephy_bookmarks_signals[LAST_SIGNAL] = { 0 };
 static void ephy_bookmarks_class_init	(EphyBookmarksClass *klass);
 static void ephy_bookmarks_init		(EphyBookmarks *tab);
 static void ephy_bookmarks_finalize	(GObject *object);
+static char *impl_resolve_address	(EphyBookmarks*, const char*, const char*);
 
 static GObjectClass *parent_class = NULL;
 
@@ -295,8 +299,10 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
 	object_class->set_property = ephy_bookmarks_set_property;
 	object_class->get_property = ephy_bookmarks_get_property;
 
+	klass->resolve_address = impl_resolve_address;
+
 	ephy_bookmarks_signals[TREE_CHANGED] =
-		g_signal_new ("tree_changed",
+		g_signal_new ("tree-changed",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (EphyBookmarksClass, tree_changed),
@@ -304,6 +310,18 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE,
 			      0);
+
+	ephy_bookmarks_signals[RESOLVE_ADDRESS] =
+		g_signal_new ("resolve-address",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyBookmarksClass, resolve_address),
+			      ephy_signal_accumulator_string, NULL,
+			      ephy_marshal_STRING__STRING_STRING,
+			      G_TYPE_STRING,
+			      2,
+			      G_TYPE_STRING,
+			      G_TYPE_STRING);
 
 	g_object_class_install_property (object_class,
                                          PROP_TOOLBARS_MODEL,
@@ -1315,20 +1333,22 @@ get_option (char *start,
 	return g_strndup (start, end - start);
 }
 
-char *
-ephy_bookmarks_solve_smart_url (EphyBookmarks *eb,
-				const char *smart_url,
-				const char *content)
+static char *
+impl_resolve_address (EphyBookmarks *eb,
+		      const char *address,
+		      const char *content)
 {
 	GString *result;
 	char *pos, *oldpos, *arg, *escaped_arg, *encoding, *optionsend;
 
-	if (content == NULL || smart_url == NULL) return NULL;
+	if (address == NULL) return NULL;
 
-	result = g_string_new_len (NULL, strlen (content) + strlen (smart_url));
+	if (content == NULL) content = "";
+
+	result = g_string_new_len (NULL, strlen (content) + strlen (address));
 
 	/* substitute %s's */
-	oldpos = (char*) smart_url;
+	oldpos = (char*) address;
 	while ((pos = strstr (oldpos, "%s")) != NULL)
 	{
 		g_string_append_len (result, oldpos, pos - oldpos);
@@ -1369,6 +1389,22 @@ ephy_bookmarks_solve_smart_url (EphyBookmarks *eb,
 	g_string_append (result, oldpos);
 
 	return g_string_free (result, FALSE);
+}
+
+char *
+ephy_bookmarks_resolve_address (EphyBookmarks *eb,
+				const char *address,
+				const char *parameter)
+{
+	char *retval = NULL;
+
+	g_return_val_if_fail (EPHY_IS_BOOKMARKS (eb), NULL);
+	g_return_val_if_fail (address != NULL, NULL);
+
+	g_signal_emit (eb, ephy_bookmarks_signals[RESOLVE_ADDRESS], 0,
+		       address, parameter, &retval);
+
+	return retval;
 }
 
 guint

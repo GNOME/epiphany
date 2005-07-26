@@ -308,81 +308,79 @@ static void
 open_in_tab_activate_cb (GtkWidget *widget,
 			 EphyBookmarkAction *action)
 {
-	const char *url;
+	EphyBookmarkActionPrivate *priv = action->priv;
+	EphyBookmarks *bookmarks;
+	const char *location;
+	char *address;
 
-	g_return_if_fail (action->priv->node != NULL);
+	g_return_if_fail (priv->node != NULL);
 
-	url = ephy_node_get_property_string (action->priv->node,
-					     EPHY_NODE_BMK_PROP_LOCATION);
-	ephy_link_open (EPHY_LINK (action), url, NULL,
+	location = ephy_node_get_property_string
+			(priv->node, EPHY_NODE_BMK_PROP_LOCATION);
+	g_return_if_fail (location != NULL);
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
+	address = ephy_bookmarks_resolve_address (bookmarks, location, NULL);
+	g_return_if_fail (address != NULL);
+
+	ephy_link_open (EPHY_LINK (action), address, NULL,
 			EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
+
+	g_free (address);
 }
 
 static void
 open_in_window_activate_cb (GtkWidget *widget, EphyBookmarkAction *action)
 {
-	const char *url;
+	EphyBookmarkActionPrivate *priv = action->priv;
+	EphyBookmarks *bookmarks;
+	const char *location;
+	char *address;
 
-	g_return_if_fail (action->priv->node != NULL);
+	g_return_if_fail (priv->node != NULL);
 
-	url = ephy_node_get_property_string (action->priv->node,
-					     EPHY_NODE_BMK_PROP_LOCATION);
+	location = ephy_node_get_property_string
+			(priv->node, EPHY_NODE_BMK_PROP_LOCATION);
+	g_return_if_fail (location != NULL);
 
-	ephy_link_open (EPHY_LINK (action), url, NULL, EPHY_LINK_NEW_WINDOW);
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
+	address = ephy_bookmarks_resolve_address (bookmarks, location, NULL);
+	g_return_if_fail (address != NULL);
+
+	ephy_link_open (EPHY_LINK (action), address, NULL, EPHY_LINK_NEW_WINDOW);
+
+	g_free (address);
 }
 
 static void
 activate_cb (GtkWidget *widget,
 	     EphyBookmarkAction *action)
 {
-	const char *url;
-	char *location = NULL, *text = NULL;
+	EphyBookmarkActionPrivate *priv = action->priv;
+	EphyBookmarks *bookmarks;
+	const char *location;
+	char *address, *text = NULL;
 
-	g_return_if_fail (action->priv->node != NULL);
+	g_return_if_fail (priv->node != NULL);
 
-	url = ephy_node_get_property_string (action->priv->node,
-					     EPHY_NODE_BMK_PROP_LOCATION);
+	location = ephy_node_get_property_string
+			(priv->node, EPHY_NODE_BMK_PROP_LOCATION);
+	g_return_if_fail (location != NULL);
 
 	if (GTK_IS_EDITABLE (widget))
 	{
 		text = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
 	}
 
-	if (text != NULL && text[0] != '\0')
-	{
-		EphyBookmarks *bookmarks;
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
 
-		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	address = ephy_bookmarks_resolve_address (bookmarks, location, text);
+	g_return_if_fail (address != NULL);
 
-		location = ephy_bookmarks_solve_smart_url (bookmarks,
-							   url,
-							   text);
-	}
-	else
-	{
-		if (action->priv->smart_url)
-		{
-			GnomeVFSURI *uri;
-
-			uri = gnome_vfs_uri_new (url);
-
-			if (uri)
-			{
-				location = g_strdup (gnome_vfs_uri_get_host_name (uri));
-				gnome_vfs_uri_unref (uri);
-			}
-		}
-
-		if (location == NULL)
-		{
-			location = g_strdup (url);
-		}
-	}
-
-	ephy_link_open (EPHY_LINK (action), location, NULL,
+	ephy_link_open (EPHY_LINK (action), address, NULL,
 			ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
 
-	g_free (location);
+	g_free (address);
 	g_free (text);
 }
 

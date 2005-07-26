@@ -133,7 +133,7 @@ action_activated_cb (GtkEntryCompletion *completion,
 	                (node, EPHY_NODE_BMK_PROP_LOCATION);
 		g_return_if_fail (smart_url != NULL);
 
-		url = ephy_bookmarks_solve_smart_url
+		url = ephy_bookmarks_resolve_address
 			(action->priv->bookmarks, smart_url, content);
 		g_return_if_fail (url != NULL);
 
@@ -148,12 +148,19 @@ static void
 entry_activate_cb (GtkEntry *entry,
 		   EphyLocationAction *action)
 {
-	const char *content;
+	EphyBookmarks *bookmarks;
 	GdkEvent *event;
 	gboolean control = FALSE;
+	const char *content;
+	char *address;
 
 	content = gtk_entry_get_text (entry);
 	if (content == NULL || content[0] == '\0') return;
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
+
+	address = ephy_bookmarks_resolve_address (bookmarks, content, NULL);
+	g_return_if_fail (address != NULL);
 
 	event = gtk_get_current_event ();
 	if (event)
@@ -167,9 +174,11 @@ entry_activate_cb (GtkEntry *entry,
 		gdk_event_free (event);
 	}
 
-		
-	ephy_link_open (EPHY_LINK (action), content, NULL, 
+	/* FIXME use ephy_bookmarks_resolve_address here too? */
+	ephy_link_open (EPHY_LINK (action), address, NULL, 
 			control ? EPHY_LINK_NEW_TAB : 0);
+
+	g_free (address);
 }
 
 static void

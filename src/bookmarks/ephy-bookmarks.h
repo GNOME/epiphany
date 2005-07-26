@@ -66,6 +66,9 @@ struct _EphyBookmarksClass
 	GObjectClass parent_class;
 
 	void	(* tree_changed)	(EphyBookmarks *eb);
+	char *	(* resolve_address)	(EphyBookmarks *eb,
+					 const char *address,
+					 const char *argument);
 };
 
 GType		  ephy_bookmarks_get_type		(void);
@@ -94,9 +97,9 @@ void		  ephy_bookmarks_set_address    	(EphyBookmarks *eb,
 							 EphyNode *bookmark,
 							 const char *address);
 
-char		 *ephy_bookmarks_solve_smart_url	 (EphyBookmarks *eb,
-							 const char *smart_url,
-							 const char *content);
+char		 *ephy_bookmarks_resolve_address	(EphyBookmarks *eb,
+							 const char *address,
+							 const char *parameter);
 
 guint		ephy_bookmarks_get_smart_bookmark_width (EphyNode *bookmark);
 

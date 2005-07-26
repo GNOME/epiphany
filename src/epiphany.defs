@@ -1965,13 +1965,13 @@
   )
 )
 
-(define-method solve_smart_url
+(define-method resolve_address
   (of-object "EphyBookmarks")
-  (c-name "ephy_bookmarks_solve_smart_url")
+  (c-name "ephy_bookmarks_resolve_address")
   (return-type "char*")
   (parameters
-    '("const-char*" "smart_url")
-    '("const-char*" "content")
+    '("const-char*" "address")
+    '("const-char*" "parameter")
   )
 )
 
