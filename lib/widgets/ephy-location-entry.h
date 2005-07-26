@@ -47,11 +47,11 @@ struct _EphyLocationEntryClass
 	GtkToolItemClass parent_class;
 
 	/* Signals */
-	void	(*user_changed)	  (EphyLocationEntry *entry);
-	void	(* lock_clicked)  (EphyLocationEntry *entry);
+	void   (* user_changed)	(EphyLocationEntry *entry);
+	void   (* lock_clicked)	(EphyLocationEntry *entry);
 	/* for getting the drag data */
-	char *	(* get_location)  (EphyLocationEntry *entry);
-	char *	(* get_title)     (EphyLocationEntry *entry);
+	char * (* get_location)	(EphyLocationEntry *entry);
+	char * (* get_title)	(EphyLocationEntry *entry);
 };
 
 struct _EphyLocationEntry
@@ -74,11 +74,12 @@ void		ephy_location_entry_set_completion	(EphyLocationEntry *le,
 							 guint relevance_col);
 
 void		ephy_location_entry_set_location	(EphyLocationEntry *le,
-							 const char *new_location);
+							 const char *address,
+							 const char *typed_address);
 
 const char     *ephy_location_entry_get_location	(EphyLocationEntry *le);
 
-void		ephy_location_entry_restore_location	(EphyLocationEntry *le);
+gboolean	ephy_location_entry_reset		(EphyLocationEntry *entry);
 
 void		ephy_location_entry_activate		(EphyLocationEntry *le);
 

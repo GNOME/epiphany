@@ -442,15 +442,16 @@ ephy_toolbar_get_location (EphyToolbar *toolbar)
 
 void
 ephy_toolbar_set_location (EphyToolbar *toolbar,
-			   const char *address)
+			   const char *address,
+			   const char *typed_address)
 {
 	EphyToolbarPrivate *priv = toolbar->priv;
 	EphyLocationAction *action = EPHY_LOCATION_ACTION (priv->actions[LOCATION_ACTION]);
-	
+
 	if (priv->updating_address) return;
 
 	priv->updating_address = TRUE;
-	ephy_location_action_set_address (action, address);
+	ephy_location_action_set_address (action, address, typed_address);
 	priv->updating_address = FALSE;
 }
 

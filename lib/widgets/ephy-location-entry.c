@@ -29,6 +29,7 @@
 #include "ephy-signal-accumulator.h"
 #include "ephy-dnd.h"
 #include "egg-editable-toolbar.h"
+#include "ephy-stock-icons.h"
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
@@ -49,6 +50,7 @@
 #include <gtk/gtkseparatormenuitem.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkalignment.h>
+#include <gtk/gtkclipboard.h>
 
 #include <string.h>
 
@@ -63,14 +65,18 @@ struct _EphyLocationEntryPrivate
 	GtkWidget *icon;
 	GtkWidget *lock_ebox;
 	GtkWidget *lock;
+	GdkPixbuf *favicon;
 
 	char *before_completion;
-	gboolean user_changed;
 
 	guint text_col;
 	guint action_col;
 	guint keywords_col;
 	guint relevance_col;
+
+	guint hash;
+	guint user_changed : 1;
+	guint original_address : 1;
 };
 
 static const struct
@@ -161,6 +167,11 @@ ephy_location_entry_finalize (GObject *object)
 	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
 	EphyLocationEntryPrivate *priv = entry->priv;
 
+	if (priv->favicon != NULL)
+	{
+		g_object_unref (priv->favicon);
+	}
+
 	g_object_unref (priv->tips);
 
 	parent_class->finalize (object);
@@ -223,14 +234,50 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 }
 
 static void
-editable_changed_cb (GtkEditable *editable, EphyLocationEntry *e)
+update_address_state (EphyLocationEntry *entry)
 {
-	EphyLocationEntryPrivate *p = e->priv;
+	EphyLocationEntryPrivate *priv = entry->priv;
+	const char *text;
 
-	if (p->user_changed)
+	text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
+	priv->original_address = text != NULL &&
+				 g_str_hash (text) == priv->hash;
+}
+
+static void
+update_favicon (EphyLocationEntry *entry)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+	GtkImage *image = GTK_IMAGE (priv->icon);
+
+	/* Only show the favicon if the entry's text is the
+	 * address of the current page.
+	 */
+	if (priv->favicon != NULL && priv->original_address)
 	{
-		g_signal_emit (e, signals[USER_CHANGED], 0);
+		gtk_image_set_from_pixbuf (image, priv->favicon);
 	}
+	else
+	{
+		gtk_image_set_from_stock (image,
+					  GTK_STOCK_NEW,
+					  GTK_ICON_SIZE_MENU);
+	}
+}
+
+static void
+editable_changed_cb (GtkEditable *editable,
+		     EphyLocationEntry *entry)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+
+	update_address_state (entry);
+
+	if (priv->user_changed == FALSE) return;
+
+	update_favicon (entry);
+
+	g_signal_emit (entry, signals[USER_CHANGED], 0);
 }
 
 static gboolean
@@ -246,17 +293,23 @@ entry_button_press_cb (GtkWidget *entry, GdkEventButton *event, EphyLocationEntr
 }
 
 static gboolean
-entry_key_press_cb (GtkWidget *widget,
+entry_key_press_cb (GtkEntry *entry,
 		    GdkEventKey *event,
-		    EphyLocationEntry *entry)
+		    EphyLocationEntry *lentry)
 {
-	if (event->keyval == GDK_Escape)
-	{
-		ephy_location_entry_restore_location (entry);
+	guint mask = gtk_accelerator_get_default_mod_mask ();
 
-		/* Don't consume the keypress, since we want the default
-		 * action (close autocompletion popup) too.
-		 */
+	if ((event->keyval == GDK_Return || event->keyval == GDK_ISO_Enter) &&
+	    (event->state & mask) == GDK_CONTROL_MASK)
+	{
+		g_signal_emit_by_name (entry, "activate");
+
+		return TRUE;
+	}
+	else if (event->keyval == GDK_Escape && (event->state & mask) == 0)
+	{
+		ephy_location_entry_reset (lentry);
+		/* don't return TRUE since we want to cancel the autocompletion popup too */
 	}
 
 	return FALSE;
@@ -354,8 +407,9 @@ match_selected_cb (GtkEntryCompletion *completion,
 
 	gtk_tree_model_get (model, iter,
 			    le->priv->action_col, &item, -1);
+	if (item == NULL) return FALSE;
 
-	ephy_location_entry_set_location (le, item);
+	ephy_location_entry_set_location (le, item, NULL);
 	g_signal_emit_by_name (le->priv->entry, "activate");
 
 	g_free (item);
@@ -585,8 +639,8 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 	gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->lock_ebox), FALSE);
 	gtk_box_pack_end (GTK_BOX (hbox), priv->lock_ebox, FALSE, FALSE, 2);
 
-	//priv->lock = gtk_image_new ();
-	priv->lock = gtk_image_new_from_stock (GTK_STOCK_QUIT, GTK_ICON_SIZE_MENU);
+	priv->lock = gtk_image_new_from_stock (STOCK_LOCK_INSECURE,
+					       GTK_ICON_SIZE_MENU);
 	gtk_container_add (GTK_CONTAINER (priv->lock_ebox), priv->lock);
 
 	gtk_widget_show_all (alignment);
@@ -601,10 +655,10 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 			  G_CALLBACK (favicon_drag_data_get_cb), entry);
 	g_signal_connect (priv->entry, "populate_popup",
 			  G_CALLBACK (entry_populate_popup_cb), entry);
-	g_signal_connect (priv->entry, "button_press_event",
-			  G_CALLBACK (entry_button_press_cb), entry);
 	g_signal_connect (priv->entry, "key-press-event",
 			  G_CALLBACK (entry_key_press_cb), entry);
+	g_signal_connect (priv->entry, "button_press_event",
+			  G_CALLBACK (entry_button_press_cb), entry);
 	g_signal_connect (priv->entry, "changed",
 			  G_CALLBACK (editable_changed_cb), entry);
 	g_signal_connect (priv->entry, "drag_motion",
@@ -700,18 +754,67 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 }
 
 void
-ephy_location_entry_set_location (EphyLocationEntry *le,
-				  const gchar *new_location)
+ephy_location_entry_set_location (EphyLocationEntry *entry,
+				  const char *address,
+				  const char *typed_address)
 {
-	EphyLocationEntryPrivate *p = le->priv;
+	EphyLocationEntryPrivate *priv = entry->priv;
+	GtkClipboard *clipboard;
+	const char *text;
+	char* selection = NULL;
+	int start, end;
 
-	g_return_if_fail (new_location != NULL);
+	g_return_if_fail (address != NULL);
 
-	p->user_changed = FALSE;
+        /* Setting a new text will clear the clipboard. This makes it impossible
+	 * to copy&paste from the location entry of one tab into another tab, see
+	 * bug #155824. So we save the selection iff the clipboard was owned by
+	 * the location entry.
+	 */
+	if (GTK_WIDGET_REALIZED (priv->entry))
+	{
+		clipboard = gtk_widget_get_clipboard (priv->entry,
+						      GDK_SELECTION_PRIMARY);
+		g_return_if_fail (clipboard != NULL);
 
-	gtk_entry_set_text (GTK_ENTRY (p->entry), new_location);
+		if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (priv->entry) &&
+		    gtk_editable_get_selection_bounds (GTK_EDITABLE (priv->entry),
+	     					       &start, &end))
+		{
+			selection = gtk_editable_get_chars (GTK_EDITABLE (priv->entry),
+							    start, end);
+		}
+	}
 
-	p->user_changed = TRUE;
+	if (typed_address != NULL)
+	{
+		text = typed_address;
+	}
+	else if (address != NULL && strcmp (address, "about:blank") != 0)
+	{
+		text = address;
+	}
+	else
+	{
+		text = "";
+	}
+
+	priv->user_changed = FALSE;
+	gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
+	priv->user_changed = TRUE;
+
+	priv->hash = g_str_hash (address);
+	update_favicon (entry);
+
+	/* Now restore the selection.
+	 * Note that it's not owned by the entry anymore!
+	 */
+	if (selection != NULL)
+	{
+		gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_PRIMARY),
+					selection, strlen (selection));
+		g_free (selection);
+	}
 }
 
 const char *
@@ -720,16 +823,25 @@ ephy_location_entry_get_location (EphyLocationEntry *le)
 	return gtk_entry_get_text (GTK_ENTRY (le->priv->entry));
 }
 
-void
-ephy_location_entry_restore_location (EphyLocationEntry *entry)
+gboolean
+ephy_location_entry_reset (EphyLocationEntry *entry)
 {
+	EphyLocationEntryPrivate *priv = entry->priv;
+	const char *text, *old_text;
 	char *url = NULL;
-
-	g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
+	gboolean retval;
 
 	g_signal_emit (entry, signals[GET_LOCATION], 0, &url);
-	gtk_entry_set_text (GTK_ENTRY (entry->priv->entry), url ? url : "");
+	text = url != NULL ? url : "";
+	old_text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
+	old_text = old_text != NULL ? old_text : "";
+
+	retval = g_str_hash (text) != g_str_hash (old_text);
+
+	ephy_location_entry_set_location (entry, text, NULL);
 	g_free (url);
+
+	return retval;
 }
 
 void
@@ -755,18 +867,16 @@ void
 ephy_location_entry_set_favicon (EphyLocationEntry *entry,
 				 GdkPixbuf *pixbuf)
 {
-	GtkImage *image = GTK_IMAGE (entry->priv->icon);
+	EphyLocationEntryPrivate *priv = entry->priv;
 
-	if (pixbuf != NULL)
+	if (priv->favicon != NULL)
 	{
-		gtk_image_set_from_pixbuf (image, pixbuf);
+		g_object_unref (priv->favicon);
 	}
-	else
-	{
-		gtk_image_set_from_stock (image,
-					  GTK_STOCK_NEW,
-					  GTK_ICON_SIZE_MENU);
-	}
+
+	priv->favicon = pixbuf ? g_object_ref (pixbuf) : NULL;
+
+	update_favicon (entry);
 }
 
 void

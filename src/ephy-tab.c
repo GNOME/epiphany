@@ -2208,22 +2208,12 @@ const char *
 ephy_tab_get_typed_address (EphyTab *tab)
 {
 	EphyTabPrivate *priv;
-	const char *address = "";
 
 	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
 	priv = tab->priv;
 
-	if (priv->typed_address)
-	{
-		address = priv->typed_address;
-	}
-	else if (priv->address)
-	{
-		address = priv->address;
-	}
-
-	return address;
+	return priv->typed_address;
 }
 
 /**

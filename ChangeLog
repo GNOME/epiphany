@@ -1,3 +1,35 @@
+2005-07-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/ui/epiphany-ui.xml:
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_finalize), (update_address_state),
+	(update_favicon), (editable_changed_cb), (entry_button_press_cb),
+	(match_selected_cb), (entry_key_press_cb),
+	(ephy_location_entry_construct_contents),
+	(ephy_location_entry_set_location), (ephy_location_entry_reset),
+	(ephy_location_entry_set_favicon):
+	* lib/widgets/ephy-location-entry.h:
+	* src/ephy-location-action.c: (entry_activate_cb),
+	(user_changed_cb), (sync_address), (connect_proxy),
+	(ephy_location_action_set_property),
+	(ephy_location_action_finalize),
+	(ephy_location_action_set_address):
+	* src/ephy-location-action.h:
+	* src/ephy-lockdown.c: (update_location_editable):
+	* src/ephy-tab.c: (ephy_tab_get_typed_address):
+	* src/ephy-toolbar.c: (ephy_toolbar_set_location):
+	* src/ephy-toolbar.h:
+	* src/ephy-window.c: (ephy_window_key_press_event),
+	(sync_tab_address), (ephy_window_set_active_tab), (modal_alert_cb):
+	* src/epiphany.defs:
+	* src/window-commands.c: (window_cmd_view_stop):
+
+	Fix ESC behaviour to always stop, and to reset the location entry
+	when it's focused only. Reset the location entry favicon to the stock
+	icon when the address shown is != the tab's address.
+	When switching tab, preserve the selection if it was owned by the
+	location entry. Fixes bug #155824.
+
 2005-07-25  Martin Kretzschmar  <martink@gnome.org>
 
 	* embed/print-dialog.c (using_pdf_printer): new function.

@@ -200,6 +200,8 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "ViewStop", GTK_STOCK_STOP, N_("_Stop"), "Escape",
 	  N_("Stop current data transfer"),
 	  G_CALLBACK (window_cmd_view_stop) },
+	{ "ViewAlwaysStop", GTK_STOCK_STOP, N_("_Stop"), "Escape",
+	  NULL, G_CALLBACK (window_cmd_view_stop) },
 	{ "ViewReload", GTK_STOCK_REFRESH, N_("_Reload"), "<control>R",
 	  N_("Display the latest content of the current page"),
 	  G_CALLBACK (window_cmd_view_reload) },
@@ -705,6 +707,35 @@ ephy_window_key_press_event (GtkWidget *widget,
 	guint mask = gtk_accelerator_get_default_mod_mask ();
 	char *accel = NULL;
 
+	/* Handle ESC here instead of an action callback, so we can
+	 * handle it differently in the location entry, and we can
+	 * stop even when the page is not loading (to stop animations).
+	 */
+	if (event->keyval == GDK_Escape && (event->state & mask) == 0)
+	{
+		GtkWidget *widget;
+		EphyEmbed *embed;
+		gboolean handled = FALSE;
+
+		widget = gtk_window_get_focus (GTK_WINDOW (window));
+
+		if (GTK_IS_WIDGET (widget))
+		{
+			handled = gtk_widget_event (widget, (GdkEvent*)event);
+		}
+
+		embed = ephy_window_get_active_embed (window);
+		if (handled == FALSE && embed != NULL)
+		{
+			ephy_embed_activate (embed);
+			ephy_embed_stop_load (embed);
+
+			handled = TRUE;
+		}
+
+		return handled;
+	}
+		
 	/* Don't activate menubar in ppv mode, or in lockdown mode */
 	if (window->priv->ppv_mode || eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
 	{
@@ -1114,11 +1145,12 @@ setup_ui_manager (EphyWindow *window)
 }
 
 static void
-sync_tab_typed_address (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_address (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	if (window->priv->closing) return;
 
 	ephy_toolbar_set_location (window->priv->toolbar,
+				   ephy_tab_get_address (tab),
 				   ephy_tab_get_typed_address (tab));
 }
 
@@ -1868,7 +1900,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 	if (old_tab != NULL)
 	{
 		g_signal_handlers_disconnect_by_func (old_tab,
-						      G_CALLBACK (sync_tab_typed_address),
+						      G_CALLBACK (sync_tab_address),
 						      window);
 		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_document_type),
@@ -1916,7 +1948,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 
 	if (new_tab != NULL)
 	{
-		sync_tab_typed_address	(new_tab, NULL, window);
+		sync_tab_address	(new_tab, NULL, window);
 		sync_tab_document_type	(new_tab, NULL, window);
 		sync_tab_icon		(new_tab, NULL, window);
 		sync_tab_load_progress	(new_tab, NULL, window);
@@ -1929,8 +1961,8 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		sync_tab_title		(new_tab, NULL, window);
 		sync_tab_zoom		(new_tab, NULL, window);
 
-		g_signal_connect_object (new_tab, "notify::typed-address",
-					 G_CALLBACK (sync_tab_typed_address),
+		g_signal_connect_object (new_tab, "notify::address",
+					 G_CALLBACK (sync_tab_address),
 					 window, 0);
 		g_signal_connect_object (new_tab, "notify::document-type",
 					 G_CALLBACK (sync_tab_document_type),
@@ -2035,7 +2067,7 @@ modal_alert_cb (EphyEmbed *embed,
 
 	/* make sure the location entry shows the real URL of the tab's page */
 	address = ephy_embed_get_location (embed, TRUE);
-	ephy_toolbar_set_location (priv->toolbar, address);
+	ephy_toolbar_set_location (priv->toolbar, address, NULL);
 	g_free (address);
 
 	/* don't suppress alert */

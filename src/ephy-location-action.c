@@ -29,10 +29,12 @@
 #include "ephy-link.h"
 #include "ephy-debug.h"
 
+#include <gdk/gdkkeysyms.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkentrycompletion.h>
+#include <gtk/gtkmain.h>
 
 #define EPHY_LOCATION_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LOCATION_ACTION, EphyLocationActionPrivate))
 
@@ -41,14 +43,15 @@ struct _EphyLocationActionPrivate
 	EphyWindow *window;
 	GList *actions;
 	char *address;
-	gboolean editable;
+	char *typed_address;
 	EphyNode *smart_bmks;
 	EphyBookmarks *bookmarks;
 	char *icon;
 	EphyFaviconCache *cache;
 	char *lock_stock_id;
 	char *lock_tooltip;
-	gboolean show_lock;
+	guint editable : 1;
+	guint show_lock : 1;
 };
 
 static void ephy_location_action_init       (EphyLocationAction *action);
@@ -142,16 +145,31 @@ action_activated_cb (GtkEntryCompletion *completion,
 }
 
 static void
-location_url_activate_cb (GtkEntry *entry,
-			  EphyLocationAction *action)
+entry_activate_cb (GtkEntry *entry,
+		   EphyLocationAction *action)
 {
 	const char *content;
+	GdkEvent *event;
+	gboolean control = FALSE;
 
 	content = gtk_entry_get_text (entry);
-	if (content != NULL)
+	if (content == NULL || content[0] == '\0') return;
+
+	event = gtk_get_current_event ();
+	if (event)
 	{
-		ephy_link_open (EPHY_LINK (action), content, NULL, 0);
+		if (event->type == GDK_KEY_PRESS ||
+		    event->type == GDK_KEY_RELEASE)
+		{
+			control = (event->key.state & gtk_accelerator_get_default_mod_mask ()) == GDK_CONTROL_MASK;
+		}
+			
+		gdk_event_free (event);
 	}
+
+		
+	ephy_link_open (EPHY_LINK (action), content, NULL, 
+			control ? EPHY_LINK_NEW_TAB : 0);
 }
 
 static void
@@ -164,7 +182,7 @@ user_changed_cb (GtkWidget *proxy, EphyLocationAction *action)
 	LOG ("user_changed_cb, new address %s", address);
 
 	g_signal_handlers_block_by_func (action, G_CALLBACK (sync_address), proxy);
-	ephy_location_action_set_address (action, address);
+	ephy_location_action_set_address (action, address, NULL);
 	g_signal_handlers_unblock_by_func (action, G_CALLBACK (sync_address), proxy);
 }
 
@@ -181,12 +199,14 @@ sync_address (GtkAction *gaction,
 	      GtkWidget *proxy)
 {
 	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
+	EphyLocationActionPrivate *priv = action->priv;
 	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
 
 	LOG ("sync_address %s", action->priv->address);
 
 	g_signal_handlers_block_by_func (proxy, G_CALLBACK (user_changed_cb), action);
-	ephy_location_entry_set_location (lentry, action->priv->address);
+	ephy_location_entry_set_location (lentry, priv->address,
+					  priv->typed_address);
 	g_signal_handlers_unblock_by_func (proxy, G_CALLBACK (user_changed_cb), action);
 }
 
@@ -372,9 +392,9 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 		entry = ephy_location_entry_get_entry (lentry);
 		g_signal_connect_object (entry, "activate",
-					 G_CALLBACK (location_url_activate_cb),
+					 G_CALLBACK (entry_activate_cb),
 					 action, 0);
-		g_signal_connect_object (proxy, "user_changed",
+		g_signal_connect_object (proxy, "user-changed",
 					 G_CALLBACK (user_changed_cb), action, 0);
 		g_signal_connect_object (proxy, "lock-clicked",
 					 G_CALLBACK (lock_clicked_cb), action, 0);
@@ -419,7 +439,7 @@ ephy_location_action_set_property (GObject *object,
 	switch (prop_id)
 	{
 		case PROP_ADDRESS:
-			ephy_location_action_set_address (action, g_value_get_string (value));
+			ephy_location_action_set_address (action, g_value_get_string (value), NULL);
 			break;
 		case PROP_EDITABLE:
 			action->priv->editable = g_value_get_boolean (value);
@@ -707,6 +727,7 @@ ephy_location_action_finalize (GObject *object)
 
 	g_list_free (priv->actions);
 	g_free (priv->address);
+	g_free (priv->typed_address);
 	g_free (priv->icon);
 	g_free (priv->lock_stock_id);
 	g_free (priv->lock_tooltip);
@@ -725,13 +746,22 @@ ephy_location_action_get_address (EphyLocationAction *action)
 
 void
 ephy_location_action_set_address (EphyLocationAction *action,
-				  const char *address)
+				  const char *address,
+				  const char *typed_address)
 {
+	EphyLocationActionPrivate *priv;
+
 	g_return_if_fail (EPHY_IS_LOCATION_ACTION (action));
+
+	priv = action->priv;
 
 	LOG ("set_address %s", address);
 
-	g_free (action->priv->address);
-	action->priv->address = g_strdup (address);
+	g_free (priv->address);
+	priv->address = g_strdup (address);
+
+	g_free (priv->typed_address);
+	priv->typed_address = typed_address ? g_strdup (typed_address) : NULL;
+
 	g_object_notify (G_OBJECT (action), "address");
 }
