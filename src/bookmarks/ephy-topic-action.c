@@ -694,8 +694,8 @@ button_toggled_cb (GtkWidget *button,
 		guint event_button = 0;
 
 		menu = build_menu (action);
-		g_signal_connect (menu, "deactivate",
-				  G_CALLBACK (menu_deactivate_cb), button);
+		g_signal_connect_object (menu, "deactivate",
+					 G_CALLBACK (menu_deactivate_cb), button, 0);
 
 		event = gtk_get_current_event ();
 		if (event != NULL)
