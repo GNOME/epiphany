@@ -321,7 +321,7 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		 strcmp (aError, "proxyConnectFailure") == 0)
 	{
 		*aPrimary = g_strdup (_("Could not connect to proxy server."));
-		*aSecondary = _("Check the proxy server settings in Control Center. "
+		*aSecondary = _("Check your proxy server settings. "
 				"If the connection still fails, there may be "
 				"a problem with your proxy server or your "
 				"network connection.");
