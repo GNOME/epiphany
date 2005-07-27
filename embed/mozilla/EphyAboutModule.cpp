@@ -454,7 +454,7 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 		Write (stream, "<p>");
 		Write (stream, linkintro);
 		Write (stream, "<ul>\n");
-		Write (stream, "<li><a href=\"http://google.com/search?q=cache:");
+		Write (stream, "<li><a href=\"http://www.google.com/search?q=cache:");
 		Write (stream, rawurl.get());
 		Write (stream, "\">");
 		/* Translators: The text before the "|" is context to help you decide on
