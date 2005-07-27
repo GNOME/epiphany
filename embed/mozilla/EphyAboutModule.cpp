@@ -276,7 +276,6 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 				 host.get());
 		*aSecondary = _("The document could not be loaded because "
 				"encryption support is not installed.");
-		*aLinkIntro = _("There may be an old version of the page you wanted:");
 	}
 	else if (strcmp (aError, "netReset") == 0)
 	{
