@@ -197,14 +197,21 @@ ephy_topic_action_sync_label (GtkAction *gaction,
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		GtkWidget *label = NULL;
-		char *title;
+		char *title, *separator;
 
 		label = g_object_get_data (G_OBJECT (proxy), "label");
 		g_return_if_fail (label != NULL);
 
 		g_object_get (G_OBJECT (action), "label", &title, NULL);
+		g_return_if_fail (label != NULL);
 
-		gtk_label_set_label (GTK_LABEL (label), title);
+		/* In case this is a multi-hierarchy topic, we only want to
+		 * display the leaf name. See bug #310963.
+		 */
+		separator = g_strrstr (title, BOOKMARKS_HIERARCHY_SEP);
+
+		gtk_label_set_label (GTK_LABEL (label),
+				     separator != NULL ? separator + 2 : title);
 
 		g_free (title);
 	}
