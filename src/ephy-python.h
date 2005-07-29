@@ -25,7 +25,11 @@
 
 G_BEGIN_DECLS
 
-void ephy_python_init (void);
+void ephy_python_init	     (void);
+
+void ephy_python_shutdown    (void);
+
+void ephy_python_schedule_gc (void);
 
 G_END_DECLS
 

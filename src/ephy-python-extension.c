@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include "ephy-python-extension.h"
+#include "ephy-python.h"
 
 #include <pygobject.h>
 
@@ -254,7 +255,7 @@ impl_detach_tab (EphyExtension *extension,
 {
 	call_python_func (extension, "detach_tab", window, tab);
 
-	g_idle_add ((GSourceFunc) PyGC_Collect, NULL);
+	ephy_python_schedule_gc ();
 }
 
 static void
@@ -270,7 +271,7 @@ impl_detach_window (EphyExtension *extension,
 {
 	call_python_func (extension, "detach_window", window, NULL);
 
-	g_idle_add ((GSourceFunc) PyGC_Collect, NULL);
+	ephy_python_schedule_gc ();
 }
 
 static void

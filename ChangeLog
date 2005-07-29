@@ -1,3 +1,14 @@
+2005-07-29  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-python-extension.c: (impl_detach_tab),
+	(impl_detach_window):
+	* src/ephy-python-loader.c: (ephy_python_loader_finalize):
+	* src/ephy-python.c: (ephy_python_init), (idle_shutdown),
+	(ephy_python_shutdown), (idle_gc), (ephy_python_schedule_gc):
+	* src/ephy-python.h:
+
+	Be careful not to leave a GC scheduled when terminating python.
+
 2005-07-28  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-window.c: (ephy_window_open_link):

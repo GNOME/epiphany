@@ -93,6 +93,8 @@ ephy_python_loader_finalize (GObject *object)
 	LOG ("EphyPythonLoader finalising");
 
 	parent_class->finalize (object);
+
+	ephy_python_shutdown ();
 }
 
 static void

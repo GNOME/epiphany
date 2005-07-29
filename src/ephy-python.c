@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include "ephy-python.h"
+#include "ephy-debug.h"
 
 #include <pygobject.h>
 #include <pygtk/pygtk.h>
@@ -34,6 +35,9 @@ void pyepiphany_register_classes (PyObject *d);
 void pyepiphany_add_constants (PyObject *module, const gchar *strip_prefix);
 
 extern PyMethodDef pyepiphany_functions[];
+
+static guint idle_gc_handler	   = 0;
+static guint idle_shutdown_handler = 0;
 
 void
 ephy_python_init (void)
@@ -54,4 +58,73 @@ ephy_python_init (void)
 
 	pyepiphany_register_classes (d);
 	pyepiphany_add_constants (m, "EPHY_");
+}
+
+static gboolean
+idle_shutdown (void)
+{
+	g_return_val_if_fail (idle_gc_handler == 0, FALSE);
+
+	Py_Finalize ();
+
+	idle_shutdown_handler = 0;
+	return FALSE;
+}
+
+void
+ephy_python_shutdown (void)
+{
+	g_return_if_fail (idle_shutdown_handler == 0);
+
+	LOG ("EphyPython shutdown with %s GC scheduled",
+	     idle_gc_handler != 0 ? "a" : "no");
+
+	if (idle_gc_handler != 0)
+	{
+		/* Process remaining GCs now */
+		while (PyGC_Collect ()) ;
+
+		g_source_remove (idle_gc_handler);
+		idle_gc_handler = 0;
+
+		/* IMPORTANT! We get here while running PyGC_Collect from idle!
+		 * Don't do Py_Finalize while inside python!
+		 */
+		idle_shutdown_handler = g_idle_add ((GSourceFunc) idle_shutdown, NULL);
+	}
+	else
+	{
+		Py_Finalize();
+	}
+}
+
+static gboolean
+idle_gc (void)
+{
+	long value;
+
+	/* LOG ("Running GC from idle"); */
+
+	/* FIXME what does the return value of PyGC_Collect mean? */
+	value = PyGC_Collect ();
+
+	/* LOG ("Idle GC returned %ld", value); */
+
+	if (value == 0)
+	{
+		idle_gc_handler = 0;
+	}
+
+	return value != 0;
+}
+
+void
+ephy_python_schedule_gc (void)
+{
+	/* LOG ("Scheduling a GC with %s GC already scheduled", idle_gc_handler != 0 ? "a" : "no"); */
+
+	if (idle_gc_handler == 0)
+	{
+		idle_gc_handler = g_idle_add ((GSourceFunc) idle_gc, NULL);
+	}
 }
