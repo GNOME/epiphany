@@ -793,7 +793,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
                 }
                 else if (embed != NULL) 
                 {
-                        /* non-empty page, focus the page */
+			/* non-empty page, focus the page. but make sure the widget is realised first! */
+			gtk_widget_realize (GTK_WIDGET (embed));
 			ephy_embed_activate (embed);
                 }
         }
