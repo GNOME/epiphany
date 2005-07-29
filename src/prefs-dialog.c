@@ -1588,14 +1588,18 @@ void
 prefs_homepage_current_button_clicked_cb (GtkWidget *button,
 					  EphyDialog *dialog)
 {
-	GtkWidget *parent;
+	EphySession *session;
+	EphyWindow *window;
 	EphyEmbed *embed;
 	char *location;
 
-	parent = ephy_dialog_get_parent (dialog);
-	g_return_if_fail (parent != NULL);
+	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+	window = ephy_session_get_active_window (session);
 
-	embed = ephy_window_get_active_embed (EPHY_WINDOW (parent));
+	/* can't do anything in this case */
+	if (window == NULL) return;
+
+	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
 	location = ephy_embed_get_location (embed, TRUE);
