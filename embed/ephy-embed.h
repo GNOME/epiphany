@@ -195,7 +195,6 @@ struct _EphyEmbedIface
 	void		   (* print_preview_navigate)	(EphyEmbed *embed,
 							 EphyEmbedPrintPreviewNavType type,
 							 int page);
-	void		   (* activate)			(EphyEmbed *embed);
 	gboolean	   (* has_modified_forms)	(EphyEmbed *embed);
 };
 
@@ -290,8 +289,6 @@ void		  ephy_embed_print_preview_navigate	(EphyEmbed *embed,
 							 int page);
 
 /* Misc. utility */
-void		  ephy_embed_activate			(EphyEmbed *embed);
-
 gboolean	  ephy_embed_has_modified_forms		(EphyEmbed *embed);
 
 G_END_DECLS

@@ -184,9 +184,20 @@ mozilla_embed_get_type (void)
 }
 
 static void
-impl_activate (EphyEmbed *embed) 
+mozilla_embed_grab_focus (GtkWidget *widget)
 {
-	gtk_widget_grab_focus (GTK_BIN (embed)->child);
+	GtkWidget *child;
+
+	child = gtk_bin_get_child (GTK_BIN (widget));
+
+	if (child != NULL)
+	{
+		gtk_widget_grab_focus (child);
+	}
+	else
+	{
+		g_warning ("Need to realize the embed before grabbing focus!\n");
+	}
 }
 
 #ifdef GTKMOZEMBED_BROKEN_FOCUS
@@ -290,6 +301,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 
 	gtk_object_class->destroy = mozilla_embed_destroy;
 
+	widget_class->grab_focus = mozilla_embed_grab_focus;
 	widget_class->realize = mozilla_embed_realize;
 
 #ifdef GTKMOZEMBED_BROKEN_FOCUS
@@ -1126,7 +1138,6 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->shistory_go_nth = impl_shistory_go_nth;
 	iface->get_security_level = impl_get_security_level;
 	iface->show_page_certificate = impl_show_page_certificate;
-	iface->activate = impl_activate;
 	iface->set_encoding = impl_set_encoding;
 	iface->get_encoding = impl_get_encoding;
 	iface->has_automatic_encoding = impl_has_automatic_encoding;

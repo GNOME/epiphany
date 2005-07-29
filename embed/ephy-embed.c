@@ -732,19 +732,6 @@ ephy_embed_show_page_certificate (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_activate:
- * @embed: an #EphyEmbed
- *
- * Gives focus to @embed (i.e., Mozilla).
- **/
-void
-ephy_embed_activate (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->activate (embed);
-}
-
-/**
  * ephy_embed_set_encoding:
  * @embed: an #EphyEmbed
  * @encoding: the desired encoding
