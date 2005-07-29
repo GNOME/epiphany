@@ -345,3 +345,32 @@ ephy_statusbar_remove_widget (EphyStatusbar *statusbar,
 	gtk_container_remove (GTK_CONTAINER (statusbar->priv->icon_container),
 			      widget);
 }
+
+
+/**
+ * ephy_statusbar_get_tooltips:
+ * @statusbar: an #EphyStatusbar
+ *
+ * Return value: the statusbar's #GtkTooltips object
+ */
+GtkTooltips *
+ephy_statusbar_get_tooltips (EphyStatusbar *statusbar)
+{
+	g_return_val_if_fail (EPHY_IS_STATUSBAR (statusbar), NULL);
+
+	return statusbar->tooltips;
+}
+
+/**
+ * ephy_statusbar_get_security_frame:
+ * @statusbar: an #EphyStatusbar
+ *
+ * Return value: the statusbar's lock icon frame
+ */
+GtkWidget *
+ephy_statusbar_get_security_frame (EphyStatusbar *statusbar)
+{
+	g_return_val_if_fail (EPHY_IS_STATUSBAR (statusbar), NULL);
+
+	return statusbar->security_frame;
+}

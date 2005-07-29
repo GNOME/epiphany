@@ -61,6 +61,10 @@ GType         ephy_statusbar_get_type			(void);
 
 GtkWidget    *ephy_statusbar_new			(void);
 
+GtkTooltips  *ephy_statusbar_get_tooltips		(EphyStatusbar *statusbar);
+
+GtkWidget    *ephy_statusbar_get_security_frame		(EphyStatusbar *statusbar);
+
 void          ephy_statusbar_set_security_state		(EphyStatusbar *statusbar,
 							 const char *stock_id,
 							 const char *tooltip);
