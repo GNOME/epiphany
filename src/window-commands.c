@@ -104,7 +104,7 @@ window_cmd_go_back (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_activate (embed);
+	gtk_widget_grab_focus (GTK_WIDGET (embed));
 
 	ephy_embed_go_back (embed);
 }
@@ -118,7 +118,7 @@ window_cmd_go_up (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_activate (embed);
+	gtk_widget_grab_focus (GTK_WIDGET (embed));
 
 	ephy_embed_go_up (embed);
 }
@@ -176,7 +176,7 @@ window_cmd_go_forward (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_activate (embed);
+	gtk_widget_grab_focus (GTK_WIDGET (embed));
 
 	ephy_embed_go_forward (embed);
 }
@@ -197,7 +197,7 @@ window_cmd_view_stop (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_activate (embed);
+	gtk_widget_grab_focus (GTK_WIDGET (embed));
 
 	ephy_embed_stop_load (embed);
 }
@@ -237,7 +237,7 @@ window_cmd_view_reload (GtkAction *action,
 		force = TRUE;
 	}
 
-	ephy_embed_activate (embed);
+	gtk_widget_grab_focus (GTK_WIDGET (embed));
 
 	ephy_embed_reload (embed, force);
 }

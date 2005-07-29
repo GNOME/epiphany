@@ -727,7 +727,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 		embed = ephy_window_get_active_embed (window);
 		if (handled == FALSE && embed != NULL)
 		{
-			ephy_embed_activate (embed);
+			gtk_widget_grab_focus (GTK_WIDGET (embed));
 			ephy_embed_stop_load (embed);
 
 			handled = TRUE;
@@ -2705,7 +2705,7 @@ ephy_window_open_link (EphyLink *link,
 		}
 		else
 		{
-			ephy_embed_activate (embed);
+			gtk_widget_grab_focus (GTK_WIDGET (embed));
 		}
 
 		new_tab = tab;

@@ -348,7 +348,7 @@ ephy_tab_grab_focus (GtkWidget *widget)
 {
 	EphyTab *tab = EPHY_TAB (widget);
 
-	ephy_embed_activate (ephy_tab_get_embed (tab));
+	gtk_widget_grab_focus (GTK_WIDGET (ephy_tab_get_embed (tab)));
 }
 
 static EphyWindow *

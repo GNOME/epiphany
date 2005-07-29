@@ -1,3 +1,17 @@
+2005-07-29  Crispin Flowerday	<gnome@flowerday.cx>
+
+	* src/ephy-find-toolbar.c: (ephy_find_toolbar_grab_focus),
+	(ephy_find_toolbar_open), (ephy_find_toolbar_close):
+	* src/ephy-shell.c: (ephy_shell_new_tab_full):
+	* src/ephy-tab.c: (ephy_tab_grab_focus):
+	* src/ephy-window.c: (ephy_window_key_press_event),
+	(ephy_window_open_link):
+	* src/window-commands.c: (window_cmd_go_back), (window_cmd_go_up),
+	(window_cmd_go_forward), (window_cmd_view_stop),
+	(window_cmd_view_reload):
+
+	Replace ephy_embed_activate with gtk_widget_grab_focus
+
 2005-07-29  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-statusbar.c: (ephy_statusbar_get_tooltips),
