@@ -264,7 +264,7 @@ mozilla_embed_realize (GtkWidget *widget)
 					 foesid, 0, NULL, NULL, data);
 	if (n != 2)
 	{
-		g_warning ("Unexpected (n=%d) focus handlers found!\n");
+		g_warning ("Unexpected (n=%d) focus handlers found!\n", n);
 	}
 
 	if (mpriv->focus_connected) return;
