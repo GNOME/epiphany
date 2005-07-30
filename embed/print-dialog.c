@@ -111,24 +111,25 @@ ephy_print_info_free (EmbedPrintInfo *info)
 static GnomePrintConfig *
 ephy_print_load_config_from_file (void)
 {
-	gchar *file_name;
-	gboolean res;
-	gchar *contents;
-	GnomePrintConfig *ephy_print_config;
+	GnomePrintConfig *ephy_print_config = NULL;
+	char *file_name, *contents = NULL;
 
-	file_name = g_build_filename (ephy_dot_dir (), PRINT_CONFIG_FILENAME,
+	file_name = g_build_filename (ephy_dot_dir (),
+				      PRINT_CONFIG_FILENAME,
 				      NULL);
 	
-	res = g_file_get_contents (file_name, &contents, NULL, NULL);
-	g_free (file_name);
-	
-	if (res)
+	if (g_file_get_contents (file_name, &contents, NULL, NULL))
 	{
 		ephy_print_config = gnome_print_config_from_string (contents, 0);
 		g_free (contents);
 	}
-	else
+
+	if (ephy_print_config == NULL)
+	{
 		ephy_print_config = gnome_print_config_default ();
+	}
+
+	g_free (file_name);
 	
 	return ephy_print_config;
 }
@@ -136,8 +137,7 @@ ephy_print_load_config_from_file (void)
 static void
 ephy_print_save_config_to_file (GnomePrintConfig *config)
 {
-	gchar *file_name;
-	gchar *str;
+	char *file_name, *str;
 
 	g_return_if_fail (config != NULL);
 
