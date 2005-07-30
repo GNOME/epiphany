@@ -126,7 +126,7 @@ trap_handler (const char *log_domain,
 		{
 			/* default behaviour only */
 		}
-		else
+		else if (ephy_debug_break[0] != '\0')
 		{
 			g_print ("Unrecognised value of EPHY_DEBUG_BREAK env var: %s!\n",
 				 ephy_debug_break);
