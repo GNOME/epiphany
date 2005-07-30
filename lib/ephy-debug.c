@@ -22,20 +22,19 @@
 
 #include "ephy-debug.h"
 
-#ifndef DISABLE_PROFILING
-
-#include <glib/gbacktrace.h>
 #include <string.h>
+#include <execinfo.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <execinfo.h>
+#include <glib/gbacktrace.h>
 
-static GHashTable *ephy_profilers_hash = NULL;
-static const char *ephy_profile_modules = NULL;
 static const char *ephy_debug_break = NULL;
 
-#endif
+#ifndef DISABLE_PROFILING
+static GHashTable *ephy_profilers_hash = NULL;
+static const char *ephy_profile_modules = NULL;
+#endif /* !DISABLE_PROFILING */
 
 #ifndef DISABLE_LOGGING
 
@@ -80,6 +79,8 @@ log_module (const gchar *log_domain,
 	}
 }
 
+#endif /* !DISABLE_LOGGING */
+
 #define MAX_DEPTH 200
 
 static void 
@@ -96,7 +97,17 @@ trap_handler (const char *log_domain,
 			  G_LOG_LEVEL_CRITICAL |
 			  G_LOG_FLAG_FATAL)))
 	{
-		if (strcmp (ephy_debug_break, "stack") == 0)
+		if (strcmp (ephy_debug_break, "suspend") == 0)
+		{
+			/* the suspend case is first because we wanna send the signal before 
+			 * other threads have had a chance to get too far from the state that
+			 * caused this assertion (in case they happen to have been involved).
+			 */
+			g_print ("Suspending program; attach with the debugger.\n");
+
+			raise (SIGSTOP);
+		}
+		else if (strcmp (ephy_debug_break, "stack") == 0)
 		{
 			void *array[MAX_DEPTH];
 			size_t size;
@@ -106,31 +117,36 @@ trap_handler (const char *log_domain,
 		}
 		else if (strcmp (ephy_debug_break, "trap") == 0)
 		{
+			/* FIXME: disable the handler for a moment so we 
+			 * don't crash if we don't actually run under gdb
+			 */
 			G_BREAKPOINT ();
 		}
-		else if (strcmp (ephy_debug_break, "suspend") == 0)
+		else if (strcmp (ephy_debug_break, "warn") == 0)
 		{
-			g_print ("Suspending program; attach with the debugger.\n");
-
-			raise (SIGSTOP);
+			/* default behaviour only */
+		}
+		else
+		{
+			g_print ("Unrecognised value of EPHY_DEBUG_BREAK env var: %s!\n",
+				 ephy_debug_break);
 		}
 	}
 }
-
-#endif
 
 void
 ephy_debug_init (void)
 {
 #ifndef DISABLE_LOGGING
 	ephy_log_modules = g_getenv ("EPHY_LOG_MODULES");
-	ephy_debug_break = g_getenv ("EPHY_DEBUG_BREAK");
-
-	g_log_set_default_handler (trap_handler, NULL);
 
 	g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, log_module, NULL);
 
 #endif
+
+	ephy_debug_break = g_getenv ("EPHY_DEBUG_BREAK");
+	g_log_set_default_handler (trap_handler, NULL);
+
 #ifndef DISABLE_PROFILING
 	ephy_profile_modules = g_getenv ("EPHY_PROFILE_MODULES");
 #endif
