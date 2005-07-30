@@ -254,12 +254,18 @@ mozilla_embed_realize (GtkWidget *widget)
 	GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
 	gpointer data = ((GtkMozEmbed *) widget)->data;
 
-	g_signal_handlers_block_matched (toplevel,
+	guint n;
+
+	n = g_signal_handlers_block_matched (toplevel,
 					 (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
 					 fiesid, 0, NULL, NULL, data);
-	g_signal_handlers_block_matched (toplevel,
+	n += g_signal_handlers_block_matched (toplevel,
 					 (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
 					 foesid, 0, NULL, NULL, data);
+	if (n != 2)
+	{
+		g_warning ("Unexpected (n=%d) focus handlers found!\n");
+	}
 
 	if (mpriv->focus_connected) return;
 
