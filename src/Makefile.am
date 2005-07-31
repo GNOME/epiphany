@@ -304,6 +304,7 @@ MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 if ENABLE_PYTHON
 
 BINDING_HEADERS_SRCDIR_IN = \
+	embed/mozilla/mozilla-embed-event.h		\
 	embed/ephy-command-manager.h			\
 	embed/ephy-cookie-manager.h			\
 	embed/ephy-embed-event.h			\
@@ -325,7 +326,6 @@ BINDING_HEADERS_SRCDIR_IN = \
 	lib/widgets/ephy-search-entry.h			\
 	lib/widgets/ephy-spinner.h			\
 	src/bookmarks/ephy-bookmarksbar.h		\
-	src/bookmarks/ephy-bookmarksbar-model.h		\
 	src/bookmarks/ephy-bookmarks.h			\
 	src/ephy-extension.h				\
 	src/ephy-extensions-manager.h			\
@@ -379,6 +379,7 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	lib/widgets/ephy-zoom-control.h			\
 	src/bookmarks/ephy-bookmark-action.h		\
 	src/bookmarks/ephy-bookmark-properties.h	\
+	src/bookmarks/ephy-bookmarksbar-model.h		\
 	src/bookmarks/ephy-bookmarks-editor.h		\
 	src/bookmarks/ephy-bookmarks-export.h		\
 	src/bookmarks/ephy-bookmarks-import.h		\
