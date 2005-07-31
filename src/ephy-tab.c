@@ -1164,29 +1164,58 @@ ephy_tab_icon_cache_changed_cb (EphyFaviconCache *cache,
 }
 
 static void
-ephy_tab_set_icon_address (EphyTab *tab, const char *address)
+ephy_tab_set_icon_address (EphyTab *tab,
+			   const char *address)
 {
+	EphyTabPrivate *priv = tab->priv;
 	EphyBookmarks *eb;
 	EphyHistory *history;
 
-	g_return_if_fail (EPHY_IS_TAB (tab));
+	g_free (priv->icon_address);
+	priv->icon_address = g_strdup (address);
 
-	g_free (tab->priv->icon_address);
-
-	tab->priv->icon_address = g_strdup (address);
-
-	if (tab->priv->icon_address)
+	if (priv->icon_address)
 	{
 		eb = ephy_shell_get_bookmarks (ephy_shell);
 		history = EPHY_HISTORY
 			(ephy_embed_shell_get_global_history (embed_shell));
-		ephy_bookmarks_set_icon (eb, tab->priv->address,
-				         tab->priv->icon_address);
-		ephy_history_set_icon (history, tab->priv->address,
-				       tab->priv->icon_address);
+		ephy_bookmarks_set_icon (eb, priv->address,
+				         priv->icon_address);
+		ephy_history_set_icon (history, priv->address,
+				       priv->icon_address);
 	}
 
 	g_object_notify (G_OBJECT (tab), "icon");
+}
+
+static void
+ephy_tab_set_fallback_icon_address (EphyTab *tab)
+{
+	EphyTabPrivate *priv = tab->priv;
+	GnomeVFSURI *uri;
+	char *icon_address;
+
+	/* If the site didn't specify a site icon, we fall back to
+	 * favicon.ico, see bug #116678.
+	 */
+
+	if (priv->icon_address != NULL ||
+	    priv->address == NULL ||
+	    !(g_str_has_prefix (priv->address, "http://") ||
+	      g_str_has_prefix (priv->address, "https://"))) return;
+
+	uri = gnome_vfs_uri_new (priv->address);
+	if (uri == NULL) return;
+
+	/* FIXME: support host:port ? */
+	icon_address = g_strconcat (gnome_vfs_uri_get_scheme (uri), "://",
+				    gnome_vfs_uri_get_host_name (uri),
+				    "/favicon.ico", NULL);
+
+	ephy_tab_set_icon_address (tab, icon_address);
+
+	g_free (icon_address);
+	gnome_vfs_uri_unref (uri);
 }
 
 static void
@@ -1620,7 +1649,7 @@ ensure_page_info (EphyTab *tab, EphyEmbed *embed, const char *address)
 
 	if (priv->address == NULL || priv->address[0] != '\0')
         {
-		ephy_tab_set_address (tab, address ? g_strdup (address) : NULL);
+		ephy_tab_set_address (tab, g_strdup (address));
 	}
 
 	/* FIXME huh?? */
@@ -1670,6 +1699,7 @@ ephy_tab_net_state_cb (EphyEmbed *embed,
 			ephy_tab_set_load_percent (tab, 100);
 			ephy_tab_set_load_status (tab, FALSE);
 			ephy_tab_update_navigation_flags (tab, embed);
+			ephy_tab_set_fallback_icon_address (tab);
 
 			g_free (priv->loading_title);
 			priv->loading_title = NULL;
