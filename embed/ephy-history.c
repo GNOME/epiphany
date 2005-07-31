@@ -34,8 +34,8 @@
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 
-#define EPHY_HISTORY_XML_ROOT	 "ephy_history"
-#define EPHY_HISTORY_XML_VERSION "1.0"
+#define EPHY_HISTORY_XML_ROOT	 (const xmlChar *)"ephy_history"
+#define EPHY_HISTORY_XML_VERSION (const xmlChar *)"1.0"
 
 /* how often to save the history, in milliseconds */
 #define HISTORY_SAVE_INTERVAL (5 * 60 * 1000)
@@ -277,7 +277,7 @@ ephy_history_save (EphyHistory *eb)
 	LOG ("Saving history db");
 
 	ret = ephy_node_db_write_to_xml_safe
-		(eb->priv->db, eb->priv->xml_file,
+		(eb->priv->db, (const xmlChar *)eb->priv->xml_file,
 		 EPHY_HISTORY_XML_ROOT,
 		 EPHY_HISTORY_XML_VERSION,
 		 NULL, /* comment */

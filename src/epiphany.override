@@ -205,10 +205,10 @@ override ephy_embed_event_get_coords noargs
 static PyObject *
 _wrap_ephy_embed_event_get_coords(PyGObject *self)
 {
-    gint x, y;
+    guint x, y;
 
     ephy_embed_event_get_coords (EPHY_EMBED_EVENT(self->obj), &x, &y);
-    return Py_BuildValue("(ii)", x, y);
+    return Py_BuildValue("(ll)", x, y);
 }
 %%
 override ephy_window_get_tabs noargs
