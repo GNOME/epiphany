@@ -1433,7 +1433,69 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-dialog.h
+;; From ../../lib/egg/egg-editable-toolbar.h
+
+(define-function egg_editable_toolbar_get_type
+  (c-name "egg_editable_toolbar_get_type")
+  (return-type "GType")
+)
+
+(define-method set_edit_mode
+  (of-object "EggEditableToolbar")
+  (c-name "egg_editable_toolbar_set_edit_mode")
+  (return-type "none")
+  (parameters
+    '("gboolean" "mode")
+  )
+)
+
+(define-method get_edit_mode
+  (of-object "EggEditableToolbar")
+  (c-name "egg_editable_toolbar_get_edit_mode")
+  (return-type "gboolean")
+)
+
+(define-method show
+  (of-object "EggEditableToolbar")
+  (c-name "egg_editable_toolbar_show")
+  (return-type "none")
+  (parameters
+    '("const-char*" "name")
+  )
+)
+
+(define-method hide
+  (of-object "EggEditableToolbar")
+  (c-name "egg_editable_toolbar_hide")
+  (return-type "none")
+  (parameters
+    '("const-char*" "name")
+  )
+)
+
+(define-method set_drag_dest
+  (of-object "EggEditableToolbar")
+  (c-name "egg_editable_toolbar_set_drag_dest")
+  (return-type "none")
+  (parameters
+    '("const-GtkTargetEntry*" "targets")
+    '("gint" "n_targets")
+    '("const-char*" "toolbar_name")
+  )
+)
+
+(define-method set_fixed
+  (of-object "EggEditableToolbar")
+  (c-name "egg_editable_toolbar_set_fixed")
+  (return-type "none")
+  (parameters
+    '("GtkToolbar*" "fixed_toolbar")
+  )
+)
+
+
+
+;; From ../../lib/ephy-dialog.h
 
 (define-function ephy_dialog_get_type
   (c-name "ephy_dialog_get_type")
@@ -2261,9 +2323,24 @@
   (return-type "EphyNode*")
 )
 
+(define-method get_local
+  (of-object "EphyBookmarks")
+  (c-name "ephy_bookmarks_get_local")
+  (return-type "EphyNode*")
+)
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-extension.h
+
+;; From ../../src/bookmarks/ephy-bookmarksbar.h
+
+(define-function ephy_bookmarksbar_get_type
+  (c-name "ephy_bookmarksbar_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ../../src/ephy-extension.h
 
 (define-function ephy_extension_get_type
   (c-name "ephy_extension_get_type")
