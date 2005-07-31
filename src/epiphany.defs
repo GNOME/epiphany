@@ -71,6 +71,13 @@
   (gtype-id "EPHY_TYPE_EXTENSIONS_MANAGER")
 )
 
+(define-object FaviconCache
+  (in-module "Ephy")
+  (parent "GObject")
+  (c-name "EphyFaviconCache")
+  (gtype-id "EPHY_TYPE_FAVICON_CACHE")
+)
+
 (define-object History
   (in-module "Ephy")
   (parent "GObject")
@@ -84,10 +91,18 @@
   (gtype-id "EPHY_TYPE_LINK")
 )
 
-(define-interface Loader
+(define-object LinkAction
   (in-module "Ephy")
-  (c-name "EphyLoader")
-  (gtype-id "EPHY_TYPE_LOADER")
+  (parent "GtkAction")
+  (c-name "EphyLinkAction")
+  (gtype-id "EPHY_TYPE_LINK_ACTION")
+)
+
+(define-object LocationAction
+  (in-module "Ephy")
+  (parent "EphyLinkAction")
+  (c-name "EphyLocationAction")
+  (gtype-id "EPHY_TYPE_LOCATION_ACTION")
 )
 
 (define-object NodeDb
@@ -116,6 +131,13 @@
   (gtype-id "EPHY_TYPE_PERMISSION_MANAGER")
 )
 
+(define-object SearchEntry
+  (in-module "Ephy")
+  (parent "GtkEntry")
+  (c-name "EphySearchEntry")
+  (gtype-id "EPHY_TYPE_SEARCH_ENTRY")
+)
+
 (define-object Session
   (in-module "Ephy")
   (parent "GObject")
@@ -128,6 +150,13 @@
   (parent "EphyEmbedShell")
   (c-name "EphyShell")
   (gtype-id "EPHY_TYPE_SHELL")
+)
+
+(define-object Spinner
+  (in-module "Ephy")
+  (parent "GtkEventBox")
+  (c-name "EphySpinner")
+  (gtype-id "EPHY_TYPE_SPINNER")
 )
 
 (define-object Statusbar
@@ -156,30 +185,6 @@
 
 ;; Enumerations and flags ...
 
-(define-enum BookmarkProperty
-  (in-module "Ephy")
-  (c-name "EphyBookmarkProperty")
-  (gtype-id "EPHY_TYPE_BOOKMARK_PROPERTY")
-  (values
-    '("bmk-prop-title" "EPHY_NODE_BMK_PROP_TITLE")
-    '("bmk-prop-location" "EPHY_NODE_BMK_PROP_LOCATION")
-    '("bmk-prop-keywords" "EPHY_NODE_BMK_PROP_KEYWORDS")
-    '("keyword-prop-name" "EPHY_NODE_KEYWORD_PROP_NAME")
-    '("bmk-prop-icon" "EPHY_NODE_BMK_PROP_ICON")
-    '("keyword-prop-priority" "EPHY_NODE_KEYWORD_PROP_PRIORITY")
-  )
-)
-
-;;(define-enum DialogApplyType
-;;  (in-module "Ephy")
-;;  (c-name "EphyDialogApplyType")
-;;  (gtype-id "EPHY_TYPE_DIALOG_APPLY_TYPE")
-;;  (values
-;;    '("normal" "PT_NORMAL")
-;;    '("autoapply" "PT_AUTOAPPLY")
-;;  )
-;;)
-
 (define-flags EmbedEventContext
   (in-module "Ephy")
   (c-name "EphyEmbedEventContext")
@@ -194,6 +199,35 @@
     '("input-password" "EPHY_EMBED_CONTEXT_INPUT_PASSWORD")
     '("xul" "EPHY_EMBED_CONTEXT_XUL")
     '("email-link" "EPHY_EMBED_CONTEXT_EMAIL_LINK")
+  )
+)
+
+(define-flags EmbedPersistFlags
+  (in-module "Ephy")
+  (c-name "EphyEmbedPersistFlags")
+  (gtype-id "EPHY_TYPE_EMBED_PERSIST_FLAGS")
+  (values
+    '("copy-page" "EPHY_EMBED_PERSIST_COPY_PAGE")
+    '("maindoc" "EPHY_EMBED_PERSIST_MAINDOC")
+    '("no-view" "EPHY_EMBED_PERSIST_NO_VIEW")
+    '("ask-destination" "EPHY_EMBED_PERSIST_ASK_DESTINATION")
+    '("do-conversion" "EPHY_EMBED_PERSIST_DO_CONVERSION")
+  )
+)
+
+(define-enum ContentCheckType
+  (in-module "Ephy")
+  (c-name "EphyContentCheckType")
+  (gtype-id "EPHY_TYPE_CONTENT_CHECK_TYPE")
+  (values
+    '("other" "EPHY_CONTENT_CHECK_TYPE_OTHER")
+    '("script" "EPHY_CONTENT_CHECK_TYPE_SCRIPT")
+    '("image" "EPHY_CONTENT_CHECK_TYPE_IMAGE")
+    '("stylesheet" "EPHY_CONTENT_CHECK_TYPE_STYLESHEET")
+    '("object" "EPHY_CONTENT_CHECK_TYPE_OBJECT")
+    '("document" "EPHY_CONTENT_CHECK_TYPE_DOCUMENT")
+    '("subdocument" "EPHY_CONTENT_CHECK_TYPE_SUBDOCUMENT")
+    '("refresh" "EPHY_CONTENT_CHECK_TYPE_REFRESH")
   )
 )
 
@@ -266,45 +300,41 @@
   )
 )
 
-(define-flags EmbedPersistFlags
+(define-enum Permission
   (in-module "Ephy")
-  (c-name "EphyEmbedPersistFlags")
-  (gtype-id "EPHY_TYPE_EMBED_PERSIST_FLAGS")
+  (c-name "EphyPermission")
+  (gtype-id "EPHY_TYPE_PERMISSION")
   (values
-    '("copy-page" "EPHY_EMBED_PERSIST_COPY_PAGE")
-    '("maindoc" "EPHY_EMBED_PERSIST_MAINDOC")
-    '("no-view" "EPHY_EMBED_PERSIST_NO_VIEW")
-    '("ask-destination" "EPHY_EMBED_PERSIST_ASK_DESTINATION")
-    '("do-conversion" "EPHY_EMBED_PERSIST_DO_CONVERSION")
+    '("allowed" "EPHY_PERMISSION_ALLOWED")
+    '("denied" "EPHY_PERMISSION_DENIED")
+    '("default" "EPHY_PERMISSION_DEFAULT")
   )
 )
 
-(define-enum ContentCheckType
-  (in-module "Ephy")
-  (c-name "EphyContentCheckType")
-  (gtype-id "EPHY_TYPE_CONTENT_CHECK_TYPE")
+(define-flags TbModelFlags
+  (in-module "Egg")
+  (c-name "EggTbModelFlags")
+  (gtype-id "EGG_TYPE_TB_MODEL_FLAGS")
   (values
-    '("other" "EPHY_CONTENT_CHECK_TYPE_OTHER")
-    '("script" "EPHY_CONTENT_CHECK_TYPE_SCRIPT")
-    '("image" "EPHY_CONTENT_CHECK_TYPE_IMAGE")
-    '("stylesheet" "EPHY_CONTENT_CHECK_TYPE_STYLESHEET")
-    '("object" "EPHY_CONTENT_CHECK_TYPE_OBJECT")
-    '("document" "EPHY_CONTENT_CHECK_TYPE_DOCUMENT")
-    '("subdocument" "EPHY_CONTENT_CHECK_TYPE_SUBDOCUMENT")
-    '("refresh" "EPHY_CONTENT_CHECK_TYPE_REFRESH")
+    '("not-removable" "EGG_TB_MODEL_NOT_REMOVABLE")
+    '("both" "EGG_TB_MODEL_BOTH")
+    '("both-horiz" "EGG_TB_MODEL_BOTH_HORIZ")
+    '("icons" "EGG_TB_MODEL_ICONS")
+    '("text" "EGG_TB_MODEL_TEXT")
+    '("styles-mask" "EGG_TB_MODEL_STYLES_MASK")
+    '("accept-items-only" "EGG_TB_MODEL_ACCEPT_ITEMS_ONLY")
   )
 )
 
-(define-flags LinkFlags
-  (in-module "Ephy")
-  (c-name "EphyLinkFlags")
-  (gtype-id "EPHY_TYPE_LINK_FLAGS")
-  (values
-    '("new-window" "EPHY_LINK_NEW_WINDOW")
-    '("new-tab" "EPHY_LINK_NEW_TAB")
-    '("jump-to" "EPHY_LINK_JUMP_TO")
-  )
-)
+;; (define-enum DialogApplyType
+;;   (in-module "Ephy")
+;;   (c-name "EphyDialogApplyType")
+;;   (gtype-id "EPHY_TYPE_DIALOG_APPLY_TYPE")
+;;   (values
+;;     '("normal" "PT_NORMAL")
+;;     '("autoapply" "PT_AUTOAPPLY")
+;;   )
+;; )
 
 (define-enum NodeSignalType
   (in-module "Ephy")
@@ -321,14 +351,40 @@
   )
 )
 
-(define-enum Permission
+(define-flags StateWindowFlags
   (in-module "Ephy")
-  (c-name "EphyPermission")
-  (gtype-id "EPHY_TYPE_PERMISSION")
+  (c-name "EphyStateWindowFlags")
+  (gtype-id "EPHY_TYPE_STATE_WINDOW_FLAGS")
   (values
-    '("allowed" "EPHY_PERMISSION_ALLOWED")
-    '("denied" "EPHY_PERMISSION_DENIED")
-    '("default" "EPHY_PERMISSION_DEFAULT")
+    '("none" "EPHY_STATE_WINDOW_SAVE_NONE")
+    '("size" "EPHY_STATE_WINDOW_SAVE_SIZE")
+    '("position" "EPHY_STATE_WINDOW_SAVE_POSITION")
+  )
+)
+
+(define-enum BookmarkProperty
+  (in-module "Ephy")
+  (c-name "EphyBookmarkProperty")
+  (gtype-id "EPHY_TYPE_BOOKMARK_PROPERTY")
+  (values
+    '("bmk-prop-title" "EPHY_NODE_BMK_PROP_TITLE")
+    '("bmk-prop-location" "EPHY_NODE_BMK_PROP_LOCATION")
+    '("bmk-prop-keywords" "EPHY_NODE_BMK_PROP_KEYWORDS")
+    '("keyword-prop-name" "EPHY_NODE_KEYWORD_PROP_NAME")
+    '("bmk-prop-icon" "EPHY_NODE_BMK_PROP_ICON")
+    '("keyword-prop-priority" "EPHY_NODE_KEYWORD_PROP_PRIORITY")
+    '("bmk-prop-immutable" "EPHY_NODE_BMK_PROP_IMMUTABLE")
+  )
+)
+
+(define-flags LinkFlags
+  (in-module "Ephy")
+  (c-name "EphyLinkFlags")
+  (gtype-id "EPHY_TYPE_LINK_FLAGS")
+  (values
+    '("new-window" "EPHY_LINK_NEW_WINDOW")
+    '("new-tab" "EPHY_LINK_NEW_TAB")
+    '("jump-to" "EPHY_LINK_JUMP_TO")
   )
 )
 
@@ -376,17 +432,6 @@
   )
 )
 
-(define-flags StateWindowFlags
-  (in-module "Ephy")
-  (c-name "EphyStateWindowFlags")
-  (gtype-id "EPHY_TYPE_STATE_WINDOW_FLAGS")
-  (values
-    '("none" "EPHY_STATE_WINDOW_SAVE_NONE")
-    '("size" "EPHY_STATE_WINDOW_SAVE_SIZE")
-    '("position" "EPHY_STATE_WINDOW_SAVE_POSITION")
-  )
-)
-
 (define-flags TabNavigationFlags
   (in-module "Ephy")
   (c-name "EphyTabNavigationFlags")
@@ -399,7 +444,7 @@
 )
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-command-manager.h
+;; From ../../embed/ephy-command-manager.h
 
 (define-function ephy_command_manager_get_type
   (c-name "ephy_command_manager_get_type")
@@ -426,7 +471,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-cookie-manager.h
+;; From ../../embed/ephy-cookie-manager.h
 
 (define-function ephy_cookie_get_type
   (c-name "ephy_cookie_get_type")
@@ -479,7 +524,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-embed-event.h
+;; From ../../embed/ephy-embed-event.h
 
 (define-function ephy_embed_event_get_type
   (c-name "ephy_embed_event_get_type")
@@ -551,7 +596,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-embed-factory.h
+;; From ../../embed/ephy-embed-factory.h
 
 (define-function ephy_embed_factory_new_object
   (c-name "ephy_embed_factory_new_object")
@@ -563,7 +608,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-embed-persist.h
+;; From ../../embed/ephy-embed-persist.h
 
 (define-function ephy_embed_persist_flags_get_type
   (c-name "ephy_embed_persist_flags_get_type")
@@ -730,7 +775,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-embed-shell.h
+;; From ../../embed/ephy-embed-shell.h
 
 (define-function ephy_embed_shell_get_type
   (c-name "ephy_embed_shell_get_type")
@@ -767,9 +812,15 @@
   (return-type "GObject*")
 )
 
+(define-method prepare_close
+  (of-object "EphyEmbedShell")
+  (c-name "ephy_embed_shell_prepare_close")
+  (return-type "none")
+)
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-embed-single.h
+
+;; From ../../embed/ephy-embed-single.h
 
 (define-function ephy_embed_single_get_type
   (c-name "ephy_embed_single_get_type")
@@ -826,7 +877,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-embed.h
+;; From ../../embed/ephy-embed.h
 
 (define-function ephy_embed_net_state_get_type
   (c-name "ephy_embed_net_state_get_type")
@@ -1075,7 +1126,25 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-history.h
+;; From ../../embed/ephy-favicon-cache.h
+
+(define-function ephy_favicon_cache_get_type
+  (c-name "ephy_favicon_cache_get_type")
+  (return-type "GType")
+)
+
+(define-method get
+  (of-object "EphyFaviconCache")
+  (c-name "ephy_favicon_cache_get")
+  (return-type "GdkPixbuf*")
+  (parameters
+    '("const-char*" "url")
+  )
+)
+
+
+
+;; From ../../embed/ephy-history.h
 
 (define-function ephy_history_get_type
   (c-name "ephy_history_get_type")
@@ -1194,7 +1263,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-password-manager.h
+;; From ../../embed/ephy-password-manager.h
 
 (define-function ephy_password_info_get_type
   (c-name "ephy_password_info_get_type")
@@ -1255,7 +1324,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-permission-manager.h
+;; From ../../embed/ephy-permission-manager.h
 
 (define-function ephy_permission_get_type
   (c-name "ephy_permission_get_type")
@@ -1384,7 +1453,7 @@
   (parameters
     '("const-char*" "id")
     '("guint" "n_items")
-    '("const-char**" "items")
+    '("const-char*-const*" "items")
   )
 )
 
@@ -1501,7 +1570,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-node-db.h
+;; From ../../lib/ephy-node-db.h
 
 (define-function ephy_node_db_get_type
   (c-name "ephy_node_db_get_type")
@@ -1574,7 +1643,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-node.h
+;; From ../../lib/ephy-node.h
 
 (define-function ephy_node_get_type
   (c-name "ephy_node_get_type")
@@ -1848,9 +1917,39 @@
   )
 )
 
+(define-method set_is_drag_source
+  (of-object "EphyNode")
+  (c-name "ephy_node_set_is_drag_source")
+  (return-type "none")
+  (parameters
+    '("gboolean" "allow")
+  )
+)
+
+(define-method get_is_drag_source
+  (of-object "EphyNode")
+  (c-name "ephy_node_get_is_drag_source")
+  (return-type "gboolean")
+)
+
+(define-method set_is_drag_dest
+  (of-object "EphyNode")
+  (c-name "ephy_node_set_is_drag_dest")
+  (return-type "none")
+  (parameters
+    '("gboolean" "allow")
+  )
+)
+
+(define-method get_is_drag_dest
+  (of-object "EphyNode")
+  (c-name "ephy_node_get_is_drag_dest")
+  (return-type "gboolean")
+)
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-state.h
+
+;; From ../../lib/ephy-state.h
 
 (define-function ephy_state_add_window
   (c-name "ephy_state_add_window")
@@ -1892,7 +1991,64 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-bookmarks.h
+;; From ../../lib/widgets/ephy-search-entry.h
+
+(define-function ephy_search_entry_get_type
+  (c-name "ephy_search_entry_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_search_entry_new
+  (c-name "ephy_search_entry_new")
+  (is-constructor-of "EphySearchEntry")
+  (return-type "GtkWidget*")
+)
+
+(define-method clear
+  (of-object "EphySearchEntry")
+  (c-name "ephy_search_entry_clear")
+  (return-type "none")
+)
+
+
+
+;; From ../../lib/widgets/ephy-spinner.h
+
+(define-function ephy_spinner_get_type
+  (c-name "ephy_spinner_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_spinner_new
+  (c-name "ephy_spinner_new")
+  (is-constructor-of "EphySpinner")
+  (return-type "GtkWidget*")
+)
+
+(define-method start
+  (of-object "EphySpinner")
+  (c-name "ephy_spinner_start")
+  (return-type "none")
+)
+
+(define-method stop
+  (of-object "EphySpinner")
+  (c-name "ephy_spinner_stop")
+  (return-type "none")
+)
+
+(define-method set_size
+  (of-object "EphySpinner")
+  (c-name "ephy_spinner_set_size")
+  (return-type "none")
+  (parameters
+    '("GtkIconSize" "size")
+  )
+)
+
+
+
+;; From ../../src/bookmarks/ephy-bookmarks.h
 
 (define-function ephy_bookmarks_get_type
   (c-name "ephy_bookmarks_get_type")
@@ -1966,6 +2122,14 @@
   (parameters
     '("const-char*" "address")
     '("const-char*" "parameter")
+  )
+)
+
+(define-function ephy_bookmarks_get_smart_bookmark_width
+  (c-name "ephy_bookmarks_get_smart_bookmark_width")
+  (return-type "guint")
+  (parameters
+    '("EphyNode*" "bookmark")
   )
 )
 
@@ -2125,7 +2289,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-extensions-manager.h
+;; From ../../src/ephy-extensions-manager.h
 
 (define-function ephy_extensions_manager_get_type
   (c-name "ephy_extensions_manager_get_type")
@@ -2173,7 +2337,16 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-link.h
+;; From ../../src/ephy-link-action.h
+
+(define-function ephy_link_action_get_type
+  (c-name "ephy_link_action_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ../../src/ephy-link.h
 
 (define-function ephy_link_flags_get_type
   (c-name "ephy_link_flags_get_type")
@@ -2198,7 +2371,32 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-notebook.h
+;; From ../../src/ephy-location-action.h
+
+(define-function ephy_location_action_get_type
+  (c-name "ephy_location_action_get_type")
+  (return-type "GType")
+)
+
+(define-method get_address
+  (of-object "EphyLocationAction")
+  (c-name "ephy_location_action_get_address")
+  (return-type "const-char*")
+)
+
+(define-method set_address
+  (of-object "EphyLocationAction")
+  (c-name "ephy_location_action_set_address")
+  (return-type "none")
+  (parameters
+    '("const-char*" "address")
+    '("const-char*" "typed_address")
+  )
+)
+
+
+
+;; From ../../src/ephy-notebook.h
 
 (define-function ephy_notebook_get_type
   (c-name "ephy_notebook_get_type")
@@ -2262,7 +2460,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-session.h
+;; From ../../src/ephy-session.h
 
 (define-function ephy_session_get_type
   (c-name "ephy_session_get_type")
@@ -2335,7 +2533,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-shell.h
+;; From ../../src/ephy-shell.h
 
 (define-function ephy_shell_error_get_type
   (c-name "ephy_shell_error_get_type")
@@ -2478,7 +2676,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-statusbar.h
+;; From ../../src/ephy-statusbar.h
 
 (define-function ephy_statusbar_get_type
   (c-name "ephy_statusbar_get_type")
@@ -2540,7 +2738,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-tab.h
+;; From ../../src/ephy-tab.h
 
 (define-function ephy_tab_get_type
   (c-name "ephy_tab_get_type")
@@ -2649,6 +2847,7 @@
     '("int" "height")
   )
 )
+
 (define-method get_status_message
   (of-object "EphyTab")
   (c-name "ephy_tab_get_status_message")
@@ -2819,9 +3018,15 @@
   (return-type "gboolean")
 )
 
+(define-method get_is_print_preview
+  (of-object "EphyWindow")
+  (c-name "ephy_window_get_is_print_preview")
+  (return-type "gboolean")
+)
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-embed-type-builtins.h
+
+;; From ../embed/ephy-embed-type-builtins.h
 
 (define-function ephy_embed_net_state_get_type
   (c-name "ephy_embed_net_state_get_type")
@@ -2870,7 +3075,16 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-lib-type-builtins.h
+;; From ../lib/egg/eggtypebuiltins.h
+
+(define-function egg_tb_model_flags_get_type
+  (c-name "egg_tb_model_flags_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ../lib/ephy-lib-type-builtins.h
 
 (define-function ephy_node_signal_type_get_type
   (c-name "ephy_node_signal_type_get_type")
@@ -2893,7 +3107,7 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-type-builtins.h
+;; From ../src/ephy-type-builtins.h
 
 (define-function ephy_link_flags_get_type
   (c-name "ephy_link_flags_get_type")
@@ -2929,7 +3143,6 @@
   (c-name "ephy_navigation_direction_get_type")
   (return-type "GType")
 )
-
 
 
 ;; Boxed types ...
