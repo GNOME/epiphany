@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 2.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-30 14:26+0000\n"
-"PO-Revision-Date: 2005-07-30 23:52+0800\n"
+"POT-Creation-Date: 2005-07-31 21:27+0000\n"
+"PO-Revision-Date: 2005-08-01 06:43+0800\n"
 "Last-Translator: Liu Songhe <jackliu9999@263.net>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -120,12 +120,13 @@ msgstr "在全屏模式中锁定 Epiphany。"
 msgid "Browse the web"
 msgstr "浏览 Web"
 
-#: ../data/epiphany.desktop.in.h:2 ../src/ephy-main.c:220
-#: ../src/ephy-main.c:228
+#: ../data/epiphany.desktop.in.h:2 ../src/window-commands.c:785
 msgid "Epiphany Web Browser"
 msgstr "Epiphany Web 浏览器"
 
-#: ../data/epiphany.desktop.in.h:3
+#. sets the name to appear in the window list applet when grouping windows
+#: ../data/epiphany.desktop.in.h:3 ../src/ephy-main.c:222
+#: ../src/ephy-main.c:233
 msgid "Web Browser"
 msgstr "Web 浏览器"
 
@@ -2756,35 +2757,35 @@ msgstr[0] "上 %d 天"
 msgid "Sites"
 msgstr "站点"
 
-#: ../src/ephy-main.c:58
-msgid "Open a new tab in an existing Epiphany window"
-msgstr "在已有的 Epiphany 窗口中打开新标签"
+#: ../src/ephy-main.c:59
+msgid "Open a new tab in an existing window"
+msgstr "在已有窗口中打开新标签"
 
-#: ../src/ephy-main.c:61
-msgid "Run Epiphany in full screen mode"
-msgstr "以全屏模式运行 Epiphany"
+#: ../src/ephy-main.c:62
+msgid "Run in full screen mode"
+msgstr "以全屏模式运行"
 
-#: ../src/ephy-main.c:64
+#: ../src/ephy-main.c:65
 msgid "Load the given session file"
 msgstr "装入给定的会话文件"
 
-#: ../src/ephy-main.c:65 ../src/ephy-main.c:71
+#: ../src/ephy-main.c:66 ../src/ephy-main.c:72
 msgid "FILE"
 msgstr "文件"
 
-#: ../src/ephy-main.c:67
+#: ../src/ephy-main.c:68
 msgid "Add a bookmark (don't open any window)"
 msgstr "添加书签(不打开任何窗口)"
 
-#: ../src/ephy-main.c:68
+#: ../src/ephy-main.c:69
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:70
+#: ../src/ephy-main.c:71
 msgid "Import bookmarks from the given file"
 msgstr "从给定文件中导入书签"
 
-#: ../src/ephy-main.c:73
+#: ../src/ephy-main.c:74
 msgid "Launch the bookmarks editor"
 msgstr "调用书签编辑器"
 
@@ -2849,7 +2850,7 @@ msgid ""
 msgstr ""
 "Epiphany 现在不可用，这是由于试图定位自动化对象时一个 Bonobo 的意外错误。"
 
-#: ../src/ephy-tab.c:474 ../src/ephy-tab.c:2158
+#: ../src/ephy-tab.c:474 ../src/ephy-tab.c:2188
 msgid "Blank page"
 msgstr "空白页"
 
@@ -2863,22 +2864,22 @@ msgstr "正在装入“%s”..."
 msgid "Loading..."
 msgstr "正在装入...."
 
-#: ../src/ephy-tab.c:1551
+#: ../src/ephy-tab.c:1580
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "正在重定向到 %s..."
 
-#: ../src/ephy-tab.c:1555
+#: ../src/ephy-tab.c:1584
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "正在从 %s 传送数据..."
 
-#: ../src/ephy-tab.c:1559
+#: ../src/ephy-tab.c:1588
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "正在等待来自 %s 的认证..."
 
-#: ../src/ephy-tab.c:1567
+#: ../src/ephy-tab.c:1596
 #, c-format
 msgid "Loading %s..."
 msgstr "正在装入 %s...."
@@ -3295,8 +3296,8 @@ msgid "_Work Offline"
 msgstr "脱机工作(_W)"
 
 #: ../src/ephy-window.c:287
-msgid "Toggle network status"
-msgstr "切换网络状态"
+msgid "Switch to offline mode"
+msgstr "切换到脱机模式"
 
 #. View Menu
 #: ../src/ephy-window.c:292
@@ -3675,9 +3676,17 @@ msgstr "选择目录"
 msgid "Check this out!"
 msgstr "看看这个！"
 
-#: ../src/window-commands.c:771
-msgid "Epiphany"
-msgstr "Epiphany"
+#: ../src/window-commands.c:763 ../src/window-commands.c:779
+msgid "Contact us at:"
+msgstr "联系我们："
+
+#: ../src/window-commands.c:766
+msgid "Contributors:"
+msgstr "志愿者："
+
+#: ../src/window-commands.c:770
+msgid "Past developers:"
+msgstr "先前的开发者："
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3687,9 +3696,15 @@ msgstr "Epiphany"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:784
+#: ../src/window-commands.c:799
 msgid "translator-credits"
 msgstr "开源软件国际化简体中文组(http://i18n.linux.net.cn),Funda Wang"
+
+#~ msgid "Toggle network status"
+#~ msgstr "切换网络状态"
+
+#~ msgid "Epiphany"
+#~ msgstr "Epiphany"
 
 #~ msgid "Enable Java."
 #~ msgstr "允许 Java。"
