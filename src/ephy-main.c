@@ -47,6 +47,7 @@ static gboolean open_in_existing = FALSE;
 static gboolean open_in_new_tab = FALSE;
 static gboolean open_fullscreen = FALSE;
 static gboolean open_as_bookmarks_editor = FALSE;
+static gboolean reload_plugins = FALSE;
 
 static char *session_filename = NULL;
 static char *bookmark_url = NULL;
@@ -55,10 +56,10 @@ static char *bookmarks_file = NULL;
 static struct poptOption popt_options[] =
 {
 	{ "new-tab", 'n', POPT_ARG_NONE, &open_in_new_tab, 0,
-	  N_("Open a new tab in an existing Epiphany window"),
+	  N_("Open a new tab in an existing window"),
 	  NULL },
 	{ "fullscreen", 'f', POPT_ARG_NONE, &open_fullscreen, 0,
-	  N_("Run Epiphany in full screen mode"),
+	  N_("Run in full screen mode"),
 	  NULL },
 	{ "load-session", 'l', POPT_ARG_STRING, &session_filename, 0,
 	  N_("Load the given session file"),
@@ -72,6 +73,7 @@ static struct poptOption popt_options[] =
 	{ "bookmarks-editor", 'b', POPT_ARG_NONE, &open_as_bookmarks_editor, 0,
 	  N_("Launch the bookmarks editor"),
 	  NULL },
+	{ "reload-plugins", '\0', POPT_ARG_NONE, &reload_plugins, 0, NULL, NULL },
 	{ NULL, 0, 0, NULL, 0, NULL, NULL }
 };
 
@@ -217,15 +219,18 @@ main (int argc, char *argv[])
 	program = gnome_program_init (PACKAGE, VERSION,
                                       LIBGNOMEUI_MODULE, argc, argv,
                                       GNOME_PARAM_POPT_TABLE, popt_options,
-                                      GNOME_PARAM_HUMAN_READABLE_NAME, _("Epiphany Web Browser"),
+                                      GNOME_PARAM_HUMAN_READABLE_NAME, _("Web Browser"),
 				      GNOME_PARAM_APP_DATADIR, DATADIR,
                                       NULL);
 
 	/* Get a timestamp manually if need be */
 	if (user_time == 0)
+	{
 		user_time = slowly_and_stupidly_obtain_timestamp (gdk_display);
+	}
 
-	g_set_application_name (_("Epiphany Web Browser"));
+	/* sets the name to appear in the window list applet when grouping windows */
+	g_set_application_name (_("Web Browser"));
 
 	/* Set default window icon */
 	gtk_window_set_default_icon_name ("web-browser");

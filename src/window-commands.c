@@ -28,7 +28,6 @@
 #include "ephy-debug.h"
 #include "ephy-command-manager.h"
 #include "window-commands.h"
-#include "print-dialog.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-embed-prefs.h"
@@ -45,6 +44,7 @@
 #include "ephy-notebook.h"
 #include "ephy-toolbar-editor.h"
 #include "ephy-find-toolbar.h"
+#include "ephy-location-entry.h"
 
 #include <string.h>
 #include <glib.h>
@@ -193,7 +193,7 @@ window_cmd_view_stop (GtkAction *action,
 		      EphyWindow *window)
 {
 	EphyEmbed *embed;
-
+	
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
@@ -753,24 +753,37 @@ void
 window_cmd_help_about (GtkAction *action,
 		       GtkWidget *window)
 {
-	static const char * const authors[] = {
-		"Marco Pesenti Gritti <marco@gnome.org>",
-		"Xan Lopez <xan@gnome.org>",
-		"David Bordoley <bordoley@msu.edu>",
-		"Christian Persch <chpe@gnome.org>",
-		NULL
+	const char * const authors[] = {
+		"Marco Pesenti Gritti",
+		"Adam Hooper",
+		"Xan Lopez",
+		"Christian Persch",
+		"Jean-François Rameau",
+		"",
+		_("Write us:"),
+		"<epiphany-list@gnome.org>",
+		"",
+		_("Contributors:"),
+		"",
+		_("Past developers:"),
+		"David Bordoley",
+		NULL,
 	};
-	static const char *const documenters[] = {
-		"Patanjali Somayaji <patanjali@codito.com>",
-		"David Bordoley <bordoley@msu.edu>",
-		"Piers Cornwell <piers@gnome.org>", 
+	const char * const documenters[] = {
+		"Piers Cornwell", 
+		"Patanjali Somayaji",
+		"David Bordoley",
+		"",
+		_("Write us:"),
+		"<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>",
 		NULL
 	};
 
 	gtk_show_about_dialog (GTK_WINDOW (window),
-			       "name", _("Epiphany"),
+			       "name", _("Epiphany Web Browser"),
 			       "version", VERSION,
-			       "copyright", "Copyright \xc2\xa9 2002-2005 Marco Pesenti Gritti",
+			       "copyright", "Copyright © 2002-2004 Marco Pesenti Gritti\n"
+					    "Copyright © 2003-2005 The Epiphany Developers",
 			       "authors", authors,
 			       "documenters", documenters,
 				/* Translators: This is a special message that shouldn't be translated
