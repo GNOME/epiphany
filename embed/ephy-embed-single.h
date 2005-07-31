@@ -115,8 +115,6 @@ gboolean	ephy_embed_single_get_offline_mode	(EphyEmbedSingle *single);
 GList		*ephy_embed_single_get_font_list	(EphyEmbedSingle *single,
 							 const char *lang_group);
 
-GList		*ephy_embed_single_get_printer_list	(EphyEmbedSingle *single);
-
 G_END_DECLS
 
 #endif
