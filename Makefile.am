@@ -2,10 +2,6 @@ SUBDIRS = lib embed idl src data po help doc
 
 ACLOCAL_AMFLAGS = -I m4
 
-distcleancheck_listfiles = find . -type f -print | grep -v 'omf\.out'
-
-distuninstallcheck_listfiles = find . -type f -print | grep -v '/var/scrollkeeper'
-
 EXTRA_DIST = 			\
 	autogen.sh		\
 	intltool-merge.in	\
