@@ -1,5 +1,12 @@
 ;; -*- scheme -*-
 ; object definitions ...
+(define-object EditableToolbar
+  (in-module "Egg")
+  (parent "GtkVBox")
+  (c-name "EggEditableToolbar")
+  (gtype-id "EGG_TYPE_EDITABLE_TOOLBAR")
+)
+
 (define-object Bookmarks
   (in-module "Ephy")
   (parent "GObject")
@@ -174,6 +181,13 @@
   (parent "GtkBin")
   (c-name "EphyTab")
   (gtype-id "EPHY_TYPE_TAB")
+)
+
+(define-object Toolbar
+  (in-module "Ephy")
+  (parent "EggEditableToolbar")
+  (c-name "EphyToolbar")
+  (gtype-id "EPHY_TYPE_TOOLBAR")
 )
 
 (define-object Window

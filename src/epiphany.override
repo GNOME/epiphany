@@ -40,7 +40,6 @@ headers
 #include "ephy-extensions-manager.h"
 #include "ephy-history.h"
 #include "ephy-lib-type-builtins.h"
-#include "ephy-loader.h"
 #include "ephy-node-db.h"
 #include "ephy-node.h"
 #include "ephy-notebook.h"
@@ -54,6 +53,18 @@ headers
 #include "ephy-type-builtins.h"
 #include "ephy-window.h"
 #include "ephy-link.h"
+#include "ephy-link-action.h"
+#include "egg-toolbars-model.h"
+#include "egg-editable-toolbar.h"
+#include "ephy-toolbars-model.h"
+#include "ephy-toolbar.h"
+#include "ephy-bookmarksbar-model.h"
+#include "ephy-bookmarksbar.h"
+#include "ephy-search-entry.h"
+#include "ephy-spinner.h"
+#include "ephy-location-action.h"
+#include "ephy-favicon-cache.h"
+#include "eggtypebuiltins.h"
 
 void pyepiphany_register_classes (PyObject *d); 
 void pyepiphany_add_constants (PyObject *module, const gchar *strip_prefix);
@@ -156,12 +167,17 @@ _helper_wrap_boxed_gptrarray (GType type, GPtrArray *list, gboolean own_ref, gbo
 %%
 modulename epiphany                     
 %%
-import gtk.Bin as PyGtkBin_Type
-import gtk.Window as PyGtkWindow_Type
-import gtk.UIManager as PyGtkUIManager_Type
 import gtk.Widget as PyGtkWidget_Type
+import gtk.Bin as PyGtkBin_Type
+import gtk.VBox as PyGtkVBox_Type
 import gtk.Statusbar as PyGtkStatusbar_Type
 import gtk.Notebook as PyGtkNotebook_Type
+import gtk.Toolbar as PyGtkToolbar_Type
+import gtk.Entry as PyGtkEntry_Type
+import gtk.EventBox as PyGtkEventBox_Type
+import gtk.Window as PyGtkWindow_Type
+import gtk.Action as PyGtkAction_Type
+import gtk.UIManager as PyGtkUIManager_Type
 import gobject.GObject as PyGObject_Type 
 %%
 ignore-glob
