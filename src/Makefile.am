@@ -317,16 +317,13 @@ BINDING_HEADERS_SRCDIR_IN = \
 	embed/ephy-password-manager.h			\
 	embed/ephy-permission-manager.h			\
 	lib/ephy-dialog.h				\
-	lib/ephy-file-chooser.h				\
 	lib/ephy-node-db.h				\
-	lib/ephy-node-filter.h				\
 	lib/ephy-node.h					\
 	lib/ephy-state.h				\
-	lib/widgets/ephy-node-view.h			\
+	lib/egg/egg-editable-toolbar.h			\
+	lib/egg/egg-toolbars-model.h			\
 	lib/widgets/ephy-search-entry.h			\
 	lib/widgets/ephy-spinner.h			\
-	lib/widgets/ephy-tree-model-node.h		\
-	lib/widgets/ephy-tree-model-sort.h		\
 	src/bookmarks/ephy-bookmarksbar.h		\
 	src/bookmarks/ephy-bookmarksbar-model.h		\
 	src/bookmarks/ephy-bookmarks.h			\
@@ -341,7 +338,6 @@ BINDING_HEADERS_SRCDIR_IN = \
 	src/ephy-statusbar.h				\
 	src/ephy-tab.h					\
 	src/ephy-toolbar.h				\
-	src/ephy-toolbars-model.h			\
 	src/ephy-window.h
 
 BINDING_HEADERS_SRCDIR_IGNORE_IN = \
@@ -352,6 +348,7 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	embed/ephy-encodings.h				\
 	lib/ephy-debug.h				\
 	lib/ephy-dnd.h					\
+	lib/ephy-file-chooser.h				\
 	lib/ephy-file-helpers.h				\
 	lib/ephy-glade.h				\
 	lib/ephy-gui.h					\
@@ -359,6 +356,7 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	lib/ephy-loader.h				\
 	lib/ephy-module.h				\
 	lib/ephy-node-common.h				\
+	lib/ephy-node-filter.h				\
 	lib/ephy-object-helpers.h			\
 	lib/ephy-prefs.h				\
 	lib/ephy-shlib-loader.h				\
@@ -366,7 +364,17 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	lib/ephy-stock-icons.h				\
 	lib/ephy-string.h				\
 	lib/ephy-zoom.h					\
+	lib/egg/eggintl.h				\
+	lib/egg/eggmarshalers.h				\
+	lib/egg/eggstatusicon.h				\
+	lib/egg/eggtrayicon.h				\
+	lib/egg/eggtraymanager.h			\
+	lib/egg/eggtreemultidnd.h			\
+	lib/egg/egg-toolbar-editor.h			\
 	lib/widgets/ephy-location-entry.h		\
+	lib/widgets/ephy-node-view.h			\
+	lib/widgets/ephy-tree-model-node.h		\
+	lib/widgets/ephy-tree-model-sort.h		\
 	lib/widgets/ephy-zoom-action.h			\
 	lib/widgets/ephy-zoom-control.h			\
 	src/bookmarks/ephy-bookmark-action.h		\
@@ -395,12 +403,10 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	src/ephy-python.h				\
 	src/ephy-python-loader.h			\
 	src/ephy-tabs-menu.h				\
-	src/ephy-toolbar-editor.h
+	src/ephy-toolbar-editor.h			\
+	src/ephy-toolbars-model.h
 
 if ENABLE_DBUS
-BINDING_HEADERS_SRCDIR_IN += \
-	lib/ephy-dbus.h
-else
 BINDING_HEADERS_SRCDIR_IGNORE_IN += \
 	lib/ephy-dbus.h
 endif
@@ -420,7 +426,7 @@ BINDING_HEADERS_SRCDIR_IGNORE	:= $(addprefix $(top_srcdir)/,$(BINDING_HEADERS_SR
 BINDING_HEADERS_BUILDDIR	:= $(addprefix $(top_builddir)/,$(BINDING_HEADERS_BUILDDIR_IN))
 BINDING_HEADERS_BUILDDIR_IGNORE	:= $(addprefix $(top_builddir)/,$(BINDING_HEADERS_BUILDDIR_IGNORE_IN))
 
-BINDING_HEADERS_ALL = $(find $(top_srcdir) $(top_builddir) -type f -name 'ephy-*.h' | sort | uniq )
+BINDING_HEADERS_ALL = $(find $(top_srcdir) $(top_builddir) -type f -name "*.h" -print | sort | uniq)
 
 BINDING_HEADERS_ALL_KNOWN = \
 	$(BINDING_HEADERS_SRCDIR) 		\
@@ -434,6 +440,7 @@ regenerate-python-binding:
 	$(PYGTK_H2DEF) $(sort $(BINDING_HEADERS_SRCDIR) $(BINDING_HEADERS_BUILDDIR)) > epiphany.defs.new
 
 check-python-binding:
+	echo "$(BINDING_HEADERS_ALL)"
 	test -z "$(BINDING_HEADERS_ALL_UNKNOWN)"
 
 check-local: check-python-binding
