@@ -799,11 +799,13 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 		text = "";
 	}
 
+	/* First record the new hash, then update the entry text */
+	priv->hash = g_str_hash (address);
+
 	priv->user_changed = FALSE;
 	gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
 	priv->user_changed = TRUE;
 
-	priv->hash = g_str_hash (address);
 	update_favicon (entry);
 
 	/* Now restore the selection.
