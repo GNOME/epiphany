@@ -2972,7 +2972,46 @@
 
 
 
-;; From /opt/gnome2/include/epiphany-1.5/epiphany/ephy-window.h
+;; From ../../src/ephy-toolbar.h
+
+(define-function ephy_toolbar_get_type
+  (c-name "ephy_toolbar_get_type")
+  (return-type "GType")
+)
+
+(define-method set_show_leave_fullscreen
+  (of-object "EphyToolbar")
+  (c-name "ephy_toolbar_set_show_leave_fullscreen")
+  (return-type "none")
+  (parameters
+    '("gboolean" "show")
+  )
+)
+
+(define-method activate_location
+  (of-object "EphyToolbar")
+  (c-name "ephy_toolbar_activate_location")
+  (return-type "none")
+)
+
+(define-method get_location
+  (of-object "EphyToolbar")
+  (c-name "ephy_toolbar_get_location")
+  (return-type "const-char*")
+)
+
+(define-method set_lock_visibility
+  (of-object "EphyToolbar")
+  (c-name "ephy_toolbar_set_lock_visibility")
+  (return-type "none")
+  (parameters
+    '("gboolean" "visible")
+  )
+)
+
+
+
+;; From ../../src/ephy-window.h
 
 (define-function ephy_window_get_type
   (c-name "ephy_window_get_type")
