@@ -284,7 +284,7 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 	/* File Menu */
 
 	{ "FileWorkOffline", NULL, N_("_Work Offline"), NULL,
-	  N_("Toggle network status"),
+	  N_("Switch to offline mode"),
 	  G_CALLBACK (window_cmd_file_work_offline), FALSE },
 
 	/* View Menu */
