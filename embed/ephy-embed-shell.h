@@ -59,6 +59,8 @@ struct _EphyEmbedShellClass
 
 GType		   ephy_embed_shell_get_type		(void);
 
+EphyEmbedShell	  *ephy_embed_shell_get_default		(void);
+
 GObject		  *ephy_embed_shell_get_favicon_cache	(EphyEmbedShell *ges);
 
 GObject		  *ephy_embed_shell_get_global_history	(EphyEmbedShell *shell);

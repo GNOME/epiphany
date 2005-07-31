@@ -258,3 +258,16 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 	
 	g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
 }
+
+/**
+ * ephy_embed_shell_get_default:
+ *
+ * Retrieves the default #EphyEmbedShell object
+ *
+ * ReturnValue: the default #EphyEmbedShell
+ **/
+EphyEmbedShell *
+ephy_embed_shell_get_default (void)
+{
+	return embed_shell;
+}
