@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany Gnome 2.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-30 05:26+0000\n"
-"PO-Revision-Date: 2005-07-30 20:36+0930\n"
+"POT-Creation-Date: 2005-08-01 05:30+0000\n"
+"PO-Revision-Date: 2005-08-01 17:25+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -126,12 +126,13 @@ msgstr "Chạy Epiphany luôn trong chế độ toàn màn hình"
 msgid "Browse the web"
 msgstr "Duyệt Mạng"
 
-#: ../data/epiphany.desktop.in.h:2 ../src/ephy-main.c:220
-#: ../src/ephy-main.c:228
+#: ../data/epiphany.desktop.in.h:2 ../src/window-commands.c:785
 msgid "Epiphany Web Browser"
 msgstr "Trình Duyệt Mạng Epiphany"
 
-#: ../data/epiphany.desktop.in.h:3
+#. sets the name to appear in the window list applet when grouping windows
+#: ../data/epiphany.desktop.in.h:3 ../src/ephy-main.c:222
+#: ../src/ephy-main.c:233
 msgid "Web Browser"
 msgstr "Trình duyệt Mạng"
 
@@ -1455,7 +1456,9 @@ msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
 msgstr ""
-"Hãy kiểm tra thiết lập trình phục vụ ủy nhiệm là đúng. Nếu vẫn chưa có thể kết nối thì có lẽ gặp lỗi với trình phục vụ ủy nhiệm, hoặc với kết nối qua mạng."
+"Hãy kiểm tra thiết lập trình phục vụ ủy nhiệm là đúng. Nếu vẫn chưa có thể "
+"kết nối thì có lẽ gặp lỗi với trình phục vụ ủy nhiệm, hoặc với kết nối qua "
+"mạng."
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -2820,35 +2823,35 @@ msgstr[0] "%d ngày trước"
 msgid "Sites"
 msgstr "Nơi Mạng"
 
-#: ../src/ephy-main.c:58
-msgid "Open a new tab in an existing Epiphany window"
-msgstr "Mở thanh mới trong cửa sổ sẵn có"
+#: ../src/ephy-main.c:59
+msgid "Open a new tab in an existing window"
+msgstr "Mở thanh mới trong cửa sổ đang mở"
 
-#: ../src/ephy-main.c:61
-msgid "Run Epiphany in full screen mode"
-msgstr "Chạy Epiphany trong chế độ toàn màn hình"
+#: ../src/ephy-main.c:62
+msgid "Run in full screen mode"
+msgstr "Chạy trong chế độ toàn màn hình"
 
-#: ../src/ephy-main.c:64
+#: ../src/ephy-main.c:65
 msgid "Load the given session file"
 msgstr "Tải tập tin phiên đã cho"
 
-#: ../src/ephy-main.c:65 ../src/ephy-main.c:71
+#: ../src/ephy-main.c:66 ../src/ephy-main.c:72
 msgid "FILE"
 msgstr "Tập Tin"
 
-#: ../src/ephy-main.c:67
+#: ../src/ephy-main.c:68
 msgid "Add a bookmark (don't open any window)"
 msgstr "Thêm dấu sách (không mở cửa sổ nào)"
 
-#: ../src/ephy-main.c:68
+#: ../src/ephy-main.c:69
 msgid "URL"
 msgstr "Địa chỉ Mạng"
 
-#: ../src/ephy-main.c:70
+#: ../src/ephy-main.c:71
 msgid "Import bookmarks from the given file"
 msgstr "Nập dấu sách từ tập tin cho trước"
 
-#: ../src/ephy-main.c:73
+#: ../src/ephy-main.c:74
 msgid "Launch the bookmarks editor"
 msgstr "Chạy trình hiệu chỉnh dấu sách"
 
@@ -2921,7 +2924,7 @@ msgstr ""
 "Hiện không thể sử dụng trình Epiphany vì gặp lỗi bất ngờ Bonobo khi cố xác "
 "định đúng vị trí của đối tượng tự động hóa."
 
-#: ../src/ephy-tab.c:474 ../src/ephy-tab.c:2158
+#: ../src/ephy-tab.c:474 ../src/ephy-tab.c:2188
 msgid "Blank page"
 msgstr "Trang trắng"
 
@@ -2935,22 +2938,22 @@ msgstr "Đang tải « %s »..."
 msgid "Loading..."
 msgstr "Đang tải..."
 
-#: ../src/ephy-tab.c:1551
+#: ../src/ephy-tab.c:1580
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Chuyển hướng tới %s ..."
 
-#: ../src/ephy-tab.c:1555
+#: ../src/ephy-tab.c:1584
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Truyền dữ liệu từ %s ..."
 
-#: ../src/ephy-tab.c:1559
+#: ../src/ephy-tab.c:1588
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Đợi xác thực từ %s ..."
 
-#: ../src/ephy-tab.c:1567
+#: ../src/ephy-tab.c:1596
 #, c-format
 msgid "Loading %s..."
 msgstr "Tải %s..."
@@ -3367,8 +3370,8 @@ msgid "_Work Offline"
 msgstr "Sử dụng trình này ngoại tuyến"
 
 #: ../src/ephy-window.c:287
-msgid "Toggle network status"
-msgstr "Trạng thái mạng bập bênh"
+msgid "Switch to offline mode"
+msgstr "Chuyển sang chế độ ngoại tuyến"
 
 #. View Menu
 #: ../src/ephy-window.c:292
@@ -3747,9 +3750,17 @@ msgstr "Chọn thư mục"
 msgid "Check this out!"
 msgstr "Hãy xem cái này!"
 
-#: ../src/window-commands.c:771
-msgid "Epiphany"
-msgstr "Epiphany"
+#: ../src/window-commands.c:763 ../src/window-commands.c:779
+msgid "Contact us at:"
+msgstr "Liên hệ chúng tôi tại:"
+
+#: ../src/window-commands.c:766
+msgid "Contributors:"
+msgstr "Người đóng góp"
+
+#: ../src/window-commands.c:770
+msgid "Past developers:"
+msgstr "Lập trình viên trước:"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3759,6 +3770,12 @@ msgstr "Epiphany"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:784
+#: ../src/window-commands.c:799
 msgid "translator-credits"
 msgstr "Nhóm Việt hoá GNOME (http://gnomevi.sourceforge.net)"
+
+#~ msgid "Toggle network status"
+#~ msgstr "Trạng thái mạng bập bênh"
+
+#~ msgid "Epiphany"
+#~ msgstr "Epiphany"
