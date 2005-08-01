@@ -24,6 +24,7 @@
 
 #include "ephy-embed.h"
 
+#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gtk/gtkbin.h>
 
 G_BEGIN_DECLS
@@ -69,7 +70,9 @@ EphyTab		       *ephy_tab_for_embed		(EphyEmbed *embed);
 
 EphyEmbedDocumentType	ephy_tab_get_document_type	(EphyTab *tab);
 
-const char             *ephy_tab_get_icon_address	(EphyTab *tab);
+GdkPixbuf	       *ephy_tab_get_icon		(EphyTab *tab);
+
+const char	       *ephy_tab_get_icon_address	(EphyTab *tab);
 
 gboolean		ephy_tab_get_load_status	(EphyTab *tab);
 

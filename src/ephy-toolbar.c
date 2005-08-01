@@ -377,7 +377,7 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 
 void
 ephy_toolbar_set_favicon (EphyToolbar *toolbar,
-			  const char *icon)
+			  GdkPixbuf *icon)
 {
 	EphyToolbarPrivate *priv = toolbar->priv;
 

@@ -49,7 +49,6 @@
 #include "ephy-tabs-menu.h"
 #include "ephy-stock-icons.h"
 #include "ephy-extension.h"
-#include "ephy-favicon-cache.h"
 #include "ephy-link.h"
 #include "ephy-gui.h"
 #include "ephy-notebook.h"
@@ -1193,33 +1192,19 @@ sync_tab_document_type (EphyTab *tab,
 }
 
 static void
-sync_tab_icon (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_icon (EphyTab *tab,
+	       GParamSpec *pspec,
+	       EphyWindow *window)
 {
-	const char *address;
-	EphyFaviconCache *cache;
-	GdkPixbuf *pixbuf = NULL;
+	EphyWindowPrivate *priv = window->priv;
+	GdkPixbuf *icon;
 
-	if (window->priv->closing) return;
+	if (priv->closing) return;
 
-	cache = EPHY_FAVICON_CACHE
-		(ephy_embed_shell_get_favicon_cache
-			(EPHY_EMBED_SHELL (ephy_shell)));
+	icon = ephy_tab_get_icon (tab);
 
-	address = ephy_tab_get_icon_address (tab);
-
-	if (address)
-	{
-		pixbuf = ephy_favicon_cache_get (cache, address);
-	}
-
-	gtk_window_set_icon (GTK_WINDOW (window), pixbuf);
-
-	ephy_toolbar_set_favicon (window->priv->toolbar, address);
-
-	if (pixbuf)
-	{
-		g_object_unref (pixbuf);
-	}
+	gtk_window_set_icon (GTK_WINDOW (window), icon);
+	ephy_toolbar_set_favicon (priv->toolbar, icon);
 }
 
 static void

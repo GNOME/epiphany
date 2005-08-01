@@ -25,6 +25,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include "egg-editable-toolbar.h"
 #include "ephy-window.h"
@@ -65,7 +66,7 @@ GType		ephy_toolbar_get_type			(void);
 EphyToolbar    *ephy_toolbar_new			(EphyWindow *window);
 
 void		ephy_toolbar_set_favicon		(EphyToolbar *toolbar,
-							 const char *icon);
+							 GdkPixbuf *icon);
 
 void		ephy_toolbar_set_show_leave_fullscreen	(EphyToolbar *toolbar,
 							 gboolean show);

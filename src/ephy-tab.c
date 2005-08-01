@@ -72,11 +72,12 @@ struct _EphyTabPrivate
 {
 	char *status_message;
 	char *link_message;
-	char *icon_address;
 	char *address;
 	char *typed_address;
 	char *title;
 	char *loading_title;
+	char *icon_address;
+	GdkPixbuf *icon;
 	int cur_requests;
 	int total_requests;
 	int width;
@@ -121,6 +122,7 @@ enum
 	PROP_ADDRESS,
 	PROP_DOCUMENT_TYPE,
 	PROP_ICON,
+	PROP_ICON_ADDRESS,
 	PROP_LOAD_PROGRESS,
 	PROP_LOAD_STATUS,
 	PROP_MESSAGE,
@@ -222,12 +224,12 @@ ephy_tab_set_property (GObject *object,
 			ephy_tab_set_typed_address (tab, g_value_get_string (value));
 			break;
 		case PROP_POPUPS_ALLOWED:
-			ephy_tab_set_popups_allowed
-				(tab, g_value_get_boolean (value));
+			ephy_tab_set_popups_allowed (tab, g_value_get_boolean (value));
 			break;
 		case PROP_ADDRESS:
 		case PROP_DOCUMENT_TYPE:
 		case PROP_ICON:
+		case PROP_ICON_ADDRESS:
 		case PROP_LOAD_PROGRESS:
 		case PROP_LOAD_STATUS:
 		case PROP_MESSAGE:
@@ -249,32 +251,36 @@ ephy_tab_get_property (GObject *object,
 		       GParamSpec *pspec)
 {
 	EphyTab *tab = EPHY_TAB (object);
+	EphyTabPrivate *priv = tab->priv;
 
 	switch (prop_id)
 	{
 		case PROP_ADDRESS:
-			g_value_set_string (value, tab->priv->address);
+			g_value_set_string (value, priv->address);
 			break;
 		case PROP_DOCUMENT_TYPE:
-			g_value_set_enum (value, tab->priv->document_type);
+			g_value_set_enum (value, priv->document_type);
 			break;
 		case PROP_ICON:
-			g_value_set_string (value, tab->priv->icon_address);
+			g_value_set_object (value, priv->icon);
+			break;
+		case PROP_ICON_ADDRESS:
+			g_value_set_string (value, priv->icon_address);
 			break;
 		case PROP_LOAD_PROGRESS:
-			g_value_set_int (value, tab->priv->load_percent);
+			g_value_set_int (value, priv->load_percent);
 			break;
 		case PROP_LOAD_STATUS:
-			g_value_set_boolean (value, tab->priv->is_loading);
+			g_value_set_boolean (value, priv->is_loading);
 			break;
 		case PROP_MESSAGE:
 			g_value_set_string (value, ephy_tab_get_status_message (tab));
 			break;
 		case PROP_NAVIGATION:
-			g_value_set_flags (value, tab->priv->nav_flags);
+			g_value_set_flags (value, priv->nav_flags);
 			break;
 		case PROP_SECURITY:
-			g_value_set_enum (value, tab->priv->security_level);
+			g_value_set_enum (value, priv->security_level);
 			break;
 		case PROP_HIDDEN_POPUP_COUNT:
 			g_value_set_int (value, popup_blocker_n_hidden (tab));
@@ -284,16 +290,16 @@ ephy_tab_get_property (GObject *object,
 				(value, ephy_tab_get_popups_allowed (tab));
 			break;
 		case PROP_TITLE:
-			g_value_set_string (value, tab->priv->title);
+			g_value_set_string (value, priv->title);
 			break;
 		case PROP_TYPED_ADDRESS:
 			g_value_set_string (value, ephy_tab_get_typed_address (tab));
 			break;
 		case PROP_VISIBLE:
-			g_value_set_boolean (value, tab->priv->visibility);
+			g_value_set_boolean (value, priv->visibility);
 			break;
 		case PROP_ZOOM:
-			g_value_set_float (value, tab->priv->zoom);
+			g_value_set_float (value, priv->zoom);
 			break;
 	}
 }
@@ -397,8 +403,16 @@ ephy_tab_class_init (EphyTabClass *class)
 							    G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
-					 PROP_ICON,
-					 g_param_spec_string ("icon",
+					 PROP_ICON_ADDRESS,
+					 g_param_spec_object ("icon",
+							      "Icon",
+							      "The tab icon's",
+							      GDK_TYPE_PIXBUF,
+							      G_PARAM_READABLE));
+
+	g_object_class_install_property (object_class,
+					 PROP_ICON_ADDRESS,
+					 g_param_spec_string ("icon-address",
 							      "Icon address",
 							      "The tab icon's address",
 							      NULL,
@@ -808,6 +822,12 @@ ephy_tab_finalize (GObject *object)
 	EphyTab *tab = EPHY_TAB (object);
 	EphyTabPrivate *priv = tab->priv;
 
+	if (priv->icon != NULL)
+	{
+		g_object_unref (priv->icon);
+		priv->icon = NULL;
+	}
+
 	g_free (priv->title);
 	g_free (priv->address);
 	g_free (priv->icon_address);
@@ -1148,18 +1168,37 @@ ephy_tab_get_visibility (EphyTab *tab)
 }
 
 static void
+ephy_tab_load_icon (EphyTab *tab)
+{
+	EphyTabPrivate *priv = tab->priv;
+	EphyEmbedShell *shell;
+	EphyFaviconCache *cache;
+
+	if (priv->icon_address == NULL || priv->icon != NULL) return;
+
+	shell = ephy_embed_shell_get_default ();
+	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (shell));
+
+	/* ephy_favicon_cache_get returns a reference already */
+	priv->icon = ephy_favicon_cache_get (cache, priv->icon_address);
+
+	g_object_notify (G_OBJECT (tab), "icon");
+}
+
+static void
 ephy_tab_icon_cache_changed_cb (EphyFaviconCache *cache,
 				const char *address,
 				EphyTab *tab)
 {
+	EphyTabPrivate *priv = tab->priv;
+
 	g_return_if_fail (address != NULL);
 
 	/* is this for us? */
-	if (tab->priv->icon_address != NULL &&
-	    strcmp (tab->priv->icon_address, address) == 0)
+	if (priv->icon_address != NULL &&
+	    strcmp (priv->icon_address, address) == 0)
 	{
-		/* notify */
-		g_object_notify (G_OBJECT (tab), "icon");
+		ephy_tab_load_icon (tab);
 	}
 }
 
@@ -1167,12 +1206,21 @@ static void
 ephy_tab_set_icon_address (EphyTab *tab,
 			   const char *address)
 {
+	GObject *object = G_OBJECT (tab);
 	EphyTabPrivate *priv = tab->priv;
 	EphyBookmarks *eb;
 	EphyHistory *history;
 
 	g_free (priv->icon_address);
 	priv->icon_address = g_strdup (address);
+
+	if (priv->icon != NULL)
+	{
+		g_object_unref (priv->icon);
+		priv->icon = NULL;
+
+		g_object_notify (object, "icon");
+	}
 
 	if (priv->icon_address)
 	{
@@ -1183,9 +1231,11 @@ ephy_tab_set_icon_address (EphyTab *tab,
 				         priv->icon_address);
 		ephy_history_set_icon (history, priv->address,
 				       priv->icon_address);
+
+		ephy_tab_load_icon (tab);
 	}
 
-	g_object_notify (G_OBJECT (tab), "icon");
+	g_object_notify (object, "icon-address");
 }
 
 static void
@@ -1337,12 +1387,33 @@ ephy_tab_update_file_monitor (EphyTab *tab,
 }
 
 /**
+ * ephy_tab_get_icon:
+ * @tab: an #EphyTab
+ *
+ * Returns the tab's site icon as a #GdkPixbuf,
+ * or %NULL if it is not available.
+ *
+ * Return value: a the tab's site icon
+ **/
+GdkPixbuf *
+ephy_tab_get_icon (EphyTab *tab)
+{
+	EphyTabPrivate *priv;
+
+	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
+
+	priv = tab->priv;
+
+	return priv->icon;
+}
+
+/**
  * ephy_tab_get_icon_address:
  * @tab: an #EphyTab
  *
- * Returns a URL which points to @tab's favicon.
+ * Returns a URL which points to @tab's site icon.
  *
- * Return value: a URL to @tab's favicon
+ * Return value: the URL of @tab's site icon
  **/
 const char *
 ephy_tab_get_icon_address (EphyTab *tab)
@@ -1962,6 +2033,12 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->zoom = 1.0;
 	priv->title = NULL;
 	priv->is_blank = TRUE;
+	priv->icon_address = NULL;
+	priv->icon = NULL;
+	priv->address = NULL;
+	priv->typed_address = NULL;
+	priv->title = NULL;
+	priv->loading_title = NULL;
 
 	embed = ephy_embed_factory_new_object (EPHY_TYPE_EMBED);
 	g_assert (embed != NULL);

@@ -1,3 +1,23 @@
+2005-08-01  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-location-action.c: (sync_icon),
+	(ephy_location_action_set_property),
+	(ephy_location_action_get_property),
+	(ephy_location_action_class_init), (ephy_location_action_init),
+	(ephy_location_action_finalize):
+	* src/ephy-notebook.c: (sync_icon):
+	* src/ephy-tab.c: (ephy_tab_set_property), (ephy_tab_get_property),
+	(ephy_tab_class_init), (ephy_tab_finalize), (ephy_tab_load_icon),
+	(ephy_tab_icon_cache_changed_cb), (ephy_tab_set_icon_address),
+	(ephy_tab_get_icon), (ephy_tab_init):
+	* src/ephy-tab.h:
+	* src/ephy-toolbar.c: (ephy_toolbar_set_favicon):
+	* src/ephy-toolbar.h:
+	* src/ephy-window.c: (sync_tab_icon):
+
+	Add a ::icon property to EphyTab, and use that everywhere instead
+	of querying the icon cache, thus saving memory.
+
 2005-07-31  Christian Persch  <chpe@cvs.gnome.org>
 
 	* Makefile.am:

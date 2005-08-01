@@ -32,7 +32,6 @@
 #include "ephy-embed.h"
 #include "ephy-window.h"
 #include "ephy-shell.h"
-#include "ephy-favicon-cache.h"
 #include "ephy-spinner.h"
 #include "ephy-link.h"
 #include "ephy-debug.h"
@@ -864,32 +863,16 @@ sync_load_status (EphyTab *tab, GParamSpec *pspec, GtkWidget *proxy)
 }
 
 static void
-sync_icon (EphyTab *tab, GParamSpec *pspec, GtkWidget *proxy)
+sync_icon (EphyTab *tab,
+	   GParamSpec *pspec,
+	   GtkWidget *proxy)
 {
-	EphyFaviconCache *cache;
-	GdkPixbuf *pixbuf = NULL;
-	GtkImage *icon = NULL;
-	const char *address;
-
-	cache = EPHY_FAVICON_CACHE
-		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));
-	address = ephy_tab_get_icon_address (tab);
-
-	if (address)
-	{
-		pixbuf = ephy_favicon_cache_get (cache, address);
-	}
+	GtkImage *icon;
 
 	icon = GTK_IMAGE (g_object_get_data (G_OBJECT (proxy), "icon"));
-	if (icon)
-	{
-		gtk_image_set_from_pixbuf (icon, pixbuf);
-	}
-
-	if (pixbuf)
-	{
-		g_object_unref (pixbuf);
-	}
+	g_return_if_fail (icon != NULL);
+	
+	gtk_image_set_from_pixbuf (icon, ephy_tab_get_icon (tab));
 }
 
 static void

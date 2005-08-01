@@ -24,7 +24,6 @@
 #include "ephy-location-action.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
-#include "ephy-favicon-cache.h"
 #include "ephy-completion-model.h"
 #include "ephy-link.h"
 #include "ephy-debug.h"
@@ -46,8 +45,7 @@ struct _EphyLocationActionPrivate
 	char *typed_address;
 	EphyNode *smart_bmks;
 	EphyBookmarks *bookmarks;
-	char *icon;
-	EphyFaviconCache *cache;
+	GdkPixbuf *icon;
 	char *lock_stock_id;
 	char *lock_tooltip;
 	guint editable : 1;
@@ -240,16 +238,8 @@ sync_icon (GtkAction *gaction,
 	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
 	EphyLocationActionPrivate *priv = action->priv;
 	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (proxy);
-	GdkPixbuf *pixbuf;
 
-	pixbuf = ephy_favicon_cache_get (priv->cache, priv->icon);
-
-	ephy_location_entry_set_favicon (entry, pixbuf);
-
-	if (pixbuf != NULL)
-	{
-		g_object_unref (pixbuf);
-	}
+	ephy_location_entry_set_favicon (entry, priv->icon);
 }
 
 static void
@@ -444,6 +434,7 @@ ephy_location_action_set_property (GObject *object,
 				   GParamSpec *pspec)
 {
 	EphyLocationAction *action = EPHY_LOCATION_ACTION (object);
+	EphyLocationActionPrivate *priv = action->priv;
 
 	switch (prop_id)
 	{
@@ -451,25 +442,28 @@ ephy_location_action_set_property (GObject *object,
 			ephy_location_action_set_address (action, g_value_get_string (value), NULL);
 			break;
 		case PROP_EDITABLE:
-			action->priv->editable = g_value_get_boolean (value);
+			priv->editable = g_value_get_boolean (value);
 			break;
 		case PROP_ICON:
-			g_free (action->priv->icon);
-			action->priv->icon = g_value_dup_string (value);
+			if (priv->icon != NULL)
+			{
+				g_object_unref (priv->icon);
+			}
+			priv->icon = GDK_PIXBUF (g_value_dup_object (value));
 			break;
 		case PROP_LOCK_STOCK:
-			g_free (action->priv->lock_stock_id);
-			action->priv->lock_stock_id = g_value_dup_string (value);
+			g_free (priv->lock_stock_id);
+			priv->lock_stock_id = g_value_dup_string (value);
 			break;
 		case PROP_LOCK_TOOLTIP:
-			g_free (action->priv->lock_tooltip);
-			action->priv->lock_tooltip = g_value_dup_string (value);
+			g_free (priv->lock_tooltip);
+			priv->lock_tooltip = g_value_dup_string (value);
 			break;
 		case PROP_SHOW_LOCK:
-			action->priv->show_lock = g_value_get_boolean (value);
+			priv->show_lock = g_value_get_boolean (value);
 			break;
 		case PROP_WINDOW:
-			action->priv->window = EPHY_WINDOW (g_value_get_object (value));
+			priv->window = EPHY_WINDOW (g_value_get_object (value));
 			break;
 	}
 }
@@ -481,6 +475,7 @@ ephy_location_action_get_property (GObject *object,
 				   GParamSpec *pspec)
 {
 	EphyLocationAction *action = EPHY_LOCATION_ACTION (object);
+	EphyLocationActionPrivate *priv = action->priv;
 
 	switch (prop_id)
 	{
@@ -488,19 +483,19 @@ ephy_location_action_get_property (GObject *object,
 			g_value_set_string (value, ephy_location_action_get_address (action));
 			break;
 		case PROP_EDITABLE:
-			g_value_set_boolean (value, action->priv->editable);
+			g_value_set_boolean (value, priv->editable);
 			break;
 		case PROP_ICON:
-			g_value_set_string (value, action->priv->icon);
+			g_value_set_object (value, priv->icon);
 			break;
 		case PROP_LOCK_STOCK:
-			g_value_set_string (value, action->priv->lock_stock_id);
+			g_value_set_string (value, priv->lock_stock_id);
 			break;
 		case PROP_LOCK_TOOLTIP:
-			g_value_set_string (value, action->priv->lock_tooltip);
+			g_value_set_string (value, priv->lock_tooltip);
 			break;
 		case PROP_SHOW_LOCK:
-			g_value_set_boolean (value, action->priv->show_lock);
+			g_value_set_boolean (value, priv->show_lock);
 			break;
 		case PROP_WINDOW:
 			/* not readable */
@@ -551,11 +546,11 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 
 	g_object_class_install_property (object_class,
 					 PROP_ICON,
-					 g_param_spec_string  ("icon",
-							       "Icon",
-							       "The icon",
-							       NULL,
-							       G_PARAM_READWRITE));
+					 g_param_spec_object ("icon",
+							      "Icon",
+							      "The icon",
+							      GDK_TYPE_PIXBUF,
+							      G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class,
 					 PROP_LOCK_STOCK,
@@ -700,32 +695,30 @@ actions_child_changed_cb (EphyNode *node,
 static void
 ephy_location_action_init (EphyLocationAction *action)
 {
-	action->priv = EPHY_LOCATION_ACTION_GET_PRIVATE (action);
+	EphyLocationActionPrivate *priv;
 
-	action->priv->address = g_strdup ("");
-	action->priv->editable = TRUE;
-	action->priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	action->priv->smart_bmks = ephy_bookmarks_get_smart_bookmarks
+	priv = action->priv = EPHY_LOCATION_ACTION_GET_PRIVATE (action);
+
+	priv->address = g_strdup ("");
+	priv->editable = TRUE;
+	priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	priv->smart_bmks = ephy_bookmarks_get_smart_bookmarks
 		(action->priv->bookmarks);
 
 	init_actions_list (action);
 
-	ephy_node_signal_connect_object (action->priv->smart_bmks,
+	ephy_node_signal_connect_object (priv->smart_bmks,
 			                 EPHY_NODE_CHILD_ADDED,
 			                 (EphyNodeCallback)actions_child_added_cb,
 			                 G_OBJECT (action));
-	ephy_node_signal_connect_object (action->priv->smart_bmks,
+	ephy_node_signal_connect_object (priv->smart_bmks,
 			                 EPHY_NODE_CHILD_REMOVED,
 			                 (EphyNodeCallback)actions_child_removed_cb,
 			                 G_OBJECT (action));
-	ephy_node_signal_connect_object (action->priv->smart_bmks,
+	ephy_node_signal_connect_object (priv->smart_bmks,
 			                 EPHY_NODE_CHILD_CHANGED,
 			                 (EphyNodeCallback)actions_child_changed_cb,
 			                 G_OBJECT (action));
-
-	action->priv->cache = EPHY_FAVICON_CACHE
-		(ephy_embed_shell_get_favicon_cache (embed_shell));
-	g_object_ref (action->priv->cache);
 }
 
 static void
@@ -734,13 +727,16 @@ ephy_location_action_finalize (GObject *object)
 	EphyLocationAction *action = EPHY_LOCATION_ACTION (object);
 	EphyLocationActionPrivate *priv = action->priv;
 
+	if (priv->icon != NULL)
+	{
+		g_object_unref (priv->icon);
+	}
+
 	g_list_free (priv->actions);
 	g_free (priv->address);
 	g_free (priv->typed_address);
-	g_free (priv->icon);
 	g_free (priv->lock_stock_id);
 	g_free (priv->lock_tooltip);
-	g_object_unref (priv->cache);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
