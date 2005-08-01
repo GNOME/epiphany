@@ -1,5 +1,21 @@
 2005-08-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-location-action.c: (get_location_cb):
+	* src/ephy-session.c: (write_tab):
+	* src/ephy-tab.c:
+	* src/ephy-window.c: (modal_alert_cb):
+	* src/prefs-dialog.c: (set_homepage_entry),
+	(prefs_homepage_current_button_clicked_cb):
+	* src/window-commands.c: (window_cmd_file_send_to),
+	(window_cmd_file_bookmark_page), (window_cmd_view_page_source):
+
+	Now that the tab's address is always correct (isn't the typed address
+	anymore), always use ephy_tab_get_address instead of
+	ephy_embed_get_location, since the former also gets the right address
+	when the page loading but still blank. Should fix bug #147840.
+
+2005-08-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-location-action.c: (sync_icon),
 	(ephy_location_action_set_property),
 	(ephy_location_action_get_property),

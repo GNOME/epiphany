@@ -2248,7 +2248,7 @@ ephy_tab_set_title (EphyTab *tab,
  *
  * Returns the title of the web page loaded in @tab.
  *
- * Return value: @tab's loaded web page's title
+ * Return value: @tab's loaded web page's title. Will never be %NULL.
  **/
 const char *
 ephy_tab_get_title (EphyTab *tab)
@@ -2283,7 +2283,7 @@ ephy_tab_get_title (EphyTab *tab)
  *
  * Returns the address of the currently loaded page.
  *
- * Return value: @tab's address
+ * Return value: @tab's address. Will never be %NULL.
  **/
 const char *
 ephy_tab_get_address (EphyTab *tab)

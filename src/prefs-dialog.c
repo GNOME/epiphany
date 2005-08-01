@@ -1280,12 +1280,12 @@ prefs_clear_cache_button_clicked_cb (GtkWidget *button,
 
 static void
 set_homepage_entry (EphyDialog *dialog,
-		    char *new_location)
+		    const char *new_location)
 {
 	GValue value = { 0, };
 
 	g_value_init (&value, G_TYPE_STRING);
-	g_value_take_string (&value, new_location);
+	g_value_set_string (&value, new_location);
 	ephy_dialog_set_value (dialog, properties[HOMEPAGE_ENTRY_PROP].id, &value);
 	g_value_unset (&value);
 }
@@ -1296,8 +1296,7 @@ prefs_homepage_current_button_clicked_cb (GtkWidget *button,
 {
 	EphySession *session;
 	EphyWindow *window;
-	EphyEmbed *embed;
-	char *location;
+	EphyTab *tab;
 
 	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
 	window = ephy_session_get_active_window (session);
@@ -1305,11 +1304,10 @@ prefs_homepage_current_button_clicked_cb (GtkWidget *button,
 	/* can't do anything in this case */
 	if (window == NULL) return;
 
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
+	tab = ephy_window_get_active_tab (window);
+	g_return_if_fail (tab != NULL);
 
-	location = ephy_embed_get_location (embed, TRUE);
-	set_homepage_entry (dialog, location);
+	set_homepage_entry (dialog, ephy_tab_get_address (tab));
 }
 
 void

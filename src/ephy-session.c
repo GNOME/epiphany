@@ -517,17 +517,14 @@ static int
 write_tab (xmlTextWriterPtr writer,
 	   EphyTab *tab)
 {
-	EphyEmbed *embed;
-	char *location;
+	const char *address;
 	int ret;
 
 	ret = xmlTextWriterStartElement (writer, (xmlChar *) "embed");
 	if (ret < 0) return ret;
 
-	embed = ephy_tab_get_embed (tab);
-	location = ephy_embed_get_location (embed, TRUE);
-	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "url", (xmlChar *) location);
-	g_free (location);
+	address = ephy_tab_get_address (tab);
+	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "url", (xmlChar *) address);
 	if (ret < 0) return ret;
 
 	ret = xmlTextWriterEndElement (writer); /* embed */

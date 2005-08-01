@@ -2035,7 +2035,7 @@ modal_alert_cb (EphyEmbed *embed,
 {
 	EphyWindowPrivate *priv = window->priv;
 	EphyTab *tab;
-	char *address;
+	const char *address;
 
 	tab = ephy_tab_for_embed (embed);
 	g_return_val_if_fail (tab != NULL, FALSE);
@@ -2051,9 +2051,8 @@ modal_alert_cb (EphyEmbed *embed,
 	gtk_window_present (GTK_WINDOW (window));
 
 	/* make sure the location entry shows the real URL of the tab's page */
-	address = ephy_embed_get_location (embed, TRUE);
+	address = ephy_tab_get_address (tab);
 	ephy_toolbar_set_location (priv->toolbar, address, NULL);
-	g_free (address);
 
 	/* don't suppress alert */
 	return FALSE;

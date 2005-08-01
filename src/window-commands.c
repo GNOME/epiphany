@@ -129,10 +129,8 @@ window_cmd_file_send_to	(GtkAction *action,
 {
 	EphyTab *tab;
 	EphyEmbed *embed;
-	char *url;
-	char *embed_location;
-	char *location;
-	char *title;
+	const char *address;
+	char *url, *location, *title;
 
 	tab = ephy_window_get_active_tab (window);
 	g_return_if_fail (tab != NULL);
@@ -140,9 +138,8 @@ window_cmd_file_send_to	(GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	embed_location = ephy_embed_get_location (embed, TRUE);
-	location = gnome_vfs_escape_string (embed_location);
-	g_free (embed_location);
+	address = ephy_tab_get_address (tab);
+	location = gnome_vfs_escape_string (address);
 
 	title = ephy_embed_get_title (embed);
 	if (title != NULL)
@@ -291,9 +288,8 @@ window_cmd_file_bookmark_page (GtkAction *action,
 	EphyEmbed *embed;
 	EphyBookmarks *bookmarks;
 	GtkWidget *new_bookmark;
-	char *location;
-	const char *icon;
-	char *title = NULL;
+	const char *location, *icon;
+	char *title;
 
 	tab = ephy_window_get_active_tab (window);
 	g_return_if_fail (tab != NULL);
@@ -301,7 +297,7 @@ window_cmd_file_bookmark_page (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	location = ephy_embed_get_location (embed, TRUE);
+	location = ephy_tab_get_address (tab);
 
 	title = ephy_embed_get_title (embed);
 	if (title == NULL)
@@ -325,7 +321,6 @@ window_cmd_file_bookmark_page (GtkAction *action,
 	}
 
 	g_free (title);
-	g_free (location);
 }
 
 static void
@@ -676,19 +671,21 @@ void
 window_cmd_view_page_source (GtkAction *action,
 			     EphyWindow *window)
 {
+	EphyTab *tab;
 	EphyEmbed *embed;
-	char *address;
-	char *scheme;
+	const char *address;
 	guint32 user_time;
+
+	tab = ephy_window_get_active_tab (window);
+	g_return_if_fail (tab != NULL);
 
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	address = ephy_embed_get_location (embed, TRUE);
-	scheme = gnome_vfs_get_uri_scheme (address);
+	address = ephy_tab_get_address (tab);
 	user_time = gtk_get_current_event_time ();
 
-	if (strcmp (scheme, "file") == 0)
+	if (g_str_has_prefix (address, "file://"))
 	{
 		ephy_file_launch_handler ("text/plain", address, user_time);
 	}
@@ -696,9 +693,6 @@ window_cmd_view_page_source (GtkAction *action,
 	{
 		save_temp_source (embed, user_time);
 	}
-
-	g_free (scheme);
-	g_free (address);
 }
 
 void
