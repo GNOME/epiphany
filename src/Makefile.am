@@ -292,9 +292,7 @@ epiphany.c: epiphany.defs epiphany.override
 		--register $(PYGTK_DEFSDIR)/gdk-types.defs \
 		--register $(PYGTK_DEFSDIR)/gtk-types.defs \
 		--override $*.override \
-		--prefix py$* $(<F) ) > gen-$@ \
-	&& ( cmp -s gen-$@ $@ || cp gen-$@ $@ ) \
-	&& rm -f gen-$@
+		--prefix py$* $(<F) ) > $@ 
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)

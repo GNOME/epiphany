@@ -1,3 +1,11 @@
+2005-08-01  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* src/Makefile.am (epiphany.c):
+
+	Pipe the output of the pygtk_codegen program straight to
+	epiphany.c to fix timestamp handling, which caused make to
+	run rules on every invocation.
+
 2005-08-01  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-location-action.c: (get_location_cb):
