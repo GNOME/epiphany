@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-29 00:03-0400\n"
-"PO-Revision-Date: 2005-07-29 22:27-0500\n"
+"POT-Creation-Date: 2005-07-31 22:11-0400\n"
+"PO-Revision-Date: 2005-07-31 22:27-0500\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -124,11 +124,12 @@ msgstr "Locks Epiphany in fullscreen mode."
 msgid "Browse the web"
 msgstr "Browse the web"
 
-#: data/epiphany.desktop.in.h:2 src/ephy-main.c:220 src/ephy-main.c:228
+#: data/epiphany.desktop.in.h:2 src/window-commands.c:785
 msgid "Epiphany Web Browser"
 msgstr "Epiphany Web Browser"
 
-#: data/epiphany.desktop.in.h:3
+#. sets the name to appear in the window list applet when grouping windows
+#: data/epiphany.desktop.in.h:3 src/ephy-main.c:222 src/ephy-main.c:233
 msgid "Web Browser"
 msgstr "Web Browser"
 
@@ -225,18 +226,10 @@ msgid "Enable Java"
 msgstr "Enable Java"
 
 #: data/epiphany.schemas.in.h:15
-msgid "Enable Java."
-msgstr "Enable Java."
-
-#: data/epiphany.schemas.in.h:16
 msgid "Enable JavaScript"
 msgstr "Enable JavaScript"
 
-#: data/epiphany.schemas.in.h:17
-msgid "Enable JavaScript."
-msgstr "Enable JavaScript."
-
-#: data/epiphany.schemas.in.h:18
+#: data/epiphany.schemas.in.h:16
 msgid ""
 "For find in page, whether to start again at the beginning after reaching the "
 "end of the page."
@@ -244,69 +237,57 @@ msgstr ""
 "For find in page, whether to start again at the beginning after reaching the "
 "end of the page."
 
-#: data/epiphany.schemas.in.h:19
+#: data/epiphany.schemas.in.h:17
 msgid "History pages time range"
 msgstr "History pages time range"
 
-#: data/epiphany.schemas.in.h:20
+#: data/epiphany.schemas.in.h:18
 msgid "Home page"
 msgstr "Home page"
 
-#: data/epiphany.schemas.in.h:21
+#: data/epiphany.schemas.in.h:19
 msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
-#: data/epiphany.schemas.in.h:22
+#: data/epiphany.schemas.in.h:20
 msgid "Languages"
 msgstr "Languages"
 
-#: data/epiphany.schemas.in.h:23
+#: data/epiphany.schemas.in.h:21
 msgid "Lists the active extensions."
 msgstr "Lists the active extensions."
 
-#: data/epiphany.schemas.in.h:24
+#: data/epiphany.schemas.in.h:22
 msgid "Match case for find in page"
 msgstr "Match case for find in page"
 
+#: data/epiphany.schemas.in.h:23
+msgid ""
+"Middle click to open the web page pointed to by the currently selected text"
+msgstr ""
+"Middle click to open the web page pointed to by the currently selected text"
+
+#: data/epiphany.schemas.in.h:24
+msgid ""
+"Middle clicking on the main view pane will open the web page pointed to by "
+"the currently selected text."
+msgstr ""
+"Middle clicking on the main view pane will open the web page pointed to by "
+"the currently selected text."
+
 #: data/epiphany.schemas.in.h:25
-msgid "Match case for find in page."
-msgstr "Match case for find in page."
-
-#: data/epiphany.schemas.in.h:26
-msgid ""
-"Middle click to open the web page pointed to by the currently selected text"
-msgstr ""
-"Middle click to open the web page pointed to by the currently selected text"
-
-#: data/epiphany.schemas.in.h:27
-msgid ""
-"Middle clicking on the main view pane will open the web page pointed to by "
-"the currently selected text."
-msgstr ""
-"Middle clicking on the main view pane will open the web page pointed to by "
-"the currently selected text."
-
-#: data/epiphany.schemas.in.h:28
 msgid "Preferred languages, two letter codes."
 msgstr "Preferred languages, two letter codes."
 
-#: data/epiphany.schemas.in.h:29
+#: data/epiphany.schemas.in.h:26
 msgid "Show bookmarks bar by default"
 msgstr "Show bookmarks bar by default"
 
-#: data/epiphany.schemas.in.h:30
-msgid "Show bookmarks bar by default."
-msgstr "Show bookmarks bar by default."
-
-#: data/epiphany.schemas.in.h:31
+#: data/epiphany.schemas.in.h:27
 msgid "Show statusbar by default"
 msgstr "Show statusbar by default"
 
-#: data/epiphany.schemas.in.h:32
-msgid "Show statusbar by default."
-msgstr "Show statusbar by default."
-
-#: data/epiphany.schemas.in.h:33
+#: data/epiphany.schemas.in.h:28
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -314,31 +295,27 @@ msgstr ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
 
-#: data/epiphany.schemas.in.h:34
+#: data/epiphany.schemas.in.h:29
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "Show the tab bar also when there is only one tab open."
 
-#: data/epiphany.schemas.in.h:35
+#: data/epiphany.schemas.in.h:30
 msgid "Show toolbars by default"
 msgstr "Show toolbars by default"
 
-#: data/epiphany.schemas.in.h:36
-msgid "Show toolbars by default."
-msgstr "Show toolbars by default."
-
-#: data/epiphany.schemas.in.h:37
+#: data/epiphany.schemas.in.h:31
 msgid "Size of disk cache"
 msgstr "Size of disk cache"
 
-#: data/epiphany.schemas.in.h:38
+#: data/epiphany.schemas.in.h:32
 msgid "Size of disk cache, in MB."
 msgstr "Size of disk cache, in MB."
 
-#: data/epiphany.schemas.in.h:39
+#: data/epiphany.schemas.in.h:33
 msgid "The bookmark information shown in the editor view"
 msgstr "The bookmark information shown in the editor view"
 
-#: data/epiphany.schemas.in.h:40
+#: data/epiphany.schemas.in.h:34
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -346,11 +323,11 @@ msgstr ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
 
-#: data/epiphany.schemas.in.h:41
+#: data/epiphany.schemas.in.h:35
 msgid "The currently selected fonts language"
 msgstr "The currently selected fonts language"
 
-#: data/epiphany.schemas.in.h:42
+#: data/epiphany.schemas.in.h:36
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -370,15 +347,15 @@ msgstr ""
 "written in latin script), \"x-tamil\" (tamil) and \"x-devanagari"
 "\" (devanagari)."
 
-#: data/epiphany.schemas.in.h:43
+#: data/epiphany.schemas.in.h:37
 msgid "The downloads folder"
 msgstr "The downloads folder"
 
-#: data/epiphany.schemas.in.h:44
+#: data/epiphany.schemas.in.h:38
 msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr "The encoding autodetector. Empty string means autodetect is off"
 
-#: data/epiphany.schemas.in.h:45
+#: data/epiphany.schemas.in.h:39
 msgid ""
 "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
 "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
@@ -400,11 +377,11 @@ msgstr ""
 "\"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) "
 "and \"universal_charset_detector\" (autodetect most encodings)."
 
-#: data/epiphany.schemas.in.h:46
+#: data/epiphany.schemas.in.h:40
 msgid "The page information shown in the history view"
 msgstr "The page information shown in the history view"
 
-#: data/epiphany.schemas.in.h:47
+#: data/epiphany.schemas.in.h:41
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"address\", \"title\"."
@@ -412,7 +389,7 @@ msgstr ""
 "The page information shown in the history view. Valid values in the list are "
 "\"address\", \"title\"."
 
-#: data/epiphany.schemas.in.h:48
+#: data/epiphany.schemas.in.h:42
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -420,11 +397,11 @@ msgstr ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
 
-#: data/epiphany.schemas.in.h:49
+#: data/epiphany.schemas.in.h:43
 msgid "Toolbar style"
 msgstr "Toolbar style"
 
-#: data/epiphany.schemas.in.h:50
+#: data/epiphany.schemas.in.h:44
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -434,27 +411,23 @@ msgstr ""
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
 "\"text\"."
 
-#: data/epiphany.schemas.in.h:51
-msgid "Use caret browsing mode."
-msgstr "Use caret browsing mode."
-
-#: data/epiphany.schemas.in.h:52
+#: data/epiphany.schemas.in.h:45
 msgid "Use own colors"
 msgstr "Use own colours"
 
-#: data/epiphany.schemas.in.h:53
+#: data/epiphany.schemas.in.h:46
 msgid "Use own fonts"
 msgstr "Use own fonts"
 
-#: data/epiphany.schemas.in.h:54
+#: data/epiphany.schemas.in.h:47
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Use your own colours instead of the colours the page requests."
 
-#: data/epiphany.schemas.in.h:55
+#: data/epiphany.schemas.in.h:48
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Use your own fonts instead of the fonts the page requests."
 
-#: data/epiphany.schemas.in.h:56
+#: data/epiphany.schemas.in.h:49
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -462,7 +435,7 @@ msgstr ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
 
-#: data/epiphany.schemas.in.h:57
+#: data/epiphany.schemas.in.h:50
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -470,39 +443,23 @@ msgstr ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
 
-#: data/epiphany.schemas.in.h:58
+#: data/epiphany.schemas.in.h:51
 msgid "Whether to print the date in the footer"
 msgstr "Whether to print the date in the footer"
 
-#: data/epiphany.schemas.in.h:59
-msgid "Whether to print the date in the footer."
-msgstr "Whether to print the date in the footer."
-
-#: data/epiphany.schemas.in.h:60
+#: data/epiphany.schemas.in.h:52
 msgid "Whether to print the page address in the header"
 msgstr "Whether to print the page address in the header"
 
-#: data/epiphany.schemas.in.h:61
-msgid "Whether to print the page address in the header."
-msgstr "Whether to print the page address in the header."
-
-#: data/epiphany.schemas.in.h:62
+#: data/epiphany.schemas.in.h:53
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "Whether to print the page numbers (x of total) in the footer"
 
-#: data/epiphany.schemas.in.h:63
-msgid "Whether to print the page numbers (x of total) in the footer."
-msgstr "Whether to print the page numbers (x of total) in the footer."
-
-#: data/epiphany.schemas.in.h:64
+#: data/epiphany.schemas.in.h:54
 msgid "Whether to print the page title in the header"
 msgstr "Whether to print the page title in the header"
 
-#: data/epiphany.schemas.in.h:65
-msgid "Whether to print the page title in the header."
-msgstr "Whether to print the page title in the header."
-
-#: data/epiphany.schemas.in.h:66
+#: data/epiphany.schemas.in.h:55
 msgid "x-western"
 msgstr "x-western"
 
@@ -2848,35 +2805,35 @@ msgstr[1] "Last %d days"
 msgid "Sites"
 msgstr "Sites"
 
-#: src/ephy-main.c:58
-msgid "Open a new tab in an existing Epiphany window"
-msgstr "Open a new tab in an existing Epiphany window"
+#: src/ephy-main.c:59
+msgid "Open a new tab in an existing window"
+msgstr "Open a new tab in an existing window"
 
-#: src/ephy-main.c:61
-msgid "Run Epiphany in full screen mode"
-msgstr "Run Epiphany in full screen mode"
+#: src/ephy-main.c:62
+msgid "Run in full screen mode"
+msgstr "Run in full screen mode"
 
-#: src/ephy-main.c:64
+#: src/ephy-main.c:65
 msgid "Load the given session file"
 msgstr "Load the given session file"
 
-#: src/ephy-main.c:65 src/ephy-main.c:71
+#: src/ephy-main.c:66 src/ephy-main.c:72
 msgid "FILE"
 msgstr "FILE"
 
-#: src/ephy-main.c:67
+#: src/ephy-main.c:68
 msgid "Add a bookmark (don't open any window)"
 msgstr "Add a bookmark (don't open any window)"
 
-#: src/ephy-main.c:68
+#: src/ephy-main.c:69
 msgid "URL"
 msgstr "URL"
 
-#: src/ephy-main.c:70
+#: src/ephy-main.c:71
 msgid "Import bookmarks from the given file"
 msgstr "Import bookmarks from the given file"
 
-#: src/ephy-main.c:73
+#: src/ephy-main.c:74
 msgid "Launch the bookmarks editor"
 msgstr "Launch the bookmarks editor"
 
@@ -2946,7 +2903,7 @@ msgstr ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
 
-#: src/ephy-tab.c:474 src/ephy-tab.c:2158
+#: src/ephy-tab.c:474 src/ephy-tab.c:2188
 msgid "Blank page"
 msgstr "Blank page"
 
@@ -2960,22 +2917,22 @@ msgstr "Loading “%s”..."
 msgid "Loading..."
 msgstr "Loading..."
 
-#: src/ephy-tab.c:1551
+#: src/ephy-tab.c:1580
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Redirecting to %s..."
 
-#: src/ephy-tab.c:1555
+#: src/ephy-tab.c:1584
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Transferring data from %s..."
 
-#: src/ephy-tab.c:1559
+#: src/ephy-tab.c:1588
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Waiting for authorization from %s..."
 
-#: src/ephy-tab.c:1567
+#: src/ephy-tab.c:1596
 #, c-format
 msgid "Loading %s..."
 msgstr "Loading %s..."
@@ -3392,8 +3349,8 @@ msgid "_Work Offline"
 msgstr "_Work Offline"
 
 #: src/ephy-window.c:287
-msgid "Toggle network status"
-msgstr "Toggle network status"
+msgid "Switch to offline mode"
+msgstr "Switch to offline mode"
 
 #. View Menu
 #: src/ephy-window.c:292
@@ -3766,7 +3723,7 @@ msgid_plural "System languages (%s)"
 msgstr[0] "System language (%s)"
 msgstr[1] "System languages (%s)"
 
-#: src/prefs-dialog.c:1357
+#: src/prefs-dialog.c:1361
 msgid "Select a directory"
 msgstr "Select a directory"
 
@@ -3774,18 +3731,14 @@ msgstr "Select a directory"
 msgid "Check this out!"
 msgstr "Check this out!"
 
-#: src/window-commands.c:771
-msgid "Epiphany"
-msgstr "Epiphany"
+#: src/window-commands.c:763 src/window-commands.c:779
+msgid "Contact us at:"
+msgstr "Contact us at:"
 
-#. Translators: This is a special message that shouldn't be translated
-#. * literally. It is used in the about box to give credits to
-#. * the translators.
-#. * Thus, you should translate it to your name and email address.
-#. * You should also include other translators who have contributed to
-#. * this translation; in that case, please write each of them on a separate
-#. * line seperated by newlines (\n).
-#.
-#: src/window-commands.c:784
-msgid "translator-credits"
-msgstr "Adam Weinberger <adamw@gnome.org>"
+#: src/window-commands.c:766
+msgid "Contributors:"
+msgstr "Contributors:"
+
+#: src/window-commands.c:770
+msgid "Past developers:"
+msgstr "Past developers:"
