@@ -1,5 +1,14 @@
 2005-08-03  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-favicon-cache.c: (pixbuf_cache_entry_free),
+	(icons_added_cb), (cleanup_entry), (periodic_cleanup_cb),
+	(ephy_favicon_cache_init), (ephy_favicon_cache_finalize),
+	(ephy_favicon_cache_get):
+
+	Keep pixbufs in cache instead of loading them over and over again.
+
+2005-08-03  Christian Persch  <chpe@cvs.gnome.org>
+
         * lib/widgets/ephy-icon-entry.c: (ephy_icon_entry_get_borders):
 
 	No need to add focus_width to borders anymore. Now we get the
