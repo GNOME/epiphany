@@ -75,12 +75,6 @@ ephy_icon_entry_get_borders (GtkWidget *widget,
 	*xborder = entry->style->xthickness;
 	*yborder = entry->style->ythickness;
 
-	/* While GtkEntry does this only when !interior-focus, we need this even
-	 * with interior-focus, since otherwise we end up being too small.
-	 */
-	*xborder += focus_width;
-	*yborder += focus_width;
-
 	if (!interior_focus)
 	{
 		*xborder += focus_width;
