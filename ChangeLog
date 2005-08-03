@@ -1,3 +1,28 @@
+2005-08-03  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/widgets/Makefile.am:
+	A lib/widgets/testiconentry.c:
+	A lib/widgets/ephy-icon-entry.c:
+	A lib/widgets/ephy-icon-entry.h:
+
+	New widget, looks like a GtkEntry with icons inside.
+
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_set_tooltip), (update_address_state),
+	(match_selected_cb), (entry_clear_activate_cb),
+	(entry_populate_popup_cb),
+	(ephy_location_entry_construct_contents),
+	(ephy_location_entry_set_completion),
+	(ephy_location_entry_set_location),
+	(ephy_location_entry_get_location), (ephy_location_entry_reset),
+	(ephy_location_entry_activate), (ephy_location_entry_get_entry),
+	(ephy_location_entry_set_show_lock):
+
+	Use EphyIconEntry. Fixes location entry drawing with new GNOME default
+	theme (Clearlooks), and should also fix drawing with all themes,
+	except those which draw inside-focus on entries even when the entry
+	has no frame.
+
 2005-08-01  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* src/Makefile.am (epiphany.c):
