@@ -1631,7 +1631,7 @@ get_name_from_address_value (const GValue *value)
 		gnome_vfs_uri_unref (uri);
 	}
 
-	return name != NULL ? name : g_strdup (_("None"));
+	return name != NULL ? name : g_strdup ("");
 }
 
 static void
