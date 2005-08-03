@@ -423,6 +423,8 @@ struct _EphyWindowPrivate
 	guint help_message_cid;
 	EphyEmbedChrome chrome;
 	guint idle_resize_handler;
+	EphyEmbedEvent *context_event;
+	guint idle_worker;
 
 	guint browse_with_caret_notifier_id;
 	guint allow_popups_notifier_id;
@@ -1541,30 +1543,79 @@ static void
 popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
 		      gpointer user_data)
 {
-	GtkWidget *window = GTK_WIDGET (user_data);
-	EphyEmbedEvent *event;
+	EphyWindow *window = EPHY_WINDOW (user_data);
+	EphyWindowPrivate *priv = window->priv;
 	guint ux, uy;
 
-	event = g_object_get_data (G_OBJECT (window), "context_event");
-	g_return_if_fail (event != NULL);
+	g_return_if_fail (priv->context_event != NULL);
 
-	ephy_embed_event_get_coords (event, &ux, &uy);
+	ephy_embed_event_get_coords (priv->context_event, &ux, &uy);
 	*x = ux; *y = uy;
 
 	/* FIXME: better position the popup within the window bounds? */
-	ephy_gui_sanitise_popup_position (menu, window, x, y);
+	ephy_gui_sanitise_popup_position (menu, GTK_WIDGET (window), x, y);
 
 	*push_in = TRUE;
 }
 
-static void
-hide_embed_popup_cb (GtkWidget *popup,
-		     EphyWindow *window)
+static gboolean
+idle_unref_context_event (EphyWindow *window)
 {
+	EphyWindowPrivate *priv = window->priv;
+
+	LOG ("Idle unreffing context event %p", priv->context_event);
+
+	if (priv->context_event != NULL)
+	{
+		g_object_unref (priv->context_event);
+		priv->context_event = NULL;
+	}
+
+	priv->idle_worker = 0;
+	return FALSE;
+}
+
+static void
+set_context_event (EphyWindow *window,
+		   EphyEmbedEvent *event)
+{
+	EphyWindowPrivate *priv = window->priv;
+
+	if (priv->idle_worker != 0)
+	{
+		g_source_remove (priv->idle_worker);
+		priv->idle_worker = 0;
+	}
+
+	if (priv->context_event != NULL)
+	{
+		g_object_unref (priv->context_event);
+	}
+
+	priv->context_event = event != NULL ? g_object_ref (event) : NULL;
+}
+
+static void
+embed_popup_deactivate_cb (GtkWidget *popup,
+		          EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+
+	LOG ("Deactivating popup menu");
+
 	enable_edit_actions_sensitivity (window);
 
 	g_signal_handlers_disconnect_by_func
-		(popup, G_CALLBACK (hide_embed_popup_cb), window);
+		(popup, G_CALLBACK (embed_popup_deactivate_cb), window);
+	
+	/* Unref the event from idle since we still need it
+	 * from the action callbacks which will run before idle.
+	 */
+	if (priv->idle_worker == 0)
+	{
+		priv->idle_worker =
+			g_idle_add ((GSourceFunc) idle_unref_context_event, window);
+	}
 }
 
 static char *
@@ -1580,7 +1631,7 @@ get_name_from_address_value (const GValue *value)
 		gnome_vfs_uri_unref (uri);
 	}
 
-	return name;
+	return name != NULL ? name : g_strdup (_("None"));
 }
 
 static void
@@ -1766,12 +1817,10 @@ show_embed_popup (EphyWindow *window,
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !can_open_in_new);
 
-	g_object_set_data_full (G_OBJECT (window), "context_event",
-				g_object_ref (event),
-				(GDestroyNotify)g_object_unref);
+	set_context_event (window, event);
 
-	g_signal_connect (widget, "hide",
-			  G_CALLBACK (hide_embed_popup_cb), window);
+	g_signal_connect (widget, "deactivate",
+			  G_CALLBACK (embed_popup_deactivate_cb), window);
 
 	button = ephy_embed_event_get_button (event);
 	if (button == 0)
@@ -2381,6 +2430,8 @@ ephy_window_dispose (GObject *object)
 
 		g_object_unref (priv->manager);
 		priv->manager = NULL;
+
+		set_context_event (window, NULL);
 	}
 
 	destroy_fullscreen_popup (window);
@@ -3424,4 +3475,21 @@ ephy_window_get_is_print_preview (EphyWindow *window)
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), FALSE);
 
 	return window->priv->ppv_mode;
+}
+
+/**
+ * ephy_window_get_context_event:
+ * @window: an #EphyWindow
+ *
+ * Returns the #EphyEmbedEvent for the current context menu.
+ * Use this to get the event from the action callback.
+ *
+ * Return value: an #EphyEmbedEvent, or %NULL
+ **/
+EphyEmbedEvent *
+ephy_window_get_context_event (EphyWindow *window)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+
+	return window->priv->context_event;
 }

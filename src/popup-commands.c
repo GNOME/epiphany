@@ -38,31 +38,20 @@
 #include <libgnomevfs/gnome-vfs-ops.h>
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
-static EphyEmbedEvent *
-get_event_info (EphyWindow *window)
-{
-	EphyEmbedEvent *info;
-
-	info = EPHY_EMBED_EVENT (g_object_get_data
-		(G_OBJECT (window), "context_event"));
-	g_return_val_if_fail (info != NULL, NULL);
-
-	return info;
-}
-
 void
 popup_cmd_link_in_new_window (GtkAction *action,
 		              EphyWindow *window)
 {
-	EphyEmbedEvent *info;
+	EphyEmbedEvent *event;
 	EphyTab *tab;
 	const GValue *value;
 
 	tab = ephy_window_get_active_tab (window);
 
-	info = get_event_info (window);
+	event = ephy_window_get_context_event (window);
+	g_return_if_fail (event != NULL);
 
-	ephy_embed_event_get_property (info, "link", &value);
+	ephy_embed_event_get_property (event, "link", &value);
 
 	ephy_shell_new_tab (ephy_shell, NULL, tab,
 			    g_value_get_string (value),
@@ -74,15 +63,16 @@ void
 popup_cmd_link_in_new_tab (GtkAction *action,
 		           EphyWindow *window)
 {
-	EphyEmbedEvent *info;
+	EphyEmbedEvent *event;
 	EphyTab *tab;
 	const GValue *value;
 
 	tab = ephy_window_get_active_tab (window);
 
-	info = get_event_info (window);
+	event = ephy_window_get_context_event (window);
+	g_return_if_fail (event != NULL);
 
-	ephy_embed_event_get_property (info, "link", &value);
+	ephy_embed_event_get_property (event, "link", &value);
 
 	ephy_shell_new_tab (ephy_shell, window, tab,
 			    g_value_get_string (value),
@@ -96,7 +86,7 @@ popup_cmd_bookmark_link (GtkAction *action,
 {
 	GtkWidget *new_bookmark;
 	EphyBookmarks *bookmarks;
-	EphyEmbedEvent *info;
+	EphyEmbedEvent *event;
 	const GValue *link_title;
 	const GValue *link_rel;
 	const GValue *link;
@@ -107,13 +97,14 @@ popup_cmd_bookmark_link (GtkAction *action,
 	const char *rel;
 	gboolean is_smart;
 
-	info = get_event_info (window);
+	event = ephy_window_get_context_event (window);
+	g_return_if_fail (event != NULL);
 
-	ephy_embed_event_get_property (info, "link_is_smart", &link_is_smart);
-	ephy_embed_event_get_property (info, "link", &link);
-	ephy_embed_event_get_property (info, "link_title", &link_title);
-	ephy_embed_event_get_property (info, "link_rel", &link_rel);
-	ephy_embed_event_get_property (info, "linktext", &linktext);
+	ephy_embed_event_get_property (event, "link_is_smart", &link_is_smart);
+	ephy_embed_event_get_property (event, "link", &link);
+	ephy_embed_event_get_property (event, "link_title", &link_title);
+	ephy_embed_event_get_property (event, "link_rel", &link_rel);
+	ephy_embed_event_get_property (event, "linktext", &linktext);
 
 	location = g_value_get_string (link);
 	g_return_if_fail (location);
@@ -164,8 +155,8 @@ popup_cmd_copy_link_address (GtkAction *action,
 	const char *address;
 	const GValue *value;
 
-	event = get_event_info (window);
-	g_return_if_fail (EPHY_IS_EMBED_EVENT (event));
+	event = ephy_window_get_context_event (window);
+	g_return_if_fail (event != NULL);
 
 	context = ephy_embed_event_get_context (event);
 
@@ -190,17 +181,19 @@ save_property_url (GtkAction *action,
 		   gboolean ask_dest,
 		   const char *property)
 {
-	EphyEmbedEvent *info;
+	EphyEmbedEvent *event;
 	const char *location;
 	const GValue *value;
 	EphyEmbedPersist *persist;
 	EphyEmbed *embed;
 
+	event = ephy_window_get_context_event (window);
+	g_return_if_fail (event != NULL);
+
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	info = get_event_info (window);
-	ephy_embed_event_get_property (info, property, &value);
+	ephy_embed_event_get_property (event, property, &value);
 	location = g_value_get_string (value);
 
 	persist = EPHY_EMBED_PERSIST
@@ -224,7 +217,7 @@ void
 popup_cmd_open_link (GtkAction *action,
 		     EphyWindow *window)
 {
-	EphyEmbedEvent *info;
+	EphyEmbedEvent *event;
 	const char *location;
 	const GValue *value;
 	EphyEmbed *embed;
@@ -232,8 +225,8 @@ popup_cmd_open_link (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	info = get_event_info (window);
-	ephy_embed_event_get_property (info, "link", &value);
+	event = ephy_window_get_context_event (window);
+	ephy_embed_event_get_property (event, "link", &value);
 	location = g_value_get_string (value);
 
 	ephy_embed_load_url (embed, location);
@@ -293,18 +286,20 @@ void
 popup_cmd_set_image_as_background (GtkAction *action,
 				   EphyWindow *window)
 {
-	EphyEmbedEvent *info;
+	EphyEmbedEvent *event;
 	const char *location;
 	char *dest, *base, *base_converted;
 	const GValue *value;
 	EphyEmbedPersist *persist;
 	EphyEmbed *embed;
 
+	event = ephy_window_get_context_event (window);
+	g_return_if_fail (event != NULL);
+
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	info = get_event_info (window);
-	ephy_embed_event_get_property (info, "image", &value);
+	ephy_embed_event_get_property (event, "image", &value);
 	location = g_value_get_string (value);
 
 	persist = EPHY_EMBED_PERSIST
@@ -334,12 +329,12 @@ void
 popup_cmd_copy_image_location (GtkAction *action,
 			       EphyWindow *window)
 {
-	EphyEmbedEvent *info;
+	EphyEmbedEvent *event;
 	const char *location;
 	const GValue *value;
 
-	info = get_event_info (window);
-	ephy_embed_event_get_property (info, "image", &value);
+	event = ephy_window_get_context_event (window);
+	ephy_embed_event_get_property (event, "image", &value);
 	location = g_value_get_string (value);
 	popup_cmd_copy_to_clipboard (window, location);
 }
@@ -442,17 +437,19 @@ void
 popup_cmd_open_image (GtkAction *action,
 		      EphyWindow *window)
 {
-	EphyEmbedEvent *info;
+	EphyEmbedEvent *event;
 	const char *address;
 	char *scheme;
 	const GValue *value;
 	EphyEmbed *embed;
 
+	event = ephy_window_get_context_event (window);
+	g_return_if_fail (event != NULL);
+
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	info = get_event_info (window);
-	ephy_embed_event_get_property (info, "image", &value);
+	ephy_embed_event_get_property (event, "image", &value);
 	address = g_value_get_string (value);
 
 	scheme = gnome_vfs_get_uri_scheme (address);

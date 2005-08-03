@@ -105,6 +105,8 @@ gboolean	  ephy_window_get_is_popup	  (EphyWindow *window);
 
 gboolean	  ephy_window_get_is_print_preview(EphyWindow *window);
 
+EphyEmbedEvent	 *ephy_window_get_context_event	  (EphyWindow *window);
+
 G_END_DECLS
 
 #endif

@@ -1,5 +1,27 @@
 2005-08-03  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-window.c: (popup_menu_at_coords),
+	(idle_unref_context_event), (set_context_event),
+	(embed_popup_deactivate_cb), (get_name_from_address_value),
+	(show_embed_popup), (ephy_window_dispose),
+	(ephy_window_get_is_print_preview),
+	(ephy_window_get_context_event):
+	* src/ephy-window.h:
+	* src/epiphany.defs:
+	* src/popup-commands.c: (popup_cmd_link_in_new_window),
+	(popup_cmd_link_in_new_tab), (popup_cmd_bookmark_link),
+	(popup_cmd_copy_link_address), (save_property_url),
+	(popup_cmd_open_link), (popup_cmd_set_image_as_background),
+	(popup_cmd_copy_image_location), (popup_cmd_open_image):
+
+	Add public function ephy_window_get_context_event() to get the
+	EphyEmbedEvent for the current popup menu, instead of using an
+	undocument g_object_get_data() call. Also fixes bug
+	#310910.
+	Don't printf NULL; fixes bug #309796.			
+
+2005-08-03  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-favicon-cache.c: (pixbuf_cache_entry_free),
 	(icons_added_cb), (cleanup_entry), (periodic_cleanup_cb),
 	(ephy_favicon_cache_init), (ephy_favicon_cache_finalize),
