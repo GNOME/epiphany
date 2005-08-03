@@ -57,6 +57,38 @@ entry_focus_change_cb (GtkWidget *widget,
 }
 
 static void
+ephy_icon_entry_get_borders (GtkWidget *widget,
+			     GtkWidget *entry,
+			     int *xborder,
+			     int *yborder)
+{
+	int focus_width;
+	gboolean interior_focus;
+
+	g_return_if_fail (entry->style != NULL);
+
+	gtk_widget_style_get (entry,
+			      "focus-line-width", &focus_width,
+			      "interior-focus", &interior_focus,
+			      NULL);
+
+	*xborder = entry->style->xthickness;
+	*yborder = entry->style->ythickness;
+
+	/* While GtkEntry does this only when !interior-focus, we need this even
+	 * with interior-focus, since otherwise we end up being too small.
+	 */
+	*xborder += focus_width;
+	*yborder += focus_width;
+
+	if (!interior_focus)
+	{
+		*xborder += focus_width;
+		*yborder += focus_width;
+	}
+}
+
+static void
 ephy_icon_entry_paint (GtkWidget *widget,
 		       GdkEventExpose *event)
 {
@@ -168,30 +200,6 @@ ephy_icon_entry_realize (GtkWidget *widget)
 }
 
 static void
-ephy_icon_entry_get_borders (GtkWidget *widget,
-			     GtkWidget *entry,
-			     int *xborder,
-			     int *yborder)
-{
-	int focus_width;
-	
-	g_return_if_fail (entry->style != NULL);
-
-	gtk_widget_style_get (entry,
-			      "focus-line-width", &focus_width,
-			      NULL);
-
-	*xborder = widget->style->xthickness;
-	*yborder = widget->style->ythickness;
-
-	/* While GtkEntry does this only when !interior-focus, we need this even
-	 * with interior-focus, since otherwise we end up being too small.
-	 */
-	*xborder += focus_width;
-	*yborder += focus_width;
-}
-
-static void
 ephy_icon_entry_size_request (GtkWidget *widget,
 			      GtkRequisition *requisition)
 {
@@ -229,7 +237,7 @@ ephy_icon_entry_size_allocate (GtkWidget *widget,
 	int xborder, yborder;
 
 	widget->allocation = *allocation;
-  
+
 	ephy_icon_entry_get_borders (widget, entry->entry, &xborder, &yborder);
 
 	if (GTK_WIDGET_REALIZED (widget))

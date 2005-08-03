@@ -1,5 +1,13 @@
 2005-08-03  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/widgets/ephy-icon-entry.c: (ephy_icon_entry_get_borders),
+	(ephy_icon_entry_size_allocate):
+
+	Use the entry's style's [xy]thickness, not our own.
+	Fixes rendering with current Clearlooks engine.
+
+2005-08-03  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/Makefile.am:
 	A lib/widgets/testiconentry.c:
 	A lib/widgets/ephy-icon-entry.c:
