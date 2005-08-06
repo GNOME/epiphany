@@ -661,8 +661,6 @@ EphyBrowser::AttachListeners(void)
 					     mPopupBlockEventListener, PR_FALSE);
 	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMWillOpenModalDialog),
 					     mModalAlertListener, PR_TRUE);
-	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMMouseScroll),
-					     mDOMScrollEventListener, PR_TRUE);
 	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMModalDialogClosed),
 					     mModalAlertListener, PR_TRUE);
 	rv |= mEventTarget->AddEventListener(nsEmbedString(kContextMenu),
