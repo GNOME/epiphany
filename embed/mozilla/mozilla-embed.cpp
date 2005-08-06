@@ -257,22 +257,36 @@ mozilla_embed_realize (GtkWidget *widget)
 	guint n;
 
 	n = g_signal_handlers_block_matched (toplevel,
-					 (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
-					 fiesid, 0, NULL, NULL, data);
+					     (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
+					     fiesid, 0, NULL, NULL, data);
 	n += g_signal_handlers_block_matched (toplevel,
-					 (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
-					 foesid, 0, NULL, NULL, data);
+					      (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
+					      foesid, 0, NULL, NULL, data);
 	if (n != 2)
 	{
-		g_warning ("Unexpected (n=%d) focus handlers found!\n", n);
+		g_warning ("Unexpected number (n=%d) of toplevel focus handlers found!\n", n);
 	}
 
 	if (mpriv->focus_connected) return;
 
-	g_signal_connect_object (bin->child, "focus-in-event",
+	GtkWidget *child = gtk_bin_get_child (bin);
+	g_return_if_fail (child != NULL);
+
+	n = g_signal_handlers_block_matched (child,
+					     (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
+					     fiesid, 0, NULL, NULL, widget);
+	n += g_signal_handlers_block_matched (child,
+					      (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
+					      foesid, 0, NULL, NULL, widget);
+	if (n != 2)
+	{
+		g_warning ("Unexpected number (n=%d) of child focus handlers found!\n", n);
+	}
+
+	g_signal_connect_object (child, "focus-in-event",
 				 G_CALLBACK (child_focus_in_event_cb), widget,
 				 G_CONNECT_AFTER);
-	g_signal_connect_object (bin->child, "focus-out-event",
+	g_signal_connect_object (child, "focus-out-event",
 				 G_CALLBACK (child_focus_out_event_cb), widget,
 				 G_CONNECT_AFTER);
 
