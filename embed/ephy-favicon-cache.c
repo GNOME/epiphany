@@ -254,14 +254,12 @@ remove_obsolete_icons (EphyFaviconCache *cache,
 				(kid, EPHY_NODE_FAVICON_PROP_FILENAME);
 			path = g_build_filename (priv->directory,
 						 filename, NULL);
-			g_print ("Removing kid %d, deleting %s\n", i, path);
 			gnome_vfs_unlink (path);
 
 			g_free (path);
 			ephy_node_unref (kid);
 		}
 	}
-	g_print ("Now %d children\n", children->len);
 }
 
 static void
