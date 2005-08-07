@@ -804,6 +804,11 @@
   (return-type "GType")
 )
 
+(define-function ephy_embed_shell_get_default
+  (c-name "ephy_embed_shell_get_default")
+  (return-type "EphyEmbedShell*")
+)
+
 (define-method get_favicon_cache
   (of-object "EphyEmbedShell")
   (c-name "ephy_embed_shell_get_favicon_cache")
@@ -2950,6 +2955,18 @@
   (return-type "GtkWidget*")
 )
 
+(define-method get_tooltips
+  (of-object "EphyStatusbar")
+  (c-name "ephy_statusbar_get_tooltips")
+  (return-type "GtkTooltips*")
+)
+
+(define-method get_security_frame
+  (of-object "EphyStatusbar")
+  (c-name "ephy_statusbar_get_security_frame")
+  (return-type "GtkWidget*")
+)
+
 (define-method set_security_state
   (of-object "EphyStatusbar")
   (c-name "ephy_statusbar_set_security_state")
@@ -3032,6 +3049,12 @@
   (return-type "EphyEmbedDocumentType")
 )
 
+(define-method get_icon
+  (of-object "EphyTab")
+  (c-name "ephy_tab_get_icon")
+  (return-type "GdkPixbuf*")
+)
+
 (define-method get_icon_address
   (of-object "EphyTab")
   (c-name "ephy_tab_get_icon_address")
@@ -3056,15 +3079,6 @@
   (return-type "int")
 )
 
-(define-method set_typed_address
-  (of-object "EphyTab")
-  (c-name "ephy_tab_set_typed_address")
-  (return-type "none")
-  (parameters
-    '("const-char*" "address")
-  )
-)
-
 (define-method get_address
   (of-object "EphyTab")
   (c-name "ephy_tab_get_address")
@@ -3075,6 +3089,15 @@
   (of-object "EphyTab")
   (c-name "ephy_tab_get_typed_address")
   (return-type "const-char*")
+)
+
+(define-method set_typed_address
+  (of-object "EphyTab")
+  (c-name "ephy_tab_set_typed_address")
+  (return-type "none")
+  (parameters
+    '("const-char*" "address")
+  )
 )
 
 (define-method get_navigation_flags

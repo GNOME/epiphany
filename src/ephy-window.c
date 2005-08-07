@@ -1611,7 +1611,7 @@ embed_popup_deactivate_cb (GtkWidget *popup,
 	/* Unref the event from idle since we still need it
 	 * from the action callbacks which will run before idle.
 	 */
-	if (priv->idle_worker == 0)
+	if (priv->idle_worker == 0 && priv->context_event != NULL)
 	{
 		priv->idle_worker =
 			g_idle_add ((GSourceFunc) idle_unref_context_event, window);

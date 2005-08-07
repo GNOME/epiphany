@@ -1,5 +1,22 @@
 2005-08-07  Christian Persch  <chpe@cvs.gnome.org>
 
+	* configure.ac:
+
+	Add switch to disable focus fix, and to disable PSM. Error out if
+	PSM isn't found but --disable-psm not given. Should prevent accidental
+	compilation without PSM.
+
+	* lib/widgets/ephy-icon-entry.c: (ephy_icon_entry_get_entry):
+	* lib/widgets/ephy-icon-entry.h:
+
+	Add ephy_icon_entry_get_entry.
+
+	* src/epiphany.defs:
+
+	Updated python bindings.
+
+2005-08-07  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/mozilla-embed.cpp: (mozilla_embed_realize):
 
 	Also block GtkMozEmbed's child focus-[in|out]-event handlers.

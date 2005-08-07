@@ -69,6 +69,8 @@ void		ephy_icon_entry_pack_widget	(EphyIconEntry *entry,
 						 GtkWidget *widget,
 						 gboolean start);
 
+GtkWidget      *ephy_icon_entry_get_entry	(EphyIconEntry *entry);
+
 G_END_DECLS
 
 #endif

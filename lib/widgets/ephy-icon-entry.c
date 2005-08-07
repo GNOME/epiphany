@@ -342,3 +342,11 @@ ephy_icon_entry_pack_widget (EphyIconEntry *entry,
 		gtk_box_pack_end (GTK_BOX (priv->hbox), widget, FALSE, FALSE, /* FIXME */ 2);
 	}
 }
+
+GtkWidget *
+ephy_icon_entry_get_entry (EphyIconEntry *entry)
+{
+	g_return_val_if_fail (EPHY_IS_ICON_ENTRY (entry), NULL);
+
+	return entry->entry;
+}
