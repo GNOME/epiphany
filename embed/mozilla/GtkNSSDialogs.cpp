@@ -358,7 +358,7 @@ GtkNSSDialogs::ConfirmUnknownIssuer (nsIInterfaceRequestor *ctx,
 			       secondary, tertiary);
  
 	res = display_cert_warning_box (ctx, cert, msg, 
- 					_("_Don't show this message again for this site"),
+ 					_("_Trust this security information from now on"),
  					&accept_perm, _("Co_nnect"));
         g_free (tertiary);
         g_free (secondary);
