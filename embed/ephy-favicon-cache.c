@@ -1,7 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
  *  Copyright (C) 2003-2004 Marco Pesenti Gritti
- *  Copyright (C) 2004 Christian Persch
+ *  Copyright (C) 2004, 2005 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@
 #include <glib/gstdio.h>
 #include <libgnomeui/libgnomeui.h>
 #include <libgnomevfs/gnome-vfs-ops.h>
+#include <libgnomevfs/gnome-vfs-directory.h>
 
 #define EPHY_FAVICON_CACHE_XML_ROOT    (const xmlChar *)"ephy_favicons_cache"
 #define EPHY_FAVICON_CACHE_XML_VERSION (const xmlChar *)"1.1"
@@ -86,6 +87,8 @@ typedef struct
 	GdkPixbuf *pixbuf;
 	guint load_failed : 1;
 } PixbufCacheEntry;
+
+typedef gboolean (* FilterFunc) (EphyNode*, GDate *);
 
 enum
 {
@@ -216,6 +219,7 @@ icons_added_cb (EphyNode *node,
 static void
 icons_removed_cb (EphyNode *node,
 		  EphyNode *child,
+		  guint old_index,
 		  EphyFaviconCache *eb)
 {
 	g_hash_table_remove (eb->priv->icons_hash,
@@ -223,39 +227,41 @@ icons_removed_cb (EphyNode *node,
 }
 
 static void
-remove_obsolete_icons (EphyFaviconCache *eb)
+remove_obsolete_icons (EphyFaviconCache *cache,
+		       FilterFunc filter)
 {
+	EphyFaviconCachePrivate *priv = cache->priv;
 	GPtrArray *children;
 	int i;
-	GTime now;
 	GDate current_date;
 
-	now = time (NULL);
 	g_date_clear (&current_date, 1);
 	g_date_set_time (&current_date, time (NULL));
 
-	children = ephy_node_get_children (eb->priv->icons);
-	for (i = 0; i < children->len; i++)
+	children = ephy_node_get_children (priv->icons);
+	for (i = (int) children->len - 1; i >= 0; i--)
 	{
 		EphyNode *kid;
 
 		kid = g_ptr_array_index (children, i);
 
-		if (icon_is_obsolete (kid, &current_date))
+		if (!filter || filter (kid, &current_date))
 		{
 			const char *filename;
 			char *path;
 
 			filename = ephy_node_get_property_string
 				(kid, EPHY_NODE_FAVICON_PROP_FILENAME);
-			path = g_build_filename (eb->priv->directory,
+			path = g_build_filename (priv->directory,
 						 filename, NULL);
+			g_print ("Removing kid %d, deleting %s\n", i, path);
 			gnome_vfs_unlink (path);
 
 			g_free (path);
 			ephy_node_unref (kid);
 		}
 	}
+	g_print ("Now %d children\n", children->len);
 }
 
 static void
@@ -412,6 +418,31 @@ kill_download (const char *key,
 	return TRUE;
 }
 
+static gboolean
+delete_file (const char *rel_path,
+	     GnomeVFSFileInfo *info,
+	     gboolean rec_will_loop,
+	     EphyFaviconCache *cache,
+	     gboolean *recurse)
+{
+	EphyFaviconCachePrivate *priv = cache->priv;
+	char *path;
+
+	*recurse = FALSE;
+
+	g_return_val_if_fail (info != NULL, TRUE);
+
+	if ((info->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_TYPE) == 0 ||
+	    info->type != GNOME_VFS_FILE_TYPE_REGULAR) return TRUE;
+
+	path = g_build_filename (priv->directory, rel_path, NULL);
+	gnome_vfs_unlink (path);
+	g_free (path);
+
+	/* continue with the visit */
+	return TRUE;
+}
+
 static void
 ephy_favicon_cache_finalize (GObject *object)
 {
@@ -433,7 +464,7 @@ ephy_favicon_cache_finalize (GObject *object)
 		g_source_remove (priv->cleanup_timeout);
 	}
 
-	remove_obsolete_icons (cache);
+	remove_obsolete_icons (cache, icon_is_obsolete);
 
 	ephy_favicon_cache_save (cache);
 
@@ -794,4 +825,29 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 	entry->load_failed = FALSE;
 
 	return pixbuf;
+}
+
+/**
+ * ephy_favicons_cache_clear:
+ * @cache:
+ * 
+ * Clears the favicon cache and removes any stored icon files from disk.
+ */
+void
+ephy_favicon_cache_clear (EphyFaviconCache *cache)
+{
+	EphyFaviconCachePrivate *priv = cache->priv;
+
+	g_return_if_fail (EPHY_IS_FAVICON_CACHE (cache));
+
+	remove_obsolete_icons (cache, NULL);
+	ephy_favicon_cache_save (cache);
+
+	/* Now remove any remaining files from the cache directory */
+	gnome_vfs_directory_visit (priv->directory,
+				   GNOME_VFS_FILE_INFO_DEFAULT,
+				   GNOME_VFS_DIRECTORY_VISIT_SAMEFS |
+				   GNOME_VFS_DIRECTORY_VISIT_LOOPCHECK,
+				   (GnomeVFSDirectoryVisitFunc) delete_file,
+				   cache);
 }

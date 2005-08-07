@@ -1,3 +1,19 @@
+2005-08-07  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-favicon-cache.c: (icons_removed_cb),
+	(remove_obsolete_icons), (delete_file),
+	(ephy_favicon_cache_finalize), (ephy_favicon_cache_get),
+	(ephy_favicon_cache_clear):
+	* embed/ephy-favicon-cache.h:
+
+	Add way to clear the favicon cache. Also removes any extraneous files
+	from favicon cache directory. Fix a crash which I wonder why we never
+	experienced it!
+
+	* src/prefs-dialog.c: (prefs_clear_cache_button_clicked_cb):
+
+	Also clear favicon cache when clearing the cache.
+
 2005-08-07  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* embed/mozilla/GtkNSSDialogs.cpp (ConfirmUnknownIssuer): 

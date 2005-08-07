@@ -25,7 +25,7 @@
 #include "ephy-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-embed-shell.h"
-#include "ephy-shell.h"
+#include "ephy-favicon-cache.h"
 #include "ephy-session.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-single.h"
@@ -1272,10 +1272,17 @@ void
 prefs_clear_cache_button_clicked_cb (GtkWidget *button,
 				     gpointer data)
 {
+	EphyEmbedShell *shell;
 	EphyEmbedSingle *single;
+	EphyFaviconCache *cache;
 
-	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
+	shell = ephy_embed_shell_get_default ();
+
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (shell));
 	ephy_embed_single_clear_cache (single);
+
+	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (shell));
+	ephy_favicon_cache_clear (cache);
 }
 
 static void
