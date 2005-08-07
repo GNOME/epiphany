@@ -178,6 +178,7 @@ icons_added_cb (EphyNode *node,
 static void
 icons_removed_cb (EphyNode *node,
 		  EphyNode *child,
+		  guint old_index,
 		  EphyFaviconCache *eb)
 {
 	g_hash_table_remove (eb->priv->icons_hash,
