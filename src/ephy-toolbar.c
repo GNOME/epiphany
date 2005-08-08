@@ -323,7 +323,7 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			      "name", "Location",
 			      "label", _("Address Entry"),
 			      "stock_id", EPHY_STOCK_ENTRY,
-			      "tooltip", _("Enter a web address to open, or a phrase to search for on the web"),
+			      "tooltip", _("Enter a web address to open, or a phrase to search for"),
 			      "visible-overflown", FALSE,
 			      "window", priv->window,
 			      NULL);

@@ -137,6 +137,8 @@ static void cmd_help_contents		  (GtkAction *action,
 
 #define CONF_BOOKMARKS_VIEW_DETAILS "/apps/epiphany/dialogs/bookmarks_view_details"
 
+#define RESERVED_STRING N_("Remove from this topic")
+
 struct _EphyBookmarksEditorPrivate
 {
 	EphyBookmarks *bookmarks;
