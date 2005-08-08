@@ -270,7 +270,9 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 {
 	GtkWidget *dialog, *button, *image;
 	const char *action_label;
-
+	const char *mime_description;
+	nsEmbedCString file_name;
+			
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (mContext);
 	GtkWindow *parentWindow = GTK_WINDOW (EphyUtils::FindGtkParent(parentDOMWindow));
 
@@ -278,48 +280,92 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			(mAction == CONTENT_ACTION_OPEN_TMP) ?
 			GTK_STOCK_OPEN : EPHY_STOCK_DOWNLOAD;
 
+#ifdef HAVE_GECKO_1_8
+	mime_description = gnome_vfs_mime_get_description (mMimeType.get());
+#else
+	mime_description = gnome_vfs_mime_get_description (mMimeType);
+#endif
+	if (mime_description == NULL)
+	{
+		/* Translators: The text before the "|" is context to help you decide on
+		 * the correct translation. You MUST OMIT it in the translated string. */
+		mime_description = Q_("File Type:|Unknown");
+	}
+
+	/* We have one tiny, minor issue, the filename can be empty (""),
+	   is that severe enough to be completely fixed ? */
+#ifdef HAVE_GECKO_1_8
+	{
+		nsEmbedString suggested;
+		
+		mLauncher->GetSuggestedFileName(&suggested);
+		NS_UTF16ToCString (
+			suggested,
+			NS_CSTRING_ENCODING_UTF8, file_name);
+	}
+#else
+	{
+		PRUnichar *suggested = nsnull;
+			
+		mLauncher->GetSuggestedFileName(&suggested);
+		if (suggested != nsnull)
+		{
+			NS_UTF16ToCString (
+				nsEmbedString(suggested),
+				NS_CSTRING_ENCODING_UTF8, file_name);
+				
+			nsMemory::Free(suggested);
+		}
+	}
+#endif
+
 	if (mPermission != EPHY_MIME_PERMISSION_SAFE && mHelperApp)
 	{
 		dialog = gtk_message_dialog_new
 			(parentWindow, GTK_DIALOG_DESTROY_WITH_PARENT,
 			 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-			 _("Download the unsafe file?"));
+			 _("Download this potentially unsafe file?"));
+			   
 		gtk_message_dialog_format_secondary_text
 			(GTK_MESSAGE_DIALOG (dialog),
-			 _("This type of file could potentially damage "
-			    "your documents or invade your privacy. "
-			    "It's not safe to open it directly. "
-			    "You can save it instead."));
+			/* translators: First %s is the file type description,
+			   Second %s is the file name */
+			_("File Type: %s.\n\nIt is unsafe to open \"%s\", "
+			  "it could potentially damage your documents or "
+			  "invade your privacy. You can download it instead."),
+			  mime_description, file_name.get());		
 	}
 	else if (mAction == CONTENT_ACTION_OPEN_TMP && mHelperApp)
 	{
 		dialog = gtk_message_dialog_new
 			(parentWindow, GTK_DIALOG_DESTROY_WITH_PARENT,
 			 GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
-			 /* translators: %s is the name of the application */
-			 _("Open this file with \"%s\"?"),
-			 mHelperApp->name);
+			 _("Open this file?"));
+			   
 		gtk_message_dialog_format_secondary_text
 			(GTK_MESSAGE_DIALOG (dialog),
-			 /* translators: %s is the name of the application */
-			 _("It's not possible to view this file type "
-			   "directly in the browser. You can open it with "
-			   "\"%s\" or save it."),
-			   mHelperApp->name);
+			/* translators: First %s is the file type description,
+			   Second %s is the file name,
+			   Third %s is the application used to open the file */
+			_("File Type: %s.\n\nYou can open \"%s\" using \"%s\" or save it."),
+			   mime_description, file_name.get(), mHelperApp->name);		 
 	}
 	else
 	{
 		dialog = gtk_message_dialog_new
 			(parentWindow, GTK_DIALOG_DESTROY_WITH_PARENT,
 			 GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
-			 _("Download the file?"));
+			 _("Download this file?"));
+		
 		gtk_message_dialog_format_secondary_text
 			(GTK_MESSAGE_DIALOG (dialog),
-			 _("It's not possible to view this file because "
-			   "there is no application installed that can open"
-			   " it. You can save it instead."));
+			/* translators: First %s is the file type description,
+			   Second %s is the file name */
+			_("File Type: %s.\n\nYou have no application able to open \"%s\". "
+			   "You can download it instead."),
+			   mime_description, file_name.get());			 
 	}
-
+	
 	button = gtk_button_new_with_label (_("_Save As..."));
 	image = gtk_image_new_from_stock (GTK_STOCK_SAVE_AS, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image (GTK_BUTTON (button), image);
