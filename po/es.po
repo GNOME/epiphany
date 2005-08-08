@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-04 16:42+0200\n"
-"PO-Revision-Date: 2005-08-04 16:43+0200\n"
+"POT-Creation-Date: 2005-08-08 18:11+0200\n"
+"PO-Revision-Date: 2005-08-08 18:16+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1277,47 +1277,65 @@ msgstr "Archivos locales"
 msgid "Save"
 msgstr "Guardar"
 
-#: ../embed/mozilla/ContentHandler.cpp:286
-msgid "Download the unsafe file?"
-msgstr "¿Descargar el archivo no seguro?"
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/ContentHandler.cpp:292
+msgid "File Type:|Unknown"
+msgstr "Desconocido"
 
-#: ../embed/mozilla/ContentHandler.cpp:289
-msgid ""
-"This type of file could potentially damage your documents or invade your "
-"privacy. It's not safe to open it directly. You can save it instead."
-msgstr ""
-"Este tipo de archivo podría dañar potencialmente sus documentos o invadir su "
-"privacidad. No es seguro abrirlo directamente. Puede guardarlo en cambio."
+#: ../embed/mozilla/ContentHandler.cpp:327
+msgid "Download this potentially unsafe file?"
+msgstr "¿Desea descargar este archivo potencialmente no seguro?"
 
-#. translators: %s is the name of the application
-#: ../embed/mozilla/ContentHandler.cpp:300
-#, c-format
-msgid "Open this file with \"%s\"?"
-msgstr "¿Quiere abrir este archivo con «%s»?"
-
-#. translators: %s is the name of the application
-#: ../embed/mozilla/ContentHandler.cpp:305
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/mozilla/ContentHandler.cpp:333
 #, c-format
 msgid ""
-"It's not possible to view this file type directly in the browser. You can "
-"open it with \"%s\" or save it."
+"File Type: %s.\n"
+"\n"
+"It is unsafe to open \"%s\", it could potentially damage your documents or "
+"invade your privacy. You can download it instead."
 msgstr ""
-"No es posible ver este tipo de archivo directamente en el navegador. Puede "
-"abrirlo con «%s» o guardarlo."
+"Tipo de archivo: %s.\n"
+"Es inseguro abrir «%s», podría dañar potencialmente sus documentos o invadir su privacidad. Puede descargarlo en cambio."
 
-#: ../embed/mozilla/ContentHandler.cpp:315
-msgid "Download the file?"
-msgstr "¿Descargar el archivo?"
+#: ../embed/mozilla/ContentHandler.cpp:343
+msgid "Open this file?"
+msgstr "¿Desea abrir este archivo?"
 
-#: ../embed/mozilla/ContentHandler.cpp:318
+#. translators: First %s is the file type description,
+#. Second %s is the file name,
+#. Third %s is the application used to open the file
+#: ../embed/mozilla/ContentHandler.cpp:350
+#, c-format
 msgid ""
-"It's not possible to view this file because there is no application "
-"installed that can open it. You can save it instead."
+"File Type: %s.\n"
+"\n"
+"You can open \"%s\" using \"%s\" or save it."
 msgstr ""
-"No es posible ver este archivo porque no hay aplicación instalada que pueda "
-"abrirlo. Puede guardarlo en cambio."
+"Tipo de archivo: %s.\n"
+"\n"
+"Puede abrir «%s» usando «%s» o guardarlo."
 
-#: ../embed/mozilla/ContentHandler.cpp:323
+#: ../embed/mozilla/ContentHandler.cpp:358
+msgid "Download this file?"
+msgstr "¿Desea descargar este archivo?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/mozilla/ContentHandler.cpp:364
+#, c-format
+msgid ""
+"File Type: %s.\n"
+"\n"
+"You have no application able to open \"%s\". You can download it instead."
+msgstr ""
+"Tipo de archivo: %s.\n"
+"\n"
+"No tiene ninguna aplicación capaz de abrir «%s». Puede descargarlo, sin embargo."
+
+#: ../embed/mozilla/ContentHandler.cpp:369
 msgid "_Save As..."
 msgstr "Guardar c_omo..."
 
@@ -1588,8 +1606,8 @@ msgid "Connect to untrusted site?"
 msgstr "¿Quiere conectar con el sitio no confiado?"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:361
-msgid "_Don't show this message again for this site"
-msgstr "_No mostrar este mensaje de nuevo para el sitio"
+msgid "_Trust this security information from now on"
+msgstr "_Confiar en esta información de seguridad desde ahora en adelante."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:362
 msgid "Co_nnect"
@@ -3774,7 +3792,7 @@ msgid_plural "System languages (%s)"
 msgstr[0] "Idioma del sistema (%s)"
 msgstr[1] "Idiomas del sistema (%s)"
 
-#: ../src/prefs-dialog.c:1359
+#: ../src/prefs-dialog.c:1366
 msgid "Select a directory"
 msgstr "Seleccione un directorio"
 
@@ -3805,6 +3823,26 @@ msgstr "Desarrolladores anteriores:"
 #: ../src/window-commands.c:793
 msgid "translator-credits"
 msgstr "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
+
+#~ msgid "Open this file with \"%s\"?"
+#~ msgstr "¿Quiere abrir este archivo con «%s»?"
+
+#~ msgid ""
+#~ "It's not possible to view this file type directly in the browser. You can "
+#~ "open it with \"%s\" or save it."
+#~ msgstr ""
+#~ "No es posible ver este tipo de archivo directamente en el navegador. "
+#~ "Puede abrirlo con «%s» o guardarlo."
+
+#~ msgid ""
+#~ "It's not possible to view this file because there is no application "
+#~ "installed that can open it. You can save it instead."
+#~ msgstr ""
+#~ "No es posible ver este archivo porque no hay aplicación instalada que "
+#~ "pueda abrirlo. Puede guardarlo en cambio."
+
+#~ msgid "_Don't show this message again for this site"
+#~ msgstr "_No mostrar este mensaje de nuevo para el sitio"
 
 #~ msgid "Toggle network status"
 #~ msgstr "Cambiar el estado de red"
