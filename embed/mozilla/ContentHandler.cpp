@@ -298,7 +298,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	{
 		nsEmbedString suggested;
 		
-		mLauncher->GetSuggestedFileName(&suggested);
+		mLauncher->GetSuggestedFileName (suggested);
 		NS_UTF16ToCString (
 			suggested,
 			NS_CSTRING_ENCODING_UTF8, file_name);
@@ -307,14 +307,14 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	{
 		PRUnichar *suggested = nsnull;
 			
-		mLauncher->GetSuggestedFileName(&suggested);
+		mLauncher->GetSuggestedFileName (&suggested);
 		if (suggested != nsnull)
 		{
 			NS_UTF16ToCString (
-				nsEmbedString(suggested),
+				nsEmbedString (suggested),
 				NS_CSTRING_ENCODING_UTF8, file_name);
 				
-			nsMemory::Free(suggested);
+			nsMemory::Free (suggested);
 		}
 	}
 #endif
