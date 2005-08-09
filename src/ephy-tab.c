@@ -1239,36 +1239,6 @@ ephy_tab_set_icon_address (EphyTab *tab,
 }
 
 static void
-ephy_tab_set_fallback_icon_address (EphyTab *tab)
-{
-	EphyTabPrivate *priv = tab->priv;
-	GnomeVFSURI *uri;
-	char *icon_address;
-
-	/* If the site didn't specify a site icon, we fall back to
-	 * favicon.ico, see bug #116678.
-	 */
-
-	if (priv->icon_address != NULL ||
-	    priv->address == NULL ||
-	    !(g_str_has_prefix (priv->address, "http://") ||
-	      g_str_has_prefix (priv->address, "https://"))) return;
-
-	uri = gnome_vfs_uri_new (priv->address);
-	if (uri == NULL) return;
-
-	/* FIXME: support host:port ? */
-	icon_address = g_strconcat (gnome_vfs_uri_get_scheme (uri), "://",
-				    gnome_vfs_uri_get_host_name (uri),
-				    "/favicon.ico", NULL);
-
-	ephy_tab_set_icon_address (tab, icon_address);
-
-	g_free (icon_address);
-	gnome_vfs_uri_unref (uri);
-}
-
-static void
 ephy_tab_file_monitor_cancel (EphyTab *tab)
 {
 	EphyTabPrivate *priv = tab->priv;
@@ -1770,7 +1740,6 @@ ephy_tab_net_state_cb (EphyEmbed *embed,
 			ephy_tab_set_load_percent (tab, 100);
 			ephy_tab_set_load_status (tab, FALSE);
 			ephy_tab_update_navigation_flags (tab, embed);
-			ephy_tab_set_fallback_icon_address (tab);
 
 			g_free (priv->loading_title);
 			priv->loading_title = NULL;
