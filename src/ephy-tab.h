@@ -74,6 +74,9 @@ GdkPixbuf	       *ephy_tab_get_icon		(EphyTab *tab);
 
 const char	       *ephy_tab_get_icon_address	(EphyTab *tab);
 
+void			ephy_tab_set_icon_address	(EphyTab *tab,
+							 const char *address);
+
 gboolean		ephy_tab_get_load_status	(EphyTab *tab);
 
 const char             *ephy_tab_get_link_message	(EphyTab *tab);

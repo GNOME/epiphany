@@ -145,8 +145,6 @@ typedef struct
 static GObjectClass *parent_class = NULL;
 
 /* internal functions, accessible only from this file */
-static void	ephy_tab_set_icon_address	(EphyTab *tab,
-						 const char *location);
 static void	ephy_tab_set_load_status	(EphyTab *tab,
 						 gboolean status);
 static void	ephy_tab_set_link_message	(EphyTab *tab,
@@ -226,10 +224,12 @@ ephy_tab_set_property (GObject *object,
 		case PROP_POPUPS_ALLOWED:
 			ephy_tab_set_popups_allowed (tab, g_value_get_boolean (value));
 			break;
+		case PROP_ICON_ADDRESS:
+			ephy_tab_set_icon_address (tab, g_value_get_string (value));
+			break;
 		case PROP_ADDRESS:
 		case PROP_DOCUMENT_TYPE:
 		case PROP_ICON:
-		case PROP_ICON_ADDRESS:
 		case PROP_LOAD_PROGRESS:
 		case PROP_LOAD_STATUS:
 		case PROP_MESSAGE:
@@ -1202,7 +1202,7 @@ ephy_tab_icon_cache_changed_cb (EphyFaviconCache *cache,
 	}
 }
 
-static void
+void
 ephy_tab_set_icon_address (EphyTab *tab,
 			   const char *address)
 {

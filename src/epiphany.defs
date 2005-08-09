@@ -3061,6 +3061,15 @@
   (return-type "const-char*")
 )
 
+(define-method set_icon_address
+  (of-object "EphyTab")
+  (c-name "ephy_tab_set_icon_address")
+  (return-type "none")
+  (parameters
+    '("const-char*" "address")
+  )
+)
+
 (define-method get_load_status
   (of-object "EphyTab")
   (c-name "ephy_tab_get_load_status")
