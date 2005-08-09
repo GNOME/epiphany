@@ -669,6 +669,10 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 	{
 		gtk_entry_set_text (GTK_ENTRY (priv->entry), "");
 	}
+	else
+	{
+		gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
+	}
 
 	gtk_widget_show (GTK_WIDGET (toolbar));
 
@@ -676,9 +680,15 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 	gtk_widget_grab_focus (GTK_WIDGET (priv->embed));
 
 	send_focus_change (priv->entry, TRUE);
+
+	if (strlen(gtk_entry_get_text (GTK_ENTRY (priv->entry))) != 0)
+	{
+		entry_changed_cb (GTK_ENTRY (priv->entry), toolbar);
+	}
 #else
 	gtk_widget_grab_focus (GTK_WIDGET (toolbar));
 #endif
+
 }
 
 void
