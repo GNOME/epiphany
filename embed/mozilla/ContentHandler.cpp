@@ -330,7 +330,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			(GTK_MESSAGE_DIALOG (dialog),
 			/* translators: First %s is the file type description,
 			   Second %s is the file name */
-			_("File Type: %s.\n\nIt is unsafe to open \"%s\", "
+			_("File Type: %s.\n\nIt is unsafe to open \"%s\" as "
 			  "it could potentially damage your documents or "
 			  "invade your privacy. You can download it instead."),
 			  mime_description, file_name.get());		
