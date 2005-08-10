@@ -224,7 +224,8 @@ sync_user_input_cb (EphyLocationAction *action,
 	address = ephy_location_action_get_address (action);
 
 	priv->updating_address = TRUE;
-	ephy_tab_set_typed_address (tab, address);
+	ephy_tab_set_typed_address (tab, address,
+				    EPHY_TAB_ADDRESS_EXPIRE_CURRENT);
 	priv->updating_address = FALSE;
 }
 

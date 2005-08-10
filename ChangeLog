@@ -1,3 +1,18 @@
+2005-08-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-lockdown.c: (update_location_editable):
+	* src/ephy-shell.c: (ephy_shell_new_tab_full):
+	* src/ephy-tab.c: (ephy_tab_set_property), (ephy_tab_set_address),
+	(ephy_tab_open_uri_cb), (ephy_tab_address_cb), (ensure_page_info),
+	(ephy_tab_net_state_cb), (ephy_tab_init), (ephy_tab_get_address),
+	(ephy_tab_get_typed_address), (ephy_tab_set_typed_address):
+	* src/ephy-tab.h:
+	* src/ephy-toolbar.c: (sync_user_input_cb):
+	* src/epiphany.defs:
+
+	Open new tabs with blank url bar if we're loading the homepage.
+	Fixes bug #313012.
+
 2005-08-10  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* embed/mozilla/MozDownload.cpp (OnStateChange):

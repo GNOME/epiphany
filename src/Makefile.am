@@ -302,7 +302,6 @@ MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 if ENABLE_PYTHON
 
 BINDING_HEADERS_SRCDIR_IN = \
-	embed/mozilla/mozilla-embed-event.h		\
 	embed/ephy-command-manager.h			\
 	embed/ephy-cookie-manager.h			\
 	embed/ephy-embed-event.h			\

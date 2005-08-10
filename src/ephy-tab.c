@@ -96,15 +96,9 @@ struct _EphyTabPrivate
 	guint is_loading : 1;
 	guint is_setting_zoom : 1;
 	EphyEmbedSecurityLevel security_level;
-	/*
-	guint security_level : 3; ??
-	*/
-	/*
-	gboolean visibility;
-	gboolean load_status;
-	gboolean is_setting_zoom;
-	gboolean address_expire;
-	*/
+	/* guint security_level : 3; ? */
+	EphyTabAddressExpire address_expire;
+	/* guint address_expire : 2; ? */
 
 	/* File watch */
 	GnomeVFSMonitorHandle *monitor;
@@ -219,7 +213,8 @@ ephy_tab_set_property (GObject *object,
 
 	{
 		case PROP_TYPED_ADDRESS:
-			ephy_tab_set_typed_address (tab, g_value_get_string (value));
+			ephy_tab_set_typed_address (tab, g_value_get_string (value),
+						    EPHY_TAB_ADDRESS_EXPIRE_NOW);
 			break;
 		case PROP_POPUPS_ALLOWED:
 			ephy_tab_set_popups_allowed (tab, g_value_get_boolean (value));
@@ -929,6 +924,7 @@ ephy_tab_set_address (EphyTab *tab,
 		      char *address)
 {
 	EphyTabPrivate *priv = tab->priv;
+	GObject *object = G_OBJECT (tab);
 
 	g_free (priv->address);
 	priv->address = address;
@@ -936,14 +932,17 @@ ephy_tab_set_address (EphyTab *tab,
 	priv->is_blank = address == NULL ||
 			 strcmp (address, "about:blank") == 0;
 
-	if (priv->is_loading && priv->typed_address != NULL)
+	if (priv->is_loading &&
+	    priv->address_expire == EPHY_TAB_ADDRESS_EXPIRE_NOW &&
+	    priv->typed_address != NULL)
 	{
 		g_free (priv->typed_address);
 		priv->typed_address = NULL;
+
+		g_object_notify (object, "typed-address");
 	}
 
-	g_object_notify (G_OBJECT (tab), "address");
-	g_object_notify (G_OBJECT (tab), "typed-address");
+	g_object_notify (object, "address");
 }
 
 /* Public functions */
@@ -1418,7 +1417,7 @@ ephy_tab_open_uri_cb (EphyEmbed *embed,
 	EphyTabPrivate *priv = tab->priv;
 
 	/* Set the address here if we have a blank page.
-	 * See bug # .
+	 * See bug #147840.
 	 */
 	if (priv->is_blank)
 	{
@@ -1446,7 +1445,8 @@ ephy_tab_address_cb (EphyEmbed *embed,
 
 	/* Do not expose about:blank to the user, an empty address
 	   bar will do better */
-	if (address == NULL || strcmp (address, "about:blank") == 0)
+	if (address == NULL || address[0] == '\0' ||
+	    strcmp (address, "about:blank") == 0)
 	{
 		ephy_tab_set_address (tab, NULL);
 		ephy_tab_set_title (tab, embed, NULL);
@@ -1688,7 +1688,8 @@ ensure_page_info (EphyTab *tab, EphyEmbed *embed, const char *address)
 {
 	EphyTabPrivate *priv = tab->priv;
 
-	if (priv->address == NULL || priv->address[0] != '\0')
+	if ((priv->address == NULL || priv->address[0] == '\0') &&
+	    priv->address_expire == EPHY_TAB_ADDRESS_EXPIRE_NOW)
         {
 		ephy_tab_set_address (tab, g_strdup (address));
 	}
@@ -1743,6 +1744,8 @@ ephy_tab_net_state_cb (EphyEmbed *embed,
 
 			g_free (priv->loading_title);
 			priv->loading_title = NULL;
+
+			priv->address_expire = EPHY_TAB_ADDRESS_EXPIRE_NOW;
 
 			g_object_notify (object, "title");
 
@@ -2008,6 +2011,7 @@ ephy_tab_init (EphyTab *tab)
 	priv->typed_address = NULL;
 	priv->title = NULL;
 	priv->loading_title = NULL;
+	priv->address_expire = EPHY_TAB_ADDRESS_EXPIRE_NOW;
 
 	embed = ephy_embed_factory_new_object (EPHY_TYPE_EMBED);
 	g_assert (embed != NULL);
@@ -2295,19 +2299,31 @@ ephy_tab_get_typed_address (EphyTab *tab)
 /**
  * ephy_tab_set_typed_address:
  * @tab: an #EphyTab
- *
+ * @address: the new typed address, or %NULL to clear it
+ * @expire: when to expire this address_expire
+ * 
  * Sets the text that @tab's #EphyWindow will display in its location toolbar
  * entry when @tab is selected.
  **/
 void
 ephy_tab_set_typed_address (EphyTab *tab,
-			    const char *address)
+			    const char *address,
+			    EphyTabAddressExpire expire)
 {
 	EphyTabPrivate *priv = tab->priv;
 
 	g_free (priv->typed_address);
-	priv->typed_address = address != NULL && address[0] != '\0'
-				? g_strdup (address) : NULL;
+	priv->typed_address = g_strdup (address);
+
+	if (expire == EPHY_TAB_ADDRESS_EXPIRE_CURRENT &&
+	    !priv->is_loading)
+	{
+		priv->address_expire = EPHY_TAB_ADDRESS_EXPIRE_NOW;
+	}
+	else
+	{
+		priv->address_expire = expire;
+	}
 
 	g_object_notify (G_OBJECT (tab), "typed-address");
 }
