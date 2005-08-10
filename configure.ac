@@ -439,6 +439,7 @@ dnl Define this down here so it doesn't affect the API checks above
 AC_DEFINE([MOZILLA_INTERNAL_API],[1],[Define for access to internal mozilla API])
 
 dnl Make sure we don't accidentally build without PSM support
+
 AC_MSG_CHECKING([whether to include PSM support])
 AC_ARG_ENABLE([--disable-psm],
 	AS_HELP_STRING([psm],[Disable PSM support (default: enabled)]),
@@ -461,12 +462,20 @@ if test "x$flavour" = "xmozilla"; then
 		[Define if mozilla nsIPassword header is available])],
 		[AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/wallet/nsIPassword.h],
 			[AC_DEFINE([HAVE_NSIPASSWORD_H],[1],
-			[Define if mozilla nsIPassword header is available])])])
+			[Define if mozilla nsIPassword header is available]) have_password_h=yes])],
+			[have_password_h=no])
 elif test "x$flavour" = "xtoolkit"; then
 	AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/passwordmgr/nsIPassword.h],
 		[AC_DEFINE([HAVE_NSIPASSWORD_H],[1],
-		[Define if mozilla nsIPassword header is available])])
+			[Define if mozilla nsIPassword header is available]) have_password_h=yes],
+		[have_password_h=no])
 fi
+
+if test "x$have_password_h" = "xno"; then
+	AC_MSG_WARN([nsIPassword.h not found; personal data manger will have no passwords support!])
+fi
+
+dnl Check whether to enable our filepicker component
 
 AC_MSG_CHECKING([whether to enable native gtk+ filepicker])
 AC_ARG_ENABLE([filepicker],
