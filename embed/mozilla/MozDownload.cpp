@@ -369,7 +369,9 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 	}
 
 	/* We will get this even in the event of a cancel */
-	if (aStateFlags & STATE_STOP)
+	/* Be careful that download is only completed when STATE_IS_NETWORK is set
+ 	   and many lonely STOP events may be triggered before */
+	if ((aStateFlags & STATE_STOP) && (aStateFlags & STATE_IS_NETWORK))
 	{
 		/* Keep us alive */
 		nsCOMPtr<nsITransfer> kungFuDeathGrip(this);

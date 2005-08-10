@@ -1,3 +1,15 @@
+2005-08-10  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* embed/mozilla/MozDownload.cpp (OnStateChange):
+
+	Gecko send several STATE_STOP, but only the final one (completed)
+	is of interest (STATE_STOP&STATE_IS_NETWORK).
+	Fix crash with gecko 1.8 when downloading.
+
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Fix compilation warning.
+
 2005-08-10  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.ac:

@@ -226,7 +226,6 @@ static void
 mozilla_embed_realize (GtkWidget *widget)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (widget)->priv;
-	GtkBin *bin = GTK_BIN (widget);
 
 	GTK_WIDGET_CLASS (parent_class)->realize (widget);
 
@@ -269,7 +268,7 @@ mozilla_embed_realize (GtkWidget *widget)
 
 	if (mpriv->focus_connected) return;
 
-	GtkWidget *child = gtk_bin_get_child (bin);
+	GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
 	g_return_if_fail (child != NULL);
 
 	n = g_signal_handlers_block_matched (child,
