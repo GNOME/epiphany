@@ -403,7 +403,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							    G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
-					 PROP_ICON_ADDRESS,
+					 PROP_ICON,
 					 g_param_spec_object ("icon",
 							      "Icon",
 							      "The tab icon's",
@@ -416,7 +416,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "Icon address",
 							      "The tab icon's address",
 							      NULL,
-							      G_PARAM_READABLE));
+							      (G_PARAM_READABLE | G_PARAM_WRITABLE)));
 
 	g_object_class_install_property (object_class,
 					 PROP_LOAD_PROGRESS,
@@ -494,7 +494,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "Typed Address",
 							      "The typed address",
 							      "",
-							      G_PARAM_READWRITE));
+							      G_PARAM_READABLE | G_PARAM_WRITABLE));
 
 	g_object_class_install_property (object_class,
 					 PROP_VISIBLE,
