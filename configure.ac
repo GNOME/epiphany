@@ -422,10 +422,12 @@ AC_LANG_POP([C++])
 dnl Broken everywhere
 dnl Provide a configure switch for easy testing of *real* fixes in gtkmozembed
 
+AC_MSG_CHECKING([whether to work around broken gtkmozembed focus])
 AC_ARG_ENABLE([--enable-focus-fix],
-	AS_HELP_STRING([focus-fix],[Enable the workaround for the broken GtkMozEmbed focus handling (default: enabled)])
+	AS_HELP_STRING([focus-fix],[Enable the workaround for the broken GtkMozEmbed focus handling (default: enabled)]),
 	[want_focus_fix=$enableval],
 	[want_focus_fix=yes])
+AC_MSG_RESULT([$want_focus_fix])
 
 if test "x$want_focus_fix" = "xyes"; then
 	AC_DEFINE([GTKMOZEMBED_BROKEN_FOCUS],[1],[Define if GtkMozEmbed has broken focus handling])
@@ -437,10 +439,12 @@ dnl Define this down here so it doesn't affect the API checks above
 AC_DEFINE([MOZILLA_INTERNAL_API],[1],[Define for access to internal mozilla API])
 
 dnl Make sure we don't accidentally build without PSM support
+AC_MSG_CHECKING([whether to include PSM support])
 AC_ARG_ENABLE([--disable-psm],
 	AS_HELP_STRING([psm],[Disable PSM support (default: enabled)]),
 	[want_psm=$enableval],
 	[want_psm=yes])
+AC_MSG_RESULT([$want_psm])
 
 if test "x$want_psm" = "xyes" -a "x$have_psm" = "xno"; then
 	AC_MSG_ERROR([PSM headers not found; use --disable-psm to disable building with PSM support])
