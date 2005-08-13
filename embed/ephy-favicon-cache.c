@@ -749,7 +749,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 			{
 				if (g_file_get_contents (pix_file, &buf, &count, NULL))
 				{
-					gdk_pixbuf_loader_write (loader, buf, count, NULL);
+					gdk_pixbuf_loader_write (loader, (const guchar *) buf, count, NULL);
 					g_free (buf);
 				}
 				
