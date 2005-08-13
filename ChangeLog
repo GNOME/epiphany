@@ -1,5 +1,12 @@
 2005-08-13  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/ContentHandler.cpp:
+
+	Check that we're not trying to open in Epiphany itself!
+	Fixes bug #310023.
+
+2005-08-13  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_get):
 
 	Reject favicons that are < 12x12.
