@@ -369,10 +369,34 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 	}
 
 	/* We will get this even in the event of a cancel */
+	/* Due to a mozilla bug [https://bugzilla.mozilla.org/show_bug.cgi?id=304353],
+	 * we'll only get STATE_STOP if we're driven from external app handler; elsewhere
+	 * we get STATE_STOP | STATE_IS_NETWORK | STATE_IS_REQUEST. So check first if 
+	 * STATE_IS_REQUEST is set.
+	 */
 	/* Be careful that download is only completed when STATE_IS_NETWORK is set
- 	   and many lonely STOP events may be triggered before */
-	if ((aStateFlags & STATE_STOP) && (aStateFlags & STATE_IS_NETWORK))
+ 	 * and many lonely STOP events may be triggered before.
+	 */
+#ifdef GNOME_ENABLE_DEBUG
+{
+	nsEmbedCString spec;
+	if (mSource) mSource->GetSpec(spec);
+
+	LOG ("url %s, status %x, state %x (is-stop:%s, is-network:%s, is-request:%s)",
+	     spec.get(), aStatus, aStateFlags,
+	     aStateFlags & STATE_STOP ? "t" : "f",
+	     aStateFlags & STATE_IS_NETWORK ? "t" : "f",
+	     aStateFlags & STATE_IS_REQUEST ? "t" : "f");
+}
+#endif
+
+	if (((aStateFlags & STATE_IS_REQUEST) &&
+	     (aStateFlags & STATE_IS_NETWORK) &&
+	     (aStateFlags & STATE_STOP)) ||
+	    aStateFlags == STATE_STOP)
 	{
+		LOG ("STATE_STOP");
+
 		/* Keep us alive */
 		nsCOMPtr<nsITransfer> kungFuDeathGrip(this);
 
