@@ -413,6 +413,10 @@ CXXFLAGS=$_SAVE_CXXFLAGS
 
 AC_LANG_POP([C++])
 
+dnl Broken everywhere
+
+AC_DEFINE([GTKMOZEMBED_BROKEN_FOCUS],[1],[Define if GtkMozEmbed has broken focus handling])
+
 dnl Needed since 1.8b2
 dnl Define this down here so it doesn't affect the API checks above
 

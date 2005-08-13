@@ -2537,6 +2537,7 @@ ephy_window_open_link (EphyLink *link,
 		       EphyLinkFlags flags)
 {
 	EphyWindow *window = EPHY_WINDOW (link);
+	EphyWindowPrivate *priv = window->priv;
 	EphyTab *new_tab;
 
 	g_return_val_if_fail (address != NULL, NULL);
@@ -2578,7 +2579,15 @@ ephy_window_open_link (EphyLink *link,
 		embed = ephy_tab_get_embed (tab);
 
 		ephy_embed_load_url (embed, address);
-		ephy_embed_activate (embed);
+
+		if (address == NULL || address[0] == '\0' || strcmp (address, "about:blank") == 0)
+		{
+			ephy_toolbar_activate_location (priv->toolbar);
+		}
+		else
+		{
+			ephy_embed_activate (embed);
+		}
 
 		new_tab = tab;
 	}

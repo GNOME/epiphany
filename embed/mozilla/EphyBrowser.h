@@ -34,6 +34,7 @@
 #include <nsIWebNavigation.h>
 #include <nsISHistory.h>
 #include <nsIWebBrowser.h>
+#include <nsIWebBrowserFocus.h>
 #include <nsIDOMDocument.h>
 #include <nsIDOMWindow.h>
 #include <nsIPrintSettings.h>
@@ -162,10 +163,16 @@ public:
 
         EphyEmbedDocumentType GetDocumentType ();
 
+#ifdef GTKMOZEMBED_BROKEN_FOCUS
+	nsresult FocusActivate ();
+	nsresult FocusDeactivate ();
+#endif
+
 	nsCOMPtr<nsIWebBrowser> mWebBrowser;
 private:
 	GtkWidget *mEmbed;
 
+	nsCOMPtr<nsIWebBrowserFocus> mWebBrowserFocus;
 	nsCOMPtr<nsIDOMDocument> mTargetDocument;
 	nsCOMPtr<nsIDOMEventTarget> mEventTarget;
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;

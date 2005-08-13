@@ -1,5 +1,17 @@
 2005-08-13  Christian Persch  <chpe@cvs.gnome.org>
 
+	* configure.ac:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-shell.c: (url_is_empty), (load_homepage),
+	(ephy_shell_new_tab_full):
+	* src/ephy-window.c: (ephy_window_open_link):
+
+	Backport of focus fix from HEAD. Fixes bug #105153.
+
+2005-08-13  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_get):
 	* lib/ephy-dnd.c: (ephy_dnd_drag_data_get):
 
