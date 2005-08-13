@@ -15,7 +15,7 @@ dnl You should have received a copy of the GNU General Public License along
 dnl with this program; if not, write to the Free Software Foundation, Inc.,
 dnl 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 
-AC_INIT([GNOME Web Browser],[1.7.5],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[1.9.0],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
@@ -25,10 +25,10 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
-EPIPHANY_MAJOR=1.7
+EPIPHANY_MAJOR=1.9
 AC_SUBST([EPIPHANY_MAJOR])
 
-AM_INIT_AUTOMAKE([1.8 dist-bzip2 no-dist-gzip check-news])
+AM_INIT_AUTOMAKE([1.9 dist-bzip2 no-dist-gzip check-news])
 
 AM_MAINTAINER_MODE
 if test "x$enable_maintainer_mode" = "xyes"; then
@@ -53,6 +53,7 @@ GNOME_DESKTOP_REQUIRED=2.9.91
 LIBSTARTUP_NOTIFICATION_REQUIRED=0.5
 LIBGNOMEPRINT_REQUIRED=2.4.0
 LIBGNOMEPRINTUI_REQUIRED=2.4.0
+DBUS_GLIB_REQUIRED=0.35
 
 AC_ENABLE_SHARED([yes])
 AC_ENABLE_STATIC([no])
@@ -82,7 +83,7 @@ else
 	STARTUP_NOTIFICATION_PACKAGE=
 fi
 
-PKG_CHECK_MODULES([EPIPHANY_DEPENDENCY], [\
+PKG_CHECK_MODULES([DEPENDENCIES], [\
 		  glib-2.0 >= $GLIB_REQUIRED \
 		  pango >= $PANGO_REQUIRED \
 		  gtk+-2.0 >= $GTK_REQUIRED \
@@ -90,8 +91,6 @@ PKG_CHECK_MODULES([EPIPHANY_DEPENDENCY], [\
 		  libxslt >= $LIBXSLT_REQUIRED \
 		  libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED \
 		  libglade-2.0 >= $LIBGLADE_REQUIRED \
-		  bonobo-activation-2.0 \
-		  ORBit-2.0 \
 		  gnome-vfs-2.0 >= $LIBGNOMEVFS_REQUIRED \
 		  gnome-vfs-module-2.0 \
 		  gconf-2.0 \
@@ -100,8 +99,24 @@ PKG_CHECK_MODULES([EPIPHANY_DEPENDENCY], [\
 		  libgnomeprint-2.2 >= $LIBGNOMEPRINT_REQUIRED \
 		  libgnomeprintui-2.2 >= $LIBGNOMEPRINTUI_REQUIRED \
 		  ])
-AC_SUBST([EPIPHANY_DEPENDENCY_CFLAGS])
-AC_SUBST([EPIPHANY_DEPENDENCY_LIBS])
+AC_SUBST([DEPENDENCIES_CFLAGS])
+AC_SUBST([DEPENDENCIES_LIBS])
+
+PKG_CHECK_MODULES([DBUS],[dbus-glib-1 >= $DBUS_GLIB_REQUIRED])
+AC_SUBST([DBUS_CFLAGS])
+AC_SUBST([DBUS_LIBS])
+
+AC_PATH_PROG([DBUS_BINDING_TOOL],[dbus-binding-tool],[no])
+
+if test x"$DBUS_BINDING_TOOL" = xno; then
+	AC_MSG_ERROR([dbus-binding-tool not found])
+fi
+
+AM_CONDITIONAL([ENABLE_DBUS],[false])
+
+PKG_CHECK_MODULES([BONOBO],[bonobo-activation-2.0 ORBit-2.0])
+AC_SUBST([BONOBO_CFLAGS])
+AC_SUBST([BONOBO_LIBS])
 
 ORBIT_IDL="`$PKG_CONFIG --variable=orbit_idl ORBit-2.0`"
 AC_SUBST([ORBIT_IDL])
@@ -204,9 +219,9 @@ AC_SUBST([MOZILLA])
 MOZILLA_FLAVOUR=$flavour
 AC_SUBST([MOZILLA_FLAVOUR])
 
-PKG_CHECK_MODULES(MOZILLA_COMPONENT, $MOZILLA-gtkmozembed >= $min_version $MOZILLA-xpcom >= $min_version)
-AC_SUBST([MOZILLA_COMPONENT_CFLAGS])
-AC_SUBST([MOZILLA_COMPONENT_LIBS])
+PKG_CHECK_MODULES([GECKO],[$MOZILLA-gtkmozembed >= $min_version $MOZILLA-xpcom >= $min_version])
+AC_SUBST([GECKO_CFLAGS])
+AC_SUBST([GECKO_LIBS])
 
 MOZILLA_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir $MOZILLA-gtkmozembed`"
 AC_SUBST([MOZILLA_INCLUDE_ROOT])
@@ -505,53 +520,11 @@ dnl ***************
 
 AC_CHECK_HEADERS([X11/XF86keysym.h])
 
-dnl ****
-dnl DBUS
-dnl ****
-
-EPIPHANY_FEATURES=
-
-AC_MSG_CHECKING([whether DBUS support is requested])
-
-AC_ARG_ENABLE([dbus],
-	AS_HELP_STRING([--enable-dbus],[Enable DBUS (default=no)]),
-	[enable_dbus=$enableval],
-	[enable_dbus=no])
-
-AC_MSG_RESULT([$enable_dbus])
-
-if test "x$enable_dbus" = "xyes" ; then
-
-	AC_MSG_CHECKING([for new DBUS API])
-
-	_SAVE_LDFLAGS="$LDFLAGS"
-	LDFLAGS="$LDFLAGS `$PKG_CONFIG --libs dbus-1`"
-	AC_TRY_LINK_FUNC([dbus_message_iter_get_boolean],[have_new_dbus=no],[have_new_dbus=yes])
-	LDFLAGS="$_SAVE_LDFLAGS"
-
-	AC_MSG_RESULT([$have_new_dbus])
-
-	if test "x$have_new_dbus" = "xyes"; then
-		AC_DEFINE([HAVE_NEW_DBUS],[1],[Define if compiling with DBUS 0.3])
-
-		DBUS_REQUIRED=0.34
-		DBUS_GLIB_REQUIRED=0.34
-	else
-		DBUS_REQUIRED=0.22
-		DBUS_GLIB_REQUIRED=0.22
-	fi
-
-	AC_DEFINE([ENABLE_DBUS],[1],[Define if DBUS support is enabled])
-	EPIPHANY_FEATURES="$EPIPHANY_FEATURES dbus"
-
-	PKG_CHECK_MODULES([DBUS], [dbus-1 >= $DBUS_REQUIRED dbus-glib-1 >= $DBUS_GLIB_REQUIRED])
-fi
-
-AM_CONDITIONAL([ENABLE_DBUS], [test "x$enable_dbus" = "xyes"])
-
 dnl ******
 dnl Python
 dnl ******
+
+EPIPHANY_FEATURES=
 
 AC_MSG_CHECKING([whether Python support is requested])
 
@@ -672,6 +645,7 @@ elif test "x$enable_python" != "xno"; then
 fi
 
 AM_CONDITIONAL([ENABLE_PYTHON],[test "x$enable_python" = "xyes"])
+
 AC_SUBST([EPIPHANY_FEATURES])
 
 dnl *******************************
@@ -744,7 +718,7 @@ dnl ************
 AC_CONFIG_FILES([
 Makefile
 data/Makefile
-data/epiphany-1.8.pc
+data/epiphany-1.10.pc
 data/glade/Makefile
 data/art/Makefile
 data/ui/Makefile

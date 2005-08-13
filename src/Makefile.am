@@ -120,7 +120,8 @@ libephymain_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libephymain_la_CFLAGS = \
-	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
+	$(DEPENDENCIES_CFLAGS) 	\
+	$(BONOBO_CFLAGS)	\
 	$(AM_CFLAGS)
 
 if ENABLE_DBUS
@@ -167,7 +168,7 @@ libpyphany_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libpyphany_la_CFLAGS = \
-	$(EPIPHANY_DEPENDENCY_CFLAGS)	\
+	$(DEPENDENCIES_CFLAGS)		\
 	$(NO_STRICT_ALIASING_CFLAGS)	\
 	$(PYGTK_CFLAGS)			\
 	$(AM_CFLAGS)
@@ -176,7 +177,8 @@ libpyphany_la_LDFLAGS = \
 	-export-symbols-regex ephy_python_init
 
 libpyphany_la_LIBADD = \
-	$(EPIPHANY_DEPENDENCY_LIBS)		\
+	$(DEPENDENCIES_LIBS)			\
+	$(BONOBO_LIBS)				\
 	$(PYTHON_LIB_LOC) $(PYTHON_LIBS)	\
 	$(PYTHON_EXTRA_LIBS)			\
 	$(PYGTK_LIBS)
@@ -193,7 +195,8 @@ epiphany_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 epiphany_CFLAGS = \
-	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
+	$(DEPENDENCIES_CFLAGS) 	\
+	$(BONOBO_LIBS)		\
 	$(AM_CFLAGS)
 
 epiphany_LDFLAGS = -R$(MOZILLA_HOME) -dlopen self
@@ -207,8 +210,9 @@ epiphany_LDADD = \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
-	$(MOZILLA_COMPONENT_LIBS)	\
-	$(EPIPHANY_DEPENDENCY_LIBS) \
+	$(GECKO_LIBS) \
+	$(DEPENDENCIES_LIBS) \
+	$(BONOBO_LIBS) \
 	$(INTLLIBS)
 
 if ENABLE_DBUS

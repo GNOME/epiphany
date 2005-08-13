@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-AUTOMAKE_OPTIONS = 1.8
+AUTOMAKE_OPTIONS = 1.9
 
 INCLUDES = $(MOZILLA_COMPONENT_CFLAGS) \
 	   -include $(MOZILLA_INCLUDE_ROOT)/mozilla-config.h

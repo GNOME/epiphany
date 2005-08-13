@@ -73,7 +73,7 @@ libephymisc_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libephymisc_la_CFLAGS = \
-        $(EPIPHANY_DEPENDENCY_CFLAGS)	\
+        $(DEPENDENCIES_CFLAGS)	\
 	$(AM_CFLAGS)
 
 libephymisc_la_LIBADD =

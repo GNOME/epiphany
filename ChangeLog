@@ -1,5 +1,25 @@
 2005-08-13  Christian Persch  <chpe@cvs.gnome.org>
 
+	* autogen.sh:
+	* configure.ac:
+	* data/Makefile.am:
+	R data/epiphany-1.8.pc.in:
+	A data/epiphany-1.10.pc.in:
+	* doc/reference/Makefile.am:
+	* embed/Makefile.am:
+	* embed/mozilla/Makefile.am:
+	* lib/Makefile.am:
+	* lib/egg/Makefile.am:
+	* lib/widgets/Makefile.am:
+	* src/Makefile.am:
+	* src/bookmarks/Makefile.am:
+
+	Version 1.9.
+	Separate bonobo pkg-config checks from rest of dependencies. Make
+	dbus mandatory, and remove check for old dbus version.
+
+2005-08-13  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/ContentHandler.cpp:
 
 	Check that we're not trying to open in Epiphany itself!

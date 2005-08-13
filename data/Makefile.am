@@ -52,7 +52,7 @@ mimepermissiondir = $(pkgdatadir)
 mimepermission_DATA = mime-types-permissions.xml
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = epiphany-1.8.pc
+pkgconfig_DATA = epiphany-1.10.pc
 
 xsldir = $(pkgdatadir)
 xsl_DATA = epiphany-bookmarks-html.xsl
