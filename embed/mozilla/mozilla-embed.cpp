@@ -337,25 +337,25 @@ mozilla_embed_init (MozillaEmbed *embed)
         embed->priv = MOZILLA_EMBED_GET_PRIVATE (embed);
 	embed->priv->browser = new EphyBrowser ();
 
-	g_signal_connect_object (G_OBJECT (embed), "location",
+	g_signal_connect_object (embed, "location",
 				 G_CALLBACK (mozilla_embed_location_changed_cb),
 				 embed, (GConnectFlags) 0);
-	g_signal_connect_object (G_OBJECT (embed), "net_state_all",
+	g_signal_connect_object (embed, "net_state_all",
 				 G_CALLBACK (mozilla_embed_net_state_all_cb),
 				 embed, (GConnectFlags) 0);
-	g_signal_connect_object (G_OBJECT (embed), "dom_mouse_click",
+	g_signal_connect_object (embed, "dom_mouse_click",
 				 G_CALLBACK (mozilla_embed_dom_mouse_click_cb),
 				 embed, (GConnectFlags) 0);
-	g_signal_connect_object (G_OBJECT (embed), "dom_mouse_down",
+	g_signal_connect_object (embed, "dom_mouse_down",
 				 G_CALLBACK (mozilla_embed_dom_mouse_down_cb),
 				 embed, (GConnectFlags) 0);
-	g_signal_connect_object (G_OBJECT (embed), "dom-key-press",
+	g_signal_connect_object (embed, "dom-key-press",
 				 G_CALLBACK (mozilla_embed_dom_key_press_cb),
 				 embed, (GConnectFlags) 0);
-	g_signal_connect_object (G_OBJECT (embed), "new_window",
+	g_signal_connect_object (embed, "new_window",
 				 G_CALLBACK (mozilla_embed_new_window_cb),
 				 embed, (GConnectFlags) 0);
-	g_signal_connect_object (G_OBJECT (embed), "security_change",
+	g_signal_connect_object (embed, "security_change",
 				 G_CALLBACK (mozilla_embed_security_change_cb),
 				 embed, (GConnectFlags) 0);
 }

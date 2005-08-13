@@ -180,6 +180,11 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 		EphyUtils::NewURI (getter_AddRefs (favUri), faviconUrl);
 		NS_ENSURE_TRUE (favUri, NS_ERROR_FAILURE);
 
+		/* Only proceed for http favicons. Bug #312291 */
+		PRBool isHttp = PR_FALSE;
+		favUri->SchemeIs ("http", &isHttp);
+		if (!isHttp) return NS_OK;
+
 		/* check if load is allowed */
 		nsCOMPtr<nsIScriptSecurityManager> secMan
 			(do_GetService("@mozilla.org/scriptsecuritymanager;1"));
