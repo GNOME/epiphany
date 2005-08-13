@@ -583,6 +583,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 	char *pix_file;
 	GdkPixbuf *pixbuf = NULL;
 	guint checklevel = NEEDS_MASK;
+	int width, height;
 
 	if (url == NULL) return NULL;
 
@@ -810,8 +811,18 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		return NULL;
 	}
 
-	if (gdk_pixbuf_get_width (pixbuf) > 16 ||
-	    gdk_pixbuf_get_height (pixbuf) > 16)
+	width = gdk_pixbuf_get_width (pixbuf);
+	height = gdk_pixbuf_get_height (pixbuf);
+
+	/* Reject icons that are too small */
+	if (width < 12 || height < 12)
+	{
+		entry->load_failed = TRUE;
+		return NULL;
+	}
+
+	/* Scale icons that are too big */
+	if (width > 16 || height > 16)
 	{
 		GdkPixbuf *scaled = gdk_pixbuf_scale_simple (pixbuf, 16, 16,
 							     GDK_INTERP_NEAREST);

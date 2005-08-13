@@ -1,5 +1,11 @@
 2005-08-13  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_get):
+
+	Reject favicons that are < 12x12.
+
+2005-08-13  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/downloader-view.c: (update_download_row):
 
 	Don't display (guint64)-1 as filesize if it's not known yet.
