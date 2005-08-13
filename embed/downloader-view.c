@@ -406,7 +406,7 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 
 	name = ephy_download_get_name (download);
 
-	if (total != -1)
+	if (total != -1 && current != -1)
 	{
 		char *total_progress;
 
@@ -416,9 +416,13 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 					cur_progress, total_progress);
 		g_free (total_progress);
 	}
-	else
+	else if (current != -1)
 	{
 		file = g_strdup_printf ("%s\n%s", name, cur_progress);
+	}
+	else
+	{
+		file = g_strdup_printf ("%s\n%s", name, _("Unknown"));
 	}
 
 	if (remaining_secs < 0)
