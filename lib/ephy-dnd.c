@@ -109,7 +109,7 @@ ephy_dnd_drag_data_get (GtkWidget *widget,
 
         gtk_selection_data_set (selection_data,
                                 selection_data->target,
-                                8, result->str, result->len);
+                                8, (const guchar *) result->str, result->len);
 
 	g_string_free (result, TRUE);
 
