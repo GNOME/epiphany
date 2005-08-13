@@ -152,7 +152,7 @@ GTKDOC_CFLAGS = -I$(top_srcdir)/src \
 		-I$(top_srcdir)/src/bookmarks \
 		-I$(top_srcdir)/lib/egg \
 		-I$(top_builddir)/lib/egg \
-		$(EPIPHANY_DEPENDENCY_CFLAGS)
+		$(DEPENDENCIES_CFLAGS)
 
 GTKDOC_LIBS = \
 	$(top_builddir)/src/libephymain.la \
@@ -163,8 +163,8 @@ GTKDOC_LIBS = \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
-	$(MOZILLA_COMPONENT_LIBS)	\
-	$(EPIPHANY_DEPENDENCY_LIBS) \
+	$(GECKO_LIBS)	\
+	$(DEPENDENCIES_LIBS) \
 	$(INTLLIBS)
 
 if ENABLE_PYTHON
