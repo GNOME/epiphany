@@ -284,12 +284,14 @@ entry_changed_cb (GtkEntry *entry,
 	set_controls (toolbar, found, found);
 }
 
+#ifdef FIND_WHILE_TYPING_IN_EMBED
 static void
 entry_preedit_changed_cb (GtkIMContext *context,
 			  EphyFindToolbar *toolbar)
 {
 	toolbar->priv->preedit_changed = TRUE;
 }
+#endif
 
 static gboolean
 entry_key_press_event_cb (GtkEntry *entry,
@@ -458,8 +460,10 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 			  G_CALLBACK (entry_key_press_event_cb), toolbar);
 	g_signal_connect_after (priv->entry, "changed",
 				G_CALLBACK (entry_changed_cb), toolbar);
+#ifdef FIND_WHILE_TYPING_IN_EMBED
 	g_signal_connect (GTK_ENTRY (priv->entry)->im_context, "preedit-changed",
 			  G_CALLBACK (entry_preedit_changed_cb), toolbar);
+#endif
 	g_signal_connect (priv->entry, "activate",
 			  G_CALLBACK (entry_activate_cb), toolbar);
 	g_signal_connect_swapped (priv->next, "clicked",

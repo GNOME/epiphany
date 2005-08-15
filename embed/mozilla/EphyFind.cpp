@@ -260,5 +260,5 @@ EphyFind::ActivateLink (GdkModifierType aMask)
 	PRBool defaultPrevented = PR_FALSE;
 	rv = target->DispatchEvent (event, &defaultPrevented);
 
-	return NS_SUCCEEDED (rv);
+	return NS_SUCCEEDED (rv) && defaultPrevented;
 }
