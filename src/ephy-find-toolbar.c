@@ -58,6 +58,7 @@ struct _EphyFindToolbarPrivate
 	guint activated : 1;
 	guint explicit_focus : 1;
 	guint links_only : 1;
+	guint typing_ahead : 1;
 };
 
 enum
@@ -320,7 +321,21 @@ static void
 entry_activate_cb (GtkWidget *entry,
 		   EphyFindToolbar *toolbar)
 {
-	ephy_embed_find_activate_link (get_find (toolbar), 0);
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+
+#ifdef FIND_WHILE_TYPING_IN_EMBED
+	priv->activated = TRUE;
+	if (priv->prevent_activate) return;
+#endif
+
+	if (priv->typing_ahead)
+	{
+		ephy_embed_find_activate_link (get_find (toolbar), 0);
+	}
+	else
+	{
+		g_signal_emit (toolbar, signals[NEXT], 0);
+	}
 }
 
 static void
@@ -678,12 +693,14 @@ ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 void
 ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 			gboolean links_only,
-		        gboolean clear_search)
+			gboolean typing_ahead)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
+	gboolean clear_search = !typing_ahead;
 
 	g_return_if_fail (priv->embed != NULL);
 
+	priv->typing_ahead = typing_ahead;
 	priv->links_only = links_only;
 	priv->explicit_focus = FALSE;
 
