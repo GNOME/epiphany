@@ -37,6 +37,17 @@
 #include <nsIInterfaceRequestorUtils.h>
 #include <nsIDOMWindow.h>
 #include <nsIWebBrowser.h>
+#include <nsIWebBrowserFocus.h>
+#include <nsIDOMNode.h>
+#include <nsIDOMElement.h>
+#include <nsIDOMDocument.h>
+#include <nsIDOMDocumentView.h>
+#include <nsIDOMAbstractView.h>
+#include <nsIDOMDocumentEvent.h>
+#include <nsIDOMEvent.h>
+#include <nsIDOMKeyEvent.h>
+#include <nsIDOMEventTarget.h>
+#include <nsIDOMHTMLAnchorElement.h>
 
 #ifdef HAVE_TYPEAHEADFIND
 #include <nsIDocShell.h>
@@ -51,6 +62,9 @@
 #ifdef HAVE_TYPEAHEADFIND
 #define NS_TYPEAHEADFIND_CONTRACTID "@mozilla.org/typeaheadfind;1"
 #endif /* HAVE_TYPEAHEADFIND */
+
+static const PRUnichar kKeyEvents[] = { 'K', 'e', 'y', 'E', 'v', 'e', 'n', 't', 's', '\0' };
+static const PRUnichar kKeyPress[] = { 'k', 'e', 'y', 'p', 'r', 'e', 's', 's', '\0' };
 
 EphyFind::EphyFind ()
 : mCurrentEmbed(nsnull)
@@ -70,15 +84,15 @@ EphyFind::SetEmbed (EphyEmbed *aEmbed)
   if (aEmbed == mCurrentEmbed) return rv;
 
   mCurrentEmbed = nsnull;
+  mWebBrowser = nsnull;
 
   rv = NS_ERROR_FAILURE;
-  nsCOMPtr<nsIWebBrowser> webBrowser;
   gtk_moz_embed_get_nsIWebBrowser (GTK_MOZ_EMBED (aEmbed),
-				   getter_AddRefs (webBrowser));
-  NS_ENSURE_TRUE (webBrowser, rv);
+				   getter_AddRefs (mWebBrowser));
+  NS_ENSURE_TRUE (mWebBrowser, rv);
 
 #ifdef HAVE_TYPEAHEADFIND
-  nsCOMPtr<nsIDocShell> docShell (do_GetInterface (webBrowser, &rv));
+  nsCOMPtr<nsIDocShell> docShell (do_GetInterface (mWebBrowser, &rv));
   NS_ENSURE_SUCCESS (rv, rv);
 
   if (!mFinder) {
@@ -97,7 +111,7 @@ EphyFind::SetEmbed (EphyEmbed *aEmbed)
     mFinder->GetSearchString (&string);
   }
 
-  mFinder = do_GetInterface (webBrowser, &rv);
+  mFinder = do_GetInterface (mWebBrowser, &rv);
   NS_ENSURE_SUCCESS (rv, rv);
 
   mFinder->SetWrapFind (PR_TRUE);
@@ -185,4 +199,66 @@ EphyFind::FindAgain (PRBool aForward)
         
   return NS_SUCCEEDED (rv) && didFind;
 #endif /* HAVE_TYPEAHEADFIND */
+}
+
+PRBool
+EphyFind::ActivateLink (GdkModifierType aMask)
+{
+	nsresult rv;
+	nsCOMPtr<nsIDOMElement> link;
+#if defined(HAVE_TYPEAHEADFIND) && defined(HAVE_GECKO_1_8)
+	rv = mFinder->GetFoundLink (getter_AddRefs (link));
+	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && link, FALSE);
+#else
+	nsCOMPtr<nsIWebBrowserFocus> focus (do_QueryInterface (mWebBrowser));
+	NS_ENSURE_TRUE (focus, FALSE);
+
+	rv = focus->GetFocusedElement (getter_AddRefs (link));
+	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && link, FALSE);
+
+	/* ensure this is really a link so we don't accidentally submit if we're on a button or so! */
+	nsCOMPtr<nsIDOMHTMLAnchorElement> anchor (do_QueryInterface (link));
+	if (!anchor) return FALSE;
+#endif /* HAVE_TYPEAHEADFIND && HAVE_GECKO_1_8 */
+
+	nsCOMPtr<nsIDOMDocument> doc;
+	rv = link->GetOwnerDocument (getter_AddRefs (doc));
+	NS_ENSURE_TRUE (doc, FALSE);
+
+	nsCOMPtr<nsIDOMDocumentView> docView (do_QueryInterface (doc));
+	NS_ENSURE_TRUE (docView, FALSE);
+
+	nsCOMPtr<nsIDOMAbstractView> abstractView;
+	docView->GetDefaultView (getter_AddRefs (abstractView));
+	NS_ENSURE_TRUE (abstractView, FALSE);
+
+	nsCOMPtr<nsIDOMDocumentEvent> docEvent (do_QueryInterface (doc));
+	NS_ENSURE_TRUE (docEvent, FALSE);
+
+	nsCOMPtr<nsIDOMEvent> event;
+	rv = docEvent->CreateEvent (nsEmbedString(kKeyEvents), getter_AddRefs (event));
+	NS_ENSURE_SUCCESS (rv, FALSE);
+
+	nsCOMPtr<nsIDOMKeyEvent> keyEvent (do_QueryInterface (event));
+	NS_ENSURE_TRUE (keyEvent, FALSE);
+
+	rv = keyEvent->InitKeyEvent (nsEmbedString (kKeyPress),
+				     PR_TRUE /* bubble */,
+				     PR_TRUE /* cancelable */,
+				     abstractView,
+				     (aMask & GDK_CONTROL_MASK) != 0,
+				     (aMask & GDK_MOD1_MASK) != 0 /* Alt */,
+				     (aMask & GDK_SHIFT_MASK) != 0,
+				     PR_FALSE /* Meta */,
+				     nsIDOMKeyEvent::DOM_VK_RETURN,
+				     0);
+	NS_ENSURE_SUCCESS (rv, FALSE);
+
+	nsCOMPtr<nsIDOMEventTarget> target (do_QueryInterface (link));
+	NS_ENSURE_TRUE (target, FALSE);
+
+	PRBool defaultPrevented = PR_FALSE;
+	rv = target->DispatchEvent (event, &defaultPrevented);
+
+	return NS_SUCCEEDED (rv);
 }

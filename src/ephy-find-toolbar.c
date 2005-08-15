@@ -40,6 +40,8 @@
 #include <gtk/gtkmain.h>
 #include <string.h>
 
+#undef FIND_WHILE_TYPING_IN_EMBED
+
 #define EPHY_FIND_TOOLBAR_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object),EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbarPrivate))
 
 struct _EphyFindToolbarPrivate
@@ -118,6 +120,8 @@ tab_content_changed_cb (EphyEmbed *embed,
 
 #ifdef HAVE_TYPEAHEADFIND
 
+#ifdef FIND_WHILE_TYPING_IN_EMBED
+
 /* Cut and paste from gtkwindow.c */
 static void
 send_focus_change (GtkWidget *widget,
@@ -150,6 +154,8 @@ send_focus_change (GtkWidget *widget,
 	gdk_event_free (event);
 }
 
+#endif /* FIND_WHILE_TYPING_IN_EMBED */
+
 /* Code adapted from gtktreeview.c:gtk_tree_view_key_press() and
  * gtk_tree_view_real_start_interactive_seach()
  */
@@ -160,10 +166,12 @@ tab_search_key_press_cb (EphyEmbed *embed,
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	GtkWidget *widget = (GtkWidget *) toolbar;
+#ifdef FIND_WHILE_TYPING_IN_EMBED
 	GtkEntry *entry = (GtkEntry *) priv->entry;
 	GdkWindow *event_window;
 	gboolean retval = FALSE;
 	guint oldhash, newhash;
+#endif
 
 	g_return_val_if_fail (event != NULL, FALSE);
 
@@ -184,7 +192,10 @@ tab_search_key_press_cb (EphyEmbed *embed,
 			return TRUE;
 		}
 	}
-	
+
+	return FALSE;
+
+#ifdef FIND_WHILE_TYPING_IN_EMBED
 	/* don't do anything if the find toolbar is hidden */
 	if (GTK_WIDGET_VISIBLE (widget) == FALSE ||
 	    event->keyval == GDK_Return ||
@@ -212,7 +223,10 @@ tab_search_key_press_cb (EphyEmbed *embed,
 
 	/* FIXME: is this correct? */
 	return retval && (oldhash != newhash || priv->preedit_changed) && !priv->activated;
+#endif /* FIND_WHILE_TYPING_IN_EMBED */
 }
+
+#ifdef FIND_WHILE_TYPING_IN_EMBED
 
 static gboolean
 tab_dom_mouse_click_cb (EphyEmbed *embed,
@@ -228,6 +242,8 @@ tab_dom_mouse_click_cb (EphyEmbed *embed,
 
 	return FALSE;
 }
+
+#endif /* FIND_WHILE_TYPING_IN_EMBED */
 
 #endif /* HAVE_TYPEAHEADFIND */
 
@@ -289,6 +305,11 @@ entry_key_press_event_cb (GtkEntry *entry,
 		g_signal_emit (toolbar, signals[CLOSE], 0);
 		handled = TRUE;
 	}
+	else if ((event->state & mask) == GDK_CONTROL_MASK &&
+		 (event->keyval == GDK_Return || event->keyval == GDK_KP_Enter))
+	{
+		handled = ephy_embed_find_activate_link (get_find (toolbar), event->state);
+	}
 
 	return handled;
 }
@@ -297,12 +318,7 @@ static void
 entry_activate_cb (GtkWidget *entry,
 		   EphyFindToolbar *toolbar)
 {
-	EphyFindToolbarPrivate *priv = toolbar->priv;
-
-	priv->activated = TRUE;
-	if (priv->prevent_activate) return;
-
-	g_signal_emit (toolbar, signals[NEXT], 0);
+	ephy_embed_find_activate_link (get_find (toolbar), 0);
 }
 
 static void
@@ -621,10 +637,12 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 		g_signal_connect_object (embed, "ge-search-key-press",
 					 G_CALLBACK (tab_search_key_press_cb),
 					 toolbar, 0);
+#ifdef FIND_WHILE_TYPING_IN_EMBED
 		g_signal_connect_object (embed, "dom-mouse-click",
 					 G_CALLBACK (tab_dom_mouse_click_cb),
 					 toolbar, 0);
-#endif
+#endif /* FIND_WHILE_TYPING_IN_EMBED */
+#endif /* HAVE_TYPEAHEADFIND */
 
 		if (priv->find != NULL)
 		{
@@ -676,7 +694,7 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 
 	gtk_widget_show (GTK_WIDGET (toolbar));
 
-#ifdef HAVE_TYPEAHEADFIND
+#if defined(HAVE_TYPEAHEADFIND) && defined(FIND_WHILE_TYPING_IN_EMBED)
 	gtk_widget_grab_focus (GTK_WIDGET (priv->embed));
 
 	send_focus_change (priv->entry, TRUE);
@@ -702,7 +720,7 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 
 	/* first unset explicit_focus, else we get infinite recursion */
 	priv->explicit_focus = FALSE;
-#ifndef HAVE_TYPEAHEADFIND
+#ifndef FIND_WHILE_TYPING_IN_EMBED
 	gtk_widget_grab_focus (GTK_WIDGET (priv->embed));
 #endif
 }

@@ -70,6 +70,21 @@ ephy_embed_find_find_again (EphyEmbedFind *find,
 	return iface->find_again (find, forward);
 }
 
+/**
+ * ephy_embed_find_activate_link:
+ * @embed: an #EphyEmbedFind
+ * @mask:
+ * 
+ * Activates the currently focused link, if there is any.
+ **/
+gboolean
+ephy_embed_find_activate_link (EphyEmbedFind *find,
+			       GdkModifierType mask)
+{
+	EphyEmbedFindIface *iface = EPHY_EMBED_FIND_GET_IFACE (find);
+	return iface->activate_link (find, mask);
+}
+
 GType
 ephy_embed_find_get_type (void)
 {

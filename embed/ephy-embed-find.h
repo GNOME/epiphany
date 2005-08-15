@@ -25,6 +25,7 @@
 #include <glib.h>
 
 #include "ephy-embed.h"
+#include <gdk/gdktypes.h>
 
 G_BEGIN_DECLS
 
@@ -54,6 +55,8 @@ struct _EphyEmbedFindIface
 					 gboolean links_only);
 	gboolean (* find_again)		(EphyEmbedFind *find,
 					 gboolean forward);
+	gboolean (* activate_link)	(EphyEmbedFind *find,
+					 GdkModifierType mask);
 };
 
 GType	 ephy_embed_find_get_type		(void);
@@ -71,6 +74,9 @@ gboolean ephy_embed_find_find			(EphyEmbedFind *find,
 
 gboolean ephy_embed_find_find_again		(EphyEmbedFind *find,
 						 gboolean forward);
+
+gboolean ephy_embed_find_activate_link		(EphyEmbedFind *find,
+						 GdkModifierType mask);
 
 G_END_DECLS
 

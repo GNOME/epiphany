@@ -24,8 +24,10 @@
 #include "ephy-embed.h"
 
 #include <nsCOMPtr.h>
+#include <gdk/gdktypes.h>
 
 class nsITypeAheadFind;
+class nsIWebBrowser;
 class nsIWebBrowserFind;
 
 class EphyFind
@@ -41,9 +43,12 @@ class EphyFind
     PRBool Find (const char *aSearchString,
                  PRBool aLinksOnly);
     PRBool FindAgain (PRBool aForward);
+    PRBool ActivateLink (GdkModifierType aMask);
 
   private:
     EphyEmbed *mCurrentEmbed;
+
+    nsCOMPtr<nsIWebBrowser> mWebBrowser;
 
 #ifdef HAVE_TYPEAHEADFIND
     nsCOMPtr<nsITypeAheadFind> mFinder;

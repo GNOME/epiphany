@@ -1,3 +1,24 @@
+2005-08-16  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-embed-find.c: (ephy_embed_find_activate_link):
+	* embed/ephy-embed-find.h:
+	* embed/mozilla/EphyFind.cpp:
+	* embed/mozilla/EphyFind.h:
+	* embed/mozilla/mozilla-embed-find.cpp:
+
+	Activate the found link with a faked keypress event.
+
+	* src/ephy-find-toolbar.c: (tab_search_key_press_cb),
+	(entry_key_press_event_cb), (entry_activate_cb),
+	(ephy_find_toolbar_set_embed), (ephy_find_toolbar_open),
+	(ephy_find_toolbar_close):
+
+	On enter, activate the found link instead of finding the next
+	occurrence.
+	Always really give focus to the find bar, instead of faking
+	keypresses in the find bar entry while focusing the embed.
+	Fixes bug #307216, bug #311985, bug #312419.
+
 2005-08-15  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/GNOME_Epiphany_Automation.server.in:
