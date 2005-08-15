@@ -37,6 +37,7 @@
 #include <gtk/gtkstock.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtktreeselection.h>
+#include <gtk/gtktoolbar.h>
 
 #include <unistd.h>
 
@@ -107,6 +108,14 @@ ephy_gui_menu_position_tree_selection (GtkMenu   *menu,
 
 /**
  * ephy_gui_menu_position_under_widget:
+ * @menu:
+ * @x:
+ * @y:
+ * @push_in:
+ * @user_data: a #GtkWidget
+ * 
+ * Positions @menu under (or over, depending on space available) the widget
+ * @user_data.
  */
 void
 ephy_gui_menu_position_under_widget (GtkMenu   *menu,
@@ -115,24 +124,130 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 				     gboolean  *push_in,
 				     gpointer	user_data)
 {
-	GtkWidget *w = GTK_WIDGET (user_data);
-	GtkRequisition requisition;
+	/* Adapted from gtktoolbar.c */
+	GtkWidget *widget = GTK_WIDGET (user_data);
+	GtkWidget *container;
+	GtkRequisition req;
+	GtkRequisition menu_req;
+	GdkRectangle monitor;
+	int monitor_num;
+	GdkScreen *screen;
+  
+	g_return_if_fail (GTK_IS_WIDGET (widget));
 
-	gdk_window_get_origin (w->window, x, y);
-	gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
+	container = gtk_widget_get_ancestor (widget, GTK_TYPE_CONTAINER);
+	g_return_if_fail (container != NULL);
 
-	if (gtk_widget_get_direction (w) == GTK_TEXT_DIR_RTL)
+	gtk_widget_size_request (widget, &req);
+	gtk_widget_size_request (GTK_WIDGET (menu), &menu_req);
+
+	screen = gtk_widget_get_screen (GTK_WIDGET (menu));
+	monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
+	if (monitor_num < 0)
+		monitor_num = 0;
+	gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+	gdk_window_get_origin (widget->window, x, y);
+	if (GTK_WIDGET_NO_WINDOW (widget))
 	{
-		*x += w->allocation.x + w->allocation.width - requisition.width;
+		*x += widget->allocation.x;
+		*y += widget->allocation.y;
 	}
+
+	if (gtk_widget_get_direction (container) == GTK_TEXT_DIR_LTR) 
+		*x += widget->allocation.width - req.width;
+	else 
+		*x += req.width - menu_req.width;
+
+	if ((*y + widget->allocation.height + menu_req.height) <= monitor.y + monitor.height)
+		*y += widget->allocation.height;
+	else if ((*y - menu_req.height) >= monitor.y)
+		*y -= menu_req.height;
+	else if (monitor.y + monitor.height - (*y + widget->allocation.height) > *y)
+		*y += widget->allocation.height;
 	else
+		*y -= menu_req.height;
+
+	*push_in = FALSE;
+}
+
+/**
+ * ephy_gui_menu_position_under_widget:
+ * @menu:
+ * @x:
+ * @y:
+ * @push_in:
+ * @user_data: a #GtkWidget which has to be contained in (a widget on) a #GtkToolbar
+ * 
+ * Positions @menu under (or over, depending on space available) the
+ * @user_data.
+ */
+void
+ephy_gui_menu_position_on_toolbar (GtkMenu   *menu,
+				   gint      *x,
+				   gint      *y,
+				   gboolean  *push_in,
+				   gpointer   user_data)
+{
+	/* Adapted from gtktoolbar.c */
+	GtkWidget *widget = GTK_WIDGET (user_data);
+	GtkToolbar *toolbar;
+	GtkRequisition req;
+	GtkRequisition menu_req;
+	GdkRectangle monitor;
+	int monitor_num;
+	GdkScreen *screen;
+  
+	g_return_if_fail (GTK_IS_WIDGET (widget));
+
+	toolbar = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOLBAR);
+	g_return_if_fail (toolbar != NULL);
+
+	gtk_widget_size_request (widget, &req);
+	gtk_widget_size_request (GTK_WIDGET (menu), &menu_req);
+
+	screen = gtk_widget_get_screen (GTK_WIDGET (menu));
+	monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
+	if (monitor_num < 0)
+		monitor_num = 0;
+	gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+	gdk_window_get_origin (widget->window, x, y);
+	if (GTK_WIDGET_NO_WINDOW (widget))
 	{
-		*x += w->allocation.x;
+		*x += widget->allocation.x;
+		*y += widget->allocation.y;
 	}
 
-	*y += w->allocation.y + w->allocation.height;
+	if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+	{
+		if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_LTR) 
+			*x += widget->allocation.width - req.width;
+		else 
+			*x += req.width - menu_req.width;
 
-	ephy_gui_sanitise_popup_position (menu, w, x, y);
+		if ((*y + widget->allocation.height + menu_req.height) <= monitor.y + monitor.height)
+			*y += widget->allocation.height;
+		else if ((*y - menu_req.height) >= monitor.y)
+			*y -= menu_req.height;
+		else if (monitor.y + monitor.height - (*y + widget->allocation.height) > *y)
+			*y += widget->allocation.height;
+		else
+			*y -= menu_req.height;
+	}
+	else 
+	{
+		if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_LTR) 
+			*x += widget->allocation.width;
+		else 
+			*x -= menu_req.width;
+
+		if (*y + menu_req.height > monitor.y + monitor.height &&
+		    *y + widget->allocation.height - monitor.y > monitor.y + monitor.height - *y)
+			*y += widget->allocation.height - menu_req.height;
+	}
+
+	*push_in = FALSE;
 }
 
 void

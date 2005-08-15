@@ -47,6 +47,12 @@ void		ephy_gui_menu_position_under_widget	 (GtkMenu   *menu,
 							  gboolean  *push_in,
 							  gpointer  user_data);
 
+void		ephy_gui_menu_position_on_toolbar	 (GtkMenu   *menu,
+							  gint      *x,
+							  gint      *y,
+							  gboolean  *push_in,
+							  gpointer  user_data);
+
 void		ephy_gui_menu_position_on_panel		 (GtkMenu *menu,
 							  gint      *x,
 							  gint      *y,
