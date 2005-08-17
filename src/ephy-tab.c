@@ -898,8 +898,6 @@ ephy_tab_set_loading_title (EphyTab *tab,
 	g_free (priv->loading_title);
 	priv->loading_title = NULL;
 
-	if (title == NULL) return;
-
 	if (is_address)
 	{
 		title = freeme = get_title_from_address (title);	
@@ -1562,19 +1560,17 @@ ephy_tab_zoom_changed_cb (EphyEmbed *embed, float zoom, EphyTab *tab)
 }
 
 static void
-ephy_tab_title_cb (EphyEmbed *embed, EphyTab *tab)
+ephy_tab_title_cb (EphyEmbed *embed,
+		   EphyTab *tab)
 {
+	EphyTabPrivate *priv = tab->priv;
 	GObject *object = G_OBJECT (tab);
-	char *title;
-
-	title = ephy_embed_get_title (embed);
 
 	g_object_freeze_notify (object);
 
-	ephy_tab_set_loading_title (tab, title, FALSE);
+	ephy_tab_set_title (tab, embed, ephy_embed_get_title (embed));
 
-	/* this consumes and/or frees |title| ! */
-	ephy_tab_set_title (tab, embed, title);
+	ephy_tab_set_loading_title (tab, priv->title, FALSE);
 
 	g_object_thaw_notify (object);
 }
