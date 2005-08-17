@@ -58,6 +58,8 @@
 #include <nsIDOMAbstractView.h>
 #include <nsIDOMNSHTMLDocument.h>
 #include <nsIDOMNSUIEvent.h>
+#include <nsIDOMHTMLSelectElement.h>
+#include <nsIDOMHTMLIsIndexElement.h>
 
 #ifdef ALLOW_PRIVATE_API
 #include <nsITextToSubURI.h>
@@ -1014,6 +1016,13 @@ EventContext::CheckKeyPress (nsIDOMKeyEvent *aEvent)
 {
 	PRBool retval = PR_FALSE;
 
+	/* make sure the event is trusted */
+	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aEvent));
+	NS_ENSURE_TRUE (nsEvent, retval);
+	PRBool isTrusted = PR_FALSE;
+	nsEvent->GetIsTrusted (&isTrusted);
+	if (!isTrusted) return retval;
+
 	/* check for alt/ctrl */
 	PRBool isCtrl = PR_FALSE, isAlt = PR_FALSE;
 	aEvent->GetCtrlKey (&isCtrl);
@@ -1037,22 +1046,27 @@ EventContext::CheckKeyPress (nsIDOMKeyEvent *aEvent)
 	nsCOMPtr<nsIDOMHTMLElement> element (do_QueryInterface (target, &rv));
 	NS_ENSURE_SUCCESS (rv, retval);
 
-	PRUint16 type = 0;
-	element->GetNodeType(&type);
-	if (nsIDOMNode::ELEMENT_NODE != type) return retval;
+	nsCOMPtr<nsIDOMHTMLInputElement> inputElement (do_QueryInterface (element));
+	if (inputElement)
+	{
+		nsEmbedString type;
+		inputElement->GetType (type);
 
-	nsEmbedString uTag;
-	rv = element->GetLocalName(uTag);
-	NS_ENSURE_SUCCESS (rv, retval);
+		nsEmbedCString (cType);
+		NS_UTF16ToCString (type, NS_CSTRING_ENCODING_UTF8, cType);
 
-	nsEmbedCString tag;
-	NS_UTF16ToCString (uTag, NS_CSTRING_ENCODING_UTF8, tag);
+		if (g_ascii_strcasecmp (cType.get(), "text") == 0 ||
+		    g_ascii_strcasecmp (cType.get(), "password") == 0 ||
+		    g_ascii_strcasecmp (cType.get(), "file") == 0) return retval;
+	}
 
-	if (g_ascii_strcasecmp (tag.get(), "input") == 0 ||
-	    g_ascii_strcasecmp (tag.get(), "textarea") == 0 ||
-	    g_ascii_strcasecmp (tag.get(), "select") == 0 ||
-	    g_ascii_strcasecmp (tag.get(), "button") == 0 ||
-	    g_ascii_strcasecmp (tag.get(), "isindex") == 0) return retval;
+	nsCOMPtr<nsIDOMHTMLTextAreaElement> textArea;
+	nsCOMPtr<nsIDOMHTMLSelectElement> selectElement;
+	nsCOMPtr<nsIDOMHTMLIsIndexElement> indexElement;
+
+	if ((textArea = do_QueryInterface (element)) ||
+	    (selectElement = do_QueryInterface (element)) ||
+	    (indexElement = do_QueryInterface (element))) return retval;
 
 	/* check for design mode */
 	nsCOMPtr<nsIDOMDocument> doc;
@@ -1060,6 +1074,7 @@ EventContext::CheckKeyPress (nsIDOMKeyEvent *aEvent)
 	NS_ENSURE_SUCCESS (rv, retval);
 
 	nsCOMPtr<nsIDOMNSHTMLDocument> htmlDoc (do_QueryInterface (doc, &rv));
+	/* FIXME: return PR_TRUE here ? */
 	if (NS_FAILED (rv)) return retval; /* it's okay not to be a HTML document */
 
 	nsEmbedString uDesign;
