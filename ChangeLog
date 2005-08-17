@@ -1,5 +1,13 @@
 2005-08-17  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-tab.c: (ephy_tab_title_cb):
+
+	Use ephy_tab_set_title after ephy_tab_set_loading_title
+	because set_title consumes the char* argument!
+	Fixes invalid UTF-8 warnings.
+
+2005-08-17  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.ac:
 
 	Fix --disable-focus-fix and --disable-psm configure args.

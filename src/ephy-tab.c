@@ -1571,8 +1571,10 @@ ephy_tab_title_cb (EphyEmbed *embed, EphyTab *tab)
 
 	g_object_freeze_notify (object);
 
-	ephy_tab_set_title (tab, embed, title);
 	ephy_tab_set_loading_title (tab, title, FALSE);
+
+	/* this consumes and/or frees |title| ! */
+	ephy_tab_set_title (tab, embed, title);
 
 	g_object_thaw_notify (object);
 }
