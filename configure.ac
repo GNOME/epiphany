@@ -433,7 +433,7 @@ dnl Broken everywhere
 dnl Provide a configure switch for easy testing of *real* fixes in gtkmozembed
 
 AC_MSG_CHECKING([whether to work around broken gtkmozembed focus])
-AC_ARG_ENABLE([--enable-focus-fix],
+AC_ARG_ENABLE([focus-fix],
 	AS_HELP_STRING([focus-fix],[Enable the workaround for the broken GtkMozEmbed focus handling (default: enabled)]),
 	[want_focus_fix=$enableval],
 	[want_focus_fix=yes])
@@ -451,7 +451,7 @@ AC_DEFINE([MOZILLA_INTERNAL_API],[1],[Define for access to internal mozilla API]
 dnl Make sure we don't accidentally build without PSM support
 
 AC_MSG_CHECKING([whether to include PSM support])
-AC_ARG_ENABLE([--disable-psm],
+AC_ARG_ENABLE([psm],
 	AS_HELP_STRING([psm],[Disable PSM support (default: enabled)]),
 	[want_psm=$enableval],
 	[want_psm=yes])
