@@ -30,6 +30,7 @@
 #include "EphyHeaderSniffer.h"
 #include "MozDownload.h"
 #include "EphyUtils.h"
+#include "ephy-debug.h"
 
 #include <stddef.h>
 
@@ -41,6 +42,9 @@
 #include <nsIIOService.h>
 #include <nsNetCID.h>
 #include <nsNetError.h>
+#include <nsICacheEntryDescriptor.h>
+#include <nsICacheService.h>
+#include <nsICacheSession.h>
 
 static void
 mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass);
@@ -193,6 +197,7 @@ impl_save (EphyEmbedPersist *persist)
 
 	/* Get post data */
 	nsCOMPtr<nsIInputStream> postData;
+	/* FIXME: don't do this on COPY_PAGE to ensure we don't end up reposting? */
 	if (browser)
 	{
 		PRInt32 sindex;
@@ -227,17 +232,63 @@ impl_save (EphyEmbedPersist *persist)
 
 
 	/* Get the current page descriptor */
-	nsCOMPtr<nsISupports> pageDescriptor;
+	nsCOMPtr<nsISupports> cacheDescriptor;
 	if (browser)
 	{
-	        browser->GetPageDescriptor(getter_AddRefs(pageDescriptor));
+	        browser->GetPageDescriptor(getter_AddRefs (cacheDescriptor));
 	}
+
+	/* Try to get a descriptor from the cache session */
+	/* FIXME: what about https?? */
+	PRBool isHttp = PR_FALSE, isHttps = PR_FALSE;
+	if (!cacheDescriptor &&
+	    (flags & EPHY_EMBED_PERSIST_FROM_CACHE) &&
+	    inURI &&
+	    ((NS_SUCCEEDED (inURI->SchemeIs ("http", &isHttp)) && isHttp) ||
+	     (NS_SUCCEEDED (inURI->SchemeIs ("https", &isHttps)) && isHttps )))
+	{
+		nsCOMPtr<nsICacheService> cacheService
+				(do_GetService(NS_CACHESERVICE_CONTRACTID));
+		if (cacheService)
+		{
+			nsCOMPtr<nsICacheSession> cacheSession;
+			rv = cacheService->CreateSession ("HTTP",
+							  nsICache::STORE_ANYWHERE,
+							  PR_TRUE,
+							  getter_AddRefs (cacheSession));
+			if (NS_SUCCEEDED (rv) && cacheSession)
+			{
+				nsCOMPtr<nsICacheEntryDescriptor> descriptor;
+
+				nsEmbedCString spec;
+				inURI->GetSpec (spec);
+
+#ifdef HAVE_GECKO_1_8
+				rv = cacheSession->OpenCacheEntry
+					(spec,
+					 nsICache::ACCESS_READ,
+					 PR_FALSE, getter_AddRefs (descriptor));
+#else
+				rv = cacheSession->OpenCacheEntry
+					(spec.get(),
+					 nsICache::ACCESS_READ,
+					 PR_FALSE, getter_AddRefs (descriptor));
+#endif
+
+				cacheDescriptor = do_QueryInterface (descriptor);
+
+				LOG ("Getting cache descriptor for '%s' rv=%x", spec.get(), rv);
+			}
+		}
+	}
+
+	LOG ("Cache descriptor %p", cacheDescriptor.get());
 
 	/* if we have COPY_PAGE, we *need* to have a page descriptor, else we'll re-fetch
 	 * the page, which will possibly give a different page than the original which we
 	 * need for view source
 	 */
-	NS_ENSURE_TRUE (!(flags & EPHY_EMBED_PERSIST_COPY_PAGE) || pageDescriptor, FALSE);
+	NS_ENSURE_TRUE (!(flags & EPHY_EMBED_PERSIST_COPY_PAGE) || cacheDescriptor, FALSE);
 
 	if (filename == NULL || filename[0] == '\0')
 	{
@@ -265,7 +316,7 @@ impl_save (EphyEmbedPersist *persist)
 		if (!sniffer) return FALSE;
 
 		webPersist->SetProgressListener(sniffer);
-		rv = webPersist->SaveURI(inURI, pageDescriptor, nsnull, nsnull, nsnull, tmpFile);
+		rv = webPersist->SaveURI(inURI, cacheDescriptor, nsnull /* FIXME: Referrer */, nsnull, nsnull, tmpFile);
 		if (NS_FAILED (rv)) return FALSE;
 	}
 	else
@@ -278,7 +329,7 @@ impl_save (EphyEmbedPersist *persist)
 
 		rv =  InitiateMozillaDownload (DOMDocument, inURI, destFile,
 					       nsnull, inURI, MOZILLA_EMBED_PERSIST (persist),
-					       postData, pageDescriptor, max_size);
+					       postData, cacheDescriptor, max_size);
 		if (NS_FAILED (rv)) return FALSE;
 	}
 

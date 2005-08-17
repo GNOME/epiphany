@@ -1,5 +1,19 @@
 2005-08-17  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-embed-persist.h:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+
+	Add EPHY_EMBED_PERSIST_FROM_CACHE, and try harder to get a cache
+	descriptor for the source URL.
+
+	* src/popup-commands.c: (save_property_url),
+	(popup_cmd_set_image_as_background), (save_temp_source):
+
+	Use EPHY_EMBED_PERSIST_FROM_CACHE to try to get the content from
+	cache when saving background, images or links. Part of bug #168554.
+
+2005-08-17  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-tab.c: (ephy_tab_set_loading_title),
 
 	Better fix: reorder again and use priv->title for

@@ -199,11 +199,11 @@ save_property_url (GtkAction *action,
 	persist = EPHY_EMBED_PERSIST
 		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
 
-	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_fc_title (persist, title);
 	ephy_embed_persist_set_fc_parent (persist, GTK_WINDOW (window));
 	ephy_embed_persist_set_flags
-		(persist, ask_dest ? EPHY_EMBED_PERSIST_ASK_DESTINATION : 0);
+		(persist, EPHY_EMBED_PERSIST_FROM_CACHE |
+			  (ask_dest ? EPHY_EMBED_PERSIST_ASK_DESTINATION : 0));
 	ephy_embed_persist_set_persist_key
 		(persist, CONF_STATE_SAVE_DIR);
 	ephy_embed_persist_set_source (persist, location);
@@ -309,9 +309,9 @@ popup_cmd_set_image_as_background (GtkAction *action,
 	base_converted = g_filename_from_utf8 (base, -1, NULL, NULL, NULL);
 	dest = g_build_filename (ephy_dot_dir (), base_converted, NULL);
 
-	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_dest (persist, dest);
-	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_NO_VIEW);
+	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_NO_VIEW |
+				     	       EPHY_EMBED_PERSIST_FROM_CACHE);
 	ephy_embed_persist_set_source (persist, location);
 
 	g_signal_connect (persist, "completed",
@@ -421,7 +421,8 @@ save_temp_source (const char *address)
 		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
 
 	ephy_embed_persist_set_source (persist, address);
-	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_NO_VIEW);
+	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_FROM_CACHE |
+			 		       EPHY_EMBED_PERSIST_NO_VIEW);
 	ephy_embed_persist_set_dest (persist, tmp);
 
 	g_signal_connect (persist, "completed",
