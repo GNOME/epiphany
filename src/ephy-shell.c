@@ -504,10 +504,25 @@ ephy_shell_new (void)
 	return EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL, NULL));
 }
 
-static void
+static gboolean
+url_is_empty (const char *location)
+{
+	gboolean is_empty = FALSE;
+
+        if (location == NULL || location[0] == '\0' ||
+            strcmp (location, "about:blank") == 0)
+        {
+                is_empty = TRUE;
+        }
+
+        return is_empty;
+}
+
+static gboolean
 load_homepage (EphyEmbed *embed)
 {
 	char *home;
+	gboolean is_empty;
 
 	home = eel_gconf_get_string(CONF_GENERAL_HOMEPAGE);
 
@@ -518,9 +533,13 @@ load_homepage (EphyEmbed *embed)
 		home = g_strdup ("about:blank");
 	}
 
+	is_empty = url_is_empty (home);
+
 	ephy_embed_load_url (embed, home);
 
 	g_free (home);
+
+	return is_empty;
 }
 
 /**
@@ -550,6 +569,7 @@ ephy_shell_new_tab (EphyShell *shell,
 	EphyEmbed *previous_embed = NULL;
 	GtkWidget *nb;
 	int position = -1;
+	gboolean is_empty = FALSE;
 	Toolbar *toolbar;
 
 	if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
@@ -594,17 +614,39 @@ ephy_shell_new_tab (EphyShell *shell,
 	{
 		ephy_tab_set_location (tab, "", TAB_ADDRESS_EXPIRE_NEXT);
 		toolbar_activate_location (toolbar);
-		load_homepage (embed);
+		is_empty = load_homepage (embed);
 	}
 	else if (flags & EPHY_NEW_TAB_OPEN_PAGE)
 	{
 		g_assert (url != NULL);
 		ephy_embed_load_url (embed, url);
+		is_empty = url_is_empty (url);
 	}
 
 	if (flags & EPHY_NEW_TAB_FULLSCREEN_MODE)
 	{
 		gtk_window_fullscreen (GTK_WINDOW (window));
+	}
+
+	/* Make sure the initial focus is somewhere sensible and not, for
+	 * example, on the reload button.
+	 */
+	if (in_new_window || jump_to)
+	{
+		/* If the location entry is blank, focus that, except if the
+		 * page was a copy */
+		if (is_empty)
+		{
+			/* empty page, focus location entry */
+			toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
+			toolbar_activate_location (toolbar);
+		}
+		else if (embed != NULL)
+		{
+			/* non-empty page, focus the page. but make sure the widget is realised first! */
+			gtk_widget_realize (GTK_WIDGET (embed));
+			ephy_embed_activate (embed);
+		}
 	}
 
 	return tab;

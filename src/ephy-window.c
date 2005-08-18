@@ -2687,7 +2687,15 @@ ephy_window_load_url (EphyWindow *window,
         g_return_if_fail (url != NULL);
 
         ephy_embed_load_url (embed, url);
-	ephy_embed_activate (embed);
+
+	if (url == NULL || url[0] == '\0' || strcmp (url, "about:blank") == 0)
+	{
+		toolbar_activate_location (window->priv->toolbar);
+	}
+	else
+	{
+		ephy_embed_activate (embed);
+	}
 }
 
 /**

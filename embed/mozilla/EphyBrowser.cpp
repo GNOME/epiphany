@@ -351,6 +351,9 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 					 getter_AddRefs(mWebBrowser));
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
+	mWebBrowserFocus = do_QueryInterface (mWebBrowser);
+	NS_ENSURE_TRUE (mWebBrowserFocus, NS_ERROR_FAILURE);
+
 	mWebBrowser->GetContentDOMWindow (getter_AddRefs (mDOMWindow));
 	NS_ENSURE_TRUE (mDOMWindow, NS_ERROR_FAILURE);
 
@@ -661,13 +664,9 @@ nsresult EphyBrowser::GetTargetDocument (nsIDOMDocument **aDOMDocument)
 	}
 
 	/* Use the focused document */
-	nsCOMPtr<nsIWebBrowserFocus> webBrowserFocus;
-	webBrowserFocus = do_QueryInterface (mWebBrowser);
-	NS_ENSURE_TRUE (webBrowserFocus, NS_ERROR_FAILURE);
-
 	nsresult rv;
 	nsCOMPtr<nsIDOMWindow> DOMWindow;
-	rv = webBrowserFocus->GetFocusedWindow (getter_AddRefs(DOMWindow));
+	rv = mWebBrowserFocus->GetFocusedWindow (getter_AddRefs(DOMWindow));
 	if (NS_SUCCEEDED (rv) && DOMWindow)
 	{
 		return DOMWindow->GetDocument (aDOMDocument);
@@ -1131,3 +1130,21 @@ EphyBrowser::ShowCertificate ()
 	return NS_OK;
 #endif
 }
+
+#ifdef GTKMOZEMBED_BROKEN_FOCUS
+nsresult
+EphyBrowser::FocusActivate ()
+{
+	NS_ENSURE_STATE (mWebBrowserFocus);
+
+	return mWebBrowserFocus->Activate();
+}
+
+nsresult
+EphyBrowser::FocusDeactivate ()
+{
+	NS_ENSURE_STATE (mWebBrowserFocus);
+
+	return mWebBrowserFocus->Deactivate();
+}
+#endif /* GTKMOZEMBED_BROKEN_FOCUS */

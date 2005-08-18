@@ -402,6 +402,9 @@ if test "x$filepicker" = "xyes"; then
   AC_DEFINE([ENABLE_FILEPICKER],[1],[Define to enable the native filepicker])
 fi
 
+dnl Broken everywhere
+AC_DEFINE([GTKMOZEMBED_BROKEN_FOCUS],[1],[Define if GtkMozEmbed has broken focus handling])
+
 dnl *******************************
 dnl Internationalization
 dnl ******************************* 

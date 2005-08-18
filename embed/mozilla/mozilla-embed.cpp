@@ -92,11 +92,19 @@ struct MozillaEmbedPrivate
 {
 	EphyBrowser *browser;
 	MozillaEmbedLoadState load_state;
+#ifdef GTKMOZEMBED_BROKEN_FOCUS
+	guint focus_connected : 1;
+#endif /* GTKMOZEMBED_BROKEN_FOCUS */
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
 
 static GObjectClass *parent_class = NULL;
+
+#ifdef GTKMOZEMBED_BROKEN_FOCUS
+static guint fiesid = 0;
+static guint foesid = 0;
+#endif /* GTKMOZEMBED_BROKEN_FOCUS */
 
 static void
 impl_manager_do_command (EphyCommandManager *manager,
@@ -211,20 +219,98 @@ impl_find_set_properties (EphyEmbed *embed,
 					   wrap_around); 
 }
 
+#ifdef GTKMOZEMBED_BROKEN_FOCUS
+static gboolean
+child_focus_in_event_cb (GtkWidget *child,
+			 GdkEventFocus *event,
+			 MozillaEmbed *embed)
+{
+	embed->priv->browser->FocusActivate ();
+
+	return FALSE;
+}
+
+static gboolean
+child_focus_out_event_cb (GtkWidget *child,
+			  GdkEventFocus *event,
+			  MozillaEmbed *embed)
+{
+	embed->priv->browser->FocusDeactivate ();
+
+	return FALSE;
+}
+#endif /* GTKMOZEMBED_BROKEN_FOCUS */
+
 static void
 mozilla_embed_realize (GtkWidget *widget)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (widget)->priv;
+	GtkBin *bin = GTK_BIN (widget);
 
-	(* GTK_WIDGET_CLASS(parent_class)->realize) (widget);
+	GTK_WIDGET_CLASS (parent_class)->realize (widget);
 
+	/* Initialise our helper class */
 	nsresult rv;
 	rv = mpriv->browser->Init (GTK_MOZ_EMBED (widget));
-
 	if (NS_FAILED (rv))
 	{
-               	g_warning ("EphyBrowser initialization failed for %p\n", widget);
+		g_warning ("EphyBrowser initialization failed for %p\n", widget);
+		return;
 	}
+
+#ifdef GTKMOZEMBED_BROKEN_FOCUS
+	/* HACK ALERT! This depends highly on undocumented interna of
+	 * GtkMozEmbed!
+	 *
+	 * GtkMozEmbed::realize installs focus-[in|out]-event handlers to
+	 * toplevel, and, on the first realize only, to the child.
+	 * GtkMozEmbed disconnects its focus-[in|out]-event handler
+	 * to the toplevel on unrealize, and leaves the ones to the child
+	 * in place. So we don't need to unblock the blocked handlers
+	 * and therefore need no ::unrealize handler.
+	*/
+
+	GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+	gpointer data = ((GtkMozEmbed *) widget)->data;
+
+	guint n;
+
+	n = g_signal_handlers_block_matched (toplevel,
+					     (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
+					     fiesid, 0, NULL, NULL, data);
+	n += g_signal_handlers_block_matched (toplevel,
+					      (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
+					      foesid, 0, NULL, NULL, data);
+	if (n != 2)
+	{
+		g_warning ("Unexpected number (n=%d) of toplevel focus handlers found!\n", n);
+	}
+
+	if (mpriv->focus_connected) return;
+
+	GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
+	g_return_if_fail (child != NULL);
+
+	n = g_signal_handlers_block_matched (child,
+					     (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
+					     fiesid, 0, NULL, NULL, widget);
+	n += g_signal_handlers_block_matched (child,
+					      (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
+					      foesid, 0, NULL, NULL, widget);
+	if (n != 2)
+	{
+		g_warning ("Unexpected number (n=%d) of child focus handlers found!\n", n);
+	}
+
+	g_signal_connect_object (child, "focus-in-event",
+				 G_CALLBACK (child_focus_in_event_cb), widget,
+				 G_CONNECT_AFTER);
+	g_signal_connect_object (child, "focus-out-event",
+				 G_CALLBACK (child_focus_out_event_cb), widget,
+				 G_CONNECT_AFTER);
+
+	mpriv->focus_connected = TRUE;
+#endif /* GTKMOZEMBED_BROKEN_FOCUS */
 }
 
 static GObject *
@@ -253,6 +339,11 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 	gtk_object_class->destroy = mozilla_embed_destroy;
 
 	widget_class->realize = mozilla_embed_realize;
+
+#ifdef GTKMOZEMBED_BROKEN_FOCUS
+	fiesid = g_signal_lookup ("focus-in-event", GTK_TYPE_WIDGET);
+	foesid = g_signal_lookup ("focus-out-event", GTK_TYPE_WIDGET);
+#endif /* GTKMOZEMBED_BROKEN_FOCUS */
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
