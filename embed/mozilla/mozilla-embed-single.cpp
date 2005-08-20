@@ -250,8 +250,7 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 #endif
 
 	/* Open ftp uris with an external handler if one is setup */
-	pref->SetBoolPref("network.protocol-handler.external.ftp",
-			  have_gnome_url_handler ("ftp"));
+	pref->SetBoolPref ("network.protocol-handler.external.ftp", PR_FALSE);	
 
 	return TRUE;
 }

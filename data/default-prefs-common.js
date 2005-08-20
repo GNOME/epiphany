@@ -99,6 +99,7 @@ pref("font.size.variable.x-unicode", 11);
 pref("font.size.variable.x-western", 11);
 
 // protocols
+pref("network.protocol-handler.external.ftp", false);
 pref("network.protocol-handler.external.news", true);
 pref("network.protocol-handler.external.mailto", true);
 pref("network.protocol-handler.external.irc", true);
