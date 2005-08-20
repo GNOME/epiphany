@@ -776,8 +776,11 @@ ephy_window_key_press_event (GtkWidget *widget,
 }
 
 static gboolean
-ephy_window_delete_event_cb (GtkWidget *widget, GdkEvent *event, EphyWindow *window)
+ephy_window_delete_event (GtkWidget *widget,
+			  GdkEvent *event)
 {
+	EphyWindow *window = EPHY_WINDOW (widget);
+	EphyWindowPrivate *priv = window->priv;
 	EphyTab *modified_tab = NULL;
 	GList *tabs, *l;
 	gboolean modified = FALSE;
@@ -785,7 +788,7 @@ ephy_window_delete_event_cb (GtkWidget *widget, GdkEvent *event, EphyWindow *win
 	/* Workaround a crash when closing a window while in print preview mode. See
 	 * mozilla bug #241809
 	 */
-	if (window->priv->ppv_mode)
+	if (priv->ppv_mode)
 	{
 		EphyEmbed *embed;
 
@@ -831,6 +834,11 @@ ephy_window_delete_event_cb (GtkWidget *widget, GdkEvent *event, EphyWindow *win
 	gtk_widget_hide (widget);
 
 	/* proceed with window close */
+	if (GTK_WIDGET_CLASS (parent_class)->delete_event)
+	{
+		return GTK_WIDGET_CLASS (parent_class)->delete_event (widget, event);
+	}
+
 	return FALSE;
 }
 
@@ -2600,6 +2608,7 @@ ephy_window_class_init (EphyWindowClass *klass)
 	widget_class->focus_in_event = ephy_window_focus_in_event;
 	widget_class->focus_out_event = ephy_window_focus_out_event;
 	widget_class->window_state_event = ephy_window_state_event;
+	widget_class->delete_event = ephy_window_delete_event;
 
 	g_object_class_install_property (object_class,
 					 PROP_ACTIVE_TAB,
@@ -2867,10 +2876,6 @@ ephy_window_init (EphyWindow *window)
 	 */
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar), model);
-
-	g_signal_connect (window, "delete-event",
-			  G_CALLBACK (ephy_window_delete_event_cb),
-			  window);
 
 	/* other notifiers */
 	browse_with_caret_notifier (NULL, 0, NULL, window);

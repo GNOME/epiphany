@@ -1,5 +1,12 @@
 2005-08-21  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-window.c: (ephy_window_delete_event),
+	(ephy_window_class_init), (ephy_window_init):
+
+	Use class closure for delete event instead of signal handler.
+
+2005-08-21  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-topic-action.c:
 	(ephy_topic_action_sync_label):
 
