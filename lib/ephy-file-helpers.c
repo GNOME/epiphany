@@ -872,7 +872,7 @@ ephy_file_launch_handler (const char *mime_type,
 	g_return_val_if_fail (address != NULL, FALSE);
 
 	canonical = gnome_vfs_make_uri_canonical (address);
-	g_return_val_if_fail (canonical != NULL, FALSE);
+	if (canonical == NULL) return FALSE;
 
 	if (mime_type != NULL)
 	{
