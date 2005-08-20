@@ -824,7 +824,9 @@ ephy_tab_finalize (GObject *object)
 	}
 
 	g_free (priv->title);
+	g_free (priv->loading_title);
 	g_free (priv->address);
+	g_free (priv->typed_address);
 	g_free (priv->icon_address);
 	g_free (priv->link_message);
 	g_free (priv->status_message);
