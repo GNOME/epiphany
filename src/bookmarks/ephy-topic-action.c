@@ -211,7 +211,7 @@ ephy_topic_action_sync_label (GtkAction *gaction,
 		separator = g_strrstr (title, BOOKMARKS_HIERARCHY_SEP);
 
 		gtk_label_set_label (GTK_LABEL (label),
-				     separator != NULL ? separator + 2 : title);
+				     separator != NULL ? separator + strlen(BOOKMARKS_HIERARCHY_SEP) : title);
 
 		g_free (title);
 	}
