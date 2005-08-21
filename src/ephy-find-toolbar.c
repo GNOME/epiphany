@@ -696,7 +696,7 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 			gboolean typing_ahead)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
-	gboolean clear_search = !typing_ahead;
+	gboolean clear_search = typing_ahead;
 
 	g_return_if_fail (priv->embed != NULL);
 
