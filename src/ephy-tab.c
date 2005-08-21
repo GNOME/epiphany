@@ -1324,11 +1324,12 @@ ephy_tab_update_file_monitor (EphyTab *tab,
 {
 	EphyTabPrivate *priv = tab->priv;
 	GnomeVFSMonitorHandle *handle = NULL;
-	GnomeVFSURI *uri;
 	gboolean local;
 
-	if (priv->address != NULL && address != NULL &&
+	if (priv->monitor != NULL &&
+	    priv->address != NULL && address != NULL &&
 	    strcmp (priv->address, address) == 0)
+	
 	{
 		/* same address, no change needed */
 		return;
@@ -1336,12 +1337,7 @@ ephy_tab_update_file_monitor (EphyTab *tab,
 
 	ephy_tab_file_monitor_cancel (tab);
 
-	uri = gnome_vfs_uri_new (address);
-	if (uri == NULL) return;
-
-	local = gnome_vfs_uri_is_local (uri);
-	gnome_vfs_uri_unref (uri);
-
+	local = g_str_has_prefix (address, "file://");
 	if (local == FALSE) return;
 	
 	if (gnome_vfs_monitor_add (&handle, address,

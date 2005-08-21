@@ -1,5 +1,15 @@
 2005-08-21  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-tab.c: (ephy_tab_update_file_monitor):
+
+	Fix the check for unchanged address to check if we even
+	have a monitor at all. Fixes auto-reload on a file:// URI
+	loaded after a blank page.
+	Also modify the 'is local' check to just check for
+	file:// prefix on URI.
+
+2005-08-21  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-find-toolbar.c: (ephy_find_toolbar_open):
 
 	Don't empty find entry on Ctrl-F.
