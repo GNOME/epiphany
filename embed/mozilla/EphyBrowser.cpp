@@ -257,7 +257,9 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 			NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && docUri, NS_ERROR_FAILURE);
 
 			/* Hide password part */
-			docUri->SetPassword (nsEmbedCString ());
+			nsEmbedCString user;
+			docUri->GetUsername (user);
+			docUri->SetUserPass (user);
 
 			nsEmbedCString resolvedLink;
 			rv = docUri->Resolve (cLink, resolvedLink);

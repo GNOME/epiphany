@@ -580,7 +580,10 @@ impl_get_location (EphyEmbed *embed,
 	rv = uri->Clone (getter_AddRefs (furi));
 	if (NS_FAILED (rv)) return NULL;
 
-	furi->SetPassword (nsEmbedCString());
+	/* Hide password part */
+	nsEmbedCString user;
+	furi->GetUsername (user);
+	furi->SetUserPass (user);
 
 	nsEmbedCString url;
 	furi->GetSpec (url);

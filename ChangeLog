@@ -1,5 +1,13 @@
 2005-08-22  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Don't use nsIURI::SetPassword, since it asserts when username
+	is empty. Use GetUsername, SetUserPass instead.
+
+2005-08-22  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/GlobalHistory.cpp:
 
 	Remove check for redirected URL. Fixes bug #313756.
