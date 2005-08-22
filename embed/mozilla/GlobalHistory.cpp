@@ -58,11 +58,6 @@ NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aT
 
 	NS_ENSURE_ARG (aURI);
 
-	if (aRedirect || !aToplevel)
-	{
-		return NS_OK;
-	}
-
 	// filter out unwanted URIs such as chrome: etc
 	// The model is really if we don't know differently then add which basically
 	// means we are suppose to try all the things we know not to allow in and
@@ -70,9 +65,7 @@ NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aT
 	// against the most common case we know to allow in and go on and say yes
 	// to it.
 
-	PRBool isHTTP = PR_FALSE;
-	PRBool isHTTPS = PR_FALSE;
-
+	PRBool isHTTP = PR_FALSE, isHTTPS = PR_FALSE;
 	rv = aURI->SchemeIs("http", &isHTTP);
 	rv |= aURI->SchemeIs("https", &isHTTPS);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
@@ -96,7 +89,7 @@ NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aT
 
 	nsEmbedCString spec;
 	rv = aURI->GetSpec(spec);
-	NS_ENSURE_SUCCESS(rv, rv);
+	NS_ENSURE_TRUE (NS_SUCCEEDED(rv) && spec.Length(), rv);
 
 	ephy_history_add_page (mGlobalHistory, spec.get());
 	
