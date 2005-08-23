@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-07 21:20+0000\n"
-"PO-Revision-Date: 2005-08-08 09:57+0530\n"
+"POT-Creation-Date: 2005-08-22 22:15+0000\n"
+"PO-Revision-Date: 2005-08-23 11:33+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -13,6 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 
 #: ../data/GNOME_Epiphany_Automation.server.in.h:1
@@ -544,7 +545,7 @@ msgstr "કુકીઓ"
 msgid "Download Manager"
 msgstr "ડાઉનલોડ વ્યવસ્થાપક"
 
-#: ../data/glade/epiphany.glade.h:6 ../src/ephy-window.c:1119
+#: ../data/glade/epiphany.glade.h:6 ../src/ephy-window.c:1127
 msgid "Find"
 msgstr "શોધો"
 
@@ -812,11 +813,12 @@ msgstr ""
 "%s\n"
 "%s જેટલા %s ના"
 
-#: ../embed/downloader-view.c:426 ../src/ephy-window.c:1298
+#: ../embed/downloader-view.c:425 ../embed/downloader-view.c:430
+#: ../src/ephy-window.c:1306
 msgid "Unknown"
 msgstr "અજાણીતું"
 
-#: ../embed/downloader-view.c:460
+#: ../embed/downloader-view.c:464
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -825,26 +827,26 @@ msgstr[1] "%d ડાઉનલોડ"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:575 ../embed/downloader-view.c:588
+#: ../embed/downloader-view.c:579 ../embed/downloader-view.c:592
 msgid "download status|Unknown"
 msgstr "અજ્ઞાત"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:580
+#: ../embed/downloader-view.c:584
 msgid "download status|Failed"
 msgstr "નિષ્ફળ"
 
-#: ../embed/downloader-view.c:642 ../src/bookmarks/ephy-bookmarks-editor.c:875
+#: ../embed/downloader-view.c:646 ../src/bookmarks/ephy-bookmarks-editor.c:877
 msgid "File"
 msgstr "ફાઇલ"
 
 # libgnomeprint/gnome-print-paper.c:51
-#: ../embed/downloader-view.c:664
+#: ../embed/downloader-view.c:668
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:675
+#: ../embed/downloader-view.c:679
 msgid "Remaining"
 msgstr "બાકી રહેલું"
 
@@ -1248,47 +1250,66 @@ msgstr "સ્થાનિક ફાઇલો"
 msgid "Save"
 msgstr "આ રીતે સંગ્રહિત કરો"
 
-#: ../embed/mozilla/ContentHandler.cpp:286
-msgid "Download the unsafe file?"
-msgstr "અસુરક્ષિત ફાઈલો ડાઉનલોડ કરવી છે?"
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/ContentHandler.cpp:292
+msgid "File Type:|Unknown"
+msgstr "અજ્ઞાત"
 
-#: ../embed/mozilla/ContentHandler.cpp:289
-msgid ""
-"This type of file could potentially damage your documents or invade your "
-"privacy. It's not safe to open it directly. You can save it instead."
-msgstr ""
-"આ પ્રકારની ફાઈલ કદાચ તમારા દસ્તાવેજમાં મોટા ભંગાણ પડે અથવા તમારુ ખાનગીપણુ તોડી નાખે. "
-"તેને સીધી રીતે ખોલવુ સુરક્ષિત નથી. એની જગ્યાએ કદાચ તમે એને સંગ્રહી શકો."
+#: ../embed/mozilla/ContentHandler.cpp:327
+msgid "Download this potentially unsafe file?"
+msgstr "શું આ અસુરક્ષિત ફાઈલો ડાઉનલોડ કરવી છે?"
 
-#. translators: %s is the name of the application
-#: ../embed/mozilla/ContentHandler.cpp:300
-#, c-format
-msgid "Open this file with \"%s\"?"
-msgstr "શું આ ફાઈલને \"%s\" સાથે ખોલવું છે?"
-
-#. translators: %s is the name of the application
-#: ../embed/mozilla/ContentHandler.cpp:305
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/mozilla/ContentHandler.cpp:333
 #, c-format
 msgid ""
-"It's not possible to view this file type directly in the browser. You can "
-"open it with \"%s\" or save it."
+"File Type: %s.\n"
+"\n"
+"It is unsafe to open \"%s\" as it could potentially damage your documents or "
+"invade your privacy. You can download it instead."
 msgstr ""
-"આ પ્રકારની ફાઈલ બ્રાઉઝરમાં શીધી જ જોવી શક્ય નથી. તમે તેને \"%s\" સાથે ખોલી અથવા "
-"સંગ્રહી શકો છો."
+"ફાઈલ પ્રકાર: %s.\n"
+"\n"
+"\"%s\" ને ખોલવાનું અસુરક્ષિત છે કારણ કે તે તમારા દસ્તાવેજો અથવા તમારું ખાનગીપણું સંભવિતપણે નષ્ટ કરી શકે છે. તમે એની જગ્યાએ તેને ડાઉનલોડ પણ કરી શકો છો."
 
-#: ../embed/mozilla/ContentHandler.cpp:315
-msgid "Download the file?"
-msgstr "ફાઈલ ડાઉનલોડ કરવી છે?"
+#: ../embed/mozilla/ContentHandler.cpp:343
+msgid "Open this file?"
+msgstr "શું આ ફાઇલ ખોલવી છે?"
 
-#: ../embed/mozilla/ContentHandler.cpp:318
+#. translators: First %s is the file type description,
+#. Second %s is the file name,
+#. Third %s is the application used to open the file
+#: ../embed/mozilla/ContentHandler.cpp:350
+#, c-format
 msgid ""
-"It's not possible to view this file because there is no application "
-"installed that can open it. You can save it instead."
+"File Type: %s.\n"
+"\n"
+"You can open \"%s\" using \"%s\" or save it."
 msgstr ""
-"આ ફાઈલને જોવી શક્ય નથી કારણકે કોઈ કાર્યક્રમ કે જે એને ખોલી શકે તે સ્થાપિત થયો નથી. તમે "
-"એની જગ્યાએ સંગ્રહી શકો."
+"ફાઈલ પ્રકાર: %s.\n"
+"\n"
+"તમે \"%s\" ને \"%s\" ની મદદથી ખોલી અથવા સંગ્રહી શકો છો."
 
-#: ../embed/mozilla/ContentHandler.cpp:323
+#: ../embed/mozilla/ContentHandler.cpp:358
+msgid "Download this file?"
+msgstr "શું આ ફાઈલ ડાઉનલોડ કરવી છે?"
+
+#. translators: First %s is the file type description,
+#. Second %s is the file name
+#: ../embed/mozilla/ContentHandler.cpp:364
+#, c-format
+msgid ""
+"File Type: %s.\n"
+"\n"
+"You have no application able to open \"%s\". You can download it instead."
+msgstr ""
+"ફાઈલ પ્રકાર: %s.\n"
+"\n"
+"તમારી પાસે \"%s\" ને ખોલી શકે તેવો કોઈ કાર્યક્રમ નથી. તેની જગ્યાએ તમે એને ડાઉનલોડ કરી શકો છો."
+
+#: ../embed/mozilla/ContentHandler.cpp:369
 msgid "_Save As..."
 msgstr "આ રીતે સંગ્રહ કરો (_S)..."
 
@@ -1451,7 +1472,7 @@ msgid "Untitled"
 msgstr "શીર્ષક વગરનું"
 
 #: ../embed/mozilla/FilePicker.cpp:148 ../lib/ephy-file-chooser.c:371
-#: ../src/bookmarks/ephy-bookmarks-editor.c:717
+#: ../src/bookmarks/ephy-bookmarks-editor.c:719
 msgid "All files"
 msgstr "બધી ફાઇલો"
 
@@ -1806,7 +1827,7 @@ msgstr ""
 "આ પાનું સુરક્ષિત જોડાણ હેઠળ લાવવામાં આવ્યું હતું છતાં, તમે દાખલ કરેલી જાણકારી અસુરક્ષિજ "
 "જોડાણ ઉપર મોકલાશે, અને ત્રીજી વ્યક્તિ દ્વારા સહેલાઈથી જોઈ શકાઈ હશે."
 
-#: ../embed/mozilla/MozDownload.cpp:692
+#: ../embed/mozilla/MozDownload.cpp:718
 msgid "Files"
 msgstr "ફાઇલો"
 
@@ -1824,7 +1845,7 @@ msgstr "ફાઇલો"
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:583
+#: ../embed/mozilla/mozilla-embed-single.cpp:582
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "એપીફની હમણાં વાપરી શકાશે નહિં. મોઝિલ્લા પ્રારંભમાં નિષ્ફળ."
 
@@ -1861,7 +1882,7 @@ msgstr "પ્રતિ (_T):"
 msgid "Sets the end of the range of pages to be printed"
 msgstr "છાપવા માટે પાનાંના વિસ્તારનો અંત સુયોજિત કરે છે"
 
-#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1115
+#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1123
 msgid "Print"
 msgstr "છાપો"
 
@@ -1905,38 +1926,38 @@ msgstr "%s અસ્તિત્વમાં છે, મહેરબાની �
 msgid "Failed to create directory %s."
 msgstr "ડિરેક્ટરી %s બનાવવામાં નિષ્ફળ."
 
-#: ../lib/ephy-gui.c:214
+#: ../lib/ephy-gui.c:329
 #, c-format
 msgid "Directory %s is not writable"
 msgstr "ડિરેક્ટરી %s એ લખી શકાય તેવી નથી"
 
-#: ../lib/ephy-gui.c:218
+#: ../lib/ephy-gui.c:333
 msgid "You do not have permission to create files in this directory."
 msgstr "તમારી પાસે આ ડિરેક્ટરીમાં ફાઈલો બનાવવાની પરવાનગી નથી."
 
-#: ../lib/ephy-gui.c:221
+#: ../lib/ephy-gui.c:336
 msgid "Directory not writable"
 msgstr "ડિરેક્ટરી લખી શકાય તેવી નથી"
 
-#: ../lib/ephy-gui.c:251
+#: ../lib/ephy-gui.c:366
 #, c-format
 msgid "File %s is not writable"
 msgstr "ફાઈલ %s એ લખી શકાય તેવી નથી"
 
-#: ../lib/ephy-gui.c:255
+#: ../lib/ephy-gui.c:370
 msgid "You do not have permission to overwrite this file."
 msgstr "તમારી પાસે આ ફાઈલ પર ફરીથી લખવાની પરવાનગી નથી."
 
-#: ../lib/ephy-gui.c:257
+#: ../lib/ephy-gui.c:372
 msgid "File not writable"
 msgstr "ફાઈલ લખી શકાય તેવી નથી"
 
-#: ../lib/ephy-gui.c:279
+#: ../lib/ephy-gui.c:394
 #, c-format
 msgid "Overwrite \"%s\"?"
 msgstr "\"%s\" પર ફરીથી લખવું છે?"
 
-#: ../lib/ephy-gui.c:283
+#: ../lib/ephy-gui.c:398
 msgid ""
 "A file with this name already exists. If you choose to overwrite this file, "
 "the contents will be lost."
@@ -1944,15 +1965,15 @@ msgstr ""
 "આ નામવાળી ફાઈલ પહેલાથી જ હાજર છે. જો તમે આ ફાઈલ પર ફરીથી લખવાનું પસંદ કરો, તો "
 "સમાવિષ્ટો ખોવાઈ જશે."
 
-#: ../lib/ephy-gui.c:287
+#: ../lib/ephy-gui.c:402
 msgid "_Overwrite"
 msgstr "ના પર ફરીથી લખો (_O)"
 
-#: ../lib/ephy-gui.c:289
+#: ../lib/ephy-gui.c:404
 msgid "Overwrite File?"
 msgstr "ફાઈલ પર ફરીથી લખવું છે?"
 
-#: ../lib/ephy-gui.c:325
+#: ../lib/ephy-gui.c:440
 #, c-format
 msgid "Could not display help: %s"
 msgstr "મદદ પ્રદર્શિત કરી શકાતી નથી: %s"
@@ -2125,13 +2146,13 @@ msgstr "પોપ-અપ વિન્ડો"
 msgid "History"
 msgstr "ઇતિહાસ"
 
-#: ../lib/ephy-stock-icons.c:59 ../src/bookmarks/ephy-bookmarks-editor.c:757
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1628
-#: ../src/bookmarks/ephy-topic-action.c:967 ../src/ephy-window.c:1121
+#: ../lib/ephy-stock-icons.c:59 ../src/bookmarks/ephy-bookmarks-editor.c:759
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1630
+#: ../src/bookmarks/ephy-topic-action.c:967 ../src/ephy-window.c:1129
 msgid "Bookmarks"
 msgstr "બુકમાર્ક"
 
-#: ../lib/ephy-stock-icons.c:60 ../src/ephy-toolbar.c:324
+#: ../lib/ephy-stock-icons.c:60 ../src/ephy-toolbar.c:325
 msgid "Address Entry"
 msgstr "સરનામાનો પ્રવેશ"
 
@@ -2185,8 +2206,8 @@ msgid "%s:"
 msgstr "%s:"
 
 #: ../src/bookmarks/ephy-bookmark-action.c:549
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1241
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1243
 #: ../src/bookmarks/ephy-topic-action.c:475 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:711
 msgid "Open in New _Tab"
@@ -2196,8 +2217,8 @@ msgstr[1] "નવા ટૅબોમાં ખોલો (_T)"
 
 #. File Menu
 #: ../src/bookmarks/ephy-bookmark-action.c:555
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1238
+#: ../src/bookmarks/ephy-bookmarks-editor.c:180
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1240
 #: ../src/ephy-history-window.c:170 ../src/ephy-history-window.c:708
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2238,203 +2259,207 @@ msgstr "મુદ્દાઓ (_p):"
 msgid "_Show in bookmarks bar"
 msgstr "બુકમાર્ક પટ્ટીમાં બતાવો (_S)"
 
+#: ../src/bookmarks/ephy-bookmarks-editor.c:140
+msgid "Remove from this topic"
+msgstr "આ મુદ્દામાંથી કાઢી નાંખો"
+
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:170
 #: ../src/ephy-history-window.c:163 ../src/ephy-window.c:114
 msgid "_File"
 msgstr "ફાઇલ (_F)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:169
+#: ../src/bookmarks/ephy-bookmarks-editor.c:171
 #: ../src/ephy-history-window.c:164 ../src/ephy-window.c:115
 msgid "_Edit"
 msgstr "ફેરફાર કરો (_E)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:172
 #: ../src/ephy-history-window.c:165 ../src/ephy-window.c:116
 msgid "_View"
 msgstr "જુઓ (_V)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:171
+#: ../src/bookmarks/ephy-bookmarks-editor.c:173
 #: ../src/ephy-history-window.c:166 ../src/ephy-window.c:121
 msgid "_Help"
 msgstr "મદદ (_H)"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:175
+#: ../src/bookmarks/ephy-bookmarks-editor.c:177
 #: ../src/bookmarks/ephy-new-bookmark.c:294
 msgid "_New Topic"
 msgstr "નવો મુદ્દો (_N)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178
 msgid "Create a new topic"
 msgstr "નવો મુદ્દો બનાવો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:179
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
 msgid "Open the selected bookmark in a new window"
 msgstr "પસંદ કરેલ બુકમાર્કને નવી વિન્ડોમાં ખોલો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+#: ../src/bookmarks/ephy-bookmarks-editor.c:184
 msgid "Open the selected bookmark in a new tab"
 msgstr "પસંદ કરેલ બુકમાર્કને નવા ટૅબમાં ખોલો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186
 msgid "_Rename..."
 msgstr "ફરીથી નામ આપો (_R)..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:185
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Rename the selected bookmark or topic"
 msgstr "પસંદ કરેલ બુકમાર્ક અથવા મુદ્દાને નવું નામ આપો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:186
+#: ../src/bookmarks/ephy-bookmarks-editor.c:188
 #: ../src/ephy-history-window.c:176
 msgid "_Delete"
 msgstr "કાઢી નાખો (_D)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
 msgid "Delete the selected bookmark or topic"
 msgstr "પસંદ કરેલ બુકમાર્ક અથવા મુદ્દાને કાઢી નાખો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:191
 msgid "_Properties"
 msgstr "ગુણધર્મો (_P)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:190
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192
 msgid "View or modify the properties of the selected bookmark"
 msgstr "પસંદ કરાયેલ બુકમાર્કના ગુણધર્મો જુઓ અથવા બદલો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/bookmarks/ephy-bookmarks-editor.c:194
 msgid "_Import Bookmarks..."
 msgstr "બુકમાર્ક આયાત કરો (_I)..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "બુકમાર્કને બીજા કોઇક બ્રાઉઝર અથવા બુકમાર્ક ફાઇલમાંથી આયાત કરો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
 msgid "_Export Bookmarks..."
 msgstr "બુકમાર્ક નિકાસ કરો (_E)..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:196
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198
 msgid "Export bookmarks to a file"
 msgstr "બુકમાર્કો ફાઈલમાં નિકાસ કરો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
 #: ../src/ephy-history-window.c:182 ../src/ephy-window.c:154
 msgid "_Close"
 msgstr "બંધ કરો (_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:199
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
 msgid "Close the bookmarks window"
 msgstr "બુકમાર્ક વિન્ડો બંધ કરો"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:203
+#: ../src/bookmarks/ephy-bookmarks-editor.c:205
 #: ../src/ephy-history-window.c:187 ../src/ephy-window.c:166
 msgid "Cu_t"
 msgstr "કાપો (_t)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
 #: ../src/ephy-history-window.c:188 ../src/ephy-window.c:167
 msgid "Cut the selection"
 msgstr "પસંદ કરાયેલને કાપો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:206
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1251
+#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1253
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:721
 #: ../src/ephy-window.c:169
 msgid "_Copy"
 msgstr "નકલ કરો (_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:207
+#: ../src/bookmarks/ephy-bookmarks-editor.c:209
 #: ../src/ephy-history-window.c:191 ../src/ephy-window.c:170
 msgid "Copy the selection"
 msgstr "પસંદ કરાયેલની નકલ કરો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/bookmarks/ephy-bookmarks-editor.c:211
 #: ../src/ephy-history-window.c:193 ../src/ephy-window.c:172
 msgid "_Paste"
 msgstr "ચોંટાડો (_P)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:210
+#: ../src/bookmarks/ephy-bookmarks-editor.c:212
 #: ../src/ephy-history-window.c:194
 msgid "Paste the clipboard"
 msgstr "ક્લિપબોર્ડને ચોંટાડો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
 #: ../src/ephy-history-window.c:196 ../src/ephy-window.c:175
 msgid "Select _All"
 msgstr "બધુ પસંદ કરો (_A)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/bookmarks/ephy-bookmarks-editor.c:215
 msgid "Select all bookmarks or text"
 msgstr "બધા જ બુકમાર્ક અથવા લખાણને પસંદ કરો"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:217
+#: ../src/bookmarks/ephy-bookmarks-editor.c:219
 #: ../src/ephy-history-window.c:204 ../src/ephy-window.c:273
 msgid "_Contents"
 msgstr "સમાવિષ્ટ વસ્તુઓ (_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:218
+#: ../src/bookmarks/ephy-bookmarks-editor.c:220
 msgid "Display bookmarks help"
 msgstr "બુકમાર્ક માટેની મદદ દેખાડો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:220
+#: ../src/bookmarks/ephy-bookmarks-editor.c:222
 #: ../src/ephy-history-window.c:207 ../src/ephy-window.c:276
 msgid "_About"
 msgstr "વિશે: (_A)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:221
+#: ../src/bookmarks/ephy-bookmarks-editor.c:223
 #: ../src/ephy-history-window.c:208 ../src/ephy-window.c:277
 msgid "Display credits for the web browser creators"
 msgstr "વેબ બ્રાઉઝર બનાવનારનો યશ પ્રદર્શિત કરો"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:229
+#: ../src/bookmarks/ephy-bookmarks-editor.c:231
 msgid "_Show in Bookmarks Bar"
 msgstr "બુકમાર્ક પટ્ટીમાં દેખાડો (_S)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:230
+#: ../src/bookmarks/ephy-bookmarks-editor.c:232
 msgid "Show the selected bookmark or topic in the bookmarks bar"
 msgstr "પસંદ કરેલ બુકમાર્ક અથવા મુદ્દાને બુકમાર્ક પટ્ટીમાં દેખાડો"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:244
+#: ../src/bookmarks/ephy-bookmarks-editor.c:246
 #: ../src/ephy-history-window.c:222
 msgid "_Title"
 msgstr "શીર્ષક (_T)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:245
+#: ../src/bookmarks/ephy-bookmarks-editor.c:247
 #: ../src/ephy-history-window.c:223
 msgid "Show only the title column"
 msgstr "ફક્ત શીર્ષકના ખાના દેખાડો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:246
+#: ../src/bookmarks/ephy-bookmarks-editor.c:248
 #: ../src/ephy-history-window.c:226
 msgid "T_itle and Address"
 msgstr "શીર્ષક અને સરનામું (_i)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:247
+#: ../src/bookmarks/ephy-bookmarks-editor.c:249
 #: ../src/ephy-history-window.c:227
 msgid "Show both the title and address columns"
 msgstr "શીર્ષક અને સરનામાના ખાના દેખાડો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:289
+#: ../src/bookmarks/ephy-bookmarks-editor.c:291
 #: ../src/bookmarks/ephy-topics-selector.c:319
 msgid "Type a topic"
 msgstr "મુદ્દો લખો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:466
+#: ../src/bookmarks/ephy-bookmarks-editor.c:468
 #, c-format
 msgid "Delete topic \"%s\"?"
 msgstr "મુદ્દો \"%s\" કાઢી નાંખવો છે?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:469
+#: ../src/bookmarks/ephy-bookmarks-editor.c:471
 msgid "Delete this topic?"
 msgstr "આ મુદ્દો કાઢી નાંખવો છે?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:471
+#: ../src/bookmarks/ephy-bookmarks-editor.c:473
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -2442,42 +2467,42 @@ msgstr ""
 "આ મુદ્દાને કાઢી નાંખવાનું તેની બધી બુકમાર્કો અપરિચિત બનાવી દે છે, જ્યાં સુધી તેઓ અન્ય મુદ્દાનો "
 "ભાગ નહિં બને. બુકમાર્કો કાઢી શકાશે નહિં."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:474
+#: ../src/bookmarks/ephy-bookmarks-editor.c:476
 msgid "_Delete Topic"
 msgstr "મુદ્દો કાઢી નાંખો (_D)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:580
+#: ../src/bookmarks/ephy-bookmarks-editor.c:582
 msgid "Firefox"
 msgstr "ફાયરફોક્સ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:584
-#: ../src/bookmarks/ephy-bookmarks-editor.c:588
+#: ../src/bookmarks/ephy-bookmarks-editor.c:586
+#: ../src/bookmarks/ephy-bookmarks-editor.c:590
 msgid "Firebird"
 msgstr "ફાયરબર્ડ"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:593
+#: ../src/bookmarks/ephy-bookmarks-editor.c:595
 #, c-format
 msgid "Mozilla \"%s\" profile"
 msgstr "મોઝિલ્લા \"%s\" રૂપરેખા"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:597
+#: ../src/bookmarks/ephy-bookmarks-editor.c:599
 msgid "Galeon"
 msgstr "ગેલિયન"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:601
+#: ../src/bookmarks/ephy-bookmarks-editor.c:603
 msgid "Konqueror"
 msgstr "કોન્કરર"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:630
+#: ../src/bookmarks/ephy-bookmarks-editor.c:632
 msgid "Import failed"
 msgstr "આયાત નિષ્ફળ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:632
+#: ../src/bookmarks/ephy-bookmarks-editor.c:634
 msgid "Import Failed"
 msgstr "આયાત નિષ્ફળ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:635
+#: ../src/bookmarks/ephy-bookmarks-editor.c:637
 #, c-format
 msgid ""
 "The bookmarks from \"%s\" could not be imported because the file is "
@@ -2486,72 +2511,72 @@ msgstr ""
 "\"%s\" માંની બુકમાર્કો આયાત કરી શકાઈ નહિં કારણ કે ફાઈલ બગડી ગયેલ હતી અથવા તેનો "
 "પ્રકાર બિનઆધારભૂત હતો."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:698
+#: ../src/bookmarks/ephy-bookmarks-editor.c:700
 msgid "Import bookmarks from file"
 msgstr "બુકમાર્ક આયાત કરો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:705
+#: ../src/bookmarks/ephy-bookmarks-editor.c:707
 msgid "Firefox/Mozilla bookmarks"
 msgstr "ફાયરફોક્સ/મોઝિલ્લા બુકમાર્કો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:709
+#: ../src/bookmarks/ephy-bookmarks-editor.c:711
 msgid "Galeon/Konqueror bookmarks"
 msgstr "ગેલિયન/કોન્કરર બુકમાર્કો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:713
+#: ../src/bookmarks/ephy-bookmarks-editor.c:715
 msgid "Epiphany bookmarks"
 msgstr "એપિફની બુકમાર્કો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:747
+#: ../src/bookmarks/ephy-bookmarks-editor.c:749
 msgid "Export Bookmarks"
 msgstr "બુકમાર્કો નિકાસ કરો"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:760
+#: ../src/bookmarks/ephy-bookmarks-editor.c:762
 msgid "File format:"
 msgstr "ફાઈલ બંધારણ:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
+#: ../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "Epiphany (RDF)"
 msgstr "એપીફની (RDF)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:764
+#: ../src/bookmarks/ephy-bookmarks-editor.c:766
 msgid "Mozilla (HTML)"
 msgstr "મોઝિલ્લા (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:835
+#: ../src/bookmarks/ephy-bookmarks-editor.c:837
 msgid "Import Bookmarks"
 msgstr "બુકમાર્ક આયાત કરો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:841
+#: ../src/bookmarks/ephy-bookmarks-editor.c:843
 msgid "I_mport"
 msgstr "આયાત કરો (_m)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:855
+#: ../src/bookmarks/ephy-bookmarks-editor.c:857
 msgid "Import bookmarks from:"
 msgstr "આમાંથી બુકમાર્ક આયાત કરો:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1247
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1249
 #: ../src/ephy-history-window.c:717
 msgid "_Copy Address"
 msgstr "સરનામાની નકલ કરો (_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1495
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1497
 #: ../src/ephy-history-window.c:1033
 msgid "_Search:"
 msgstr "શોધો (_S):"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1694
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1696
 #: ../src/bookmarks/ephy-topics-selector.c:198
 msgid "Topics"
 msgstr "મુદ્દાઓ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1764
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1766
 #: ../src/ephy-history-window.c:1316
 msgid "Title"
 msgstr "શીર્ષક"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1770
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1772
 #: ../src/ephy-history-window.c:1322
 msgid "Address"
 msgstr "સરનામું"
@@ -2684,32 +2709,32 @@ msgstr "અન્ય સંગ્રહપધ્ધતિ"
 msgid "_Automatic"
 msgstr "આપોઆપ (_A)"
 
-#: ../src/ephy-find-toolbar.c:404
+#: ../src/ephy-find-toolbar.c:437
 msgid "Find:"
 msgstr "શોધો:"
 
-#: ../src/ephy-find-toolbar.c:420 ../src/ephy-find-toolbar.c:421
+#: ../src/ephy-find-toolbar.c:453 ../src/ephy-find-toolbar.c:454
 msgid "Find Next"
 msgstr "આગળનું શોધો"
 
-#: ../src/ephy-find-toolbar.c:424
+#: ../src/ephy-find-toolbar.c:457
 msgid "Find next occurrence of the search string"
 msgstr "શોધ શબ્દમાળાનો આગળનો વારો શોધો"
 
-#: ../src/ephy-find-toolbar.c:431 ../src/ephy-find-toolbar.c:432
+#: ../src/ephy-find-toolbar.c:464 ../src/ephy-find-toolbar.c:465
 msgid "Find Previous"
 msgstr "પહેલાનું શોધો"
 
-#: ../src/ephy-find-toolbar.c:435
+#: ../src/ephy-find-toolbar.c:468
 msgid "Find previous occurrence of the search string"
 msgstr "શોધ શબ્દમાળાનો પહેલાનો વારો શોધો"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:278 ../src/ephy-toolbar.c:627
+#: ../src/ephy-fullscreen-popup.c:278 ../src/ephy-toolbar.c:628
 msgid "Leave Fullscreen"
 msgstr "પૂર્ણ સ્ક્રીન છોડો"
 
-#: ../src/ephy-go-action.c:71 ../src/ephy-toolbar.c:354
+#: ../src/ephy-go-action.c:71 ../src/ephy-toolbar.c:355
 msgid "Go"
 msgstr "જાઓ"
 
@@ -2895,36 +2920,36 @@ msgstr ""
 "ઓટોમેશન વસ્તુ પાસે સ્થિત કરાવતી વખતે બોનોબોની અનિચ્છનીય ભૂલને કારણે એપીફની હવે પછી "
 "વાપરી શકાશે નહિ."
 
-#: ../src/ephy-tab.c:488 ../src/ephy-tab.c:2265
+#: ../src/ephy-tab.c:483 ../src/ephy-tab.c:2234
 msgid "Blank page"
 msgstr "ખાલી પાનું"
 
 #. translators: %s here is the address of the web page
-#: ../src/ephy-tab.c:916
+#: ../src/ephy-tab.c:911
 #, c-format
 msgid "Loading “%s”..."
 msgstr "“%s” લાવી રહ્યા છે..."
 
-#: ../src/ephy-tab.c:920
+#: ../src/ephy-tab.c:915
 msgid "Loading..."
 msgstr "લાવી રહ્યા છે..."
 
-#: ../src/ephy-tab.c:1651
+#: ../src/ephy-tab.c:1617
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "%s ની તરફ કરી રહ્યા છે..."
 
-#: ../src/ephy-tab.c:1655
+#: ../src/ephy-tab.c:1621
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "%s માંથી માહિતી મોકલી રહ્યા છે..."
 
-#: ../src/ephy-tab.c:1659
+#: ../src/ephy-tab.c:1625
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "%s તરફથી સત્તાના હક માટે રાહ જોઇ રહ્યા છે..."
 
-#: ../src/ephy-tab.c:1667
+#: ../src/ephy-tab.c:1633
 #, c-format
 msgid "Loading %s..."
 msgstr "%s લાવી રહ્યા છે..."
@@ -2952,72 +2977,72 @@ msgstr "સાધનપટ્ટી બટન લેબલો (_b):"
 msgid "_Add a New Toolbar"
 msgstr "નવી સાધનપટ્ટી ઉમેરો (_A)"
 
-#: ../src/ephy-toolbar.c:264
+#: ../src/ephy-toolbar.c:265
 msgid "Back"
 msgstr "પાછા"
 
-#: ../src/ephy-toolbar.c:266
+#: ../src/ephy-toolbar.c:267
 msgid "Go back"
 msgstr "પાછા જાઓ"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:270
+#: ../src/ephy-toolbar.c:271
 msgid "Back history"
 msgstr "પાછળનો ઇતિહાસ"
 
-#: ../src/ephy-toolbar.c:283
+#: ../src/ephy-toolbar.c:284
 msgid "Forward"
 msgstr "આગળ"
 
-#: ../src/ephy-toolbar.c:285
+#: ../src/ephy-toolbar.c:286
 msgid "Go forward"
 msgstr "આગળ જાઓ"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:289
+#: ../src/ephy-toolbar.c:290
 msgid "Forward history"
 msgstr "આગળનો ઇતિહાસ"
 
-#: ../src/ephy-toolbar.c:301
+#: ../src/ephy-toolbar.c:302
 msgid "Up"
 msgstr "ઉપર"
 
-#: ../src/ephy-toolbar.c:303 ../src/ephy-window.c:244
+#: ../src/ephy-toolbar.c:304 ../src/ephy-window.c:244
 msgid "Go up one level"
 msgstr "એક સ્તર ઉપર જાઓ"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:307
+#: ../src/ephy-toolbar.c:308
 msgid "List of upper levels"
 msgstr "ઉપરના સ્તરોની યાદી"
 
-#: ../src/ephy-toolbar.c:326
-msgid "Enter a web address to open, or a phrase to search for on the web"
-msgstr "ખોલવા માટે વૅબ સરનામું આપો, અથવા વેબ પર શોધવા માટે શબ્દસમૂહ આપો"
+#: ../src/ephy-toolbar.c:327
+msgid "Enter a web address to open, or a phrase to search for"
+msgstr "ખોલવા માટે વૅબ સરનામું આપો, અથવા શોધવા માટે શબ્દસમૂહ આપો"
 
-#: ../src/ephy-toolbar.c:342
+#: ../src/ephy-toolbar.c:343
 msgid "Zoom"
 msgstr "નાનું-મોટુ કરો"
 
-#: ../src/ephy-toolbar.c:344
+#: ../src/ephy-toolbar.c:345
 msgid "Adjust the text size"
 msgstr "લખાણનું માપ બંધબેસતુ કરો"
 
-#: ../src/ephy-toolbar.c:356
+#: ../src/ephy-toolbar.c:357
 msgid "Go to the address entered in the address entry"
 msgstr "સરનામાના દાખલાઓમાં દાખલ કરેલ સરનામા પર જાઓ"
 
-#: ../src/ephy-toolbar.c:365
+#: ../src/ephy-toolbar.c:366
 msgid "_Home"
 msgstr "ઘર (_H)"
 
-#: ../src/ephy-toolbar.c:367
+#: ../src/ephy-toolbar.c:368
 msgid "Go to the home page"
 msgstr "ઘર પાના પર જાઓ"
 
@@ -3492,92 +3517,92 @@ msgstr "જો તમે કોઈપણ રીતે દસ્તાવેજ �
 msgid "Close _Document"
 msgstr "દસ્તાવેજ બંધ કરો (_D)"
 
-#: ../src/ephy-window.c:1111 ../src/window-commands.c:357
+#: ../src/ephy-window.c:1119 ../src/window-commands.c:357
 msgid "Open"
 msgstr "ખોલો"
 
-#: ../src/ephy-window.c:1113 ../src/window-commands.c:383
+#: ../src/ephy-window.c:1121 ../src/window-commands.c:383
 msgid "Save As"
 msgstr "આ રીતે સંગ્રહિત કરો"
 
-#: ../src/ephy-window.c:1117
+#: ../src/ephy-window.c:1125
 msgid "Bookmark"
 msgstr "બુકમાર્ક"
 
-#: ../src/ephy-window.c:1301
+#: ../src/ephy-window.c:1309
 msgid "Insecure"
 msgstr "અસુરક્ષિત"
 
-#: ../src/ephy-window.c:1306
+#: ../src/ephy-window.c:1314
 msgid "Broken"
 msgstr "તૂટેલું"
 
-#: ../src/ephy-window.c:1314
+#: ../src/ephy-window.c:1322
 msgid "Low"
 msgstr "ઓછું"
 
-#: ../src/ephy-window.c:1321
+#: ../src/ephy-window.c:1329
 msgid "High"
 msgstr "વધારે"
 
-#: ../src/ephy-window.c:1330
+#: ../src/ephy-window.c:1338
 #, c-format
 msgid "Security level: %s"
 msgstr "સુરક્ષા સ્તર %s"
 
-#: ../src/ephy-window.c:1370
+#: ../src/ephy-window.c:1378
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d છુપી પોપ-અપ વિન્ડો"
 msgstr[1] "%d છુપી પોપ-અપ વિન્ડો"
 
-#: ../src/ephy-window.c:1652
+#: ../src/ephy-window.c:1660
 #, c-format
 msgid "Save background image '%s'"
 msgstr "પાશ્વ ભાગનું ચિત્ર '%s' સંગ્રહો"
 
-#: ../src/ephy-window.c:1666
+#: ../src/ephy-window.c:1674
 #, c-format
 msgid "Open image '%s'"
 msgstr "ચિત્ર '%s' ખોલો"
 
-#: ../src/ephy-window.c:1671
+#: ../src/ephy-window.c:1679
 #, c-format
 msgid "Use as desktop background '%s'"
 msgstr "'%s' ને ડેસ્કટોપ પાશ્વ ભાગ તરીકે વાપરો"
 
-#: ../src/ephy-window.c:1676
+#: ../src/ephy-window.c:1684
 #, c-format
 msgid "Save image '%s'"
 msgstr "ચિત્ર '%s' સંગ્રહો"
 
-#: ../src/ephy-window.c:1681
+#: ../src/ephy-window.c:1689
 #, c-format
 msgid "Copy image address '%s'"
 msgstr "ચિત્ર સરનામું '%s' ની નકલ કરો"
 
-#: ../src/ephy-window.c:1694
+#: ../src/ephy-window.c:1702
 #, c-format
 msgid "Send email to address '%s'"
 msgstr "સરનામા '%s' ને ઈમેઈલ મોકલો"
 
-#: ../src/ephy-window.c:1700
+#: ../src/ephy-window.c:1708
 #, c-format
 msgid "Copy email address '%s'"
 msgstr "ઈમેઈલ સરનામું '%s' ની નકલ કરો"
 
-#: ../src/ephy-window.c:1712
+#: ../src/ephy-window.c:1720
 #, c-format
 msgid "Save link '%s'"
 msgstr "કડી '%s' સંગ્રહો"
 
-#: ../src/ephy-window.c:1718
+#: ../src/ephy-window.c:1726
 #, c-format
 msgid "Bookmark link '%s'"
 msgstr "કડી '%s' ની બુકમાર્ક કરો"
 
-#: ../src/ephy-window.c:1724
+#: ../src/ephy-window.c:1732
 #, c-format
 msgid "Copy link's address '%s'"
 msgstr "કડીનું સરનામું '%s' ની નકલ કરો"
@@ -3724,7 +3749,7 @@ msgid_plural "System languages (%s)"
 msgstr[0] "સિસ્ટમ ભાષા (%s)"
 msgstr[1] "સિસ્ટમની ભાષાઓ (%s)"
 
-#: ../src/prefs-dialog.c:1359
+#: ../src/prefs-dialog.c:1366
 msgid "Select a directory"
 msgstr "ડિરેક્ટરી પસંદ કરો"
 
