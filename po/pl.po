@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-11 11:06+0200\n"
+"POT-Creation-Date: 2005-08-24 00:10+0200\n"
 "PO-Revision-Date: 2005-06-28 00:14+0200\n"
 "Last-Translator: GNOME PL Team <translators@gnomepl.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -576,7 +576,7 @@ msgstr "Akceptowanie ciasteczek"
 msgid "Download Manager"
 msgstr "Menedżer pobierania"
 
-#: ../data/glade/epiphany.glade.h:6 ../src/ephy-window.c:1119
+#: ../data/glade/epiphany.glade.h:6 ../src/ephy-window.c:1127
 msgid "Find"
 msgstr "Znajdź"
 
@@ -843,11 +843,12 @@ msgstr ""
 "%s\n"
 "%s z %s"
 
-#: ../embed/downloader-view.c:426 ../src/ephy-window.c:1298
+#: ../embed/downloader-view.c:425 ../embed/downloader-view.c:430
+#: ../src/ephy-window.c:1306
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: ../embed/downloader-view.c:460
+#: ../embed/downloader-view.c:464
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -857,25 +858,25 @@ msgstr[2] "%d pobrań"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:575 ../embed/downloader-view.c:588
+#: ../embed/downloader-view.c:579 ../embed/downloader-view.c:592
 msgid "download status|Unknown"
 msgstr "Nieznany"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:580
+#: ../embed/downloader-view.c:584
 msgid "download status|Failed"
 msgstr "Niepowodzenie"
 
-#: ../embed/downloader-view.c:642 ../src/bookmarks/ephy-bookmarks-editor.c:877
+#: ../embed/downloader-view.c:646 ../src/bookmarks/ephy-bookmarks-editor.c:877
 msgid "File"
 msgstr "Plik"
 
-#: ../embed/downloader-view.c:664
+#: ../embed/downloader-view.c:668
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:675
+#: ../embed/downloader-view.c:679
 msgid "Remaining"
 msgstr "Pozostało"
 
@@ -1301,8 +1302,9 @@ msgid ""
 msgstr ""
 "Rodzaj pliku: %s.\n"
 "\n"
-"Otwarcie \"%s\" jest niebezpieczne, ze względu na potencjalne niebezpieczeństwo "
-"uszkodzenia dokumentów lub naruszenia prywatności. Zamiast tego można go pobrać."
+"Otwarcie \"%s\" jest niebezpieczne, ze względu na potencjalne "
+"niebezpieczeństwo uszkodzenia dokumentów lub naruszenia prywatności. Zamiast "
+"tego można go pobrać."
 
 #: ../embed/mozilla/ContentHandler.cpp:343
 msgid "Open this file?"
@@ -1884,7 +1886,7 @@ msgstr ""
 "wprowadzone informacje zostaną wysłane poprzez połączenie niezabezpieczone i "
 "mogą być z łatwością przechwycone."
 
-#: ../embed/mozilla/MozDownload.cpp:694
+#: ../embed/mozilla/MozDownload.cpp:718
 msgid "Files"
 msgstr "Pliki"
 
@@ -1902,7 +1904,7 @@ msgstr "Pliki"
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.pl/search?ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:583
+#: ../embed/mozilla/mozilla-embed-single.cpp:582
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Nie można teraz użyć Epiphany. Nie powiodła się inicjalizacja Mozilli."
 
@@ -1939,7 +1941,7 @@ msgstr "_do:"
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Ustawia koniec zakresu stron do wydruku"
 
-#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1115
+#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1123
 msgid "Print"
 msgstr "Wydrukuj"
 
@@ -1971,7 +1973,7 @@ msgstr "Wszystkie obsługiwane typy"
 #. The name of the default downloads folder
 #: ../lib/ephy-file-helpers.c:96 ../src/prefs-dialog.c:1146
 msgid "Downloads"
-msgstr "Pobrane"
+msgstr "Pobrania"
 
 #: ../lib/ephy-file-helpers.c:270
 #, c-format
@@ -1983,38 +1985,38 @@ msgstr "%s istnieje, przenieś go gdzie indziej."
 msgid "Failed to create directory %s."
 msgstr "Utworzenie katalogu %s nie powiodło się."
 
-#: ../lib/ephy-gui.c:214
+#: ../lib/ephy-gui.c:329
 #, c-format
 msgid "Directory %s is not writable"
 msgstr "Nie można zapisywać w katalogu %s"
 
-#: ../lib/ephy-gui.c:218
+#: ../lib/ephy-gui.c:333
 msgid "You do not have permission to create files in this directory."
 msgstr "Nie masz uprawnień do tworzenie plików w tym katalogu."
 
-#: ../lib/ephy-gui.c:221
+#: ../lib/ephy-gui.c:336
 msgid "Directory not writable"
 msgstr "Nie można zapisać w katalogu"
 
-#: ../lib/ephy-gui.c:251
+#: ../lib/ephy-gui.c:366
 #, c-format
 msgid "File %s is not writable"
 msgstr "Nie można zapisać do pliku %s"
 
-#: ../lib/ephy-gui.c:255
+#: ../lib/ephy-gui.c:370
 msgid "You do not have permission to overwrite this file."
 msgstr "Nie masz uprawnień do nadpisania tego pliku."
 
-#: ../lib/ephy-gui.c:257
+#: ../lib/ephy-gui.c:372
 msgid "File not writable"
 msgstr "Nie można zapisać pliku"
 
-#: ../lib/ephy-gui.c:279
+#: ../lib/ephy-gui.c:394
 #, c-format
 msgid "Overwrite \"%s\"?"
 msgstr "Nadpisać \"%s\"?"
 
-#: ../lib/ephy-gui.c:283
+#: ../lib/ephy-gui.c:398
 msgid ""
 "A file with this name already exists. If you choose to overwrite this file, "
 "the contents will be lost."
@@ -2022,15 +2024,15 @@ msgstr ""
 "Plik o tej nazwie już istnieje. Jeżeli zostanie wybrane nadpisanie tego "
 "pliku, jego zawartość zostanie utracona."
 
-#: ../lib/ephy-gui.c:287
+#: ../lib/ephy-gui.c:402
 msgid "_Overwrite"
 msgstr "_Nadpisz"
 
-#: ../lib/ephy-gui.c:289
+#: ../lib/ephy-gui.c:404
 msgid "Overwrite File?"
 msgstr "Nadpisać plik?"
 
-#: ../lib/ephy-gui.c:325
+#: ../lib/ephy-gui.c:440
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Nie można wyświetlić pomocy: %s"
@@ -2205,7 +2207,7 @@ msgstr "Historia"
 
 #: ../lib/ephy-stock-icons.c:59 ../src/bookmarks/ephy-bookmarks-editor.c:759
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1630
-#: ../src/bookmarks/ephy-topic-action.c:967 ../src/ephy-window.c:1121
+#: ../src/bookmarks/ephy-topic-action.c:967 ../src/ephy-window.c:1129
 msgid "Bookmarks"
 msgstr "Zakładki"
 
@@ -2769,23 +2771,23 @@ msgstr "Inne kodowania"
 msgid "_Automatic"
 msgstr "_Automatyczne"
 
-#: ../src/ephy-find-toolbar.c:404
+#: ../src/ephy-find-toolbar.c:437
 msgid "Find:"
 msgstr "Wyszukaj:"
 
-#: ../src/ephy-find-toolbar.c:420 ../src/ephy-find-toolbar.c:421
+#: ../src/ephy-find-toolbar.c:453 ../src/ephy-find-toolbar.c:454
 msgid "Find Next"
 msgstr "Znajdź następne"
 
-#: ../src/ephy-find-toolbar.c:424
+#: ../src/ephy-find-toolbar.c:457
 msgid "Find next occurrence of the search string"
 msgstr "Wyszukuje następne wystąpienie ciągu"
 
-#: ../src/ephy-find-toolbar.c:431 ../src/ephy-find-toolbar.c:432
+#: ../src/ephy-find-toolbar.c:464 ../src/ephy-find-toolbar.c:465
 msgid "Find Previous"
 msgstr "Znajdź poprzednie"
 
-#: ../src/ephy-find-toolbar.c:435
+#: ../src/ephy-find-toolbar.c:468
 msgid "Find previous occurrence of the search string"
 msgstr "Wyszukuje poprzednie wystąpienie słowa lub frazy"
 
@@ -2984,7 +2986,7 @@ msgstr ""
 "Nie można teraz użyć programu Epiphany, ze względu na niespodziewany błąd "
 "programu Bonobo podczas próby rejestracji obiektu automatyzacji."
 
-#: ../src/ephy-tab.c:483 ../src/ephy-tab.c:2238
+#: ../src/ephy-tab.c:483 ../src/ephy-tab.c:2234
 msgid "Blank page"
 msgstr "Pusta strona"
 
@@ -2998,22 +3000,22 @@ msgstr "Wczytywanie \"%s\"..."
 msgid "Loading..."
 msgstr "Wczytywanie..."
 
-#: ../src/ephy-tab.c:1621
+#: ../src/ephy-tab.c:1617
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Przekierowanie do %s..."
 
-#: ../src/ephy-tab.c:1625
+#: ../src/ephy-tab.c:1621
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Pobieranie danych z %s..."
 
-#: ../src/ephy-tab.c:1629
+#: ../src/ephy-tab.c:1625
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Oczekiwanie na autoryzację od %s..."
 
-#: ../src/ephy-tab.c:1637
+#: ../src/ephy-tab.c:1633
 #, c-format
 msgid "Loading %s..."
 msgstr "Wczytywanie %s..."
@@ -3581,40 +3583,40 @@ msgstr "Jeżeli zamkniesz dokument, stracisz tą informację."
 msgid "Close _Document"
 msgstr "Zamkn_ij dokument"
 
-#: ../src/ephy-window.c:1111 ../src/window-commands.c:357
+#: ../src/ephy-window.c:1119 ../src/window-commands.c:357
 msgid "Open"
 msgstr "Otwieranie"
 
-#: ../src/ephy-window.c:1113 ../src/window-commands.c:383
+#: ../src/ephy-window.c:1121 ../src/window-commands.c:383
 msgid "Save As"
 msgstr "Zapis jako"
 
-#: ../src/ephy-window.c:1117
+#: ../src/ephy-window.c:1125
 msgid "Bookmark"
 msgstr "Zakładka"
 
-#: ../src/ephy-window.c:1301
+#: ../src/ephy-window.c:1309
 msgid "Insecure"
 msgstr "Niepewny"
 
-#: ../src/ephy-window.c:1306
+#: ../src/ephy-window.c:1314
 msgid "Broken"
 msgstr "Złamany"
 
-#: ../src/ephy-window.c:1314
+#: ../src/ephy-window.c:1322
 msgid "Low"
 msgstr "Niski"
 
-#: ../src/ephy-window.c:1321
+#: ../src/ephy-window.c:1329
 msgid "High"
 msgstr "Wysoki"
 
-#: ../src/ephy-window.c:1330
+#: ../src/ephy-window.c:1338
 #, c-format
 msgid "Security level: %s"
 msgstr "Poziom bezpieczeństwa: %s"
 
-#: ../src/ephy-window.c:1370
+#: ../src/ephy-window.c:1378
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
@@ -3622,52 +3624,52 @@ msgstr[0] "%d ukryte wyskakujące okno"
 msgstr[1] "%d ukryte wyskakujące okna"
 msgstr[2] "%d ukrytych wyskakujących okien"
 
-#: ../src/ephy-window.c:1652
+#: ../src/ephy-window.c:1660
 #, c-format
 msgid "Save background image '%s'"
 msgstr "Zapisz obraz tła \"%s\""
 
-#: ../src/ephy-window.c:1666
+#: ../src/ephy-window.c:1674
 #, c-format
 msgid "Open image '%s'"
 msgstr "Otwórz obraz \"%s\""
 
-#: ../src/ephy-window.c:1671
+#: ../src/ephy-window.c:1679
 #, c-format
 msgid "Use as desktop background '%s'"
 msgstr "Wykorzystaj jako tło \"%s\""
 
-#: ../src/ephy-window.c:1676
+#: ../src/ephy-window.c:1684
 #, c-format
 msgid "Save image '%s'"
 msgstr "Zapisz obraz \"%s\""
 
-#: ../src/ephy-window.c:1681
+#: ../src/ephy-window.c:1689
 #, c-format
 msgid "Copy image address '%s'"
 msgstr "Skopiuj adres obrazu \"%s\""
 
-#: ../src/ephy-window.c:1694
+#: ../src/ephy-window.c:1702
 #, c-format
 msgid "Send email to address '%s'"
 msgstr "Wyślij e-mail na adres \"%s\""
 
-#: ../src/ephy-window.c:1700
+#: ../src/ephy-window.c:1708
 #, c-format
 msgid "Copy email address '%s'"
 msgstr "Skopiuj adres e-mail \"%s\""
 
-#: ../src/ephy-window.c:1712
+#: ../src/ephy-window.c:1720
 #, c-format
 msgid "Save link '%s'"
 msgstr "Zapisz odnośnik \"%s\""
 
-#: ../src/ephy-window.c:1718
+#: ../src/ephy-window.c:1726
 #, c-format
 msgid "Bookmark link '%s'"
 msgstr "Dodaj do zakładek odnośnik \"%s\""
 
-#: ../src/ephy-window.c:1724
+#: ../src/ephy-window.c:1732
 #, c-format
 msgid "Copy link's address '%s'"
 msgstr "Skopiuj adres odnośnika \"%s\""
