@@ -307,7 +307,7 @@ AC_MSG_CHECKING([[for gecko version]])
 
 gecko_version=`cat $MOZILLA_INCLUDE_ROOT/mozilla-config.h | grep MOZILLA_VERSION_U | awk '{ print $[3]; }' | tr ".ab+" " "`
 if test -z "$gecko_version"; then
-	gecko_version="1.7"
+	gecko_version="1 7"
 fi
 
 gecko_version_major=`echo $gecko_version | awk '{ print $[1]; }'`
