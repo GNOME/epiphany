@@ -125,3 +125,21 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI, const nsAString & aTi
 	
 	return NS_OK;
 }
+
+#ifdef HAVE_GECKO_1_9
+/* unsigned long getURIGeckoFlags(in nsIURI aURI); */
+NS_IMETHODIMP
+GlobalHistory::GetURIGeckoFlags(nsIURI *aURI, PRUint32* aFlags)
+{
+#error Implement me!
+	return NS_ERROR_NOT_IMPLEMENTED:
+}
+
+/* void setURIGeckoFlags(in nsIURI aURI, in unsigned long aFlags); */
+NS_IMETHODIMP
+GlobalHistory::SetURIGeckoFlags(nsIURI *aURI, PRUint32 aFlags)
+{
+#error Implement me!
+	return NS_ERROR_NOT_IMPLEMENTED:
+}
+#endif /* HAVE_GECKO_1_9 */
