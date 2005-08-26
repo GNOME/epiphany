@@ -33,8 +33,8 @@ pref("helpers.private_mailcap_file", "");
 pref("helpers.global_mime_types_file", "");
 pref("helpers.private_mime_types_file", "");
 
-// use google for keywords
-pref("keyword.enabled", true);
+// disable keyword searches by default, see bug #158486
+pref("keyword.enabled", false);
 
 // disable usless security warnings
 pref("security.warn_entering_secure", false);
