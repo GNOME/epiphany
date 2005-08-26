@@ -777,7 +777,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 
 static gboolean
 ephy_window_delete_event (GtkWidget *widget,
-			  GdkEvent *event)
+			  GdkEventAny *event)
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
 	EphyWindowPrivate *priv = window->priv;
