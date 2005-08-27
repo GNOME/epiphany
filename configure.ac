@@ -267,6 +267,9 @@ dnl FIXME find a m4/autoconf guru who can distill this into a nice macro
 CPPFLAGS="-I$MOZILLA_INCLUDE_ROOT -I$MOZILLA_INCLUDE_ROOT/pipnss `$PKG_CONFIG --cflags-only-I $MOZILLA-xpcom`"
 CXXFLAGS="$_SAVE_CXXFLAGS $AM_CXXFLAGS `$PKG_CONFIG --cflags-only-other $MOZILLA-xpcom`"
 
+dnl Sigh Gentoo has a rubbish header layout
+CPPFLAGS="$CPPFLAGS -I$MOZILLA_INCLUDE_ROOT/dom"
+
 AC_MSG_CHECKING([[whether we have a gtk 2 mozilla build]])
 
 AC_RUN_IFELSE(
