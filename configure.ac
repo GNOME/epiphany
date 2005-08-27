@@ -435,20 +435,6 @@ CXXFLAGS=$_SAVE_CXXFLAGS
 
 AC_LANG_POP([C++])
 
-dnl Broken everywhere
-dnl Provide a configure switch for easy testing of *real* fixes in gtkmozembed
-
-AC_MSG_CHECKING([whether to work around broken gtkmozembed focus])
-AC_ARG_ENABLE([focus-fix],
-	AS_HELP_STRING([focus-fix],[Enable the workaround for the broken GtkMozEmbed focus handling (default: enabled)]),
-	[want_focus_fix=$enableval],
-	[want_focus_fix=yes])
-AC_MSG_RESULT([$want_focus_fix])
-
-if test "x$want_focus_fix" = "xyes"; then
-	AC_DEFINE([GTKMOZEMBED_BROKEN_FOCUS],[1],[Define if GtkMozEmbed has broken focus handling])
-fi
-
 dnl Needed since 1.8b2
 dnl Define this down here so it doesn't affect the API checks above
 

@@ -1329,7 +1329,7 @@ EphyBrowser::GetDocumentType ()
   return type;
 }
 
-#ifdef GTKMOZEMBED_BROKEN_FOCUS
+#ifndef HAVE_GECKO_1_8
 nsresult
 EphyBrowser::FocusActivate ()
 {
@@ -1345,4 +1345,4 @@ EphyBrowser::FocusDeactivate ()
 
 	return mWebBrowserFocus->Deactivate();
 }
-#endif /* GTKMOZEMBED_BROKEN_FOCUS */
+#endif /* !HAVE_GECKO_1_8 */

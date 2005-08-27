@@ -91,19 +91,19 @@ struct MozillaEmbedPrivate
 {
 	EphyBrowser *browser;
 	MozillaEmbedLoadState load_state;
-#ifdef GTKMOZEMBED_BROKEN_FOCUS
+#ifndef HAVE_GECKO_1_8
 	guint focus_connected : 1;
-#endif /* GTKMOZEMBED_BROKEN_FOCUS */
+#endif /* !HAVE_GECKO_1_8 */
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
 
 static GObjectClass *parent_class = NULL;
 
-#ifdef GTKMOZEMBED_BROKEN_FOCUS
+#ifndef HAVE_GECKO_1_8
 static guint fiesid = 0;
 static guint foesid = 0;
-#endif /* GTKMOZEMBED_BROKEN_FOCUS */
+#endif /* !HAVE_GECKO_1_8 */
 
 static void
 impl_manager_do_command (EphyCommandManager *manager,
@@ -200,7 +200,7 @@ mozilla_embed_grab_focus (GtkWidget *widget)
 	}
 }
 
-#ifdef GTKMOZEMBED_BROKEN_FOCUS
+#ifndef HAVE_GECKO_1_8
 static gboolean
 child_focus_in_event_cb (GtkWidget *child,
 			 GdkEventFocus *event,
@@ -220,7 +220,7 @@ child_focus_out_event_cb (GtkWidget *child,
 
 	return FALSE;
 }
-#endif /* GTKMOZEMBED_BROKEN_FOCUS */
+#endif /* !HAVE_GECKO_1_8 */
 
 static void
 mozilla_embed_realize (GtkWidget *widget)
@@ -238,7 +238,7 @@ mozilla_embed_realize (GtkWidget *widget)
 		return;
 	}
 
-#ifdef GTKMOZEMBED_BROKEN_FOCUS
+#ifndef HAVE_GECKO_1_8
 	/* HACK ALERT! This depends highly on undocumented interna of
 	 * GtkMozEmbed!
 	 *
@@ -290,7 +290,7 @@ mozilla_embed_realize (GtkWidget *widget)
 				 G_CONNECT_AFTER);
 
 	mpriv->focus_connected = TRUE;
-#endif /* GTKMOZEMBED_BROKEN_FOCUS */
+#endif /* !HAVE_GECKO_1_8 */
 }
 
 static GObject *
@@ -323,10 +323,10 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 	widget_class->grab_focus = mozilla_embed_grab_focus;
 	widget_class->realize = mozilla_embed_realize;
 
-#ifdef GTKMOZEMBED_BROKEN_FOCUS
+#ifndef HAVE_GECKO_1_8
 	fiesid = g_signal_lookup ("focus-in-event", GTK_TYPE_WIDGET);
 	foesid = g_signal_lookup ("focus-out-event", GTK_TYPE_WIDGET);
-#endif /* GTKMOZEMBED_BROKEN_FOCUS */
+#endif /* !HAVE_GECKO_1_8 */
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }

@@ -179,10 +179,10 @@ public:
 
         EphyEmbedDocumentType GetDocumentType ();
 
-#ifdef GTKMOZEMBED_BROKEN_FOCUS
+#ifndef HAVE_GECKO_1_8
 	nsresult FocusActivate ();
 	nsresult FocusDeactivate ();
-#endif
+#endif /* !HAVE_GECKO_1_8 */
 
 	nsCOMPtr<nsIWebBrowser> mWebBrowser;
 private:
