@@ -268,6 +268,7 @@ CPPFLAGS="-I$MOZILLA_INCLUDE_ROOT -I$MOZILLA_INCLUDE_ROOT/pipnss `$PKG_CONFIG --
 CXXFLAGS="$_SAVE_CXXFLAGS $AM_CXXFLAGS `$PKG_CONFIG --cflags-only-other $MOZILLA-xpcom`"
 
 dnl Sigh Gentoo has a rubbish header layout
+dnl http://bugs.gentoo.org/show_bug.cgi?id=100804
 CPPFLAGS="$CPPFLAGS -I$MOZILLA_INCLUDE_ROOT/dom"
 
 AC_MSG_CHECKING([[whether we have a gtk 2 mozilla build]])

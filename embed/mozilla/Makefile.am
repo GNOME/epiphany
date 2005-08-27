@@ -105,6 +105,10 @@ mozilla_include_subdirs = \
 	xpcom			\
 	xpconnect
 
+# Grr, damn gentoo has a dodgy header layout
+# http://bugs.gentoo.org/show_bug.cgi?id=100804
+mozilla_include_subdirs += find pref
+
 libephymozillaembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib	    		\
 	-I$(top_srcdir)/embed	    		\
