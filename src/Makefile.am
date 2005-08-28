@@ -133,7 +133,7 @@ NOINST_H_FILES += \
 	ephy-python-extension.h	\
 	ephy-python-loader.h
 
-PYPHANY_SOURCE = epiphany.c
+BUILT_PYPHANY_SOURCE = epiphany.c
 
 libpyphany_la_SOURCES = \
 	ephy-python.c		\
@@ -142,7 +142,7 @@ libpyphany_la_SOURCES = \
 	ephy-python-extension.h	\
 	ephy-python-loader.c	\
 	ephy-python-loader.h	\
-	$(PYPHANY_SOURCE)	\
+	$(BUILT_PYPHANY_SOURCE)	\
 	$(TYPES_SOURCE)
 
 libpyphany_la_CPPFLAGS = \
@@ -241,7 +241,7 @@ TYPES_SOURCE = \
 	ephy-type-builtins.h
 
 if ENABLE_PYTHON
-BUILT_SOURCES += $(PYPHANY_SOURCE)
+BUILT_SOURCES += $(BUILT_PYPHANY_SOURCE)
 endif
 
 stamp_files = \
