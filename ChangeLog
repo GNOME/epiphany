@@ -1,3 +1,17 @@
+2005-08-28  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* embed/ephy-history.c: (ephy_history_class_init),
+	(internal_get_host), (ephy_history_get_host),
+	(ephy_history_add_host), (ephy_history_add_page), (impl_add_page):
+	* embed/ephy-history.h:
+	* lib/ephy-marshal.list:
+
+	Add an "add-page" signal to the EphyHistory object that can be
+	used to block urls from appearing in the history. 
+
+	Also make the ephy_history_get_host() function not create
+	the EphyNode if it doesn't already exist.
+
 2005-08-28  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-notebook.c: (drag_stop), (grab_broken_event_cb),

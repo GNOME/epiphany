@@ -64,6 +64,8 @@ struct _EphyHistoryClass
         GObjectClass parent_class;
 
 	/* Signals */
+	gboolean (* add_page)	(EphyHistory *history,
+				 const char *url);
 	void	(* visited)	(EphyHistory *history,
 				 const char *url);
 	void	(* cleared)	(EphyHistory *history);

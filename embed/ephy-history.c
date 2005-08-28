@@ -69,6 +69,7 @@ enum
 
 enum
 {
+	ADD_PAGE,
 	VISITED,
 	CLEARED,
 	REDIRECT,
@@ -80,6 +81,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static void ephy_history_class_init	(EphyHistoryClass *klass);
 static void ephy_history_init		(EphyHistory *history);
 static void ephy_history_finalize	(GObject *object);
+static gboolean impl_add_page           (EphyHistory *histroy, const char *url);
 
 static GObjectClass *parent_class = NULL;
 
@@ -170,6 +172,8 @@ ephy_history_class_init (EphyHistoryClass *klass)
 	object_class->get_property = ephy_history_get_property;
 	object_class->set_property = ephy_history_set_property;
 
+	klass->add_page = impl_add_page;
+
 	g_object_class_install_property (object_class,
 					 PROP_ENABLED,
 					 g_param_spec_boolean ("enabled",
@@ -177,6 +181,17 @@ ephy_history_class_init (EphyHistoryClass *klass)
 							       "Enabled",
 							       TRUE,
 							       G_PARAM_READWRITE));
+
+	signals[ADD_PAGE] =
+		g_signal_new ("add_page",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyHistoryClass, add_page),
+			      g_signal_accumulator_true_handled, NULL,
+			      ephy_marshal_BOOLEAN__STRING,
+			      G_TYPE_BOOLEAN,
+			      1,
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 	signals[VISITED] =
                 g_signal_new ("visited",
@@ -657,18 +672,7 @@ ephy_history_host_visited (EphyHistory *eh,
 }
 
 static EphyNode *
-ephy_history_add_host (EphyHistory *eh, EphyNode *page)
-{
-	const char *url;
-
-	url = ephy_node_get_property_string
-		(page, EPHY_NODE_PAGE_PROP_LOCATION);
-
-	return ephy_history_get_host (eh, url);
-}
-
-EphyNode *
-ephy_history_get_host (EphyHistory *eh, const char *url)
+internal_get_host (EphyHistory *eh, const char *url, gboolean create)
 {
 	GnomeVFSURI *vfs_uri = NULL;
 	EphyNode *host = NULL;
@@ -740,7 +744,7 @@ ephy_history_get_host (EphyHistory *eh, const char *url)
 		if (host) break;
 	}
 
-	if (!host)
+	if (!host && create)
 	{
 		host = ephy_node_new (eh->priv->db);
 		ephy_node_signal_connect_object (host,
@@ -773,7 +777,10 @@ ephy_history_get_host (EphyHistory *eh, const char *url)
 		ephy_node_add_child (eh->priv->hosts, host);
 	}
 
-	ephy_history_host_visited (eh, host, now);
+	if (host)
+	{
+		ephy_history_host_visited (eh, host, now);
+	}
 
 	if (vfs_uri)
 	{
@@ -784,6 +791,23 @@ ephy_history_get_host (EphyHistory *eh, const char *url)
 	g_list_free (host_locations);
 
 	return host;
+}
+
+EphyNode *
+ephy_history_get_host (EphyHistory *eh, const char *url)
+{
+	return internal_get_host (eh, url, FALSE);
+}
+
+static EphyNode *
+ephy_history_add_host (EphyHistory *eh, EphyNode *page)
+{
+	const char *url;
+
+	url = ephy_node_get_property_string
+		(page, EPHY_NODE_PAGE_PROP_LOCATION);
+
+	return internal_get_host (eh, url, TRUE);
 }
 
 static void
@@ -857,22 +881,30 @@ ephy_history_get_page_visits (EphyHistory *gh,
 }
 
 void
-ephy_history_add_page (EphyHistory *eb,
+ephy_history_add_page (EphyHistory *eh,
 		       const char *url)
+{
+	gboolean result = FALSE;
+
+	g_signal_emit (eh, signals[ADD_PAGE], 0, url, &result);
+}
+
+static gboolean
+impl_add_page (EphyHistory *eb, const char *url)
 {
 	EphyNode *bm, *node, *host;
 	GValue value = { 0, };
 
 	if (eb->priv->enabled == FALSE)
 	{
-		return;
+		return FALSE;
 	}
 
 	node = ephy_history_get_page (eb, url);
 	if (node)
 	{
 		ephy_history_visited (eb, node);
-		return;
+		return TRUE;
 	}
 
 	bm = ephy_node_new (eb->priv->db);
@@ -897,6 +929,8 @@ ephy_history_add_page (EphyHistory *eb,
 
 	ephy_node_add_child (host, bm);
 	ephy_node_add_child (eb->priv->pages, bm);
+
+	return TRUE;
 }
 
 EphyNode *
