@@ -321,11 +321,8 @@ AC_MSG_RESULT([$gecko_version_major.$gecko_version_minor])
 
 if test "$gecko_version_major" = "1" -a "$gecko_version_minor" = "9"; then
 	AC_MSG_ERROR([Gecko 1.9 is not supported yet])
-	have_gecko_1_8=yes
 elif test "$gecko_version_major" = "1" -a "$gecko_version_minor" = "8"; then
-	have_gecko_1_8=yes
 elif test "$gecko_version_major" = "1" -a "$gecko_version_minor" = "7"; then
-	have_gecko_1_8=no
 else
 	AC_MSG_ERROR([Unsupported Gecko version $gecko_version_major.$gecko_version_minor])
 fi
