@@ -319,10 +319,7 @@ gecko_version_minor=`echo $gecko_version | awk '{ print $[2]; }'`
 
 AC_MSG_RESULT([$gecko_version_major.$gecko_version_minor])
 
-if test "$gecko_version_major" = "1" -a "$gecko_version_minor" = "9"; then
-	AC_MSG_ERROR([Gecko 1.9 is not supported yet])
-elif test "$gecko_version_major" != "1" ||
-     test "$gecko_version_minor" -lt "7" -o "$gecko_version_minor" -gt "8"; then
+if test "$gecko_version_major" != "1" -o "$gecko_version_minor" -lt "7" -o "$gecko_version_minor" -gt "8"; then
 	AC_MSG_ERROR([Unsupported Gecko version $gecko_version_major.$gecko_version_minor])
 fi
 
