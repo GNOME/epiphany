@@ -98,7 +98,7 @@ libephybookmarks_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libephybookmarks_la_CFLAGS = \
-	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
+	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CFLAGS)
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)

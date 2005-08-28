@@ -13,7 +13,8 @@ EXTRA_DIST = 			\
 	HACKING			\
 	MAINTAINERS		\
 	ChangeLog-20030925	\
-	ChangeLog-20040912
+	ChangeLog-20040912	\
+	ChangeLog-20050828
 
 DISTCLEANFILES = 		\
 	intltool-extract 	\

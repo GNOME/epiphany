@@ -122,7 +122,6 @@ libephymozillaembed_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libephymozillaembed_la_CXXFLAGS = \
-	$(MOZILLA_COMPONENT_CFLAGS)		\
-	$(EPIPHANY_DEPENDENCY_CFLAGS) 		\
+	$(GECKO_CFLAGS)		\
+	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CXXFLAGS)
-

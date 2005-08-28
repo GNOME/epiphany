@@ -28,5 +28,5 @@ libephywidgets_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libephywidgets_la_CFLAGS = \
-	$(EPIPHANY_DEPENDENCY_CFLAGS)	\
+	$(DEPENDENCIES_CFLAGS)	\
 	$(AM_CFLAGS)

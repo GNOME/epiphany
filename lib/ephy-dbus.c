@@ -113,11 +113,7 @@ session_filter_func (DBusConnection *connection,
 	EphyDbus *dbus = EPHY_DBUS (user_data);
 
 	if (dbus_message_is_signal (message,
-#ifdef HAVE_NEW_DBUS
 				    DBUS_INTERFACE_LOCAL,
-#else
-				    DBUS_INTERFACE_ORG_FREEDESKTOP_LOCAL,
-#endif
 				    "Disconnected"))
 	{
 		LOG ("EphyDbus disconnected from session bus");
@@ -147,11 +143,7 @@ system_filter_func (DBusConnection *connection,
 	LOG ("EphyDbus filtering message from system bus");
 
 	if (dbus_message_is_signal (message,
-#ifdef HAVE_NEW_DBUS
 				    DBUS_INTERFACE_LOCAL,
-#else
-				    DBUS_INTERFACE_ORG_FREEDESKTOP_LOCAL,
-#endif
 				    "Disconnected"))
 	{
 		LOG ("EphyDbus disconnected from system bus");
@@ -225,11 +217,7 @@ ephy_dbus_connect_to_session_bus (EphyDbus *dbus)
 
 	dbus_connection_add_filter (bus, session_filter_func, dbus, NULL);
 
-#ifdef HAVE_NEW_DBUS
 	dbus_bus_request_name (bus, epiphany_dbus_service, 0, NULL);
-#else
-	dbus_bus_acquire_service (bus, epiphany_dbus_service, 0, &error);
-#endif
 
 	if (dbus_error_is_set (&error)) {
 		g_warning ("EphyDbus failed to acquire epiphany service");
@@ -250,11 +238,7 @@ static void
 ephy_dbus_disconnect_bus (DBusConnection *bus)
 {
 	if (bus != NULL) {
-#ifdef HAVE_NEW_DBUS
 		dbus_connection_close (bus);
-#else
-		dbus_connection_disconnect (bus);
-#endif
 		dbus_connection_unref (bus);
 	}
 }

@@ -28,10 +28,12 @@ NOINST_H_FILES = \
 	ephy-zoom.h
 
 TYPES_H_FILES = \
+	ephy-dbus.h				\
 	ephy-node.h				\
 	ephy-state.h
 
 INST_H_FILES = \
+	ephy-dbus.h				\
 	ephy-dialog.h				\
 	ephy-loader.h				\
 	ephy-node.h				\
@@ -40,6 +42,7 @@ INST_H_FILES = \
 
 libephymisc_la_SOURCES = \
 	eel-gconf-extensions.c			\
+	ephy-dbus.c				\
 	ephy-debug.c				\
 	ephy-dialog.c				\
 	ephy-dnd.c				\
@@ -73,25 +76,12 @@ libephymisc_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libephymisc_la_CFLAGS = \
-        $(EPIPHANY_DEPENDENCY_CFLAGS)	\
+        $(DEPENDENCIES_CFLAGS)	\
+        $(DBUS_CFLAGS)		\
 	$(AM_CFLAGS)
 
-libephymisc_la_LIBADD =
-
-if ENABLE_DBUS
-INST_H_FILES += \
-	ephy-dbus.h
-
-TYPES_H_FILES += \
-	ephy-dbus.h
-
-libephymisc_la_SOURCES += \
-	ephy-dbus.c
-
-libephymisc_la_CFLAGS += $(DBUS_CFLAGS)
-
-libephymisc_la_LIBADD += $(DBUS_LIBS)
-endif
+libephymisc_la_LIBADD = \
+	$(DBUS_LIBS)
 
 BUILT_SOURCES = \
 	ephy-lib-type-builtins.c	\

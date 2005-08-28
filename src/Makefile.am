@@ -120,12 +120,10 @@ libephymain_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libephymain_la_CFLAGS = \
-	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
+	$(DEPENDENCIES_CFLAGS) 	\
+	$(BONOBO_CFLAGS)	\
+	$(DBUS_CFLAGS)		\
 	$(AM_CFLAGS)
-
-if ENABLE_DBUS
-libephymain_la_CFLAGS += $(DBUS_CFLAGS)
-endif
 
 if ENABLE_PYTHON
 NOINST_H_FILES += \
@@ -167,7 +165,7 @@ libpyphany_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libpyphany_la_CFLAGS = \
-	$(EPIPHANY_DEPENDENCY_CFLAGS)	\
+	$(DEPENDENCIES_CFLAGS)		\
 	$(NO_STRICT_ALIASING_CFLAGS)	\
 	$(PYGTK_CFLAGS)			\
 	$(AM_CFLAGS)
@@ -176,7 +174,8 @@ libpyphany_la_LDFLAGS = \
 	-export-symbols-regex ephy_python_init
 
 libpyphany_la_LIBADD = \
-	$(EPIPHANY_DEPENDENCY_LIBS)		\
+	$(DEPENDENCIES_LIBS)			\
+	$(BONOBO_LIBS)				\
 	$(PYTHON_LIB_LOC) $(PYTHON_LIBS)	\
 	$(PYTHON_EXTRA_LIBS)			\
 	$(PYGTK_LIBS)
@@ -193,7 +192,8 @@ epiphany_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 epiphany_CFLAGS = \
-	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
+	$(DEPENDENCIES_CFLAGS) 	\
+	$(BONOBO_LIBS)		\
 	$(AM_CFLAGS)
 
 epiphany_LDFLAGS = -R$(MOZILLA_HOME) -dlopen self
@@ -207,13 +207,11 @@ epiphany_LDADD = \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
-	$(MOZILLA_COMPONENT_LIBS)	\
-	$(EPIPHANY_DEPENDENCY_LIBS) \
+	$(GECKO_LIBS) \
+	$(DEPENDENCIES_LIBS) \
+	$(BONOBO_LIBS) \
+	$(DBUS_LIBS) \
 	$(INTLLIBS)
-
-if ENABLE_DBUS
-epiphany_LDADD += $(DBUS_LIBS)
-endif
 
 if ENABLE_PYTHON
 epiphany_LDADD += \
@@ -343,6 +341,7 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	embed/ephy-embed-find.h				\
 	embed/ephy-embed-prefs.h			\
 	embed/ephy-encodings.h				\
+	lib/ephy-dbus.h					\
 	lib/ephy-debug.h				\
 	lib/ephy-dnd.h					\
 	lib/ephy-file-chooser.h				\
@@ -403,11 +402,6 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	src/ephy-tabs-menu.h				\
 	src/ephy-toolbar-editor.h			\
 	src/ephy-toolbars-model.h
-
-if ENABLE_DBUS
-BINDING_HEADERS_SRCDIR_IGNORE_IN += \
-	lib/ephy-dbus.h
-endif
 
 BINDING_HEADERS_BUILDDIR_IN = \
 	embed/ephy-embed-type-builtins.h		\
