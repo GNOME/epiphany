@@ -1,3 +1,13 @@
+2005-08-28  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-notebook.c: (drag_stop), (grab_broken_event_cb),
+	(grab_notify_cb), (toplevel_motion_notify_cb),
+	(toplevel_button_release_cb), (drag_start), (motion_notify_cb),
+	(move_tab_to_another_notebook), (button_release_cb),
+	(button_press_cb):
+
+	Fix pointer grab lockup when gecko pops up a dialogue.
+
 2005-08-27  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* configure.ac:

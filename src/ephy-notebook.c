@@ -69,6 +69,10 @@ struct _EphyNotebookPrivate
 	GtkTooltips *title_tips;
 	guint tabs_vis_notifier_id;
 	gulong motion_notify_handler_id;
+	gulong grab_notify_handler_id;
+	gulong toplevel_grab_broken_handler_id;
+	gulong toplevel_motion_notify_handler_id;
+	gulong toplevel_button_release_handler_id;
 	int x_start;
 	int y_start;
 
@@ -83,6 +87,8 @@ static void ephy_notebook_finalize       (GObject *object);
 static void move_tab_to_another_notebook (EphyNotebook *src,
 			                  EphyNotebook *dest,
 					  GdkEventMotion *event,
+					  int dest_position);
+static void move_tab			 (EphyNotebook *notebook,
 					  int dest_position);
 
 /* Local variables */
@@ -436,42 +442,213 @@ ephy_notebook_move_tab (EphyNotebook *src,
 }
 
 static void
+drag_stop (EphyNotebook *notebook,
+	   guint32 time)
+{
+	EphyNotebookPrivate *priv = notebook->priv;
+	GtkWidget *widget = GTK_WIDGET (notebook);
+	GtkWidget *toplevel, *child;
+
+	if (priv->drag_in_progress)
+	{
+		LOG ("Drag Stop");
+
+		toplevel = gtk_widget_get_toplevel (widget);
+		g_return_if_fail (GTK_WIDGET_TOPLEVEL (toplevel));
+
+		child = gtk_bin_get_child (GTK_BIN (toplevel));
+		g_return_if_fail (child != NULL);
+
+		/* disconnect the signals before ungrabbing! */
+		if (priv->toplevel_grab_broken_handler_id != 0)
+		{
+			g_signal_handler_disconnect (toplevel,
+						     priv->toplevel_grab_broken_handler_id);
+			priv->toplevel_grab_broken_handler_id = 0;
+		}
+		if (priv->grab_notify_handler_id != 0)
+		{
+			g_signal_handler_disconnect (notebook,
+						     priv->grab_notify_handler_id);
+			priv->grab_notify_handler_id = 0;
+		}
+		if (priv->toplevel_motion_notify_handler_id != 0)
+		{
+			g_signal_handler_disconnect (toplevel,
+						     priv->toplevel_motion_notify_handler_id);
+			priv->toplevel_motion_notify_handler_id = 0;
+		}
+		if (priv->toplevel_button_release_handler_id != 0)
+		{
+			g_signal_handler_disconnect (toplevel,
+						     priv->toplevel_button_release_handler_id);
+			priv->toplevel_button_release_handler_id = 0;
+		}
+
+		/* ungrab the pointer if it's grabbed */
+		/* FIXME multihead */
+		if (gdk_pointer_is_grabbed ())
+		{
+			gdk_pointer_ungrab (time);
+		}
+
+		gtk_grab_remove (toplevel);
+
+		g_signal_emit (G_OBJECT (notebook), signals[TABS_REORDERED], 0);
+	}
+
+	if (priv->motion_notify_handler_id != 0)
+	{
+		g_signal_handler_disconnect (notebook,
+					     priv->motion_notify_handler_id);
+		priv->motion_notify_handler_id = 0;
+	}
+
+	priv->drag_in_progress = FALSE;
+}
+
+static gboolean
+grab_broken_event_cb (GtkWidget *widget,
+		      GdkEventGrabBroken *event,
+		      EphyNotebook *notebook)
+{
+	LOG ("Grab Broken [%p]", notebook);
+
+	drag_stop (notebook, GDK_CURRENT_TIME /* FIXME? */);
+
+	return FALSE;
+}
+
+static void
+grab_notify_cb (GtkWidget *widget,
+	        gboolean was_grabbed,
+	        EphyNotebook *notebook)
+{
+	LOG ("Grab Notify [%p, was-grabbed:%s]", notebook, was_grabbed ? "t" : "f");
+
+	drag_stop (notebook, GDK_CURRENT_TIME /* FIXME? */);
+}
+
+static gboolean
+toplevel_motion_notify_cb (GtkWidget *toplevel,
+			   GdkEventMotion *event,
+			   EphyNotebook *notebook)
+{
+	EphyNotebook *dest = NULL;
+	int page_num, result;
+
+	result = find_notebook_and_tab_at_pos ((gint)event->x_root,
+					       (gint)event->y_root,
+					       &dest, &page_num);
+
+	if (result != NOT_IN_APP_WINDOWS)
+	{
+		if (dest != notebook)
+		{
+			move_tab_to_another_notebook (notebook, dest,
+						      event, page_num);
+		}
+		else
+		{
+			g_assert (page_num >= -1);
+			move_tab (notebook, page_num);
+		}
+	}
+
+	return FALSE;
+}
+
+static gboolean
+toplevel_button_release_cb (GtkWidget *toplevel,
+			    GdkEventButton *event,
+			    EphyNotebook *notebook)
+{
+#ifndef KEEP_TAB_IN_SAME_TOPLEVEL
+	EphyNotebookPrivate *priv = notebook->priv;
+
+	if (priv->drag_in_progress)
+	{
+		gint cur_page_num;
+		GtkWidget *cur_page;
+
+		cur_page_num =
+			gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+		cur_page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
+						      cur_page_num);
+
+		if (!is_in_notebook_window (notebook, event->x_root, event->y_root)
+		    && gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) > 1)
+		{
+			/* Tab was detached */
+			g_signal_emit (G_OBJECT (notebook),
+				       signals[TAB_DETACHED], 0, cur_page);
+		}
+	}
+#endif
+
+	/* This must be called even if a drag isn't happening */
+	drag_stop (notebook, event->time);
+
+	return FALSE;
+}
+
+static gboolean
 drag_start (EphyNotebook *notebook,
 	    guint32 time)
 {
-	notebook->priv->drag_in_progress = TRUE;
+	EphyNotebookPrivate *priv = notebook->priv;
+	GtkWidget *widget = GTK_WIDGET (notebook);
+	GtkWidget *toplevel, *child;
+
+	/* FIXME multihead */
+	if (priv->drag_in_progress || gdk_pointer_is_grabbed ()) return FALSE;
+
+	LOG ("Drag Start");
+
+	priv->drag_in_progress = TRUE;
 
 	/* get a new cursor, if necessary */
 	/* FIXME multi-head */
 	if (!cursor) cursor = gdk_cursor_new (GDK_FLEUR);
 
+	toplevel = gtk_widget_get_toplevel (widget);
+	g_return_val_if_fail (GTK_WIDGET_TOPLEVEL (toplevel), FALSE);
+
+	child = gtk_bin_get_child (GTK_BIN (toplevel));
+	g_return_val_if_fail (child != NULL, FALSE);
+
 	/* grab the pointer */
-	gtk_grab_add (GTK_WIDGET (notebook));
+	gtk_grab_add (toplevel);
+
 	/* FIXME multi-head */
-	if (!gdk_pointer_is_grabbed ())
+	if (gdk_pointer_grab (toplevel->window,
+			      FALSE,
+			      GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+			      NULL, cursor, time) != GDK_GRAB_SUCCESS)
 	{
-		gdk_pointer_grab (GTK_WIDGET (notebook)->window,
-				  FALSE,
-				  GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
-				  NULL, cursor, time);
-	}
-}
-
-static void
-drag_stop (EphyNotebook *notebook)
-{
-	if (notebook->priv->drag_in_progress)
-	{
-		g_signal_emit (G_OBJECT (notebook), signals[TABS_REORDERED], 0);
+		drag_stop (notebook, time);
+		return FALSE;
 	}
 
-	notebook->priv->drag_in_progress = FALSE;
-	if (notebook->priv->motion_notify_handler_id != 0)
-	{
-		g_signal_handler_disconnect (G_OBJECT (notebook),
-					     notebook->priv->motion_notify_handler_id);
-		notebook->priv->motion_notify_handler_id = 0;
-	}
+	g_return_val_if_fail (priv->toplevel_grab_broken_handler_id == 0, FALSE);
+	g_return_val_if_fail (priv->toplevel_motion_notify_handler_id == 0, FALSE);
+	g_return_val_if_fail (priv->toplevel_button_release_handler_id == 0, FALSE);
+	g_return_val_if_fail (priv->grab_notify_handler_id == 0, FALSE);
+
+	priv->toplevel_grab_broken_handler_id =
+		g_signal_connect (toplevel, "grab-broken-event",
+				  G_CALLBACK (grab_broken_event_cb), notebook);
+	priv->toplevel_motion_notify_handler_id =
+		g_signal_connect (toplevel, "motion-notify-event",
+				  G_CALLBACK (toplevel_motion_notify_cb), notebook);
+	priv->toplevel_button_release_handler_id =
+		g_signal_connect (toplevel, "button-release-event",
+				  G_CALLBACK (toplevel_button_release_cb), notebook);
+	priv->grab_notify_handler_id =
+		g_signal_connect (notebook, "grab-notify",
+				  G_CALLBACK (grab_notify_cb), notebook);
+
+	return TRUE;
 }
 
 /* this function is only called during dnd, we don't need to emit TABS_REORDERED
@@ -502,40 +679,19 @@ motion_notify_cb (EphyNotebook *notebook,
 		  GdkEventMotion *event,
 		  gpointer data)
 {
-	EphyNotebook *dest;
-	gint page_num;
-	gint result;
+	EphyNotebookPrivate *priv = notebook->priv;
 
-	if (notebook->priv->drag_in_progress == FALSE)
+	if (priv->drag_in_progress == FALSE)
 	{
 		if (gtk_drag_check_threshold (GTK_WIDGET (notebook),
 					      notebook->priv->x_start,
 					      notebook->priv->y_start,
 					      event->x_root, event->y_root))
 		{
-			drag_start (notebook, event->time);
-			return TRUE;
+			return drag_start (notebook, event->time);
 		}
 
 		return FALSE;
-	}
-
-	result = find_notebook_and_tab_at_pos ((gint)event->x_root,
-					       (gint)event->y_root,
-					       &dest, &page_num);
-
-	if (result != NOT_IN_APP_WINDOWS)
-	{
-		if (dest != notebook)
-		{
-			move_tab_to_another_notebook (notebook, dest,
-						      event, page_num);
-		}
-		else
-		{
-			g_assert (page_num >= -1);
-			move_tab (notebook, page_num);
-		}
 	}
 
 	return FALSE;
@@ -566,13 +722,8 @@ move_tab_to_another_notebook (EphyNotebook *src,
 	tab = EPHY_TAB (gtk_notebook_get_nth_page (GTK_NOTEBOOK (src), cur_page));
 
 	/* stop drag in origin window */
-	/* ungrab the pointer if it's grabbed */
-	drag_stop (src);
-	if (gdk_pointer_is_grabbed ())
-	{
-		gdk_pointer_ungrab (event->time);
-	}
-	gtk_grab_remove (GTK_WIDGET (src));
+	 */
+	drag_stop (src, event->time);
 
 	ephy_notebook_move_tab (src, dest, tab, dest_position);
 
@@ -593,36 +744,8 @@ button_release_cb (EphyNotebook *notebook,
 		   GdkEventButton *event,
 		   gpointer data)
 {
-	if (notebook->priv->drag_in_progress)
-	{
-		gint cur_page_num;
-		GtkWidget *cur_page;
-
-		cur_page_num =
-			gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
-		cur_page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
-						      cur_page_num);
-
-#ifndef KEEP_TAB_IN_SAME_TOPLEVEL
-		if (!is_in_notebook_window (notebook, event->x_root, event->y_root)
-		    && gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) > 1)
-		{
-			/* Tab was detached */
-			g_signal_emit (G_OBJECT (notebook),
-				       signals[TAB_DETACHED], 0, cur_page);
-		}
-#endif
-
-		/* ungrab the pointer if it's grabbed */
-		if (gdk_pointer_is_grabbed ())
-		{
-			gdk_pointer_ungrab (event->time);
-		}
-		gtk_grab_remove (GTK_WIDGET (notebook));
-	}
-
 	/* This must be called even if a drag isn't happening */
-	drag_stop (notebook);
+	drag_stop (notebook, event->time);
 
 	return FALSE;
 }
@@ -632,6 +755,7 @@ button_press_cb (EphyNotebook *notebook,
 		 GdkEventButton *event,
 		 gpointer data)
 {
+	EphyNotebookPrivate *priv = notebook->priv;
 	int tab_clicked;
 
 	if (!notebook->priv->dnd_enabled) return FALSE;
@@ -647,11 +771,10 @@ button_press_cb (EphyNotebook *notebook,
 	if ((event->button == 1) && (event->type == GDK_BUTTON_PRESS)
 	    && (tab_clicked >= 0))
 	{
-		notebook->priv->x_start = event->x_root;
-		notebook->priv->y_start = event->y_root;
-		notebook->priv->motion_notify_handler_id =
-			g_signal_connect (G_OBJECT (notebook),
-					  "motion-notify-event",
+		priv->x_start = event->x_root;
+		priv->y_start = event->y_root;
+		priv->motion_notify_handler_id =
+			g_signal_connect (notebook, "motion-notify-event",
 					  G_CALLBACK (motion_notify_cb), NULL);
 	}
 	else if (GDK_BUTTON_PRESS == event->type && 3 == event->button)
