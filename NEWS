@@ -264,6 +264,125 @@ Liu Songhe (zh_CN) and Ching-Hung Lin (zh_TW).
 
 
 ==============
+Epiphany 1.6.5
+==============
+
+Changes
+
+	* Fix a mem leak
+	* Work around broken mime detection which cannot detect that a .ico file from content
+	* Fix signed/unsigned confusion (gcc4 fixes)
+	* Update list of mime types
+	* Fix default printer name [#301730]
+	* Also ellipsise the menu entries in the toolbar overflow menu
+	* Don't crash in case a desktop file is not found
+	* Fix a crash when deactivating a dead menu [part of #309918]
+	* Fix setting homepage to current page [#311962]
+	* Fix focus bug [#105153]
+
+Updated translations:
+
+	* Priit Laes (et)
+	* Ganesh Ghimire (ne)
+
+
+==============
+Epiphany 1.6.4
+==============
+
+Changes
+
+	* Fix for mozilla API change on trunk
+	* Fix filepicker configure check
+	* Fix crash in toolbar editor with X composite extension [#159767]
+	* Don't use chrome URLs in the session [#301044]
+	* Update list of mime types
+	* Automatically detect whether we have a mozilla debug build
+	* Adapt to new DBUS API [#301153]
+	* Allow View Source for XML documents [#305788]
+	* Fix getting the trust setting from New CA dialogue
+	* Work around mozilla bug https://bugzilla.mozilla.org/show_bug.cgi?id=296002 by
+ 	   disallowing tabs moves to a different window [#303922]
+	* Fix more signed/unsigned problems with gcc 4 [#306169]
+	* Fix context menu on image maps [#152482]
+	* Fix crash on exit with only downloader open [#151037]
+	* Preserve session when shutting down while resuming the session
+	* Fix a refcount leak in the persist object
+	* Comply with gtk-button-images setting [#307818]
+
+Contributors to this release: Colin Gibbs, Martin Kretzschmar,
+Thom May, Christian Persch, Jean-François Rameau, and Raphaël Slinckx.
+
+Updated translations:
+
+	* Vladimir Petkov (bg)
+	* Ignacio Casal Quinteiro (gl)
+	* Afonso Celso Medina (pt_BR)
+	* Christian Rose (sv)
+	* Ching-Hung Lin (zh_TW)
+
+
+==============
+Epiphany 1.6.3
+==============
+
+Changes
+
+	* Fix crash when trying to download [#301093]
+	* Fix rare crash on 64-bit archs
+	* Some constification [#301065]
+	* Corectly restore width and height of restored popup windows [#155395]
+	* Adapt to mozilla API change on trunk
+	* Fix for pkg-config problem [#300452]
+
+Contributors to this release:
+Paolo Borelli, James Henstridge, Christian Persch and Sjoerd Simons, and the
+translators Vladimir Petkov (bg), Gabor Kelemen (hu), Steve Murphy (rw) and
+Clytie Siddall (vi).
+
+
+==============
+Epiphany 1.6.2
+==============
+
+Changes
+
+	* Fix toolbar activation [#172694]
+	* Adapt to mozilla API change on trunk
+
+Translation updates
+
+	* Francisco Javier F. Serrador (es)
+	* Pauli Virtanen (fi)
+	* tunggul arif siswoyo (id)
+	* Changwoo Ryu (ko)
+	* GNOME PL Team (pl)
+	* Laurent Dhima (sq)
+	* Данило Шеган (sr, sr@Latn)
+
+
+==============
+Epiphany 1.6.1
+==============
+
+	* Use libstartup-notification, not gnome-desktop to launch apps [#169039]
+	* Disable automatic image resizing on toolkit too
+	* Fix a crash on window close with active toolbar activation
+	* Fix tabs menu crash [#169833]
+	* Fix tabs label sizing [#167657]
+	* Default to links only with the fixed-up typeaheadfind too
+	* Adapt to mozilla API changes
+	* Fix automatically opened downloads [#171197]
+	* Revise mime type list [#170493]
+
+Contributors to this release:
+Christian Persch and Jean-François Rameau, and the translators
+Hendrik Richter (de), Adam Weinberger (en_CA), Francesco Marletta (it),
+Takeshi AIHANA (ja), Steve Murphy (rw), Erçin EKER (tr), and
+Ching-Hung Lin (zh_TW).
+
+
+==============
 Epiphany 1.6.0
 ==============
 
@@ -784,6 +903,20 @@ Translation updates
 	* Marcel Telka (sk)
 	* Laurent Dhima (sq)
 	* Danilo Segan (sr)
+
+
+==============
+Epiphany 1.4.9
+==============
+
+Changes
+
+	* Fix several focus issues (some with security implications)
+	* Fix crash when updating tray icon
+	* Fix lock up with the move cursor showing
+	* Fix some leaks
+	* Fix getting the trust setting from New CA dialogue
+	* Don't activate the location entry if it's hidden
 
 
 ==============
