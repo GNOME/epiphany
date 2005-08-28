@@ -25,7 +25,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
-EPIPHANY_MAJOR=1.7
+EPIPHANY_MAJOR=1.8
 AC_SUBST([EPIPHANY_MAJOR])
 
 AM_INIT_AUTOMAKE([1.8 dist-bzip2 no-dist-gzip check-news])
