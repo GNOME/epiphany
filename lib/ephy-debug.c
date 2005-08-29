@@ -23,7 +23,9 @@
 #include "ephy-debug.h"
 
 #include <string.h>
+#ifdef HAVE_EXECINFO_H
 #include <execinfo.h>
+#endif
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
