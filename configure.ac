@@ -133,6 +133,9 @@ dnl ******************
 
 AC_CHECK_FUNCS([mkdtemp])
 
+dnl for backtrace()
+AC_CHECK_HEADERS([execinfo.h])
+
 dnl Check for -Wdeclaration-after-statement (since gcc 3.4)
 
 if test "x$enable_maintainer_mode" = "xyes"; then
