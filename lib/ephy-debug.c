@@ -109,11 +109,15 @@ trap_handler (const char *log_domain,
 		}
 		else if (strcmp (ephy_debug_break, "stack") == 0)
 		{
+#ifdef HAVE_EXECINFO_H
 			void *array[MAX_DEPTH];
 			size_t size;
 			
 			size = backtrace (array, MAX_DEPTH);
 			backtrace_symbols_fd (array, size, 2);
+#else
+			g_on_error_stack_trace (g_get_prgname ());
+#endif /* HAVE_EXECINFO_H */
 		}
 		else if (strcmp (ephy_debug_break, "trap") == 0)
 		{
