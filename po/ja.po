@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-12 15:51+0900\n"
-"PO-Revision-Date: 2005-08-12 15:48+0900\n"
+"POT-Creation-Date: 2005-08-30 17:44+0900\n"
+"PO-Revision-Date: 2005-08-30 17:40+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -126,13 +126,13 @@ msgstr "Epiphany をフルスクリーン・モードにロックします。"
 msgid "Browse the web"
 msgstr "ウェブを閲覧します"
 
-#: ../data/epiphany.desktop.in.h:2 ../src/window-commands.c:779
+#: ../data/epiphany.desktop.in.h:2
 msgid "Epiphany Web Browser"
 msgstr "Epiphany ウェブ・ブラウザ"
 
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.h:3 ../src/ephy-main.c:222
-#: ../src/ephy-main.c:233
+#: ../src/ephy-main.c:233 ../src/window-commands.c:779
 msgid "Web Browser"
 msgstr "GNOME ウェブ・ブラウザ"
 
@@ -569,7 +569,7 @@ msgstr "クッキー"
 msgid "Download Manager"
 msgstr "ダウンロード・マネージャ"
 
-#: ../data/glade/epiphany.glade.h:6 ../src/ephy-window.c:1119
+#: ../data/glade/epiphany.glade.h:6 ../src/ephy-window.c:1127
 msgid "Find"
 msgstr "検索"
 
@@ -836,11 +836,12 @@ msgstr ""
 "%s\n"
 "%s / %s"
 
-#: ../embed/downloader-view.c:426 ../src/ephy-window.c:1298
+#: ../embed/downloader-view.c:425 ../embed/downloader-view.c:430
+#: ../src/ephy-window.c:1306
 msgid "Unknown"
 msgstr "不明"
 
-#: ../embed/downloader-view.c:460
+#: ../embed/downloader-view.c:464
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -849,25 +850,25 @@ msgstr[1] "%d 個ダウンロード"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:575 ../embed/downloader-view.c:588
+#: ../embed/downloader-view.c:579 ../embed/downloader-view.c:592
 msgid "download status|Unknown"
 msgstr "不明"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:580
+#: ../embed/downloader-view.c:584
 msgid "download status|Failed"
 msgstr "失敗"
 
-#: ../embed/downloader-view.c:642 ../src/bookmarks/ephy-bookmarks-editor.c:877
+#: ../embed/downloader-view.c:646 ../src/bookmarks/ephy-bookmarks-editor.c:877
 msgid "File"
 msgstr "ファイル"
 
-#: ../embed/downloader-view.c:664
+#: ../embed/downloader-view.c:668
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:675
+#: ../embed/downloader-view.c:679
 msgid "Remaining"
 msgstr "残り"
 
@@ -1254,15 +1255,15 @@ msgstr "ウクライナ語"
 msgid "Unknown (%s)"
 msgstr "不明 (%s)"
 
-#: ../embed/ephy-history.c:527
+#: ../embed/ephy-history.c:542
 msgid "All"
 msgstr "全て"
 
-#: ../embed/ephy-history.c:701
+#: ../embed/ephy-history.c:705
 msgid "Others"
 msgstr "その他"
 
-#: ../embed/ephy-history.c:707
+#: ../embed/ephy-history.c:711
 msgid "Local files"
 msgstr "ローカル・ファイル"
 
@@ -1298,7 +1299,7 @@ msgstr ""
 
 #: ../embed/mozilla/ContentHandler.cpp:343
 msgid "Open this file?"
-msgstr "このファイルを開きまか？"
+msgstr "このファイルを開きますか？"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
@@ -1862,7 +1863,7 @@ msgstr ""
 "このページはセキュアな接続を介して読み込まれていますが、入力した情報はセキュ"
 "アではない接続を介して送信され、第三者から簡単に傍受される恐れがあります。"
 
-#: ../embed/mozilla/MozDownload.cpp:694
+#: ../embed/mozilla/MozDownload.cpp:718
 msgid "Files"
 msgstr "ファイル"
 
@@ -1880,7 +1881,7 @@ msgstr "ファイル"
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:583
+#: ../embed/mozilla/mozilla-embed-single.cpp:582
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "現在、Epiphany は利用できません。Mozilla の初期化に失敗しました。"
 
@@ -1917,7 +1918,7 @@ msgstr "終了(_T):"
 msgid "Sets the end of the range of pages to be printed"
 msgstr "印刷する終了ページを指定して下さい"
 
-#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1115
+#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1123
 msgid "Print"
 msgstr "印刷"
 
@@ -1961,38 +1962,38 @@ msgstr "%s は存在します。別の場所に移動して下さい。"
 msgid "Failed to create directory %s."
 msgstr "フォルダ %s を作成できませんでした。"
 
-#: ../lib/ephy-gui.c:214
+#: ../lib/ephy-gui.c:329
 #, c-format
 msgid "Directory %s is not writable"
 msgstr "フォルダ %s は書き込み可能ではありません"
 
-#: ../lib/ephy-gui.c:218
+#: ../lib/ephy-gui.c:333
 msgid "You do not have permission to create files in this directory."
 msgstr "このフォルダの中にファイルを生成するための権限がありません。"
 
-#: ../lib/ephy-gui.c:221
+#: ../lib/ephy-gui.c:336
 msgid "Directory not writable"
 msgstr "フォルダは書き込み不可"
 
-#: ../lib/ephy-gui.c:251
+#: ../lib/ephy-gui.c:366
 #, c-format
 msgid "File %s is not writable"
 msgstr "ファイル %s は書き込み可能ではありません"
 
-#: ../lib/ephy-gui.c:255
+#: ../lib/ephy-gui.c:370
 msgid "You do not have permission to overwrite this file."
 msgstr "このファイルを上書きするための権限がありません。"
 
-#: ../lib/ephy-gui.c:257
+#: ../lib/ephy-gui.c:372
 msgid "File not writable"
 msgstr "ファイルは書き込み不可"
 
-#: ../lib/ephy-gui.c:279
+#: ../lib/ephy-gui.c:394
 #, c-format
 msgid "Overwrite \"%s\"?"
 msgstr "\"%s\" を上書きしますか？"
 
-#: ../lib/ephy-gui.c:283
+#: ../lib/ephy-gui.c:398
 msgid ""
 "A file with this name already exists. If you choose to overwrite this file, "
 "the contents will be lost."
@@ -2000,15 +2001,15 @@ msgstr ""
 "同名のファイルが存在します。このファイルを上書きすると、その内容が失われま"
 "す。"
 
-#: ../lib/ephy-gui.c:287
+#: ../lib/ephy-gui.c:402
 msgid "_Overwrite"
 msgstr "上書きする(_O)"
 
-#: ../lib/ephy-gui.c:289
+#: ../lib/ephy-gui.c:404
 msgid "Overwrite File?"
 msgstr "ファイルの上書き？"
 
-#: ../lib/ephy-gui.c:325
+#: ../lib/ephy-gui.c:440
 #, c-format
 msgid "Could not display help: %s"
 msgstr "ヘルプを表示できませんでした: %s"
@@ -2183,7 +2184,7 @@ msgstr "履歴"
 
 #: ../lib/ephy-stock-icons.c:59 ../src/bookmarks/ephy-bookmarks-editor.c:759
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1630
-#: ../src/bookmarks/ephy-topic-action.c:967 ../src/ephy-window.c:1121
+#: ../src/bookmarks/ephy-topic-action.c:967 ../src/ephy-window.c:1129
 msgid "Bookmarks"
 msgstr "ブックマーク"
 
@@ -2746,23 +2747,23 @@ msgstr "別のエンコーディングを選択します"
 msgid "_Automatic"
 msgstr "自動(_A)"
 
-#: ../src/ephy-find-toolbar.c:404
+#: ../src/ephy-find-toolbar.c:437
 msgid "Find:"
 msgstr "検索:"
 
-#: ../src/ephy-find-toolbar.c:420 ../src/ephy-find-toolbar.c:421
+#: ../src/ephy-find-toolbar.c:453 ../src/ephy-find-toolbar.c:454
 msgid "Find Next"
 msgstr "次を検索"
 
-#: ../src/ephy-find-toolbar.c:424
+#: ../src/ephy-find-toolbar.c:457
 msgid "Find next occurrence of the search string"
 msgstr "前方に出現する文字列を検索します"
 
-#: ../src/ephy-find-toolbar.c:431 ../src/ephy-find-toolbar.c:432
+#: ../src/ephy-find-toolbar.c:464 ../src/ephy-find-toolbar.c:465
 msgid "Find Previous"
 msgstr "前を検索"
 
-#: ../src/ephy-find-toolbar.c:435
+#: ../src/ephy-find-toolbar.c:468
 msgid "Find previous occurrence of the search string"
 msgstr "後方に出現する文字列を検索します"
 
@@ -2890,7 +2891,7 @@ msgstr "指定されたファイルからブックマークをインポートす
 msgid "Launch the bookmarks editor"
 msgstr "ブックマーク・エディタを起動する"
 
-#: ../src/ephy-notebook.c:970
+#: ../src/ephy-notebook.c:1093
 msgid "Close tab"
 msgstr "タブを閉じます"
 
@@ -2958,7 +2959,7 @@ msgstr ""
 "Bonobo がオートメーション・オブジェクトの場所を特定する際に予期しないエラーが"
 "発生したため、現在、Epiphany は利用できません。"
 
-#: ../src/ephy-tab.c:483 ../src/ephy-tab.c:2238
+#: ../src/ephy-tab.c:483 ../src/ephy-tab.c:2234
 msgid "Blank page"
 msgstr "空のページ"
 
@@ -2972,22 +2973,22 @@ msgstr "\"%s\" の読み込み中..."
 msgid "Loading..."
 msgstr "読み込み中..."
 
-#: ../src/ephy-tab.c:1621
+#: ../src/ephy-tab.c:1617
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "%s へリダイレクト中..."
 
-#: ../src/ephy-tab.c:1625
+#: ../src/ephy-tab.c:1621
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "%s からデータの転送中..."
 
-#: ../src/ephy-tab.c:1629
+#: ../src/ephy-tab.c:1625
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "%s からの認証待ちです..."
 
-#: ../src/ephy-tab.c:1637
+#: ../src/ephy-tab.c:1633
 #, c-format
 msgid "Loading %s..."
 msgstr "%s の読み込み中..."
@@ -3554,92 +3555,92 @@ msgstr "いずれにしろドキュメントを閉じると、その情報は失
 msgid "Close _Document"
 msgstr "ドキュメントを閉じる(_D)"
 
-#: ../src/ephy-window.c:1111 ../src/window-commands.c:357
+#: ../src/ephy-window.c:1119 ../src/window-commands.c:357
 msgid "Open"
 msgstr "開く"
 
-#: ../src/ephy-window.c:1113 ../src/window-commands.c:383
+#: ../src/ephy-window.c:1121 ../src/window-commands.c:383
 msgid "Save As"
 msgstr "別名で保存(_A)..."
 
-#: ../src/ephy-window.c:1117
+#: ../src/ephy-window.c:1125
 msgid "Bookmark"
 msgstr "ブックマーク"
 
-#: ../src/ephy-window.c:1301
+#: ../src/ephy-window.c:1309
 msgid "Insecure"
 msgstr "セキュアでない"
 
-#: ../src/ephy-window.c:1306
+#: ../src/ephy-window.c:1314
 msgid "Broken"
 msgstr "壊れています"
 
-#: ../src/ephy-window.c:1314
+#: ../src/ephy-window.c:1322
 msgid "Low"
 msgstr "低"
 
-#: ../src/ephy-window.c:1321
+#: ../src/ephy-window.c:1329
 msgid "High"
 msgstr "高"
 
-#: ../src/ephy-window.c:1330
+#: ../src/ephy-window.c:1338
 #, c-format
 msgid "Security level: %s"
 msgstr "セキュリティのレベル: %s"
 
-#: ../src/ephy-window.c:1370
+#: ../src/ephy-window.c:1378
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d 個のポップアップ・ウィンドウを隠す"
 msgstr[1] "%d 個のポップアップ・ウィンドウを隠す"
 
-#: ../src/ephy-window.c:1652
+#: ../src/ephy-window.c:1660
 #, c-format
 msgid "Save background image '%s'"
 msgstr "この背景画像 '%s' を保存します"
 
-#: ../src/ephy-window.c:1666
+#: ../src/ephy-window.c:1674
 #, c-format
 msgid "Open image '%s'"
 msgstr "この画像 '%s' を開きます"
 
-#: ../src/ephy-window.c:1671
+#: ../src/ephy-window.c:1679
 #, c-format
 msgid "Use as desktop background '%s'"
 msgstr "この画像 '%s' をデスクトップの背景にセットします"
 
-#: ../src/ephy-window.c:1676
+#: ../src/ephy-window.c:1684
 #, c-format
 msgid "Save image '%s'"
 msgstr "画像 '%s' を保存します"
 
-#: ../src/ephy-window.c:1681
+#: ../src/ephy-window.c:1689
 #, c-format
 msgid "Copy image address '%s'"
 msgstr "画像のアドレス '%s' をコピーします"
 
-#: ../src/ephy-window.c:1694
+#: ../src/ephy-window.c:1702
 #, c-format
 msgid "Send email to address '%s'"
 msgstr "アドレス '%s' へ E-メールを送信します"
 
-#: ../src/ephy-window.c:1700
+#: ../src/ephy-window.c:1708
 #, c-format
 msgid "Copy email address '%s'"
 msgstr "E-メール・アドレス '%s' をコピーします"
 
-#: ../src/ephy-window.c:1712
+#: ../src/ephy-window.c:1720
 #, c-format
 msgid "Save link '%s'"
 msgstr "リンク先 '%s' を保存します"
 
-#: ../src/ephy-window.c:1718
+#: ../src/ephy-window.c:1726
 #, c-format
 msgid "Bookmark link '%s'"
 msgstr "リンク先 '%s' をブックマークに追加します"
 
-#: ../src/ephy-window.c:1724
+#: ../src/ephy-window.c:1732
 #, c-format
 msgid "Copy link's address '%s'"
 msgstr "リンク先のアドレス '%s' をコピーします"
