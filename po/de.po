@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-29 18:37+0200\n"
-"PO-Revision-Date: 2005-08-29 18:52+0200\n"
+"POT-Creation-Date: 2005-08-31 15:34+0200\n"
+"PO-Revision-Date: 2005-08-31 15:59+0200\n"
 "Last-Translator: Hendrik Richter <hendi@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1339,6 +1339,10 @@ msgid ""
 "\n"
 "You have no application able to open \"%s\". You can download it instead."
 msgstr ""
+"Dateityp: %s.\n"
+"\n"
+"Es ist keine Anwendung zum Öffnen von »%s« installiert. Sie können die Datei "
+"jedoch herunterladen."
 
 #: ../embed/mozilla/ContentHandler.cpp:369
 msgid "_Save As..."
@@ -1348,44 +1352,51 @@ msgstr "_Speichern unter..."
 #: ../embed/mozilla/EphyAboutModule.cpp:184
 #, c-format
 msgid "“%s” protocol is not supported."
-msgstr ""
+msgstr "Das »%s«-Protokoll wird nicht unterstützt."
 
 #. FIXME: get the list of supported protocols from necko
 #: ../embed/mozilla/EphyAboutModule.cpp:186
 msgid ""
 "Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
 msgstr ""
+"Unterstützte Protokolle sind »http«, »https«, »ftp«, »file«, »smb« und "
+"»sftp«."
 
 #. Translators: %s is the path and filename, for example "/home/user/test.html"
 #: ../embed/mozilla/EphyAboutModule.cpp:195
 #, c-format
 msgid "File “%s” not found."
-msgstr ""
+msgstr "Datei »%s« konnte nicht gefunden werden."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:196
 msgid "Check the location of the file and try again."
 msgstr ""
+"Überprüfen Sie den Ort der Datei und versuchen Sie es anschließend erneut."
 
 #. Translators: %s is the hostname, like "www.example.com"
 #: ../embed/mozilla/EphyAboutModule.cpp:204
 #, c-format
 msgid "“%s” could not be found."
-msgstr ""
+msgstr "»%s« konnte nicht gefunden werden."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:206
 msgid ""
 "Check that you are connected to the internet, and that the address is "
 "correct."
 msgstr ""
+"Stellen Sie sicher, dass Sie mit dem Internet verbunden sind und die "
+"Adresse korrekt ist."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:208
 msgid "If this page used to exist, you may find an archived version:"
 msgstr ""
+"Sofern diese Seite existierte können Sie möglicherweise eine archivierte "
+"Version aufrufen:"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:217
 #, c-format
 msgid "“%s” refused the connection."
-msgstr ""
+msgstr "»%s« hat den Verbindungsaufbau abgelehnt."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:219
 #: ../embed/mozilla/EphyAboutModule.cpp:232
@@ -1396,6 +1407,8 @@ msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
 msgstr ""
+"Möglicherweise ist der Server ausgelastet oder es existiert ein Problem mit "
+"Ihrer Netzwerkverbindung. Versuchen Sie es bitte später erneut."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:221
 #: ../embed/mozilla/EphyAboutModule.cpp:234
@@ -1404,12 +1417,12 @@ msgstr ""
 #: ../embed/mozilla/EphyAboutModule.cpp:293
 #: ../embed/mozilla/EphyAboutModule.cpp:318
 msgid "There may be an old version of the page you wanted:"
-msgstr ""
+msgstr "Möglicherweise existiert eine ältere Version der gewünschten Seite:"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:230
 #, c-format
 msgid "“%s” interrupted the connection."
-msgstr ""
+msgstr "»%s« hat die Verbindung unterbrochen."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:243
 #, c-format
@@ -1418,7 +1431,9 @@ msgstr "»%s« antwortet nicht."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:245
 msgid "The connection was lost because the server took too long to respond."
-msgstr "Die Verbindung wurde unterbrochen da der Server zu lang mit einer Antwort wartete."
+msgstr ""
+"Die Verbindung wurde unterbrochen da der Server zu lang mit einer Antwort "
+"wartete."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:253
 msgid "Invalid address."
@@ -1442,57 +1457,68 @@ msgstr "Die Weiterleitung wurde aus Sicherheitsgründen unterbunden."
 msgid "“%s” requires an encrypted connection."
 msgstr "»%s« benötigt eine verschlüsselte Verbindung."
 
+# CHECK
 #: ../embed/mozilla/EphyAboutModule.cpp:277
 msgid ""
 "The document could not be loaded because encryption support is not installed."
 msgstr ""
+"Die Seite konnte nicht geladen werden da keine Unterstützung für "
+"verschlüsselte Verbindungen installiert ist."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:287
 #, c-format
 msgid "“%s” dropped the connection."
-msgstr ""
+msgstr "»%s« hat die Verbindung abgebrochen."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:289
 #: ../embed/mozilla/EphyAboutModule.cpp:314
 msgid "The server dropped the connection before any data could be read."
 msgstr ""
+"Der Server hat die Verbindung abgebrochen, bevor Daten empfangen wurden."
 
+# CHECK
 #: ../embed/mozilla/EphyAboutModule.cpp:297
 msgid "Cannot load document in offline mode."
-msgstr ""
+msgstr "Diese Seite kann nicht angezeigt werden, während Sie offline sind."
 
+# CHECK
 #: ../embed/mozilla/EphyAboutModule.cpp:298
 msgid ""
 "This document cannot be viewed in offline mode. Set Epiphany to “online” and "
 "try again."
 msgstr ""
+"Dieses Seite kann nicht angezeigt werden, während Sie offline sind. Wechseln "
+"Sie in den »Online«-Modus und versuchen Sie es erneut."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:312
 #, c-format
 msgid "“%s” denied access to port “%d”."
-msgstr ""
+msgstr "»%s« hat den Zugriff auf Port »%d« verweigert."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:323
 msgid "Could not connect to proxy server."
-msgstr ""
+msgstr "Verbindung zum Proxy-Server ist gescheitert."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:324
 msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
 msgstr ""
+"Überprüfen Sie die Einstellungen zu Ihrem Proxy-Server. Funktioniert die "
+"Verbindung weiterhin nicht so existiert möglicherweise ein Problem mit Ihrem "
+"Proxy-Server oder Ihrer Netzwerkverbindung."
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/mozilla/EphyAboutModule.cpp:462
 msgid "You may find an old version:|in the Google Cache"
-msgstr ""
+msgstr "im Google-Cache"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/mozilla/EphyAboutModule.cpp:470
 msgid "You may find an old version:|in the Internet Archive"
-msgstr ""
+msgstr "im Internet-Archiv"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:321
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
@@ -1904,11 +1930,11 @@ msgstr ""
 
 #: ../embed/print-dialog.c:275
 msgid "Generating PDF is not supported"
-msgstr ""
+msgstr "Das Erstellen von PDF-Dokumenten wird nicht unterstützt"
 
 #: ../embed/print-dialog.c:282
 msgid "Printing is not supported on this printer"
-msgstr ""
+msgstr "Drucken wird von diesem Drucker nicht unterstützt"
 
 #: ../embed/print-dialog.c:285
 #, c-format
@@ -1916,6 +1942,8 @@ msgid ""
 "You were trying to print to a printer using the \"%s\" driver. This program "
 "requires a PostScript printer driver."
 msgstr ""
+"Sie versuchten mittels des »%s«-Treibers zu drucken. Dieses Programm "
+"benötigt einen PostScript-Druckertreiber."
 
 #: ../embed/print-dialog.c:392
 msgid "_From:"
@@ -1923,7 +1951,7 @@ msgstr "_Von:"
 
 #: ../embed/print-dialog.c:405
 msgid "Sets the start of the range of pages to be printed"
-msgstr ""
+msgstr "Legt den Anfang des zu druckenden Bereichs fest"
 
 #: ../embed/print-dialog.c:407
 msgid "_To:"
@@ -1931,7 +1959,7 @@ msgstr "_Bis:"
 
 #: ../embed/print-dialog.c:420
 msgid "Sets the end of the range of pages to be printed"
-msgstr ""
+msgstr "Legt das Ende des zu druckenden Bereichs fest"
 
 #: ../embed/print-dialog.c:435 ../src/ephy-window.c:1123
 msgid "Print"
@@ -2316,10 +2344,10 @@ msgstr "T_hemen:"
 msgid "_Show in bookmarks bar"
 msgstr "In der Lesezeichenleiste _anzeigen"
 
+#CHECK
 #: ../src/bookmarks/ephy-bookmarks-editor.c:140
-#, fuzzy
 msgid "Remove from this topic"
-msgstr "Soll dieses Thema gelöscht werden?"
+msgstr "Von diesem Thema entfernen?"
 
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:170
@@ -2884,14 +2912,12 @@ msgid "Sites"
 msgstr "Seiten"
 
 #: ../src/ephy-main.c:59
-#, fuzzy
 msgid "Open a new tab in an existing window"
-msgstr "Einen neuen Reiter in einem bestehenden Epiphany-Fenster öffnen"
+msgstr "Einen neuen Reiter in einem bestehenden Fenster öffnen"
 
 #: ../src/ephy-main.c:62
-#, fuzzy
 msgid "Run in full screen mode"
-msgstr "Epiphany im Vollbild-Modus ausführen"
+msgstr "Vollbild-Modus verwenden"
 
 #: ../src/ephy-main.c:65
 msgid "Load the given session file"
@@ -2989,14 +3015,13 @@ msgstr "Leere Seite"
 
 #. translators: %s here is the address of the web page
 #: ../src/ephy-tab.c:911
-#, fuzzy, c-format
+#, c-format
 msgid "Loading “%s”..."
 msgstr "%s wird geladen..."
 
 #: ../src/ephy-tab.c:915
-#, fuzzy
 msgid "Loading..."
-msgstr "%s wird geladen..."
+msgstr "Laden..."
 
 #: ../src/ephy-tab.c:1617
 #, c-format
@@ -3087,11 +3112,10 @@ msgid "List of upper levels"
 msgstr "Liste höherer Ebenen"
 
 #: ../src/ephy-toolbar.c:327
-#, fuzzy
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr ""
-"Geben Sie eine zu öffnende Website oder einen Begriff ein, nach dem das Web "
-"durchsucht werden soll"
+"Geben Sie eine zu öffnende Website oder einen Begriff ein, nach dem gesucht "
+"werden soll"
 
 #: ../src/ephy-toolbar.c:343
 msgid "Zoom"
@@ -3433,9 +3457,8 @@ msgid "_Work Offline"
 msgstr "_Offline arbeiten"
 
 #: ../src/ephy-window.c:286
-#, fuzzy
 msgid "Switch to offline mode"
-msgstr "Zu diesem Reiter wechseln"
+msgstr "In den Offline-Modus wechseln"
 
 #. View Menu
 #: ../src/ephy-window.c:291
@@ -3820,16 +3843,15 @@ msgstr "Schauen Sie sich das an!"
 
 #: ../src/window-commands.c:757 ../src/window-commands.c:773
 msgid "Contact us at:"
-msgstr ""
+msgstr "Kontakt:"
 
 #: ../src/window-commands.c:760
 msgid "Contributors:"
-msgstr ""
+msgstr "Mitwirkende:"
 
 #: ../src/window-commands.c:764
-#, fuzzy
 msgid "Past developers:"
-msgstr "_Software-Entwickler"
+msgstr "Frühere Entwickler:"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
