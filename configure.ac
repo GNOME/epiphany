@@ -208,10 +208,10 @@ fi
 AC_MSG_RESULT([$gecko])
 
 case "$gecko" in
-mozilla) min_version=1.7.5 flavour=mozilla ;;
+mozilla) min_version=1.7.9 flavour=mozilla ;;
 seamonkey) min_version=1.0 flavour=mozilla ;;
-*firefox) min_version=1.0 flavour=toolkit ;;
-*thunderbird) min_version=1.0 flavour=toolkit ;;
+*firefox) min_version=1.0.5 flavour=toolkit ;;
+*thunderbird) min_version=1.0.5 flavour=toolkit ;;
 esac
 
 MOZILLA=$gecko
