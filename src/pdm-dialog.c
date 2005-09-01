@@ -907,7 +907,8 @@ show_cookies_properties (PdmDialog *dialog,
 			       -1, -1, FALSE,
 			       EPHY_STATE_WINDOW_SAVE_SIZE | EPHY_STATE_WINDOW_SAVE_POSITION);
 	gtk_dialog_set_has_separator (GTK_DIALOG(gdialog), FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER(gdialog), 6);
+	gtk_container_set_border_width (GTK_CONTAINER (gdialog), 5);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (gdialog)->vbox), 2);
 
 	table = gtk_table_new (2, 4, FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);

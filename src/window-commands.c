@@ -776,7 +776,7 @@ window_cmd_help_about (GtkAction *action,
 	};
 
 	gtk_show_about_dialog (GTK_WINDOW (window),
-			       "name", _("Web Browser"),
+			       "name", _("GNOME Web Browser"),
 			       "version", VERSION,
 			       "copyright", "Copyright © 2002-2004 Marco Pesenti Gritti\n"
 					    "Copyright © 2003-2005 The GNOME Web Browser Developers",
