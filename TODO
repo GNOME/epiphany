@@ -11,12 +11,11 @@ Stuff to port to new glib/gtk+ APIs:
 - port Downloads directory button in prefs to GtkFileChooserButton
   (but wait for bugs #154388, #154390, #154392, #154394)
 - port to confirm-overwrite signal of GtkFileChooser
+- use GtkStatusIcon instead of EggStatusIcon
+- use g_intern_static_string for static type name registrations
+  and g_object_set_data
 
 Stuff to do when dropping support for mozilla < 1.7:
 - use dependent strings
 - use gtk_moz_embed_set_app_components
-
-================
-
-- Rename "Unicode" to "Other languages/scripts" in Fonts prefs.
 
