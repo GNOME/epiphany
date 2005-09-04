@@ -41,9 +41,8 @@ fi
 
 AC_PROG_INTLTOOL([0.29])
 
-GLIB_REQUIRED=2.7.0
-PANGO_REQUIRED=1.8.0
-GTK_REQUIRED=2.6.3
+GLIB_REQUIRED=2.8.0
+GTK_REQUIRED=2.8.3
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
 LIBGLADE_REQUIRED=2.3.1
@@ -84,7 +83,6 @@ fi
 
 PKG_CHECK_MODULES([EPIPHANY_DEPENDENCY], [\
 		  glib-2.0 >= $GLIB_REQUIRED \
-		  pango >= $PANGO_REQUIRED \
 		  gtk+-2.0 >= $GTK_REQUIRED \
 		  libxml-2.0 >= $LIBXML_REQUIRED \
 		  libxslt >= $LIBXSLT_REQUIRED \
@@ -312,7 +310,7 @@ dnl and not the Gecko version
 
 AC_MSG_CHECKING([[for gecko version]])
 
-gecko_version=`cat $MOZILLA_INCLUDE_ROOT/mozilla-config.h | grep MOZILLA_VERSION_U | awk '{ print $[3]; }' | tr ".ab+" " "`
+gecko_version=`cat $MOZILLA_INCLUDE_ROOT/mozilla-config.h | grep 'MOZILLA_VERSION ' | awk '{ print $[3]; }' | tr "\".ab+" " "`
 if test -z "$gecko_version"; then
 	gecko_version="1 7"
 fi
@@ -610,7 +608,7 @@ EOF
 fi
 
 if test "x$have_python" != "xno"; then
-	PYGTK_REQUIRED=2.6.0
+	PYGTK_REQUIRED=2.7.1
 	GNOME_PYTHON_REQUIRED=2.6.0
 
 	PKG_CHECK_MODULES([PYGTK], [pygtk-2.0 >= $PYGTK_REQUIRED gnome-python-2.0 >= $GNOME_PYTHON_REQUIRED],
