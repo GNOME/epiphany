@@ -129,17 +129,46 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI, const nsAString & aTi
 #ifdef HAVE_GECKO_1_9
 /* unsigned long getURIGeckoFlags(in nsIURI aURI); */
 NS_IMETHODIMP
-GlobalHistory::GetURIGeckoFlags(nsIURI *aURI, PRUint32* aFlags)
+MozGlobalHistory::GetURIGeckoFlags(nsIURI *aURI, PRUint32* aFlags)
 {
-#error Implement me!
-	return NS_ERROR_NOT_IMPLEMENTED:
+	nsEmbedCString spec;
+	aURI->GetSpec(spec);
+
+	EphyNode *page = ephy_history_get_page (mGlobalHistory, spec.get());
+
+	GValue value = { 0, };
+	if (page != NULL &&
+	    ephy_node_get_property (page, EPHY_NODE_PAGE_PROP_GECKO_FLAGS, &value))
+	{
+		*aFlags = (PRUint32) (gulong) g_value_get_long (&value);
+		g_value_unset (&value);
+
+		return NS_OK;
+	}
+
+	return NS_ERROR_FAILURE;
 }
 
 /* void setURIGeckoFlags(in nsIURI aURI, in unsigned long aFlags); */
 NS_IMETHODIMP
-GlobalHistory::SetURIGeckoFlags(nsIURI *aURI, PRUint32 aFlags)
+MozGlobalHistory::SetURIGeckoFlags(nsIURI *aURI, PRUint32 aFlags)
 {
-#error Implement me!
-	return NS_ERROR_NOT_IMPLEMENTED:
+	nsEmbedCString spec;
+	aURI->GetSpec(spec);
+
+	EphyNode *page = ephy_history_get_page (mGlobalHistory, spec.get());
+	if (page != NULL)
+	{
+		GValue value = { 0, };
+
+		g_value_init (&value, G_TYPE_LONG);
+		g_value_set_long (&value, (long) (gulong) aFlags);
+		ephy_node_set_property (page, EPHY_NODE_PAGE_PROP_GECKO_FLAGS, &value);
+		g_value_unset (&value);
+
+		return NS_OK;
+	}
+
+	return NS_ERROR_FAILURE;
 }
 #endif /* HAVE_GECKO_1_9 */
