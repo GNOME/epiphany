@@ -155,7 +155,7 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 	
 	const GnomePrintUnit *unit, *inch, *mm;
 	double value;
-	
+
 	mm = gnome_print_unit_get_by_abbreviation ((const guchar *) "mm");
 	inch = gnome_print_unit_get_by_abbreviation ((const guchar *) "in");
 	g_assert (mm != NULL && inch != NULL);
@@ -251,6 +251,15 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 	options->SetPaperSize (nsIPrintSettings::kPaperSizeDefined);
 	options->SetPaperSizeUnit (nsIPrintSettings::kPaperSizeMillimeters);
 
+	/* NOTE: Due to completely braindead mozilla code, the paper
+	 * dimensions aren't actually used. We have to set the paper name,
+	 * and only 6 papers formats are accepted
+	 * (A3, A4, A5, Letter, Legal, Executive).
+	 *
+	 * See http://lxr.mozilla.org/seamonkey/source/gfx/src/ps/nsPostScriptObj.cpp#301 and
+	 * http://lxr.mozilla.org/seamonkey/source/gfx/src/psshared/nsPaperPS.cpp#46 .
+	 */
+#if 0
 	if (gnome_print_config_get_length (info->config,
 					   (const guchar *) GNOME_PRINT_KEY_PAPER_WIDTH,
 					   &value, &unit)
@@ -266,13 +275,38 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 	{
 		options->SetPaperHeight (value);	
 	}
-	
+#endif
+
+	/* Gnome-Print names some papers differently than what moz understands */
+	static const struct
+	{
+		const char *gppaper;
+		const char *mozpaper;
+	}
+	paper_table [] =
+	{
+		{ "USLetter", "Letter" },
+		{ "USLegal", "Legal" }
+	};
+
 	char *string;
 
 	/* paper name */
 	string = (char *) gnome_print_config_get (info->config,
 						  (const guchar *) GNOME_PRINT_KEY_PAPER_SIZE);
-	NS_CStringToUTF16 (nsEmbedCString(string),
+
+	const char *paper = string;
+	for (PRUint32 i = 0; i < G_N_ELEMENTS (paper_table); i++)
+	{
+		if (string != NULL &&
+		    g_ascii_strcasecmp (paper_table[i].gppaper, string) == 0)
+		{
+			paper = paper_table[i].mozpaper;
+			break;
+		}
+	}
+
+	NS_CStringToUTF16 (nsEmbedCString(paper),
 			   NS_CSTRING_ENCODING_UTF8, tmp);
 	options->SetPaperName (tmp.get());
 	g_free (string);
