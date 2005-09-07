@@ -259,7 +259,6 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 	 * See http://lxr.mozilla.org/seamonkey/source/gfx/src/ps/nsPostScriptObj.cpp#301 and
 	 * http://lxr.mozilla.org/seamonkey/source/gfx/src/psshared/nsPaperPS.cpp#46 .
 	 */
-#if 0
 	if (gnome_print_config_get_length (info->config,
 					   (const guchar *) GNOME_PRINT_KEY_PAPER_WIDTH,
 					   &value, &unit)
@@ -275,7 +274,6 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 	{
 		options->SetPaperHeight (value);	
 	}
-#endif
 
 	/* Gnome-Print names some papers differently than what moz understands */
 	static const struct
