@@ -65,6 +65,7 @@
 #include "nsIDOMMouseEvent.h"
 #include "nsIDOMNSEvent.h"
 #include "nsIDOMEventTarget.h"
+#include "nsIDOMNSEventTarget.h"
 #include "nsIDOMPopupBlockedEvent.h"
 #include "nsIDOMNode.h"
 #include "nsIDOMElement.h"
@@ -117,13 +118,6 @@ NS_IMPL_ISUPPORTS1(EphyEventListener, nsIDOMEventListener)
 NS_IMETHODIMP
 EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 {
-	/* make sure the event is trusted */
-	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
-	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
-	PRBool isTrusted = PR_FALSE;
-	nsEvent->GetIsTrusted (&isTrusted);
-	if (!isTrusted) return NS_OK;
-
 	nsCOMPtr<nsIDOMEventTarget> eventTarget;
 	aDOMEvent->GetTarget(getter_AddRefs(eventTarget));
 
@@ -283,13 +277,6 @@ EphyDOMContentLoadedEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 {
 	LOG ("DOMContentLoaded event fired up");
 
-	/* make sure the event is trusted */
-	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
-	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
-	PRBool isTrusted = PR_FALSE;
-	nsEvent->GetIsTrusted (&isTrusted);
-	if (!isTrusted) return NS_OK;
-
 	g_signal_emit_by_name (mOwner->mEmbed, "dom_content_loaded", (gpointer)aDOMEvent);
 
 	return NS_OK;
@@ -320,13 +307,6 @@ EphyDOMLinkEventListener::GetDocURI (nsIDOMElement *aElement,
 NS_IMETHODIMP
 EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 {
-	/* make sure the event is trusted */
-	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
-	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
-	PRBool isTrusted = PR_FALSE;
-	nsEvent->GetIsTrusted (&isTrusted);
-	if (!isTrusted) return NS_OK;
-
 	nsCOMPtr<nsIDOMPopupBlockedEvent> popupEvent =
 		do_QueryInterface (aDOMEvent);
 	NS_ENSURE_TRUE (popupEvent, NS_ERROR_FAILURE);
@@ -361,13 +341,6 @@ EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 {
 	NS_ENSURE_TRUE (mOwner, NS_ERROR_FAILURE);
 
-	/* make sure the event is trusted */
-	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
-	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
-	PRBool isTrusted = PR_FALSE;
-	nsEvent->GetIsTrusted (&isTrusted);
-	if (!isTrusted) return NS_OK;
-
 	nsresult rv;
 	nsEmbedString type;
 	rv = aDOMEvent->GetType (type);
@@ -401,14 +374,7 @@ EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 NS_IMETHODIMP
 EphyDOMScrollEventListener::HandleEvent (nsIDOMEvent * aEvent)
 {
-	/* make sure the event is trusted */
 	nsresult rv;
-	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aEvent, &rv));
-	NS_ENSURE_SUCCESS (rv, rv);
-	PRBool isTrusted = PR_FALSE;
-	nsEvent->GetIsTrusted (&isTrusted);
-	if (!isTrusted) return NS_OK;
-
 	nsCOMPtr<nsIDOMMouseEvent> mouseEvent (do_QueryInterface (aEvent, &rv));
 	NS_ENSURE_SUCCESS (rv, rv);
 		
@@ -658,20 +624,23 @@ EphyBrowser::AttachListeners(void)
 	NS_ENSURE_TRUE (mEventTarget, NS_ERROR_FAILURE);
 
 	nsresult rv;
-	rv = mEventTarget->AddEventListener(nsEmbedString(kDOMLinkAdded),
-					    mDOMLinkEventListener, PR_FALSE);
-	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMContentLoaded),
-					     mDOMContentLoadedEventListener, PR_FALSE);
-	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMMouseScroll),
-					     mDOMScrollEventListener, PR_TRUE); /* capture */
-	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMPopupBlocked),
-					     mPopupBlockEventListener, PR_FALSE);
-	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMWillOpenModalDialog),
-					     mModalAlertListener, PR_TRUE);
-	rv |= mEventTarget->AddEventListener(nsEmbedString(kDOMModalDialogClosed),
-					     mModalAlertListener, PR_TRUE);
-	rv |= mEventTarget->AddEventListener(nsEmbedString(kContextMenu),
-					     mContextMenuListener, PR_TRUE /* capture */);
+	nsCOMPtr<nsIDOMNSEventTarget> target (do_QueryInterface (mEventTarget, &rv));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	rv = target->AddEventListener(nsEmbedString(kDOMLinkAdded),
+				      mDOMLinkEventListener, PR_FALSE, PR_FALSE);
+	rv |= target->AddEventListener(nsEmbedString(kDOMContentLoaded),
+				       mDOMContentLoadedEventListener, PR_FALSE, PR_FALSE);
+	rv |= target->AddEventListener(nsEmbedString(kDOMMouseScroll),
+				       mDOMScrollEventListener, PR_TRUE /* capture */, PR_FALSE);
+	rv |= target->AddEventListener(nsEmbedString(kDOMPopupBlocked),
+				       mPopupBlockEventListener, PR_FALSE, PR_FALSE);
+	rv |= target->AddEventListener(nsEmbedString(kDOMWillOpenModalDialog),
+				       mModalAlertListener, PR_TRUE, PR_FALSE);
+	rv |= target->AddEventListener(nsEmbedString(kDOMModalDialogClosed),
+				       mModalAlertListener, PR_TRUE, PR_FALSE);
+	rv |= target->AddEventListener(nsEmbedString(kContextMenu),
+				       mContextMenuListener, PR_TRUE /* capture */, PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	return NS_OK;
