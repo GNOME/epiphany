@@ -82,6 +82,11 @@ EphySingle::Detach ()
 		mObserverService->RemoveObserver (this, "perm-changed");
 		mObserverService->RemoveObserver (this, "signonChanged");
 		mObserverService->RemoveObserver (this, "network:offline-status-changed");
+
+#if 1
+		/* HACK: Work around https://bugzilla.mozilla.org/show_bug.cgi?id=292699 */
+		mObserverService->NotifyObservers(nsnull, "profile-change-net-teardown", nsnull); 
+#endif
 	}
 
 	return NS_OK;
