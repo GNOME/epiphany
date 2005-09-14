@@ -793,6 +793,7 @@ window_cmd_help_about (GtkAction *action,
 			       "translator-credits", _("translator-credits"),
 			       "logo-icon-name", "web-browser",
 			       "website", "http://www.gnome.org/projects/epiphany",
+			       "website-label", _("GNOME Web Browser Website"),
 			       NULL);
 }
 
