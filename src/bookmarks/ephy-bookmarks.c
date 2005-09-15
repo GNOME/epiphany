@@ -1343,6 +1343,24 @@ impl_resolve_address (EphyBookmarks *eb,
 
 	if (address == NULL) return NULL;
 
+	/* The entered search term is empty "" */
+	if (content == NULL || content[0] == '\0')
+	{
+		GnomeVFSURI *uri = gnome_vfs_uri_new (address);
+		if (uri != NULL)
+		{
+			char *real_address = g_strconcat (
+					gnome_vfs_uri_get_scheme (uri),
+					"://",
+					gnome_vfs_uri_get_host_name (uri),
+					NULL);
+			gnome_vfs_uri_unref (uri);
+			
+			return real_address;
+		}
+	}
+	
+	/* Either there was a search term, or gnome-vfs URI had a problem */
 	if (content == NULL) content = "";
 
 	result = g_string_new_len (NULL, strlen (content) + strlen (address));
