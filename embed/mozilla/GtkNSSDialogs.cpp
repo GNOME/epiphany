@@ -204,9 +204,12 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
                           gboolean *checkbox_value,
 			  const char *affirmative_text)
 {
-	GtkWidget *dialog, *label, *checkbox, *vbox;
+	GtkWidget *dialog, *label, *checkbox, *vbox, *button;
 	int res;
 
+	/* NOTE: Due to a mozilla bug [https://bugzilla.mozilla.org/show_bug.cgi?id=306288],
+	 * we will always end up without a parent!
+	 */
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
 
@@ -240,9 +243,9 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 		affirmative_text = _("_Accept");
 	}
 
-	gtk_dialog_add_button (GTK_DIALOG (dialog), 
-			       affirmative_text,
-			       GTK_RESPONSE_ACCEPT);
+	button = gtk_dialog_add_button (GTK_DIALOG (dialog), 
+					affirmative_text,
+					GTK_RESPONSE_ACCEPT);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
         if (checkbox_text)
@@ -257,6 +260,9 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	{
 		checkbox = 0;
 	}
+
+	/* We don't want focus on the checkbox */
+	gtk_widget_grab_focus (button);
 
 	gtk_label_set_markup (GTK_LABEL (label), markup_text);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
