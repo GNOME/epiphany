@@ -289,6 +289,7 @@ ephy_toolbar_editor_constructor (GType type,
 			       GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
 			       GTK_STOCK_HELP, GTK_RESPONSE_HELP);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
 
 	gtk_widget_show (editor);
 	
