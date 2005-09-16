@@ -305,83 +305,77 @@ ephy_bookmark_action_sync_label (GtkAction *gaction,
 }
 
 static void
-open_in_tab_activate_cb (GtkWidget *widget,
-			 EphyBookmarkAction *action)
+bookmark_activate_with_flags (GtkWidget *widget,
+				EphyBookmarkAction *action,
+				EphyLinkFlags flags)
 {
 	EphyBookmarkActionPrivate *priv = action->priv;
 	EphyBookmarks *bookmarks;
 	const char *location;
-	char *address;
+	char *address = NULL, *text = NULL;
 
 	g_return_if_fail (priv->node != NULL);
 
 	location = ephy_node_get_property_string
 			(priv->node, EPHY_NODE_BMK_PROP_LOCATION);
 	g_return_if_fail (location != NULL);
-
+	
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
-	address = ephy_bookmarks_resolve_address (bookmarks, location, NULL);
-	g_return_if_fail (address != NULL);
-
-	ephy_link_open (EPHY_LINK (action), address, NULL,
-			EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
-
-	g_free (address);
-}
-
-static void
-open_in_window_activate_cb (GtkWidget *widget, EphyBookmarkAction *action)
-{
-	EphyBookmarkActionPrivate *priv = action->priv;
-	EphyBookmarks *bookmarks;
-	const char *location;
-	char *address;
-
-	g_return_if_fail (priv->node != NULL);
-
-	location = ephy_node_get_property_string
-			(priv->node, EPHY_NODE_BMK_PROP_LOCATION);
-	g_return_if_fail (location != NULL);
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
-	address = ephy_bookmarks_resolve_address (bookmarks, location, NULL);
-	g_return_if_fail (address != NULL);
-
-	ephy_link_open (EPHY_LINK (action), address, NULL, EPHY_LINK_NEW_WINDOW);
-
-	g_free (address);
-}
-
-static void
-activate_cb (GtkWidget *widget,
-	     EphyBookmarkAction *action)
-{
-	EphyBookmarkActionPrivate *priv = action->priv;
-	EphyBookmarks *bookmarks;
-	const char *location;
-	char *address, *text = NULL;
-
-	g_return_if_fail (priv->node != NULL);
-
-	location = ephy_node_get_property_string
-			(priv->node, EPHY_NODE_BMK_PROP_LOCATION);
-	g_return_if_fail (location != NULL);
-
+	
 	if (GTK_IS_EDITABLE (widget))
 	{
 		text = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
 	}
+	
+	/* The entered search term is empty, and we have a smart bookmark */
+	if ((text == NULL || text[0] == '\0') && strstr (location, "%s") != NULL)
+	{
+		GnomeVFSURI *uri = gnome_vfs_uri_new (location);
+		if (uri != NULL)
+		{
+			address = g_strconcat (
+					gnome_vfs_uri_get_scheme (uri),
+					"://",
+					gnome_vfs_uri_get_host_name (uri),
+					NULL);
+			gnome_vfs_uri_unref (uri);
+		}
+	}
 
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
-
-	address = ephy_bookmarks_resolve_address (bookmarks, location, text);
+	if (address == NULL)
+	{
+		address = ephy_bookmarks_resolve_address (bookmarks, location, text);
+	}
 	g_return_if_fail (address != NULL);
 
-	ephy_link_open (EPHY_LINK (action), address, NULL,
-			ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
+	ephy_link_open (EPHY_LINK (action), address, NULL, flags);
 
 	g_free (address);
 	g_free (text);
+}
+
+static void
+open_in_tab_activate_cb (GtkWidget *widget,
+			 EphyBookmarkAction *action)
+{
+	bookmark_activate_with_flags(widget, action,
+			EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
+}
+
+static void
+open_in_window_activate_cb (GtkWidget *widget,
+			EphyBookmarkAction *action)
+{
+	bookmark_activate_with_flags(widget, action,
+			EPHY_LINK_NEW_WINDOW);
+}
+
+static void
+activate_cb (GtkWidget *widget,
+	     	EphyBookmarkAction *action)
+{
+	bookmark_activate_with_flags(widget, action,
+			ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
 }
 
 static void
