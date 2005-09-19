@@ -1583,9 +1583,9 @@ idle_unref_context_event (EphyWindow *window)
 	return FALSE;
 }
 
-static void
-set_context_event (EphyWindow *window,
-		   EphyEmbedEvent *event)
+void
+_ephy_window_set_context_event (EphyWindow *window,
+				EphyEmbedEvent *event)
 {
 	EphyWindowPrivate *priv = window->priv;
 
@@ -1603,9 +1603,24 @@ set_context_event (EphyWindow *window,
 	priv->context_event = event != NULL ? g_object_ref (event) : NULL;
 }
 
+void
+_ephy_window_unset_context_event (EphyWindow *window)
+{
+	EphyWindowPrivate *priv = window->priv;
+
+	/* Unref the event from idle since we still need it
+	 * from the action callbacks which will run before idle.
+	 */
+	if (priv->idle_worker == 0 && priv->context_event != NULL)
+	{
+		priv->idle_worker =
+			g_idle_add ((GSourceFunc) idle_unref_context_event, window);
+	}
+}
+
 static void
 embed_popup_deactivate_cb (GtkWidget *popup,
-		          EphyWindow *window)
+			   EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
 
@@ -1615,15 +1630,8 @@ embed_popup_deactivate_cb (GtkWidget *popup,
 
 	g_signal_handlers_disconnect_by_func
 		(popup, G_CALLBACK (embed_popup_deactivate_cb), window);
-	
-	/* Unref the event from idle since we still need it
-	 * from the action callbacks which will run before idle.
-	 */
-	if (priv->idle_worker == 0 && priv->context_event != NULL)
-	{
-		priv->idle_worker =
-			g_idle_add ((GSourceFunc) idle_unref_context_event, window);
-	}
+
+	_ephy_window_unset_context_event (window);
 }
 
 static char *
@@ -1825,7 +1833,7 @@ show_embed_popup (EphyWindow *window,
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !can_open_in_new);
 
-	set_context_event (window, event);
+	_ephy_window_set_context_event (window, event);
 
 	g_signal_connect (widget, "deactivate",
 			  G_CALLBACK (embed_popup_deactivate_cb), window);
@@ -2439,7 +2447,7 @@ ephy_window_dispose (GObject *object)
 		g_object_unref (priv->manager);
 		priv->manager = NULL;
 
-		set_context_event (window, NULL);
+		_ephy_window_set_context_event (window, NULL);
 	}
 
 	destroy_fullscreen_popup (window);
