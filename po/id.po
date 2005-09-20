@@ -10,13 +10,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-27 12:16+0300\n"
+"POT-Creation-Date: 2005-09-20 13:45+0200\n"
 "PO-Revision-Date: 2005-08-27 12:27+0300\n"
 "Last-Translator: tunggul arif siswoyo <tunggul@matralintas.net>\n"
 "Language-Team: Indonesian <sukarelawan@gnome.linux.or.id>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: ../data/GNOME_Epiphany_Automation.server.in.h:1
 msgid "Epiphany automation"
@@ -127,7 +127,7 @@ msgstr "Kunci Epiphany di modus layar penuh."
 msgid "Browse the web"
 msgstr "Jelajah web"
 
-#: ../data/epiphany.desktop.in.h:2 ../src/window-commands.c:779
+#: ../data/epiphany.desktop.in.h:2
 msgid "Epiphany Web Browser"
 msgstr "Web Browser Epiphany"
 
@@ -522,7 +522,7 @@ msgid "MD5 Fingerprint:"
 msgstr "Sidikjari MD5:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:989
+#: ../embed/mozilla/GtkNSSDialogs.cpp:995
 msgid "Organization:"
 msgstr "Organisasi:"
 
@@ -547,56 +547,32 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>Gunakan encoding yang berbeda.</b>"
 
 #: ../data/glade/epiphany.glade.h:3
-msgid "C_ase sensitive"
-msgstr "H_uruf sensitif"
-
-#: ../data/glade/epiphany.glade.h:4
 msgid "Cookies"
 msgstr "Cookies"
 
-#: ../data/glade/epiphany.glade.h:5
+#: ../data/glade/epiphany.glade.h:4
 msgid "Download Manager"
 msgstr "Manajer Download"
 
-#: ../data/glade/epiphany.glade.h:6 ../src/ephy-window.c:1127
-msgid "Find"
-msgstr "Cari"
-
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.glade.h:5
 msgid "Passwords"
 msgstr "Kata Sandi"
 
-#: ../data/glade/epiphany.glade.h:8
+#: ../data/glade/epiphany.glade.h:6
 msgid "Personal Data Manager"
 msgstr "Manajer Data Pribadi"
 
-#: ../data/glade/epiphany.glade.h:9
+#: ../data/glade/epiphany.glade.h:7
 msgid "Text Encoding"
 msgstr "Encoding Teks"
 
-#: ../data/glade/epiphany.glade.h:10 ../src/ephy-encoding-menu.c:358
+#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:358
 msgid "Use the encoding specified by the document"
 msgstr "Gunakan encoding yang dinyatakan oleh dokumen"
 
-#: ../data/glade/epiphany.glade.h:11
-msgid "_Find:"
-msgstr "_Cari:"
-
-#: ../data/glade/epiphany.glade.h:12
-msgid "_Next"
-msgstr "_Lanjut"
-
-#: ../data/glade/epiphany.glade.h:13 ../embed/downloader-view.c:368
+#: ../data/glade/epiphany.glade.h:9 ../embed/downloader-view.c:368
 msgid "_Pause"
 msgstr "_Pause"
-
-#: ../data/glade/epiphany.glade.h:14
-msgid "_Previous"
-msgstr "_Mundur"
-
-#: ../data/glade/epiphany.glade.h:15
-msgid "_Wrap around"
-msgstr ""
 
 #: ../data/glade/prefs-dialog.glade.h:1 ../data/glade/print.glade.h:1
 msgid "<b>Colors</b>"
@@ -831,9 +807,11 @@ msgid "Unknown"
 msgstr "Tak dikenal"
 
 #: ../embed/downloader-view.c:464
-#, c-format
+#, fuzzy, c-format
 msgid "%d download"
-msgstr "%d unduhan"
+msgid_plural "%d downloads"
+msgstr[0] "%d unduhan"
+msgstr[1] "%d unduhan"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -1242,15 +1220,15 @@ msgstr "kenali secara automatis ... pengkodean karakter|Ukrania"
 msgid "Unknown (%s)"
 msgstr "Tak dikenal (%s)"
 
-#: ../embed/ephy-history.c:527
+#: ../embed/ephy-history.c:542
 msgid "All"
 msgstr "Semua"
 
-#: ../embed/ephy-history.c:701
+#: ../embed/ephy-history.c:705
 msgid "Others"
 msgstr "Lainnya"
 
-#: ../embed/ephy-history.c:707
+#: ../embed/ephy-history.c:711
 msgid "Local files"
 msgstr "Berkas lokal"
 
@@ -1281,8 +1259,8 @@ msgid ""
 msgstr ""
 "Jenis Berkas: %s\n"
 "\n"
-"Berkas \"%s\" ini berpotensi untuk merusak dokumen anda atau menyerang privasi "
-"anda. Tidak aman untuk membukanya secara langsung. Tetapi Anda dapat "
+"Berkas \"%s\" ini berpotensi untuk merusak dokumen anda atau menyerang "
+"privasi anda. Tidak aman untuk membukanya secara langsung. Tetapi Anda dapat "
 "menyimpannya."
 
 #: ../embed/mozilla/ContentHandler.cpp:343
@@ -1517,16 +1495,16 @@ msgid "Certificate _Details"
 msgstr "_Detail Sertifikat"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:232
-#: ../embed/mozilla/GtkNSSDialogs.cpp:539
+#: ../embed/mozilla/GtkNSSDialogs.cpp:235
+#: ../embed/mozilla/GtkNSSDialogs.cpp:545
 msgid "_View Certificate"
 msgstr "Lihat Serti_fikat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:240
+#: ../embed/mozilla/GtkNSSDialogs.cpp:243
 msgid "_Accept"
 msgstr "_Terima"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:304
+#: ../embed/mozilla/GtkNSSDialogs.cpp:310
 #, c-format
 msgid ""
 "The site \"%s\" returned security information for \"%s\". It is possible "
@@ -1536,7 +1514,7 @@ msgstr ""
 "Situs \"%s\" mengembalikan informasi keamanan untuk \"%s\". Ada kemungkinan "
 "seseorang memotong komunikasi anda untuk mendapatkan informasi rahasia anda."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:310
+#: ../embed/mozilla/GtkNSSDialogs.cpp:316
 #, c-format
 msgid ""
 "You should only accept the security information if you trust \"%s\" and \"%s"
@@ -1545,11 +1523,11 @@ msgstr ""
 "Anda seharusnya hanya menerima informasi keamanan yang anda percaya \"%s\" "
 "dan \"%s\"."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:315
+#: ../embed/mozilla/GtkNSSDialogs.cpp:321
 msgid "Accept incorrect security information?"
 msgstr "Terima informasi keamanan yang salah?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:346
+#: ../embed/mozilla/GtkNSSDialogs.cpp:352
 #, c-format
 msgid ""
 "It was not possible to automatically trust \"%s\". It is possible that "
@@ -1560,7 +1538,7 @@ msgstr ""
 "seseorang sedang memotong komunikasi anda untuk mendapatkan informasi "
 "rahasia anda."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:358
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
@@ -1568,32 +1546,32 @@ msgid ""
 msgstr ""
 "Pastikan anda melakukan koneksi hanya bila yakin anda terkoneksi ke \"%s\"."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:357
+#: ../embed/mozilla/GtkNSSDialogs.cpp:363
 msgid "Connect to untrusted site?"
 msgstr "Koneksi ke situs tak dipercaya?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:361
+#: ../embed/mozilla/GtkNSSDialogs.cpp:367
 msgid "_Trust this security information from now on"
 msgstr "_Percayai informasi keamananan ini sejak sekarnag"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:362
+#: ../embed/mozilla/GtkNSSDialogs.cpp:368
 msgid "Co_nnect"
 msgstr "Ko_nek"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:421
+#: ../embed/mozilla/GtkNSSDialogs.cpp:427
 msgid "Accept expired security information?"
 msgstr "Terima informasi keamanan kedaluwarsa?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:422
+#: ../embed/mozilla/GtkNSSDialogs.cpp:428
 #, c-format
 msgid "The security information for \"%s\" expired on %s."
 msgstr "Informasi keamanan untuk \"%s\" kadaluwarsa pada \"%s\"."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:428
+#: ../embed/mozilla/GtkNSSDialogs.cpp:434
 msgid "Accept not yet valid security information?"
 msgstr "Terima informasi keamanan yang belum valid?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:429
+#: ../embed/mozilla/GtkNSSDialogs.cpp:435
 #, c-format
 msgid "The security information for \"%s\" isn't valid until %s."
 msgstr "Informasi keamanan tentang \"%s\" tidak sah hingga \"%s\"."
@@ -1601,42 +1579,43 @@ msgstr "Informasi keamanan tentang \"%s\" tidak sah hingga \"%s\"."
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:445
+#: ../embed/mozilla/GtkNSSDialogs.cpp:451
 msgid "%a %d %b %Y"
 msgstr "%a %d %b %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:453
+#: ../embed/mozilla/GtkNSSDialogs.cpp:459
 msgid "You should ensure that your computer's time is correct."
 msgstr "Anda harus memastikan bahwa jam komputer anda benar."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:499
+#: ../embed/mozilla/GtkNSSDialogs.cpp:505
 #, c-format
 msgid "Cannot establish connection to \"%s\"."
 msgstr "Gagal membuat koneksi ke \"%s\"."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:502
+#: ../embed/mozilla/GtkNSSDialogs.cpp:508
 #, c-format
 msgid "The certificate revocation list (CRL) from \"%s\" needs to be updated."
 msgstr "Certificate Revocation List (CRL) dari \"%s\" harus diperbarui."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:507
+#: ../embed/mozilla/GtkNSSDialogs.cpp:513
 msgid "Please ask your system administrator for assistance."
 msgstr "Harap minta bantuan administrator sistem anda."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:537
+#: ../embed/mozilla/GtkNSSDialogs.cpp:543
 msgid "Trust new Certificate Authority?"
 msgstr "Percayai Certificate Authority baru?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:542
+#: ../embed/mozilla/GtkNSSDialogs.cpp:548
 msgid "_Trust CA"
 msgstr "_Percaya CA"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:564
+#: ../embed/mozilla/GtkNSSDialogs.cpp:570
 #, c-format
 msgid "Trust new Certificate Authority \"%s\" to identify web sites?"
-msgstr "Percayai Otoritas Sertifikat \"%s\" untuk mengidentifikasikan situs web?"
+msgstr ""
+"Percayai Otoritas Sertifikat \"%s\" untuk mengidentifikasikan situs web?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:569
+#: ../embed/mozilla/GtkNSSDialogs.cpp:575
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1644,108 +1623,108 @@ msgstr ""
 "Sebelum mempercayai sebuah Sertifikat Kekuasaan (CA) anda harus memeriksa "
 "sertifikat tersebut asli."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:640
+#: ../embed/mozilla/GtkNSSDialogs.cpp:646
 msgid "Certificate already exists."
 msgstr "Sertifikat telah ada."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:641
+#: ../embed/mozilla/GtkNSSDialogs.cpp:647
 msgid "The certificate has already been imported."
 msgstr "Sertifikat telah diimpor"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:766
+#: ../embed/mozilla/GtkNSSDialogs.cpp:772
 msgid "_Backup Certificate"
 msgstr "_Backup Sertifikat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:773
+#: ../embed/mozilla/GtkNSSDialogs.cpp:779
 msgid "Select password."
 msgstr "Pilih kata sandi"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:774
+#: ../embed/mozilla/GtkNSSDialogs.cpp:780
 msgid "Select a password to protect this certificate."
 msgstr "Pilih kata sandi untuk melindungi sertifikat."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:786
-#: ../embed/mozilla/GtkNSSDialogs.cpp:896
+#: ../embed/mozilla/GtkNSSDialogs.cpp:792
+#: ../embed/mozilla/GtkNSSDialogs.cpp:902
 msgid "_Password:"
 msgstr "_Kata Sandi:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:800
+#: ../embed/mozilla/GtkNSSDialogs.cpp:806
 msgid "Con_firm password:"
 msgstr "Kon_firmasi Kata Sandi:"
 
 #. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:812
+#: ../embed/mozilla/GtkNSSDialogs.cpp:818
 msgid "Password quality:"
 msgstr "Kualitas Kata Sandi:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:869
+#: ../embed/mozilla/GtkNSSDialogs.cpp:875
 msgid "I_mport Certificate"
 msgstr "I_mpor Sertifikat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:885
+#: ../embed/mozilla/GtkNSSDialogs.cpp:891
 msgid "Password required."
 msgstr "Perlu kata sandi."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:886
+#: ../embed/mozilla/GtkNSSDialogs.cpp:892
 msgid "Enter the password for this certificate."
 msgstr "Masukkan kata sandi untuk sertifikat ini"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:967
+#: ../embed/mozilla/GtkNSSDialogs.cpp:973
 msgid "Certificate Revocation list successfully imported."
 msgstr "Certificate Revocation list sukses diimpor."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:968
+#: ../embed/mozilla/GtkNSSDialogs.cpp:974
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "Certificate Revocation List (CRL) diimpor:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:994
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1000
 msgid "Unit:"
 msgstr "Unit:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:999
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1005
 msgid "Next Update:"
 msgstr "Pembaruan berikutnya:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1026
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1032
 msgid "Not part of certificate"
 msgstr "Bukan bagian sertifikat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1312
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1318
 msgid "Certificate Properties"
 msgstr "Settingan Sertifikat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1334
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
 msgid "This certificate has been verified for the following uses:"
 msgstr "Sertifikat ini telah diverifikasi untuk penggunaan berikut:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1337
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1343
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Tidak dapat memverifikasi sertifikat karena sertifikat telah ditarik"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1346
 msgid "Could not verify this certificate because it has expired."
 msgstr "Gagal memverifikasi sertifikat karena sertifikat kadaluwarsa."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1343
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1349
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Gagal memverifikasi sertifikat karena sertifikat tidak dapat dipercaya"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1346
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1352
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "Gagal memverifikasi sertifikat karena penerbit sertifikat tidak dapat "
 "dipercaya"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1349
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1355
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Gagal memverifikasi sertifikat karena penerbit tak dikenal"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1358
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr "Gagal memverifikasi sertifikat karena CA sertifikat tidak sah"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1357
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1363
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Gagal memverifikasi sertifikat karena alasan tak diketahui."
 
@@ -1770,25 +1749,21 @@ msgid "This page is loaded over a secure connection"
 msgstr "Halaman ini di baca melalui sambungan aman"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
-msgid ""
-"You can always see the security status of a page from the padlock icon on "
-"the statusbar."
+msgid "The padlock icon in the statusbar indicates whether a page is secure."
 msgstr ""
-"Anda selalu dapat melihat status keamanan dari suatu halaman dari icon "
-"padlock pada statusbar."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
 msgid "Security Warning"
 msgstr "Peringatan Keamanan"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
 msgid "This page is loaded over a low security connection"
 msgstr "Halaman ini dibaca melalui sambungan aman yang rendah"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -1796,12 +1771,12 @@ msgstr ""
 "Setiap informasi yang anda lihat atau masukkan pada halaman ini dapat dengan "
 "mudah di potong oleh pihak ketiga."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr ""
 "Beberapa bagian dari halaman ini di baca melalui sambungan yang tidak aman"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1809,12 +1784,12 @@ msgstr ""
 "Beberapa informasi yang anda lihat atau masukkan akan dikirim melalui "
 "sambungan tidak aman, dan dapat dengan mudah di potong oleh pihak ketiga."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid "Send this information over an insecure connection?"
 msgstr "Kirim informasi ini melalui sambungan aman?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1822,12 +1797,12 @@ msgstr ""
 "Informasi yang anda masukkan akan dikirim melalui sambungan tidak aman, dan "
 "dapat dengan mudah dipotong oleh pihak ketiga."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
 msgid "_Send"
 msgstr "_Kirim"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2213,33 +2188,39 @@ msgstr "Seret dan jatuhkan icon ini untuk membuat sambungan ke halaman ini"
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:549
+#: ../src/bookmarks/ephy-bookmark-action.c:543
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1243
 #: ../src/bookmarks/ephy-topic-action.c:475 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:711
+#, fuzzy
 msgid "Open in New _Tab"
-msgstr "Buka Dalam _Tab Baru"
+msgid_plural "Open in New _Tabs"
+msgstr[0] "Buka Dalam _Tab Baru"
+msgstr[1] "Buka Dalam _Tab Baru"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmark-action.c:555
+#: ../src/bookmarks/ephy-bookmark-action.c:549
 #: ../src/bookmarks/ephy-bookmarks-editor.c:180
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1240
 #: ../src/ephy-history-window.c:170 ../src/ephy-history-window.c:708
+#, fuzzy
 msgid "Open in New _Window"
-msgstr "Buka di _Jendela Baru"
+msgid_plural "Open in New _Windows"
+msgstr[0] "Buka di _Jendela Baru"
+msgstr[1] "Buka di _Jendela Baru"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:576
+#: ../src/bookmarks/ephy-bookmark-action.c:570
 #: ../src/bookmarks/ephy-topic-action.c:797
 msgid "_Remove from Toolbar"
 msgstr "_Hilangkan dari Toolbar"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:589
+#: ../src/bookmarks/ephy-bookmark-action.c:583
 #: ../src/bookmarks/ephy-topic-action.c:810
 msgid "Move _Left"
 msgstr "Pindahkan _Kiri"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:596
+#: ../src/bookmarks/ephy-bookmark-action.c:590
 #: ../src/bookmarks/ephy-topic-action.c:817
 msgid "Move Ri_ght"
 msgstr "Pindahkan _Kanan"
@@ -2513,8 +2494,8 @@ msgid ""
 "The bookmarks from \"%s\" could not be imported because the file is "
 "corrupted or of an unsupported type."
 msgstr ""
-"Bookmark dari \"%s\" tidak dapat diimpor karena berkas rusak ataupun merupakan "
-"jenis yang tidak didukung."
+"Bookmark dari \"%s\" tidak dapat diimpor karena berkas rusak ataupun "
+"merupakan jenis yang tidak didukung."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:700
 msgid "Import bookmarks from file"
@@ -2818,9 +2799,11 @@ msgstr "Hari ini"
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
 #: ../src/ephy-history-window.c:1044 ../src/ephy-history-window.c:1047
 #: ../src/ephy-history-window.c:1051
-#, c-format
+#, fuzzy, c-format
 msgid "Last %d day"
-msgstr "%d hari terakhir"
+msgid_plural "Last %d days"
+msgstr[0] "%d hari terakhir"
+msgstr[1] "%d hari terakhir"
 
 #: ../src/ephy-history-window.c:1253
 msgid "Sites"
@@ -2858,7 +2841,7 @@ msgstr "Impor bookmark dari berkas ini"
 msgid "Launch the bookmarks editor"
 msgstr "Jalankan editor bookmark"
 
-#: ../src/ephy-notebook.c:970
+#: ../src/ephy-notebook.c:1093
 msgid "Close tab"
 msgstr "Tutup tab"
 
@@ -3028,8 +3011,7 @@ msgstr "Daftar satu tingkat naik"
 
 #: ../src/ephy-toolbar.c:327
 msgid "Enter a web address to open, or a phrase to search for"
-msgstr ""
-"Masukkan alamat web untuk membukanya, atau kata yang ingin dicari"
+msgstr "Masukkan alamat web untuk membukanya, atau kata yang ingin dicari"
 
 #: ../src/ephy-toolbar.c:343
 msgid "Zoom"
@@ -3534,6 +3516,10 @@ msgstr "Simpan sebagai"
 msgid "Bookmark"
 msgstr "Bookmark"
 
+#: ../src/ephy-window.c:1127
+msgid "Find"
+msgstr "Cari"
+
 #: ../src/ephy-window.c:1309
 msgid "Insecure"
 msgstr "Tidak aman"
@@ -3556,56 +3542,58 @@ msgid "Security level: %s"
 msgstr "Tingkat Keamanan: %s"
 
 #: ../src/ephy-window.c:1378
-#, c-format
+#, fuzzy, c-format
 msgid "%d hidden popup window"
-msgstr "%d jendela popup tersembunyi"
+msgid_plural "%d hidden popup windows"
+msgstr[0] "%d jendela popup tersembunyi"
+msgstr[1] "%d jendela popup tersembunyi"
 
-#: ../src/ephy-window.c:1660
+#: ../src/ephy-window.c:1668
 #, c-format
 msgid "Save background image '%s'"
 msgstr "Simpan gambar latar belakang '%s'"
 
-#: ../src/ephy-window.c:1674
+#: ../src/ephy-window.c:1682
 #, c-format
 msgid "Open image '%s'"
 msgstr "Lihat Gambar '%s'"
 
-#: ../src/ephy-window.c:1679
+#: ../src/ephy-window.c:1687
 #, c-format
 msgid "Use as desktop background '%s'"
 msgstr "Pakai sebagai latar belakang desktop '%s'"
 
-#: ../src/ephy-window.c:1684
+#: ../src/ephy-window.c:1692
 #, c-format
 msgid "Save image '%s'"
 msgstr "Simpan Gambar '%s'"
 
-#: ../src/ephy-window.c:1689
+#: ../src/ephy-window.c:1697
 #, c-format
 msgid "Copy image address '%s'"
 msgstr "Salin Alamat Gambar '%s'"
 
-#: ../src/ephy-window.c:1702
+#: ../src/ephy-window.c:1710
 #, c-format
 msgid "Send email to address '%s'"
 msgstr "Kirim surat ke alamat '%s'"
 
-#: ../src/ephy-window.c:1708
+#: ../src/ephy-window.c:1716
 #, c-format
 msgid "Copy email address '%s'"
 msgstr "Salin alamat email '%s'"
 
-#: ../src/ephy-window.c:1720
+#: ../src/ephy-window.c:1728
 #, c-format
 msgid "Save link '%s'"
 msgstr "Simpan sambungan '%s'"
 
-#: ../src/ephy-window.c:1726
+#: ../src/ephy-window.c:1734
 #, c-format
 msgid "Bookmark link '%s'"
 msgstr "Bookmark sambungan '%s'"
 
-#: ../src/ephy-window.c:1732
+#: ../src/ephy-window.c:1740
 #, c-format
 msgid "Copy link's address '%s'"
 msgstr "Salin alamat sambungan '%s'"
@@ -3630,31 +3618,31 @@ msgstr "User Name"
 msgid "Cookie Properties"
 msgstr "Settingan Cookie"
 
-#: ../src/pdm-dialog.c:918
+#: ../src/pdm-dialog.c:919
 msgid "Content:"
 msgstr "Isi:"
 
-#: ../src/pdm-dialog.c:934
+#: ../src/pdm-dialog.c:935
 msgid "Path:"
 msgstr "Path:"
 
-#: ../src/pdm-dialog.c:950
+#: ../src/pdm-dialog.c:951
 msgid "Send for:"
 msgstr "Kirim untuk:"
 
-#: ../src/pdm-dialog.c:959
+#: ../src/pdm-dialog.c:960
 msgid "Encrypted connections only"
 msgstr "Hanya sambungan yang diacak"
 
-#: ../src/pdm-dialog.c:959
+#: ../src/pdm-dialog.c:960
 msgid "Any type of connection"
 msgstr "Sambungan jenis apapun"
 
-#: ../src/pdm-dialog.c:965
+#: ../src/pdm-dialog.c:966
 msgid "Expires:"
 msgstr "Kadaluwarsa:"
 
-#: ../src/pdm-dialog.c:976
+#: ../src/pdm-dialog.c:977
 msgid "End of current session"
 msgstr "Akhir dari sesi ini"
 
@@ -3738,9 +3726,11 @@ msgid "language|User defined (%s)"
 msgstr "bahasa|Ketentuan Pengguna (%s) "
 
 #: ../src/prefs-dialog.c:801
-#, c-format
+#, fuzzy, c-format
 msgid "System language (%s)"
-msgstr "Bahasa sistem·(%s)"
+msgid_plural "System languages (%s)"
+msgstr[0] "Bahasa sistem·(%s)"
+msgstr[1] "Bahasa sistem·(%s)"
 
 #: ../src/prefs-dialog.c:1366
 msgid "Select a directory"
@@ -3762,6 +3752,11 @@ msgstr "Kontributor:"
 msgid "Past developers:"
 msgstr "Pengembang yang lalu:"
 
+#: ../src/window-commands.c:779
+#, fuzzy
+msgid "GNOME Web Browser"
+msgstr "Browser Web"
+
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
 #. * the translators.
@@ -3774,684 +3769,7 @@ msgstr "Pengembang yang lalu:"
 msgid "translator-credits"
 msgstr "Tunggul Arif Siswoyo <tunggul@matralintas.net>"
 
-#~ msgid "Enable Java."
-#~ msgstr "Aktifkan Java."
-
-#~ msgid "Enable JavaScript."
-#~ msgstr "Aktifkan JavaScript."
-
-#~ msgid "Filename to print to"
-#~ msgstr "Cetak ke nama file"
-
-#~ msgid "Filename to print to."
-#~ msgstr "Cetak ke nama berkas"
-
-#~ msgid "Match case for find in page."
-#~ msgstr "Huruf yang cocok untuk menemukan dalam halaman."
-
-#~ msgid "Paper type"
-#~ msgstr "Jenis kertas"
-
-#~ msgid ""
-#~ "Paper type. Supported values are \"A4\", \"Letter\", \"Legal\" and "
-#~ "\"Executive\"."
-#~ msgstr ""
-#~ "Jenis kertas. Nilai yang didukung adalah \"A4\", \"Letter\", \"Legal\" "
-#~ "dan \"Executive\"."
-
-#~ msgid "Printer name"
-#~ msgstr "Nama printer"
-
-#~ msgid "Printer name."
-#~ msgstr "Nama Printer."
-
-#~ msgid "Printing bottom margin"
-#~ msgstr "Margin bawah cetak"
-
-#~ msgid "Printing bottom margin (in mm)."
-#~ msgstr "Margin bawah cetak (dalam mm)"
-
-#~ msgid "Printing left margin"
-#~ msgstr "Margin kiri cetak"
-
-#~ msgid "Printing left margin (in mm)."
-#~ msgstr "Margin kiri cetak (dalam mm)"
-
-#~ msgid "Printing right margin"
-#~ msgstr "Margin kanan cetak"
-
-#~ msgid "Printing right margin (in mm)."
-#~ msgstr "Margin kanan cetak (dalam mm)"
-
-#~ msgid "Printing top margin"
-#~ msgstr "Margin atas cetak"
-
-#~ msgid "Printing top margin (in mm)."
-#~ msgstr "Margin atas cetak (dalam mm)."
-
-#~ msgid "Show bookmarks bar by default."
-#~ msgstr "Perlihatkan batang bookmark secara default"
-
-#~ msgid "Show statusbar by default."
-#~ msgstr "Perlihatkan batang status secara default"
-
-#~ msgid "Show toolbars by default."
-#~ msgstr "Perlihatkan toolbar secara default"
-
-#~ msgid "The path of the folder where downloads are saved."
-#~ msgstr "Lokasi dari folder dimana download akan disimpan."
-
-#~ msgid "Use caret browsing mode."
-#~ msgstr "Pergunakan mode browsing caret."
-
-#~ msgid "Whether to print the date in the footer."
-#~ msgstr "Cetak tanggal di catatan kaki."
-
-#~ msgid "Whether to print the page address in the header."
-#~ msgstr "Cetak alamat halaman di catatan kepala."
-
-#~ msgid "Whether to print the page numbers (x of total) in the footer."
-#~ msgstr "Cetak nomor halaman (x of total) di catatan kaki."
-
-#~ msgid "Whether to print the page title in the header."
-#~ msgstr "Cetak judul halaman di catatan kepala."
-
-#~ msgid "<b>Margins (in mm)</b>"
-#~ msgstr "<b>Margin (dalam mm)</b>"
-
-#~ msgid "<b>Orientation</b>"
-#~ msgstr "<b>Orientasi</b>"
-
-#~ msgid "<b>Page Range</b>"
-#~ msgstr "<b>Jangkauan Halaman</b>"
-
-#~ msgid "<b>Print To</b>"
-#~ msgstr "<b>Cetak Ke</b>"
-
-#~ msgid "<b>Size</b>"
-#~ msgstr "<b>Ukuran</b>"
-
-#~ msgid "A_4"
-#~ msgstr "A_4"
-
-#~ msgid "E_xecutive"
-#~ msgstr "E_xecutive"
-
-#~ msgid "L_egal"
-#~ msgstr "L_egal"
-
-#~ msgid "Lan_dscape"
-#~ msgstr "Mendatar"
-
-#~ msgid "P_ortrait"
-#~ msgstr "T_egak"
-
-#~ msgid "P_rinter:"
-#~ msgstr "P_rinter:"
-
-#~ msgid "_All pages"
-#~ msgstr "Semu_a halaman"
-
-#~ msgid "_Bottom:"
-#~ msgstr "_Bawah:"
-
-#~ msgid "_Browse..."
-#~ msgstr "_Jelajah..."
-
-#~ msgid "_File:"
-#~ msgstr "_File:"
-
-#~ msgid "_Left:"
-#~ msgstr "_Kiri:"
-
-#~ msgid "_Letter"
-#~ msgstr "_Letter"
-
-#~ msgid "_Right:"
-#~ msgstr "Ka_nan:"
-
-#~ msgid "_Selection"
-#~ msgstr "_Pilihan"
-
-#~ msgid "_to:"
-#~ msgstr "Un_tuk:"
-
-#~ msgid "Open this file with \"%s\"?"
-#~ msgstr "Buka file ini dengan \"%s\"?"
-
-#~ msgid ""
-#~ "It's not possible to view this file type directly in the browser. You can "
-#~ "open it with \"%s\" or save it."
-#~ msgstr ""
-#~ "Tidak mungkin menampilkan file ini secara langsung pada browser. Anda "
-#~ "dapat membukanya dalam \"%s\" ataupun menyimpannya."
-
-#~ msgid ""
-#~ "It's not possible to view this file because there is no application "
-#~ "installed that can open it. You can save it instead."
-#~ msgstr ""
-#~ "Tidak mungkin untuk menampilkan file ini karena tidak ada aplikasi yang "
-#~ "terpasang yang dapat membukanya. Anda dapat menyimpannya."
-
-#~ msgid "_Don't show this message again for this site"
-#~ msgstr "_jangan tampilkan pesan ini lagi untuk situs ini"
-
-#~ msgid "Trust \"%s\" to identify:"
-#~ msgstr "Percayai \"%s\" untuk identifikasi:"
-
-#~ msgid "_Web sites"
-#~ msgstr "Situs _Web"
-
-#~ msgid "Print to"
-#~ msgstr "Cetak ke"
-
-#~ msgid "Postscript files"
-#~ msgstr "File Postscript"
-
-#~ msgid "Failed to find %s"
-#~ msgstr "Gagal menemukan %s"
-
-#~ msgid "select fonts for|Unicode"
-#~ msgstr "pilih jenis huruf untuk|Unicode"
-
-#~ msgid "Ephy"
-#~ msgstr "Ephy"
-
-#~ msgid "toolbar style|Text below icons"
-#~ msgstr "gaya toolbar|Teks di bawah icons"
-
-#~ msgid "toolbar style|Text beside icons"
-#~ msgstr "gaya toolbar|Teks di samping icons"
-
-#~ msgid "toolbar style|Icons only"
-#~ msgstr "gaya toolbar|Icons saja"
-
-#~ msgid "toolbar style|Text only"
-#~ msgstr "gaya toolbar|Teks saja"
-
-#~ msgid "Toggle network status"
-#~ msgstr "Toggle status jaringan"
-
-#~ msgid "Afrikaans"
-#~ msgstr "Afrikaan"
-
-#~ msgid "Arabic"
-#~ msgstr "Arab"
-
-#~ msgid "Azerbaijani"
-#~ msgstr "Azerbaijan"
-
-#~ msgid "Byelorussian"
-#~ msgstr "Belorussia"
-
-#~ msgid "Bulgarian"
-#~ msgstr "Bulgaria"
-
-#~ msgid "Breton"
-#~ msgstr "Breton"
-
-#~ msgid "Catalan"
-#~ msgstr "Katalan"
-
-#~ msgid "Czech"
-#~ msgstr "Czech"
-
-#~ msgid "Danish"
-#~ msgstr "Denmark"
-
-#~ msgid "German"
-#~ msgstr "Jerman"
-
-#~ msgid "English"
-#~ msgstr "Inggris"
-
-#~ msgid "Greek"
-#~ msgstr "Yunani"
-
-#~ msgid "Esperanto"
-#~ msgstr "Esperanto"
-
-#~ msgid "Spanish"
-#~ msgstr "Spanyol"
-
-#~ msgid "Estonian"
-#~ msgstr "Estonia"
-
-#~ msgid "Basque"
-#~ msgstr "Basque"
-
-#~ msgid "Finnish"
-#~ msgstr "Finlandia"
-
-#~ msgid "Faeroese"
-#~ msgstr "Faeroe"
-
-#~ msgid "French"
-#~ msgstr "Perancis"
-
-#~ msgid "Irish"
-#~ msgstr "Irlandia"
-
-#~ msgid "Scots Gaelic"
-#~ msgstr "Skotlandia Gaelic"
-
-#~ msgid "Galician"
-#~ msgstr "Gaelic"
-
-#~ msgid "Hebrew"
-#~ msgstr "Ibrani"
-
-#~ msgid "Croatian"
-#~ msgstr "Kroasia"
-
-#~ msgid "Hungarian"
-#~ msgstr "Hungaria"
-
-#~ msgid "Indonesian"
-#~ msgstr "Indonesia"
-
-#~ msgid "Icelandic"
-#~ msgstr "Islandia"
-
-#~ msgid "Italian"
-#~ msgstr "Italia"
-
-#~ msgid "Japanese"
-#~ msgstr "Jepang"
-
-#~ msgid "Korean"
-#~ msgstr "Korea"
-
-#~ msgid "Lithuanian"
-#~ msgstr "Lithuania"
-
-#~ msgid "Latvian"
-#~ msgstr "Latvia"
-
-#~ msgid "Macedonian"
-#~ msgstr "Makedonia"
-
-#~ msgid "Malay"
-#~ msgstr "Melayu"
-
-#~ msgid "Dutch"
-#~ msgstr "Belanda"
-
-#~ msgid "Norwegian/Bokmal"
-#~ msgstr "Norwegia/Bokmal"
-
-#~ msgid "Norwegian/Nynorsk"
-#~ msgstr "Norwegia/Nynorsk"
-
-#~ msgid "Norwegian"
-#~ msgstr "Norwegia"
-
-#~ msgid "Polish"
-#~ msgstr "Polandia"
-
-#~ msgid "Portuguese"
-#~ msgstr "Portugis"
-
-#~ msgid "Portuguese of Brazil"
-#~ msgstr "Portugis Brazil"
-
-#~ msgid "Romanian"
-#~ msgstr "Rumania"
-
-#~ msgid "Russian"
-#~ msgstr "Rusia"
-
-#~ msgid "Slovak"
-#~ msgstr "Slovak"
-
-#~ msgid "Slovenian"
-#~ msgstr "Slovenia"
-
-#~ msgid "Albanian"
-#~ msgstr "Albania"
-
-#~ msgid "Serbian"
-#~ msgstr "Serbia"
-
-#~ msgid "Swedish"
-#~ msgstr "Swedia"
-
-#~ msgid "Tamil"
-#~ msgstr "Tamil"
-
-#~ msgid "Turkish"
-#~ msgstr "Turki"
-
-#~ msgid "Ukrainian"
-#~ msgstr "Ukrania"
-
-#~ msgid "Vietnamese"
-#~ msgstr "Vietnam"
-
-#~ msgid "Walloon"
-#~ msgstr "Walloon"
-
-#~ msgid "Chinese"
-#~ msgstr "Cina"
-
-#~ msgid "Simplified Chinese"
-#~ msgstr "Cina sederhana"
-
-#~ msgid "Traditional Chinese"
-#~ msgstr "Cina Tradisional"
-
-#~ msgid "Home"
-#~ msgstr "Rumah"
-
-#~ msgid "Desktop"
-#~ msgstr "Desktop"
-
-#~ msgid "Epiphany"
-#~ msgstr "Epiphany"
-
-#~ msgid "Hide the menubar by default."
-#~ msgstr "Sembunyikan batang menu secara default."
-
-#~ msgid "    "
-#~ msgstr "    "
-
-#~ msgid "      "
-#~ msgstr "......"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "_Add..."
-#~ msgstr "_Tambah..."
-
-#~ msgid "_Down"
-#~ msgstr "_Turun"
-
-#~ msgid "_Remove"
-#~ msgstr "_Hilangkan"
-
-#~ msgid "lpr"
-#~ msgstr "lpr"
-
-#~ msgid "About %d second left"
-#~ msgstr "Sekitar %d detik tersisa"
-
-#~ msgid "About %d minute left"
-#~ msgstr "Sekitar %d menit tersisa"
-
-#~ msgid "Off"
-#~ msgstr "Mati"
-
-#~ msgid "Chinese Simplified"
-#~ msgstr "Cina Sederhana"
-
-#~ msgid "Chinese Traditional"
-#~ msgstr "Cina Tradisional"
-
-#~ msgid "East Asian"
-#~ msgstr "Asia Timur"
-
-#~ msgid "Universal"
-#~ msgstr "Universal"
-
-#~ msgid "Open the file in another application?"
-#~ msgstr "Buka file pada aplikasi lain?"
-
-#~ msgid "system-language"
-#~ msgstr "id"
-
-#~ msgid ""
-#~ "Drag an item onto the toolbars above to add it, from the toolbars in the "
-#~ "items table to remove it."
-#~ msgstr ""
-#~ "Tarik suatu item ke toolbar untuk menambahkannya kesana, atau tarik dari "
-#~ "toolbar di tabel item untuk menghapusnya."
-
-#~ msgid "A file %s already exists."
-#~ msgstr "Sebuah file %s telah ada."
-
-#~ msgid "Baltic"
-#~ msgstr "Baltik"
-
-#~ msgid "Cyrillic"
-#~ msgstr "Cyrillic"
-
-#~ msgid "Devanagari"
-#~ msgstr "Devanagari"
-
-#~ msgid "Thai"
-#~ msgstr "Thailand"
-
-#~ msgid "Unicode"
-#~ msgstr "Unicode"
-
-#~ msgid "Western"
-#~ msgstr "Barat"
-
-#~ msgid "Secure"
-#~ msgstr "Aman"
-
-#~ msgid "Failed"
-#~ msgstr "Gagal"
-
-#~ msgid "%d %%"
-#~ msgstr "%d %%"
-
-#~ msgid "_Open in New Window"
-#~ msgstr "_Buka di Jendela Baru"
-
-#~ msgid "_Open in New Windows"
-#~ msgstr "_Buka di Jendela Baru"
-
-#~ msgid "Open in New _Tabs"
-#~ msgstr "Buka di _Tab baru"
-
-#~ msgid "C_lear History"
-#~ msgstr "B_ersihkan Riwayat"
-
-#~ msgid "C_lear"
-#~ msgstr "B_ersihkan"
-
-#~ msgid "Used internally by the bonobo interface"
-#~ msgstr "Digunakan oleh antarmuka bonobo secara internal"
-
-#~ msgid "You can recover the opened tabs and windows."
-#~ msgstr "Anda dapat mengembalikan tampilan tab dan jendela yang telah dibuka"
-
-#~ msgid "site"
-#~ msgstr "site"
-
-#~ msgid "_Open Frame"
-#~ msgstr "_Buka Frame"
-
-#~ msgid "Exit Fullscreen"
-#~ msgstr "Keluar dari mode Layar Penuh"
-
-#~ msgid "Medium"
-#~ msgstr "Sedang"
-
-#~ msgid ""
-#~ "Security level: %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Tingkat keamanan: %s\n"
-#~ "%s"
-
-#~ msgid "Download link"
-#~ msgstr "Download link"
-
-#~ msgid "Scottish"
-#~ msgstr "Skotlandia"
-
-#~ msgid "Go up"
-#~ msgstr "Ke atas"
-
-#~ msgid "Favicon"
-#~ msgstr "Ikon Favorit"
-
-#~ msgid "A GNOME browser based on Mozilla"
-#~ msgstr "Browser GNOME berbasis Mozilla"
-
-#~ msgid "Epiphany Nautilus view"
-#~ msgstr "Tampilan Epiphany Nautilus"
-
-#~ msgid "Epiphany content view component"
-#~ msgstr "komponen lihat isi Epiphany"
-
-#~ msgid "View as Web Page"
-#~ msgstr "Lihat halaman web"
-
-#~ msgid "Web Page Viewer"
-#~ msgstr "Penampil Halaman web"
-
-#~ msgid "Add Bookmark for Frame"
-#~ msgstr "Tambahkan Bookmark untuk Frame"
-
-#~ msgid "Copy"
-#~ msgstr "Salin"
-
-#~ msgid "Copy Page Address"
-#~ msgstr "Salin Alamat Halaman"
-
-#~ msgid "Copy the Selection"
-#~ msgstr "Salin Pilihan"
-
-#~ msgid "Cut"
-#~ msgstr "Potong"
-
-#~ msgid "Cut the Selection"
-#~ msgstr "Potong pilihan"
-
-#~ msgid "Open Frame"
-#~ msgstr "Buka Frame"
-
-#~ msgid "Open Frame in New Window"
-#~ msgstr "Buka Frame di Jendela Baru"
-
-#~ msgid "Open Image in New Window"
-#~ msgstr "Buka Gambar di Jendela Baru"
-
-#~ msgid "Paste"
-#~ msgstr "Tempel"
-
-#~ msgid "Print the Current File"
-#~ msgstr "Cetak berkas ini"
-
-#~ msgid "Save Background As..."
-#~ msgstr "Simpan Latarbelakang Sebagai..."
-
-#~ msgid "Save Image As..."
-#~ msgstr "Simpan Gambar Sebagai..."
-
-#~ msgid "Save Page As..."
-#~ msgstr "Simpan Halaman Sebagai..."
-
-#~ msgid "Search for a String"
-#~ msgstr "Cari string"
-
-#~ msgid "Select All"
-#~ msgstr "Pilih Semua"
-
-#~ msgid "Select the Entire Document"
-#~ msgstr "Pilih seluruh dokumen"
-
-#~ msgid "Text _Encoding..."
-#~ msgstr "_Encoding Teks..."
-
-#~ msgid "Save Page As"
-#~ msgstr "Simpan Halaman Sebagai"
-
-#~ msgid ""
-#~ "Epiphany cannot handle this protocol,\n"
-#~ "and no GNOME default handler is set"
-#~ msgstr ""
-#~ "Epiphany tidak dapat menangani protokol ini,\n"
-#~ "dan tidak ada GNOME default handler yang diset"
-
-#~ msgid ""
-#~ "The protocol specified is not recognised.\n"
-#~ "\n"
-#~ "Would you like to try the GNOME default?"
-#~ msgstr ""
-#~ "Protokol yang disebutkan tidak dikenal.\n"
-#~ "\n"
-#~ "Apa anda ingin coba Default GNOME?"
-
-#~ msgid "HTML files"
-#~ msgstr "File HTML"
-
-#~ msgid ""
-#~ "GConf error:\n"
-#~ "  %s\n"
-#~ "All further errors shown only on terminal"
-#~ msgstr ""
-#~ "GConf error:\n"
-#~ "  %s\n"
-#~ "Semua error selanjutnya hanya ditampilkan di terminal"
-
-#~ msgid "GConf Error"
-#~ msgstr "GConf Error"
-
-#~ msgid ""
-#~ "File %s will be overwritten.\n"
-#~ "If you choose yes, the contents will be lost.\n"
-#~ "\n"
-#~ "Do you want to continue?"
-#~ msgstr ""
-#~ "Berkas %s akan ditimpa.\n"
-#~ "Jika anda memilih ya, isi berkas akan hilang.\n"
-#~ "\n"
-#~ "Yakin akan melanjutkan?"
-
-#~ msgid "Choose the bookmarks source:"
-#~ msgstr "Pilih bookmark"
-
-#~ msgid "Mozilla bookmarks"
-#~ msgstr "Bookmark Mozilla"
-
-#~ msgid "Open Frame in _New Window"
-#~ msgstr "Buka Frame di _Jendela Baru"
-
-#~ msgid "Open Frame in New _Tab"
-#~ msgstr "Buka Frame di _Tab Baru"
-
-#~ msgid "Open Image in New _Window"
-#~ msgstr "Buka gambar di _Jendela Baru"
-
-#~ msgid "Open Image in New T_ab"
-#~ msgstr "Buka Gambar di T_ab Baru"
-
-#~ msgid "Yes"
-#~ msgstr "Ya"
-
-#~ msgid "No"
-#~ msgstr "Tidak"
-
-#~ msgid ""
-#~ "Automatically open downloaded files which are \"safe\" to open, like "
-#~ "videos, images, text documents, compressed files, etc."
-#~ msgstr ""
-#~ "Otomatis buka file terdownload yang \"aman\" dibuka, seperti video, "
-#~ "gambar, teks, file terkompres, dll."
-
+#: ../src/window-commands.c:796
 #, fuzzy
-#~ msgid "Pause"
-#~ msgstr "_Pause"
-
-#~ msgid "Unicode (UTF-_7)"
-#~ msgstr "Unicode (UTF-_7)"
-
-#~ msgid "_Zoom"
-#~ msgstr "_Zoom"
-
-#~ msgid "Organization (O):"
-#~ msgstr "Organisasi (O):"
-
-#~ msgid "Language Editor"
-#~ msgstr "Editor Bahasa"
-
-#~ msgid "_Language:"
-#~ msgstr "_Bahasa:"
-
-#~ msgid "_More..."
-#~ msgstr "_Lagi..."
+msgid "GNOME Web Browser Website"
+msgstr "Browser Web"
