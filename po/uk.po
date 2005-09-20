@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-20 13:45+0200\n"
+"POT-Creation-Date: 2005-08-17 08:48+0300\n"
 "PO-Revision-Date: 2005-08-17 12:57+0300\n"
 "Last-Translator: Maxim Dziumanenko <mvd@mylinux.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -125,7 +125,7 @@ msgstr "Блокує Epiphany у повноекранному режимі."
 msgid "Browse the web"
 msgstr "Програма перегляду веб-сторінок"
 
-#: ../data/epiphany.desktop.in.h:2
+#: ../data/epiphany.desktop.in.h:2 ../src/window-commands.c:779
 msgid "Epiphany Web Browser"
 msgstr "Веб-переглядач Epiphany"
 
@@ -403,9 +403,8 @@ msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
 msgstr ""
-"Шлях до теки, куди завантажуються файли; або \"Downloads\" щоб "
-"використовувати типову теку завантаження, чи \"Desktop\" щоб завантажувати "
-"файли на стільницю."
+"Шлях до теки, куди завантажуються файли; або \"Downloads\" щоб використовувати "
+"типову теку завантаження, чи \"Desktop\" щоб завантажувати файли на стільницю."
 
 #: ../data/epiphany.schemas.in.h:43
 msgid "Toolbar style"
@@ -530,7 +529,7 @@ msgid "MD5 Fingerprint:"
 msgstr "Відбитки MD5:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:995
+#: ../embed/mozilla/GtkNSSDialogs.cpp:989
 msgid "Organization:"
 msgstr "Організація:"
 
@@ -555,32 +554,56 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>_Використовувати інше кодування:</b>"
 
 #: ../data/glade/epiphany.glade.h:3
+msgid "C_ase sensitive"
+msgstr "Враховувати _регістр"
+
+#: ../data/glade/epiphany.glade.h:4
 msgid "Cookies"
 msgstr "Cookies"
 
-#: ../data/glade/epiphany.glade.h:4
+#: ../data/glade/epiphany.glade.h:5
 msgid "Download Manager"
 msgstr "Менеджер завантажень"
 
-#: ../data/glade/epiphany.glade.h:5
+#: ../data/glade/epiphany.glade.h:6 ../src/ephy-window.c:1119
+msgid "Find"
+msgstr "Знайти"
+
+#: ../data/glade/epiphany.glade.h:7
 msgid "Passwords"
 msgstr "Паролі"
 
-#: ../data/glade/epiphany.glade.h:6
+#: ../data/glade/epiphany.glade.h:8
 msgid "Personal Data Manager"
 msgstr "Менеджер особистих даних"
 
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.glade.h:9
 msgid "Text Encoding"
 msgstr "Кодова сторінка"
 
-#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:358
+#: ../data/glade/epiphany.glade.h:10 ../src/ephy-encoding-menu.c:358
 msgid "Use the encoding specified by the document"
 msgstr "Використовувати кодування, що визначається документом"
 
-#: ../data/glade/epiphany.glade.h:9 ../embed/downloader-view.c:368
+#: ../data/glade/epiphany.glade.h:11
+msgid "_Find:"
+msgstr "Зна_йти:"
+
+#: ../data/glade/epiphany.glade.h:12
+msgid "_Next"
+msgstr "_Наступне"
+
+#: ../data/glade/epiphany.glade.h:13 ../embed/downloader-view.c:368
 msgid "_Pause"
 msgstr "_Пауза"
+
+#: ../data/glade/epiphany.glade.h:14
+msgid "_Previous"
+msgstr "_Попереднэ"
+
+#: ../data/glade/epiphany.glade.h:15
+msgid "_Wrap around"
+msgstr "_Автоматично переходити на початок"
 
 #: ../data/glade/prefs-dialog.glade.h:1 ../data/glade/print.glade.h:1
 msgid "<b>Colors</b>"
@@ -810,7 +833,7 @@ msgstr ""
 "%s з %s"
 
 #: ../embed/downloader-view.c:425 ../embed/downloader-view.c:430
-#: ../src/ephy-window.c:1306
+#: ../src/ephy-window.c:1298
 msgid "Unknown"
 msgstr "Невідомо"
 
@@ -1229,15 +1252,15 @@ msgstr "Українська"
 msgid "Unknown (%s)"
 msgstr "Невідоме (%s)"
 
-#: ../embed/ephy-history.c:542
+#: ../embed/ephy-history.c:527
 msgid "All"
 msgstr "Всі"
 
-#: ../embed/ephy-history.c:705
+#: ../embed/ephy-history.c:701
 msgid "Others"
 msgstr "Інші"
 
-#: ../embed/ephy-history.c:711
+#: ../embed/ephy-history.c:707
 msgid "Local files"
 msgstr "Локальні файли"
 
@@ -1268,9 +1291,9 @@ msgid ""
 msgstr ""
 "Тип файлу: %s.\n"
 "\n"
-"Небезпечно відкривати файл \"%s\", він потенційно може зіпсувати ваші "
-"документи чи порушити вашу конфіденційність. Безпосередньо його відкривати - "
-"небезпечно. Натомість, можете його зберегти."
+"Небезпечно відкривати файл \"%s\", він потенційно може зіпсувати ваші документи чи порушити вашу "
+"конфіденційність. Безпосередньо його відкривати - небезпечно. Натомість, "
+"можете його зберегти."
 
 #: ../embed/mozilla/ContentHandler.cpp:343
 msgid "Open this file?"
@@ -1344,7 +1367,8 @@ msgstr "Не вдається знайти “%s”."
 msgid ""
 "Check that you are connected to the internet, and that the address is "
 "correct."
-msgstr "Перевірте ваше з'єднання з Інтернет та коректність вказаної адреси."
+msgstr ""
+"Перевірте ваше з'єднання з Інтернет та коректність вказаної адреси."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:208
 msgid "If this page used to exist, you may find an archived version:"
@@ -1364,8 +1388,7 @@ msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
 msgstr ""
-"Можливо, сервер зайнятий або у вас проблеми при з'єднанні з мережею. "
-"Спробуйте пізніше."
+"Можливо, сервер зайнятий або у вас проблеми при з'єднанні з мережею. Спробуйте пізніше."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:221
 #: ../embed/mozilla/EphyAboutModule.cpp:234
@@ -1415,7 +1438,8 @@ msgstr "“%s” вимагає безпечного з'єднання."
 #: ../embed/mozilla/EphyAboutModule.cpp:277
 msgid ""
 "The document could not be loaded because encryption support is not installed."
-msgstr "Документ не завантажено. тому що не встановлено підтримку шифрування."
+msgstr ""
+"Документ не завантажено. тому що не встановлено підтримку шифрування."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:287
 #, c-format
@@ -1436,8 +1460,7 @@ msgid ""
 "This document cannot be viewed in offline mode. Set Epiphany to “online” and "
 "try again."
 msgstr ""
-"Цей документ не можна переглянути у автономному режимі. Встановіть з'єднання "
-"з мережею та спробуйте ще раз."
+"Цей документ не можна переглянути у автономному режимі. Встановіть з'єднання з мережею та спробуйте ще раз."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:312
 #, c-format
@@ -1517,16 +1540,16 @@ msgid "Certificate _Details"
 msgstr "_Подробиці сертифікату"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:235
-#: ../embed/mozilla/GtkNSSDialogs.cpp:545
+#: ../embed/mozilla/GtkNSSDialogs.cpp:232
+#: ../embed/mozilla/GtkNSSDialogs.cpp:539
 msgid "_View Certificate"
 msgstr "Пере_глянути сертифікат"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:243
+#: ../embed/mozilla/GtkNSSDialogs.cpp:240
 msgid "_Accept"
 msgstr "_Прийняти"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:310
+#: ../embed/mozilla/GtkNSSDialogs.cpp:304
 #, c-format
 msgid ""
 "The site \"%s\" returned security information for \"%s\". It is possible "
@@ -1537,7 +1560,7 @@ msgstr ""
 "намагається перехопити ваше з'єднання для отримання конфіденційної "
 "інформації."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:316
+#: ../embed/mozilla/GtkNSSDialogs.cpp:310
 #, c-format
 msgid ""
 "You should only accept the security information if you trust \"%s\" and \"%s"
@@ -1545,11 +1568,11 @@ msgid ""
 msgstr ""
 "Слід прийняти інформацію про безпеку, якщо ви довіряєте \"%s\" та \"%s\"."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:321
+#: ../embed/mozilla/GtkNSSDialogs.cpp:315
 msgid "Accept incorrect security information?"
 msgstr "Прийняти некоректну інформацію про безпеку?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:346
 #, c-format
 msgid ""
 "It was not possible to automatically trust \"%s\". It is possible that "
@@ -1560,39 +1583,39 @@ msgstr ""
 "намагається перехопити ваше з'єднання для отримання конфіденційної "
 "інформації."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:358
+#: ../embed/mozilla/GtkNSSDialogs.cpp:352
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
 "\"%s\"."
 msgstr "Підключатись до сайту слід лише якщо при з'єднанні з \"%s\"."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:357
 msgid "Connect to untrusted site?"
 msgstr "Підключитись до не довіреного сайту?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:367
+#: ../embed/mozilla/GtkNSSDialogs.cpp:361
 msgid "_Trust this security information from now on"
 msgstr "Віднині _довіряти цій інформації про безпеку"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:362
 msgid "Co_nnect"
 msgstr "З'_єднатись"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:427
+#: ../embed/mozilla/GtkNSSDialogs.cpp:421
 msgid "Accept expired security information?"
 msgstr "Прийняти застарілу інформацію про безпеку?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:428
+#: ../embed/mozilla/GtkNSSDialogs.cpp:422
 #, c-format
 msgid "The security information for \"%s\" expired on %s."
 msgstr "Термін дії інформації про безпеку для \"%s\" закінчився %s."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:434
+#: ../embed/mozilla/GtkNSSDialogs.cpp:428
 msgid "Accept not yet valid security information?"
 msgstr "Прийняти ще недостовірну інформацію про безпеку?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:435
+#: ../embed/mozilla/GtkNSSDialogs.cpp:429
 #, c-format
 msgid "The security information for \"%s\" isn't valid until %s."
 msgstr "Інформація про безпеку для \"%s\" стане дійсною не раніше %s."
@@ -1600,43 +1623,42 @@ msgstr "Інформація про безпеку для \"%s\" стане ді
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:451
+#: ../embed/mozilla/GtkNSSDialogs.cpp:445
 msgid "%a %d %b %Y"
 msgstr "%a %b %d %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:459
+#: ../embed/mozilla/GtkNSSDialogs.cpp:453
 msgid "You should ensure that your computer's time is correct."
 msgstr "Слід перевірити коректність встановленого у комп'ютері часу"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:505
+#: ../embed/mozilla/GtkNSSDialogs.cpp:499
 #, c-format
 msgid "Cannot establish connection to \"%s\"."
 msgstr "Не вдається встановити з'єднання з \"%s\"."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:508
+#: ../embed/mozilla/GtkNSSDialogs.cpp:502
 #, c-format
 msgid "The certificate revocation list (CRL) from \"%s\" needs to be updated."
 msgstr "Список відкликаних сертифікатів (CRL) з \"%s\" потребує оновлення."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:513
+#: ../embed/mozilla/GtkNSSDialogs.cpp:507
 msgid "Please ask your system administrator for assistance."
 msgstr "Зверніться до системного адміністратора за допомогою."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:543
+#: ../embed/mozilla/GtkNSSDialogs.cpp:537
 msgid "Trust new Certificate Authority?"
 msgstr "Довіряти новому центру сертифікації?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:548
+#: ../embed/mozilla/GtkNSSDialogs.cpp:542
 msgid "_Trust CA"
 msgstr "_Довіряти CA"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:570
+#: ../embed/mozilla/GtkNSSDialogs.cpp:564
 #, c-format
 msgid "Trust new Certificate Authority \"%s\" to identify web sites?"
-msgstr ""
-"Довіряти новому центру сертифікації \"%s\" при ідентифікації веб-сайтів?"
+msgstr "Довіряти новому центру сертифікації \"%s\" при ідентифікації веб-сайтів?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:575
+#: ../embed/mozilla/GtkNSSDialogs.cpp:569
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1644,108 +1666,108 @@ msgstr ""
 "Перед встановленням довіри центру сертифікації (CA) необхідно перевірити "
 "автентичність сертифікату."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:646
+#: ../embed/mozilla/GtkNSSDialogs.cpp:640
 msgid "Certificate already exists."
 msgstr "Сертифікат вже існує."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:647
+#: ../embed/mozilla/GtkNSSDialogs.cpp:641
 msgid "The certificate has already been imported."
 msgstr "Сертифікат вже був імпортований."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:772
+#: ../embed/mozilla/GtkNSSDialogs.cpp:766
 msgid "_Backup Certificate"
 msgstr "З_берегти сертифікат у сховищі"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:779
+#: ../embed/mozilla/GtkNSSDialogs.cpp:773
 msgid "Select password."
 msgstr "Вибір паролю."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:780
+#: ../embed/mozilla/GtkNSSDialogs.cpp:774
 msgid "Select a password to protect this certificate."
 msgstr "Виберіть пароль для захисту сертифікату."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:792
-#: ../embed/mozilla/GtkNSSDialogs.cpp:902
+#: ../embed/mozilla/GtkNSSDialogs.cpp:786
+#: ../embed/mozilla/GtkNSSDialogs.cpp:896
 msgid "_Password:"
 msgstr "_Пароль:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:806
+#: ../embed/mozilla/GtkNSSDialogs.cpp:800
 msgid "Con_firm password:"
 msgstr "Під_твердження паролю:"
 
 #. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:818
+#: ../embed/mozilla/GtkNSSDialogs.cpp:812
 msgid "Password quality:"
 msgstr "Якість паролю:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:875
+#: ../embed/mozilla/GtkNSSDialogs.cpp:869
 msgid "I_mport Certificate"
 msgstr "_Імпортувати сертифікат"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:891
+#: ../embed/mozilla/GtkNSSDialogs.cpp:885
 msgid "Password required."
 msgstr "Потрібен пароль."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:892
+#: ../embed/mozilla/GtkNSSDialogs.cpp:886
 msgid "Enter the password for this certificate."
 msgstr "Введіть пароль для цього сертифіката."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:973
+#: ../embed/mozilla/GtkNSSDialogs.cpp:967
 msgid "Certificate Revocation list successfully imported."
 msgstr "Список відкликаних сертифікатів успішно оновлено."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:974
+#: ../embed/mozilla/GtkNSSDialogs.cpp:968
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "Список відкликаних сертифікатів (CRL) імпортований:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1000
+#: ../embed/mozilla/GtkNSSDialogs.cpp:994
 msgid "Unit:"
 msgstr "Підрозділ:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1005
+#: ../embed/mozilla/GtkNSSDialogs.cpp:999
 msgid "Next Update:"
 msgstr "Наступне оновлення:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1032
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1026
 msgid "Not part of certificate"
 msgstr "Не є частиною сертифіката"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1318
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1312
 msgid "Certificate Properties"
 msgstr "Властивості сертифіката"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1334
 msgid "This certificate has been verified for the following uses:"
 msgstr "Цей сертифікат перевірений для наступних користувачів:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1343
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1337
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Не вдається перевірити цей сертифікат, бо він відкликаний. "
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1346
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
 msgid "Could not verify this certificate because it has expired."
 msgstr "Не вдається перевірити цей сертифікат, бо він застарів."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1349
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1343
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Не вдається перевірити цей сертифікат, бо він не є довіреним."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1346
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "Не вдається перевірити цей сертифікат, бо його видавець не є довіреним."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1355
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1349
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Не вдається перевірити цей сертифікат, бо його видавець невідомий."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1358
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1352
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "Не вдається перевірити цей сертифікат, бо цент сертифікації неправильний."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1357
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Не вдається перевірити цей сертифікат з невідомої причини."
 
@@ -1770,21 +1792,25 @@ msgid "This page is loaded over a secure connection"
 msgstr "Ця сторінка завантажена через захищене з'єднання"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
-msgid "The padlock icon in the statusbar indicates whether a page is secure."
+msgid ""
+"You can always see the security status of a page from the padlock icon on "
+"the statusbar."
 msgstr ""
+"Ви завжди можете побачити стан захисту сторінки за допомогою значка із "
+"замком на панелі стану."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid "Security Warning"
 msgstr "Попередження про безпеку"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid "This page is loaded over a low security connection"
 msgstr "Ця сторінка була завантажена через недостатньо захищене з'єднання"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -1792,11 +1818,11 @@ msgstr ""
 "Усі дані, які ви бачите на цій сторінці, можуть бути легко перехоплені "
 "третьою стороною."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "Деякі частини цієї сторінки завантажені через незахищене з'єднання"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1804,12 +1830,12 @@ msgstr ""
 "Деякі дані, які ви бачите, будуть передані через незахищене з'єднання та "
 "можуть бути легко доступні третій стороні."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid "Send this information over an insecure connection?"
 msgstr "Передати цю інформацію через незахищене з'єднання?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1817,12 +1843,12 @@ msgstr ""
 "Введені вами дані будуть передаватись через незахищений канал та можуть бути "
 "легко доступні третій стороні."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "_Send"
 msgstr "_Надіслати"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -1850,7 +1876,7 @@ msgstr "Файли"
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com.ua/search?ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:582
+#: ../embed/mozilla/mozilla-embed-single.cpp:583
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr ""
 "Наразі Epiphany використовувати не можна. Помилка при ініціалізації Mozilla. "
@@ -1869,8 +1895,8 @@ msgid ""
 "You were trying to print to a printer using the \"%s\" driver. This program "
 "requires a PostScript printer driver."
 msgstr ""
-"Ви спробували надрукувати на принтер використовуючи драйвер \"%s\". Ця "
-"програма вимагає PostScript драйвер принтера."
+"Ви спробували надрукувати на принтер використовуючи драйвер \"%s\". Ця програма "
+"вимагає PostScript драйвер принтера."
 
 #: ../embed/print-dialog.c:392
 msgid "_From:"
@@ -1888,7 +1914,7 @@ msgstr "д_о:"
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Встановлює кінець діапазону сторінок для друку"
 
-#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1123
+#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1115
 msgid "Print"
 msgstr "Друк"
 
@@ -2154,7 +2180,7 @@ msgstr "Історія"
 
 #: ../lib/ephy-stock-icons.c:59 ../src/bookmarks/ephy-bookmarks-editor.c:759
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1630
-#: ../src/bookmarks/ephy-topic-action.c:967 ../src/ephy-window.c:1129
+#: ../src/bookmarks/ephy-topic-action.c:967 ../src/ephy-window.c:1121
 msgid "Bookmarks"
 msgstr "Закладки"
 
@@ -2211,7 +2237,7 @@ msgstr "Перетягніть цей значок для створення п�
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:543
+#: ../src/bookmarks/ephy-bookmark-action.c:549
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1243
 #: ../src/bookmarks/ephy-topic-action.c:475 ../src/ephy-history-window.c:173
@@ -2223,7 +2249,7 @@ msgstr[1] "Відкрити у нових вк_ладках"
 msgstr[2] "Відкрити у нових вк_ладках"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmark-action.c:549
+#: ../src/bookmarks/ephy-bookmark-action.c:555
 #: ../src/bookmarks/ephy-bookmarks-editor.c:180
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1240
 #: ../src/ephy-history-window.c:170 ../src/ephy-history-window.c:708
@@ -2233,17 +2259,17 @@ msgstr[0] "_Відкрити у новому вікні"
 msgstr[1] "_Відкрити у нових вікнах"
 msgstr[2] "_Відкрити у нових вікнах"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:570
+#: ../src/bookmarks/ephy-bookmark-action.c:576
 #: ../src/bookmarks/ephy-topic-action.c:797
 msgid "_Remove from Toolbar"
 msgstr "В_идалити з панелі"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:583
+#: ../src/bookmarks/ephy-bookmark-action.c:589
 #: ../src/bookmarks/ephy-topic-action.c:810
 msgid "Move _Left"
 msgstr "Перемістити _ліворуч"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:590
+#: ../src/bookmarks/ephy-bookmark-action.c:596
 #: ../src/bookmarks/ephy-topic-action.c:817
 msgid "Move Ri_ght"
 msgstr "Перемістити п_раворуч"
@@ -2472,9 +2498,9 @@ msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
 msgstr ""
-"Видалення цієї категорії призведе до того, що усі закладки стануть не "
-"віднесеними до категорій, оскільки вони належали цій категорії. Закладки не "
-"будуть видалені."
+"Видалення цієї категорії призведе до того, що усі закладки стануть "
+"не віднесеними до категорій, оскільки вони належали цій категорії. Закладки не будуть "
+"видалені."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:476
 msgid "_Delete Topic"
@@ -2864,7 +2890,7 @@ msgstr "Імпортувати закладки з файлу закладок"
 msgid "Launch the bookmarks editor"
 msgstr "Запустити менеджер закладок"
 
-#: ../src/ephy-notebook.c:1093
+#: ../src/ephy-notebook.c:970
 msgid "Close tab"
 msgstr "Закрити закладку"
 
@@ -2930,7 +2956,7 @@ msgstr ""
 "Наразі Epiphany не вдається використовувати, через несподівану помилку від "
 "Bonobo при спробі знайти об'єкт автоматизації."
 
-#: ../src/ephy-tab.c:483 ../src/ephy-tab.c:2234
+#: ../src/ephy-tab.c:483 ../src/ephy-tab.c:2238
 msgid "Blank page"
 msgstr "Чиста сторінка"
 
@@ -2944,22 +2970,22 @@ msgstr "Завантаження “%s”..."
 msgid "Loading..."
 msgstr "Завантаження..."
 
-#: ../src/ephy-tab.c:1617
+#: ../src/ephy-tab.c:1621
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Перенаправлення до %s..."
 
-#: ../src/ephy-tab.c:1621
+#: ../src/ephy-tab.c:1625
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Перенесення даних з %s..."
 
-#: ../src/ephy-tab.c:1625
+#: ../src/ephy-tab.c:1629
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Очікування авторизації від %s..."
 
-#: ../src/ephy-tab.c:1633
+#: ../src/ephy-tab.c:1637
 #, c-format
 msgid "Loading %s..."
 msgstr "Завантаження %s..."
@@ -3526,44 +3552,40 @@ msgstr "Якщо ви закриєте документ, цю інформаці
 msgid "Close _Document"
 msgstr "Закрити _документ"
 
-#: ../src/ephy-window.c:1119 ../src/window-commands.c:357
+#: ../src/ephy-window.c:1111 ../src/window-commands.c:357
 msgid "Open"
 msgstr "Відкрити"
 
-#: ../src/ephy-window.c:1121 ../src/window-commands.c:383
+#: ../src/ephy-window.c:1113 ../src/window-commands.c:383
 msgid "Save As"
 msgstr "Зберегти як"
 
-#: ../src/ephy-window.c:1125
+#: ../src/ephy-window.c:1117
 msgid "Bookmark"
 msgstr "Закладка"
 
-#: ../src/ephy-window.c:1127
-msgid "Find"
-msgstr "Знайти"
-
-#: ../src/ephy-window.c:1309
+#: ../src/ephy-window.c:1301
 msgid "Insecure"
 msgstr "Без захисту"
 
-#: ../src/ephy-window.c:1314
+#: ../src/ephy-window.c:1306
 msgid "Broken"
 msgstr "Пошкоджено"
 
-#: ../src/ephy-window.c:1322
+#: ../src/ephy-window.c:1314
 msgid "Low"
 msgstr "Низький"
 
-#: ../src/ephy-window.c:1329
+#: ../src/ephy-window.c:1321
 msgid "High"
 msgstr "Високий"
 
-#: ../src/ephy-window.c:1338
+#: ../src/ephy-window.c:1330
 #, c-format
 msgid "Security level: %s"
 msgstr "Рівень безпеки: %s"
 
-#: ../src/ephy-window.c:1378
+#: ../src/ephy-window.c:1370
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
@@ -3571,52 +3593,52 @@ msgstr[0] "%d приховане випадаюче вікно"
 msgstr[1] "%d прихованих випадаючих вікна"
 msgstr[2] "%d прихованих випадаючих вікон"
 
-#: ../src/ephy-window.c:1668
+#: ../src/ephy-window.c:1652
 #, c-format
 msgid "Save background image '%s'"
 msgstr "Зберегти зображення тла як '%s'"
 
-#: ../src/ephy-window.c:1682
+#: ../src/ephy-window.c:1666
 #, c-format
 msgid "Open image '%s'"
 msgstr "Відкрити зображення '%s'"
 
-#: ../src/ephy-window.c:1687
+#: ../src/ephy-window.c:1671
 #, c-format
 msgid "Use as desktop background '%s'"
 msgstr "Використовувати зображення як тло '%s'"
 
-#: ../src/ephy-window.c:1692
+#: ../src/ephy-window.c:1676
 #, c-format
 msgid "Save image '%s'"
 msgstr "Зберегти зображення '%s'"
 
-#: ../src/ephy-window.c:1697
+#: ../src/ephy-window.c:1681
 #, c-format
 msgid "Copy image address '%s'"
 msgstr "Копіювати адресу зображення '%s'"
 
-#: ../src/ephy-window.c:1710
+#: ../src/ephy-window.c:1694
 #, c-format
 msgid "Send email to address '%s'"
 msgstr "Надіслати повідомлення за адресою '%s'"
 
-#: ../src/ephy-window.c:1716
+#: ../src/ephy-window.c:1700
 #, c-format
 msgid "Copy email address '%s'"
 msgstr "Копіювати поштову адресу '%s'"
 
-#: ../src/ephy-window.c:1728
+#: ../src/ephy-window.c:1712
 #, c-format
 msgid "Save link '%s'"
 msgstr "Зберегти посилання '%s'"
 
-#: ../src/ephy-window.c:1734
+#: ../src/ephy-window.c:1718
 #, c-format
 msgid "Bookmark link '%s'"
 msgstr "Закладка на посилання '%s'"
 
-#: ../src/ephy-window.c:1740
+#: ../src/ephy-window.c:1724
 #, c-format
 msgid "Copy link's address '%s'"
 msgstr "Копіювати адресу посилання '%s'"
@@ -3641,31 +3663,31 @@ msgstr "Ім'я користувача"
 msgid "Cookie Properties"
 msgstr "Властивості cookie"
 
-#: ../src/pdm-dialog.c:919
+#: ../src/pdm-dialog.c:918
 msgid "Content:"
 msgstr "Вміст:"
 
-#: ../src/pdm-dialog.c:935
+#: ../src/pdm-dialog.c:934
 msgid "Path:"
 msgstr "Шлях:"
 
-#: ../src/pdm-dialog.c:951
+#: ../src/pdm-dialog.c:950
 msgid "Send for:"
 msgstr "Надсилати для:"
 
-#: ../src/pdm-dialog.c:960
+#: ../src/pdm-dialog.c:959
 msgid "Encrypted connections only"
 msgstr "Лише шифрованих з'єднань"
 
-#: ../src/pdm-dialog.c:960
+#: ../src/pdm-dialog.c:959
 msgid "Any type of connection"
 msgstr "Довільного типу з'єднань"
 
-#: ../src/pdm-dialog.c:966
+#: ../src/pdm-dialog.c:965
 msgid "Expires:"
 msgstr "Застаріває:"
 
-#: ../src/pdm-dialog.c:977
+#: ../src/pdm-dialog.c:976
 msgid "End of current session"
 msgstr "Закінчення поточного сеансу"
 
@@ -3776,11 +3798,6 @@ msgstr "Співавтори:"
 msgid "Past developers:"
 msgstr "Колишні розробники:"
 
-#: ../src/window-commands.c:779
-#, fuzzy
-msgid "GNOME Web Browser"
-msgstr "Переглядач веб-сторінок"
-
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
 #. * the translators.
@@ -3792,8 +3809,3 @@ msgstr "Переглядач веб-сторінок"
 #: ../src/window-commands.c:793
 msgid "translator-credits"
 msgstr "Максим Дзюманенко <mvd@mylinux.com.ua>"
-
-#: ../src/window-commands.c:796
-#, fuzzy
-msgid "GNOME Web Browser Website"
-msgstr "Переглядач веб-сторінок"

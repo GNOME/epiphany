@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-20 13:45+0200\n"
+"POT-Creation-Date: 2005-08-24 00:10+0200\n"
 "PO-Revision-Date: 2005-06-28 00:14+0200\n"
 "Last-Translator: GNOME PL Team <translators@gnomepl.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -132,7 +132,7 @@ msgstr "Uruchamia i blokuje Epiphany w trybie pełnoekranowym."
 msgid "Browse the web"
 msgstr "Przeglądanie stron WWW"
 
-#: ../data/epiphany.desktop.in.h:2
+#: ../data/epiphany.desktop.in.h:2 ../src/window-commands.c:779
 msgid "Epiphany Web Browser"
 msgstr "Przeglądarka WWW Epiphany"
 
@@ -540,7 +540,7 @@ msgid "MD5 Fingerprint:"
 msgstr "Odcisk palca MD5:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:995
+#: ../embed/mozilla/GtkNSSDialogs.cpp:989
 msgid "Organization:"
 msgstr "Organizacja:"
 
@@ -565,32 +565,56 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>Inne _kodowanie:</b>"
 
 #: ../data/glade/epiphany.glade.h:3
+msgid "C_ase sensitive"
+msgstr "Rozróżnianie _wielkości liter"
+
+#: ../data/glade/epiphany.glade.h:4
 msgid "Cookies"
 msgstr "Akceptowanie ciasteczek"
 
-#: ../data/glade/epiphany.glade.h:4
+#: ../data/glade/epiphany.glade.h:5
 msgid "Download Manager"
 msgstr "Menedżer pobierania"
 
-#: ../data/glade/epiphany.glade.h:5
+#: ../data/glade/epiphany.glade.h:6 ../src/ephy-window.c:1127
+msgid "Find"
+msgstr "Znajdź"
+
+#: ../data/glade/epiphany.glade.h:7
 msgid "Passwords"
 msgstr "Hasła"
 
-#: ../data/glade/epiphany.glade.h:6
+#: ../data/glade/epiphany.glade.h:8
 msgid "Personal Data Manager"
 msgstr "Menedżer danych osobistych"
 
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.glade.h:9
 msgid "Text Encoding"
 msgstr "Kodowanie tekstu"
 
-#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:358
+#: ../data/glade/epiphany.glade.h:10 ../src/ephy-encoding-menu.c:358
 msgid "Use the encoding specified by the document"
 msgstr "Używanie kodowania określonego przez dokument"
 
-#: ../data/glade/epiphany.glade.h:9 ../embed/downloader-view.c:368
+#: ../data/glade/epiphany.glade.h:11
+msgid "_Find:"
+msgstr "_Znajdź:"
+
+#: ../data/glade/epiphany.glade.h:12
+msgid "_Next"
+msgstr "_Naprzód"
+
+#: ../data/glade/epiphany.glade.h:13 ../embed/downloader-view.c:368
 msgid "_Pause"
 msgstr "_Wstrzymaj"
+
+#: ../data/glade/epiphany.glade.h:14
+msgid "_Previous"
+msgstr "W_stecz"
+
+#: ../data/glade/epiphany.glade.h:15
+msgid "_Wrap around"
+msgstr "Przeszu_kiwanie całego tekstu"
 
 #: ../data/glade/prefs-dialog.glade.h:1 ../data/glade/print.glade.h:1
 msgid "<b>Colors</b>"
@@ -1239,15 +1263,15 @@ msgstr "Ukraińskie"
 msgid "Unknown (%s)"
 msgstr "Nieznane (%s)"
 
-#: ../embed/ephy-history.c:542
+#: ../embed/ephy-history.c:527
 msgid "All"
 msgstr "Wszystko"
 
-#: ../embed/ephy-history.c:705
+#: ../embed/ephy-history.c:701
 msgid "Others"
 msgstr "Inne"
 
-#: ../embed/ephy-history.c:711
+#: ../embed/ephy-history.c:707
 msgid "Local files"
 msgstr "Pliki lokalne"
 
@@ -1534,16 +1558,16 @@ msgid "Certificate _Details"
 msgstr "Szcz_egóły certyfikatów"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:235
-#: ../embed/mozilla/GtkNSSDialogs.cpp:545
+#: ../embed/mozilla/GtkNSSDialogs.cpp:232
+#: ../embed/mozilla/GtkNSSDialogs.cpp:539
 msgid "_View Certificate"
 msgstr "_Wyświetl certyfikat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:243
+#: ../embed/mozilla/GtkNSSDialogs.cpp:240
 msgid "_Accept"
 msgstr "_Zaakceptuj"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:310
+#: ../embed/mozilla/GtkNSSDialogs.cpp:304
 #, c-format
 msgid ""
 "The site \"%s\" returned security information for \"%s\". It is possible "
@@ -1553,7 +1577,7 @@ msgstr ""
 "Strona \"%s\" zwróciła informację o zabezpieczeniach dla \"%s\". Możliwe "
 "jest, że ktoś przechwycił to połączenie w celu uzyskania poufnych informacji."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:316
+#: ../embed/mozilla/GtkNSSDialogs.cpp:310
 #, c-format
 msgid ""
 "You should only accept the security information if you trust \"%s\" and \"%s"
@@ -1562,11 +1586,11 @@ msgstr ""
 "Informację o zabezpieczeniach należy zaakceptować tylko wtedy gdy ufa się \"%"
 "s\" oraz \"%s\"."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:321
+#: ../embed/mozilla/GtkNSSDialogs.cpp:315
 msgid "Accept incorrect security information?"
 msgstr "Zaakceptować niepoprawną informację o zabezpieczeniach?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:346
 #, c-format
 msgid ""
 "It was not possible to automatically trust \"%s\". It is possible that "
@@ -1576,7 +1600,7 @@ msgstr ""
 "Przeglądarka nie mogła automatycznie zaufać \"%s\". Możliwe jest, że ktoś "
 "przechwycił to połączenie w celu uzyskania poufnych informacji."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:358
+#: ../embed/mozilla/GtkNSSDialogs.cpp:352
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
@@ -1585,32 +1609,32 @@ msgstr ""
 "Ze stroną powinno się połączyć tylko wtedy gdy istnieje pewność, że jest się "
 "połączonym z \"%s\"."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:357
 msgid "Connect to untrusted site?"
 msgstr "Połączyć się z niezaufaną stroną?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:367
+#: ../embed/mozilla/GtkNSSDialogs.cpp:361
 msgid "_Trust this security information from now on"
 msgstr "Zaufanie _informacji o zabezpieczeniach od teraz"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:362
 msgid "Co_nnect"
 msgstr "_Połącz"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:427
+#: ../embed/mozilla/GtkNSSDialogs.cpp:421
 msgid "Accept expired security information?"
 msgstr "Zaakceptować przeterminowaną informację o zabezpieczeniach?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:428
+#: ../embed/mozilla/GtkNSSDialogs.cpp:422
 #, c-format
 msgid "The security information for \"%s\" expired on %s."
 msgstr "Informacja o zabezpieczeniach dla \"%s\" uległa przedawnieniu dnia %s."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:434
+#: ../embed/mozilla/GtkNSSDialogs.cpp:428
 msgid "Accept not yet valid security information?"
 msgstr "Zaakceptować jeszcze nie ważną informację o zabezpieczeniach?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:435
+#: ../embed/mozilla/GtkNSSDialogs.cpp:429
 #, c-format
 msgid "The security information for \"%s\" isn't valid until %s."
 msgstr "Informacja o zabezpieczeniach dla \"%s\" będzie ważna od %s."
@@ -1618,44 +1642,44 @@ msgstr "Informacja o zabezpieczeniach dla \"%s\" będzie ważna od %s."
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:451
+#: ../embed/mozilla/GtkNSSDialogs.cpp:445
 msgid "%a %d %b %Y"
 msgstr "%a %d %b %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:459
+#: ../embed/mozilla/GtkNSSDialogs.cpp:453
 msgid "You should ensure that your computer's time is correct."
 msgstr "Upewnij się, że czas w komputerze jest ustawiony poprawnie."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:505
+#: ../embed/mozilla/GtkNSSDialogs.cpp:499
 #, c-format
 msgid "Cannot establish connection to \"%s\"."
 msgstr "Nie można ustanowić połączenia z \"%s\"."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:508
+#: ../embed/mozilla/GtkNSSDialogs.cpp:502
 #, c-format
 msgid "The certificate revocation list (CRL) from \"%s\" needs to be updated."
 msgstr "Lista unieważnionych certyfikatów (CRL) z \"%s\" wymaga aktualizacji."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:513
+#: ../embed/mozilla/GtkNSSDialogs.cpp:507
 msgid "Please ask your system administrator for assistance."
 msgstr "Poproś administratora systemu o pomoc."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:543
+#: ../embed/mozilla/GtkNSSDialogs.cpp:537
 msgid "Trust new Certificate Authority?"
 msgstr "Zaufać nowemu ośrodkowi certyfikacji?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:548
+#: ../embed/mozilla/GtkNSSDialogs.cpp:542
 msgid "_Trust CA"
 msgstr "_Zaufaj CA"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:570
+#: ../embed/mozilla/GtkNSSDialogs.cpp:564
 #, c-format
 msgid "Trust new Certificate Authority \"%s\" to identify web sites?"
 msgstr ""
 "Zaufać nowemu ośrodkowi certyfikacji \"%s\" identyfikującemu witryny "
 "sieciowe?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:575
+#: ../embed/mozilla/GtkNSSDialogs.cpp:569
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1663,113 +1687,113 @@ msgstr ""
 "Przed zaufaniem ośrodkowi autoryzacji (CA) należy sprawdzić autentyczność "
 "certyfikatu."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:646
+#: ../embed/mozilla/GtkNSSDialogs.cpp:640
 msgid "Certificate already exists."
 msgstr "Certyfikat już istnieje."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:647
+#: ../embed/mozilla/GtkNSSDialogs.cpp:641
 msgid "The certificate has already been imported."
 msgstr "Certyfikat został już zaimportowny."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:772
+#: ../embed/mozilla/GtkNSSDialogs.cpp:766
 msgid "_Backup Certificate"
 msgstr "_Zapisz kopię certyfikatu"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:779
+#: ../embed/mozilla/GtkNSSDialogs.cpp:773
 msgid "Select password."
 msgstr "Wybierz hasło."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:780
+#: ../embed/mozilla/GtkNSSDialogs.cpp:774
 msgid "Select a password to protect this certificate."
 msgstr "Wybierz hasło chroniące ten certyfikat."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:792
-#: ../embed/mozilla/GtkNSSDialogs.cpp:902
+#: ../embed/mozilla/GtkNSSDialogs.cpp:786
+#: ../embed/mozilla/GtkNSSDialogs.cpp:896
 msgid "_Password:"
 msgstr "_Hasło:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:806
+#: ../embed/mozilla/GtkNSSDialogs.cpp:800
 msgid "Con_firm password:"
 msgstr "Po_twierdź hasło:"
 
 #. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:818
+#: ../embed/mozilla/GtkNSSDialogs.cpp:812
 msgid "Password quality:"
 msgstr "Jakość hasła:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:875
+#: ../embed/mozilla/GtkNSSDialogs.cpp:869
 msgid "I_mport Certificate"
 msgstr "Zai_mportuj certyfikat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:891
+#: ../embed/mozilla/GtkNSSDialogs.cpp:885
 msgid "Password required."
 msgstr "Wymagane jest hasło."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:892
+#: ../embed/mozilla/GtkNSSDialogs.cpp:886
 msgid "Enter the password for this certificate."
 msgstr "Wprowadź hasło dla tego certyfikatu."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:973
+#: ../embed/mozilla/GtkNSSDialogs.cpp:967
 msgid "Certificate Revocation list successfully imported."
 msgstr ""
 "Lista unieważnionych certyfikatów (CRL) została pomyślnie zaimportowana."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:974
+#: ../embed/mozilla/GtkNSSDialogs.cpp:968
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "Lista unieważnionych certyfikatów (CRL) została zaimportowana:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1000
+#: ../embed/mozilla/GtkNSSDialogs.cpp:994
 msgid "Unit:"
 msgstr "Jednostka:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1005
+#: ../embed/mozilla/GtkNSSDialogs.cpp:999
 msgid "Next Update:"
 msgstr "Następna aktualizacja:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1032
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1026
 msgid "Not part of certificate"
 msgstr "To nie jest część certyfikatu"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1318
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1312
 msgid "Certificate Properties"
 msgstr "Właściwości certyfikatu"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1334
 msgid "This certificate has been verified for the following uses:"
 msgstr "Ten certyfikat został zweryfikowany do następującego użycia:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1343
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1337
 msgid "Could not verify this certificate because it has been revoked."
 msgstr ""
 "Nie można zweryfikować tego certyfikatu ponieważ został on unieważniony."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1346
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
 msgid "Could not verify this certificate because it has expired."
 msgstr "Nie można zweryfikować tego certyfikatu ponieważ wygasł."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1349
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1343
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Nie można zweryfikować tego certyfikatu ponieważ nie jest on zaufany."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1346
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "Nie można zweryfikować tego certyfikatu ponieważ jego wydawca nie jest "
 "zaufany."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1355
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1349
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr ""
 "Nie można zweryfikować tego certyfikatu ponieważ jego wydawca jest nieznany."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1358
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1352
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "Nie można zweryfikować tego certyfikatu ponieważ centrum atoryzacyjne "
 "certyfikatu jest nieprawidłowe."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1357
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Nie można zweryfikować tego certyfikatu z nieznanego powodu."
 
@@ -1794,21 +1818,25 @@ msgid "This page is loaded over a secure connection"
 msgstr "Ta strona zastała wczytana poprzez bezpieczne połączenie"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
-msgid "The padlock icon in the statusbar indicates whether a page is secure."
+msgid ""
+"You can always see the security status of a page from the padlock icon on "
+"the statusbar."
 msgstr ""
+"Informację o stanie zabezpieczeń można zobaczyć na ikonie kłódki na pasku "
+"stanu."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid "Security Warning"
 msgstr "Ostrzeżenie o zabezpieczeniach"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid "This page is loaded over a low security connection"
 msgstr "Ta strona została wczytana poprzez słabo zabezpieczone połączenie"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -1816,13 +1844,13 @@ msgstr ""
 "Wszystkie informacje jakie są widoczne lub zostały wprowadzone na tej "
 "stronie, mogą być z łatwością przechwycone."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr ""
 "Część elementów tej strony została wczytana poprzez niezabezpieczone "
 "połączenie"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1830,12 +1858,12 @@ msgstr ""
 "Część informacji jakie są widoczne lub zostały wprowadzone na tej stronie, "
 "może być z łatwością przechwycona."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid "Send this information over an insecure connection?"
 msgstr "Wysłać dane poprzez niezabezpieczone połączenie?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1843,12 +1871,12 @@ msgstr ""
 "Dane jakie zostały wprowadzone, zostaną wysłane poprzez niezabezpieczone "
 "połączenie i mogą być z łatwością przechwycone."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "_Send"
 msgstr "_Wyślij"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2236,7 +2264,7 @@ msgstr "Przeciągnij tą ikonę aby utworzyć dowiązanie do tej strony"
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:543
+#: ../src/bookmarks/ephy-bookmark-action.c:549
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1243
 #: ../src/bookmarks/ephy-topic-action.c:475 ../src/ephy-history-window.c:173
@@ -2248,7 +2276,7 @@ msgstr[1] "Otwórz w nowych pane_lach"
 msgstr[2] "Otwórz w nowych pane_lach"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmark-action.c:549
+#: ../src/bookmarks/ephy-bookmark-action.c:555
 #: ../src/bookmarks/ephy-bookmarks-editor.c:180
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1240
 #: ../src/ephy-history-window.c:170 ../src/ephy-history-window.c:708
@@ -2258,17 +2286,17 @@ msgstr[0] "Otwórz w no_wym oknie"
 msgstr[1] "Otwórz w no_wych oknach"
 msgstr[2] "Otwórz w no_wych oknach"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:570
+#: ../src/bookmarks/ephy-bookmark-action.c:576
 #: ../src/bookmarks/ephy-topic-action.c:797
 msgid "_Remove from Toolbar"
 msgstr "_Usuń z paska narzędziowego"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:583
+#: ../src/bookmarks/ephy-bookmark-action.c:589
 #: ../src/bookmarks/ephy-topic-action.c:810
 msgid "Move _Left"
 msgstr "Przenieś w _lewo"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:590
+#: ../src/bookmarks/ephy-bookmark-action.c:596
 #: ../src/bookmarks/ephy-topic-action.c:817
 msgid "Move Ri_ght"
 msgstr "Przenieś w p_rawo"
@@ -2890,7 +2918,7 @@ msgstr "Zaimportowanie zakładek z podanego pliku"
 msgid "Launch the bookmarks editor"
 msgstr "Uruchamia edytor zakładek"
 
-#: ../src/ephy-notebook.c:1093
+#: ../src/ephy-notebook.c:970
 msgid "Close tab"
 msgstr "Zamyka panel"
 
@@ -3567,10 +3595,6 @@ msgstr "Zapis jako"
 msgid "Bookmark"
 msgstr "Zakładka"
 
-#: ../src/ephy-window.c:1127
-msgid "Find"
-msgstr "Znajdź"
-
 #: ../src/ephy-window.c:1309
 msgid "Insecure"
 msgstr "Niepewny"
@@ -3600,52 +3624,52 @@ msgstr[0] "%d ukryte wyskakujące okno"
 msgstr[1] "%d ukryte wyskakujące okna"
 msgstr[2] "%d ukrytych wyskakujących okien"
 
-#: ../src/ephy-window.c:1668
+#: ../src/ephy-window.c:1660
 #, c-format
 msgid "Save background image '%s'"
 msgstr "Zapisz obraz tła \"%s\""
 
-#: ../src/ephy-window.c:1682
+#: ../src/ephy-window.c:1674
 #, c-format
 msgid "Open image '%s'"
 msgstr "Otwórz obraz \"%s\""
 
-#: ../src/ephy-window.c:1687
+#: ../src/ephy-window.c:1679
 #, c-format
 msgid "Use as desktop background '%s'"
 msgstr "Wykorzystaj jako tło \"%s\""
 
-#: ../src/ephy-window.c:1692
+#: ../src/ephy-window.c:1684
 #, c-format
 msgid "Save image '%s'"
 msgstr "Zapisz obraz \"%s\""
 
-#: ../src/ephy-window.c:1697
+#: ../src/ephy-window.c:1689
 #, c-format
 msgid "Copy image address '%s'"
 msgstr "Skopiuj adres obrazu \"%s\""
 
-#: ../src/ephy-window.c:1710
+#: ../src/ephy-window.c:1702
 #, c-format
 msgid "Send email to address '%s'"
 msgstr "Wyślij e-mail na adres \"%s\""
 
-#: ../src/ephy-window.c:1716
+#: ../src/ephy-window.c:1708
 #, c-format
 msgid "Copy email address '%s'"
 msgstr "Skopiuj adres e-mail \"%s\""
 
-#: ../src/ephy-window.c:1728
+#: ../src/ephy-window.c:1720
 #, c-format
 msgid "Save link '%s'"
 msgstr "Zapisz odnośnik \"%s\""
 
-#: ../src/ephy-window.c:1734
+#: ../src/ephy-window.c:1726
 #, c-format
 msgid "Bookmark link '%s'"
 msgstr "Dodaj do zakładek odnośnik \"%s\""
 
-#: ../src/ephy-window.c:1740
+#: ../src/ephy-window.c:1732
 #, c-format
 msgid "Copy link's address '%s'"
 msgstr "Skopiuj adres odnośnika \"%s\""
@@ -3670,31 +3694,31 @@ msgstr "Nazwa użytkownika"
 msgid "Cookie Properties"
 msgstr "Właściwości ciasteczka"
 
-#: ../src/pdm-dialog.c:919
+#: ../src/pdm-dialog.c:918
 msgid "Content:"
 msgstr "Zawartość:"
 
-#: ../src/pdm-dialog.c:935
+#: ../src/pdm-dialog.c:934
 msgid "Path:"
 msgstr "Ścieżka:"
 
-#: ../src/pdm-dialog.c:951
+#: ../src/pdm-dialog.c:950
 msgid "Send for:"
 msgstr "Wyślij do:"
 
-#: ../src/pdm-dialog.c:960
+#: ../src/pdm-dialog.c:959
 msgid "Encrypted connections only"
 msgstr "Tylko zaszyfrowane połączenia"
 
-#: ../src/pdm-dialog.c:960
+#: ../src/pdm-dialog.c:959
 msgid "Any type of connection"
 msgstr "Dowolny rodzaj połączenia"
 
-#: ../src/pdm-dialog.c:966
+#: ../src/pdm-dialog.c:965
 msgid "Expires:"
 msgstr "Traci ważność:"
 
-#: ../src/pdm-dialog.c:977
+#: ../src/pdm-dialog.c:976
 msgid "End of current session"
 msgstr "Koniec bieżącej sesji"
 
@@ -3805,11 +3829,6 @@ msgstr "Współpraca:"
 msgid "Past developers:"
 msgstr "Poprzedni programiści:"
 
-#: ../src/window-commands.c:779
-#, fuzzy
-msgid "GNOME Web Browser"
-msgstr "Przeglądarka WWW"
-
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
 #. * the translators.
@@ -3822,7 +3841,535 @@ msgstr "Przeglądarka WWW"
 msgid "translator-credits"
 msgstr "GNOME PL Team <translators@gnomepl.org>"
 
-#: ../src/window-commands.c:796
-#, fuzzy
-msgid "GNOME Web Browser Website"
-msgstr "Przeglądarka WWW"
+#~ msgid "Enable Java."
+#~ msgstr "Obsługa języka Java."
+
+#~ msgid "Enable JavaScript."
+#~ msgstr "Obsługa języka JavaScript."
+
+#~ msgid "Match case for find in page."
+#~ msgstr "Rozróżnianie wielkości liter podczas wyszukiwania na stronie."
+
+#~ msgid "Show bookmarks bar by default."
+#~ msgstr "Domyślne wyświetlanie paska zakładek."
+
+#~ msgid "Show statusbar by default."
+#~ msgstr "Domyślne wyświetlanie paska stanu."
+
+#~ msgid "Show toolbars by default."
+#~ msgstr "Domyślne wyświetlanie pasków narzędziowych."
+
+# FIXME - czy to ma sens?
+#~ msgid "Use caret browsing mode."
+#~ msgstr "Przeglądanie w trybie korektorskim."
+
+#~ msgid "Whether to print the date in the footer."
+#~ msgstr "Określa czy należy drukować datę w stopce."
+
+#~ msgid "Whether to print the page address in the header."
+#~ msgstr "Określa czy należy drukować adres strony w nagłówku."
+
+#~ msgid "Whether to print the page numbers (x of total) in the footer."
+#~ msgstr ""
+#~ "Określa czy należy drukować numery stron (x ze wszystkich) w stopce."
+
+#~ msgid "Whether to print the page title in the header."
+#~ msgstr "Określa czy należy drukować tytuł strony w nagłówku."
+
+#~ msgid "Open this file with \"%s\"?"
+#~ msgstr "Otworzyć plik przy użyciu \"%s\"?"
+
+#~ msgid ""
+#~ "It's not possible to view this file type directly in the browser. You can "
+#~ "open it with \"%s\" or save it."
+#~ msgstr ""
+#~ "Nie można wyświetlić pliku bezpośrednio w oknie przeglądarki. Można go "
+#~ "otworzyć przy użyciu \"%s\" lub zapisać."
+
+#~ msgid ""
+#~ "It's not possible to view this file because there is no application "
+#~ "installed that can open it. You can save it instead."
+#~ msgstr ""
+#~ "Nie można wyświetlić tego pliku z powodu braku zainstalowanej aplikacji "
+#~ "która by to potrafiła. Zamiast tego można go zapisać."
+
+#~ msgid "_Don't show this message again for this site"
+#~ msgstr "Nie wyświetlaj tego komunikatu ponownie dla tej strony"
+
+#~ msgid "Toggle network status"
+#~ msgstr "Przełącza stan sieci"
+
+#~ msgid "Epiphany"
+#~ msgstr "Epiphany"
+
+#~ msgid "Filename to print to"
+#~ msgstr "Nazwa pliku z wydrukiem"
+
+#~ msgid "Filename to print to."
+#~ msgstr "Nazwa pliku z wydrukiem."
+
+#~ msgid "Paper type"
+#~ msgstr "Typ papieru"
+
+#~ msgid ""
+#~ "Paper type. Supported values are \"A4\", \"Letter\", \"Legal\" and "
+#~ "\"Executive\"."
+#~ msgstr ""
+#~ "Rodzaj papieru. Dopuszczalne wartości to \"A4\", \"Letter\", \"Legal\" i "
+#~ "\"Executive\"."
+
+#~ msgid "Printer name"
+#~ msgstr "Nazwa drukarki"
+
+#~ msgid "Printer name."
+#~ msgstr "Nazwa drukarki."
+
+#~ msgid "Printing bottom margin"
+#~ msgstr "Dolny margines wydruku"
+
+#~ msgid "Printing bottom margin (in mm)."
+#~ msgstr "Dolny margines wydruku (w mm)."
+
+#~ msgid "Printing left margin"
+#~ msgstr "Lewy margines wydruku"
+
+#~ msgid "Printing left margin (in mm)."
+#~ msgstr "Lewy margines wydruku (w mm)."
+
+#~ msgid "Printing right margin"
+#~ msgstr "Prawy margines wydruku"
+
+#~ msgid "Printing right margin (in mm)."
+#~ msgstr "Prawy margines wydruku (w mm)."
+
+#~ msgid "Printing top margin"
+#~ msgstr "Górny margines wydruku"
+
+#~ msgid "Printing top margin (in mm)."
+#~ msgstr "Górny margines wydruku (w mm)."
+
+#~ msgid "The path of the folder where downloads are saved."
+#~ msgstr "Ścieżka folderu gdzie są zapisywane pobrania."
+
+#~ msgid "<b>Margins (in mm)</b>"
+#~ msgstr "<b>Marginesy (w mm)</b>"
+
+#~ msgid "<b>Orientation</b>"
+#~ msgstr "<b>Ułożenie</b>"
+
+#~ msgid "<b>Page Range</b>"
+#~ msgstr "<b>Zakres stron</b>"
+
+#~ msgid "<b>Print To</b>"
+#~ msgstr "<b>Drukowanie do</b>"
+
+#~ msgid "<b>Size</b>"
+#~ msgstr "<b>Rozmiar</b>"
+
+#~ msgid "A_4"
+#~ msgstr "A_4"
+
+#~ msgid "E_xecutive"
+#~ msgstr "E_xecutive"
+
+#~ msgid "L_egal"
+#~ msgstr "L_egal"
+
+#~ msgid "Lan_dscape"
+#~ msgstr "_Poziomo"
+
+#~ msgid "P_ortrait"
+#~ msgstr "Pi_onowo"
+
+#~ msgid "P_rinter:"
+#~ msgstr "D_rukarka:"
+
+#~ msgid "_All pages"
+#~ msgstr "_Wszystkie"
+
+#~ msgid "_Bottom:"
+#~ msgstr "_Dół"
+
+#~ msgid "_Browse..."
+#~ msgstr "Prz_eglądaj..."
+
+#~ msgid "_File:"
+#~ msgstr "_Plik:"
+
+#~ msgid "_Left:"
+#~ msgstr "_Lewy:"
+
+#~ msgid "_Letter"
+#~ msgstr "_Letter"
+
+#~ msgid "_Right:"
+#~ msgstr "_Prawy:"
+
+#~ msgid "_Selection"
+#~ msgstr "_Zaznaczenie"
+
+#~ msgid "_to:"
+#~ msgstr "d_o:"
+
+#~ msgid "Trust \"%s\" to identify:"
+#~ msgstr "Zaufaj \"%s\" przy identyfikacji:"
+
+#~ msgid "_Web sites"
+#~ msgstr "_Witryny www"
+
+#~ msgid "Print to"
+#~ msgstr "Wydrukuj do"
+
+#~ msgid "Postscript files"
+#~ msgstr "Pliki postcript"
+
+#~ msgid "Failed to find %s"
+#~ msgstr "Nie można odnaleźć %s"
+
+#~ msgid "select fonts for|Unicode"
+#~ msgstr "Unikodu"
+
+#~ msgid "Ephy"
+#~ msgstr "Ephy"
+
+#~ msgid "toolbar style|Text below icons"
+#~ msgstr "Tekst pod ikonami"
+
+#~ msgid "toolbar style|Text beside icons"
+#~ msgstr "Tekst obok ikon"
+
+#~ msgid "toolbar style|Icons only"
+#~ msgstr "Tylko ikony"
+
+#~ msgid "toolbar style|Text only"
+#~ msgstr "Tylko tekst"
+
+#~ msgid "Afrikaans"
+#~ msgstr "Afrykanerski"
+
+#~ msgid "Arabic"
+#~ msgstr "Arabskie"
+
+#~ msgid "Azerbaijani"
+#~ msgstr "Azerbejdżański"
+
+#~ msgid "Byelorussian"
+#~ msgstr "Białoruski"
+
+#~ msgid "Bulgarian"
+#~ msgstr "Bułgarski"
+
+#~ msgid "Breton"
+#~ msgstr "Bretoński"
+
+#~ msgid "Catalan"
+#~ msgstr "Kataloński"
+
+#~ msgid "Czech"
+#~ msgstr "Czeski"
+
+#~ msgid "Danish"
+#~ msgstr "Duński"
+
+#~ msgid "German"
+#~ msgstr "Niemiecki"
+
+#~ msgid "English"
+#~ msgstr "Angielski"
+
+#~ msgid "Greek"
+#~ msgstr "Greckie"
+
+#~ msgid "Esperanto"
+#~ msgstr "Esperanto"
+
+#~ msgid "Spanish"
+#~ msgstr "Hiszpański"
+
+#~ msgid "Estonian"
+#~ msgstr "Estoński"
+
+#~ msgid "Basque"
+#~ msgstr "Baskijski"
+
+#~ msgid "Finnish"
+#~ msgstr "Fiński"
+
+#~ msgid "Faeroese"
+#~ msgstr "Farerski"
+
+#~ msgid "French"
+#~ msgstr "Francuski"
+
+#~ msgid "Irish"
+#~ msgstr "Irlandzki"
+
+#~ msgid "Scots Gaelic"
+#~ msgstr "Szkocki gaelijski"
+
+#~ msgid "Galician"
+#~ msgstr "Galijski"
+
+#~ msgid "Hebrew"
+#~ msgstr "Hebrajskie"
+
+#~ msgid "Croatian"
+#~ msgstr "Chorwacki"
+
+#~ msgid "Hungarian"
+#~ msgstr "Węgierski"
+
+#~ msgid "Indonesian"
+#~ msgstr "Indonezyjski"
+
+#~ msgid "Icelandic"
+#~ msgstr "Islandzki"
+
+#~ msgid "Italian"
+#~ msgstr "Włoski"
+
+#~ msgid "Japanese"
+#~ msgstr "Japońskie"
+
+#~ msgid "Korean"
+#~ msgstr "Koreańskie"
+
+#~ msgid "Lithuanian"
+#~ msgstr "Litewski"
+
+#~ msgid "Latvian"
+#~ msgstr "Łotewski"
+
+#~ msgid "Macedonian"
+#~ msgstr "Macedoński"
+
+#~ msgid "Malay"
+#~ msgstr "Malajski"
+
+#~ msgid "Dutch"
+#~ msgstr "Niderlandzki"
+
+#~ msgid "Norwegian/Bokmal"
+#~ msgstr "Norweski/Bokmal"
+
+#~ msgid "Norwegian/Nynorsk"
+#~ msgstr "Norweski/Nynorsk"
+
+#~ msgid "Norwegian"
+#~ msgstr "Norweski"
+
+#~ msgid "Polish"
+#~ msgstr "Polski"
+
+#~ msgid "Portuguese"
+#~ msgstr "Portugalski"
+
+#~ msgid "Portuguese of Brazil"
+#~ msgstr "Portugalski/Brazylia"
+
+#~ msgid "Romanian"
+#~ msgstr "Rumuński"
+
+#~ msgid "Russian"
+#~ msgstr "Rosyjski"
+
+#~ msgid "Slovak"
+#~ msgstr "Słowacki"
+
+#~ msgid "Slovenian"
+#~ msgstr "Słoweński"
+
+#~ msgid "Albanian"
+#~ msgstr "Albański"
+
+#~ msgid "Serbian"
+#~ msgstr "Serbski"
+
+#~ msgid "Swedish"
+#~ msgstr "Szwedzki"
+
+#~ msgid "Tamil"
+#~ msgstr "Tamilskie"
+
+#~ msgid "Turkish"
+#~ msgstr "Tureckie"
+
+#~ msgid "Ukrainian"
+#~ msgstr "Ukraiński"
+
+#~ msgid "Vietnamese"
+#~ msgstr "Wietnamski"
+
+#~ msgid "Walloon"
+#~ msgstr "Waloński"
+
+#~ msgid "Chinese"
+#~ msgstr "Chiński"
+
+#~ msgid "Simplified Chinese"
+#~ msgstr "Chiński uproszczony"
+
+#~ msgid "Traditional Chinese"
+#~ msgstr "Chiński tradycyjny"
+
+#~ msgid "Home"
+#~ msgstr "Początek"
+
+#~ msgid "Desktop"
+#~ msgstr "Pulpit"
+
+#~ msgid "Hide the menubar by default."
+#~ msgstr "Domyślne ukrycie paska menu."
+
+#~ msgid "    "
+#~ msgstr "    "
+
+#~ msgid "      "
+#~ msgstr "      "
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "_Add..."
+#~ msgstr "D_odaj..."
+
+#~ msgid "_Down"
+#~ msgstr "_Dół"
+
+#~ msgid "_Remove"
+#~ msgstr "_Usuń"
+
+#~ msgid "lpr"
+#~ msgstr "lpr"
+
+#~ msgid "About %d second left"
+#~ msgid_plural "About %d seconds left"
+#~ msgstr[0] "Pozostała około %d sekunda"
+#~ msgstr[1] "Pozostały około %d sekundy"
+#~ msgstr[2] "Pozostało około %d sekund"
+
+#~ msgid "About %d minute left"
+#~ msgid_plural "About %d minutes left"
+#~ msgstr[0] "Pozostała około %d minuta"
+#~ msgstr[1] "Pozostały około %d minuty"
+#~ msgstr[2] "Pozostało około %d minut"
+
+#~ msgid "Off"
+#~ msgstr "Nieaktywne"
+
+#~ msgid "Chinese Simplified"
+#~ msgstr "Chińskie uproszczone"
+
+#~ msgid "Chinese Traditional"
+#~ msgstr "Chińskie tradycyjne"
+
+#~ msgid "East Asian"
+#~ msgstr "Wschodnia Azja"
+
+#~ msgid "Universal"
+#~ msgstr "Uniwersalny"
+
+#~ msgid "Open the file in another application?"
+#~ msgstr "Otworzyć plik za pomocą innej aplikacji?"
+
+#~ msgid "system-language"
+#~ msgstr "pl"
+
+#~ msgid ""
+#~ "Drag an item onto the toolbars above to add it, from the toolbars in the "
+#~ "items table to remove it."
+#~ msgstr ""
+#~ "Przeciągnij element z palety na pasek narzędziowy aby go dodać, lub z "
+#~ "paska na paletę, aby go usunąć."
+
+#~ msgid "A file %s already exists."
+#~ msgstr "Plik %s już istnieje."
+
+#~ msgid "Baltic"
+#~ msgstr "Bałtyckie"
+
+#~ msgid "Cyrillic"
+#~ msgstr "Cyrylica"
+
+#~ msgid "Devanagari"
+#~ msgstr "Dewanagari"
+
+#~ msgid "Thai"
+#~ msgstr "Tajskie"
+
+#~ msgid "Unicode"
+#~ msgstr "Unikod"
+
+#~ msgid "Western"
+#~ msgstr "Zachodnie"
+
+#~ msgid "Secure"
+#~ msgstr "Bezpieczny"
+
+#~ msgid "%d %%"
+#~ msgstr "%d %%"
+
+# FIXME - albo zaznacz wszystko, zaznacza wszystko?
+#~ msgid "Select All"
+#~ msgstr "Zaznaczanie wszystkiego"
+
+#~ msgid "Input Methods"
+#~ msgstr "Metody wejściowe"
+
+#~ msgid "_Open in New Window"
+#~ msgstr "_Otwórz w nowym oknie"
+
+#~ msgid "_Open in New Windows"
+#~ msgstr "_Otwórz w nowych oknach"
+
+#~ msgid "Open in New _Tabs"
+#~ msgstr "Otwórz w nowych pane_lach"
+
+#~ msgid "_Open in Tabs"
+#~ msgstr "Otwórz w pane_lach"
+
+#~ msgid "C_lear History"
+#~ msgstr "Wyczyść _historię"
+
+#~ msgid "C_lear"
+#~ msgstr "_Wyczyść"
+
+#~ msgid "Used internally by the bonobo interface"
+#~ msgstr "Funkcja używana wewnętrznie przez bonobo"
+
+#~ msgid "You can recover the opened tabs and windows."
+#~ msgstr "Można przywrócić otwarte panele i okna."
+
+#~ msgid "site"
+#~ msgstr "witryny"
+
+#~ msgid "_Open Frame"
+#~ msgstr "_Otwórz ramkę"
+
+#~ msgid "Exit Fullscreen"
+#~ msgstr "Zakończ tryb pełnoekranowy"
+
+#~ msgid "Medium"
+#~ msgstr "Średni"
+
+#~ msgid ""
+#~ "Security level: %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Poziom bezpieczeństwa: %s\n"
+#~ "%s"
+
+#~ msgid "Scottish"
+#~ msgstr "Szkocki"
+
+#~ msgid "Custom [%s]"
+#~ msgstr "Dowolny [%s]"
+
+#~ msgid "Go up"
+#~ msgstr "Idź do góry"
+
+#~ msgid "Favicon"
+#~ msgstr "Ikona strony"
+
+#~ msgid "A GNOME browser based on Mozilla"
+#~ msgstr "Przeglądarka WWW GNOME oparta na projekcie Mozilla"

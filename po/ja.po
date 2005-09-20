@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-20 13:45+0200\n"
+"POT-Creation-Date: 2005-08-30 17:44+0900\n"
 "PO-Revision-Date: 2005-08-30 17:40+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -132,7 +132,7 @@ msgstr "Epiphany ウェブ・ブラウザ"
 
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.h:3 ../src/ephy-main.c:222
-#: ../src/ephy-main.c:233
+#: ../src/ephy-main.c:233 ../src/window-commands.c:779
 msgid "Web Browser"
 msgstr "GNOME ウェブ・ブラウザ"
 
@@ -533,7 +533,7 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5 指紋:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:995
+#: ../embed/mozilla/GtkNSSDialogs.cpp:989
 msgid "Organization:"
 msgstr "組織 (O):"
 
@@ -558,32 +558,56 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>別のエンコーディングを使用する(_U):</b>"
 
 #: ../data/glade/epiphany.glade.h:3
+msgid "C_ase sensitive"
+msgstr "大/小文字を区別する(_A)"
+
+#: ../data/glade/epiphany.glade.h:4
 msgid "Cookies"
 msgstr "クッキー"
 
-#: ../data/glade/epiphany.glade.h:4
+#: ../data/glade/epiphany.glade.h:5
 msgid "Download Manager"
 msgstr "ダウンロード・マネージャ"
 
-#: ../data/glade/epiphany.glade.h:5
+#: ../data/glade/epiphany.glade.h:6 ../src/ephy-window.c:1127
+msgid "Find"
+msgstr "検索"
+
+#: ../data/glade/epiphany.glade.h:7
 msgid "Passwords"
 msgstr "パスワード"
 
-#: ../data/glade/epiphany.glade.h:6
+#: ../data/glade/epiphany.glade.h:8
 msgid "Personal Data Manager"
 msgstr "個人データ・マネージャ"
 
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.glade.h:9
 msgid "Text Encoding"
 msgstr "テキストのエンコーディング"
 
-#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:358
+#: ../data/glade/epiphany.glade.h:10 ../src/ephy-encoding-menu.c:358
 msgid "Use the encoding specified by the document"
 msgstr "ドキュメント指定のエンコーディングを使用します"
 
-#: ../data/glade/epiphany.glade.h:9 ../embed/downloader-view.c:368
+#: ../data/glade/epiphany.glade.h:11
+msgid "_Find:"
+msgstr "検索(_F):"
+
+#: ../data/glade/epiphany.glade.h:12
+msgid "_Next"
+msgstr "次へ(_N)"
+
+#: ../data/glade/epiphany.glade.h:13 ../embed/downloader-view.c:368
 msgid "_Pause"
 msgstr "中断(_P)"
+
+#: ../data/glade/epiphany.glade.h:14
+msgid "_Previous"
+msgstr "前へ(_P)"
+
+#: ../data/glade/epiphany.glade.h:15
+msgid "_Wrap around"
+msgstr "折り返しも検索する(_W)"
 
 #: ../data/glade/prefs-dialog.glade.h:1 ../data/glade/print.glade.h:1
 msgid "<b>Colors</b>"
@@ -1522,16 +1546,16 @@ msgid "Certificate _Details"
 msgstr "証明書の詳細"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:235
-#: ../embed/mozilla/GtkNSSDialogs.cpp:545
+#: ../embed/mozilla/GtkNSSDialogs.cpp:232
+#: ../embed/mozilla/GtkNSSDialogs.cpp:539
 msgid "_View Certificate"
 msgstr "証明書の表示(_V)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:243
+#: ../embed/mozilla/GtkNSSDialogs.cpp:240
 msgid "_Accept"
 msgstr "受け入れる(_A)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:310
+#: ../embed/mozilla/GtkNSSDialogs.cpp:304
 #, c-format
 msgid ""
 "The site \"%s\" returned security information for \"%s\". It is possible "
@@ -1541,7 +1565,7 @@ msgstr ""
 "サイト \"%s\" が \"%s\" のセキュリティ情報を返してきました。誰かがあなたの機"
 "密情報を入手するために通信内容を傍受するおそれがあります。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:316
+#: ../embed/mozilla/GtkNSSDialogs.cpp:310
 #, c-format
 msgid ""
 "You should only accept the security information if you trust \"%s\" and \"%s"
@@ -1549,11 +1573,11 @@ msgid ""
 msgstr ""
 "\"%s\" と \"%s\" を信用する場合はセキュリティ情報のみ受け入れて下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:321
+#: ../embed/mozilla/GtkNSSDialogs.cpp:315
 msgid "Accept incorrect security information?"
 msgstr "不確かなセキュリティ情報を受け入れますか？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:346
 #, c-format
 msgid ""
 "It was not possible to automatically trust \"%s\". It is possible that "
@@ -1563,7 +1587,7 @@ msgstr ""
 "自動的に \"%s\" を信用できませんでした。誰かがあなたの機密情報を入手するため"
 "に通信内容を傍受するおそれがあります。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:358
+#: ../embed/mozilla/GtkNSSDialogs.cpp:352
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
@@ -1571,32 +1595,32 @@ msgid ""
 msgstr ""
 "\"%s\" に接続していると確信がある場合に、そのサイトへ接続のみ行って下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:357
 msgid "Connect to untrusted site?"
 msgstr "信用できないサイトに接続しますか？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:367
+#: ../embed/mozilla/GtkNSSDialogs.cpp:361
 msgid "_Trust this security information from now on"
 msgstr "これ以降このセキュリティ情報を信用する(_T)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:362
 msgid "Co_nnect"
 msgstr "接続する(_N)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:427
+#: ../embed/mozilla/GtkNSSDialogs.cpp:421
 msgid "Accept expired security information?"
 msgstr "期限切れのセキュリティ情報を受け入れますか？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:428
+#: ../embed/mozilla/GtkNSSDialogs.cpp:422
 #, c-format
 msgid "The security information for \"%s\" expired on %s."
 msgstr "\"%s\" のセキュリティ情報は %s で有効期限が切れています。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:434
+#: ../embed/mozilla/GtkNSSDialogs.cpp:428
 msgid "Accept not yet valid security information?"
 msgstr "まだ不正なセキュリティ情報を受け入れますか？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:435
+#: ../embed/mozilla/GtkNSSDialogs.cpp:429
 #, c-format
 msgid "The security information for \"%s\" isn't valid until %s."
 msgstr "\"%s\" のセキュリティ情報は %s まで不正な状態にあります。"
@@ -1604,151 +1628,151 @@ msgstr "\"%s\" のセキュリティ情報は %s まで不正な状態にあり�
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:451
+#: ../embed/mozilla/GtkNSSDialogs.cpp:445
 msgid "%a %d %b %Y"
 msgstr "%Y年%b %d日 (%a)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:459
+#: ../embed/mozilla/GtkNSSDialogs.cpp:453
 msgid "You should ensure that your computer's time is correct."
 msgstr "お使いのコンピュータの時刻が正しいことを確認して下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:505
+#: ../embed/mozilla/GtkNSSDialogs.cpp:499
 #, c-format
 msgid "Cannot establish connection to \"%s\"."
 msgstr "\"%s\" への接続を確立できません。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:508
+#: ../embed/mozilla/GtkNSSDialogs.cpp:502
 #, c-format
 msgid "The certificate revocation list (CRL) from \"%s\" needs to be updated."
 msgstr "\"%s\" の証明書失効リスト (CRL) を更新する必要があります。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:513
+#: ../embed/mozilla/GtkNSSDialogs.cpp:507
 msgid "Please ask your system administrator for assistance."
 msgstr "システム管理者にヘルプを依頼して下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:543
+#: ../embed/mozilla/GtkNSSDialogs.cpp:537
 msgid "Trust new Certificate Authority?"
 msgstr "新しい認証局 (CA) を信用しますか？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:548
+#: ../embed/mozilla/GtkNSSDialogs.cpp:542
 msgid "_Trust CA"
 msgstr "CA を信用する(_T)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:570
+#: ../embed/mozilla/GtkNSSDialogs.cpp:564
 #, c-format
 msgid "Trust new Certificate Authority \"%s\" to identify web sites?"
 msgstr ""
 "ウェブ・サイトを識別するために、新しい認証局 (CA) \"%s\" を信用しますか？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:575
+#: ../embed/mozilla/GtkNSSDialogs.cpp:569
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
 msgstr ""
 "認証局 (CA) を信用する前に証明書が信頼できるかどうか確認する必要があります。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:646
+#: ../embed/mozilla/GtkNSSDialogs.cpp:640
 msgid "Certificate already exists."
 msgstr "証明書は既に存在します。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:647
+#: ../embed/mozilla/GtkNSSDialogs.cpp:641
 msgid "The certificate has already been imported."
 msgstr "証明書は既にインポートされています。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:772
+#: ../embed/mozilla/GtkNSSDialogs.cpp:766
 msgid "_Backup Certificate"
 msgstr "証明書のバックアップ(_B)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:779
+#: ../embed/mozilla/GtkNSSDialogs.cpp:773
 msgid "Select password."
 msgstr "パスワードを選択して下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:780
+#: ../embed/mozilla/GtkNSSDialogs.cpp:774
 msgid "Select a password to protect this certificate."
 msgstr "この証明書を保護するパスワードを選択して下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:792
-#: ../embed/mozilla/GtkNSSDialogs.cpp:902
+#: ../embed/mozilla/GtkNSSDialogs.cpp:786
+#: ../embed/mozilla/GtkNSSDialogs.cpp:896
 msgid "_Password:"
 msgstr "パスワード(_P):"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:806
+#: ../embed/mozilla/GtkNSSDialogs.cpp:800
 msgid "Con_firm password:"
 msgstr "パスワードの確認(_F):"
 
 #. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:818
+#: ../embed/mozilla/GtkNSSDialogs.cpp:812
 msgid "Password quality:"
 msgstr "パスワードの品質:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:875
+#: ../embed/mozilla/GtkNSSDialogs.cpp:869
 msgid "I_mport Certificate"
 msgstr "証明書のインポート(_M)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:891
+#: ../embed/mozilla/GtkNSSDialogs.cpp:885
 msgid "Password required."
 msgstr "パスワードが必要です。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:892
+#: ../embed/mozilla/GtkNSSDialogs.cpp:886
 msgid "Enter the password for this certificate."
 msgstr "この証明書のパスワードを入力して下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:973
+#: ../embed/mozilla/GtkNSSDialogs.cpp:967
 msgid "Certificate Revocation list successfully imported."
 msgstr "証明書失効リストのインポートが完了しました。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:974
+#: ../embed/mozilla/GtkNSSDialogs.cpp:968
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "インポートする証明書失効リスト (CRL):"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1000
+#: ../embed/mozilla/GtkNSSDialogs.cpp:994
 msgid "Unit:"
 msgstr "単位:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1005
+#: ../embed/mozilla/GtkNSSDialogs.cpp:999
 msgid "Next Update:"
 msgstr "次回の更新:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1032
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1026
 msgid "Not part of certificate"
 msgstr "証明書の一部ではありません"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1318
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1312
 msgid "Certificate Properties"
 msgstr "証明書のプロパティ"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1334
 msgid "This certificate has been verified for the following uses:"
 msgstr "この証明書は次の使用に対して確認済みです:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1343
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1337
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "この証明書は失効しているので、正しいかものか確認できませんでした。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1346
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
 msgid "Could not verify this certificate because it has expired."
 msgstr ""
 "この証明書は有効期限が切れているので、正しいものか確認できませんでした。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1349
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1343
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "この証明書は信用されていないので、正しいものか確認できませんでした。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1346
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "この証明書は発行者が信用されていないので、正しいものか確認できませんでした。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1355
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1349
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "この証明書は発行者が不明なため、正しいものか確認できませんでした。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1358
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1352
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr "この証明書は CA 証明書が不正なので、正しいものか確認できませんでした。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1357
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "この証明書は不明な理由で正しいものか確認できませんでした。"
 
@@ -1773,21 +1797,25 @@ msgid "This page is loaded over a secure connection"
 msgstr "このページはセキュアな接続を介して読み込まれました"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
-msgid "The padlock icon in the statusbar indicates whether a page is secure."
+msgid ""
+"You can always see the security status of a page from the padlock icon on "
+"the statusbar."
 msgstr ""
+"ステータスバーにある南京錠のアイコンから、常にページのセキュリティ・レベルを"
+"確認することが可能です。"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid "Security Warning"
 msgstr "セキュリティの警告"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid "This page is loaded over a low security connection"
 msgstr "このページは低レベルのセキュリティ接続を介して読み込まれました"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -1795,12 +1823,12 @@ msgstr ""
 "このページで表示されている情報または入力した情報は第三者から簡単に傍受される"
 "恐れがあります。"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr ""
 "このページのいくつかの部分はセキュアではない接続を介して読み込まれました"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1808,12 +1836,12 @@ msgstr ""
 "このページで表示されている情報または入力した情報はセキュアではない接続を介し"
 "て送信され、第三者から簡単に傍受される恐れがあります。"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid "Send this information over an insecure connection?"
 msgstr "この情報をセキュアではない接続を介して送信しますか？"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1821,12 +1849,12 @@ msgstr ""
 "このページで入力した情報はセキュアではない接続を介して送信され、第三者から簡"
 "単に傍受される恐れがあります。"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "_Send"
 msgstr "送信する(_S)"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2213,7 +2241,7 @@ msgstr "このアイコンをドラッグ＆ドロップすると、このペー
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:543
+#: ../src/bookmarks/ephy-bookmark-action.c:549
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1243
 #: ../src/bookmarks/ephy-topic-action.c:475 ../src/ephy-history-window.c:173
@@ -2224,7 +2252,7 @@ msgstr[0] "新しいタブで開く(_T)"
 msgstr[1] "新しい複数のタブで開く(_T)"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmark-action.c:549
+#: ../src/bookmarks/ephy-bookmark-action.c:555
 #: ../src/bookmarks/ephy-bookmarks-editor.c:180
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1240
 #: ../src/ephy-history-window.c:170 ../src/ephy-history-window.c:708
@@ -2233,17 +2261,17 @@ msgid_plural "Open in New _Windows"
 msgstr[0] "新しいウィンドウで開く(_W)"
 msgstr[1] "新しい複数のウィンドウで開く(_W)"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:570
+#: ../src/bookmarks/ephy-bookmark-action.c:576
 #: ../src/bookmarks/ephy-topic-action.c:797
 msgid "_Remove from Toolbar"
 msgstr "ツールバーから削除(_R)"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:583
+#: ../src/bookmarks/ephy-bookmark-action.c:589
 #: ../src/bookmarks/ephy-topic-action.c:810
 msgid "Move _Left"
 msgstr "左へ移動(_L)"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:590
+#: ../src/bookmarks/ephy-bookmark-action.c:596
 #: ../src/bookmarks/ephy-topic-action.c:817
 msgid "Move Ri_ght"
 msgstr "右へ移動(_G)"
@@ -3539,10 +3567,6 @@ msgstr "別名で保存(_A)..."
 msgid "Bookmark"
 msgstr "ブックマーク"
 
-#: ../src/ephy-window.c:1127
-msgid "Find"
-msgstr "検索"
-
 #: ../src/ephy-window.c:1309
 msgid "Insecure"
 msgstr "セキュアでない"
@@ -3571,52 +3595,52 @@ msgid_plural "%d hidden popup windows"
 msgstr[0] "%d 個のポップアップ・ウィンドウを隠す"
 msgstr[1] "%d 個のポップアップ・ウィンドウを隠す"
 
-#: ../src/ephy-window.c:1668
+#: ../src/ephy-window.c:1660
 #, c-format
 msgid "Save background image '%s'"
 msgstr "この背景画像 '%s' を保存します"
 
-#: ../src/ephy-window.c:1682
+#: ../src/ephy-window.c:1674
 #, c-format
 msgid "Open image '%s'"
 msgstr "この画像 '%s' を開きます"
 
-#: ../src/ephy-window.c:1687
+#: ../src/ephy-window.c:1679
 #, c-format
 msgid "Use as desktop background '%s'"
 msgstr "この画像 '%s' をデスクトップの背景にセットします"
 
-#: ../src/ephy-window.c:1692
+#: ../src/ephy-window.c:1684
 #, c-format
 msgid "Save image '%s'"
 msgstr "画像 '%s' を保存します"
 
-#: ../src/ephy-window.c:1697
+#: ../src/ephy-window.c:1689
 #, c-format
 msgid "Copy image address '%s'"
 msgstr "画像のアドレス '%s' をコピーします"
 
-#: ../src/ephy-window.c:1710
+#: ../src/ephy-window.c:1702
 #, c-format
 msgid "Send email to address '%s'"
 msgstr "アドレス '%s' へ E-メールを送信します"
 
-#: ../src/ephy-window.c:1716
+#: ../src/ephy-window.c:1708
 #, c-format
 msgid "Copy email address '%s'"
 msgstr "E-メール・アドレス '%s' をコピーします"
 
-#: ../src/ephy-window.c:1728
+#: ../src/ephy-window.c:1720
 #, c-format
 msgid "Save link '%s'"
 msgstr "リンク先 '%s' を保存します"
 
-#: ../src/ephy-window.c:1734
+#: ../src/ephy-window.c:1726
 #, c-format
 msgid "Bookmark link '%s'"
 msgstr "リンク先 '%s' をブックマークに追加します"
 
-#: ../src/ephy-window.c:1740
+#: ../src/ephy-window.c:1732
 #, c-format
 msgid "Copy link's address '%s'"
 msgstr "リンク先のアドレス '%s' をコピーします"
@@ -3641,31 +3665,31 @@ msgstr "ユーザ名"
 msgid "Cookie Properties"
 msgstr "クッキーのプロパティ"
 
-#: ../src/pdm-dialog.c:919
+#: ../src/pdm-dialog.c:918
 msgid "Content:"
 msgstr "コンテンツ:"
 
-#: ../src/pdm-dialog.c:935
+#: ../src/pdm-dialog.c:934
 msgid "Path:"
 msgstr "パス名:"
 
-#: ../src/pdm-dialog.c:951
+#: ../src/pdm-dialog.c:950
 msgid "Send for:"
 msgstr "送信先:"
 
-#: ../src/pdm-dialog.c:960
+#: ../src/pdm-dialog.c:959
 msgid "Encrypted connections only"
 msgstr "暗号化した接続のみ"
 
-#: ../src/pdm-dialog.c:960
+#: ../src/pdm-dialog.c:959
 msgid "Any type of connection"
 msgstr "全ての接続"
 
-#: ../src/pdm-dialog.c:966
+#: ../src/pdm-dialog.c:965
 msgid "Expires:"
 msgstr "有効期限:"
 
-#: ../src/pdm-dialog.c:977
+#: ../src/pdm-dialog.c:976
 msgid "End of current session"
 msgstr "現在のセッションの最後"
 
@@ -3775,11 +3799,6 @@ msgstr "貢献者:"
 msgid "Past developers:"
 msgstr "前バージョンの開発者:"
 
-#: ../src/window-commands.c:779
-#, fuzzy
-msgid "GNOME Web Browser"
-msgstr "GNOME ウェブ・ブラウザ"
-
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
 #. * the translators.
@@ -3797,8 +3816,3 @@ msgstr ""
 "Takuro Ashie <ashie@homa.ne.jp>\n"
 "Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "日本GNOMEユーザー会 http://www.gnome.gr.jp"
-
-#: ../src/window-commands.c:796
-#, fuzzy
-msgid "GNOME Web Browser Website"
-msgstr "GNOME ウェブ・ブラウザ"

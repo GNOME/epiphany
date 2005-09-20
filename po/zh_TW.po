@@ -10,14 +10,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 1.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-20 13:45+0200\n"
+"POT-Creation-Date: 2005-08-18 11:41+0800\n"
 "PO-Revision-Date: 2005-08-18 11:43+0800\n"
 "Last-Translator: Woodman Tuen <wmtuen@gmail.com>\n"
 "Language-Team: Chinese/Traditional <zh-l10n@linux.org.tw>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=1; plural=0;"
 
 #: ../data/GNOME_Epiphany_Automation.server.in.h:1
 msgid "Epiphany automation"
@@ -121,7 +121,7 @@ msgstr "鎖定 Epiphany 使用全螢幕模式"
 msgid "Browse the web"
 msgstr "瀏覽網頁"
 
-#: ../data/epiphany.desktop.in.h:2
+#: ../data/epiphany.desktop.in.h:2 ../src/window-commands.c:779
 msgid "Epiphany Web Browser"
 msgstr "Epiphany 網頁瀏覽器"
 
@@ -515,7 +515,7 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5 數位簽章："
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:995
+#: ../embed/mozilla/GtkNSSDialogs.cpp:989
 msgid "Organization:"
 msgstr "組織："
 
@@ -540,32 +540,56 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "使用不同的編碼(_U)："
 
 #: ../data/glade/epiphany.glade.h:3
+msgid "C_ase sensitive"
+msgstr "區分大小寫(_A)"
+
+#: ../data/glade/epiphany.glade.h:4
 msgid "Cookies"
 msgstr "Cookie"
 
-#: ../data/glade/epiphany.glade.h:4
+#: ../data/glade/epiphany.glade.h:5
 msgid "Download Manager"
 msgstr "下載管理員"
 
-#: ../data/glade/epiphany.glade.h:5
+#: ../data/glade/epiphany.glade.h:6 ../src/ephy-window.c:1119
+msgid "Find"
+msgstr "尋找"
+
+#: ../data/glade/epiphany.glade.h:7
 msgid "Passwords"
 msgstr "密碼"
 
-#: ../data/glade/epiphany.glade.h:6
+#: ../data/glade/epiphany.glade.h:8
 msgid "Personal Data Manager"
 msgstr "個人資料管理員"
 
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.glade.h:9
 msgid "Text Encoding"
 msgstr "字元編碼"
 
-#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:358
+#: ../data/glade/epiphany.glade.h:10 ../src/ephy-encoding-menu.c:358
 msgid "Use the encoding specified by the document"
 msgstr "使用文件指定的編碼方式"
 
-#: ../data/glade/epiphany.glade.h:9 ../embed/downloader-view.c:368
+#: ../data/glade/epiphany.glade.h:11
+msgid "_Find:"
+msgstr "尋找(_F)："
+
+#: ../data/glade/epiphany.glade.h:12
+msgid "_Next"
+msgstr "下一個(_N)"
+
+#: ../data/glade/epiphany.glade.h:13 ../embed/downloader-view.c:368
 msgid "_Pause"
 msgstr "暫停(_P)"
+
+#: ../data/glade/epiphany.glade.h:14
+msgid "_Previous"
+msgstr "上一個(_P)"
+
+#: ../data/glade/epiphany.glade.h:15
+msgid "_Wrap around"
+msgstr "回到檔案開始部份再搜尋(_W)"
 
 #: ../data/glade/prefs-dialog.glade.h:1 ../data/glade/print.glade.h:1
 msgid "<b>Colors</b>"
@@ -795,7 +819,7 @@ msgstr ""
 "%s (共 %s)"
 
 #: ../embed/downloader-view.c:425 ../embed/downloader-view.c:430
-#: ../src/ephy-window.c:1306
+#: ../src/ephy-window.c:1298
 msgid "Unknown"
 msgstr "不詳"
 
@@ -1213,15 +1237,15 @@ msgstr "烏克蘭文"
 msgid "Unknown (%s)"
 msgstr "不明 (%s)"
 
-#: ../embed/ephy-history.c:542
+#: ../embed/ephy-history.c:527
 msgid "All"
 msgstr "全部"
 
-#: ../embed/ephy-history.c:705
+#: ../embed/ephy-history.c:701
 msgid "Others"
 msgstr "其它"
 
-#: ../embed/ephy-history.c:711
+#: ../embed/ephy-history.c:707
 msgid "Local files"
 msgstr "本機檔案"
 
@@ -1495,16 +1519,16 @@ msgid "Certificate _Details"
 msgstr "憑證詳細資料(_D)"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:235
-#: ../embed/mozilla/GtkNSSDialogs.cpp:545
+#: ../embed/mozilla/GtkNSSDialogs.cpp:232
+#: ../embed/mozilla/GtkNSSDialogs.cpp:539
 msgid "_View Certificate"
 msgstr "檢視憑證(_V)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:243
+#: ../embed/mozilla/GtkNSSDialogs.cpp:240
 msgid "_Accept"
 msgstr "接受(_A)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:310
+#: ../embed/mozilla/GtkNSSDialogs.cpp:304
 #, c-format
 msgid ""
 "The site \"%s\" returned security information for \"%s\". It is possible "
@@ -1514,18 +1538,18 @@ msgstr ""
 "“%s”這個站台所回傳對於“%s”的安全資訊。可能有人正在竊聽您的連線以獲得您的機密"
 "資料。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:316
+#: ../embed/mozilla/GtkNSSDialogs.cpp:310
 #, c-format
 msgid ""
 "You should only accept the security information if you trust \"%s\" and \"%s"
 "\"."
 msgstr "您應當只接受該安全資訊，如果您信任“%s”與“%s”。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:321
+#: ../embed/mozilla/GtkNSSDialogs.cpp:315
 msgid "Accept incorrect security information?"
 msgstr "接受不正確的安全資訊？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:346
 #, c-format
 msgid ""
 "It was not possible to automatically trust \"%s\". It is possible that "
@@ -1533,39 +1557,39 @@ msgid ""
 "information."
 msgstr "不可能會自動地信任“%s”。可能有人正在竊聽您的連線以獲得您的機密資料。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:358
+#: ../embed/mozilla/GtkNSSDialogs.cpp:352
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
 "\"%s\"."
 msgstr "您應當只連接該站台如果您確認您所要連接的站台是“%s”。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:357
 msgid "Connect to untrusted site?"
 msgstr "連接到不信任的站台？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:367
+#: ../embed/mozilla/GtkNSSDialogs.cpp:361
 msgid "_Trust this security information from now on"
 msgstr "現在開始信任此安全資訊(_T)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:362
 msgid "Co_nnect"
 msgstr "連接(_N)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:427
+#: ../embed/mozilla/GtkNSSDialogs.cpp:421
 msgid "Accept expired security information?"
 msgstr "接受過期的安全資訊？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:428
+#: ../embed/mozilla/GtkNSSDialogs.cpp:422
 #, c-format
 msgid "The security information for \"%s\" expired on %s."
 msgstr "“%s”的安全資訊已在 %s 過期。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:434
+#: ../embed/mozilla/GtkNSSDialogs.cpp:428
 msgid "Accept not yet valid security information?"
 msgstr "接受還不是有效的安全資訊？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:435
+#: ../embed/mozilla/GtkNSSDialogs.cpp:429
 #, c-format
 msgid "The security information for \"%s\" isn't valid until %s."
 msgstr "“%s” 的安全資訊在 %s 後才有效 。"
@@ -1573,147 +1597,147 @@ msgstr "“%s” 的安全資訊在 %s 後才有效 。"
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:451
+#: ../embed/mozilla/GtkNSSDialogs.cpp:445
 msgid "%a %d %b %Y"
 msgstr "%Y年%-m月%-d日 (%a)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:459
+#: ../embed/mozilla/GtkNSSDialogs.cpp:453
 msgid "You should ensure that your computer's time is correct."
 msgstr "您應該確保電腦的時間正確。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:505
+#: ../embed/mozilla/GtkNSSDialogs.cpp:499
 #, c-format
 msgid "Cannot establish connection to \"%s\"."
 msgstr "無法建立連線到“%s”。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:508
+#: ../embed/mozilla/GtkNSSDialogs.cpp:502
 #, c-format
 msgid "The certificate revocation list (CRL) from \"%s\" needs to be updated."
 msgstr "“%s” 的憑證廢止清冊 (CRL) 需要更新。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:513
+#: ../embed/mozilla/GtkNSSDialogs.cpp:507
 msgid "Please ask your system administrator for assistance."
 msgstr "請要求您的系統管理員以獲得協助。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:543
+#: ../embed/mozilla/GtkNSSDialogs.cpp:537
 msgid "Trust new Certificate Authority?"
 msgstr "信任新的憑證管理中心(CA)？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:548
+#: ../embed/mozilla/GtkNSSDialogs.cpp:542
 msgid "_Trust CA"
 msgstr "信任該憑證管理中心(_CA)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:570
+#: ../embed/mozilla/GtkNSSDialogs.cpp:564
 #, c-format
 msgid "Trust new Certificate Authority \"%s\" to identify web sites?"
 msgstr "信任新的憑證管理中心“%s”來辨識網站？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:575
+#: ../embed/mozilla/GtkNSSDialogs.cpp:569
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
 msgstr "在信任一個憑證管理中心 (CA) 前，您應該驗證該憑證是可信的。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:646
+#: ../embed/mozilla/GtkNSSDialogs.cpp:640
 msgid "Certificate already exists."
 msgstr "憑證已經存在。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:647
+#: ../embed/mozilla/GtkNSSDialogs.cpp:641
 msgid "The certificate has already been imported."
 msgstr "憑證已經匯入。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:772
+#: ../embed/mozilla/GtkNSSDialogs.cpp:766
 msgid "_Backup Certificate"
 msgstr "備份憑證(_B)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:779
+#: ../embed/mozilla/GtkNSSDialogs.cpp:773
 msgid "Select password."
 msgstr "輸入密碼。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:780
+#: ../embed/mozilla/GtkNSSDialogs.cpp:774
 msgid "Select a password to protect this certificate."
 msgstr "輸入一個密碼來保護此憑證。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:792
-#: ../embed/mozilla/GtkNSSDialogs.cpp:902
+#: ../embed/mozilla/GtkNSSDialogs.cpp:786
+#: ../embed/mozilla/GtkNSSDialogs.cpp:896
 msgid "_Password:"
 msgstr "密碼(_P)："
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:806
+#: ../embed/mozilla/GtkNSSDialogs.cpp:800
 msgid "Con_firm password:"
 msgstr "確認密碼(_F)："
 
 #. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:818
+#: ../embed/mozilla/GtkNSSDialogs.cpp:812
 msgid "Password quality:"
 msgstr "密碼品質："
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:875
+#: ../embed/mozilla/GtkNSSDialogs.cpp:869
 msgid "I_mport Certificate"
 msgstr "匯入憑證(_M)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:891
+#: ../embed/mozilla/GtkNSSDialogs.cpp:885
 msgid "Password required."
 msgstr "須要密碼。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:892
+#: ../embed/mozilla/GtkNSSDialogs.cpp:886
 msgid "Enter the password for this certificate."
 msgstr "輸入此憑證的密碼。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:973
+#: ../embed/mozilla/GtkNSSDialogs.cpp:967
 msgid "Certificate Revocation list successfully imported."
 msgstr "憑證廢止清冊 (CRL) 匯入成功。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:974
+#: ../embed/mozilla/GtkNSSDialogs.cpp:968
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "匯入憑證廢止清冊 (CRL)："
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1000
+#: ../embed/mozilla/GtkNSSDialogs.cpp:994
 msgid "Unit:"
 msgstr "單位："
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1005
+#: ../embed/mozilla/GtkNSSDialogs.cpp:999
 msgid "Next Update:"
 msgstr "更新下一個："
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1032
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1026
 msgid "Not part of certificate"
 msgstr "非憑證的一部份"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1318
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1312
 msgid "Certificate Properties"
 msgstr "憑證屬性"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1334
 msgid "This certificate has been verified for the following uses:"
 msgstr "此憑證已經被驗證，可以使用於以下目的："
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1343
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1337
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "因為此憑證已經被廢止所以無法驗證。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1346
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
 msgid "Could not verify this certificate because it has expired."
 msgstr "因為此憑證已過期所以無法驗證。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1349
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1343
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "因為此憑證為不可信任所以無法驗證。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1346
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr "因為發行者為不可信任的所以無法驗證此憑證。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1355
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1349
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "因為發行者為不明所以無法驗證此憑證。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1358
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1352
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr "無法驗證此憑證，因為 CA 憑證無效。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1357
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "因為不明原因無法驗證此憑證。"
 
@@ -1736,54 +1760,56 @@ msgid "This page is loaded over a secure connection"
 msgstr "本頁是以安全的連線方式載入"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
-msgid "The padlock icon in the statusbar indicates whether a page is secure."
-msgstr ""
+msgid ""
+"You can always see the security status of a page from the padlock icon on "
+"the statusbar."
+msgstr "您可以在狀態列中的安全掛鎖上看到安全狀態。"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid "Security Warning"
 msgstr "安全警告"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid "This page is loaded over a low security connection"
 msgstr "本頁是以低安全的連線方式載入"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
 msgstr "任何您在此頁中看到或輸入的資料，會很容易被第三者竊聽。"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "本頁某些部份是以不安全的連線方式載入"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr ""
 "有些您在此頁中看到或輸入的資料會以不安全的連線送出，這會很容易被第三者竊聽。"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid "Send this information over an insecure connection?"
 msgstr "以不安全的連線傳送這些資料？"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr "您輸入的資料會以不安全的連線送出，這會很容易被第三者竊聽。"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "_Send"
 msgstr "傳送(_S)"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -1810,7 +1836,7 @@ msgstr "檔案"
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com.tw/webhp?ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:582
+#: ../embed/mozilla/mozilla-embed-single.cpp:583
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphany 目前無法使用，因為 Mozilla 初始化程序失敗。"
 
@@ -1847,7 +1873,7 @@ msgstr "至(_T)："
 msgid "Sets the end of the range of pages to be printed"
 msgstr "設定列印範圍的最後一頁"
 
-#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1123
+#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1115
 msgid "Print"
 msgstr "列印"
 
@@ -2112,7 +2138,7 @@ msgstr "瀏覽紀錄"
 
 #: ../lib/ephy-stock-icons.c:59 ../src/bookmarks/ephy-bookmarks-editor.c:759
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1630
-#: ../src/bookmarks/ephy-topic-action.c:967 ../src/ephy-window.c:1129
+#: ../src/bookmarks/ephy-topic-action.c:967 ../src/ephy-window.c:1121
 msgid "Bookmarks"
 msgstr "書籤"
 
@@ -2169,7 +2195,7 @@ msgstr "拖放這個圖示來建立連至該網頁的連結"
 msgid "%s:"
 msgstr "%s："
 
-#: ../src/bookmarks/ephy-bookmark-action.c:543
+#: ../src/bookmarks/ephy-bookmark-action.c:549
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1243
 #: ../src/bookmarks/ephy-topic-action.c:475 ../src/ephy-history-window.c:173
@@ -2179,7 +2205,7 @@ msgid_plural "Open in New _Tabs"
 msgstr[0] "在新的分頁中開啟(_T)"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmark-action.c:549
+#: ../src/bookmarks/ephy-bookmark-action.c:555
 #: ../src/bookmarks/ephy-bookmarks-editor.c:180
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1240
 #: ../src/ephy-history-window.c:170 ../src/ephy-history-window.c:708
@@ -2187,17 +2213,17 @@ msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "在新的視窗中開啟(_W)"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:570
+#: ../src/bookmarks/ephy-bookmark-action.c:576
 #: ../src/bookmarks/ephy-topic-action.c:797
 msgid "_Remove from Toolbar"
 msgstr "從工具列中移除(_R)"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:583
+#: ../src/bookmarks/ephy-bookmark-action.c:589
 #: ../src/bookmarks/ephy-topic-action.c:810
 msgid "Move _Left"
 msgstr "左移(_L)"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:590
+#: ../src/bookmarks/ephy-bookmark-action.c:596
 #: ../src/bookmarks/ephy-topic-action.c:817
 msgid "Move Ri_ght"
 msgstr "右移(_G)"
@@ -2814,7 +2840,7 @@ msgstr "從所指定的檔案匯入書籤"
 msgid "Launch the bookmarks editor"
 msgstr "啟動書籤編輯器"
 
-#: ../src/ephy-notebook.c:1093
+#: ../src/ephy-notebook.c:970
 msgid "Close tab"
 msgstr "關閉分頁"
 
@@ -2875,36 +2901,36 @@ msgid ""
 msgstr ""
 "Epiphany 現在無法使用，因為 Bonobo 試圖定位自動化物件時發生意外的錯誤。"
 
-#: ../src/ephy-tab.c:483 ../src/ephy-tab.c:2234
+#: ../src/ephy-tab.c:483 ../src/ephy-tab.c:2236
 msgid "Blank page"
 msgstr "空白頁面"
 
 #. translators: %s here is the address of the web page
-#: ../src/ephy-tab.c:911
+#: ../src/ephy-tab.c:909
 #, c-format
 msgid "Loading “%s”..."
 msgstr "正在載入“%s”..."
 
-#: ../src/ephy-tab.c:915
+#: ../src/ephy-tab.c:913
 msgid "Loading..."
 msgstr "載入中..."
 
-#: ../src/ephy-tab.c:1617
+#: ../src/ephy-tab.c:1619
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "重新導向至 %s..."
 
-#: ../src/ephy-tab.c:1621
+#: ../src/ephy-tab.c:1623
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "正在從 %s 傳送資料..."
 
-#: ../src/ephy-tab.c:1625
+#: ../src/ephy-tab.c:1627
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "正在等待 %s 發出授權..."
 
-#: ../src/ephy-tab.c:1633
+#: ../src/ephy-tab.c:1635
 #, c-format
 msgid "Loading %s..."
 msgstr "正在載入 %s..."
@@ -3473,95 +3499,91 @@ msgstr "如果您無論無何要關閉此文件，您將會失去未儲存的資
 msgid "Close _Document"
 msgstr "關閉文件(_D)"
 
-#: ../src/ephy-window.c:1119 ../src/window-commands.c:357
+#: ../src/ephy-window.c:1111 ../src/window-commands.c:357
 msgid "Open"
 msgstr "開啟"
 
-#: ../src/ephy-window.c:1121 ../src/window-commands.c:383
+#: ../src/ephy-window.c:1113 ../src/window-commands.c:383
 msgid "Save As"
 msgstr "另存新檔"
 
-#: ../src/ephy-window.c:1125
+#: ../src/ephy-window.c:1117
 msgid "Bookmark"
 msgstr "加入書籤"
 
-#: ../src/ephy-window.c:1127
-msgid "Find"
-msgstr "尋找"
-
-#: ../src/ephy-window.c:1309
+#: ../src/ephy-window.c:1301
 msgid "Insecure"
 msgstr "不安全"
 
-#: ../src/ephy-window.c:1314
+#: ../src/ephy-window.c:1306
 msgid "Broken"
 msgstr "中斷"
 
-#: ../src/ephy-window.c:1322
+#: ../src/ephy-window.c:1314
 msgid "Low"
 msgstr "低"
 
-#: ../src/ephy-window.c:1329
+#: ../src/ephy-window.c:1321
 msgid "High"
 msgstr "高"
 
-#: ../src/ephy-window.c:1338
+#: ../src/ephy-window.c:1330
 #, c-format
 msgid "Security level: %s"
 msgstr "安全等級：%s"
 
-#: ../src/ephy-window.c:1378
+#: ../src/ephy-window.c:1370
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d 個隱藏彈出式視窗"
 
-#: ../src/ephy-window.c:1668
+#: ../src/ephy-window.c:1652
 #, c-format
 msgid "Save background image '%s'"
 msgstr "儲存背景圖片‘%s’"
 
-#: ../src/ephy-window.c:1682
+#: ../src/ephy-window.c:1666
 #, c-format
 msgid "Open image '%s'"
 msgstr "開啟圖片‘%s’"
 
-#: ../src/ephy-window.c:1687
+#: ../src/ephy-window.c:1671
 #, c-format
 msgid "Use as desktop background '%s'"
 msgstr "使用圖片作為桌面背景‘%s’"
 
-#: ../src/ephy-window.c:1692
+#: ../src/ephy-window.c:1676
 #, c-format
 msgid "Save image '%s'"
 msgstr "儲存圖片‘%s’"
 
-#: ../src/ephy-window.c:1697
+#: ../src/ephy-window.c:1681
 #, c-format
 msgid "Copy image address '%s'"
 msgstr "複製圖片地址‘%s’"
 
-#: ../src/ephy-window.c:1710
+#: ../src/ephy-window.c:1694
 #, c-format
 msgid "Send email to address '%s'"
 msgstr "傳送電郵到地址‘%s’"
 
-#: ../src/ephy-window.c:1716
+#: ../src/ephy-window.c:1700
 #, c-format
 msgid "Copy email address '%s'"
 msgstr "複製電郵地址‘%s’"
 
-#: ../src/ephy-window.c:1728
+#: ../src/ephy-window.c:1712
 #, c-format
 msgid "Save link '%s'"
 msgstr "儲存連結‘%s’"
 
-#: ../src/ephy-window.c:1734
+#: ../src/ephy-window.c:1718
 #, c-format
 msgid "Bookmark link '%s'"
 msgstr "將連結‘%s’加入書籤"
 
-#: ../src/ephy-window.c:1740
+#: ../src/ephy-window.c:1724
 #, c-format
 msgid "Copy link's address '%s'"
 msgstr "複製連結地址 ‘%s’"
@@ -3586,31 +3608,31 @@ msgstr "使用者名稱"
 msgid "Cookie Properties"
 msgstr "Cookie 屬性"
 
-#: ../src/pdm-dialog.c:919
+#: ../src/pdm-dialog.c:918
 msgid "Content:"
 msgstr "內容"
 
-#: ../src/pdm-dialog.c:935
+#: ../src/pdm-dialog.c:934
 msgid "Path:"
 msgstr "路徑："
 
-#: ../src/pdm-dialog.c:951
+#: ../src/pdm-dialog.c:950
 msgid "Send for:"
 msgstr "傳送給："
 
-#: ../src/pdm-dialog.c:960
+#: ../src/pdm-dialog.c:959
 msgid "Encrypted connections only"
 msgstr "只限加密後的連線"
 
-#: ../src/pdm-dialog.c:960
+#: ../src/pdm-dialog.c:959
 msgid "Any type of connection"
 msgstr "任何類型的連線"
 
-#: ../src/pdm-dialog.c:966
+#: ../src/pdm-dialog.c:965
 msgid "Expires:"
 msgstr "時限："
 
-#: ../src/pdm-dialog.c:977
+#: ../src/pdm-dialog.c:976
 msgid "End of current session"
 msgstr "結束目前的作業階段"
 
@@ -3719,11 +3741,6 @@ msgstr "貢獻者："
 msgid "Past developers:"
 msgstr "前度開發人員："
 
-#: ../src/window-commands.c:779
-#, fuzzy
-msgid "GNOME Web Browser"
-msgstr "網頁瀏覽器"
-
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
 #. * the translators.
@@ -3743,7 +3760,3 @@ msgstr ""
 "Ching-Hung Lin <billlin@wshlab2.ee.kuas.edu.tw>, 2004\n"
 "Abel Cheung <maddog@linux.org.hk>, 2003"
 
-#: ../src/window-commands.c:796
-#, fuzzy
-msgid "GNOME Web Browser Website"
-msgstr "網頁瀏覽器"
