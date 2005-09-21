@@ -1,5 +1,17 @@
 2005-09-21  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EphyUtils.cpp:
+	* embed/print-dialog.c: (ephy_print_do_print_idle_cb):
+
+	Don't use "cat >" as output command, it fails inpredicably.
+	Instead, use the tempfile setting, and set "PostScript/default"
+	as printer name. fflush before printing the temp file
+	using gnome-print. If not using gecko 1.9, translate the paper
+	name to the one mozilla expects (mozilla bug 
+	https://bugzilla.mozilla.org/show_bug.cgi?id=307404).
+
+2005-09-21  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-gui.c: (ephy_gui_check_location_writable):
 	* lib/ephy-gui.h:
 
