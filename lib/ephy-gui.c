@@ -200,7 +200,7 @@ ephy_gui_menu_position_on_toolbar (GtkMenu   *menu,
   
 	g_return_if_fail (GTK_IS_WIDGET (widget));
 
-	toolbar = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOLBAR);
+	toolbar = GTK_TOOLBAR (gtk_widget_get_ancestor (widget, GTK_TYPE_TOOLBAR));
 	g_return_if_fail (toolbar != NULL);
 
 	gtk_widget_size_request (widget, &req);
@@ -309,7 +309,6 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 {
 	GtkWidget *dialog;
 	char *display_name;
-	gboolean retval;
 
 	if (filename == NULL) return FALSE;
 
