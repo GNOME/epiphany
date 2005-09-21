@@ -63,7 +63,7 @@ GtkWindowGroup *ephy_gui_ensure_window_group		 (GtkWindow *window);
 
 gboolean	ephy_gui_is_middle_click		 (void);
 
-gboolean	ephy_gui_confirm_overwrite_file	         (GtkWidget *parent,
+gboolean	ephy_gui_check_location_writable         (GtkWidget *parent,
 							  const char *filename);
 
 void		ephy_gui_help				 (GtkWindow *parent,

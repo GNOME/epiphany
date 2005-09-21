@@ -752,6 +752,8 @@ cmd_bookmarks_export (GtkAction *action,
 		NULL,
 		EPHY_FILE_FILTER_NONE));
 
+	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+
 	gtk_file_chooser_set_current_folder
 		(GTK_FILE_CHOOSER (dialog), g_get_home_dir ());
 
@@ -777,7 +779,7 @@ cmd_bookmarks_export (GtkAction *action,
 
 	do
 	{
-		char *basename, *strtmp;
+		char *basename, *strtmp = NULL;
 
 		g_free (filename);
 
@@ -788,13 +790,14 @@ cmd_bookmarks_export (GtkAction *action,
 		basename = g_path_get_basename (filename);
 		if (basename != NULL && strchr (basename, '.') == NULL)
 		{
-			strtmp = filename;
 			if (format == 0)
 			{
+				strtmp = filename;
 				filename = g_strconcat (filename, ".rdf", NULL);
 			}
 			else if (format == 1)
 			{
+				strtmp = filename;
 				filename = g_strconcat (filename, ".html", NULL);
 			}
 			g_free (strtmp);
@@ -802,7 +805,7 @@ cmd_bookmarks_export (GtkAction *action,
 		g_free (basename);
 	}
 	while (response == GTK_RESPONSE_ACCEPT
-	       && !ephy_gui_confirm_overwrite_file (GTK_WIDGET (dialog), filename));
+	       && !ephy_gui_check_location_writable (GTK_WIDGET (dialog), filename));
 
 	gtk_widget_destroy (dialog);
 

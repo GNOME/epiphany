@@ -1,3 +1,19 @@
+2005-09-21  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-gui.c: (ephy_gui_check_location_writable):
+	* lib/ephy-gui.h:
+
+	New function to check the filename/directory for writability,
+	derived from the now removed ephy_gui_confirm_overwrite_file.
+	
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+
+	Use the filechooser's stock confirm-overwrite checking, but
+	we still need our own writability check.
+
 2005-09-19  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/ephy-embed.h:

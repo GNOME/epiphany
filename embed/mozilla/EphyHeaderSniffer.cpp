@@ -213,7 +213,7 @@ filechooser_response_cb (GtkWidget *dialog,
 
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 
-		if (ephy_gui_confirm_overwrite_file (dialog, filename) == FALSE)
+		if (ephy_gui_check_location_writable (dialog, filename) == FALSE)
 		{
 			g_free (filename);
 			return;
@@ -367,6 +367,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 						GTK_FILE_CHOOSER_ACTION_SAVE,
 						key ? key : CONF_STATE_SAVE_DIR,
 						EPHY_FILE_FILTER_ALL_SUPPORTED);
+		gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
 		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
                                                    filename);

@@ -304,8 +304,8 @@ ephy_gui_ensure_window_group (GtkWindow *window)
 }
 
 gboolean
-ephy_gui_confirm_overwrite_file (GtkWidget *parent,
-				 const char *filename)
+ephy_gui_check_location_writable (GtkWidget *parent,
+				  const char *filename)
 {
 	GtkWidget *dialog;
 	char *display_name;
@@ -331,7 +331,7 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent,
 			gtk_message_dialog_format_secondary_text (
 					GTK_MESSAGE_DIALOG (dialog),
 					_("You do not have permission to "
-						"create files in this directory."));
+					  "create files in this directory."));
 
 			gtk_window_set_title (GTK_WINDOW (dialog), _("Directory not writable"));
 			gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
@@ -386,39 +386,8 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent,
 		return FALSE;
 	}
 
-	dialog = gtk_message_dialog_new
-		(parent ? GTK_WINDOW (parent) : NULL,
-		 GTK_DIALOG_DESTROY_WITH_PARENT,
-		 GTK_MESSAGE_QUESTION,
-		 GTK_BUTTONS_CANCEL,
-		 _("Overwrite \"%s\"?"), display_name);
 
-	gtk_message_dialog_format_secondary_text
-		(GTK_MESSAGE_DIALOG (dialog),
-		 _("A file with this name already exists. If you choose to "
-		   "overwrite this file, the contents will be lost."));
-
-	gtk_dialog_add_button (GTK_DIALOG (dialog),
-			       _("_Overwrite"), GTK_RESPONSE_ACCEPT);
-
-	gtk_window_set_title (GTK_WINDOW (dialog), _("Overwrite File?"));
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
-
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-
-	if (parent != NULL)
-	{
-		gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (parent)),
-					     GTK_WINDOW (dialog));
-	}
-
-	retval = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT);
-
-	gtk_widget_destroy (dialog);
-
-	g_free (display_name);
-
-	return retval;
+	return TRUE;
 }
 
 void

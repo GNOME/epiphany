@@ -173,6 +173,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 					GTK_FILE_CHOOSER_ACTION_SAVE,
 					CONF_STATE_SAVE_DIR,
 					EPHY_FILE_FILTER_ALL);
+	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), defaultFile.get());
 
 	if (parentWindow)
@@ -191,7 +192,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 		response = gtk_dialog_run (GTK_DIALOG (dialog));
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 	} while (response == GTK_RESPONSE_ACCEPT
-		 && !ephy_gui_confirm_overwrite_file (GTK_WIDGET (dialog), filename));
+		 && !ephy_gui_check_location_writable (GTK_WIDGET (dialog), filename));
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{

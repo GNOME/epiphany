@@ -127,6 +127,10 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 	{
 		gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (mDialog), TRUE);
 	}
+	if (mMode == nsIFilePicker::modeSave)
+	{
+		gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (mDialog), TRUE);
+	}
 
 	g_object_add_weak_pointer (G_OBJECT (mDialog), (gpointer *) &mDialog);
 
@@ -447,7 +451,7 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 	}
 	while (response == GTK_RESPONSE_ACCEPT &&
 	       mMode == nsIFilePicker::modeSave &&
-	       !ephy_gui_confirm_overwrite_file (GTK_WIDGET (mDialog), filename));
+	       !ephy_gui_check_location_writable (GTK_WIDGET (mDialog), filename));
 
 	gtk_widget_hide (GTK_WIDGET (mDialog));
 
