@@ -153,6 +153,7 @@ GTKDOC_CFLAGS = -I$(top_srcdir)/src \
 		-I$(top_srcdir)/lib/egg \
 		-I$(top_builddir)/lib/egg \
 		$(DEPENDENCIES_CFLAGS) \
+		$(GECKO_CFLAGS) \
 		$(BONOBO_CFLAGS) \
 		$(DBUS_CFLAGS)
 
