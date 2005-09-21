@@ -34,6 +34,7 @@
 
 #include <unistd.h>
 #include <string.h>
+#include <stdio.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkentry.h>
@@ -309,14 +310,22 @@ static gboolean
 ephy_print_do_print_idle_cb (EmbedPrintInfo *info)
 {
 	GnomePrintJob *job;
+	int ret;
+
+	/* Sometimes mozilla doesn't even create the temp file!? */
+	if (g_file_test (info->tempfile, G_FILE_TEST_EXISTS) == FALSE) return FALSE;
+
+	/* FIXME: is this actually necessary? libc docs say all streams
+	 * are flushed when reading from any stream.
+	 */
+	fflush(NULL);
 
 	job = gnome_print_job_new (info->config);
 
 	gnome_print_job_set_file (job, info->tempfile);
 	gnome_print_job_print (job);
-
 	g_object_unref (job);
-	
+
 	unlink (info->tempfile);
 
 	ephy_print_info_free (info);

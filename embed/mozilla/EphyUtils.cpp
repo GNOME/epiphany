@@ -130,6 +130,12 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 				 nsIPrintSettings *options,
 				 gboolean preview)
 {
+	NS_ENSURE_ARG (options);
+
+	/* FIXME: for CUPS printers, print directly instead of to a tmp file? */
+	const static PRUnichar pName[] = { 'P', 'o', 's', 't', 'S', 'c', 'r', 'i', 'p', 't', '/', 'd', 'e', 'f', 'a', 'u', 'l', 't', '\0' };
+	options->SetPrinterName(nsEmbedString(pName).get());
+
 	const static int frame_types[] = {
 		nsIPrintSettings::kFramesAsIs,
 		nsIPrintSettings::kSelectedFrame,
@@ -225,7 +231,11 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 
 	options->SetPrintToFile (PR_FALSE);
 	
-	if (!preview)
+	if (preview)
+	{
+		options->SetPrintToFile (PR_FALSE);
+	}
+	else
 	{
 		char *cmd, *base;
 		const char *temp_dir;
@@ -235,16 +245,12 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 		info->tempfile = ephy_file_tmp_filename (base, "ps");
 		g_free (base);
 		
-		/* use cat instead of print to file to avoid fflush to ensure
-		 * the file has been written completely and we don't need to
-		 * select a printer (i.e. should be printing backend independent)
-		 */
+		if (info->tempfile == NULL) return NS_ERROR_FAILURE;
 		
-		cmd = g_strconcat ("cat > ", info->tempfile, NULL);
-		NS_CStringToUTF16 (nsEmbedCString(cmd),
+		NS_CStringToUTF16 (nsEmbedCString(info->tempfile),
 				   NS_CSTRING_ENCODING_UTF8, tmp);
-		options->SetPrintCommand (tmp.get());
-		g_free (cmd);
+		options->SetPrintToFile (PR_TRUE);
+		options->SetToFileName (tmp.get());
 	}
 
 	/* paper size */
@@ -275,6 +281,11 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 		options->SetPaperHeight (value);	
 	}
 
+	/* Mozilla bug https://bugzilla.mozilla.org/show_bug.cgi?id=307404
+	 * means that we cannot actually use any paper sizes except mozilla's
+	 * builtin list, and we must refer to them *by name*!
+	 */
+#ifndef HAVE_GECKO_1_9
 	/* Gnome-Print names some papers differently than what moz understands */
 	static const struct
 	{
@@ -286,14 +297,14 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 		{ "USLetter", "Letter" },
 		{ "USLegal", "Legal" }
 	};
-
-	char *string;
+#endif /* !HAVE_GECKO_1_9 */
 
 	/* paper name */
-	string = (char *) gnome_print_config_get (info->config,
+	char *string = (char *) gnome_print_config_get (info->config,
 						  (const guchar *) GNOME_PRINT_KEY_PAPER_SIZE);
-
 	const char *paper = string;
+
+#ifndef HAVE_GECKO_1_9
 	for (PRUint32 i = 0; i < G_N_ELEMENTS (paper_table); i++)
 	{
 		if (string != NULL &&
@@ -303,6 +314,7 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 			break;
 		}
 	}
+#endif /* !HAVE_GECKO_1_9 */
 
 	NS_CStringToUTF16 (nsEmbedCString(paper),
 			   NS_CSTRING_ENCODING_UTF8, tmp);
