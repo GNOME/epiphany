@@ -53,7 +53,7 @@
 #endif
 
 #define CONF_LOADED_EXTENSIONS	"/apps/epiphany/general/active_extensions"
-#define DOT_INIT	".ephy-extension"
+#define DOT_INI	".ephy-extension"
 
 #define EPHY_EXTENSIONS_MANAGER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EXTENSIONS_MANAGER, EphyExtensionsManagerPrivate))
 
@@ -769,7 +769,7 @@ path_to_identifier (const char *path)
 	char *identifier, *dot;
 
 	identifier = g_path_get_basename (path);
-	dot = strstr (identifier, DOT_INIT);
+	dot = strstr (identifier, DOT_INI);
 
 	if (!dot)
 	{
@@ -804,7 +804,7 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 	identifier = path_to_identifier (path);
 	g_return_if_fail (identifier != NULL);
 
-	if (g_str_has_suffix (path, DOT_INIT))
+	if (g_str_has_suffix (path, DOT_INI))
 	{
 		ephy_extensions_manager_load_ini_string (manager, identifier,
 							 contents);
@@ -1188,7 +1188,7 @@ load_file_from_monitor (EphyExtensionsManager *manager,
 		return;
 	}
 
-	if (g_str_has_suffix (path, DOT_INIT))
+	if (g_str_has_suffix (path, DOT_INI))
 	{
 		ephy_extensions_manager_load_ini_string (manager, 
 							 identifier, contents);
@@ -1218,7 +1218,7 @@ dir_changed_cb (GnomeVFSMonitorHandle *handle,
 	 * We only deal with XML and INI files:
 	 * Add them to the manager when created, remove them when deleted.
 	 */
-	if (g_str_has_suffix (info_uri, DOT_INIT) == FALSE &&
+	if (g_str_has_suffix (info_uri, DOT_INI) == FALSE &&
 	    g_str_has_suffix (info_uri, ".xml") == FALSE) return;
 
 	path = gnome_vfs_get_local_path_from_uri (info_uri);
@@ -1261,7 +1261,7 @@ ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
 	}
 	while ((e = readdir (d)) != NULL)
 	{
-		if (g_str_has_suffix (e->d_name, DOT_INIT) ||
+		if (g_str_has_suffix (e->d_name, DOT_INI) ||
 		    g_str_has_suffix (e->d_name, ".xml"))
 		{
 			file_path = g_build_filename (path, e->d_name, NULL);
