@@ -36,6 +36,7 @@ typedef struct
 	GObject *object;
 } LoaderData;
 
+static GQuark Library_quark = 0;
 static GQuark library_quark = 0;
 
 #define EPHY_SHLIB_LOADER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHLIB_LOADER, EphyShlibLoaderPrivate))
@@ -149,7 +150,11 @@ impl_get_object (EphyLoader *eloader,
 	LoaderData *data = NULL;
 	const char *library;
 
-	library = g_datalist_id_get_data (attributes, library_quark);
+	library = g_datalist_id_get_data (attributes, Library_quark);
+	if (library == NULL)
+	{
+		library = g_datalist_id_get_data (attributes, library_quark);
+	}
 	if (library == NULL)
 	{
 		g_warning ("NULL library name!\n");
@@ -237,5 +242,6 @@ ephy_shlib_loader_class_init (EphyShlibLoaderClass *klass)
 
 	g_type_class_add_private (object_class, sizeof (EphyShlibLoaderPrivate));
 
+	Library_quark = g_quark_from_string ("Library");
 	library_quark = g_quark_from_string ("library");
 }
