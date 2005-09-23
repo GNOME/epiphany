@@ -364,6 +364,19 @@ NS_METHOD GContentHandler::MIMEInitiateAction (void)
 	mPermission = ephy_file_check_mime (mMimeType);
 #endif
 
+        /* HACK! Check that this 'helper application' isn't Epiphany itself,
+         * see bug #310023.
+         */
+        if (mHelperApp)
+        {
+                const char *id = gnome_vfs_mime_application_get_desktop_id (mHelperApp);
+
+                if (id && strcmp (id, "epiphany.desktop") == 0)
+                {
+                        mHelperApp = nsnull;
+                }
+        }
+
 	if (auto_downloads)
 	{
 		mAction = CONTENT_ACTION_OPEN;
