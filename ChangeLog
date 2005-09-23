@@ -1,5 +1,15 @@
 2005-09-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/epphy-extensions-manager.c: (free_extension_info),
+	(ephy_extensions_manager_load_xml_string), (path_to_identifier),
+	(ephy_extensions_manager_load_file), (load_file_from_monitor),
+	(dir_changed_cb), (ephy_extensions_manager_load_dir):
+
+	Don't read unused variables, and use a #define for the
+	keyfile extension.
+
+2005-09-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-python-loader.c: (impl_get_object):
 
 	Accept "Module" argument.
