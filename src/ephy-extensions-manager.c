@@ -47,13 +47,6 @@
 #include <dirent.h>
 #include <string.h>
 
-/* define to validate the extensions files */
-/* #define ENABLE_VALIDATION */
-
-#ifdef ENABLE_VALIDATION
-#include <libxml/xmlschemas.h>
-#endif
-
 #ifdef ENABLE_PYTHON
 #include "ephy-python-extension.h"
 #include "ephy-python-loader.h"
@@ -74,11 +67,6 @@ struct _EphyExtensionsManagerPrivate
 	GList *dir_monitors;
 	GList *windows;
 	guint active_extensions_notifier_id;
-
-#ifdef ENABLE_VALIDATION
-	xmlSchemaPtr schema;
-	xmlSchemaValidCtxtPtr schema_ctxt;
-#endif
 };
 
 typedef struct
@@ -400,19 +388,7 @@ ephy_extensions_manager_load_xml_string (EphyExtensionsManager *manager,
 		g_warning ("Couldn't read '%s' data\n", identifier);
 		return;
 	}
-#ifdef ENABLE_VALIDATION
-	/* Validate the extension description */
-	if (manager->priv->schema_ctxt)
-	{
-		if (xmlSchemaValidateDoc (manager->priv->schema_ctxt, doc))
-		{
-			g_warning ("Validation errors in '%s' data",
-				   identifier);
-			xmlFreeDoc (doc);
-			return;
-		}
-	}
-#endif
+
 	/* Now parse it */
 	reader = xmlReaderWalker (doc);
 	g_return_if_fail (reader != NULL);
@@ -1347,65 +1323,6 @@ active_extensions_notifier (GConfClient *client,
 	sync_loaded_extensions (manager);
 }
 
-#ifdef ENABLE_VALIDATION
-static void
-xml_error_cb (EphyExtensionsManager *manager,
-	      const char *msg,
-	      ...)
-
-{
-	va_list args;
-
-	va_start (args, msg);
-	g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING, msg, args);
-	va_end(args);
-}
-
-static void
-init_schema_ctxt (EphyExtensionsManager *manager)
-{
-	xmlSchemaParserCtxtPtr parse_ctxt;
-	const char *filename;
-
-	manager->priv->schema = NULL;
-	manager->priv->schema_ctxt = NULL;
-
-	filename = ephy_file (SCHEMA_FILE);
-	g_return_if_fail (filename != NULL);
-
-	parse_ctxt = xmlSchemaNewParserCtxt (filename);
-	if (parse_ctxt == NULL)
-	{
-		g_warning ("Error opening extensions description schema file "
-			   "\"" SCHEMA_FILE "\"");
-		return;
-	}
-
-	manager->priv->schema = xmlSchemaParse (parse_ctxt);
-	xmlSchemaFreeParserCtxt (parse_ctxt);
-	if (manager->priv->schema == NULL)
-	{
-		g_warning ("Error parsing extensions description schema file "
-			   "\"" SCHEMA_FILE "\"");
-		return;
-	}
-
-	manager->priv->schema_ctxt = xmlSchemaNewValidCtxt
-		(manager->priv->schema);
-	if (manager->priv->schema == NULL)
-	{
-		g_warning ("Error creating extensions description schema "
-			   "validation context for \"" SCHEMA_FILE "\"");
-		return;
-	}
-
-	xmlSchemaSetValidErrors (manager->priv->schema_ctxt,
-				 (xmlSchemaValidityErrorFunc) xml_error_cb,
-				 (xmlSchemaValidityWarningFunc) xml_error_cb,
-				 manager);
-}
-#endif
-
 static void
 ephy_extensions_manager_init (EphyExtensionsManager *manager)
 {
@@ -1422,10 +1339,6 @@ ephy_extensions_manager_startup (EphyExtensionsManager *manager)
 	g_return_if_fail (EPHY_IS_EXTENSIONS_MANAGER (manager));
 
 	LOG ("EphyExtensionsManager startup");
-
-#ifdef ENABLE_VALIDATION
-	init_schema_ctxt (manager);
-#endif
 
 	/* load the extensions descriptions */
 	path = g_build_filename (ephy_dot_dir (), "extensions", NULL);
@@ -1466,17 +1379,6 @@ ephy_extensions_manager_finalize (GObject *object)
 	g_list_free (priv->data);
 
 	g_list_free (priv->windows);
-
-#ifdef ENABLE_VALIDATION
-	if (priv->schema)
-	{
-		xmlSchemaFree (priv->schema);
-	}
-	if (priv->schema_ctxt)
-	{
-		xmlSchemaFreeValidCtxt (priv->schema_ctxt);
-	}
-#endif
 
 	parent_class->finalize (object);
 }

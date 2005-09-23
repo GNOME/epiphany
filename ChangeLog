@@ -1,3 +1,15 @@
+2005-09-23  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/Makefile.am:
+	R data/epiphany-extension.xsd:
+	* src/ephy-extensions-manager.c:
+	(ephy_extensions_manager_load_xml_string),
+	(ephy_extensions_manager_startup),
+	(ephy_extensions_manager_finalize):
+
+	Since the .xml format is deprecated, remove the (already #if 0'd)
+	schema validation code.
+
 2005-09-23  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* data/epiphany.m4: Really add the file
