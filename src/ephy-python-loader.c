@@ -44,7 +44,11 @@ impl_get_object (EphyLoader *eloader,
 	char *filename;
 	GObject *object;
 
-	filename = g_datalist_get_data (attributes, "module");
+	filename = g_datalist_get_data (attributes, "Module");
+	if (filename == NULL)
+	{
+		filename = g_datalist_get_data (attributes, "module");
+	}
 	if (filename == NULL)
 	{
 		g_warning ("NULL module name!\n");
