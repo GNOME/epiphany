@@ -711,13 +711,17 @@ ephy_extensions_manager_load_ini_string (EphyExtensionsManager *manager,
 	list = g_key_file_get_string_list (key_file, 
 					   "Epiphany Extension",
 					   "Authors", NULL, NULL);
-	for (i = 0 ; list[i]; i++ )
+        if (list)
 	{
-		einfo->authors = g_list_prepend (einfo->authors, 
-					   g_strstrip (g_strdup (list[i])));
+		for (i = 0 ; list[i]; i++ )
+		{
+			einfo->authors = g_list_prepend (einfo->authors, 
+							 g_strstrip (g_strdup (list[i])));
+		}
+		g_strfreev (list);
 	}
+
 	einfo->authors = g_list_reverse (einfo->authors);
- 	g_strfreev (list);
 	
 	info->version = g_key_file_get_integer (key_file,
 						"Epiphany Extension",
@@ -725,28 +729,31 @@ ephy_extensions_manager_load_ini_string (EphyExtensionsManager *manager,
 
 	/* Load the loader flags */
 	list = g_key_file_get_keys (key_file, "Loader", NULL, NULL);
-	for (i = 0 ; list[i]; i++ )
+
+	if (list)
 	{
-		
-		char * value;
-		GQuark attr_quark = 0;
-
-		value = g_key_file_get_string (key_file, "Loader", 
-					       list[i], NULL);
-		
-		if (strcmp (list[i], "Type") == 0)
+		for (i = 0 ; list[i]; i++ )
 		{
-			info->loader_type = value;
-			continue;
+			char * value;
+			GQuark attr_quark = 0;
+
+			value = g_key_file_get_string (key_file, "Loader", 
+						       list[i], NULL);
+		
+			if (strcmp (list[i], "Type") == 0)
+			{
+				info->loader_type = value;
+				continue;
+			}
+
+			attr_quark = g_quark_from_string (list[i]);
+
+			g_datalist_id_set_data_full (&info->loader_attributes,
+						     attr_quark, value,
+						     (GDestroyNotify) g_free);
 		}
-
-		attr_quark = g_quark_from_string (list[i]);
-
-		g_datalist_id_set_data_full (&info->loader_attributes,
-					     attr_quark, value,
-					     (GDestroyNotify) g_free);
-	}	
  	g_strfreev (list);
+	}	
 
 	g_key_file_free (key_file);
 
