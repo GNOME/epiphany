@@ -51,6 +51,9 @@ about_DATA = epiphany.xhtml
 mimepermissiondir = $(pkgdatadir)
 mimepermission_DATA = mime-types-permissions.xml
 
+m4datadir=$(datadir)/aclocal
+m4data_DATA=epiphany.m4
+
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = epiphany-1.10.pc
 
@@ -77,6 +80,7 @@ EXTRA_DIST = \
 	     $(pkgconfig_DATA)		\
 	     $(default_prefs_in_FILES)	\
 	     $(xsl_DATA)		\
+	     $(m4data_DATA)		\
 	     check-mime.py
 
 DISTCLEANFILES = \

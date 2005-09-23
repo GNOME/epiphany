@@ -1,3 +1,18 @@
+2005-09-23  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* data/Makefile.am:
+	* data/epiphany.m4:
+	* src/ephy-extensions-manager.c: (free_extension_info),
+	(ephy_extensions_manager_load_xml_string),
+	(ephy_extensions_manager_load_ini_string), (path_to_identifier),
+	(ephy_extensions_manager_load_file), (load_extension),
+	(load_file_from_monitor), (dir_changed_cb),
+	(ephy_extensions_manager_load_dir):
+
+	Add support for extension description files in the keyfile
+	format, using the extension .ephy-extension. Also included
+	is a m4 macro to help do the translation of these files.
+	
 2005-09-21  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed-single.cpp: (have_gnome_url_handler):

@@ -2,6 +2,7 @@
  *  Copyright (C) 2003 Marco Pesenti Gritti
  *  Copyright (C) 2003, 2004 Christian Persch
  *  Copyright (C) 2004 Adam Hooper
+ *  Copyright (C) 2005 Crispin Flowerday
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -84,12 +85,12 @@ typedef struct
 {
 	EphyExtensionInfo info;
 	guint version;
-	gboolean load_deferred;
+	gboolean load_deferred; /* NOT USED? */
 	gboolean load_failed;
 
-	xmlChar *gettext_domain;
-	xmlChar *locale_directory;
-	xmlChar *loader_type;
+	char *gettext_domain;   /* NOT USED? */
+	char *locale_directory; /* NOT USED? */
+	char *loader_type;
 	GData *loader_attributes;
 
 	EphyLoader *loader; /* NULL if never loaded */
@@ -268,14 +269,14 @@ free_extension_info (ExtensionInfo *info)
 	EphyExtensionInfo *einfo = (EphyExtensionInfo *) info;
 
 	g_free (einfo->identifier);
-	xmlFree ((xmlChar *) einfo->name);
-	xmlFree ((xmlChar *) einfo->description);
-	g_list_foreach (einfo->authors, (GFunc) xmlFree, NULL);
+	g_free (einfo->name);
+	g_free (einfo->description);
+	g_list_foreach (einfo->authors, (GFunc) g_free, NULL);
 	g_list_free (einfo->authors);
-	xmlFree ((xmlChar *) einfo->url);
-	xmlFree ((xmlChar *) info->gettext_domain);
-	xmlFree ((xmlChar *) info->locale_directory);
-	xmlFree ((xmlChar *) info->loader_type);
+	g_free (einfo->url);
+	g_free (info->gettext_domain);
+	g_free (info->locale_directory);
+	g_free (info->loader_type);
 	g_datalist_clear (&info->loader_attributes);
 
 	if (info->extension != NULL)
@@ -363,9 +364,9 @@ typedef enum
 } ParserState;
 
 static void
-ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
-				     const char *identifier,
-				     /* const */ char *xml)
+ephy_extensions_manager_load_xml_string (EphyExtensionsManager *manager,
+					 const char *identifier,
+					 /* const */ char *xml)
 {
 	xmlDocPtr doc;
 	xmlTextReaderPtr reader;
@@ -377,7 +378,7 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 	LocalisedString description = { NULL, G_MAXUINT };
 	LocalisedString name = { NULL, G_MAXUINT };
 
-	LOG ("Loading description file for '%s'", identifier);
+	LOG ("Loading XML description file for '%s'", identifier);
 
 	if (g_list_find_custom (manager->priv->data, identifier,
 				(GCompareFunc) find_extension_info) != NULL)
@@ -495,21 +496,29 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 			 type == XML_READER_TYPE_ELEMENT &&
 			 xmlStrEqual (tag, (const xmlChar *) "loader"))
 		{
-			state = STATE_LOADER;
+			xmlChar * attr;
 
-			info->loader_type = xmlTextReaderGetAttribute (reader, (const xmlChar *) "type");
+			state = STATE_LOADER;
+			
+			attr = xmlTextReaderGetAttribute 
+				(reader, (const xmlChar *) "type");
+
+			info->loader_type = g_strdup ((char*)attr);
+			
+			xmlFree (attr);
 		}
 		else if (state == STATE_LOADER_ATTRIBUTE &&
 			 type == XML_READER_TYPE_TEXT &&
 			 attr_quark != 0)
 		{
-			xmlChar *value;
+			const xmlChar *value;
 
-			value = xmlTextReaderValue (reader);
+			value = xmlTextReaderConstValue (reader);
 
 			g_datalist_id_set_data_full (&info->loader_attributes,
-						     attr_quark, value,
-						     (GDestroyNotify) xmlFree);
+						     attr_quark, 
+						     g_strdup ((char*)value),
+						     (GDestroyNotify) g_free);
 			attr_quark = 0;
 		}
 		else if (state == STATE_LOADER_ATTRIBUTE &&
@@ -521,8 +530,12 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 		else if (state == STATE_AUTHOR &&
 			 type == XML_READER_TYPE_TEXT)
 		{
+			const xmlChar *attr;
+
+			attr = xmlTextReaderConstValue (reader);
+
 			einfo->authors = g_list_prepend
-				(einfo->authors, xmlTextReaderValue (reader));
+				(einfo->authors, g_strdup ((char*)attr));
 		}
 		else if (state == STATE_DESCRIPTION &&
 			 type == XML_READER_TYPE_TEXT)
@@ -532,7 +545,11 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 		else if (state == STATE_GETTEXT_DOMAIN &&
 			 type == XML_READER_TYPE_TEXT)
 		{
-			info->gettext_domain = xmlTextReaderValue (reader);
+			const xmlChar *attr;
+
+			attr = xmlTextReaderConstValue (reader);
+
+			info->gettext_domain = g_strdup ((char*)attr);
 		}
 		else if (state == STATE_LOAD_DEFERRED &&
 			 type == XML_READER_TYPE_TEXT)
@@ -540,13 +557,18 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 			const xmlChar *value;
 
 			value = xmlTextReaderConstValue (reader);
+
 			info->load_deferred =
 				(value != NULL && xmlStrEqual (value, (const xmlChar *) "true"));
 		}
 		else if (state == STATE_LOCALE_DIRECTORY &&
 			 type == XML_READER_TYPE_TEXT)
 		{
-			info->locale_directory = xmlTextReaderValue (reader);
+			const xmlChar *attr;
+
+			attr = xmlTextReaderConstValue (reader);
+			
+			info->locale_directory = g_strdup ((char*)attr);
 		}
 		else if (state == STATE_NAME &&
 			 type == XML_READER_TYPE_TEXT)
@@ -561,7 +583,11 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 		else if (state == STATE_URL &&
 			 type == XML_READER_TYPE_TEXT)
 		{
-			einfo->url = (char *)xmlTextReaderValue (reader);
+			const xmlChar *attr;
+
+			attr = xmlTextReaderConstValue (reader);
+			
+			einfo->url = g_strdup ((char*)attr);
 		}
 		else if (state == STATE_AUTHOR &&
 			 type == XML_READER_TYPE_END_ELEMENT &&
@@ -651,9 +677,131 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 	einfo->description = (char *)description.string;
 	einfo->name = (char *)name.string;
 
+	/* Reverse authors list */
+	einfo->authors = g_list_reverse (einfo->authors);
+
 	/* sanity check */
 	if (ret < 0 || state != STATE_STOP ||
 	    einfo->name == NULL || einfo->description == NULL ||
+	    info->loader_type == NULL || info->loader_type[0] == '\0')
+	{
+		free_extension_info (info);
+		return;
+	}
+
+	manager->priv->data = g_list_prepend (manager->priv->data, info);
+
+	g_signal_emit (manager, signals[ADDED], 0, info);
+}
+
+static void
+ephy_extensions_manager_load_ini_string (EphyExtensionsManager *manager,
+					 const char * identifier,
+					 const char * contents)
+{
+	ExtensionInfo *info;
+	EphyExtensionInfo *einfo;
+	gchar ** list;
+	int i;
+	GKeyFile *key_file;
+	GError *err = NULL;
+
+	LOG ("Loading INI description file for '%s'", identifier);
+
+	if (g_list_find_custom (manager->priv->data, identifier,
+				(GCompareFunc) find_extension_info) != NULL)
+	{
+		g_warning ("Extension description for '%s' already read!",
+			   identifier);
+		return;
+	}
+
+	key_file = g_key_file_new ();
+	if (g_key_file_load_from_data (key_file, contents, strlen (contents),
+				       G_KEY_FILE_NONE, &err) == FALSE)
+	{
+		g_warning ("Could load key file for '%s': '%s'",
+			   identifier, err->message);
+		g_error_free (err);
+		g_key_file_free (key_file);
+		return;
+	}
+
+	if (g_key_file_has_group (key_file, "Epiphany Extension") == FALSE ||
+	    g_key_file_has_group (key_file, "Loader") == FALSE)
+	{
+		g_warning ("Invalid extension description file for '%s'; "
+			   "missing 'Epiphany Extension' or 'Loader' group",
+			   identifier);
+		
+		g_key_file_free (key_file);
+		return;
+	}
+
+	info = g_new0 (ExtensionInfo, 1);
+	einfo = (EphyExtensionInfo *) info;
+	einfo->identifier = g_strdup (identifier);
+	g_datalist_init (&info->loader_attributes);
+
+	einfo->name = g_key_file_get_locale_string (key_file, 
+							"Epiphany Extension",
+							"Name",
+							NULL, NULL);
+
+	einfo->description = g_key_file_get_locale_string (key_file, 
+							"Epiphany Extension",
+							"Description",
+							NULL, NULL);
+
+	einfo->url = g_key_file_get_locale_string (key_file, 
+						       "Epiphany Extension",
+						       "URL",
+						       NULL, NULL);
+
+	list = g_key_file_get_string_list (key_file, 
+					   "Epiphany Extension",
+					   "Authors", NULL, NULL);
+	for (i = 0 ; list[i]; i++ )
+	{
+		einfo->authors = g_list_prepend (einfo->authors, 
+					   g_strstrip (g_strdup (list[i])));
+	}
+	einfo->authors = g_list_reverse (einfo->authors);
+ 	g_strfreev (list);
+	
+	info->version = g_key_file_get_integer (key_file,
+						"Epiphany Extension",
+						"Version", NULL);
+
+	/* Load the loader flags */
+	list = g_key_file_get_keys (key_file, "Loader", NULL, NULL);
+	for (i = 0 ; list[i]; i++ )
+	{
+		
+		char * value;
+		GQuark attr_quark = 0;
+
+		value = g_key_file_get_string (key_file, "Loader", 
+					       list[i], NULL);
+		
+		if (strcmp (list[i], "Type") == 0)
+		{
+			info->loader_type = value;
+			continue;
+		}
+
+		attr_quark = g_quark_from_string (list[i]);
+
+		g_datalist_id_set_data_full (&info->loader_attributes,
+					     attr_quark, value,
+					     (GDestroyNotify) g_free);
+	}	
+ 	g_strfreev (list);
+
+	g_key_file_free (key_file);
+
+	/* sanity check */
+	if (einfo->name == NULL || einfo->description == NULL ||
 	    info->loader_type == NULL || info->loader_type[0] == '\0')
 	{
 		free_extension_info (info);
@@ -671,7 +819,13 @@ path_to_identifier (const char *path)
 	char *identifier, *dot;
 
 	identifier = g_path_get_basename (path);
-	dot = strstr (identifier, ".xml");
+	dot = strstr (identifier, ".ephy-extension");
+
+	if (!dot)
+	{
+		dot = strstr (identifier, ".xml");
+	}
+
 	g_return_val_if_fail (dot != NULL, NULL);
 
 	*dot = '\0';
@@ -684,10 +838,10 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 				   const char *path)
 {
 	char *identifier;
-	char *xml;
+	char *contents;
 	GError *err = NULL;
 
-	g_file_get_contents (path, &xml, NULL, &err);
+	g_file_get_contents (path, &contents, NULL, &err);
 
 	if (err != NULL)
 	{
@@ -700,11 +854,21 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 	identifier = path_to_identifier (path);
 	g_return_if_fail (identifier != NULL);
 
-	ephy_extensions_manager_load_string (manager, identifier, xml);
+	if (g_str_has_suffix (path, ".ephy-extension"))
+	{
+		ephy_extensions_manager_load_ini_string (manager, identifier,
+							 contents);
+	} 
+	else if (g_str_has_suffix (path, ".xml"))
+	{
+		ephy_extensions_manager_load_xml_string (manager, identifier,
+							 contents);
+	}
 
 	g_free (identifier);
-	g_free (xml);
+	g_free (contents);
 }
+
 
 static int
 find_loader (const LoaderInfo *info,
@@ -838,7 +1002,8 @@ load_extension (EphyExtensionsManager *manager,
 	if (info->load_failed) return;
 
 	/* get a loader */
-	loader = get_loader_for_type (manager, (const char *)info->loader_type);
+	loader = get_loader_for_type (manager, 
+				      info->loader_type);
 	if (loader == NULL)
 	{
 		g_message ("No loader found for extension '%s' of type '%s'\n",
@@ -1035,7 +1200,7 @@ load_file_from_monitor (EphyExtensionsManager *manager,
 	/* When a file is installed, it sometimes gets CREATED empty and then
 	 * gets its contents filled later (for a CHANGED signal). Theoretically
 	 * I suppose we could get a CHANGED signal when the file is half-full,
-	 * but I doubt that'll happen much (the xml files are <1000 bytes). We
+	 * but I doubt that'll happen much (the files are <1000 bytes). We
 	 * don't want warnings all over the place, so we return from this
 	 * function if the file is empty. (We're assuming that if a file is
 	 * empty it'll be filled soon and this function will be called again.)
@@ -1043,11 +1208,11 @@ load_file_from_monitor (EphyExtensionsManager *manager,
 	 * Oh, and we return if the extension is already loaded, too.
 	 */
 	char *identifier;
-	char *xml;
+	char *contents;
 	gsize len;
 	GError *err = NULL;
 
-	g_file_get_contents (path, &xml, &len, &err);
+	g_file_get_contents (path, &contents, &len, &err);
 
 	if (err != NULL)
 	{
@@ -1058,7 +1223,7 @@ load_file_from_monitor (EphyExtensionsManager *manager,
 	}
 
 	if (len == 0) {
-		g_free (xml);
+		g_free (contents);
 		return;
 	}
 
@@ -1069,14 +1234,23 @@ load_file_from_monitor (EphyExtensionsManager *manager,
 				(GCompareFunc) find_extension_info) != NULL)
 	{
 		g_free (identifier);
-		g_free (xml);
+		g_free (contents);
 		return;
 	}
 
-	ephy_extensions_manager_load_string (manager, identifier, xml);
-
+	if (g_str_has_suffix (path, ".ephy-extension"))
+	{
+		ephy_extensions_manager_load_ini_string (manager, 
+							 identifier, contents);
+	}
+	else if (g_str_has_suffix (path, ".xml")) 
+	{
+		ephy_extensions_manager_load_xml_string (manager, 
+							 identifier, contents);
+	}
+	
 	g_free (identifier);
-	g_free (xml);
+	g_free (contents);
 
 	sync_loaded_extensions (manager);
 }
@@ -1091,10 +1265,11 @@ dir_changed_cb (GnomeVFSMonitorHandle *handle,
 	char *path;
 
 	/*
-	 * We only deal with XML files: Add them to the manager when created,
-	 * remove them when deleted.
+	 * We only deal with XML and INI files:
+	 * Add them to the manager when created, remove them when deleted.
 	 */
-	if (g_str_has_suffix (info_uri, ".xml") == FALSE) return;
+	if (g_str_has_suffix (info_uri, ".ephy-extension") == FALSE &&
+	    g_str_has_suffix (info_uri, ".xml") == FALSE) return;
 
 	path = gnome_vfs_get_local_path_from_uri (info_uri);
 
@@ -1136,7 +1311,8 @@ ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
 	}
 	while ((e = readdir (d)) != NULL)
 	{
-		if (g_str_has_suffix (e->d_name, ".xml"))
+		if (g_str_has_suffix (e->d_name, ".ephy-extension") ||
+		    g_str_has_suffix (e->d_name, ".xml"))
 		{
 			file_path = g_build_filename (path, e->d_name, NULL);
 			ephy_extensions_manager_load_file (manager, file_path);
