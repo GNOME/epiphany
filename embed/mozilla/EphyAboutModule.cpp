@@ -326,6 +326,11 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 				"a problem with your proxy server or your "
 				"network connection.");
 	}
+	else if (strcmp (aError, "contentEncodingError") == 0)
+	{
+		*aPrimary = g_strdup (_("Could not display content."));
+		*aSecondary = _("The page uses an unsupported or invalid form of compression.");
+	}
 	else
 	{
 		return NS_ERROR_ILLEGAL_VALUE;
