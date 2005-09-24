@@ -1,3 +1,11 @@
+2005-09-24  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* lib/Makefile.am:
+	* lib/ephy-module.c: (ephy_module_load):
+
+	If the library path isn't absolute, look in the main extension
+	dir, and then the users own extension directory
+
 2005-09-23  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* src/ephy-extensions-manager.c:

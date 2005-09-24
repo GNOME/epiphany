@@ -84,10 +84,34 @@ ephy_module_load (GTypeModule *gmodule)
 {
 	EphyModule *module = EPHY_MODULE (gmodule);
 	EphyModuleRegisterFunc register_func;
+	gboolean is_absolute;
 
 	LOG ("Loading %s", module->path);
 
-	module->library = g_module_open (module->path, 0);
+	is_absolute = g_path_is_absolute (module->path);
+
+	if (module->library == NULL && ! is_absolute)
+	{
+		char *path = g_build_filename (EXTENSIONS_DIR, module->path, NULL);
+
+		module->library = g_module_open (path, 0);
+
+		g_free (path);
+	}
+
+	if (module->library == NULL && ! is_absolute)
+	{
+		char *path = g_build_filename (ephy_dot_dir(), "extensions", module->path, NULL);
+		
+		module->library = g_module_open (path, 0);
+
+		g_free (path);
+	}
+
+	if (module->library == NULL)
+	{
+		module->library = g_module_open (module->path, 0);
+	}
 
 	if (module->library == NULL)
 	{
