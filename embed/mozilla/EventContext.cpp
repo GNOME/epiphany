@@ -266,7 +266,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 	rv = node->GetNodeType(&type);
 	if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
-	PRBool has_background = PR_FALSE;
+	PRBool has_image = PR_FALSE;
 
 	nsCOMPtr<nsIDOMHTMLElement> element = do_QueryInterface(node);
 	if ((nsIDOMNode::ELEMENT_NODE == type) && element)
@@ -280,8 +280,6 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 		if (g_ascii_strcasecmp (tag.get(), "img") == 0)
 		{
-			info->context |= EPHY_EMBED_CONTEXT_IMAGE;
-
 			nsEmbedString img;
 			nsCOMPtr <nsIDOMHTMLImageElement> image = 
 						do_QueryInterface(node, &rv);
@@ -289,7 +287,10 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 			rv = image->GetSrc (img);
 			if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
+
 			SetStringProperty ("image", img);
+			info->context |= EPHY_EMBED_CONTEXT_IMAGE;
+			has_image = PR_TRUE;
 		}
 		else if (g_ascii_strcasecmp (tag.get(), "area") == 0)
 		{
@@ -343,9 +344,9 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					rv = img->GetSrc (imgSrc);
 					if (NS_FAILED(rv)) continue;
 
-					info->context |= EPHY_EMBED_CONTEXT_IMAGE;
-
 					SetStringProperty ("image", imgSrc);
+					info->context |= EPHY_EMBED_CONTEXT_IMAGE;
+					has_image = PR_TRUE;
 
 					break;
 				}
@@ -374,8 +375,6 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			// MIME types are always lower case
 			if (g_str_has_prefix (cValue.get(), "image/"))
 			{
-				info->context |= EPHY_EMBED_CONTEXT_IMAGE;
-				
 				nsEmbedString img;
 				
 				rv = object->GetData (img);
@@ -386,6 +385,8 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
                                 if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
 				SetStringProperty ("image", cImg.get());
+				info->context |= EPHY_EMBED_CONTEXT_IMAGE;
+				has_image = PR_TRUE;
 			}
 			else
 			{
@@ -415,10 +416,9 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					if (NS_FAILED (rv))
 						return NS_ERROR_FAILURE;
 
-					SetStringProperty ("background_image",
-							   bgimg.get());
-
-					has_background = PR_TRUE;
+					SetStringProperty ("image", bgimg.get());
+					info->context |= EPHY_EMBED_CONTEXT_IMAGE;
+					has_image = PR_TRUE;
 				}
 			}
  		}
@@ -587,7 +587,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				info->context |= EPHY_EMBED_CONTEXT_INPUT;
 			}
 
-			if (!has_background)
+			if (!has_image)
 			{
 				nsEmbedString cssurl;
 				rv = GetCSSBackground (node, cssurl);
@@ -598,10 +598,9 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
                                         rv = ResolveBaseURL (cssurl, bgimg);
                                         if (NS_FAILED (rv))
                                                 return NS_ERROR_FAILURE;
-					SetStringProperty ("background_image",
-						           bgimg.get());
-
-					has_background = PR_TRUE;
+					SetStringProperty ("image", bgimg.get());
+					info->context |= EPHY_EMBED_CONTEXT_IMAGE;
+					has_image = PR_TRUE;
 				}
 			}
 		}

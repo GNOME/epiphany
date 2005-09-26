@@ -311,8 +311,6 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 static const GtkActionEntry ephy_popups_entries [] = {
 	/* Document */
 
-	{ "SaveBackgroundAs", NULL, N_("_Save Background As..."), NULL,
-	  NULL, G_CALLBACK (popup_cmd_save_background_as) },
 	{ "ContextBookmarkPage", STOCK_ADD_BOOKMARK, N_("Add Boo_kmark..."), "<control>D",
 	  N_("Add a bookmark for the current page"),
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
@@ -1622,8 +1620,6 @@ static void
 embed_popup_deactivate_cb (GtkWidget *popup,
 			   EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
-
 	LOG ("Deactivating popup menu");
 
 	enable_edit_actions_sensitivity (window);
@@ -1658,18 +1654,6 @@ update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 	const GValue *value;
 	GtkAction *action;
 	char *tooltip, *name;
-
-	if (ephy_embed_event_has_property (event, "background_image"))
-	{
-		ephy_embed_event_get_property (event, "background_image", &value);
-
-		action = gtk_action_group_get_action (group, "SaveBackgroundAs");
-		name = get_name_from_address_value (value);
-		tooltip = g_strdup_printf (_("Save background image '%s'"), name);
-		g_object_set (action, "tooltip", tooltip, NULL);
-		g_free (name);
-		g_free (tooltip);
-	}
 
 	context = ephy_embed_event_get_context (event);
 
@@ -1755,7 +1739,7 @@ show_embed_popup (EphyWindow *window,
 	EphyEmbedEventContext context;
 	const char *popup;
 	const GValue *value;
-	gboolean framed, has_background, can_open_in_new;
+	gboolean framed, can_open_in_new;
 	GtkWidget *widget;
 	guint button;
 
@@ -1768,7 +1752,6 @@ show_embed_popup (EphyWindow *window,
 	ephy_embed_event_get_property (event, "framed_page", &value);
 	framed = g_value_get_int (value);
 
-	has_background = ephy_embed_event_has_property (event, "background_image");
 	can_open_in_new = ephy_embed_event_has_property (event, "link-has-web-scheme");
 
 	context = ephy_embed_event_get_context (event);
@@ -1823,9 +1806,6 @@ show_embed_popup (EphyWindow *window,
 	g_return_if_fail (widget != NULL);
 
 	action_group = window->priv->popups_action_group;
-	action = gtk_action_group_get_action (action_group, "SaveBackgroundAs");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !has_background);
-	gtk_action_set_visible (action, has_background);
 
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewWindow");
 	gtk_action_set_sensitive (action, can_open_in_new);

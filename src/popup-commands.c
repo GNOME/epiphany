@@ -340,14 +340,6 @@ popup_cmd_copy_image_location (GtkAction *action,
 }
 
 void
-popup_cmd_save_background_as (GtkAction *action,
-			      EphyWindow *window)
-{
-	save_property_url (action, _("Save Background As"),
-			   window, TRUE, "background_image");
-}
-
-void
 popup_cmd_open_frame (GtkAction *action,
 		      EphyWindow *window)
 {
