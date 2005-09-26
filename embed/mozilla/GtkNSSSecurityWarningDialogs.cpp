@@ -47,7 +47,6 @@
 
 #include "GtkNSSSecurityWarningDialogs.h"
 #include "EphyUtils.h"
-#include "AutoEventQueue.h"
 
 #include <nsCOMPtr.h>
 #include <nsIPrefBranch.h>
@@ -201,12 +200,6 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 {
 	*_retval = PR_FALSE;
 
-	/* Work around this broken API by pushing a new event queue. Otherwise
-	 * networking will block while the dialogue is shown!
-	 */
-	AutoEventQueue queue;
-	if (NS_FAILED (queue.Init ())) return;
-
 	nsresult rv;
 	PRBool show = PR_TRUE;
 	nsCOMPtr<nsIPrefBranch> prefBranch
@@ -272,6 +265,7 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	int response = gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
 
 	*_retval = (response == GTK_RESPONSE_ACCEPT || response == GTK_RESPONSE_OK);
 
@@ -280,6 +274,5 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 		prefBranch->SetBoolPref (showOncePref, PR_FALSE);
 	}
 
-	gtk_widget_destroy (dialog);
 	g_free (showOncePref);
 }

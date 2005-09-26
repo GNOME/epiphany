@@ -1,6 +1,15 @@
 2005-09-26  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/Makefile.am:
+	* embed/mozilla/GtkNSSSecurityWarningDialogs.cpp: (DoDialog):
+
+	Back out previous change, it doesn't work right when there
+	are *two* dialogues shown: the 1st one can only be dismissed
+	after the 2nd one has been dismissed.
+
+2005-09-26  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/Makefile.am:
 	* embed/mozilla/AutoEventQueue.cpp:
 	* embed/mozilla/AutoEventQueue.h:
 	* embed/mozilla/GtkNSSSecurityWarningDialogs.cpp: (DoDialog):
