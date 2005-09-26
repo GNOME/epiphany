@@ -1,3 +1,16 @@
+2005-09-26  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/AutoEventQueue.cpp:
+	* embed/mozilla/AutoEventQueue.h:
+	* embed/mozilla/GtkNSSSecurityWarningDialogs.cpp: (DoDialog):
+	
+	Push a new event queue while showing the dialogue
+	with gtk_dialog_run. This fixes the problem (caused by the
+	braindead API of showing this dialogue synchronously) that
+	networking is blocked in all other windows while the dialogue
+	is shown.
+	
 2005-09-25  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* data/epiphany-lockdown.schemas.in:

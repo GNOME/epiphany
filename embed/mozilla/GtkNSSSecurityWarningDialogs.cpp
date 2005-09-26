@@ -47,6 +47,7 @@
 
 #include "GtkNSSSecurityWarningDialogs.h"
 #include "EphyUtils.h"
+#include "AutoEventQueue.h"
 
 #include <nsCOMPtr.h>
 #include <nsIPrefBranch.h>
@@ -199,6 +200,12 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 					PRBool *_retval)
 {
 	*_retval = PR_FALSE;
+
+	/* Work around this broken API by pushing a new event queue. Otherwise
+	 * networking will block while the dialogue is shown!
+	 */
+	AutoEventQueue queue;
+	if (NS_FAILED (queue.Init ())) return;
 
 	nsresult rv;
 	PRBool show = PR_TRUE;
