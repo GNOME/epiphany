@@ -1036,23 +1036,23 @@ close_button_clicked_cb (GtkWidget *widget, GtkWidget *tab)
 }
 
 static void
-tab_label_style_set_cb (GtkWidget *label,
+tab_label_style_set_cb (GtkWidget *hbox,
 			GtkStyle *previous_style,
-			GtkWidget *hbox)
+		        gpointer user_data)
 {
 	PangoFontMetrics *metrics;
 	PangoContext *context;
 	int char_width, h, w;
 
-	context = gtk_widget_get_pango_context (label);
+	context = gtk_widget_get_pango_context (hbox);
 	metrics = pango_context_get_metrics (context,
-			                     label->style->font_desc,
+			                     hbox->style->font_desc,
 					     pango_context_get_language (context));
 
 	char_width = pango_font_metrics_get_approximate_digit_width (metrics);
 	pango_font_metrics_unref (metrics);
 
-	gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (label),
+	gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (hbox),
 					   GTK_ICON_SIZE_MENU, &w, &h);
 
 	gtk_widget_set_size_request
@@ -1114,8 +1114,8 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	gtk_box_pack_start (GTK_BOX (label_hbox), label, TRUE, TRUE, 0);
 
 	/* Set minimal size */
-	g_signal_connect (label, "style-set",
-			  G_CALLBACK (tab_label_style_set_cb), hbox);
+	g_signal_connect (hbox, "style-set",
+			  G_CALLBACK (tab_label_style_set_cb), NULL);
 
 	gtk_widget_show (hbox);
 	gtk_widget_show (label_ebox);
