@@ -129,7 +129,6 @@ window_cmd_file_send_to	(GtkAction *action,
 {
 	EphyTab *tab;
 	EphyEmbed *embed;
-	const char *address;
 	char *url, *location, *title;
 
 	tab = ephy_window_get_active_tab (window);
@@ -138,20 +137,8 @@ window_cmd_file_send_to	(GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	address = ephy_tab_get_address (tab);
-	location = gnome_vfs_escape_string (address);
-
-	title = ephy_embed_get_title (embed);
-	if (title != NULL)
-	{
-		char *tmp = gnome_vfs_escape_string (title);
-		g_free (title);
-		title = tmp;
-	}
-	else
-	{
-		title = gnome_vfs_escape_string (_("Check this out!"));
-	}
+	location = gnome_vfs_escape_string (ephy_tab_get_address (tab));
+	title = gnome_vfs_escape_string (ephy_tab_get_title (tab));
 
 	url = g_strconcat ("mailto:",
                            "?Subject=", title,
@@ -288,8 +275,7 @@ window_cmd_file_bookmark_page (GtkAction *action,
 	EphyEmbed *embed;
 	EphyBookmarks *bookmarks;
 	GtkWidget *new_bookmark;
-	const char *location, *icon;
-	char *title;
+	const char *location, *icon, *title;
 
 	tab = ephy_window_get_active_tab (window);
 	g_return_if_fail (tab != NULL);
@@ -298,13 +284,7 @@ window_cmd_file_bookmark_page (GtkAction *action,
 	g_return_if_fail (embed != NULL);
 
 	location = ephy_tab_get_address (tab);
-
-	title = ephy_embed_get_title (embed);
-	if (title == NULL)
-	{
-		title = g_strdup (_("Untitled"));
-	}
-
+	title = ephy_tab_get_title (tab);
 	icon = ephy_tab_get_icon_address (tab);
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
