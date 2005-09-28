@@ -492,16 +492,16 @@ dnl Check whether to enable our filepicker component
 AC_MSG_CHECKING([whether to enable native gtk+ filepicker])
 AC_ARG_ENABLE([filepicker],
 	AS_HELP_STRING([--enable-filepicker],[Whether to enable the gtk+ native filepicker; not needed when the mozilla build itself has native gtk+ filepicker enabled (default:enabled)]),
-	[filepicker=$enableval],
+	[],
 	[if test "$gecko_version_major" = "1" -a "$gecko_version_minor" -ge "8"; then
-		filepicker=no
+		enable_filepicker=no
  	 else
-		filepicker=yes
+		enable_filepicker=yes
  	 fi])
-AC_MSG_RESULT([$filepicker])
+AC_MSG_RESULT([$enable_filepicker])
 
-AM_CONDITIONAL([ENABLE_FILEPICKER],[test "x$filepicker" = "xyes"])
-if test "x$filepicker" = "xyes"; then
+AM_CONDITIONAL([ENABLE_FILEPICKER],[test "x$enable_filepicker" = "xyes"])
+if test "x$enable_filepicker" = "xyes"; then
 	AC_DEFINE([ENABLE_FILEPICKER],[1],[Define to enable the native filepicker])
 fi
 

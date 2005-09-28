@@ -435,6 +435,21 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 	gtk_window_set_modal (GTK_WINDOW (mDialog), TRUE);
 	gtk_window_set_destroy_with_parent (GTK_WINDOW (mDialog), FALSE);
 
+	/* If there's just the "ALL" filter, it's no use showing the filters! */
+	GSList *filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (mDialog));
+	if (g_slist_length (filters) == 1)
+	{
+		GtkFileFilter *filter = GTK_FILE_FILTER (filters->data);
+		const char *name = gtk_file_filter_get_name (filter);
+
+		if (!name || strcmp (name, _("All files")) == 0)
+		{
+			gtk_file_chooser_remove_filter (GTK_FILE_CHOOSER (mDialog),
+							filter);
+		}
+	}
+	g_slist_free (filters);
+
 	gtk_widget_show (GTK_WIDGET (mDialog));
 
 	int response;
