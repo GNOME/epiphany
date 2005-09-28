@@ -299,8 +299,6 @@ window_cmd_file_bookmark_page (GtkAction *action,
 			(EPHY_NEW_BOOKMARK (new_bookmark), icon);
 		gtk_widget_show (new_bookmark);
 	}
-
-	g_free (title);
 }
 
 static void
