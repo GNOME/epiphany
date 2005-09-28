@@ -2212,6 +2212,44 @@ ephy_tab_set_title (EphyTab *tab,
 }
 
 /**
+ * ephy_tab_get_title_composite:
+ * @tab: an #EphyTab
+ *
+ * Returns the title of the web page loaded in @tab.
+ * 
+ * This differs from #ephy_tab_get_title in that this function
+ * will return a special title while the page is still loading.
+ *
+ * Return value: @tab's web page's title. Will never be %NULL.
+ **/
+const char *
+ephy_tab_get_title_composite (EphyTab *tab)
+{
+	EphyTabPrivate *priv;
+	const char *title = "";
+
+	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
+
+	priv = tab->priv;
+
+	if (priv->is_blank)
+	{
+		title = _("Blank page");
+	}
+	else if (priv->is_loading &&
+		 priv->loading_title != NULL)
+	{
+		title = priv->loading_title;
+	}
+	else
+	{
+		title = priv->title;
+	}
+
+	return title != NULL ? title : "";
+}
+
+/**
  * ephy_tab_get_title:
  * @tab: an #EphyTab
  *
@@ -2232,11 +2270,6 @@ ephy_tab_get_title (EphyTab *tab)
 	if (priv->is_blank)
 	{
 		title = _("Blank page");
-	}
-	else if (priv->is_loading &&
-		 priv->loading_title != NULL)
-	{
-		title = priv->loading_title;
 	}
 	else
 	{

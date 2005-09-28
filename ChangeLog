@@ -1,5 +1,19 @@
 2005-09-28  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-notebook.c: (sync_label):
+	* src/ephy-tab.c: (ephy_tab_get_title_composite),
+	(ephy_tab_get_title):
+	* src/ephy-tab.h:
+	* src/ephy-tabs-menu.c: (sync_tab_title):
+	* src/ephy-window.c: (sync_tab_title):
+	* src/window-commands.c: (window_cmd_file_send_to),
+	(window_cmd_file_bookmark_page):
+
+	Add a function to get the tab's real title, and use it
+	where appropriate. Fixes bug #317418.
+
+2005-09-28  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.ac:
 	* embed/mozilla/FilePicker.cpp:
 

@@ -1011,7 +1011,7 @@ sync_label (EphyTab *tab, GParamSpec *pspec, GtkWidget *proxy)
 
 	g_return_if_fail (ebox != NULL && tips != NULL && label != NULL);
 
-	title = ephy_tab_get_title (tab);
+	title = ephy_tab_get_title_composite (tab);
 
 	if (title)
 	{

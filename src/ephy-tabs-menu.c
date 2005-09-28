@@ -124,7 +124,7 @@ sync_tab_title (EphyTab *tab,
 {
 	const char *title;
 
-	title = ephy_tab_get_title (tab);
+	title = ephy_tab_get_title_composite (tab);
 
 	g_object_set (action, "label", title, NULL);
 }
