@@ -71,7 +71,7 @@ EphyAboutModule::NewChannel(nsIURI *aURI,
 	nsCAutoString path;
 	aURI->GetPath (path);
 
-	if (strncmp (path.get(), "neterror", strlen ("neterror")) == 0)
+	if (strncmp (path.get(), "neterror?", strlen ("neterror?")) == 0)
 	{
 		return CreateErrorPage (aURI, _retval);
 	}
@@ -163,7 +163,7 @@ EphyAboutModule::ParseErrorURL(const char *aURL,
 	}
 
 	g_strfreev (params);
-	
+
 	return NS_OK;
 }
 
@@ -347,16 +347,17 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
         nsresult rv = NS_ERROR_ILLEGAL_VALUE;
         nsCAutoString spec;
 	rv = aErrorURI->GetSpec (spec);
-	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && !spec.IsEmpty(), rv);
+	NS_ENSURE_TRUE (NS_SUCCEEDED (rv), rv);
 
 	nsCAutoString error, rawurl, url, charset;
 	rv = ParseErrorURL (spec.get (), error, rawurl, url, charset);
-	if (NS_FAILED (rv) || error.IsEmpty () || url.IsEmpty()) return rv;
+	if (NS_FAILED (rv)) return rv;
+	if (error.IsEmpty () || rawurl.IsEmpty () || url.IsEmpty()) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIURI> uri;
 	rv = EphyUtils::NewURI(getter_AddRefs (uri), url, charset.get());
 	/* FIXME can uri be NULL if the original url was invalid? */
-	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && uri, rv);
+	NS_ENSURE_TRUE (NS_SUCCEEDED (rv), rv);
 
 	char *primary = nsnull, *secondary = nsnull, *tertiary = nsnull, *linkintro = nsnull;
 	rv = GetErrorMessage (uri, error.get(), &primary, &secondary, &tertiary, &linkintro);
@@ -376,7 +377,7 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 
 		return Redirect (url, _retval);
 	}
-
+	NS_ENSURE_SUCCESS (rv, rv);
 	NS_ENSURE_TRUE (primary && secondary, NS_ERROR_FAILURE);
 
 	/* open the rendering stream */
