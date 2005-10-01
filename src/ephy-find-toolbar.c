@@ -200,7 +200,8 @@ tab_search_key_press_cb (EphyEmbed *embed,
 	/* don't do anything if the find toolbar is hidden */
 	if (GTK_WIDGET_VISIBLE (widget) == FALSE ||
 	    event->keyval == GDK_Return ||
-	    event->keyval == GDK_KP_Enter)
+	    event->keyval == GDK_KP_Enter ||
+	    event->keyval == GDK_ISO_Enter)
 	{
 		return FALSE;
 	}

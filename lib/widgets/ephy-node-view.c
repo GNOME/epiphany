@@ -570,7 +570,8 @@ ephy_node_view_key_press_cb (GtkTreeView *treeview,
 
 	if (event->keyval == GDK_space ||
 	    event->keyval == GDK_Return ||
-	    event->keyval == GDK_KP_Enter)
+	    event->keyval == GDK_KP_Enter ||
+	    event->keyval == GDK_ISO_Enter)
 	{
 		if (view->priv->toggle_column >= 0)
 		{
