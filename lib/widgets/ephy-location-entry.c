@@ -297,16 +297,20 @@ entry_key_press_cb (GtkEntry *entry,
 		    GdkEventKey *event,
 		    EphyLocationEntry *lentry)
 {
-	guint mask = gtk_accelerator_get_default_mod_mask ();
+	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 
-	if ((event->keyval == GDK_Return || event->keyval == GDK_ISO_Enter) &&
-	    (event->state & mask) == GDK_CONTROL_MASK)
+	if ((event->keyval == GDK_Return ||
+	     event->keyval == GDK_KP_Enter ||
+	     event->keyval == GDK_ISO_Enter) &&
+	    state == GDK_CONTROL_MASK)
 	{
+		gtk_im_context_reset (entry->im_context);
+
 		g_signal_emit_by_name (entry, "activate");
 
 		return TRUE;
 	}
-	else if (event->keyval == GDK_Escape && (event->state & mask) == 0)
+	else if (event->keyval == GDK_Escape && state == 0)
 	{
 		ephy_location_entry_reset (lentry);
 		/* don't return TRUE since we want to cancel the autocompletion popup too */

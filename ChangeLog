@@ -1,3 +1,14 @@
+2005-10-01  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/widgets/ephy-location-entry.c: (entry_key_press_cb):
+
+	Reset the IM context before activating the entry.
+
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_key_press_cb):
+	* src/ephy-find-toolbar.c: (tab_search_key_press_cb):
+
+	Add GDK_ISO_Enter to recognised keyvals.
+
 2005-09-26  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/EphyAboutModule.cpp:
