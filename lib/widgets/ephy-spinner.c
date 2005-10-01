@@ -449,7 +449,7 @@ ephy_spinner_cache_ref (void)
 
 /* Spinner implementation */
 
-#define SPINNER_TIMEOUT 100	/* Milliseconds Per Frame */
+#define SPINNER_TIMEOUT 125 /* ms */
 
 #define EPHY_SPINNER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SPINNER, EphySpinnerDetails))
 
@@ -461,6 +461,7 @@ struct _EphySpinnerDetails
 	EphySpinnerImages *images;
 	GList *current_image;
 	guint timer_task;
+	guint spinning : 1;
 };
 
 static void ephy_spinner_class_init (EphySpinnerClass *class);
@@ -549,8 +550,9 @@ ephy_spinner_init (EphySpinner *spinner)
 
 	spinner->details->cache = ephy_spinner_cache_ref ();
 	spinner->details->size = GTK_ICON_SIZE_INVALID;
+	spinner->details->spinning = FALSE;
 
-	/* FIXME: icon theme is per-screen, not global */
+	/* FIXME: multihead */
 	spinner->details->icon_theme = gtk_icon_theme_get_default ();
 	g_signal_connect (spinner->details->icon_theme, "changed",
 			  G_CALLBACK (icon_theme_changed_cb), spinner);
@@ -676,7 +678,12 @@ bump_spinner_frame_cb (EphySpinner *spinner)
 void
 ephy_spinner_start (EphySpinner *spinner)
 {
-	if (spinner->details->timer_task == 0)
+	EphySpinnerDetails *details = spinner->details;
+
+	details->spinning = TRUE;
+
+	if (GTK_WIDGET_MAPPED (GTK_WIDGET (spinner)) &&
+	    details->timer_task == 0)
 	{
 
 		if (spinner->details->images != NULL)
@@ -712,10 +719,18 @@ ephy_spinner_remove_update_callback (EphySpinner *spinner)
 void
 ephy_spinner_stop (EphySpinner *spinner)
 {
+	EphySpinnerDetails *details = spinner->details;
+
+	details->spinning = FALSE;
+
 	if (spinner->details->timer_task != 0)
 	{
 		ephy_spinner_remove_update_callback (spinner);
-		gtk_widget_queue_draw (GTK_WIDGET (spinner));
+
+		if (GTK_WIDGET_MAPPED (GTK_WIDGET (spinner)))
+		{
+			gtk_widget_queue_draw (GTK_WIDGET (spinner));
+		}
 	}
 }
 
@@ -769,6 +784,30 @@ ephy_spinner_size_request (GtkWidget *widget,
 }
 
 static void
+ephy_spinner_map (GtkWidget *widget)
+{
+	EphySpinner *spinner = EPHY_SPINNER (widget);
+	EphySpinnerDetails *details = spinner->details;
+
+	GTK_WIDGET_CLASS (parent_class)->map (widget);
+
+	if (details->spinning)
+	{
+		ephy_spinner_start (spinner);
+	}
+}
+
+static void
+ephy_spinner_unmap (GtkWidget *widget)
+{
+	EphySpinner *spinner = EPHY_SPINNER (widget);
+
+	ephy_spinner_remove_update_callback (spinner);
+
+	GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+}
+
+static void
 ephy_spinner_finalize (GObject *object)
 {
 	EphySpinner *spinner = EPHY_SPINNER (object);
@@ -797,6 +836,8 @@ ephy_spinner_class_init (EphySpinnerClass *class)
 
 	widget_class->expose_event = ephy_spinner_expose;
 	widget_class->size_request = ephy_spinner_size_request;
+	widget_class->map = ephy_spinner_map;
+	widget_class->unmap = ephy_spinner_unmap;
 
 	g_type_class_add_private (object_class, sizeof (EphySpinnerDetails));
 }

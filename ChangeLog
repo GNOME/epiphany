@@ -1,5 +1,14 @@
 2005-10-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_init),
+	(ephy_spinner_start), (ephy_spinner_stop), (ephy_spinner_map),
+	(ephy_spinner_unmap), (ephy_spinner_class_init):
+
+	Don't spin unmapped spinners. Slightly decrease the frequency.
+	Might help with bug #315232.
+
+2005-10-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-location-entry.c: (entry_key_press_cb):
 
 	Reset the IM context before activating the entry.
