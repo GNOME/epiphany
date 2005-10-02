@@ -310,7 +310,6 @@ static gboolean
 ephy_print_do_print_idle_cb (EmbedPrintInfo *info)
 {
 	GnomePrintJob *job;
-	int ret;
 
 	/* Sometimes mozilla doesn't even create the temp file!? */
 	if (g_file_test (info->tempfile, G_FILE_TEST_EXISTS) == FALSE) return FALSE;
