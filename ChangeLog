@@ -1,5 +1,13 @@
 2005-10-02  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-tab.c: (ephy_tab_finalize):
+	* src/ephy-window.c: (ephy_window_finalize):
+
+	Schedule a GC in finalize of EphyTab and EphyWindow, to 
+	work around bug #317242.
+
+2005-10-02  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.ac:
 	* embed/ephy-embed-shell.c: (ephy_embed_shell_dispose),
 	(ephy_embed_shell_finalize), (ephy_embed_shell_class_init):

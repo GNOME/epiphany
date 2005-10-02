@@ -64,6 +64,10 @@
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <string.h>
 
+#ifdef ENABLE_PYTHON
+#include "ephy-python.h"
+#endif
+
 #define EPHY_TAB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TAB, EphyTabPrivate))
 
 #define MAX_HIDDEN_POPUPS 5
@@ -833,6 +837,10 @@ ephy_tab_finalize (GObject *object)
 	popups_manager_reset (tab);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
+
+#ifdef ENABLE_PYTHON
+	ephy_python_schedule_gc ();
+#endif
 
 	LOG ("EphyTab finalized %p", tab);
 }
