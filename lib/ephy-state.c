@@ -398,15 +398,15 @@ ephy_state_add_window (GtkWidget *window,
 }
 
 static gboolean
-paned_size_allocate_cb (GtkWidget *paned,
-			GtkAllocation *allocation,
+paned_sync_position_cb (GtkWidget *paned,
+			GParamSpec *pspec,
 			EphyNode *node)
 {
 	int width;
 	GValue value = { 0, };
 
 	width = gtk_paned_get_position (GTK_PANED (paned));
-
+	
 	g_value_init (&value, G_TYPE_INT);
 	g_value_set_int (&value, width);
 	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_WIDTH,
@@ -450,8 +450,8 @@ ephy_state_add_paned (GtkWidget *paned,
 	width = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_WIDTH);
 	gtk_paned_set_position (GTK_PANED (paned), width);
 
-	g_signal_connect (paned, "size_allocate",
-			  G_CALLBACK (paned_size_allocate_cb), node);
+	g_signal_connect (paned, "notify::position",
+			  G_CALLBACK (paned_sync_position_cb), node);
 }
 
 static void

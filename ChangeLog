@@ -1,5 +1,19 @@
 2005-10-03  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-state.c: (paned_sync_position_cb),
+	(ephy_state_add_paned):
+
+	Use "position" property notification instead of
+	size-allocate to monitor the paned's position.
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_construct):
+
+	Use resize=FALSE with gtk_paned_pack1. Fixes growing size of
+	the left pane of the bookmarks editor by repeated opening.
+
+2005-10-03  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.c: (setup_ui_manager), (ephy_window_dispose),
 	(ephy_window_finalize):
 
