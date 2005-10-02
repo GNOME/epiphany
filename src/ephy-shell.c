@@ -91,6 +91,7 @@ EphyShell *ephy_shell = NULL;
 
 static void ephy_shell_class_init	(EphyShellClass *klass);
 static void ephy_shell_init		(EphyShell *shell);
+static void ephy_shell_dispose		(GObject *object);
 static void ephy_shell_finalize		(GObject *object);
 static GObject *impl_get_embed_single   (EphyEmbedShell *embed_shell);
 
@@ -145,6 +146,7 @@ ephy_shell_class_init (EphyShellClass *klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 
+	object_class->dispose = ephy_shell_dispose;
 	object_class->finalize = ephy_shell_finalize;
 
 	embed_shell_class->get_embed_single = impl_get_embed_single;
@@ -414,14 +416,13 @@ gnome_session_init (EphyShell *shell)
 
 	client = gnome_master_client ();
 
-	g_signal_connect (G_OBJECT (client),
-			  "save_yourself",
-			  G_CALLBACK (save_yourself_cb),
-			  shell);
-	g_signal_connect (G_OBJECT (client),
-			  "die",
-			  G_CALLBACK (die_cb),
-			  shell);
+	g_signal_connect_object (client, "save_yourself",
+				 G_CALLBACK (save_yourself_cb), shell, 0);
+	/* don't use connect_object here, since that will ref the shell
+	 * while dispatching the callbacks!
+	 */
+	g_signal_connect (client, "die",
+			  G_CALLBACK (die_cb), shell);
 }
 
 gboolean
@@ -525,100 +526,106 @@ done:
 }
 
 static void
-ephy_shell_finalize (GObject *object)
+ephy_shell_dispose (GObject *object)
 {
 	EphyShell *shell = EPHY_SHELL (object);
 
-	g_assert (ephy_shell == NULL);
-
-	/* this will unload the extensions */
-	LOG ("Unref extension manager");
-	if (shell->priv->extensions_manager)
-	{
-		g_object_unref (shell->priv->extensions_manager);
-	}
-
-#ifdef ENABLE_DBUS
-	LOG ("Shutting down DBUS service");
-	if (shell->priv->dbus_service)
-	{
-		g_object_unref (shell->priv->dbus_service);
-	}
-#endif
-
-	LOG ("Unref session manager");
-	if (shell->priv->session)
-	{
-		g_object_unref (shell->priv->session);
-	}
-
-	LOG ("Unref lockdown controller");
-	if (shell->priv->lockdown)
-	{
-		g_object_unref (shell->priv->lockdown);
-	}
-
-	LOG ("Unref toolbars model");
-	if (shell->priv->toolbars_model)
-	{
-		g_object_unref (shell->priv->toolbars_model);
-	}
-
-	LOG ("Unref fullscreen toolbars model");
-	if (shell->priv->fs_toolbars_model)
-	{
-		g_object_unref (shell->priv->fs_toolbars_model);
-	}
-
-	LOG ("Unref Bookmarks Editor");
-	if (shell->priv->bme)
-	{
-		gtk_widget_destroy (GTK_WIDGET (shell->priv->bme));
-	}
-
-	LOG ("Unref History Window");
-	if (shell->priv->history_window)
-	{
-		gtk_widget_destroy (GTK_WIDGET (shell->priv->history_window));
-	}
-
-	LOG ("Unref PDM Dialog");
-	if (shell->priv->pdm_dialog)
-	{
-		g_object_unref (shell->priv->pdm_dialog);
-	}
-
-	LOG ("Unref prefs dialog");
-	if (shell->priv->prefs_dialog)
-	{
-		g_object_unref (shell->priv->prefs_dialog);
-	}
-
-	LOG ("Unref print setup dialog");
-	if (shell->priv->print_setup_dialog)
-	{
-		g_object_unref (shell->priv->print_setup_dialog);
-	}
-
-	LOG ("Unref bookmarks");
-	if (shell->priv->bookmarks)
-	{
-		g_object_unref (shell->priv->bookmarks);
-	}
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	LOG ("EphyShell disposing");
 
 	if (shell->priv->automation_factory)
 	{
+		LOG ("Deregistering bonobo server");
 		bonobo_activation_unregister_active_server
-			(AUTOMATION_FACTORY_IID, BONOBO_OBJREF (shell->priv->automation_factory));
+				(AUTOMATION_FACTORY_IID, BONOBO_OBJREF (shell->priv->automation_factory));
 
 		bonobo_object_unref (shell->priv->automation_factory);
 	}
 
-	LOG ("Ephy shell finalized");
+	if (shell->priv->extensions_manager)
+	{
+		LOG ("Unref extension manager");
+		/* this will unload the extensions */
+		g_object_unref (shell->priv->extensions_manager);
+	}
+
+#ifdef ENABLE_DBUS
+	if (shell->priv->dbus_service)
+	{
+		LOG ("Shutting down DBUS service");
+		g_object_unref (shell->priv->dbus_service);
+	}
+#endif
+
+	if (shell->priv->session)
+	{
+		LOG ("Unref session manager");
+		g_object_unref (shell->priv->session);
+	}
+
+	if (shell->priv->lockdown)
+	{
+		LOG ("Unref lockdown controller");
+		g_object_unref (shell->priv->lockdown);
+	}
+
+	if (shell->priv->toolbars_model)
+	{
+		LOG ("Unref toolbars model");
+		g_object_unref (shell->priv->toolbars_model);
+	}
+
+	if (shell->priv->fs_toolbars_model)
+	{
+		LOG ("Unref fullscreen toolbars model");
+		g_object_unref (shell->priv->fs_toolbars_model);
+	}
+
+	if (shell->priv->bme)
+	{
+		LOG ("Unref Bookmarks Editor");
+		gtk_widget_destroy (GTK_WIDGET (shell->priv->bme));
+	}
+
+	if (shell->priv->history_window)
+	{
+		LOG ("Unref History Window");
+		gtk_widget_destroy (GTK_WIDGET (shell->priv->history_window));
+	}
+
+	if (shell->priv->pdm_dialog)
+	{
+		LOG ("Unref PDM Dialog");
+		g_object_unref (shell->priv->pdm_dialog);
+	}
+
+	if (shell->priv->prefs_dialog)
+	{
+		LOG ("Unref prefs dialog");
+		g_object_unref (shell->priv->prefs_dialog);
+	}
+
+	if (shell->priv->print_setup_dialog)
+	{
+		LOG ("Unref print setup dialog");
+		g_object_unref (shell->priv->print_setup_dialog);
+	}
+
+	if (shell->priv->bookmarks)
+	{
+		LOG ("Unref bookmarks");
+		g_object_unref (shell->priv->bookmarks);
+	}
+
+	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
+static void
+ephy_shell_finalize (GObject *object)
+{
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+
+	LOG ("Ephy shell finalised");
+}
 
 /**
  * ephy_shell_get_default:

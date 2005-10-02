@@ -1795,26 +1795,6 @@ ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 	g_object_notify (G_OBJECT (tab), "visibility");
 }
 
-static void
-ephy_tab_destroy_brsr_cb (EphyEmbed *embed, EphyTab *tab)
-{
-	EphyWindow *window;
-	GtkWidget *notebook;
-
-	g_return_if_fail (EPHY_IS_TAB (tab));
-
-	LOG ("ephy_tab_destroy_browser_cb tab %p parent %p",
-	     tab, ((GtkWidget *) tab)->parent);
-
-	window = ephy_tab_get_window (tab);
-	g_return_if_fail (window != NULL);
-
-	/* Do not use ephy_window_remove_tab because it will
-	   check for unsubmitted forms */
-	notebook = ephy_window_get_notebook (window);
-	ephy_notebook_remove_tab (EPHY_NOTEBOOK (notebook), tab);
-}
-
 static gboolean
 open_link_in_new_tab (EphyTab *tab,
 		      const char *link_address)
@@ -2044,9 +2024,6 @@ ephy_tab_init (EphyTab *tab)
 				 tab, 0);
 	g_signal_connect_object (embed, "visibility",
 				 G_CALLBACK (ephy_tab_visibility_cb),
-				 tab, 0);
-	g_signal_connect_object (embed, "destroy_browser",
-				 G_CALLBACK (ephy_tab_destroy_brsr_cb),
 				 tab, 0);
 	g_signal_connect_object (embed, "ge_dom_mouse_click",
 				 G_CALLBACK (ephy_tab_dom_mouse_click_cb),

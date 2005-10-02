@@ -87,40 +87,49 @@ ephy_embed_shell_get_type (void)
 }
 
 static void
-ephy_embed_shell_finalize (GObject *object)
+ephy_embed_shell_dispose (GObject *object)
 {
 	EphyEmbedShell *shell = EPHY_EMBED_SHELL (object);
 
-	LOG ("Unref history");
-	if (shell->priv->global_history)
-	{
-		g_object_unref (shell->priv->global_history);
-	}
-
-	LOG ("Unref downloader");
 	if (shell->priv->downloader_view)
 	{
+		LOG ("Unref downloader");
 		g_object_remove_weak_pointer
 			(G_OBJECT(shell->priv->downloader_view),
 			 (gpointer *) &shell->priv->downloader_view);
 		g_object_unref (shell->priv->downloader_view);
 	}
 
-	LOG ("Unref favicon cache");
 	if (shell->priv->favicon_cache)
 	{
+		LOG ("Unref favicon cache");
 		g_object_unref (G_OBJECT (shell->priv->favicon_cache));
 	}
 
-	LOG ("Unref encodings");
 	if (shell->priv->encodings)
+	LOG ("Unref encodings");
 	{
+		LOG ("Unref encodings");
 		g_object_unref (G_OBJECT (shell->priv->encodings));
 	}
 
-	LOG ("Unref embed single");
+	G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+
+static void
+ephy_embed_shell_finalize (GObject *object)
+{
+	EphyEmbedShell *shell = EPHY_EMBED_SHELL (object);
+
+	if (shell->priv->global_history)
+	{
+		LOG ("Unref history");
+		g_object_unref (shell->priv->global_history);
+	}
+
 	if (shell->priv->embed_single)
 	{
+		LOG ("Unref embed single");
 		g_object_unref (G_OBJECT (shell->priv->embed_single));
 	}
 
@@ -235,6 +244,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
+	object_class->dispose = ephy_embed_shell_dispose;
 	object_class->finalize = ephy_embed_shell_finalize;
 
 	klass->get_embed_single = impl_get_embed_single;

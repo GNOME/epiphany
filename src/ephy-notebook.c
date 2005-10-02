@@ -113,7 +113,7 @@ enum
 	TAB_REMOVED,
 	TABS_REORDERED,
 	TAB_DETACHED,
-	TAB_DELETE,
+	TAB_CLOSE_REQUEST,
 	LAST_SIGNAL
 };
 
@@ -260,14 +260,14 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE,
 			      0);
-	signals[TAB_DELETE] =
-		g_signal_new ("tab_delete",
+	signals[TAB_CLOSE_REQUEST] =
+		g_signal_new ("tab-close-request",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNotebookClass, tab_delete),
-			      g_signal_accumulator_true_handled, NULL,
-			      ephy_marshal_BOOLEAN__OBJECT,
-			      G_TYPE_BOOLEAN,
+			      G_STRUCT_OFFSET (EphyNotebookClass, tab_close_req),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__OBJECT,
+			      G_TYPE_NONE,
 			      1,
 			      EPHY_TYPE_TAB);
 
@@ -1023,16 +1023,10 @@ sync_label (EphyTab *tab, GParamSpec *pspec, GtkWidget *proxy)
 static void
 close_button_clicked_cb (GtkWidget *widget, GtkWidget *tab)
 {
-	EphyNotebook *notebook;
-	gboolean inhibited = FALSE;
+	GtkWidget *notebook;
 
-	notebook = EPHY_NOTEBOOK (gtk_widget_get_parent (tab));
-	g_signal_emit (G_OBJECT (notebook), signals[TAB_DELETE], 0, tab, &inhibited);
-
-	if (inhibited == FALSE)
-	{
-		ephy_notebook_remove_tab (notebook, EPHY_TAB (tab));
-	}
+	notebook = gtk_widget_get_parent (tab);
+	g_signal_emit (notebook, signals[TAB_CLOSE_REQUEST], 0, tab);
 }
 
 static void

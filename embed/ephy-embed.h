@@ -149,6 +149,7 @@ struct _EphyEmbedIface
 					 EphyEmbed *new_embed);
 	gboolean (* search_key_press)	(EphyEmbed *embed,
 					 GdkEventKey *event);
+	gboolean (* close_request)	(EphyEmbed *embed);
 
 	/* Methods  */
 	void		   (* load_url)			(EphyEmbed *embed,
@@ -197,6 +198,7 @@ struct _EphyEmbedIface
 							 EphyEmbedPrintPreviewNavType type,
 							 int page);
 	gboolean	   (* has_modified_forms)	(EphyEmbed *embed);
+	void		   (* close)			(EphyEmbed *embed);
 };
 
 GType 		  ephy_embed_net_state_get_type		(void);
@@ -290,6 +292,8 @@ void		  ephy_embed_print_preview_navigate	(EphyEmbed *embed,
 							 int page);
 
 /* Misc. utility */
+void		  ephy_embed_close			(EphyEmbed *embed);
+
 gboolean	  ephy_embed_has_modified_forms		(EphyEmbed *embed);
 
 G_END_DECLS

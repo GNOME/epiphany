@@ -368,6 +368,23 @@ ephy_embed_base_init (gpointer g_class)
 			      1,
 			      GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
+/**
+ * EphyEmbed::close-request
+ * @embed:
+ *
+ * The ::close signal is emitted when the embed request closing.
+ * Return %TRUE to prevent closing. You HAVE to process removal of the embed
+ * as soon as possible after that.
+ **/
+		g_signal_new ("close-request",
+			      EPHY_TYPE_EMBED,
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyEmbedIface, close_request),
+			      g_signal_accumulator_true_handled, NULL,
+			      ephy_marshal_BOOLEAN__VOID,
+			      G_TYPE_BOOLEAN,
+			      0);
+
 		initialized = TRUE;
 	}
 }
@@ -729,6 +746,19 @@ ephy_embed_show_page_certificate (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	iface->show_page_certificate (embed);
+}
+
+/**
+ * ephy_embed_close:
+ * @embed: an #EphyEmbed
+ *
+ * Closes the @embed
+ **/
+void
+ephy_embed_close (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	iface->close (embed);
 }
 
 /**

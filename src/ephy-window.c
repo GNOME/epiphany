@@ -421,6 +421,7 @@ struct _EphyWindowPrivate
 	guint help_message_cid;
 	EphyEmbedChrome chrome;
 	guint idle_resize_handler;
+	GHashTable *tabs_to_remove;
 	EphyEmbedEvent *context_event;
 	guint idle_worker;
 
@@ -648,11 +649,10 @@ ephy_window_unfullscreen (EphyWindow *window)
 	sync_chromes_visibility (window);
 }
 
-static gboolean
-confirm_close_with_modified_forms (EphyWindow *window)
+static GtkWidget *
+construct_confirm_close_dialog (EphyWindow *window)
 {
 	GtkWidget *dialog;
-	int response;
 
 	dialog = gtk_message_dialog_new
 		(GTK_WINDOW (window),
@@ -671,11 +671,21 @@ confirm_close_with_modified_forms (EphyWindow *window)
 
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
-	/* FIXME set title */
+	/* FIXME gtk_window_set_title (GTK_WINDOW (dialog), _("Close Document?")); */
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	gtk_window_group_add_window (GTK_WINDOW (window)->group, GTK_WINDOW (dialog));
 
+	return dialog;
+}
+
+static gboolean
+confirm_close_with_modified_forms (EphyWindow *window)
+{
+	GtkWidget *dialog;
+	int response;
+
+	dialog = construct_confirm_close_dialog (window);
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 
 	gtk_widget_destroy (dialog);
@@ -2076,8 +2086,8 @@ update_tabs_menu_sensitivity (EphyWindow *window)
 }
 
 static gboolean
-modal_alert_cb (EphyEmbed *embed,
-		EphyWindow *window)
+embed_modal_alert_cb (EphyEmbed *embed,
+		      EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
 	EphyTab *tab;
@@ -2102,6 +2112,83 @@ modal_alert_cb (EphyEmbed *embed,
 
 	/* don't suppress alert */
 	return FALSE;
+}
+
+static gboolean
+idle_tab_remove_cb (EphyTab *tab)
+{
+	GtkWidget *toplevel;
+	EphyWindow *window;
+	EphyWindowPrivate *priv;
+	EphyNotebook *notebook;
+
+	toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tab));
+	if (!EPHY_IS_WINDOW (toplevel)) return FALSE; /* FIXME should this ever occur? */
+
+	window = EPHY_WINDOW (toplevel);
+	priv = window->priv;
+
+	if (priv->closing) return FALSE;
+
+	g_hash_table_remove (priv->tabs_to_remove, tab);
+
+	notebook = EPHY_NOTEBOOK (ephy_window_get_notebook (window));
+	ephy_notebook_remove_tab (notebook, tab);
+
+	/* don't run again */
+	return FALSE;
+}
+
+static void
+schedule_tab_close (EphyWindow *window,
+		    EphyEmbed *embed)
+{
+	EphyWindowPrivate *priv = window->priv;
+	EphyTab *tab;
+	guint id;
+
+	LOG ("scheduling close of embed %p in window %p", embed, window);
+
+	if (priv->closing) return;
+
+	tab = ephy_tab_for_embed (embed);
+	g_return_if_fail (tab != NULL);
+
+	if (g_hash_table_lookup (priv->tabs_to_remove, tab) != NULL) return;
+
+	/* do this on idle, because otherwise we'll crash in certain circumstances
+	* (see galeon bug #116256)
+	*/
+	id = g_idle_add_full (G_PRIORITY_HIGH_IDLE,
+			      (GSourceFunc) idle_tab_remove_cb,
+			      tab, NULL);
+
+	g_hash_table_insert (priv->tabs_to_remove, tab, GUINT_TO_POINTER (id));
+
+	/* don't wait until idle to hide the window */
+	if (g_hash_table_size (priv->tabs_to_remove) == priv->num_tabs)
+	{
+		gtk_widget_hide (GTK_WIDGET (window));
+	}
+}
+
+static gboolean
+embed_close_request_cb (EphyEmbed *embed,
+			EphyWindow *window)
+{
+	LOG ("embed_close_request_cb embed %p window %p", embed, window);
+
+	schedule_tab_close (window, embed);
+
+	/* handled */
+	return TRUE;
+}
+
+static void
+embed_destroy_browser_cb (EphyEmbed *embed,
+			  EphyWindow *window)
+{
+	g_return_if_reached ();
 }
 
 static gboolean
@@ -2190,8 +2277,14 @@ tab_added_cb (EphyNotebook *notebook,
 	embed = ephy_tab_get_embed (tab);
 	g_return_if_fail (embed != NULL);
 
-	g_signal_connect_after (embed, "ge-modal-alert",
-				G_CALLBACK (modal_alert_cb), window);
+	g_signal_connect_object (embed, "close-request",
+				 G_CALLBACK (embed_close_request_cb),
+				 window, 0);
+	g_signal_connect_object (embed, "destroy-browser",
+				 G_CALLBACK (embed_destroy_browser_cb),
+				 window, 0);
+	g_signal_connect_object (embed, "ge-modal-alert",
+				 G_CALLBACK (embed_modal_alert_cb), window, G_CONNECT_AFTER);
 
 	/* Let the extensions attach themselves to the tab */
 	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
@@ -2230,7 +2323,11 @@ tab_removed_cb (EphyNotebook *notebook,
 	g_return_if_fail (embed != NULL);
 
 	g_signal_handlers_disconnect_by_func
-		(embed, G_CALLBACK (modal_alert_cb), window);
+		(embed, G_CALLBACK (embed_modal_alert_cb), window);
+	g_signal_handlers_disconnect_by_func
+			(embed, G_CALLBACK (embed_close_request_cb), window);
+	g_signal_handlers_disconnect_by_func
+			(embed, G_CALLBACK (embed_destroy_browser_cb), window);
 }
 
 static void
@@ -2260,24 +2357,28 @@ tabs_reordered_cb (EphyNotebook *notebook, EphyWindow *window)
 	update_tabs_menu_sensitivity (window);
 }
 
-static gboolean
-tab_delete_cb (EphyNotebook *notebook,
-	       EphyTab *tab,
-	       EphyWindow *window)
+static void
+tab_close_request_cb (EphyNotebook *notebook,
+		      EphyTab *tab,
+		      EphyWindow *window)
 {
-	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
+	EphyWindowPrivate *priv = window->priv;
+	EphyEmbed *embed;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_QUIT) &&
-	    gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) == 1)
+	    gtk_notebook_get_n_pages (priv->notebook) == 1)
 	{
-		return TRUE;
-	}
-	else if (ephy_embed_has_modified_forms (ephy_tab_get_embed (tab)))
-	{
-		return !confirm_close_with_modified_forms (window);
+		return;
 	}
 
-	return FALSE;
+	embed = ephy_tab_get_embed (tab);
+	g_return_if_fail (embed != NULL);
+
+	if (!ephy_embed_has_modified_forms (embed) ||
+	    confirm_close_with_modified_forms (window))
+	{
+		ephy_embed_close (embed);
+	}
 }
 
 static GtkNotebook *
@@ -2305,8 +2406,8 @@ setup_notebook (EphyWindow *window)
 			  G_CALLBACK (tab_detached_cb), NULL);
 	g_signal_connect (G_OBJECT (notebook), "tabs_reordered",
 			  G_CALLBACK (tabs_reordered_cb), window);
-	g_signal_connect (G_OBJECT (notebook), "tab_delete",
-			  G_CALLBACK (tab_delete_cb), window);
+	g_signal_connect (G_OBJECT (notebook), "tab_close_request",
+			  G_CALLBACK (tab_close_request_cb), window);
 
 	return notebook;
 }
@@ -2365,6 +2466,12 @@ ephy_window_set_is_popup (EphyWindow *window,
 	g_object_notify (G_OBJECT (window), "is-popup");
 }
 
+static gboolean
+remove_true (void)
+{
+	return TRUE;
+}
+
 static void
 ephy_window_dispose (GObject *object)
 {
@@ -2403,6 +2510,8 @@ ephy_window_dispose (GObject *object)
 			g_source_remove (priv->idle_resize_handler);
 			priv->idle_resize_handler = 0;
 		}
+
+		g_hash_table_foreach_remove (priv->tabs_to_remove, (GHRFunc) remove_true, NULL);
 
 		g_object_unref (priv->fav_menu);
 		priv->fav_menu = NULL;
@@ -2755,6 +2864,14 @@ find_toolbar_close_cb (EphyFindToolbar *toolbar,
 }
 
 static void
+cancel_handler (gpointer idptr)
+{
+	guint id = GPOINTER_TO_UINT (idptr);
+
+	g_source_remove (id);
+}
+
+static void
 ephy_window_init (EphyWindow *window)
 {
 	EphyWindowPrivate *priv;
@@ -2768,6 +2885,9 @@ ephy_window_init (EphyWindow *window)
 	g_object_ref (ephy_shell);
 
 	priv = window->priv = EPHY_WINDOW_GET_PRIVATE (window);
+
+	priv->tabs_to_remove = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+						      NULL, cancel_handler);
 
 	window->priv->chrome = EPHY_EMBED_CHROME_ALL;
 
@@ -2911,6 +3031,11 @@ ephy_window_constructor (GType type,
 static void
 ephy_window_finalize (GObject *object)
 {
+	EphyWindow *window = EPHY_WINDOW (object);
+	EphyWindowPrivate *priv = window->priv;
+
+	g_hash_table_destroy (priv->tabs_to_remove);
+
         G_OBJECT_CLASS (parent_class)->finalize (object);
 
 	LOG ("Ephy Window finalized %p", object);

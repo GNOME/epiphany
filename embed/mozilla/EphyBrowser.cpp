@@ -90,6 +90,7 @@
 /* will never be frozen */
 #include "nsIDocShell.h"
 #include "nsIMarkupDocumentViewer.h"
+#include <nsIDOMWindowInternal.h>
 #ifdef HAVE_MOZILLA_PSM
 /* not sure about this one: */
 #include <nsITransportSecurityInfo.h>
@@ -108,6 +109,7 @@ const static PRUnichar kDOMMouseScroll[]	 = { 'D', 'O', 'M', 'M', 'o', 'u', 's',
 const static PRUnichar kDOMPopupBlocked[]	 = { 'D', 'O', 'M', 'P', 'o', 'p', 'u', 'p', 'B', 'l', 'o', 'c', 'k', 'e', 'd', '\0' };
 const static PRUnichar kDOMWillOpenModalDialog[] = { 'D', 'O', 'M', 'W', 'i', 'l', 'l', 'O', 'p', 'e', 'n', 'M', 'o', 'd', 'a', 'l', 'D', 'i', 'a', 'l', 'o', 'g', '\0' };
 const static PRUnichar kDOMModalDialogClosed[]	 = { 'D', 'O', 'M', 'M', 'o', 'd', 'a', 'l', 'D', 'i', 'a', 'l', 'o', 'g', 'C', 'l', 'o', 's', 'e', 'd', '\0' };
+const static PRUnichar kDOMWindowClose[]	 = { 'D', 'O', 'M', 'W', 'i', 'n', 'd', 'o', 'w', 'C', 'l', 'o', 's', 'e', '\0' };
 const static PRUnichar kHrefAttr[]		 = { 'h', 'r', 'e', 'f', '\0' };
 const static PRUnichar kTypeAttr[]		 = { 't', 'y', 'p', 'e', '\0' };
 const static PRUnichar kTitleAttr[]		 = { 't', 'i', 't', 'l', 'e', '\0' };
@@ -273,11 +275,39 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 }
 
 NS_IMETHODIMP
-EphyDOMContentLoadedEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
+EphyMiscDOMEventsListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 {
-	LOG ("DOMContentLoaded event fired up");
+	/* make sure the event is trusted */
+	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
+	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
+	PRBool isTrusted = PR_FALSE;
+	nsEvent->GetIsTrusted (&isTrusted);
+	if (!isTrusted) return NS_OK;
 
-	g_signal_emit_by_name (mOwner->mEmbed, "dom_content_loaded", (gpointer)aDOMEvent);
+	nsresult rv;
+	nsEmbedString type;
+	rv = aDOMEvent->GetType (type);
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	nsEmbedCString cType;
+	NS_UTF16ToCString (type, NS_CSTRING_ENCODING_UTF8, cType);
+
+	if (g_ascii_strcasecmp (cType.get(), "DOMContentLoaded") == 0)
+	{
+		g_signal_emit_by_name (mOwner->mEmbed, "dom_content_loaded",
+				       (gpointer)aDOMEvent);
+	}
+	else if (g_ascii_strcasecmp (cType.get(), "DOMWindowClose") == 0)
+	{
+		gboolean prevent = FALSE;
+
+		g_signal_emit_by_name (mOwner->mEmbed, "close-request", &prevent);
+
+		if (prevent)
+		{
+			aDOMEvent->PreventDefault ();
+		}
+	}
 
 	return NS_OK;
 }
@@ -484,7 +514,7 @@ EphyContextMenuListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 
 EphyBrowser::EphyBrowser ()
 : mDOMLinkEventListener(nsnull)
-, mDOMContentLoadedEventListener(nsnull)
+, mMiscDOMEventsListener(nsnull)
 , mDOMScrollEventListener(nsnull)
 , mPopupBlockEventListener(nsnull)
 , mModalAlertListener(nsnull)
@@ -524,8 +554,8 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 	mDOMLinkEventListener = new EphyDOMLinkEventListener(this);
 	if (!mDOMLinkEventListener) return NS_ERROR_OUT_OF_MEMORY;
 
-	mDOMContentLoadedEventListener = new EphyDOMContentLoadedEventListener(this);
-	if (!mDOMContentLoadedEventListener) return NS_ERROR_OUT_OF_MEMORY;
+	mMiscDOMEventsListener = new EphyMiscDOMEventsListener(this);
+	if (!mMiscDOMEventsListener) return NS_ERROR_OUT_OF_MEMORY;
 
 	mDOMScrollEventListener = new EphyDOMScrollEventListener(this);
 	if (!mDOMScrollEventListener) return NS_ERROR_OUT_OF_MEMORY;
@@ -630,7 +660,9 @@ EphyBrowser::AttachListeners(void)
 	rv = target->AddEventListener(nsEmbedString(kDOMLinkAdded),
 				      mDOMLinkEventListener, PR_FALSE, PR_FALSE);
 	rv |= target->AddEventListener(nsEmbedString(kDOMContentLoaded),
-				       mDOMContentLoadedEventListener, PR_FALSE, PR_FALSE);
+				       mMiscDOMEventsListener, PR_FALSE, PR_FALSE);
+	rv |= target->AddEventListener(nsEmbedString(kDOMWindowClose),
+				       mMiscDOMEventsListener, PR_FALSE, PR_FALSE);
 	rv |= target->AddEventListener(nsEmbedString(kDOMMouseScroll),
 				       mDOMScrollEventListener, PR_TRUE /* capture */, PR_FALSE);
 	rv |= target->AddEventListener(nsEmbedString(kDOMPopupBlocked),
@@ -641,7 +673,7 @@ EphyBrowser::AttachListeners(void)
 				       mModalAlertListener, PR_TRUE, PR_FALSE);
 	rv |= target->AddEventListener(nsEmbedString(kContextMenu),
 				       mContextMenuListener, PR_TRUE /* capture */, PR_FALSE);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+	NS_ENSURE_SUCCESS (rv, rv);
 
 	return NS_OK;
 }
@@ -655,7 +687,9 @@ EphyBrowser::DetachListeners(void)
 	rv = mEventTarget->RemoveEventListener(nsEmbedString(kDOMLinkAdded),
 					       mDOMLinkEventListener, PR_FALSE);
 	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMContentLoaded),
-					        mDOMContentLoadedEventListener, PR_FALSE);
+					        mMiscDOMEventsListener, PR_FALSE);
+	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMWindowClose),
+						mMiscDOMEventsListener, PR_FALSE);
 	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMMouseScroll),
 						mDOMScrollEventListener, PR_TRUE); /* capture */
 	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMPopupBlocked),
@@ -1296,6 +1330,15 @@ EphyBrowser::GetDocumentType ()
     }
 
   return type;
+}
+
+nsresult
+EphyBrowser::Close ()
+{
+	nsCOMPtr<nsIDOMWindowInternal> domWin (do_QueryInterface (mDOMWindow));
+	NS_ENSURE_TRUE (domWin, NS_ERROR_FAILURE);
+
+	return domWin->Close();
 }
 
 #ifndef HAVE_GECKO_1_8

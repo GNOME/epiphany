@@ -165,6 +165,33 @@ window_cmd_go_forward (GtkAction *action,
 	ephy_embed_go_forward (embed);
 }
 
+static gboolean
+event_with_shift (void)
+{
+	GdkEvent *event;
+	GdkEventType type = 0;
+	guint state = 0;
+
+	event = gtk_get_current_event ();
+	if (event)
+	{
+		type = event->type;
+
+		if (type == GDK_BUTTON_RELEASE)
+		{
+			state = event->button.state; 
+		}
+		else if (type == GDK_KEY_PRESS || type == GDK_KEY_RELEASE)
+		{
+			state = event->key.state;
+		}
+
+		gdk_event_free (event);
+	}
+
+	return (state & GDK_SHIFT_MASK) != 0;
+}
+
 void
 window_cmd_go_location (GtkAction *action,
 		        EphyWindow *window)
@@ -191,39 +218,13 @@ window_cmd_view_reload (GtkAction *action,
 		        EphyWindow *window)
 {
 	EphyEmbed *embed;
-	GdkEvent *event;
-	GdkEventType type;
-	guint state = 0;
-	gboolean force = FALSE;
 
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	event = gtk_get_current_event ();
-	if (event)
-	{
-		type = event->type;
-
-		if (type == GDK_BUTTON_RELEASE)
-		{
-			state = event->button.state; 
-		}
-		else if (type == GDK_KEY_RELEASE)
-		{
-			state = event->key.state;
-		}
-
-		gdk_event_free (event);
-	}
-
-	if (state & GDK_SHIFT_MASK)
-	{
-		force = TRUE;
-	}
-
 	gtk_widget_grab_focus (GTK_WIDGET (embed));
 
-	ephy_embed_reload (embed, force);
+	ephy_embed_reload (embed, event_with_shift ());
 }
 
 void
@@ -387,7 +388,7 @@ void
 window_cmd_file_close_window (GtkAction *action,
 		              EphyWindow *window)
 {
-	EphyTab *tab;
+	EphyEmbed *embed;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_QUIT) &&
 	    gtk_notebook_get_n_pages (GTK_NOTEBOOK (ephy_window_get_notebook (window))) == 1)
@@ -395,10 +396,10 @@ window_cmd_file_close_window (GtkAction *action,
 		return;
 	}
 
-	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab != NULL);
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (embed != NULL);
 
-	ephy_window_remove_tab (window, tab);
+	ephy_embed_close (embed);
 }
 
 void
