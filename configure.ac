@@ -665,6 +665,22 @@ fi
 AM_CONDITIONAL([ENABLE_PYTHON],[test "x$enable_python" = "xyes"])
 AC_SUBST([EPIPHANY_FEATURES])
 
+dnl *******************
+dnl Additional features
+dnl *******************
+
+AC_MSG_CHECKING([whether to enable zeroconf bookmarks support])
+AC_ARG_ENABLE([zeroconf],
+	AS_HELP_STRING([--enable-zeroconf],[Whether to enable zeroconf bookmarks support (default:disabled)]),
+	[], [enable_zeroconf=no])
+AC_MSG_RESULT([$enable_zeroconf])
+
+if test "x$enable_zeroconf" = "xyes"; then
+	AC_DEFINE([ENABLE_ZEROCONF],[1],[Define to enable zeroconf bookmarks support])
+fi
+
+AM_CONDITIONAL([ENABLE_ZEROCONF],[test "x$enable_zeroconf" = "xyes"])
+
 dnl *******************************
 dnl Add warning flags
 dnl *******************************
