@@ -90,27 +90,30 @@ static void
 ephy_embed_shell_dispose (GObject *object)
 {
 	EphyEmbedShell *shell = EPHY_EMBED_SHELL (object);
+	EphyEmbedShellPrivate *priv = shell->priv;
 
-	if (shell->priv->downloader_view)
+	if (priv->downloader_view != NULL)
 	{
 		LOG ("Unref downloader");
 		g_object_remove_weak_pointer
-			(G_OBJECT(shell->priv->downloader_view),
-			 (gpointer *) &shell->priv->downloader_view);
-		g_object_unref (shell->priv->downloader_view);
+			(G_OBJECT (priv->downloader_view),
+			 (gpointer *) &priv->downloader_view);
+		g_object_unref (priv->downloader_view);
+		priv->downloader_view = NULL;
 	}
 
-	if (shell->priv->favicon_cache)
+	if (priv->favicon_cache != NULL)
 	{
 		LOG ("Unref favicon cache");
-		g_object_unref (G_OBJECT (shell->priv->favicon_cache));
+		g_object_unref (priv->favicon_cache);
+		priv->favicon_cache = NULL;
 	}
 
-	if (shell->priv->encodings)
-	LOG ("Unref encodings");
+	if (priv->encodings != NULL)
 	{
 		LOG ("Unref encodings");
-		g_object_unref (G_OBJECT (shell->priv->encodings));
+		g_object_unref (priv->encodings);
+		priv->encodings = NULL;
 	}
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);

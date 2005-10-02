@@ -529,91 +529,105 @@ static void
 ephy_shell_dispose (GObject *object)
 {
 	EphyShell *shell = EPHY_SHELL (object);
+	EphyShellPrivate *priv = shell->priv;
 
 	LOG ("EphyShell disposing");
 
-	if (shell->priv->automation_factory)
+	if (priv->automation_factory != NULL)
 	{
 		LOG ("Deregistering bonobo server");
 		bonobo_activation_unregister_active_server
-				(AUTOMATION_FACTORY_IID, BONOBO_OBJREF (shell->priv->automation_factory));
+				(AUTOMATION_FACTORY_IID, BONOBO_OBJREF (priv->automation_factory));
 
-		bonobo_object_unref (shell->priv->automation_factory);
+		bonobo_object_unref (priv->automation_factory);
+		priv->automation_factory = NULL;
 	}
 
-	if (shell->priv->extensions_manager)
+	if (shell->priv->extensions_manager != NULL)
 	{
 		LOG ("Unref extension manager");
 		/* this will unload the extensions */
-		g_object_unref (shell->priv->extensions_manager);
+		g_object_unref (priv->extensions_manager);
+		priv->extensions_manager = NULL;
 	}
 
 #ifdef ENABLE_DBUS
-	if (shell->priv->dbus_service)
+	if (priv->dbus_service != NULL)
 	{
 		LOG ("Shutting down DBUS service");
-		g_object_unref (shell->priv->dbus_service);
+		g_object_unref (priv->dbus_service);
+		priv->dbus_service = NULL;
 	}
 #endif
 
-	if (shell->priv->session)
+	if (priv->session != NULL)
 	{
 		LOG ("Unref session manager");
-		g_object_unref (shell->priv->session);
+		g_object_unref (priv->session);
+		priv->session = NULL;
 	}
 
-	if (shell->priv->lockdown)
+	if (priv->lockdown != NULL)
 	{
 		LOG ("Unref lockdown controller");
-		g_object_unref (shell->priv->lockdown);
+		g_object_unref (priv->lockdown);
+		priv->lockdown = NULL;
 	}
 
-	if (shell->priv->toolbars_model)
+	if (priv->toolbars_model != NULL)
 	{
 		LOG ("Unref toolbars model");
-		g_object_unref (shell->priv->toolbars_model);
+		g_object_unref (priv->toolbars_model);
+		priv->toolbars_model = NULL;
 	}
 
-	if (shell->priv->fs_toolbars_model)
+	if (priv->fs_toolbars_model != NULL)
 	{
 		LOG ("Unref fullscreen toolbars model");
-		g_object_unref (shell->priv->fs_toolbars_model);
+		g_object_unref (priv->fs_toolbars_model);
+		priv->fs_toolbars_model = NULL;
 	}
 
-	if (shell->priv->bme)
+	if (priv->bme != NULL)
 	{
 		LOG ("Unref Bookmarks Editor");
-		gtk_widget_destroy (GTK_WIDGET (shell->priv->bme));
+		gtk_widget_destroy (GTK_WIDGET (priv->bme));
+		priv->bme = NULL;
 	}
 
-	if (shell->priv->history_window)
+	if (priv->history_window != NULL)
 	{
 		LOG ("Unref History Window");
-		gtk_widget_destroy (GTK_WIDGET (shell->priv->history_window));
+		gtk_widget_destroy (GTK_WIDGET (priv->history_window));
+		priv->history_window = NULL;
 	}
 
-	if (shell->priv->pdm_dialog)
+	if (priv->pdm_dialog != NULL)
 	{
 		LOG ("Unref PDM Dialog");
-		g_object_unref (shell->priv->pdm_dialog);
+		g_object_unref (priv->pdm_dialog);
+		priv->pdm_dialog = NULL;
 	}
 
-	if (shell->priv->prefs_dialog)
+	if (priv->prefs_dialog != NULL)
 	{
 		LOG ("Unref prefs dialog");
-		g_object_unref (shell->priv->prefs_dialog);
+		g_object_unref (priv->prefs_dialog);
+		priv->prefs_dialog = NULL;
 	}
 
-	if (shell->priv->print_setup_dialog)
+	if (priv->print_setup_dialog != NULL)
 	{
 		LOG ("Unref print setup dialog");
-		g_object_unref (shell->priv->print_setup_dialog);
+		g_object_unref (priv->print_setup_dialog);
+		priv->print_setup_dialog = NULL;
 	}
 
-	if (shell->priv->bookmarks)
+	if (priv->bookmarks != NULL)
 	{
 		LOG ("Unref bookmarks");
-		g_object_unref (shell->priv->bookmarks);
+		g_object_unref (priv->bookmarks);
+		priv->bookmarks = NULL;
 	}
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
