@@ -1129,6 +1129,8 @@ setup_ui_manager (EphyWindow *window)
 					     window);
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
 	window->priv->action_group = action_group;
+	g_object_unref (action_group);
+
 	action = gtk_action_group_get_action (action_group, "FileOpen");
 	g_object_set (action, "short_label", _("Open"), NULL);
 	action = gtk_action_group_get_action (action_group, "FileSaveAs");
@@ -1156,6 +1158,7 @@ setup_ui_manager (EphyWindow *window)
 				      G_N_ELEMENTS (ephy_popups_entries), window);
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
 	window->priv->popups_action_group = action_group;
+	g_object_unref (action_group);
 
 	window->priv->manager = manager;
 	g_signal_connect (manager, "add_widget", G_CALLBACK (add_widget), window);
@@ -2528,6 +2531,8 @@ ephy_window_dispose (GObject *object)
 	
 		eel_gconf_notification_remove (priv->browse_with_caret_notifier_id);
 		eel_gconf_notification_remove (priv->allow_popups_notifier_id);
+		priv->browse_with_caret_notifier_id = 0;
+		priv->allow_popups_notifier_id = 0;
 
 		if (priv->idle_resize_handler != 0)
 		{
@@ -2554,9 +2559,9 @@ ephy_window_dispose (GObject *object)
 			g_object_unref (priv->ppview_toolbar);
 			priv->ppview_toolbar = NULL;
 		}
-	
-		g_object_unref (priv->action_group);
+
 		priv->action_group = NULL;
+		priv->popups_action_group = NULL;
 
 		g_object_unref (priv->manager);
 		priv->manager = NULL;
@@ -3062,7 +3067,7 @@ ephy_window_finalize (GObject *object)
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 
-	LOG ("Ephy Window finalized %p", object);
+	LOG ("EphyWindow finalised %p", object);
 
 #ifdef ENABLE_PYTHON
 	ephy_python_schedule_gc ();
