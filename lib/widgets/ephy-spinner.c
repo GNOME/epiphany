@@ -28,10 +28,12 @@
  * $Id$
  */
 
+#ifndef COMPILING_TESTSPINNER
 #include "config.h"
+#include "ephy-debug.h"
+#endif
 
 #include "ephy-spinner.h"
-#include "ephy-debug.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gtk/gtkicontheme.h>
@@ -50,16 +52,6 @@
 typedef struct _EphySpinnerCache	EphySpinnerCache;
 typedef struct _EphySpinnerCacheClass	EphySpinnerCacheClass;
 typedef struct _EphySpinnerCachePrivate	EphySpinnerCachePrivate;
-typedef struct _EphySpinnerImages	EphySpinnerImages;
-
-struct _EphySpinnerImages
-{
-	GtkIconSize size;
-	int width;
-	int height;
-	GdkPixbuf *quiescent_pixbuf;
-	GList *images;
-};
 
 struct _EphySpinnerCacheClass
 {
@@ -76,12 +68,28 @@ struct _EphySpinnerCache
 
 #define EPHY_SPINNER_CACHE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SPINNER_CACHE, EphySpinnerCachePrivate))
 
-struct _EphySpinnerCachePrivate
+typedef struct
 {
+	GtkIconSize size;
+	int width;
+	int height;
+	GdkPixbuf *quiescent_pixbuf;
+	GList *images;
+} EphySpinnerImages;
+
+typedef struct
+{
+	GdkScreen *screen;
 	GtkIconTheme *icon_theme;
 	EphySpinnerImages *originals;
 	/* List of EphySpinnerImages scaled to different sizes */
 	GList *images;
+} EphySpinnerCacheData;
+
+struct _EphySpinnerCachePrivate
+{
+	/* Hash table of GdkScreen -> EphySpinnerCacheData */
+	GHashTable *hash;
 };
 
 static void ephy_spinner_cache_class_init (EphySpinnerCacheClass *klass);
@@ -146,11 +154,15 @@ ephy_spinner_images_copy (EphySpinnerImages *images)
 }
 
 static void
-ephy_spinner_cache_unload (EphySpinnerCache *cache)
+ephy_spinner_cache_data_unload (EphySpinnerCacheData *data)
 {
-	g_list_foreach (cache->priv->images, (GFunc) ephy_spinner_images_free, NULL);
-	cache->priv->images = NULL;
-	cache->priv->originals = NULL;
+	g_return_if_fail (data != NULL);
+
+	LOG ("EphySpinnerDataCache unload for screen %p", data->screen);
+
+	g_list_foreach (data->images, (GFunc) ephy_spinner_images_free, NULL);
+	data->images = NULL;
+	data->originals = NULL;
 }
 
 static GdkPixbuf *
@@ -176,7 +188,7 @@ extract_frame (GdkPixbuf *grid_pixbuf,
 }
 
 static void
-ephy_spinner_cache_load (EphySpinnerCache *cache)
+ephy_spinner_cache_data_load (EphySpinnerCacheData *data)
 {
 	EphySpinnerImages *images;
 	GdkPixbuf *icon_pixbuf, *pixbuf;
@@ -184,14 +196,16 @@ ephy_spinner_cache_load (EphySpinnerCache *cache)
 	int grid_width, grid_height, x, y, size, h, w;
 	const char *icon;
 
-	LOG ("EphySpinnerCache loading");
+	g_return_if_fail (data != NULL);
 
-	ephy_spinner_cache_unload (cache);
+	LOG ("EphySpinnerCacheData loading for screen %p", data->screen);
+
+	ephy_spinner_cache_data_unload (data);
 
 	START_PROFILER ("loading spinner animation")
 
 	/* Load the animation */
-	icon_info = gtk_icon_theme_lookup_icon (cache->priv->icon_theme,
+	icon_info = gtk_icon_theme_lookup_icon (data->icon_theme,
 						"gnome-spinner", -1, 0);
 	if (icon_info == NULL)
 	{
@@ -219,8 +233,8 @@ ephy_spinner_cache_load (EphySpinnerCache *cache)
 	grid_height = gdk_pixbuf_get_height (icon_pixbuf);
 
 	images = g_new (EphySpinnerImages, 1);
-	cache->priv->images = g_list_prepend (NULL, images);
-	cache->priv->originals = images;
+	data->images = g_list_prepend (NULL, images);
+	data->originals = images;
 
 	images->size = GTK_ICON_SIZE_INVALID;
 	images->width = images->height = size;
@@ -250,7 +264,7 @@ ephy_spinner_cache_load (EphySpinnerCache *cache)
 	g_object_unref (icon_pixbuf);
 
 	/* Load the rest icon */
-	icon_info = gtk_icon_theme_lookup_icon (cache->priv->icon_theme,
+	icon_info = gtk_icon_theme_lookup_icon (data->icon_theme,
 						"gnome-spinner-rest", -1, 0);
 	if (icon_info == NULL)
 	{
@@ -284,6 +298,39 @@ ephy_spinner_cache_load (EphySpinnerCache *cache)
 	images->height = MAX (images->height, h);
 
 	STOP_PROFILER ("loading spinner animation")
+}
+
+static EphySpinnerCacheData *
+ephy_spinner_cache_data_new (GdkScreen *screen)
+{
+	EphySpinnerCacheData *data;
+
+	data = g_new0 (EphySpinnerCacheData, 1);
+
+	data->screen = screen;
+	data->icon_theme = gtk_icon_theme_get_for_screen (screen);
+	g_signal_connect_swapped (data->icon_theme, "changed",
+				  G_CALLBACK (ephy_spinner_cache_data_load),
+				  data);
+
+	ephy_spinner_cache_data_load (data);
+
+	return data;
+}
+
+static void
+ephy_spinner_cache_data_free (EphySpinnerCacheData *data)
+{
+	g_return_if_fail (data != NULL);
+	g_return_if_fail (data->icon_theme != NULL);
+
+	g_signal_handlers_disconnect_by_func
+		(data->icon_theme,
+		 G_CALLBACK (ephy_spinner_cache_data_load), data);
+
+	ephy_spinner_cache_data_unload (data);
+
+	g_free (data);
 }
 
 static int
@@ -327,21 +374,33 @@ scale_to_size (GdkPixbuf *pixbuf,
 
 static EphySpinnerImages *
 ephy_spinner_cache_get_images (EphySpinnerCache *cache,
+			       GdkScreen *screen,
 			       GtkIconSize size)
 {
+	EphySpinnerCachePrivate *priv = cache->priv;
+	EphySpinnerCacheData *data;
 	EphySpinnerImages *images;
+	GtkSettings *settings;
 	GdkPixbuf *pixbuf, *scaled_pixbuf;
 	GList *element, *l;
 	int h, w;
 
-	LOG ("Getting animation images at size %d", size);
+	LOG ("Getting animation images at size %d for screen %p", size, screen);
 
-	if (cache->priv->images == NULL || cache->priv->originals == NULL)
+	data = g_hash_table_lookup (priv->hash, screen);
+	if (data == NULL)
 	{
+		data = ephy_spinner_cache_data_new (screen);
+		g_hash_table_insert (priv->hash, screen, data);
+	}
+
+	if (data->images == NULL || data->originals == NULL)
+	{
+		/* Load failed, but don't try endlessly again! */
 		return NULL;
 	}
 
-	element = g_list_find_custom (cache->priv->images,
+	element = g_list_find_custom (data->images,
 				      GINT_TO_POINTER (size),
 				      (GCompareFunc) compare_size);
 	if (element != NULL)
@@ -349,9 +408,10 @@ ephy_spinner_cache_get_images (EphySpinnerCache *cache,
 		return ephy_spinner_images_copy ((EphySpinnerImages *) element->data);
 	}
 
-	if (!gtk_icon_size_lookup_for_settings (gtk_settings_get_default (), size, &w, &h))
+	settings = gtk_settings_get_for_screen (screen);
+	if (!gtk_icon_size_lookup_for_settings (settings, size, &w, &h))
 	{
-		g_warning ("Failed to lookup icon size\n");
+		g_warning ("Failed to look up icon size\n");
 		return NULL;
 	}
 
@@ -363,7 +423,7 @@ ephy_spinner_cache_get_images (EphySpinnerCache *cache,
 
 	START_PROFILER ("scaling spinner animation")
 
-	for (l = cache->priv->originals->images; l != NULL; l = l->next)
+	for (l = data->originals->images; l != NULL; l = l->next)
 	{
 		pixbuf = (GdkPixbuf *) l->data;
 		scaled_pixbuf = scale_to_size (pixbuf, w, h);
@@ -373,10 +433,10 @@ ephy_spinner_cache_get_images (EphySpinnerCache *cache,
 	images->images = g_list_reverse (images->images);
 
 	images->quiescent_pixbuf =
-		scale_to_size (cache->priv->originals->quiescent_pixbuf, w, h);
+		scale_to_size (data->originals->quiescent_pixbuf, w, h);
 
 	/* store in cache */
-	cache->priv->images = g_list_prepend (cache->priv->images, images);
+	data->images = g_list_prepend (data->images, images);
 
 	STOP_PROFILER ("scaling spinner animation")
 
@@ -386,29 +446,26 @@ ephy_spinner_cache_get_images (EphySpinnerCache *cache,
 static void
 ephy_spinner_cache_init (EphySpinnerCache *cache)
 {
-	cache->priv = EPHY_SPINNER_CACHE_GET_PRIVATE (cache);
+	EphySpinnerCachePrivate *priv;
+
+	priv = cache->priv = EPHY_SPINNER_CACHE_GET_PRIVATE (cache);
 
 	LOG ("EphySpinnerCache initialising");
 
-	/* FIXME: icon theme is per-screen, not global */
-	cache->priv->icon_theme = gtk_icon_theme_get_default ();
-	g_signal_connect_swapped (cache->priv->icon_theme, "changed",
-				  G_CALLBACK (ephy_spinner_cache_load), cache);
-
-	ephy_spinner_cache_load (cache);
+	priv->hash = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+					    NULL,
+					    (GDestroyNotify) ephy_spinner_cache_data_free);
 }
 
 static void
 ephy_spinner_cache_finalize (GObject *object)
 {
 	EphySpinnerCache *cache = EPHY_SPINNER_CACHE (object); 
+	EphySpinnerCachePrivate *priv = cache->priv;
 
 	LOG ("EphySpinnerCache finalising");
 
-	g_signal_handlers_disconnect_by_func
-		(cache->priv->icon_theme, G_CALLBACK(ephy_spinner_cache_load), cache);
-
-	ephy_spinner_cache_unload (cache);
+	g_hash_table_destroy (priv->hash);
 
 	G_OBJECT_CLASS (cache_parent_class)->finalize (object);
 }
@@ -460,6 +517,7 @@ struct _EphySpinnerDetails
 	GtkIconSize size;
 	EphySpinnerImages *images;
 	GList *current_image;
+	guint timeout;
 	guint timer_task;
 	guint spinning : 1;
 };
@@ -507,7 +565,10 @@ ephy_spinner_load_images (EphySpinner *spinner)
 		START_PROFILER ("ephy_spinner_load_images")
 
 		details->images =
-			ephy_spinner_cache_get_images (details->cache, details->size);
+			ephy_spinner_cache_get_images
+				(details->cache,
+				 gtk_widget_get_screen (GTK_WIDGET (spinner)),
+				 details->size);
 
 		if (details->images != NULL)
 		{
@@ -539,6 +600,7 @@ icon_theme_changed_cb (GtkIconTheme *icon_theme,
 static void
 ephy_spinner_init (EphySpinner *spinner)
 {
+	EphySpinnerDetails *details = spinner->details;
 	GtkWidget *widget = GTK_WIDGET (spinner);
 
 	gtk_widget_set_events (widget,
@@ -546,17 +608,12 @@ ephy_spinner_init (EphySpinner *spinner)
 			       | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK
 			       | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
 
-	spinner->details = EPHY_SPINNER_GET_PRIVATE (spinner);
+	details = spinner->details = EPHY_SPINNER_GET_PRIVATE (spinner);
 
-	spinner->details->cache = ephy_spinner_cache_ref ();
-	spinner->details->size = GTK_ICON_SIZE_INVALID;
-	spinner->details->spinning = FALSE;
-
-	/* FIXME: multihead */
-	spinner->details->icon_theme = gtk_icon_theme_get_default ();
-	g_signal_connect (spinner->details->icon_theme, "changed",
-			  G_CALLBACK (icon_theme_changed_cb), spinner);
-
+	details->cache = ephy_spinner_cache_ref ();
+	details->size = GTK_ICON_SIZE_INVALID;
+	details->spinning = FALSE;
+	details->timeout = SPINNER_TIMEOUT;
 }
 
 static GdkPixbuf *
@@ -652,7 +709,7 @@ bump_spinner_frame_cb (EphySpinner *spinner)
 
 	frame = spinner->details->current_image;
 
-	if (g_list_next (frame) != NULL)
+	if (frame->next != NULL)
 	{
 		frame = frame->next;
 	}
@@ -694,7 +751,7 @@ ephy_spinner_start (EphySpinner *spinner)
 		}
 
 		spinner->details->timer_task =
-			g_timeout_add (SPINNER_TIMEOUT,
+			g_timeout_add (details->timeout,
 				       (GSourceFunc) bump_spinner_frame_cb,
 				       spinner);
 	}
@@ -756,6 +813,32 @@ ephy_spinner_set_size (EphySpinner *spinner,
 	}
 }
 
+/*
+ * ephy_spinner_set_timeout:
+ * @spinner: a #EphySpinner
+ * @timeout: time delay between updates to the spinner.
+ *
+ * Sets the timeout delay for spinner updates.
+ **/
+static void
+ephy_spinner_set_timeout (EphySpinner *spinner,
+			  guint timeout)
+{
+	EphySpinnerDetails *details = spinner->details;
+
+	if (timeout != details->timeout)
+	{
+		ephy_spinner_stop (spinner);
+
+		details->timeout = timeout;
+
+		if (details->spinning)
+		{
+			ephy_spinner_start (spinner);
+		}
+	}
+}
+
 static void
 ephy_spinner_size_request (GtkWidget *widget,
 			   GtkRequisition *requisition)
@@ -813,7 +896,7 @@ ephy_spinner_finalize (GObject *object)
 	EphySpinner *spinner = EPHY_SPINNER (object);
 
 	g_signal_handlers_disconnect_by_func
-		(spinner->details->icon_theme,
+			(spinner->details->icon_theme,
 		 G_CALLBACK (icon_theme_changed_cb), spinner);
 
 	ephy_spinner_remove_update_callback (spinner);
@@ -822,6 +905,43 @@ ephy_spinner_finalize (GObject *object)
 	g_object_unref (spinner->details->cache);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+ephy_spinner_screen_changed (GtkWidget *widget,
+			     GdkScreen *old_screen)
+{
+	EphySpinner *spinner = EPHY_SPINNER (widget);
+	EphySpinnerDetails *details = spinner->details;
+	GdkScreen *screen;
+
+	if (GTK_WIDGET_CLASS (parent_class)->screen_changed)
+	{
+		GTK_WIDGET_CLASS (parent_class)->screen_changed (widget, old_screen);
+	}
+
+	screen = gtk_widget_get_screen (widget);
+
+	/* FIXME: this seems to be happening when then spinner is destroyed!? */
+	if (old_screen == screen) return;
+
+	/* We'll get mapped again on the new screen, but not unmapped from
+	 * the old screen, so remove timeout here.
+	 */
+	ephy_spinner_remove_update_callback (spinner);
+
+	ephy_spinner_unload_images (spinner);
+
+	if (old_screen != NULL)
+	{
+		g_signal_handlers_disconnect_by_func
+			(gtk_icon_theme_get_for_screen (old_screen),
+			 G_CALLBACK (icon_theme_changed_cb), spinner);
+	}
+
+	details->icon_theme = gtk_icon_theme_get_for_screen (screen);
+	g_signal_connect (details->icon_theme, "changed",
+			  G_CALLBACK (icon_theme_changed_cb), spinner);
 }
 
 static void
@@ -838,6 +958,7 @@ ephy_spinner_class_init (EphySpinnerClass *class)
 	widget_class->size_request = ephy_spinner_size_request;
 	widget_class->map = ephy_spinner_map;
 	widget_class->unmap = ephy_spinner_unmap;
+	widget_class->screen_changed = ephy_spinner_screen_changed;
 
 	g_type_class_add_private (object_class, sizeof (EphySpinnerDetails));
 }

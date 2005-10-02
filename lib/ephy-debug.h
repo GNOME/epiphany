@@ -21,8 +21,6 @@
 #ifndef EPHY_DEBUG_H
 #define EPHY_DEBUG_H
 
-#include "config.h"
-
 #include <glib.h>
 
 G_BEGIN_DECLS

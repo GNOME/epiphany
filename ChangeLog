@@ -1,3 +1,24 @@
+2005-10-02  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-debug.h:
+	
+	Don't include config.h here.
+
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_cache_data_unload),
+	(ephy_spinner_cache_data_load), (ephy_spinner_cache_data_new),
+	(ephy_spinner_cache_data_free), (ephy_spinner_cache_get_images),
+	(ephy_spinner_cache_init), (ephy_spinner_cache_finalize),
+	(ephy_spinner_load_images), (ephy_spinner_init),
+	(bump_spinner_frame_cb), (ephy_spinner_start),
+	(ephy_spinner_set_timeout), (ephy_spinner_finalize),
+	(ephy_spinner_screen_changed), (ephy_spinner_class_init):
+	
+	Make spinner multihead safe.
+
+	* lib/widgets/testspinner.c:
+	
+	Add a tiny spinner test program.
+
 2005-10-01  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/widgets/ephy-spinner.c: (ephy_spinner_init),
