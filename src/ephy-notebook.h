@@ -61,7 +61,7 @@ struct _EphyNotebookClass
 	void	 (* tab_detached)   (EphyNotebook *notebook,
 				     EphyTab *tab);
 	void	 (* tabs_reordered) (EphyNotebook *notebook);
-	gboolean (* tab_delete)	    (EphyNotebook *notebook,
+	void	 (* tab_close_req)  (EphyNotebook *notebook,
 				     EphyTab *tab);
 };
 

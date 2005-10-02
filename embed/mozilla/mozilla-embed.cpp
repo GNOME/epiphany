@@ -223,6 +223,14 @@ child_focus_out_event_cb (GtkWidget *child,
 #endif /* !HAVE_GECKO_1_8 */
 
 static void
+impl_close (EphyEmbed *embed) 
+{
+	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
+
+	mpriv->browser->Close ();
+}
+
+static void
 mozilla_embed_realize (GtkWidget *widget)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (widget)->priv;
@@ -1163,6 +1171,7 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->shistory_go_nth = impl_shistory_go_nth;
 	iface->get_security_level = impl_get_security_level;
 	iface->show_page_certificate = impl_show_page_certificate;
+	iface->close = impl_close;
 	iface->set_encoding = impl_set_encoding;
 	iface->get_encoding = impl_get_encoding;
 	iface->has_automatic_encoding = impl_has_automatic_encoding;

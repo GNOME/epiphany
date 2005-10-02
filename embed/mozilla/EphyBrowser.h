@@ -93,12 +93,12 @@ public:
 	EphyModalAlertEventListener(EphyBrowser *aOwner) : EphyEventListener(aOwner) { };
 };
 
-class EphyDOMContentLoadedEventListener : public EphyEventListener
+class EphyMiscDOMEventsListener : public EphyEventListener
 {
 public:
 	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
 
-	EphyDOMContentLoadedEventListener(EphyBrowser *aOwner) : EphyEventListener(aOwner) { };
+	EphyMiscDOMEventsListener(EphyBrowser *aOwner) : EphyEventListener(aOwner) { };
 };
 
 class EphyDOMScrollEventListener : public EphyEventListener
@@ -129,7 +129,7 @@ class EphyBrowser
 {
 friend class EphyEventListener;
 friend class EphyDOMLinkEventListener;
-friend class EphyDOMContentLoadedEventListener;
+friend class EphyMiscDOMEventsListener;
 friend class EphyDOMScrollEventListener;
 friend class EphyPopupBlockEventListener;
 friend class EphyModalAlertEventListener;
@@ -177,6 +177,8 @@ public:
 	nsresult GetSecurityInfo (PRUint32 *aState, nsACString &aDescription);
 	nsresult ShowCertificate ();
 
+	nsresult Close ();
+
         EphyEmbedDocumentType GetDocumentType ();
 
 #ifndef HAVE_GECKO_1_8
@@ -193,7 +195,7 @@ private:
 	nsCOMPtr<nsIDOMEventTarget> mEventTarget;
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;
 	EphyDOMLinkEventListener *mDOMLinkEventListener;
-	EphyDOMContentLoadedEventListener *mDOMContentLoadedEventListener;
+	EphyMiscDOMEventsListener *mMiscDOMEventsListener;
 	EphyDOMScrollEventListener *mDOMScrollEventListener;
 	EphyPopupBlockEventListener *mPopupBlockEventListener;
 	EphyModalAlertEventListener *mModalAlertListener;

@@ -38,6 +38,7 @@ extern PyMethodDef pyepiphany_functions[];
 
 static guint idle_gc_handler	   = 0;
 static guint idle_shutdown_handler = 0;
+static gboolean python_initialised = FALSE;
 
 void
 ephy_python_init (void)
@@ -46,6 +47,7 @@ ephy_python_init (void)
 	PyObject *m, *d;
 	
 	Py_Initialize();
+	python_initialised = TRUE;
 
 	argv[0] = g_get_prgname ();
 	PySys_SetArgv (1, argv);
@@ -74,6 +76,8 @@ idle_shutdown (void)
 void
 ephy_python_shutdown (void)
 {
+	if (!python_initialised) return;
+
 	g_return_if_fail (idle_shutdown_handler == 0);
 
 	LOG ("EphyPython shutdown with %s GC scheduled",
@@ -123,7 +127,7 @@ ephy_python_schedule_gc (void)
 {
 	/* LOG ("Scheduling a GC with %s GC already scheduled", idle_gc_handler != 0 ? "a" : "no"); */
 
-	if (idle_gc_handler == 0)
+	if (python_initialised && idle_gc_handler == 0)
 	{
 		idle_gc_handler = g_idle_add ((GSourceFunc) idle_gc, NULL);
 	}

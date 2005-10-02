@@ -1,5 +1,39 @@
 2005-10-02  Christian Persch  <chpe@cvs.gnome.org>
 
+	* configure.ac:
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_dispose),
+	(ephy_embed_shell_finalize), (ephy_embed_shell_class_init):
+	* embed/ephy-embed.c: (ephy_embed_base_init),
+	(ephy_embed_show_page_certificate), (ephy_embed_close):
+	* embed/ephy-embed.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-notebook.c: (ephy_notebook_class_init),
+	(close_button_clicked_cb):
+	* src/ephy-notebook.h:
+	* src/ephy-python.c: (ephy_python_init), (ephy_python_shutdown),
+	(ephy_python_schedule_gc):
+	* src/ephy-shell.c: (ephy_shell_class_init), (gnome_session_init),
+	(ephy_shell_dispose), (ephy_shell_finalize):
+	* src/ephy-tab.c: (ephy_tab_init):
+	* src/ephy-window.c: (construct_confirm_close_dialog),
+	(confirm_close_with_modified_forms), (embed_modal_alert_cb),
+	(idle_tab_remove_cb), (schedule_tab_close),
+	(embed_close_request_cb), (embed_destroy_browser_cb),
+	(tab_added_cb), (tab_removed_cb), (tab_close_request_cb),
+	(setup_notebook), (remove_true), (ephy_window_dispose),
+	(cancel_handler), (ephy_window_init), (ephy_window_finalize):
+	* src/window-commands.c: (event_with_shift),
+	(window_cmd_view_reload), (window_cmd_file_close_window):
+
+	Use nsIDOMWindowInternal::Close to close tabs. Delay tabs destruction
+	to an idle handler, to avoid crashes when tabs are closed from signal
+	handlers (blur, mousedown, keydown etc).
+	Fixes bug #172878, bug #172879, bug #172882, bug #303254, bug #313425.
+
+2005-10-02  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/print-dialog.c: (ephy_print_do_print_idle_cb):
 
 	Remove unused variable.
