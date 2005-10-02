@@ -1,4 +1,53 @@
 ==============
+Epiphany 1.8.1
+==============
+
+Changes
+
+        * Make Mozilla paper sizes work with gnome-print [#163255].
+        * Require pygtk 2.8. Fixes [#314557].
+        * Manually emit the "profile-change-net-teardown" notification; works
+          around mozilla bug https://bugzilla.mozilla.org/show_bug.cgi?id=292699
+        * Don't focus the checkbox initially. Fixes [#163371].
+        * If the search term is empty for a smart bookmark use the normal URL
+          instead of the smart url with the %s replaced by ""
+        * Don't use "cat >" as output command, it fails inpredicably.
+          If not using gecko 1.9, translate the paper name to the one 
+          mozilla expects (https://bugzilla.mozilla.org/show_bug.cgi?id=307404).
+        * Use the tab label's outer hbox for the size calculation instead of
+          the label itself. Fixes size oscillations with the Tab States
+          extension.
+        * Back out the fix for [#158486] by re-enabling keyword: searches. 
+          Fixes [#314974].
+        * Don't spin unmapped spinners. Slightly decrease the frequency.
+          Might help with [#315232].    
+        * Use nsIDOMWindowInternal::Close to close tabs. Delay tabs destruction
+          to an idle handler, to avoid crashes when tabs are closed from signal
+          handlers (blur, mousedown, keydown etc).      
+          Fixes [#172878], [#172879], [#172882], [#303254], [#313425].
+        * Schedule a GC in finalize of EphyTab and EphyWindow, to work around 
+          [#317242].
+
+Contributors to this release: Christian Persch, Jean-François Rameau, 
+Reinout van Schouwen and Raphaël Slinckx.
+
+New and updated translations:
+
+	* Progga (bn)
+	* Hendrik Richter (de)
+	* Ivar Smolin (et)
+	* Iñaki Larrañaga Murgoitio (eu)
+	* Ignacio Casal Quinteiro (gl)
+	* Francesco Marletta (it)
+	* Young-Ho Cha (ko)
+	* Erdal Ronahi (ku)
+	* Данило Шеган (sr, sr@Latn)
+	* Christian Rose (sv)
+	* Erçin EKER (tr)
+	* Clytie Siddall (vi)
+
+
+==============
 Epiphany 1.8.0
 ==============
 
