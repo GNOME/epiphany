@@ -1,5 +1,20 @@
 2005-10-02  Christian Persch  <chpe@cvs.gnome.org>
 
+	* configure.ac:
+	* src/bookmarks/ephy-bookmarks.c: (save_filter),
+	(ephy_bookmarks_save), (update_bookmark_keywords),
+	(bookmark_is_categorized), (ephy_bookmarks_init),
+	(ephy_bookmarks_finalize), (ephy_bookmarks_get_topic_uri),
+	(ephy_bookmarks_find_keyword):
+	* src/epiphany.defs:
+
+	Add configure switch to disable zeroconf bookmarks, since
+	they're almost useless since just about nobody ships gnome-vfs
+	with howl support enabled, and have also been reported to
+	cause long delays on startup.
+
+2005-10-02  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-tab.c: (ephy_tab_finalize):
 	* src/ephy-window.c: (ephy_window_finalize):
 

@@ -75,10 +75,12 @@ struct _EphyBookmarksPrivate
 	GHashTable *props_dialogs;
 	guint disable_bookmark_editing_notifier_id;
 
+#ifdef ENABLE_ZEROCONF
 	/* Local sites */
 	EphyNode *local;
 	GnomeVFSDNSSDBrowseHandle *browse_handle;
 	GList *resolve_list;
+#endif
 };
 
 typedef struct
@@ -343,9 +345,14 @@ save_filter (EphyNode *node,
 	return node != priv->bookmarks &&
 	       node != priv->favorites &&
 	       node != priv->notcategorized &&
+#ifdef ENABLE_ZEROCONF
 	       node != priv->local;
+#else
+	       TRUE;
+#endif
 }
 
+#ifdef ENABLE_ZEROCONF
 static gboolean
 save_filter_local (EphyNode *node,
 		   EphyBookmarks *bookmarks)
@@ -354,6 +361,7 @@ save_filter_local (EphyNode *node,
 
 	return !ephy_node_has_child (priv->local, node);
 }
+#endif
 
 static void
 ephy_bookmarks_save (EphyBookmarks *eb)
@@ -368,7 +376,11 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 		 (xmlChar *) EPHY_BOOKMARKS_XML_VERSION,
 		 (xmlChar *) "Do not rely on this file, it's only for internal use. Use bookmarks.rdf instead.",
 		 eb->priv->keywords, (EphyNodeFilterFunc) save_filter, eb,
+#ifdef ENABLE_ZEROCONF
 		 eb->priv->bookmarks, (EphyNodeFilterFunc) save_filter_local, eb,
+#else
+		 eb->priv->bookmarks, NULL, eb,
+#endif
 		 NULL);
 
 	/* Export bookmarks in rdf */
@@ -656,7 +668,9 @@ update_bookmark_keywords (EphyBookmarks *eb, EphyNode *bookmark)
 		if (kid != eb->priv->notcategorized && 
 		    kid != eb->priv->favorites &&
 		    kid != eb->priv->bookmarks &&
+#ifdef ENABLE_ZEROCONF
 		    kid != eb->priv->local &&
+#endif
 		    ephy_node_has_child (kid, bookmark))
 		{
 			const char *topic;
@@ -725,7 +739,9 @@ bookmark_is_categorized (EphyBookmarks *eb, EphyNode *bookmark)
 		if (kid != eb->priv->notcategorized && 
 		    kid != eb->priv->favorites &&
 		    kid != eb->priv->bookmarks &&
+#ifdef ENABLE_ZEROCONF
 		    kid != eb->priv->local &&
+#endif
 		    ephy_node_has_child (kid, bookmark))
 		{
 			return TRUE;
@@ -811,6 +827,8 @@ backup_file (const char *original_filename, const char *extension)
 	g_free (template);
 	g_free (backup_filename);
 }
+
+#ifdef ENABLE_ZEROCONF
 
 static void
 resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
@@ -949,6 +967,8 @@ ephy_local_bookmarks_stop (EphyBookmarks *bookmarks)
 	priv->resolve_list = NULL;
 }
 
+#endif /* ENABLE_ZEROCONF */
+
 static void
 ephy_bookmarks_init (EphyBookmarks *eb)
 {
@@ -1044,6 +1064,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	g_value_unset (&value);
 	ephy_node_add_child (eb->priv->keywords, eb->priv->notcategorized);
 
+#ifdef ENABLE_ZEROCONF
 	/* Local Websites */
 	eb->priv->local = ephy_node_new_with_id (db, BMKS_LOCAL_NODE_ID);
 
@@ -1068,6 +1089,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	g_value_unset (&value);
 	ephy_node_add_child (eb->priv->keywords, eb->priv->local);
 	ephy_local_bookmarks_init (eb);
+#endif /* ENABLE_ZEROCONF */
 
 	/* Smart bookmarks */
 	eb->priv->smartbookmarks = ephy_node_new_with_id (db, SMARTBOOKMARKS_NODE_ID);
@@ -1122,7 +1144,9 @@ ephy_bookmarks_finalize (GObject *object)
 		g_source_remove (eb->priv->save_timeout_id);
 	}
 
+#ifdef ENABLE_ZEROCONF
 	ephy_local_bookmarks_stop (eb);
+#endif
 
 	ephy_bookmarks_save (eb);
 
@@ -1534,10 +1558,12 @@ ephy_bookmarks_get_topic_uri (EphyBookmarks *eb,
 	{
 		uri = g_strdup ("topic://Special/Favorites");
 	}
+#ifdef ENABLE_ZEROCONF
 	else if (ephy_bookmarks_get_local (eb) == node)
 	{
 		uri = g_strdup ("topic://Special/Local");
 	}
+#endif
 	else
 	{
 		const char *name;
@@ -1583,10 +1609,12 @@ ephy_bookmarks_find_keyword (EphyBookmarks *eb,
 	{
 		return ephy_bookmarks_get_favorites (eb);
 	}
+#ifdef ENABLE_ZEROCONF
 	else if (strcmp (name, "topic://Special/Local") == 0)
 	{
 		return ephy_bookmarks_get_local (eb);
 	}
+#endif
 	else if (g_str_has_prefix (name, "topic://"))
 	{
 		topic_name += strlen ("topic://");
@@ -1687,11 +1715,13 @@ ephy_bookmarks_get_favorites (EphyBookmarks *eb)
 	return eb->priv->favorites;
 }
 
+#ifdef ENABLE_ZEROCONF
 EphyNode *
 ephy_bookmarks_get_local (EphyBookmarks *eb)
 {
 	return eb->priv->local;
 }
+#endif
 
 EphyNode *
 ephy_bookmarks_get_not_categorized (EphyBookmarks *eb)
