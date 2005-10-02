@@ -813,6 +813,7 @@ ephy_spinner_set_size (EphySpinner *spinner,
 	}
 }
 
+#if 0
 /*
  * ephy_spinner_set_timeout:
  * @spinner: a #EphySpinner
@@ -820,7 +821,7 @@ ephy_spinner_set_size (EphySpinner *spinner,
  *
  * Sets the timeout delay for spinner updates.
  **/
-static void
+void
 ephy_spinner_set_timeout (EphySpinner *spinner,
 			  guint timeout)
 {
@@ -838,6 +839,7 @@ ephy_spinner_set_timeout (EphySpinner *spinner,
 		}
 	}
 }
+#endif
 
 static void
 ephy_spinner_size_request (GtkWidget *widget,
