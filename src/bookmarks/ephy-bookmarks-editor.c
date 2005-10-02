@@ -1687,7 +1687,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 					"vscrollbar_policy", GTK_POLICY_AUTOMATIC,
 					"shadow_type", GTK_SHADOW_IN,
 					NULL);
-	gtk_paned_pack1 (GTK_PANED (hpaned), GTK_WIDGET (scrolled_window), TRUE, TRUE);
+	gtk_paned_pack1 (GTK_PANED (hpaned), GTK_WIDGET (scrolled_window), FALSE, TRUE);
 	gtk_widget_show (scrolled_window);
 
 	/* Keywords View */
