@@ -134,7 +134,6 @@ ephy_toolbar_update_fixed_visibility (EphyToolbar *toolbar)
 static void
 ephy_toolbar_update_spinner (EphyToolbar *toolbar)
 {
-	GtkWidget *widget = GTK_WIDGET (toolbar);
 	EphyToolbarPrivate *priv = toolbar->priv;
 
 	if (priv->spinning)
