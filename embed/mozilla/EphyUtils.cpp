@@ -122,7 +122,10 @@ EphyUtils::FindGtkParent (nsIDOMWindow *aDOMWindow)
 	GtkWidget *embed = FindEmbed (aDOMWindow);
 	NS_ENSURE_TRUE (embed, nsnull);
 
-	return gtk_widget_get_toplevel (GTK_WIDGET (embed));
+	GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (embed));
+	if (!GTK_WIDGET_TOPLEVEL (toplevel)) return nsnull;
+
+	return toplevel;
 }
 
 nsresult
