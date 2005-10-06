@@ -116,6 +116,7 @@ libephymozillaembed_la_CPPFLAGS = \
 	-I$(MOZILLA_INCLUDE_ROOT)		\
 	$(addprefix -I$(MOZILLA_INCLUDE_ROOT)/,$(mozilla_include_subdirs))	\
 	-DSHARE_DIR=\"$(pkgdatadir)\"   	\
+	-DPLUGINDIR=\"$(libdir)/epiphany/$(EPIPHANY_MAJOR)/plugins\"		\
 	-DMOZILLA_HOME=\"$(MOZILLA_HOME)\"	\
 	-DMOZILLA_PREFIX=\"$(MOZILLA_PREFIX)\"	\
 	-DALLOW_PRIVATE_API			\

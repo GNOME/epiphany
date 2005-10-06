@@ -356,8 +356,11 @@ mozilla_init_plugin_path ()
 	user_path = g_getenv ("MOZ_PLUGIN_PATH");
 	new_path = g_strconcat (user_path ? user_path : "",
 				user_path ? ":" : "",
-				MOZILLA_PREFIX "/lib/mozilla/plugins:"
-				MOZILLA_HOME "/plugins",
+				MOZILLA_PREFIX "/lib/mozilla/plugins"
+				":" MOZILLA_HOME "/plugins",
+#ifdef HAVE_PRIVATE_PLUGINS
+				":" PLUGINDIR,
+#endif
 				NULL);
 
 	g_setenv ("MOZ_PLUGIN_PATH", new_path, TRUE);

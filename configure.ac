@@ -664,6 +664,10 @@ if test "x$enable_desktop_file_plugin" = "xyes"; then
 	AC_SUBST([DESKTOP_FILE_PLUGIN_DEP_LIBS])
 fi
 
+if test "x$enable_desktop_file_plugin" = "xyes"; then
+	AC_DEFINE([HAVE_PRIVATE_PLUGINS],[1],[Define if any private plugins are enabled])
+fi
+
 dnl *******************
 dnl Additional features
 dnl *******************
