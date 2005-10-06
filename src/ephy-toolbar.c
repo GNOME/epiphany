@@ -76,12 +76,13 @@ struct _EphyToolbarPrivate
 	GtkToolItem *sep_item;
 	GtkToolItem *exit_button;
 	gulong set_focus_handler;
-	gboolean updating_address;
-	gboolean show_lock;
-	gboolean is_secure;
-	gboolean lock_visible;
-	gboolean leave_fullscreen_visible;
-	gboolean spinning;
+
+	guint updating_address : 1;
+	guint show_lock : 1;
+	guint is_secure : 1;
+	guint lock_visible : 1;
+	guint leave_fullscreen_visible : 1;
+	guint spinning : 1;
 };
 
 static const GtkTargetEntry drag_targets [] =
@@ -136,7 +137,7 @@ ephy_toolbar_update_spinner (EphyToolbar *toolbar)
 	GtkWidget *widget = GTK_WIDGET (toolbar);
 	EphyToolbarPrivate *priv = toolbar->priv;
 
-	if (priv->spinning && GTK_WIDGET_VISIBLE (widget))
+	if (priv->spinning)
 	{
 		ephy_spinner_start (EPHY_SPINNER (priv->spinner));
 	}
@@ -392,7 +393,7 @@ ephy_toolbar_set_show_leave_fullscreen (EphyToolbar *toolbar,
 {
 	EphyToolbarPrivate *priv = toolbar->priv;
 
-	priv->leave_fullscreen_visible = show;
+	priv->leave_fullscreen_visible = show != FALSE;
 
 	ephy_toolbar_update_fixed_visibility (toolbar);
 }
@@ -479,8 +480,8 @@ ephy_toolbar_set_security_state (EphyToolbar *toolbar,
 {
 	EphyToolbarPrivate *priv = toolbar->priv;
 
-	priv->show_lock = show_lock;
-	priv->is_secure = is_secure;
+	priv->show_lock = show_lock != FALSE;
+	priv->is_secure = is_secure != FALSE;
 
 	g_object_set (priv->actions[LOCATION_ACTION],
 		      "lock-stock-id", stock_id,
@@ -496,7 +497,7 @@ ephy_toolbar_set_lock_visibility (EphyToolbar *toolbar,
 {
 	EphyToolbarPrivate *priv = toolbar->priv;
 
-	priv->lock_visible = visible;
+	priv->lock_visible = visible != FALSE;
 
 	g_object_set (priv->actions[LOCATION_ACTION],
 		      "show-lock", priv->lock_visible && priv->show_lock,
@@ -509,7 +510,7 @@ ephy_toolbar_set_spinning (EphyToolbar *toolbar,
 {
 	EphyToolbarPrivate *priv = toolbar->priv;
 
-	priv->spinning = spinning;
+	priv->spinning = spinning != FALSE;
 
 	ephy_toolbar_update_spinner (toolbar);
 }
