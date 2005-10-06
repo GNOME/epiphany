@@ -1,4 +1,4 @@
-SUBDIRS = lib embed idl src data po help doc
+SUBDIRS = lib embed idl src plugins data po help doc
 
 ACLOCAL_AMFLAGS = -I m4
 

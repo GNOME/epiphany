@@ -1,3 +1,19 @@
+2005-10-06  Christian Persch  <chpe@cvs.gnome.org>
+
+	* Makefile.am:
+	* configure.ac:
+	* plugins/.cvsignore:
+	* plugins/Makefile.am:
+	* plugins/desktop-file/.cvsignore:
+	* plugins/desktop-file/Makefile.am:
+	* plugins/desktop-file/plugin.cpp:
+	* po/POTFILES.in:
+
+	Add "desktop-file" plugin, adapted from the
+	"mozilla-desktop-file-plugin" written by Jorn Baayen <jbaayen@gnome.org>.
+	For now only handle .desktop files from file:/// URIs, for security 
+	reasons.
+
 2005-10-03  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-state.c: (paned_sync_position_cb),

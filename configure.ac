@@ -639,6 +639,31 @@ AM_CONDITIONAL([ENABLE_PYTHON],[test "x$enable_python" = "xyes"])
 
 AC_SUBST([EPIPHANY_FEATURES])
 
+dnl *******
+dnl Plugins
+dnl *******
+
+dnl Gecko 1.9 can handle .desktop files from file: URLs itself, so disable
+dnl this plugin at least until we handle non-file: URLs
+
+if test "$gecko_version_major" = "1" -a "$gecko_version_minor" -le "8"; then
+
+AC_MSG_CHECKING([whether to build the deskop file plugin])
+AC_ARG_ENABLE([desktop-file-plugin],
+	AS_HELP_STRING([--disable-desktop-file-plugin],[Disable the desktop file plugin (default: enabled)]),
+	[],[enable_desktop_file_plugin=yes])
+AC_MSG_RESULT([$enable_desktop_file_plugin])
+
+fi
+
+AM_CONDITIONAL([ENABLE_DESKTOP_FILE_PLUGIN],[test "x$enable_desktop_file_plugin" = "xyes"])
+
+if test "x$enable_desktop_file_plugin" = "xyes"; then
+	PKG_CHECK_MODULES([DESKTOP_FILE_PLUGIN_DEP],[$MOZILLA-xpcom $MOZILLA-plugin gtk+-2.0 >= 2.6.0])
+	AC_SUBST([DESKTOP_FILE_PLUGIN_DEP_CFLAGS])
+	AC_SUBST([DESKTOP_FILE_PLUGIN_DEP_LIBS])
+fi
+
 dnl *******************
 dnl Additional features
 dnl *******************
@@ -740,6 +765,8 @@ embed/mozilla/Makefile
 src/Makefile
 src/bookmarks/Makefile
 help/Makefile
+plugins/Makefile
+plugins/desktop-file/Makefile
 po/Makefile.in
 ])
 
