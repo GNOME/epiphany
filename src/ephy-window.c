@@ -592,8 +592,6 @@ sync_chromes_visibility (EphyWindow *window)
 	g_object_set (priv->bookmarksbar, "visible", show_bookmarksbar, NULL);
 	g_object_set (priv->statusbar, "visible", show_statusbar, NULL);
 
-	ephy_toolbar_set_lock_visibility (priv->toolbar, !show_statusbar);
-
 	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (priv->notebook), show_tabsbar);
 
 	if (priv->fullscreen_popup != NULL)
@@ -1307,7 +1305,7 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	char *state = NULL;
 	char *tooltip;
 	const char *stock_id = STOCK_LOCK_INSECURE;
-	gboolean show_lock = FALSE;
+	gboolean show_lock = FALSE, is_secure = FALSE;
 
 	if (window->priv->closing) return;
 
@@ -1344,6 +1342,7 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 			state = _("High");
 			stock_id = STOCK_LOCK_SECURE;
 			show_lock = TRUE;
+			is_secure = TRUE;
 			break;
 		default:
 			g_assert_not_reached ();
@@ -1363,7 +1362,7 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	ephy_statusbar_set_security_state (EPHY_STATUSBAR (window->priv->statusbar),
 					   stock_id, tooltip);
 
-	ephy_toolbar_set_security_state (window->priv->toolbar,
+	ephy_toolbar_set_security_state (window->priv->toolbar, is_secure,
 					 show_lock, stock_id, tooltip);
 
 	if (window->priv->fullscreen_popup != NULL)

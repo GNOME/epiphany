@@ -85,6 +85,7 @@ void		ephy_toolbar_set_navigation_actions	(EphyToolbar *toolbar,
 							 gboolean up);
 
 void		ephy_toolbar_set_security_state		(EphyToolbar *toolbar,
+							 gboolean is_secure,
 							 gboolean show_lock,
 							 const char *stock_id,
 							 const char *tooltip);

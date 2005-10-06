@@ -1,5 +1,30 @@
 2005-10-06  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_style_set), (ephy_location_entry_class_init),
+	(ephy_location_entry_set_favicon),
+	(ephy_location_entry_set_secure):
+	* lib/widgets/ephy-location-entry.h:
+
+	Add style properties for 'secure-[bg|fg]-color', and apply them when
+	the entry is in 'secure' mode. Reset the IM context before emitting
+	the 'activate' signal.
+
+	* src/ephy-location-action.c: (sync_secure), (connect_proxy),
+	(ephy_location_action_set_property),
+	(ephy_location_action_get_property),
+	(ephy_location_action_class_init):
+	* src/ephy-toolbar.c: (ephy_toolbar_set_security_state),
+	(ephy_toolbar_init):
+	* src/ephy-toolbar.h:
+	* src/ephy-window.c: (sync_chromes_visibility),
+	(sync_tab_security):
+
+	Set the location entry's 'secure' property on secure sites,
+	and also always show the lock for secure sites.
+
+2005-10-06  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.ac:
 	* embed/mozilla/Makefile.am:
 	* embed/mozilla/mozilla-embed-single.cpp:

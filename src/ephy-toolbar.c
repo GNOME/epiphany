@@ -78,6 +78,7 @@ struct _EphyToolbarPrivate
 	gulong set_focus_handler;
 	gboolean updating_address;
 	gboolean show_lock;
+	gboolean is_secure;
 	gboolean lock_visible;
 	gboolean leave_fullscreen_visible;
 	gboolean spinning;
@@ -471,6 +472,7 @@ ephy_toolbar_set_navigation_actions (EphyToolbar *toolbar,
 
 void
 ephy_toolbar_set_security_state (EphyToolbar *toolbar,
+				 gboolean is_secure,
 				 gboolean show_lock,
 				 const char *stock_id,
 				 const char *tooltip)
@@ -478,11 +480,13 @@ ephy_toolbar_set_security_state (EphyToolbar *toolbar,
 	EphyToolbarPrivate *priv = toolbar->priv;
 
 	priv->show_lock = show_lock;
+	priv->is_secure = is_secure;
 
 	g_object_set (priv->actions[LOCATION_ACTION],
 		      "lock-stock-id", stock_id,
 		      "lock-tooltip", tooltip,
 		      "show-lock", priv->lock_visible && priv->show_lock,
+		      "secure", is_secure,
 		      NULL);
 }
 
@@ -588,7 +592,11 @@ ephy_toolbar_hide (GtkWidget *widget)
 static void
 ephy_toolbar_init (EphyToolbar *toolbar)
 {
-	toolbar->priv = EPHY_TOOLBAR_GET_PRIVATE (toolbar);
+	EphyToolbarPrivate *priv;
+
+	priv = toolbar->priv = EPHY_TOOLBAR_GET_PRIVATE (toolbar);
+
+	priv->lock_visible = TRUE;
 }
 
 static GObject *

@@ -65,6 +65,8 @@ struct _EphyLocationEntryPrivate
 	GtkWidget *lock_ebox;
 	GtkWidget *lock;
 	GdkPixbuf *favicon;
+	GdkColor secure_bg_colour;
+	GdkColor secure_fg_colour;
 
 	char *before_completion;
 
@@ -74,8 +76,11 @@ struct _EphyLocationEntryPrivate
 	guint relevance_col;
 
 	guint hash;
+
 	guint user_changed : 1;
 	guint original_address : 1;
+	guint secure : 1;
+	guint apply_colours : 1;
 };
 
 static const struct
@@ -98,6 +103,8 @@ static const GtkTargetEntry url_drag_types [] =
 	{ EPHY_DND_URI_LIST_TYPE,   0, 1 },
 	{ EPHY_DND_TEXT_TYPE,       0, 2 }
 };
+
+static const GdkColor fallback_bg_colour = { 0, 0xf7f7, 0xf7f7, 0xbebe }; /* yellow-ish */
 
 static void ephy_location_entry_class_init (EphyLocationEntryClass *klass);
 static void ephy_location_entry_init (EphyLocationEntry *le);
@@ -162,6 +169,61 @@ ephy_location_entry_set_tooltip (GtkToolItem *tool_item,
 }
 
 static void
+ephy_location_entry_style_set (GtkWidget *widget,
+			       GtkStyle *previous_style)
+{
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
+	EphyLocationEntryPrivate *priv = entry->priv;
+	GtkSettings *settings;
+	GdkColor *bg_colour = NULL, *fg_colour = NULL;
+	char *theme;
+	gboolean is_a11y_theme;
+
+	if (GTK_WIDGET_CLASS (parent_class)->style_set)
+	{
+		GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
+	}
+
+	settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
+	g_object_get (settings, "gtk-theme-name", &theme, NULL);
+	is_a11y_theme = strncmp (theme, "HighContrast", strlen ("HighContrast")) == 0 ||
+			strncmp (theme, "LowContrast", strlen ("LowContrast")) == 0;
+	g_free (theme);
+
+	gtk_widget_style_get (widget,
+			      "secure-fg-color", &fg_colour,
+			      "secure-bg-color", &bg_colour,
+			      NULL);
+
+	/* We only use the fallback colours when we don't have an a11y theme */
+	priv->apply_colours = !is_a11y_theme || (fg_colour != NULL && bg_colour != NULL);
+
+	if (fg_colour != NULL)
+	{
+		priv->secure_fg_colour = *fg_colour;
+		gdk_color_free (fg_colour);
+	}
+	else
+	{
+		/* FIXME: fall back to black text maybe? */
+		priv->secure_fg_colour = widget->style->text[GTK_STATE_NORMAL];
+	}
+
+	if (bg_colour != NULL)
+	{
+		priv->secure_bg_colour = *bg_colour;
+		gdk_color_free (bg_colour);
+	}
+	else
+	{
+		priv->secure_bg_colour = fallback_bg_colour;
+	}
+
+	/* Apply the new style */
+	ephy_location_entry_set_secure (entry, priv->secure);
+}
+
+static void
 ephy_location_entry_finalize (GObject *object)
 {
 	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
@@ -181,11 +243,14 @@ static void
 ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 	GtkToolItemClass *tool_item_class = GTK_TOOL_ITEM_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_location_entry_finalize;
+
+	widget_class->style_set = ephy_location_entry_style_set;
 
 	tool_item_class->set_tooltip = ephy_location_entry_set_tooltip;
 
@@ -229,6 +294,19 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		0,
 		G_TYPE_NONE);
 
+        gtk_widget_class_install_style_property (widget_class,
+                                                 g_param_spec_boxed ("secure-bg-color",
+                                                                     "Secure background colour",
+                                                                     "Background colour to use for secure sites",
+                                                                     GDK_TYPE_COLOR,
+                                                                     G_PARAM_READABLE));
+
+        gtk_widget_class_install_style_property (widget_class,
+                                                 g_param_spec_boxed ("secure-fg-color",
+                                                                     "Secure foreground Colour",
+                                                                     "Foreground colour to use for secure sites",
+                                                                     GDK_TYPE_COLOR,
+                                                                     G_PARAM_READABLE));
 
 	g_type_class_add_private (object_class, sizeof (EphyLocationEntryPrivate));
 }
@@ -848,6 +926,31 @@ ephy_location_entry_set_favicon (EphyLocationEntry *entry,
 	priv->favicon = pixbuf ? g_object_ref (pixbuf) : NULL;
 
 	update_favicon (entry);
+}
+
+void
+ephy_location_entry_set_secure (EphyLocationEntry *entry,
+				gboolean secure)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+	GtkWidget *widget = GTK_WIDGET (entry);
+	GtkWidget *gentry = ephy_icon_entry_get_entry (entry->priv->icon_entry);
+
+	priv->secure = secure;
+
+	/* We have to set the colour of the GtkEntry in the EphyIconEntry */
+	if (priv->secure && priv->apply_colours)
+	{
+		gtk_widget_modify_text (gentry, GTK_STATE_NORMAL, &priv->secure_fg_colour);
+		gtk_widget_modify_base (gentry, GTK_STATE_NORMAL, &priv->secure_bg_colour);
+	}
+	else
+	{
+		gtk_widget_modify_text (gentry, GTK_STATE_NORMAL, NULL);
+		gtk_widget_modify_base (gentry, GTK_STATE_NORMAL, NULL);
+	}
+
+	gtk_widget_queue_draw (widget);
 }
 
 void

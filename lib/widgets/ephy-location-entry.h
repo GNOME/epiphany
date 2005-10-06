@@ -88,6 +88,9 @@ GtkWidget      *ephy_location_entry_get_entry		(EphyLocationEntry *entry);
 void		ephy_location_entry_set_favicon		(EphyLocationEntry *entry,
 							 GdkPixbuf *pixbuf);
 
+void		ephy_location_entry_set_secure		(EphyLocationEntry *entry,
+							 gboolean secure);
+
 void		ephy_location_entry_set_show_lock	(EphyLocationEntry *entry,
 							 gboolean show_lock);
 

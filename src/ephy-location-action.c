@@ -50,6 +50,7 @@ struct _EphyLocationActionPrivate
 	char *lock_tooltip;
 	guint editable : 1;
 	guint show_lock : 1;
+	guint secure : 1;
 };
 
 static void ephy_location_action_init       (EphyLocationAction *action);
@@ -69,6 +70,7 @@ enum
 	PROP_ICON,
 	PROP_LOCK_STOCK,
 	PROP_LOCK_TOOLTIP,
+	PROP_SECURE,
 	PROP_SHOW_LOCK,
 	PROP_WINDOW
 };
@@ -267,6 +269,18 @@ sync_lock_tooltip (GtkAction *gaction,
 }
 
 static void
+sync_secure (GtkAction *gaction,
+	     GParamSpec *pspec,
+	     GtkWidget *proxy)
+{
+	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
+	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (proxy);
+
+	ephy_location_entry_set_secure (entry, priv->secure);
+}
+
+static void
 sync_show_lock (GtkAction *gaction,
 	        GParamSpec *pspec,
 	        GtkWidget *proxy)
@@ -387,6 +401,9 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		sync_lock_tooltip (action, NULL, proxy);
 		g_signal_connect_object (action, "notify::lock-tooltip",
 					 G_CALLBACK (sync_lock_tooltip), proxy, 0);
+		sync_secure (action, NULL, proxy);
+		g_signal_connect_object (action, "notify::secure",
+					 G_CALLBACK (sync_secure), proxy, 0);
 		sync_show_lock (action, NULL, proxy);
 		g_signal_connect_object (action, "notify::show-lock",
 					 G_CALLBACK (sync_show_lock), proxy, 0);
@@ -461,6 +478,9 @@ ephy_location_action_set_property (GObject *object,
 			g_free (priv->lock_tooltip);
 			priv->lock_tooltip = g_value_dup_string (value);
 			break;
+		case PROP_SECURE:
+			priv->secure = g_value_get_boolean (value);
+			break;
 		case PROP_SHOW_LOCK:
 			priv->show_lock = g_value_get_boolean (value);
 			break;
@@ -495,6 +515,9 @@ ephy_location_action_get_property (GObject *object,
 			break;
 		case PROP_LOCK_TOOLTIP:
 			g_value_set_string (value, priv->lock_tooltip);
+			break;
+		case PROP_SECURE:
+			g_value_set_boolean (value, priv->secure);
 			break;
 		case PROP_SHOW_LOCK:
 			g_value_set_boolean (value, priv->show_lock);
@@ -568,6 +591,14 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							       "Lock Tooltip",
 							       "The icon",
 							       NULL,
+							       G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_SECURE,
+					 g_param_spec_boolean ("secure",
+							       "Secure",
+							       "Secure",
+							       FALSE,
 							       G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class,
