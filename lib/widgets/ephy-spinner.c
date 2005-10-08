@@ -740,17 +740,17 @@ ephy_spinner_start (EphySpinner *spinner)
 	details->spinning = TRUE;
 
 	if (GTK_WIDGET_MAPPED (GTK_WIDGET (spinner)) &&
-	    details->timer_task == 0)
+	    details->timer_task == 0 &&
+	    ephy_spinner_load_images (spinner))
+	
 	{
-
-		if (spinner->details->images != NULL)
+		if (details->images != NULL)
 		{
 			/* reset to first frame */
-			spinner->details->current_image =
-				spinner->details->images->images;
+			details->current_image = details->images->images;
 		}
 
-		spinner->details->timer_task =
+		details->timer_task =
 			g_timeout_add (details->timeout,
 				       (GSourceFunc) bump_spinner_frame_cb,
 				       spinner);
@@ -893,13 +893,21 @@ ephy_spinner_unmap (GtkWidget *widget)
 }
 
 static void
-ephy_spinner_finalize (GObject *object)
+ephy_spinner_dispose (GObject *object)
 {
 	EphySpinner *spinner = EPHY_SPINNER (object);
 
 	g_signal_handlers_disconnect_by_func
 			(spinner->details->icon_theme,
 		 G_CALLBACK (icon_theme_changed_cb), spinner);
+
+	G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+
+static void
+ephy_spinner_finalize (GObject *object)
+{
+	EphySpinner *spinner = EPHY_SPINNER (object);
 
 	ephy_spinner_remove_update_callback (spinner);
 	ephy_spinner_unload_images (spinner);
@@ -954,6 +962,7 @@ ephy_spinner_class_init (EphySpinnerClass *class)
 
 	parent_class = g_type_class_peek_parent (class);
 
+	object_class->dispose = ephy_spinner_dispose;
 	object_class->finalize = ephy_spinner_finalize;
 
 	widget_class->expose_event = ephy_spinner_expose;

@@ -1,3 +1,12 @@
+
+
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_start),
+	(ephy_spinner_dispose), (ephy_spinner_finalize),
+	(ephy_spinner_class_init):
+
+	Ensure the images are loaded before starting to spin.
+	Should fix crashes on start/new tab.
+
 2005-10-06  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-toolbar.c: (ephy_toolbar_update_spinner):
