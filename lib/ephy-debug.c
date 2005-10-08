@@ -35,44 +35,61 @@ static const char *ephy_debug_break = NULL;
 
 #ifndef DISABLE_PROFILING
 static GHashTable *ephy_profilers_hash = NULL;
-static const char *ephy_profile_modules = NULL;
+static char **ephy_profile_modules;
+static gboolean ephy_profile_all_modules;
 #endif /* !DISABLE_PROFILING */
+
+#ifdef GNOME_ENABLE_DEBUG
+
+static char **
+build_modules (const char *name,
+	       gboolean* is_all)
+{
+	const char *env;
+
+	*is_all = FALSE;
+
+	env = g_getenv (name);
+	if (env == NULL) return NULL;
+
+	if (strcmp (env, "all") == 0)
+	{
+		*is_all = TRUE;
+		return NULL;
+	}
+
+	return g_strsplit (g_getenv (name), ":", -1);
+}
+
+#endif
 
 #ifndef DISABLE_LOGGING
 
-static const char *ephy_log_modules;
+static char **ephy_log_modules;
+static gboolean ephy_log_all_modules;
 
 static void
 log_module (const gchar *log_domain,
 	    GLogLevelFlags log_level,
-	    const gchar *message,
+	    const char *message,
 	    gpointer user_data)
 {
-	gboolean should_log = FALSE;
+	gboolean should_log = ephy_log_all_modules;
 
-	if (!ephy_log_modules) return;
+	if (!ephy_log_all_modules && !ephy_log_modules) return;
 
-	if (strcmp (ephy_log_modules, "all") != 0)
+	if (!ephy_log_all_modules)
 	{
-		char **modules;
-		int i;
+		guint i;
 
-		modules = g_strsplit (ephy_log_modules, ":", 100);
-
-		for (i = 0; modules[i] != NULL; i++)
+		for (i = 0; ephy_log_modules[i] != NULL; i++)
 		{
-			if (strstr (message, modules [i]) != NULL)
+			if (strstr (ephy_log_modules [i], message) != NULL)
 			{
 				should_log = TRUE;
 				break;
 			}
 		}
-
-		g_strfreev (modules);
-	}
-	else
-	{
-		should_log = TRUE;
 	}
 
 	if (should_log)
@@ -144,7 +161,7 @@ void
 ephy_debug_init (void)
 {
 #ifndef DISABLE_LOGGING
-	ephy_log_modules = g_getenv ("EPHY_LOG_MODULES");
+	ephy_log_modules = build_modules ("EPHY_LOG_MODULES", &ephy_log_all_modules);
 
 	g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, log_module, NULL);
 
@@ -154,7 +171,7 @@ ephy_debug_init (void)
 	g_log_set_default_handler (trap_handler, NULL);
 
 #ifndef DISABLE_PROFILING
-	ephy_profile_modules = g_getenv ("EPHY_PROFILE_MODULES");
+	ephy_profile_modules = build_modules ("EPHY_PROFILE_MODULES", &ephy_profile_all_modules);
 #endif
 }
 
@@ -178,27 +195,25 @@ ephy_profiler_new (const char *name, const char *module)
 static gboolean
 ephy_should_profile (const char *module)
 {
-	char **modules;
-	int i;
-	gboolean res = FALSE;
+	char *slash;
+	gboolean result = FALSE;
+	guint i;
 
-	if (!ephy_profile_modules) return FALSE;
-	if (strcmp (ephy_profile_modules, "all") == 0) return TRUE;
+	slash = strrchr (module, '/');
 
-	modules = g_strsplit (ephy_profile_modules, ":", 100);
+	/* Happens on builddir != srcdir builds */
+	if (slash != NULL) module = slash + 1;
 
-	for (i = 0; modules[i] != NULL; i++)
+	for (i = 0; ephy_profile_modules[i] != NULL; i++)
 	{
-		if (strcmp (module, modules [i]) == 0)
+		if (strcmp (ephy_profile_modules[i], module) == 0)
 		{
-			res = TRUE;
+			result = TRUE;
 			break;
 		}
 	}
 
-	g_strfreev (modules);
-
-	return res;
+	return result;
 }
 
 static void
@@ -238,7 +253,8 @@ ephy_profiler_start (const char *name, const char *module)
 					       g_free, NULL);
 	}
 
-	if (!ephy_should_profile (module)) return;
+	if (!ephy_profile_all_modules &&
+	    (ephy_profile_modules == NULL || !ephy_should_profile (module))) return;
 
 	profiler = ephy_profiler_new (name, module);
 
