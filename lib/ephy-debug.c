@@ -84,7 +84,7 @@ log_module (const gchar *log_domain,
 
 		for (i = 0; ephy_log_modules[i] != NULL; i++)
 		{
-			if (strstr (ephy_log_modules [i], message) != NULL)
+			if (strstr (message, ephy_log_modules [i]) != NULL)
 			{
 				should_log = TRUE;
 				break;
