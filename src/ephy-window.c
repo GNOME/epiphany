@@ -853,6 +853,24 @@ ephy_window_delete_event (GtkWidget *widget,
 }
 
 static void
+update_image_actions_visibility (EphyWindow *window, gboolean show)
+{
+	GtkAction *action;
+	GtkActionGroup *action_group;
+
+	action_group = window->priv->popups_action_group;
+
+	action = gtk_action_group_get_action (action_group, "OpenImage");
+	gtk_action_set_visible (action, show);
+	action = gtk_action_group_get_action (action_group, "SaveImageAs");
+	gtk_action_set_visible (action, show);
+	action = gtk_action_group_get_action (action_group, "SetImageAsBackground");
+	gtk_action_set_visible (action, show);
+	action = gtk_action_group_get_action (action_group, "CopyImageLocation");
+	gtk_action_set_visible (action, show);
+}
+
+static void
 update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
@@ -1775,29 +1793,15 @@ show_embed_popup (EphyWindow *window,
 
 	LOG ("show_embed_popup context %x", context);
 
-	if ((context & EPHY_EMBED_CONTEXT_EMAIL_LINK) &&
-	    (context & EPHY_EMBED_CONTEXT_IMAGE))
-	{
-		popup = "/EphyImageEmailLinkPopup";
-	}
-	else if (context & EPHY_EMBED_CONTEXT_EMAIL_LINK)
+	if (context & EPHY_EMBED_CONTEXT_EMAIL_LINK)
 	{
 		popup = "/EphyEmailLinkPopup";
 		update_edit_actions_sensitivity (window, TRUE);
-	}
-	else if ((context & EPHY_EMBED_CONTEXT_LINK) &&
-		 (context & EPHY_EMBED_CONTEXT_IMAGE))
-	{
-		popup = "/EphyImageLinkPopup";
 	}
 	else if (context & EPHY_EMBED_CONTEXT_LINK)
 	{
 		popup = "/EphyLinkPopup";
 		update_edit_actions_sensitivity (window, TRUE);
-	}
-	else if (context & EPHY_EMBED_CONTEXT_IMAGE)
-	{
-		popup = "/EphyImagePopup";
 	}
 	else if (context & EPHY_EMBED_CONTEXT_INPUT)
 	{
@@ -1829,6 +1833,8 @@ show_embed_popup (EphyWindow *window,
 
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !can_open_in_new);
+
+	update_image_actions_visibility (window, context & EPHY_EMBED_CONTEXT_IMAGE);
 
 	_ephy_window_set_context_event (window, event);
 
