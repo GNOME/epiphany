@@ -78,7 +78,7 @@ log_module (const gchar *log_domain,
 
 	if (!ephy_log_all_modules && !ephy_log_modules) return;
 
-	if (!ephy_log_all_modules)
+	if (ephy_log_all_modules)
 	{
 		guint i;
 
