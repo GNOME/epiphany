@@ -47,10 +47,7 @@
 #include "print-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
-
-#ifdef ENABLE_DBUS
 #include "ephy-dbus.h"
-#endif
 
 #include <string.h>
 #include <bonobo/bonobo-main.h>
@@ -551,14 +548,12 @@ ephy_shell_dispose (GObject *object)
 		priv->extensions_manager = NULL;
 	}
 
-#ifdef ENABLE_DBUS
 	if (priv->dbus_service != NULL)
 	{
 		LOG ("Shutting down DBUS service");
 		g_object_unref (priv->dbus_service);
 		priv->dbus_service = NULL;
 	}
-#endif
 
 	if (priv->session != NULL)
 	{
@@ -651,7 +646,7 @@ ephy_shell_finalize (GObject *object)
 EphyShell *
 ephy_shell_get_default (void)
 {
-   return ephy_shell;
+	return ephy_shell;
 }
 
 EphyShell *
@@ -1091,7 +1086,6 @@ ephy_shell_get_print_setup_dialog (EphyShell *shell)
 	return shell->priv->print_setup_dialog;
 }
 
-#ifdef ENABLE_DBUS
 GObject	*
 ephy_shell_get_dbus_service (EphyShell *shell)
 {
@@ -1105,4 +1099,3 @@ ephy_shell_get_dbus_service (EphyShell *shell)
 
 	return G_OBJECT (shell->priv->dbus_service);
 }
-#endif
