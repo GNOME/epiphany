@@ -1,3 +1,16 @@
+2005-10-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-string.c: (ephy_string_blank_chr),
+	(ephy_string_shorten):
+	* lib/ephy-string.h:
+
+	Bring back ephy_string_shorten.
+
+	* src/ephy-tab.c: (ephy_tab_file_monitor_cb), (ephy_tab_set_title):
+
+	Shorten overlong tab titles, hard. Increase reload delay slightly.
+	Strip whitespace from tab title before determining if it's empty.
+
 2005-10-09  Christian Persch  <chpe@cvs.gnome.org>
 
         * lib/ephy-debug.c:

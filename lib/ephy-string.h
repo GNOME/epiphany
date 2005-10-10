@@ -25,10 +25,13 @@
 
 G_BEGIN_DECLS
 
-gboolean	 ephy_string_to_int			(const char *string,
-							 gulong *integer);
+gboolean  ephy_string_to_int	(const char *string,
+				 gulong *integer);
 
-char		*ephy_string_blank_chr			(char *source);
+char	 *ephy_string_blank_chr	(char *source);
+
+char	 *ephy_string_shorten	(const char *str,
+				 gsize target_length);
 
 G_END_DECLS
 

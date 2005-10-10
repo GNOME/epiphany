@@ -70,7 +70,9 @@
 
 #define EPHY_TAB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TAB, EphyTabPrivate))
 
-#define MAX_HIDDEN_POPUPS 5
+#define MAX_HIDDEN_POPUPS	5
+#define RELOAD_DELAY		250 /* ms */
+#define MAX_TITLE_LENGTH	512 /* characters */
 
 struct _EphyTabPrivate
 {
@@ -1312,7 +1314,7 @@ ephy_tab_file_monitor_cb (GnomeVFSMonitorHandle *handle,
 			}
 
 			priv->reload_scheduled_id =
-				g_timeout_add (100 /* ms */,
+				g_timeout_add (RELOAD_DELAY,
 					       (GSourceFunc) ephy_file_monitor_reload_cb,
 					       tab);
 			break;
@@ -2175,7 +2177,7 @@ ephy_tab_set_title (EphyTab *tab,
 {
 	EphyTabPrivate *priv = tab->priv;
 
-	if (!priv->is_blank && (title == NULL || title[0] == '\0'))
+	if (!priv->is_blank && (title == NULL || g_strstrip (title)[0] == '\0'))
 	{
 
 		g_free (title);
@@ -2189,9 +2191,14 @@ ephy_tab_set_title (EphyTab *tab,
 			priv->is_blank = TRUE;
 		}
 	}
+	else if (priv->is_blank && title != NULL)
+	{
+		g_free (title);
+		title = NULL;
+	}
 
 	g_free (priv->title);
-	priv->title = title;
+	priv->title = ephy_string_shorten (title, MAX_TITLE_LENGTH);
 
 	g_object_notify (G_OBJECT (tab), "title");
 }
