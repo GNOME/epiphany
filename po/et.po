@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Epiphany Web Browser GNOME 2.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-14 13:36+0000\n"
-"PO-Revision-Date: 2005-08-20 10:15+0300\n"
+"PO-Revision-Date: 2005-10-08 22:55+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -458,7 +458,7 @@ msgstr "Tekstikodeering"
 #: ../data/glade/epiphany.glade.h:10
 #: ../src/ephy-encoding-menu.c:358
 msgid "Use the encoding specified by the document"
-msgstr ""
+msgstr "Kasuta dokumendi poolt määratud kodeeringut"
 
 #: ../data/glade/epiphany.glade.h:11
 msgid "_Find:"
@@ -1317,7 +1317,7 @@ msgstr "“%s” loobus ühendusest."
 #: ../embed/mozilla/EphyAboutModule.cpp:289
 #: ../embed/mozilla/EphyAboutModule.cpp:314
 msgid "The server dropped the connection before any data could be read."
-msgstr ""
+msgstr "Ühendus serveriga katkes enne kui andmeid lugeda jõuti."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:297
 msgid "Cannot load document in offline mode."
@@ -1344,13 +1344,13 @@ msgstr ""
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/mozilla/EphyAboutModule.cpp:462
 msgid "You may find an old version:|in the Google Cache"
-msgstr ""
+msgstr "Google'i vahemälust"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/mozilla/EphyAboutModule.cpp:470
 msgid "You may find an old version:|in the Internet Archive"
-msgstr ""
+msgstr "Internetiarhiivist"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:321
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
@@ -1482,7 +1482,7 @@ msgstr "Sa peaks veenduma, et su arvuti kell on õige."
 #: ../embed/mozilla/GtkNSSDialogs.cpp:499
 #, c-format
 msgid "Cannot establish connection to \"%s\"."
-msgstr ""
+msgstr "Ühendust \"%s\"-ga pole võimalik luua."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:502
 #, c-format
@@ -1504,14 +1504,11 @@ msgstr "_Usalda sertifitseerimiskeskust"
 #: ../embed/mozilla/GtkNSSDialogs.cpp:564
 #, c-format
 msgid "Trust new Certificate Authority \"%s\" to identify web sites?"
-msgstr ""
-"Kas usaldada uut sertifitseerimiskeskust \"%s\" veebisaitide tuvastamiseks?"
+msgstr "Kas usaldada uut sertifitseerimiskeskust \"%s\" veebisaitide tuvastamiseks?"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:569
 msgid "Before trusting a Certificate Authority (CA) you should verify the certificate is authentic."
-msgstr ""
-"Enne sertifitseerimiskeskuse (CA) usaldamist peaksid sa veenduma, et nende "
-"sertifikaat on autentne."
+msgstr "Enne sertifitseerimiskeskuse (CA) usaldamist peaksid sa veenduma, et nende sertifikaat on autentne."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:640
 msgid "Certificate already exists."
@@ -1609,9 +1606,7 @@ msgstr "Sertifikaati pole võimalik verifitseerida kuna selle väljaandja on tun
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1352
 msgid "Could not verify this certificate because the CA certificate is invalid."
-msgstr ""
-"Seda sertifikaati pole võimalik verifitseerida kuna sertifitseerimiskeskuse "
-"sertifikaat on vigane."
+msgstr "Seda sertifikaati pole võimalik verifitseerida kuna sertifitseerimiskeskuse sertifikaat on vigane."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1357
 msgid "Could not verify this certificate for unknown reasons."
@@ -1663,7 +1658,7 @@ msgstr ""
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid "Send this information over an insecure connection?"
-msgstr ""
+msgstr "Kas saata need andmed üle ebaturvalise ühenduse?"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
 msgid "The information you have entered will be sent over an insecure connection, and could easily be intercepted by a third party."
@@ -1715,19 +1710,19 @@ msgstr "Sa proovisid printida kasutades \"%s\" draiverit. See programm vaja Post
 
 #: ../embed/print-dialog.c:392
 msgid "_From:"
-msgstr "_Saatja:"
+msgstr "_Alates:"
 
 #: ../embed/print-dialog.c:405
 msgid "Sets the start of the range of pages to be printed"
-msgstr ""
+msgstr "Prinditavate lehtede vahemiku alguse määramine"
 
 #: ../embed/print-dialog.c:407
 msgid "_To:"
-msgstr "_Vastuvõtja:"
+msgstr "_Kuni:"
 
 #: ../embed/print-dialog.c:420
 msgid "Sets the end of the range of pages to be printed"
-msgstr ""
+msgstr "Prinditavate lehtede vahemiku lõpu määramine"
 
 #: ../embed/print-dialog.c:435
 #: ../src/ephy-window.c:1115
@@ -1782,7 +1777,7 @@ msgstr "Kataloogi %s jaoks ei ole kirjutusõigust"
 
 #: ../lib/ephy-gui.c:218
 msgid "You do not have permission to create files in this directory."
-msgstr ""
+msgstr "Sul ei ole öiguseid selles kaustas faile luua."
 
 #: ../lib/ephy-gui.c:221
 msgid "Directory not writable"
@@ -3625,111 +3620,3 @@ msgid "translator-credits"
 msgstr ""
 "Priit Laes <amd@store20.com>, 2003-2005.\n"
 "Ivar Smolin <okul@linux.ee>, 2005."
-
-#~ msgid "Open this file with \"%s\"?"
-#~ msgstr "Kas avada fail \"%s\" abil?"
-#~ msgid "_Don't show this message again for this site"
-#~ msgstr "Ä_ra näita seda teadet selle serveri kohta uuesti"
-#~ msgid "Enable Java."
-#~ msgstr "Java lubamine."
-#~ msgid "Enable JavaScript."
-#~ msgstr "JavaScripti lubamine."
-#~ msgid "Match case for find in page."
-#~ msgstr "Otsing on tõstutundlik."
-#~ msgid "Show bookmarks bar by default."
-#~ msgstr "Näita järjehoidjate riba vaikimisi."
-#~ msgid "Show statusbar by default."
-#~ msgstr "Vaikimisi näita olekuriba."
-#~ msgid "Show toolbars by default."
-#~ msgstr "Vaikimisi näita tööriistaribasid."
-#~ msgid "Whether to print the date in the footer."
-#~ msgstr "Kas printida kuupäev jaluses."
-#~ msgid "Whether to print the page address in the header."
-#~ msgstr "Kas printida lehekülje aadress päises."
-#~ msgid "Whether to print the page numbers (x of total) in the footer."
-#~ msgstr "Kas printida leheküljenumbreid (y x-st) jaluses."
-#~ msgid "Whether to print the page title in the header."
-#~ msgstr "Kas printida lehekülje pealkirja päises."
-#~ msgid "Toggle network status"
-#~ msgstr "Võrgu seisundi muutmine"
-#~ msgid "Epiphany"
-#~ msgstr "Epiphany"
-#~ msgid "Filename to print to"
-#~ msgstr "Fail, kuhu printida"
-#~ msgid "Filename to print to."
-#~ msgstr "Fail, kuhu printida."
-#~ msgid "Paper type"
-#~ msgstr "Paberi tüüp"
-#~ msgid ""
-#~ "Paper type. Supported values are \"A4\", \"Letter\", \"Legal\" and "
-#~ "\"Executive\"."
-#~ msgstr ""
-#~ "Paberi tüüp. Toetatud väärtused on \"A4\", \"Letter\", \"Legal\" ja "
-#~ "\"Executive\"."
-#~ msgid "Printer name"
-#~ msgstr "Printeri nimi"
-#~ msgid "Printer name."
-#~ msgstr "Printeri nimi."
-#~ msgid "Printing bottom margin"
-#~ msgstr "Printimise alumine veeris"
-#~ msgid "Printing bottom margin (in mm)."
-#~ msgstr "Printimise alumine veeris (millimeetrites)."
-#~ msgid "Printing left margin"
-#~ msgstr "Printimise vasak veeris"
-#~ msgid "Printing left margin (in mm)."
-#~ msgstr "Printimise vasak veeris (millimeetrites)."
-#~ msgid "Printing right margin"
-#~ msgstr "Printimise parem veeris"
-#~ msgid "Printing right margin (in mm)."
-#~ msgstr "Printimise parem veeris (millimeetrites)."
-#~ msgid "Printing top margin"
-#~ msgstr "Printimise ülemine veeris"
-#~ msgid "Printing top margin (in mm)."
-#~ msgstr "Printimise ülemine veeris (millimeetrites)."
-#~ msgid "<b>Margins (in mm)</b>"
-#~ msgstr "<b>Veerised (millimeetrites)</b>"
-#~ msgid "<b>Orientation</b>"
-#~ msgstr "<b>Suund</b>"
-#~ msgid "<b>Page Range</b>"
-#~ msgstr "<b>Lehekülgede vahemik</b>"
-#~ msgid "<b>Print To</b>"
-#~ msgstr "<b>Trüki</b>"
-#~ msgid "<b>Size</b>"
-#~ msgstr "<b>Suurus</b>"
-#~ msgid "A_4"
-#~ msgstr "A_4"
-#~ msgid "E_xecutive"
-#~ msgstr "E_xecutive"
-#~ msgid "L_egal"
-#~ msgstr "L_egal"
-#~ msgid "Lan_dscape"
-#~ msgstr "_Rõhtasetus"
-#~ msgid "P_ortrait"
-#~ msgstr "P_üstasetus"
-#~ msgid "P_rinter:"
-#~ msgstr "_Printer"
-#~ msgid "_All pages"
-#~ msgstr "_Kõik leheküljed"
-#~ msgid "_Bottom:"
-#~ msgstr "_Alumine:"
-#~ msgid "_Browse..."
-#~ msgstr "_Sirvi..."
-#~ msgid "_File:"
-#~ msgstr "_Fail:"
-#~ msgid "_Left:"
-#~ msgstr "_Vasak:"
-#~ msgid "_Letter"
-#~ msgstr "_Letter"
-#~ msgid "_Right:"
-#~ msgstr "_Parem:"
-#~ msgid "_Selection"
-#~ msgstr "_Valik"
-#~ msgid "_to:"
-#~ msgstr "_kellele:"
-#~ msgid "Print to"
-#~ msgstr "Trüki"
-#~ msgid "Postscript files"
-#~ msgstr "Postscripti failid"
-#~ msgid "_Web sites"
-#~ msgstr "_Veebisaidid"
-
