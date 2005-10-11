@@ -1,5 +1,11 @@
 2005-10-10  Christian Persch  <chpe@cvs.gnome.org>
 
+        * lib/ephy-string.c: (ephy_string_shorten):
+
+	Fix constness and don't strdup when returning early.
+		
+2005-10-10  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-string.c: (ephy_string_blank_chr),
 	(ephy_string_shorten):
 	* lib/ephy-string.h:

@@ -100,7 +100,7 @@ ephy_string_blank_chr (char *source)
  * characters.
  */
 char *
-ephy_string_shorten (const char *str,
+ephy_string_shorten (char *str,
 		     gsize target_length)
 {
         char *new_str;
@@ -119,7 +119,7 @@ ephy_string_shorten (const char *str,
 
         /* if the string is already short enough, or if it's too short for
          * us to shorten it, return a new copy */
-        if (actual_length <= target_length) return g_strdup (str);
+        if (actual_length <= target_length) return str;
 
         /* create string */
         bytes = GPOINTER_TO_UINT (g_utf8_offset_to_pointer (str, target_length - 1) - str);
