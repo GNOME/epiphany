@@ -1,6 +1,7 @@
 /*
  *  Copyright (C) 2001,2002,2003 Philip Langdale
  *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2004, 2005 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +30,7 @@
 #include "MozDownload.h"
 #include "EphyContentPolicy.h"
 #include "EphySidebar.h"
+#include "EphyAboutModule.h"
 
 #ifdef ENABLE_FILEPICKER
 #include "FilePicker.h"
@@ -40,10 +42,6 @@
 #include "GtkNSSKeyPairDialogs.h"
 #include "GtkNSSSecurityWarningDialogs.h"
 #include <nsISecureBrowserUI.h>
-#endif
-
-#ifdef HAVE_GECKO_1_8
-#include "EphyAboutModule.h"
 #endif
 
 #include <nsMemory.h>
@@ -63,6 +61,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(MozGlobalHistory)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GPrintingPromptService)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyContentPolicy)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphySidebar)
+NS_GENERIC_FACTORY_CONSTRUCTOR(EphyAboutModule)
 
 #ifdef ENABLE_FILEPICKER
 NS_GENERIC_FACTORY_CONSTRUCTOR(GFilePicker)
@@ -75,9 +74,6 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSKeyPairDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSSecurityWarningDialogs)
 #endif
 
-#ifdef HAVE_GECKO_1_8
-NS_GENERIC_FACTORY_CONSTRUCTOR(EphyAboutModule)
-#endif
 
 /* class information */ 
 NS_DECL_CLASSINFO(EphySidebar)
@@ -205,19 +201,25 @@ static const nsModuleComponentInfo sAppComps[] = {
 		&NS_CLASSINFO_NAME(EphySidebar),
 		nsIClassInfo::DOM_OBJECT
 	},
+	{
+		EPHY_ABOUT_EPIPHANY_CLASSNAME,
+		EPHY_ABOUT_MODULE_CID,
+		EPHY_ABOUT_EPIPHANY_CONTRACTID,
+		EphyAboutModuleConstructor
+	},
+	{
+		EPHY_ABOUT_RECOVER_CLASSNAME,
+		EPHY_ABOUT_MODULE_CID,
+		EPHY_ABOUT_RECOVER_CONTRACTID,
+		EphyAboutModuleConstructor
+	},
 #ifdef HAVE_GECKO_1_8
-{
-	EPHY_ABOUT_EPIPHANY_CLASSNAME,
-	EPHY_ABOUT_MODULE_CID,
-	EPHY_ABOUT_EPIPHANY_CONTRACTID,
-	EphyAboutModuleConstructor
-},
-{
-	EPHY_ABOUT_NETERROR_CLASSNAME,
-	EPHY_ABOUT_MODULE_CID,
-	EPHY_ABOUT_NETERROR_CONTRACTID,
-	EphyAboutModuleConstructor
-},
+	{
+		EPHY_ABOUT_NETERROR_CLASSNAME,
+		EPHY_ABOUT_MODULE_CID,
+		EPHY_ABOUT_NETERROR_CONTRACTID,
+		EphyAboutModuleConstructor
+	},
 #endif
 };
 

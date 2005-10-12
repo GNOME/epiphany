@@ -1,7 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen
  *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
- *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2003, 2004, 2005 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
 #include <libgnomevfs/gnome-vfs-ops.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
 #include <libxml/tree.h>
 #include <libxml/xmlwriter.h>
 
@@ -165,7 +166,7 @@ tab_added_cb (GtkWidget *notebook,
 	      EphyTab *tab,
 	      EphySession *session)
 {
-	g_signal_connect (ephy_tab_get_embed (tab), "net_stop",
+	g_signal_connect (ephy_tab_get_embed (tab), "net-stop",
 			  G_CALLBACK (net_stop_cb), session);
 }
 
@@ -222,11 +223,11 @@ impl_attach_window (EphyExtension *extension,
 			  G_CALLBACK (window_focus_in_event_cb), session);
 
 	notebook = ephy_window_get_notebook (window);
-	g_signal_connect (notebook, "tab_added",
+	g_signal_connect (notebook, "tab-added",
 			  G_CALLBACK (tab_added_cb), session);
-	g_signal_connect (notebook, "tab_removed",
+	g_signal_connect (notebook, "tab-removed",
 			  G_CALLBACK (tab_removed_cb), session);
-	g_signal_connect (notebook, "tabs_reordered",
+	g_signal_connect (notebook, "tabs-reordered",
 			  G_CALLBACK (tabs_reordered_cb), session);
 
 	/* Set unique identifier as role, so that on restore, the WM can
@@ -431,9 +432,10 @@ ephy_session_autoresume (EphySession *session,
 
 	if (priv->resume_dialog)
 	{
-		ephy_gui_window_update_user_time (session->priv->resume_dialog,
+		ephy_gui_window_update_user_time (priv->resume_dialog,
 						  user_time);
-		ephy_gui_window_present (GTK_WINDOW (priv->resume_dialog), user_time);
+		ephy_gui_window_present (GTK_WINDOW (priv->resume_dialog),
+					 user_time);
 		return TRUE;
 	}
 
@@ -442,10 +444,10 @@ ephy_session_autoresume (EphySession *session,
 	if (g_file_test (saved_session, G_FILE_TEST_EXISTS)
 	    && offer_to_resume (session, user_time))
 	{
-		session->priv->dont_save = TRUE;
+		priv->dont_save = TRUE;
 		retval = ephy_session_load (session, saved_session,
 					    0 /* since we've shown the dialogue */);
-		session->priv->dont_save = FALSE;
+		priv->dont_save = FALSE;
 		ephy_session_save (session, SESSION_CRASHED);
 	}
 
@@ -517,15 +519,29 @@ static int
 write_tab (xmlTextWriterPtr writer,
 	   EphyTab *tab)
 {
-	const char *address;
+	const char *address, *title;
 	int ret;
 
 	ret = xmlTextWriterStartElement (writer, (xmlChar *) "embed");
 	if (ret < 0) return ret;
 
 	address = ephy_tab_get_address (tab);
-	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "url", (xmlChar *) address);
+	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "url",
+					   (const xmlChar *) address);
 	if (ret < 0) return ret;
+
+	title = ephy_tab_get_title (tab);
+	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "title",
+					   (const xmlChar *) title);
+	if (ret < 0) return ret;
+
+	if (ephy_tab_get_load_status (tab))
+	{
+		ret = xmlTextWriterWriteAttribute (writer,
+						   (const xmlChar *) "loading",
+						   (const xmlChar *) "true");
+		if (ret < 0) return ret;
+	}
 
 	ret = xmlTextWriterEndElement (writer); /* embed */
 	return ret;
@@ -636,19 +652,20 @@ gboolean
 ephy_session_save (EphySession *session,
 		   const char *filename)
 {
+	EphySessionPrivate *priv = session->priv;
 	xmlTextWriterPtr writer;
 	GList *w;
 	char *save_to, *tmp_file;
 	int ret;
 
-	if (session->priv->dont_save)
+	if (priv->dont_save)
 	{
 		return TRUE;
 	}
 
 	LOG ("ephy_sesion_save %s", filename);
 
-	if (session->priv->windows == NULL && session->priv->tool_windows == NULL)
+	if (priv->windows == NULL && priv->tool_windows == NULL)
 	{
 		session_delete (session, filename);
 		return TRUE;
@@ -720,24 +737,63 @@ out:
 }
 
 static void
-parse_embed (xmlNodePtr child, EphyWindow *window)
+parse_embed (xmlNodePtr child,
+	     EphyWindow *window,
+	     EphySession *session)
 {
+	EphySessionPrivate *priv = session->priv;
+
 	while (child != NULL)
 	{
 		if (strcmp ((char *) child->name, "embed") == 0)
 		{
-			xmlChar *url;
+			xmlChar *url, *attr;
+			char *recover_url, *freeme = NULL;
+			gboolean was_loading;
 
 			g_return_if_fail (window != NULL);
 
-			url = xmlGetProp (child, (const xmlChar *) "url");
+			/* Check if that tab wasn't fully loaded yet when the session crashed */
+			attr = xmlGetProp (child, (const xmlChar *) "loading");
+			was_loading = attr != NULL &&
+				      xmlStrEqual (attr, (const xmlChar *) "true");
+			xmlFree (attr);
 
-			ephy_shell_new_tab (ephy_shell, window, NULL, (char *) url,
+			url = xmlGetProp (child, (const xmlChar *) "url");
+			if (url == NULL) continue;
+
+			if (!was_loading ||
+			    strcmp ((const char *) url, "about:blank") == 0)
+			{
+				recover_url = (char *) url;
+			}
+			else
+			{
+				xmlChar *title;
+				char *escaped_url, *escaped_title;
+
+				title = xmlGetProp (child, (const xmlChar *) "title");
+				escaped_title = gnome_vfs_escape_string (title ? (const char*) title : _("Untitled"));
+
+				escaped_url = gnome_vfs_escape_string ((const char *) url);
+				freeme = recover_url =
+					g_strconcat ("about:recover?u=",
+						     escaped_url,
+						     "&c=UTF-8&t=",
+						     escaped_title, NULL);
+
+				xmlFree (title);
+				g_free (escaped_url);
+				g_free (escaped_title);
+			}
+
+			ephy_shell_new_tab (ephy_shell, window, NULL, recover_url,
 					    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
 					    EPHY_NEW_TAB_OPEN_PAGE |
 					    EPHY_NEW_TAB_APPEND_LAST);
 
 			xmlFree (url);
+			g_free (freeme);
 		}
 
 		child = child->next;
@@ -801,6 +857,7 @@ restore_geometry (GtkWindow *window,
 		
 	}
 }
+
 /*
  * ephy_session_load:
  * @session: a #EphySession
@@ -818,6 +875,7 @@ ephy_session_load (EphySession *session,
 {
 	xmlDocPtr doc;
         xmlNodePtr child;
+	EphyWindow *window;
 	GtkWidget *widget = NULL;
 	char *save_to;
 
@@ -842,11 +900,17 @@ ephy_session_load (EphySession *session,
 	{
 		if (xmlStrEqual (child->name, (const xmlChar *) "window"))
 		{
-			widget = GTK_WIDGET (ephy_window_new ());
+			window = ephy_window_new ();
+			widget = GTK_WIDGET (window);
 			restore_geometry (GTK_WINDOW (widget), child);
-			parse_embed (child->children, EPHY_WINDOW (widget));
 
 			ephy_gui_window_update_user_time (widget, user_time);
+
+			/* Now add the tabs */
+			parse_embed (child->children, window, session);
+
+			/* Set focus to something sane */
+			gtk_widget_grab_focus (ephy_window_get_notebook (window));
 
 			gtk_widget_show (widget);
 		}

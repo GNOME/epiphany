@@ -1,3 +1,22 @@
+2005-10-12  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/EphyAboutModule.cpp:
+	* embed/mozilla/EphyAboutModule.h:
+	A embed/mozilla/EphyRedirectChannel.cpp:
+	A embed/mozilla/EphyRedirectChannel.h:
+	* embed/mozilla/Makefile.am:
+
+	Implement about:recover. Build the about module on all geckos, and
+	only #ifdef the about:neterror implementation for gecko 1.8.
+
+	* src/ephy-session.c: (tab_added_cb), (impl_attach_window),
+	(ephy_session_autoresume), (write_tab), (ephy_session_save),
+	(parse_embed), (ephy_session_load):
+
+	Record the page load status and page title in the session file, and
+	use about:recover when the page was still loading when the browser
+	crashed.
+
 2005-10-10  Christian Persch  <chpe@cvs.gnome.org>
 
         * lib/ephy-string.c: (ephy_string_shorten):

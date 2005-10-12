@@ -3,6 +3,8 @@ noinst_LTLIBRARIES = libephymozillaembed.la
 libephymozillaembed_la_SOURCES = 	\
 	ContentHandler.cpp		\
 	ContentHandler.h		\
+	EphyAboutModule.cpp		\
+	EphyAboutModule.h		\
 	EphyContentPolicy.cpp		\
 	EphyContentPolicy.h		\
 	EphyHeaderSniffer.cpp		\
@@ -13,6 +15,8 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyFind.h			\
 	EphyHistoryListener.cpp		\
 	EphyHistoryListener.h		\
+	EphyRedirectChannel.cpp		\
+	EphyRedirectChannel.h		\
 	EphySidebar.cpp			\
 	EphySidebar.h			\
 	EphySingle.cpp			\
@@ -62,12 +66,6 @@ libephymozillaembed_la_SOURCES += 	\
 	GtkNSSKeyPairDialogs.h		\
 	GtkNSSSecurityWarningDialogs.cpp\
 	GtkNSSSecurityWarningDialogs.h
-endif
-
-if HAVE_GECKO_1_8
-libephymozillaembed_la_SOURCES += \
-	EphyAboutModule.cpp		\
-	EphyAboutModule.h
 endif
 
 mozilla_include_subdirs = \

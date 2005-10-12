@@ -38,11 +38,13 @@
 #include <nsNetCID.h>
 #include <nsString.h>
 #include <nsEscape.h>
+#include <nsAutoPtr.h>
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 #include "EphyAboutModule.h"
+#include "EphyRedirectChannel.h"
 #include "EphyUtils.h"
 
 #include "ephy-debug.h"
@@ -71,12 +73,19 @@ EphyAboutModule::NewChannel(nsIURI *aURI,
 	nsCAutoString path;
 	aURI->GetPath (path);
 
+#ifdef HAVE_GECKO_1_8
 	if (strncmp (path.get(), "neterror?", strlen ("neterror?")) == 0)
 	{
 		return CreateErrorPage (aURI, _retval);
 	}
+#endif
 
-	if (strncmp (path.get (), "epiphany", strlen ("epiphany")) == 0)
+	if (strncmp (path.get (), "recover?", strlen ("recover?")) == 0)
+	{
+		return CreateRecoverPage (aURI, _retval);
+	}
+
+	if (strcmp (path.get (), "epiphany") == 0)
 	{
 		return Redirect (nsDependentCString ("file://" SHARE_DIR "/epiphany.xhtml"), _retval);
 	}
@@ -121,13 +130,14 @@ EphyAboutModule::Redirect(const nsACString &aURL,
 }
 
 nsresult
-EphyAboutModule::ParseErrorURL(const char *aURL,
-			       nsACString &aError,
-			       nsACString &aRawOriginURL,
-			       nsACString &aOriginURL,
-			       nsACString &aOriginCharset)
+EphyAboutModule::ParseURL(const char *aURL,
+			  nsACString &aCode,
+			  nsACString &aRawOriginURL,
+			  nsACString &aOriginURL,
+			  nsACString &aOriginCharset,
+			  nsACString &aTitle)
 {
-	/* The error page URL is of the form "epiphany:error?e=<error>&u=<URL>&c=<charset>&d=<description>" */
+	/* The page URL is of the form "about:neterror?e=<errorcode>&u=<URL>&c=<charset>&d=<description>" */
 	const char *query = strstr (aURL, "?");
 	if (!query) return NS_ERROR_FAILURE;
 	
@@ -146,7 +156,7 @@ EphyAboutModule::ParseErrorURL(const char *aURL,
 		switch (param[0])
 		{
 			case 'e':
-				aError.Assign (nsUnescape (param + 2));
+				aCode.Assign (nsUnescape (param + 2));
 				break;
 			case 'u':
 				aRawOriginURL.Assign (param + 2);
@@ -154,6 +164,10 @@ EphyAboutModule::ParseErrorURL(const char *aURL,
 				break;
 			case 'c':
 				aOriginCharset.Assign (nsUnescape (param + 2));
+				break;
+			/* The next one is not used in neterror but recover: */
+			case 't':
+				aTitle.Assign (nsUnescape (param + 2));
 				break;
 			case 'd':
 				/* we don't need mozilla's description parameter */
@@ -167,6 +181,7 @@ EphyAboutModule::ParseErrorURL(const char *aURL,
 	return NS_OK;
 }
 
+#ifdef HAVE_GECKO_1_8
 nsresult
 EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 				 const char *aError,
@@ -344,20 +359,20 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 				 nsIChannel **_retval)
 {
         /* First parse the arguments */
-        nsresult rv = NS_ERROR_ILLEGAL_VALUE;
+	nsresult rv;
         nsCAutoString spec;
 	rv = aErrorURI->GetSpec (spec);
 	NS_ENSURE_TRUE (NS_SUCCEEDED (rv), rv);
 
-	nsCAutoString error, rawurl, url, charset;
-	rv = ParseErrorURL (spec.get (), error, rawurl, url, charset);
+	nsCAutoString error, rawurl, url, charset, dummy;
+	rv = ParseURL (spec.get (), error, rawurl, url, charset, dummy);
 	if (NS_FAILED (rv)) return rv;
 	if (error.IsEmpty () || rawurl.IsEmpty () || url.IsEmpty()) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIURI> uri;
 	rv = EphyUtils::NewURI(getter_AddRefs (uri), url, charset.get());
 	/* FIXME can uri be NULL if the original url was invalid? */
-	NS_ENSURE_TRUE (NS_SUCCEEDED (rv), rv);
+	NS_ENSURE_SUCCESS (rv, rv);
 
 	char *primary = nsnull, *secondary = nsnull, *tertiary = nsnull, *linkintro = nsnull;
 	rv = GetErrorMessage (uri, error.get(), &primary, &secondary, &tertiary, &linkintro);
@@ -369,24 +384,95 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 	 */
 	if (rv == NS_ERROR_ILLEGAL_VALUE)
 	{
-		nsCAutoString url(spec);
+		nsCAutoString newurl(spec);
 
 		/* remove "about:neterror" part and insert mozilla's error page url */
-		url.Cut(0, strlen ("about:neterror"));
-		url.Insert("chrome://global/content/netError.xhtml", 0);
+		newurl.Cut(0, strlen ("about:neterror"));
+		newurl.Insert("chrome://global/content/netError.xhtml", 0);
 
-		return Redirect (url, _retval);
+		return Redirect (newurl, _retval);
 	}
 	NS_ENSURE_SUCCESS (rv, rv);
 	NS_ENSURE_TRUE (primary && secondary, NS_ERROR_FAILURE);
 
-	/* open the rendering stream */
+	nsCOMPtr<nsIInputStreamChannel> channel;
+	rv = WritePage (aErrorURI, uri, rawurl, primary /* as title */, GTK_STOCK_DIALOG_ERROR, primary, secondary, tertiary, linkintro, getter_AddRefs (channel));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	rv = channel->SetURI (aErrorURI);
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	g_free (primary);
+
+	return CallQueryInterface (channel, _retval);
+}
+#endif /* HAVE_GECKO_1_8 */
+
+nsresult
+EphyAboutModule::CreateRecoverPage(nsIURI *aRecoverURI,
+				   nsIChannel **_retval)
+{
+        /* First parse the arguments */
+	nsresult rv;
+        nsCAutoString spec;
+	rv = aRecoverURI->GetSpec (spec);
+	NS_ENSURE_TRUE (NS_SUCCEEDED (rv), rv);
+
+	nsCAutoString error, rawurl, url, charset, title;
+	rv = ParseURL (spec.get (), error, rawurl, url, charset, title);
+	if (NS_FAILED (rv)) return rv;
+	if (rawurl.IsEmpty () || url.IsEmpty()) return NS_ERROR_FAILURE;
+
+	nsCOMPtr<nsIURI> uri;
+	rv = EphyUtils::NewURI(getter_AddRefs (uri), url, charset.get());
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	char *secondary = g_strdup_printf
+		(_("The page “%s” in this tab was not fully loaded yet when "
+		   "the web browser crashed; it could have caused the crash."),
+		 url.get());
+
+	nsCOMPtr<nsIInputStreamChannel> ischannel;
+	rv = WritePage (aRecoverURI, uri, rawurl, title.get(),
+			GTK_STOCK_DIALOG_INFO, title.get() /* as primary */,
+			secondary, nsnull, nsnull, getter_AddRefs (ischannel));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	rv = ischannel->SetURI (uri);
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	nsCOMPtr<nsIChannel> channel (do_QueryInterface (ischannel, &rv));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	nsRefPtr<EphyRedirectChannel> redirectChannel (new EphyRedirectChannel (channel));
+	if (!redirectChannel) return NS_ERROR_OUT_OF_MEMORY;
+
+	g_free (secondary);
+
+	NS_ADDREF(*_retval = redirectChannel);
+
+	return NS_OK;
+}
+
+nsresult
+EphyAboutModule::WritePage(nsIURI *aOriginalURI,
+			   nsIURI *aURI,
+			   const nsACString &aRawURL,
+			   const char *aTitle,
+			   const char *aStockIcon,
+			   const char *aPrimary,
+			   const char *aSecondary,
+			   const char *aTertiary,
+			   const char *aLinkIntro,
+			   nsIInputStreamChannel **_retval)
+{
+	nsresult rv;
 	nsCOMPtr<nsIStorageStream> storageStream;
-	rv = NS_NewStorageStream(16384, (PRUint32) -1, getter_AddRefs (storageStream));
+	rv = NS_NewStorageStream (16384, (PRUint32) -1, getter_AddRefs (storageStream));
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	nsCOMPtr<nsIOutputStream> stream;
-	rv = storageStream->GetOutputStream(0, getter_AddRefs (stream));
+	rv = storageStream->GetOutputStream (0, getter_AddRefs (stream));
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	char *language = g_strdup (pango_language_to_string (gtk_get_default_language ()));
@@ -405,7 +491,7 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 	       "\">\n"
 	       "<head>\n"
 		"<title>");
-	Write (stream, primary);
+	Write (stream, aTitle);
 	/* no favicon for now, it would pollute the favicon cache */
 	/* "<link rel=\"icon\" type=\"image/png\" href=\"moz-icon://stock/gtk-dialog-error?size=16\" />\n" */
 	Write (stream,
@@ -418,7 +504,10 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 			"left: 12px;\n"
 			"overflow: auto;\n"
 
-			"background: -moz-dialog url('moz-icon://stock/gtk-dialog-error?size=dialog') no-repeat 12px 12px;\n"
+			"background: -moz-dialog url('moz-icon://stock/");
+	Write (stream, aStockIcon);
+	Write (stream,
+			"?size=dialog') no-repeat 12px 12px;\n"
 			"color: -moz-dialogtext;\n"
 			"font: message-box;\n"
 			"border: 1px solid -moz-dialogtext;\n"
@@ -439,29 +528,33 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 	       "\">\n"
 		"<div id=\"body\">"
 		"<h1>");
-	Write (stream, primary);
+	Write (stream, aTitle);
 	Write (stream,
-	       "</h1>\n"
-	       "<p>");
-	Write (stream, secondary);
-	if (tertiary)
-	{
-		Write (stream, " ");
-		Write (stream, tertiary);
-	}
-	Write (stream,
-		"</p>\n");
-
-	PRBool isHttp = PR_FALSE, isHttps = PR_FALSE;
-	uri->SchemeIs ("http", &isHttp);
-	uri->SchemeIs ("https", &isHttps);
-	if (linkintro && (isHttp || isHttps))
+	       "</h1>\n");
+	if (aSecondary)
 	{
 		Write (stream, "<p>");
-		Write (stream, linkintro);
+		Write (stream, aSecondary);
+		if (aTertiary)
+		{
+			Write (stream, " ");
+			Write (stream, aTertiary);
+		}
+		Write (stream, "</p>\n");
+	}
+
+	PRBool isHttp = PR_FALSE, isHttps = PR_FALSE;
+	aURI->SchemeIs ("http", &isHttp);
+	aURI->SchemeIs ("https", &isHttps);
+	if (aLinkIntro && (isHttp || isHttps))
+	{
+		nsCString raw(aRawURL);
+
+		Write (stream, "<p>");
+		Write (stream, aLinkIntro);
 		Write (stream, "<ul>\n");
 		Write (stream, "<li><a href=\"http://www.google.com/search?q=cache:");
-		Write (stream, rawurl.get());
+		Write (stream, raw.get());
 		Write (stream, "\">");
 		/* Translators: The text before the "|" is context to help you decide on
 		 * the correct translation. You MUST OMIT it in the translated string. */
@@ -469,7 +562,7 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 		Write (stream, "</a></li>\n");
 
 		Write (stream, "<li><a href=\"http://web.archive.org/web/*/");
-		Write (stream, rawurl.get());
+		Write (stream, raw.get());
 		Write (stream, "\">");
 		/* Translators: The text before the "|" is context to help you decide on
 		 * the correct translation. You MUST OMIT it in the translated string. */
@@ -485,17 +578,16 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 	       "</html>\n");
 
 	g_free (language);
-	g_free (primary);
  
 	/* finish the rendering */
 	nsCOMPtr<nsIInputStream> inputStream;
-	rv = storageStream->NewInputStream(0, getter_AddRefs (inputStream));
+	rv = storageStream->NewInputStream (0, getter_AddRefs (inputStream));
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	nsCOMPtr<nsIInputStreamChannel> channel (do_CreateInstance ("@mozilla.org/network/input-stream-channel;1", &rv));
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	rv |= channel->SetURI (aErrorURI);
+	rv |= channel->SetOriginalURI (aOriginalURI);
 	rv |= channel->SetContentStream (inputStream);
 	rv |= channel->SetContentType (NS_LITERAL_CSTRING ("application/xhtml+xml"));
 	rv |= channel->SetContentCharset (NS_LITERAL_CSTRING ("utf-8"));
@@ -506,13 +598,14 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	nsCOMPtr<nsIPrincipal> principal;
-	rv = securityManager->GetCodebasePrincipal (aErrorURI, getter_AddRefs (principal));
+	rv = securityManager->GetCodebasePrincipal (aOriginalURI, getter_AddRefs (principal));
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	rv = channel->SetOwner(principal);
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	NS_ADDREF(*_retval = channel);
+	NS_ADDREF (*_retval = channel);
+
 	return rv;
 }
 
