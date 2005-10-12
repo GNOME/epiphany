@@ -105,6 +105,14 @@ struct MozillaEmbedSinglePrivate
 	GtkWidget *theme_window;
 
 	EphySingle *mSingleObserver;
+
+	guint online : 1;
+};
+
+enum
+{
+	PROP_0,
+	PROP_NETWORK_STATUS
 };
 
 static void mozilla_embed_single_class_init	(MozillaEmbedSingleClass *klass);
@@ -626,18 +634,23 @@ impl_clear_auth_cache (EphyEmbedSingle *shell)
 }
 
 static void
-impl_set_offline_mode (EphyEmbedSingle *shell,
-		       gboolean offline)
+impl_set_network_status (EphyEmbedSingle *single,
+			 gboolean online)
 {
 	nsCOMPtr<nsIIOService> io = do_GetService(NS_IOSERVICE_CONTRACTID);
 	if (!io) return;
 
-	io->SetOffline(offline);
+	io->SetOffline (!online);
 }
 
 static gboolean
-impl_get_offline_mode (EphyEmbedSingle *shell)
+impl_get_network_status (EphyEmbedSingle *esingle)
 {
+	MozillaEmbedSingle *single = MOZILLA_EMBED_SINGLE (esingle);
+	MozillaEmbedSinglePrivate *priv = single->priv;
+
+	NS_ENSURE_TRUE (priv->mSingleObserver, TRUE);
+
 	nsCOMPtr<nsIIOService> io = do_GetService(NS_IOSERVICE_CONTRACTID);
 	if (!io) return FALSE; /* no way to check the state, assume offline */
 
@@ -646,7 +659,12 @@ impl_get_offline_mode (EphyEmbedSingle *shell)
 	rv = io->GetOffline(&isOffline);
 	NS_ENSURE_SUCCESS (rv, FALSE);
 
-	return isOffline;
+	PRBool isOnline = !isOffline;
+	PRBool reallyOnline = priv->mSingleObserver->IsOnline ();
+
+	g_return_val_if_fail (reallyOnline == isOnline, TRUE);
+
+	return !isOffline;
 }
 
 static GList *
@@ -985,6 +1003,22 @@ impl_open_window (EphyEmbedSingle *single,
 }
 
 static void
+mozilla_embed_single_get_property (GObject *object,
+				guint prop_id,
+				GValue *value,
+				GParamSpec *pspec)
+{
+	EphyEmbedSingle *single = EPHY_EMBED_SINGLE (object);
+
+	switch (prop_id)
+	{
+		case PROP_NETWORK_STATUS:
+			g_value_set_boolean (value, ephy_embed_single_get_network_status (single));
+			break;
+	}
+}
+
+static void
 mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -993,6 +1027,9 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 
 	object_class->dispose = mozilla_embed_single_dispose;
 	object_class->finalize = mozilla_embed_single_finalize;
+	object_class->get_property = mozilla_embed_single_get_property;
+
+	g_object_class_override_property (object_class, PROP_NETWORK_STATUS, "network-status");
 
 	g_type_class_add_private (object_class, sizeof (MozillaEmbedSinglePrivate));
 }
@@ -1002,8 +1039,8 @@ ephy_embed_single_iface_init (EphyEmbedSingleIface *iface)
 {
 	iface->clear_cache = impl_clear_cache;
 	iface->clear_auth_cache = impl_clear_auth_cache;
-	iface->set_offline_mode = impl_set_offline_mode;
-	iface->get_offline_mode = impl_get_offline_mode;
+	iface->set_network_status = impl_set_network_status;
+	iface->get_network_status = impl_get_network_status;
 	iface->get_font_list = impl_get_font_list;
 	iface->open_window = impl_open_window;
 }

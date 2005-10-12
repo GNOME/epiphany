@@ -51,7 +51,7 @@ ephy_embed_single_get_type (void)
 }
 
 static void
-ephy_embed_single_iface_init (gpointer g_class)
+ephy_embed_single_iface_init (gpointer g_iface)
 {
 	static gboolean initialised = FALSE;
 
@@ -102,23 +102,6 @@ ephy_embed_single_iface_init (gpointer g_class)
 		      2,
 		      G_TYPE_STRING,
 		      G_TYPE_STRING);
-
-/**
- * EphyEmbedSingle::network-status:
- * @single:
- * @offline: the network status
- *
- * The ::network-status signal is emitted when the network status changes.
- **/
-	g_signal_new ("network-status",
-		      EPHY_TYPE_EMBED_SINGLE,
-		      G_SIGNAL_RUN_LAST,
-		      G_STRUCT_OFFSET (EphyEmbedSingleIface, network_status),
-		      NULL, NULL,
-		      g_cclosure_marshal_VOID__BOOLEAN,
-		      G_TYPE_NONE,
-		      1,
-		      G_TYPE_BOOLEAN);
 
 /**
  * EphyEmbedSingle::add-sidebar:
@@ -189,6 +172,19 @@ ephy_embed_single_iface_init (gpointer g_class)
 		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
 		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
+/**
+ * EphyEmbedSingle::network-status:
+ * 
+ * Whether the network is on-line.
+ */
+	g_object_interface_install_property
+		(g_iface,
+		 g_param_spec_boolean ("network-status",
+				       "network-status",
+				       "network-status",
+				       FALSE,
+				       G_PARAM_READABLE));
+
 	initialised = TRUE;
 	}
 }
@@ -228,31 +224,33 @@ ephy_embed_single_clear_auth_cache (EphyEmbedSingle *single)
 }
 
 /**
- * ephy_embed_single_set_offline_mode:
+ * ephy_embed_single_get_nework_status:
  * @single: the #EphyEmbedSingle
- * @offline: %TRUE to disable networking
+ * @offline: %TRUE if the network is on-line
  * 
  * Sets the state of the network connection.
  **/
 void
-ephy_embed_single_set_offline_mode (EphyEmbedSingle *single,
-				    gboolean offline)
+ephy_embed_single_set_network_status (EphyEmbedSingle *single,
+				      gboolean status)
 {
 	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	iface->set_offline_mode (single, offline);
+	iface->set_network_status (single, status);
 }
 
 /**
- * ephy_embed_single_get_offline_mode:
+ * ephy_embed_single_get_network_status:
  * @single: the #EphyEmbedSingle
  * 
  * Gets the state of the network connection.
+ * 
+ * Returns: %TRUE iff the network is on-line.
  **/
 gboolean
-ephy_embed_single_get_offline_mode (EphyEmbedSingle *single)
+ephy_embed_single_get_network_status (EphyEmbedSingle *single)
 {
 	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	return iface->get_offline_mode (single);
+	return iface->get_network_status (single);
 }
 
 /**

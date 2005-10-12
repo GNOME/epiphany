@@ -152,7 +152,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "FilePrint", GTK_STOCK_PRINT, N_("_Print..."), "<control>P",
 	  N_("Print the current page"),
 	  G_CALLBACK (window_cmd_file_print) },
-	{ "FileSendTo", STOCK_SEND_MAIL, N_("S_end To..."), "<control>M",
+	{ "FileSendTo", STOCK_SEND_MAIL, N_("S_end Link by Email..."), "<control>M",
 	  N_("Send a link of the current page"),
 	  G_CALLBACK (window_cmd_file_send_to) },
 	{ "FileCloseTab", GTK_STOCK_CLOSE, N_("_Close"), "<control>W",
@@ -1244,7 +1244,6 @@ sync_tab_icon (EphyTab *tab,
 
 	icon = ephy_tab_get_icon (tab);
 
-	gtk_window_set_icon (GTK_WINDOW (window), icon);
 	ephy_toolbar_set_favicon (priv->toolbar, icon);
 }
 
@@ -1565,17 +1564,21 @@ sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
-network_status_changed (EphyEmbedSingle *single,
-			gboolean offline,
-			EphyWindow *window)
+sync_network_status (EphyEmbedSingle *single,
+		     GParamSpec *pspec,
+		     EphyWindow *window)
 {
+	EphyWindowPrivate *priv = window->priv;
 	GtkAction *action;
+	gboolean is_online;
 
-	action = gtk_action_group_get_action (window->priv->action_group,
+	is_online = ephy_embed_single_get_network_status (single);
+
+	action = gtk_action_group_get_action (priv->action_group,
 					      "FileWorkOffline");
 	g_signal_handlers_block_by_func
 		(action, G_CALLBACK (window_cmd_file_work_offline), window);
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), offline);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), !is_online);
 	g_signal_handlers_unblock_by_func
 		(action, G_CALLBACK (window_cmd_file_work_offline), window);	
 }
@@ -2512,7 +2515,7 @@ ephy_window_dispose (GObject *object)
 	
 		single = ephy_embed_shell_get_embed_single (embed_shell);
 		g_signal_handlers_disconnect_by_func
-			(single, G_CALLBACK (network_status_changed), window);
+			(single, G_CALLBACK (sync_network_status), window);
 	
 		eel_gconf_notification_remove (priv->browse_with_caret_notifier_id);
 		eel_gconf_notification_remove (priv->allow_popups_notifier_id);
@@ -3012,11 +3015,9 @@ ephy_window_init (EphyWindow *window)
 
 	/* network status */
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
-	network_status_changed (single,
-			        ephy_embed_single_get_offline_mode (single),
-				window);
-	g_signal_connect (single, "network-status",
-			  G_CALLBACK (network_status_changed), window);
+	sync_network_status (single, NULL, window);
+	g_signal_connect (single, "notify::network-status",
+			  G_CALLBACK (sync_network_status), window);
 
 	/* ensure the UI is updated */
 	gtk_ui_manager_ensure_update (window->priv->manager);

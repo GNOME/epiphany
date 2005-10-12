@@ -45,6 +45,7 @@ NS_IMPL_ISUPPORTS1(EphySingle, nsIObserver)
 
 EphySingle::EphySingle()
 : mOwner(nsnull)
+, mIsOnline(PR_TRUE) /* nsIOService doesn't send an initial notification, assume we start on-line */
 {
 	LOG ("EphySingle ctor");
 }
@@ -233,11 +234,9 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 	else if (strcmp (aTopic, "network:offline-status-changed") == 0)
 	{
 		/* aData is either (PRUnichar[]) "offline" or "online" */
-		gboolean offline;
+		mIsOnline = (aData && aData[0] == 'o' && aData[1] == 'n');
 
-		offline = (aData[1] == 'f');
-
-		g_signal_emit_by_name (mOwner, "network-status", offline);
+		g_object_notify (G_OBJECT (mOwner), "network-status");
 	}
 	else
 	{

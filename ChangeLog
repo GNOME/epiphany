@@ -1,5 +1,23 @@
 2005-10-12  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-embed-single.c: (ephy_embed_single_iface_init),
+	(ephy_embed_single_set_network_status),
+	(ephy_embed_single_get_network_status):
+	* embed/ephy-embed-single.h:
+	* embed/mozilla/EphySingle.cpp:
+	* embed/mozilla/EphySingle.h:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* src/ephy-window.c: (sync_tab_icon), (sync_network_status),
+	(ephy_window_dispose), (ephy_window_init):
+	* src/epiphany.defs:
+	* src/window-commands.c: (window_cmd_file_work_offline):
+
+	Remove the "network-status" signal from the embed single, and
+	make it a property instead. Keep track of the network status in
+	EphySingle, and emit property notification when it changes.
+
+2005-10-12  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/EphyAboutModule.cpp:
 	* embed/mozilla/EphyAboutModule.h:
 	A embed/mozilla/EphyRedirectChannel.cpp:

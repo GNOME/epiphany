@@ -61,10 +61,6 @@ struct _EphyEmbedSingleIface
 				     char *mime_type,
 				     char *uri);
 
-	void	 (* network_status) (EphyEmbedSingle *single,
-				     gboolean offline);
-
-
         gboolean (* add_sidebar)    (EphyEmbedSingle *single,
 				     const char *url,
 				     const char *title);
@@ -88,9 +84,9 @@ struct _EphyEmbedSingleIface
 						 const char *features);
 	void		  (* clear_cache)	(EphyEmbedSingle *shell);
 	void		  (* clear_auth_cache)	(EphyEmbedSingle *shell);
-	void		  (* set_offline_mode)	(EphyEmbedSingle *shell,
+	void		  (* set_network_status)(EphyEmbedSingle *shell,
 						 gboolean offline);
-	gboolean	  (* get_offline_mode)	(EphyEmbedSingle *single);
+	gboolean	  (* get_network_status)(EphyEmbedSingle *single);
 	GList *		  (* get_font_list)	(EphyEmbedSingle *shell,
 						 const char *langGroup);
 };
@@ -107,10 +103,10 @@ void		ephy_embed_single_clear_cache		(EphyEmbedSingle *single);
 
 void		ephy_embed_single_clear_auth_cache	(EphyEmbedSingle *single);
 
-void		ephy_embed_single_set_offline_mode	(EphyEmbedSingle *single,
-							 gboolean offline);
+void		ephy_embed_single_set_network_status	(EphyEmbedSingle *single,
+							 gboolean online);
 
-gboolean	ephy_embed_single_get_offline_mode	(EphyEmbedSingle *single);
+gboolean	ephy_embed_single_get_network_status	(EphyEmbedSingle *single);
 
 GList		*ephy_embed_single_get_font_list	(EphyEmbedSingle *single,
 							 const char *lang_group);

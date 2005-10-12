@@ -878,18 +878,18 @@
   (return-type "none")
 )
 
-(define-method set_offline_mode
+(define-method set_network_status
   (of-object "EphyEmbedSingle")
-  (c-name "ephy_embed_single_set_offline_mode")
+  (c-name "ephy_embed_single_set_network_status")
   (return-type "none")
   (parameters
     '("gboolean" "offline")
   )
 )
 
-(define-method get_offline_mode
+(define-method get_network_status
   (of-object "EphyEmbedSingle")
-  (c-name "ephy_embed_single_get_offline_mode")
+  (c-name "ephy_embed_single_get_network_status")
   (return-type "gboolean")
 )
 

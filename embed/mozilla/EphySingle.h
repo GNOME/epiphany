@@ -45,6 +45,8 @@ public:
 	nsresult Init (EphyEmbedSingle *aOwner);
 	nsresult Detach ();
 
+	PRBool IsOnline() { return mIsOnline; }
+
 protected:
 	nsresult EmitCookieNotification (const char *name, nsISupports *aSubject);
 	nsresult EmitPermissionNotification (const char *name, nsISupports *aSubject);
@@ -52,6 +54,7 @@ protected:
 private:
 	nsCOMPtr<nsIObserverService> mObserverService;
 	EphyEmbedSingle *mOwner;
+	PRBool mIsOnline;
 };
 
 EphyCookie	   *mozilla_cookie_to_ephy_cookie	  (nsICookie *cookie);
