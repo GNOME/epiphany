@@ -150,9 +150,6 @@ activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
 
 	go_nth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menuitem), NTH_DATA_KEY));
 
-	url = g_object_get_data (G_OBJECT (menuitem), URL_DATA_KEY);
-	g_return_if_fail (url != NULL);
-
 	if (ephy_gui_is_middle_click ())
 	{
 		EphyEmbed *dest;
