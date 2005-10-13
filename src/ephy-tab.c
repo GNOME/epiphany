@@ -1819,8 +1819,19 @@ open_link_in_new_tab (EphyTab *tab,
 
 	if (new_tab)
 	{
-		return ephy_link_open (EPHY_LINK (tab), link_address,
-				       tab, EPHY_LINK_NEW_TAB) != NULL;
+		EphyTab *dest;
+		dest = ephy_link_open (EPHY_LINK (tab), link_address,
+				       tab, EPHY_LINK_NEW_TAB);
+
+		if (dest)
+		{
+			ephy_embed_shistory_copy (ephy_tab_get_embed (tab),
+						  ephy_tab_get_embed (dest),
+						  TRUE,   /* back history */
+						  FALSE,  /* forward history */
+					  	  FALSE); /* current index */
+			return TRUE;
+		}
 	}
 
 	return FALSE;
