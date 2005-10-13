@@ -143,12 +143,31 @@ activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
 {
 	EphyEmbed *embed;
 	int go_nth;
+	char *url;
 
 	embed = ephy_window_get_active_embed (action->priv->window);
 	g_return_if_fail (embed != NULL);
 
 	go_nth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menuitem), NTH_DATA_KEY));
 
+	url = g_object_get_data (G_OBJECT (menuitem), URL_DATA_KEY);
+	g_return_if_fail (url != NULL);
+
+	if (ephy_gui_is_middle_click ())
+	{
+		EphyEmbed *dest;
+		EphyTab *newTab;
+
+		newTab = ephy_link_open (EPHY_LINK (action), "about:blank", NULL,
+					 EPHY_LINK_NEW_TAB);
+		g_return_if_fail (newTab != NULL);
+
+		dest = ephy_tab_get_embed (newTab);
+		g_return_if_fail (dest != NULL);
+
+		ephy_embed_shistory_copy (embed, dest, TRUE, TRUE, FALSE);
+		embed = dest;
+	}
 	ephy_embed_shistory_go_nth (embed, go_nth);
 }
 

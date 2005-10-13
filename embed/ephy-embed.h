@@ -179,6 +179,11 @@ struct _EphyEmbedIface
 	int		   (* shistory_get_pos)		(EphyEmbed *embed);
 	void		   (* shistory_go_nth)		(EphyEmbed *embed,
 							 int nth);
+	void		   (* shistory_copy)		(EphyEmbed *source,
+							 EphyEmbed *dest,
+							 gboolean copy_back,
+							 gboolean copy_forward,
+							 gboolean copy_current);
 	void		   (* get_security_level)	(EphyEmbed *embed,
 						  	 EphyEmbedSecurityLevel *level,
 						  	 char **description);
@@ -258,6 +263,12 @@ int		  ephy_embed_shistory_get_pos		(EphyEmbed *embed);
 
 void		  ephy_embed_shistory_go_nth		(EphyEmbed *embed,
 							 int nth);
+
+void		  ephy_embed_shistory_copy		(EphyEmbed *source,
+							 EphyEmbed *dest,
+							 gboolean copy_back,
+							 gboolean copy_forward,
+							 gboolean copy_current);
 
 void		  ephy_embed_get_security_level		(EphyEmbed *embed,
 							 EphyEmbedSecurityLevel *level,

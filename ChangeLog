@@ -1,3 +1,28 @@
+2005-10-12  Philip Langdale  <philipl@mail.utexas.edu>
+
+	* embed/ephy-embed.c
+	* embed/ephy-embed.h: (ephy_embed_shistory_copy).
+	Add a method to copy the back/forward history from
+	one embed to another.
+
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	(EphyBrowser::CopySHistory) Implementation of 
+	history copying.
+
+	* embed/mozilla/mozilla-embed.cpp:
+	Implement ephy_embed_shistory_copy by calling into
+	EphyBrowser.
+
+	* src/ephy-navigation-action.c:
+	(activate_back_or_forward_menu_item_cb). If a
+	history menu item is middle-clicked on, open a new
+	tab, copy the history over and then go to the
+	relevant page in the history.
+
+	* src/ephy-toolbar.c: (ephy_toolbar_set_window) Attach
+	handler for "open-link" to back/forward actions.
+
 2005-10-12  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/ephy-embed-single.c: (ephy_embed_single_iface_init),

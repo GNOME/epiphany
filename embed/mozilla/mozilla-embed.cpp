@@ -42,6 +42,7 @@
 #include <nsMemory.h>
 #include <nsIURI.h>
 #include <nsIRequest.h>
+#include <nsIWebNavigation.h>
 #include <nsIWebProgressListener.h>
 #include <nsGfxCIID.h>
 
@@ -721,6 +722,20 @@ impl_shistory_go_nth (EphyEmbed *embed,
 }
 
 static void
+impl_shistory_copy (EphyEmbed *source,
+		    EphyEmbed *dest,
+		    gboolean copy_back,
+		    gboolean copy_forward,
+		    gboolean copy_current)
+{
+	MozillaEmbedPrivate *spriv = MOZILLA_EMBED(source)->priv;
+	MozillaEmbedPrivate *dpriv = MOZILLA_EMBED(dest)->priv;
+
+	spriv->browser->CopySHistory(dpriv->browser, copy_back,
+				     copy_forward, copy_current);
+}
+
+static void
 impl_get_security_level (EphyEmbed *embed,
                          EphyEmbedSecurityLevel *level,
                          char **description)
@@ -1169,6 +1184,7 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->shistory_get_nth = impl_shistory_get_nth;
 	iface->shistory_get_pos = impl_shistory_get_pos;
 	iface->shistory_go_nth = impl_shistory_go_nth;
+	iface->shistory_copy = impl_shistory_copy;
 	iface->get_security_level = impl_get_security_level;
 	iface->show_page_certificate = impl_show_page_certificate;
 	iface->close = impl_close;

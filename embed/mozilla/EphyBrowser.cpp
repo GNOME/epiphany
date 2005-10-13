@@ -50,6 +50,8 @@
 #include "nsIDocShellTreeNode.h"
 #include "nsIDocShellTreeOwner.h"
 #include "nsIWebPageDescriptor.h"
+#include "nsISHistory.h"
+#include "nsISHistoryInternal.h"
 #include "nsISHEntry.h"
 #include "nsIHistoryEntry.h"
 #include "nsIDOMHTMLDocument.h"
@@ -786,6 +788,62 @@ nsresult EphyBrowser::GetSHistory (nsISHistory **aSHistory)
 
 	*aSHistory = SessionHistory.get();
 	NS_IF_ADDREF (*aSHistory);
+
+	return NS_OK;
+}
+
+nsresult EphyBrowser::CopySHistory (EphyBrowser *dest, PRBool copy_back,
+	                            PRBool copy_forward, PRBool copy_current)
+{
+	nsresult rv;
+	
+	nsCOMPtr<nsISHistory> h_src;
+	GetSHistory (getter_AddRefs(h_src));
+	NS_ENSURE_TRUE (h_src, NS_ERROR_FAILURE);
+
+	PRInt32 count, index;
+	h_src->GetCount (&count);
+	h_src->GetIndex (&index);
+
+	nsCOMPtr<nsISHistory> h_dest;
+	dest->GetSHistory (getter_AddRefs (h_dest));
+	NS_ENSURE_TRUE (h_dest, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsISHistoryInternal> hi_dest = do_QueryInterface (h_dest);
+	NS_ENSURE_TRUE (hi_dest, NS_ERROR_FAILURE);
+
+	if (count)
+	{
+		nsCOMPtr<nsIHistoryEntry> he;
+		nsCOMPtr<nsISHEntry> she, dhe;
+
+		for (PRInt32 i = (copy_back ? 0 : index + 1); 
+		     i < (copy_forward ? count : index + 1);
+		     i++) 
+		{
+			rv = h_src->GetEntryAtIndex (i, PR_FALSE,
+						     getter_AddRefs (he));
+			NS_ENSURE_SUCCESS (rv, rv);
+
+			she = do_QueryInterface (he);
+			NS_ENSURE_TRUE (she, NS_ERROR_FAILURE);
+			
+			rv = she->Clone(getter_AddRefs (dhe));
+			NS_ENSURE_SUCCESS (rv, rv);
+
+			rv = hi_dest->AddEntry (dhe, PR_TRUE);
+			NS_ENSURE_SUCCESS (rv, rv);
+		}
+		
+		if (copy_current)
+		{
+			nsCOMPtr<nsIWebNavigation> wn_dest = do_QueryInterface (dest->mWebBrowser);
+			NS_ENSURE_TRUE (wn_dest, NS_ERROR_FAILURE);
+			
+			rv = wn_dest->GotoIndex(index);
+			if (!NS_SUCCEEDED(rv)) return NS_ERROR_FAILURE;
+		}
+	}
 
 	return NS_OK;
 }

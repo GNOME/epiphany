@@ -718,6 +718,28 @@ ephy_embed_shistory_go_nth (EphyEmbed *embed,
 }
 
 /**
+ * ephy_embed_shistory_copy:
+ * @source: the #EphyEmbed to copy the history from
+ * @dest: the #EphyEmbed to copy the history to
+ * @copy_back: %TRUE to copy the back history
+ * @copy_forward: %TRUE to copy the forward history
+ * @copy_current: %TRUE to set the current page to that in the copied history
+ *
+ * Copy's the back and/or forward history from @source to @dest,
+ * and optionally set @dest to the current page of @source as well.
+ **/
+void
+ephy_embed_shistory_copy (EphyEmbed *source,
+			  EphyEmbed *dest,
+			  gboolean copy_back,
+			  gboolean copy_forward,
+			  gboolean copy_current)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (source);
+	iface->shistory_copy (source, dest, copy_back, copy_forward, copy_current);
+}
+
+/**
  * ephy_embed_get_security_level:
  * @embed: an #EphyEmbed
  * @level: return value of security level

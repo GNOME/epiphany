@@ -276,6 +276,8 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			      NULL);
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (window_cmd_go_back), priv->window);
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), toolbar);
 	gtk_action_group_add_action (priv->action_group, action);
 	g_object_unref (action);
 
@@ -294,6 +296,8 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			      NULL);
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (window_cmd_go_forward), priv->window);
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), toolbar);
 	gtk_action_group_add_action (priv->action_group, action);
 	g_object_unref (action);
 

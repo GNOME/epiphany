@@ -177,6 +177,9 @@ public:
 	nsresult GetSecurityInfo (PRUint32 *aState, nsACString &aDescription);
 	nsresult ShowCertificate ();
 
+	nsresult CopySHistory (EphyBrowser *dest, PRBool copy_back,
+	                       PRBool copy_forward, PRBool copy_current);
+
 	nsresult Close ();
 
         EphyEmbedDocumentType GetDocumentType ();
