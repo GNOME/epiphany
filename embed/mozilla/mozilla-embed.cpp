@@ -587,7 +587,8 @@ impl_get_location (EphyEmbed *embed,
 
 	nsCOMPtr<nsIURI> furi;
 	rv = uri->Clone (getter_AddRefs (furi));
-	if (NS_FAILED (rv)) return NULL;
+	/* Some nsIURI impls return NS_OK even though they didn't put anything in the outparam!! */
+	if (NS_FAILED (rv) || !furi) furi.swap(uri);
 
 	/* Hide password part */
 	nsEmbedCString user;
