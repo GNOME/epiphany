@@ -22,7 +22,6 @@
 #define EPHY_BAD_CERT_DENIER_H
 
 #include <nsIBadCertListener.h>
-#include <stdio.h>
 
 class EphyBadCertRejector : public nsIBadCertListener
 {
@@ -30,8 +29,8 @@ class EphyBadCertRejector : public nsIBadCertListener
 		NS_DECL_ISUPPORTS
 		NS_DECL_NSIBADCERTLISTENER
 
-		EphyBadCertRejector () { printf ("BadCertRejector ctor [%p]\n", (void*) this); }
-		~EphyBadCertRejector () { printf ("BadCertRejector dtor [%p]\n", (void*) this); }
+		EphyBadCertRejector () {  }
+		~EphyBadCertRejector () {  }
 };
 
 #endif
