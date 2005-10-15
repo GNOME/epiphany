@@ -68,6 +68,12 @@ libephymozillaembed_la_SOURCES += 	\
 	GtkNSSSecurityWarningDialogs.h
 endif
 
+if HAVE_GECKO_1_8
+libephymozillaembed_la_SOURCES += \
+	EphyBadCertRejector.cpp		\
+	EphyBadCertRejector.h
+endif
+
 mozilla_include_subdirs = \
 	caps			\
 	chardet			\

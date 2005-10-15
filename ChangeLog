@@ -1,3 +1,24 @@
+2005-10-15  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-embed-persist.h:
+
+	Add EPHY_EMBED_PERSIST_NO_CERTDIALOGS flag.
+
+        * embed/mozilla/Makefile.am:
+	A embed/mozilla/EphyBadCertRejector.cpp:
+	A embed/mozilla/EphyBadCertRejector.h:
+
+	A class implementing nsIBadCertListener which always rejects.
+
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EphyHeaderSniffer.h:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+
+	For gecko 1.8, implement nsIInterfaceRequestor for EphyHeaderSniffer
+	and MozDownload, and make GetInterface hand out a EphyBadCertRejector
+	if the EPHY_EMBED_PERSIST_NO_CERTDIALOGS flag is set.
+
 2005-10-14  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed.cpp:

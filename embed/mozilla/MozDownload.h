@@ -55,6 +55,7 @@
 #ifdef HAVE_GECKO_1_8
 #include <nsICancelable.h>
 #include <nsITransfer.h>
+#include <nsIInterfaceRequestor.h>
 #else
 #include <nsIDownload.h>
 #endif
@@ -98,7 +99,8 @@ nsresult BuildDownloadPath (const char *defaultFileName, nsILocalFile **_retval)
 
 class MozDownload :
 #ifdef HAVE_GECKO_1_8
-		    public nsITransfer
+		    public nsITransfer,
+		    public nsIInterfaceRequestor
 #else
 		    public nsIDownload,
                     public nsIWebProgressListener
@@ -113,6 +115,7 @@ public:
 #ifdef HAVE_GECKO_1_8
 	NS_DECL_NSIWEBPROGRESSLISTENER2
 	NS_DECL_NSITRANSFER
+	NS_DECL_NSIINTERFACEREQUESTOR
 
 	nsresult GetMIMEInfo (nsIMIMEInfo **aMIMEInfo);
 	nsresult GetTargetFile (nsILocalFile **aFile);

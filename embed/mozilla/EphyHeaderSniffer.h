@@ -54,7 +54,14 @@
 #include <nsEmbedString.h>
 #define MOZILLA_INTERNAL_API 1
 
+#ifdef HAVE_GECKO_1_8
+#include <nsIInterfaceRequestor.h>
+#endif
+
 class EphyHeaderSniffer : public nsIWebProgressListener,
+#ifdef HAVE_GECKO_1_8
+			  public nsIInterfaceRequestor,
+#endif
 			  public nsIAuthPrompt
 {
 public:
@@ -66,6 +73,9 @@ public:
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIWEBPROGRESSLISTENER
 	NS_FORWARD_SAFE_NSIAUTHPROMPT(mAuthPrompt)
+#ifdef HAVE_GECKO_1_8
+	NS_DECL_NSIINTERFACEREQUESTOR
+#endif
 
 	nsresult InitiateDownload (nsILocalFile *aDestFile);
 

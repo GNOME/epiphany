@@ -66,6 +66,10 @@
 #include <nsIMIMEHeaderParam.h>
 #include <nsIWindowWatcher.h>
 
+#ifdef HAVE_GECKO_1_8
+#include "EphyBadCertRejector.h"
+#endif
+
 EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
 		nsIFile* aFile, nsIURI* aURL, nsIDOMDocument* aDocument, nsIInputStream* aPostData,
 		EphyEmbedSingle *single)
@@ -101,7 +105,16 @@ EphyHeaderSniffer::~EphyHeaderSniffer()
 	}
 }
 
-NS_IMPL_ISUPPORTS2(EphyHeaderSniffer, nsIWebProgressListener, nsIAuthPrompt)
+#ifdef HAVE_GECKO_1_8
+NS_IMPL_ISUPPORTS3 (EphyHeaderSniffer,
+		    nsIWebProgressListener,
+		    nsIInterfaceRequestor,
+		    nsIAuthPrompt)
+#else
+NS_IMPL_ISUPPORTS2 (EphyHeaderSniffer,
+		    nsIWebProgressListener,
+		    nsIAuthPrompt)
+#endif
 
 NS_IMETHODIMP
 EphyHeaderSniffer::HandleContent ()
@@ -201,6 +214,36 @@ EphyHeaderSniffer::OnSecurityChange (nsIWebProgress *aWebProgress, nsIRequest *a
 {
 	return NS_OK;
 }
+
+#ifdef HAVE_GECKO_1_8
+
+/* void getInterface (in nsIIDRef uuid, [iid_is (uuid), retval] out nsQIResult result); */
+NS_IMETHODIMP
+EphyHeaderSniffer::GetInterface(const nsIID & uuid, void * *result)
+{
+	if (uuid.Equals (NS_GET_IID (nsIBadCertListener)) &&
+	    mEmbedPersist)
+	{
+		EphyEmbedPersistFlags flags;
+
+		g_object_get (mEmbedPersist, "flags", &flags, NULL);
+
+		if (flags & EPHY_EMBED_PERSIST_NO_CERTDIALOGS)
+		{
+			EphyBadCertRejector *badCertRejector = new EphyBadCertRejector ();
+			if (!badCertRejector) return NS_ERROR_OUT_OF_MEMORY;
+
+			*result = NS_STATIC_CAST(nsIBadCertListener*, badCertRejector);
+			NS_ADDREF (badCertRejector);
+
+			return NS_OK;
+		}
+	}
+
+	return NS_ERROR_NO_INTERFACE;
+}
+
+#endif /* HAVE_GECKO_1_8 */
 
 static void
 filechooser_response_cb (GtkWidget *dialog,

@@ -72,6 +72,10 @@
 
 #include <stdlib.h>
 
+#ifdef HAVE_GECKO_1_8
+#include "EphyBadCertRejector.h"
+#endif
+
 const char* const persistContractID = "@mozilla.org/embedding/browser/nsWebBrowserPersist;1";
 
 MozDownload::MozDownload() :
@@ -93,9 +97,16 @@ MozDownload::~MozDownload()
 }
 
 #ifdef HAVE_GECKO_1_8
-NS_IMPL_ISUPPORTS3(MozDownload, nsIWebProgressListener, nsIWebProgressListener2, nsITransfer)
+NS_IMPL_ISUPPORTS4 (MozDownload,
+		    nsIWebProgressListener,
+		    nsIWebProgressListener2,
+		    nsITransfer,
+		    nsIInterfaceRequestor)
 #else
-NS_IMPL_ISUPPORTS3(MozDownload, nsIWebProgressListener, nsIDownload, nsITransfer)
+NS_IMPL_ISUPPORTS3 (MozDownload,
+		    nsIWebProgressListener,
+		    nsIDownload,
+		    nsITransfer)
 #endif
 
 #ifdef HAVE_GECKO_1_8
@@ -582,6 +593,36 @@ MozDownload::OnSecurityChange (nsIWebProgress *aWebProgress, nsIRequest *aReques
 {
 	return NS_OK;
 }
+
+#ifdef HAVE_GECKO_1_8
+
+/* void getInterface (in nsIIDRef uuid, [iid_is (uuid), retval] out nsQIResult result); */
+NS_IMETHODIMP
+MozDownload::GetInterface(const nsIID & uuid, void * *result)
+{
+	if (uuid.Equals (NS_GET_IID (nsIBadCertListener)) &&
+	    mEmbedPersist)
+	{
+		EphyEmbedPersistFlags flags;
+
+		g_object_get (mEmbedPersist, "flags", &flags, NULL);
+
+		if (flags & EPHY_EMBED_PERSIST_NO_CERTDIALOGS)
+		{
+			nsIBadCertListener *badCertRejector = new EphyBadCertRejector ();
+			if (!badCertRejector) return NS_ERROR_OUT_OF_MEMORY;
+
+			*result = badCertRejector;
+			NS_ADDREF (badCertRejector);
+
+			return NS_OK;
+		}
+	}
+
+	return NS_ERROR_NO_INTERFACE;
+}
+
+#endif /* HAVE_GECKO_1_8 */
 
 void
 MozDownload::Cancel()
