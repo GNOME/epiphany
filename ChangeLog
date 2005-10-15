@@ -1,5 +1,15 @@
 2005-10-15  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/glade/prefs-dialog.glade:
+	* src/prefs-dialog.c: (prefs_dialog_finalize),
+	(download_path_changed_cb), (create_download_path_button),
+	(prefs_dialog_init), (prefs_homepage_blank_button_clicked_cb):
+
+	Use a GtkFileChooserButton for the download path selector.
+	Fixes bug #135738.
+
+2005-10-15  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_download),
 	(ephy_favicon_cache_get):
 	* embed/mozilla/EphyBrowser.cpp:

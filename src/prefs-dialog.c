@@ -1,6 +1,6 @@
- /*
+/*
  *  Copyright (C) 200-2003 Marco Pesenti Gritti
- *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2003, 2004, 2005 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,9 +57,11 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtknotebook.h>
+#include <gtk/gtkfilechooserbutton.h>
 #include <string.h>
 
 #define CONF_FONTS_FOR_LANGUAGE	"/apps/epiphany/dialogs/preferences_font_language"
+#define DOWNLOAD_BUTTON_WIDTH	8
 
 static void prefs_dialog_class_init	(PrefsDialogClass *klass);
 static void prefs_dialog_init		(PrefsDialog *pd);
@@ -76,8 +78,6 @@ void prefs_homepage_blank_button_clicked_cb	(GtkWidget *button,
 						 EphyDialog *dialog);
 void prefs_language_more_button_clicked_cb	(GtkWidget *button,
 						 EphyDialog *dialog);
-void prefs_download_path_button_clicked_cb	(GtkWidget *button,
-						 PrefsDialog *dialog);
 void language_editor_add_button_clicked_cb	(GtkWidget *button,
 						 PrefsDialog *pd);
 void language_editor_remove_button_clicked_cb	(GtkWidget *button,
@@ -138,7 +138,7 @@ enum
 	HOMEPAGE_CURRENT_PROP,
 	HOMEPAGE_BLANK_PROP,
 	AUTO_OPEN_PROP,
-	DOWNLOAD_PATH_BUTTON_PROP,
+	DOWNLOAD_PATH_HBOX_PROP,
 
 	/* Fonts and Colors */
 	FONTS_LANGUAGE_PROP,
@@ -180,7 +180,7 @@ EphyDialogProperty properties [] =
 	{ "homepage_current_button",		NULL,			  PT_NORMAL,	0 },
 	{ "homepage_blank_button",		NULL,			  PT_NORMAL,	0 },
 	{ "automatic_downloads_checkbutton",	CONF_AUTO_DOWNLOADS,      PT_AUTOAPPLY,	0 },
-	{ "download_path_button",		NULL,			  PT_NORMAL,	0 },
+	{ "download_button_hbox",		NULL,			  PT_NORMAL,	0 },
 
 	/* Fonts and Colors */
 	{ "fonts_language_combo",	CONF_FONTS_FOR_LANGUAGE,	PT_AUTOAPPLY,	G_TYPE_STRING },
@@ -252,7 +252,6 @@ enum
 
 struct PrefsDialogPrivate
 {
-	GtkWidget *download_dir_chooser;
 	GtkTreeView *lang_treeview;
 	GtkTreeModel *lang_model;
 	EphyDialog *add_lang_dialog;
@@ -263,10 +262,6 @@ struct PrefsDialogPrivate
 	GHashTable *iso_639_table;
 	GHashTable *iso_3166_table;
 };
-
-/* gtk+' gettext domain */
-#define GTK_DOMAIN "gtk20"
-#define DGETTEXT_GTK_(x) dgettext(GTK_DOMAIN, x)
 
 static GObjectClass *parent_class = NULL;
 
@@ -309,13 +304,6 @@ prefs_dialog_finalize (GObject *object)
 			(G_OBJECT (dialog->priv->add_lang_dialog),
 			(gpointer *) &dialog->priv->add_lang_dialog);
 		g_object_unref (dialog->priv->add_lang_dialog);
-	}
-
-	if (dialog->priv->download_dir_chooser != NULL)
-	{
-		g_object_remove_weak_pointer
-			(G_OBJECT (dialog->priv->download_dir_chooser),
-			 (gpointer *) &dialog->priv->download_dir_chooser);
 	}
 
 	g_hash_table_destroy (dialog->priv->iso_639_table);
@@ -1126,58 +1114,55 @@ create_language_section (EphyDialog *dialog)
 	g_slist_free (ulist);
 }
 
-static char*
-get_download_button_label (void)
-{
-	char *key, *label, *downloads_path, *converted_dp;
-
-	key = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
-
-	downloads_path = ephy_file_downloads_dir ();
-	converted_dp = g_filename_to_utf8 (downloads_path, -1, NULL, NULL, NULL);
-
-	if (key == NULL || g_utf8_collate (key, "~") == 0)
-	{
-		label = g_strdup (DGETTEXT_GTK_("Home"));
-	}
-	else if ((converted_dp != NULL && g_utf8_collate (key, converted_dp) == 0) ||
-		 g_utf8_collate (key, "Downloads") == 0)
-	{
-		label = g_strdup (_("Downloads"));
-	}
-	else if (g_utf8_collate (key, "~/Desktop") == 0 ||
-	         g_utf8_collate (key, "Desktop") == 0)
-	{
-		label = g_strdup (DGETTEXT_GTK_("Desktop"));
-	}
-	else
-	{
-		label = g_strdup (key);
-	}
-
-	g_free (downloads_path);
-	g_free (converted_dp);
-	g_free (key);
-
-	return label;
-}
-	
 static void
-create_download_path_label (EphyDialog *dialog)
+download_path_changed_cb (GtkFileChooser *button)
 {
-	GtkWidget *button, *label;
 	char *dir;
 
-	button = ephy_dialog_get_control (dialog, properties[DOWNLOAD_PATH_BUTTON_PROP].id);
-	
-	dir = get_download_button_label ();
-	label = gtk_label_new (dir);
-	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_START);
-	gtk_container_add (GTK_CONTAINER (button), label);
-	g_free (dir);
-	gtk_widget_show (label);
+	/* FIXME: use _uri variant when we support downloading 
+	 * to gnome-vfs remote locations
+	 */
+	dir = gtk_file_chooser_get_filename (button);
+	if (dir != NULL)
+	{
+		eel_gconf_set_path (CONF_STATE_DOWNLOAD_DIR, dir);
+		g_free (dir);
+	}
+}
+
+static void
+create_download_path_button (EphyDialog *dialog)
+{
+	GtkWidget *parent, *hbox, *button;
+	EphyFileChooser *fc;
+	char *dir;
+
+	dir = ephy_file_downloads_dir ();
+
+	ephy_dialog_get_controls (dialog,
+				  properties[DOWNLOAD_PATH_HBOX_PROP].id, &hbox,
+				  properties[WINDOW_PROP].id, &parent,
+				  NULL);
+
+	fc = ephy_file_chooser_new (_("Select a directory"),
+				    parent,
+				    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+				    NULL, EPHY_FILE_FILTER_NONE);
+
+	/* Unset the destroy-with-parent, since gtkfilechooserbutton doesn't expect this */
+	gtk_window_set_destroy_with_parent (GTK_WINDOW (fc), FALSE);
+
+	button = gtk_file_chooser_button_new_with_dialog (GTK_WIDGET (fc));
+	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button), dir);
+	gtk_file_chooser_button_set_width_chars (GTK_FILE_CHOOSER_BUTTON (button),
+						 DOWNLOAD_BUTTON_WIDTH);
+	g_signal_connect (button, "current-folder-changed",
+			  G_CALLBACK (download_path_changed_cb), dialog);
+	gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+	gtk_widget_show (button);
 
 	gtk_widget_set_sensitive (button, eel_gconf_key_is_writable (CONF_STATE_DOWNLOAD_DIR));
+	g_free (dir);
 }
 	
 static void
@@ -1191,12 +1176,6 @@ prefs_dialog_init (PrefsDialog *pd)
 	gboolean sensitive;
 
 	pd->priv = EPHY_PREFS_DIALOG_GET_PRIVATE (pd);
-
-#ifdef ENABLE_NLS
-        /* Initialize the control centre domain */
-        bindtextdomain (GTK_DOMAIN, GNOMELOCALEDIR);
-        bind_textdomain_codeset(GTK_DOMAIN, "UTF-8");
-#endif
 
 	ephy_dialog_construct (dialog,
 			       properties,
@@ -1250,7 +1229,7 @@ prefs_dialog_init (PrefsDialog *pd)
 
 	create_language_section	(dialog);
 
-	create_download_path_label (dialog);
+	create_download_path_button (dialog);
 }
 
 void
@@ -1322,61 +1301,4 @@ prefs_homepage_blank_button_clicked_cb (GtkWidget *button,
 					EphyDialog *dialog)
 {
 	set_homepage_entry (dialog, NULL);
-}
-
-static void
-download_path_response_cb (GtkDialog *fc, gint response, EphyDialog *dialog)
-{
-	if (response == GTK_RESPONSE_ACCEPT)
-	{
-		char *dir;
-
-		dir = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fc));
-		if (dir != NULL)
-		{
-			GtkWidget *button;
-			char *label;
-
-			eel_gconf_set_path (CONF_STATE_DOWNLOAD_DIR, dir);
-
-			button = ephy_dialog_get_control (dialog, properties[DOWNLOAD_PATH_BUTTON_PROP].id);
-			label = get_download_button_label ();
-			gtk_label_set_text (GTK_LABEL (GTK_BIN (button)->child), label);
-
-			g_free (dir);
-			g_free (label);
-		}
-	}
-
-	gtk_widget_destroy (GTK_WIDGET (fc));
-}
-
-void
-prefs_download_path_button_clicked_cb (GtkWidget *button,
-				       PrefsDialog *dialog)
-{
-	if (dialog->priv->download_dir_chooser == NULL)
-	{
-		GtkWidget *parent;
-		EphyFileChooser *fc;
-
-		parent = ephy_dialog_get_control
-			(EPHY_DIALOG (dialog), properties[WINDOW_PROP].id);
-	
-		fc = ephy_file_chooser_new (_("Select a directory"),
-					    GTK_WIDGET (parent),
-					    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-					    NULL, EPHY_FILE_FILTER_NONE);
-		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fc),
-						     g_get_home_dir ());
-
-		g_signal_connect (GTK_DIALOG (fc), "response",
-				    G_CALLBACK (download_path_response_cb),
-				    dialog);
-		dialog->priv->download_dir_chooser = GTK_WIDGET (fc);
-		g_object_add_weak_pointer
-			(G_OBJECT (fc), (gpointer *) &dialog->priv->download_dir_chooser);
-	}
-
-	gtk_widget_show (dialog->priv->download_dir_chooser);
 }
