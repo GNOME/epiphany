@@ -181,7 +181,13 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 		/* Only proceed for http favicons. Bug #312291 */
 		PRBool isHttp = PR_FALSE;
 		favUri->SchemeIs ("http", &isHttp);
+#ifdef HAVE_GECKO_1_9
+		PRBool isHttps = PR_FALSE;
+		favUri->SchemeIs ("https", &isHttps);
+		if (!isHttp && !isHttps) return NS_OK;
+#else
 		if (!isHttp) return NS_OK;
+#endif
 
 		/* check if load is allowed */
 		nsCOMPtr<nsIScriptSecurityManager> secMan

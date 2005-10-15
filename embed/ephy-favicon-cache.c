@@ -544,6 +544,7 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 
 	ephy_embed_persist_set_dest (persist, dest);
 	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_NO_VIEW |
+					       EPHY_EMBED_PERSIST_NO_CERTDIALOGS |
 					       EPHY_EMBED_PERSIST_DO_CONVERSION);
 	ephy_embed_persist_set_max_size (persist, EPHY_FAVICON_MAX_SIZE);
 	ephy_embed_persist_set_source (persist, favicon_url);
@@ -587,7 +588,12 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 
 	if (url == NULL) return NULL;
 
+#ifdef HAVE_GECKO_1_9
+	if (!g_str_has_prefix (url, "http://") &&
+	    !g_str_has_prefix (url, "https://")) return NULL;
+#else
 	if (!g_str_has_prefix (url, "http://")) return NULL;
+#endif
 
 	priv->requests += 1;
 
