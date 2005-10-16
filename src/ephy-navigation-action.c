@@ -138,17 +138,13 @@ new_history_menu_item (const char *origtext,
 }
 
 static void
-activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
-				       EphyNavigationAction *action)
+activate_by_history_index (EphyNavigationAction *action,
+			   int index)
 {
 	EphyEmbed *embed;
-	int go_nth;
-	char *url;
 
 	embed = ephy_window_get_active_embed (action->priv->window);
 	g_return_if_fail (embed != NULL);
-
-	go_nth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menuitem), NTH_DATA_KEY));
 
 	if (ephy_gui_is_middle_click ())
 	{
@@ -165,7 +161,18 @@ activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
 		ephy_embed_shistory_copy (embed, dest, TRUE, TRUE, FALSE);
 		embed = dest;
 	}
-	ephy_embed_shistory_go_nth (embed, go_nth);
+	ephy_embed_shistory_go_nth (embed, index);
+}
+
+static void
+activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
+				       EphyNavigationAction *action)
+{
+	int go_nth;
+
+	go_nth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menuitem), NTH_DATA_KEY));
+
+	activate_by_history_index(action, go_nth);
 }
 
 static void
@@ -397,6 +404,36 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 }
 
 static void
+ephy_navigation_action_activate (GtkAction *gtk_action)
+{
+	EphyNavigationAction *action = EPHY_NAVIGATION_ACTION (gtk_action);
+	EphyWindow *window = action->priv->window;
+	EphyEmbed *embed;
+	int pos;
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (embed != NULL);
+
+	pos = ephy_embed_shistory_get_pos (embed);
+
+	if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_BACK)
+	{
+		activate_by_history_index (action, pos - 1);
+	}
+	else if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_FORWARD)
+	{
+		activate_by_history_index (action, pos + 1);
+	}
+	else if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_UP)
+	{
+		ephy_link_open (EPHY_LINK (action),
+				ephy_embed_get_go_up_list (embed)->data,
+				NULL,
+				ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
+	}
+}
+
+static void
 ephy_navigation_action_init (EphyNavigationAction *action)
 {
 	action->priv = EPHY_NAVIGATION_ACTION_GET_PRIVATE (action);
@@ -482,6 +519,7 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 
 	action_class->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
 	action_class->connect_proxy = connect_proxy;
+	action_class->activate = ephy_navigation_action_activate;
 
 	g_object_class_install_property (object_class,
 					 PROP_ARROW_TOOLTIP,

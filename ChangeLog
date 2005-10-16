@@ -1,3 +1,36 @@
+2005-10-16  Philip Langdale  <philipl@mail.utexas.edu>
+
+	* src/ephy-link-action.c:
+	(proxy_button_release_event_cb), (get_event_widget),
+	(ephy_link_action_connect_proxy), (ephy_link_action_disconnect_proxy),
+	(ephy_link_action_class_init), (ephy_link_action_get_type):
+	Exten the EphyLinkAction to attach a mouse-release-event handler
+	which turns around and calls gtk_action_activate in response to a
+	middle-click even on the proxy. This allows us to fully encapsulate
+	the extra work needed to catch middle clicks.
+	The GoHome action will automatically start working correctly now
+	that it is getting activated in this case.
+
+	* src/ephy-navigation-action.c:
+	(activate_by_history_index), (activate_back_or_forward_menu_item_cb),
+	(ephy_navigation_action_activate), (ephy_navigation_action_class_init):
+	Fully enscapsulate 'activate' handling inside the action. This is more
+	consistent because the menus are already handled internally. Also
+	add support for middle-click on back/forward/up.
+	
+	* src/ephy-toolbar.c:
+	(ephy_toolbar_set_window): Don't attach 'activate' signal handlers
+	to the navigate actions because activation is now handled internally
+	to the action.
+
+	I intend to make a followup change that removes the separate actions
+	for GoUp/Back/Forward in the menu and replace them with the main
+	actions already used in the toolbar. This means the menu items will
+	get middle-click support for free.
+
+	* lib/ephy-gui.c: (ephy_gui_is_middle_click):
+	Only consider an unmodified middle-click to be a middle-click.
+
 2005-10-16  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_get):

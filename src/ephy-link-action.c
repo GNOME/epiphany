@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2004 Christian Persch
+ *  Copyright (C) 2005 Philip Langdale
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +24,124 @@
 #include "ephy-link-action.h"
 #include "ephy-link.h"
 
+#include "ephy-debug.h"
+#include "ephy-gui.h"
+
+#include <gtk/gtkbutton.h>
+#include <gtk/gtkmenuitem.h>
+#include <gtk/gtkmenutoolbutton.h>
+
+static GObjectClass *parent_class = NULL;
+
+static gboolean
+proxy_button_release_event_cb (GtkWidget *widget,
+			       GdkEventButton *event,
+			       GtkAction *action)
+{
+	/**
+	 * We do not use ephy_gui_is_middle_click() here because
+	 * that also catches ctrl + left_click which already
+	 * triggers an activate event for all proxies.
+	 */
+	if (event->button == 2)
+	{
+		gtk_action_activate(action);
+	}
+
+	return FALSE;
+}
+
+static GtkWidget *
+get_event_widget (GtkWidget *proxy)
+{
+	GtkWidget *widget;
+
+	/**
+	 * Finding the interesting widget requires internal knowledge of
+	 * the widgets in question. This can't be helped, but by keeping
+	 * the sneaky code in one place, it can easily be updated.
+	 */
+	if (GTK_IS_MENU_ITEM (proxy))
+	{
+		/* Menu items already forward middle clicks */
+		widget = NULL;
+	}
+	else if (GTK_IS_MENU_TOOL_BUTTON (proxy))
+	{
+		/**
+		 * The menu tool button's button is the first child
+		 * of the child hbox.
+		 */
+		GtkContainer *container =
+			GTK_CONTAINER (gtk_bin_get_child (GTK_BIN (proxy)));
+		widget = GTK_WIDGET (gtk_container_get_children (container)->data);
+	}
+	else if (GTK_IS_TOOL_BUTTON (proxy))
+	{
+		/* The tool button's button is the direct child */
+		widget = gtk_bin_get_child (GTK_BIN (proxy));
+	}
+	else if (GTK_IS_BUTTON (proxy))
+	{
+		widget = proxy;
+	}
+	else
+	{
+		/* Don't touch anything we don't know about */
+		widget = NULL;
+	}
+
+	return widget;
+}
+
+static void
+ephy_link_action_connect_proxy (GtkAction *action, GtkWidget *proxy)
+{
+	GtkWidget *widget;
+
+	LOG ("Connect link action proxy");
+
+	widget = get_event_widget(proxy);
+	if (widget)
+	{
+		g_signal_connect (widget, "button-release-event",
+				  G_CALLBACK (proxy_button_release_event_cb),
+				  action);
+	}
+
+	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
+}
+
+static void
+ephy_link_action_disconnect_proxy (GtkAction *action, GtkWidget *proxy)
+{
+	GtkWidget *widget;
+
+	LOG ("Disconnect link action proxy");
+
+	widget = get_event_widget(proxy);
+	if (widget)
+	{
+		g_signal_handlers_disconnect_by_func (widget,
+						      G_CALLBACK (proxy_button_release_event_cb),
+						      action);
+	}
+
+	GTK_ACTION_CLASS (parent_class)->disconnect_proxy (action, proxy);
+}
+
+static void
+ephy_link_action_class_init (EphyLinkActionClass *class)
+{
+	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
+
+	parent_class = g_type_class_peek_parent (class);
+
+	action_class->connect_proxy = ephy_link_action_connect_proxy;
+	action_class->disconnect_proxy = ephy_link_action_disconnect_proxy;
+}
+
+
 GType
 ephy_link_action_get_type (void)
 {
@@ -35,7 +154,7 @@ ephy_link_action_get_type (void)
 			sizeof (EphyLinkActionClass),
 			NULL, /* base_init */
 			NULL, /* base_finalize */
-			NULL, /* class_init */
+			(GClassInitFunc) ephy_link_action_class_init,
 			NULL,
 			NULL, /* class_data */
 			sizeof (EphyLinkAction),

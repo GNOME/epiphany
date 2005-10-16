@@ -434,7 +434,7 @@ ephy_gui_is_middle_click (void)
 
 			/* middle-click or control-click */
 			if ((button == 1 && ((state & modifiers) == GDK_CONTROL_MASK)) ||
-			    (button == 2))
+			    (button == 2 && ((state & modifiers) == 0)))
 			{
 				is_middle_click = TRUE;
 			}
