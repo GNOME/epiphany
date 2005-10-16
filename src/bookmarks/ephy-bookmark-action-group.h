@@ -1,7 +1,5 @@
 /*
- *  Copyright (C) 2002  Ricardo Fernández Pascual
- *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
- *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2005 Peter Harvey
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,18 +14,20 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  $Id$
  */
 
-#ifndef EPHY_BOOKMARKS_MENU_H
-#define EPHY_BOOKMARKS_MENU_H
+#ifndef EPHY_BOOKMARK_ACTION_GROUP_H
+#define EPHY_BOOKMARK_ACTION_GROUP_H
 
-#include "ephy-window.h"
+#include "ephy-link-action.h"
 #include "ephy-node.h"
 
-#include <gtk/gtk.h>
+#include <gtk/gtkactiongroup.h>
 
-void ephy_bookmarks_menu_build (GString *string, EphyNode *parent);
+G_BEGIN_DECLS
+
+GtkActionGroup * ephy_bookmark_group_new       (EphyNode *node);
+
+G_END_DECLS
 
 #endif

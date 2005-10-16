@@ -25,6 +25,8 @@
 #include "ephy-link-action.h"
 #include "ephy-node.h"
 
+#include <gtk/gtkactiongroup.h>
+
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_BOOKMARK_ACTION		(ephy_bookmark_action_get_type ())
@@ -51,11 +53,20 @@ struct _EphyBookmarkActionClass
 	EphyLinkActionClass parent_class;
 };
 
-GType      ephy_bookmark_action_get_type	(void);
 
-GtkAction *ephy_bookmark_action_new		(const char *name,
-						 EphyNode *node);
+GType       ephy_bookmark_action_get_type (void);
+
+char *      ephy_bookmark_action_name     (EphyNode *node);
+
+GtkAction * ephy_bookmark_action_new      (EphyNode *node, char *name);
+
+
+void        ephy_bookmark_action_set_bookmark (EphyBookmarkAction *action, EphyNode *node);
+
+EphyNode *  ephy_bookmark_action_get_bookmark (EphyBookmarkAction *action);
+
+void        ephy_bookmark_action_updated      (EphyBookmarkAction *action);
 
 G_END_DECLS
 
-#endif /* EPHY_BOOKMARK_ACTION_H */
+#endif

@@ -13,14 +13,19 @@ NOINST_H_FILES =		 	\
 	ephy-bookmarks-editor.h		\
 	ephy-bookmarks-export.h		\
 	ephy-bookmarks-import.h		\
+	ephy-bookmarks-ui.h		\
 	ephy-bookmarks-menu.h		\
-	ephy-bookmarksbar-model.h	\
-	ephy-bookmarksbar.h		\
 	ephy-bookmark-properties.h	\
-	ephy-favorites-menu.h		\
 	ephy-new-bookmark.h		\
 	ephy-topic-action.h		\
-	ephy-topics-selector.h
+	ephy-related-action.h		\
+	ephy-open-tabs-action.h		\
+	ephy-topic-factory-action.h	\
+	ephy-bookmark-factory-action.h	\
+	ephy-topic-action-group.h	\
+	ephy-bookmark-action-group.h	\
+	ephy-topics-selector.h		\
+	ephy-nodes-cover.h
 
 libephybookmarks_la_SOURCES = 		\
 	$(BUILT_SOURCES)		\
@@ -29,14 +34,19 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-bookmarks-editor.c		\
 	ephy-bookmarks-export.c		\
 	ephy-bookmarks-import.c 	\
+	ephy-bookmarks-ui.c		\
 	ephy-bookmarks-menu.c		\
-	ephy-bookmarksbar-model.c	\
-	ephy-bookmarksbar.c		\
 	ephy-bookmark-properties.c	\
-	ephy-favorites-menu.c		\
 	ephy-new-bookmark.c		\
 	ephy-topic-action.c		\
+	ephy-related-action.c		\
+	ephy-open-tabs-action.c		\
+	ephy-topic-factory-action.c	\
+	ephy-bookmark-factory-action.c	\
+	ephy-topic-action-group.c	\
+	ephy-bookmark-action-group.c	\
 	ephy-topics-selector.c  	\
+	ephy-nodes-cover.c      	\
 	$(NOINST_H_FILES)		\
 	$(INST_H_FILES)
 

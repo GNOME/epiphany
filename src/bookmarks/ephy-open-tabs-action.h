@@ -1,7 +1,5 @@
 /*
- *  Copyright (C) 2002  Ricardo Fernández Pascual
- *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
- *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2003 Peter Harvey
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,18 +14,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  $Id$
  */
 
-#ifndef EPHY_BOOKMARKS_MENU_H
-#define EPHY_BOOKMARKS_MENU_H
+#ifndef EPHY_OPEN_TABS_ACTION_H
+#define EPHY_OPEN_TABS_ACTION_H
 
-#include "ephy-window.h"
+#include <gtk/gtkactiongroup.h>
+
 #include "ephy-node.h"
 
-#include <gtk/gtk.h>
+char *           ephy_open_tabs_action_name (EphyNode *node);
 
-void ephy_bookmarks_menu_build (GString *string, EphyNode *parent);
+GtkActionGroup * ephy_open_tabs_group_new   (EphyNode *node);
 
 #endif

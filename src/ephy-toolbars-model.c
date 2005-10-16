@@ -30,8 +30,8 @@
 
 #include <string.h>
 
-#define EPHY_TOOLBARS_XML_FILE		"epiphany-toolbars-2.xml"
-#define EPHY_TOOLBARS_XML_VERSION	"1.0"
+#define EPHY_TOOLBARS_XML_FILE		"epiphany-toolbars-3.xml"
+#define EPHY_TOOLBARS_XML_VERSION	"1.1"
 
 #define EPHY_TOOLBARS_MODEL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOOLBARS_MODEL, EphyToolbarsModelPrivate))
 
@@ -106,7 +106,7 @@ update_flags (EphyToolbarsModel *model)
 {
 	EggToolbarsModel *eggmodel = EGG_TOOLBARS_MODEL (model);
 	int i, n_toolbars;
-	int flag = EGG_TB_MODEL_ACCEPT_ITEMS_ONLY;
+	int flag = 0;
 
 	n_toolbars = egg_toolbars_model_n_toolbars (eggmodel);
 
@@ -136,29 +136,6 @@ update_flags_and_save_changes (EphyToolbarsModel *model)
 {
 	update_flags (model);
 	save_changes (model);
-}
-
-static int
-get_toolbar_pos (EggToolbarsModel *model,
-		 const char *name)
-{
-	int i, n_toolbars;
-
-	n_toolbars = egg_toolbars_model_n_toolbars (model);
-
-	for (i = 0; i < n_toolbars; i++)
-	{
-		const char *t_name;
-
-		t_name = egg_toolbars_model_toolbar_nth (model, i);
-		g_return_val_if_fail (t_name != NULL, -1);
-		if (strcmp (name, t_name) == 0)
-		{
-			return i;
-		}
-	}
-
-	return -1;
 }
 
 static EggTbModelFlags
@@ -203,7 +180,28 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 {
 	EggToolbarsModel *eggmodel = EGG_TOOLBARS_MODEL (model);
 	gboolean success;
+	int i;
 
+	egg_toolbars_model_set_n_avail (eggmodel, "NavigationBack", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "NavigationForward", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "NavigationUp", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "ViewStop", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "ViewReload", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "GoHome", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "GoHistory", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "GoBookmarks", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "FileNewTab", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "FileNewWindow", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "FileOpen", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "FileSaveAs", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "FilePrint", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "FileBookmarkPage", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "ViewFullscreen", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "EditFind", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "Location", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "ToolbarGo", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "Zoom", 1);
+  
 	success = egg_toolbars_model_load (eggmodel, model->priv->xml_file);
 	LOG ("Loading the toolbars was %ssuccessful", success ? "" : "un");
 
@@ -213,22 +211,34 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 	if (success == FALSE)
 	{
 		char *old_xml;
-		int toolbar;
+
+		old_xml = g_build_filename (ephy_dot_dir (),
+					    "epiphany-toolbars-2.xml",
+					    NULL);
+		success = egg_toolbars_model_load (eggmodel, old_xml);
+		g_free (old_xml);
+
+		if (success == TRUE)
+		{
+			old_xml = g_build_filename (ephy_dot_dir (),
+						    "epiphany-bookmarksbar.xml",
+						    NULL);
+			egg_toolbars_model_load (eggmodel, old_xml);
+			g_free (old_xml);
+		}
+
+		LOG ("Migration was %ssuccessful", success ? "" : "un");
+	}
+	
+	if (success == FALSE)
+	{
+		char *old_xml;
 
 		old_xml = g_build_filename (ephy_dot_dir (),
 					    "epiphany-toolbars.xml",
 					    NULL);
 		success = egg_toolbars_model_load (eggmodel, old_xml);
 		g_free (old_xml);
-
-		if (success)
-		{
-			toolbar = get_toolbar_pos (eggmodel, "BookmarksBar");
-			if (toolbar != -1)
-			{
-				egg_toolbars_model_remove_toolbar (eggmodel, toolbar);
-			}
-		}
 
 		LOG ("Migration was %ssuccessful", success ? "" : "un");
 	}
@@ -241,6 +251,15 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 		LOG ("Loading the default toolbars was %ssuccessful", success ? "" : "un");
 	}
 
+	/* Cleanup any empty toolbars */
+	for (i = egg_toolbars_model_n_toolbars (eggmodel)-1; i >= 0; i--)
+	{
+		if (egg_toolbars_model_n_items (eggmodel, i) == 0)
+		{
+			egg_toolbars_model_remove_toolbar (eggmodel, i);
+		}
+	}
+	
 	/* Ensure we have at least 1 toolbar */
 	if (egg_toolbars_model_n_toolbars (eggmodel) < 1)
 	{

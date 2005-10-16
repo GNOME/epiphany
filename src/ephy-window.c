@@ -26,8 +26,6 @@
 #include "ephy-type-builtins.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-command-manager.h"
-#include "ephy-bookmarks-menu.h"
-#include "ephy-favorites-menu.h"
 #include "ephy-state.h"
 #include "ppview-toolbar.h"
 #include "window-commands.h"
@@ -43,12 +41,12 @@
 #include "ephy-statusbar.h"
 #include "egg-editable-toolbar.h"
 #include "ephy-toolbar.h"
-#include "ephy-bookmarksbar.h"
 #include "popup-commands.h"
 #include "ephy-encoding-menu.h"
 #include "ephy-tabs-menu.h"
 #include "ephy-stock-icons.h"
 #include "ephy-extension.h"
+#include "ephy-bookmarks-ui.h"
 #include "ephy-link.h"
 #include "ephy-gui.h"
 #include "ephy-notebook.h"
@@ -94,11 +92,9 @@ static void ephy_window_notebook_switch_page_cb	(GtkNotebook *notebook,
 						 guint page_num,
 						 EphyWindow *window);
 static void ephy_window_view_statusbar_cb       (GtkAction *action,
-			                         EphyWindow *window);
+						 EphyWindow *window);
 static void ephy_window_view_toolbar_cb         (GtkAction *action,
-			                         EphyWindow *window);
-static void ephy_window_view_bookmarksbar_cb    (GtkAction *action,
-			                         EphyWindow *window);
+						 EphyWindow *window);
 static void ephy_window_view_popup_windows_cb	(GtkAction *action,
 						 EphyWindow *window);
 static void sync_tab_load_status		(EphyTab *tab,
@@ -295,9 +291,6 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 	{ "ViewToolbar", NULL, N_("_Toolbar"), "<shift><control>T",
 	  N_("Show or hide toolbar"),
 	  G_CALLBACK (ephy_window_view_toolbar_cb), TRUE },
-	{ "ViewBookmarksBar", NULL, N_("_Bookmarks Bar"), NULL,
-	  N_("Show or hide bookmarks bar"),
-	  G_CALLBACK (ephy_window_view_bookmarksbar_cb), TRUE },
 	{ "ViewStatusbar", NULL, N_("St_atusbar"), NULL,
 	  N_("Show or hide statusbar"),
 	  G_CALLBACK (ephy_window_view_statusbar_cb), TRUE },
@@ -397,7 +390,7 @@ static const struct
 #define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"
 
 /* Until https://bugzilla.mozilla.org/show_bug.cgi?id=296002 is fixed */
-#define KEEP_TAB_IN_SAME_TOPLEVEL
+//#define KEEP_TAB_IN_SAME_TOPLEVEL
 
 #define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
 
@@ -407,15 +400,12 @@ struct _EphyWindowPrivate
 	GtkWidget *menu_dock;
 	GtkWidget *fullscreen_popup;
 	EphyToolbar *toolbar;
-	GtkWidget *bookmarksbar;
 	GtkWidget *statusbar;
 	GtkUIManager *manager;
 	GtkActionGroup *action_group;
 	GtkActionGroup *popups_action_group;
-	EphyFavoritesMenu *fav_menu;
 	EphyEncodingMenu *enc_menu;
 	EphyTabsMenu *tabs_menu;
-	EphyBookmarksMenu *bmk_menu;
 	PPViewToolbar *ppview_toolbar;
 	GtkNotebook *notebook;
 	EphyTab *active_tab;
@@ -464,22 +454,22 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_window_get_type (void)
 {
-        static GType type = 0;
+	static GType type = 0;
 
-        if (G_UNLIKELY (type == 0))
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (EphyWindowClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ephy_window_class_init,
-                        NULL,
-                        NULL, /* class_data */
-                        sizeof (EphyWindow),
-                        0, /* n_preallocs */
-                        (GInstanceInitFunc) ephy_window_init
-                };
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyWindowClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) ephy_window_class_init,
+			NULL,
+			NULL, /* class_data */
+			sizeof (EphyWindow),
+			0, /* n_preallocs */
+			(GInstanceInitFunc) ephy_window_init
+		};
 		static const GInterfaceInfo link_info = 
 		{
 			(GInterfaceInitFunc) ephy_window_link_iface_init,
@@ -487,16 +477,16 @@ ephy_window_get_type (void)
 			NULL
 		};
 
-                type = g_type_register_static (GTK_TYPE_WINDOW,
+		type = g_type_register_static (GTK_TYPE_WINDOW,
 					       "EphyWindow",
 					       &our_info, 0);
 
 		g_type_add_interface_static (type,
 					     EPHY_TYPE_LINK,
 					     &link_info);
-        }
+	}
 
-        return type;
+	return type;
 }
 
 static void
@@ -541,7 +531,6 @@ get_chromes_visibility (EphyWindow *window,
 			gboolean *show_menubar,
 			gboolean *show_statusbar,
 			gboolean *show_toolbar,
-			gboolean *show_bookmarksbar,
 			gboolean *show_tabsbar)
 {
 	EphyWindowPrivate *priv = window->priv;
@@ -551,14 +540,13 @@ get_chromes_visibility (EphyWindow *window,
 	{
 		*show_menubar = *show_statusbar
 			      = *show_toolbar
-			      = *show_bookmarksbar
 			      = *show_tabsbar
 			      = FALSE;
 	}
 	else if (window->priv->fullscreen_mode)
 	{
 		*show_toolbar = (flags & EPHY_EMBED_CHROME_TOOLBAR) != 0;
-		*show_menubar = *show_statusbar = *show_bookmarksbar = FALSE;
+		*show_menubar = *show_statusbar = FALSE;
 		*show_tabsbar = !priv->is_popup;
 	}
 	else
@@ -566,7 +554,6 @@ get_chromes_visibility (EphyWindow *window,
 		*show_menubar = (flags & EPHY_EMBED_CHROME_MENUBAR) != 0;
 		*show_statusbar = (flags & EPHY_EMBED_CHROME_STATUSBAR) != 0;
 		*show_toolbar = (flags & EPHY_EMBED_CHROME_TOOLBAR) != 0;
-		*show_bookmarksbar = (flags & EPHY_EMBED_CHROME_BOOKMARKSBAR) != 0;
 		*show_tabsbar = !priv->is_popup;
 	}
 }
@@ -576,20 +563,19 @@ sync_chromes_visibility (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
 	GtkWidget *menubar;
-	gboolean show_statusbar, show_menubar, show_toolbar, show_bookmarksbar, show_tabsbar;
+	gboolean show_statusbar, show_menubar, show_toolbar, show_tabsbar;
 
 	if (priv->closing) return;
 
 	get_chromes_visibility (window, &show_menubar,
 				&show_statusbar, &show_toolbar,
-				&show_bookmarksbar, &show_tabsbar);
+				&show_tabsbar);
 
 	menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");
 	g_assert (menubar != NULL);
 
 	g_object_set (menubar, "visible", show_menubar, NULL);
 	g_object_set (priv->toolbar, "visible", show_toolbar, NULL);
-	g_object_set (priv->bookmarksbar, "visible", show_bookmarksbar, NULL);
 	g_object_set (priv->statusbar, "visible", show_statusbar, NULL);
 
 	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (priv->notebook), show_tabsbar);
@@ -765,7 +751,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 	}
 
 	/* Show and activate the menubar, if it isn't visible */
-        if (event->keyval == keyval && (event->state & mask) == (modifier & mask))
+	if (event->keyval == keyval && (event->state & mask) == (modifier & mask))
 	{
 		menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");
 		g_return_val_if_fail (menubar != NULL , FALSE);
@@ -780,7 +766,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 
 			return TRUE;
 		}
-        }
+	}
 
 	return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
 }
@@ -1010,6 +996,94 @@ menu_item_deselect_cb (GtkMenuItem *proxy,
 			   window->priv->help_message_cid);
 }
 
+static gboolean
+tool_item_enter_cb (GtkWidget *proxy,
+		    GdkEventCrossing *event,
+		    EphyWindow *window)
+{
+	if (event->mode == GDK_CROSSING_NORMAL && 
+	    event->detail == GDK_NOTIFY_NONLINEAR)
+	{
+		GtkToolItem *item;
+		GtkAction *action;
+		char *message;
+    
+		item = GTK_TOOL_ITEM (gtk_widget_get_ancestor (proxy, GTK_TYPE_TOOL_ITEM));
+		
+		action = g_object_get_data (G_OBJECT (item),  "gtk-action");
+		g_return_val_if_fail (action != NULL, FALSE);
+		
+		g_object_get (G_OBJECT (action), "tooltip", &message, NULL);
+		if (message)
+		{
+			gtk_statusbar_push (GTK_STATUSBAR (window->priv->statusbar),
+					    window->priv->help_message_cid, message);
+			g_free (message);
+		}
+	}
+	
+	return FALSE;
+}
+
+static gboolean
+tool_item_leave_cb (GtkWidget *proxy,
+		    GdkEventCrossing *event,
+		    EphyWindow *window)
+{
+	if (event->mode == GDK_CROSSING_NORMAL && 
+	    event->detail == GDK_NOTIFY_NONLINEAR)
+	{
+		gtk_statusbar_pop (GTK_STATUSBAR (window->priv->statusbar),
+				   window->priv->help_message_cid);
+	}
+	
+	return FALSE;
+}
+
+static void
+tool_item_drag_begin_cb (GtkWidget          *widget,
+			 GdkDragContext     *context,
+			 EphyWindow         *window)
+{
+	gtk_statusbar_pop (GTK_STATUSBAR (window->priv->statusbar),
+			   window->priv->help_message_cid);
+}
+
+
+static void
+connect_tool_item (GtkWidget *proxy, EphyWindow *window)
+{
+	if (GTK_IS_CONTAINER (proxy))
+	{
+		gtk_container_foreach (GTK_CONTAINER (proxy),
+				       (GtkCallback) connect_tool_item,
+				       (gpointer) window);
+	}
+
+	g_signal_connect (proxy, "drag_begin",
+			  G_CALLBACK (tool_item_drag_begin_cb), window);
+	 g_signal_connect (proxy, "enter-notify-event",
+			  G_CALLBACK (tool_item_enter_cb), window);
+	g_signal_connect (proxy, "leave-notify-event",
+			  G_CALLBACK (tool_item_leave_cb), window);
+}
+
+static void
+disconnect_tool_item (GtkWidget *proxy, EphyWindow *window)
+{
+	if (GTK_IS_CONTAINER (proxy))
+	{
+		gtk_container_foreach (GTK_CONTAINER (proxy),
+				       (GtkCallback) disconnect_tool_item,
+				       (gpointer) window);
+	}
+
+	g_signal_handlers_disconnect_by_func
+	  (proxy, G_CALLBACK (tool_item_enter_cb), window);
+	g_signal_handlers_disconnect_by_func
+	  (proxy, G_CALLBACK (tool_item_leave_cb), window);
+}
+
 static void
 disconnect_proxy_cb (GtkUIManager *manager,
 		     GtkAction *action,
@@ -1022,6 +1096,10 @@ disconnect_proxy_cb (GtkUIManager *manager,
 			(proxy, G_CALLBACK (menu_item_select_cb), window);
 		g_signal_handlers_disconnect_by_func
 			(proxy, G_CALLBACK (menu_item_deselect_cb), window);
+	}
+	else if (GTK_IS_TOOL_ITEM (proxy))
+	{
+		disconnect_tool_item (proxy, window);
 	}
 }
 
@@ -1038,6 +1116,10 @@ connect_proxy_cb (GtkUIManager *manager,
 		g_signal_connect (proxy, "deselect",
 				  G_CALLBACK (menu_item_deselect_cb), window);
 	}
+	else if (GTK_IS_TOOL_ITEM (proxy))
+	{
+		connect_tool_item (proxy, window);
+	}
 }
 
 static void
@@ -1045,11 +1127,11 @@ update_chromes_actions (EphyWindow *window)
 {
 	GtkActionGroup *action_group = window->priv->action_group;
 	GtkAction *action;
-	gboolean show_statusbar, show_menubar, show_toolbar, show_bookmarksbar, show_tabsbar;
+	gboolean show_statusbar, show_menubar, show_toolbar, show_tabsbar;
 
 	get_chromes_visibility (window, &show_menubar,
 				&show_statusbar, &show_toolbar,
-				&show_bookmarksbar, &show_tabsbar);
+				&show_tabsbar);
 
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
 	g_signal_handlers_block_by_func (G_OBJECT (action),
@@ -1058,15 +1140,6 @@ update_chromes_actions (EphyWindow *window)
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), show_toolbar);
 	g_signal_handlers_unblock_by_func (G_OBJECT (action),
 		 			   G_CALLBACK (ephy_window_view_toolbar_cb),
-		 			   window);
-
-	action = gtk_action_group_get_action (action_group, "ViewBookmarksBar");
-	g_signal_handlers_block_by_func (G_OBJECT (action),
-		 			 G_CALLBACK (ephy_window_view_bookmarksbar_cb),
-		 			 window);
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), show_bookmarksbar);
-	g_signal_handlers_unblock_by_func (G_OBJECT (action),
-		 			   G_CALLBACK (ephy_window_view_bookmarksbar_cb),
 		 			   window);
 
 	action = gtk_action_group_get_action (action_group, "ViewStatusbar");
@@ -1845,6 +1918,7 @@ show_embed_popup (EphyWindow *window,
 			  G_CALLBACK (embed_popup_deactivate_cb), window);
 
 	button = ephy_embed_event_get_button (event);
+
 	if (button == 0)
 	{
 		gtk_menu_popup (GTK_MENU (widget), NULL, NULL,
@@ -2277,7 +2351,7 @@ tab_added_cb (EphyNotebook *notebook,
 	EphyExtension *manager;
 	EphyEmbed *embed;
 
-        g_return_if_fail (EPHY_IS_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	window->priv->num_tabs++;
 
@@ -2314,7 +2388,7 @@ tab_removed_cb (EphyNotebook *notebook,
 	EphyExtension *manager;
 	EphyEmbed *embed;
 
-        g_return_if_fail (EPHY_IS_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	/* Let the extensions remove themselves from the tab */
 	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
@@ -2447,11 +2521,6 @@ ephy_window_set_chrome (EphyWindow *window, EphyEmbedChrome mask)
 		chrome_mask &= ~EPHY_EMBED_CHROME_STATUSBAR;
 	}
 
-	if (!eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR))
-	{
-		chrome_mask &= ~EPHY_EMBED_CHROME_BOOKMARKSBAR;
-	}
-
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
 	{
 		chrome_mask &= ~EPHY_EMBED_CHROME_MENUBAR;
@@ -2507,6 +2576,7 @@ ephy_window_dispose (GObject *object)
 		/* Let the extensions detach themselves from the window */
 		manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
 		ephy_extension_detach_window (manager, window);
+		ephy_bookmarks_ui_detach_window (window);
 
 		/* Deactivate menus */
 		popups = gtk_ui_manager_get_toplevels (window->priv->manager, GTK_UI_MANAGER_POPUP);
@@ -2530,18 +2600,12 @@ ephy_window_dispose (GObject *object)
 
 		g_hash_table_foreach_remove (priv->tabs_to_remove, (GHRFunc) remove_true, NULL);
 
-		g_object_unref (priv->fav_menu);
-		priv->fav_menu = NULL;
-
 		g_object_unref (priv->enc_menu);
 		priv->enc_menu = NULL;
 
 		g_object_unref (priv->tabs_menu);
 		priv->tabs_menu = NULL;
 
-		g_object_unref (priv->bmk_menu);
-		priv->bmk_menu = NULL;
-	
 		if (priv->ppview_toolbar)
 		{
 			g_object_unref (priv->ppview_toolbar);
@@ -2559,7 +2623,7 @@ ephy_window_dispose (GObject *object)
 
 	destroy_fullscreen_popup (window);
 
-        G_OBJECT_CLASS (parent_class)->dispose (object);
+	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 static void
@@ -2710,11 +2774,11 @@ ephy_window_class_init (EphyWindowClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-        parent_class = g_type_class_peek_parent (klass);
+	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->constructor = ephy_window_constructor;
 	object_class->dispose = ephy_window_dispose;
-        object_class->finalize = ephy_window_finalize;
+	object_class->finalize = ephy_window_finalize;
 	object_class->get_property = ephy_window_get_property;
 	object_class->set_property = ephy_window_set_property;
 
@@ -2797,14 +2861,6 @@ allow_popups_notifier (GConfClient *client,
 
 		g_object_notify (G_OBJECT (tab), "popups-allowed");
 	}
-}
-
-static void
-action_request_forward_cb (GObject *toolbar,
-			   const char *name,
-                	   GObject *bookmarksbar)
-{
-	g_signal_emit_by_name (bookmarksbar, "action_request", name);
 }
 
 static EphyTab *
@@ -2950,10 +3006,6 @@ ephy_window_init (EphyWindow *window)
 				  G_CALLBACK (ephy_link_open), window);
 	g_signal_connect_swapped (window->priv->toolbar, "exit-clicked",
 				  G_CALLBACK (exit_fullscreen_clicked_cb), window);
-	window->priv->bookmarksbar = ephy_bookmarksbar_new (window);
-	g_signal_connect_swapped (window->priv->bookmarksbar, "open-link",
-				  G_CALLBACK (ephy_link_open), window);
-
 	g_signal_connect_swapped (window->priv->toolbar, "activation-finished",
 				  G_CALLBACK (sync_chromes_visibility), window);
 
@@ -2964,30 +3016,13 @@ ephy_window_init (EphyWindow *window)
 	{
 		g_warning ("Could not merge epiphany-ui.xml: %s", error->message);
 		g_error_free (error);
-        }
+	}
 
 	/* Initialize the menus */
 	window->priv->tabs_menu = ephy_tabs_menu_new (window);
 	window->priv->enc_menu = ephy_encoding_menu_new (window);
-	window->priv->fav_menu = ephy_favorites_menu_new (window);
-	g_signal_connect_swapped (window->priv->fav_menu, "open-link",
-				  G_CALLBACK (ephy_link_open), window);
-	window->priv->bmk_menu = ephy_bookmarks_menu_new (window->priv->manager,
-							  BOOKMARKS_MENU_PATH);
-	g_signal_connect_swapped (window->priv->bmk_menu, "open-link",
-				  G_CALLBACK (ephy_link_open), window);
-
-	/* forward the toolbar's action_request signal to the bookmarks toolbar,
-	 * so the user can also have bookmarks on the normal toolbar
-	 */
-	g_signal_connect (window->priv->toolbar, "action_request",
-			  G_CALLBACK (action_request_forward_cb),
-			  window->priv->bookmarksbar);
 
 	/* Add the toolbars to the window */
-	gtk_box_pack_end (GTK_BOX (window->priv->menu_dock),
-			  window->priv->bookmarksbar,
-			  FALSE, FALSE, 0);
 	gtk_box_pack_end (GTK_BOX (window->priv->menu_dock),
 			  GTK_WIDGET (window->priv->toolbar),
 			  FALSE, FALSE, 0);
@@ -2995,6 +3030,7 @@ ephy_window_init (EphyWindow *window)
 	/* Once the window is sufficiently created let the extensions attach to it */
 	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
 	ephy_extension_attach_window (manager, window);
+	ephy_bookmarks_ui_attach_window (window);
 
 	/* We only set the model now after attaching the extensions, so that
 	 * extensions already have created their actions which may be on
@@ -3051,7 +3087,7 @@ ephy_window_finalize (GObject *object)
 
 	g_hash_table_destroy (priv->tabs_to_remove);
 
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 
 	LOG ("EphyWindow finalised %p", object);
 
@@ -3166,22 +3202,6 @@ ephy_window_get_toolbar (EphyWindow *window)
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
 	return GTK_WIDGET (window->priv->toolbar);
-}
-
-/**
- * ephy_window_get_bookmarksbar:
- * @window: an #EphyWindow
- *
- * Returns this window's bookmarks toolbar, which is an #EggEditableToolbar.
- *
- * Return value: an #EggEditableToolbar
- **/
-GtkWidget *
-ephy_window_get_bookmarksbar (EphyWindow *window)
-{
-	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
-
-	return GTK_WIDGET (window->priv->bookmarksbar);
 }
 
 /**
@@ -3304,7 +3324,7 @@ real_get_active_tab (EphyWindow *window, int page_num)
  **/
 void
 ephy_window_remove_tab (EphyWindow *window,
-		        EphyTab *tab)
+			EphyTab *tab)
 {
 	EphyEmbed *embed;
 	gboolean modified;
@@ -3483,10 +3503,10 @@ ephy_window_set_zoom (EphyWindow *window,
 	EphyEmbed *embed;
 	float current_zoom = 1.0;
 
-        g_return_if_fail (EPHY_IS_WINDOW (window));
+	g_return_if_fail (EPHY_IS_WINDOW (window));
 
 	embed = ephy_window_get_active_embed (window);
-        g_return_if_fail (embed != NULL);
+	g_return_if_fail (embed != NULL);
 
 	current_zoom = ephy_embed_get_zoom (embed);
 
@@ -3512,8 +3532,6 @@ sync_prefs_with_chrome (EphyWindow *window)
 
 	if (window->priv->should_save_chrome)
 	{
-		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR,
-				       flags & EPHY_EMBED_CHROME_BOOKMARKSBAR);
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_TOOLBARS,
 				       flags & EPHY_EMBED_CHROME_TOOLBAR);
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_STATUSBAR,
@@ -3549,14 +3567,6 @@ ephy_window_view_toolbar_cb (GtkAction *action,
 {
 	sync_chrome_with_view_toggle (action, window,
 				      EPHY_EMBED_CHROME_TOOLBAR);
-}
-
-static void
-ephy_window_view_bookmarksbar_cb (GtkAction *action,
-			          EphyWindow *window)
-{
-	sync_chrome_with_view_toggle (action, window,
-				      EPHY_EMBED_CHROME_BOOKMARKSBAR);
 }
 
 static void

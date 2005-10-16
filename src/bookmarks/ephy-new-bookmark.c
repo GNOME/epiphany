@@ -46,9 +46,9 @@ static void ephy_new_bookmark_class_init (EphyNewBookmarkClass *klass);
 static void ephy_new_bookmark_init (EphyNewBookmark *editor);
 static void ephy_new_bookmark_finalize (GObject *object);
 static void ephy_new_bookmark_set_property (GObject *object,
-		                                guint prop_id,
-		                                const GValue *value,
-		                                GParamSpec *pspec);
+						guint prop_id,
+						const GValue *value,
+						GParamSpec *pspec);
 static void ephy_new_bookmark_get_property (GObject *object,
 						guint prop_id,
 						GValue *value,
@@ -164,7 +164,7 @@ ephy_new_bookmark_add (EphyNewBookmark *new_bookmark)
 	title = gtk_editable_get_chars
 		(GTK_EDITABLE (new_bookmark->priv->title_entry), 0, -1);
 	node = ephy_bookmarks_add (new_bookmark->priv->bookmarks, title,
-			           new_bookmark->priv->location);
+				   new_bookmark->priv->location);
 	new_bookmark->priv->id = ephy_node_get_id (node);
 
 	ephy_topics_selector_apply (selector, node);
@@ -260,6 +260,17 @@ build_editing_table (EphyNewBookmark *editor)
 	gtk_table_attach (GTK_TABLE (table), scrolled_window, 1, 2, 1, 2,
 			  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
 
+	
+	label = gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_BUTTON);
+	gtk_widget_show (label);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4, GTK_FILL, GTK_FILL, 0, 0);
+
+	label = gtk_label_new (_("Each \xE2\x80\xA2 highlights a topic to consider, derived from your current selections and existing bookmarks."));
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	gtk_widget_show (label);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4, GTK_FILL, GTK_FILL, 0, 0);
+
 	return table;
 }
 
@@ -268,7 +279,7 @@ ephy_new_bookmark_construct (EphyNewBookmark *editor)
 {
 	ephy_state_add_window (GTK_WIDGET(editor),
 			       "new_bookmark",
-		               280, 240, FALSE,
+			       280, 240, FALSE,
 			       EPHY_STATE_WINDOW_SAVE_SIZE);
 
 	gtk_window_set_title (GTK_WINDOW (editor),
@@ -414,9 +425,9 @@ ephy_new_bookmark_new (EphyBookmarks *bookmarks,
 
 static void
 ephy_new_bookmark_set_property (GObject *object,
-		                guint prop_id,
-		                const GValue *value,
-		                GParamSpec *pspec)
+				guint prop_id,
+				const GValue *value,
+				GParamSpec *pspec)
 {
 	EphyNewBookmark *editor = EPHY_NEW_BOOKMARK (object);
 
@@ -437,9 +448,9 @@ ephy_new_bookmark_set_property (GObject *object,
 
 static void
 ephy_new_bookmark_get_property (GObject *object,
-		                guint prop_id,
-		                GValue *value,
-		                GParamSpec *pspec)
+				guint prop_id,
+				GValue *value,
+				GParamSpec *pspec)
 {
 	EphyNewBookmark *editor = EPHY_NEW_BOOKMARK (object);
 

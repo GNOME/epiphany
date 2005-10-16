@@ -65,22 +65,22 @@ static GObjectClass *parent_class = NULL;
 
 static int
 find_name (GtkActionGroup *action_group,
-           const char *name)
+	   const char *name)
 {
-        return strcmp (gtk_action_group_get_name (action_group), name);
+	return strcmp (gtk_action_group_get_name (action_group), name);
 }
 
 static GtkActionGroup *
 find_action_group (GtkUIManager *manager,
 		   const char *name)
 {
-        GList *list, *element;
+	GList *list, *element;
 
-        list = gtk_ui_manager_get_action_groups (manager);
-        element = g_list_find_custom (list, name, (GCompareFunc) find_name);
-        g_return_val_if_fail (element != NULL, NULL);
+	list = gtk_ui_manager_get_action_groups (manager);
+	element = g_list_find_custom (list, name, (GCompareFunc) find_name);
+	g_return_val_if_fail (element != NULL, NULL);
 
-        return GTK_ACTION_GROUP (element->data);
+	return GTK_ACTION_GROUP (element->data);
 }
 
 static void
@@ -147,10 +147,6 @@ update_window (EphyWindow *window,
 
 	writable = eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_TOOLBARS);
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, !writable);
-
-	writable = eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_BOOKMARKS_BAR);
-	action = gtk_action_group_get_action (action_group, "ViewBookmarksBar");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, !writable);
 
 	writable = eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_STATUSBAR);

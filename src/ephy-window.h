@@ -43,15 +43,15 @@ typedef struct _EphyWindowPrivate	EphyWindowPrivate;
 
 struct _EphyWindow
 {
-        GtkWindow parent;
+	GtkWindow parent;
 
 	/*< private >*/
-        EphyWindowPrivate *priv;
+	EphyWindowPrivate *priv;
 };
 
 struct _EphyWindowClass
 {
-        GtkWindowClass parent_class;
+	GtkWindowClass parent_class;
 };
 
 GType		  ephy_window_get_type		  (void);
@@ -67,8 +67,6 @@ void		  ephy_window_set_print_preview	  (EphyWindow *window,
 GObject		 *ephy_window_get_ui_manager	  (EphyWindow *window);
 
 GtkWidget	 *ephy_window_get_toolbar	  (EphyWindow *window);
-
-GtkWidget	 *ephy_window_get_bookmarksbar	  (EphyWindow *window);
 
 GtkWidget	 *ephy_window_get_notebook	  (EphyWindow *window);
 

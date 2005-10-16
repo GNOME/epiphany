@@ -30,7 +30,6 @@
 #include "ephy-debug.h"
 #include "ephy-tree-model-node.h"
 #include "ephy-node-common.h"
-#include "ephy-bookmarksbar-model.h"
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-bookmark-properties.h"
@@ -58,7 +57,6 @@
 
 struct _EphyBookmarksPrivate
 {
-	EphyBookmarksBarModel *toolbars_model;
 	gboolean init_defaults;
 	gboolean dirty;
 	guint save_timeout_id;
@@ -110,12 +108,6 @@ static const char *default_topics [] =
 };
 static int n_default_topics = G_N_ELEMENTS (default_topics);
 
-enum
-{
-	PROP_0,
-	PROP_TOOLBARS_MODEL
-};
-
 /* Signals */
 enum
 {
@@ -136,33 +128,33 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_bookmarks_get_type (void)
 {
-        static GType type = 0;
+	static GType type = 0;
 
-        if (G_UNLIKELY (type == 0))
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (EphyBookmarksClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ephy_bookmarks_class_init,
-                        NULL,
-                        NULL, /* class_data */
-                        sizeof (EphyBookmarks),
-                        0, /* n_preallocs */
-                        (GInstanceInitFunc) ephy_bookmarks_init
-                };
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyBookmarksClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) ephy_bookmarks_class_init,
+			NULL,
+			NULL, /* class_data */
+			sizeof (EphyBookmarks),
+			0, /* n_preallocs */
+			(GInstanceInitFunc) ephy_bookmarks_init
+		};
 		volatile GType flags_type; /* work around gcc's optimiser */
       
 		/* make sure the flags type is known */
 	      	flags_type = EPHY_TYPE_BOOKMARK_PROPERTY;
 
-                type = g_type_register_static (G_TYPE_OBJECT,
+		type = g_type_register_static (G_TYPE_OBJECT,
 					       "EphyBookmarks",
 					       &our_info, 0);
-        }
+	}
 
-        return type;
+	return type;
 }
 
 static void
@@ -180,126 +172,18 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 		EphyNode *bmk;
 
 		bmk = ephy_bookmarks_add (eb, _(default_bookmarks[i].title),
-				          _(default_bookmarks[i].location));
-		ephy_bookmarksbar_model_add_bookmark (eb->priv->toolbars_model, FALSE,
-							    ephy_node_get_id (bmk));
+					  _(default_bookmarks[i].location));
 	}
 }
-
-static char *
-get_item_type_forward_cb (EggToolbarsModel *model,
-			  GdkAtom type,
-			  EggToolbarsModel *bookmarksbar_model)
-{
-	char *retval;
-
-	g_signal_emit_by_name (bookmarksbar_model, "get_item_type",
-			       type, &retval);
-
-	return retval;
-}
-
-static char *
-get_item_id_forward_cb (EggToolbarsModel *model,
-			const char *type,
-			const char *name,
-			EggToolbarsModel *bookmarksbar_model)
-{
-	char *retval;
-
-	g_signal_emit_by_name (bookmarksbar_model, "get_item_id",
-			       type, name, &retval);
-
-	return retval;
-}
-
-static char *
-get_item_data_forward_cb (EggToolbarsModel *model,
-			  const char *type,
-			  const char *id,
-			  EggToolbarsModel *bookmarksbar_model)
-{
-	char *retval;
-
-	g_signal_emit_by_name (bookmarksbar_model, "get_item_data",
-			       type, id, &retval);
-
-	return retval;
-}
-
-GObject *
-ephy_bookmarks_get_toolbars_model (EphyBookmarks *eb)
-{
-	g_return_val_if_fail (EPHY_IS_BOOKMARKS (eb), NULL);
-
-	LOG ("ephy_bookmarks_get_toolbars_model");
-
-	if (eb->priv->toolbars_model == NULL)
-	{
-		GObject *toolbars_model;
-
-		eb->priv->toolbars_model = EPHY_BOOKMARKSBAR_MODEL
-			(ephy_bookmarksbar_model_new (eb));
-
-		/* forward those signals, so that bookmarks can also be on the main model */
-		toolbars_model = ephy_shell_get_toolbars_model (ephy_shell, FALSE);
-
-		g_signal_connect_after (toolbars_model, "get_item_type",
-					G_CALLBACK (get_item_type_forward_cb),
-					eb->priv->toolbars_model);
-		g_signal_connect_after (toolbars_model, "get_item_id",
-					G_CALLBACK (get_item_id_forward_cb),
-					eb->priv->toolbars_model);
-		g_signal_connect_after (toolbars_model, "get_item_data",
-					G_CALLBACK (get_item_data_forward_cb),
-					eb->priv->toolbars_model);
-
-		if (eb->priv->init_defaults)
-		{
-			ephy_bookmarks_init_defaults (eb);
-		}
-	}
-
-	return G_OBJECT (eb->priv->toolbars_model);
-}
-
-static void
-ephy_bookmarks_set_property (GObject *object,
-                             guint prop_id,
-                             const GValue *value,
-                             GParamSpec *pspec)
-{
-	/* no writable properties */
-	g_assert_not_reached ();
-}
-
-static void
-ephy_bookmarks_get_property (GObject *object,
-                             guint prop_id,
-                             GValue *value,
-                             GParamSpec *pspec)
-{
-	EphyBookmarks *eb = EPHY_BOOKMARKS (object);
-
-	switch (prop_id)
-	{
-		case PROP_TOOLBARS_MODEL:
-			g_value_set_object (value, ephy_bookmarks_get_toolbars_model (eb));
-			break;
-	}
-}
-
 
 static void
 ephy_bookmarks_class_init (EphyBookmarksClass *klass)
 {
-        GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-        parent_class = g_type_class_peek_parent (klass);
+	parent_class = g_type_class_peek_parent (klass);
 
-        object_class->finalize = ephy_bookmarks_finalize;
-	object_class->set_property = ephy_bookmarks_set_property;
-	object_class->get_property = ephy_bookmarks_get_property;
+	object_class->finalize = ephy_bookmarks_finalize;
 
 	klass->resolve_address = impl_resolve_address;
 
@@ -324,14 +208,6 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
 			      2,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING);
-
-	g_object_class_install_property (object_class,
-                                         PROP_TOOLBARS_MODEL,
-                                         g_param_spec_object ("toolbars-model",
-                                                              "Toolbars model",
-                                                              "Toolbars model",
-                                                              EPHY_TYPE_BOOKMARKSBAR_MODEL,
-                                                              G_PARAM_READABLE));
 
 	g_type_class_add_private (object_class, sizeof(EphyBookmarksPrivate));
 }
@@ -408,7 +284,7 @@ ephy_bookmarks_save_delayed (EphyBookmarks *bookmarks, int delay)
 		{
 			bookmarks->priv->save_timeout_id =
 				g_timeout_add (BOOKMARKS_SAVE_DELAY,
-				               (GSourceFunc) save_bookmarks_delayed,
+					       (GSourceFunc) save_bookmarks_delayed,
 					       bookmarks);
 		}
 		else
@@ -485,7 +361,7 @@ add_to_favorites (EphyBookmarks *eb, EphyNode *node, EphyHistory *eh)
 	if (eb->priv->lower_fav && full_menu)
 	{
 		ephy_node_remove_child (eb->priv->favorites,
-				        eb->priv->lower_fav);
+					eb->priv->lower_fav);
 	}
 
 	ephy_node_add_child (eb->priv->favorites, node);
@@ -692,7 +568,7 @@ update_bookmark_keywords (EphyBookmarks *eb, EphyNode *bookmark)
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, case_normalized_keywords);
 	ephy_node_set_property (bookmark, EPHY_NODE_BMK_PROP_KEYWORDS,
-			        &value);
+				&value);
 	g_value_unset (&value);
 
 	g_string_free (list, TRUE);
@@ -998,30 +874,30 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	/* Translators: this topic contains all bookmarks */
 	g_value_set_string (&value, Q_("bookmarks|All"));
 	ephy_node_set_property (eb->priv->bookmarks,
-			        EPHY_NODE_KEYWORD_PROP_NAME,
-			        &value);
+				EPHY_NODE_KEYWORD_PROP_NAME,
+				&value);
 	g_value_unset (&value);
 	ephy_node_signal_connect_object (eb->priv->bookmarks,
-				         EPHY_NODE_CHILD_REMOVED,
-				         (EphyNodeCallback) bookmarks_removed_cb,
-				         G_OBJECT (eb));
+					 EPHY_NODE_CHILD_REMOVED,
+					 (EphyNodeCallback) bookmarks_removed_cb,
+					 G_OBJECT (eb));
 	ephy_node_signal_connect_object (eb->priv->bookmarks,
-				         EPHY_NODE_CHILD_CHANGED,
-				         (EphyNodeCallback) bookmarks_changed_cb,
-				         G_OBJECT (eb));
+					 EPHY_NODE_CHILD_CHANGED,
+					 (EphyNodeCallback) bookmarks_changed_cb,
+					 G_OBJECT (eb));
 
 	/* Keywords */
 	eb->priv->keywords = ephy_node_new_with_id (db, KEYWORDS_NODE_ID);
 	g_value_init (&value, G_TYPE_INT);
 	g_value_set_int (&value, EPHY_NODE_ALL_PRIORITY);
 	ephy_node_set_property (eb->priv->bookmarks,
-			        EPHY_NODE_KEYWORD_PROP_PRIORITY,
-			        &value);
+				EPHY_NODE_KEYWORD_PROP_PRIORITY,
+				&value);
 	g_value_unset (&value);
 	ephy_node_signal_connect_object (eb->priv->keywords,
-				         EPHY_NODE_CHILD_REMOVED,
-				         (EphyNodeCallback) topics_removed_cb,
-				         G_OBJECT (eb));
+					 EPHY_NODE_CHILD_REMOVED,
+					 (EphyNodeCallback) topics_removed_cb,
+					 G_OBJECT (eb));
 
 	ephy_node_add_child (eb->priv->keywords,
 			     eb->priv->bookmarks);
@@ -1034,8 +910,8 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	/* Translators: this topic contains the most used bookmarks */
 	g_value_set_string (&value, Q_("bookmarks|Most Visited"));
 	ephy_node_set_property (eb->priv->favorites,
-			        EPHY_NODE_KEYWORD_PROP_NAME,
-			        &value);
+				EPHY_NODE_KEYWORD_PROP_NAME,
+				&value);
 	g_value_unset (&value);
 	g_value_init (&value, G_TYPE_INT);
 	g_value_set_int (&value, EPHY_NODE_SPECIAL_PRIORITY);
@@ -1053,8 +929,8 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	/* Translators: this topic contains the not categorized bookmarks */
 	g_value_set_string (&value, Q_("bookmarks|Not Categorized"));
 	ephy_node_set_property (eb->priv->notcategorized,
-			        EPHY_NODE_KEYWORD_PROP_NAME,
-			        &value);
+				EPHY_NODE_KEYWORD_PROP_NAME,
+				&value);
 	g_value_unset (&value);
 	g_value_init (&value, G_TYPE_INT);
 	g_value_set_int (&value, EPHY_NODE_SPECIAL_PRIORITY);
@@ -1120,6 +996,11 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 			eb->priv->init_defaults = TRUE;
 		}
 	}
+	
+	if (eb->priv->init_defaults)
+	{
+		ephy_bookmarks_init_defaults (eb);
+	}
 
 	eb->priv->disable_bookmark_editing_notifier_id = eel_gconf_notification_add
 		(CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING,
@@ -1149,13 +1030,6 @@ ephy_bookmarks_finalize (GObject *object)
 #endif
 
 	ephy_bookmarks_save (eb);
-
-	/* have to do this before unreffing the nodes */
-        LOG ("Unref bookmarks toolbars model");
-        if (eb->priv->toolbars_model != NULL)
-        {
-                g_object_unref (eb->priv->toolbars_model);
-        }
 
 	ephy_node_unref (eb->priv->bookmarks);
 	ephy_node_unref (eb->priv->keywords);
@@ -1236,13 +1110,13 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, title);
 	ephy_node_set_property (bm, EPHY_NODE_BMK_PROP_TITLE,
-			        &value);
+				&value);
 	g_value_unset (&value);
 
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, url);
 	ephy_node_set_property (bm, EPHY_NODE_BMK_PROP_LOCATION,
-			        &value);
+				&value);
 	g_value_unset (&value);
 
 	update_has_smart_address (eb, bm, url);
@@ -1266,7 +1140,7 @@ ephy_bookmarks_set_address (EphyBookmarks *eb,
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, address);
 	ephy_node_set_property (bookmark, EPHY_NODE_BMK_PROP_LOCATION,
-			        &value);
+				&value);
 	g_value_unset (&value);
 
 	update_has_smart_address (eb, bookmark, address);
@@ -1318,7 +1192,7 @@ ephy_bookmarks_set_icon	(EphyBookmarks *eb,
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, icon);
 	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_ICON,
-			        &value);
+				&value);
 	g_value_unset (&value);
 }
 
@@ -1468,13 +1342,13 @@ ephy_bookmarks_add_keyword (EphyBookmarks *eb,
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, name);
 	ephy_node_set_property (key, EPHY_NODE_KEYWORD_PROP_NAME,
-			        &value);
+				&value);
 	g_value_unset (&value);
 
 	g_value_init (&value, G_TYPE_INT);
 	g_value_set_int (&value, EPHY_NODE_NORMAL_PRIORITY);
 	ephy_node_set_property (key, EPHY_NODE_KEYWORD_PROP_PRIORITY,
-			        &value);
+				&value);
 	g_value_unset (&value);
 
 	ephy_node_add_child (eb->priv->keywords, key);
@@ -1504,7 +1378,7 @@ bookmark_destroyed_cb (EphyNode *bookmark,
 GtkWidget *
 ephy_bookmarks_show_bookmark_properties (EphyBookmarks *bookmarks,
 					 EphyNode *bookmark,
-				         GtkWidget *parent)
+					 GtkWidget *parent)
 {
 	GtkWidget *dialog = NULL;
 
@@ -1733,4 +1607,61 @@ EphyNode *
 ephy_bookmarks_get_from_id (EphyBookmarks *eb, long id)
 {
 	return ephy_node_db_get_node_from_id (eb->priv->db, id);
+}
+
+int
+ephy_bookmarks_compare_topics (gconstpointer a, gconstpointer b)
+{
+	EphyNode *node_a = (EphyNode *)a;
+	EphyNode *node_b = (EphyNode *)b;
+	const char *title1, *title2;
+	int priority1, priority2;
+
+	priority1 = ephy_node_get_property_int (node_a, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+	priority2 = ephy_node_get_property_int (node_b, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+	
+	if (priority1 > priority2) return 1;
+	if (priority1 < priority2) return -1;
+
+	title1 = ephy_node_get_property_string (node_a, EPHY_NODE_KEYWORD_PROP_NAME);
+	title2 = ephy_node_get_property_string (node_b, EPHY_NODE_KEYWORD_PROP_NAME);
+
+	if (title1 == title2) return 0;
+	if (title1 == NULL) return -1;
+	if (title2 == NULL) return 1;
+	return g_utf8_collate (title1, title2);
+}
+
+int
+ephy_bookmarks_compare_topic_pointers (gconstpointer a, gconstpointer b)
+{
+	EphyNode *node_a = *(EphyNode **)a;
+	EphyNode *node_b = *(EphyNode **)b;
+	
+	return ephy_bookmarks_compare_topics (node_a, node_b);
+}
+
+int
+ephy_bookmarks_compare_bookmarks (gconstpointer a, gconstpointer b)
+{
+	EphyNode *node_a = (EphyNode *)a;
+	EphyNode *node_b = (EphyNode *)b;
+	const char *title1, *title2;
+	
+	title1 = ephy_node_get_property_string (node_a, EPHY_NODE_BMK_PROP_TITLE);
+	title2 = ephy_node_get_property_string (node_b, EPHY_NODE_BMK_PROP_TITLE);
+
+	if (title1 == title2) return 0;
+	if (title1 == NULL) return -1;
+	if (title2 == NULL) return 1;
+	return g_utf8_collate (title1, title2);
+}
+
+int
+ephy_bookmarks_compare_bookmark_pointers (gconstpointer a, gconstpointer b)
+{
+	EphyNode *node_a = *(EphyNode **)a;
+	EphyNode *node_b = *(EphyNode **)b;
+	
+	return ephy_bookmarks_compare_bookmarks (node_a, node_b);
 }

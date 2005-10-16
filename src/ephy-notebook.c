@@ -59,7 +59,7 @@
 #define INSANE_NUMBER_OF_URLS 20
 
 /* Until https://bugzilla.mozilla.org/show_bug.cgi?id=296002 is fixed */
-#define KEEP_TAB_IN_SAME_TOPLEVEL
+//#define KEEP_TAB_IN_SAME_TOPLEVEL
 
 #define EPHY_NOTEBOOK_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NOTEBOOK, EphyNotebookPrivate))
 
@@ -85,7 +85,7 @@ static void ephy_notebook_init           (EphyNotebook *notebook);
 static void ephy_notebook_class_init     (EphyNotebookClass *klass);
 static void ephy_notebook_finalize       (GObject *object);
 static void move_tab_to_another_notebook (EphyNotebook *src,
-			                  EphyNotebook *dest,
+					  EphyNotebook *dest,
 					  GdkEventMotion *event,
 					  int dest_position);
 static void move_tab			 (EphyNotebook *notebook,
@@ -96,8 +96,8 @@ static GdkCursor *cursor = NULL;
 
 static const GtkTargetEntry url_drag_types [] = 
 {
-        { EPHY_DND_URI_LIST_TYPE,   0, 0 },
-        { EPHY_DND_URL_TYPE,        0, 1 }
+	{ EPHY_DND_URI_LIST_TYPE,   0, 0 },
+	{ EPHY_DND_URL_TYPE,        0, 1 }
 };
 
 enum
@@ -722,7 +722,6 @@ move_tab_to_another_notebook (EphyNotebook *src,
 	tab = EPHY_TAB (gtk_notebook_get_nth_page (GTK_NOTEBOOK (src), cur_page));
 
 	/* stop drag in origin window */
-	 */
 	drag_stop (src, event->time);
 
 	ephy_notebook_move_tab (src, dest, tab, dest_position);
@@ -804,9 +803,9 @@ ephy_notebook_new (void)
 
 static void
 ephy_notebook_switch_page_cb (GtkNotebook *notebook,
-                              GtkNotebookPage *page,
-                              guint page_num,
-                              gpointer data)
+			      GtkNotebookPage *page,
+			      guint page_num,
+			      gpointer data)
 {
 	EphyNotebook *nb = EPHY_NOTEBOOK (notebook);
 	GtkWidget *child;
@@ -929,17 +928,17 @@ ephy_notebook_init (EphyNotebook *notebook)
 	gtk_widget_add_events (GTK_WIDGET (notebook), GDK_BUTTON1_MOTION_MASK);
 
 	g_signal_connect_after (G_OBJECT (notebook), "switch_page",
-                                G_CALLBACK (ephy_notebook_switch_page_cb),
-                                NULL);
+				G_CALLBACK (ephy_notebook_switch_page_cb),
+				NULL);
 
 	/* Set up drag-and-drop target */
 	g_signal_connect (G_OBJECT(notebook), "drag_data_received",
 			  G_CALLBACK(notebook_drag_data_received_cb),
 			  NULL);
-        gtk_drag_dest_set (GTK_WIDGET(notebook), GTK_DEST_DEFAULT_MOTION |
+	gtk_drag_dest_set (GTK_WIDGET(notebook), GTK_DEST_DEFAULT_MOTION |
 			   GTK_DEST_DEFAULT_DROP,
-                           url_drag_types, G_N_ELEMENTS (url_drag_types),
-                           GDK_ACTION_MOVE | GDK_ACTION_COPY);
+			   url_drag_types, G_N_ELEMENTS (url_drag_types),
+			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
 
 	notebook->priv->tabs_vis_notifier_id = eel_gconf_notification_add
 		(CONF_ALWAYS_SHOW_TABS_BAR,
@@ -1040,7 +1039,7 @@ tab_label_style_set_cb (GtkWidget *hbox,
 
 	context = gtk_widget_get_pango_context (hbox);
 	metrics = pango_context_get_metrics (context,
-			                     hbox->style->font_desc,
+					     hbox->style->font_desc,
 					     pango_context_get_language (context));
 
 	char_width = pango_font_metrics_get_approximate_digit_width (metrics);
@@ -1087,8 +1086,8 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 			      _("Close tab"), NULL);
 
 	g_signal_connect (G_OBJECT (close_button), "clicked",
-                          G_CALLBACK (close_button_clicked_cb),
-                          tab);
+			  G_CALLBACK (close_button_clicked_cb),
+			  tab);
 
 	/* setup load feedback */
 	spinner = ephy_spinner_new ();
@@ -1100,11 +1099,11 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	gtk_box_pack_start (GTK_BOX (label_hbox), icon, FALSE, FALSE, 0);
 
 	/* setup label */
-        label = gtk_label_new ("");
+	label = gtk_label_new ("");
 	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
 	gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-        gtk_misc_set_padding (GTK_MISC (label), 0, 0);
+	gtk_misc_set_padding (GTK_MISC (label), 0, 0);
 	gtk_box_pack_start (GTK_BOX (label_hbox), label, TRUE, TRUE, 0);
 
 	/* Set minimal size */
@@ -1165,9 +1164,9 @@ ephy_notebook_add_tab (EphyNotebook *nb,
 	sync_load_status (tab, NULL, label);
 
 	g_signal_connect_object (tab, "notify::icon",
-			         G_CALLBACK (sync_icon), label, 0);
+				 G_CALLBACK (sync_icon), label, 0);
 	g_signal_connect_object (tab, "notify::title",
-			         G_CALLBACK (sync_label), label, 0);
+				 G_CALLBACK (sync_label), label, 0);
 	g_signal_connect_object (tab, "notify::load-status",
 				 G_CALLBACK (sync_load_status), label, 0);
 

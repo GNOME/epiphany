@@ -25,22 +25,25 @@
 #include "ephy-link-action.h"
 #include "ephy-node.h"
 
+#include <gtk/gtkactiongroup.h>
+#include <gtk/gtkuimanager.h>
+
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_TOPIC_ACTION            (ephy_topic_action_get_type ())
-#define EPHY_TOPIC_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_TOPIC_ACTION, EphyTopicAction))
-#define EPHY_TOPIC_ACTION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_TOPIC_ACTION, EphyTopicActionClass))
-#define EPHY_IS_TOPIC_ACTION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_TOPIC_ACTION))
-#define EPHY_IS_TOPIC_ACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), EPHY_TYPE_TOPIC_ACTION))
-#define EPHY_TOPIC_ACTION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_TOPIC_ACTION, EphyTopicActionClass))
+#define EPHY_TYPE_TOPIC_ACTION			(ephy_topic_action_get_type ())
+#define EPHY_TOPIC_ACTION(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_TOPIC_ACTION, EphyTopicAction))
+#define EPHY_TOPIC_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_TOPIC_ACTION, EphyTopicActionClass))
+#define EPHY_IS_TOPIC_ACTION(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_TOPIC_ACTION))
+#define EPHY_IS_TOPIC_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((obj), EPHY_TYPE_TOPIC_ACTION))
+#define EPHY_TOPIC_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_TOPIC_ACTION, EphyTopicActionClass))
 
-typedef struct _EphyTopicAction		EphyTopicAction;
-typedef struct _EphyTopicActionPrivate	EphyTopicActionPrivate;
-typedef struct _EphyTopicActionClass	EphyTopicActionClass;
+typedef struct _EphyTopicAction			EphyTopicAction;
+typedef struct _EphyTopicActionPrivate		EphyTopicActionPrivate;
+typedef struct _EphyTopicActionClass		EphyTopicActionClass;
 
 struct _EphyTopicAction
 {
-	EphyLinkAction parent_instance;
+	GtkAction parent_instance;
 
 	/*< private >*/
 	EphyTopicActionPrivate *priv;
@@ -51,10 +54,19 @@ struct _EphyTopicActionClass
 	EphyLinkActionClass parent_class;
 };
 
-GType      ephy_topic_action_get_type	(void);
 
-GtkAction *ephy_topic_action_new	(const char *name,
-					 EphyNode *node);
+GType       ephy_topic_action_get_type (void);
+
+char *      ephy_topic_action_name     (EphyNode *node);
+
+GtkAction * ephy_topic_action_new      (EphyNode *node, GtkUIManager *manager, char *name);
+
+
+void        ephy_topic_action_set_topic (EphyTopicAction *action, EphyNode *node);
+
+EphyNode *  ephy_topic_action_get_topic (EphyTopicAction *action);
+
+void        ephy_topic_action_updated   (EphyTopicAction *action);
 
 G_END_DECLS
 

@@ -1,3 +1,304 @@
+2005-10-16  Peter Harvey <pah06@uow.edu.au>
+
+	H18 patch, by Peter Harvey <pah06@uow.edu.au>.
+	
+	* data/ui/epiphany-bookmark-editor-ui.xml:
+	* data/ui/epiphany-ui.xml:
+	* lib/egg/egg-editable-toolbar.c: (get_dock_position),
+	(get_toolbar_position), (get_toolbar_nth), (find_action),
+	(drag_data_delete_cb), (drag_begin_cb), (drag_end_cb),
+	(drag_data_get_cb), (move_item_cb), (set_dock_visible),
+	(remove_item_cb), (remove_toolbar_cb), (toggle_visibility_cb),
+	(egg_editable_toolbar_add_visibility_items),
+	(egg_editable_toolbar_add_popup_items), (popup_context_menu_cb),
+	(button_press_event_cb), (configure_item_sensitivity),
+	(configure_item_cursor), (connect_widget_signals),
+	(action_sensitive_cb), (create_item_from_action),
+	(create_item_from_position), (toolbar_drag_data_received_cb),
+	(toolbar_drag_drop_cb), (toolbar_drag_motion_cb),
+	(toolbar_drag_leave_cb), (configure_drag_dest), (create_dock),
+	(toolbar_changed_cb), (unparent_fixed), (update_fixed),
+	(toolbar_added_cb), (toolbar_removed_cb), (item_added_cb),
+	(item_removed_cb), (egg_editable_toolbar_construct),
+	(egg_editable_toolbar_set_ui_manager),
+	(egg_editable_toolbar_set_property),
+	(egg_editable_toolbar_get_property), (egg_editable_toolbar_init),
+	(egg_editable_toolbar_finalize),
+	(egg_editable_toolbar_get_edit_mode),
+	(egg_editable_toolbar_set_edit_mode),
+	(egg_editable_toolbar_set_fixed):
+	* lib/egg/egg-editable-toolbar.h:
+	* lib/egg/egg-toolbar-editor.c: (compare_items),
+	(item_added_or_removed_cb), (toolbar_removed_cb),
+	(egg_toolbar_editor_set_model), (egg_toolbar_editor_finalize),
+	(drag_begin_cb), (drag_end_cb), (drag_data_get_cb),
+	(editor_create_item), (editor_create_item_from_name),
+	(append_table), (update_editor_sheet), (egg_toolbar_editor_init):
+	* lib/egg/egg-toolbar-editor.h:
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_to_xml),
+	(egg_toolbars_model_save), (toolbar_node_new), (item_node_new),
+	(item_node_free), (toolbar_node_free),
+	(egg_toolbars_model_get_flags), (egg_toolbars_model_set_flags),
+	(egg_toolbars_model_get_data), (egg_toolbars_model_get_name),
+	(impl_add_item), (egg_toolbars_model_add_item),
+	(egg_toolbars_model_add_toolbar), (parse_data_list),
+	(parse_item_list), (parse_toolbars), (egg_toolbars_model_load),
+	(egg_toolbars_model_class_init), (egg_toolbars_model_init),
+	(egg_toolbars_model_finalize), (egg_toolbars_model_remove_toolbar),
+	(egg_toolbars_model_remove_item), (egg_toolbars_model_move_item),
+	(egg_toolbars_model_n_items), (egg_toolbars_model_item_nth),
+	(egg_toolbars_model_n_toolbars), (egg_toolbars_model_toolbar_nth),
+	(egg_toolbars_model_get_types), (egg_toolbars_model_set_types),
+	(fill_avail_array), (egg_toolbars_model_get_avail),
+	(egg_toolbars_model_get_n_avail), (egg_toolbars_model_set_n_avail):
+	* lib/egg/egg-toolbars-model.h:
+	* src/bookmarks/Makefile.am:
+	* src/bookmarks/ephy-bookmark-action-group.c: (smart_added_cb),
+	(smart_removed_cb), (node_changed_cb), (node_added_cb),
+	(node_removed_cb), (ephy_bookmark_group_new):
+	* src/bookmarks/ephy-bookmark-action-group.h:
+	* src/bookmarks/ephy-bookmark-action.c: (create_tool_item),
+	(ephy_bookmark_action_sync_icon), (show_context_menu),
+	(popup_menu_cb), (button_press_cb), (button_release_cb),
+	(connect_proxy), (ephy_bookmark_action_updated),
+	(ephy_bookmark_action_get_bookmark),
+	(ephy_bookmark_action_set_bookmark),
+	(ephy_bookmark_action_set_property),
+	(ephy_bookmark_action_get_property),
+	(ephy_bookmark_action_finalize), (ephy_bookmark_action_class_init),
+	(ephy_bookmark_action_init), (ephy_bookmark_action_name),
+	(ephy_bookmark_action_new):
+	* src/bookmarks/ephy-bookmark-action.h:
+	* src/bookmarks/ephy-bookmark-factory-action.c:
+	(ephy_bookmark_factory_action_get_type), (activate_item_cb),
+	(build_menu_for_topic), (build_menu), (remove_placeholder_cb),
+	(activate_placeholder_cb), (clicked_placeholder_cb),
+	(realize_placeholder_cb), (create_tool_item), (connect_proxy),
+	(ephy_bookmark_factory_action_class_init),
+	(ephy_bookmark_factory_action_new):
+	* src/bookmarks/ephy-bookmark-factory-action.h:
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(ephy_bookmark_properties_set_property),
+	(ephy_bookmark_properties_get_property),
+	(bookmark_properties_response_cb), (update_entry),
+	(location_entry_changed_cb), (build_ui):
+	* src/bookmarks/ephy-bookmarks-editor.c: (add_entry_monitor),
+	(cmd_add_topic), (delete_topic_dialog_construct),
+	(cmd_bookmarks_import), (ephy_bookmarks_editor_finalize),
+	(ephy_bookmarks_editor_node_activated_cb),
+	(ephy_bookmarks_editor_update_menu), (view_focus_cb),
+	(add_focus_monitor), (remove_focus_monitor), (bookmarks_filter),
+	(search_entry_search_cb), (ephy_bookmarks_editor_construct),
+	(ephy_bookmarks_editor_set_parent),
+	(ephy_bookmarks_editor_set_property),
+	(ephy_bookmarks_editor_get_property), (ephy_bookmarks_editor_init):
+	* src/bookmarks/ephy-bookmarks-menu.c: (append_bookmarks),
+	(append_menu), (ephy_bookmarks_menu_build):
+	* src/bookmarks/ephy-bookmarks-menu.h:
+	* src/bookmarks/ephy-bookmarks-ui.c: (find_action),
+	(activate_bookmarks_menu), (activate_favorites_menu),
+	(erase_bookmarks_menu), (erase_favorites_menu), (tree_changed_cb),
+	(node_added_cb), (node_changed_cb), (node_removed_cb),
+	(ephy_bookmarks_ui_attach_window),
+	(ephy_bookmarks_ui_detach_window), (toolbar_node_removed_cb),
+	(topic_has_data), (topic_get_data), (topic_get_name),
+	(bookmark_has_data), (bookmark_get_data), (bookmark_get_name),
+	(bookmark_new_name), (ephy_bookmarks_ui_attach_toolbar_model),
+	(ephy_bookmarks_ui_detach_toolbar_model):
+	* src/bookmarks/ephy-bookmarks-ui.h:
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_get_type),
+	(ephy_bookmarks_init_defaults), (ephy_bookmarks_class_init),
+	(ephy_bookmarks_save_delayed), (add_to_favorites),
+	(update_bookmark_keywords), (ephy_bookmarks_init),
+	(ephy_bookmarks_finalize), (ephy_bookmarks_add),
+	(ephy_bookmarks_set_address), (ephy_bookmarks_set_icon),
+	(ephy_bookmarks_add_keyword),
+	(ephy_bookmarks_show_bookmark_properties),
+	(ephy_bookmarks_get_from_id), (ephy_bookmarks_compare_topics),
+	(ephy_bookmarks_compare_topic_pointers),
+	(ephy_bookmarks_compare_bookmarks),
+	(ephy_bookmarks_compare_bookmark_pointers):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-bookmarksbar-model.c:
+	* src/bookmarks/ephy-bookmarksbar-model.h:
+	* src/bookmarks/ephy-bookmarksbar.c:
+	* src/bookmarks/ephy-bookmarksbar.h:
+	* src/bookmarks/ephy-favorites-menu.c:
+	* src/bookmarks/ephy-favorites-menu.h:
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_add),
+	(build_editing_table), (ephy_new_bookmark_construct),
+	(ephy_new_bookmark_set_property), (ephy_new_bookmark_get_property):
+	* src/bookmarks/ephy-nodes-cover.c: (ephy_nodes_count_covered),
+	(ephy_nodes_remove_covered), (ephy_nodes_remove_not_covered),
+	(ephy_nodes_get_covered), (ephy_nodes_covered),
+	(ephy_nodes_get_covering):
+	* src/bookmarks/ephy-nodes-cover.h:
+	* src/bookmarks/ephy-open-tabs-action.c: (activate_cb),
+	(node_added_cb), (node_removed_cb), (ephy_open_tabs_group_new),
+	(ephy_open_tabs_action_name):
+	* src/bookmarks/ephy-open-tabs-action.h:
+	* src/bookmarks/ephy-related-action.c: (node_changed),
+	(node_destroyed), (open_link), (iface_init),
+	(ephy_related_action_get_type), (ephy_related_action_new):
+	* src/bookmarks/ephy-related-action.h:
+	* src/bookmarks/ephy-topic-action-group.c: (node_changed_cb),
+	(node_added_cb), (node_removed_cb), (ephy_topic_group_new):
+	* src/bookmarks/ephy-topic-action-group.h:
+	* src/bookmarks/ephy-topic-action.c: (ephy_topic_action_get_type),
+	(create_tool_item), (ephy_topic_action_sync_label), (get_popup),
+	(erase_popup), (child_added_cb), (child_changed_cb),
+	(child_removed_cb), (menu_destroy_cb), (menu_init_cb),
+	(button_deactivate_cb), (button_toggled_cb), (button_release_cb),
+	(button_press_cb), (connect_proxy), (ephy_topic_action_updated),
+	(ephy_topic_action_get_topic), (ephy_topic_action_set_topic),
+	(ephy_topic_action_set_property), (ephy_topic_action_get_property),
+	(ephy_topic_action_class_init), (ephy_topic_action_init),
+	(ephy_topic_action_name), (ephy_topic_action_new):
+	* src/bookmarks/ephy-topic-action.h:
+	* src/bookmarks/ephy-topic-factory-action.c:
+	(ephy_topic_factory_action_get_type), (sort_topics),
+	(activate_item_cb), (build_menu), (remove_placeholder_cb),
+	(activate_placeholder_cb), (clicked_placeholder_cb),
+	(realize_placeholder_cb), (create_tool_item), (connect_proxy),
+	(ephy_topic_factory_action_class_init),
+	(ephy_topic_factory_action_new):
+	* src/bookmarks/ephy-topic-factory-action.h:
+	* src/ephy-link-action.c: (ephy_link_action_group_get_type),
+	(ephy_link_action_group_new):
+	* src/ephy-link-action.h:
+	* src/ephy-lockdown.c: (find_name), (find_action_group),
+	(update_window):
+	* src/ephy-notebook.c: (move_tab_to_another_notebook),
+	(ephy_notebook_switch_page_cb), (ephy_notebook_init),
+	(tab_label_style_set_cb), (build_tab_label),
+	(ephy_notebook_add_tab):
+	* src/ephy-shell.c: (ephy_shell_get_toolbars_model):
+	* src/ephy-toolbar-editor.c: (ephy_toolbar_editor_constructor),
+	(ephy_toolbar_editor_finalize), (ephy_toolbar_editor_set_property),
+	(ephy_toolbar_editor_class_init):
+	* src/ephy-toolbar.c: (ephy_toolbar_realize),
+	(ephy_toolbar_unrealize), (ephy_toolbar_finalize):
+	* src/ephy-toolbars-model.c: (update_flags),
+	(ephy_toolbars_model_load):
+	* src/ephy-window.c: (ephy_window_get_type),
+	(get_chromes_visibility), (sync_chromes_visibility),
+	(ephy_window_key_press_event), (tool_item_enter_cb),
+	(tool_item_leave_cb), (tool_item_drag_begin_cb),
+	(connect_tool_item), (disconnect_tool_item), (disconnect_proxy_cb),
+	(connect_proxy_cb), (update_chromes_actions), (show_embed_popup),
+	(tab_added_cb), (tab_removed_cb), (ephy_window_set_chrome),
+	(ephy_window_dispose), (ephy_window_class_init),
+	(ephy_window_init), (ephy_window_finalize),
+	(ephy_window_remove_tab), (ephy_window_set_zoom),
+	(sync_prefs_with_chrome), (ephy_window_view_toolbar_cb):
+	* src/ephy-window.h:
+
+	Revision history:
+
+	h18, released 2005/09/23, for Epiphany 1.8.0
+
+	* Just an update for 1.8.0.
+	
+	h17, released 2005/08/30, for Epiphany 1.7.6 or CVS HEAD
+	
+	* Mostly just an update for 1.7.6.
+	* Topic menus on the toolbar now open without releasing the mouse button.
+	* Topic menus on the toolbar are now also hierarchical (see if you like it.
+	
+	h16, released 2005/08/25, for Epiphany 1.7.5 or CVS HEAD
+	
+	* Just an update for 1.7.5. Sorry, I've been busy. :)
+	
+	h15, released 2005/07/19, for Epiphany 1.7.2 or CVS HEAD
+	
+	* Code cleanup
+	
+	h14, released 2005/07/9, for Epiphany 1.7.1 or CVS HEAD
+	
+	* Improved helpful tip when adding a bookmark
+	* Improved toolbar context menu
+	* Toolbar visibility state is now saved
+	* Separated bookmark/topic action groups into separate files
+	* Topics in the overflow menu now behave as submenus
+	* Now importing old bookmarksbar, and saving to new filename
+	* Incremented toolbar file format version number to 1.1
+	* Fixed the 'sticky' statusbar help
+	* Fixed a crashing bug (dnd then open a topic on the toolbar)
+	
+	h13, released 2005/05/12, for CVS HEAD
+	
+	* Added middle-mouse drag-drop for the editable toolbar.
+	* Fixed some warnings at compile and run time.
+	* Added brief help for the user when adding a new bookmark.
+	* Cleaned up the editable toolbar code a little.
+	
+	h12, released 2005/05/10, for CVS HEAD
+	
+	* Added new editing facilities for the editable toolbar.
+	
+	h11, released 2005/04/29, for CVS HEAD
+	
+	* Fixed bug in statusbar information for toolbar items.
+	* Added an all-new 'Related' toolbar widget which changes to show 
+	the most related topic whenever a bookmark is activated.
+	
+	h10, released 2005/04/15, for Epiphany 1.6.2 or CVS HEAD
+	
+	* Added statusbar information for all toolbar items.
+	* Empty toolbars are now only deleted when exiting edit mode.
+	* Fixed regression of middle-click for bookmarks on toolbar.
+	* Fixed regression of ellipsized bookmark names in menus.
+	
+	h9, released 2005/04/12, for Epiphany 1.6.1
+	
+	* Updated patch for 1.6.1. Long time no see.
+	* Now using EphyLink objects everywhere.
+	
+	h7, released 2004/10/21, for Epiphany 1.4.4
+	
+	* Updated patch for 1.4.4.
+	* Fixed bugs causing crashes when bookmarks were added (thanks Reinout).
+	* Added "Open in Tabs" back into bookmark menus where suitable.
+	
+	h6, released 2004/09/20, for Epiphany 1.4.0
+	
+	* Updated patch for 1.4.0.
+	* Removed the bookmarks bar.
+	* Generate shared XML string for bookmarks menu.
+	* Slightly improve performance of node-cover code.
+	* Delay adding bookmarks menu until it is first used.
+	* Fixed bug(?) in ephy-node.
+	
+	h4, released 2004/08/08, for Epiphany 1.3.4
+	
+	* Updated patch due to changes to topics selector.
+	* Removed 'Most Visited' from the min-cover calculations.
+	* Fixed Epiphany 1.3.4 bug where topics in selector aren't sorted.
+	* Updated patch due to other changes in Epiphany 1.3.4 source.
+	
+	h3, released 2004/07/12, for Epiphany 1.3.2
+	
+	* Simple update for Epiphany 1.3.2
+	
+	h3, released 2004/05/24, for Epiphany 1.2.5
+	
+	* Moved duplicated functions into a seperate file.
+	* Improved topic selector.
+	* Bookmarks toolbar topic menus now have subdivisions.
+	* Topic names in menu now change if modified in the bookmarks editor.
+	
+	h2, released 2004/05/23, for Epiphany 1.2.5
+	
+	* Significantly cleaned up the code.
+	* 'Most Visited' no longer appears as a submenu.
+	* Subtopics are selected much more intelligently, giving a better
+ 	  approximation to a true minimum cover.
+	* Topic selector now shows suggestions with arrows, not bold font.
+	
+	h1, released 2004/05/19, for Epiphany 1.2.5
+	
+	* Initial release.
+
 2005-10-16  Philip Langdale  <philipl@mail.utexas.edu>
 
 	* configure.ac: Add another necessary mozilla include subdir to

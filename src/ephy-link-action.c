@@ -178,3 +178,47 @@ ephy_link_action_get_type (void)
 
 	return type;
 }
+
+GType
+ephy_link_action_group_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyLinkActionGroupClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			NULL, /* class_init */
+			NULL,
+			NULL, /* class_data */
+			sizeof (EphyLinkActionGroup),
+			0,   /* n_preallocs */
+			NULL /* instance_init */
+		};
+		static const GInterfaceInfo link_info = 
+		{
+			NULL,
+			NULL,
+			NULL
+		};
+
+		type = g_type_register_static (GTK_TYPE_ACTION_GROUP,
+					       "EphyLinkActionGroup",
+					       &our_info, 0);
+		g_type_add_interface_static (type,
+					     EPHY_TYPE_LINK,
+					     &link_info);
+	}
+
+	return type;
+}
+
+EphyLinkActionGroup *
+ephy_link_action_group_new (char * name)
+{
+	return EPHY_LINK_ACTION_GROUP (g_object_new (EPHY_TYPE_LINK_ACTION_GROUP,
+						     "name", "BookmarkActions", NULL));
+}

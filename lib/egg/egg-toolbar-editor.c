@@ -34,6 +34,7 @@
 #include <gtk/gtktable.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkhbox.h>
+#include <gtk/gtk.h>
 
 static const GtkTargetEntry dest_drag_types[] = {
   {EGG_TOOLBAR_ITEM_TYPE, GTK_TARGET_SAME_APP, 0},
@@ -46,7 +47,6 @@ static const GtkTargetEntry source_drag_types[] = {
 static void egg_toolbar_editor_class_init	(EggToolbarEditorClass *klass);
 static void egg_toolbar_editor_init		(EggToolbarEditor *t);
 static void egg_toolbar_editor_finalize         (GObject *object);
-static void update_actions_list			(EggToolbarEditor *editor);
 static void update_editor_sheet                 (EggToolbarEditor *editor);
 
 enum
@@ -67,9 +67,8 @@ struct EggToolbarEditorPrivate
 
   GtkWidget *table;
   GtkWidget *scrolled_window;
-
-  GList *default_actions_list;
-  GList *actions_list;
+  GList     *actions_list;
+  GList     *factory_list;
 };
 
 GType
@@ -100,27 +99,18 @@ egg_toolbar_editor_get_type (void)
 }
 
 static gint
-compare_actions (gconstpointer a,
-		 gconstpointer b)
+compare_items (gconstpointer a,
+               gconstpointer b)
 {
-  GValue value_a = { 0, }, value_b = { 0, };
-  const char *short_label_a, *short_label_b;
-  int ret;
+  const GtkWidget *item1 = a;
+  const GtkWidget *item2 = b;
 
-  g_value_init (&value_a, G_TYPE_STRING);
-  g_object_get_property (G_OBJECT (a), "short_label", &value_a);
-  short_label_a = g_value_get_string (&value_a);
-
-  g_value_init (&value_b, G_TYPE_STRING);
-  g_object_get_property (G_OBJECT (b), "short_label", &value_b);
-  short_label_b = g_value_get_string (&value_b);
-
-  ret = g_utf8_collate (short_label_a, short_label_b);
-
-  g_value_unset (&value_a);
-  g_value_unset (&value_b);
-
-  return ret;
+  char *key1 = g_object_get_data (G_OBJECT (item1),
+                                  "egg-collate-key");
+  char *key2 = g_object_get_data (G_OBJECT (item2),
+                                  "egg-collate-key");
+  
+  return strcmp (key1, key2);
 }
 
 static GtkAction *
@@ -157,11 +147,19 @@ egg_toolbar_editor_set_ui_manager (EggToolbarEditor *t,
 }
 
 static void
+item_added_or_removed_cb (EggToolbarsModel   *model,
+                          int                 tpos,
+                          int                 ipos,
+                          EggToolbarEditor   *editor)
+{
+  update_editor_sheet (editor);
+}
+
+static void
 toolbar_removed_cb (EggToolbarsModel   *model,
 	            int                 position,
 	            EggToolbarEditor   *editor)
 {
-  update_actions_list (editor);
   update_editor_sheet (editor);
 }
 
@@ -172,7 +170,13 @@ egg_toolbar_editor_set_model (EggToolbarEditor *t,
   g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (t));
 
   t->priv->model = g_object_ref (model);
+  
+  update_editor_sheet (t);
 
+  g_signal_connect_object (model, "item_added",
+			   G_CALLBACK (item_added_or_removed_cb), t, 0);
+  g_signal_connect_object (model, "item_removed",
+			   G_CALLBACK (item_added_or_removed_cb), t, 0);
   g_signal_connect_object (model, "toolbar_removed",
 			   G_CALLBACK (toolbar_removed_cb), t, 0);
 }
@@ -261,8 +265,8 @@ egg_toolbar_editor_finalize (GObject *object)
       g_object_unref (editor->priv->model);
     }
 
-  g_list_free (editor->priv->default_actions_list);
   g_list_free (editor->priv->actions_list);
+  g_list_free (editor->priv->factory_list);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -281,66 +285,14 @@ static void
 drag_begin_cb (GtkWidget          *widget,
 	       GdkDragContext     *context)
 {
-	gtk_widget_hide (widget);
+  gtk_widget_hide (widget);
 }
 
 static void
 drag_end_cb (GtkWidget          *widget,
 	     GdkDragContext     *context)
 {
-	gtk_widget_show (widget);
-}
-
-static void
-editor_drag_data_received_cb (GtkWidget          *widget,
-			      GdkDragContext     *context,
-			      gint                x,
-			      gint                y,
-			      GtkSelectionData   *selection_data,
-			      guint               info,
-			      guint               time_,
-			      EggToolbarEditor *editor)
-{
-  GtkAction *action;
-  const char *data;
-
-  g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (editor));
-  g_return_if_fail (selection_data != NULL);
-
-  if (selection_data->length <= 0 || selection_data->data == NULL) return;
-
-  data = (const char *) selection_data->data;
-
-  if (strcmp (data, "separator") == 0) return;
-
-  action = find_action (editor, data);
-  g_return_if_fail (action != NULL);
-
-  if (g_list_find (editor->priv->default_actions_list, action))
-    {
-      editor->priv->actions_list = g_list_insert_sorted
-	    (editor->priv->actions_list, action, compare_actions);
-    }
-
-  update_editor_sheet (editor);
-}
-
-static void
-editor_drag_data_delete_cb (GtkWidget          *widget,
-			    GdkDragContext     *context,
-			    EggToolbarEditor *editor)
-{
-  GtkAction *action;
-  g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (editor));
-
-  action = GTK_ACTION (g_object_get_data (G_OBJECT (widget), "egg-action"));
-  if (action)
-    {
-      editor->priv->actions_list = g_list_remove
-	    (editor->priv->actions_list, action);
-    }
-
-  update_editor_sheet (editor);
+  gtk_widget_show (widget);
 }
 
 static void
@@ -351,23 +303,12 @@ drag_data_get_cb (GtkWidget          *widget,
 		  guint32             time,
 		  EggToolbarEditor   *editor)
 {
-  GtkAction *action;
   const char *target;
 
-  action = GTK_ACTION (g_object_get_data (G_OBJECT (widget), "egg-action"));
-
-  if (action)
-    {
-      target = gtk_action_get_name (action);
-    }
-  else
-    {
-      target = "separator";
-    }
-
-  gtk_selection_data_set (selection_data,
-                          selection_data->target, 8,
-                          (const guchar *)target, strlen (target));
+  target = g_object_get_data (G_OBJECT (widget), "egg-item-name");
+  g_return_if_fail (target != NULL);
+  
+  gtk_selection_data_set (selection_data, selection_data->target, 8, target, strlen (target));
 }
 
 static gchar *
@@ -454,8 +395,6 @@ editor_create_item (EggToolbarEditor *editor,
 		       source_drag_types, G_N_ELEMENTS (source_drag_types), action);
   g_signal_connect (event_box, "drag_data_get",
 		    G_CALLBACK (drag_data_get_cb), editor);
-  g_signal_connect (event_box, "drag_data_delete",
-		    G_CALLBACK (editor_drag_data_delete_cb), editor);
   g_signal_connect_after (event_box, "realize",
 		          G_CALLBACK (event_box_realize_cb), icon);
 
@@ -482,80 +421,174 @@ editor_create_item (EggToolbarEditor *editor,
   return event_box;
 }
 
-static void
-update_editor_sheet (EggToolbarEditor *editor)
+static GtkWidget *
+editor_create_item_from_name (EggToolbarEditor *editor,
+                              const char *      name,
+                              GdkDragAction     drag_action)
 {
-  GList *l;
-  GList *to_drag;
-  int x, y, height, width;
-  GtkWidget *table;
-  GtkWidget *viewport;
   GtkWidget *item;
-  GtkWidget *icon;
-
-  g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (editor));
-
-  viewport = GTK_BIN (editor->priv->scrolled_window)->child;
-  if (viewport)
+  const char *item_name;
+  const char *stock_id;
+  const char *short_label;
+  const char *collate_key;
+  
+  if (strcmp (name, "_separator") == 0)
     {
-      table = GTK_BIN (viewport)->child;
-      gtk_container_remove (GTK_CONTAINER (viewport), table);
+      GtkWidget *icon;
+      
+      icon = _egg_editable_toolbar_new_separator_image ();
+      short_label = _("Separator");
+      item_name = strdup (name);
+      collate_key = g_utf8_collate_key (short_label, -1);
+      item = editor_create_item (editor, GTK_IMAGE (icon), 
+                                 short_label, drag_action);
     }
-  table = gtk_table_new (0, 0, TRUE);
-  editor->priv->table = table;
-  gtk_container_set_border_width (GTK_CONTAINER (table), 12);
-  gtk_widget_show (table);
-  gtk_scrolled_window_add_with_viewport
-    (GTK_SCROLLED_WINDOW (editor->priv->scrolled_window), table);
-  gtk_drag_dest_set (table, GTK_DEST_DEFAULT_ALL,
-		     dest_drag_types, G_N_ELEMENTS (dest_drag_types), GDK_ACTION_MOVE);
-  g_signal_connect (table, "drag_data_received",
-		    G_CALLBACK (editor_drag_data_received_cb), editor);
-
-  to_drag = editor->priv->actions_list;
-
-  x = y = 0;
-  width = 4;
-  height = (g_list_length (to_drag)) / width + 1;
-  gtk_table_resize (GTK_TABLE (editor->priv->table), height, width);
-
-  for (l = to_drag; l != NULL; l = l->next)
+  else
     {
-      GtkAction *action = (l->data);
-      const char *stock_id, *short_label;
       GValue value = { 0, };
+      GtkAction *action;
+      GtkWidget *icon;
+      
+      action = find_action (editor, name);
+      g_return_val_if_fail (action != NULL, NULL);
 
       g_value_init (&value, G_TYPE_STRING);
       g_object_get_property (G_OBJECT (action), "stock_id", &value);
       stock_id = g_value_get_string (&value);
-      icon = gtk_image_new_from_stock
-		(stock_id ? stock_id : GTK_STOCK_DND,
-		 GTK_ICON_SIZE_LARGE_TOOLBAR);
+      icon = gtk_image_new_from_stock (stock_id ? stock_id : GTK_STOCK_DND,
+                                       GTK_ICON_SIZE_LARGE_TOOLBAR);
       g_value_unset (&value);
-
+      
       g_value_init (&value, G_TYPE_STRING);
       g_object_get_property (G_OBJECT (action), "short_label", &value);
       short_label = g_value_get_string (&value);
-      item = editor_create_item (editor, GTK_IMAGE (icon),
-				 short_label, GDK_ACTION_MOVE);
-      g_value_unset (&value);
-      g_object_set_data (G_OBJECT (item), "egg-action", action);
-      gtk_table_attach_defaults (GTK_TABLE (editor->priv->table),
-		                 item, x, x + 1, y, y + 1);
 
-      x++;
-      if (x >= width)
-	{
-	  x = 0;
-	  y++;
-	}
+      item_name = strdup (name);
+      collate_key = g_utf8_collate_key (short_label, -1);
+      item = editor_create_item (editor, GTK_IMAGE (icon),
+                                 short_label, drag_action);
+      g_value_unset (&value);
+    }
+  
+  g_object_set_data_full (G_OBJECT (item), "egg-collate-key",
+                          (gpointer) collate_key, g_free);
+  g_object_set_data_full (G_OBJECT (item), "egg-item-name",
+                          (gpointer) item_name, g_free);
+  
+  return item;
+}
+
+static gint
+append_table (GtkTable *table, GList *items, gint y, gint width)
+{
+  if (items != NULL)
+    {
+      gint x = 0, height;
+      GtkWidget *alignment;
+      GtkWidget *item;
+  
+      height = g_list_length (items) / width + 1;
+      gtk_table_resize (table, height, width);
+      
+      if (y > 0)
+        {
+          item = gtk_hseparator_new ();
+          alignment = gtk_alignment_new (0.5, 0.5, 1.0, 0.0);
+          gtk_container_add (GTK_CONTAINER (alignment), item);
+          gtk_widget_show (alignment);
+          gtk_widget_show (item);
+          
+          gtk_table_attach_defaults (table, alignment, 0, width, y-1, y+1);
+        }
+      
+      for (; items != NULL; items = items->next)
+        {
+          item = items->data;
+          alignment = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+          gtk_container_add (GTK_CONTAINER (alignment), item);
+          gtk_widget_show (alignment);
+          gtk_widget_show (item);
+          
+          if (x >= width)
+            {
+              x = 0;
+              y++;
+            }
+          gtk_table_attach_defaults (table, alignment, x, x+1, y, y+1);
+          x++;
+        }
+      
+      y++;
+    }
+  return y;
+}
+
+static void
+update_editor_sheet (EggToolbarEditor *editor)
+{
+  gint y;
+  GPtrArray *items;
+  GList *to_move = NULL, *to_copy = NULL;
+  GtkWidget *table;
+  GtkWidget *viewport;
+
+  g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (editor));
+
+  /* Create new table. */
+  table = gtk_table_new (0, 0, TRUE);
+  editor->priv->table = table;
+  gtk_container_set_border_width (GTK_CONTAINER (table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 24);
+  gtk_widget_show (table);
+  gtk_drag_dest_set (table, GTK_DEST_DEFAULT_ALL,
+		     dest_drag_types, G_N_ELEMENTS (dest_drag_types),
+                     GDK_ACTION_MOVE | GDK_ACTION_COPY);
+  
+  /* Build two lists of items (one for copying, one for moving). */
+  items = egg_toolbars_model_get_avail (editor->priv->model);
+  while (items->len > 0)
+    {
+      GtkWidget *item;
+      const char *name;
+      
+      name = g_ptr_array_index (items, 0);
+      g_ptr_array_remove_index_fast (items, 0);
+      
+      if (egg_toolbars_model_get_n_avail (editor->priv->model, name) == 1)
+        {
+          item = editor_create_item_from_name (editor, name, GDK_ACTION_MOVE);
+          if (item != NULL)
+            to_move = g_list_insert_sorted (to_move, item, compare_items);
+        }
+      else
+        {
+          item = editor_create_item_from_name (editor, name, GDK_ACTION_COPY);
+          if (item != NULL)
+            to_copy = g_list_insert_sorted (to_copy, item, compare_items);
+        }
     }
 
-  icon = _egg_editable_toolbar_new_separator_image ();
-  item = editor_create_item (editor, GTK_IMAGE (icon), _("Separator"),
-			     GDK_ACTION_COPY);
-  gtk_table_attach_defaults (GTK_TABLE (editor->priv->table),
-		             item, x, x + 1, y, y + 1);
+  /* Add them to the sheet. */
+  y = 0;
+  y = append_table (GTK_TABLE (table), to_move, y, 4);
+  y = append_table (GTK_TABLE (table), to_copy, y, 4);
+  
+  g_list_free (to_move);
+  g_list_free (to_copy);
+  g_ptr_array_free (items, TRUE);
+  
+  /* Delete old table. */
+  viewport = GTK_BIN (editor->priv->scrolled_window)->child;
+  if (viewport)
+    {
+      gtk_container_remove (GTK_CONTAINER (viewport),
+                            GTK_BIN (viewport)->child);
+    }
+  
+  /* Add table to window. */
+  gtk_scrolled_window_add_with_viewport
+    (GTK_SCROLLED_WINDOW (editor->priv->scrolled_window), table);
+
 }
 
 static void
@@ -578,113 +611,8 @@ egg_toolbar_editor_init (EggToolbarEditor *t)
   t->priv = EGG_TOOLBAR_EDITOR_GET_PRIVATE (t);
 
   t->priv->manager = NULL;
-  t->priv->default_actions_list = NULL;
   t->priv->actions_list = NULL;
 
   setup_editor (t);
 }
 
-void
-egg_toolbar_editor_add_action (EggToolbarEditor *editor,
-			       const char       *action_name)
-{
-	GtkAction *action;
-
-	action = find_action (editor, action_name);
-	g_return_if_fail (action != NULL);
-
-	editor->priv->default_actions_list = g_list_insert_sorted
-		(editor->priv->default_actions_list, action, compare_actions);
-}
-
-static void
-parse_item_list (EggToolbarEditor *t,
-		 xmlNodePtr        child)
-{
-  while (child)
-    {
-      if (xmlStrEqual (child->name, (const xmlChar*) "toolitem"))
-	{
-	  xmlChar *name;
-
-	  name = xmlGetProp (child, (const xmlChar*) "name");
-	  egg_toolbar_editor_add_action (t, (const char*)name);
-	  xmlFree (name);
-	}
-      child = child->next;
-    }
-}
-
-static gboolean
-model_has_action (EggToolbarsModel *model, GtkAction *action)
-{
-  int i, l, n_items, n_toolbars;
-
-  n_toolbars = egg_toolbars_model_n_toolbars (model);
-  for (i = 0; i < n_toolbars; i++)
-    {
-      n_items = egg_toolbars_model_n_items (model, i);
-      for (l = 0; l < n_items; l++)
-        {
-          const char *name;
-	  const char *action_name;
-          gboolean sep;
-
-          egg_toolbars_model_item_nth (model, i, l, &sep, &name, NULL);
-          action_name = gtk_action_get_name (action);
-          if (!sep && strcmp (name, action_name) == 0) return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
-static void
-update_actions_list (EggToolbarEditor *editor)
-{
-  GList *l;
-
-  if (editor->priv->actions_list)
-    g_list_free (editor->priv->actions_list);
-
-  /* Remove the already used items */
-  editor->priv->actions_list = NULL;
-
-  for (l = editor->priv->default_actions_list; l != NULL; l = l->next)
-    {
-      GtkAction *action = GTK_ACTION (l->data);
-
-      if (!model_has_action (editor->priv->model, action))
-        {
-          editor->priv->actions_list = g_list_insert_sorted
-		(editor->priv->actions_list, action, compare_actions);
-        }
-    }
-}
-
-void
-egg_toolbar_editor_load_actions (EggToolbarEditor *editor,
-				 const char       *xml_file)
-{
-  xmlDocPtr doc;
-  xmlNodePtr root;
-  xmlNodePtr child;
-
-  doc = xmlParseFile (xml_file);
-  root = xmlDocGetRootElement (doc);
-  child = root->children;
-
-  while (child)
-    {
-      if (xmlStrEqual (child->name, (const xmlChar*) "available"))
-	{
-	  parse_item_list (editor, child->children);
-	}
-      child = child->next;
-    }
-
-  xmlFreeDoc (doc);
-
-  update_actions_list (editor);
-  update_editor_sheet (editor);
-}

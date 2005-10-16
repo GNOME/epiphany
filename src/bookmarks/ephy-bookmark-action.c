@@ -1,6 +1,7 @@
 /*
  *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
  *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2005 Peter Harvey
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,12 +22,11 @@
 
 #include "config.h"
 
+#include "egg-editable-toolbar.h"
 #include "ephy-bookmark-action.h"
-#include "ephy-bookmarksbar-model.h"
-#include "ephy-bookmarksbar.h"
 #include "ephy-bookmarks.h"
+#include "ephy-link-action.h"
 #include "ephy-link.h"
-#include "ephy-dnd.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
 #include "ephy-gui.h"
@@ -37,16 +37,13 @@
 #include <gtk/gtkhbox.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkbutton.h>
-#include <gtk/gtkentry.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkimagemenuitem.h>
 #include <gtk/gtkseparatormenuitem.h>
-#include <gtk/gtkmenushell.h>
-#include <gtk/gtkmenu.h>
+#include <gtk/gtkentry.h>
 #include <gtk/gtktoolitem.h>
-#include <gtk/gtktoolbar.h>
 #include <gtk/gtkmain.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 
@@ -62,20 +59,11 @@ static void ephy_bookmark_action_class_init (EphyBookmarkActionClass *class);
 
 #define EPHY_BOOKMARK_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkActionPrivate))
 
-static GtkTargetEntry drag_targets[] =
-{
-	{ EPHY_DND_URL_TYPE, 0,	0 }
-};
-static int n_drag_targets = G_N_ELEMENTS (drag_targets);
-
 struct _EphyBookmarkActionPrivate
 {
 	EphyNode *node;
 	gboolean smart_url;
 	guint cache_handler;
-	guint motion_handler;
-	gint drag_x;
-	gint drag_y;
 };
 
 enum
@@ -138,6 +126,7 @@ create_tool_item (GtkAction *action)
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (hbox), button);
 	g_object_set_data (G_OBJECT (item), "button", button);
+	g_object_set_data (G_OBJECT (item), "egg-drag-source", button);
 
 	entry = gtk_entry_new ();
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), ENTRY_WIDTH_CHARS);
@@ -247,7 +236,7 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 		if (pixbuf == NULL)
 		{
 			pixbuf = gtk_widget_render_icon (proxy, GTK_STOCK_NEW,
-					                 GTK_ICON_SIZE_MENU, NULL);
+							 GTK_ICON_SIZE_MENU, NULL);
 		}
 
 		gtk_image_set_from_pixbuf (icon, pixbuf);
@@ -379,142 +368,6 @@ activate_cb (GtkWidget *widget,
 }
 
 static void
-stop_drag_check (EphyBookmarkAction *action, GtkWidget *widget)
-{
-	if (action->priv->motion_handler)
-	{
-		g_signal_handler_disconnect (widget, action->priv->motion_handler);
-		action->priv->motion_handler = 0;
-	}
-}
-
-static void
-drag_data_get_cb (GtkWidget *widget, GdkDragContext *context,
-		  GtkSelectionData *selection_data, guint info,
-		  guint32 time, EphyBookmarkAction *action)
-{
-	const char *address, *title;
-	char *data;
-
-	g_return_if_fail (action->priv->node != NULL);
-
-	address = ephy_node_get_property_string (action->priv->node,
-						 EPHY_NODE_BMK_PROP_LOCATION);
-	g_return_if_fail (address != NULL);
-
-	title = ephy_node_get_property_string (action->priv->node,
-					       EPHY_NODE_BMK_PROP_TITLE);
-	g_return_if_fail (title != NULL);
-
-	data = g_strdup_printf ("%s\n%s", address, title);
-	gtk_selection_data_set (selection_data, selection_data->target, 8,
-				(unsigned char *) data, strlen (data));
-	g_free (data);
-}
-
-static int
-get_item_position (GtkWidget *widget, gboolean *last)
-{
-	GtkWidget *item, *toolbar;
-	int index;
-
-	item = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM);
-	g_return_val_if_fail (item != NULL, -1);
-
-	toolbar = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOLBAR);
-	g_return_val_if_fail (toolbar != NULL, -1);
-
-	index = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolbar),
-				            GTK_TOOL_ITEM (item));
-	if (last)
-	{
-		int n_items;
-
-		n_items = gtk_toolbar_get_n_items (GTK_TOOLBAR (toolbar));
-		*last = (index == n_items - 1);
-	}
-
-	return index;
-}
-
-static void
-remove_from_model (GtkWidget *widget)
-{
-	EphyBookmarks *bookmarks;
-	EggToolbarsModel *model;
-	int pos;
-
-	pos = get_item_position (widget, NULL);
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	model = EGG_TOOLBARS_MODEL (ephy_bookmarks_get_toolbars_model (bookmarks));
-
-	egg_toolbars_model_remove_item (model, 0, pos);
-}
-
-static void
-move_in_model (GtkWidget *widget, int direction)
-{
-	EphyBookmarks *bookmarks;
-	EggToolbarsModel *model;
-	int pos, new_pos;
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	model = EGG_TOOLBARS_MODEL (ephy_bookmarks_get_toolbars_model (bookmarks));
-
-	pos = get_item_position (widget, NULL);
-	new_pos = MAX (0, pos + direction);
-
-	egg_toolbars_model_move_item (model, 0, pos, 0, new_pos);
-}
-
-static void
-drag_data_delete_cb (GtkWidget *widget, GdkDragContext *context,
-		     EphyBookmarkAction *action)
-{
-	remove_from_model (widget);
-}
-
-static gboolean
-drag_motion_cb (GtkWidget *widget, GdkEventMotion *event, EphyBookmarkAction *action)
-{
-	if (gtk_drag_check_threshold (widget, action->priv->drag_x,
-				      action->priv->drag_y, event->x, event->y))
-	{
-		GtkTargetList *target_list;
-
-		target_list = gtk_target_list_new (drag_targets, n_drag_targets);
-
-		stop_drag_check (action, widget);
-		gtk_drag_begin (widget, target_list, GDK_ACTION_ASK |
-				GDK_ACTION_MOVE | GDK_ACTION_COPY, 1,
-				(GdkEvent*)event);
-
-		gtk_target_list_unref (target_list);
-	}
-
-	return TRUE;
-}
-
-static void
-remove_activate_cb (GtkWidget *menu, GtkWidget *proxy)
-{
-	remove_from_model (proxy);
-}
-
-static void
-move_left_activate_cb (GtkWidget *menu, GtkWidget *proxy)
-{
-	move_in_model (proxy, -1);
-}
-
-static void
-move_right_activate_cb (GtkWidget *menu, GtkWidget *proxy)
-{
-	move_in_model (proxy, +1);
-}
-
-static void
 properties_activate_cb (GtkWidget *menu,
 			EphyBookmarkAction *action)
 {
@@ -535,8 +388,7 @@ show_context_menu (EphyBookmarkAction *action,
 		   GdkEventButton *event,
 		   GtkMenuPositionFunc func)
 {
-	GtkWidget *menu, *item, *image;
-	gboolean last;
+	GtkWidget *menu, *item;
 
 	menu = gtk_menu_new ();
 
@@ -562,38 +414,8 @@ show_context_menu (EphyBookmarkAction *action,
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (properties_activate_cb), action);
-
-	item = gtk_separator_menu_item_new ();
-	gtk_widget_show (item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-	item = gtk_image_menu_item_new_with_mnemonic (_("_Remove from Toolbar"));
-	gtk_widget_show (item);
-	image = gtk_image_new_from_stock (GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-	gtk_widget_show (image);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	g_signal_connect (item, "activate",
-			  G_CALLBACK (remove_activate_cb), proxy);
-
-	item = gtk_separator_menu_item_new ();
-	gtk_widget_show (item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-	item = gtk_menu_item_new_with_mnemonic (_("Move _Left"));
-	gtk_widget_set_sensitive (item, get_item_position (proxy, NULL) > 0);
-	gtk_widget_show (item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	g_signal_connect (item, "activate",
-			  G_CALLBACK (move_left_activate_cb), proxy);
-
-	item = gtk_menu_item_new_with_mnemonic (_("Move Ri_ght"));
-	get_item_position (proxy, &last);
-	gtk_widget_set_sensitive (item, !last);
-	gtk_widget_show (item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	g_signal_connect (item, "activate",
-			  G_CALLBACK (move_right_activate_cb), proxy);
+    
+	egg_editable_toolbar_add_popup_items (proxy, GTK_MENU (menu));
 
 	if (event != NULL)
 	{
@@ -611,14 +433,8 @@ show_context_menu (EphyBookmarkAction *action,
 static gboolean
 popup_menu_cb (GtkWidget *widget, EphyBookmarkAction *action)
 {
-	if (gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))
-        {
-                show_context_menu (action, widget, NULL,
-				   ephy_gui_menu_position_under_widget);
-		return TRUE;
-        }
-
-	return FALSE;
+	show_context_menu (action, widget, NULL, ephy_gui_menu_position_under_widget);
+	return TRUE;
 }
 
 static gboolean
@@ -626,8 +442,7 @@ button_press_cb (GtkWidget *widget,
 		 GdkEventButton *event,
 		 EphyBookmarkAction *action)
 {
-	if (event->button == 3 &&
-	    gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))	
+	if (event->button == 3)
 	{
 		show_context_menu (action, widget, event, NULL);
 		return TRUE;
@@ -636,34 +451,23 @@ button_press_cb (GtkWidget *widget,
 	{
 		gtk_button_pressed (GTK_BUTTON (widget));
 	}
-	else if (event->button == 1 &&
-		 gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))
-	{
-		action->priv->drag_x = event->x;
-		action->priv->drag_y = event->y;
-		action->priv->motion_handler = g_signal_connect
-			(widget, "motion_notify_event", G_CALLBACK (drag_motion_cb), action);
-	}
 
 	return FALSE;
 }
 
 static gboolean
 button_release_cb (GtkWidget *widget,
-                   GdkEventButton *event,
+		   GdkEventButton *event,
 		   EphyBookmarkAction *action)
 {
 	if (event->button == 2)	
 	{
 		gtk_button_released (GTK_BUTTON (widget));
 	}
-	else if (event->button == 1)
-	{
-		stop_drag_check (action, widget);
-	}
 
 	return FALSE;
 }
+
 
 static void
 connect_proxy (GtkAction *action, GtkWidget *proxy)
@@ -676,11 +480,11 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 	ephy_bookmark_action_sync_icon (action, NULL, proxy);
 	g_signal_connect_object (action, "notify::icon",
-			         G_CALLBACK (ephy_bookmark_action_sync_icon), proxy, 0);
+				 G_CALLBACK (ephy_bookmark_action_sync_icon), proxy, 0);
 
 	ephy_bookmark_action_sync_smart_url (action, NULL, proxy);
 	g_signal_connect_object (action, "notify::smarturl",
-			         G_CALLBACK (ephy_bookmark_action_sync_smart_url), proxy, 0);
+				 G_CALLBACK (ephy_bookmark_action_sync_smart_url), proxy, 0);
 
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
@@ -696,10 +500,6 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 				  G_CALLBACK (button_press_cb), action);
 		g_signal_connect (button, "button-release-event",
 				  G_CALLBACK (button_release_cb), action);
-		g_signal_connect (button, "drag_data_get",
-				  G_CALLBACK (drag_data_get_cb), action);
-		g_signal_connect (button, "drag_data_delete",
-				  G_CALLBACK (drag_data_delete_cb), action);
 
 		entry = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "entry"));
 		g_signal_connect (entry, "activate", G_CALLBACK (activate_cb), action);
@@ -718,73 +518,73 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 	}
 }
 
-static void
-bookmark_changed_cb (EphyNode *node,
-		     guint property_id,
-		     EphyBookmarkAction *action)
+void
+ephy_bookmark_action_updated (EphyBookmarkAction *action)
 {
-	if (property_id == EPHY_NODE_BMK_PROP_TITLE)
-	{
-		GValue value = { 0, };
-		const char *title;
+	GValue value = { 0, };
+	EphyBookmarks *bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	EphyNode *smart = ephy_bookmarks_get_smart_bookmarks (bookmarks);
+	EphyNode *node = action->priv->node;
+	const char *title;
+	
+	g_return_if_fail (action != NULL);
+	g_return_if_fail (node != NULL);
+	
+	g_object_freeze_notify (G_OBJECT (action));
 
-		title = ephy_node_get_property_string
-				(node, EPHY_NODE_BMK_PROP_TITLE);
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_static_string (&value, title);
-		g_object_set_property (G_OBJECT (action), "label", &value);
-		g_value_unset (&value);
-	}
-	else if (property_id == EPHY_NODE_BMK_PROP_ICON)
-	{
-		g_object_notify (G_OBJECT (action), "icon");
-	}
+	// Set smart_url
+	action->priv->smart_url = ephy_node_has_child (smart, node);
+	g_object_notify (G_OBJECT (action), "smarturl");
+	
+	// Set title
+	title = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_static_string (&value, title);
+	g_object_set_property (G_OBJECT (action), "label", &value);
+	g_value_unset (&value);
+	
+	// Notify all other properties
+	g_object_notify (G_OBJECT (action), "location");
+	g_object_notify (G_OBJECT (action), "tooltip");
+	g_object_notify (G_OBJECT (action), "icon");
+	
+	g_object_thaw_notify (G_OBJECT (action));        
 }
 
-static void
-bookmark_destroy_cb (EphyNode *node, EphyBookmarkAction *action)
+EphyNode *
+ephy_bookmark_action_get_bookmark (EphyBookmarkAction *action)
 {
-	action->priv->node = NULL;
+	return action->priv->node;
 }
 
-static void
+void
 ephy_bookmark_action_set_bookmark (EphyBookmarkAction *action,
 				   EphyNode *node)
-{
-	EphyBookmarks *bookmarks;
-	EphyNode *smart_bmks;
-
+{        
 	g_return_if_fail (node != NULL);
-
+	
 	action->priv->node = node;
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	smart_bmks = ephy_bookmarks_get_smart_bookmarks (bookmarks);
-	action->priv->smart_url = ephy_node_has_child (smart_bmks, node);
-
-	bookmark_changed_cb (node, EPHY_NODE_BMK_PROP_TITLE, action);
-//	bookmark_changed_cb (node, EPHY_NODE_BMK_PROP_ICON, action);
-	ephy_node_signal_connect_object (node, EPHY_NODE_CHANGED,
-					 (EphyNodeCallback) bookmark_changed_cb,
-					 G_OBJECT (action));
-	ephy_node_signal_connect_object (node, EPHY_NODE_DESTROY,
-					 (EphyNodeCallback) bookmark_destroy_cb,
-					 G_OBJECT (action));
+	
+	g_object_freeze_notify (G_OBJECT (action));
+	
+	g_object_notify (G_OBJECT (action), "bookmark");
+	ephy_bookmark_action_updated (action);
+	
+	g_object_thaw_notify (G_OBJECT (action));        
 }
 
 static void
 ephy_bookmark_action_set_property (GObject *object,
-                                   guint prop_id,
-                                   const GValue *value,
-                                   GParamSpec *pspec)
+				   guint prop_id,
+				   const GValue *value,
+				   GParamSpec *pspec)
 {
 	EphyBookmarkAction *action = EPHY_BOOKMARK_ACTION (object);
 
 	switch (prop_id)
 	{
 		case PROP_BOOKMARK:
-			ephy_bookmark_action_set_bookmark
-					(action, g_value_get_pointer (value));
+			ephy_bookmark_action_set_bookmark (action, g_value_get_pointer (value));
 			break;
 		case PROP_TOOLTIP:
 		case PROP_LOCATION:
@@ -797,9 +597,9 @@ ephy_bookmark_action_set_property (GObject *object,
 
 static void
 ephy_bookmark_action_get_property (GObject *object,
-                                   guint prop_id,
-                                   GValue *value,
-                                   GParamSpec *pspec)
+				   guint prop_id,
+				   GValue *value,
+				   GParamSpec *pspec)
 {
 	EphyBookmarkAction *action = EPHY_BOOKMARK_ACTION (object);
 
@@ -830,8 +630,6 @@ ephy_bookmark_action_get_property (GObject *object,
 static void
 ephy_bookmark_action_finalize (GObject *object)
 {
- /*       EphyBookmarkAction *eba = EPHY_BOOKMARK_ACTION (object);*/
-
 	LOG ("Bookmark action %p finalized", object);
 
 	parent_class->finalize (object);
@@ -855,7 +653,7 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 	object_class->get_property = ephy_bookmark_action_get_property;
 
 	g_object_class_install_property (object_class,
-                                         PROP_BOOKMARK,
+					 PROP_BOOKMARK,
 					 g_param_spec_pointer ("bookmark",
 							       "Bookmark",
 							       "Bookmark",
@@ -864,89 +662,63 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 
 	/* overwrite GtkActionClass::tooltip, so we can use the url as tooltip */
 	g_object_class_install_property (object_class,
-                                         PROP_TOOLTIP,
-                                         g_param_spec_string  ("tooltip",
-                                                               "Tooltip",
-                                                               "Tooltip",
-                                                               NULL,
-                                                               G_PARAM_READABLE));
-
+					 PROP_TOOLTIP,
+					 g_param_spec_string  ("tooltip",
+							       "Tooltip",
+							       "Tooltip",
+							       NULL,
+							       G_PARAM_READABLE));
+	
 	g_object_class_install_property (object_class,
-                                         PROP_LOCATION,
-                                         g_param_spec_string  ("location",
-                                                               "Location",
-                                                               "Location",
-                                                               NULL,
-                                                               G_PARAM_READABLE));
+					 PROP_LOCATION,
+					 g_param_spec_string  ("location",
+							       "Location",
+							       "Location",
+							       NULL,
+							       G_PARAM_READABLE));
 	g_object_class_install_property (object_class,
-                                         PROP_SMART_URL,
-                                         g_param_spec_boolean  ("smarturl",
-                                                                "Smart url",
-                                                                "Smart url",
-                                                                FALSE,
-                                                                G_PARAM_READABLE));
+					 PROP_SMART_URL,
+					 g_param_spec_boolean  ("smarturl",
+								"Smart url",
+								"Smart url",
+								FALSE,
+								G_PARAM_READABLE));
 	g_object_class_install_property (object_class,
-                                         PROP_ICON,
-                                         g_param_spec_string  ("icon",
-                                                               "Icon",
-                                                               "Icon",
-                                                               NULL,
-                                                               G_PARAM_READABLE));
+					 PROP_ICON,
+					 g_param_spec_string  ("icon",
+							       "Icon",
+							       "Icon",
+							       NULL,
+							       G_PARAM_READABLE));
 
 	g_type_class_add_private (object_class, sizeof(EphyBookmarkActionPrivate));
 }
 
 static void
-smart_child_added_cb (EphyNode *smart_bmks,
-		      EphyNode *child,
-		      EphyBookmarkAction *action)
-{
-	if (ephy_node_get_id (action->priv->node) == ephy_node_get_id (child))
-	{
-		action->priv->smart_url = TRUE;
-		g_object_notify (G_OBJECT (action), "smarturl");
-	}
-}
-
-static void
-smart_child_removed_cb (EphyNode *smart_bmks,
-			EphyNode *child,
-			guint old_index,
-			EphyBookmarkAction *action)
-{
-	if (ephy_node_get_id (action->priv->node) == ephy_node_get_id (child))
-	{
-		action->priv->smart_url = FALSE;
-		g_object_notify (G_OBJECT (action), "smarturl");
-	}
-}
-
-static void
 ephy_bookmark_action_init (EphyBookmarkAction *action)
 {
-	EphyBookmarks *bookmarks;
-	EphyNode *node;
-
 	action->priv = EPHY_BOOKMARK_ACTION_GET_PRIVATE (action);
+	action->priv->cache_handler = 0;
+}
 
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	node = ephy_bookmarks_get_smart_bookmarks (bookmarks);
-	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_ADDED,
-					 (EphyNodeCallback) smart_child_added_cb,
-					 G_OBJECT (action));
-	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_REMOVED,
-					 (EphyNodeCallback) smart_child_removed_cb,
-					 G_OBJECT (action));
+char *
+ephy_bookmark_action_name (EphyNode *node)
+{
+	return g_strdup_printf("Bmk%u", ephy_node_get_id (node));
 }
 
 GtkAction *
-ephy_bookmark_action_new (const char *name,
-			  EphyNode *node)
+ephy_bookmark_action_new (EphyNode *node, char *name)
 {
-	g_return_val_if_fail (node != NULL, NULL);
+	GtkAction *action;
+	
+	if(!name) name = ephy_bookmark_action_name (node);
+	g_return_val_if_fail (name, NULL);
+	
+	action =  GTK_ACTION (g_object_new (EPHY_TYPE_BOOKMARK_ACTION,
+					    "name", name,
+					    "bookmark", node,
+					    NULL));
 
-	return g_object_new (EPHY_TYPE_BOOKMARK_ACTION,
-			     "name", name,
-			     "bookmark", node,
-			     NULL);
+	return action;
 }

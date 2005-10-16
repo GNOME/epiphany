@@ -29,6 +29,7 @@
 #include <gtk/gtkvbox.h>
 #include <gtk/gtktoolitem.h>
 #include <gtk/gtktoolbar.h>
+#include <gtk/gtkmenu.h>
 
 G_BEGIN_DECLS
 
@@ -80,6 +81,8 @@ void		    egg_editable_toolbar_set_drag_dest   (EggEditableToolbar   *etoolbar,
 void		    egg_editable_toolbar_set_fixed       (EggEditableToolbar   *etoolbar,
 							  GtkToolbar           *fixed_toolbar);
 
+void		    egg_editable_toolbar_add_popup_items (GtkWidget *widget,
+                                                          GtkMenu   *popup);
 
 /* Private Functions */
 

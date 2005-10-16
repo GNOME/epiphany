@@ -167,20 +167,6 @@ fixed_toolbar_reconfigured_cb (GtkToolItem *item,
 	ephy_spinner_set_size (spinner, size);
 }
 
-static void
-toolbar_added_cb (EggToolbarsModel *model,
-		  int position,
-		  EggEditableToolbar *toolbar)
-{
-	const char *t_name;
-
-	t_name = egg_toolbars_model_toolbar_nth (model, position);
-	g_return_if_fail (t_name != NULL);
-
-	egg_editable_toolbar_set_drag_dest
-		(toolbar, drag_targets, G_N_ELEMENTS (drag_targets), t_name);
-}
-
 static void 
 maybe_finish_activation_cb (EphyWindow *window,
 			    GtkWidget *widget,
@@ -528,42 +514,12 @@ ephy_toolbar_set_zoom (EphyToolbar *toolbar,
 static void
 ephy_toolbar_realize (GtkWidget *widget)
 {
-	EggEditableToolbar *etoolbar = EGG_EDITABLE_TOOLBAR (widget);
-	EphyToolbar *toolbar = EPHY_TOOLBAR (widget);
-	EggToolbarsModel *model = egg_editable_toolbar_get_model (etoolbar);
-	int i, n_toolbars;
-
 	GTK_WIDGET_CLASS (parent_class)->realize (widget);
-
-	g_signal_connect_after (model, "toolbar_added",
-				G_CALLBACK (toolbar_added_cb), toolbar);
-
-	/* now that the toolbar has been constructed, set drag dests */
-	n_toolbars = egg_toolbars_model_n_toolbars (model);
-	for (i = 0; i < n_toolbars; i++)
-	{
-		const char *t_name;
-
-		t_name = egg_toolbars_model_toolbar_nth (model, i);
-		g_return_if_fail (t_name != NULL);
-
-		egg_editable_toolbar_set_drag_dest
-			(etoolbar, drag_targets, G_N_ELEMENTS (drag_targets), t_name);
-	}	
 }
 
 static void
 ephy_toolbar_unrealize (GtkWidget *widget)
 {
-	EggEditableToolbar *eggtoolbar = EGG_EDITABLE_TOOLBAR (widget);
-	EphyToolbar *toolbar = EPHY_TOOLBAR (widget);
-	EggToolbarsModel *model;
- 
- 	model = egg_editable_toolbar_get_model (eggtoolbar);
-
-	g_signal_handlers_disconnect_by_func
-		(model, G_CALLBACK (toolbar_added_cb), toolbar);
-
 	GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
 }
 
@@ -649,17 +605,12 @@ ephy_toolbar_finalize (GObject *object)
 {
 	EphyToolbar *toolbar = EPHY_TOOLBAR (object);
 	EphyToolbarPrivate *priv = toolbar->priv;
-	EggEditableToolbar *etoolbar = EGG_EDITABLE_TOOLBAR (object);
 
 	if (priv->set_focus_handler != 0)
 	{
 		g_signal_handler_disconnect (priv->window,
 					     priv->set_focus_handler);
 	}
-
-	g_signal_handlers_disconnect_by_func
-		(egg_editable_toolbar_get_model (etoolbar),
-		 G_CALLBACK (toolbar_added_cb), toolbar);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

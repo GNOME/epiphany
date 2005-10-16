@@ -167,7 +167,7 @@ ephy_toolbar_editor_constructor (GType type,
 				 GObjectConstructParam *construct_params)
 
 {
-        GObject *object;
+	GObject *object;
 	EphyToolbarEditorPrivate *priv;
 	GtkWidget *dialog, *editor, *toolbar, *vbox, *hbox, *label, *combo;
 	GtkUIManager *manager;
@@ -180,13 +180,13 @@ ephy_toolbar_editor_constructor (GType type,
 	char *pref;
 	int i;
 
-        object = parent_class->constructor (type, n_construct_properties,
+	object = parent_class->constructor (type, n_construct_properties,
 					    construct_params);
 
 #ifdef ENABLE_NLS
-        /* Initialize the control centre domain */
-        bindtextdomain (CONTROL_CENTRE_DOMAIN, GNOMELOCALEDIR);
-        bind_textdomain_codeset(CONTROL_CENTRE_DOMAIN, "UTF-8");
+	/* Initialize the control centre domain */
+	bindtextdomain (CONTROL_CENTRE_DOMAIN, GNOMELOCALEDIR);
+	bind_textdomain_codeset(CONTROL_CENTRE_DOMAIN, "UTF-8");
 #endif
 
 	dialog = GTK_WIDGET (object);
@@ -199,14 +199,12 @@ ephy_toolbar_editor_constructor (GType type,
 	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 2);
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Toolbar Editor"));
-        gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (priv->window));
+	gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (priv->window));
 	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (priv->window));
 	editor = egg_toolbar_editor_new (manager, priv->model);
-	egg_toolbar_editor_load_actions (EGG_TOOLBAR_EDITOR (editor),
-					 ephy_file ("epiphany-toolbar.xml"));
 	gtk_container_set_border_width (GTK_CONTAINER (EGG_TOOLBAR_EDITOR (editor)), 5);
 	gtk_box_set_spacing (GTK_BOX (EGG_TOOLBAR_EDITOR (editor)), 5);
 	gtk_box_pack_start (GTK_BOX (vbox), editor, TRUE, TRUE, 0);
@@ -294,13 +292,11 @@ ephy_toolbar_editor_constructor (GType type,
 	gtk_widget_show (editor);
 	
 	ephy_state_add_window (dialog, "toolbar_editor",
-		               500, 330, FALSE,
+			       500, 330, FALSE,
 			       EPHY_STATE_WINDOW_SAVE_SIZE);
 	gtk_widget_show (dialog);
 
 	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR (toolbar), TRUE);
-	egg_editable_toolbar_set_edit_mode
-		(EGG_EDITABLE_TOOLBAR (ephy_window_get_bookmarksbar (priv->window)), TRUE);
 
 	return object;
 }
@@ -313,8 +309,6 @@ ephy_toolbar_editor_finalize (GObject *object)
 
 	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR
 		(ephy_window_get_toolbar (priv->window)), FALSE);
-	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR
-		(ephy_window_get_bookmarksbar (priv->window)), FALSE);
 
 	g_object_set_data (G_OBJECT (priv->window), DATA_KEY, NULL);
 
@@ -337,14 +331,14 @@ ephy_toolbar_editor_set_property (GObject *object,
 				  const GValue *value,
 				  GParamSpec *pspec)
 {
-        EphyToolbarEditorPrivate *priv = EPHY_TOOLBAR_EDITOR (object)->priv;
+	EphyToolbarEditorPrivate *priv = EPHY_TOOLBAR_EDITOR (object)->priv;
 
-        switch (prop_id)
-        {
+	switch (prop_id)
+	{
 		case PROP_WINDOW:
 			priv->window = g_value_get_object (value);
 			break;
-        }
+	}
 }
 
 static void
@@ -363,10 +357,10 @@ ephy_toolbar_editor_class_init (EphyToolbarEditorClass *klass)
 	dialog_class->response = ephy_toolbar_editor_response;
 
 	g_object_class_install_property (object_class,
-                                         PROP_WINDOW,
-                                         g_param_spec_object ("window",
-                                                              "Window",
-                                                              "Parent window",
+					 PROP_WINDOW,
+					 g_param_spec_object ("window",
+							      "Window",
+							      "Parent window",
 							      EPHY_TYPE_WINDOW,
 							      G_PARAM_WRITABLE |
 							      G_PARAM_CONSTRUCT_ONLY));

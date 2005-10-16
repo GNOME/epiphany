@@ -30,6 +30,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-window.h"
+#include "ephy-bookmarks-ui.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-history-window.h"
@@ -938,19 +939,10 @@ ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 	{
 		if (shell->priv->toolbars_model == NULL)
 		{
-			EphyBookmarks *bookmarks;
-			GObject *bookmarksbar_model;
-
 			shell->priv->toolbars_model = ephy_toolbars_model_new ();
-
-			/* get the bookmarks toolbars model. we have to do this
-			 * before loading the toolbars model from disk, since
-			 * this will connect the get_item_* signals
-			 */
-			bookmarks = ephy_shell_get_bookmarks (shell);
-			bookmarksbar_model = ephy_bookmarks_get_toolbars_model (bookmarks);
-
-			/* ok, now we can load the model */
+			
+			ephy_bookmarks_ui_attach_toolbar_model (shell->priv->toolbars_model);
+			
 			ephy_toolbars_model_load
 				(EPHY_TOOLBARS_MODEL (shell->priv->toolbars_model));
 		}

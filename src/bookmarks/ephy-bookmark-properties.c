@@ -20,7 +20,6 @@
 
 #include "config.h"
 
-#include "ephy-bookmarksbar-model.h"
 #include "ephy-bookmark-properties.h"
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"
@@ -43,13 +42,13 @@
 static void ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass);
 static void ephy_bookmark_properties_init (EphyBookmarkProperties *editor);
 static void ephy_bookmark_properties_set_property (GObject *object,
-		                               guint prop_id,
-		                               const GValue *value,
-		                               GParamSpec *pspec);
+					       guint prop_id,
+					       const GValue *value,
+					       GParamSpec *pspec);
 static void ephy_bookmark_properties_get_property (GObject *object,
-		                               guint prop_id,
-		                               GValue *value,
-		                               GParamSpec *pspec);
+					       guint prop_id,
+					       GValue *value,
+					       GParamSpec *pspec);
 
 #define EPHY_BOOKMARK_PROPERTIES_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkPropertiesPrivate))
 
@@ -61,8 +60,6 @@ struct _EphyBookmarkPropertiesPrivate
 	GtkWidget *title_entry;
 	GtkWidget *location_entry;
 	GtkWidget *topics_selector;
-
-	EphyBookmarksBarModel *tb_model;
 };
 
 enum
@@ -143,9 +140,9 @@ ephy_bookmark_properties_set_bookmark (EphyBookmarkProperties *selector,
 
 static void
 ephy_bookmark_properties_set_property (GObject *object,
-		                   guint prop_id,
-		                   const GValue *value,
-		                   GParamSpec *pspec)
+				   guint prop_id,
+				   const GValue *value,
+				   GParamSpec *pspec)
 {
 	EphyBookmarkProperties *selector = EPHY_BOOKMARK_PROPERTIES (object);
 
@@ -153,8 +150,6 @@ ephy_bookmark_properties_set_property (GObject *object,
 	{
 	case PROP_BOOKMARKS:
 		selector->priv->bookmarks = g_value_get_object (value);
-		selector->priv->tb_model = EPHY_BOOKMARKSBAR_MODEL
-			(ephy_bookmarks_get_toolbars_model (selector->priv->bookmarks));
 		break;
 	case PROP_BOOKMARK:
 		ephy_bookmark_properties_set_bookmark
@@ -168,9 +163,9 @@ ephy_bookmark_properties_set_property (GObject *object,
 
 static void
 ephy_bookmark_properties_get_property (GObject *object,
-		                   guint prop_id,
-		                   GValue *value,
-		                   GParamSpec *pspec)
+				   guint prop_id,
+				   GValue *value,
+				   GParamSpec *pspec)
 {
 	EphyBookmarkProperties *selector = EPHY_BOOKMARK_PROPERTIES (object);
 
@@ -187,8 +182,8 @@ ephy_bookmark_properties_get_property (GObject *object,
 
 static void
 bookmark_properties_response_cb (GtkDialog *dialog,
-		                 int response_id,
-			         gpointer data)
+				 int response_id,
+				 gpointer data)
 {
 	switch (response_id)
 	{
@@ -213,8 +208,8 @@ update_entry (EphyBookmarkProperties *props, GtkWidget *entry, guint prop)
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, text);
 	ephy_node_set_property (props->priv->bookmark,
-			        prop,
-			        &value);
+				prop,
+				&value);
 	g_value_unset (&value);
 	g_free (text);
 }
@@ -245,29 +240,7 @@ location_entry_changed_cb (GtkWidget *entry, EphyBookmarkProperties *props)
 {
 	ephy_bookmarks_set_address (props->priv->bookmarks,
 				    props->priv->bookmark,
-			            gtk_entry_get_text (GTK_ENTRY (entry)));
-}
-
-static void
-toolbar_checkbox_changed_cb (GtkWidget *checkbox, EphyBookmarkProperties *props)
-{
-	gboolean state;
-	guint id;
-
-	state = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbox));
-
-	id = ephy_node_get_id (props->priv->bookmark);
-
-	if (state)
-	{
-		ephy_bookmarksbar_model_add_bookmark
-			(props->priv->tb_model, FALSE, id);
-	}
-	else
-	{
-		ephy_bookmarksbar_model_remove_bookmark
-			(props->priv->tb_model, id);
-	}
+				    gtk_entry_get_text (GTK_ENTRY (entry)));
 }
 
 static void
@@ -306,11 +279,9 @@ static void
 build_ui (EphyBookmarkProperties *editor)
 {
 	GtkWidget *table, *label, *entry, *topics_selector;
-	GtkWidget *checkbox, *scrolled_window;
+	GtkWidget *scrolled_window;
 	char *str;
 	const char *tmp;
-	gboolean state;
-	guint id;
 
 	g_signal_connect (G_OBJECT (editor),
 			  "response",
@@ -319,7 +290,7 @@ build_ui (EphyBookmarkProperties *editor)
 
 	ephy_state_add_window (GTK_WIDGET(editor),
 			       "bookmark_properties",
-		               290, 280, FALSE,
+			       290, 280, FALSE,
 			       EPHY_STATE_WINDOW_SAVE_SIZE);
 
 	update_window_title (editor);
@@ -397,16 +368,6 @@ build_ui (EphyBookmarkProperties *editor)
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
 	gtk_table_attach (GTK_TABLE (table), scrolled_window, 1, 2, 2, 3,
 			  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-
-	checkbox = gtk_check_button_new_with_mnemonic (_("_Show in bookmarks bar"));
-	id = ephy_node_get_id (editor->priv->bookmark);
-	state = ephy_bookmarksbar_model_has_bookmark (editor->priv->tb_model, id);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbox), state);
-	g_signal_connect (checkbox, "toggled",
-			  G_CALLBACK (toolbar_checkbox_changed_cb), editor);
-	gtk_table_attach (GTK_TABLE (table), checkbox, 0, 2, 3, 4, GTK_FILL, 0, 0, 0);
-	gtk_widget_show (checkbox);
-
 
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (editor)->vbox),
 			    table, TRUE, TRUE, 0);

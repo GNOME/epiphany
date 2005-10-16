@@ -78,8 +78,6 @@ EphyBookmarks    *ephy_bookmarks_new			(void);
 EphyNode	 *ephy_bookmarks_get_from_id		(EphyBookmarks *eb,
 							 long id);
 
-GObject		 *ephy_bookmarks_get_toolbars_model	(EphyBookmarks *eb);
-
 /* Bookmarks */
 
 EphyNode	 *ephy_bookmarks_add			(EphyBookmarks *eb,
@@ -150,6 +148,12 @@ EphyNode	 *ephy_bookmarks_get_not_categorized	(EphyBookmarks *eb);
 EphyNode	 *ephy_bookmarks_get_smart_bookmarks	(EphyBookmarks *eb);
 
 EphyNode	 *ephy_bookmarks_get_local		(EphyBookmarks *eb);
+
+/* Comparison functions, useful for sorting lists and arrays. */
+int            ephy_bookmarks_compare_topics            (gconstpointer a, gconstpointer b);
+int            ephy_bookmarks_compare_topic_pointers    (gconstpointer a, gconstpointer b);
+int            ephy_bookmarks_compare_bookmarks         (gconstpointer a, gconstpointer b);
+int            ephy_bookmarks_compare_bookmark_pointers (gconstpointer a, gconstpointer b);
 
 G_END_DECLS
 
