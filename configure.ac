@@ -285,7 +285,11 @@ CXXFLAGS="$_SAVE_CXXFLAGS $AM_CXXFLAGS `$PKG_CONFIG --cflags-only-other $MOZILLA
 
 dnl Sigh Gentoo has a rubbish header layout
 dnl http://bugs.gentoo.org/show_bug.cgi?id=100804
-CPPFLAGS="$CPPFLAGS -I$MOZILLA_INCLUDE_ROOT/dom"
+dnl Mind you, it's useful to be able to test against uninstalled mozilla builds...
+TEST_MOZILLA_INCLUDE_DIRS="necko dom"
+for i in $TEST_MOZILLA_INCLUDE_DIRS ; do
+   CPPFLAGS="$CPPFLAGS -I$MOZILLA_INCLUDE_ROOT/$i"
+done
 
 AC_MSG_CHECKING([[whether we have a gtk 2 mozilla build]])
 

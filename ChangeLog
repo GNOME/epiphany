@@ -1,5 +1,13 @@
 2005-10-16  Philip Langdale  <philipl@mail.utexas.edu>
 
+	* configure.ac: Add another necessary mozilla include subdir to
+	the includes for tests. This is necessary when compiling against
+	an uninstalled mozilla build (header organisation is only done
+	at make install time) or, apparently, against gentoo's mozilla
+	packages.
+
+2005-10-16  Philip Langdale  <philipl@mail.utexas.edu>
+
 	* src/ephy-link-action.c:
 	(proxy_button_release_event_cb), (get_event_widget),
 	(ephy_link_action_connect_proxy), (ephy_link_action_disconnect_proxy),
