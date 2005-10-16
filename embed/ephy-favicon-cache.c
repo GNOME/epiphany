@@ -588,7 +588,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 
 	if (url == NULL) return NULL;
 
-#ifdef HAVE_GECKO_1_9
+#ifdef HAVE_GECKO_1_8
 	if (!g_str_has_prefix (url, "http://") &&
 	    !g_str_has_prefix (url, "https://")) return NULL;
 #else
