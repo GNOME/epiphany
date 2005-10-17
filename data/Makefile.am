@@ -55,7 +55,9 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = epiphany-1.10.pc
 
 xsldir = $(pkgdatadir)
-xsl_DATA = epiphany-bookmarks-html.xsl
+xsl_DATA = \
+	epiphany-bookmarks-html.xsl	\
+	ephy-xml2ini.xsl
 
 install-data-local:
 if GCONF_SCHEMAS_INSTALL

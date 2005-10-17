@@ -37,6 +37,12 @@
 
 #include <libxml/tree.h>
 #include <libxml/xmlreader.h>
+#include <libxml/globals.h>
+#include <libxml/tree.h>
+#include <libxml/xmlwriter.h>
+#include <libxslt/xslt.h>
+#include <libxslt/transform.h>
+#include <libxslt/xsltutils.h>
 
 #include <libgnomevfs/gnome-vfs-ops.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -55,6 +61,8 @@
 #define CONF_LOADED_EXTENSIONS	"/apps/epiphany/general/active_extensions"
 #define DOT_INI	".ephy-extension"
 
+#define ENABLE_LEGACY_FORMAT
+
 #define EPHY_EXTENSIONS_MANAGER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EXTENSIONS_MANAGER, EphyExtensionsManagerPrivate))
 
 struct _EphyExtensionsManagerPrivate
@@ -67,6 +75,10 @@ struct _EphyExtensionsManagerPrivate
 	GList *dir_monitors;
 	GList *windows;
 	guint active_extensions_notifier_id;
+
+#ifdef ENABLE_LEGACY_FORMAT
+	xsltStylesheetPtr xml2ini_xsl;
+#endif
 };
 
 typedef struct
@@ -291,359 +303,6 @@ find_extension_info (const ExtensionInfo *info,
 	return strcmp (info->info.identifier, identifier);
 }
 
-typedef struct
-{
-	xmlChar *string;
-	guint match;
-} LocalisedString;
-
-static const char * const *languages = NULL;
-
-static void
-assign_localised_string (xmlTextReaderPtr reader,
-			 LocalisedString *string)
-{
-	const xmlChar *value, *lang;
-	guint i;
-
-	lang = xmlTextReaderConstXmlLang (reader);
-	value = xmlTextReaderConstValue (reader);
-
-	if (G_UNLIKELY (lang == NULL))
-	{
-		/* languages always has "C" in it, so make sure we get a match */
-		lang = (const xmlChar *) "C";
-	}
-
-	for (i = 0; languages[i] != NULL && i < string->match; i++)
-	{
-		if (lang != NULL &&
-		    strcmp ((const char *) lang, languages[i]) == 0)
-		{
-			xmlFree (string->string);
-			string->string = xmlStrdup (value);
-			string->match = i;
-			break;
-		}
-	}
-}
-
-typedef enum
-{
-	STATE_START,
-	STATE_STOP,
-	STATE_ERROR,
-	STATE_EXTENSION,
-	STATE_NAME,
-	STATE_DESCRIPTION,
-	STATE_VERSION,
-	STATE_AUTHOR,
-	STATE_URL,
-	STATE_GETTEXT_DOMAIN,
-	STATE_LOCALE_DIRECTORY,
-	STATE_LOADER,
-	STATE_LOADER_ATTRIBUTE,
-	STATE_LOAD_DEFERRED,
-} ParserState;
-
-static void
-ephy_extensions_manager_load_xml_string (EphyExtensionsManager *manager,
-					 const char *identifier,
-					 /* const */ char *xml)
-{
-	xmlDocPtr doc;
-	xmlTextReaderPtr reader;
-	ParserState state = STATE_START;
-	GQuark attr_quark = 0;
-	EphyExtensionInfo *einfo;
-	ExtensionInfo *info;
-	int ret;
-	LocalisedString description = { NULL, G_MAXUINT };
-	LocalisedString name = { NULL, G_MAXUINT };
-
-	LOG ("Loading XML description file for '%s'", identifier);
-
-	if (g_list_find_custom (manager->priv->data, identifier,
-				(GCompareFunc) find_extension_info) != NULL)
-	{
-		g_warning ("Extension description for '%s' already read!",
-			   identifier);
-		return;
-	}
-
-	/* FIXME: Ideally we'd put the schema validator in the reader. libxml2
-	 * doesn't seem to support that at this point in time, so we've got to
-	 * put the schema validation on the Doc Tree and then pass that to the
-	 * reader. (maybe switch to RelaxNG?)
-	 */
-	doc = xmlParseDoc ((xmlChar *) xml);
-
-	if (doc == NULL)
-	{
-		g_warning ("Couldn't read '%s' data\n", identifier);
-		return;
-	}
-
-	/* Now parse it */
-	reader = xmlReaderWalker (doc);
-	g_return_if_fail (reader != NULL);
-
-	info = g_new0 (ExtensionInfo, 1);
-	einfo = (EphyExtensionInfo *) info;
-	einfo->identifier = g_strdup (identifier);
-	g_datalist_init (&info->loader_attributes);
-
-	ret = xmlTextReaderRead (reader);
-
-	while (ret == 1)
-	{
-		const xmlChar *tag;
-		xmlReaderTypes type;
-
-		tag = xmlTextReaderConstName (reader);
-		type = xmlTextReaderNodeType (reader);
-
-		if (state == STATE_LOADER &&
-		    type == XML_READER_TYPE_ELEMENT &&
-		    xmlStrEqual (tag, (const xmlChar *) "attribute"))
-		{
-			xmlChar *name;
-
-			state = STATE_LOADER_ATTRIBUTE;
-
-			name = xmlTextReaderGetAttribute (reader, (const xmlChar *) "name");
-			attr_quark = g_quark_from_string ((const char *) name);
-			xmlFree (name);
-		}
-		else if (state == STATE_EXTENSION &&
-			 type == XML_READER_TYPE_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "author"))
-		{
-			state = STATE_AUTHOR;
-		}
-		else if (state == STATE_EXTENSION &&
-			 type == XML_READER_TYPE_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "description"))
-		{
-			state = STATE_DESCRIPTION;
-		}
-		else if (state == STATE_EXTENSION &&
-			 type == XML_READER_TYPE_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "gettext-domain"))
-		{
-			state = STATE_GETTEXT_DOMAIN;
-		}
-		else if (state == STATE_EXTENSION &&
-			 type == XML_READER_TYPE_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "load-deferred"))
-		{
-			state = STATE_LOAD_DEFERRED;
-		}
-		else if (state == STATE_EXTENSION &&
-			 type == XML_READER_TYPE_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "locale-directory"))
-		{
-			state = STATE_LOCALE_DIRECTORY;
-		}
-		else if (state == STATE_EXTENSION &&
-			 type == XML_READER_TYPE_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "name"))
-		{
-			state = STATE_NAME;
-		}
-		else if (state == STATE_EXTENSION &&
-			 type == XML_READER_TYPE_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "url"))
-		{
-			state = STATE_URL;
-		}
-		else if (state == STATE_EXTENSION &&
-			 type == XML_READER_TYPE_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "version"))
-		{
-			state = STATE_VERSION;
-		}
-		else if (state == STATE_EXTENSION &&
-			 type == XML_READER_TYPE_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "loader"))
-		{
-			xmlChar * attr;
-
-			state = STATE_LOADER;
-			
-			attr = xmlTextReaderGetAttribute 
-				(reader, (const xmlChar *) "type");
-
-			info->loader_type = g_strdup ((char*)attr);
-			
-			xmlFree (attr);
-		}
-		else if (state == STATE_LOADER_ATTRIBUTE &&
-			 type == XML_READER_TYPE_TEXT &&
-			 attr_quark != 0)
-		{
-			const xmlChar *value;
-
-			value = xmlTextReaderConstValue (reader);
-
-			g_datalist_id_set_data_full (&info->loader_attributes,
-						     attr_quark, 
-						     g_strdup ((char*)value),
-						     (GDestroyNotify) g_free);
-			attr_quark = 0;
-		}
-		else if (state == STATE_LOADER_ATTRIBUTE &&
-			 type == XML_READER_TYPE_END_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "attribute"))
-		{
-			state = STATE_LOADER;
-		}
-		else if (state == STATE_AUTHOR &&
-			 type == XML_READER_TYPE_TEXT)
-		{
-			const xmlChar *attr;
-
-			attr = xmlTextReaderConstValue (reader);
-
-			einfo->authors = g_list_prepend
-				(einfo->authors, g_strdup ((char*)attr));
-		}
-		else if (state == STATE_DESCRIPTION &&
-			 type == XML_READER_TYPE_TEXT)
-		{
-			assign_localised_string (reader, &description);
-		}
-		else if (type == XML_READER_TYPE_TEXT &&
-			 (state == STATE_GETTEXT_DOMAIN ||
-			  state == STATE_LOAD_DEFERRED ||
-			  state == STATE_LOCALE_DIRECTORY))
-		{
-			/* not supported anymore */
-		}
-		else if (state == STATE_NAME &&
-			 type == XML_READER_TYPE_TEXT)
-		{
-			assign_localised_string (reader, &name);
-		}
-		else if (state == STATE_VERSION &&
-			 type == XML_READER_TYPE_TEXT)
-		{
-			info->version = (guint) strtol ((const char *) xmlTextReaderConstValue (reader), NULL, 10);
-		}
-		else if (state == STATE_URL &&
-			 type == XML_READER_TYPE_TEXT)
-		{
-			const xmlChar *attr;
-
-			attr = xmlTextReaderConstValue (reader);
-			
-			einfo->url = g_strdup ((char*)attr);
-		}
-		else if (state == STATE_AUTHOR &&
-			 type == XML_READER_TYPE_END_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "author"))
-		{
-			state = STATE_EXTENSION;
-		}
-		else if (state == STATE_DESCRIPTION &&
-			 type == XML_READER_TYPE_END_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "description"))
-		{
-			state = STATE_EXTENSION;
-		}
-		else if (state == STATE_GETTEXT_DOMAIN &&
-			 type == XML_READER_TYPE_END_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "gettext-domain"))
-		{
-			state = STATE_EXTENSION;
-		}
-		else if (state == STATE_LOCALE_DIRECTORY &&
-			 type == XML_READER_TYPE_END_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "locale-directory"))
-		{
-			state = STATE_EXTENSION;
-		}
-		else if (state == STATE_LOADER &&
-			 type == XML_READER_TYPE_END_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "loader"))
-		{
-			state = STATE_EXTENSION;
-		}
-		else if (state == STATE_NAME &&
-			 type == XML_READER_TYPE_END_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "name"))
-		{
-			state = STATE_EXTENSION;
-		}
-		else if (state == STATE_URL &&
-			 type == XML_READER_TYPE_END_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "url"))
-		{
-			state = STATE_EXTENSION;
-		}
-		else if (state == STATE_VERSION &&
-			 type == XML_READER_TYPE_END_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "version"))
-		{
-			state = STATE_EXTENSION;
-		}
-		else if (type == XML_READER_TYPE_SIGNIFICANT_WHITESPACE ||
-			 type == XML_READER_TYPE_WHITESPACE ||
-			 type == XML_READER_TYPE_TEXT)
-		{
-			/* eat it */
-		}
-		else if (state == STATE_START &&
-			 type == XML_READER_TYPE_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "extension"))
-		{
-			state = STATE_EXTENSION;
-		}
-		else if (state == STATE_EXTENSION &&
-			 type == XML_READER_TYPE_END_ELEMENT &&
-			 xmlStrEqual (tag, (const xmlChar *) "extension"))
-		{
-			state = STATE_STOP;
-		}
-		else
-		{
-			const xmlChar *content;
-
-			content = xmlTextReaderConstValue (reader);
-			g_warning ("tag '%s' of type %d in state %d with content '%s' was unexpected!",
-				   tag, type, state, content ? (char *) content : "(null)");
-
-			state = STATE_ERROR;
-			break;
-		}
-
-		ret = xmlTextReaderRead (reader);
-	}
-
-	xmlFreeTextReader (reader);
-	xmlFreeDoc (doc);
-
-	/* assign localised strings */
-	einfo->description = (char *)description.string;
-	einfo->name = (char *)name.string;
-
-	/* Reverse authors list */
-	einfo->authors = g_list_reverse (einfo->authors);
-
-	/* sanity check */
-	if (ret < 0 || state != STATE_STOP ||
-	    einfo->name == NULL || einfo->description == NULL ||
-	    info->loader_type == NULL || info->loader_type[0] == '\0')
-	{
-		free_extension_info (info);
-		return;
-	}
-
-	manager->priv->data = g_list_prepend (manager->priv->data, info);
-
-	g_signal_emit (manager, signals[ADDED], 0, info);
-}
-
 static void
 ephy_extensions_manager_load_ini_string (EphyExtensionsManager *manager,
 					 const char * identifier,
@@ -770,6 +429,57 @@ ephy_extensions_manager_load_ini_string (EphyExtensionsManager *manager,
 	g_signal_emit (manager, signals[ADDED], 0, info);
 }
 
+#ifdef ENABLE_LEGACY_FORMAT
+
+static void
+ephy_extensions_manager_load_xml_string (EphyExtensionsManager *manager,
+					 const char *identifier,
+					 /* const */ char *xml)
+{
+	EphyExtensionsManagerPrivate *priv = manager->priv;
+	xmlDocPtr doc, res;
+	const xmlChar *xsl_file;
+	xmlChar *output = NULL;
+	int outlen = -1, ret = -1;
+	
+	START_PROFILER ("Transforming .xml -> " DOT_INI)
+
+	doc = xmlParseMemory (xml, strlen (xml));
+	if (!doc) goto out;
+
+	if (priv->xml2ini_xsl == NULL)
+	{
+		xsl_file = (const xmlChar *) ephy_file ("ephy-xml2ini.xsl");
+		if (!xsl_file) return;
+
+		priv->xml2ini_xsl = xsltParseStylesheetFile (xsl_file);
+		if (priv->xml2ini_xsl == NULL)
+		{
+			g_warning ("Couldn't parse the XSL to transform .xml extension descriptions!\n");
+			goto out;
+		}
+	}
+
+	res = xsltApplyStylesheet (priv->xml2ini_xsl, doc, NULL);
+	if (!res) goto out;
+
+	ret = xsltSaveResultToString (&output, &outlen, res, priv->xml2ini_xsl);
+
+	xmlFreeDoc (res);
+	xmlFreeDoc (doc);
+
+out:
+	STOP_PROFILER ("Transforming .xml -> " DOT_INI)
+
+	if (ret >= 0 && output != NULL && outlen > -1)
+	{
+		ephy_extensions_manager_load_ini_string (manager, identifier, (char*) output);
+		xmlFree (output);
+	}
+}
+
+#endif /* ENABLE_LEGACY_FORMAT */
+
 static char *
 path_to_identifier (const char *path)
 {
@@ -815,12 +525,14 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 	{
 		ephy_extensions_manager_load_ini_string (manager, identifier,
 							 contents);
-	} 
+	}
+#ifdef ENABLE_LEGACY_FORMAT
 	else if (g_str_has_suffix (path, ".xml"))
 	{
 		ephy_extensions_manager_load_xml_string (manager, identifier,
 							 contents);
 	}
+#endif
 
 	g_free (identifier);
 	g_free (contents);
@@ -1344,6 +1056,13 @@ ephy_extensions_manager_finalize (GObject *object)
 
 	LOG ("EphyExtensionsManager finalising");
 
+#ifdef ENABLE_LEGACY_FORMAT
+	if (priv->xml2ini_xsl != NULL)
+	{
+		xsltFreeStylesheet (priv->xml2ini_xsl);
+	}
+#endif
+
 	eel_gconf_notification_remove (manager->priv->active_extensions_notifier_id);
 
 	g_list_foreach (priv->dir_monitors, (GFunc) gnome_vfs_monitor_cancel, NULL);
@@ -1504,7 +1223,4 @@ ephy_extensions_manager_class_init (EphyExtensionsManagerClass *class)
 			      G_TYPE_POINTER);
 	
 	g_type_class_add_private (object_class, sizeof (EphyExtensionsManagerPrivate));
-
-	languages = g_get_language_names ();
-	g_assert (languages != NULL);
 }
