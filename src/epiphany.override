@@ -58,8 +58,6 @@ headers
 #include "egg-editable-toolbar.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-toolbar.h"
-#include "ephy-bookmarksbar-model.h"
-#include "ephy-bookmarksbar.h"
 #include "ephy-search-entry.h"
 #include "ephy-spinner.h"
 #include "ephy-location-action.h"
@@ -181,6 +179,9 @@ import gtk.EventBox as PyGtkEventBox_Type
 import gtk.Window as PyGtkWindow_Type
 import gtk.Action as PyGtkAction_Type
 import gtk.UIManager as PyGtkUIManager_Type
+import gtk.Menu as PyGtkMenu_Type
+import gtk.ActionGroup as PyGtkActionGroup_Type
+import gtk.gdk.Pixbuf as PyGdkPixbuf_Type
 import gobject.GObject as PyGObject_Type 
 %%
 ignore-glob

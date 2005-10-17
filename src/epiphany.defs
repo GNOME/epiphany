@@ -14,13 +14,6 @@
   (gtype-id "EPHY_TYPE_BOOKMARKS")
 )
 
-(define-object BookmarksBar
-  (in-module "Ephy")
-  (parent "EggEditableToolbar")
-  (c-name "EphyBookmarksBar")
-  (gtype-id "EPHY_TYPE_BOOKMARKSBAR")
-)
-
 (define-interface CommandManager
   (in-module "Ephy")
   (c-name "EphyCommandManager")
@@ -99,7 +92,7 @@
   (gtype-id "EPHY_TYPE_HISTORY")
 )
 
-(define-object Link
+(define-interface Link
   (in-module "Ephy")
   (c-name "EphyLink")
   (gtype-id "EPHY_TYPE_LINK")
@@ -110,6 +103,13 @@
   (parent "GtkAction")
   (c-name "EphyLinkAction")
   (gtype-id "EPHY_TYPE_LINK_ACTION")
+)
+
+(define-object LinkActionGroup
+  (in-module "Ephy")
+  (parent "GtkActionGroup")
+  (c-name "EphyLinkActionGroup")
+  (gtype-id "EPHY_TYPE_LINK_ACTION_GROUP")
 )
 
 (define-object LocationAction
@@ -240,6 +240,8 @@
     '("no-view" "EPHY_EMBED_PERSIST_NO_VIEW")
     '("ask-destination" "EPHY_EMBED_PERSIST_ASK_DESTINATION")
     '("do-conversion" "EPHY_EMBED_PERSIST_DO_CONVERSION")
+    '("from-cache" "EPHY_EMBED_PERSIST_FROM_CACHE")
+    '("no-certdialogs" "EPHY_EMBED_PERSIST_NO_CERTDIALOGS")
   )
 )
 
@@ -274,6 +276,7 @@
     '("is-document" "EPHY_EMBED_STATE_IS_DOCUMENT")
     '("is-network" "EPHY_EMBED_STATE_IS_NETWORK")
     '("is-window" "EPHY_EMBED_STATE_IS_WINDOW")
+    '("restoring" "EPHY_EMBED_STATE_RESTORING")
   )
 )
 
@@ -351,6 +354,7 @@
     '("text" "EGG_TB_MODEL_TEXT")
     '("styles-mask" "EGG_TB_MODEL_STYLES_MASK")
     '("accept-items-only" "EGG_TB_MODEL_ACCEPT_ITEMS_ONLY")
+    '("hidden" "EGG_TB_MODEL_HIDDEN")
   )
 )
 
@@ -471,8 +475,19 @@
   )
 )
 
+(define-enum TabAddressExpire
+  (in-module "Ephy")
+  (c-name "EphyTabAddressExpire")
+  (gtype-id "EPHY_TYPE_TAB_ADDRESS_EXPIRE")
+  (values
+    '("now" "EPHY_TAB_ADDRESS_EXPIRE_NOW")
+    '("next" "EPHY_TAB_ADDRESS_EXPIRE_NEXT")
+    '("current" "EPHY_TAB_ADDRESS_EXPIRE_CURRENT")
+  )
+)
 
-;; From ../../embed/ephy-command-manager.h
+
+;; From ../embed/ephy-command-manager.h
 
 (define-function ephy_command_manager_get_type
   (c-name "ephy_command_manager_get_type")
@@ -617,8 +632,15 @@
 )
 
 
+; Not very useful for python!
+;(define-method get_dom_event
+;  (of-object "EphyEmbedEvent")
+;  (c-name "ephy_embed_event_get_dom_event")
+;  (return-type "gpointer")
+;)
 
-;; From ../../embed/ephy-embed-factory.h
+
+;; From ../embed/ephy-embed-factory.h
 
 (define-function ephy_embed_factory_new_object
   (c-name "ephy_embed_factory_new_object")
@@ -904,7 +926,56 @@
 
 
 
-;; From ../../embed/ephy-embed.h
+;; From ../embed/ephy-embed-type-builtins.h
+
+(define-function ephy_embed_net_state_get_type
+  (c-name "ephy_embed_net_state_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_embed_chrome_get_type
+  (c-name "ephy_embed_chrome_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_embed_print_preview_nav_type_get_type
+  (c-name "ephy_embed_print_preview_nav_type_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_embed_security_level_get_type
+  (c-name "ephy_embed_security_level_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_embed_document_type_get_type
+  (c-name "ephy_embed_document_type_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_embed_event_context_get_type
+  (c-name "ephy_embed_event_context_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_embed_persist_flags_get_type
+  (c-name "ephy_embed_persist_flags_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_content_check_type_get_type
+  (c-name "ephy_content_check_type_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_permission_get_type
+  (c-name "ephy_permission_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ../embed/ephy-embed.h
 
 (define-function ephy_embed_net_state_get_type
   (c-name "ephy_embed_net_state_get_type")
@@ -1062,6 +1133,18 @@
   )
 )
 
+(define-method shistory_copy
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_shistory_copy")
+  (return-type "none")
+  (parameters
+    '("EphyEmbed*" "dest")
+    '("gboolean" "copy_back")
+    '("gboolean" "copy_forward")
+    '("gboolean" "copy_current")
+  )
+)
+
 (define-method get_security_level
   (of-object "EphyEmbed")
   (c-name "ephy_embed_get_security_level")
@@ -1145,6 +1228,12 @@
   )
 )
 
+(define-method close
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_close")
+  (return-type "none")
+)
+
 (define-method has_modified_forms
   (of-object "EphyEmbed")
   (c-name "ephy_embed_has_modified_forms")
@@ -1160,6 +1249,13 @@
   (return-type "GType")
 )
 
+; Don't allow creation of another favicon cache
+;(define-function ephy_favicon_cache_new
+;  (c-name "ephy_favicon_cache_new")
+;  (is-constructor-of "EphyFaviconCache")
+;  (return-type "EphyFaviconCache*")
+;)
+
 (define-method get
   (of-object "EphyFaviconCache")
   (c-name "ephy_favicon_cache_get")
@@ -1169,6 +1265,11 @@
   )
 )
 
+(define-method clear
+  (of-object "EphyFaviconCache")
+  (c-name "ephy_favicon_cache_clear")
+  (return-type "none")
+)
 
 
 ;; From ../../embed/ephy-history.h
@@ -1446,6 +1547,41 @@
   (return-type "GType")
 )
 
+; Don't allow creation of another toolbar
+;(define-function egg_editable_toolbar_new
+;  (c-name "egg_editable_toolbar_new")
+;  (is-constructor-of "EggEditableToolbar")
+;  (return-type "GtkWidget*")
+;  (parameters
+;    '("GtkUIManager*" "manager")
+;  )
+;)
+
+; Don't allow creation of another toolbar
+;(define-function egg_editable_toolbar_new_with_model
+;  (c-name "egg_editable_toolbar_new_with_model")
+;  (return-type "GtkWidget*")
+;  (parameters
+;    '("GtkUIManager*" "manager")
+;    '("EggToolbarsModel*" "model")
+;  )
+;)
+
+(define-method set_model
+  (of-object "EggEditableToolbar")
+  (c-name "egg_editable_toolbar_set_model")
+  (return-type "none")
+  (parameters
+    '("EggToolbarsModel*" "model")
+  )
+)
+
+(define-method get_model
+  (of-object "EggEditableToolbar")
+  (c-name "egg_editable_toolbar_get_model")
+  (return-type "EggToolbarsModel*")
+)
+
 (define-method set_edit_mode
   (of-object "EggEditableToolbar")
   (c-name "egg_editable_toolbar_set_edit_mode")
@@ -1499,6 +1635,14 @@
   )
 )
 
+(define-function egg_editable_toolbar_add_popup_items
+  (c-name "egg_editable_toolbar_add_popup_items")
+  (return-type "none")
+  (parameters
+    '("GtkWidget*" "widget")
+    '("GtkMenu*" "popup")
+  )
+)
 
 
 ;; From ../../lib/egg/egg-toolbars-model.h
@@ -1513,13 +1657,92 @@
   (return-type "GType")
 )
 
-(define-method add_toolbar
+; Don't allow creation of another toolbar
+;(define-function egg_toolbars_model_new
+;  (c-name "egg_toolbars_model_new")
+;  (is-constructor-of "EggToolbarsModel")
+;  (return-type "EggToolbarsModel*")
+;)
+
+(define-method load
   (of-object "EggToolbarsModel")
-  (c-name "egg_toolbars_model_add_toolbar")
-  (return-type "int")
+  (c-name "egg_toolbars_model_load")
+  (return-type "gboolean")
   (parameters
-    '("int" "position")
+    '("const-char*" "xml_file")
+  )
+)
+
+(define-method save
+  (of-object "EggToolbarsModel")
+  (c-name "egg_toolbars_model_save")
+  (return-type "none")
+  (parameters
+    '("const-char*" "xml_file")
+    '("const-char*" "version")
+  )
+)
+
+(define-method get_types
+  (of-object "EggToolbarsModel")
+  (c-name "egg_toolbars_model_get_types")
+  (return-type "GList*")
+)
+
+(define-method set_types
+  (of-object "EggToolbarsModel")
+  (c-name "egg_toolbars_model_set_types")
+  (return-type "none")
+  (parameters
+    '("GList*" "types")
+  )
+)
+
+; I can't get the GdkAtom compiling
+;(define-method get_name
+;  (of-object "EggToolbarsModel")
+;  (c-name "egg_toolbars_model_get_name")
+;  (return-type "char*")
+;  (parameters
+;    '("GdkAtom" "type")
+;    '("const-char*" "data")
+;    '("gboolean" "create")
+;  )
+;)
+
+; I can't get the GdkAtom compiling
+;(define-method get_data
+;  (of-object "EggToolbarsModel")
+;  (c-name "egg_toolbars_model_get_data")
+;  (return-type "char*")
+;  (parameters
+;    '("GdkAtom" "type")
+;    '("const-char*" "name")
+;  )
+;)
+
+(define-method get_avail
+  (of-object "EggToolbarsModel")
+  (c-name "egg_toolbars_model_get_avail")
+  (return-type "GPtrArray*")
+)
+
+(define-method get_n_avail
+  (of-object "EggToolbarsModel")
+  (c-name "egg_toolbars_model_get_n_avail")
+  (return-type "gint")
+  (parameters
     '("const-char*" "name")
+  )
+)
+
+(define-method set_n_avail
+  (of-object "EggToolbarsModel")
+  (c-name "egg_toolbars_model_set_n_avail")
+  (return-type "none")
+  (parameters
+    '("const-char*" "name")
+    '("gint" "count")
   )
 )
 
@@ -1542,42 +1765,22 @@
   )
 )
 
-(define-method add_separator
+(define-method add_toolbar
   (of-object "EggToolbarsModel")
-  (c-name "egg_toolbars_model_add_separator")
-  (return-type "none")
+  (c-name "egg_toolbars_model_add_toolbar")
+  (return-type "int")
   (parameters
-    '("int" "toolbar_position")
     '("int" "position")
-  )
-)
-
-;; (define-method get_item_type
-;;   (of-object "EggToolbarsModel")
-;;   (c-name "egg_toolbars_model_get_item_type")
-;;   (return-type "char*")
-;;   (parameters
-;;     '("GdkAtom" "dnd_type")
-;;   )
-;; )
-
-(define-method get_item_id
-  (of-object "EggToolbarsModel")
-  (c-name "egg_toolbars_model_get_item_id")
-  (return-type "char*")
-  (parameters
-    '("const-char*" "type")
     '("const-char*" "name")
   )
 )
 
-(define-method get_item_data
+(define-method remove_toolbar
   (of-object "EggToolbarsModel")
-  (c-name "egg_toolbars_model_get_item_data")
-  (return-type "char*")
+  (c-name "egg_toolbars_model_remove_toolbar")
+  (return-type "none")
   (parameters
-    '("const-char*" "type")
-    '("const-char*" "id")
+    '("int" "position")
   )
 )
 
@@ -1588,17 +1791,7 @@
   (parameters
     '("int" "toolbar_position")
     '("int" "position")
-    '("const-char*" "id")
-    '("const-char*" "type")
-  )
-)
-
-(define-method remove_toolbar
-  (of-object "EggToolbarsModel")
-  (c-name "egg_toolbars_model_remove_toolbar")
-  (return-type "none")
-  (parameters
-    '("int" "position")
+    '("const-char*" "name")
   )
 )
 
@@ -1636,13 +1829,10 @@
 (define-method item_nth
   (of-object "EggToolbarsModel")
   (c-name "egg_toolbars_model_item_nth")
-  (return-type "none")
+  (return-type "const-char*")
   (parameters
     '("int" "toolbar_position")
     '("int" "position")
-    '("gboolean*" "is_separator")
-    '("const-char**" "id")
-    '("const-char**" "type")
   )
 )
 
@@ -1663,7 +1853,16 @@
 
 
 
-;; From ../../lib/ephy-dialog.h
+;; From ../lib/egg/eggtypebuiltins.h
+
+(define-function egg_tb_model_flags_get_type
+  (c-name "egg_tb_model_flags_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ../lib/ephy-dialog.h
 
 (define-function ephy_dialog_get_type
   (c-name "ephy_dialog_get_type")
@@ -1821,7 +2020,26 @@
 
 
 
-;; From ../../lib/ephy-node-db.h
+;; From ../lib/ephy-lib-type-builtins.h
+
+(define-function ephy_dbus_bus_get_type
+  (c-name "ephy_dbus_bus_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_node_signal_type_get_type
+  (c-name "ephy_node_signal_type_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_state_window_flags_get_type
+  (c-name "ephy_state_window_flags_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ../lib/ephy-node-db.h
 
 (define-function ephy_node_db_get_type
   (c-name "ephy_node_db_get_type")
@@ -2299,7 +2517,16 @@
 
 
 
-;; From ../../src/bookmarks/ephy-bookmarks.h
+;; From ../src/bookmarks/ephy-bookmarks-type-builtins.h
+
+(define-function ephy_bookmark_property_get_type
+  (c-name "ephy_bookmark_property_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ../src/bookmarks/ephy-bookmarks.h
 
 (define-function ephy_bookmarks_get_type
   (c-name "ephy_bookmarks_get_type")
@@ -2319,12 +2546,6 @@
   (parameters
     '("long" "id")
   )
-)
-
-(define-method get_toolbars_model
-  (of-object "EphyBookmarks")
-  (c-name "ephy_bookmarks_get_toolbars_model")
-  (return-type "GObject*")
 )
 
 (define-method add
@@ -2492,17 +2713,53 @@
 )
 
 
+; This is conditional on configure checks, so might not
+; always be available
+;(define-method get_local
+;  (of-object "EphyBookmarks")
+;  (c-name "ephy_bookmarks_get_local")
+;  (return-type "EphyNode*")
+;)
 
-;; From ../../src/bookmarks/ephy-bookmarksbar.h
+(define-function ephy_bookmarks_compare_topics
+  (c-name "ephy_bookmarks_compare_topics")
+  (return-type "int")
+  (parameters
+    '("gconstpointer" "a")
+    '("gconstpointer" "b")
+  )
+)
 
-(define-function ephy_bookmarksbar_get_type
-  (c-name "ephy_bookmarksbar_get_type")
-  (return-type "GType")
+(define-function ephy_bookmarks_compare_topic_pointers
+  (c-name "ephy_bookmarks_compare_topic_pointers")
+  (return-type "int")
+  (parameters
+    '("gconstpointer" "a")
+    '("gconstpointer" "b")
+  )
+)
+
+(define-function ephy_bookmarks_compare_bookmarks
+  (c-name "ephy_bookmarks_compare_bookmarks")
+  (return-type "int")
+  (parameters
+    '("gconstpointer" "a")
+    '("gconstpointer" "b")
+  )
+)
+
+(define-function ephy_bookmarks_compare_bookmark_pointers
+  (c-name "ephy_bookmarks_compare_bookmark_pointers")
+  (return-type "int")
+  (parameters
+    '("gconstpointer" "a")
+    '("gconstpointer" "b")
+  )
 )
 
 
 
-;; From ../../src/ephy-extension.h
+;; From ../src/ephy-extension.h
 
 (define-function ephy_extension_get_type
   (c-name "ephy_extension_get_type")
@@ -2604,9 +2861,23 @@
   (return-type "GType")
 )
 
+(define-function ephy_link_action_group_get_type
+  (c-name "ephy_link_action_group_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_link_action_group_new
+  (c-name "ephy_link_action_group_new")
+  (is-constructor-of "EphyLinkActionGroup")
+  (return-type "EphyLinkActionGroup*")
+  (parameters
+    '("char*" "name")
+  )
+)
 
 
-;; From ../../src/ephy-link.h
+
+;; From ../src/ephy-link.h
 
 (define-function ephy_link_flags_get_type
   (c-name "ephy_link_flags_get_type")
@@ -3148,6 +3419,12 @@
   (return-type "const-char*")
 )
 
+(define-method get_title_composite
+  (of-object "EphyTab")
+  (c-name "ephy_tab_get_title_composite")
+  (return-type "const-char*")
+)
+
 (define-method get_visibility
   (of-object "EphyTab")
   (c-name "ephy_tab_get_visibility")
@@ -3167,6 +3444,25 @@
 (define-function ephy_toolbar_get_type
   (c-name "ephy_toolbar_get_type")
   (return-type "GType")
+)
+
+; Don't allow creation of another toolbar
+;(define-function ephy_toolbar_new
+;  (c-name "ephy_toolbar_new")
+;  (is-constructor-of "EphyToolbar")
+;  (return-type "EphyToolbar*")
+;  (parameters
+;    '("EphyWindow*" "window")
+;  )
+;)
+
+(define-method set_favicon
+  (of-object "EphyToolbar")
+  (c-name "ephy_toolbar_set_favicon")
+  (return-type "none")
+  (parameters
+    '("GdkPixbuf*" "icon")
+  )
 )
 
 (define-method set_show_leave_fullscreen
@@ -3190,18 +3486,104 @@
   (return-type "const-char*")
 )
 
-(define-method set_lock_visibility
-  (of-object "EphyToolbar")
-  (c-name "ephy_toolbar_set_lock_visibility")
-  (return-type "none")
-  (parameters
-    '("gboolean" "visible")
-  )
+; Don't allow setting the location
+;(define-method set_location
+;  (of-object "EphyToolbar")
+;  (c-name "ephy_toolbar_set_location")
+;  (return-type "none")
+;  (parameters
+;    '("const-char*" "address")
+;    '("const-char*" "typed_address")
+;  )
+;)
+
+; Don't allow setting the nav actions
+;(define-method set_navigation_actions
+;  (of-object "EphyToolbar")
+;  (c-name "ephy_toolbar_set_navigation_actions")
+;  (return-type "none")
+;  (parameters
+;    '("gboolean" "back")
+;    '("gboolean" "forward")
+;    '("gboolean" "up")
+;  )
+;)
+
+; Don't allow setting the security state
+;(define-method set_security_state
+;  (of-object "EphyToolbar")
+;  (c-name "ephy_toolbar_set_security_state")
+;  (return-type "none")
+;  (parameters
+;    '("gboolean" "is_secure")
+;    '("gboolean" "show_lock")
+;    '("const-char*" "stock_id")
+;    '("const-char*" "tooltip")
+;  )
+;)
+
+; Don't allow control of the spinner
+;(define-method set_spinning
+;  (of-object "EphyToolbar")
+;  (c-name "ephy_toolbar_set_spinning")
+;  (return-type "none")
+;  (parameters
+;    '("gboolean" "spinning")
+;  )
+;)
+
+; Don't allow control of the zoom widget
+;(define-method set_zoom
+;  (of-object "EphyToolbar")
+;  (c-name "ephy_toolbar_set_zoom")
+;  (return-type "none")
+;  (parameters
+;    '("gboolean" "can_zoom")
+;    '("float" "zoom")
+;  )
+;)
+
+
+;; From ../src/ephy-type-builtins.h
+
+(define-function ephy_link_flags_get_type
+  (c-name "ephy_link_flags_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_shell_error_get_type
+  (c-name "ephy_shell_error_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_shell_startup_flags_get_type
+  (c-name "ephy_shell_startup_flags_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_new_tab_flags_get_type
+  (c-name "ephy_new_tab_flags_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_tab_navigation_flags_get_type
+  (c-name "ephy_tab_navigation_flags_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_tab_address_expire_get_type
+  (c-name "ephy_tab_address_expire_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_navigation_direction_get_type
+  (c-name "ephy_navigation_direction_get_type")
+  (return-type "GType")
 )
 
 
 
-;; From ../../src/ephy-window.h
+;; From ../src/ephy-window.h
 
 (define-function ephy_window_get_type
   (c-name "ephy_window_get_type")
@@ -3241,12 +3623,6 @@
 (define-method get_toolbar
   (of-object "EphyWindow")
   (c-name "ephy_window_get_toolbar")
-  (return-type "GtkWidget*")
-)
-
-(define-method get_bookmarksbar
-  (of-object "EphyWindow")
-  (c-name "ephy_window_get_bookmarksbar")
   (return-type "GtkWidget*")
 )
 
@@ -3355,126 +3731,6 @@
   (of-object "EphyWindow")
   (c-name "ephy_window_get_context_event")
   (return-type "EphyEmbedEvent*")
-)
-
-
-
-;; From ../embed/ephy-embed-type-builtins.h
-
-(define-function ephy_embed_net_state_get_type
-  (c-name "ephy_embed_net_state_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_embed_chrome_get_type
-  (c-name "ephy_embed_chrome_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_embed_print_preview_nav_type_get_type
-  (c-name "ephy_embed_print_preview_nav_type_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_embed_security_level_get_type
-  (c-name "ephy_embed_security_level_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_embed_document_type_get_type
-  (c-name "ephy_embed_document_type_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_embed_event_context_get_type
-  (c-name "ephy_embed_event_context_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_embed_persist_flags_get_type
-  (c-name "ephy_embed_persist_flags_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_content_check_type_get_type
-  (c-name "ephy_content_check_type_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_permission_get_type
-  (c-name "ephy_permission_get_type")
-  (return-type "GType")
-)
-
-
-
-;; From ../lib/egg/eggtypebuiltins.h
-
-(define-function egg_tb_model_flags_get_type
-  (c-name "egg_tb_model_flags_get_type")
-  (return-type "GType")
-)
-
-
-
-;; From ../lib/ephy-lib-type-builtins.h
-
-(define-function ephy_node_signal_type_get_type
-  (c-name "ephy_node_signal_type_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_state_window_flags_get_type
-  (c-name "ephy_state_window_flags_get_type")
-  (return-type "GType")
-)
-
-
-
-;; From ../src/bookmarks/ephy-bookmarks-type-builtins.h
-
-(define-function ephy_bookmark_property_get_type
-  (c-name "ephy_bookmark_property_get_type")
-  (return-type "GType")
-)
-
-
-
-;; From ../src/ephy-type-builtins.h
-
-(define-function ephy_link_flags_get_type
-  (c-name "ephy_link_flags_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_shell_error_get_type
-  (c-name "ephy_shell_error_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_shell_startup_flags_get_type
-  (c-name "ephy_shell_startup_flags_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_new_tab_flags_get_type
-  (c-name "ephy_new_tab_flags_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_tab_navigation_flags_get_type
-  (c-name "ephy_tab_navigation_flags_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_tab_address_expire_get_type
-  (c-name "ephy_tab_address_expire_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_navigation_direction_get_type
-  (c-name "ephy_navigation_direction_get_type")
-  (return-type "GType")
 )
 
 

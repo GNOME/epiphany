@@ -320,7 +320,6 @@ BINDING_HEADERS_SRCDIR_IN = \
 	lib/egg/egg-toolbars-model.h			\
 	lib/widgets/ephy-search-entry.h			\
 	lib/widgets/ephy-spinner.h			\
-	src/bookmarks/ephy-bookmarksbar.h		\
 	src/bookmarks/ephy-bookmarks.h			\
 	src/ephy-extension.h				\
 	src/ephy-extensions-manager.h			\
@@ -336,11 +335,14 @@ BINDING_HEADERS_SRCDIR_IN = \
 	src/ephy-window.h
 
 BINDING_HEADERS_SRCDIR_IGNORE_IN = \
+	embed/downloader-view.h				\
 	embed/ephy-download.h				\
 	embed/ephy-embed-dialog.h			\
 	embed/ephy-embed-find.h				\
 	embed/ephy-embed-prefs.h			\
 	embed/ephy-encodings.h				\
+	embed/print-dialog.h				\
+	lib/eel-gconf-extensions.h			\
 	lib/ephy-dbus.h					\
 	lib/ephy-debug.h				\
 	lib/ephy-dnd.h					\
@@ -348,6 +350,7 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	lib/ephy-file-helpers.h				\
 	lib/ephy-glade.h				\
 	lib/ephy-gui.h					\
+	lib/widgets/ephy-icon-entry.h			\
 	lib/ephy-langs.h				\
 	lib/ephy-loader.h				\
 	lib/ephy-module.h				\
@@ -384,6 +387,14 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	src/bookmarks/ephy-new-bookmark.h		\
 	src/bookmarks/ephy-topic-action.h		\
 	src/bookmarks/ephy-topics-selector.h		\
+	src/bookmarks/ephy-bookmark-action-group.h	\
+	src/bookmarks/ephy-bookmark-factory-action.h	\
+	src/bookmarks/ephy-bookmarks-ui.h		\
+	src/bookmarks/ephy-nodes-cover.h		\
+	src/bookmarks/ephy-open-tabs-action.h		\
+	src/bookmarks/ephy-related-action.h		\
+	src/bookmarks/ephy-topic-action-group.h		\
+	src/bookmarks/ephy-topic-factory-action.h	\
 	src/ephy-action-helper.h			\
 	src/ephy-automation.h				\
 	src/ephy-completion-model.h			\
@@ -401,7 +412,13 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	src/ephy-python-loader.h			\
 	src/ephy-tabs-menu.h				\
 	src/ephy-toolbar-editor.h			\
-	src/ephy-toolbars-model.h
+	src/ephy-toolbars-model.h			\
+	src/languages.h					\
+	src/pdm-dialog.h				\
+	src/popup-commands.h				\
+	src/ppview-toolbar.h				\
+	src/prefs-dialog.h				\
+	src/window-commands.h
 
 BINDING_HEADERS_BUILDDIR_IN = \
 	embed/ephy-embed-type-builtins.h		\
@@ -411,14 +428,27 @@ BINDING_HEADERS_BUILDDIR_IN = \
 	src/ephy-type-builtins.h
 
 BINDING_HEADERS_BUILDDIR_IGNORE_IN = \
-	lib/ephy-marshal.h
+        config.h					\
+        embed/stamp-ephy-embed-type-builtins.h		\
+	lib/ephy-marshal.h				\
+        lib/egg/eggmarshalers.h				\
+        lib/egg/eggtypebuiltins.h			\
+	lib/egg/stamp-eggmarshalers.h			\
+	lib/egg/stamp-eggtypebuiltins.h			\
+        lib/ephy-marshal.h				\
+        lib/stamp-ephy-lib-type-builtins.h		\
+        lib/stamp-ephy-marshal.h			\
+        src/EphyAutomation.h				\
+        src/stamp-ephy-type-builtins.h			\
+	src/bookmarks/stamp-ephy-bookmarks-type-builtins.h
 
 BINDING_HEADERS_SRCDIR		:= $(addprefix $(top_srcdir)/,$(BINDING_HEADERS_SRCDIR_IN))
 BINDING_HEADERS_SRCDIR_IGNORE	:= $(addprefix $(top_srcdir)/,$(BINDING_HEADERS_SRCDIR_IGNORE_IN))
 BINDING_HEADERS_BUILDDIR	:= $(addprefix $(top_builddir)/,$(BINDING_HEADERS_BUILDDIR_IN))
 BINDING_HEADERS_BUILDDIR_IGNORE	:= $(addprefix $(top_builddir)/,$(BINDING_HEADERS_BUILDDIR_IGNORE_IN))
 
-BINDING_HEADERS_ALL = $(shell find $(top_srcdir) $(top_builddir) -type f -name "*.h" -print | sort | uniq)
+BINDING_HEADERS_ALL = $(shell find $(top_srcdir) $(top_builddir) -type f -name "*.h"  \
+	               -a ! -wholename "*/mozilla/*" -print| sort | uniq)
 
 BINDING_HEADERS_ALL_KNOWN = \
 	$(BINDING_HEADERS_SRCDIR) 		\
