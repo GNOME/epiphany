@@ -418,22 +418,22 @@ BINDING_HEADERS_SRCDIR_IGNORE	:= $(addprefix $(top_srcdir)/,$(BINDING_HEADERS_SR
 BINDING_HEADERS_BUILDDIR	:= $(addprefix $(top_builddir)/,$(BINDING_HEADERS_BUILDDIR_IN))
 BINDING_HEADERS_BUILDDIR_IGNORE	:= $(addprefix $(top_builddir)/,$(BINDING_HEADERS_BUILDDIR_IGNORE_IN))
 
-BINDING_HEADERS_ALL = $(find $(top_srcdir) $(top_builddir) -type f -name "*.h" -print | sort | uniq)
+BINDING_HEADERS_ALL = $(shell find $(top_srcdir) $(top_builddir) -type f -name "*.h" -print | sort | uniq)
 
 BINDING_HEADERS_ALL_KNOWN = \
 	$(BINDING_HEADERS_SRCDIR) 		\
 	$(BINDING_HEADERS_SRCDIR_IGNORE)	\
- 	$(BINDING_HEADERS_BUILDDIR)		\
+	$(BINDING_HEADERS_BUILDDIR)		\
 	$(BINDING_HEADERS_BUILDDIR_IGNORE)
- 
+
 BINDING_HEADERS_ALL_UNKNOWN = $(filter-out $(BINDING_HEADERS_ALL_KNOWN),$(BINDING_HEADERS_ALL))
 
 regenerate-python-binding:
 	$(PYGTK_H2DEF) $(sort $(BINDING_HEADERS_SRCDIR) $(BINDING_HEADERS_BUILDDIR)) > epiphany.defs.new
 
 check-python-binding:
-	echo "$(BINDING_HEADERS_ALL)"
-	test -z "$(BINDING_HEADERS_ALL_UNKNOWN)"
+	@echo "$(BINDING_HEADERS_ALL_UNKNOWN)"
+	@test -z "$(BINDING_HEADERS_ALL_UNKNOWN)"
 
 check-local: check-python-binding
 
