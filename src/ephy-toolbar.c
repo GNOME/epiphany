@@ -80,7 +80,6 @@ struct _EphyToolbarPrivate
 	guint updating_address : 1;
 	guint show_lock : 1;
 	guint is_secure : 1;
-	guint lock_visible : 1;
 	guint leave_fullscreen_visible : 1;
 	guint spinning : 1;
 };
@@ -469,24 +468,11 @@ ephy_toolbar_set_security_state (EphyToolbar *toolbar,
 	g_object_set (priv->actions[LOCATION_ACTION],
 		      "lock-stock-id", stock_id,
 		      "lock-tooltip", tooltip,
-		      "show-lock", priv->lock_visible && priv->show_lock,
+		      "show-lock", priv->show_lock,
 		      "secure", is_secure,
 		      NULL);
 }
 
-void
-ephy_toolbar_set_lock_visibility (EphyToolbar *toolbar,
-				  gboolean visible)
-{
-	EphyToolbarPrivate *priv = toolbar->priv;
-
-	priv->lock_visible = visible != FALSE;
-
-	g_object_set (priv->actions[LOCATION_ACTION],
-		      "show-lock", priv->lock_visible && priv->show_lock,
-		      NULL);
-}
-			    
 void
 ephy_toolbar_set_spinning (EphyToolbar *toolbar,
 			   gboolean spinning)
@@ -549,8 +535,6 @@ ephy_toolbar_init (EphyToolbar *toolbar)
 	EphyToolbarPrivate *priv;
 
 	priv = toolbar->priv = EPHY_TOOLBAR_GET_PRIVATE (toolbar);
-
-	priv->lock_visible = TRUE;
 }
 
 static GObject *
