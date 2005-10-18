@@ -261,7 +261,7 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader, EphyNode **ret_
 }
 
 static int
-xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_folder)
+xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, GList *folders)
 {
 	EphyXBELImporterState state = STATE_FOLDER;
 	char *folder = NULL;
@@ -285,22 +285,9 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_fold
 		{
 			if (state == STATE_TITLE && folder == NULL)
 			{
-				char *title;
-
-				title = (char *) xmlTextReaderValue (reader);
-
-				if (!parent_folder)
-				{
-					folder = g_strdup (title);
-				}
-				else
-				{
-					folder = g_strconcat (parent_folder,
-							      BOOKMARKS_HIERARCHY_SEP,
-							      title, NULL);
-				}
-
-				g_free (title);
+				folder = (char *) xmlTextReaderValue (reader);
+				
+				folders = g_list_prepend (folders, folder);
 			}
 			else
 			{
@@ -310,19 +297,27 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_fold
 		else if (xmlStrEqual (tag, (xmlChar *) "bookmark") && type == 1 && state == STATE_FOLDER)
 		{
 			EphyNode *node = NULL, *keyword;
+			GList *l;
 
 			ret = xbel_parse_bookmark (eb, reader, &node);
 
-			keyword = ephy_bookmarks_find_keyword (eb, folder ? folder : "", FALSE);
+			for (l = folders; l != NULL; l=l->next)
+			{
+				char *title;
+				
+				title = l->data ? (char *) l->data : "";
+				
+				keyword = ephy_bookmarks_find_keyword (eb, title, FALSE);
 			
-			if (keyword == NULL && folder != NULL && folder[0] != '\0')
-			{
-				keyword = ephy_bookmarks_add_keyword (eb, folder);
-			}
+				if (keyword == NULL && title[0] != '\0')
+				{
+					keyword = ephy_bookmarks_add_keyword (eb, title);
+				}
 
-			if (node != NULL && keyword != NULL)
-			{
-				ephy_bookmarks_set_keyword (eb, keyword, node);
+				if (node != NULL && keyword != NULL)
+				{
+					ephy_bookmarks_set_keyword (eb, keyword, node);
+				}
 			}
 
 			if (ret != 1) break;
@@ -332,7 +327,7 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_fold
 		{
 			if (type == XML_READER_TYPE_ELEMENT)
 			{
-				ret = xbel_parse_folder (eb, reader, folder ? folder : "");
+				ret = xbel_parse_folder (eb, reader, folders);
 				
 				if (ret != 1) break;
 			}
@@ -384,8 +379,12 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_fold
 		/* next one, please */
 		ret = xmlTextReaderRead (reader);
 	}
-
-	g_free (folder);
+	
+	if (folder)
+	{
+		folders = g_list_remove (folders, folder);
+		g_free (folder);
+	}
 
 	return ret;
 }
@@ -660,25 +659,6 @@ ns_parse_bookmark_item (GString *string)
 	return temp;
 }
 
-static char *
-folders_list_to_topic_name (GList *folders)
-{
-	GString *topic;
-	GList *l;
-
-	g_return_val_if_fail (folders != NULL, NULL);
-
-	topic = g_string_new (folders->data);
-
-	for (l = folders->next; l != NULL; l = l->next)
-	{
-		g_string_append (topic, BOOKMARKS_HIERARCHY_SEP);
-		g_string_append (topic, l->data);
-	}
-
-	return g_string_free (topic, FALSE);
-}
-
 gboolean
 ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 			       const char *filename)
@@ -733,18 +713,18 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 			if (folders != NULL)
 			{
 				EphyNode *keyword;
+				GList *l;
 
-				topic = folders_list_to_topic_name (folders);
-				g_return_val_if_fail (topic != NULL, FALSE);
-
-				keyword = ephy_bookmarks_find_keyword (bookmarks, topic, FALSE);
-				if (keyword == NULL)
+				for (l = folders; l != NULL; l = l->next)
 				{
-					keyword = ephy_bookmarks_add_keyword (bookmarks, topic);
-				}
-				g_free (topic);
+					keyword = ephy_bookmarks_find_keyword (bookmarks, l->data, FALSE);
+					if (keyword == NULL)
+					{
+						keyword = ephy_bookmarks_add_keyword (bookmarks, l->data);
+					}
 
-				ephy_bookmarks_set_keyword (bookmarks, keyword, node);
+					ephy_bookmarks_set_keyword (bookmarks, keyword, node);
+				}
 			}
 
 			g_free (parsedname);
