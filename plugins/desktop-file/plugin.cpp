@@ -258,7 +258,7 @@ plugin_stream_as_file (NPP instance,
 
 		show_error_dialog (instance,
 				   _("Unsafe protocol."),
-				   _("The contained address has not been "
+				   _("The address has not been "
 				     "loaded, because it refers to an "
 				     "unsafe protocol and thereby presents "
 				     "a security risk to your system."));
