@@ -60,39 +60,43 @@ ephy_stock_icons_init (void)
 	};
 
 	factory = gtk_icon_factory_new ();
-	gtk_icon_factory_add_default (factory);
 
 	for (i = 0; i < (int) G_N_ELEMENTS (items); i++)
 	{
 		char *fn;
 
-		icon_set = gtk_icon_set_new ();
 		icon_source = gtk_icon_source_new ();
 
 		fn = g_strconcat (items[i].stock_id, ".png", NULL);
+		gtk_icon_source_set_icon_name (icon_source, items[i].stock_id);
 		gtk_icon_source_set_filename (icon_source, ephy_file (fn));
 		g_free (fn);
 
+		icon_set = gtk_icon_set_new ();
 		gtk_icon_set_add_source (icon_set, icon_source);
+		gtk_icon_source_free (icon_source);
+
 		gtk_icon_factory_add (factory, items[i].stock_id, icon_set);
 		gtk_icon_set_unref (icon_set);
-		gtk_icon_source_free (icon_source);
 	}
 
 	gtk_stock_add_static (items, G_N_ELEMENTS (items));
 
 	for (i = 0; i < (int) G_N_ELEMENTS (icon_theme_items); i++)
 	{
-		icon_set = gtk_icon_set_new ();
 		icon_source = gtk_icon_source_new ();
 		gtk_icon_source_set_icon_name (icon_source, icon_theme_items[i]);
+
+		icon_set = gtk_icon_set_new ();
 		gtk_icon_set_add_source (icon_set, icon_source);
+		gtk_icon_source_free (icon_source);
+
 		gtk_icon_factory_add (factory, icon_theme_items[i], icon_set);
 		gtk_icon_set_unref (icon_set);
-		gtk_icon_source_free (icon_source);
 	}
 
-	g_object_unref (G_OBJECT (factory));
+	gtk_icon_factory_add_default (factory);
+	g_object_unref (factory);
 
 	gtk_icon_size_register (EPHY_ICON_SIZE_TAB_BUTTON, 10, 10);
 }
