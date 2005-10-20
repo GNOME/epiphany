@@ -40,7 +40,6 @@ ephy_stock_icons_init (void)
 	static const char *icon_theme_items[] =
 	{
 		STOCK_NEW_TAB,
-		STOCK_FULLSCREEN,
 		STOCK_VIEW_SOURCE,
 		STOCK_SEND_MAIL,
 		STOCK_ADD_BOOKMARK,
@@ -48,7 +47,6 @@ ephy_stock_icons_init (void)
 		STOCK_LOCK_INSECURE,
 		STOCK_LOCK_SECURE,
 		STOCK_LOCK_BROKEN,
-		STOCK_LEAVE_FULLSCREEN
 	};
 
 	static const GtkStockItem items[] =

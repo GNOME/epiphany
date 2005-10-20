@@ -23,7 +23,6 @@
 
 #include "ephy-fullscreen-popup.h"
 #include "ephy-spinner.h"
-#include "ephy-stock-icons.h"
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
@@ -276,7 +275,7 @@ ephy_fullscreen_popup_constructor (GType type,
 
 	/* exit button */
 	priv->button = gtk_button_new_with_label (_("Leave Fullscreen"));
-	icon = gtk_image_new_from_stock (STOCK_LEAVE_FULLSCREEN, GTK_ICON_SIZE_BUTTON);
+	icon = gtk_image_new_from_stock (GTK_STOCK_LEAVE_FULLSCREEN, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image (GTK_BUTTON (priv->button), icon);
 	/* don't show the image! see bug #307818 */
 	g_signal_connect (priv->button, "clicked",

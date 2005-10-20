@@ -33,7 +33,6 @@ G_BEGIN_DECLS
 #define EPHY_STOCK_DOWNLOAD	   "epiphany-download"
 
 #define STOCK_NEW_TAB		   "stock_new-tab"
-#define STOCK_FULLSCREEN	   "stock_fullscreen"
 #define STOCK_VIEW_SOURCE	   "stock_view-html-source"
 #define STOCK_SEND_MAIL		   "stock_mail-send"
 #define STOCK_ADD_BOOKMARK	   "stock_add-bookmark"
@@ -41,7 +40,6 @@ G_BEGIN_DECLS
 #define STOCK_LOCK_INSECURE	   "stock_lock-open"
 #define STOCK_LOCK_SECURE	   "stock_lock"
 #define STOCK_LOCK_BROKEN	   "stock_lock-broken"
-#define STOCK_LEAVE_FULLSCREEN	   "stock_leave-fullscreen"
 
 void ephy_stock_icons_init (void);
 

@@ -624,7 +624,7 @@ ephy_toolbar_constructor (GType type,
 	priv->sep_item = gtk_separator_tool_item_new ();
 	gtk_toolbar_insert (gtoolbar, priv->sep_item, -1);
 
-	priv->exit_button = gtk_tool_button_new_from_stock (STOCK_LEAVE_FULLSCREEN);
+	priv->exit_button = gtk_tool_button_new_from_stock (GTK_STOCK_LEAVE_FULLSCREEN);
 	gtk_tool_button_set_label (GTK_TOOL_BUTTON (priv->exit_button), _("Leave Fullscreen"));
 	gtk_tool_item_set_is_important (priv->exit_button, TRUE);
 	g_signal_connect (priv->exit_button, "clicked",
