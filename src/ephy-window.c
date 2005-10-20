@@ -294,7 +294,7 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 	{ "ViewStatusbar", NULL, N_("St_atusbar"), NULL,
 	  N_("Show or hide statusbar"),
 	  G_CALLBACK (ephy_window_view_statusbar_cb), TRUE },
-	{ "ViewFullscreen", STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
+	{ "ViewFullscreen", GTK_STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
 	  N_("Browse at full screen"),
 	  G_CALLBACK (window_cmd_view_fullscreen), FALSE },
 	{ "ViewPopupWindows", EPHY_STOCK_POPUPS, N_("Popup _Windows"), NULL,
