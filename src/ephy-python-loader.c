@@ -39,16 +39,14 @@ static GObjectClass *parent_class = NULL;
 
 static GObject *
 impl_get_object (EphyLoader *eloader,
-		 GData **attributes)
+		 GKeyFile *keyfile)
 {
 	char *filename;
 	GObject *object;
 
-	filename = g_datalist_get_data (attributes, "Module");
-	if (filename == NULL)
-	{
-		filename = g_datalist_get_data (attributes, "module");
-	}
+	g_return_val_if_fail (keyfile != NULL, NULL);
+
+	filename = g_key_file_get_string (keyfile, "Loader", "Module", NULL);
 	if (filename == NULL)
 	{
 		g_warning ("NULL module name!\n");
@@ -58,6 +56,8 @@ impl_get_object (EphyLoader *eloader,
 	object = g_object_new (EPHY_TYPE_PYTHON_EXTENSION,
 			       "filename", filename,
 			       NULL);
+
+	g_free (filename);
 
 	/* we own one ref */
 	return g_object_ref (object);

@@ -44,10 +44,7 @@ typedef struct _EphyExtensionsManagerPrivate	EphyExtensionsManagerPrivate;
 typedef struct
 {
 	char *identifier;
-	char *name;
-	char *description;
-	GList *authors;
-	char *url;
+	GKeyFile *keyfile;
 	gboolean active;
 } EphyExtensionInfo;
 	

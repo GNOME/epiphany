@@ -59,7 +59,8 @@
 #endif
 
 #define CONF_LOADED_EXTENSIONS	"/apps/epiphany/general/active_extensions"
-#define DOT_INI	".ephy-extension"
+#define EE_GROUP	"Epiphany Extension"
+#define DOT_INI		".ephy-extension"
 
 #define ENABLE_LEGACY_FORMAT
 
@@ -84,11 +85,9 @@ struct _EphyExtensionsManagerPrivate
 typedef struct
 {
 	EphyExtensionInfo info;
-	guint version;
 	gboolean load_failed;
 
 	char *loader_type;
-	GData *loader_attributes;
 
 	EphyLoader *loader; /* NULL if never loaded */
 	GObject *extension; /* NULL if unloaded */
@@ -266,13 +265,8 @@ free_extension_info (ExtensionInfo *info)
 	EphyExtensionInfo *einfo = (EphyExtensionInfo *) info;
 
 	g_free (einfo->identifier);
-	g_free (einfo->name);
-	g_free (einfo->description);
-	g_list_foreach (einfo->authors, (GFunc) g_free, NULL);
-	g_list_free (einfo->authors);
-	g_free (einfo->url);
+	g_key_file_free (einfo->keyfile);
 	g_free (info->loader_type);
-	g_datalist_clear (&info->loader_attributes);
 
 	if (info->extension != NULL)
 	{
@@ -310,10 +304,9 @@ ephy_extensions_manager_load_ini_string (EphyExtensionsManager *manager,
 {
 	ExtensionInfo *info;
 	EphyExtensionInfo *einfo;
-	gchar ** list;
-	int i;
 	GKeyFile *key_file;
 	GError *err = NULL;
+	char *start_group;
 
 	LOG ("Loading INI description file for '%s'", identifier);
 
@@ -336,11 +329,26 @@ ephy_extensions_manager_load_ini_string (EphyExtensionsManager *manager,
 		return;
 	}
 
-	if (g_key_file_has_group (key_file, "Epiphany Extension") == FALSE ||
-	    g_key_file_has_group (key_file, "Loader") == FALSE)
+	start_group = g_key_file_get_start_group (key_file);
+	if (start_group == NULL ||
+	    strcmp (start_group, EE_GROUP) != 0 ||
+	    !g_key_file_has_group (key_file, "Loader"))
 	{
 		g_warning ("Invalid extension description file for '%s'; "
 			   "missing 'Epiphany Extension' or 'Loader' group",
+			   identifier);
+		
+		g_key_file_free (key_file);
+		g_free (start_group);
+		return;
+	}
+	g_free (start_group);
+
+	if (!g_key_file_has_key (key_file, EE_GROUP, "Name", NULL) ||
+	    !g_key_file_has_key (key_file, EE_GROUP, "Description", NULL))
+	{
+		g_warning ("Invalid extension description file for '%s'; "
+			   "missing 'Name' or 'Description' keys.",
 			   identifier);
 		
 		g_key_file_free (key_file);
@@ -350,75 +358,12 @@ ephy_extensions_manager_load_ini_string (EphyExtensionsManager *manager,
 	info = g_new0 (ExtensionInfo, 1);
 	einfo = (EphyExtensionInfo *) info;
 	einfo->identifier = g_strdup (identifier);
-	g_datalist_init (&info->loader_attributes);
+	einfo->keyfile = key_file;
 
-	einfo->name = g_key_file_get_locale_string (key_file, 
-							"Epiphany Extension",
-							"Name",
-							NULL, NULL);
-
-	einfo->description = g_key_file_get_locale_string (key_file, 
-							"Epiphany Extension",
-							"Description",
-							NULL, NULL);
-
-	einfo->url = g_key_file_get_locale_string (key_file, 
-						       "Epiphany Extension",
-						       "URL",
-						       NULL, NULL);
-
-	list = g_key_file_get_string_list (key_file, 
-					   "Epiphany Extension",
-					   "Authors", NULL, NULL);
-        if (list)
-	{
-		for (i = 0 ; list[i]; i++ )
-		{
-			einfo->authors = g_list_prepend (einfo->authors, 
-							 g_strstrip (g_strdup (list[i])));
-		}
-		g_strfreev (list);
-	}
-
-	einfo->authors = g_list_reverse (einfo->authors);
-	
-	info->version = g_key_file_get_integer (key_file,
-						"Epiphany Extension",
-						"Version", NULL);
-
-	/* Load the loader flags */
-	list = g_key_file_get_keys (key_file, "Loader", NULL, NULL);
-
-	if (list)
-	{
-		for (i = 0 ; list[i]; i++ )
-		{
-			char * value;
-			GQuark attr_quark = 0;
-
-			value = g_key_file_get_string (key_file, "Loader", 
-						       list[i], NULL);
-		
-			if (strcmp (list[i], "Type") == 0)
-			{
-				info->loader_type = value;
-				continue;
-			}
-
-			attr_quark = g_quark_from_string (list[i]);
-
-			g_datalist_id_set_data_full (&info->loader_attributes,
-						     attr_quark, value,
-						     (GDestroyNotify) g_free);
-		}
- 	g_strfreev (list);
-	}	
-
-	g_key_file_free (key_file);
+	info->loader_type = g_key_file_get_string (key_file, "Loader", "Type", NULL);
 
 	/* sanity check */
-	if (einfo->name == NULL || einfo->description == NULL ||
-	    info->loader_type == NULL || info->loader_type[0] == '\0')
+	if (info->loader_type == NULL || info->loader_type[0] == '\0')
 	{
 		free_extension_info (info);
 		return;
@@ -566,8 +511,8 @@ get_loader_for_type (EphyExtensionsManager *manager,
 {
 	LoaderInfo *info;
 	GList *l;
-	GData *attr = NULL;
-	char *path, *name, *stype;
+	char *path, *name, *stype, *data;
+	GKeyFile *keyfile;
 	EphyLoader *shlib_loader;
 	GObject *loader;
 
@@ -608,20 +553,26 @@ get_loader_for_type (EphyExtensionsManager *manager,
 #endif
 	}
 
-	stype = sanitise_type (type);
-	name = g_strconcat ("lib", stype, "loader.", G_MODULE_SUFFIX, NULL);
-	path = g_build_filename (LOADER_DIR, name, NULL);
-	g_datalist_init (&attr);
-	g_datalist_set_data (&attr, "library", path);
-
 	shlib_loader = get_loader_for_type (manager, "shlib");
 	g_return_val_if_fail (shlib_loader != NULL, NULL);
 
-	loader = ephy_loader_get_object (shlib_loader, &attr);
-	g_datalist_clear (&attr);
+	stype = sanitise_type (type);
+	name = g_strconcat ("lib", stype, "loader.", G_MODULE_SUFFIX, NULL);
+	path = g_build_filename (LOADER_DIR, name, NULL);
+	data = g_strconcat ("[Loader]\nType=shlib\nLibrary=", path, "\n", NULL);
 	g_free (stype);
 	g_free (name);
 	g_free (path);
+
+	keyfile = g_key_file_new ();
+	if (!g_key_file_load_from_data (keyfile, data, strlen (data), 0, NULL))
+	{
+		g_free (data);
+		return NULL;
+	}
+
+	loader = ephy_loader_get_object (shlib_loader, keyfile);
+	g_key_file_free (keyfile);
 
 	if (EPHY_IS_LOADER (loader))
 	{
@@ -671,8 +622,7 @@ load_extension (EphyExtensionsManager *manager,
 	if (info->load_failed) return;
 
 	/* get a loader */
-	loader = get_loader_for_type (manager, 
-				      info->loader_type);
+	loader = get_loader_for_type (manager, info->loader_type);
 	if (loader == NULL)
 	{
 		g_message ("No loader found for extension '%s' of type '%s'\n",
@@ -682,8 +632,7 @@ load_extension (EphyExtensionsManager *manager,
 
 	info->loader = loader;
 
-	info->extension = ephy_loader_get_object (loader,
-						   &info->loader_attributes);
+	info->extension = ephy_loader_get_object (loader, info->info.keyfile);
 
 	/* attach if the extension implements EphyExtensionIface */
 	if (EPHY_IS_EXTENSION (info->extension))

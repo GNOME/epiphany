@@ -36,9 +36,6 @@ typedef struct
 	GObject *object;
 } LoaderData;
 
-static GQuark Library_quark = 0;
-static GQuark library_quark = 0;
-
 #define EPHY_SHLIB_LOADER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHLIB_LOADER, EphyShlibLoaderPrivate))
 
 struct _EphyShlibLoaderPrivate
@@ -143,23 +140,24 @@ find_object (const LoaderData *data,
 
 static GObject *
 impl_get_object (EphyLoader *eloader,
-		 GData **attributes)
+		 GKeyFile *keyfile)
 {
 	EphyShlibLoader *loader = EPHY_SHLIB_LOADER (eloader);
 	GSList *l;
 	LoaderData *data = NULL;
-	const char *library;
+	char *library;
+	gboolean resident;
 
-	library = g_datalist_id_get_data (attributes, Library_quark);
-	if (library == NULL)
-	{
-		library = g_datalist_id_get_data (attributes, library_quark);
-	}
+	g_return_val_if_fail (keyfile != NULL, NULL);
+
+	library = g_key_file_get_string (keyfile, "Loader", "Library", NULL);
 	if (library == NULL)
 	{
 		g_warning ("NULL library name!\n");
 		return NULL;
 	}
+
+	resident = g_key_file_get_boolean (keyfile, "Loader", "Resident", NULL);
 
 	l = g_slist_find_custom (loader->priv->data, library,
 				(GCompareFunc) find_library);
@@ -171,6 +169,7 @@ impl_get_object (EphyLoader *eloader,
 
 		if (data->object != NULL)
 		{
+			g_free (library);
 			return g_object_ref (data->object);
 		}
 	}
@@ -182,13 +181,14 @@ impl_get_object (EphyLoader *eloader,
 
 	if (data->module == NULL)
 	{
-		data->module = ephy_module_new (library);
+		data->module = ephy_module_new (library, resident);
 	}
 
 	g_return_val_if_fail (data->object == NULL, data->object);
 
 	if (g_type_module_use (G_TYPE_MODULE (data->module)) == FALSE)
 	{
+		g_free (library);
 		g_warning ("Could not load extension file at %s\n",
 			   ephy_module_get_path (data->module));
 		return NULL;
@@ -202,6 +202,8 @@ impl_get_object (EphyLoader *eloader,
 	{
 		g_object_set_data (G_OBJECT (data->object), DATA_KEY, data);
 	}
+
+	g_free (library);
 
 	return data->object;
 }
@@ -241,7 +243,4 @@ ephy_shlib_loader_class_init (EphyShlibLoaderClass *klass)
 	object_class->finalize = ephy_shlib_loader_finalize;
 
 	g_type_class_add_private (object_class, sizeof (EphyShlibLoaderPrivate));
-
-	Library_quark = g_quark_from_string ("Library");
-	library_quark = g_quark_from_string ("library");
 }

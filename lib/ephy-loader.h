@@ -46,7 +46,7 @@ struct _EphyLoaderIface
 
 	/* Methods */
 	GObject *    (* get_object)	(EphyLoader *loader,
-					 GData **attributes);
+					 GKeyFile *keyfile);
 	void	     (* release_object)	(EphyLoader *loader,
 					 GObject *object);
 };
@@ -56,7 +56,7 @@ GType	    ephy_loader_get_type	(void);
 const char *ephy_loader_type		(const EphyLoader *loader);
 
 GObject    *ephy_loader_get_object	(EphyLoader *loader,
-					 GData **attributes);
+					 GKeyFile *keyfile);
 
 void	    ephy_loader_release_object	(EphyLoader *loader,
 					 GObject *object);

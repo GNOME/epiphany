@@ -54,10 +54,10 @@ ephy_loader_type (const EphyLoader *loader)
 
 GObject *
 ephy_loader_get_object (EphyLoader *loader,
-			 GData **attributes)
+			GKeyFile *keyfile)
 {
 	EphyLoaderIface *iface = EPHY_LOADER_GET_IFACE (loader);
-	return iface->get_object (loader, attributes);
+	return iface->get_object (loader, keyfile);
 }
 
 void

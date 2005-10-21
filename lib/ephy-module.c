@@ -42,6 +42,7 @@ struct _EphyModule
 
 	char *path;
 	GType type;
+	guint resident : 1;
 };
 
 typedef GType (*EphyModuleRegisterFunc) (GTypeModule *);
@@ -139,6 +140,11 @@ ephy_module_load (GTypeModule *gmodule)
 		return FALSE;
 	}
 
+	if (module->resident)
+	{
+		g_module_make_resident (module->library);
+	}
+
 	return TRUE;
 }
 
@@ -209,7 +215,8 @@ ephy_module_class_init (EphyModuleClass *class)
 }
 
 EphyModule *
-ephy_module_new (const char *path)
+ephy_module_new (const char *path,
+		 gboolean resident)
 {
 	EphyModule *result;
 
@@ -222,6 +229,7 @@ ephy_module_new (const char *path)
 
 	g_type_module_set_name (G_TYPE_MODULE (result), path);
 	result->path = g_strdup (path);
+	result->resident = resident != FALSE;
 
 	return result;
 }

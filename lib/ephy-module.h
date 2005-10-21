@@ -37,7 +37,8 @@ typedef struct _EphyModule	EphyModule;
 
 GType		 ephy_module_get_type	(void);
 
-EphyModule	*ephy_module_new	(const char *path);
+EphyModule	*ephy_module_new	(const char *path,
+					 gboolean resident);
 
 const char	*ephy_module_get_path	(EphyModule *module);
 

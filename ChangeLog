@@ -1,3 +1,18 @@
+2005-10-21  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-loader.c: (ephy_loader_get_object):
+	* lib/ephy-loader.h:
+	* lib/ephy-module.c: (ephy_module_load), (ephy_module_new):
+	* lib/ephy-module.h:
+	* lib/ephy-shlib-loader.c: (impl_get_object),
+	(ephy_shlib_loader_class_init):
+	* src/ephy-extensions-manager.c: (free_extension_info),
+	(ephy_extensions_manager_load_ini_string), (get_loader_for_type),
+	(load_extension):
+	* src/ephy-python-loader.c: (impl_get_object):
+
+	Expose the extension description keyfile directly to the loaders.
+
 2005-10-20  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-stock-icons.c: (ephy_stock_icons_init):
