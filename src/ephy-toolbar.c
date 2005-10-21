@@ -248,9 +248,9 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 	action = priv->actions[BACK_ACTION] =
 		g_object_new (EPHY_TYPE_NAVIGATION_ACTION,
 			      "name", "NavigationBack",
-			      "label", _("Back"),
+			      "label", _("_Back"),
 			      "stock_id", GTK_STOCK_GO_BACK,
-			      "tooltip", _("Go back"),
+			      "tooltip", _("Go to the previous visited page"),
 			      /* this is the tooltip on the Back button's drop-down arrow, which will show
 			       * a menu with all sites you can go 'back' to
 			       */
@@ -261,15 +261,16 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			      NULL);
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), toolbar);
-	gtk_action_group_add_action (priv->action_group, action);
+	gtk_action_group_add_action_with_accel (priv->action_group, action,
+						"<alt>Left");
 	g_object_unref (action);
 
 	action = priv->actions[FORWARD_ACTION] =
 		g_object_new (EPHY_TYPE_NAVIGATION_ACTION,
 			      "name", "NavigationForward",
-			      "label", _("Forward"),
+			      "label", _("_Forward"),
 			      "stock_id", GTK_STOCK_GO_FORWARD,
-			      "tooltip", _("Go forward"),
+			      "tooltip", _("Go to the next visited page"),
 			      /* this is the tooltip on the Forward button's drop-down arrow, which will show
 			       * a menu with all sites you can go 'forward' to
 			       */
@@ -279,13 +280,14 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			      NULL);
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), toolbar);
-	gtk_action_group_add_action (priv->action_group, action);
+	gtk_action_group_add_action_with_accel (priv->action_group, action,
+						"<alt>Right");
 	g_object_unref (action);
 
 	action = priv->actions[UP_ACTION] =
 		g_object_new (EPHY_TYPE_NAVIGATION_ACTION,
 			      "name", "NavigationUp",
-			      "label", _("Up"),
+			      "label", _("_Up"),
 			      "stock_id", GTK_STOCK_GO_UP,
 			      "tooltip", _("Go up one level"),
 			      /* this is the tooltip on the Up button's drop-down arrow, which will show
@@ -297,7 +299,8 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 			      NULL);
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), toolbar);
-	gtk_action_group_add_action (priv->action_group, action);
+	gtk_action_group_add_action_with_accel (priv->action_group, action,
+						"<alt>Up");
 	g_object_unref (action);
 
 	/* FIXME: I'm still waiting for the exact term to 

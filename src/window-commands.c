@@ -110,20 +110,6 @@ window_cmd_go_back (GtkAction *action,
 }
 
 void
-window_cmd_go_up (GtkAction *action,
-		  EphyWindow *window)
-{
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	gtk_widget_grab_focus (GTK_WIDGET (embed));
-
-	ephy_embed_go_up (embed);
-}
-
-void
 window_cmd_file_send_to	(GtkAction *action,
 			 EphyWindow *window)
 {

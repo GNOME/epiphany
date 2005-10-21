@@ -1,3 +1,22 @@
+2005-10-21  Philip Langdale  <philipl@mail.utexas.edu>
+
+	* data/ui/epiphany-ui.xml:
+	Point main menu UI at toolbar actions.
+	* src/ephy-lockdown.c:
+	(update_window): Don't try and change the state of
+	the now non-existent menu specific actions.
+	* src/ephy-toolbar.c
+	(ephy_toolbar_set_window): Sync up toolbar actions
+	so that they will appear in menus to be identical to
+	the old menu specific actions. This just means adding
+	accelerators and shortcuts and adjusting tooltip text.	
+	* src/ephy-window.c
+	(sync_tab_navigation): Remove the menu specific actions
+	and consequently, don't try to manipulate them.
+	* src/window-commands.c
+	* src/window-commands.h:
+	(window_cmd_go_up): Remove unused callback.
+
 2005-10-21  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-loader.c: (ephy_loader_get_object):

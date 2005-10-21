@@ -158,19 +158,13 @@ update_window (EphyWindow *window,
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 	action = gtk_action_group_get_action (toolbar_action_group, "Location");
 	update_location_editable (window, action, !disabled);
-	action = gtk_action_group_get_action (action_group, "GoUp");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 	action = gtk_action_group_get_action (toolbar_action_group, "NavigationUp");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 
 	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY);
 	action = gtk_action_group_get_action (action_group, "GoHistory");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (action_group, "GoBack");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 	action = gtk_action_group_get_action (toolbar_action_group, "NavigationBack");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (action_group, "GoForward");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 	action = gtk_action_group_get_action (toolbar_action_group, "NavigationForward");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);

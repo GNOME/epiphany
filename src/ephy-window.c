@@ -234,15 +234,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* Go menu */
 
-	{ "GoBack", GTK_STOCK_GO_BACK, N_("_Back"), "<alt>Left",
-	  N_("Go to the previous visited page"),
-	  G_CALLBACK (window_cmd_go_back) },
-	{ "GoForward", GTK_STOCK_GO_FORWARD, N_("_Forward"), "<alt>Right",
-	  N_("Go to the next visited page"),
-	  G_CALLBACK (window_cmd_go_forward) },
-	{ "GoUp", GTK_STOCK_GO_UP, N_("_Up"), "<alt>Up",
-	  N_("Go up one level"),
-	  G_CALLBACK (window_cmd_go_up) },
 	{ "GoLocation", NULL, N_("_Location..."), "<control>L",
 	  N_("Go to a specified location"),
 	  G_CALLBACK (window_cmd_go_location) },
@@ -1373,14 +1364,6 @@ sync_tab_navigation (EphyTab *tab,
 	{
 		forward = TRUE;
 	}
-
-	action_group = window->priv->action_group;
-	action = gtk_action_group_get_action (action_group, "GoUp");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_NAVIGATION, !up);
-	action = gtk_action_group_get_action (action_group, "GoBack");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_NAVIGATION, !back);
-	action = gtk_action_group_get_action (action_group, "GoForward");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_NAVIGATION, !forward);
 
 	ephy_toolbar_set_navigation_actions (window->priv->toolbar,
 					     back, forward, up);
