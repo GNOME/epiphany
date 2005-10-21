@@ -1,3 +1,20 @@
+2005-10-21  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-extensions-manager.c:
+	(ephy_extensions_manager_parse_keyfile),
+	(ephy_extensions_manager_load_ini_file),
+	(ephy_extensions_manager_load_xml_file), (path_to_identifier),
+	(ephy_extensions_manager_load_file), (reload_sync_cb), (reload_cb),
+	(schedule_load_from_monitor), (dir_changed_cb), (cancel_timeout),
+	(ephy_extensions_manager_init), (ephy_extensions_manager_dispose),
+	(ephy_extensions_manager_class_init):
+
+	Load the key files and xml files directly from disc, instead of
+	getting their contents and parsing from memory.
+	When a file changes, schedule a reload instead of processing it
+	immediately, to cope with multiple changes (CREATED + CHANGED) in
+	a row.
+
 2005-10-21  Philip Langdale  <philipl@mail.utexas.edu>
 
 	* data/ui/epiphany-ui.xml:

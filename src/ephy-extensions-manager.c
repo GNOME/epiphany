@@ -59,8 +59,10 @@
 #endif
 
 #define CONF_LOADED_EXTENSIONS	"/apps/epiphany/general/active_extensions"
-#define EE_GROUP	"Epiphany Extension"
-#define DOT_INI		".ephy-extension"
+#define EE_GROUP		"Epiphany Extension"
+#define DOT_INI			".ephy-extension"
+#define RELOAD_DELAY		333 /* ms */
+#define RELOAD_SYNC_DELAY	1000 /* ms */
 
 #define ENABLE_LEGACY_FORMAT
 
@@ -76,6 +78,8 @@ struct _EphyExtensionsManagerPrivate
 	GList *dir_monitors;
 	GList *windows;
 	guint active_extensions_notifier_id;
+	guint sync_timeout_id;
+	GHashTable *reload_hash;
 
 #ifdef ENABLE_LEGACY_FORMAT
 	xsltStylesheetPtr xml2ini_xsl;
@@ -298,36 +302,15 @@ find_extension_info (const ExtensionInfo *info,
 }
 
 static void
-ephy_extensions_manager_load_ini_string (EphyExtensionsManager *manager,
-					 const char * identifier,
-					 const char * contents)
+ephy_extensions_manager_parse_keyfile (EphyExtensionsManager *manager,
+				       GKeyFile *key_file,
+				       const char *identifier)
 {
 	ExtensionInfo *info;
 	EphyExtensionInfo *einfo;
-	GKeyFile *key_file;
-	GError *err = NULL;
 	char *start_group;
 
-	LOG ("Loading INI description file for '%s'", identifier);
-
-	if (g_list_find_custom (manager->priv->data, identifier,
-				(GCompareFunc) find_extension_info) != NULL)
-	{
-		g_warning ("Extension description for '%s' already read!",
-			   identifier);
-		return;
-	}
-
-	key_file = g_key_file_new ();
-	if (g_key_file_load_from_data (key_file, contents, strlen (contents),
-				       G_KEY_FILE_NONE, &err) == FALSE)
-	{
-		g_warning ("Could load key file for '%s': '%s'",
-			   identifier, err->message);
-		g_error_free (err);
-		g_key_file_free (key_file);
-		return;
-	}
+	LOG ("Parsing INI description file for '%s'", identifier);
 
 	start_group = g_key_file_get_start_group (key_file);
 	if (start_group == NULL ||
@@ -374,12 +357,33 @@ ephy_extensions_manager_load_ini_string (EphyExtensionsManager *manager,
 	g_signal_emit (manager, signals[ADDED], 0, info);
 }
 
+static void
+ephy_extensions_manager_load_ini_file (EphyExtensionsManager *manager,
+				       const char *identifier,
+				       const char *path)
+{
+	GKeyFile *keyfile;
+	GError *err = NULL;
+
+	keyfile = g_key_file_new ();
+	if (!g_key_file_load_from_file (keyfile, path, G_KEY_FILE_NONE, &err))
+	{
+		g_warning ("Could load key file for '%s': '%s'",
+			   identifier, err->message);
+		g_error_free (err);
+		g_key_file_free (keyfile);
+		return;
+	}
+
+	ephy_extensions_manager_parse_keyfile (manager, keyfile, identifier);
+}
+
 #ifdef ENABLE_LEGACY_FORMAT
 
 static void
-ephy_extensions_manager_load_xml_string (EphyExtensionsManager *manager,
-					 const char *identifier,
-					 /* const */ char *xml)
+ephy_extensions_manager_load_xml_file (EphyExtensionsManager *manager,
+				       const char *identifier,
+				       const char *path)
 {
 	EphyExtensionsManagerPrivate *priv = manager->priv;
 	xmlDocPtr doc, res;
@@ -389,7 +393,7 @@ ephy_extensions_manager_load_xml_string (EphyExtensionsManager *manager,
 	
 	START_PROFILER ("Transforming .xml -> " DOT_INI)
 
-	doc = xmlParseMemory (xml, strlen (xml));
+	doc = xmlParseFile (path);
 	if (!doc) goto out;
 
 	if (priv->xml2ini_xsl == NULL)
@@ -410,17 +414,32 @@ ephy_extensions_manager_load_xml_string (EphyExtensionsManager *manager,
 
 	ret = xsltSaveResultToString (&output, &outlen, res, priv->xml2ini_xsl);
 
+	if (ret >= 0 && output != NULL && outlen > -1)
+	{
+		GKeyFile *keyfile;
+		GError *err = NULL;
+
+		keyfile = g_key_file_new ();
+		if (!g_key_file_load_from_data (keyfile, (char *) output, outlen,
+					        G_KEY_FILE_NONE, &err))
+		{
+			g_warning ("Could load converted key file for '%s': '%s'",
+				   identifier, err->message);
+			g_error_free (err);
+			g_key_file_free (keyfile);
+			goto out;
+		}
+
+		ephy_extensions_manager_parse_keyfile (manager, keyfile, identifier);
+	}
+
 	xmlFreeDoc (res);
 	xmlFreeDoc (doc);
 
 out:
-	STOP_PROFILER ("Transforming .xml -> " DOT_INI)
+	xmlFree (output);
 
-	if (ret >= 0 && output != NULL && outlen > -1)
-	{
-		ephy_extensions_manager_load_ini_string (manager, identifier, (char*) output);
-		xmlFree (output);
-	}
+	STOP_PROFILER ("Transforming .xml -> " DOT_INI)
 }
 
 #endif /* ENABLE_LEGACY_FORMAT */
@@ -433,10 +452,12 @@ path_to_identifier (const char *path)
 	identifier = g_path_get_basename (path);
 	dot = strstr (identifier, DOT_INI);
 
+#ifdef ENABLE_LEGACY_FORMAT
 	if (!dot)
 	{
 		dot = strstr (identifier, ".xml");
 	}
+#endif
 
 	g_return_val_if_fail (dot != NULL, NULL);
 
@@ -450,37 +471,33 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 				   const char *path)
 {
 	char *identifier;
-	char *contents;
-	GError *err = NULL;
-
-	g_file_get_contents (path, &contents, NULL, &err);
-
-	if (err != NULL)
-	{
-		g_warning ("Could not read file at '%s': '%s'",
-			   path, err->message);
-		g_error_free (err);
-		return;
-	}
 
 	identifier = path_to_identifier (path);
 	g_return_if_fail (identifier != NULL);
+	if (identifier == NULL) return;
+
+	if (g_list_find_custom (manager->priv->data, identifier,
+	    (GCompareFunc) find_extension_info) != NULL)
+	{
+		g_warning ("Extension description for '%s' already read!",
+			   identifier);
+		return;
+	}
 
 	if (g_str_has_suffix (path, DOT_INI))
 	{
-		ephy_extensions_manager_load_ini_string (manager, identifier,
-							 contents);
+		ephy_extensions_manager_load_ini_file (manager, identifier,
+						       path);
 	}
 #ifdef ENABLE_LEGACY_FORMAT
 	else if (g_str_has_suffix (path, ".xml"))
 	{
-		ephy_extensions_manager_load_xml_string (manager, identifier,
-							 contents);
+		ephy_extensions_manager_load_xml_file (manager, identifier,
+						       path);
 	}
 #endif
 
 	g_free (identifier);
-	g_free (contents);
 }
 
 
@@ -811,66 +828,96 @@ ephy_extensions_manager_unload_file (EphyExtensionsManager *manager,
 	g_free (identifier);
 }
 
-static void
-load_file_from_monitor (EphyExtensionsManager *manager,
-			const char *path)
+static gboolean
+reload_sync_cb (EphyExtensionsManager *manager)
 {
+	EphyExtensionsManagerPrivate *priv = manager->priv;
+
+	if (priv->sync_timeout_id != 0)
+	{
+		g_source_remove (priv->sync_timeout_id);
+		priv->sync_timeout_id = 0;
+	}
+
+	sync_loaded_extensions (manager);
+
+	return FALSE;
+}
+
+static gboolean
+reload_cb (gpointer *data)
+{
+	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (data[0]);
+	EphyExtensionsManagerPrivate *priv = manager->priv;
+	char *path = data[1];
+
+	LOG ("Reloading %s", path);
+
+	/* We still need path and don't want to remove the timeout
+	 * which will be removed automatically when we return, so 
+	 * just use _steal instead of _remove.
+	 */
+	g_hash_table_steal (priv->reload_hash, path);
+
+	ephy_extensions_manager_load_file (manager, path);
+	g_free (path);
+
+	/* Schedule a sync of active extensions */
+	/* FIXME: just look if we need to activate *this* extension? */
+
+	if (priv->sync_timeout_id != 0)
+	{
+		g_source_remove (priv->sync_timeout_id);
+	}
+
+	priv->sync_timeout_id = g_timeout_add (RELOAD_SYNC_DELAY,
+					       (GSourceFunc) reload_sync_cb,
+					       manager);
+	return FALSE;
+}
+
+static void
+schedule_load_from_monitor (EphyExtensionsManager *manager,
+			    const char *path)
+{
+	EphyExtensionsManagerPrivate *priv = manager->priv;
+	char *identifier, *copy;
+	gpointer *data;
+	guint timeout_id;
+
 	/* When a file is installed, it sometimes gets CREATED empty and then
 	 * gets its contents filled later (for a CHANGED signal). Theoretically
 	 * I suppose we could get a CHANGED signal when the file is half-full,
 	 * but I doubt that'll happen much (the files are <1000 bytes). We
-	 * don't want warnings all over the place, so we return from this
-	 * function if the file is empty. (We're assuming that if a file is
+	 * don't want warnings all over the place, so we just wait a bit before
+	 * actually reloading the file. (We're assuming that if a file is
 	 * empty it'll be filled soon and this function will be called again.)
 	 *
 	 * Oh, and we return if the extension is already loaded, too.
 	 */
-	char *identifier;
-	char *contents;
-	gsize len;
-	GError *err = NULL;
-
-	g_file_get_contents (path, &contents, &len, &err);
-
-	if (err != NULL)
-	{
-		g_warning  ("Could not read file at '%s': '%s'",
-			    path, err->message);
-		g_error_free (err);
-		return;
-	}
-
-	if (len == 0) {
-		g_free (contents);
-		return;
-	}
 
 	identifier = path_to_identifier (path);
 	g_return_if_fail (identifier != NULL);
+	if (identifier == NULL) return;
 
 	if (g_list_find_custom (manager->priv->data, identifier,
 				(GCompareFunc) find_extension_info) != NULL)
 	{
 		g_free (identifier);
-		g_free (contents);
 		return;
 	}
-
-	if (g_str_has_suffix (path, DOT_INI))
-	{
-		ephy_extensions_manager_load_ini_string (manager, 
-							 identifier, contents);
-	}
-	else if (g_str_has_suffix (path, ".xml")) 
-	{
-		ephy_extensions_manager_load_xml_string (manager, 
-							 identifier, contents);
-	}
-	
 	g_free (identifier);
-	g_free (contents);
 
-	sync_loaded_extensions (manager);
+	g_return_if_fail (priv->reload_hash != NULL);
+
+	data = g_new (gpointer, 2);
+	data[0] = (gpointer) manager;
+	data[1] = copy = g_strdup (path);
+	timeout_id = g_timeout_add_full (G_PRIORITY_LOW, RELOAD_DELAY,
+					 (GSourceFunc) reload_cb,
+					 data, (GDestroyNotify) g_free);
+	g_hash_table_replace (priv->reload_hash, copy /* owns it */,
+			      GUINT_TO_POINTER (timeout_id));
 }
 
 static void
@@ -890,12 +937,13 @@ dir_changed_cb (GnomeVFSMonitorHandle *handle,
 	    g_str_has_suffix (info_uri, ".xml") == FALSE) return;
 
 	path = gnome_vfs_get_local_path_from_uri (info_uri);
+	g_print ("notify, uri=%s path=%s\n", info_uri, path);
 
 	switch (event_type)
 	{
 		case GNOME_VFS_MONITOR_EVENT_CREATED:
 		case GNOME_VFS_MONITOR_EVENT_CHANGED:
-			load_file_from_monitor (manager, path);
+			schedule_load_from_monitor (manager, path);
 			break;
 		case GNOME_VFS_MONITOR_EVENT_DELETED:
 			ephy_extensions_manager_unload_file (manager, path);
@@ -966,11 +1014,23 @@ active_extensions_notifier (GConfClient *client,
 }
 
 static void
+cancel_timeout (gpointer data)
+{
+	guint id = GPOINTER_TO_UINT (data);
+
+	g_source_remove (id);
+}
+
+static void
 ephy_extensions_manager_init (EphyExtensionsManager *manager)
 {
-	manager->priv = EPHY_EXTENSIONS_MANAGER_GET_PRIVATE (manager);
+	EphyExtensionsManagerPrivate *priv;
 
-	LOG ("EphyExtensionsManager initialising");
+	priv = manager->priv = EPHY_EXTENSIONS_MANAGER_GET_PRIVATE (manager);
+
+	priv->reload_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
+						   (GDestroyNotify) g_free,
+						   (GDestroyNotify) cancel_timeout);
 }
 
 void
@@ -998,38 +1058,73 @@ ephy_extensions_manager_startup (EphyExtensionsManager *manager)
 }
 
 static void
-ephy_extensions_manager_finalize (GObject *object)
+ephy_extensions_manager_dispose (GObject *object)
 {
 	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (object);
 	EphyExtensionsManagerPrivate *priv = manager->priv;
-
-	LOG ("EphyExtensionsManager finalising");
 
 #ifdef ENABLE_LEGACY_FORMAT
 	if (priv->xml2ini_xsl != NULL)
 	{
 		xsltFreeStylesheet (priv->xml2ini_xsl);
+		priv->xml2ini_xsl = NULL;
 	}
 #endif
 
-	eel_gconf_notification_remove (manager->priv->active_extensions_notifier_id);
+	if (priv->active_extensions_notifier_id != 0)
+	{
+		eel_gconf_notification_remove (priv->active_extensions_notifier_id);
+		priv->active_extensions_notifier_id = 0;
+	}
 
-	g_list_foreach (priv->dir_monitors, (GFunc) gnome_vfs_monitor_cancel, NULL);
-	g_list_free (priv->dir_monitors);
+	if (priv->reload_hash != NULL)
+	{
+		g_hash_table_destroy (priv->reload_hash);
+		priv->reload_hash = NULL;
+	}
 
-	g_list_foreach (priv->extensions, (GFunc) g_object_unref, NULL);
-	g_list_free (priv->extensions);
+	if (priv->sync_timeout_id != 0)
+	{
+		g_source_remove (priv->sync_timeout_id);
+		priv->sync_timeout_id = 0;
+	}
 
-	/* FIXME release loaded loaders */
-	g_list_foreach (priv->factories, (GFunc) free_loader_info, NULL);
-	g_list_free (priv->factories);
+	if (priv->dir_monitors != NULL)
+	{
+		g_list_foreach (priv->dir_monitors, (GFunc) gnome_vfs_monitor_cancel, NULL);
+		g_list_free (priv->dir_monitors);
+		priv->dir_monitors = NULL;
+	}
 
-	g_list_foreach (priv->data, (GFunc) free_extension_info, NULL);
-	g_list_free (priv->data);
+	if (priv->extensions != NULL)
+	{
+		g_list_foreach (priv->extensions, (GFunc) g_object_unref, NULL);
+		g_list_free (priv->extensions);
+		priv->extensions = NULL;
+	}
 
-	g_list_free (priv->windows);
+	if (priv->factories != NULL)
+	{
+		/* FIXME release loaded loaders */
+		g_list_foreach (priv->factories, (GFunc) free_loader_info, NULL);
+		g_list_free (priv->factories);
+		priv->factories = NULL;
+	}
 
-	parent_class->finalize (object);
+	if (priv->data != NULL)
+	{
+		g_list_foreach (priv->data, (GFunc) free_extension_info, NULL);
+		g_list_free (priv->data);
+		priv->data = NULL;
+	}
+
+	if (priv->windows != NULL)
+	{
+		g_list_free (priv->windows);
+		priv->windows = NULL;
+	}
+
+	parent_class->dispose (object);
 }
 
 static void
@@ -1138,7 +1233,7 @@ ephy_extensions_manager_class_init (EphyExtensionsManagerClass *class)
 
 	parent_class = (GObjectClass *) g_type_class_peek_parent (class);
 
-	object_class->finalize = ephy_extensions_manager_finalize;
+	object_class->dispose = ephy_extensions_manager_dispose;
 
 	signals[CHANGED] =
 		g_signal_new ("changed",
