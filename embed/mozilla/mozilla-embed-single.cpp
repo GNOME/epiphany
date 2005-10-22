@@ -810,11 +810,18 @@ impl_list_passwords (EphyPasswordManager *manager)
 		NS_UTF16ToCString (unicodeName,
 				   NS_CSTRING_ENCODING_UTF8, userName);
 
+		rv = nsPassword->GetPassword (unicodeName);
+		if (NS_FAILED (rv)) continue;
+
+		nsEmbedCString userPassword;
+		NS_UTF16ToCString (unicodeName,
+				   NS_CSTRING_ENCODING_UTF8, userPassword);
+
 		EphyPasswordInfo *p = g_new0 (EphyPasswordInfo, 1);
 
 		p->host = g_strdup (host.get());
 		p->username = g_strdup (userName.get());
-		p->password = NULL;
+		p->password = g_strdup (userPassword.get());
 
 		passwords = g_list_prepend (passwords, p);
 	}

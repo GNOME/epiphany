@@ -18,6 +18,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <signal name="delete_event" handler="download_dialog_delete_cb"/>
 
   <child>
@@ -129,6 +130,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <property name="has_separator">False</property>
   <signal name="response" handler="pdm_dialog_response_cb" last_modification_time="Tue, 17 Jun 2003 22:37:44 GMT"/>
 
@@ -332,34 +334,67 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkVButtonBox" id="vbuttonbox2">
+		<widget class="GtkVBox" id="vbox149">
 		  <property name="visible">True</property>
-		  <property name="layout_style">GTK_BUTTONBOX_START</property>
-		  <property name="spacing">6</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkButton" id="passwords_remove_button">
+		    <widget class="GtkVButtonBox" id="vbuttonbox2">
 		      <property name="visible">True</property>
-		      <property name="sensitive">False</property>
-		      <property name="can_default">True</property>
+		      <property name="layout_style">GTK_BUTTONBOX_START</property>
+		      <property name="spacing">6</property>
+
+		      <child>
+			<widget class="GtkButton" id="passwords_remove_button">
+			  <property name="visible">True</property>
+			  <property name="sensitive">False</property>
+			  <property name="can_default">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="label">gtk-remove</property>
+			  <property name="use_stock">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
+			</widget>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkCheckButton" id="passwords_show_button">
+		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label">gtk-remove</property>
-		      <property name="use_stock">True</property>
+		      <property name="label" translatable="yes">_Show password</property>
+		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		      <signal name="toggled" handler="pdm_dialog_passwords_show_cb" last_modification_time="Sat, 22 Oct 2005 20:04:26 GMT"/>
 		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">True</property>
+		    </packing>
 		  </child>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
 		  <property name="expand">False</property>
-		  <property name="fill">False</property>
+		  <property name="fill">True</property>
 		</packing>
 	      </child>
 	    </widget>
 	    <packing>
 	      <property name="tab_expand">False</property>
-	      <property name="tab_fill">True</property>
+	      <property name="tab_fill">False</property>
 	    </packing>
 	  </child>
 
@@ -412,6 +447,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <property name="has_separator">False</property>
   <signal name="response" handler="ephy_encoding_dialog_response_cb" last_modification_time="Thu, 16 Oct 2003 17:19:06 GMT"/>
 

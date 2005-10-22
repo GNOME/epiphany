@@ -41,6 +41,7 @@
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtknotebook.h>
+#include <gtk/gtktogglebutton.h>
 #include <glib/gi18n.h>
 
 #include <time.h>
@@ -90,6 +91,7 @@ enum
 {
 	COL_PASSWORDS_HOST,
 	COL_PASSWORDS_USER,
+	COL_PASSWORDS_PASSWORD,
 	COL_PASSWORDS_DATA
 };
 
@@ -101,7 +103,8 @@ enum
 	PROP_COOKIES_REMOVE,
 	PROP_COOKIES_PROPERTIES,
 	PROP_PASSWORDS_TREEVIEW,
-	PROP_PASSWORDS_REMOVE
+	PROP_PASSWORDS_REMOVE,
+	PROP_PASSWORDS_SHOW
 };
 
 static const
@@ -110,11 +113,12 @@ EphyDialogProperty properties [] =
 	{ "pdm_dialog",			NULL, PT_NORMAL, 0 },
 	{ "pdm_notebook",		NULL, PT_NORMAL, 0 },
 
-	{ "cookies_treeview",		NULL, PT_NORMAL, 0 },
-	{ "cookies_remove_button",	NULL, PT_NORMAL, 0 },
-	{ "cookies_properties_button",	NULL, PT_NORMAL, 0 },
-	{ "passwords_treeview",		NULL, PT_NORMAL, 0 },
-	{ "passwords_remove_button",	NULL, PT_NORMAL, 0 },
+	{ "cookies_treeview",	   	NULL, PT_NORMAL, 0 },
+	{ "cookies_remove_button",     	NULL, PT_NORMAL, 0 },
+	{ "cookies_properties_button", 	NULL, PT_NORMAL, 0 },
+	{ "passwords_treeview",	       	NULL, PT_NORMAL, 0 },
+	{ "passwords_remove_button",   	NULL, PT_NORMAL, 0 },
+	{ "passwords_show_button",     	NULL, PT_NORMAL, 0 },
 
 	{ NULL }
 };
@@ -124,13 +128,11 @@ static void pdm_dialog_init		(PdmDialog *dialog);
 static void pdm_dialog_finalize		(GObject *object);
 
 /* Glade callbacks */
-void pdm_dialog_close_button_clicked_cb 		(GtkWidget *button,
+void pdm_dialog_close_button_clicked_cb 	  	(GtkWidget *button,
 							 PdmDialog *dialog);
 void pdm_dialog_cookies_properties_button_clicked_cb	(GtkWidget *button,
 							 PdmDialog *dialog);
-void pdm_dialog_cookies_treeview_selection_changed_cb	(GtkTreeSelection *selection,
-							 PdmDialog *dialog);
-void pdm_dialog_passwords_treeview_selection_changed_cb	(GtkTreeSelection *selection,
+void pdm_dialog_passwords_show_cb	 		(GtkWidget *checkbox,
 							 PdmDialog *dialog);
 void pdm_dialog_response_cb (GtkDialog *widget,
 			     int response,
@@ -637,7 +639,8 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 			(EPHY_DIALOG(dialog), properties[PROP_PASSWORDS_TREEVIEW].id));
 
 	/* set tree model */
-	liststore = gtk_list_store_new (3,
+	liststore = gtk_list_store_new (4,
+					G_TYPE_STRING,
 					G_TYPE_STRING,
 					G_TYPE_STRING,
 					EPHY_TYPE_PASSWORD_INFO);
@@ -676,6 +679,20 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 	gtk_tree_view_column_set_reorderable (column, TRUE);
 	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
 	gtk_tree_view_column_set_sort_column_id (column, COL_PASSWORDS_USER);
+
+	gtk_tree_view_insert_column_with_attributes (treeview,
+						     COL_PASSWORDS_PASSWORD,
+						     _("User Password"),
+						     renderer,
+						     "text", COL_PASSWORDS_PASSWORD,
+						     NULL);
+	column = gtk_tree_view_get_column (treeview, COL_PASSWORDS_PASSWORD);
+	/* Hide this info by default */
+	gtk_tree_view_column_set_visible (column, FALSE);
+	gtk_tree_view_column_set_resizable (column, TRUE);
+	gtk_tree_view_column_set_reorderable (column, TRUE);
+	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+	gtk_tree_view_column_set_sort_column_id (column, COL_PASSWORDS_PASSWORD);
 
 	info->treeview = treeview;
 
@@ -746,6 +763,7 @@ pdm_dialog_password_add (PdmActionInfo *info,
 			    &iter,
 			    COL_PASSWORDS_HOST, pinfo->host,
 			    COL_PASSWORDS_USER, pinfo->username,
+			    COL_PASSWORDS_PASSWORD, pinfo->password,
 			    -1);
 
 	g_value_init (&value, EPHY_TYPE_PASSWORD_INFO);
@@ -1032,6 +1050,23 @@ pdm_dialog_cookies_properties_button_clicked_cb (GtkWidget *button,
 
 	g_list_foreach (l, (GFunc)gtk_tree_path_free, NULL);
 	g_list_free (l);
+}
+
+void
+pdm_dialog_passwords_show_cb (GtkWidget *button,
+			      PdmDialog *dialog)
+{
+	GtkTreeView *treeview;
+	GtkTreeViewColumn *column;
+	gboolean active;
+
+	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
+			(EPHY_DIALOG(dialog), properties[PROP_PASSWORDS_TREEVIEW].id));
+	column = gtk_tree_view_get_column (treeview, COL_PASSWORDS_PASSWORD);
+
+	active = gtk_toggle_button_get_active ((GTK_TOGGLE_BUTTON (button)));
+	
+	gtk_tree_view_column_set_visible (column, active);
 }
 
 void
