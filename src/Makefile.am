@@ -465,6 +465,6 @@ check-python-binding:
 	@echo "$(BINDING_HEADERS_ALL_UNKNOWN)"
 	@test -z "$(BINDING_HEADERS_ALL_UNKNOWN)"
 
-check-local: check-python-binding
+#check-local: check-python-binding
 
 endif

@@ -1,4 +1,99 @@
 ==============
+Epiphany 1.9.1
+==============
+
+New features:
+
+	* Add a way to view stored password [#316821]
+	* Peter Harvey's bookmarks patch
+	* Copy the session history to new tabs
+	* Improved context menu
+	* Handle drags of .desktop link files from nautilus
+
+UI changes:
+
+	* Use a GtkFileChooserButton for the download path selector [#135738]
+	* Use lock and background colour in the location entry for secure sites
+	* Hide the filters combo if there's only the "All" filter
+	* Back out the fix for bug #158486 by re-enabling keyword: searches [#314974]
+
+Code changes:
+
+	* Point main menu UI at toolbar actions
+	* Expose the extension description keyfile directly to the loaders
+	* Remove fullscreen and leave-fullscreen stock icons; they're available in gtk+ 2.8
+	* Adapt folder import to new menu code
+	* Update python API to the new bookmark headers
+	* Fix the check-python-binding makefile target to work properly
+	* Remove extension description .xml parsing code and use XSLT instead
+	* Extend the EphyLinkAction to handle middle-click in one place
+	* Enable favicons for https: sites when using gecko 1.8
+	* Adapt to changed and new mozilla APIs
+	* Add configure switch to disable zeroconf bookmarks
+	* Make spinner multihead safe
+	* Add a tiny spinner test program
+	* Don't spin unmapped spinners. Slightly decrease the frequency [#315232]
+	* Add GDK_ISO_Enter to recognised keyvals
+	* Reset the IM context before activating the entry
+	* Add a function to get the tab's real title [#317418]
+	* Unify background image and image code (contex menu, conext event) [#154887]
+	* Add disable_quit to lockdown gconf schema [#316499]
+	* Add autoconf macro packages for use in extensions
+	* Handle 'contentEncodingError' error in our error pages implementation
+	* Allow loading extensions from home dir
+	* New extensions description format based on GKeyFile
+	* Use the filechooser's stock confirm-overwrite checking
+	* Make the methods to unset/release the context event semi-public
+	* Don't focus the checkbox in cert dialogues [#163371]
+	* Only listen for trusted events
+	* Better message on the enter-secure warning.
+
+Bug fixes:
+
+	* Fix logging
+	* Fix profiling in builddir != srcdir builds
+	* Ensure the images are loaded before starting to spin
+	* Fix some memory leaks
+	* Schedule a GC in finalize of EphyTab and EphyWindow [#317242]
+	* Make sure we don't unref NULL objects
+	* Fix crash on window close from JS [#172878, #172879, #172882, #303254, #313425]
+	* Return error on failure
+	* Don't free const strings
+	* Fix size oscillations with the Tab States extension
+	* Remove unused function.
+	* Fix compile warnings.
+	* Repair the previous b0rkage, see previous log
+	* Mozilla printing code is braindead [#163255]
+	* Depend on pygtk 2.8 [#314557]
+	* Check for execinfo.h [#314776]
+
+Contributors to this release: 
+Jorn Baayen, Crispin Flowerday, Peter Harvey, Philip Langdale, 
+Christian Persch, Jean François Rameau and Raphael Slinckx.
+
+New and updated translations:
+
+	* Progga (bn)
+	* Nikos Charonitakis (el)
+	* Adam Weinberger (en_CA)
+	* Ivar Smolin (et)
+	* Iñaki Larrañaga Murgoitio (eu)
+	* Roozbeh Pournader (fa)
+	* Ignacio Casal Quinteiro (gl)
+	* Gil Osher (he)
+	* Takeshi AIHANA (ja)
+	* Žygimantas Beručka (lt)
+	* Reinout van Schouwen (nl)
+	* Afonso Celso Medina (pt_BR)
+	* Nickolay V. Shmyrev (ru)
+	* Marcel Telka (sk)
+	* Данило Шеган (sr, sr@Latn)
+	* Christian Rose (sv)
+	* Liu Songhe (zh_CN)
+	* Woodman Tuen (zh_TW)
+
+
+==============
 Epiphany 1.7.6
 ==============
 
