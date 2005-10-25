@@ -28,15 +28,23 @@
 #include "ephy-gui.h"
 
 #include <gtk/gtkbutton.h>
+#include <gtk/gtkmain.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenutoolbutton.h>
+
+#define EPHY_LINK_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LINK_ACTION, EphyLinkActionPrivate))
+
+struct _EphyLinkActionPrivate
+{
+	gboolean ignore_next_middle_click;
+};
 
 static GObjectClass *parent_class = NULL;
 
 static gboolean
 proxy_button_release_event_cb (GtkWidget *widget,
 			       GdkEventButton *event,
-			       GtkAction *action)
+			       EphyLinkAction *action)
 {
 	/**
 	 * We do not use ephy_gui_is_middle_click() here because
@@ -45,10 +53,35 @@ proxy_button_release_event_cb (GtkWidget *widget,
 	 */
 	if (event->button == 2)
 	{
-		gtk_action_activate(action);
+		if (!action->priv->ignore_next_middle_click)
+		{
+			gtk_action_activate (GTK_ACTION (action));
+		}
+		action->priv->ignore_next_middle_click = FALSE;
 	}
 
 	return FALSE;
+}
+
+static void
+proxy_drag_begin_cb (GtkWidget *widget,
+		     GdkDragContext *context,
+		     EphyLinkAction *action)
+{
+	GdkEventMotion *event;
+	GdkEvent *base_event = gtk_get_current_event ();
+
+	g_return_if_fail (base_event != NULL);
+	g_return_if_fail (base_event->type == GDK_MOTION_NOTIFY);
+
+	event = (GdkEventMotion *) base_event;
+
+	if (event->state & GDK_BUTTON2_MASK)
+	{
+		action->priv->ignore_next_middle_click = TRUE;
+	}
+
+	gdk_event_free(base_event);
 }
 
 static GtkWidget *
@@ -107,6 +140,9 @@ ephy_link_action_connect_proxy (GtkAction *action, GtkWidget *proxy)
 		g_signal_connect (widget, "button-release-event",
 				  G_CALLBACK (proxy_button_release_event_cb),
 				  action);
+		g_signal_connect (widget, "drag-begin",
+				  G_CALLBACK (proxy_drag_begin_cb),
+				  action);
 	}
 
 	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
@@ -125,6 +161,9 @@ ephy_link_action_disconnect_proxy (GtkAction *action, GtkWidget *proxy)
 		g_signal_handlers_disconnect_by_func (widget,
 						      G_CALLBACK (proxy_button_release_event_cb),
 						      action);
+		g_signal_handlers_disconnect_by_func (widget,
+						      G_CALLBACK (proxy_drag_begin_cb),
+						      action);
 	}
 
 	GTK_ACTION_CLASS (parent_class)->disconnect_proxy (action, proxy);
@@ -133,14 +172,23 @@ ephy_link_action_disconnect_proxy (GtkAction *action, GtkWidget *proxy)
 static void
 ephy_link_action_class_init (EphyLinkActionClass *class)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS (class);
 	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 
 	parent_class = g_type_class_peek_parent (class);
 
 	action_class->connect_proxy = ephy_link_action_connect_proxy;
 	action_class->disconnect_proxy = ephy_link_action_disconnect_proxy;
+
+	g_type_class_add_private (object_class, sizeof (EphyLinkActionPrivate));
 }
 
+static void
+ephy_link_action_init (EphyLinkAction *action)
+{
+	action->priv = EPHY_LINK_ACTION_GET_PRIVATE (action);
+	action->priv->ignore_next_middle_click = FALSE;
+}
 
 GType
 ephy_link_action_get_type (void)
@@ -159,7 +207,7 @@ ephy_link_action_get_type (void)
 			NULL, /* class_data */
 			sizeof (EphyLinkAction),
 			0,   /* n_preallocs */
-			NULL /* instance_init */
+			(GInstanceInitFunc) ephy_link_action_init
 		};
 		static const GInterfaceInfo link_info = 
 		{
