@@ -181,7 +181,7 @@ status_icon_popup_menu_cb (EggStatusIcon *icon,
 	menu = gtk_menu_new ();
 
 	/* this opens the downloader window, or brings it to the foreground if already open */
-	item = gtk_menu_item_new_with_mnemonic (_("_Show Downloader..."));
+	item = gtk_menu_item_new_with_mnemonic (_("_Show Downloads"));
 	g_signal_connect_swapped (item, "activate",
 				  G_CALLBACK (show_downloader_cb), dv);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
