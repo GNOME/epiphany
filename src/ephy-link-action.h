@@ -41,7 +41,6 @@ G_BEGIN_DECLS
 #define EPHY_LINK_ACTION_GROUP_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_LINK_ACTION_GROUP, EphyLinkActionGroupClass))
 
 typedef struct _EphyLinkAction			EphyLinkAction;
-typedef struct _EphyLinkActionPrivate		EphyLinkActionPrivate;
 typedef struct _EphyLinkActionClass		EphyLinkActionClass;
 
 typedef struct _EphyLinkActionGroup		EphyLinkActionGroup;
@@ -50,9 +49,6 @@ typedef struct _EphyLinkActionGroupClass	EphyLinkActionGroupClass;
 struct _EphyLinkAction
 {
 	GtkAction parent_instance;
-
-	/*< private >*/
-	EphyLinkActionPrivate *priv;
 };
 
 struct _EphyLinkActionClass

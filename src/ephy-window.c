@@ -106,6 +106,10 @@ static void sync_tab_security			(EphyTab *tab,
 static void sync_tab_zoom			(EphyTab *tab,
 						 GParamSpec *pspec,
 						 EphyWindow *window);
+static void gtk_key_theme_changed_cb		(GtkSettings  *settings,
+						 GParamSpec   *pspec,
+						 gpointer dummy);
+
 
 static const GtkActionEntry ephy_menu_entries [] = {
 
@@ -375,6 +379,7 @@ static const struct
 };
 #endif /* HAVE_X11_XF86KEYSYM_H */
 
+
 #define CONF_LOCKDOWN_HIDE_MENUBAR "/apps/epiphany/lockdown/hide_menubar"
 #define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
 
@@ -439,6 +444,9 @@ enum
 	SENS_FLAG_LOADING	= 1 << 3,
 	SENS_FLAG_NAVIGATION	= 1 << 4
 };
+
+/* Static class variables */
+static gboolean key_theme_is_emacs = FALSE;
 
 static GObjectClass *parent_class = NULL;
 
@@ -684,16 +692,123 @@ menubar_deactivate_cb (GtkWidget *menubar,
 	sync_chromes_visibility (window);
 }
 
+static gboolean 
+ephy_window_key_press_event (GtkWidget *widget,
+			     GdkEventKey *event)
+{
+	EphyWindow *window = EPHY_WINDOW(widget);
+	GtkWidget *menubar;
+	guint keyval = GDK_F10;
+	guint mask = gtk_accelerator_get_default_mod_mask ();
+	char *accel = NULL;
+
+	/* In an attempt to get the mozembed playing nice with things like emacs keybindings
+	 * we are passing important events to the focused child widget before letting the window's
+	 * base handler see them. This is *completely against* stated gtk2 policy but the 
+	 * 'correct' behaviour is exceptionally useless. We need to keep an eye out for 
+	 * unexpected consequences of this decision. IME's should be a high concern, but 
+	 * considering that the IME folks complained about the upside-down event propagation
+	 * rules, we might be doing them a favour.
+	 */
+
+	gboolean shortcircuit = FALSE;
+	gboolean force_chain  = FALSE;
+	gboolean handled = FALSE;
+	guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
+	guint i;
+
+	if (event->keyval == GDK_Escape)
+	{
+		/* Always pass Escape to both the widget, and the parent */
+		shortcircuit = TRUE;
+		force_chain = TRUE;
+	}
+	else if (key_theme_is_emacs && 
+		 (modifier == GDK_CONTROL_MASK) && event->length > 0 &&
+		 /* But don't pass Ctrl+Enter twice */
+		 event->keyval != GDK_Return)
+	{
+		/* Pass CTRL+letter characters to the widget */
+		shortcircuit = TRUE;
+	}
+
+	if (shortcircuit)
+	{
+		GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+
+		if (GTK_IS_WIDGET (widget))
+		{
+			handled = gtk_widget_event (widget, (GdkEvent*)event);
+		}
+
+		if (handled && !force_chain)
+		{
+			return handled;
+		}
+	}
+
+#if 0
+	/* Handle accelerators that we want bound, but aren't associated with
+	 * an action */
+	for (i = 0; i < G_N_ELEMENTS (extra_keybindings); i++)
+	{
+		if (modifier == extra_keybindings[i].modifier &&
+		    event->keyval == extra_keybindings[i].keyval)
+		{
+			GtkAction * action = gtk_action_group_get_action 
+				(priv->action_group, 
+				 extra_keybindings[i].action);
+			gtk_action_activate (action);
+			return TRUE;
+		}
+	}
+#endif
+
+	/* Don't activate menubar in ppv mode, or in lockdown mode */
+	if (window->priv->ppv_mode || eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
+	{
+		return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
+	}
+
+	g_object_get (gtk_widget_get_settings (widget),
+		      "gtk-menu-bar-accel", &accel,
+		      NULL);
+
+	if (accel != NULL)
+	{
+		gtk_accelerator_parse (accel, &keyval, &modifier);
+
+		g_free (accel);
+	}
+
+	/* Show and activate the menubar, if it isn't visible */
+	if (event->keyval == keyval && (event->state & mask) == (modifier & mask))
+	{
+		menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");
+		g_return_val_if_fail (menubar != NULL , FALSE);
+
+		if (!GTK_WIDGET_VISIBLE (menubar))
+		{
+			g_signal_connect (menubar, "deactivate",
+					  G_CALLBACK (menubar_deactivate_cb), window);
+
+			gtk_widget_show (menubar);
+			gtk_menu_shell_select_first (GTK_MENU_SHELL (menubar), FALSE);
+
+			return TRUE;
+		}
+	}
+
+	return GTK_WIDGET_CLASS(parent_class)->key_press_event(widget, event);
+}
+
+#if 0
 static gboolean
 ephy_window_key_press_event (GtkWidget *widget,
 			     GdkEventKey *event)
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
 	GtkWidget *menubar;
-	guint keyval = GDK_F10;
-	guint modifier = 0;
-	guint mask = gtk_accelerator_get_default_mod_mask ();
-	char *accel = NULL;
 
 	/* Handle ESC here instead of an action callback, so we can
 	 * handle it differently in the location entry, and we can
@@ -761,6 +876,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 
 	return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
 }
+#endif
 
 static gboolean
 ephy_window_delete_event (GtkWidget *widget,
@@ -1344,8 +1460,6 @@ sync_tab_navigation (EphyTab *tab,
 		     EphyWindow *window)
 {
 	EphyTabNavigationFlags flags;
-	GtkActionGroup *action_group;
-	GtkAction *action;
 	gboolean up = FALSE, back = FALSE, forward = FALSE;
 
 	if (window->priv->closing) return;
@@ -2754,6 +2868,8 @@ ephy_window_link_iface_init (EphyLinkIface *iface)
 static void
 ephy_window_class_init (EphyWindowClass *klass)
 {
+	GtkSettings *settings;
+
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
@@ -2808,6 +2924,14 @@ ephy_window_class_init (EphyWindowClass *klass)
 							       G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (EphyWindowPrivate));
+
+	/* initialize the listener for the key theme */
+	settings = gtk_settings_get_default();
+	g_signal_connect (settings,
+			  "notify::gtk-key-theme-name",
+			  G_CALLBACK (gtk_key_theme_changed_cb),
+			  NULL);
+	gtk_key_theme_changed_cb (settings, NULL, NULL);
 }
 
 static void
@@ -3576,6 +3700,27 @@ ephy_window_view_popup_windows_cb (GtkAction *action,
 	g_object_set (G_OBJECT (tab), "popups-allowed", allow, NULL);
 }
 
+static void
+gtk_key_theme_changed_cb (GtkSettings  *settings,
+                          GParamSpec   *pspec,
+                          gpointer dummy)
+{
+	gchar *key_theme_name;
+
+	g_object_get (settings,
+		      "gtk-key-theme-name", &key_theme_name,
+		      NULL);
+	if (key_theme_name && g_ascii_strcasecmp (key_theme_name, "Emacs") == 0)
+	{
+		key_theme_is_emacs = TRUE;
+	}
+	else
+	{
+		key_theme_is_emacs = FALSE;
+	}
+	g_free (key_theme_name);
+}
+
 /**
  * ephy_window_get_is_popup:
  * @window: an #EphyWindow
@@ -3624,3 +3769,4 @@ ephy_window_get_context_event (EphyWindow *window)
 
 	return window->priv->context_event;
 }
+

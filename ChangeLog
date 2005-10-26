@@ -2,6 +2,21 @@
 
 	* src/ephy-link-action.c
 	* src/ephy-link-action.h:
+	(proxy_button_press_event_cb),
+	(proxy_button_release_event_cb), (proxy_drag_begin_cb),
+	(ephy_link_action_connect_proxy),
+	(ephy_link_action_disconnect_proxy),
+	(ephy_link_action_class_init), (ephy_link_action_init):
+
+	Well, that didn't last long. Turns out this was a solved
+	problem in EphyBookmarkAction but no one pointed it out
+	until just now. Using gtk_button_pressed/released fixes
+	everything.
+
+2005-10-25  Philip Langdale  <philipl@mail.utexas.edu>
+
+	* src/ephy-link-action.c
+	* src/ephy-link-action.h:
 	(proxy_button_release_event_cb), (proxy_drag_begin_cb),
 	(ephy_link_action_connect_proxy),
 	(ephy_link_action_disconnect_proxy),
