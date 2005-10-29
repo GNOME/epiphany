@@ -700,14 +700,19 @@ ephy_spinner_expose (GtkWidget *widget,
 static gboolean
 bump_spinner_frame_cb (EphySpinner *spinner)
 {
+	EphySpinnerDetails *details = spinner->details;
 	GList *frame;
 
-	if (!GTK_WIDGET_DRAWABLE (spinner))
-	{
-		return TRUE;
-	}
+	if (!GTK_WIDGET_DRAWABLE (spinner)) return TRUE;
 
-	frame = spinner->details->current_image;
+	/* This can happen when we've unloaded the images on a theme
+	 * change, but haven't been in the queued size request yet.
+	 * Just skip this update.
+	 */
+	if (details->images == NULL) return TRUE;
+
+	frame = details->current_image;
+	g_assert (frame != NULL);
 
 	if (frame->next != NULL)
 	{
@@ -718,7 +723,7 @@ bump_spinner_frame_cb (EphySpinner *spinner)
 		frame = g_list_first (frame);
 	}
 
-	spinner->details->current_image = frame;
+	details->current_image = frame;
 
 	gtk_widget_queue_draw (GTK_WIDGET (spinner));
 
@@ -742,7 +747,6 @@ ephy_spinner_start (EphySpinner *spinner)
 	if (GTK_WIDGET_MAPPED (GTK_WIDGET (spinner)) &&
 	    details->timer_task == 0 &&
 	    ephy_spinner_load_images (spinner))
-	
 	{
 		if (details->images != NULL)
 		{
