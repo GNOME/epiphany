@@ -108,6 +108,47 @@ ephy_file_downloads_dir (void)
 }
 
 char *
+ephy_file_get_downloads_dir (void)
+{
+	char *path = NULL, *download_dir, *home_dir, *expanded;
+
+	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
+
+	if (download_dir && strcmp (download_dir, "Downloads") == 0)
+	{
+		g_free (download_dir);
+		download_dir = ephy_file_downloads_dir ();
+	}
+  	else if (download_dir && strcmp (download_dir, "Desktop") == 0)
+	{
+		g_free (download_dir);
+		download_dir = ephy_file_desktop_dir ();
+	}  
+	else if (download_dir)
+	{
+		char *converted_dp;
+
+		converted_dp = g_filename_from_utf8 (download_dir, -1, NULL, NULL, NULL);
+		g_free (download_dir);
+		download_dir = converted_dp;
+	}
+
+	/* Emergency download destination */
+	if (download_dir == NULL)
+	{
+		home_dir = g_get_home_dir ();
+		download_dir = g_strdup (home_dir != NULL ? home_dir : "/");
+	}
+
+	g_return_val_if_fail (download_dir != NULL, NULL);
+
+	expanded = gnome_vfs_expand_initial_tilde (download_dir);
+	g_free (download_dir);
+
+	return expanded;
+}
+
+char *
 ephy_file_desktop_dir (void)
 {
 	char *downloads_dir;

@@ -53,7 +53,6 @@
 #include "MozDownload.h"
 #include "EphyUtils.h"
 
-#include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
 
 #include <nsIIOService.h>
@@ -773,50 +772,22 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 static char*
 GetFilePath (const char *filename)
 {
-	char *path = NULL, *download_dir, *expanded;
+	const char *home_dir;
+	char *download_dir, *path;
 
-	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
+	download_dir = ephy_file_get_downloads_dir ();
 
-	if (download_dir && strcmp (download_dir, "Downloads") == 0)
+	if (ephy_ensure_dir_exists (download_dir))
 	{
-		g_free (download_dir);
-		download_dir = ephy_file_downloads_dir ();
+		path = g_build_filename (download_dir, filename, NULL);
 	}
-  	else if (download_dir && strcmp (download_dir, "Desktop") == 0)
+	else
 	{
-		g_free (download_dir);
-		download_dir = ephy_file_desktop_dir ();
-	}  
-	else if (download_dir)
-	{
-		char *converted_dp;
-
-		converted_dp = g_filename_from_utf8 (download_dir, -1, NULL, NULL, NULL);
-		g_free (download_dir);
-		download_dir = converted_dp;
+		home_dir = g_get_home_dir ();
+		path = g_build_filename (home_dir ? home_dir : "/", filename, NULL);
 	}
-
-	if (download_dir == NULL)
-	{
-		/* Emergency download destination */
-		download_dir = g_strdup (g_get_home_dir ());
-	}
-
-	g_return_val_if_fail (download_dir != NULL, FALSE);
-
-	expanded = gnome_vfs_expand_initial_tilde (download_dir);
-	if (ephy_ensure_dir_exists (expanded))
-	{
-		path = g_build_filename (expanded, filename, NULL);
-	}
-	g_free (expanded);
 	g_free (download_dir);
 	
-	if (path == NULL)
-	{
-		path = g_build_filename (g_get_home_dir (), filename, NULL);
-	}
-
 	return path;
 }
 

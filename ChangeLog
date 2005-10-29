@@ -1,3 +1,16 @@
+2005-10-29  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/MozDownload.cpp:
+	* lib/ephy-file-chooser.c: (ephy_file_chooser_constructor):
+	* lib/ephy-file-helpers.c: (ephy_file_get_downloads_dir):
+	* lib/ephy-file-helpers.h:
+	* src/prefs-dialog.c: (download_path_changed_cb),
+	(create_download_path_button):
+
+	Add ephy_file_get_downloads_dir() to get the actual downloads
+	directory, and use it in the prefs dialogue, the filechooser, and
+	the backend.
+
 2005-10-29  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* src/ephy-window.c: (ephy_window_key_press_event):

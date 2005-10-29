@@ -111,7 +111,7 @@ ephy_file_chooser_constructor (GType type,
 	object = parent_class->constructor (type, n_construct_properties,
 					    construct_params);
 
-	downloads_dir = ephy_file_downloads_dir ();
+	downloads_dir = ephy_file_get_downloads_dir ();
 	gtk_file_chooser_add_shortcut_folder
 		(GTK_FILE_CHOOSER (object), downloads_dir, NULL);
 	g_free (downloads_dir);
