@@ -715,7 +715,6 @@ ephy_window_key_press_event (GtkWidget *widget,
 	gboolean force_chain  = FALSE;
 	gboolean handled = FALSE;
 	guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
-	guint i;
 
 	if (event->keyval == GDK_Escape)
 	{
@@ -2624,8 +2623,6 @@ ephy_window_set_chrome (EphyWindow *window, EphyEmbedChrome mask)
 	}
 
 	window->priv->chrome = chrome_mask;
-
-	update_chromes_actions (window);
 }
 
 static void
@@ -2633,16 +2630,8 @@ ephy_window_set_is_popup (EphyWindow *window,
 			  gboolean is_popup)
 {
 	EphyWindowPrivate *priv = window->priv;
-	GtkAction *action;
 
 	priv->is_popup = is_popup;
-	ephy_notebook_set_dnd_enabled (EPHY_NOTEBOOK (priv->notebook), !is_popup);
-
-	action = gtk_action_group_get_action (priv->action_group, "FileNewTab");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, is_popup);
-
-	action = gtk_action_group_get_action (priv->popups_action_group, "OpenLinkInNewTab");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, is_popup);
 
 	g_object_notify (G_OBJECT (window), "is-popup");
 }
@@ -3054,51 +3043,66 @@ cancel_handler (gpointer idptr)
 static void
 ephy_window_init (EphyWindow *window)
 {
-	EphyWindowPrivate *priv;
-	EphyExtension *manager;
-	EphyEmbedSingle *single;
-	EggToolbarsModel *model;
-	GError *error = NULL;
-
 	LOG ("EphyWindow initialising %p", window);
 
 	g_object_ref (ephy_shell);
 
-	priv = window->priv = EPHY_WINDOW_GET_PRIVATE (window);
+	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
+}
+
+static GObject *
+ephy_window_constructor (GType type,
+			 guint n_construct_properties,
+			 GObjectConstructParam *construct_params)
+{
+	GObject *object;
+	EphyWindow *window;
+	EphyWindowPrivate *priv;
+	EphyExtension *manager;
+	EphyEmbedSingle *single;
+	EggToolbarsModel *model;
+	GtkAction *action;
+	GError *error = NULL;
+
+	object = parent_class->constructor (type, n_construct_properties,
+					    construct_params);
+
+	window = EPHY_WINDOW (object);
+
+	priv = window->priv;
 
 	priv->tabs_to_remove = g_hash_table_new_full (g_direct_hash, g_direct_equal,
-						      NULL, cancel_handler);
-
-	window->priv->chrome = EPHY_EMBED_CHROME_ALL;
+						              NULL, cancel_handler);
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (window));
 
 	/* Setup the UI manager and connect verbs */
 	setup_ui_manager (window);
 
-	window->priv->notebook = setup_notebook (window);
-	g_signal_connect_swapped (window->priv->notebook, "open-link",
+	priv->notebook = setup_notebook (window);
+	g_signal_connect_swapped (priv->notebook, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
-	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
-			    GTK_WIDGET (window->priv->notebook),
+	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
+			    GTK_WIDGET (priv->notebook),
 			    TRUE, TRUE, 0);
-	gtk_widget_show (GTK_WIDGET (window->priv->notebook));
+	gtk_widget_show (GTK_WIDGET (priv->notebook));
+	ephy_notebook_set_dnd_enabled (EPHY_NOTEBOOK (priv->notebook), !priv->is_popup);
 
 	priv->find_toolbar = ephy_find_toolbar_new (window);
 	g_signal_connect (priv->find_toolbar, "close",
 			  G_CALLBACK (find_toolbar_close_cb), window);
-	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
+	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
 			    GTK_WIDGET (priv->find_toolbar), FALSE, FALSE, 0);
 	/* don't show the find toolbar here! */
 	
-	window->priv->statusbar = ephy_statusbar_new ();
-	gtk_box_pack_end (GTK_BOX (window->priv->main_vbox),
-			  GTK_WIDGET (window->priv->statusbar),
+	priv->statusbar = ephy_statusbar_new ();
+	gtk_box_pack_end (GTK_BOX (priv->main_vbox),
+			  GTK_WIDGET (priv->statusbar),
 			  FALSE, TRUE, 0);
-	window->priv->tab_message_cid = gtk_statusbar_get_context_id
-		(GTK_STATUSBAR (window->priv->statusbar), "tab_message");
-	window->priv->help_message_cid = gtk_statusbar_get_context_id
-		(GTK_STATUSBAR (window->priv->statusbar), "help_message");
+	priv->tab_message_cid = gtk_statusbar_get_context_id
+		(GTK_STATUSBAR (priv->statusbar), "tab_message");
+	priv->help_message_cid = gtk_statusbar_get_context_id
+		(GTK_STATUSBAR (priv->statusbar), "help_message");
 
 	/* get the toolbars model *before* getting the bookmarksbar model
 	 * (via ephy_bookmarsbar_new()), so that the toolbars model is
@@ -3108,17 +3112,17 @@ ephy_window_init (EphyWindow *window)
 	model= EGG_TOOLBARS_MODEL (ephy_shell_get_toolbars_model (ephy_shell, FALSE));
 
 	/* create the toolbars */
-	window->priv->toolbar = ephy_toolbar_new (window);
-	g_signal_connect_swapped (window->priv->toolbar, "open-link",
+	priv->toolbar = ephy_toolbar_new (window);
+	g_signal_connect_swapped (priv->toolbar, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
-	g_signal_connect_swapped (window->priv->toolbar, "exit-clicked",
+	g_signal_connect_swapped (priv->toolbar, "exit-clicked",
 				  G_CALLBACK (exit_fullscreen_clicked_cb), window);
-	g_signal_connect_swapped (window->priv->toolbar, "activation-finished",
+	g_signal_connect_swapped (priv->toolbar, "activation-finished",
 				  G_CALLBACK (sync_chromes_visibility), window);
 
 	/* now load the UI definition */
 	gtk_ui_manager_add_ui_from_file
-		(window->priv->manager, ephy_file ("epiphany-ui.xml"), &error);
+		(priv->manager, ephy_file ("epiphany-ui.xml"), &error);
 	if (error != NULL)
 	{
 		g_warning ("Could not merge epiphany-ui.xml: %s", error->message);
@@ -3126,12 +3130,12 @@ ephy_window_init (EphyWindow *window)
 	}
 
 	/* Initialize the menus */
-	window->priv->tabs_menu = ephy_tabs_menu_new (window);
-	window->priv->enc_menu = ephy_encoding_menu_new (window);
+	priv->tabs_menu = ephy_tabs_menu_new (window);
+	priv->enc_menu = ephy_encoding_menu_new (window);
 
 	/* Add the toolbars to the window */
-	gtk_box_pack_end (GTK_BOX (window->priv->menu_dock),
-			  GTK_WIDGET (window->priv->toolbar),
+	gtk_box_pack_end (GTK_BOX (priv->menu_dock),
+			  GTK_WIDGET (priv->toolbar),
 			  FALSE, FALSE, 0);
 
 	/* Once the window is sufficiently created let the extensions attach to it */
@@ -3144,15 +3148,15 @@ ephy_window_init (EphyWindow *window)
 	 * the toolbar
 	 */
 	egg_editable_toolbar_set_model
-		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar), model);
+		(EGG_EDITABLE_TOOLBAR (priv->toolbar), model);
 
 	/* other notifiers */
 	browse_with_caret_notifier (NULL, 0, NULL, window);
-	window->priv->browse_with_caret_notifier_id = eel_gconf_notification_add
+	priv->browse_with_caret_notifier_id = eel_gconf_notification_add
 		(CONF_BROWSE_WITH_CARET,
 		 (GConfClientNotifyFunc)browse_with_caret_notifier, window);
 
-	window->priv->allow_popups_notifier_id = eel_gconf_notification_add
+	priv->allow_popups_notifier_id = eel_gconf_notification_add
 		(CONF_SECURITY_ALLOW_POPUPS,
 		 (GConfClientNotifyFunc)allow_popups_notifier, window);
 
@@ -3162,24 +3166,19 @@ ephy_window_init (EphyWindow *window)
 	g_signal_connect (single, "notify::network-status",
 			  G_CALLBACK (sync_network_status), window);
 
+	/* Popup part */
+	action = gtk_action_group_get_action (priv->action_group, "FileNewTab");
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, priv->is_popup);
+
+	action = gtk_action_group_get_action (priv->popups_action_group, "OpenLinkInNewTab");
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, priv->is_popup);
+
 	/* ensure the UI is updated */
-	gtk_ui_manager_ensure_update (window->priv->manager);
+	gtk_ui_manager_ensure_update (priv->manager);
 
 	init_menu_updaters (window);
-}
 
-static GObject *
-ephy_window_constructor (GType type,
-			 guint n_construct_properties,
-			 GObjectConstructParam *construct_params)
-{
-	GObject *object;
-	EphyWindow *window;
-
-	object = parent_class->constructor (type, n_construct_properties,
-					    construct_params);
-
-	window = EPHY_WINDOW (object);
+	update_chromes_actions (window);
 
 	sync_chromes_visibility (window);
 

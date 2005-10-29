@@ -1,3 +1,15 @@
+2005-10-29  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* src/ephy-window.c: (ephy_window_key_press_event):
+
+	Removed unused variable.
+
+	* src/ephy-window.c: (ephy_window_constructor), (ephy_window_init),
+	(ephy_window_set_is_popup):
+
+	Move most of ephy_window_init code to constructor so properties are
+	fully initialized before running that code.
+	
 2005-10-29  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-module.c: (ephy_module_load):
