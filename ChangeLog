@@ -1,5 +1,12 @@
 2005-10-29  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-module.c: (ephy_module_load):
+
+	Use G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL when opening
+	the extension module.
+
+2005-10-29  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-spinner.c: (bump_spinner_frame_cb),
 	(ephy_spinner_start):
 

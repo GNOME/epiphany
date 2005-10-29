@@ -95,7 +95,8 @@ ephy_module_load (GTypeModule *gmodule)
 	{
 		char *path = g_build_filename (EXTENSIONS_DIR, module->path, NULL);
 
-		module->library = g_module_open (path, 0);
+		module->library = g_module_open (path, G_MODULE_BIND_LAZY |
+						       G_MODULE_BIND_LOCAL);
 
 		g_free (path);
 	}
