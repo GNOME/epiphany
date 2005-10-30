@@ -1161,7 +1161,7 @@ create_download_path_button (EphyDialog *dialog)
 				  properties[WINDOW_PROP].id, &parent,
 				  NULL);
 
-	fc = ephy_file_chooser_new (_("Select a directory"),
+	fc = ephy_file_chooser_new (_("Select a Directory"),
 				    parent,
 				    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
 				    NULL, EPHY_FILE_FILTER_NONE);
