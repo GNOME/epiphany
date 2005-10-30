@@ -1,3 +1,10 @@
+2005-10-30  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-module.c: (ephy_module_load):
+
+	Don't use BIND_LAZY when enabling debugging. That way we can find
+	missing symbols in extensions more easily.
+
 2005-10-30  Emmanuele Bassi  <ebassi@cvs.gnome.org>
 
 	* lib/ephy-glade.c: (glade_signal_connect_func):

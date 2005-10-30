@@ -86,8 +86,16 @@ ephy_module_load (GTypeModule *gmodule)
 	EphyModule *module = EPHY_MODULE (gmodule);
 	EphyModuleRegisterFunc register_func;
 	gboolean is_absolute;
+	GModuleFlags flags = G_MODULE_BIND_LOCAL | G_MODULE_BIND_LAZY;
 
 	LOG ("Loading %s", module->path);
+
+	/* In debug builds, we bind immediately so we can find missing
+	 * symbols in extensions on load; otherwise we bind lazily
+	 */
+#ifdef GNOME_ENABLE_DEBUG
+	flags &= ~G_MODULE_BIND_LAZY;
+#endif
 
 	is_absolute = g_path_is_absolute (module->path);
 
@@ -95,8 +103,7 @@ ephy_module_load (GTypeModule *gmodule)
 	{
 		char *path = g_build_filename (EXTENSIONS_DIR, module->path, NULL);
 
-		module->library = g_module_open (path, G_MODULE_BIND_LAZY |
-						       G_MODULE_BIND_LOCAL);
+		module->library = g_module_open (path, flags);
 
 		g_free (path);
 	}
@@ -105,16 +112,14 @@ ephy_module_load (GTypeModule *gmodule)
 	{
 		char *path = g_build_filename (ephy_dot_dir(), "extensions", module->path, NULL);
 		
-		module->library = g_module_open (path, G_MODULE_BIND_LAZY |
-						       G_MODULE_BIND_LOCAL);
+		module->library = g_module_open (path, flags);
  
 		g_free (path);
 	}
 
 	if (module->library == NULL)
 	{
-		module->library = g_module_open (module->path, G_MODULE_BIND_LAZY |
-							       G_MODULE_BIND_LOCAL);
+		module->library = g_module_open (module->path, flags);
 	}
 
 	if (module->library == NULL)
