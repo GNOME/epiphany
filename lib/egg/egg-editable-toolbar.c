@@ -689,7 +689,13 @@ create_item_from_action (EggEditableToolbar *etoolbar,
       GtkAction *action = find_action (etoolbar, name);
       g_return_val_if_fail (action != NULL, NULL);
       item = GTK_TOOL_ITEM (gtk_action_create_tool_item (action));
-        
+
+      /* Normally done on-demand by the GtkUIManager, but no
+       * such demand may have been made yet, so do it ourselves.
+       */
+      gtk_action_set_accel_group
+        (action, gtk_ui_manager_get_accel_group(etoolbar->priv->manager));
+     
       g_signal_connect_object (action, "notify::sensitive",
                                G_CALLBACK (action_sensitive_cb), item, 0);
     }
