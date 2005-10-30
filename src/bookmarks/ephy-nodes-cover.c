@@ -162,7 +162,7 @@ ephy_nodes_get_covering (const GPtrArray *parents, const GPtrArray *children,
 	}
 	
 	/* While there are more suitable topics... */
-	while (count_u[p])
+	while (p < parents->len && count_u[p])
 	{
 		/* Update the arrays of uncovered bookmarks and covering topics. */
 		parent = g_ptr_array_index (parents, p);
