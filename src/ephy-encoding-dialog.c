@@ -43,6 +43,7 @@
 
 enum
 {
+	WINDOW_PROP,
 	SCROLLED_WINDOW_PROP,
 	AUTOMATIC_PROP,
 	MANUAL_PROP
@@ -51,6 +52,7 @@ enum
 static const
 EphyDialogProperty properties [] =
 {
+	{ "encoding_dialog",	NULL, PT_NORMAL, 0 },
 	{ "scrolled_window",	NULL, PT_NORMAL, 0 },
 	{ "automatic_button",	NULL, PT_NORMAL, 0 },
 	{ "manual_button",	NULL, PT_NORMAL, 0 },
@@ -73,9 +75,6 @@ struct _EphyEncodingDialogPrivate
 
 static void	ephy_encoding_dialog_class_init		(EphyEncodingDialogClass *klass);
 static void	ephy_encoding_dialog_init		(EphyEncodingDialog *ge);
-void		ephy_encoding_dialog_response_cb	(GtkWidget *widget,
-							 int response,
-							 EphyEncodingDialog *dialog);
 
 static GObjectClass *parent_class = NULL;
 
@@ -223,7 +222,7 @@ activate_choice (EphyEncodingDialog *dialog)
 	}
 }
 
-void
+static void
 ephy_encoding_dialog_response_cb (GtkWidget *widget,
 				  int response,
 				  EphyEncodingDialog *dialog)
@@ -286,7 +285,7 @@ automatic_toggled_cb (GtkToggleButton *button, EphyEncodingDialog *dialog)
 static void
 ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 {
-	GtkWidget *treeview, *scroller, *button;
+	GtkWidget *treeview, *scroller, *button, *window;
 	GtkTreeSelection *selection;
 	EphyNode *node;
 
@@ -301,6 +300,10 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 			       ephy_file ("epiphany.glade"),
 			       "encoding_dialog",
 			       NULL);
+
+	window = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[WINDOW_PROP].id);
+	g_signal_connect (window, "response",
+			  G_CALLBACK (ephy_encoding_dialog_response_cb), dialog);
 
 	dialog->priv->filter = ephy_node_filter_new ();
 

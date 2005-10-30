@@ -1,5 +1,28 @@
 2005-10-30  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/glade/epiphany.glade:
+	* data/glade/prefs-dialog.glade:
+	* data/glade/print.glade:
+	* embed/downloader-view.c: (update_buttons),
+	(downloader_view_build_ui), (download_dialog_pause),
+	(download_dialog_stop), (download_dialog_response_cb),
+	(download_dialog_delete_event_cb):
+	* embed/print-dialog.c: (ephy_print_setup_dialog_response_cb),
+	(ephy_print_setup_dialog_new):
+	* src/ephy-encoding-dialog.c: (ephy_encoding_dialog_init):
+	* src/pdm-dialog.c: (show_cookies_properties),
+	(cookies_properties_clicked_cb), (pdm_dialog_cookies_construct),
+	(passwords_show_toggled_cb), (pdm_dialog_passwords_construct),
+	(pdm_dialog_response_cb), (pdm_dialog_init), (pdm_dialog_finalize):
+	* src/prefs-dialog.c: (create_language_section),
+	(prefs_dialog_response_cb), (prefs_clear_cache_button_clicked_cb),
+	(set_homepage_entry), (prefs_homepage_current_button_clicked_cb),
+	(prefs_homepage_blank_button_clicked_cb), (prefs_dialog_init):
+
+	Remove glade callbacks, and connect from code instead.
+
+2005-10-30  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-module.c: (ephy_module_load):
 
 	Don't use BIND_LAZY when enabling debugging. That way we can find

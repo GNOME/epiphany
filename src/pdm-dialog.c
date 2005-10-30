@@ -127,17 +127,6 @@ static void pdm_dialog_class_init	(PdmDialogClass *klass);
 static void pdm_dialog_init		(PdmDialog *dialog);
 static void pdm_dialog_finalize		(GObject *object);
 
-/* Glade callbacks */
-void pdm_dialog_close_button_clicked_cb 	  	(GtkWidget *button,
-							 PdmDialog *dialog);
-void pdm_dialog_cookies_properties_button_clicked_cb	(GtkWidget *button,
-							 PdmDialog *dialog);
-void pdm_dialog_passwords_show_cb	 		(GtkWidget *checkbox,
-							 PdmDialog *dialog);
-void pdm_dialog_response_cb (GtkDialog *widget,
-			     int response,
-			     PdmDialog *dialog);
-
 static GObjectClass *parent_class = NULL;
 
 GType 
@@ -361,6 +350,156 @@ setup_action (PdmActionInfo *action)
 /* "Cookies" tab */
 
 static void
+show_cookies_properties (PdmDialog *dialog,
+			 EphyCookie *info)
+{
+	GtkWidget *gdialog;
+	GtkWidget *table;
+	GtkWidget *label;
+	GtkWidget *parent;
+	GtkWidget *dialog_vbox;
+	char *str;
+
+	parent = ephy_dialog_get_control (EPHY_DIALOG(dialog),
+					  properties[PROP_WINDOW].id);
+
+	gdialog = gtk_dialog_new_with_buttons
+		 (_("Cookie Properties"),
+		  GTK_WINDOW (parent),
+		  GTK_DIALOG_DESTROY_WITH_PARENT,
+		  GTK_STOCK_CLOSE, 0, NULL);
+	ephy_state_add_window (GTK_WIDGET (gdialog), "cookie_properties", 
+			       -1, -1, FALSE,
+			       EPHY_STATE_WINDOW_SAVE_SIZE | EPHY_STATE_WINDOW_SAVE_POSITION);
+	gtk_dialog_set_has_separator (GTK_DIALOG(gdialog), FALSE);
+	gtk_container_set_border_width (GTK_CONTAINER (gdialog), 5);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (gdialog)->vbox), 2);
+
+	table = gtk_table_new (2, 4, FALSE);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
+	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+	gtk_widget_show (table);
+
+	str = g_strconcat ("<b>", _("Content:"), "</b>", NULL);
+	label = gtk_label_new (str);
+	g_free (str);
+	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+	gtk_widget_show (label);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+			  GTK_FILL, GTK_FILL, 0, 0);
+
+	label = gtk_label_new (info->value);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+	gtk_widget_show (label);
+	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
+
+	str = g_strconcat ("<b>", _("Path:"), "</b>", NULL);
+	label = gtk_label_new (str);
+	g_free (str);
+	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+	gtk_widget_show (label);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+			  GTK_FILL, GTK_FILL, 0, 0);
+
+	label = gtk_label_new (info->path);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+	gtk_widget_show (label);
+	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 1, 2);
+
+	str = g_strconcat ("<b>", _("Send for:"), "</b>", NULL);
+	label = gtk_label_new (str);
+	g_free (str);
+	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+	gtk_widget_show (label);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+			  GTK_FILL, GTK_FILL, 0, 0);
+
+	label = gtk_label_new (info->is_secure ? _("Encrypted connections only") : _("Any type of connection") );
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+	gtk_widget_show (label);
+	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 2, 3);
+
+	str = g_strconcat ("<b>", _("Expires:"), "</b>", NULL);
+	label = gtk_label_new (str);
+	g_free (str);
+	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+	gtk_widget_show (label);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+			  GTK_FILL, GTK_FILL, 0, 0);
+
+	if (info->is_session)
+	{
+		str = g_strdup (_("End of current session"));
+	}
+	else
+	{
+		struct tm t;
+		char s[128];
+		const char *fmt_hack = "%c";
+		strftime (s, sizeof(s), fmt_hack, localtime_r (&info->expires, &t));
+		str = g_locale_to_utf8 (s, -1, NULL, NULL, NULL);
+	}
+	label = gtk_label_new (str);
+	g_free (str);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+	gtk_widget_show (label);
+	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 3, 4);
+
+	dialog_vbox = GTK_DIALOG(gdialog)->vbox;
+	gtk_box_pack_start (GTK_BOX(dialog_vbox),
+			    table,
+			    FALSE, FALSE, 0);
+
+	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (parent)),
+				     GTK_WINDOW (gdialog));
+
+	gtk_dialog_run (GTK_DIALOG (gdialog));
+
+	gtk_widget_destroy (gdialog);
+}
+
+static void
+cookies_properties_clicked_cb (GtkWidget *button,
+			       PdmDialog *dialog)
+{
+	GtkTreeModel *model;
+	GValue val = {0, };
+	GtkTreeIter iter;
+	GtkTreePath *path;
+	EphyCookie *cookie;
+	GList *l;
+	GtkTreeSelection *selection;
+
+	selection = gtk_tree_view_get_selection (dialog->priv->cookies->treeview);
+	l = gtk_tree_selection_get_selected_rows
+		(selection, &model);
+
+	path = (GtkTreePath *)l->data;
+	gtk_tree_model_get_iter (model, &iter, path);
+	gtk_tree_model_get_value
+		(model, &iter, COL_COOKIES_DATA, &val);
+	cookie = (EphyCookie *) g_value_get_boxed (&val);
+
+	show_cookies_properties (dialog, cookie);
+
+	g_value_unset (&val);
+
+	g_list_foreach (l, (GFunc)gtk_tree_path_free, NULL);
+	g_list_free (l);
+}
+
+static void
 cookies_treeview_selection_changed_cb (GtkTreeSelection *selection,
 				       PdmDialog *dialog)
 {
@@ -383,11 +522,17 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
+	GtkWidget *button;
 
 	LOG ("pdm_dialog_cookies_construct");
 
-	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
-			(EPHY_DIALOG (dialog), properties[PROP_COOKIES_TREEVIEW].id));
+	ephy_dialog_get_controls (EPHY_DIALOG (dialog),
+				  properties[PROP_COOKIES_TREEVIEW].id, &treeview,
+				  properties[PROP_COOKIES_PROPERTIES].id, &button,
+				  NULL);
+
+	g_signal_connect (button, "clicked",
+			  G_CALLBACK (cookies_properties_clicked_cb), dialog);
 
 	/* set tree model */
 	liststore = gtk_list_store_new (4,
@@ -624,6 +769,23 @@ pdm_dialog_cookie_remove (PdmActionInfo *info,
 /* "Passwords" tab */
 
 static void
+passwords_show_toggled_cb (GtkWidget *button,
+			   PdmDialog *dialog)
+{
+	GtkTreeView *treeview;
+	GtkTreeViewColumn *column;
+	gboolean active;
+
+	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
+			(EPHY_DIALOG(dialog), properties[PROP_PASSWORDS_TREEVIEW].id));
+	column = gtk_tree_view_get_column (treeview, COL_PASSWORDS_PASSWORD);
+
+	active = gtk_toggle_button_get_active ((GTK_TOGGLE_BUTTON (button)));
+	
+	gtk_tree_view_column_set_visible (column, active);
+}
+
+static void
 pdm_dialog_passwords_construct (PdmActionInfo *info)
 {
 	PdmDialog *dialog = info->dialog;
@@ -632,11 +794,17 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
+	GtkWidget *button;
 
 	LOG ("pdm_dialog_passwords_construct");
 
-	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
-			(EPHY_DIALOG(dialog), properties[PROP_PASSWORDS_TREEVIEW].id));
+	ephy_dialog_get_controls (EPHY_DIALOG (dialog),
+				  properties[PROP_PASSWORDS_TREEVIEW].id, &treeview,
+				  properties[PROP_PASSWORDS_SHOW].id, &button,
+				  NULL);
+
+	g_signal_connect (button, "toggled",
+			  G_CALLBACK (passwords_show_toggled_cb), dialog);
 
 	/* set tree model */
 	liststore = gtk_list_store_new (4,
@@ -816,6 +984,23 @@ sync_notebook_tab (GtkWidget *notebook,
 }
 
 static void
+pdm_dialog_response_cb (GtkDialog *widget,
+			int response,
+			PdmDialog *dialog)
+{
+	switch (response)
+	{
+		case GTK_RESPONSE_CLOSE:
+			g_object_unref (dialog);
+			break;
+		case GTK_RESPONSE_HELP:
+			pdm_dialog_show_help (dialog);
+			break;
+		default:
+			break;
+	}
+}
+static void
 pdm_dialog_init (PdmDialog *dialog)
 {
 	PdmActionInfo *cookies, *passwords;
@@ -836,6 +1021,8 @@ pdm_dialog_init (PdmDialog *dialog)
 
 	gtk_window_set_icon_name (GTK_WINDOW (window), "web-browser");
 
+	g_signal_connect (window, "response",
+			  G_CALLBACK (pdm_dialog_response_cb), dialog);
 	/**
 	 * Group all Properties and Remove buttons in the same size group to
 	 * avoid the little jerk you get otherwise when switching pages because
@@ -900,189 +1087,4 @@ pdm_dialog_finalize (GObject *object)
 	g_free (dialog->priv->cookies);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-static void
-show_cookies_properties (PdmDialog *dialog,
-			 EphyCookie *info)
-{
-	GtkWidget *gdialog;
-	GtkWidget *table;
-	GtkWidget *label;
-	GtkWidget *parent;
-	GtkWidget *dialog_vbox;
-	char *str;
-
-	parent = ephy_dialog_get_control (EPHY_DIALOG(dialog),
-					  properties[PROP_WINDOW].id);
-
-	gdialog = gtk_dialog_new_with_buttons
-		 (_("Cookie Properties"),
-		  GTK_WINDOW (parent),
-		  GTK_DIALOG_DESTROY_WITH_PARENT,
-		  GTK_STOCK_CLOSE, 0, NULL);
-	ephy_state_add_window (GTK_WIDGET (gdialog), "cookie_properties", 
-			       -1, -1, FALSE,
-			       EPHY_STATE_WINDOW_SAVE_SIZE | EPHY_STATE_WINDOW_SAVE_POSITION);
-	gtk_dialog_set_has_separator (GTK_DIALOG(gdialog), FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (gdialog), 5);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (gdialog)->vbox), 2);
-
-	table = gtk_table_new (2, 4, FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-	gtk_widget_show (table);
-
-	str = g_strconcat ("<b>", _("Content:"), "</b>", NULL);
-	label = gtk_label_new (str);
-	g_free (str);
-	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-			  GTK_FILL, GTK_FILL, 0, 0);
-
-	label = gtk_label_new (info->value);
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
-
-	str = g_strconcat ("<b>", _("Path:"), "</b>", NULL);
-	label = gtk_label_new (str);
-	g_free (str);
-	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-			  GTK_FILL, GTK_FILL, 0, 0);
-
-	label = gtk_label_new (info->path);
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 1, 2);
-
-	str = g_strconcat ("<b>", _("Send for:"), "</b>", NULL);
-	label = gtk_label_new (str);
-	g_free (str);
-	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-			  GTK_FILL, GTK_FILL, 0, 0);
-
-	label = gtk_label_new (info->is_secure ? _("Encrypted connections only") : _("Any type of connection") );
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 2, 3);
-
-	str = g_strconcat ("<b>", _("Expires:"), "</b>", NULL);
-	label = gtk_label_new (str);
-	g_free (str);
-	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
-			  GTK_FILL, GTK_FILL, 0, 0);
-
-	if (info->is_session)
-	{
-		str = g_strdup (_("End of current session"));
-	}
-	else
-	{
-		struct tm t;
-		char s[128];
-		const char *fmt_hack = "%c";
-		strftime (s, sizeof(s), fmt_hack, localtime_r (&info->expires, &t));
-		str = g_locale_to_utf8 (s, -1, NULL, NULL, NULL);
-	}
-	label = gtk_label_new (str);
-	g_free (str);
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
-	gtk_widget_show (label);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 3, 4);
-
-	dialog_vbox = GTK_DIALOG(gdialog)->vbox;
-	gtk_box_pack_start (GTK_BOX(dialog_vbox),
-			    table,
-			    FALSE, FALSE, 0);
-
-	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (parent)),
-				     GTK_WINDOW (gdialog));
-
-	gtk_dialog_run (GTK_DIALOG (gdialog));
-
-	gtk_widget_destroy (gdialog);
-}
-
-void
-pdm_dialog_cookies_properties_button_clicked_cb (GtkWidget *button,
-						 PdmDialog *dialog)
-{
-	GtkTreeModel *model;
-	GValue val = {0, };
-	GtkTreeIter iter;
-	GtkTreePath *path;
-	EphyCookie *cookie;
-	GList *l;
-	GtkTreeSelection *selection;
-
-	selection = gtk_tree_view_get_selection (dialog->priv->cookies->treeview);
-	l = gtk_tree_selection_get_selected_rows
-		(selection, &model);
-
-	path = (GtkTreePath *)l->data;
-	gtk_tree_model_get_iter (model, &iter, path);
-	gtk_tree_model_get_value
-		(model, &iter, COL_COOKIES_DATA, &val);
-	cookie = (EphyCookie *) g_value_get_boxed (&val);
-
-	show_cookies_properties (dialog, cookie);
-
-	g_value_unset (&val);
-
-	g_list_foreach (l, (GFunc)gtk_tree_path_free, NULL);
-	g_list_free (l);
-}
-
-void
-pdm_dialog_passwords_show_cb (GtkWidget *button,
-			      PdmDialog *dialog)
-{
-	GtkTreeView *treeview;
-	GtkTreeViewColumn *column;
-	gboolean active;
-
-	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
-			(EPHY_DIALOG(dialog), properties[PROP_PASSWORDS_TREEVIEW].id));
-	column = gtk_tree_view_get_column (treeview, COL_PASSWORDS_PASSWORD);
-
-	active = gtk_toggle_button_get_active ((GTK_TOGGLE_BUTTON (button)));
-	
-	gtk_tree_view_column_set_visible (column, active);
-}
-
-void
-pdm_dialog_response_cb (GtkDialog *widget,
-			gint response,
-			PdmDialog *dialog)
-{
-	switch (response)
-	{
-		case GTK_RESPONSE_CLOSE:
-			g_object_unref (dialog);
-			break;
-		case GTK_RESPONSE_HELP:
-			pdm_dialog_show_help (dialog);
-			break;
-		default:
-			break;
-	}
 }

@@ -66,27 +66,6 @@
 static void prefs_dialog_class_init	(PrefsDialogClass *klass);
 static void prefs_dialog_init		(PrefsDialog *pd);
 
-/* Glade callbacks */
-void prefs_clear_cache_button_clicked_cb	(GtkWidget *button,
-						 gpointer data);
-void prefs_dialog_response_cb			(GtkDialog *widget,
-						 gint response_id,
-						 EphyDialog *dialog);
-void prefs_homepage_current_button_clicked_cb	(GtkWidget *button,
-						 EphyDialog *dialog);
-void prefs_homepage_blank_button_clicked_cb	(GtkWidget *button,
-						 EphyDialog *dialog);
-void prefs_language_more_button_clicked_cb	(GtkWidget *button,
-						 EphyDialog *dialog);
-void language_editor_add_button_clicked_cb	(GtkWidget *button,
-						 PrefsDialog *pd);
-void language_editor_remove_button_clicked_cb	(GtkWidget *button,
-						 PrefsDialog *pd);
-void language_editor_up_button_clicked_cb	(GtkWidget *button,
-						 PrefsDialog *pd);
-void language_editor_down_button_clicked_cb	(GtkWidget *button,
-						 PrefsDialog *pd);
-
 #include "languages.h"
 
 static const char * const cookies_accept_enum [] =
@@ -156,6 +135,7 @@ enum
 	ALLOW_JS_PROP,
 	ACCEPT_COOKIES_PROP,
 	DISK_CACHE_PROP,
+	CLEAR_CACHE_BUTTON_PROP,
 
 	/* Language */
 	AUTO_ENCODING_PROP,
@@ -198,6 +178,7 @@ EphyDialogProperty properties [] =
 	{ "enable_javascript_checkbutton",	CONF_SECURITY_JAVASCRIPT_ENABLED, PT_AUTOAPPLY, 0 },
 	{ "cookies_radiobutton",		CONF_SECURITY_COOKIES_ACCEPT,	  PT_AUTOAPPLY, G_TYPE_STRING },
 	{ "disk_cache_spin",			CONF_NETWORK_CACHE_SIZE,	  PT_AUTOAPPLY, 0 },
+	{ "clear_cache_button",			NULL,				  PT_NORMAL,	0 },
 
 	/* Languages */
 	{ "auto_encoding_combo",	CONF_LANGUAGE_AUTODETECT_ENCODING,	PT_AUTOAPPLY,	G_TYPE_STRING },
@@ -889,7 +870,7 @@ setup_add_language_dialog (PrefsDialog *pd)
 	return dialog;
 }
 
-void
+static void
 language_editor_add_button_clicked_cb (GtkWidget *button,
 				       PrefsDialog *pd)
 {
@@ -905,7 +886,7 @@ language_editor_add_button_clicked_cb (GtkWidget *button,
 	ephy_dialog_show (pd->priv->add_lang_dialog);
 }
 
-void
+static void
 language_editor_remove_button_clicked_cb (GtkWidget *button,
 					  PrefsDialog *pd)
 {
@@ -924,7 +905,7 @@ language_editor_remove_button_clicked_cb (GtkWidget *button,
 	language_editor_update_buttons (pd);
 }
 
-void
+static void
 language_editor_up_button_clicked_cb (GtkWidget *button,
 				      PrefsDialog *pd)
 {
@@ -956,7 +937,7 @@ language_editor_up_button_clicked_cb (GtkWidget *button,
 	language_editor_update_buttons (pd);
 }
 
-void
+static void
 language_editor_down_button_clicked_cb (GtkWidget *button,
 					PrefsDialog *pd)
 {
@@ -1023,6 +1004,15 @@ create_language_section (EphyDialog *dialog)
 		 properties[LANGUAGE_UP_BUTTON_PROP].id, &pd->priv->lang_up_button, 
 		 properties[LANGUAGE_DOWN_BUTTON_PROP].id, &pd->priv->lang_down_button,
 		 NULL);
+
+	g_signal_connect (pd->priv->lang_add_button, "clicked",
+			  G_CALLBACK (language_editor_add_button_clicked_cb), dialog);
+	g_signal_connect (pd->priv->lang_remove_button, "clicked",
+			  G_CALLBACK (language_editor_remove_button_clicked_cb), dialog);
+	g_signal_connect (pd->priv->lang_up_button, "clicked",
+			  G_CALLBACK (language_editor_up_button_clicked_cb), dialog);
+	g_signal_connect (pd->priv->lang_down_button, "clicked",
+			  G_CALLBACK (language_editor_down_button_clicked_cb), dialog);
 
 	/* setup the languages treeview */
 	pd->priv->lang_treeview = treeview;
@@ -1181,92 +1171,24 @@ create_download_path_button (EphyDialog *dialog)
 	gtk_widget_set_sensitive (button, eel_gconf_key_is_writable (CONF_STATE_DOWNLOAD_DIR));
 	g_free (dir);
 }
-	
+
 static void
-prefs_dialog_init (PrefsDialog *pd)
-{
-	EphyDialog *dialog = EPHY_DIALOG (pd);
-	EphyEncodings *encodings;
-	GtkWidget *window, *curr_button, *blank_button;
-	GtkWidget *variable_combo, *monospace_combo;
-	GtkCellRenderer *renderer;
-	gboolean sensitive;
-
-	pd->priv = EPHY_PREFS_DIALOG_GET_PRIVATE (pd);
-
-	ephy_dialog_construct (dialog,
-			       properties,
-			       ephy_file ("prefs-dialog.glade"),
-			       "prefs_dialog",
-			       NULL);
-
-	ephy_dialog_add_enum (dialog, properties[ACCEPT_COOKIES_PROP].id,
-			      G_N_ELEMENTS (cookies_accept_enum), cookies_accept_enum);
-
-	ephy_dialog_get_controls
-		(dialog,
-		 properties[WINDOW_PROP].id, &window,
-		 properties[HOMEPAGE_CURRENT_PROP].id, &curr_button,
-		 properties[HOMEPAGE_BLANK_PROP].id, &blank_button,
-		 properties[VARIABLE_PROP].id, &variable_combo,
-		 properties[MONOSPACE_PROP].id, &monospace_combo,
-		 NULL);
-
-	gtk_window_set_icon_name (GTK_WINDOW (window), GTK_STOCK_PREFERENCES);
-
-	/* set homepage button sensitivity */
-	sensitive = eel_gconf_key_is_writable (CONF_GENERAL_HOMEPAGE);
-	gtk_widget_set_sensitive (curr_button, sensitive);
-	gtk_widget_set_sensitive (blank_button, sensitive);
-
-        renderer = gtk_cell_renderer_text_new ();
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (variable_combo), renderer, TRUE);
-        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (variable_combo), renderer,
-                                        "text", 0,
-                                        NULL);
-	ephy_dialog_set_data_column (dialog, properties[VARIABLE_PROP].id, 0);
-        renderer = gtk_cell_renderer_text_new ();
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (monospace_combo), renderer, TRUE);
-        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (monospace_combo), renderer,
-                                        "text", 0,
-                                        NULL);
-	ephy_dialog_set_data_column (dialog, properties[MONOSPACE_PROP].id, 0);
-
-	create_fonts_language_menu (dialog);
-
-	encodings = EPHY_ENCODINGS (ephy_embed_shell_get_encodings
-					(EPHY_EMBED_SHELL (ephy_shell)));
-
-	create_node_combo (dialog, DEFAULT_ENCODING_PROP, encodings,
-			   ephy_encodings_get_all (encodings),
-			   CONF_LANGUAGE_DEFAULT_ENCODING, "ISO-8859-1");
-	create_node_combo (dialog, AUTO_ENCODING_PROP, encodings,
-			   ephy_encodings_get_detectors (encodings),
-			   CONF_LANGUAGE_AUTODETECT_ENCODING, "");
-
-	create_language_section	(dialog);
-
-	create_download_path_button (dialog);
-}
-
-void
 prefs_dialog_response_cb (GtkDialog *widget,
-			  gint response_id,
+			  int response,
 			  EphyDialog *dialog)
 {
-	if (response_id == GTK_RESPONSE_CLOSE)
-	{
-		g_object_unref (dialog);
-	}
-	else if (response_id == GTK_RESPONSE_HELP)
+	if (response == GTK_RESPONSE_HELP)
 	{
 		prefs_dialog_show_help (dialog);
+		return;
 	}
+		
+	g_object_unref (dialog);
 }
 
-void
+static void
 prefs_clear_cache_button_clicked_cb (GtkWidget *button,
-				     gpointer data)
+				     PrefsDialog *dialog)
 {
 	EphyEmbedShell *shell;
 	EphyEmbedSingle *single;
@@ -1293,7 +1215,7 @@ set_homepage_entry (EphyDialog *dialog,
 	g_value_unset (&value);
 }
 
-void
+static void
 prefs_homepage_current_button_clicked_cb (GtkWidget *button,
 					  EphyDialog *dialog)
 {
@@ -1313,9 +1235,87 @@ prefs_homepage_current_button_clicked_cb (GtkWidget *button,
 	set_homepage_entry (dialog, ephy_tab_get_address (tab));
 }
 
-void
+static void
 prefs_homepage_blank_button_clicked_cb (GtkWidget *button,
 					EphyDialog *dialog)
 {
 	set_homepage_entry (dialog, NULL);
+}
+static void
+prefs_dialog_init (PrefsDialog *pd)
+{
+	EphyDialog *dialog = EPHY_DIALOG (pd);
+	EphyEncodings *encodings;
+	GtkWidget *window, *curr_button, *blank_button;
+	GtkWidget *variable_combo, *monospace_combo, *clear_cache_button;
+	GtkCellRenderer *renderer;
+	gboolean sensitive;
+
+	pd->priv = EPHY_PREFS_DIALOG_GET_PRIVATE (pd);
+
+	ephy_dialog_construct (dialog,
+			       properties,
+			       ephy_file ("prefs-dialog.glade"),
+			       "prefs_dialog",
+			       NULL);
+
+	ephy_dialog_add_enum (dialog, properties[ACCEPT_COOKIES_PROP].id,
+			      G_N_ELEMENTS (cookies_accept_enum), cookies_accept_enum);
+
+	ephy_dialog_get_controls
+		(dialog,
+		 properties[WINDOW_PROP].id, &window,
+		 properties[HOMEPAGE_CURRENT_PROP].id, &curr_button,
+		 properties[HOMEPAGE_BLANK_PROP].id, &blank_button,
+		 properties[VARIABLE_PROP].id, &variable_combo,
+		 properties[MONOSPACE_PROP].id, &monospace_combo,
+		 properties[CLEAR_CACHE_BUTTON_PROP].id, &clear_cache_button,
+		 NULL);
+
+	gtk_window_set_icon_name (GTK_WINDOW (window), GTK_STOCK_PREFERENCES);
+
+	g_signal_connect (window, "response",
+			  G_CALLBACK (prefs_dialog_response_cb), dialog);
+
+	g_signal_connect (curr_button, "clicked",
+			  G_CALLBACK (prefs_homepage_current_button_clicked_cb), dialog);
+	g_signal_connect (blank_button, "clicked",
+			  G_CALLBACK (prefs_homepage_blank_button_clicked_cb), dialog);
+
+	/* set homepage button sensitivity */
+	sensitive = eel_gconf_key_is_writable (CONF_GENERAL_HOMEPAGE);
+	gtk_widget_set_sensitive (curr_button, sensitive);
+	gtk_widget_set_sensitive (blank_button, sensitive);
+
+        renderer = gtk_cell_renderer_text_new ();
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (variable_combo), renderer, TRUE);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (variable_combo), renderer,
+                                        "text", 0,
+                                        NULL);
+	ephy_dialog_set_data_column (dialog, properties[VARIABLE_PROP].id, 0);
+        renderer = gtk_cell_renderer_text_new ();
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (monospace_combo), renderer, TRUE);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (monospace_combo), renderer,
+                                        "text", 0,
+                                        NULL);
+	ephy_dialog_set_data_column (dialog, properties[MONOSPACE_PROP].id, 0);
+
+	create_fonts_language_menu (dialog);
+
+	g_signal_connect (clear_cache_button, "clicked",
+			  G_CALLBACK (prefs_clear_cache_button_clicked_cb), dialog);
+
+	encodings = EPHY_ENCODINGS (ephy_embed_shell_get_encodings
+					(EPHY_EMBED_SHELL (ephy_shell)));
+
+	create_node_combo (dialog, DEFAULT_ENCODING_PROP, encodings,
+			   ephy_encodings_get_all (encodings),
+			   CONF_LANGUAGE_DEFAULT_ENCODING, "ISO-8859-1");
+	create_node_combo (dialog, AUTO_ENCODING_PROP, encodings,
+			   ephy_encodings_get_detectors (encodings),
+			   CONF_LANGUAGE_AUTODETECT_ENCODING, "");
+
+	create_language_section	(dialog);
+
+	create_download_path_button (dialog);
 }

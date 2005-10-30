@@ -80,14 +80,6 @@ EphyDialogProperty setup_props [] =
 	{ NULL }
 };
 
-void ephy_print_dialog_response_cb		(GtkDialog *dialog,
-						 int response,
-						 EmbedPrintInfo *info);
-void ephy_print_setup_dialog_close_button_cb	(GtkWidget *widget,
-						 EphyDialog *dialog);
-void ephy_print_setup_dialog_help_button_cb	(GtkWidget *widget,
-						 EphyDialog *dialog);
-
 void
 ephy_print_info_free (EmbedPrintInfo *info)
 {
@@ -346,18 +338,18 @@ ephy_print_do_print_and_free (EmbedPrintInfo *info)
 						  info);
 }
 
-void
-ephy_print_setup_dialog_close_button_cb (GtkWidget *widget,
-					 EphyDialog *dialog)
+static void
+ephy_print_setup_dialog_response_cb (GtkWidget *widget,
+				     int response,
+				     EphyDialog *dialog)
 {
-	g_object_unref (dialog);
-}
+	if (response == GTK_RESPONSE_HELP)
+	{
+		ephy_gui_help (GTK_WINDOW (widget), "epiphany", "using-print-setup");
+		return;
+	}
 
-void
-ephy_print_setup_dialog_help_button_cb (GtkWidget *widget,
-					 EphyDialog *dialog)
-{
-	ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "using-print-setup");
+	g_object_unref (dialog);
 }
 
 static GtkWidget *
@@ -483,7 +475,9 @@ ephy_print_setup_dialog_new (void)
 
 	window = ephy_dialog_get_control (dialog, setup_props[SETUP_WINDOW_PROP].id);
 	gtk_window_set_icon_name (GTK_WINDOW (window), STOCK_PRINT_SETUP);
-	
+	g_signal_connect (window, "response",
+			  G_CALLBACK (ephy_print_setup_dialog_response_cb), dialog);
+
 	paper_selector_hbox = ephy_dialog_get_control (dialog,
 						setup_props[PAPER_SELECTOR_PROP].id);
 	gtk_box_pack_start_defaults (GTK_BOX (paper_selector_hbox),

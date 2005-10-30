@@ -105,6 +105,12 @@ EphyDialogProperty properties [] =
 	{ NULL }
 };
 
+enum
+{
+	RESPONSE_PAUSE = 1,
+	RESPONSE_STOP = 2
+};
+
 static void
 downloader_view_build_ui (DownloaderView *dv);
 static void
@@ -113,15 +119,14 @@ static void
 downloader_view_finalize (GObject *object);
 static void
 downloader_view_init (DownloaderView *dv);
-
-/* Callbacks */
-void
-download_dialog_pause_cb (GtkButton *button, DownloaderView *dv);
-void
-download_dialog_abort_cb (GtkButton *button, DownloaderView *dv);
-gboolean
-download_dialog_delete_cb (GtkWidget *window, GdkEventAny *event,
-			   DownloaderView *dv);
+static void
+download_dialog_response_cb (GtkWidget *dialog,
+			     int response,
+			     DownloaderView *dv);
+static gboolean
+download_dialog_delete_event_cb (GtkWidget *window,
+				 GdkEventAny *event,
+				 DownloaderView *dv);
 
 static GObjectClass *parent_class = NULL;
 
@@ -365,7 +370,8 @@ update_buttons (DownloaderView *dv)
 	}
 	gtk_widget_set_sensitive (dv->priv->pause_button, pause_enabled);
 	gtk_widget_set_sensitive (dv->priv->abort_button, abort_enabled);
-	gtk_button_set_label (GTK_BUTTON (dv->priv->pause_button), label_pause ? _("_Pause") : _("_Resume"));
+	gtk_button_set_label (GTK_BUTTON (dv->priv->pause_button),
+			      label_pause ? _("_Pause") : _("_Resume"));
 }
 
 static void
@@ -625,6 +631,11 @@ downloader_view_build_ui (DownloaderView *dv)
 		 properties[PROP_ABORT_BUTTON].id, &priv->abort_button,
 		 NULL);
 
+	g_signal_connect (priv->window, "response",
+			  G_CALLBACK (download_dialog_response_cb), dv);
+	g_signal_connect (priv->window, "delete-event",
+			  G_CALLBACK (download_dialog_delete_event_cb), dv);
+
 	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview)),
 				     GTK_SELECTION_BROWSE);
 
@@ -695,8 +706,8 @@ downloader_view_build_ui (DownloaderView *dv)
 	g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), dv);
 }
 
-void
-download_dialog_pause_cb (GtkButton *button, DownloaderView *dv)
+static void
+download_dialog_pause (DownloaderView *dv)
 {
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
@@ -794,8 +805,8 @@ downloader_view_remove_download (DownloaderView *dv, EphyDownload *download)
 	}
 }
 
-void
-download_dialog_abort_cb (GtkButton *button, DownloaderView *dv)
+static void
+download_dialog_stop (DownloaderView *dv)
 {
 	GValue val = {0, };
 	GtkTreeSelection *selection;
@@ -818,9 +829,25 @@ download_dialog_abort_cb (GtkButton *button, DownloaderView *dv)
 	g_value_unset (&val);
 }
 
-gboolean
-download_dialog_delete_cb (GtkWidget *window, GdkEventAny *event,
-			   DownloaderView *dv)
+static void
+download_dialog_response_cb (GtkWidget *dialog,
+			     int response,
+			     DownloaderView *dv)
+{
+	if (response == RESPONSE_PAUSE)
+	{
+		download_dialog_pause (dv);
+	}
+	else if (response == RESPONSE_STOP)
+	{
+		download_dialog_stop (dv);
+	}
+}
+
+static gboolean
+download_dialog_delete_event_cb (GtkWidget *window,
+				 GdkEventAny *event,
+				 DownloaderView *dv)
 {
 	/* FIXME multi-head */
 	if (egg_tray_manager_check_running (gdk_screen_get_default ()))
