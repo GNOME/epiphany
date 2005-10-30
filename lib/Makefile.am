@@ -13,7 +13,6 @@ NOINST_H_FILES = \
 	ephy-dnd.h				\
 	ephy-file-chooser.h			\
 	ephy-file-helpers.h			\
-	ephy-glade.h				\
 	ephy-gui.h				\
 	ephy-langs.h				\
 	ephy-module.h				\
@@ -48,7 +47,6 @@ libephymisc_la_SOURCES = \
 	ephy-dnd.c				\
 	ephy-file-chooser.c			\
 	ephy-file-helpers.c			\
-	ephy-glade.c				\
 	ephy-gui.c				\
 	ephy-langs.c				\
 	ephy-loader.c				\

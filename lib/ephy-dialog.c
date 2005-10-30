@@ -22,7 +22,6 @@
 #include "config.h"
 
 #include "ephy-dialog.h"
-#include "ephy-glade.h"
 #include "ephy-state.h"
 #include "ephy-gui.h"
 #include "eel-gconf-extensions.h"
@@ -36,6 +35,9 @@
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkentry.h>
+#include <gtk/gtksizegroup.h>
+#include <gtk/gtkdialog.h>
+#include <glade/glade-xml.h>
 
 enum
 {
@@ -1035,14 +1037,18 @@ impl_construct (EphyDialog *dialog,
 		const char *name,
 		const char *domain)
 {
+	EphyDialogPrivate *priv = dialog->priv;
 	GladeXML *gxml;
 
-	gxml = ephy_glade_widget_new
-		(file, name, &(dialog->priv->dialog), dialog, domain);
+	gxml = glade_xml_new (file, name, domain);
+	g_return_if_fail (gxml != NULL);
 
-	if (dialog->priv->name == NULL)
+	priv->dialog = glade_xml_get_widget (gxml, name);
+	g_return_if_fail (priv->dialog != NULL);
+
+	if (priv->name == NULL)
 	{
-		dialog->priv->name = g_strdup (name);
+		priv->name = g_strdup (name);
 	}
 
 	if (properties)
@@ -1050,10 +1056,8 @@ impl_construct (EphyDialog *dialog,
 		init_props (dialog, properties, gxml);
 	}
 
-	g_signal_connect_object (dialog->priv->dialog,
-				 "destroy",
-				 G_CALLBACK(dialog_destroy_cb),
-				 dialog, 0);
+	g_signal_connect_object (dialog->priv->dialog, "destroy",
+				 G_CALLBACK(dialog_destroy_cb), dialog, 0);
 
 	g_object_unref (gxml);
 }

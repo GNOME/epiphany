@@ -185,7 +185,7 @@ ephy_print_get_print_info (void)
 	return info;
 }
 
-void
+static void
 ephy_print_dialog_response_cb (GtkDialog *dialog,
 			       int response,
 			       EmbedPrintInfo *info)

@@ -50,7 +50,7 @@
 #include <nsEmbedString.h>
 #define MOZILLA_INTERNAL_API 1
 
-#include <gconf/gconf-client.h>
+#include <glib/gi18n.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkcheckbutton.h>
@@ -72,12 +72,13 @@
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextview.h>
 #include <gtk/gtkprogressbar.h>
-#include <glib/gi18n.h>
+#include <gtk/gtksizegroup.h>
+#include <glade/glade-xml.h>
+#include <gconf/gconf-client.h>
 #include <time.h>
 
 #include "GtkNSSDialogs.h"
 #include "ephy-file-helpers.h"
-#include "ephy-glade.h"
 #include "ephy-gui.h"
 
 NS_DEFINE_CID (kX509CertCID, NS_IX509CERT_IID);
@@ -1299,9 +1300,12 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	PRUnichar ** usage;
 	GtkSizeGroup * sizegroup;
 
-	gxml = ephy_glade_widget_new (ephy_file ("certificate-dialogs.glade"),
-				      "viewcert_dialog",
-				      &dialog, NULL, NULL);
+	gxml = glade_xml_new (ephy_file ("certificate-dialogs.glade"),
+			      "viewcert_dialog", NULL);
+	g_return_val_if_fail (gxml != NULL, NS_ERROR_FAILURE);
+
+	dialog = glade_xml_get_widget (gxml, "viewcert_dialog");
+	g_return_val_if_fail (dialog != NULL, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
