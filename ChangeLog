@@ -1,3 +1,10 @@
+2005-10-30  Emmanuele Bassi  <ebassi@cvs.gnome.org>
+
+	* lib/ephy-glade.c: (glade_signal_connect_func):
+	* lib/ephy-module.c: (ephy_module_load):
+	
+	Use G_MODULE_BIND_LAZY when dlopening modules.
+
 2005-10-30  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/prefs-dialog.c: (create_download_path_button):

@@ -105,14 +105,16 @@ ephy_module_load (GTypeModule *gmodule)
 	{
 		char *path = g_build_filename (ephy_dot_dir(), "extensions", module->path, NULL);
 		
-		module->library = g_module_open (path, 0);
-
+		module->library = g_module_open (path, G_MODULE_BIND_LAZY |
+						       G_MODULE_BIND_LOCAL);
+ 
 		g_free (path);
 	}
 
 	if (module->library == NULL)
 	{
-		module->library = g_module_open (module->path, 0);
+		module->library = g_module_open (module->path, G_MODULE_BIND_LAZY |
+							       G_MODULE_BIND_LOCAL);
 	}
 
 	if (module->library == NULL)

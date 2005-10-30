@@ -95,7 +95,7 @@ glade_signal_connect_func (const gchar *cb_name, GObject *obj,
 	/* initialize gmodule */
 	if (mod_self == NULL)
 	{
-		mod_self = g_module_open (NULL, 0);
+		mod_self = g_module_open (NULL, G_MODULE_BIND_LAZY);
 		g_assert (mod_self != NULL);
 	}
 
