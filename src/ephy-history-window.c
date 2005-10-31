@@ -1039,7 +1039,7 @@ build_search_box (EphyHistoryWindow *editor)
 	combo = gtk_combo_box_new_text ();
 	gtk_widget_show (combo);
 
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Last 30 Minutes"));
+	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Last 30 minutes"));
 	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Today"));
 	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 2), 2);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), str);
