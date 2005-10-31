@@ -46,8 +46,8 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static GObjectClass *parent_class = NULL;
 
 /* Epiphany's DBUS identification */
-static const char* epiphany_dbus_service     = "org.gnome.Epiphany";
-static const char* epiphany_dbus_object_path = "/org/gnome/Epiphany";
+static const char epiphany_dbus_service[]     = "org.gnome.Epiphany";
+static const char epiphany_dbus_object_path[] = "/org/gnome/Epiphany";
 
 /* This function is called by DBUS when a message directed at the
  * Epiphany's object path arrives (provided we're the registered instance!)

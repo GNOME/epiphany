@@ -67,26 +67,22 @@
 #include "ephy-debug.h"
 #include "egg-toolbars-model.h"
 
-static GtkTargetEntry topic_drag_dest_types [] =
+static const GtkTargetEntry topic_drag_dest_types [] =
 {
 	{ EPHY_DND_URI_LIST_TYPE,   0, 0 }
 };
 
-static int n_topic_drag_dest_types = G_N_ELEMENTS (topic_drag_dest_types);
-
-static GtkTargetEntry bmk_drag_types [] =
+static const GtkTargetEntry bmk_drag_types [] =
 {
 	{ EPHY_DND_URL_TYPE,        0, 0 },
 	{ EPHY_DND_URI_LIST_TYPE,   0, 1 },
 	{ EPHY_DND_TEXT_TYPE,       0, 2 }
 };
-static int n_bmk_drag_types = G_N_ELEMENTS (bmk_drag_types);
 
-static GtkTargetEntry topic_drag_types [] =
+static const GtkTargetEntry topic_drag_types [] =
 {
 	{ EPHY_DND_TOPIC_TYPE,      0, 0 }
 };
-static int n_topic_drag_types = G_N_ELEMENTS (topic_drag_types);
 
 static void ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass);
 static void ephy_bookmarks_editor_init (EphyBookmarksEditor *editor);
@@ -162,7 +158,7 @@ enum
 
 static GObjectClass *parent_class = NULL;
 
-static GtkActionEntry ephy_bookmark_popup_entries [] = {
+static const GtkActionEntry ephy_bookmark_popup_entries [] = {
 	/* Toplevel */
 	{ "File", NULL, N_("_File") },
 	{ "Edit", NULL, N_("_Edit") },
@@ -220,7 +216,6 @@ static GtkActionEntry ephy_bookmark_popup_entries [] = {
 	  N_("Display credits for the web browser creators"),
 	  G_CALLBACK (window_cmd_help_about) },
 };
-static guint ephy_bookmark_popup_n_entries = G_N_ELEMENTS (ephy_bookmark_popup_entries);
 
 enum
 {
@@ -228,7 +223,7 @@ enum
 	VIEW_TITLE_AND_ADDRESS
 };
 
-static GtkRadioActionEntry ephy_bookmark_radio_entries [] =
+static const GtkRadioActionEntry ephy_bookmark_radio_entries [] =
 {
 	/* View Menu */
 	{ "ViewTitle", NULL, N_("_Title"), NULL,
@@ -237,7 +232,6 @@ static GtkRadioActionEntry ephy_bookmark_radio_entries [] =
 	  N_("Show both the title and address columns"),
 	  VIEW_TITLE_AND_ADDRESS } 
 };
-static guint ephy_bookmark_n_radio_entries = G_N_ELEMENTS (ephy_bookmark_radio_entries);
 
 static void
 entry_selection_changed_cb (GtkWidget *widget, GParamSpec *pspec, EphyBookmarksEditor *editor)
@@ -1553,12 +1547,12 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	action_group = gtk_action_group_new ("PopupActions");
 	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_bookmark_popup_entries,
-				      ephy_bookmark_popup_n_entries, editor);
+				      G_N_ELEMENTS (ephy_bookmark_popup_entries), editor);
 
 	details_value = get_details_value (editor);
 	gtk_action_group_add_radio_actions (action_group,
 					    ephy_bookmark_radio_entries,
-					    ephy_bookmark_n_radio_entries,
+					    G_N_ELEMENTS (ephy_bookmark_radio_entries),
 					    details_value,
 					    G_CALLBACK (cmd_view_columns), 
 					    editor);
@@ -1608,11 +1602,11 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 				   EPHY_NODE_VIEW_SEARCHABLE, NULL, NULL);
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (key_view),
 					   topic_drag_types,
-					   n_topic_drag_types,
+					   G_N_ELEMENTS (topic_drag_types),
 					   col_id, -1);
 	ephy_node_view_enable_drag_dest (EPHY_NODE_VIEW (key_view),
 					 topic_drag_dest_types,
-					 n_topic_drag_dest_types);
+					 G_N_ELEMENTS (topic_drag_dest_types));
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (key_view));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 	g_signal_connect (G_OBJECT (selection),
@@ -1681,7 +1675,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 				   0, NULL, &(editor->priv->address_col));
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (bm_view),
 					   bmk_drag_types,
-					   n_bmk_drag_types,
+					   G_N_ELEMENTS (bmk_drag_types),
 					   url_col_id, title_col_id);
 	ephy_node_view_set_sort (EPHY_NODE_VIEW (bm_view), G_TYPE_STRING,
 				 EPHY_NODE_BMK_PROP_TITLE, GTK_SORT_ASCENDING);

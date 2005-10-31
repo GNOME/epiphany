@@ -95,7 +95,6 @@ static const EphyBookmarksBookmarkInfo default_bookmarks [] =
 	 */
 	{ N_("Search the web"), N_("http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8") }
 };
-static int n_default_bookmarks = G_N_ELEMENTS (default_bookmarks);
 
 static const char *default_topics [] =
 {
@@ -106,7 +105,6 @@ static const char *default_topics [] =
 	N_("Travel"),
 	N_("Work")
 };
-static int n_default_topics = G_N_ELEMENTS (default_topics);
 
 /* Signals */
 enum
@@ -162,12 +160,12 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 {
 	int i;
 
-	for (i = 0; i < n_default_topics; i++)
+	for (i = 0; i < G_N_ELEMENTS (default_topics); i++)
 	{
 		ephy_bookmarks_add_keyword (eb, _(default_topics[i]));
 	}
 
-	for (i = 0; i < n_default_bookmarks; i++)
+	for (i = 0; i < G_N_ELEMENTS (default_bookmarks); i++)
 	{
 		EphyNode *bmk;
 
