@@ -480,7 +480,7 @@ cmd_bookmark_link (GtkAction *action,
         GtkWidget *new_bookmark;
         GList *selection;
 
-        window = GTK_WINDOW(get_target_window (editor));
+	window = GTK_WINDOW (editor);
         bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
         selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->pages_view));
