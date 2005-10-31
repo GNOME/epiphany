@@ -63,6 +63,12 @@ struct _EphyHistoryPrivate
 
 enum
 {
+	REDIRECT_FLAG	= 1 << 0,
+	TOPLEVEL_FLAG	= 1 << 1
+};
+
+enum
+{
 	PROP_0,
 	PROP_ENABLED
 };
@@ -81,7 +87,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static void ephy_history_class_init	(EphyHistoryClass *klass);
 static void ephy_history_init		(EphyHistory *history);
 static void ephy_history_finalize	(GObject *object);
-static gboolean impl_add_page           (EphyHistory *histroy, const char *url);
+static gboolean impl_add_page           (EphyHistory *, const char *, gboolean, gboolean);
 
 static GObjectClass *parent_class = NULL;
 
@@ -188,10 +194,12 @@ ephy_history_class_init (EphyHistoryClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (EphyHistoryClass, add_page),
 			      g_signal_accumulator_true_handled, NULL,
-			      ephy_marshal_BOOLEAN__STRING,
+			      ephy_marshal_BOOLEAN__STRING_BOOLEAN_BOOLEAN,
 			      G_TYPE_BOOLEAN,
-			      1,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+			      3,
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN);
 
 	signals[VISITED] =
                 g_signal_new ("visited",
@@ -882,18 +890,24 @@ ephy_history_get_page_visits (EphyHistory *gh,
 
 void
 ephy_history_add_page (EphyHistory *eh,
-		       const char *url)
+		       const char *url,
+		       gboolean redirect,
+		       gboolean toplevel)
 {
 	gboolean result = FALSE;
 
-	g_signal_emit (eh, signals[ADD_PAGE], 0, url, &result);
+	g_signal_emit (eh, signals[ADD_PAGE], 0, url, redirect, toplevel, &result);
 }
 
 static gboolean
-impl_add_page (EphyHistory *eb, const char *url)
+impl_add_page (EphyHistory *eb,
+	       const char *url,
+	       gboolean redirect,
+	       gboolean toplevel)
 {
 	EphyNode *bm, *node, *host;
 	GValue value = { 0, };
+	gulong flags = 0;
 
 	if (eb->priv->enabled == FALSE)
 	{
@@ -914,6 +928,16 @@ impl_add_page (EphyHistory *eb, const char *url)
 	ephy_node_set_property (bm, EPHY_NODE_PAGE_PROP_LOCATION,
 			        &value);
 	ephy_node_set_property (bm, EPHY_NODE_PAGE_PROP_TITLE,
+			        &value);
+	g_value_unset (&value);
+
+	if (redirect) flags |= REDIRECT_FLAG;
+	if (toplevel) flags |= TOPLEVEL_FLAG;
+
+	/* EphyNode SUCKS! */
+	g_value_init (&value, G_TYPE_LONG);
+	g_value_set_long (&value, (long) flags);
+	ephy_node_set_property (bm, EPHY_NODE_PAGE_PROP_EXTRA_FLAGS,
 			        &value);
 	g_value_unset (&value);
 

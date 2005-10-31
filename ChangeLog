@@ -1,5 +1,18 @@
 2005-10-31  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-history.c: (ephy_history_class_init),
+	(ephy_history_add_page), (impl_add_page):
+	* embed/ephy-history.h:
+	* embed/mozilla/GlobalHistory.cpp:
+	* lib/ephy-marshal.list:
+	* src/epiphany.defs:
+
+	Store the redirect and toplevel attributes when
+	adding pages to the history (doesn't do anything with
+	the info yet, though). Based on a galeon patch by tko.
+
+2005-10-31  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/GtkNSSDialogs.cpp:
 	* embed/print-dialog.c:
 	* lib/Makefile.am:

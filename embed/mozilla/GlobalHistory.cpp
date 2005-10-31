@@ -48,10 +48,15 @@ MozGlobalHistory::~MozGlobalHistory ()
 
 #ifdef HAVE_GECKO_1_8
 /* void addURI (in nsIURI aURI, in boolean aRedirect, in boolean aToplevel, in nsIURI aReferrer); */
-NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aToplevel, nsIURI *aReferrer)
+NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI,
+				       PRBool aRedirect,
+				       PRBool aToplevel,
+				       nsIURI *aReferrer)
 #else
 /* void addURI (in nsIURI aURI, in boolean aRedirect, in boolean aToplevel); */
-NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aToplevel)
+NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI,
+				       PRBool aRedirect,
+				       PRBool aToplevel)
 #endif
 {
 	nsresult rv;
@@ -72,18 +77,20 @@ NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aT
 
 	if (!isHTTP && !isHTTPS)
 	{
-		PRBool isJavascript, isAbout, isViewSource, isChrome, isData;
+		static const char *schemes[] = { "javascript",
+						 "data",
+						 "about",
+						 "chrome",
+						 "resource",
+						 "view-source" };
 
-	        rv = aURI->SchemeIs("javascript", &isJavascript);
-		rv |= aURI->SchemeIs("about", &isAbout);
-		rv |= aURI->SchemeIs("view-source", &isViewSource);
-		rv |= aURI->SchemeIs("chrome", &isChrome);
-		rv |= aURI->SchemeIs("data", &isData);
-		NS_ENSURE_SUCCESS(rv, NS_ERROR_FAILURE);
-
-		if (isJavascript ||isAbout || isViewSource || isChrome || isData)
+		for (PRUint32 i = 0; i < G_N_ELEMENTS (schemes); ++i)
 		{
-		      return NS_OK;
+			PRBool result = PR_FALSE;
+			if (NS_SUCCEEDED (aURI->SchemeIs (schemes[i], &result)) && result)
+			{
+				return NS_OK;
+			}
 		}
 	}
 
@@ -91,13 +98,14 @@ NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aT
 	rv = aURI->GetSpec(spec);
 	NS_ENSURE_TRUE (NS_SUCCEEDED(rv) && spec.Length(), rv);
 
-	ephy_history_add_page (mGlobalHistory, spec.get());
+	ephy_history_add_page (mGlobalHistory, spec.get(), aRedirect, aToplevel);
 	
 	return NS_OK;
 }
 
 /* boolean isVisited (in nsIURI aURI); */
-NS_IMETHODIMP MozGlobalHistory::IsVisited(nsIURI *aURI, PRBool *_retval)
+NS_IMETHODIMP MozGlobalHistory::IsVisited(nsIURI *aURI,
+					  PRBool *_retval)
 {
 	NS_ENSURE_ARG (aURI);
 
@@ -110,7 +118,8 @@ NS_IMETHODIMP MozGlobalHistory::IsVisited(nsIURI *aURI, PRBool *_retval)
 }
 
 /* void setPageTitle (in nsIURI aURI, in AString aTitle); */
-NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI, const nsAString & aTitle)
+NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI,
+					     const nsAString & aTitle)
 {
 	NS_ENSURE_ARG (aURI);
 
@@ -129,7 +138,8 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI, const nsAString & aTi
 #ifdef HAVE_GECKO_1_9
 /* unsigned long getURIGeckoFlags(in nsIURI aURI); */
 NS_IMETHODIMP
-MozGlobalHistory::GetURIGeckoFlags(nsIURI *aURI, PRUint32* aFlags)
+MozGlobalHistory::GetURIGeckoFlags(nsIURI *aURI,
+				   PRUint32* aFlags)
 {
 	nsEmbedCString spec;
 	aURI->GetSpec(spec);
@@ -151,7 +161,8 @@ MozGlobalHistory::GetURIGeckoFlags(nsIURI *aURI, PRUint32* aFlags)
 
 /* void setURIGeckoFlags(in nsIURI aURI, in unsigned long aFlags); */
 NS_IMETHODIMP
-MozGlobalHistory::SetURIGeckoFlags(nsIURI *aURI, PRUint32 aFlags)
+MozGlobalHistory::SetURIGeckoFlags(nsIURI *aURI,
+				   PRUint32 aFlags)
 {
 	nsEmbedCString spec;
 	aURI->GetSpec(spec);

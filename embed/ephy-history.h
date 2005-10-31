@@ -49,7 +49,8 @@ enum
 	EPHY_NODE_PAGE_PROP_PRIORITY = 8,
 	EPHY_NODE_PAGE_PROP_ICON = 9,
 	EPHY_NODE_HOST_PROP_ZOOM = 10,
-	EPHY_NODE_PAGE_PROP_GECKO_FLAGS = 11
+	EPHY_NODE_PAGE_PROP_GECKO_FLAGS = 11,
+	EPHY_NODE_PAGE_PROP_EXTRA_FLAGS = 12
 };
 
 struct _EphyHistory
@@ -66,7 +67,9 @@ struct _EphyHistoryClass
 
 	/* Signals */
 	gboolean (* add_page)	(EphyHistory *history,
-				 const char *url);
+				 const char *url,
+				 gboolean redirect,
+				 gboolean toplevel);
 	void	(* visited)	(EphyHistory *history,
 				 const char *url);
 	void	(* cleared)	(EphyHistory *history);
@@ -91,7 +94,9 @@ EphyNode       *ephy_history_get_page           (EphyHistory *gh,
 						 const char *url);
 
 void            ephy_history_add_page           (EphyHistory *gh,
-						 const char *url);
+						 const char *url,
+						 gboolean redirect,
+						 gboolean toplevel);
 
 gboolean        ephy_history_is_page_visited    (EphyHistory *gh,
 						 const char *url);
