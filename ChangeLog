@@ -1,5 +1,13 @@
 2005-11-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/egg/egg-toolbars-model.c: (item_node_new), (item_node_free),
+	(egg_toolbars_model_get_n_avail), (egg_toolbars_model_set_n_avail):
+
+	Use GINT_TO_POINTER/GPOINTER_TO_INT when stuffing ints into pointers,
+	and fix gcc 2.95 issues.
+
+2005-11-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-embed.c: (ephy_embed_base_init):
 	* embed/ephy-embed.h:
 	* embed/mozilla/EphyBrowser.cpp:

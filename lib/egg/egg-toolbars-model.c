@@ -254,17 +254,18 @@ static GNode *
 item_node_new (const char *name, EggToolbarsModel *model)
 {
   EggToolbarsItem *item;
+  int count;
 
   g_return_val_if_fail (name != NULL, NULL);
 
   item = g_new (EggToolbarsItem, 1);
   item->name = g_strdup (name);
 
-  gint count = (gint) g_hash_table_lookup (model->priv->avail, item->name);
+  count = GPOINTER_TO_INT (g_hash_table_lookup (model->priv->avail, item->name));
   if (count > G_MININT && count < G_MAXINT)
     g_hash_table_insert (model->priv->avail,
 			 g_strdup (item->name),
-			 (gpointer) (count-1));
+			 GINT_TO_POINTER (count - 1));
 
   return g_node_new (item);
 }
@@ -273,12 +274,13 @@ static void
 item_node_free (GNode *item_node, EggToolbarsModel *model)
 {
   EggToolbarsItem *item = item_node->data;
+  int count;
 
-  gint count = (gint) g_hash_table_lookup (model->priv->avail, item->name);
-  if (count < G_MAXINT-1)
+  count = GPOINTER_TO_INT (g_hash_table_lookup (model->priv->avail, item->name));
+  if (count < G_MAXINT - 1)
     g_hash_table_insert (model->priv->avail,
 			 g_strdup (item->name),
-			 (gpointer) (count+1));
+			 GINT_TO_POINTER (count + 1));
 
   g_free (item->name);
   g_free (item);
@@ -839,11 +841,11 @@ egg_toolbars_model_get_avail (EggToolbarsModel *model)
 gint
 egg_toolbars_model_get_n_avail (EggToolbarsModel *model, const char *name)
 {
-  return (gint) g_hash_table_lookup (model->priv->avail, name);
+  return GPOINTER_TO_INT (g_hash_table_lookup (model->priv->avail, name));
 }
 
 void
 egg_toolbars_model_set_n_avail (EggToolbarsModel *model, const char *name, gint count)
 {
-  g_hash_table_insert (model->priv->avail, g_strdup (name), (gpointer) count);
+  g_hash_table_insert (model->priv->avail, g_strdup (name), GINT_TO_POINTER (count));
 }
