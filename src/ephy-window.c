@@ -1870,22 +1870,22 @@ update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 		name = get_name_from_address_value (value);
 
 		action = gtk_action_group_get_action (group, "OpenImage");
-		tooltip = g_strdup_printf (_("Open image '%s'"), name);
+		tooltip = g_strdup_printf (_("Open image “%s”"), name);
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (tooltip);
 
 		action = gtk_action_group_get_action (group, "SetImageAsBackground");
-		tooltip = g_strdup_printf (_("Use as desktop background '%s'"), name);
+		tooltip = g_strdup_printf (_("Use as desktop background “%s”"), name);
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (tooltip);
 
 		action = gtk_action_group_get_action (group, "SaveImageAs");
-		tooltip = g_strdup_printf (_("Save image '%s'"), name);
+		tooltip = g_strdup_printf (_("Save image “%s”"), name);
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (tooltip);
 
 		action = gtk_action_group_get_action (group, "CopyImageLocation");
-		tooltip = g_strdup_printf (_("Copy image address '%s'"),
+		tooltip = g_strdup_printf (_("Copy image address “%s”"),
 					   g_value_get_string (value));
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (tooltip);		
@@ -1898,13 +1898,13 @@ update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 		ephy_embed_event_get_property (event, "link", &value);
 
 		action = gtk_action_group_get_action (group, "SendEmail");
-		tooltip = g_strdup_printf (_("Send email to address '%s'"),
+		tooltip = g_strdup_printf (_("Send email to address “%s”"),
 					   g_value_get_string (value));
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (tooltip);
 
 		action = gtk_action_group_get_action (group, "CopyEmailAddress");
-		tooltip = g_strdup_printf (_("Copy email address '%s'"),
+		tooltip = g_strdup_printf (_("Copy email address “%s”"),
 					   g_value_get_string (value));
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (tooltip);
@@ -1916,19 +1916,19 @@ update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 
 		action = gtk_action_group_get_action (group, "DownloadLink");
 		name = get_name_from_address_value (value);
-		tooltip = g_strdup_printf (_("Save link '%s'"), name);
+		tooltip = g_strdup_printf (_("Save link “%s”"), name);
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (name);
 		g_free (tooltip);
 
 		action = gtk_action_group_get_action (group, "BookmarkLink");
-		tooltip = g_strdup_printf (_("Bookmark link '%s'"),
+		tooltip = g_strdup_printf (_("Bookmark link “%s”"),
 					   g_value_get_string (value));
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (tooltip);
 
 		action = gtk_action_group_get_action (group, "CopyLinkAddress");
-		tooltip = g_strdup_printf (_("Copy link's address '%s'"),
+		tooltip = g_strdup_printf (_("Copy link's address “%s”"),
 					   g_value_get_string (value));
 		g_object_set (action, "tooltip", tooltip, NULL);
 		g_free (tooltip);
