@@ -937,7 +937,6 @@ dir_changed_cb (GnomeVFSMonitorHandle *handle,
 	    g_str_has_suffix (info_uri, ".xml") == FALSE) return;
 
 	path = gnome_vfs_get_local_path_from_uri (info_uri);
-	g_print ("notify, uri=%s path=%s\n", info_uri, path);
 
 	switch (event_type)
 	{

@@ -309,7 +309,7 @@ duplicate_dialog_construct (GtkWindow *parent,
 	GtkWidget *dialog;
 	char *str, *tmp_str;
 
-	tmp_str = g_markup_printf_escaped (_("You already have a bookmark titled \"%s\" for this page."),
+	tmp_str = g_markup_printf_escaped (_("You already have a bookmark titled “%s” for this page."),
 				   	   title);
 	str = g_strconcat ("<span weight=\"bold\" size=\"larger\">", tmp_str, "</span>", NULL);
 

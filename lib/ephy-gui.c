@@ -325,7 +325,7 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 					GTK_DIALOG_DESTROY_WITH_PARENT,
 					GTK_MESSAGE_ERROR,
 					GTK_BUTTONS_CLOSE,
-					_("Directory %s is not writable"), path);
+					_("Directory “%s” is not writable"), path);
 
 			gtk_message_dialog_format_secondary_text (
 					GTK_MESSAGE_DIALOG (dialog),
@@ -362,7 +362,7 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_MESSAGE_ERROR,
 				GTK_BUTTONS_CLOSE,
-				_("File %s is not writable"), display_name);
+				_("File “%s” is not writable"), display_name);
 
 		gtk_message_dialog_format_secondary_text (
 				GTK_MESSAGE_DIALOG (dialog),

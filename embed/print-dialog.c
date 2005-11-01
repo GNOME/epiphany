@@ -275,7 +275,7 @@ ephy_print_verify_postscript (GnomePrintDialog *print_dialog)
                         _("Printing is not supported on this printer"));
                 gtk_message_dialog_format_secondary_text (
                         GTK_MESSAGE_DIALOG (dialog),
-                        _("You were trying to print to a printer using the \"%s\" driver. This program requires a PostScript printer driver."),
+                        _("You were trying to print to a printer using the “%s” driver. This program requires a PostScript printer driver."),
                         gnome_print_config_get (
                                 config, (guchar *)"Settings.Engine.Backend.Driver"));
         }

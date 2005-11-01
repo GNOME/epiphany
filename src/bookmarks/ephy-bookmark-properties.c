@@ -222,7 +222,7 @@ update_window_title(EphyBookmarkProperties *editor)
 
 	tmp = ephy_node_get_property_string (editor->priv->bookmark,
 					     EPHY_NODE_BMK_PROP_TITLE);
-	title = g_strdup_printf (_("%s Properties"), tmp);
+	title = g_strdup_printf (_("“%s” Properties"), tmp);
 	gtk_window_set_title (GTK_WINDOW (editor), title);
 	g_free (title);
 }

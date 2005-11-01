@@ -388,7 +388,7 @@ delete_topic_dialog_construct (GtkWindow *parent,
 					 GTK_DIALOG_MODAL,
 					 GTK_MESSAGE_WARNING,
 					 GTK_BUTTONS_CANCEL,
-					 _("Delete topic \"%s\"?"),
+					 _("Delete topic “%s”?"),
 					 topic);
 	
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Delete this topic?"));
@@ -515,7 +515,7 @@ add_bookmarks_source (const char *file,
 		else if (strcmp (p, ".mozilla") == 0)
 		{
 			/* Translators: The %s is the name of a Mozilla profile. */
-			description = g_strdup_printf (_("Mozilla \"%s\" profile"), path[i+1]);
+			description = g_strdup_printf (_("Mozilla “%s” profile"), path[i+1]);
 		}
 		else if (strcmp (p, ".galeon") == 0)
 		{
@@ -557,7 +557,7 @@ import_bookmarks (EphyBookmarksEditor *editor,
 		gtk_window_set_title (GTK_WINDOW (dialog), _("Import Failed"));
 		gtk_message_dialog_format_secondary_text
 			(GTK_MESSAGE_DIALOG (dialog),
-			 _("The bookmarks from \"%s\" could not be imported "
+			 _("The bookmarks from “%s” could not be imported "
 			   "because the file is corrupted or of an "
 			   "unsupported type."),
 			 basename);

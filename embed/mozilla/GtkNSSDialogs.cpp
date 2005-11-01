@@ -308,14 +308,14 @@ GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,
 
 	nsEmbedCString cTargetUrl (targetURL);
 
-        first = g_markup_printf_escaped (_("The site \"%s\" returned security information for "
-					   "\"%s\". It is possible that someone is intercepting "
+	first = g_markup_printf_escaped (_("The site “%s” returned security information for "
+					   "“%s”. It is possible that someone is intercepting "
 					   "your communication to obtain your confidential "
 					   "information."),
 					 cTargetUrl.get(), cCommonName.get());
 
         second = g_markup_printf_escaped (_("You should only accept the security information if you "
-					    "trust \"%s\" and \"%s\"."),
+					    "trust “%s” and “%s”."),
 					  cTargetUrl.get(), cCommonName.get());
 	
 	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n\n%s",
@@ -350,14 +350,14 @@ GtkNSSDialogs::ConfirmUnknownIssuer (nsIInterfaceRequestor *ctx,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
 	secondary = g_markup_printf_escaped
-		           (_("It was not possible to automatically trust \"%s\". "
+		           (_("It was not possible to automatically trust “%s”. "
 			      "It is possible that someone is intercepting your "
 			      "communication to obtain your confidential information."),
 			      cCommonName.get());
 
         tertiary = g_markup_printf_escaped
 		           (_("You should only connect to the site if you are certain "
-			      "you are connected to \"%s\"."),
+			      "you are connected to “%s”."),
 			    cCommonName.get());
 
 	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n\n%s",
@@ -426,14 +426,16 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 	if (LL_CMP(now, >, notAfter))
 	{
 		primary = _("Accept expired security information?");
-		text    = _("The security information for \"%s\" "
+		/* Translators: first %s is a hostname, second %s is a time/date */
+		text    = _("The security information for “%s” "
 			    "expired on %s.");
 		timeToUse = notAfter;
 	} 
 	else
 	{
 		primary = _("Accept not yet valid security information?");
-		text    = _("The security information for \"%s\" isn't valid until %s.");
+		/* Translators: first %s is a hostname, second %s is a time/date */
+		text    = _("The security information for “%s” isn't valid until %s.");
 		timeToUse = notBefore;
 	}
 	
@@ -503,10 +505,10 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 
 	nsEmbedCString cTargetUrl (targetURL);
 
-	primary = g_markup_printf_escaped (_("Cannot establish connection to \"%s\"."),
+	primary = g_markup_printf_escaped (_("Cannot establish connection to “%s”."),
 					   cTargetUrl.get());
 
-	secondary = g_markup_printf_escaped (_("The certificate revocation list (CRL) from \"%s\" "
+	secondary = g_markup_printf_escaped (_("The certificate revocation list (CRL) from “%s” "
 					       "needs to be updated."),
 					     cCommonName.get());
 	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n\n%s",
@@ -568,7 +570,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
-	primary = g_markup_printf_escaped (_("Trust new Certificate Authority \"%s\" to identify web sites?"),
+	primary = g_markup_printf_escaped (_("Trust new Certificate Authority “%s” to identify web sites?"),
 					   cCommonName.get());
 
 	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",

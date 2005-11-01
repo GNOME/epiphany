@@ -1624,15 +1624,15 @@ update_net_state_message (EphyTab *tab, const char *uri, EphyEmbedNetState flags
 	{
 		if (flags & EPHY_EMBED_STATE_REDIRECTING)
 		{
-			msg = _("Redirecting to %s...");
+			msg = _("Redirecting to “%s”...");
 		}
 		else if (flags & EPHY_EMBED_STATE_TRANSFERRING)
 		{
-			msg = _("Transferring data from %s...");
+			msg = _("Transferring data from “%s”...");
 		}
 		else if (flags & EPHY_EMBED_STATE_NEGOTIATING)
 		{
-			msg = _("Waiting for authorization from %s...");
+			msg = _("Waiting for authorization from “%s”...");
 		}
 	}
 
@@ -1640,7 +1640,7 @@ update_net_state_message (EphyTab *tab, const char *uri, EphyEmbedNetState flags
 	{
 		if (flags & EPHY_EMBED_STATE_START)
 		{
-			msg = _("Loading %s...");
+			msg = _("Loading “%s”...");
 		}
 	}
 

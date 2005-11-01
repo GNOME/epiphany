@@ -331,7 +331,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			(GTK_MESSAGE_DIALOG (dialog),
 			/* translators: First %s is the file type description,
 			   Second %s is the file name */
-			_("File Type: %s.\n\nIt is unsafe to open \"%s\" as "
+			_("File Type: “%s”.\n\nIt is unsafe to open “%s” as "
 			  "it could potentially damage your documents or "
 			  "invade your privacy. You can download it instead."),
 			  mime_description, file_name.get());		
@@ -348,7 +348,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			/* translators: First %s is the file type description,
 			   Second %s is the file name,
 			   Third %s is the application used to open the file */
-			_("File Type: %s.\n\nYou can open \"%s\" using \"%s\" or save it."),
+			_("File Type: “%s”.\n\nYou can open “%s” using “%s” or save it."),
 			   mime_description, file_name.get(), mHelperApp->name);		 
 	}
 	else
@@ -362,7 +362,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			(GTK_MESSAGE_DIALOG (dialog),
 			/* translators: First %s is the file type description,
 			   Second %s is the file name */
-			_("File Type: %s.\n\nYou have no application able to open \"%s\". "
+			_("File Type: “%s”.\n\nYou have no application able to open “%s”. "
 			   "You can download it instead."),
 			   mime_description, file_name.get());			 
 	}
