@@ -134,6 +134,7 @@ struct _EphyEmbedIface
 					 gpointer event);
 	void	 (* popup_blocked)	(EphyEmbed *embed,
 					 const char *address,
+					 const char *target,
 					 const char *features);
 	void	 (* security_change)	(EphyEmbed *embed,
 					 EphyEmbedSecurityLevel level);

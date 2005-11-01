@@ -367,8 +367,20 @@ EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 			   NS_CSTRING_ENCODING_UTF8,
 			   popupWindowFeaturesString);
 
-	g_signal_emit_by_name(mOwner->mEmbed, "ge_popup_blocked",
+	nsEmbedCString popupWindowNameString;
+#ifdef HAVE_GECKO_1_9
+	nsEmbedString popupWindowName;
+	rv = popupEvent->GetPopupWindowName (popupWindowName);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+	NS_UTF16ToCString (popupWindowName,
+			   NS_CSTRING_ENCODING_UTF8,
+			   popupWindowNameString);
+#endif
+
+	g_signal_emit_by_name(mOwner->mEmbed, "ge-popup-blocked",
 			      popupWindowURIString.get(),
+			      popupWindowNameString.get(),
 			      popupWindowFeaturesString.get());
 
 	return NS_OK;

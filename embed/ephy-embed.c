@@ -79,6 +79,7 @@ ephy_embed_base_init (gpointer g_class)
  * EphyEmbed::ge-popup-blocked:
  * @embed:
  * @address: The requested URL
+ * @target: The requested window name, e.g. "_blank"
  * @features: The requested features: for example, "height=400,width=200"
  *
  * The ::ge_popup_blocked signal is emitted when the viewed web page requests
@@ -89,9 +90,10 @@ ephy_embed_base_init (gpointer g_class)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (EphyEmbedIface, popup_blocked),
 			      NULL, NULL,
-			      ephy_marshal_VOID__STRING_STRING,
+			      ephy_marshal_VOID__STRING_STRING_STRING,
 			      G_TYPE_NONE,
-			      2,
+			      3,
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**

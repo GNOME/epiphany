@@ -139,6 +139,7 @@ enum
 typedef struct
 {
 	char *url;
+	char *name;
 	char *features;
 } PopupInfo;
 
@@ -522,6 +523,7 @@ static void
 popups_manager_free_info (PopupInfo *popup)
 {
 	g_free (popup->url);
+	g_free (popup->name);
 	g_free (popup->features);
 	g_free (popup);
 }
@@ -529,8 +531,10 @@ popups_manager_free_info (PopupInfo *popup)
 static void
 popups_manager_add (EphyTab *tab,
 		    const char *url,
+		    const char *name,
 		    const char *features)
 {
+	EphyTabPrivate *priv = tab->priv;
 	PopupInfo *popup;
 
 	LOG ("popups_manager_add: tab %p, url %s, features %s",
@@ -541,10 +545,10 @@ popups_manager_add (EphyTab *tab,
 	popup = g_new0 (PopupInfo, 1);
 
 	popup->url = g_strdup (url);
+	popup->name = g_strdup (name);
 	popup->features = g_strdup (features);
 
-	tab->priv->hidden_popups = g_slist_prepend
-		(tab->priv->hidden_popups, popup);
+	priv->hidden_popups = g_slist_prepend (priv->hidden_popups, popup);
 
 	if (popup_blocker_n_hidden (tab) > MAX_HIDDEN_POPUPS) /* bug #160863 */
 	{
@@ -661,8 +665,8 @@ popups_manager_show (PopupInfo *popup,
 	single = EPHY_EMBED_SINGLE
 		(ephy_embed_shell_get_embed_single (embed_shell));
 
-	ephy_embed_single_open_window (single, embed, popup->url, "",
-				       popup->features);
+	ephy_embed_single_open_window (single, embed, popup->url,
+				       popup->name, popup->features);
 
 	popups_manager_free_info (popup);
 }
@@ -720,7 +724,7 @@ popups_manager_hide (EphyWindow *window,
 
 	features = popups_manager_new_window_info (window);
 
-	popups_manager_add (parent_tab, location, features);
+	popups_manager_add (parent_tab, location, "" /* FIXME? maybe _blank? */, features);
 
 	gtk_widget_destroy (GTK_WIDGET (window));
 
@@ -1778,10 +1782,13 @@ ephy_tab_new_window_cb (EphyEmbed *embed,
 }
 
 static void
-ephy_tab_popup_blocked_cb (EphyEmbed *embed, const char *url,
-			   const char *features, EphyTab *tab)
+ephy_tab_popup_blocked_cb (EphyEmbed *embed,
+			   const char *url,
+			   const char *name,
+			   const char *features,
+			   EphyTab *tab)
 {
-	popups_manager_add (tab, url, features);
+	popups_manager_add (tab, url, name, features);
 }
 
 static void

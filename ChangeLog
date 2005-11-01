@@ -1,5 +1,16 @@
 2005-11-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-embed.c: (ephy_embed_base_init):
+	* embed/ephy-embed.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* src/ephy-tab.c: (popups_manager_free_info), (popups_manager_add),
+	(popups_manager_show), (popups_manager_hide),
+	(ephy_tab_popup_blocked_cb):
+
+	Get the window name from the popup-blocked event.
+
+2005-11-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/ContentHandler.cpp:
 	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
 	* embed/mozilla/GtkNSSDialogs.cpp:
