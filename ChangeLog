@@ -1,3 +1,29 @@
+2005-11-01  Philip Langdale  <philipl@mail.utexas.edu>
+
+	* src/ephy-window.c: (ephy_window_key_press_event),
+	(gtk_key_theme_changed_cb), (ephy_window_constructor),
+	(ephy_window_class_init): I accidentally committed my
+	half-complete port of the Galeon key-press event handler
+	that allows emacs keybindings to work when I made my last
+	commit. Whoops.
+
+	This change addresses post-facto comments made by chpe :-)
+
+	Nothing terribly profound; just attaching the GktSettings
+	listener on a per-window, rather than global, basis and
+	detecting the other keycodes for Enter/Return.
+
+	As the original change wasn't described, I will do it here:
+	Gtk+ has optional support for emacs style keybindings in
+	GtkEditable based widgets. But, these keybindings often
+	conflict with toplevel accelerators. To make things work
+	sanely, we'd like the emacs keybindings to take priority when
+	the Editable is focused, and the toplevel accelerators take
+	priority for other widgets. As gtk2 uses outside-in event
+	propagation, we have to attach a topevel event handler to
+	get the event and then pass it on to the focused widget if
+	appropriate - and that is what this change does.
+
 2005-11-01  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/egg/egg-toolbars-model.c: (item_node_new), (item_node_free),
