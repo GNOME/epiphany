@@ -59,7 +59,7 @@ class EphyAboutModule : public nsIAboutModule
 	nsresult Redirect(const nsACString&, nsIChannel**);
 	nsresult ParseURL(const char*, nsACString&, nsACString&, nsACString&, nsACString&, nsACString&);
 #ifdef HAVE_GECKO_1_8
-	nsresult GetErrorMessage(nsIURI*, const char*, char**, char**, char**, char**);
+	nsresult GetErrorMessage(nsIURI*, const char*, char**, char**, char**, char**, char**, char**);
 	nsresult CreateErrorPage(nsIURI*, nsIChannel**);
 #endif
 	nsresult CreateRecoverPage(nsIURI*, nsIChannel**);

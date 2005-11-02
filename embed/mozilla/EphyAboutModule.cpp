@@ -185,16 +185,22 @@ EphyAboutModule::ParseURL(const char *aURL,
 nsresult
 EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 				 const char *aError,
+				 char **aStockIcon,
+				 char **aTitle,
 				 char **aPrimary,
 				 char **aSecondary,
 				 char **aTertiary,
 				 char **aLinkIntro)
 {
+	*aStockIcon = GTK_STOCK_DIALOG_ERROR;
+
 	if (strcmp (aError, "protocolNotFound") == 0)
 	{
 		nsCAutoString scheme;
 		aURI->GetScheme (scheme);
 
+		/* Translators: %s is the name of a protocol, like "http" etc. */
+		*aTitle = g_strdup_printf (_("“%s” Protocol is not Supported"), scheme.get());
 		/* Translators: %s is the name of a protocol, like "http" etc. */
 		*aPrimary = g_strdup_printf (_("“%s” protocol is not supported."), scheme.get());
 		/* FIXME: get the list of supported protocols from necko */
@@ -207,6 +213,8 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		aURI->GetPath (path);
 
 		/* Translators: %s is the path and filename, for example "/home/user/test.html" */
+		*aTitle = g_markup_printf_escaped (_("File “%s” not Found"), path.get());
+		/* Translators: %s is the path and filename, for example "/home/user/test.html" */
 		*aPrimary = g_markup_printf_escaped (_("File “%s” not found."), path.get());
 		*aSecondary = _("Check the location of the file and try again.");
 	}
@@ -215,6 +223,9 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		nsCAutoString host;
 		aURI->GetHost (host);
 
+		/* Translators: %s is the hostname, like "www.example.com" */
+		*aTitle = g_markup_printf_escaped (_("“%s” Could not be Found"),
+						     host.get());
 		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped (_("“%s” could not be found."),
 						     host.get());
@@ -227,6 +238,10 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		nsCAutoString host;
 		aURI->GetHost (host);
 
+		/* Translators: %s is the hostname, like "www.example.com" */
+		*aTitle = g_markup_printf_escaped
+				(_("“%s” Refused the Connection"),
+				 host.get());
 		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” refused the connection."),
@@ -241,6 +256,10 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		aURI->GetHost (host);
 
 		/* Translators: %s is the hostname, like "www.example.com" */
+		*aTitle = g_markup_printf_escaped
+				(_("“%s” Interrupted the Connection"),
+				 host.get());
+		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” interrupted the connection."),
 				 host.get());
@@ -254,6 +273,10 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		aURI->GetHost (host);
 
 		/* Translators: %s is the hostname, like "www.example.com" */
+		*aTitle = g_markup_printf_escaped
+				(_("“%s” is not Responding"),
+				 host.get());
+		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” is not responding."),
 				 host.get());
@@ -265,6 +288,7 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 	}
 	else if (strcmp (aError, "malformedURI") == 0)
 	{
+		*aTitle = g_strdup (_("Invalid Address"));
 		*aPrimary = g_strdup (_("Invalid address."));
 		*aSecondary = g_strdup (_("The address you entered is not valid."));
 	}
@@ -273,6 +297,10 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		nsCAutoString host;
 		aURI->GetHost (host);
 
+		/* Translators: %s is the hostname, like "www.example.com" */
+		*aTitle = g_markup_printf_escaped
+				(_("“%s” Redirected Too Many Times"),
+				 host.get());
 		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” redirected too many times."),
@@ -286,6 +314,10 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		aURI->GetHost (host);
 
 		/* Translators: %s is the hostname, like "www.example.com" */
+		*aTitle = g_markup_printf_escaped
+				(_("“%s” Requires an Encrypted Connection"),
+				 host.get());
+		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” requires an encrypted connection."),
 				 host.get());
@@ -298,6 +330,10 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		aURI->GetHost (host);
 
 		/* Translators: %s is the hostname, like "www.example.com" */
+		*aTitle = g_markup_printf_escaped
+				(_("“%s” Dropped the Connection"),
+				 host.get());
+		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” dropped the connection."),
 				 host.get());
@@ -309,10 +345,12 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 	}
 	else if (strcmp (aError, "netOffline") == 0)
 	{
-		*aPrimary = g_strdup (_("Cannot load document in offline mode."));
-		*aSecondary = _("This document cannot be viewed in offline "
-				"mode. Set Epiphany to “online” "
-				"and try again.");
+		/* Error is a bit too strong here */
+		*aStockIcon = GTK_STOCK_DIALOG_INFO;
+
+		*aTitle = g_strdup (_("Cannot Load Document Whilst Working Offline"));
+		*aPrimary = g_strdup (_("Cannot load document whilst working offline."));
+		*aSecondary = _("To view this document, disable “Work Offline” and try again.");
 	}
 	else if (strcmp (aError, "deniedPortAccess") == 0)
 	{
@@ -322,6 +360,10 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		PRInt32 port = -1;
 		aURI->GetPort (&port);
 
+		/* Translators: %s is the hostname, like "www.example.com" */
+		*aTitle = g_markup_printf_escaped
+				(_("“%s” Denied Access to Port “%d”"),
+				 host.get(), port > 0 ? port : 80);
 		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” denied access to port “%d”."),
@@ -335,14 +377,17 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 	else if (strcmp (aError, "proxyResolveFailure") == 0 ||
 		 strcmp (aError, "proxyConnectFailure") == 0)
 	{
+		*aTitle = g_strdup (_("Could not Connect to Proxy Server"));
 		*aPrimary = g_strdup (_("Could not connect to proxy server."));
 		*aSecondary = _("Check your proxy server settings. "
 				"If the connection still fails, there may be "
 				"a problem with your proxy server or your "
 				"network connection.");
 	}
+	/* This was introduced in gecko 1.9 */
 	else if (strcmp (aError, "contentEncodingError") == 0)
 	{
+		*aTitle = g_strdup (_("Could not Display Content"));
 		*aPrimary = g_strdup (_("Could not display content."));
 		*aSecondary = _("The page uses an unsupported or invalid form of compression.");
 	}
@@ -374,8 +419,10 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 	/* FIXME can uri be NULL if the original url was invalid? */
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	char *primary = nsnull, *secondary = nsnull, *tertiary = nsnull, *linkintro = nsnull;
-	rv = GetErrorMessage (uri, error.get(), &primary, &secondary, &tertiary, &linkintro);
+	char *stock_id = nsnull, *title = nsnull, *primary = nsnull,
+	     *secondary = nsnull, *tertiary = nsnull, *linkintro = nsnull;
+	rv = GetErrorMessage (uri, error.get(), &stock_id, &title, &primary,
+			      &secondary, &tertiary, &linkintro);
 
 	/* we don't know about this error code.
 	 * FIXME: We'd like to forward to mozilla's about:neterror handler,
@@ -396,12 +443,13 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 	NS_ENSURE_TRUE (primary && secondary, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIInputStreamChannel> channel;
-	rv = WritePage (aErrorURI, uri, rawurl, primary /* as title */, GTK_STOCK_DIALOG_ERROR, primary, secondary, tertiary, linkintro, getter_AddRefs (channel));
+	rv = WritePage (aErrorURI, uri, rawurl, title, stock_id, primary, secondary, tertiary, linkintro, getter_AddRefs (channel));
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	rv = channel->SetURI (aErrorURI);
 	NS_ENSURE_SUCCESS (rv, rv);
 
+	g_free (title);
 	g_free (primary);
 
 	return CallQueryInterface (channel, _retval);
