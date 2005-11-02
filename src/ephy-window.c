@@ -381,6 +381,8 @@ static const struct
 
 #define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"
 
+#define SETTINGS_CONNECTION_DATA_KEY	"EphyWindowSettings"
+
 /* Until https://bugzilla.mozilla.org/show_bug.cgi?id=296002 is fixed */
 #define KEEP_TAB_IN_SAME_TOPLEVEL
 
@@ -413,6 +415,9 @@ struct _EphyWindowPrivate
 
 	guint browse_with_caret_notifier_id;
 	guint allow_popups_notifier_id;
+
+	guint menubar_accel_keyval;
+	guint menubar_accel_modifier;
 
 	guint closing : 1;
 	guint has_size : 1;
@@ -484,20 +489,48 @@ ephy_window_get_type (void)
 }
 
 static void
-gtk_key_theme_changed_cb (GtkSettings *settings,
-                          GParamSpec  *pspec,
-                          EphyWindow  *window)
+settings_change_notify (GtkSettings *settings,
+			EphyWindow  *window)
 {
-	gchar *key_theme_name;
+	EphyWindowPrivate *priv = window->priv;
+	char *key_theme_name, *menubar_accel_accel;
 
 	g_object_get (settings,
 		      "gtk-key-theme-name", &key_theme_name,
+		      "gtk-menu-bar-accel", &menubar_accel_accel,
 		      NULL);
 
- 	window->priv->key_theme_is_emacs =
- 	   key_theme_name && g_ascii_strcasecmp (key_theme_name, "Emacs") == 0;
+	g_return_if_fail (menubar_accel_accel != NULL);
+			      
+	gtk_accelerator_parse (menubar_accel_accel,
+			       &priv->menubar_accel_keyval,
+			       &priv->menubar_accel_modifier);
+
+	priv->key_theme_is_emacs =
+		key_theme_name &&
+		g_ascii_strcasecmp (key_theme_name, "Emacs") == 0;
 
 	g_free (key_theme_name);
+	g_free (menubar_accel_accel);
+}
+
+static void
+settings_changed_cb (GtkSettings *settings)
+{
+	GList *list, *l;
+
+	/* FIXME: multi-head */
+	list = gtk_window_list_toplevels ();
+
+	for (l = list; l != NULL; l = l->next)
+	{
+		if (EPHY_IS_WINDOW (l->data))
+		{
+			settings_change_notify (settings, l->data);
+		}
+	}
+
+	g_list_free (list);
 }
 
 static void
@@ -709,10 +742,10 @@ ephy_window_key_press_event (GtkWidget *widget,
 			     GdkEventKey *event)
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
-	GtkWidget *menubar;
-	guint keyval = GDK_F10;
-	guint mask = gtk_accelerator_get_default_mod_mask ();
-	char *accel = NULL;
+	EphyWindowPrivate *priv = window->priv;
+	GtkWidget *menubar, *focus_widget;
+	gboolean shortcircuit = FALSE, force_chain = FALSE, handled = FALSE;
+	guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
 
 	/* In an attempt to get the mozembed playing nice with things like emacs keybindings
 	 * we are passing important events to the focused child widget before letting the window's
@@ -729,19 +762,15 @@ ephy_window_key_press_event (GtkWidget *widget,
 	 * widget), otherwise the event follows the normal handling path.
 	 */
 
-	gboolean shortcircuit = FALSE;
-	gboolean force_chain  = FALSE;
-	gboolean handled = FALSE;
-	guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
-
-	if (event->keyval == GDK_Escape)
+	if (event->keyval == GDK_Escape && modifier == 0)
 	{
 		/* Always pass Escape to both the widget, and the parent */
 		shortcircuit = TRUE;
 		force_chain = TRUE;
 	}
-	else if (window->priv->key_theme_is_emacs && 
-		 (modifier == GDK_CONTROL_MASK) && event->length > 0 &&
+	else if (priv->key_theme_is_emacs && 
+		 (modifier == GDK_CONTROL_MASK) &&
+		 event->length > 0 &&
 		 /* But don't pass Ctrl+Enter twice */
 		 event->keyval != GDK_Return &&
 		 event->keyval != GDK_KP_Enter &&
@@ -753,11 +782,12 @@ ephy_window_key_press_event (GtkWidget *widget,
 
 	if (shortcircuit)
 	{
-		GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+		focus_widget = gtk_window_get_focus (GTK_WINDOW (window));
 
-		if (GTK_IS_WIDGET (widget))
+		if (GTK_IS_WIDGET (focus_widget))
 		{
-			handled = gtk_widget_event (widget, (GdkEvent*)event);
+			handled = gtk_widget_event (focus_widget,
+						    (GdkEvent*) event);
 		}
 
 		if (handled && !force_chain)
@@ -789,24 +819,14 @@ ephy_window_key_press_event (GtkWidget *widget,
 #endif
 
 	/* Don't activate menubar in ppv mode, or in lockdown mode */
-	if (window->priv->ppv_mode || eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
+	if (priv->ppv_mode || eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
 	{
 		return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
 	}
 
-	g_object_get (gtk_widget_get_settings (widget),
-		      "gtk-menu-bar-accel", &accel,
-		      NULL);
-
-	if (accel != NULL)
-	{
-		gtk_accelerator_parse (accel, &keyval, &modifier);
-
-		g_free (accel);
-	}
-
 	/* Show and activate the menubar, if it isn't visible */
-	if (event->keyval == keyval && (event->state & mask) == (modifier & mask))
+	if (event->keyval == priv->menubar_accel_keyval &&
+            modifier == priv->menubar_accel_modifier)
 	{
 		menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");
 		g_return_val_if_fail (menubar != NULL , FALSE);
@@ -823,7 +843,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 		}
 	}
 
-	return GTK_WIDGET_CLASS(parent_class)->key_press_event(widget, event);
+	return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
 }
 
 static gboolean
@@ -3003,6 +3023,7 @@ ephy_window_constructor (GType type,
 	GtkSettings *settings;
 	GtkAction *action;
 	GError *error = NULL;
+	guint settings_connection;
 
 	object = parent_class->constructor (type, n_construct_properties,
 					    construct_params);
@@ -3020,11 +3041,19 @@ ephy_window_constructor (GType type,
 	 * FIXME: Need to handle multi-head and migration.
 	 */
 	settings = gtk_settings_get_default ();
-	g_signal_connect (settings,
-			  "notify::gtk-key-theme-name",
-			  G_CALLBACK (gtk_key_theme_changed_cb),
-			  window);
-	gtk_key_theme_changed_cb (settings, NULL, window);
+	settings_connection = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (settings),
+								   SETTINGS_CONNECTION_DATA_KEY));
+	if (settings_connection == 0)
+	{
+		settings_connection =
+			g_signal_connect (settings, "notify::gtk-key-theme-name",
+					  G_CALLBACK (settings_changed_cb), NULL);
+		g_object_set_data (G_OBJECT (settings), SETTINGS_CONNECTION_DATA_KEY,
+				   GUINT_TO_POINTER (settings_connection));
+
+	}
+
+	settings_change_notify (settings, window);
 
 	/* Setup the UI manager and connect verbs */
 	setup_ui_manager (window);

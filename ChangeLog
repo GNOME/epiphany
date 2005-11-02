@@ -1,5 +1,15 @@
 2005-11-02  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-window.c: (settings_change_notify),
+	(settings_changed_cb), (ephy_window_key_press_event),
+	(ephy_window_constructor):
+
+	Use a single connection to the settings object, and
+	also store the menubar accel instead of parsing it on
+	each keypress.
+
+2005-11-02  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.c:
 
 	Revert change from H18 patch which shouldn't have been committed.
