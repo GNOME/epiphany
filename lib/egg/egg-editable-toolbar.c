@@ -687,7 +687,8 @@ create_item_from_action (EggEditableToolbar *etoolbar,
   else
     {
       GtkAction *action = find_action (etoolbar, name);
-      g_return_val_if_fail (action != NULL, NULL);
+      if (action == NULL) return NULL;
+	
       item = GTK_TOOL_ITEM (gtk_action_create_tool_item (action));
 
       /* Normally done on-demand by the GtkUIManager, but no
@@ -1083,6 +1084,8 @@ item_added_cb (EggToolbarsModel   *model,
 
   toolbar = get_toolbar_nth (etoolbar, tpos);
   item = create_item_from_position (etoolbar, tpos, ipos);
+  if (item == NULL) return;
+    
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, ipos);
   
   connect_widget_signals (GTK_WIDGET (item), etoolbar);
