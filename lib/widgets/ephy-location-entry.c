@@ -77,6 +77,11 @@ struct _EphyLocationEntryPrivate
 
 	guint hash;
 
+	int drag_start_x;
+	int drag_start_y;
+	guint button;
+
+	guint in_drag : 1; /* Drag from the favicon handle */
 	guint user_changed : 1;
 	guint original_address : 1;
 	guint secure : 1;
@@ -616,6 +621,130 @@ each_url_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 	g_free (title);
 }
 
+#define DRAG_ICON_LAYOUT_BORDER		2
+#define DRAG_ICON_ICON_SPACING		DRAG_ICON_LAYOUT_BORDER * 2
+#define DRAG_ICON_MAX_WIDTH_CHARS	32
+
+static GdkPixmap *
+favicon_create_drag_pixmap (EphyLocationEntry *entry,
+			    GtkWidget *widget)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+	char *title = NULL, *address = NULL;
+	GString *text;
+	GdkDrawable *drawable;
+	PangoContext *context;
+	PangoLayout  *layout;
+	PangoFontMetrics *metrics;
+	int pixmap_height, pixmap_width;
+	int layout_width, layout_height;
+	int icon_width = 0, icon_height = 0, offset_x = 0;
+	int char_width;
+
+	g_signal_emit (entry, signals[GET_LOCATION], 0, &address);
+	g_signal_emit (entry, signals[GET_TITLE], 0, &title);
+	if (address == NULL || title == NULL) return NULL;
+
+	/* Compute text */
+	title = g_strstrip (title);
+
+	text = g_string_sized_new (strlen (address) + strlen (title) + 2);
+	if (title[0] != '\0')
+	{
+		g_string_append (text, title);
+		g_string_append (text, "\n");
+	}
+
+	if (address[0] != '\0')
+	{
+		g_string_append (text, address);
+	}
+
+	/* Now build the pixmap */
+
+	if (priv->favicon != NULL)
+	{
+		icon_width = gdk_pixbuf_get_width (priv->favicon);
+		icon_height = gdk_pixbuf_get_height (priv->favicon);
+	}
+
+	context = gtk_widget_get_pango_context (widget);
+	layout = pango_layout_new (context);
+
+	context = gtk_widget_get_pango_context (widget);
+	metrics = pango_context_get_metrics (context,
+					     widget->style->font_desc,
+					     pango_context_get_language (context));
+
+	char_width = pango_font_metrics_get_approximate_digit_width (metrics);
+	pango_font_metrics_unref (metrics);
+
+	pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
+	pango_layout_set_width (layout, char_width * DRAG_ICON_MAX_WIDTH_CHARS);
+	pango_layout_set_text (layout, text->str, text->len);
+
+	pango_layout_get_size (layout, &layout_width, &layout_height);
+
+	pixmap_width  = layout_width  / PANGO_SCALE + DRAG_ICON_LAYOUT_BORDER * 2;
+
+	if (priv->favicon != NULL)
+	{
+		offset_x = icon_width + 2 * DRAG_ICON_ICON_SPACING;
+		pixmap_width += offset_x;
+		pixmap_height = MAX (layout_height / PANGO_SCALE, icon_height) + DRAG_ICON_LAYOUT_BORDER * 2;
+	}
+	else
+	{
+		pixmap_height = layout_height / PANGO_SCALE + DRAG_ICON_LAYOUT_BORDER * 2;
+	}
+
+	drawable = gdk_pixmap_new (widget->window,
+				   pixmap_width  + 2,
+				   pixmap_height + 2,
+				   -1);
+
+	gdk_draw_rectangle (drawable,
+			    widget->style->base_gc [GTK_WIDGET_STATE (widget)],
+			    TRUE,
+			    0, 0,
+			    pixmap_width + 1,
+			    pixmap_height + 1);
+
+
+	if (priv->favicon != NULL)
+	{
+		gdk_draw_pixbuf (drawable,
+				 widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				 priv->favicon,
+				 0, 0, 
+				 1 + DRAG_ICON_LAYOUT_BORDER + DRAG_ICON_ICON_SPACING,
+				 1 + DRAG_ICON_LAYOUT_BORDER + (pixmap_height - icon_height) / 2,
+				 -1, -1,
+				 GDK_RGB_DITHER_NONE, 0, 0);
+	}
+
+	gdk_draw_layout (drawable,
+			 widget->style->text_gc [GTK_WIDGET_STATE (widget)],
+			 1 + DRAG_ICON_LAYOUT_BORDER + offset_x,
+			 1 + DRAG_ICON_LAYOUT_BORDER,
+			 layout);
+
+	gdk_draw_rectangle (drawable,
+			    widget->style->black_gc,
+			    FALSE,
+			    0, 0,
+			    pixmap_width + 1,
+			    pixmap_height + 1);
+
+	g_object_unref (layout);
+
+	g_free (address);
+	g_free (title);
+	g_string_free (text,TRUE);
+
+	return drawable;
+}
+
 static void
 favicon_drag_data_get_cb (GtkWidget *widget,
 			  GdkDragContext *context,
@@ -629,6 +758,102 @@ favicon_drag_data_get_cb (GtkWidget *widget,
 
 	ephy_dnd_drag_data_get (widget, context, selection_data,
 		time, entry, each_url_get_data_binder);
+}
+
+static gboolean
+favicon_button_press_event_cb (GtkWidget *ebox,
+			       GdkEventButton *event,
+			       EphyLocationEntry *entry)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+
+	if (event->button == 1 &&
+	    (event->state & gtk_accelerator_get_default_mod_mask ()) == 0)
+	{
+		if (event->type == GDK_BUTTON_PRESS)
+		{
+			priv->in_drag = TRUE;
+			priv->drag_start_x = event->x;
+			priv->drag_start_y = event->y;
+			priv->button = event->button;
+		}
+		else
+		{
+			/* We always get a GDK_BUTTON_PRESS before a GDK_2BUTTON_PRESS
+			 * or GDK_3BUTTON_PRES, so we need to reset in_drag here.
+			 */
+			priv->in_drag = FALSE;
+		}
+	}
+
+	return FALSE;
+}
+
+static gboolean
+favicon_button_release_event_cb (GtkWidget *ebox,
+				 GdkEventButton *event,
+				 EphyLocationEntry *entry)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+
+	priv->in_drag = FALSE;
+
+	return FALSE;
+}
+
+static gint
+favicon_motion_notify_event_cb (GtkWidget *widget,
+				GdkEventMotion *event,
+				EphyLocationEntry *entry)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+
+	if (/* FIXME why this doesn't work? event->window != widget->window || */
+	    priv->button != 1 ||
+	    !priv->in_drag)
+	{
+		return FALSE;
+	}
+
+	if (gtk_drag_check_threshold (widget,
+				      priv->drag_start_x,
+				      priv->drag_start_y,
+				      event->x, event->y))
+	{
+		GdkDragContext *context;
+		GdkPixmap *pixmap = NULL;
+		GtkTargetList  *target_list;
+
+		target_list = gtk_target_list_new (NULL, 0);
+		/* gtk_target_list_add_uri_targets (target_list, 0); */
+		gtk_target_list_add_table (target_list, url_drag_types,
+					   G_N_ELEMENTS (url_drag_types));
+		/* gtk_target_list_add_text_targets (target_list, 0); */
+
+		pixmap = favicon_create_drag_pixmap (entry, widget);
+
+		context = gtk_drag_begin (widget, target_list,
+					  GDK_ACTION_COPY | GDK_ACTION_MOVE,
+					  priv->button, (GdkEvent *) event);
+		if (pixmap != NULL)
+		{
+			gtk_drag_set_icon_pixmap (context,
+						  gdk_drawable_get_colormap (pixmap),
+						  pixmap, NULL, -2, -2);
+			g_object_unref (pixmap);
+		}
+		else
+		{
+			gtk_drag_set_icon_default (context);
+		}
+
+		priv->in_drag = FALSE;
+		priv->button = 0;
+  
+		gtk_target_list_unref (target_list);
+	}
+
+	return TRUE;
 }
 
 static gboolean
@@ -665,9 +890,15 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 	priv->icon_ebox = gtk_event_box_new ();
 	gtk_container_set_border_width (GTK_CONTAINER (priv->icon_ebox), 2);
 	gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->icon_ebox), FALSE);
+	gtk_widget_add_events (priv->icon_ebox, GDK_BUTTON_PRESS_MASK |
+			      			GDK_BUTTON_RELEASE_MASK |
+						GDK_POINTER_MOTION_HINT_MASK);
+#if 0
 	gtk_drag_source_set (priv->icon_ebox, GDK_BUTTON1_MASK,
 			     url_drag_types, G_N_ELEMENTS (url_drag_types),
 			     GDK_ACTION_ASK | GDK_ACTION_COPY | GDK_ACTION_LINK);
+#endif
+
 	gtk_tooltips_set_tip (priv->tips, priv->icon_ebox,
 			      _("Drag and drop this icon to create a link to this page"), NULL);
 
@@ -689,6 +920,13 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
 	g_signal_connect (priv->icon_ebox, "drag-data-get",
 			  G_CALLBACK (favicon_drag_data_get_cb), entry);
+	g_signal_connect (priv->icon_ebox, "button-press-event",
+			  G_CALLBACK (favicon_button_press_event_cb), entry);
+	g_signal_connect (priv->icon_ebox, "button-release-event",
+			  G_CALLBACK (favicon_button_release_event_cb), entry);
+	g_signal_connect (priv->icon_ebox, "motion-notify-event",
+			  G_CALLBACK (favicon_motion_notify_event_cb), entry);
+
 	g_signal_connect (priv->lock_ebox, "button-press-event",
 			  G_CALLBACK (lock_button_press_event_cb), entry);
 
