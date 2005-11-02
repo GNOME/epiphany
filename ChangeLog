@@ -1,5 +1,16 @@
 2005-11-02  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/ui/epiphany-ui.xml:
+	* src/ephy-window.c: (update_popup_actions_visibility),
+	(show_embed_popup):
+
+	Simplify context menu code by removing the extra
+	EphyDocument*FramePopup variants, and just setting the OpenFrame
+	action's visibility accordingly; and fix its accelerator.
+	Fixes bug #320520.
+
+2005-11-02  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/EphyAboutModule.cpp:
 	* embed/mozilla/EphyAboutModule.h:
 

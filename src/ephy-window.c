@@ -306,7 +306,7 @@ static const GtkActionEntry ephy_popups_entries [] = {
 
 	/* Framed document */
 
-	{ "OpenFrame", NULL, N_("Show Only This _Frame"), NULL,
+	{ "OpenFrame", NULL, N_("Show Only _This Frame"), NULL,
 	  N_("Show only this frame in this window"),
 	  G_CALLBACK (popup_cmd_open_frame) },
 
@@ -914,7 +914,9 @@ ephy_window_delete_event (GtkWidget *widget,
 }
 
 static void
-update_image_actions_visibility (EphyWindow *window, gboolean show)
+update_popup_actions_visibility (EphyWindow *window,
+				 gboolean is_image,
+				 gboolean is_frame)
 {
 	GtkAction *action;
 	GtkActionGroup *action_group;
@@ -922,13 +924,16 @@ update_image_actions_visibility (EphyWindow *window, gboolean show)
 	action_group = window->priv->popups_action_group;
 
 	action = gtk_action_group_get_action (action_group, "OpenImage");
-	gtk_action_set_visible (action, show);
+	gtk_action_set_visible (action, is_image);
 	action = gtk_action_group_get_action (action_group, "SaveImageAs");
-	gtk_action_set_visible (action, show);
+	gtk_action_set_visible (action, is_image);
 	action = gtk_action_group_get_action (action_group, "SetImageAsBackground");
-	gtk_action_set_visible (action, show);
+	gtk_action_set_visible (action, is_image);
 	action = gtk_action_group_get_action (action_group, "CopyImageLocation");
-	gtk_action_set_visible (action, show);
+	gtk_action_set_visible (action, is_image);
+
+	action = gtk_action_group_get_action (action_group, "OpenFrame");
+	gtk_action_set_visible (action, is_frame);
 }
 
 static void
@@ -1951,14 +1956,12 @@ show_embed_popup (EphyWindow *window,
 	}
 	else if (window->priv->fullscreen_mode)
 	{
-		popup = framed ? "/EphyFullscreenFramedDocumentPopup" :
-				 "/EphyFullscreenDocumentPopup";
+		popup = "/EphyFullscreenDocumentPopup";
 		update_edit_actions_sensitivity (window, TRUE);
 	}
 	else
 	{
-		popup = framed ? "/EphyFramedDocumentPopup" :
-				 "/EphyDocumentPopup";
+		popup = "/EphyDocumentPopup";
 		update_edit_actions_sensitivity (window, TRUE);
 	}
 
@@ -1975,7 +1978,10 @@ show_embed_popup (EphyWindow *window,
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !can_open_in_new);
 
-	update_image_actions_visibility (window, context & EPHY_EMBED_CONTEXT_IMAGE);
+	
+	update_popup_actions_visibility (window,
+					 context & EPHY_EMBED_CONTEXT_IMAGE,
+					 framed);
 
 	_ephy_window_set_context_event (window, event);
 
