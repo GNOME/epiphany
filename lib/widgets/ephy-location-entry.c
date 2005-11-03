@@ -77,11 +77,6 @@ struct _EphyLocationEntryPrivate
 
 	guint hash;
 
-	int drag_start_x;
-	int drag_start_y;
-	guint button;
-
-	guint in_drag : 1; /* Drag from the favicon handle */
 	guint user_changed : 1;
 	guint original_address : 1;
 	guint secure : 1;
@@ -746,6 +741,25 @@ favicon_create_drag_pixmap (EphyLocationEntry *entry,
 }
 
 static void
+favicon_drag_begin_cb (GtkWidget *widget,
+		       GdkDragContext *context,
+		       EphyLocationEntry *entry)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+	GdkPixmap *pixmap;
+
+	pixmap = favicon_create_drag_pixmap (entry, widget);
+
+	if (pixmap != NULL)
+	{
+		gtk_drag_set_icon_pixmap (context,
+					  gdk_drawable_get_colormap (pixmap),
+					  pixmap, NULL, -2, -2);
+		g_object_unref (pixmap);
+	}
+}
+
+static void
 favicon_drag_data_get_cb (GtkWidget *widget,
 			  GdkDragContext *context,
 			  GtkSelectionData *selection_data,
@@ -758,102 +772,6 @@ favicon_drag_data_get_cb (GtkWidget *widget,
 
 	ephy_dnd_drag_data_get (widget, context, selection_data,
 		time, entry, each_url_get_data_binder);
-}
-
-static gboolean
-favicon_button_press_event_cb (GtkWidget *ebox,
-			       GdkEventButton *event,
-			       EphyLocationEntry *entry)
-{
-	EphyLocationEntryPrivate *priv = entry->priv;
-
-	if (event->button == 1 &&
-	    (event->state & gtk_accelerator_get_default_mod_mask ()) == 0)
-	{
-		if (event->type == GDK_BUTTON_PRESS)
-		{
-			priv->in_drag = TRUE;
-			priv->drag_start_x = event->x;
-			priv->drag_start_y = event->y;
-			priv->button = event->button;
-		}
-		else
-		{
-			/* We always get a GDK_BUTTON_PRESS before a GDK_2BUTTON_PRESS
-			 * or GDK_3BUTTON_PRES, so we need to reset in_drag here.
-			 */
-			priv->in_drag = FALSE;
-		}
-	}
-
-	return FALSE;
-}
-
-static gboolean
-favicon_button_release_event_cb (GtkWidget *ebox,
-				 GdkEventButton *event,
-				 EphyLocationEntry *entry)
-{
-	EphyLocationEntryPrivate *priv = entry->priv;
-
-	priv->in_drag = FALSE;
-
-	return FALSE;
-}
-
-static gint
-favicon_motion_notify_event_cb (GtkWidget *widget,
-				GdkEventMotion *event,
-				EphyLocationEntry *entry)
-{
-	EphyLocationEntryPrivate *priv = entry->priv;
-
-	if (/* FIXME why this doesn't work? event->window != widget->window || */
-	    priv->button != 1 ||
-	    !priv->in_drag)
-	{
-		return FALSE;
-	}
-
-	if (gtk_drag_check_threshold (widget,
-				      priv->drag_start_x,
-				      priv->drag_start_y,
-				      event->x, event->y))
-	{
-		GdkDragContext *context;
-		GdkPixmap *pixmap = NULL;
-		GtkTargetList  *target_list;
-
-		target_list = gtk_target_list_new (NULL, 0);
-		/* gtk_target_list_add_uri_targets (target_list, 0); */
-		gtk_target_list_add_table (target_list, url_drag_types,
-					   G_N_ELEMENTS (url_drag_types));
-		/* gtk_target_list_add_text_targets (target_list, 0); */
-
-		pixmap = favicon_create_drag_pixmap (entry, widget);
-
-		context = gtk_drag_begin (widget, target_list,
-					  GDK_ACTION_COPY | GDK_ACTION_MOVE,
-					  priv->button, (GdkEvent *) event);
-		if (pixmap != NULL)
-		{
-			gtk_drag_set_icon_pixmap (context,
-						  gdk_drawable_get_colormap (pixmap),
-						  pixmap, NULL, -2, -2);
-			g_object_unref (pixmap);
-		}
-		else
-		{
-			gtk_drag_set_icon_default (context);
-		}
-
-		priv->in_drag = FALSE;
-		priv->button = 0;
-  
-		gtk_target_list_unref (target_list);
-	}
-
-	return TRUE;
 }
 
 static gboolean
@@ -893,11 +811,9 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 	gtk_widget_add_events (priv->icon_ebox, GDK_BUTTON_PRESS_MASK |
 			      			GDK_BUTTON_RELEASE_MASK |
 						GDK_POINTER_MOTION_HINT_MASK);
-#if 0
 	gtk_drag_source_set (priv->icon_ebox, GDK_BUTTON1_MASK,
 			     url_drag_types, G_N_ELEMENTS (url_drag_types),
 			     GDK_ACTION_ASK | GDK_ACTION_COPY | GDK_ACTION_LINK);
-#endif
 
 	gtk_tooltips_set_tip (priv->tips, priv->icon_ebox,
 			      _("Drag and drop this icon to create a link to this page"), NULL);
@@ -920,12 +836,8 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
 	g_signal_connect (priv->icon_ebox, "drag-data-get",
 			  G_CALLBACK (favicon_drag_data_get_cb), entry);
-	g_signal_connect (priv->icon_ebox, "button-press-event",
-			  G_CALLBACK (favicon_button_press_event_cb), entry);
-	g_signal_connect (priv->icon_ebox, "button-release-event",
-			  G_CALLBACK (favicon_button_release_event_cb), entry);
-	g_signal_connect (priv->icon_ebox, "motion-notify-event",
-			  G_CALLBACK (favicon_motion_notify_event_cb), entry);
+	g_signal_connect (priv->icon_ebox, "drag-begin",
+			  G_CALLBACK (favicon_drag_begin_cb), entry);
 
 	g_signal_connect (priv->lock_ebox, "button-press-event",
 			  G_CALLBACK (lock_button_press_event_cb), entry);
