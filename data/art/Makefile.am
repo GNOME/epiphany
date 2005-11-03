@@ -4,8 +4,7 @@ art_DATA = \
 	epiphany-download.png \
 	epiphany-history.png	\
 	epiphany-popup-hidden.png \
-	epiphany-bookmarks.png \
-	hand-open.png
+	epiphany-bookmarks.png
 
 appicon_DATA = epiphany-bookmarks.png
 appicondir = $(datadir)/pixmaps

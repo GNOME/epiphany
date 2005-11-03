@@ -308,7 +308,8 @@ drag_data_get_cb (GtkWidget          *widget,
   target = g_object_get_data (G_OBJECT (widget), "egg-item-name");
   g_return_if_fail (target != NULL);
   
-  gtk_selection_data_set (selection_data, selection_data->target, 8, target, strlen (target));
+  gtk_selection_data_set (selection_data, selection_data->target, 8,
+			  (const guchar *) target, strlen (target));
 }
 
 static gchar *
@@ -341,14 +342,12 @@ static void
 set_drag_cursor (GtkWidget *widget)
 {
   GdkCursor *cursor;
-  GdkPixbuf *pixbuf;
-
-  pixbuf = gdk_pixbuf_new_from_file (CURSOR_DIR "/hand-open.png", NULL);
-  cursor = gdk_cursor_new_from_pixbuf (gdk_display_get_default (), pixbuf, 12, 12);
+  
+  /* FIXME multihead */
+  cursor = gdk_cursor_new (GDK_HAND2);
 
   gdk_window_set_cursor (widget->window, cursor);
   gdk_cursor_unref (cursor);
-  g_object_unref (pixbuf);
 }
 
 static void
