@@ -22,6 +22,7 @@
 #define TYPEAHEADFIND_H
 
 #include "ephy-embed.h"
+#include "ephy-embed-find.h"
 
 #include <nsCOMPtr.h>
 #include <gdk/gdktypes.h>
@@ -40,9 +41,9 @@ class EphyFind
     void SetFindProperties (const char *aSearchString,
 			    PRBool aCaseSensitive);
 
-    PRBool Find (const char *aSearchString,
-                 PRBool aLinksOnly);
-    PRBool FindAgain (PRBool aForward);
+    EphyEmbedFindResult Find (const char *aSearchString,
+			      PRBool aLinksOnly);
+    EphyEmbedFindResult FindAgain (PRBool aForward);
     PRBool ActivateLink (GdkModifierType aMask);
 
   private:

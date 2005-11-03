@@ -62,7 +62,7 @@ impl_set_properties (EphyEmbedFind *efind,
 	priv->find->SetFindProperties (find_string, case_sensitive);
 }
 
-static gboolean
+static EphyEmbedFindResult
 impl_find (EphyEmbedFind *efind,
 	     const char *find_string,
 	     gboolean links_only)
@@ -73,7 +73,7 @@ impl_find (EphyEmbedFind *efind,
 	return priv->find->Find (find_string, links_only);
 }
 
-static gboolean
+static EphyEmbedFindResult
 impl_find_again (EphyEmbedFind *efind,
 		   gboolean forward)
 {

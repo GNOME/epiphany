@@ -46,7 +46,15 @@ ephy_embed_find_set_properties (EphyEmbedFind *find,
 	iface->set_properties (find, search_string, case_sensitive);
 }
 
-gboolean
+/**
+ * ephy_embed_find_find:
+ * @embed: an #EphyEmbedFind
+ * @search_string: the text to search for
+ * @links_only: whether to only search the text in links
+ *
+ * Return value: whether a match was found
+ **/
+EphyEmbedFindResult
 ephy_embed_find_find (EphyEmbedFind *find,
 		      const char *search_string,
 		      gboolean links_only)
@@ -56,13 +64,13 @@ ephy_embed_find_find (EphyEmbedFind *find,
 }
 
 /**
- * ephy_embed_find_search_again:
+ * ephy_embed_find_find_again:
  * @embed: an #EphyEmbedFind
  * @forward %TRUE to search forwards in the document
  *
- * Return value: %TRUE if a match was found
+ * Return value: whether a match was found
  **/
-gboolean
+EphyEmbedFindResult
 ephy_embed_find_find_again (EphyEmbedFind *find,
 			    gboolean forward)
 {
@@ -76,6 +84,8 @@ ephy_embed_find_find_again (EphyEmbedFind *find,
  * @mask:
  * 
  * Activates the currently focused link, if there is any.
+ * 
+ * Return value: %TRUE if a link was activated
  **/
 gboolean
 ephy_embed_find_activate_link (EphyEmbedFind *find,

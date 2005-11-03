@@ -52,6 +52,9 @@ struct _EphyFindToolbarPrivate
 	GtkWidget *entry;
 	GtkToolItem *next;
 	GtkToolItem *prev;
+	GtkToolItem *sep;
+	GtkToolItem *status_item;
+	GtkWidget *status_label;
 	gulong set_focus_handler;
 	guint preedit_changed : 1;
 	guint prevent_activate : 1;
@@ -109,6 +112,42 @@ set_controls (EphyFindToolbar *toolbar,
 
 	gtk_widget_set_sensitive (GTK_WIDGET (priv->next), can_find_next);
 	gtk_widget_set_sensitive (GTK_WIDGET (priv->prev), can_find_prev);
+}
+
+static void
+set_status (EphyFindToolbar *toolbar,
+	    EphyEmbedFindResult result)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+	char *text = NULL;
+
+	switch (result)
+	{
+		case EPHY_EMBED_FIND_FOUND:
+			text = NULL;
+			break;
+		case EPHY_EMBED_FIND_NOTFOUND:
+			text = _("Phrase not found");
+			break;
+		case EPHY_EMBED_FIND_FOUNDWRAPPED:
+			text = _("Find wrapped");
+			break;
+	}
+
+	gtk_label_set_text (GTK_LABEL (priv->status_label),
+			    text != NULL ? text : "");
+
+	g_object_set (priv->sep, "visible", text != NULL, NULL);
+	g_object_set (priv->status_item, "visible", text != NULL, NULL);
+}
+
+static void
+clear_status (EphyFindToolbar *toolbar)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+
+	gtk_widget_hide (GTK_WIDGET (priv->sep));
+	gtk_widget_hide (GTK_WIDGET (priv->status_item));
 }
 
 static void
@@ -268,6 +307,7 @@ entry_changed_cb (GtkEntry *entry,
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	const char *text;
 	char *lowercase;
+	EphyEmbedFindResult result;
 	gboolean found = TRUE, case_sensitive;
 
 	text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
@@ -281,7 +321,10 @@ entry_changed_cb (GtkEntry *entry,
 
 	ephy_embed_find_set_properties (get_find (toolbar), text, case_sensitive);
 #ifdef HAVE_TYPEAHEADFIND
-	found = ephy_embed_find_find (get_find (toolbar), text, priv->links_only);
+	result = ephy_embed_find_find (get_find (toolbar), text, priv->links_only);
+
+	found = result == EPHY_EMBED_FIND_FOUND;
+	set_status (toolbar, result);
 #endif
 	set_controls (toolbar, found, found);
 }
@@ -449,6 +492,17 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 	gtk_widget_show_all (GTK_WIDGET (item));
 
+	/* Prev */
+	arrow = gtk_arrow_new (GTK_ARROW_LEFT, GTK_SHADOW_NONE);
+	label = gtk_label_new (_("Find Previous"));
+	priv->prev = gtk_tool_button_new (arrow, _("Find Previous"));
+	gtk_tool_item_set_is_important (priv->prev, TRUE);
+	gtk_tool_item_set_tooltip (priv->prev, gtoolbar->tooltips,
+				   _("Find previous occurrence of the search string"),
+				   NULL);
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->prev, -1);
+	gtk_widget_show_all (GTK_WIDGET (priv->prev));
+
 	/* Next */
 	arrow = gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
 	label = gtk_label_new (_("Find Next"));
@@ -460,16 +514,17 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->next, -1);
 	gtk_widget_show_all (GTK_WIDGET (priv->next));
 
-	/* Prev */
-	arrow = gtk_arrow_new (GTK_ARROW_LEFT, GTK_SHADOW_NONE);
-	label = gtk_label_new (_("Find Previous"));
-	priv->prev = gtk_tool_button_new (arrow, _("Find Previous"));
-	gtk_tool_item_set_is_important (priv->prev, TRUE);
-	gtk_tool_item_set_tooltip (priv->prev, gtoolbar->tooltips,
-				   _("Find previous occurrence of the search string"),
-				   NULL);
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->prev, -1);
-	gtk_widget_show_all (GTK_WIDGET (priv->prev));
+	priv->sep = gtk_separator_tool_item_new ();
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->sep, -1);
+	
+	priv->status_item = gtk_tool_item_new ();
+	gtk_tool_item_set_expand (priv->status_item, TRUE);
+	priv->status_label = gtk_label_new ("");
+	gtk_misc_set_alignment (GTK_MISC (priv->status_label), 0.0, 0.5);
+	gtk_label_set_ellipsize (GTK_LABEL (priv->status_label), PANGO_ELLIPSIZE_END);
+	gtk_container_add (GTK_CONTAINER (priv->status_item), priv->status_label);
+	gtk_widget_show (priv->status_label);
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->status_item, -1);
 
 	/* connect signals */
 	g_signal_connect (priv->entry, "key-press-event",
@@ -676,19 +731,26 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 void
 ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
 {
+	EphyEmbedFindResult result;
 	gboolean found;
 
-	found = ephy_embed_find_find_again (get_find (toolbar), TRUE);
+	result = ephy_embed_find_find_again (get_find (toolbar), TRUE);
+
+	found = result == EPHY_EMBED_FIND_FOUND;
 	set_controls (toolbar, found, found);
+	set_status (toolbar, result);
 }
 
 void
 ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 {
+	EphyEmbedFindResult result;
 	gboolean found;
 
-	found = ephy_embed_find_find_again (get_find (toolbar), FALSE);
+	result = ephy_embed_find_find_again (get_find (toolbar), FALSE);
+	found = result == EPHY_EMBED_FIND_FOUND;
 	set_controls (toolbar, found, found);
+	set_status (toolbar, result);
 }
 
 void
@@ -704,6 +766,8 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 	priv->typing_ahead = typing_ahead;
 	priv->links_only = links_only;
 	priv->explicit_focus = FALSE;
+
+	clear_status (toolbar);
 
 	if (clear_search)
 	{

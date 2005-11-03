@@ -1,5 +1,23 @@
 2005-11-03  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-embed-find.c:
+	* embed/ephy-embed-find.h:
+	* embed/mozilla/EphyFind.cpp:
+	* embed/mozilla/EphyFind.h:
+	* embed/mozilla/mozilla-embed-find.cpp:
+
+	More detailed result code from find backend.
+
+	* src/ephy-find-toolbar.c: (set_status), (clear_status),
+	(entry_changed_cb), (ephy_find_toolbar_init),
+	(ephy_find_toolbar_find_next), (ephy_find_toolbar_find_previous),
+	(ephy_find_toolbar_open):
+
+	Add status text to the find toolbar.
+	Reverse Next/Previous button order.
+
+2005-11-03  Christian Persch  <chpe@cvs.gnome.org>
+
 	* data/art/Makefile.am:
 	R data/art/hand-open.png:
 	* lib/egg/egg-toolbar-editor.c: (drag_data_get_cb),

@@ -39,6 +39,13 @@ G_BEGIN_DECLS
 typedef struct _EphyEmbedFind		EphyEmbedFind;
 typedef struct _EphyEmbedFindIface	EphyEmbedFindIface;
 
+/* Keep these the same as in nsITypeAheadFind */
+typedef enum
+{
+	EPHY_EMBED_FIND_FOUND		= 0,
+	EPHY_EMBED_FIND_NOTFOUND	= 1,
+	EPHY_EMBED_FIND_FOUNDWRAPPED	= 2
+} EphyEmbedFindResult;
 
 struct _EphyEmbedFindIface
 {
@@ -50,11 +57,11 @@ struct _EphyEmbedFindIface
 	void	 (* set_properties)	(EphyEmbedFind *find,
 					 const char *search_string,
 					 gboolean case_sensitive);
-	gboolean (* find)		(EphyEmbedFind *find,
-					 const char *search_string,
-					 gboolean links_only);
-	gboolean (* find_again)		(EphyEmbedFind *find,
-					 gboolean forward);
+	EphyEmbedFindResult (* find)		(EphyEmbedFind *find,
+						 const char *search_string,
+						 gboolean links_only);
+	EphyEmbedFindResult (* find_again)	(EphyEmbedFind *find,
+						 gboolean forward);
 	gboolean (* activate_link)	(EphyEmbedFind *find,
 					 GdkModifierType mask);
 };
@@ -68,12 +75,12 @@ void	 ephy_embed_find_set_properties		(EphyEmbedFind *find,
 						 const char *search_string,
 						 gboolean case_sensitive);
 
-gboolean ephy_embed_find_find			(EphyEmbedFind *find,
-						 const char *search_string,
-						 gboolean links_only);
+EphyEmbedFindResult	ephy_embed_find_find		(EphyEmbedFind *find,
+							 const char *search_string,
+							 gboolean links_only);
 
-gboolean ephy_embed_find_find_again		(EphyEmbedFind *find,
-						 gboolean forward);
+EphyEmbedFindResult	ephy_embed_find_find_again	(EphyEmbedFind *find,
+							 gboolean forward);
 
 gboolean ephy_embed_find_activate_link		(EphyEmbedFind *find,
 						 GdkModifierType mask);

@@ -147,11 +147,11 @@ EphyFind::SetFindProperties (const char *aSearchString,
 #endif /* TYPEAHEADFIND */
 }
 
-PRBool
+EphyEmbedFindResult
 EphyFind::Find (const char *aSearchString,
                 PRBool aLinksOnly)
 {
-  if (!mFinder) return PR_FALSE;
+  if (!mFinder) return EPHY_EMBED_FIND_NOTFOUND;
 
   nsEmbedString uSearchString;
   NS_CStringToUTF16 (nsEmbedCString (aSearchString ? aSearchString : ""),
@@ -162,7 +162,7 @@ EphyFind::Find (const char *aSearchString,
   PRUint16 found = nsITypeAheadFind::FIND_NOTFOUND;
   rv = mFinder->Find (uSearchString, aLinksOnly, &found);
 
-  return NS_SUCCEEDED (rv) && found != nsITypeAheadFind::FIND_NOTFOUND;
+  return (EphyEmbedFindResult) found;
 #else
   mFinder->SetSearchString (uSearchString.get ());
   mFinder->SetFindBackwards (PR_FALSE);
@@ -171,14 +171,15 @@ EphyFind::Find (const char *aSearchString,
   PRBool didFind = PR_FALSE;
   rv = mFinder->FindNext (&didFind);
         
-  return NS_SUCCEEDED (rv) && didFind;
+  return NS_SUCCEEDED (rv) && didFind ? EPHY_EMBED_FIND_FOUND :
+		  			EPHY_EMBED_FIND_NOTFOUND;
 #endif /* HAVE_TYPEAHEADFIND */
 }
 
-PRBool
+EphyEmbedFindResult
 EphyFind::FindAgain (PRBool aForward)
 {
-  if (!mFinder) return PR_FALSE;
+  if (!mFinder) return EPHY_EMBED_FIND_NOTFOUND;
 
 #ifdef HAVE_TYPEAHEADFIND
   nsresult rv;
@@ -189,15 +190,16 @@ EphyFind::FindAgain (PRBool aForward)
     rv = mFinder->FindPrevious (&found);
   }
 
-  return NS_SUCCEEDED (rv) && found != nsITypeAheadFind::FIND_NOTFOUND;
+  return (EphyEmbedFindResult) found;
 #else
   mFinder->SetFindBackwards (!aForward);
         
   nsresult rv;
   PRBool didFind = PR_FALSE;
   rv = mFinder->FindNext (&didFind);
-        
-  return NS_SUCCEEDED (rv) && didFind;
+
+  return NS_SUCCEEDED (rv) && didFind ? EPHY_EMBED_FIND_FOUND :
+		  EPHY_EMBED_FIND_NOTFOUND;
 #endif /* HAVE_TYPEAHEADFIND */
 }
 
