@@ -332,7 +332,7 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 					_("You do not have permission to "
 					  "create files in this directory."));
 
-			gtk_window_set_title (GTK_WINDOW (dialog), _("Directory not writable"));
+			gtk_window_set_title (GTK_WINDOW (dialog), _("Directory not Writable"));
 			gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 			if (parent != NULL)
@@ -362,13 +362,14 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_MESSAGE_ERROR,
 				GTK_BUTTONS_CLOSE,
-				_("File “%s” is not writable"), display_name);
+				_("Cannot overwrite existing file “%s”"), display_name);
 
 		gtk_message_dialog_format_secondary_text (
 				GTK_MESSAGE_DIALOG (dialog),
-				_("You do not have permission to overwrite this file."));
+				_("A file with this name alreay exists and "
+				  "you don't have permission to overwrite it."));
 
-		gtk_window_set_title (GTK_WINDOW (dialog), _("File not writable"));
+		gtk_window_set_title (GTK_WINDOW (dialog), _("Cannot Overwrite File"));
 		gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 		if (parent != NULL)
