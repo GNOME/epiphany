@@ -223,6 +223,7 @@ plugin_stream_as_file (NPP instance,
 		g_key_file_free (keyfile);
 		return NPERR_GENERIC_ERROR;
 	}
+	g_free (group);
 
 	char *encoding = g_key_file_get_string (keyfile, kDesktopEntry, "Encoding", NULL);
 	if (!encoding || strcmp (encoding, "UTF-8") != 0) {
@@ -231,6 +232,7 @@ plugin_stream_as_file (NPP instance,
 		g_key_file_free (keyfile);
 		return NPERR_GENERIC_ERROR;
 	}
+	g_free (encoding);
 
 	char *type = g_key_file_get_string (keyfile, kDesktopEntry, "Type", NULL);
 	if (!type || strcmp (type, "Link") != 0) {
@@ -239,6 +241,7 @@ plugin_stream_as_file (NPP instance,
 		g_key_file_free (keyfile);
 		return NPERR_GENERIC_ERROR;
 	}
+	g_free (type);
 
 	char *url = g_key_file_get_string (keyfile, kDesktopEntry, "URL", NULL);
 	if (!url || !url[0]) {
