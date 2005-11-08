@@ -611,7 +611,7 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 
 	g_object_class_install_property (object_class,
 					 PROP_MAX_SIZE,
-					 g_param_spec_int64  ("max_size",
+					 g_param_spec_int64  ("max-size",
 							      "Maxsize",
 							      "Maximum size of the file",
 							      -1,
