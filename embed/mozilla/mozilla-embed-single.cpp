@@ -1011,9 +1011,9 @@ impl_open_window (EphyEmbedSingle *single,
 
 static void
 mozilla_embed_single_get_property (GObject *object,
-				guint prop_id,
-				GValue *value,
-				GParamSpec *pspec)
+				   guint prop_id,
+				   GValue *value,
+				   GParamSpec *pspec)
 {
 	EphyEmbedSingle *single = EPHY_EMBED_SINGLE (object);
 
@@ -1026,6 +1026,21 @@ mozilla_embed_single_get_property (GObject *object,
 }
 
 static void
+mozilla_embed_single_set_property (GObject *object,
+				   guint prop_id,
+				   const GValue *value,
+				   GParamSpec *pspec)
+{
+	EphyEmbedSingle *single = EPHY_EMBED_SINGLE (object);
+
+	switch (prop_id)
+	{
+		case PROP_NETWORK_STATUS:
+			ephy_embed_single_set_network_status (single, g_value_get_boolean (value));
+			break;
+	}
+}
+static void
 mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -1035,6 +1050,7 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 	object_class->dispose = mozilla_embed_single_dispose;
 	object_class->finalize = mozilla_embed_single_finalize;
 	object_class->get_property = mozilla_embed_single_get_property;
+	object_class->set_property = mozilla_embed_single_set_property;
 
 	g_object_class_override_property (object_class, PROP_NETWORK_STATUS, "network-status");
 
