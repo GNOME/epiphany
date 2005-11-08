@@ -151,7 +151,7 @@ egg_status_icon_class_init (EggStatusIconClass *klass)
 							_("Pixbuf"),
 							_("A GdkPixbuf to display"),
 							GDK_TYPE_PIXBUF,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property (gobject_class,
 				   PROP_FILE,
@@ -167,7 +167,7 @@ egg_status_icon_class_init (EggStatusIconClass *klass)
 							_("Stock ID"),
 							_("Stock ID for a stock image to display"),
 							NULL,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   
   g_object_class_install_property (gobject_class,
 				   PROP_PIXBUF_ANIMATION,
@@ -175,7 +175,7 @@ egg_status_icon_class_init (EggStatusIconClass *klass)
 							_("Animation"),
 							_("GdkPixbufAnimation to display"),
 							GDK_TYPE_PIXBUF_ANIMATION,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   
   g_object_class_install_property (gobject_class,
 				   PROP_STORAGE_TYPE,
@@ -202,7 +202,7 @@ egg_status_icon_class_init (EggStatusIconClass *klass)
 							 _("Blinking"),
 							 _("Whether or not the status icon is blinking"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   status_icon_signals [ACTIVATE_SIGNAL] =
     g_signal_new ("activate",

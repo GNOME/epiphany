@@ -527,7 +527,7 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 							      "Arrow Tooltip",
 							      "Arrow Tooltip",
 							      NULL,
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_DIRECTION,
@@ -537,14 +537,14 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 							   0,
 							   G_MAXINT,
 							   0,
-							   G_PARAM_READWRITE));
+							   G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 	g_object_class_install_property (object_class,
 					 PROP_WINDOW,
 					 g_param_spec_object ("window",
 							      "Window",
 							      "The navigation window",
 							      G_TYPE_OBJECT,
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphyNavigationActionPrivate));
 }

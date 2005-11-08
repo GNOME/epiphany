@@ -282,7 +282,7 @@ ephy_file_chooser_class_init (EphyFileChooserClass *klass)
 							      "Persist Key",
 							      "The gconf key to which to persist the selected directory",
 							      NULL,
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphyFileChooserPrivate));
 }

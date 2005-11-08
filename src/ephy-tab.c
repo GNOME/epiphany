@@ -418,7 +418,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "Icon address",
 							      "The tab icon's address",
 							      NULL,
-							      (G_PARAM_READABLE | G_PARAM_WRITABLE)));
+							      (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)));
 
 	g_object_class_install_property (object_class,
 					 PROP_LOAD_PROGRESS,
@@ -480,7 +480,7 @@ ephy_tab_class_init (EphyTabClass *class)
 						 	       "Popups Allowed",
 							       "Whether popup windows are to be displayed",
 							       FALSE,
-							       G_PARAM_READABLE | G_PARAM_WRITABLE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_TITLE,
@@ -496,7 +496,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "Typed Address",
 							      "The typed address",
 							      "",
-							      G_PARAM_READABLE | G_PARAM_WRITABLE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_VISIBLE,

@@ -461,7 +461,7 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 					 g_param_spec_pointer ("topic",
 							       "Topic",
 							       "Topic",
-							       G_PARAM_READWRITE |
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							       G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (object_class,

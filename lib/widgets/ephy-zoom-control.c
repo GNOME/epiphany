@@ -274,7 +274,7 @@ ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 							     ZOOM_MINIMAL,
 							     ZOOM_MAXIMAL,
 							     1.0,
-							     G_PARAM_READWRITE));
+							     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	signals[ZOOM_TO_LEVEL_SIGNAL] =
 		g_signal_new ("zoom_to_level",

@@ -1445,7 +1445,7 @@ ephy_dialog_class_init (EphyDialogClass *klass)
 							      "Parent window",
 							      "Parent window",
 							      GTK_TYPE_WINDOW,
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_MODAL,
@@ -1453,7 +1453,7 @@ ephy_dialog_class_init (EphyDialogClass *klass)
 							       "Modal",
 							       "Modal dialog",
 							       FALSE,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_PERSIST_POSITION,
@@ -1461,7 +1461,7 @@ ephy_dialog_class_init (EphyDialogClass *klass)
 							       "Persist position",
 							       "Persist dialog position",
 							       FALSE,
-							       G_PARAM_READWRITE |
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							       G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (object_class,
@@ -1472,7 +1472,7 @@ ephy_dialog_class_init (EphyDialogClass *klass)
 							   -1,
 							   G_MAXINT,
 							   -1,
-							   G_PARAM_READWRITE |
+							   G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							   G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (object_class,
@@ -1483,7 +1483,7 @@ ephy_dialog_class_init (EphyDialogClass *klass)
 							   -1,
 							   G_MAXINT,
 							   -1,
-							   G_PARAM_READWRITE |
+							   G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							   G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (EphyDialogPrivate));

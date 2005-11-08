@@ -573,7 +573,7 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 							      "Destination",
 							      "Destination file path",
 							      NULL,
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_EMBED,
@@ -581,7 +581,7 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 							      "Embed",
 							      "The embed containing the document",
 							      G_TYPE_OBJECT,
-							      G_PARAM_READWRITE |
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							      G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (object_class,
@@ -590,7 +590,7 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 							       "Filechooser title",
 							       "Title to use if showing filechooser",
 							       NULL,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_FILECHOOSER_PARENT,
@@ -598,7 +598,7 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 							      "Filechooser parent",
 							      "The parent window for the filechooser",
 							      GTK_TYPE_WINDOW,
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_FLAGS,
@@ -607,7 +607,7 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 							      "Flags",
 							      EPHY_TYPE_EMBED_PERSIST_FLAGS,
 							      0,
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_MAX_SIZE,
@@ -617,7 +617,7 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 							      -1,
 							      G_MAXINT64,
 							      -1,
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_PERSISTKEY,
@@ -625,7 +625,7 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 							       "persist key",
 							       "Path persistence gconf key",
 							       NULL,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_SOURCE,
@@ -633,7 +633,7 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 							       "Source",
 							       "Url of the document to save",
 							       NULL,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_USER_TIME,
@@ -643,7 +643,7 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 							      0,
 							      G_MAXUINT,
 							      0,
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof(EphyEmbedPersistPrivate));
 }

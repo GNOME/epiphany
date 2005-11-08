@@ -1034,7 +1034,7 @@ ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass)
 							      "Bookmarks set",
 							      "Bookmarks set",
 							      EPHY_TYPE_BOOKMARKS,
-							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof(EphyBookmarksEditorPrivate));
 }

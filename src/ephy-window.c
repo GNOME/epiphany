@@ -2856,7 +2856,7 @@ ephy_window_class_init (EphyWindowClass *klass)
 							      "active-tab",
 							      "Active tab",
 							      EPHY_TYPE_TAB,
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_CHROME,
@@ -2866,7 +2866,7 @@ ephy_window_class_init (EphyWindowClass *klass)
 							     EPHY_TYPE_EMBED_CHROME,
 							     EPHY_EMBED_CHROME_ALL,
 							     G_PARAM_CONSTRUCT_ONLY |
-							     G_PARAM_READWRITE));
+							     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_PPV_MODE,
@@ -2874,7 +2874,7 @@ ephy_window_class_init (EphyWindowClass *klass)
 							       "Print preview mode",
 							       "Whether the window is in print preview mode",
 							       FALSE,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_SINGLE_TAB_MODE,
@@ -2882,7 +2882,7 @@ ephy_window_class_init (EphyWindowClass *klass)
 							       "Is Popup",
 							       "Whether the window is a popup",
 							       FALSE,
-							       G_PARAM_READWRITE |
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							       G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (EphyWindowPrivate));

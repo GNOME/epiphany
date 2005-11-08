@@ -1638,14 +1638,14 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 					 g_param_spec_pointer ("root",
 							       "Root node",
 							       "Root node",
-							       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
 	g_object_class_install_property (object_class,
 					 PROP_FILTER,
 					 g_param_spec_object ("filter",
 							      "Filter object",
 							      "Filter object",
 							      EPHY_TYPE_NODE_FILTER,
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	ephy_node_view_signals[NODE_TOGGLED] =
 		g_signal_new ("node_toggled",

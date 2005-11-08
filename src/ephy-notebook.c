@@ -277,7 +277,7 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 							       "DND enabled",
 							       "Whether the notebook allows tab reordering by DND",
 							       TRUE,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_SHOW_TABS,
@@ -285,7 +285,7 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 							       "Show tabs",
 							       "Whether the notebook shows the tabs bar",
 							       TRUE,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphyNotebookPrivate));
 }

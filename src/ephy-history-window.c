@@ -622,7 +622,7 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 							      "Global history",
 							      "Global History",
 							      EPHY_TYPE_HISTORY,
-							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof(EphyHistoryWindowPrivate));
 }

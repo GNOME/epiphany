@@ -657,7 +657,7 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 					 g_param_spec_pointer ("bookmark",
 							       "Bookmark",
 							       "Bookmark",
-							       G_PARAM_READWRITE |
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							       G_PARAM_CONSTRUCT_ONLY));
 
 	/* overwrite GtkActionClass::tooltip, so we can use the url as tooltip */

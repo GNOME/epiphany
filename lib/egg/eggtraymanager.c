@@ -146,7 +146,7 @@ egg_tray_manager_class_init (EggTrayManagerClass *klass)
 						      _("The orientation of the tray."),
 						      GTK_TYPE_ORIENTATION,
 						      GTK_ORIENTATION_HORIZONTAL,
-						      G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+						      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT));
   
   manager_signals[TRAY_ICON_ADDED] =
     g_signal_new ("tray_icon_added",

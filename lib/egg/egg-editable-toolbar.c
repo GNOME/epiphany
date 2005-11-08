@@ -1318,14 +1318,14 @@ egg_editable_toolbar_class_init (EggEditableToolbarClass *klass)
 							"UI-Mmanager",
 							"UI Manager",
 							GTK_TYPE_UI_MANAGER,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   g_object_class_install_property (object_class,
 				   PROP_TOOLBARS_MODEL,
 				   g_param_spec_object ("model",
 							"Model",
 							"Toolbars Model",
 							EGG_TYPE_TOOLBARS_MODEL,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_type_class_add_private (object_class, sizeof (EggEditableToolbarPrivate));
 }

@@ -186,7 +186,7 @@ ephy_history_class_init (EphyHistoryClass *klass)
 							       "Enabled",
 							       "Enabled",
 							       TRUE,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	signals[ADD_PAGE] =
 		g_signal_new ("add_page",

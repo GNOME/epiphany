@@ -236,7 +236,7 @@ egg_toolbar_editor_class_init (EggToolbarEditorClass *klass)
 							"UI-Manager",
 							"UI Manager",
 							GTK_TYPE_UI_MANAGER,
-							G_PARAM_READWRITE |
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							G_PARAM_CONSTRUCT_ONLY));
  g_object_class_install_property (object_class,
 				  PROP_TOOLBARS_MODEL,
@@ -244,7 +244,7 @@ egg_toolbar_editor_class_init (EggToolbarEditorClass *klass)
 						       "Model",
 						       "Toolbars Model",
 						       EGG_TYPE_TOOLBARS_MODEL,
-						       G_PARAM_READWRITE |
+						       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 						       G_PARAM_CONSTRUCT_ONLY));
 
   g_type_class_add_private (object_class, sizeof (EggToolbarEditorPrivate));

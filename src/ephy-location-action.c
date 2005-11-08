@@ -560,14 +560,14 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							      "Address",
 							      "The address",
 							      "",
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 	g_object_class_install_property (object_class,
 					 PROP_EDITABLE,
 					 g_param_spec_boolean ("editable",
 							       "Editable",
 							       "Editable",
 							       TRUE,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_ICON,
@@ -575,7 +575,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							      "Icon",
 							      "The icon",
 							      GDK_TYPE_PIXBUF,
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_LOCK_STOCK,
@@ -583,7 +583,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							       "Lock Stock ID",
 							       "Lock Stock ID",
 							       NULL,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_LOCK_TOOLTIP,
@@ -591,7 +591,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							       "Lock Tooltip",
 							       "The icon",
 							       NULL,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_SECURE,
@@ -599,7 +599,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							       "Secure",
 							       "Secure",
 							       FALSE,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_SHOW_LOCK,
@@ -607,7 +607,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							       "Show Lock",
 							       "Show Lock",
 							       FALSE,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_WINDOW,
