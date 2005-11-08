@@ -393,7 +393,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "Address",
 							      "The tab's address",
 							      "",
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_DOCUMENT_TYPE,
@@ -402,7 +402,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							    "The tab's documen type",
 							    EPHY_TYPE_EMBED_DOCUMENT_TYPE,
 							    EPHY_EMBED_DOCUMENT_HTML,
-							    G_PARAM_READABLE));
+							    G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_ICON,
@@ -410,7 +410,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "Icon",
 							      "The tab icon's",
 							      GDK_TYPE_PIXBUF,
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_ICON_ADDRESS,
@@ -428,7 +428,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							   0,
 							   100,
 							   0,
-							   G_PARAM_READABLE));
+							   G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_LOAD_STATUS,
@@ -436,7 +436,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							       "Load status",
 							       "The tab's load status",
 							       FALSE,
-							       G_PARAM_READABLE));
+							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_MESSAGE,
@@ -444,7 +444,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "Message",
 							      "The tab's statusbar message",
 							      NULL,
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_NAVIGATION,
@@ -453,7 +453,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							     "The tab's navigation flags",
 							     EPHY_TYPE_TAB_NAVIGATION_FLAGS,
 							     0,
-							     G_PARAM_READABLE));
+							     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_SECURITY,
@@ -462,7 +462,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							    "The tab's security level",
 							    EPHY_TYPE_EMBED_SECURITY_LEVEL,
 							    EPHY_EMBED_STATE_IS_UNKNOWN,
-							     G_PARAM_READABLE));
+							     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_HIDDEN_POPUP_COUNT,
@@ -472,7 +472,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							    0,
 							    G_MAXINT,
 							    0,
-							    G_PARAM_READABLE));
+							    G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_POPUPS_ALLOWED,
@@ -488,7 +488,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "Title",
 							      "The tab's title",
 							      _("Blank page"),
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_TYPED_ADDRESS,
@@ -504,7 +504,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							       "Visibility",
 							       "The tab's visibility",
 							       TRUE,
-							       G_PARAM_READABLE));
+							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_ZOOM,
@@ -514,7 +514,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							     ZOOM_MINIMAL,
 							     ZOOM_MAXIMAL,
 							     1.0,
-							     G_PARAM_READABLE));
+							     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphyTabPrivate));
 }

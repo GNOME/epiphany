@@ -183,7 +183,7 @@ ephy_embed_single_iface_init (gpointer g_iface)
 				       "network-status",
 				       "network-status",
 				       FALSE,
-				       G_PARAM_READABLE));
+				       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	initialised = TRUE;
 	}

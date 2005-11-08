@@ -299,14 +299,14 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
                                                                      "Secure background colour",
                                                                      "Background colour to use for secure sites",
                                                                      GDK_TYPE_COLOR,
-                                                                     G_PARAM_READABLE));
+                                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
         gtk_widget_class_install_style_property (widget_class,
                                                  g_param_spec_boxed ("secure-fg-color",
                                                                      "Secure foreground Colour",
                                                                      "Foreground colour to use for secure sites",
                                                                      GDK_TYPE_COLOR,
-                                                                     G_PARAM_READABLE));
+                                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphyLocationEntryPrivate));
 }

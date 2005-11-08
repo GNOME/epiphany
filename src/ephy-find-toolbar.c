@@ -636,7 +636,7 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 				      "Window",
 				      "Parent window",
 				      EPHY_TYPE_WINDOW,
-				      (GParamFlags) (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY)));
+				      (GParamFlags) (G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY)));
 
 	g_type_class_add_private (klass, sizeof (EphyFindToolbarPrivate));
 }

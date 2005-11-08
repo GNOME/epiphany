@@ -159,7 +159,7 @@ egg_status_icon_class_init (EggStatusIconClass *klass)
 							_("Filename"),
 							_("Filename to load and display"),
 							NULL,
-							G_PARAM_WRITABLE));
+							G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property (gobject_class,
 				   PROP_STOCK,
@@ -184,7 +184,7 @@ egg_status_icon_class_init (EggStatusIconClass *klass)
 						      _("The representation being used for image data"),
 						      GTK_TYPE_IMAGE_TYPE,
 						      GTK_IMAGE_EMPTY,
-						      G_PARAM_READABLE));
+						      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property (gobject_class,
 				   PROP_SIZE,
@@ -194,7 +194,7 @@ egg_status_icon_class_init (EggStatusIconClass *klass)
 						     G_MININT,
 						     G_MAXINT,
 						     0,
-						     G_PARAM_READABLE));
+						     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property (gobject_class,
 				   PROP_BLINKING,

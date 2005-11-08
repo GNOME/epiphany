@@ -330,7 +330,7 @@ ephy_python_extension_class_init (EphyPythonExtensionClass *klass)
 					      "Filename",
 					      "Filename",
 					      NULL,
-					      G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+					      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (EphyPythonExtensionPrivate));
 }

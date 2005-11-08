@@ -121,7 +121,7 @@ egg_tray_icon_class_init (EggTrayIconClass *klass)
 						      _("The orientation of the tray."),
 						      GTK_TYPE_ORIENTATION,
 						      GTK_ORIENTATION_HORIZONTAL,
-						      G_PARAM_READABLE));
+						      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 }
 
 static void

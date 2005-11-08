@@ -358,7 +358,7 @@ ephy_session_class_init (EphySessionClass *class)
 		 		      "Active Window",
 		 		      "The active window",
 				      EPHY_TYPE_WINDOW,
-				      G_PARAM_READABLE));
+				      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphySessionPrivate));
 }

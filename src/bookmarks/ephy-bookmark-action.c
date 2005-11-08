@@ -667,7 +667,7 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 							       "Tooltip",
 							       "Tooltip",
 							       NULL,
-							       G_PARAM_READABLE));
+							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 	
 	g_object_class_install_property (object_class,
 					 PROP_LOCATION,
@@ -675,21 +675,21 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 							       "Location",
 							       "Location",
 							       NULL,
-							       G_PARAM_READABLE));
+							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 	g_object_class_install_property (object_class,
 					 PROP_SMART_URL,
 					 g_param_spec_boolean  ("smarturl",
 								"Smart url",
 								"Smart url",
 								FALSE,
-								G_PARAM_READABLE));
+								G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 	g_object_class_install_property (object_class,
 					 PROP_ICON,
 					 g_param_spec_string  ("icon",
 							       "Icon",
 							       "Icon",
 							       NULL,
-							       G_PARAM_READABLE));
+							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof(EphyBookmarkActionPrivate));
 }
