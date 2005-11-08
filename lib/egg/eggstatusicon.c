@@ -39,6 +39,7 @@
 #define _(x) x
 #define N_(x) x
 #endif
+#define P_(x) x
 
 enum{
   PROP_0,
@@ -148,40 +149,40 @@ egg_status_icon_class_init (EggStatusIconClass *klass)
   g_object_class_install_property (gobject_class,
 				   PROP_PIXBUF,
 				   g_param_spec_object ("pixbuf",
-							_("Pixbuf"),
-							_("A GdkPixbuf to display"),
+							P_("Pixbuf"),
+							P_("A GdkPixbuf to display"),
 							GDK_TYPE_PIXBUF,
 							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property (gobject_class,
 				   PROP_FILE,
 				   g_param_spec_string ("file",
-							_("Filename"),
-							_("Filename to load and display"),
+							P_("Filename"),
+							P_("Filename to load and display"),
 							NULL,
 							G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property (gobject_class,
 				   PROP_STOCK,
 				   g_param_spec_string ("stock",
-							_("Stock ID"),
-							_("Stock ID for a stock image to display"),
+							P_("Stock ID"),
+							P_("Stock ID for a stock image to display"),
 							NULL,
 							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   
   g_object_class_install_property (gobject_class,
 				   PROP_PIXBUF_ANIMATION,
 				   g_param_spec_object ("pixbuf-animation",
-							_("Animation"),
-							_("GdkPixbufAnimation to display"),
+							P_("Animation"),
+							P_("GdkPixbufAnimation to display"),
 							GDK_TYPE_PIXBUF_ANIMATION,
 							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   
   g_object_class_install_property (gobject_class,
 				   PROP_STORAGE_TYPE,
 				   g_param_spec_enum ("image-type",
-						      _("Image type"),
-						      _("The representation being used for image data"),
+						      P_("Image type"),
+						      P_("The representation being used for image data"),
 						      GTK_TYPE_IMAGE_TYPE,
 						      GTK_IMAGE_EMPTY,
 						      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
@@ -189,8 +190,8 @@ egg_status_icon_class_init (EggStatusIconClass *klass)
   g_object_class_install_property (gobject_class,
 				   PROP_SIZE,
 				   g_param_spec_int ("size",
-						     _("Size"),
-						     _("The size of the icon"),
+						     P_("Size"),
+						     P_("The size of the icon"),
 						     G_MININT,
 						     G_MAXINT,
 						     0,
@@ -199,8 +200,8 @@ egg_status_icon_class_init (EggStatusIconClass *klass)
   g_object_class_install_property (gobject_class,
 				   PROP_BLINKING,
 				   g_param_spec_boolean ("blinking",
-							 _("Blinking"),
-							 _("Whether or not the status icon is blinking"),
+							 P_("Blinking"),
+							 P_("Whether or not the status icon is blinking"),
 							 FALSE,
 							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 

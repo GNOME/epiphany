@@ -40,6 +40,7 @@
 #define _(x) x
 #define N_(x) x
 #endif
+#define P_(x) x
 
 /* Signals */
 enum
@@ -142,8 +143,8 @@ egg_tray_manager_class_init (EggTrayManagerClass *klass)
   g_object_class_install_property (gobject_class,
 				   PROP_ORIENTATION,
 				   g_param_spec_enum ("orientation",
-						      _("Orientation"),
-						      _("The orientation of the tray."),
+						      P_("Orientation"),
+						      P_("The orientation of the tray."),
 						      GTK_TYPE_ORIENTATION,
 						      GTK_ORIENTATION_HORIZONTAL,
 						      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT));
