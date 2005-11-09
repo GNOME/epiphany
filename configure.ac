@@ -180,100 +180,25 @@ dnl *******
 dnl Mozilla
 dnl *******
 
-AC_MSG_CHECKING([which gecko to use])
+GECKO_INIT([MOZILLA])
 
-AC_ARG_WITH([mozilla],
-	AS_HELP_STRING([--with-mozilla@<:@=mozilla|firefox|xulrunner|thunderbird@:>@],
-		       [Which gecko engine to use (default: autodetect)]))
-
-GECKOS="firefox mozilla-firefox seamonkey mozilla xulrunner thunderbird mozilla-thunderbird"
-gecko=$with_mozilla
-
-if test "x$gecko" = "x"; then
-	dnl Autodetect gecko
-	for g in $GECKOS; do
-		if $PKG_CONFIG --exists $g-xpcom; then
-			gecko=$g
-			break;
-		fi
-	done
-fi
-
-if test "x$gecko" = "x"; then
-	AC_MSG_ERROR([No gecko found])
-elif ! ( echo "$GECKOS" | egrep "(^| )$gecko(\$| )" > /dev/null); then
-	AC_MSG_ERROR([Unknown gecko "$gecko" specified])
-fi
-
-AC_MSG_RESULT([$gecko])
-
-case "$gecko" in
-mozilla) min_version=1.7.9 flavour=mozilla ;;
-seamonkey) min_version=1.0 flavour=mozilla ;;
-*firefox) min_version=1.0.5 flavour=toolkit ;;
-*thunderbird) min_version=1.0.5 flavour=toolkit ;;
-xulrunner) min_version=1.8 flavour=toolkit ;;
-esac
-
-MOZILLA=$gecko
 AC_SUBST([MOZILLA])
-
-MOZILLA_FLAVOUR=$flavour
 AC_SUBST([MOZILLA_FLAVOUR])
+AC_SUBST([MOZILLA_INCLUDE_ROOT])
+AC_SUBST([MOZILLA_HOME])
+AC_SUBST([MOZILLA_PREFIX])
+
+case "$MOZILLA" in
+mozilla) min_version=1.7.9 ;;
+seamonkey) min_version=1.0 ;;
+*firefox) min_version=1.0.5 ;;
+*thunderbird) min_version=1.0.5 ;;
+xulrunner) min_version=1.8 ;;
+esac
 
 PKG_CHECK_MODULES([GECKO],[$MOZILLA-gtkmozembed >= $min_version $MOZILLA-xpcom >= $min_version])
 AC_SUBST([GECKO_CFLAGS])
 AC_SUBST([GECKO_LIBS])
-
-MOZILLA_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir $MOZILLA-gtkmozembed`"
-AC_SUBST([MOZILLA_INCLUDE_ROOT])
-
-MOZILLA_HOME="`$PKG_CONFIG --variable=libdir $MOZILLA-gtkmozembed`"
-AC_SUBST([MOZILLA_HOME])
-
-MOZILLA_PREFIX="`$PKG_CONFIG --variable=prefix $MOZILLA-gtkmozembed`"
-AC_SUBST([MOZILLA_PREFIX])
-
-AC_ARG_ENABLE([cpp-rtti],
-	      AS_HELP_STRING([--enable-cpp-rtti],[Enable C++ RTTI]),[],
-	      [enable_cpp_rtti=no])
-
-if test "x$enable_cpp_rtti" = "xno"; then
-  AM_CXXFLAGS="-fno-rtti $AM_CXXFLAGS"
-fi
-
-dnl *************************************************************************
-dnl This is from Mozilla's configure.in. They set almost all the config stuff
-dnl they need in mozilla-config.h Except for this compiler flag, which can't
-dnl go in mozilla-config.h So we check the flag too and now we can include
-dnl mozilla-config.h without breaking epiphany.
-dnl This is really gcc-only
-dnl Do this test using CXX only since some versions of gcc
-dnl 2.95-2.97 have a signed wchar_t in c++ only and some versions
-dnl only have short-wchar support for c++.
-
-AC_LANG_PUSH([C++])
-
-_SAVE_CPPFLAGS=$CPPFLAGS
-_SAVE_CXXFLAGS=$CXXFLAGS
-_SAVE_AM_CXXFLAGS=$AM_CXXFLAGS
-AM_CXXFLAGS="$AM_CXXFLAGS -fshort-wchar"
-CXXFLAGS="$CXXFLAGS $AM_CXXFLAGS"
-
-AC_CACHE_CHECK([for compiler -fshort-wchar option],
-	ac_cv_have_usable_wchar_option,
-	[AC_RUN_IFELSE([AC_LANG_SOURCE(
-		[[#include <stddef.h>
-		  int main () {
-		    return (sizeof(wchar_t) != 2) || (wchar_t)-1 < (wchar_t) 0 ;
-		  } ]])],
-		[ac_cv_have_usable_wchar_option="yes"],
-		[ac_cv_have_usable_wchar_option="no"],
-		[ac_cv_have_usable_wchar_option="maybe"])])
-
-if test "$ac_cv_have_usable_wchar_option" != "yes"; then
-    AM_CXXFLAGS=$_SAVE_AM_CXXFLAGS
-fi
 
 dnl **********************************
 dnl now tests for mozilla API variance
@@ -281,6 +206,8 @@ dnl **********************************
 
 dnl FIXME find a m4/autoconf guru who can distill this into a nice macro
 
+_SAVE_CFLAGS=$CXXFLAGS
+_SAVE_CPPFLAGS=$CPPFLAGS
 CPPFLAGS="-I$MOZILLA_INCLUDE_ROOT -I$MOZILLA_INCLUDE_ROOT/pipnss `$PKG_CONFIG --cflags-only-I $MOZILLA-xpcom`"
 CXXFLAGS="$_SAVE_CXXFLAGS $AM_CXXFLAGS `$PKG_CONFIG --cflags-only-other $MOZILLA-xpcom`"
 
@@ -291,38 +218,6 @@ TEST_MOZILLA_INCLUDE_DIRS="necko dom"
 for i in $TEST_MOZILLA_INCLUDE_DIRS ; do
    CPPFLAGS="$CPPFLAGS -I$MOZILLA_INCLUDE_ROOT/$i"
 done
-
-AC_MSG_CHECKING([[whether we have a gtk 2 mozilla build]])
-
-AC_RUN_IFELSE(
-	[AC_LANG_SOURCE(
-		[[#include <mozilla-config.h>
-		  #include <string.h>
-                  int main(void) {
-		    return strcmp (MOZ_DEFAULT_TOOLKIT, "gtk2") != 0;
-		  } ]]
-	)],
-	[result=yes],
-	[AC_MSG_ERROR([[Epiphany needs a gtk 2 mozilla build]])],
-        [result=maybe])
-
-AC_MSG_RESULT([$result])
-
-dnl Check whether we have a mozilla debug build
-
-AC_MSG_CHECKING([[whether we have a mozilla debug build]])
-
-AC_PREPROC_IFELSE(
-	[AC_LANG_SOURCE(
-		[[#include <mozilla-config.h>
-		  #if !defined(MOZ_REFLOW_PERF) || !defined(MOZ_REFLOW_PERF_DSP)
-		  #error No
-		  #endif]]
-	)],
-	[AM_CXXFLAGS="-DDEBUG -D_DEBUG $AM_CXXFLAGS" have_mozilla_debug=yes],
-	[have_mozilla_debug=no])
-
-AC_MSG_RESULT([$have_mozilla_debug])
 
 dnl Determine gecko version
 dnl We don't use the version from the .pc file, since that's the app version
