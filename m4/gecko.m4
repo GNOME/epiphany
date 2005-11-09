@@ -235,7 +235,7 @@ if test "$gecko_cv_xpcom_contractid_[]$1" = "present"; then
 	ifelse([$3],,[:],[$3])
 else
 	ifelse([$4],,[AC_MSG_FAILURE([dnl
-Contract ID "$2" is not registered, but this program depends on it.])],
+Contract ID "$2" is not registered, but $PACKAGE_NAME depends on it.])],
 	[$4])
 fi
 
