@@ -92,7 +92,6 @@ dnl **************************************************************
 
 AC_LANG_PUSH([C++])
 
-_SAVE_CPPFLAGS=$CPPFLAGS
 _SAVE_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS -fshort-wchar"
 
@@ -105,7 +104,7 @@ AC_CACHE_CHECK([for compiler -fshort-wchar option],
 		  } ]])],
 		[gecko_cv_have_usable_wchar_option="yes"],
 		[gecko_cv_have_usable_wchar_option="no"],
-		[gecko_cv_have_usable_wchar_option="maybe"])])
+		[gecko_cv_have_usable_wchar_option="maybe (cross-compiling)"])])
 
 CXXFLAGS="$_SAVE_CXXFLAGS"
 
@@ -220,9 +219,9 @@ NS_ShutdownXPCOM (nsnull);
 exit (EXIT_SUCCESS);
 ])
 ],
-[gecko_cv_xpcom_contractid_[]$1[]=yes],
-[gecko_cv_xpcom_contractid_[]$1[]=no],
-[gecko_cv_xpcom_contractid_[]$1[]="no (cross-compiling)"])
+[gecko_cv_xpcom_contractid_[]$1[]=present],
+[gecko_cv_xpcom_contractid_[]$1[]="not present"],
+[gecko_cv_xpcom_contractid_[]$1[]="not present (cross-compiling)"])
 
 CPPFLAGS="$_SAVE_CPPFLAGS"
 CXXFLAGS="$_SAVE_CXXFLAGS"
@@ -232,7 +231,7 @@ AC_LANG_POP([C++])
 
 ])
 
-if test "$gecko_cv_xpcom_contractid_[]$1" = "yes"; then
+if test "$gecko_cv_xpcom_contractid_[]$1" = "present"; then
 	ifelse([$3],,[:],[$3])
 else
 	ifelse([$4],,[AC_MSG_FAILURE([dnl

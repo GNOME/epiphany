@@ -408,7 +408,7 @@ fi
 dnl Check for some contractIDs that we need but are provided by extensions
 dnl which may or may not have been built.
 
-GECKO_CHECK_CONTRACTID([PermissionsManager],[@mozilla.org/permissionmanager;1])
+GECKO_CHECK_CONTRACTID([PermissionManager],[@mozilla.org/permissionmanager;1])
 GECKO_CHECK_CONTRACTID([CookiePermission],[@mozilla.org/cookie/permission;1])
 
 dnl ***************
