@@ -405,6 +405,12 @@ if test "x$enable_filepicker" = "xyes"; then
 	AC_DEFINE([ENABLE_FILEPICKER],[1],[Define to enable the native filepicker])
 fi
 
+dnl Check for some contractIDs that we need but are provided by extensions
+dnl which may or may not have been built.
+
+GECKO_CHECK_CONTRACTID([PermissionsManager],[@mozilla.org/permissionmanager;1])
+GECKO_CHECK_CONTRACTID([CookiePermission],[@mozilla.org/cookie/permission;1])
+
 dnl ***************
 dnl Multimedia keys
 dnl ***************

@@ -177,15 +177,15 @@ dnl ***************************************************************************
 dnl ***************************************************************************
 dnl ***************************************************************************
 
-dnl GECKO_CHECK_CONTRACTID_REGISTERED(IDENTIFIER, CONTRACTID, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+dnl GECKO_CHECK_CONTRACTID(IDENTIFIER, CONTRACTID, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 dnl
-AC_DEFUN([GECKO_CHECK_CONTRACTID_REGISTERED],
+AC_DEFUN([GECKO_CHECK_CONTRACTID],
 [AC_REQUIRE([GECKO_INIT])dnl
 
 AC_CACHE_CHECK([for the $2 XPCOM component],
-[gecko_cv_xpcom_service_[]$1],
+[gecko_cv_xpcom_contractid_[]$1],
 [
-gecko_cv_xpcom_service_[]$1[]=no
+gecko_cv_xpcom_contractid_[]$1[]=no
 
 AC_LANG_PUSH([C++])
 
@@ -210,7 +210,7 @@ if (NS_FAILED (rv) || !serviceManager) {
 }
 
 nsCOMPtr<nsISupports> service;
-rv = serviceManager->GetServiceByContractID ($2, NS_GET_IID (nsISupports), getter_AddRefs (service));
+rv = serviceManager->GetServiceByContractID ("$2", NS_GET_IID (nsISupports), getter_AddRefs (service));
 if (NS_FAILED (rv) || !service) {
 	NS_ShutdownXPCOM (nsnull);
 	exit (EXIT_FAILURE);
@@ -220,9 +220,9 @@ NS_ShutdownXPCOM (nsnull);
 exit (EXIT_SUCCESS);
 ])
 ],
-[gecko_cv_xpcom_service_[]$1[]=yes],
-[gecko_cv_xpcom_service_[]$1[]=no],
-[gecko_cv_xpcom_service_[]$1[]="no (cross-compiling)"])
+[gecko_cv_xpcom_contractid_[]$1[]=yes],
+[gecko_cv_xpcom_contractid_[]$1[]=no],
+[gecko_cv_xpcom_contractid_[]$1[]="no (cross-compiling)"])
 
 CPPFLAGS="$_SAVE_CPPFLAGS"
 CXXFLAGS="$_SAVE_CXXFLAGS"
@@ -232,10 +232,12 @@ AC_LANG_POP([C++])
 
 ])
 
-if test "$gecko_cv_xpcom_service_[]$1" = "yes"; then
+if test "$gecko_cv_xpcom_contractid_[]$1" = "yes"; then
 	ifelse([$3],,[:],[$3])
 else
-	ifelse([$4],,[:],[$4])
+	ifelse([$4],,[AC_MSG_FAILURE([dnl
+Contract ID "$2" is not registered, but this program depends on it.])],
+	[$4])
 fi
 
 ])

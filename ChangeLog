@@ -1,5 +1,14 @@
 2005-11-09  Christian Persch  <chpe@cvs.gnome.org>
 
+	* configure.ac:
+	* m4/gecko.m4:
+
+	Add check for contract IDs which we need but are only provided
+	by extensions which may or may not have been built into gecko.
+	We cannot check for the headers here since they are always present.
+
+2005-11-09  Christian Persch  <chpe@cvs.gnome.org>
+
 	* data/glade/epiphany.glade:
 
 	Because the Dwnloads window is a GtkDiaog for technical reasons,
