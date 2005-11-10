@@ -206,6 +206,7 @@ dnl **********************************
 
 dnl FIXME find a m4/autoconf guru who can distill this into a nice macro
 
+AC_LANG_PUSH([C++])
 _SAVE_CFLAGS=$CXXFLAGS
 _SAVE_CPPFLAGS=$CPPFLAGS
 CPPFLAGS="-I$MOZILLA_INCLUDE_ROOT -I$MOZILLA_INCLUDE_ROOT/pipnss `$PKG_CONFIG --cflags-only-I $MOZILLA-xpcom`"
