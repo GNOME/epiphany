@@ -745,7 +745,6 @@ favicon_drag_begin_cb (GtkWidget *widget,
 		       GdkDragContext *context,
 		       EphyLocationEntry *entry)
 {
-	EphyLocationEntryPrivate *priv = entry->priv;
 	GdkPixmap *pixmap;
 
 	pixmap = favicon_create_drag_pixmap (entry, widget);

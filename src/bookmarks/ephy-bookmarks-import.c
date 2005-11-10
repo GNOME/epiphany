@@ -665,7 +665,7 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 {
 	FILE *bf;  /* bookmark file */
 	GString *name, *url;
-	char *parsedname, *topic;
+	char *parsedname;
 	GList *folders = NULL;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;

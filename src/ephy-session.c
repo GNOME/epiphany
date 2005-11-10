@@ -741,8 +741,6 @@ parse_embed (xmlNodePtr child,
 	     EphyWindow *window,
 	     EphySession *session)
 {
-	EphySessionPrivate *priv = session->priv;
-
 	while (child != NULL)
 	{
 		if (strcmp ((char *) child->name, "embed") == 0)

@@ -110,7 +110,7 @@ ephy_file_downloads_dir (void)
 char *
 ephy_file_get_downloads_dir (void)
 {
-	char *path = NULL, *download_dir, *home_dir, *expanded;
+	char *download_dir, *expanded;
 
 	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
 
@@ -136,6 +136,7 @@ ephy_file_get_downloads_dir (void)
 	/* Emergency download destination */
 	if (download_dir == NULL)
 	{
+		const char *home_dir;
 		home_dir = g_get_home_dir ();
 		download_dir = g_strdup (home_dir != NULL ? home_dir : "/");
 	}
