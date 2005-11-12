@@ -39,8 +39,9 @@ applicationsdir = $(datadir)/application-registry
 applications_DATA = epiphany.applications
 
 schemadir = $(GCONF_SCHEMA_FILE_DIR)
+font_schema_files = epiphany-fonts.schemas
 schema_in_files = epiphany.schemas.in epiphany-lockdown.schemas.in
-schema_DATA = epiphany.schemas epiphany-lockdown.schemas
+schema_DATA = $(schema_in_files:.schemas.in=.schemas)
 
 aboutdir = $(pkgdatadir)
 about_DATA = epiphany.xhtml
@@ -59,18 +60,19 @@ xsl_DATA = \
 	epiphany-bookmarks-html.xsl	\
 	ephy-xml2ini.xsl
 
-install-data-local:
+install-data-local: $(schema_DATA) $(font_schema_files)
 if GCONF_SCHEMAS_INSTALL
 	if test -z "$(DESTDIR)" ; then \
-	for p in $(schema_DATA) ; do \
-	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(top_builddir)/data/$$p >&1 > /dev/null; \
+	for p in $^ ; do \
+	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $$p >&1 > /dev/null; \
 	done \
-        fi
+	fi
 endif
 
 EXTRA_DIST = \
 	     $(server_in_files)     	\
 	     $(schema_in_files)         \
+	     $(font_schema_files)	\
 	     $(DESKTOP_IN_FILES)	\
 	     $(about_DATA)		\
 	     $(applications_DATA)	\
@@ -79,7 +81,8 @@ EXTRA_DIST = \
 	     $(default_prefs_in_FILES)	\
 	     $(xsl_DATA)		\
 	     $(m4data_DATA)		\
-	     check-mime.py
+	     check-mime.py		\
+	     generate-font-schemas.py
 
 DISTCLEANFILES = \
 	$(server_DATA)		\
