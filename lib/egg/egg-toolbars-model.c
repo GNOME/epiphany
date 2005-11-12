@@ -111,17 +111,18 @@ egg_toolbars_model_to_xml (EggToolbarsModel *model)
   tl = model->priv->toolbars;
 
   xmlIndentTreeOutput = TRUE;
-  doc = xmlNewDoc ("1.0");
-  doc->children = xmlNewDocNode (doc, NULL, "toolbars", NULL);
+  doc = xmlNewDoc ((const xmlChar*) "1.0");
+  doc->children = xmlNewDocNode (doc, NULL, (const xmlChar*) "toolbars", NULL);
 
   for (l1 = tl->children; l1 != NULL; l1 = l1->next)
     {
       xmlNodePtr tnode;
       EggToolbarsToolbar *toolbar = l1->data;
 
-      tnode = xmlNewChild (doc->children, NULL, "toolbar", NULL);
-      xmlSetProp (tnode, "name", toolbar->name);
-      xmlSetProp (tnode, "hidden", (toolbar->flags&EGG_TB_MODEL_HIDDEN)?"true":"false");
+      tnode = xmlNewChild (doc->children, NULL, (const xmlChar*) "toolbar", NULL);
+      xmlSetProp (tnode, (const xmlChar*) "name", (const xmlChar*) toolbar->name);
+      xmlSetProp (tnode, (const xmlChar*) "hidden",
+		  (toolbar->flags&EGG_TB_MODEL_HIDDEN) ? (const xmlChar*) "true" : (const xmlChar*) "false");
 
       for (l2 = l1->children; l2 != NULL; l2 = l2->next)
 	{
@@ -130,12 +131,12 @@ egg_toolbars_model_to_xml (EggToolbarsModel *model)
 
           if (strcmp (item->name, "_separator") == 0)
             {
-              node = xmlNewChild (tnode, NULL, "separator", NULL);
+              node = xmlNewChild (tnode, NULL, (const xmlChar*) "separator", NULL);
               continue;
             }
           
-          node = xmlNewChild (tnode, NULL, "toolitem", NULL);
-          xmlSetProp (node, "name", item->name);
+          node = xmlNewChild (tnode, NULL, (const xmlChar*) "toolitem", NULL);
+          xmlSetProp (node, (const xmlChar*) "name", (const xmlChar*) item->name);
 
           /* Add 'data' nodes for each data type which can be written out for this
            * item. Only write types which can be used to restore the data. */
@@ -150,11 +151,11 @@ egg_toolbars_model_to_xml (EggToolbarsModel *model)
                   tmp = type->get_data (type, item->name);
                   if (tmp != NULL)
                     {
-                      dnode = xmlNewTextChild (node, NULL, "data", tmp);
+                      dnode = xmlNewTextChild (node, NULL, (const xmlChar*) "data", (const xmlChar*) tmp);
                       g_free (tmp);
                       
                       tmp = gdk_atom_name (type->type);
-                      xmlSetProp (dnode, "type", tmp);
+                      xmlSetProp (dnode, (const xmlChar*) "type", (const xmlChar*) tmp);
                       g_free (tmp);
                     }
                 }
@@ -233,7 +234,7 @@ egg_toolbars_model_save (EggToolbarsModel *model,
 
   doc = egg_toolbars_model_to_xml (model);
   root = xmlDocGetRootElement (doc);
-  xmlSetProp (root, "version", version);
+  xmlSetProp (root, (const xmlChar*) "version", (const xmlChar*) version);
   safe_save_xml (xml_file, doc);
   xmlFreeDoc (doc);
 }
@@ -471,15 +472,15 @@ parse_data_list (EggToolbarsModel *model,
   char *name = NULL;
   while (child && name == NULL)
     {
-      if (xmlStrEqual (child->name, "data"))
+      if (xmlStrEqual (child->name, (const xmlChar*) "data"))
         {
-          xmlChar *type = xmlGetProp (child, "type");
+          xmlChar *type = xmlGetProp (child, (const xmlChar*) "type");
           xmlChar *data = xmlNodeGetContent (child);
   
           if (type != NULL)
             {
-              GdkAtom atom = gdk_atom_intern (type, TRUE);
-              name = egg_toolbars_model_get_name (model, atom, data, create);
+              GdkAtom atom = gdk_atom_intern ((const char*) type, TRUE);
+              name = egg_toolbars_model_get_name (model, atom, (const char*) data, create);
             }
           
           xmlFree (type);
@@ -499,7 +500,7 @@ parse_item_list (EggToolbarsModel *model,
 {
   while (child)
     {
-      if (xmlStrEqual (child->name, "toolitem"))
+      if (xmlStrEqual (child->name, (const xmlChar*) "toolitem"))
 	{
           char *name;
 
@@ -514,15 +515,15 @@ parse_item_list (EggToolbarsModel *model,
           /* If that fails, try to use the name. */
           if (name == NULL)
             {
-              xmlChar *type = xmlGetProp (child, "type");
-              xmlChar *data = xmlGetProp (child, "name");
-              GdkAtom  atom = type ? gdk_atom_intern (type, TRUE) : GDK_NONE;
+              xmlChar *type = xmlGetProp (child, (const xmlChar*) "type");
+              xmlChar *data = xmlGetProp (child, (const xmlChar*) "name");
+              GdkAtom  atom = type ? gdk_atom_intern ((const char*) type, TRUE) : GDK_NONE;
               
               /* If an old format, try to use it. */
-              name = egg_toolbars_model_get_name (model, atom, data, FALSE);
+              name = egg_toolbars_model_get_name (model, atom, (const char*) data, FALSE);
               if (name == NULL)
                 {
-                  name = egg_toolbars_model_get_name (model, atom, data, TRUE);
+                  name = egg_toolbars_model_get_name (model, atom, (const char*) data, TRUE);
                 }
               
               xmlFree (type);
@@ -535,7 +536,7 @@ parse_item_list (EggToolbarsModel *model,
               g_free (name);
             }
 	}
-      else if (xmlStrEqual (child->name, "separator"))
+      else if (xmlStrEqual (child->name, (const xmlChar*) "separator"))
 	{
           egg_toolbars_model_add_item (model, position, -1, "_separator");
 	}
@@ -550,24 +551,24 @@ parse_toolbars (EggToolbarsModel *model,
 {
   while (child)
     {
-      if (xmlStrEqual (child->name, "toolbar"))
+      if (xmlStrEqual (child->name, (const xmlChar*) "toolbar"))
 	{
 	  xmlChar *string;
 	  int position;
           EggTbModelFlags flags;
 
-	  string = xmlGetProp (child, "name");
-	  position = egg_toolbars_model_add_toolbar (model, -1, string);
+	  string = xmlGetProp (child, (const xmlChar*) "name");
+	  position = egg_toolbars_model_add_toolbar (model, -1, (const char*) string);
           flags = egg_toolbars_model_get_flags (model, position);
 	  xmlFree (string);
 
-	  string = xmlGetProp (child, "hidden");
-          if (string && xmlStrEqual (string, "true"))
+	  string = xmlGetProp (child, (const xmlChar*) "hidden");
+          if (string && xmlStrEqual (string, (const xmlChar*) "true"))
             flags |= EGG_TB_MODEL_HIDDEN;
 	  xmlFree (string);
 
-	  string = xmlGetProp (child, "style");
-	  if (string && xmlStrEqual (string, "icons-only"))
+	  string = xmlGetProp (child, (const xmlChar*) "style");
+	  if (string && xmlStrEqual (string, (const xmlChar*) "icons-only"))
             flags |= EGG_TB_MODEL_ICONS;
 	  xmlFree (string);
 

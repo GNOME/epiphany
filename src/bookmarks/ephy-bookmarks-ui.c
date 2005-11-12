@@ -502,10 +502,14 @@ bookmark_new_name (EggToolbarsItemType *type,
 void
 ephy_bookmarks_ui_attach_toolbar_model (EggToolbarsModel *model)
 {
-  	eb = ephy_shell_get_bookmarks (ephy_shell);        
-	EphyNode *bookmarks = ephy_bookmarks_get_bookmarks (eb);
-	EphyNode *topics = ephy_bookmarks_get_keywords (eb);
-	GList *types = egg_toolbars_model_get_types (model);
+	EphyNode *bookmarks;
+	EphyNode *topics;
+	GList *types;
+
+	eb = ephy_shell_get_bookmarks (ephy_shell);        
+	bookmarks = ephy_bookmarks_get_bookmarks (eb);
+	topics = ephy_bookmarks_get_keywords (eb);
+	types = egg_toolbars_model_get_types (model);
 
 	topic_type.type = gdk_atom_intern (EPHY_DND_TOPIC_TYPE, TRUE);
 	topic_type.has_data = topic_has_data;
