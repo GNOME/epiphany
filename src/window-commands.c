@@ -96,20 +96,6 @@ window_cmd_file_print (GtkAction *action,
 }
 
 void
-window_cmd_go_back (GtkAction *action,
-		    EphyWindow *window)
-{
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	gtk_widget_grab_focus (GTK_WIDGET (embed));
-
-	ephy_embed_go_back (embed);
-}
-
-void
 window_cmd_file_send_to	(GtkAction *action,
 			 EphyWindow *window)
 {
@@ -135,20 +121,6 @@ window_cmd_file_send_to	(GtkAction *action,
 	g_free (title);
 	g_free (location);
 	g_free (url);
-}
-
-void
-window_cmd_go_forward (GtkAction *action,
-		       EphyWindow *window)
-{
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	gtk_widget_grab_focus (GTK_WIDGET (embed));
-
-	ephy_embed_go_forward (embed);
 }
 
 static gboolean
@@ -887,25 +859,3 @@ window_cmd_browse_with_caret (GtkAction *action,
 	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
 	eel_gconf_set_boolean (CONF_BROWSE_WITH_CARET, active);
 }
-
-#ifdef HAVE_X11_XF86KEYSYM_H
-void
-window_cmd_go_home (GtkAction *action,
-		    EphyWindow *window)
-{
-	char *location;
-
-	location = eel_gconf_get_string (CONF_GENERAL_HOMEPAGE);
-
-	if (location == NULL || location[0] == '\0')
-	{
-		g_free (location);
-
-		location = g_strdup ("about:blank");
-	}
-
-	ephy_window_load_url (window, location);
-
-	g_free (location);
-}
-#endif /* HAVE_X11_XF86KEYSYM_H */

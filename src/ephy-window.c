@@ -137,9 +137,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "FileSaveAs", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>S",
 	  N_("Save the current page"),
 	  G_CALLBACK (window_cmd_file_save_as) },
-	{ "FileSave", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<control>S",
-	  N_("Save the current page"),
-	  G_CALLBACK (window_cmd_file_save_as) },
 	{ "FilePrintSetup", STOCK_PRINT_SETUP, N_("Print Set_up..."), NULL,
 	  N_("Setup the page settings for printing"),
 	  G_CALLBACK (window_cmd_file_print_setup) },
@@ -204,9 +201,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	  NULL, G_CALLBACK (window_cmd_view_stop) },
 	{ "ViewReload", GTK_STOCK_REFRESH, N_("_Reload"), "<control>R",
 	  N_("Display the latest content of the current page"),
-	  G_CALLBACK (window_cmd_view_reload) },
-	{ "ForceReload", NULL, "", "<shift><control>R",
-	  NULL,
 	  G_CALLBACK (window_cmd_view_reload) },
 	{ "ViewZoomIn", GTK_STOCK_ZOOM_IN, N_("Zoom _In"), "<control>plus",
 	  N_("Increase the text size"),
@@ -351,30 +345,34 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_copy_image_location) },
 };
 
-#ifdef HAVE_X11_XF86KEYSYM_H
 static const struct
 {
-	const char *name;
 	guint keyval;
-	GCallback callback;
-} xf_key_actions [] = {
-	{ "XFKeyHomePage", 	XF86XK_HomePage,	G_CALLBACK (window_cmd_go_home ) },
-	{ "XFKeyBack",		XF86XK_Back,		G_CALLBACK (window_cmd_go_back ) },
-	{ "XFKeyForward",	XF86XK_Forward,		G_CALLBACK (window_cmd_go_forward ) },
-	{ "XFKeyStop", 		XF86XK_Stop,		G_CALLBACK (window_cmd_view_stop ) },
-	{ "XFKeyRefresh", 	XF86XK_Refresh, 	G_CALLBACK (window_cmd_view_reload ) },
-	{ "XFKeyFavorites", 	XF86XK_Favorites,	G_CALLBACK (window_cmd_go_bookmarks ) },
-	{ "XFKeyHistory", 	XF86XK_History, 	G_CALLBACK (window_cmd_go_history ) },
-	{ "XFKeyOpenURL", 	XF86XK_OpenURL, 	G_CALLBACK (window_cmd_go_location ) },
-	{ "XFKeyAddFavorite", 	XF86XK_AddFavorite, 	G_CALLBACK (window_cmd_file_bookmark_page ) },
-	{ "XFKeyGo", 		XF86XK_Go,	 	G_CALLBACK (window_cmd_go_location ) },
-	{ "XFKeyReload", 	XF86XK_Reload,	 	G_CALLBACK (window_cmd_view_reload ) },
-	{ "XFKeySendTo", 	XF86XK_Send,	 	G_CALLBACK (window_cmd_file_send_to) },
-	{ "XFKeyZoomIn", 	XF86XK_ZoomIn,	 	G_CALLBACK (window_cmd_view_zoom_in ) },
-	{ "XFKeyZoomOut", 	XF86XK_ZoomOut,	 	G_CALLBACK (window_cmd_view_zoom_out) }
+	GdkModifierType modifier;
+	const gchar *action;
+	gboolean fromToolbar;
+} extra_keybindings [] = {
+	{ GDK_s,		GDK_CONTROL_MASK,	"FileSaveAs",		FALSE },
+	{ GDK_R,		GDK_CONTROL_MASK |
+				GDK_SHIFT_MASK,		"ViewReload",		FALSE },
+#ifdef HAVE_X11_XF86KEYSYM_H
+	{ XF86XK_HomePage,	0,			"GoHome",		TRUE  },
+	{ XF86XK_Back,		0,			"NavigationBack",	TRUE  },
+	{ XF86XK_Forward,	0,			"NavigationForward",	TRUE  },
+	{ XF86XK_Stop,		0,			"ViewStop",		FALSE },
+	{ XF86XK_Refresh, 	0,			"ViewReload",		FALSE },
+	{ XF86XK_Reload,	0, 			"ViewReload",		FALSE },
+	{ XF86XK_Favorites,	0,			"GoBookmarks",		FALSE },
+	{ XF86XK_History, 	0,			"GoHistory",		FALSE },
+	{ XF86XK_OpenURL, 	0,			"GoLocation",		FALSE },
+	{ XF86XK_Go,	 	0,			"GoLocation",		FALSE },
+	{ XF86XK_AddFavorite, 	0,			"FileBookmarkPage",	FALSE },
+	{ XF86XK_Send,	 	0,			"FileSendTo",		FALSE },
+	{ XF86XK_ZoomIn,	0, 			"ViewZoomIn",		FALSE },
+	{ XF86XK_ZoomOut,	0, 			"ViewZoomOut",		FALSE },
 	/* FIXME: what about ScrollUp, ScrollDown, Menu*, Option, LogOff, Save,.. any others? */
-};
 #endif /* HAVE_X11_XF86KEYSYM_H */
+};
 
 #define CONF_LOCKDOWN_HIDE_MENUBAR "/apps/epiphany/lockdown/hide_menubar"
 #define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
@@ -746,6 +744,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 	GtkWidget *menubar, *focus_widget;
 	gboolean shortcircuit = FALSE, force_chain = FALSE, handled = FALSE;
 	guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
+	guint i;
 
 	/* In an attempt to get the mozembed playing nice with things like emacs keybindings
 	 * we are passing important events to the focused child widget before letting the window's
@@ -796,27 +795,22 @@ ephy_window_key_press_event (GtkWidget *widget,
 		}
 	}
 
-	/**
-	 * FIXME: The following construct allows us to use extra keybindings
-	 * mapped directly to actions. This is better than the current mechanism
-	 * of mapping them to the same callback as the desired actions.
-	 */
-#if 0
 	/* Handle accelerators that we want bound, but aren't associated with
 	 * an action */
 	for (i = 0; i < G_N_ELEMENTS (extra_keybindings); i++)
 	{
-		if (modifier == extra_keybindings[i].modifier &&
-		    event->keyval == extra_keybindings[i].keyval)
+		if (event->keyval == extra_keybindings[i].keyval &&
+		    modifier == extra_keybindings[i].modifier)
 		{
-			GtkAction * action = gtk_action_group_get_action 
-				(priv->action_group, 
-				 extra_keybindings[i].action);
+			GtkAction * action = gtk_action_group_get_action
+				(extra_keybindings[i].fromToolbar ? 
+					ephy_toolbar_get_action_group (priv->toolbar) :
+					priv->action_group,
+				extra_keybindings[i].action);
 			gtk_action_activate (action);
 			return TRUE;
 		}
 	}
-#endif
 
 	/* Don't activate menubar in ppv mode, or in lockdown mode */
 	if (priv->ppv_mode || eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
@@ -1232,35 +1226,6 @@ update_chromes_actions (EphyWindow *window)
 		 			   window);
 }
 
-#ifdef HAVE_X11_XF86KEYSYM_H
-static void
-setup_multimedia_key_actions (EphyWindow *window)
-{
-	GtkActionGroup *action_group = window->priv->action_group;
-	GtkAction *action;
-	const char *agname, *name;
-	char *accel_path;
-	guint i;
-
-	agname = gtk_action_group_get_name (action_group);
-
-	for (i = 0; i < G_N_ELEMENTS (xf_key_actions); i++)
-	{
-		name = xf_key_actions[i].name;
-
-		action = g_object_new (GTK_TYPE_ACTION, "name", name, NULL);
-		g_signal_connect (action, "activate",
-				  xf_key_actions[i].callback, window);
-
-		accel_path = g_strconcat ("<Actions>/", agname, "/", name, NULL);
-		gtk_action_set_accel_path (action, accel_path);
-		gtk_accel_map_add_entry (accel_path, xf_key_actions[i].keyval, 0);
-		gtk_action_group_add_action (action_group, action);
-		g_free (accel_path);
-	}
-}
-#endif /* HAVE_X11_XF86KEYSYM_H */
-
 static void
 setup_ui_manager (EphyWindow *window)
 {
@@ -1331,10 +1296,6 @@ setup_ui_manager (EphyWindow *window)
 	g_signal_connect (manager, "add_widget", G_CALLBACK (add_widget), window);
 	gtk_window_add_accel_group (GTK_WINDOW (window),
 				    gtk_ui_manager_get_accel_group (manager));
-
-#ifdef HAVE_X11_XF86KEYSYM_H
-	setup_multimedia_key_actions (window);
-#endif				    
 }
 
 static void

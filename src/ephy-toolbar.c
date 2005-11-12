@@ -363,6 +363,12 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 
 /* public functions */
 
+GtkActionGroup *
+ephy_toolbar_get_action_group (EphyToolbar *toolbar)
+{
+   return toolbar->priv->action_group;   
+}
+
 void
 ephy_toolbar_set_favicon (EphyToolbar *toolbar,
 			  GdkPixbuf *icon)

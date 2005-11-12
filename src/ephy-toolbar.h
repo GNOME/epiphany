@@ -65,6 +65,8 @@ GType		ephy_toolbar_get_type			(void);
 
 EphyToolbar    *ephy_toolbar_new			(EphyWindow *window);
 
+GtkActionGroup *ephy_toolbar_get_action_group		(EphyToolbar *toolbar);
+
 void		ephy_toolbar_set_favicon		(EphyToolbar *toolbar,
 							 GdkPixbuf *icon);
 

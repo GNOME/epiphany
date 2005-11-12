@@ -182,8 +182,6 @@ update_window (EphyWindow *window,
 	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK);
 	action = gtk_action_group_get_action (action_group, "FileSaveAs");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (action_group, "FileSave");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 	action = gtk_action_group_get_action (popups_action_group, "DownloadLink");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 	action = gtk_action_group_get_action (popups_action_group, "DownloadLinkAs");

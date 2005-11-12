@@ -28,12 +28,6 @@ void window_cmd_edit_find	(GtkAction *action,
 void window_cmd_view_stop	(GtkAction *action,
 				 EphyWindow *window);
 
-void window_cmd_go_back		(GtkAction *action,
-				 EphyWindow *window);
-
-void window_cmd_go_forward	(GtkAction *action,
-				 EphyWindow *window);
-
 void window_cmd_go_location	(GtkAction *action,
 				 EphyWindow *window);
 
@@ -163,7 +157,3 @@ void window_cmd_load_location   (GtkAction *action,
 void window_cmd_browse_with_caret (GtkAction *action,
 				   EphyWindow *window);
 
-#ifdef HAVE_X11_XF86KEYSYM_H
-void window_cmd_go_home		(GtkAction *action,
-				 EphyWindow *window);
-#endif

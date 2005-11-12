@@ -1,3 +1,28 @@
+2005-11-12  Philip Langdale  <philipl@mail.utexas.edu>
+
+	* data/ui/epiphany-ui.xml: Remove accelerator actions
+	for extra keybindings.
+
+	* src/ephy-lockdown.c: (update_window):
+	Don't manipulate removed "FileSave" action.
+
+	* src/ephy-toolbar.c
+	* src/ephy-toolbar.h: (ephy_toolbar_get_action_group):
+
+	Add getter for the toolbar's action group.
+
+	* src/ephy-window.c: (ephy_window_key_press_event):
+
+	Transition over to the Galeon mechanism for handling
+	extra keybindings. This maps the keybindings to
+	actions so that no extra actions are required. The
+	only subtlety is that some of the actions come from
+	the toolbar, so access to its action group is required.
+
+	* src/window-commands.c
+	* src/window-commands.h: (window_cmd_go_back/forward/home):
+	Remove the now unsued back/forward/home callbacks.
+
 2005-11-12  Christian Persch  <chpe@cvs.gnome.org>
 
         * data/Makefile.am:
