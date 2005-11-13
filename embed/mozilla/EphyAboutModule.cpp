@@ -39,6 +39,7 @@
 #include <nsString.h>
 #include <nsEscape.h>
 #include <nsAutoPtr.h>
+#include <nsNetUtil.h>
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -99,6 +100,8 @@ nsresult
 EphyAboutModule::Redirect(const nsACString &aURL,
 			  nsIChannel **_retval)
 {
+	*_retval = nsnull;
+
 	nsresult rv;
 	nsCOMPtr<nsIIOService> ioService;
 	rv = EphyUtils::GetIOService (getter_AddRefs (ioService));
@@ -125,8 +128,9 @@ EphyAboutModule::Redirect(const nsACString &aURL,
 	rv = tempChannel->SetOwner(principal);
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	NS_ADDREF(*_retval = tempChannel);
-	return rv;
+	tempChannel.swap (*_retval);
+
+	return NS_OK;
 }
 
 nsresult
@@ -403,6 +407,8 @@ nsresult
 EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 				 nsIChannel **_retval)
 {
+	*_retval = nsnull;
+
         /* First parse the arguments */
 	nsresult rv;
         nsCAutoString spec;
@@ -442,17 +448,16 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 	NS_ENSURE_SUCCESS (rv, rv);
 	NS_ENSURE_TRUE (primary && secondary, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIInputStreamChannel> channel;
-	rv = WritePage (aErrorURI, uri, rawurl, title, stock_id, primary, secondary, tertiary, linkintro, getter_AddRefs (channel));
-	NS_ENSURE_SUCCESS (rv, rv);
-
-	rv = channel->SetURI (aErrorURI);
+	nsCOMPtr<nsIChannel> channel;
+	rv = WritePage (aErrorURI, uri, aErrorURI, rawurl, title, stock_id, primary, secondary, tertiary, linkintro, getter_AddRefs (channel));
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	g_free (title);
 	g_free (primary);
 
-	return CallQueryInterface (channel, _retval);
+	channel.swap (*_retval);
+
+	return NS_OK;
 }
 #endif /* HAVE_GECKO_1_8 */
 
@@ -460,6 +465,8 @@ nsresult
 EphyAboutModule::CreateRecoverPage(nsIURI *aRecoverURI,
 				   nsIChannel **_retval)
 {
+	*_retval = nsnull;
+
         /* First parse the arguments */
 	nsresult rv;
         nsCAutoString spec;
@@ -480,16 +487,10 @@ EphyAboutModule::CreateRecoverPage(nsIURI *aRecoverURI,
 		   "the web browser crashed; it could have caused the crash."),
 		 url.get());
 
-	nsCOMPtr<nsIInputStreamChannel> ischannel;
-	rv = WritePage (aRecoverURI, uri, rawurl, title.get(),
+	nsCOMPtr<nsIChannel> channel;
+	rv = WritePage (aRecoverURI, uri, uri, rawurl, title.get(),
 			GTK_STOCK_DIALOG_INFO, title.get() /* as primary */,
-			secondary, nsnull, nsnull, getter_AddRefs (ischannel));
-	NS_ENSURE_SUCCESS (rv, rv);
-
-	rv = ischannel->SetURI (uri);
-	NS_ENSURE_SUCCESS (rv, rv);
-
-	nsCOMPtr<nsIChannel> channel (do_QueryInterface (ischannel, &rv));
+			secondary, nsnull, nsnull, getter_AddRefs (channel));
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	nsRefPtr<EphyRedirectChannel> redirectChannel (new EphyRedirectChannel (channel));
@@ -505,6 +506,7 @@ EphyAboutModule::CreateRecoverPage(nsIURI *aRecoverURI,
 nsresult
 EphyAboutModule::WritePage(nsIURI *aOriginalURI,
 			   nsIURI *aURI,
+			   nsIURI *aChannelURI,
 			   const nsACString &aRawURL,
 			   const char *aTitle,
 			   const char *aStockIcon,
@@ -512,8 +514,10 @@ EphyAboutModule::WritePage(nsIURI *aOriginalURI,
 			   const char *aSecondary,
 			   const char *aTertiary,
 			   const char *aLinkIntro,
-			   nsIInputStreamChannel **_retval)
+			   nsIChannel **_retval)
 {
+	*_retval = nsnull;
+
 	nsresult rv;
 	nsCOMPtr<nsIStorageStream> storageStream;
 	rv = NS_NewStorageStream (16384, (PRUint32) -1, getter_AddRefs (storageStream));
@@ -632,13 +636,15 @@ EphyAboutModule::WritePage(nsIURI *aOriginalURI,
 	rv = storageStream->NewInputStream (0, getter_AddRefs (inputStream));
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	nsCOMPtr<nsIInputStreamChannel> channel (do_CreateInstance ("@mozilla.org/network/input-stream-channel;1", &rv));
+	nsCOMPtr<nsIChannel> channel;
+	rv = NS_NewInputStreamChannel (getter_AddRefs (channel),
+				       aChannelURI,
+				       inputStream,
+				       NS_LITERAL_CSTRING ("application/xhtml+xml"),
+				       NS_LITERAL_CSTRING ("utf-8"));
 	NS_ENSURE_SUCCESS (rv, rv);
-
-	rv |= channel->SetOriginalURI (aOriginalURI);
-	rv |= channel->SetContentStream (inputStream);
-	rv |= channel->SetContentType (NS_LITERAL_CSTRING ("application/xhtml+xml"));
-	rv |= channel->SetContentCharset (NS_LITERAL_CSTRING ("utf-8"));
+	
+	rv = channel->SetOriginalURI (aOriginalURI);
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	nsCOMPtr<nsIScriptSecurityManager> securityManager 
@@ -652,9 +658,9 @@ EphyAboutModule::WritePage(nsIURI *aOriginalURI,
 	rv = channel->SetOwner(principal);
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	NS_ADDREF (*_retval = channel);
+	channel.swap (*_retval);
 
-	return rv;
+	return NS_OK;
 }
 
 nsresult

@@ -20,8 +20,8 @@
  *  $Id$
  */
  
-#ifndef EPHY_PROTOCOL_HANDLER_H
-#define EPHY_PROTOCOL_HANDLER_H
+#ifndef EPHY_ABOUT_MODULE_H
+#define EPHY_ABOUT_MODULE_H
     
 #include <nsError.h>
 #include <nsIAboutModule.h>
@@ -63,8 +63,8 @@ class EphyAboutModule : public nsIAboutModule
 	nsresult CreateErrorPage(nsIURI*, nsIChannel**);
 #endif
 	nsresult CreateRecoverPage(nsIURI*, nsIChannel**);
-	nsresult WritePage(nsIURI*, nsIURI*, const nsACString&, const char*, const char*, const char*, const char*, const char*, const char*, nsIInputStreamChannel**);
+	nsresult WritePage(nsIURI*, nsIURI*, nsIURI*, const nsACString&, const char*, const char*, const char*, const char*, const char*, const char*, nsIChannel**);
 	nsresult Write(nsIOutputStream*, const char*);
 };
 
-#endif /* EPHY_PROTOCOL_HANDLER_H */
+#endif /* EPHY_ABOUT_MODULE_H */
