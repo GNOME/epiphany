@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 2.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-10 18:05+0300\n"
+"POT-Creation-Date: 2005-11-14 14:30+0200\n"
 "PO-Revision-Date: 2005-08-10 18:02+0300\n"
 "Last-Translator: Rostislav \"zbrox\" Raykov <zbrox@i-space.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -107,29 +107,38 @@ msgstr ""
 "Безопасните са http и https."
 
 #: ../data/epiphany-lockdown.schemas.in.h:15
+#, fuzzy
+msgid "Epiphany cannot quit"
+msgstr "Автоматизация на Epiphany"
+
+#: ../data/epiphany-lockdown.schemas.in.h:16
 msgid "Hide menubar by default"
 msgstr "Скриване на лентата с менютата по подразбиране"
 
-#: ../data/epiphany-lockdown.schemas.in.h:16
+#: ../data/epiphany-lockdown.schemas.in.h:17
 msgid ""
 "Hide the menubar by default. The menubar can still be accessed using F10."
 msgstr ""
 "Скриване на лентата с менюта по подразбиране. Менюто ще може да бъде "
 "достигнато чрез натискане на клавиша F10."
 
-#: ../data/epiphany-lockdown.schemas.in.h:17
+#: ../data/epiphany-lockdown.schemas.in.h:18
 msgid "Lock in fullscreen mode"
 msgstr "Заключване на режима „На цял екран“"
 
-#: ../data/epiphany-lockdown.schemas.in.h:18
+#: ../data/epiphany-lockdown.schemas.in.h:19
 msgid "Locks Epiphany in fullscreen mode."
 msgstr "Заключване на режима „На цял екран“."
+
+#: ../data/epiphany-lockdown.schemas.in.h:20
+msgid "User is not allowed to close Epiphany"
+msgstr ""
 
 #: ../data/epiphany.desktop.in.h:1
 msgid "Browse the web"
 msgstr "Сърфиране в Интернет"
 
-#: ../data/epiphany.desktop.in.h:2 ../src/window-commands.c:779
+#: ../data/epiphany.desktop.in.h:2
 msgid "Epiphany Web Browser"
 msgstr "Интернет браузър (Epiphany)"
 
@@ -535,7 +544,7 @@ msgid "MD5 Fingerprint:"
 msgstr "Пръстови отпечатъци тип MD5:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:989
+#: ../embed/mozilla/GtkNSSDialogs.cpp:998
 msgid "Organization:"
 msgstr "Организация:"
 
@@ -560,56 +569,34 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>_Използване на различно кодиране:</b>"
 
 #: ../data/glade/epiphany.glade.h:3
-msgid "C_ase sensitive"
-msgstr "М_алките и големите букви имат значение"
-
-#: ../data/glade/epiphany.glade.h:4
 msgid "Cookies"
 msgstr "Бисквитки"
 
+#. The name of the default downloads folder
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:96
+msgid "Downloads"
+msgstr "Изтегляния"
+
 #: ../data/glade/epiphany.glade.h:5
-msgid "Download Manager"
-msgstr "Управление на изтеглящите се файлове"
-
-#: ../data/glade/epiphany.glade.h:6 ../src/ephy-window.c:1119
-msgid "Find"
-msgstr "Търсене"
-
-#: ../data/glade/epiphany.glade.h:7
 msgid "Passwords"
 msgstr "Пароли"
 
-#: ../data/glade/epiphany.glade.h:8
-msgid "Personal Data Manager"
-msgstr "Мениджър за личната информация"
+#: ../data/glade/epiphany.glade.h:6
+msgid "Personal Data"
+msgstr "Лична информация"
+
+#: ../data/glade/epiphany.glade.h:7
+msgid "Text Encoding"
+msgstr "Кодиране на текста"
+
+#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:358
+msgid "Use the encoding specified by the document"
+msgstr "Използване на кодирането, определено от документа"
 
 #: ../data/glade/epiphany.glade.h:9
-msgid "Text Encoding"
-msgstr "_Кодиране на текста"
-
-#: ../data/glade/epiphany.glade.h:10 ../src/ephy-encoding-menu.c:358
-msgid "Use the encoding specified by the document"
-msgstr "Използване на кодировката определена от документа"
-
-#: ../data/glade/epiphany.glade.h:11
-msgid "_Find:"
-msgstr "_Търсене:"
-
-#: ../data/glade/epiphany.glade.h:12
-msgid "_Next"
-msgstr "_Следващ"
-
-#: ../data/glade/epiphany.glade.h:13 ../embed/downloader-view.c:368
-msgid "_Pause"
-msgstr "_Пауза"
-
-#: ../data/glade/epiphany.glade.h:14
-msgid "_Previous"
-msgstr "_Предишен"
-
-#: ../data/glade/epiphany.glade.h:15
-msgid "_Wrap around"
-msgstr "Об_виване"
+#, fuzzy
+msgid "_Show password"
+msgstr "_Парола:"
 
 #: ../data/glade/prefs-dialog.glade.h:1 ../data/glade/print.glade.h:1
 msgid "<b>Colors</b>"
@@ -680,7 +667,7 @@ msgstr "Избор на _език:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:17
-#: ../lib/widgets/ephy-location-entry.c:498 ../src/ephy-history-window.c:261
+#: ../lib/widgets/ephy-location-entry.c:580 ../src/ephy-history-window.c:261
 msgid "Cl_ear"
 msgstr "Из_чистване"
 
@@ -704,7 +691,7 @@ msgstr "Шрифтове и цветове"
 msgid "For l_anguage:"
 msgstr "За _език:"
 
-#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1056
+#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1034
 msgid "Language"
 msgstr "Език"
 
@@ -733,7 +720,7 @@ msgid "Set to _Blank Page"
 msgstr "_Празна страница"
 
 #: ../data/glade/prefs-dialog.glade.h:31
-#: ../src/bookmarks/ephy-bookmark-properties.c:369
+#: ../src/bookmarks/ephy-bookmark-properties.c:340
 msgid "_Address:"
 msgstr "_Адрес:"
 
@@ -751,7 +738,7 @@ msgstr "_Папка за запазване на изтеглените файл
 
 #: ../data/glade/prefs-dialog.glade.h:35
 msgid "_Fixed width:"
-msgstr "_Фиксирана ширина:"
+msgstr "_Фиксирана широчина:"
 
 #: ../data/glade/prefs-dialog.glade.h:36
 msgid "_Minimum size:"
@@ -763,15 +750,15 @@ msgstr "_Никога да не бъдат приемани"
 
 #: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Variable width:"
-msgstr "_Променлива ширина:"
+msgstr "_Променлива широчина:"
 
 #: ../data/glade/print.glade.h:2
 msgid "<b>Footers</b>"
-msgstr "<b>Долна част</b>"
+msgstr "<b>Долен колонтитул</b>"
 
 #: ../data/glade/print.glade.h:3
 msgid "<b>Headers</b>"
-msgstr "<b>Хедъри</b>"
+msgstr "<b>Горен колонтитул</b>"
 
 #: ../data/glade/print.glade.h:4
 msgid "Appearance"
@@ -810,26 +797,31 @@ msgid "_Page address"
 msgstr "Адрес на с_траницата"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:184
-msgid "_Show Downloader..."
+#: ../embed/downloader-view.c:189
+#, fuzzy
+msgid "_Show Downloads"
 msgstr "_Показване на програмата за изтеглянията..."
 
-#: ../embed/downloader-view.c:313
+#: ../embed/downloader-view.c:318
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:317
+#: ../embed/downloader-view.c:322
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:368
+#: ../embed/downloader-view.c:374
+msgid "_Pause"
+msgstr "_Пауза"
+
+#: ../embed/downloader-view.c:374
 msgid "_Resume"
 msgstr "_Продължаване"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:415
+#: ../embed/downloader-view.c:421
 #, c-format
 msgid ""
 "%s\n"
@@ -838,11 +830,12 @@ msgstr ""
 "%s\n"
 "%s от %s"
 
-#: ../embed/downloader-view.c:426 ../src/ephy-window.c:1298
+#: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
+#: ../src/ephy-window.c:1440
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: ../embed/downloader-view.c:460
+#: ../embed/downloader-view.c:470
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -851,25 +844,25 @@ msgstr[1] "%d изтегляния"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:575 ../embed/downloader-view.c:588
+#: ../embed/downloader-view.c:585 ../embed/downloader-view.c:598
 msgid "download status|Unknown"
 msgstr "Неизвестно"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:580
+#: ../embed/downloader-view.c:590
 msgid "download status|Failed"
 msgstr "Неуспешно"
 
-#: ../embed/downloader-view.c:642 ../src/bookmarks/ephy-bookmarks-editor.c:877
+#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:803
 msgid "File"
 msgstr "Файл"
 
-#: ../embed/downloader-view.c:664
+#: ../embed/downloader-view.c:679
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:675
+#: ../embed/downloader-view.c:690
 msgid "Remaining"
 msgstr "Остават"
 
@@ -1256,41 +1249,41 @@ msgstr "Украински"
 msgid "Unknown (%s)"
 msgstr "Непознат (%s)"
 
-#: ../embed/ephy-history.c:527
+#: ../embed/ephy-history.c:550
 msgid "All"
 msgstr "Всички"
 
-#: ../embed/ephy-history.c:701
+#: ../embed/ephy-history.c:713
 msgid "Others"
 msgstr "Други"
 
-#: ../embed/ephy-history.c:707
+#: ../embed/ephy-history.c:719
 msgid "Local files"
 msgstr "Локални файлове"
 
 #: ../embed/mozilla/ContentHandler.cpp:172
-#: ../embed/mozilla/EphyHeaderSniffer.cpp:365
+#: ../embed/mozilla/EphyHeaderSniffer.cpp:408
 msgid "Save"
 msgstr "Запазване"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:292
+#: ../embed/mozilla/ContentHandler.cpp:293
 msgid "File Type:|Unknown"
 msgstr "Неизвестен"
 
-#: ../embed/mozilla/ContentHandler.cpp:327
+#: ../embed/mozilla/ContentHandler.cpp:328
 msgid "Download this potentially unsafe file?"
 msgstr "Да бъде ли изтеглен потенциално опасния файл?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:333
-#, c-format
+#: ../embed/mozilla/ContentHandler.cpp:334
+#, fuzzy, c-format
 msgid ""
-"File Type: %s.\n"
+"File Type: “%s”.\n"
 "\n"
-"It is unsafe to open \"%s\" as it could potentially damage your documents or "
+"It is unsafe to open “%s” as it could potentially damage your documents or "
 "invade your privacy. You can download it instead."
 msgstr ""
 "Тип файл: %s.\n"
@@ -1298,97 +1291,120 @@ msgstr ""
 "Опасно е да отваряте „%s“, възможно е да повреди документите Ви или да "
 "застраши личните ви данни. Вместо това, можете да го изтеглите."
 
-#: ../embed/mozilla/ContentHandler.cpp:343
+#: ../embed/mozilla/ContentHandler.cpp:344
 msgid "Open this file?"
 msgstr "Отваряне на този файл?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:350
-#, c-format
+#: ../embed/mozilla/ContentHandler.cpp:351
+#, fuzzy, c-format
 msgid ""
-"File Type: %s.\n"
+"File Type: “%s”.\n"
 "\n"
-"You can open \"%s\" using \"%s\" or save it."
+"You can open “%s” using “%s” or save it."
 msgstr ""
 "Тип файл: %s.\n"
 "\n"
 "Можете да отворите „%s“ чрез „%s“ или можете да го запазите."
 
-#: ../embed/mozilla/ContentHandler.cpp:358
+#: ../embed/mozilla/ContentHandler.cpp:359
 msgid "Download this file?"
 msgstr "Изтегляне на този файл?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:364
-#, c-format
+#: ../embed/mozilla/ContentHandler.cpp:365
+#, fuzzy, c-format
 msgid ""
-"File Type: %s.\n"
+"File Type: “%s”.\n"
 "\n"
-"You have no application able to open \"%s\". You can download it instead."
+"You have no application able to open “%s”. You can download it instead."
 msgstr ""
 "Тип файл: %s.\n"
 "\n"
 "Не разполагате с програма, способна да отвори „%s“. Вместо това, можете да "
 "го изтеглите."
 
-#: ../embed/mozilla/ContentHandler.cpp:369
+#: ../embed/mozilla/ContentHandler.cpp:370
 msgid "_Save As..."
 msgstr "Запазване _като..."
 
 #. Translators: %s is the name of a protocol, like "http" etc.
-#: ../embed/mozilla/EphyAboutModule.cpp:184
+#: ../embed/mozilla/EphyAboutModule.cpp:207
+#, fuzzy, c-format
+msgid "“%s” Protocol is not Supported"
+msgstr "Протоколът “%s” не се поддържа."
+
+#. Translators: %s is the name of a protocol, like "http" etc.
+#: ../embed/mozilla/EphyAboutModule.cpp:209
 #, c-format
 msgid "“%s” protocol is not supported."
 msgstr "Протоколът “%s” не се поддържа."
 
 #. FIXME: get the list of supported protocols from necko
-#: ../embed/mozilla/EphyAboutModule.cpp:186
+#: ../embed/mozilla/EphyAboutModule.cpp:211
 msgid ""
 "Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
 msgstr ""
 "Поддържаните протоколи са “http”, “https”, “ftp”, “file”, “smb” и “sftp”."
 
 #. Translators: %s is the path and filename, for example "/home/user/test.html"
-#: ../embed/mozilla/EphyAboutModule.cpp:195
+#: ../embed/mozilla/EphyAboutModule.cpp:220
+#, fuzzy, c-format
+msgid "File “%s” not Found"
+msgstr "Файлът “%s” не е намерен."
+
+#. Translators: %s is the path and filename, for example "/home/user/test.html"
+#: ../embed/mozilla/EphyAboutModule.cpp:222
 #, c-format
 msgid "File “%s” not found."
 msgstr "Файлът “%s” не е намерен."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:196
+#: ../embed/mozilla/EphyAboutModule.cpp:223
 msgid "Check the location of the file and try again."
 msgstr "Проверете местоположението на файла и опитайте отново."
 
 #. Translators: %s is the hostname, like "www.example.com"
-#: ../embed/mozilla/EphyAboutModule.cpp:204
+#: ../embed/mozilla/EphyAboutModule.cpp:231
+#, fuzzy, c-format
+msgid "“%s” Could not be Found"
+msgstr "“%s” не може да бъде намерен."
+
+#. Translators: %s is the hostname, like "www.example.com"
+#: ../embed/mozilla/EphyAboutModule.cpp:234
 #, c-format
 msgid "“%s” could not be found."
 msgstr "“%s” не може да бъде намерен."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:206
+#: ../embed/mozilla/EphyAboutModule.cpp:236
 msgid ""
 "Check that you are connected to the internet, and that the address is "
 "correct."
 msgstr ""
 "Проверете дали сте свързани към Интернет, и че въведеният адрес е точен."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:208
+#: ../embed/mozilla/EphyAboutModule.cpp:238
 msgid "If this page used to exist, you may find an archived version:"
 msgstr ""
 "Ако тази страница е съществувала, то вие сте намерили архивирана версия:"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:217
+#: ../embed/mozilla/EphyAboutModule.cpp:247
+#, fuzzy, c-format
+msgid "“%s” Refused the Connection"
+msgstr "“%s” отказа свързване."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:251
 #, c-format
 msgid "“%s” refused the connection."
 msgstr "“%s” отказа свързване."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:219
-#: ../embed/mozilla/EphyAboutModule.cpp:232
-#: ../embed/mozilla/EphyAboutModule.cpp:247
-#: ../embed/mozilla/EphyAboutModule.cpp:291
-#: ../embed/mozilla/EphyAboutModule.cpp:316
+#: ../embed/mozilla/EphyAboutModule.cpp:253
+#: ../embed/mozilla/EphyAboutModule.cpp:270
+#: ../embed/mozilla/EphyAboutModule.cpp:289
+#: ../embed/mozilla/EphyAboutModule.cpp:346
+#: ../embed/mozilla/EphyAboutModule.cpp:377
 msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
@@ -1396,94 +1412,136 @@ msgstr ""
 "Сървърът може да е зает или е възможно да имате проблеми с мрежата. Опитайте "
 "отново по-късно."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:221
-#: ../embed/mozilla/EphyAboutModule.cpp:234
-#: ../embed/mozilla/EphyAboutModule.cpp:249
-#: ../embed/mozilla/EphyAboutModule.cpp:266
-#: ../embed/mozilla/EphyAboutModule.cpp:293
-#: ../embed/mozilla/EphyAboutModule.cpp:318
+#: ../embed/mozilla/EphyAboutModule.cpp:255
+#: ../embed/mozilla/EphyAboutModule.cpp:272
+#: ../embed/mozilla/EphyAboutModule.cpp:291
+#: ../embed/mozilla/EphyAboutModule.cpp:313
+#: ../embed/mozilla/EphyAboutModule.cpp:348
+#: ../embed/mozilla/EphyAboutModule.cpp:379
 msgid "There may be an old version of the page you wanted:"
 msgstr "Възможно е да има стара версия на търсената от вас страница:"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:230
+#: ../embed/mozilla/EphyAboutModule.cpp:264
+#, fuzzy, c-format
+msgid "“%s” Interrupted the Connection"
+msgstr "“%s” прекъсна връзката."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:268
 #, c-format
 msgid "“%s” interrupted the connection."
 msgstr "“%s” прекъсна връзката."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:243
+#: ../embed/mozilla/EphyAboutModule.cpp:281
+#, fuzzy, c-format
+msgid "“%s” is not Responding"
+msgstr "“%s” не отговаря."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:285
 #, c-format
 msgid "“%s” is not responding."
 msgstr "“%s” не отговаря."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:245
+#: ../embed/mozilla/EphyAboutModule.cpp:287
 msgid "The connection was lost because the server took too long to respond."
 msgstr ""
 "Връзката беше прекъсната, защото сървърът се забави прекалено много при "
 "отговора."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:253
+#: ../embed/mozilla/EphyAboutModule.cpp:295
+#, fuzzy
+msgid "Invalid Address"
+msgstr "Неточен адрес."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:296
 msgid "Invalid address."
 msgstr "Неточен адрес."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:254
+#: ../embed/mozilla/EphyAboutModule.cpp:297
 msgid "The address you entered is not valid."
 msgstr "Въведеният адрес е невалиден."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:263
+#: ../embed/mozilla/EphyAboutModule.cpp:306
+#, fuzzy, c-format
+msgid "“%s” Redirected Too Many Times"
+msgstr "“%s” пренасочи твърде много пъти."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:310
 #, c-format
 msgid "“%s” redirected too many times."
 msgstr "“%s” пренасочи твърде много пъти."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:265
+#: ../embed/mozilla/EphyAboutModule.cpp:312
 msgid "The redirection has been stopped for security reasons."
 msgstr ""
 "Пренасочването беше прекъснато поради причини свързани със сигурността."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:275
+#: ../embed/mozilla/EphyAboutModule.cpp:322
+#, fuzzy, c-format
+msgid "“%s” Requires an Encrypted Connection"
+msgstr "“%s” изисква криптирана връзка."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:326
 #, c-format
 msgid "“%s” requires an encrypted connection."
 msgstr "“%s” изисква криптирана връзка."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:277
+#: ../embed/mozilla/EphyAboutModule.cpp:328
 msgid ""
 "The document could not be loaded because encryption support is not installed."
 msgstr ""
 "Документът не може да бъде зареден, защото поддръжката на криптиране не е "
 "инсталирана."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:287
+#: ../embed/mozilla/EphyAboutModule.cpp:338
+#, fuzzy, c-format
+msgid "“%s” Dropped the Connection"
+msgstr "“%s” преустанови връзката."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:342
 #, c-format
 msgid "“%s” dropped the connection."
 msgstr "“%s” преустанови връзката."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:289
-#: ../embed/mozilla/EphyAboutModule.cpp:314
+#: ../embed/mozilla/EphyAboutModule.cpp:344
+#: ../embed/mozilla/EphyAboutModule.cpp:375
 msgid "The server dropped the connection before any data could be read."
 msgstr ""
 "Сървърът преустанови връзката преди да бъдат прочетени каквито и да е данни."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:297
-msgid "Cannot load document in offline mode."
+#: ../embed/mozilla/EphyAboutModule.cpp:355
+#, fuzzy
+msgid "Cannot Load Document Whilst Working Offline"
 msgstr "Документът не може да бъде зареден в режим „Изключен“."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:298
-msgid ""
-"This document cannot be viewed in offline mode. Set Epiphany to “online” and "
-"try again."
-msgstr ""
-"Този документ не може да бъде прегледан в режим „Изключен“. Превключете "
-"Epiphany режим „Включен“ и опитайте отново."
+#: ../embed/mozilla/EphyAboutModule.cpp:356
+#, fuzzy
+msgid "Cannot load document whilst working offline."
+msgstr "Документът не може да бъде зареден в режим „Изключен“."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:312
+#: ../embed/mozilla/EphyAboutModule.cpp:357
+msgid "To view this document, disable “Work Offline” and try again."
+msgstr ""
+
+#: ../embed/mozilla/EphyAboutModule.cpp:369
+#, fuzzy, c-format
+msgid "“%s” Denied Access to Port “%d”"
+msgstr "“%s” отказа достъп до порт “%d”."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:373
 #, c-format
 msgid "“%s” denied access to port “%d”."
 msgstr "“%s” отказа достъп до порт “%d”."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:323
+#: ../embed/mozilla/EphyAboutModule.cpp:384
+#, fuzzy
+msgid "Could not Connect to Proxy Server"
+msgstr "Неуспех при свързването към сървър посредник."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:385
 msgid "Could not connect to proxy server."
 msgstr "Неуспех при свързването към сървър посредник."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:324
+#: ../embed/mozilla/EphyAboutModule.cpp:386
 msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
@@ -1492,46 +1550,67 @@ msgstr ""
 "неуспешна, възможно е да има някакъв проблем със сървъра посредник или с "
 "вашата мрежа."
 
+#: ../embed/mozilla/EphyAboutModule.cpp:394
+#, fuzzy
+msgid "Could not Display Content"
+msgstr "Помощта не може да бъде изобразена: %s"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:395
+#, fuzzy
+msgid "Could not display content."
+msgstr "Помощта не може да бъде изобразена: %s"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:396
+msgid "The page uses an unsupported or invalid form of compression."
+msgstr ""
+
+#: ../embed/mozilla/EphyAboutModule.cpp:486
+#, c-format
+msgid ""
+"The page “%s” in this tab was not fully loaded yet when the web browser "
+"crashed; it could have caused the crash."
+msgstr ""
+
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:462
+#: ../embed/mozilla/EphyAboutModule.cpp:613
 msgid "You may find an old version:|in the Google Cache"
 msgstr "в кешът на Google"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:470
+#: ../embed/mozilla/EphyAboutModule.cpp:621
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "в Интернет архив"
 
-#: ../embed/mozilla/EphyHeaderSniffer.cpp:321
+#: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarksbar-model.c:350 ../src/window-commands.c:305
+#: ../src/bookmarks/ephy-bookmarks-ui.c:481 ../src/ephy-session.c:774
 msgid "Untitled"
 msgstr "Без заглавие"
 
-#: ../embed/mozilla/FilePicker.cpp:148 ../lib/ephy-file-chooser.c:371
-#: ../src/bookmarks/ephy-bookmarks-editor.c:719
+#: ../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:642
 msgid "All files"
 msgstr "Всички файлове"
 
-#: ../embed/mozilla/FilePicker.cpp:153 ../lib/ephy-file-chooser.c:355
+#: ../embed/mozilla/FilePicker.cpp:157 ../lib/ephy-file-chooser.c:355
 msgid "Web pages"
 msgstr "Интернет страници"
 
-#: ../embed/mozilla/FilePicker.cpp:161
+#: ../embed/mozilla/FilePicker.cpp:165
 msgid "Text files"
 msgstr "Текстови файлове"
 
-#: ../embed/mozilla/FilePicker.cpp:166 ../lib/ephy-file-chooser.c:363
+#: ../embed/mozilla/FilePicker.cpp:170 ../lib/ephy-file-chooser.c:363
 msgid "Images"
 msgstr "Изображения"
 
-#: ../embed/mozilla/FilePicker.cpp:174
+#: ../embed/mozilla/FilePicker.cpp:178
 msgid "XML files"
 msgstr "XML файлове"
 
-#: ../embed/mozilla/FilePicker.cpp:179
+#: ../embed/mozilla/FilePicker.cpp:183
 msgid "XUL files"
 msgstr "XUL файлове"
 
@@ -1540,8 +1619,8 @@ msgid "_Select Certificate"
 msgstr "_Избиране на сертификат"
 
 #: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:203
-#, c-format
-msgid "Choose a certificate to present as identification to \"%s\"."
+#, fuzzy, c-format
+msgid "Choose a certificate to present as identification to “%s”."
 msgstr ""
 "Избиране на сертификат, който да бъде представен като идентификация пред „%"
 "s“."
@@ -1555,127 +1634,127 @@ msgid "Certificate _Details"
 msgstr "Детайли за сертификата"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:232
-#: ../embed/mozilla/GtkNSSDialogs.cpp:539
+#: ../embed/mozilla/GtkNSSDialogs.cpp:236
+#: ../embed/mozilla/GtkNSSDialogs.cpp:548
 msgid "_View Certificate"
 msgstr "_Преглед на сертификат"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:240
+#: ../embed/mozilla/GtkNSSDialogs.cpp:244
 msgid "_Accept"
 msgstr "_Приемане"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:304
-#, c-format
+#: ../embed/mozilla/GtkNSSDialogs.cpp:311
+#, fuzzy, c-format
 msgid ""
-"The site \"%s\" returned security information for \"%s\". It is possible "
-"that someone is intercepting your communication to obtain your confidential "
+"The site “%s” returned security information for “%s”. It is possible that "
+"someone is intercepting your communication to obtain your confidential "
 "information."
 msgstr ""
 "Сайтът „%s“ върна информация по сигурността за „%s“. Възможно е някой да "
 "засича Вашите връзки, за да получи достъп до личната Ви информация."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:310
-#, c-format
+#: ../embed/mozilla/GtkNSSDialogs.cpp:317
+#, fuzzy, c-format
 msgid ""
-"You should only accept the security information if you trust \"%s\" and \"%s"
-"\"."
+"You should only accept the security information if you trust “%s” and “%s”."
 msgstr ""
 "Би трябвало да приемате информацията за сигурност, само ако имате доверие на "
 "„%s“ и „%s“."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:315
+#: ../embed/mozilla/GtkNSSDialogs.cpp:322
 msgid "Accept incorrect security information?"
 msgstr "Ще приемете ли некоректната информация за сигурността?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:346
-#, c-format
+#: ../embed/mozilla/GtkNSSDialogs.cpp:353
+#, fuzzy, c-format
 msgid ""
-"It was not possible to automatically trust \"%s\". It is possible that "
-"someone is intercepting your communication to obtain your confidential "
-"information."
+"It was not possible to automatically trust “%s”. It is possible that someone "
+"is intercepting your communication to obtain your confidential information."
 msgstr ""
 "Браузърът не може да се довери автоматично на „%s“. Възможно е някой да "
 "засича вашите връзки, за да получи достъп до личната ви информация."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:352
-#, c-format
+#: ../embed/mozilla/GtkNSSDialogs.cpp:359
+#, fuzzy, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
-"\"%s\"."
+"“%s”."
 msgstr ""
 "Трябва да се свързвате със сайта само ако сте сигурни, че сте свързани към „%"
 "s“."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:357
+#: ../embed/mozilla/GtkNSSDialogs.cpp:364
 msgid "Connect to untrusted site?"
 msgstr "Искате ли да се свържете с тази непроверена страница?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:361
+#: ../embed/mozilla/GtkNSSDialogs.cpp:368
 msgid "_Trust this security information from now on"
 msgstr "_Доверяване от сега нататък"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:362
+#: ../embed/mozilla/GtkNSSDialogs.cpp:369
 msgid "Co_nnect"
 msgstr "Св_ързване"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:421
+#: ../embed/mozilla/GtkNSSDialogs.cpp:428
 msgid "Accept expired security information?"
 msgstr "Да се приеме ли остарялата информация за сигурност?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:422
-#, c-format
-msgid "The security information for \"%s\" expired on %s."
+#. Translators: first %s is a hostname, second %s is a time/date
+#: ../embed/mozilla/GtkNSSDialogs.cpp:430
+#, fuzzy, c-format
+msgid "The security information for “%s” expired on %s."
 msgstr "Информацията за сигурността относно „%s“ изтича на %s."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:428
+#: ../embed/mozilla/GtkNSSDialogs.cpp:436
 msgid "Accept not yet valid security information?"
 msgstr "Приемане на все още невалидната информация за сигурност?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:429
-#, c-format
-msgid "The security information for \"%s\" isn't valid until %s."
+#. Translators: first %s is a hostname, second %s is a time/date
+#: ../embed/mozilla/GtkNSSDialogs.cpp:438
+#, fuzzy, c-format
+msgid "The security information for “%s” isn't valid until %s."
 msgstr "Информацията за сигурността относно „%s“ е невалидна докато %s."
 
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:445
+#: ../embed/mozilla/GtkNSSDialogs.cpp:454
 msgid "%a %d %b %Y"
 msgstr "%a %d %b %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:453
+#: ../embed/mozilla/GtkNSSDialogs.cpp:462
 msgid "You should ensure that your computer's time is correct."
 msgstr "Трябва да се уверите, че часовника на компютъра е верен."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:499
-#, c-format
-msgid "Cannot establish connection to \"%s\"."
+#: ../embed/mozilla/GtkNSSDialogs.cpp:508
+#, fuzzy, c-format
+msgid "Cannot establish connection to “%s”."
 msgstr "Не може да се осъществи връзка с „%s“."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:502
-#, c-format
-msgid "The certificate revocation list (CRL) from \"%s\" needs to be updated."
+#: ../embed/mozilla/GtkNSSDialogs.cpp:511
+#, fuzzy, c-format
+msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
 msgstr ""
 "Списъкът за отхвърляне на сертификати (СОС) от „%s“ трябва да се обнови."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:507
+#: ../embed/mozilla/GtkNSSDialogs.cpp:516
 msgid "Please ask your system administrator for assistance."
 msgstr "Помолете вашия системен администратор за съдействие."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:537
+#: ../embed/mozilla/GtkNSSDialogs.cpp:546
 msgid "Trust new Certificate Authority?"
 msgstr "Доверявате ли се на този нов сертификат?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:542
+#: ../embed/mozilla/GtkNSSDialogs.cpp:551
 msgid "_Trust CA"
 msgstr "_Доверяване на CA"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:564
-#, c-format
-msgid "Trust new Certificate Authority \"%s\" to identify web sites?"
+#: ../embed/mozilla/GtkNSSDialogs.cpp:573
+#, fuzzy, c-format
+msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr "Доверявате ли се на „%s“ при идентификацията на Интернет страници?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:569
+#: ../embed/mozilla/GtkNSSDialogs.cpp:578
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1683,111 +1762,111 @@ msgstr ""
 "Преди да се доверите на Агенцията за сертификати трябва да се уверите в "
 "истинността на техния сертификат."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:640
+#: ../embed/mozilla/GtkNSSDialogs.cpp:649
 msgid "Certificate already exists."
 msgstr "Сертификатът вече съществува."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:641
+#: ../embed/mozilla/GtkNSSDialogs.cpp:650
 msgid "The certificate has already been imported."
 msgstr "Сертификатът вече беше внесен."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:766
+#: ../embed/mozilla/GtkNSSDialogs.cpp:775
 msgid "_Backup Certificate"
 msgstr "Резервно копие на сертификат"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:773
+#: ../embed/mozilla/GtkNSSDialogs.cpp:782
 msgid "Select password."
 msgstr "Избиране на парола."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:774
+#: ../embed/mozilla/GtkNSSDialogs.cpp:783
 msgid "Select a password to protect this certificate."
 msgstr "Избиране на парола за защита на този сертификат."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:786
-#: ../embed/mozilla/GtkNSSDialogs.cpp:896
+#: ../embed/mozilla/GtkNSSDialogs.cpp:795
+#: ../embed/mozilla/GtkNSSDialogs.cpp:905
 msgid "_Password:"
 msgstr "_Парола:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:800
+#: ../embed/mozilla/GtkNSSDialogs.cpp:809
 msgid "Con_firm password:"
 msgstr "Пот_върждаване на паролата:"
 
 #. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:812
+#: ../embed/mozilla/GtkNSSDialogs.cpp:821
 msgid "Password quality:"
 msgstr "Качество на паролата:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:869
+#: ../embed/mozilla/GtkNSSDialogs.cpp:878
 msgid "I_mport Certificate"
 msgstr "В_насяне на сертификат"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:885
+#: ../embed/mozilla/GtkNSSDialogs.cpp:894
 msgid "Password required."
 msgstr "Изисква се парола."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:886
+#: ../embed/mozilla/GtkNSSDialogs.cpp:895
 msgid "Enter the password for this certificate."
 msgstr "Въведете парола за този сертификат."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:967
+#: ../embed/mozilla/GtkNSSDialogs.cpp:976
 msgid "Certificate Revocation list successfully imported."
 msgstr "Списъкът за отхвърляне на сертификати е импортиран успешно."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:968
+#: ../embed/mozilla/GtkNSSDialogs.cpp:977
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "Списъци за отхвърляне на сертификати, които са импортирани:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:994
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1003
 msgid "Unit:"
 msgstr "Единица:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:999
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1008
 msgid "Next Update:"
 msgstr "Следващо осъвременяване:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1026
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1035
 msgid "Not part of certificate"
 msgstr "Не е част от сертификат"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1312
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1325
 msgid "Certificate Properties"
 msgstr "Настройки на сертификат"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1334
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1347
 msgid "This certificate has been verified for the following uses:"
 msgstr "Този сертификат е проверен за следните потребители:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1337
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1350
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Неуспешна проверка на сертификата - той е бил отхвърлен."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1353
 msgid "Could not verify this certificate because it has expired."
 msgstr "Този сертификат не може да бъде проверен защото е изтекъл."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1343
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1356
 msgid "Could not verify this certificate because it is not trusted."
 msgstr ""
 "Този сертификат не може да бъде проверен защото не му е гласувано доверие."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1346
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1359
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "Този сертификат не може да бъде проверен защото издателят му не се ползва с "
 "доверие."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1349
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1362
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr ""
 "Този сертификат не може да бъде проверен защото издателя му е непознат."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "Не може да се провери този сертификат, защото CA сертификатът е невалиден."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1357
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1370
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Този сертификат не може да бъде проверен поради неизвестни причини."
 
@@ -1812,25 +1891,21 @@ msgid "This page is loaded over a secure connection"
 msgstr "Разглеждате тази страница чрез сигурна връзка"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
-msgid ""
-"You can always see the security status of a page from the padlock icon on "
-"the statusbar."
+msgid "The padlock icon in the statusbar indicates whether a page is secure."
 msgstr ""
-"Винаги можете да видите състоянието на сигурността към дадена страница, чрез "
-"поглеждане на вградената икона в лентата за състоянието."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
 msgid "Security Warning"
 msgstr "Предупреждение за сигурността"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
 msgid "This page is loaded over a low security connection"
 msgstr "Разглеждате тази страница чрез несигурна връзка"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -1838,11 +1913,11 @@ msgstr ""
 "Всяка информация, която виждате или въвеждате в тази страница, може да бъде "
 "проследена от трети лица."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "Някои части от тази страница са заредени чрез несигурна връзка."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1850,12 +1925,12 @@ msgstr ""
 "Част от информацията, която въведохте, ще бъде изпратена чрез несигурна "
 "връзка и лесно може да бъде прочетена/проследена от трети лица."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid "Send this information over an insecure connection?"
 msgstr "Изпращане на тази информация чрез несигурна връзка?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1863,12 +1938,12 @@ msgstr ""
 "Информацията, която въведохте, ще бъде изпратена чрез несигурна връзка и "
 "може да бъде прочетена/проследена от трети лица."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
 msgid "_Send"
 msgstr "_Изпращане"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -1878,7 +1953,7 @@ msgstr ""
 "която въведохте, ще бъде изпратена чрез несигурна връзка и лесно ще може да "
 "бъде прочетена/проследена от трети лица."
 
-#: ../embed/mozilla/MozDownload.cpp:692
+#: ../embed/mozilla/MozDownload.cpp:758
 msgid "Files"
 msgstr "Файлове"
 
@@ -1892,28 +1967,28 @@ msgstr "Файлове"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:229
+#: ../embed/mozilla/mozilla-embed-single.cpp:236
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?hl=bg&ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:583
+#: ../embed/mozilla/mozilla-embed-single.cpp:568
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr ""
 "В момента Epiphany не може да бъде използван. Браузърът Mozilla не може да "
 "бъде намерен."
 
-#: ../embed/print-dialog.c:275
+#: ../embed/print-dialog.c:268
 msgid "Generating PDF is not supported"
 msgstr "Генерирането на PDF не се поддържа"
 
-#: ../embed/print-dialog.c:282
+#: ../embed/print-dialog.c:275
 msgid "Printing is not supported on this printer"
 msgstr "Разпечатването не се поддържа на този принтер"
 
-#: ../embed/print-dialog.c:285
-#, c-format
+#: ../embed/print-dialog.c:278
+#, fuzzy, c-format
 msgid ""
-"You were trying to print to a printer using the \"%s\" driver. This program "
+"You were trying to print to a printer using the “%s” driver. This program "
 "requires a PostScript printer driver."
 msgstr ""
 "Опитвахте се да печатате на принтер използвайки драйвера „%s“. Тази програма "
@@ -1935,7 +2010,7 @@ msgstr "_До:"
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Задава краят на обвахата за печат на страниците"
 
-#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1115
+#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1271
 msgid "Print"
 msgstr "Печат"
 
@@ -1952,11 +2027,20 @@ msgstr ""
 "Грешка в GConf:\n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:534
+#: ../lib/egg/egg-editable-toolbar.c:487
+#, fuzzy
+msgid "_Move on Toolbar"
+msgstr "_Премахване от лентата с инструменти"
+
+#: ../lib/egg/egg-editable-toolbar.c:495
+msgid "_Remove from Toolbar"
+msgstr "_Премахване от лентата с инструменти"
+
+#: ../lib/egg/egg-editable-toolbar.c:524
 msgid "_Remove Toolbar"
 msgstr "_Премахване на лентата с инструменти"
 
-#: ../lib/egg/egg-toolbar-editor.c:555
+#: ../lib/egg/egg-toolbar-editor.c:439
 msgid "Separator"
 msgstr "Разделител"
 
@@ -1964,69 +2048,50 @@ msgstr "Разделител"
 msgid "All supported types"
 msgstr "Всички поддържани типове"
 
-#. The name of the default downloads folder
-#: ../lib/ephy-file-helpers.c:96 ../src/prefs-dialog.c:1146
-msgid "Downloads"
-msgstr "Изтегляния"
-
-#: ../lib/ephy-file-helpers.c:270
+#: ../lib/ephy-file-helpers.c:312
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s не съществува, премахнете го."
 
-#: ../lib/ephy-file-helpers.c:276
+#: ../lib/ephy-file-helpers.c:318
 #, c-format
 msgid "Failed to create directory %s."
 msgstr "Папката %s не може да бъде създадена."
 
-#: ../lib/ephy-gui.c:214
-#, c-format
-msgid "Directory %s is not writable"
+#: ../lib/ephy-gui.c:328
+#, fuzzy, c-format
+msgid "Directory “%s” is not writable"
 msgstr "В папката %s не може да се пише"
 
-#: ../lib/ephy-gui.c:218
+#: ../lib/ephy-gui.c:332
 msgid "You do not have permission to create files in this directory."
 msgstr "Нямате права за създаването на файлове в тази директория."
 
-#: ../lib/ephy-gui.c:221
-msgid "Directory not writable"
+#: ../lib/ephy-gui.c:335
+#, fuzzy
+msgid "Directory not Writable"
 msgstr "В папката не може да се пише"
 
-#: ../lib/ephy-gui.c:251
+#: ../lib/ephy-gui.c:365
 #, c-format
-msgid "File %s is not writable"
-msgstr "Във файла %s не може да се пише"
+msgid "Cannot overwrite existing file “%s”"
+msgstr ""
 
-#: ../lib/ephy-gui.c:255
-msgid "You do not have permission to overwrite this file."
-msgstr "Нямате права да презапишете този файл."
-
-#: ../lib/ephy-gui.c:257
-msgid "File not writable"
-msgstr "Във файла не може да се пише"
-
-#: ../lib/ephy-gui.c:279
-#, c-format
-msgid "Overwrite \"%s\"?"
-msgstr "Презаписване на „%s“?"
-
-#: ../lib/ephy-gui.c:283
+#: ../lib/ephy-gui.c:369
+#, fuzzy
 msgid ""
-"A file with this name already exists. If you choose to overwrite this file, "
-"the contents will be lost."
+"A file with this name alreay exists and you don't have permission to "
+"overwrite it."
 msgstr ""
 "Вече съществува файл с такова име. Ако изберете да презапишете този файл, ще "
 "загубите съдържанието на предишния файл."
 
-#: ../lib/ephy-gui.c:287
-msgid "_Overwrite"
-msgstr "_Презаписване"
-
-#: ../lib/ephy-gui.c:289
-msgid "Overwrite File?"
+#: ../lib/ephy-gui.c:372
+#, fuzzy
+msgid "Cannot Overwrite File"
 msgstr "Презаписване на този файл?"
 
-#: ../lib/ephy-gui.c:325
+#: ../lib/ephy-gui.c:409
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Помощта не може да бъде изобразена: %s"
@@ -2187,29 +2252,29 @@ msgstr "Западни"
 msgid "select fonts for|Other Scripts"
 msgstr "Други скриптове"
 
-#: ../lib/ephy-stock-icons.c:56
+#: ../lib/ephy-stock-icons.c:54
 msgid "Close Tab"
 msgstr "Затваряне на страница"
 
-#: ../lib/ephy-stock-icons.c:57
+#: ../lib/ephy-stock-icons.c:55
 msgid "Popup Windows"
 msgstr "Изскачащи прозорци"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-history-window.c:1191
+#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1191
 msgid "History"
 msgstr "История"
 
-#: ../lib/ephy-stock-icons.c:59 ../src/bookmarks/ephy-bookmarks-editor.c:759
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1630
-#: ../src/bookmarks/ephy-topic-action.c:967 ../src/ephy-window.c:1121
+#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1535
+#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1277
 msgid "Bookmarks"
 msgstr "Отметки"
 
-#: ../lib/ephy-stock-icons.c:60 ../src/ephy-toolbar.c:324
+#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Запис на адрес"
 
-#: ../lib/ephy-stock-icons.c:61
+#: ../lib/ephy-stock-icons.c:59
 msgid "_Download"
 msgstr "_Изтегляне"
 
@@ -2249,271 +2314,270 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:590
+#: ../lib/widgets/ephy-location-entry.c:818
 msgid "Drag and drop this icon to create a link to this page"
 msgstr ""
 "Изтеглете и пуснете тази икона, за да създадете връзка към тази страница"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:295
+#: ../plugins/desktop-file/plugin.cpp:263
+#, fuzzy
+msgid "Unsafe protocol."
+msgstr "Спиране на несигурните протоколи"
+
+#: ../plugins/desktop-file/plugin.cpp:264
+msgid ""
+"The address has not been loaded, because it refers to an unsafe protocol and "
+"thereby presents a security risk to your system."
+msgstr ""
+
+#: ../plugins/desktop-file/plugin.cpp:290
+msgid "No address found."
+msgstr ""
+
+#: ../plugins/desktop-file/plugin.cpp:291
+msgid "No web address could be found in this file."
+msgstr ""
+
+#. Translators: "Desktop File" refers to .desktop files containing a link
+#: ../plugins/desktop-file/plugin.cpp:326
+msgid "Epiphany Desktop File Plugin"
+msgstr ""
+
+#: ../plugins/desktop-file/plugin.cpp:330
+msgid "This plugin handles “.desktop” files containing web links."
+msgstr ""
+
+#: ../src/bookmarks/ephy-bookmark-action.c:284
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:549
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1243
-#: ../src/bookmarks/ephy-topic-action.c:475 ../src/ephy-history-window.c:173
-#: ../src/ephy-history-window.c:711
+#: ../src/bookmarks/ephy-bookmark-action.c:395
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1162
+#: ../src/ephy-history-window.c:173 ../src/ephy-history-window.c:711
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Отваряне в нова _страница"
 msgstr[1] "Отваряне в нови _страници"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmark-action.c:555
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1240
+#: ../src/bookmarks/ephy-bookmark-action.c:401
+#: ../src/bookmarks/ephy-bookmarks-editor.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1159
 #: ../src/ephy-history-window.c:170 ../src/ephy-history-window.c:708
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Отваряне в нов _прозорец"
 msgstr[1] "Отваряне в нови _прозорци"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:576
-#: ../src/bookmarks/ephy-topic-action.c:797
-msgid "_Remove from Toolbar"
-msgstr "_Премахване от лентата с инструменти"
-
-#: ../src/bookmarks/ephy-bookmark-action.c:589
-#: ../src/bookmarks/ephy-topic-action.c:810
-msgid "Move _Left"
-msgstr "Преместване на_ляво"
-
-#: ../src/bookmarks/ephy-bookmark-action.c:596
-#: ../src/bookmarks/ephy-topic-action.c:817
-msgid "Move Ri_ght"
-msgstr "Преместване на_дясно"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:230
-#, c-format
-msgid "%s Properties"
+#: ../src/bookmarks/ephy-bookmark-properties.c:225
+#, fuzzy, c-format
+msgid "“%s” Properties"
 msgstr "%s настройки"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:350
+#: ../src/bookmarks/ephy-bookmark-properties.c:321
 #: ../src/bookmarks/ephy-new-bookmark.c:231
 msgid "_Title:"
 msgstr "_Заглавие:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:392
+#: ../src/bookmarks/ephy-bookmark-properties.c:363
 #: ../src/bookmarks/ephy-new-bookmark.c:254
 msgid "To_pics:"
 msgstr "Те_ми:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:401
-msgid "_Show in bookmarks bar"
-msgstr "_Показване в лентата с отметките"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:140
+#: ../src/bookmarks/ephy-bookmarks-editor.c:134
 msgid "Remove from this topic"
 msgstr "Премахване от тази тема"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
-#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:114
+#: ../src/bookmarks/ephy-bookmarks-editor.c:163
+#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:115
 msgid "_File"
 msgstr "_Файл"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:171
-#: ../src/ephy-history-window.c:164 ../src/ephy-window.c:115
+#: ../src/bookmarks/ephy-bookmarks-editor.c:164
+#: ../src/ephy-history-window.c:164 ../src/ephy-window.c:116
 msgid "_Edit"
 msgstr "_Редактиране"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:172
-#: ../src/ephy-history-window.c:165 ../src/ephy-window.c:116
+#: ../src/bookmarks/ephy-bookmarks-editor.c:165
+#: ../src/ephy-history-window.c:165 ../src/ephy-window.c:117
 msgid "_View"
 msgstr "_Изглед"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
-#: ../src/ephy-history-window.c:166 ../src/ephy-window.c:121
+#: ../src/bookmarks/ephy-bookmarks-editor.c:166
+#: ../src/ephy-history-window.c:166 ../src/ephy-window.c:122
 msgid "_Help"
 msgstr "_Помощ"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:177
+#: ../src/bookmarks/ephy-bookmarks-editor.c:170
 #: ../src/bookmarks/ephy-new-bookmark.c:294
 msgid "_New Topic"
 msgstr "_Нова тема"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
+#: ../src/bookmarks/ephy-bookmarks-editor.c:171
 msgid "Create a new topic"
 msgstr "Създаване на нова тема"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/bookmarks/ephy-bookmarks-editor.c:174
 msgid "Open the selected bookmark in a new window"
 msgstr "Отваряне на избраната отметка в нов прозорец"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#: ../src/bookmarks/ephy-bookmarks-editor.c:177
 msgid "Open the selected bookmark in a new tab"
 msgstr "Отваряне на избраната отметка в нова страница"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:186
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "_Rename..."
 msgstr "_Преименуване..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "Rename the selected bookmark or topic"
 msgstr "Преименуване на избраната отметка или тема"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
 #: ../src/ephy-history-window.c:176
 msgid "_Delete"
 msgstr "_Изтриване"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "Delete the selected bookmark or topic"
 msgstr "Изтриване на избраната отметка или тема"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:191
+#: ../src/bookmarks/ephy-bookmarks-editor.c:184
 msgid "_Properties"
 msgstr "_Настройки"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/bookmarks/ephy-bookmarks-editor.c:185
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Преглед или промяна на настройките на избраната отметка"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:194
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "_Import Bookmarks..."
-msgstr "_Вмъкване на отметки..."
+msgstr "_Внасяне на отметки..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
+#: ../src/bookmarks/ephy-bookmarks-editor.c:188
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Вмъкване на отметки от друг браузър или файл с отметки"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:197
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "_Export Bookmarks..."
 msgstr "_Изнасяне на отметки..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:191
 msgid "Export bookmarks to a file"
 msgstr "Изнасяне на отметки във файл"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
-#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:154
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:152
 msgid "_Close"
 msgstr "_Затваряне"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
+#: ../src/bookmarks/ephy-bookmarks-editor.c:194
 msgid "Close the bookmarks window"
 msgstr "Затваряне на прозорецът с отметките"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
-#: ../src/ephy-history-window.c:187 ../src/ephy-window.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/ephy-history-window.c:187 ../src/ephy-window.c:164
 msgid "Cu_t"
 msgstr "Из_рязване"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:206
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:199
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:165
 msgid "Cut the selection"
 msgstr "Изрязване на избрания текст"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1253
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1172
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:721
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:167
 msgid "_Copy"
 msgstr "_Копиране"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:168
 msgid "Copy the selection"
 msgstr "Копиране на избрания текст"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:170
 msgid "_Paste"
 msgstr "_Поставяне"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/bookmarks/ephy-bookmarks-editor.c:205
 #: ../src/ephy-history-window.c:194
 msgid "Paste the clipboard"
 msgstr "Поставяне от буфера за обмен"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:214
-#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:175
+#: ../src/bookmarks/ephy-bookmarks-editor.c:207
+#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:173
 msgid "Select _All"
 msgstr "Избиране на _всичко"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:215
+#: ../src/bookmarks/ephy-bookmarks-editor.c:208
 msgid "Select all bookmarks or text"
 msgstr "Избиране на всички отметки или текст"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:219
-#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:273
+#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:259
 msgid "_Contents"
 msgstr "_Ръководство"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:220
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
 msgid "Display bookmarks help"
 msgstr "Показване на помощта за отметките"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:222
-#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:276
+#: ../src/bookmarks/ephy-bookmarks-editor.c:215
+#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:262
 msgid "_About"
 msgstr "_Относно"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:223
-#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:277
+#: ../src/bookmarks/ephy-bookmarks-editor.c:216
+#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:263
 msgid "Display credits for the web browser creators"
 msgstr "Показване на информацията за създателите тази програма"
 
-#. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:231
-msgid "_Show in Bookmarks Bar"
-msgstr "_Показване в лентата с отметките"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:232
-msgid "Show the selected bookmark or topic in the bookmarks bar"
-msgstr "Показване на избраната отметка или тема в лентата с отметките"
-
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:246
+#: ../src/bookmarks/ephy-bookmarks-editor.c:229
 #: ../src/ephy-history-window.c:222
 msgid "_Title"
 msgstr "_Заглавие"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:247
+#: ../src/bookmarks/ephy-bookmarks-editor.c:230
 #: ../src/ephy-history-window.c:223
 msgid "Show only the title column"
 msgstr "Показване само на титулната колона"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:248
+#: ../src/bookmarks/ephy-bookmarks-editor.c:231
 #: ../src/ephy-history-window.c:226
 msgid "T_itle and Address"
 msgstr "За_главие и адрес"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:249
+#: ../src/bookmarks/ephy-bookmarks-editor.c:232
 #: ../src/ephy-history-window.c:227
 msgid "Show both the title and address columns"
 msgstr "Показване на колоните за заглавието и адреса"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:291
+#: ../src/bookmarks/ephy-bookmarks-editor.c:273
 #: ../src/bookmarks/ephy-topics-selector.c:319
 msgid "Type a topic"
 msgstr "Тип тема"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:468
+#: ../src/bookmarks/ephy-bookmarks-editor.c:391
 #, c-format
-msgid "Delete topic \"%s\"?"
+msgid "Delete topic “%s”?"
 msgstr "Изтриване на темата „%s“?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:471
+#: ../src/bookmarks/ephy-bookmarks-editor.c:394
 msgid "Delete this topic?"
 msgstr "Изтриване на тази тема?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:473
+#: ../src/bookmarks/ephy-bookmarks-editor.c:396
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -2521,116 +2585,116 @@ msgstr ""
 "Изтриването на тази тема ще разбърка всички нейни отметки, освен ако те не "
 "принадлежат към друга тема. Отметките няма да бъдат изтрити."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:476
+#: ../src/bookmarks/ephy-bookmarks-editor.c:399
 msgid "_Delete Topic"
 msgstr "_Изтриване на тема"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:582
+#: ../src/bookmarks/ephy-bookmarks-editor.c:505
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:586
-#: ../src/bookmarks/ephy-bookmarks-editor.c:590
+#: ../src/bookmarks/ephy-bookmarks-editor.c:509
+#: ../src/bookmarks/ephy-bookmarks-editor.c:513
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:595
+#: ../src/bookmarks/ephy-bookmarks-editor.c:518
 #, c-format
-msgid "Mozilla \"%s\" profile"
+msgid "Mozilla “%s” profile"
 msgstr "Профил „%s“ на Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:599
+#: ../src/bookmarks/ephy-bookmarks-editor.c:522
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:603
+#: ../src/bookmarks/ephy-bookmarks-editor.c:526
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:632
+#: ../src/bookmarks/ephy-bookmarks-editor.c:555
 msgid "Import failed"
 msgstr "Внасянето е неуспешно"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:634
+#: ../src/bookmarks/ephy-bookmarks-editor.c:557
 msgid "Import Failed"
 msgstr "Внасянето е неуспешно"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:637
+#: ../src/bookmarks/ephy-bookmarks-editor.c:560
 #, c-format
 msgid ""
-"The bookmarks from \"%s\" could not be imported because the file is "
-"corrupted or of an unsupported type."
+"The bookmarks from “%s” could not be imported because the file is corrupted "
+"or of an unsupported type."
 msgstr ""
 "Отметките от „%s“ не могат да бъдат внесени, защото файлът е развален или е "
 "от неподдържан файлов формат."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:700
+#: ../src/bookmarks/ephy-bookmarks-editor.c:623
 msgid "Import bookmarks from file"
 msgstr "Внасяне на отметки от файл"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:707
+#: ../src/bookmarks/ephy-bookmarks-editor.c:630
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Отметки от Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:711
+#: ../src/bookmarks/ephy-bookmarks-editor.c:634
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Отметки от Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:715
+#: ../src/bookmarks/ephy-bookmarks-editor.c:638
 msgid "Epiphany bookmarks"
 msgstr "Отметки от Epiphany"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:749
+#: ../src/bookmarks/ephy-bookmarks-editor.c:672
 msgid "Export Bookmarks"
 msgstr "Изнасяне на отметки"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:762
+#: ../src/bookmarks/ephy-bookmarks-editor.c:687
 msgid "File format:"
 msgstr "Файлов формат:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:765
+#: ../src/bookmarks/ephy-bookmarks-editor.c:690
 msgid "Epiphany (RDF)"
 msgstr "Epiphany (RDF)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:766
+#: ../src/bookmarks/ephy-bookmarks-editor.c:691
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:837
+#: ../src/bookmarks/ephy-bookmarks-editor.c:763
 msgid "Import Bookmarks"
 msgstr "Внасяне на отметки"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:843
+#: ../src/bookmarks/ephy-bookmarks-editor.c:769
 msgid "I_mport"
 msgstr "В_насяне"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:857
+#: ../src/bookmarks/ephy-bookmarks-editor.c:783
 msgid "Import bookmarks from:"
 msgstr "Внасяне на отметки от:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1249
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1168
 #: ../src/ephy-history-window.c:717
 msgid "_Copy Address"
 msgstr "_Копиране на адрес"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1497
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1402
 #: ../src/ephy-history-window.c:1033
 msgid "_Search:"
 msgstr "_Търсене:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1696
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1597
 #: ../src/bookmarks/ephy-topics-selector.c:198
 msgid "Topics"
 msgstr "Теми"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1766
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1667
 #: ../src/ephy-history-window.c:1316
 msgid "Title"
 msgstr "Заглавие"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1772
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1673
 #: ../src/ephy-history-window.c:1322
 msgid "Address"
 msgstr "Адреси"
@@ -2648,72 +2712,72 @@ msgstr "Търсене в Интернет"
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.co.uk/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../src/bookmarks/ephy-bookmarks.c:102
+#: ../src/bookmarks/ephy-bookmarks.c:101
 msgid "Entertainment"
 msgstr "Забавление"
 
-#: ../src/bookmarks/ephy-bookmarks.c:103
+#: ../src/bookmarks/ephy-bookmarks.c:102
 msgid "News"
 msgstr "Новини"
 
-#: ../src/bookmarks/ephy-bookmarks.c:104
+#: ../src/bookmarks/ephy-bookmarks.c:103
 msgid "Shopping"
 msgstr "Пазаруване"
 
-#: ../src/bookmarks/ephy-bookmarks.c:105
+#: ../src/bookmarks/ephy-bookmarks.c:104
 msgid "Sports"
 msgstr "Спортове"
 
-#: ../src/bookmarks/ephy-bookmarks.c:106
+#: ../src/bookmarks/ephy-bookmarks.c:105
 msgid "Travel"
 msgstr "Пътуване"
 
-#: ../src/bookmarks/ephy-bookmarks.c:107
+#: ../src/bookmarks/ephy-bookmarks.c:106
 msgid "Work"
 msgstr "Работа"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:585
+#: ../src/bookmarks/ephy-bookmarks.c:471
 #, c-format
-msgid "Update bookmark \"%s\"?"
+msgid "Update bookmark “%s”?"
 msgstr "Осъвременяване на отметката „%s“?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:590
+#: ../src/bookmarks/ephy-bookmarks.c:476
 #, c-format
-msgid "The bookmarked page has moved to \"%s\"."
+msgid "The bookmarked page has moved to “%s”."
 msgstr "Страницата с отметките беше преместена в „%s“."
 
-#: ../src/bookmarks/ephy-bookmarks.c:594
+#: ../src/bookmarks/ephy-bookmarks.c:480
 msgid "_Don't Update"
 msgstr "_Да не се актуализира"
 
-#: ../src/bookmarks/ephy-bookmarks.c:596
+#: ../src/bookmarks/ephy-bookmarks.c:482
 msgid "_Update"
 msgstr "_Актуализиране"
 
-#: ../src/bookmarks/ephy-bookmarks.c:599
+#: ../src/bookmarks/ephy-bookmarks.c:485
 msgid "Update Bookmark?"
 msgstr "Актуализиране на отметка?"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:979
+#: ../src/bookmarks/ephy-bookmarks.c:873
 msgid "bookmarks|All"
 msgstr "Всички"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1015
+#: ../src/bookmarks/ephy-bookmarks.c:909
 msgid "bookmarks|Most Visited"
 msgstr "Най-използвани"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this topic contains the not categorized bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1034
+#: ../src/bookmarks/ephy-bookmarks.c:928
 msgid "bookmarks|Not Categorized"
 msgstr "Неразпределени"
 
@@ -2721,7 +2785,7 @@ msgstr "Неразпределени"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this is an automatic topic containing local websites bookmarks
 #. * autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1058
+#: ../src/bookmarks/ephy-bookmarks.c:953
 msgid "bookmarks|Local Sites"
 msgstr "Местни сайтове"
 
@@ -2730,8 +2794,8 @@ msgid "Add Bookmark"
 msgstr "Добавяне на отметка"
 
 #: ../src/bookmarks/ephy-new-bookmark.c:312
-#, c-format
-msgid "You already have a bookmark titled \"%s\" for this page."
+#, fuzzy, c-format
+msgid "You already have a bookmark titled “%s” for this page."
 msgstr "Отметка с име „%s“ вече съществува за тази страница."
 
 #: ../src/bookmarks/ephy-new-bookmark.c:324
@@ -2742,12 +2806,26 @@ msgstr "_Преглед на настройките"
 msgid "Duplicated Bookmark"
 msgstr "Дублирани отметки"
 
-#. This is the adjective, not the verb
-#: ../src/bookmarks/ephy-topic-action.c:281
-msgid "Empty"
-msgstr "Празен"
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:316
+#, fuzzy
+msgid "Quick Bookmark"
+msgstr "Дублирани отметки"
 
-#: ../src/ephy-encoding-dialog.c:310
+#: ../src/bookmarks/ephy-open-tabs-action.c:64
+#, fuzzy
+msgid "Open in New _Tabs"
+msgstr "Отваряне в нова _страница"
+
+#: ../src/bookmarks/ephy-related-action.c:167
+#, fuzzy
+msgid "Related"
+msgstr "_Презареждане"
+
+#: ../src/bookmarks/ephy-topic-factory-action.c:315
+msgid "Quick Topic"
+msgstr ""
+
+#: ../src/ephy-encoding-dialog.c:313
 msgid "Encodings"
 msgstr "Кодиране"
 
@@ -2763,32 +2841,40 @@ msgstr "Други кодирания"
 msgid "_Automatic"
 msgstr "_Автоматичен"
 
-#: ../src/ephy-find-toolbar.c:404
+#: ../src/ephy-find-toolbar.c:130
+msgid "Phrase not found"
+msgstr ""
+
+#: ../src/ephy-find-toolbar.c:133
+msgid "Find wrapped"
+msgstr ""
+
+#: ../src/ephy-find-toolbar.c:481
 msgid "Find:"
 msgstr "Търсене:"
 
-#: ../src/ephy-find-toolbar.c:420 ../src/ephy-find-toolbar.c:421
-msgid "Find Next"
-msgstr "Следващо търсене"
-
-#: ../src/ephy-find-toolbar.c:424
-msgid "Find next occurrence of the search string"
-msgstr "Търсене на следващото споменаване на низ"
-
-#: ../src/ephy-find-toolbar.c:431 ../src/ephy-find-toolbar.c:432
+#: ../src/ephy-find-toolbar.c:497 ../src/ephy-find-toolbar.c:498
 msgid "Find Previous"
 msgstr "Предишно търсене"
 
-#: ../src/ephy-find-toolbar.c:435
+#: ../src/ephy-find-toolbar.c:501
 msgid "Find previous occurrence of the search string"
 msgstr "Търсене на предишното място на търсен низ"
 
+#: ../src/ephy-find-toolbar.c:508 ../src/ephy-find-toolbar.c:509
+msgid "Find Next"
+msgstr "Следващо търсене"
+
+#: ../src/ephy-find-toolbar.c:512
+msgid "Find next occurrence of the search string"
+msgstr "Търсене на следващото споменаване на низ"
+
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:278 ../src/ephy-toolbar.c:627
+#: ../src/ephy-fullscreen-popup.c:277 ../src/ephy-toolbar.c:583
 msgid "Leave Fullscreen"
 msgstr "Напускане на „Цял екран“"
 
-#: ../src/ephy-go-action.c:71 ../src/ephy-toolbar.c:354
+#: ../src/ephy-go-action.c:71 ../src/ephy-toolbar.c:342
 msgid "Go"
 msgstr "Отиване"
 
@@ -2857,7 +2943,8 @@ msgid "Clear History"
 msgstr "Изчистване на историята"
 
 #: ../src/ephy-history-window.c:1042
-msgid "Last 30 Minutes"
+#, fuzzy
+msgid "Last 30 minutes"
 msgstr "Последните 30 минути"
 
 #: ../src/ephy-history-window.c:1043
@@ -2909,15 +2996,15 @@ msgstr "Вмъкване на отметки от посочения файл"
 msgid "Launch the bookmarks editor"
 msgstr "Стартиране на редактора на отметките"
 
-#: ../src/ephy-notebook.c:970
+#: ../src/ephy-notebook.c:1086
 msgid "Close tab"
 msgstr "Затваряне на страница"
 
-#: ../src/ephy-session.c:377
+#: ../src/ephy-session.c:378
 msgid "Recover previous browser windows and tabs?"
 msgstr "Възстановяване на предишните прозорци и страници?"
 
-#: ../src/ephy-session.c:381
+#: ../src/ephy-session.c:382
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -2925,15 +3012,15 @@ msgstr ""
 "Epiphany спря неочаквано по време на предишната сесия. Можете да "
 "възстановите отворените прозорци и страници."
 
-#: ../src/ephy-session.c:385
+#: ../src/ephy-session.c:386
 msgid "_Don't Recover"
 msgstr "_Без възстановяване"
 
-#: ../src/ephy-session.c:387
+#: ../src/ephy-session.c:388
 msgid "_Recover"
 msgstr "_Възстановяване"
 
-#: ../src/ephy-session.c:389
+#: ../src/ephy-session.c:390
 msgid "Crash Recovery"
 msgstr "Възстановяване след срив"
 
@@ -2949,7 +3036,7 @@ msgstr "Изисква се разширение за страничната л�
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Връзката, която натиснахте, се нуждае от инсталирана странична лента."
 
-#: ../src/ephy-shell.c:455
+#: ../src/ephy-shell.c:454
 msgid ""
 "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
 "use bonobo-activation-sysconf to configure the search path for bonobo server "
@@ -2959,7 +3046,7 @@ msgstr ""
 "използвате bonobo-activation-sysconf, за да конфигурирате къде да се търси "
 "за сървърни файлове."
 
-#: ../src/ephy-shell.c:462
+#: ../src/ephy-shell.c:461
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
@@ -2967,7 +3054,7 @@ msgstr ""
 "Epiphany не може да бъде използван, заради неочаквана грешка от Bonobo при "
 "опит да се регистрира автоматизиращия сървър"
 
-#: ../src/ephy-shell.c:479
+#: ../src/ephy-shell.c:478
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
@@ -2975,39 +3062,34 @@ msgstr ""
 "Epiphany не може да бъде използван, заради неочаквана грешка от Bonobo при "
 "опит да се открие обект от автоматизацията."
 
-#: ../src/ephy-tab.c:488 ../src/ephy-tab.c:2234
+#: ../src/ephy-tab.c:490 ../src/ephy-tab.c:2247 ../src/ephy-tab.c:2282
 msgid "Blank page"
 msgstr "Празна страница"
 
 #. translators: %s here is the address of the web page
-#: ../src/ephy-tab.c:916
+#: ../src/ephy-tab.c:925 ../src/ephy-tab.c:1647
 #, c-format
 msgid "Loading “%s”..."
 msgstr "Зареждане на „%s“..."
 
-#: ../src/ephy-tab.c:920
+#: ../src/ephy-tab.c:929
 msgid "Loading..."
 msgstr "Зареждане..."
 
-#: ../src/ephy-tab.c:1621
-#, c-format
-msgid "Redirecting to %s..."
+#: ../src/ephy-tab.c:1631
+#, fuzzy, c-format
+msgid "Redirecting to “%s”..."
 msgstr "Пренасочване към %s..."
 
-#: ../src/ephy-tab.c:1625
-#, c-format
-msgid "Transferring data from %s..."
+#: ../src/ephy-tab.c:1635
+#, fuzzy, c-format
+msgid "Transferring data from “%s”..."
 msgstr "Пренасяне на данни от %s..."
 
-#: ../src/ephy-tab.c:1629
-#, c-format
-msgid "Waiting for authorization from %s..."
+#: ../src/ephy-tab.c:1639
+#, fuzzy, c-format
+msgid "Waiting for authorization from “%s”..."
 msgstr "Очакване на разрешение от %s..."
-
-#: ../src/ephy-tab.c:1637
-#, c-format
-msgid "Loading %s..."
-msgstr "Зареждане на %s..."
 
 #: ../src/ephy-tabs-menu.c:148
 msgid "Switch to this tab"
@@ -3017,697 +3099,671 @@ msgstr "Превключване към тази страница"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../src/ephy-toolbar-editor.c:82
 msgid "toolbar style|Default"
-msgstr "Стандартен"
+msgstr "Стандартни"
 
 #: ../src/ephy-toolbar-editor.c:201
 msgid "Toolbar Editor"
 msgstr "_Редактор на лентата с инструментите"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:219
+#: ../src/ephy-toolbar-editor.c:217
 msgid "Toolbar _button labels:"
 msgstr "Надписи на бутоните:"
 
-#: ../src/ephy-toolbar-editor.c:287
+#: ../src/ephy-toolbar-editor.c:285
 msgid "_Add a New Toolbar"
 msgstr "_Добавяне на нова лента с инструменти"
 
-#: ../src/ephy-toolbar.c:264
-msgid "Back"
-msgstr "Назад"
+#: ../src/ephy-toolbar.c:251
+msgid "_Back"
+msgstr "_Назад"
 
-#: ../src/ephy-toolbar.c:266
-msgid "Go back"
-msgstr "Отиване назад"
+#: ../src/ephy-toolbar.c:253
+msgid "Go to the previous visited page"
+msgstr "Отива на предишната посетена страница"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:270
+#: ../src/ephy-toolbar.c:257
 msgid "Back history"
 msgstr "Предишни страници"
 
-#: ../src/ephy-toolbar.c:283
-msgid "Forward"
-msgstr "Напред"
+#: ../src/ephy-toolbar.c:271
+msgid "_Forward"
+msgstr "_Напред"
 
-#: ../src/ephy-toolbar.c:285
-msgid "Go forward"
-msgstr "Отиване напред"
+#: ../src/ephy-toolbar.c:273
+msgid "Go to the next visited page"
+msgstr "Отиване на следващата посетена страница"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:289
+#: ../src/ephy-toolbar.c:277
 msgid "Forward history"
 msgstr "Следващи страници"
 
-#: ../src/ephy-toolbar.c:301
-msgid "Up"
-msgstr "Нагоре"
+#: ../src/ephy-toolbar.c:290
+msgid "_Up"
+msgstr "_Нагоре"
 
-#: ../src/ephy-toolbar.c:303 ../src/ephy-window.c:244
+#: ../src/ephy-toolbar.c:292
 msgid "Go up one level"
 msgstr "Нагоре с едно ниво"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:307
+#: ../src/ephy-toolbar.c:296
 msgid "List of upper levels"
 msgstr "Списък на предишните нива"
 
-#: ../src/ephy-toolbar.c:326
+#: ../src/ephy-toolbar.c:314
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "Въведете адрес или фраза за търсене"
 
-#: ../src/ephy-toolbar.c:342
+#: ../src/ephy-toolbar.c:330
 msgid "Zoom"
 msgstr "Увеличение"
 
-#: ../src/ephy-toolbar.c:344
+#: ../src/ephy-toolbar.c:332
 msgid "Adjust the text size"
 msgstr "Нагласяне размера на текста"
 
-#: ../src/ephy-toolbar.c:356
+#: ../src/ephy-toolbar.c:344
 msgid "Go to the address entered in the address entry"
 msgstr "Отиване на адреса въведен в полето за адреси"
 
-#: ../src/ephy-toolbar.c:365
+#: ../src/ephy-toolbar.c:353
 msgid "_Home"
 msgstr "_У дома"
 
-#: ../src/ephy-toolbar.c:367
+#: ../src/ephy-toolbar.c:355
 msgid "Go to the home page"
 msgstr "Отиване в домашната страница"
 
-#: ../src/ephy-window.c:117
+#: ../src/ephy-window.c:118
 msgid "_Bookmarks"
 msgstr "_Отметки"
 
-#: ../src/ephy-window.c:118
+#: ../src/ephy-window.c:119
 msgid "_Go"
 msgstr "_Отиване"
 
-#: ../src/ephy-window.c:119
+#: ../src/ephy-window.c:120
 msgid "T_ools"
 msgstr "_Инструменти"
 
-#: ../src/ephy-window.c:120
+#: ../src/ephy-window.c:121
 msgid "_Tabs"
 msgstr "_Страници"
 
 #. File menu
-#: ../src/ephy-window.c:127
+#: ../src/ephy-window.c:128
 msgid "_New Window"
 msgstr "_Нов прозорец"
 
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:129
 msgid "Open a new window"
 msgstr "Отваряне на нов прозорец"
 
-#: ../src/ephy-window.c:130
+#: ../src/ephy-window.c:131
 msgid "New _Tab"
 msgstr "Нова _страница"
 
-#: ../src/ephy-window.c:131
+#: ../src/ephy-window.c:132
 msgid "Open a new tab"
 msgstr "Отваряне на нова страница"
 
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:134
 msgid "_Open..."
 msgstr "_Отваряне..."
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:135
 msgid "Open a file"
 msgstr "Отваряне на файл"
 
-#: ../src/ephy-window.c:136 ../src/ephy-window.c:139
+#: ../src/ephy-window.c:137
 msgid "Save _As..."
 msgstr "Запазване _като..."
 
-#: ../src/ephy-window.c:137 ../src/ephy-window.c:140
+#: ../src/ephy-window.c:138
 msgid "Save the current page"
 msgstr "Запазване на текущата страница"
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:140
 msgid "Print Set_up..."
 msgstr "Настройки на печата"
 
-#: ../src/ephy-window.c:143
+#: ../src/ephy-window.c:141
 msgid "Setup the page settings for printing"
 msgstr "Определяне на настройките за страница при печатане"
 
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:143
 msgid "Print Pre_view"
 msgstr "Преглед, преди печата"
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:144
 msgid "Print preview"
 msgstr "Преглед, преди печата"
 
-#: ../src/ephy-window.c:148
+#: ../src/ephy-window.c:146
 msgid "_Print..."
 msgstr "_Печат..."
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:147
 msgid "Print the current page"
 msgstr "Печат на текущата страница"
 
-#: ../src/ephy-window.c:151
-msgid "S_end To..."
-msgstr "И_зпращане до..."
+#: ../src/ephy-window.c:149
+#, fuzzy
+msgid "S_end Link by Email..."
+msgstr "И_зпращане на е-писмо..."
 
-#: ../src/ephy-window.c:152
+#: ../src/ephy-window.c:150
 msgid "Send a link of the current page"
 msgstr "Изпращане на връзка за текущата страница"
 
-#: ../src/ephy-window.c:155
+#: ../src/ephy-window.c:153
 msgid "Close this tab"
 msgstr "Затваряне на тази страница"
 
 #. Edit menu
-#: ../src/ephy-window.c:160
+#: ../src/ephy-window.c:158
 msgid "_Undo"
 msgstr "_Възстановяване"
 
-#: ../src/ephy-window.c:161
+#: ../src/ephy-window.c:159
 msgid "Undo the last action"
 msgstr "Отказване на последното действие"
 
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:161
 msgid "Re_do"
 msgstr "Повта_ряне"
 
-#: ../src/ephy-window.c:164
+#: ../src/ephy-window.c:162
 msgid "Redo the last undone action"
 msgstr "Повтаряне на последното недовършено действие"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:171
 msgid "Paste clipboard"
 msgstr "Поставяне от буфера за обмен"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:174
 msgid "Select the entire page"
 msgstr "Избиране на цялата страница"
 
-#: ../src/ephy-window.c:178
+#: ../src/ephy-window.c:176
 msgid "_Find..."
 msgstr "_Търсене..."
 
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:177
 msgid "Find a word or phrase in the page"
 msgstr "Търсене за дума или фраза в страницата"
 
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:179
 msgid "Find Ne_xt"
 msgstr "С_ледващо търсене"
 
-#: ../src/ephy-window.c:182
+#: ../src/ephy-window.c:180
 msgid "Find next occurrence of the word or phrase"
 msgstr "Търсене на следващото споменаване на дума или фраза"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:182
 msgid "Find Pre_vious"
 msgstr "Пр_едишно търсене"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:183
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Търсене на предишното място на дума или фраза"
 
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:185
 msgid "P_ersonal Data"
 msgstr "Ли_чна информация"
 
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:186
 msgid "View and remove cookies and passwords"
 msgstr "Преглед или премахване на бисквитки и пароли"
 
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:188
 msgid "T_oolbars"
 msgstr "Ленти с _инструменти"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:189
 msgid "Customize toolbars"
 msgstr "Настройване на лентите с инструменти"
 
-#: ../src/ephy-window.c:193
+#: ../src/ephy-window.c:191
 msgid "P_references"
 msgstr "На_стройки"
 
-#: ../src/ephy-window.c:194
+#: ../src/ephy-window.c:192
 msgid "Configure the web browser"
 msgstr "Настройване на Интернет браузъра"
 
 #. View menu
-#: ../src/ephy-window.c:199 ../src/ephy-window.c:202
+#: ../src/ephy-window.c:197 ../src/ephy-window.c:200
 msgid "_Stop"
 msgstr "_Спиране"
 
-#: ../src/ephy-window.c:200
+#: ../src/ephy-window.c:198
 msgid "Stop current data transfer"
 msgstr "Спиране на текущото пренасяне на данни"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:202
 msgid "_Reload"
 msgstr "_Презареждане"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:203
 msgid "Display the latest content of the current page"
 msgstr "Показване на последното съдържание на текущата страница"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:205
 msgid "Zoom _In"
 msgstr "_Увеличаване"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:206
 msgid "Increase the text size"
 msgstr "Увеличаване размера на текста"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:208
 msgid "Zoom _Out"
 msgstr "Нама_ляване"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:209
 msgid "Decrease the text size"
 msgstr "Намаляване размера на текста"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:211
 msgid "_Normal Size"
 msgstr "_Нормален размер"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:212
 msgid "Use the normal text size"
 msgstr "Използване на нормален размер на текста"
 
-#: ../src/ephy-window.c:219
+#: ../src/ephy-window.c:214
 msgid "Text _Encoding"
 msgstr "_Кодиране на текста"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:215
 msgid "Change the text encoding"
 msgstr "Промяна кодирането на текста"
 
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:217
 msgid "_Page Source"
 msgstr "Изходен _код на страницата"
 
-#: ../src/ephy-window.c:223
+#: ../src/ephy-window.c:218
 msgid "View the source code of the page"
 msgstr "Показване изходния код на страницата"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:223
 msgid "_Add Bookmark..."
 msgstr "_Добавяне на отметка..."
 
-#: ../src/ephy-window.c:229 ../src/ephy-window.c:317
+#: ../src/ephy-window.c:224 ../src/ephy-window.c:298
 msgid "Add a bookmark for the current page"
 msgstr "Добавяне на отметка за тази страница"
 
-#: ../src/ephy-window.c:231
+#: ../src/ephy-window.c:226
 msgid "_Edit Bookmarks"
 msgstr "_Редакция на отметки"
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:227
 msgid "Open the bookmarks window"
 msgstr "Отваряне на прозореца с отметките"
 
 #. Go menu
-#: ../src/ephy-window.c:237
-msgid "_Back"
-msgstr "_Назад"
-
-#: ../src/ephy-window.c:238
-msgid "Go to the previous visited page"
-msgstr "Отива на предишната посетена страница"
-
-#: ../src/ephy-window.c:240
-msgid "_Forward"
-msgstr "_Напред"
-
-#: ../src/ephy-window.c:241
-msgid "Go to the next visited page"
-msgstr "Отиване на следващата посетена страница"
-
-#: ../src/ephy-window.c:243
-msgid "_Up"
-msgstr "_Нагоре"
-
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:232
 msgid "_Location..."
 msgstr "_Местоположение..."
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:233
 msgid "Go to a specified location"
 msgstr "Отива на посочения адрес"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:235
 msgid "H_istory"
 msgstr "_История"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:236
 msgid "Open the history window"
 msgstr "Отваряне на прозорец историята на посетените страници в Интернет"
 
 #. Tabs menu
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:241
 msgid "_Previous Tab"
 msgstr "_Предишна страница"
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:242
 msgid "Activate previous tab"
 msgstr "Активиране на предишната страница"
 
-#: ../src/ephy-window.c:258
+#: ../src/ephy-window.c:244
 msgid "_Next Tab"
 msgstr "_Следваща страница"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:245
 msgid "Activate next tab"
 msgstr "Активиране на следващата страница"
 
-#: ../src/ephy-window.c:261
+#: ../src/ephy-window.c:247
 msgid "Move Tab _Left"
 msgstr "Преместване на страницата в_ляво"
 
-#: ../src/ephy-window.c:262
+#: ../src/ephy-window.c:248
 msgid "Move current tab to left"
 msgstr "Преместване на текущата страница вляво"
 
-#: ../src/ephy-window.c:264
+#: ../src/ephy-window.c:250
 msgid "Move Tab _Right"
 msgstr "Преместване на страницата в_дясно"
 
-#: ../src/ephy-window.c:265
+#: ../src/ephy-window.c:251
 msgid "Move current tab to right"
 msgstr "Преместване на текущата страница вдясно"
 
-#: ../src/ephy-window.c:267
+#: ../src/ephy-window.c:253
 msgid "_Detach Tab"
 msgstr "_Отделяне на страницата"
 
-#: ../src/ephy-window.c:268
+#: ../src/ephy-window.c:254
 msgid "Detach current tab"
 msgstr "Отделяне на текущата страница"
 
-#: ../src/ephy-window.c:274
+#: ../src/ephy-window.c:260
 msgid "Display web browser help"
 msgstr "Показване на помощта за Интернет браузъра"
 
 #. File Menu
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:271
 msgid "_Work Offline"
 msgstr "_Преминаване в режим „Изключен“"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:272
 msgid "Switch to offline mode"
 msgstr "Преминаване в режим „Изключен“"
 
 #. View Menu
-#: ../src/ephy-window.c:291
+#: ../src/ephy-window.c:277
 msgid "_Toolbar"
 msgstr "_Лента с инструменти"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:278
 msgid "Show or hide toolbar"
 msgstr "Показване или скриване лентата с инструменти"
 
-#: ../src/ephy-window.c:294
-msgid "_Bookmarks Bar"
-msgstr "_Лента с отметките"
-
-#: ../src/ephy-window.c:295
-msgid "Show or hide bookmarks bar"
-msgstr "Показване или скриване на лентата за отметките"
-
-#: ../src/ephy-window.c:297
+#: ../src/ephy-window.c:280
 msgid "St_atusbar"
 msgstr "Лента за _състоянието"
 
-#: ../src/ephy-window.c:298
+#: ../src/ephy-window.c:281
 msgid "Show or hide statusbar"
 msgstr "Показване или скриване на лентата за състоянието"
 
-#: ../src/ephy-window.c:300
+#: ../src/ephy-window.c:283
 msgid "_Fullscreen"
 msgstr "На _цял екран"
 
-#: ../src/ephy-window.c:301
+#: ../src/ephy-window.c:284
 msgid "Browse at full screen"
 msgstr "Сърфиране на цял екран"
 
-#: ../src/ephy-window.c:303
+#: ../src/ephy-window.c:286
 msgid "Popup _Windows"
 msgstr "Изскачащи _прозорци"
 
-#: ../src/ephy-window.c:304
+#: ../src/ephy-window.c:287
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Показване или скриване на непоисканите изскачащи прозорци от този сайт"
 
-#: ../src/ephy-window.c:306
+#: ../src/ephy-window.c:289
 msgid "Selection Caret"
 msgstr "Избор на каретка"
 
 #. Document
-#: ../src/ephy-window.c:314
-msgid "_Save Background As..."
-msgstr "_Запазване на фона като..."
-
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:297
 msgid "Add Boo_kmark..."
 msgstr "Добавяне на от_метка..."
 
 #. Framed document
-#: ../src/ephy-window.c:322
-msgid "Show Only This _Frame"
+#: ../src/ephy-window.c:303
+#, fuzzy
+msgid "Show Only _This Frame"
 msgstr "Показване само на тази _рамка"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:304
 msgid "Show only this frame in this window"
 msgstr "Показване само на тази рамка в този прозорец"
 
 #. Links
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:309
 msgid "_Open Link"
 msgstr "_Отваряне на връзка"
 
-#: ../src/ephy-window.c:329
+#: ../src/ephy-window.c:310
 msgid "Open link in this window"
 msgstr "Отваряне на връзката в този прозорец"
 
-#: ../src/ephy-window.c:331
+#: ../src/ephy-window.c:312
 msgid "Open Link in New _Window"
 msgstr "Отваряне на връзката в нов _прозорец"
 
-#: ../src/ephy-window.c:332
+#: ../src/ephy-window.c:313
 msgid "Open link in a new window"
 msgstr "Отваряне на връзката в нов прозорец"
 
-#: ../src/ephy-window.c:334
+#: ../src/ephy-window.c:315
 msgid "Open Link in New _Tab"
 msgstr "Отваряне на връзката в нова _страница"
 
-#: ../src/ephy-window.c:335
+#: ../src/ephy-window.c:316
 msgid "Open link in a new tab"
 msgstr "Отваряне на връзката в нова страница"
 
-#: ../src/ephy-window.c:337
+#: ../src/ephy-window.c:318
 msgid "_Download Link"
 msgstr "_Изтегляне на връзката"
 
-#: ../src/ephy-window.c:339
+#: ../src/ephy-window.c:320
 msgid "_Save Link As..."
 msgstr "Запазване на връзката _като..."
 
-#: ../src/ephy-window.c:340
+#: ../src/ephy-window.c:321
 msgid "Save link with a different name"
 msgstr "Запазване на връзката под различно име"
 
-#: ../src/ephy-window.c:342
+#: ../src/ephy-window.c:323
 msgid "_Bookmark Link..."
 msgstr "_Добавяне на връзката в отметките..."
 
-#: ../src/ephy-window.c:344
+#: ../src/ephy-window.c:325
 msgid "_Copy Link Address"
 msgstr "_Копиране адреса на връзката"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:350
+#: ../src/ephy-window.c:331
 msgid "_Send Email..."
 msgstr "И_зпращане на е-писмо..."
 
-#: ../src/ephy-window.c:352
+#: ../src/ephy-window.c:333
 msgid "_Copy Email Address"
 msgstr "Копиране на адресът на ел. поща"
 
 #. Images
-#: ../src/ephy-window.c:357
+#: ../src/ephy-window.c:338
 msgid "Open _Image"
 msgstr "Отваряне на _изображението"
 
-#: ../src/ephy-window.c:359
+#: ../src/ephy-window.c:340
 msgid "_Save Image As..."
 msgstr "_Запазване на изображение като..."
 
-#: ../src/ephy-window.c:361
+#: ../src/ephy-window.c:342
 msgid "_Use Image As Background"
 msgstr "_Използване на изображението като фон"
 
-#: ../src/ephy-window.c:363
+#: ../src/ephy-window.c:344
 msgid "Copy I_mage Address"
 msgstr "Копиране адресът на из_ображението"
 
-#: ../src/ephy-window.c:664
+#: ../src/ephy-window.c:692
 msgid "There are unsubmitted changes to form elements"
 msgstr "Има неизпратени промени по елементите от формуляра"
 
-#: ../src/ephy-window.c:668
+#: ../src/ephy-window.c:696
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Ако все пак затворите документа, ще загубите тази информация."
 
-#: ../src/ephy-window.c:672
+#: ../src/ephy-window.c:700
 msgid "Close _Document"
 msgstr "Затваряне на _документа"
 
-#: ../src/ephy-window.c:1111 ../src/window-commands.c:357
+#: ../src/ephy-window.c:1267 ../src/window-commands.c:294
 msgid "Open"
 msgstr "Отваряне"
 
-#: ../src/ephy-window.c:1113 ../src/window-commands.c:383
+#: ../src/ephy-window.c:1269 ../src/window-commands.c:320
 msgid "Save As"
 msgstr "Запазване като"
 
-#: ../src/ephy-window.c:1117
+#: ../src/ephy-window.c:1273
 msgid "Bookmark"
 msgstr "Отметка"
 
-#: ../src/ephy-window.c:1301
+#: ../src/ephy-window.c:1275
+msgid "Find"
+msgstr "Търсене"
+
+#: ../src/ephy-window.c:1443
 msgid "Insecure"
 msgstr "Несигурно"
 
-#: ../src/ephy-window.c:1306
+#: ../src/ephy-window.c:1448
 msgid "Broken"
 msgstr "Развален"
 
-#: ../src/ephy-window.c:1314
+#: ../src/ephy-window.c:1456
 msgid "Low"
 msgstr "Нисък"
 
-#: ../src/ephy-window.c:1321
+#: ../src/ephy-window.c:1463
 msgid "High"
 msgstr "Висок"
 
-#: ../src/ephy-window.c:1330
+#: ../src/ephy-window.c:1473
 #, c-format
 msgid "Security level: %s"
 msgstr "Ниво на сигурност: %s"
 
-#: ../src/ephy-window.c:1370
+#: ../src/ephy-window.c:1513
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d скрит изскачащ прозорец"
 msgstr[1] "%d скрити изскачащи прозорци"
 
-#: ../src/ephy-window.c:1652
-#, c-format
-msgid "Save background image '%s'"
-msgstr "Запазване на фоновото изображение „%s“"
-
-#: ../src/ephy-window.c:1666
-#, c-format
-msgid "Open image '%s'"
+#: ../src/ephy-window.c:1808
+#, fuzzy, c-format
+msgid "Open image “%s”"
 msgstr "Отваряне на изображението „%s“"
 
-#: ../src/ephy-window.c:1671
-#, c-format
-msgid "Use as desktop background '%s'"
+#: ../src/ephy-window.c:1813
+#, fuzzy, c-format
+msgid "Use as desktop background “%s”"
 msgstr "Използване на изображението „%s“ като фон"
 
-#: ../src/ephy-window.c:1676
-#, c-format
-msgid "Save image '%s'"
+#: ../src/ephy-window.c:1818
+#, fuzzy, c-format
+msgid "Save image “%s”"
 msgstr "Запазване на изображението „%s“"
 
-#: ../src/ephy-window.c:1681
-#, c-format
-msgid "Copy image address '%s'"
+#: ../src/ephy-window.c:1823
+#, fuzzy, c-format
+msgid "Copy image address “%s”"
 msgstr "Копиране адресът на изображението „%s“"
 
-#: ../src/ephy-window.c:1694
-#, c-format
-msgid "Send email to address '%s'"
+#: ../src/ephy-window.c:1836
+#, fuzzy, c-format
+msgid "Send email to address “%s”"
 msgstr "Изпращане на е-писмо до „%s“"
 
-#: ../src/ephy-window.c:1700
-#, c-format
-msgid "Copy email address '%s'"
+#: ../src/ephy-window.c:1842
+#, fuzzy, c-format
+msgid "Copy email address “%s”"
 msgstr "Копиране адресът на ел. поща „%s“"
 
-#: ../src/ephy-window.c:1712
-#, c-format
-msgid "Save link '%s'"
+#: ../src/ephy-window.c:1854
+#, fuzzy, c-format
+msgid "Save link “%s”"
 msgstr "Запазване на връзката „%s“"
 
-#: ../src/ephy-window.c:1718
-#, c-format
-msgid "Bookmark link '%s'"
+#: ../src/ephy-window.c:1860
+#, fuzzy, c-format
+msgid "Bookmark link “%s”"
 msgstr "Отмятане на връзката „%s“"
 
-#: ../src/ephy-window.c:1724
-#, c-format
-msgid "Copy link's address '%s'"
+#: ../src/ephy-window.c:1866
+#, fuzzy, c-format
+msgid "Copy link's address “%s”"
 msgstr "Копиране адреса на връзката „%s“"
 
-#: ../src/pdm-dialog.c:414
-msgid "Domain"
-msgstr "Домейн"
-
-#: ../src/pdm-dialog.c:426
-msgid "Name"
-msgstr "Име"
-
-#: ../src/pdm-dialog.c:658
-msgid "Host"
-msgstr "Хост"
-
-#: ../src/pdm-dialog.c:670
-msgid "User Name"
-msgstr "Потребителско име"
-
-#: ../src/pdm-dialog.c:902
+#: ../src/pdm-dialog.c:367
 msgid "Cookie Properties"
 msgstr "Настройки на бисквитките"
 
-#: ../src/pdm-dialog.c:918
+#: ../src/pdm-dialog.c:384
 msgid "Content:"
 msgstr "Съдържание:"
 
-#: ../src/pdm-dialog.c:934
+#: ../src/pdm-dialog.c:400
 msgid "Path:"
 msgstr "Пътека:"
 
-#: ../src/pdm-dialog.c:950
+#: ../src/pdm-dialog.c:416
 msgid "Send for:"
 msgstr "Изпращане за:"
 
-#: ../src/pdm-dialog.c:959
+#: ../src/pdm-dialog.c:425
 msgid "Encrypted connections only"
 msgstr "Само криптирани връзки с Интернет"
 
-#: ../src/pdm-dialog.c:959
+#: ../src/pdm-dialog.c:425
 msgid "Any type of connection"
 msgstr "Всеки тип връзка с Интернет"
 
-#: ../src/pdm-dialog.c:965
+#: ../src/pdm-dialog.c:431
 msgid "Expires:"
 msgstr "Изтича на:"
 
-#: ../src/pdm-dialog.c:976
+#: ../src/pdm-dialog.c:442
 msgid "End of current session"
 msgstr "Край на текущата сесия"
+
+#: ../src/pdm-dialog.c:561
+msgid "Domain"
+msgstr "Домейн"
+
+#: ../src/pdm-dialog.c:573
+msgid "Name"
+msgstr "Име"
+
+#: ../src/pdm-dialog.c:829
+msgid "Host"
+msgstr "Хост"
+
+#: ../src/pdm-dialog.c:841
+msgid "User Name"
+msgstr "Потребителско име"
+
+#: ../src/pdm-dialog.c:853
+#, fuzzy
+msgid "User Password"
+msgstr "Пароли"
 
 #: ../src/popup-commands.c:239
 msgid "Download Link"
@@ -3720,10 +3776,6 @@ msgstr "Запазване на връзката като"
 #: ../src/popup-commands.c:254
 msgid "Save Image As"
 msgstr "Запазване на изображението като..."
-
-#: ../src/popup-commands.c:346
-msgid "Save Background As"
-msgstr "Запазване на фона като..."
 
 #: ../src/ppview-toolbar.c:89
 msgid "First"
@@ -3773,7 +3825,7 @@ msgstr "Затваряне на прегледа преди печат"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:760 ../src/prefs-dialog.c:768
+#: ../src/prefs-dialog.c:729 ../src/prefs-dialog.c:737
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -3783,37 +3835,38 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:779
+#: ../src/prefs-dialog.c:748
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "Зададен от потребителя (%s)"
 
-#: ../src/prefs-dialog.c:801
+#: ../src/prefs-dialog.c:770
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Системен език (%s)"
 msgstr[1] "Системни езици (%s)"
 
-#: ../src/prefs-dialog.c:1366
-msgid "Select a directory"
+#: ../src/prefs-dialog.c:1154
+#, fuzzy
+msgid "Select a Directory"
 msgstr "Избор на папка"
 
-#: ../src/window-commands.c:153
-msgid "Check this out!"
-msgstr "Трябва да видиш това!"
-
-#: ../src/window-commands.c:757 ../src/window-commands.c:773
+#: ../src/window-commands.c:694 ../src/window-commands.c:711
 msgid "Contact us at:"
 msgstr "Свържете се с нас на:"
 
-#: ../src/window-commands.c:760
+#: ../src/window-commands.c:697
 msgid "Contributors:"
 msgstr "Допринесли:"
 
-#: ../src/window-commands.c:764
+#: ../src/window-commands.c:702
 msgid "Past developers:"
 msgstr "Предишни разработчици:"
+
+#: ../src/window-commands.c:717
+msgid "GNOME Web Browser"
+msgstr "Интернет браузър на GNOME"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3823,7 +3876,7 @@ msgstr "Предишни разработчици:"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:793
+#: ../src/window-commands.c:731
 msgid "translator-credits"
 msgstr ""
 "Владимир „Kaladan“ Петков <vpetkov@i-space.org>\n"
@@ -3831,3 +3884,8 @@ msgstr ""
 "Проектът за превод на GNOME има нужда от подкрепа.\n"
 "Научете повече за нас на http://gnome.cult.bg\n"
 "Докладвайте за грешки на http://gnome.cult.bg/bugs"
+
+#: ../src/window-commands.c:734
+#, fuzzy
+msgid "GNOME Web Browser Website"
+msgstr "Интернет браузър на GNOME"
