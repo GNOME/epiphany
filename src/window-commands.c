@@ -709,7 +709,7 @@ window_cmd_help_about (GtkAction *action,
 		"David Bordoley",
 		"",
 		_("Contact us at:"),
-		"<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>",
+		_("<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"),
 		NULL
 	};
 
