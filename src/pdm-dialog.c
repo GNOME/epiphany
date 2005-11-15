@@ -816,6 +816,9 @@ pdm_dialog_init (PdmDialog *dialog)
 				  properties[PROP_NOTEBOOK].id, &notebook,
 				  NULL);
 
+	ephy_gui_ensure_window_group (GTK_WINDOW (window));
+
+	gtk_window_set_role (GTK_WINDOW (window), "epiphany-cookie-manager");
 	gtk_window_set_icon_name (GTK_WINDOW (window), "web-browser");
 
 	/**
@@ -1038,15 +1041,11 @@ pdm_dialog_response_cb (GtkDialog *widget,
 			gint response,
 			PdmDialog *dialog)
 {
-	switch (response)
+	if (response == GTK_RESPONSE_HELP)
 	{
-		case GTK_RESPONSE_CLOSE:
-			g_object_unref (dialog);
-			break;
-		case GTK_RESPONSE_HELP:
-			pdm_dialog_show_help (dialog);
-			break;
-		default:
-			break;
+		pdm_dialog_show_help (dialog);
+		return;
 	}
+
+	g_object_unref (dialog);
 }

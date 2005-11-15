@@ -816,7 +816,7 @@ static EphyDialog *
 setup_add_language_dialog (PrefsDialog *pd)
 {
 	EphyDialog *dialog;
-	GtkWidget *window;
+	GtkWidget *window, *parent;
 	GtkListStore *store;
 	GtkTreeModel *sortmodel;
 	GtkTreeView *treeview;
@@ -826,10 +826,10 @@ setup_add_language_dialog (PrefsDialog *pd)
 	GtkTreeIter iter;
 	int i;
 
-	window = ephy_dialog_get_control (EPHY_DIALOG (pd), properties[WINDOW_PROP].id);
+	parent = ephy_dialog_get_control (EPHY_DIALOG (pd), properties[WINDOW_PROP].id);
 
 	dialog =  EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG,
-					     "parent-window", window,
+					     "parent-window", parent,
 					     "default-width", 260,
 					     "default-height", 230,
 					     NULL));
@@ -867,6 +867,9 @@ setup_add_language_dialog (PrefsDialog *pd)
 				  add_lang_props[LANGUAGE_PROP].id, &treeview,
 				  add_lang_props[LANGUAGE_DIALOG].id, &window,
 				  NULL);
+
+	gtk_window_group_add_window (GTK_WINDOW (parent)->group, GTK_WINDOW (window));
+	gtk_window_set_modal (GTK_WINDOW (window), TRUE);
 
 	gtk_tree_view_set_reorderable (GTK_TREE_VIEW (treeview), FALSE);
 
@@ -1216,6 +1219,9 @@ prefs_dialog_init (PrefsDialog *pd)
 		 properties[MONOSPACE_PROP].id, &monospace_combo,
 		 NULL);
 
+	ephy_gui_ensure_window_group (GTK_WINDOW (window));
+
+	gtk_window_set_role (GTK_WINDOW (window), "epiphany-preferences");
 	gtk_window_set_icon_name (GTK_WINDOW (window), GTK_STOCK_PREFERENCES);
 
 	/* set homepage button sensitivity */
