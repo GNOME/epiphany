@@ -1,3 +1,15 @@
+2005-11-15  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/glade/epiphany.glade:
+	* data/glade/prefs-dialog.glade:
+	* data/glade/print.glade:
+	* src/pdm-dialog.c: (pdm_dialog_response_cb), (pdm_dialog_init):
+	* src/prefs-dialog.c: (setup_add_language_dialog),
+	(prefs_dialog_init):
+
+	Don't put the prefs/pdm dialogue over all windows. Make the
+	add-language dialogue modal to the prefs dialogue.
+
 2005-11-14  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/window-commands.c: (window_cmd_help_about):
