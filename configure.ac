@@ -318,12 +318,10 @@ AC_COMPILE_IFELSE(
 		[[nsIX509Cert *c;
 		  c->GetIssuer (nsnull);]]
 	)],
-	[AC_DEFINE([HAVE_MOZILLA_PSM], [1],[Define if you have the mozilla NSS headers installed]) have_psm=yes],
+	[have_psm=yes],
 	[have_psm=no])
 
 AC_MSG_RESULT([$have_psm])
-
-AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "x$have_psm" = "xyes"])
 
 dnl This is only present on toolkit
 
@@ -356,20 +354,25 @@ dnl Make sure we don't accidentally build without PSM support
 AC_MSG_CHECKING([whether to include PSM support])
 AC_ARG_ENABLE([psm],
 	AS_HELP_STRING([psm],[Disable PSM support (default: enabled)]),
-	[want_psm=$enableval],
-	[want_psm=yes])
-AC_MSG_RESULT([$want_psm])
+	[],[enable_psm=yes])
+AC_MSG_RESULT([$enable_psm])
 
-if test "x$want_psm" = "xyes" -a "x$have_psm" = "xno"; then
+if test "$enable_psm" = "yes" -a "$have_psm" = "no"; then
 	AC_MSG_ERROR([PSM headers not found; use --disable-psm to disable building with PSM support])
-elif test "x$have_psm" = "xno"; then
+elif test "$have_psm" = "no"; then
 	AC_MSG_WARN([PSM headers not found; PSM support disabled])
 fi
+
+if test "$enable_psm" = "yes" -a "$have_psm" = "yes"; then
+	AC_DEFINE([HAVE_MOZILLA_PSM],[1],[Define if you have the mozilla NSS headers installed]) 
+fi
+
+AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "$enable_psm" = "yes" -a "$have_psm" = "yes"])
 
 dnl Not a simple file check due to the header being in the SDK since 1.8a6
 dnl https://bugzilla.mozilla.org/show_bug.cgi?id=271068
 
-if test "x$flavour" = "xmozilla"; then
+if test "$MOZILLA_FLAVOUR" = "mozilla"; then
 	AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsIPassword.h],
 		[AC_DEFINE([HAVE_NSIPASSWORD_H],[1],
 		[Define if mozilla nsIPassword header is available])],
@@ -377,7 +380,7 @@ if test "x$flavour" = "xmozilla"; then
 			[AC_DEFINE([HAVE_NSIPASSWORD_H],[1],
 			[Define if mozilla nsIPassword header is available]) have_password_h=yes])],
 			[have_password_h=no])
-elif test "x$flavour" = "xtoolkit"; then
+elif test "$MOZILLA_FLAVOUR" = "toolkit"; then
 	AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/passwordmgr/nsIPassword.h],
 		[AC_DEFINE([HAVE_NSIPASSWORD_H],[1],
 			[Define if mozilla nsIPassword header is available]) have_password_h=yes],
