@@ -932,22 +932,35 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 
 
 static void
-set_table_row (GtkWidget *table, int row, const char *title, GtkWidget *label)
+set_table_row (GtkWidget *table,
+	       int& row,
+	       const char *title,
+	       const char *text)
 {
-	GtkWidget *header;
-	char buf[64];
+	GtkWidget *header, *label;
+	char *bold;
 
-	g_snprintf (buf, sizeof(buf), "<b>%s</b>", title);
-	header = gtk_label_new (buf);
-	gtk_label_set_use_markup (GTK_LABEL(header), TRUE);
-	gtk_misc_set_alignment (GTK_MISC(header), 0, 0);
+	if (text == NULL || text[0] == 0) return;
+
+	bold = g_markup_printf_escaped ("<b>%s</b>", title);
+	header = gtk_label_new (bold);
+	g_free (bold);
+
+	gtk_label_set_use_markup (GTK_LABEL (header), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (header), 0, 0);
 	gtk_widget_show (header);
 	gtk_table_attach (GTK_TABLE (table), header, 0, 1, row, row+1,
 			  GTK_FILL, GTK_FILL, 0, 0);
-	
-	gtk_misc_set_alignment (GTK_MISC(label), 0, 0);
+
+	label = gtk_label_new (text);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+	gtk_label_set_max_width_chars (GTK_LABEL (label), 48);
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, row, row+1);
+
+	row++;
 }
 
 NS_IMETHODIMP 
@@ -968,13 +981,17 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 					      NULL);
 
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Certificate Revocation List Imported"));
+
+	/* Needed because gparent == NULL always because of mozilla sucks */
+	gtk_window_set_skip_pager_hint (GTK_WINDOW (dialog), TRUE);
+	gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
 
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_INFO,
 			    &label, &vbox);
 
-	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
-			       _("Certificate Revocation list successfully imported."),
-			       _("Certificate Revocation list (CRL) imported:"));
+	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>",
+			       _("Certificate Revocation List (CRL) successfully imported"));
 	gtk_label_set_markup (GTK_LABEL (label), msg);
 	g_free (msg);
 
@@ -992,22 +1009,20 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 	rv = crl->GetNextUpdateLocale (nextUpdate);
 	if (NS_FAILED(rv)) return rv;
 
+	int row = 0;
 	nsEmbedCString cOrg;
 	NS_UTF16ToCString (org, NS_CSTRING_ENCODING_UTF8, cOrg);
-	label = gtk_label_new (cOrg.get());
-	set_table_row (table, 0, _("Organization:"), label);
+	set_table_row (table, row, _("Organization:"), cOrg.get ());
 
 	nsEmbedCString cOrgUnit;
 	NS_UTF16ToCString (orgUnit, NS_CSTRING_ENCODING_UTF8, cOrgUnit);
-	label = gtk_label_new (cOrgUnit.get());
-	set_table_row (table, 1, _("Unit:"), label);
+	set_table_row (table, row, _("Unit:"), cOrgUnit.get ());
 
 	nsEmbedCString cNextUpdate;
 	NS_UTF16ToCString (nextUpdate, NS_CSTRING_ENCODING_UTF8, cNextUpdate);
-	label = gtk_label_new (cNextUpdate.get());
-	set_table_row (table, 2, _("Next Update:"), label);
+	set_table_row (table, row, _("Next Update:"), cNextUpdate.get ());
 
-	gtk_box_pack_start (GTK_BOX (vbox), higgy_indent_widget (table), FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
 
 	gtk_widget_show_all (dialog);
 	g_signal_connect (G_OBJECT (dialog),
