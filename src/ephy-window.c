@@ -355,6 +355,7 @@ static const struct
 	{ GDK_s,		GDK_CONTROL_MASK,	"FileSaveAs",		FALSE },
 	{ GDK_R,		GDK_CONTROL_MASK |
 				GDK_SHIFT_MASK,		"ViewReload",		FALSE },
+	{ GDK_F5,		0,			"ViewReload",		FALSE },
 #ifdef HAVE_X11_XF86KEYSYM_H
 	{ XF86XK_HomePage,	0,			"GoHome",		TRUE  },
 	{ XF86XK_Back,		0,			"NavigationBack",	TRUE  },
@@ -1914,11 +1915,6 @@ show_embed_popup (EphyWindow *window,
 	{
 		popup = "/EphyInputPopup";
 		update_edit_actions_sensitivity (window, FALSE);
-	}
-	else if (window->priv->fullscreen_mode)
-	{
-		popup = "/EphyFullscreenDocumentPopup";
-		update_edit_actions_sensitivity (window, TRUE);
 	}
 	else
 	{
