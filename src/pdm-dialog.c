@@ -397,9 +397,7 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 	gtk_tree_view_set_headers_visible (treeview, TRUE);
 	selection = gtk_tree_view_get_selection (treeview);
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (liststore),
-					      COL_COOKIES_HOST,
-					      GTK_SORT_ASCENDING);
+
 	info->model = GTK_TREE_MODEL (liststore);
 	g_object_unref (liststore);
 
@@ -575,6 +573,11 @@ pdm_dialog_fill_cookies_list (PdmActionInfo *info)
 			 G_CALLBACK (cookie_deleted_cb), info->dialog);
 	g_signal_connect (manager, "cookies-cleared",
 			 G_CALLBACK (cookies_cleared_cb), info->dialog);
+
+	/* Now turn on sorting */
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (info->model),
+					      COL_COOKIES_HOST,
+					      GTK_SORT_ASCENDING);
 }
 
 static void
@@ -645,9 +648,7 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 	gtk_tree_view_set_headers_visible (treeview, TRUE);
 	selection = gtk_tree_view_get_selection (treeview);
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (liststore),
-					      COL_PASSWORDS_HOST,
-					      GTK_SORT_ASCENDING);
+
 	info->model = GTK_TREE_MODEL (liststore);
 	g_object_unref (liststore);
 
@@ -686,12 +687,19 @@ static void
 passwords_changed_cb (EphyPasswordManager *manager,
 		      PdmDialog *dialog)
 {
+	GtkTreeModel *model = dialog->priv->passwords->model;
+
 	LOG ("passwords changed");
 
 	/* since the callback doesn't carry any information about what
 	 * exactly has changed, we have to rebuild the list from scratch.
 	 */
-	gtk_list_store_clear (GTK_LIST_STORE (dialog->priv->passwords->model));
+	gtk_list_store_clear (GTK_LIST_STORE (model));
+
+	/* And turn off sorting */
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
+					      GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
+					      GTK_SORT_ASCENDING);
 
 	dialog->priv->passwords->fill (dialog->priv->passwords);
 }
@@ -723,6 +731,10 @@ pdm_dialog_fill_passwords_list (PdmActionInfo *info)
 	}
 
 	info->filled = TRUE;
+
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (info->model),
+					      COL_PASSWORDS_HOST,
+					      GTK_SORT_ASCENDING);
 }
 
 static void
