@@ -35,18 +35,6 @@ G_BEGIN_DECLS
 typedef struct _EphyEmbedSingle		EphyEmbedSingle;
 typedef struct _EphyEmbedSingleIface	EphyEmbedSingleIface;
 
-typedef enum
-{
-	EPHY_CONTENT_CHECK_TYPE_OTHER	    = 1U,
-	EPHY_CONTENT_CHECK_TYPE_SCRIPT	    = 2U, /* Indicates an executable script (such as JavaScript) */
-	EPHY_CONTENT_CHECK_TYPE_IMAGE	    = 3U, /* Indicates an image (e.g., IMG elements) */
-	EPHY_CONTENT_CHECK_TYPE_STYLESHEET  = 4U, /* Indicates a stylesheet (e.g., STYLE elements) */
-	EPHY_CONTENT_CHECK_TYPE_OBJECT	    = 5U, /* Indicates a generic object (plugin-handled content typically falls under this category) */
-	EPHY_CONTENT_CHECK_TYPE_DOCUMENT    = 6U, /* Indicates a document at the top-level (i.e., in a browser) */
-	EPHY_CONTENT_CHECK_TYPE_SUBDOCUMENT = 7U, /* Indicates a document contained within another document (e.g., IFRAMEs, FRAMES, and OBJECTs) */
-	EPHY_CONTENT_CHECK_TYPE_REFRESH	    = 8U  /* Indicates a timed refresh */
-} EphyContentCheckType;
-
 struct _EphyEmbedSingleIface
 {
 	GTypeInterface base_iface;
@@ -70,11 +58,6 @@ struct _EphyEmbedSingleIface
 					const char *icon_url,
 					const char *title);
 
-	gboolean (* check_content)  (EphyEmbedSingle *single,
-				     EphyContentCheckType type,
-				     const char *address,
-				     const char *requesting_address,
-				     const char *mime_type_guess);
 	/* Methods */
 
 	GtkWidget *	  (* open_window)	(EphyEmbedSingle *single,

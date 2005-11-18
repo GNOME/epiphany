@@ -146,33 +146,6 @@ ephy_embed_single_iface_init (gpointer g_iface)
 		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
- * EphyEmbedSingle::check_content:
- * @single: the #EphyEmbedSingle
- * @type: the type of content (an #EphyContentCheckType)
- * @address: the address of the content
- * @requesting_address: the address of the requesting content (may be empty)
- * @mime_type_guess: a guess of the mime type of the content (may be empty)
- *
- * The ::check-content signal is emitted when Epiphany loads any content from
- * anywhere.
- *
- * If a connected callback returns %TRUE, the
- * signal emission will stop, and the load be aborted.
- **/
-	g_signal_new ("check_content",
-		      EPHY_TYPE_EMBED_SINGLE,
-		      G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-		      G_STRUCT_OFFSET (EphyEmbedSingleIface, check_content),
-		      g_signal_accumulator_true_handled, NULL,
-		      ephy_marshal_BOOLEAN__ENUM_STRING_STRING_STRING,
-		      G_TYPE_BOOLEAN,
-		      4,
-		      EPHY_TYPE_CONTENT_CHECK_TYPE,
-		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
-
-/**
  * EphyEmbedSingle::network-status:
  * 
  * Whether the network is on-line.

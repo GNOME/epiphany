@@ -48,8 +48,6 @@ EphyContentPolicy::EphyContentPolicy()
 	mLocked = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_UNSAFE_PROTOCOLS);
 
 	mSafeProtocols = eel_gconf_get_string_list (CONF_LOCKDOWN_ADDITIONAL_SAFE_PROTOCOLS);
-	mSafeProtocols = g_slist_prepend (mSafeProtocols, g_strdup ("https"));
-	mSafeProtocols = g_slist_prepend (mSafeProtocols, g_strdup ("http"));
 
 	mEmbedSingle = ephy_embed_shell_get_embed_single (embed_shell);
 	g_return_if_fail (mEmbedSingle);
@@ -74,43 +72,33 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 			      PRInt16 *aDecision)
 {
 	NS_ENSURE_ARG (aContentLocation);
+	NS_ENSURE_ARG_POINTER (aDecision);
+
+	*aDecision = nsIContentPolicy::ACCEPT;
+
+	PRBool isHttp = PR_FALSE, isHttps = PR_FALSE;
+	aContentLocation->SchemeIs ("http", &isHttp);
+	aContentLocation->SchemeIs ("https", &isHttps);
+	if (isHttp || isHttps) return NS_OK;
+
+	/* We have to always allow these, else forms and scrollbars break */
+	PRBool isChrome = PR_FALSE, isResource = PR_FALSE;
+	aContentLocation->SchemeIs ("chrome", &isChrome);
+	aContentLocation->SchemeIs ("resource", &isResource);
+	if (isChrome || isResource) return NS_OK;
+
+	nsEmbedCString contentSpec;
+	aContentLocation->GetSpec (contentSpec);
+	if (strcmp (contentSpec.get(), "about:blank") == 0) return NS_OK;
 
 	nsEmbedCString contentScheme;
 	aContentLocation->GetScheme (contentScheme);
 
-	nsEmbedCString contentSpec;
-	aContentLocation->GetSpec (contentSpec);
-
 	/* first general lockdown check */
 	if (mLocked &&
-	    !g_slist_find_custom (mSafeProtocols, contentScheme.get(), (GCompareFunc) strcmp) &&
-	    strcmp (contentSpec.get(), "about:blank") != 0)
+	    !g_slist_find_custom (mSafeProtocols, contentScheme.get(), (GCompareFunc) strcmp))
 	{
 		*aDecision = nsIContentPolicy::REJECT_REQUEST;
-		return NS_OK;
-	}
-
-	nsEmbedCString requestingSpec;
-	if (aRequestingLocation)
-	{
-		aRequestingLocation->GetSpec (requestingSpec);
-	}
-
-	gboolean result = FALSE;
-	g_signal_emit_by_name (mEmbedSingle, "check-content",
-			       (EphyContentCheckType) aContentType,
-			       contentSpec.get(),
-			       requestingSpec.get(),
-			       nsEmbedCString(aMimeTypeGuess).get(),
-			       &result);
-
-	if (result)
-	{
-		*aDecision = nsIContentPolicy::REJECT_REQUEST;
-	}
-	else
-	{
-		*aDecision = nsIContentPolicy::ACCEPT;
 	}
 
 	return NS_OK;
@@ -139,63 +127,34 @@ NS_IMETHODIMP EphyContentPolicy::ShouldLoad(PRInt32 aContentType,
 					    PRBool *_retval)
 {
 	NS_ENSURE_ARG (aContentLocation);
+	NS_ENSURE_ARG_POINTER (aDecision);
+
+	*_retval = PR_TRUE;
+
+	PRBool isHttp = PR_FALSE, isHttps = PR_FALSE;
+	aContentLocation->SchemeIs ("http", &isHttp);
+	aContentLocation->SchemeIs ("https", &isHttps);
+	if (isHttp || isHttps) return NS_OK;
+
+	/* We have to always allow these, else forms and scrollbars break */
+	PRBool isChrome = PR_FALSE, isResource = PR_FALSE;
+	aContentLocation->SchemeIs ("chrome", &isChrome);
+	aContentLocation->SchemeIs ("resource", &isResource);
+	if (isChrome || isResource) return NS_OK;
+
+	nsEmbedCString contentSpec;
+	aContentLocation->GetSpec (contentSpec);
+	if (strcmp (contentSpec.get(), "about:blank") == 0) return NS_OK;
 
 	nsEmbedCString contentScheme;
 	aContentLocation->GetScheme (contentScheme);
 
-	nsEmbedCString contentSpec;
-	aContentLocation->GetSpec (contentSpec);
-
 	/* first general lockdown check */
 	if (mLocked &&
-	    !g_slist_find_custom (mSafeProtocols, contentScheme.get(), (GCompareFunc) strcmp) &&
-	    strcmp (contentSpec.get(), "about:blank") != 0)
+	    !g_slist_find_custom (mSafeProtocols, contentScheme.get(), (GCompareFunc) strcmp))
 	{
 		*_retval = PR_FALSE;
-		return NS_OK;
 	}
-
-	/* translate to variant-2 types */
-	EphyContentCheckType type;
-	switch (aContentType)
-	{
-		case nsIContentPolicy::SCRIPT:
-			type = EPHY_CONTENT_CHECK_TYPE_SCRIPT;
-			break;
-		case nsIContentPolicy::IMAGE:
-			type = EPHY_CONTENT_CHECK_TYPE_IMAGE;
-			break;
-		case nsIContentPolicy::STYLESHEET:
-			type = EPHY_CONTENT_CHECK_TYPE_STYLESHEET;
-			break;
-		case nsIContentPolicy::OBJECT:
-			type = EPHY_CONTENT_CHECK_TYPE_OBJECT;
-			break;
-		case nsIContentPolicy::SUBDOCUMENT:
-			type = EPHY_CONTENT_CHECK_TYPE_SUBDOCUMENT;
-			break;
-		case nsIContentPolicy::CONTROL_TAG:
-			type = EPHY_CONTENT_CHECK_TYPE_REFRESH;
-			break;
-		case nsIContentPolicy::DOCUMENT:
-			type = EPHY_CONTENT_CHECK_TYPE_DOCUMENT;
-			break;
-		case nsIContentPolicy::OTHER:
-		case nsIContentPolicy::RAW_URL:
-		default:
-			type = EPHY_CONTENT_CHECK_TYPE_OTHER;
-			break;
-	}
-
-	gboolean result = FALSE;
-	g_signal_emit_by_name (mEmbedSingle, "check-content",
-			       type,
-			       contentSpec.get(),
-			       "",
-			       "",
-			       &result);
-
-	*_retval = !result;
 
 	return NS_OK;
 }
