@@ -95,6 +95,10 @@ typedef struct
 
 	EphyLoader *loader; /* NULL if never loaded */
 	GObject *extension; /* NULL if unloaded */
+
+#ifdef ENABLE_LEGACY_FORMAT
+	guint is_legacy_format : 1;
+#endif
 } ExtensionInfo;
 
 typedef struct
@@ -102,6 +106,15 @@ typedef struct
 	char *type;
 	EphyLoader *loader;
 } LoaderInfo;
+
+typedef enum
+{
+	FORMAT_UNKNOWN,
+	FORMAT_INI
+#ifdef ENABLE_LEGACY_FORMAT
+	, FORMAT_XML
+#endif
+} ExtensionFormat;
 
 enum
 {
@@ -301,7 +314,7 @@ find_extension_info (const ExtensionInfo *info,
 	return strcmp (info->info.identifier, identifier);
 }
 
-static void
+static ExtensionInfo *
 ephy_extensions_manager_parse_keyfile (EphyExtensionsManager *manager,
 				       GKeyFile *key_file,
 				       const char *identifier)
@@ -323,7 +336,7 @@ ephy_extensions_manager_parse_keyfile (EphyExtensionsManager *manager,
 		
 		g_key_file_free (key_file);
 		g_free (start_group);
-		return;
+		return NULL;
 	}
 	g_free (start_group);
 
@@ -335,7 +348,7 @@ ephy_extensions_manager_parse_keyfile (EphyExtensionsManager *manager,
 			   identifier);
 		
 		g_key_file_free (key_file);
-		return;
+		return NULL;
 	}
 
 	info = g_new0 (ExtensionInfo, 1);
@@ -349,12 +362,14 @@ ephy_extensions_manager_parse_keyfile (EphyExtensionsManager *manager,
 	if (info->loader_type == NULL || info->loader_type[0] == '\0')
 	{
 		free_extension_info (info);
-		return;
+		return NULL;
 	}
 
 	manager->priv->data = g_list_prepend (manager->priv->data, info);
 
 	g_signal_emit (manager, signals[ADDED], 0, info);
+
+	return info;
 }
 
 static void
@@ -386,6 +401,7 @@ ephy_extensions_manager_load_xml_file (EphyExtensionsManager *manager,
 				       const char *path)
 {
 	EphyExtensionsManagerPrivate *priv = manager->priv;
+	ExtensionInfo *info;
 	xmlDocPtr doc, res;
 	const xmlChar *xsl_file;
 	xmlChar *output = NULL;
@@ -430,7 +446,11 @@ ephy_extensions_manager_load_xml_file (EphyExtensionsManager *manager,
 			goto out;
 		}
 
-		ephy_extensions_manager_parse_keyfile (manager, keyfile, identifier);
+		info = ephy_extensions_manager_parse_keyfile (manager, keyfile, identifier);
+		if (info != NULL)
+		{
+			info->is_legacy_format = TRUE;
+		}
 	}
 
 	xmlFreeDoc (res);
@@ -466,31 +486,68 @@ path_to_identifier (const char *path)
 	return identifier;
 }
 
+static ExtensionFormat
+format_from_path (const char *path)
+{
+	ExtensionFormat format = FORMAT_UNKNOWN;
+
+	if (g_str_has_suffix (path, DOT_INI))
+	{
+		format = FORMAT_INI;
+	}
+#ifdef ENABLE_LEGACY_FORMAT
+	else if (g_str_has_suffix (path, ".xml"))
+	{
+		format = FORMAT_XML;
+	}
+#endif
+
+	return format;
+}
+
 static void
 ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 				   const char *path)
 {
+	GList *element;
 	char *identifier;
+	ExtensionFormat format;
 
 	identifier = path_to_identifier (path);
 	g_return_if_fail (identifier != NULL);
 	if (identifier == NULL) return;
 
-	if (g_list_find_custom (manager->priv->data, identifier,
-	    (GCompareFunc) find_extension_info) != NULL)
+	format = format_from_path (path);
+	g_return_if_fail (format != FORMAT_UNKNOWN);
+
+	element = g_list_find_custom (manager->priv->data, identifier,
+				      (GCompareFunc) find_extension_info);
+	if (element != NULL)
 	{
-		g_warning ("Extension description for '%s' already read!",
-			   identifier);
+#ifdef ENABLE_LEGACY_FORMAT
+		ExtensionInfo *info = (ExtensionInfo *) element->data;
+
+		/* If this is the legacy format and we already have the info
+		 * read for this type from a non-legacy format file, don't
+		 * warn.
+		 */
+		if (format == FORMAT_XML && !info->is_legacy_format)
+#endif
+		{
+			g_warning ("Extension description for '%s' already read!",
+				   identifier);
+		}
+
 		return;
 	}
 
-	if (g_str_has_suffix (path, DOT_INI))
+	if (format == FORMAT_INI)
 	{
 		ephy_extensions_manager_load_ini_file (manager, identifier,
 						       path);
 	}
 #ifdef ENABLE_LEGACY_FORMAT
-	else if (g_str_has_suffix (path, ".xml"))
+	else if (format == FORMAT_XML)
 	{
 		ephy_extensions_manager_load_xml_file (manager, identifier,
 						       path);
@@ -933,8 +990,7 @@ dir_changed_cb (GnomeVFSMonitorHandle *handle,
 	 * We only deal with XML and INI files:
 	 * Add them to the manager when created, remove them when deleted.
 	 */
-	if (g_str_has_suffix (info_uri, DOT_INI) == FALSE &&
-	    g_str_has_suffix (info_uri, ".xml") == FALSE) return;
+	if (format_from_path (info_uri) == FORMAT_UNKNOWN) return;
 
 	path = gnome_vfs_get_local_path_from_uri (info_uri);
 
@@ -976,8 +1032,7 @@ ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
 	}
 	while ((e = readdir (d)) != NULL)
 	{
-		if (g_str_has_suffix (e->d_name, DOT_INI) ||
-		    g_str_has_suffix (e->d_name, ".xml"))
+		if (format_from_path (e->d_name) != FORMAT_UNKNOWN)
 		{
 			file_path = g_build_filename (path, e->d_name, NULL);
 			ephy_extensions_manager_load_file (manager, file_path);

@@ -1,5 +1,13 @@
 2005-11-18  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-extensions-manager.c:
+
+	Don't warn when reading a .xml when we previously read the
+	.ephy-extension for this identifier. Allows .xml and .ephy-extension
+	to co-exist in ~/.gnome2/epiphany/extensions.
+
+2005-11-18  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-tab.c:
 
 	Delay reloads when we get many change notifications in a short time.
