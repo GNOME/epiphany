@@ -1,5 +1,12 @@
 2005-11-18  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EphyContentPolicy.cpp:
+
+	Add chrome: and resource: to the safe list; otherwise
+	forms and scrollbars break. Fixes bug #316498.
+
+2005-11-18  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-tab.c:
 
 	Delay reloads when we get many change notifications in a short time.
