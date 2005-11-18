@@ -106,7 +106,8 @@ struct _EphyTabPrivate
 
 	/* File watch */
 	GnomeVFSMonitorHandle *monitor;
-	guint reload_scheduled_id;	
+	guint reload_scheduled_id;
+	guint reload_delay_ticks;	
 };
 
 static void ephy_tab_class_init		(EphyTabClass *klass);
@@ -354,17 +355,6 @@ ephy_tab_grab_focus (GtkWidget *widget)
 	EphyTab *tab = EPHY_TAB (widget);
 
 	gtk_widget_grab_focus (GTK_WIDGET (ephy_tab_get_embed (tab)));
-}
-
-static EphyWindow *
-ephy_tab_get_window (EphyTab *tab)
-{
-	GtkWidget *toplevel;
-
-	toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tab));
-	g_return_val_if_fail (toplevel != NULL, NULL);
-
-	return EPHY_WINDOW (toplevel);
 }
 
 static void
@@ -1265,6 +1255,8 @@ ephy_tab_file_monitor_cancel (EphyTab *tab)
 		g_source_remove (priv->reload_scheduled_id);
 		priv->reload_scheduled_id = 0;
 	}
+
+	priv->reload_delay_ticks = 0;
 }
 
 static gboolean
@@ -1273,7 +1265,24 @@ ephy_file_monitor_reload_cb (EphyTab *tab)
 	EphyTabPrivate *priv = tab->priv;
 	EphyEmbed *embed;
 
-	LOG ("Reloading file '%s'\n", priv->address);
+	if (priv->reload_delay_ticks > 0)
+	{
+		priv->reload_delay_ticks--;
+
+		/* Run again */
+		return TRUE;
+	}
+
+	if (priv->is_loading)
+	{
+		/* Wait a bit to reload if we're still loading! */
+		priv->reload_delay_ticks = RELOAD_DELAY_MAX_TICKS / 2;
+
+		/* Run again */
+		return TRUE;
+	}
+
+	LOG ("Reloading file '%s'", priv->address);
 
 	priv->reload_scheduled_id = 0;
 
@@ -1807,11 +1816,7 @@ static gboolean
 open_link_in_new_tab (EphyTab *tab,
 		      const char *link_address)
 {
-	EphyWindow *window;
 	gboolean new_tab;
-
-	window = ephy_tab_get_window (tab);
-	g_return_val_if_fail (window != NULL, FALSE);
 
 	new_tab = address_has_web_scheme (link_address);
 
@@ -1996,6 +2001,7 @@ ephy_tab_init (EphyTab *tab)
 	priv->title = NULL;
 	priv->loading_title = NULL;
 	priv->address_expire = EPHY_TAB_ADDRESS_EXPIRE_NOW;
+	priv->reload_delay_ticks = 0;
 
 	embed = ephy_embed_factory_new_object (EPHY_TYPE_EMBED);
 	g_assert (embed != NULL);
