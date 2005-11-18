@@ -245,22 +245,6 @@
   )
 )
 
-(define-enum ContentCheckType
-  (in-module "Ephy")
-  (c-name "EphyContentCheckType")
-  (gtype-id "EPHY_TYPE_CONTENT_CHECK_TYPE")
-  (values
-    '("other" "EPHY_CONTENT_CHECK_TYPE_OTHER")
-    '("script" "EPHY_CONTENT_CHECK_TYPE_SCRIPT")
-    '("image" "EPHY_CONTENT_CHECK_TYPE_IMAGE")
-    '("stylesheet" "EPHY_CONTENT_CHECK_TYPE_STYLESHEET")
-    '("object" "EPHY_CONTENT_CHECK_TYPE_OBJECT")
-    '("document" "EPHY_CONTENT_CHECK_TYPE_DOCUMENT")
-    '("subdocument" "EPHY_CONTENT_CHECK_TYPE_SUBDOCUMENT")
-    '("refresh" "EPHY_CONTENT_CHECK_TYPE_REFRESH")
-  )
-)
-
 (define-flags EmbedNetState
   (in-module "Ephy")
   (c-name "EphyEmbedNetState")
