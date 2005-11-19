@@ -127,7 +127,7 @@ NS_IMETHODIMP EphyContentPolicy::ShouldLoad(PRInt32 aContentType,
 					    PRBool *_retval)
 {
 	NS_ENSURE_ARG (aContentLocation);
-	NS_ENSURE_ARG_POINTER (aDecision);
+	NS_ENSURE_ARG_POINTER (_retval);
 
 	*_retval = PR_TRUE;
 
