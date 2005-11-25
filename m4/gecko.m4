@@ -128,7 +128,7 @@ AC_ARG_ENABLE([cpp-rtti],
 	[],[enable_cpp_rtti=no])
 AC_MSG_RESULT([$enable_cpp_rtti])
 
-if test "x$enable_cpp_rtti" = "xno"; then
+if test "$enable_cpp_rtti" = "no"; then
 	CXXFLAGS="-fno-rtti $CXXFLAGS"
 	AM_CXXFLAGS="-fno-rtti $AM_CXXFLAGS"
 fi
@@ -172,7 +172,7 @@ CPPFLAGS="$_SAVE_CPPFLAGS"
 
 AC_LANG_POP([C++])
 
-if test "$gecko_cv_have_debug" = "xyes"; then
+if test "$gecko_cv_have_debug" = "yes"; then
 	CXXFLAGS="-DDEBUG -D_DEBUG $CXXFLAGS"
 	AM_CXXFLAGS="-DDEBUG -D_DEBUG $AM_CXXFLAGS"
 fi
