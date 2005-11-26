@@ -51,7 +51,7 @@ _GECKO=$with_gecko
 
 dnl Autodetect gecko
 _geckos="firefox mozilla-firefox seamonkey mozilla xulrunner"
-if test "x$_GECKO" = "x"; then
+if test -z "$_GECKO"; then
 	for lizard in $_geckos; do
 		if $PKG_CONFIG --exists $lizard-xpcom; then
 			_GECKO=$lizard
@@ -113,7 +113,7 @@ CXXFLAGS="$_SAVE_CXXFLAGS"
 
 AC_LANG_POP([C++])
 
-if test "$_GECKO_cv_have_usable_wchar_option" = "yes"; then
+if test "$gecko_cv_have_usable_wchar_option" = "yes"; then
 	CXXFLAGS="$CXXFLAGS -fshort-wchar"
 	AM_CXXFLAGS="$AM_CXXFLAGS -fshort-wchar"
 fi
