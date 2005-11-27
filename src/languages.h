@@ -494,6 +494,7 @@ static const char languages[][7] =
 "tr-cy",
 "tr-tr",
 "ts",
+"tt",
 "tvl",
 "uk",
 "ur",

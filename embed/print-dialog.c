@@ -357,7 +357,7 @@ void
 ephy_print_setup_dialog_help_button_cb (GtkWidget *widget,
 					 EphyDialog *dialog)
 {
-	ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "using-print-setup");
+	ephy_gui_help (gtk_widget_get_toplevel (widget), "epiphany", "using-print-setup");
 }
 
 static GtkWidget *

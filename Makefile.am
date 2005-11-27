@@ -7,7 +7,6 @@ EXTRA_DIST = 			\
 	intltool-merge.in	\
 	intltool-update.in	\
 	intltool-extract.in	\
-	po/LINGUAS		\
 	gnome-doc-utils.make	\
 	COPYING.README		\
 	HACKING			\
