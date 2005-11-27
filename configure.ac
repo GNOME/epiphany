@@ -207,10 +207,10 @@ dnl **********************************
 dnl FIXME find a m4/autoconf guru who can distill this into a nice macro
 
 AC_LANG_PUSH([C++])
-_SAVE_CFLAGS=$CXXFLAGS
-_SAVE_CPPFLAGS=$CPPFLAGS
+_SAVE_CXXFLAGS="$CXXFLAGS"
+_SAVE_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="-I$MOZILLA_INCLUDE_ROOT -I$MOZILLA_INCLUDE_ROOT/pipnss `$PKG_CONFIG --cflags-only-I $MOZILLA-xpcom`"
-CXXFLAGS="$_SAVE_CXXFLAGS $AM_CXXFLAGS `$PKG_CONFIG --cflags-only-other $MOZILLA-xpcom`"
+CXXFLAGS="$CXXFLAGS $AM_CXXFLAGS `$PKG_CONFIG --cflags-only-other $MOZILLA-xpcom`"
 
 dnl Sigh Gentoo has a rubbish header layout
 dnl http://bugs.gentoo.org/show_bug.cgi?id=100804
