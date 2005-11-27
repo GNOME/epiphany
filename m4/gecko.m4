@@ -196,7 +196,7 @@ gecko_cv_xpcom_contractid_[]$1[]=no
 AC_LANG_PUSH([C++])
 
 _SAVE_CPPFLAGS="$CPPFLAGS"
-_SAVE_CXXFLAGS="$CFLAGS"
+_SAVE_CXXFLAGS="$CXXFLAGS"
 _SAVE_LDFLAGS="$LDFLAGS"
 CPPFLAGS="$CPPFLAGS -I$_GECKO_INCLUDE_ROOT $($PKG_CONFIG --cflags-only-I $_GECKO-xpcom)"
 CXXFLAGS="$CXXFLAGS $($PKG_CONFIG --cflags-only-other $_GECKO-xpcom)"
