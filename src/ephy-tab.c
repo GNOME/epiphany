@@ -71,6 +71,10 @@
 #define EPHY_TAB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TAB, EphyTabPrivate))
 
 #define MAX_HIDDEN_POPUPS 5
+#define MAX_HIDDEN_POPUPS	5
+#define RELOAD_DELAY		250 /* ms */
+#define RELOAD_DELAY_MAX_TICKS	40  /* RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s */
+#define MAX_TITLE_LENGTH	512 /* characters */
 
 struct _EphyTabPrivate
 {
@@ -1315,15 +1319,25 @@ ephy_tab_file_monitor_cb (GnomeVFSMonitorHandle *handle,
 			 * Delay the reload a little bit so we don't endlessly
 			 * reload while a file is written.
 			 */
-			if (priv->reload_scheduled_id != 0)
+			if (priv->reload_delay_ticks == 0)
 			{
-				g_source_remove (priv->reload_scheduled_id);
+				priv->reload_delay_ticks = 1;
+			}
+			else
+			{
+				/* Exponential backoff */
+				priv->reload_delay_ticks = MIN (priv->reload_delay_ticks * 2,
+								RELOAD_DELAY_MAX_TICKS);
 			}
 
-			priv->reload_scheduled_id =
-				g_timeout_add (100 /* ms */,
-					       (GSourceFunc) ephy_file_monitor_reload_cb,
-					       tab);
+			if (priv->reload_scheduled_id == 0)
+			{
+				priv->reload_scheduled_id =
+					g_timeout_add (RELOAD_DELAY,
+						       (GSourceFunc) ephy_file_monitor_reload_cb,
+						       tab);
+			}
+
 			break;
 
 		case GNOME_VFS_MONITOR_EVENT_DELETED:
