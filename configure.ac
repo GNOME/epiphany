@@ -1,19 +1,19 @@
-dnl Copyright (C) 2000-2004 Marco Pesenti Gritti
-dnl Copyright (C) 2003, 2004, 2005 Christian Persch
-dnl
-dnl This program is free software; you can redistribute it and/or modify it
-dnl under the terms of the GNU General Public License as published by the
-dnl Free Software Foundation; either version 2 of the License, or (at your
-dnl option) any later version.
-dnl
-dnl This program is distributed in the hope that it will be useful, but
-dnl WITHOUT ANY WARRANTY; without even the implied warranty of
-dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-dnl General Public License for more details.
-dnl
-dnl You should have received a copy of the GNU General Public License along
-dnl with this program; if not, write to the Free Software Foundation, Inc.,
-dnl 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+# Copyright (C) 2000-2004 Marco Pesenti Gritti
+# Copyright (C) 2003, 2004, 2005 Christian Persch
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2 of the License, or (at your
+# option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 
 AC_INIT([GNOME Web Browser],[1.9.2.90],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
@@ -70,7 +70,7 @@ AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
 
 GNOME_DEBUG_CHECK
 GNOME_COMPILE_WARNINGS([maximum])
-dnl GNOME_CXX_WARNINGS
+# GNOME_CXX_WARNINGS
 
 AC_PATH_PROG([PKG_CONFIG], [pkg-config], [no])
 if $PKG_CONFIG --atleast-version $LIBSTARTUP_NOTIFICATION_REQUIRED libstartup-notification-1.0; then
@@ -125,12 +125,12 @@ AC_SUBST([LIBBONOBO_IDL])
 BONOBO_ACTIVATION_IDL="`$PKG_CONFIG --variable=idldir bonobo-activation-2.0`"
 AC_SUBST([BONOBO_ACTIVATION_IDL])
 
-dnl *****
-dnl GConf
-dnl *****
+# *****
+# GConf
+# *****
 
-dnl Specify the gconf configuration source, 
-dnl default to xml::$(sysconfdir)/gconf/gconf.xml.defaults
+# Specify the gconf configuration source, 
+# default to xml::$(sysconfdir)/gconf/gconf.xml.defaults
 
 AC_PATH_PROG([GCONFTOOL], [gconftool-2], [no])
 
@@ -140,16 +140,16 @@ fi
 
 AM_GCONF_SOURCE_2
 
-dnl ******************
-dnl Portability checks
-dnl ******************
+# ******************
+# Portability checks
+# ******************
 
 AC_CHECK_FUNCS([mkdtemp])
 
-dnl for backtrace()
+# for backtrace()
 AC_CHECK_HEADERS([execinfo.h])
 
-dnl Check for -Wdeclaration-after-statement (since gcc 3.4)
+# Check for -Wdeclaration-after-statement (since gcc 3.4)
 
 if test "x$enable_maintainer_mode" = "xyes"; then
 
@@ -176,9 +176,9 @@ if test "x$enable_maintainer_mode" = "xyes"; then
 	AC_LANG_POP([C])
 fi
 
-dnl *******
-dnl Mozilla
-dnl *******
+# *******
+# Mozilla
+# *******
 
 GECKO_INIT([MOZILLA])
 
@@ -200,64 +200,18 @@ PKG_CHECK_MODULES([GECKO],[$MOZILLA-gtkmozembed >= $min_version $MOZILLA-xpcom >
 AC_SUBST([GECKO_CFLAGS])
 AC_SUBST([GECKO_LIBS])
 
-dnl **********************************
-dnl now tests for mozilla API variance
-dnl **********************************
+# **********************************
+# now tests for mozilla API variance
+# **********************************
 
-dnl FIXME find a m4/autoconf guru who can distill this into a nice macro
-
-AC_LANG_PUSH([C++])
-_SAVE_CXXFLAGS="$CXXFLAGS"
-_SAVE_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="-I$MOZILLA_INCLUDE_ROOT -I$MOZILLA_INCLUDE_ROOT/pipnss `$PKG_CONFIG --cflags-only-I $MOZILLA-xpcom`"
-CXXFLAGS="$CXXFLAGS $AM_CXXFLAGS `$PKG_CONFIG --cflags-only-other $MOZILLA-xpcom`"
-
-dnl Sigh Gentoo has a rubbish header layout
-dnl http://bugs.gentoo.org/show_bug.cgi?id=100804
-dnl Mind you, it's useful to be able to test against uninstalled mozilla builds...
-TEST_MOZILLA_INCLUDE_DIRS="necko dom"
-for i in $TEST_MOZILLA_INCLUDE_DIRS ; do
-   CPPFLAGS="$CPPFLAGS -I$MOZILLA_INCLUDE_ROOT/$i"
-done
-
-dnl Determine gecko version
-dnl We don't use the version from the .pc file, since that's the app version
-dnl and not the Gecko version
-
-AC_MSG_CHECKING([[for gecko version]])
-
-gecko_version=`cat $MOZILLA_INCLUDE_ROOT/mozilla-config.h | grep MOZILLA_VERSION_U | awk '{ print $[3]; }' | tr ".ab+" " "`
-if test -z "$gecko_version"; then
-	gecko_version="1 7"
-fi
-
-gecko_version_major=`echo $gecko_version | awk '{ print $[1]; }'`
-gecko_version_minor=`echo $gecko_version | awk '{ print $[2]; }'`
-
-AC_MSG_RESULT([$gecko_version_major.$gecko_version_minor])
-
-if test "$gecko_version_major" != "1" -o "$gecko_version_minor" -lt "7" -o "$gecko_version_minor" -gt "9"; then
-	AC_MSG_ERROR([Unsupported Gecko version $gecko_version_major.$gecko_version_minor])
-fi
-
-if test "$gecko_version_major" = "1" -a "$gecko_version_minor" -ge "8"; then
-	AC_DEFINE([HAVE_GECKO_1_8],[1],[Define if we have gecko 1.8])
-fi
-if test "$gecko_version_major" = "1" -a "$gecko_version_minor" -ge "9"; then
-	AC_DEFINE([HAVE_GECKO_1_9],[1],[Define if we have gecko 1.9])
-fi
-
-AM_CONDITIONAL([HAVE_GECKO_1_8],[test "$gecko_version_major" = "1" -a "$gecko_version_minor" -ge "8"])
-AM_CONDITIONAL([HAVE_GECKO_1_9],[test "$gecko_version_major" = "1" -a "$gecko_version_minor" -ge "9"])
-
-dnl Changed from PRUnichar* to nsAString& in 1.8a1 and on aviary branch
+# Changed from PRUnichar* to nsAString& in 1.8a1 and on aviary branch
 
 AC_MSG_CHECKING([whether nsIFilePicker methods expect nsAString&])
 
-AC_COMPILE_IFELSE(
+GECKO_COMPILE_IFELSE([widget],
 	[AC_LANG_PROGRAM(
 		[[#include <nsEmbedString.h>
-		  #include <widget/nsIFilePicker.h>]],
+		  #include <nsIFilePicker.h>]],
 		[[nsIFilePicker *p;
 		  p->SetDefaultString (nsEmbedString());]]
 	)],
@@ -266,16 +220,16 @@ AC_COMPILE_IFELSE(
 
 AC_MSG_RESULT([$result])
 
-dnl Changed in 1.8a1 and again in 1.8a3 to its present form (variant 2);
-dnl variant 1 is on 1.7 branch. Aviary branch also has variant 2.
+# Changed in 1.8a1 and again in 1.8a3 to its present form (variant 2);
+# variant 1 is on 1.7 branch. Aviary branch also has variant 2.
 
 AC_MSG_CHECKING([for nsIContentPolicy API])
 
-AC_COMPILE_IFELSE(
+GECKO_COMPILE_IFELSE([content],
 	[AC_LANG_PROGRAM(
 		[[#include <nsEmbedString.h>
 		  #include <nsIURI.h>
-		  #include <content/nsIContentPolicy.h>]],
+		  #include <nsIContentPolicy.h>]],
 		[[nsIContentPolicy *p;
 		  nsISupports *arg4;
 		  p->ShouldLoad(0,nsnull,nsnull,arg4,nsEmbedCString(),nsnull,nsnull);]]
@@ -283,18 +237,18 @@ AC_COMPILE_IFELSE(
 	[variant=2],
 	[variant=1])
 
-AC_DEFINE_UNQUOTED([MOZ_NSICONTENTPOLICY_VARIANT], [$variant], [Define the nsIContentPolicy API variant])
-
 AC_MSG_RESULT([variant $variant])
 
-dnl Firefox doesn't have this API (?)
+AC_DEFINE_UNQUOTED([MOZ_NSICONTENTPOLICY_VARIANT], [$variant], [Define the nsIContentPolicy API variant])
+
+# Firefox doesn't have this API (?)
 
 AC_MSG_CHECKING([for nsIXULChromeRegistry API])
 
-AC_COMPILE_IFELSE(
+GECKO_COMPILE_IFELSE([content],
 	[AC_LANG_PROGRAM(
 		[[#include <nsEmbedString.h>
-		  #include <content/nsIChromeRegistry.h>]],
+		  #include <nsIChromeRegistry.h>]],
 		[[nsIXULChromeRegistry *p;
 		  p->SelectSkin (nsEmbedCString(), PR_FALSE);]]
 	)],
@@ -303,16 +257,16 @@ AC_COMPILE_IFELSE(
 
 AC_MSG_RESULT([$result])
 
-dnl changed from nsIXULChromeRegistry in 1.8a4
+# changed from nsIXULChromeRegistry in 1.8a4
 
 AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/chrome/nsIChromeRegistrySea.h],
 	[AC_DEFINE([HAVE_CHROME_NSICHROMEREGISTRYSEA_H], [1], [Define if nsIChromeRegistrySea.h exists])])
 
-dnl changed location in 1.8a6
+# changed location in 1.8a6
 
 AC_MSG_CHECKING([for mozilla security compoment])
 
-AC_COMPILE_IFELSE(
+GECKO_COMPILE_IFELSE([pipnss],
 	[AC_LANG_PROGRAM(
 		[[#include <nsIX509Cert.h>]],
 		[[nsIX509Cert *c;
@@ -323,13 +277,13 @@ AC_COMPILE_IFELSE(
 
 AC_MSG_RESULT([$have_psm])
 
-dnl This is only present on toolkit
+# This is only present on toolkit
 
 AC_MSG_CHECKING([for toolkit's nsITypeAheadFind])
 
-AC_COMPILE_IFELSE(
+GECKO_COMPILE_IFELSE([fastfind],
 	[AC_LANG_PROGRAM(
-		[[#include <fastfind/nsITypeAheadFind.h>]],
+		[[#include <nsITypeAheadFind.h>]],
 		[[nsITypeAheadFind *p;
 		  p->SetDocShell(nsnull);]]
 	)],
@@ -338,18 +292,12 @@ AC_COMPILE_IFELSE(
 
 AC_MSG_RESULT([$result])
 
-dnl restore flags
-CPPFLAGS=$_SAVE_CPPFLAGS
-CXXFLAGS=$_SAVE_CXXFLAGS
-
-AC_LANG_POP([C++])
-
-dnl Needed since 1.8b2
-dnl Define this down here so it doesn't affect the API checks above
+# Needed since 1.8b2
+# Define this down here so it doesn't affect the API checks above
 
 AC_DEFINE([MOZILLA_INTERNAL_API],[1],[Define for access to internal mozilla API])
 
-dnl Make sure we don't accidentally build without PSM support
+# Make sure we don't accidentally build without PSM support
 
 AC_MSG_CHECKING([whether to include PSM support])
 AC_ARG_ENABLE([psm],
@@ -369,8 +317,8 @@ fi
 
 AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "$enable_psm" = "yes" -a "$have_psm" = "yes"])
 
-dnl Not a simple file check due to the header being in the SDK since 1.8a6
-dnl https://bugzilla.mozilla.org/show_bug.cgi?id=271068
+# Not a simple file check due to the header being in the SDK since 1.8a6
+# https://bugzilla.mozilla.org/show_bug.cgi?id=271068
 
 if test "$MOZILLA_FLAVOUR" = "mozilla"; then
 	AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsIPassword.h],
@@ -391,13 +339,13 @@ if test "x$have_password_h" = "xno"; then
 	AC_MSG_WARN([nsIPassword.h not found; personal data manger will have no passwords support!])
 fi
 
-dnl Check whether to enable our filepicker component
+# Check whether to enable our filepicker component
 
 AC_MSG_CHECKING([whether to enable native gtk+ filepicker])
 AC_ARG_ENABLE([filepicker],
 	AS_HELP_STRING([--enable-filepicker],[Whether to enable the gtk+ native filepicker; not needed when the mozilla build itself has native gtk+ filepicker enabled (default:enabled)]),
 	[],
-	[if test "$gecko_version_major" = "1" -a "$gecko_version_minor" -ge "8"; then
+	[if test "$MOZILLA_VERSION_MAJOR" = "1" -a "$MOZILLA_VERSION_MINOR" -ge "8"; then
 		enable_filepicker=no
  	 else
 		enable_filepicker=yes
@@ -409,21 +357,21 @@ if test "x$enable_filepicker" = "xyes"; then
 	AC_DEFINE([ENABLE_FILEPICKER],[1],[Define to enable the native filepicker])
 fi
 
-dnl Check for some contractIDs that we need but are provided by extensions
-dnl which may or may not have been built.
+# Check for some contractIDs that we need but are provided by extensions
+# which may or may not have been built.
 
 GECKO_CHECK_CONTRACTID([PermissionManager],[@mozilla.org/permissionmanager;1])
 GECKO_CHECK_CONTRACTID([CookiePermission],[@mozilla.org/cookie/permission;1])
 
-dnl ***************
-dnl Multimedia keys
-dnl ***************
+# ***************
+# Multimedia keys
+# ***************
 
 AC_CHECK_HEADERS([X11/XF86keysym.h])
 
-dnl ******
-dnl Python
-dnl ******
+# ******
+# Python
+# ******
 
 EPIPHANY_FEATURES=
 
@@ -549,14 +497,14 @@ AM_CONDITIONAL([ENABLE_PYTHON],[test "x$enable_python" = "xyes"])
 
 AC_SUBST([EPIPHANY_FEATURES])
 
-dnl *******
-dnl Plugins
-dnl *******
+# *******
+# Plugins
+# *******
 
-dnl Gecko 1.9 can handle .desktop files from file: URLs itself, so disable
-dnl this plugin at least until we handle non-file: URLs
+# Gecko 1.9 can handle .desktop files from file: URLs itself, so disable
+# this plugin at least until we handle non-file: URLs
 
-if test "$gecko_version_major" = "1" -a "$gecko_version_minor" -le "8"; then
+if test "$MOZILLA_VERSION_MAJOR" = "1" -a "$MOZILLA_VERSION_MINOR" -le "8"; then
 
 AC_MSG_CHECKING([whether to build the deskop file plugin])
 AC_ARG_ENABLE([desktop-file-plugin],
@@ -578,9 +526,9 @@ if test "x$enable_desktop_file_plugin" = "xyes"; then
 	AC_DEFINE([HAVE_PRIVATE_PLUGINS],[1],[Define if any private plugins are enabled])
 fi
 
-dnl *******************
-dnl Additional features
-dnl *******************
+# *******************
+# Additional features
+# *******************
 
 AC_MSG_CHECKING([whether to enable zeroconf bookmarks support])
 AC_ARG_ENABLE([zeroconf],
@@ -594,9 +542,9 @@ fi
 
 AM_CONDITIONAL([ENABLE_ZEROCONF],[test "x$enable_zeroconf" = "xyes"])
 
-dnl *******************************
-dnl Add warning flags
-dnl *******************************
+# *******************************
+# Add warning flags
+# *******************************
 
 AM_CPPFLAGS="$AM_CPPFLAGS $DEPRECATION_FLAGS"
 AM_CFLAGS="$AM_CFLAGS $WARN_CFLAGS $MORE_WARN_FLAGS"
@@ -606,9 +554,9 @@ AC_SUBST([AM_CFLAGS])
 AC_SUBST([AM_CXXFLAGS])
 AC_SUBST([AM_LDFLAGS])
 
-dnl *******************************
-dnl Internationalization
-dnl ******************************* 
+# *******************************
+# Internationalization
+# ******************************* 
 
 AC_MSG_CHECKING([for iso-codes package])
 have_iso_codes=no
@@ -636,7 +584,7 @@ else
 	AC_MSG_ERROR([iso-codes is required])
 fi
 
-dnl Translators: new languages must be added to the po/LINGUAS file
+# Translators: new languages must be added to the po/LINGUAS file
 ALL_LINGUAS="`cat "$srcdir/po/LINGUAS" | grep -v '^#'`"
 
 AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
@@ -647,19 +595,19 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[Gettext package])
 AM_GLIB_GNU_GETTEXT
 AM_GLIB_DEFINE_LOCALEDIR([GNOMELOCALEDIR])
 
-dnl uninstalled share dir to search data
+# uninstalled share dir to search data
 AC_DEFINE_UNQUOTED([SHARE_UNINSTALLED_DIR], ["`pwd`/data"], [path to source data dir])
 
-dnl *****************
-dnl API Documentation
-dnl *****************
+# *****************
+# API Documentation
+# *****************
 
 GNOME_DOC_INIT
 GTK_DOC_CHECK([1.0])
 
-dnl ************
-dnl Output files
-dnl ************
+# ************
+# Output files
+# ************
 
 AC_CONFIG_FILES([
 Makefile
