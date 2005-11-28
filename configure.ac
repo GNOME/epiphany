@@ -31,13 +31,6 @@ AC_SUBST([EPIPHANY_MAJOR])
 AM_INIT_AUTOMAKE([1.9 dist-bzip2 no-dist-gzip check-news])
 
 AM_MAINTAINER_MODE
-if test "x$enable_maintainer_mode" = "xyes"; then
-	AC_DEFINE([MAINTAINER_MODE],[1],[Define to enable 'maintainer-only' behaviour])
-	enable_debug=yes
-	MORE_WARN_FLAGS=
-        DEPRECATION_FLAGS="-DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGCONF_DISABLE_DEPRECATED -DGNOME_VFS_DISABLE_DEPRECATED -DBONOBO_UI_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED -DLIBGLADE_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED"
-	MOZILLA_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
-fi
 
 AC_PROG_INTLTOOL([0.29])
 
@@ -70,7 +63,18 @@ AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
 
 GNOME_DEBUG_CHECK
 GNOME_COMPILE_WARNINGS([maximum])
-# GNOME_CXX_WARNINGS
+GNOME_CXX_WARNINGS
+
+MORE_WARN_FLAGS=
+DEPRECATION_FLAGS=
+MOZILLA_WARN_CXXFLAGS="-Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
+
+if test "x$enable_maintainer_mode" = "xyes"; then
+	AC_DEFINE([MAINTAINER_MODE],[1],[Define to enable 'maintainer-only' behaviour])
+	enable_debug=yes
+        DEPRECATION_FLAGS="-DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGCONF_DISABLE_DEPRECATED -DGNOME_VFS_DISABLE_DEPRECATED -DBONOBO_UI_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED -DLIBGLADE_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED"
+	MOZILLA_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth $MOZILLA_WARN_CXXFLAGS"
+fi
 
 AC_PATH_PROG([PKG_CONFIG], [pkg-config], [no])
 if $PKG_CONFIG --atleast-version $LIBSTARTUP_NOTIFICATION_REQUIRED libstartup-notification-1.0; then
@@ -154,11 +158,9 @@ AC_CHECK_HEADERS([execinfo.h])
 if test "x$enable_maintainer_mode" = "xyes"; then
 
 	AC_LANG_PUSH([C])
-	FLAGS="-Wdeclaration-after-statement"
-	_SAVE_AM_CFLAGS=$AM_CFLAGS
+	_FLAGS="-Wdeclaration-after-statement"
 	_SAVE_CFLAGS=$CFLAGS
-	AM_CFLAGS="$AM_CFLAGS $FLAGS"
-	CFLAGS="$CFLAGS $AM_CFLAGS"
+	CFLAGS="$CFLAGS $_FLAGS"
 
 	AC_CACHE_CHECK([for compiler $FLAGS option],
 		ac_cv_have_declaration_after_statement,
@@ -169,9 +171,8 @@ if test "x$enable_maintainer_mode" = "xyes"; then
 			[ac_cv_have_declaration_after_statement="maybe"])])
 	
 	if test "x$ac_cv_have_declaration_after_statement" = "xyes"; then
-		MORE_WARN_FLAGS="$MORE_WARN_FLAGS $FLAGS"
+		MORE_WARN_FLAGS="$MORE_WARN_FLAGS $_FLAGS"
 	fi
-	AM_CFLAGS="$_SAVE_AM_CFLAGS"
 	CFLAGS="$_SAVE_CFLAGS"
 	AC_LANG_POP([C])
 fi
