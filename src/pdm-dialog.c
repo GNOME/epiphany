@@ -922,7 +922,7 @@ pdm_dialog_cookie_scroll_to (PdmActionInfo *info)
 		path = gtk_tree_model_get_path (info->model, &iter);
 		gtk_tree_view_scroll_to_cell (info->treeview,
 					      path, NULL, TRUE,
-					      0.0, 0.5);
+					      0.5, 0.0);
 		gtk_tree_path_free (path);
 	}
 
