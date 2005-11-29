@@ -614,6 +614,8 @@ AC_CONFIG_FILES([
 Makefile
 data/Makefile
 data/epiphany-1.10.pc
+data/epiphany.desktop.in
+data/bme.desktop.in
 data/glade/Makefile
 data/art/Makefile
 data/ui/Makefile

@@ -29,11 +29,9 @@ server_in_files = GNOME_Epiphany_Automation.server.in
 server_DATA = GNOME_Epiphany_Automation.server
 serverdir = $(libdir)/bonobo/servers
 
-DESKTOP_IN_FILES= epiphany.desktop.in bme.desktop.in
-DESKTOP_FILES= $(DESKTOP_IN_FILES:.desktop.in=.desktop)
-
+desktop_in_file= epiphany.desktop.in.in bme.desktop.in.in
 desktopdir = $(datadir)/applications
-desktop_DATA = $(DESKTOP_FILES)
+desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 
 applicationsdir = $(datadir)/application-registry
 applications_DATA = epiphany.applications
@@ -73,7 +71,7 @@ EXTRA_DIST = \
 	     $(server_in_files)     	\
 	     $(schema_in_files)         \
 	     $(font_schema_files)	\
-	     $(DESKTOP_IN_FILES)	\
+	     $(desktop_in_files)	\
 	     $(about_DATA)		\
 	     $(applications_DATA)	\
 	     $(mimepermission_DATA)	\
