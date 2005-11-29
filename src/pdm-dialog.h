@@ -51,7 +51,10 @@ struct PdmDialogClass
         EphyDialogClass parent_class;
 };
 
-GType         pdm_dialog_get_type         (void);
+GType	pdm_dialog_get_type	(void);
+
+void	pdm_dialog_open		(PdmDialog *dialog,
+				 const char *host);
 
 G_END_DECLS
 

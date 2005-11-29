@@ -33,6 +33,9 @@ char	 *ephy_string_blank_chr	(char *source);
 char	 *ephy_string_shorten	(char *str,
 				 gsize target_length);
 
+char	 *ephy_string_collate_key_for_domain	(const char *host,
+						 gssize len);
+
 G_END_DECLS
 
 #endif

@@ -1,5 +1,26 @@
 2005-11-29  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-string.c: (ephy_string_collate_key_for_domain):
+	* lib/ephy-string.h:
+
+	Add a method to generate collation keys for domain names.
+
+	* src/pdm-dialog.c: (cookie_search_equal),
+	(pdm_dialog_cookies_construct), (cookie_host_to_iter),
+	(compare_cookie_host_keys), (pdm_dialog_fill_cookies_list),
+	(pdm_dialog_cookies_destruct), (pdm_dialog_cookie_add),
+	(pdm_dialog_cookie_scroll_to), (sync_notebook_tab),
+	(pdm_dialog_init), (pdm_dialog_finalize), (pdm_dialog_open):
+	* src/pdm-dialog.h:
+	* src/window-commands.c: (window_cmd_edit_personal_data):
+
+	Open the PDM dialogue on the cookies page scrolled to show the
+	cookies of the currently loaded page, if there are any. Sort
+	cookies by domain. Allow treeview typeaheadfind search to find
+	by substring not prefix.
+
+2005-11-29  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.ac:
 	* data/Makefile.am:
 	R data/bme.desktop.in:

@@ -45,6 +45,7 @@
 #include "ephy-toolbar-editor.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-location-entry.h"
+#include "pdm-dialog.h"
 
 #include <string.h>
 #include <glib.h>
@@ -648,11 +649,25 @@ void
 window_cmd_edit_personal_data (GtkAction *action,
 		               EphyWindow *window)
 {
-	EphyDialog *dialog;
+	PdmDialog *dialog;
+	EphyTab *tab;
+	GnomeVFSURI *uri;
+	const char *host;
 
-	dialog = EPHY_DIALOG (ephy_shell_get_pdm_dialog (ephy_shell));
+	tab = ephy_window_get_active_tab (window);
+	if (tab == NULL) return;
 
-	ephy_dialog_show (dialog);
+	uri = gnome_vfs_uri_new (ephy_tab_get_address (tab));
+
+	host = uri != NULL ? gnome_vfs_uri_get_host_name (uri) : NULL;
+
+	dialog = EPHY_PDM_DIALOG (ephy_shell_get_pdm_dialog (ephy_shell));
+	pdm_dialog_open (dialog, host);
+
+	if (uri != NULL)
+	{
+		gnome_vfs_uri_unref (uri);
+	}
 }
 
 void

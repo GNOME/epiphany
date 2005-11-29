@@ -134,3 +134,51 @@ ephy_string_shorten (char *str,
 
         return new_str;
 }
+
+/* This is a collation key that is very very likely to sort before any
+   collation key that libc strxfrm generates. We use this before any
+   special case (dot or number) to make sure that its sorted before
+   anything else.
+ */
+#define COLLATION_SENTINEL "\1\1\1"
+
+/**
+ * ephy_string_collate_key_for_domain:
+ * @host:
+ * @len: the length of @host, or -1 to use the entire null-terminated @host string
+ * 
+ * Return value: a collation key for @host.
+ */
+char*
+ephy_string_collate_key_for_domain (const char *str,
+				    gssize len)
+{
+	GString *result;
+	const char *dot;
+	gssize newlen;
+
+	if (len < 0) len = strlen (str);
+
+	result = g_string_sized_new (len + 6 * strlen (COLLATION_SENTINEL));
+
+	/* Note that we could do even better by using
+	 * g_utf8_collate_key_for_filename on the dot-separated
+	 * components, but this seems good enough for now.
+	 */
+	while ((dot = g_strrstr_len (str, len, ".")) != NULL)
+	{
+		newlen = dot - str;
+
+		g_string_append_len (result, dot + 1, len - newlen - 1);
+		g_string_append (result, COLLATION_SENTINEL);
+
+		len = newlen;
+	}
+
+	if (len > 0)
+	{
+		g_string_append_len (result, str, len);
+	}
+
+	return g_string_free (result, FALSE);
+}
