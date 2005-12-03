@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 1.8.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-15 21:56+0100\n"
-"PO-Revision-Date: 2005-11-15 22:05+0100\n"
+"POT-Creation-Date: 2005-12-03 14:29+0100\n"
+"PO-Revision-Date: 2005-12-03 14:34+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -20,18 +20,6 @@ msgstr ""
 #: ../data/GNOME_Epiphany_Automation.server.in.h:1
 msgid "Epiphany automation"
 msgstr "Epiphany automatisering"
-
-#: ../data/bme.desktop.in.h:1
-msgid "Browse and organize your bookmarks"
-msgstr "Bla gjennom og organiser dine bokmerker"
-
-#: ../data/bme.desktop.in.h:2
-msgid "Epiphany Web Bookmarks"
-msgstr "Epiphany-bokmerker"
-
-#: ../data/bme.desktop.in.h:3
-msgid "Web Bookmarks"
-msgstr "Bokmerker på internett"
 
 #: ../data/epiphany-lockdown.schemas.in.h:1
 msgid ""
@@ -125,18 +113,30 @@ msgstr "Låser Epiphany i fullskjermmodus."
 
 #: ../data/epiphany-lockdown.schemas.in.h:20
 msgid "User is not allowed to close Epiphany"
-msgstr ""
+msgstr "Brukeren har ikke lov til å lukke Epiphany"
 
-#: ../data/epiphany.desktop.in.h:1
+#: ../data/bme.desktop.in.in.h:1
+msgid "Browse and organize your bookmarks"
+msgstr "Bla gjennom og organiser dine bokmerker"
+
+#: ../data/bme.desktop.in.in.h:2
+msgid "Epiphany Web Bookmarks"
+msgstr "Epiphany-bokmerker"
+
+#: ../data/bme.desktop.in.in.h:3
+msgid "Web Bookmarks"
+msgstr "Bokmerker på internett"
+
+#: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
 msgstr "Surf på nettet"
 
-#: ../data/epiphany.desktop.in.h:2
+#: ../data/epiphany.desktop.in.in.h:2
 msgid "Epiphany Web Browser"
 msgstr "Epiphany nettleser"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.h:3 ../src/ephy-main.c:222
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:222
 #: ../src/ephy-main.c:233
 msgid "Web Browser"
 msgstr "Nettleser"
@@ -526,7 +526,7 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5-fingeravtrykk:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:998
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1015
 msgid "Organization:"
 msgstr "Organisasjon:"
 
@@ -811,7 +811,7 @@ msgstr ""
 "%s av %s"
 
 #: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#: ../src/ephy-window.c:1440
+#: ../src/ephy-window.c:1441
 msgid "Unknown"
 msgstr "Ukjent"
 
@@ -1259,17 +1259,16 @@ msgstr "Laste ned mulig utrygg fil?"
 #. translators: First %s is the file type description,
 #. Second %s is the file name
 #: ../embed/mozilla/ContentHandler.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File Type: “%s”.\n"
 "\n"
 "It is unsafe to open “%s” as it could potentially damage your documents or "
 "invade your privacy. You can download it instead."
 msgstr ""
-"Filtype: %s.\n"
+"Filtype: «%s».\n"
 "\n"
-"Det er ikke trygt å åpne «%s». Den kan skade dokumentene dine eller få "
-"tilgang til dine personlige opplysninger. Du kan laste den ned i stedet."
+"Det er ikke trygt å åpne «%s». Den kan skade dokumentene dine eller få tilgang til dine personlige opplysninger. Du kan laste den ned i stedet."
 
 #: ../embed/mozilla/ContentHandler.cpp:344
 msgid "Open this file?"
@@ -1279,13 +1278,13 @@ msgstr "Åpne filen?"
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
 #: ../embed/mozilla/ContentHandler.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File Type: “%s”.\n"
 "\n"
 "You can open “%s” using “%s” or save it."
 msgstr ""
-"Filtype: %s\n"
+"Filtype: «%s»\n"
 "\n"
 "Du kan åpne «%s» ved å bruke «%s» eller lagre den."
 
@@ -1296,16 +1295,15 @@ msgstr "Laste ned filen?"
 #. translators: First %s is the file type description,
 #. Second %s is the file name
 #: ../embed/mozilla/ContentHandler.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File Type: “%s”.\n"
 "\n"
 "You have no application able to open “%s”. You can download it instead."
 msgstr ""
-"Filtype: %s.\n"
+"Filtype: «%s».\n"
 "\n"
-"Det finnes ingen programmer som kan åpne «%s». Du kan laste den ned i "
-"stedet. "
+"Det finnes ingen programmer som kan åpne «%s». Du kan laste den ned i stedet. "
 
 #: ../embed/mozilla/ContentHandler.cpp:370
 msgid "_Save As..."
@@ -1313,9 +1311,9 @@ msgstr "L_agre som..."
 
 #. Translators: %s is the name of a protocol, like "http" etc.
 #: ../embed/mozilla/EphyAboutModule.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "“%s” Protocol is not Supported"
-msgstr "Protokollen «%s» er ikke støttet."
+msgstr "Protokoll «%s» er ikke støttet"
 
 #. Translators: %s is the name of a protocol, like "http" etc.
 #: ../embed/mozilla/EphyAboutModule.cpp:209
@@ -1493,7 +1491,8 @@ msgstr "Kan ikke laste dokument i frakoblet modus."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:357
 msgid "To view this document, disable “Work Offline” and try again."
-msgstr "For å vise dette dokumentet må du deaktivere frakoblet modus og prøve igjen."
+msgstr ""
+"For å vise dette dokumentet må du deaktivere frakoblet modus og prøve igjen."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:369
 #, c-format
@@ -1531,14 +1530,16 @@ msgstr "Kunne ikke vise innhold."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:396
 msgid "The page uses an unsupported or invalid form of compression."
-msgstr "Denne siden bruker en form for komprimering som ikke er støttet eller er ugyldig."
+msgstr ""
+"Denne siden bruker en form for komprimering som ikke er støttet eller er "
+"ugyldig."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:486
 #, c-format
 msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
 "crashed; it could have caused the crash."
-msgstr ""
+msgstr "Siden «%s» i denne fanen var ikke ferdig lastet når nettleseren krasjet. Den kan ha forårsaket krasjet."
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -1611,7 +1612,7 @@ msgid "_Accept"
 msgstr "_Godta"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
 "someone is intercepting your communication to obtain your confidential "
@@ -1621,7 +1622,7 @@ msgstr ""
 "noen fanger opp trafikken din for å få tak i din konfidensielle informasjon."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:317
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You should only accept the security information if you trust “%s” and “%s”."
 msgstr ""
@@ -1632,7 +1633,7 @@ msgid "Accept incorrect security information?"
 msgstr "Godta ugyldig sikkerhetsinformasjon?"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
 "is intercepting your communication to obtain your confidential information."
@@ -1641,7 +1642,7 @@ msgstr ""
 "trafikken din for å få tak i konfidensiell informasjon."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
 "“%s”."
@@ -1698,7 +1699,7 @@ msgid "Cannot establish connection to “%s”."
 msgstr "Kan ikke etablere tilkobling til «%s»."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:511
-#, fuzzy, c-format
+#, c-format
 msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
 msgstr "Tilbaketrekkingslisten for sertifikat (CRL) fra «%s» må oppdateres."
 
@@ -1715,9 +1716,9 @@ msgid "_Trust CA"
 msgstr "S_tol på CA"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:573
-#, fuzzy, c-format
+#, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
-msgstr "Stole på sertifikatmyndighet «%s» til å identifisere nettsider?"
+msgstr "Stol på sertifikatmyndighet «%s» til å identifisere nettsider?"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:578
 msgid ""
@@ -1773,63 +1774,63 @@ msgstr "Passord kreves."
 msgid "Enter the password for this certificate."
 msgstr "Oppgi passordet for dette sertifikatet."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:976
-msgid "Certificate Revocation list successfully imported."
-msgstr "Import av tilbaketrekkingsliste for sertifikat fullført."
+#: ../embed/mozilla/GtkNSSDialogs.cpp:984
+msgid "Certificate Revocation List Imported"
+msgstr "Tilbaketrekkingsliste for sertifikat (CRL) importert"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:977
-msgid "Certificate Revocation list (CRL) imported:"
-msgstr "Tilbaketrekkingsliste for sertifikat (CRL) importert:"
+#: ../embed/mozilla/GtkNSSDialogs.cpp:994
+msgid "Certificate Revocation List (CRL) successfully imported"
+msgstr "Import av tilbaketrekkingsliste for sertifikat (CRL) fullført"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1003
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1019
 msgid "Unit:"
 msgstr "Enhet:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1008
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1023
 msgid "Next Update:"
 msgstr "Neste oppdatering:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1035
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1050
 msgid "Not part of certificate"
 msgstr "Ikke del av sertifikatet"
 
 # (ugh)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1325
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
 msgid "Certificate Properties"
 msgstr "Egenskaper for sertifikat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1347
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1362
 msgid "This certificate has been verified for the following uses:"
 msgstr "Dette sertifikatet er verifisert for følgende bruksområder:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1350
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Kunne ikke verifisere dette sertifikatet fordi det er trukket tilbake."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1353
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1368
 msgid "Could not verify this certificate because it has expired."
 msgstr "Kunne ikke verifisere dette sertifikatet fordi det er utgått."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1356
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1371
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Kunne ikke verifisere dette sertifikatet fordi det ikke stoles på."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1359
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1374
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "Kunne ikke verifisere dette sertifikatet fordi vi ikke stoler på utsteder."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1362
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1377
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Kunne ikke verifisere dette sertifikatet fordi utsteder er ukjent."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1380
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "Kunne ikke verifisere dette sertifikatet fordi CA's sertifikat er ugyldig."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1370
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1385
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Kunne ikke verifisere dette sertifikatet av ukjente årsaker."
 
@@ -1855,7 +1856,7 @@ msgstr "Denne siden lastes over en sikker forbindelse"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
 msgid "The padlock icon in the statusbar indicates whether a page is secure."
-msgstr ""
+msgstr "Hengelåsikonet i statuslinjen indikerer om en side er sikker."
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
@@ -1947,7 +1948,7 @@ msgid "Printing is not supported on this printer"
 msgstr "Utskriving er ikke støttet på denne skriveren"
 
 #: ../embed/print-dialog.c:278
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You were trying to print to a printer using the “%s” driver. This program "
 "requires a PostScript printer driver."
@@ -1971,7 +1972,7 @@ msgstr "_Til:"
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Slutten på sideområdet som skal skrives ut"
 
-#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1271
+#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1272
 msgid "Print"
 msgstr "Skriv ut"
 
@@ -2037,13 +2038,10 @@ msgid "Cannot overwrite existing file “%s”"
 msgstr "Kan ikke overskrive eksisterende fil «%s»"
 
 #: ../lib/ephy-gui.c:369
-#, fuzzy
 msgid ""
 "A file with this name alreay exists and you don't have permission to "
 "overwrite it."
-msgstr ""
-"En fil med dette navnet eksisterer allerede. Hvis du velger å overskrive "
-"denne filen vil innholdet gå tapt."
+msgstr "En fil med dette navnet eksisterer allerede og du har ikke rettigheter til å skrive over den."
 
 #: ../lib/ephy-gui.c:372
 msgid "Cannot Overwrite File"
@@ -2224,7 +2222,7 @@ msgstr "Historie"
 
 #: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1535
-#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1277
+#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1278
 msgid "Bookmarks"
 msgstr "Bokmerker"
 
@@ -2284,7 +2282,7 @@ msgstr "Utrygg protokoll."
 msgid ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
-msgstr ""
+msgstr "Adressen er ikke lastet fordi den refererer til en utrygg protokoll og dette kan være en sikkerhetsrisiko for ditt system."
 
 #: ../plugins/desktop-file/plugin.cpp:290
 msgid "No address found."
@@ -2297,11 +2295,11 @@ msgstr "Fant ingen web-adresser i denne filen."
 #. Translators: "Desktop File" refers to .desktop files containing a link
 #: ../plugins/desktop-file/plugin.cpp:326
 msgid "Epiphany Desktop File Plugin"
-msgstr ""
+msgstr "Epiphany tillegg for lenker på skrivebordet"
 
 #: ../plugins/desktop-file/plugin.cpp:330
 msgid "This plugin handles “.desktop” files containing web links."
-msgstr ""
+msgstr "Dette tillegget håndterer «.desktop» filer som inneholder lenker til nettsteder."
 
 #: ../src/bookmarks/ephy-bookmark-action.c:284
 #, c-format
@@ -2580,7 +2578,7 @@ msgid "Import Failed"
 msgstr "Import feilet"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:560
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
@@ -3015,31 +3013,31 @@ msgstr ""
 "Epiphany kan ikke brukes nå pga en uventet feil fra Bonobo ved forsøk på å "
 "laste automasjonsobjektet."
 
-#: ../src/ephy-tab.c:490 ../src/ephy-tab.c:2247 ../src/ephy-tab.c:2282
+#: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2264 ../src/ephy-tab.c:2299
 msgid "Blank page"
 msgstr "Tom side"
 
 #. translators: %s here is the address of the web page
-#: ../src/ephy-tab.c:925 ../src/ephy-tab.c:1647
+#: ../src/ephy-tab.c:916 ../src/ephy-tab.c:1667
 #, c-format
 msgid "Loading “%s”..."
 msgstr "Laster «%s»..."
 
-#: ../src/ephy-tab.c:929
+#: ../src/ephy-tab.c:920
 msgid "Loading..."
 msgstr "Laster..."
 
-#: ../src/ephy-tab.c:1631
+#: ../src/ephy-tab.c:1651
 #, c-format
 msgid "Redirecting to “%s”..."
 msgstr "Omdirigerer til «%s»..."
 
-#: ../src/ephy-tab.c:1635
+#: ../src/ephy-tab.c:1655
 #, c-format
 msgid "Transferring data from “%s”..."
 msgstr "Overfører data fra «%s»..."
 
-#: ../src/ephy-tab.c:1639
+#: ../src/ephy-tab.c:1659
 #, c-format
 msgid "Waiting for authorization from “%s”..."
 msgstr "Venter på godkjenning fra «%s»..."
@@ -3563,157 +3561,157 @@ msgstr "Br_uk bilde som bakgrunn"
 msgid "Copy I_mage Address"
 msgstr "Ko_pier adressen til bildet"
 
-#: ../src/ephy-window.c:692
+#: ../src/ephy-window.c:693
 msgid "There are unsubmitted changes to form elements"
 msgstr "Det finnes endringer i skjemaet som ikke er sendt"
 
-#: ../src/ephy-window.c:696
+#: ../src/ephy-window.c:697
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Hvis du lukker dokumentet likevel vil du miste denne informasjonen."
 
-#: ../src/ephy-window.c:700
+#: ../src/ephy-window.c:701
 msgid "Close _Document"
 msgstr "Lukk _dokument"
 
-#: ../src/ephy-window.c:1267 ../src/window-commands.c:294
+#: ../src/ephy-window.c:1268 ../src/window-commands.c:295
 msgid "Open"
 msgstr "Åpne"
 
-#: ../src/ephy-window.c:1269 ../src/window-commands.c:320
+#: ../src/ephy-window.c:1270 ../src/window-commands.c:321
 msgid "Save As"
 msgstr "Lagre som"
 
-#: ../src/ephy-window.c:1273
+#: ../src/ephy-window.c:1274
 msgid "Bookmark"
 msgstr "Bokmerke"
 
-#: ../src/ephy-window.c:1275
+#: ../src/ephy-window.c:1276
 msgid "Find"
 msgstr "Finn"
 
-#: ../src/ephy-window.c:1443
+#: ../src/ephy-window.c:1444
 msgid "Insecure"
 msgstr "Usikker"
 
-#: ../src/ephy-window.c:1448
+#: ../src/ephy-window.c:1449
 msgid "Broken"
 msgstr "Ødelagt"
 
-#: ../src/ephy-window.c:1456
+#: ../src/ephy-window.c:1457
 msgid "Low"
 msgstr "Lav"
 
-#: ../src/ephy-window.c:1463
+#: ../src/ephy-window.c:1464
 msgid "High"
 msgstr "Høy"
 
-#: ../src/ephy-window.c:1473
+#: ../src/ephy-window.c:1474
 #, c-format
 msgid "Security level: %s"
 msgstr "Sikkerhetsnivå: %s"
 
-#: ../src/ephy-window.c:1513
+#: ../src/ephy-window.c:1514
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d skjult sprettoppvindu"
 msgstr[1] "%d skjulte sprettoppvinduer"
 
-#: ../src/ephy-window.c:1808
+#: ../src/ephy-window.c:1809
 #, c-format
 msgid "Open image “%s”"
 msgstr "Åpne bilde «%s»"
 
-#: ../src/ephy-window.c:1813
+#: ../src/ephy-window.c:1814
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Bruk som bakgrunn på skrivebordet «%s»"
 
-#: ../src/ephy-window.c:1818
+#: ../src/ephy-window.c:1819
 #, c-format
 msgid "Save image “%s”"
 msgstr "Lagre bilde «%s»"
 
-#: ../src/ephy-window.c:1823
+#: ../src/ephy-window.c:1824
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopier adressen til bildet «%s»"
 
-#: ../src/ephy-window.c:1836
+#: ../src/ephy-window.c:1837
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Send e-post til adresse «%s»"
 
-#: ../src/ephy-window.c:1842
+#: ../src/ephy-window.c:1843
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopier e-postadresse «%s»"
 
-#: ../src/ephy-window.c:1854
+#: ../src/ephy-window.c:1855
 #, c-format
 msgid "Save link “%s”"
 msgstr "Lagre lenke «%s»"
 
-#: ../src/ephy-window.c:1860
+#: ../src/ephy-window.c:1861
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Lag bokmerke av lenke «%s»"
 
-#: ../src/ephy-window.c:1866
+#: ../src/ephy-window.c:1867
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopier lenkens adresse «%s»"
 
 # (ugh)
-#: ../src/pdm-dialog.c:367
+#: ../src/pdm-dialog.c:379
 msgid "Cookie Properties"
 msgstr "Egenskaper for informasjonskapsel"
 
-#: ../src/pdm-dialog.c:384
+#: ../src/pdm-dialog.c:396
 msgid "Content:"
 msgstr "Innhold:"
 
-#: ../src/pdm-dialog.c:400
+#: ../src/pdm-dialog.c:412
 msgid "Path:"
 msgstr "Sti:"
 
-#: ../src/pdm-dialog.c:416
+#: ../src/pdm-dialog.c:428
 msgid "Send for:"
 msgstr "Send for:"
 
-#: ../src/pdm-dialog.c:425
+#: ../src/pdm-dialog.c:437
 msgid "Encrypted connections only"
 msgstr "Kun krypterte tilkoblinger"
 
-#: ../src/pdm-dialog.c:425
+#: ../src/pdm-dialog.c:437
 msgid "Any type of connection"
 msgstr "Enhver type tilkobling"
 
-#: ../src/pdm-dialog.c:431
+#: ../src/pdm-dialog.c:443
 msgid "Expires:"
 msgstr "Utgår:"
 
-#: ../src/pdm-dialog.c:442
+#: ../src/pdm-dialog.c:454
 msgid "End of current session"
 msgstr "Slutten på siste sesjon"
 
-#: ../src/pdm-dialog.c:561
+#: ../src/pdm-dialog.c:591
 msgid "Domain"
 msgstr "Domene"
 
-#: ../src/pdm-dialog.c:573
+#: ../src/pdm-dialog.c:602
 msgid "Name"
 msgstr "Navn"
 
-#: ../src/pdm-dialog.c:829
+#: ../src/pdm-dialog.c:991
 msgid "Host"
 msgstr "Vert"
 
-#: ../src/pdm-dialog.c:841
+#: ../src/pdm-dialog.c:1003
 msgid "User Name"
 msgstr "Brukernavn"
 
-#: ../src/pdm-dialog.c:853
+#: ../src/pdm-dialog.c:1015
 msgid "User Password"
 msgstr "Brukerpassord"
 
@@ -3803,23 +3801,23 @@ msgstr[1] "Systemspråk [%s]"
 msgid "Select a Directory"
 msgstr "Velg en katalog"
 
-#: ../src/window-commands.c:694 ../src/window-commands.c:711
+#: ../src/window-commands.c:709 ../src/window-commands.c:726
 msgid "Contact us at:"
 msgstr "Kontakt oss her:"
 
-#: ../src/window-commands.c:697
+#: ../src/window-commands.c:712
 msgid "Contributors:"
 msgstr "Bidragsytere:"
 
-#: ../src/window-commands.c:702
+#: ../src/window-commands.c:717
 msgid "Past developers:"
 msgstr "Tidligere utviklere:"
 
-#: ../src/window-commands.c:712
+#: ../src/window-commands.c:727
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
-msgstr ""
+msgstr "<epiphany-list@gnome.org> eller <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:717
+#: ../src/window-commands.c:732
 msgid "GNOME Web Browser"
 msgstr "GNOME Nettleser"
 
@@ -3831,10 +3829,10 @@ msgstr "GNOME Nettleser"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:731
+#: ../src/window-commands.c:746
 msgid "translator-credits"
 msgstr "Kjartan Maraas <kmaraas@gnome.org>"
 
-#: ../src/window-commands.c:734
+#: ../src/window-commands.c:749
 msgid "GNOME Web Browser Website"
 msgstr "Nettsted for GNOME Nettleser"
