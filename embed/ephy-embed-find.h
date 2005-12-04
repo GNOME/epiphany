@@ -62,6 +62,8 @@ struct _EphyEmbedFindIface
 						 gboolean links_only);
 	EphyEmbedFindResult (* find_again)	(EphyEmbedFind *find,
 						 gboolean forward);
+	void	 (* set_selection)	(EphyEmbedFind *find,
+					 gboolean attention);
 	gboolean (* activate_link)	(EphyEmbedFind *find,
 					 GdkModifierType mask);
 };
@@ -81,6 +83,9 @@ EphyEmbedFindResult	ephy_embed_find_find		(EphyEmbedFind *find,
 
 EphyEmbedFindResult	ephy_embed_find_find_again	(EphyEmbedFind *find,
 							 gboolean forward);
+
+void	 ephy_embed_find_set_selection		(EphyEmbedFind *find,
+						 gboolean attention);
 
 gboolean ephy_embed_find_activate_link		(EphyEmbedFind *find,
 						 GdkModifierType mask);

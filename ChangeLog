@@ -1,5 +1,31 @@
 2005-12-04  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-embed-find.c: (ephy_embed_find_set_selection):
+	* embed/ephy-embed-find.h:
+	* embed/mozilla/EphyFind.cpp:
+	* embed/mozilla/EphyFind.h:
+	* embed/mozilla/mozilla-embed-find.cpp:
+
+	While in find mode, set the selection colour to "attention".
+
+	* src/ephy-find-toolbar.c: (set_status), (clear_status),
+	(tab_search_key_press_cb), (entry_key_press_event_cb),
+	(entry_activate_cb), (set_focus_cb),
+	(ephy_find_toolbar_set_window), (ephy_find_toolbar_init),
+	(ephy_find_toolbar_class_init), (ephy_find_toolbar_set_embed),
+	(ephy_find_toolbar_open), (ephy_find_toolbar_close),
+	(ephy_find_toolbar_request_close):
+	* src/ephy-find-toolbar.h:
+	* src/ephy-window.c: (sync_tab_document_type),
+	(find_toolbar_close_cb), (ephy_window_set_print_preview),
+	(ephy_window_get_find_toolbar), (ephy_window_get_context_event):
+
+	Refactor find toolbar closing not to crash with auto-closing popups.
+	Unset the selection colour on close.
+	Remove dead #ifdef FIND_WHILE_TYPING_IN_EMBED code.
+
+2005-12-04  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/GtkNSSDialog.cpp:
 
 	Add a comment for translators.

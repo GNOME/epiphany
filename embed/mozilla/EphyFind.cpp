@@ -50,8 +50,12 @@
 #include <nsIDOMHTMLAnchorElement.h>
 
 #ifdef HAVE_TYPEAHEADFIND
+#include <nsISimpleEnumerator.h>
 #include <nsIDocShell.h>
+#include <nsIDocShellTreeItem.h>
 #include <nsITypeAheadFind.h>
+#include <nsISelectionDisplay.h>
+#include <nsISelectionController.h>
 #else
 #include <nsIWebBrowserFind.h>
 #include <nsMemory.h>
@@ -68,6 +72,9 @@ static const PRUnichar kKeyPress[] = { 'k', 'e', 'y', 'p', 'r', 'e', 's', 's', '
 
 EphyFind::EphyFind ()
 : mCurrentEmbed(nsnull)
+#ifdef HAVE_TYPEAHEADFIND
+, mAttention(PR_FALSE)
+#endif
 {
   LOG ("EphyFind ctor [%p]", this);
 }
@@ -82,6 +89,8 @@ EphyFind::SetEmbed (EphyEmbed *aEmbed)
 {
   nsresult rv = NS_OK;
   if (aEmbed == mCurrentEmbed) return rv;
+
+  SetSelectionAttention (PR_FALSE);
 
   mCurrentEmbed = nsnull;
   mWebBrowser = nsnull;
@@ -147,6 +156,53 @@ EphyFind::SetFindProperties (const char *aSearchString,
 #endif /* TYPEAHEADFIND */
 }
 
+void
+EphyFind::SetSelectionAttention (PRBool aAttention)
+{
+#ifdef HAVE_TYPEAHEADFIND
+  if (aAttention && mAttention) return;
+
+  mAttention = aAttention;
+
+  nsresult rv;
+  nsCOMPtr<nsIDocShell> shell (do_GetInterface (mWebBrowser, &rv));
+  /* It's okay for this to fail, if the tab is closing, or if
+   * we weren't attached to any tab yet
+   */
+  if (NS_FAILED (rv) || !shell) return;
+
+  nsCOMPtr<nsISimpleEnumerator> enumerator;
+  rv = shell->GetDocShellEnumerator (nsIDocShellTreeItem::typeContent,
+				     nsIDocShell::ENUMERATE_FORWARDS,
+				     getter_AddRefs (enumerator));
+  NS_ENSURE_SUCCESS (rv, );
+
+  PRInt16 display;
+  if (aAttention) {
+    display = nsISelectionController::SELECTION_ATTENTION;
+  } else {
+    display = nsISelectionController::SELECTION_ON;
+  }
+
+  PRBool hasMore = PR_FALSE;
+  while (NS_SUCCEEDED (enumerator->HasMoreElements (&hasMore)) && hasMore) {
+    nsCOMPtr<nsISupports> element;
+    nsCOMPtr<nsISelectionDisplay> sd;
+
+    enumerator->GetNext (getter_AddRefs (element));
+    if (!element) continue;
+	 
+    sd = do_GetInterface (element);
+    if (!sd) continue;
+  
+    nsCOMPtr<nsISelectionController> controller (do_QueryInterface (sd));
+    if (!controller) continue;
+
+    controller->SetDisplaySelection (display);
+  }
+#endif
+}
+
 EphyEmbedFindResult
 EphyFind::Find (const char *aSearchString,
                 PRBool aLinksOnly)
@@ -158,6 +214,8 @@ EphyFind::Find (const char *aSearchString,
   		     NS_CSTRING_ENCODING_UTF8, uSearchString);
 
 #ifdef HAVE_TYPEAHEADFIND
+  SetSelectionAttention (PR_TRUE);
+
   nsresult rv;
   PRUint16 found = nsITypeAheadFind::FIND_NOTFOUND;
   rv = mFinder->Find (uSearchString, aLinksOnly, &found);
@@ -182,6 +240,8 @@ EphyFind::FindAgain (PRBool aForward)
   if (!mFinder) return EPHY_EMBED_FIND_NOTFOUND;
 
 #ifdef HAVE_TYPEAHEADFIND
+  SetSelectionAttention (PR_TRUE);
+
   nsresult rv;
   PRUint16 found = nsITypeAheadFind::FIND_NOTFOUND;
   if (aForward) {

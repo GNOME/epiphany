@@ -83,6 +83,16 @@ impl_find_again (EphyEmbedFind *efind,
 	return priv->find->FindAgain (forward);
 }
 
+static void
+impl_set_selection (EphyEmbedFind *efind,
+		    gboolean attention)
+{
+	MozillaEmbedFind *find = MOZILLA_EMBED_FIND (efind);
+	MozillaEmbedFindPrivate *priv = find->priv;
+
+	priv->find->SetSelectionAttention (attention);
+}
+
 static gboolean
 impl_activate_link (EphyEmbedFind *efind,
 		    GdkModifierType mask)
@@ -100,6 +110,7 @@ ephy_find_iface_init (EphyEmbedFindIface *iface)
 	iface->set_properties = impl_set_properties;
 	iface->find = impl_find;
 	iface->find_again = impl_find_again;
+	iface->set_selection = impl_set_selection;
 	iface->activate_link = impl_activate_link;
 }
 

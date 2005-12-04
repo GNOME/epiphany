@@ -78,6 +78,14 @@ ephy_embed_find_find_again (EphyEmbedFind *find,
 	return iface->find_again (find, forward);
 }
 
+void
+ephy_embed_find_set_selection (EphyEmbedFind *find,
+			       gboolean attention)
+{
+	EphyEmbedFindIface *iface = EPHY_EMBED_FIND_GET_IFACE (find);
+	iface->set_selection (find, attention);
+}
+
 /**
  * ephy_embed_find_activate_link:
  * @embed: an #EphyEmbedFind

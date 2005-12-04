@@ -1343,7 +1343,7 @@ sync_tab_document_type (EphyTab *tab,
 
 	if (!can_find)
 	{
-		ephy_find_toolbar_close (priv->find_toolbar);
+		ephy_find_toolbar_request_close (priv->find_toolbar);
 	}
 }
 
@@ -2951,7 +2951,17 @@ static void
 find_toolbar_close_cb (EphyFindToolbar *toolbar,
 		       EphyWindow *window)
 {
-	gtk_widget_hide (GTK_WIDGET (toolbar));
+	EphyWindowPrivate *priv = window->priv;
+	EphyTab *tab;
+
+	if (priv->closing) return;
+
+	ephy_find_toolbar_close (priv->find_toolbar);
+
+	tab = ephy_window_get_active_tab (window);
+	if (tab == NULL) return;
+
+	gtk_widget_grab_focus (GTK_WIDGET (tab));
 }
 
 static void
@@ -3205,6 +3215,8 @@ ephy_window_set_print_preview (EphyWindow *window,
 	{
 		g_return_if_fail (priv->ppview_toolbar == NULL);
 
+		ephy_find_toolbar_request_close (priv->find_toolbar);
+
 		priv->ppview_toolbar = ppview_toolbar_new (window);
 		gtk_window_remove_accel_group (GTK_WINDOW (window), accel_group);
 	}
@@ -3279,9 +3291,9 @@ ephy_window_get_notebook (EphyWindow *window)
 GtkWidget *
 ephy_window_get_find_toolbar (EphyWindow *window)
 {
-	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+       g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
-	return GTK_WIDGET (window->priv->find_toolbar);
+       return GTK_WIDGET (window->priv->find_toolbar);
 }
 
 /**
@@ -3689,4 +3701,3 @@ ephy_window_get_context_event (EphyWindow *window)
 
 	return window->priv->context_event;
 }
-

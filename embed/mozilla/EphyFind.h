@@ -40,7 +40,7 @@ class EphyFind
     nsresult SetEmbed (EphyEmbed *aEmbed);
     void SetFindProperties (const char *aSearchString,
 			    PRBool aCaseSensitive);
-
+    void SetSelectionAttention (PRBool aAttention);
     EphyEmbedFindResult Find (const char *aSearchString,
 			      PRBool aLinksOnly);
     EphyEmbedFindResult FindAgain (PRBool aForward);
@@ -53,6 +53,7 @@ class EphyFind
 
 #ifdef HAVE_TYPEAHEADFIND
     nsCOMPtr<nsITypeAheadFind> mFinder;
+    PRBool mAttention;
 #else
     nsCOMPtr<nsIWebBrowserFind> mFinder;
 #endif
