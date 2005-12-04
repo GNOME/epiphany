@@ -76,6 +76,8 @@ void		 ephy_find_toolbar_open		 (EphyFindToolbar *toolbar,
 
 void		 ephy_find_toolbar_close	 (EphyFindToolbar *toolbar);
 
+void		 ephy_find_toolbar_request_close (EphyFindToolbar *toolbar);
+
 G_END_DECLS
 
 #endif /* EPHY_FIND_TOOLBAR_H */
