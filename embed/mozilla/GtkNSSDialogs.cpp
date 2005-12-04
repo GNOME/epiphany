@@ -180,7 +180,7 @@ higgy_setup_dialog (GtkDialog *dialog, const gchar *stock_icon,
 
 	/* Set up the spacing for the dialog internal widgets */
 	gtk_box_set_spacing (GTK_BOX(dialog->action_area), 6);	
-	gtk_box_set_spacing (GTK_BOX(dialog->vbox), 12);
+	gtk_box_set_spacing (GTK_BOX(dialog->vbox), 2);
 
 	*content_label = label;
 	if (content_vbox)
@@ -772,7 +772,8 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_QUESTION,
 			    &label, &vbox);
 
-	button = gtk_button_new_with_mnemonic (_("_Backup Certificate"));
+	/* Translators: this is the action of the certificate being exported to a backup file */
+	button = gtk_button_new_with_mnemonic (_("_Back Up Certificate"));
 	gtk_widget_show (button);
 	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, GTK_RESPONSE_OK);
 	GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
