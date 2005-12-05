@@ -385,7 +385,7 @@ tab_set_action_accelerator (GtkActionGroup *action_group,
 		accel_key = 0;
 		accel_number = (tab_number + 1) % 10;
 
-		g_snprintf (accel, 7, "<alt>%d", accel_number);
+		g_snprintf (accel, sizeof (accel), "<alt>%d", accel_number);
 
 		gtk_accelerator_parse (accel, &accel_key, &accel_mods);
 
