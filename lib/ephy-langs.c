@@ -30,8 +30,8 @@
 
 #include <libxml/xmlreader.h>
 
-/* If you add more language codes here, remember also to add them in the default font size
- * section in data/default-prefs-common.js.
+/* If you add more language codes here, remember to also
+ * add them to data/generate-font-schemas.py .
  */
 static const EphyFontsLanguageInfo font_languages [] =
 {
