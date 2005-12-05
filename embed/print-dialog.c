@@ -63,7 +63,6 @@ enum
 	PAGE_NUMBERS_PROP,
 	DATE_PROP,
 	COLOR_PROP,
-	PAPER_SELECTOR_PROP,
 };
 
 static const
@@ -75,7 +74,6 @@ EphyDialogProperty setup_props [] =
 	{ "print_page_numbers_checkbutton",	CONF_PRINT_PAGE_NUMBERS,  PT_AUTOAPPLY, 0 },
 	{ "print_date_checkbutton",		CONF_PRINT_DATE,	  PT_AUTOAPPLY, 0 },
 	{ "print_color_radiobutton",		CONF_PRINT_COLOR,	  PT_AUTOAPPLY, 0 },
-	{ "print_paper_selector_hbox",		NULL,			  PT_NORMAL,    0 },
 
 	{ NULL }
 };
@@ -144,14 +142,6 @@ ephy_print_save_config_to_file (GnomePrintConfig *config)
 
 	g_free (file_name);
 	g_free (str);
-}
-
-static void
-ephy_print_save_config_to_file_and_unref (GnomePrintConfig *config)
-{
-	ephy_print_save_config_to_file (config);
-	
-	g_object_unref (G_OBJECT (config));
 }
 
 EmbedPrintInfo *
@@ -352,23 +342,6 @@ ephy_print_setup_dialog_response_cb (GtkWidget *widget,
 	g_object_unref (dialog);
 }
 
-static GtkWidget *
-ephy_print_paper_selector_new ()
-{
-	GtkWidget *paper_selector;
-	GnomePrintConfig *config;
-	
-	config = ephy_print_load_config_from_file ();
-
-	paper_selector = gnome_paper_selector_new_with_flags (config,
-						GNOME_PAPER_SELECTOR_MARGINS);
-	
-	g_object_set_data_full (G_OBJECT (paper_selector), "config", config,
-				(GDestroyNotify) ephy_print_save_config_to_file_and_unref);
-	
-	return paper_selector;
-}
-
 /*
  * A variant of gnome_print_dialog_construct_range_page that can be used when
  * the total page count is unknown. It defaults to 1-1
@@ -463,7 +436,6 @@ ephy_print_setup_dialog_new (void)
 {
 	EphyDialog *dialog;
 	GtkWidget *window;
-	GtkWidget *paper_selector_hbox;
 
 	dialog = EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG, NULL));
 
@@ -474,15 +446,8 @@ ephy_print_setup_dialog_new (void)
 			       NULL);
 
 	window = ephy_dialog_get_control (dialog, setup_props[SETUP_WINDOW_PROP].id);
-	gtk_window_set_icon_name (GTK_WINDOW (window), STOCK_PRINT_SETUP);
 	g_signal_connect (window, "response",
 			  G_CALLBACK (ephy_print_setup_dialog_response_cb), dialog);
-
-	paper_selector_hbox = ephy_dialog_get_control (dialog,
-						setup_props[PAPER_SELECTOR_PROP].id);
-	gtk_box_pack_start_defaults (GTK_BOX (paper_selector_hbox),
-			   ephy_print_paper_selector_new ());
-	gtk_widget_show_all (paper_selector_hbox);
 
 	return dialog;
 }
