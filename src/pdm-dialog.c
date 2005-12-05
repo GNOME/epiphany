@@ -385,7 +385,7 @@ show_cookies_properties (PdmDialog *dialog,
 			       EPHY_STATE_WINDOW_SAVE_SIZE | EPHY_STATE_WINDOW_SAVE_POSITION);
 	gtk_dialog_set_has_separator (GTK_DIALOG(gdialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (gdialog), 5);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (gdialog)->vbox), 2);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (gdialog)->vbox), 14); /* 24 = 2 * 5 + 14 */
 
 	table = gtk_table_new (2, 4, FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
@@ -1196,7 +1196,6 @@ pdm_dialog_init (PdmDialog *dialog)
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (window));
 
-	gtk_window_set_role (GTK_WINDOW (window), "epiphany-cookie-manager");
 	gtk_window_set_icon_name (GTK_WINDOW (window), "web-browser");
 
 	g_signal_connect (window, "response",

@@ -12,11 +12,15 @@
   <property name="modal">True</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="icon_name">stock_certificate</property>
+  <property name="role">epiphany-certificate-view</property>
   <property name="decorated">True</property>
   <property name="skip_taskbar_hint">False</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <property name="has_separator">False</property>
 
   <child internal-child="vbox">
@@ -81,7 +85,7 @@
 	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">12</property>
+	      <property name="spacing">18</property>
 
 	      <child>
 		<widget class="GtkVBox" id="vbox_validity">
@@ -113,17 +117,6 @@
 		      <property name="fill">False</property>
 		    </packing>
 		  </child>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">False</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkHSeparator" id="hseparator1">
-		  <property name="visible">True</property>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -172,7 +165,7 @@
 		      <property name="yscale">1</property>
 		      <property name="top_padding">0</property>
 		      <property name="bottom_padding">0</property>
-		      <property name="left_padding">18</property>
+		      <property name="left_padding">12</property>
 		      <property name="right_padding">0</property>
 
 		      <child>
@@ -182,7 +175,7 @@
 			  <property name="n_columns">2</property>
 			  <property name="homogeneous">False</property>
 			  <property name="row_spacing">6</property>
-			  <property name="column_spacing">6</property>
+			  <property name="column_spacing">12</property>
 
 			  <child>
 			    <widget class="GtkLabel" id="label_size">
@@ -468,7 +461,7 @@
 		      <property name="yscale">1</property>
 		      <property name="top_padding">0</property>
 		      <property name="bottom_padding">0</property>
-		      <property name="left_padding">18</property>
+		      <property name="left_padding">12</property>
 		      <property name="right_padding">0</property>
 
 		      <child>
@@ -478,7 +471,7 @@
 			  <property name="n_columns">2</property>
 			  <property name="homogeneous">False</property>
 			  <property name="row_spacing">6</property>
-			  <property name="column_spacing">6</property>
+			  <property name="column_spacing">12</property>
 
 			  <child>
 			    <widget class="GtkLabel" id="label41">
@@ -707,7 +700,7 @@
 		      <property name="yscale">1</property>
 		      <property name="top_padding">0</property>
 		      <property name="bottom_padding">0</property>
-		      <property name="left_padding">18</property>
+		      <property name="left_padding">12</property>
 		      <property name="right_padding">0</property>
 
 		      <child>
@@ -717,7 +710,7 @@
 			  <property name="n_columns">2</property>
 			  <property name="homogeneous">False</property>
 			  <property name="row_spacing">6</property>
-			  <property name="column_spacing">6</property>
+			  <property name="column_spacing">12</property>
 
 			  <child>
 			    <widget class="GtkLabel" id="label35">
@@ -889,7 +882,7 @@
 		      <property name="yscale">1</property>
 		      <property name="top_padding">0</property>
 		      <property name="bottom_padding">0</property>
-		      <property name="left_padding">18</property>
+		      <property name="left_padding">12</property>
 		      <property name="right_padding">0</property>
 
 		      <child>
@@ -899,7 +892,7 @@
 			  <property name="n_columns">2</property>
 			  <property name="homogeneous">False</property>
 			  <property name="row_spacing">6</property>
-			  <property name="column_spacing">6</property>
+			  <property name="column_spacing">12</property>
 
 			  <child>
 			    <widget class="GtkLabel" id="label_size4">

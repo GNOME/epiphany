@@ -179,8 +179,7 @@ higgy_setup_dialog (GtkDialog *dialog, const gchar *stock_icon,
 	gtk_widget_show (label);
 
 	/* Set up the spacing for the dialog internal widgets */
-	gtk_box_set_spacing (GTK_BOX(dialog->action_area), 6);	
-	gtk_box_set_spacing (GTK_BOX(dialog->vbox), 2);
+	gtk_box_set_spacing (GTK_BOX(dialog->vbox), 14); /* 24 = 2 * 5 + 14 */
 
 	*content_label = label;
 	if (content_vbox)
@@ -787,7 +786,7 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 
 	table = gtk_table_new (3, 3, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 6);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
 	gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
 
 	label = gtk_label_new (NULL);
@@ -998,7 +997,7 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 
 	table = gtk_table_new (2, 3, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 6);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
 
 	nsEmbedString org, orgUnit, nextUpdate;
 	rv = crl->GetOrganization (org);
