@@ -21,4 +21,4 @@ DISTCLEANFILES = 		\
 	intltool-update		\
 	gnome-doc-utils.make
 
-DISTCHECK_CONFIGURE_FLAGS = --enable-dbus --enable-python --enable-gtk-doc --disable-schemas-install --disable-scrollkeeper --with-mozilla=$(MOZILLA)
+DISTCHECK_CONFIGURE_FLAGS = --enable-dbus --enable-python --enable-gtk-doc --disable-schemas-install --disable-scrollkeeper --with-gecko=$(MOZILLA)
