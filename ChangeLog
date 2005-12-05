@@ -1,3 +1,11 @@
+2005-12-05  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* src/ephy-find-toolbar.c: (entry_changed_cb),
+	(ephy_find_toolbar_request_close):
+
+	Fix a compile warning, and don't bother requesting a close
+	if the find bar is already closed
+
 2005-12-05  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-tabs-menu.c: (tab_set_action_accelerator):

@@ -214,7 +214,9 @@ entry_changed_cb (GtkEntry *entry,
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	const char *text;
 	char *lowercase;
+#ifdef HAVE_TYPEAHEADFIND
 	EphyEmbedFindResult result;
+#endif
 	gboolean found = TRUE, case_sensitive;
 
 	text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
@@ -670,5 +672,8 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 void
 ephy_find_toolbar_request_close (EphyFindToolbar *toolbar)
 {
-	g_signal_emit (toolbar, signals[CLOSE], 0);
+	if (GTK_WIDGET_VISIBLE (GTK_WIDGET (toolbar)))
+	{
+		g_signal_emit (toolbar, signals[CLOSE], 0);
+	}
 }
