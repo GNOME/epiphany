@@ -43,12 +43,6 @@ node_destroyed (EphyNode *node, GObject *object)
 	
 	ephy_topic_action_set_topic (EPHY_TOPIC_ACTION (object),
 				     ephy_bookmarks_get_favorites (eb));
-	ephy_node_signal_connect_object (node, EPHY_NODE_CHANGED,
-					 (EphyNodeCallback) node_changed,
-					 object);
-	ephy_node_signal_connect_object (node, EPHY_NODE_DESTROY,
-					 (EphyNodeCallback) node_destroyed,
-					 object);
 }
 
 static EphyTab *
