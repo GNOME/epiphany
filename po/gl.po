@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-21 21:52+0100\n"
-"PO-Revision-Date: 2005-11-21 21:53+0100\n"
+"POT-Creation-Date: 2005-12-06 19:52+0100\n"
+"PO-Revision-Date: 2005-12-06 19:52+0100\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego\n"
 "MIME-Version: 1.0\n"
@@ -24,18 +24,6 @@ msgstr ""
 #: ../data/GNOME_Epiphany_Automation.server.in.h:1
 msgid "Epiphany automation"
 msgstr "Automatización do Epiphany"
-
-#: ../data/bme.desktop.in.h:1
-msgid "Browse and organize your bookmarks"
-msgstr "Navegar e organizar os seus marcadores"
-
-#: ../data/bme.desktop.in.h:2
-msgid "Epiphany Web Bookmarks"
-msgstr "Marcadores web de Epiphany"
-
-#: ../data/bme.desktop.in.h:3
-msgid "Web Bookmarks"
-msgstr "Marcadores web"
 
 #: ../data/epiphany-lockdown.schemas.in.h:1
 msgid ""
@@ -131,16 +119,28 @@ msgstr "Bloquea Epiphany en modo a pantalla completa."
 msgid "User is not allowed to close Epiphany"
 msgstr "O usuario non ten permitido pechar Epiphany"
 
-#: ../data/epiphany.desktop.in.h:1
+#: ../data/bme.desktop.in.in.h:1
+msgid "Browse and organize your bookmarks"
+msgstr "Navegar e organizar os seus marcadores"
+
+#: ../data/bme.desktop.in.in.h:2
+msgid "Epiphany Web Bookmarks"
+msgstr "Marcadores web de Epiphany"
+
+#: ../data/bme.desktop.in.in.h:3
+msgid "Web Bookmarks"
+msgstr "Marcadores web"
+
+#: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
 msgstr "Navegar pola web"
 
-#: ../data/epiphany.desktop.in.h:2
+#: ../data/epiphany.desktop.in.in.h:2
 msgid "Epiphany Web Browser"
 msgstr "Navegador web Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.h:3 ../src/ephy-main.c:222
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:222
 #: ../src/ephy-main.c:233
 msgid "Web Browser"
 msgstr "Navegador web"
@@ -757,38 +757,30 @@ msgid "<b>Headers</b>"
 msgstr "<b>Cabeceiras</b>"
 
 #: ../data/glade/print.glade.h:4
-msgid "Appearance"
-msgstr "Apariencia"
-
-#: ../data/glade/print.glade.h:5
 msgid "C_olor"
 msgstr "C_or"
 
-#: ../data/glade/print.glade.h:6
+#: ../data/glade/print.glade.h:5
 msgid "P_age title"
 msgstr "_Título de páxina"
 
-#: ../data/glade/print.glade.h:7
+#: ../data/glade/print.glade.h:6
 msgid "Page _numbers"
 msgstr "_Números de páxina"
 
-#: ../data/glade/print.glade.h:8
-msgid "Paper"
-msgstr "Papel"
-
-#: ../data/glade/print.glade.h:9
+#: ../data/glade/print.glade.h:7
 msgid "Print Setup"
 msgstr "Configuración de impresión"
 
-#: ../data/glade/print.glade.h:10
+#: ../data/glade/print.glade.h:8
 msgid "_Date"
 msgstr "_Data"
 
-#: ../data/glade/print.glade.h:11
+#: ../data/glade/print.glade.h:9
 msgid "_Grayscale"
 msgstr "_Escala de grises"
 
-#: ../data/glade/print.glade.h:12
+#: ../data/glade/print.glade.h:10
 msgid "_Page address"
 msgstr "Enderezo da _páxina"
 
@@ -1601,30 +1593,30 @@ msgstr "Arquivos XUL"
 msgid "_Select Certificate"
 msgstr "_Seleccionar certificado"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:203
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:202
 #, c-format
 msgid "Choose a certificate to present as identification to “%s”."
 msgstr "Escolla un certificado para presentar como identificación a “%s”."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:206
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
 msgid "Select a certificate to identify yourself."
 msgstr "Seleccionar un certificado de identificación persoal."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:243
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:242
 msgid "Certificate _Details"
 msgstr "_Detalles do certificado"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:236
-#: ../embed/mozilla/GtkNSSDialogs.cpp:548
+#: ../embed/mozilla/GtkNSSDialogs.cpp:235
+#: ../embed/mozilla/GtkNSSDialogs.cpp:547
 msgid "_View Certificate"
 msgstr "_Ver certificado"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:244
+#: ../embed/mozilla/GtkNSSDialogs.cpp:243
 msgid "_Accept"
 msgstr "_Aceptar"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:311
+#: ../embed/mozilla/GtkNSSDialogs.cpp:310
 #, c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
@@ -1635,16 +1627,16 @@ msgstr ""
 "alguén esté interceptando a súa comunicación para obter a súa información "
 "confidencial."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:317
+#: ../embed/mozilla/GtkNSSDialogs.cpp:316
 #, c-format
 msgid "You should only accept the security information if you trust “%s” and “%s”."
 msgstr "Debería aceptar só a información de seguranza se está seguro en “%s” e “%s”."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:322
+#: ../embed/mozilla/GtkNSSDialogs.cpp:321
 msgid "Accept incorrect security information?"
 msgstr "¿Desea aceptar a información de seguridade incorrecta?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:353
+#: ../embed/mozilla/GtkNSSDialogs.cpp:352
 #, c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
@@ -1654,41 +1646,41 @@ msgstr ""
 "tentando interceptar a súa comunicación para obter a súa información  "
 "confidencial."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:359
+#: ../embed/mozilla/GtkNSSDialogs.cpp:358
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
 "“%s”."
 msgstr "Debería conectar co sitio só se ten a certeza de que está conectado a “%s”."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:364
+#: ../embed/mozilla/GtkNSSDialogs.cpp:363
 msgid "Connect to untrusted site?"
 msgstr "¿Conectar cun sitio non seguro?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:367
 msgid "_Trust this security information from now on"
 msgstr "_Confiar nesta información de seguranza desde agora endiante"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:369
+#: ../embed/mozilla/GtkNSSDialogs.cpp:368
 msgid "Co_nnect"
 msgstr "Co_nectar"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:428
+#: ../embed/mozilla/GtkNSSDialogs.cpp:427
 msgid "Accept expired security information?"
 msgstr "¿Aceptar a información de seguridade caducada?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:430
+#: ../embed/mozilla/GtkNSSDialogs.cpp:429
 #, c-format
 msgid "The security information for “%s” expired on %s."
 msgstr "A información de seguranza para “%s” caduca en %s."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:436
+#: ../embed/mozilla/GtkNSSDialogs.cpp:435
 msgid "Accept not yet valid security information?"
 msgstr "¿Desexa aceptar a información de seguridade aínda válida?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:438
+#: ../embed/mozilla/GtkNSSDialogs.cpp:437
 #, c-format
 msgid "The security information for “%s” isn't valid until %s."
 msgstr "A información de seguridade para “%s” non é válida ata %s."
@@ -1696,42 +1688,42 @@ msgstr "A información de seguridade para “%s” non é válida ata %s."
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:454
+#: ../embed/mozilla/GtkNSSDialogs.cpp:453
 msgid "%a %d %b %Y"
 msgstr "%a %d %b %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:462
+#: ../embed/mozilla/GtkNSSDialogs.cpp:461
 msgid "You should ensure that your computer's time is correct."
 msgstr "Debería asegurarse de que a hora do seu equipo é correcta."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:508
+#: ../embed/mozilla/GtkNSSDialogs.cpp:507
 #, c-format
 msgid "Cannot establish connection to “%s”."
 msgstr "Non se pode establecer unha conexión con “%s”."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:511
+#: ../embed/mozilla/GtkNSSDialogs.cpp:510
 #, c-format
 msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
 msgstr "A lista de revocación de certificados (CRL) de “%s” necesita ser actualizada."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:516
+#: ../embed/mozilla/GtkNSSDialogs.cpp:515
 msgid "Please ask your system administrator for assistance."
 msgstr "Pida axuda o seu administrador do sistema."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:546
+#: ../embed/mozilla/GtkNSSDialogs.cpp:545
 msgid "Trust new Certificate Authority?"
 msgstr "¿Confiar no nova autoridade de certificación?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:551
+#: ../embed/mozilla/GtkNSSDialogs.cpp:550
 msgid "_Trust CA"
 msgstr "_Confiar na CA"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:573
+#: ../embed/mozilla/GtkNSSDialogs.cpp:572
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr "Confiar na nova Autoridade de Certificación “%s” para identificar sitios web?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:578
+#: ../embed/mozilla/GtkNSSDialogs.cpp:577
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1739,16 +1731,17 @@ msgstr ""
 "Antes de confiar nunha autoridade de certificación (CA) debería verificar se "
 "ese certificado é auténtico."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:649
+#: ../embed/mozilla/GtkNSSDialogs.cpp:648
 msgid "Certificate already exists."
 msgstr "O certificado xa existe."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:650
+#: ../embed/mozilla/GtkNSSDialogs.cpp:649
 msgid "The certificate has already been imported."
 msgstr "O certificado xa foi importado."
 
+#. Translators: this is the action of the certificate being exported to a backup file
 #: ../embed/mozilla/GtkNSSDialogs.cpp:775
-msgid "_Backup Certificate"
+msgid "_Back Up Certificate"
 msgstr "_Copia de respaldo do certificado"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:782
@@ -1946,15 +1939,15 @@ msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphany non se pode usar agora. A iniciación de Mozilla fallou."
 
-#: ../embed/print-dialog.c:268
+#: ../embed/print-dialog.c:258
 msgid "Generating PDF is not supported"
 msgstr "A xeración de PDF non está soportada"
 
-#: ../embed/print-dialog.c:275
+#: ../embed/print-dialog.c:265
 msgid "Printing is not supported on this printer"
 msgstr "A impresión non está soportada nesta impresora"
 
-#: ../embed/print-dialog.c:278
+#: ../embed/print-dialog.c:268
 #, c-format
 msgid ""
 "You were trying to print to a printer using the “%s” driver. This program "
@@ -1963,27 +1956,27 @@ msgstr ""
 "Estaba tentando imprimir usando o controlador “%s”. Este programa require un "
 "controlador de impresora PostScript."
 
-#: ../embed/print-dialog.c:392
+#: ../embed/print-dialog.c:365
 msgid "_From:"
 msgstr "_Desde:"
 
-#: ../embed/print-dialog.c:405
+#: ../embed/print-dialog.c:378
 msgid "Sets the start of the range of pages to be printed"
 msgstr "Establece o inicio do rango de páxinas que se vai a imprimir"
 
-#: ../embed/print-dialog.c:407
+#: ../embed/print-dialog.c:380
 msgid "_To:"
 msgstr "_A:"
 
-#: ../embed/print-dialog.c:420
+#: ../embed/print-dialog.c:393
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Establece o final do rango de páxinas que se vai a imprimir"
 
-#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1272
+#: ../embed/print-dialog.c:408 ../src/ephy-window.c:1272
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../embed/print-dialog.c:443
+#: ../embed/print-dialog.c:416
 msgid "Pages"
 msgstr "Páxinas"
 
@@ -2778,7 +2771,7 @@ msgstr "Marcador rápido"
 msgid "Open in New _Tabs"
 msgstr "Abrir en _solapas novas"
 
-#: ../src/bookmarks/ephy-related-action.c:167
+#: ../src/bookmarks/ephy-related-action.c:161
 msgid "Related"
 msgstr "Relacionado"
 
@@ -2802,31 +2795,31 @@ msgstr "Outras codificacións"
 msgid "_Automatic"
 msgstr "_Automático"
 
-#: ../src/ephy-find-toolbar.c:130
-msgid "Phrase not found"
-msgstr "Frase non atopada"
+#: ../src/ephy-find-toolbar.c:128
+msgid "Not found"
+msgstr "Non atopado"
 
-#: ../src/ephy-find-toolbar.c:133
-msgid "Find wrapped"
-msgstr "Buscar desde o inicio"
+#: ../src/ephy-find-toolbar.c:131
+msgid "Wrapped"
+msgstr "Desde o inicio"
 
-#: ../src/ephy-find-toolbar.c:481
+#: ../src/ephy-find-toolbar.c:361
 msgid "Find:"
 msgstr "Buscar:"
 
-#: ../src/ephy-find-toolbar.c:497 ../src/ephy-find-toolbar.c:498
+#: ../src/ephy-find-toolbar.c:377 ../src/ephy-find-toolbar.c:378
 msgid "Find Previous"
 msgstr "Buscar anterior"
 
-#: ../src/ephy-find-toolbar.c:501
+#: ../src/ephy-find-toolbar.c:381
 msgid "Find previous occurrence of the search string"
 msgstr "Busca a anterior ocurrencia do texto buscado"
 
-#: ../src/ephy-find-toolbar.c:508 ../src/ephy-find-toolbar.c:509
+#: ../src/ephy-find-toolbar.c:388 ../src/ephy-find-toolbar.c:389
 msgid "Find Next"
 msgstr "Buscar seguinte"
 
-#: ../src/ephy-find-toolbar.c:512
+#: ../src/ephy-find-toolbar.c:392
 msgid "Find next occurrence of the search string"
 msgstr "Busca a seguinte ocurrencia do texto buscado"
 
@@ -3581,11 +3574,11 @@ msgstr "Se pechas o documento, perderá esa información."
 msgid "Close _Document"
 msgstr "_Pechar documento"
 
-#: ../src/ephy-window.c:1268 ../src/window-commands.c:294
+#: ../src/ephy-window.c:1268 ../src/window-commands.c:295
 msgid "Open"
 msgstr "Abrir"
 
-#: ../src/ephy-window.c:1270 ../src/window-commands.c:320
+#: ../src/ephy-window.c:1270 ../src/window-commands.c:321
 msgid "Save As"
 msgstr "Gardar como"
 
@@ -3670,55 +3663,55 @@ msgstr "Marcar ligazón “%s”"
 msgid "Copy link's address “%s”"
 msgstr "Copiar enderezo da ligazón “%s”"
 
-#: ../src/pdm-dialog.c:367
+#: ../src/pdm-dialog.c:379
 msgid "Cookie Properties"
 msgstr "Propiedades das cookies"
 
-#: ../src/pdm-dialog.c:384
+#: ../src/pdm-dialog.c:396
 msgid "Content:"
 msgstr "Contido:"
 
-#: ../src/pdm-dialog.c:400
+#: ../src/pdm-dialog.c:412
 msgid "Path:"
 msgstr "Ruta:"
 
-#: ../src/pdm-dialog.c:416
+#: ../src/pdm-dialog.c:428
 msgid "Send for:"
 msgstr "Enviar a:"
 
-#: ../src/pdm-dialog.c:425
+#: ../src/pdm-dialog.c:437
 msgid "Encrypted connections only"
 msgstr "Só conexións encriptadas"
 
-#: ../src/pdm-dialog.c:425
+#: ../src/pdm-dialog.c:437
 msgid "Any type of connection"
 msgstr "Calquer tipo de conexión"
 
-#: ../src/pdm-dialog.c:431
+#: ../src/pdm-dialog.c:443
 msgid "Expires:"
 msgstr "Expira:"
 
-#: ../src/pdm-dialog.c:442
+#: ../src/pdm-dialog.c:454
 msgid "End of current session"
 msgstr "Fin da sesión actual"
 
-#: ../src/pdm-dialog.c:559
+#: ../src/pdm-dialog.c:591
 msgid "Domain"
 msgstr "Dominio"
 
-#: ../src/pdm-dialog.c:571
+#: ../src/pdm-dialog.c:602
 msgid "Name"
 msgstr "Nome"
 
-#: ../src/pdm-dialog.c:830
+#: ../src/pdm-dialog.c:991
 msgid "Host"
 msgstr "Host"
 
-#: ../src/pdm-dialog.c:842
+#: ../src/pdm-dialog.c:1003
 msgid "User Name"
 msgstr "Nome de usuario"
 
-#: ../src/pdm-dialog.c:854
+#: ../src/pdm-dialog.c:1015
 msgid "User Password"
 msgstr "Contrasinal de usuario"
 
@@ -3808,23 +3801,23 @@ msgstr[1] "Idiomas do sistema (%s)"
 msgid "Select a Directory"
 msgstr "Seleccionar un directorio"
 
-#: ../src/window-commands.c:694 ../src/window-commands.c:711
+#: ../src/window-commands.c:709 ../src/window-commands.c:726
 msgid "Contact us at:"
 msgstr "Contacte con nos en:"
 
-#: ../src/window-commands.c:697
+#: ../src/window-commands.c:712
 msgid "Contributors:"
 msgstr "Contribuíntes:"
 
-#: ../src/window-commands.c:702
+#: ../src/window-commands.c:717
 msgid "Past developers:"
 msgstr "Desenroladores anteriores:"
 
-#: ../src/window-commands.c:712
+#: ../src/window-commands.c:727
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> ou <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:717
+#: ../src/window-commands.c:732
 msgid "GNOME Web Browser"
 msgstr "Navegador web de Gnome"
 
@@ -3836,11 +3829,11 @@ msgstr "Navegador web de Gnome"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:731
+#: ../src/window-commands.c:746
 msgid "translator-credits"
 msgstr "Ignacio Casal Quinteiro <nacho.resa@gmail.com>"
 
-#: ../src/window-commands.c:734
+#: ../src/window-commands.c:749
 msgid "GNOME Web Browser Website"
 msgstr "Navegador web de sitios web de Gnome"
 
