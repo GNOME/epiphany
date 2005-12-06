@@ -192,6 +192,8 @@ struct _EphyEmbedIface
 	void		   (* set_zoom)			(EphyEmbed *embed,
 							 float zoom);
 	float		   (* get_zoom)			(EphyEmbed *embed);
+	void		   (* scroll)			(EphyEmbed *embed, int num_lines);
+	void		   (* page_scroll)		(EphyEmbed *embed, int num_pages);
 	char *		   (* get_encoding)		(EphyEmbed *embed);
 	gboolean	   (* has_automatic_encoding)	(EphyEmbed *embed);
 	void		   (* set_encoding)		(EphyEmbed *embed,
@@ -205,6 +207,7 @@ struct _EphyEmbedIface
 							 int page);
 	gboolean	   (* has_modified_forms)	(EphyEmbed *embed);
 	void		   (* close)			(EphyEmbed *embed);
+
 };
 
 GType 		  ephy_embed_net_state_get_type		(void);
@@ -282,6 +285,13 @@ void		  ephy_embed_set_zoom			(EphyEmbed *embed,
 							 float zoom);
 
 float		  ephy_embed_get_zoom			(EphyEmbed *embed);
+
+/* Scroll */
+void		  ephy_embed_scroll			(EphyEmbed *embed,
+							 int num_lines);
+
+void		  ephy_embed_page_scroll		(EphyEmbed *embed,
+							 int num_pages);
 
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);

@@ -928,6 +928,35 @@ nsresult EphyBrowser::GetZoom (float *aZoom)
 	return mdv->GetTextZoom (aZoom);
 }
 
+nsresult EphyBrowser::ScrollLines (int aNumLines)
+{
+	nsresult rv;
+	nsCOMPtr<nsIDOMWindow> DOMWindow;
+
+	mWebBrowserFocus->GetFocusedWindow (getter_AddRefs(DOMWindow));
+	if (!DOMWindow)
+	{
+		DOMWindow = mDOMWindow;
+	}
+
+	DOMWindow->ScrollByLines (aNumLines);
+}
+
+nsresult EphyBrowser::ScrollPages (int aNumPages)
+{
+	nsresult rv;
+	nsCOMPtr<nsIDOMWindow> DOMWindow;
+
+	mWebBrowserFocus->GetFocusedWindow (getter_AddRefs(DOMWindow));
+	if (!DOMWindow)
+	{
+		DOMWindow = mDOMWindow;
+	}
+
+	DOMWindow->ScrollByPages (aNumPages);
+}
+
+
 nsresult EphyBrowser::GetDocument (nsIDOMDocument **aDOMDocument)
 {
 	return mDOMWindow->GetDocument (aDOMDocument);

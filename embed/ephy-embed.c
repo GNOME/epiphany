@@ -645,6 +645,38 @@ ephy_embed_get_zoom (EphyEmbed *embed)
 }
 
 /**
+ * ephy_embed_scroll:
+ * @embed: an #EphyEmbed
+ * @num_lines: The number of lines to scroll by
+ *
+ * Scrolls the view by lines. Positive numbers scroll down, negative
+ * numbers scroll up
+ *
+ **/
+void
+ephy_embed_scroll (EphyEmbed *embed, int num_lines)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	iface->scroll (embed, num_lines);
+}
+
+/**
+ * ephy_embed_page_scroll:
+ * @embed: an #EphyEmbed
+ * @num_lines: The number of pages to scroll by
+ *
+ * Scrolls the view by pages. Positive numbers scroll down, negative
+ * numbers scroll up
+ *
+ **/
+void
+ephy_embed_page_scroll (EphyEmbed *embed, int num_pages)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	iface->page_scroll (embed, num_pages);
+}
+
+/**
  * ephy_embed_shistory_n_items:
  * @embed: an #EphyEmbed
  *

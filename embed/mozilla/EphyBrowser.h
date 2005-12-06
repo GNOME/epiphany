@@ -147,6 +147,9 @@ public:
 	nsresult SetZoom (float aTextZoom);
 	nsresult GetZoom (float *aTextZoom);
 
+	nsresult ScrollLines (int aNumLines);
+	nsresult ScrollPages (int aNumPages);
+
 	nsresult Print ();
 	nsresult SetPrintPreviewMode (PRBool previewMode);
 	nsresult PrintPreviewNumPages (int *numPages);

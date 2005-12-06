@@ -243,14 +243,39 @@ entry_key_press_event_cb (GtkEntry *entry,
 			  GdkEventKey *event,
 			  EphyFindToolbar *toolbar)
 {
+	EphyFindToolbarPrivate *priv = toolbar->priv;
 	guint mask = gtk_accelerator_get_default_mod_mask ();
 	gboolean handled = FALSE;
 
-	/* Hide the toolbar when ESC is pressed */
-	if ((event->state & mask) == 0 && event->keyval == GDK_Escape)
+	if ((event->state & mask) == 0)
 	{
-		ephy_find_toolbar_request_close (toolbar);
 		handled = TRUE;
+		switch (event->keyval)
+		{
+		case GDK_Up:
+                case GDK_KP_Up:
+			ephy_embed_scroll (priv->embed, -1);
+			break;
+		case GDK_Down:
+                case GDK_KP_Down:
+			ephy_embed_scroll (priv->embed, 1);
+			break;
+		case GDK_Page_Up:
+                case GDK_KP_Page_Up:
+			ephy_embed_page_scroll (priv->embed, -1);
+			break;
+		case GDK_Page_Down:
+                case GDK_KP_Page_Down:
+			ephy_embed_page_scroll (priv->embed, 1);
+			break;
+		case GDK_Escape:
+			/* Hide the toolbar when ESC is pressed */
+			ephy_find_toolbar_request_close (toolbar);
+			break;
+		default:
+			handled = FALSE;
+			break;
+		}
 	}
 	else if ((event->state & mask) == GDK_CONTROL_MASK &&
 		 (event->keyval == GDK_Return || event->keyval == GDK_KP_Enter))
