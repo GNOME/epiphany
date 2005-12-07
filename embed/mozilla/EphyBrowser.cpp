@@ -928,9 +928,9 @@ nsresult EphyBrowser::GetZoom (float *aZoom)
 	return mdv->GetTextZoom (aZoom);
 }
 
-nsresult EphyBrowser::ScrollLines (int aNumLines)
+nsresult
+EphyBrowser::ScrollLines (PRInt32 aNumLines)
 {
-	nsresult rv;
 	nsCOMPtr<nsIDOMWindow> DOMWindow;
 
 	mWebBrowserFocus->GetFocusedWindow (getter_AddRefs(DOMWindow));
@@ -938,13 +938,14 @@ nsresult EphyBrowser::ScrollLines (int aNumLines)
 	{
 		DOMWindow = mDOMWindow;
 	}
+	NS_ENSURE_TRUE (DOMWindow, NS_ERROR_FAILURE);
 
-	DOMWindow->ScrollByLines (aNumLines);
+	return DOMWindow->ScrollByLines (aNumLines);
 }
 
-nsresult EphyBrowser::ScrollPages (int aNumPages)
+nsresult
+EphyBrowser::ScrollPages (PRInt32 aNumPages)
 {
-	nsresult rv;
 	nsCOMPtr<nsIDOMWindow> DOMWindow;
 
 	mWebBrowserFocus->GetFocusedWindow (getter_AddRefs(DOMWindow));
@@ -952,17 +953,35 @@ nsresult EphyBrowser::ScrollPages (int aNumPages)
 	{
 		DOMWindow = mDOMWindow;
 	}
+	NS_ENSURE_TRUE (DOMWindow, NS_ERROR_FAILURE);
 
-	DOMWindow->ScrollByPages (aNumPages);
+	return DOMWindow->ScrollByPages (aNumPages);
 }
 
+nsresult
+EphyBrowser::ScrollPixels (PRInt32 aDeltaX,
+			   PRInt32 aDeltaY)
+{
+	nsCOMPtr<nsIDOMWindow> DOMWindow;
 
-nsresult EphyBrowser::GetDocument (nsIDOMDocument **aDOMDocument)
+	mWebBrowserFocus->GetFocusedWindow (getter_AddRefs(DOMWindow));
+	if (!DOMWindow)
+	{
+		DOMWindow = mDOMWindow;
+	}
+	NS_ENSURE_TRUE (DOMWindow, NS_ERROR_FAILURE);
+
+	return DOMWindow->ScrollBy (aDeltaX, aDeltaY);
+}
+
+nsresult
+EphyBrowser::GetDocument (nsIDOMDocument **aDOMDocument)
 {
 	return mDOMWindow->GetDocument (aDOMDocument);
 }
 
-nsresult EphyBrowser::GetTargetDocument (nsIDOMDocument **aDOMDocument)
+nsresult
+EphyBrowser::GetTargetDocument (nsIDOMDocument **aDOMDocument)
 {
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 

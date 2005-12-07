@@ -192,8 +192,13 @@ struct _EphyEmbedIface
 	void		   (* set_zoom)			(EphyEmbed *embed,
 							 float zoom);
 	float		   (* get_zoom)			(EphyEmbed *embed);
-	void		   (* scroll)			(EphyEmbed *embed, int num_lines);
-	void		   (* page_scroll)		(EphyEmbed *embed, int num_pages);
+	void		   (* scroll_lines)		(EphyEmbed *embed,
+							 int num_lines);
+	void		   (* scroll_pages)		(EphyEmbed *embed,
+	 						 int num_pages);
+	void		   (* scroll_pixels)		(EphyEmbed *embed,
+							 int dx,
+							 int dy);
 	char *		   (* get_encoding)		(EphyEmbed *embed);
 	gboolean	   (* has_automatic_encoding)	(EphyEmbed *embed);
 	void		   (* set_encoding)		(EphyEmbed *embed,
@@ -292,6 +297,10 @@ void		  ephy_embed_scroll			(EphyEmbed *embed,
 
 void		  ephy_embed_page_scroll		(EphyEmbed *embed,
 							 int num_pages);
+							 
+void		  ephy_embed_scroll_pixels		(EphyEmbed *embed,
+							 int dx,
+							 int dy);
 
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);

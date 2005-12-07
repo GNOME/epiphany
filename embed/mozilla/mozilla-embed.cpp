@@ -653,7 +653,8 @@ impl_get_zoom (EphyEmbed *embed)
 }
 
 static void
-impl_scroll (EphyEmbed *embed, int num_lines)
+impl_scroll_lines (EphyEmbed *embed,
+		   int num_lines)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
@@ -661,11 +662,22 @@ impl_scroll (EphyEmbed *embed, int num_lines)
 }
 
 static void
-impl_page_scroll (EphyEmbed *embed, int num_pages)
+impl_scroll_pages (EphyEmbed *embed,
+		   int num_pages)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
 	mpriv->browser->ScrollPages (num_pages);
+}
+
+static void
+impl_scroll_pixels (EphyEmbed *embed,
+		    int dx,
+		    int dy)
+{
+	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
+
+	mpriv->browser->ScrollPixels (dx, dy);
 }
 
 static int
@@ -1197,8 +1209,9 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->reload = impl_reload;
 	iface->set_zoom = impl_set_zoom;
 	iface->get_zoom = impl_get_zoom;
-	iface->scroll = impl_scroll;
-	iface->page_scroll = impl_page_scroll;
+	iface->scroll_lines = impl_scroll_lines;
+	iface->scroll_pages = impl_scroll_pages;
+	iface->scroll_pixels = impl_scroll_pixels;
 	iface->shistory_n_items = impl_shistory_n_items;
 	iface->shistory_get_nth = impl_shistory_get_nth;
 	iface->shistory_get_pos = impl_shistory_get_pos;
