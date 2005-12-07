@@ -278,7 +278,9 @@ entry_key_press_event_cb (GtkEntry *entry,
 		}
 	}
 	else if ((event->state & mask) == GDK_CONTROL_MASK &&
-		 (event->keyval == GDK_Return || event->keyval == GDK_KP_Enter))
+		 (event->keyval == GDK_Return ||
+		  event->keyval == GDK_KP_Enter ||
+		  event->keyval == GDK_ISO_Enter))
 	{
 		handled = ephy_embed_find_activate_link (get_find (toolbar), event->state);
 	}
@@ -690,7 +692,7 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 
 	gtk_widget_hide (GTK_WIDGET (toolbar));
 
-	if (priv->embed == NULL) return;
+	if (priv->embed == NULL || priv->find == NULL) return;
 	ephy_embed_find_set_selection (get_find (toolbar), FALSE);
 }
 

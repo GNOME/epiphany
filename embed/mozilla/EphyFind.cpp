@@ -160,7 +160,7 @@ void
 EphyFind::SetSelectionAttention (PRBool aAttention)
 {
 #ifdef HAVE_TYPEAHEADFIND
-  if (aAttention && mAttention) return;
+  if (aAttention == mAttention) return;
 
   mAttention = aAttention;
 
@@ -187,12 +187,10 @@ EphyFind::SetSelectionAttention (PRBool aAttention)
   PRBool hasMore = PR_FALSE;
   while (NS_SUCCEEDED (enumerator->HasMoreElements (&hasMore)) && hasMore) {
     nsCOMPtr<nsISupports> element;
-    nsCOMPtr<nsISelectionDisplay> sd;
-
     enumerator->GetNext (getter_AddRefs (element));
     if (!element) continue;
 	 
-    sd = do_GetInterface (element);
+    nsCOMPtr<nsISelectionDisplay> sd (do_GetInterface (element));
     if (!sd) continue;
   
     nsCOMPtr<nsISelectionController> controller (do_QueryInterface (sd));
@@ -270,7 +268,7 @@ EphyFind::ActivateLink (GdkModifierType aMask)
 	nsCOMPtr<nsIDOMElement> link;
 #if defined(HAVE_TYPEAHEADFIND) && defined(HAVE_GECKO_1_8)
 	rv = mFinder->GetFoundLink (getter_AddRefs (link));
-	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && link, FALSE);
+	if (NS_FAILED (rv) || !link) return FALSE;
 #else
 	nsCOMPtr<nsIWebBrowserFocus> focus (do_QueryInterface (mWebBrowser));
 	NS_ENSURE_TRUE (focus, FALSE);
@@ -279,6 +277,7 @@ EphyFind::ActivateLink (GdkModifierType aMask)
 	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && link, FALSE);
 
 	/* ensure this is really a link so we don't accidentally submit if we're on a button or so! */
+	/* FIXME: does that work with xlink links? */
 	nsCOMPtr<nsIDOMHTMLAnchorElement> anchor (do_QueryInterface (link));
 	if (!anchor) return FALSE;
 #endif /* HAVE_TYPEAHEADFIND && HAVE_GECKO_1_8 */
@@ -311,6 +310,7 @@ EphyFind::ActivateLink (GdkModifierType aMask)
 				     (aMask & GDK_CONTROL_MASK) != 0,
 				     (aMask & GDK_MOD1_MASK) != 0 /* Alt */,
 				     (aMask & GDK_SHIFT_MASK) != 0,
+				     /* FIXME when we upgrade to gtk 2.10 */
 				     PR_FALSE /* Meta */,
 				     nsIDOMKeyEvent::DOM_VK_RETURN,
 				     0);

@@ -1300,13 +1300,18 @@ setup_ui_manager (EphyWindow *window)
 }
 
 static void
-sync_tab_address (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_address (EphyTab *tab,
+	          GParamSpec *pspec,
+		  EphyWindow *window)
 {
-	if (window->priv->closing) return;
+	EphyWindowPrivate *priv = window->priv;
 
-	ephy_toolbar_set_location (window->priv->toolbar,
+	if (priv->closing) return;
+
+	ephy_toolbar_set_location (priv->toolbar,
 				   ephy_tab_get_address (tab),
 				   ephy_tab_get_typed_address (tab));
+	ephy_find_toolbar_request_close (priv->find_toolbar);
 }
 
 static void

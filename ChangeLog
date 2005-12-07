@@ -1,5 +1,20 @@
 2005-12-07  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EphyFind.cpp:
+
+	Minor code cleanup.
+
+	* src/ephy-find-toolbar.c: (entry_key_press_event_cb),
+	(ephy_find_toolbar_close):
+
+	Also check for GDK_ISO_Enter.
+
+	* src/ephy-window.c: (sync_tab_address):
+
+	Close the find toolbar when loading a new page.
+
+2005-12-07  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-embed.c: (ephy_embed_scroll),
 	(ephy_embed_page_scroll), (ephy_embed_scroll_pixels):
 	* embed/ephy-embed.h:
