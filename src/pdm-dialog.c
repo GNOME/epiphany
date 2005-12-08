@@ -89,7 +89,6 @@ enum
 	COL_COOKIES_HOST,
 	COL_COOKIES_HOST_KEY,
 	COL_COOKIES_NAME,
-	COL_COOKIES_PATH,
 	COL_COOKIES_DATA,
 };
 
@@ -566,8 +565,7 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 			  G_CALLBACK (cookies_properties_clicked_cb), dialog);
 
 	/* set tree model */
-	liststore = gtk_list_store_new (5,
-					G_TYPE_STRING,
+	liststore = gtk_list_store_new (4,
 					G_TYPE_STRING,
 					G_TYPE_STRING,
 					G_TYPE_STRING,
@@ -872,26 +870,35 @@ pdm_dialog_cookie_add (PdmActionInfo *info,
 	EphyCookie *cookie = (EphyCookie *) data;
 	GtkListStore *store;
 	GtkTreeIter iter;
-	GValue value = { 0, };
+	int column[4] = { COL_COOKIES_HOST, COL_COOKIES_HOST_KEY, COL_COOKIES_NAME, COL_COOKIES_DATA };
+	GValue value[4] = { { 0, }, { 0, }, { 0, }, { 0, } };
 
 	store = GTK_LIST_STORE(info->model);
 
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set (store, &iter,
-			    COL_COOKIES_HOST, cookie->domain,
-			    COL_COOKIES_NAME, cookie->name,
-			    COL_COOKIES_PATH, cookie->path,
-			    -1);
+	/* NOTE: We use this strange method to insert the row, because
+	 * we want to use g_value_take_string but all the row data needs to
+	 * be inserted in one call as it's needed when the new row is sorted
+	 * into the model.
+	 */
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_take_string (&value, ephy_string_collate_key_for_domain (cookie->domain, -1));
-	gtk_list_store_set_value (store, &iter, COL_COOKIES_HOST_KEY, &value);
-	g_value_unset (&value);
+	g_value_init (&value[0], G_TYPE_STRING);
+	g_value_init (&value[1], G_TYPE_STRING);
+	g_value_init (&value[2], G_TYPE_STRING);
+	g_value_init (&value[3], EPHY_TYPE_COOKIE);
 
-	g_value_init (&value, EPHY_TYPE_COOKIE);
-	g_value_take_boxed (&value, cookie);
-	gtk_list_store_set_value (store, &iter, COL_COOKIES_DATA, &value);
-	g_value_unset (&value);
+	g_value_set_static_string (&value[0], cookie->domain);
+	g_value_take_string (&value[1], ephy_string_collate_key_for_domain (cookie->domain, -1));
+	g_value_set_static_string (&value[2], cookie->name);
+	g_value_take_boxed (&value[3], cookie);
+
+	gtk_list_store_insert_with_valuesv (store, &iter, -1,
+					    column, value,
+					    G_N_ELEMENTS (value));
+
+	g_value_unset (&value[0]);
+	g_value_unset (&value[1]);
+	g_value_unset (&value[2]);
+	g_value_unset (&value[3]);
 }
 
 static void
