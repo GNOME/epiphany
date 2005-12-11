@@ -2,8 +2,51 @@
 Epiphany 1.9.3
 ==============
 
+Changes:
+	* Add certificate manager. Patch by Robert Marcano and Crispin 
+	  Flowerday. Fixes bug #119090.
+	* Fix crash when adding a cookie while the dialogue is open.
+	* Also check for GDK_ISO_Enter.
+	* Close the find toolbar when loading a new page.
+	* Forward up/down/page up/page down from the findbar entry to the 
+	  embed.
+	* Fix a compile warning, and don't bother requesting a close if the 
+	  find bar is already closed
+	* Updated comment to refer to the schema autogeneration tool.
+	* Remove the paper selector from the print setup dialogue, we have 
+	  one in the print dialogue already.
+	* Fix spacings to be HIG compliant. Set window roles.
+	* Add image/x-png type to list of safe mime types.
+	* Use --with-gecko in the distcheck configure args.
+	* While in find mode, set the selection colour to "attention".
+	* Refactor find toolbar closing not to crash with auto-closing 
+	  popups. Unset the selection colour on close.
+	* Open the PDM dialogue on the cookies page scrolled to show the 
+	  cookies of the currently loaded page, if there are any. Sort 
+	  cookies by domain. Allow treeview typeaheadfind search to find 
+	  by substring not prefix.
+	* Add chrome: and resource: to the safe list; otherwise forms 
+	  and scrollbars break. Fixes bug #316498.
+	* Delay reloads when we get many change notifications in a short
+	  time. Fixes bug #319993.
+	* Add F5 as accelerator for reload.
+	* Set the model's sort column only after filling it. Vastly reduces
+	  delay when opening the PDM dialogue when you have many cookies.
+	* Prettify Certificate Revocation List import dialogue. Fixes 
+	  bug #321590.
+	* Don't put the prefs/pdm dialogue over all windows. Make the 
+	  add-language dialogue modal to the prefs dialogue.
+	* Mark message for translation. Patch by Guilherme de S. Pastore,
+	  fixes bug #319988.
+	* Transition over to the Galeon mechanism for handling extra 
+	  keybindings. This maps the keybindings to actions so that no extra
+	  actions are required. The only subtlety is that some of the 
+	  actions come from the toolbar, so access to its action group is
+	  required.
+	
 Contributors to this release: Crispin Flowerday, Philip Langdale,
-Robert Marcano, Christian Persch and Reinout van Schouwen.
+Robert Marcano, Christian Persch, Guilherme de S. Pastore and
+Reinout van Schouwen.
 
 Updated translations:
 
