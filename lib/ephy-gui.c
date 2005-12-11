@@ -366,7 +366,7 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 
 		gtk_message_dialog_format_secondary_text (
 				GTK_MESSAGE_DIALOG (dialog),
-				_("A file with this name alreay exists and "
+				_("A file with this name already exists and "
 				  "you don't have permission to overwrite it."));
 
 		gtk_window_set_title (GTK_WINDOW (dialog), _("Cannot Overwrite File"));
