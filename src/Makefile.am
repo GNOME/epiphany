@@ -107,10 +107,10 @@ libephymain_la_SOURCES = \
 
 if ENABLE_CERTIFICATE_MANAGER
 NOINST_H_FILES += \
-	ephy-certificate-manager.h
+	ephy-cert-manager-dialog.h
 
 libephymain_la_SOURCES += \
-	ephy-certificate-manager.c
+	ephy-cert-manager-dialog.c
 endif
 
 libephymain_la_CPPFLAGS = \

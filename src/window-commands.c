@@ -672,7 +672,7 @@ window_cmd_edit_personal_data (GtkAction *action,
 
 #ifdef ENABLE_CERTIFICATE_MANAGER
 
-#include "ephy-certificate-manager.h"
+#include "ephy-cert-manager-dialog.h"
 
 void
 window_cmd_edit_certificates (GtkAction *action,

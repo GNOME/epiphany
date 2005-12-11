@@ -18,8 +18,8 @@
  *  $Id$
  */
 
-#ifndef CERTS_MANAGER_DIALOG_H
-#define CERTS_MANAGER_DIALOG_H
+#ifndef EPHY_CERT_MANAGER_DIALOG_H
+#define EPHY_CERT_MANAGER_DIALOG_H
 
 #include <glib.h>
 #include "ephy-dialog.h"

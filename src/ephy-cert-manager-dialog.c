@@ -21,7 +21,7 @@
 
 #include "config.h"
 
-#include "ephy-certificate-manager.h"
+#include "ephy-cert-manager-dialog.h"
 #include "ephy-shell.h"
 #include "ephy-embed-shell.h"
 #include "ephy-gui.h"
