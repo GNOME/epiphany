@@ -531,6 +531,8 @@ fi
 # Additional features
 # *******************
 
+# Zeroconf bookmarks sites
+
 AC_MSG_CHECKING([whether to enable zeroconf bookmarks support])
 AC_ARG_ENABLE([zeroconf],
 	AS_HELP_STRING([--enable-zeroconf],[Whether to enable zeroconf bookmarks support (default:disabled)]),
@@ -542,6 +544,24 @@ if test "x$enable_zeroconf" = "xyes"; then
 fi
 
 AM_CONDITIONAL([ENABLE_ZEROCONF],[test "x$enable_zeroconf" = "xyes"])
+
+# Certificates manager
+
+if test "$enable_psm" = "yes"; then
+
+AC_MSG_CHECKING([whether to build the certificates manager])
+AC_ARG_ENABLE([certificate-manager],
+	AS_HELP_STRING([--enable-certificate-manager],[Whether to enable the certificate manager (experimental; default:disabled)]),
+	[],[enable_certificate_manager=no])
+AC_MSG_RESULT([$enable_certificate_manager])
+
+fi
+
+if test "$enable_certificate_manager" = "yes"; then
+	AC_DEFINE([ENABLE_CERTIFICATE_MANAGER],[1],[Define to enable the certificate manager build])
+fi
+
+AM_CONDITIONAL([ENABLE_CERTIFICATE_MANAGER],[test "$enable_certificate_manager" = "yes"])
 
 # *******************************
 # Add warning flags

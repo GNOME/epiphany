@@ -1,3 +1,28 @@
+2005-12-11  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.ac:
+	* data/glade/Makefile.am:
+	* data/glade/certs-manager.glade:
+	* data/ui/epiphany-ui.xml:
+	* embed/Makefile.am:
+	A embed/ephy-certificate-manager.c:
+	A embed/ephy-certificate-manager.h:
+	A embed/ephy-x509-cert.c:
+	A embed/ephy-x509-cert.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	A embed/mozilla/mozilla-x509-cert.cpp:
+	A embed/mozilla/mozilla-x509-cert.h:
+	* src/Makefile.am:
+	A src/ephy-certificate-manager.c:
+	A src/ephy-certificate-manager.h:
+	* src/ephy-window.c:
+	* src/window-commands.c:
+	* src/window-commands.h:
+
+	Add certificate manager. Patch by Robert Marcano and Crispin
+	Flowerday. Fixes bug #119090.
+
 2005-12-08  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/pdm-dialog.c: (pdm_dialog_cookies_construct),

@@ -185,6 +185,11 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "EditPersonalData", NULL, N_("P_ersonal Data"), NULL,
 	  N_("View and remove cookies and passwords"),
 	  G_CALLBACK (window_cmd_edit_personal_data) },
+#ifdef ENABLE_CERTIFICATE_MANAGER
+	{ "EditCertificates", NULL, N_("Cert_ificates"), NULL,
+	  N_("Manage Certificates"),
+	  G_CALLBACK (window_cmd_edit_certificates) },
+#endif
 	{ "EditToolbar", NULL, N_("T_oolbars"), NULL,
 	  N_("Customize toolbars"),
 	  G_CALLBACK (window_cmd_edit_toolbar) },
@@ -3085,6 +3090,16 @@ ephy_window_constructor (GType type,
 		g_warning ("Could not merge epiphany-ui.xml: %s", error->message);
 		g_error_free (error);
 	}
+#if ENABLE_CERTIFICATE_MANAGER
+{
+	guint ui_id;
+	ui_id = gtk_ui_manager_new_merge_id (priv->manager);
+	gtk_ui_manager_add_ui (priv->manager, ui_id,
+			       "/menubar/EditMenu/EditPersonalDataMenu",
+			       "EditCertificates", "EditCertificates",
+			       GTK_UI_MANAGER_MENUITEM, FALSE);
+}
+#endif
 
 	/* Initialize the menus */
 	priv->tabs_menu = ephy_tabs_menu_new (window);

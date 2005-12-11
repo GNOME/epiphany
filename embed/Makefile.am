@@ -52,6 +52,16 @@ libephyembed_la_SOURCES = \
 	$(NOINST_H_FILES)		\
 	$(BUILT_SOURCES)
 
+if ENABLE_CERTIFICATE_MANAGER
+INST_H_FILES += \
+	ephy-certificate-manager.h      \
+	ephy-x509-cert.h
+
+libephyembed_la_SOURCES += \
+	ephy-certificate-manager.c      \
+	ephy-x509-cert.c
+endif
+
 libephyembed_la_CPPFLAGS = \
 	-I$(top_builddir)/lib       	\
 	-I$(top_srcdir)/embed/mozilla   \
@@ -78,7 +88,6 @@ libephyembedfactory_la_CPPFLAGS = \
 libephyembedfactory_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CFLAGS)
-
 
 BUILT_SOURCES = \
 	ephy-embed-type-builtins.c	\

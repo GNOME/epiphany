@@ -105,6 +105,14 @@ libephymain_la_SOURCES = \
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
 
+if ENABLE_CERTIFICATE_MANAGER
+NOINST_H_FILES += \
+	ephy-certificate-manager.h
+
+libephymain_la_SOURCES += \
+	ephy-certificate-manager.c
+endif
+
 libephymain_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
 	-I$(top_builddir)/lib/egg	\

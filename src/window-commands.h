@@ -124,6 +124,9 @@ void window_cmd_go_history	(GtkAction *action,
 void window_cmd_edit_personal_data (GtkAction *action,
 				    EphyWindow *window);
 
+void window_cmd_edit_certificates (GtkAction *action,
+				    EphyWindow *window);
+
 void window_cmd_edit_prefs      (GtkAction *action,
 				 EphyWindow *window);
 

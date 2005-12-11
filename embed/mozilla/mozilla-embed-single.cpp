@@ -1,6 +1,8 @@
 /*  vim:set ts=8 noet sw=8:
  *  Copyright (C) 2000-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Robert Marcano
  *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2005 Crispin Flowerday
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +30,7 @@
 #include "ephy-cookie-manager.h"
 #include "ephy-password-manager.h"
 #include "ephy-permission-manager.h"
+#include "ephy-certificate-manager.h"
 #include "ephy-embed-shell.h"
 
 #include "glib.h"
@@ -44,6 +47,7 @@
 #include "EphyBrowser.h"
 #include "EphyUtils.h"
 #include "MozillaPrivate.h"
+#include "mozilla-x509-cert.h"
 
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -67,6 +71,11 @@
 #include <nsIPermissionManager.h>
 #include <nsILocalFile.h>
 #include <nsIURI.h>
+
+#ifdef HAVE_MOZILLA_PSM
+#include <nsIX509Cert.h>
+#include <nsIX509CertDB.h>
+#endif
 
 #ifdef HAVE_NSIPASSWORD_H
 #include <nsIPassword.h>
@@ -122,6 +131,10 @@ static void ephy_password_manager_iface_init	(EphyPasswordManagerIface *iface);
 static void ephy_permission_manager_iface_init	(EphyPermissionManagerIface *iface);
 static void mozilla_embed_single_init		(MozillaEmbedSingle *ges);
 
+#ifdef ENABLE_CERTIFICATE_MANAGER
+static void ephy_certificate_manager_iface_init	(EphyCertificateManagerIface *iface);
+#endif
+
 static GObjectClass *parent_class = NULL;
 
 GType
@@ -172,6 +185,15 @@ mozilla_embed_single_get_type (void)
 			NULL
 		};
 
+#ifdef ENABLE_CERTIFICATE_MANAGER
+		static const GInterfaceInfo certificate_manager_info =
+		{
+			(GInterfaceInitFunc) ephy_certificate_manager_iface_init,
+			NULL,
+			NULL
+		};
+#endif
+
 		type = g_type_register_static (G_TYPE_OBJECT,
 					       "MozillaEmbedSingle",
 					       &our_info,
@@ -192,6 +214,11 @@ mozilla_embed_single_get_type (void)
 		g_type_add_interface_static (type,
 					     EPHY_TYPE_PERMISSION_MANAGER,
 					     &permission_manager_info);
+#ifdef ENABLE_CERTIFICATE_MANAGER
+		g_type_add_interface_static (type,
+					     EPHY_TYPE_CERTIFICATE_MANAGER,
+					     &certificate_manager_info);
+#endif
 	}
 
         return type;
@@ -1009,6 +1036,124 @@ impl_open_window (EphyEmbedSingle *single,
 	return EphyUtils::FindEmbed (newWindow);
 }
 
+#ifdef ENABLE_CERTIFICATE_MANAGER
+
+static gboolean
+impl_remove_certificate (EphyCertificateManager *manager,
+			 EphyX509Cert *cert)
+{
+	nsresult rv;
+
+	nsCOMPtr<nsIX509CertDB> certDB;
+	certDB = do_GetService (NS_X509CERTDB_CONTRACTID);
+	if (!certDB) return FALSE;
+
+        nsCOMPtr<nsIX509Cert> mozCert;
+        rv = mozilla_x509_cert_get_mozilla_cert (MOZILLA_X509_CERT (cert),
+						 getter_AddRefs (mozCert));
+	if (NS_FAILED (rv)) return FALSE;
+
+	rv = certDB->DeleteCertificate (mozCert);
+	if (NS_FAILED (rv)) return FALSE;
+
+        return TRUE;
+}
+
+#define NICK_DELIMITER PRUnichar('\001')
+
+static GList *
+retrieveCerts (PRUint32 type)
+{
+	nsresult rv;
+
+	nsCOMPtr<nsIX509CertDB> certDB;
+	certDB = do_GetService (NS_X509CERTDB_CONTRACTID);
+	if (!certDB) return NULL;
+
+	PRUint32 count;
+	PRUnichar **certNameList = NULL;
+
+	rv = certDB->FindCertNicknames (NULL, type, &count, &certNameList);
+	if (NS_FAILED (rv)) return NULL;
+
+	LOG("Certificates found: %i", count);
+
+	GList *list = NULL;
+	for (PRUint32 i = 0; i < count; i++)
+	{
+		/* HACK HACK, this is EVIL, the string for each cert is:
+		     <DELIMITER>nicknameOrEmailAddress<DELIMITER>dbKey
+		   So we need to chop off the dbKey to look it up in the database.
+		   
+		   https://bugzilla.mozilla.org/show_bug.cgi?id=214742
+		*/
+		nsEmbedCString full_string;
+		NS_UTF16ToCString (nsEmbedString(certNameList[i]),
+				   NS_CSTRING_ENCODING_UTF8, full_string);
+
+		const char *key = full_string.get();
+		char *pos = strrchr (key, NICK_DELIMITER);
+		if (!pos) continue;
+
+		nsCOMPtr<nsIX509Cert> mozilla_cert;
+		rv = certDB->FindCertByDBKey (pos, NULL, getter_AddRefs (mozilla_cert));
+		if (NS_FAILED (rv)) continue;
+
+		MozillaX509Cert *cert = mozilla_x509_cert_new (mozilla_cert);
+		list = g_list_prepend (list, cert);
+	}
+
+	NS_FREE_XPCOM_ALLOCATED_POINTER_ARRAY (count, certNameList);
+	return list;
+}
+
+static GList *
+impl_get_certificates (EphyCertificateManager *manager,
+		       EphyX509CertType type)
+{
+	int moz_type = nsIX509Cert::USER_CERT;
+	switch (type)
+	{
+		case PERSONAL_CERTIFICATE:
+			moz_type = nsIX509Cert::USER_CERT;
+			break;
+		case SERVER_CERTIFICATE:
+			moz_type = nsIX509Cert::SERVER_CERT;
+			break;
+		case CA_CERTIFICATE:
+			moz_type = nsIX509Cert::CA_CERT;
+			break;
+	}
+	return retrieveCerts (moz_type);
+}
+
+static gboolean
+impl_import (EphyCertificateManager *manager,
+	     const gchar *file)
+{
+	nsresult rv;
+	nsCOMPtr<nsIX509CertDB> certDB;
+	certDB = do_GetService (NS_X509CERTDB_CONTRACTID);
+	if (!certDB) return NULL;
+
+	nsCOMPtr<nsILocalFile> localFile;
+	localFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
+
+	// TODO Is this correct ?
+	nsEmbedString path;
+	NS_CStringToUTF16 (nsEmbedCString(file),
+			   NS_CSTRING_ENCODING_UTF8, path);
+
+
+	localFile->InitWithPath (path);
+	rv = certDB->ImportPKCS12File(NULL, localFile);
+	if (NS_FAILED (rv)) return FALSE;
+
+	return TRUE;
+}
+
+#endif /* ENABLE_CERTIFICATE_MANAGER */
+
 static void
 mozilla_embed_single_get_property (GObject *object,
 				   guint prop_id,
@@ -1093,3 +1238,15 @@ ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface)
 	iface->test = impl_permission_manager_test;
 	iface->list = impl_permission_manager_list;
 }
+
+#ifdef ENABLE_CERTIFICATE_MANAGER
+
+static void
+ephy_certificate_manager_iface_init (EphyCertificateManagerIface *iface)
+{
+	iface->get_certificates = impl_get_certificates;
+	iface->remove_certificate = impl_remove_certificate;
+	iface->import = impl_import;
+}
+
+#endif /* ENABLE_CERTIFICATE_MANAGER */

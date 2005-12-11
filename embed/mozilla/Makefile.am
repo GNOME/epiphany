@@ -68,6 +68,12 @@ libephymozillaembed_la_SOURCES += 	\
 	GtkNSSSecurityWarningDialogs.h
 endif
 
+if ENABLE_CERTIFICATE_MANAGER
+libephymozillaembed_la_SOURCES += \
+	mozilla-x509-cert.cpp		\
+	mozilla-x509-cert.h
+endif
+
 if HAVE_GECKO_1_8
 libephymozillaembed_la_SOURCES += \
 	EphyBadCertRejector.cpp		\
