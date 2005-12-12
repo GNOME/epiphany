@@ -29,7 +29,7 @@ server_in_files = GNOME_Epiphany_Automation.server.in
 server_DATA = GNOME_Epiphany_Automation.server
 serverdir = $(libdir)/bonobo/servers
 
-desktop_in_file= epiphany.desktop.in.in bme.desktop.in.in
+desktop_in_files = epiphany.desktop.in.in bme.desktop.in.in
 desktopdir = $(datadir)/applications
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 
