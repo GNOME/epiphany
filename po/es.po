@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-06 01:39+0100\n"
-"PO-Revision-Date: 2005-12-06 01:40+0100\n"
+"POT-Creation-Date: 2005-12-12 18:24+0100\n"
+"PO-Revision-Date: 2005-12-12 18:25+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -822,7 +822,7 @@ msgstr ""
 "%s de %s"
 
 #: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#: ../src/ephy-window.c:1441
+#: ../src/ephy-window.c:1451
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -1954,11 +1954,11 @@ msgstr "Archivos"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:236
+#: ../embed/mozilla/mozilla-embed-single.cpp:263
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.es/search?ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:568
+#: ../embed/mozilla/mozilla-embed-single.cpp:595
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphany no puede usarse ahora. La inicialización de Mozilla falló."
 
@@ -1995,7 +1995,7 @@ msgstr "_hasta:"
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Establece el final del rango de páginas que se va a imprimir"
 
-#: ../embed/print-dialog.c:408 ../src/ephy-window.c:1272
+#: ../embed/print-dialog.c:408 ../src/ephy-window.c:1277
 msgid "Print"
 msgstr "Imprimir"
 
@@ -2034,13 +2034,13 @@ msgstr "Todos los tipos soportados"
 
 #: ../lib/ephy-file-helpers.c:312
 #, c-format
-msgid "%s exists, please move it out of the way."
-msgstr "%s ya existe, muévalo fuera de la ruta."
+msgid "\"%s\" exists, please move it out of the way."
+msgstr "«%s» ya existe, muévalo fuera de la ruta."
 
 #: ../lib/ephy-file-helpers.c:318
 #, c-format
-msgid "Failed to create directory %s."
-msgstr "Falló al crear el directorio: %s."
+msgid "Failed to create directory \"%s\"."
+msgstr "Falló al crear el directorio: «%s»."
 
 #: ../lib/ephy-gui.c:328
 #, c-format
@@ -2062,7 +2062,7 @@ msgstr "No se puede sobreescribir el archivo «%s»"
 
 #: ../lib/ephy-gui.c:369
 msgid ""
-"A file with this name alreay exists and you don't have permission to "
+"A file with this name already exists and you don't have permission to "
 "overwrite it."
 msgstr ""
 "Ya existe un archivo con este nombre y no tiene permiso para sobreescribirlo."
@@ -2246,7 +2246,7 @@ msgstr "Histórico"
 
 #: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1535
-#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1278
+#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1283
 msgid "Bookmarks"
 msgstr "Marcadores"
 
@@ -2505,7 +2505,7 @@ msgstr "Seleccionar todos los marcadores o texto"
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:259
+#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:264
 msgid "_Contents"
 msgstr "_Índice"
 
@@ -2514,12 +2514,12 @@ msgid "Display bookmarks help"
 msgstr "Mostrar ayuda de los marcadores"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:215
-#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:262
+#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:267
 msgid "_About"
 msgstr "_Acerca de"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:216
-#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:263
+#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:268
 msgid "Display credits for the web browser creators"
 msgstr "Mostrar créditos de los creadores del navegador web"
 
@@ -2795,7 +2795,7 @@ msgstr "Marcador rápido"
 msgid "Open in New _Tabs"
 msgstr "Abrir en _solapas nuevas"
 
-#: ../src/bookmarks/ephy-related-action.c:167
+#: ../src/bookmarks/ephy-related-action.c:161
 msgid "Related"
 msgstr "Relacionado"
 
@@ -2827,23 +2827,23 @@ msgstr "No encontrada"
 msgid "Wrapped"
 msgstr "Desde el inicio"
 
-#: ../src/ephy-find-toolbar.c:361
+#: ../src/ephy-find-toolbar.c:388
 msgid "Find:"
 msgstr "Buscar:"
 
-#: ../src/ephy-find-toolbar.c:377 ../src/ephy-find-toolbar.c:378
+#: ../src/ephy-find-toolbar.c:404 ../src/ephy-find-toolbar.c:405
 msgid "Find Previous"
 msgstr "Buscar anterior"
 
-#: ../src/ephy-find-toolbar.c:381
+#: ../src/ephy-find-toolbar.c:408
 msgid "Find previous occurrence of the search string"
 msgstr "Busca la aparición anterior de la cadena de búsqueda"
 
-#: ../src/ephy-find-toolbar.c:388 ../src/ephy-find-toolbar.c:389
+#: ../src/ephy-find-toolbar.c:415 ../src/ephy-find-toolbar.c:416
 msgid "Find Next"
 msgstr "Buscar siguiente"
 
-#: ../src/ephy-find-toolbar.c:392
+#: ../src/ephy-find-toolbar.c:419
 msgid "Find next occurrence of the search string"
 msgstr "Busca la siguiente aparición de la cadena de búsqueda"
 
@@ -3305,442 +3305,450 @@ msgstr "Datos _personales"
 msgid "View and remove cookies and passwords"
 msgstr "Ver y eliminar cookies y contraseñas"
 
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:189
+msgid "Cert_ificates"
+msgstr "Cer_tificados"
+
+#: ../src/ephy-window.c:190
+msgid "Manage Certificates"
+msgstr "Administrar certificados"
+
+#: ../src/ephy-window.c:193
 msgid "T_oolbars"
 msgstr "Barras de _herramientas"
 
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:194
 msgid "Customize toolbars"
 msgstr "Personalizar barras de herramientas"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:196
 msgid "P_references"
 msgstr "P_referencias"
 
-#: ../src/ephy-window.c:192
+#: ../src/ephy-window.c:197
 msgid "Configure the web browser"
 msgstr "Configurar el navegador de web"
 
 #. View menu
-#: ../src/ephy-window.c:197 ../src/ephy-window.c:200
+#: ../src/ephy-window.c:202 ../src/ephy-window.c:205
 msgid "_Stop"
 msgstr "_Detener"
 
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:203
 msgid "Stop current data transfer"
 msgstr "Detener la transferencia de datos actual"
 
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:207
 msgid "_Reload"
 msgstr "_Recargar"
 
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:208
 msgid "Display the latest content of the current page"
 msgstr "Mostrar el último contenido de la página actual"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:210
 msgid "Zoom _In"
 msgstr "_Ampliar"
 
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:211
 msgid "Increase the text size"
 msgstr "Aumentar el tamaño del texto"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:213
 msgid "Zoom _Out"
 msgstr "R_educir"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:214
 msgid "Decrease the text size"
 msgstr "Disminuir el tamaño del texto"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:216
 msgid "_Normal Size"
 msgstr "Tamaño _normal"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:217
 msgid "Use the normal text size"
 msgstr "Usar el tamaño de texto normal"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:219
 msgid "Text _Encoding"
 msgstr "_Codificación del texto"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:220
 msgid "Change the text encoding"
 msgstr "Cambiar la codificación del texto"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:222
 msgid "_Page Source"
 msgstr "Código _fuente"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:223
 msgid "View the source code of the page"
 msgstr "Ver el código fuente de la página"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:223
+#: ../src/ephy-window.c:228
 msgid "_Add Bookmark..."
 msgstr "_Añadir marcador…"
 
-#: ../src/ephy-window.c:224 ../src/ephy-window.c:298
+#: ../src/ephy-window.c:229 ../src/ephy-window.c:303
 msgid "Add a bookmark for the current page"
 msgstr "Añadir un marcador para la página actual"
 
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:231
 msgid "_Edit Bookmarks"
 msgstr "_Editar marcadores"
 
-#: ../src/ephy-window.c:227
+#: ../src/ephy-window.c:232
 msgid "Open the bookmarks window"
 msgstr "Abrir la ventana de marcadores"
 
 #. Go menu
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:237
 msgid "_Location..."
 msgstr "_Dirección…"
 
-#: ../src/ephy-window.c:233
+#: ../src/ephy-window.c:238
 msgid "Go to a specified location"
 msgstr "Ir a una dirección especificada"
 
-#: ../src/ephy-window.c:235
+#: ../src/ephy-window.c:240
 msgid "H_istory"
 msgstr "_Histórico"
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:241
 msgid "Open the history window"
 msgstr "Abrir la ventana del histórico"
 
 #. Tabs menu
-#: ../src/ephy-window.c:241
+#: ../src/ephy-window.c:246
 msgid "_Previous Tab"
 msgstr "Solapa _anterior"
 
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:247
 msgid "Activate previous tab"
 msgstr "Activar solapa anterior"
 
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:249
 msgid "_Next Tab"
 msgstr "_Solapa siguiente"
 
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:250
 msgid "Activate next tab"
 msgstr "Activar siguiente solapa"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:252
 msgid "Move Tab _Left"
 msgstr "Mover la solapa a la _izquierda"
 
-#: ../src/ephy-window.c:248
+#: ../src/ephy-window.c:253
 msgid "Move current tab to left"
 msgstr "Mover la solapa actual a la izquierda"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:255
 msgid "Move Tab _Right"
 msgstr "Mover la solapa a la de_recha"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:256
 msgid "Move current tab to right"
 msgstr "Mover la solapa actual a la derecha"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:258
 msgid "_Detach Tab"
 msgstr "_Desacoplar solapa"
 
-#: ../src/ephy-window.c:254
+#: ../src/ephy-window.c:259
 msgid "Detach current tab"
 msgstr "Desacoplar la solapa actual"
 
-#: ../src/ephy-window.c:260
+#: ../src/ephy-window.c:265
 msgid "Display web browser help"
 msgstr "Mostrar ayuda del navegador"
 
 #. File Menu
-#: ../src/ephy-window.c:271
+#: ../src/ephy-window.c:276
 msgid "_Work Offline"
 msgstr "_Trabajar desconectado"
 
-#: ../src/ephy-window.c:272
+#: ../src/ephy-window.c:277
 msgid "Switch to offline mode"
 msgstr "Cambiar a modo desconectado"
 
 #. View Menu
-#: ../src/ephy-window.c:277
+#: ../src/ephy-window.c:282
 msgid "_Toolbar"
 msgstr "Barra de _herramientas"
 
-#: ../src/ephy-window.c:278
+#: ../src/ephy-window.c:283
 msgid "Show or hide toolbar"
 msgstr "Muestra u oculta la barra de herramientas"
 
-#: ../src/ephy-window.c:280
+#: ../src/ephy-window.c:285
 msgid "St_atusbar"
 msgstr "Barra de es_tado"
 
-#: ../src/ephy-window.c:281
+#: ../src/ephy-window.c:286
 msgid "Show or hide statusbar"
 msgstr "Muestra u oculta la barra de estado"
 
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:288
 msgid "_Fullscreen"
 msgstr "_Pantalla completa"
 
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:289
 msgid "Browse at full screen"
 msgstr "Navegar a pantalla completa"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:291
 msgid "Popup _Windows"
 msgstr "Ventanas _emergentes"
 
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:292
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Mostrar u ocultar ventanas emergentes no solicitadas desde este sitio"
 
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:294
 msgid "Selection Caret"
 msgstr "Cursor de selección"
 
 #. Document
-#: ../src/ephy-window.c:297
+#: ../src/ephy-window.c:302
 msgid "Add Boo_kmark..."
 msgstr "Añadir _marcador…"
 
 #. Framed document
-#: ../src/ephy-window.c:303
+#: ../src/ephy-window.c:308
 msgid "Show Only _This Frame"
 msgstr "Mostrar sólo este _marco"
 
-#: ../src/ephy-window.c:304
+#: ../src/ephy-window.c:309
 msgid "Show only this frame in this window"
 msgstr "Muestra sólo este marco en esta ventana"
 
 #. Links
-#: ../src/ephy-window.c:309
+#: ../src/ephy-window.c:314
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
-#: ../src/ephy-window.c:310
+#: ../src/ephy-window.c:315
 msgid "Open link in this window"
 msgstr "Abre el enlace en esta ventana"
 
-#: ../src/ephy-window.c:312
+#: ../src/ephy-window.c:317
 msgid "Open Link in New _Window"
 msgstr "Abrir enlace en una _ventana nueva"
 
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:318
 msgid "Open link in a new window"
 msgstr "Abre el enlace en una ventana nueva"
 
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:320
 msgid "Open Link in New _Tab"
 msgstr "Abrir enlace en una _solapa nueva"
 
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:321
 msgid "Open link in a new tab"
 msgstr "Abre el enlace en una solapa nueva"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:323
 msgid "_Download Link"
 msgstr "_Descargar enlace"
 
-#: ../src/ephy-window.c:320
+#: ../src/ephy-window.c:325
 msgid "_Save Link As..."
 msgstr "Guardar _enlace como…"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:326
 msgid "Save link with a different name"
 msgstr "Guardar enlace con un nombre diferente"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:328
 msgid "_Bookmark Link..."
 msgstr "Añadir _marcador…"
 
-#: ../src/ephy-window.c:325
+#: ../src/ephy-window.c:330
 msgid "_Copy Link Address"
 msgstr "_Copiar dirección del enlace"
 
 # Añadimos enlace para mantener el léxico igual a Galeon y Mozilla
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:331
+#: ../src/ephy-window.c:336
 msgid "_Send Email..."
 msgstr "_Enviar enlace a…"
 
-#: ../src/ephy-window.c:333
+#: ../src/ephy-window.c:338
 msgid "_Copy Email Address"
 msgstr "_Copiar dirección de correo"
 
 #. Images
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:343
 msgid "Open _Image"
 msgstr "Abrir _imagen"
 
-#: ../src/ephy-window.c:340
+#: ../src/ephy-window.c:345
 msgid "_Save Image As..."
 msgstr "_Guardar imagen como…"
 
-#: ../src/ephy-window.c:342
+#: ../src/ephy-window.c:347
 msgid "_Use Image As Background"
 msgstr "_Utilizar esta imagen como tapiz"
 
-#: ../src/ephy-window.c:344
+#: ../src/ephy-window.c:349
 msgid "Copy I_mage Address"
 msgstr "Copiar dirección de la i_magen"
 
-#: ../src/ephy-window.c:693
+#: ../src/ephy-window.c:698
 msgid "There are unsubmitted changes to form elements"
 msgstr "Hay cambios no enviados en los elementos del formulario"
 
-#: ../src/ephy-window.c:697
+#: ../src/ephy-window.c:702
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Si cierra el documento, perderá esa información."
 
-#: ../src/ephy-window.c:701
+#: ../src/ephy-window.c:706
 msgid "Close _Document"
 msgstr "Cerrar _documento"
 
-#: ../src/ephy-window.c:1268 ../src/window-commands.c:295
+#: ../src/ephy-window.c:1273 ../src/window-commands.c:295
 msgid "Open"
 msgstr "Abrir"
 
-#: ../src/ephy-window.c:1270 ../src/window-commands.c:321
+#: ../src/ephy-window.c:1275 ../src/window-commands.c:321
 msgid "Save As"
 msgstr "Guardar como"
 
-#: ../src/ephy-window.c:1274
+#: ../src/ephy-window.c:1279
 msgid "Bookmark"
 msgstr "Marcador"
 
-#: ../src/ephy-window.c:1276
+#: ../src/ephy-window.c:1281
 msgid "Find"
 msgstr "Buscar"
 
-#: ../src/ephy-window.c:1444
+#: ../src/ephy-window.c:1454
 msgid "Insecure"
 msgstr "Inseguro"
 
-#: ../src/ephy-window.c:1449
+#: ../src/ephy-window.c:1459
 msgid "Broken"
 msgstr "Roto"
 
-#: ../src/ephy-window.c:1457
+#: ../src/ephy-window.c:1467
 msgid "Low"
 msgstr "Bajo"
 
-#: ../src/ephy-window.c:1464
+#: ../src/ephy-window.c:1474
 msgid "High"
 msgstr "Alto"
 
-#: ../src/ephy-window.c:1474
+#: ../src/ephy-window.c:1484
 #, c-format
 msgid "Security level: %s"
 msgstr "Nivel de seguridad %s"
 
-#: ../src/ephy-window.c:1514
+#: ../src/ephy-window.c:1524
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d ventana emergente oculta"
 msgstr[1] "%d ventanas emergentes ocultas"
 
-#: ../src/ephy-window.c:1809
+#: ../src/ephy-window.c:1819
 #, c-format
 msgid "Open image “%s”"
 msgstr "Abrir la imagen «%s»"
 
-#: ../src/ephy-window.c:1814
+#: ../src/ephy-window.c:1824
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Utilizar «%s» como tapiz del escritorio"
 
-#: ../src/ephy-window.c:1819
+#: ../src/ephy-window.c:1829
 #, c-format
 msgid "Save image “%s”"
 msgstr "Guardar imagen «%s»"
 
-#: ../src/ephy-window.c:1824
+#: ../src/ephy-window.c:1834
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Copiar dirección de la imagen «%s»"
 
-#: ../src/ephy-window.c:1837
+#: ../src/ephy-window.c:1847
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Enviar correo-e a la dirección «%s»"
 
-#: ../src/ephy-window.c:1843
+#: ../src/ephy-window.c:1853
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Copiar dirección de correo-e «%s»"
 
-#: ../src/ephy-window.c:1855
+#: ../src/ephy-window.c:1865
 #, c-format
 msgid "Save link “%s”"
 msgstr "Guardar enlace «%s»"
 
-#: ../src/ephy-window.c:1861
+#: ../src/ephy-window.c:1871
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Crear marcador con el enlace «%s»"
 
-#: ../src/ephy-window.c:1867
+#: ../src/ephy-window.c:1877
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Copiar dirección del enlace de «%s»"
 
-#: ../src/pdm-dialog.c:379
+#: ../src/pdm-dialog.c:378
 msgid "Cookie Properties"
 msgstr "Propiedades de cookies"
 
-#: ../src/pdm-dialog.c:396
+#: ../src/pdm-dialog.c:395
 msgid "Content:"
 msgstr "Contenido:"
 
-#: ../src/pdm-dialog.c:412
+#: ../src/pdm-dialog.c:411
 msgid "Path:"
 msgstr "Ruta:"
 
 # Añadimos enlace para mantener el léxico igual a Galeon y Mozilla
-#: ../src/pdm-dialog.c:428
+#: ../src/pdm-dialog.c:427
 msgid "Send for:"
 msgstr "Enviar enlace a:"
 
-#: ../src/pdm-dialog.c:437
+#: ../src/pdm-dialog.c:436
 msgid "Encrypted connections only"
 msgstr "Sólo conexiones encriptadas"
 
-#: ../src/pdm-dialog.c:437
+#: ../src/pdm-dialog.c:436
 msgid "Any type of connection"
 msgstr "Cualquier tipo de conexión"
 
-#: ../src/pdm-dialog.c:443
+#: ../src/pdm-dialog.c:442
 msgid "Expires:"
 msgstr "Caduca:"
 
-#: ../src/pdm-dialog.c:454
+#: ../src/pdm-dialog.c:453
 msgid "End of current session"
 msgstr "Finalizar la sesión actual"
 
-#: ../src/pdm-dialog.c:591
+#: ../src/pdm-dialog.c:589
 msgid "Domain"
 msgstr "Dominio"
 
-#: ../src/pdm-dialog.c:602
+#: ../src/pdm-dialog.c:600
 msgid "Name"
 msgstr "Nombre"
 
-#: ../src/pdm-dialog.c:991
+#: ../src/pdm-dialog.c:998
 msgid "Host"
 msgstr "Anfitrión"
 
-#: ../src/pdm-dialog.c:1003
+#: ../src/pdm-dialog.c:1010
 msgid "User Name"
 msgstr "Nombre de usuario"
 
-#: ../src/pdm-dialog.c:1015
+#: ../src/pdm-dialog.c:1022
 msgid "User Password"
 msgstr "Contraseña de usuario"
 
@@ -3830,23 +3838,23 @@ msgstr[1] "Idiomas del sistema (%s)"
 msgid "Select a Directory"
 msgstr "Seleccione un directorio"
 
-#: ../src/window-commands.c:709 ../src/window-commands.c:726
+#: ../src/window-commands.c:726 ../src/window-commands.c:743
 msgid "Contact us at:"
 msgstr "Contacte con nosotros en:"
 
-#: ../src/window-commands.c:712
+#: ../src/window-commands.c:729
 msgid "Contributors:"
 msgstr "Contribuyentes:"
 
-#: ../src/window-commands.c:717
+#: ../src/window-commands.c:734
 msgid "Past developers:"
 msgstr "Desarrolladores anteriores:"
 
-#: ../src/window-commands.c:727
+#: ../src/window-commands.c:744
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> o <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:732
+#: ../src/window-commands.c:749
 msgid "GNOME Web Browser"
 msgstr "Navegador web de Gnome"
 
@@ -3858,11 +3866,11 @@ msgstr "Navegador web de Gnome"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:746
+#: ../src/window-commands.c:763
 msgid "translator-credits"
 msgstr "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: ../src/window-commands.c:749
+#: ../src/window-commands.c:766
 msgid "GNOME Web Browser Website"
 msgstr "Sitio web del navegador de Gnome"
 
