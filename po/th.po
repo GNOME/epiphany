@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.th\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-21 11:10+0700\n"
-"PO-Revision-Date: 2005-11-26 17:37+0700\n"
+"POT-Creation-Date: 2005-12-12 10:18+0700\n"
+"PO-Revision-Date: 2005-12-12 10:27+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,18 +19,6 @@ msgstr ""
 #: data/GNOME_Epiphany_Automation.server.in.h:1
 msgid "Epiphany automation"
 msgstr ""
-
-#: data/bme.desktop.in.h:1
-msgid "Browse and organize your bookmarks"
-msgstr "จัดการที่คั่นหน้าเว็บ"
-
-#: data/bme.desktop.in.h:2
-msgid "Epiphany Web Bookmarks"
-msgstr "ที่คั่นหน้าเว็บของ Epiphany"
-
-#: data/bme.desktop.in.h:3
-msgid "Web Bookmarks"
-msgstr "ที่คั่นหน้าเว็บ"
 
 #: data/epiphany-lockdown.schemas.in.h:1
 msgid ""
@@ -122,16 +110,28 @@ msgstr "ล็อค Epiphany ไว้ในโหมดเต็มหน้�
 msgid "User is not allowed to close Epiphany"
 msgstr "ไม่อนุญาตให้ผู้ใช้ปิด Epiphany"
 
-#: data/epiphany.desktop.in.h:1
+#: data/bme.desktop.in.in.h:1
+msgid "Browse and organize your bookmarks"
+msgstr "จัดการที่คั่นหน้าเว็บ"
+
+#: data/bme.desktop.in.in.h:2
+msgid "Epiphany Web Bookmarks"
+msgstr "ที่คั่นหน้าเว็บของ Epiphany"
+
+#: data/bme.desktop.in.in.h:3
+msgid "Web Bookmarks"
+msgstr "ที่คั่นหน้าเว็บ"
+
+#: data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
 msgstr "ใช้งานเว็บเบราว์เซอร์ Epiphany"
 
-#: data/epiphany.desktop.in.h:2
+#: data/epiphany.desktop.in.in.h:2
 msgid "Epiphany Web Browser"
 msgstr "เว็บเบราว์เซอร์ Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: data/epiphany.desktop.in.h:3 src/ephy-main.c:222
+#: data/epiphany.desktop.in.in.h:3 src/ephy-main.c:222
 #: src/ephy-main.c:233
 msgid "Web Browser"
 msgstr "เว็บเบราว์เซอร์"
@@ -728,38 +728,30 @@ msgid "<b>Headers</b>"
 msgstr "<b>หัวกระดาษ</b>"
 
 #: data/glade/print.glade.h:4
-msgid "Appearance"
-msgstr "รูปแบบ"
-
-#: data/glade/print.glade.h:5
 msgid "C_olor"
 msgstr "_สี"
 
-#: data/glade/print.glade.h:6
+#: data/glade/print.glade.h:5
 msgid "P_age title"
 msgstr "_ชื่อเอกสาร"
 
-#: data/glade/print.glade.h:7
+#: data/glade/print.glade.h:6
 msgid "Page _numbers"
 msgstr "เ_ลขหน้า"
 
-#: data/glade/print.glade.h:8
-msgid "Paper"
-msgstr "กระดาษ"
-
-#: data/glade/print.glade.h:9
+#: data/glade/print.glade.h:7
 msgid "Print Setup"
 msgstr "ตั้งค่าการพิมพ์"
 
-#: data/glade/print.glade.h:10
+#: data/glade/print.glade.h:8
 msgid "_Date"
 msgstr "_วันที่"
 
-#: data/glade/print.glade.h:11
+#: data/glade/print.glade.h:9
 msgid "_Grayscale"
 msgstr "_ขาวดำ"
 
-#: data/glade/print.glade.h:12
+#: data/glade/print.glade.h:10
 msgid "_Page address"
 msgstr "_ตำแหน่งเอกสาร"
 
@@ -797,7 +789,7 @@ msgstr ""
 "%s จาก %s"
 
 #: embed/downloader-view.c:431 embed/downloader-view.c:436
-#: src/ephy-window.c:1441
+#: src/ephy-window.c:1451
 msgid "Unknown"
 msgstr "ไม่ทราบ"
 
@@ -1568,30 +1560,30 @@ msgstr "แฟ้ม XUL"
 msgid "_Select Certificate"
 msgstr "เ_ลือกใบรับรอง"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:203
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:202
 #, c-format
 msgid "Choose a certificate to present as identification to “%s”."
 msgstr "เลือกใบรับรองที่จะใช้แสดงตัวตนของ “%s”"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:206
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
 msgid "Select a certificate to identify yourself."
 msgstr "เลือกใบรับรองที่จะใช้แสดงตัวตนของคุณ"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:243
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:242
 msgid "Certificate _Details"
 msgstr "_รายละเอียดใบรับรอง"
 
 #. Add the buttons
-#: embed/mozilla/GtkNSSDialogs.cpp:236
-#: embed/mozilla/GtkNSSDialogs.cpp:548
+#: embed/mozilla/GtkNSSDialogs.cpp:235
+#: embed/mozilla/GtkNSSDialogs.cpp:547
 msgid "_View Certificate"
 msgstr "_ดูใบรับรอง"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:244
+#: embed/mozilla/GtkNSSDialogs.cpp:243
 msgid "_Accept"
 msgstr "_ยอมรับ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:311
+#: embed/mozilla/GtkNSSDialogs.cpp:310
 #, c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
@@ -1601,17 +1593,17 @@ msgstr ""
 "ไซต์ “%s” คืนค่าข้อมูลระบบรักษาความปลอดภัยของ “%s” มาให้ "
 "เป็นไปได้ว่าอาจมีใครดักข้อมูลการสื่อสารของคุณอยู่ เพื่อล้วงข้อมูลที่เป็นความลับของคุณ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:317
+#: embed/mozilla/GtkNSSDialogs.cpp:316
 #, c-format
 msgid ""
 "You should only accept the security information if you trust “%s” and “%s”."
 msgstr "คุณควรยอมรับข้อมูลระบบรักษาความปลอดภัยนี้ ก็ต่อเมื่อคุณเชื่อถือทั้ง “%s” และ “%s” เท่านั้น"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:322
+#: embed/mozilla/GtkNSSDialogs.cpp:321
 msgid "Accept incorrect security information?"
 msgstr "ยอมรับข้อมูลระบบรักษาความปลอดภัยที่ไม่ถูกต้องหรือไม่?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:353
+#: embed/mozilla/GtkNSSDialogs.cpp:352
 #, c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
@@ -1620,41 +1612,41 @@ msgstr ""
 "ไม่สามารถเชื่อถือ “%s” โดยอัตโนมัติได้ เป็นไปได้ว่าอาจมีใครดักข้อมูลการสื่อสารของคุณอยู่ "
 "เพื่อล้วงข้อมูลที่เป็นความลับของคุณ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:359
+#: embed/mozilla/GtkNSSDialogs.cpp:358
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
 "“%s”."
 msgstr "คุณควรเชื่อมต่อไปยังไซต์นี้ ก็ต่อเมื่อคุณแน่ใจว่ากำลังเชื่อมต่อไปยัง “%s” จริงๆ เท่านั้น"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:364
+#: embed/mozilla/GtkNSSDialogs.cpp:363
 msgid "Connect to untrusted site?"
 msgstr "เชื่อมต่อไปยังไซต์ที่ไม่น่าเชื่อถือหรือไม่?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:368
+#: embed/mozilla/GtkNSSDialogs.cpp:367
 msgid "_Trust this security information from now on"
 msgstr "เ_ชื่อถือข้อมูลระบบรักษาความปลอดภัยนี้นับจากนี้ไป"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:369
+#: embed/mozilla/GtkNSSDialogs.cpp:368
 msgid "Co_nnect"
 msgstr "เ_ชื่อมต่อ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:428
+#: embed/mozilla/GtkNSSDialogs.cpp:427
 msgid "Accept expired security information?"
 msgstr "ยอมรับข้อมูลระบบรักษาความปลอดภัยที่หมดอายุแล้วหรือไม่?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: embed/mozilla/GtkNSSDialogs.cpp:430
+#: embed/mozilla/GtkNSSDialogs.cpp:429
 #, c-format
 msgid "The security information for “%s” expired on %s."
 msgstr "ข้อมูลระบบรักษาความปลอดภัยของ “%s” หมดอายุลงแล้วเมื่อ %s"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:436
+#: embed/mozilla/GtkNSSDialogs.cpp:435
 msgid "Accept not yet valid security information?"
 msgstr "ยอมรับข้อมูลระบบรักษาความปลอดภัยที่ยังไม่มีผลหรือไม่?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: embed/mozilla/GtkNSSDialogs.cpp:438
+#: embed/mozilla/GtkNSSDialogs.cpp:437
 #, c-format
 msgid "The security information for “%s” isn't valid until %s."
 msgstr "ข้อมูลระบบรักษาความปลอดภัยของ “%s” ยังไม่มีผลจนกว่าจะถึง %s"
@@ -1662,57 +1654,58 @@ msgstr "ข้อมูลระบบรักษาความปลอดภ
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: embed/mozilla/GtkNSSDialogs.cpp:454
+#: embed/mozilla/GtkNSSDialogs.cpp:453
 msgid "%a %d %b %Y"
 msgstr "%a %d %b %Ey"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:462
+#: embed/mozilla/GtkNSSDialogs.cpp:461
 msgid "You should ensure that your computer's time is correct."
 msgstr "คุณควรแน่ใจด้วยว่านาฬิกาของเครื่องคุณตั้งไว้ถูกต้อง"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:508
+#: embed/mozilla/GtkNSSDialogs.cpp:507
 #, c-format
 msgid "Cannot establish connection to “%s”."
 msgstr "ไม่สามารถเชื่อมต่อไปยัง “%s”"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:511
+#: embed/mozilla/GtkNSSDialogs.cpp:510
 #, c-format
 msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
 msgstr "จำเป็นต้องอัพเดตรายการการเพิกถอนใบรับรอง (CRL) จาก “%s”"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:516
+#: embed/mozilla/GtkNSSDialogs.cpp:515
 msgid "Please ask your system administrator for assistance."
 msgstr "กรุณาขอความช่วยเหลือจากผู้ดูแลระบบของคุณ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:546
+#: embed/mozilla/GtkNSSDialogs.cpp:545
 msgid "Trust new Certificate Authority?"
 msgstr "เชื่อถือหน่วยงานออกใบรับรองหน่วยงานใหม่หรือไม่?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:551
+#: embed/mozilla/GtkNSSDialogs.cpp:550
 msgid "_Trust CA"
 msgstr "เ_ชื่อถือหน่วยงานออกใบรับรอง"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:573
+#: embed/mozilla/GtkNSSDialogs.cpp:572
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr "เชื่อถือหน่วยงานออกใบรับรอง “%s” ในการตรวจสอบตัวตนเว็บต่างๆ หรือไม่?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:578
+#: embed/mozilla/GtkNSSDialogs.cpp:577
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
 msgstr "ก่อนที่จะเชื่อถือหน่วยงานออกใบรับรอง (CA) คุณควรตรวจสอบด้วย ว่าใบรับรองเป็นของจริง"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:649
+#: embed/mozilla/GtkNSSDialogs.cpp:648
 msgid "Certificate already exists."
 msgstr "มีใบรับรองอยู่แล้ว"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:650
+#: embed/mozilla/GtkNSSDialogs.cpp:649
 msgid "The certificate has already been imported."
 msgstr "เคยนำเข้าใบรับรองนี้มาก่อนแล้ว"
 
+#. Translators: this is the action of the certificate being exported to a backup file
 #: embed/mozilla/GtkNSSDialogs.cpp:775
-msgid "_Backup Certificate"
+msgid "_Back Up Certificate"
 msgstr "_สำรองข้อมูลใบรับรอง"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:782
@@ -1896,23 +1889,23 @@ msgstr "แฟ้ม"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: embed/mozilla/mozilla-embed-single.cpp:236
+#: embed/mozilla/mozilla-embed-single.cpp:263
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
-#: embed/mozilla/mozilla-embed-single.cpp:568
+#: embed/mozilla/mozilla-embed-single.cpp:595
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "ไม่สามารถใช้ Epiphany ได้เนื่องจากการเริ่มทำงานของ Mozilla ล้มเหลว"
 
-#: embed/print-dialog.c:268
+#: embed/print-dialog.c:258
 msgid "Generating PDF is not supported"
 msgstr "ไม่สนับสนุนการสร้าง PDF"
 
-#: embed/print-dialog.c:275
+#: embed/print-dialog.c:265
 msgid "Printing is not supported on this printer"
 msgstr "ไม่สนับสนุนการพิมพ์บนเครื่องพิมพ์นี้"
 
-#: embed/print-dialog.c:278
+#: embed/print-dialog.c:268
 #, c-format
 msgid ""
 "You were trying to print to a printer using the “%s” driver. This program "
@@ -1921,27 +1914,27 @@ msgstr ""
 "คุณกำลังพยายามพิมพ์ไปยังเครื่องพิมพ์โดยใช้ไดรเวอร์ “%s” "
 "โปรแกรมนี้ต้องการไดรเวอร์เครื่องพิมพ์โพสต์สคริปต์"
 
-#: embed/print-dialog.c:392
+#: embed/print-dialog.c:365
 msgid "_From:"
 msgstr "_จาก:"
 
-#: embed/print-dialog.c:405
+#: embed/print-dialog.c:378
 msgid "Sets the start of the range of pages to be printed"
 msgstr "กำหนดหน้าที่จะเริ่มพิมพ์"
 
-#: embed/print-dialog.c:407
+#: embed/print-dialog.c:380
 msgid "_To:"
 msgstr "_ถึง:"
 
-#: embed/print-dialog.c:420
+#: embed/print-dialog.c:393
 msgid "Sets the end of the range of pages to be printed"
 msgstr "กำหนดหน้าสุดท้ายที่จะพิมพ์"
 
-#: embed/print-dialog.c:435 src/ephy-window.c:1272
+#: embed/print-dialog.c:408 src/ephy-window.c:1277
 msgid "Print"
 msgstr "พิมพ์"
 
-#: embed/print-dialog.c:443
+#: embed/print-dialog.c:416
 msgid "Pages"
 msgstr "หน้า"
 
@@ -1976,13 +1969,13 @@ msgstr "ทุกชนิดที่สนับสนุน"
 
 #: lib/ephy-file-helpers.c:312
 #, c-format
-msgid "%s exists, please move it out of the way."
-msgstr "มี %s อยู่แล้ว กรุณาย้ายตำแหน่ง"
+msgid "\"%s\" exists, please move it out of the way."
+msgstr "มี \"%s\" อยู่แล้ว กรุณาย้ายตำแหน่ง"
 
 #: lib/ephy-file-helpers.c:318
 #, c-format
-msgid "Failed to create directory %s."
-msgstr "ไม่สามารถสร้างไดเรคทอรี %s"
+msgid "Failed to create directory \"%s\"."
+msgstr "ไม่สามารถสร้างไดเรกทอรี \"%s\""
 
 #: lib/ephy-gui.c:328
 #, c-format
@@ -2004,7 +1997,7 @@ msgstr "ไม่สามารถเขียนทับแฟ้ม “%s”
 
 #: lib/ephy-gui.c:369
 msgid ""
-"A file with this name alreay exists and you don't have permission to "
+"A file with this name already exists and you don't have permission to "
 "overwrite it."
 msgstr "มีแฟ้มชื่อนี้อยู่ก่อนแล้ว และคุณไม่ได้รับอนุญาตให้เขียนทับ"
 
@@ -2187,7 +2180,7 @@ msgstr "ประวัติ"
 
 #: lib/ephy-stock-icons.c:57 src/bookmarks/ephy-bookmarks-editor.c:684
 #: src/bookmarks/ephy-bookmarks-editor.c:1535
-#: src/bookmarks/ephy-topic-action.c:344 src/ephy-window.c:1278
+#: src/bookmarks/ephy-topic-action.c:344 src/ephy-window.c:1283
 msgid "Bookmarks"
 msgstr "ที่คั่นหน้า"
 
@@ -2445,7 +2438,7 @@ msgstr "เลือกที่คั่นหน้าหรือข้อค
 #. Help Menu
 #. Help menu
 #: src/bookmarks/ephy-bookmarks-editor.c:212
-#: src/ephy-history-window.c:204 src/ephy-window.c:259
+#: src/ephy-history-window.c:204 src/ephy-window.c:264
 msgid "_Contents"
 msgstr "เนื้อ_หา"
 
@@ -2454,12 +2447,12 @@ msgid "Display bookmarks help"
 msgstr "แสดงวิธีใช้ที่คั่นหน้า"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:215
-#: src/ephy-history-window.c:207 src/ephy-window.c:262
+#: src/ephy-history-window.c:207 src/ephy-window.c:267
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:216
-#: src/ephy-history-window.c:208 src/ephy-window.c:263
+#: src/ephy-history-window.c:208 src/ephy-window.c:268
 msgid "Display credits for the web browser creators"
 msgstr "แสดงชื่อผู้จัดทำเบราว์เซอร์"
 
@@ -2733,7 +2726,7 @@ msgstr "เพิ่มที่คั่นหน้าอย่างเร็
 msgid "Open in New _Tabs"
 msgstr "เปิดในแ_ท็บใหม่"
 
-#: src/bookmarks/ephy-related-action.c:167
+#: src/bookmarks/ephy-related-action.c:161
 msgid "Related"
 msgstr "ที่เกี่ยวข้อง"
 
@@ -2757,31 +2750,31 @@ msgstr "รหัสอื่น"
 msgid "_Automatic"
 msgstr "อัตโ_นมัติ"
 
-#: src/ephy-find-toolbar.c:130
-msgid "Phrase not found"
+#: src/ephy-find-toolbar.c:128
+msgid "Not found"
 msgstr "หาไม่พบ"
 
-#: src/ephy-find-toolbar.c:133
-msgid "Find wrapped"
+#: src/ephy-find-toolbar.c:131
+msgid "Wrapped"
 msgstr "เริ่มหาใหม่"
 
-#: src/ephy-find-toolbar.c:481
+#: src/ephy-find-toolbar.c:388
 msgid "Find:"
 msgstr "หา:"
 
-#: src/ephy-find-toolbar.c:497 src/ephy-find-toolbar.c:498
+#: src/ephy-find-toolbar.c:404 src/ephy-find-toolbar.c:405
 msgid "Find Previous"
 msgstr "หาก่อนหน้า"
 
-#: src/ephy-find-toolbar.c:501
+#: src/ephy-find-toolbar.c:408
 msgid "Find previous occurrence of the search string"
 msgstr "หาข้อความเดิมถอยหลัง"
 
-#: src/ephy-find-toolbar.c:508 src/ephy-find-toolbar.c:509
+#: src/ephy-find-toolbar.c:415 src/ephy-find-toolbar.c:416
 msgid "Find Next"
 msgstr "หาต่อ"
 
-#: src/ephy-find-toolbar.c:512
+#: src/ephy-find-toolbar.c:419
 msgid "Find next occurrence of the search string"
 msgstr "หาข้อความเดิมต่อไป"
 
@@ -3237,440 +3230,448 @@ msgstr "ข้อมูล_ส่วนตัว"
 msgid "View and remove cookies and passwords"
 msgstr "จัดการกับคุกกี้และรหัสผ่าน"
 
-#: src/ephy-window.c:188
+#: src/ephy-window.c:189
+msgid "Cert_ificates"
+msgstr "ใบ_รับรอง"
+
+#: src/ephy-window.c:190
+msgid "Manage Certificates"
+msgstr "จัดการใบรับรอง"
+
+#: src/ephy-window.c:193
 msgid "T_oolbars"
 msgstr "แถบเ_ครื่องมือ"
 
-#: src/ephy-window.c:189
+#: src/ephy-window.c:194
 msgid "Customize toolbars"
 msgstr "แก้ไขแถบเครื่องมือ"
 
-#: src/ephy-window.c:191
+#: src/ephy-window.c:196
 msgid "P_references"
 msgstr "_ปรับแต่ง"
 
-#: src/ephy-window.c:192
+#: src/ephy-window.c:197
 msgid "Configure the web browser"
 msgstr "ปรับแต่งเว็บเบราว์เซอร์"
 
 #. View menu
-#: src/ephy-window.c:197 src/ephy-window.c:200
+#: src/ephy-window.c:202 src/ephy-window.c:205
 msgid "_Stop"
 msgstr "_หยุด"
 
-#: src/ephy-window.c:198
+#: src/ephy-window.c:203
 msgid "Stop current data transfer"
 msgstr "หยุดการเรียกข้อมูล"
 
-#: src/ephy-window.c:202
+#: src/ephy-window.c:207
 msgid "_Reload"
 msgstr "เรียกให_ม่"
 
-#: src/ephy-window.c:203
+#: src/ephy-window.c:208
 msgid "Display the latest content of the current page"
 msgstr "แสดงเนื้อหาล่าสุดของหน้าปัจจุบัน"
 
-#: src/ephy-window.c:205
+#: src/ephy-window.c:210
 msgid "Zoom _In"
 msgstr "_ขยาย"
 
-#: src/ephy-window.c:206
+#: src/ephy-window.c:211
 msgid "Increase the text size"
 msgstr "เพิ่มขนาดตัวอักษร"
 
-#: src/ephy-window.c:208
+#: src/ephy-window.c:213
 msgid "Zoom _Out"
 msgstr "_ย่อ"
 
-#: src/ephy-window.c:209
+#: src/ephy-window.c:214
 msgid "Decrease the text size"
 msgstr "ลดขนาดตัวอักษร"
 
-#: src/ephy-window.c:211
+#: src/ephy-window.c:216
 msgid "_Normal Size"
 msgstr "ขนาด_ปกติ"
 
-#: src/ephy-window.c:212
+#: src/ephy-window.c:217
 msgid "Use the normal text size"
 msgstr "ใช้ตัวอักษรขนาดปกติ"
 
-#: src/ephy-window.c:214
+#: src/ephy-window.c:219
 msgid "Text _Encoding"
 msgstr "_รหัสอักขระ"
 
-#: src/ephy-window.c:215
+#: src/ephy-window.c:220
 msgid "Change the text encoding"
 msgstr "เปลี่ยนรหัสอักขระ"
 
-#: src/ephy-window.c:217
+#: src/ephy-window.c:222
 msgid "_Page Source"
 msgstr "_ต้นฉบับเอกสาร"
 
-#: src/ephy-window.c:218
+#: src/ephy-window.c:223
 msgid "View the source code of the page"
 msgstr "แสดงซอร์สโค้ดของหน้าเว็บ"
 
 #. Bookmarks menu
-#: src/ephy-window.c:223
+#: src/ephy-window.c:228
 msgid "_Add Bookmark..."
 msgstr "เ_พิ่มที่คั่นหน้า..."
 
-#: src/ephy-window.c:224 src/ephy-window.c:298
+#: src/ephy-window.c:229 src/ephy-window.c:303
 msgid "Add a bookmark for the current page"
 msgstr "เพิ่มหน้านี้ในที่คั่นหน้า"
 
-#: src/ephy-window.c:226
+#: src/ephy-window.c:231
 msgid "_Edit Bookmarks"
 msgstr "แ_ก้ไขที่คั่นหน้า"
 
-#: src/ephy-window.c:227
+#: src/ephy-window.c:232
 msgid "Open the bookmarks window"
 msgstr "เปิดหน้าต่างที่คั่นหน้า"
 
 #. Go menu
-#: src/ephy-window.c:232
+#: src/ephy-window.c:237
 msgid "_Location..."
 msgstr "_ตำแหน่ง..."
 
-#: src/ephy-window.c:233
+#: src/ephy-window.c:238
 msgid "Go to a specified location"
 msgstr "ไปยังตำแหน่งที่ระบุ"
 
-#: src/ephy-window.c:235
+#: src/ephy-window.c:240
 msgid "H_istory"
 msgstr "_ประวัติ"
 
-#: src/ephy-window.c:236
+#: src/ephy-window.c:241
 msgid "Open the history window"
 msgstr "เปิดหน้าต่างประวัติ"
 
 #. Tabs menu
-#: src/ephy-window.c:241
+#: src/ephy-window.c:246
 msgid "_Previous Tab"
 msgstr "แท็บ_ก่อนหน้า"
 
-#: src/ephy-window.c:242
+#: src/ephy-window.c:247
 msgid "Activate previous tab"
 msgstr "เรียกแท็บก่อนหน้า"
 
-#: src/ephy-window.c:244
+#: src/ephy-window.c:249
 msgid "_Next Tab"
 msgstr "แท็บ_ถัดไป"
 
-#: src/ephy-window.c:245
+#: src/ephy-window.c:250
 msgid "Activate next tab"
 msgstr "เรียกแท็บถัดไป"
 
-#: src/ephy-window.c:247
+#: src/ephy-window.c:252
 msgid "Move Tab _Left"
 msgstr "ย้ายแท็บไปทาง_ซ้าย"
 
-#: src/ephy-window.c:248
+#: src/ephy-window.c:253
 msgid "Move current tab to left"
 msgstr "ย้ายแท็บนี้ไปทางซ้าย"
 
-#: src/ephy-window.c:250
+#: src/ephy-window.c:255
 msgid "Move Tab _Right"
 msgstr "ย้ายแท็บไปทาง_ขวา"
 
-#: src/ephy-window.c:251
+#: src/ephy-window.c:256
 msgid "Move current tab to right"
 msgstr "ย้ายแท็บนี้ไปทางขวา"
 
-#: src/ephy-window.c:253
+#: src/ephy-window.c:258
 msgid "_Detach Tab"
 msgstr "แ_ยกออกไป"
 
-#: src/ephy-window.c:254
+#: src/ephy-window.c:259
 msgid "Detach current tab"
 msgstr "แยกแท็บนี้ออกเป็นอีกหน้าต่าง"
 
-#: src/ephy-window.c:260
+#: src/ephy-window.c:265
 msgid "Display web browser help"
 msgstr "แสดงวิธีใช้งาน"
 
 #. File Menu
-#: src/ephy-window.c:271
+#: src/ephy-window.c:276
 msgid "_Work Offline"
 msgstr "_ทำงานแบบออฟไลน์"
 
-#: src/ephy-window.c:272
+#: src/ephy-window.c:277
 msgid "Switch to offline mode"
 msgstr "เปลี่ยนเป็นโหมดออฟไลน์"
 
 #. View Menu
-#: src/ephy-window.c:277
+#: src/ephy-window.c:282
 msgid "_Toolbar"
 msgstr "แถบเ_ครื่องมือ"
 
-#: src/ephy-window.c:278
+#: src/ephy-window.c:283
 msgid "Show or hide toolbar"
 msgstr "แสดงหรือซ่อนแถบเครื่องมือ"
 
-#: src/ephy-window.c:280
+#: src/ephy-window.c:285
 msgid "St_atusbar"
 msgstr "แถบ_สถานะ"
 
-#: src/ephy-window.c:281
+#: src/ephy-window.c:286
 msgid "Show or hide statusbar"
 msgstr "แสดงหรือซ่อนแถบสถานะ"
 
-#: src/ephy-window.c:283
+#: src/ephy-window.c:288
 msgid "_Fullscreen"
 msgstr "เ_ต็มจอ"
 
-#: src/ephy-window.c:284
+#: src/ephy-window.c:289
 msgid "Browse at full screen"
 msgstr "แสดงผลเต็มหน้าจอ"
 
-#: src/ephy-window.c:286
+#: src/ephy-window.c:291
 msgid "Popup _Windows"
 msgstr "หน้าต่าง_ป็อบอัพ"
 
-#: src/ephy-window.c:287
+#: src/ephy-window.c:292
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "แสดงหรือซ่อนหน้าต่างป็อบอัพที่ไม่ได้ร้องขอจากไซต์นี้"
 
-#: src/ephy-window.c:289
+#: src/ephy-window.c:294
 msgid "Selection Caret"
 msgstr "ใช้เคอร์เซอร์"
 
 #. Document
-#: src/ephy-window.c:297
+#: src/ephy-window.c:302
 msgid "Add Boo_kmark..."
 msgstr "เพิ่ม_ที่คั่นหน้า..."
 
 #. Framed document
-#: src/ephy-window.c:303
+#: src/ephy-window.c:308
 msgid "Show Only _This Frame"
 msgstr "แสดงเ_ฟรมนี้เท่านั้น"
 
-#: src/ephy-window.c:304
+#: src/ephy-window.c:309
 msgid "Show only this frame in this window"
 msgstr "แสดงเฉพาะเฟรมนี้ในหน้าต่างนี้"
 
 #. Links
-#: src/ephy-window.c:309
+#: src/ephy-window.c:314
 msgid "_Open Link"
 msgstr "เ_ปิดลิงก์"
 
-#: src/ephy-window.c:310
+#: src/ephy-window.c:315
 msgid "Open link in this window"
 msgstr "เปิดลิงก์ในหน้าต่างนี้"
 
-#: src/ephy-window.c:312
+#: src/ephy-window.c:317
 msgid "Open Link in New _Window"
 msgstr "เปิดลิงก์ในห_น้าต่างใหม่"
 
-#: src/ephy-window.c:313
+#: src/ephy-window.c:318
 msgid "Open link in a new window"
 msgstr "เปิดลิงก์ในหน้าต่างใหม่"
 
-#: src/ephy-window.c:315
+#: src/ephy-window.c:320
 msgid "Open Link in New _Tab"
 msgstr "เปิดลิงก์ในแ_ท็บใหม่"
 
-#: src/ephy-window.c:316
+#: src/ephy-window.c:321
 msgid "Open link in a new tab"
 msgstr "เปิดลิงก์ในแท็บใหม่"
 
-#: src/ephy-window.c:318
+#: src/ephy-window.c:323
 msgid "_Download Link"
 msgstr "_บันทึกลิงก์"
 
-#: src/ephy-window.c:320
+#: src/ephy-window.c:325
 msgid "_Save Link As..."
 msgstr "บันทึกลิงก์เป็_น..."
 
-#: src/ephy-window.c:321
+#: src/ephy-window.c:326
 msgid "Save link with a different name"
 msgstr "บันทึกลิงก์ด้วยชื่อใหม่"
 
-#: src/ephy-window.c:323
+#: src/ephy-window.c:328
 msgid "_Bookmark Link..."
 msgstr "เพิ่มลิงก์ใน_ที่คั่นหน้า..."
 
-#: src/ephy-window.c:325
+#: src/ephy-window.c:330
 msgid "_Copy Link Address"
 msgstr "_คัดลอกตำแหน่งลิงก์"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: src/ephy-window.c:331
+#: src/ephy-window.c:336
 msgid "_Send Email..."
 msgstr "_ส่งอีเมล..."
 
-#: src/ephy-window.c:333
+#: src/ephy-window.c:338
 msgid "_Copy Email Address"
 msgstr "_คัดลอกที่อยู่อีเมล"
 
 #. Images
-#: src/ephy-window.c:338
+#: src/ephy-window.c:343
 msgid "Open _Image"
 msgstr "แสดง_ภาพ"
 
-#: src/ephy-window.c:340
+#: src/ephy-window.c:345
 msgid "_Save Image As..."
 msgstr "บันทึกภาพเป็_น..."
 
-#: src/ephy-window.c:342
+#: src/ephy-window.c:347
 msgid "_Use Image As Background"
 msgstr "ใ_ช้เป็นภาพพื้นหลัง"
 
-#: src/ephy-window.c:344
+#: src/ephy-window.c:349
 msgid "Copy I_mage Address"
 msgstr "คัด_ลอกตำแหน่งภาพ"
 
-#: src/ephy-window.c:693
+#: src/ephy-window.c:698
 msgid "There are unsubmitted changes to form elements"
 msgstr "มีการเปลี่ยนแปลงในช่องข้อมูลแบบฟอร์มที่ยังไม่ส่ง"
 
-#: src/ephy-window.c:697
+#: src/ephy-window.c:702
 msgid "If you close the document anyway, you will lose that information."
 msgstr "ถ้าคุณปิดเอกสาร คุณจะเสียข้อมูลเหล่านี้"
 
-#: src/ephy-window.c:701
+#: src/ephy-window.c:706
 msgid "Close _Document"
 msgstr "ปิ_ดเอกสาร"
 
-#: src/ephy-window.c:1268 src/window-commands.c:294
+#: src/ephy-window.c:1273 src/window-commands.c:295
 msgid "Open"
 msgstr "เปิด"
 
-#: src/ephy-window.c:1270 src/window-commands.c:320
+#: src/ephy-window.c:1275 src/window-commands.c:321
 msgid "Save As"
 msgstr "บันทึกเป็น"
 
-#: src/ephy-window.c:1274
+#: src/ephy-window.c:1279
 msgid "Bookmark"
 msgstr "ที่คั่นหน้า"
 
-#: src/ephy-window.c:1276
+#: src/ephy-window.c:1281
 msgid "Find"
 msgstr "ค้นหา"
 
-#: src/ephy-window.c:1444
+#: src/ephy-window.c:1454
 msgid "Insecure"
 msgstr "ไม่ปลอดภัย"
 
-#: src/ephy-window.c:1449
+#: src/ephy-window.c:1459
 msgid "Broken"
 msgstr "เสียอยู่"
 
-#: src/ephy-window.c:1457
+#: src/ephy-window.c:1467
 msgid "Low"
 msgstr "ต่ำ"
 
-#: src/ephy-window.c:1464
+#: src/ephy-window.c:1474
 msgid "High"
 msgstr "สูง"
 
-#: src/ephy-window.c:1474
+#: src/ephy-window.c:1484
 #, c-format
 msgid "Security level: %s"
 msgstr "ระดับการรักษาความปลอดภัย: %s"
 
-#: src/ephy-window.c:1514
+#: src/ephy-window.c:1524
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "มีหน้าต่างป็อบอัพซ่อนอยู่ %d หน้าต่าง"
 msgstr[1] "มีหน้าต่างป็อบอัพซ่อนอยู่ %d หน้าต่าง"
 
-#: src/ephy-window.c:1809
+#: src/ephy-window.c:1819
 #, c-format
 msgid "Open image “%s”"
 msgstr "แสดงภาพ “%s”"
 
-#: src/ephy-window.c:1814
+#: src/ephy-window.c:1824
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "ใช้ “%s” เป็นภาพพื้นหลัง"
 
-#: src/ephy-window.c:1819
+#: src/ephy-window.c:1829
 #, c-format
 msgid "Save image “%s”"
 msgstr "บันทึกภาพ “%s”"
 
-#: src/ephy-window.c:1824
+#: src/ephy-window.c:1834
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "คัดลอกตำแหน่งภาพ “%s”"
 
-#: src/ephy-window.c:1837
+#: src/ephy-window.c:1847
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "ส่งอีเมลไปยังที่อยู่ “%s”"
 
-#: src/ephy-window.c:1843
+#: src/ephy-window.c:1853
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "คัดลอกที่อยู่อีเมล “%s”"
 
-#: src/ephy-window.c:1855
+#: src/ephy-window.c:1865
 #, c-format
 msgid "Save link “%s”"
 msgstr "บันทึกลิงก์ “%s”"
 
-#: src/ephy-window.c:1861
+#: src/ephy-window.c:1871
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "เพิ่มลิงก์ “%s” ในที่คั่นหน้า"
 
-#: src/ephy-window.c:1867
+#: src/ephy-window.c:1877
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "คัดลอกตำแหน่งลิงก์ “%s”"
 
-#: src/pdm-dialog.c:367
+#: src/pdm-dialog.c:378
 msgid "Cookie Properties"
 msgstr "คุณสมบัติของคุกกี้"
 
-#: src/pdm-dialog.c:384
+#: src/pdm-dialog.c:395
 msgid "Content:"
 msgstr "เนื้อหา:"
 
-#: src/pdm-dialog.c:400
+#: src/pdm-dialog.c:411
 msgid "Path:"
 msgstr "พาธ:"
 
-#: src/pdm-dialog.c:416
+#: src/pdm-dialog.c:427
 msgid "Send for:"
 msgstr "ส่งเพื่อ:"
 
-#: src/pdm-dialog.c:425
+#: src/pdm-dialog.c:436
 msgid "Encrypted connections only"
 msgstr "การเชื่อมต่อที่เข้ารหัสเท่านั้น"
 
-#: src/pdm-dialog.c:425
+#: src/pdm-dialog.c:436
 msgid "Any type of connection"
 msgstr "การเชื่อมต่อทุกชนิด"
 
-#: src/pdm-dialog.c:431
+#: src/pdm-dialog.c:442
 msgid "Expires:"
 msgstr "หมดอายุ:"
 
-#: src/pdm-dialog.c:442
+#: src/pdm-dialog.c:453
 msgid "End of current session"
 msgstr "เมื่อจบวาระปัจจุบัน"
 
-#: src/pdm-dialog.c:559
+#: src/pdm-dialog.c:589
 msgid "Domain"
 msgstr "โดเมน"
 
-#: src/pdm-dialog.c:571
+#: src/pdm-dialog.c:600
 msgid "Name"
 msgstr "ชื่อ"
 
-#: src/pdm-dialog.c:830
+#: src/pdm-dialog.c:998
 msgid "Host"
 msgstr "โฮสต์"
 
-#: src/pdm-dialog.c:842
+#: src/pdm-dialog.c:1010
 msgid "User Name"
 msgstr "ชื่อผู้ใช้"
 
-#: src/pdm-dialog.c:854
+#: src/pdm-dialog.c:1022
 msgid "User Password"
 msgstr "รหัสผ่าน"
 
@@ -3760,23 +3761,23 @@ msgstr[1] "ภาษาของระบบ (%s)"
 msgid "Select a Directory"
 msgstr "เลือกไดเรกทอรี"
 
-#: src/window-commands.c:694 src/window-commands.c:711
+#: src/window-commands.c:726 src/window-commands.c:743
 msgid "Contact us at:"
 msgstr "ติดต่อเราได้ที่:"
 
-#: src/window-commands.c:697
+#: src/window-commands.c:729
 msgid "Contributors:"
 msgstr "ผู้ร่วมสมทบงาน:"
 
-#: src/window-commands.c:702
+#: src/window-commands.c:734
 msgid "Past developers:"
 msgstr "ผู้พัฒนาในอดีต"
 
-#: src/window-commands.c:712
+#: src/window-commands.c:744
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> หรือ <gnome-doc-list@gnome.org>"
 
-#: src/window-commands.c:717
+#: src/window-commands.c:749
 msgid "GNOME Web Browser"
 msgstr "เว็บเบราว์เซอร์ของ GNOME"
 
@@ -3788,7 +3789,7 @@ msgstr "เว็บเบราว์เซอร์ของ GNOME"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:731
+#: src/window-commands.c:763
 msgid "translator-credits"
 msgstr ""
 "อิสริยะ ไพรีพ่ายฤทธิ์\n"
@@ -3797,9 +3798,15 @@ msgstr ""
 "ถ้ามีเวลาโปรดมาช่วยกันแปล :-)\n"
 "http://gnome-th.sf.net"
 
-#: src/window-commands.c:734
+#: src/window-commands.c:766
 msgid "GNOME Web Browser Website"
 msgstr "เว็บไซต์ของเว็บเบราว์เซอร์ของ GNOME"
+
+#~ msgid "Appearance"
+#~ msgstr "รูปแบบ"
+
+#~ msgid "Paper"
+#~ msgstr "กระดาษ"
 
 #~ msgid "C_ase sensitive"
 #~ msgstr "ตัวอักษรเ_ล็กใหญ่ตรงกัน"
