@@ -39,7 +39,7 @@ applications_DATA = epiphany.applications
 schemadir = $(GCONF_SCHEMA_FILE_DIR)
 font_schema_files = epiphany-fonts.schemas
 schema_in_files = epiphany.schemas.in epiphany-lockdown.schemas.in
-schema_DATA = $(schema_in_files:.schemas.in=.schemas)
+schema_DATA = $(schema_in_files:.schemas.in=.schemas) $(font_schema_files)
 
 aboutdir = $(pkgdatadir)
 about_DATA = epiphany.xhtml
@@ -47,8 +47,8 @@ about_DATA = epiphany.xhtml
 mimepermissiondir = $(pkgdatadir)
 mimepermission_DATA = mime-types-permissions.xml
 
-m4datadir=$(datadir)/aclocal
-m4data_DATA=epiphany.m4
+m4datadir = $(datadir)/aclocal
+m4data_DATA = epiphany.m4
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = epiphany-1.10.pc
@@ -58,7 +58,7 @@ xsl_DATA = \
 	epiphany-bookmarks-html.xsl	\
 	ephy-xml2ini.xsl
 
-install-data-local: $(schema_DATA) $(font_schema_files)
+install-data-local: $(schema_DATA)
 if GCONF_SCHEMAS_INSTALL
 	if test -z "$(DESTDIR)" ; then \
 	for p in $^ ; do \
