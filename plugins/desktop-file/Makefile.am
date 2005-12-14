@@ -17,4 +17,8 @@ libdesktopfileplugin_la_CXXFLAGS = \
 libdesktopfileplugin_la_LIBADD = \
 	$(DESKTOP_FILE_PLUGIN_DEP_LIBS)
 
-libdesktopfileplugin_la_LDFLAGS = -module -avoid-version -R$(MOZILLA_HOME)
+libdesktopfileplugin_la_LDFLAGS = \
+	-module -avoid-version \
+	-export-symbols $(srcdir)/plugin.symbols \
+	-R$(MOZILLA_HOME) \
+	$(AM_LDFLAGS)
