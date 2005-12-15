@@ -1134,7 +1134,7 @@ impl_import (EphyCertificateManager *manager,
 	nsresult rv;
 	nsCOMPtr<nsIX509CertDB> certDB;
 	certDB = do_GetService (NS_X509CERTDB_CONTRACTID);
-	if (!certDB) return NULL;
+	if (!certDB) return FALSE;
 
 	nsCOMPtr<nsILocalFile> localFile;
 	localFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
