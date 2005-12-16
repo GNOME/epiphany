@@ -611,14 +611,10 @@ configure_item_cursor (GtkToolItem *item, EggEditableToolbar *etoolbar)
   if (etoolbar->priv->edit_mode > 0)
     {
       GdkCursor *cursor;
-      GdkPixbuf *pixbuf;
           
-      pixbuf = gdk_pixbuf_new_from_file (CURSOR_DIR "/hand-open.png", NULL);
-      cursor = gdk_cursor_new_from_pixbuf (gdk_display_get_default (),
-                                           pixbuf, 12, 12);
+      cursor = gdk_cursor_new (GDK_HAND2);
       gdk_window_set_cursor (GTK_WIDGET(item)->window, cursor);
       gdk_cursor_unref (cursor);
-      g_object_unref (pixbuf);
 
       gtk_drag_source_set (GTK_WIDGET (item), GDK_BUTTON1_MASK, dest_drag_types,
                            G_N_ELEMENTS (dest_drag_types), GDK_ACTION_MOVE);
