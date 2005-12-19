@@ -71,6 +71,8 @@ GObject		  *ephy_embed_shell_get_encodings	(EphyEmbedShell *shell);
 
 GObject		  *ephy_embed_shell_get_embed_single	(EphyEmbedShell *shell);
 
+GObject        	  *ephy_embed_shell_get_adblock_manager	(EphyEmbedShell *shell);
+
 void		   ephy_embed_shell_prepare_close	(EphyEmbedShell *shell);
 
 G_END_DECLS

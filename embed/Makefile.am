@@ -17,6 +17,7 @@ NOINST_H_FILES = \
 	print-dialog.h
 
 INST_H_FILES = \
+	ephy-adblock-manager.h		\
 	ephy-command-manager.h		\
 	ephy-cookie-manager.h		\
 	ephy-embed.h			\
@@ -31,6 +32,7 @@ INST_H_FILES = \
 	ephy-permission-manager.h
 
 libephyembed_la_SOURCES = \
+	ephy-adblock-manager.c		\
 	downloader-view.c		\
 	ephy-command-manager.c		\
 	ephy-cookie-manager.c		\

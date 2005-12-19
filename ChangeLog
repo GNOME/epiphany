@@ -1,3 +1,22 @@
+2005-12-19  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* embed/Makefile.am:
+	* embed/ephy-adblock-manager.c:
+	* embed/ephy-adblock-manager.h:
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_finalize):
+	* embed/ephy-embed-shell.h:
+	* embed/mozilla/EphyContentPolicy.cpp: (EphyContentPolicy::ShouldLoad):
+	* lib/Makefile.am:
+	* lib/ephy-adblock.h:
+	* lib/ephy-adblock.c:
+	* src/ephy-shell.c: (ephy_shell_get_extensions_manager):
+
+	Add some code so ad blocking should be more easy. Based on the fact
+	that Epiphany already has its own content policy component (EphyContentPolicy).
+	The new design adds:
+	- an interface, EphyAdBlock
+	- a manager, EphyAdBlockManager, pointing to a blocker (possibly no one).
+
 2005-12-16  Claudio Saavedra  <csaavedra@alumnos.utalca.cl>
 
 	* lib/egg/egg-editable-toolbar.c: (configure_item_cursor):

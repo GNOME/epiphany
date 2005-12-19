@@ -31,6 +31,7 @@
 #include "downloader-view.h"
 #include "ephy-encodings.h"
 #include "ephy-debug.h"
+#include "ephy-adblock-manager.h"
 
 #define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
 
@@ -41,6 +42,7 @@ struct _EphyEmbedShellPrivate
 	EphyFaviconCache *favicon_cache;
 	EphyEmbedSingle *embed_single;
 	EphyEncodings *encodings;
+	EphyAdBlockManager *adblock_manager;
 };
 
 enum
@@ -134,6 +136,13 @@ ephy_embed_shell_finalize (GObject *object)
 	{
 		LOG ("Unref embed single");
 		g_object_unref (G_OBJECT (shell->priv->embed_single));
+	}
+
+	if (shell->priv->adblock_manager != NULL)
+	{
+		LOG ("Unref adblock manager");
+		g_object_unref (shell->priv->adblock_manager);
+		shell->priv->adblock_manager = NULL;
 	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -284,3 +293,25 @@ ephy_embed_shell_get_default (void)
 {
 	return embed_shell;
 }
+
+/**
+ * ephy_embed_shell_get_adblock_manager:
+ * @shell: the #EphyEmbedShell
+ *
+ * Returns the adblock manager.
+ *
+ * Return value: the adblock manager
+ **/
+GObject *
+ephy_embed_shell_get_adblock_manager (EphyEmbedShell *shell)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+
+	if (shell->priv->adblock_manager == NULL)
+	{
+		shell->priv->adblock_manager = g_object_new (EPHY_TYPE_ADBLOCK_MANAGER, NULL);
+	}
+
+	return G_OBJECT (shell->priv->adblock_manager);
+}
+

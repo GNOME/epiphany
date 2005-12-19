@@ -81,7 +81,6 @@ struct _EphyShellPrivate
 	GObject *prefs_dialog;
 	GObject *print_setup_dialog;
 	GList *del_on_exit;
-
 	gboolean embed_single_connected;
 };
 
@@ -966,6 +965,7 @@ ephy_shell_get_extensions_manager (EphyShell *es)
 
 		/* FIXME */
 		ephy_shell_get_lockdown (es);
+		ephy_embed_shell_get_adblock_manager (embed_shell);
 	}
 
 	return G_OBJECT (es->priv->extensions_manager);

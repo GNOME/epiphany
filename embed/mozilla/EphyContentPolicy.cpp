@@ -28,6 +28,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "eel-gconf-extensions.h"
+#include "ephy-adblock-manager.h"
 #include "ephy-debug.h"
 
 #include <nsCOMPtr.h>
@@ -76,16 +77,32 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 
 	*aDecision = nsIContentPolicy::ACCEPT;
 
-	PRBool isHttp = PR_FALSE, isHttps = PR_FALSE;
-	aContentLocation->SchemeIs ("http", &isHttp);
-	aContentLocation->SchemeIs ("https", &isHttps);
-	if (isHttp || isHttps) return NS_OK;
-
 	/* We have to always allow these, else forms and scrollbars break */
 	PRBool isChrome = PR_FALSE, isResource = PR_FALSE;
 	aContentLocation->SchemeIs ("chrome", &isChrome);
 	aContentLocation->SchemeIs ("resource", &isResource);
 	if (isChrome || isResource) return NS_OK;
+
+	PRBool isHttps = PR_FALSE;
+	aContentLocation->SchemeIs ("https", &isHttps);
+	if (isHttps) return NS_OK;
+
+	/* is this url allowed ? */
+	nsEmbedCString spec;
+	aContentLocation->GetSpec(spec);
+
+	EphyAdBlockManager *adblock_manager = 
+		EPHY_ADBLOCK_MANAGER (ephy_embed_shell_get_adblock_manager (embed_shell));
+
+	if (!ephy_adblock_manager_should_load (adblock_manager, spec.get (), AdUriCheckType(aContentType)))
+	{
+		*aDecision = nsIContentPolicy::REJECT_REQUEST;
+		return NS_OK;
+	}
+
+	PRBool isHttp = PR_FALSE;
+	aContentLocation->SchemeIs ("http", &isHttp);
+	if (isHttp) return NS_OK;
 
 	nsEmbedCString contentSpec;
 	aContentLocation->GetSpec (contentSpec);
@@ -155,7 +172,6 @@ NS_IMETHODIMP EphyContentPolicy::ShouldLoad(PRInt32 aContentType,
 	{
 		*_retval = PR_FALSE;
 	}
-
 	return NS_OK;
 }
 
