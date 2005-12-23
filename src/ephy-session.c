@@ -389,6 +389,7 @@ offer_to_resume (EphySession *session,
 
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Crash Recovery"));
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
 	session->priv->resume_dialog = dialog;
