@@ -4,10 +4,14 @@ plugin_LTLIBRARIES = libdesktopfileplugin.la
 libdesktopfileplugin_la_SOURCES = \
 	plugin.cpp
 
+gecko_include_subdirs = \
+	.	\
+	dom
+
 libdesktopfileplugin_la_CPPFLAGS = \
 	-DG_LOG_DOMAIN=\"ephy-desktop-file-plugin\" \
 	-I$(top_srcdir)/lib \
-	-I$(MOZILLA_INCLUDE_ROOT) \
+	$(addprefix -I$(MOZILLA_INCLUDE_ROOT)/,$(gecko_include_subdirs)) \
 	$(AM_CPPFLAGS)
 
 libdesktopfileplugin_la_CXXFLAGS = \
@@ -22,3 +26,6 @@ libdesktopfileplugin_la_LDFLAGS = \
 	-export-symbols $(srcdir)/plugin.symbols \
 	-R$(MOZILLA_HOME) \
 	$(AM_LDFLAGS)
+
+EXTRA_DIST = \
+	plugin.symbols
