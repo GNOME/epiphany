@@ -37,7 +37,6 @@
 #include <libgnome/gnome-init.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <libgnomevfs/gnome-vfs-file-info.h>
-#include <libgnomevfs/gnome-vfs-ops.h>
 #include <libxml/xmlreader.h>
 
 /* bug http://bugzilla.gnome.org/show_bug.cgi?id=156687 */
@@ -50,6 +49,10 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #endif
+
+#define EPHY_UUID		"0d82d98f-7079-401c-abff-203fcde1ece3"
+#define EPHY_UUID_ENVVAR	"EPHY_UNIQUE"
+#define EPHY_UUID_ENVSTRING	EPHY_UUID_ENVVAR "=" EPHY_UUID
 
 static GHashTable *files = NULL;
 static GHashTable *mime_table = NULL;
@@ -216,6 +219,19 @@ ephy_dot_dir (void)
 void
 ephy_file_helpers_init (void)
 {
+	const char *uuid;
+
+	/* See if we've been calling ourself, and abort if we have */
+	uuid = g_getenv (EPHY_UUID_ENVVAR);
+	if (uuid && strcmp (uuid, EPHY_UUID) == 0)
+	{
+		g_warning ("Self call detected, exiting!\n");
+		exit (1);
+	}
+
+	/* Put marker in env */
+	g_setenv (EPHY_UUID_ENVVAR, EPHY_UUID, TRUE);
+
 	files = g_hash_table_new_full (g_str_hash,
 				       g_str_equal,
 				       (GDestroyNotify) g_free,
@@ -476,30 +492,26 @@ my_gdk_spawn_make_environment_for_screen (GdkScreen  *screen,
 {
   gchar **retval = NULL;
   gchar  *display_name;
-  gint    display_index = -1;
-  gint    i, env_len;
+  gint    i, j = 0, env_len;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
   if (envp == NULL)
     envp = environ;
 
-  for (env_len = 0; envp[env_len]; env_len++)
-    if (strncmp (envp[env_len], "DISPLAY", strlen ("DISPLAY")) == 0)
-      display_index = env_len;
-
-  retval = g_new (char *, env_len + 1);
-  retval[env_len] = NULL;
+  env_len = g_strv_length (envp);
+  retval = g_new (char *, env_len + 3);
 
   display_name = gdk_screen_make_display_name (screen);
 
-  for (i = 0; i < env_len; i++)
-    if (i == display_index)
-      retval[i] = g_strconcat ("DISPLAY=", display_name, NULL);
-    else
-      retval[i] = g_strdup (envp[i]);
+  for (i = 0; envp[i] != NULL; i++)
+    if (!g_str_has_prefix (envp[i], "DISPLAY=") &&
+        !g_str_has_prefix (envp[i], EPHY_UUID_ENVVAR "="))
+      retval[j++] = g_strdup (envp[i]);
 
-  g_assert (i == env_len);
+  retval[j++] = g_strconcat ("DISPLAY=", display_name, NULL);
+  retval[j++] = g_strdup (EPHY_UUID_ENVSTRING);
+  retval[j] = NULL;
 
   g_free (display_name);
 
@@ -526,7 +538,7 @@ make_spawn_environment_for_sn_context (SnLauncherContext *sn_context,
 				       char             **envp)
 {
 	char **retval;
-	int    i, j;
+	int    i, j, len;
 
 	retval = NULL;
 	
@@ -534,22 +546,19 @@ make_spawn_environment_for_sn_context (SnLauncherContext *sn_context,
 		envp = environ;
 	}
 	
-	for (i = 0; envp[i]; i++) {
-		/* Count length */
-	}
+	len = g_strv_length (envp);
+	retval = g_new (char *, len + 3);
 
-	retval = g_new (char *, i + 2);
-
-	for (i = 0, j = 0; envp[i]; i++) {
-		if (!g_str_has_prefix (envp[i], "DESKTOP_STARTUP_ID=")) {
-			retval[j] = g_strdup (envp[i]);
-			++j;
+	for (i = 0, j = 0; envp[i] != NULL; i++) {
+		if (!g_str_has_prefix (envp[i], "DESKTOP_STARTUP_ID=") &&
+		    !g_str_has_prefix (envp[i], EPHY_UUID_ENVVAR "=")) {
+			retval[j++] = g_strdup (envp[i]);
 	        }
 	}
 
-	retval[j] = g_strdup_printf ("DESKTOP_STARTUP_ID=%s",
-				     sn_launcher_context_get_startup_id (sn_context));
-	++j;
+	retval[j++] = g_strdup_printf ("DESKTOP_STARTUP_ID=%s",
+				       sn_launcher_context_get_startup_id (sn_context));
+	retval[j++] = g_strdup (EPHY_UUID_ENVSTRING);
 	retval[j] = NULL;
 
 	return retval;
@@ -701,7 +710,7 @@ ephy_file_launch_application (GnomeVFSMimeApplication *application,
 	if (uri == NULL) return FALSE;
 
 	uris = g_list_prepend (NULL, uri);
-	
+
 	screen = gdk_screen_get_default ();
 	envp = my_gdk_spawn_make_environment_for_screen (screen, NULL);
 	
@@ -800,6 +809,7 @@ launch_desktop_item (const char *desktop_file,
 	GList *uris = NULL;
 	char *canonical;
 	int ret = -1;
+	char *envp[2] = { EPHY_UUID_ENVSTRING, NULL };
 
 	item = gnome_desktop_item_new_from_file (desktop_file, 0, NULL);
 	if (item == NULL) return FALSE;
@@ -811,7 +821,7 @@ launch_desktop_item (const char *desktop_file,
 	}
 
 	gnome_desktop_item_set_launch_time (item, user_time);
-	ret = gnome_desktop_item_launch (item, uris, 0, error);
+	ret = gnome_desktop_item_launch_with_env (item, uris, 0, envp, error);
 
 	g_list_foreach (uris, (GFunc) g_free, NULL);
 	g_list_free (uris);
