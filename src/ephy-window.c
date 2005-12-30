@@ -361,6 +361,9 @@ static const struct
 	{ GDK_R,		GDK_CONTROL_MASK |
 				GDK_SHIFT_MASK,		"ViewReload",		FALSE },
 	{ GDK_F5,		0,			"ViewReload",		FALSE },
+	{ GDK_KP_Add,		GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
+	{ GDK_KP_Subtract,	GDK_CONTROL_MASK,	"ViewZoomOut",		FALSE },
+	{ GDK_equal,		GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
 #ifdef HAVE_X11_XF86KEYSYM_H
 	{ XF86XK_HomePage,	0,			"GoHome",		TRUE  },
 	{ XF86XK_Back,		0,			"NavigationBack",	TRUE  },
