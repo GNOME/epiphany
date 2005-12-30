@@ -64,7 +64,7 @@ if test -z "$_GECKO"; then
 fi
 
 if test "x$_GECKO" = "x"; then
-	AC_MSG_ERROR([No gecko found])
+	AC_MSG_ERROR([No gecko found; you may need to adjust PKG_CONFIG_PATH or install a mozilla/firefox/xulrunner -devel package])
 elif ! ( echo "$_geckos" | egrep "(^| )$_GECKO(\$| )" > /dev/null); then
 	AC_MSG_ERROR([Unknown gecko "$_GECKO" specified])
 fi
