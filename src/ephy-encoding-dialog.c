@@ -107,7 +107,7 @@ ephy_encoding_dialog_get_type (void)
 }
 
 static void
-sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
+sync_encoding_against_embed (EphyEncodingDialog *dialog)
 {
 	EphyEmbed *embed;
 	EphyNode *node;
@@ -158,6 +158,33 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 	g_free (encoding);
 
 	dialog->priv->update_tag = FALSE;
+}
+
+
+static void
+embed_net_stop_cb (EphyEmbed *embed, EphyEncodingDialog *dialog)
+{
+	sync_encoding_against_embed (dialog);
+}
+
+static void
+sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
+{
+	EphyEmbed *embed;
+	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
+
+	if (dialog->priv->embed != NULL)
+	{
+		g_signal_handlers_disconnect_by_func (dialog->priv->embed,
+						      G_CALLBACK (embed_net_stop_cb),
+						      dialog);
+	}
+
+	g_signal_connect (G_OBJECT (embed), "net_stop",
+			  G_CALLBACK (embed_net_stop_cb), dialog);
+	dialog->priv->embed = embed;
+
+	sync_encoding_against_embed (dialog);
 }
 
 static void
@@ -364,6 +391,13 @@ ephy_encoding_dialog_finalize (GObject *object)
 	{
 		g_signal_handlers_disconnect_by_func (dialog->priv->window,
 						      G_CALLBACK (sync_active_tab),
+						      dialog);
+	}
+
+	if (dialog->priv->embed)
+	{
+		g_signal_handlers_disconnect_by_func (dialog->priv->embed,
+						      G_CALLBACK (embed_net_stop_cb),
 						      dialog);
 	}
 

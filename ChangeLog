@@ -1,3 +1,12 @@
+2005-12-31  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* src/ephy-encoding-dialog.c: (sync_encoding_against_embed),
+	(embed_net_stop_cb), (sync_embed_cb),
+	(ephy_encoding_dialog_finalize):
+
+	When in automatic mode, update the treeview to reflect
+	the currently selected encoding. Fixes bug #127757
+
 2005-12-30  Christian Persch  <chpe@cvs.gnome.org>
 
 	* plugins/desktop-file/Makefile.am:
