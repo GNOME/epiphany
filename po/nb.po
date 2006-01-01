@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 1.8.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-08 05:32+0100\n"
-"PO-Revision-Date: 2005-12-08 05:33+0100\n"
+"POT-Creation-Date: 2006-01-02 00:39+0100\n"
+"PO-Revision-Date: 2006-01-02 00:40+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -555,7 +555,7 @@ msgid "Cookies"
 msgstr "Informasjonskapsler"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:96
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:99
 msgid "Downloads"
 msgstr "Nedlastinger"
 
@@ -803,7 +803,7 @@ msgstr ""
 "%s av %s"
 
 #: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#: ../src/ephy-window.c:1446
+#: ../src/ephy-window.c:1454
 msgid "Unknown"
 msgstr "Ukjent"
 
@@ -1551,7 +1551,7 @@ msgstr "i the Internet Archive"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks-ui.c:481 ../src/ephy-session.c:774
+#: ../src/bookmarks/ephy-bookmarks-ui.c:481 ../src/ephy-session.c:775
 msgid "Untitled"
 msgstr "Uten tittel"
 
@@ -1928,11 +1928,11 @@ msgstr "Filer"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:236
+#: ../embed/mozilla/mozilla-embed-single.cpp:263
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:568
+#: ../embed/mozilla/mozilla-embed-single.cpp:595
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphany kan ikke brukes nå. Initiering av Mozilla feilet."
 
@@ -1969,7 +1969,7 @@ msgstr "_Til:"
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Slutten på sideområdet som skal skrives ut"
 
-#: ../embed/print-dialog.c:408 ../src/ephy-window.c:1272
+#: ../embed/print-dialog.c:408 ../src/ephy-window.c:1280
 msgid "Print"
 msgstr "Skriv ut"
 
@@ -2006,15 +2006,15 @@ msgstr "Skillelinje"
 msgid "All supported types"
 msgstr "Alle støttede typer"
 
-#: ../lib/ephy-file-helpers.c:312
+#: ../lib/ephy-file-helpers.c:328
 #, c-format
-msgid "%s exists, please move it out of the way."
-msgstr "%s eksisterer. Vennligst flytt den bort."
+msgid "\"%s\" exists, please move it out of the way."
+msgstr "«%s» eksisterer. Vennligst flytt den."
 
-#: ../lib/ephy-file-helpers.c:318
+#: ../lib/ephy-file-helpers.c:334
 #, c-format
-msgid "Failed to create directory %s."
-msgstr "Kunne ikke opprette katalog %s."
+msgid "Failed to create directory \"%s\"."
+msgstr "Kunne ikke opprette katalog «%s»."
 
 #: ../lib/ephy-gui.c:328
 #, c-format
@@ -2036,11 +2036,9 @@ msgstr "Kan ikke overskrive eksisterende fil «%s»"
 
 #: ../lib/ephy-gui.c:369
 msgid ""
-"A file with this name alreay exists and you don't have permission to "
+"A file with this name already exists and you don't have permission to "
 "overwrite it."
-msgstr ""
-"En fil med dette navnet eksisterer allerede og du har ikke rettigheter til å "
-"skrive over den."
+msgstr "En fil med dette navnet eksisterer allerede og du har ikke rettigheter til å overskrive den."
 
 #: ../lib/ephy-gui.c:372
 msgid "Cannot Overwrite File"
@@ -2221,7 +2219,7 @@ msgstr "Historie"
 
 #: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1535
-#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1278
+#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1286
 msgid "Bookmarks"
 msgstr "Bokmerker"
 
@@ -2483,7 +2481,7 @@ msgstr "Velg alle bokmerker eller all tekst"
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:259
+#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:264
 msgid "_Contents"
 msgstr "_Innhold"
 
@@ -2492,12 +2490,12 @@ msgid "Display bookmarks help"
 msgstr "Vis hjelp for bokmerker"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:215
-#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:262
+#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:267
 msgid "_About"
 msgstr "_Om"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:216
-#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:263
+#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:268
 msgid "Display credits for the web browser creators"
 msgstr "Vis kreditering for skaperene av nettleseren"
 
@@ -2783,7 +2781,7 @@ msgstr "Relatert"
 msgid "Quick Topic"
 msgstr "Hurtigemne"
 
-#: ../src/ephy-encoding-dialog.c:313
+#: ../src/ephy-encoding-dialog.c:340
 msgid "Encodings"
 msgstr "Kodinger"
 
@@ -2979,19 +2977,19 @@ msgstr "_Gjenopprett"
 msgid "Crash Recovery"
 msgstr "Krasjsikring"
 
-#: ../src/ephy-shell.c:218
+#: ../src/ephy-shell.c:217
 msgid "Sidebar extension required"
 msgstr "Sidelinjetillegg krevves"
 
-#: ../src/ephy-shell.c:220
+#: ../src/ephy-shell.c:219
 msgid "Sidebar Extension Required"
 msgstr "Sidelinjetillegg kreves"
 
-#: ../src/ephy-shell.c:224
+#: ../src/ephy-shell.c:223
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Lenken du klikket på krever at sidelinjetillegget er installert."
 
-#: ../src/ephy-shell.c:454
+#: ../src/ephy-shell.c:453
 msgid ""
 "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
 "use bonobo-activation-sysconf to configure the search path for bonobo server "
@@ -3000,7 +2998,7 @@ msgstr ""
 "Bonobo kunne ikke finne filen GNOME_Epiphany_Automation.server. Du kan bruke "
 "bonobo-activation-sysconf for å konfigurere søkestien for bonobo-serverfiler."
 
-#: ../src/ephy-shell.c:461
+#: ../src/ephy-shell.c:460
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
@@ -3008,7 +3006,7 @@ msgstr ""
 "Epiphany kan ikke brukes nå pga en uvetet feil fra Bonobo ved forsøk på å "
 "registrere automasjonstjeneren"
 
-#: ../src/ephy-shell.c:478
+#: ../src/ephy-shell.c:477
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
@@ -3280,441 +3278,449 @@ msgstr "P_ersonlige data"
 msgid "View and remove cookies and passwords"
 msgstr "Vis og fjern informasjonskapsler og passord"
 
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:189
+msgid "Cert_ificates"
+msgstr "Sert_ifikater"
+
+#: ../src/ephy-window.c:190
+msgid "Manage Certificates"
+msgstr "Håndter sertifikater"
+
+#: ../src/ephy-window.c:193
 msgid "T_oolbars"
 msgstr "_Verktøylinjer"
 
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:194
 msgid "Customize toolbars"
 msgstr "Tilpass verktøylinjer"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:196
 msgid "P_references"
 msgstr "B_rukervalg"
 
-#: ../src/ephy-window.c:192
+#: ../src/ephy-window.c:197
 msgid "Configure the web browser"
 msgstr "Konfigurer nettleseren"
 
 #. View menu
-#: ../src/ephy-window.c:197 ../src/ephy-window.c:200
+#: ../src/ephy-window.c:202 ../src/ephy-window.c:205
 msgid "_Stop"
 msgstr "_Stopp"
 
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:203
 msgid "Stop current data transfer"
 msgstr "Stopp aktiv dataoverføring"
 
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:207
 msgid "_Reload"
 msgstr "_Last om"
 
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:208
 msgid "Display the latest content of the current page"
 msgstr "Vis nyeste innhold i aktiv side"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:210
 msgid "Zoom _In"
 msgstr "Zoom _inn"
 
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:211
 msgid "Increase the text size"
 msgstr "Øk tekststørrelsen"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:213
 msgid "Zoom _Out"
 msgstr "Zoom _ut"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:214
 msgid "Decrease the text size"
 msgstr "Minsk tekststørrelsen"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:216
 msgid "_Normal Size"
 msgstr "_Normal størrelse"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:217
 msgid "Use the normal text size"
 msgstr "Bruk normal tekststørrelse"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:219
 msgid "Text _Encoding"
 msgstr "T_ekstkoding"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:220
 msgid "Change the text encoding"
 msgstr "Endre tekstkoding"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:222
 msgid "_Page Source"
 msgstr "_Sidens kildekode"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:223
 msgid "View the source code of the page"
 msgstr "Vis kildekoden for siden"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:223
+#: ../src/ephy-window.c:228
 msgid "_Add Bookmark..."
 msgstr "_Legg til bokmerke..."
 
-#: ../src/ephy-window.c:224 ../src/ephy-window.c:298
+#: ../src/ephy-window.c:229 ../src/ephy-window.c:303
 msgid "Add a bookmark for the current page"
 msgstr "Legg til et bokmerke for denne siden"
 
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:231
 msgid "_Edit Bookmarks"
 msgstr "R_ediger bokmerker"
 
-#: ../src/ephy-window.c:227
+#: ../src/ephy-window.c:232
 msgid "Open the bookmarks window"
 msgstr "Åpne bokmerkevinduet"
 
 #. Go menu
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:237
 msgid "_Location..."
 msgstr "_Lokasjon..."
 
-#: ../src/ephy-window.c:233
+#: ../src/ephy-window.c:238
 msgid "Go to a specified location"
 msgstr "Gå til en spesifisert lokasjon"
 
-#: ../src/ephy-window.c:235
+#: ../src/ephy-window.c:240
 msgid "H_istory"
 msgstr "H_istorikk"
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:241
 msgid "Open the history window"
 msgstr "Åpne historikkvinduet"
 
 #. Tabs menu
-#: ../src/ephy-window.c:241
+#: ../src/ephy-window.c:246
 msgid "_Previous Tab"
 msgstr "_Forrige fane"
 
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:247
 msgid "Activate previous tab"
 msgstr "Aktiver forrige fane"
 
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:249
 msgid "_Next Tab"
 msgstr "_Neste fane"
 
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:250
 msgid "Activate next tab"
 msgstr "Aktiver neste fane"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:252
 msgid "Move Tab _Left"
 msgstr "F_lytt fane til venstre"
 
-#: ../src/ephy-window.c:248
+#: ../src/ephy-window.c:253
 msgid "Move current tab to left"
 msgstr "Flytt denne fanen til venstre"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:255
 msgid "Move Tab _Right"
 msgstr "Flytt fane til høy_re"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:256
 msgid "Move current tab to right"
 msgstr "Flytt denne fanen til høyre"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:258
 msgid "_Detach Tab"
 msgstr "_Løsne fane"
 
-#: ../src/ephy-window.c:254
+#: ../src/ephy-window.c:259
 msgid "Detach current tab"
 msgstr "Løsne denne fanen"
 
-#: ../src/ephy-window.c:260
+#: ../src/ephy-window.c:265
 msgid "Display web browser help"
 msgstr "Vis hjelp for nettleser"
 
 #. File Menu
-#: ../src/ephy-window.c:271
+#: ../src/ephy-window.c:276
 msgid "_Work Offline"
 msgstr "Ar_beid frakoblet"
 
-#: ../src/ephy-window.c:272
+#: ../src/ephy-window.c:277
 msgid "Switch to offline mode"
 msgstr "Bytt til frakoblet modus"
 
 #. View Menu
-#: ../src/ephy-window.c:277
+#: ../src/ephy-window.c:282
 msgid "_Toolbar"
 msgstr "Verk_tøylinje"
 
-#: ../src/ephy-window.c:278
+#: ../src/ephy-window.c:283
 msgid "Show or hide toolbar"
 msgstr "Vis/skjul verktøylinje"
 
-#: ../src/ephy-window.c:280
+#: ../src/ephy-window.c:285
 msgid "St_atusbar"
 msgstr "St_atuslinje"
 
-#: ../src/ephy-window.c:281
+#: ../src/ephy-window.c:286
 msgid "Show or hide statusbar"
 msgstr "Vis/skjul statuslinje"
 
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:288
 msgid "_Fullscreen"
 msgstr "_Fullskjerm"
 
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:289
 msgid "Browse at full screen"
 msgstr "Bruk fullskjermmodus"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:291
 msgid "Popup _Windows"
 msgstr "Sprettopp_vinduer"
 
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:292
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Vis eller skjul sprettoppvinduer fra dette nettstedet"
 
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:294
 msgid "Selection Caret"
 msgstr "Utvalgsmarkør"
 
 #. Document
-#: ../src/ephy-window.c:297
+#: ../src/ephy-window.c:302
 msgid "Add Boo_kmark..."
 msgstr "Legg til bo_kmerke..."
 
 #. Framed document
-#: ../src/ephy-window.c:303
+#: ../src/ephy-window.c:308
 msgid "Show Only _This Frame"
 msgstr "Vis kun denne _rammen"
 
-#: ../src/ephy-window.c:304
+#: ../src/ephy-window.c:309
 msgid "Show only this frame in this window"
 msgstr "Vis kun denne rammen i dette vinduet"
 
 #. Links
-#: ../src/ephy-window.c:309
+#: ../src/ephy-window.c:314
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
-#: ../src/ephy-window.c:310
+#: ../src/ephy-window.c:315
 msgid "Open link in this window"
 msgstr "Åpne lenke i dette vinduet"
 
-#: ../src/ephy-window.c:312
+#: ../src/ephy-window.c:317
 msgid "Open Link in New _Window"
 msgstr "Åpne lenke i nytt _vindu"
 
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:318
 msgid "Open link in a new window"
 msgstr "Åpne lenke i et nytt vindu"
 
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:320
 msgid "Open Link in New _Tab"
 msgstr "Åpne lenke i ny _fane"
 
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:321
 msgid "Open link in a new tab"
 msgstr "Åpne lenke i en ny fane"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:323
 msgid "_Download Link"
 msgstr "Last ne_d lenke"
 
-#: ../src/ephy-window.c:320
+#: ../src/ephy-window.c:325
 msgid "_Save Link As..."
 msgstr "Lagre lenke _som..."
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:326
 msgid "Save link with a different name"
 msgstr "Lagre lenken med nytt navn"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:328
 msgid "_Bookmark Link..."
 msgstr "_Lag bokmerke av lenke..."
 
-#: ../src/ephy-window.c:325
+#: ../src/ephy-window.c:330
 msgid "_Copy Link Address"
 msgstr "_Kopier lenkens adresse"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:331
+#: ../src/ephy-window.c:336
 msgid "_Send Email..."
 msgstr "_Send e-post..."
 
-#: ../src/ephy-window.c:333
+#: ../src/ephy-window.c:338
 msgid "_Copy Email Address"
 msgstr "_Kopier e-postadresse"
 
 #. Images
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:343
 msgid "Open _Image"
 msgstr "Åpne b_ilde"
 
-#: ../src/ephy-window.c:340
+#: ../src/ephy-window.c:345
 msgid "_Save Image As..."
 msgstr "_Lagre bilde som..."
 
-#: ../src/ephy-window.c:342
+#: ../src/ephy-window.c:347
 msgid "_Use Image As Background"
 msgstr "Br_uk bilde som bakgrunn"
 
-#: ../src/ephy-window.c:344
+#: ../src/ephy-window.c:349
 msgid "Copy I_mage Address"
 msgstr "Ko_pier adressen til bildet"
 
-#: ../src/ephy-window.c:693
+#: ../src/ephy-window.c:701
 msgid "There are unsubmitted changes to form elements"
 msgstr "Det finnes endringer i skjemaet som ikke er sendt"
 
-#: ../src/ephy-window.c:697
+#: ../src/ephy-window.c:705
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Hvis du lukker dokumentet likevel vil du miste denne informasjonen."
 
-#: ../src/ephy-window.c:701
+#: ../src/ephy-window.c:709
 msgid "Close _Document"
 msgstr "Lukk _dokument"
 
-#: ../src/ephy-window.c:1268 ../src/window-commands.c:295
+#: ../src/ephy-window.c:1276 ../src/window-commands.c:295
 msgid "Open"
 msgstr "Åpne"
 
-#: ../src/ephy-window.c:1270 ../src/window-commands.c:321
+#: ../src/ephy-window.c:1278 ../src/window-commands.c:321
 msgid "Save As"
 msgstr "Lagre som"
 
-#: ../src/ephy-window.c:1274
+#: ../src/ephy-window.c:1282
 msgid "Bookmark"
 msgstr "Bokmerke"
 
-#: ../src/ephy-window.c:1276
+#: ../src/ephy-window.c:1284
 msgid "Find"
 msgstr "Finn"
 
-#: ../src/ephy-window.c:1449
+#: ../src/ephy-window.c:1457
 msgid "Insecure"
 msgstr "Usikker"
 
-#: ../src/ephy-window.c:1454
+#: ../src/ephy-window.c:1462
 msgid "Broken"
 msgstr "Ødelagt"
 
-#: ../src/ephy-window.c:1462
+#: ../src/ephy-window.c:1475
 msgid "Low"
 msgstr "Lav"
 
-#: ../src/ephy-window.c:1469
+#: ../src/ephy-window.c:1482
 msgid "High"
 msgstr "Høy"
 
-#: ../src/ephy-window.c:1479
+#: ../src/ephy-window.c:1492
 #, c-format
 msgid "Security level: %s"
 msgstr "Sikkerhetsnivå: %s"
 
-#: ../src/ephy-window.c:1519
+#: ../src/ephy-window.c:1532
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d skjult sprettoppvindu"
 msgstr[1] "%d skjulte sprettoppvinduer"
 
-#: ../src/ephy-window.c:1814
+#: ../src/ephy-window.c:1827
 #, c-format
 msgid "Open image “%s”"
 msgstr "Åpne bilde «%s»"
 
-#: ../src/ephy-window.c:1819
+#: ../src/ephy-window.c:1832
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Bruk som bakgrunn på skrivebordet «%s»"
 
-#: ../src/ephy-window.c:1824
+#: ../src/ephy-window.c:1837
 #, c-format
 msgid "Save image “%s”"
 msgstr "Lagre bilde «%s»"
 
-#: ../src/ephy-window.c:1829
+#: ../src/ephy-window.c:1842
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopier adressen til bildet «%s»"
 
-#: ../src/ephy-window.c:1842
+#: ../src/ephy-window.c:1855
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Send e-post til adresse «%s»"
 
-#: ../src/ephy-window.c:1848
+#: ../src/ephy-window.c:1861
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopier e-postadresse «%s»"
 
-#: ../src/ephy-window.c:1860
+#: ../src/ephy-window.c:1873
 #, c-format
 msgid "Save link “%s”"
 msgstr "Lagre lenke «%s»"
 
-#: ../src/ephy-window.c:1866
+#: ../src/ephy-window.c:1879
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Lag bokmerke av lenke «%s»"
 
-#: ../src/ephy-window.c:1872
+#: ../src/ephy-window.c:1885
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopier lenkens adresse «%s»"
 
 # (ugh)
-#: ../src/pdm-dialog.c:379
+#: ../src/pdm-dialog.c:378
 msgid "Cookie Properties"
 msgstr "Egenskaper for informasjonskapsel"
 
-#: ../src/pdm-dialog.c:396
+#: ../src/pdm-dialog.c:395
 msgid "Content:"
 msgstr "Innhold:"
 
-#: ../src/pdm-dialog.c:412
+#: ../src/pdm-dialog.c:411
 msgid "Path:"
 msgstr "Sti:"
 
-#: ../src/pdm-dialog.c:428
+#: ../src/pdm-dialog.c:427
 msgid "Send for:"
 msgstr "Send for:"
 
-#: ../src/pdm-dialog.c:437
+#: ../src/pdm-dialog.c:436
 msgid "Encrypted connections only"
 msgstr "Kun krypterte tilkoblinger"
 
-#: ../src/pdm-dialog.c:437
+#: ../src/pdm-dialog.c:436
 msgid "Any type of connection"
 msgstr "Enhver type tilkobling"
 
-#: ../src/pdm-dialog.c:443
+#: ../src/pdm-dialog.c:442
 msgid "Expires:"
 msgstr "Utgår:"
 
-#: ../src/pdm-dialog.c:454
+#: ../src/pdm-dialog.c:453
 msgid "End of current session"
 msgstr "Slutten på siste sesjon"
 
-#: ../src/pdm-dialog.c:591
+#: ../src/pdm-dialog.c:589
 msgid "Domain"
 msgstr "Domene"
 
-#: ../src/pdm-dialog.c:602
+#: ../src/pdm-dialog.c:600
 msgid "Name"
 msgstr "Navn"
 
-#: ../src/pdm-dialog.c:991
+#: ../src/pdm-dialog.c:998
 msgid "Host"
 msgstr "Vert"
 
-#: ../src/pdm-dialog.c:1003
+#: ../src/pdm-dialog.c:1010
 msgid "User Name"
 msgstr "Brukernavn"
 
-#: ../src/pdm-dialog.c:1015
+#: ../src/pdm-dialog.c:1022
 msgid "User Password"
 msgstr "Brukerpassord"
 
@@ -3804,23 +3810,23 @@ msgstr[1] "Systemspråk [%s]"
 msgid "Select a Directory"
 msgstr "Velg en katalog"
 
-#: ../src/window-commands.c:709 ../src/window-commands.c:726
+#: ../src/window-commands.c:726 ../src/window-commands.c:743
 msgid "Contact us at:"
 msgstr "Kontakt oss her:"
 
-#: ../src/window-commands.c:712
+#: ../src/window-commands.c:729
 msgid "Contributors:"
 msgstr "Bidragsytere:"
 
-#: ../src/window-commands.c:717
+#: ../src/window-commands.c:734
 msgid "Past developers:"
 msgstr "Tidligere utviklere:"
 
-#: ../src/window-commands.c:727
+#: ../src/window-commands.c:744
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> eller <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:732
+#: ../src/window-commands.c:749
 msgid "GNOME Web Browser"
 msgstr "GNOME Nettleser"
 
@@ -3832,10 +3838,10 @@ msgstr "GNOME Nettleser"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:746
+#: ../src/window-commands.c:763
 msgid "translator-credits"
 msgstr "Kjartan Maraas <kmaraas@gnome.org>"
 
-#: ../src/window-commands.c:749
+#: ../src/window-commands.c:766
 msgid "GNOME Web Browser Website"
 msgstr "Nettsted for GNOME Nettleser"
