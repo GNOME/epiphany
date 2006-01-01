@@ -2,6 +2,19 @@
 Epiphany 1.9.4
 ==============
 
+Changes:
+        * When in automatic mode, update the treeview to reflect the currently selected encoding. Fixes bug #127757
+        * Add include subdirs for broken distros. Bug #321841. Add plugins.symbols to EXTRA_DIST.
+        * Improve "gecko not found" message. Bug #319253.
+        * Put a marker in the environment to detect when we launch ourself as a helper app. Fixes bug #324828.
+        * Zoom on Ctrl-=, Ctrl-KP+, Ctrl-KP- too. Bug #105183.
+        * Always center dialog on screen. Bug #324896.
+        * Show warning on mixed content in the tooltip. Bug #321508.
+        * Add some code so ad blocking should be more easy. 
+        * Use a gtk stock cursor (GDK_HAND2) instead of already removed image. Fixes bug #324265.
+        * Fix a compile warning.
+        * Install the fonts schemas file too.
+
 Contributors to this release:
 Christian Neumair, Christian Persch, Claudio Saavedra,
 Crispin Flowerday and Jean-François Rameau.
@@ -19,14 +32,13 @@ Updated translations:
         * Takeshi AIHANA (ja)
         * Žygimantas Beručka (lt)
         * Reinout van Schouwen (nl)
-        * "Last-Translator: \n" (nn)
+        * "" (nn)
         * Afonso Celso Medina (pt_BR)
         * Marcel Telka (sk)
         * Clytie Siddall (vi)
         * Liu Songhe (zh_CN)
         * Chao-Hsiung Liao (zh_HK)
         * Chao-Hsiung Liao (zh_TW)
-
 
 ================
 Epiphany 1.9.3.1
