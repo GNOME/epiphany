@@ -87,4 +87,4 @@ DISTCLEANFILES = \
 	$(schema_DATA)		\
 	$(pkgconfig_DATA)	\
 	$(default_prefs_DATA)	\
-	$(DESKTOP_FILES)
+	$(desktop_DATA)
