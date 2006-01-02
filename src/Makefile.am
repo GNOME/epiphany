@@ -65,8 +65,10 @@ INST_H_FILES = \
 	ephy-tab.h			\
 	ephy-window.h
 
+nodist_libephymain_la_SOURCES = \
+	$(CORBA_SOURCE)	
+
 libephymain_la_SOURCES = \
-	$(CORBA_SOURCE)			\
 	$(TYPES_SOURCE)			\
 	ephy-action-helper.c		\
 	ephy-automation.c		\
