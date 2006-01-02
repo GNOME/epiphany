@@ -11,19 +11,6 @@ bin_PROGRAMS = epiphany
 CXXLD = $(CXX)
 LINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
 
-CORBA_SOURCE = \
-	EphyAutomation-common.c	  \
-	EphyAutomation-stubs.c	  \
-	EphyAutomation-skels.c	  \
-	EphyAutomation.h
-
-idls = $(top_srcdir)/idl/EphyAutomation.idl
-
-idl_flags = -I$(LIBBONOBO_IDL) -I$(BONOBO_ACTIVATION_IDL) 
-
-$(CORBA_SOURCE): $(idls) $(ORBIT_IDL)
-	$(ORBIT_IDL) $(idl_flags) $(idls)
-
 headerdir = $(prefix)/include/epiphany/@EPIPHANY_MAJOR@/epiphany
 header_DATA = \
 	ephy-type-builtins.h	\
@@ -31,7 +18,7 @@ header_DATA = \
 
 NOINST_H_FILES = \
 	ephy-action-helper.h		\
-	ephy-automation.h		\
+	ephy-activation.h		\
 	ephy-encoding-dialog.h		\
 	ephy-encoding-menu.h		\
 	ephy-find-toolbar.h		\
@@ -55,6 +42,7 @@ NOINST_H_FILES = \
 	window-commands.h
 
 INST_H_FILES = \
+	ephy-dbus.h			\
 	ephy-extension.h		\
 	ephy-extensions-manager.h	\
 	ephy-link.h			\
@@ -66,12 +54,13 @@ INST_H_FILES = \
 	ephy-window.h
 
 libephymain_la_SOURCES = \
-	$(CORBA_SOURCE)			\
 	$(TYPES_SOURCE)			\
+	ephy-activation.c		\
 	ephy-action-helper.c		\
-	ephy-automation.c		\
 	ephy-completion-model.c		\
 	ephy-completion-model.h		\
+	ephy-dbus.c			\
+	ephy-dbus.h			\
 	ephy-encoding-dialog.c		\
 	ephy-encoding-menu.c		\
 	ephy-extension.c		\
@@ -129,7 +118,6 @@ libephymain_la_CPPFLAGS = \
 
 libephymain_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	\
-	$(BONOBO_CFLAGS)	\
 	$(DBUS_CFLAGS)		\
 	$(AM_CFLAGS)
 
@@ -175,6 +163,7 @@ libpyphany_la_CPPFLAGS = \
 libpyphany_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS)		\
 	$(NO_STRICT_ALIASING_CFLAGS)	\
+	$(DBUS_CFLAGS)			\
 	$(PYGTK_CFLAGS)			\
 	$(AM_CFLAGS)
 
@@ -183,7 +172,6 @@ libpyphany_la_LDFLAGS = \
 
 libpyphany_la_LIBADD = \
 	$(DEPENDENCIES_LIBS)			\
-	$(BONOBO_LIBS)				\
 	$(PYTHON_LIB_LOC) $(PYTHON_LIBS)	\
 	$(PYTHON_EXTRA_LIBS)			\
 	$(PYGTK_LIBS)
@@ -201,7 +189,7 @@ epiphany_CPPFLAGS = \
 
 epiphany_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	\
-	$(BONOBO_LIBS)		\
+	$(DBUS_CFLAGS)		\
 	$(AM_CFLAGS)
 
 epiphany_LDFLAGS = -R$(MOZILLA_HOME) -dlopen self
@@ -217,7 +205,6 @@ epiphany_LDADD = \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(GECKO_LIBS) \
 	$(DEPENDENCIES_LIBS) \
-	$(BONOBO_LIBS) \
 	$(DBUS_LIBS) \
 	$(INTLLIBS)
 
@@ -239,8 +226,10 @@ EXTRA_DIST = \
 endif
 
 BUILT_SOURCES =	\
-	$(CORBA_SOURCE)	\
-	$(TYPES_SOURCE)
+	$(TYPES_SOURCE)			\
+	ephy-dbus-client-bindings.h	\
+	ephy-dbus-server-bindings.h
+
 
 TYPES_SOURCE = \
 	ephy-type-builtins.c	\
@@ -300,6 +289,12 @@ epiphany.c: epiphany.defs epiphany.override
 		--override $*.override \
 		--prefix py$* $(<F) ) > $@ 
 
+ephy-dbus-server-bindings.h:  $(top_builddir)/data/epiphany-service.xml
+	$(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-server $< > $@
+	
+ephy-dbus-client-bindings.h:  $(top_builddir)/data/epiphany-service.xml
+	$(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-client $< > $@
+
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
@@ -351,7 +346,6 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	embed/ephy-encodings.h				\
 	embed/print-dialog.h				\
 	lib/eel-gconf-extensions.h			\
-	lib/ephy-dbus.h					\
 	lib/ephy-debug.h				\
 	lib/ephy-dnd.h					\
 	lib/ephy-file-chooser.h				\
@@ -404,8 +398,9 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	src/bookmarks/ephy-topic-action-group.h		\
 	src/bookmarks/ephy-topic-factory-action.h	\
 	src/ephy-action-helper.h			\
-	src/ephy-automation.h				\
+	src/ephy-activation.h				\
 	src/ephy-completion-model.h			\
+	src/ephy-dbus.h					\
 	src/ephy-encoding-dialog.h			\
 	src/ephy-encoding-menu.h			\
 	src/ephy-find-toolbar.h				\

@@ -25,10 +25,6 @@ default-prefs.js: $(default_prefs_files)
 default_prefsdir = $(pkgdatadir)
 default_prefs_DATA = default-prefs.js
 
-server_in_files = GNOME_Epiphany_Automation.server.in
-server_DATA = GNOME_Epiphany_Automation.server
-serverdir = $(libdir)/bonobo/servers
-
 desktop_in_files = epiphany.desktop.in.in bme.desktop.in.in
 desktopdir = $(datadir)/applications
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
@@ -58,6 +54,16 @@ xsl_DATA = \
 	epiphany-bookmarks-html.xsl	\
 	ephy-xml2ini.xsl
 
+# Dbus service file
+servicedir = $(datadir)/dbus-1/services
+service_in_files = org.gnome.Epiphany.service.in
+service_DATA = $(service_in_files:.service.in=.service)
+ 
+# Rule to make the service file with bindir expanded
+$(service_DATA): $(service_in_files) Makefile
+	@sed -e "s|\@bindir\@|$(bindir)|" $< > $@
+
+
 install-data-local: $(schema_DATA)
 if GCONF_SCHEMAS_INSTALL
 	if test -z "$(DESTDIR)" ; then \
@@ -78,6 +84,7 @@ EXTRA_DIST = \
 	     $(pkgconfig_DATA)		\
 	     $(default_prefs_in_FILES)	\
 	     $(xsl_DATA)		\
+	     $(service_DATA)		\
 	     $(m4data_DATA)		\
 	     check-mime.py		\
 	     generate-font-schemas.py

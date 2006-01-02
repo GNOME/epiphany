@@ -1,4 +1,4 @@
-SUBDIRS = lib embed idl src plugins data po help doc
+SUBDIRS = lib embed src plugins data po help doc
 
 ACLOCAL_AMFLAGS = -I m4
 
@@ -21,4 +21,4 @@ DISTCLEANFILES = 		\
 	intltool-update		\
 	gnome-doc-utils.make
 
-DISTCHECK_CONFIGURE_FLAGS = --enable-dbus --enable-python --enable-gtk-doc --disable-schemas-install --disable-scrollkeeper --with-gecko=$(MOZILLA)
+DISTCHECK_CONFIGURE_FLAGS = --enable-python --enable-gtk-doc --disable-schemas-install --disable-scrollkeeper --with-gecko=$(MOZILLA)

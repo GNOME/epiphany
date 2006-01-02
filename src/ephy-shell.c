@@ -44,14 +44,14 @@
 #include "egg-toolbars-model.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-toolbar.h"
-#include "ephy-automation.h"
 #include "print-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
 #include "ephy-dbus.h"
+#include "ephy-dbus-client-bindings.h"
+#include "ephy-activation.h"
 
 #include <string.h>
-#include <bonobo/bonobo-main.h>
 #include <glib/gi18n.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkmain.h>
@@ -67,7 +67,6 @@
 
 struct _EphyShellPrivate
 {
-	BonoboGenericFactory *automation_factory;
 	EphySession *session;
 	GObject *lockdown;
 	EphyBookmarks *bookmarks;
@@ -255,38 +254,6 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
 	return embed_single;
 }
 
-static BonoboObject *
-ephy_automation_factory_cb (BonoboGenericFactory *this_factory,
-			    const char *iid,
-			    EphyShell *shell)
-{
-	if (strcmp (iid, AUTOMATION_IID) == 0)
-	{
-		return BONOBO_OBJECT (g_object_new (EPHY_TYPE_AUTOMATION, NULL));
-	}
-
-	g_assert_not_reached ();
-
-	return NULL;
-}
-
-static BonoboGenericFactory *
-ephy_automation_factory_new (EphyShell *shell)
-{
-	BonoboGenericFactory *factory;
-	GClosure *factory_closure;
-
-	factory = g_object_new (bonobo_generic_factory_get_type (), NULL);
-
-	factory_closure = g_cclosure_new
-		(G_CALLBACK (ephy_automation_factory_cb), shell, NULL);
-
-	bonobo_generic_factory_construct_noreg
-		(factory, AUTOMATION_FACTORY_IID, factory_closure);
-
-	return factory;
-}
-
 static void
 ephy_shell_init (EphyShell *shell)
 {
@@ -299,9 +266,6 @@ ephy_shell_init (EphyShell *shell)
 	ephy_shell = shell;
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
 				   (gpointer *)ptr);
-
-	/* Instantiate the automation factory */
-	shell->priv->automation_factory = ephy_automation_factory_new (shell);
 }
 
 static char *
@@ -320,10 +284,9 @@ path_from_command_line_arg (const char *arg)
 }
 
 static void
-open_urls (GNOME_EphyAutomation automation,
+open_urls (DBusGProxy *proxy,
 	   guint32 user_time,
 	   const char **args,
-	   CORBA_Environment *ev,
 	   gboolean new_tab,
 	   gboolean existing_window,
 	   gboolean fullscreen)
@@ -333,9 +296,10 @@ open_urls (GNOME_EphyAutomation automation,
 	if (args == NULL)
 	{
 		/* Homepage or resume */
-		GNOME_EphyAutomation_loadUrlWithStartupId
-			(automation, "", fullscreen,
-			 existing_window, new_tab, user_time, ev);
+		org_gnome_Epiphany_load_url_async
+			(proxy, "", fullscreen, existing_window, new_tab,
+			 user_time, ephy_activation_general_purpose_reply,
+			 NULL);
 	}
 	else
 	{
@@ -345,9 +309,10 @@ open_urls (GNOME_EphyAutomation automation,
 
 			path = path_from_command_line_arg (args[i]);
 
-			GNOME_EphyAutomation_loadUrlWithStartupId
-				(automation, path, fullscreen,
-				 existing_window, new_tab, user_time, ev);
+			org_gnome_Epiphany_load_url_async
+				(proxy, path, fullscreen, existing_window,
+				 new_tab, user_time,
+				 ephy_activation_general_purpose_reply, NULL);
 
 			g_free (path);
 		}
@@ -407,6 +372,13 @@ die_cb (GnomeClient* client,
 }
 
 static void
+dbus_g_proxy_finalized_cb (EphyShell *ephy_shell,
+			   GObject *where_the_object_was)
+{
+	g_object_unref (ephy_shell);
+}
+
+static void
 gnome_session_init (EphyShell *shell)
 {
 	GnomeClient *client;
@@ -430,96 +402,77 @@ ephy_shell_startup (EphyShell *shell,
 		    const char *string_arg,
 		    GError **error)
 {
-	CORBA_Environment ev;
-	GNOME_EphyAutomation automation;
-	Bonobo_RegistrationResult result;
+	EphyDbus *ephy_dbus;
+	DBusGProxy *proxy;
 
 	ephy_ensure_dir_exists (ephy_dot_dir ());
 
-	CORBA_exception_init (&ev);
+	ephy_dbus = EPHY_DBUS (ephy_shell_get_dbus_service (shell));
+	g_assert (ephy_dbus != NULL);
 
-	result = bonobo_activation_register_active_server
-		(AUTOMATION_FACTORY_IID, BONOBO_OBJREF (shell->priv->automation_factory), NULL);
-
-	switch (result)
+	proxy = ephy_dbus_get_proxy (ephy_dbus, EPHY_DBUS_SESSION);
+	if (proxy == NULL)
 	{
-		case Bonobo_ACTIVATION_REG_SUCCESS:
-			break;
-		case Bonobo_ACTIVATION_REG_ALREADY_ACTIVE:
-			break;
-		case Bonobo_ACTIVATION_REG_NOT_LISTED:
-			g_set_error (error, EPHY_SHELL_ERROR,
-				     EPHY_SHELL_ERROR_MISSING_SERVER,
-				     _("Bonobo couldn't locate the GNOME_Epiphany_Automation.server "
-				       "file. You can use bonobo-activation-sysconf to configure "
-				       "the search path for bonobo server files."));
-			break;
-		case Bonobo_ACTIVATION_REG_ERROR:
-			g_set_error (error, EPHY_SHELL_ERROR,
-				     EPHY_SHELL_ERROR_FACTORY_REG_FAILED,
-				     _("Epiphany can't be used now, due to an unexpected error "
-				       "from Bonobo when attempting to register the automation "
-				       "server"));
-			break;
-		default:
-			g_assert_not_reached ();
+		g_warning ("Unable to get DBus proxy; aborting activation.");
+		gdk_notify_startup_complete ();
+		return FALSE;
 	}
+	g_object_ref (ephy_shell);
+	g_object_weak_ref (G_OBJECT (proxy),
+			   (GWeakNotify) dbus_g_proxy_finalized_cb,
+			   ephy_shell);
 
-	if (result == Bonobo_ACTIVATION_REG_SUCCESS ||
-		 result == Bonobo_ACTIVATION_REG_ALREADY_ACTIVE)
+	if (ephy_dbus->is_session_service_owner == TRUE)
 	{
-		automation = bonobo_activation_activate_from_id (AUTOMATION_IID,
-								 0, NULL, &ev);
-		if (CORBA_Object_is_nil (automation, &ev))
-		{
-			g_set_error (error, EPHY_SHELL_ERROR,
-				     EPHY_SHELL_ERROR_OBJECT_REG_FAILED,
-				     _("Epiphany can't be used now, due to an unexpected error "
-				       "from Bonobo when attempting to locate the automation "
-				       "object."));
-			automation = NULL;
-			goto done;
-		}
+		LOG ("Instance is session service owner");
 
 		/* init the session manager up here so we can quit while the resume dialogue is on */
 		gnome_session_init (shell);
+	}
 
-		if (flags & EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR)
+	if (flags & EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR)
+	{
+		org_gnome_Epiphany_open_bookmarks_editor_async
+			(proxy, user_time,
+			 ephy_activation_general_purpose_reply, ephy_shell);
+	}
+	else if (flags & EPHY_SHELL_STARTUP_SESSION)
+	{
+		org_gnome_Epiphany_load_session_async
+			(proxy, string_arg, user_time,
+			 ephy_activation_general_purpose_reply, ephy_shell);
+	}
+	else if (flags & EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS)
+	{
+		org_gnome_Epiphany_import_bookmarks_async
+			(proxy, string_arg,
+			 ephy_activation_general_purpose_reply, ephy_shell);
+	}
+	else if (flags & EPHY_SHELL_STARTUP_ADD_BOOKMARK)
+	{
+		org_gnome_Epiphany_add_bookmark_async
+			(proxy, string_arg,
+			 ephy_activation_general_purpose_reply, ephy_shell);
+	}
+	else
+	{
+		/* no need to open the homepage if autoresume returns TRUE;
+		 * we already opened session windows */
+		if ((ephy_dbus->is_session_service_owner == FALSE) ||
+		    (ephy_session_autoresume
+			(EPHY_SESSION (ephy_shell_get_session (ephy_shell)),
+			 user_time) == FALSE))
 		{
-			GNOME_EphyAutomation_openBookmarksEditorWithStartupId
-				(automation, user_time, &ev);
-		}
-		else if (flags & EPHY_SHELL_STARTUP_SESSION)
-		{
-			GNOME_EphyAutomation_loadSessionWithStartupId
-				(automation, string_arg, user_time, &ev);
-		}
-		else if (flags & EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS)
-		{
-			GNOME_EphyAutomation_importBookmarks
-				(automation, string_arg, &ev);
-		}
-		else if (flags & EPHY_SHELL_STARTUP_ADD_BOOKMARK)
-		{
-			GNOME_EphyAutomation_addBookmark
-				(automation, string_arg, &ev);
-		}
-		else
-		{
-			open_urls (automation, user_time, args, &ev,
+			open_urls (proxy, user_time, args,
 				   flags & EPHY_SHELL_STARTUP_TABS,
 				   flags & EPHY_SHELL_STARTUP_EXISTING_WINDOW,
 				   flags & EPHY_SHELL_STARTUP_FULLSCREEN);
 		}
-
-		bonobo_object_release_unref (automation, &ev);
 	}
 
-done:
-	CORBA_exception_free (&ev);
+	dbus_g_connection_flush (ephy_dbus_get_bus (ephy_dbus, EPHY_DBUS_SESSION));
 	gdk_notify_startup_complete ();
-
-	return !(result == Bonobo_ACTIVATION_REG_ALREADY_ACTIVE);
+	return ephy_dbus->is_session_service_owner;
 }
 
 static void
@@ -529,16 +482,6 @@ ephy_shell_dispose (GObject *object)
 	EphyShellPrivate *priv = shell->priv;
 
 	LOG ("EphyShell disposing");
-
-	if (priv->automation_factory != NULL)
-	{
-		LOG ("Deregistering bonobo server");
-		bonobo_activation_unregister_active_server
-				(AUTOMATION_FACTORY_IID, BONOBO_OBJREF (priv->automation_factory));
-
-		bonobo_object_unref (priv->automation_factory);
-		priv->automation_factory = NULL;
-	}
 
 	if (shell->priv->extensions_manager != NULL)
 	{

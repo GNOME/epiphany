@@ -1,5 +1,5 @@
 # Copyright (C) 2000-2004 Marco Pesenti Gritti
-# Copyright (C) 2003, 2004, 2005 Christian Persch
+# Copyright (C) 2003, 2004, 2005, 2006 Christian Persch
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -32,26 +32,11 @@ AM_INIT_AUTOMAKE([1.9 dist-bzip2 no-dist-gzip check-news])
 
 AM_MAINTAINER_MODE
 
-AC_PROG_INTLTOOL([0.29])
-
-GLIB_REQUIRED=2.8.0
-GTK_REQUIRED=2.8.3
-LIBXML_REQUIRED=2.6.12
-LIBXSLT_REQUIRED=1.1.7
-LIBGLADE_REQUIRED=2.3.1
-LIBGNOMEVFS_REQUIRED=2.9.2
-LIBGNOMEUI_REQUIRED=2.6.0
-GNOME_DESKTOP_REQUIRED=2.9.91
-LIBSTARTUP_NOTIFICATION_REQUIRED=0.5
-LIBGNOMEPRINT_REQUIRED=2.4.0
-LIBGNOMEPRINTUI_REQUIRED=2.4.0
-DBUS_GLIB_REQUIRED=0.35
-
 AC_ENABLE_SHARED([yes])
 AC_ENABLE_STATIC([no])
 
 AC_LIBTOOL_DLOPEN
-AM_PROG_LIBTOOL
+AC_PROG_LIBTOOL
 
 AC_ISC_POSIX
 AC_PROG_CC
@@ -60,6 +45,10 @@ AM_PROG_CC_STDC
 AC_HEADER_STDC
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
+
+IT_PROG_INTLTOOL([0.34.1])
+
+PKG_PROG_PKG_CONFIG
 
 GNOME_DEBUG_CHECK
 GNOME_COMPILE_WARNINGS([maximum])
@@ -76,15 +65,18 @@ if test "x$enable_maintainer_mode" = "xyes"; then
 	MOZILLA_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth $MOZILLA_WARN_CXXFLAGS"
 fi
 
-AC_PATH_PROG([PKG_CONFIG], [pkg-config], [no])
-if $PKG_CONFIG --atleast-version $LIBSTARTUP_NOTIFICATION_REQUIRED libstartup-notification-1.0; then
-	echo "Building with libstartup-notification"
-	AC_DEFINE([HAVE_STARTUP_NOTIFICATION],[1],[Define to enable startup notification support])
-	STARTUP_NOTIFICATION_PACKAGE=libstartup-notification-1.0
-else
-	echo "***** WARNING: Building without libstartup-notification"
-	STARTUP_NOTIFICATION_PACKAGE=
-fi
+GLIB_REQUIRED=2.8.0
+GTK_REQUIRED=2.8.3
+LIBXML_REQUIRED=2.6.12
+LIBXSLT_REQUIRED=1.1.7
+LIBGLADE_REQUIRED=2.3.1
+LIBGNOMEVFS_REQUIRED=2.9.2
+LIBGNOMEUI_REQUIRED=2.6.0
+GNOME_DESKTOP_REQUIRED=2.9.91
+LIBSTARTUP_NOTIFICATION_REQUIRED=0.5
+LIBGNOMEPRINT_REQUIRED=2.4.0
+LIBGNOMEPRINTUI_REQUIRED=2.4.0
+DBUS_GLIB_REQUIRED=0.35
 
 PKG_CHECK_MODULES([DEPENDENCIES], [\
 		  glib-2.0 >= $GLIB_REQUIRED \
@@ -97,12 +89,16 @@ PKG_CHECK_MODULES([DEPENDENCIES], [\
 		  gnome-vfs-module-2.0 \
 		  gconf-2.0 \
 		  gnome-desktop-2.0 >= $GNOME_DESKTOP_REQUIRED \
-		  $STARTUP_NOTIFICATION_PACKAGE \
+		  libstartup-notification-1.0 >= $LIBSTARTUP_NOTIFICATION_REQUIRED \
 		  libgnomeprint-2.2 >= $LIBGNOMEPRINT_REQUIRED \
 		  libgnomeprintui-2.2 >= $LIBGNOMEPRINTUI_REQUIRED \
 		  ])
 AC_SUBST([DEPENDENCIES_CFLAGS])
 AC_SUBST([DEPENDENCIES_LIBS])
+
+# ****
+# DBUS
+# ****
 
 PKG_CHECK_MODULES([DBUS],[dbus-glib-1 >= $DBUS_GLIB_REQUIRED])
 AC_SUBST([DBUS_CFLAGS])
@@ -110,39 +106,21 @@ AC_SUBST([DBUS_LIBS])
 
 AC_PATH_PROG([DBUS_BINDING_TOOL],[dbus-binding-tool],[no])
 
-if test x"$DBUS_BINDING_TOOL" = xno; then
+if test "$DBUS_BINDING_TOOL" = "no"; then
 	AC_MSG_ERROR([dbus-binding-tool not found])
 fi
-
-AM_CONDITIONAL([ENABLE_DBUS],[false])
-
-PKG_CHECK_MODULES([BONOBO],[bonobo-activation-2.0 ORBit-2.0])
-AC_SUBST([BONOBO_CFLAGS])
-AC_SUBST([BONOBO_LIBS])
-
-ORBIT_IDL="`$PKG_CONFIG --variable=orbit_idl ORBit-2.0`"
-AC_SUBST([ORBIT_IDL])
-
-LIBBONOBO_IDL="`$PKG_CONFIG --variable=idldir libbonobo-2.0`"
-AC_SUBST([LIBBONOBO_IDL])
-
-BONOBO_ACTIVATION_IDL="`$PKG_CONFIG --variable=idldir bonobo-activation-2.0`"
-AC_SUBST([BONOBO_ACTIVATION_IDL])
 
 # *****
 # GConf
 # *****
 
-# Specify the gconf configuration source, 
-# default to xml::$(sysconfdir)/gconf/gconf.xml.defaults
+AM_GCONF_SOURCE_2
 
 AC_PATH_PROG([GCONFTOOL], [gconftool-2], [no])
 
-if test x"$GCONFTOOL" = xno; then
-  AC_MSG_ERROR([gconftool-2 executable not found in your path - should be installed with GConf])
+if test "$GCONFTOOL" = "no"; then
+	AC_MSG_ERROR([gconftool-2 not found])
 fi
-
-AM_GCONF_SOURCE_2
 
 # ******************
 # Portability checks
@@ -641,7 +619,6 @@ data/art/Makefile
 data/ui/Makefile
 doc/Makefile
 doc/reference/Makefile
-idl/Makefile
 lib/Makefile
 lib/egg/Makefile
 lib/widgets/Makefile

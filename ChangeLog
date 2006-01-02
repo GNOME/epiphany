@@ -1,3 +1,33 @@
+2006-01-02  Christian Persch  <chpe@cvs.gnome.org>
+
+	* Makefile.am:
+	* autogen.sh:
+	* configure.ac:
+	R data/GNOME_Epiphany_Automation.server.in:
+	* data/Makefile.am:
+	A data/epiphany-service.xml:
+	A data/org.gnome.Epiphany.service.in:
+	* doc/reference/Makefile.am:
+	R idl/.cvsignore:
+	R idl/EphyAutomation.idl:
+	R idl/Makefile.am:
+	* lib/Makefile.am:
+	R lib/ephy-dbus.c:
+	R lib/ephy-dbus.h:
+	* lib/ephy-file-helpers.c: (ephy_file_launch_application):
+	* src/Makefile.am:
+	A src/ephy-activation.c:
+	A src/ephy-activation.h:
+	A src/ephy-dbus.c:
+	A src/ephy-dbus.h:
+	* src/ephy-main.c: (main):
+	* src/ephy-shell.c: (ephy_shell_init), (open_urls),
+	(dbus_g_proxy_finalized_cb), (ephy_shell_startup),
+	(ephy_shell_dispose):
+
+	Bonobo is dead; long live the Bonobos!
+	Patch by Gustavo Gama, bug #322463.
+
 2006-01-01  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.ac:

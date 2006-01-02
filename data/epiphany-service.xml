@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node name="/org/gnome/Epiphany">
+	<interface name="org.gnome.Epiphany">
+		<method name="loadSession">
+			<arg type="s"/>
+			<arg type="u"/>
+		</method>
+		<method name="loadUrl">
+			<arg type="s"/>
+			<arg type="b"/>
+			<arg type="b"/>
+			<arg type="b"/>
+			<arg type="u"/>
+		</method>
+		<method name="openBookmarksEditor">
+			<arg type="u"/>
+		</method>
+		<method name="importBookmarks">
+			<arg type="s"/>
+		</method>
+		<method name="addBookmark">
+			<arg type="s"/>
+		</method>
+	</interface>
+</node>

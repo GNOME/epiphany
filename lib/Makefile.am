@@ -28,13 +28,11 @@ NOINST_H_FILES = \
 
 TYPES_H_FILES = \
 	ephy-adblock.h				\
-	ephy-dbus.h				\
 	ephy-node.h				\
 	ephy-state.h
 
 INST_H_FILES = \
 	ephy-adblock.h				\
-	ephy-dbus.h				\
 	ephy-dialog.h				\
 	ephy-loader.h				\
 	ephy-node.h				\
@@ -44,7 +42,6 @@ INST_H_FILES = \
 libephymisc_la_SOURCES = \
 	eel-gconf-extensions.c			\
 	ephy-adblock.c				\
-	ephy-dbus.c				\
 	ephy-debug.c				\
 	ephy-dialog.c				\
 	ephy-dnd.c				\
@@ -78,12 +75,10 @@ libephymisc_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libephymisc_la_CFLAGS = \
-        $(DEPENDENCIES_CFLAGS)	\
-        $(DBUS_CFLAGS)		\
+	$(DEPENDENCIES_CFLAGS)	\
 	$(AM_CFLAGS)
 
-libephymisc_la_LIBADD = \
-	$(DBUS_LIBS)
+libephymisc_la_LIBADD =
 
 BUILT_SOURCES = \
 	ephy-lib-type-builtins.c	\
@@ -152,4 +147,5 @@ stamp-ephy-lib-type-builtins.h: $(TYPES_H_FILES)
 	&& echo timestamp > $(@F)
 
 EXTRA_DIST = 			\
-	ephy-marshal.list
+	ephy-marshal.list	\
+	epiphany-service.xml

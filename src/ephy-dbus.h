@@ -30,6 +30,16 @@
 
 G_BEGIN_DECLS
 
+/* Epiphany's DBUS ids */
+#define DBUS_EPHY_SERVICE		"org.gnome.Epiphany"
+#define DBUS_EPHY_PATH			"/org/gnome/Epiphany"
+#define DBUS_EPHY_INTERFACE		"org.gnome.Epiphany"
+
+/* NetworkManager's DBUS ids */
+#define DBUS_NETWORK_MANAGER_SERVICE	"org.freedesktop.NetworkManager"
+#define DBUS_NETWORK_MANAGER_PATH	"/org/freedesktop/NetworkManager"
+#define DBUS_NETWORK_MANAGER_INTERFACE	"org.freedesktop.NetworkManager"
+
 #define EPHY_TYPE_DBUS		(ephy_dbus_get_type ())
 #define EPHY_DBUS(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_DBUS, EphyDbus))
 #define EPHY_DBUS_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_DBUS, EphyDbusClass))
@@ -50,6 +60,7 @@ typedef enum
 struct _EphyDbus
 {
 	GObject parent;
+	gboolean is_session_service_owner;
 
 	/*< private >*/
 	EphyDbusPrivate *priv;
@@ -72,7 +83,10 @@ void		ephy_dbus_startup	(EphyDbus *dbus);
 
 void		ephy_dbus_shutdown	(EphyDbus *dbus);
 
-DBusConnection *ephy_dbus_get_bus	(EphyDbus *dbus,
+DBusGConnection *ephy_dbus_get_bus	(EphyDbus *dbus,
+					 EphyDbusBus kind);
+
+DBusGProxy	*ephy_dbus_get_proxy	(EphyDbus *dbus,
 					 EphyDbusBus kind);
 
 G_END_DECLS

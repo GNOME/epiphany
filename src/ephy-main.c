@@ -287,8 +287,6 @@ main (int argc, char *argv[])
 	gtk_about_dialog_set_url_hook (handle_url, NULL, NULL);
 	gtk_about_dialog_set_email_hook (handle_email, NULL, NULL);
 
-	bonobo_activate ();
-
 	ephy_shell_new ();
 	g_assert (ephy_shell != NULL);
 	new_instance = ephy_shell_startup (ephy_shell, startup_flags,

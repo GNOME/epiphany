@@ -43,12 +43,10 @@
 #undef GNOME_DISABLE_DEPRECATED
 #include <libgnome/gnome-desktop-item.h>
 
-#ifdef HAVE_STARTUP_NOTIFICATION
 #define SN_API_NOT_YET_FROZEN
 #include <libsn/sn.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
-#endif
 
 #define EPHY_UUID		"0d82d98f-7079-401c-abff-203fcde1ece3"
 #define EPHY_UUID_ENVVAR	"EPHY_UNIQUE"
@@ -560,7 +558,6 @@ my_gdk_spawn_make_environment_for_screen (GdkScreen  *screen,
   return retval;
 }
 
-#ifdef HAVE_STARTUP_NOTIFICATION
 static void
 sn_error_trap_push (SnDisplay *display,
 		    Display   *xdisplay)
@@ -728,8 +725,6 @@ add_startup_timeout (GdkScreen         *screen,
 	}
 }
 
-#endif /* HAVE_STARTUP_NOTIFICATION */
-
 gboolean
 ephy_file_launch_application (GnomeVFSMimeApplication *application,
 			      const char *parameter,
@@ -740,10 +735,8 @@ ephy_file_launch_application (GnomeVFSMimeApplication *application,
 	char            *uri;
 	char           **envp;
 	GnomeVFSResult   result;
-#ifdef HAVE_STARTUP_NOTIFICATION
 	SnLauncherContext *sn_context;
 	SnDisplay *sn_display;
-#endif
 
 	g_return_val_if_fail (application != NULL, FALSE);
 	g_return_val_if_fail (parameter != NULL, FALSE);
@@ -756,7 +749,6 @@ ephy_file_launch_application (GnomeVFSMimeApplication *application,
 	screen = gdk_screen_get_default ();
 	envp = my_gdk_spawn_make_environment_for_screen (screen, NULL);
 	
-#ifdef HAVE_STARTUP_NOTIFICATION
 	sn_display = sn_display_new (gdk_display,
 				     sn_error_trap_push,
 				     sn_error_trap_pop);
@@ -807,11 +799,9 @@ ephy_file_launch_application (GnomeVFSMimeApplication *application,
 	} else {
 		sn_context = NULL;
 	}
-#endif /* HAVE_STARTUP_NOTIFICATION */
 	
 	result = gnome_vfs_mime_application_launch_with_env (application, uris, envp);
 
-#ifdef HAVE_STARTUP_NOTIFICATION
 	if (sn_context != NULL) {
 		if (result != GNOME_VFS_OK) {
 			sn_launcher_context_complete (sn_context); /* end sequence */
@@ -824,7 +814,6 @@ ephy_file_launch_application (GnomeVFSMimeApplication *application,
 	}
 	
 	sn_display_unref (sn_display);
-#endif /* HAVE_STARTUP_NOTIFICATION */
 
 	g_strfreev (envp);
 	g_list_foreach (uris, (GFunc) g_free,NULL);

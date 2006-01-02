@@ -154,7 +154,6 @@ GTKDOC_CFLAGS = -I$(top_srcdir)/src \
 		-I$(top_builddir)/lib/egg \
 		$(DEPENDENCIES_CFLAGS) \
 		$(GECKO_CFLAGS) \
-		$(BONOBO_CFLAGS) \
 		$(DBUS_CFLAGS)
 
 GTKDOC_LIBS = \
@@ -168,7 +167,6 @@ GTKDOC_LIBS = \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(GECKO_LIBS)	\
 	$(DEPENDENCIES_LIBS) \
-	$(BONOBO_LIBS) \
 	$(DBUS_LIBS)
 	$(INTLLIBS)
 
