@@ -223,7 +223,7 @@ ephy_dbus_connect_to_session_bus (EphyDbus *ephy_dbus)
 	}
 
 	dbus_connection_set_exit_on_disconnect 
-		(dbus_g_connection_get_connection (ephy_dbus->priv->system_bus),
+		(dbus_g_connection_get_connection (ephy_dbus->priv->session_bus),
 		 FALSE);
 
 	dbus_connection_add_filter
