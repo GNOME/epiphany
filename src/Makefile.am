@@ -137,7 +137,7 @@ libpyphany_la_SOURCES = \
 	ephy-python-extension.h	\
 	ephy-python-loader.c	\
 	ephy-python-loader.h
-	
+
 nodist_libpyphany_la_SOURCES = \
 	$(BUILT_PYPHANY_SOURCE)
 
@@ -287,7 +287,7 @@ ephy-dbus-server-bindings.h: $(top_srcdir)/data/epiphany-service.xml Makefile
 	$(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-server $< > xgen-$(@F) \
 	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
 	&& rm -f xgen-$(@F)
-	
+
 ephy-dbus-client-bindings.h: $(top_srcdir)/data/epiphany-service.xml Makefile
 	$(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-client $< > xgen-$(@F) \
 	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
@@ -480,8 +480,8 @@ endif
 
 dist-check-python-binding:
 if !ENABLE_PYTHON
-        @echo "Python bindings must be enabled in order to make dist!"
-        @false
+	@echo "Python bindings must be enabled in order to make dist!"
+	@false
 endif
 
 dist-hook: dist-check-python-binding
