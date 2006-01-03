@@ -28,7 +28,6 @@ NOINST_H_FILES =		 	\
 	ephy-nodes-cover.h
 
 libephybookmarks_la_SOURCES = 		\
-	$(BUILT_SOURCES)		\
 	ephy-bookmarks.c		\
 	ephy-bookmark-action.c		\
 	ephy-bookmarks-editor.c		\
@@ -49,6 +48,9 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-nodes-cover.c      	\
 	$(NOINST_H_FILES)		\
 	$(INST_H_FILES)
+
+nodist_libephybookmarks_la_SOURCES = 	\
+	$(BUILT_SOURCES)
 
 BUILT_SOURCES =	$(TYPES_SOURCE)
 

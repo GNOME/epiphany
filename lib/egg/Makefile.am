@@ -25,7 +25,9 @@ noinst_LTLIBRARIES = libegg.la
 
 libegg_la_SOURCES = \
 	$(EGGSOURCES) \
-	$(EGGHEADERS) \
+	$(EGGHEADERS)
+
+nodist_libegg_la_SOURCES = \
 	$(BUILT_SOURCES)
 
 libegg_la_CPPFLAGS = \

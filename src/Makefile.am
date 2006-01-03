@@ -8,6 +8,8 @@ endif
 
 bin_PROGRAMS = epiphany
 
+EXTRA_DIST =
+
 CXXLD = $(CXX)
 LINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
 
@@ -54,7 +56,6 @@ INST_H_FILES = \
 	ephy-window.h
 
 libephymain_la_SOURCES = \
-	$(TYPES_SOURCE)			\
 	ephy-activation.c		\
 	ephy-action-helper.c		\
 	ephy-completion-model.c		\
@@ -93,6 +94,9 @@ libephymain_la_SOURCES = \
 	window-commands.c		\
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
+
+nodist_libephymain_la_SOURCES = \
+	$(TYPES_SOURCE)
 
 if ENABLE_CERTIFICATE_MANAGER
 NOINST_H_FILES += \
@@ -135,9 +139,10 @@ libpyphany_la_SOURCES = \
 	ephy-python-extension.c	\
 	ephy-python-extension.h	\
 	ephy-python-loader.c	\
-	ephy-python-loader.h	\
-	$(BUILT_PYPHANY_SOURCE)	\
-	$(TYPES_SOURCE)
+	ephy-python-loader.h
+	
+nodist_libpyphany_la_SOURCES = \
+	$(BUILT_PYPHANY_SOURCE)
 
 libpyphany_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib		\
@@ -220,7 +225,7 @@ if ENABLE_PYTHON
 pydefsdir = $(datadir)/pygtk/2.0/defs
 pydefs_DATA = epiphany.defs
 
-EXTRA_DIST = \
+EXTRA_DIST += \
 	epiphany.override	\
 	$(pydefs_DATA)
 endif
@@ -281,6 +286,16 @@ stamp-ephy-type-builtins.h: $(INST_H_FILES) $(NOINST_H_FILES)
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
 
+ephy-dbus-server-bindings.h: $(top_srcdir)/data/epiphany-service.xml Makefile
+	$(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-server $< > xgen-$(@F) \
+	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
+	&& rm -f xgen-$(@F)
+	
+ephy-dbus-client-bindings.h: $(top_srcdir)/data/epiphany-service.xml Makefile
+	$(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-client $< > xgen-$(@F) \
+	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
+	&& rm -f xgen-$(@F)
+
 epiphany.c: epiphany.defs epiphany.override
 	( cd $(srcdir) && $(PYGTK_CODEGEN) \
 		--register $(PYGTK_DEFSDIR)/pango-types.defs \
@@ -288,12 +303,6 @@ epiphany.c: epiphany.defs epiphany.override
 		--register $(PYGTK_DEFSDIR)/gtk-types.defs \
 		--override $*.override \
 		--prefix py$* $(<F) ) > $@ 
-
-ephy-dbus-server-bindings.h:  $(top_builddir)/data/epiphany-service.xml
-	$(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-server $< > $@
-	
-ephy-dbus-client-bindings.h:  $(top_builddir)/data/epiphany-service.xml
-	$(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-client $< > $@
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
@@ -471,3 +480,11 @@ check-python-binding:
 #check-local: check-python-binding
 
 endif
+
+dist-check-python-binding:
+if !ENABLE_PYTHON
+        @echo "Python bindings must be enabled in order to make dist!"
+        @false
+endif
+
+dist-hook: dist-check-python-binding

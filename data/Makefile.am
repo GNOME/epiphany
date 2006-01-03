@@ -74,20 +74,21 @@ if GCONF_SCHEMAS_INSTALL
 endif
 
 EXTRA_DIST = \
-	     $(server_in_files)     	\
-	     $(schema_in_files)         \
-	     $(font_schema_files)	\
-	     $(desktop_in_files)	\
-	     $(about_DATA)		\
-	     $(applications_DATA)	\
-	     $(mimepermission_DATA)	\
-	     $(pkgconfig_DATA)		\
-	     $(default_prefs_in_FILES)	\
-	     $(xsl_DATA)		\
-	     $(service_DATA)		\
-	     $(m4data_DATA)		\
-	     check-mime.py		\
-	     generate-font-schemas.py
+	$(server_in_files)		\
+	$(schema_in_files)		\
+	$(font_schema_files)		\
+	$(desktop_in_files)		\
+	$(about_DATA)			\
+	$(applications_DATA)		\
+	$(mimepermission_DATA)		\
+	$(pkgconfig_DATA)		\
+	$(default_prefs_in_FILES)	\
+	$(xsl_DATA)			\
+	$(service_DATA)			\
+	$(m4data_DATA)			\
+	epiphany-service.xml		\
+	check-mime.py			\
+	generate-font-schemas.py
 
 DISTCLEANFILES = \
 	$(server_DATA)		\

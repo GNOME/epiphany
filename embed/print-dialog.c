@@ -270,9 +270,8 @@ ephy_print_verify_postscript (GnomePrintDialog *print_dialog)
                                 config, (guchar *)"Settings.Engine.Backend.Driver"));
         }
 
-	if (GTK_WINDOW (print_dialog)->group)
-		gtk_window_group_add_window (GTK_WINDOW (print_dialog)->group,
-					     GTK_WINDOW (dialog));
+	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (print_dialog)),
+				     GTK_WINDOW (dialog));
 
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
@@ -423,10 +422,9 @@ ephy_print_dialog_new (GtkWidget *parent,
 			  G_CALLBACK (ephy_print_dialog_response_cb), info);
 	
 	gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
-	
-	if (GTK_WINDOW (parent)->group)
-		gtk_window_group_add_window (GTK_WINDOW (parent)->group,
-					     GTK_WINDOW (dialog));
+
+	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (parent)),
+				     GTK_WINDOW (dialog));
 
 	return dialog;
 }

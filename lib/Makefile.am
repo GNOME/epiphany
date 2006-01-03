@@ -65,7 +65,9 @@ libephymisc_la_SOURCES = \
 	ephy-stock-icons.c			\
 	ephy-zoom.c				\
 	$(INST_H_FILES)				\
-	$(NOINST_H_FILES)			\
+	$(NOINST_H_FILES)
+
+nodist_libephymisc_la_SOURCES = \
 	$(BUILT_SOURCES)
 
 libephymisc_la_CPPFLAGS = \
@@ -147,5 +149,4 @@ stamp-ephy-lib-type-builtins.h: $(TYPES_H_FILES)
 	&& echo timestamp > $(@F)
 
 EXTRA_DIST = 			\
-	ephy-marshal.list	\
-	epiphany-service.xml
+	ephy-marshal.list

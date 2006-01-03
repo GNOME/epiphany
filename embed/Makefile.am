@@ -31,6 +31,10 @@ INST_H_FILES = \
 	ephy-password-manager.h		\
 	ephy-permission-manager.h
 
+BUILT_SOURCES = \
+	ephy-embed-type-builtins.c	\
+	ephy-embed-type-builtins.h
+
 libephyembed_la_SOURCES = \
 	ephy-adblock-manager.c		\
 	downloader-view.c		\
@@ -51,8 +55,7 @@ libephyembed_la_SOURCES = \
 	ephy-permission-manager.c	\
 	print-dialog.c			\
 	$(INST_H_FILES)			\
-	$(NOINST_H_FILES)		\
-	$(BUILT_SOURCES)
+	$(NOINST_H_FILES)
 
 if ENABLE_CERTIFICATE_MANAGER
 INST_H_FILES += \
@@ -63,6 +66,9 @@ libephyembed_la_SOURCES += \
 	ephy-certificate-manager.c      \
 	ephy-x509-cert.c
 endif
+
+nodist_libephyembed_la_SOURCES = \
+	$(BUILT_SOURCES)
 
 libephyembed_la_CPPFLAGS = \
 	-I$(top_builddir)/lib       	\
@@ -90,10 +96,6 @@ libephyembedfactory_la_CPPFLAGS = \
 libephyembedfactory_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CFLAGS)
-
-BUILT_SOURCES = \
-	ephy-embed-type-builtins.c	\
-	ephy-embed-type-builtins.h
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
