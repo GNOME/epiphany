@@ -35,7 +35,6 @@
 #include <gtk/gtkmessagedialog.h>
 #include <gdk/gdkx.h>
 #include <libgnome/gnome-program.h>
-#include <bonobo/bonobo-main.h>
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-init.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
