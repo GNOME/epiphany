@@ -10,9 +10,6 @@ bin_PROGRAMS = epiphany
 
 EXTRA_DIST =
 
-CXXLD = $(CXX)
-LINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
-
 headerdir = $(prefix)/include/epiphany/@EPIPHANY_MAJOR@/epiphany
 header_DATA = \
 	ephy-type-builtins.h	\
