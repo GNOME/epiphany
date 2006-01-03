@@ -236,6 +236,11 @@ ephy_dbus_connect_to_session_bus (EphyDbus *ephy_dbus)
 					   DBUS_PATH_DBUS,
 					   DBUS_INTERFACE_DBUS);
 
+/* dbus 0.6 dependency */
+#ifndef DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT
+#define DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT 0
+#endif
+
 	org_freedesktop_DBus_request_name (proxy,
 					   DBUS_EPHY_SERVICE,
 					   DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT,
