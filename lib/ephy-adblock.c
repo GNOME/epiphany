@@ -56,4 +56,6 @@ ephy_adblock_should_load (EphyAdBlock *adblock,
 	{
 		return iface->should_load (adblock, url, check_type);
 	}
+
+	return TRUE;
 }

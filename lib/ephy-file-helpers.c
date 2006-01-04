@@ -37,6 +37,7 @@
 #include <libgnome/gnome-init.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <libgnomevfs/gnome-vfs-file-info.h>
+#include <libgnomevfs/gnome-vfs-ops.h>
 #include <libxml/xmlreader.h>
 
 /* bug http://bugzilla.gnome.org/show_bug.cgi?id=156687 */
