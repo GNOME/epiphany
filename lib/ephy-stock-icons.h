@@ -23,8 +23,6 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_ICON_SIZE_TAB_BUTTON "epiphany-icon-size-tab-button"
-
 #define EPHY_STOCK_CLOSE_TAB	   "epiphany-close-tab"
 #define EPHY_STOCK_POPUPS	   "epiphany-popup-hidden"
 #define EPHY_STOCK_HISTORY         "epiphany-history"

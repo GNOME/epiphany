@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include "ephy-notebook.h"
-#include "ephy-stock-icons.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-marshal.h"
@@ -36,7 +35,7 @@
 #include "ephy-link.h"
 #include "ephy-debug.h"
 
-#include <glib-object.h>
+#include <glib/gi18n.h>
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkhbox.h>
@@ -48,8 +47,6 @@
 #include <gtk/gtkimage.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkiconfactory.h>
-#include <glib/gi18n.h>
-#include <libgnomevfs/gnome-vfs-uri.h>
 
 #define TAB_WIDTH_N_CHARS 15
 
@@ -1057,7 +1054,7 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 {
 	GtkWidget *hbox, *label_hbox, *label_ebox;
 	GtkWidget *label, *close_button, *image, *spinner, *icon;
-	GtkIconSize close_icon_size;
+	GtkRcStyle *rcstyle;
 
 	/* set hbox spacing and label padding (see below) so that there's an
 	 * equal amount of space around the label */
@@ -1076,9 +1073,14 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 			       GTK_RELIEF_NONE);
 	/* don't allow focus on the close button */
 	gtk_button_set_focus_on_click (GTK_BUTTON (close_button), FALSE);
+	gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
 
-	close_icon_size = gtk_icon_size_from_name (EPHY_ICON_SIZE_TAB_BUTTON);
-	image = gtk_image_new_from_stock (EPHY_STOCK_CLOSE_TAB, close_icon_size);
+	rcstyle = gtk_rc_style_new ();
+	rcstyle->xthickness = rcstyle->ythickness = 0;
+	gtk_widget_modify_style (close_button, rcstyle);
+	gtk_rc_style_unref (rcstyle),
+
+	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
 	gtk_container_add (GTK_CONTAINER (close_button), image);
 	gtk_box_pack_start (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
 
