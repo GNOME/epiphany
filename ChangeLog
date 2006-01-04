@@ -1,3 +1,17 @@
+2006-01-04  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-find-toolbar.c: (entry_changed_cb), (set_focus_cb),
+	(ephy_find_toolbar_grab_focus), (ephy_find_toolbar_find_next),
+	(ephy_find_toolbar_find_previous), (ephy_find_toolbar_open),
+	(ephy_find_toolbar_close):
+
+	Fix warning when Ctrl-F while the find toolbar is already shown.
+	Fix next/prev button sensitivity when find wrapped around.
+
+	* src/ephy-window.c:
+
+	Add more XF86XK key codes.
+
 2006-01-03  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* configure.ac:

@@ -365,20 +365,22 @@ static const struct
 	{ GDK_KP_Subtract,	GDK_CONTROL_MASK,	"ViewZoomOut",		FALSE },
 	{ GDK_equal,		GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
 #ifdef HAVE_X11_XF86KEYSYM_H
-	{ XF86XK_HomePage,	0,			"GoHome",		TRUE  },
 	{ XF86XK_Back,		0,			"NavigationBack",	TRUE  },
+	{ XF86XK_Favorites,	0,			"GoBookmarks",		FALSE },
 	{ XF86XK_Forward,	0,			"NavigationForward",	TRUE  },
-	{ XF86XK_Stop,		0,			"ViewStop",		FALSE },
+	{ XF86XK_Go,	 	0,			"GoLocation",		FALSE },
+	{ XF86XK_History, 	0,			"GoHistory",		FALSE },
+	{ XF86XK_HomePage,	0,			"GoHome",		TRUE  },
+	{ XF86XK_OpenURL, 	0,			"GoLocation",		FALSE },
+	{ XF86XK_AddFavorite, 	0,			"FileBookmarkPage",	FALSE },
 	{ XF86XK_Refresh, 	0,			"ViewReload",		FALSE },
 	{ XF86XK_Reload,	0, 			"ViewReload",		FALSE },
-	{ XF86XK_Favorites,	0,			"GoBookmarks",		FALSE },
-	{ XF86XK_History, 	0,			"GoHistory",		FALSE },
-	{ XF86XK_OpenURL, 	0,			"GoLocation",		FALSE },
-	{ XF86XK_Go,	 	0,			"GoLocation",		FALSE },
-	{ XF86XK_AddFavorite, 	0,			"FileBookmarkPage",	FALSE },
+	{ XF86XK_Search,	0,			"EditFind",		FALSE },
 	{ XF86XK_Send,	 	0,			"FileSendTo",		FALSE },
+	{ XF86XK_Start,		0,			"GoHome",		TRUE  },
+	{ XF86XK_Stop,		0,			"ViewStop",		FALSE },
 	{ XF86XK_ZoomIn,	0, 			"ViewZoomIn",		FALSE },
-	{ XF86XK_ZoomOut,	0, 			"ViewZoomOut",		FALSE },
+	{ XF86XK_ZoomOut,	0, 			"ViewZoomOut",		FALSE }
 	/* FIXME: what about ScrollUp, ScrollDown, Menu*, Option, LogOff, Save,.. any others? */
 #endif /* HAVE_X11_XF86KEYSYM_H */
 };

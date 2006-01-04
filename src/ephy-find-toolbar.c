@@ -57,7 +57,6 @@ struct _EphyFindToolbarPrivate
 	guint preedit_changed : 1;
 	guint prevent_activate : 1;
 	guint activated : 1;
-	guint explicit_focus : 1;
 	guint links_only : 1;
 	guint typing_ahead : 1;
 };
@@ -232,7 +231,7 @@ entry_changed_cb (GtkEntry *entry,
 #ifdef HAVE_TYPEAHEADFIND
 	result = ephy_embed_find_find (get_find (toolbar), text, priv->links_only);
 
-	found = result == EPHY_EMBED_FIND_FOUND;
+	found = result != EPHY_EMBED_FIND_NOTFOUND;
 	set_status (toolbar, result);
 #endif
 	set_controls (toolbar, found, found);
@@ -309,7 +308,6 @@ set_focus_cb (EphyWindow *window,
 	      GtkWidget *widget,
 	      EphyFindToolbar *toolbar)
 {
-	EphyFindToolbarPrivate *priv = toolbar->priv;
 	GtkWidget *wtoolbar = GTK_WIDGET (toolbar);
 
 	while (widget != NULL && widget != wtoolbar)
@@ -318,11 +316,7 @@ set_focus_cb (EphyWindow *window,
 	}
 
 	/* if widget == toolbar, the new focus widget is in the toolbar */
-	if (widget == wtoolbar)
-	{
-		priv->explicit_focus = TRUE;
-	}
-	else if (priv->explicit_focus)
+	if (widget != wtoolbar)
 	{
 		ephy_find_toolbar_request_close (toolbar);
 	}
@@ -361,7 +355,6 @@ ephy_find_toolbar_grab_focus (GtkWidget *widget)
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
 	gtk_widget_grab_focus (GTK_WIDGET (priv->entry));
-	g_return_if_fail (priv->explicit_focus);
 }
 
 static void
@@ -635,7 +628,7 @@ ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
 
 	result = ephy_embed_find_find_again (get_find (toolbar), TRUE);
 
-	found = result == EPHY_EMBED_FIND_FOUND;
+	found = result != EPHY_EMBED_FIND_NOTFOUND;
 	set_controls (toolbar, found, found);
 	set_status (toolbar, result);
 }
@@ -647,7 +640,7 @@ ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 	gboolean found;
 
 	result = ephy_embed_find_find_again (get_find (toolbar), FALSE);
-	found = result == EPHY_EMBED_FIND_FOUND;
+	found = result != EPHY_EMBED_FIND_NOTFOUND;
 	set_controls (toolbar, found, found);
 	set_status (toolbar, result);
 }
@@ -664,7 +657,6 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 
 	priv->typing_ahead = typing_ahead;
 	priv->links_only = links_only;
-	priv->explicit_focus = FALSE;
 
 	clear_status (toolbar);
 
@@ -686,9 +678,6 @@ void
 ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
-
-	/* first unset explicit_focus, else we get infinite recursion */
-	priv->explicit_focus = FALSE;
 
 	gtk_widget_hide (GTK_WIDGET (toolbar));
 
