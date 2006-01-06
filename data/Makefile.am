@@ -29,9 +29,6 @@ desktop_in_files = epiphany.desktop.in.in bme.desktop.in.in
 desktopdir = $(datadir)/applications
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 
-applicationsdir = $(datadir)/application-registry
-applications_DATA = epiphany.applications
-
 schemadir = $(GCONF_SCHEMA_FILE_DIR)
 font_schema_files = epiphany-fonts.schemas
 schema_in_files = epiphany.schemas.in epiphany-lockdown.schemas.in
@@ -79,7 +76,6 @@ EXTRA_DIST = \
 	$(font_schema_files)		\
 	$(desktop_in_files)		\
 	$(about_DATA)			\
-	$(applications_DATA)		\
 	$(mimepermission_DATA)		\
 	$(pkgconfig_DATA)		\
 	$(default_prefs_in_FILES)	\
