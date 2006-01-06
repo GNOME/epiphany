@@ -749,7 +749,7 @@ window_cmd_help_about (GtkAction *action,
 			       "name", _("GNOME Web Browser"),
 			       "version", VERSION,
 			       "copyright", "Copyright © 2002-2004 Marco Pesenti Gritti\n"
-					    "Copyright © 2003-2005 The GNOME Web Browser Developers",
+					    "Copyright © 2003-2006 The GNOME Web Browser Developers",
 			       "authors", authors,
 			       "documenters", documenters,
 				/* Translators: This is a special message that shouldn't be translated
