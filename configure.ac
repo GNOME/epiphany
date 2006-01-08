@@ -26,7 +26,9 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
 EPIPHANY_MAJOR=1.9
+EPIPHANY_API_VERSION=1.10
 AC_SUBST([EPIPHANY_MAJOR])
+AC_SUBST([EPIPHANY_API_VERSION])
 
 AM_INIT_AUTOMAKE([1.9 dist-bzip2 no-dist-gzip check-news])
 
@@ -339,8 +341,16 @@ fi
 # Check for some contractIDs that we need but are provided by extensions
 # which may or may not have been built.
 
-GECKO_CHECK_CONTRACTID([PermissionManager],[@mozilla.org/permissionmanager;1])
-GECKO_CHECK_CONTRACTID([CookiePermission],[@mozilla.org/cookie/permission;1])
+GECKO_CHECK_CONTRACTID([@mozilla.org/permissionmanager;1],
+	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,cookie,permissions])])
+GECKO_CHECK_CONTRACTID([@mozilla.org/PopupWindowManager;1],
+	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,cookie,permissions])])
+GECKO_CHECK_CONTRACTID([@mozilla.org/cookie/permission;1],
+	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,cookie,permissions])])
+	
+# This one ought to exist too but somehow doesn't on breezy at least...!?
+# GECKO_CHECK_CONTRACTID([@mozilla.org/permissions/contentblocker;1],
+#	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,cookie,permissions])])
 
 # ***************
 # Multimedia keys
@@ -611,7 +621,7 @@ GTK_DOC_CHECK([1.0])
 AC_CONFIG_FILES([
 Makefile
 data/Makefile
-data/epiphany-1.10.pc
+data/epiphany-${EPIPHANY_API_VERSION}.pc:data/epiphany.pc.in
 data/epiphany.desktop.in
 data/bme.desktop.in
 data/glade/Makefile
@@ -630,6 +640,8 @@ help/Makefile
 plugins/Makefile
 plugins/desktop-file/Makefile
 po/Makefile.in
-])
+],
+[],
+[EPIPHANY_API_VERSION=$EPIPHANY_API_VERSION])
 
 AC_OUTPUT
