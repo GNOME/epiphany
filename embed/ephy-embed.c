@@ -386,6 +386,22 @@ ephy_embed_base_init (gpointer g_class)
 			      ephy_marshal_BOOLEAN__VOID,
 			      G_TYPE_BOOLEAN,
 			      0);
+/**
+ * EphyEmbed::content-blocked:
+ * @embed:
+ * @uri: blocked URI 
+ *
+ * The ::content-blocked signal is emitted when an url has been blocked.
+ **/
+		g_signal_new ("content-blocked",
+			      EPHY_TYPE_EMBED,
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyEmbedIface, content_blocked),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 		initialized = TRUE;
 	}

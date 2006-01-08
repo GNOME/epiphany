@@ -25,6 +25,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include "ephy-embed.h"
+
 #include <nsISupports.h>
 #include <nsIContentPolicy.h>
 
@@ -48,6 +50,8 @@ public:
 	EphyContentPolicy();
 	virtual ~EphyContentPolicy();
 private:
+	GtkWidget *GetEmbedFromContext (nsISupports *aContext);
+
 	GObject *mEmbedSingle;
 	gboolean mLocked;
 	GSList *mSafeProtocols;

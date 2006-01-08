@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include "EphyContentPolicy.h"
+#include "EphyUtils.h"
 
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
@@ -32,10 +33,15 @@
 #include "ephy-debug.h"
 
 #include <nsCOMPtr.h>
-#include <nsIURI.h>
 #undef MOZILLA_INTERNAL_API
 #include <nsEmbedString.h>
 #define MOZILLA_INTERNAL_API 1
+#include <nsIDOMAbstractView.h>
+#include <nsIDOMDocument.h>
+#include <nsIDOMDocumentView.h>
+#include <nsIDOMNode.h>
+#include <nsIDOMWindow.h>
+#include <nsIURI.h>
 
 #define CONF_LOCKDOWN_DISABLE_UNSAFE_PROTOCOLS	"/apps/epiphany/lockdown/disable_unsafe_protocols"
 #define CONF_LOCKDOWN_ADDITIONAL_SAFE_PROTOCOLS	"/apps/epiphany/lockdown/additional_safe_protocols"
@@ -60,6 +66,49 @@ EphyContentPolicy::~EphyContentPolicy()
 
 	g_slist_foreach (mSafeProtocols, (GFunc) g_free, NULL);
 	g_slist_free (mSafeProtocols);
+}
+
+GtkWidget *
+EphyContentPolicy::GetEmbedFromContext (nsISupports *aContext)
+{
+	GtkWidget *ret;
+
+	/*
+	 * aContext is either an nsIDOMWindow, an nsIDOMNode, or NULL. If it's
+	 * an nsIDOMNode, we need the nsIDOMWindow to get the EphyEmbed.
+	 */
+	if (aContext == NULL) return NULL;
+
+	nsCOMPtr<nsIDOMWindow> window;
+
+	nsCOMPtr<nsIDOMNode> node (do_QueryInterface (aContext));
+	if (node != NULL)
+	{
+		nsCOMPtr<nsIDOMDocument> domDocument;
+
+		node->GetOwnerDocument (getter_AddRefs (domDocument));
+		if (domDocument == NULL) return NULL; /* resource://... */
+
+		nsCOMPtr<nsIDOMDocumentView> docView = 
+			do_QueryInterface (domDocument);
+		NS_ENSURE_TRUE (docView, NULL);
+
+		nsCOMPtr<nsIDOMAbstractView> view;
+		
+		docView->GetDefaultView (getter_AddRefs (view));
+
+		window = do_QueryInterface (view);
+	}
+	else
+	{
+		window = do_QueryInterface (aContext);
+	}
+	NS_ENSURE_TRUE (window, NULL);
+
+	ret = EphyUtils::FindEmbed (window);
+	if (EPHY_IS_EMBED (ret)) return GTK_WIDGET (ret);
+
+	return NULL;
 }
 
 #if MOZ_NSICONTENTPOLICY_VARIANT == 2
@@ -94,9 +143,16 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 	EphyAdBlockManager *adblock_manager = 
 		EPHY_ADBLOCK_MANAGER (ephy_embed_shell_get_adblock_manager (embed_shell));
 
-	if (!ephy_adblock_manager_should_load (adblock_manager, spec.get (), AdUriCheckType(aContentType)))
+	if (!ephy_adblock_manager_should_load (adblock_manager, spec.get (), AdUriCheckType (aContentType)))
 	{
 		*aDecision = nsIContentPolicy::REJECT_REQUEST;
+
+		GtkWidget *embed = GetEmbedFromContext (aContext); 
+
+		if (embed) 
+		{
+			g_signal_emit_by_name (embed, "content-blocked", spec.get ());
+		}
 		return NS_OK;
 	}
 
