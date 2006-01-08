@@ -154,7 +154,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 				    nsILocalFile **_retval)
 {
 	EphyFileChooser *dialog;
-	gint response;
+	int response;
 	char *filename = NULL;
 	nsEmbedCString defaultFile;
 
@@ -375,15 +375,18 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, CONTENT_ACTION_SAVEAS);
 
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
-			       GTK_STOCK_CANCEL, CONTENT_ACTION_NONE);
+			       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
 			       action_label, mAction);
 
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+ 
+	int defaultResponse = mAction == CONTENT_ACTION_NONE
+				? (int) GTK_RESPONSE_CANCEL
+				: (int) mAction;
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), defaultResponse);
 
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), (guint) mAction);
-
-	NS_ADDREF (this);
+	NS_ADDREF_THIS();
 	g_signal_connect_data (dialog, "response",
 			       G_CALLBACK (response_cb), this,
 			       (GClosureNotify) release_cb, (GConnectFlags) 0);
