@@ -1007,7 +1007,7 @@ sync_label (EphyTab *tab, GParamSpec *pspec, GtkWidget *proxy)
 
 	g_return_if_fail (ebox != NULL && tips != NULL && label != NULL);
 
-	title = ephy_tab_get_title_composite (tab);
+	title = ephy_tab_get_title (tab);
 
 	if (title)
 	{
@@ -1032,6 +1032,7 @@ tab_label_style_set_cb (GtkWidget *hbox,
 {
 	PangoFontMetrics *metrics;
 	PangoContext *context;
+	GtkWidget *button;
 	int char_width, h, w;
 
 	context = gtk_widget_get_pango_context (hbox);
@@ -1047,6 +1048,9 @@ tab_label_style_set_cb (GtkWidget *hbox,
 
 	gtk_widget_set_size_request
 		(hbox, TAB_WIDTH_N_CHARS * PANGO_PIXELS(char_width) + 2 * w, -1);
+
+	button = g_object_get_data (G_OBJECT (hbox), "close-button");
+	gtk_widget_set_size_request (button, w + 2, h + 2);
 }
 
 static GtkWidget *
