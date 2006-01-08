@@ -862,7 +862,8 @@ ephy_window_delete_event (GtkWidget *widget,
 	gboolean modified = FALSE;
 
 	/* Workaround a crash when closing a window while in print preview mode. See
-	 * mozilla bug #241809
+	 * mozilla bug #241809. /
+	 * Go back to normal mode instead of closing, see bug #326136.
 	 */
 	if (priv->ppv_mode)
 	{
@@ -872,6 +873,8 @@ ephy_window_delete_event (GtkWidget *widget,
 		ephy_embed_set_print_preview_mode (embed, FALSE);
 
 		ephy_window_set_print_preview (window, FALSE);
+
+		return TRUE;
 	}
 
 	tabs = ephy_window_get_tabs (window);
