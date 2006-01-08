@@ -44,7 +44,7 @@ m4datadir = $(datadir)/aclocal
 m4data_DATA = epiphany.m4
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = epiphany-1.10.pc
+pkgconfig_DATA = epiphany-$(EPIPHANY_API_VERSION).pc
 
 xsldir = $(pkgdatadir)
 xsl_DATA = \
