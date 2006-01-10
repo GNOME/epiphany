@@ -48,6 +48,7 @@ struct _EphyFindToolbarPrivate
 	EphyWindow *window;
 	EphyEmbed *embed;
 	GtkWidget *entry;
+	GtkWidget *label;
 	GtkToolItem *next;
 	GtkToolItem *prev;
 	GtkToolItem *sep;
@@ -146,6 +147,8 @@ clear_status (EphyFindToolbar *toolbar)
 	gtk_widget_hide (GTK_WIDGET (priv->sep));
 	gtk_widget_hide (GTK_WIDGET (priv->status_item));
 	gtk_label_set_text (GTK_LABEL (priv->status_label), "");
+	gtk_label_set_text (GTK_LABEL (priv->label),
+			    priv->links_only ? _("Find links:") : _("Find:"));
 }
 
 static void
@@ -363,7 +366,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	EphyFindToolbarPrivate *priv;
 	GtkToolbar *gtoolbar;
 	GtkToolItem *item;
-	GtkWidget *alignment, *arrow, *box, *label;
+	GtkWidget *alignment, *arrow, *box;
 
 	priv = toolbar->priv = EPHY_FIND_TOOLBAR_GET_PRIVATE (toolbar);
 	gtoolbar = GTK_TOOLBAR (toolbar);
@@ -377,9 +380,8 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	box = gtk_hbox_new (FALSE, 12);
 	gtk_container_add (GTK_CONTAINER (alignment), box);
 
-	label = gtk_label_new (NULL);
-	gtk_label_set_markup (GTK_LABEL (label), _("Find:"));
-	gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+	priv->label = gtk_label_new (NULL);
+	gtk_box_pack_start (GTK_BOX (box), priv->label, FALSE, FALSE, 0);
 
 	priv->entry = gtk_entry_new ();
 	gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), 32);
@@ -394,7 +396,6 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 
 	/* Prev */
 	arrow = gtk_arrow_new (GTK_ARROW_LEFT, GTK_SHADOW_NONE);
-	label = gtk_label_new (_("Find Previous"));
 	priv->prev = gtk_tool_button_new (arrow, _("Find Previous"));
 	gtk_tool_item_set_is_important (priv->prev, TRUE);
 	gtk_tool_item_set_tooltip (priv->prev, gtoolbar->tooltips,
@@ -405,7 +406,6 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 
 	/* Next */
 	arrow = gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
-	label = gtk_label_new (_("Find Next"));
 	priv->next = gtk_tool_button_new (arrow, _("Find Next"));
 	gtk_tool_item_set_is_important (priv->next, TRUE);
 	gtk_tool_item_set_tooltip (priv->next, gtoolbar->tooltips,
