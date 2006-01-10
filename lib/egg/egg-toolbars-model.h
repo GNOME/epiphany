@@ -102,12 +102,6 @@ struct EggToolbarsItemType
                          const char          *data);
 };
 
-struct EggToolbarsItemAvailable
-{
-  const char * name;
-  guint        available;
-};
-
 GType		  egg_toolbars_model_flags_get_type (void);
 GType		  egg_toolbars_model_get_type       (void);
 EggToolbarsModel *egg_toolbars_model_new	    (void);
