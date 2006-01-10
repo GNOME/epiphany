@@ -74,14 +74,14 @@ static void
 append_menu (GString *string, const GPtrArray *topics, const GPtrArray *bookmarks, guint flags)
 {
 	GPtrArray *uncovered;
-	guint i;
+	guint i, j;
 	
 	gboolean use_subdivis = flags & BUILD_SUBDIVIS;
 	gboolean use_submenus = flags & BUILD_SUBMENUS;        
 
 	if (use_subdivis || use_submenus)
 	{
-		GPtrArray *subset, *covering, *subdivisions, *submenus;
+		GPtrArray *subset, *covering, *subdivisions, *submenus, *unused;
 		GArray *sizes = 0;
 		EphyNode *topic;
 		gint size, total;
@@ -97,6 +97,7 @@ append_menu (GString *string, const GPtrArray *topics, const GPtrArray *bookmark
 		subdivisions = g_ptr_array_sized_new (topics->len);
 		submenus = g_ptr_array_sized_new (topics->len);
 		subset = g_ptr_array_sized_new (bookmarks->len);
+		unused = g_ptr_array_sized_new (bookmarks->len);
 
 		/* Get the total number of items in the menu. */
 		total = uncovered->len;
@@ -144,17 +145,29 @@ append_menu (GString *string, const GPtrArray *topics, const GPtrArray *bookmark
 				g_free (name);
 			}
 		}
+		
+		/* Build a list of bookmarks which don't appear in any subdivision yet. */
+		for (i = 0; i < bookmarks->len; i++)
+		{
+			g_ptr_array_add (unused, g_ptr_array_index (bookmarks, i));
+		}
 
 		/* Create each of the subdivisions. */
 		for (i = 0; i < subdivisions->len; i++)
 		{
 			topic = g_ptr_array_index (subdivisions, i);
-			ephy_nodes_get_covered (topic, bookmarks, subset);
+			ephy_nodes_get_covered (topic, unused, subset);
 			g_ptr_array_sort (subset, ephy_bookmarks_compare_bookmark_pointers);
 			
 			if (separate) g_string_append (string, "<separator/>");
 			append_bookmarks (string, subset, i+1);
 			separate = TRUE;
+			
+			/* Record that each bookmark has been added. */
+			for (j = 0; j < subset->len; j++)
+			{
+				g_ptr_array_remove_fast (unused, g_ptr_array_index (subset, j));
+			}
 		}
 
 		g_array_free (sizes, TRUE);
@@ -162,6 +175,7 @@ append_menu (GString *string, const GPtrArray *topics, const GPtrArray *bookmark
 		g_ptr_array_free (subdivisions, TRUE);
 		g_ptr_array_free (submenus, TRUE);
 		g_ptr_array_free (subset, TRUE);
+		g_ptr_array_free (unused, TRUE);
 		
 		if (separate && uncovered->len) g_string_append (string, "<separator/>");
 	}
