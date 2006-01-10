@@ -50,26 +50,26 @@ AC_ARG_WITH([gecko],
 # Backward compat
 AC_ARG_WITH([mozilla],[],[with_gecko=$withval],[])
 
-_GECKO=$with_gecko
+gecko_cv_gecko=$with_gecko
 
 # Autodetect gecko
 _geckos="firefox mozilla-firefox seamonkey mozilla xulrunner"
-if test -z "$_GECKO"; then
+if test -z "$gecko_cv_gecko"; then
 	for lizard in $_geckos; do
 		if $PKG_CONFIG --exists $lizard-xpcom; then
-			_GECKO=$lizard
+			gecko_cv_gecko=$lizard
 			break;
 		fi
 	done
 fi
 
-AC_MSG_RESULT([$_GECKO])
+AC_MSG_RESULT([$gecko_cv_gecko])
 
-if test "x$_GECKO" = "x"; then
+if test "x$gecko_cv_gecko" = "x"; then
 	ifelse([$3],,[AC_MSG_ERROR([No gecko found; you may need to adjust PKG_CONFIG_PATH or install a mozilla/firefox/xulrunner -devel package])],[$3])
 	gecko_cv_have_gecko=no
-elif ! ( echo "$_geckos" | egrep "(^| )$_GECKO(\$| )" > /dev/null); then
-	AC_MSG_ERROR([Unknown gecko "$_GECKO" specified])
+elif ! ( echo "$_geckos" | egrep "(^| )$gecko_cv_gecko(\$| )" > /dev/null); then
+	AC_MSG_ERROR([Unknown gecko "gecko_cv_gecko" specified])
 else
 	ifelse([$2],,[],[$2])
 	gecko_cv_have_gecko=yes
@@ -81,21 +81,21 @@ fi
 
 if test "$gecko_cv_have_gecko" = "yes"; then
 
-case "$_GECKO" in
-mozilla) _GECKO_FLAVOUR=mozilla ;;
-seamonkey) _GECKO_FLAVOUR=mozilla ;;
-*firefox) _GECKO_FLAVOUR=toolkit ;;
-xulrunner) _GECKO_FLAVOUR=toolkit ;;
+case "$gecko_cv_gecko" in
+mozilla) gecko_cv_gecko_flavour=mozilla ;;
+seamonkey) gecko_cv_gecko_flavour=mozilla ;;
+*firefox) gecko_cv_gecko_flavour=toolkit ;;
+xulrunner) gecko_cv_gecko_flavour=toolkit ;;
 esac
 
-_GECKO_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir $_GECKO-gtkmozembed`"
-_GECKO_HOME="`$PKG_CONFIG --variable=libdir $_GECKO-gtkmozembed`"
-_GECKO_PREFIX="`$PKG_CONFIG --variable=prefix $_GECKO-gtkmozembed`"
+_GECKO_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir ${gecko_cv_gecko}-gtkmozembed`"
+_GECKO_HOME="`$PKG_CONFIG --variable=libdir ${gecko_cv_gecko}-gtkmozembed`"
+_GECKO_PREFIX="`$PKG_CONFIG --variable=prefix ${gecko_cv_gecko}-gtkmozembed`"
 
 fi # if gecko_cv_have_gecko
 
-$1[]=$_GECKO
-$1[]_FLAVOUR=$_GECKO_FLAVOUR
+$1[]=$gecko_cv_gecko
+$1[]_FLAVOUR=$gecko_cv_gecko_flavour
 $1[]_INCLUDE_ROOT=$_GECKO_INCLUDE_ROOT
 $1[]_HOME=$_GECKO_HOME
 $1[]_PREFIX=$_GECKO_PREFIX
@@ -186,7 +186,7 @@ AC_RUN_IFELSE(
 AC_MSG_RESULT([$result])
 
 AC_MSG_CHECKING([[whether we have a gecko debug build]])
-AC_PREPROC_IFELSE(
+AC_COMPILE_IFELSE(
 	[AC_LANG_SOURCE(
 		[[#include <mozilla-config.h>
 		  #if !defined(MOZ_REFLOW_PERF) || !defined(MOZ_REFLOW_PERF_DSP)
@@ -214,45 +214,62 @@ fi # if gecko_cv_have_gecko
 
 if test "$gecko_cv_have_gecko" = "yes"; then
 
-AC_MSG_CHECKING([[for gecko version]])
+AC_MSG_CHECKING([for gecko version])
 
-_GECKO_VERSION_SPLIT=`cat $_GECKO_INCLUDE_ROOT/mozilla-config.h | grep MOZILLA_VERSION_U | awk '{ print $[3]; }' | tr ".ab+" " "`
-if test -z "$_GECKO_VERSION_SPLIT"; then
-	_GECKO_VERSION_SPLIT="1 7"
+# We cannot in grep in mozilla-config.h directly, since in some setups
+# (mult-arch for instance) it includes another file with the real
+# definitions.
+
+AC_LANG_PUSH([C++])
+
+_SAVE_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS -I$_GECKO_INCLUDE_ROOT"
+
+AC_EGREP_CPP([\"1\.9],
+	[#include <mozilla-config.h>
+	 MOZILLA_VERSION],
+	[gecko_cv_gecko_version_major=1 gecko_cv_gecko_version_minor=9],
+	[AC_EGREP_CPP([\"1\.8],
+		[#include <mozilla-config.h>
+		 MOZILLA_VERSION],
+		[gecko_cv_gecko_version_major=1 gecko_cv_gecko_version_minor=8],
+		[gecko_cv_gecko_version_major=1 gecko_cv_gecko_version_minor=7])
+])
+
+CPPFLAGS="$_SAVE_CPPFLAGS"
+
+AC_LANG_POP([C++])
+
+gecko_cv_gecko_version="$gecko_cv_gecko_version_major.$gecko_cv_gecko_version_minor"
+
+AC_MSG_RESULT([$gecko_cv_gecko_version])
+
+if test "$gecko_cv_gecko_version_major" != "1" -o "$gecko_cv_gecko_version_minor" -lt "7" -o "$gecko_cv_gecko_version_minor" -gt "9"; then
+	AC_MSG_ERROR([Gecko version $gecko_cv_gecko_version is not supported!])
 fi
 
-_GECKO_VERSION_MAJOR=`echo $_GECKO_VERSION_SPLIT | awk '{ print $[1]; }'`
-_GECKO_VERSION_MINOR=`echo $_GECKO_VERSION_SPLIT | awk '{ print $[2]; }'`
-_GECKO_VERSION="$_GECKO_VERSION_MAJOR.$_GECKO_VERSION_MINOR"
-
-AC_MSG_RESULT([$_GECKO_VERSION])
-
-if test "$_GECKO_VERSION_MAJOR" != "1" -o "$_GECKO_VERSION_MINOR" -lt "7" -o "$_GECKO_VERSION_MINOR" -gt "9"; then
-	AC_MSG_ERROR([Gecko version $_GECKO_VERSION is not supported!])
-fi
-
-if test "$_GECKO_VERSION_MAJOR" = "1" -a "$_GECKO_VERSION_MINOR" -ge "7"; then
+if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "7"; then
 	AC_DEFINE([HAVE_GECKO_1_7],[1],[Define if we have gecko 1.7])
 	gecko_cv_have_gecko_1_7=yes
 fi
-if test "$_GECKO_VERSION_MAJOR" = "1" -a "$_GECKO_VERSION_MINOR" -ge "8"; then
+if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "8"; then
 	AC_DEFINE([HAVE_GECKO_1_8],[1],[Define if we have gecko 1.8])
 	gecko_cv_have_gecko_1_8=yes
 fi
-if test "$_GECKO_VERSION_MAJOR" = "1" -a "$_GECKO_VERSION_MINOR" -ge "9"; then
+if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "9"; then
 	AC_DEFINE([HAVE_GECKO_1_9],[1],[Define if we have gecko 1.9])
 	gecko_cv_have_gecko_1_9=yes
 fi
 
 fi # if gecko_cv_have_gecko
 
-AM_CONDITIONAL([HAVE_GECKO_1_7],[test "$_GECKO_VERSION_MAJOR" = "1" -a "$_GECKO_VERSION_MINOR" -ge "7"])
-AM_CONDITIONAL([HAVE_GECKO_1_8],[test "$_GECKO_VERSION_MAJOR" = "1" -a "$_GECKO_VERSION_MINOR" -ge "8"])
-AM_CONDITIONAL([HAVE_GECKO_1_9],[test "$_GECKO_VERSION_MAJOR" = "1" -a "$_GECKO_VERSION_MINOR" -ge "9"])
+AM_CONDITIONAL([HAVE_GECKO_1_7],[test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "7"])
+AM_CONDITIONAL([HAVE_GECKO_1_8],[test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "8"])
+AM_CONDITIONAL([HAVE_GECKO_1_9],[test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "9"])
 
-$1[]_VERSION=$_GECKO_VERSION
-$1[]_VERSION_MAJOR=$_GECKO_VERSION_MAJOR
-$1[]_VERSION_MINOR=$_GECKO_VERSION_MINOR
+$1[]_VERSION=$gecko_cv_gecko_version
+$1[]_VERSION_MAJOR=$gecko_cv_gecko_version_major
+$1[]_VERSION_MINOR=$gecko_cv_gecko_version_minor
 
 ])
 
@@ -274,9 +291,9 @@ AC_LANG_PUSH([C++])
 _SAVE_CPPFLAGS="$CPPFLAGS"
 _SAVE_CXXFLAGS="$CXXFLAGS"
 _SAVE_LDFLAGS="$LDFLAGS"
-CPPFLAGS="$CPPFLAGS $_GECKO_EXTRA_CPPFLAGS -I$_GECKO_INCLUDE_ROOT $($PKG_CONFIG --cflags-only-I $_GECKO-xpcom)"
-CXXFLAGS="$CXXFLAGS $_GECKO_EXTRA_CXXFLAGS $($PKG_CONFIG --cflags-only-other $_GECKO-xpcom)"
-LDFLAGS="$LDFLAGS $_GECKO_EXTRA_LDFLAGS $($PKG_CONFIG --libs $_GECKO-xpcom) -Wl,--rpath=$_GECKO_HOME"
+CPPFLAGS="$CPPFLAGS $_GECKO_EXTRA_CPPFLAGS -I$_GECKO_INCLUDE_ROOT $($PKG_CONFIG --cflags-only-I ${gecko_cv_gecko}-xpcom)"
+CXXFLAGS="$CXXFLAGS $_GECKO_EXTRA_CXXFLAGS $($PKG_CONFIG --cflags-only-other ${gecko_cv_gecko}-xpcom)"
+LDFLAGS="$LDFLAGS $_GECKO_EXTRA_LDFLAGS $($PKG_CONFIG --libs ${gecko_cv_gecko}-xpcom) -Wl,--rpath=$_GECKO_HOME"
 
 _GECKO_DISPATCH_HEADERS="$2"
 
@@ -328,7 +345,7 @@ AS_VAR_PUSHDEF([gecko_cv_have_CID],[gecko_cv_have_$1])
 AC_CACHE_CHECK([for the $1 XPCOM component],
 [gecko_cv_have_CID],
 [
-gecko_cv_have_CID=no
+AS_VAR_SET(gecko_cv_have_CID,[no])
 
 GECKO_RUN_IFELSE([],
 [AC_LANG_PROGRAM([[
@@ -374,13 +391,13 @@ NS_ShutdownXPCOM (nsnull);
 exit (isRegistered ? EXIT_SUCCESS : EXIT_FAILURE);
 ]])
 ],
-[gecko_cv_have_CID=yes],
-[gecko_cv_have_CID=no],
-[gecko_cv_have_CID=maybe])
+[AS_VAR_SET(gecko_cv_have_CID,[yes])],
+[AS_VAR_SET(gecko_cv_have_CID,[no])],
+[AS_VAR_SET(gecko_cv_have_CID,[maybe])])
 
 ])
 
-if test "$gecko_cv_have_CID" = "yes"; then
+if test AS_VAR_GET(gecko_cv_have_CID) = "yes"; then
 	ifelse([$2],,[:],[$2])
 else
 	ifelse([$3],,[AC_MSG_FAILURE([dnl
