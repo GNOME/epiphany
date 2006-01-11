@@ -61,3 +61,6 @@ pref("xpinstall.enabled", false);
 
 // enable typeahead find
 pref("accessibility.typeaheadfind", false);
+
+// disable pings
+pref("browser.send_pings", false);
