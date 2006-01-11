@@ -341,16 +341,22 @@ fi
 # Check for some contractIDs that we need but are provided by extensions
 # which may or may not have been built.
 
+REQUIRED_EXTENSIONS="cookie"
+if test "$gecko_cv_gecko_version_major" = 1 -a "$gecko_cv_gecko_version_minor" -ge "8"; then
+	REQUIRED_EXTENSIONS="$REQUIRED_EXTENSIONS,permissions"
+fi
+
 GECKO_CHECK_CONTRACTID([@mozilla.org/permissionmanager;1],
-	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,cookie,permissions])])
+	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
 GECKO_CHECK_CONTRACTID([@mozilla.org/PopupWindowManager;1],
-	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,cookie,permissions])])
+	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
 GECKO_CHECK_CONTRACTID([@mozilla.org/cookie/permission;1],
-	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,cookie,permissions])])
+	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
 	
-# This one ought to exist too but somehow doesn't on breezy at least...!?
-# GECKO_CHECK_CONTRACTID([@mozilla.org/permissions/contentblocker;1],
-#	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,cookie,permissions])])
+if test "$gecko_cv_gecko_version_major" = 1 -a "$gecko_cv_gecko_version_minor" -ge "8"; then
+	GECKO_CHECK_CONTRACTID([@mozilla.org/permissions/contentblocker;1],
+		[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
+fi
 
 # ***************
 # Multimedia keys
