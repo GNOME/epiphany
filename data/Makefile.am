@@ -88,7 +88,7 @@ EXTRA_DIST = \
 
 DISTCLEANFILES = \
 	$(server_DATA)		\
-	$(schema_DATA)		\
+	$(schema_in_files:.schemas.in=.schemas)	\
 	$(pkgconfig_DATA)	\
 	$(default_prefs_DATA)	\
 	$(desktop_DATA)
