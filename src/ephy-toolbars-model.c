@@ -201,6 +201,8 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 	egg_toolbars_model_set_n_avail (eggmodel, "Location", 1);
 	egg_toolbars_model_set_n_avail (eggmodel, "ToolbarGo", 1);
 	egg_toolbars_model_set_n_avail (eggmodel, "Zoom", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "ViewZoomOut", 1);
+	egg_toolbars_model_set_n_avail (eggmodel, "ViewZoomIn", 1);
   
 	success = egg_toolbars_model_load (eggmodel, model->priv->xml_file);
 	LOG ("Loading the toolbars was %ssuccessful", success ? "" : "un");
