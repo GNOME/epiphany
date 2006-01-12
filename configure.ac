@@ -353,7 +353,7 @@ GECKO_CHECK_CONTRACTID([@mozilla.org/PopupWindowManager;1],
 GECKO_CHECK_CONTRACTID([@mozilla.org/cookie/permission;1],
 	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
 	
-if test "$gecko_cv_gecko_version_major" = 1 -a "$gecko_cv_gecko_version_minor" -ge "8"; then
+if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "8"; then
 	GECKO_CHECK_CONTRACTID([@mozilla.org/permissions/contentblocker;1],
 		[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
 fi
@@ -529,8 +529,8 @@ fi
 
 AC_MSG_CHECKING([whether to enable zeroconf bookmarks support])
 AC_ARG_ENABLE([zeroconf],
-	AS_HELP_STRING([--enable-zeroconf],[Whether to enable zeroconf bookmarks support (default:disabled)]),
-	[], [enable_zeroconf=no])
+	AS_HELP_STRING([--disable-zeroconf],[Whether to enable zeroconf bookmarks support (default: enabled)]),
+	[], [enable_zeroconf=yes])
 AC_MSG_RESULT([$enable_zeroconf])
 
 if test "x$enable_zeroconf" = "xyes"; then

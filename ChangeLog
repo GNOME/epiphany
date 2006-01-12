@@ -1,3 +1,12 @@
+2006-01-12  Christian Persch  <chpe@cvs.gnome.org>
+
+        * configure.ac:
+	* Makefile.am:
+
+	Enable zeroconf by default now that gnome-vfs dns-sd can use
+	avahi and more distros are hopefully shipping with that.
+	Still can be disabled by --disable-zeroconf.
+
 2006-01-12  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* src/ephy-dbus.c: (ephy_dbus_connect_to_session_bus):
