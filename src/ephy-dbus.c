@@ -209,7 +209,7 @@ ephy_dbus_connect_to_session_bus (EphyDbus *ephy_dbus)
 {
 	DBusGProxy *proxy;
 	GError *error = NULL;
-	int request_ret;
+	guint request_ret;
 	
 	LOG ("EphyDbus connecting to session DBUS");
 
