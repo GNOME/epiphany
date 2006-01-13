@@ -1297,6 +1297,10 @@ setup_ui_manager (EphyWindow *window)
 
 	action = gtk_action_group_get_action (action_group, "ViewEncoding");
 	g_object_set (action, "hide_if_empty", FALSE, NULL);
+	action = gtk_action_group_get_action (action_group, "ViewZoomIn");
+	g_object_set (action, "short-label", _("Larger"), NULL);
+	action = gtk_action_group_get_action (action_group, "ViewZoomOut");
+	g_object_set (action, "short-label", _("Smaller"), NULL);
 
 	action_group = gtk_action_group_new ("PopupsActions");
 	gtk_action_group_set_translation_domain (action_group, NULL);
