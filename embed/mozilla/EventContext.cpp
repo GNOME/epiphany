@@ -1043,10 +1043,7 @@ EventContext::CheckKeyPress (nsIDOMKeyEvent *aEvent)
 	rv = aEvent->GetTarget (getter_AddRefs (target));
 	NS_ENSURE_SUCCESS (rv, retval);
 
-	nsCOMPtr<nsIDOMHTMLElement> element (do_QueryInterface (target, &rv));
-	NS_ENSURE_SUCCESS (rv, retval);
-
-	nsCOMPtr<nsIDOMHTMLInputElement> inputElement (do_QueryInterface (element));
+	nsCOMPtr<nsIDOMHTMLInputElement> inputElement (do_QueryInterface (target));
 	if (inputElement)
 	{
 		nsEmbedString type;
@@ -1064,27 +1061,34 @@ EventContext::CheckKeyPress (nsIDOMKeyEvent *aEvent)
 	nsCOMPtr<nsIDOMHTMLSelectElement> selectElement;
 	nsCOMPtr<nsIDOMHTMLIsIndexElement> indexElement;
 
-	if ((textArea = do_QueryInterface (element)) ||
-	    (selectElement = do_QueryInterface (element)) ||
-	    (indexElement = do_QueryInterface (element))) return retval;
+	if ((textArea = do_QueryInterface (target)) ||
+	    (selectElement = do_QueryInterface (target)) ||
+	    (indexElement = do_QueryInterface (target))) return retval;
 
 	/* check for design mode */
+	nsCOMPtr<nsIDOMNode> node (do_QueryInterface (target, &rv));
+	NS_ENSURE_SUCCESS (rv, PR_FALSE);
+
 	nsCOMPtr<nsIDOMDocument> doc;
-	rv = element->GetOwnerDocument (getter_AddRefs (doc));
+	rv = node->GetOwnerDocument (getter_AddRefs (doc));
 	NS_ENSURE_SUCCESS (rv, retval);
 
-	nsCOMPtr<nsIDOMNSHTMLDocument> htmlDoc (do_QueryInterface (doc, &rv));
-	/* FIXME: return PR_TRUE here ? */
-	if (NS_FAILED (rv)) return retval; /* it's okay not to be a HTML document */
+	nsCOMPtr<nsIDOMNSHTMLDocument> htmlDoc (do_QueryInterface (doc));
+	if (htmlDoc)
+	{
+		nsEmbedString uDesign;
+		rv = htmlDoc->GetDesignMode (uDesign);
+		NS_ENSURE_SUCCESS (rv, retval);
 
-	nsEmbedString uDesign;
-	rv = htmlDoc->GetDesignMode (uDesign);
-	NS_ENSURE_SUCCESS (rv, retval);
+		nsEmbedCString design;
+		NS_UTF16ToCString (uDesign, NS_CSTRING_ENCODING_UTF8, design);
 
-	nsEmbedCString design;
-	NS_UTF16ToCString (uDesign, NS_CSTRING_ENCODING_UTF8, design);
-
-	retval = g_ascii_strcasecmp (design.get(), "on") != 0;
+		retval = g_ascii_strcasecmp (design.get(), "on") != 0;
+	}
+	else
+	{
+		retval = PR_TRUE;
+	}
 
 	return retval;
 }
