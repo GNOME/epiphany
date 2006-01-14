@@ -58,12 +58,6 @@ libephymozillaembed_la_SOURCES += 	\
 	FilePicker.h
 endif
 
-if HAVE_MOZILLA_TOOLKIT
-libephymozillaembed_la_SOURCES += \
-	EphyDirectoryProvider.cpp	\
-	EphyDirectoryProvider.h
-endif
-
 if HAVE_MOZILLA_PSM
 libephymozillaembed_la_SOURCES += 	\
 	GtkNSSClientAuthDialogs.cpp	\
@@ -86,6 +80,13 @@ if HAVE_GECKO_1_8
 libephymozillaembed_la_SOURCES += \
 	EphyBadCertRejector.cpp		\
 	EphyBadCertRejector.h
+
+if HAVE_MOZILLA_TOOLKIT
+libephymozillaembed_la_SOURCES += \
+	EphyDirectoryProvider.cpp	\
+	EphyDirectoryProvider.h
+endif
+
 endif
 
 mozilla_include_subdirs = \

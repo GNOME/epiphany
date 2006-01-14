@@ -73,7 +73,7 @@
 #include <nsILocalFile.h>
 #include <nsIURI.h>
 
-#ifdef HAVE_MOZILLA_TOOLKIT
+#if defined(HAVE_MOZILLA_TOOLKIT) && defined(HAVE_GECKO_1_8)
 #include "EphyDirectoryProvider.h"
 #endif
 
@@ -533,12 +533,12 @@ init_services (MozillaEmbedSingle *single)
 	/* Set mozilla binary path */
 	gtk_moz_embed_set_comp_path (MOZILLA_HOME);
 
-#ifdef HAVE_MOZILLA_TOOLKIT
+#if defined(HAVE_MOZILLA_TOOLKIT) && defined(HAVE_GECKO_1_8)
+
 	nsCOMPtr<nsIDirectoryServiceProvider> dp = new EphyDirectoryProvider ();
 	if (!dp) return FALSE;
 
 	gtk_moz_embed_set_directory_service_provider (dp);
-	dp = nsnull;
 #endif
 
 	/* Fire up the beast */
