@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-12 18:24+0100\n"
-"PO-Revision-Date: 2005-12-12 18:25+0100\n"
+"POT-Creation-Date: 2006-01-14 18:31+0100\n"
+"PO-Revision-Date: 2006-01-14 18:32+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,10 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10.2\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-
-#: ../data/GNOME_Epiphany_Automation.server.in.h:1
-msgid "Epiphany automation"
-msgstr "Automatización de Epiphany"
 
 #: ../data/epiphany-lockdown.schemas.in.h:1
 msgid ""
@@ -139,8 +135,8 @@ msgid "Epiphany Web Browser"
 msgstr "Navegador Web Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:222
-#: ../src/ephy-main.c:233
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:221
+#: ../src/ephy-main.c:232
 msgid "Web Browser"
 msgstr "Navegador web"
 
@@ -574,7 +570,7 @@ msgid "Cookies"
 msgstr "Cookies"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:96
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:98
 msgid "Downloads"
 msgstr "Descargas"
 
@@ -822,7 +818,7 @@ msgstr ""
 "%s de %s"
 
 #: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#: ../src/ephy-window.c:1451
+#: ../src/ephy-window.c:1465
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -1568,9 +1564,28 @@ msgstr "en el Archivo de Internet"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks-ui.c:481 ../src/ephy-session.c:774
+#: ../src/bookmarks/ephy-bookmarks-ui.c:481 ../src/ephy-session.c:775
 msgid "Untitled"
 msgstr "Sin título"
+
+#: ../embed/mozilla/EphyPromptService.cpp:193
+msgid "_Abort Script"
+msgstr "_Abortar script"
+
+#: ../embed/mozilla/EphyPromptService.cpp:261
+msgid "Don't Save"
+msgstr "No guardar"
+
+#: ../embed/mozilla/EphyPromptService.cpp:742
+msgid "_User:"
+msgstr "_Usuario:"
+
+#: ../embed/mozilla/EphyPromptService.cpp:743
+#: ../embed/mozilla/EphyPromptService.cpp:770
+#: ../embed/mozilla/GtkNSSDialogs.cpp:795
+#: ../embed/mozilla/GtkNSSDialogs.cpp:905
+msgid "_Password:"
+msgstr "_Contraseña:"
 
 #: ../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
 #: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:642
@@ -1766,11 +1781,6 @@ msgstr "Seleccionar contraseña."
 #: ../embed/mozilla/GtkNSSDialogs.cpp:783
 msgid "Select a password to protect this certificate."
 msgstr "Seleccione una contraseña para proteger este certificado."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:795
-#: ../embed/mozilla/GtkNSSDialogs.cpp:905
-msgid "_Password:"
-msgstr "_Contraseña:"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:809
 msgid "Con_firm password:"
@@ -1979,27 +1989,27 @@ msgstr ""
 "Estaba intentando imprimir usando el controlador «%s». Este programa "
 "requiere un controlador de impresora PostScript."
 
-#: ../embed/print-dialog.c:365
+#: ../embed/print-dialog.c:364
 msgid "_From:"
 msgstr "_Desde:"
 
-#: ../embed/print-dialog.c:378
+#: ../embed/print-dialog.c:377
 msgid "Sets the start of the range of pages to be printed"
 msgstr "Establece el inicio del rango de páginas que se va a imprimir"
 
-#: ../embed/print-dialog.c:380
+#: ../embed/print-dialog.c:379
 msgid "_To:"
 msgstr "_hasta:"
 
-#: ../embed/print-dialog.c:393
+#: ../embed/print-dialog.c:392
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Establece el final del rango de páginas que se va a imprimir"
 
-#: ../embed/print-dialog.c:408 ../src/ephy-window.c:1277
+#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1285
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../embed/print-dialog.c:416
+#: ../embed/print-dialog.c:415
 msgid "Pages"
 msgstr "Páginas"
 
@@ -2032,12 +2042,12 @@ msgstr "Separador"
 msgid "All supported types"
 msgstr "Todos los tipos soportados"
 
-#: ../lib/ephy-file-helpers.c:312
+#: ../lib/ephy-file-helpers.c:327
 #, c-format
 msgid "\"%s\" exists, please move it out of the way."
 msgstr "«%s» ya existe, muévalo fuera de la ruta."
 
-#: ../lib/ephy-file-helpers.c:318
+#: ../lib/ephy-file-helpers.c:333
 #, c-format
 msgid "Failed to create directory \"%s\"."
 msgstr "Falló al crear el directorio: «%s»."
@@ -2233,28 +2243,24 @@ msgid "select fonts for|Other Scripts"
 msgstr "Otras escrituras"
 
 #: ../lib/ephy-stock-icons.c:54
-msgid "Close Tab"
-msgstr "Cerrar solapa"
-
-#: ../lib/ephy-stock-icons.c:55
 msgid "Popup Windows"
 msgstr "Ventanas emergentes"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1191
+#: ../lib/ephy-stock-icons.c:55 ../src/ephy-history-window.c:1191
 msgid "History"
 msgstr "Histórico"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
+#: ../lib/ephy-stock-icons.c:56 ../src/bookmarks/ephy-bookmarks-editor.c:684
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1535
-#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1283
+#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1291
 msgid "Bookmarks"
 msgstr "Marcadores"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Entrada de dirección"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:58
 msgid "_Download"
 msgstr "_Descargar"
 
@@ -2803,7 +2809,7 @@ msgstr "Relacionado"
 msgid "Quick Topic"
 msgstr "Tema rápido"
 
-#: ../src/ephy-encoding-dialog.c:313
+#: ../src/ephy-encoding-dialog.c:340
 msgid "Encodings"
 msgstr "Codificaciones"
 
@@ -2827,23 +2833,27 @@ msgstr "No encontrada"
 msgid "Wrapped"
 msgstr "Desde el inicio"
 
-#: ../src/ephy-find-toolbar.c:388
+#: ../src/ephy-find-toolbar.c:151
+msgid "Find links:"
+msgstr "Buscar enlaces:"
+
+#: ../src/ephy-find-toolbar.c:151
 msgid "Find:"
 msgstr "Buscar:"
 
-#: ../src/ephy-find-toolbar.c:404 ../src/ephy-find-toolbar.c:405
+#: ../src/ephy-find-toolbar.c:399
 msgid "Find Previous"
 msgstr "Buscar anterior"
 
-#: ../src/ephy-find-toolbar.c:408
+#: ../src/ephy-find-toolbar.c:402
 msgid "Find previous occurrence of the search string"
 msgstr "Busca la aparición anterior de la cadena de búsqueda"
 
-#: ../src/ephy-find-toolbar.c:415 ../src/ephy-find-toolbar.c:416
+#: ../src/ephy-find-toolbar.c:409
 msgid "Find Next"
 msgstr "Buscar siguiente"
 
-#: ../src/ephy-find-toolbar.c:419
+#: ../src/ephy-find-toolbar.c:412
 msgid "Find next occurrence of the search string"
 msgstr "Busca la siguiente aparición de la cadena de búsqueda"
 
@@ -2941,39 +2951,39 @@ msgstr[1] "Últimos %d días"
 msgid "Sites"
 msgstr "Sitios"
 
-#: ../src/ephy-main.c:59
+#: ../src/ephy-main.c:58
 msgid "Open a new tab in an existing window"
 msgstr "Abrir una solapa nueva en una ventana existente"
 
-#: ../src/ephy-main.c:62
+#: ../src/ephy-main.c:61
 msgid "Run in full screen mode"
 msgstr "Ejecutar a pantalla completa"
 
-#: ../src/ephy-main.c:65
+#: ../src/ephy-main.c:64
 msgid "Load the given session file"
 msgstr "Cargar el archivo de sesiones dado"
 
-#: ../src/ephy-main.c:66 ../src/ephy-main.c:72
+#: ../src/ephy-main.c:65 ../src/ephy-main.c:71
 msgid "FILE"
 msgstr "ARCHIVO"
 
-#: ../src/ephy-main.c:68
+#: ../src/ephy-main.c:67
 msgid "Add a bookmark (don't open any window)"
 msgstr "Añadir un marcador (no abre ninguna ventana)"
 
-#: ../src/ephy-main.c:69
+#: ../src/ephy-main.c:68
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:71
+#: ../src/ephy-main.c:70
 msgid "Import bookmarks from the given file"
 msgstr "Importar marcadores desde el archivo dado"
 
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:73
 msgid "Launch the bookmarks editor"
 msgstr "Lanzar el editor de marcadores"
 
-#: ../src/ephy-notebook.c:1086
+#: ../src/ephy-notebook.c:1092
 msgid "Close tab"
 msgstr "Cerrar solapa"
 
@@ -3001,45 +3011,19 @@ msgstr "_Recuperar"
 msgid "Crash Recovery"
 msgstr "Recuperación de cuelgue"
 
-#: ../src/ephy-shell.c:218
+#: ../src/ephy-shell.c:216
 msgid "Sidebar extension required"
 msgstr "Se requiere la extensión de la barra lateral"
 
-#: ../src/ephy-shell.c:220
+#: ../src/ephy-shell.c:218
 msgid "Sidebar Extension Required"
 msgstr "Se requiere la extensión de la barra lateral"
 
-#: ../src/ephy-shell.c:224
+#: ../src/ephy-shell.c:222
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr ""
 "El enlace que pulsó necesita la extensión de la barra lateral para ser "
 "instalado."
-
-#: ../src/ephy-shell.c:454
-msgid ""
-"Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
-"use bonobo-activation-sysconf to configure the search path for bonobo server "
-"files."
-msgstr ""
-"Bonobo no pudo ubicar el archivo GNOME_Epiphany_automation.server. Debe usar "
-"bonobo-activation-sysconf para configurar la ruta de búsqueda para los "
-"archivos bonobo."
-
-#: ../src/ephy-shell.c:461
-msgid ""
-"Epiphany can't be used now, due to an unexpected error from Bonobo when "
-"attempting to register the automation server"
-msgstr ""
-"Epiphany no puede ser usado ahora, debido a un error inesperado desde bonobo "
-"al intentar registrar el servidor de automatización"
-
-#: ../src/ephy-shell.c:478
-msgid ""
-"Epiphany can't be used now, due to an unexpected error from Bonobo when "
-"attempting to locate the automation object."
-msgstr ""
-"Epiphany no puede ser usado ahora, debido a un error inesperado desde Bonobo "
-"al intentar ubicar el objeto de automatización."
 
 #: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2264 ../src/ephy-tab.c:2299
 msgid "Blank page"
@@ -3598,103 +3582,113 @@ msgstr "_Utilizar esta imagen como tapiz"
 msgid "Copy I_mage Address"
 msgstr "Copiar dirección de la i_magen"
 
-#: ../src/ephy-window.c:698
+#: ../src/ephy-window.c:703
 msgid "There are unsubmitted changes to form elements"
 msgstr "Hay cambios no enviados en los elementos del formulario"
 
-#: ../src/ephy-window.c:702
+#: ../src/ephy-window.c:707
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Si cierra el documento, perderá esa información."
 
-#: ../src/ephy-window.c:706
+#: ../src/ephy-window.c:711
 msgid "Close _Document"
 msgstr "Cerrar _documento"
 
-#: ../src/ephy-window.c:1273 ../src/window-commands.c:295
+#: ../src/ephy-window.c:1281 ../src/window-commands.c:295
 msgid "Open"
 msgstr "Abrir"
 
-#: ../src/ephy-window.c:1275 ../src/window-commands.c:321
+#: ../src/ephy-window.c:1283 ../src/window-commands.c:321
 msgid "Save As"
 msgstr "Guardar como"
 
-#: ../src/ephy-window.c:1279
+#: ../src/ephy-window.c:1287
 msgid "Bookmark"
 msgstr "Marcador"
 
-#: ../src/ephy-window.c:1281
+#: ../src/ephy-window.c:1289
 msgid "Find"
 msgstr "Buscar"
 
-#: ../src/ephy-window.c:1454
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1302
+msgid "Larger"
+msgstr "Más grande"
+
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1305
+msgid "Smaller"
+msgstr "Más pequeño"
+
+#: ../src/ephy-window.c:1468
 msgid "Insecure"
 msgstr "Inseguro"
 
-#: ../src/ephy-window.c:1459
+#: ../src/ephy-window.c:1473
 msgid "Broken"
 msgstr "Roto"
 
-#: ../src/ephy-window.c:1467
+#: ../src/ephy-window.c:1486
 msgid "Low"
 msgstr "Bajo"
 
-#: ../src/ephy-window.c:1474
+#: ../src/ephy-window.c:1493
 msgid "High"
 msgstr "Alto"
 
-#: ../src/ephy-window.c:1484
+#: ../src/ephy-window.c:1503
 #, c-format
 msgid "Security level: %s"
 msgstr "Nivel de seguridad %s"
 
-#: ../src/ephy-window.c:1524
+#: ../src/ephy-window.c:1543
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d ventana emergente oculta"
 msgstr[1] "%d ventanas emergentes ocultas"
 
-#: ../src/ephy-window.c:1819
+#: ../src/ephy-window.c:1838
 #, c-format
 msgid "Open image “%s”"
 msgstr "Abrir la imagen «%s»"
 
-#: ../src/ephy-window.c:1824
+#: ../src/ephy-window.c:1843
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Utilizar «%s» como tapiz del escritorio"
 
-#: ../src/ephy-window.c:1829
+#: ../src/ephy-window.c:1848
 #, c-format
 msgid "Save image “%s”"
 msgstr "Guardar imagen «%s»"
 
-#: ../src/ephy-window.c:1834
+#: ../src/ephy-window.c:1853
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Copiar dirección de la imagen «%s»"
 
-#: ../src/ephy-window.c:1847
+#: ../src/ephy-window.c:1866
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Enviar correo-e a la dirección «%s»"
 
-#: ../src/ephy-window.c:1853
+#: ../src/ephy-window.c:1872
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Copiar dirección de correo-e «%s»"
 
-#: ../src/ephy-window.c:1865
+#: ../src/ephy-window.c:1884
 #, c-format
 msgid "Save link “%s”"
 msgstr "Guardar enlace «%s»"
 
-#: ../src/ephy-window.c:1871
+#: ../src/ephy-window.c:1890
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Crear marcador con el enlace «%s»"
 
-#: ../src/ephy-window.c:1877
+#: ../src/ephy-window.c:1896
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Copiar dirección del enlace de «%s»"
@@ -3873,6 +3867,35 @@ msgstr "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 #: ../src/window-commands.c:766
 msgid "GNOME Web Browser Website"
 msgstr "Sitio web del navegador de Gnome"
+
+#~ msgid "Epiphany automation"
+#~ msgstr "Automatización de Epiphany"
+
+#~ msgid "Close Tab"
+#~ msgstr "Cerrar solapa"
+
+#~ msgid ""
+#~ "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
+#~ "use bonobo-activation-sysconf to configure the search path for bonobo "
+#~ "server files."
+#~ msgstr ""
+#~ "Bonobo no pudo ubicar el archivo GNOME_Epiphany_automation.server. Debe "
+#~ "usar bonobo-activation-sysconf para configurar la ruta de búsqueda para "
+#~ "los archivos bonobo."
+
+#~ msgid ""
+#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
+#~ "attempting to register the automation server"
+#~ msgstr ""
+#~ "Epiphany no puede ser usado ahora, debido a un error inesperado desde "
+#~ "bonobo al intentar registrar el servidor de automatización"
+
+#~ msgid ""
+#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
+#~ "attempting to locate the automation object."
+#~ msgstr ""
+#~ "Epiphany no puede ser usado ahora, debido a un error inesperado desde "
+#~ "Bonobo al intentar ubicar el objeto de automatización."
 
 #~ msgid "Appearance"
 #~ msgstr "Apariencia"
