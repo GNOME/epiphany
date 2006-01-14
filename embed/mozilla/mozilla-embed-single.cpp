@@ -534,13 +534,7 @@ init_services (MozillaEmbedSingle *single)
 	gtk_moz_embed_set_comp_path (MOZILLA_HOME);
 
 #ifdef HAVE_MOZILLA_TOOLKIT
-	EphyDirectoryProvider *dirProvider = new EphyDirectoryProvider ();
-	if (!dirProvider) return FALSE;
-
-	NS_ADDREF (dirProvider);
-	nsCOMPtr<nsIDirectoryServiceProvider> dp (do_QueryInterface (dirProvider));
-	NS_RELEASE (dirProvider);
-
+	nsCOMPtr<nsIDirectoryServiceProvider> dp = new EphyDirectoryProvider ();
 	if (!dp) return FALSE;
 
 	gtk_moz_embed_set_directory_service_provider (dp);
