@@ -7,18 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.th\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-12 10:18+0700\n"
-"PO-Revision-Date: 2005-12-12 10:27+0700\n"
+"POT-Creation-Date: 2006-01-14 15:46+0700\n"
+"PO-Revision-Date: 2006-01-14 16:01+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;"
-
-#: data/GNOME_Epiphany_Automation.server.in.h:1
-msgid "Epiphany automation"
-msgstr ""
 
 #: data/epiphany-lockdown.schemas.in.h:1
 msgid ""
@@ -131,8 +127,8 @@ msgid "Epiphany Web Browser"
 msgstr "เว็บเบราว์เซอร์ Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: data/epiphany.desktop.in.in.h:3 src/ephy-main.c:222
-#: src/ephy-main.c:233
+#: data/epiphany.desktop.in.in.h:3 src/ephy-main.c:221
+#: src/ephy-main.c:232
 msgid "Web Browser"
 msgstr "เว็บเบราว์เซอร์"
 
@@ -259,7 +255,7 @@ msgstr "รายการส่วนขยายที่เปิดใช้
 
 #: data/epiphany.schemas.in.h:22
 msgid "Match case for find in page"
-msgstr "หาข้อความโดยให้ตัวอักษรเล็กใหญ่ตรงกัน"
+msgstr "หาข้อความโดยให้ตัวพิมพ์ใหญ่-เล็กตรงกัน"
 
 #: data/epiphany.schemas.in.h:23
 msgid ""
@@ -541,7 +537,7 @@ msgid "Cookies"
 msgstr "คุกกี้"
 
 #. The name of the default downloads folder
-#: data/glade/epiphany.glade.h:4 lib/ephy-file-helpers.c:96
+#: data/glade/epiphany.glade.h:4 lib/ephy-file-helpers.c:98
 msgid "Downloads"
 msgstr "ดาวน์โหลด"
 
@@ -789,7 +785,7 @@ msgstr ""
 "%s จาก %s"
 
 #: embed/downloader-view.c:431 embed/downloader-view.c:436
-#: src/ephy-window.c:1451
+#: src/ephy-window.c:1465
 msgid "Unknown"
 msgstr "ไม่ทราบ"
 
@@ -1527,9 +1523,28 @@ msgstr "ในกรุอินเทอร์เน็ต"
 
 #: embed/mozilla/EphyHeaderSniffer.cpp:364
 #: src/bookmarks/ephy-bookmarks-import.c:245
-#: src/bookmarks/ephy-bookmarks-ui.c:481 src/ephy-session.c:774
+#: src/bookmarks/ephy-bookmarks-ui.c:481 src/ephy-session.c:775
 msgid "Untitled"
 msgstr "ไม่มีชื่อ"
+
+#: embed/mozilla/EphyPromptService.cpp:193
+msgid "_Abort Script"
+msgstr "เ_ลิกทำสคริปต์"
+
+#: embed/mozilla/EphyPromptService.cpp:261
+msgid "Don't Save"
+msgstr "ไ_ม่บันทึก"
+
+#: embed/mozilla/EphyPromptService.cpp:742
+msgid "_User:"
+msgstr "_ผู้ใช้:"
+
+#: embed/mozilla/EphyPromptService.cpp:743
+#: embed/mozilla/EphyPromptService.cpp:770
+#: embed/mozilla/GtkNSSDialogs.cpp:795
+#: embed/mozilla/GtkNSSDialogs.cpp:905
+msgid "_Password:"
+msgstr "_รหัสผ่าน:"
 
 #: embed/mozilla/FilePicker.cpp:152 embed/mozilla/FilePicker.cpp:445
 #: lib/ephy-file-chooser.c:371 src/bookmarks/ephy-bookmarks-editor.c:642
@@ -1715,11 +1730,6 @@ msgstr "เลือกรหัสผ่าน"
 #: embed/mozilla/GtkNSSDialogs.cpp:783
 msgid "Select a password to protect this certificate."
 msgstr "เลือกรหัสผ่านเพื่อปกป้องข้อมูลใบรับรองนี้"
-
-#: embed/mozilla/GtkNSSDialogs.cpp:795
-#: embed/mozilla/GtkNSSDialogs.cpp:905
-msgid "_Password:"
-msgstr "_รหัสผ่าน:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:809
 msgid "Con_firm password:"
@@ -1914,27 +1924,27 @@ msgstr ""
 "คุณกำลังพยายามพิมพ์ไปยังเครื่องพิมพ์โดยใช้ไดรเวอร์ “%s” "
 "โปรแกรมนี้ต้องการไดรเวอร์เครื่องพิมพ์โพสต์สคริปต์"
 
-#: embed/print-dialog.c:365
+#: embed/print-dialog.c:364
 msgid "_From:"
 msgstr "_จาก:"
 
-#: embed/print-dialog.c:378
+#: embed/print-dialog.c:377
 msgid "Sets the start of the range of pages to be printed"
 msgstr "กำหนดหน้าที่จะเริ่มพิมพ์"
 
-#: embed/print-dialog.c:380
+#: embed/print-dialog.c:379
 msgid "_To:"
 msgstr "_ถึง:"
 
-#: embed/print-dialog.c:393
+#: embed/print-dialog.c:392
 msgid "Sets the end of the range of pages to be printed"
 msgstr "กำหนดหน้าสุดท้ายที่จะพิมพ์"
 
-#: embed/print-dialog.c:408 src/ephy-window.c:1277
+#: embed/print-dialog.c:407 src/ephy-window.c:1285
 msgid "Print"
 msgstr "พิมพ์"
 
-#: embed/print-dialog.c:416
+#: embed/print-dialog.c:415
 msgid "Pages"
 msgstr "หน้า"
 
@@ -1967,12 +1977,12 @@ msgstr "เส้นแบ่ง"
 msgid "All supported types"
 msgstr "ทุกชนิดที่สนับสนุน"
 
-#: lib/ephy-file-helpers.c:312
+#: lib/ephy-file-helpers.c:327
 #, c-format
 msgid "\"%s\" exists, please move it out of the way."
 msgstr "มี \"%s\" อยู่แล้ว กรุณาย้ายตำแหน่ง"
 
-#: lib/ephy-file-helpers.c:318
+#: lib/ephy-file-helpers.c:333
 #, c-format
 msgid "Failed to create directory \"%s\"."
 msgstr "ไม่สามารถสร้างไดเรกทอรี \"%s\""
@@ -2167,28 +2177,24 @@ msgid "select fonts for|Other Scripts"
 msgstr "ภาษาอื่น"
 
 #: lib/ephy-stock-icons.c:54
-msgid "Close Tab"
-msgstr "ปิดแท็บ"
-
-#: lib/ephy-stock-icons.c:55
 msgid "Popup Windows"
 msgstr "หน้าต่างป็อบอัพ"
 
-#: lib/ephy-stock-icons.c:56 src/ephy-history-window.c:1191
+#: lib/ephy-stock-icons.c:55 src/ephy-history-window.c:1191
 msgid "History"
 msgstr "ประวัติ"
 
-#: lib/ephy-stock-icons.c:57 src/bookmarks/ephy-bookmarks-editor.c:684
+#: lib/ephy-stock-icons.c:56 src/bookmarks/ephy-bookmarks-editor.c:684
 #: src/bookmarks/ephy-bookmarks-editor.c:1535
-#: src/bookmarks/ephy-topic-action.c:344 src/ephy-window.c:1283
+#: src/bookmarks/ephy-topic-action.c:344 src/ephy-window.c:1291
 msgid "Bookmarks"
 msgstr "ที่คั่นหน้า"
 
-#: lib/ephy-stock-icons.c:58 src/ephy-toolbar.c:312
+#: lib/ephy-stock-icons.c:57 src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "ตำแหน่ง"
 
-#: lib/ephy-stock-icons.c:59
+#: lib/ephy-stock-icons.c:58
 msgid "_Download"
 msgstr "_ดาวน์โหลด"
 
@@ -2734,7 +2740,7 @@ msgstr "ที่เกี่ยวข้อง"
 msgid "Quick Topic"
 msgstr "เพิ่มหมวดอย่างเร็ว"
 
-#: src/ephy-encoding-dialog.c:313
+#: src/ephy-encoding-dialog.c:340
 msgid "Encodings"
 msgstr "รหัสอักขระ"
 
@@ -2758,23 +2764,27 @@ msgstr "หาไม่พบ"
 msgid "Wrapped"
 msgstr "เริ่มหาใหม่"
 
-#: src/ephy-find-toolbar.c:388
+#: src/ephy-find-toolbar.c:151
+msgid "Find links:"
+msgstr "หาลิงก์:"
+
+#: src/ephy-find-toolbar.c:151
 msgid "Find:"
 msgstr "หา:"
 
-#: src/ephy-find-toolbar.c:404 src/ephy-find-toolbar.c:405
+#: src/ephy-find-toolbar.c:399
 msgid "Find Previous"
 msgstr "หาก่อนหน้า"
 
-#: src/ephy-find-toolbar.c:408
+#: src/ephy-find-toolbar.c:402
 msgid "Find previous occurrence of the search string"
 msgstr "หาข้อความเดิมถอยหลัง"
 
-#: src/ephy-find-toolbar.c:415 src/ephy-find-toolbar.c:416
+#: src/ephy-find-toolbar.c:409
 msgid "Find Next"
 msgstr "หาต่อ"
 
-#: src/ephy-find-toolbar.c:419
+#: src/ephy-find-toolbar.c:412
 msgid "Find next occurrence of the search string"
 msgstr "หาข้อความเดิมต่อไป"
 
@@ -2870,39 +2880,39 @@ msgstr[1] "%d วันก่อน"
 msgid "Sites"
 msgstr "ไซต์"
 
-#: src/ephy-main.c:59
+#: src/ephy-main.c:58
 msgid "Open a new tab in an existing window"
 msgstr "เปิดแท็บใหม่ในหน้าต่างปัจจุบัน"
 
-#: src/ephy-main.c:62
+#: src/ephy-main.c:61
 msgid "Run in full screen mode"
 msgstr "ใช้งานแบบเต็มหน้าจอ"
 
-#: src/ephy-main.c:65
+#: src/ephy-main.c:64
 msgid "Load the given session file"
 msgstr "โหลดแฟ้มวาระที่กำหนด"
 
-#: src/ephy-main.c:66 src/ephy-main.c:72
+#: src/ephy-main.c:65 src/ephy-main.c:71
 msgid "FILE"
 msgstr "FILE"
 
-#: src/ephy-main.c:68
+#: src/ephy-main.c:67
 msgid "Add a bookmark (don't open any window)"
 msgstr "เพิ่มที่คั่นหน้า (ไม่ต้องเปิดหน้าต่าง)"
 
-#: src/ephy-main.c:69
+#: src/ephy-main.c:68
 msgid "URL"
 msgstr "URL"
 
-#: src/ephy-main.c:71
+#: src/ephy-main.c:70
 msgid "Import bookmarks from the given file"
 msgstr "นำเข้าที่คั่นหน้าจากแฟ้ม"
 
-#: src/ephy-main.c:74
+#: src/ephy-main.c:73
 msgid "Launch the bookmarks editor"
 msgstr "เรียกตัวแก้ไขที่คั่นหน้า"
 
-#: src/ephy-notebook.c:1086
+#: src/ephy-notebook.c:1092
 msgid "Close tab"
 msgstr "ปิดแท็บ"
 
@@ -2930,42 +2940,17 @@ msgstr "เ_รียกคืน"
 msgid "Crash Recovery"
 msgstr "การเรียกคืนจากการพัง"
 
-#: src/ephy-shell.c:218
+#: src/ephy-shell.c:216
 msgid "Sidebar extension required"
 msgstr "ต้องการส่วนขยายสำหรับแถบข้าง"
 
-#: src/ephy-shell.c:220
+#: src/ephy-shell.c:218
 msgid "Sidebar Extension Required"
 msgstr "ต้องการส่วนขยายสำหรับแถบข้าง"
 
-#: src/ephy-shell.c:224
+#: src/ephy-shell.c:222
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "ลิงก์ที่คุณคลิกต้องการใช้ส่วนขยายสำหรับแถบข้าง ซึ่งต้องติดตั้ง"
-
-#: src/ephy-shell.c:454
-msgid ""
-"Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
-"use bonobo-activation-sysconf to configure the search path for bonobo server "
-"files."
-msgstr ""
-"bonobo หาแฟ้ม GNOME_Epiphany_Automation.server ไม่พบ คุณสามารถใช้คำสั่งbonobo-"
-"activation-sysconf ตั้งค่าพาธที่จะให้เซิร์ฟเวอร์ bonobo ค้นหาแฟ้มได้"
-
-#: src/ephy-shell.c:461
-msgid ""
-"Epiphany can't be used now, due to an unexpected error from Bonobo when "
-"attempting to register the automation server"
-msgstr ""
-"ไม่สามารถใช้งาน Epiphany ได้ในขณะนี้ เนื่องจากข้อผิดพลาดที่เกิดกับ bonobo "
-"ขณะพยายามจะลงทะเบียนเซิร์ฟเวอร์ดำเนินการอัตโนมัติ"
-
-#: src/ephy-shell.c:478
-msgid ""
-"Epiphany can't be used now, due to an unexpected error from Bonobo when "
-"attempting to locate the automation object."
-msgstr ""
-"ไม่สามารถใช้งาน Epiphany ได้ในขณะนี้ เนื่องจากข้อผิดพลาดที่เกิดกับ bonobo "
-"ขณะพยายามจะค้นหาอ็อบเจกต์ของตัวดำเนินการอัตโนมัติ"
 
 #: src/ephy-tab.c:481 src/ephy-tab.c:2264 src/ephy-tab.c:2299
 msgid "Blank page"
@@ -3522,103 +3507,113 @@ msgstr "ใ_ช้เป็นภาพพื้นหลัง"
 msgid "Copy I_mage Address"
 msgstr "คัด_ลอกตำแหน่งภาพ"
 
-#: src/ephy-window.c:698
+#: src/ephy-window.c:703
 msgid "There are unsubmitted changes to form elements"
 msgstr "มีการเปลี่ยนแปลงในช่องข้อมูลแบบฟอร์มที่ยังไม่ส่ง"
 
-#: src/ephy-window.c:702
+#: src/ephy-window.c:707
 msgid "If you close the document anyway, you will lose that information."
 msgstr "ถ้าคุณปิดเอกสาร คุณจะเสียข้อมูลเหล่านี้"
 
-#: src/ephy-window.c:706
+#: src/ephy-window.c:711
 msgid "Close _Document"
 msgstr "ปิ_ดเอกสาร"
 
-#: src/ephy-window.c:1273 src/window-commands.c:295
+#: src/ephy-window.c:1281 src/window-commands.c:295
 msgid "Open"
 msgstr "เปิด"
 
-#: src/ephy-window.c:1275 src/window-commands.c:321
+#: src/ephy-window.c:1283 src/window-commands.c:321
 msgid "Save As"
 msgstr "บันทึกเป็น"
 
-#: src/ephy-window.c:1279
+#: src/ephy-window.c:1287
 msgid "Bookmark"
 msgstr "ที่คั่นหน้า"
 
-#: src/ephy-window.c:1281
+#: src/ephy-window.c:1289
 msgid "Find"
 msgstr "ค้นหา"
 
-#: src/ephy-window.c:1454
+#. Translators: This refers to text size
+#: src/ephy-window.c:1302
+msgid "Larger"
+msgstr "ใหญ่ขึ้้น"
+
+#. Translators: This refers to text size
+#: src/ephy-window.c:1305
+msgid "Smaller"
+msgstr "เล็กลง"
+
+#: src/ephy-window.c:1468
 msgid "Insecure"
 msgstr "ไม่ปลอดภัย"
 
-#: src/ephy-window.c:1459
+#: src/ephy-window.c:1473
 msgid "Broken"
 msgstr "เสียอยู่"
 
-#: src/ephy-window.c:1467
+#: src/ephy-window.c:1486
 msgid "Low"
 msgstr "ต่ำ"
 
-#: src/ephy-window.c:1474
+#: src/ephy-window.c:1493
 msgid "High"
 msgstr "สูง"
 
-#: src/ephy-window.c:1484
+#: src/ephy-window.c:1503
 #, c-format
 msgid "Security level: %s"
 msgstr "ระดับการรักษาความปลอดภัย: %s"
 
-#: src/ephy-window.c:1524
+#: src/ephy-window.c:1543
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "มีหน้าต่างป็อบอัพซ่อนอยู่ %d หน้าต่าง"
 msgstr[1] "มีหน้าต่างป็อบอัพซ่อนอยู่ %d หน้าต่าง"
 
-#: src/ephy-window.c:1819
+#: src/ephy-window.c:1838
 #, c-format
 msgid "Open image “%s”"
 msgstr "แสดงภาพ “%s”"
 
-#: src/ephy-window.c:1824
+#: src/ephy-window.c:1843
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "ใช้ “%s” เป็นภาพพื้นหลัง"
 
-#: src/ephy-window.c:1829
+#: src/ephy-window.c:1848
 #, c-format
 msgid "Save image “%s”"
 msgstr "บันทึกภาพ “%s”"
 
-#: src/ephy-window.c:1834
+#: src/ephy-window.c:1853
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "คัดลอกตำแหน่งภาพ “%s”"
 
-#: src/ephy-window.c:1847
+#: src/ephy-window.c:1866
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "ส่งอีเมลไปยังที่อยู่ “%s”"
 
-#: src/ephy-window.c:1853
+#: src/ephy-window.c:1872
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "คัดลอกที่อยู่อีเมล “%s”"
 
-#: src/ephy-window.c:1865
+#: src/ephy-window.c:1884
 #, c-format
 msgid "Save link “%s”"
 msgstr "บันทึกลิงก์ “%s”"
 
-#: src/ephy-window.c:1871
+#: src/ephy-window.c:1890
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "เพิ่มลิงก์ “%s” ในที่คั่นหน้า"
 
-#: src/ephy-window.c:1877
+#: src/ephy-window.c:1896
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "คัดลอกตำแหน่งลิงก์ “%s”"
@@ -3802,6 +3797,31 @@ msgstr ""
 msgid "GNOME Web Browser Website"
 msgstr "เว็บไซต์ของเว็บเบราว์เซอร์ของ GNOME"
 
+#~ msgid "Close Tab"
+#~ msgstr "ปิดแท็บ"
+
+#~ msgid ""
+#~ "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
+#~ "use bonobo-activation-sysconf to configure the search path for bonobo "
+#~ "server files."
+#~ msgstr ""
+#~ "bonobo หาแฟ้ม GNOME_Epiphany_Automation.server ไม่พบ คุณสามารถใช้คำสั่งbonobo-"
+#~ "activation-sysconf ตั้งค่าพาธที่จะให้เซิร์ฟเวอร์ bonobo ค้นหาแฟ้มได้"
+
+#~ msgid ""
+#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
+#~ "attempting to register the automation server"
+#~ msgstr ""
+#~ "ไม่สามารถใช้งาน Epiphany ได้ในขณะนี้ เนื่องจากข้อผิดพลาดที่เกิดกับ bonobo "
+#~ "ขณะพยายามจะลงทะเบียนเซิร์ฟเวอร์ดำเนินการอัตโนมัติ"
+
+#~ msgid ""
+#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
+#~ "attempting to locate the automation object."
+#~ msgstr ""
+#~ "ไม่สามารถใช้งาน Epiphany ได้ในขณะนี้ เนื่องจากข้อผิดพลาดที่เกิดกับ bonobo "
+#~ "ขณะพยายามจะค้นหาอ็อบเจกต์ของตัวดำเนินการอัตโนมัติ"
+
 #~ msgid "Appearance"
 #~ msgstr "รูปแบบ"
 
@@ -3809,7 +3829,7 @@ msgstr "เว็บไซต์ของเว็บเบราว์เซอ
 #~ msgstr "กระดาษ"
 
 #~ msgid "C_ase sensitive"
-#~ msgstr "ตัวอักษรเ_ล็กใหญ่ตรงกัน"
+#~ msgstr "ตัวพิมพ์ใหญ่เ_ล็กตรงกัน"
 
 #~ msgid "Download Manager"
 #~ msgstr "จัดการดาวน์โหลด"
@@ -4002,9 +4022,6 @@ msgstr "เว็บไซต์ของเว็บเบราว์เซอ
 
 #~ msgid "Lan_dscape"
 #~ msgstr "แนวนอน"
-
-#~ msgid "P_ortrait"
-#~ msgstr "แนวตั้ง"
 
 #~ msgid "P_rinter:"
 #~ msgstr "เครื่องพิมพ์:"
