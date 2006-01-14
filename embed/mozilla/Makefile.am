@@ -58,6 +58,12 @@ libephymozillaembed_la_SOURCES += 	\
 	FilePicker.h
 endif
 
+if HAVE_MOZILLA_TOOLKIT
+libephymozillaembed_la_SOURCES += \
+	EphyDirectoryProvider.cpp	\
+	EphyDirectoryProvider.h
+endif
+
 if HAVE_MOZILLA_PSM
 libephymozillaembed_la_SOURCES += 	\
 	GtkNSSClientAuthDialogs.cpp	\
@@ -85,6 +91,7 @@ endif
 mozilla_include_subdirs = \
 	caps			\
 	chardet			\
+	chrome			\
 	commandhandler		\
 	content			\
 	cookie			\

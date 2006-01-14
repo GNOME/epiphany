@@ -630,6 +630,9 @@ data/Makefile
 data/epiphany-${EPIPHANY_API_VERSION}.pc:data/epiphany.pc.in
 data/epiphany.desktop.in
 data/bme.desktop.in
+data/chrome/Makefile
+data/chrome/brand.dtd
+data/chrome/brand.properties
 data/glade/Makefile
 data/art/Makefile
 data/ui/Makefile

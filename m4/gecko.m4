@@ -94,6 +94,12 @@ _GECKO_PREFIX="`$PKG_CONFIG --variable=prefix ${gecko_cv_gecko}-gtkmozembed`"
 
 fi # if gecko_cv_have_gecko
 
+if test "$gecko_cv_gecko_flavour" = "toolkit"; then
+	AC_DEFINE([HAVE_MOZILLA_TOOLKIT],[1],[Define if mozilla is of the toolkit flavour])
+fi
+
+AM_CONDITIONAL([HAVE_MOZILLA_TOOLKIT],[test "$gecko_cv_gecko_flavour" = "toolkit"])
+
 $1[]=$gecko_cv_gecko
 $1[]_FLAVOUR=$gecko_cv_gecko_flavour
 $1[]_INCLUDE_ROOT=$_GECKO_INCLUDE_ROOT

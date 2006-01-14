@@ -1,3 +1,27 @@
+2006-01-14  Christian Persch  <chpe@cvs.gnome.org>
+
+	* m4/gecko.m4:
+	
+	Add defines and automake conditional for toolkit flavour.
+
+	* configure.ac:
+	* data/Makefile.am:
+	A data/chrome/.cvsignore:
+	A data/chrome/Makefile.am:
+	A data/chrome/brand.dtd.in:
+	A data/chrome/brand.properties.in:
+	A data/chrome/epiphany.manifest.in:
+	
+	Provide branding so mozilla dialogues don't show "Deer Park" or
+	"Firefox" but "Epiphany" instead.
+
+	* embed/mozilla/Makefile.am:
+	A embed/mozilla/EphyDirectoryProvider.cpp:
+	A embed/mozilla/EphyDirectoryProvider.h:
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Add a directory service provider.
+
 2006-01-13  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-stock-icons.c:
