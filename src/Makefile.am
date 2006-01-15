@@ -216,15 +216,18 @@ epiphany_LDADD += \
 	$(PYTHON_LIB_LOC) $(PYTHON_LIBS)	\
 	$(PYTHON_EXTRA_LIBS)			\
 	$(PYGTK_LIBS)
-endif
 
-if ENABLE_PYTHON
 pydefsdir = $(datadir)/pygtk/2.0/defs
 pydefs_DATA = epiphany.defs
 
 EXTRA_DIST += \
 	epiphany.override	\
 	$(pydefs_DATA)
+endif
+
+if ENABLE_NETWORK_MANAGER
+epiphany_LDADD += \
+	$(NETWORK_MANAGER_LIBS)
 endif
 
 BUILT_SOURCES =	\

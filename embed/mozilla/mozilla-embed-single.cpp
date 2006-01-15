@@ -1,7 +1,7 @@
 /*  vim:set ts=8 noet sw=8:
  *  Copyright (C) 2000-2004 Marco Pesenti Gritti
  *  Copyright (C) 2003 Robert Marcano
- *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2003, 2004, 2005, 2006 Christian Persch
  *  Copyright (C) 2005 Crispin Flowerday
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -102,7 +102,16 @@
 #include <nsIIDNService.h>
 #endif /* ALLOW_PRIVATE_API */
 
+#ifdef HAVE_GECKO_1_8
+#include <nsIStyleSheetService.h>
+#include "EphyUtils.h"
+#endif
+
 #include <stdlib.h>
+
+#ifdef ENABLE_NETWORK_MANAGER
+#include <libnm_glib.h>
+#endif
 
 #define MOZILLA_PROFILE_DIR  "/mozilla"
 #define MOZILLA_PROFILE_NAME "epiphany"
@@ -119,6 +128,11 @@ struct MozillaEmbedSinglePrivate
 	GtkWidget *theme_window;
 
 	EphySingle *mSingleObserver;
+
+#ifdef ENABLE_NETWORK_MANAGER
+	libnm_glib_ctx *nm_context;
+	guint nm_callback_id;
+#endif
 
 	guint online : 1;
 };
@@ -522,6 +536,62 @@ mozilla_init_observer (MozillaEmbedSingle *single)
 	}
 }
 
+#ifdef ENABLE_NETWORK_MANAGER
+
+static void
+network_state_cb (libnm_glib_ctx *context,
+		  gpointer data)
+{
+	EphyEmbedSingle *single = EPHY_EMBED_SINGLE (data);
+	libnm_glib_state state;
+
+	state = libnm_glib_get_network_state (context);
+
+	LOG ("Network state: %d\n", state);
+
+	switch (state)
+	{
+		case LIBNM_NO_DBUS:
+		case LIBNM_NO_NETWORKMANAGER:
+		case LIBNM_INVALID_CONTEXT:
+			/* do nothing */
+			break;
+		case LIBNM_NO_NETWORK_CONNECTION:
+			ephy_embed_single_set_network_status (single, FALSE);
+			break;
+		case LIBNM_ACTIVE_NETWORK_CONNECTION:
+			ephy_embed_single_set_network_status (single, TRUE);
+			break;
+	}
+}
+
+static void
+mozilla_init_network_manager (MozillaEmbedSingle *single)
+{
+	MozillaEmbedSinglePrivate *priv = single->priv;
+
+	priv->nm_context = libnm_glib_init ();
+	if (priv->nm_context == NULL)
+	{
+		g_warning ("Could not initialise NetworkManager, connection status will not be managed!\n");
+		return;
+	}
+
+	priv->nm_callback_id = libnm_glib_register_callback (priv->nm_context,
+							     network_state_cb,
+							     single, NULL);
+	if (priv->nm_callback_id == 0)
+	{
+		libnm_glib_shutdown (priv->nm_context);
+		priv->nm_context = NULL;
+
+		g_warning ("Could not connect to NetworkManager, connection status will not be managed!\n");
+		return;
+	}
+}
+
+#endif /* ENABLE_NETWORK_MANAGER */
+
 static gboolean
 init_services (MozillaEmbedSingle *single)
 {
@@ -544,6 +614,8 @@ init_services (MozillaEmbedSingle *single)
 	/* Fire up the beast */
 	gtk_moz_embed_push_startup ();
 
+	mozilla_register_components ();
+
 	/* Until gtkmozembed does this itself */
 	mozilla_init_chrome ();
 
@@ -563,9 +635,11 @@ init_services (MozillaEmbedSingle *single)
 	mozilla_notifiers_init ();
 	STOP_PROFILER ("Mozilla prefs notifiers")
 
-	mozilla_register_components ();
-
 	mozilla_init_observer (single);
+
+#ifdef ENABLE_NETWORK_MANAGER
+	mozilla_init_network_manager (single);
+#endif
 
 	return TRUE;
 }
@@ -621,13 +695,29 @@ static void
 mozilla_embed_single_dispose (GObject *object)
 {
 	MozillaEmbedSingle *single = MOZILLA_EMBED_SINGLE (object);
+	MozillaEmbedSinglePrivate *priv = single->priv;
 
-	if (single->priv->mSingleObserver)
+	if (priv->mSingleObserver)
 	{
-		single->priv->mSingleObserver->Detach ();
-		NS_RELEASE (single->priv->mSingleObserver);
-		single->priv->mSingleObserver = nsnull;
+		priv->mSingleObserver->Detach ();
+		NS_RELEASE (priv->mSingleObserver);
+		priv->mSingleObserver = nsnull;
 	}
+
+#ifdef ENABLE_NETWORK_MANAGER
+        if (priv->nm_context != NULL)
+	{
+		if (priv->nm_callback_id != 0)
+		{
+			libnm_glib_unregister_callback (priv->nm_context,
+							priv->nm_callback_id);
+			priv->nm_callback_id = 0;
+		}
+	
+		libnm_glib_shutdown (priv->nm_context);
+		priv->nm_context = NULL;
+	}
+#endif
 
 	parent_class->dispose (object);
 }

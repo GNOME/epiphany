@@ -557,6 +557,29 @@ fi
 
 AM_CONDITIONAL([ENABLE_CERTIFICATE_MANAGER],[test "$enable_certificate_manager" = "yes"])
 
+# NetworkManager
+
+AC_MSG_CHECKING([whether to enable NetworkManager support])
+AC_ARG_ENABLE([network-manager],
+	AS_HELP_STRING([--enable-network-manager],[Whether to enable automatic network status with NetworkManager (default: disabled]),
+	[],[enable_network_manager=no])
+AC_MSG_RESULT([$enable_network_manager])
+
+if test "x$enable_network_manager" != "xno"; then
+	NETWORKMANAGER_REQUIRED=0.5.0
+
+	PKG_CHECK_MODULES([NETWORK_MANAGER],[libnm_glib >= $NETWORKMANAGER_REQUIRED],
+		[enable_network_manager=yes],[enable_network_manager=no])
+	AC_SUBST([NETWORK_MANAGER_CFLAGS])
+	AC_SUBST([NETWORK_MANAGER_LIBS])
+fi
+
+if test "x$enable_network_manager" = "xyes"; then
+	AC_DEFINE([ENABLE_NETWORK_MANAGER],[1],[Define for NetworkManager support])
+fi
+
+AM_CONDITIONAL([ENABLE_NETWORK_MANAGER],[test "x$enable_network_manager" = "xyes"])
+
 # *******************************
 # Add warning flags
 # *******************************

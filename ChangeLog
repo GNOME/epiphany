@@ -1,3 +1,14 @@
+2006-01-15  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.ac:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* src/Makefile.am:
+
+	Add NetworkManager magic for connection status autodetection.
+	Defaults to disabled because I'm not very happy with the libnm-glib
+	implementation. Oh, and it may crash on startup, too.
+
 2006-01-15  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* lib/ephy-adblock.h:
