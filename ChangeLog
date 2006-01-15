@@ -1,3 +1,15 @@
+2006-01-15  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* lib/ephy-adblock.h:
+	* lib/ephy-adblock.c:
+	* embed/ephy-adblock-manager.h:
+	* embed/ephy-adblock-manager.c:
+
+	Add a method to EphyAdblock interface, ephy_adblock_manager_edit_rule,
+	so one can allow/disallow an url.
+	Add a method to EphyAdblockManager, ephy_adblock_manager_has_blocker, 
+	so one can ask it whether a blocker is running.
+
 2006-01-15  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* data/chrome/Makefile.am:

@@ -59,3 +59,15 @@ ephy_adblock_should_load (EphyAdBlock *adblock,
 
 	return TRUE;
 }
+
+void
+ephy_adblock_edit_rule (EphyAdBlock *adblock,
+			const char *url,
+			gboolean allowed)
+{
+	EphyAdBlockIface *iface = EPHY_ADBLOCK_GET_IFACE (adblock);
+	if (iface->edit_rule)
+	{
+		iface->edit_rule (adblock, url, allowed);
+	}
+}

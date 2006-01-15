@@ -98,4 +98,38 @@ ephy_adblock_manager_class_init (EphyAdBlockManagerClass *klass)
 	g_type_class_add_private (object_class, sizeof (EphyAdBlockManagerPrivate));
 }
 
+/**
+ * ephy_adblock_manager_edit_rule:
+ * @shell: a #EphyAdBlockManager
+ * @url: the target url on which the rule is based
+ * @allowed: TRUE if the url has to be blocked.
+ *
+ * Ask to the blocker a new rule based on @url.
+ *
+ **/
+void
+ephy_adblock_manager_edit_rule (EphyAdBlockManager *self,
+	    	 	    	const char *url,
+	    	 	    	gboolean allowed)
+{
+	if (self->priv->blocker != NULL)
+	{
+		ephy_adblock_edit_rule (self->priv->blocker,	
+					url,
+					allowed);
+	}
+}
 
+/**
+ * ephy_adblock_manager_has_blocker:
+ * @shell: a #EphyAdBlockManager
+ *
+ * Check if Epiphany has currently an active blocker
+ *
+ * ReturnValue: TRUE if an active blocker is running
+ **/
+gboolean
+ephy_adblock_manager_has_blocker (EphyAdBlockManager *self)
+{
+	return self->priv->blocker != NULL;
+} 
