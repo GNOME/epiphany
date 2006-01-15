@@ -11,6 +11,9 @@ branding_in_files = \
 	brand.properties.in
 branding_DATA = $(branding_in_files:%.in=%)
 
+globalchromedir = $(manifestdir)/global
+globalchrome_DATA = about.xhtml
+
 EXTRA_DIST = \
 	$(manifest_in_files)	\
 	$(branding_in_files)
