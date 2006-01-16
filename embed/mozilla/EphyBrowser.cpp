@@ -84,6 +84,13 @@
 #include "nsIInterfaceRequestor.h"
 #include "nsIDOMHTMLDocument.h"
 #include "nsIDOMXMLDocument.h"
+#include <nsIDOMCSSStyleDeclaration.h>
+#include <nsIDOMCSSStyleDeclaration.h>
+#include <nsIDOMCSSPrimitiveValue.h>
+#include <nsIDOMCSSValue.h>
+#include <nsIDOMViewCSS.h>
+#include <nsIDOMDocumentView.h>
+#include <nsIDOMAbstractView.h>
 
 #ifdef ALLOW_PRIVATE_API
 #include "nsIImageDocument.h"
@@ -1241,6 +1248,24 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 	nsCOMPtr<nsIDOMHTMLCollection> forms;
 	htmlDoc->GetForms (getter_AddRefs (forms));
 	if (!forms) return NS_OK; /* it's ok not to have any forms */
+	
+	nsCOMPtr<nsIDOMDocumentView> docView (do_QueryInterface (aDomDoc));
+	nsCOMPtr<nsIDOMViewCSS> defaultCSSView;
+	if (docView)
+	{
+		nsCOMPtr<nsIDOMAbstractView> defaultView;
+		docView->GetDefaultView (getter_AddRefs (defaultView));
+		defaultCSSView = do_QueryInterface (defaultView);
+	}
+
+	const PRUnichar visibilityLiteral[] = { 'v', 'i', 's', 'i', 'b', 'i', 'l', 'i', 't', 'y', '\0' };
+	const PRUnichar visibleLiteral[] = { 'v', 'i', 's', 'i', 'b', 'l', 'e', '\0' };
+	nsEmbedString visibilityAttr(visibilityLiteral);
+	nsEmbedString visibleAttr(visibleLiteral);
+	nsEmbedString EmptyString;
+	nsCOMPtr<nsIDOMCSSStyleDeclaration> computedStyle;
+	nsCOMPtr<nsIDOMCSSValue> cssValue;
+	nsCOMPtr<nsIDOMCSSPrimitiveValue> primitiveValue;
 
 	PRUint32 formNum;
 	forms->GetLength (&formNum);
@@ -1255,6 +1280,32 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 		nsCOMPtr<nsIDOMHTMLFormElement> formElement = do_QueryInterface (formNode);
 		if (!formElement) continue;
 
+		PRBool isVisible = PR_FALSE;
+		nsresult rv;
+		computedStyle = nsnull;
+		rv = defaultCSSView->GetComputedStyle (formElement, EmptyString,
+						       getter_AddRefs (computedStyle));
+		if (NS_SUCCEEDED (rv) && computedStyle)
+		{
+			rv = computedStyle->GetPropertyCSSValue(visibilityAttr, getter_AddRefs (cssValue));
+			if (NS_SUCCEEDED (rv) && cssValue)
+			{
+				nsEmbedString value;
+				rv = cssValue->GetCssText (value);
+				if (NS_SUCCEEDED (rv) && value.Length ())
+				{
+					/* what to do for "collapse" and "inherit" values? */
+					isVisible = CompareFormsText (value, visibleAttr);
+				}
+			}
+		}
+
+		if (!isVisible)
+		{
+			LOG ("Form node %p is invisible\n", formNode.get());
+			continue;
+		}
+		
 		nsCOMPtr<nsIDOMHTMLCollection> formElements;
 		formElement->GetElements (getter_AddRefs (formElements));
 		if (!formElements) continue;
@@ -1269,9 +1320,45 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 			formElements->Item (elementIndex, getter_AddRefs (domNode));
 			if (!domNode) continue;
 
+			nsCOMPtr<nsIDOMElement> domElement (do_QueryInterface (domNode));
+			if (!domElement) continue;
+
+			isVisible = PR_FALSE;
+			computedStyle = nsnull;
+			rv = defaultCSSView->GetComputedStyle (domElement, EmptyString,
+							       getter_AddRefs (computedStyle));
+			if (NS_SUCCEEDED (rv) && computedStyle)
+			{
+				rv = computedStyle->GetPropertyCSSValue(visibilityAttr, getter_AddRefs (cssValue));
+				if (NS_SUCCEEDED (rv) && cssValue)
+				{
+					nsEmbedString value;
+					rv = cssValue->GetCssText (value);
+					if (NS_SUCCEEDED (rv) && value.Length ())
+					{
+						/* what to do for "collapse" and "inherit" values? */
+						isVisible = CompareFormsText (value, visibleAttr);
+					}
+				}
+			}
+
+			if (!isVisible)
+			{
+				LOG("Form node %p element %p is invisible\n", formNode.get(), domNode.get());
+				continue;
+			}
+	
 			nsCOMPtr<nsIDOMHTMLTextAreaElement> areaElement = do_QueryInterface (domNode);
 			if (areaElement)
 			{
+				PRBool isDisabled = PR_TRUE;
+				areaElement->GetDisabled (&isDisabled);
+				if (isDisabled)
+				{
+					LOG ("Form node %p element %p [textarea] is disabled\n", formNode.get(), areaElement.get());
+					continue;
+				}
+
 				nsEmbedString defaultText, userText;
 				areaElement->GetDefaultValue (defaultText);
 				areaElement->GetValue (userText);
@@ -1288,6 +1375,14 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 			nsCOMPtr<nsIDOMHTMLInputElement> inputElement = do_QueryInterface(domNode);
 			if (!inputElement) continue;
 	
+			PRBool isDisabled = PR_TRUE;
+			inputElement->GetDisabled (&isDisabled);
+			if (isDisabled)
+			{
+				LOG ("Form node %p element %p [input] is disabled\n", formNode.get(), inputElement.get());
+				continue;
+			}
+
 			nsEmbedString type;
 			inputElement->GetType(type);
 
