@@ -724,6 +724,8 @@ ephy_node_write_to_xml(EphyNode *node,
 		value = g_ptr_array_index (node->properties, i);
 
 		if (value == NULL) continue;
+		if (G_VALUE_TYPE (value) == G_TYPE_STRING &&
+		    g_value_get_string (value) == NULL) continue;
 
 		ret = xmlTextWriterStartElement (writer, (const xmlChar *)"property");
 		if (ret < 0) break;
