@@ -30,4 +30,14 @@ void  ephy_bookmarks_ui_detach_window        (EphyWindow *window);
 void  ephy_bookmarks_ui_attach_toolbar_model (EggToolbarsModel *model);
 void  ephy_bookmarks_ui_detach_toolbar_model (EggToolbarsModel *model);
 
+void ephy_bookmarks_ui_add_bookmark  (GtkWidget *parent,
+				      const char *location,
+				      const char *title);
+
+void ephy_bookmarks_ui_add_topic     (GtkWidget *parent,
+				      EphyNode *bookmark);
+
+void ephy_bookmarks_ui_show_bookmark (GtkWidget *parent,
+				      EphyNode *bookmark);
+
 #endif

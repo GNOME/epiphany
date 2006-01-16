@@ -53,7 +53,7 @@ GType		     ephy_bookmark_properties_get_type        (void);
 
 GtkWidget	    *ephy_bookmark_properties_new             (EphyBookmarks *bookmarks,
 							       EphyNode *bookmark,
-							       GtkWidget *parent_window);
+							       gboolean creating);
 
 EphyNode            *ephy_bookmark_properties_get_node        (EphyBookmarkProperties *properties);
 

@@ -395,9 +395,8 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	src/bookmarks/ephy-bookmarks-import.h		\
 	src/bookmarks/ephy-bookmarks-menu.h		\
 	src/bookmarks/ephy-favorites-menu.h		\
-	src/bookmarks/ephy-new-bookmark.h		\
 	src/bookmarks/ephy-topic-action.h		\
-	src/bookmarks/ephy-topics-selector.h		\
+	src/bookmarks/ephy-topics-palette.h		\
 	src/bookmarks/ephy-bookmark-action-group.h	\
 	src/bookmarks/ephy-bookmark-factory-action.h	\
 	src/bookmarks/ephy-bookmarks-ui.h		\

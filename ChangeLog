@@ -1,5 +1,41 @@
 2006-01-17  Peter Harvey  <peter.a.harvey@gmail.com>
 
+	* src/Makefile.am
+
+	Removed ephy-new-bookmark and ephy-topics-selector from the Makefile.
+	
+	* src/ephy-history-window.c
+	* src/popup-commands.c
+	* src/window-commands.c
+	* src/bookmarks/ephy-bookmarks-editor.c
+	
+	Removed all the slightly different bits of code to create a
+	bookmark and called ephy_bookmarks_ui_add_bookmark instead.
+	
+	* src/bookmarks/ephy-bookmarks.c
+	* src/bookmarks/ephy-bookmarks.h
+	
+	Moved the hashtable for bookmark windows to ephy-bookmarks-ui.
+	Added a new field "usericon" to the ephynode/bookmarks database,
+	to store the URL of the user-defined icon (if any). It can be
+	NULL (use site icon), "" (use none), or a URL.
+
+	* src/bookmarks/ephy-bookmark-properties.c
+	* src/bookmarks/ephy-bookmark-properties.h
+	
+	Large changes to the bookmark properties window to handle different
+	use cases (adding or changing a bookmark), to use the new topics
+	palette widget, and to support the new usericon.
+	
+	* src/bookmarks/ephy-bookmarks-ui.c
+	* src/bookmarks/ephy-bookmarks-ui.h
+
+	Large additions to ephy-bookmarks-ui to replace ephy-new-bookmark.
+	Fixed some bugs in the datatype handlers for the toolbar which
+	are supplied by ephy-bookmarks-ui.
+
+2006-01-17  Peter Harvey  <peter.a.harvey@gmail.com>
+
 	* src/bookmarks/ephy-topics-palette.c
 	* src/bookmarks/ephy-topics-palette.h
 	

@@ -34,7 +34,6 @@
 #include "ephy-dialog.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-history-window.h"
-#include "ephy-new-bookmark.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-toolbar.h"
@@ -45,6 +44,7 @@
 #include "ephy-toolbar-editor.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-location-entry.h"
+#include "ephy-bookmarks-ui.h"
 #include "pdm-dialog.h"
 
 #include <string.h>
@@ -233,9 +233,6 @@ window_cmd_file_bookmark_page (GtkAction *action,
 {
 	EphyTab *tab;
 	EphyEmbed *embed;
-	EphyBookmarks *bookmarks;
-	GtkWidget *new_bookmark;
-	const char *location, *icon, *title;
 
 	tab = ephy_window_get_active_tab (window);
 	g_return_if_fail (tab != NULL);
@@ -243,22 +240,9 @@ window_cmd_file_bookmark_page (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	location = ephy_tab_get_address (tab);
-	title = ephy_tab_get_title (tab);
-	icon = ephy_tab_get_icon_address (tab);
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	if (ephy_new_bookmark_is_unique (bookmarks, GTK_WINDOW (window),
-					 location))
-	{
-		new_bookmark = ephy_new_bookmark_new
-			(bookmarks, GTK_WINDOW (window), location);
-		ephy_new_bookmark_set_title
-			(EPHY_NEW_BOOKMARK (new_bookmark), title);
-		ephy_new_bookmark_set_icon
-			(EPHY_NEW_BOOKMARK (new_bookmark), icon);
-		gtk_widget_show (new_bookmark);
-	}
+	ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window),
+					ephy_tab_get_address (tab),
+					ephy_tab_get_title (tab));
 }
 
 static void

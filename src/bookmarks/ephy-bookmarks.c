@@ -70,7 +70,6 @@ struct _EphyBookmarksPrivate
 	EphyNode *smartbookmarks;
 	EphyNode *lower_fav;
 	double lower_score;
-	GHashTable *props_dialogs;
 	guint disable_bookmark_editing_notifier_id;
 
 #ifdef ENABLE_ZEROCONF
@@ -861,9 +860,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 					       "bookmarks.rdf",
 					       NULL);
 
-	eb->priv->props_dialogs = g_hash_table_new (g_direct_hash,
-						    g_direct_equal);
-
 	/* Bookmarks */
 	eb->priv->bookmarks = ephy_node_new_with_id (db, BOOKMARKS_NODE_ID);
 	g_value_init (&value, G_TYPE_STRING);
@@ -1016,8 +1012,6 @@ ephy_bookmarks_finalize (GObject *object)
 
 	eel_gconf_notification_remove (eb->priv->disable_bookmark_editing_notifier_id);
 
-	g_hash_table_destroy (eb->priv->props_dialogs);
-
 	if (eb->priv->save_timeout_id != 0)
 	{
 		g_source_remove (eb->priv->save_timeout_id);
@@ -1098,24 +1092,42 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 		    const char *title,
 		    const char *url)
 {
+	EphyHistory *history;
 	EphyNode *bm;
 	GValue value = { 0, };
 
 	bm = ephy_node_new (eb->priv->db);
 
 	if (bm == NULL) return NULL;
-
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, title);
-	ephy_node_set_property (bm, EPHY_NODE_BMK_PROP_TITLE,
-				&value);
-	g_value_unset (&value);
-
+	
+	if (url == NULL) return NULL;
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, url);
-	ephy_node_set_property (bm, EPHY_NODE_BMK_PROP_LOCATION,
-				&value);
+	ephy_node_set_property (bm, EPHY_NODE_BMK_PROP_LOCATION, &value);
 	g_value_unset (&value);
+
+	if (title == NULL || title[0] == '\0')
+	{
+		title = _("Untitled");
+	}	
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, title);
+	ephy_node_set_property (bm, EPHY_NODE_BMK_PROP_TITLE, &value);
+	g_value_unset (&value);
+
+	history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
+	if (history != NULL)
+	{
+		const char *icon = ephy_history_get_icon (history, url);
+		if (icon != NULL)
+		{
+			g_value_init (&value, G_TYPE_STRING);
+			g_value_set_string (&value, icon);
+			ephy_node_set_property (bm, EPHY_NODE_BMK_PROP_ICON,
+						&value);
+			g_value_unset (&value);
+		}
+	}
 
 	update_has_smart_address (eb, bm, url);
 	update_bookmark_keywords (eb, bm);
@@ -1193,6 +1205,28 @@ ephy_bookmarks_set_icon	(EphyBookmarks *eb,
 				&value);
 	g_value_unset (&value);
 }
+
+
+void
+ephy_bookmarks_set_usericon (EphyBookmarks *eb,
+			     const char *url,
+			     const char *icon)
+{
+	EphyNode *node;
+	GValue value = { 0, };
+
+	g_return_if_fail (icon != NULL);
+
+	node = ephy_bookmarks_find_bookmark (eb, url);
+	if (node == NULL) return;
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, icon);
+	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_USERICON,
+				&value);
+	g_value_unset (&value);
+}
+
 
 /* name must end with '=' */
 static char *
@@ -1352,57 +1386,6 @@ ephy_bookmarks_add_keyword (EphyBookmarks *eb,
 	ephy_node_add_child (eb->priv->keywords, key);
 
 	return key;
-}
-
-
-static void
-prop_dialog_destroy_cb (EphyBookmarkProperties *dialog,
-			EphyBookmarks *bookmarks)
-{
-	EphyNode *bookmark;
-
-	bookmark = ephy_bookmark_properties_get_node (dialog);
-
-	g_hash_table_remove (bookmarks->priv->props_dialogs, bookmark);
-}
-
-static void
-bookmark_destroyed_cb (EphyNode *bookmark,
-		       GtkWidget *dialog)
-{
-	gtk_widget_destroy (dialog);
-}		 
-
-GtkWidget *
-ephy_bookmarks_show_bookmark_properties (EphyBookmarks *bookmarks,
-					 EphyNode *bookmark,
-					 GtkWidget *parent)
-{
-	GtkWidget *dialog = NULL;
-
-	g_return_val_if_fail (EPHY_IS_BOOKMARKS (bookmarks), NULL);
-	g_return_val_if_fail (EPHY_IS_NODE (bookmark), NULL);
-
-	dialog = g_hash_table_lookup (bookmarks->priv->props_dialogs, bookmark);
-
-	if (dialog == NULL)
-	{
-		dialog = ephy_bookmark_properties_new (bookmarks, bookmark, parent);
-
-		ephy_node_signal_connect_object (bookmark,
-						 EPHY_NODE_DESTROY,
-						 (EphyNodeCallback) bookmark_destroyed_cb,
-						 G_OBJECT (dialog));
-
-		g_signal_connect (dialog, "destroy",
-				  G_CALLBACK (prop_dialog_destroy_cb), bookmarks);
-		g_hash_table_insert (bookmarks->priv->props_dialogs,
-				     bookmark, dialog);
-	}
-
-	gtk_window_present (GTK_WINDOW (dialog));
-
-	return dialog;
 }
 
 void

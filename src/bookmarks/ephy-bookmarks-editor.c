@@ -48,6 +48,7 @@
 #include "ephy-bookmarks-editor.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-bookmarks-export.h"
+#include "ephy-bookmarks-ui.h"
 #include "ephy-node-common.h"
 #include "ephy-node-view.h"
 #include "ephy-window.h"
@@ -461,8 +462,7 @@ static void
 show_properties_dialog (EphyBookmarksEditor *editor,
 			EphyNode *bookmark)
 {
-	ephy_bookmarks_show_bookmark_properties
-		(editor->priv->bookmarks, bookmark, GTK_WIDGET (editor));
+	ephy_bookmarks_ui_show_bookmark (GTK_WIDGET (editor), bookmark);
 }
 
 static GSList *

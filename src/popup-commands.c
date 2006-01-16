@@ -22,7 +22,6 @@
 
 #include "popup-commands.h"
 #include "ephy-shell.h"
-#include "ephy-new-bookmark.h"
 #include "ephy-embed-factory.h"
 #include "ephy-embed-persist.h"
 #include "ephy-prefs.h"
@@ -84,8 +83,6 @@ void
 popup_cmd_bookmark_link (GtkAction *action,
 			 EphyWindow *window)
 {
-	GtkWidget *new_bookmark;
-	EphyBookmarks *bookmarks;
 	EphyEmbedEvent *event;
 	const GValue *link_title;
 	const GValue *link_rel;
@@ -123,18 +120,13 @@ popup_cmd_bookmark_link (GtkAction *action,
 	{
 		title = location;
 	}
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	if (ephy_new_bookmark_is_unique (bookmarks, GTK_WINDOW (window),
-					 location))
+	
+	if (is_smart)
 	{
-		new_bookmark = ephy_new_bookmark_new
-			(bookmarks, GTK_WINDOW (window),
-			 is_smart ? rel : location);
-		ephy_new_bookmark_set_title
-			(EPHY_NEW_BOOKMARK (new_bookmark), title);
-		gtk_widget_show (new_bookmark);
+		location = rel;
 	}
+
+	ephy_bookmarks_ui_add_bookmark (location, title, GTK_WINDOW (window));
 }
 
 static void

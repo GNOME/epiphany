@@ -56,7 +56,6 @@
 #include "window-commands.h"
 #include "ephy-file-helpers.h"
 #include "ephy-debug.h"
-#include "ephy-new-bookmark.h"
 #include "ephy-stock-icons.h"
 #include "ephy-gui.h"
 #include "ephy-stock-icons.h"
@@ -67,6 +66,7 @@
 #include "ephy-node.h"
 #include "ephy-node-common.h"
 #include "ephy-node-view.h"
+#include "ephy-bookmarks-ui.h"
 
 static const GtkTargetEntry page_drag_types [] =
 {
@@ -475,13 +475,7 @@ static void
 cmd_bookmark_link (GtkAction *action,
                    EphyHistoryWindow *editor)
 {
-        GtkWindow *window;
-        EphyBookmarks *bookmarks;
-        GtkWidget *new_bookmark;
         GList *selection;
-
-	window = GTK_WINDOW (editor);
-        bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
         selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->pages_view));
 
@@ -494,16 +488,10 @@ cmd_bookmark_link (GtkAction *action,
 		node = selection->data;
 		location = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_LOCATION);
 		title = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_TITLE);
-		if (ephy_new_bookmark_is_unique (bookmarks, GTK_WINDOW (window),
-						 location))
-		{
-			new_bookmark = ephy_new_bookmark_new
-				(bookmarks, window, location);
-			ephy_new_bookmark_set_title
-				(EPHY_NEW_BOOKMARK (new_bookmark), title);
-			gtk_widget_show (new_bookmark);
-		}
+
+		ephy_bookmarks_ui_add_bookmark (GTK_WIDGET (editor), location, title);
 	}
+
 	g_list_free (selection);
 }
 
