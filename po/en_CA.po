@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-11 12:40-0500\n"
+"POT-Creation-Date: 2006-01-15 23:12-0500\n"
 "PO-Revision-Date: 2005-08-13 22:27-0500\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -803,7 +803,7 @@ msgstr ""
 "%s of %s"
 
 #: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#: ../src/ephy-window.c:1459
+#: ../src/ephy-window.c:1465
 msgid "Unknown"
 msgstr "Unknown"
 
@@ -1550,6 +1550,25 @@ msgstr "in the Internet Archive"
 msgid "Untitled"
 msgstr "Untitled"
 
+#: ../embed/mozilla/EphyPromptService.cpp:193
+msgid "_Abort Script"
+msgstr "_Abort Script"
+
+#: ../embed/mozilla/EphyPromptService.cpp:261
+msgid "Don't Save"
+msgstr "Do Not Save"
+
+#: ../embed/mozilla/EphyPromptService.cpp:742
+msgid "_User:"
+msgstr "_User:"
+
+#: ../embed/mozilla/EphyPromptService.cpp:743
+#: ../embed/mozilla/EphyPromptService.cpp:770
+#: ../embed/mozilla/GtkNSSDialogs.cpp:795
+#: ../embed/mozilla/GtkNSSDialogs.cpp:905
+msgid "_Password:"
+msgstr "_Password:"
+
 #: ../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
 #: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:642
 msgid "All files"
@@ -1741,11 +1760,6 @@ msgstr "Select password."
 msgid "Select a password to protect this certificate."
 msgstr "Select a password to protect this certificate."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:795
-#: ../embed/mozilla/GtkNSSDialogs.cpp:905
-msgid "_Password:"
-msgstr "_Password:"
-
 #: ../embed/mozilla/GtkNSSDialogs.cpp:809
 msgid "Con_firm password:"
 msgstr "Con_firm password:"
@@ -1922,11 +1936,11 @@ msgstr "Files"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:263
+#: ../embed/mozilla/mozilla-embed-single.cpp:282
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.ca/search?ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:595
+#: ../embed/mozilla/mozilla-embed-single.cpp:682
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphany cannot be used now. Mozilla initialization failed."
 
@@ -2202,28 +2216,24 @@ msgid "select fonts for|Other Scripts"
 msgstr "Other Scripts"
 
 #: ../lib/ephy-stock-icons.c:54
-msgid "Close Tab"
-msgstr "Close Tab"
-
-#: ../lib/ephy-stock-icons.c:55
 msgid "Popup Windows"
 msgstr "Popup Windows"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1191
+#: ../lib/ephy-stock-icons.c:55 ../src/ephy-history-window.c:1191
 msgid "History"
 msgstr "History"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
+#: ../lib/ephy-stock-icons.c:56 ../src/bookmarks/ephy-bookmarks-editor.c:684
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1535
 #: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1291
 msgid "Bookmarks"
 msgstr "Bookmarks"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Address Entry"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:58
 msgid "_Download"
 msgstr "_Download"
 
@@ -3568,75 +3578,85 @@ msgstr "Bookmark"
 msgid "Find"
 msgstr "Find"
 
-#: ../src/ephy-window.c:1462
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1302
+msgid "Larger"
+msgstr "Larger"
+
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1305
+msgid "Smaller"
+msgstr "Smaller"
+
+#: ../src/ephy-window.c:1468
 msgid "Insecure"
 msgstr "Insecure"
 
-#: ../src/ephy-window.c:1467
+#: ../src/ephy-window.c:1473
 msgid "Broken"
 msgstr "Broken"
 
-#: ../src/ephy-window.c:1480
+#: ../src/ephy-window.c:1486
 msgid "Low"
 msgstr "Low"
 
-#: ../src/ephy-window.c:1487
+#: ../src/ephy-window.c:1493
 msgid "High"
 msgstr "High"
 
-#: ../src/ephy-window.c:1497
+#: ../src/ephy-window.c:1503
 #, c-format
 msgid "Security level: %s"
 msgstr "Security level: %s"
 
-#: ../src/ephy-window.c:1537
+#: ../src/ephy-window.c:1543
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d hidden popup window"
 msgstr[1] "%d hidden popup windows"
 
-#: ../src/ephy-window.c:1832
+#: ../src/ephy-window.c:1838
 #, c-format
 msgid "Open image “%s”"
 msgstr "Open image “%s”"
 
-#: ../src/ephy-window.c:1837
+#: ../src/ephy-window.c:1843
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Use as desktop background “%s”"
 
-#: ../src/ephy-window.c:1842
+#: ../src/ephy-window.c:1848
 #, c-format
 msgid "Save image “%s”"
 msgstr "Save image “%s”"
 
-#: ../src/ephy-window.c:1847
+#: ../src/ephy-window.c:1853
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Copy image address “%s”"
 
-#: ../src/ephy-window.c:1860
+#: ../src/ephy-window.c:1866
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Send email to address “%s”"
 
-#: ../src/ephy-window.c:1866
+#: ../src/ephy-window.c:1872
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Copy email address “%s”"
 
-#: ../src/ephy-window.c:1878
+#: ../src/ephy-window.c:1884
 #, c-format
 msgid "Save link “%s”"
 msgstr "Save link “%s”"
 
-#: ../src/ephy-window.c:1884
+#: ../src/ephy-window.c:1890
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Bookmark link “%s”"
 
-#: ../src/ephy-window.c:1890
+#: ../src/ephy-window.c:1896
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Copy link's address “%s”"
