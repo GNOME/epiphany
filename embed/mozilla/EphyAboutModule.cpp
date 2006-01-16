@@ -580,7 +580,7 @@ EphyAboutModule::WritePage(nsIURI *aOriginalURI,
 	       "\">\n"
 		"<div id=\"body\">"
 		"<h1>");
-	Write (stream, aTitle);
+	Write (stream, aPrimary);
 	Write (stream,
 	       "</h1>\n");
 	if (aSecondary)

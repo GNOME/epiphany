@@ -45,13 +45,15 @@
 #include <nsCOMPtr.h>
 #include <nsIServiceManager.h>
 #include <nsIPrefService.h>
+#include <nsMemory.h>
 
 /* define to migrate epiphany 1.0 font preferences */
 #define MIGRATE_PIXEL_SIZE
 
 /* Keeps the list of the notifiers we installed for mozilla prefs */
 /* to be able to remove them when exiting */
-GList *notifiers = NULL;
+static GList *notifiers = NULL;
+static nsIPrefBranch *gPrefBranch;
 
 typedef struct
 {
@@ -71,15 +73,18 @@ free_pref_data (PrefData *data)
 }
 
 static gboolean
-transform_accept_languages_list (GConfValue *gcvalue,
+transform_accept_languages_list (GConfEntry *gcentry,
 				 GValue *value,
 				 gpointer user_data)
 {
+	GConfValue *gcvalue;
 	GArray *array;
 	GSList *languages, *l;
 	char **langs;
 
-	if (gcvalue->type != GCONF_VALUE_LIST ||
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_LIST ||
 	    gconf_value_get_list_type (gcvalue) != GCONF_VALUE_STRING) return FALSE;
 
 	languages = gconf_value_get_list (gcvalue);
@@ -117,11 +122,15 @@ transform_accept_languages_list (GConfValue *gcvalue,
 }
 
 static gboolean
-transform_cache_size (GConfValue *gcvalue,
+transform_cache_size (GConfEntry *gcentry,
 		      GValue *value,
 		      gpointer user_data)
 {
-	if (gcvalue->type != GCONF_VALUE_INT) return FALSE;
+	GConfValue *gcvalue;
+
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_INT) return FALSE;
 
 	g_value_init (value, G_TYPE_INT);
 	g_value_set_int (value, gconf_value_get_int (gcvalue) * 1024);
@@ -130,15 +139,18 @@ transform_cache_size (GConfValue *gcvalue,
 }
 
 static gboolean
-transform_cookies_accept_mode (GConfValue *gcvalue,
+transform_cookies_accept_mode (GConfEntry *gcentry,
 			       GValue *value,
 			       gpointer user_data)
 
 {
+	GConfValue *gcvalue;
 	const char *mode;
 	int mozilla_mode = 0;
 
-	if (gcvalue->type != GCONF_VALUE_STRING) return FALSE;
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue == NULL ||
+	     gcvalue->type != GCONF_VALUE_STRING) return FALSE;
 
 	mode = gconf_value_get_string (gcvalue);
 	if (mode == NULL) return FALSE;
@@ -163,16 +175,19 @@ transform_cookies_accept_mode (GConfValue *gcvalue,
 }
 
 static gboolean
-transform_encoding (GConfValue *gcvalue,
+transform_encoding (GConfEntry *gcentry,
 		    GValue *value,
 		    gpointer user_data)
 {
+	GConfValue *gcvalue;
 	EphyEncodings *encodings;
 	EphyNode *node;
 	const char *code;
 	gboolean is_autodetector;
 
-	if (gcvalue->type != GCONF_VALUE_STRING) return FALSE;
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_STRING) return FALSE;
 
 	code = gconf_value_get_string (gcvalue);
 	if (code == NULL) return FALSE;
@@ -191,28 +206,54 @@ transform_encoding (GConfValue *gcvalue,
 }
 
 static gboolean
-transform_font_size (GConfValue *gcvalue,
-		     GValue *value,
-		     gpointer user_data)
+transform_image_animation_mode (GConfEntry *gcentry,
+			        GValue *value,
+			        gpointer user_data)
+
 {
-	if (gcvalue->type != GCONF_VALUE_INT) return FALSE;
+	GConfValue *gcvalue;
+	const char *mode;
+	int mozilla_mode = 0;
+
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_STRING) return FALSE;
+
+	mode = gconf_value_get_string (gcvalue);
+	if (mode == NULL) return FALSE;
+
+	if (strcmp (mode, "normal") == 0)
+	{
+		mozilla_mode = 0;
+	}
+	else if (strcmp (mode, "once") == 0)
+	{
+		mozilla_mode = 1;
+	}
+	else if (strcmp (mode, "disabled") == 0)
+	{
+		mozilla_mode = 2;
+	}
 
 	g_value_init (value, G_TYPE_INT);
-	g_value_set_int (value, MAX (1, gconf_value_get_int (gcvalue)));
+	g_value_set_int (value, mozilla_mode);
 
 	return TRUE;
 }
 
 static gboolean
-transform_proxy_ignore_list (GConfValue *gcvalue,
+transform_proxy_ignore_list (GConfEntry *gcentry,
 			     GValue *value,
 			     gpointer user_data)
 {
+	GConfValue *gcvalue;
 	GArray *array;
 	GSList *hosts, *l;
 	char **strings;
 
-	if (gcvalue->type != GCONF_VALUE_LIST ||
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_LIST ||
 	    gconf_value_get_list_type (gcvalue) != GCONF_VALUE_STRING) return FALSE;
 
 	hosts = gconf_value_get_list (gcvalue);
@@ -243,14 +284,17 @@ transform_proxy_ignore_list (GConfValue *gcvalue,
 }
 
 static gboolean
-transform_proxy_mode (GConfValue *gcvalue,
+transform_proxy_mode (GConfEntry *gcentry,
 		      GValue *value,
 		      gpointer user_data)
 {
+	GConfValue *gcvalue;
 	const char *mode;
 	int mozilla_mode = 0;
 
-	if (gcvalue->type != GCONF_VALUE_STRING) return FALSE;
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_STRING) return FALSE;
 
 	mode = gconf_value_get_string (gcvalue);
 	if (mode == NULL) return FALSE;
@@ -271,11 +315,15 @@ transform_proxy_mode (GConfValue *gcvalue,
 }
 
 static gboolean
-transform_use_own_fonts (GConfValue *gcvalue,
+transform_use_own_fonts (GConfEntry *gcentry,
 			 GValue *value,
 			 gpointer user_data)
 {
-	if (gcvalue->type != GCONF_VALUE_BOOL) return FALSE;
+	GConfValue *gcvalue;
+
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_BOOL) return FALSE;
 
 	g_value_init (value, G_TYPE_INT);
 	g_value_set_int (value, gconf_value_get_bool (gcvalue) ? 0 : 1);
@@ -284,11 +332,15 @@ transform_use_own_fonts (GConfValue *gcvalue,
 }
 
 extern "C" gboolean
-mozilla_notifier_transform_bool (GConfValue *gcvalue,
+mozilla_notifier_transform_bool (GConfEntry *gcentry,
 				 GValue *value,
 				 gpointer user_data)
 {
-	if (gcvalue->type != GCONF_VALUE_BOOL) return FALSE;
+	GConfValue *gcvalue;
+
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_BOOL) return FALSE;
 
 	g_value_init (value, G_TYPE_BOOLEAN);
 	g_value_set_boolean (value, gconf_value_get_bool (gcvalue));
@@ -297,11 +349,15 @@ mozilla_notifier_transform_bool (GConfValue *gcvalue,
 }
 
 extern "C" gboolean
-mozilla_notifier_transform_bool_invert (GConfValue *gcvalue,
+mozilla_notifier_transform_bool_invert (GConfEntry *gcentry,
 					GValue *value,
 					gpointer user_data)
 {
-	if (gcvalue->type != GCONF_VALUE_BOOL) return FALSE;
+	GConfValue *gcvalue;
+
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_BOOL) return FALSE;
 
 	g_value_init (value, G_TYPE_BOOLEAN);
 	g_value_set_boolean (value, !gconf_value_get_bool (gcvalue));
@@ -310,11 +366,15 @@ mozilla_notifier_transform_bool_invert (GConfValue *gcvalue,
 }
 
 extern "C" gboolean
-mozilla_notifier_transform_int (GConfValue *gcvalue,
+mozilla_notifier_transform_int (GConfEntry *gcentry,
 				GValue *value,
 				gpointer user_data)
 {
-	if (gcvalue->type != GCONF_VALUE_INT) return FALSE;
+	GConfValue *gcvalue;
+
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_INT) return FALSE;
 
 	g_value_init (value, G_TYPE_INT);
 	g_value_set_int (value, gconf_value_get_int (gcvalue));
@@ -323,13 +383,16 @@ mozilla_notifier_transform_int (GConfValue *gcvalue,
 }
 
 extern "C" gboolean
-mozilla_notifier_transform_string (GConfValue *gcvalue,
+mozilla_notifier_transform_string (GConfEntry *gcentry,
 				   GValue *value,
 				   gpointer user_data)
 {
+	GConfValue *gcvalue;
 	const char *str;
 
-	if (gcvalue->type != GCONF_VALUE_STRING) return FALSE;
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_STRING) return FALSE;
 
 	str = gconf_value_get_string (gcvalue);
 	if (str == NULL) return FALSE;
@@ -357,6 +420,9 @@ static const PrefData notifier_entries[] =
 	{ CONF_SECURITY_ALLOW_POPUPS,
 	  "dom.disable_open_during_load",
 	  mozilla_notifier_transform_bool_invert },
+	{ CONF_IMAGE_ANIMATION_MODE,
+	  "image.animation_mode",
+	  transform_image_animation_mode },
 	{ CONF_RENDERING_LANGUAGE,
 	  "intl.accept_languages",
 	  transform_accept_languages_list },
@@ -416,29 +482,62 @@ gboolean
 mozilla_pref_set (const char *pref,
 		  const GValue *value)
 {
+	NS_ENSURE_TRUE (gPrefBranch, FALSE);
+
 	g_return_val_if_fail (pref != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
-
-	nsCOMPtr<nsIPrefService> prefService
-		(do_GetService (NS_PREFSERVICE_CONTRACTID));
-	NS_ENSURE_TRUE (prefService, FALSE);
-
-	nsCOMPtr<nsIPrefBranch> prefBranch;
-	prefService->GetBranch ("", getter_AddRefs (prefBranch));
-	NS_ENSURE_TRUE (prefBranch, FALSE);
 
 	nsresult rv;
 	switch (G_VALUE_TYPE (value))
 	{
 		case G_TYPE_INT:
-			rv = prefBranch->SetIntPref (pref, g_value_get_int (value));
+		{
+			PRInt32 old_value = 0;
+			PRInt32 new_value = g_value_get_int (value);
+			rv = gPrefBranch->GetIntPref (pref, &old_value);
+			if (NS_FAILED (rv) || old_value != new_value)
+			{
+				rv = gPrefBranch->SetIntPref (pref, g_value_get_int (value));
+			}
 			break;
+		}
 		case G_TYPE_BOOLEAN:
-			rv = prefBranch->SetBoolPref (pref, g_value_get_boolean (value));
+		{
+			PRBool old_value = PR_FALSE;
+			PRBool new_value = g_value_get_boolean (value);
+			rv = gPrefBranch->GetBoolPref (pref, &old_value);
+			if (NS_FAILED (rv) || old_value != new_value)
+			{
+				rv = gPrefBranch->SetBoolPref (pref, new_value);
+			}
 			break;
+		}
 		case G_TYPE_STRING:
-			rv = prefBranch->SetCharPref (pref, g_value_get_string (value));
+		{
+			const char *new_value = g_value_get_string (value);
+			if (new_value == NULL)
+			{
+				rv = gPrefBranch->ClearUserPref (pref);
+			}
+			else
+			{
+				char *old_value = nsnull;
+
+				rv = gPrefBranch->GetCharPref (pref, &old_value);
+				if (NS_FAILED (rv) ||
+				    old_value == nsnull ||
+				    strcmp (old_value, new_value) != 0)
+				{
+					rv = gPrefBranch->SetCharPref (pref, new_value);
+				}
+
+				if (old_value)
+				{
+					nsMemory::Free (old_value);
+				}
+			}
 			break;
+		}
 		default:
 			g_return_val_if_reached (FALSE);
 			rv = NS_ERROR_FAILURE;
@@ -451,31 +550,28 @@ mozilla_pref_set (const char *pref,
 static void
 notify_cb (GConfClient *client,
 	   guint cnxn_id,
-	   GConfEntry *entry,
+	   GConfEntry *gcentry,
 	   PrefData *data)
 {
-	GConfValue *gcvalue;
 	GValue value = { 0, };
 
-	g_return_if_fail (entry != NULL);
+	g_return_if_fail (gcentry != NULL);
 	g_return_if_fail (data != NULL);
 
-	gcvalue = gconf_entry_get_value (entry);
-	/* happens on initial notify if the key doesn't exist */
-	if (gcvalue == NULL) return;
-
-	if (data->func (gcvalue, &value, data->user_data))
+	if (data->func (gcentry, &value, data->user_data))
 	{
 		mozilla_pref_set (data->mozilla_pref, &value);
 		g_value_unset (&value);
 	}
 }
 
-extern "C" guint
-mozilla_notifier_add (const char *gconf_key,
-		      const char *mozilla_pref,
-		      PrefValueTransformFunc func,
-		      gpointer user_data)
+static guint
+mozilla_notifier_add_internal (const char *gconf_key,
+			       GConfClientNotifyFunc notify_func,
+			       const char *mozilla_pref,
+			       PrefValueTransformFunc func,
+			       gpointer user_data,
+			       GFreeFunc free_data_func)
 {
 	GConfClient *client;
 	PrefData *data;
@@ -489,6 +585,7 @@ mozilla_notifier_add (const char *gconf_key,
 	client = eel_gconf_client_get_global ();
 	g_return_val_if_fail (client != NULL, 0);
 
+	/* FIXME: use slice allocator */
 	data = g_new (PrefData, 1);
 	data->gconf_key = g_strdup (gconf_key);
 	data->mozilla_pref = g_strdup (mozilla_pref);
@@ -496,8 +593,8 @@ mozilla_notifier_add (const char *gconf_key,
 	data->user_data = user_data;
 
 	cnxn_id = gconf_client_notify_add (client, gconf_key,
-					   (GConfClientNotifyFunc) notify_cb,
-					   data, (GFreeFunc) free_pref_data,
+					   notify_func,
+					   data, free_data_func,
 					   &error);
 	if (eel_gconf_handle_error (&error))
 	{
@@ -515,6 +612,20 @@ mozilla_notifier_add (const char *gconf_key,
 	gconf_client_notify (client, gconf_key);
 
 	return cnxn_id;
+}
+
+extern "C" guint
+mozilla_notifier_add (const char *gconf_key,
+		      const char *mozilla_pref,
+		      PrefValueTransformFunc func,
+		      gpointer user_data)
+{
+	return mozilla_notifier_add_internal (gconf_key,
+					      (GConfClientNotifyFunc) notify_cb,
+					      mozilla_pref,
+					      func,
+					      user_data,
+					      (GFreeFunc) free_pref_data);
 }
 
 static int
@@ -596,15 +707,249 @@ migrate_font_gconf_key (const char *pixel_key,
 
 #endif
 
-extern "C" void
-mozilla_notifiers_init (void)
+static gboolean
+parse_pango_font (const char *font,
+		  char **name,
+		  int *size)
 {
+	PangoFontMask mask = (PangoFontMask) (PANGO_FONT_MASK_FAMILY | PANGO_FONT_MASK_SIZE);
+
+	PangoFontDescription *desc = pango_font_description_from_string (font);
+	if (desc == NULL ||
+	    (pango_font_description_get_set_fields (desc) & mask) != mask)
+	{
+		return FALSE;
+	}
+					
+	*size = PANGO_PIXELS (pango_font_description_get_size (desc));
+	*name = g_strdup (pango_font_description_get_family (desc));
+
+	return *name != NULL && *size > 0;
+}
+
+typedef struct
+{
+	guint cnxn_id;
+	char **font_name_prefs;
+	char **font_size_prefs;
+	char *font_name;
+	int font_size;
+	guint is_set : 1;
+} DesktopFontData;
+
+static gboolean
+transform_font_name (GConfEntry *gcentry,
+		     GValue *value,
+		     gpointer user_data)
+{
+	DesktopFontData *data = (DesktopFontData *) user_data;
+	GConfValue *gcvalue;
+	const char *font_name;
+
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gconf_entry_get_is_default (gcentry) ||
+	    gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_STRING)
+	{
+		font_name = data->font_name;
+	}
+	else
+	{
+		font_name = gconf_value_get_string (gcvalue);
+		if ((font_name == NULL || font_name[0] == '\0'))
+		{
+			font_name = data->font_name;
+		}
+	}
+
+	LOG ("%s value for key '%s'",
+	     gconf_entry_get_is_default (gcentry) ? "default" : "NON-default",
+	     gconf_entry_get_key (gcentry));
+
+	if (font_name == NULL) return FALSE;
+
+	LOG ("Inferred font name '%s' for key '%s'",
+	     font_name, gconf_entry_get_key (gcentry));
+
+	g_value_init (value, G_TYPE_STRING);
+	g_value_set_string (value, font_name);
+
+	return TRUE;
+}
+
+static gboolean
+transform_font_size (GConfEntry *gcentry,
+		     GValue *value,
+		     gpointer user_data)
+{
+	DesktopFontData *data = (DesktopFontData *) user_data;
+	GConfValue *gcvalue;
+	int size = 0;
+
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gconf_entry_get_is_default (gcentry) ||
+	    gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_INT)
+	{
+		size = data->font_size;
+	}
+	else
+	{
+		size = gconf_value_get_int (gcvalue);
+	}
+
+	if (size <= 0) return FALSE;
+
+	g_value_init (value, G_TYPE_INT);
+	g_value_set_int (value, size);
+
+	return TRUE;
+}
+
+static void
+notify_desktop_font_cb (GConfClient *client,
+			guint cnxn_id,
+			GConfEntry *gcentry,
+			DesktopFontData *data)
+{
+	GConfValue *gcvalue;
+	char *name = NULL;
+	int size = 0, i;
+
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue != NULL &&
+	    gcvalue->type == GCONF_VALUE_STRING &&
+	    parse_pango_font (gconf_value_get_string (gcvalue), &name, &size))
+	{
+		LOG ("Desktop font %s -> name=%s, size=%d", 
+		     gconf_entry_get_key (gcentry), name, size);
+
+		data->font_name = name;
+		data->font_size = size;
+		data->is_set = TRUE;
+	}
+	else
+	{
+		g_free (name);
+		g_free (data->font_name);
+		data->font_name = NULL;
+		data->font_size = 0;
+		data->is_set = FALSE;
+	}
+
+	for (i = 0; data->font_name_prefs[i] != NULL; ++i)
+	{
+		gconf_client_notify (client, data->font_name_prefs[i]);
+	}
+	for (i = 0; data->font_size_prefs[i] != NULL; ++i)
+	{
+		gconf_client_notify (client, data->font_size_prefs[i]);
+	}
+}
+
+typedef struct
+{
+	guint cnxn_id;
+	char **prefs;
+	int size;
+} MinimumFontSizeData;
+
+static gboolean
+transform_minimum_font_size (GConfEntry *gcentry,
+			     GValue *value,
+			     gpointer user_data)
+{
+	MinimumFontSizeData *data = (MinimumFontSizeData *) user_data;
+	GConfValue *gcvalue;
+	int size = 0;
+
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (gcvalue == NULL ||
+	    gcvalue->type != GCONF_VALUE_INT)
+	{
+		size = data->size;
+	}
+	else
+	{
+		size = MAX (gconf_value_get_int (gcvalue),
+			    data->size);
+	}
+
+	if (size <= 0) return FALSE;
+
+	g_value_init (value, G_TYPE_INT);
+	g_value_set_int (value, size);
+
+	return TRUE;
+}
+
+static void
+notify_minimum_size_cb (GConfClient *client,
+			guint cnxn_id,
+			GConfEntry *entry,
+			MinimumFontSizeData *data)
+{
+	GConfValue *gcvalue;
+	int i;
+
+	data->size = 0;
+
+	gcvalue = gconf_entry_get_value (entry);
+	/* happens on initial notify if the key doesn't exist */
+	if (gcvalue != NULL &&
+	    gcvalue->type == GCONF_VALUE_INT)
+	{
+		data->size = gconf_value_get_int (gcvalue);
+		data->size = MAX (data->size, 0);
+	}
+
+	LOG ("Minimum font size now %d", data->size);
+
+	for (i = 0; data->prefs[i] != NULL; ++i)
+	{
+		gconf_client_notify (client, data->prefs[i]);
+	}
+}
+
+static DesktopFontData *desktop_font_data;
+static MinimumFontSizeData *minimum_font_size_data;
+
+static void
+mozilla_font_notifiers_init (void)
+{
+	static const char *types [] = { "variable", "monospace" };
 	const EphyFontsLanguageInfo *font_languages;
 	guint n_font_languages, i;
 
-	eel_gconf_monitor_add ("/apps/epiphany/web");
-	eel_gconf_monitor_add ("/system/proxy");
-	eel_gconf_monitor_add ("/system/http_proxy");
+	font_languages = ephy_font_languages ();
+	n_font_languages = ephy_font_n_languages ();
+
+	desktop_font_data = g_new0 (DesktopFontData, 2);
+	desktop_font_data[0].font_name_prefs = g_new0 (char*, n_font_languages + 1);
+	desktop_font_data[0].font_size_prefs = g_new0 (char*, n_font_languages + 1);
+	desktop_font_data[1].font_name_prefs = g_new0 (char*, n_font_languages + 1);
+	desktop_font_data[1].font_size_prefs = g_new0 (char*, n_font_languages + 1);
+
+	desktop_font_data[0].cnxn_id =
+		eel_gconf_notification_add (CONF_DESKTOP_FONT_VARIABLE,
+					    (GConfClientNotifyFunc) notify_desktop_font_cb,
+					    &desktop_font_data[0]);
+	eel_gconf_notify (CONF_DESKTOP_FONT_VARIABLE);
+
+	desktop_font_data[1].cnxn_id =
+		eel_gconf_notification_add (CONF_DESKTOP_FONT_MONOSPACE,
+					    (GConfClientNotifyFunc) notify_desktop_font_cb,
+					    &desktop_font_data[1]);
+	eel_gconf_notify (CONF_DESKTOP_FONT_MONOSPACE);
+
+	minimum_font_size_data = g_new0 (MinimumFontSizeData, 1);
+	minimum_font_size_data->prefs = g_new0 (char*, n_font_languages + 1);
+
+	minimum_font_size_data->cnxn_id =
+		eel_gconf_notification_add (CONF_RENDERING_FONT_MIN_SIZE,
+					    (GConfClientNotifyFunc) notify_minimum_size_cb,
+					    minimum_font_size_data);
+	eel_gconf_notify (CONF_RENDERING_FONT_MIN_SIZE);
 
 #ifdef MIGRATE_PIXEL_SIZE
 	gboolean migrate_size;
@@ -617,23 +962,10 @@ mozilla_notifiers_init (void)
 	}
 #endif
 
-	for (i = 0; i < G_N_ELEMENTS (notifier_entries); i++)
-	{
-		mozilla_notifier_add (notifier_entries[i].gconf_key,
-				      notifier_entries[i].mozilla_pref,
-				      notifier_entries[i].func,
-				      notifier_entries[i].user_data);
-	}
-
-	/* fonts notifiers */
-	font_languages = ephy_font_languages ();
-	n_font_languages = ephy_font_n_languages ();
-
 	for (i=0; i < n_font_languages; i++)
 	{
 		const char *code = font_languages[i].code;
 		guint k;
-		char *types [] = { "variable", "monospace" };
 		char key[255], pref[255];
 #ifdef MIGRATE_PIXEL_SIZE
 		char old_key[255];
@@ -646,8 +978,11 @@ mozilla_notifiers_init (void)
 			g_snprintf (pref, sizeof (pref), "font.name.%s.%s",
 				    types[k], code);
 
+			desktop_font_data[k].font_name_prefs[i] = g_strdup (key);
+
 			mozilla_notifier_add (key, pref,
-					      mozilla_notifier_transform_string, NULL);
+					      transform_font_name,
+					      &desktop_font_data[k]);
 		}
 
 #ifdef MIGRATE_PIXEL_SIZE
@@ -682,7 +1017,11 @@ mozilla_notifiers_init (void)
 		g_snprintf (key, sizeof (key), "%s_%s",
 			    CONF_RENDERING_FONT_MIN_SIZE, code);
 		g_snprintf (pref, sizeof (pref), "font.minimum-size.%s", code);
-		mozilla_notifier_add (key, pref, transform_font_size, NULL);
+
+		minimum_font_size_data->prefs[i] = g_strdup (key);
+
+		mozilla_notifier_add (key, pref, transform_minimum_font_size,
+				      minimum_font_size_data);
 
 #ifdef MIGRATE_PIXEL_SIZE
 		if (migrate_size)
@@ -696,7 +1035,10 @@ mozilla_notifiers_init (void)
 		g_snprintf (key, sizeof (key), "%s_%s",
 			    CONF_RENDERING_FONT_FIXED_SIZE, code);
 		g_snprintf (pref, sizeof (pref), "font.size.fixed.%s", code);
-		mozilla_notifier_add (key, pref, transform_font_size, NULL);
+
+		desktop_font_data[1].font_size_prefs[i] = g_strdup (key);
+		mozilla_notifier_add (key, pref, transform_font_size,
+				      &desktop_font_data[1]);
 
 #ifdef MIGRATE_PIXEL_SIZE
 		if (migrate_size)
@@ -710,7 +1052,10 @@ mozilla_notifiers_init (void)
 		g_snprintf (key, sizeof (key), "%s_%s",
 			    CONF_RENDERING_FONT_VAR_SIZE, code);
 		g_snprintf (pref, sizeof (pref), "font.size.variable.%s", code);
-		mozilla_notifier_add (key, pref, transform_font_size, NULL);
+	
+		desktop_font_data[0].font_size_prefs[i] = g_strdup (key);
+		mozilla_notifier_add (key, pref, transform_font_size,
+				      &desktop_font_data[0]);
 
 #ifdef MIGRATE_PIXEL_SIZE
 		if (migrate_size)
@@ -724,6 +1069,64 @@ mozilla_notifiers_init (void)
 }
 
 static void
+mozilla_font_notifiers_shutdown (void)
+{
+	eel_gconf_notification_remove (desktop_font_data[0].cnxn_id);
+	eel_gconf_notification_remove (desktop_font_data[1].cnxn_id);
+	eel_gconf_notification_remove (minimum_font_size_data->cnxn_id);
+
+	g_free (desktop_font_data[0].font_name);
+	g_free (desktop_font_data[1].font_name);
+
+	g_strfreev (desktop_font_data[0].font_name_prefs);
+	g_strfreev (desktop_font_data[0].font_size_prefs);
+	g_strfreev (desktop_font_data[1].font_name_prefs);
+	g_strfreev (desktop_font_data[1].font_size_prefs);
+	g_strfreev (minimum_font_size_data->prefs);
+}
+
+extern "C" gboolean
+mozilla_notifiers_init (void)
+{
+	guint i;
+
+	eel_gconf_monitor_add ("/apps/epiphany/web");
+	eel_gconf_monitor_add ("/system/proxy");
+	eel_gconf_monitor_add ("/system/http_proxy");
+
+	/* Cache the pref branch */
+	nsresult rv;
+	nsCOMPtr<nsIPrefService> prefService
+		(do_GetService (NS_PREFSERVICE_CONTRACTID, &rv));
+	if (NS_FAILED (rv))
+	{
+		g_warning ("Failed to get the pref service!\n");
+		return FALSE;
+	}
+
+	/* the pref service conveniently implements the root pref branch */
+	gPrefBranch = nsnull;
+	rv = CallQueryInterface (prefService, &gPrefBranch);
+	if (NS_FAILED (rv) || !gPrefBranch)
+	{
+		g_warning ("Failed to get the pref service!\n");
+		return FALSE;
+	}
+
+	for (i = 0; i < G_N_ELEMENTS (notifier_entries); i++)
+	{
+		mozilla_notifier_add (notifier_entries[i].gconf_key,
+				      notifier_entries[i].mozilla_pref,
+				      notifier_entries[i].func,
+				      notifier_entries[i].user_data);
+	}
+
+	mozilla_font_notifiers_init ();
+
+	return TRUE;
+}
+
+static void
 remove_notification (PrefData *data)
 {
 	eel_gconf_notification_remove (data->cnxn_id);
@@ -732,6 +1135,11 @@ remove_notification (PrefData *data)
 extern "C" void
 mozilla_notifiers_shutdown (void)
 {
+	NS_IF_RELEASE (gPrefBranch);
+	gPrefBranch = nsnull;
+
+	mozilla_font_notifiers_shutdown ();
+
 	eel_gconf_monitor_remove ("/apps/epiphany/web");
 	eel_gconf_monitor_remove ("/system/proxy");
 	eel_gconf_monitor_remove ("/system/http_proxy");

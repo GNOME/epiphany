@@ -28,15 +28,15 @@
 
 G_BEGIN_DECLS
 
-typedef gboolean (* PrefValueTransformFunc)	(GConfValue *, GValue *, gpointer);
+typedef gboolean (* PrefValueTransformFunc)	(GConfEntry*, GValue*, gpointer);
 
-gboolean mozilla_notifier_transform_bool	(GConfValue *, GValue *, gpointer);
+gboolean mozilla_notifier_transform_bool	(GConfEntry*, GValue*, gpointer);
 
-gboolean mozilla_notifier_transform_bool_invert	(GConfValue *, GValue *, gpointer);
+gboolean mozilla_notifier_transform_bool_invert	(GConfEntry*, GValue*, gpointer);
 
-gboolean mozilla_notifier_transform_int		(GConfValue *, GValue *, gpointer);
+gboolean mozilla_notifier_transform_int		(GConfEntry*, GValue*, gpointer);
 
-gboolean mozilla_notifier_transform_string	(GConfValue *, GValue *, gpointer);
+gboolean mozilla_notifier_transform_string	(GConfEntry*, GValue*, gpointer);
 
 guint	 mozilla_notifier_add		(const char *gconf_key,
 					 const char *mozilla_pref,
@@ -48,7 +48,7 @@ void	 mozilla_notifier_remove	(guint id);
 gboolean mozilla_pref_set		(const char *pref,
 					 const GValue *value);
 
-void	 mozilla_notifiers_init		(void);
+gboolean mozilla_notifiers_init		(void);
 
 void	 mozilla_notifiers_shutdown	(void);
 

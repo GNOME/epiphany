@@ -96,6 +96,16 @@
         </locale>
      </schema>
      <schema>
+        <key>/schemas/apps/epiphany/web/minimum_font_size</key>
+        <applyto>/apps/epiphany/web/minimum_font_size</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>7</default>
+        <locale name="C">
+        <short>Minimum font size</short>
+        </locale>
+      </schema>
+     <schema>
         <key>/schemas/apps/epiphany/web/use_own_colors</key>
         <applyto>/apps/epiphany/web/use_own_colors</applyto>
         <owner>epiphany</owner>
@@ -391,6 +401,18 @@
         <short>Cookie accept</short>
         <long>Where to accept cookies from.  Possible values are "anywhere", 
         "current site" and "nowhere".</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/web/image_animation</key>
+        <applyto>/apps/epiphany/web/image_animation</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>normal</default>
+        <locale name="C">
+        <short>Image animation mode</short>
+        <long>How to present animated images. Possible values are "normal",
+        "once" and "disabled".</long>
         </locale>
       </schema>
       <schema>

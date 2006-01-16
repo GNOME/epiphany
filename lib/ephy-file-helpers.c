@@ -954,3 +954,151 @@ ephy_file_launch_handler (const char *mime_type,
 
 	return ret;
 }
+
+#define DELAY_MAX_TICKS	64
+
+struct _EphyFileMonitor
+{
+	GnomeVFSMonitorHandle *handle;
+	EphyFileMonitorFunc callback;
+	EphyFileMonitorDelayFunc delay_func;
+	gpointer user_data;
+	char *uri;
+	guint delay;
+	guint timeout_id;
+	guint ticks;
+};
+
+static gboolean
+ephy_file_monitor_timeout_cb (EphyFileMonitor *monitor)
+{
+	if (monitor->ticks > 0)
+	{
+		monitor->ticks--;
+
+		/* Run again */
+		return TRUE;
+	}
+
+	if (monitor->delay_func &&
+	    monitor->delay_func (monitor, monitor->user_data))
+	{
+		monitor->ticks = DELAY_MAX_TICKS / 2;
+
+		/* Run again */
+		return TRUE;
+	}
+
+	monitor->timeout_id = 0;
+
+	monitor->callback (monitor, monitor->uri, monitor->user_data);
+
+	/* don't run again */
+	return FALSE;
+}
+
+static void
+ephy_file_monitor_cb (GnomeVFSMonitorHandle *handle,
+		      const char *monitor_uri,
+		      const char *info_uri,
+		      GnomeVFSMonitorEventType event_type,
+		      EphyFileMonitor *monitor)
+{
+	LOG ("File '%s' has changed, scheduling reload", monitor_uri);
+
+	switch (event_type)
+	{
+		case GNOME_VFS_MONITOR_EVENT_CHANGED:
+		case GNOME_VFS_MONITOR_EVENT_CREATED:
+			/* We make a lot of assumptions here, but basically we know
+			 * that we just have to reload, by construction.
+			 * Delay the reload a little bit so we don't endlessly
+			 * reload while a file is written.
+			 */
+			if (monitor->ticks == 0)
+			{
+				monitor->ticks = 1;
+			}
+			else
+			{
+				/* Exponential backoff */
+				monitor->ticks = MIN (monitor->ticks * 2,
+						      DELAY_MAX_TICKS);
+			}
+
+			if (monitor->timeout_id == 0)
+			{
+				monitor->timeout_id = 
+					g_timeout_add (monitor->delay,
+						       (GSourceFunc) ephy_file_monitor_timeout_cb,
+						       monitor);
+			}
+
+			break;
+
+		case GNOME_VFS_MONITOR_EVENT_DELETED:
+		case GNOME_VFS_MONITOR_EVENT_STARTEXECUTING:
+		case GNOME_VFS_MONITOR_EVENT_STOPEXECUTING:
+		case GNOME_VFS_MONITOR_EVENT_METADATA_CHANGED:
+		default:
+			break;
+	}
+}
+
+EphyFileMonitor *
+ephy_file_monitor_add (const char *uri,
+		       GnomeVFSMonitorType monitor_type,
+		       guint delay,
+		       EphyFileMonitorFunc callback,
+		       EphyFileMonitorDelayFunc delay_func,
+		       gpointer user_data)
+{
+	EphyFileMonitor *monitor;
+
+	g_return_val_if_fail (uri != NULL, NULL);
+	g_return_val_if_fail (callback, NULL);
+
+	monitor = g_new (EphyFileMonitor, 1);
+	monitor->callback = callback;
+	monitor->delay_func = delay_func;
+	monitor->user_data = user_data;
+	monitor->uri = g_strdup (uri);
+	monitor->delay = delay;
+	monitor->ticks = 0;
+	monitor->timeout_id = 0;
+
+	if (gnome_vfs_monitor_add (&monitor->handle, uri, monitor_type,
+				   (GnomeVFSMonitorCallback) ephy_file_monitor_cb,
+				   monitor) != GNOME_VFS_OK)
+	{
+		LOG ("Failed to add file monitor for '%s'", uri);
+
+		g_free (monitor->uri);
+		g_free (monitor);
+		return NULL;
+	}
+
+	LOG ("File monitor for '%s' added", uri);
+
+	return monitor;
+}
+
+void
+ephy_file_monitor_cancel (EphyFileMonitor *monitor)
+{
+	g_return_if_fail (monitor != NULL);
+	g_return_if_fail (monitor->handle != NULL);
+	g_return_if_fail (monitor->uri != NULL);
+
+	LOG ("Cancelling file monitor for '%s'", monitor->uri);
+
+	gnome_vfs_monitor_cancel (monitor->handle);
+
+	if (monitor->timeout_id != 0)
+	{
+		g_source_remove (monitor->timeout_id);
+	}
+
+	g_free (monitor->uri);
+	g_free (monitor);
+}

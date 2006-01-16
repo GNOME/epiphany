@@ -368,10 +368,11 @@ popup_context_menu_cb (GtkWidget          *toolbar,
 {
   if (etoolbar->priv->popup != 0)
     {
+      GtkMenu *menu;
       egg_editable_toolbar_set_selected (etoolbar, toolbar);
       g_object_notify (G_OBJECT (etoolbar), "selected");
 	
-      GtkMenu *menu = GTK_MENU (gtk_ui_manager_get_widget (etoolbar->priv->manager, "/ToolbarPopup"));
+      menu = GTK_MENU (gtk_ui_manager_get_widget (etoolbar->priv->manager, "/ToolbarPopup"));
       gtk_menu_popup (menu, NULL, NULL, NULL, NULL, button_number, gtk_get_current_event_time ());
     }
 }
@@ -383,10 +384,11 @@ button_press_event_cb (GtkWidget *widget,
 {
   if (event->button == 3 && etoolbar->priv->popup != 0)
     {
+      GtkMenu *menu;
       egg_editable_toolbar_set_selected (etoolbar, widget);
       g_object_notify (G_OBJECT (etoolbar), "selected");
 	
-      GtkMenu *menu = GTK_MENU (gtk_ui_manager_get_widget (etoolbar->priv->manager, "/ToolbarPopup"));
+      menu = GTK_MENU (gtk_ui_manager_get_widget (etoolbar->priv->manager, "/ToolbarPopup"));
       gtk_menu_popup (menu, NULL, NULL, NULL, NULL, event->button, event->time);
       
       return TRUE;
@@ -1053,8 +1055,6 @@ static void
 egg_editable_toolbar_set_ui_manager (EggEditableToolbar *etoolbar,
 				     GtkUIManager       *manager)
 {
-  g_return_if_fail (GTK_IS_UI_MANAGER (manager));
-
   GtkActionGroup *group = gtk_action_group_new ("ToolbarActions");
   GtkActionEntry actions[] = {
     { "MoveToolItem", NULL, _("_Move on Toolbar"), NULL,
@@ -1086,10 +1086,12 @@ void
 egg_editable_toolbar_set_selected (EggEditableToolbar *etoolbar,
 				   GtkWidget          *widget)
 {
+  gboolean toolitem, toolbar;
+
   etoolbar->priv->selected = widget;
   
-  gboolean toolitem = (gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM) != 0);
-  gboolean toolbar = (gtk_widget_get_ancestor (widget, GTK_TYPE_TOOLBAR) != 0);
+  toolitem = (gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM) != 0);
+  toolbar = (gtk_widget_get_ancestor (widget, GTK_TYPE_TOOLBAR) != 0);
   
   gtk_action_set_visible (find_action (etoolbar, "RemoveToolbar"), toolbar && (etoolbar->priv->edit_mode > 0));
   gtk_action_set_visible (find_action (etoolbar, "RemoveToolItem"), toolitem);

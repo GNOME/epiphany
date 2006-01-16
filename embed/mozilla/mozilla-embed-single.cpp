@@ -102,21 +102,25 @@
 #include <nsIIDNService.h>
 #endif /* ALLOW_PRIVATE_API */
 
-#ifdef HAVE_GECKO_1_8
-#include <nsIStyleSheetService.h>
-#include "EphyUtils.h"
-#endif
-
 #include <stdlib.h>
 
 #ifdef ENABLE_NETWORK_MANAGER
 #include <libnm_glib.h>
 #endif
 
+#ifdef HAVE_GECKO_1_8
+#include <nsIURI.h>
+#include <nsIStyleSheetService.h>
+#include "EphyUtils.h"
+#include "ephy-file-helpers.h"
+#endif
+
 #define MOZILLA_PROFILE_DIR  "/mozilla"
 #define MOZILLA_PROFILE_NAME "epiphany"
 #define MOZILLA_PROFILE_FILE "prefs.js"
 #define DEFAULT_PROFILE_FILE SHARE_DIR"/default-prefs.js"
+
+#define USER_CSS_LOAD_DELAY 500 /* ms */
 
 #define MOZILLA_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED_SINGLE, MozillaEmbedSinglePrivate))
 
@@ -132,6 +136,12 @@ struct MozillaEmbedSinglePrivate
 #ifdef ENABLE_NETWORK_MANAGER
 	libnm_glib_ctx *nm_context;
 	guint nm_callback_id;
+#endif
+#ifdef HAVE_GECKO_1_8
+        char *user_css_uri;
+        guint user_css_enabled_notifier_id;
+        EphyFileMonitor *user_css_file_monitor;
+        guint user_css_enabled : 1;
 #endif
 
 	guint online : 1;
@@ -592,6 +602,156 @@ mozilla_init_network_manager (MozillaEmbedSingle *single)
 
 #endif /* ENABLE_NETWORK_MANAGER */
 
+#ifdef HAVE_GECKO_1_8
+
+static void
+user_css_register (MozillaEmbedSingle *single)
+{
+	MozillaEmbedSinglePrivate *priv = single->priv;
+
+	nsresult rv;
+	nsCOMPtr<nsIURI> uri;
+	rv = EphyUtils::NewURI (getter_AddRefs (uri),
+				nsDependentCString (priv->user_css_uri));
+	NS_ENSURE_SUCCESS (rv, );
+
+	nsCOMPtr<nsIStyleSheetService> service
+			(do_GetService ("@mozilla.org/content/style-sheet-service;1", &rv));
+	NS_ENSURE_SUCCESS (rv, );
+
+	rv = service->LoadAndRegisterSheet (uri, nsIStyleSheetService::AGENT_SHEET);
+	if (NS_FAILED (rv))
+	{
+		g_warning ("Registering the user stylesheet failed (rv=%x)!\n", rv);
+	}
+}
+
+static void
+user_css_unregister (MozillaEmbedSingle *single)
+{
+	MozillaEmbedSinglePrivate *priv = single->priv;
+
+	nsresult rv;
+	nsCOMPtr<nsIURI> uri;
+	rv = EphyUtils::NewURI (getter_AddRefs (uri),
+				nsDependentCString (priv->user_css_uri));
+	NS_ENSURE_SUCCESS (rv, );
+
+	nsCOMPtr<nsIStyleSheetService> service
+			(do_GetService ("@mozilla.org/content/style-sheet-service;1", &rv));
+	NS_ENSURE_SUCCESS (rv, );
+
+	PRBool isRegistered = PR_FALSE;
+	rv = service->SheetRegistered (uri, nsIStyleSheetService::USER_SHEET,
+				       &isRegistered);
+	if (NS_SUCCEEDED (rv) && isRegistered)
+	{
+		rv = service->UnregisterSheet (uri, nsIStyleSheetService::USER_SHEET);
+	}
+	if (NS_FAILED (rv))
+	{
+		g_warning ("Unregistering the user stylesheet failed (rv=%x)!\n", rv);
+	}
+}
+
+static void
+user_css_file_monitor_func (EphyFileMonitor *,
+			    const char *,
+			    MozillaEmbedSingle *single)
+{
+	LOG ("Reregistering the user style sheet");
+
+	user_css_unregister (single);
+	user_css_register (single);
+}
+
+static void
+user_css_enabled_notify (GConfClient *client,
+			 guint cnxn_id,
+			 GConfEntry *entry,
+			 MozillaEmbedSingle *single)
+{
+	MozillaEmbedSinglePrivate *priv = single->priv;
+	guint enabled;
+
+	enabled = eel_gconf_get_boolean (CONF_USER_CSS_ENABLED) != FALSE;
+	if (priv->user_css_enabled == enabled) return;
+
+	LOG ("User stylesheet enabled: %s", enabled ? "t" : "f");
+
+	priv->user_css_enabled = enabled;
+
+        if (enabled)
+	{
+		user_css_register (single);
+
+		g_assert (priv->user_css_file_monitor == NULL);
+		priv->user_css_file_monitor =
+			ephy_file_monitor_add (priv->user_css_uri,
+						GNOME_VFS_MONITOR_FILE,
+						USER_CSS_LOAD_DELAY,
+						(EphyFileMonitorFunc) user_css_file_monitor_func,
+						NULL,
+						single);
+	}
+        else
+	{
+		if (priv->user_css_file_monitor != NULL)
+		{
+			ephy_file_monitor_cancel (priv->user_css_file_monitor);
+			priv->user_css_file_monitor = NULL;
+		}
+
+		user_css_unregister (single);
+	}
+}
+
+static void
+mozilla_stylesheet_init (MozillaEmbedSingle *single)
+{
+	MozillaEmbedSinglePrivate *priv = single->priv;
+	char *user_css_file;
+
+	user_css_file = g_build_filename (ephy_dot_dir (),
+					  USER_STYLESHEET_FILENAME,
+					  NULL);
+	priv->user_css_uri = gnome_vfs_get_uri_from_local_path (user_css_file);
+	g_free (user_css_file);
+
+	user_css_enabled_notify (NULL, 0, NULL, single);
+	priv->user_css_enabled_notifier_id =
+		eel_gconf_notification_add
+			(CONF_USER_CSS_ENABLED,
+			 (GConfClientNotifyFunc) user_css_enabled_notify,
+			 single);
+}
+
+static void
+mozilla_stylesheet_shutdown (MozillaEmbedSingle *single)
+{
+	MozillaEmbedSinglePrivate *priv = single->priv;
+
+	if (priv->user_css_enabled_notifier_id != 0)
+	{
+		eel_gconf_notification_remove (priv->user_css_enabled_notifier_id);
+		priv->user_css_enabled_notifier_id = 0;
+	}
+
+	if (priv->user_css_file_monitor != NULL)
+	{
+		ephy_file_monitor_cancel (priv->user_css_file_monitor);
+		priv->user_css_file_monitor = NULL;
+	}
+
+	if (priv->user_css_uri != NULL)
+	{
+		g_free (priv->user_css_uri);
+		priv->user_css_uri = NULL;
+	}
+}
+
+#endif /* HAVE_GECKO_1_8 */
+
 static gboolean
 init_services (MozillaEmbedSingle *single)
 {
@@ -639,6 +799,10 @@ init_services (MozillaEmbedSingle *single)
 
 #ifdef ENABLE_NETWORK_MANAGER
 	mozilla_init_network_manager (single);
+#endif
+
+#ifdef HAVE_GECKO_1_8
+        mozilla_stylesheet_init (single);
 #endif
 
 	return TRUE;
@@ -696,6 +860,10 @@ mozilla_embed_single_dispose (GObject *object)
 {
 	MozillaEmbedSingle *single = MOZILLA_EMBED_SINGLE (object);
 	MozillaEmbedSinglePrivate *priv = single->priv;
+
+#ifdef HAVE_GECKO_1_8
+        mozilla_stylesheet_shutdown (single);
+#endif
 
 	if (priv->mSingleObserver)
 	{

@@ -27,6 +27,7 @@
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-file-helpers.h"
+#include "ephy-bookmarks-ui.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -126,7 +127,7 @@ popup_cmd_bookmark_link (GtkAction *action,
 		location = rel;
 	}
 
-	ephy_bookmarks_ui_add_bookmark (location, title, GTK_WINDOW (window));
+	ephy_bookmarks_ui_add_bookmark (GTK_WIDGET (window), location, title);
 }
 
 static void

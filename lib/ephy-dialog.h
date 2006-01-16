@@ -41,8 +41,9 @@ typedef struct _EphyDialogPrivate	EphyDialogPrivate;
 
 typedef enum
 {
-	PT_NORMAL,
-	PT_AUTOAPPLY
+	PT_NORMAL	= 0,
+	PT_AUTOAPPLY	= 1 << 0,
+	PT_INVERTED	= 1 << 1
 } EphyDialogApplyType;
 
 typedef struct

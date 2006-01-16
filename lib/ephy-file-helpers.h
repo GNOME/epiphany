@@ -25,6 +25,7 @@
 
 #include <glib.h>
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
+#include <libgnomevfs/gnome-vfs-ops.h>
 
 G_BEGIN_DECLS
 
@@ -34,6 +35,10 @@ typedef enum
 	EPHY_MIME_PERMISSION_UNSAFE	= 2,
 	EPHY_MIME_PERMISSION_UNKNOWN	= 3
 } EphyMimePermission;
+
+typedef struct _EphyFileMonitor EphyFileMonitor;
+typedef void (* EphyFileMonitorFunc) (EphyFileMonitor*, const char*, gpointer);
+typedef gboolean (* EphyFileMonitorDelayFunc) (EphyFileMonitor*, gpointer);
 
 const char *ephy_file                    (const char *filename);
 
@@ -77,6 +82,15 @@ gboolean    ephy_file_launch_application (GnomeVFSMimeApplication *application,
 gboolean    ephy_file_launch_handler	 (const char *mime_type,
 					  const char *address,
 					  guint32 user_time);
+
+EphyFileMonitor *ephy_file_monitor_add	 (const char *uri,
+					  GnomeVFSMonitorType monitor_type,
+					  guint delay,
+					  EphyFileMonitorFunc callback,
+					  EphyFileMonitorDelayFunc delay_func,
+					  gpointer user_data);
+
+void	   ephy_file_monitor_cancel	 (EphyFileMonitor *monitor);
 
 G_END_DECLS
 

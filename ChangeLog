@@ -1,3 +1,56 @@
+2006-01-17  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/chrome/epiphany.manifest.in:
+
+	Fix number of /'s in URI.
+
+	* data/epiphany.schemas.in:
+
+	Add new entries.
+		
+	* embed/mozilla/EphyAboutModule.cpp:
+	
+	Fix title.
+
+	* data/glade/prefs-dialog.glade:
+	* embed/ephy-embed-prefs.h:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* embed/mozilla/mozilla-notifiers.h:
+	* lib/eel-gconf-extensions.c: (eel_gconf_unset_key),
+	(eel_gconf_notify):
+	* lib/eel-gconf-extensions.h:
+	* lib/egg/egg-editable-toolbar.c: (popup_context_menu_cb),
+	(button_press_event_cb), (egg_editable_toolbar_set_ui_manager),
+	(egg_editable_toolbar_set_selected):
+	* lib/ephy-dialog.c: (set_value_from_pref), (set_pref_from_value),
+	(set_value_from_togglebutton), (strcmp_with_null),
+	(get_index_from_value), (compare_values),
+	(set_togglebutton_from_value), (set_pref_from_info_and_emit),
+	(spinbutton_changed_cb), (save_info):
+	* lib/ephy-dialog.h:
+	* lib/ephy-file-helpers.c: (ephy_file_monitor_timeout_cb),
+	(ephy_file_monitor_cb), (ephy_file_monitor_add),
+	(ephy_file_monitor_cancel):
+	* lib/ephy-file-helpers.h:
+	* src/ephy-extensions-manager.c:
+	(ephy_extensions_manager_load_file):
+	* src/ephy-window.c:
+	* src/popup-commands.c: (popup_cmd_bookmark_link):
+	* src/prefs-dialog.c: (prefs_dialog_finalize), (setup_font_combo),
+	(fonts_language_changed_cb), (font_prefs_dialog_response_cb),
+	(row_is_separator), (setup_fonts_dialog),
+	(font_prefs_button_clicked_cb), (css_checkbox_toggled),
+	(css_edit_button_clicked_cb), (prefs_dialog_init):
+
+	Rework font prefs, and add user stylesheet setting.
+
+	* src/bookmarks/ephy-bookmark-action-group.c: (node_added_cb):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_get_local):
+	* src/window-commands.c: (window_cmd_file_bookmark_page):
+
+	Some build fixes.
+	
 2006-01-17  Peter Harvey  <peter.a.harvey@gmail.com>
 
 	* src/bookmarks/ephy-bookmark-action.c

@@ -178,7 +178,7 @@ set_value_from_pref (PropertyInfo *info, GValue *value)
 		case G_TYPE_STRING:
 			g_value_init (value, G_TYPE_STRING);
 			text = eel_gconf_get_string (info->pref);
-			g_value_take_string (value, text ? text : g_strdup (""));
+			g_value_take_string (value, text);
 			break;
 		case G_TYPE_INT:
 			g_value_init (value, G_TYPE_INT);
@@ -212,8 +212,18 @@ set_pref_from_value (PropertyInfo *info, GValue *value)
 	switch (info->data_type)
 	{
 		case G_TYPE_STRING:
-			eel_gconf_set_string (pref, g_value_get_string (value));
+		{
+			const char *string = g_value_get_string (value);
+			if (string != NULL)
+			{
+				eel_gconf_set_string (pref, string);
+			}
+			else
+			{
+				eel_gconf_unset_key (pref);
+			}
 			break;
+		}
 		case G_TYPE_INT:
 			eel_gconf_set_integer (pref, g_value_get_int (value));
 			break;
@@ -412,6 +422,11 @@ set_value_from_togglebutton (PropertyInfo *info, GValue *value)
 
 	active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (info->widget));
 
+	if (info->apply_type & PT_INVERTED)
+	{
+		active = !active;
+	}
+
 	if (info->data_type == G_TYPE_BOOLEAN)
 	{
 		g_value_init (value, info->data_type);
@@ -499,6 +514,26 @@ set_editable_from_value (PropertyInfo *info, const GValue *value)
 }
 
 static int
+strcmp_with_null (const char *key1,
+		  const char *key2)
+{
+	if (key1 == NULL && key2 == NULL)
+	{
+		return 0;
+	}
+	if (key1 == NULL)
+	{
+		return -1;
+	}
+	if (key2 == NULL)
+	{
+		return 1;
+	}
+
+	return strcmp (key1, key2);
+}
+
+static int
 get_index_from_value (const GValue *value, GList *string_enum)
 {
 	int index = -1;
@@ -509,10 +544,7 @@ get_index_from_value (const GValue *value, GList *string_enum)
 	{
 		val = g_value_get_string (value);
 
-		if (val)
-		{
-			s = g_list_find_custom (string_enum, val, (GCompareFunc) strcmp);
-		}
+		s = g_list_find_custom (string_enum, val, (GCompareFunc) strcmp_with_null);
 
 		if (s)
 		{
@@ -538,7 +570,7 @@ compare_values (const GValue *a, const GValue *b)
 		ta = g_value_get_string (a);
 		tb = g_value_get_string (b);
 
-		return (ta && tb && strcmp (ta, tb) == 0);
+		return (strcmp_with_null (ta, tb) == 0);
 	}
 	else if (G_VALUE_HOLDS (a, G_TYPE_INT))
 	{
@@ -689,6 +721,11 @@ set_togglebutton_from_value (PropertyInfo *info, const GValue *value)
 
 	active = g_value_get_boolean (value);
 
+	if (info->apply_type & PT_INVERTED)
+	{
+		active = !active;
+	}
+
 	info->sane_state = TRUE;
 
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (info->widget), active);
@@ -740,7 +777,7 @@ set_pref_from_info_and_emit (PropertyInfo *info)
 
 	g_signal_emit (info->dialog, signals[CHANGED], g_quark_from_string (info->id), &value);
 
-	if (info->apply_type == PT_AUTOAPPLY && info->pref != NULL)
+	if ((info->apply_type & PT_AUTOAPPLY) && info->pref != NULL)
 	{
 		set_pref_from_value (info, &value);
 	}
@@ -812,7 +849,7 @@ spinbutton_changed_cb (GtkWidget *widget, PropertyInfo *info)
 {
 	GTimer *spin_timer;
 
-	if (info->apply_type != PT_AUTOAPPLY) return;
+	if ((info->apply_type & PT_AUTOAPPLY) == 0) return;
 
 	spin_timer = g_object_get_data (G_OBJECT (info->widget), "timer");
 
@@ -977,7 +1014,7 @@ save_info (gpointer key, PropertyInfo *info, EphyDialog *dialog)
 {
 	GValue value = { 0, };
 
-	if (info->pref == NULL || info->apply_type != PT_NORMAL)
+	if (info->pref == NULL || (info->apply_type & PT_NORMAL) == 0)
 	{
 		return;
 	}

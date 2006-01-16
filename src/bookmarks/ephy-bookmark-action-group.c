@@ -114,6 +114,7 @@ node_added_cb (EphyNode *parent,
 	gtk_action_group_add_action (actions, action);
 	g_object_unref (action);
 	g_free (accel);
+	g_free (name);
 
 	ephy_bookmark_action_updated (EPHY_BOOKMARK_ACTION (action));
 	

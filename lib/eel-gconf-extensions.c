@@ -699,3 +699,27 @@ eel_gconf_set_path (const char *key,
 	g_free (tilde_path);
 	g_free (converted);
 }
+
+void
+eel_gconf_unset_key (const char *key)
+{
+	GConfClient *client;
+	GError *error = NULL;
+
+	client = eel_gconf_client_get_global ();
+	g_return_if_fail (client != NULL);
+
+	gconf_client_unset (client, key, &error);
+	eel_gconf_handle_error (&error);
+}
+
+void
+eel_gconf_notify (const char *key)
+{
+	GConfClient *client;
+
+	client = eel_gconf_client_get_global ();
+	g_return_if_fail (client != NULL);
+
+	gconf_client_notify (client, key);
+}

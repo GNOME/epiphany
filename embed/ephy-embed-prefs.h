@@ -6,6 +6,7 @@
 #define CONF_RENDERING_LANGUAGE "/apps/epiphany/web/language"
 #define CONF_RENDERING_USE_OWN_COLORS "/apps/epiphany/web/use_own_colors"
 #define CONF_RENDERING_USE_OWN_FONTS "/apps/epiphany/web/use_own_fonts"
+#define CONF_USER_CSS_ENABLED "/apps/epiphany/web/user_css_enabled"
 #define CONF_SECURITY_ALLOW_POPUPS "/apps/epiphany/web/allow_popups"
 #define CONF_SECURITY_JAVA_ENABLED "/apps/epiphany/web/java_enabled"
 #define CONF_SECURITY_JAVASCRIPT_ENABLED "/apps/epiphany/web/javascript_enabled"
@@ -13,6 +14,8 @@
 #define CONF_LANGUAGE_AUTODETECT_ENCODING "/apps/epiphany/web/autodetect_encoding"
 #define CONF_LANGUAGE_DEFAULT_ENCODING "/apps/epiphany/web/default_encoding"
 #define CONF_BROWSE_WITH_CARET "/apps/epiphany/web/browse_with_caret"
+#define CONF_IMAGE_ANIMATION_MODE "/apps/epiphany/web/image_animation"
+#define CONF_IMAGE_LOADING_MODE "/apps/epiphany/web/image_loading"
 
 /* These are defined gnome wide now */
 #define CONF_NETWORK_PROXY_MODE "/system/proxy/mode"
@@ -26,9 +29,13 @@
 #define CONF_NETWORK_SOCKS_PROXY_PORT "/system/proxy/socks_port"
 #define CONF_NETWORK_PROXY_AUTO_URL "/system/proxy/autoconfig_url"
 #define CONF_NETWORK_PROXY_IGNORE_HOSTS "/system/http_proxy/ignore_hosts"
+#define CONF_DESKTOP_FONT_VARIABLE "/desktop/gnome/interface/font_name"
+#define CONF_DESKTOP_FONT_MONOSPACE "/desktop/gnome/interface/monospace_font_name"
 
 /* DEPRECATED, we migrate them */
 #define CONF_RENDERING_FONT_VAR_SIZE_OLD "/apps/epiphany/web/font_var_size"
 #define CONF_RENDERING_FONT_FIXED_SIZE_OLD "/apps/epiphany/web/font_fixed_size"
 #define CONF_RENDERING_FONT_MIN_SIZE_OLD "/apps/epiphany/web/font_min_size"
 #define CONF_RENDERING_FONT_TYPE_OLD "/apps/epiphany/web/default_font_type"
+
+#define USER_STYLESHEET_FILENAME	"user-stylesheet.css"

@@ -538,6 +538,7 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 				   identifier);
 		}
 
+		g_free (identifier);
 		return;
 	}
 

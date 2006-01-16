@@ -1570,13 +1570,15 @@ ephy_bookmarks_get_favorites (EphyBookmarks *eb)
 	return eb->priv->favorites;
 }
 
-#ifdef ENABLE_ZEROCONF
 EphyNode *
 ephy_bookmarks_get_local (EphyBookmarks *eb)
 {
+#ifdef ENABLE_ZEROCONF
 	return eb->priv->local;
-}
+#else
+	return NULL;
 #endif
+}
 
 EphyNode *
 ephy_bookmarks_get_not_categorized (EphyBookmarks *eb)
