@@ -16,7 +16,6 @@ NOINST_H_FILES =		 	\
 	ephy-bookmarks-ui.h		\
 	ephy-bookmarks-menu.h		\
 	ephy-bookmark-properties.h	\
-	ephy-new-bookmark.h		\
 	ephy-topic-action.h		\
 	ephy-related-action.h		\
 	ephy-open-tabs-action.h		\
@@ -24,7 +23,7 @@ NOINST_H_FILES =		 	\
 	ephy-bookmark-factory-action.h	\
 	ephy-topic-action-group.h	\
 	ephy-bookmark-action-group.h	\
-	ephy-topics-selector.h		\
+	ephy-topics-palette.h  		\
 	ephy-nodes-cover.h
 
 libephybookmarks_la_SOURCES = 		\
@@ -36,7 +35,6 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-bookmarks-ui.c		\
 	ephy-bookmarks-menu.c		\
 	ephy-bookmark-properties.c	\
-	ephy-new-bookmark.c		\
 	ephy-topic-action.c		\
 	ephy-related-action.c		\
 	ephy-open-tabs-action.c		\
@@ -44,7 +42,7 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-bookmark-factory-action.c	\
 	ephy-topic-action-group.c	\
 	ephy-bookmark-action-group.c	\
-	ephy-topics-selector.c  	\
+	ephy-topics-palette.c  		\
 	ephy-nodes-cover.c      	\
 	$(NOINST_H_FILES)		\
 	$(INST_H_FILES)

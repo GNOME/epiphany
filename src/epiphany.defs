@@ -1621,14 +1621,6 @@
   )
 )
 
-(define-function egg_editable_toolbar_add_popup_items
-  (c-name "egg_editable_toolbar_add_popup_items")
-  (return-type "none")
-  (parameters
-    '("GtkWidget*" "widget")
-    '("GtkMenu*" "popup")
-  )
-)
 
 
 ;; From ../../lib/egg/egg-toolbars-model.h
@@ -2588,16 +2580,6 @@
   (return-type "guint")
   (parameters
     '("EphyNode*" "bookmark")
-  )
-)
-
-(define-method show_bookmark_properties
-  (of-object "EphyBookmarks")
-  (c-name "ephy_bookmarks_show_bookmark_properties")
-  (return-type "GtkWidget*")
-  (parameters
-    '("EphyNode*" "bookmark")
-    '("GtkWidget*" "parent_window")
   )
 )
 
