@@ -2,26 +2,21 @@
 # translation of epiphany.HEAD.nl.po to Dutch
 # Commentaar:
 # Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>, 2003.
-# Reinout van Schouwen <reinout@cs.vu.nl>, 2003-2005
+# Reinout van Schouwen <reinout@cs.vu.nl>, 2003-2006
 # Lode Vermeiren <lode@linu.cx>, 2004 (kleine aanpassingen).
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-28 01:21+0100\n"
-"PO-Revision-Date: 2005-12-28 23:49+0100\n"
+"POT-Creation-Date: 2006-01-16 23:17+0100\n"
+"PO-Revision-Date: 2006-01-16 23:19+0100\n"
 "Last-Translator: Reinout van Schouwen <reinout@cs.vu.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-# ui/epiphany.glade.h:63
-#: ../data/GNOME_Epiphany_Automation.server.in.h:1
-msgid "Epiphany automation"
-msgstr "Epiphany automatisering"
 
 #: ../data/epiphany-lockdown.schemas.in.h:1
 msgid ""
@@ -167,8 +162,8 @@ msgstr "Epiphany webbrowser"
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:222
-#: ../src/ephy-main.c:233
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:221
+#: ../src/ephy-main.c:232
 msgid "Web Browser"
 msgstr "Webbrowser"
 
@@ -640,7 +635,7 @@ msgstr "Cookies"
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:99
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:98
 msgid "Downloads"
 msgstr "Downloads"
 
@@ -946,7 +941,7 @@ msgstr ""
 # src/prefs_callbacks.c:237
 # src/prefs_callbacks.c:407
 #: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#: ../src/ephy-window.c:1451
+#: ../src/ephy-window.c:1465
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -1817,6 +1812,33 @@ msgstr "in het Internet Archive"
 msgid "Untitled"
 msgstr "Naamloos"
 
+# ui/epiphany.glade.h:95
+# ui/preferences.glade.h:139
+#: ../embed/mozilla/EphyPromptService.cpp:193
+msgid "_Abort Script"
+msgstr "S_cript onderbreken"
+
+# src/bookmarks.c:245
+# src/prefs.c:365
+# src/toolbar.c:260
+# ui/bookmarks.glade.h:3
+#: ../embed/mozilla/EphyPromptService.cpp:261
+msgid "Don't Save"
+msgstr "Niet opslaan"
+
+#: ../embed/mozilla/EphyPromptService.cpp:742
+msgid "_User:"
+msgstr "_Gebruiker:"
+
+# src/menubar.c:502
+# ui/epiphany.glade.h:163
+#: ../embed/mozilla/EphyPromptService.cpp:743
+#: ../embed/mozilla/EphyPromptService.cpp:770
+#: ../embed/mozilla/GtkNSSDialogs.cpp:795
+#: ../embed/mozilla/GtkNSSDialogs.cpp:905
+msgid "_Password:"
+msgstr "_Wachtwoord:"
+
 # src/history.c:845
 #: ../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
 #: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:642
@@ -2018,13 +2040,6 @@ msgstr "Kies wachtwoord."
 msgid "Select a password to protect this certificate."
 msgstr "Kies een wachtwoord om dit certificaat mee te beschermen."
 
-# src/menubar.c:502
-# ui/epiphany.glade.h:163
-#: ../embed/mozilla/GtkNSSDialogs.cpp:795
-#: ../embed/mozilla/GtkNSSDialogs.cpp:905
-msgid "_Password:"
-msgstr "_Wachtwoord:"
-
 #: ../embed/mozilla/GtkNSSDialogs.cpp:809
 msgid "Con_firm password:"
 msgstr "Wachtwoord (_nogmaals):"
@@ -2216,11 +2231,11 @@ msgstr "Bestanden"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:263
+#: ../embed/mozilla/mozilla-embed-single.cpp:282
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.nl/search?&ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:595
+#: ../embed/mozilla/mozilla-embed-single.cpp:682
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr ""
 "Epiphany kan nu niet gebruikt worden. Initialisatie van Mozilla mislukt."
@@ -2242,32 +2257,32 @@ msgstr ""
 "U trachtte af te drukken naar een printer met behulp van het ‘%s’-"
 "stuurprogramma. Dit programma vereist een PostScript-printerstuurprogramma."
 
-#: ../embed/print-dialog.c:365
+#: ../embed/print-dialog.c:364
 msgid "_From:"
 msgstr "_van:"
 
-#: ../embed/print-dialog.c:378
+#: ../embed/print-dialog.c:377
 msgid "Sets the start of the range of pages to be printed"
 msgstr "Stelt het begin in van het af te drukken paginabereik"
 
 # ui/preferences.glade.h:195
-#: ../embed/print-dialog.c:380
+#: ../embed/print-dialog.c:379
 msgid "_To:"
 msgstr "_tot:"
 
-#: ../embed/print-dialog.c:393
+#: ../embed/print-dialog.c:392
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Stelt het einde in van het af te drukken paginabereik"
 
 # src/toolbar.c:286
-#: ../embed/print-dialog.c:408 ../src/ephy-window.c:1277
+#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1285
 msgid "Print"
 msgstr "Afdrukken"
 
 # src/mozilla/TOCProtocolHandler.cpp:232
 # src/mozilla/TOCProtocolHandler.cpp:316
 # src/mozilla/TOCProtocolHandler.cpp:415
-#: ../embed/print-dialog.c:416
+#: ../embed/print-dialog.c:415
 msgid "Pages"
 msgstr "Pagina's"
 
@@ -2304,12 +2319,12 @@ msgstr "Scheidingsteken"
 msgid "All supported types"
 msgstr "Alle ondersteunde types"
 
-#: ../lib/ephy-file-helpers.c:328
+#: ../lib/ephy-file-helpers.c:327
 #, c-format
 msgid "\"%s\" exists, please move it out of the way."
 msgstr "'%s' bestaat. Haal het alstublieft uit de weg."
 
-#: ../lib/ephy-file-helpers.c:334
+#: ../lib/ephy-file-helpers.c:333
 #, c-format
 msgid "Failed to create directory \"%s\"."
 msgstr "Kan de map '%s' niet aanmaken."
@@ -2511,14 +2526,8 @@ msgstr "Westers"
 msgid "select fonts for|Other Scripts"
 msgstr "Overige schriften"
 
-# src/bookmarks_editor.c:945
-# src/menubar.c:91
-#: ../lib/ephy-stock-icons.c:54
-msgid "Close Tab"
-msgstr "Tabblad sluiten"
-
 # src/menubar.c:416
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:54
 msgid "Popup Windows"
 msgstr "Opduikvensters"
 
@@ -2526,18 +2535,18 @@ msgstr "Opduikvensters"
 # src/toolbar.c:273
 # ui/epiphany.glade.h:78
 # ui/preferences.glade.h:88
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1191
+#: ../lib/ephy-stock-icons.c:55 ../src/ephy-history-window.c:1191
 msgid "History"
 msgstr "Geschiedenis"
 
 # src/menubar.c:571
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
+#: ../lib/ephy-stock-icons.c:56 ../src/bookmarks/ephy-bookmarks-editor.c:684
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1535
-#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1283
+#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1291
 msgid "Bookmarks"
 msgstr "Bladwijzers"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Adresingang"
 
@@ -2545,7 +2554,7 @@ msgstr "Adresingang"
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:58
 msgid "_Download"
 msgstr "_Download"
 
@@ -3202,7 +3211,7 @@ msgstr "Snel onderwerp"
 
 # src/prefs.c:385
 # ui/epiphany.glade.h:36
-#: ../src/ephy-encoding-dialog.c:313
+#: ../src/ephy-encoding-dialog.c:340
 msgid "Encodings"
 msgstr "Coderingen"
 
@@ -3230,25 +3239,30 @@ msgid "Wrapped"
 msgstr "Omgeslagen"
 
 # ui/epiphany.glade.h:149
-#: ../src/ephy-find-toolbar.c:388
+#: ../src/ephy-find-toolbar.c:151
+msgid "Find links:"
+msgstr "Verwijzingen zoeken:"
+
+# ui/epiphany.glade.h:149
+#: ../src/ephy-find-toolbar.c:151
 msgid "Find:"
 msgstr "Zoeken:"
 
 # src/menubar.c:208
-#: ../src/ephy-find-toolbar.c:404 ../src/ephy-find-toolbar.c:405
+#: ../src/ephy-find-toolbar.c:399
 msgid "Find Previous"
 msgstr "Vorige zoeken"
 
-#: ../src/ephy-find-toolbar.c:408
+#: ../src/ephy-find-toolbar.c:402
 msgid "Find previous occurrence of the search string"
 msgstr "Zoeken naar vorige positie waar de zoekreeks voorkomt"
 
 # src/menubar.c:117
-#: ../src/ephy-find-toolbar.c:415 ../src/ephy-find-toolbar.c:416
+#: ../src/ephy-find-toolbar.c:409
 msgid "Find Next"
 msgstr "Volgende zoeken"
 
-#: ../src/ephy-find-toolbar.c:419
+#: ../src/ephy-find-toolbar.c:412
 msgid "Find next occurrence of the search string"
 msgstr "Zoeken naar volgende positie waar de zoekreeks voorkomt"
 
@@ -3365,46 +3379,46 @@ msgid "Sites"
 msgstr "Sites"
 
 # src/main.c:102
-#: ../src/ephy-main.c:59
+#: ../src/ephy-main.c:58
 msgid "Open a new tab in an existing window"
 msgstr "Een nieuw tabblad openen in een bestaand venster"
 
 # src/main.c:111
-#: ../src/ephy-main.c:62
+#: ../src/ephy-main.c:61
 msgid "Run in full screen mode"
 msgstr "In schermvullende modus uitvoeren"
 
-#: ../src/ephy-main.c:65
+#: ../src/ephy-main.c:64
 msgid "Load the given session file"
 msgstr "Het gegeven sessiebestand laden"
 
-#: ../src/ephy-main.c:66 ../src/ephy-main.c:72
+#: ../src/ephy-main.c:65 ../src/ephy-main.c:71
 msgid "FILE"
 msgstr "BESTAND"
 
 # src/main.c:133
-#: ../src/ephy-main.c:68
+#: ../src/ephy-main.c:67
 msgid "Add a bookmark (don't open any window)"
 msgstr "Voeg bladwijzer toe (zonder een nieuw venster te openen)"
 
 # src/main.c:134
 # ui/bookmarks.glade.h:41
 # ui/epiphany.glade.h:125
-#: ../src/ephy-main.c:69
+#: ../src/ephy-main.c:68
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:71
+#: ../src/ephy-main.c:70
 msgid "Import bookmarks from the given file"
 msgstr "Bladwijzers importeren van het gegeven bestand"
 
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:73
 msgid "Launch the bookmarks editor"
 msgstr "Bladwijzerbeheer starten"
 
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
-#: ../src/ephy-notebook.c:1086
+#: ../src/ephy-notebook.c:1092
 msgid "Close tab"
 msgstr "Tabblad sluiten"
 
@@ -3436,45 +3450,19 @@ msgstr "He_rstellen"
 msgid "Crash Recovery"
 msgstr "Herstellen na vastlopen"
 
-#: ../src/ephy-shell.c:217
+#: ../src/ephy-shell.c:216
 msgid "Sidebar extension required"
 msgstr "Zijbalk-uitbreiding vereist"
 
-#: ../src/ephy-shell.c:219
+#: ../src/ephy-shell.c:218
 msgid "Sidebar Extension Required"
 msgstr "Zijbalk-uitbreiding vereist"
 
-#: ../src/ephy-shell.c:223
+#: ../src/ephy-shell.c:222
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr ""
 "De verwijzing waarop u geklikt heeft vereist de zijbalk-uitbreiding om "
 "geïnstalleerd te kunnen worden."
-
-#: ../src/ephy-shell.c:453
-msgid ""
-"Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
-"use bonobo-activation-sysconf to configure the search path for bonobo server "
-"files."
-msgstr ""
-"Bonobo kan het bestand GNOME_Epiphany_Automation.server niet vinden. U kunt "
-"bonobo-activation-sysconf gebruiken om de zoekpaden aan te passen voor "
-"bonobo serverbestanden."
-
-#: ../src/ephy-shell.c:460
-msgid ""
-"Epiphany can't be used now, due to an unexpected error from Bonobo when "
-"attempting to register the automation server"
-msgstr ""
-"Epiphany kan nu niet gebruikt worden door een onverwachte fout van bonobo "
-"bij registreren van de automatiserings-server."
-
-#: ../src/ephy-shell.c:477
-msgid ""
-"Epiphany can't be used now, due to an unexpected error from Bonobo when "
-"attempting to locate the automation object."
-msgstr ""
-"Epiphany kan nu niet gebruikt worden door een onverwachte fout van bonobo "
-"bij registreren van de automatiserings-server."
 
 # ui/preferences.glade.h:170
 #: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2264 ../src/ephy-tab.c:2299
@@ -4153,66 +4141,76 @@ msgstr "Afbeelding _gebruiken als achtergrond"
 msgid "Copy I_mage Address"
 msgstr "Afbeeldingsadres _kopiëren"
 
-#: ../src/ephy-window.c:698
+#: ../src/ephy-window.c:703
 msgid "There are unsubmitted changes to form elements"
 msgstr "Er zijn niet-verstuurde wijzigingen in delen van het formulier"
 
-#: ../src/ephy-window.c:702
+#: ../src/ephy-window.c:707
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Als u het document desondanks sluit, verliest u die informatie."
 
-#: ../src/ephy-window.c:706
+#: ../src/ephy-window.c:711
 msgid "Close _Document"
 msgstr "Do_cument sluiten"
 
 # src/bookmarks_editor.c:942
 # src/menubar.c:34
-#: ../src/ephy-window.c:1273 ../src/window-commands.c:295
+#: ../src/ephy-window.c:1281 ../src/window-commands.c:295
 msgid "Open"
 msgstr "Openen"
 
 # src/menubar.c:63
-#: ../src/ephy-window.c:1275 ../src/window-commands.c:321
+#: ../src/ephy-window.c:1283 ../src/window-commands.c:321
 msgid "Save As"
 msgstr "Opslaan als"
 
 # src/menubar.c:571
-#: ../src/ephy-window.c:1279
+#: ../src/ephy-window.c:1287
 msgid "Bookmark"
 msgstr "Bladwijzer"
 
 # src/toolbar.c:351
-#: ../src/ephy-window.c:1281
+#: ../src/ephy-window.c:1289
 msgid "Find"
 msgstr "Zoeken"
 
-#: ../src/ephy-window.c:1454
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1302
+msgid "Larger"
+msgstr "Groter"
+
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1305
+msgid "Smaller"
+msgstr "Kleiner"
+
+#: ../src/ephy-window.c:1468
 msgid "Insecure"
 msgstr "Onveilig"
 
 # src/mozilla/mozilla.cpp:996
 # src/persistent_data_manager.c:374
 # src/persistent_data_manager.c:609
-#: ../src/ephy-window.c:1459
+#: ../src/ephy-window.c:1473
 msgid "Broken"
 msgstr "Gebroken"
 
-#: ../src/ephy-window.c:1472
+#: ../src/ephy-window.c:1486
 msgid "Low"
 msgstr "Laag"
 
 # src/mozilla/mozilla.cpp:1982
-#: ../src/ephy-window.c:1479
+#: ../src/ephy-window.c:1493
 msgid "High"
 msgstr "Hoog"
 
-#: ../src/ephy-window.c:1489
+#: ../src/ephy-window.c:1503
 #, c-format
 msgid "Security level: %s"
 msgstr "Beveiligingsniveau: %s"
 
 # src/menubar.c:416
-#: ../src/ephy-window.c:1529
+#: ../src/ephy-window.c:1543
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
@@ -4220,40 +4218,40 @@ msgstr[0] "%d verborgen opduikvenster"
 msgstr[1] "%d verborgen opduikvensters"
 
 # src/context.c:1075
-#: ../src/ephy-window.c:1824
+#: ../src/ephy-window.c:1838
 #, c-format
 msgid "Open image “%s”"
 msgstr "Afbeelding ‘%s’ openen"
 
 # src/context.c:68
-#: ../src/ephy-window.c:1829
+#: ../src/ephy-window.c:1843
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Gebruiken als werkbladachtergrond ‘%s’"
 
 # src/context.c:67
-#: ../src/ephy-window.c:1834
+#: ../src/ephy-window.c:1848
 #, c-format
 msgid "Save image “%s”"
 msgstr "Afbeelding ‘%s’ opslaan"
 
-#: ../src/ephy-window.c:1839
+#: ../src/ephy-window.c:1853
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Afbeeldingsadres ‘%s’ kopiëren"
 
-#: ../src/ephy-window.c:1852
+#: ../src/ephy-window.c:1866
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "E-mail versturen naar adres ‘%s’"
 
-#: ../src/ephy-window.c:1858
+#: ../src/ephy-window.c:1872
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "E-mailadres ‘%s’ kopiëren"
 
 # src/menubar.c:63
-#: ../src/ephy-window.c:1870
+#: ../src/ephy-window.c:1884
 #, c-format
 msgid "Save link “%s”"
 msgstr "Verwijzing ‘%s’ opslaan"
@@ -4261,12 +4259,12 @@ msgstr "Verwijzing ‘%s’ opslaan"
 # src/context.c:64
 # src/history_callbacks.c:165
 # src/misc_callbacks.c:412
-#: ../src/ephy-window.c:1876
+#: ../src/ephy-window.c:1890
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Bladwijzer maken van verwijzing ‘%s’"
 
-#: ../src/ephy-window.c:1882
+#: ../src/ephy-window.c:1896
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Verwijzing-adres ‘%s’ kopiëren"
@@ -4485,6 +4483,38 @@ msgstr ""
 #: ../src/window-commands.c:766
 msgid "GNOME Web Browser Website"
 msgstr "Webstek van de GNOME-webbrowser"
+
+# ui/epiphany.glade.h:63
+#~ msgid "Epiphany automation"
+#~ msgstr "Epiphany automatisering"
+
+# src/bookmarks_editor.c:945
+# src/menubar.c:91
+#~ msgid "Close Tab"
+#~ msgstr "Tabblad sluiten"
+
+#~ msgid ""
+#~ "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
+#~ "use bonobo-activation-sysconf to configure the search path for bonobo "
+#~ "server files."
+#~ msgstr ""
+#~ "Bonobo kan het bestand GNOME_Epiphany_Automation.server niet vinden. U "
+#~ "kunt bonobo-activation-sysconf gebruiken om de zoekpaden aan te passen "
+#~ "voor bonobo serverbestanden."
+
+#~ msgid ""
+#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
+#~ "attempting to register the automation server"
+#~ msgstr ""
+#~ "Epiphany kan nu niet gebruikt worden door een onverwachte fout van bonobo "
+#~ "bij registreren van de automatiserings-server."
+
+#~ msgid ""
+#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
+#~ "attempting to locate the automation object."
+#~ msgstr ""
+#~ "Epiphany kan nu niet gebruikt worden door een onverwachte fout van bonobo "
+#~ "bij registreren van de automatiserings-server."
 
 # src/context.c:939
 # ui/preferences.glade.h:221
@@ -4781,11 +4811,6 @@ msgstr "Webstek van de GNOME-webbrowser"
 
 #~ msgid "Lan_dscape"
 #~ msgstr "Lan_dschap"
-
-# ui/epiphany.glade.h:95
-# ui/preferences.glade.h:139
-#~ msgid "P_ortrait"
-#~ msgstr "P_ortret:"
 
 # src/toolbar.c:286
 #~ msgid "P_rinter:"
