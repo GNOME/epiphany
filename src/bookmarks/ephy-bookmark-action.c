@@ -354,18 +354,6 @@ activate_cb (GtkWidget *widget,
 	  (action, widget, ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
 }
 
-static void
-properties_activate_cb (GtkWidget *menu,
-			EphyBookmarkAction *action)
-{
-	GtkWidget *window, *proxy;
-
-	proxy = g_object_get_data (G_OBJECT (menu), "proxy");
-	window = gtk_widget_get_toplevel (proxy);
-
-	ephy_bookmarks_ui_show_bookmark	(window, action->priv->node);
-}
-
 static gboolean
 button_press_cb (GtkWidget *widget,
 		 GdkEventButton *event,
