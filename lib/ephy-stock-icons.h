@@ -33,6 +33,7 @@ G_BEGIN_DECLS
 #define STOCK_VIEW_SOURCE	   "stock_view-html-source"
 #define STOCK_SEND_MAIL		   "stock_mail-send"
 #define STOCK_ADD_BOOKMARK	   "stock_add-bookmark"
+#define STOCK_BOOKMARK		   "stock_bookmark"
 #define STOCK_PRINT_SETUP	   "stock_print-setup"
 #define STOCK_LOCK_INSECURE	   "stock_lock-open"
 #define STOCK_LOCK_SECURE	   "stock_lock"
