@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-30 16:45+0200\n"
-"PO-Revision-Date: 2005-12-30 17:06+0200\n"
+"POT-Creation-Date: 2006-01-16 20:11+0200\n"
+"PO-Revision-Date: 2006-01-16 20:12+0200\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists."
 "sourceforge.net>\n"
@@ -17,10 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
-
-#: ../data/GNOME_Epiphany_Automation.server.in.h:1
-msgid "Epiphany automation"
-msgstr "Epiphany-automaatio"
 
 #: ../data/epiphany-lockdown.schemas.in.h:1
 msgid ""
@@ -140,8 +136,8 @@ msgid "Epiphany Web Browser"
 msgstr "Epiphany, WWW-selain"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:222
-#: ../src/ephy-main.c:233
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:221
+#: ../src/ephy-main.c:232
 msgid "Web Browser"
 msgstr "WWW-selain"
 
@@ -566,7 +562,7 @@ msgid "Cookies"
 msgstr "Evästeet"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:96
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:98
 msgid "Downloads"
 msgstr "Tallennukset"
 
@@ -814,7 +810,7 @@ msgstr ""
 "%s / %s"
 
 #: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#: ../src/ephy-window.c:1451
+#: ../src/ephy-window.c:1465
 msgid "Unknown"
 msgstr "Tuntematon"
 
@@ -1272,8 +1268,7 @@ msgstr ""
 "Tiedoston tyyppi: %s.\n"
 "\n"
 "Tiedoston \"%s\" avaaminen ei ole turvallista, sillä se saattaa vaurioittaa "
-"asiakirjojasi tai loukata yksityisyyttäsi. Voit kuitenkin noutaa sen "
-"levylle."
+"asiakirjojasi tai loukata yksityisyyttäsi. Voit kuitenkin noutaa sen levylle."
 
 #: ../embed/mozilla/ContentHandler.cpp:344
 msgid "Open this file?"
@@ -1496,8 +1491,9 @@ msgstr "Asiakirjaa ei voida ladata yhteydettömässä tilassa."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:357
 msgid "To view this document, disable “Work Offline” and try again."
-msgstr "Jos haluat nähdä tämän asiakirjan, poista käytöstä valinta "
-"\"Yhteydetön tila\" ja yritä uudestaan."
+msgstr ""
+"Jos haluat nähdä tämän asiakirjan, poista käytöstä valinta \"Yhteydetön tila"
+"\" ja yritä uudestaan."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:369
 #, c-format
@@ -1543,8 +1539,8 @@ msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
 "crashed; it could have caused the crash."
 msgstr ""
-"Sivua \"%s\" tässä välilehdessä ei oltu ladattu kokonaan, kun selain "
-"kaatui. Tämä sivu on voinut aiheuttaa kaatumisen."
+"Sivua \"%s\" tässä välilehdessä ei oltu ladattu kokonaan, kun selain kaatui. "
+"Tämä sivu on voinut aiheuttaa kaatumisen."
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -1563,6 +1559,25 @@ msgstr "Internet Archivesta"
 #: ../src/bookmarks/ephy-bookmarks-ui.c:481 ../src/ephy-session.c:775
 msgid "Untitled"
 msgstr "Nimetön"
+
+#: ../embed/mozilla/EphyPromptService.cpp:193
+msgid "_Abort Script"
+msgstr "_Keskeytä skripti"
+
+#: ../embed/mozilla/EphyPromptService.cpp:261
+msgid "Don't Save"
+msgstr "Älä tallenna"
+
+#: ../embed/mozilla/EphyPromptService.cpp:742
+msgid "_User:"
+msgstr "_Käyttäjä:"
+
+#: ../embed/mozilla/EphyPromptService.cpp:743
+#: ../embed/mozilla/EphyPromptService.cpp:770
+#: ../embed/mozilla/GtkNSSDialogs.cpp:795
+#: ../embed/mozilla/GtkNSSDialogs.cpp:905
+msgid "_Password:"
+msgstr "_Salasana:"
 
 #: ../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
 #: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:642
@@ -1631,8 +1646,8 @@ msgstr ""
 msgid ""
 "You should only accept the security information if you trust “%s” and “%s”."
 msgstr ""
-"Nämä turvatiedot tulisi hyväksyä vain, jos luotat varmentajiin \"%s\" ja "
-"\"%s\"."
+"Nämä turvatiedot tulisi hyväksyä vain, jos luotat varmentajiin \"%s\" ja \"%s"
+"\"."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:321
 msgid "Accept incorrect security information?"
@@ -1653,8 +1668,8 @@ msgid ""
 "You should only connect to the site if you are certain you are connected to "
 "“%s”."
 msgstr ""
-"Yhteys tulisi ottaa vain,  jos olet varma että olet yhteydessä sivustoon "
-"\"%s\"."
+"Yhteys tulisi ottaa vain,  jos olet varma että olet yhteydessä sivustoon \"%s"
+"\"."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:363
 msgid "Connect to untrusted site?"
@@ -1707,9 +1722,7 @@ msgstr "Yhteyttä kohteeseen \"%s\" ei voi avata."
 #: ../embed/mozilla/GtkNSSDialogs.cpp:510
 #, c-format
 msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
-msgstr ""
-"Varmenteiden sulkulista (CRL) lähteestä \"%s\" "
-"täytyy päivittää."
+msgstr "Varmenteiden sulkulista (CRL) lähteestä \"%s\" täytyy päivittää."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:515
 msgid "Please ask your system administrator for assistance."
@@ -1757,11 +1770,6 @@ msgstr "Valitse salasana."
 #: ../embed/mozilla/GtkNSSDialogs.cpp:783
 msgid "Select a password to protect this certificate."
 msgstr "Valitse tätä varmennetta suojaava salasana."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:795
-#: ../embed/mozilla/GtkNSSDialogs.cpp:905
-msgid "_Password:"
-msgstr "_Salasana:"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:809
 msgid "Con_firm password:"
@@ -1943,11 +1951,11 @@ msgstr "Tiedostot"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:263
+#: ../embed/mozilla/mozilla-embed-single.cpp:282
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.fi/search?ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:595
+#: ../embed/mozilla/mozilla-embed-single.cpp:682
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphanya ei voi käyttää nyt: Mozillan alustus ei onnistunut."
 
@@ -1968,27 +1976,27 @@ msgstr ""
 "Yritit tulostaa ajuria \"%s\" käyttävälle tulostimelle. Tämä ohjelma vaatii "
 "PostScript-ajurin."
 
-#: ../embed/print-dialog.c:365
+#: ../embed/print-dialog.c:364
 msgid "_From:"
 msgstr "_Alkaen:"
 
-#: ../embed/print-dialog.c:378
+#: ../embed/print-dialog.c:377
 msgid "Sets the start of the range of pages to be printed"
 msgstr "Asettaa tulostettavan sivualueen alun"
 
-#: ../embed/print-dialog.c:380
+#: ../embed/print-dialog.c:379
 msgid "_To:"
 msgstr "_Saakka:"
 
-#: ../embed/print-dialog.c:393
+#: ../embed/print-dialog.c:392
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Asettaa tulostettavan sivualueen lopun"
 
-#: ../embed/print-dialog.c:408 ../src/ephy-window.c:1277
+#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1285
 msgid "Print"
 msgstr "Tulosta"
 
-#: ../embed/print-dialog.c:416
+#: ../embed/print-dialog.c:415
 msgid "Pages"
 msgstr "Sivuja"
 
@@ -2021,12 +2029,12 @@ msgstr "Erotin"
 msgid "All supported types"
 msgstr "Kaikki tuetut tyypit"
 
-#: ../lib/ephy-file-helpers.c:312
+#: ../lib/ephy-file-helpers.c:327
 #, c-format
 msgid "\"%s\" exists, please move it out of the way."
 msgstr "%s on jo olemassa, se tulee siirtää pois tieltä."
 
-#: ../lib/ephy-file-helpers.c:318
+#: ../lib/ephy-file-helpers.c:333
 #, c-format
 msgid "Failed to create directory \"%s\"."
 msgstr "Kansion \"%s\" luominen ei onnistunut."
@@ -2054,8 +2062,8 @@ msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
 msgstr ""
-"Tämänniminen tiedosto on jo olemassa, eikä sinulla ole oikeuksia "
-"kirjoittaa sen päälle."
+"Tämänniminen tiedosto on jo olemassa, eikä sinulla ole oikeuksia kirjoittaa "
+"sen päälle."
 
 #: ../lib/ephy-gui.c:372
 msgid "Cannot Overwrite File"
@@ -2223,28 +2231,24 @@ msgid "select fonts for|Other Scripts"
 msgstr "muut kielet"
 
 #: ../lib/ephy-stock-icons.c:54
-msgid "Close Tab"
-msgstr "Sulje välilehti"
-
-#: ../lib/ephy-stock-icons.c:55
 msgid "Popup Windows"
 msgstr "Ponnahdusikkunat"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1191
+#: ../lib/ephy-stock-icons.c:55 ../src/ephy-history-window.c:1191
 msgid "History"
 msgstr "Historiikki"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
+#: ../lib/ephy-stock-icons.c:56 ../src/bookmarks/ephy-bookmarks-editor.c:684
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1535
-#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1283
+#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1291
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Osoitekenttä"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:58
 msgid "_Download"
 msgstr "_Tallenna"
 
@@ -2297,8 +2301,8 @@ msgid ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
 msgstr ""
-"Osoitetta ei ole ladattu, koska se viittaa turvattomaan protokollaan ja siten "
-"aiheuttaa turvallisuusriskin tietokoneellesi."
+"Osoitetta ei ole ladattu, koska se viittaa turvattomaan protokollaan ja "
+"siten aiheuttaa turvallisuusriskin tietokoneellesi."
 
 #: ../plugins/desktop-file/plugin.cpp:290
 msgid "No address found."
@@ -2793,7 +2797,7 @@ msgstr "Liittyy"
 msgid "Quick Topic"
 msgstr "Nopea aihe"
 
-#: ../src/ephy-encoding-dialog.c:313
+#: ../src/ephy-encoding-dialog.c:340
 msgid "Encodings"
 msgstr "Merkistöt"
 
@@ -2817,23 +2821,27 @@ msgstr "Ei löytynyt"
 msgid "Wrapped"
 msgstr "Rivitetty"
 
-#: ../src/ephy-find-toolbar.c:388
+#: ../src/ephy-find-toolbar.c:151
+msgid "Find links:"
+msgstr "Etsi linkkejä:"
+
+#: ../src/ephy-find-toolbar.c:151
 msgid "Find:"
 msgstr "Etsi:"
 
-#: ../src/ephy-find-toolbar.c:404 ../src/ephy-find-toolbar.c:405
+#: ../src/ephy-find-toolbar.c:399
 msgid "Find Previous"
 msgstr "Etsi edellinen"
 
-#: ../src/ephy-find-toolbar.c:408
+#: ../src/ephy-find-toolbar.c:402
 msgid "Find previous occurrence of the search string"
 msgstr "Etsi haettavan merkkijonon edellinen esiintymä"
 
-#: ../src/ephy-find-toolbar.c:415 ../src/ephy-find-toolbar.c:416
+#: ../src/ephy-find-toolbar.c:409
 msgid "Find Next"
 msgstr "Etsi seuraava"
 
-#: ../src/ephy-find-toolbar.c:419
+#: ../src/ephy-find-toolbar.c:412
 msgid "Find next occurrence of the search string"
 msgstr "Etsi haettavan merkkijonon seuraava esiintymä"
 
@@ -2930,39 +2938,39 @@ msgstr[1] "Viimeisimmät %d päivää"
 msgid "Sites"
 msgstr "Sivustot"
 
-#: ../src/ephy-main.c:59
+#: ../src/ephy-main.c:58
 msgid "Open a new tab in an existing window"
 msgstr "Avaa uusi välilehti olemassaolevaan ikkunaan"
 
-#: ../src/ephy-main.c:62
+#: ../src/ephy-main.c:61
 msgid "Run in full screen mode"
 msgstr "Käynnistä kokoruututilassa"
 
-#: ../src/ephy-main.c:65
+#: ../src/ephy-main.c:64
 msgid "Load the given session file"
 msgstr "Lataa annettu istuntotiedosto"
 
-#: ../src/ephy-main.c:66 ../src/ephy-main.c:72
+#: ../src/ephy-main.c:65 ../src/ephy-main.c:71
 msgid "FILE"
 msgstr "TIEDOSTO"
 
-#: ../src/ephy-main.c:68
+#: ../src/ephy-main.c:67
 msgid "Add a bookmark (don't open any window)"
 msgstr "Lisää kirjanmerkki (älä avaa ikkunaa)"
 
-#: ../src/ephy-main.c:69
+#: ../src/ephy-main.c:68
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:71
+#: ../src/ephy-main.c:70
 msgid "Import bookmarks from the given file"
 msgstr "Tuo kirjanmerkkejä annetusta tiedostosta"
 
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:73
 msgid "Launch the bookmarks editor"
 msgstr "Käynnistä kirjanmerkkimuokkain"
 
-#: ../src/ephy-notebook.c:1086
+#: ../src/ephy-notebook.c:1092
 msgid "Close tab"
 msgstr "Sulje välilehti"
 
@@ -2990,43 +2998,17 @@ msgstr "_Palauta"
 msgid "Crash Recovery"
 msgstr "Kaatumisesta palautuminen"
 
-#: ../src/ephy-shell.c:217
+#: ../src/ephy-shell.c:216
 msgid "Sidebar extension required"
 msgstr "Sivupalkkilaajennos vaaditaan"
 
-#: ../src/ephy-shell.c:219
+#: ../src/ephy-shell.c:218
 msgid "Sidebar Extension Required"
 msgstr "Sivupalkkilaajennos vaaditaan"
 
-#: ../src/ephy-shell.c:223
+#: ../src/ephy-shell.c:222
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Napsauttamasi linkki vaatii, että sivupalkkilaajennos on asennettu."
-
-#: ../src/ephy-shell.c:453
-msgid ""
-"Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
-"use bonobo-activation-sysconf to configure the search path for bonobo server "
-"files."
-msgstr ""
-"Bonobo ei löytänyt GNOME_Epiphany_Automation.server-tiedostoa. Voit käyttää "
-"bonobo-activation-sysconf-ohjelmaa näiden Bonobo-palvelintiedostojen "
-"hakupolun määrittelyyn."
-
-#: ../src/ephy-shell.c:460
-msgid ""
-"Epiphany can't be used now, due to an unexpected error from Bonobo when "
-"attempting to register the automation server"
-msgstr ""
-"Epiphanya ei voi käyttää nyt, koska tapahtui odottamaton Bonobo-virhe "
-"Epiphanyn rekisteröityessä automaatiopalveluun."
-
-#: ../src/ephy-shell.c:477
-msgid ""
-"Epiphany can't be used now, due to an unexpected error from Bonobo when "
-"attempting to locate the automation object."
-msgstr ""
-"Epiphanya ei voi käyttää nyt, koska tapahtui odottamaton Bonobo-virhe "
-"Epiphanyn paikantaessa automaatio-oliota."
 
 #: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2264 ../src/ephy-tab.c:2299
 msgid "Blank page"
@@ -3583,103 +3565,113 @@ msgstr "_Käytä kuvaa taustana"
 msgid "Copy I_mage Address"
 msgstr "Kopioi kuvan _osoite"
 
-#: ../src/ephy-window.c:698
+#: ../src/ephy-window.c:703
 msgid "There are unsubmitted changes to form elements"
 msgstr "Lähettämättömän lomakkeen kenttiä on muutettu"
 
-#: ../src/ephy-window.c:702
+#: ../src/ephy-window.c:707
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Jos suljet asiakirjan tästä huolimatta, menetät nämä tiedot."
 
-#: ../src/ephy-window.c:706
+#: ../src/ephy-window.c:711
 msgid "Close _Document"
 msgstr "_Sulje asiakirja"
 
-#: ../src/ephy-window.c:1273 ../src/window-commands.c:295
+#: ../src/ephy-window.c:1281 ../src/window-commands.c:295
 msgid "Open"
 msgstr "Avaa"
 
-#: ../src/ephy-window.c:1275 ../src/window-commands.c:321
+#: ../src/ephy-window.c:1283 ../src/window-commands.c:321
 msgid "Save As"
 msgstr "Tallenna nimellä"
 
-#: ../src/ephy-window.c:1279
+#: ../src/ephy-window.c:1287
 msgid "Bookmark"
 msgstr "Kirjanmerkki"
 
-#: ../src/ephy-window.c:1281
+#: ../src/ephy-window.c:1289
 msgid "Find"
 msgstr "Etsi"
 
-#: ../src/ephy-window.c:1454
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1302
+msgid "Larger"
+msgstr "Suurempi"
+
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1305
+msgid "Smaller"
+msgstr "Pienempi"
+
+#: ../src/ephy-window.c:1468
 msgid "Insecure"
 msgstr "Turvaton"
 
-#: ../src/ephy-window.c:1459
+#: ../src/ephy-window.c:1473
 msgid "Broken"
 msgstr "Rikki"
 
-#: ../src/ephy-window.c:1472
+#: ../src/ephy-window.c:1486
 msgid "Low"
 msgstr "Matala"
 
-#: ../src/ephy-window.c:1479
+#: ../src/ephy-window.c:1493
 msgid "High"
 msgstr "Korkea"
 
-#: ../src/ephy-window.c:1489
+#: ../src/ephy-window.c:1503
 #, c-format
 msgid "Security level: %s"
 msgstr "Turvallisuustaso: %s"
 
-#: ../src/ephy-window.c:1529
+#: ../src/ephy-window.c:1543
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d ponnahdusikkuna piilossa"
 msgstr[1] "%d ponnahdusikkunaa piilossa"
 
-#: ../src/ephy-window.c:1824
+#: ../src/ephy-window.c:1838
 #, c-format
 msgid "Open image “%s”"
 msgstr "Avaa kuva \"%s\""
 
-#: ../src/ephy-window.c:1829
+#: ../src/ephy-window.c:1843
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Käytä \"%s\" työpöydän taustana"
 
-#: ../src/ephy-window.c:1834
+#: ../src/ephy-window.c:1848
 #, c-format
 msgid "Save image “%s”"
 msgstr "Tallenna kuva \"%s\""
 
-#: ../src/ephy-window.c:1839
+#: ../src/ephy-window.c:1853
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopioi kuvan \"%s\" osoite"
 
-#: ../src/ephy-window.c:1852
+#: ../src/ephy-window.c:1866
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Lähetä sähköpostia osoitteeseen \"%s\""
 
-#: ../src/ephy-window.c:1858
+#: ../src/ephy-window.c:1872
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopioi sähköpostiosoite \"%s\""
 
-#: ../src/ephy-window.c:1870
+#: ../src/ephy-window.c:1884
 #, c-format
 msgid "Save link “%s”"
 msgstr "Tallenna linkki \"%s\""
 
-#: ../src/ephy-window.c:1876
+#: ../src/ephy-window.c:1890
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Lisää kirjanmerkki linkkiin \"%s\""
 
-#: ../src/ephy-window.c:1882
+#: ../src/ephy-window.c:1896
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopioi linkin osoite \"%s\""
@@ -3862,3 +3854,31 @@ msgstr ""
 msgid "GNOME Web Browser Website"
 msgstr "Gnomen wwwselaimen www-sivu"
 
+#~ msgid "Epiphany automation"
+#~ msgstr "Epiphany-automaatio"
+
+#~ msgid "Close Tab"
+#~ msgstr "Sulje välilehti"
+
+#~ msgid ""
+#~ "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
+#~ "use bonobo-activation-sysconf to configure the search path for bonobo "
+#~ "server files."
+#~ msgstr ""
+#~ "Bonobo ei löytänyt GNOME_Epiphany_Automation.server-tiedostoa. Voit "
+#~ "käyttää bonobo-activation-sysconf-ohjelmaa näiden Bonobo-"
+#~ "palvelintiedostojen hakupolun määrittelyyn."
+
+#~ msgid ""
+#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
+#~ "attempting to register the automation server"
+#~ msgstr ""
+#~ "Epiphanya ei voi käyttää nyt, koska tapahtui odottamaton Bonobo-virhe "
+#~ "Epiphanyn rekisteröityessä automaatiopalveluun."
+
+#~ msgid ""
+#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
+#~ "attempting to locate the automation object."
+#~ msgstr ""
+#~ "Epiphanya ei voi käyttää nyt, koska tapahtui odottamaton Bonobo-virhe "
+#~ "Epiphanyn paikantaessa automaatio-oliota."
