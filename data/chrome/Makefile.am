@@ -16,4 +16,5 @@ globalchrome_DATA = about.xhtml
 
 EXTRA_DIST = \
 	$(manifest_in_files)	\
-	$(branding_in_files)
+	$(branding_in_files)	\
+	$(globalchrome_DATA)
