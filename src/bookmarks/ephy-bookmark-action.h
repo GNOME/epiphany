@@ -22,6 +22,7 @@
 #ifndef EPHY_BOOKMARK_ACTION_H
 #define EPHY_BOOKMARK_ACTION_H
 
+#include "ephy-link.h"
 #include "ephy-link-action.h"
 #include "ephy-node.h"
 
@@ -66,6 +67,10 @@ void        ephy_bookmark_action_set_bookmark (EphyBookmarkAction *action, EphyN
 EphyNode *  ephy_bookmark_action_get_bookmark (EphyBookmarkAction *action);
 
 void        ephy_bookmark_action_updated      (EphyBookmarkAction *action);
+
+void        ephy_bookmark_action_activate     (EphyBookmarkAction *action,
+					       GtkWidget *widget,
+					       EphyLinkFlags flags);
 
 G_END_DECLS
 

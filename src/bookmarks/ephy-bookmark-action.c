@@ -24,9 +24,9 @@
 
 #include "egg-editable-toolbar.h"
 #include "ephy-bookmark-action.h"
+#include "ephy-bookmarks-ui.h"
 #include "ephy-bookmarks.h"
-#include "ephy-link-action.h"
-#include "ephy-link.h"
+#include "ephy-stock-icons.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
 #include "ephy-gui.h"
@@ -126,7 +126,6 @@ create_tool_item (GtkAction *action)
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (hbox), button);
 	g_object_set_data (G_OBJECT (item), "button", button);
-	g_object_set_data (G_OBJECT (item), "egg-drag-source", button);
 
 	entry = gtk_entry_new ();
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), ENTRY_WIDTH_CHARS);
@@ -168,7 +167,6 @@ ephy_bookmark_action_sync_smart_url (GtkAction *gaction, GParamSpec *pspec, GtkW
 		entry = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "entry"));
 		icon = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "icon"));
 
-		g_object_set (icon, "visible", !is_smart_url, NULL);
 		g_object_set (entry, "visible", is_smart_url, NULL);
 		gtk_entry_set_width_chars (GTK_ENTRY (entry),
 					   width > 0 ? width : ENTRY_WIDTH_CHARS);
@@ -207,12 +205,17 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 	g_return_if_fail (bma->priv->node != NULL);
 
 	icon_location = ephy_node_get_property_string (bma->priv->node,
-						       EPHY_NODE_BMK_PROP_ICON);
-
+						       EPHY_NODE_BMK_PROP_USERICON);
+	if (icon_location == NULL)
+	{
+		icon_location = ephy_node_get_property_string (bma->priv->node,
+							       EPHY_NODE_BMK_PROP_ICON);
+	}
+	
 	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache
 		(EPHY_EMBED_SHELL (ephy_shell)));
 
-	if (icon_location)
+	if (icon_location && *icon_location)
 	{
 		pixbuf = ephy_favicon_cache_get (cache, icon_location);
 
@@ -233,9 +236,9 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 		icon = GTK_IMAGE (g_object_get_data (G_OBJECT (proxy), "icon"));
 		g_return_if_fail (icon != NULL);
 
-		if (pixbuf == NULL)
+		if (pixbuf == NULL && icon_location == NULL)
 		{
-			pixbuf = gtk_widget_render_icon (proxy, GTK_STOCK_NEW,
+			pixbuf = gtk_widget_render_icon (proxy, STOCK_BOOKMARK,
 							 GTK_ICON_SIZE_MENU, NULL);
 		}
 
@@ -293,10 +296,10 @@ ephy_bookmark_action_sync_label (GtkAction *gaction,
 	}
 }
 
-static void
-bookmark_activate_with_flags (GtkWidget *widget,
-				EphyBookmarkAction *action,
-				EphyLinkFlags flags)
+void
+ephy_bookmark_action_activate (EphyBookmarkAction *action,
+			       GtkWidget *widget,
+			       EphyLinkFlags flags)
 {
 	EphyBookmarkActionPrivate *priv = action->priv;
 	EphyBookmarks *bookmarks;
@@ -344,27 +347,11 @@ bookmark_activate_with_flags (GtkWidget *widget,
 }
 
 static void
-open_in_tab_activate_cb (GtkWidget *widget,
-			 EphyBookmarkAction *action)
-{
-	bookmark_activate_with_flags(widget, action,
-			EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
-}
-
-static void
-open_in_window_activate_cb (GtkWidget *widget,
-			EphyBookmarkAction *action)
-{
-	bookmark_activate_with_flags(widget, action,
-			EPHY_LINK_NEW_WINDOW);
-}
-
-static void
 activate_cb (GtkWidget *widget,
-	     	EphyBookmarkAction *action)
+	     EphyBookmarkAction *action)
 {
-	bookmark_activate_with_flags(widget, action,
-			ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
+	ephy_bookmark_action_activate
+	  (action, widget, ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
 }
 
 static void
@@ -372,69 +359,11 @@ properties_activate_cb (GtkWidget *menu,
 			EphyBookmarkAction *action)
 {
 	GtkWidget *window, *proxy;
-	EphyBookmarks *bookmarks;
 
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	proxy = g_object_get_data (G_OBJECT (menu), "proxy");
 	window = gtk_widget_get_toplevel (proxy);
 
-	ephy_bookmarks_show_bookmark_properties
-		(bookmarks, action->priv->node, window);
-}
-
-static void
-show_context_menu (EphyBookmarkAction *action,
-		   GtkWidget *proxy,
-		   GdkEventButton *event,
-		   GtkMenuPositionFunc func)
-{
-	GtkWidget *menu, *item;
-
-	menu = gtk_menu_new ();
-
-	item = gtk_menu_item_new_with_mnemonic (_("Open in New _Tab"));
-	gtk_widget_show (item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	g_signal_connect (item, "activate",
-			  G_CALLBACK (open_in_tab_activate_cb), action);
-
-	item = gtk_menu_item_new_with_mnemonic (_("Open in New _Window"));
-	gtk_widget_show (item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	g_signal_connect (item, "activate",
-			  G_CALLBACK (open_in_window_activate_cb), action);
-
-	item = gtk_separator_menu_item_new ();
-	gtk_widget_show (item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PROPERTIES, NULL);
-	g_object_set_data (G_OBJECT (item), "proxy", proxy);
-	gtk_widget_show (item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	g_signal_connect (item, "activate",
-			  G_CALLBACK (properties_activate_cb), action);
-    
-	egg_editable_toolbar_add_popup_items (proxy, GTK_MENU (menu));
-
-	if (event != NULL)
-	{
-		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, func, proxy,
-				event->button, event->time);
-	}
-	else
-	{
-		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, func, proxy, 0,
-				gtk_get_current_event_time ());
-		gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
-	}
-}
-
-static gboolean
-popup_menu_cb (GtkWidget *widget, EphyBookmarkAction *action)
-{
-	show_context_menu (action, widget, NULL, ephy_gui_menu_position_under_widget);
-	return TRUE;
+	ephy_bookmarks_ui_show_bookmark	(window, action->priv->node);
 }
 
 static gboolean
@@ -442,12 +371,7 @@ button_press_cb (GtkWidget *widget,
 		 GdkEventButton *event,
 		 EphyBookmarkAction *action)
 {
-	if (event->button == 3)
-	{
-		show_context_menu (action, widget, event, NULL);
-		return TRUE;
-	}
-	else if (event->button == 2)	
+	if (event->button == 2)	
 	{
 		gtk_button_pressed (GTK_BUTTON (widget));
 	}
@@ -494,8 +418,6 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
 		g_signal_connect (button, "clicked", G_CALLBACK (activate_cb), action);
-		g_signal_connect (button, "popup_menu",
-				  G_CALLBACK (popup_menu_cb), action);
 		g_signal_connect (button, "button-press-event",
 				  G_CALLBACK (button_press_cb), action);
 		g_signal_connect (button, "button-release-event",
