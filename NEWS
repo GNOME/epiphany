@@ -1,4 +1,46 @@
-1.9.4.90 dummy
+==============
+Epiphany 1.9.5
+==============
+
+Changes:
+	* Add NetworkManager magic for connection status autodetection. (disabled by default)
+	* Add more methods to EphyAdblock interface and EphyAdblockManager
+        * Override mozilla prompts by our own.
+       	* Enable zeroconf by default now that gnome-vfs dns-sd can use avahi
+	* Override the page that is shown for the about: url so that it doesn't say "Deer Park"
+	* Go back to using the gtk stock close icon, to get correct themeing in a11y themes.
+	* Fix compilation with DBUS 0.6
+
+Bug fixes:
+	* Don't require a HTML document to activate typeaheadfind. Bug #326813.
+	* Add Zoom In/Out buttons to default toolbar layout and toolbars editor repertoire. Bug #117923.
+	* Now 'Loading' is not displayed when loading a new tab. Bug #323468.
+	* Exit print preview mode when clicking the window close button. Bug #326136.
+	* Make ESC cancel the content handler dialogue. Bug #325811.
+	* Fix next/prev button sensitivity when find wrapped around.
+	* Don't include generated files in the tarball. Bug #319440. 
+	* Bonobo is dead; long live the Bonobos! Patch by Gustavo Gama, bug #322463.
+
+Contributors to this release: Christian Persch, Jean-François Rameau, Crispin Flowerday, thetroublemaker,
+Gustavo Gama, Matthew Thomas, Peter Harvey?
+
+Updated translations: 
+
+        * Miloslav Trmac (cs)
+        * Hendrik Richter (de)
+        * Adam Weinberger (en_CA)
+        * Francisco Javier F. Serrador (es)
+        * Ilkka Tuohela (fi)
+        * Christophe Merlet (RedFox) (fr)
+        * Ignacio Casal Quinteiro (gl)
+        * Ankit Patel (gu)
+        * Gabor Kelemen (hu)
+        * Mohammad DAMT (id)
+        * Žygimantas Beručka (lt)
+        * Kjartan Maraas (nb)
+        * Kjartan Maraas (no)
+        * Theppitak Karoonboonyanan (th)
+        * Clytie Siddall (vi)
 
 ==============
 Epiphany 1.9.4
