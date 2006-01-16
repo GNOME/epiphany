@@ -234,13 +234,27 @@ ephy_bookmarks_menu_build (GString *string, EphyNode *parent)
                 break;
         }
 
-	/* Build the menu, and return the merge_id */
-	append_menu (string, topics, children, flags);
-	g_ptr_array_free (topics, TRUE);
-	
-	/* Add a "Open in tabs" menu item if this menu isn't the 'All' menu. */
-	if (id != BOOKMARKS_NODE_ID)
+	/* If this menu is the 'All' menu, be sure to include the 'local' topic. */
+	if (id == BOOKMARKS_NODE_ID)
 	{
+		EphyNode *local_node;
+		
+		local_node = ephy_bookmarks_get_local (eb);
+		if (local_node != NULL)
+		{
+			g_ptr_array_add (topics, ephy_bookmarks_get_local (eb));
+		}
+		
+		append_menu (string, topics, children, flags);
+		g_ptr_array_free (topics, TRUE);
+	}
+	
+	/* Otherwise, build the menu with "Open in tabs". */
+	else
+	{
+		append_menu (string, topics, children, flags);
+		g_ptr_array_free (topics, TRUE);
+	
 		char *name = ephy_open_tabs_action_name (node);
 		g_string_append_printf
 		  (string, "<separator/><menuitem action=\"%s\" name=\"OpenTabs\"/>", name);
