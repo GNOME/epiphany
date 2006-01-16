@@ -28,8 +28,10 @@
 #include "ephy-bookmarks.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-bookmarks-menu.h"
+#include "ephy-shell.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
+#include "ephy-dnd.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtkwidget.h>
@@ -46,6 +48,10 @@
 #include <gtk/gtkmain.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <string.h>
+
+static const GtkTargetEntry dest_drag_types[] = {
+  {EPHY_DND_URL_TYPE, 0, 0},
+};
 
 #define TOOLITEM_WIDTH_CHARS	24
 #define MENUITEM_WIDTH_CHARS	32
@@ -98,6 +104,53 @@ ephy_topic_action_get_type (void)
 	}
 
 	return type;
+}
+
+static void
+drag_data_received_cb (GtkWidget	  *widget,
+		       GdkDragContext     *context,
+		       gint                x,
+		       gint                y,
+		       GtkSelectionData   *selection_data,
+		       guint               info,
+		       guint               time,
+		       GtkAction          *action)
+{  
+	const char *data;
+	EphyBookmarks *bookmarks;
+	EphyNode *bookmark, *topic;
+	gchar **netscape_url;
+	
+	topic = ephy_topic_action_get_topic (EPHY_TOPIC_ACTION (action));
+	
+	data = (char *)selection_data->data;
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	
+	netscape_url = g_strsplit (data, "\n", 2);
+	if (!netscape_url || !netscape_url[0])
+	{
+		g_strfreev (netscape_url);
+		gtk_drag_finish (context, FALSE, FALSE, time);
+		return;
+	}
+
+	bookmark = ephy_bookmarks_find_bookmark (bookmarks, netscape_url[0]);
+	if (bookmark == NULL)
+	{
+		bookmark = ephy_bookmarks_add (bookmarks, netscape_url[1], netscape_url[0]);
+	}
+
+	g_strfreev (netscape_url);
+	
+	if (bookmark != NULL)
+	{
+		ephy_bookmarks_set_keyword (bookmarks, topic, bookmark);
+		gtk_drag_finish (context, TRUE, FALSE, time);
+	}
+	else
+	{
+		gtk_drag_finish (context, FALSE, FALSE, time);
+	}
 }
 
 static GtkWidget *
@@ -320,6 +373,11 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 				  G_CALLBACK (button_press_cb), action);
 		g_signal_connect (button, "button-release-event",
 				  G_CALLBACK (button_release_cb), action);
+	    
+		g_signal_connect (button, "drag_data_received",
+				  G_CALLBACK (drag_data_received_cb), action);
+		gtk_drag_dest_set (button, GTK_DEST_DEFAULT_ALL, dest_drag_types,
+				   G_N_ELEMENTS (dest_drag_types), GDK_ACTION_COPY);
 	}
 	else if (GTK_IS_MENU_ITEM (proxy))
 	{
