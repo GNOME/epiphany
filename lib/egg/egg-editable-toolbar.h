@@ -67,6 +67,7 @@ GtkWidget	   *egg_editable_toolbar_new_with_model	 (GtkUIManager         *manage
 void		    egg_editable_toolbar_set_model       (EggEditableToolbar   *etoolbar,
 							  EggToolbarsModel     *model);
 EggToolbarsModel   *egg_editable_toolbar_get_model       (EggEditableToolbar   *etoolbar);
+GtkUIManager       *egg_editable_toolbar_get_manager     (EggEditableToolbar   *etoolbar);
 void		    egg_editable_toolbar_set_edit_mode	 (EggEditableToolbar   *etoolbar,
 							  gboolean              mode);
 gboolean	    egg_editable_toolbar_get_edit_mode	 (EggEditableToolbar   *etoolbar);
@@ -81,8 +82,10 @@ void		    egg_editable_toolbar_set_drag_dest   (EggEditableToolbar   *etoolbar,
 void		    egg_editable_toolbar_set_fixed       (EggEditableToolbar   *etoolbar,
 							  GtkToolbar           *fixed_toolbar);
 
-void		    egg_editable_toolbar_add_popup_items (GtkWidget *widget,
-                                                          GtkMenu   *popup);
+GtkWidget *         egg_editable_toolbar_get_selected    (EggEditableToolbar   *etoolbar);
+void                egg_editable_toolbar_set_selected    (EggEditableToolbar   *etoolbar,
+							  GtkWidget            *widget);
+
 
 /* Private Functions */
 
