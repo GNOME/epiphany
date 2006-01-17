@@ -1260,6 +1260,14 @@ ephy_node_view_add_column (EphyNodeView *view,
 
 	if (flags & EPHY_NODE_VIEW_SORTABLE)
 	{
+		/* Now we have created a new column, re-create the
+		 * sort model, but ensure that the set_sort function
+		 * hasn't been called, see bug #320686 */
+		g_assert (view->priv->sort_column == -1);
+		g_object_unref (view->priv->sortmodel);
+		view->priv->sortmodel = ephy_tree_model_sort_new (view->priv->filtermodel);
+		gtk_tree_view_set_model (GTK_TREE_VIEW (view), GTK_TREE_MODEL (view->priv->sortmodel));
+
 		gtk_tree_view_column_set_sort_column_id (gcolumn, column);
 	}
 

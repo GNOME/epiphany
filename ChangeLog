@@ -1,5 +1,13 @@
 2006-01-17  Crispin Flowerday  <gnome@flowerday.cx>
 
+	* lib/widgets/ephy-node-view.c (ephy_node_view_add_column): 
+
+	When adding a column that can be sorted on, re-create the
+	sort model, so that it sets up the sort method correctly.
+	Fixes bug #320686
+
+2006-01-17  Crispin Flowerday  <gnome@flowerday.cx>
+
 	* embed/ephy-embed-event.c: (ephy_embed_event_get_property):
 	* embed/ephy-embed-event.h:
 	* embed/mozilla/mozilla-embed-event.cpp:
