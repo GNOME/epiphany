@@ -257,9 +257,12 @@ ephy_bookmarks_menu_build (GString *string, EphyNode *parent)
 		append_menu (string, topics, children, flags);
 		g_ptr_array_free (topics, TRUE);
 	
-		name = ephy_open_tabs_action_name (node);
-		g_string_append_printf
-		  (string, "<separator/><menuitem action=\"%s\" name=\"OpenTabs\"/>", name);
-		g_free (name);
+		if (children->len > 1)
+		{
+			name = ephy_open_tabs_action_name (node);
+			g_string_append_printf
+			  (string, "<separator/><menuitem action=\"%s\" name=\"OpenTabs\"/>", name);
+			g_free (name);
+		}
 	}
 }
