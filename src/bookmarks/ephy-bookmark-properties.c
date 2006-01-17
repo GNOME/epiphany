@@ -539,7 +539,6 @@ build_ui (EphyBookmarkProperties *properties)
 	GtkWidget *table, *label, *entry, *palette;
 	GtkWidget *scrolled_window;
 	GtkComboBox *cbox;
-	char *str;
 	const char *tmp;
 
 	g_signal_connect (G_OBJECT (properties),
@@ -579,11 +578,8 @@ build_ui (EphyBookmarkProperties *properties)
 	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 	gtk_widget_set_size_request (entry, 200, -1);
 	gtk_widget_show (entry);
-	label = gtk_label_new (NULL);
+	label = gtk_label_new_with_mnemonic (_("_Title:"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	str = g_strconcat ("<b>", _("_Title:"), "</b>", NULL);
-	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), str);
-	g_free (str);
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
@@ -597,22 +593,16 @@ build_ui (EphyBookmarkProperties *properties)
 			  G_CALLBACK (location_entry_changed_cb), properties);
 	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 	gtk_widget_show (entry);
-	label = gtk_label_new (NULL);
+	label = gtk_label_new_with_mnemonic (_("_Address:"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	str = g_strconcat ("<b>", _("_Address:"), "</b>", NULL);
-	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), str);
-	g_free (str);
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);
 	
 	entry = build_icon (properties);
-	label = gtk_label_new (NULL);
+	label = gtk_label_new_with_mnemonic (_("I_con:"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	str = g_strconcat ("<b>", _("_Icon:"), "</b>", NULL);
-	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), str);
-	g_free (str);
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, 0, 0, 0);
@@ -622,11 +612,8 @@ build_ui (EphyBookmarkProperties *properties)
 	gtk_widget_show (GTK_WIDGET (cbox));
 	gtk_combo_box_append_text (cbox, _("All"));
 	gtk_combo_box_append_text (cbox, _("Subtopics"));
-	label = gtk_label_new (NULL);
+	label = gtk_label_new_with_mnemonic(_("T_opics:"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	str = g_strconcat ("<b>", _("T_opics:"), "</b>", NULL);
-	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), str);
-	g_free (str);
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (cbox));
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4, GTK_FILL, 0, 0, 0);
