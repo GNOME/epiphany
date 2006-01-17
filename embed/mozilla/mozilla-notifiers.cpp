@@ -921,6 +921,8 @@ mozilla_font_notifiers_init (void)
 	const EphyFontsLanguageInfo *font_languages;
 	guint n_font_languages, i;
 
+	eel_gconf_monitor_add ("/desktop/gnome/interface");
+
 	font_languages = ephy_font_languages ();
 	n_font_languages = ephy_font_n_languages ();
 
@@ -1071,6 +1073,8 @@ mozilla_font_notifiers_init (void)
 static void
 mozilla_font_notifiers_shutdown (void)
 {
+	eel_gconf_monitor_remove ("/desktop/gnome/interface");
+
 	eel_gconf_notification_remove (desktop_font_data[0].cnxn_id);
 	eel_gconf_notification_remove (desktop_font_data[1].cnxn_id);
 	eel_gconf_notification_remove (minimum_font_size_data->cnxn_id);
@@ -1083,6 +1087,9 @@ mozilla_font_notifiers_shutdown (void)
 	g_strfreev (desktop_font_data[1].font_name_prefs);
 	g_strfreev (desktop_font_data[1].font_size_prefs);
 	g_strfreev (minimum_font_size_data->prefs);
+
+	g_free (desktop_font_data);
+	g_free (minimum_font_size_data);	
 }
 
 extern "C" gboolean

@@ -30,6 +30,7 @@
 
 #include <nsIIOService.h>
 #include <nsIURI.h>
+#include <nsIFile.h>
 #include <nsIDOMWindow.h>
 #include <nsIServiceManager.h>
 #undef MOZILLA_INTERNAL_API
@@ -75,14 +76,23 @@ EphyUtils::NewURI (nsIURI **result,
 		   nsIURI *baseURI)
 {
 	nsresult rv;
-
 	nsCOMPtr<nsIIOService> ioService;
 	rv = EphyUtils::GetIOService (getter_AddRefs (ioService));
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	rv = ioService->NewURI (spec, charset, baseURI, result);
+	return ioService->NewURI (spec, charset, baseURI, result);
+}
 
-	return rv;
+nsresult
+EphyUtils::NewFileURI (nsIURI **result,
+		       nsIFile *spec)
+{
+	nsresult rv;
+	nsCOMPtr<nsIIOService> ioService;
+	rv = EphyUtils::GetIOService (getter_AddRefs (ioService));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	return ioService->NewFileURI (spec, result);
 }
 
 GtkWidget *

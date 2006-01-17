@@ -70,6 +70,7 @@
 #include <nsCPasswordManager.h>
 #include <nsIPermission.h>
 #include <nsIPermissionManager.h>
+#include <nsIFile.h>
 #include <nsILocalFile.h>
 #include <nsIURI.h>
 
@@ -138,7 +139,7 @@ struct MozillaEmbedSinglePrivate
 	guint nm_callback_id;
 #endif
 #ifdef HAVE_GECKO_1_8
-        char *user_css_uri;
+	char *user_css_file;
         guint user_css_enabled_notifier_id;
         EphyFileMonitor *user_css_file_monitor;
         guint user_css_enabled : 1;
@@ -610,14 +611,30 @@ user_css_register (MozillaEmbedSingle *single)
 	MozillaEmbedSinglePrivate *priv = single->priv;
 
 	nsresult rv;
+	nsCOMPtr<nsILocalFile> file;
+	rv = NS_NewNativeLocalFile (nsDependentCString (priv->user_css_file),
+				    PR_TRUE, getter_AddRefs (file));
+	NS_ENSURE_SUCCESS (rv, );
+
+	PRBool exists = PR_FALSE;
+	rv = file->Exists (&exists);
+	if (NS_FAILED (rv) || !exists) return;
+
 	nsCOMPtr<nsIURI> uri;
-	rv = EphyUtils::NewURI (getter_AddRefs (uri),
-				nsDependentCString (priv->user_css_uri));
+	rv = EphyUtils::NewFileURI (getter_AddRefs (uri), file);
 	NS_ENSURE_SUCCESS (rv, );
 
 	nsCOMPtr<nsIStyleSheetService> service
 			(do_GetService ("@mozilla.org/content/style-sheet-service;1", &rv));
 	NS_ENSURE_SUCCESS (rv, );
+
+	PRBool isRegistered = PR_FALSE;
+	rv = service->SheetRegistered (uri, nsIStyleSheetService::USER_SHEET,
+				       &isRegistered);
+	if (NS_SUCCEEDED (rv) && isRegistered)
+	{
+		rv = service->UnregisterSheet (uri, nsIStyleSheetService::USER_SHEET);
+	}
 
 	rv = service->LoadAndRegisterSheet (uri, nsIStyleSheetService::AGENT_SHEET);
 	if (NS_FAILED (rv))
@@ -632,9 +649,13 @@ user_css_unregister (MozillaEmbedSingle *single)
 	MozillaEmbedSinglePrivate *priv = single->priv;
 
 	nsresult rv;
+	nsCOMPtr<nsILocalFile> file;
+	rv = NS_NewNativeLocalFile (nsDependentCString (priv->user_css_file),
+				    PR_TRUE, getter_AddRefs (file));
+	NS_ENSURE_SUCCESS (rv, );
+
 	nsCOMPtr<nsIURI> uri;
-	rv = EphyUtils::NewURI (getter_AddRefs (uri),
-				nsDependentCString (priv->user_css_uri));
+	rv = EphyUtils::NewFileURI (getter_AddRefs (uri), file);
 	NS_ENSURE_SUCCESS (rv, );
 
 	nsCOMPtr<nsIStyleSheetService> service
@@ -657,12 +678,19 @@ user_css_unregister (MozillaEmbedSingle *single)
 static void
 user_css_file_monitor_func (EphyFileMonitor *,
 			    const char *,
+			    GnomeVFSMonitorEventType event_type,
 			    MozillaEmbedSingle *single)
 {
 	LOG ("Reregistering the user style sheet");
 
-	user_css_unregister (single);
-	user_css_register (single);
+	if (event_type == GNOME_VFS_MONITOR_EVENT_DELETED)
+	{
+		user_css_unregister (single);
+	}
+	else
+	{
+		user_css_register (single);
+	}
 }
 
 static void
@@ -683,16 +711,21 @@ user_css_enabled_notify (GConfClient *client,
 
         if (enabled)
 	{
+		char *uri;
+
 		user_css_register (single);
+
+		uri = gnome_vfs_get_uri_from_local_path (priv->user_css_file);
 
 		g_assert (priv->user_css_file_monitor == NULL);
 		priv->user_css_file_monitor =
-			ephy_file_monitor_add (priv->user_css_uri,
-						GNOME_VFS_MONITOR_FILE,
-						USER_CSS_LOAD_DELAY,
-						(EphyFileMonitorFunc) user_css_file_monitor_func,
-						NULL,
-						single);
+			ephy_file_monitor_add (uri,
+					       GNOME_VFS_MONITOR_FILE,
+					       USER_CSS_LOAD_DELAY,
+					       (EphyFileMonitorFunc) user_css_file_monitor_func,
+					       NULL,
+					       single);
+		g_free (uri);
 	}
         else
 	{
@@ -710,13 +743,10 @@ static void
 mozilla_stylesheet_init (MozillaEmbedSingle *single)
 {
 	MozillaEmbedSinglePrivate *priv = single->priv;
-	char *user_css_file;
 
-	user_css_file = g_build_filename (ephy_dot_dir (),
-					  USER_STYLESHEET_FILENAME,
-					  NULL);
-	priv->user_css_uri = gnome_vfs_get_uri_from_local_path (user_css_file);
-	g_free (user_css_file);
+	priv->user_css_file = g_build_filename (ephy_dot_dir (),
+						USER_STYLESHEET_FILENAME,
+						NULL);
 
 	user_css_enabled_notify (NULL, 0, NULL, single);
 	priv->user_css_enabled_notifier_id =
@@ -743,10 +773,10 @@ mozilla_stylesheet_shutdown (MozillaEmbedSingle *single)
 		priv->user_css_file_monitor = NULL;
 	}
 
-	if (priv->user_css_uri != NULL)
+	if (priv->user_css_file != NULL)
 	{
-		g_free (priv->user_css_uri);
-		priv->user_css_uri = NULL;
+		g_free (priv->user_css_file);
+		priv->user_css_file = NULL;
 	}
 }
 

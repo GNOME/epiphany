@@ -37,7 +37,7 @@ typedef enum
 } EphyMimePermission;
 
 typedef struct _EphyFileMonitor EphyFileMonitor;
-typedef void (* EphyFileMonitorFunc) (EphyFileMonitor*, const char*, gpointer);
+typedef void (* EphyFileMonitorFunc) (EphyFileMonitor*, const char*, GnomeVFSMonitorEventType, gpointer);
 typedef gboolean (* EphyFileMonitorDelayFunc) (EphyFileMonitor*, gpointer);
 
 const char *ephy_file                    (const char *filename);

@@ -1,5 +1,32 @@
 2006-01-17  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-file-helpers.c: (ephy_file_monitor_timeout_cb),
+	(ephy_file_monitor_cb):
+	* lib/ephy-file-helpers.h:
+
+	Add event type to the callback.
+
+	* embed/mozilla/EphyUtils.cpp:
+	* embed/mozilla/EphyUtils.h:
+	
+	New function, like NS_NewFileURI (which we can't use since
+	nsNetUtil.h conflicts with embed strings).
+
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+
+	Check that the user CSS file exists before registering it.
+	Also handle file-deleted events.
+
+	* src/bookmarks/ephy-bookmarks-menu.c: (ephy_bookmarks_menu_build):
+	* src/bookmarks/ephy-topics-palette.c:
+	(ephy_topics_palette_constructor),
+	(ephy_topics_palette_class_init):
+
+	Build fixes.
+
+2006-01-17  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-main.c:
 
 	Fix compile with libgnome HEAD.

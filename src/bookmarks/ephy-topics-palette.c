@@ -430,6 +430,7 @@ ephy_topics_palette_constructor (GType type,
 	priv->store = gtk_list_store_new (COLUMNS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_INT,
 					  G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (object), GTK_TREE_MODEL (priv->store));
+	g_object_unref (priv->store);
 
 	column = gtk_tree_view_column_new ();
 	
@@ -464,14 +465,6 @@ ephy_topics_palette_init (EphyTopicsPalette *palette)
 	palette->priv = EPHY_TOPICS_PALETTE_GET_PRIVATE (palette);
 }
 
-static void
-ephy_topics_palette_finalize (GObject *object)
-{
-	EphyTopicsPalette *palette = EPHY_TOPICS_PALETTE (object);
-
-	parent_class->finalize (object);
-}
-
 GtkWidget *
 ephy_topics_palette_new (EphyBookmarks *bookmarks,
 			 EphyNode *bookmark)
@@ -498,7 +491,6 @@ ephy_topics_palette_class_init (EphyTopicsPaletteClass *klass)
 
 	object_class->set_property = ephy_topics_palette_set_property;
 	object_class->constructor = ephy_topics_palette_constructor;
-	object_class->finalize = ephy_topics_palette_finalize;
 	
 	g_object_class_install_property (object_class,
 					 PROP_BOOKMARKS,

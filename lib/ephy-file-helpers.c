@@ -53,6 +53,9 @@
 #define EPHY_UUID_ENVVAR	"EPHY_UNIQUE"
 #define EPHY_UUID_ENVSTRING	EPHY_UUID_ENVVAR "=" EPHY_UUID
 
+#define DELAY_MAX_TICKS	64
+#define INITIAL_TICKS	2
+
 static GHashTable *files = NULL;
 static GHashTable *mime_table = NULL;
 
@@ -955,8 +958,6 @@ ephy_file_launch_handler (const char *mime_type,
 	return ret;
 }
 
-#define DELAY_MAX_TICKS	64
-
 struct _EphyFileMonitor
 {
 	GnomeVFSMonitorHandle *handle;
@@ -967,6 +968,7 @@ struct _EphyFileMonitor
 	guint delay;
 	guint timeout_id;
 	guint ticks;
+	GnomeVFSMonitorEventType type;
 };
 
 static gboolean
@@ -991,7 +993,7 @@ ephy_file_monitor_timeout_cb (EphyFileMonitor *monitor)
 
 	monitor->timeout_id = 0;
 
-	monitor->callback (monitor, monitor->uri, monitor->user_data);
+	monitor->callback (monitor, monitor->uri, monitor->type, monitor->user_data);
 
 	/* don't run again */
 	return FALSE;
@@ -1009,12 +1011,16 @@ ephy_file_monitor_cb (GnomeVFSMonitorHandle *handle,
 	switch (event_type)
 	{
 		case GNOME_VFS_MONITOR_EVENT_CHANGED:
+			monitor->ticks = INITIAL_TICKS;
+			/* fall-through */
 		case GNOME_VFS_MONITOR_EVENT_CREATED:
 			/* We make a lot of assumptions here, but basically we know
 			 * that we just have to reload, by construction.
 			 * Delay the reload a little bit so we don't endlessly
 			 * reload while a file is written.
 			 */
+			monitor->type = event_type;
+
 			if (monitor->ticks == 0)
 			{
 				monitor->ticks = 1;
@@ -1037,6 +1043,15 @@ ephy_file_monitor_cb (GnomeVFSMonitorHandle *handle,
 			break;
 
 		case GNOME_VFS_MONITOR_EVENT_DELETED:
+			if (monitor->timeout_id != 0)
+			{
+				g_source_remove (monitor->timeout_id);
+				monitor->timeout_id = 0;
+			}
+			monitor->ticks = 0;
+
+			monitor->callback (monitor, monitor->uri, event_type, monitor->user_data);
+			break;
 		case GNOME_VFS_MONITOR_EVENT_STARTEXECUTING:
 		case GNOME_VFS_MONITOR_EVENT_STOPEXECUTING:
 		case GNOME_VFS_MONITOR_EVENT_METADATA_CHANGED:

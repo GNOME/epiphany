@@ -30,6 +30,7 @@ class nsIDOMWindow;
 class nsIIOService;
 class nsIPrintSettings;
 class nsIURI;
+class nsIFile;
 struct _EmbedPrintInfo;
 
 namespace EphyUtils
@@ -45,6 +46,9 @@ namespace EphyUtils
 						 const nsACString &spec,
 						 const char *charset = nsnull,
 						 nsIURI *baseURI = nsnull);
+
+	nsresult	NewFileURI		(nsIURI **result,
+						 nsIFile *spec);
 
 	GtkWidget      *FindEmbed		(nsIDOMWindow *aDOMWindow);
 

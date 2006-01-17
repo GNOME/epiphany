@@ -252,10 +252,12 @@ ephy_bookmarks_menu_build (GString *string, EphyNode *parent)
 	/* Otherwise, build the menu with "Open in tabs". */
 	else
 	{
+		char *name;
+
 		append_menu (string, topics, children, flags);
 		g_ptr_array_free (topics, TRUE);
 	
-		char *name = ephy_open_tabs_action_name (node);
+		name = ephy_open_tabs_action_name (node);
 		g_string_append_printf
 		  (string, "<separator/><menuitem action=\"%s\" name=\"OpenTabs\"/>", name);
 		g_free (name);
