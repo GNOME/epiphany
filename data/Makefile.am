@@ -71,7 +71,7 @@ if GCONF_SCHEMAS_INSTALL
 endif
 
 EXTRA_DIST = \
-	$(server_in_files)		\
+	$(service_in_files)		\
 	$(schema_in_files)		\
 	$(font_schema_files)		\
 	$(desktop_in_files)		\
@@ -87,7 +87,7 @@ EXTRA_DIST = \
 	generate-font-schemas.py
 
 DISTCLEANFILES = \
-	$(server_DATA)		\
+	$(service_DATA)		\
 	$(schema_in_files:.schemas.in=.schemas)	\
 	$(pkgconfig_DATA)	\
 	$(default_prefs_DATA)	\

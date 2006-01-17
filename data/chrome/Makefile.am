@@ -18,3 +18,10 @@ EXTRA_DIST = \
 	$(manifest_in_files)	\
 	$(branding_in_files)	\
 	$(globalchrome_DATA)
+
+CLEANFILES = \
+	$(manifest_DATA)
+
+DISTCLEANFILES = \
+	$(manifest_DATA)	\
+	$(branding_DATA)
