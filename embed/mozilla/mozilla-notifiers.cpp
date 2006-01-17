@@ -50,6 +50,8 @@
 /* define to migrate epiphany 1.0 font preferences */
 #define MIGRATE_PIXEL_SIZE
 
+#define MAX_FONT_SIZE	128
+
 /* Keeps the list of the notifiers we installed for mozilla prefs */
 /* to be able to remove them when exiting */
 static GList *notifiers = NULL;
@@ -497,7 +499,7 @@ mozilla_pref_set (const char *pref,
 			rv = gPrefBranch->GetIntPref (pref, &old_value);
 			if (NS_FAILED (rv) || old_value != new_value)
 			{
-				rv = gPrefBranch->SetIntPref (pref, g_value_get_int (value));
+				rv = gPrefBranch->SetIntPref (pref, new_value);
 			}
 			break;
 		}
@@ -565,13 +567,11 @@ notify_cb (GConfClient *client,
 	}
 }
 
-static guint
-mozilla_notifier_add_internal (const char *gconf_key,
-			       GConfClientNotifyFunc notify_func,
-			       const char *mozilla_pref,
-			       PrefValueTransformFunc func,
-			       gpointer user_data,
-			       GFreeFunc free_data_func)
+extern "C" guint
+mozilla_notifier_add (const char *gconf_key,
+		      const char *mozilla_pref,
+		      PrefValueTransformFunc func,
+		      gpointer user_data)
 {
 	GConfClient *client;
 	PrefData *data;
@@ -593,8 +593,8 @@ mozilla_notifier_add_internal (const char *gconf_key,
 	data->user_data = user_data;
 
 	cnxn_id = gconf_client_notify_add (client, gconf_key,
-					   notify_func,
-					   data, free_data_func,
+					   (GConfClientNotifyFunc) notify_cb,
+					   data, (GFreeFunc) free_pref_data,
 					   &error);
 	if (eel_gconf_handle_error (&error))
 	{
@@ -612,20 +612,6 @@ mozilla_notifier_add_internal (const char *gconf_key,
 	gconf_client_notify (client, gconf_key);
 
 	return cnxn_id;
-}
-
-extern "C" guint
-mozilla_notifier_add (const char *gconf_key,
-		      const char *mozilla_pref,
-		      PrefValueTransformFunc func,
-		      gpointer user_data)
-{
-	return mozilla_notifier_add_internal (gconf_key,
-					      (GConfClientNotifyFunc) notify_cb,
-					      mozilla_pref,
-					      func,
-					      user_data,
-					      (GFreeFunc) free_pref_data);
 }
 
 static int
@@ -715,14 +701,21 @@ parse_pango_font (const char *font,
 	PangoFontMask mask = (PangoFontMask) (PANGO_FONT_MASK_FAMILY | PANGO_FONT_MASK_SIZE);
 
 	PangoFontDescription *desc = pango_font_description_from_string (font);
-	if (desc == NULL ||
-	    (pango_font_description_get_set_fields (desc) & mask) != mask)
+	if (desc == NULL) return FALSE;
+
+	if ((pango_font_description_get_set_fields (desc) & mask) != mask)
 	{
+		pango_font_description_free (desc);
 		return FALSE;
 	}
-					
+				
 	*size = PANGO_PIXELS (pango_font_description_get_size (desc));
 	*name = g_strdup (pango_font_description_get_family (desc));
+
+	pango_font_description_free (desc);
+
+	LOG ("Parsed pango font description '%s' -> name:%s, size:%d",
+	     font, *name ? *name : "-", *size);
 
 	return *name != NULL && *size > 0;
 }
@@ -734,7 +727,6 @@ typedef struct
 	char **font_size_prefs;
 	char *font_name;
 	int font_size;
-	guint is_set : 1;
 } DesktopFontData;
 
 static gboolean
@@ -798,7 +790,7 @@ transform_font_size (GConfEntry *gcentry,
 		size = gconf_value_get_int (gcvalue);
 	}
 
-	if (size <= 0) return FALSE;
+	if (size <= 0 || size > MAX_FONT_SIZE) return FALSE;
 
 	g_value_init (value, G_TYPE_INT);
 	g_value_set_int (value, size);
@@ -824,17 +816,17 @@ notify_desktop_font_cb (GConfClient *client,
 		LOG ("Desktop font %s -> name=%s, size=%d", 
 		     gconf_entry_get_key (gcentry), name, size);
 
+		g_free (data->font_name);
 		data->font_name = name;
 		data->font_size = size;
-		data->is_set = TRUE;
 	}
 	else
 	{
 		g_free (name);
+
 		g_free (data->font_name);
 		data->font_name = NULL;
 		data->font_size = 0;
-		data->is_set = FALSE;
 	}
 
 	for (i = 0; data->font_name_prefs[i] != NULL; ++i)
