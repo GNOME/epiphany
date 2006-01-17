@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#undef GNOME_DISABLE_DEPRECATED
+
 #include "ephy-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-object-helpers.h"
