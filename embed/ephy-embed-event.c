@@ -88,13 +88,12 @@ ephy_embed_event_get_coords (EphyEmbedEvent *event,
 	iface->get_coordinates (event, x, y);
 }
 
-void
+const GValue*
 ephy_embed_event_get_property	(EphyEmbedEvent *event,
-				 const char *name,
-				 const GValue **value)
+				 const char *name)
 {
 	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
-	iface->get_property (event, name, value);
+	return iface->get_property (event, name);
 }
 
 gboolean

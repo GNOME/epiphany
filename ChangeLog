@@ -1,3 +1,23 @@
+2006-01-17  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* embed/ephy-embed-event.c: (ephy_embed_event_get_property):
+	* embed/ephy-embed-event.h:
+	* embed/mozilla/mozilla-embed-event.cpp:
+	* src/ephy-tab.c: (save_property_url),
+	(ephy_tab_dom_mouse_click_cb):
+	* src/ephy-window.c: (update_popups_tooltips), (show_embed_popup):
+	* src/epiphany.defs:
+	* src/epiphany.override:
+	* src/popup-commands.c: (popup_cmd_link_in_new_window),
+	(popup_cmd_link_in_new_tab), (popup_cmd_bookmark_link),
+	(popup_cmd_copy_link_address), (save_property_url),
+	(popup_cmd_open_link), (popup_cmd_set_image_as_background),
+	(popup_cmd_copy_image_location), (popup_cmd_open_image):
+
+	Change the 'ephy_embed_event_get_property' function
+	return a GValue* rather than taking a pointer to it as
+	an argument.
+
 2006-01-17  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/glade/prefs-dialog.glade:

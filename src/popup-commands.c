@@ -51,7 +51,7 @@ popup_cmd_link_in_new_window (GtkAction *action,
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
-	ephy_embed_event_get_property (event, "link", &value);
+	value = ephy_embed_event_get_property (event, "link");
 
 	ephy_shell_new_tab (ephy_shell, NULL, tab,
 			    g_value_get_string (value),
@@ -72,7 +72,7 @@ popup_cmd_link_in_new_tab (GtkAction *action,
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
-	ephy_embed_event_get_property (event, "link", &value);
+	value = ephy_embed_event_get_property (event, "link");
 
 	ephy_shell_new_tab (ephy_shell, window, tab,
 			    g_value_get_string (value),
@@ -98,11 +98,11 @@ popup_cmd_bookmark_link (GtkAction *action,
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
-	ephy_embed_event_get_property (event, "link_is_smart", &link_is_smart);
-	ephy_embed_event_get_property (event, "link", &link);
-	ephy_embed_event_get_property (event, "link_title", &link_title);
-	ephy_embed_event_get_property (event, "link_rel", &link_rel);
-	ephy_embed_event_get_property (event, "linktext", &linktext);
+	link_is_smart = ephy_embed_event_get_property (event, "link_is_smart");
+	link = ephy_embed_event_get_property (event, "link");
+	link_title = ephy_embed_event_get_property (event, "link_title");
+	link_rel = ephy_embed_event_get_property (event, "link_rel");
+	linktext = ephy_embed_event_get_property (event, "linktext");
 
 	location = g_value_get_string (link);
 	g_return_if_fail (location);
@@ -155,13 +155,13 @@ popup_cmd_copy_link_address (GtkAction *action,
 
 	if (context & EPHY_EMBED_CONTEXT_EMAIL_LINK)
 	{
-		ephy_embed_event_get_property (event, "email", &value);
+		value = ephy_embed_event_get_property (event, "email");
 		address = g_value_get_string (value);
 		popup_cmd_copy_to_clipboard (window, address);
 	}
 	else if (context & EPHY_EMBED_CONTEXT_LINK)
 	{
-		ephy_embed_event_get_property (event, "link", &value);
+		value = ephy_embed_event_get_property (event, "link");
 		address = g_value_get_string (value);
 		popup_cmd_copy_to_clipboard (window, address);
 	}
@@ -186,7 +186,7 @@ save_property_url (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_event_get_property (event, property, &value);
+	value = ephy_embed_event_get_property (event, property);
 	location = g_value_get_string (value);
 
 	persist = EPHY_EMBED_PERSIST
@@ -219,7 +219,7 @@ popup_cmd_open_link (GtkAction *action,
 	g_return_if_fail (embed != NULL);
 
 	event = ephy_window_get_context_event (window);
-	ephy_embed_event_get_property (event, "link", &value);
+	value = ephy_embed_event_get_property (event, "link");
 	location = g_value_get_string (value);
 
 	ephy_embed_load_url (embed, location);
@@ -292,7 +292,7 @@ popup_cmd_set_image_as_background (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_event_get_property (event, "image", &value);
+	value = ephy_embed_event_get_property (event, "image");
 	location = g_value_get_string (value);
 
 	persist = EPHY_EMBED_PERSIST
@@ -327,7 +327,7 @@ popup_cmd_copy_image_location (GtkAction *action,
 	const GValue *value;
 
 	event = ephy_window_get_context_event (window);
-	ephy_embed_event_get_property (event, "image", &value);
+	value = ephy_embed_event_get_property (event, "image");
 	location = g_value_get_string (value);
 	popup_cmd_copy_to_clipboard (window, location);
 }
@@ -435,7 +435,7 @@ popup_cmd_open_image (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_event_get_property (event, "image", &value);
+	value = ephy_embed_event_get_property (event, "image");
 	address = g_value_get_string (value);
 
 	scheme = gnome_vfs_get_uri_scheme (address);

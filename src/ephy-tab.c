@@ -1870,7 +1870,7 @@ save_property_url (EphyEmbed *embed,
 	const GValue *value;
 	EphyEmbedPersist *persist;
 
-	ephy_embed_event_get_property (event, property, &value);
+	value = ephy_embed_event_get_property (event, property);
 	location = g_value_get_string (value);
 
 	persist = EPHY_EMBED_PERSIST
@@ -1951,7 +1951,7 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 		const GValue *value;
 		const char *link_address;
 
-		ephy_embed_event_get_property (event, "link", &value);
+		value = ephy_embed_event_get_property (event, "link");
 		link_address = g_value_get_string (value);
 		handled = open_link_in_new_tab (tab, link_address);
 	}

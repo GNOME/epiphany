@@ -599,10 +599,9 @@
 (define-method get_property
   (of-object "EphyEmbedEvent")
   (c-name "ephy_embed_event_get_property")
-  (return-type "none")
+  (return-type "const-GValue*")
   (parameters
     '("const-char*" "name")
-    '("const-GValue**" "value")
   )
 )
 

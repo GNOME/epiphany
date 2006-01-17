@@ -140,12 +140,11 @@ impl_get_coordinates (EphyEmbedEvent *event,
 	*y = ((MozillaEmbedEvent *) event)->y;
 }
 
-static void
+static const GValue*
 impl_get_property (EphyEmbedEvent *event,
-		   const char *name,
-		   const GValue **value)
+		   const char *name)
 {
-	*value = (const GValue *) g_hash_table_lookup (((MozillaEmbedEvent *) event)->priv->props, name);
+	return (const GValue *) g_hash_table_lookup (((MozillaEmbedEvent *) event)->priv->props, name);
 }
 
 static gboolean

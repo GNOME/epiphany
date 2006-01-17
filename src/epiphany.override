@@ -359,7 +359,7 @@ _wrap_ephy_embed_event_get_property (PyGObject *self,
                                      "s:EphyEmbedEvent.get_property", kwlist, &prop))
         return NULL;
 
-    ephy_embed_event_get_property (EPHY_EMBED_EVENT (self->obj), prop, &value);
+    value = ephy_embed_event_get_property (EPHY_EMBED_EVENT (self->obj), prop);
 
     return pyg_value_as_pyobject(value, TRUE);
 }

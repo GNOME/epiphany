@@ -1835,7 +1835,7 @@ update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 
 	if (context & EPHY_EMBED_CONTEXT_IMAGE)
 	{
-		ephy_embed_event_get_property (event, "image", &value);
+		value = ephy_embed_event_get_property (event, "image");
 		name = get_name_from_address_value (value);
 
 		action = gtk_action_group_get_action (group, "OpenImage");
@@ -1864,7 +1864,7 @@ update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 
 	if (context & EPHY_EMBED_CONTEXT_EMAIL_LINK)
 	{
-		ephy_embed_event_get_property (event, "link", &value);
+		value = ephy_embed_event_get_property (event, "link");
 
 		action = gtk_action_group_get_action (group, "SendEmail");
 		tooltip = g_strdup_printf (_("Send email to address “%s”"),
@@ -1881,7 +1881,7 @@ update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 
 	if (context & EPHY_EMBED_CONTEXT_LINK)
 	{
-		ephy_embed_event_get_property (event, "link", &value);
+		value = ephy_embed_event_get_property (event, "link");
 
 		action = gtk_action_group_get_action (group, "DownloadLink");
 		name = get_name_from_address_value (value);
@@ -1925,7 +1925,7 @@ show_embed_popup (EphyWindow *window,
 		return;
 	}
 
-	ephy_embed_event_get_property (event, "framed_page", &value);
+	value = ephy_embed_event_get_property (event, "framed_page");
 	framed = g_value_get_int (value);
 
 	can_open_in_new = ephy_embed_event_has_property (event, "link-has-web-scheme");

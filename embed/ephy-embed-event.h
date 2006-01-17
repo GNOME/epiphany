@@ -61,9 +61,8 @@ struct _EphyEmbedEventIface
 	void			(* get_coordinates)	(EphyEmbedEvent *event,
 							 guint *x,
 							 guint *y);
-	void			(* get_property)	(EphyEmbedEvent *event,
-							 const char *name,
-							 const GValue **value);
+	const GValue*		(* get_property)	(EphyEmbedEvent *event,
+							 const char *name);
 	gboolean		(* has_property)	(EphyEmbedEvent *event,
 							 const char *name);
 	gpointer		(* get_dom_event)	(EphyEmbedEvent *event);
@@ -85,10 +84,8 @@ guint			ephy_embed_event_get_modifier	(EphyEmbedEvent *event);
 void			ephy_embed_event_get_coords	(EphyEmbedEvent *event,
 							 guint *x, guint *y);
 
-
-void			ephy_embed_event_get_property	(EphyEmbedEvent *event,
-							 const char *name,
-							 const GValue **value);
+const GValue*		ephy_embed_event_get_property	(EphyEmbedEvent *event,
+							 const char *name);
 
 gboolean		ephy_embed_event_has_property	(EphyEmbedEvent *event,
 							 const char *name);
