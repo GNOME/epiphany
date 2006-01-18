@@ -1,5 +1,20 @@
 2006-01-18  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-embed-shell.c: (impl_get_embed_single):
+	* embed/ephy-embed-single.c: (ephy_embed_single_init):
+	* embed/ephy-embed-single.h:
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Decouple embed single instantiation and initialisation.
+	Prevents double-initialisation on startup.
+
+	* embed/mozilla/EphyContentPolicy.cpp:
+	* embed/mozilla/EphyContentPolicy.h:
+
+	Remove embed single variable, it was unused.
+
+2006-01-18  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-statusbar.c: (create_caret_indicator),
 	(ephy_statusbar_init), (ephy_statusbar_new),
 	(ephy_statusbar_set_caret_mode):

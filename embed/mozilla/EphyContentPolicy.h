@@ -50,9 +50,8 @@ public:
 	EphyContentPolicy();
 	virtual ~EphyContentPolicy();
 private:
-	GtkWidget *GetEmbedFromContext (nsISupports *aContext);
+	static GtkWidget *GetEmbedFromContext (nsISupports *aContext);
 
-	GObject *mEmbedSingle;
 	gboolean mLocked;
 	GSList *mSafeProtocols;
 };

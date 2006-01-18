@@ -55,9 +55,6 @@ EphyContentPolicy::EphyContentPolicy()
 	mLocked = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_UNSAFE_PROTOCOLS);
 
 	mSafeProtocols = eel_gconf_get_string_list (CONF_LOCKDOWN_ADDITIONAL_SAFE_PROTOCOLS);
-
-	mEmbedSingle = ephy_embed_shell_get_embed_single (embed_shell);
-	g_return_if_fail (mEmbedSingle);
 }
 
 EphyContentPolicy::~EphyContentPolicy()

@@ -163,6 +163,20 @@ ephy_embed_single_iface_init (gpointer g_iface)
 }
 
 /**
+ * ephy_embed_single_init:
+ * @single: the #EphyEmbedSingle
+ * 
+ * Performs startup initialisations. Must be called before calling
+ * any other methods.
+ **/
+gboolean
+ephy_embed_single_init (EphyEmbedSingle *single)
+{
+	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
+	return iface->init (single);
+}
+
+/**
  * ephy_embed_single_clear_cache:
  * @single: the #EphyEmbedSingle
  * 

@@ -33,6 +33,9 @@
 #include "ephy-debug.h"
 #include "ephy-adblock-manager.h"
 
+#include <glib/gi18n.h>
+#include <gtk/gtkmessagedialog.h>
+
 #define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
 
 struct _EphyEmbedShellPrivate
@@ -43,6 +46,7 @@ struct _EphyEmbedShellPrivate
 	EphyEmbedSingle *embed_single;
 	EphyEncodings *encodings;
 	EphyAdBlockManager *adblock_manager;
+	guint single_initialised : 1;
 };
 
 enum
@@ -201,12 +205,41 @@ ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell)
 static GObject *
 impl_get_embed_single (EphyEmbedShell *shell)
 {
+	EphyEmbedShellPrivate *priv;
+
 	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
-	if (shell->priv->embed_single == NULL)
+	priv = shell->priv;
+
+	if (priv->embed_single != NULL &&
+	    !priv->single_initialised)
 	{
-		shell->priv->embed_single = EPHY_EMBED_SINGLE
+		g_warning ("ephy_embed_shell_get_embed_single called while the single is being initialised!\n");
+		return G_OBJECT (priv->embed_single);
+	}
+
+	if (priv->embed_single == NULL)
+	{
+		priv->embed_single = EPHY_EMBED_SINGLE
 			(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_SINGLE));
+
+		if (!ephy_embed_single_init (priv->embed_single))
+		{
+			GtkWidget *dialog;
+
+			dialog = gtk_message_dialog_new
+					(NULL,
+					 GTK_DIALOG_MODAL,
+					 GTK_MESSAGE_ERROR,
+					 GTK_BUTTONS_CLOSE,
+					 _("Epiphany can't be used now. "
+							 "Mozilla initialization failed."));
+			gtk_dialog_run (GTK_DIALOG (dialog));
+
+			exit (0);
+		}
+
+		priv->single_initialised = TRUE;
 	}
 
 	return G_OBJECT (shell->priv->embed_single);

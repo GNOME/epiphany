@@ -783,8 +783,10 @@ mozilla_stylesheet_shutdown (MozillaEmbedSingle *single)
 #endif /* HAVE_GECKO_1_8 */
 
 static gboolean
-init_services (MozillaEmbedSingle *single)
+impl_init (EphyEmbedSingle *esingle)
 {
+	MozillaEmbedSingle *single = MOZILLA_EMBED_SINGLE (esingle);
+
 	/* Pre initialization */
 	mozilla_init_plugin_path ();
 	mozilla_init_home ();
@@ -803,6 +805,7 @@ init_services (MozillaEmbedSingle *single)
 
 	/* Fire up the beast */
 	gtk_moz_embed_push_startup ();
+	/* FIXME check that it succeeded! */
 
 	mozilla_register_components ();
 
@@ -863,22 +866,6 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 				  MOZILLA_PROFILE_NAME,
 				  MOZILLA_PROFILE_FILE,
 				  NULL);
-
-	if (!init_services (mes))
-	{
-		GtkWidget *dialog;
-
-		dialog = gtk_message_dialog_new
-			(NULL,
-                         GTK_DIALOG_MODAL,
-                         GTK_MESSAGE_ERROR,
-                         GTK_BUTTONS_CLOSE,
-                         _("Epiphany can't be used now. "
-                         "Mozilla initialization failed."));
-		gtk_dialog_run (GTK_DIALOG (dialog));
-
-		exit (0);
-	}
 
 	g_signal_connect_object (embed_shell, "prepare-close",
 				 G_CALLBACK (prepare_close_cb), mes,
@@ -1506,6 +1493,7 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 static void
 ephy_embed_single_iface_init (EphyEmbedSingleIface *iface)
 {
+	iface->init = impl_init;
 	iface->clear_cache = impl_clear_cache;
 	iface->clear_auth_cache = impl_clear_auth_cache;
 	iface->set_network_status = impl_set_network_status;

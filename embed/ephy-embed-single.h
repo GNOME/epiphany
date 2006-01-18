@@ -60,6 +60,7 @@ struct _EphyEmbedSingleIface
 
 	/* Methods */
 
+	gboolean	  (* init)		(EphyEmbedSingle *single);
 	GtkWidget *	  (* open_window)	(EphyEmbedSingle *single,
 						 EphyEmbed *parent,
 						 const char *address,
@@ -75,6 +76,8 @@ struct _EphyEmbedSingleIface
 };
 
 GType		ephy_embed_single_get_type		(void);
+
+gboolean	ephy_embed_single_init			(EphyEmbedSingle *single);
 
 GtkWidget      *ephy_embed_single_open_window		(EphyEmbedSingle *single,
 							 EphyEmbed *parent,
