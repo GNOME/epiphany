@@ -2884,12 +2884,16 @@ browse_with_caret_notifier (GConfClient *client,
 			    GConfEntry *entry,
 			    EphyWindow *window)
 {
+	EphyWindowPrivate *priv = window->priv;
 	GtkAction *action;
+	gboolean enabled;
 
+	enabled = eel_gconf_get_boolean (CONF_BROWSE_WITH_CARET);
 	action = gtk_action_group_get_action (window->priv->action_group,
 					      "BrowseWithCaret");
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
-				      eel_gconf_get_boolean (CONF_BROWSE_WITH_CARET));
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), enabled);
+
+	ephy_statusbar_set_caret_mode (EPHY_STATUSBAR (priv->statusbar), enabled);
 }
 
 static void

@@ -65,6 +65,9 @@ GtkTooltips  *ephy_statusbar_get_tooltips		(EphyStatusbar *statusbar);
 
 GtkWidget    *ephy_statusbar_get_security_frame		(EphyStatusbar *statusbar);
 
+void	      ephy_statusbar_set_caret_mode		(EphyStatusbar *statusbar,
+							 gboolean enabled);
+
 void          ephy_statusbar_set_security_state		(EphyStatusbar *statusbar,
 							 const char *stock_id,
 							 const char *tooltip);

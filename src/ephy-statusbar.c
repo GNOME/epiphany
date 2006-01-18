@@ -26,6 +26,8 @@
 #include "ephy-stock-icons.h"
 
 #include <string.h>
+#include <glib/gi18n.h>
+#include <gtk/gtklabel.h>	
 #include <gtk/gtkprogressbar.h>
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkimage.h>
@@ -44,6 +46,7 @@ struct _EphyStatusbarPrivate
 {
 	GtkWidget *icon_container;
 
+	GtkWidget *caret_indicator;
 	GtkWidget *security_icon;
 	GtkWidget *progressbar;
 	GtkWidget *security_evbox;
@@ -89,6 +92,38 @@ ephy_statusbar_class_init (EphyStatusbarClass *klass)
 	object_class->finalize = ephy_statusbar_finalize;
 
 	g_type_class_add_private (object_class, sizeof (EphyStatusbarPrivate));
+}
+
+static void
+create_caret_indicator (EphyStatusbar *statusbar)
+{
+	EphyStatusbarPrivate *priv = statusbar->priv;
+	GtkWidget *label, *ebox;
+
+	priv->caret_indicator = gtk_frame_new (NULL);
+	gtk_frame_set_shadow_type (GTK_FRAME (priv->caret_indicator),
+				   GTK_SHADOW_IN);
+	ebox = gtk_event_box_new ();
+	gtk_event_box_set_visible_window (GTK_EVENT_BOX (ebox), FALSE);
+	gtk_container_add (GTK_CONTAINER (priv->caret_indicator), ebox);
+	gtk_widget_show (ebox);
+
+	/* Translators: this is displayed in the statusbar; choose a short word
+	 * or even an abbreviation.
+	 */
+	label = gtk_label_new (_("Caret"));
+	gtk_container_add (GTK_CONTAINER (ebox), label);
+	gtk_widget_show (label);
+
+	gtk_tooltips_set_tip (statusbar->tooltips, ebox,
+			      /* Translators: this is the tooltip on the "Caret" icon
+			       * in the statusbar.
+			       */
+			      _("In keyboard selection mode, press F7 to exit"),
+			      NULL);
+
+	gtk_box_pack_start (GTK_BOX (priv->icon_container), priv->caret_indicator,
+			    FALSE, FALSE, 0);
 }
 
 static void
@@ -199,6 +234,7 @@ ephy_statusbar_init (EphyStatusbar *t)
 	create_statusbar_progress (t);
 	create_statusbar_security_icon (t);
 	create_statusbar_popups_manager_icon (t);
+	create_caret_indicator (t);
 
 	sync_shadow_type (t, NULL, NULL);
 	g_signal_connect (t, "style-set", G_CALLBACK (sync_shadow_type), NULL);
@@ -225,6 +261,24 @@ GtkWidget *
 ephy_statusbar_new (void)
 {
 	return GTK_WIDGET (g_object_new (EPHY_TYPE_STATUSBAR, NULL));
+}
+
+/**
+ * ephy_statusbar_set_caret_mode:
+ * @statusbar: an #EphyStatusbar
+ * @enabled:
+ * 
+ * Sets the statusbar's caret browsing mode indicator.
+ **/
+void
+ephy_statusbar_set_caret_mode (EphyStatusbar *statusbar,
+			       gboolean enabled)
+{
+	EphyStatusbarPrivate *priv = statusbar->priv;
+
+	enabled = enabled != FALSE;
+
+	g_object_set (priv->caret_indicator, "visible", enabled, NULL);
 }
 
 /**
