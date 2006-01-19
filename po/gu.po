@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-17 05:45+0100\n"
-"PO-Revision-Date: 2006-01-17 17:52+0530\n"
+"POT-Creation-Date: 2006-01-19 05:38+0100\n"
+"PO-Revision-Date: 2006-01-19 11:47+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -14,6 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -134,8 +135,8 @@ msgid "Epiphany Web Browser"
 msgstr "એપીફની વૅબ બ્રાઉઝર"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:221
-#: ../src/ephy-main.c:232
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:223
+#: ../src/ephy-main.c:234
 msgid "Web Browser"
 msgstr "વેબ બ્રાઉઝર"
 
@@ -253,7 +254,9 @@ msgstr "ઘર પાનું"
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
-msgstr "કેવી રીતે એનીમેટેડ ચિત્રો રજૂ કરવા. \"સામાન્ય\", \"એકવાર\" અને \"નિષ્ક્રિય\" શક્ય કિંમતો છે."
+msgstr ""
+"કેવી રીતે એનીમેટેડ ચિત્રો રજૂ કરવા. \"સામાન્ય\", \"એકવાર\" અને \"નિષ્ક્રિય\" શક્ય કિંમતો "
+"છે."
 
 #: ../data/epiphany.schemas.in.h:20
 msgid "ISO-8859-1"
@@ -561,7 +564,7 @@ msgid "Cookies"
 msgstr "કુકીઓ"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:98
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:101
 msgid "Downloads"
 msgstr "ડાઉનલોડ"
 
@@ -666,7 +669,7 @@ msgstr "ફોન્ટ & શૈલી"
 msgid "For l_anguage:"
 msgstr "ભાષા માટે (_a):"
 
-#: ../data/glade/prefs-dialog.glade.h:21 ../src/prefs-dialog.c:1201
+#: ../data/glade/prefs-dialog.glade.h:21 ../src/prefs-dialog.c:1301
 msgid "Language"
 msgstr "ભાષા"
 
@@ -707,7 +710,7 @@ msgid "Use custom _stylesheet"
 msgstr "વૈવિધ્યપૂર્ણ સ્ટાઈલશીટ વાપરો (_s)"
 
 #: ../data/glade/prefs-dialog.glade.h:31
-#: ../src/bookmarks/ephy-bookmark-properties.c:602
+#: ../src/bookmarks/ephy-bookmark-properties.c:596
 msgid "_Address:"
 msgstr "સરનામું (_A):"
 
@@ -856,6 +859,10 @@ msgstr "%"
 #: ../embed/downloader-view.c:690
 msgid "Remaining"
 msgstr "બાકી રહેલું"
+
+#: ../embed/ephy-embed-shell.c:235
+msgid "Epiphany can't be used now. Mozilla initialization failed."
+msgstr "એપીફની હમણાં વાપરી શકાશે નહિં. મોઝિલ્લા પ્રારંભમાં નિષ્ફળ."
 
 #: ../embed/ephy-encodings.c:60
 msgid "Arabic (_IBM-864)"
@@ -1240,7 +1247,7 @@ msgstr "યુક્રેનિયાઈ"
 msgid "Unknown (%s)"
 msgstr "અજાણીતું (%s)"
 
-#: ../embed/ephy-history.c:550 ../src/bookmarks/ephy-bookmark-properties.c:623
+#: ../embed/ephy-history.c:550 ../src/bookmarks/ephy-bookmark-properties.c:613
 msgid "All"
 msgstr "બધું"
 
@@ -1942,13 +1949,9 @@ msgstr "ફાઇલો"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:292
+#: ../embed/mozilla/mozilla-embed-single.cpp:293
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
-
-#: ../embed/mozilla/mozilla-embed-single.cpp:846
-msgid "Epiphany can't be used now. Mozilla initialization failed."
-msgstr "એપીફની હમણાં વાપરી શકાશે નહિં. મોઝિલ્લા પ્રારંભમાં નિષ્ફળ."
 
 #: ../embed/print-dialog.c:258
 msgid "Generating PDF is not supported"
@@ -2032,12 +2035,12 @@ msgstr "વિભાજક"
 msgid "All supported types"
 msgstr "બધા આધારભૂત પ્રકારો"
 
-#: ../lib/ephy-file-helpers.c:327
+#: ../lib/ephy-file-helpers.c:330
 #, c-format
 msgid "\"%s\" exists, please move it out of the way."
 msgstr "\"%s\" અસ્તિત્વમાં છે, મહેરબાની કરીને તેને પથમાંથી દૂર કરો."
 
-#: ../lib/ephy-file-helpers.c:333
+#: ../lib/ephy-file-helpers.c:336
 #, c-format
 msgid "Failed to create directory \"%s\"."
 msgstr "ડિરેક્ટરી \"%s\" બનાવવામાં નિષ્ફળ."
@@ -2344,29 +2347,29 @@ msgstr "ફાઈલમાંથી..."
 msgid "None"
 msgstr "કંઈ નહિં"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:509 ../src/prefs-dialog.c:405
+#: ../src/bookmarks/ephy-bookmark-properties.c:509 ../src/prefs-dialog.c:412
 msgid "Default"
 msgstr "મૂળભૂત"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:584
+#: ../src/bookmarks/ephy-bookmark-properties.c:581
 msgid "_Title:"
 msgstr "શીર્ષક (_T):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:613
-msgid "_Icon:"
-msgstr "ચિહ્ન (_I):"
+#: ../src/bookmarks/ephy-bookmark-properties.c:604
+msgid "I_con:"
+msgstr "ચિહ્ન (_c):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:624
+#: ../src/bookmarks/ephy-bookmark-properties.c:614
 #: ../src/bookmarks/ephy-topics-palette.c:274
 msgid "Subtopics"
 msgstr "ઉપમુદ્દાઓ"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:627
+#: ../src/bookmarks/ephy-bookmark-properties.c:615
 msgid "T_opics:"
 msgstr "મુદ્દાઓ (_o):"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmark-properties.c:663
+#: ../src/bookmarks/ephy-bookmark-properties.c:650
 #: ../src/bookmarks/ephy-bookmarks-editor.c:171
 msgid "_New Topic"
 msgstr "નવો મુદ્દો (_N)"
@@ -3034,36 +3037,36 @@ msgstr[1] "છેલ્લા %d દિવસો"
 msgid "Sites"
 msgstr "સાઇટો"
 
-#: ../src/ephy-main.c:58
+#: ../src/ephy-main.c:60
 msgid "Open a new tab in an existing window"
 msgstr "હાલની વિન્ડોમાં નવી ટેબ ખોલો"
 
-#: ../src/ephy-main.c:61
+#: ../src/ephy-main.c:63
 msgid "Run in full screen mode"
 msgstr "પૂર્ણ સ્ક્રીન સ્થિતિમાં ચલાવો"
 
-#: ../src/ephy-main.c:64
+#: ../src/ephy-main.c:66
 msgid "Load the given session file"
 msgstr "આપેલ સત્રની ફાઇલને લાવો"
 
-#: ../src/ephy-main.c:65 ../src/ephy-main.c:71
+#: ../src/ephy-main.c:67 ../src/ephy-main.c:73
 msgid "FILE"
 msgstr "ફાઇલ"
 
-#: ../src/ephy-main.c:67
+#: ../src/ephy-main.c:69
 msgid "Add a bookmark (don't open any window)"
 msgstr "બુકમાર્ક ઉમેરો (કોઇપણ વિન્ડો ખોલો નહીં)"
 
 # libgnomeui/gnome-href.c:118
-#: ../src/ephy-main.c:68
+#: ../src/ephy-main.c:70
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:70
+#: ../src/ephy-main.c:72
 msgid "Import bookmarks from the given file"
 msgstr "આપેલ ફાઈલમાંથી બુકમાર્ક આયાત કરો"
 
-#: ../src/ephy-main.c:73
+#: ../src/ephy-main.c:75
 msgid "Launch the bookmarks editor"
 msgstr "બુકમાર્ક સંપાદક ચાલુ કરો"
 
@@ -3902,7 +3905,7 @@ msgstr "છાપવા માટેનું પૂર્વદર્શન બ
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:893 ../src/prefs-dialog.c:901
+#: ../src/prefs-dialog.c:993 ../src/prefs-dialog.c:1001
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -3912,19 +3915,19 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:912
+#: ../src/prefs-dialog.c:1012
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "વપરાશકર્તા વ્યાખ્યાયિત (%s)"
 
-#: ../src/prefs-dialog.c:934
+#: ../src/prefs-dialog.c:1034
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "સિસ્ટમ ભાષા (%s)"
 msgstr[1] "સિસ્ટમની ભાષાઓ (%s)"
 
-#: ../src/prefs-dialog.c:1321
+#: ../src/prefs-dialog.c:1421
 msgid "Select a Directory"
 msgstr "ડિરેક્ટરી પસંદ કરો"
 
