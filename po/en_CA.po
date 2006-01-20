@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-17 14:28-0500\n"
+"POT-Creation-Date: 2006-01-19 23:13-0500\n"
 "PO-Revision-Date: 2005-08-13 22:27-0500\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -676,7 +676,7 @@ msgstr "Fonts & Style"
 msgid "For l_anguage:"
 msgstr "For l_anguage:"
 
-#: ../data/glade/prefs-dialog.glade.h:21 ../src/prefs-dialog.c:1201
+#: ../data/glade/prefs-dialog.glade.h:21 ../src/prefs-dialog.c:1301
 msgid "Language"
 msgstr "Language"
 
@@ -717,7 +717,7 @@ msgid "Use custom _stylesheet"
 msgstr "Use custom _stylesheet"
 
 #: ../data/glade/prefs-dialog.glade.h:31
-#: ../src/bookmarks/ephy-bookmark-properties.c:602
+#: ../src/bookmarks/ephy-bookmark-properties.c:596
 msgid "_Address:"
 msgstr "_Address:"
 
@@ -865,6 +865,10 @@ msgstr "%"
 #: ../embed/downloader-view.c:690
 msgid "Remaining"
 msgstr "Remaining"
+
+#: ../embed/ephy-embed-shell.c:235
+msgid "Epiphany can't be used now. Mozilla initialization failed."
+msgstr "Epiphany cannot be used now. Mozilla initialization failed."
 
 #: ../embed/ephy-encodings.c:60
 msgid "Arabic (_IBM-864)"
@@ -1249,7 +1253,7 @@ msgstr "Ukrainian"
 msgid "Unknown (%s)"
 msgstr "Unknown (%s)"
 
-#: ../embed/ephy-history.c:550 ../src/bookmarks/ephy-bookmark-properties.c:623
+#: ../embed/ephy-history.c:550 ../src/bookmarks/ephy-bookmark-properties.c:613
 msgid "All"
 msgstr "All"
 
@@ -1968,10 +1972,6 @@ msgstr "Files"
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.ca/search?ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:876
-msgid "Epiphany can't be used now. Mozilla initialization failed."
-msgstr "Epiphany cannot be used now. Mozilla initialization failed."
-
 #: ../embed/print-dialog.c:258
 msgid "Generating PDF is not supported"
 msgstr "PDF generation is not supported"
@@ -2368,29 +2368,29 @@ msgstr "From file..."
 msgid "None"
 msgstr "None"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:509 ../src/prefs-dialog.c:405
+#: ../src/bookmarks/ephy-bookmark-properties.c:509 ../src/prefs-dialog.c:412
 msgid "Default"
 msgstr "Default"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:584
+#: ../src/bookmarks/ephy-bookmark-properties.c:581
 msgid "_Title:"
 msgstr "_Title:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:613
-msgid "_Icon:"
-msgstr "_Icon:"
+#: ../src/bookmarks/ephy-bookmark-properties.c:604
+msgid "I_con:"
+msgstr "I_con:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:624
+#: ../src/bookmarks/ephy-bookmark-properties.c:614
 #: ../src/bookmarks/ephy-topics-palette.c:274
 msgid "Subtopics"
 msgstr "Subtopics"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:627
+#: ../src/bookmarks/ephy-bookmark-properties.c:615
 msgid "T_opics:"
 msgstr "T_opics:"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmark-properties.c:663
+#: ../src/bookmarks/ephy-bookmark-properties.c:650
 #: ../src/bookmarks/ephy-bookmarks-editor.c:171
 msgid "_New Topic"
 msgstr "_New Topic"
@@ -3130,6 +3130,20 @@ msgstr "Sidebar Extension Required"
 #: ../src/ephy-shell.c:222
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "The link you clicked needs the sidebar extension installed."
+
+#. Translators: this is displayed in the statusbar; choose a short word
+#. * or even an abbreviation.
+#.
+#: ../src/ephy-statusbar.c:114
+msgid "Caret"
+msgstr "Caret"
+
+#. Translators: this is the tooltip on the "Caret" icon
+#. * in the statusbar.
+#.
+#: ../src/ephy-statusbar.c:122
+msgid "In keyboard selection mode, press F7 to exit"
+msgstr "In keyboard selection mode, press F7 to exit"
 
 #: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2264 ../src/ephy-tab.c:2299
 msgid "Blank page"
@@ -3917,7 +3931,7 @@ msgstr "Close print preview"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:893 ../src/prefs-dialog.c:901
+#: ../src/prefs-dialog.c:993 ../src/prefs-dialog.c:1001
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -3927,19 +3941,19 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:912
+#: ../src/prefs-dialog.c:1012
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "User defined (%s)"
 
-#: ../src/prefs-dialog.c:934
+#: ../src/prefs-dialog.c:1034
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "System language (%s)"
 msgstr[1] "System languages (%s)"
 
-#: ../src/prefs-dialog.c:1321
+#: ../src/prefs-dialog.c:1421
 msgid "Select a Directory"
 msgstr "Select a Directory"
 
