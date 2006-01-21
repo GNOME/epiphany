@@ -1093,8 +1093,7 @@ tool_item_enter_cb (GtkWidget *proxy,
 		    GdkEventCrossing *event,
 		    EphyWindow *window)
 {
-	if (event->mode == GDK_CROSSING_NORMAL && 
-	    event->detail == GDK_NOTIFY_NONLINEAR)
+	if (event->mode == GDK_CROSSING_NORMAL)
 	{
 		GtkToolItem *item;
 		GtkAction *action;
@@ -1122,8 +1121,7 @@ tool_item_leave_cb (GtkWidget *proxy,
 		    GdkEventCrossing *event,
 		    EphyWindow *window)
 {
-	if (event->mode == GDK_CROSSING_NORMAL && 
-	    event->detail == GDK_NOTIFY_NONLINEAR)
+	if (event->mode == GDK_CROSSING_NORMAL)
 	{
 		gtk_statusbar_pop (GTK_STATUSBAR (window->priv->statusbar),
 				   window->priv->help_message_cid);
