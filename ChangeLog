@@ -1,6 +1,12 @@
 2006-01-21  Crispin Flowerday  <gnome@flowerday.cx>
 
-	* src/bookmarks/ephy-bookmarks-editor.c (cmd_bookmarks_export): 
+	* src/bookmarks/ephy-bookmarks-editor.c (cmd_bookmarks_export) 
+
+	Add back the gtk_widget_destroy() to really fix bug #327438
+
+2006-01-21  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* src/bookmarks/ephy-bookmarks-editor.c (cmd_bookmarks_export) 
 
 	Fix bookmark exporting, so that it can be cancelled. 
 	Fixes bug #327438

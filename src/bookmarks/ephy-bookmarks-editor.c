@@ -734,6 +734,8 @@ cmd_bookmarks_export (GtkAction *action,
 		g_free (basename);
 	}
 	while (!ephy_gui_check_location_writable (GTK_WIDGET (dialog), filename));
+        
+        gtk_widget_destroy (dialog);
 
 	/* 0 for ephy RDF format, 1 for mozilla HTML format */
 
