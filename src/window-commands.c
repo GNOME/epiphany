@@ -729,7 +729,7 @@ window_cmd_help_about (GtkAction *action,
 		NULL
 	};
 
-	const char *license[] = {
+	const char *licence_part[] = {
 		N_("The GNOME Web Browser is free software; you can redistribute it and/or modify "
 		   "it under the terms of the GNU General Public License as published by "
 		   "the Free Software Foundation; either version 2 of the License, or "
@@ -746,7 +746,7 @@ window_cmd_help_about (GtkAction *action,
 	char *licence;
 
 	licence = g_strdup_printf ("%s\n%s\n%s",
-				   _(license[0]), _(license[1]), _(license[2]));
+				   _(licence_part[0]), _(licence_part[1]), _(licence_part[2]));
 
 	gtk_show_about_dialog (GTK_WINDOW (window),
 			       "name", _("GNOME Web Browser"),
@@ -767,7 +767,7 @@ window_cmd_help_about (GtkAction *action,
 			       "logo-icon-name", "web-browser",
 			       "website", "http://www.gnome.org/projects/epiphany",
 			       "website-label", _("GNOME Web Browser Website"),
-			       "license", license,
+			       "license", licence,
 			       "wrap-license", TRUE,
 			       NULL);
 
