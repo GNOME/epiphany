@@ -596,7 +596,7 @@
   )
 )
 
-(define-method get_property
+(define-method get_event_property
   (of-object "EphyEmbedEvent")
   (c-name "ephy_embed_event_get_property")
   (return-type "const-GValue*")
@@ -605,7 +605,7 @@
   )
 )
 
-(define-method has_property
+(define-method has_event_property
   (of-object "EphyEmbedEvent")
   (c-name "ephy_embed_event_has_property")
   (return-type "gboolean")
@@ -3738,3 +3738,13 @@
   (gtype-id "EPHY_TYPE_NODE")
 )
 
+(define-boxed PermissionInfo
+  (in-module "Ephy")
+  (c-name "EphyPermissionInfo")
+  (gtype-id  "EPHY_TYPE_PERMISSION_INFO")
+  (fields
+    '("char*" "host")
+    '("GQuark" "type")
+    '("EphyPermission" "permission")
+  )
+)

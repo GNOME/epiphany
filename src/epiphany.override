@@ -215,6 +215,23 @@ _wrap_ephy_embed_event_get_coords(PyGObject *self)
     return Py_BuildValue("(ll)", x, y);
 }
 %%
+override ephy_embed_get_security_level noargs
+static PyObject *
+_wrap_ephy_embed_get_security_level(PyGObject *self)
+{
+    EphyEmbedSecurityLevel level;
+    char *description;
+    PyObject* ret;
+    
+    ephy_embed_get_security_level (EPHY_EMBED(self->obj), &level, &description);
+    ret = Py_BuildValue("(Os)", 
+                        pyg_enum_from_gtype (EPHY_TYPE_EMBED_SECURITY_LEVEL, level),
+                        description);
+    g_free (description);
+
+    return ret;
+}
+%%
 override ephy_window_get_tabs noargs
 static PyObject *
 _wrap_ephy_window_get_tabs(PyGObject *self)
@@ -384,6 +401,35 @@ _wrap_ephy_cookie_manager_list_cookies(PyGObject *self)
     list = ephy_cookie_manager_list_cookies(EPHY_COOKIE_MANAGER (self->obj));
 
     return _helper_wrap_boxed_glist (EPHY_TYPE_COOKIE, list);
+}
+%%
+override ephy_permission_manager_list kwargs
+static PyObject *
+_wrap_ephy_permission_manager_list (PyGObject *self,
+                                    PyObject *args, PyObject *kwargs)
+{
+    static char *kwlist[] = {"type", NULL};
+    char *type;
+    GList *list;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, 
+                                     "s:EphyPermissionManager.list", kwlist, &type))
+        return NULL;
+       
+    list = ephy_permission_manager_list(EPHY_PERMISSION_MANAGER (self->obj), type);
+
+    return _helper_wrap_boxed_glist (EPHY_TYPE_PERMISSION_INFO, list);
+}
+%%
+override-attr EphyPermissionInfo.type
+static PyObject*
+_wrap_ephy_permission_info__get_type (PyObject* self, void* closure)
+{
+    const char* type;
+    
+    type = g_quark_to_string (pyg_boxed_get(self, EphyPermissionInfo)->qtype);
+    
+    return PyString_FromString (type);
 }
 %%
 override ephy_node_get_children noargs

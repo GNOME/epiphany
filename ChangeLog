@@ -1,5 +1,15 @@
 2006-01-21  Crispin Flowerday  <gnome@flowerday.cx>
 
+	* src/epiphany.defs:
+	* src/epiphany.override:
+
+	- Change EphyEmbedEvent.get_property to .get_event_property
+	- Wrap EphyPermissionManager.list(), and the boxed
+	  type it uses.
+	- Wrap EphyEmbed.get_security_level()
+
+2006-01-21  Crispin Flowerday  <gnome@flowerday.cx>
+
 	* src/window-commands.c (window_cmd_help_about): 
 
 	Put blank lines between the paragraphs in the
