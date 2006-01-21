@@ -745,7 +745,7 @@ window_cmd_help_about (GtkAction *action,
 
 	char *licence;
 
-	licence = g_strdup_printf ("%s\n%s\n%s",
+	licence = g_strdup_printf ("%s\n\n%s\n\n%s",
 				   _(licence_part[0]), _(licence_part[1]), _(licence_part[2]));
 
 	gtk_show_about_dialog (GTK_WINDOW (window),
