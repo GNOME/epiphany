@@ -708,6 +708,12 @@ cmd_bookmarks_export (GtkAction *action,
 
 		response = gtk_dialog_run (GTK_DIALOG (dialog));
 
+		if (response != GTK_RESPONSE_ACCEPT)
+		{
+			gtk_widget_destroy (dialog);
+			return;
+		}
+
 		format = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 		basename = g_path_get_basename (filename);
@@ -727,10 +733,7 @@ cmd_bookmarks_export (GtkAction *action,
 		}
 		g_free (basename);
 	}
-	while (response == GTK_RESPONSE_ACCEPT
-	       && !ephy_gui_check_location_writable (GTK_WIDGET (dialog), filename));
-
-	gtk_widget_destroy (dialog);
+	while (!ephy_gui_check_location_writable (GTK_WIDGET (dialog), filename));
 
 	/* 0 for ephy RDF format, 1 for mozilla HTML format */
 
