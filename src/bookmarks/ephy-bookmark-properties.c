@@ -27,8 +27,8 @@
 #include "ephy-shell.h"
 #include "ephy-state.h"
 #include "ephy-gui.h"
-#include "ephy-dnd.h"
 #include "ephy-favicon-cache.h"
+#include "ephy-dnd.h"
 
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtktogglebutton.h>
@@ -38,17 +38,9 @@
 #include <gtk/gtktable.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkmisc.h>
-#include <gtk/gtkliststore.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <glib/gi18n.h>
 #include <string.h>
-
-enum
-{
-	LIST_SEPARATOR,
-	LIST_ICON,
-	LIST_FROMFILE
-};
 
 static const GtkTargetEntry dest_drag_types[] = {
   {EPHY_DND_URL_TYPE, 0, 0},
@@ -296,7 +288,6 @@ update_window_title (EphyBookmarkProperties *properties)
 	g_free (title);
 }
 
-
 static void 
 combo_changed_cb (GtkComboBox *combobox, GtkWidget *palette)
 {
@@ -348,189 +339,6 @@ set_window_icon (EphyBookmarkProperties *properties)
 		gtk_window_set_icon_name (GTK_WINDOW (properties),
 					  GTK_STOCK_PROPERTIES);
 	}
-}
-
-static void
-refresh_icon (GtkComboBox *combobox, const char *location, gboolean set, gboolean create)
-{
-	EphyFaviconCache *cache;
-	GtkListStore *store;
-	GtkTreeIter iter;
-	GdkPixbuf *icon;
-	gboolean valid;
-	const char *filename;
-	
-	store = GTK_LIST_STORE (gtk_combo_box_get_model (combobox));
-	valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
-	while (valid)
-	{
-		int type;
-		char *tmp;
-		
-		// Check that this is really an icon
-		gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, 3, &type, -1);
-		if (type == LIST_ICON)
-		{
-			// Check if it's the icon we're looking for
-			gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, 0, &tmp, -1);
-			if (location == tmp || (tmp != NULL && location != NULL && strcmp (location, tmp) == 0))
-			{
-				g_free (tmp);
-				break;
-			}
-			g_free (tmp);
-		}
-		valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
-	}
-	
-	if (!valid && !create) return;
-	
-	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (embed_shell));
-	icon = (location && *location) ? ephy_favicon_cache_get (cache, location) : NULL;
-	
-	if (!valid)
-	{
-		filename = g_strrstr (location, "/");
-		filename = filename ? (filename+1) : "";
-		filename = *filename ? filename : location;
-		gtk_list_store_insert_with_values (store, &iter, 0, 0, location, 1, filename, 2, icon, 3, LIST_ICON, -1);
-	}
-	else
-	{
-		gtk_list_store_set (store, &iter, 2, icon, -1);
-	}
-	
-	if (set)
-	{
-		gtk_combo_box_set_active_iter (combobox, &iter);
-	}
-}
-
-static void
-icon_changed_cb (GtkComboBox *combobox, 
-		 EphyBookmarkProperties *properties)
-{
-	GValue value = { 0, };
-	GtkTreeIter iter;
-	int type;
-	char *location;
-	
-	gtk_combo_box_get_active_iter (combobox, &iter);
-	gtk_tree_model_get (gtk_combo_box_get_model (combobox), &iter, 0, &location, 3, &type, -1);
-
-	if (type == LIST_ICON)
-	{
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, location);
-		ephy_node_set_property (properties->priv->bookmark,
-					EPHY_NODE_BMK_PROP_USERICON,
-					&value);
-		g_value_unset (&value);
-	}
-	else if (type == LIST_FROMFILE)
-	{
-		GtkWidget *widget = gtk_file_chooser_dialog_new
-		  (_("Open Icon"), GTK_WINDOW (properties), GTK_FILE_CHOOSER_ACTION_OPEN,
-		   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-		gtk_widget_show (widget);
-	}
-	
-	g_free (location);
-
-        refresh_icon (GTK_COMBO_BOX (combobox), 
-	   ephy_node_get_property_string (properties->priv->bookmark, EPHY_NODE_BMK_PROP_USERICON),
-	   TRUE, TRUE);
-}
-
-static void
-icon_drag_data_received_cb (GObject            *widget,
-			    GdkDragContext     *context,
-			    gint                x,
-			    gint                y,
-			    GtkSelectionData   *selection_data,
-			    guint               info,
-			    guint               time,
-			    gpointer            user)
-{  
-	gchar **netscape_url;
-	
-	netscape_url = g_strsplit ((char *)selection_data->data, "\n", 2);
-	if (!netscape_url || !netscape_url[0])
-	{
-		g_strfreev (netscape_url);
-		gtk_drag_finish (context, FALSE, FALSE, time);
-		return;
-	}
-	
-	refresh_icon (GTK_COMBO_BOX (widget), netscape_url[0], TRUE, TRUE);
-	g_strfreev (netscape_url);
-	gtk_drag_finish (context, TRUE, TRUE, time);
-}
-
-static void
-icon_cache_changed (EphyFaviconCache *cache, const char *url, GtkComboBox *combobox)
-{
-	refresh_icon (combobox, url, FALSE, FALSE);
-}
-
-
-static gboolean
-is_separator (GtkTreeModel *model,
-	      GtkTreeIter *iter,
-	      gpointer data)
-{
-	int type;
-	gtk_tree_model_get (model, iter, 3, &type, -1);
-	return (type == LIST_SEPARATOR);
-}
-
-static GtkWidget *
-build_icon (EphyBookmarkProperties *properties)
-{
-	EphyFaviconCache *cache;
-	GtkWidget *combobox;
-	GtkListStore *store;
-	GtkTreeIter iter;
-	GtkCellLayout *layout;
-	GtkCellRenderer *renderer;
-	const char *location;
-	
-	store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING, GDK_TYPE_PIXBUF, G_TYPE_INT);
-	combobox = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
-	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combobox), is_separator, NULL, NULL);
-	layout = GTK_CELL_LAYOUT (combobox);
-
-	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (embed_shell));
-	g_signal_connect (cache, "changed", G_CALLBACK (icon_cache_changed), combobox);
-	
-	gtk_list_store_insert_with_values (store, &iter, 0, 0, NULL, 1, _("From file..."), 2, NULL, 3, LIST_FROMFILE, -1);
-	gtk_list_store_insert_with_values (store, &iter, 0, 0, NULL, 1, NULL, 2, NULL, 3, LIST_SEPARATOR, -1);
-	gtk_list_store_insert_with_values (store, &iter, 0, 0, "", 1, _("None"), 2, NULL, 3, LIST_ICON, -1);	
-	gtk_list_store_insert_with_values (store, &iter, 0, 0, NULL, 1, _("Default"), 2, NULL, 3, LIST_ICON, -1);
-	
-	location = ephy_node_get_property_string (properties->priv->bookmark, EPHY_NODE_BMK_PROP_ICON);
-        refresh_icon (GTK_COMBO_BOX (combobox), location, FALSE, TRUE);
-	
-	location = ephy_node_get_property_string (properties->priv->bookmark, EPHY_NODE_BMK_PROP_USERICON);
-        refresh_icon (GTK_COMBO_BOX (combobox), location, TRUE, TRUE);
-	
-	renderer = gtk_cell_renderer_text_new ();
-	gtk_cell_layout_pack_start (layout, renderer, TRUE);
-	gtk_cell_layout_add_attribute (layout, renderer, "text", 1);
-	
-	renderer = gtk_cell_renderer_pixbuf_new ();
-	gtk_cell_layout_pack_start (layout, renderer, FALSE);
-	gtk_cell_layout_add_attribute (layout, renderer, "pixbuf", 2);
-	
-	g_signal_connect (G_OBJECT (combobox), "changed", G_CALLBACK (icon_changed_cb), properties);
-	gtk_widget_show (combobox);
-
-	g_signal_connect (G_OBJECT (combobox), "drag_data_received",
-			  G_CALLBACK (icon_drag_data_received_cb), NULL);
-	gtk_drag_dest_set (combobox, GTK_DEST_DEFAULT_ALL, dest_drag_types,
-			   G_N_ELEMENTS (dest_drag_types), GDK_ACTION_COPY);
-	
-	return combobox;
 }
 
 static void
@@ -599,14 +407,6 @@ build_ui (EphyBookmarkProperties *properties)
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);
-	
-	entry = build_icon (properties);
-	label = gtk_label_new_with_mnemonic (_("I_con:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, 0, 0, 0);
-	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3, GTK_FILL, 0, 0, 0);
 
 	cbox = GTK_COMBO_BOX (gtk_combo_box_new_text ());
 	gtk_widget_show (GTK_WIDGET (cbox));
@@ -616,8 +416,8 @@ build_ui (EphyBookmarkProperties *properties)
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (cbox));
 	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4, GTK_FILL, 0, 0, 0);
-	gtk_table_attach (GTK_TABLE (table), GTK_WIDGET (cbox), 1, 2, 3, 4, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), GTK_WIDGET (cbox), 1, 2, 2, 3, GTK_FILL, 0, 0, 0);
 
 	palette = ephy_topics_palette_new (properties->priv->bookmarks,
 					   properties->priv->bookmark);
@@ -636,7 +436,7 @@ build_ui (EphyBookmarkProperties *properties)
 	g_signal_connect_object (G_OBJECT (cbox), "changed", G_CALLBACK (combo_changed_cb), 
 				 palette, G_CONNECT_AFTER);
 	
-	gtk_table_attach (GTK_TABLE (table), scrolled_window, 1, 2, 4, 5,
+	gtk_table_attach (GTK_TABLE (table), scrolled_window, 1, 2, 3, 4,
 			  GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
 	gtk_table_set_row_spacing (GTK_TABLE (table), 3, 3);
 

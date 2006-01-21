@@ -159,6 +159,8 @@ ephy_bookmark_action_sync_smart_url (GtkAction *gaction, GParamSpec *pspec, GtkW
 		EphyBookmarkAction *action = EPHY_BOOKMARK_ACTION (gaction);
 		EphyBookmarkActionPrivate *priv = action->priv;
 		gboolean is_smart_url = priv->smart_url;
+		gboolean has_icon = (gboolean) ephy_node_get_property_string
+		  (priv->node, EPHY_NODE_BMK_PROP_ICON);		
 		GtkWidget *entry, *icon;
 		guint width;
 
@@ -168,6 +170,7 @@ ephy_bookmark_action_sync_smart_url (GtkAction *gaction, GParamSpec *pspec, GtkW
 		icon = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "icon"));
 
 		g_object_set (entry, "visible", is_smart_url, NULL);
+		g_object_set (icon, "visible", !is_smart_url || has_icon, NULL);
 		gtk_entry_set_width_chars (GTK_ENTRY (entry),
 					   width > 0 ? width : ENTRY_WIDTH_CHARS);
 	}
@@ -205,12 +208,7 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 	g_return_if_fail (bma->priv->node != NULL);
 
 	icon_location = ephy_node_get_property_string (bma->priv->node,
-						       EPHY_NODE_BMK_PROP_USERICON);
-	if (icon_location == NULL)
-	{
-		icon_location = ephy_node_get_property_string (bma->priv->node,
-							       EPHY_NODE_BMK_PROP_ICON);
-	}
+						       EPHY_NODE_BMK_PROP_ICON);
 	
 	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache
 		(EPHY_EMBED_SHELL (ephy_shell)));
