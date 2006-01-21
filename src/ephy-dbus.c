@@ -349,7 +349,14 @@ ephy_dbus_shutdown (EphyDbus *dbus)
 		dbus->priv->reconnect_timeout_id = 0;
 	}
 
+	dbus_connection_remove_filter
+		(dbus_g_connection_get_connection (dbus->priv->session_bus),
+		 session_filter_func, dbus);
 	ephy_dbus_disconnect_bus (dbus->priv->session_bus);
+
+	dbus_connection_remove_filter
+		(dbus_g_connection_get_connection (dbus->priv->system_bus),
+		 system_filter_func, dbus);
 	ephy_dbus_disconnect_bus (dbus->priv->system_bus);
 }
 
