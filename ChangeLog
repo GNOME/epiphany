@@ -1,5 +1,12 @@
 2006-01-22  Crispin Flowerday  <gnome@flowerday.cx>
 
+	* src/ephy-dbus.c (ephy_dbus_shutdown): 
+
+	Add guards to avoid crashing on exit if system bus
+	isn't running. Fixes bug #327845
+
+2006-01-22  Crispin Flowerday  <gnome@flowerday.cx>
+
 	* embed/ephy-permission-manager.c:
 	(ephy_permission_manager_add_permission),
 	(ephy_permission_manager_remove_permission),
