@@ -247,7 +247,11 @@ page_is_obsolete (EphyNode *node, GDate *now)
 		(node, EPHY_NODE_PAGE_PROP_LAST_VISIT);
 
         g_date_clear (&date, 1);
+#if GLIB_CHECK_VERSION (2,9,0)
+        g_date_set_time_t (&date, last_visit);
+#else
         g_date_set_time (&date, last_visit);
+#endif
 
 	return (g_date_days_between (&date, now) >=
 		HISTORY_PAGE_OBSOLETE_DAYS);
@@ -263,7 +267,11 @@ remove_obsolete_pages (EphyHistory *eb)
 
 	now = time (NULL);
         g_date_clear (&current_date, 1);
+#if GLIB_CHECK_VERSION (2,9,0)
+        g_date_set_time_t (&current_date, time (NULL));
+#else
         g_date_set_time (&current_date, time (NULL));
+#endif
 
 	children = ephy_node_get_children (eb->priv->pages);
 	for (i = (int) children->len - 1; i >= 0; i--)
