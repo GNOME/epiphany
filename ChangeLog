@@ -1,5 +1,22 @@
 2006-01-22  Crispin Flowerday  <gnome@flowerday.cx>
 
+	* embed/ephy-permission-manager.c:
+	(ephy_permission_manager_add_permission),
+	(ephy_permission_manager_remove_permission),
+	(ephy_permission_manager_clear_permissions),
+	(ephy_permission_manager_test_permission),
+	(ephy_permission_manager_list_permissions):
+	* embed/ephy-permission-manager.h:
+	* src/ephy-tab.c: (ephy_tab_get_popups_allowed),
+	(ephy_tab_set_popups_allowed):
+	* src/epiphany.defs:
+	* src/epiphany.override:
+
+	Change the EphyPermissionManager API so that it is
+	more obvious what it does when used from python.
+
+2006-01-22  Crispin Flowerday  <gnome@flowerday.cx>
+
 	* embed/ephy-favicon-cache.c (remove_obsolete_icons) 
 	(icon_is_obsolete)
 	* embed/ephy-history.c (page_is_obsolete, remove_obsolete_pages): 

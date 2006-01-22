@@ -1477,9 +1477,9 @@
   (return-type "GType")
 )
 
-(define-method add
+(define-method add_permission
   (of-object "EphyPermissionManager")
-  (c-name "ephy_permission_manager_add")
+  (c-name "ephy_permission_manager_add_permission")
   (return-type "none")
   (parameters
     '("const-char*" "host")
@@ -1488,9 +1488,9 @@
   )
 )
 
-(define-method remove
+(define-method remove_permission
   (of-object "EphyPermissionManager")
-  (c-name "ephy_permission_manager_remove")
+  (c-name "ephy_permission_manager_remove_permission")
   (return-type "none")
   (parameters
     '("const-char*" "host")
@@ -1498,15 +1498,15 @@
   )
 )
 
-(define-method clear
+(define-method clear_permissions
   (of-object "EphyPermissionManager")
-  (c-name "ephy_permission_manager_clear")
+  (c-name "ephy_permission_manager_clear_permissions")
   (return-type "none")
 )
 
-(define-method test
+(define-method test_permission
   (of-object "EphyPermissionManager")
-  (c-name "ephy_permission_manager_test")
+  (c-name "ephy_permission_manager_test_permission")
   (return-type "EphyPermission")
   (parameters
     '("const-char*" "host")
@@ -1514,9 +1514,9 @@
   )
 )
 
-(define-method list
+(define-method list_permissions
   (of-object "EphyPermissionManager")
-  (c-name "ephy_permission_manager_list")
+  (c-name "ephy_permission_manager_list_permissions")
   (return-type "GList*")
   (parameters
     '("const-char*" "type")

@@ -206,7 +206,7 @@ ephy_permission_manager_base_init (gpointer g_class)
 }
 
 /**
- * ephy_permission_manager_add:
+ * ephy_permission_manager_add_permission:
  * @manager: the #EphyPermissionManager
  * @host: a website URL
  * @type: a string to identify the type of the permission
@@ -215,17 +215,17 @@ ephy_permission_manager_base_init (gpointer g_class)
  * Adds the specified permission to the permissions database.
  **/
 void
-ephy_permission_manager_add (EphyPermissionManager *manager,
-			     const char *host,
-			     const char *type,
-			     EphyPermission permission)
+ephy_permission_manager_add_permission (EphyPermissionManager *manager,
+					const char *host,
+					const char *type,
+					EphyPermission permission)
 {
 	EphyPermissionManagerIface *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
 	iface->add (manager, host, type, permission);
 }
 
 /**
- * ephy_permission_manager_remove:
+ * ephy_permission_manager_remove_permission:
  * @manager: the #EphyPermissionManager
  * @host: a website URL
  * @type: a string to identify the type of the permission
@@ -235,29 +235,29 @@ ephy_permission_manager_add (EphyPermissionManager *manager,
  * @host's web pages.
  **/
 void
-ephy_permission_manager_remove (EphyPermissionManager *manager,
-				const char *host,
-				const char *type)
+ephy_permission_manager_remove_permission (EphyPermissionManager *manager,
+					   const char *host,
+					   const char *type)
 {
 	EphyPermissionManagerIface *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
 	iface->remove (manager, host, type);
 }
 
 /**
- * ephy_permission_manager_clear:
+ * ephy_permission_manager_clear_permission:
  * @manager: the #EphyPermissionManager
  * 
  * Clears the permissions database. This cannot be undone.
  **/
 void
-ephy_permission_manager_clear (EphyPermissionManager *manager)
+ephy_permission_manager_clear_permissions (EphyPermissionManager *manager)
 {
 	EphyPermissionManagerIface *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
 	iface->clear (manager);
 }
 
 /**
- * ephy_permission_manager_test:
+ * ephy_permission_manager_test_permission:
  * @manager: the #EphyPermissionManager
  * @host: a website URL
  * @type: a string to identify the type of the permission
@@ -270,16 +270,16 @@ ephy_permission_manager_clear (EphyPermissionManager *manager)
  * Return value: the permission of type #EphyPermission
  **/
 EphyPermission
-ephy_permission_manager_test (EphyPermissionManager *manager,
-			      const char *host,
-			      const char *type)
+ephy_permission_manager_test_permission (EphyPermissionManager *manager,
+					 const char *host,
+					 const char *type)
 {
 	EphyPermissionManagerIface *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
 	return iface->test (manager, host, type);
 }
 
 /**
- * ephy_permission_manager_list:
+ * ephy_permission_manager_list_permission:
  * @manager: the #EphyPermissionManager
  * @type: a string to identify the type of the permission
  * 
@@ -290,8 +290,8 @@ ephy_permission_manager_test (EphyPermissionManager *manager,
  * Return value: the list of permission database entries
  **/
 GList *
-ephy_permission_manager_list (EphyPermissionManager *manager,
-			      const char *type)
+ephy_permission_manager_list_permissions (EphyPermissionManager *manager,
+					 const char *type)
 {
 	EphyPermissionManagerIface *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
 	return iface->list (manager, type);

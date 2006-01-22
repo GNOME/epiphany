@@ -106,23 +106,23 @@ void			ephy_permission_info_free	(EphyPermissionInfo *info);
 
 GType 		ephy_permission_manager_get_type	(void);
 
-void		ephy_permission_manager_add		(EphyPermissionManager *manager,
-							 const char *host,
-							 const char *type,
-							 EphyPermission permission);
+void		ephy_permission_manager_add_permission		(EphyPermissionManager *manager,
+								 const char *host,
+								 const char *type,
+								 EphyPermission permission);
 
-void		ephy_permission_manager_remove		(EphyPermissionManager *manager,
-							 const char *host,
-							 const char *type);
+void		ephy_permission_manager_remove_permission	(EphyPermissionManager *manager,
+								 const char *host,
+								 const char *type);
 
-void		ephy_permission_manager_clear		(EphyPermissionManager *manager);
+void		ephy_permission_manager_clear_permissions	(EphyPermissionManager *manager);
 
-EphyPermission	ephy_permission_manager_test		(EphyPermissionManager *manager,
-							 const char *host,
-							 const char *type);
+EphyPermission	ephy_permission_manager_test_permission		(EphyPermissionManager *manager,
+								 const char *host,
+								 const char *type);
 
-GList *		ephy_permission_manager_list		(EphyPermissionManager *manager,
-							 const char *type);
+GList *		ephy_permission_manager_list_permissions	(EphyPermissionManager *manager,
+								 const char *type);
 
 G_END_DECLS
 
