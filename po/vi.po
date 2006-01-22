@@ -8,8 +8,8 @@ msgid ""
 ""
 msgstr "Project-Id-Version: Epiphany Gnome HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-19 05:38+0100\n"
-"PO-Revision-Date: 2006-01-19 21:47+1030\n"
+"POT-Creation-Date: 2006-01-22 05:24+0100\n"
+"PO-Revision-Date: 2006-01-22 15:17+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -252,9 +252,9 @@ msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
 msgstr "Cách hiển thị ảnh hoạt cảnh. Giá trị có thể:\n"
-" • normal		chuẩn\n"
-" • once		một lần\n"
-" • disabled	bị tắt."
+" • normal\t\tchuẩn\n"
+" • once\t\tmột lần\n"
+" • disabled\tbị tắt."
 
 #:../data/epiphany.schemas.in.h:20
 msgid "ISO-8859-1"
@@ -708,7 +708,7 @@ msgid "Use custom _stylesheet"
 msgstr "Dùng tờ _kiểu dáng tự chọn"
 
 #:../data/glade/prefs-dialog.glade.h:31
-#:../src/bookmarks/ephy-bookmark-properties.c:596
+#:../src/bookmarks/ephy-bookmark-properties.c:404
 msgid "_Address:"
 msgstr "Đị_a chỉ:"
 
@@ -821,7 +821,7 @@ msgstr "%s\n"
 "%s của %s"
 
 #:../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#:../src/ephy-window.c:1469
+#:../src/ephy-window.c:1467
 msgid "Unknown"
 msgstr "Không biết"
 
@@ -843,7 +843,7 @@ msgstr "không rõ"
 msgid "download status|Failed"
 msgstr "đã thất bại"
 
-#:../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:803
+#:../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:808
 msgid "File"
 msgstr "Tập tin"
 
@@ -1242,7 +1242,7 @@ msgstr "Tiếng Ukraina"
 msgid "Unknown (%s)"
 msgstr "Không biết mã chữ (%s)"
 
-#:../embed/ephy-history.c:550 ../src/bookmarks/ephy-bookmark-properties.c:613
+#:../embed/ephy-history.c:550 ../src/bookmarks/ephy-bookmark-properties.c:413
 msgid "All"
 msgstr "Tất cả"
 
@@ -1972,7 +1972,7 @@ msgstr "Đế_n:"
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Lập kết thức của phạm vị các trang cần in"
 
-#:../embed/print-dialog.c:407 ../src/ephy-window.c:1289
+#:../embed/print-dialog.c:407 ../src/ephy-window.c:1287
 msgid "Print"
 msgstr "In"
 
@@ -2228,8 +2228,8 @@ msgid "History"
 msgstr "Lược sử"
 
 #:../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
-#:../src/bookmarks/ephy-bookmarks-editor.c:1535
-#:../src/bookmarks/ephy-topic-action.c:402 ../src/ephy-window.c:1295
+#:../src/bookmarks/ephy-bookmarks-editor.c:1540
+#:../src/bookmarks/ephy-topic-action.c:402 ../src/ephy-window.c:1293
 msgid "Bookmarks"
 msgstr "Đánh dấu"
 
@@ -2309,51 +2309,31 @@ msgstr "Bộ cầm phít tập tin .desktop Epiphany"
 msgid "This plugin handles “.desktop” files containing web links."
 msgstr "Bộ cầm phít này quản lý tập tin « .desktop » chứa liên kết Mạng."
 
-#:../src/bookmarks/ephy-bookmark-action.c:287
+#:../src/bookmarks/ephy-bookmark-action.c:285
 #,c-format
 msgid "%s:"
 msgstr "%s:"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:294
+#:../src/bookmarks/ephy-bookmark-properties.c:286
 #,c-format
 msgid "“%s” Properties"
 msgstr "Thuộc tính « %s »"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:433
-msgid "Open Icon"
-msgstr "Mở biểu tượng"
-
-#:../src/bookmarks/ephy-bookmark-properties.c:506
-msgid "From file..."
-msgstr "Từ tập tin..."
-
-#:../src/bookmarks/ephy-bookmark-properties.c:508
-msgid "None"
-msgstr "Không có"
-
-#:../src/bookmarks/ephy-bookmark-properties.c:509 ../src/prefs-dialog.c:412
-msgid "Default"
-msgstr "Mặc định"
-
-#:../src/bookmarks/ephy-bookmark-properties.c:581
+#:../src/bookmarks/ephy-bookmark-properties.c:389
 msgid "_Title:"
 msgstr "_Tiêu đề:"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:604
-msgid "I_con:"
-msgstr "_Biểu tượng:"
-
-#:../src/bookmarks/ephy-bookmark-properties.c:614
+#:../src/bookmarks/ephy-bookmark-properties.c:414
 #:../src/bookmarks/ephy-topics-palette.c:274
 msgid "Subtopics"
 msgstr "Chủ đề phụ"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:615
+#:../src/bookmarks/ephy-bookmark-properties.c:415
 msgid "T_opics:"
 msgstr "C_hủ đề:"
 
 #.File Menu
-#:../src/bookmarks/ephy-bookmark-properties.c:650
+#:../src/bookmarks/ephy-bookmark-properties.c:450
 #:../src/bookmarks/ephy-bookmarks-editor.c:171
 msgid "_New Topic"
 msgstr "Chủ đề _mới"
@@ -2389,7 +2369,7 @@ msgstr "Tạo chủ đề mới"
 
 #.File Menu
 #:../src/bookmarks/ephy-bookmarks-editor.c:174
-#:../src/bookmarks/ephy-bookmarks-editor.c:1159
+#:../src/bookmarks/ephy-bookmarks-editor.c:1164
 #:../src/bookmarks/ephy-bookmarks-ui.c:268 ../src/ephy-history-window.c:170
 #:../src/ephy-history-window.c:696
 msgid "Open in New _Window"
@@ -2401,7 +2381,7 @@ msgid "Open the selected bookmark in a new window"
 msgstr "Mở đánh dấu được chọn trong cửa sổ mới"
 
 #:../src/bookmarks/ephy-bookmarks-editor.c:177
-#:../src/bookmarks/ephy-bookmarks-editor.c:1162
+#:../src/bookmarks/ephy-bookmarks-editor.c:1167
 #:../src/bookmarks/ephy-bookmarks-ui.c:257 ../src/ephy-history-window.c:173
 #:../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
@@ -2474,7 +2454,7 @@ msgid "Cut the selection"
 msgstr "Cắt phần được chọn"
 
 #:../src/bookmarks/ephy-bookmarks-editor.c:202
-#:../src/bookmarks/ephy-bookmarks-editor.c:1172
+#:../src/bookmarks/ephy-bookmarks-editor.c:1177
 #:../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #:../src/ephy-window.c:167
 msgid "_Copy"
@@ -2642,38 +2622,38 @@ msgstr "Epiphany (RDF)"
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:763
+#:../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "Import Bookmarks"
 msgstr "Nập đánh dấu"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:769
+#:../src/bookmarks/ephy-bookmarks-editor.c:774
 msgid "I_mport"
 msgstr "_Nập"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:783
+#:../src/bookmarks/ephy-bookmarks-editor.c:788
 msgid "Import bookmarks from:"
 msgstr "_Nập đánh dấu từ:"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1168
+#:../src/bookmarks/ephy-bookmarks-editor.c:1173
 #:../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "_Sao chép địa chỉ"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1402
+#:../src/bookmarks/ephy-bookmarks-editor.c:1407
 #:../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Tìm kiếm:"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1597
+#:../src/bookmarks/ephy-bookmarks-editor.c:1602
 msgid "Topics"
 msgstr "Chủ đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1667
+#:../src/bookmarks/ephy-bookmarks-editor.c:1672
 #:../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Tiêu đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1673
+#:../src/bookmarks/ephy-bookmarks-editor.c:1678
 #:../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Địa chỉ"
@@ -3086,6 +3066,20 @@ msgstr "Cần phần mở rộng thanh nách"
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Mới nhắp vào liên kết cần thiết phần mở rộng cho thanh nách được cài đặt "
 "trước."
+
+#.Translators: this is displayed in the statusbar; choose a short word
+#.* or even an abbreviation.
+#.
+#:../src/ephy-statusbar.c:114
+msgid "Caret"
+msgstr "Mũ"
+
+#.Translators: this is the tooltip on the "Caret" icon
+#.* in the statusbar.
+#.
+#:../src/ephy-statusbar.c:122
+msgid "In keyboard selection mode, press F7 to exit"
+msgstr "Trong chế độ chọn bàn phím, nhấn F7 để thoát"
 
 #:../src/ephy-tab.c:481 ../src/ephy-tab.c:2264 ../src/ephy-tab.c:2299
 msgid "Blank page"
@@ -3662,100 +3656,100 @@ msgstr "Sẽ mất các thông tin ấy khi có phải đóng tài liệu."
 msgid "Close _Document"
 msgstr "_Đóng tài liệu"
 
-#:../src/ephy-window.c:1285 ../src/window-commands.c:279
+#:../src/ephy-window.c:1283 ../src/window-commands.c:279
 msgid "Open"
 msgstr "Mở"
 
-#:../src/ephy-window.c:1287 ../src/window-commands.c:305
+#:../src/ephy-window.c:1285 ../src/window-commands.c:305
 msgid "Save As"
 msgstr "Lưu là"
 
-#:../src/ephy-window.c:1291
+#:../src/ephy-window.c:1289
 msgid "Bookmark"
 msgstr "Đánh dấu"
 
-#:../src/ephy-window.c:1293
+#:../src/ephy-window.c:1291
 msgid "Find"
 msgstr "Tìm"
 
 #.Translators: This refers to text size
-#:../src/ephy-window.c:1306
+#:../src/ephy-window.c:1304
 msgid "Larger"
 msgstr "Lớn hơn"
 
 #.Translators: This refers to text size
-#:../src/ephy-window.c:1309
+#:../src/ephy-window.c:1307
 msgid "Smaller"
 msgstr "Nhỏ hơn"
 
-#:../src/ephy-window.c:1472
+#:../src/ephy-window.c:1470
 msgid "Insecure"
 msgstr "Không bảo mật"
 
-#:../src/ephy-window.c:1477
+#:../src/ephy-window.c:1475
 msgid "Broken"
 msgstr "Bị ngắt"
 
-#:../src/ephy-window.c:1490
+#:../src/ephy-window.c:1488
 msgid "Low"
 msgstr "Thấp"
 
-#:../src/ephy-window.c:1497
+#:../src/ephy-window.c:1495
 msgid "High"
 msgstr "Cao"
 
-#:../src/ephy-window.c:1507
+#:../src/ephy-window.c:1505
 #,c-format
 msgid "Security level: %s"
 msgstr "Mức bảo mật: %s"
 
-#:../src/ephy-window.c:1547
+#:../src/ephy-window.c:1545
 #,c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d cửa sổ bật lên đã ẩn"
 
-#:../src/ephy-window.c:1842
+#:../src/ephy-window.c:1840
 #,c-format
 msgid "Open image “%s”"
 msgstr "Mở ảnh « %s »"
 
-#:../src/ephy-window.c:1847
+#:../src/ephy-window.c:1845
 #,c-format
 msgid "Use as desktop background “%s”"
 msgstr "Dùng ảnh làm nền màn hình « %s »"
 
-#:../src/ephy-window.c:1852
+#:../src/ephy-window.c:1850
 #,c-format
 msgid "Save image “%s”"
 msgstr "Lưu ảnh « %s »"
 
-#:../src/ephy-window.c:1857
+#:../src/ephy-window.c:1855
 #,c-format
 msgid "Copy image address “%s”"
 msgstr "Chép địa chỉ ảnh « %s »"
 
-#:../src/ephy-window.c:1870
+#:../src/ephy-window.c:1868
 #,c-format
 msgid "Send email to address “%s”"
 msgstr "Gởi thư cho địa chỉ « %s »"
 
-#:../src/ephy-window.c:1876
+#:../src/ephy-window.c:1874
 #,c-format
 msgid "Copy email address “%s”"
 msgstr "Chép địa chỉ thư « %s »"
 
-#:../src/ephy-window.c:1888
+#:../src/ephy-window.c:1886
 #,c-format
 msgid "Save link “%s”"
 msgstr "Lưu liên kết « %s »"
 
-#:../src/ephy-window.c:1894
+#:../src/ephy-window.c:1892
 #,c-format
 msgid "Bookmark link “%s”"
 msgstr "Đánh dấu cho liên kết « %s »"
 
-#:../src/ephy-window.c:1900
+#:../src/ephy-window.c:1898
 #,c-format
 msgid "Copy link's address “%s”"
 msgstr "Chép địa chỉ liên kết « %s »"
@@ -3864,6 +3858,10 @@ msgstr "Đóng"
 msgid "Close print preview"
 msgstr "Đóng của sổ xem in trước"
 
+#:../src/prefs-dialog.c:412
+msgid "Default"
+msgstr "Mặc định"
+
 #.Translators: The text before the "|" is context to help you decide on
 #.* the correct translation. You MUST OMIT it in the translated string.
 #.* Translators: the first %s is the language name, and the
@@ -3914,6 +3912,32 @@ msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> hay <gnome-doc-list@gnome.org>"
 
 #:../src/window-commands.c:733
+msgid ""
+"The GNOME Web Browser is free software; you can redistribute it and/or "
+"modify it under the terms of the GNU General Public License as published by "
+"the Free Software Foundation; either version 2 of the License, or (at your "
+"option) any later version."
+msgstr "Bộ duyệt Mạng Gnome là phần mềm tự do; bạn có thể phát hành lại nó và/hay sửa đổi nó với điều kiện của Quyền Công Chung GNU (GPL) như đưọơc xuất bản bởi Tổ chức Phần mềm Tự do, hoặc phiên bản 2 của Quyền này, hoặc (tùy chọn) bất cứ phiên bản sau nào."
+
+#:../src/window-commands.c:737
+msgid ""
+"The GNOME Web Browser is distributed in the hope that it will be useful, but "
+"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
+"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details."
+msgstr "Bộ duyệt Mạng Gnome được phát hành vì chúng tôi mong muốn nó hữu ích, nhưng không bảo đảm gì cả, thậm chí không có bảo đảm được ngụ ý khả năng bán hoặc khả năng làm việc dứt khoát. Hãy xem Quyền Công Chung GNU (GPL) để tìm chi tiết."
+
+#:../src/window-commands.c:741
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
+"59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
+msgstr "Bạn nên đã nhận một bản sao của Quyền Công Chung GNU cùng với trình X; nếu không, hãy viết là thư cho Tổ chức Phần mềm Tự do :\n"
+"Free Software Foundation, Inc.,\n"
+"59 Temple Place, Suite 330,\n"
+"Boston, MA  02111-1307  USA (Mỹ)"
+
+#:../src/window-commands.c:752
 msgid "GNOME Web Browser"
 msgstr "Bộ duyệt Mạng Gnome"
 
@@ -3925,10 +3949,10 @@ msgstr "Bộ duyệt Mạng Gnome"
 #.* this translation; in that case, please write each of them on a separate
 #.* line seperated by newlines (\n).
 #.
-#:../src/window-commands.c:747
+#:../src/window-commands.c:766
 msgid "translator-credits"
 msgstr "Nhóm Việt hoá GNOME (http://gnomevi.sourceforge.net)"
 
-#:../src/window-commands.c:750
+#:../src/window-commands.c:769
 msgid "GNOME Web Browser Website"
 msgstr "Chỗ Mạng của Bộ duyệt Mạng Gnome"
