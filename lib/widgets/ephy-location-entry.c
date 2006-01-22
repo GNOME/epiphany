@@ -997,6 +997,9 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 	gtk_entry_set_text (GTK_ENTRY (priv->icon_entry->entry), text);
 	priv->user_changed = TRUE;
 
+	/* We need to call update_address_state() here, as the 'changed' signal
+	 * may not get called if the user has typed in the exact correct url */
+	update_address_state (entry);
 	update_favicon (entry);
 
 	/* Now restore the selection.

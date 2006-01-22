@@ -1,5 +1,13 @@
 2006-01-22  Crispin Flowerday  <gnome@flowerday.cx>
 
+	* lib/widgets/ephy-location-entry.c (ephy_location_entry_set_location): 
+
+	When updating the address bar, always update the address state,
+	sometimes it isn't updated if the text in the GtkEntry isn't
+	altered (and hence the 'changed' signal isn't called.
+
+2006-01-22  Crispin Flowerday  <gnome@flowerday.cx>
+
 	* src/ephy-dbus.c (ephy_dbus_shutdown): 
 
 	Add guards to avoid crashing on exit if system bus
