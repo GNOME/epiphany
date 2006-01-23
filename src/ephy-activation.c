@@ -15,24 +15,26 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
- *  $Id:
+ *  $Id$
  */
 
+#include "config.h"
+
 #include "ephy-activation.h"
-#include "ephy-debug.h"
+
 #include "ephy-shell.h"
 #include "ephy-session.h"
-#include "ephy-bookmarks-import.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
+#include "eel-gconf-extensions.h"
+#include "ephy-debug.h"
+
+#include <string.h>
 
 gboolean
 ephy_activation_load_url (EphyDbus *ephy_dbus,
 			  char *url,
-			  gboolean fullscreen,
-			  gboolean open_in_existing_tab,
-			  gboolean open_in_new_tab,
+			  char *options,
 			  guint startup_id)
 {
 	EphyNewTabFlags flags = 0;
@@ -40,8 +42,10 @@ ephy_activation_load_url (EphyDbus *ephy_dbus,
 	EphySession *session;
 	guint32 user_time = (guint32) startup_id;
 
+	g_return_val_if_fail (url != NULL && options != NULL, TRUE);
+
 	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
-	g_return_val_if_fail (session != NULL, FALSE);
+	g_return_val_if_fail (session != NULL, TRUE);
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL))
 	{
@@ -50,6 +54,7 @@ ephy_activation_load_url (EphyDbus *ephy_dbus,
 
 	window = ephy_session_get_active_window (session);
 
+#if 0
 	if (open_in_existing_tab && window != NULL)
 	{
 		ephy_gui_window_update_user_time (GTK_WIDGET (window),
@@ -57,8 +62,9 @@ ephy_activation_load_url (EphyDbus *ephy_dbus,
 		ephy_window_load_url (window, url);
 		return TRUE;
 	}
+#endif
 
-	if (*url == '\0')
+	if (url[0] == '\0')
 	{
 		flags |= EPHY_NEW_TAB_HOME_PAGE;
 	}
@@ -67,42 +73,20 @@ ephy_activation_load_url (EphyDbus *ephy_dbus,
 		flags |= EPHY_NEW_TAB_OPEN_PAGE;
 	}
 
-	if (open_in_new_tab)
+	if (strstr (options, "new-window") != NULL)
+	{
+		window = NULL;
+		flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+	}
+	else if (strstr (options, "new-tab") != NULL)
 	{
 		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW |
 			 EPHY_NEW_TAB_JUMP;
-	}
-	else
-	{
-		flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
-	}
-
-	if (fullscreen)
-	{
-		flags |= EPHY_NEW_TAB_FULLSCREEN_MODE;
 	}
 
 	ephy_shell_new_tab_full (ephy_shell, window, NULL, url, flags,
 				 EPHY_EMBED_CHROME_ALL, FALSE, user_time);
 
-	return TRUE;
-}
-
-gboolean
-ephy_activation_add_bookmark (EphyDbus *ephy_dbus,
-			      char *url)
-{
-	ephy_bookmarks_add (ephy_shell_get_bookmarks (ephy_shell),
-			    url /* title */, url);
-	return TRUE;
-}
-
-gboolean
-ephy_activation_import_bookmarks (EphyDbus *ephy_dbus,
-				  char *filename)
-{
-	ephy_bookmarks_import (ephy_shell_get_bookmarks (ephy_shell),
-			       filename);
 	return TRUE;
 }
 
@@ -135,19 +119,4 @@ ephy_activation_open_bookmarks_editor (EphyDbus *ephy_dbus,
 	ephy_gui_window_update_user_time (editor, user_time);
 	gtk_window_present (GTK_WINDOW (editor));
 	return TRUE;
-}
-
-
-void
-ephy_activation_general_purpose_reply (DBusGProxy *proxy,
-				       GError *error,
-				       gpointer user_data)
-{
-	g_object_unref (proxy);
-	if (error != NULL)
-	{
-		g_warning ("An error occured while calling remote method: %s", error->message);
-		g_error_free (error);
-		return;
-	}
 }

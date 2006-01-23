@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef EPHY_ACTIVATION_H
@@ -26,16 +28,8 @@ G_BEGIN_DECLS
 /* activation handlers */
 gboolean ephy_activation_load_url		(EphyDbus *ephy_dbus,
 						 char *url,
-						 gboolean fullscreen,
-						 gboolean open_in_existing_tab,
-						 gboolean open_in_new_tab,
+						 char *options,
 						 guint startup_id);
-
-gboolean ephy_activation_add_bookmark		(EphyDbus *ephy_dbus,
-						 char *url);
-
-gboolean ephy_activation_import_bookmarks	(EphyDbus *ephy_dbus,
-						 char *filename);
 
 gboolean ephy_activation_load_session		(EphyDbus *ephy_dbus,
 						 char *session_name,
@@ -44,11 +38,6 @@ gboolean ephy_activation_load_session		(EphyDbus *ephy_dbus,
 
 gboolean ephy_activation_open_bookmarks_editor	(EphyDbus *ephy_dbus,
 						 guint user_time);
-
-/* async reply handlers */
-void ephy_activation_general_purpose_reply (DBusGProxy *proxy,
-					    GError *error,
-					    gpointer user_data);
 
 G_END_DECLS
 

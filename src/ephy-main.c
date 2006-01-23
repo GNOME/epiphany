@@ -337,23 +337,46 @@ path_from_command_line_arg (const char *arg)
 }
 #endif
 
+static void
+unref_proxy_reply_cb (DBusGProxy *proxy,
+		      GError *error,
+		      gpointer user_data)
+{
+	if (error != NULL)
+	{
+		g_warning ("An error occured while calling remote method: %s", error->message);
+		g_error_free (error);
+	}
+
+	g_object_unref (proxy);
+}
+
 static gboolean
 open_urls (DBusGProxy *proxy,
 	   guint32 user_time,
 	   GError **error)
 {
 	EphyShell *shell;
+	const char *options = "new-window";
 	int i;
 	
 	shell = ephy_shell_get_default ();
+
+	if (open_in_new_window)
+	{
+		options = "new-window";
+	}
+	else if (open_in_new_tab)
+	{
+		options = "new-tab";
+	}
 
 	if (remaining_arguments == NULL)
 	{
 		/* Homepage or resume */
 		org_gnome_Epiphany_load_url_async
-			(proxy, "", FALSE, !open_in_new_tab,
-			 open_in_new_tab, user_time,
-			 ephy_activation_general_purpose_reply, NULL /* FIXME! */);
+			(proxy, "", options, user_time,
+			 unref_proxy_reply_cb, NULL /* FIXME! */);
 	}
 	else
 	{
@@ -365,9 +388,8 @@ open_urls (DBusGProxy *proxy,
 			//path = path_from_command_line_arg (args[i]);
 
 			org_gnome_Epiphany_load_url_async
-				(proxy, path, FALSE, !open_in_new_tab,
-				 open_in_new_tab, user_time,
-				 ephy_activation_general_purpose_reply, NULL /* FIXME */);
+				(proxy, path, options, user_time,
+				 unref_proxy_reply_cb, NULL /* FIXME */);
 
 			//g_free (path);
 		}
@@ -392,28 +414,14 @@ call_dbus_proxy (DBusGProxy *proxy,
 	{
 		org_gnome_Epiphany_open_bookmarks_editor_async
 			(proxy, user_time,
-			 ephy_activation_general_purpose_reply, shell);
+			 unref_proxy_reply_cb, shell);
 	}
 	else if (session_filename != NULL)
 	{
 		org_gnome_Epiphany_load_session_async
 			(proxy, session_filename, user_time,
-			 ephy_activation_general_purpose_reply, shell);
+			 unref_proxy_reply_cb, shell);
 	}
-#if 0
-	else if (flags & EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS)
-	{
-		org_gnome_Epiphany_import_bookmarks_async
-			(proxy, string_arg,
-			 ephy_activation_general_purpose_reply, shell);
-	}
-	else if (flags & EPHY_SHELL_STARTUP_ADD_BOOKMARK)
-	{
-		org_gnome_Epiphany_add_bookmark_async
-			(proxy, string_arg,
-			 ephy_activation_general_purpose_reply, shell);
-	}
-#endif
 	else
 	{
 		/* no need to open the homepage if autoresume returns TRUE;

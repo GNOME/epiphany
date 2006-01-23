@@ -1,5 +1,22 @@
 2006-01-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/epiphany-service.xml:
+	* src/ephy-activation.c: (ephy_activation_load_url),
+	(ephy_activation_open_bookmarks_editor):
+	* src/ephy-activation.h:
+
+	Removed add-bookmark and import-bookmarks functions,
+	and changed load-url to use an options string instead of
+	loads of booleans.
+	
+	* src/ephy-main.c: (unref_proxy_reply_cb), (open_urls),
+	(call_dbus_proxy):
+
+	Adapt to changed dbus call signatures.
+	Fixes open-in-new-tab/window from cmd line.
+
+2006-01-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/MozDownload.cpp:
 	* lib/ephy-file-helpers.c: (ephy_file_helpers_init),
 	(ephy_ensure_dir_exists):
