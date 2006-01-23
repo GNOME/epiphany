@@ -233,16 +233,17 @@ ephy_lockdown_init (EphyLockdown *lockdown)
 
 	LOG ("EphyLockdown initialising");
 
-	/* lockdown pref notifiers */
 	for (i = 0; i < G_N_ELEMENTS (keys); i++)
 	{
 		priv->notifier_id[i] =eel_gconf_notification_add
 			(keys[i], (GConfClientNotifyFunc) notifier, lockdown);
 	}
-
 	/* We know that no windows are open yet,
-	 * so we don't need to do anything else here.
+	 * so we don't need to do notify here.
 	 */
+
+	eel_gconf_monitor_add ("/apps/epiphany/lockdown");
+	eel_gconf_monitor_add ("/desktop/gnome/lockdown");
 }
 
 static void
@@ -253,6 +254,9 @@ ephy_lockdown_finalize (GObject *object)
 	guint i;
 
 	LOG ("EphyLockdown finalising");
+
+	eel_gconf_monitor_remove ("/apps/epiphany/lockdown");
+	eel_gconf_monitor_remove ("/desktop/gnome/lockdown");
 
 	for (i = 0; i < G_N_ELEMENTS (keys); i++)
 	{

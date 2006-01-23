@@ -28,13 +28,22 @@
 #include <string.h>
 #include <dbus/dbus-glib-bindings.h>
 
+/* dbus 0.6 API change */
+#ifndef DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT
+#define DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT 0
+#endif
+
+#define RECONNECT_DELAY	3000
+
 #define EPHY_DBUS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_DBUS, EphyDbusPrivate))
 
 struct _EphyDbusPrivate
 {
 	DBusGConnection *session_bus;
 	DBusGConnection *system_bus;
-	guint reconnect_timeout_id;
+	guint session_reconnect_timeout_id;
+	guint system_reconnect_timeout_id;
+	guint is_session_service_owner : 1;
 };
 
 enum
@@ -44,9 +53,11 @@ enum
 	LAST_SIGNAL
 };
 
-static guint signals[LAST_SIGNAL] = { 0 };
+static EphyDbus *ephy_dbus_instance;
 
-static GObjectClass *parent_class = NULL;
+static guint signals[LAST_SIGNAL];
+static GObjectClass *parent_class;
+GQuark ephy_dbus_error_quark;
 
 /* Filter signals form session bus */
 static DBusHandlerResult session_filter_func (DBusConnection *connection,
@@ -63,8 +74,8 @@ static void ephy_dbus_nm_devices_changed_cb (DBusGProxy *proxy,
 					     EphyDbus *ephy_dbus);
 
 /* Both  connect to their respective bus */
-static void ephy_dbus_connect_to_session_bus (EphyDbus *dbus);
-static void ephy_dbus_connect_to_system_bus  (EphyDbus *dbus);
+static gboolean ephy_dbus_connect_to_session_bus (EphyDbus*, GError**);
+static gboolean ephy_dbus_connect_to_system_bus  (EphyDbus*, GError**);
 
 /* implementation of the DBUS helpers */
 
@@ -72,27 +83,40 @@ static gboolean
 ephy_dbus_connect_to_session_bus_cb (gpointer user_data)
 {
 	EphyDbus *dbus = EPHY_DBUS (user_data);
-	gboolean success;
+	GError *error = NULL;
 
-	ephy_dbus_connect_to_session_bus (dbus);
-
-	success = (dbus->priv->session_bus != NULL);
-	if (success)
+	if (!ephy_dbus_connect_to_session_bus (dbus, &error))
 	{
-		dbus->priv->reconnect_timeout_id = 0;
+		g_error_free (error);
+
+		/* try again */
+		return TRUE;
 	}
 
-	return !success;
+	dbus->priv->session_reconnect_timeout_id = 0;
+
+	/* we're done */
+	return FALSE;
 }
 
 static gboolean
 ephy_dbus_connect_to_system_bus_cb (gpointer user_data)
 {
 	EphyDbus *dbus = EPHY_DBUS (user_data);
+	GError *error = NULL;
 
-	ephy_dbus_connect_to_system_bus (dbus);
+	if (!ephy_dbus_connect_to_system_bus (dbus, &error))
+	{
+		g_error_free (error);
 
-	return dbus->priv->system_bus == NULL;
+		/* try again */
+		return TRUE;
+	}
+
+	dbus->priv->system_reconnect_timeout_id = 0;
+
+	/* we're done */
+	return FALSE;
 }
 
 static DBusHandlerResult
@@ -114,8 +138,10 @@ session_filter_func (DBusConnection *connection,
 		g_signal_emit (ephy_dbus, signals[DISCONNECTED], 0, EPHY_DBUS_SESSION);
 
 		/* try to reconnect later ... */
-		ephy_dbus->priv->reconnect_timeout_id =
-			g_timeout_add (3000, (GSourceFunc) ephy_dbus_connect_to_session_bus_cb, ephy_dbus);
+		ephy_dbus->priv->session_reconnect_timeout_id =
+			g_timeout_add (RECONNECT_DELAY,
+				       (GSourceFunc) ephy_dbus_connect_to_session_bus_cb,
+				       ephy_dbus);
 
 		return DBUS_HANDLER_RESULT_HANDLED;
 	}
@@ -144,33 +170,40 @@ system_filter_func (DBusConnection *connection,
 		g_signal_emit (ephy_dbus, signals[DISCONNECTED], 0, EPHY_DBUS_SYSTEM);
 
 		/* try to reconnect later ... */
-		g_timeout_add (3000, ephy_dbus_connect_to_system_bus_cb, (gpointer) ephy_dbus);
+		ephy_dbus->priv->system_reconnect_timeout_id =
+			g_timeout_add (RECONNECT_DELAY,
+				       (GSourceFunc) ephy_dbus_connect_to_system_bus_cb,
+				       ephy_dbus);
 
 		return DBUS_HANDLER_RESULT_HANDLED;
 	}
+
 	return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
 
-static void
-ephy_dbus_connect_to_system_bus (EphyDbus *ephy_dbus)
+static gboolean
+ephy_dbus_connect_to_system_bus (EphyDbus *ephy_dbus,
+				 GError **error)
 {
 	DBusGProxy *proxy;
-	GError *error = NULL;
 
 	LOG ("EphyDbus connecting to system DBUS");
 
-	ephy_dbus->priv->system_bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	ephy_dbus->priv->system_bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, error);
 	if (ephy_dbus->priv->system_bus == NULL)
 	{
-		g_warning ("Unable to connect to system bus: %s", error->message);
-		g_error_free (error);
-		return;
+		g_warning ("Unable to connect to system bus: %s", error ? (*error)->message : "");
+		return FALSE;
 	}
 
 	if (dbus_g_connection_get_connection (ephy_dbus->priv->system_bus) == NULL)
 	{
 		g_warning ("DBus connection is null");
-		return;
+		g_set_error (error,
+			     EPHY_DBUS_ERROR_QUARK,
+			     0,
+			     "DBus connection is NULL");
+		return FALSE;
 	}
 
 	dbus_connection_set_exit_on_disconnect 
@@ -186,13 +219,6 @@ ephy_dbus_connect_to_system_bus (EphyDbus *ephy_dbus)
 					   DBUS_NETWORK_MANAGER_PATH,
 					   DBUS_NETWORK_MANAGER_INTERFACE);
 
-	if (proxy == NULL)
-	{
-		g_warning ("Unable to get DBus proxy: %s", error->message);
-		g_error_free (error);
-		return;
-	}
-
 	dbus_g_proxy_add_signal (proxy, "DevicesChanged", G_TYPE_STRING,
 				 G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy, "DevicesChanged",
@@ -202,24 +228,25 @@ ephy_dbus_connect_to_system_bus (EphyDbus *ephy_dbus)
 	g_object_unref (proxy);
 
 	g_signal_emit (ephy_dbus, signals[CONNECTED], 0, EPHY_DBUS_SYSTEM);
+
+	return TRUE;
 }
 
-static void
-ephy_dbus_connect_to_session_bus (EphyDbus *ephy_dbus)
+static gboolean
+ephy_dbus_connect_to_session_bus (EphyDbus *ephy_dbus,
+				  GError **error)
 {
 	DBusGProxy *proxy;
-	GError *error = NULL;
 	guint request_ret;
 	
 	LOG ("EphyDbus connecting to session DBUS");
 
 	/* Init the DBus connection */
-	ephy_dbus->priv->session_bus = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	ephy_dbus->priv->session_bus = dbus_g_bus_get (DBUS_BUS_SESSION, error);
 	if (ephy_dbus->priv->session_bus == NULL)
 	{
-		g_warning("Unable to connect to session bus: %s", error->message);
-		g_error_free (error);
-		return;
+		g_warning("Unable to connect to session bus: %s", error ? (*error)->message : "");
+		return FALSE;
 	}
 
 	dbus_connection_set_exit_on_disconnect 
@@ -244,43 +271,35 @@ ephy_dbus_connect_to_session_bus (EphyDbus *ephy_dbus)
 					   DBUS_PATH_DBUS,
 					   DBUS_INTERFACE_DBUS);
 
-/* dbus 0.6 dependency */
-#ifndef DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT
-#define DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT 0
-#endif
-
-	org_freedesktop_DBus_request_name (proxy,
-					   DBUS_EPHY_SERVICE,
-					   DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT,
-					   &request_ret, &error);
+	if (!org_freedesktop_DBus_request_name (proxy,
+						DBUS_EPHY_SERVICE,
+						DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT,
+						&request_ret, error))
+	{
+		/* We have a BIG problem! */
+		g_warning ("RequestName failed: %s\n", error ? (*error)->message : "");
+		return FALSE;
+	}
 
 	if (request_ret == DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 	{
-		ephy_dbus->is_session_service_owner = TRUE;
+		ephy_dbus->priv->is_session_service_owner = TRUE;
 	}
-	else 
+	else if (request_ret == DBUS_REQUEST_NAME_REPLY_EXISTS)
 	{
-		/* if the bus replied that an owner already exists, we set the
-		 * owner flag and proceed -- it means there's another epiphany
-		 * instance running and we should simply forward the requests to
-		 * it; however if it's another return code, we should (at least)
-		 * print a warning */
-		ephy_dbus->is_session_service_owner = FALSE;
-
-		if ((request_ret != DBUS_REQUEST_NAME_REPLY_EXISTS) &&
-		    (error != NULL))
-		{
-			g_warning("Unable to register service: %s", error->message);
-		}
-
+		ephy_dbus->priv->is_session_service_owner = FALSE;
 	}
-	if (error != NULL)
+	else
 	{
-		g_error_free (error);
+		/* FIXME can this happen? */
+		g_assert_not_reached ();
 	}
-	LOG ("Instance is %ssession bus owner.", ephy_dbus->is_session_service_owner ? "" : "NOT ");
+
+	LOG ("Instance is %ssession bus owner.", ephy_dbus->priv->is_session_service_owner ? "" : "NOT ");
 
 	g_object_unref (proxy);
+
+	return TRUE;
 }
 
 static void
@@ -325,28 +344,21 @@ ephy_dbus_nm_devices_changed_cb (DBusGProxy *proxy,
 
 /* Public methods */
 
-void
-ephy_dbus_startup (EphyDbus *dbus)
-{
-	g_return_if_fail (EPHY_IS_DBUS (dbus));
-
-	LOG ("EphyDbus startup");
-
-	ephy_dbus_connect_to_session_bus (dbus);
-	ephy_dbus_connect_to_system_bus (dbus);
-}
-
-void
+static void
 ephy_dbus_shutdown (EphyDbus *dbus)
 {
-	g_return_if_fail (EPHY_IS_DBUS (dbus));
-
 	LOG ("EphyDbus shutdown");
 
-	if (dbus->priv->reconnect_timeout_id != 0)
+	if (dbus->priv->session_reconnect_timeout_id != 0)
 	{
-		g_source_remove (dbus->priv->reconnect_timeout_id);
-		dbus->priv->reconnect_timeout_id = 0;
+		g_source_remove (dbus->priv->session_reconnect_timeout_id);
+		dbus->priv->session_reconnect_timeout_id = 0;
+	}
+
+	if (dbus->priv->system_reconnect_timeout_id != 0)
+	{
+		g_source_remove (dbus->priv->system_reconnect_timeout_id);
+		dbus->priv->system_reconnect_timeout_id = 0;
 	}
 
 	if (dbus->priv->session_bus)
@@ -368,50 +380,6 @@ ephy_dbus_shutdown (EphyDbus *dbus)
 	}
 }
 
-DBusGConnection *
-ephy_dbus_get_bus (EphyDbus *dbus,
-		   EphyDbusBus kind)
-{
-	DBusGConnection *bus = NULL;
-
-	g_return_val_if_fail (EPHY_IS_DBUS (dbus), NULL);
-
-	switch (kind)
-	{
-		case EPHY_DBUS_SYSTEM:
-			bus = dbus->priv->system_bus;
-			break;
-		case EPHY_DBUS_SESSION:
-			bus = dbus->priv->session_bus;
-			break;
-		default:
-			bus = dbus->priv->session_bus;
-	}
-	return bus;
-}
-
-DBusGProxy *
-ephy_dbus_get_proxy (EphyDbus *dbus,
-		     EphyDbusBus kind)
-{
-	DBusGConnection *bus = NULL;
-
-	g_return_val_if_fail (EPHY_IS_DBUS (dbus), NULL);
-	
-	bus = ephy_dbus_get_bus (dbus, kind);
-
-	if (bus == NULL)
-	{
-		g_warning ("Unable to get proxy for DBus's s bus.");
-		return NULL;
-	}
-
-	return dbus_g_proxy_new_for_name (bus,
-					  DBUS_EPHY_SERVICE,
-					  DBUS_EPHY_PATH,
-					  DBUS_EPHY_INTERFACE);
-}
-
 /* Class implementation */
 
 static void
@@ -427,6 +395,9 @@ ephy_dbus_finalize (GObject *object)
 {
 	EphyDbus *dbus = EPHY_DBUS (object);
 
+	/* Have to do this after the object's weak ref notifiers have
+	 * been called, see https://bugs.freedesktop.org/show_bug.cgi?id=5688
+	 */
 	ephy_dbus_shutdown (dbus);
 
 	LOG ("EphyDbus finalised");
@@ -494,4 +465,98 @@ ephy_dbus_get_type (void)
 	}
 
 	return type;
+}
+
+EphyDbus *
+ephy_dbus_get_default (void)
+{
+	g_assert (ephy_dbus_instance != NULL);
+
+	return ephy_dbus_instance;
+}
+
+DBusGConnection *
+ephy_dbus_get_bus (EphyDbus *dbus,
+		   EphyDbusBus kind)
+{
+	DBusGConnection *bus = NULL;
+
+	g_return_val_if_fail (EPHY_IS_DBUS (dbus), NULL);
+
+	if (kind == EPHY_DBUS_SYSTEM)
+	{
+		/* We connect lazily to the system bus */
+		if (dbus->priv->system_bus == NULL)
+		{
+			ephy_dbus_connect_to_system_bus (dbus, NULL);
+		}
+		bus = dbus->priv->system_bus;
+	}
+	else if (kind == EPHY_DBUS_SESSION)
+	{
+		bus = dbus->priv->session_bus;
+	}
+	else
+	{
+		g_assert_not_reached ();
+	}
+
+	g_assert (bus != NULL);
+
+	return bus;
+}
+
+DBusGProxy *
+ephy_dbus_get_proxy (EphyDbus *dbus,
+		     EphyDbusBus kind)
+{
+	DBusGConnection *bus = NULL;
+
+	g_return_val_if_fail (EPHY_IS_DBUS (dbus), NULL);
+	
+	bus = ephy_dbus_get_bus (dbus, kind);
+
+	if (bus == NULL)
+	{
+		g_warning ("Unable to get proxy for the %s bus.\n",
+			   kind == EPHY_DBUS_SESSION ? "session" : "system");
+		return NULL;
+	}
+
+	return dbus_g_proxy_new_for_name (bus,
+					  DBUS_EPHY_SERVICE,
+					  DBUS_EPHY_PATH,
+					  DBUS_EPHY_INTERFACE);
+}
+
+/* private API */
+
+gboolean
+_ephy_dbus_startup (GError **error)
+{
+	g_assert (ephy_dbus_instance == NULL);
+
+	ephy_dbus_error_quark = g_quark_from_static_string ("ephy-dbus-error");
+		
+	ephy_dbus_instance = g_object_new (EPHY_TYPE_DBUS, NULL);
+
+	/* We only connect to the session bus on startup*/
+	return ephy_dbus_connect_to_session_bus (ephy_dbus_instance, error);
+}
+
+void
+_ephy_dbus_release (void)
+{
+	g_assert (ephy_dbus_instance != NULL);
+
+	g_object_unref (ephy_dbus_instance);
+	ephy_dbus_instance = NULL;
+}
+
+gboolean
+_ephy_dbus_is_name_owner (void)
+{
+	g_assert (ephy_dbus_instance != NULL);
+
+	return ephy_dbus_instance->priv->is_session_service_owner;
 }

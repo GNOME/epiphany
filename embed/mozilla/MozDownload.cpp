@@ -777,7 +777,7 @@ GetFilePath (const char *filename)
 
 	download_dir = ephy_file_get_downloads_dir ();
 
-	if (ephy_ensure_dir_exists (download_dir))
+	if (ephy_ensure_dir_exists (download_dir, NULL))
 	{
 		path = g_build_filename (download_dir, filename, NULL);
 	}

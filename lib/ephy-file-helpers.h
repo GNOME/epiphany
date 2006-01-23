@@ -27,6 +27,9 @@
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 #include <libgnomevfs/gnome-vfs-ops.h>
 
+extern GQuark ephy_file_helpers_error_quark;
+#define EPHY_FILE_HELPERS_ERROR_QUARK	(ephy_file_helpers_error_quark)
+
 G_BEGIN_DECLS
 
 typedef enum
@@ -44,7 +47,7 @@ const char *ephy_file                    (const char *filename);
 
 const char *ephy_dot_dir                 (void);
 
-void        ephy_file_helpers_init       (void);
+gboolean    ephy_file_helpers_init       (GError **error);
 
 void        ephy_file_helpers_shutdown   (void);
 
@@ -59,7 +62,8 @@ const char *ephy_file_tmp_dir	 	 (void);
 char       *ephy_file_tmp_filename	 (const char *base,
 					  const char *extension);
 
-gboolean    ephy_ensure_dir_exists       (const char *dir);
+gboolean    ephy_ensure_dir_exists       (const char *dir,
+					  GError **);
 
 GSList     *ephy_file_find               (const char *path,
 				          const char *fname,

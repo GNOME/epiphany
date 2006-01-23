@@ -1,5 +1,51 @@
 2006-01-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/MozDownload.cpp:
+	* lib/ephy-file-helpers.c: (ephy_file_helpers_init),
+	(ephy_ensure_dir_exists):
+	* lib/ephy-file-helpers.h:
+
+	Add a GError** to ephy_file_helpers_init and ephy_ensure_dir_exists,
+	so we can show the error to the user in main().
+
+	* src/ephy-dbus.c: (ephy_dbus_connect_to_session_bus_cb),
+	(ephy_dbus_connect_to_system_bus_cb), (session_filter_func),
+	(system_filter_func), (ephy_dbus_connect_to_system_bus),
+	(ephy_dbus_connect_to_session_bus), (ephy_dbus_shutdown),
+	(ephy_dbus_finalize), (ephy_dbus_get_type),
+	(ephy_dbus_get_default), (ephy_dbus_get_bus),
+	(ephy_dbus_get_proxy), (_ephy_dbus_startup), (_ephy_dbus_release),
+	(_ephy_dbus_is_name_owner):
+	* src/ephy-dbus.h:
+
+	Refactored. Propagate errors to callers via GError**, and change
+	lifecycle to the app lifetime.
+
+	* src/ephy-lockdown.c: (ephy_lockdown_init),
+	(ephy_lockdown_finalize):
+
+	Move gconf notification add/remove for the lockdown key dirs 
+	here from main().
+
+	* src/ephy-shell.c: (ephy_shell_dispose),
+	(_ephy_shell_create_instance):
+	* src/ephy-shell.h:
+	* src/epiphany.defs:
+
+	Remove ephy_shell_startup and related stuff.
+
+	* src/ephy-main.c: (handle_url), (handle_email),
+	(shell_weak_notify), (dbus_g_proxy_finalized_cb),
+	(save_yourself_cb), (die_cb), (gnome_session_init),
+	(path_from_command_line_arg), (open_urls), (call_dbus_proxy),
+	(show_error_message), (main):
+
+	Move all startup code to main(), so we can show errors to
+	the user instead of crashing when things go wrong.
+	Part of bug #326807.
+
+2006-01-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/EphyPromptService.cpp:
 
 	Invert button order. Bug #327381.

@@ -404,32 +404,6 @@
   )
 )
 
-(define-enum ShellError
-  (in-module "Ephy")
-  (c-name "EphyShellError")
-  (gtype-id "EPHY_TYPE_SHELL_ERROR")
-  (values
-    '("missing-server" "EPHY_SHELL_ERROR_MISSING_SERVER")
-    '("object-reg-failed" "EPHY_SHELL_ERROR_OBJECT_REG_FAILED")
-    '("factory-reg-failed" "EPHY_SHELL_ERROR_FACTORY_REG_FAILED")
-  )
-)
-
-(define-flags ShellStartupFlags
-  (in-module "Ephy")
-  (c-name "EphyShellStartupFlags")
-  (gtype-id "EPHY_TYPE_SHELL_STARTUP_FLAGS")
-  (values
-    '("tabs" "EPHY_SHELL_STARTUP_TABS")
-    '("existing-window" "EPHY_SHELL_STARTUP_EXISTING_WINDOW")
-    '("fullscreen" "EPHY_SHELL_STARTUP_FULLSCREEN")
-    '("bookmarks-editor" "EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR")
-    '("session" "EPHY_SHELL_STARTUP_SESSION")
-    '("import-bookmarks" "EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS")
-    '("add-bookmark" "EPHY_SHELL_STARTUP_ADD_BOOKMARK")
-  )
-)
-
 (define-flags NewTabFlags
   (in-module "Ephy")
   (c-name "EphyNewTabFlags")
@@ -3033,16 +3007,6 @@
 
 ;; From ../../src/ephy-shell.h
 
-(define-function ephy_shell_error_get_type
-  (c-name "ephy_shell_error_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_shell_startup_flags_get_type
-  (c-name "ephy_shell_startup_flags_get_type")
-  (return-type "GType")
-)
-
 (define-function ephy_new_tab_flags_get_type
   (c-name "ephy_new_tab_flags_get_type")
   (return-type "GType")
@@ -3051,11 +3015,6 @@
 (define-function ephy_shell_get_type
   (c-name "ephy_shell_get_type")
   (return-type "GType")
-)
-
-(define-function ephy_shell_error_quark
-  (c-name "ephy_shell_error_quark")
-  (return-type "GQuark")
 )
 
 (define-function ephy_shell_get_default
@@ -3067,19 +3026,6 @@
   (c-name "ephy_shell_new")
   (is-constructor-of "EphyShell")
   (return-type "EphyShell*")
-)
-
-(define-method startup
-  (of-object "EphyShell")
-  (c-name "ephy_shell_startup")
-  (return-type "gboolean")
-  (parameters
-    '("EphyShellStartupFlags" "flags")
-    '("guint32" "user_time")
-    '("const-char**" "args")
-    '("const-char*" "string_arg")
-    '("GError**" "error")
-  )
 )
 
 (define-method new_tab
@@ -3515,16 +3461,6 @@
 
 (define-function ephy_link_flags_get_type
   (c-name "ephy_link_flags_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_shell_error_get_type
-  (c-name "ephy_shell_error_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_shell_startup_flags_get_type
-  (c-name "ephy_shell_startup_flags_get_type")
   (return-type "GType")
 )
 

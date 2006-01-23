@@ -63,6 +63,8 @@ static char *dot_dir = NULL;
 static char *tmp_dir = NULL;
 static GList *del_on_exit = NULL;
 
+GQuark ephy_file_helpers_error_quark;
+
 const char *
 ephy_file_tmp_dir (void)
 {
@@ -260,8 +262,8 @@ ephy_dot_dir (void)
 	return dot_dir;
 }
 
-void
-ephy_file_helpers_init (void)
+gboolean
+ephy_file_helpers_init (GError **error)
 {
 	const char *uuid;
 
@@ -276,10 +278,14 @@ ephy_file_helpers_init (void)
 	/* Put marker in env */
 	g_setenv (EPHY_UUID_ENVVAR, EPHY_UUID, TRUE);
 
+	ephy_file_helpers_error_quark = g_quark_from_static_string ("ephy-file-helpers-error");
+
 	files = g_hash_table_new_full (g_str_hash,
 				       g_str_equal,
 				       (GDestroyNotify) g_free,
 				       (GDestroyNotify) g_free);
+
+	return ephy_ensure_dir_exists (ephy_dot_dir (), error);
 }
 
 static void
@@ -321,21 +327,29 @@ ephy_file_helpers_shutdown (void)
 }
 
 gboolean
-ephy_ensure_dir_exists (const char *dir)
+ephy_ensure_dir_exists (const char *dir,
+		        GError **error)
 {
-	if (g_file_test (dir, G_FILE_TEST_IS_DIR) == FALSE)
+	if (g_file_test (dir, G_FILE_TEST_EXISTS) &&
+	    !g_file_test (dir, G_FILE_TEST_IS_DIR))
 	{
-		if (g_file_test (dir, G_FILE_TEST_EXISTS) == TRUE)
-		{
-			g_warning (_("\"%s\" exists, please move it out of the way."), dir);
-			return FALSE;
-		}
+		g_set_error (error,
+			     EPHY_FILE_HELPERS_ERROR_QUARK,
+			     0,
+			     _("“%s” exists, please move it out of the way."),
+			     dir);
+		return FALSE;
+	}
 
-		if (mkdir (dir, 488) != 0)
-		{
-			g_warning (_("Failed to create directory \"%s\"."), dir);
-			return FALSE;
-		}
+	if (!g_file_test (dir, G_FILE_TEST_EXISTS) &&
+            mkdir (dir, 488) != 0)
+	{
+		g_set_error (error,
+			     EPHY_FILE_HELPERS_ERROR_QUARK,
+			     0,
+			     _("Failed to create directory “%s”."),
+			     dir);
+		return FALSE;
 	}
 
 	return TRUE;

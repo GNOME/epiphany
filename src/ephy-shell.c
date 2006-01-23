@@ -47,19 +47,12 @@
 #include "print-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
-#include "ephy-dbus.h"
-#include "ephy-dbus-client-bindings.h"
-#include "ephy-activation.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtkmessagedialog.h>
 #include <gtk/gtknotebook.h>
 #include <dirent.h>
 #include <unistd.h>
-#include <libgnomeui/gnome-client.h>
 
 #define AUTOMATION_IID "OAFIID:GNOME_Epiphany_Automation"
 
@@ -73,7 +66,6 @@ struct _EphyShellPrivate
 	EggToolbarsModel *toolbars_model;
 	EggToolbarsModel *fs_toolbars_model;
 	EphyExtensionsManager *extensions_manager;
-	GObject *dbus_service;
 	GtkWidget *bme;
 	GtkWidget *history_window;
 	GObject *pdm_dialog;
@@ -92,19 +84,6 @@ static void ephy_shell_finalize		(GObject *object);
 static GObject *impl_get_embed_single   (EphyEmbedShell *embed_shell);
 
 static GObjectClass *parent_class = NULL;
-
-GQuark
-ephy_shell_error_quark (void)
-{
-	static GQuark q = 0;
-
-	if (q == 0)
-	{
-		q = g_quark_from_static_string ("ephy-shell-error-quark");
-	}
-
-	return q;
-}
 
 GType
 ephy_shell_get_type (void)
@@ -268,213 +247,6 @@ ephy_shell_init (EphyShell *shell)
 				   (gpointer *)ptr);
 }
 
-static char *
-path_from_command_line_arg (const char *arg)
-{
-	char path[PATH_MAX];
-
-	if (realpath (arg, path) != NULL)
-	{
-		return g_strdup (path);
-	}
-	else
-	{
-		return g_strdup (arg);
-	}
-}
-
-static void
-open_urls (DBusGProxy *proxy,
-	   guint32 user_time,
-	   const char **args,
-	   gboolean new_tab,
-	   gboolean existing_window,
-	   gboolean fullscreen)
-{
-	int i;
-
-	if (args == NULL)
-	{
-		/* Homepage or resume */
-		org_gnome_Epiphany_load_url_async
-			(proxy, "", fullscreen, existing_window, new_tab,
-			 user_time, ephy_activation_general_purpose_reply,
-			 NULL);
-	}
-	else
-	{
-		for (i = 0; args[i] != NULL; i++)
-		{
-			char *path;
-
-			path = path_from_command_line_arg (args[i]);
-
-			org_gnome_Epiphany_load_url_async
-				(proxy, path, fullscreen, existing_window,
-				 new_tab, user_time,
-				 ephy_activation_general_purpose_reply, NULL);
-
-			g_free (path);
-		}
-	}
-}
-
-static gboolean
-save_yourself_cb (GnomeClient *client,
-		  gint phase,
-		  GnomeSaveStyle save_style,
-		  gboolean shutdown,
-		  GnomeInteractStyle interact_style,
-		  gboolean fast,
-		  EphyShell *shell)
-{
-	char *argv[] = { NULL, "--load-session", NULL };
-	char *discard_argv[] = { "rm", "-f", NULL };
-	EphySession *session;
-	char *tmp, *save_to;
-
-	LOG ("save_yourself_cb");
-
-	tmp = g_build_filename (ephy_dot_dir (),
-				"session_gnome-XXXXXX",
-				NULL);
-	save_to = ephy_file_tmp_filename (tmp, "xml");
-	g_free (tmp);
-
-	session = EPHY_SESSION (ephy_shell_get_session (shell));
-
-	argv[0] = g_get_prgname ();
-	argv[2] = save_to;
-	gnome_client_set_restart_command
-		(client, 3, argv);
-
-	discard_argv[2] = save_to;
-	gnome_client_set_discard_command (client, 3,
-					  discard_argv);
-
-	ephy_session_save (session, save_to);
-
-	g_free (save_to);
-
-	return TRUE;
-}
-
-static void
-die_cb (GnomeClient* client,
-	EphyShell *shell)
-{
-	EphySession *session;
-
-	LOG ("die_cb");
-
-	session = EPHY_SESSION (ephy_shell_get_session (shell));
-	ephy_session_close (session);
-}
-
-static void
-dbus_g_proxy_finalized_cb (EphyShell *ephy_shell,
-			   GObject *where_the_object_was)
-{
-	g_object_unref (ephy_shell);
-}
-
-static void
-gnome_session_init (EphyShell *shell)
-{
-	GnomeClient *client;
-
-	client = gnome_master_client ();
-
-	g_signal_connect_object (client, "save_yourself",
-				 G_CALLBACK (save_yourself_cb), shell, 0);
-	/* don't use connect_object here, since that will ref the shell
-	 * while dispatching the callbacks!
-	 */
-	g_signal_connect (client, "die",
-			  G_CALLBACK (die_cb), shell);
-}
-
-gboolean
-ephy_shell_startup (EphyShell *shell,
-		    EphyShellStartupFlags flags,
-		    guint32 user_time,
-		    const char **args,
-		    const char *string_arg,
-		    GError **error)
-{
-	EphyDbus *ephy_dbus;
-	DBusGProxy *proxy;
-
-	ephy_ensure_dir_exists (ephy_dot_dir ());
-
-	ephy_dbus = EPHY_DBUS (ephy_shell_get_dbus_service (shell));
-	g_assert (ephy_dbus != NULL);
-
-	proxy = ephy_dbus_get_proxy (ephy_dbus, EPHY_DBUS_SESSION);
-	if (proxy == NULL)
-	{
-		g_warning ("Unable to get DBus proxy; aborting activation.");
-		gdk_notify_startup_complete ();
-		return FALSE;
-	}
-	g_object_ref (ephy_shell);
-	g_object_weak_ref (G_OBJECT (proxy),
-			   (GWeakNotify) dbus_g_proxy_finalized_cb,
-			   ephy_shell);
-
-	if (ephy_dbus->is_session_service_owner == TRUE)
-	{
-		LOG ("Instance is session service owner");
-
-		/* init the session manager up here so we can quit while the resume dialogue is on */
-		gnome_session_init (shell);
-	}
-
-	if (flags & EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR)
-	{
-		org_gnome_Epiphany_open_bookmarks_editor_async
-			(proxy, user_time,
-			 ephy_activation_general_purpose_reply, ephy_shell);
-	}
-	else if (flags & EPHY_SHELL_STARTUP_SESSION)
-	{
-		org_gnome_Epiphany_load_session_async
-			(proxy, string_arg, user_time,
-			 ephy_activation_general_purpose_reply, ephy_shell);
-	}
-	else if (flags & EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS)
-	{
-		org_gnome_Epiphany_import_bookmarks_async
-			(proxy, string_arg,
-			 ephy_activation_general_purpose_reply, ephy_shell);
-	}
-	else if (flags & EPHY_SHELL_STARTUP_ADD_BOOKMARK)
-	{
-		org_gnome_Epiphany_add_bookmark_async
-			(proxy, string_arg,
-			 ephy_activation_general_purpose_reply, ephy_shell);
-	}
-	else
-	{
-		/* no need to open the homepage if autoresume returns TRUE;
-		 * we already opened session windows */
-		if ((ephy_dbus->is_session_service_owner == FALSE) ||
-		    (ephy_session_autoresume
-			(EPHY_SESSION (ephy_shell_get_session (ephy_shell)),
-			 user_time) == FALSE))
-		{
-			open_urls (proxy, user_time, args,
-				   flags & EPHY_SHELL_STARTUP_TABS,
-				   flags & EPHY_SHELL_STARTUP_EXISTING_WINDOW,
-				   flags & EPHY_SHELL_STARTUP_FULLSCREEN);
-		}
-	}
-
-	dbus_g_connection_flush (ephy_dbus_get_bus (ephy_dbus, EPHY_DBUS_SESSION));
-	gdk_notify_startup_complete ();
-	return ephy_dbus->is_session_service_owner;
-}
-
 static void
 ephy_shell_dispose (GObject *object)
 {
@@ -489,13 +261,6 @@ ephy_shell_dispose (GObject *object)
 		/* this will unload the extensions */
 		g_object_unref (priv->extensions_manager);
 		priv->extensions_manager = NULL;
-	}
-
-	if (priv->dbus_service != NULL)
-	{
-		LOG ("Shutting down DBUS service");
-		g_object_unref (priv->dbus_service);
-		priv->dbus_service = NULL;
 	}
 
 	if (priv->session != NULL)
@@ -590,12 +355,6 @@ EphyShell *
 ephy_shell_get_default (void)
 {
 	return ephy_shell;
-}
-
-EphyShell *
-ephy_shell_new (void)
-{
-	return EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL, NULL));
 }
 
 static gboolean
@@ -1021,16 +780,13 @@ ephy_shell_get_print_setup_dialog (EphyShell *shell)
 	return shell->priv->print_setup_dialog;
 }
 
-GObject	*
-ephy_shell_get_dbus_service (EphyShell *shell)
+void
+_ephy_shell_create_instance (void)
 {
-	g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+	g_assert (ephy_shell == NULL);
 
-	if (shell->priv->dbus_service == NULL)
-	{
-		shell->priv->dbus_service = g_object_new (EPHY_TYPE_DBUS, NULL);
-		ephy_dbus_startup (EPHY_DBUS (shell->priv->dbus_service));
-	}
+	ephy_shell = EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL, NULL));
+	/* FIXME weak ref */
 
-	return G_OBJECT (shell->priv->dbus_service);
+	g_assert (ephy_shell != NULL);
 }

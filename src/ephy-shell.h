@@ -45,26 +45,6 @@ typedef struct _EphyShellPrivate	EphyShellPrivate;
 
 extern EphyShell *ephy_shell;
 
-#define EPHY_SHELL_ERROR ephy_shell_error_quark ()
-
-typedef enum
-{
-	EPHY_SHELL_ERROR_MISSING_SERVER,
-	EPHY_SHELL_ERROR_OBJECT_REG_FAILED,
-	EPHY_SHELL_ERROR_FACTORY_REG_FAILED
-} EphyShellError;
-
-typedef enum
-{
-	EPHY_SHELL_STARTUP_TABS			= 1 << 0,
-	EPHY_SHELL_STARTUP_EXISTING_WINDOW	= 1 << 2,
-	EPHY_SHELL_STARTUP_FULLSCREEN		= 1 << 3,
-	EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR	= 1 << 4,
-	EPHY_SHELL_STARTUP_SESSION		= 1 << 5,
-	EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS	= 1 << 6,
-	EPHY_SHELL_STARTUP_ADD_BOOKMARK		= 1 << 7
-} EphyShellStartupFlags;
-
 typedef enum
 {
 	/* Page types */
@@ -97,26 +77,11 @@ struct _EphyShellClass
 	EphyEmbedShellClass parent_class;
 };
 
-GType		ephy_shell_error_get_type		(void) G_GNUC_CONST;
-
-GType		ephy_shell_startup_flags_get_type	(void) G_GNUC_CONST;
-
 GType		ephy_new_tab_flags_get_type		(void) G_GNUC_CONST;
 
 GType		ephy_shell_get_type			(void);
 
-GQuark		ephy_shell_error_quark			(void);
-
 EphyShell      *ephy_shell_get_default			(void);
-
-EphyShell      *ephy_shell_new				(void);
-
-gboolean	ephy_shell_startup			(EphyShell *shell,
-							 EphyShellStartupFlags flags,
-							 guint32 user_time,
-							 const char **args,
-							 const char *string_arg,
-							 GError **error);
 
 EphyTab	       *ephy_shell_new_tab			(EphyShell *shell,
 							 EphyWindow *parent_window,
@@ -153,6 +118,10 @@ GObject        *ephy_shell_get_prefs_dialog		(EphyShell *shell);
 GObject	       *ephy_shell_get_print_setup_dialog	(EphyShell *shell);
 
 GObject	       *ephy_shell_get_dbus_service		(EphyShell *shell);
+
+/* private API */
+
+void	       _ephy_shell_create_instance		(void);
 
 G_END_DECLS
 
