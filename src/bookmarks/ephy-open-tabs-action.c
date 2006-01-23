@@ -77,6 +77,7 @@ node_added_cb (EphyNode *parent, EphyNode *child, GObject *object)
 	gtk_action_group_add_action (actions, action);
 	g_object_unref (action);
 	g_free (accel);
+	g_free (name);
 }
 
 static void
