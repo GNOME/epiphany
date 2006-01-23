@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 1.9.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-19 14:09+0100\n"
-"PO-Revision-Date: 2006-01-19 14:14+0100\n"
+"POT-Creation-Date: 2006-01-23 11:14+0100\n"
+"PO-Revision-Date: 2006-01-23 11:19+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -251,7 +251,9 @@ msgstr "Hjemmeside"
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
-msgstr "Presentasjon av animerte bilder. Mulige verdier er «normal», «once», og «disabled»."
+msgstr ""
+"Presentasjon av animerte bilder. Mulige verdier er «normal», «once», og "
+"«disabled»."
 
 #: ../data/epiphany.schemas.in.h:20
 msgid "ISO-8859-1"
@@ -711,7 +713,7 @@ msgid "Use custom _stylesheet"
 msgstr "Bruk egendefinert _stilark"
 
 #: ../data/glade/prefs-dialog.glade.h:31
-#: ../src/bookmarks/ephy-bookmark-properties.c:596
+#: ../src/bookmarks/ephy-bookmark-properties.c:404
 msgid "_Address:"
 msgstr "_Adresse:"
 
@@ -825,7 +827,7 @@ msgstr ""
 "%s av %s"
 
 #: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#: ../src/ephy-window.c:1469
+#: ../src/ephy-window.c:1467
 msgid "Unknown"
 msgstr "Ukjent"
 
@@ -848,7 +850,7 @@ msgstr "Ukjent"
 msgid "download status|Failed"
 msgstr "Feilet"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:803
+#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:808
 msgid "File"
 msgstr "Fil"
 
@@ -1247,15 +1249,15 @@ msgstr "Ukrainsk"
 msgid "Unknown (%s)"
 msgstr "Ukjent (%s)"
 
-#: ../embed/ephy-history.c:550 ../src/bookmarks/ephy-bookmark-properties.c:613
+#: ../embed/ephy-history.c:558 ../src/bookmarks/ephy-bookmark-properties.c:413
 msgid "All"
 msgstr "Alle"
 
-#: ../embed/ephy-history.c:713
+#: ../embed/ephy-history.c:721
 msgid "Others"
 msgstr "Andre"
 
-#: ../embed/ephy-history.c:719
+#: ../embed/ephy-history.c:727
 msgid "Local files"
 msgstr "Lokale filer"
 
@@ -2005,7 +2007,7 @@ msgstr "_Til:"
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Slutten på sideområdet som skal skrives ut"
 
-#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1289
+#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1287
 msgid "Print"
 msgstr "Skriv ut"
 
@@ -2264,8 +2266,8 @@ msgid "History"
 msgstr "Historie"
 
 #: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1535
-#: ../src/bookmarks/ephy-topic-action.c:402 ../src/ephy-window.c:1295
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1540
+#: ../src/bookmarks/ephy-topic-action.c:402 ../src/ephy-window.c:1293
 msgid "Bookmarks"
 msgstr "Bokmerker"
 
@@ -2348,52 +2350,32 @@ msgstr ""
 "Dette tillegget håndterer «.desktop» filer som inneholder lenker til "
 "nettsteder."
 
-#: ../src/bookmarks/ephy-bookmark-action.c:287
+#: ../src/bookmarks/ephy-bookmark-action.c:285
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
 # (ugh)
-#: ../src/bookmarks/ephy-bookmark-properties.c:294
+#: ../src/bookmarks/ephy-bookmark-properties.c:286
 #, c-format
 msgid "“%s” Properties"
 msgstr "Egenskaper for «%s»"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:433
-msgid "Open Icon"
-msgstr "Åpne ikon"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:506
-msgid "From file..."
-msgstr "Fra fil..."
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:508
-msgid "None"
-msgstr "Ingen"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:509 ../src/prefs-dialog.c:412
-msgid "Default"
-msgstr "Forvalgt"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:581
+#: ../src/bookmarks/ephy-bookmark-properties.c:389
 msgid "_Title:"
 msgstr "_Tittel:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:604
-msgid "I_con:"
-msgstr "I_kon:"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:614
+#: ../src/bookmarks/ephy-bookmark-properties.c:414
 #: ../src/bookmarks/ephy-topics-palette.c:274
 msgid "Subtopics"
 msgstr "Underemner"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:615
+#: ../src/bookmarks/ephy-bookmark-properties.c:415
 msgid "T_opics:"
 msgstr "Em_ner:"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmark-properties.c:650
+#: ../src/bookmarks/ephy-bookmark-properties.c:450
 #: ../src/bookmarks/ephy-bookmarks-editor.c:171
 msgid "_New Topic"
 msgstr "_Nytt emne"
@@ -2429,7 +2411,7 @@ msgstr "Opprett et nytt emne"
 
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:174
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1164
 #: ../src/bookmarks/ephy-bookmarks-ui.c:268 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
@@ -2442,7 +2424,7 @@ msgid "Open the selected bookmark in a new window"
 msgstr "Åpne valgte bokmerker i et nytt vindu"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:177
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1162
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1167
 #: ../src/bookmarks/ephy-bookmarks-ui.c:257 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
@@ -2517,7 +2499,7 @@ msgid "Cut the selection"
 msgstr "Klipp ut utvalget"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1177
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:167
 msgid "_Copy"
@@ -2688,38 +2670,38 @@ msgstr "Epiphany (RDF)"
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
+#: ../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "Import Bookmarks"
 msgstr "Importer bokmerker"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:769
+#: ../src/bookmarks/ephy-bookmarks-editor.c:774
 msgid "I_mport"
 msgstr "I_mport"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:783
+#: ../src/bookmarks/ephy-bookmarks-editor.c:788
 msgid "Import bookmarks from:"
 msgstr "Importer bokmerker fra:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1173
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "_Kopier adresse"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1402
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1407
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Søk:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1597
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1602
 msgid "Topics"
 msgstr "Emner"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1667
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1672
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Tittel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1673
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1678
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Adresse"
@@ -3135,6 +3117,20 @@ msgstr "Sidelinjetillegg kreves"
 #: ../src/ephy-shell.c:222
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Lenken du klikket på krever at sidelinjetillegget er installert."
+
+#. Translators: this is displayed in the statusbar; choose a short word
+#. * or even an abbreviation.
+#.
+#: ../src/ephy-statusbar.c:114
+msgid "Caret"
+msgstr "Markør"
+
+#. Translators: this is the tooltip on the "Caret" icon
+#. * in the statusbar.
+#.
+#: ../src/ephy-statusbar.c:122
+msgid "In keyboard selection mode, press F7 to exit"
+msgstr "I tastaturutvalgsmodus. Trykk F7 for å avslutte"
 
 #: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2264 ../src/ephy-tab.c:2299
 msgid "Blank page"
@@ -3712,101 +3708,101 @@ msgstr "Hvis du lukker dokumentet likevel vil du miste denne informasjonen."
 msgid "Close _Document"
 msgstr "Lukk _dokument"
 
-#: ../src/ephy-window.c:1285 ../src/window-commands.c:279
+#: ../src/ephy-window.c:1283 ../src/window-commands.c:279
 msgid "Open"
 msgstr "Åpne"
 
-#: ../src/ephy-window.c:1287 ../src/window-commands.c:305
+#: ../src/ephy-window.c:1285 ../src/window-commands.c:305
 msgid "Save As"
 msgstr "Lagre som"
 
-#: ../src/ephy-window.c:1291
+#: ../src/ephy-window.c:1289
 msgid "Bookmark"
 msgstr "Bokmerke"
 
-#: ../src/ephy-window.c:1293
+#: ../src/ephy-window.c:1291
 msgid "Find"
 msgstr "Finn"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1306
+#: ../src/ephy-window.c:1304
 msgid "Larger"
 msgstr "Større"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1309
+#: ../src/ephy-window.c:1307
 msgid "Smaller"
 msgstr "Mindre"
 
-#: ../src/ephy-window.c:1472
+#: ../src/ephy-window.c:1470
 msgid "Insecure"
 msgstr "Usikker"
 
-#: ../src/ephy-window.c:1477
+#: ../src/ephy-window.c:1475
 msgid "Broken"
 msgstr "Ødelagt"
 
-#: ../src/ephy-window.c:1490
+#: ../src/ephy-window.c:1488
 msgid "Low"
 msgstr "Lav"
 
-#: ../src/ephy-window.c:1497
+#: ../src/ephy-window.c:1495
 msgid "High"
 msgstr "Høy"
 
-#: ../src/ephy-window.c:1507
+#: ../src/ephy-window.c:1505
 #, c-format
 msgid "Security level: %s"
 msgstr "Sikkerhetsnivå: %s"
 
-#: ../src/ephy-window.c:1547
+#: ../src/ephy-window.c:1545
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d skjult sprettoppvindu"
 msgstr[1] "%d skjulte sprettoppvinduer"
 
-#: ../src/ephy-window.c:1842
+#: ../src/ephy-window.c:1840
 #, c-format
 msgid "Open image “%s”"
 msgstr "Åpne bilde «%s»"
 
-#: ../src/ephy-window.c:1847
+#: ../src/ephy-window.c:1845
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Bruk som bakgrunn på skrivebordet «%s»"
 
-#: ../src/ephy-window.c:1852
+#: ../src/ephy-window.c:1850
 #, c-format
 msgid "Save image “%s”"
 msgstr "Lagre bilde «%s»"
 
-#: ../src/ephy-window.c:1857
+#: ../src/ephy-window.c:1855
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopier adressen til bildet «%s»"
 
-#: ../src/ephy-window.c:1870
+#: ../src/ephy-window.c:1868
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Send e-post til adresse «%s»"
 
-#: ../src/ephy-window.c:1876
+#: ../src/ephy-window.c:1874
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopier e-postadresse «%s»"
 
-#: ../src/ephy-window.c:1888
+#: ../src/ephy-window.c:1886
 #, c-format
 msgid "Save link “%s”"
 msgstr "Lagre lenke «%s»"
 
-#: ../src/ephy-window.c:1894
+#: ../src/ephy-window.c:1892
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Lag bokmerke av lenke «%s»"
 
-#: ../src/ephy-window.c:1900
+#: ../src/ephy-window.c:1898
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopier lenkens adresse «%s»"
@@ -3916,6 +3912,10 @@ msgstr "Lukk"
 msgid "Close print preview"
 msgstr "Lukk forhåndsvisning av utskrift"
 
+#: ../src/prefs-dialog.c:412
+msgid "Default"
+msgstr "Forvalgt"
+
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. * Translators: the first %s is the language name, and the
@@ -3967,6 +3967,29 @@ msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> eller <gnome-doc-list@gnome.org>"
 
 #: ../src/window-commands.c:733
+msgid ""
+"The GNOME Web Browser is free software; you can redistribute it and/or "
+"modify it under the terms of the GNU General Public License as published by "
+"the Free Software Foundation; either version 2 of the License, or (at your "
+"option) any later version."
+msgstr ""
+
+#: ../src/window-commands.c:737
+msgid ""
+"The GNOME Web Browser is distributed in the hope that it will be useful, but "
+"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
+"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details."
+msgstr ""
+
+#: ../src/window-commands.c:741
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
+"59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
+msgstr ""
+
+#: ../src/window-commands.c:752
 msgid "GNOME Web Browser"
 msgstr "GNOME Nettleser"
 
@@ -3978,10 +4001,10 @@ msgstr "GNOME Nettleser"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:747
+#: ../src/window-commands.c:766
 msgid "translator-credits"
 msgstr "Kjartan Maraas <kmaraas@gnome.org>"
 
-#: ../src/window-commands.c:750
+#: ../src/window-commands.c:769
 msgid "GNOME Web Browser Website"
 msgstr "Nettsted for GNOME Nettleser"
