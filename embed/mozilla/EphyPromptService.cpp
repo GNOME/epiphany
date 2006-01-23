@@ -103,6 +103,7 @@ private:
 	PRInt32 mNumButtons;
 	PRInt32 mNumEntries;
 	PRInt32 mDefaultResponse;
+	PRInt32 mUnaffirmativeResponse;
 	PRInt32 mResponse;
 	PRBool mSuccess;
 	PRBool mDelay;
@@ -120,6 +121,7 @@ Prompter::Prompter (const char *aStock,
 	, mNumButtons(0)
 	, mNumEntries(0)
 	, mDefaultResponse(GTK_RESPONSE_ACCEPT)
+	, mUnaffirmativeResponse(0)
 	, mResponse(GTK_RESPONSE_CANCEL)
 	, mSuccess(PR_FALSE)
 	, mDelay(PR_FALSE)
@@ -268,6 +270,7 @@ Prompter::AddButtonWithFlags (PRInt32 aNum,
 		case nsIPromptService::BUTTON_TITLE_IS_STRING:
 		default:
 			label = freeme = ConvertAndEscapeButtonText (aText, MAX_BUTTON_TEXT_LENGTH);
+			/* We can't tell, so assume it's affirmative */
 			isAffirmative = TRUE;
 			break;
 	}
@@ -280,6 +283,11 @@ Prompter::AddButtonWithFlags (PRInt32 aNum,
 	if (isAffirmative && mDelay)
 	{
 		gtk_dialog_set_response_sensitive (mDialog, aNum, FALSE);
+	}
+
+	if (!isAffirmative)
+	{
+		mUnaffirmativeResponse = aNum;
 	}
 
 	if (aDefault)
@@ -297,13 +305,25 @@ Prompter::AddButtonsWithFlags (PRUint32 aFlags,
 			       const PRUnichar *aText2)
 {
 	mDelay = (aFlags & nsIPromptService::BUTTON_DELAY_ENABLE) != 0;
+	mDefaultResponse = -1;
 
-	AddButtonWithFlags (0, ((aFlags / nsIPromptService::BUTTON_POS_0) & 0xff), aText0,
-			    aFlags & nsIPromptService::BUTTON_POS_0_DEFAULT);
-	AddButtonWithFlags (1, ((aFlags / nsIPromptService::BUTTON_POS_1) & 0xff), aText1,
-			    aFlags & nsIPromptService::BUTTON_POS_1_DEFAULT);
+	/* Reverse the order, on the assumption that what we passed is the
+	 * 'windows' button order, and we want HIG order.
+	 */
 	AddButtonWithFlags (2, ((aFlags / nsIPromptService::BUTTON_POS_2) & 0xff), aText2,
 			    aFlags & nsIPromptService::BUTTON_POS_2_DEFAULT);
+	AddButtonWithFlags (1, ((aFlags / nsIPromptService::BUTTON_POS_1) & 0xff), aText1,
+			    aFlags & nsIPromptService::BUTTON_POS_1_DEFAULT);
+	AddButtonWithFlags (0, ((aFlags / nsIPromptService::BUTTON_POS_0) & 0xff), aText0,
+			    aFlags & nsIPromptService::BUTTON_POS_0_DEFAULT);
+
+	/* If no default was set, use the 'rightmost' unaffirmative response.
+	 * This happens with the suite's password manager prompt.
+	 */
+	if (mDefaultResponse == -1)
+	{
+		mDefaultResponse = mUnaffirmativeResponse;
+	}
 }
 
 void
