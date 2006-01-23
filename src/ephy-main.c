@@ -44,11 +44,7 @@
 
 #include <libgnome/gnome-program.h>
 #include <libgnomeui/gnome-client.h>
-
-/* libgnome < 2.13 compat */
-#ifndef GNOME_PARAM_GOPTION_CONTEXT
 #include <libgnomeui/gnome-ui-init.h>
-#endif
 
 #include <libgnomevfs/gnome-vfs-init.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
