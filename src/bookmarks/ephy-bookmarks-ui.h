@@ -37,7 +37,6 @@ void ephy_bookmarks_ui_add_bookmark  (GtkWidget *parent,
 void ephy_bookmarks_ui_add_topic     (GtkWidget *parent,
 				      EphyNode *bookmark);
 
-void ephy_bookmarks_ui_show_bookmark (GtkWidget *parent,
-				      EphyNode *bookmark);
+void ephy_bookmarks_ui_show_bookmark (EphyNode *bookmark);
 
 #endif

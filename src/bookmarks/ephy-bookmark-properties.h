@@ -1,5 +1,7 @@
 /*
  *  Copyright (C) 2002 Marco Pesenti Gritti <mpeseng@tin.it>
+ *  Copyright (C) 2005, 2006 Peter A. Harvey
+ *  Copyright (C) 2006 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,35 +29,37 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_BOOKMARK_PROPERTIES         (ephy_bookmark_properties_get_type ())
-#define EPHY_BOOKMARK_PROPERTIES(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkProperties))
-#define EPHY_BOOKMARK_PROPERTIES_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkPropertiesClass))
-#define EPHY_IS_BOOKMARK_PROPERTIES(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_BOOKMARK_PROPERTIES))
-#define EPHY_IS_BOOKMARK_PROPERTIES_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_BOOKMARK_PROPERTIES))
-#define EPHY_BOOKMARK_PROPERTIES_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkPropertiesClass))
+#define EPHY_TYPE_BOOKMARK_PROPERTIES		(ephy_bookmark_properties_get_type ())
+#define EPHY_BOOKMARK_PROPERTIES(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkProperties))
+#define EPHY_BOOKMARK_PROPERTIES_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkPropertiesClass))
+#define EPHY_IS_BOOKMARK_PROPERTIES(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_BOOKMARK_PROPERTIES))
+#define EPHY_IS_BOOKMARK_PROPERTIES_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_BOOKMARK_PROPERTIES))
+#define EPHY_BOOKMARK_PROPERTIES_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkPropertiesClass))
 
-typedef struct _EphyBookmarkPropertiesPrivate EphyBookmarkPropertiesPrivate;
+typedef struct _EphyBookmarkProperties		EphyBookmarkProperties;
+typedef struct _EphyBookmarkPropertiesPrivate	EphyBookmarkPropertiesPrivate;
+typedef struct _EphyBookmarkPropertiesClass	EphyBookmarkPropertiesClass;
 
-typedef struct
+struct _EphyBookmarkProperties
 {
-	GtkDialog parent;
+	GtkDialog parent_instance;
 
 	/*< private >*/
 	EphyBookmarkPropertiesPrivate *priv;
-} EphyBookmarkProperties;
+};
 
-typedef struct
+struct _EphyBookmarkPropertiesClass
 {
-	GtkDialogClass parent;
-} EphyBookmarkPropertiesClass;
+	GtkDialogClass parent_class;
+};
 
-GType		     ephy_bookmark_properties_get_type        (void);
+GType		 ephy_bookmark_properties_get_type	(void);
 
-GtkWidget	    *ephy_bookmark_properties_new             (EphyBookmarks *bookmarks,
-							       EphyNode *bookmark,
-							       gboolean creating);
+GtkWidget	*ephy_bookmark_properties_new		(EphyBookmarks *bookmarks,
+							 EphyNode *bookmark,
+							 gboolean creating);
 
-EphyNode            *ephy_bookmark_properties_get_node        (EphyBookmarkProperties *properties);
+EphyNode	*ephy_bookmark_properties_get_node	(EphyBookmarkProperties *properties);
 
 G_END_DECLS
 

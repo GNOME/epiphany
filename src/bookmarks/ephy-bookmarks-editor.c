@@ -469,13 +469,6 @@ cmd_delete (GtkAction *action,
 	}
 }
 
-static void
-show_properties_dialog (EphyBookmarksEditor *editor,
-			EphyNode *bookmark)
-{
-	ephy_bookmarks_ui_show_bookmark (GTK_WIDGET (editor), bookmark);
-}
-
 static GSList *
 add_bookmarks_files (const char *dir,
 		     const char *filename,
@@ -909,7 +902,8 @@ cmd_bookmark_properties (GtkAction *action,
 	for (l = selection; l; l = l->next)
 	{
 		EphyNode *node = l->data;
-		show_properties_dialog (editor, node);
+
+		ephy_bookmarks_ui_show_bookmark (node);
 	}
 
 	g_list_free (selection);

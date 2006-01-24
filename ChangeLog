@@ -1,5 +1,41 @@
 2006-01-24  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(ephy_bookmark_properties_set_bookmark),
+	(bookmark_properties_close_cb), (bookmark_properties_response_cb),
+	(update_entry), (update_window_title), (combo_changed_cb),
+	(title_entry_changed_cb), (location_entry_changed_cb),
+	(set_window_icon), (ephy_bookmark_properties_init),
+	(ephy_bookmark_properties_constructor),
+	(ephy_bookmark_properties_set_property),
+	(ephy_bookmark_properties_get_property),
+	(ephy_bookmark_properties_class_init),
+	(ephy_bookmark_properties_get_type),
+	(ephy_bookmark_properties_new):
+	* src/bookmarks/ephy-bookmark-properties.h:
+
+	Refactored, code cleanups. Don't make the bookmark properties
+	window transient.
+
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_bookmark_properties):
+	* src/bookmarks/ephy-bookmarks-ui.c:
+	(activate_bookmark_properties), (activate_bookmark_open_tab),
+	(activate_bookmark_open_window), (selected_bookmark_action),
+	(erase_bookmarks_menu), (tree_changed_cb), (node_added_cb),
+	(node_changed_cb), (node_removed_cb),
+	(ephy_bookmarks_ui_attach_window), (properties_dialog_destroy_cb),
+	(add_bookmark), (duplicate_bookmark_response_cb),
+	(ephy_bookmarks_ui_add_bookmark), (add_topic_changed_cb),
+	(add_topic_response_cb), (ephy_bookmarks_ui_add_topic),
+	(ephy_bookmarks_ui_show_bookmark):
+	* src/bookmarks/ephy-bookmarks-ui.h:
+
+	Cleanups. Make the New Topic dialogue modal to the bookmark properties
+	window. Change some strings, don't unnecessarily use markup when
+	constructing a message dialog.
+
+2006-01-24  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-bookmarks-editor.c:
 	(import_dialog_response_cb), (export_format_combo_changed_cb),
 	(export_dialog_response_cb), (cmd_bookmarks_export):
