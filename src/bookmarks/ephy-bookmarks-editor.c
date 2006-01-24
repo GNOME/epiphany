@@ -85,6 +85,17 @@ static const GtkTargetEntry topic_drag_types [] =
 	{ EPHY_DND_TOPIC_TYPE,      0, 0 }
 };
 
+static const struct
+{
+	const char *name;
+	const char *extension;
+}
+export_formats [] = 
+{
+	{ N_("Mozilla (HTML)"), "html" },
+	{ N_("Epiphany (RDF)"), "rdf" }
+};
+
 static void ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass);
 static void ephy_bookmarks_editor_init (EphyBookmarksEditor *editor);
 static void ephy_bookmarks_editor_finalize (GObject *object);
@@ -598,7 +609,7 @@ import_from_file_response_cb (GtkWidget *dialog,
 
 static void
 import_dialog_response_cb (GtkDialog *dialog,
-			   gint response,
+			   int response,
 			   EphyBookmarksEditor *editor)
 {
 	if (response == GTK_RESPONSE_OK)
@@ -662,12 +673,101 @@ import_dialog_response_cb (GtkDialog *dialog,
 }
 
 static void
+export_format_combo_changed_cb (GtkComboBox *combo,
+				GtkFileChooser *chooser)
+{
+	char *filename, *basename, *dot, *newname;
+	int i, format;
+
+	filename = gtk_file_chooser_get_filename (chooser);
+	if (filename == NULL) return;
+
+	basename = g_path_get_basename (filename);
+	if (basename == NULL || basename[0] == '\0')
+	{
+		g_free (filename);
+		g_free (basename);
+		return;
+	}
+
+	format = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
+	g_return_if_fail (format >= 0 && format < G_N_ELEMENTS (export_formats));
+
+	dot = strrchr (basename, '.');
+	if (dot != NULL)
+	{
+		for (i = 0; i < G_N_ELEMENTS (export_formats); ++i)
+		{
+			if (strcmp (dot + 1, export_formats[i].extension) == 0)
+			{
+				*dot = '\0';
+				break;
+			}
+		}
+	}
+
+	newname = g_strconcat (basename, ".",
+			       export_formats[format].extension,
+			       NULL);
+
+	gtk_file_chooser_set_current_name (chooser, newname);
+
+	g_free (filename);
+	g_free (basename);
+	g_free (newname);
+}
+
+static void
+export_dialog_response_cb (GtkWidget *dialog,
+			   int response,
+			   EphyBookmarksEditor *editor)
+{
+	GtkWidget *combo;
+	char *filename;
+	int format;
+
+	if (response != GTK_RESPONSE_ACCEPT)
+	{
+		gtk_widget_destroy (dialog);
+		return;
+	}
+
+	filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+	if (filename == NULL) return;
+	
+	if (!ephy_gui_check_location_writable (GTK_WIDGET (dialog), filename))
+	{
+		g_free (filename);
+		return;
+	}
+
+	combo = g_object_get_data (G_OBJECT (dialog), "format-combo");
+	g_return_if_fail (combo != NULL);
+
+	format = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
+	g_return_if_fail (format >= 0 && format < G_N_ELEMENTS (export_formats));
+
+	gtk_widget_destroy (dialog);
+
+	/* 0 for ephy RDF format, 1 for mozilla HTML format */
+	if (format == 0)
+	{
+		ephy_bookmarks_export_rdf (editor->priv->bookmarks, filename);
+	}
+	else if (format == 1)
+	{
+		ephy_bookmarks_export_mozilla (editor->priv->bookmarks, filename);
+	}
+
+	g_free (filename);
+}
+
+static void
 cmd_bookmarks_export (GtkAction *action,
 		      EphyBookmarksEditor *editor)
 {
 	GtkWidget *dialog, *hbox, *label, *combo;
-	char *filename = NULL;
-	int response, format;
+	int format;
 
 	dialog = GTK_WIDGET (ephy_file_chooser_new (_("Export Bookmarks"),
 		GTK_WIDGET (editor),
@@ -687,10 +787,18 @@ cmd_bookmarks_export (GtkAction *action,
 	label = gtk_label_new (_("File format:"));
 
 	combo = gtk_combo_box_new_text ();
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Epiphany (RDF)"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Mozilla (HTML)"));
-	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 1);
-	
+
+	for (format = 0; format < G_N_ELEMENTS (export_formats); ++format)
+	{
+		gtk_combo_box_append_text (GTK_COMBO_BOX (combo),
+					   _(export_formats[format].name));
+	}
+
+	g_object_set_data (G_OBJECT (dialog), "format-combo", combo);
+	g_signal_connect (combo, "changed",
+			  G_CALLBACK (export_format_combo_changed_cb), dialog);
+	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+
 	hbox = gtk_hbox_new (FALSE, 12);
 	gtk_box_pack_end (GTK_BOX (hbox), combo, TRUE, TRUE, 0);
 	gtk_box_pack_end (GTK_BOX (hbox), label, FALSE, FALSE, 0);
@@ -700,55 +808,9 @@ cmd_bookmarks_export (GtkAction *action,
 
 	gtk_window_group_add_window (GTK_WINDOW (editor)->group, GTK_WINDOW (dialog));
 
-	do
-	{
-		char *basename, *strtmp = NULL;
-
-		g_free (filename);
-
-		response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-		if (response != GTK_RESPONSE_ACCEPT)
-		{
-			gtk_widget_destroy (dialog);
-			return;
-		}
-
-		format = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
-		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-		basename = g_path_get_basename (filename);
-		if (basename != NULL && strchr (basename, '.') == NULL)
-		{
-			if (format == 0)
-			{
-				strtmp = filename;
-				filename = g_strconcat (filename, ".rdf", NULL);
-			}
-			else if (format == 1)
-			{
-				strtmp = filename;
-				filename = g_strconcat (filename, ".html", NULL);
-			}
-			g_free (strtmp);
-		}
-		g_free (basename);
-	}
-	while (!ephy_gui_check_location_writable (GTK_WIDGET (dialog), filename));
-        
-        gtk_widget_destroy (dialog);
-
-	/* 0 for ephy RDF format, 1 for mozilla HTML format */
-
-	if (format == 0)
-	{
-		ephy_bookmarks_export_rdf (editor->priv->bookmarks, filename);
-	}
-	else if (format == 1)
-	{
-		ephy_bookmarks_export_mozilla (editor->priv->bookmarks, filename);
-	}
-
-	g_free (filename);
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (export_dialog_response_cb), editor);
+	gtk_widget_show (dialog);
 }
 
 static void

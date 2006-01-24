@@ -1,5 +1,14 @@
 2006-01-24  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(import_dialog_response_cb), (export_format_combo_changed_cb),
+	(export_dialog_response_cb), (cmd_bookmarks_export):
+
+	Switch extensions when changing the export format from the combo
+	box; and don't use gtk_dialog_run. Bug #328064.
+
+2006-01-24  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-file-helpers.c: (ephy_dot_dir),
 	(ephy_file_helpers_init):
 	* lib/ephy-file-helpers.h:
