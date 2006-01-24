@@ -500,16 +500,16 @@ ephy_bookmarks_ui_add_bookmark (GtkWidget *parent,
 						_("_Create New"),
 						RESPONSE_NEW_BOOKMARK);
 		gtk_button_set_image (GTK_BUTTON (button),
-				      gtk_image_new_from_stock
-				      	(STOCK_BOOKMARK, GTK_ICON_SIZE_BUTTON));
-		
+				      gtk_image_new_from_stock (STOCK_BOOKMARK,
+								GTK_ICON_SIZE_BUTTON));
+
 		button = gtk_dialog_add_button (GTK_DIALOG (dialog),
 						_("_View Properties"),
 						RESPONSE_SHOW_PROPERTIES);
 		gtk_button_set_image (GTK_BUTTON (button), 
-				      gtk_image_new_from_stock
-				      (GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_BUTTON));
-		
+				      gtk_image_new_from_stock (GTK_STOCK_PROPERTIES,
+						      		GTK_ICON_SIZE_BUTTON));
+
 		gtk_dialog_add_button (GTK_DIALOG (dialog),
 				       GTK_STOCK_OK,
 				       GTK_RESPONSE_OK);
@@ -522,7 +522,7 @@ ephy_bookmarks_ui_add_bookmark (GtkWidget *parent,
 					g_strdup (location), g_free);
 		g_object_set_data_full (G_OBJECT (dialog), "title",
 					g_strdup (title), g_free);
-		
+
 		g_signal_connect (dialog, "response",
 			  	  G_CALLBACK (duplicate_bookmark_response_cb), bookmark);
 		

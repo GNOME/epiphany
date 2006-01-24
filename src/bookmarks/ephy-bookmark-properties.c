@@ -23,15 +23,17 @@
 #include "config.h"
 
 #include "ephy-bookmark-properties.h"
+
 #include "ephy-bookmarks-ui.h"
 #include "ephy-topics-palette.h"
+#include "ephy-stock-icons.h"
 #include "ephy-debug.h"
 #include "ephy-shell.h"
 #include "ephy-state.h"
 #include "ephy-gui.h"
-#include "ephy-favicon-cache.h"
 #include "ephy-dnd.h"
 
+#include <glib/gi18n.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkstock.h>
@@ -41,7 +43,7 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkmisc.h>
 #include <gtk/gtkscrolledwindow.h>
-#include <glib/gi18n.h>
+
 #include <string.h>
 
 static const GtkTargetEntry dest_drag_types[] = {
@@ -195,7 +197,7 @@ title_entry_changed_cb (GtkWidget *entry,
 			EphyBookmarkProperties *props)
 {
 	update_entry (props, entry, EPHY_NODE_BMK_PROP_TITLE);
-	update_window_title(props);
+	update_window_title (props);
 }
 
 static void
@@ -207,38 +209,6 @@ location_entry_changed_cb (GtkWidget *entry,
 	ephy_bookmarks_set_address (priv->bookmarks,
 				    priv->bookmark,
 				    gtk_entry_get_text (GTK_ENTRY (entry)));
-}
-
-static void
-set_window_icon (EphyBookmarkProperties *properties)
-{
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
-	EphyFaviconCache *cache;
-	const char *icon_location;
-	GdkPixbuf *icon = NULL;
-
-	cache = EPHY_FAVICON_CACHE
-		(ephy_embed_shell_get_favicon_cache (ephy_embed_shell_get_default ()));
-	icon_location = ephy_node_get_property_string
-		(priv->bookmark, EPHY_NODE_BMK_PROP_ICON);
-
-	LOG ("Get favicon for %s", icon_location ? icon_location : "None");
-
-	if (icon_location != NULL)
-	{
-		icon = ephy_favicon_cache_get (cache, icon_location);
-	}
-
-	if (icon != NULL)
-	{
-		gtk_window_set_icon (GTK_WINDOW (properties), icon);
-		g_object_unref (icon);
-	}
-	else
-	{
-		gtk_window_set_icon_name (GTK_WINDOW (properties),
-					  GTK_STOCK_PROPERTIES);
-	}
 }
 
 static void
@@ -271,6 +241,7 @@ ephy_bookmark_properties_constructor (GType type,
 	properties = EPHY_BOOKMARK_PROPERTIES (object);
 	priv = properties->priv;
 
+	gtk_window_set_icon_name (window, STOCK_BOOKMARK);
 	gtk_window_set_type_hint (window, GDK_WINDOW_TYPE_HINT_NORMAL);
 	ephy_gui_ensure_window_group (window);
 
@@ -286,13 +257,12 @@ ephy_bookmark_properties_constructor (GType type,
 			       EPHY_STATE_WINDOW_SAVE_SIZE);
 
 	update_window_title (properties);
-	set_window_icon (properties);
 
 	gtk_dialog_set_has_separator (dialog, FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (properties), 5);
 	gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2);
 
-	table = gtk_table_new (5, 2, FALSE);
+	table = gtk_table_new (4, 2, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
@@ -359,7 +329,6 @@ ephy_bookmark_properties_constructor (GType type,
 	
 	gtk_table_attach (GTK_TABLE (table), scrolled_window, 1, 2, 3, 4,
 			  GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
-	gtk_table_set_row_spacing (GTK_TABLE (table), 3, 3);
 	gtk_widget_show (scrolled_window);
 
 	gtk_box_pack_start (GTK_BOX (dialog->vbox), table, TRUE, TRUE, 0);
