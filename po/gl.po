@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-22 19:49+0100\n"
-"PO-Revision-Date: 2006-01-22 19:52+0100\n"
+"POT-Creation-Date: 2006-01-24 11:46+0100\n"
+"PO-Revision-Date: 2006-01-24 11:48+0100\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego\n"
 "MIME-Version: 1.0\n"
@@ -135,8 +135,8 @@ msgid "Epiphany Web Browser"
 msgstr "Navegador web Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:223
-#: ../src/ephy-main.c:234
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:505
+#: ../src/ephy-main.c:554 ../src/ephy-main.c:570
 msgid "Web Browser"
 msgstr "Navegador web"
 
@@ -581,7 +581,7 @@ msgid "Cookies"
 msgstr "Cookies"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:101
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:103
 msgid "Downloads"
 msgstr "Descargas"
 
@@ -1591,20 +1591,20 @@ msgstr "no Arquivo de Internet"
 msgid "Untitled"
 msgstr "Sen título"
 
-#: ../embed/mozilla/EphyPromptService.cpp:193
+#: ../embed/mozilla/EphyPromptService.cpp:195
 msgid "_Abort Script"
 msgstr "_Abortar script"
 
-#: ../embed/mozilla/EphyPromptService.cpp:261
+#: ../embed/mozilla/EphyPromptService.cpp:263
 msgid "Don't Save"
 msgstr "Non gardar"
 
-#: ../embed/mozilla/EphyPromptService.cpp:742
+#: ../embed/mozilla/EphyPromptService.cpp:762
 msgid "_User:"
 msgstr "_Usuario:"
 
-#: ../embed/mozilla/EphyPromptService.cpp:743
-#: ../embed/mozilla/EphyPromptService.cpp:770
+#: ../embed/mozilla/EphyPromptService.cpp:763
+#: ../embed/mozilla/EphyPromptService.cpp:790
 #: ../embed/mozilla/GtkNSSDialogs.cpp:795
 #: ../embed/mozilla/GtkNSSDialogs.cpp:905
 msgid "_Password:"
@@ -2058,15 +2058,15 @@ msgstr "Separador"
 msgid "All supported types"
 msgstr "Todos os tipos soportados"
 
-#: ../lib/ephy-file-helpers.c:330
+#: ../lib/ephy-file-helpers.c:339
 #, c-format
-msgid "\"%s\" exists, please move it out of the way."
-msgstr "\"%s\" xa existe, móvao fora da ruta."
+msgid "“%s” exists, please move it out of the way."
+msgstr "“%s” xa existe, móvao fora da ruta."
 
-#: ../lib/ephy-file-helpers.c:336
+#: ../lib/ephy-file-helpers.c:350
 #, c-format
-msgid "Failed to create directory \"%s\"."
-msgstr "Fallou ao crear o directorio \"%s\"."
+msgid "Failed to create directory “%s”."
+msgstr "Fallou ao crear o directorio “%s”."
 
 #: ../lib/ephy-gui.c:328
 #, c-format
@@ -3042,37 +3042,54 @@ msgstr[1] "Últimos %d días"
 msgid "Sites"
 msgstr "Sitios"
 
-#: ../src/ephy-main.c:60
-msgid "Open a new tab in an existing window"
-msgstr "Abrir unha nova solapa nunha fiestra existente"
+#: ../src/ephy-main.c:72 ../src/ephy-main.c:74
+msgid "Open a new tab in an existing Epiphany window"
+msgstr "Abrir unha nova solapa nunha fiestra de Epiphany existente"
 
-#: ../src/ephy-main.c:63
-msgid "Run in full screen mode"
-msgstr "Executar en pantalla completa"
+#: ../src/ephy-main.c:76
+msgid "Launch the bookmarks editor"
+msgstr "Lanzar o editor de marcadores"
 
-#: ../src/ephy-main.c:66
-msgid "Load the given session file"
-msgstr "Cargar o arquivo de sesión dado"
-
-#: ../src/ephy-main.c:67 ../src/ephy-main.c:73
-msgid "FILE"
-msgstr "ARQUIVO"
-
-#: ../src/ephy-main.c:69
-msgid "Add a bookmark (don't open any window)"
-msgstr "Engadir un marcador (non abre ningunha fiestra)"
-
-#: ../src/ephy-main.c:70
-msgid "URL"
-msgstr "URL"
-
-#: ../src/ephy-main.c:72
+#: ../src/ephy-main.c:78
 msgid "Import bookmarks from the given file"
 msgstr "Importar marcadores desde o arquivo dado"
 
-#: ../src/ephy-main.c:75
-msgid "Launch the bookmarks editor"
-msgstr "Lanzar o editor de marcadores"
+#: ../src/ephy-main.c:78 ../src/ephy-main.c:80
+msgid "FILE"
+msgstr "ARQUIVO"
+
+#: ../src/ephy-main.c:80
+msgid "Load the given session file"
+msgstr "Cargar o arquivo de sesión dado"
+
+#: ../src/ephy-main.c:82
+msgid "Add a bookmark"
+msgstr "Engadir marcador"
+
+#: ../src/ephy-main.c:82
+msgid "URL"
+msgstr "URL"
+
+#: ../src/ephy-main.c:450
+msgid "Could not start GNOME Web Browser"
+msgstr "Non se puido iniciar o Navegador web de Gnome"
+
+#: ../src/ephy-main.c:453
+#, c-format
+msgid ""
+"Startup failed because of the following error:\n"
+"%s"
+msgstr ""
+"Fallou o inicio polo seguinte erro:\n"
+"%s"
+
+#: ../src/ephy-main.c:492 ../src/ephy-main.c:494 ../src/window-commands.c:752
+msgid "GNOME Web Browser"
+msgstr "Navegador web de Gnome"
+
+#: ../src/ephy-main.c:495
+msgid "GNOME Web Browser options"
+msgstr "Opcións do Navegador web de Gnome"
 
 #: ../src/ephy-notebook.c:1092
 msgid "Close tab"
@@ -3102,15 +3119,15 @@ msgstr "_Recuperar"
 msgid "Crash Recovery"
 msgstr "Recuperación de colgue"
 
-#: ../src/ephy-shell.c:216
+#: ../src/ephy-shell.c:195
 msgid "Sidebar extension required"
 msgstr "Requírese a extensión da barra lateral"
 
-#: ../src/ephy-shell.c:218
+#: ../src/ephy-shell.c:197
 msgid "Sidebar Extension Required"
 msgstr "Requírese a extensión da barra lateral"
 
-#: ../src/ephy-shell.c:222
+#: ../src/ephy-shell.c:201
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "O enlace que pulsou necesita a extensión da barra lateral para ser instalado."
 
@@ -3968,9 +3985,9 @@ msgid ""
 "option) any later version."
 msgstr ""
 "O navegador web de Gnome é software libre; pode redistribuílo e/ou "
-"modificadlo baixo os termos da Licencia Pública Xeral de GNU tal "
-"como o publica a Free Software Foundation; tanto na versión 2 da "
-"Licencia como (á súa elección) calquer versión posterior."
+"modificadlo baixo os termos da Licencia Pública Xeral de GNU tal como o "
+"publica a Free Software Foundation; tanto na versión 2 da Licencia como (á "
+"súa elección) calquer versión posterior."
 
 #: ../src/window-commands.c:737
 msgid ""
@@ -3979,10 +3996,10 @@ msgid ""
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 msgstr ""
-"O navegador web de Gnome distribúese coa esperanza de que será útil, "
-"pero SEN NINGUNHA GARANTÍA; sen incluso a garantía implicada de MERCATIBILIDADE "
-"ou ADECUACIÓN PARA UN PROPÓSITO PARTICULAR. Vexa a Licencia Pública"
-"Xeral de GNU para máis detalles."
+"O navegador web de Gnome distribúese coa esperanza de que será útil, pero "
+"SEN NINGUNHA GARANTÍA; sen incluso a garantía implicada de MERCATIBILIDADE "
+"ou ADECUACIÓN PARA UN PROPÓSITO PARTICULAR. Vexa a Licencia PúblicaXeral de "
+"GNU para máis detalles."
 
 #: ../src/window-commands.c:741
 msgid ""
@@ -3990,13 +4007,9 @@ msgid ""
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
 msgstr ""
-"Debeu recibir unha copia da Licencia Pública Xeral de GNU "
-"xunto con Nautilus; se non, escriba á Free Software Foundation, Inc., "
-"59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
-
-#: ../src/window-commands.c:752
-msgid "GNOME Web Browser"
-msgstr "Navegador web de Gnome"
+"Debeu recibir unha copia da Licencia Pública Xeral de GNU xunto con "
+"Nautilus; se non, escriba á Free Software Foundation, Inc., 59 Temple Place, "
+"Suite 330, Boston, MA  02111-1307  USA"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
