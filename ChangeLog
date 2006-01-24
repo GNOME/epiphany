@@ -1,3 +1,10 @@
+2006-01-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-dbus.c: (ephy_dbus_connect_to_session_bus):
+
+	Use DBUS_NAME_FLAG_DO_NOT_QUEUE when requesting the name,
+	and also handle unexpected request return values.
+
 2006-01-23  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* src/bookmarks/ephy-open-tabs-action.c: (node_added_cb):

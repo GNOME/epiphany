@@ -35,6 +35,11 @@
 #define DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT 0
 #endif
 
+/* dbus < 0.6 compat */
+#ifndef DBUS_NAME_FLAG_DO_NOT_QUEUE
+#define DBUS_NAME_FLAG_DO_NOT_QUEUE 0
+#endif
+
 #define RECONNECT_DELAY	3000
 
 #define EPHY_DBUS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_DBUS, EphyDbusPrivate))
@@ -275,7 +280,8 @@ ephy_dbus_connect_to_session_bus (EphyDbus *ephy_dbus,
 
 	if (!org_freedesktop_DBus_request_name (proxy,
 						DBUS_EPHY_SERVICE,
-						DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT,
+						DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT |
+						DBUS_NAME_FLAG_DO_NOT_QUEUE,
 						&request_ret, error))
 	{
 		/* We have a BIG problem! */
@@ -283,18 +289,15 @@ ephy_dbus_connect_to_session_bus (EphyDbus *ephy_dbus,
 		return FALSE;
 	}
 
-	if (request_ret == DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
+	if (request_ret == DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER ||
+	    request_ret == DBUS_REQUEST_NAME_REPLY_ALREADY_OWNER)
 	{
 		ephy_dbus->priv->is_session_service_owner = TRUE;
 	}
-	else if (request_ret == DBUS_REQUEST_NAME_REPLY_EXISTS)
+	else if (request_ret == DBUS_REQUEST_NAME_REPLY_EXISTS ||
+		 request_ret == DBUS_REQUEST_NAME_REPLY_IN_QUEUE)
 	{
 		ephy_dbus->priv->is_session_service_owner = FALSE;
-	}
-	else
-	{
-		/* FIXME can this happen? */
-		g_assert_not_reached ();
 	}
 
 	LOG ("Instance is %ssession bus owner.", ephy_dbus->priv->is_session_service_owner ? "" : "NOT ");
