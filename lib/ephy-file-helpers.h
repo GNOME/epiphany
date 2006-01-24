@@ -1,7 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen
  *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
- *  Copyright (C) 2004 Christian Persch
+ *  Copyright (C) 2004, 2005, 2006 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,11 +43,12 @@ typedef struct _EphyFileMonitor EphyFileMonitor;
 typedef void (* EphyFileMonitorFunc) (EphyFileMonitor*, const char*, GnomeVFSMonitorEventType, gpointer);
 typedef gboolean (* EphyFileMonitorDelayFunc) (EphyFileMonitor*, gpointer);
 
+gboolean    ephy_file_helpers_init       (gboolean private_profile,
+					  GError **error);
+
 const char *ephy_file                    (const char *filename);
 
 const char *ephy_dot_dir                 (void);
-
-gboolean    ephy_file_helpers_init       (GError **error);
 
 void        ephy_file_helpers_shutdown   (void);
 

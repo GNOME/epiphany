@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2000-2002 Marco Pesenti Gritti
+ *  Copyright (C) 2006 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -59,6 +60,7 @@ static GQuark startup_error_quark = 0;
 static gboolean open_in_new_tab = FALSE;
 static gboolean open_in_new_window = FALSE;
 static gboolean open_as_bookmarks_editor = FALSE;
+static gboolean private_instance = FALSE;
 //static gboolean reload_plugins = FALSE;
 
 static char *session_filename = NULL;
@@ -80,6 +82,8 @@ static const GOptionEntry option_entries[] =
 	  N_("Load the given session file"), N_("FILE") },
 	{ "add-bookmark", 't', 0, G_OPTION_ARG_STRING, &bookmark_url,
 	  N_("Add a bookmark"), N_("URL") },
+	{ "private-instance", 0, 0, G_OPTION_ARG_NONE, &private_instance,
+	  N_("Start a private instance"), NULL },
 	{ G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_STRING_ARRAY, &remaining_arguments,
 	  "", "" },
 	{ NULL }
@@ -345,6 +349,11 @@ unref_proxy_reply_cb (DBusGProxy *proxy,
 	}
 
 	g_object_unref (proxy);
+
+	if (!_ephy_dbus_is_name_owner () && gtk_main_level ())
+	{
+		gtk_main_quit ();
+	}
 }
 
 static gboolean
@@ -391,6 +400,7 @@ open_urls (DBusGProxy *proxy,
 		}
 
 		g_strfreev (remaining_arguments);
+		remaining_arguments = NULL;
 	}
 
 	return TRUE;
@@ -578,7 +588,6 @@ main (int argc,
 	{
 		_ephy_dbus_release ();
 
-		gdk_notify_startup_complete ();
 		show_error_message (&error);
 
 		exit (1);
@@ -601,6 +610,8 @@ main (int argc,
 		if (proxy != NULL &&
 		    call_dbus_proxy (proxy, user_time, &error))
 		{
+			gtk_main ();
+
 			_ephy_dbus_release ();
 
 			gdk_notify_startup_complete ();
@@ -609,7 +620,6 @@ main (int argc,
 
 		_ephy_dbus_release ();
 
-		gdk_notify_startup_complete ();
 		show_error_message (&error);
 
 		exit (1);
@@ -617,11 +627,10 @@ main (int argc,
 
 	/* We're not remoting; start our services */
 
-	if (!ephy_file_helpers_init (&error))
+	if (!ephy_file_helpers_init (FALSE, &error))
 	{
 		_ephy_dbus_release ();
 
-		gdk_notify_startup_complete ();
 		show_error_message (&error);
 
 		exit (1);
@@ -651,9 +660,9 @@ main (int argc,
 
 		g_object_unref (ephy_shell_get_default ());
 
+		ephy_file_helpers_shutdown ();
 		_ephy_dbus_release ();
 
-		gdk_notify_startup_complete ();
 		show_error_message (&error);
 
 		exit (1);
@@ -667,9 +676,9 @@ main (int argc,
 	{
 		g_object_unref (ephy_shell_get_default ());
 
+		ephy_file_helpers_shutdown ();
 		_ephy_dbus_release ();
 
-		gdk_notify_startup_complete ();
 		show_error_message (&error);
 
 		exit (1);

@@ -1,5 +1,17 @@
 2006-01-24  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-file-helpers.c: (ephy_dot_dir),
+	(ephy_file_helpers_init):
+	* lib/ephy-file-helpers.h:
+	* src/ephy-dbus.c:
+	* src/ephy-main.c: (unref_proxy_reply_cb), (open_urls), (main):
+
+	Run the main loop until the reply is received when
+	activating a running instance. Fixes URL opening with
+	two concurrently starting instance.
+
+2006-01-24  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-dbus.c: (ephy_dbus_connect_to_session_bus):
 
 	Use DBUS_NAME_FLAG_DO_NOT_QUEUE when requesting the name,

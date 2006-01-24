@@ -1,7 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen
  *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
- *  Copyright (C) 2004 Christian Persch
+ *  Copyright (C) 2004, 2005, 2006 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,10 +28,6 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/stat.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <libgnome/gnome-init.h>
@@ -49,6 +45,11 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/stat.h>
+
 #define EPHY_UUID		"0d82d98f-7079-401c-abff-203fcde1ece3"
 #define EPHY_UUID_ENVVAR	"EPHY_UNIQUE"
 #define EPHY_UUID_ENVSTRING	EPHY_UUID_ENVVAR "=" EPHY_UUID
@@ -59,6 +60,7 @@
 static GHashTable *files = NULL;
 static GHashTable *mime_table = NULL;
 
+static gboolean have_private_profile = FALSE;
 static char *dot_dir = NULL;
 static char *tmp_dir = NULL;
 static GList *del_on_exit = NULL;
@@ -251,19 +253,12 @@ ephy_file (const char *filename)
 const char *
 ephy_dot_dir (void)
 {
-	if (dot_dir == NULL)
-	{
-		dot_dir = g_build_filename (g_get_home_dir (),
-					    GNOME_DOT_GNOME,
-					    "epiphany",
-					    NULL);
-	}
-
 	return dot_dir;
 }
 
 gboolean
-ephy_file_helpers_init (GError **error)
+ephy_file_helpers_init (gboolean private_profile,
+			GError **error)
 {
 	const char *uuid;
 
@@ -285,6 +280,32 @@ ephy_file_helpers_init (GError **error)
 				       (GDestroyNotify) g_free,
 				       (GDestroyNotify) g_free);
 
+	have_private_profile = private_profile;
+
+	if (private_profile)
+	{
+		if (ephy_file_tmp_dir () == NULL)
+		{
+			g_set_error (error,
+				     EPHY_FILE_HELPERS_ERROR_QUARK,
+				     0,
+				     _("Could not create a temporary directory in “%s”."),
+				     g_get_tmp_dir ());
+			return FALSE;
+		}
+
+		dot_dir = g_build_filename (ephy_file_tmp_dir (),
+					    "epiphany",
+					    NULL);
+	}
+	else
+	{
+		dot_dir = g_build_filename (g_get_home_dir (),
+					    GNOME_DOT_GNOME,
+					    "epiphany",
+					    NULL);
+	}
+	
 	return ephy_ensure_dir_exists (ephy_dot_dir (), error);
 }
 
