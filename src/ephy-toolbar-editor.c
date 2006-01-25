@@ -199,9 +199,12 @@ ephy_toolbar_editor_constructor (GType type,
 	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 2);
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Toolbar Editor"));
-	gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (priv->window));
-	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
+	gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (priv->window));
+	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (priv->window)),
+				     GTK_WINDOW (dialog));
+	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 
 	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (priv->window));
 	editor = egg_toolbar_editor_new (manager, priv->model);
