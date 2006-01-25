@@ -50,7 +50,7 @@
 #include <string.h>
 
 static const GtkTargetEntry dest_drag_types[] = {
-  {EPHY_DND_URL_TYPE, 0, 0},
+	{ EPHY_DND_URL_TYPE, 0, 0},
 };
 
 #define TOOLITEM_WIDTH_CHARS	24
@@ -73,48 +73,17 @@ enum
 	PROP_MANAGER
 };
 
-static void ephy_topic_action_class_init (EphyTopicActionClass *class);
-static void ephy_topic_action_init       (EphyTopicAction *action);
-
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_topic_action_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		static const GTypeInfo type_info =
-		{
-			sizeof (EphyTopicActionClass),
-			(GBaseInitFunc) NULL,
-			(GBaseFinalizeFunc) NULL,
-			(GClassInitFunc) ephy_topic_action_class_init,
-			(GClassFinalizeFunc) NULL,
-			NULL,
-			sizeof (EphyTopicAction),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_topic_action_init,
-		};
-
-		type = g_type_register_static (GTK_TYPE_ACTION,
-					       "EphyTopicAction",
-					       &type_info, 0);
-	}
-
-	return type;
-}
+static GObjectClass *parent_class;
 
 static void
-drag_data_received_cb (GtkWidget	  *widget,
-		       GdkDragContext     *context,
-		       gint                x,
-		       gint                y,
-		       GtkSelectionData   *selection_data,
-		       guint               info,
-		       guint               time,
-		       GtkAction          *action)
+drag_data_received_cb (GtkWidget *widget,
+		       GdkDragContext *context,
+		       gint x,
+		       gint y,
+		       GtkSelectionData *selection_data,
+		       guint info,
+		       guint time,
+		       GtkAction *action)
 {  
 	const char *data;
 	EphyBookmarks *bookmarks;
@@ -162,7 +131,7 @@ create_tool_item (GtkAction *action)
 	GtkWidget *hbox;
 	GtkWidget *label;
 
-	item = (* GTK_ACTION_CLASS (parent_class)->create_tool_item) (action);
+	item = GTK_ACTION_CLASS (parent_class)->create_tool_item (action);
 
 	button = gtk_toggle_button_new ();
 	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
@@ -190,7 +159,9 @@ create_tool_item (GtkAction *action)
 }
 
 static void
-ephy_topic_action_sync_label (GtkAction *action, GParamSpec *pspec, GtkWidget *proxy)
+ephy_topic_action_sync_label (GtkAction *action,
+			      GParamSpec *pspec,
+			      GtkWidget *proxy)
 {
 	GtkWidget *label = NULL;
 	GValue value = { 0, };
@@ -228,34 +199,41 @@ ephy_topic_action_sync_label (GtkAction *action, GParamSpec *pspec, GtkWidget *p
 static GtkWidget *
 get_popup (EphyTopicAction *action)
 {
+	EphyTopicActionPrivate *priv = action->priv;
 	char path[40];
 
 	g_snprintf (path, sizeof (path), "/PopupTopic%ld",
 		    (long int) ephy_node_get_id (action->priv->node));
-	
-	if (action->priv->merge_id == 0)
+
+	if (priv->merge_id == 0)
 	{
-		GString *popup_menu_string = g_string_new ("");
-		g_string_append_printf (popup_menu_string, "<ui><popup name=\"%s\">", path+1);
-		ephy_bookmarks_menu_build (popup_menu_string, action->priv->node);
+		GString *popup_menu_string;
+
+		popup_menu_string = g_string_new (NULL);
+		g_string_append_printf (popup_menu_string, "<ui><popup name=\"%s\">", path + 1);
+
+		ephy_bookmarks_menu_build (popup_menu_string, priv->node);
 		g_string_append (popup_menu_string, "</popup></ui>");
-		
-		action->priv->merge_id = gtk_ui_manager_add_ui_from_string
-		  (action->priv->manager, popup_menu_string->str, popup_menu_string->len, 0);
-		
+
+		priv->merge_id = gtk_ui_manager_add_ui_from_string
+			(priv->manager, popup_menu_string->str,
+			 popup_menu_string->len, 0);
+
 		g_string_free (popup_menu_string, TRUE);
 	}
-	
-	return gtk_ui_manager_get_widget (action->priv->manager, path);
+
+	return gtk_ui_manager_get_widget (priv->manager, path);
 }
 
 static void
 erase_popup (EphyTopicAction *action)
 {
-	if (action->priv->merge_id != 0)
+	EphyTopicActionPrivate *priv = action->priv;
+
+	if (priv->merge_id != 0)
 	{
-		gtk_ui_manager_remove_ui (action->priv->manager, action->priv->merge_id);
-		action->priv->merge_id = 0;
+		gtk_ui_manager_remove_ui (priv->manager, priv->merge_id);
+		priv->merge_id = 0;
 	}
 }
 
@@ -267,16 +245,24 @@ child_added_cb (EphyNode *node, EphyNode *child, GObject *object)
 }
 
 static void
-child_changed_cb (EphyNode *node, EphyNode *child, guint property, GObject *object)
+child_changed_cb (EphyNode *node,
+		  EphyNode *child,
+		  guint property,
+		  GObject *object)
 {
 	EphyTopicAction *action = EPHY_TOPIC_ACTION (object);
+
 	erase_popup (action);
 }
 
 static void
-child_removed_cb (EphyNode *node, EphyNode *child, guint index, GObject *object)
+child_removed_cb (EphyNode *node,
+		  EphyNode *child,
+		  guint index,
+		  GObject *object)
 {
 	EphyTopicAction *action = EPHY_TOPIC_ACTION (object);
+
 	erase_popup (action);
 }
 
@@ -295,14 +281,18 @@ menu_init_cb (GtkWidget *menuitem,
 {
 	if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (menuitem)) == NULL)
 	{
-		GtkWidget *popup = get_popup (action);
+		GtkWidget *popup;
+
+		popup = get_popup (action);
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), popup);
-		g_signal_connect (menuitem, "destroy", G_CALLBACK (menu_destroy_cb), NULL);
+		g_signal_connect (menuitem, "destroy",
+				  G_CALLBACK (menu_destroy_cb), NULL);
 	}
 }
 
 static void
-button_deactivate_cb (GtkMenuShell *ms, GtkWidget *button)
+button_deactivate_cb (GtkMenuShell *ms,
+		      GtkWidget *button)
 {
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
 	gtk_button_released (GTK_BUTTON (button));
@@ -314,9 +304,14 @@ button_toggled_cb (GtkWidget *button,
 {
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
 	{
-		GtkWidget *popup = get_popup (action);
+		GtkWidget *popup;
+
+		popup = get_popup (action);
+
 		g_signal_connect_object (popup, "deactivate",
 					 G_CALLBACK (button_deactivate_cb), button, 0);
+
+		/* FIXME: ephy_gui_menu_position_menu_on_toolbar? */
 		gtk_menu_popup (GTK_MENU (popup), NULL, NULL,
 				ephy_gui_menu_position_under_widget,
 				button, 1, gtk_get_current_event_time ());
@@ -330,8 +325,8 @@ button_release_cb (GtkWidget *button,
 {
 	if (event->button == 1)
 	{
-                gtk_toggle_button_set_active
-                  (GTK_TOGGLE_BUTTON (button), FALSE);
+		gtk_toggle_button_set_active
+			(GTK_TOGGLE_BUTTON (button), FALSE);
 	}
 
 	return FALSE;
@@ -347,7 +342,8 @@ button_press_cb (GtkWidget *button,
 		if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
 		{
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-                        button_toggled_cb (button, action);
+			button_toggled_cb (button, action);
+
 			return TRUE;
 		}
 	}
@@ -356,9 +352,10 @@ button_press_cb (GtkWidget *button,
 }
 
 static void
-connect_proxy (GtkAction *action, GtkWidget *proxy)
+connect_proxy (GtkAction *action,
+	       GtkWidget *proxy)
 {
-	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
     
 	ephy_topic_action_sync_label (action, NULL, proxy);
 	g_signal_connect_object (action, "notify::label",
@@ -366,36 +363,42 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
-		GtkWidget *button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
+		GtkWidget *button;
+
+		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
+
 		g_signal_connect (button, "toggled",
 				  G_CALLBACK (button_toggled_cb), action);
 		g_signal_connect (button, "button-press-event",
 				  G_CALLBACK (button_press_cb), action);
 		g_signal_connect (button, "button-release-event",
 				  G_CALLBACK (button_release_cb), action);
-	    
-		g_signal_connect (button, "drag_data_received",
+		/* FIXME: what about keyboard (toggled by Space) ? */
+
+		g_signal_connect (button, "drag-data-received",
 				  G_CALLBACK (drag_data_received_cb), action);
 		gtk_drag_dest_set (button, GTK_DEST_DEFAULT_ALL, dest_drag_types,
 				   G_N_ELEMENTS (dest_drag_types), GDK_ACTION_COPY);
 	}
 	else if (GTK_IS_MENU_ITEM (proxy))
 	{
-		g_signal_connect (proxy, "map", G_CALLBACK (menu_init_cb), action);
+		g_signal_connect (proxy, "map",
+				  G_CALLBACK (menu_init_cb), action);
 	}
 }
 
 void
 ephy_topic_action_updated (EphyTopicAction *action)
 {
+	EphyTopicActionPrivate *priv = action->priv;
 	GValue value = { 0, };
 	const char *title;
 	int priority;
 	
-	g_return_if_fail (action->priv->node != NULL);
+	g_return_if_fail (priv->node != NULL);
 	
 	priority = ephy_node_get_property_int 
-	  (action->priv->node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+		(priv->node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 	
 	if (priority == EPHY_NODE_ALL_PRIORITY)
 	{
@@ -404,7 +407,7 @@ ephy_topic_action_updated (EphyTopicAction *action)
 	else
 	{
 		title = ephy_node_get_property_string
-		  (action->priv->node, EPHY_NODE_KEYWORD_PROP_NAME);
+			(priv->node, EPHY_NODE_KEYWORD_PROP_NAME);
 	}
 	
 	g_value_init(&value, G_TYPE_STRING);
@@ -417,48 +420,53 @@ ephy_topic_action_updated (EphyTopicAction *action)
 EphyNode *
 ephy_topic_action_get_topic (EphyTopicAction *action)
 {
-	return action->priv->node;
+	EphyTopicActionPrivate *priv = action->priv;
+
+	return priv->node;
 }
 
 void
 ephy_topic_action_set_topic (EphyTopicAction *action,
 			     EphyNode *node)
 {
+	EphyTopicActionPrivate *priv = action->priv;
+	GObject *object = G_OBJECT (action);
+
 	g_return_if_fail (node != NULL);
 	
-	if (action->priv->node == node) return;
+	if (priv->node == node) return;
 
-	if (action->priv->node != NULL)
+	if (priv->node != NULL)
 	{
 		ephy_node_signal_disconnect_object
-		  (action->priv->node, EPHY_NODE_CHILD_ADDED,
-		   (EphyNodeCallback)child_added_cb, G_OBJECT (action));
+			(priv->node, EPHY_NODE_CHILD_ADDED,
+			 (EphyNodeCallback) child_added_cb, object);
 		ephy_node_signal_disconnect_object
-		  (action->priv->node, EPHY_NODE_CHILD_CHANGED,
-		   (EphyNodeCallback)child_changed_cb, G_OBJECT (action));
+			(priv->node, EPHY_NODE_CHILD_CHANGED,
+			 (EphyNodeCallback)child_changed_cb, object);
 		ephy_node_signal_disconnect_object
-		  (action->priv->node, EPHY_NODE_CHILD_REMOVED,
-		   (EphyNodeCallback)child_removed_cb, G_OBJECT (action));
+			(priv->node, EPHY_NODE_CHILD_REMOVED,
+			 (EphyNodeCallback)child_removed_cb, object);
 	}
 
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_ADDED,
-					 (EphyNodeCallback)child_added_cb,
-					 G_OBJECT (action));
+					 (EphyNodeCallback) child_added_cb,
+					 object);
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_CHANGED,
-					 (EphyNodeCallback)child_changed_cb,
-					 G_OBJECT (action));
+					 (EphyNodeCallback) child_changed_cb,
+					 object);
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_REMOVED,
-					 (EphyNodeCallback)child_removed_cb,
-					 G_OBJECT (action));
+					 (EphyNodeCallback) child_removed_cb,
+					 object);
 
-	action->priv->node = node;
+	priv->node = node;
 	
 	erase_popup (action);
 	
-	g_object_freeze_notify (G_OBJECT (action));
-	g_object_notify (G_OBJECT (action), "topic");
+	g_object_freeze_notify (object);
+	g_object_notify (object, "topic");
 	ephy_topic_action_updated (action);
-	g_object_thaw_notify (G_OBJECT (action));
+	g_object_thaw_notify (object);
 }
 
 static void
@@ -468,6 +476,7 @@ ephy_topic_action_set_property (GObject *object,
 				GParamSpec *pspec)
 {
 	EphyTopicAction *action = EPHY_TOPIC_ACTION (object);
+	EphyTopicActionPrivate *priv = action->priv;
 
 	switch (prop_id)
 	{
@@ -475,28 +484,41 @@ ephy_topic_action_set_property (GObject *object,
 			ephy_topic_action_set_topic (action, g_value_get_pointer (value));
 			break;
 		case PROP_MANAGER:
-			action->priv->manager = g_value_get_object (value);
+			priv->manager = g_value_get_object (value);
 			break;
 	}
 }
 
 static void
 ephy_topic_action_get_property (GObject *object,
-				   guint prop_id,
-				   GValue *value,
-				   GParamSpec *pspec)
+				guint prop_id,
+				GValue *value,
+				GParamSpec *pspec)
 {
 	EphyTopicAction *action = EPHY_TOPIC_ACTION (object);
+	EphyTopicActionPrivate *priv = action->priv;
 
 	switch (prop_id)
 	{
 		case PROP_TOPIC:
-			g_value_set_pointer (value, action->priv->node);
+			g_value_set_pointer (value, priv->node);
 			break;
 		case PROP_MANAGER:
-			g_value_set_object (value, action->priv->manager);
+			g_value_set_object (value, priv->manager);
 			break;
 	}
+}
+
+static void
+ephy_topic_action_init (EphyTopicAction *action)
+{
+	EphyTopicActionPrivate *priv;
+
+	priv = action->priv = EPHY_TOPIC_ACTION_GET_PRIVATE (action);
+	
+	priv->merge_id = 0;
+	priv->node = NULL;
+	priv->manager = NULL;
 }
 
 static void
@@ -534,14 +556,32 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 	g_type_class_add_private (object_class, sizeof(EphyTopicActionPrivate));
 }
 
-static void
-ephy_topic_action_init (EphyTopicAction *action)
+GType
+ephy_topic_action_get_type (void)
 {
-	action->priv = EPHY_TOPIC_ACTION_GET_PRIVATE (action);
-	
-	action->priv->merge_id = 0;
-	action->priv->node = NULL;
-	action->priv->manager = NULL;
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GTypeInfo type_info =
+		{
+			sizeof (EphyTopicActionClass),
+			(GBaseInitFunc) NULL,
+			(GBaseFinalizeFunc) NULL,
+			(GClassInitFunc) ephy_topic_action_class_init,
+			(GClassFinalizeFunc) NULL,
+			NULL,
+			sizeof (EphyTopicAction),
+			0, /* n_preallocs */
+			(GInstanceInitFunc) ephy_topic_action_init,
+		};
+
+		type = g_type_register_static (GTK_TYPE_ACTION,
+					       "EphyTopicAction",
+					       &type_info, 0);
+	}
+
+	return type;
 }
 
 char *
@@ -551,9 +591,10 @@ ephy_topic_action_name (EphyNode *node)
 }
 
 GtkAction *
-ephy_topic_action_new (EphyNode *node, GtkUIManager *manager, char *name)
+ephy_topic_action_new (EphyNode *node,
+		       GtkUIManager *manager,
+		       char *name)
 {
-	if(!name) name = ephy_topic_action_name (node);
 	g_return_val_if_fail (name, NULL);
 
 	return GTK_ACTION (g_object_new (EPHY_TYPE_TOPIC_ACTION,
