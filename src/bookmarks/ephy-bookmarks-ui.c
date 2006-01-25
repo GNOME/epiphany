@@ -424,6 +424,7 @@ add_bookmark (const char *location,
 {
 	EphyBookmarks *bookmarks;
 	EphyNode *bookmark;
+	GtkWidget *dialog;
 	
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
 	bookmark = ephy_bookmarks_add (bookmarks, title, location);
@@ -432,8 +433,16 @@ add_bookmark (const char *location,
 	{
 		properties_dialogs = g_hash_table_new (g_direct_hash, g_direct_equal);
 	}
-
-	ephy_bookmarks_ui_show_bookmark (bookmark);
+	
+	dialog = ephy_bookmark_properties_new (bookmarks, bookmark, TRUE);
+	
+	g_signal_connect (dialog, "destroy",
+			  G_CALLBACK (properties_dialog_destroy_cb), bookmarks);
+	g_hash_table_insert (properties_dialogs,
+			     bookmark, dialog);
+	
+	gtk_window_present_with_time (GTK_WINDOW (dialog),
+				      gtk_get_current_event_time ());
 }
 
 static void
