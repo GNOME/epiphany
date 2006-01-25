@@ -110,6 +110,15 @@ static const GOptionEntry libgnome_option_entries[] =
 };
 #endif /* !GNOME_PARAM_GOPTION_CONTEXT */
 
+#ifdef GNOME_ENABLE_DEBUG
+static GOptionEntry debug_option_entries[] =
+{
+	{ "private-instance", 0, 0, G_OPTION_ARG_NONE, &private_instance,
+	  N_("Start a private instance"), NULL },
+	{ NULL }
+};
+#endif /* GNOME_ENABLE_DEBUG */
+
 /* adapted from gtk+/gdk/x11/gdkdisplay-x11.c */
 static guint32
 get_startup_id (void)
@@ -508,6 +517,15 @@ main (int argc,
 
 	g_option_context_set_main_group (option_context, option_group);
 
+#ifdef GNOME_ENABLE_DEBUG
+	option_group = g_option_group_new ("debug",
+					   "Epiphany debug options",
+					   "Epiphany debug options",
+					   NULL, NULL);
+	g_option_group_add_entries (option_group, debug_option_entries);
+	g_option_context_add_group (option_context, option_group);
+#endif /* GNOME_ENABLE_DEBUG */
+
 #ifdef GNOME_PARAM_GOPTION_CONTEXT
 	gnome_program_init (PACKAGE, VERSION,
 			    LIBGNOMEUI_MODULE, argc, argv,
@@ -567,6 +585,9 @@ main (int argc,
 
 	g_ptr_array_add (fake_argv_array, NULL);
 	g_strfreev ((char**) g_ptr_array_free (fake_argv_array, FALSE));
+
+	g_option_context_free (option_context);
+	option_context = NULL;
 
 #endif /* GNOME_PARAM_GOPTION_CONTEXT */
 
