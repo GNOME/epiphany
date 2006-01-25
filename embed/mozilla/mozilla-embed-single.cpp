@@ -129,15 +129,18 @@ struct MozillaEmbedSinglePrivate
 {
 	char *user_prefs;
 	
+	EphySingle *mSingleObserver;
+
+#ifndef HAVE_GECKO_1_8
 	/* monitor this widget for theme changes*/
 	GtkWidget *theme_window;
-
-	EphySingle *mSingleObserver;
+#endif
 
 #ifdef ENABLE_NETWORK_MANAGER
 	libnm_glib_ctx *nm_context;
 	guint nm_callback_id;
 #endif
+
 #ifdef HAVE_GECKO_1_8
 	char *user_css_file;
         guint user_css_enabled_notifier_id;
@@ -319,6 +322,7 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	return TRUE;
 }
 
+#ifndef HAVE_GECKO_1_8
 static char *
 color_to_string (GdkColor color)
 {
@@ -381,6 +385,7 @@ mozilla_setup_colors (MozillaEmbedSingle *mes)
 
 	mes->priv->theme_window = window;
 }			
+#endif
 
 static void 
 mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *moz_single,
@@ -819,10 +824,12 @@ impl_init (EphyEmbedSingle *esingle)
 		return FALSE;
 	}
 
+#ifndef HAVE_GECKO_1_8
 	/* FIXME: This should be removed when mozilla
 	 * bugs 207000 and 207001 are fixed.
 	 */
 	mozilla_setup_colors (single);
+#endif
 
 	START_PROFILER ("Mozilla prefs notifiers")
 	mozilla_notifiers_init ();
@@ -922,10 +929,12 @@ mozilla_embed_single_finalize (GObject *object)
 
 	g_free (mes->priv->user_prefs);
 
+#ifndef HAVE_GECKO_1_8
 	if (mes->priv->theme_window)
 	{
 		gtk_widget_destroy (mes->priv->theme_window);
 	}
+#endif
 }
 
 static void
