@@ -8,15 +8,15 @@ msgid ""
 ""
 msgstr "Project-Id-Version: Epiphany Gnome HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-22 05:24+0100\n"
-"PO-Revision-Date: 2006-01-22 15:17+1030\n"
+"POT-Creation-Date: 2006-01-24 21:54+0100\n"
+"PO-Revision-Date: 2006-01-25 15:44+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: LocFactoryEditor 1.6b30\n"
+"X-Generator: LocFactoryEditor 1.6b31\n"
 
 #:../data/epiphany-lockdown.schemas.in.h:1
 msgid ""
@@ -131,8 +131,8 @@ msgid "Epiphany Web Browser"
 msgstr "Bộ Duyệt Mạng Epiphany"
 
 #.sets the name to appear in the window list applet when grouping windows
-#:../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:223
-#:../src/ephy-main.c:234
+#:../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:515
+#:../src/ephy-main.c:564 ../src/ephy-main.c:580
 msgid "Web Browser"
 msgstr "Bộ duyệt Mạng"
 
@@ -562,7 +562,7 @@ msgid "Cookies"
 msgstr "Cookie"
 
 #.The name of the default downloads folder
-#:../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:101
+#:../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:105
 msgid "Downloads"
 msgstr "Tải về"
 
@@ -843,7 +843,7 @@ msgstr "không rõ"
 msgid "download status|Failed"
 msgstr "đã thất bại"
 
-#:../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:808
+#:../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:870
 msgid "File"
 msgstr "Tập tin"
 
@@ -1242,15 +1242,15 @@ msgstr "Tiếng Ukraina"
 msgid "Unknown (%s)"
 msgstr "Không biết mã chữ (%s)"
 
-#:../embed/ephy-history.c:550 ../src/bookmarks/ephy-bookmark-properties.c:413
+#:../embed/ephy-history.c:558 ../src/bookmarks/ephy-bookmark-properties.c:413
 msgid "All"
 msgstr "Tất cả"
 
-#:../embed/ephy-history.c:713
+#:../embed/ephy-history.c:721
 msgid "Others"
 msgstr "Khác"
 
-#:../embed/ephy-history.c:719
+#:../embed/ephy-history.c:727
 msgid "Local files"
 msgstr "Tập tin cục bộ"
 
@@ -1564,27 +1564,27 @@ msgstr "trong Kho Mạng"
 msgid "Untitled"
 msgstr "Không tên"
 
-#:../embed/mozilla/EphyPromptService.cpp:193
+#:../embed/mozilla/EphyPromptService.cpp:195
 msgid "_Abort Script"
 msgstr "_Hủy tập lệnh"
 
-#:../embed/mozilla/EphyPromptService.cpp:261
+#:../embed/mozilla/EphyPromptService.cpp:263
 msgid "Don't Save"
 msgstr "Không lưu"
 
-#:../embed/mozilla/EphyPromptService.cpp:742
+#:../embed/mozilla/EphyPromptService.cpp:762
 msgid "_User:"
 msgstr "_Người dùng:"
 
-#:../embed/mozilla/EphyPromptService.cpp:743
-#:../embed/mozilla/EphyPromptService.cpp:770
+#:../embed/mozilla/EphyPromptService.cpp:763
+#:../embed/mozilla/EphyPromptService.cpp:790
 #:../embed/mozilla/GtkNSSDialogs.cpp:795
 #:../embed/mozilla/GtkNSSDialogs.cpp:905
 msgid "_Password:"
 msgstr "_Mật khẩu:"
 
 #:../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
-#:../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:642
+#:../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:653
 msgid "All files"
 msgstr "Mọi tập tin"
 
@@ -2020,14 +2020,19 @@ msgstr "Thanh ngăn cách"
 msgid "All supported types"
 msgstr "Mọi loại được hỗ trợ"
 
-#:../lib/ephy-file-helpers.c:330
+#:../lib/ephy-file-helpers.c:292
 #,c-format
-msgid "\"%s\" exists, please move it out of the way."
+msgid "Could not create a temporary directory in “%s”."
+msgstr "Không thể tạo thư mục tạm thời trong « %s »."
+
+#:../lib/ephy-file-helpers.c:360
+#,c-format
+msgid "“%s” exists, please move it out of the way."
 msgstr "« %s » tồn tại, hãy chuyển nó ra."
 
-#:../lib/ephy-file-helpers.c:336
+#:../lib/ephy-file-helpers.c:371
 #,c-format
-msgid "Failed to create directory \"%s\"."
+msgid "Failed to create directory “%s”."
 msgstr "Việc tạo thư mục « %s » bị lỗi."
 
 #:../lib/ephy-gui.c:328
@@ -2227,8 +2232,8 @@ msgstr "Cửa sổ bất lên"
 msgid "History"
 msgstr "Lược sử"
 
-#:../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
-#:../src/bookmarks/ephy-bookmarks-editor.c:1540
+#:../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:784
+#:../src/bookmarks/ephy-bookmarks-editor.c:1602
 #:../src/bookmarks/ephy-topic-action.c:402 ../src/ephy-window.c:1293
 msgid "Bookmarks"
 msgstr "Đánh dấu"
@@ -2334,254 +2339,262 @@ msgstr "C_hủ đề:"
 
 #.File Menu
 #:../src/bookmarks/ephy-bookmark-properties.c:450
-#:../src/bookmarks/ephy-bookmarks-editor.c:171
+#:../src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "_New Topic"
 msgstr "Chủ đề _mới"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:135
+#:../src/bookmarks/ephy-bookmarks-editor.c:95
+msgid "Mozilla (HTML)"
+msgstr "Mozilla (HTML)"
+
+#:../src/bookmarks/ephy-bookmarks-editor.c:96
+msgid "Epiphany (RDF)"
+msgstr "Epiphany (RDF)"
+
+#:../src/bookmarks/ephy-bookmarks-editor.c:146
 msgid "Remove from this topic"
 msgstr "Loại bỏ ra chủ đề này"
 
 #.Toplevel
-#:../src/bookmarks/ephy-bookmarks-editor.c:164
+#:../src/bookmarks/ephy-bookmarks-editor.c:175
 #:../src/ephy-history-window.c:163 ../src/ephy-window.c:115
 msgid "_File"
 msgstr "_Tập tin"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:165
+#:../src/bookmarks/ephy-bookmarks-editor.c:176
 #:../src/ephy-history-window.c:164 ../src/ephy-window.c:116
 msgid "_Edit"
 msgstr "_Hiệu chỉnh"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:166
+#:../src/bookmarks/ephy-bookmarks-editor.c:177
 #:../src/ephy-history-window.c:165 ../src/ephy-window.c:117
 msgid "_View"
 msgstr "_Xem"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:167
+#:../src/bookmarks/ephy-bookmarks-editor.c:178
 #:../src/ephy-history-window.c:166 ../src/ephy-window.c:122
 msgid "_Help"
 msgstr "Trợ _giúp"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:172
+#:../src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "Create a new topic"
 msgstr "Tạo chủ đề mới"
 
 #.File Menu
-#:../src/bookmarks/ephy-bookmarks-editor.c:174
-#:../src/bookmarks/ephy-bookmarks-editor.c:1164
+#:../src/bookmarks/ephy-bookmarks-editor.c:185
+#:../src/bookmarks/ephy-bookmarks-editor.c:1226
 #:../src/bookmarks/ephy-bookmarks-ui.c:268 ../src/ephy-history-window.c:170
 #:../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Mở trong _cửa sổ mới"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:175
+#:../src/bookmarks/ephy-bookmarks-editor.c:186
 msgid "Open the selected bookmark in a new window"
 msgstr "Mở đánh dấu được chọn trong cửa sổ mới"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:177
-#:../src/bookmarks/ephy-bookmarks-editor.c:1167
+#:../src/bookmarks/ephy-bookmarks-editor.c:188
+#:../src/bookmarks/ephy-bookmarks-editor.c:1229
 #:../src/bookmarks/ephy-bookmarks-ui.c:257 ../src/ephy-history-window.c:173
 #:../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Mở trong _thanh mới"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:178
+#:../src/bookmarks/ephy-bookmarks-editor.c:189
 msgid "Open the selected bookmark in a new tab"
 msgstr "Mở đánh dấu được chọn trong thanh mới"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:180
+#:../src/bookmarks/ephy-bookmarks-editor.c:191
 msgid "_Rename..."
 msgstr "Đổi _tên..."
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:181
+#:../src/bookmarks/ephy-bookmarks-editor.c:192
 msgid "Rename the selected bookmark or topic"
 msgstr "Đổi tên đánh dấu hoặc chủ đề được chọn"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:182
+#:../src/bookmarks/ephy-bookmarks-editor.c:193
 #:../src/ephy-history-window.c:176
 msgid "_Delete"
 msgstr "_Xóa bỏ"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:183
+#:../src/bookmarks/ephy-bookmarks-editor.c:194
 msgid "Delete the selected bookmark or topic"
 msgstr "Xóa bỏ đánh dấu hoặc chủ đề được chọn"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:185
+#:../src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "_Properties"
 msgstr "_Thuộc tính"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:186
+#:../src/bookmarks/ephy-bookmarks-editor.c:197
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Xem/sửa đổi thuộc tính của đánh dấu được chọn"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:188
+#:../src/bookmarks/ephy-bookmarks-editor.c:199
 msgid "_Import Bookmarks..."
 msgstr "_Nập đánh dấu..."
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:189
+#:../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Nhập đánh dấu từ trình duyệt khác hay từ tập tin đánh dấu"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:191
+#:../src/bookmarks/ephy-bookmarks-editor.c:202
 msgid "_Export Bookmarks..."
 msgstr "_Xuất đánh dấu..."
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:192
+#:../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Export bookmarks to a file"
 msgstr "Xuất đánh dấu vào tập tin"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:194
+#:../src/bookmarks/ephy-bookmarks-editor.c:205
 #:../src/ephy-history-window.c:182 ../src/ephy-window.c:152
 msgid "_Close"
 msgstr "_Đóng"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:195
+#:../src/bookmarks/ephy-bookmarks-editor.c:206
 msgid "Close the bookmarks window"
 msgstr "Đóng cửa sổ đánh dấu"
 
 #.Edit Menu
-#:../src/bookmarks/ephy-bookmarks-editor.c:199
+#:../src/bookmarks/ephy-bookmarks-editor.c:210
 #:../src/ephy-history-window.c:187 ../src/ephy-window.c:164
 msgid "Cu_t"
 msgstr "Cắ_t"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:200
+#:../src/bookmarks/ephy-bookmarks-editor.c:211
 #:../src/ephy-history-window.c:188 ../src/ephy-window.c:165
 msgid "Cut the selection"
 msgstr "Cắt phần được chọn"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:202
-#:../src/bookmarks/ephy-bookmarks-editor.c:1177
+#:../src/bookmarks/ephy-bookmarks-editor.c:213
+#:../src/bookmarks/ephy-bookmarks-editor.c:1239
 #:../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #:../src/ephy-window.c:167
 msgid "_Copy"
 msgstr "Sao _chép"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:203
+#:../src/bookmarks/ephy-bookmarks-editor.c:214
 #:../src/ephy-history-window.c:191 ../src/ephy-window.c:168
 msgid "Copy the selection"
 msgstr "Sao chép phần đã chọn"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:205
+#:../src/bookmarks/ephy-bookmarks-editor.c:216
 #:../src/ephy-history-window.c:193 ../src/ephy-window.c:170
 msgid "_Paste"
 msgstr "_Dán"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:206
+#:../src/bookmarks/ephy-bookmarks-editor.c:217
 #:../src/ephy-history-window.c:194
 msgid "Paste the clipboard"
 msgstr "Dán khay"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:208
+#:../src/bookmarks/ephy-bookmarks-editor.c:219
 #:../src/ephy-history-window.c:196 ../src/ephy-window.c:173
 msgid "Select _All"
 msgstr "Chọn _Tất cả"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:209
+#:../src/bookmarks/ephy-bookmarks-editor.c:220
 msgid "Select all bookmarks or text"
 msgstr "Chọn mọi đánh dấu hoặc văn bản"
 
 #.Help Menu
 #.Help menu
-#:../src/bookmarks/ephy-bookmarks-editor.c:213
+#:../src/bookmarks/ephy-bookmarks-editor.c:224
 #:../src/ephy-history-window.c:204 ../src/ephy-window.c:264
 msgid "_Contents"
 msgstr "_Nội dung"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:214
+#:../src/bookmarks/ephy-bookmarks-editor.c:225
 msgid "Display bookmarks help"
 msgstr "Hiển thị trợ giúp đánh dấu"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:216
+#:../src/bookmarks/ephy-bookmarks-editor.c:227
 #:../src/ephy-history-window.c:207 ../src/ephy-window.c:267
 msgid "_About"
 msgstr "_Giới thiệu"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:217
+#:../src/bookmarks/ephy-bookmarks-editor.c:228
 #:../src/ephy-history-window.c:208 ../src/ephy-window.c:268
 msgid "Display credits for the web browser creators"
 msgstr "Hiển thị công lao người tạo trình duyệt"
 
 #.View Menu
-#:../src/bookmarks/ephy-bookmarks-editor.c:230
+#:../src/bookmarks/ephy-bookmarks-editor.c:241
 #:../src/ephy-history-window.c:222
 msgid "_Title"
 msgstr "T_iêu đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:231
+#:../src/bookmarks/ephy-bookmarks-editor.c:242
 #:../src/ephy-history-window.c:223
 msgid "Show only the title column"
 msgstr "Chỉ hiển thị cột tiêu đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:232
+#:../src/bookmarks/ephy-bookmarks-editor.c:243
 #:../src/ephy-history-window.c:226
 msgid "T_itle and Address"
 msgstr "Tiêu đề và địa chỉ"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:233
+#:../src/bookmarks/ephy-bookmarks-editor.c:244
 #:../src/ephy-history-window.c:227
 msgid "Show both the title and address columns"
 msgstr "Hiển thị cả các cột tiêu đề và địa chỉ"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:274
+#:../src/bookmarks/ephy-bookmarks-editor.c:285
 msgid "Type a topic"
 msgstr "Gõ chủ đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:392
+#:../src/bookmarks/ephy-bookmarks-editor.c:403
 #,c-format
 msgid "Delete topic “%s”?"
 msgstr "Xóa bỏ chủ đề « %s » chứ?"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:395
+#:../src/bookmarks/ephy-bookmarks-editor.c:406
 msgid "Delete this topic?"
 msgstr "Xóa bỏ chủ đề này chứ?"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:397
+#:../src/bookmarks/ephy-bookmarks-editor.c:408
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
 msgstr "Khi xóa bỏ chủ đề này thì tất cả đánh dấu của nó sẽ không có loại, trừ khi "
 "cũng của chủ đề khác. Sẽ không xóa bỏ đánh dấu ấy, sẽ chỉ xóa bỏ chủ đề."
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:400
+#:../src/bookmarks/ephy-bookmarks-editor.c:411
 msgid "_Delete Topic"
 msgstr "_Xóa bỏ chủ đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:505
+#:../src/bookmarks/ephy-bookmarks-editor.c:516
 msgid "Firefox"
 msgstr "Firefox"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:509
-#:../src/bookmarks/ephy-bookmarks-editor.c:513
+#:../src/bookmarks/ephy-bookmarks-editor.c:520
+#:../src/bookmarks/ephy-bookmarks-editor.c:524
 msgid "Firebird"
 msgstr "Firebird"
 
 #.Translators: The %s is the name of a Mozilla profile.
-#:../src/bookmarks/ephy-bookmarks-editor.c:518
+#:../src/bookmarks/ephy-bookmarks-editor.c:529
 #,c-format
 msgid "Mozilla “%s” profile"
 msgstr "Hồ sơ Mozilla « %s »"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:522
+#:../src/bookmarks/ephy-bookmarks-editor.c:533
 msgid "Galeon"
 msgstr "Galeon"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:526
+#:../src/bookmarks/ephy-bookmarks-editor.c:537
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:555
+#:../src/bookmarks/ephy-bookmarks-editor.c:566
 msgid "Import failed"
 msgstr "Không nạp được"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:557
+#:../src/bookmarks/ephy-bookmarks-editor.c:568
 msgid "Import Failed"
 msgstr "Không nạp được"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:560
+#:../src/bookmarks/ephy-bookmarks-editor.c:571
 #,c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2589,71 +2602,63 @@ msgid ""
 msgstr "Không thể nạp những đánh dấu từ « %s » vì tập tin bị hỏng hoặc có kiểu chưa "
 "được hỗ trợ."
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:623
+#:../src/bookmarks/ephy-bookmarks-editor.c:634
 msgid "Import bookmarks from file"
 msgstr "Nập đánh dấu từ tập tin"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:630
+#:../src/bookmarks/ephy-bookmarks-editor.c:641
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Đánh dấu loại Firefox/Mozilla"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:634
+#:../src/bookmarks/ephy-bookmarks-editor.c:645
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Đánh dấu loại Galeon/Konqueror"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:638
+#:../src/bookmarks/ephy-bookmarks-editor.c:649
 msgid "Epiphany bookmarks"
 msgstr "Đánh dấu Epiphany"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:672
+#:../src/bookmarks/ephy-bookmarks-editor.c:772
 msgid "Export Bookmarks"
 msgstr "Xuất đánh dấu"
 
 #.Make a format selection combo & label
-#:../src/bookmarks/ephy-bookmarks-editor.c:687
+#:../src/bookmarks/ephy-bookmarks-editor.c:787
 msgid "File format:"
 msgstr "Khuôn dạng tập tin"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:690
-msgid "Epiphany (RDF)"
-msgstr "Epiphany (RDF)"
-
-#:../src/bookmarks/ephy-bookmarks-editor.c:691
-msgid "Mozilla (HTML)"
-msgstr "Mozilla (HTML)"
-
-#:../src/bookmarks/ephy-bookmarks-editor.c:768
+#:../src/bookmarks/ephy-bookmarks-editor.c:830
 msgid "Import Bookmarks"
 msgstr "Nập đánh dấu"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:774
+#:../src/bookmarks/ephy-bookmarks-editor.c:836
 msgid "I_mport"
 msgstr "_Nập"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:788
+#:../src/bookmarks/ephy-bookmarks-editor.c:850
 msgid "Import bookmarks from:"
 msgstr "_Nập đánh dấu từ:"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1173
+#:../src/bookmarks/ephy-bookmarks-editor.c:1235
 #:../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "_Sao chép địa chỉ"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1407
+#:../src/bookmarks/ephy-bookmarks-editor.c:1469
 #:../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Tìm kiếm:"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1602
+#:../src/bookmarks/ephy-bookmarks-editor.c:1664
 msgid "Topics"
 msgstr "Chủ đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1672
+#:../src/bookmarks/ephy-bookmarks-editor.c:1734
 #:../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Tiêu đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1678
+#:../src/bookmarks/ephy-bookmarks-editor.c:1740
 #:../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Địa chỉ"
@@ -2995,37 +3000,57 @@ msgstr[0] "%d ngày trước"
 msgid "Sites"
 msgstr "Chỗ Mạng"
 
-#:../src/ephy-main.c:60
-msgid "Open a new tab in an existing window"
-msgstr "Mở thanh mới trong cửa sổ đang mở"
+#:../src/ephy-main.c:74 ../src/ephy-main.c:76
+msgid "Open a new tab in an existing Epiphany window"
+msgstr "Mở thanh mới trong cửa sổ Epiphany đang mở"
 
-#:../src/ephy-main.c:63
-msgid "Run in full screen mode"
-msgstr "Chạy trong chế độ toàn màn hình"
+#:../src/ephy-main.c:78
+msgid "Launch the bookmarks editor"
+msgstr "Chạy trình hiệu chỉnh đánh dấu"
 
-#:../src/ephy-main.c:66
-msgid "Load the given session file"
-msgstr "Tải tập tin phiên đã cho"
-
-#:../src/ephy-main.c:67 ../src/ephy-main.c:73
-msgid "FILE"
-msgstr "Tập Tin"
-
-#:../src/ephy-main.c:69
-msgid "Add a bookmark (don't open any window)"
-msgstr "Thêm đánh dấu (không mở cửa sổ nào)"
-
-#:../src/ephy-main.c:70
-msgid "URL"
-msgstr "Địa chỉ Mạng"
-
-#:../src/ephy-main.c:72
+#:../src/ephy-main.c:80
 msgid "Import bookmarks from the given file"
 msgstr "Nập đánh dấu từ tập tin cho trước"
 
-#:../src/ephy-main.c:75
-msgid "Launch the bookmarks editor"
-msgstr "Chạy trình hiệu chỉnh đánh dấu"
+#:../src/ephy-main.c:80 ../src/ephy-main.c:82
+msgid "FILE"
+msgstr "Tập Tin"
+
+#:../src/ephy-main.c:82
+msgid "Load the given session file"
+msgstr "Tải tập tin phiên đã cho"
+
+#:../src/ephy-main.c:84
+msgid "Add a bookmark"
+msgstr "Thêm đánh dấu"
+
+#:../src/ephy-main.c:84
+msgid "URL"
+msgstr "Địa chỉ Mạng"
+
+#:../src/ephy-main.c:86
+msgid "Start a private instance"
+msgstr "Sở khởi một tức thời riêng"
+
+#:../src/ephy-main.c:460
+msgid "Could not start GNOME Web Browser"
+msgstr "Không thể khởi chạy Bộ duyệt Mạng Gnome"
+
+#:../src/ephy-main.c:463
+#,c-format
+msgid ""
+"Startup failed because of the following error:\n"
+"%s"
+msgstr "Việc khởi chạy thất bại vì lỗi theo đây:\n"
+"%s"
+
+#:../src/ephy-main.c:502 ../src/ephy-main.c:504 ../src/window-commands.c:752
+msgid "GNOME Web Browser"
+msgstr "Bộ duyệt Mạng Gnome"
+
+#:../src/ephy-main.c:505
+msgid "GNOME Web Browser options"
+msgstr "Tùy chọn của Bộ duyệt Mạng Gnome"
 
 #:../src/ephy-notebook.c:1092
 msgid "Close tab"
@@ -3054,15 +3079,15 @@ msgstr "Phụ_c hồi"
 msgid "Crash Recovery"
 msgstr "Phục hồi sau bị hỏng"
 
-#:../src/ephy-shell.c:216
+#:../src/ephy-shell.c:195
 msgid "Sidebar extension required"
 msgstr "Cần phần mở rộng thanh nách"
 
-#:../src/ephy-shell.c:218
+#:../src/ephy-shell.c:197
 msgid "Sidebar Extension Required"
 msgstr "Cần phần mở rộng thanh nách"
 
-#:../src/ephy-shell.c:222
+#:../src/ephy-shell.c:201
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Mới nhắp vào liên kết cần thiết phần mở rộng cho thanh nách được cài đặt "
 "trước."
@@ -3917,7 +3942,10 @@ msgid ""
 "modify it under the terms of the GNU General Public License as published by "
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
-msgstr "Bộ duyệt Mạng Gnome là phần mềm tự do; bạn có thể phát hành lại nó và/hay sửa đổi nó với điều kiện của Quyền Công Chung GNU (GPL) như đưọơc xuất bản bởi Tổ chức Phần mềm Tự do, hoặc phiên bản 2 của Quyền này, hoặc (tùy chọn) bất cứ phiên bản sau nào."
+msgstr "Bộ duyệt Mạng Gnome là phần mềm tự do; bạn có thể phát hành lại nó và/hay "
+"sửa đổi nó với điều kiện của Quyền Công Chung GNU (GPL) như đưọơc xuất bản "
+"bởi Tổ chức Phần mềm Tự do, hoặc phiên bản 2 của Quyền này, hoặc (tùy chọn) "
+"bất cứ phiên bản sau nào."
 
 #:../src/window-commands.c:737
 msgid ""
@@ -3925,21 +3953,21 @@ msgid ""
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
-msgstr "Bộ duyệt Mạng Gnome được phát hành vì chúng tôi mong muốn nó hữu ích, nhưng không bảo đảm gì cả, thậm chí không có bảo đảm được ngụ ý khả năng bán hoặc khả năng làm việc dứt khoát. Hãy xem Quyền Công Chung GNU (GPL) để tìm chi tiết."
+msgstr "Bộ duyệt Mạng Gnome được phát hành vì chúng tôi mong muốn nó hữu ích, nhưng "
+"không bảo đảm gì cả, thậm chí không có bảo đảm được ngụ ý khả năng bán hoặc "
+"khả năng làm việc dứt khoát. Hãy xem Quyền Công Chung GNU (GPL) để tìm chi "
+"tiết."
 
 #:../src/window-commands.c:741
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
-msgstr "Bạn nên đã nhận một bản sao của Quyền Công Chung GNU cùng với trình X; nếu không, hãy viết là thư cho Tổ chức Phần mềm Tự do :\n"
+msgstr "Bạn nên đã nhận một bản sao của Quyền Công Chung GNU cùng với trình X; nếu "
+"không, hãy viết là thư cho Tổ chức Phần mềm Tự do :\n"
 "Free Software Foundation, Inc.,\n"
 "59 Temple Place, Suite 330,\n"
 "Boston, MA  02111-1307  USA (Mỹ)"
-
-#:../src/window-commands.c:752
-msgid "GNOME Web Browser"
-msgstr "Bộ duyệt Mạng Gnome"
 
 #.Translators: This is a special message that shouldn't be translated
 #.* literally. It is used in the about box to give credits to
