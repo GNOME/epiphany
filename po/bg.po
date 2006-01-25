@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-18 11:26+0200\n"
-"PO-Revision-Date: 2006-01-18 12:00+0200\n"
+"POT-Creation-Date: 2006-01-25 12:00+0200\n"
+"PO-Revision-Date: 2006-01-25 11:55+0200\n"
 "Last-Translator: Rostislav \"zbrox\" Raykov <zbrox@i-space.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -139,8 +139,8 @@ msgid "Epiphany Web Browser"
 msgstr "Интернет браузър (Epiphany)"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:223
-#: ../src/ephy-main.c:234
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:515
+#: ../src/ephy-main.c:564 ../src/ephy-main.c:580
 msgid "Web Browser"
 msgstr "Интернет браузър"
 
@@ -586,7 +586,7 @@ msgid "Cookies"
 msgstr "Бисквитки"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:101
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:105
 msgid "Downloads"
 msgstr "Изтегляния"
 
@@ -732,7 +732,7 @@ msgid "Use custom _stylesheet"
 msgstr "Използване на личен набор от _стилове"
 
 #: ../data/glade/prefs-dialog.glade.h:31
-#: ../src/bookmarks/ephy-bookmark-properties.c:596
+#: ../src/bookmarks/ephy-bookmark-properties.c:295
 msgid "_Address:"
 msgstr "_Адрес:"
 
@@ -846,7 +846,7 @@ msgstr ""
 "%s от %s"
 
 #: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#: ../src/ephy-window.c:1469
+#: ../src/ephy-window.c:1467
 msgid "Unknown"
 msgstr "Неизвестно"
 
@@ -869,7 +869,7 @@ msgstr "Неизвестно"
 msgid "download status|Failed"
 msgstr "Неуспешно"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:803
+#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:863
 msgid "File"
 msgstr "Файл"
 
@@ -1270,15 +1270,15 @@ msgstr "Украински"
 msgid "Unknown (%s)"
 msgstr "Непознат (%s)"
 
-#: ../embed/ephy-history.c:550 ../src/bookmarks/ephy-bookmark-properties.c:613
+#: ../embed/ephy-history.c:558 ../src/bookmarks/ephy-bookmark-properties.c:304
 msgid "All"
 msgstr "Всички"
 
-#: ../embed/ephy-history.c:713
+#: ../embed/ephy-history.c:721
 msgid "Others"
 msgstr "Други"
 
-#: ../embed/ephy-history.c:719
+#: ../embed/ephy-history.c:727
 msgid "Local files"
 msgstr "Локални файлове"
 
@@ -1539,7 +1539,7 @@ msgstr "Документът не може да бъде зареден в ре�
 #: ../embed/mozilla/EphyAboutModule.cpp:357
 msgid "To view this document, disable “Work Offline” and try again."
 msgstr ""
-"За да прегледате този документ, спрете режима \"Изключен\" и опитайте отново"
+"За да прегледате този документ, спрете режима „Изключен“ и опитайте отново"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:369
 #, c-format
@@ -1607,27 +1607,27 @@ msgstr "в Интернет архив"
 msgid "Untitled"
 msgstr "Без заглавие"
 
-#: ../embed/mozilla/EphyPromptService.cpp:193
+#: ../embed/mozilla/EphyPromptService.cpp:195
 msgid "_Abort Script"
 msgstr "Отк_азване на скрипт"
 
-#: ../embed/mozilla/EphyPromptService.cpp:261
+#: ../embed/mozilla/EphyPromptService.cpp:263
 msgid "Don't Save"
 msgstr "Без запазване"
 
-#: ../embed/mozilla/EphyPromptService.cpp:742
+#: ../embed/mozilla/EphyPromptService.cpp:762
 msgid "_User:"
 msgstr "_Потребител:"
 
-#: ../embed/mozilla/EphyPromptService.cpp:743
-#: ../embed/mozilla/EphyPromptService.cpp:770
+#: ../embed/mozilla/EphyPromptService.cpp:763
+#: ../embed/mozilla/EphyPromptService.cpp:790
 #: ../embed/mozilla/GtkNSSDialogs.cpp:795
 #: ../embed/mozilla/GtkNSSDialogs.cpp:905
 msgid "_Password:"
 msgstr "_Парола:"
 
 #: ../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:642
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "All files"
 msgstr "Всички файлове"
 
@@ -1734,7 +1734,7 @@ msgstr "Св_ързване"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:427
 msgid "Accept expired security information?"
-msgstr "Да се приеме ли остарялата информация за сигурност?"
+msgstr "Приемане на остарялата информация за сигурност?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
 #: ../embed/mozilla/GtkNSSDialogs.cpp:429
@@ -2039,7 +2039,7 @@ msgstr "_До:"
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Задава краят на обхвата за печат на страниците"
 
-#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1289
+#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1287
 msgid "Print"
 msgstr "Печат"
 
@@ -2088,20 +2088,25 @@ msgstr "Разделител"
 msgid "All supported types"
 msgstr "Всички поддържани видове"
 
-#: ../lib/ephy-file-helpers.c:330
+#: ../lib/ephy-file-helpers.c:292
 #, c-format
-msgid "\"%s\" exists, please move it out of the way."
-msgstr "\"%s\" съществува, премахнете го."
+msgid "Could not create a temporary directory in “%s”."
+msgstr "Временната папка „%s“ не може да бъде създадена."
 
-#: ../lib/ephy-file-helpers.c:336
+#: ../lib/ephy-file-helpers.c:360
 #, c-format
-msgid "Failed to create directory \"%s\"."
-msgstr "Папката \"%s\" не може да бъде създадена."
+msgid "“%s” exists, please move it out of the way."
+msgstr "„%s“ съществува, премахнете я."
+
+#: ../lib/ephy-file-helpers.c:371
+#, c-format
+msgid "Failed to create directory “%s”."
+msgstr "Папката „%s“ не може да бъде създадена."
 
 #: ../lib/ephy-gui.c:328
 #, c-format
 msgid "Directory “%s” is not writable"
-msgstr "В папката „%s\" не може да се пише"
+msgstr "В папката „%s“ не може да се пише"
 
 #: ../lib/ephy-gui.c:332
 msgid "You do not have permission to create files in this directory."
@@ -2295,9 +2300,9 @@ msgstr "Изскачащи прозорци"
 msgid "History"
 msgstr "История"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1535
-#: ../src/bookmarks/ephy-topic-action.c:402 ../src/ephy-window.c:1295
+#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:777
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1596
+#: ../src/bookmarks/ephy-topic-action.c:402 ../src/ephy-window.c:1293
 msgid "Bookmarks"
 msgstr "Отметки"
 
@@ -2381,259 +2386,249 @@ msgstr ""
 "Приставката обработва файлове с разширение .desktop, които сочат към места в "
 "Интернет"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:287
+#: ../src/bookmarks/ephy-bookmark-action.c:285
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:294
+#: ../src/bookmarks/ephy-bookmark-properties.c:180
 #, c-format
 msgid "“%s” Properties"
 msgstr "Настройки на отметката „%s“"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:433
-msgid "Open Icon"
-msgstr "Отваряне на икона"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:506
-msgid "From file..."
-msgstr "От файл..."
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:508
-msgid "None"
-msgstr "Без"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:509 ../src/prefs-dialog.c:412
-msgid "Default"
-msgstr "По подразбиране"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:581
+#: ../src/bookmarks/ephy-bookmark-properties.c:280
 msgid "_Title:"
 msgstr "_Заглавие:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:604
-msgid "I_con:"
-msgstr "И_кона:"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:614
-#: ../src/bookmarks/ephy-topics-palette.c:274
+#: ../src/bookmarks/ephy-bookmark-properties.c:305
+#: ../src/bookmarks/ephy-topics-palette.c:276
 msgid "Subtopics"
 msgstr "Под-теми"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:615
+#: ../src/bookmarks/ephy-bookmark-properties.c:306
 msgid "T_opics:"
 msgstr "Те_ми:"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmark-properties.c:650
-#: ../src/bookmarks/ephy-bookmarks-editor.c:171
+#: ../src/bookmarks/ephy-bookmark-properties.c:340
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "_New Topic"
 msgstr "_Нова тема"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:135
+#: ../src/bookmarks/ephy-bookmarks-editor.c:95
+msgid "Mozilla (HTML)"
+msgstr "Mozilla (HTML)"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:96
+msgid "Epiphany (RDF)"
+msgstr "Epiphany (RDF)"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:146
 msgid "Remove from this topic"
 msgstr "Премахване от тази тема"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:175
 #: ../src/ephy-history-window.c:163 ../src/ephy-window.c:115
 msgid "_File"
 msgstr "_Файл"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
 #: ../src/ephy-history-window.c:164 ../src/ephy-window.c:116
 msgid "_Edit"
 msgstr "_Редактиране"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:177
 #: ../src/ephy-history-window.c:165 ../src/ephy-window.c:117
 msgid "_View"
 msgstr "_Изглед"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178
 #: ../src/ephy-history-window.c:166 ../src/ephy-window.c:122
 msgid "_Help"
 msgstr "_Помощ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "Create a new topic"
 msgstr "Създаване на нова тема"
 
+#. FIXME ngettext
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:174
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1159
-#: ../src/bookmarks/ephy-bookmarks-ui.c:268 ../src/ephy-history-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:185
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1220
+#: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Отваряне в нов _прозорец"
 msgstr[1] "Отваряне в нови _прозорци"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:175
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186
 msgid "Open the selected bookmark in a new window"
 msgstr "Отваряне на избраната отметка в нов прозорец"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:177
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1162
-#: ../src/bookmarks/ephy-bookmarks-ui.c:257 ../src/ephy-history-window.c:173
+#. FIXME ngettext
+#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1223
+#: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Отваряне в нов _подпрозорец"
 msgstr[1] "Отваряне в нови _подпрозорци"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
 msgid "Open the selected bookmark in a new tab"
 msgstr "Отваряне на избраната отметка в нов подпрозорец"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180
+#: ../src/bookmarks/ephy-bookmarks-editor.c:191
 msgid "_Rename..."
 msgstr "_Преименуване..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192
 msgid "Rename the selected bookmark or topic"
 msgstr "Преименуване на избраната отметка или тема"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
 #: ../src/ephy-history-window.c:176
 msgid "_Delete"
 msgstr "_Изтриване"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183
+#: ../src/bookmarks/ephy-bookmarks-editor.c:194
 msgid "Delete the selected bookmark or topic"
 msgstr "Изтриване на избраната отметка или тема"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:185
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "_Properties"
 msgstr "_Настройки"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:186
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Преглед или промяна на настройките на избраната отметка"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:199
 msgid "_Import Bookmarks..."
 msgstr "_Внасяне на отметки..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Вмъкване на отметки от друг браузър или файл с отметки"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:191
+#: ../src/bookmarks/ephy-bookmarks-editor.c:202
 msgid "_Export Bookmarks..."
 msgstr "_Изнасяне на отметки..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Export bookmarks to a file"
 msgstr "Изнасяне на отметки във файл"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:194
+#: ../src/bookmarks/ephy-bookmarks-editor.c:205
 #: ../src/ephy-history-window.c:182 ../src/ephy-window.c:152
 msgid "_Close"
 msgstr "_Затваряне"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
 msgid "Close the bookmarks window"
 msgstr "Затваряне на прозореца с отметките"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:199
+#: ../src/bookmarks/ephy-bookmarks-editor.c:210
 #: ../src/ephy-history-window.c:187 ../src/ephy-window.c:164
 msgid "Cu_t"
 msgstr "Из_рязване"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-editor.c:211
 #: ../src/ephy-history-window.c:188 ../src/ephy-window.c:165
 msgid "Cut the selection"
 msgstr "Изрязване на избрания текст"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1233
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:167
 msgid "_Copy"
 msgstr "_Копиране"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:203
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
 #: ../src/ephy-history-window.c:191 ../src/ephy-window.c:168
 msgid "Copy the selection"
 msgstr "Копиране на избрания текст"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/bookmarks/ephy-bookmarks-editor.c:216
 #: ../src/ephy-history-window.c:193 ../src/ephy-window.c:170
 msgid "_Paste"
 msgstr "_Поставяне"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:206
+#: ../src/bookmarks/ephy-bookmarks-editor.c:217
 #: ../src/ephy-history-window.c:194
 msgid "Paste the clipboard"
 msgstr "Поставяне от буфера за обмен"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:219
 #: ../src/ephy-history-window.c:196 ../src/ephy-window.c:173
 msgid "Select _All"
 msgstr "Избиране на _всичко"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/bookmarks/ephy-bookmarks-editor.c:220
 msgid "Select all bookmarks or text"
 msgstr "Избиране на всички отметки или текст"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/bookmarks/ephy-bookmarks-editor.c:224
 #: ../src/ephy-history-window.c:204 ../src/ephy-window.c:264
 msgid "_Contents"
 msgstr "_Ръководство"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:214
+#: ../src/bookmarks/ephy-bookmarks-editor.c:225
 msgid "Display bookmarks help"
 msgstr "Показване на помощта за отметките"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:216
+#: ../src/bookmarks/ephy-bookmarks-editor.c:227
 #: ../src/ephy-history-window.c:207 ../src/ephy-window.c:267
 msgid "_About"
 msgstr "_Относно"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:217
+#: ../src/bookmarks/ephy-bookmarks-editor.c:228
 #: ../src/ephy-history-window.c:208 ../src/ephy-window.c:268
 msgid "Display credits for the web browser creators"
 msgstr "Показване на информацията за създателите тази програма"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:230
+#: ../src/bookmarks/ephy-bookmarks-editor.c:241
 #: ../src/ephy-history-window.c:222
 msgid "_Title"
 msgstr "_Заглавие"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:231
+#: ../src/bookmarks/ephy-bookmarks-editor.c:242
 #: ../src/ephy-history-window.c:223
 msgid "Show only the title column"
 msgstr "Показване само на титулната колона"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:232
+#: ../src/bookmarks/ephy-bookmarks-editor.c:243
 #: ../src/ephy-history-window.c:226
 msgid "T_itle and Address"
 msgstr "За_главие и адрес"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:233
+#: ../src/bookmarks/ephy-bookmarks-editor.c:244
 #: ../src/ephy-history-window.c:227
 msgid "Show both the title and address columns"
 msgstr "Показване на колоните за заглавието и адреса"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:274
+#: ../src/bookmarks/ephy-bookmarks-editor.c:285
 msgid "Type a topic"
 msgstr "Тип тема"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:392
+#: ../src/bookmarks/ephy-bookmarks-editor.c:403
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "Изтриване на темата „%s“?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:395
+#: ../src/bookmarks/ephy-bookmarks-editor.c:406
 msgid "Delete this topic?"
 msgstr "Изтриване на тази тема?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:397
+#: ../src/bookmarks/ephy-bookmarks-editor.c:408
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -2641,42 +2636,42 @@ msgstr ""
 "Изтриването на тази тема ще разбърка всички нейни отметки, освен ако те не "
 "принадлежат към друга тема. Отметките няма да бъдат изтрити."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:400
+#: ../src/bookmarks/ephy-bookmarks-editor.c:411
 msgid "_Delete Topic"
 msgstr "_Изтриване на тема"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:505
+#: ../src/bookmarks/ephy-bookmarks-editor.c:509
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:509
 #: ../src/bookmarks/ephy-bookmarks-editor.c:513
+#: ../src/bookmarks/ephy-bookmarks-editor.c:517
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:518
+#: ../src/bookmarks/ephy-bookmarks-editor.c:522
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Профил „%s“ на Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:522
+#: ../src/bookmarks/ephy-bookmarks-editor.c:526
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:526
+#: ../src/bookmarks/ephy-bookmarks-editor.c:530
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:555
+#: ../src/bookmarks/ephy-bookmarks-editor.c:559
 msgid "Import failed"
 msgstr "Внасянето е неуспешно"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:557
+#: ../src/bookmarks/ephy-bookmarks-editor.c:561
 msgid "Import Failed"
 msgstr "Внасянето е неуспешно"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:560
+#: ../src/bookmarks/ephy-bookmarks-editor.c:564
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2685,71 +2680,63 @@ msgstr ""
 "Отметките от „%s“ не могат да бъдат внесени, защото файлът е развален или е "
 "от неподдържан файлов формат."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:623
+#: ../src/bookmarks/ephy-bookmarks-editor.c:627
 msgid "Import bookmarks from file"
 msgstr "Внасяне на отметки от файл"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:630
+#: ../src/bookmarks/ephy-bookmarks-editor.c:634
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Отметки от Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:634
+#: ../src/bookmarks/ephy-bookmarks-editor.c:638
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Отметки от Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:638
+#: ../src/bookmarks/ephy-bookmarks-editor.c:642
 msgid "Epiphany bookmarks"
 msgstr "Отметки от Epiphany"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:672
+#: ../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "Export Bookmarks"
 msgstr "Изнасяне на отметки"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:687
+#: ../src/bookmarks/ephy-bookmarks-editor.c:780
 msgid "File format:"
 msgstr "Формат на файла:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:690
-msgid "Epiphany (RDF)"
-msgstr "Epiphany (RDF)"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:691
-msgid "Mozilla (HTML)"
-msgstr "Mozilla (HTML)"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
+#: ../src/bookmarks/ephy-bookmarks-editor.c:823
 msgid "Import Bookmarks"
 msgstr "Внасяне на отметки"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:769
+#: ../src/bookmarks/ephy-bookmarks-editor.c:829
 msgid "I_mport"
 msgstr "В_насяне"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:783
+#: ../src/bookmarks/ephy-bookmarks-editor.c:843
 msgid "Import bookmarks from:"
 msgstr "Внасяне на отметки от:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1229
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "_Копиране на адреса"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1402
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1463
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Търсене:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1597
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1658
 msgid "Topics"
 msgstr "Теми"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1667
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1728
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Заглавие"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1673
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1734
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Адреси"
@@ -2844,111 +2831,111 @@ msgstr "Неразпределени"
 msgid "bookmarks|Local Sites"
 msgstr "Местни сайтове"
 
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:316
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:317
 msgid "Quick Bookmark"
 msgstr "Бърза отметка"
 
 #. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-ui.c:246
+#: ../src/bookmarks/ephy-bookmarks-ui.c:290
 msgid "Properties"
 msgstr "Настройки"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:247
+#: ../src/bookmarks/ephy-bookmarks-ui.c:291
 msgid "Show properties for this bookmark"
 msgstr "Преглед на настройките на тази отметка"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:258
+#: ../src/bookmarks/ephy-bookmarks-ui.c:303
 msgid "Open this bookmark in a new tab"
 msgstr "Отваряне на тази отметка в нов подпрозорец"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:269
+#: ../src/bookmarks/ephy-bookmarks-ui.c:315
 msgid "Open this bookmark in a new window"
 msgstr "Отваряне на тази отметка в нов прозорец"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:453
+#: ../src/bookmarks/ephy-bookmarks-ui.c:488
 msgid "Bookmark exists"
 msgstr "Отметката съществува"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:456
+#: ../src/bookmarks/ephy-bookmarks-ui.c:492
 #, c-format
 msgid "You already have a bookmark titled “%s” for this page."
 msgstr "Вече съществува отметка с име „%s“ за тази страница."
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:466
+#: ../src/bookmarks/ephy-bookmarks-ui.c:502
 msgid "_Create New"
 msgstr "_Създаване на нова тема"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:472
+#: ../src/bookmarks/ephy-bookmarks-ui.c:509
 msgid "_View Properties"
 msgstr "_Преглед на настройките"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:481
+#: ../src/bookmarks/ephy-bookmarks-ui.c:520
 msgid "Bookmark Exists"
 msgstr "Отметката съществува"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:569
+#: ../src/bookmarks/ephy-bookmarks-ui.c:613
 #, c-format
-msgid ""
-"You already have a topic named “%s”.\n"
-"Please use a new topic name."
-msgstr ""
-"Вече съществува тема с име „%s“.\n"
-"Изберете друго име."
+msgid "You already have a topic named “%s”"
+msgstr "Вече съществува тема с име „%s“."
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:610
+#: ../src/bookmarks/ephy-bookmarks-ui.c:617
+msgid "Please use a different topic name."
+msgstr "Използвайте друго име за темата."
+
+#: ../src/bookmarks/ephy-bookmarks-ui.c:657
 #, c-format
 msgid "New topic for “%s”"
 msgstr "Нова тема за „%s“"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:624
+#: ../src/bookmarks/ephy-bookmarks-ui.c:667
 msgid "New topic"
 msgstr "Нова тема"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:628
+#: ../src/bookmarks/ephy-bookmarks-ui.c:672
 msgid "Enter a unique name for the topic."
 msgstr "Въведете уникално име за темата"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:660
+#: ../src/bookmarks/ephy-bookmarks-ui.c:704
 msgid "Create"
 msgstr "Създаване"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:663
+#: ../src/bookmarks/ephy-bookmarks-ui.c:707
 msgid "New Topic"
 msgstr "Нова тема"
 
-#: ../src/bookmarks/ephy-open-tabs-action.c:64
+#: ../src/bookmarks/ephy-open-tabs-action.c:65
 msgid "Open in New _Tabs"
 msgstr "Отваряне в нови _подпрозорци"
 
-#: ../src/bookmarks/ephy-related-action.c:161
+#: ../src/bookmarks/ephy-related-action.c:163
 msgid "Related"
 msgstr "Свързан"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:315
+#: ../src/bookmarks/ephy-topic-factory-action.c:316
 msgid "Quick Topic"
 msgstr "Бърза тема"
 
-#: ../src/bookmarks/ephy-topics-palette.c:203
+#: ../src/bookmarks/ephy-topics-palette.c:205
 msgid "No topics"
 msgstr "Няма теми"
 
-#: ../src/bookmarks/ephy-topics-palette.c:273
+#: ../src/bookmarks/ephy-topics-palette.c:275
 msgid "Selection"
 msgstr "Избор"
 
-#: ../src/bookmarks/ephy-topics-palette.c:273
+#: ../src/bookmarks/ephy-topics-palette.c:275
 msgid "No selected topics"
 msgstr "Няма избрани теми"
 
-#: ../src/bookmarks/ephy-topics-palette.c:274
+#: ../src/bookmarks/ephy-topics-palette.c:276
 msgid "No more subtopics"
 msgstr "Няма други под-теми"
 
-#: ../src/bookmarks/ephy-topics-palette.c:275
+#: ../src/bookmarks/ephy-topics-palette.c:277
 msgid "Other"
 msgstr "Други"
 
-#: ../src/bookmarks/ephy-topics-palette.c:275
+#: ../src/bookmarks/ephy-topics-palette.c:277
 msgid "No other topics"
 msgstr "Няма други теми"
 
@@ -3094,37 +3081,58 @@ msgstr[1] "Последните %d дни"
 msgid "Sites"
 msgstr "Интернет страници"
 
-#: ../src/ephy-main.c:60
-msgid "Open a new tab in an existing window"
+#: ../src/ephy-main.c:74 ../src/ephy-main.c:76
+msgid "Open a new tab in an existing Epiphany window"
 msgstr "Отваряне на нов подпрозорец в съществуващия прозорец"
 
-#: ../src/ephy-main.c:63
-msgid "Run in full screen mode"
-msgstr "Работа на цял екран"
+#: ../src/ephy-main.c:78
+msgid "Launch the bookmarks editor"
+msgstr "Стартиране на редактора на отметките"
 
-#: ../src/ephy-main.c:66
-msgid "Load the given session file"
-msgstr "Зареждане на файла на дадената сесия"
-
-#: ../src/ephy-main.c:67 ../src/ephy-main.c:73
-msgid "FILE"
-msgstr "ФАЙЛ"
-
-#: ../src/ephy-main.c:69
-msgid "Add a bookmark (don't open any window)"
-msgstr "Добавяне на отметка (не се отварят никакви прозорци)"
-
-#: ../src/ephy-main.c:70
-msgid "URL"
-msgstr "АДРЕС"
-
-#: ../src/ephy-main.c:72
+#: ../src/ephy-main.c:80
 msgid "Import bookmarks from the given file"
 msgstr "Вмъкване на отметки от посочения файл"
 
-#: ../src/ephy-main.c:75
-msgid "Launch the bookmarks editor"
-msgstr "Стартиране на редактора на отметките"
+#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
+msgid "FILE"
+msgstr "ФАЙЛ"
+
+#: ../src/ephy-main.c:82
+msgid "Load the given session file"
+msgstr "Зареждане на файла на дадената сесия"
+
+#: ../src/ephy-main.c:84
+msgid "Add a bookmark"
+msgstr "Добавяне на отметка"
+
+#: ../src/ephy-main.c:84
+msgid "URL"
+msgstr "АДРЕС"
+
+#: ../src/ephy-main.c:86
+msgid "Start a private instance"
+msgstr "Стартиране на отделен процес"
+
+#: ../src/ephy-main.c:460
+msgid "Could not start GNOME Web Browser"
+msgstr "Неуспех при стартирането на браузъра"
+
+#: ../src/ephy-main.c:463
+#, c-format
+msgid ""
+"Startup failed because of the following error:\n"
+"%s"
+msgstr ""
+"Стартирането е неуспешно поради следните причини:\n"
+"%s"
+
+#: ../src/ephy-main.c:502 ../src/ephy-main.c:504 ../src/window-commands.c:752
+msgid "GNOME Web Browser"
+msgstr "Интернет браузър на GNOME"
+
+#: ../src/ephy-main.c:505
+msgid "GNOME Web Browser options"
+msgstr "Настройки на браузъра"
 
 #: ../src/ephy-notebook.c:1092
 msgid "Close tab"
@@ -3154,17 +3162,31 @@ msgstr "_Възстановяване"
 msgid "Crash Recovery"
 msgstr "Възстановяване след срив"
 
-#: ../src/ephy-shell.c:216
+#: ../src/ephy-shell.c:195
 msgid "Sidebar extension required"
 msgstr "Изисква се разширение за страничната лента"
 
-#: ../src/ephy-shell.c:218
+#: ../src/ephy-shell.c:197
 msgid "Sidebar Extension Required"
 msgstr "Изисква се разширение за страничната лента"
 
-#: ../src/ephy-shell.c:222
+#: ../src/ephy-shell.c:201
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Връзката, която натиснахте, се нуждае от инсталирана странична лента."
+
+#. Translators: this is displayed in the statusbar; choose a short word
+#. * or even an abbreviation.
+#.
+#: ../src/ephy-statusbar.c:114
+msgid "Caret"
+msgstr "Каретка"
+
+#. Translators: this is the tooltip on the "Caret" icon
+#. * in the statusbar.
+#.
+#: ../src/ephy-statusbar.c:122
+msgid "In keyboard selection mode, press F7 to exit"
+msgstr "Режим на избор с курсор. За изход - натиснете „F7“."
 
 #: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2264 ../src/ephy-tab.c:2299
 msgid "Blank page"
@@ -3183,17 +3205,17 @@ msgstr "Зареждане..."
 #: ../src/ephy-tab.c:1651
 #, c-format
 msgid "Redirecting to “%s”..."
-msgstr "Пренасочване към „%s\"..."
+msgstr "Пренасочване към „%s“..."
 
 #: ../src/ephy-tab.c:1655
 #, c-format
 msgid "Transferring data from “%s”..."
-msgstr "Пренасяне на данни от „%s\"..."
+msgstr "Пренасяне на данни от „%s“..."
 
 #: ../src/ephy-tab.c:1659
 #, c-format
 msgid "Waiting for authorization from “%s”..."
-msgstr "Очакване на разрешение от „%s\"..."
+msgstr "Очакване на разрешение от „%s“..."
 
 #: ../src/ephy-tabs-menu.c:148
 msgid "Switch to this tab"
@@ -3451,7 +3473,7 @@ msgstr "На_стройки"
 
 #: ../src/ephy-window.c:197
 msgid "Configure the web browser"
-msgstr "Настройване на Интернет браузъра"
+msgstr "Настройване на браузъра"
 
 #. View menu
 #: ../src/ephy-window.c:202 ../src/ephy-window.c:205
@@ -3741,101 +3763,101 @@ msgstr "Ако все пак затворите документа, ще заг�
 msgid "Close _Document"
 msgstr "Затваряне на _документа"
 
-#: ../src/ephy-window.c:1285 ../src/window-commands.c:279
+#: ../src/ephy-window.c:1283 ../src/window-commands.c:279
 msgid "Open"
 msgstr "Отваряне"
 
-#: ../src/ephy-window.c:1287 ../src/window-commands.c:305
+#: ../src/ephy-window.c:1285 ../src/window-commands.c:305
 msgid "Save As"
 msgstr "Запазване като"
 
-#: ../src/ephy-window.c:1291
+#: ../src/ephy-window.c:1289
 msgid "Bookmark"
 msgstr "Отметка"
 
-#: ../src/ephy-window.c:1293
+#: ../src/ephy-window.c:1291
 msgid "Find"
 msgstr "Търсене"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1306
+#: ../src/ephy-window.c:1304
 msgid "Larger"
 msgstr "По-голям"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1309
+#: ../src/ephy-window.c:1307
 msgid "Smaller"
 msgstr "По-малък"
 
-#: ../src/ephy-window.c:1472
+#: ../src/ephy-window.c:1470
 msgid "Insecure"
 msgstr "Несигурно"
 
-#: ../src/ephy-window.c:1477
+#: ../src/ephy-window.c:1475
 msgid "Broken"
 msgstr "Развален"
 
-#: ../src/ephy-window.c:1490
+#: ../src/ephy-window.c:1488
 msgid "Low"
 msgstr "Нисък"
 
-#: ../src/ephy-window.c:1497
+#: ../src/ephy-window.c:1495
 msgid "High"
 msgstr "Висок"
 
-#: ../src/ephy-window.c:1507
+#: ../src/ephy-window.c:1505
 #, c-format
 msgid "Security level: %s"
 msgstr "Ниво на сигурност: %s"
 
-#: ../src/ephy-window.c:1547
+#: ../src/ephy-window.c:1545
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d скрит изскачащ прозорец"
 msgstr[1] "%d скрити изскачащи прозорци"
 
-#: ../src/ephy-window.c:1842
+#: ../src/ephy-window.c:1840
 #, c-format
 msgid "Open image “%s”"
 msgstr "Отваряне на изображението „%s“"
 
-#: ../src/ephy-window.c:1847
+#: ../src/ephy-window.c:1845
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Използване на изображението „%s“ като фон"
 
-#: ../src/ephy-window.c:1852
+#: ../src/ephy-window.c:1850
 #, c-format
 msgid "Save image “%s”"
 msgstr "Запазване на изображението „%s“"
 
-#: ../src/ephy-window.c:1857
+#: ../src/ephy-window.c:1855
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Копиране на адреса на изображението „%s“"
 
-#: ../src/ephy-window.c:1870
+#: ../src/ephy-window.c:1868
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Изпращане на е-писмо до „%s“"
 
-#: ../src/ephy-window.c:1876
+#: ../src/ephy-window.c:1874
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Копиране на адреса на е-поща „%s“"
 
-#: ../src/ephy-window.c:1888
+#: ../src/ephy-window.c:1886
 #, c-format
 msgid "Save link “%s”"
 msgstr "Запазване на връзката „%s“"
 
-#: ../src/ephy-window.c:1894
+#: ../src/ephy-window.c:1892
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Отмятане на връзката „%s“"
 
-#: ../src/ephy-window.c:1900
+#: ../src/ephy-window.c:1898
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Копиране на адреса на връзката „%s“"
@@ -3944,6 +3966,10 @@ msgstr "Затваряне"
 msgid "Close print preview"
 msgstr "Затваряне на прегледа преди печат"
 
+#: ../src/prefs-dialog.c:412
+msgid "Default"
+msgstr "По подразбиране"
+
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. * Translators: the first %s is the language name, and the
@@ -3995,8 +4021,40 @@ msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> или <gnome-doc-list@gnome.org>"
 
 #: ../src/window-commands.c:733
-msgid "GNOME Web Browser"
-msgstr "Интернет браузър на GNOME"
+msgid ""
+"The GNOME Web Browser is free software; you can redistribute it and/or "
+"modify it under the terms of the GNU General Public License as published by "
+"the Free Software Foundation; either version 2 of the License, or (at your "
+"option) any later version."
+msgstr ""
+"Интернет браузърът на GNOME е свободен софтуер.\n"
+"Можете да го разпространявате според условията на версия\n"
+"2 или по-висока (по Ваш избор) на Общия публичен лиценз на GNU,\n"
+"който е публикуван от Фондацията за свободен софтуер."
+
+#: ../src/window-commands.c:737
+msgid ""
+"The GNOME Web Browser is distributed in the hope that it will be useful, but "
+"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
+"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details."
+msgstr ""
+"Интернет браузърът на GNOME се разпространява с надеждата да\n"
+"е полезен, но БЕЗ НИКАКВА ГАРАНЦИЯ, дори и подразбиращата\n"
+"се ПРИГОДНОСТ или ГОДНОСТ ЗА КОНКРЕТНА УПОТРЕБА. За подробности\n"
+"прегледайте Общия публичен лиценз на GNU."
+
+#: ../src/window-commands.c:741
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
+"59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
+msgstr ""
+"Трябва да сте получили копие на Общия публичен лиценз на GNU\n"
+"заедно с тази програма. Ако се сте - пишете на Фондацията за\n"
+"свободен софтуер на адрес:\n"
+"Free Software Foundation, Inc., 51 Franklin Street, \n"
+"Fifth Floor, Boston, MA 02110-1301, USA."
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -4006,7 +4064,7 @@ msgstr "Интернет браузър на GNOME"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:747
+#: ../src/window-commands.c:766
 msgid "translator-credits"
 msgstr ""
 "Владимир „Kaladan“ Петков <vpetkov@i-space.org>\n"
@@ -4015,6 +4073,6 @@ msgstr ""
 "Научете повече за нас на http://gnome.cult.bg\n"
 "Докладвайте за грешки на http://gnome.cult.bg/bugs"
 
-#: ../src/window-commands.c:750
+#: ../src/window-commands.c:769
 msgid "GNOME Web Browser Website"
 msgstr "Интернет браузър към GNOME"
