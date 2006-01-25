@@ -67,7 +67,7 @@ ephy_net_monitor_set_net_status (EphyNetMonitor *monitor,
 	LOG ("EphyNetMonitor turning Epiphany to %s mode",
 	     status != NETWORK_DOWN ? "online" : "offline");
 
-	priv->status = priv->active ? status : NETWORK_UP;
+	priv->status = status;
 
 	g_object_notify (G_OBJECT (monitor), "network-status");
 }
@@ -436,7 +436,7 @@ notify_network_managed_cb (GConfClient *client,
 {
 	EphyNetMonitorPrivate *priv = monitor->priv;
 	GConfValue *value;
-	gboolean active = FALSE;
+	gboolean active = TRUE;
 
 	LOG (CONF_NETWORK_MANAGED " key changed");
 
