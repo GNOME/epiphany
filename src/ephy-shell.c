@@ -256,13 +256,13 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
 					 G_CALLBACK (ephy_shell_add_sidebar_cb),
 					 shell, G_CONNECT_AFTER);
 
+		priv->embed_single_connected = TRUE;
+
 #ifdef ENABLE_NETWORK_MANAGER
 		/* Now we need the net monitor */
 		ephy_shell_get_net_monitor (shell);
 		ephy_shell_sync_network_status (priv->net_monitor, NULL, shell);
 #endif
-
-		priv->embed_single_connected = TRUE;
 	}
 	
 	return embed_single;
