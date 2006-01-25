@@ -148,8 +148,3 @@ libephymozillaembed_la_CXXFLAGS = \
 	$(GECKO_CFLAGS)		\
 	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CXXFLAGS)
-
-if ENABLE_NETWORK_MANAGER
-libephymozillaembed_la_CXXFLAGS += \
-	$(NETWORK_MANAGER_CFLAGS)
-endif

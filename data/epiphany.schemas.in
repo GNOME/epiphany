@@ -24,28 +24,6 @@
         </long>
         </locale>
       </schema>
-     <schema>
-        <key>/schemas/apps/epiphany/dialogs/find_match_case</key>
-        <applyto>/apps/epiphany/dialogs/find_match_case</applyto>
-        <owner>epiphany</owner>
-        <type>bool</type>
-        <default>false</default>
-        <locale name="C">
-        <short>Match case for find in page</short>
-        </locale>
-      </schema>
-     <schema>
-        <key>/schemas/apps/epiphany/dialogs/find_autowrap</key>
-        <applyto>/apps/epiphany/dialogs/find_autowrap</applyto>
-        <owner>epiphany</owner>
-        <type>bool</type>
-        <default>true</default>
-        <locale name="C">
-        <short>Autowrap for find in page</short>
-        <long>For find in page, whether to start again at the beginning after
-        reaching the end of the page.</long>
-        </locale>
-      </schema>
       <schema>
         <key>/schemas/apps/epiphany/dialogs/bookmarks_view_details</key>
         <applyto>/apps/epiphany/dialogs/bookmarks_view_details</applyto>
@@ -455,6 +433,16 @@
         <default>false</default>
         <locale name="C">
         <short>Browse with caret</short>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/general/managed_network</key>
+        <applyto>/apps/epiphany/general/managed_network</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>true</default>
+        <locale name="C">
+        <short>Automatically manage offline status with NetworkManager</short>
         </locale>
       </schema>
     </schemalist>

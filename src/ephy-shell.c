@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2000-2004 Marco Pesenti Gritti
- *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2003, 2004, 2006 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,7 +54,9 @@
 #include <dirent.h>
 #include <unistd.h>
 
-#define AUTOMATION_IID "OAFIID:GNOME_Epiphany_Automation"
+#ifdef ENABLE_NETWORK_MANAGER
+#include "ephy-net-monitor.h"
+#endif
 
 #define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
 
@@ -66,13 +68,17 @@ struct _EphyShellPrivate
 	EggToolbarsModel *toolbars_model;
 	EggToolbarsModel *fs_toolbars_model;
 	EphyExtensionsManager *extensions_manager;
+#ifdef ENABLE_NETWORK_MANAGER
+	EphyNetMonitor *net_monitor;
+#endif
 	GtkWidget *bme;
 	GtkWidget *history_window;
 	GObject *pdm_dialog;
 	GObject *prefs_dialog;
 	GObject *print_setup_dialog;
 	GList *del_on_exit;
-	gboolean embed_single_connected;
+
+	guint embed_single_connected : 1;
 };
 
 EphyShell *ephy_shell = NULL;
@@ -83,7 +89,7 @@ static void ephy_shell_dispose		(GObject *object);
 static void ephy_shell_finalize		(GObject *object);
 static GObject *impl_get_embed_single   (EphyEmbedShell *embed_shell);
 
-static GObjectClass *parent_class = NULL;
+static GObjectClass *parent_class;
 
 GType
 ephy_shell_get_type (void)
@@ -209,15 +215,38 @@ ephy_shell_add_sidebar_cb (EphyEmbedSingle *embed_single,
 	return TRUE;
 }
 
+#ifdef ENABLE_NETWORK_MANAGER
+
+static void
+ephy_shell_sync_network_status (EphyNetMonitor *net_monitor,
+				GParamSpec *pspec,
+				EphyShell *shell)
+{
+	EphyShellPrivate *priv = shell->priv;
+	EphyEmbedSingle *single;
+	gboolean net_status;
+
+	if (!priv->embed_single_connected) return;
+
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (shell)));
+
+	net_status = ephy_net_monitor_get_net_status (net_monitor);
+	ephy_embed_single_set_network_status (single, net_status);
+}
+
+#endif /* ENABLE_NETWORK_MANAGER */
+
 static GObject*
 impl_get_embed_single (EphyEmbedShell *embed_shell)
 {
 	EphyShell *shell = EPHY_SHELL (embed_shell);
+	EphyShellPrivate *priv = shell->priv;
 	GObject *embed_single;
 
 	embed_single = EPHY_EMBED_SHELL_CLASS (parent_class)->get_embed_single (embed_shell);
 
-	if (embed_single != NULL && shell->priv->embed_single_connected == FALSE)
+	if (embed_single != NULL &&
+	    priv->embed_single_connected == FALSE)
 	{
 		g_signal_connect_object (embed_single, "new-window",
 					 G_CALLBACK (ephy_shell_new_window_cb),
@@ -227,7 +256,13 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
 					 G_CALLBACK (ephy_shell_add_sidebar_cb),
 					 shell, G_CONNECT_AFTER);
 
-		shell->priv->embed_single_connected = TRUE;
+#ifdef ENABLE_NETWORK_MANAGER
+		/* Now we need the net monitor */
+		ephy_shell_get_net_monitor (shell);
+		ephy_shell_sync_network_status (priv->net_monitor, NULL, shell);
+#endif
+
+		priv->embed_single_connected = TRUE;
 	}
 	
 	return embed_single;
@@ -332,6 +367,17 @@ ephy_shell_dispose (GObject *object)
 		g_object_unref (priv->bookmarks);
 		priv->bookmarks = NULL;
 	}
+
+#ifdef ENABLE_NETWORK_MANAGER
+	if (priv->net_monitor != NULL)
+	{
+		LOG ("Unref net monitor");
+		g_signal_handlers_disconnect_by_func
+			(priv->net_monitor, G_CALLBACK (ephy_shell_sync_network_status), shell);
+		g_object_unref (priv->net_monitor);
+		priv->net_monitor = NULL;
+	}
+#endif /* ENABLE_NETWORK_MANAGER */
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
@@ -671,6 +717,25 @@ ephy_shell_get_extensions_manager (EphyShell *es)
 	}
 
 	return G_OBJECT (es->priv->extensions_manager);
+}
+
+GObject *
+ephy_shell_get_net_monitor (EphyShell *shell)
+{
+#ifdef ENABLE_NETWORK_MANAGER
+	EphyShellPrivate *priv = shell->priv;
+
+	if (priv->net_monitor == NULL)
+	{
+		priv->net_monitor = ephy_net_monitor_new ();
+		g_signal_connect (priv->net_monitor, "notify::network-status",
+				  G_CALLBACK (ephy_shell_sync_network_status), shell);
+	}
+
+	return G_OBJECT (priv->net_monitor);
+#else
+	return NULL;
+#endif /* ENABLE_NETWORK_MANAGER */
 }
 
 static void

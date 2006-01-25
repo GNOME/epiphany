@@ -105,10 +105,6 @@
 
 #include <stdlib.h>
 
-#ifdef ENABLE_NETWORK_MANAGER
-#include <libnm_glib.h>
-#endif
-
 #ifdef HAVE_GECKO_1_8
 #include <nsIURI.h>
 #include <nsIStyleSheetService.h>
@@ -134,11 +130,6 @@ struct MozillaEmbedSinglePrivate
 #ifndef HAVE_GECKO_1_8
 	/* monitor this widget for theme changes*/
 	GtkWidget *theme_window;
-#endif
-
-#ifdef ENABLE_NETWORK_MANAGER
-	libnm_glib_ctx *nm_context;
-	guint nm_callback_id;
 #endif
 
 #ifdef HAVE_GECKO_1_8
@@ -552,62 +543,6 @@ mozilla_init_observer (MozillaEmbedSingle *single)
 	}
 }
 
-#ifdef ENABLE_NETWORK_MANAGER
-
-static void
-network_state_cb (libnm_glib_ctx *context,
-		  gpointer data)
-{
-	EphyEmbedSingle *single = EPHY_EMBED_SINGLE (data);
-	libnm_glib_state state;
-
-	state = libnm_glib_get_network_state (context);
-
-	LOG ("Network state: %d\n", state);
-
-	switch (state)
-	{
-		case LIBNM_NO_DBUS:
-		case LIBNM_NO_NETWORKMANAGER:
-		case LIBNM_INVALID_CONTEXT:
-			/* do nothing */
-			break;
-		case LIBNM_NO_NETWORK_CONNECTION:
-			ephy_embed_single_set_network_status (single, FALSE);
-			break;
-		case LIBNM_ACTIVE_NETWORK_CONNECTION:
-			ephy_embed_single_set_network_status (single, TRUE);
-			break;
-	}
-}
-
-static void
-mozilla_init_network_manager (MozillaEmbedSingle *single)
-{
-	MozillaEmbedSinglePrivate *priv = single->priv;
-
-	priv->nm_context = libnm_glib_init ();
-	if (priv->nm_context == NULL)
-	{
-		g_warning ("Could not initialise NetworkManager, connection status will not be managed!\n");
-		return;
-	}
-
-	priv->nm_callback_id = libnm_glib_register_callback (priv->nm_context,
-							     network_state_cb,
-							     single, NULL);
-	if (priv->nm_callback_id == 0)
-	{
-		libnm_glib_shutdown (priv->nm_context);
-		priv->nm_context = NULL;
-
-		g_warning ("Could not connect to NetworkManager, connection status will not be managed!\n");
-		return;
-	}
-}
-
-#endif /* ENABLE_NETWORK_MANAGER */
-
 #ifdef HAVE_GECKO_1_8
 
 static void
@@ -837,10 +772,6 @@ impl_init (EphyEmbedSingle *esingle)
 
 	mozilla_init_observer (single);
 
-#ifdef ENABLE_NETWORK_MANAGER
-	mozilla_init_network_manager (single);
-#endif
-
 #ifdef HAVE_GECKO_1_8
         mozilla_stylesheet_init (single);
 #endif
@@ -895,21 +826,6 @@ mozilla_embed_single_dispose (GObject *object)
 		NS_RELEASE (priv->mSingleObserver);
 		priv->mSingleObserver = nsnull;
 	}
-
-#ifdef ENABLE_NETWORK_MANAGER
-        if (priv->nm_context != NULL)
-	{
-		if (priv->nm_callback_id != 0)
-		{
-			libnm_glib_unregister_callback (priv->nm_context,
-							priv->nm_callback_id);
-			priv->nm_callback_id = 0;
-		}
-	
-		libnm_glib_shutdown (priv->nm_context);
-		priv->nm_context = NULL;
-	}
-#endif
 
 	parent_class->dispose (object);
 }

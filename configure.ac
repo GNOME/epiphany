@@ -561,17 +561,19 @@ AM_CONDITIONAL([ENABLE_CERTIFICATE_MANAGER],[test "$enable_certificate_manager" 
 
 AC_MSG_CHECKING([whether to enable NetworkManager support])
 AC_ARG_ENABLE([network-manager],
-	AS_HELP_STRING([--enable-network-manager],[Whether to enable automatic network status with NetworkManager (default: disabled]),
+	AS_HELP_STRING([--enable-network-manager],[Whether to enable automatic network status with NetworkManager (default: disabled)]),
 	[],[enable_network_manager=no])
 AC_MSG_RESULT([$enable_network_manager])
 
-if test "x$enable_network_manager" != "xno"; then
-	NETWORKMANAGER_REQUIRED=0.5.0
+if test "$enable_network_manager" != "no"; then
+	AC_CHECK_HEADERS([NetworkManager/NetworkManager.h],
+		[have_network_manager=yes],[have_network_manager=no])
 
-	PKG_CHECK_MODULES([NETWORK_MANAGER],[libnm_glib >= $NETWORKMANAGER_REQUIRED],
-		[enable_network_manager=yes],[enable_network_manager=no])
-	AC_SUBST([NETWORK_MANAGER_CFLAGS])
-	AC_SUBST([NETWORK_MANAGER_LIBS])
+	if test "$enable_network_manager" = "yes" -a "$have_network_manager" = "no"; then
+		AC_MSG_ERROR([NetworkManager support requested but NetworkManager headers not found])
+	elif test "$have_network_manager" = "no"; then
+		AC_MSG_WARN([NetworkManager headers not found; disabling NetworkManager support])
+	fi
 fi
 
 if test "x$enable_network_manager" = "xyes"; then

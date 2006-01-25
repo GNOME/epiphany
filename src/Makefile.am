@@ -122,6 +122,12 @@ libephymain_la_CFLAGS = \
 	$(DBUS_CFLAGS)		\
 	$(AM_CFLAGS)
 
+if ENABLE_NETWORK_MANAGER
+libephymain_la_SOURCES += \
+	ephy-net-monitor.c	\
+	ephy-net-monitor.h
+endif
+
 if ENABLE_PYTHON
 NOINST_H_FILES += \
 	ephy-python.h		\

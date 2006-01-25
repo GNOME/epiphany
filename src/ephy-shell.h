@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2000-2004 Marco Pesenti Gritti
- *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2003, 2004, 2006 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -100,6 +100,8 @@ EphyTab	       *ephy_shell_new_tab_full			(EphyShell *shell,
 
 GObject	       *ephy_shell_get_session			(EphyShell *shell);
 
+GObject	       *ephy_shell_get_net_monitor		(EphyShell *shell);
+
 EphyBookmarks  *ephy_shell_get_bookmarks		(EphyShell *shell);
 
 GObject	       *ephy_shell_get_toolbars_model		(EphyShell *shell,
@@ -117,10 +119,7 @@ GObject        *ephy_shell_get_prefs_dialog		(EphyShell *shell);
 
 GObject	       *ephy_shell_get_print_setup_dialog	(EphyShell *shell);
 
-GObject	       *ephy_shell_get_dbus_service		(EphyShell *shell);
-
 /* private API */
-
 void	       _ephy_shell_create_instance		(void);
 
 G_END_DECLS
