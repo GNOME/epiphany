@@ -252,7 +252,9 @@ endif
 
 stamp_files = \
 	stamp-ephy-type-builtins.c	\
-	stamp-ephy-type-builtins.h
+	stamp-ephy-type-builtins.h	\
+	stamp-ephy-dbus-server-bindings.h	\
+	stamp-ephy-dbus-client-bindings.h
 
 ephy-type-builtins.c: stamp-ephy-type-builtins.c
 	@true
@@ -292,15 +294,21 @@ stamp-ephy-type-builtins.h: $(INST_H_FILES) $(NOINST_H_FILES)
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
 
-ephy-dbus-server-bindings.h: $(top_srcdir)/data/epiphany-service.xml Makefile
+ephy-dbus-server-bindings.h: stamp-ephy-dbus-server-bindings.h
+	@true
+stamp-ephy-dbus-server-bindings.h: $(top_srcdir)/data/epiphany-service.xml Makefile
 	$(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-server $< > xgen-$(@F) \
-	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
-	&& rm -f xgen-$(@F)
+	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
+	&& rm -f xgen-$(@F) \
+	&& echo timestamp > $(@F)
 
-ephy-dbus-client-bindings.h: $(top_srcdir)/data/epiphany-service.xml Makefile
+ephy-dbus-client-bindings.h: stamp-ephy-dbus-client-bindings.h
+	@true
+stamp-ephy-dbus-client-bindings.h: $(top_srcdir)/data/epiphany-service.xml Makefile
 	$(DBUS_BINDING_TOOL) --prefix=ephy_activation --mode=glib-client $< > xgen-$(@F) \
-	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
-	&& rm -f xgen-$(@F)
+	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
+	&& rm -f xgen-$(@F) \
+	&& echo timestamp > $(@F)
 
 epiphany.c: epiphany.defs epiphany.override
 	( cd $(srcdir) && $(PYGTK_CODEGEN) \
