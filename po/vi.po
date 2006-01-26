@@ -8,8 +8,8 @@ msgid ""
 ""
 msgstr "Project-Id-Version: Epiphany Gnome HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-24 21:54+0100\n"
-"PO-Revision-Date: 2006-01-25 15:44+1030\n"
+"POT-Creation-Date: 2006-01-25 21:57+0100\n"
+"PO-Revision-Date: 2006-01-26 15:57+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -131,8 +131,8 @@ msgid "Epiphany Web Browser"
 msgstr "Bộ Duyệt Mạng Epiphany"
 
 #.sets the name to appear in the window list applet when grouping windows
-#:../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:515
-#:../src/ephy-main.c:564 ../src/ephy-main.c:580
+#:../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:533
+#:../src/ephy-main.c:582 ../src/ephy-main.c:601
 msgid "Web Browser"
 msgstr "Bộ duyệt Mạng"
 
@@ -708,7 +708,7 @@ msgid "Use custom _stylesheet"
 msgstr "Dùng tờ _kiểu dáng tự chọn"
 
 #:../data/glade/prefs-dialog.glade.h:31
-#:../src/bookmarks/ephy-bookmark-properties.c:404
+#:../src/bookmarks/ephy-bookmark-properties.c:295
 msgid "_Address:"
 msgstr "Đị_a chỉ:"
 
@@ -843,7 +843,7 @@ msgstr "không rõ"
 msgid "download status|Failed"
 msgstr "đã thất bại"
 
-#:../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:870
+#:../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:863
 msgid "File"
 msgstr "Tập tin"
 
@@ -1242,7 +1242,7 @@ msgstr "Tiếng Ukraina"
 msgid "Unknown (%s)"
 msgstr "Không biết mã chữ (%s)"
 
-#:../embed/ephy-history.c:558 ../src/bookmarks/ephy-bookmark-properties.c:413
+#:../embed/ephy-history.c:558 ../src/bookmarks/ephy-bookmark-properties.c:304
 msgid "All"
 msgstr "Tất cả"
 
@@ -1584,7 +1584,7 @@ msgid "_Password:"
 msgstr "_Mật khẩu:"
 
 #:../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
-#:../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:653
+#:../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "All files"
 msgstr "Mọi tập tin"
 
@@ -1936,7 +1936,7 @@ msgstr "Tập tin"
 #.* in url-escaped UTF-8; that means that if you're choosing google,
 #.* the 'q=' part needs to come last.
 #.
-#:../embed/mozilla/mozilla-embed-single.cpp:293
+#:../embed/mozilla/mozilla-embed-single.cpp:296
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com.vn/search?ie=UTF-8&oe=UTF-8&q="
 
@@ -2232,9 +2232,9 @@ msgstr "Cửa sổ bất lên"
 msgid "History"
 msgstr "Lược sử"
 
-#:../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:784
-#:../src/bookmarks/ephy-bookmarks-editor.c:1602
-#:../src/bookmarks/ephy-topic-action.c:402 ../src/ephy-window.c:1293
+#:../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:777
+#:../src/bookmarks/ephy-bookmarks-editor.c:1596
+#:../src/bookmarks/ephy-topic-action.c:405 ../src/ephy-window.c:1293
 msgid "Bookmarks"
 msgstr "Đánh dấu"
 
@@ -2319,26 +2319,26 @@ msgstr "Bộ cầm phít này quản lý tập tin « .desktop » chứa liên k
 msgid "%s:"
 msgstr "%s:"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:286
+#:../src/bookmarks/ephy-bookmark-properties.c:180
 #,c-format
 msgid "“%s” Properties"
 msgstr "Thuộc tính « %s »"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:389
+#:../src/bookmarks/ephy-bookmark-properties.c:280
 msgid "_Title:"
 msgstr "_Tiêu đề:"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:414
-#:../src/bookmarks/ephy-topics-palette.c:274
+#:../src/bookmarks/ephy-bookmark-properties.c:305
+#:../src/bookmarks/ephy-topics-palette.c:276
 msgid "Subtopics"
 msgstr "Chủ đề phụ"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:415
+#:../src/bookmarks/ephy-bookmark-properties.c:306
 msgid "T_opics:"
 msgstr "C_hủ đề:"
 
 #.File Menu
-#:../src/bookmarks/ephy-bookmark-properties.c:450
+#:../src/bookmarks/ephy-bookmark-properties.c:340
 #:../src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "_New Topic"
 msgstr "Chủ đề _mới"
@@ -2380,10 +2380,11 @@ msgstr "Trợ _giúp"
 msgid "Create a new topic"
 msgstr "Tạo chủ đề mới"
 
+#.FIXME ngettext
 #.File Menu
 #:../src/bookmarks/ephy-bookmarks-editor.c:185
-#:../src/bookmarks/ephy-bookmarks-editor.c:1226
-#:../src/bookmarks/ephy-bookmarks-ui.c:268 ../src/ephy-history-window.c:170
+#:../src/bookmarks/ephy-bookmarks-editor.c:1220
+#:../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
 #:../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2393,9 +2394,10 @@ msgstr[0] "Mở trong _cửa sổ mới"
 msgid "Open the selected bookmark in a new window"
 msgstr "Mở đánh dấu được chọn trong cửa sổ mới"
 
+#.FIXME ngettext
 #:../src/bookmarks/ephy-bookmarks-editor.c:188
-#:../src/bookmarks/ephy-bookmarks-editor.c:1229
-#:../src/bookmarks/ephy-bookmarks-ui.c:257 ../src/ephy-history-window.c:173
+#:../src/bookmarks/ephy-bookmarks-editor.c:1223
+#:../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
 #:../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
@@ -2467,7 +2469,7 @@ msgid "Cut the selection"
 msgstr "Cắt phần được chọn"
 
 #:../src/bookmarks/ephy-bookmarks-editor.c:213
-#:../src/bookmarks/ephy-bookmarks-editor.c:1239
+#:../src/bookmarks/ephy-bookmarks-editor.c:1233
 #:../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #:../src/ephy-window.c:167
 msgid "_Copy"
@@ -2563,38 +2565,38 @@ msgstr "Khi xóa bỏ chủ đề này thì tất cả đánh dấu của nó s�
 msgid "_Delete Topic"
 msgstr "_Xóa bỏ chủ đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:516
+#:../src/bookmarks/ephy-bookmarks-editor.c:509
 msgid "Firefox"
 msgstr "Firefox"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:520
-#:../src/bookmarks/ephy-bookmarks-editor.c:524
+#:../src/bookmarks/ephy-bookmarks-editor.c:513
+#:../src/bookmarks/ephy-bookmarks-editor.c:517
 msgid "Firebird"
 msgstr "Firebird"
 
 #.Translators: The %s is the name of a Mozilla profile.
-#:../src/bookmarks/ephy-bookmarks-editor.c:529
+#:../src/bookmarks/ephy-bookmarks-editor.c:522
 #,c-format
 msgid "Mozilla “%s” profile"
 msgstr "Hồ sơ Mozilla « %s »"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:533
+#:../src/bookmarks/ephy-bookmarks-editor.c:526
 msgid "Galeon"
 msgstr "Galeon"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:537
+#:../src/bookmarks/ephy-bookmarks-editor.c:530
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:566
+#:../src/bookmarks/ephy-bookmarks-editor.c:559
 msgid "Import failed"
 msgstr "Không nạp được"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:568
+#:../src/bookmarks/ephy-bookmarks-editor.c:561
 msgid "Import Failed"
 msgstr "Không nạp được"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:571
+#:../src/bookmarks/ephy-bookmarks-editor.c:564
 #,c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2602,63 +2604,63 @@ msgid ""
 msgstr "Không thể nạp những đánh dấu từ « %s » vì tập tin bị hỏng hoặc có kiểu chưa "
 "được hỗ trợ."
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:634
+#:../src/bookmarks/ephy-bookmarks-editor.c:627
 msgid "Import bookmarks from file"
 msgstr "Nập đánh dấu từ tập tin"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:641
+#:../src/bookmarks/ephy-bookmarks-editor.c:634
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Đánh dấu loại Firefox/Mozilla"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:645
+#:../src/bookmarks/ephy-bookmarks-editor.c:638
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Đánh dấu loại Galeon/Konqueror"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:649
+#:../src/bookmarks/ephy-bookmarks-editor.c:642
 msgid "Epiphany bookmarks"
 msgstr "Đánh dấu Epiphany"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:772
+#:../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "Export Bookmarks"
 msgstr "Xuất đánh dấu"
 
 #.Make a format selection combo & label
-#:../src/bookmarks/ephy-bookmarks-editor.c:787
+#:../src/bookmarks/ephy-bookmarks-editor.c:780
 msgid "File format:"
 msgstr "Khuôn dạng tập tin"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:830
+#:../src/bookmarks/ephy-bookmarks-editor.c:823
 msgid "Import Bookmarks"
 msgstr "Nập đánh dấu"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:836
+#:../src/bookmarks/ephy-bookmarks-editor.c:829
 msgid "I_mport"
 msgstr "_Nập"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:850
+#:../src/bookmarks/ephy-bookmarks-editor.c:843
 msgid "Import bookmarks from:"
 msgstr "_Nập đánh dấu từ:"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1235
+#:../src/bookmarks/ephy-bookmarks-editor.c:1229
 #:../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "_Sao chép địa chỉ"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1469
+#:../src/bookmarks/ephy-bookmarks-editor.c:1463
 #:../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Tìm kiếm:"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1664
+#:../src/bookmarks/ephy-bookmarks-editor.c:1658
 msgid "Topics"
 msgstr "Chủ đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1734
+#:../src/bookmarks/ephy-bookmarks-editor.c:1728
 #:../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Tiêu đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1740
+#:../src/bookmarks/ephy-bookmarks-editor.c:1734
 #:../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Địa chỉ"
@@ -2753,110 +2755,111 @@ msgstr "Chưa phân loại"
 msgid "bookmarks|Local Sites"
 msgstr "Nơi địa phương"
 
-#:../src/bookmarks/ephy-bookmark-factory-action.c:316
+#:../src/bookmarks/ephy-bookmark-factory-action.c:317
 msgid "Quick Bookmark"
 msgstr "Đánh dấu nhânh"
 
 #.Add popup menu actions that are specific to the bookmark widgets
-#:../src/bookmarks/ephy-bookmarks-ui.c:246
+#:../src/bookmarks/ephy-bookmarks-ui.c:290
 msgid "Properties"
 msgstr "Thuộc tính"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:247
+#:../src/bookmarks/ephy-bookmarks-ui.c:291
 msgid "Show properties for this bookmark"
 msgstr "Hiển thị thuộc tính của đánh dấu này"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:258
+#:../src/bookmarks/ephy-bookmarks-ui.c:303
 msgid "Open this bookmark in a new tab"
 msgstr "Mở đánh dấu này trong thanh mới"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:269
+#:../src/bookmarks/ephy-bookmarks-ui.c:315
 msgid "Open this bookmark in a new window"
 msgstr "Mở đánh dấu này trong cửa sổ mới"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:453
+#:../src/bookmarks/ephy-bookmarks-ui.c:488
 msgid "Bookmark exists"
 msgstr "Đánh dấu đã có"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:456
+#:../src/bookmarks/ephy-bookmarks-ui.c:492
 #,c-format
 msgid "You already have a bookmark titled “%s” for this page."
 msgstr "Bạn đã có đánh dấu có tiêu đề « %s » cho trang này."
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:466
+#:../src/bookmarks/ephy-bookmarks-ui.c:502
 msgid "_Create New"
 msgstr "Tạ_o mới"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:472
+#:../src/bookmarks/ephy-bookmarks-ui.c:509
 msgid "_View Properties"
 msgstr "_Xem thuộc tính"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:481
+#:../src/bookmarks/ephy-bookmarks-ui.c:520
 msgid "Bookmark Exists"
 msgstr "Đánh dấu đã có"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:569
+#:../src/bookmarks/ephy-bookmarks-ui.c:613
 #,c-format
-msgid ""
-"You already have a topic named “%s”.\n"
-"Please use a new topic name."
-msgstr "Bạn đã có chủ đề tên « %s ».\n"
-"Hãy dùng tên chủ đề mới."
+msgid "You already have a topic named “%s”"
+msgstr "Bạn đã có chủ đề tên « %s »"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:610
+#:../src/bookmarks/ephy-bookmarks-ui.c:617
+msgid "Please use a different topic name."
+msgstr "Hãy dùng tên chủ đề khác."
+
+#:../src/bookmarks/ephy-bookmarks-ui.c:657
 #,c-format
 msgid "New topic for “%s”"
 msgstr "Chủ đề mới cho « %s »"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:624
+#:../src/bookmarks/ephy-bookmarks-ui.c:667
 msgid "New topic"
 msgstr "Chủ đề mới"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:628
+#:../src/bookmarks/ephy-bookmarks-ui.c:672
 msgid "Enter a unique name for the topic."
 msgstr "Hãy gõ tên duy nhất cho chủ đề."
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:660
+#:../src/bookmarks/ephy-bookmarks-ui.c:704
 msgid "Create"
 msgstr "Tạo"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:663
+#:../src/bookmarks/ephy-bookmarks-ui.c:707
 msgid "New Topic"
 msgstr "Chủ đề mới"
 
-#:../src/bookmarks/ephy-open-tabs-action.c:64
+#:../src/bookmarks/ephy-open-tabs-action.c:65
 msgid "Open in New _Tabs"
 msgstr "Mở trong _thanh mới"
 
-#:../src/bookmarks/ephy-related-action.c:161
+#:../src/bookmarks/ephy-related-action.c:163
 msgid "Related"
 msgstr "Liên quan"
 
-#:../src/bookmarks/ephy-topic-factory-action.c:315
+#:../src/bookmarks/ephy-topic-factory-action.c:316
 msgid "Quick Topic"
 msgstr "Chủ đề nhanh"
 
-#:../src/bookmarks/ephy-topics-palette.c:203
+#:../src/bookmarks/ephy-topics-palette.c:205
 msgid "No topics"
 msgstr "Không có chủ đề"
 
-#:../src/bookmarks/ephy-topics-palette.c:273
+#:../src/bookmarks/ephy-topics-palette.c:275
 msgid "Selection"
 msgstr "Vùng chọn"
 
-#:../src/bookmarks/ephy-topics-palette.c:273
+#:../src/bookmarks/ephy-topics-palette.c:275
 msgid "No selected topics"
 msgstr "Không có chủ đề đã chọn"
 
-#:../src/bookmarks/ephy-topics-palette.c:274
+#:../src/bookmarks/ephy-topics-palette.c:276
 msgid "No more subtopics"
 msgstr "Không có chủ đề phụ thêm nào"
 
-#:../src/bookmarks/ephy-topics-palette.c:275
+#:../src/bookmarks/ephy-topics-palette.c:277
 msgid "Other"
 msgstr "Khác"
 
-#:../src/bookmarks/ephy-topics-palette.c:275
+#:../src/bookmarks/ephy-topics-palette.c:277
 msgid "No other topics"
 msgstr "Không có chủ đề khác nào"
 
@@ -3028,15 +3031,15 @@ msgstr "Thêm đánh dấu"
 msgid "URL"
 msgstr "Địa chỉ Mạng"
 
-#:../src/ephy-main.c:86
+#:../src/ephy-main.c:86 ../src/ephy-main.c:117
 msgid "Start a private instance"
 msgstr "Sở khởi một tức thời riêng"
 
-#:../src/ephy-main.c:460
+#:../src/ephy-main.c:469
 msgid "Could not start GNOME Web Browser"
 msgstr "Không thể khởi chạy Bộ duyệt Mạng Gnome"
 
-#:../src/ephy-main.c:463
+#:../src/ephy-main.c:472
 #,c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -3044,11 +3047,11 @@ msgid ""
 msgstr "Việc khởi chạy thất bại vì lỗi theo đây:\n"
 "%s"
 
-#:../src/ephy-main.c:502 ../src/ephy-main.c:504 ../src/window-commands.c:752
+#:../src/ephy-main.c:511 ../src/ephy-main.c:513 ../src/window-commands.c:752
 msgid "GNOME Web Browser"
 msgstr "Bộ duyệt Mạng Gnome"
 
-#:../src/ephy-main.c:505
+#:../src/ephy-main.c:514
 msgid "GNOME Web Browser options"
 msgstr "Tùy chọn của Bộ duyệt Mạng Gnome"
 
