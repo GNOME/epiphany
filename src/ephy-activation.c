@@ -35,7 +35,8 @@ gboolean
 ephy_activation_load_url (EphyDbus *ephy_dbus,
 			  char *url,
 			  char *options,
-			  guint startup_id)
+			  guint startup_id,
+			  GError **error)
 {
 	EphyNewTabFlags flags = 0;
 	EphyWindow *window;
@@ -101,22 +102,31 @@ ephy_activation_load_session (EphyDbus *ephy_dbus,
 
 	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 	ephy_session_load (session, session_name, user_time);
+
 	return TRUE;
 }
 
 gboolean
 ephy_activation_open_bookmarks_editor (EphyDbus *ephy_dbus,
-				       guint startup_id)
+				       guint startup_id,
+				       GError **error)
 {
 	GtkWidget *editor;
 	guint32 user_time = (guint32) startup_id;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING))
 	{
+		g_set_error (error,
+			     g_quark_from_static_string ("ephy-activation-error"),
+			     0,
+			     "Bookmarks editing is locked down.");
+
 		return FALSE;
 	}
+
 	editor = ephy_shell_get_bookmarks_editor (ephy_shell);
 	ephy_gui_window_update_user_time (editor, user_time);
 	gtk_window_present (GTK_WINDOW (editor));
+
 	return TRUE;
 }

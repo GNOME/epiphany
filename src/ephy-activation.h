@@ -29,7 +29,8 @@ G_BEGIN_DECLS
 gboolean ephy_activation_load_url		(EphyDbus *ephy_dbus,
 						 char *url,
 						 char *options,
-						 guint startup_id);
+						 guint startup_id,
+						 GError **error);
 
 gboolean ephy_activation_load_session		(EphyDbus *ephy_dbus,
 						 char *session_name,
@@ -37,7 +38,8 @@ gboolean ephy_activation_load_session		(EphyDbus *ephy_dbus,
 						 GError **error);
 
 gboolean ephy_activation_open_bookmarks_editor	(EphyDbus *ephy_dbus,
-						 guint user_time);
+						 guint user_time,
+						 GError **error);
 
 G_END_DECLS
 

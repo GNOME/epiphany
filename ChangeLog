@@ -1,5 +1,15 @@
 2006-01-27  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-activation.c: (ephy_activation_load_url),
+	(ephy_activation_load_session),
+	(ephy_activation_open_bookmarks_editor):
+	* src/ephy-activation.h:
+
+	Add required GError** params, and actually set the
+	error when returning FALSE.
+
+2006-01-27  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-main.c: (main):
 
 	Disable pango rendering by default, unless MOZ_ENABLE_PANGO env
