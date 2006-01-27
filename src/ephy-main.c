@@ -486,6 +486,7 @@ main (int argc,
 	DBusGProxy *proxy;
 	GError *error = NULL;
 	guint32 user_time;
+	const char *env;
 #ifndef GNOME_PARAM_GOPTION_CONTEXT
 	GPtrArray *fake_argv_array;
 #endif
@@ -614,36 +615,42 @@ main (int argc,
 		exit (1);
 	}
 
-	/* If we're remoting, no need to start up any further services,
-	 * just forward the call.
-	 */
-	if (!_ephy_dbus_is_name_owner ())
+	/* Create DBUS proxy */
+	proxy = ephy_dbus_get_proxy (ephy_dbus_get_default (), EPHY_DBUS_SESSION);
+	if (proxy == NULL)
 	{
-		/* FIXME */
-		proxy = ephy_dbus_get_proxy (ephy_dbus_get_default (), EPHY_DBUS_SESSION);
-		if (proxy == NULL)
-		{
-			error = g_error_new (STARTUP_ERROR_QUARK,
-					     0,
-					     "Unable to get DBus proxy; aborting activation."); /* FIXME i18n */	
-		}
-
-		if (proxy != NULL &&
-		    call_dbus_proxy (proxy, user_time, &error))
-		{
-			gtk_main ();
-
-			_ephy_dbus_release ();
-
-			gdk_notify_startup_complete ();
-			exit (0);
-		}
+		error = g_error_new (STARTUP_ERROR_QUARK,
+				     0,
+				     "Unable to get DBus proxy; aborting activation."); /* FIXME i18n */
 
 		_ephy_dbus_release ();
 
 		show_error_message (&error);
 
 		exit (1);
+	}
+
+	/* If we're remoting, no need to start up any further services,
+	 * just forward the call.
+	 */
+	if (!_ephy_dbus_is_name_owner ())
+	{
+		if (!call_dbus_proxy (proxy, user_time, &error))
+		{
+			_ephy_dbus_release ();
+
+			show_error_message (&error);
+
+			exit (1);
+		}
+
+		/* Wait for the response */
+		gtk_main ();
+
+		_ephy_dbus_release ();
+
+		gdk_notify_startup_complete ();
+		exit (0);
 	}
 
 	/* We're not remoting; start our services */
@@ -668,27 +675,17 @@ main (int argc,
 	gtk_about_dialog_set_url_hook (handle_url, NULL, NULL);
 	gtk_about_dialog_set_email_hook (handle_email, NULL, NULL);
 
-	/* Now create the shell */
-	_ephy_shell_create_instance ();
-
-	/* Create DBUS proxy */
-	proxy = ephy_dbus_get_proxy (ephy_dbus_get_default (), EPHY_DBUS_SESSION);
-	if (proxy == NULL)
+	/* Work around bug #328844 */
+	env = g_getenv ("MOZ_ENABLE_PANGO");
+	if (env == NULL ||
+	    env[0] == '\0' ||
+	    strcmp (env, "0") == 0)
 	{
-		error = g_error_new (STARTUP_ERROR_QUARK,
-				     0,
-				     "Unable to get DBus proxy; aborting activation."); /* FIXME i18n */
-
-		g_object_unref (ephy_shell_get_default ());
-
-		ephy_file_helpers_shutdown ();
-		_ephy_dbus_release ();
-
-		show_error_message (&error);
-
-		exit (1);
+		g_setenv ("MOZ_DISABLE_PANGO", "1", TRUE);
 	}
 
+	/* Now create the shell */
+	_ephy_shell_create_instance ();
 	g_object_weak_ref (G_OBJECT (proxy),
 			   (GWeakNotify) dbus_g_proxy_finalized_cb,
 			   g_object_ref (ephy_shell_get_default ()));
@@ -696,6 +693,8 @@ main (int argc,
 	if (!call_dbus_proxy (proxy, user_time, &error))
 	{
 		g_object_unref (ephy_shell_get_default ());
+		g_object_unref (proxy);
+		g_assert (ephy_shell_get_default () == NULL);
 
 		ephy_file_helpers_shutdown ();
 		_ephy_dbus_release ();
