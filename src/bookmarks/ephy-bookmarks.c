@@ -1186,6 +1186,47 @@ ephy_bookmarks_find_bookmark (EphyBookmarks *eb,
 	return NULL;
 }
 
+EphyNode *
+ephy_bookmarks_find_duplicate (EphyBookmarks *eb,
+			       EphyNode *bookmark)
+{
+	GPtrArray *children;
+	const char *url;
+	int i;
+
+	g_return_val_if_fail (EPHY_IS_BOOKMARKS (eb), NULL);
+	g_return_val_if_fail (eb->priv->bookmarks != NULL, NULL);
+	g_return_val_if_fail (bookmark != NULL, NULL);
+	
+	url = ephy_node_get_property_string 
+	  (bookmark, EPHY_NODE_BMK_PROP_LOCATION);
+
+	g_return_val_if_fail (url != NULL, NULL);
+
+	children = ephy_node_get_children (eb->priv->bookmarks);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+		const char *location;
+
+		kid = g_ptr_array_index (children, i);
+		if (kid == bookmark)
+		{
+			continue;
+		}
+		
+		location = ephy_node_get_property_string
+			(kid, EPHY_NODE_BMK_PROP_LOCATION);
+
+		if (location != NULL && strcmp (url, location) == 0)
+		{
+			return kid;
+		}
+	}
+	
+	return NULL;
+}
+
 void
 ephy_bookmarks_set_icon	(EphyBookmarks *eb,
 			 const char *url,

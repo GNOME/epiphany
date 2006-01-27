@@ -240,8 +240,7 @@ window_cmd_file_bookmark_page (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_bookmarks_ui_add_bookmark (GTK_WIDGET (window),
-					ephy_tab_get_address (tab),
+	ephy_bookmarks_ui_add_bookmark (ephy_tab_get_address (tab),
 					ephy_tab_get_title (tab));
 }
 

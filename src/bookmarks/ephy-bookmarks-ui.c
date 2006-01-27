@@ -418,9 +418,9 @@ properties_dialog_destroy_cb (EphyBookmarkProperties *dialog,
 			     ephy_bookmark_properties_get_node (dialog));
 }
 
-static void
-add_bookmark (const char *location, 
-	      const char *title)
+void
+ephy_bookmarks_ui_add_bookmark (const char *location, 
+				const char *title)
 {
 	EphyBookmarks *bookmarks;
 	EphyNode *bookmark;
@@ -445,113 +445,8 @@ add_bookmark (const char *location,
 				      gtk_get_current_event_time ());
 }
 
-static void
-duplicate_bookmark_response_cb (GtkWidget *dialog,
-				int response,
-				EphyNode *node)
-{
-	if (response == RESPONSE_SHOW_PROPERTIES)
-	{
-		ephy_bookmarks_ui_show_bookmark (node);
-	}
-        else if (response == RESPONSE_NEW_BOOKMARK)
-	{
-		const char *location;
-		const char *title;
-
-		location = g_object_get_data (G_OBJECT (dialog), "location");
-		title = g_object_get_data (G_OBJECT (dialog), "title");
-
-		add_bookmark (location, title);
-	}
-
-	gtk_widget_destroy (dialog);
-}
-
-static void
-dialog_node_destroy_cb (EphyNode *node,
-			GtkWidget *dialog)
-{
-	gtk_widget_destroy (dialog);
-}
-
-void
-ephy_bookmarks_ui_add_bookmark (GtkWidget *parent,
-				const char *location, 
-				const char *title)
-{
-	EphyBookmarks *bookmarks;
-	EphyNode *bookmark;
-	
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	bookmark = location ? ephy_bookmarks_find_bookmark (bookmarks, location) : NULL;
-	
-	if (bookmark != NULL)
-	{
-		GtkWidget *button, *dialog;
-
-		dialog = gtk_message_dialog_new
-			(GTK_WINDOW (parent),
-			 GTK_DIALOG_DESTROY_WITH_PARENT,
-			 GTK_MESSAGE_INFO, GTK_BUTTONS_NONE, 
-			 _("Bookmark exists"));
-
-		gtk_message_dialog_format_secondary_text
-			(GTK_MESSAGE_DIALOG (dialog),
-			 _("You already have a bookmark titled “%s” for this page."),
-			 ephy_node_get_property_string (bookmark, EPHY_NODE_BMK_PROP_TITLE));
-
-		if (parent != NULL)
-		{
-			gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (parent)),
-						     GTK_WINDOW (dialog));
-		}
-
-		button = gtk_dialog_add_button (GTK_DIALOG (dialog),
-						_("_Create New"),
-						RESPONSE_NEW_BOOKMARK);
-		gtk_button_set_image (GTK_BUTTON (button),
-				      gtk_image_new_from_stock (STOCK_BOOKMARK,
-								GTK_ICON_SIZE_BUTTON));
-
-		button = gtk_dialog_add_button (GTK_DIALOG (dialog),
-						_("_View Properties"),
-						RESPONSE_SHOW_PROPERTIES);
-		gtk_button_set_image (GTK_BUTTON (button), 
-				      gtk_image_new_from_stock (GTK_STOCK_PROPERTIES,
-						      		GTK_ICON_SIZE_BUTTON));
-
-		gtk_dialog_add_button (GTK_DIALOG (dialog),
-				       GTK_STOCK_OK,
-				       GTK_RESPONSE_OK);
-		gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-
-		gtk_window_set_title (GTK_WINDOW (dialog), _("Bookmark Exists"));
-		gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
-
-		g_object_set_data_full (G_OBJECT (dialog), "location",
-					g_strdup (location), g_free);
-		g_object_set_data_full (G_OBJECT (dialog), "title",
-					g_strdup (title), g_free);
-
-		g_signal_connect (dialog, "response",
-			  	  G_CALLBACK (duplicate_bookmark_response_cb), bookmark);
-		
-		ephy_node_signal_connect_object (bookmark, EPHY_NODE_DESTROY,
-						 (EphyNodeCallback) dialog_node_destroy_cb,
-						 G_OBJECT (dialog));
-
-		gtk_window_present_with_time (GTK_WINDOW (dialog),
-					      gtk_get_current_event_time ());
-	}
-	else
-	{
-		add_bookmark (location, title);
-	}
-}
-
 static EphyNode *
-ephy_bookmarks_ui_find_topic (const char *name)
+find_topic (const char *name)
 {
 	EphyBookmarks *bookmarks;
 	GPtrArray *children;
@@ -576,6 +471,13 @@ ephy_bookmarks_ui_find_topic (const char *name)
 	}
 	
 	return NULL;
+}
+
+static void
+dialog_node_destroy_cb (EphyNode *node,
+			GtkWidget *dialog)
+{
+	gtk_widget_destroy (dialog);
 }
 
 static void
@@ -610,7 +512,7 @@ add_topic_response_cb (GtkWidget *dialog,
 	name = gtk_entry_get_text (entry);
 	g_return_if_fail (name != NULL && name[0] != '\0');
 	
-	topic = ephy_bookmarks_ui_find_topic (name);
+	topic = find_topic (name);
 	if (topic != NULL)
 	{
 		GtkWidget *message;

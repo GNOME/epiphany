@@ -58,6 +58,9 @@ struct _EphyBookmarkPropertiesPrivate
 	EphyNode *bookmark;
 	EphyTopicsPalette *palette;
 	gboolean creating;
+	
+	EphyNode *duplicate;
+	GtkWidget *warning;
 };
 
 enum
@@ -74,6 +77,57 @@ enum
 };
 
 static GObjectClass *parent_class;
+
+static void
+node_added_cb (EphyNode *bookmarks,
+	       EphyNode *bookmark,
+	       EphyBookmarkProperties *properties)
+{
+	EphyBookmarkPropertiesPrivate *priv = properties->priv;
+	
+	if (priv->duplicate == NULL)
+	{
+		priv->duplicate = ephy_bookmarks_find_duplicate
+		  (priv->bookmarks, priv->bookmark);
+		g_object_set (priv->warning, "visible", 
+			      priv->duplicate != NULL, NULL);
+	}
+}
+
+static void
+node_changed_cb (EphyNode *bookmarks,
+		 EphyNode *bookmark,
+		 guint property,
+		 EphyBookmarkProperties *properties)
+{
+	EphyBookmarkPropertiesPrivate *priv = properties->priv;
+	
+	if (priv->duplicate == bookmark || priv->bookmark == bookmark ||
+	    priv->duplicate == NULL)
+	{
+		priv->duplicate = ephy_bookmarks_find_duplicate
+		  (priv->bookmarks, priv->bookmark);
+		g_object_set (priv->warning, "visible", 
+			      priv->duplicate != NULL, NULL);
+	}
+}
+
+static void
+node_removed_cb (EphyNode *bookmarks,
+		 EphyNode *bookmark,
+		 guint index,
+		 EphyBookmarkProperties *properties)
+{
+	EphyBookmarkPropertiesPrivate *priv = properties->priv;
+	
+	if (priv->duplicate == bookmark)
+	{
+		priv->duplicate = ephy_bookmarks_find_duplicate
+		  (priv->bookmarks, priv->bookmark);
+		g_object_set (priv->warning, "visible", 
+			      priv->duplicate != NULL, NULL);
+	}
+}
 
 static void
 node_destroy_cb (EphyNode *bookmark,
@@ -106,14 +160,27 @@ ephy_bookmark_properties_set_bookmark (EphyBookmarkProperties *properties,
 					 G_OBJECT (properties));
 }
 
+
 static void
-bookmark_properties_close_cb (GtkDialog *dialog,
-			      gpointer data)
+show_duplicate_cb (GtkButton *button,
+		   EphyBookmarkProperties *properties)
+{
+	EphyBookmarkPropertiesPrivate *priv = properties->priv;
+	EphyNode *dup = ephy_bookmarks_find_duplicate (priv->bookmarks, priv->bookmark);
+	
+	g_return_if_fail (dup != NULL);
+	
+	ephy_bookmarks_ui_show_bookmark (dup);
+}
+
+static void
+bookmark_properties_destroy_cb (GtkDialog *dialog,
+				gpointer data)
 {
 	EphyBookmarkProperties *properties = EPHY_BOOKMARK_PROPERTIES (dialog);
 	EphyBookmarkPropertiesPrivate *priv = properties->priv;
 
-	if (priv->creating)
+	if (priv->creating && priv->bookmark != NULL)
 	{
 		ephy_node_unref (priv->bookmark);
 		priv->bookmark = NULL;
@@ -139,8 +206,10 @@ bookmark_properties_response_cb (GtkDialog *dialog,
 			ephy_bookmarks_ui_add_topic (GTK_WIDGET (dialog),
 						     priv->bookmark);
 			return;
-		case GTK_RESPONSE_CANCEL:
-			ephy_node_unref (priv->bookmark);
+		case GTK_RESPONSE_ACCEPT:
+			/* On destruction of the dialog, if priv->creating==TRUE,
+			 * we will unref any bookmark we have, so we set it
+			 * to NULL here to 'protect' it from unreffing. */
 			priv->bookmark = NULL;
 			break;
 	 	default:
@@ -229,7 +298,6 @@ ephy_bookmark_properties_constructor (GType type,
 	GtkWidget *scrolled_window;
 	GtkWindow *window;
 	GtkDialog *dialog;
-	GtkComboBox *cbox;
 	const char *tmp;
 
 	object = parent_class->constructor (type, n_construct_properties,
@@ -248,8 +316,8 @@ ephy_bookmark_properties_constructor (GType type,
 	g_signal_connect (properties, "response",
 			  G_CALLBACK (bookmark_properties_response_cb), properties);
 
-	g_signal_connect (properties, "close",
-			  G_CALLBACK (bookmark_properties_close_cb), properties);
+	g_signal_connect (properties, "destroy",
+			  G_CALLBACK (bookmark_properties_destroy_cb), properties);
 
 	ephy_state_add_window (widget,
 			       "bookmark_properties",
@@ -292,27 +360,26 @@ ephy_bookmark_properties_constructor (GType type,
 			  G_CALLBACK (location_entry_changed_cb), properties);
 	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 	gtk_widget_show (entry);
-	label = gtk_label_new_with_mnemonic (_("_Address:"));
+	label = gtk_label_new_with_mnemonic (_("A_ddress:"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);
 
-	cbox = GTK_COMBO_BOX (gtk_combo_box_new_text ());
-	gtk_widget_show (GTK_WIDGET (cbox));
-	gtk_combo_box_append_text (cbox, _("All"));
-	gtk_combo_box_append_text (cbox, _("Subtopics"));
-	label = gtk_label_new_with_mnemonic(_("T_opics:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (cbox));
-	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, 0, 0, 0);
-	gtk_table_attach (GTK_TABLE (table), GTK_WIDGET (cbox), 1, 2, 2, 3, GTK_FILL, 0, 0, 0);
+	widget = gtk_image_new_from_stock (GTK_STOCK_INFO, GTK_ICON_SIZE_BUTTON);
+	priv->warning = gtk_button_new_with_mnemonic (_("_Show bookmark with same address"));
+	gtk_button_set_image (GTK_BUTTON (priv->warning), widget);
+	g_signal_connect (priv->warning, "clicked",
+			  G_CALLBACK(show_duplicate_cb), properties);
+	gtk_widget_show (priv->warning);
+	gtk_table_set_row_spacing (GTK_TABLE (table), 1, 0);
+	gtk_table_attach (GTK_TABLE (table), priv->warning, 1, 2, 2, 3, GTK_FILL, 0, 0, 3);
+	priv->duplicate = ephy_bookmarks_find_duplicate (priv->bookmarks, priv->bookmark);
+	g_object_set (priv->warning, "visible", priv->duplicate != NULL, NULL);
 
 	palette = ephy_topics_palette_new (priv->bookmarks, priv->bookmark);
 	priv->palette = EPHY_TOPICS_PALETTE (palette);
-
 	scrolled_window = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
 					"hadjustment", NULL,
 					"vadjustment", NULL,
@@ -322,11 +389,11 @@ ephy_bookmark_properties_constructor (GType type,
 					NULL);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), palette);
 	gtk_widget_show (palette);
-  
-	g_signal_connect_object (cbox, "changed",
-				 G_CALLBACK (combo_changed_cb), palette,
-				 G_CONNECT_AFTER);
-	
+	label = gtk_label_new_with_mnemonic(_("T_opics:"));
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+	gtk_label_set_mnemonic_widget (GTK_LABEL (label), palette);
+	gtk_widget_show (label);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4, GTK_FILL, GTK_FILL, 0, 6);
 	gtk_table_attach (GTK_TABLE (table), scrolled_window, 1, 2, 3, 4,
 			  GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
 	gtk_widget_show (scrolled_window);
@@ -346,9 +413,9 @@ ephy_bookmark_properties_constructor (GType type,
 				       GTK_STOCK_CANCEL,
 				       GTK_RESPONSE_CANCEL);
 		gtk_dialog_add_button (dialog,
-				       GTK_STOCK_OK,
-				       GTK_RESPONSE_OK);
-		gtk_dialog_set_default_response (dialog, GTK_RESPONSE_OK);
+				       GTK_STOCK_ADD,
+				       GTK_RESPONSE_ACCEPT);
+		gtk_dialog_set_default_response (dialog, GTK_RESPONSE_ACCEPT);
 	}
 	else
 	{
@@ -357,8 +424,6 @@ ephy_bookmark_properties_constructor (GType type,
 				       GTK_RESPONSE_CLOSE);
 		gtk_dialog_set_default_response (dialog, GTK_RESPONSE_CLOSE);
 	}
-
-	gtk_combo_box_set_active (cbox, 1);
 
 	return object;
 }
@@ -371,11 +436,25 @@ ephy_bookmark_properties_set_property (GObject *object,
 {
 	EphyBookmarkProperties *properties = EPHY_BOOKMARK_PROPERTIES (object);
 	EphyBookmarkPropertiesPrivate *priv = properties->priv;
+	EphyNode *bookmarks;
 
 	switch (prop_id)
 	{
 		case PROP_BOOKMARKS:
 			priv->bookmarks = g_value_get_object (value);
+			bookmarks = ephy_bookmarks_get_bookmarks (priv->bookmarks);
+			ephy_node_signal_connect_object (bookmarks,
+							 EPHY_NODE_CHILD_ADDED,
+							 (EphyNodeCallback) node_added_cb,
+							 object);
+			ephy_node_signal_connect_object (bookmarks,
+							 EPHY_NODE_CHILD_REMOVED,
+							 (EphyNodeCallback) node_removed_cb,
+							 object);
+			ephy_node_signal_connect_object (bookmarks,
+							 EPHY_NODE_CHILD_CHANGED,
+							 (EphyNodeCallback) node_changed_cb,
+							 object);
 			break;
 		case PROP_BOOKMARK:
 			ephy_bookmark_properties_set_bookmark

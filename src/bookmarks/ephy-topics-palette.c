@@ -41,6 +41,7 @@ struct _EphyTopicsPalettePrivate
 	EphyBookmarks *bookmarks;
 	EphyNode *bookmark;
 	GtkListStore *store;
+	GtkTreeViewColumn *column;
 	int mode;
 };
 
@@ -65,9 +66,9 @@ enum
 
 enum
 {
-	MODE_ALL,
-	MODE_TOPLEVEL,
-	MODE_COMMUNITY
+	MODE_GROUPED,
+	MODE_LIST,
+	MODES
 };
 
 static GObjectClass *parent_class = NULL;
@@ -184,8 +185,10 @@ update_list (EphyTopicsPalette *palette)
 	valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (palette->priv->store), &iter);
 	first = TRUE;
 	
-	if (palette->priv->mode == MODE_ALL)
+	if (palette->priv->mode == MODE_LIST)
 	{
+		gtk_tree_view_column_set_title (palette->priv->column, _("By title"));
+		
 		/* Allocate and fill the suggestions array. */
 		node = ephy_bookmarks_get_keywords (palette->priv->bookmarks);
 		children = ephy_node_get_children (node);
@@ -205,9 +208,11 @@ update_list (EphyTopicsPalette *palette)
 		append_topics (palette, &iter, &valid, &first, NULL, _("No topics"), topics);
 		g_ptr_array_free (topics, TRUE);
 	}
-	else if (palette->priv->mode == MODE_TOPLEVEL)
+	else if (palette->priv->mode == MODE_GROUPED)
 	{
 		GPtrArray *suggested, *selected;
+		
+		gtk_tree_view_column_set_title (palette->priv->column, _("By relation"));
 		
 		/* Allocate and fill the bookmarks array. */
 		node = ephy_bookmarks_get_bookmarks (palette->priv->bookmarks);
@@ -346,6 +351,14 @@ ephy_topics_palette_set_property (GObject *object,
 }
 
 static void
+column_clicked (GtkTreeViewColumn *column,
+		EphyTopicsPalette *palette)
+{
+	palette->priv->mode = (palette->priv->mode+1)%MODES;
+	update_list_idle (palette);
+}
+	     
+static void
 cell_edited (GtkCellRendererText *renderer,
 	     const char *path_str,
 	     const char *new_text,
@@ -422,7 +435,6 @@ ephy_topics_palette_constructor (GType type,
 	EphyTopicsPalette *palette;
 	EphyTopicsPalettePrivate *priv;
 	GtkCellRenderer *renderer;
-	GtkTreeViewColumn *column;
 
 	object = parent_class->constructor (type, n_construct_properties,
                                             construct_params);
@@ -434,23 +446,26 @@ ephy_topics_palette_constructor (GType type,
 	gtk_tree_view_set_model (GTK_TREE_VIEW (object), GTK_TREE_MODEL (priv->store));
 	g_object_unref (priv->store);
 
-	column = gtk_tree_view_column_new ();
+	priv->column = gtk_tree_view_column_new ();
+	gtk_tree_view_column_set_clickable (priv->column, TRUE);
+	g_signal_connect (priv->column, "clicked", G_CALLBACK (column_clicked), palette);	
 	
 	renderer = gtk_cell_renderer_toggle_new ();
-	gtk_tree_view_column_pack_start (column, renderer, FALSE);
-	gtk_tree_view_column_add_attribute (column, renderer, "active", COLUMN_SELECTED);
-	gtk_tree_view_column_add_attribute (column, renderer, "visible", COLUMN_SELECTABLE);
+	gtk_tree_view_column_pack_start (priv->column, renderer, FALSE);
+	gtk_tree_view_column_add_attribute (priv->column, renderer, "active", COLUMN_SELECTED);
+	gtk_tree_view_column_add_attribute (priv->column, renderer, "visible", COLUMN_SELECTABLE);
 	g_signal_connect (renderer, "toggled", G_CALLBACK (toggled), palette);
 	
 	renderer = gtk_cell_renderer_text_new ();
-	gtk_tree_view_column_pack_start (column, renderer, TRUE);
-	gtk_tree_view_column_add_attribute (column, renderer, "text", COLUMN_TITLE);
-	gtk_tree_view_column_add_attribute (column, renderer, "weight", COLUMN_WEIGHT);
+	gtk_tree_view_column_pack_start (priv->column, renderer, TRUE);
+	gtk_tree_view_column_add_attribute (priv->column, renderer, "text", COLUMN_TITLE);
+	gtk_tree_view_column_add_attribute (priv->column, renderer, "weight", COLUMN_WEIGHT);
 	g_signal_connect (renderer, "edited", G_CALLBACK (cell_edited), palette);
-	
-	gtk_tree_view_append_column (GTK_TREE_VIEW (object), column);
 
-	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (object), FALSE);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (object), priv->column);
+	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (object), TRUE);
+	gtk_tree_view_set_headers_clickable (GTK_TREE_VIEW (object), TRUE);
+
 	gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (object), is_separator, NULL, NULL);
 	gtk_tree_view_set_enable_search (GTK_TREE_VIEW (object), TRUE);
 	gtk_tree_view_set_search_column (GTK_TREE_VIEW (object), COLUMN_TITLE);
@@ -516,7 +531,7 @@ ephy_topics_palette_class_init (EphyTopicsPaletteClass *klass)
 					 g_param_spec_int ("mode",
 							   "Mode",
 							   "Mode",
-							   0, 2, 1, G_PARAM_WRITABLE));
+							   0, MODES-1, 0, G_PARAM_WRITABLE));
 
 	g_type_class_add_private (object_class, sizeof(EphyTopicsPalettePrivate));
 }
