@@ -1,3 +1,9 @@
+2006-01-29  Reinout van Schouwen <reinout@cs.vu.nl>
+
+	* lib/ephy-file-helpers.c
+	
+	Change string to fix bug 328747.
+
 2006-01-29  Peter Harvey  <peter.a.harvey@gmail.com>
 
 	* src/bookmarks/ephy-bookmark-properties.c
@@ -841,7 +847,7 @@
 
 2006-01-13  Christian Persch  <chpe@cvs.gnome.org>
 
-        * data/ui/epiphany-toolbar.xml:
+		* data/ui/epiphany-toolbar.xml:
 	* src/ephy-window.c:
 
 	Fix zoom buttons order on default toolbar. Set short-label
@@ -874,7 +880,7 @@
 
 2006-01-12  Christian Persch  <chpe@cvs.gnome.org>
 
-        * configure.ac:
+		* configure.ac:
 	* Makefile.am:
 
 	Enable zeroconf by default now that gnome-vfs dns-sd can use
@@ -889,7 +895,7 @@
 
 2006-01-11  Christian Persch  <chpe@cvs.gnome.org>
 
-        * data/default-prefs-common.js:
+		* data/default-prefs-common.js:
 
 	Disable <a ping>.
 	
@@ -1321,9 +1327,9 @@
 
 2005-12-05  Christian Persch  <chpe@cvs.gnome.org>
 
-        * src/bookmarks/ephy-related-action.c: (node_destroyed_cb):
+		* src/bookmarks/ephy-related-action.c: (node_destroyed_cb):
 	
-        Don't try to connect signals to the destroyed node!
+		Don't try to connect signals to the destroyed node!
 		
 2005-12-05  Crispin Flowerday  <gnome@flowerday.cx>
 
@@ -1580,7 +1586,7 @@
 
 2005-11-12  Christian Persch  <chpe@cvs.gnome.org>
 
-        * data/Makefile.am:
+		* data/Makefile.am:
 
 	Fix schemas install and add generate-font-schemas.py
 	to EXTRA_DIST.
@@ -2581,7 +2587,7 @@
 	* Significantly cleaned up the code.
 	* 'Most Visited' no longer appears as a submenu.
 	* Subtopics are selected much more intelligently, giving a better
- 	  approximation to a true minimum cover.
+	  approximation to a true minimum cover.
 	* Topic selector now shows suggestions with arrows, not bold font.
 	
 	h1, released 2004/05/19, for Epiphany 1.2.5
@@ -2666,7 +2672,7 @@
 
 	Add EPHY_EMBED_PERSIST_NO_CERTDIALOGS flag.
 
-        * embed/mozilla/Makefile.am:
+		* embed/mozilla/Makefile.am:
 	A embed/mozilla/EphyBadCertRejector.cpp:
 	A embed/mozilla/EphyBadCertRejector.h:
 
@@ -2764,7 +2770,7 @@
 
 2005-10-10  Christian Persch  <chpe@cvs.gnome.org>
 
-        * lib/ephy-string.c: (ephy_string_shorten):
+		* lib/ephy-string.c: (ephy_string_shorten):
 
 	Fix constness and don't strdup when returning early.
 		
@@ -2783,7 +2789,7 @@
 
 2005-10-09  Christian Persch  <chpe@cvs.gnome.org>
 
-        * lib/ephy-debug.c:
+		* lib/ephy-debug.c:
 
 	Search the needle in the haystack, not the other way 'round.
 

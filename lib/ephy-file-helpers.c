@@ -76,9 +76,9 @@ ephy_file_tmp_dir (void)
 		char *full_name;
 
 		partial_name = g_strconcat ("epiphany-", g_get_user_name (),
-					    "-XXXXXX", NULL);
+						"-XXXXXX", NULL);
 		full_name = g_build_filename (g_get_tmp_dir (), partial_name,
-					      NULL);
+						  NULL);
 #ifdef HAVE_MKDTEMP
 		tmp_dir = mkdtemp (full_name);
 #else
@@ -128,7 +128,7 @@ ephy_file_get_downloads_dir (void)
 		g_free (download_dir);
 		download_dir = ephy_file_downloads_dir ();
 	}
-  	else if (download_dir && strcmp (download_dir, "Desktop") == 0)
+	else if (download_dir && strcmp (download_dir, "Desktop") == 0)
 	{
 		g_free (download_dir);
 		download_dir = ephy_file_desktop_dir ();
@@ -276,9 +276,9 @@ ephy_file_helpers_init (gboolean private_profile,
 	ephy_file_helpers_error_quark = g_quark_from_static_string ("ephy-file-helpers-error");
 
 	files = g_hash_table_new_full (g_str_hash,
-				       g_str_equal,
-				       (GDestroyNotify) g_free,
-				       (GDestroyNotify) g_free);
+					   g_str_equal,
+					   (GDestroyNotify) g_free,
+					   (GDestroyNotify) g_free);
 
 	have_private_profile = private_profile;
 
@@ -287,23 +287,23 @@ ephy_file_helpers_init (gboolean private_profile,
 		if (ephy_file_tmp_dir () == NULL)
 		{
 			g_set_error (error,
-				     EPHY_FILE_HELPERS_ERROR_QUARK,
-				     0,
-				     _("Could not create a temporary directory in “%s”."),
-				     g_get_tmp_dir ());
+					 EPHY_FILE_HELPERS_ERROR_QUARK,
+					 0,
+					 _("Could not create a temporary directory in “%s”."),
+					 g_get_tmp_dir ());
 			return FALSE;
 		}
 
 		dot_dir = g_build_filename (ephy_file_tmp_dir (),
-					    "epiphany",
-					    NULL);
+						"epiphany",
+						NULL);
 	}
 	else
 	{
 		dot_dir = g_build_filename (g_get_home_dir (),
-					    GNOME_DOT_GNOME,
-					    "epiphany",
-					    NULL);
+						GNOME_DOT_GNOME,
+						"epiphany",
+						NULL);
 	}
 	
 	return ephy_ensure_dir_exists (ephy_dot_dir (), error);
@@ -349,27 +349,27 @@ ephy_file_helpers_shutdown (void)
 
 gboolean
 ephy_ensure_dir_exists (const char *dir,
-		        GError **error)
+				GError **error)
 {
 	if (g_file_test (dir, G_FILE_TEST_EXISTS) &&
-	    !g_file_test (dir, G_FILE_TEST_IS_DIR))
+		!g_file_test (dir, G_FILE_TEST_IS_DIR))
 	{
 		g_set_error (error,
-			     EPHY_FILE_HELPERS_ERROR_QUARK,
-			     0,
-			     _("“%s” exists, please move it out of the way."),
-			     dir);
+				 EPHY_FILE_HELPERS_ERROR_QUARK,
+				 0,
+				 _("“%s” exists. Please move it out of the way."),
+				 dir);
 		return FALSE;
 	}
 
 	if (!g_file_test (dir, G_FILE_TEST_EXISTS) &&
-            mkdir (dir, 488) != 0)
+			mkdir (dir, 488) != 0)
 	{
 		g_set_error (error,
-			     EPHY_FILE_HELPERS_ERROR_QUARK,
-			     0,
-			     _("Failed to create directory “%s”."),
-			     dir);
+				 EPHY_FILE_HELPERS_ERROR_QUARK,
+				 0,
+				 _("Failed to create directory “%s”."),
+				 dir);
 		return FALSE;
 	}
 
@@ -411,8 +411,8 @@ ephy_find_file_recursive (const char *path,
 
 GSList *
 ephy_file_find (const char *path,
-	        const char *fname,
-	        gint maxdepth)
+			const char *fname,
+			gint maxdepth)
 {
 	GSList *ret = NULL;
 	ephy_find_file_recursive (path, fname, &ret, 0, maxdepth);
@@ -421,7 +421,7 @@ ephy_file_find (const char *path,
 
 gboolean
 ephy_file_switch_temp_file (const char *filename,
-			    const char *filename_temp)
+				const char *filename_temp)
 {
 	char *old_file;
 	gboolean old_exist;
@@ -472,7 +472,7 @@ void
 ephy_file_delete_on_exit (const char *path)
 {
 	del_on_exit = g_list_prepend (del_on_exit,
-				      g_strdup (path));
+					  g_strdup (path));
 }
 
 static void
@@ -486,7 +486,7 @@ load_mime_from_xml (void)
 	g_return_if_fail (mime_table == NULL);
 
 	mime_table = g_hash_table_new_full (g_str_hash, g_str_equal,
-					    xmlFree, NULL);
+						xmlFree, NULL);
 
 	xml_file = ephy_file ("mime-types-permissions.xml");
 	if (xml_file == NULL)
@@ -525,7 +525,7 @@ load_mime_from_xml (void)
 
 			type = xmlTextReaderGetAttribute (reader, (const xmlChar *)"type");
 			g_hash_table_insert (mime_table, type,
-					     GINT_TO_POINTER (permission));
+						 GINT_TO_POINTER (permission));
 		}
 
 		ret = xmlTextReaderRead (reader);
@@ -576,7 +576,7 @@ my_gdk_spawn_make_environment_for_screen (GdkScreen  *screen,
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
   if (envp == NULL)
-    envp = environ;
+	envp = environ;
 
   env_len = g_strv_length (envp);
   retval = g_new (char *, env_len + 3);
@@ -584,9 +584,9 @@ my_gdk_spawn_make_environment_for_screen (GdkScreen  *screen,
   display_name = gdk_screen_make_display_name (screen);
 
   for (i = 0; envp[i] != NULL; i++)
-    if (!g_str_has_prefix (envp[i], "DISPLAY=") &&
-        !g_str_has_prefix (envp[i], EPHY_UUID_ENVVAR "="))
-      retval[j++] = g_strdup (envp[i]);
+	if (!g_str_has_prefix (envp[i], "DISPLAY=") &&
+		!g_str_has_prefix (envp[i], EPHY_UUID_ENVVAR "="))
+	  retval[j++] = g_strdup (envp[i]);
 
   retval[j++] = g_strconcat ("DISPLAY=", display_name, NULL);
   retval[j++] = g_strdup (EPHY_UUID_ENVSTRING);
@@ -599,7 +599,7 @@ my_gdk_spawn_make_environment_for_screen (GdkScreen  *screen,
 
 static void
 sn_error_trap_push (SnDisplay *display,
-		    Display   *xdisplay)
+			Display   *xdisplay)
 {
 	gdk_error_trap_push ();
 }
@@ -613,7 +613,7 @@ sn_error_trap_pop (SnDisplay *display,
 
 static char **
 make_spawn_environment_for_sn_context (SnLauncherContext *sn_context,
-				       char             **envp)
+					   char             **envp)
 {
 	char **retval;
 	int    i, j, len;
@@ -629,13 +629,13 @@ make_spawn_environment_for_sn_context (SnLauncherContext *sn_context,
 
 	for (i = 0, j = 0; envp[i] != NULL; i++) {
 		if (!g_str_has_prefix (envp[i], "DESKTOP_STARTUP_ID=") &&
-		    !g_str_has_prefix (envp[i], EPHY_UUID_ENVVAR "=")) {
+			!g_str_has_prefix (envp[i], EPHY_UUID_ENVVAR "=")) {
 			retval[j++] = g_strdup (envp[i]);
-	        }
+			}
 	}
 
 	retval[j++] = g_strdup_printf ("DESKTOP_STARTUP_ID=%s",
-				       sn_launcher_context_get_startup_id (sn_context));
+					   sn_launcher_context_get_startup_id (sn_context));
 	retval[j++] = g_strdup (EPHY_UUID_ENVSTRING);
 	retval[j] = NULL;
 
@@ -739,7 +739,7 @@ startup_timeout (void *data)
 
 static void
 add_startup_timeout (GdkScreen         *screen,
-		     SnLauncherContext *sn_context)
+			 SnLauncherContext *sn_context)
 {
 	StartupTimeoutData *data;
 
@@ -766,8 +766,8 @@ add_startup_timeout (GdkScreen         *screen,
 
 gboolean
 ephy_file_launch_application (GnomeVFSMimeApplication *application,
-			      const char *parameter,
-			      guint32 user_time)
+				  const char *parameter,
+				  guint32 user_time)
 {
 	GdkScreen       *screen;
 	GList           *uris = NULL;
@@ -789,8 +789,8 @@ ephy_file_launch_application (GnomeVFSMimeApplication *application,
 	envp = my_gdk_spawn_make_environment_for_screen (screen, NULL);
 	
 	sn_display = sn_display_new (gdk_display,
-				     sn_error_trap_push,
-				     sn_error_trap_pop);
+					 sn_error_trap_push,
+					 sn_error_trap_pop);
 
 	
 	/* Only initiate notification if application supports it. */
@@ -799,8 +799,8 @@ ephy_file_launch_application (GnomeVFSMimeApplication *application,
 		char *name;
 
 		sn_context = sn_launcher_context_new (sn_display,
-						      screen ? gdk_screen_get_number (screen) :
-						      DefaultScreen (gdk_display));
+							  screen ? gdk_screen_get_number (screen) :
+							  DefaultScreen (gdk_display));
 		
 		name = g_filename_display_basename (uri);
 		if (name != NULL) {
@@ -824,12 +824,12 @@ ephy_file_launch_application (GnomeVFSMimeApplication *application,
 			binary_name = gnome_vfs_mime_application_get_binary_name (application);
 		
 			sn_launcher_context_set_binary_name (sn_context,
-							     binary_name);
+								 binary_name);
 			
 			sn_launcher_context_initiate (sn_context,
-						      g_get_prgname () ? g_get_prgname () : "unknown",
-						      binary_name,
-						      (Time) user_time);
+							  g_get_prgname () ? g_get_prgname () : "unknown",
+							  binary_name,
+							  (Time) user_time);
 
 			old_envp = envp;
 			envp = make_spawn_environment_for_sn_context (sn_context, envp);
@@ -846,8 +846,8 @@ ephy_file_launch_application (GnomeVFSMimeApplication *application,
 			sn_launcher_context_complete (sn_context); /* end sequence */
 		} else {
 			add_startup_timeout (screen ? screen :
-					     gdk_display_get_default_screen (gdk_display_get_default ()),
-					     sn_context);
+						 gdk_display_get_default_screen (gdk_display_get_default ()),
+						 sn_context);
 		}
 		sn_launcher_context_unref (sn_context);
 	}
@@ -871,9 +871,9 @@ ephy_file_launch_application (GnomeVFSMimeApplication *application,
 
 static int
 launch_desktop_item (const char *desktop_file,
-		     const char *parameter,
-		     guint32 user_time,
-		     GError **error)
+			 const char *parameter,
+			 guint32 user_time,
+			 GError **error)
 {
 	GnomeDesktopItem *item = NULL;
 	GList *uris = NULL;
@@ -902,7 +902,7 @@ launch_desktop_item (const char *desktop_file,
 
 gboolean
 ephy_file_launch_desktop_file (const char *filename,
-			       guint32 user_time)
+				   guint32 user_time)
 {
 	GError *error = NULL;
 	const char * const *dirs;
@@ -963,12 +963,12 @@ ephy_file_launch_handler (const char *mime_type,
 		/* Sniff mime type and check if it's safe to open */
 		info = gnome_vfs_file_info_new ();
 		if (gnome_vfs_get_file_info (canonical, info,
-					     GNOME_VFS_FILE_INFO_GET_MIME_TYPE |
-					     GNOME_VFS_FILE_INFO_FORCE_SLOW_MIME_TYPE) == GNOME_VFS_OK &&
-		    (info->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_MIME_TYPE) &&
-		    info->mime_type != NULL &&
-		    info->mime_type[0] != '\0' &&
-		    ephy_file_check_mime (info->mime_type) == EPHY_MIME_PERMISSION_SAFE)
+						 GNOME_VFS_FILE_INFO_GET_MIME_TYPE |
+						 GNOME_VFS_FILE_INFO_FORCE_SLOW_MIME_TYPE) == GNOME_VFS_OK &&
+			(info->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_MIME_TYPE) &&
+			info->mime_type != NULL &&
+			info->mime_type[0] != '\0' &&
+			ephy_file_check_mime (info->mime_type) == EPHY_MIME_PERMISSION_SAFE)
 		{
 			/* FIXME rename tmp file to right extension ? */
 			app = gnome_vfs_mime_get_default_application (info->mime_type);
@@ -1018,7 +1018,7 @@ ephy_file_monitor_timeout_cb (EphyFileMonitor *monitor)
 	}
 
 	if (monitor->delay_func &&
-	    monitor->delay_func (monitor, monitor->user_data))
+		monitor->delay_func (monitor, monitor->user_data))
 	{
 		monitor->ticks = DELAY_MAX_TICKS / 2;
 
@@ -1036,10 +1036,10 @@ ephy_file_monitor_timeout_cb (EphyFileMonitor *monitor)
 
 static void
 ephy_file_monitor_cb (GnomeVFSMonitorHandle *handle,
-		      const char *monitor_uri,
-		      const char *info_uri,
-		      GnomeVFSMonitorEventType event_type,
-		      EphyFileMonitor *monitor)
+			  const char *monitor_uri,
+			  const char *info_uri,
+			  GnomeVFSMonitorEventType event_type,
+			  EphyFileMonitor *monitor)
 {
 	LOG ("File '%s' has changed, scheduling reload", monitor_uri);
 
@@ -1064,15 +1064,15 @@ ephy_file_monitor_cb (GnomeVFSMonitorHandle *handle,
 			{
 				/* Exponential backoff */
 				monitor->ticks = MIN (monitor->ticks * 2,
-						      DELAY_MAX_TICKS);
+							  DELAY_MAX_TICKS);
 			}
 
 			if (monitor->timeout_id == 0)
 			{
 				monitor->timeout_id = 
 					g_timeout_add (monitor->delay,
-						       (GSourceFunc) ephy_file_monitor_timeout_cb,
-						       monitor);
+							   (GSourceFunc) ephy_file_monitor_timeout_cb,
+							   monitor);
 			}
 
 			break;
@@ -1097,11 +1097,11 @@ ephy_file_monitor_cb (GnomeVFSMonitorHandle *handle,
 
 EphyFileMonitor *
 ephy_file_monitor_add (const char *uri,
-		       GnomeVFSMonitorType monitor_type,
-		       guint delay,
-		       EphyFileMonitorFunc callback,
-		       EphyFileMonitorDelayFunc delay_func,
-		       gpointer user_data)
+			   GnomeVFSMonitorType monitor_type,
+			   guint delay,
+			   EphyFileMonitorFunc callback,
+			   EphyFileMonitorDelayFunc delay_func,
+			   gpointer user_data)
 {
 	EphyFileMonitor *monitor;
 
