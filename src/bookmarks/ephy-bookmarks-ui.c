@@ -412,10 +412,9 @@ ephy_bookmarks_ui_detach_window (EphyWindow *window)
 
 static void
 properties_dialog_destroy_cb (EphyBookmarkProperties *dialog,
-			      gpointer user_data)
+			      EphyNode *bookmark)
 {
-	g_hash_table_remove (properties_dialogs,
-			     ephy_bookmark_properties_get_node (dialog));
+	g_hash_table_remove (properties_dialogs, bookmark);
 }
 
 void
@@ -437,7 +436,7 @@ ephy_bookmarks_ui_add_bookmark (const char *location,
 	dialog = ephy_bookmark_properties_new (bookmarks, bookmark, TRUE);
 	
 	g_signal_connect (dialog, "destroy",
-			  G_CALLBACK (properties_dialog_destroy_cb), bookmarks);
+			  G_CALLBACK (properties_dialog_destroy_cb), bookmark);
 	g_hash_table_insert (properties_dialogs,
 			     bookmark, dialog);
 	
@@ -661,7 +660,7 @@ ephy_bookmarks_ui_show_bookmark (EphyNode *bookmark)
 		dialog = ephy_bookmark_properties_new (bookmarks, bookmark, FALSE);
 
 		g_signal_connect (dialog, "destroy",
-				  G_CALLBACK (properties_dialog_destroy_cb), bookmarks);
+				  G_CALLBACK (properties_dialog_destroy_cb), bookmark);
 		g_hash_table_insert (properties_dialogs,
 				     bookmark, dialog);
 	}

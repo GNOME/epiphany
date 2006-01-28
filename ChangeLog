@@ -1,4 +1,26 @@
-2006-01-22  Peter Harvey  <peter.a.harvey@gmail.com>
+2006-01-29  Peter Harvey  <peter.a.harvey@gmail.com>
+
+	* src/bookmarks/ephy-bookmark-properties.c
+	* src/bookmarks/ephy-topics-entry.c
+	* src/bookmarks/ephy-topics-entry.h
+	* src/bookmarks/Makefile.am
+	* po/POTFILES.in
+
+	Ongoing Saga Of The Bookmark Properties Dialog.
+	Dialog is now much more compact, using a text entry by
+	default and offering the palette when desired.
+	
+	* src/bookmarks/ephy-topics-palette.c
+	
+	Simplified code and made more usable.
+	Removed the header from the last patch as well.
+
+	* src/bookmarks/ephy-bookmarks-ui.c
+	
+	'Add bookmark' dialogs were not correctly removed from the
+	hashtable.
+	
+2006-01-28  Peter Harvey  <peter.a.harvey@gmail.com>
 
 	* src/bookmarks/ephy-bookmark-properties.c
 	* src/bookmarks/ephy-bookmarks-ui.c

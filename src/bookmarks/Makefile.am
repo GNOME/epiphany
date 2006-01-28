@@ -23,6 +23,7 @@ NOINST_H_FILES =		 	\
 	ephy-bookmark-factory-action.h	\
 	ephy-topic-action-group.h	\
 	ephy-bookmark-action-group.h	\
+	ephy-topics-entry.h  		\
 	ephy-topics-palette.h  		\
 	ephy-nodes-cover.h
 
@@ -42,6 +43,7 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-bookmark-factory-action.c	\
 	ephy-topic-action-group.c	\
 	ephy-bookmark-action-group.c	\
+	ephy-topics-entry.c  		\
 	ephy-topics-palette.c  		\
 	ephy-nodes-cover.c      	\
 	$(NOINST_H_FILES)		\

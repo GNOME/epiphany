@@ -57,10 +57,7 @@ enum
 {
 	COLUMN_TITLE,
         COLUMN_NODE,
-	COLUMN_WEIGHT,
 	COLUMN_SELECTED,
-	COLUMN_SEPARATOR,
-	COLUMN_SELECTABLE,
 	COLUMNS
 };
 
@@ -106,69 +103,36 @@ append_topics (EphyTopicsPalette *palette,
 	       GtkTreeIter *iter,
 	       gboolean *valid,
 	       gboolean *first,
-	       const char *label,
-	       const char *empty,
 	       GPtrArray *topics)
 {
 	EphyNode *node;
 	const char *title;
-	char *noted;
 	gint i;
 	
+	if (topics->len == 0)
+	{
+		return;
+	}
+	 
 	if (!*first)
 	{
 		if (!*valid) gtk_list_store_append (palette->priv->store, iter);
 		gtk_list_store_set (palette->priv->store, iter, COLUMN_TITLE, NULL,
-				    COLUMN_NODE, NULL, COLUMN_SEPARATOR, TRUE, -1);
+				    COLUMN_NODE, NULL, -1);
 		*valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (palette->priv->store), iter);
 	}
 
-	if (label != NULL)
+	for (i = 0; i < topics->len ; i++)
 	{
+		node = g_ptr_array_index (topics, i);
+		title = ephy_node_get_property_string (node, EPHY_NODE_KEYWORD_PROP_NAME);
+		
 		if (!*valid) gtk_list_store_append (palette->priv->store, iter);
-		gtk_list_store_set (palette->priv->store, iter, COLUMN_TITLE, label,
-				    COLUMN_NODE, NULL, COLUMN_SELECTED, FALSE,
-				    COLUMN_WEIGHT, PANGO_WEIGHT_BOLD,
-				    COLUMN_SEPARATOR, FALSE, COLUMN_SELECTABLE, FALSE, -1);
+		gtk_list_store_set (palette->priv->store, iter, COLUMN_TITLE, title,
+				    COLUMN_NODE, node, COLUMN_SELECTED,
+				    ephy_node_has_child (node, palette->priv->bookmark), -1);
 		*valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (palette->priv->store), iter);
 		*first = FALSE;
-	}
-		
-	if (!topics || topics->len == 0)
-	{
-		if (empty != NULL)
-		{
-			if (!*valid) gtk_list_store_append (palette->priv->store, iter);
-			gtk_list_store_set (palette->priv->store, iter, COLUMN_TITLE, empty,
-					    COLUMN_NODE, NULL, COLUMN_SELECTED, FALSE,
-					    COLUMN_WEIGHT, PANGO_WEIGHT_NORMAL,
-					    COLUMN_SEPARATOR, FALSE, COLUMN_SELECTABLE, FALSE, -1);
-			*valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (palette->priv->store), iter);
-			*first = FALSE;
-		}
-	}
-	else
-	{
-		for (i = 0; i < topics->len ; i++)
-		{
-			node = g_ptr_array_index (topics, i);
-			title = ephy_node_get_property_string (node, EPHY_NODE_KEYWORD_PROP_NAME);
-			noted = NULL;
-			if (ephy_node_get_children(node)->len == 0)
-			{
-				noted = g_strdup_printf ("%s (unused)", title);
-			}
-			
-			if (!*valid) gtk_list_store_append (palette->priv->store, iter);
-			gtk_list_store_set (palette->priv->store, iter, COLUMN_TITLE, noted ? noted : title,
-					    COLUMN_NODE, node, COLUMN_SELECTED,
-					    ephy_node_has_child (node, palette->priv->bookmark),
-					    COLUMN_WEIGHT, PANGO_WEIGHT_NORMAL,
-					    COLUMN_SEPARATOR, FALSE, COLUMN_SELECTABLE, TRUE, -1);
-			*valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (palette->priv->store), iter);
-			*first = FALSE;
-			g_free (noted);
-		}
 	}
 }
 
@@ -187,8 +151,6 @@ update_list (EphyTopicsPalette *palette)
 	
 	if (palette->priv->mode == MODE_LIST)
 	{
-		gtk_tree_view_column_set_title (palette->priv->column, _("By title"));
-		
 		/* Allocate and fill the suggestions array. */
 		node = ephy_bookmarks_get_keywords (palette->priv->bookmarks);
 		children = ephy_node_get_children (node);
@@ -205,14 +167,12 @@ update_list (EphyTopicsPalette *palette)
 		}
 
 		g_ptr_array_sort (topics, ephy_bookmarks_compare_topic_pointers);		
-		append_topics (palette, &iter, &valid, &first, NULL, _("No topics"), topics);
+		append_topics (palette, &iter, &valid, &first, topics);
 		g_ptr_array_free (topics, TRUE);
 	}
 	else if (palette->priv->mode == MODE_GROUPED)
 	{
 		GPtrArray *suggested, *selected;
-		
-		gtk_tree_view_column_set_title (palette->priv->column, _("By relation"));
 		
 		/* Allocate and fill the bookmarks array. */
 		node = ephy_bookmarks_get_bookmarks (palette->priv->bookmarks);
@@ -277,9 +237,9 @@ update_list (EphyTopicsPalette *palette)
 		g_ptr_array_sort (selected, ephy_bookmarks_compare_topic_pointers);
 		g_ptr_array_sort (suggested, ephy_bookmarks_compare_topic_pointers);
 		g_ptr_array_sort (topics, ephy_bookmarks_compare_topic_pointers);
-		append_topics (palette, &iter, &valid, &first, _("Selection"), _("No selected topics"), selected);
-		append_topics (palette, &iter, &valid, &first, _("Subtopics"), _("No more subtopics"), suggested);
-		append_topics (palette, &iter, &valid, &first, _("Other"), _("No other topics"), topics);
+		append_topics (palette, &iter, &valid, &first, selected);
+		append_topics (palette, &iter, &valid, &first, suggested);
+		append_topics (palette, &iter, &valid, &first, topics);
 		g_ptr_array_free (selected, TRUE);
 		g_ptr_array_free (suggested, TRUE);
 		g_ptr_array_free (bookmarks, TRUE);
@@ -291,6 +251,8 @@ update_list (EphyTopicsPalette *palette)
 		valid = gtk_list_store_remove (palette->priv->store, &iter);
 	}
 	
+	gtk_tree_selection_unselect_all
+	  (gtk_tree_view_get_selection (GTK_TREE_VIEW (palette)));
 }
 
 static gboolean
@@ -351,14 +313,6 @@ ephy_topics_palette_set_property (GObject *object,
 }
 
 static void
-column_clicked (GtkTreeViewColumn *column,
-		EphyTopicsPalette *palette)
-{
-	palette->priv->mode = (palette->priv->mode+1)%MODES;
-	update_list_idle (palette);
-}
-	     
-static void
 cell_edited (GtkCellRendererText *renderer,
 	     const char *path_str,
 	     const char *new_text,
@@ -368,7 +322,7 @@ cell_edited (GtkCellRendererText *renderer,
 	{
 		EphyNode *node;
 		node = ephy_bookmarks_add_keyword (palette->priv->bookmarks, new_text);
-		ephy_bookmarks_set_keyword (palette->priv->bookmarks, node, 
+		ephy_bookmarks_set_keyword (palette->priv->bookmarks, node,
 					    palette->priv->bookmark);
 	}
 	else
@@ -388,30 +342,21 @@ toggled (GtkCellRendererToggle *cell_renderer,
 	
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (palette));
 
-	if (gtk_tree_model_get_iter_from_string (model, &iter, path))
+	g_return_if_fail(gtk_tree_model_get_iter_from_string (model, &iter, path));
+
+	gtk_tree_model_get (model, &iter, COLUMN_NODE, &topic, -1);
+	
+	if (ephy_node_has_child (topic, palette->priv->bookmark))
 	{
-		gtk_tree_model_get (model, &iter, COLUMN_NODE, &topic, -1);
-		if (topic == NULL)
-		{
-			char *title;
-			gtk_tree_model_get (model, &iter, COLUMN_TITLE, &title, -1);
-			g_return_if_fail (title != NULL && *title != 0);
-			topic = ephy_bookmarks_add_keyword (palette->priv->bookmarks, title);
-			g_free (title);
-		}
-		
-		if (ephy_node_has_child (topic, palette->priv->bookmark))
-		{
-			ephy_bookmarks_unset_keyword (palette->priv->bookmarks,
-						      topic,
-						      palette->priv->bookmark);
-		}
-		else
-		{
-			ephy_bookmarks_set_keyword (palette->priv->bookmarks,
-						    topic,
-						    palette->priv->bookmark);
-		}
+		ephy_bookmarks_unset_keyword (palette->priv->bookmarks,
+					      topic,
+					      palette->priv->bookmark);
+	}
+	else
+	{
+		ephy_bookmarks_set_keyword (palette->priv->bookmarks,
+					    topic,
+					    palette->priv->bookmark);
 	}
 }
 
@@ -420,9 +365,9 @@ is_separator (GtkTreeModel *model,
 	      GtkTreeIter *iter,
 	      gpointer data)
 {
-	gboolean separator;
-	gtk_tree_model_get (model, iter, COLUMN_SEPARATOR, &separator, -1);
-	return separator;
+	EphyNode *node;
+	gtk_tree_model_get (model, iter, COLUMN_NODE, &node, -1);
+	return (node == NULL);
 }
 
 static GObject *
@@ -441,35 +386,29 @@ ephy_topics_palette_constructor (GType type,
 	palette = EPHY_TOPICS_PALETTE (object);
 	priv = EPHY_TOPICS_PALETTE_GET_PRIVATE (object);
 
-	priv->store = gtk_list_store_new (COLUMNS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_INT,
-					  G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
+	priv->store = gtk_list_store_new (COLUMNS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (object), GTK_TREE_MODEL (priv->store));
 	g_object_unref (priv->store);
 
 	priv->column = gtk_tree_view_column_new ();
-	gtk_tree_view_column_set_clickable (priv->column, TRUE);
-	g_signal_connect (priv->column, "clicked", G_CALLBACK (column_clicked), palette);	
 	
 	renderer = gtk_cell_renderer_toggle_new ();
 	gtk_tree_view_column_pack_start (priv->column, renderer, FALSE);
 	gtk_tree_view_column_add_attribute (priv->column, renderer, "active", COLUMN_SELECTED);
-	gtk_tree_view_column_add_attribute (priv->column, renderer, "visible", COLUMN_SELECTABLE);
 	g_signal_connect (renderer, "toggled", G_CALLBACK (toggled), palette);
 	
 	renderer = gtk_cell_renderer_text_new ();
 	gtk_tree_view_column_pack_start (priv->column, renderer, TRUE);
 	gtk_tree_view_column_add_attribute (priv->column, renderer, "text", COLUMN_TITLE);
-	gtk_tree_view_column_add_attribute (priv->column, renderer, "weight", COLUMN_WEIGHT);
 	g_signal_connect (renderer, "edited", G_CALLBACK (cell_edited), palette);
 
 	gtk_tree_view_append_column (GTK_TREE_VIEW (object), priv->column);
-	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (object), TRUE);
-	gtk_tree_view_set_headers_clickable (GTK_TREE_VIEW (object), TRUE);
 
 	gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (object), is_separator, NULL, NULL);
 	gtk_tree_view_set_enable_search (GTK_TREE_VIEW (object), TRUE);
 	gtk_tree_view_set_search_column (GTK_TREE_VIEW (object), COLUMN_TITLE);
-	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (object)), GTK_SELECTION_NONE);
+	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (object), FALSE);
+	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (object)), GTK_SELECTION_BROWSE);
 	
 	update_list (palette);
     
@@ -515,23 +454,28 @@ ephy_topics_palette_class_init (EphyTopicsPaletteClass *klass)
 							      "Bookmarks set",
 							      "Bookmarks set",
 							      EPHY_TYPE_BOOKMARKS,
-							      G_PARAM_WRITABLE |
-							      G_PARAM_CONSTRUCT_ONLY));
+							      G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY |
+							      G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | 
+							      G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_BOOKMARK,
 					 g_param_spec_pointer ("bookmark",
 							       "Bookmark",
 							       "Bookmark",
-							       G_PARAM_WRITABLE |
-							       G_PARAM_CONSTRUCT_ONLY));
+							       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY |
+							       G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | 
+							       G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_MODE,
 					 g_param_spec_int ("mode",
 							   "Mode",
 							   "Mode",
-							   0, MODES-1, 0, G_PARAM_WRITABLE));
+							   0, MODES-1, 0, 
+							   G_PARAM_WRITABLE |
+							   G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK |
+							   G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof(EphyTopicsPalettePrivate));
 }

@@ -25,6 +25,7 @@
 #include "ephy-bookmark-properties.h"
 
 #include "ephy-bookmarks-ui.h"
+#include "ephy-topics-entry.h"
 #include "ephy-topics-palette.h"
 #include "ephy-stock-icons.h"
 #include "ephy-debug.h"
@@ -56,11 +57,12 @@ struct _EphyBookmarkPropertiesPrivate
 {
 	EphyBookmarks *bookmarks;
 	EphyNode *bookmark;
-	EphyTopicsPalette *palette;
 	gboolean creating;
 	
 	EphyNode *duplicate;
 	GtkWidget *warning;
+	GtkWidget *entry;
+	GtkWidget *palette;
 };
 
 enum
@@ -69,11 +71,6 @@ enum
 	PROP_BOOKMARKS,
 	PROP_BOOKMARK,
 	PROP_CREATING
-};
-
-enum
-{
-	RESPONSE_NEW_TOPIC = 1
 };
 
 static GObjectClass *parent_class;
@@ -202,10 +199,6 @@ bookmark_properties_response_cb (GtkDialog *dialog,
 				       "epiphany", 
 				       "to-edit-bookmark-properties");
 			return;
-		case RESPONSE_NEW_TOPIC:
-			ephy_bookmarks_ui_add_topic (GTK_WIDGET (dialog),
-						     priv->bookmark);
-			return;
 		case GTK_RESPONSE_ACCEPT:
 			/* On destruction of the dialog, if priv->creating==TRUE,
 			 * we will unref any bookmark we have, so we set it
@@ -251,16 +244,6 @@ update_window_title (EphyBookmarkProperties *properties)
 	g_free (title);
 }
 
-static void 
-combo_changed_cb (GtkComboBox *combobox,
-		  GtkWidget *palette)
-{
-	int active;
-
-	active = gtk_combo_box_get_active (GTK_COMBO_BOX (combobox));
-	g_object_set (palette, "mode", active, NULL);
-}
-
 static void
 title_entry_changed_cb (GtkWidget *entry,
 			EphyBookmarkProperties *props)
@@ -281,6 +264,38 @@ location_entry_changed_cb (GtkWidget *entry,
 }
 
 static void
+toggled_cb (GtkToggleButton *button,
+	    EphyBookmarkProperties *properties)
+{
+	EphyBookmarkPropertiesPrivate *priv = properties->priv;
+	GdkGeometry geometry;
+	
+	if(gtk_toggle_button_get_active (button))
+	{
+		g_object_set (priv->entry, "sensitive", FALSE, NULL);
+		g_object_set (priv->palette, "visible", TRUE, NULL);
+	
+		geometry.min_width = -1;
+		geometry.min_height = 230;
+		gtk_window_set_geometry_hints (GTK_WINDOW (properties),
+					       priv->palette, &geometry,
+					       GDK_HINT_MIN_SIZE);
+	}
+	else
+	{
+		g_object_set (priv->entry, "sensitive", TRUE, NULL);
+		g_object_set (priv->palette, "visible", FALSE, NULL);
+		
+		geometry.max_height = -1;
+		geometry.max_width = G_MAXINT;
+		gtk_window_set_geometry_hints (GTK_WINDOW (properties),	
+					       GTK_WIDGET (properties),
+					       &geometry, GDK_HINT_MAX_SIZE);
+	}
+}
+
+
+static void
 ephy_bookmark_properties_init (EphyBookmarkProperties *properties)
 {
 	properties->priv = EPHY_BOOKMARK_PROPERTIES_GET_PRIVATE (properties);
@@ -294,8 +309,8 @@ ephy_bookmark_properties_constructor (GType type,
 	GObject *object;
 	EphyBookmarkProperties *properties;
 	EphyBookmarkPropertiesPrivate *priv;
-	GtkWidget *widget, *table, *label, *entry, *palette;
-	GtkWidget *scrolled_window;
+	GtkWidget *widget, *table, *label, *entry, *button;
+	GtkWidget *scrolled_window, *palette;
 	GtkWindow *window;
 	GtkDialog *dialog;
 	const char *tmp;
@@ -322,7 +337,8 @@ ephy_bookmark_properties_constructor (GType type,
 	ephy_state_add_window (widget,
 			       "bookmark_properties",
 			       290, 280, FALSE,
-			       EPHY_STATE_WINDOW_SAVE_SIZE);
+			       EPHY_STATE_WINDOW_SAVE_SIZE |
+			       EPHY_STATE_WINDOW_SAVE_POSITION);
 
 	update_window_title (properties);
 
@@ -330,9 +346,10 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_container_set_border_width (GTK_CONTAINER (properties), 5);
 	gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2);
 
-	table = gtk_table_new (4, 2, FALSE);
+	table = gtk_table_new (4, 3, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+	gtk_table_set_col_spacing (GTK_TABLE (table), 1, 3);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_widget_show (table);
 
@@ -350,7 +367,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
-	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 3, 0, 1, GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
 	entry = gtk_entry_new ();
 	tmp = ephy_node_get_property_string (properties->priv->bookmark,
@@ -365,21 +382,30 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
-	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 3, 1, 2, GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
 	widget = gtk_image_new_from_stock (GTK_STOCK_INFO, GTK_ICON_SIZE_BUTTON);
-	priv->warning = gtk_button_new_with_mnemonic (_("_Show bookmark with same address"));
+	priv->warning = gtk_button_new_with_mnemonic (_("_Show similar bookmark"));
 	gtk_button_set_image (GTK_BUTTON (priv->warning), widget);
 	g_signal_connect (priv->warning, "clicked",
 			  G_CALLBACK(show_duplicate_cb), properties);
 	gtk_widget_show (priv->warning);
 	gtk_table_set_row_spacing (GTK_TABLE (table), 1, 0);
-	gtk_table_attach (GTK_TABLE (table), priv->warning, 1, 2, 2, 3, GTK_FILL, 0, 0, 3);
+	gtk_table_attach (GTK_TABLE (table), priv->warning, 1, 3, 2, 3, GTK_FILL, 0, 0, 3);
 	priv->duplicate = ephy_bookmarks_find_duplicate (priv->bookmarks, priv->bookmark);
 	g_object_set (priv->warning, "visible", priv->duplicate != NULL, NULL);
 
+	entry = ephy_topics_entry_new (priv->bookmarks, priv->bookmark);
+	priv->entry = entry;
+	gtk_widget_show (entry);
+	label = gtk_label_new_with_mnemonic(_("T_opics:"));
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+	gtk_widget_show (label);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 3, 4, GTK_FILL | GTK_EXPAND, 0, 0, 0);
+
 	palette = ephy_topics_palette_new (priv->bookmarks, priv->bookmark);
-	priv->palette = EPHY_TOPICS_PALETTE (palette);
 	scrolled_window = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
 					"hadjustment", NULL,
 					"vadjustment", NULL,
@@ -387,25 +413,27 @@ ephy_bookmark_properties_constructor (GType type,
 					"vscrollbar_policy", GTK_POLICY_AUTOMATIC,
 					"shadow_type", GTK_SHADOW_IN,
 					NULL);
+	priv->palette = scrolled_window;
 	gtk_container_add (GTK_CONTAINER (scrolled_window), palette);
 	gtk_widget_show (palette);
-	label = gtk_label_new_with_mnemonic(_("T_opics:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), palette);
-	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4, GTK_FILL, GTK_FILL, 0, 6);
-	gtk_table_attach (GTK_TABLE (table), scrolled_window, 1, 2, 3, 4,
+	gtk_table_attach (GTK_TABLE (table), scrolled_window, 1, 3, 4, 5,
 			  GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
 	gtk_widget_show (scrolled_window);
+
+	widget = gtk_image_new_from_stock (GTK_STOCK_INDEX, GTK_ICON_SIZE_BUTTON);
+	gtk_widget_show (widget);
+	button = gtk_toggle_button_new_with_label ("");
+	gtk_button_set_image (GTK_BUTTON (button), widget);
+	g_signal_connect (button, "toggled", G_CALLBACK (toggled_cb), properties);
+	toggled_cb (button, properties);
+	gtk_widget_show (button);
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 3, 4, GTK_FILL, GTK_FILL, 0, 0);
 
 	gtk_box_pack_start (GTK_BOX (dialog->vbox), table, TRUE, TRUE, 0);
 	
 	gtk_dialog_add_button (dialog,
 			       GTK_STOCK_HELP,
 			       GTK_RESPONSE_HELP);
-	gtk_dialog_add_button (dialog,
-			       _("_New Topic"),
-			       RESPONSE_NEW_TOPIC);
 	
 	if (priv->creating)
 	{
