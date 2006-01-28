@@ -71,9 +71,9 @@ static char **remaining_arguments = NULL;
 static const GOptionEntry option_entries[] =
 {
 	{ "new-tab", 'n', 0, G_OPTION_ARG_NONE, &open_in_new_tab,
-	  N_("Open a new tab in an existing Epiphany window"), NULL },
+	  N_("Open a new tab in an existing browser window"), NULL },
 	{ "new-window", 0, 0, G_OPTION_ARG_NONE, &open_in_new_window,
-	  N_("Open a new tab in an existing Epiphany window"), NULL },
+	  N_("Open a new tab in an existing browser window"), NULL },
 	{ "bookmarks-editor", 'b', 0, G_OPTION_ARG_NONE, &open_as_bookmarks_editor,
 	  N_("Launch the bookmarks editor"), NULL },
 	{ "import-bookmarks", '\0', 0, G_OPTION_ARG_FILENAME, &bookmarks_file,
@@ -172,14 +172,14 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
 		
 		xwindow =
 			XCreateWindow (xdisplay,
-				       RootWindow (xdisplay, 0),
-				       -100, -100, 1, 1,
-				       0,
-				       CopyFromParent,
-				       CopyFromParent,
-				       CopyFromParent,
-				       CWOverrideRedirect | CWEventMask,
-				       &attrs);
+					   RootWindow (xdisplay, 0),
+					   -100, -100, 1, 1,
+					   0,
+					   CopyFromParent,
+					   CopyFromParent,
+					   CopyFromParent,
+					   CWOverrideRedirect | CWEventMask,
+					   &attrs);
 		
 		atom_name = XInternAtom (xdisplay, "WM_NAME", TRUE);
 		g_assert (atom_name != None);
@@ -194,9 +194,9 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
 	}
 	
 	XWindowEvent (xdisplay,
-		      xwindow,
-		      PropertyChangeMask,
-		      &event);
+			  xwindow,
+			  PropertyChangeMask,
+			  &event);
 	
 	XDestroyWindow(xdisplay, xwindow);
 	
@@ -205,18 +205,18 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
 
 static void
 handle_url (GtkAboutDialog *about,
-	    const char *link,
-	    gpointer data)
+		const char *link,
+		gpointer data)
 {
 	ephy_shell_new_tab (ephy_shell_get_default (),
-			    NULL, NULL, link,
-			    EPHY_NEW_TAB_OPEN_PAGE);
+				NULL, NULL, link,
+				EPHY_NEW_TAB_OPEN_PAGE);
 }
 
 static void
 handle_email (GtkAboutDialog *about,
-	      const char *link,
-	      gpointer data)
+		  const char *link,
+		  gpointer data)
 {
 	char *address;
 
@@ -227,7 +227,7 @@ handle_email (GtkAboutDialog *about,
 
 static void
 shell_weak_notify (gpointer data,
-                   GObject *zombie)
+				   GObject *zombie)
 {
 	if (gtk_main_level ())
 	{
@@ -348,8 +348,8 @@ path_from_command_line_arg (const char *arg)
 
 static void
 unref_proxy_reply_cb (DBusGProxy *proxy,
-		      GError *error,
-		      gpointer user_data)
+			  GError *error,
+			  gpointer user_data)
 {
 	if (error != NULL)
 	{
@@ -442,7 +442,7 @@ call_dbus_proxy (DBusGProxy *proxy,
 		/* no need to open the homepage if autoresume returns TRUE;
 		 * we already opened session windows */
 		if (!_ephy_dbus_is_name_owner () ||
-		    (ephy_session_autoresume
+			(ephy_session_autoresume
 			(EPHY_SESSION (ephy_shell_get_session (shell)),
 			 user_time) == FALSE))
 		{
@@ -479,7 +479,7 @@ show_error_message (GError **error)
 
 int
 main (int argc,
-      char *argv[])
+	  char *argv[])
 {
 	GOptionContext *option_context;
 	GOptionGroup *option_group;
@@ -529,11 +529,11 @@ main (int argc,
 
 #ifdef GNOME_PARAM_GOPTION_CONTEXT
 	gnome_program_init (PACKAGE, VERSION,
-			    LIBGNOMEUI_MODULE, argc, argv,
-			    GNOME_PARAM_GOPTION_CONTEXT, option_context,
-			    GNOME_PARAM_HUMAN_READABLE_NAME, _("Web Browser"),
-			    GNOME_PARAM_APP_DATADIR, DATADIR,
-			    NULL);
+				LIBGNOMEUI_MODULE, argc, argv,
+				GNOME_PARAM_GOPTION_CONTEXT, option_context,
+				GNOME_PARAM_HUMAN_READABLE_NAME, _("Web Browser"),
+				GNOME_PARAM_APP_DATADIR, DATADIR,
+				NULL);
 
 #else /* !GNOME_PARAM_GOPTION_CONTEXT */
 
@@ -577,12 +577,12 @@ main (int argc,
 	}
 
 	gnome_program_init (PACKAGE, VERSION,
-			    LIBGNOMEUI_MODULE,
-			    fake_argv_array->len,
-			    (char**) fake_argv_array->pdata,
-			    GNOME_PARAM_HUMAN_READABLE_NAME, _("Web Browser"),
-			    GNOME_PARAM_APP_DATADIR, DATADIR,
-			    NULL);
+				LIBGNOMEUI_MODULE,
+				fake_argv_array->len,
+				(char**) fake_argv_array->pdata,
+				GNOME_PARAM_HUMAN_READABLE_NAME, _("Web Browser"),
+				GNOME_PARAM_APP_DATADIR, DATADIR,
+				NULL);
 
 	g_ptr_array_add (fake_argv_array, NULL);
 	g_strfreev ((char**) g_ptr_array_free (fake_argv_array, FALSE));
@@ -620,8 +620,8 @@ main (int argc,
 	if (proxy == NULL)
 	{
 		error = g_error_new (STARTUP_ERROR_QUARK,
-				     0,
-				     "Unable to get DBus proxy; aborting activation."); /* FIXME i18n */
+					 0,
+					 "Unable to get DBus proxy; aborting activation."); /* FIXME i18n */
 
 		_ephy_dbus_release ();
 
@@ -678,8 +678,8 @@ main (int argc,
 	/* Work around bug #328844 */
 	env = g_getenv ("MOZ_ENABLE_PANGO");
 	if (env == NULL ||
-	    env[0] == '\0' ||
-	    strcmp (env, "0") == 0)
+		env[0] == '\0' ||
+		strcmp (env, "0") == 0)
 	{
 		g_setenv ("MOZ_DISABLE_PANGO", "1", TRUE);
 	}
