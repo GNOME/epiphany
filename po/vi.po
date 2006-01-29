@@ -8,15 +8,15 @@ msgid ""
 ""
 msgstr "Project-Id-Version: Epiphany Gnome HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-27 05:46+0100\n"
-"PO-Revision-Date: 2006-01-27 18:32+1030\n"
+"POT-Creation-Date: 2006-01-29 05:45+0100\n"
+"PO-Revision-Date: 2006-01-29 15:53+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: LocFactoryEditor 1.6b31\n"
+"X-Generator: LocFactoryEditor 1.6b34\n"
 
 #:../data/epiphany-lockdown.schemas.in.h:1
 msgid ""
@@ -131,8 +131,8 @@ msgid "Epiphany Web Browser"
 msgstr "Bộ Duyệt Mạng Epiphany"
 
 #.sets the name to appear in the window list applet when grouping windows
-#:../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:533
-#:../src/ephy-main.c:582 ../src/ephy-main.c:601
+#:../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:534
+#:../src/ephy-main.c:583 ../src/ephy-main.c:602
 msgid "Web Browser"
 msgstr "Bộ duyệt Mạng"
 
@@ -697,7 +697,6 @@ msgid "Use custom _stylesheet"
 msgstr "Dùng tờ _kiểu dáng tự chọn"
 
 #:../data/glade/prefs-dialog.glade.h:31
-#:../src/bookmarks/ephy-bookmark-properties.c:295
 msgid "_Address:"
 msgstr "Đị_a chỉ:"
 
@@ -1231,7 +1230,7 @@ msgstr "Tiếng Ukraina"
 msgid "Unknown (%s)"
 msgstr "Không biết mã chữ (%s)"
 
-#:../embed/ephy-history.c:558 ../src/bookmarks/ephy-bookmark-properties.c:304
+#:../embed/ephy-history.c:558
 msgid "All"
 msgstr "Tất cả"
 
@@ -2016,8 +2015,8 @@ msgstr "Không thể tạo thư mục tạm thời trong « %s »."
 
 #:../lib/ephy-file-helpers.c:360
 #,c-format
-msgid "“%s” exists, please move it out of the way."
-msgstr "« %s » tồn tại, hãy chuyển nó ra."
+msgid "“%s” exists. Please move it out of the way."
+msgstr "« %s » đã có. Hãy chuyển nó ra."
 
 #:../lib/ephy-file-helpers.c:371
 #,c-format
@@ -2308,29 +2307,26 @@ msgstr "Bộ cầm phít này quản lý tập tin « .desktop » chứa liên k
 msgid "%s:"
 msgstr "%s:"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:180
+#:../src/bookmarks/ephy-bookmark-properties.c:242
 #,c-format
 msgid "“%s” Properties"
 msgstr "Thuộc tính « %s »"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:280
+#:../src/bookmarks/ephy-bookmark-properties.c:365
 msgid "_Title:"
 msgstr "_Tiêu đề:"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:305
-#:../src/bookmarks/ephy-topics-palette.c:276
-msgid "Subtopics"
-msgstr "Chủ đề phụ"
+#:../src/bookmarks/ephy-bookmark-properties.c:380
+msgid "A_ddress:"
+msgstr "Đị_a chỉ:"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:306
+#:../src/bookmarks/ephy-bookmark-properties.c:388
+msgid "_Show similar bookmark"
+msgstr "_Hiện đánh dấu tương tự"
+
+#:../src/bookmarks/ephy-bookmark-properties.c:401
 msgid "T_opics:"
 msgstr "C_hủ đề:"
-
-#.File Menu
-#:../src/bookmarks/ephy-bookmark-properties.c:340
-#:../src/bookmarks/ephy-bookmarks-editor.c:182
-msgid "_New Topic"
-msgstr "Chủ đề _mới"
 
 #:../src/bookmarks/ephy-bookmarks-editor.c:95
 msgid "Mozilla (HTML)"
@@ -2364,6 +2360,11 @@ msgstr "_Xem"
 #:../src/ephy-history-window.c:166 ../src/ephy-window.c:122
 msgid "_Help"
 msgstr "Trợ _giúp"
+
+#.File Menu
+#:../src/bookmarks/ephy-bookmarks-editor.c:182
+msgid "_New Topic"
+msgstr "Chủ đề _mới"
 
 #:../src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "Create a new topic"
@@ -2765,54 +2766,33 @@ msgstr "Mở đánh dấu này trong thanh mới"
 msgid "Open this bookmark in a new window"
 msgstr "Mở đánh dấu này trong cửa sổ mới"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:497
-msgid "Bookmark exists"
-msgstr "Đánh dấu đã có"
-
-#:../src/bookmarks/ephy-bookmarks-ui.c:501
-#,c-format
-msgid "You already have a bookmark titled “%s” for this page."
-msgstr "Bạn đã có đánh dấu có tiêu đề « %s » cho trang này."
-
-#:../src/bookmarks/ephy-bookmarks-ui.c:511
-msgid "_Create New"
-msgstr "Tạ_o mới"
-
-#:../src/bookmarks/ephy-bookmarks-ui.c:518
-msgid "_View Properties"
-msgstr "_Xem thuộc tính"
-
-#:../src/bookmarks/ephy-bookmarks-ui.c:529
-msgid "Bookmark Exists"
-msgstr "Đánh dấu đã có"
-
-#:../src/bookmarks/ephy-bookmarks-ui.c:622
+#:../src/bookmarks/ephy-bookmarks-ui.c:523
 #,c-format
 msgid "You already have a topic named “%s”"
 msgstr "Bạn đã có chủ đề tên « %s »"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:626
+#:../src/bookmarks/ephy-bookmarks-ui.c:527
 msgid "Please use a different topic name."
 msgstr "Hãy dùng tên chủ đề khác."
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:666
+#:../src/bookmarks/ephy-bookmarks-ui.c:567
 #,c-format
 msgid "New topic for “%s”"
 msgstr "Chủ đề mới cho « %s »"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:676
+#:../src/bookmarks/ephy-bookmarks-ui.c:577
 msgid "New topic"
 msgstr "Chủ đề mới"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:681
+#:../src/bookmarks/ephy-bookmarks-ui.c:582
 msgid "Enter a unique name for the topic."
 msgstr "Hãy gõ tên duy nhất cho chủ đề."
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:713
+#:../src/bookmarks/ephy-bookmarks-ui.c:614
 msgid "Create"
 msgstr "Tạo"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:716
+#:../src/bookmarks/ephy-bookmarks-ui.c:617
 msgid "New Topic"
 msgstr "Chủ đề mới"
 
@@ -2828,29 +2808,10 @@ msgstr "Liên quan"
 msgid "Quick Topic"
 msgstr "Chủ đề nhanh"
 
-#:../src/bookmarks/ephy-topics-palette.c:205
-msgid "No topics"
-msgstr "Không có chủ đề"
-
-#:../src/bookmarks/ephy-topics-palette.c:275
-msgid "Selection"
-msgstr "Vùng chọn"
-
-#:../src/bookmarks/ephy-topics-palette.c:275
-msgid "No selected topics"
-msgstr "Không có chủ đề đã chọn"
-
-#:../src/bookmarks/ephy-topics-palette.c:276
-msgid "No more subtopics"
-msgstr "Không có chủ đề phụ thêm nào"
-
-#:../src/bookmarks/ephy-topics-palette.c:277
-msgid "Other"
-msgstr "Khác"
-
-#:../src/bookmarks/ephy-topics-palette.c:277
-msgid "No other topics"
-msgstr "Không có chủ đề khác nào"
+#:../src/bookmarks/ephy-topics-entry.c:201
+#,c-format
+msgid "Create topic “%s”"
+msgstr "Tạo chủ đề « %s »"
 
 #:../src/ephy-encoding-dialog.c:340
 msgid "Encodings"
@@ -2993,8 +2954,8 @@ msgid "Sites"
 msgstr "Chỗ Mạng"
 
 #:../src/ephy-main.c:74 ../src/ephy-main.c:76
-msgid "Open a new tab in an existing Epiphany window"
-msgstr "Mở thanh mới trong cửa sổ Epiphany đang mở"
+msgid "Open a new tab in an existing browser window"
+msgstr "Mở thanh mới trong cửa sổ bộ duyệt đang mở"
 
 #:../src/ephy-main.c:78
 msgid "Launch the bookmarks editor"
@@ -3036,11 +2997,11 @@ msgid ""
 msgstr "Việc khởi chạy thất bại vì lỗi theo đây:\n"
 "%s"
 
-#:../src/ephy-main.c:511 ../src/ephy-main.c:513 ../src/window-commands.c:752
+#:../src/ephy-main.c:512 ../src/ephy-main.c:514 ../src/window-commands.c:751
 msgid "GNOME Web Browser"
 msgstr "Bộ duyệt Mạng Gnome"
 
-#:../src/ephy-main.c:514
+#:../src/ephy-main.c:515
 msgid "GNOME Web Browser options"
 msgstr "Tùy chọn của Bộ duyệt Mạng Gnome"
 
@@ -3673,11 +3634,11 @@ msgstr "Sẽ mất các thông tin ấy khi có phải đóng tài liệu."
 msgid "Close _Document"
 msgstr "_Đóng tài liệu"
 
-#:../src/ephy-window.c:1283 ../src/window-commands.c:279
+#:../src/ephy-window.c:1283 ../src/window-commands.c:278
 msgid "Open"
 msgstr "Mở"
 
-#:../src/ephy-window.c:1285 ../src/window-commands.c:305
+#:../src/ephy-window.c:1285 ../src/window-commands.c:304
 msgid "Save As"
 msgstr "Lưu là"
 
@@ -3912,23 +3873,23 @@ msgstr[0] "Ngôn ngữ hệ thống (%s)"
 msgid "Select a Directory"
 msgstr "Chọn thư mục"
 
-#:../src/window-commands.c:710 ../src/window-commands.c:727
+#:../src/window-commands.c:709 ../src/window-commands.c:726
 msgid "Contact us at:"
 msgstr "Liên hệ chúng tôi tại:"
 
-#:../src/window-commands.c:713
+#:../src/window-commands.c:712
 msgid "Contributors:"
 msgstr "Người đóng góp"
 
-#:../src/window-commands.c:718
+#:../src/window-commands.c:717
 msgid "Past developers:"
 msgstr "Lập trình viên trước:"
 
-#:../src/window-commands.c:728
+#:../src/window-commands.c:727
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> hay <gnome-doc-list@gnome.org>"
 
-#:../src/window-commands.c:733
+#:../src/window-commands.c:732
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3939,7 +3900,7 @@ msgstr "Bộ duyệt Mạng Gnome là phần mềm tự do; bạn có thể phá
 "bởi Tổ chức Phần mềm Tự do, hoặc phiên bản 2 của Quyền này, hoặc (tùy chọn) "
 "bất cứ phiên bản sau nào."
 
-#:../src/window-commands.c:737
+#:../src/window-commands.c:736
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3950,7 +3911,7 @@ msgstr "Bộ duyệt Mạng Gnome được phát hành vì chúng tôi mong mu�
 "khả năng làm việc dứt khoát. Hãy xem Quyền Công Chung GNU (GPL) để tìm chi "
 "tiết."
 
-#:../src/window-commands.c:741
+#:../src/window-commands.c:740
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3969,10 +3930,10 @@ msgstr "Bạn nên đã nhận một bản sao của Quyền Công Chung GNU cù
 #.* this translation; in that case, please write each of them on a separate
 #.* line seperated by newlines (\n).
 #.
-#:../src/window-commands.c:766
+#:../src/window-commands.c:765
 msgid "translator-credits"
 msgstr "Nhóm Việt hoá GNOME (http://gnomevi.sourceforge.net)"
 
-#:../src/window-commands.c:769
+#:../src/window-commands.c:768
 msgid "GNOME Web Browser Website"
 msgstr "Chỗ Mạng của Bộ duyệt Mạng Gnome"
