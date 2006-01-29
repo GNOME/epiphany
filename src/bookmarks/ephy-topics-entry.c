@@ -42,7 +42,8 @@ struct _EphyTopicsEntryPrivate
 	GtkListStore *store;
 	GtkEntryCompletion *completion;
 	gboolean update_keywords;
-	char *action;
+	char *input;
+	char *key;
 };
 
 enum
@@ -85,22 +86,20 @@ ephy_topics_entry_get_type (void)
 static void
 update_widget (EphyTopicsEntry *entry)
 {
+	EphyTopicsEntryPrivate *priv = entry->priv;
+	GtkEditable *editable = GTK_EDITABLE (entry);
+	
 	EphyNode *node;
 	GPtrArray *children, *topics;
 	GtkTreeIter iter;
-	gint i, priority;
+	gint i, priority, pos;
 	const char *title;
 	char *tmp1, *tmp2;
 	gboolean update_text;
 	
-	entry->priv->update_keywords = FALSE;
+	priv->update_keywords = FALSE;
 	
-	update_text = !GTK_WIDGET_HAS_FOCUS (GTK_WIDGET (entry));
-	gtk_entry_set_completion (GTK_ENTRY (entry), NULL);    
-	gtk_list_store_clear (entry->priv->store);
-	if (update_text) gtk_entry_set_text (GTK_ENTRY (entry), "");
-	
-	node = ephy_bookmarks_get_keywords (entry->priv->bookmarks);
+	node = ephy_bookmarks_get_keywords (priv->bookmarks);
 	children = ephy_node_get_children (node);
 	topics = g_ptr_array_sized_new (children->len);
 	
@@ -117,51 +116,57 @@ update_widget (EphyTopicsEntry *entry)
 	
 	g_ptr_array_sort (topics, ephy_bookmarks_compare_topic_pointers);
 		
+	gtk_list_store_clear (priv->store);	
+	update_text = !GTK_WIDGET_HAS_FOCUS (GTK_WIDGET (entry));
+	if (update_text) gtk_editable_delete_text (editable, 0, -1);
+	pos = 0;
+	
 	for (i = 0; i < topics->len; i++)
 	{
 		node = g_ptr_array_index (topics, i);
 		title = ephy_node_get_property_string (node, EPHY_NODE_KEYWORD_PROP_NAME);
 		  
-		if (ephy_node_has_child (node, entry->priv->bookmark))
+		if (ephy_node_has_child (node, priv->bookmark))
 		{
 			if (update_text)
 			{
-				gtk_entry_append_text (GTK_ENTRY (entry), title);
-				gtk_entry_append_text (GTK_ENTRY (entry), "; ");
+				gtk_editable_insert_text (editable, title, -1, &pos);
+				gtk_editable_insert_text (editable, "; ", -1, &pos);
 			}
 		}
-		else
-		{
-			tmp1 = g_utf8_casefold (title, -1);
-			tmp2 = g_utf8_normalize (tmp1, -1, G_NORMALIZE_DEFAULT);
-			gtk_list_store_append (entry->priv->store, &iter);
-			gtk_list_store_set (entry->priv->store, &iter, 0, title, 1, tmp2, -1);
-			g_free (tmp2);
-			g_free (tmp1);
-		}
+
+		/* We just include all topics, else we get odd behaviour after you
+		 * just finish entering a topic (it gets selected, so wouldn't show) */
+		tmp1 = g_utf8_casefold (title, -1);
+		tmp2 = g_utf8_normalize (tmp1, -1, G_NORMALIZE_DEFAULT);
+		gtk_list_store_append (priv->store, &iter);
+		gtk_list_store_set (priv->store, &iter, 0, title, 1, tmp2, -1);
+		g_free (tmp2);
+		g_free (tmp1);
 	}
 	
 	g_ptr_array_free (topics, TRUE);
-		
-	gtk_entry_set_completion (GTK_ENTRY (entry), entry->priv->completion);
-	if (update_text) gtk_editable_set_position (GTK_EDITABLE (entry), -1);
+	
+	if (update_text) gtk_editable_set_position (editable, -1);
 
-	entry->priv->update_keywords = TRUE;
+	priv->update_keywords = TRUE;
 }
 
 static void
-update_action (EphyTopicsEntry *entry)
+update_input (EphyTopicsEntry *entry)
 {
 	GtkEditable *editable = GTK_EDITABLE (entry);
 	const char *text = gtk_entry_get_text (GTK_ENTRY (entry));
-	char *key;
+	char *input;
 	gint start, end;
 
-	if(entry->priv->action)
+	if (entry->priv->input)
 	{
 		gtk_entry_completion_delete_action (entry->priv->completion, 0);
-		g_free (entry->priv->action);
-		entry->priv->action = 0;
+		g_free (entry->priv->input);
+		g_free (entry->priv->key);
+		entry->priv->input = 0;
+		entry->priv->key = 0;
 	}
 
 	/* Find the start and end locations */
@@ -181,16 +186,32 @@ update_action (EphyTopicsEntry *entry)
 	}
 	
 	/* If no text to work with, exit */
-	key = g_strndup (text+start, end-start);
-	g_strstrip (key);
-	if (*key != 0 && ephy_bookmarks_find_keyword (entry->priv->bookmarks, key, FALSE) == NULL)
+	input = g_strndup (text+start, end-start);
+	g_strstrip (input);
+	if (*input != 0)
 	{
-		entry->priv->action = key;
-		key = g_strdup_printf (_("Create topic “%s”"), key);
-		gtk_entry_completion_insert_action_text (entry->priv->completion, 0, key);
+		entry->priv->input = input;
+		
+		input = g_utf8_casefold (input, -1);
+		entry->priv->key = g_utf8_normalize (input, -1, G_NORMALIZE_DEFAULT);
+		g_free (input);
+		
+		if (ephy_bookmarks_find_keyword (entry->priv->bookmarks, entry->priv->input, FALSE) == NULL)
+		{
+			input = g_strdup_printf (_("Create topic “%s”"), entry->priv->input);
+			gtk_entry_completion_insert_action_text (entry->priv->completion, 0, input);
+			g_free (input);
+		}
+		else
+		{
+			g_free (entry->priv->input);
+			entry->priv->input = 0;
+		}
 	}
-	
-	g_free (key);
+	else
+	{
+		g_free (input);
+	}
 }
 
 static void
@@ -255,8 +276,6 @@ update_keywords (EphyTopicsEntry *entry)
 	}
 		  
 	g_strfreev (split);
-
-	update_action (entry);
 }
 
 static void
@@ -305,7 +324,6 @@ insert_text (EphyTopicsEntry *entry,
 			g_free (key);
 			return;
 		}
-		
 	}
 
 	/* Replace the text in the current position with the title */
@@ -322,7 +340,7 @@ action_cb (GtkEntryCompletion *completion,
 	   gpointer user_data)
 {
 	EphyTopicsEntry *entry = EPHY_TOPICS_ENTRY (gtk_entry_completion_get_entry (completion));
-	char *action = g_strdup(entry->priv->action);
+	char *action = g_strdup(entry->priv->input);
 
 	if (ephy_bookmarks_find_keyword (entry->priv->bookmarks, action, FALSE) == NULL)
 	{
@@ -371,18 +389,17 @@ match_func (GtkEntryCompletion *completion,
 	    GtkTreeIter *iter,
 	    gpointer user_data)
 {
+	GtkEntry *entry = gtk_entry_completion_get_entry (completion);
+	GtkTreeModel *model = gtk_entry_completion_get_model (completion);
+	EphyTopicsEntryPrivate *priv = EPHY_TOPICS_ENTRY(entry)->priv;
+	
 	gboolean result;
-	const char *real_key;
 	char *text;
 
-	real_key = g_strrstr (key, ";");
-	if (real_key) real_key++;
-	else real_key = key;
-	while (*real_key == ' ') real_key++;
-	
-	gtk_tree_model_get (gtk_entry_completion_get_model (completion), iter, 1, &text, -1);
+	if (priv->key == NULL) return TRUE;
+	gtk_tree_model_get (model, iter, 1, &text, -1);
 	if (text == NULL) return FALSE;
-	result = g_str_has_prefix (text, real_key);
+	result = g_str_has_prefix (text, priv->key);
 	g_free (text);
 	
 	return result;
@@ -435,17 +452,23 @@ ephy_topics_entry_constructor (GType type,
 	gtk_entry_completion_set_text_column (priv->completion, 0);
 	gtk_entry_completion_set_popup_completion (priv->completion, TRUE);
 	gtk_entry_completion_set_popup_single_match (priv->completion, TRUE);
-	
 	gtk_entry_completion_set_match_func (priv->completion, match_func, NULL, NULL);
+	gtk_entry_set_completion (GTK_ENTRY (entry), priv->completion);
 	
 	g_signal_connect (priv->completion, "match-selected",
 			  G_CALLBACK (match_selected_cb), NULL);
+	g_signal_connect (priv->completion, "action-activated",
+			  G_CALLBACK (action_cb), NULL);
+	
 	g_signal_connect (object, "focus-out-event",
 			  G_CALLBACK (focus_out_cb), NULL);
 	g_signal_connect (object, "changed",
 			  G_CALLBACK (update_keywords), NULL);
-	g_signal_connect (G_OBJECT (priv->completion), "action-activated",
-			  G_CALLBACK (action_cb), NULL);
+
+	g_signal_connect (object, "notify::cursor-position",
+			  G_CALLBACK (update_input), NULL);
+	g_signal_connect (object, "notify::text",
+			  G_CALLBACK (update_input), NULL);
 	
 	update_widget (entry);
 	
@@ -464,7 +487,8 @@ ephy_topics_entry_finalize (GObject *object)
 {
 	EphyTopicsEntry *entry = EPHY_TOPICS_ENTRY (object);
 	
-	g_free (entry->priv->action);
+	g_free (entry->priv->input);
+	g_free (entry->priv->key);
 
 	parent_class->finalize (object);
 }
