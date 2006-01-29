@@ -907,6 +907,22 @@ impl_get_network_status (EphyEmbedSingle *esingle)
 	return !isOffline;
 }
 
+static const char*
+impl_get_backend_name (EphyEmbedSingle *esingle)
+{
+	/* If you alter the return values here, remember to update
+	 * the docs in ephy-embed-single.c */
+#if defined (HAVE_GECKO_1_10)
+# error "Need to add version string for gecko 1.10"
+#elif defined(HAVE_GECKO_1_9)
+	return "gecko-1.9";
+#elif defined(HAVE_GECKO_1_8)
+	return "gecko-1.8";
+#elif defined(HAVE_GECKO_1_7)
+	return "gecko-1.7";
+#endif
+}
+
 static GList *
 impl_get_font_list (EphyEmbedSingle *shell,
 		    const char *langGroup)
@@ -1425,6 +1441,7 @@ ephy_embed_single_iface_init (EphyEmbedSingleIface *iface)
 	iface->get_network_status = impl_get_network_status;
 	iface->get_font_list = impl_get_font_list;
 	iface->open_window = impl_open_window;
+	iface->get_backend_name = impl_get_backend_name;
 }
 
 static void

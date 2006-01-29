@@ -73,6 +73,7 @@ struct _EphyEmbedSingleIface
 	gboolean	  (* get_network_status)(EphyEmbedSingle *single);
 	GList *		  (* get_font_list)	(EphyEmbedSingle *shell,
 						 const char *langGroup);
+	const char *      (* get_backend_name)  (EphyEmbedSingle *shell);
 };
 
 GType		ephy_embed_single_get_type		(void);
@@ -96,6 +97,8 @@ gboolean	ephy_embed_single_get_network_status	(EphyEmbedSingle *single);
 
 GList		*ephy_embed_single_get_font_list	(EphyEmbedSingle *single,
 							 const char *lang_group);
+
+const char	*ephy_embed_single_get_backend_name	(EphyEmbedSingle *single);
 
 G_END_DECLS
 

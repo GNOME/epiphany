@@ -881,7 +881,11 @@
   )
 )
 
-
+(define-method get_backend_name
+  (of-object "EphyEmbedSingle")
+  (c-name "ephy_embed_single_get_backend_name")
+  (return-type "const-char*")
+)
 
 ;; From ../embed/ephy-embed-type-builtins.h
 
