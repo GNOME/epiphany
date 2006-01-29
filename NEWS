@@ -1,3 +1,31 @@
+==============
+Epiphany 1.9.6
+==============
+
+Changes:
+        * libnm-glib be-gone! Use NetworkManager directly via DBUS, by 
+	  importing the excellent net-monitor extension directly into
+	  Epiphany. Code by Jean-François Rameau.
+	* Revamped Bookmark Properties/Add Bookmark/New Topic dialogues.  
+
+Bug fixes:
+	* Misc fixes: bug #328747, #328064, #328351, #327381, #125723,
+	  #320686, #327845, #326807.
+	* Open smart bookmark url in new tabs when using Ctrl+Enter (part of
+	  bug #310814)
+	* Disable pango rendering by default, unless MOZ_ENABLE_PANGO env 
+	  var is set. Bug #328844.
+	* Don't use favicon as window icon. Bug 131010.
+	* Fix URL opening with two concurrently starting instances.
+	* Fix a couple of memory leaks
+	* Add license to about dialogue. Patch by Brian Pepple, bug #327998.
+	* Add caret mode indicator UI. Bug #145581.
+	* When adding a column that can be sorted on, re-create the sort 
+	  model, so that it sets up the sort method correctly. Fixes #320686.
+
+Contributors to this release: Christian Persch, Peter Harvey, Brian Pepple,
+Jean-François Rameau, Crispin Flowerday, Reinout van Schouwen
+
 ================
 Epiphany 1.9.5.1
 ================
