@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-27 19:19+0100\n"
-"PO-Revision-Date: 2006-01-27 19:20+0100\n"
+"POT-Creation-Date: 2006-01-29 14:22+0100\n"
+"PO-Revision-Date: 2006-01-29 14:23+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -136,8 +136,8 @@ msgid "Epiphany Web Browser"
 msgstr "Navegador Web Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:533
-#: ../src/ephy-main.c:582 ../src/ephy-main.c:601
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:534
+#: ../src/ephy-main.c:583 ../src/ephy-main.c:602
 msgid "Web Browser"
 msgstr "Navegador web"
 
@@ -721,7 +721,6 @@ msgid "Use custom _stylesheet"
 msgstr "Usar hoja de _estilos personalizada"
 
 #: ../data/glade/prefs-dialog.glade.h:31
-#: ../src/bookmarks/ephy-bookmark-properties.c:295
 msgid "_Address:"
 msgstr "_Dirección:"
 
@@ -1257,7 +1256,7 @@ msgstr "Ucraniano"
 msgid "Unknown (%s)"
 msgstr "Desconocido (%s)"
 
-#: ../embed/ephy-history.c:558 ../src/bookmarks/ephy-bookmark-properties.c:304
+#: ../embed/ephy-history.c:558
 msgid "All"
 msgstr "Todo"
 
@@ -2078,8 +2077,8 @@ msgstr "No se pudo crear el directorio temporal en: «%s»."
 
 #: ../lib/ephy-file-helpers.c:360
 #, c-format
-msgid "“%s” exists, please move it out of the way."
-msgstr "«%s» ya existe, muévalo fuera de la ruta."
+msgid "“%s” exists. Please move it out of the way."
+msgstr "«%s» ya existe. Muévalo fuera de la ruta."
 
 #: ../lib/ephy-file-helpers.c:371
 #, c-format
@@ -2373,29 +2372,26 @@ msgstr ""
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:180
+#: ../src/bookmarks/ephy-bookmark-properties.c:242
 #, c-format
 msgid "“%s” Properties"
 msgstr "Propiedades de %s"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:280
+#: ../src/bookmarks/ephy-bookmark-properties.c:365
 msgid "_Title:"
 msgstr "_Título:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:305
-#: ../src/bookmarks/ephy-topics-palette.c:276
-msgid "Subtopics"
-msgstr "Subtemas"
+#: ../src/bookmarks/ephy-bookmark-properties.c:380
+msgid "A_ddress:"
+msgstr "_Dirección:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:306
+#: ../src/bookmarks/ephy-bookmark-properties.c:388
+msgid "_Show similar bookmark"
+msgstr "_Mostrar marcador similar"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:401
 msgid "T_opics:"
 msgstr "Te_mas:"
-
-#. File Menu
-#: ../src/bookmarks/ephy-bookmark-properties.c:340
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
-msgid "_New Topic"
-msgstr "Tema _nuevo"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:95
 msgid "Mozilla (HTML)"
@@ -2429,6 +2425,11 @@ msgstr "_Ver"
 #: ../src/ephy-history-window.c:166 ../src/ephy-window.c:122
 msgid "_Help"
 msgstr "A_yuda"
+
+#. File Menu
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+msgid "_New Topic"
+msgstr "Tema _nuevo"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "Create a new topic"
@@ -2834,54 +2835,33 @@ msgstr "Abre este marcador en una solapa nueva"
 msgid "Open this bookmark in a new window"
 msgstr "Abre este marcador en una ventana nueva"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:497
-msgid "Bookmark exists"
-msgstr "El marcador existe"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:501
-#, c-format
-msgid "You already have a bookmark titled “%s” for this page."
-msgstr "Ya tiene un marcador llamado «%s» para esa página."
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:511
-msgid "_Create New"
-msgstr "_Crear nuevo"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:518
-msgid "_View Properties"
-msgstr "_Ver propiedades"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:529
-msgid "Bookmark Exists"
-msgstr "El marcador existe"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:622
+#: ../src/bookmarks/ephy-bookmarks-ui.c:523
 #, c-format
 msgid "You already have a topic named “%s”"
 msgstr "Ya tiene un tema llamado «%s»"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:626
+#: ../src/bookmarks/ephy-bookmarks-ui.c:527
 msgid "Please use a different topic name."
 msgstr "Use un nombre de tema diferente."
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:666
+#: ../src/bookmarks/ephy-bookmarks-ui.c:567
 #, c-format
 msgid "New topic for “%s”"
 msgstr "Tema nuevo para «%s»"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:676
+#: ../src/bookmarks/ephy-bookmarks-ui.c:577
 msgid "New topic"
 msgstr "Tema nuevo"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:681
+#: ../src/bookmarks/ephy-bookmarks-ui.c:582
 msgid "Enter a unique name for the topic."
 msgstr "Introduzca un nombre único para el tema."
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:713
+#: ../src/bookmarks/ephy-bookmarks-ui.c:614
 msgid "Create"
 msgstr "Crear"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:716
+#: ../src/bookmarks/ephy-bookmarks-ui.c:617
 msgid "New Topic"
 msgstr "Tema nuevo"
 
@@ -2897,29 +2877,10 @@ msgstr "Relacionado"
 msgid "Quick Topic"
 msgstr "Tema rápido"
 
-#: ../src/bookmarks/ephy-topics-palette.c:205
-msgid "No topics"
-msgstr "Sin temas"
-
-#: ../src/bookmarks/ephy-topics-palette.c:275
-msgid "Selection"
-msgstr "Selección"
-
-#: ../src/bookmarks/ephy-topics-palette.c:275
-msgid "No selected topics"
-msgstr "Sin temas seleccionados"
-
-#: ../src/bookmarks/ephy-topics-palette.c:276
-msgid "No more subtopics"
-msgstr "Sin más subtemas"
-
-#: ../src/bookmarks/ephy-topics-palette.c:277
-msgid "Other"
-msgstr "Otros"
-
-#: ../src/bookmarks/ephy-topics-palette.c:277
-msgid "No other topics"
-msgstr "Sin otros temas"
+#: ../src/bookmarks/ephy-topics-entry.c:367
+#, c-format
+msgid "Create topic “%s”"
+msgstr "Crear tema «%s»"
 
 #: ../src/ephy-encoding-dialog.c:340
 msgid "Encodings"
@@ -3064,8 +3025,8 @@ msgid "Sites"
 msgstr "Sitios"
 
 #: ../src/ephy-main.c:74 ../src/ephy-main.c:76
-msgid "Open a new tab in an existing Epiphany window"
-msgstr "Abre una solapa nueva en una ventana de Epiphany existente"
+msgid "Open a new tab in an existing browser window"
+msgstr "Abre una solapa nueva en una ventana existente del navegador"
 
 #: ../src/ephy-main.c:78
 msgid "Launch the bookmarks editor"
@@ -3108,11 +3069,11 @@ msgstr ""
 "El inicio ha fallado debido al siguiente error:\n"
 "%s"
 
-#: ../src/ephy-main.c:511 ../src/ephy-main.c:513 ../src/window-commands.c:752
+#: ../src/ephy-main.c:512 ../src/ephy-main.c:514 ../src/window-commands.c:751
 msgid "GNOME Web Browser"
 msgstr "Navegador web de Gnome"
 
-#: ../src/ephy-main.c:514
+#: ../src/ephy-main.c:515
 msgid "GNOME Web Browser options"
 msgstr "Opciones del navegador web de Gnome"
 
@@ -3749,11 +3710,11 @@ msgstr "Si cierra el documento, perderá esa información."
 msgid "Close _Document"
 msgstr "Cerrar _documento"
 
-#: ../src/ephy-window.c:1283 ../src/window-commands.c:279
+#: ../src/ephy-window.c:1283 ../src/window-commands.c:278
 msgid "Open"
 msgstr "Abrir"
 
-#: ../src/ephy-window.c:1285 ../src/window-commands.c:305
+#: ../src/ephy-window.c:1285 ../src/window-commands.c:304
 msgid "Save As"
 msgstr "Guardar como"
 
@@ -3991,23 +3952,23 @@ msgstr[1] "Idiomas del sistema (%s)"
 msgid "Select a Directory"
 msgstr "Seleccione un directorio"
 
-#: ../src/window-commands.c:710 ../src/window-commands.c:727
+#: ../src/window-commands.c:709 ../src/window-commands.c:726
 msgid "Contact us at:"
 msgstr "Contacte con nosotros en:"
 
-#: ../src/window-commands.c:713
+#: ../src/window-commands.c:712
 msgid "Contributors:"
 msgstr "Contribuyentes:"
 
-#: ../src/window-commands.c:718
+#: ../src/window-commands.c:717
 msgid "Past developers:"
 msgstr "Desarrolladores anteriores:"
 
-#: ../src/window-commands.c:728
+#: ../src/window-commands.c:727
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> o <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:733
+#: ../src/window-commands.c:732
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4019,7 +3980,7 @@ msgstr ""
 "publica por la Free Software Foundation; ya sea en la versión 2 de la "
 "Licencia, o (a su opción) cualquier versión posterior."
 
-#: ../src/window-commands.c:737
+#: ../src/window-commands.c:736
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4031,7 +3992,7 @@ msgstr ""
 "MERCANTILIDAD o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Vea la Licencia "
 "Pública General de GNU para más detalles."
 
-#: ../src/window-commands.c:741
+#: ../src/window-commands.c:740
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4049,13 +4010,49 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:766
+#: ../src/window-commands.c:765
 msgid "translator-credits"
 msgstr "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: ../src/window-commands.c:769
+#: ../src/window-commands.c:768
 msgid "GNOME Web Browser Website"
 msgstr "Sitio web del navegador de Gnome"
+
+#~ msgid "Subtopics"
+#~ msgstr "Subtemas"
+
+#~ msgid "Bookmark exists"
+#~ msgstr "El marcador existe"
+
+#~ msgid "You already have a bookmark titled “%s” for this page."
+#~ msgstr "Ya tiene un marcador llamado «%s» para esa página."
+
+#~ msgid "_Create New"
+#~ msgstr "_Crear nuevo"
+
+#~ msgid "_View Properties"
+#~ msgstr "_Ver propiedades"
+
+#~ msgid "Bookmark Exists"
+#~ msgstr "El marcador existe"
+
+#~ msgid "No topics"
+#~ msgstr "Sin temas"
+
+#~ msgid "Selection"
+#~ msgstr "Selección"
+
+#~ msgid "No selected topics"
+#~ msgstr "Sin temas seleccionados"
+
+#~ msgid "No more subtopics"
+#~ msgstr "Sin más subtemas"
+
+#~ msgid "Other"
+#~ msgstr "Otros"
+
+#~ msgid "No other topics"
+#~ msgstr "Sin otros temas"
 
 #~ msgid "Autowrap for find in page"
 #~ msgstr "Auto-ajustar al buscar en la página"
