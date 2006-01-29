@@ -36,7 +36,7 @@ ephy_home_action_activate (GtkAction *action)
 	ephy_link_open (EPHY_LINK (action),
 			address != NULL && address[0] != '\0' ? address : "about:blank",
 			NULL,
-			ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
+			ephy_link_flags_from_current_event ());
 
 	g_free (address);
 }

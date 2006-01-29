@@ -380,7 +380,8 @@ entry_key_press_cb (GtkEntry *entry,
 	if ((event->keyval == GDK_Return ||
 	     event->keyval == GDK_KP_Enter ||
 	     event->keyval == GDK_ISO_Enter) &&
-	    state == GDK_CONTROL_MASK)
+	    (state == GDK_CONTROL_MASK ||
+	     state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK)))
 	{
 		gtk_im_context_reset (entry->im_context);
 
@@ -388,7 +389,8 @@ entry_key_press_cb (GtkEntry *entry,
 
 		return TRUE;
 	}
-	else if (event->keyval == GDK_Escape && state == 0)
+
+	if (event->keyval == GDK_Escape && state == 0)
 	{
 		ephy_location_entry_reset (lentry);
 		/* don't return TRUE since we want to cancel the autocompletion popup too */

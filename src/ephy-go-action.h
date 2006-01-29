@@ -21,7 +21,7 @@
 #ifndef EPHY_GO_ACTION_H
 #define EPHY_GO_ACTION_H
 
-#include <gtk/gtkaction.h>
+#include "ephy-link-action.h"
 
 #define EPHY_TYPE_GO_ACTION            (ephy_go_action_get_type ())
 #define EPHY_GO_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_GO_ACTION, EphyGoAction))
@@ -35,12 +35,12 @@ typedef struct _EphyGoActionClass EphyGoActionClass;
 
 struct _EphyGoAction
 {
-	GtkAction parent;
+	EphyLinkAction parent;
 };
 
 struct _EphyGoActionClass
 {
-	GtkActionClass parent_class;
+	EphyLinkActionClass parent_class;
 };
 
 GType    ephy_go_action_get_type   (void);

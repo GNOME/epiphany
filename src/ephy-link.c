@@ -25,6 +25,7 @@
 #include "ephy-type-builtins.h"
 #include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
+#include "ephy-gui.h"
 #include "ephy-debug.h"
 
 enum
@@ -96,4 +97,39 @@ ephy_link_open (EphyLink *link,
 		       &new_tab);
 
 	return new_tab;
+}
+
+EphyLinkFlags
+ephy_link_flags_from_current_event (void)
+{
+	GdkEventType type = GDK_NOTHING;
+	guint state = 0, button = (guint) -1;
+	EphyLinkFlags flags = 0;
+
+	ephy_gui_get_current_event (&type, &state, &button);
+
+	if (button == 2 && type == GDK_BUTTON_PRESS)
+	{
+		if (state == GDK_SHIFT_MASK)
+		{
+			flags = EPHY_LINK_NEW_WINDOW;
+		}
+		else
+		{
+			flags = EPHY_LINK_NEW_TAB;
+		}
+	}
+	else
+	{
+		if (state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))
+		{
+			flags = EPHY_LINK_NEW_WINDOW;
+		}
+		else if (state == GDK_CONTROL_MASK)
+		{
+			flags = EPHY_LINK_NEW_TAB;
+		}
+	}
+
+	return flags;
 }

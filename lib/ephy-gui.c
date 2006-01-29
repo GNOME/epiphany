@@ -416,6 +416,42 @@ ephy_gui_help (GtkWindow *parent,
 	}
 }
 
+void
+ephy_gui_get_current_event (GdkEventType *otype,
+			    guint *ostate,
+			    guint *obutton)
+{
+	GdkEvent *event;
+	GdkEventType type = GDK_NOTHING;
+	guint state = 0, button = (guint) -1;
+
+	event = gtk_get_current_event ();
+	if (event != NULL)
+	{
+		type = event->type;
+
+		if (type == GDK_KEY_PRESS ||
+		    type == GDK_KEY_RELEASE)
+		{
+			state = event->key.state;
+		}
+		else if (type == GDK_BUTTON_PRESS ||
+			 type == GDK_BUTTON_RELEASE ||
+			 type == GDK_2BUTTON_PRESS ||
+			 type == GDK_3BUTTON_PRESS)
+		{
+			button = event->button.button;
+			state = event->button.state;
+		}
+
+		gdk_event_free (event);
+	}
+	
+	if (otype) *otype = type;
+	if (ostate) *ostate = state & gtk_accelerator_get_default_mod_mask ();
+	if (obutton) *obutton = button;
+}
+
 gboolean
 ephy_gui_is_middle_click (void)
 {

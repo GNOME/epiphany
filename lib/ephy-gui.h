@@ -61,6 +61,10 @@ void		ephy_gui_menu_position_on_panel		 (GtkMenu *menu,
 
 GtkWindowGroup *ephy_gui_ensure_window_group		 (GtkWindow *window);
 
+void		ephy_gui_get_current_event		 (GdkEventType *type,
+							  guint *state,
+							  guint *button);
+
 gboolean	ephy_gui_is_middle_click		 (void);
 
 gboolean	ephy_gui_check_location_writable         (GtkWidget *parent,

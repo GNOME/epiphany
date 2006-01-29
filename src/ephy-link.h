@@ -64,6 +64,8 @@ EphyTab	*ephy_link_open			(EphyLink *link,
 					 EphyTab *tab,
 					 EphyLinkFlags flags);
 
+EphyLinkFlags ephy_link_flags_from_current_event (void);
+
 G_END_DECLS
 
 #endif /* EPHY_LINK_H */

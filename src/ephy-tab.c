@@ -1833,28 +1833,26 @@ ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 }
 
 static gboolean
-open_link_in_new_tab (EphyTab *tab,
-		      const char *link_address)
+open_link_in_new (EphyTab *tab,
+		  const char *link_address,
+		  guint state)
 {
-	gboolean new_tab;
+	EphyTab *dest;
 
-	new_tab = address_has_web_scheme (link_address);
+	if (!address_has_web_scheme (link_address)) return FALSE;
 
-	if (new_tab)
+	dest = ephy_link_open (EPHY_LINK (tab), link_address, tab,
+			       state & GDK_SHIFT_MASK ? EPHY_LINK_NEW_WINDOW
+						      : EPHY_LINK_NEW_TAB);
+
+	if (dest)
 	{
-		EphyTab *dest;
-		dest = ephy_link_open (EPHY_LINK (tab), link_address,
-				       tab, EPHY_LINK_NEW_TAB);
-
-		if (dest)
-		{
-			ephy_embed_shistory_copy (ephy_tab_get_embed (tab),
-						  ephy_tab_get_embed (dest),
-						  TRUE,   /* back history */
-						  FALSE,  /* forward history */
-					  	  FALSE); /* current index */
-			return TRUE;
-		}
+		ephy_embed_shistory_copy (ephy_tab_get_embed (tab),
+					  ephy_tab_get_embed (dest),
+					  TRUE,   /* back history */
+					  FALSE,  /* forward history */
+					  FALSE); /* current index */
+		return TRUE;
 	}
 
 	return FALSE;
@@ -1915,7 +1913,8 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	EphyEmbedEventContext context;
 	guint button, modifier;
 	gboolean handled = TRUE;
-	gboolean with_control, with_shift, is_left_click, is_middle_click;
+	gboolean with_control, with_shift, with_shift_control;
+	gboolean is_left_click, is_middle_click;
 	gboolean is_link, is_image, is_middle_clickable;
 	gboolean middle_click_opens;
 	gboolean is_input;
@@ -1929,8 +1928,9 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	LOG ("ephy_tab_dom_mouse_click_cb: button %d, context %x, modifier %x",
 	     button, context, modifier);
 
-	with_control = (modifier & GDK_CONTROL_MASK) != 0;
-	with_shift = (modifier & GDK_SHIFT_MASK) != 0;
+	with_control = (modifier & GDK_CONTROL_MASK) == GDK_CONTROL_MASK;
+	with_shift = (modifier & GDK_SHIFT_MASK) == GDK_SHIFT_MASK;
+	with_shift_control = (modifier & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)) == (GDK_SHIFT_MASK | GDK_CONTROL_MASK);
 	is_left_click = (button == 1);
 	is_middle_click = (button == 2);
 
@@ -1946,14 +1946,16 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	is_input = (context & EPHY_EMBED_CONTEXT_INPUT) != 0;
 
 	/* ctrl+click or middle click opens the link in new tab */
-	if (is_link && ((is_left_click && with_control) || is_middle_click))
+	if (is_link &&
+	    ((is_left_click && (with_control || with_shift_control)) ||
+	     is_middle_click))
 	{
 		const GValue *value;
 		const char *link_address;
 
 		value = ephy_embed_event_get_property (event, "link");
 		link_address = g_value_get_string (value);
-		handled = open_link_in_new_tab (tab, link_address);
+		handled = open_link_in_new (tab, link_address, modifier);
 	}
 	/* shift+click saves the link target */
 	else if (is_link && is_left_click && with_shift)

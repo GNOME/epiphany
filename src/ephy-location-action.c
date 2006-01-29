@@ -149,8 +149,6 @@ entry_activate_cb (GtkEntry *entry,
 		   EphyLocationAction *action)
 {
 	EphyBookmarks *bookmarks;
-	GdkEvent *event;
-	gboolean control = FALSE;
 	const char *content;
 	char *address;
 
@@ -162,21 +160,8 @@ entry_activate_cb (GtkEntry *entry,
 	address = ephy_bookmarks_resolve_address (bookmarks, content, NULL);
 	g_return_if_fail (address != NULL);
 
-	event = gtk_get_current_event ();
-	if (event)
-	{
-		if (event->type == GDK_KEY_PRESS ||
-		    event->type == GDK_KEY_RELEASE)
-		{
-			control = (event->key.state & gtk_accelerator_get_default_mod_mask ()) == GDK_CONTROL_MASK;
-		}
-			
-		gdk_event_free (event);
-	}
-
-	/* FIXME use ephy_bookmarks_resolve_address here too? */
 	ephy_link_open (EPHY_LINK (action), address, NULL, 
-			control ? EPHY_LINK_NEW_TAB : 0);
+		        ephy_link_flags_from_current_event ());
 
 	g_free (address);
 }

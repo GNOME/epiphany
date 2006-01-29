@@ -45,6 +45,7 @@
 #include "ephy-find-toolbar.h"
 #include "ephy-location-entry.h"
 #include "ephy-bookmarks-ui.h"
+#include "ephy-link.h"
 #include "pdm-dialog.h"
 
 #include <string.h>
@@ -884,7 +885,9 @@ window_cmd_load_location (GtkAction *action,
 
 	if (location)
 	{
-		ephy_window_load_url (window, location);
+		ephy_link_open (EPHY_LINK (window), location,
+			        ephy_window_get_active_tab (window),
+				ephy_link_flags_from_current_event ());
 	}
 }
 

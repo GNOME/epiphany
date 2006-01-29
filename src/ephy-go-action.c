@@ -52,7 +52,7 @@ ephy_go_action_get_type (void)
 			(GInstanceInitFunc) NULL,
 		};
 
-		type = g_type_register_static (GTK_TYPE_ACTION,
+		type = g_type_register_static (EPHY_TYPE_LINK_ACTION,
 					       "EphyGoAction",
 					       &type_info, 0);
 	}
