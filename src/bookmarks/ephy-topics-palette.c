@@ -269,16 +269,31 @@ tree_changed_cb (EphyBookmarks *bookmarks,
 	g_idle_add ((GSourceFunc) update_list_idle, palette);
 }
 
-
 static void
-child_changed_cb (EphyNode *node,
-		  EphyNode *child,
-		  guint property_id,
-		  EphyTopicsPalette *palette)
+node_added_cb (EphyNode *parent,
+	       EphyNode *child,
+	       EphyTopicsPalette *palette)
 {
 	g_idle_add ((GSourceFunc) update_list_idle, palette);
 }
 
+static void
+node_changed_cb (EphyNode *parent,
+		 EphyNode *child,
+		 guint property_id,
+		 EphyTopicsPalette *palette)
+{
+	g_idle_add ((GSourceFunc) update_list_idle, palette);
+}
+
+static void
+node_removed_cb (EphyNode *parent,
+		 EphyNode *child,
+		 guint index,
+		 EphyTopicsPalette *palette)
+{
+	g_idle_add ((GSourceFunc) update_list_idle, palette);
+}
 
 static void
 ephy_topics_palette_set_property (GObject *object,
@@ -287,17 +302,22 @@ ephy_topics_palette_set_property (GObject *object,
 		                   GParamSpec *pspec)
 {
 	EphyTopicsPalette *palette = EPHY_TOPICS_PALETTE (object);
+	EphyNode *node;
 
 	switch (prop_id)
 	{
 	case PROP_BOOKMARKS:
 		palette->priv->bookmarks = g_value_get_object (value);
+		node = ephy_bookmarks_get_keywords (palette->priv->bookmarks);
+		ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_ADDED,
+				   (EphyNodeCallback) node_added_cb, object);
+		ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_CHANGED,
+				   (EphyNodeCallback) node_changed_cb, object);
+		ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_REMOVED,
+				   (EphyNodeCallback) node_removed_cb, object);
 		g_signal_connect_object (palette->priv->bookmarks, "tree-changed",
 					 G_CALLBACK (tree_changed_cb), palette,
 					 G_CONNECT_AFTER);
-		ephy_node_signal_connect_object 
-		  (ephy_bookmarks_get_keywords (palette->priv->bookmarks),
-		   EPHY_NODE_CHILD_CHANGED, (EphyNodeCallback) child_changed_cb, object);
 		break;
 	case PROP_BOOKMARK:
 		palette->priv->bookmark = g_value_get_pointer (value);
