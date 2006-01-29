@@ -255,18 +255,11 @@ update_list (EphyTopicsPalette *palette)
 	  (gtk_tree_view_get_selection (GTK_TREE_VIEW (palette)));
 }
 
-static gboolean
-update_list_idle (EphyTopicsPalette *palette)
-{
-	update_list (palette);
-	return FALSE;
-}
-
 static void
 tree_changed_cb (EphyBookmarks *bookmarks,
 		 EphyTopicsPalette *palette)
 {
-	g_idle_add ((GSourceFunc) update_list_idle, palette);
+	update_list (palette);
 }
 
 static void
@@ -274,7 +267,7 @@ node_added_cb (EphyNode *parent,
 	       EphyNode *child,
 	       EphyTopicsPalette *palette)
 {
-	g_idle_add ((GSourceFunc) update_list_idle, palette);
+	update_list (palette);
 }
 
 static void
@@ -283,7 +276,7 @@ node_changed_cb (EphyNode *parent,
 		 guint property_id,
 		 EphyTopicsPalette *palette)
 {
-	g_idle_add ((GSourceFunc) update_list_idle, palette);
+	update_list (palette);
 }
 
 static void
@@ -292,7 +285,7 @@ node_removed_cb (EphyNode *parent,
 		 guint index,
 		 EphyTopicsPalette *palette)
 {
-	g_idle_add ((GSourceFunc) update_list_idle, palette);
+	update_list (palette);
 }
 
 static void
@@ -324,7 +317,7 @@ ephy_topics_palette_set_property (GObject *object,
 		break;
 	case PROP_MODE:
 		palette->priv->mode = g_value_get_int (value);
-		update_list_idle (palette);
+		update_list (palette);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -365,6 +358,9 @@ toggled (GtkCellRendererToggle *cell_renderer,
 	g_return_if_fail(gtk_tree_model_get_iter_from_string (model, &iter, path));
 
 	gtk_tree_model_get (model, &iter, COLUMN_NODE, &topic, -1);
+	
+	/* Need to protect against toggling separators. */
+	if (topic == NULL) return;
 	
 	if (ephy_node_has_child (topic, palette->priv->bookmark))
 	{

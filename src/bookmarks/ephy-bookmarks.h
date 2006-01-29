@@ -88,7 +88,10 @@ EphyNode	 *ephy_bookmarks_add			(EphyBookmarks *eb,
 EphyNode*	  ephy_bookmarks_find_bookmark		(EphyBookmarks *eb,
 							 const char *url);
 
-EphyNode*         ephy_bookmarks_find_duplicate		(EphyBookmarks *eb,
+GPtrArray        *ephy_bookmarks_find_duplicates	(EphyBookmarks *eb,
+							 EphyNode *bookmark);
+    
+gint              ephy_bookmarks_count_duplicates	(EphyBookmarks *eb,
 							 EphyNode *bookmark);
     
 void		  ephy_bookmarks_set_icon		(EphyBookmarks *eb,

@@ -125,39 +125,32 @@ insert_text (EphyTopicsEntry *entry,
 	     const char *title)
 {
 	GtkEditable *editable = GTK_EDITABLE (entry);
-	const char *text = gtk_entry_get_text (GTK_ENTRY (entry));
-	gint start, end;
 
-	/* Find the start and end locations */
-	start = gtk_editable_get_position (editable);
-	while (start > 0 && text[start-1] != ';')
-	{
-		start--;
-	}
-	if(start > 0 && text[start-1] == ';' && text[start] == ' ')
-	{
-		start++;
-	}
-	end = start;
-	while (text[end] && text[end] != ';')
-	{
-		end++;
-	}
-	end = end;
-	if (text[end] == ';')
-	{
-		end++;
-		if (text[end] == ' ')
-		{
-			end++;
-		}
-	}
+	const gchar *text = gtk_entry_get_text (GTK_ENTRY (entry));
+	const gchar *midpoint = g_utf8_offset_to_pointer (text, gtk_editable_get_position (editable));
+	const gchar *start = g_utf8_strrchr (text, (gssize)(midpoint-text), ',');
+	const gchar *end = g_utf8_strchr (midpoint, -1, ',');
+	int startpos, endpos;
+	
+	if (start == NULL)
+	  startpos = 0;
+	else if (g_unichar_isspace (g_utf8_get_char (g_utf8_next_char (start))))
+	  startpos = g_utf8_pointer_to_offset (text, start)+2;
+	else
+	  startpos = g_utf8_pointer_to_offset (text, start)+1;
+	  
+	if (end == NULL)
+	  endpos = -1;
+	else if (g_unichar_isspace (g_utf8_get_char (g_utf8_next_char (end))))
+	  endpos = g_utf8_pointer_to_offset (text, end)+2;
+	else
+	  endpos = g_utf8_pointer_to_offset (text, end)+1;
 	
 	/* Replace the text in the current position with the title */
-	gtk_editable_delete_text (editable, start, end);
-	gtk_editable_insert_text (editable, title, strlen(title), &start);
-	gtk_editable_insert_text (editable, "; ", 2, &start);
-	gtk_editable_set_position (editable, start);
+	gtk_editable_delete_text (editable, startpos, endpos);
+	gtk_editable_insert_text (editable, title, strlen(title), &startpos);
+	gtk_editable_insert_text (editable, ", ", 2, &startpos);
+	gtk_editable_set_position (editable, startpos);
 }
 
 /* Updates the text entry and the completion model to match the database */
@@ -204,7 +197,7 @@ update_widget (EphyTopicsEntry *entry)
 		gtk_editable_delete_text (editable, 0, -1);
 	}
 	
-	for (pos = 0, i = 0; i < topics->len; i++)
+	for (pos = -1, i = 0; i < topics->len; i++)
 	{
 		node = g_ptr_array_index (topics, i);
 		title = ephy_node_get_property_string (node, EPHY_NODE_KEYWORD_PROP_NAME);
@@ -212,7 +205,7 @@ update_widget (EphyTopicsEntry *entry)
 		if (update_text && ephy_node_has_child (node, priv->bookmark))
 		{
 			gtk_editable_insert_text (editable, title, -1, &pos);
-			gtk_editable_insert_text (editable, "; ", -1, &pos);
+			gtk_editable_insert_text (editable, ", ", -1, &pos);
 		}
 
 		tmp1 = g_utf8_casefold (title, -1);
@@ -258,7 +251,7 @@ update_database (EphyTopicsEntry *entry)
 	
 	/* Get the list of strings input by the user */
 	text = gtk_entry_get_text (GTK_ENTRY (entry));
-	split = g_strsplit (text, ";", 0);
+	split = g_strsplit (text, ",", 0);
 	for (i=0; split[i]; i++)
 	{
 		g_strstrip (split[i]);
@@ -309,12 +302,24 @@ update_database (EphyTopicsEntry *entry)
 static void
 update_key (EphyTopicsEntry *entry)
 {
-	GtkEditable *editable = GTK_EDITABLE (entry);
 	EphyTopicsEntryPrivate *priv = entry->priv;
-	
-	const char *text = gtk_entry_get_text (GTK_ENTRY (entry));
+	GtkEditable *editable = GTK_EDITABLE (entry);
 	char *input;
-	gint start, end;
+	
+	const gchar *text = gtk_entry_get_text (GTK_ENTRY (entry));
+	const gchar *midpoint = g_utf8_offset_to_pointer (text, gtk_editable_get_position (editable));
+	const gchar *start = g_utf8_strrchr (text, (gssize)(midpoint-text), ',');
+	const gchar *end = g_utf8_strchr (midpoint, -1, ',');
+	
+	if (start == NULL)
+	  start = text;
+	else if (g_unichar_isspace (g_utf8_get_char (g_utf8_next_char (start))))
+	  start = g_utf8_next_char (g_utf8_next_char (start));
+	else
+	  start = g_utf8_next_char (start);
+	  
+	if (end == NULL)
+	  end = text+strlen(text);
 
 	/* If there was something we could create, then delete the action. */
 	if (priv->create)
@@ -327,24 +332,8 @@ update_key (EphyTopicsEntry *entry)
 	priv->create = 0;
 	priv->key = 0;
 
-	/* Find the start and end locations */
-	start = gtk_editable_get_position (editable);
-	while (start > 0 && text[start-1] != ';')
-	{
-		start--;
-	}
-	if(start > 0 && text[start-1] == ';' && text[start] == ' ')
-	{
-		start++;
-	}
-	end = start;
-	while (text[end] && text[end] != ';')
-	{
-		end++;
-	}
-	
 	/* Set the priv->create and priv->key appropriately. */
-	input = g_strndup (text+start, end-start);
+	input = g_strndup (start, end-start);
 	g_strstrip (input);
 	if (*input != 0)
 	{

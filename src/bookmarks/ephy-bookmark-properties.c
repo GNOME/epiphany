@@ -59,7 +59,9 @@ struct _EphyBookmarkPropertiesPrivate
 	EphyNode *bookmark;
 	gboolean creating;
 	
-	EphyNode *duplicate;
+	gint duplicate_count;
+	gint duplicate_idle;
+	
 	GtkWidget *warning;
 	GtkWidget *entry;
 	GtkWidget *palette;
@@ -75,20 +77,45 @@ enum
 
 static GObjectClass *parent_class;
 
+static gboolean
+update_warning (EphyBookmarkProperties *properties)
+{
+	EphyBookmarkPropertiesPrivate *priv = properties->priv;
+	char *label;
+
+	priv->duplicate_idle = 0;	
+	priv->duplicate_count = ephy_bookmarks_count_duplicates
+	  (priv->bookmarks, priv->bookmark);
+	
+	label = g_strdup_printf (_("%d _Similar"), priv->duplicate_count);
+	gtk_button_set_label (GTK_BUTTON (priv->warning), label);
+	g_free (label);
+
+	g_object_set (priv->warning, "sensitive", priv->duplicate_count > 0, NULL);
+
+	return FALSE;
+}
+
+static void
+update_warning_idle (EphyBookmarkProperties *properties)
+{
+	EphyBookmarkPropertiesPrivate *priv = properties->priv;
+	
+	if(priv->duplicate_idle != 0)
+	{
+		g_source_remove (priv->duplicate_idle);
+	}
+	
+	priv->duplicate_idle = g_timeout_add 
+	  (500, (GSourceFunc)update_warning, properties);
+}
+
 static void
 node_added_cb (EphyNode *bookmarks,
 	       EphyNode *bookmark,
 	       EphyBookmarkProperties *properties)
 {
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
-	
-	if (priv->duplicate == NULL)
-	{
-		priv->duplicate = ephy_bookmarks_find_duplicate
-		  (priv->bookmarks, priv->bookmark);
-		g_object_set (priv->warning, "visible", 
-			      priv->duplicate != NULL, NULL);
-	}
+	update_warning_idle (properties);
 }
 
 static void
@@ -97,15 +124,9 @@ node_changed_cb (EphyNode *bookmarks,
 		 guint property,
 		 EphyBookmarkProperties *properties)
 {
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
-	
-	if (priv->duplicate == bookmark || priv->bookmark == bookmark ||
-	    priv->duplicate == NULL)
+	if (property == EPHY_NODE_BMK_PROP_LOCATION) 
 	{
-		priv->duplicate = ephy_bookmarks_find_duplicate
-		  (priv->bookmarks, priv->bookmark);
-		g_object_set (priv->warning, "visible", 
-			      priv->duplicate != NULL, NULL);
+		update_warning_idle (properties);
 	}
 }
 
@@ -115,21 +136,14 @@ node_removed_cb (EphyNode *bookmarks,
 		 guint index,
 		 EphyBookmarkProperties *properties)
 {
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
-	
-	if (priv->duplicate == bookmark)
-	{
-		priv->duplicate = ephy_bookmarks_find_duplicate
-		  (priv->bookmarks, priv->bookmark);
-		g_object_set (priv->warning, "visible", 
-			      priv->duplicate != NULL, NULL);
-	}
+	update_warning_idle (properties);
 }
 
 static void
 node_destroy_cb (EphyNode *bookmark,
 		 GtkWidget *dialog)
 {
+	EPHY_BOOKMARK_PROPERTIES (dialog)->priv->creating = FALSE;
 	gtk_widget_destroy (dialog);
 }
 
@@ -157,17 +171,97 @@ ephy_bookmark_properties_set_bookmark (EphyBookmarkProperties *properties,
 					 G_OBJECT (properties));
 }
 
+static void
+activate_merge_cb (GtkMenuItem *item,
+		   EphyBookmarkProperties *properties)
+{
+	EphyBookmarkPropertiesPrivate *priv = properties->priv;
+	GPtrArray *duplicates;
+	GPtrArray *topics;
+	EphyNode *node, *topic;
+	gint i, j;
+
+	duplicates = ephy_bookmarks_find_duplicates
+	  (priv->bookmarks, priv->bookmark);
+	
+	node = ephy_bookmarks_get_keywords (priv->bookmarks);
+	topics = ephy_node_get_children (node);
+
+	for (i = 0; i < duplicates->len; i++)
+	{	
+		node = g_ptr_array_index (duplicates, i);
+		for (j = 0; j < topics->len; j++)
+		{
+			topic = g_ptr_array_index (topics, j);
+
+			if (ephy_node_has_child (topic, node))
+			{
+				ephy_bookmarks_set_keyword
+				  (priv->bookmarks, topic, priv->bookmark);
+			}
+		}
+		ephy_node_unref (node);
+	}	
+	
+	g_ptr_array_free (duplicates, TRUE);
+	
+	update_warning (properties);
+}
+
+static void
+activate_show_cb (GtkMenuItem *item,
+		  EphyNode *node)
+{
+	ephy_bookmarks_ui_show_bookmark (node);
+}
 
 static void
 show_duplicate_cb (GtkButton *button,
 		   EphyBookmarkProperties *properties)
 {
 	EphyBookmarkPropertiesPrivate *priv = properties->priv;
-	EphyNode *dup = ephy_bookmarks_find_duplicate (priv->bookmarks, priv->bookmark);
+	EphyNode *node;
+	GPtrArray *duplicates;
+	GtkMenuShell *menu;
+	GtkWidget *item, *image;
+	gint i;
 	
-	g_return_if_fail (dup != NULL);
+	update_warning (properties);
+	if (priv->duplicate_count == 0)
+	{
+		return;
+	}
 	
-	ephy_bookmarks_ui_show_bookmark (dup);
+	duplicates = ephy_bookmarks_find_duplicates
+	  (priv->bookmarks, priv->bookmark);
+	
+	menu = GTK_MENU_SHELL (gtk_menu_new ());
+	item = gtk_image_menu_item_new_with_mnemonic (_("_Merge"));
+	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	g_signal_connect (item, "activate", G_CALLBACK (activate_merge_cb), properties);
+	gtk_widget_show (image);
+	gtk_widget_show (item);
+	gtk_menu_shell_append (menu, item);
+	
+	item = gtk_separator_menu_item_new ();
+	gtk_widget_show (item);
+	gtk_menu_shell_append (menu, item);
+	
+	for (i = 0; i < duplicates->len; i++)
+	{
+		node = g_ptr_array_index (duplicates, i);
+		item = gtk_image_menu_item_new_with_label
+		  (ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE));
+		g_signal_connect (item, "activate", G_CALLBACK (activate_show_cb), node);
+		gtk_widget_show (item);
+		gtk_menu_shell_append (menu, item);
+	}
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+			ephy_gui_menu_position_under_widget, button,
+			0, gtk_get_current_event_time ());
+		
+	g_ptr_array_free (duplicates, TRUE);
 }
 
 static void
@@ -177,10 +271,16 @@ bookmark_properties_destroy_cb (GtkDialog *dialog,
 	EphyBookmarkProperties *properties = EPHY_BOOKMARK_PROPERTIES (dialog);
 	EphyBookmarkPropertiesPrivate *priv = properties->priv;
 
-	if (priv->creating && priv->bookmark != NULL)
+	if (priv->creating)
 	{
 		ephy_node_unref (priv->bookmark);
-		priv->bookmark = NULL;
+		priv->creating = FALSE;
+	}
+	
+	if(priv->duplicate_idle != 0)
+	{
+		g_source_remove (priv->duplicate_idle);
+		priv->duplicate_idle = 0;
 	}
 }
 
@@ -199,11 +299,8 @@ bookmark_properties_response_cb (GtkDialog *dialog,
 				       "epiphany", 
 				       "to-edit-bookmark-properties");
 			return;
-		case GTK_RESPONSE_ACCEPT:
-			/* On destruction of the dialog, if priv->creating==TRUE,
-			 * we will unref any bookmark we have, so we set it
-			 * to NULL here to 'protect' it from unreffing. */
-			priv->bookmark = NULL;
+	 	case GTK_RESPONSE_ACCEPT:
+			priv->creating = FALSE;
 			break;
 	 	default:
 			break;
@@ -273,7 +370,7 @@ toggled_cb (GtkToggleButton *button,
 	if(gtk_toggle_button_get_active (button))
 	{
 		g_object_set (priv->entry, "sensitive", FALSE, NULL);
-		g_object_set (priv->palette, "visible", TRUE, NULL);
+		gtk_widget_show (priv->palette);
 	
 		geometry.min_width = -1;
 		geometry.min_height = 230;
@@ -284,7 +381,7 @@ toggled_cb (GtkToggleButton *button,
 	else
 	{
 		g_object_set (priv->entry, "sensitive", TRUE, NULL);
-		g_object_set (priv->palette, "visible", FALSE, NULL);
+		gtk_widget_hide (priv->palette);
 		
 		geometry.max_height = -1;
 		geometry.max_width = G_MAXINT;
@@ -310,10 +407,11 @@ ephy_bookmark_properties_constructor (GType type,
 	EphyBookmarkProperties *properties;
 	EphyBookmarkPropertiesPrivate *priv;
 	GtkWidget *widget, *table, *label, *entry, *button;
-	GtkWidget *scrolled_window, *palette;
+	GtkWidget *container, *palette;
 	GtkWindow *window;
 	GtkDialog *dialog;
 	const char *tmp;
+	char *text;
 
 	object = parent_class->constructor (type, n_construct_properties,
 					    construct_params);
@@ -349,7 +447,7 @@ ephy_bookmark_properties_constructor (GType type,
 	table = gtk_table_new (4, 3, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-	gtk_table_set_col_spacing (GTK_TABLE (table), 1, 3);
+	gtk_table_set_col_spacing (GTK_TABLE (table), 1, 6);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_widget_show (table);
 
@@ -384,17 +482,6 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 3, 1, 2, GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
-	widget = gtk_image_new_from_stock (GTK_STOCK_INFO, GTK_ICON_SIZE_BUTTON);
-	priv->warning = gtk_button_new_with_mnemonic (_("_Show similar bookmark"));
-	gtk_button_set_image (GTK_BUTTON (priv->warning), widget);
-	g_signal_connect (priv->warning, "clicked",
-			  G_CALLBACK(show_duplicate_cb), properties);
-	gtk_widget_show (priv->warning);
-	gtk_table_set_row_spacing (GTK_TABLE (table), 1, 0);
-	gtk_table_attach (GTK_TABLE (table), priv->warning, 1, 3, 2, 3, GTK_FILL, 0, 0, 3);
-	priv->duplicate = ephy_bookmarks_find_duplicate (priv->bookmarks, priv->bookmark);
-	g_object_set (priv->warning, "visible", priv->duplicate != NULL, NULL);
-
 	entry = ephy_topics_entry_new (priv->bookmarks, priv->bookmark);
 	priv->entry = entry;
 	gtk_widget_show (entry);
@@ -402,38 +489,56 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4, GTK_FILL, 0, 0, 0);
-	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 3, 4, GTK_FILL | GTK_EXPAND, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3, GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
 	palette = ephy_topics_palette_new (priv->bookmarks, priv->bookmark);
-	scrolled_window = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-					"hadjustment", NULL,
-					"vadjustment", NULL,
-					"hscrollbar_policy", GTK_POLICY_AUTOMATIC,
-					"vscrollbar_policy", GTK_POLICY_AUTOMATIC,
-					"shadow_type", GTK_SHADOW_IN,
-					NULL);
-	priv->palette = scrolled_window;
-	gtk_container_add (GTK_CONTAINER (scrolled_window), palette);
+	container = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+				  "hadjustment", NULL,
+				  "vadjustment", NULL,
+				  "hscrollbar_policy", GTK_POLICY_AUTOMATIC,
+				  "vscrollbar_policy", GTK_POLICY_AUTOMATIC,
+				  "shadow_type", GTK_SHADOW_IN,
+				  NULL);
+	priv->palette = container;
+	gtk_container_add (GTK_CONTAINER (container), palette);
 	gtk_widget_show (palette);
-	gtk_table_attach (GTK_TABLE (table), scrolled_window, 1, 3, 4, 5,
+	gtk_table_attach (GTK_TABLE (table), container, 1, 3, 3, 4,
 			  GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
-	gtk_widget_show (scrolled_window);
+	gtk_widget_show (container);
 
 	widget = gtk_image_new_from_stock (GTK_STOCK_INDEX, GTK_ICON_SIZE_BUTTON);
 	gtk_widget_show (widget);
 	button = gtk_toggle_button_new_with_label ("");
 	gtk_button_set_image (GTK_BUTTON (button), widget);
 	g_signal_connect (button, "toggled", G_CALLBACK (toggled_cb), properties);
-	toggled_cb (button, properties);
+	toggled_cb (GTK_TOGGLE_BUTTON (button), properties);
 	gtk_widget_show (button);
-	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 3, 4, GTK_FILL, GTK_FILL, 0, 0);
-
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
+	
 	gtk_box_pack_start (GTK_BOX (dialog->vbox), table, TRUE, TRUE, 0);
 	
+	priv->warning = gtk_button_new ();
+	gtk_button_set_use_underline (GTK_BUTTON (priv->warning), TRUE);
+	text = g_strdup_printf (_("%d _Similar"), 0);
+	gtk_button_set_label (GTK_BUTTON (priv->warning), text);
+	g_free (text);
+	widget = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_BUTTON);
+	gtk_widget_show (widget);
+	gtk_button_set_image (GTK_BUTTON (priv->warning), widget);
+	g_object_set (priv->warning, "sensitive", FALSE, NULL);
+	gtk_widget_show (priv->warning);
+	g_signal_connect (priv->warning, "clicked",
+			  G_CALLBACK(show_duplicate_cb), properties);
+		
 	gtk_dialog_add_button (dialog,
 			       GTK_STOCK_HELP,
 			       GTK_RESPONSE_HELP);
+	
+	gtk_box_pack_end (GTK_BOX (dialog->action_area), 
+			  priv->warning, FALSE, TRUE, 0);
+	gtk_button_box_set_child_secondary
+	  (GTK_BUTTON_BOX (dialog->action_area), priv->warning, TRUE);
 	
 	if (priv->creating)
 	{
@@ -453,6 +558,8 @@ ephy_bookmark_properties_constructor (GType type,
 		gtk_dialog_set_default_response (dialog, GTK_RESPONSE_CLOSE);
 	}
 
+	update_warning_idle (properties);
+	
 	return object;
 }
 
