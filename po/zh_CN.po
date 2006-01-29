@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 2.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-26 06:26+0100\n"
-"PO-Revision-Date: 2006-01-26 16:21+0800\n"
+"POT-Creation-Date: 2006-01-29 22:02+0100\n"
+"PO-Revision-Date: 2006-01-30 06:54+0800\n"
 "Last-Translator: Liu Songhe <jackliu9999@263.net>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -129,8 +129,8 @@ msgid "Epiphany Web Browser"
 msgstr "Epiphany Web 浏览器"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:533
-#: ../src/ephy-main.c:582 ../src/ephy-main.c:601
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:534
+#: ../src/ephy-main.c:583 ../src/ephy-main.c:602
 msgid "Web Browser"
 msgstr "Web 浏览器"
 
@@ -682,7 +682,6 @@ msgid "Use custom _stylesheet"
 msgstr "使用自定义样式表(_S)"
 
 #: ../data/glade/prefs-dialog.glade.h:31
-#: ../src/bookmarks/ephy-bookmark-properties.c:295
 msgid "_Address:"
 msgstr "地址(_A)："
 
@@ -1217,7 +1216,7 @@ msgstr "乌克兰语"
 msgid "Unknown (%s)"
 msgstr "未知(%s)"
 
-#: ../embed/ephy-history.c:558 ../src/bookmarks/ephy-bookmark-properties.c:304
+#: ../embed/ephy-history.c:558
 msgid "All"
 msgstr "全部"
 
@@ -1999,8 +1998,8 @@ msgstr "无法在“%s”中创建临时目录。"
 
 #: ../lib/ephy-file-helpers.c:360
 #, c-format
-msgid "“%s” exists, please move it out of the way."
-msgstr "“%s”已存在，请将其移出。"
+msgid "The file “%s” exists. Please move it out of the way."
+msgstr "文件“%s”已存在，请将其移出。"
 
 #: ../lib/ephy-file-helpers.c:371
 #, c-format
@@ -2291,29 +2290,32 @@ msgstr "此插件将处理包含 Web 链接的“.desktop”文件。"
 msgid "%s:"
 msgstr "%s："
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:180
+#: ../src/bookmarks/ephy-bookmark-properties.c:90
+#: ../src/bookmarks/ephy-bookmark-properties.c:523
+#, c-format
+msgid "%d _Similar"
+msgstr "%d 个相似(_S)"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:239
+msgid "_Merge"
+msgstr "合并(_M)"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:339
 #, c-format
 msgid "“%s” Properties"
 msgstr "“%s”属性"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:280
+#: ../src/bookmarks/ephy-bookmark-properties.c:463
 msgid "_Title:"
 msgstr "标题(_T)："
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:305
-#: ../src/bookmarks/ephy-topics-palette.c:276
-msgid "Subtopics"
-msgstr "次主题"
+#: ../src/bookmarks/ephy-bookmark-properties.c:478
+msgid "A_ddress:"
+msgstr "地址(_D)："
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:306
+#: ../src/bookmarks/ephy-bookmark-properties.c:488
 msgid "T_opics:"
 msgstr "主题(_O)："
-
-#. File Menu
-#: ../src/bookmarks/ephy-bookmark-properties.c:340
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
-msgid "_New Topic"
-msgstr "新建主题(_N)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:95
 msgid "Mozilla (HTML)"
@@ -2347,6 +2349,11 @@ msgstr "查看(_V)"
 #: ../src/ephy-history-window.c:166 ../src/ephy-window.c:122
 msgid "_Help"
 msgstr "帮助(_H)"
+
+#. File Menu
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+msgid "_New Topic"
+msgstr "新建主题(_N)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "Create a new topic"
@@ -2748,55 +2755,33 @@ msgstr "在新标签中打开此书签"
 msgid "Open this bookmark in a new window"
 msgstr "在新窗口中打开此书签"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:497
-msgid "Bookmark exists"
-msgstr "书签已存在"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:501
-#, c-format
-msgid "You already have a bookmark titled “%s” for this page."
-msgstr "此页面已经存在标题为“%s”的书签。"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:511
-msgid "_Create New"
-msgstr "新建(_C)"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:518
-msgid "_View Properties"
-msgstr "查看属性(_V)"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:529
-msgid "Bookmark Exists"
-msgstr "书签已存在"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:622
+#: ../src/bookmarks/ephy-bookmarks-ui.c:523
 #, c-format
 msgid "You already have a topic named “%s”"
-msgstr ""
-"您已经有名为“%s”的主题。。"
+msgstr "您已经有名为“%s”的主题。。"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:626
+#: ../src/bookmarks/ephy-bookmarks-ui.c:527
 msgid "Please use a different topic name."
 msgstr "请使用不同的主题名称。"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:666
+#: ../src/bookmarks/ephy-bookmarks-ui.c:567
 #, c-format
 msgid "New topic for “%s”"
 msgstr "为“%s”新建主题"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:676
+#: ../src/bookmarks/ephy-bookmarks-ui.c:577
 msgid "New topic"
 msgstr "新主题"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:681
+#: ../src/bookmarks/ephy-bookmarks-ui.c:582
 msgid "Enter a unique name for the topic."
 msgstr "输入主题的唯一名称。"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:713
+#: ../src/bookmarks/ephy-bookmarks-ui.c:614
 msgid "Create"
 msgstr "创建"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:716
+#: ../src/bookmarks/ephy-bookmarks-ui.c:617
 msgid "New Topic"
 msgstr "新建主题"
 
@@ -2812,29 +2797,10 @@ msgstr "相关"
 msgid "Quick Topic"
 msgstr "快速主题"
 
-#: ../src/bookmarks/ephy-topics-palette.c:205
-msgid "No topics"
-msgstr "无主题"
-
-#: ../src/bookmarks/ephy-topics-palette.c:275
-msgid "Selection"
-msgstr "选中内容"
-
-#: ../src/bookmarks/ephy-topics-palette.c:275
-msgid "No selected topics"
-msgstr "无选中的主题"
-
-#: ../src/bookmarks/ephy-topics-palette.c:276
-msgid "No more subtopics"
-msgstr "无更多的次主题"
-
-#: ../src/bookmarks/ephy-topics-palette.c:277
-msgid "Other"
-msgstr "其它"
-
-#: ../src/bookmarks/ephy-topics-palette.c:277
-msgid "No other topics"
-msgstr "无其它主题"
+#: ../src/bookmarks/ephy-topics-entry.c:356
+#, c-format
+msgid "Create topic “%s”"
+msgstr "创建主题“%s”"
 
 #: ../src/ephy-encoding-dialog.c:340
 msgid "Encodings"
@@ -2975,9 +2941,13 @@ msgstr[0] "上 %d 天"
 msgid "Sites"
 msgstr "站点"
 
-#: ../src/ephy-main.c:74 ../src/ephy-main.c:76
-msgid "Open a new tab in an existing Epiphany window"
-msgstr "在已有的 Epiphany 窗口中打开新标签"
+#: ../src/ephy-main.c:74
+msgid "Open a new tab in an existing browser window"
+msgstr "在已有的浏览器窗口中打开新标签"
+
+#: ../src/ephy-main.c:76
+msgid "Open a new browser window"
+msgstr "在新的浏览器窗口中打开"
 
 #: ../src/ephy-main.c:78
 msgid "Launch the bookmarks editor"
@@ -3016,13 +2986,15 @@ msgstr "无法启动 GNOME Web 浏览器"
 msgid ""
 "Startup failed because of the following error:\n"
 "%s"
-msgstr "启动失败，原因是下列错误：\n%s"
+msgstr ""
+"启动失败，原因是下列错误：\n"
+"%s"
 
-#: ../src/ephy-main.c:511 ../src/ephy-main.c:513 ../src/window-commands.c:752
+#: ../src/ephy-main.c:512 ../src/ephy-main.c:514 ../src/window-commands.c:751
 msgid "GNOME Web Browser"
 msgstr "GNOME Web 浏览器"
 
-#: ../src/ephy-main.c:514
+#: ../src/ephy-main.c:515
 msgid "GNOME Web Browser options"
 msgstr "GNOME Web 浏览器选项"
 
@@ -3653,11 +3625,11 @@ msgstr "如果您无论如何都要关闭该文档，您将丢失那些信息。
 msgid "Close _Document"
 msgstr "关闭文档(_D)"
 
-#: ../src/ephy-window.c:1283 ../src/window-commands.c:279
+#: ../src/ephy-window.c:1283 ../src/window-commands.c:278
 msgid "Open"
 msgstr "打开"
 
-#: ../src/ephy-window.c:1285 ../src/window-commands.c:305
+#: ../src/ephy-window.c:1285 ../src/window-commands.c:304
 msgid "Save As"
 msgstr "另存为"
 
@@ -3892,23 +3864,23 @@ msgstr[0] "系统语言(%s)"
 msgid "Select a Directory"
 msgstr "选择目录"
 
-#: ../src/window-commands.c:710 ../src/window-commands.c:727
+#: ../src/window-commands.c:709 ../src/window-commands.c:726
 msgid "Contact us at:"
 msgstr "联系我们："
 
-#: ../src/window-commands.c:713
+#: ../src/window-commands.c:712
 msgid "Contributors:"
 msgstr "志愿者："
 
-#: ../src/window-commands.c:718
+#: ../src/window-commands.c:717
 msgid "Past developers:"
 msgstr "先前的开发者："
 
-#: ../src/window-commands.c:728
+#: ../src/window-commands.c:727
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> 或 <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:733
+#: ../src/window-commands.c:732
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3916,7 +3888,7 @@ msgid ""
 "option) any later version."
 msgstr ""
 
-#: ../src/window-commands.c:737
+#: ../src/window-commands.c:736
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3924,7 +3896,7 @@ msgid ""
 "more details."
 msgstr ""
 
-#: ../src/window-commands.c:741
+#: ../src/window-commands.c:740
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3939,11 +3911,11 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:766
+#: ../src/window-commands.c:765
 msgid "translator-credits"
 msgstr "开源软件国际化简体中文组(http://i18n.linux.net.cn),Funda Wang"
 
-#: ../src/window-commands.c:769
+#: ../src/window-commands.c:768
 msgid "GNOME Web Browser Website"
 msgstr "GNOME Web 浏览器网站"
 
