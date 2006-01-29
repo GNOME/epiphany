@@ -1,3 +1,10 @@
+2006-01-29  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	If GetPassword failed, break instead of continue.
+	That way we don't endlessly re-ask for the master password.
+
 2006-01-29  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* embed/ephy-embed-single.c: (ephy_embed_single_get_backend_name):

@@ -1067,7 +1067,15 @@ impl_list_passwords (EphyPasswordManager *manager)
 				   NS_CSTRING_ENCODING_UTF8, userName);
 
 		rv = nsPassword->GetPassword (unicodeName);
-		if (NS_FAILED (rv)) continue;
+		if (NS_FAILED (rv))
+		{
+			/* this usually means we couldn't decrypt the password, due to
+			 * the master password being unavailable. Don't continue since that
+			 * would lead to endless prompting for the master password; abort
+			 * instead.
+			 */
+			break;
+		}
 
 		nsEmbedCString userPassword;
 		NS_UTF16ToCString (unicodeName,
