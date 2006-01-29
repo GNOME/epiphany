@@ -348,8 +348,44 @@ static void
 activate_cb (GtkWidget *widget,
 	     EphyBookmarkAction *action)
 {
+	gboolean control = FALSE;
+	GdkEvent *event;
+
+	event = gtk_get_current_event ();
+	if (event)
+	{
+		if (event->type == GDK_KEY_PRESS ||
+		    event->type == GDK_KEY_RELEASE)
+		{
+			control = (event->key.state & gtk_accelerator_get_default_mod_mask ()) == GDK_CONTROL_MASK;
+		}
+			
+		gdk_event_free (event);
+	}
+
 	ephy_bookmark_action_activate
-	  (action, widget, ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
+	  (action, widget, (control || ephy_gui_is_middle_click ()) ? EPHY_LINK_NEW_TAB : 0);
+}
+
+static gboolean
+entry_key_press_cb (GtkEntry *entry,
+		    GdkEventKey *event,
+		    EphyBookmarkAction *action)
+{
+	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
+
+	if ((event->keyval == GDK_Return ||
+	     event->keyval == GDK_KP_Enter ||
+	     event->keyval == GDK_ISO_Enter) &&
+	    state == GDK_CONTROL_MASK)
+	{
+		gtk_im_context_reset (entry->im_context);
+
+		g_signal_emit_by_name (entry, "activate");
+
+		return TRUE;
+	}
+	return FALSE;
 }
 
 static gboolean
@@ -411,6 +447,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 		entry = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "entry"));
 		g_signal_connect (entry, "activate", G_CALLBACK (activate_cb), action);
+		g_signal_connect (entry, "key-press-event", G_CALLBACK (entry_key_press_cb), action);
 	}
 	else if (GTK_IS_MENU_ITEM (proxy))
 	{
