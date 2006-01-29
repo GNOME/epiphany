@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-08 17:39+0200\n"
+"POT-Creation-Date: 2006-01-29 16:35+0200\n"
 "PO-Revision-Date: 2005-08-27 12:27+0300\n"
 "Last-Translator: Mohammad DAMT <mdamt@gnome.org>\n"
 "Language-Team: Indonesian <sukarelawan@gnome.linux.or.id>\n"
@@ -137,8 +137,8 @@ msgid "Epiphany Web Browser"
 msgstr "Web Browser Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:221
-#: ../src/ephy-main.c:232
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:534
+#: ../src/ephy-main.c:583 ../src/ephy-main.c:602
 msgid "Web Browser"
 msgstr "Browser Web"
 
@@ -170,8 +170,8 @@ msgid "Automatic downloads"
 msgstr "Unduh Otomatis"
 
 #: ../data/epiphany.schemas.in.h:7
-msgid "Autowrap for find in page"
-msgstr "Autowrap untuk Cari di halaman"
+msgid "Automatically manage offline status with NetworkManager"
+msgstr ""
 
 #: ../data/epiphany.schemas.in.h:8
 msgid "Browse with caret"
@@ -240,36 +240,34 @@ msgid "Enable JavaScript"
 msgstr "Aktifkan JavaScript"
 
 #: ../data/epiphany.schemas.in.h:16
-msgid ""
-"For find in page, whether to start again at the beginning after reaching the "
-"end of the page."
-msgstr ""
-"Untuk Cari di halaman, apakah akah mengulang dari awal lagi setelah mencapai "
-"bagian akhir halaman."
-
-#: ../data/epiphany.schemas.in.h:17
 msgid "History pages time range"
 msgstr "jangkauan waktu riwayat halaman"
 
-#: ../data/epiphany.schemas.in.h:18
+#: ../data/epiphany.schemas.in.h:17
 msgid "Home page"
 msgstr "Home page"
+
+#: ../data/epiphany.schemas.in.h:18
+msgid ""
+"How to present animated images. Possible values are \"normal\", \"once\" and "
+"\"disabled\"."
+msgstr ""
 
 #: ../data/epiphany.schemas.in.h:19
 msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
 #: ../data/epiphany.schemas.in.h:20
+msgid "Image animation mode"
+msgstr ""
+
+#: ../data/epiphany.schemas.in.h:21
 msgid "Languages"
 msgstr "Bahasa"
 
-#: ../data/epiphany.schemas.in.h:21
+#: ../data/epiphany.schemas.in.h:22
 msgid "Lists the active extensions."
 msgstr "Daftar ekstensi aktif."
-
-#: ../data/epiphany.schemas.in.h:22
-msgid "Match case for find in page"
-msgstr "Huruf yang cocok untuk menemukan dalam halaman"
 
 #: ../data/epiphany.schemas.in.h:23
 msgid ""
@@ -285,18 +283,23 @@ msgstr ""
 "ditunjukkan oleh teks yang sedang terpilih."
 
 #: ../data/epiphany.schemas.in.h:25
+#, fuzzy
+msgid "Minimum font size"
+msgstr "Ukuran _minimum:"
+
+#: ../data/epiphany.schemas.in.h:26
 msgid "Preferred languages, two letter codes."
 msgstr "Bahasa favorit, kode dua-huruf"
 
-#: ../data/epiphany.schemas.in.h:26
+#: ../data/epiphany.schemas.in.h:27
 msgid "Show bookmarks bar by default"
 msgstr "Perlihatkan batang bookmark secara default"
 
-#: ../data/epiphany.schemas.in.h:27
+#: ../data/epiphany.schemas.in.h:28
 msgid "Show statusbar by default"
 msgstr "Perlihatkan batang status secara default"
 
-#: ../data/epiphany.schemas.in.h:28
+#: ../data/epiphany.schemas.in.h:29
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -304,27 +307,27 @@ msgstr ""
 "Tampilkan riwayat halaman yang dikunjungi \"ever\", \"last_two_days\", "
 "\"last_three_days\", \"today\"."
 
-#: ../data/epiphany.schemas.in.h:29
+#: ../data/epiphany.schemas.in.h:30
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "Perlihatkan batang tab saat hanya ada satu tab terbuka"
 
-#: ../data/epiphany.schemas.in.h:30
+#: ../data/epiphany.schemas.in.h:31
 msgid "Show toolbars by default"
 msgstr "Perlihatkan toolbar secara default"
 
-#: ../data/epiphany.schemas.in.h:31
+#: ../data/epiphany.schemas.in.h:32
 msgid "Size of disk cache"
 msgstr "Ukuran cache disk"
 
-#: ../data/epiphany.schemas.in.h:32
+#: ../data/epiphany.schemas.in.h:33
 msgid "Size of disk cache, in MB."
 msgstr "Ukuran cache disk, dalam MB."
 
-#: ../data/epiphany.schemas.in.h:33
+#: ../data/epiphany.schemas.in.h:34
 msgid "The bookmark information shown in the editor view"
 msgstr "Informasi bookmark diperlihatkan dalam tampilan editor"
 
-#: ../data/epiphany.schemas.in.h:34
+#: ../data/epiphany.schemas.in.h:35
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -332,11 +335,11 @@ msgstr ""
 "Informasi bookmark diperlihatkan dalam tampilan editor. Nilai valid untuk "
 "daftar adalah \"alamat\" dan \"judul\"."
 
-#: ../data/epiphany.schemas.in.h:35
+#: ../data/epiphany.schemas.in.h:36
 msgid "The currently selected fonts language"
 msgstr "bahasa huruf yang sedang dipilih"
 
-#: ../data/epiphany.schemas.in.h:36
+#: ../data/epiphany.schemas.in.h:37
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -355,15 +358,15 @@ msgstr ""
 "\" (bahasa lainnya), \"x-western\" (bahasa dengan huruf latin),\"x-tamil"
 "\" (tamil) dan \"x-devanagari\" (devanagari)."
 
-#: ../data/epiphany.schemas.in.h:37
+#: ../data/epiphany.schemas.in.h:38
 msgid "The downloads folder"
 msgstr "Folder Download"
 
-#: ../data/epiphany.schemas.in.h:38
+#: ../data/epiphany.schemas.in.h:39
 msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr "Autodetektor encoding. String kosong artinya autodetektor dimatikan"
 
-#: ../data/epiphany.schemas.in.h:39
+#: ../data/epiphany.schemas.in.h:40
 msgid ""
 "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
 "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
@@ -385,11 +388,11 @@ msgstr ""
 "\"zhtw_parallel_state_machin\" (autodeteksi encoing cina tradisional), dan "
 "\"universal_charset_detector\" (autodeteksi kebanyakan encoding lainnya)."
 
-#: ../data/epiphany.schemas.in.h:40
+#: ../data/epiphany.schemas.in.h:41
 msgid "The page information shown in the history view"
 msgstr "Informasi halaman diperlihatkan di tampilan riwayat"
 
-#: ../data/epiphany.schemas.in.h:41
+#: ../data/epiphany.schemas.in.h:42
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"address\", \"title\"."
@@ -397,19 +400,19 @@ msgstr ""
 "Informasi halaman ditunjukkan di tampilan riwayat. Nilai valid di daftar "
 "adalah \"alamat\" dan \"judul\"."
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:43
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
 msgstr ""
-"Path folder tempat mengunduh berkas, atau pilih saja \"Downloads\" "
-"atau \"Desktop\"."
+"Path folder tempat mengunduh berkas, atau pilih saja \"Downloads\" atau "
+"\"Desktop\"."
 
-#: ../data/epiphany.schemas.in.h:43
+#: ../data/epiphany.schemas.in.h:44
 msgid "Toolbar style"
 msgstr "Gaya toolbar"
 
-#: ../data/epiphany.schemas.in.h:44
+#: ../data/epiphany.schemas.in.h:45
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -419,23 +422,23 @@ msgstr ""
 "GNOME). \"keduanya\" (teks dan icon), \"keduanya-horiz\" (teks disamping "
 "icon), \"icons\", dan \"teks\"."
 
-#: ../data/epiphany.schemas.in.h:45
+#: ../data/epiphany.schemas.in.h:46
 msgid "Use own colors"
 msgstr "Pakai warna pilihan sendiri"
 
-#: ../data/epiphany.schemas.in.h:46
+#: ../data/epiphany.schemas.in.h:47
 msgid "Use own fonts"
 msgstr "Pakai huruf pilihan sendiri"
 
-#: ../data/epiphany.schemas.in.h:47
+#: ../data/epiphany.schemas.in.h:48
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Gunakan warna pilihan sendiri daripada warna yang diminta halaman."
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:49
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Gunakan huruf pilihan sendiri daripada huruf yang diminta halaman."
 
-#: ../data/epiphany.schemas.in.h:49
+#: ../data/epiphany.schemas.in.h:50
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -443,7 +446,7 @@ msgstr ""
 "Ketika files tidak dapat dibuka oleh browser mereka secara automatis akan di "
 "unduh ke folder unduh dan dibuka dengan aplikasi yang sesuai."
 
-#: ../data/epiphany.schemas.in.h:50
+#: ../data/epiphany.schemas.in.h:51
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -451,23 +454,23 @@ msgstr ""
 "Darimana mau menerima cookie. Nilai yang mungkin adalah \"anywhere\", "
 "\"current site\", dan \"nowhere\"."
 
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:52
 msgid "Whether to print the date in the footer"
 msgstr "Cetak tanggal di catatan kaki"
 
-#: ../data/epiphany.schemas.in.h:52
+#: ../data/epiphany.schemas.in.h:53
 msgid "Whether to print the page address in the header"
 msgstr "Cetak alamat halaman di catatan kepala"
 
-#: ../data/epiphany.schemas.in.h:53
+#: ../data/epiphany.schemas.in.h:54
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "Cetak nomor halaman (x of total) di catatan kaki"
 
-#: ../data/epiphany.schemas.in.h:54
+#: ../data/epiphany.schemas.in.h:55
 msgid "Whether to print the page title in the header"
 msgstr "Cetak judul halaman di catatan kepala?"
 
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:56
 msgid "x-western"
 msgstr "x-western"
 
@@ -516,7 +519,7 @@ msgid "Field _Value"
 msgstr "Isi _Kolom"
 
 #: ../data/glade/certificate-dialogs.glade.h:12
-#: ../data/glade/prefs-dialog.glade.h:23
+#: ../data/glade/prefs-dialog.glade.h:20
 msgid "General"
 msgstr "Umum"
 
@@ -558,7 +561,7 @@ msgid "Cookies"
 msgstr "Cookies"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:98
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:105
 msgid "Downloads"
 msgstr "Download"
 
@@ -582,67 +585,51 @@ msgstr "Gunakan pengodean yang dipilih oleh dokumen"
 msgid "_Show password"
 msgstr "Tampilkan _sandi:"
 
-#: ../data/glade/prefs-dialog.glade.h:1 ../data/glade/print.glade.h:1
-msgid "<b>Colors</b>"
-msgstr "<b>Warna</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:2
+#: ../data/glade/prefs-dialog.glade.h:1
 msgid "<b>Cookies</b>"
 msgstr "<b>Cookies</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:3
+#: ../data/glade/prefs-dialog.glade.h:2
 msgid "<b>Downloads</b>"
 msgstr "<b>Unduhan</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:4
+#: ../data/glade/prefs-dialog.glade.h:3
 msgid "<b>Encodings</b>"
 msgstr "<b>Pengodean</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:5
-msgid "<b>Fonts</b>"
-msgstr "<b>Huruf</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:6
+#: ../data/glade/prefs-dialog.glade.h:4
 msgid "<b>Home page</b>"
 msgstr "<b>Halaman awal</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:7
+#: ../data/glade/prefs-dialog.glade.h:5
 msgid "<b>Languages</b>"
 msgstr "<b>Bahasa</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:8
+#: ../data/glade/prefs-dialog.glade.h:6
 msgid "<b>Temporary Files</b>"
 msgstr "<b>Berkas Sementara</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:9
+#: ../data/glade/prefs-dialog.glade.h:7
 msgid "<b>Web Content</b>"
 msgstr "<b>Isi Web</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:10
+#: ../data/glade/prefs-dialog.glade.h:8
 msgid "A_utomatically download and open files"
 msgstr "_Unduh dan buka berkas secara otomatis"
 
-#: ../data/glade/prefs-dialog.glade.h:11
+#: ../data/glade/prefs-dialog.glade.h:9
 msgid "Add Language"
 msgstr "Tambah Bahasa"
 
-#: ../data/glade/prefs-dialog.glade.h:12
-msgid "Al_ways use the desktop theme colors"
-msgstr "Gunakan selalu _warna tema desktop"
-
-#: ../data/glade/prefs-dialog.glade.h:13
+#: ../data/glade/prefs-dialog.glade.h:10
 msgid "Allow popup _windows"
 msgstr "Perbolehkan _jendela popup"
 
-#: ../data/glade/prefs-dialog.glade.h:14
-msgid "Always use _these fonts"
-msgstr "Gunakan selalu _huruf _ini"
-
-#: ../data/glade/prefs-dialog.glade.h:15
+#: ../data/glade/prefs-dialog.glade.h:11
 msgid "Au_todetect:"
 msgstr "De_teksi otomatis:"
 
-#: ../data/glade/prefs-dialog.glade.h:16
+#: ../data/glade/prefs-dialog.glade.h:12
 msgid "Choose a l_anguage:"
 msgstr "Pilih _bahasa:"
 
@@ -650,61 +637,76 @@ msgstr "Pilih _bahasa:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.glade.h:17
+#: ../data/glade/prefs-dialog.glade.h:13
 #: ../lib/widgets/ephy-location-entry.c:580 ../src/ephy-history-window.c:261
 msgid "Cl_ear"
 msgstr "B_ersihkan"
 
-#: ../data/glade/prefs-dialog.glade.h:18
+#: ../data/glade/prefs-dialog.glade.h:14
 msgid "De_fault:"
 msgstr "U_tama:"
 
-#: ../data/glade/prefs-dialog.glade.h:19
+#: ../data/glade/prefs-dialog.glade.h:15
 msgid "Enable Java_Script"
 msgstr "Aktifkan Java_Script"
 
-#: ../data/glade/prefs-dialog.glade.h:20
+#: ../data/glade/prefs-dialog.glade.h:16
 msgid "Enable _Java"
 msgstr "Aktifkan _Java"
 
-#: ../data/glade/prefs-dialog.glade.h:21
-msgid "Fonts and Colors"
-msgstr "Huruf dan Warna"
+#: ../data/glade/prefs-dialog.glade.h:17
+msgid "Fonts"
+msgstr ""
 
-#: ../data/glade/prefs-dialog.glade.h:22
+#: ../data/glade/prefs-dialog.glade.h:18
+msgid "Fonts & Style"
+msgstr ""
+
+#: ../data/glade/prefs-dialog.glade.h:19
 msgid "For l_anguage:"
 msgstr "Untuk _bahasa:"
 
-#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1037
+#: ../data/glade/prefs-dialog.glade.h:21 ../src/prefs-dialog.c:1301
 msgid "Language"
 msgstr "Bahasa"
 
-#: ../data/glade/prefs-dialog.glade.h:25
+#: ../data/glade/prefs-dialog.glade.h:22
+msgid "Let web pages specify their own _colors"
+msgstr ""
+
+#: ../data/glade/prefs-dialog.glade.h:23
+msgid "Let web pages specify their own _fonts"
+msgstr ""
+
+#: ../data/glade/prefs-dialog.glade.h:24
 msgid "MB"
 msgstr "MB"
 
-#: ../data/glade/prefs-dialog.glade.h:26
+#: ../data/glade/prefs-dialog.glade.h:25
 msgid "Only _from sites you visit"
 msgstr "Hanya _dari situs yang pernah dikunjungi"
 
-#: ../data/glade/prefs-dialog.glade.h:27
+#: ../data/glade/prefs-dialog.glade.h:26
 msgid "Preferences"
 msgstr "Pengaturan"
 
-#: ../data/glade/prefs-dialog.glade.h:28
+#: ../data/glade/prefs-dialog.glade.h:27
 msgid "Privacy"
 msgstr "Privasi"
 
-#: ../data/glade/prefs-dialog.glade.h:29
+#: ../data/glade/prefs-dialog.glade.h:28
 msgid "Set to Current _Page"
 msgstr "Halaman Ini"
 
-#: ../data/glade/prefs-dialog.glade.h:30
+#: ../data/glade/prefs-dialog.glade.h:29
 msgid "Set to _Blank Page"
 msgstr "Halaman _Kosong"
 
+#: ../data/glade/prefs-dialog.glade.h:30
+msgid "Use custom _stylesheet"
+msgstr ""
+
 #: ../data/glade/prefs-dialog.glade.h:31
-#: ../src/bookmarks/ephy-bookmark-properties.c:340
 msgid "_Address:"
 msgstr "_Alamat:"
 
@@ -713,28 +715,40 @@ msgid "_Always accept"
 msgstr "Terim_a selalu"
 
 #: ../data/glade/prefs-dialog.glade.h:33
+msgid "_Detailed Font Settings..."
+msgstr ""
+
+#: ../data/glade/prefs-dialog.glade.h:34
 msgid "_Disk space:"
 msgstr "Ruang _Disk:"
 
-#: ../data/glade/prefs-dialog.glade.h:34
+#: ../data/glade/prefs-dialog.glade.h:35
 msgid "_Download folder:"
 msgstr "Folder un_duhan:"
 
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/glade/prefs-dialog.glade.h:36
+msgid "_Edit Stylesheet..."
+msgstr ""
+
+#: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Fixed width:"
 msgstr "Lebar teta_p:"
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Minimum size:"
 msgstr "Ukuran _minimum:"
 
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/glade/prefs-dialog.glade.h:39
 msgid "_Never accept"
 msgstr "_Tolak selalu"
 
-#: ../data/glade/prefs-dialog.glade.h:38
+#: ../data/glade/prefs-dialog.glade.h:40
 msgid "_Variable width:"
 msgstr "Lebar _variabel:"
+
+#: ../data/glade/print.glade.h:1
+msgid "<b>Colors</b>"
+msgstr "<b>Warna</b>"
 
 #: ../data/glade/print.glade.h:2
 msgid "<b>Footers</b>"
@@ -806,7 +820,7 @@ msgstr ""
 "%sÂ·dariÂ·%s"
 
 #: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#: ../src/ephy-window.c:1456
+#: ../src/ephy-window.c:1467
 msgid "Unknown"
 msgstr "Tak dikenal"
 
@@ -820,15 +834,15 @@ msgstr[0] "%d unduhan"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/downloader-view.c:585 ../embed/downloader-view.c:598
 msgid "download status|Unknown"
-msgstr "download status|Tidak diketahui"
+msgstr "Tidak diketahui"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/downloader-view.c:590
 msgid "download status|Failed"
-msgstr "download status|Gagal"
+msgstr "Gagal"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:803
+#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:863
 msgid "File"
 msgstr "Berkas"
 
@@ -839,6 +853,10 @@ msgstr "%"
 #: ../embed/downloader-view.c:690
 msgid "Remaining"
 msgstr "Sisa"
+
+#: ../embed/ephy-embed-shell.c:235
+msgid "Epiphany can't be used now. Mozilla initialization failed."
+msgstr "Epiphany tidak dapat digunakan sekarang. Inisialisasi Mozilla gagal."
 
 #: ../embed/ephy-encodings.c:60
 msgid "Arabic (_IBM-864)"
@@ -1159,61 +1177,61 @@ msgstr "Unicode (UTF-3_2 LE)"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/ephy-encodings.c:145
 msgid "autodetectors|Off"
-msgstr "autodetectors|Tidak aktif"
+msgstr "Tidak aktif"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/ephy-encodings.c:148
 msgid "automatically detect ... character encodings|Chinese"
-msgstr "automatically detect ... character encodings|China"
+msgstr "China"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/ephy-encodings.c:151
 msgid "automatically detect ... character encodings|Simplified Chinese"
-msgstr "automatically detect ... character encodings|China Sederhana"
+msgstr "China Sederhana"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/ephy-encodings.c:154
 msgid "automatically detect ... character encodings|Traditional Chinese"
-msgstr "automatically detect ... character encodings|China Tradisional"
+msgstr "China Tradisional"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/ephy-encodings.c:157
 msgid "automatically detect ... character encodings|East Asian"
-msgstr "automatically detect ... character encodings|Asia Timur"
+msgstr "Asia Timur"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/ephy-encodings.c:160
 msgid "automatically detect ... character encodings|Japanese"
-msgstr "automatically detect ... character encodings|Jepang"
+msgstr "Jepang"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/ephy-encodings.c:163
 msgid "automatically detect ... character encodings|Korean"
-msgstr "automatically detect ... character encodings|Korea"
+msgstr "Korea"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/ephy-encodings.c:166
 msgid "automatically detect ... character encodings|Russian"
-msgstr "automatically detect ... character encodings|Rusia"
+msgstr "Rusia"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/ephy-encodings.c:169
 msgid "automatically detect ... character encodings|Universal"
-msgstr "automatically detect ... character encodings|Umum"
+msgstr "Umum"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/ephy-encodings.c:172
 msgid "automatically detect ... character encodings|Ukrainian"
-msgstr "automatically detect ... character encodings|Ukrania"
+msgstr "Ukrania"
 
 #. translators: this is the title that an unknown encoding will
 #. * be displayed as.
@@ -1223,15 +1241,15 @@ msgstr "automatically detect ... character encodings|Ukrania"
 msgid "Unknown (%s)"
 msgstr "Tak dikenal (%s)"
 
-#: ../embed/ephy-history.c:550
+#: ../embed/ephy-history.c:558
 msgid "All"
 msgstr "Semua"
 
-#: ../embed/ephy-history.c:713
+#: ../embed/ephy-history.c:721
 msgid "Others"
 msgstr "Lainnya"
 
-#: ../embed/ephy-history.c:719
+#: ../embed/ephy-history.c:727
 msgid "Local files"
 msgstr "Berkas lokal"
 
@@ -1244,7 +1262,7 @@ msgstr "Simpan"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/mozilla/ContentHandler.cpp:293
 msgid "File Type:|Unknown"
-msgstr "File Type:|Tidak diketahui"
+msgstr "Tidak diketahui"
 
 #: ../embed/mozilla/ContentHandler.cpp:328
 msgid "Download this potentially unsafe file?"
@@ -1253,11 +1271,11 @@ msgstr "Unduh berkas ini (kemungkinan tidak aman)?"
 #. translators: First %s is the file type description,
 #. Second %s is the file name
 #: ../embed/mozilla/ContentHandler.cpp:334
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"File Type: â%sâ.\n"
+"File Type: “%s”.\n"
 "\n"
-"It is unsafe to open â%sâ as it could potentially damage your documents or "
+"It is unsafe to open “%s” as it could potentially damage your documents or "
 "invade your privacy. You can download it instead."
 msgstr ""
 "Jenis Berkas: %s\n"
@@ -1273,11 +1291,11 @@ msgstr "Buka berkas ini?"
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
 #: ../embed/mozilla/ContentHandler.cpp:351
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"File Type: â%sâ.\n"
+"File Type: “%s”.\n"
 "\n"
-"You can open â%sâ using â%sâ or save it."
+"You can open “%s” using “%s” or save it."
 msgstr ""
 "Jenis Berkas: %s.\n"
 "\n"
@@ -1290,11 +1308,11 @@ msgstr "Unduh berkas ini?"
 #. translators: First %s is the file type description,
 #. Second %s is the file name
 #: ../embed/mozilla/ContentHandler.cpp:365
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"File Type: â%sâ.\n"
+"File Type: “%s”.\n"
 "\n"
-"You have no application able to open â%sâ. You can download it instead."
+"You have no application able to open “%s”. You can download it instead."
 msgstr ""
 "Jenis Berkas: %s.\n"
 "\n"
@@ -1306,33 +1324,33 @@ msgstr "_Simpan Jadi..."
 
 #. Translators: %s is the name of a protocol, like "http" etc.
 #: ../embed/mozilla/EphyAboutModule.cpp:207
-#, c-format
-msgid "â%sâ Protocol is not Supported"
+#, fuzzy, c-format
+msgid "“%s” Protocol is not Supported"
 msgstr "Protokol %s Tidak Didukung"
 
 #. Translators: %s is the name of a protocol, like "http" etc.
 #: ../embed/mozilla/EphyAboutModule.cpp:209
-#, c-format
-msgid "â%sâ protocol is not supported."
+#, fuzzy, c-format
+msgid "“%s” protocol is not supported."
 msgstr "Protokol %s tidak didukung."
 
 #. FIXME: get the list of supported protocols from necko
 #: ../embed/mozilla/EphyAboutModule.cpp:211
+#, fuzzy
 msgid ""
-"Supported protocols are âhttpâ, âhttpsâ, âftpâ, âfileâ, âsmbâ and âsftpâ."
-msgstr ""
-"Protokol yang didukung hanyalah http, https, ftp, file, smb dan sftp."
+"Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
+msgstr "Protokol yang didukung hanyalah http, https, ftp, file, smb dan sftp."
 
 #. Translators: %s is the path and filename, for example "/home/user/test.html"
 #: ../embed/mozilla/EphyAboutModule.cpp:220
-#, c-format
-msgid "File â%sâ not Found"
+#, fuzzy, c-format
+msgid "File “%s” not Found"
 msgstr "Berkas %s Tidak Ditemukan"
 
 #. Translators: %s is the path and filename, for example "/home/user/test.html"
 #: ../embed/mozilla/EphyAboutModule.cpp:222
-#, c-format
-msgid "File â%sâ not found."
+#, fuzzy, c-format
+msgid "File “%s” not found."
 msgstr "Berkas %s tidak ditemukan."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:223
@@ -1341,14 +1359,14 @@ msgstr "Silakan periksa lokasi berkas dan coba kembali."
 
 #. Translators: %s is the hostname, like "www.example.com"
 #: ../embed/mozilla/EphyAboutModule.cpp:231
-#, c-format
-msgid "â%sâ Could not be Found"
+#, fuzzy, c-format
+msgid "“%s” Could not be Found"
 msgstr "%s Tidak Dapat Ditemukan"
 
 #. Translators: %s is the hostname, like "www.example.com"
 #: ../embed/mozilla/EphyAboutModule.cpp:234
-#, c-format
-msgid "â%sâ could not be found."
+#, fuzzy, c-format
+msgid "“%s” could not be found."
 msgstr "%s tidak dapat ditemukan"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:236
@@ -1361,16 +1379,17 @@ msgstr ""
 
 #: ../embed/mozilla/EphyAboutModule.cpp:238
 msgid "If this page used to exist, you may find an archived version:"
-msgstr "Bila halaman ini dulu pernah ada, mungkin Anda dapat mencarinya dalam arsip:"
+msgstr ""
+"Bila halaman ini dulu pernah ada, mungkin Anda dapat mencarinya dalam arsip:"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:247
-#, c-format
-msgid "â%sâ Refused the Connection"
+#, fuzzy, c-format
+msgid "“%s” Refused the Connection"
 msgstr "Koneksi Ditolak oleh %s"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:251
-#, c-format
-msgid "â%sâ refused the connection."
+#, fuzzy, c-format
+msgid "“%s” refused the connection."
 msgstr "Koneksi ditolak oleh %s."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:253
@@ -1382,8 +1401,8 @@ msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
 msgstr ""
-"Server sedang sibuk atau ada masalah dalam jaringan Anda. Silakan "
-"coba kembali nanti."
+"Server sedang sibuk atau ada masalah dalam jaringan Anda. Silakan coba "
+"kembali nanti."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:255
 #: ../embed/mozilla/EphyAboutModule.cpp:272
@@ -1395,23 +1414,23 @@ msgid "There may be an old version of the page you wanted:"
 msgstr "Kemungkinan ada versi yang lama:"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:264
-#, c-format
-msgid "â%sâ Interrupted the Connection"
+#, fuzzy, c-format
+msgid "“%s” Interrupted the Connection"
 msgstr "Koneksi ke %s Terganggu"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:268
-#, c-format
-msgid "â%sâ interrupted the connection."
+#, fuzzy, c-format
+msgid "“%s” interrupted the connection."
 msgstr "Koneksi ke %s terganggu"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:281
-#, c-format
-msgid "â%sâ is not Responding"
+#, fuzzy, c-format
+msgid "“%s” is not Responding"
 msgstr "%s Tidak Menjawab"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:285
-#, c-format
-msgid "â%sâ is not responding."
+#, fuzzy, c-format
+msgid "“%s” is not responding."
 msgstr "%s tidak menjawab."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:287
@@ -1431,13 +1450,13 @@ msgid "The address you entered is not valid."
 msgstr "Alamat yang dimasukkan salah."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:306
-#, c-format
-msgid "â%sâ Redirected Too Many Times"
+#, fuzzy, c-format
+msgid "“%s” Redirected Too Many Times"
 msgstr "%s Dialihkan Terlampau Banyak"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:310
-#, c-format
-msgid "â%sâ redirected too many times."
+#, fuzzy, c-format
+msgid "“%s” redirected too many times."
 msgstr "%s dialihkan terlampau banyak."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:312
@@ -1445,29 +1464,28 @@ msgid "The redirection has been stopped for security reasons."
 msgstr "Pengalihan koneksi telah dihentikan demi alasan keamanan."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:322
-#, c-format
-msgid "â%sâ Requires an Encrypted Connection"
+#, fuzzy, c-format
+msgid "“%s” Requires an Encrypted Connection"
 msgstr "%s Menghendaki Koneksi Tersandi"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:326
-#, c-format
-msgid "â%sâ requires an encrypted connection."
+#, fuzzy, c-format
+msgid "“%s” requires an encrypted connection."
 msgstr "%s menghendaki koneksi tersandi."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:328
 msgid ""
 "The document could not be loaded because encryption support is not installed."
-msgstr ""
-"Dokumen tidak dapat dibuka karena dukungan sandi tidak terpasang."
+msgstr "Dokumen tidak dapat dibuka karena dukungan sandi tidak terpasang."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:338
-#, c-format
-msgid "â%sâ Dropped the Connection"
+#, fuzzy, c-format
+msgid "“%s” Dropped the Connection"
 msgstr "Koneksi Diputus oleh %s"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:342
-#, c-format
-msgid "â%sâ dropped the connection."
+#, fuzzy, c-format
+msgid "“%s” dropped the connection."
 msgstr "Koneksi diputus oleh %s"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:344
@@ -1484,18 +1502,21 @@ msgid "Cannot load document whilst working offline."
 msgstr "Dokumen tidak dapat dibuka saat koneksi terputus."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:357
-msgid "To view this document, disable âWork Offlineâ and try again."
-msgstr "Untuk membuka dokumen ini, aktifkan lagi sambungan jaringannya dan coba lagi. "
-"Klik menu Berkas dan pilih buang tanda centang pada pilihan \"Matikan Sambungan\""
+#, fuzzy
+msgid "To view this document, disable “Work Offline” and try again."
+msgstr ""
+"Untuk membuka dokumen ini, aktifkan lagi sambungan jaringannya dan coba "
+"lagi. Klik menu Berkas dan pilih buang tanda centang pada pilihan \"Matikan "
+"Sambungan\""
 
 #: ../embed/mozilla/EphyAboutModule.cpp:369
-#, c-format
-msgid "â%sâ Denied Access to Port â%dâ"
+#, fuzzy, c-format
+msgid "“%s” Denied Access to Port “%d”"
 msgstr "%s Menolak Akses ke port %d"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:373
-#, c-format
-msgid "â%sâ denied access to port â%dâ."
+#, fuzzy, c-format
+msgid "“%s” denied access to port “%d”."
 msgstr "%s menolak akses ke port %d."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:384
@@ -1512,7 +1533,8 @@ msgid ""
 "be a problem with your proxy server or your network connection."
 msgstr ""
 "Silakan periksa dulu pengaturan server proksinya. Jika sambungan masih saja "
-"tidak dapat terlaksana, mungkin ada masalah pada server proksi atau jaringan Anda"
+"tidak dapat terlaksana, mungkin ada masalah pada server proksi atau jaringan "
+"Anda"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:394
 msgid "Could not Display Content"
@@ -1524,36 +1546,57 @@ msgstr "Isi tidak dapat ditampilkan."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:396
 msgid "The page uses an unsupported or invalid form of compression."
-msgstr "Halam ini menggunakan metoda kompresi yang tidak didukung oleh komputer ini."
+msgstr ""
+"Halam ini menggunakan metoda kompresi yang tidak didukung oleh komputer ini."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:486
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The page â%sâ in this tab was not fully loaded yet when the web browser "
+"The page “%s” in this tab was not fully loaded yet when the web browser "
 "crashed; it could have caused the crash."
-msgstr ""
-"Halaman %s pada tab ini tidak sepenuhnya dibuka saat program ini mati."
+msgstr "Halaman %s pada tab ini tidak sepenuhnya dibuka saat program ini mati."
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/mozilla/EphyAboutModule.cpp:613
 msgid "You may find an old version:|in the Google Cache"
-msgstr "You may find an old version:|dalam Google Cache"
+msgstr "dalam Google Cache"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../embed/mozilla/EphyAboutModule.cpp:621
 msgid "You may find an old version:|in the Internet Archive"
-msgstr "You may find an old version:|dalam Arsip Internet"
+msgstr "dalam Arsip Internet"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks-ui.c:481 ../src/ephy-session.c:775
+#: ../src/bookmarks/ephy-bookmarks.c:1111 ../src/ephy-session.c:775
 msgid "Untitled"
 msgstr "Tak Ada Judul"
 
+#: ../embed/mozilla/EphyPromptService.cpp:195
+#, fuzzy
+msgid "_Abort Script"
+msgstr "T_egak"
+
+#: ../embed/mozilla/EphyPromptService.cpp:263
+#, fuzzy
+msgid "Don't Save"
+msgstr "_Jangan Perbarui"
+
+#: ../embed/mozilla/EphyPromptService.cpp:762
+msgid "_User:"
+msgstr ""
+
+#: ../embed/mozilla/EphyPromptService.cpp:763
+#: ../embed/mozilla/EphyPromptService.cpp:790
+#: ../embed/mozilla/GtkNSSDialogs.cpp:795
+#: ../embed/mozilla/GtkNSSDialogs.cpp:905
+msgid "_Password:"
+msgstr "_Kata Sandi:"
+
 #: ../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:642
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "All files"
 msgstr "Semua file"
 
@@ -1582,8 +1625,8 @@ msgid "_Select Certificate"
 msgstr "_Pilih Sertifikat"
 
 #: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:202
-#, c-format
-msgid "Choose a certificate to present as identification to â%sâ."
+#, fuzzy, c-format
+msgid "Choose a certificate to present as identification to “%s”."
 msgstr "Pilih sertifikat sebagai identifikasi untuk \"%s\"."
 
 #: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
@@ -1605,9 +1648,9 @@ msgid "_Accept"
 msgstr "_Terima"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:310
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The site â%sâ returned security information for â%sâ. It is possible that "
+"The site “%s” returned security information for “%s”. It is possible that "
 "someone is intercepting your communication to obtain your confidential "
 "information."
 msgstr ""
@@ -1615,35 +1658,32 @@ msgstr ""
 "seseorang memotong komunikasi anda untuk mendapatkan informasi rahasia anda."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:316
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"You should only accept the security information if you trust â%sâ and â%sâ."
-msgstr ""
-"Silakan terima informasi keamanan ini jika Anda mempercayai %s dan %s."
+"You should only accept the security information if you trust “%s” and “%s”."
+msgstr "Silakan terima informasi keamanan ini jika Anda mempercayai %s dan %s."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:321
 msgid "Accept incorrect security information?"
 msgstr "Terima informasi keamanan yang salah?"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:352
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"It was not possible to automatically trust â%sâ. It is possible that someone "
+"It was not possible to automatically trust “%s”. It is possible that someone "
 "is intercepting your communication to obtain your confidential information."
 msgstr ""
-"%s tidak dapat diterima secara otomatis. "
-"Ada kemungkinan "
-"seseorang sedang memotong komunikasi anda untuk mendapatkan informasi "
-"rahasia anda."
+"%s tidak dapat diterima secara otomatis. Ada kemungkinan seseorang sedang "
+"memotong komunikasi anda untuk mendapatkan informasi rahasia anda."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:358
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
-"â%sâ."
+"“%s”."
 msgstr ""
-"Pastikan dulu bahwa Anda sedang terhubung ke situs yang benar dan periksa lagi "
-"apakah koneksi ini benar-benar terhubung ke %s."
+"Pastikan dulu bahwa Anda sedang terhubung ke situs yang benar dan periksa "
+"lagi apakah koneksi ini benar-benar terhubung ke %s."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:363
 msgid "Connect to untrusted site?"
@@ -1663,8 +1703,8 @@ msgstr "Terima informasi keamanan kadaluwarsa?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
 #: ../embed/mozilla/GtkNSSDialogs.cpp:429
-#, c-format
-msgid "The security information for â%sâ expired on %s."
+#, fuzzy, c-format
+msgid "The security information for “%s” expired on %s."
 msgstr "Informasi keamanan untuk \"%s\" kadaluwarsa pada \"%s\"."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:435
@@ -1673,8 +1713,8 @@ msgstr "Terima informasi keamanan yang belum valid?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
 #: ../embed/mozilla/GtkNSSDialogs.cpp:437
-#, c-format
-msgid "The security information for â%sâ isn't valid until %s."
+#, fuzzy, c-format
+msgid "The security information for “%s” isn't valid until %s."
 msgstr "Informasi keamanan tentang \"%s\" tidak sah hingga \"%s\"."
 
 #. To translators: this a time format that is used while displaying the
@@ -1689,14 +1729,16 @@ msgid "You should ensure that your computer's time is correct."
 msgstr "Anda harus memastikan bahwa jam komputer anda benar."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:507
-#, c-format
-msgid "Cannot establish connection to â%sâ."
+#, fuzzy, c-format
+msgid "Cannot establish connection to “%s”."
 msgstr "Gagal membuka \"%s\"."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:510
-#, c-format
-msgid "The certificate revocation list (CRL) from â%sâ needs to be updated."
-msgstr "Daftar Pencabutan Sertifikat/Certificate Revocation List (CRL) dari \"%s\" harus diperbarui."
+#, fuzzy, c-format
+msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
+msgstr ""
+"Daftar Pencabutan Sertifikat/Certificate Revocation List (CRL) dari \"%s\" "
+"harus diperbarui."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:515
 msgid "Please ask your system administrator for assistance."
@@ -1711,8 +1753,8 @@ msgid "_Trust CA"
 msgstr "_Percaya CA"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:572
-#, c-format
-msgid "Trust new Certificate Authority â%sâ to identify web sites?"
+#, fuzzy, c-format
+msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr ""
 "Percayai Otoritas Sertifikat \"%s\" untuk mengidentifikasikan situs web?"
 
@@ -1745,11 +1787,6 @@ msgstr "Pilih kata sandi"
 msgid "Select a password to protect this certificate."
 msgstr "Pilih kata sandi untuk melindungi sertifikat."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:795
-#: ../embed/mozilla/GtkNSSDialogs.cpp:905
-msgid "_Password:"
-msgstr "_Kata Sandi:"
-
 #: ../embed/mozilla/GtkNSSDialogs.cpp:809
 msgid "Con_firm password:"
 msgstr "Kon_firmasi Kata Sandi:"
@@ -1773,11 +1810,14 @@ msgstr "Masukkan kata sandi untuk sertifikat ini"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:984
 msgid "Certificate Revocation List Imported"
-msgstr "Daftar Pencabutan Sertifikat/Certificate Revocation List (CRL) Selesai Diimpor"
+msgstr ""
+"Daftar Pencabutan Sertifikat/Certificate Revocation List (CRL) Selesai "
+"Diimpor"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:994
 msgid "Certificate Revocation List (CRL) successfully imported"
-msgstr "Daftar Pencabutan Sertifikat/Certificate Revocation List sukses diimpor."
+msgstr ""
+"Daftar Pencabutan Sertifikat/Certificate Revocation List sukses diimpor."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1019
 msgid "Unit:"
@@ -1852,7 +1892,9 @@ msgstr "Halaman ini di baca melalui sambungan aman"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
 msgid "The padlock icon in the statusbar indicates whether a page is secure."
-msgstr "Ikon gembok pada batang status menandakan bahwa halaman yang sedang dibuka adalah aman."
+msgstr ""
+"Ikon gembok pada batang status menandakan bahwa halaman yang sedang dibuka "
+"adalah aman."
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
@@ -1875,16 +1917,15 @@ msgstr ""
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
 msgid "Some parts of this page are loaded over an insecure connection"
-msgstr ""
-"Ada bagian dari halaman ini dibaca melalui sambungan yang tidak aman"
+msgstr "Ada bagian dari halaman ini dibaca melalui sambungan yang tidak aman"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr ""
-"Ada informasi yang sedang dilihat atau akan Anda masukkan akan dikirim melalui "
-"sambungan tidak aman, dan dapat dengan mudah disadap oleh orang lain."
+"Ada informasi yang sedang dilihat atau akan Anda masukkan akan dikirim "
+"melalui sambungan tidak aman, dan dapat dengan mudah disadap oleh orang lain."
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
@@ -1896,8 +1937,8 @@ msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr ""
-"Informasi yang anda masukkan akan dikirim melalui sambungan yang tidak aman, dan "
-"dapat dengan mudah disadap oleh orang lain."
+"Informasi yang anda masukkan akan dikirim melalui sambungan yang tidak aman, "
+"dan dapat dengan mudah disadap oleh orang lain."
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
@@ -1911,8 +1952,8 @@ msgid ""
 "intercepted by a third party."
 msgstr ""
 "Walaupun halaman ini dibaca melalui sambungan aman, informasi yang anda "
-"masukkan akan dikirim melalui sambungan yang tidak aman, dan dapat dengan mudah "
-"disadap oleh orang lain."
+"masukkan akan dikirim melalui sambungan yang tidak aman, dan dapat dengan "
+"mudah disadap oleh orang lain."
 
 #: ../embed/mozilla/MozDownload.cpp:758
 msgid "Files"
@@ -1928,13 +1969,9 @@ msgstr "Berkas"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:263
+#: ../embed/mozilla/mozilla-embed-single.cpp:287
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
-
-#: ../embed/mozilla/mozilla-embed-single.cpp:595
-msgid "Epiphany can't be used now. Mozilla initialization failed."
-msgstr "Epiphany tidak dapat digunakan sekarang. Inisialisasi Mozilla gagal."
 
 #: ../embed/print-dialog.c:258
 msgid "Generating PDF is not supported"
@@ -1945,9 +1982,9 @@ msgid "Printing is not supported on this printer"
 msgstr "Pencetakan tidak dapat dilakukan pada pencetak ini"
 
 #: ../embed/print-dialog.c:268
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"You were trying to print to a printer using the â%sâ driver. This program "
+"You were trying to print to a printer using the “%s” driver. This program "
 "requires a PostScript printer driver."
 msgstr ""
 "Anda sedang mencetak menggunakan %s, sedangkan program ini menghendaki "
@@ -1969,7 +2006,7 @@ msgstr "A_khir:"
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Pilih akhir halaman yang hendak dicetak"
 
-#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1282
+#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1287
 msgid "Print"
 msgstr "Cetak"
 
@@ -1986,17 +2023,32 @@ msgstr ""
 "GConf error:\n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:487
+#: ../lib/egg/egg-editable-toolbar.c:1060
 msgid "_Move on Toolbar"
 msgstr "_Pindahkan pada Kotak Tombol"
 
-#: ../lib/egg/egg-editable-toolbar.c:495
+#: ../lib/egg/egg-editable-toolbar.c:1061
+#, fuzzy
+msgid "Move the selected item on the toolbar"
+msgstr "Perlihatkan bookmark atau topik terpilih pada batang bookmark"
+
+#: ../lib/egg/egg-editable-toolbar.c:1062
 msgid "_Remove from Toolbar"
 msgstr "_Hilangkan dari Kotak Tombol"
 
-#: ../lib/egg/egg-editable-toolbar.c:524
+#: ../lib/egg/egg-editable-toolbar.c:1063
+#, fuzzy
+msgid "Remove the selected item from the toolbar"
+msgstr "Ubah nama alamat atau topik yang dipilih"
+
+#: ../lib/egg/egg-editable-toolbar.c:1064
 msgid "_Remove Toolbar"
 msgstr "_Hilangkan Kotak Tombol"
+
+#: ../lib/egg/egg-editable-toolbar.c:1065
+#, fuzzy
+msgid "Remove the selected toolbar"
+msgstr "Ubah nama alamat atau topik yang dipilih"
 
 #: ../lib/egg/egg-toolbar-editor.c:439
 msgid "Separator"
@@ -2006,19 +2058,24 @@ msgstr "Pemisah"
 msgid "All supported types"
 msgstr "Seluruh jenis yang didukung"
 
-#: ../lib/ephy-file-helpers.c:327
-#, c-format
-msgid "\"%s\" exists, please move it out of the way."
+#: ../lib/ephy-file-helpers.c:292
+#, fuzzy, c-format
+msgid "Could not create a temporary directory in “%s”."
+msgstr "Gagal buat direktori %s."
+
+#: ../lib/ephy-file-helpers.c:360
+#, fuzzy, c-format
+msgid "The file “%s” exists. Please move it out of the way."
 msgstr "%s telah ada, harap pindahkan terlebih dulu."
 
-#: ../lib/ephy-file-helpers.c:333
-#, c-format
-msgid "Failed to create directory \"%s\"."
+#: ../lib/ephy-file-helpers.c:371
+#, fuzzy, c-format
+msgid "Failed to create directory “%s”."
 msgstr "Gagal buat direktori %s."
 
 #: ../lib/ephy-gui.c:328
-#, c-format
-msgid "Directory â%sâ is not writable"
+#, fuzzy, c-format
+msgid "Directory “%s” is not writable"
 msgstr "Direktori %s tidak dapat ditulisi"
 
 #: ../lib/ephy-gui.c:332
@@ -2030,8 +2087,8 @@ msgid "Directory not Writable"
 msgstr "Direktori Tidak Dapat Ditulisi"
 
 #: ../lib/ephy-gui.c:365
-#, c-format
-msgid "Cannot overwrite existing file â%sâ"
+#, fuzzy, c-format
+msgid "Cannot overwrite existing file “%s”"
 msgstr "Berkas %s tidak dapat ditimpa"
 
 #: ../lib/ephy-gui.c:369
@@ -2055,173 +2112,169 @@ msgstr "Gagal menampilkan bantuan: %s"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:40
 msgid "select fonts for|Arabic"
-msgstr "select fonts for|Arab"
+msgstr "Arab"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:43
 msgid "select fonts for|Baltic"
-msgstr "select fonts for|Baltik"
+msgstr "Baltik"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:46
 msgid "select fonts for|Central European"
-msgstr "select fonts for|Eropa Tengah"
+msgstr "Eropa Tengah"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:49
 msgid "select fonts for|Cyrillic"
-msgstr "select fonts for|Cyrillic"
+msgstr "Cyrillic"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:52
 msgid "select fonts for|Devanagari"
-msgstr "select fonts for|Devanagari"
+msgstr "Devanagari"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:55
 msgid "select fonts for|Greek"
-msgstr "select fonts for|Yunani"
+msgstr "Yunani"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:58
 msgid "select fonts for|Hebrew"
-msgstr "select fonts for|Israel"
+msgstr "Israel"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:61
 msgid "select fonts for|Japanese"
-msgstr "select fonts for|Jepang"
+msgstr "Jepang"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:64
 msgid "select fonts for|Korean"
-msgstr "select fonts for|Korea"
+msgstr "Korea"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:67
 msgid "select fonts for|Simplified Chinese"
-msgstr "select fonts for|Cina sederhana"
+msgstr "Cina sederhana"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:70
 msgid "select fonts for|Tamil"
-msgstr "select fonts for|Tamil"
+msgstr "Tamil"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:73
 msgid "select fonts for|Thai"
-msgstr "select fonts for|Thailand"
+msgstr "Thailand"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:76
 msgid "select fonts for|Traditional Chinese"
-msgstr "select fonts for|Cina Tradisional"
+msgstr "Cina Tradisional"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:79
 msgid "select fonts for|Traditional Chinese (Hong Kong)"
-msgstr "select fonts for|Cina Tradisional (Hong Kong)"
+msgstr "Cina Tradisional (Hong Kong)"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:82
 msgid "select fonts for|Turkish"
-msgstr "select fonts for|Turki"
+msgstr "Turki"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:86
 msgid "select fonts for|Armenian"
-msgstr "select fonts for|Armenia"
+msgstr "Armenia"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:89
 msgid "select fonts for|Bengali"
-msgstr "select fonts for|Bengali"
+msgstr "Bengali"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:92
 msgid "select fonts for|Unified Canadian Syllabics"
-msgstr "select fonts for|Silabil Kanadia Gabungan"
+msgstr "Silabil Kanadia Gabungan"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:95
 msgid "select fonts for|Ethiopic"
-msgstr "select fonts for|Ethiopia"
+msgstr "Ethiopia"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:98
 msgid "select fonts for|Georgian"
-msgstr "select fonts for|Georgia"
+msgstr "Georgia"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:101
 msgid "select fonts for|Gujarati"
-msgstr "select fonts for|Gujarat"
+msgstr "Gujarat"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:104
 msgid "select fonts for|Gurmukhi"
-msgstr "select fonts for|Gurmukhi"
+msgstr "Gurmukhi"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:107
 msgid "select fonts for|Khmer"
-msgstr "select fonts for|Khmer"
+msgstr "Khmer"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:110
 msgid "select fonts for|Malayalam"
-msgstr "select fonts for|Malayalam"
+msgstr "Malayalam"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:114
 msgid "select fonts for|Western"
-msgstr "select fonts for|Barat"
+msgstr "Barat"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:117
 msgid "select fonts for|Other Scripts"
-msgstr "select fonts for|Lainnya"
-
-#: ../lib/ephy-stock-icons.c:54
-msgid "Close Tab"
-msgstr "Tutup Tab"
+msgstr "Lainnya"
 
 #: ../lib/ephy-stock-icons.c:55
 msgid "Popup Windows"
 msgstr "Jendela Popup"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1191
+#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1179
 msgid "History"
 msgstr "Riwayat"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1535
-#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1288
+#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:777
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1596
+#: ../src/bookmarks/ephy-topic-action.c:405 ../src/ephy-window.c:1293
 msgid "Bookmarks"
 msgstr "Buku Alamat"
 
@@ -2282,8 +2335,8 @@ msgid ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
 msgstr ""
-"Alamat ini belum dibuka karena menggunakan protokol yang tidak aman "
-"dan karena itu membahayakan keamanan sistem Anda."
+"Alamat ini belum dibuka karena menggunakan protokol yang tidak aman dan "
+"karena itu membahayakan keamanan sistem Anda."
 
 #: ../plugins/desktop-file/plugin.cpp:290
 msgid "No address found."
@@ -2299,238 +2352,256 @@ msgid "Epiphany Desktop File Plugin"
 msgstr "Plugin Berkas Desktop Epiphany"
 
 #: ../plugins/desktop-file/plugin.cpp:330
-msgid "This plugin handles â.desktopâ files containing web links."
+#, fuzzy
+msgid "This plugin handles “.desktop” files containing web links."
 msgstr "Plugin ini mengatur berkas .desktop yang berisi taut web."
 
-#: ../src/bookmarks/ephy-bookmark-action.c:284
+#: ../src/bookmarks/ephy-bookmark-action.c:285
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:395
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1162
-#: ../src/ephy-history-window.c:173 ../src/ephy-history-window.c:711
-msgid "Open in New _Tab"
-msgid_plural "Open in New _Tabs"
-msgstr[0] "Buka Dalam _Tab Baru"
-
-#. File Menu
-#: ../src/bookmarks/ephy-bookmark-action.c:401
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1159
-#: ../src/ephy-history-window.c:170 ../src/ephy-history-window.c:708
-msgid "Open in New _Window"
-msgid_plural "Open in New _Windows"
-msgstr[0] "Buka di _Jendela Baru"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:225
-#, c-format
-msgid "â%sâ Properties"
+#: ../src/bookmarks/ephy-bookmark-properties.c:242
+#, fuzzy, c-format
+msgid "“%s” Properties"
 msgstr "Properti %s"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:321
-#: ../src/bookmarks/ephy-new-bookmark.c:231
+#: ../src/bookmarks/ephy-bookmark-properties.c:365
 msgid "_Title:"
 msgstr "_Judul:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:363
-#: ../src/bookmarks/ephy-new-bookmark.c:254
-msgid "To_pics:"
+#: ../src/bookmarks/ephy-bookmark-properties.c:380
+#, fuzzy
+msgid "A_ddress:"
+msgstr "_Alamat:"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:388
+#, fuzzy
+msgid "_Show similar bookmark"
+msgstr "_Tampilkan di batang bookmark"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:401
+#, fuzzy
+msgid "T_opics:"
 msgstr "To_pik:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:134
+#: ../src/bookmarks/ephy-bookmarks-editor.c:95
+msgid "Mozilla (HTML)"
+msgstr "Mozilla (HTML)"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:96
+msgid "Epiphany (RDF)"
+msgstr "Epiphany (RDF)"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:146
 msgid "Remove from this topic"
 msgstr "Hapus dari topik ini"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:163
+#: ../src/bookmarks/ephy-bookmarks-editor.c:175
 #: ../src/ephy-history-window.c:163 ../src/ephy-window.c:115
 msgid "_File"
 msgstr "_Berkas"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
 #: ../src/ephy-history-window.c:164 ../src/ephy-window.c:116
 msgid "_Edit"
 msgstr "_Ubah"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:177
 #: ../src/ephy-history-window.c:165 ../src/ephy-window.c:117
 msgid "_View"
 msgstr "_Lihat"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178
 #: ../src/ephy-history-window.c:166 ../src/ephy-window.c:122
 msgid "_Help"
 msgstr "Ba_ntuan"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
-#: ../src/bookmarks/ephy-new-bookmark.c:294
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "_New Topic"
 msgstr "Topik _Baru"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:171
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "Create a new topic"
 msgstr "Buat topik baru"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:174
+#. FIXME ngettext
+#. File Menu
+#: ../src/bookmarks/ephy-bookmarks-editor.c:185
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1220
+#: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
+#: ../src/ephy-history-window.c:696
+msgid "Open in New _Window"
+msgid_plural "Open in New _Windows"
+msgstr[0] "Buka di _Jendela Baru"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186
 msgid "Open the selected bookmark in a new window"
 msgstr "Buka alamat terpilih dalam jendela baru"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:177
+#. FIXME ngettext
+#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1223
+#: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
+#: ../src/ephy-history-window.c:699
+msgid "Open in New _Tab"
+msgid_plural "Open in New _Tabs"
+msgstr[0] "Buka Dalam _Tab Baru"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
 msgid "Open the selected bookmark in a new tab"
 msgstr "Buka alamat terpilih dalam tab baru"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:179
+#: ../src/bookmarks/ephy-bookmarks-editor.c:191
 msgid "_Rename..."
 msgstr "_Ganti nama..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192
 msgid "Rename the selected bookmark or topic"
 msgstr "Ubah nama alamat atau topik yang dipilih"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
 #: ../src/ephy-history-window.c:176
 msgid "_Delete"
 msgstr "_Hapus"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+#: ../src/bookmarks/ephy-bookmarks-editor.c:194
 msgid "Delete the selected bookmark or topic"
 msgstr "Hapus alamat atau topik yang dipilih"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "_Properties"
 msgstr "_Informasi"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:185
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Lihat/ubah pengaturan alamat yang dipilih"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:199
 msgid "_Import Bookmarks..."
 msgstr "_Impor Alamat..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Impor alamat dari program perambah web lain atau dari berkas alamat"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:190
+#: ../src/bookmarks/ephy-bookmarks-editor.c:202
 msgid "_Export Bookmarks..."
 msgstr "_Ekspor Alamat..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:191
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Export bookmarks to a file"
 msgstr "Ekspor alamat ke berkas"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/bookmarks/ephy-bookmarks-editor.c:205
 #: ../src/ephy-history-window.c:182 ../src/ephy-window.c:152
 msgid "_Close"
 msgstr "_Tutup"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:194
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
 msgid "Close the bookmarks window"
 msgstr "Tutup jendela alamat"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:210
 #: ../src/ephy-history-window.c:187 ../src/ephy-window.c:164
 msgid "Cu_t"
 msgstr "Po_tong"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:199
+#: ../src/bookmarks/ephy-bookmarks-editor.c:211
 #: ../src/ephy-history-window.c:188 ../src/ephy-window.c:165
 msgid "Cut the selection"
 msgstr "Potong pilihan"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1172
-#: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:721
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1233
+#: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:167
 msgid "_Copy"
 msgstr "_Salin"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
 #: ../src/ephy-history-window.c:191 ../src/ephy-window.c:168
 msgid "Copy the selection"
 msgstr "Salin pilihan"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/bookmarks/ephy-bookmarks-editor.c:216
 #: ../src/ephy-history-window.c:193 ../src/ephy-window.c:170
 msgid "_Paste"
 msgstr "_Tempel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/bookmarks/ephy-bookmarks-editor.c:217
 #: ../src/ephy-history-window.c:194
 msgid "Paste the clipboard"
 msgstr "Ambil dari papan tempel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:207
+#: ../src/bookmarks/ephy-bookmarks-editor.c:219
 #: ../src/ephy-history-window.c:196 ../src/ephy-window.c:173
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:220
 msgid "Select all bookmarks or text"
 msgstr "Pilih semua alamat atau teks"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/bookmarks/ephy-bookmarks-editor.c:224
 #: ../src/ephy-history-window.c:204 ../src/ephy-window.c:264
 msgid "_Contents"
 msgstr "Daftar _Isi"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/bookmarks/ephy-bookmarks-editor.c:225
 msgid "Display bookmarks help"
 msgstr "Tampilkan bantuan alamat"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:215
+#: ../src/bookmarks/ephy-bookmarks-editor.c:227
 #: ../src/ephy-history-window.c:207 ../src/ephy-window.c:267
 msgid "_About"
 msgstr "T_entang Program Ini"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:216
+#: ../src/bookmarks/ephy-bookmarks-editor.c:228
 #: ../src/ephy-history-window.c:208 ../src/ephy-window.c:268
 msgid "Display credits for the web browser creators"
 msgstr "Tampilkan informasi pembuat program ini"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:229
+#: ../src/bookmarks/ephy-bookmarks-editor.c:241
 #: ../src/ephy-history-window.c:222
 msgid "_Title"
 msgstr "_Judul"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:230
+#: ../src/bookmarks/ephy-bookmarks-editor.c:242
 #: ../src/ephy-history-window.c:223
 msgid "Show only the title column"
 msgstr "Hanya tampilkan kolom judul"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:231
+#: ../src/bookmarks/ephy-bookmarks-editor.c:243
 #: ../src/ephy-history-window.c:226
 msgid "T_itle and Address"
 msgstr "_Judul dan Alamat"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:232
+#: ../src/bookmarks/ephy-bookmarks-editor.c:244
 #: ../src/ephy-history-window.c:227
 msgid "Show both the title and address columns"
 msgstr "Tampilkan kolom judul dan alamat"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:273
-#: ../src/bookmarks/ephy-topics-selector.c:319
+#: ../src/bookmarks/ephy-bookmarks-editor.c:285
 msgid "Type a topic"
 msgstr "Tulis topik"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:391
-#, c-format
-msgid "Delete topic â%sâ?"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:403
+#, fuzzy, c-format
+msgid "Delete topic “%s”?"
 msgstr "Hapus topik \"%s\"?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:394
+#: ../src/bookmarks/ephy-bookmarks-editor.c:406
 msgid "Delete this topic?"
 msgstr "Hapus topik ini?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:396
+#: ../src/bookmarks/ephy-bookmarks-editor.c:408
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -2539,117 +2610,108 @@ msgstr ""
 "terkategorikan lagi, kecuali mereka juga milik topik yang lain. Bookmark nya "
 "tidak dapat dihapus."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:399
+#: ../src/bookmarks/ephy-bookmarks-editor.c:411
 msgid "_Delete Topic"
 msgstr "_Hapus Topik"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:505
+#: ../src/bookmarks/ephy-bookmarks-editor.c:509
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:509
 #: ../src/bookmarks/ephy-bookmarks-editor.c:513
+#: ../src/bookmarks/ephy-bookmarks-editor.c:517
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:518
-#, c-format
-msgid "Mozilla â%sâ profile"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:522
+#, fuzzy, c-format
+msgid "Mozilla “%s” profile"
 msgstr "Profil Mozila \"%s\""
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:522
+#: ../src/bookmarks/ephy-bookmarks-editor.c:526
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:526
+#: ../src/bookmarks/ephy-bookmarks-editor.c:530
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:555
+#: ../src/bookmarks/ephy-bookmarks-editor.c:559
 msgid "Import failed"
 msgstr "Impor gagal"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:557
+#: ../src/bookmarks/ephy-bookmarks-editor.c:561
 msgid "Import Failed"
 msgstr "Impor gagal"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:560
-#, c-format
+#: ../src/bookmarks/ephy-bookmarks-editor.c:564
+#, fuzzy, c-format
 msgid ""
-"The bookmarks from â%sâ could not be imported because the file is corrupted "
+"The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
 msgstr ""
-"Alamat yang diambil dari \"%s\" tidak dapat diimpor karena berkasnya rusak atau "
-"merupakan jenis yang tidak didukung."
+"Alamat yang diambil dari \"%s\" tidak dapat diimpor karena berkasnya rusak "
+"atau merupakan jenis yang tidak didukung."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:623
+#: ../src/bookmarks/ephy-bookmarks-editor.c:627
 msgid "Import bookmarks from file"
 msgstr "Impor alamat dari berkas"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:630
+#: ../src/bookmarks/ephy-bookmarks-editor.c:634
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Alamat dari Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:634
+#: ../src/bookmarks/ephy-bookmarks-editor.c:638
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Alamat dari Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:638
+#: ../src/bookmarks/ephy-bookmarks-editor.c:642
 msgid "Epiphany bookmarks"
 msgstr "Alamat dari Epiphany"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:672
+#: ../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "Export Bookmarks"
 msgstr "Ekspor Alamat"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:687
+#: ../src/bookmarks/ephy-bookmarks-editor.c:780
 msgid "File format:"
 msgstr "Bentuk susunan file:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:690
-msgid "Epiphany (RDF)"
-msgstr "Epiphany (RDF)"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:691
-msgid "Mozilla (HTML)"
-msgstr "Mozilla (HTML)"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
+#: ../src/bookmarks/ephy-bookmarks-editor.c:823
 msgid "Import Bookmarks"
 msgstr "Impor Alamat"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:769
+#: ../src/bookmarks/ephy-bookmarks-editor.c:829
 msgid "I_mport"
 msgstr "I_mpor"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:783
+#: ../src/bookmarks/ephy-bookmarks-editor.c:843
 msgid "Import bookmarks from:"
 msgstr "Impor alamat dari:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1168
-#: ../src/ephy-history-window.c:717
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1229
+#: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "_Salin Alamat"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1402
-#: ../src/ephy-history-window.c:1033
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1463
+#: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Cari:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1597
-#: ../src/bookmarks/ephy-topics-selector.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1658
 msgid "Topics"
 msgstr "Topik"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1667
-#: ../src/ephy-history-window.c:1316
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1728
+#: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Judul"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1673
-#: ../src/ephy-history-window.c:1322
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1734
+#: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Alamat"
 
@@ -2657,124 +2719,167 @@ msgstr "Alamat"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: ../src/bookmarks/ephy-bookmarks.c:96
+#: ../src/bookmarks/ephy-bookmarks.c:95
 msgid "Search the web"
 msgstr "Cari di web"
 
-#: ../src/bookmarks/ephy-bookmarks.c:96
+#: ../src/bookmarks/ephy-bookmarks.c:95
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&hl=id&ie=UTF-8&oe=UTF-8"
 
-#: ../src/bookmarks/ephy-bookmarks.c:101
+#: ../src/bookmarks/ephy-bookmarks.c:100
 msgid "Entertainment"
 msgstr "Hiburan"
 
-#: ../src/bookmarks/ephy-bookmarks.c:102
+#: ../src/bookmarks/ephy-bookmarks.c:101
 msgid "News"
 msgstr "Berita"
 
-#: ../src/bookmarks/ephy-bookmarks.c:103
+#: ../src/bookmarks/ephy-bookmarks.c:102
 msgid "Shopping"
 msgstr "Belanja"
 
-#: ../src/bookmarks/ephy-bookmarks.c:104
+#: ../src/bookmarks/ephy-bookmarks.c:103
 msgid "Sports"
 msgstr "Olahraga"
 
-#: ../src/bookmarks/ephy-bookmarks.c:105
+#: ../src/bookmarks/ephy-bookmarks.c:104
 msgid "Travel"
 msgstr "Jalan-jalan"
 
-#: ../src/bookmarks/ephy-bookmarks.c:106
+#: ../src/bookmarks/ephy-bookmarks.c:105
 msgid "Work"
 msgstr "Kerja"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:471
-#, c-format
-msgid "Update bookmark â%sâ?"
+#: ../src/bookmarks/ephy-bookmarks.c:470
+#, fuzzy, c-format
+msgid "Update bookmark “%s”?"
 msgstr "Perbarui alamat \"%s\"?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:476
-#, c-format
-msgid "The bookmarked page has moved to â%sâ."
+#: ../src/bookmarks/ephy-bookmarks.c:475
+#, fuzzy, c-format
+msgid "The bookmarked page has moved to “%s”."
 msgstr "Halaman yang telah dicatat pindah ke \"%s\"."
 
-#: ../src/bookmarks/ephy-bookmarks.c:480
+#: ../src/bookmarks/ephy-bookmarks.c:479
 msgid "_Don't Update"
 msgstr "_Jangan Perbarui"
 
-#: ../src/bookmarks/ephy-bookmarks.c:482
+#: ../src/bookmarks/ephy-bookmarks.c:481
 msgid "_Update"
 msgstr "_Perbarui"
 
-#: ../src/bookmarks/ephy-bookmarks.c:485
+#: ../src/bookmarks/ephy-bookmarks.c:484
 msgid "Update Bookmark?"
 msgstr "Perbarui Alamat?"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:873
+#: ../src/bookmarks/ephy-bookmarks.c:869
 msgid "bookmarks|All"
-msgstr "bookmarks|Semua"
+msgstr "Semua"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:909
+#: ../src/bookmarks/ephy-bookmarks.c:905
 msgid "bookmarks|Most Visited"
-msgstr "bookmarks|Yang Paling Sering Dikunjungi"
+msgstr "Yang Paling Sering Dikunjungi"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this topic contains the not categorized bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:928
+#: ../src/bookmarks/ephy-bookmarks.c:924
 msgid "bookmarks|Not Categorized"
-msgstr "bookmarks|Yang Belum Dikategorikan"
+msgstr "Yang Belum Dikategorikan"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this is an automatic topic containing local websites bookmarks
 #. * autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:953
+#: ../src/bookmarks/ephy-bookmarks.c:949
 msgid "bookmarks|Local Sites"
-msgstr "bookmarks|Situs Lokal"
+msgstr "Situs Lokal"
 
-#: ../src/bookmarks/ephy-new-bookmark.c:275
-msgid "Add Bookmark"
-msgstr "Tambah Alamat"
-
-#: ../src/bookmarks/ephy-new-bookmark.c:312
-#, c-format
-msgid "You already have a bookmark titled â%sâ for this page."
-msgstr "Alamat berjudul \"%s\" telah ada untuk halaman ini."
-
-#: ../src/bookmarks/ephy-new-bookmark.c:324
-msgid "_View Properties"
-msgstr "_Lihat Properti"
-
-#: ../src/bookmarks/ephy-new-bookmark.c:329
-msgid "Duplicated Bookmark"
-msgstr "Bookmark dobel"
-
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:316
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:317
 msgid "Quick Bookmark"
 msgstr "Catatan Cepat"
 
-#: ../src/bookmarks/ephy-open-tabs-action.c:64
+#. Add popup menu actions that are specific to the bookmark widgets
+#: ../src/bookmarks/ephy-bookmarks-ui.c:290
+#, fuzzy
+msgid "Properties"
+msgstr "_Informasi"
+
+#: ../src/bookmarks/ephy-bookmarks-ui.c:291
+#, fuzzy
+msgid "Show properties for this bookmark"
+msgstr "Tampilkan atau sembunyikan batang bookmark"
+
+#: ../src/bookmarks/ephy-bookmarks-ui.c:303
+#, fuzzy
+msgid "Open this bookmark in a new tab"
+msgstr "Buka alamat terpilih dalam tab baru"
+
+#: ../src/bookmarks/ephy-bookmarks-ui.c:315
+#, fuzzy
+msgid "Open this bookmark in a new window"
+msgstr "Buka alamat terpilih dalam jendela baru"
+
+#: ../src/bookmarks/ephy-bookmarks-ui.c:523
+#, c-format
+msgid "You already have a topic named “%s”"
+msgstr ""
+
+#: ../src/bookmarks/ephy-bookmarks-ui.c:527
+#, fuzzy
+msgid "Please use a different topic name."
+msgstr "Simpan taut dengan nama yang berbeda"
+
+#: ../src/bookmarks/ephy-bookmarks-ui.c:567
+#, c-format
+msgid "New topic for “%s”"
+msgstr ""
+
+#: ../src/bookmarks/ephy-bookmarks-ui.c:577
+#, fuzzy
+msgid "New topic"
+msgstr "Topik _Baru"
+
+#: ../src/bookmarks/ephy-bookmarks-ui.c:582
+msgid "Enter a unique name for the topic."
+msgstr ""
+
+#: ../src/bookmarks/ephy-bookmarks-ui.c:614
+#, fuzzy
+msgid "Create"
+msgstr "Terkait"
+
+#: ../src/bookmarks/ephy-bookmarks-ui.c:617
+#, fuzzy
+msgid "New Topic"
+msgstr "Topik _Baru"
+
+#: ../src/bookmarks/ephy-open-tabs-action.c:65
 msgid "Open in New _Tabs"
 msgstr "Buka dalam _Tab baru"
 
-#: ../src/bookmarks/ephy-related-action.c:161
+#: ../src/bookmarks/ephy-related-action.c:163
 msgid "Related"
 msgstr "Terkait"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:315
+#: ../src/bookmarks/ephy-topic-factory-action.c:316
 msgid "Quick Topic"
 msgstr "Topik Cepat"
+
+#: ../src/bookmarks/ephy-topics-entry.c:367
+#, fuzzy, c-format
+msgid "Create topic “%s”"
+msgstr "Hapus topik \"%s\"?"
 
 #: ../src/ephy-encoding-dialog.c:340
 msgid "Encodings"
@@ -2792,27 +2897,32 @@ msgstr "Pengodean lainnya"
 msgid "_Automatic"
 msgstr "_Otomatis"
 
-#: ../src/ephy-find-toolbar.c:127
+#: ../src/ephy-find-toolbar.c:128
 msgid "Not found"
 msgstr "Tidak ada"
 
-#: ../src/ephy-find-toolbar.c:130
+#: ../src/ephy-find-toolbar.c:131
 msgid "Wrapped"
 msgstr ""
 
-#: ../src/ephy-find-toolbar.c:381
+#: ../src/ephy-find-toolbar.c:151
+#, fuzzy
+msgid "Find links:"
+msgstr "Cari:"
+
+#: ../src/ephy-find-toolbar.c:151
 msgid "Find:"
 msgstr "Cari:"
 
-#: ../src/ephy-find-toolbar.c:397 ../src/ephy-find-toolbar.c:398
+#: ../src/ephy-find-toolbar.c:399
 msgid "Find Previous"
 msgstr "Cari ke Belakang"
 
-#: ../src/ephy-find-toolbar.c:401
+#: ../src/ephy-find-toolbar.c:402
 msgid "Find previous occurrence of the search string"
 msgstr "Cari kata yang dikehendaki ke arah belakang"
 
-#: ../src/ephy-find-toolbar.c:408 ../src/ephy-find-toolbar.c:409
+#: ../src/ephy-find-toolbar.c:409
 msgid "Find Next"
 msgstr "Cari Lagi"
 
@@ -2893,59 +3003,87 @@ msgstr ""
 msgid "Clear History"
 msgstr "Bersihkan Riwayat"
 
-#: ../src/ephy-history-window.c:1042
+#: ../src/ephy-history-window.c:1030
 msgid "Last 30 minutes"
 msgstr "30 Menit terakhir"
 
-#: ../src/ephy-history-window.c:1043
+#: ../src/ephy-history-window.c:1031
 msgid "Today"
 msgstr "Hari ini"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1044 ../src/ephy-history-window.c:1047
-#: ../src/ephy-history-window.c:1051
+#: ../src/ephy-history-window.c:1032 ../src/ephy-history-window.c:1035
+#: ../src/ephy-history-window.c:1039
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "%d hari terakhir"
 
-#: ../src/ephy-history-window.c:1253
+#: ../src/ephy-history-window.c:1241
 msgid "Sites"
 msgstr "Situs"
 
-#: ../src/ephy-main.c:58
-msgid "Open a new tab in an existing window"
+#: ../src/ephy-main.c:74
+#, fuzzy
+msgid "Open a new tab in an existing browser window"
 msgstr "Buka tab baru pada jendela yang sudah ada"
 
-#: ../src/ephy-main.c:61
-msgid "Run in full screen mode"
-msgstr "Jalankan pada moda layar penuh"
+#: ../src/ephy-main.c:76
+#, fuzzy
+msgid "Open a new browser window"
+msgstr "Buka jendela baru"
 
-#: ../src/ephy-main.c:64
-msgid "Load the given session file"
-msgstr "Muat berkas sesi ini"
-
-#: ../src/ephy-main.c:65 ../src/ephy-main.c:71
-msgid "FILE"
-msgstr "BERKAS"
-
-#: ../src/ephy-main.c:67
-msgid "Add a bookmark (don't open any window)"
-msgstr "Tambahkan bookmark (jangan buka jendela apapun)"
-
-#: ../src/ephy-main.c:68
-msgid "URL"
-msgstr "URL"
-
-#: ../src/ephy-main.c:70
-msgid "Import bookmarks from the given file"
-msgstr "Impor alamat dari berkas ini"
-
-#: ../src/ephy-main.c:73
+#: ../src/ephy-main.c:78
 msgid "Launch the bookmarks editor"
 msgstr "Jalankan penyunting alamat"
 
-#: ../src/ephy-notebook.c:1088
+#: ../src/ephy-main.c:80
+msgid "Import bookmarks from the given file"
+msgstr "Impor alamat dari berkas ini"
+
+#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
+msgid "FILE"
+msgstr "BERKAS"
+
+#: ../src/ephy-main.c:82
+msgid "Load the given session file"
+msgstr "Muat berkas sesi ini"
+
+#: ../src/ephy-main.c:84
+#, fuzzy
+msgid "Add a bookmark"
+msgstr "Tambah Alamat"
+
+#: ../src/ephy-main.c:84
+msgid "URL"
+msgstr "URL"
+
+#: ../src/ephy-main.c:86 ../src/ephy-main.c:117
+msgid "Start a private instance"
+msgstr ""
+
+#: ../src/ephy-main.c:469
+#, fuzzy
+msgid "Could not start GNOME Web Browser"
+msgstr "Perambah Web GNOME"
+
+#: ../src/ephy-main.c:472
+#, c-format
+msgid ""
+"Startup failed because of the following error:\n"
+"%s"
+msgstr ""
+
+#: ../src/ephy-main.c:512 ../src/ephy-main.c:514 ../src/window-commands.c:751
+msgid "GNOME Web Browser"
+msgstr "Perambah Web GNOME"
+
+#: ../src/ephy-main.c:515
+#, fuzzy
+msgid "GNOME Web Browser options"
+msgstr "Perambah Web GNOME"
+
+#: ../src/ephy-notebook.c:1092
 msgid "Close tab"
 msgstr "Tutup tab"
 
@@ -2958,8 +3096,8 @@ msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
 msgstr ""
-"Sepertinya Epiphany sebelumnya mati tiba-tiba saat terakhir kali anda dijalankan. Anda "
-"dapat memulihkan jendela dan tab yang telah terbuka."
+"Sepertinya Epiphany sebelumnya mati tiba-tiba saat terakhir kali anda "
+"dijalankan. Anda dapat memulihkan jendela dan tab yang telah terbuka."
 
 #: ../src/ephy-session.c:386
 msgid "_Don't Recover"
@@ -2973,17 +3111,31 @@ msgstr "_Pulihkan"
 msgid "Crash Recovery"
 msgstr "Penanggulangan Crash"
 
-#: ../src/ephy-shell.c:216
+#: ../src/ephy-shell.c:201
 msgid "Sidebar extension required"
 msgstr "Ekstensi sidebar dibutuhkan"
 
-#: ../src/ephy-shell.c:218
+#: ../src/ephy-shell.c:203
 msgid "Sidebar Extension Required"
 msgstr "Ekstensi Sidebar Diperlukan"
 
-#: ../src/ephy-shell.c:222
+#: ../src/ephy-shell.c:207
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Sambungan yang anda klik memerlukan ekstensi sidebar terpasang."
+
+#. Translators: this is displayed in the statusbar; choose a short word
+#. * or even an abbreviation.
+#.
+#: ../src/ephy-statusbar.c:114
+msgid "Caret"
+msgstr ""
+
+#. Translators: this is the tooltip on the "Caret" icon
+#. * in the statusbar.
+#.
+#: ../src/ephy-statusbar.c:122
+msgid "In keyboard selection mode, press F7 to exit"
+msgstr ""
 
 #: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2264 ../src/ephy-tab.c:2299
 msgid "Blank page"
@@ -2991,8 +3143,8 @@ msgstr "Halaman kosong"
 
 #. translators: %s here is the address of the web page
 #: ../src/ephy-tab.c:916 ../src/ephy-tab.c:1667
-#, c-format
-msgid "Loading â%sâ..."
+#, fuzzy, c-format
+msgid "Loading “%s”..."
 msgstr "Membuka %s..."
 
 #: ../src/ephy-tab.c:920
@@ -3000,18 +3152,18 @@ msgid "Loading..."
 msgstr "Membuka..."
 
 #: ../src/ephy-tab.c:1651
-#, c-format
-msgid "Redirecting to â%sâ..."
+#, fuzzy, c-format
+msgid "Redirecting to “%s”..."
 msgstr "Diarahkan ke %s..."
 
 #: ../src/ephy-tab.c:1655
-#, c-format
-msgid "Transferring data from â%sâ..."
+#, fuzzy, c-format
+msgid "Transferring data from “%s”..."
 msgstr "Data dari %s sedang ditransfer..."
 
 #: ../src/ephy-tab.c:1659
-#, c-format
-msgid "Waiting for authorization from â%sâ..."
+#, fuzzy, c-format
+msgid "Waiting for authorization from “%s”..."
 msgstr "Menunggu otorisasi dari %s..."
 
 #: ../src/ephy-tabs-menu.c:148
@@ -3022,18 +3174,18 @@ msgstr "Pindah ke tab ini"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../src/ephy-toolbar-editor.c:82
 msgid "toolbar style|Default"
-msgstr "toolbar style|Bawaan"
+msgstr "Bawaan"
 
 #: ../src/ephy-toolbar-editor.c:201
 msgid "Toolbar Editor"
 msgstr "Penyunting Kotak Tombol"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:217
+#: ../src/ephy-toolbar-editor.c:220
 msgid "Toolbar _button labels:"
 msgstr "Label _tombol:"
 
-#: ../src/ephy-toolbar-editor.c:285
+#: ../src/ephy-toolbar-editor.c:288
 msgid "_Add a New Toolbar"
 msgstr "T_ambah Tombol Baru"
 
@@ -3541,104 +3693,122 @@ msgstr "Jadikan _Gambar sebagai Latarbelakang"
 msgid "Copy I_mage Address"
 msgstr "Salin Alamat Ga_mbar"
 
-#: ../src/ephy-window.c:703
+#: ../src/ephy-window.c:351
+msgid "St_art Animation"
+msgstr ""
+
+#: ../src/ephy-window.c:353
+msgid "St_op Animation"
+msgstr ""
+
+#: ../src/ephy-window.c:707
 msgid "There are unsubmitted changes to form elements"
 msgstr "Ada perubahan yang belum dikirimkan ke bagian formulir"
 
-#: ../src/ephy-window.c:707
+#: ../src/ephy-window.c:711
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Jika anda menutup dokumen, anda akan kehilangan informasi."
 
-#: ../src/ephy-window.c:711
+#: ../src/ephy-window.c:715
 msgid "Close _Document"
 msgstr "Tutup _Dokumen"
 
-#: ../src/ephy-window.c:1278 ../src/window-commands.c:295
+#: ../src/ephy-window.c:1283 ../src/window-commands.c:278
 msgid "Open"
 msgstr "Buka"
 
-#: ../src/ephy-window.c:1280 ../src/window-commands.c:321
+#: ../src/ephy-window.c:1285 ../src/window-commands.c:304
 msgid "Save As"
 msgstr "Simpan sebagai"
 
-#: ../src/ephy-window.c:1284
+#: ../src/ephy-window.c:1289
 msgid "Bookmark"
 msgstr "Alamat"
 
-#: ../src/ephy-window.c:1286
+#: ../src/ephy-window.c:1291
 msgid "Find"
 msgstr "Cari"
 
-#: ../src/ephy-window.c:1459
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1304
+msgid "Larger"
+msgstr ""
+
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1307
+msgid "Smaller"
+msgstr ""
+
+#: ../src/ephy-window.c:1470
 msgid "Insecure"
 msgstr "Tidak aman"
 
-#: ../src/ephy-window.c:1464
+#: ../src/ephy-window.c:1475
 msgid "Broken"
 msgstr "Rusak"
 
-#: ../src/ephy-window.c:1477
+#: ../src/ephy-window.c:1488
 msgid "Low"
 msgstr "Rendah"
 
-#: ../src/ephy-window.c:1484
+#: ../src/ephy-window.c:1495
 msgid "High"
 msgstr "Tinggi"
 
-#: ../src/ephy-window.c:1494
+#: ../src/ephy-window.c:1505
 #, c-format
 msgid "Security level: %s"
 msgstr "Tingkat Keamanan: %s"
 
-#: ../src/ephy-window.c:1534
+#: ../src/ephy-window.c:1545
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d jendela popup tersembunyi"
 
-#: ../src/ephy-window.c:1829
-#, c-format
-msgid "Open image â%sâ"
+#: ../src/ephy-window.c:1840
+#, fuzzy, c-format
+msgid "Open image “%s”"
 msgstr "Buka Gambar '%s'"
 
-#: ../src/ephy-window.c:1834
-#, c-format
-msgid "Use as desktop background â%sâ"
+#: ../src/ephy-window.c:1845
+#, fuzzy, c-format
+msgid "Use as desktop background “%s”"
 msgstr "Pakai sebagai latar belakang desktop '%s'"
 
-#: ../src/ephy-window.c:1839
-#, c-format
-msgid "Save image â%sâ"
+#: ../src/ephy-window.c:1850
+#, fuzzy, c-format
+msgid "Save image “%s”"
 msgstr "Simpan Gambar '%s'"
 
-#: ../src/ephy-window.c:1844
-#, c-format
-msgid "Copy image address â%sâ"
+#: ../src/ephy-window.c:1855
+#, fuzzy, c-format
+msgid "Copy image address “%s”"
 msgstr "Salin alamat gambar '%s'"
 
-#: ../src/ephy-window.c:1857
-#, c-format
-msgid "Send email to address â%sâ"
+#: ../src/ephy-window.c:1868
+#, fuzzy, c-format
+msgid "Send email to address “%s”"
 msgstr "Kirim surat ke alamat '%s'"
 
-#: ../src/ephy-window.c:1863
-#, c-format
-msgid "Copy email address â%sâ"
+#: ../src/ephy-window.c:1874
+#, fuzzy, c-format
+msgid "Copy email address “%s”"
 msgstr "Salin alamat email '%s'"
 
-#: ../src/ephy-window.c:1875
-#, c-format
-msgid "Save link â%sâ"
+#: ../src/ephy-window.c:1886
+#, fuzzy, c-format
+msgid "Save link “%s”"
 msgstr "Simpan taut '%s'"
 
-#: ../src/ephy-window.c:1881
-#, c-format
-msgid "Bookmark link â%sâ"
+#: ../src/ephy-window.c:1892
+#, fuzzy, c-format
+msgid "Bookmark link “%s”"
 msgstr "Catat alamat taut '%s'"
 
-#: ../src/ephy-window.c:1887
-#, c-format
-msgid "Copy link's address â%sâ"
+#: ../src/ephy-window.c:1898
+#, fuzzy, c-format
+msgid "Copy link's address “%s”"
 msgstr "Salin alamat taut '%s'"
 
 #: ../src/pdm-dialog.c:378
@@ -3693,15 +3863,15 @@ msgstr "Pengguna"
 msgid "User Password"
 msgstr "Kata Sandi"
 
-#: ../src/popup-commands.c:239
+#: ../src/popup-commands.c:232
 msgid "Download Link"
 msgstr "Unduh Taut"
 
-#: ../src/popup-commands.c:247
+#: ../src/popup-commands.c:240
 msgid "Save Link As"
 msgstr "Simpan Sambungan Sebagai"
 
-#: ../src/popup-commands.c:254
+#: ../src/popup-commands.c:247
 msgid "Save Image As"
 msgstr "Simpan Gambar Sebagai"
 
@@ -3745,6 +3915,11 @@ msgstr "Tutup"
 msgid "Close print preview"
 msgstr "Tutup tampilan cetak"
 
+#: ../src/prefs-dialog.c:412
+#, fuzzy
+msgid "Default"
+msgstr "U_tama:"
+
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. * Translators: the first %s is the language name, and the
@@ -3753,50 +3928,69 @@ msgstr "Tutup tampilan cetak"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:729 ../src/prefs-dialog.c:737
+#: ../src/prefs-dialog.c:993 ../src/prefs-dialog.c:1001
 #, c-format
 msgid "language|%s (%s)"
-msgstr "language|%s (%s)"
+msgstr "%s (%s)"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:748
+#: ../src/prefs-dialog.c:1012
 #, c-format
 msgid "language|User defined (%s)"
-msgstr "language|Ketentuan Pengguna (%s) "
+msgstr "Ketentuan Pengguna (%s) "
 
-#: ../src/prefs-dialog.c:770
+#: ../src/prefs-dialog.c:1034
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Bahasa sistem (%s)"
 
-#: ../src/prefs-dialog.c:1157
+#: ../src/prefs-dialog.c:1421
 msgid "Select a Directory"
 msgstr "Pilih direktori"
 
-#: ../src/window-commands.c:726 ../src/window-commands.c:743
+#: ../src/window-commands.c:709 ../src/window-commands.c:726
 msgid "Contact us at:"
 msgstr "Hubungi:"
 
-#: ../src/window-commands.c:729
+#: ../src/window-commands.c:712
 msgid "Contributors:"
 msgstr "Kontributor:"
 
-#: ../src/window-commands.c:734
+#: ../src/window-commands.c:717
 msgid "Past developers:"
 msgstr "Pengembang yang lalu:"
 
-#: ../src/window-commands.c:744
+#: ../src/window-commands.c:727
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> atau <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:749
-msgid "GNOME Web Browser"
-msgstr "Perambah Web GNOME"
+#: ../src/window-commands.c:732
+msgid ""
+"The GNOME Web Browser is free software; you can redistribute it and/or "
+"modify it under the terms of the GNU General Public License as published by "
+"the Free Software Foundation; either version 2 of the License, or (at your "
+"option) any later version."
+msgstr ""
+
+#: ../src/window-commands.c:736
+msgid ""
+"The GNOME Web Browser is distributed in the hope that it will be useful, but "
+"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
+"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details."
+msgstr ""
+
+#: ../src/window-commands.c:740
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
+"59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
+msgstr ""
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3806,15 +4000,59 @@ msgstr "Perambah Web GNOME"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:763
+#: ../src/window-commands.c:765
 msgid "translator-credits"
-msgstr "Tunggul Arif Siswoyo <tunggul@matralintas.net>\n"
+msgstr ""
+"Tunggul Arif Siswoyo <tunggul@matralintas.net>\n"
 "Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "http://id.gnome.org"
 
-#: ../src/window-commands.c:766
+#: ../src/window-commands.c:768
 msgid "GNOME Web Browser Website"
 msgstr "Situs Web Resmi Program Ini"
+
+#~ msgid "Autowrap for find in page"
+#~ msgstr "Autowrap untuk Cari di halaman"
+
+#~ msgid ""
+#~ "For find in page, whether to start again at the beginning after reaching "
+#~ "the end of the page."
+#~ msgstr ""
+#~ "Untuk Cari di halaman, apakah akah mengulang dari awal lagi setelah "
+#~ "mencapai bagian akhir halaman."
+
+#~ msgid "Match case for find in page"
+#~ msgstr "Huruf yang cocok untuk menemukan dalam halaman"
+
+#~ msgid "<b>Fonts</b>"
+#~ msgstr "<b>Huruf</b>"
+
+#~ msgid "Al_ways use the desktop theme colors"
+#~ msgstr "Gunakan selalu _warna tema desktop"
+
+#~ msgid "Always use _these fonts"
+#~ msgstr "Gunakan selalu _huruf _ini"
+
+#~ msgid "Fonts and Colors"
+#~ msgstr "Huruf dan Warna"
+
+#~ msgid "Close Tab"
+#~ msgstr "Tutup Tab"
+
+#~ msgid "You already have a bookmark titled â%sâ for this page."
+#~ msgstr "Alamat berjudul \"%s\" telah ada untuk halaman ini."
+
+#~ msgid "_View Properties"
+#~ msgstr "_Lihat Properti"
+
+#~ msgid "Duplicated Bookmark"
+#~ msgstr "Bookmark dobel"
+
+#~ msgid "Run in full screen mode"
+#~ msgstr "Jalankan pada moda layar penuh"
+
+#~ msgid "Add a bookmark (don't open any window)"
+#~ msgstr "Tambahkan bookmark (jangan buka jendela apapun)"
 
 #~ msgid "C_ase sensitive"
 #~ msgstr "H_uruf sensitif"
@@ -3862,14 +4100,8 @@ msgstr "Situs Web Resmi Program Ini"
 #~ msgid "Move Ri_ght"
 #~ msgstr "Pindahkan _Kanan"
 
-#~ msgid "_Show in bookmarks bar"
-#~ msgstr "_Tampilkan di batang bookmark"
-
 #~ msgid "_Show in Bookmarks Bar"
 #~ msgstr "_Tampilkan di Batang Bookmark"
-
-#~ msgid "Show the selected bookmark or topic in the bookmarks bar"
-#~ msgstr "Perlihatkan bookmark atau topik terpilih pada batang bookmark"
 
 #~ msgid "Empty"
 #~ msgstr "Kosong"
@@ -3920,9 +4152,6 @@ msgstr "Situs Web Resmi Program Ini"
 
 #~ msgid "_Bookmarks Bar"
 #~ msgstr "Batang _Alamat"
-
-#~ msgid "Show or hide bookmarks bar"
-#~ msgstr "Tampilkan atau sembunyikan batang bookmark"
 
 #~ msgid "_Save Background As..."
 #~ msgstr "_Simpan Latarbelakang jadi..."
@@ -4045,9 +4274,6 @@ msgstr "Situs Web Resmi Program Ini"
 #~ msgid "Lan_dscape"
 #~ msgstr "Mendatar"
 
-#~ msgid "P_ortrait"
-#~ msgstr "T_egak"
-
 #~ msgid "P_rinter:"
 #~ msgstr "P_rinter:"
 
@@ -4114,22 +4340,22 @@ msgstr "Situs Web Resmi Program Ini"
 #~ msgstr "Gagal menemukan %s"
 
 #~ msgid "select fonts for|Unicode"
-#~ msgstr "select fonts for|Unicode"
+#~ msgstr "Unicode"
 
 #~ msgid "Ephy"
 #~ msgstr "Ephy"
 
 #~ msgid "toolbar style|Text below icons"
-#~ msgstr "gaya toolbar|Teks di bawah icons"
+#~ msgstr "Teks di bawah icons"
 
 #~ msgid "toolbar style|Text beside icons"
-#~ msgstr "gaya toolbar|Teks di samping icons"
+#~ msgstr "Teks di samping icons"
 
 #~ msgid "toolbar style|Icons only"
-#~ msgstr "gaya toolbar|Icons saja"
+#~ msgstr "Icons saja"
 
 #~ msgid "toolbar style|Text only"
-#~ msgstr "gaya toolbar|Teks saja"
+#~ msgstr "Teks saja"
 
 #~ msgid "Toggle network status"
 #~ msgstr "Toggle status jaringan"
