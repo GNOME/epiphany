@@ -32,6 +32,9 @@
 #include <nsEmbedString.h>
 #define MOZILLA_INTERNAL_API 1
 
+#define MAX_TITLE_LENGTH	2048
+#define MAX_URL_LENGTH		16384
+
 NS_IMPL_ISUPPORTS1 (MozGlobalHistory, nsIGlobalHistory2)
 
 MozGlobalHistory::MozGlobalHistory ()
@@ -98,6 +101,8 @@ NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI,
 	rv = aURI->GetSpec(spec);
 	NS_ENSURE_TRUE (NS_SUCCEEDED(rv) && spec.Length(), rv);
 
+	if (spec.Length () > MAX_URL_LENGTH) return NS_OK;
+
 	ephy_history_add_page (mGlobalHistory, spec.get(), aRedirect, aToplevel);
 	
 	return NS_OK;
@@ -109,8 +114,12 @@ NS_IMETHODIMP MozGlobalHistory::IsVisited(nsIURI *aURI,
 {
 	NS_ENSURE_ARG (aURI);
 
+	*_retval = PR_FALSE;
+
 	nsEmbedCString spec;
 	aURI->GetSpec(spec);
+
+	if (spec.Length () > MAX_URL_LENGTH) return NS_OK;
 
 	*_retval = ephy_history_is_page_visited (mGlobalHistory, spec.get());
 	
@@ -123,15 +132,27 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI,
 {
 	NS_ENSURE_ARG (aURI);
 
-	nsEmbedCString title;
-	NS_UTF16ToCString (nsEmbedString (aTitle),
-			   NS_CSTRING_ENCODING_UTF8, title);
-
 	nsEmbedCString spec;
 	aURI->GetSpec(spec);
-	
-	ephy_history_set_page_title (mGlobalHistory, spec.get(), title.get());
-	
+
+	if (spec.Length () > MAX_URL_LENGTH) return NS_OK;
+
+	nsEmbedString uTitle (aTitle);
+
+	/* This depends on the assumption that 
+	 * typeof(PRUnichar) == typeof (gunichar2) == uint16,
+	 * which should be pretty safe.
+	 */
+	glong n_read = 0, n_written = 0;
+	char *converted = g_utf16_to_utf8 ((gunichar2*) uTitle.get(), MAX_TITLE_LENGTH,
+					    &n_read, &n_written, NULL);
+	/* FIXME loop from the end while !g_unichar_isspace (char)? */
+	if (converted == NULL) return NS_OK;
+
+	ephy_history_set_page_title (mGlobalHistory, spec.get(), converted);
+
+	g_free (converted);
+
 	return NS_OK;
 }
 
@@ -141,8 +162,12 @@ NS_IMETHODIMP
 MozGlobalHistory::GetURIGeckoFlags(nsIURI *aURI,
 				   PRUint32* aFlags)
 {
+	*aFlags = 0;
+
 	nsEmbedCString spec;
 	aURI->GetSpec(spec);
+
+	if (spec.Length () > MAX_URL_LENGTH) return NS_OK;
 
 	EphyNode *page = ephy_history_get_page (mGlobalHistory, spec.get());
 
@@ -166,6 +191,8 @@ MozGlobalHistory::SetURIGeckoFlags(nsIURI *aURI,
 {
 	nsEmbedCString spec;
 	aURI->GetSpec(spec);
+
+	if (spec.Length () > MAX_URL_LENGTH) return NS_OK;
 
 	EphyNode *page = ephy_history_get_page (mGlobalHistory, spec.get());
 	if (page != NULL)
