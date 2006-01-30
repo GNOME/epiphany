@@ -440,7 +440,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 }
 
 static void
-ephy_find_toolbar_finalize (GObject *object)
+ephy_find_toolbar_dispose (GObject *object)
 {
 	EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (object);
 	EphyFindToolbarPrivate *priv = toolbar->priv;
@@ -448,9 +448,10 @@ ephy_find_toolbar_finalize (GObject *object)
 	if (priv->find != NULL)
 	{
 		g_object_unref (priv->find);
+		priv->find = NULL;
 	}
 
-	parent_class->finalize (object);
+	parent_class->dispose (object);
 }
 
 static void
@@ -487,7 +488,7 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 
         parent_class = g_type_class_peek_parent (klass);
 
-	object_class->finalize = ephy_find_toolbar_finalize;
+	object_class->dispose = ephy_find_toolbar_dispose;
 	object_class->get_property = ephy_find_toolbar_get_property;
 	object_class->set_property = ephy_find_toolbar_set_property;
 
