@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-26 21:46+0100\n"
-"PO-Revision-Date: 2006-01-27 09:44+0530\n"
+"POT-Creation-Date: 2006-01-30 05:43+0100\n"
+"PO-Revision-Date: 2006-01-30 15:36+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -14,6 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -138,8 +139,8 @@ msgid "Epiphany Web Browser"
 msgstr "એપીફની વૅબ બ્રાઉઝર"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:533
-#: ../src/ephy-main.c:582 ../src/ephy-main.c:601
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:534
+#: ../src/ephy-main.c:583 ../src/ephy-main.c:602
 msgid "Web Browser"
 msgstr "વેબ બ્રાઉઝર"
 
@@ -634,7 +635,7 @@ msgstr "ભાષા પસંદ કરો:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:13
-#: ../lib/widgets/ephy-location-entry.c:580 ../src/ephy-history-window.c:261
+#: ../lib/widgets/ephy-location-entry.c:582 ../src/ephy-history-window.c:261
 msgid "Cl_ear"
 msgstr "સાફ કરો (_e)"
 
@@ -703,7 +704,6 @@ msgid "Use custom _stylesheet"
 msgstr "વૈવિધ્યપૂર્ણ સ્ટાઈલશીટ વાપરો (_s)"
 
 #: ../data/glade/prefs-dialog.glade.h:31
-#: ../src/bookmarks/ephy-bookmark-properties.c:295
 msgid "_Address:"
 msgstr "સરનામું (_A):"
 
@@ -1240,7 +1240,7 @@ msgstr "યુક્રેનિયાઈ"
 msgid "Unknown (%s)"
 msgstr "અજાણીતું (%s)"
 
-#: ../embed/ephy-history.c:558 ../src/bookmarks/ephy-bookmark-properties.c:304
+#: ../embed/ephy-history.c:558
 msgid "All"
 msgstr "બધું"
 
@@ -2035,8 +2035,8 @@ msgstr "“%s” માં કામચલાઉ ડિરેક્ટરી બ
 
 #: ../lib/ephy-file-helpers.c:360
 #, c-format
-msgid "“%s” exists, please move it out of the way."
-msgstr "“%s” હાજર છે, મહેરબાની કરીને તેને રસ્તાની બહાર ખસેડો."
+msgid "The file “%s” exists. Please move it out of the way."
+msgstr "ફાઈલ “%s” હાજર છે. મહેરબાની કરીને તેને રસ્તાની બહાર ખસેડો."
 
 #: ../lib/ephy-file-helpers.c:371
 #, c-format
@@ -2290,7 +2290,7 @@ msgstr "૩૦૦%"
 msgid "400%"
 msgstr "૪૦૦%"
 
-#: ../lib/widgets/ephy-location-entry.c:818
+#: ../lib/widgets/ephy-location-entry.c:820
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "આ પાનાંની કડી બનાવવા માટે આ ચિહ્ન ખેંચો અને મૂકો"
 
@@ -2328,29 +2328,32 @@ msgstr "આ પ્લગઈન વેબ કડીઓ સમાવતી “.des
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:180
+#: ../src/bookmarks/ephy-bookmark-properties.c:90
+#: ../src/bookmarks/ephy-bookmark-properties.c:523
+#, c-format
+msgid "%d _Similar"
+msgstr "%d સરખું (_S)"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:239
+msgid "_Merge"
+msgstr "ભેગું કરો (_M)"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:339
 #, c-format
 msgid "“%s” Properties"
 msgstr "“%s” ગુણધર્મો"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:280
+#: ../src/bookmarks/ephy-bookmark-properties.c:463
 msgid "_Title:"
 msgstr "શીર્ષક (_T):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:305
-#: ../src/bookmarks/ephy-topics-palette.c:276
-msgid "Subtopics"
-msgstr "ઉપમુદ્દાઓ"
+#: ../src/bookmarks/ephy-bookmark-properties.c:478
+msgid "A_ddress:"
+msgstr "સરનામું (_d):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:306
+#: ../src/bookmarks/ephy-bookmark-properties.c:488
 msgid "T_opics:"
 msgstr "મુદ્દાઓ (_o):"
-
-#. File Menu
-#: ../src/bookmarks/ephy-bookmark-properties.c:340
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
-msgid "_New Topic"
-msgstr "નવો મુદ્દો (_N)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:95
 msgid "Mozilla (HTML)"
@@ -2384,6 +2387,11 @@ msgstr "જુઓ (_V)"
 #: ../src/ephy-history-window.c:166 ../src/ephy-window.c:122
 msgid "_Help"
 msgstr "મદદ (_H)"
+
+#. File Menu
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+msgid "_New Topic"
+msgstr "નવો મુદ્દો (_N)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "Create a new topic"
@@ -2789,54 +2797,33 @@ msgstr "આ બુકમાર્કને નવી ટેબમાં ખો�
 msgid "Open this bookmark in a new window"
 msgstr "આ બુકમાર્કને નવી વિન્ડોમાં ખોલો"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:497
-msgid "Bookmark exists"
-msgstr "બુકમાર્ક હાજર છે"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:501
-#, c-format
-msgid "You already have a bookmark titled “%s” for this page."
-msgstr "તમારી પાસે આ પાના માટે “%s” શીર્ષકવાળી બુકમાર્ક પહેલાથી જ છે."
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:511
-msgid "_Create New"
-msgstr "નવું બનાવો (_C)"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:518
-msgid "_View Properties"
-msgstr "ગુણધર્મો જુઓ (_V)"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:529
-msgid "Bookmark Exists"
-msgstr "બુકમાર્ક હાજર છે"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:622
+#: ../src/bookmarks/ephy-bookmarks-ui.c:523
 #, c-format
 msgid "You already have a topic named “%s”"
 msgstr "તમારી પાસે પહેલાથી જ “%s” નામવાળો મુદ્દો છે"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:626
+#: ../src/bookmarks/ephy-bookmarks-ui.c:527
 msgid "Please use a different topic name."
 msgstr "મહેરબાની કરીને અલગ મુદ્દા નામ વાપરો."
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:666
+#: ../src/bookmarks/ephy-bookmarks-ui.c:567
 #, c-format
 msgid "New topic for “%s”"
 msgstr "“%s” માટે નવો મુદ્દો"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:676
+#: ../src/bookmarks/ephy-bookmarks-ui.c:577
 msgid "New topic"
 msgstr "નવો મુદ્દો"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:681
+#: ../src/bookmarks/ephy-bookmarks-ui.c:582
 msgid "Enter a unique name for the topic."
 msgstr "મુદ્દા માટે અનન્ય નામ દાખલ કરો."
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:713
+#: ../src/bookmarks/ephy-bookmarks-ui.c:614
 msgid "Create"
 msgstr "બનાવો"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:716
+#: ../src/bookmarks/ephy-bookmarks-ui.c:617
 msgid "New Topic"
 msgstr "નવો મુદ્દો"
 
@@ -2852,30 +2839,10 @@ msgstr "સંબંધિત"
 msgid "Quick Topic"
 msgstr "ઝડપી મુદ્દો"
 
-#: ../src/bookmarks/ephy-topics-palette.c:205
-msgid "No topics"
-msgstr "નવા મુદ્દાઓ"
-
-# libgnomeprintui/gnome-print-dialog.c:242
-#: ../src/bookmarks/ephy-topics-palette.c:275
-msgid "Selection"
-msgstr "પસંદગી"
-
-#: ../src/bookmarks/ephy-topics-palette.c:275
-msgid "No selected topics"
-msgstr "કોઈ મુદ્દાઓ પસંદિત નથી"
-
-#: ../src/bookmarks/ephy-topics-palette.c:276
-msgid "No more subtopics"
-msgstr "કોઈ વધુ ઉપમુદ્દાઓ નથી"
-
-#: ../src/bookmarks/ephy-topics-palette.c:277
-msgid "Other"
-msgstr "અન્ય"
-
-#: ../src/bookmarks/ephy-topics-palette.c:277
-msgid "No other topics"
-msgstr "કોઈ અન્ય મુદ્દાઓ નથી"
+#: ../src/bookmarks/ephy-topics-entry.c:356
+#, c-format
+msgid "Create topic “%s”"
+msgstr "મુદ્દો “%s” બનાવો"
 
 #: ../src/ephy-encoding-dialog.c:340
 msgid "Encodings"
@@ -3017,9 +2984,13 @@ msgstr[1] "છેલ્લા %d દિવસો"
 msgid "Sites"
 msgstr "સાઇટો"
 
-#: ../src/ephy-main.c:74 ../src/ephy-main.c:76
-msgid "Open a new tab in an existing Epiphany window"
-msgstr "વર્તમાન એપીફની વિન્ડોમાં નવી ટેબ ખોલો"
+#: ../src/ephy-main.c:74
+msgid "Open a new tab in an existing browser window"
+msgstr "હાલની બ્રાઉઝર વિન્ડોમાં નવી ટેબ ખોલો"
+
+#: ../src/ephy-main.c:76
+msgid "Open a new browser window"
+msgstr "નવી બ્રાઉઝર વિન્ડો ખોલો"
 
 #: ../src/ephy-main.c:78
 msgid "Launch the bookmarks editor"
@@ -3063,11 +3034,11 @@ msgstr ""
 "નીચેની ભૂલોને કારણે શરૂઆત કરવાનું નિષ્ફળ ગયું:\n"
 "%s"
 
-#: ../src/ephy-main.c:511 ../src/ephy-main.c:513 ../src/window-commands.c:752
+#: ../src/ephy-main.c:512 ../src/ephy-main.c:514 ../src/window-commands.c:752
 msgid "GNOME Web Browser"
 msgstr "જીનોમ વેબ બ્રાઉઝર"
 
-#: ../src/ephy-main.c:514
+#: ../src/ephy-main.c:515
 msgid "GNOME Web Browser options"
 msgstr "જીનોમ વેબ બ્રાઉઝર વિકલ્પો"
 
@@ -3125,7 +3096,7 @@ msgstr "કેરેટ"
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "કીબોર્ડ પદ્ધતિ સ્થિતિમાં, બહાર નીકળવા માટે F7 દબાવો"
 
-#: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2264 ../src/ephy-tab.c:2299
+#: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2266 ../src/ephy-tab.c:2301
 msgid "Blank page"
 msgstr "ખાલી પાનું"
 
