@@ -36,6 +36,12 @@ mozilla-embed-event
 
 @k: 
 
+<!-- ##### MACRO EPHY_SHELL_ERROR ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### MACRO EPHY_SHELL_TYPE_DEF ##### -->
 <para>
 
@@ -207,6 +213,28 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 </para>
 
 
+<!-- ##### ENUM EphyShellError ##### -->
+<para>
+
+</para>
+
+@EPHY_SHELL_ERROR_MISSING_SERVER: 
+@EPHY_SHELL_ERROR_OBJECT_REG_FAILED: 
+@EPHY_SHELL_ERROR_FACTORY_REG_FAILED: 
+
+<!-- ##### ENUM EphyShellStartupFlags ##### -->
+<para>
+
+</para>
+
+@EPHY_SHELL_STARTUP_TABS: 
+@EPHY_SHELL_STARTUP_EXISTING_WINDOW: 
+@EPHY_SHELL_STARTUP_FULLSCREEN: 
+@EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR: 
+@EPHY_SHELL_STARTUP_SESSION: 
+@EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS: 
+@EPHY_SHELL_STARTUP_ADD_BOOKMARK: 
+
 <!-- ##### ARG EphyTab:blocked-popup-count ##### -->
 <para>
 
@@ -343,6 +371,51 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @manager: 
 @info: 
 
+<!-- ##### FUNCTION ephy_permission_manager_add ##### -->
+<para>
+
+</para>
+
+@manager: 
+@host: 
+@type: 
+@permission: 
+
+<!-- ##### FUNCTION ephy_permission_manager_clear ##### -->
+<para>
+
+</para>
+
+@manager: 
+
+<!-- ##### FUNCTION ephy_permission_manager_list ##### -->
+<para>
+
+</para>
+
+@manager: 
+@type: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_permission_manager_remove ##### -->
+<para>
+
+</para>
+
+@manager: 
+@host: 
+@type: 
+
+<!-- ##### FUNCTION ephy_permission_manager_test ##### -->
+<para>
+
+</para>
+
+@manager: 
+@host: 
+@type: 
+@Returns: 
+
 <!-- ##### FUNCTION ephy_shell_delete_on_exit ##### -->
 <para>
 
@@ -352,6 +425,13 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @path: 
 @gs: 
 
+<!-- ##### FUNCTION ephy_shell_error_quark ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
 <!-- ##### FUNCTION ephy_shell_get_active_window ##### -->
 <para>
 
@@ -359,6 +439,27 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 
 @shell: 
 @Returns: 
+
+<!-- ##### FUNCTION ephy_shell_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### FUNCTION ephy_shell_startup ##### -->
+<para>
+
+</para>
+
+@shell: 
+@flags: 
+@user_time: 
+@args: 
+@string_arg: 
+@error: 
+@Returns: 
+@startup_id: 
 
 <!-- ##### FUNCTION ephy_tab_get_location ##### -->
 <para>
