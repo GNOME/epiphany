@@ -224,6 +224,7 @@ show_duplicate_cb (GtkButton *button,
 	GPtrArray *duplicates;
 	GtkMenuShell *menu;
 	GtkWidget *item, *image;
+	char *label;
 	gint i;
 	
 	update_warning (properties);
@@ -251,8 +252,10 @@ show_duplicate_cb (GtkButton *button,
 	for (i = 0; i < duplicates->len; i++)
 	{
 		node = g_ptr_array_index (duplicates, i);
-		item = gtk_image_menu_item_new_with_label
-		  (ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE));
+		label = g_strdup_printf (_("Show “%s”"),
+		   ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE));
+		item = gtk_image_menu_item_new_with_label (label);
+		g_free (label);
 		g_signal_connect (item, "activate", G_CALLBACK (activate_show_cb), node);
 		gtk_widget_show (item);
 		gtk_menu_shell_append (menu, item);
