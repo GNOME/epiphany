@@ -244,15 +244,62 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 
 		/* Translators: %s is the hostname, like "www.example.com" */
 		*aTitle = g_markup_printf_escaped
-				(_("“%s” Refused the Connection"),
-				 host.get());
+			(_("“%s” Refused the Connection"),
+			 host.get());
 		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” refused the connection."),
 				 host.get());
-		*aSecondary = _("The server may be busy or you may have a "
-				"network connection problem. Try again later.");
-		*aLinkIntro = _("There may be an old version of the page you wanted:");
+
+		/* FIXME what about 127.0.0.* ? */
+		if (strcmp (host.get(), "localhost") == 0)
+		{
+			const char *not_started_msg = _("some service isn't started, or");
+			PRInt32 port;
+			aURI->GetPort (&port);
+
+			*aSecondary = _("Likely causes of the problem are");
+
+			/* Try to get the service name attached to that port */
+			if (port != -1)
+			{
+				struct servent *serv;
+			
+				if ((serv = getservbyport (htons (port), NULL)) != NULL)
+				{
+					*aTertiary = g_markup_printf_escaped (
+							_("<ul>"
+							   "<li>the service ""%s"" isn't started.</li>"
+							   "Try to start it using the Services Configuration Tool in "
+							   "Desktop > System Settings > Server Settings > Services, or</ul>"
+							   "<ul><li>the port number %d is wrong.</li>"
+							   "</ul>"),
+							serv->s_name, port);
+				}
+				else
+				{
+					*aTertiary = g_markup_printf_escaped (
+							_("<ul>"
+							   "<li>some service isn't started, or</li>"
+							   "<li>the port number %d is wrong.</li>"
+							   "</ul>"),
+							port);
+				}
+			}
+			else
+			{
+				*aTertiary = _("<ul>"
+					       "<li>some service isn't started, or</li>"
+					       "<li>you got the port number wrong.</li>"
+					       "</ul>");
+			}
+		}
+		else
+		{
+			*aSecondary = _("The server may be busy or you may have a "
+					"network connection problem. Try again later.");
+			*aLinkIntro = _("There may be an old version of the page you wanted:");
+		}
 	}
 	else if (strcmp (aError, "netInterrupt") == 0)
 	{
