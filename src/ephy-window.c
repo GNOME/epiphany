@@ -120,6 +120,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "Tools", NULL, N_("T_ools") },
 	{ "Tabs", NULL, N_("_Tabs") },
 	{ "Help", NULL, N_("_Help") },
+	{ "Toolbar", NULL, N_("_Toolbars") },
 	{ "PopupAction", NULL, "" },
 	{ "NotebookPopupAction", NULL, "" },
 
@@ -190,15 +191,15 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	  N_("Manage Certificates"),
 	  G_CALLBACK (window_cmd_edit_certificates) },
 #endif
-	{ "EditToolbar", NULL, N_("T_oolbars"), NULL,
-	  N_("Customize toolbars"),
-	  G_CALLBACK (window_cmd_edit_toolbar) },
 	{ "EditPrefs", GTK_STOCK_PREFERENCES, N_("P_references"), NULL,
 	  N_("Configure the web browser"),
 	  G_CALLBACK (window_cmd_edit_prefs) },
 
 	/* View menu */
 
+	{ "ViewToolbarEditor", NULL, N_("_Customize Toolbars..."), NULL,
+	  N_("Customize toolbars"),
+	  G_CALLBACK (window_cmd_edit_toolbar) },
 	{ "ViewStop", GTK_STOCK_STOP, N_("_Stop"), "Escape",
 	  N_("Stop current data transfer"),
 	  G_CALLBACK (window_cmd_view_stop) },
@@ -279,7 +280,7 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 
 	/* View Menu */
 
-	{ "ViewToolbar", NULL, N_("_Toolbar"), "<shift><control>T",
+	{ "ViewToolbar", NULL, N_("_Show Toolbars"), "<shift><control>T",
 	  N_("Show or hide toolbar"),
 	  G_CALLBACK (ephy_window_view_toolbar_cb), TRUE },
 	{ "ViewStatusbar", NULL, N_("St_atusbar"), NULL,

@@ -739,5 +739,6 @@ ephy_toolbar_new (EphyWindow *window)
 	return EPHY_TOOLBAR (g_object_new (EPHY_TYPE_TOOLBAR,
 					   "window", window,
 					   "ui-manager", ephy_window_get_ui_manager (window),
+					   "visibility-path", "/menubar/ViewMenu/ViewTogglesGroup/ToolbarMenu",
 					   NULL));
 }

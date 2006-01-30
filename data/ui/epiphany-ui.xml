@@ -32,13 +32,16 @@
 	<separator name="EditSep3"/>
 	<menuitem name="EditPersonalDataMenu" action="EditPersonalData"/>
 <!--	<menuitem name="EditCertificatesMenu" action="EditCertificates"/> -->
-	<menuitem name="EditToolbarMenu" action="EditToolbar"/>
 	<menuitem name="EditPrefsMenu" action="EditPrefs"/> 
 </menu>
 
 <menu name="ViewMenu" action="View">
 	<placeholder name="ViewTogglesGroup" position="top">
+		<menu name="ToolbarMenu" action="Toolbar">
+		<menuitem name="ViewToolbarEditorMenu" action="ViewToolbarEditor"/>
 		<menuitem name="ViewToolbarMenu" action="ViewToolbar"/>
+		<separator name="ToolbarSep1"/>
+		</menu>
 		<menuitem name="ViewStatusbarMenu" action="ViewStatusbar"/>
 	</placeholder>
 	<separator name="ViewSep1"/>
@@ -163,6 +166,12 @@
 		<menuitem name="TabMoveRightENP" action="TabsMoveRight"/>
 	</placeholder>
         <menuitem name="TabDetachENP" action="TabsDetach"/>
+</popup>
+
+<popup name="ToolbarPopup">
+	<separator/>
+        <menuitem action="ViewToolbarEditor"/>
+	<separator/>
 </popup>
 
 <accelerator name="AlwaysStopAccel" action="ViewAlwaysStop"/>

@@ -193,7 +193,7 @@ update_window (EphyWindow *window,
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled || !writable);
 
 	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING);
-	action = gtk_action_group_get_action (action_group, "EditToolbar");
+	action = gtk_action_group_get_action (action_group, "ViewToolbarEditor");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 
 	fullscreen = eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);

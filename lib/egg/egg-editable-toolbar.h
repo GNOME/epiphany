@@ -61,9 +61,11 @@ struct _EggEditableToolbarClass
 };
 
 GType               egg_editable_toolbar_get_type        (void);
-GtkWidget	   *egg_editable_toolbar_new		 (GtkUIManager         *manager);
+GtkWidget	   *egg_editable_toolbar_new		 (GtkUIManager         *manager,
+							  const char           *visibility_path);
 GtkWidget	   *egg_editable_toolbar_new_with_model	 (GtkUIManager         *manager,
-							  EggToolbarsModel     *model);
+							  EggToolbarsModel     *model,
+							  const char           *visibility_path);
 void		    egg_editable_toolbar_set_model       (EggEditableToolbar   *etoolbar,
 							  EggToolbarsModel     *model);
 EggToolbarsModel   *egg_editable_toolbar_get_model       (EggEditableToolbar   *etoolbar);
@@ -75,17 +77,12 @@ void		    egg_editable_toolbar_show		 (EggEditableToolbar   *etoolbar,
 							  const char           *name);
 void		    egg_editable_toolbar_hide		 (EggEditableToolbar   *etoolbar,
 							  const char           *name);
-void		    egg_editable_toolbar_set_drag_dest   (EggEditableToolbar   *etoolbar,
-							  const GtkTargetEntry *targets,
-							  gint                  n_targets,
-							  const char           *toolbar_name);
 void		    egg_editable_toolbar_set_fixed       (EggEditableToolbar   *etoolbar,
 							  GtkToolbar           *fixed_toolbar);
 
 GtkWidget *         egg_editable_toolbar_get_selected    (EggEditableToolbar   *etoolbar);
 void                egg_editable_toolbar_set_selected    (EggEditableToolbar   *etoolbar,
 							  GtkWidget            *widget);
-
 
 /* Private Functions */
 
