@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.th\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-29 12:22+0700\n"
-"PO-Revision-Date: 2006-01-29 12:44+0700\n"
+"POT-Creation-Date: 2006-01-30 10:18+0700\n"
+"PO-Revision-Date: 2006-01-30 10:23+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
@@ -619,7 +619,7 @@ msgstr "เลือก_ภาษา:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: data/glade/prefs-dialog.glade.h:13
-#: lib/widgets/ephy-location-entry.c:580 src/ephy-history-window.c:261
+#: lib/widgets/ephy-location-entry.c:582 src/ephy-history-window.c:261
 msgid "Cl_ear"
 msgstr "_ล้าง"
 
@@ -2012,8 +2012,8 @@ msgstr "ไม่สามารถสร้างไดเรกทอรีช
 
 #: lib/ephy-file-helpers.c:360
 #, c-format
-msgid "“%s” exists. Please move it out of the way."
-msgstr "มี “%s” อยู่แล้ว กรุณาย้ายตำแหน่ง"
+msgid "The file “%s” exists. Please move it out of the way."
+msgstr "มีแฟ้ม “%s” อยู่แล้ว กรุณาย้ายตำแหน่ง"
 
 #: lib/ephy-file-helpers.c:371
 #, c-format
@@ -2267,7 +2267,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: lib/widgets/ephy-location-entry.c:818
+#: lib/widgets/ephy-location-entry.c:820
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "ลากไอคอนนี้ไปปล่อยเพื่อสร้างลิงก์มายังหน้านี้"
 
@@ -2305,24 +2305,30 @@ msgstr "ปลั๊กอินนี้จัดการแฟ้ม “.desk
 msgid "%s:"
 msgstr "%s:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:242
+#: src/bookmarks/ephy-bookmark-properties.c:90
+#: src/bookmarks/ephy-bookmark-properties.c:523
+#, c-format
+msgid "%d _Similar"
+msgstr "ที่_คล้ายกัน %d รายการ"
+
+#: src/bookmarks/ephy-bookmark-properties.c:239
+msgid "_Merge"
+msgstr "_รวมกัน"
+
+#: src/bookmarks/ephy-bookmark-properties.c:339
 #, c-format
 msgid "“%s” Properties"
 msgstr "คุณสมบัติของ “%s”"
 
-#: src/bookmarks/ephy-bookmark-properties.c:365
+#: src/bookmarks/ephy-bookmark-properties.c:463
 msgid "_Title:"
 msgstr "_ชื่อ:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:380
+#: src/bookmarks/ephy-bookmark-properties.c:478
 msgid "A_ddress:"
 msgstr "_ตำแหน่ง:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:388
-msgid "_Show similar bookmark"
-msgstr "แ_สดงที่คั่นหน้าที่คล้ายกัน"
-
-#: src/bookmarks/ephy-bookmark-properties.c:401
+#: src/bookmarks/ephy-bookmark-properties.c:488
 msgid "T_opics:"
 msgstr "ห_มวด:"
 
@@ -2808,7 +2814,7 @@ msgstr "ที่เกี่ยวข้อง"
 msgid "Quick Topic"
 msgstr "เพิ่มหมวดอย่างเร็ว"
 
-#: src/bookmarks/ephy-topics-entry.c:201
+#: src/bookmarks/ephy-topics-entry.c:356
 #, c-format
 msgid "Create topic “%s”"
 msgstr "สร้างหมวด “%s”"
@@ -2953,9 +2959,13 @@ msgstr[1] "%d วันก่อน"
 msgid "Sites"
 msgstr "ไซต์"
 
-#: src/ephy-main.c:74 src/ephy-main.c:76
+#: src/ephy-main.c:74
 msgid "Open a new tab in an existing browser window"
 msgstr "เปิดแท็บใหม่ในหน้าต่างเบราว์เซอร์ปัจจุบัน"
+
+#: src/ephy-main.c:76
+msgid "Open a new browser window"
+msgstr "เปิดเบราว์เซอร์หน้าต่างใหม่"
 
 #: src/ephy-main.c:78
 msgid "Launch the bookmarks editor"
@@ -2998,7 +3008,7 @@ msgstr ""
 "ไม่สามารถเริ่มการทำงานได้ เนื่องจากข้อผิดพลาดต่อไปนี้:\n"
 "%s"
 
-#: src/ephy-main.c:512 src/ephy-main.c:514 src/window-commands.c:751
+#: src/ephy-main.c:512 src/ephy-main.c:514 src/window-commands.c:752
 msgid "GNOME Web Browser"
 msgstr "เว็บเบราว์เซอร์ของ GNOME"
 
@@ -3060,7 +3070,7 @@ msgstr "เคอร์เซอร์"
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "อยู่ในโหมดเลือกด้วยแป้นพิมพ์ กด F7 เพื่อออกจากโหมดนี้"
 
-#: src/ephy-tab.c:481 src/ephy-tab.c:2264 src/ephy-tab.c:2299
+#: src/ephy-tab.c:481 src/ephy-tab.c:2266 src/ephy-tab.c:2301
 msgid "Blank page"
 msgstr "หน้าว่าง"
 
@@ -3635,11 +3645,11 @@ msgstr "ถ้าคุณปิดเอกสาร คุณจะเสี�
 msgid "Close _Document"
 msgstr "ปิ_ดเอกสาร"
 
-#: src/ephy-window.c:1283 src/window-commands.c:278
+#: src/ephy-window.c:1283 src/window-commands.c:279
 msgid "Open"
 msgstr "เปิด"
 
-#: src/ephy-window.c:1285 src/window-commands.c:304
+#: src/ephy-window.c:1285 src/window-commands.c:305
 msgid "Save As"
 msgstr "บันทึกเป็น"
 
@@ -3876,23 +3886,23 @@ msgstr[1] "ภาษาของระบบ (%s)"
 msgid "Select a Directory"
 msgstr "เลือกไดเรกทอรี"
 
-#: src/window-commands.c:709 src/window-commands.c:726
+#: src/window-commands.c:710 src/window-commands.c:727
 msgid "Contact us at:"
 msgstr "ติดต่อเราได้ที่:"
 
-#: src/window-commands.c:712
+#: src/window-commands.c:713
 msgid "Contributors:"
 msgstr "ผู้ร่วมสมทบงาน:"
 
-#: src/window-commands.c:717
+#: src/window-commands.c:718
 msgid "Past developers:"
 msgstr "ผู้พัฒนาในอดีต"
 
-#: src/window-commands.c:727
+#: src/window-commands.c:728
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> หรือ <gnome-doc-list@gnome.org>"
 
-#: src/window-commands.c:732
+#: src/window-commands.c:733
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3903,7 +3913,7 @@ msgstr ""
 "ภายใต้เงื่อนไขของ GNU General Public License ที่เผยแพร่โดยมูลนิธิซอฟต์แวร์เสรี\n"
 "ไม่ว่าจะเป็นสัญญาอนุญาตรุ่นที่ 2 หรือรุ่นถัดมา (ตามแต่คุณจะเลือก)"
 
-#: src/window-commands.c:736
+#: src/window-commands.c:737
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3915,13 +3925,14 @@ msgstr ""
 "หรือ _ความเหมาะสมสำหรับวัตถุประสงค์เฉพาะกิจใดๆ_ กรุณาอ่าน\n"
 "GNU General Public License เพื่อดูรายละเอียดเพิ่มเติม"
 
-#: src/window-commands.c:740
+#: src/window-commands.c:741
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
 msgstr ""
-"คุณควรจะได้รับสำเนาของ GNU General Public License มาพร้อมกับเว็บเบราว์เซอร์ของ GNOME\n"
+"คุณควรจะได้รับสำเนาของ GNU General Public License มาพร้อมกับเว็บเบราว์เซอร์ของ "
+"GNOME\n"
 "ถ้าคุณไม่ได้รับ กรุณาติดต่อไปที่ Free Software Foundation, Inc., \n"
 "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
 
@@ -3933,7 +3944,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:765
+#: src/window-commands.c:766
 msgid "translator-credits"
 msgstr ""
 "อิสริยะ ไพรีพ่ายฤทธิ์\n"
@@ -3942,9 +3953,12 @@ msgstr ""
 "ถ้ามีเวลาโปรดมาช่วยกันแปล :-)\n"
 "http://gnome-th.sf.net"
 
-#: src/window-commands.c:768
+#: src/window-commands.c:769
 msgid "GNOME Web Browser Website"
 msgstr "เว็บไซต์ของเว็บเบราว์เซอร์ของ GNOME"
+
+#~ msgid "_Show similar bookmark"
+#~ msgstr "แ_สดงที่คั่นหน้าที่คล้ายกัน"
 
 #~ msgid "Autowrap for find in page"
 #~ msgstr "เริ่มค้นใหม่เมื่อค้นจนจบเอกสาร"
