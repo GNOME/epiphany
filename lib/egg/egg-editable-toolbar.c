@@ -392,25 +392,29 @@ configure_item_sensitivity (GtkToolItem *item, EggEditableToolbar *etoolbar)
 }
 
 static void
-configure_item_cursor (GtkToolItem *item, EggEditableToolbar *etoolbar)
+configure_item_cursor (GtkToolItem *item,
+		       EggEditableToolbar *etoolbar)
 {
-  g_return_if_fail (etoolbar != NULL);
-  g_return_if_fail (GTK_WIDGET(item)->window != NULL);
-  
-  if (etoolbar->priv->edit_mode > 0)
-    {
-      GdkCursor *cursor;
-          
-      cursor = gdk_cursor_new (GDK_HAND2);
-      gdk_window_set_cursor (GTK_WIDGET(item)->window, cursor);
-      gdk_cursor_unref (cursor);
+  EggEditableToolbarPrivate *priv = etoolbar->priv;
+  GtkWidget *widget = GTK_WIDGET (item);
 
-      gtk_drag_source_set (GTK_WIDGET (item), GDK_BUTTON1_MASK, dest_drag_types,
-                           G_N_ELEMENTS (dest_drag_types), GDK_ACTION_MOVE);
-    }
-  else
+  if (widget->window != NULL)
     {
-      gdk_window_set_cursor (GTK_WIDGET(item)->window, NULL);
+      if (priv->edit_mode > 0)
+        {
+          GdkCursor *cursor;
+          
+          cursor = gdk_cursor_new (GDK_HAND2);
+          gdk_window_set_cursor (widget->window, cursor);
+          gdk_cursor_unref (cursor);
+
+          gtk_drag_source_set (widget, GDK_BUTTON1_MASK, dest_drag_types,
+                               G_N_ELEMENTS (dest_drag_types), GDK_ACTION_MOVE);
+        }
+      else
+        {
+          gdk_window_set_cursor (GTK_WIDGET(item)->window, NULL);
+        }
     }
 }
 
@@ -1241,16 +1245,15 @@ egg_editable_toolbar_set_ui_manager (EggEditableToolbar *etoolbar,
       N_("Remove the selected toolbar"), G_CALLBACK (remove_toolbar_cb) },
   };
   
-  g_object_ref (manager);
+  etoolbar->priv->manager = g_object_ref (manager);
 
   etoolbar->priv->actions = gtk_action_group_new ("ToolbarActions");
   gtk_action_group_set_translation_domain (etoolbar->priv->actions, GETTEXT_PACKAGE);
   gtk_action_group_add_actions (etoolbar->priv->actions, actions,
 		 		G_N_ELEMENTS (actions), etoolbar);
-
   gtk_ui_manager_insert_action_group (manager, etoolbar->priv->actions, -1);
+  g_object_unref (etoolbar->priv->actions);
 
-  etoolbar->priv->manager = g_object_ref (manager);
   etoolbar->priv->popup_id = gtk_ui_manager_add_ui_from_string (manager, 
      "<popup name=\"ToolbarPopup\">"
      "<menuitem action=\"MoveToolItem\"/>"

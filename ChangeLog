@@ -1,3 +1,11 @@
+2006-01-30  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c: (configure_item_cursor),
+	(egg_editable_toolbar_set_ui_manager):
+
+	Don't double-ref the UI manager.
+	Don't try to set a cursor on windowless widgets.
+
 2006-01-30  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* embed/mozilla/EphyAboutModule.cpp: (GetErrorMessage):
