@@ -1186,53 +1186,36 @@ ephy_bookmarks_find_bookmark (EphyBookmarks *eb,
 	return NULL;
 }
 
-GPtrArray *
-ephy_bookmarks_find_duplicates (EphyBookmarks *eb,
-				EphyNode *bookmark)
+static gboolean
+is_similar (const char *url1, const char *url2)
 {
-	GPtrArray *children;
-	GPtrArray *result;
-	const char *url;
-	int i;
-
-	g_return_val_if_fail (EPHY_IS_BOOKMARKS (eb), NULL);
-	g_return_val_if_fail (eb->priv->bookmarks != NULL, NULL);
-	g_return_val_if_fail (bookmark != NULL, NULL);
-	
-	url = ephy_node_get_property_string 
-	  (bookmark, EPHY_NODE_BMK_PROP_LOCATION);
-
-	g_return_val_if_fail (url != NULL, NULL);
-	
-	result = g_ptr_array_new ();
-
-	children = ephy_node_get_children (eb->priv->bookmarks);
-	for (i = 0; i < children->len; i++)
+	while(*url1 == *url2 && *url1 != '\0' && 
+	      *url1 != '#' && *url1 != '?')
 	{
-		EphyNode *kid;
-		const char *location;
-
-		kid = g_ptr_array_index (children, i);
-		if (kid == bookmark)
-		{
-			continue;
-		}
-		
-		location = ephy_node_get_property_string
-			(kid, EPHY_NODE_BMK_PROP_LOCATION);
-
-		if (location != NULL && strcmp (url, location) == 0)
-		{
-			g_ptr_array_add (result, kid);
-		}
+		url1++;
+		url2++;
 	}
-	
-	return result;
+	if(*url1 == *url2) return TRUE;
+	if(*url1 == '\0')
+	{
+		if(*url2 == '#') return TRUE;
+		if(*url2 == '?') return TRUE;
+		if(*url2 == '/' && *(url2+1) == '\0') return TRUE;
+	}
+	if(*url2 == '\0')
+	{
+		if(*url1 == '#') return TRUE;
+		if(*url1 == '?') return TRUE;
+		if(*url1 == '/' && *(url1+1) == '\0') return TRUE;
+	}
+	return FALSE;
 }
 
 gint
-ephy_bookmarks_count_duplicates (EphyBookmarks *eb,
-				 EphyNode *bookmark)
+ephy_bookmarks_get_similar (EphyBookmarks *eb,
+			    EphyNode *bookmark,
+			    GPtrArray *identical,
+			    GPtrArray *similar)
 {
 	GPtrArray *children;
 	const char *url;
@@ -1264,9 +1247,21 @@ ephy_bookmarks_count_duplicates (EphyBookmarks *eb,
 		location = ephy_node_get_property_string
 			(kid, EPHY_NODE_BMK_PROP_LOCATION);
 
-		if (location != NULL && strcmp (url, location) == 0)
+		if (location != NULL)
 		{
-			result++;
+			if(identical != NULL && strcmp (url, location) == 0)
+			{
+				g_ptr_array_add (identical, kid);
+				result++;
+			}
+			else if(is_similar (url, location))
+			{
+				if (similar != NULL)
+				{
+					g_ptr_array_add (similar, kid);
+				}
+				result++;
+			}
 		}
 	}
 	

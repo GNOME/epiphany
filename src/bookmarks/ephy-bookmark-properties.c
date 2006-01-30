@@ -84,8 +84,8 @@ update_warning (EphyBookmarkProperties *properties)
 	char *label;
 
 	priv->duplicate_idle = 0;	
-	priv->duplicate_count = ephy_bookmarks_count_duplicates
-	  (priv->bookmarks, priv->bookmark);
+	priv->duplicate_count = ephy_bookmarks_get_similar
+	  (priv->bookmarks, priv->bookmark, NULL, NULL);
 	
         /* Translators: This string is used when counting bookmarks that
          * are similar to each other */
@@ -178,20 +178,21 @@ activate_merge_cb (GtkMenuItem *item,
 		   EphyBookmarkProperties *properties)
 {
 	EphyBookmarkPropertiesPrivate *priv = properties->priv;
-	GPtrArray *duplicates;
 	GPtrArray *topics;
 	EphyNode *node, *topic;
 	gint i, j;
 
-	duplicates = ephy_bookmarks_find_duplicates
-	  (priv->bookmarks, priv->bookmark);
+	GPtrArray *identical = g_ptr_array_new ();
+	
+	ephy_bookmarks_get_similar
+	  (priv->bookmarks, priv->bookmark, identical, NULL);
 	
 	node = ephy_bookmarks_get_keywords (priv->bookmarks);
 	topics = ephy_node_get_children (node);
 
-	for (i = 0; i < duplicates->len; i++)
+	for (i = 0; i < identical->len; i++)
 	{	
-		node = g_ptr_array_index (duplicates, i);
+		node = g_ptr_array_index (identical, i);
 		for (j = 0; j < topics->len; j++)
 		{
 			topic = g_ptr_array_index (topics, j);
@@ -205,7 +206,7 @@ activate_merge_cb (GtkMenuItem *item,
 		ephy_node_unref (node);
 	}	
 	
-	g_ptr_array_free (duplicates, TRUE);
+	g_ptr_array_free (identical, TRUE);
 	
 	update_warning (properties);
 }
@@ -223,50 +224,82 @@ show_duplicate_cb (GtkButton *button,
 {
 	EphyBookmarkPropertiesPrivate *priv = properties->priv;
 	EphyNode *node;
-	GPtrArray *duplicates;
 	GtkMenuShell *menu;
 	GtkWidget *item, *image;
 	char *label;
 	gint i;
 	
-	update_warning (properties);
-	if (priv->duplicate_count == 0)
+	GPtrArray *identical = g_ptr_array_new ();
+	GPtrArray *similar = g_ptr_array_new ();
+
+	ephy_bookmarks_get_similar (priv->bookmarks,
+				    priv->bookmark,
+				    identical,
+				    similar);
+	
+	if (identical->len + similar->len > 0)
 	{
-		return;
-	}
-	
-	duplicates = ephy_bookmarks_find_duplicates
-	  (priv->bookmarks, priv->bookmark);
-	
-	menu = GTK_MENU_SHELL (gtk_menu_new ());
-	item = gtk_image_menu_item_new_with_mnemonic (_("_Merge"));
-	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-	g_signal_connect (item, "activate", G_CALLBACK (activate_merge_cb), properties);
-	gtk_widget_show (image);
-	gtk_widget_show (item);
-	gtk_menu_shell_append (menu, item);
-	
-	item = gtk_separator_menu_item_new ();
-	gtk_widget_show (item);
-	gtk_menu_shell_append (menu, item);
-	
-	for (i = 0; i < duplicates->len; i++)
-	{
-		node = g_ptr_array_index (duplicates, i);
-		label = g_strdup_printf (_("Show “%s”"),
-		   ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE));
-		item = gtk_image_menu_item_new_with_label (label);
-		g_free (label);
-		g_signal_connect (item, "activate", G_CALLBACK (activate_show_cb), node);
-		gtk_widget_show (item);
-		gtk_menu_shell_append (menu, item);
-	}
-	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-			ephy_gui_menu_position_under_widget, button,
-			0, gtk_get_current_event_time ());
+		menu = GTK_MENU_SHELL (gtk_menu_new ());
 		
-	g_ptr_array_free (duplicates, TRUE);
+		if (identical->len > 0)
+		{
+			label = g_strdup_printf (_("_Unify With %d Identical Bookmark(s)"),
+						 identical->len);
+			item = gtk_image_menu_item_new_with_mnemonic (label);
+			g_free (label);
+			image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU);
+			gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+			g_signal_connect (item, "activate", G_CALLBACK (activate_merge_cb), properties);
+			gtk_widget_show (image);
+			gtk_widget_show (item);
+			gtk_menu_shell_append (menu, item);
+	
+			item = gtk_separator_menu_item_new ();
+			gtk_widget_show (item);
+			gtk_menu_shell_append (menu, item);
+	
+			for (i = 0; i < identical->len; i++)
+			{
+				node = g_ptr_array_index (identical, i);
+				label = g_strdup_printf (_("Show “%s”"),
+							 ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE));
+				item = gtk_image_menu_item_new_with_label (label);
+				g_free (label);
+				g_signal_connect (item, "activate", G_CALLBACK (activate_show_cb), node);
+				gtk_widget_show (item);
+				gtk_menu_shell_append (menu, item);
+			}
+		}
+		
+		if (identical->len > 0 && similar->len > 0)
+		{
+			item = gtk_separator_menu_item_new ();
+			gtk_widget_show (item);
+			gtk_menu_shell_append (menu, item);
+		}
+		
+		if (similar->len > 0)
+		{
+			for (i = 0; i < similar->len; i++)
+			{
+				node = g_ptr_array_index (similar, i);
+				label = g_strdup_printf (_("Show “%s”"),
+							 ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE));
+				item = gtk_image_menu_item_new_with_label (label);
+				g_free (label);
+				g_signal_connect (item, "activate", G_CALLBACK (activate_show_cb), node);
+				gtk_widget_show (item);
+				gtk_menu_shell_append (menu, item);
+			}
+		}
+		
+		gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+				ephy_gui_menu_position_under_widget, button,
+				0, gtk_get_current_event_time ());
+	}
+		
+	g_ptr_array_free (similar, TRUE);
+	g_ptr_array_free (identical, TRUE);
 }
 
 static void
