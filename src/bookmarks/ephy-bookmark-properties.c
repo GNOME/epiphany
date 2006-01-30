@@ -243,7 +243,9 @@ show_duplicate_cb (GtkButton *button,
 		
 		if (identical->len > 0)
 		{
-			label = g_strdup_printf (_("_Unify With %d Identical Bookmark(s)"),
+			label = g_strdup_printf (ngettext ("_Unify With %d Identical Bookmark",
+							   "_Unify With %d Identical Bookmarks",
+							   identical->len),
 						 identical->len);
 			item = gtk_image_menu_item_new_with_mnemonic (label);
 			g_free (label);
