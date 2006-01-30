@@ -1232,20 +1232,23 @@ static void
 egg_editable_toolbar_set_ui_manager (EggEditableToolbar *etoolbar,
 				     GtkUIManager       *manager)
 {
-  g_object_ref (manager);
-  
-  etoolbar->priv->actions = gtk_action_group_new ("ToolbarActions");
-  GtkActionEntry actions[] = {
-    { "MoveToolItem", NULL, _("_Move on Toolbar"), NULL,
-      _("Move the selected item on the toolbar"), G_CALLBACK (move_item_cb) },
-    { "RemoveToolItem", GTK_STOCK_REMOVE, _("_Remove from Toolbar"), NULL,
-      _("Remove the selected item from the toolbar"), G_CALLBACK (remove_item_cb) },
-    { "RemoveToolbar", GTK_STOCK_REMOVE, _("_Remove Toolbar"), NULL,
-      _("Remove the selected toolbar"), G_CALLBACK (remove_toolbar_cb) },
+  static const GtkActionEntry actions[] = {
+    { "MoveToolItem", NULL, N_("_Move on Toolbar"), NULL,
+      N_("Move the selected item on the toolbar"), G_CALLBACK (move_item_cb) },
+    { "RemoveToolItem", GTK_STOCK_REMOVE, N_("_Remove from Toolbar"), NULL,
+      N_("Remove the selected item from the toolbar"), G_CALLBACK (remove_item_cb) },
+    { "RemoveToolbar", GTK_STOCK_REMOVE, N_("_Remove Toolbar"), NULL,
+      N_("Remove the selected toolbar"), G_CALLBACK (remove_toolbar_cb) },
   };
-  gtk_action_group_add_actions (etoolbar->priv->actions, actions, 3, etoolbar);
+  
+  g_object_ref (manager);
 
-  gtk_ui_manager_insert_action_group (manager, etoolbar->priv->actions, 0);
+  etoolbar->priv->actions = gtk_action_group_new ("ToolbarActions");
+  gtk_action_group_set_translation_domain (etoolbar->priv->actions, GETTEXT_PACKAGE);
+  gtk_action_group_add_actions (etoolbar->priv->actions, actions,
+		 		G_N_ELEMENTS (actions), etoolbar);
+
+  gtk_ui_manager_insert_action_group (manager, etoolbar->priv->actions, -1);
 
   etoolbar->priv->manager = g_object_ref (manager);
   etoolbar->priv->popup_id = gtk_ui_manager_add_ui_from_string (manager, 
