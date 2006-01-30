@@ -1,3 +1,11 @@
+2006-01-30  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-main.c: (open_urls), (call_dbus_proxy):
+
+	Idle unref the dbus proxy in case we didn't call any remote
+	methods; and ref the dbus proxy for each call + one idle unref
+	for each URL remoted.
+
 2006-01-30  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* src/bookmarks/ephy-bookmark-properties.c: (update_warning),

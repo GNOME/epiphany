@@ -370,11 +370,8 @@ open_urls (DBusGProxy *proxy,
 	   guint32 user_time,
 	   GError **error)
 {
-	EphyShell *shell;
 	const char *options = "new-window";
 	int i;
-	
-	shell = ephy_shell_get_default ();
 
 	if (open_in_new_window)
 	{
@@ -399,17 +396,21 @@ open_urls (DBusGProxy *proxy,
 			char *path;
 
 			path = remaining_arguments[i];
-			//path = path_from_command_line_arg (args[i]);
+			/* path = path_from_command_line_arg (args[i]); */
+
+			g_object_ref (proxy);
 
 			org_gnome_Epiphany_load_url_async
 				(proxy, path, options, user_time,
 				 unref_proxy_reply_cb, NULL /* FIXME */);
 
-			//g_free (path);
+			/* g_free (path); */
 		}
 
 		g_strfreev (remaining_arguments);
 		remaining_arguments = NULL;
+
+		ephy_object_idle_unref (proxy);
 	}
 
 	return TRUE;
@@ -447,6 +448,10 @@ call_dbus_proxy (DBusGProxy *proxy,
 			 user_time) == FALSE))
 		{
 			retval = open_urls (proxy, user_time, error);
+		}
+		else
+		{
+			ephy_object_idle_unref (proxy);
 		}
 	}
 
