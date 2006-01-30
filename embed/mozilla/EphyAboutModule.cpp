@@ -254,7 +254,6 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		/* FIXME what about 127.0.0.* ? */
 		if (strcmp (host.get(), "localhost") == 0)
 		{
-			const char *not_started_msg = _("some service isn't started, or");
 			PRInt32 port;
 			aURI->GetPort (&port);
 
