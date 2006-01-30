@@ -87,7 +87,9 @@ update_warning (EphyBookmarkProperties *properties)
 	priv->duplicate_count = ephy_bookmarks_count_duplicates
 	  (priv->bookmarks, priv->bookmark);
 	
-	label = g_strdup_printf (_("%d _Similar"), priv->duplicate_count);
+        /* Translators: This string is used when counting bookmarks that
+         * are similar to each other */
+	label = g_strdup_printf (ngettext("%d _Similar", "%d _Similar", priv->duplicate_count), priv->duplicate_count);
 	gtk_button_set_label (GTK_BUTTON (priv->warning), label);
 	g_free (label);
 
@@ -523,7 +525,7 @@ ephy_bookmark_properties_constructor (GType type,
 	
 	priv->warning = gtk_button_new ();
 	gtk_button_set_use_underline (GTK_BUTTON (priv->warning), TRUE);
-	text = g_strdup_printf (_("%d _Similar"), 0);
+	text = g_strdup_printf (ngettext("%d _Similar", "%d _Similar", 0), 0);
 	gtk_button_set_label (GTK_BUTTON (priv->warning), text);
 	g_free (text);
 	widget = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_BUTTON);
