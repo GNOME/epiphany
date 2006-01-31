@@ -66,7 +66,7 @@ static gboolean private_instance = FALSE;
 static char *session_filename = NULL;
 static char *bookmark_url = NULL;
 static char *bookmarks_file = NULL;
-static char **remaining_arguments = NULL;
+static char **extra_arguments = NULL;
 
 static const GOptionEntry option_entries[] =
 {
@@ -84,7 +84,7 @@ static const GOptionEntry option_entries[] =
 	  N_("Add a bookmark"), N_("URL") },
 	{ "private-instance", 0, 0, G_OPTION_ARG_NONE, &private_instance,
 	  N_("Start a private instance"), NULL },
-	{ G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_STRING_ARRAY, &remaining_arguments,
+	{ G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_STRING_ARRAY, &extra_arguments,
 	  "", "" },
 	{ NULL }
 };
@@ -354,7 +354,7 @@ unref_proxy_reply_cb (DBusGProxy *proxy,
 	if (error != NULL)
 	{
 		g_warning ("An error occured while calling remote method: %s", error->message);
-		g_error_free (error);
+		g_error_free (error);// FIXME???
 	}
 
 	g_object_unref (proxy);
@@ -370,48 +370,33 @@ open_urls (DBusGProxy *proxy,
 	   guint32 user_time,
 	   GError **error)
 {
-	const char *options = "new-window";
-	int i;
+	static const char *empty_arguments[] = { "", NULL };
+	GString *options;
+
+	options = g_string_sized_new (64);
 
 	if (open_in_new_window)
 	{
-		options = "new-window";
+		g_string_append (options, "new-window,");
 	}
-	else if (open_in_new_tab)
+	if (open_in_new_tab)
 	{
-		options = "new-tab";
+		g_string_append (options, "new-tab,");
 	}
 
-	if (remaining_arguments == NULL)
+	org_gnome_Epiphany_load_uris_async
+		(proxy,
+		 extra_arguments ? (const char**) extra_arguments : (const char**)empty_arguments,
+		 options->str, user_time,
+		 unref_proxy_reply_cb, NULL);
+	
+	if (extra_arguments)
 	{
-		/* Homepage or resume */
-		org_gnome_Epiphany_load_url_async
-			(proxy, "", options, user_time,
-			 unref_proxy_reply_cb, NULL /* FIXME! */);
+		g_strfreev (extra_arguments);
+		extra_arguments = NULL;
 	}
-	else
-	{
-		for (i = 0; remaining_arguments[i] != NULL; ++i)
-		{
-			char *path;
 
-			path = remaining_arguments[i];
-			/* path = path_from_command_line_arg (args[i]); */
-
-			g_object_ref (proxy);
-
-			org_gnome_Epiphany_load_url_async
-				(proxy, path, options, user_time,
-				 unref_proxy_reply_cb, NULL /* FIXME */);
-
-			/* g_free (path); */
-		}
-
-		g_strfreev (remaining_arguments);
-		remaining_arguments = NULL;
-
-		ephy_object_idle_unref (proxy);
-	}
+	g_string_free (options, TRUE);
 
 	return TRUE;
 }

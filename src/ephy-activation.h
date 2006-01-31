@@ -26,8 +26,8 @@
 G_BEGIN_DECLS
 
 /* activation handlers */
-gboolean ephy_activation_load_url		(EphyDbus *ephy_dbus,
-						 char *url,
+gboolean ephy_activation_load_uris		(EphyDbus *ephy_dbus,
+						 char **uris,
 						 char *options,
 						 guint startup_id,
 						 GError **error);

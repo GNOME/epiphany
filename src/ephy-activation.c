@@ -32,25 +32,33 @@
 #include <string.h>
 
 gboolean
-ephy_activation_load_url (EphyDbus *ephy_dbus,
-			  char *url,
-			  char *options,
-			  guint startup_id,
-			  GError **error)
+ephy_activation_load_uris (EphyDbus *ephy_dbus,
+			   char **uris,
+			   char *options,
+			   guint startup_id,
+			   GError **error)
 {
+	EphyShell *shell;
+	EphySession *session;
 	EphyNewTabFlags flags = 0;
 	EphyWindow *window;
-	EphySession *session;
+	EphyTab *tab;
+	static char *empty_urls[] = { "", NULL };
 	guint32 user_time = (guint32) startup_id;
+	guint i;
 
-	g_return_val_if_fail (url != NULL && options != NULL, TRUE);
+	g_return_val_if_fail (uris != NULL && options != NULL, TRUE);
 
-	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
-	g_return_val_if_fail (session != NULL, TRUE);
+	shell = ephy_shell_get_default ();
+
+	g_object_ref (shell);
+
+	session = EPHY_SESSION (ephy_shell_get_session (shell));
+	g_assert (session != NULL);
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL))
 	{
-		url = "";
+		uris = empty_urls;
 	}
 
 	window = ephy_session_get_active_window (session);
@@ -65,15 +73,6 @@ ephy_activation_load_url (EphyDbus *ephy_dbus,
 	}
 #endif
 
-	if (url[0] == '\0')
-	{
-		flags |= EPHY_NEW_TAB_HOME_PAGE;
-	}
-	else
-	{
-		flags |= EPHY_NEW_TAB_OPEN_PAGE;
-	}
-
 	if (strstr (options, "new-window") != NULL)
 	{
 		window = NULL;
@@ -85,8 +84,32 @@ ephy_activation_load_url (EphyDbus *ephy_dbus,
 			 EPHY_NEW_TAB_JUMP;
 	}
 
-	ephy_shell_new_tab_full (ephy_shell, window, NULL, url, flags,
-				 EPHY_EMBED_CHROME_ALL, FALSE, user_time);
+	for (i = 0; uris[i] != NULL; ++i)
+	{
+		const char *url = uris[i];
+		EphyNewTabFlags page_flags;
+
+		if (url[0] == '\0')
+		{
+			page_flags = EPHY_NEW_TAB_HOME_PAGE;
+		}
+		else
+		{
+			page_flags = EPHY_NEW_TAB_OPEN_PAGE;
+		}
+
+		tab = ephy_shell_new_tab_full (shell,window,
+					       NULL, url,
+					       flags | page_flags,
+					       EPHY_EMBED_CHROME_ALL,
+					       FALSE, user_time);
+
+		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab)));
+	}
+
+	g_object_unref (shell);
+
+	/* FIXME: do we have to g_strfreev (uris) ? */
 
 	return TRUE;
 }
