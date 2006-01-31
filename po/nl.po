@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-29 17:13+0100\n"
-"PO-Revision-Date: 2006-01-29 17:17+0100\n"
+"POT-Creation-Date: 2006-01-31 23:22+0100\n"
+"PO-Revision-Date: 2006-01-31 23:32+0100\n"
 "Last-Translator: Reinout van Schouwen <reinout@cs.vu.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: ../data/epiphany-lockdown.schemas.in.h:1
 msgid ""
-"A list of protocols to be considered safe in addition to the default, when "
+"A list of protocols to be considered safev in addition to the default, when "
 "disable_unsafe_protocols is enabled."
 msgstr ""
 "Een lijst van protocollen die, naast de standaardprotocollen, als veilig "
@@ -162,8 +162,8 @@ msgstr "Epiphany webbrowser"
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:534
-#: ../src/ephy-main.c:583 ../src/ephy-main.c:602
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:524
+#: ../src/ephy-main.c:573 ../src/ephy-main.c:592
 msgid "Web Browser"
 msgstr "Webbrowser"
 
@@ -738,7 +738,7 @@ msgstr "Kies een t_aal:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:13
-#: ../lib/widgets/ephy-location-entry.c:580 ../src/ephy-history-window.c:261
+#: ../lib/widgets/ephy-location-entry.c:582 ../src/ephy-history-window.c:261
 msgid "Cl_ear"
 msgstr "_Wissen"
 
@@ -952,7 +952,7 @@ msgstr ""
 # src/prefs_callbacks.c:237
 # src/prefs_callbacks.c:407
 #: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#: ../src/ephy-window.c:1467
+#: ../src/ephy-window.c:1468
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -1635,11 +1635,44 @@ msgstr "‘%s’ heeft de verbinding geweigerd"
 msgid "“%s” refused the connection."
 msgstr "‘%s’ heeft de verbinding geweigerd."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:253
+#: ../embed/mozilla/EphyAboutModule.cpp:260
+msgid "Likely causes of the problem are"
+msgstr "Waarschijnlijke oorzaken van het probleem zijn"
+
 #: ../embed/mozilla/EphyAboutModule.cpp:270
-#: ../embed/mozilla/EphyAboutModule.cpp:289
-#: ../embed/mozilla/EphyAboutModule.cpp:346
-#: ../embed/mozilla/EphyAboutModule.cpp:377
+#, c-format
+msgid ""
+"<ul><li>the service %s isn't started.</li>Try to start it using the Services "
+"Configuration Tool in Desktop > System Settings > Server Settings > "
+"Services, or</ul><ul><li>the port number %d is wrong.</li></ul>"
+msgstr ""
+"<ul><li>de %s-dienst is niet gestart.</li>Probeer hem te starten met het "
+"dienstenconfiguratiegereedschap onder Werkplek > Voorkeuren > "
+"Serverinstellingen > Diensten, of</ul><ul><li>het poortnummer %d is onjuist."
+"</li></ul>"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:281
+#, c-format
+msgid ""
+"<ul><li>some service isn't started, or</li><li>the port number %d is wrong.</"
+"li></ul>"
+msgstr ""
+"<ul><li>een bepaalde dienst is niet gestart, of</li><li>het poortnummer "
+"%d is onjuist.</li></ul>"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:290
+msgid ""
+"<ul><li>some service isn't started, or</li><li>you got the port number wrong."
+"</li></ul>"
+msgstr ""
+"<ul><li>een bepaalde dienst is niet gestart, of</li><li>u hebt zich vergist "
+"in het poortnummer.</li></ul>"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:298
+#: ../embed/mozilla/EphyAboutModule.cpp:316
+#: ../embed/mozilla/EphyAboutModule.cpp:335
+#: ../embed/mozilla/EphyAboutModule.cpp:392
+#: ../embed/mozilla/EphyAboutModule.cpp:423
 msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
@@ -1647,133 +1680,133 @@ msgstr ""
 "De server heeft het druk of wellicht heeft u een probleem met uw "
 "netwerkverbinding. Probeer het later nog eens."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:255
-#: ../embed/mozilla/EphyAboutModule.cpp:272
-#: ../embed/mozilla/EphyAboutModule.cpp:291
-#: ../embed/mozilla/EphyAboutModule.cpp:313
-#: ../embed/mozilla/EphyAboutModule.cpp:348
-#: ../embed/mozilla/EphyAboutModule.cpp:379
+#: ../embed/mozilla/EphyAboutModule.cpp:300
+#: ../embed/mozilla/EphyAboutModule.cpp:318
+#: ../embed/mozilla/EphyAboutModule.cpp:337
+#: ../embed/mozilla/EphyAboutModule.cpp:359
+#: ../embed/mozilla/EphyAboutModule.cpp:394
+#: ../embed/mozilla/EphyAboutModule.cpp:425
 msgid "There may be an old version of the page you wanted:"
 msgstr "Er bestaat mogelijk een oude versie van de door u gewenste pagina:"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:264
+#: ../embed/mozilla/EphyAboutModule.cpp:310
 #, c-format
 msgid "“%s” Interrupted the Connection"
 msgstr "‘%s’ heeft de verbinding onderbroken"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:268
+#: ../embed/mozilla/EphyAboutModule.cpp:314
 #, c-format
 msgid "“%s” interrupted the connection."
 msgstr "‘%s’ heeft de verbinding onderbroken."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:281
+#: ../embed/mozilla/EphyAboutModule.cpp:327
 #, c-format
 msgid "“%s” is not Responding"
 msgstr "‘%s’ geeft geen antwoord"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:285
+#: ../embed/mozilla/EphyAboutModule.cpp:331
 #, c-format
 msgid "“%s” is not responding."
 msgstr "‘%s’ geeft geen antwoord."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:287
+#: ../embed/mozilla/EphyAboutModule.cpp:333
 msgid "The connection was lost because the server took too long to respond."
 msgstr ""
 "De verbinding is weggevallen omdat de server er te lang over deed om "
 "antwoord te geven."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:295
+#: ../embed/mozilla/EphyAboutModule.cpp:341
 msgid "Invalid Address"
 msgstr "Ongeldig adres"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:296
+#: ../embed/mozilla/EphyAboutModule.cpp:342
 msgid "Invalid address."
 msgstr "Ongeldig adres."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:297
+#: ../embed/mozilla/EphyAboutModule.cpp:343
 msgid "The address you entered is not valid."
 msgstr "Het door u ingegeven adres is niet geldig."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:306
+#: ../embed/mozilla/EphyAboutModule.cpp:352
 #, c-format
 msgid "“%s” Redirected Too Many Times"
 msgstr "‘%s’ heeft te vaak doorverwezen"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:310
+#: ../embed/mozilla/EphyAboutModule.cpp:356
 #, c-format
 msgid "“%s” redirected too many times."
 msgstr "‘%s’ heeft te vaak doorverwezen."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:312
+#: ../embed/mozilla/EphyAboutModule.cpp:358
 msgid "The redirection has been stopped for security reasons."
 msgstr "De doorverwijzing is gestopt vanwege beveiligingsredenen."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:322
+#: ../embed/mozilla/EphyAboutModule.cpp:368
 #, c-format
 msgid "“%s” Requires an Encrypted Connection"
 msgstr "‘%s’ vereist een versleutelde verbinding"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:326
+#: ../embed/mozilla/EphyAboutModule.cpp:372
 #, c-format
 msgid "“%s” requires an encrypted connection."
 msgstr "‘%s’ vereist een versleutelde verbinding."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:328
+#: ../embed/mozilla/EphyAboutModule.cpp:374
 msgid ""
 "The document could not be loaded because encryption support is not installed."
 msgstr ""
 "Het document kan niet worden geladen omdat ondersteuning voor versleuteling "
 "niet is geïnstalleerd."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:338
+#: ../embed/mozilla/EphyAboutModule.cpp:384
 #, c-format
 msgid "“%s” Dropped the Connection"
 msgstr "‘%s’ heeft de verbinding verbroken"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:342
+#: ../embed/mozilla/EphyAboutModule.cpp:388
 #, c-format
 msgid "“%s” dropped the connection."
 msgstr "‘%s’ heeft de verbinding verbroken."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:344
-#: ../embed/mozilla/EphyAboutModule.cpp:375
+#: ../embed/mozilla/EphyAboutModule.cpp:390
+#: ../embed/mozilla/EphyAboutModule.cpp:421
 msgid "The server dropped the connection before any data could be read."
 msgstr ""
 "De server heeft de verbinding verbroken voordat er gegevens gelezen konden "
 "worden."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:355
+#: ../embed/mozilla/EphyAboutModule.cpp:401
 msgid "Cannot Load Document Whilst Working Offline"
 msgstr "Kan document niet laden in de offline-stand"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:356
+#: ../embed/mozilla/EphyAboutModule.cpp:402
 msgid "Cannot load document whilst working offline."
 msgstr "Kan document niet laden in de offline-stand."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:357
+#: ../embed/mozilla/EphyAboutModule.cpp:403
 msgid "To view this document, disable “Work Offline” and try again."
 msgstr ""
 "Zet ‘Offline werken’ uit en probeer het opnieuw om dit document te bekijken."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:369
+#: ../embed/mozilla/EphyAboutModule.cpp:415
 #, c-format
 msgid "“%s” Denied Access to Port “%d”"
 msgstr "‘%s’ heeft de toegang tot poort ‘%d’ geweigerd"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:373
+#: ../embed/mozilla/EphyAboutModule.cpp:419
 #, c-format
 msgid "“%s” denied access to port “%d”."
 msgstr "‘%s’ heeft de toegang tot poort ‘%d’ geweigerd."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:384
+#: ../embed/mozilla/EphyAboutModule.cpp:430
 msgid "Could not Connect to Proxy Server"
 msgstr "Kan niet verbinden met de proxy-server"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:385
+#: ../embed/mozilla/EphyAboutModule.cpp:431
 msgid "Could not connect to proxy server."
 msgstr "Kan niet verbinden met de proxy-server."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:386
+#: ../embed/mozilla/EphyAboutModule.cpp:432
 msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
@@ -1782,20 +1815,20 @@ msgstr ""
 "gemaakt kan worden, zou er een probleem kunnen zijn met uw proxyserver of uw "
 "netwerkverbinding."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:394
+#: ../embed/mozilla/EphyAboutModule.cpp:440
 msgid "Could not Display Content"
 msgstr "Kan de inhoud niet weergeven"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:395
+#: ../embed/mozilla/EphyAboutModule.cpp:441
 msgid "Could not display content."
 msgstr "Kan de inhoud niet weergeven."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:396
+#: ../embed/mozilla/EphyAboutModule.cpp:442
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr ""
 "De pagina gebruikt een niet-ondersteunde of foutieve vorm van compressie."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:486
+#: ../embed/mozilla/EphyAboutModule.cpp:532
 #, c-format
 msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
@@ -1806,13 +1839,13 @@ msgstr ""
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:613
+#: ../embed/mozilla/EphyAboutModule.cpp:659
 msgid "You may find an old version:|in the Google Cache"
 msgstr "in de Google-cache"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:621
+#: ../embed/mozilla/EphyAboutModule.cpp:667
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "in het Internet Archive"
 
@@ -2286,7 +2319,7 @@ msgid "Sets the end of the range of pages to be printed"
 msgstr "Stelt het einde in van het af te drukken paginabereik"
 
 # src/toolbar.c:286
-#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1287
+#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1288
 msgid "Print"
 msgstr "Afdrukken"
 
@@ -2307,30 +2340,36 @@ msgstr ""
 "GConf-fout:\n"
 "  %s"
 
+# src/context.c:1075
+#: ../lib/egg/egg-editable-toolbar.c:806
+#, c-format
+msgid "Hide “%s”"
+msgstr "‘%s’ verbergen"
+
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1060
+#: ../lib/egg/egg-editable-toolbar.c:1240
 msgid "_Move on Toolbar"
 msgstr "Ver_plaatsen op werkbalk"
 
-#: ../lib/egg/egg-editable-toolbar.c:1061
+#: ../lib/egg/egg-editable-toolbar.c:1241
 msgid "Move the selected item on the toolbar"
 msgstr "Geselecteerd item op de werkbalk verplaatsen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1062
+#: ../lib/egg/egg-editable-toolbar.c:1242
 msgid "_Remove from Toolbar"
 msgstr "Ver_wijderen van werkbalk"
 
-#: ../lib/egg/egg-editable-toolbar.c:1063
+#: ../lib/egg/egg-editable-toolbar.c:1243
 msgid "Remove the selected item from the toolbar"
 msgstr "Geselecteerd item van de werkbalk verwijderen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1064
+#: ../lib/egg/egg-editable-toolbar.c:1244
 msgid "_Remove Toolbar"
 msgstr "_Werkbalk verwijderen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1065
+#: ../lib/egg/egg-editable-toolbar.c:1245
 msgid "Remove the selected toolbar"
 msgstr "Geselecteerde werkbalk verwijderen"
 
@@ -2570,7 +2609,7 @@ msgstr "Geschiedenis"
 # src/menubar.c:571
 #: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:777
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1596
-#: ../src/bookmarks/ephy-topic-action.c:405 ../src/ephy-window.c:1293
+#: ../src/bookmarks/ephy-topic-action.c:405 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Bladwijzers"
 
@@ -2622,7 +2661,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:818
+#: ../lib/widgets/ephy-location-entry.c:820
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Sleep dit pictogram om een verwijzing naar deze pagina te maken"
 
@@ -2660,31 +2699,45 @@ msgstr "Deze plugin kan ‘.desktop’-bestanden met webverwijzingen afhandelen.
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:90
-#: ../src/bookmarks/ephy-bookmark-properties.c:523
+#. Translators: This string is used when counting bookmarks that
+#. * are similar to each other
+#: ../src/bookmarks/ephy-bookmark-properties.c:92
+#: ../src/bookmarks/ephy-bookmark-properties.c:563
 #, c-format
 msgid "%d _Similar"
-msgstr "%d Gelij_kende"
+msgid_plural "%d _Similar"
+msgstr[0] "%d Gelij_kende"
+msgstr[1] "%d Gelij_kende"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:239
-msgid "_Merge"
-msgstr "_Samenvoegen"
+#: ../src/bookmarks/ephy-bookmark-properties.c:246
+#, c-format
+msgid "_Unify With %d Identical Bookmark"
+msgid_plural "_Unify With %d Identical Bookmarks"
+msgstr[0] "Samen_voegen met %d identieke bladwijzer"
+msgstr[1] "Samen_voegen met %d identieke bladwijzers"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:339
+# src/menubar.c:63
+#: ../src/bookmarks/ephy-bookmark-properties.c:266
+#: ../src/bookmarks/ephy-bookmark-properties.c:288
+#, c-format
+msgid "Show “%s”"
+msgstr "‘%s’ tonen"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:379
 #, c-format
 msgid "“%s” Properties"
 msgstr "‘%s’-eigenschappen"
 
 # ui/epiphany.glade.h:121
-#: ../src/bookmarks/ephy-bookmark-properties.c:463
+#: ../src/bookmarks/ephy-bookmark-properties.c:503
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:478
+#: ../src/bookmarks/ephy-bookmark-properties.c:518
 msgid "A_ddress:"
 msgstr "A_dres:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:488
+#: ../src/bookmarks/ephy-bookmark-properties.c:528
 msgid "T_opics:"
 msgstr "_Onderwerpen:"
 
@@ -2827,7 +2880,7 @@ msgstr "Bladwijzers exporteren naar een bestand"
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
 #: ../src/bookmarks/ephy-bookmarks-editor.c:205
-#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:152
+#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:153
 msgid "_Close"
 msgstr "Sl_uiten"
 
@@ -2842,13 +2895,13 @@ msgstr "Bladwijzervenster sluiten"
 # src/window_callbacks.c:2880
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:210
-#: ../src/ephy-history-window.c:187 ../src/ephy-window.c:164
+#: ../src/ephy-history-window.c:187 ../src/ephy-window.c:165
 msgid "Cu_t"
 msgstr "K_nippen"
 
 # src/menubar.c:37
 #: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:165
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:166
 msgid "Cut the selection"
 msgstr "Selectie knippen"
 
@@ -2858,13 +2911,13 @@ msgstr "Selectie knippen"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:213
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1233
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:168
 msgid "_Copy"
 msgstr "_Kopiëren"
 
 # src/menubar.c:38
 #: ../src/bookmarks/ephy-bookmarks-editor.c:214
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:168
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:169
 msgid "Copy the selection"
 msgstr "Selectie kopiëren"
 
@@ -2872,7 +2925,7 @@ msgstr "Selectie kopiëren"
 # src/bookmarks_editor.c:1169
 # src/menubar.c:39
 #: ../src/bookmarks/ephy-bookmarks-editor.c:216
-#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:170
+#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:171
 msgid "_Paste"
 msgstr "_Plakken"
 
@@ -2883,7 +2936,7 @@ msgid "Paste the clipboard"
 msgstr "Plakken vanuit klembord"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:219
-#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:173
+#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:174
 msgid "Select _All"
 msgstr "_Alles selecteren"
 
@@ -2894,7 +2947,7 @@ msgstr "Alle bladwijzers of tekst selecteren"
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:224
-#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:264
+#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:265
 msgid "_Contents"
 msgstr "_Inhoud"
 
@@ -2906,12 +2959,12 @@ msgstr "Hulp voor bladwijzers weergeven"
 
 # src/menubar.c:43
 #: ../src/bookmarks/ephy-bookmarks-editor.c:227
-#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:267
+#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:268
 msgid "_About"
 msgstr "In_fo"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:228
-#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:268
+#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:269
 msgid "Display credits for the web browser creators"
 msgstr "Namen van de webbrowser-auteurs weergeven"
 
@@ -3497,11 +3550,11 @@ msgstr "Privé-instantie starten"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-main.c:469
+#: ../src/ephy-main.c:459
 msgid "Could not start GNOME Web Browser"
 msgstr "Kon GNOME-webbrowser niet opstarten"
 
-#: ../src/ephy-main.c:472
+#: ../src/ephy-main.c:462
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -3512,13 +3565,13 @@ msgstr ""
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-main.c:512 ../src/ephy-main.c:514 ../src/window-commands.c:751
+#: ../src/ephy-main.c:502 ../src/ephy-main.c:504 ../src/window-commands.c:752
 msgid "GNOME Web Browser"
 msgstr "GNOME-webbrowser"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-main.c:515
+#: ../src/ephy-main.c:505
 msgid "GNOME Web Browser options"
 msgstr "Opties voor GNOME-webbrowser"
 
@@ -3587,7 +3640,7 @@ msgid "In keyboard selection mode, press F7 to exit"
 msgstr "In toetsenbordselectiestand drukt u op F7 om deze te verlaten"
 
 # ui/preferences.glade.h:170
-#: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2264 ../src/ephy-tab.c:2299
+#: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2266 ../src/ephy-tab.c:2301
 msgid "Blank page"
 msgstr "Blanco pagina"
 
@@ -3754,284 +3807,286 @@ msgstr "E_xtra"
 msgid "_Tabs"
 msgstr "_Tabbladen"
 
+# src/menubar.c:150
+#: ../src/ephy-window.c:123
+msgid "_Toolbars"
+msgstr "_Werkbalken"
+
 # src/context.c:60
 #. File menu
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:129
 msgid "_New Window"
 msgstr "_Nieuw venster"
 
 # src/context.c:60
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:130
 msgid "Open a new window"
 msgstr "Nieuw venster openen"
 
 # src/menubar.c:54
-#: ../src/ephy-window.c:131
+#: ../src/ephy-window.c:132
 msgid "New _Tab"
 msgstr "Nieuw _tabblad"
 
 # src/menubar.c:54
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:133
 msgid "Open a new tab"
 msgstr "Nieuw tabblad openen"
 
 # src/bookmarks_editor.c:942
 # src/menubar.c:34
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:135
 msgid "_Open..."
 msgstr "_Openen..."
 
 # src/menubar.c:34
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:136
 msgid "Open a file"
 msgstr "Bestand openen"
 
 # src/menubar.c:63
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:138
 msgid "Save _As..."
 msgstr "Opslaan _als..."
 
 # src/menubar.c:64
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:139
 msgid "Save the current page"
 msgstr "Huidige pagina opslaan"
 
 # src/menubar.c:73
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:141
 msgid "Print Set_up..."
 msgstr "Afdrukin_stellingen..."
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:142
 msgid "Setup the page settings for printing"
 msgstr "De pagina instellen voor afdrukken"
 
-#: ../src/ephy-window.c:143
+#: ../src/ephy-window.c:144
 msgid "Print Pre_view"
 msgstr "Afdruk_voorbeeld"
 
-#: ../src/ephy-window.c:144
+#: ../src/ephy-window.c:145
 msgid "Print preview"
 msgstr "Afdrukvoorbeeld"
 
 # src/menubar.c:73
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:147
 msgid "_Print..."
 msgstr "Af_drukken..."
 
 # src/menubar.c:73
-#: ../src/ephy-window.c:147
+#: ../src/ephy-window.c:148
 msgid "Print the current page"
 msgstr "Huidige pagina afdrukken"
 
 # src/menubar.c:68
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:150
 msgid "S_end Link by Email..."
 msgstr "Verwijzing ve_rsturen per e-mail..."
 
 # src/toolbar.c:131
-#: ../src/ephy-window.c:150
+#: ../src/ephy-window.c:151
 msgid "Send a link of the current page"
 msgstr "Verwijzing naar de huidige pagina versturen"
 
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
-#: ../src/ephy-window.c:153
+#: ../src/ephy-window.c:154
 msgid "Close this tab"
 msgstr "Dit tabblad sluiten"
 
 # src/mozilla_i18n.c:37
 # ui/preferences.glade.h:202
 #. Edit menu
-#: ../src/ephy-window.c:158
+#: ../src/ephy-window.c:159
 msgid "_Undo"
 msgstr "_Ongedaan maken"
 
 # ui/epiphany.glade.h:18
-#: ../src/ephy-window.c:159
+#: ../src/ephy-window.c:160
 msgid "Undo the last action"
 msgstr "Laatste bewerking ongedaan maken"
 
-#: ../src/ephy-window.c:161
+#: ../src/ephy-window.c:162
 msgid "Re_do"
 msgstr "Op_nieuw"
 
-#: ../src/ephy-window.c:162
+#: ../src/ephy-window.c:163
 msgid "Redo the last undone action"
 msgstr "De laatst ongedaan gemaakte actie weer opnieuw uitvoeren"
 
 # src/menubar.c:39
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:172
 msgid "Paste clipboard"
 msgstr "Plakken vanuit klembord"
 
 # src/window.c:985
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:175
 msgid "Select the entire page"
 msgstr "De hele pagina selecteren"
 
 # src/menubar.c:112
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:177
 msgid "_Find..."
 msgstr "_Zoeken..."
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:178
 msgid "Find a word or phrase in the page"
 msgstr "Zoeken naar een woord of zin in de pagina"
 
 # src/menubar.c:117
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:180
 msgid "Find Ne_xt"
 msgstr "V_olgende zoeken"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:181
 msgid "Find next occurrence of the word or phrase"
 msgstr "Volgende overeenkomende tekenreeks zoeken"
 
 # src/menubar.c:208
-#: ../src/ephy-window.c:182
+#: ../src/ephy-window.c:183
 msgid "Find Pre_vious"
 msgstr "Vo_rige zoeken"
 
-#: ../src/ephy-window.c:183
+#: ../src/ephy-window.c:184
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Vorige overeenkomende tekenreeks zoeken"
 
 # src/persistent_data_manager.c:138
 # ui/epiphany.glade.h:94
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:186
 msgid "P_ersonal Data"
 msgstr "P_ersoonlijke informatie"
 
-#: ../src/ephy-window.c:186
+#: ../src/ephy-window.c:187
 msgid "View and remove cookies and passwords"
 msgstr "Cookies en wachtwoorden bekijken en verwijderen"
 
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:190
 msgid "Cert_ificates"
 msgstr "_Certificaten"
 
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:191
 msgid "Manage Certificates"
 msgstr "Certificaten beheren"
 
-# src/menubar.c:150
-#: ../src/ephy-window.c:193
-msgid "T_oolbars"
-msgstr "_Werkbalken"
-
-#: ../src/ephy-window.c:194
-msgid "Customize toolbars"
-msgstr "Werkbalken bewerken"
-
 # ui/preferences.glade.h:142
-#: ../src/ephy-window.c:196
+#: ../src/ephy-window.c:194
 msgid "P_references"
 msgstr "_Voorkeuren"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-window.c:197
+#: ../src/ephy-window.c:195
 msgid "Configure the web browser"
 msgstr "De webbrowser instellen"
 
-# src/menubar.c:477
 #. View menu
-#: ../src/ephy-window.c:202 ../src/ephy-window.c:205
+#: ../src/ephy-window.c:200
+msgid "_Customize Toolbars..."
+msgstr "Werkbalken _bewerken..."
+
+#: ../src/ephy-window.c:201
+msgid "Customize toolbars"
+msgstr "Werkbalken bewerken"
+
+# src/menubar.c:477
+#: ../src/ephy-window.c:203 ../src/ephy-window.c:206
 msgid "_Stop"
 msgstr "_Stoppen"
 
 # src/toolbar.c:157
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:204
 msgid "Stop current data transfer"
 msgstr "Stop de huidige dataoverdracht"
 
 # src/menubar.c:468
 # ui/preferences.glade.h:262
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:208
 msgid "_Reload"
 msgstr "_Herladen"
 
 # src/toolbar.c:131
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:209
 msgid "Display the latest content of the current page"
 msgstr "De nieuwste inhoud van de huidige pagina weergeven"
 
-# src/menubar.c:127
-#: ../src/ephy-window.c:210
-msgid "Zoom _In"
-msgstr "Inzoo_men"
-
 #: ../src/ephy-window.c:211
+msgid "_Larger Text"
+msgstr "Grotere _tekst"
+
+#: ../src/ephy-window.c:212
 msgid "Increase the text size"
 msgstr "Tekst vergroten"
 
-# src/menubar.c:136
-#: ../src/ephy-window.c:213
-msgid "Zoom _Out"
-msgstr "_Uitzoomen"
-
 #: ../src/ephy-window.c:214
+msgid "S_maller Text"
+msgstr "_Kleinere tekst"
+
+#: ../src/ephy-window.c:215
 msgid "Decrease the text size"
 msgstr "Tekst verkleinen"
 
 # ui/epiphany.glade.h:90
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:217
 msgid "_Normal Size"
 msgstr "_Normale grootte"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:218
 msgid "Use the normal text size"
 msgstr "Standaard tekstgrootte"
 
 # src/prefs.c:385
 # ui/epiphany.glade.h:36
-#: ../src/ephy-window.c:219
+#: ../src/ephy-window.c:220
 msgid "Text _Encoding"
 msgstr "Tekst_codering"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:221
 msgid "Change the text encoding"
 msgstr "Tekstcodering aanpassen"
 
 # src/menubar.c:187
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:223
 msgid "_Page Source"
 msgstr "B_ron weergeven"
 
-#: ../src/ephy-window.c:223
+#: ../src/ephy-window.c:224
 msgid "View the source code of the page"
 msgstr "De broncode van de pagina bekijken"
 
 # src/menubar.c:571
 #. Bookmarks menu
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:229
 msgid "_Add Bookmark..."
 msgstr "Bladwijzer _toevoegen..."
 
 # src/menubar.c:433
-#: ../src/ephy-window.c:229 ../src/ephy-window.c:303
+#: ../src/ephy-window.c:230 ../src/ephy-window.c:304
 msgid "Add a bookmark for the current page"
 msgstr "Bladwijzer toevoegen voor de huidige pagina"
 
 # src/menubar.c:571
-#: ../src/ephy-window.c:231
+#: ../src/ephy-window.c:232
 msgid "_Edit Bookmarks"
 msgstr "Bladwijzers be_werken"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:233
 msgid "Open the bookmarks window"
 msgstr "Bladwijzervenster openen"
 
 # ui/epiphany.glade.h:85
 #. Go menu
-#: ../src/ephy-window.c:237
+#: ../src/ephy-window.c:238
 msgid "_Location..."
 msgstr "_Locatie..."
 
 # src/toolbar.c:170
-#: ../src/ephy-window.c:238
+#: ../src/ephy-window.c:239
 msgid "Go to a specified location"
 msgstr "Ga naar een bepaalde locatie"
 
@@ -4039,308 +4094,308 @@ msgstr "Ga naar een bepaalde locatie"
 # src/toolbar.c:273
 # ui/epiphany.glade.h:78
 # ui/preferences.glade.h:88
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:241
 msgid "H_istory"
 msgstr "_Geschiedenis"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-window.c:241
+#: ../src/ephy-window.c:242
 msgid "Open the history window"
 msgstr "Geschiedenisvenster openen"
 
 # src/menubar.c:208
 #. Tabs menu
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:247
 msgid "_Previous Tab"
 msgstr "_Vorig tabblad"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:248
 msgid "Activate previous tab"
 msgstr "Vorige tabblad activeren"
 
 # ui/preferences.glade.h:272
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:250
 msgid "_Next Tab"
 msgstr "V_olgend tabblad"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:251
 msgid "Activate next tab"
 msgstr "Volgende tabblad activeren"
 
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:253
 msgid "Move Tab _Left"
 msgstr "Tabblad naar _links verplaatsen"
 
 # src/menubar.c:73
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:254
 msgid "Move current tab to left"
 msgstr "Huidige tabblad naar links verplaatsen"
 
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:256
 msgid "Move Tab _Right"
 msgstr "Tabblad naar _rechts verplaatsen"
 
 # src/menubar.c:73
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:257
 msgid "Move current tab to right"
 msgstr "Huidige tabblad naar rechts verplaatsen"
 
 # ui/preferences.glade.h:272
-#: ../src/ephy-window.c:258
+#: ../src/ephy-window.c:259
 msgid "_Detach Tab"
 msgstr "Tabblad los_scheuren"
 
 # src/menubar.c:73
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:260
 msgid "Detach current tab"
 msgstr "Huidige tabblad losscheuren"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-window.c:265
+#: ../src/ephy-window.c:266
 msgid "Display web browser help"
 msgstr "Hulp voor webbrowser weergeven"
 
 #. File Menu
-#: ../src/ephy-window.c:276
+#: ../src/ephy-window.c:277
 msgid "_Work Offline"
 msgstr "Offline _werken"
 
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
-#: ../src/ephy-window.c:277
+#: ../src/ephy-window.c:278
 msgid "Switch to offline mode"
 msgstr "Naar offline stand schakelen"
 
 # src/menubar.c:150
 #. View Menu
-#: ../src/ephy-window.c:282
-msgid "_Toolbar"
-msgstr "_Werkbalk"
+#: ../src/ephy-window.c:283
+msgid "_Show Toolbars"
+msgstr "_Werkbalken tonen"
 
 # src/bookmarks_menus.c:525
 # ui/bookmarks.glade.h:47
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:284
 msgid "Show or hide toolbar"
 msgstr "Werkbalk weergeven/verbergen"
 
 # src/menubar.c:160
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:286
 msgid "St_atusbar"
 msgstr "St_atusbalk"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:287
 msgid "Show or hide statusbar"
 msgstr "Statusbalk weergeven/verbergen"
 
 # src/menubar.c:165
-#: ../src/ephy-window.c:288
+#: ../src/ephy-window.c:289
 msgid "_Fullscreen"
 msgstr "_Volledig scherm"
 
 # src/main.c:111
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:290
 msgid "Browse at full screen"
 msgstr "Surfen met het volledige scherm"
 
 # src/menubar.c:416
-#: ../src/ephy-window.c:291
+#: ../src/ephy-window.c:292
 msgid "Popup _Windows"
 msgstr "_Opduikvensters"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:293
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Ongevraagde opduikvensters van deze pagina tonen of verbergen"
 
 # ui/preferences.glade.h:7
-#: ../src/ephy-window.c:294
+#: ../src/ephy-window.c:295
 msgid "Selection Caret"
 msgstr "Selectie-tekstcursor"
 
 # src/menubar.c:571
 #. Document
-#: ../src/ephy-window.c:302
+#: ../src/ephy-window.c:303
 msgid "Add Boo_kmark..."
 msgstr "Bladwijzer _toevoegen..."
 
 #. Framed document
-#: ../src/ephy-window.c:308
+#: ../src/ephy-window.c:309
 msgid "Show Only _This Frame"
 msgstr "Alleen dit _frame tonen"
 
 # src/context.c:71
-#: ../src/ephy-window.c:309
+#: ../src/ephy-window.c:310
 msgid "Show only this frame in this window"
 msgstr "Alleen dit frame in dit venster tonen"
 
 # ui/epiphany.glade.h:91
 #. Links
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:315
 msgid "_Open Link"
 msgstr "Verwijzing _openen"
 
 # src/context.c:60
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:316
 msgid "Open link in this window"
 msgstr "Verwijzing openen in dit venster"
 
 # src/context.c:60
-#: ../src/ephy-window.c:317
+#: ../src/ephy-window.c:318
 msgid "Open Link in New _Window"
 msgstr "Verwijzing openen in _nieuw venster"
 
 # src/context.c:60
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:319
 msgid "Open link in a new window"
 msgstr "Verwijzing openen in nieuw venster"
 
 # src/context.c:61
-#: ../src/ephy-window.c:320
+#: ../src/ephy-window.c:321
 msgid "Open Link in New _Tab"
 msgstr "Verwijzing openen in een nieuw _tabblad"
 
 # src/context.c:61
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:322
 msgid "Open link in a new tab"
 msgstr "Verwijzing openen in een nieuw tabblad"
 
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:324
 msgid "_Download Link"
 msgstr "Verwijzing _downloaden"
 
 # src/menubar.c:63
-#: ../src/ephy-window.c:325
+#: ../src/ephy-window.c:326
 msgid "_Save Link As..."
 msgstr "Verwij_zing opslaan als..."
 
-#: ../src/ephy-window.c:326
+#: ../src/ephy-window.c:327
 msgid "Save link with a different name"
 msgstr "Verwijzing opslaan onder een andere naam"
 
 # src/context.c:64
 # src/history_callbacks.c:165
 # src/misc_callbacks.c:412
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:329
 msgid "_Bookmark Link..."
 msgstr "Bl_adwijzer maken van verwijzing..."
 
-#: ../src/ephy-window.c:330
+#: ../src/ephy-window.c:331
 msgid "_Copy Link Address"
 msgstr "Verwijzing _kopiëren"
 
 # src/menubar.c:68
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:337
 msgid "_Send Email..."
 msgstr "E-mail ve_rsturen..."
 
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:339
 msgid "_Copy Email Address"
 msgstr "E-mailadres _kopiëren"
 
 # src/context.c:1075
 #. Images
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:344
 msgid "Open _Image"
 msgstr "_Afbeelding openen"
 
 # src/context.c:67
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:346
 msgid "_Save Image As..."
 msgstr "Afbeelding _opslaan als..."
 
 # src/context.c:68
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:348
 msgid "_Use Image As Background"
 msgstr "Afbeelding _gebruiken als achtergrond"
 
-#: ../src/ephy-window.c:349
+#: ../src/ephy-window.c:350
 msgid "Copy I_mage Address"
 msgstr "Afbeeldingsadres _kopiëren"
 
-#: ../src/ephy-window.c:351
+#: ../src/ephy-window.c:352
 msgid "St_art Animation"
 msgstr "A_nimatie starten"
 
-#: ../src/ephy-window.c:353
+#: ../src/ephy-window.c:354
 msgid "St_op Animation"
 msgstr "Animatie st_oppen"
 
-#: ../src/ephy-window.c:707
+#: ../src/ephy-window.c:708
 msgid "There are unsubmitted changes to form elements"
 msgstr "Er zijn niet-verstuurde wijzigingen in delen van het formulier"
 
-#: ../src/ephy-window.c:711
+#: ../src/ephy-window.c:712
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Als u het document desondanks sluit, verliest u die informatie."
 
-#: ../src/ephy-window.c:715
+#: ../src/ephy-window.c:716
 msgid "Close _Document"
 msgstr "Do_cument sluiten"
 
 # src/bookmarks_editor.c:942
 # src/menubar.c:34
-#: ../src/ephy-window.c:1283 ../src/window-commands.c:278
+#: ../src/ephy-window.c:1284 ../src/window-commands.c:279
 msgid "Open"
 msgstr "Openen"
 
 # src/menubar.c:63
-#: ../src/ephy-window.c:1285 ../src/window-commands.c:304
+#: ../src/ephy-window.c:1286 ../src/window-commands.c:305
 msgid "Save As"
 msgstr "Opslaan als"
 
 # src/menubar.c:571
-#: ../src/ephy-window.c:1289
+#: ../src/ephy-window.c:1290
 msgid "Bookmark"
 msgstr "Bladwijzer"
 
 # src/toolbar.c:351
-#: ../src/ephy-window.c:1291
+#: ../src/ephy-window.c:1292
 msgid "Find"
 msgstr "Zoeken"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1304
+#: ../src/ephy-window.c:1305
 msgid "Larger"
 msgstr "Groter"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1307
+#: ../src/ephy-window.c:1308
 msgid "Smaller"
 msgstr "Kleiner"
 
-#: ../src/ephy-window.c:1470
+#: ../src/ephy-window.c:1471
 msgid "Insecure"
 msgstr "Onveilig"
 
 # src/mozilla/mozilla.cpp:996
 # src/persistent_data_manager.c:374
 # src/persistent_data_manager.c:609
-#: ../src/ephy-window.c:1475
+#: ../src/ephy-window.c:1476
 msgid "Broken"
 msgstr "Gebroken"
 
-#: ../src/ephy-window.c:1488
+#: ../src/ephy-window.c:1489
 msgid "Low"
 msgstr "Laag"
 
 # src/mozilla/mozilla.cpp:1982
-#: ../src/ephy-window.c:1495
+#: ../src/ephy-window.c:1496
 msgid "High"
 msgstr "Hoog"
 
-#: ../src/ephy-window.c:1505
+#: ../src/ephy-window.c:1506
 #, c-format
 msgid "Security level: %s"
 msgstr "Beveiligingsniveau: %s"
 
 # src/menubar.c:416
-#: ../src/ephy-window.c:1545
+#: ../src/ephy-window.c:1546
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
@@ -4348,40 +4403,40 @@ msgstr[0] "%d verborgen opduikvenster"
 msgstr[1] "%d verborgen opduikvensters"
 
 # src/context.c:1075
-#: ../src/ephy-window.c:1840
+#: ../src/ephy-window.c:1841
 #, c-format
 msgid "Open image “%s”"
 msgstr "Afbeelding ‘%s’ openen"
 
 # src/context.c:68
-#: ../src/ephy-window.c:1845
+#: ../src/ephy-window.c:1846
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Gebruiken als werkbladachtergrond ‘%s’"
 
 # src/context.c:67
-#: ../src/ephy-window.c:1850
+#: ../src/ephy-window.c:1851
 #, c-format
 msgid "Save image “%s”"
 msgstr "Afbeelding ‘%s’ opslaan"
 
-#: ../src/ephy-window.c:1855
+#: ../src/ephy-window.c:1856
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Afbeeldingsadres ‘%s’ kopiëren"
 
-#: ../src/ephy-window.c:1868
+#: ../src/ephy-window.c:1869
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "E-mail versturen naar adres ‘%s’"
 
-#: ../src/ephy-window.c:1874
+#: ../src/ephy-window.c:1875
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "E-mailadres ‘%s’ kopiëren"
 
 # src/menubar.c:63
-#: ../src/ephy-window.c:1886
+#: ../src/ephy-window.c:1887
 #, c-format
 msgid "Save link “%s”"
 msgstr "Verwijzing ‘%s’ opslaan"
@@ -4389,12 +4444,12 @@ msgstr "Verwijzing ‘%s’ opslaan"
 # src/context.c:64
 # src/history_callbacks.c:165
 # src/misc_callbacks.c:412
-#: ../src/ephy-window.c:1892
+#: ../src/ephy-window.c:1893
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Bladwijzer maken van verwijzing ‘%s’"
 
-#: ../src/ephy-window.c:1898
+#: ../src/ephy-window.c:1899
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Verwijzing-adres ‘%s’ kopiëren"
@@ -4573,57 +4628,57 @@ msgstr[1] "Systeemtalen (%s)"
 msgid "Select a Directory"
 msgstr "Kies een map"
 
-#: ../src/window-commands.c:709 ../src/window-commands.c:726
+#: ../src/window-commands.c:710 ../src/window-commands.c:727
 msgid "Contact us at:"
 msgstr "Wij zijn te bereiken op:"
 
-#: ../src/window-commands.c:712
+#: ../src/window-commands.c:713
 msgid "Contributors:"
 msgstr "Met bijdragen van:"
 
-#: ../src/window-commands.c:717
+#: ../src/window-commands.c:718
 msgid "Past developers:"
 msgstr "Ex-ontwikkelaars:"
 
-#: ../src/window-commands.c:727
+#: ../src/window-commands.c:728
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> of <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:732
+#: ../src/window-commands.c:733
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
 msgstr ""
-"De GNOME webbrowser is vrije software; U mag het herdistribueren en/of\n"
-"wijzigen onder de voorwaarden van de GNU General Public License als\n"
-"geplubiceerd door the Free Software Foundation; ofwel versie 2, als\n"
+"De GNOME webbrowser is vrije software; U mag het herdistribueren en/of "
+"wijzigen onder de voorwaarden van de GNU General Public License als "
+"gepubliceerd door the Free Software Foundation; ofwel versie 2, als "
 "ook (uw eigen optie) elke latere versie."
 
-#: ../src/window-commands.c:736
+#: ../src/window-commands.c:737
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 msgstr ""
-"Dit programma wordt gedistribueerd in de hoop dat het bruikbaar\n"
-"zal zijn, maar ZONDER ENIGE GARANTIE; zelfs zonder de impliciete \n"
-"garantie voor VERKOOPBAARHEID of GESCHIKTHEID VOOR EEN\n"
-"SPECIFIEK DOEL. Zie de GNU General Public License voor meer\n"
+"Dit programma wordt gedistribueerd in de hoop dat het bruikbaar "
+"zal zijn, maar ZONDER ENIGE GARANTIE; zelfs zonder de impliciete "
+"garantie voor VERKOOPBAARHEID of GESCHIKTHEID VOOR EEN "
+"SPECIFIEK DOEL. Zie de GNU General Public License voor meer "
 "details."
 
-#: ../src/window-commands.c:740
+#: ../src/window-commands.c:741
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
 msgstr ""
-"U zou een kopie ontvangen moeten hebben van de GNU General\n"
-"Public License bij Nautilus; indien dit niet het geval is,\n"
-"schrijf dan een brief naar de Free Software Foundation, Inc.,\n"
-" 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA"
+"U zou een kopie ontvangen moeten hebben van de GNU General "
+"Public License bij de GNOME webbrowser; indien dit niet het geval is, "
+"schrijf dan een brief naar de Free Software Foundation, Inc., "
+"59 Temple Place - Suite 330, Boston, MA 02111-1307, USA"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -4633,7 +4688,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:765
+#: ../src/window-commands.c:766
 msgid "translator-credits"
 msgstr ""
 "Vincent van Adrighem \n"
@@ -4645,9 +4700,24 @@ msgstr ""
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/window-commands.c:768
+#: ../src/window-commands.c:769
 msgid "GNOME Web Browser Website"
 msgstr "Webstek van de GNOME-webbrowser"
+
+#~ msgid "_Merge"
+#~ msgstr "_Samenvoegen"
+
+# src/menubar.c:150
+#~ msgid "T_oolbars"
+#~ msgstr "_Werkbalken"
+
+# src/menubar.c:127
+#~ msgid "Zoom _In"
+#~ msgstr "Inzoo_men"
+
+# src/menubar.c:136
+#~ msgid "Zoom _Out"
+#~ msgstr "_Uitzoomen"
 
 # src/bookmarks_menus.c:525
 # ui/bookmarks.glade.h:47
