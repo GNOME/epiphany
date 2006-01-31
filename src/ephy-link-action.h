@@ -66,11 +66,11 @@ struct _EphyLinkActionGroupClass
 	GtkActionGroupClass parent_class;
 };
 
-GType ephy_link_action_get_type (void);
+GType ephy_link_action_get_type	(void);
 
 GType ephy_link_action_group_get_type (void);
 
-EphyLinkActionGroup * ephy_link_action_group_new (char *name);
+EphyLinkActionGroup * ephy_link_action_group_new (const char *name);
 
 G_END_DECLS
 

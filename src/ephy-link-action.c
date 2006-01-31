@@ -32,7 +32,7 @@
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenutoolbutton.h>
 
-static GObjectClass *parent_class = NULL;
+static GObjectClass *parent_class;
 
 static gboolean
 proxy_button_press_event_cb (GtkButton *button,
@@ -236,8 +236,9 @@ ephy_link_action_group_get_type (void)
 }
 
 EphyLinkActionGroup *
-ephy_link_action_group_new (char * name)
+ephy_link_action_group_new (const char * name)
 {
-	return EPHY_LINK_ACTION_GROUP (g_object_new (EPHY_TYPE_LINK_ACTION_GROUP,
-						     "name", "BookmarkActions", NULL));
+	return g_object_new (EPHY_TYPE_LINK_ACTION_GROUP,
+			     "name", name,
+			     NULL);
 }
