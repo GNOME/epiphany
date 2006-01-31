@@ -160,6 +160,8 @@ void		  egg_toolbars_model_move_item      (EggToolbarsModel *model,
 						     int               position,
 						     int	       new_toolbar_position,
 						     int               new_position);
+void		  egg_toolbars_model_delete_item    (EggToolbarsModel *model,
+						     const char       *name);
 
 /* Functions for accessing the names of items. */
 int		  egg_toolbars_model_n_items	    (EggToolbarsModel *model,

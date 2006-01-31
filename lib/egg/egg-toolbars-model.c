@@ -761,6 +761,69 @@ egg_toolbars_model_move_item (EggToolbarsModel *model,
 		 new_toolbar_position, new_position);
 }
 
+void
+egg_toolbars_model_delete_item (EggToolbarsModel *model,
+				const char       *name)
+{
+  EggToolbarsItem *idata;
+  EggToolbarsToolbar *tdata;
+  GNode *toolbar, *item, *next;
+  int tpos, ipos;
+
+  g_return_if_fail (EGG_IS_TOOLBARS_MODEL (model));
+  
+  toolbar = g_node_first_child (model->priv->toolbars);
+  tpos = 0;
+  
+  while (toolbar != NULL)
+    {
+      item = g_node_first_child (toolbar);
+      ipos = 0;
+      
+      if (item == NULL)
+        {
+	  continue;
+        }
+      
+      while (item != NULL)
+        {
+	  next = g_node_next_sibling (item);
+	  idata = item->data;
+	  if (strcmp (idata->name, name) == 0)
+	    {
+	      item_node_free (item, model);
+	      g_signal_emit (G_OBJECT (model),
+			     signals[ITEM_REMOVED],
+			     0, tpos, ipos);
+	    }
+	  else
+	    {
+	      ipos++;
+	    }
+	  
+	  item = next;
+        }
+      
+      next = g_node_next_sibling (toolbar);
+      tdata = toolbar->data;
+      if (!(tdata->flags & EGG_TB_MODEL_NOT_REMOVABLE) &&
+	  g_node_first_child (toolbar) == NULL)
+        {
+	  toolbar_node_free (toolbar, model);
+
+	  g_signal_emit (G_OBJECT (model),
+			 signals[TOOLBAR_REMOVED],
+			 0, tpos);
+        }
+      else
+        {
+	  tpos++;
+        }
+      
+      toolbar = next;
+    }
+}
+
 int
 egg_toolbars_model_n_items (EggToolbarsModel *model,
 			    int               toolbar_position)
