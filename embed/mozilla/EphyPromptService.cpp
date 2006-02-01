@@ -756,7 +756,7 @@ EphyPromptService::PromptUsernameAndPassword (nsIDOMWindow *aParent,
 	NS_ENSURE_ARG_POINTER (aUsername);
 	NS_ENSURE_ARG_POINTER (aPassword);
 
-	Prompter prompt (GTK_STOCK_DIALOG_QUESTION, aParent, aDialogTitle, aText);
+	Prompter prompt (GTK_STOCK_DIALOG_AUTHENTICATION, aParent, aDialogTitle, aText);
 	prompt.AddStockButton (GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 	prompt.AddStockButton (GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
 	prompt.AddEntry (_("_User:"), *aUsername, PR_FALSE);
@@ -784,7 +784,7 @@ EphyPromptService::PromptPassword (nsIDOMWindow *aParent,
 	NS_ENSURE_ARG_POINTER (_retval);
 	NS_ENSURE_ARG_POINTER (aPassword);
 
-	Prompter prompt (GTK_STOCK_DIALOG_QUESTION, aParent, aDialogTitle, aText);
+	Prompter prompt (GTK_STOCK_DIALOG_AUTHENTICATION, aParent, aDialogTitle, aText);
 	prompt.AddStockButton (GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 	prompt.AddStockButton (GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
 	prompt.AddEntry (_("_Password:"), *aPassword, PR_TRUE);
