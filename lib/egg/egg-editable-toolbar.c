@@ -418,14 +418,28 @@ configure_item_cursor (GtkToolItem *item,
     }
 }
 
+
+static void
+configure_item_tooltip (GtkToolItem *item)
+{
+  GtkAction *action = g_object_get_data (G_OBJECT (item),
+					 "gtk-action");
+  
+  if (action != NULL)
+    {
+      g_object_notify (G_OBJECT (action), "tooltip");
+    }
+}
+
+
 static void
 connect_widget_signals (GtkWidget *proxy, EggEditableToolbar *etoolbar)
 {
   if (GTK_IS_CONTAINER (proxy))
     {
-       gtk_container_foreach (GTK_CONTAINER (proxy),
-                              (GtkCallback) connect_widget_signals,
-                              (gpointer) etoolbar);
+       gtk_container_forall (GTK_CONTAINER (proxy),
+			     (GtkCallback) connect_widget_signals,
+			     (gpointer) etoolbar);
     }
 
   if (GTK_IS_TOOL_ITEM (proxy))
@@ -1031,6 +1045,7 @@ item_added_cb (EggToolbarsModel   *model,
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, ipos);
   
   connect_widget_signals (GTK_WIDGET (item), etoolbar);
+  configure_item_tooltip (item);
   configure_item_cursor (item, etoolbar);
   configure_item_sensitivity (item, etoolbar);
   
@@ -1099,6 +1114,7 @@ egg_editable_toolbar_build (EggEditableToolbar *etoolbar)
 	      gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, l);
               
               connect_widget_signals (GTK_WIDGET (item), etoolbar);
+	      configure_item_tooltip (item);
               configure_item_sensitivity (item, etoolbar);
             }
           else
