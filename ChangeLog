@@ -1,3 +1,13 @@
+2006-02-03  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-dbus.c: (ephy_dbus_connect_to_session_bus),
+	(ephy_dbus_get_property), (ephy_dbus_set_property),
+	(ephy_dbus_class_init), (_ephy_dbus_startup):
+	* src/ephy-dbus.h:
+	* src/ephy-main.c: (main):
+
+	Only claim the DBUS name when not running as private instance.
+
 2006-02-02  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/Makefile.am:

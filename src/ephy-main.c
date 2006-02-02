@@ -578,7 +578,7 @@ main (int argc,
 
 	startup_error_quark = g_quark_from_static_string ("epiphany-startup-error");
 
-	if (!_ephy_dbus_startup (&error))
+	if (!_ephy_dbus_startup (!private_instance, &error))
 	{
 		_ephy_dbus_release ();
 
@@ -590,7 +590,8 @@ main (int argc,
 	/* If we're remoting, no need to start up any further services,
 	 * just forward the call.
 	 */
-	if (!_ephy_dbus_is_name_owner ())
+	if (!private_instance &&
+	    !_ephy_dbus_is_name_owner ())
 	{
 		/* Create DBUS proxy */
 		proxy = ephy_dbus_get_proxy (ephy_dbus_get_default (), EPHY_DBUS_SESSION);
@@ -627,7 +628,10 @@ main (int argc,
 
 	/* We're not remoting; start our services */
 
-	if (!ephy_file_helpers_init (NULL, FALSE, FALSE, &error))
+	if (!ephy_file_helpers_init (profile_directory,
+				     private_instance,
+				     !keep_profile_directory,
+				     &error))
 	{
 		_ephy_dbus_release ();
 

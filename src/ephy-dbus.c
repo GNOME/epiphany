@@ -57,6 +57,7 @@ struct _EphyDbusPrivate
 	guint session_reconnect_timeout_id;
 	guint system_reconnect_timeout_id;
 	guint is_session_service_owner : 1;
+	guint claim_name : 1;
 };
 
 enum
@@ -64,6 +65,12 @@ enum
 	CONNECTED,
 	DISCONNECTED,
 	LAST_SIGNAL
+};
+
+enum
+{
+	PROP_0,
+	PROP_CLAIM_NAME
 };
 
 static EphyDbus *ephy_dbus_instance;
@@ -248,7 +255,9 @@ ephy_dbus_connect_to_session_bus (EphyDbus *ephy_dbus,
 	dbus_connection_add_filter
 		(dbus_g_connection_get_connection (priv->session_bus),
 		 session_filter_func, ephy_dbus, NULL);
-	
+
+	if (priv->claim_name == FALSE) return TRUE;
+
 	dbus_g_object_type_install_info (EPHY_TYPE_DBUS,
 					 &dbus_glib_ephy_activation_object_info);
 
@@ -368,12 +377,41 @@ ephy_dbus_finalize (GObject *object)
 }
 
 static void
+ephy_dbus_get_property (GObject *object,
+			guint prop_id,
+		 	GValue *value,
+			GParamSpec *pspec)
+{
+	/* no readable properties */
+	g_return_if_reached ();
+}
+
+static void
+ephy_dbus_set_property (GObject *object,
+			guint prop_id,
+			const GValue *value,
+			GParamSpec *pspec)
+{
+	EphyDbus *dbus = EPHY_DBUS (object);
+	EphyDbusPrivate *priv = dbus->priv;
+
+	switch (prop_id)
+	{
+		case PROP_CLAIM_NAME:
+			priv->claim_name = g_value_get_boolean (value);
+			break;
+	}
+}
+
+static void
 ephy_dbus_class_init (EphyDbusClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
+	object_class->get_property = ephy_dbus_get_property;
+	object_class->set_property = ephy_dbus_set_property;
 	object_class->finalize = ephy_dbus_finalize;
 
 	signals[CONNECTED] =
@@ -397,6 +435,15 @@ ephy_dbus_class_init (EphyDbusClass *klass)
 			      G_TYPE_NONE,
 			      1,
 			      EPHY_TYPE_DBUS_BUS);
+
+	g_object_class_install_property
+		(object_class,
+		 PROP_CLAIM_NAME,
+		 g_param_spec_boolean ("claim-name",
+				       "claim-name",
+				       "claim-name",
+				       TRUE,
+				       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof(EphyDbusPrivate));
 }
@@ -494,13 +541,16 @@ ephy_dbus_get_proxy (EphyDbus *dbus,
 /* private API */
 
 gboolean
-_ephy_dbus_startup (GError **error)
+_ephy_dbus_startup (gboolean claim_name,
+		    GError **error)
 {
 	g_assert (ephy_dbus_instance == NULL);
 
 	ephy_dbus_error_quark = g_quark_from_static_string ("ephy-dbus-error");
 		
-	ephy_dbus_instance = g_object_new (EPHY_TYPE_DBUS, NULL);
+	ephy_dbus_instance = g_object_new (EPHY_TYPE_DBUS,
+					   "claim-name", claim_name,
+					   NULL);
 
 	/* We only connect to the session bus on startup*/
 	return ephy_dbus_connect_to_session_bus (ephy_dbus_instance, error);

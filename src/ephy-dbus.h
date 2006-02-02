@@ -80,7 +80,8 @@ DBusGProxy	*ephy_dbus_get_proxy	(EphyDbus *dbus,
 					 EphyDbusBus kind);
 
 /* private */
-gboolean       _ephy_dbus_startup	(GError **error);
+gboolean       _ephy_dbus_startup	(gboolean claim_name,
+					 GError **error);
 
 void	       _ephy_dbus_release	(void);
 
