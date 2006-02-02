@@ -1,6 +1,8 @@
 noinst_LTLIBRARIES = libephymozillaembed.la
 
 libephymozillaembed_la_SOURCES = 	\
+	AutoJSContextStack.cpp		\
+	AutoJSContextStack.h		\
 	ContentHandler.cpp		\
 	ContentHandler.h		\
 	EphyContentPolicy.cpp		\

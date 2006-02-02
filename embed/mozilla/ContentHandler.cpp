@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include "ContentHandler.h"
+#include "AutoJSContextStack.h"
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
@@ -164,6 +165,11 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	{
 		return BuildDownloadPath (defaultFile.get(), _retval);
 	}
+
+	nsresult rv;
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return rv;
 
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (aWindowContext);
 	GtkWidget *parentWindow = GTK_WIDGET (EphyUtils::FindGtkParent (parentDOMWindow));

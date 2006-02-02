@@ -47,6 +47,7 @@
 
 #include "GtkNSSSecurityWarningDialogs.h"
 #include "EphyUtils.h"
+#include "AutoJSContextStack.h"
 
 #include <nsCOMPtr.h>
 #include <nsIPrefBranch.h>
@@ -226,7 +227,11 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 		*_retval = PR_TRUE;
 		return;
 	}
-	
+
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv));
+
 	/* Didn't you know it, mozilla SUCKS!
 	 * the "aContext" interface requestor is made from a nsIDOMWindow,
 	 * but can only give out a nsIPrompt, from where there's no way to get

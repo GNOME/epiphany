@@ -1,3 +1,25 @@
+2006-02-02  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/AutoJSContextStack.cpp:
+	* embed/mozilla/AutoJSContextStack.h:
+
+	Helper class that pushes a null JS context on the stack,
+	and pops it in the destructor.
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/mozilla/GtkNSSKeyPairDialogs.cpp:
+	* embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:
+	* embed/mozilla/PrintingPromptService.cpp:
+
+	Push a null JS context on the stack when we run a recursive
+	mainloop. Fixes the epiphany equivalend of camino bug
+	https://bugzilla.mozilla.org/show_bug.cgi?id=179307.
+	Merged from HEAD.
+
 2005-10-03  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-state.c: (paned_sync_position_cb),

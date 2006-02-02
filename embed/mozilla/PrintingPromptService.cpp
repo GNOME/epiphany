@@ -23,13 +23,15 @@
 
 #include "config.h"
 
+#include "PrintingPromptService.h"
+#include "EphyUtils.h"
+#include "AutoJSContextStack.h"
+
 #include <gtk/gtkdialog.h>
 
 #include "print-dialog.h"
 #include "ephy-embed.h"
 #include "ephy-command-manager.h"
-#include "EphyUtils.h"
-#include "PrintingPromptService.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-debug.h"
@@ -60,6 +62,11 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 	{
 		return NS_ERROR_ABORT;
 	}
+
+	nsresult rv;
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return rv;
 
 	EphyEmbed *embed = EPHY_EMBED (EphyUtils::FindEmbed (parent));
 	NS_ENSURE_TRUE (embed, NS_ERROR_FAILURE);
@@ -107,7 +114,8 @@ NS_IMETHODIMP GPrintingPromptService::ShowProgress(nsIDOMWindow *parent, nsIWebB
 }
 
 /* void showPageSetup (in nsIDOMWindow parent, in nsIPrintSettings printSettings, in nsIObserver printObserver); */
-NS_IMETHODIMP GPrintingPromptService::ShowPageSetup(nsIDOMWindow *parent, nsIPrintSettings *printSettings, 
+NS_IMETHODIMP GPrintingPromptService::ShowPageSetup(nsIDOMWindow *parent,
+						    nsIPrintSettings *printSettings, 
 						    nsIObserver *printObserver)
 {
 	EphyDialog *dialog;
@@ -118,6 +126,10 @@ NS_IMETHODIMP GPrintingPromptService::ShowPageSetup(nsIDOMWindow *parent, nsIPri
 	{
 		return rv;
 	}
+
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return rv;
 
 	dialog = ephy_print_setup_dialog_new ();
 	ephy_dialog_set_modal (dialog, TRUE);
