@@ -418,3 +418,45 @@ fi
 AS_VAR_POPDEF([gecko_cv_have_CID])
 
 ])
+
+# ***************************************************************************
+# ***************************************************************************
+# ***************************************************************************
+
+# GECKO_XPIDL([ACTION-IF-FOUND],[ACTION-IF-NOT-FOUND])
+#
+# Checks for xpidl program and include directory
+#
+# Variables set:
+# XPIDL:        the xpidl program
+# XPIDL_IDLDIR: the xpidl include directory
+
+AC_DEFUN([GECKO_XPIDL],
+[AC_REQUIRE([GECKO_INIT])dnl
+
+_GECKO_LIBDIR="`$PKG_CONFIG --variable=libdir ${gecko_cv_gecko}-xpcom`"
+
+AC_PATH_PROG([XPIDL],[xpidl],[no],[$_GECKO_LIBDIR:$PATH])
+
+XPIDL_IDLDIR="`$PKG_CONFIG --variable=idldir ${gecko_cv_gecko}-xpcom`"
+
+# Older gecko's don't have this variable, see
+# https://bugzilla.mozilla.org/show_bug.cgi?id=240473
+
+if test -z "$XPIDL_IDLDIR" -o ! -f "$XPIDL_IDLDIR/nsISupports.idl"; then
+	XPIDL_IDLDIR="`echo $_GECKO_LIBDIR | sed -e s!lib!share/idl!`"
+fi
+
+# Some distributions (Gentoo) have it in unusual places
+
+if test -z "$XPIDL_IDLDIR" -o ! -f "$XPIDL_IDLDIR/nsISupports.idl"; then
+	XPIDL_IDLDIR="$_GECKO_INCLUDE_ROOT/idl"
+fi
+
+if test "$XPIDL" != "no" -a -n "$XPIDL_IDLDIR" -a -f "$XPIDL_IDLDIR/nsISupports.idl"; then
+	ifelse([$1],,[:],[$1])
+else
+	ifelse([$2],,[AC_MSG_FAILURE([XPIDL program or include directory not found])],[$2])
+fi
+
+])
