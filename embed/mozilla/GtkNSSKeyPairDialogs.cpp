@@ -40,6 +40,7 @@
 #include "config.h"
 
 #include "EphyUtils.h"
+#include "AutoJSContextStack.h"
 
 #include <nsIServiceManager.h>
 #include <nsIInterfaceRequestor.h>
@@ -197,6 +198,10 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 	GtkWidget *dialog, *progress, *label, *vbox;
 	gint timeout_id;
 
+	nsresult rv;
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return rv;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
