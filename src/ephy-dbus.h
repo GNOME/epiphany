@@ -30,11 +30,6 @@
 
 G_BEGIN_DECLS
 
-/* Epiphany's DBUS ids */
-#define DBUS_EPHY_SERVICE		"org.gnome.Epiphany"
-#define DBUS_EPHY_PATH			"/org/gnome/Epiphany"
-#define DBUS_EPHY_INTERFACE		"org.gnome.Epiphany"
-
 #define EPHY_TYPE_DBUS		(ephy_dbus_get_type ())
 #define EPHY_DBUS(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_DBUS, EphyDbus))
 #define EPHY_DBUS_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_DBUS, EphyDbusClass))

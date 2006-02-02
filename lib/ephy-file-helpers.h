@@ -43,7 +43,9 @@ typedef struct _EphyFileMonitor EphyFileMonitor;
 typedef void (* EphyFileMonitorFunc) (EphyFileMonitor*, const char*, GnomeVFSMonitorEventType, gpointer);
 typedef gboolean (* EphyFileMonitorDelayFunc) (EphyFileMonitor*, gpointer);
 
-gboolean    ephy_file_helpers_init       (gboolean private_profile,
+gboolean    ephy_file_helpers_init       (const char *profile_dir,
+					  gboolean private_profile,
+					  gboolean delete_profile_on_exit,
 					  GError **error);
 
 const char *ephy_file                    (const char *filename);

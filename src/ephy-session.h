@@ -39,8 +39,19 @@ G_BEGIN_DECLS
 #define EPHY_SESSION_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SESSION, EphySessionClass))
 
 typedef struct _EphySession		EphySession;
-typedef struct _EphySessionClass	EphySessionClass;
 typedef struct _EphySessionPrivate	EphySessionPrivate;
+typedef struct _EphySessionClass	EphySessionClass;
+
+typedef enum
+{
+	EPHY_SESSION_CMD_RESUME_SESSION,
+	EPHY_SESSION_CMD_LOAD_SESSION,
+	EPHY_SESSION_CMD_OPEN_BOOKMARKS_EDITOR,
+	EPHY_SESSION_CMD_OPEN_URIS,
+	EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
+	EPHY_SESSION_CMD_LAST
+	
+} EphySessionCommand;
 
 struct _EphySession
 {
@@ -66,9 +77,6 @@ gboolean	 ephy_session_load		(EphySession *session,
 						 const char *filename,
 						 guint32 user_time);
 
-gboolean	 ephy_session_autoresume	(EphySession *session,
-						 guint32 user_time);
-
 void		 ephy_session_close		(EphySession *session);
 
 GList		*ephy_session_get_windows	(EphySession *session);
@@ -76,8 +84,15 @@ GList		*ephy_session_get_windows	(EphySession *session);
 void		 ephy_session_add_window	(EphySession *session,
 						 GtkWindow *window);
 
-void		ephy_session_remove_window	(EphySession *session,
+void		 ephy_session_remove_window	(EphySession *session,
 						 GtkWindow *window);
+
+void		 ephy_session_queue_command	(EphySession *session,
+						 EphySessionCommand op,
+						 const char *arg,
+						 char **args,
+						 guint32 user_time,
+						 gboolean priority);
 
 G_END_DECLS
 

@@ -36,9 +36,7 @@
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
-#include <errno.h>
-#include <string.h>
-#include <stdlib.h>
+#include <gtk/gtkmain.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkstock.h>
@@ -46,10 +44,26 @@
 #include <gtk/gtkvbox.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
+
+#include <libgnomeui/gnome-client.h>
+
 #include <libgnomevfs/gnome-vfs-ops.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
+
 #include <libxml/tree.h>
 #include <libxml/xmlwriter.h>
+
+#include <errno.h>
+#include <string.h>
+#include <stdlib.h>
+
+typedef struct
+{
+	EphySessionCommand command;
+	char *arg;
+	char **args;
+	guint32 user_time;
+} SessionCommand;
 
 #define EPHY_SESSION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SESSION, EphySessionPrivate))
 
@@ -58,6 +72,10 @@ struct _EphySessionPrivate
 	GList *windows;
 	GList *tool_windows;
 	GtkWidget *resume_dialog;
+
+	GQueue *queue;
+	guint queue_idle_id;
+
 	guint dont_save : 1;
 	guint quit_while_resuming : 1;
 };
@@ -69,6 +87,7 @@ struct _EphySessionPrivate
 static void ephy_session_class_init	(EphySessionClass *klass);
 static void ephy_session_iface_init	(EphyExtensionIface *iface);
 static void ephy_session_init		(EphySession *session);
+static void session_command_queue_next	(EphySession *session);
 
 enum
 {
@@ -116,6 +135,57 @@ ephy_session_get_type (void)
 
 	return type;
 }
+
+/* Gnome session client */
+
+static gboolean
+save_yourself_cb (GnomeClient *client,
+		  gint phase,
+		  GnomeSaveStyle save_style,
+		  gboolean shutdown,
+		  GnomeInteractStyle interact_style,
+		  gboolean fast,
+		  EphySession *session)
+{
+	char *argv[] = { NULL, "--load-session", NULL };
+	char *discard_argv[] = { "rm", "-f", NULL };
+	char *tmp, *save_to;
+
+	LOG ("save_yourself_cb");
+
+	tmp = g_build_filename (ephy_dot_dir (),
+				"session_gnome-XXXXXX",
+				NULL);
+	save_to = ephy_file_tmp_filename (tmp, "xml");
+	g_free (tmp);
+
+	argv[0] = g_get_prgname ();
+	argv[2] = save_to;
+	gnome_client_set_restart_command
+		(client, 3, argv);
+
+	discard_argv[2] = save_to;
+	gnome_client_set_discard_command (client, 3,
+					  discard_argv);
+
+	ephy_session_save (session, save_to);
+
+	g_free (save_to);
+
+	return TRUE;
+}
+
+static void
+die_cb (GnomeClient* client,
+	EphySession *session)
+	
+{
+	LOG ("die_cb");
+
+	ephy_session_close (session);
+}
+
+/* Helper functions */
 
 static char *
 get_session_filename (const char *filename)
@@ -207,6 +277,334 @@ window_focus_in_event_cb (EphyWindow *window,
 	return FALSE;
 }
 
+/* Queue worker */
+
+static void
+session_command_free (SessionCommand *cmd)
+{
+	g_assert (cmd != NULL);
+
+	g_free (cmd->arg);
+	if (cmd->args)
+	{
+		g_strfreev (cmd->args);
+	}
+
+	g_free (cmd);
+
+	g_object_unref (ephy_shell_get_default ());
+}
+
+static int
+session_command_find (const SessionCommand *cmd,
+		      gpointer cmdptr)
+{
+	EphySessionCommand command = GPOINTER_TO_INT (cmdptr);
+
+	return command != cmd->command;
+}
+
+static void
+resume_dialog_response_cb (GtkWidget *dialog,
+			   int response,
+			   EphySession *session)
+{
+	guint32 user_time;
+
+	LOG ("resume_dialog_response_cb response:%d", response);
+
+	gtk_widget_hide (dialog);
+
+	user_time = gtk_get_current_event_time ();
+
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		ephy_session_queue_command (session,
+				  	    EPHY_SESSION_CMD_LOAD_SESSION,
+					    SESSION_CRASHED, NULL,
+					    user_time, TRUE);
+	}
+
+	ephy_session_queue_command (session,
+				    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
+				    NULL, NULL, user_time, FALSE);
+
+	gtk_widget_destroy (dialog);
+}
+
+static void
+resume_dialog_weak_ref_cb (EphySession *session,
+			   GObject *zombie)
+{
+	EphySessionPrivate *priv = session->priv;
+
+	LOG ("resume_dialog_weak_ref_cb");
+
+	priv->resume_dialog = NULL;
+
+	gtk_window_set_auto_startup_notification (TRUE);
+
+	session_command_queue_next (session);
+
+	g_object_unref (ephy_shell_get_default ());
+}
+
+static void
+session_command_autoresume (EphySession *session,
+			    guint32 user_time)
+{
+	EphySessionPrivate *priv = session->priv;
+	GtkWidget *dialog;
+	char *saved_session;
+	gboolean crashed_session;
+
+	LOG ("ephy_session_autoresume");
+
+	saved_session = get_session_filename (SESSION_CRASHED);
+	crashed_session = g_file_test (saved_session, G_FILE_TEST_EXISTS);
+	g_free (saved_session);
+
+	if (crashed_session == FALSE ||
+	    priv->windows != NULL ||
+	    priv->tool_windows != NULL)
+	{
+		/* FIXME can this happen? */
+		if (priv->resume_dialog != NULL)
+		{
+			gtk_widget_hide (priv->resume_dialog);
+			gtk_widget_destroy (priv->resume_dialog);
+		}
+
+		ephy_session_queue_command (session,
+					    EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW,
+					    NULL, NULL, user_time, FALSE);
+
+		return;
+	}
+
+	if (priv->resume_dialog)
+	{
+		gtk_window_present_with_time (GTK_WINDOW (priv->resume_dialog),
+					      user_time);
+
+		return;
+	}
+
+	/* Ref the shell while we show the dialogue. The unref
+	 * happens in the weak ref notification when the dialogue
+	 * is destroyed.
+	 */
+	g_object_ref (ephy_shell_get_default ());
+
+	dialog = gtk_message_dialog_new
+		(NULL,
+		 GTK_DIALOG_MODAL,
+		 GTK_MESSAGE_WARNING,
+		 GTK_BUTTONS_NONE,
+		 _("Recover previous browser windows and tabs?"));
+
+	gtk_message_dialog_format_secondary_text
+		(GTK_MESSAGE_DIALOG (dialog),
+		 _("Epiphany appears to have exited unexpectedly the last time "
+		   "it was run. You can recover the opened windows and tabs."));
+	
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       _("_Don't Recover"), GTK_RESPONSE_CANCEL);
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       _("_Recover"), GTK_RESPONSE_ACCEPT);
+
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Crash Recovery"));
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (resume_dialog_response_cb), session);
+	g_object_weak_ref (G_OBJECT (dialog),
+			   (GWeakNotify) resume_dialog_weak_ref_cb,
+			   session);
+
+	/* FIXME ? */
+	gtk_window_set_auto_startup_notification (FALSE);
+
+	priv->resume_dialog = dialog;
+
+	gtk_window_present_with_time (GTK_WINDOW (dialog), user_time);
+}
+
+static void
+session_command_open_bookmarks_editor (EphySession *session,
+				       guint32 user_time)
+{
+	GtkWidget *editor;
+
+	editor = ephy_shell_get_bookmarks_editor (ephy_shell_get_default ());
+        
+	gtk_window_present_with_time (GTK_WINDOW (editor), user_time);
+}
+
+static void
+session_command_open_uris (EphySession *session,
+			   char **uris,
+			   const char *options,
+			   guint32 user_time)
+{
+	EphyShell *shell;
+	EphyWindow *window;
+	EphyTab *tab;
+	EphyNewTabFlags flags = 0;
+	guint i;
+
+	shell = ephy_shell_get_default ();
+
+	g_object_ref (shell);
+
+	window = ephy_session_get_active_window (session);
+
+	if (options != NULL && strstr (options, "new-window") != NULL)
+	{
+		window = NULL;
+		flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+	}
+	else if (options != NULL && strstr (options, "new-tab") != NULL)
+	{
+		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+			 EPHY_NEW_TAB_JUMP;
+	}
+
+	for (i = 0; uris[i] != NULL; ++i)
+	{
+		const char *url = uris[i];
+		EphyNewTabFlags page_flags;
+
+		if (url[0] == '\0')
+		{
+			page_flags = EPHY_NEW_TAB_HOME_PAGE;
+		}
+		else
+		{
+			page_flags = EPHY_NEW_TAB_OPEN_PAGE;
+		}
+
+		tab = ephy_shell_new_tab_full (shell, window,
+					       NULL /* parent tab */,
+					       url,
+					       flags | page_flags,
+					       EPHY_EMBED_CHROME_ALL,
+					       FALSE /* is popup? */,
+					       user_time);
+
+		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab)));
+	}
+
+	g_object_unref (shell);
+}
+
+static gboolean
+session_command_dispatch (EphySession *session)
+{
+	EphySessionPrivate *priv = session->priv;
+	SessionCommand *cmd;
+	gboolean run_again = TRUE;
+
+	cmd = g_queue_pop_head (priv->queue);
+	g_assert (cmd != NULL);
+
+	LOG ("dispatching queue cmd:%d", cmd->command);
+
+	switch (cmd->command)
+	{
+		case EPHY_SESSION_CMD_RESUME_SESSION:
+			session_command_autoresume (session, cmd->user_time);
+			break;
+		case EPHY_SESSION_CMD_LOAD_SESSION:
+			ephy_session_load (session, cmd->arg, cmd->user_time);
+			break;
+		case EPHY_SESSION_CMD_OPEN_BOOKMARKS_EDITOR:
+			session_command_open_bookmarks_editor (session, cmd->user_time);
+			break;
+		case EPHY_SESSION_CMD_OPEN_URIS:
+			session_command_open_uris (session, cmd->args, cmd->arg, cmd->user_time);
+			break;
+		case EPHY_SESSION_CMD_MAYBE_OPEN_WINDOW:
+			/* FIXME: maybe just check for normal windows? */
+			if (priv->windows == NULL &&
+			    priv->tool_windows == NULL)
+			{
+				ephy_shell_new_tab_full (ephy_shell_get_default (),
+							 NULL /* window */, NULL /* tab */,
+							 NULL /* URL */,
+							 EPHY_NEW_TAB_IN_NEW_WINDOW |
+							 EPHY_NEW_TAB_HOME_PAGE,
+							 EPHY_EMBED_CHROME_ALL,
+							 FALSE /* is popup? */,
+							 cmd->user_time);
+			}
+			break;
+		default:
+			g_assert_not_reached ();
+			break;
+	}
+
+	/* Look if there's anything else to dispatch */
+	if (g_queue_is_empty (priv->queue) ||
+	    priv->resume_dialog != NULL)
+	{
+		priv->queue_idle_id = 0;
+		run_again = FALSE;
+	}
+
+	/* This unrefs the shell! */
+	session_command_free (cmd);
+
+	return run_again;
+}
+
+static void
+session_command_queue_next (EphySession *session)
+{
+	EphySessionPrivate *priv = session->priv;
+
+	LOG ("queue_next");
+
+	if (!g_queue_is_empty (priv->queue) &&
+	    priv->resume_dialog == NULL &&
+	    priv->queue_idle_id == 0)
+	{
+		priv->queue_idle_id =
+			g_idle_add ((GSourceFunc) session_command_dispatch,
+				    session);
+	}
+}
+
+static void
+session_command_queue_clear (EphySession *session)
+{
+	EphySessionPrivate *priv = session->priv;
+
+	if (priv->resume_dialog != NULL)
+	{
+		gtk_widget_destroy (priv->resume_dialog);
+		/* destroying the resume dialogue will set this to NULL */
+		g_assert (priv->resume_dialog == NULL);
+	}
+
+	if (priv->queue_idle_id != 0)
+	{
+		g_source_remove (priv->queue_idle_id);
+		priv->queue_idle_id = 0;
+	}
+
+	if (priv->queue != NULL)
+	{
+		g_queue_foreach (priv->queue, (GFunc) session_command_free, NULL);
+		g_queue_free (priv->queue);
+		priv->queue = NULL;
+	}
+}
+
+/* EphyExtensionIface implementation */
+
 static void
 impl_attach_window (EphyExtension *extension,
 		    EphyWindow *window)
@@ -263,19 +661,33 @@ impl_detach_window (EphyExtension *extension,
 	 */
 }
 
+/* Class implementation */
+
 static void
 ephy_session_init (EphySession *session)
 {
-	session->priv = EPHY_SESSION_GET_PRIVATE (session);
+	EphySessionPrivate *priv;
+	GnomeClient *client;
 
 	LOG ("EphySession initialising");
+
+	priv = session->priv = EPHY_SESSION_GET_PRIVATE (session);
+
+	priv->queue = g_queue_new ();
+
+	client = gnome_master_client ();
+	g_signal_connect (client, "save-yourself",
+			  G_CALLBACK (save_yourself_cb), session);
+	g_signal_connect (client, "die",
+			  G_CALLBACK (die_cb), session);
 }
 
 static void
 ephy_session_dispose (GObject *object)
 {
-	EphySession *session = EPHY_SESSION(object);
+	EphySession *session = EPHY_SESSION (object);
 	EphySessionPrivate *priv = session->priv;
+	GnomeClient *client;
 
 	LOG ("EphySession disposing");
 
@@ -286,6 +698,14 @@ ephy_session_dispose (GObject *object)
 	{
 		session_delete (session, SESSION_CRASHED);
 	}
+
+	session_command_queue_clear (session);
+
+	client = gnome_master_client ();
+	g_signal_handlers_disconnect_by_func
+		(client, G_CALLBACK (save_yourself_cb), session);
+	g_signal_handlers_disconnect_by_func
+		(client, G_CALLBACK (die_cb), session);
 
 	parent_class->dispose (object);
 }
@@ -301,7 +721,7 @@ ephy_session_finalize (GObject *object)
 	g_list_free (session->priv->windows);
 	g_list_free (session->priv->tool_windows);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	parent_class->finalize (object);
 }
 
 static void
@@ -363,100 +783,7 @@ ephy_session_class_init (EphySessionClass *class)
 	g_type_class_add_private (object_class, sizeof (EphySessionPrivate));
 }
 
-static gboolean
-offer_to_resume (EphySession *session,
-		 guint32 user_time)
-{
-	GtkWidget *dialog;
-	int response;
-
-	dialog = gtk_message_dialog_new
-		(NULL,
-		 GTK_DIALOG_MODAL,
-		 GTK_MESSAGE_WARNING,
-		 GTK_BUTTONS_NONE,
-		 _("Recover previous browser windows and tabs?"));
-
-	gtk_message_dialog_format_secondary_text
-		(GTK_MESSAGE_DIALOG (dialog),
-		 _("Epiphany appears to have exited unexpectedly the last time "
-		   "it was run. You can recover the opened windows and tabs."));
-	
-	gtk_dialog_add_button (GTK_DIALOG (dialog),
-			       _("_Don't Recover"), GTK_RESPONSE_CANCEL);
-	gtk_dialog_add_button (GTK_DIALOG (dialog),
-			       _("_Recover"), GTK_RESPONSE_ACCEPT);
-
-	gtk_window_set_title (GTK_WINDOW (dialog), _("Crash Recovery"));
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
-	gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-
-	session->priv->resume_dialog = dialog;
-
-	ephy_gui_window_update_user_time (session->priv->resume_dialog,
-					  user_time);
-
-	gtk_window_set_auto_startup_notification (FALSE);
-	response = gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_window_set_auto_startup_notification (TRUE);
-
-	gtk_widget_destroy (dialog);
-
-	session->priv->resume_dialog = NULL;
-
-	return (response == GTK_RESPONSE_ACCEPT);
-}
-
-/**
- * ephy_session_autoresume:
- * @session: a #EphySession
- * @user_time: a timestamp, or 0
- *
- * Resume a crashed session when necessary (interactive)
- *
- * Return value: TRUE if handled; windows have actually
- * been opened or the dialog from a previous instance
- * has been re-presented to the user.
- **/
-gboolean
-ephy_session_autoresume (EphySession *session,
-			 guint32 user_time)
-{
-	EphySessionPrivate *priv = session->priv;
-	char *saved_session;
-	gboolean retval = FALSE;
-
-	LOG ("ephy_session_autoresume");
-
-	if (priv->windows != NULL || priv->tool_windows != NULL) return FALSE;
-
-	if (priv->resume_dialog)
-	{
-		ephy_gui_window_update_user_time (priv->resume_dialog,
-						  user_time);
-		ephy_gui_window_present (GTK_WINDOW (priv->resume_dialog),
-					 user_time);
-		return TRUE;
-	}
-
-	saved_session = get_session_filename (SESSION_CRASHED);
-
-	if (g_file_test (saved_session, G_FILE_TEST_EXISTS)
-	    && offer_to_resume (session, user_time))
-	{
-		priv->dont_save = TRUE;
-		retval = ephy_session_load (session, saved_session,
-					    0 /* since we've shown the dialogue */);
-		priv->dont_save = FALSE;
-		ephy_session_save (session, SESSION_CRASHED);
-	}
-
-	g_free (saved_session);
-
-	/* ensure we don't open a blank window when quitting while resuming */
-	return retval || priv->quit_while_resuming;
-}
+/* Implementation */
 
 static void
 close_dialog (GtkWidget *widget)
@@ -480,11 +807,14 @@ ephy_session_close (EphySession *session)
 	/* we have to ref the shell or else we may get finalised between
 	 * destroying the windows and destroying the tool windows
 	 */
-	g_object_ref (ephy_shell);
+	g_object_ref (ephy_shell_get_default ());
 
 	priv->dont_save = TRUE;
 	/* need to set this up here while the dialogue hasn't been killed yet */
 	priv->quit_while_resuming = priv->resume_dialog != NULL;	
+
+	/* Clear command queue */
+	session_command_queue_clear (session);
 
 	ephy_embed_shell_prepare_close (embed_shell);
 
@@ -513,7 +843,11 @@ ephy_session_close (EphySession *session)
 	g_list_free (windows);
 
 	session->priv->dont_save = FALSE;
-	g_object_unref (ephy_shell);
+
+	/* Clear command queue */
+	session_command_queue_clear (session);
+
+	g_object_unref (ephy_shell_get_default ());
 }
 
 static int
@@ -861,7 +1195,7 @@ restore_geometry (GtkWindow *window,
  * ephy_session_load:
  * @session: a #EphySession
  * @filename: the path of the source file
- * @user_time: a timestamp, or 0
+ * @user_time: a user_time, or 0
  *
  * Load a session from disk, restoring the windows and their state
  *
@@ -872,6 +1206,7 @@ ephy_session_load (EphySession *session,
 		   const char *filename,
 		   guint32 user_time)
 {
+	EphySessionPrivate *priv = session->priv;
 	xmlDocPtr doc;
         xmlNodePtr child;
 	EphyWindow *window;
@@ -889,6 +1224,10 @@ ephy_session_load (EphySession *session,
 	{
 		return FALSE;
 	}
+
+	g_object_ref (ephy_shell_get_default ());
+
+	priv->dont_save = TRUE;
 
 	child = xmlDocGetRootElement (doc);
 
@@ -946,7 +1285,13 @@ ephy_session_load (EphySession *session,
 
 	xmlFreeDoc (doc);
 
-	return (session->priv->windows != NULL || session->priv->tool_windows != NULL);
+	priv->dont_save = FALSE;
+
+	ephy_session_save (session, SESSION_CRASHED);
+
+	g_object_unref (ephy_shell_get_default ());
+
+	return (priv->windows != NULL || priv->tool_windows != NULL);
 }
 
 /**
@@ -1033,4 +1378,73 @@ ephy_session_get_active_window (EphySession *session)
 	}
 
 	return window;
+}
+
+/**
+ * ephy_session_queue_command:
+ * @session: a #EphySession
+ **/
+void
+ephy_session_queue_command (EphySession *session,
+			    EphySessionCommand command,
+			    const char *arg,
+			    char **args,
+			    guint32 user_time,
+			    gboolean priority)
+{
+	EphySessionPrivate *priv;
+	GList *element;
+	SessionCommand *cmd;
+
+	LOG ("queue_command command:%d", command);
+
+	g_return_if_fail (EPHY_IS_SESSION (session));
+	g_return_if_fail (command != EPHY_SESSION_CMD_OPEN_URIS || args != NULL);
+
+	priv = session->priv;
+
+	/* First look if the same command is already queued */
+	if (command > EPHY_SESSION_CMD_RESUME_SESSION &&
+	    command < EPHY_SESSION_CMD_OPEN_URIS)
+	{
+		element = g_queue_find_custom (priv->queue,
+					       GINT_TO_POINTER (command),
+					       (GCompareFunc) session_command_find);
+		if (element != NULL)
+		{
+			cmd = (SessionCommand *) element->data;
+
+			if ((command == EPHY_SESSION_CMD_LOAD_SESSION &&
+			     strcmp (cmd->arg, arg) == 0) ||
+			    command == EPHY_SESSION_CMD_OPEN_BOOKMARKS_EDITOR ||
+			    command == EPHY_SESSION_CMD_RESUME_SESSION)
+			{
+				cmd->user_time = user_time;
+				g_queue_remove (priv->queue, cmd);
+				g_queue_push_tail (priv->queue, cmd);
+
+				return;
+			}
+		}
+	}
+
+	/* FIXME: use g_slice_new */
+	cmd = g_new0 (SessionCommand, 1);
+	cmd->command = command;
+	cmd->arg = arg ? g_strdup (arg) : NULL;
+	cmd->args = args ? g_strdupv (args) : NULL;
+	cmd->user_time = user_time;
+	/* This ref is released in session_command_free */
+	g_object_ref (ephy_shell_get_default ());
+
+	if (priority)
+	{
+		g_queue_push_head (priv->queue, cmd);
+	}
+	else
+	{
+		g_queue_push_tail (priv->queue, cmd);
+	}
+
+	session_command_queue_next (session);
 }

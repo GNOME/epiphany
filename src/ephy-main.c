@@ -32,6 +32,7 @@
 #include "ephy-activation.h"
 #include "ephy-session.h"
 #include "ephy-shell.h"
+#include "ephy-prefs.h"
 #include "ephy-debug.h"
 
 #include <libxml/xmlversion.h>
@@ -44,7 +45,6 @@
 #include <gtk/gtkmessagedialog.h>
 
 #include <libgnome/gnome-program.h>
-#include <libgnomeui/gnome-client.h>
 #include <libgnomeui/gnome-ui-init.h>
 
 #include <libgnomevfs/gnome-vfs-init.h>
@@ -111,10 +111,17 @@ static const GOptionEntry libgnome_option_entries[] =
 #endif /* !GNOME_PARAM_GOPTION_CONTEXT */
 
 #ifdef GNOME_ENABLE_DEBUG
+static gboolean keep_profile_directory = FALSE;
+static char *profile_directory = NULL;
+
 static GOptionEntry debug_option_entries[] =
 {
 	{ "private-instance", 0, 0, G_OPTION_ARG_NONE, &private_instance,
-	  N_("Start a private instance"), NULL },
+	  "Start a private instance", NULL },
+	{ "profile", 'p', 0, G_OPTION_ARG_STRING, &profile_directory,
+	  "Profile directory to use in the private instance (default: a newly created directory in tmpdir)", "DIR" },
+	{ "keep-profile", 0, 0, G_OPTION_ARG_NONE, &keep_profile_directory,
+	  "Don't delete the profile directory on exit (default: delete the temp profile on exit)", NULL },
 	{ NULL }
 };
 #endif /* GNOME_ENABLE_DEBUG */
@@ -235,100 +242,6 @@ shell_weak_notify (gpointer data,
 	}
 }
 
-static void
-dbus_g_proxy_finalized_cb (EphyShell *shell,
-			   GObject *zombie)
-{
-	LOG ("dbus_g_proxy_finalized_cb");
-
-	g_object_unref (shell);
-}
-
-/* Gnome session client */
-
-static gboolean
-save_yourself_cb (GnomeClient *client,
-		  gint phase,
-		  GnomeSaveStyle save_style,
-		  gboolean shutdown,
-		  GnomeInteractStyle interact_style,
-		  gboolean fast,
-		  gpointer user_data)
-{
-	EphyShell *shell;
-	EphySession *session;
-	char *argv[] = { NULL, "--load-session", NULL };
-	char *discard_argv[] = { "rm", "-f", NULL };
-	char *tmp, *save_to;
-
-	LOG ("save_yourself_cb");
-
-	/* FIXME FIXME */
-	if (!ephy_shell_get_default ()) return FALSE;
-
-	tmp = g_build_filename (ephy_dot_dir (),
-				"session_gnome-XXXXXX",
-				NULL);
-	save_to = ephy_file_tmp_filename (tmp, "xml");
-	g_free (tmp);
-
-	shell = ephy_shell_get_default ();
-	g_assert (shell != NULL);
-
-	session = EPHY_SESSION (ephy_shell_get_session (shell));
-	g_assert (session != NULL);
-
-	argv[0] = g_get_prgname ();
-	argv[2] = save_to;
-	gnome_client_set_restart_command
-		(client, 3, argv);
-
-	discard_argv[2] = save_to;
-	gnome_client_set_discard_command (client, 3,
-					  discard_argv);
-
-	ephy_session_save (session, save_to);
-
-	g_free (save_to);
-
-	return TRUE;
-}
-
-static void
-die_cb (GnomeClient* client,
-	gpointer user_data)
-	
-{
-	EphyShell *shell;
-	EphySession *session;
-
-	LOG ("die_cb");
-
-	/* FIXME FIXME */
-	if (!ephy_shell_get_default ()) return;
-
-	shell = ephy_shell_get_default ();
-	g_assert (shell != NULL);
-
-	session = EPHY_SESSION (ephy_shell_get_session (shell));
-	g_assert (session != NULL);
-
-	ephy_session_close (session);
-}
-
-static void
-gnome_session_init (void)
-{
-	GnomeClient *client;
-
-	client = gnome_master_client ();
-
-	g_signal_connect (client, "save_yourself",
-			  G_CALLBACK (save_yourself_cb), NULL);
-	g_signal_connect (client, "die",
-			  G_CALLBACK (die_cb), NULL);
-}
-
 #if 0
 static char *
 path_from_command_line_arg (const char *arg)
@@ -359,7 +272,7 @@ unref_proxy_reply_cb (DBusGProxy *proxy,
 
 	g_object_unref (proxy);
 
-	if (!_ephy_dbus_is_name_owner () && gtk_main_level ())
+	if (gtk_main_level ())
 	{
 		gtk_main_quit ();
 	}
@@ -372,6 +285,7 @@ open_urls (DBusGProxy *proxy,
 {
 	static const char *empty_arguments[] = { "", NULL };
 	GString *options;
+	char **uris;
 
 	options = g_string_sized_new (64);
 
@@ -384,13 +298,20 @@ open_urls (DBusGProxy *proxy,
 		g_string_append (options, "new-tab,");
 	}
 
-	org_gnome_Epiphany_load_uris_async
-		(proxy,
-		 extra_arguments ? (const char**) extra_arguments : (const char**)empty_arguments,
-		 options->str, user_time,
+	if (extra_arguments == NULL)
+	{
+		uris = (char **) empty_arguments;
+	}
+	else
+	{
+		uris = (char **) extra_arguments;
+	}
+
+	org_gnome_Epiphany_load_ur_ilist_async
+		(proxy, (const char **) uris, options->str, user_time,
 		 unref_proxy_reply_cb, NULL);
 	
-	if (extra_arguments)
+	if (extra_arguments != NULL)
 	{
 		g_strfreev (extra_arguments);
 		extra_arguments = NULL;
@@ -422,28 +343,83 @@ call_dbus_proxy (DBusGProxy *proxy,
 		org_gnome_Epiphany_load_session_async
 			(proxy, session_filename, user_time,
 			 unref_proxy_reply_cb, shell);
+
+		g_free (session_filename);
+		session_filename = NULL;
 	}
 	else
 	{
-		/* no need to open the homepage if autoresume returns TRUE;
-		 * we already opened session windows */
-		if (!_ephy_dbus_is_name_owner () ||
-		    (ephy_session_autoresume
-			(EPHY_SESSION (ephy_shell_get_session (shell)),
-			 user_time) == FALSE))
-		{
-			retval = open_urls (proxy, user_time, error);
-		}
-		else
-		{
-			ephy_object_idle_unref (proxy);
-		}
+		retval = open_urls (proxy, user_time, error);
 	}
 
 	/* FIXME why? */
 	dbus_g_connection_flush (ephy_dbus_get_bus (ephy_dbus_get_default (), EPHY_DBUS_SESSION));
 
 	return retval;
+}
+
+static void
+queue_commands (guint32 user_time)
+{
+	EphyShell *shell;
+	EphySession *session;
+
+	shell = ephy_shell_get_default ();
+	g_assert (shell != NULL);
+
+	session = EPHY_SESSION (ephy_shell_get_session (shell));
+	g_assert (session != NULL);
+
+	/* We only get here when starting a new instance, so we 
+	 * first need to autoresume!
+	 */
+	ephy_session_queue_command (session,
+				    EPHY_SESSION_CMD_RESUME_SESSION,
+				    NULL, NULL, user_time, TRUE);
+
+	if (open_as_bookmarks_editor)
+	{
+		ephy_session_queue_command (session,
+					    EPHY_SESSION_CMD_OPEN_BOOKMARKS_EDITOR,
+					    NULL, NULL, user_time, FALSE);
+	}
+	else if (session_filename != NULL)
+	{
+		ephy_session_queue_command (session,
+					    EPHY_SESSION_CMD_LOAD_SESSION,
+					    session_filename, NULL,
+					    user_time, FALSE);
+
+		g_free (session_filename);
+		session_filename = NULL;
+	}
+	/* Don't queue any window openings if no extra arguments given,
+	 * since session autoresume will open one for us.
+	 */
+	else if (extra_arguments != NULL)
+	{
+		GString *options;
+
+		options = g_string_sized_new (64);
+
+		if (open_in_new_window)
+		{
+			g_string_append (options, "new-window,");
+		}
+		if (open_in_new_tab)
+		{
+			g_string_append (options, "new-tab,");
+		}
+
+		ephy_session_queue_command (session,
+					    EPHY_SESSION_CMD_OPEN_URIS,
+					    options->str,
+					    extra_arguments,
+					    user_time, FALSE);
+
+		g_strfreev (extra_arguments);
+		extra_arguments = NULL;
+	}
 }
 
 static void
@@ -582,6 +558,12 @@ main (int argc,
 
 #endif /* GNOME_PARAM_GOPTION_CONTEXT */
 
+	if (extra_arguments != NULL &&
+	    eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL))
+	{
+		exit (1);
+	}
+
 	/* Get a timestamp manually if need be */
 	if (user_time == 0)
 	{
@@ -605,26 +587,26 @@ main (int argc,
 		exit (1);
 	}
 
-	/* Create DBUS proxy */
-	proxy = ephy_dbus_get_proxy (ephy_dbus_get_default (), EPHY_DBUS_SESSION);
-	if (proxy == NULL)
-	{
-		error = g_error_new (STARTUP_ERROR_QUARK,
-				     0,
-				     "Unable to get DBus proxy; aborting activation."); /* FIXME i18n */
-
-		_ephy_dbus_release ();
-
-		show_error_message (&error);
-
-		exit (1);
-	}
-
 	/* If we're remoting, no need to start up any further services,
 	 * just forward the call.
 	 */
 	if (!_ephy_dbus_is_name_owner ())
 	{
+		/* Create DBUS proxy */
+		proxy = ephy_dbus_get_proxy (ephy_dbus_get_default (), EPHY_DBUS_SESSION);
+		if (proxy == NULL)
+		{
+			error = g_error_new (STARTUP_ERROR_QUARK,
+					     0,
+					     "Unable to get DBus proxy; aborting activation."); /* FIXME i18n */
+
+			_ephy_dbus_release ();
+
+			show_error_message (&error);
+
+			exit (1);
+		}
+
 		if (!call_dbus_proxy (proxy, user_time, &error))
 		{
 			_ephy_dbus_release ();
@@ -645,7 +627,7 @@ main (int argc,
 
 	/* We're not remoting; start our services */
 
-	if (!ephy_file_helpers_init (FALSE, &error))
+	if (!ephy_file_helpers_init (NULL, FALSE, FALSE, &error))
 	{
 		_ephy_dbus_release ();
 
@@ -653,9 +635,6 @@ main (int argc,
 
 		exit (1);
 	}
-
-	/* init the session manager up here so we can quit while the resume dialogue is shown */
-	gnome_session_init ();
 
 	eel_gconf_monitor_add ("/apps/epiphany/general");
 	gnome_vfs_init ();
@@ -676,23 +655,8 @@ main (int argc,
 
 	/* Now create the shell */
 	_ephy_shell_create_instance ();
-	g_object_weak_ref (G_OBJECT (proxy),
-			   (GWeakNotify) dbus_g_proxy_finalized_cb,
-			   g_object_ref (ephy_shell_get_default ()));
 
-	if (!call_dbus_proxy (proxy, user_time, &error))
-	{
-		g_object_unref (ephy_shell_get_default ());
-		g_object_unref (proxy);
-		g_assert (ephy_shell_get_default () == NULL);
-
-		ephy_file_helpers_shutdown ();
-		_ephy_dbus_release ();
-
-		show_error_message (&error);
-
-		exit (1);
-	}
+	queue_commands (user_time);
 
 	/* We'll release the initial reference on idle */
 	g_object_weak_ref (G_OBJECT (ephy_shell), shell_weak_notify, NULL);

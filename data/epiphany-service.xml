@@ -2,16 +2,17 @@
 <node name="/org/gnome/Epiphany">
 	<interface name="org.gnome.Epiphany">
 		<method name="loadSession">
-			<arg type="s"/>
-			<arg type="u"/>
+			<arg type="s" name="SessionFilename" direction="in" />
+			<arg type="u" name="Timestamp" direction="in" />
 		</method>
-		<method name="loadUris">
-			<arg type="as"/>
-			<arg type="s"/>
-			<arg type="u"/>
+		<method name="loadURIList">
+			<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="ephy_activation_load_uri_list" />
+			<arg type="as" name="URIs" direction="in" />
+			<arg type="s" name="Options" direction="in" />
+			<arg type="u" name="Timestamp" direction="in" />
 		</method>
 		<method name="openBookmarksEditor">
-			<arg type="u"/>
+			<arg type="u" name="Timestamp" direction="in" />
 		</method>
 	</interface>
 </node>

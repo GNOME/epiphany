@@ -2968,15 +2968,6 @@
   )
 )
 
-(define-method autoresume
-  (of-object "EphySession")
-  (c-name "ephy_session_autoresume")
-  (return-type "gboolean")
-  (parameters
-    '("guint32" "user_time")
-  )
-)
-
 (define-method close
   (of-object "EphySession")
   (c-name "ephy_session_close")

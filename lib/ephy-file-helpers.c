@@ -61,6 +61,7 @@ static GHashTable *files = NULL;
 static GHashTable *mime_table = NULL;
 
 static gboolean have_private_profile = FALSE;
+static gboolean delete_profile_on_exit = FALSE;
 static char *dot_dir = NULL;
 static char *tmp_dir = NULL;
 static GList *del_on_exit = NULL;
@@ -257,7 +258,9 @@ ephy_dot_dir (void)
 }
 
 gboolean
-ephy_file_helpers_init (gboolean private_profile,
+ephy_file_helpers_init (const char *profile_dir,
+			gboolean private_profile,
+			gboolean delete_profile,
 			GError **error)
 {
 	const char *uuid;
@@ -281,8 +284,13 @@ ephy_file_helpers_init (gboolean private_profile,
 				       (GDestroyNotify) g_free);
 
 	have_private_profile = private_profile;
+	delete_profile_on_exit = delete_profile;
 
-	if (private_profile)
+	if (private_profile && profile_dir != NULL)
+	{
+		dot_dir = g_strdup (profile_dir);
+	}
+	else if (private_profile)
 	{
 		if (ephy_file_tmp_dir () == NULL)
 		{

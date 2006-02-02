@@ -1,3 +1,35 @@
+2006-02-02  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-session.c: (save_yourself_cb), (die_cb),
+	(session_command_free), (session_command_find),
+	(resume_dialog_response_cb), (resume_dialog_weak_ref_cb),
+	(session_command_autoresume),
+	(session_command_open_bookmarks_editor),
+	(session_command_open_uris), (session_command_dispatch),
+	(session_command_queue_next), (session_command_queue_clear),
+	(ephy_session_init), (ephy_session_dispose),
+	(ephy_session_finalize), (ephy_session_close), (ephy_session_load),
+	(ephy_session_get_active_window), (ephy_session_queue_command):
+	* src/ephy-session.h:
+	* src/ephy-main.c: (unref_proxy_reply_cb), (open_urls),
+	(call_dbus_proxy), (queue_commands), (main):
+
+	Queue commands received from the main and remote instances,
+	and process them after autoresume has completed. Bug #328286.
+
+	* data/epiphany-service.xml:
+	* lib/ephy-file-helpers.c: (ephy_file_helpers_init):
+	* lib/ephy-file-helpers.h:
+	* src/ephy-activation.c: (session_queue_command),
+	(ephy_activation_load_uri_list), (ephy_activation_load_session),
+	(ephy_activation_open_bookmarks_editor):
+	* src/ephy-activation.h:
+	* src/ephy-dbus.c:
+	* src/ephy-dbus.h:
+	* src/epiphany.defs:
+
+	Adapt to those changed APIs.
+
 2006-01-31  Peter Harvey  <peter.a.harvey@gmail.com>
 
 	* lib/egg/egg-editable-toolbar.c

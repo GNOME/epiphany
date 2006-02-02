@@ -26,7 +26,7 @@
 G_BEGIN_DECLS
 
 /* activation handlers */
-gboolean ephy_activation_load_uris		(EphyDbus *ephy_dbus,
+gboolean ephy_activation_load_uri_list		(EphyDbus *ephy_dbus,
 						 char **uris,
 						 char *options,
 						 guint startup_id,

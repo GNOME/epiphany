@@ -41,6 +41,11 @@
 #define DBUS_NAME_FLAG_DO_NOT_QUEUE 0
 #endif
 
+/* Epiphany's DBUS ids */
+#define DBUS_EPHY_SERVICE	"org.gnome.Epiphany"
+#define DBUS_EPHY_PATH		"/org/gnome/Epiphany"
+#define DBUS_EPHY_INTERFACE	"org.gnome.Epiphany"
+
 #define RECONNECT_DELAY	3000
 
 #define EPHY_DBUS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_DBUS, EphyDbusPrivate))
