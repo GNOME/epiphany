@@ -295,6 +295,8 @@ update_database (EphyTopicsEntry *entry)
 		valid = gtk_tree_model_iter_next (model, &iter);
 	}
 
+	g_strfreev (split);
+
 	priv->lock = FALSE;
 }
 

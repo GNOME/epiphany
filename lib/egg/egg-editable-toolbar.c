@@ -794,15 +794,23 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
           g_value_init (&value, G_TYPE_STRING);
           g_object_get_property (G_OBJECT (action), "label", &value);
           name = g_value_get_string (&value);
-          if (name == NULL) continue;
-	  
+          if (name == NULL)
+	    {
+		g_value_unset (&value);
+		continue;
+	    }
 	  k += g_utf8_strlen (name, -1) + 2;
 	  if (j > 0)
 	    {
 	      g_string_append (string, ", ");
-	      if (k > 25) break;
+	      if (k > 25)
+		{
+		  g_value_unset (&value);
+		  break;
+		}
 	    }
 	  g_string_append (string, name);
+	  g_value_unset (&value);
 	}
       if (j < n_items)
         {
