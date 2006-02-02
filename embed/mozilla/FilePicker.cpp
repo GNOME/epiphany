@@ -25,6 +25,7 @@
 
 #include "FilePicker.h"
 #include "EphyUtils.h"
+#include "AutoJSContextStack.h"
 
 #include <nsCOMPtr.h>
 #undef MOZILLA_INTERNAL_API
@@ -430,6 +431,11 @@ NS_IMETHODIMP GFilePicker::GetFiles(nsISimpleEnumerator * *aFiles)
 /* short show (); */
 NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 {
+	nsresult rv;
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return rv;
+
 	LOG ("GFilePicker::Show");
 
 	gtk_window_set_modal (GTK_WINDOW (mDialog), TRUE);

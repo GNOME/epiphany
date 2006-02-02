@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "EphyPromptService.h"
+#include "AutoJSContextStack.h"
 
 #include <nsCOMPtr.h>
 #include <nsIDOMWindow.h>
@@ -482,6 +483,11 @@ Prompter::Run (PRBool *aSuccess)
 		return GTK_RESPONSE_CANCEL;
 	}
 #endif
+
+	nsresult rv;
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return rv;
 
 	if (mDelay)
 	{

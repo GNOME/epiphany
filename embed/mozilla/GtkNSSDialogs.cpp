@@ -31,6 +31,7 @@
 #include "config.h"
 
 #include "EphyUtils.h"
+#include "AutoJSContextStack.h"
 
 #include <nsCOMPtr.h>
 #include <nsMemory.h>
@@ -206,6 +207,11 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 {
 	GtkWidget *dialog, *label, *checkbox, *vbox, *button;
 	int res;
+
+	nsresult rv;
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return rv;
 
 	/* NOTE: Due to a mozilla bug [https://bugzilla.mozilla.org/show_bug.cgi?id=306288],
 	 * we will always end up without a parent!
@@ -539,6 +545,11 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	GtkWidget *dialog, *label;
 	char *msg, *primary;
 
+	nsresult rv;
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return rv;
+
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
 
@@ -751,6 +762,11 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	GtkWidget *progress;
 	char *msg;
 
+	nsresult rv;
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return rv;
+
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
 
@@ -868,6 +884,11 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 {
 	GtkWidget *dialog, *hbox, *label, *entry, *vbox;
 	char *msg;
+
+	nsresult rv;
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return rv;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
@@ -1313,10 +1334,14 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	GtkWidget *dialog, *widget;
 	GladeXML *gxml;
 	nsEmbedString value;
-	nsresult rv;
 	PRUint32 verifystate, count;
 	PRUnichar ** usage;
 	GtkSizeGroup * sizegroup;
+
+	nsresult rv;
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return rv;
 
 	gxml = glade_xml_new (ephy_file ("certificate-dialogs.glade"),
 			      "viewcert_dialog", NULL);
