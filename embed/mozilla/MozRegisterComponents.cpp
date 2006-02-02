@@ -229,6 +229,14 @@ static const nsModuleComponentInfo sAppComps[] = {
 		"@mozilla.org/embedcomp/prompt-service;1",
 		EphyPromptServiceConstructor
 	},
+#ifdef HAVE_NSINONBLOCKINGALERTSERVICE_H
+	{
+		EPHY_PROMPT_SERVICE_CLASSNAME,
+		EPHY_PROMPT_SERVICE_IID,
+		"@mozilla.org/embedcomp/nbalert-service;1",
+		EphyPromptServiceConstructor
+	},
+#endif /* HAVE_NSINONBLOCKINGALERTSERVICE_H */
 };
 
 #if defined(HAVE_MOZILLA_PSM) && !defined(HAVE_GECKO_1_8)

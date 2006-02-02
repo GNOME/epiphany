@@ -23,6 +23,10 @@
 
 #include <nsIPromptService.h>
 
+#if HAVE_NSINONBLOCKINGALERTSERVICE_H
+#include <nsINonBlockingAlertService.h>
+#endif
+
 #define EPHY_PROMPT_SERVICE_IID				\
 { /* 6e8b90d4-78a6-41c5-98da-b1559a40d30d */		\
   0x6e8b90d4, 0x78a6, 0x41c5,				\
@@ -31,11 +35,17 @@
 #define EPHY_PROMPT_SERVICE_CLASSNAME	"Epiphany Prompt Service"
 
 class EphyPromptService : public nsIPromptService
+#if HAVE_NSINONBLOCKINGALERTSERVICE_H
+			, public nsINonBlockingAlertService
+#endif
 {
 public:
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIPROMPTSERVICE
-	
+#if HAVE_NSINONBLOCKINGALERTSERVICE_H
+	NS_DECL_NSINONBLOCKINALERTSERVICE
+#endif
+
 	EphyPromptService();
 	virtual ~EphyPromptService();
 };

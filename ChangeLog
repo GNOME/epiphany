@@ -1,5 +1,22 @@
 2006-02-02  Christian Persch  <chpe@cvs.gnome.org>
 
+	* m4/gecko.m4:
+
+	Add GECKO_CHECK_HEADERS, wrapping AC_CHECK_HEADERS.
+
+	* configure.ac:
+
+	Simplify some header checks with GECKO_CHECK_HEADERS.
+	Check for nsINonBlockingAlertService.h.
+
+	* embed/mozilla/EphyPromptService.cpp:
+	* embed/mozilla/EphyPromptService.h:
+	* embed/mozilla/MozRegisterComponents.cpp:
+
+	Implement nsINonBlockingAlertService.
+
+2006-02-02  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/downloader-view.c:
 	* embed/downloader-view.h:
 	* embed/ephy-embed-shell.c:

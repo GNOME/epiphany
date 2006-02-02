@@ -283,7 +283,7 @@ $1[]_VERSION_MINOR=$gecko_cv_gecko_version_minor
 # ***************************************************************************
 # ***************************************************************************
 
-# GECKO_DISPATCH([MACRO], [HEADERS], ...)
+# GECKO_DISPATCH([MACRO], [INCLUDEDIRS], ...)
 
 m4_define([GECKO_DISPATCH],
 [
@@ -301,15 +301,15 @@ CPPFLAGS="$CPPFLAGS $_GECKO_EXTRA_CPPFLAGS -I$_GECKO_INCLUDE_ROOT $($PKG_CONFIG 
 CXXFLAGS="$CXXFLAGS $_GECKO_EXTRA_CXXFLAGS $($PKG_CONFIG --cflags-only-other ${gecko_cv_gecko}-xpcom)"
 LDFLAGS="$LDFLAGS $_GECKO_EXTRA_LDFLAGS $($PKG_CONFIG --libs ${gecko_cv_gecko}-xpcom) -Wl,--rpath=$_GECKO_HOME"
 
-_GECKO_DISPATCH_HEADERS="$2"
+_GECKO_DISPATCH_INCLUDEDIRS="$2"
 
 # Sigh Gentoo has a rubbish header layout
 # http://bugs.gentoo.org/show_bug.cgi?id=100804
 # Mind you, it's useful to be able to test against uninstalled mozilla builds...
-_GECKO_DISPATCH_HEADERS="$_GECKO_DISPATCH_HEADERS necko dom"
+_GECKO_DISPATCH_INCLUDEDIRS="$_GECKO_DISPATCH_INCLUDEDIRS dom necko pref"
 
 # Now add them to CPPFLAGS
-for i in $_GECKO_DISPATCH_HEADERS; do
+for i in $_GECKO_DISPATCH_INCLUDEDIRS; do
 	CPPFLAGS="$CPPFLAGS -I$_GECKO_INCLUDE_ROOT/$i"
 done
 
@@ -327,11 +327,15 @@ AC_LANG_POP([C++])
 # ***************************************************************************
 # ***************************************************************************
 
-# GECKO_COMPILE_IFELSE(HEADERS, PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# GECKO_CHECK_HEADERS(INCLUDEDIRS, HEADERS, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [INCLUDES])
+
+AC_DEFUN([GECKO_CHECK_HEADERS],[GECKO_DISPATCH([AC_CHECK_HEADERS],$@)])
+
+# GECKO_COMPILE_IFELSE(INCLUDEDIRS, PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 
 AC_DEFUN([GECKO_COMPILE_IFELSE],[GECKO_DISPATCH([AC_COMPILE_IFELSE],$@)])
 
-# GECKO_RUN_IFELSE(HEADERS, PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# GECKO_RUN_IFELSE(INCLUDEDIRS, PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 
 AC_DEFUN([GECKO_RUN_IFELSE],[GECKO_DISPATCH([AC_RUN_IFELSE],$@)])
 

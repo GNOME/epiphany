@@ -86,6 +86,7 @@ public:
 	void GetSelected (PRInt32*);
 
 	PRInt32 Run (PRBool * = nsnull);
+	static void ShowAndForget (Prompter*);
 
 	PRBool IsCalledFromScript ();
 	void PerformScriptAbortion ();
@@ -515,6 +516,35 @@ Prompter::Run (PRBool *aSuccess)
 	return mResponse;
 }
 
+static void
+DeletePrompter (gpointer aPromptPtr,
+	        GObject *aZombie)
+{
+	Prompter *prompt = NS_STATIC_CAST (Prompter*, aPromptPtr);
+
+	delete prompt;
+}
+
+static void
+DestroyOnResonse (GtkWidget *aDialog,
+		  int aResponse,
+		  gpointer aUserData)
+{
+	gtk_widget_destroy (aDialog);
+}
+
+/* static */ void
+Prompter::ShowAndForget (Prompter *aPrompt)
+{
+	g_signal_connect (aPrompt->mDialog, "response",
+			  G_CALLBACK (DestroyOnResonse), NULL);
+	g_object_weak_ref (G_OBJECT (aPrompt->mDialog),
+			   (GWeakNotify) DeletePrompter,
+			   NS_STATIC_CAST (gpointer, aPrompt));
+
+	gtk_widget_show (GTK_WIDGET (aPrompt->mDialog));
+}
+
 PRBool
 Prompter::IsCalledFromScript()
 {
@@ -604,7 +634,14 @@ Prompter::ConvertAndEscapeButtonText(const PRUnichar *aText,
 }
 
 /* FIXME: needs THREADSAFE? */
-NS_IMPL_ISUPPORTS1 (EphyPromptService, nsIPromptService)
+#if HAVE_NSINONBLOCKINGALERTSERVICE_H
+NS_IMPL_ISUPPORTS2 (EphyPromptService,
+		    nsIPromptService,
+		    nsINonBlockingAlertService)
+#else
+NS_IMPL_ISUPPORTS1 (EphyPromptService,
+		    nsIPromptService)
+#endif
 
 EphyPromptService::EphyPromptService()
 {
@@ -822,3 +859,22 @@ EphyPromptService::Select (nsIDOMWindow *aParent,
 
 	return RETVAL(response);
 }
+
+#if HAVE_NSINONBLOCKINGALERTSERVICE_H
+
+/* showNonBlockingAlert (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText); */
+NS_IMETHODIMP
+EphyPromptService::ShowNonBlockingAlert (nsIDOMWindow *aParent,
+					 const PRUnichar *aDialogTitle,
+					 const PRUnichar *aText)
+{
+	Prompter *prompt = new Prompter (GTK_STOCK_DIALOG_INFO, aParent, aDialogTitle, aText);
+	if (!prompt) return NS_ERROR_OUT_OF_MEMORY;
+
+	prompt->AddStockButton (GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
+	prompt->ShowAndForget ();
+
+	return NS_OK;
+}
+
+#endif /* HAVE_NSINONBLOCKINGALERTSERVICE_H */
