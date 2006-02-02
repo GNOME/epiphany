@@ -36,11 +36,11 @@ G_BEGIN_DECLS
 #define EPHY_IS_DOWNLOADER_VIEW_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_DOWNLOADER_VIEW))
 #define EPHY_DOWNLOADER_VIEW_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_DOWNLOADER_VIEW, DownloaderViewClass))
 
-typedef struct DownloaderView DownloaderView;
-typedef struct DownloaderViewClass DownloaderViewClass;
-typedef struct DownloaderViewPrivate DownloaderViewPrivate;
+typedef struct _DownloaderView		DownloaderView;
+typedef struct _DownloaderViewPrivate	DownloaderViewPrivate;
+typedef struct _DownloaderViewClass	DownloaderViewClass;
 
-struct DownloaderView
+struct _DownloaderView
 {
         EphyDialog parent;
 
@@ -48,7 +48,7 @@ struct DownloaderView
         DownloaderViewPrivate *priv;
 };
 
-struct DownloaderViewClass
+struct _DownloaderViewClass
 {
         EphyDialogClass parent_class;
 };

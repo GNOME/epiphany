@@ -70,7 +70,7 @@ enum
 
 #define EPHY_DOWNLOADER_VIEW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_DOWNLOADER_VIEW, DownloaderViewPrivate))
 
-struct DownloaderViewPrivate
+struct _DownloaderViewPrivate
 {
 	GtkTreeModel *model;
 	GHashTable *downloads_hash;

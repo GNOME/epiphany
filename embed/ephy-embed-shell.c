@@ -202,6 +202,14 @@ ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell)
 	return G_OBJECT (shell->priv->downloader_view);
 }
 
+GObject *
+ephy_embed_shell_get_downloader_view_nocreate (EphyEmbedShell *shell)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+
+	return (GObject *) shell->priv->downloader_view;
+}
+
 static GObject *
 impl_get_embed_single (EphyEmbedShell *shell)
 {

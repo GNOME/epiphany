@@ -526,3 +526,27 @@ ephy_gui_window_present (GtkWindow *window,
 		gtk_widget_show (widget);
 	}
 }
+
+/* Pending gtk+ bug http://bugzilla.gnome.org/show_bug.cgi?id=328069 */
+GtkWidget *
+ephy_gui_message_dialog_get_content_box (GtkWidget *dialog)
+{
+	GtkWidget *container;
+	GList *children;
+
+	/* Get the hbox which is the first child of the main vbox */
+	children = gtk_container_get_children (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox));
+	g_return_val_if_fail (children != NULL, NULL);
+
+	container = GTK_WIDGET (children->data);
+	g_list_free (children);
+
+	/* Get the vbox which is the second child of the hbox */
+	children = gtk_container_get_children (GTK_CONTAINER (container));
+	g_return_val_if_fail (children != NULL && children->next != NULL, NULL);
+
+	container = GTK_WIDGET (children->next->data);
+	g_list_free (children);
+
+	return container;
+}

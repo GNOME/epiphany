@@ -1,3 +1,23 @@
+2006-02-02  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/downloader-view.c:
+	* embed/downloader-view.h:
+	* embed/ephy-embed-shell.c:
+	(ephy_embed_shell_get_downloader_view_nocreate):
+	* embed/ephy-embed-shell.h:
+	* lib/ephy-gui.c: (ephy_gui_message_dialog_get_content_box):
+	* lib/ephy-gui.h:
+	* src/ephy-session.c:
+	(confirm_shutdown_dialog_update_timeout_label),
+	(confirm_shutdown_dialog_tick_cb),
+	(confirm_shutdown_dialog_response_cb),
+	(confirm_shutdown_dialog_accept_cb),
+	(confirm_shutdown_dialog_weak_ref_cb), (confirm_shutdown_cb),
+	(save_yourself_cb):
+
+	On session logout, check if there are downloads pending (since
+	they're not resumable, bug #128048). #if 0'd for now.
+
 2006-02-02  Jean-François Rameau  <jframeau@cvs.gnome.org>
 	
 	* lib/egg/egg-editable-toolbar.c: (toolbar_visibility_refresh):

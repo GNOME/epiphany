@@ -138,9 +138,200 @@ ephy_session_get_type (void)
 
 /* Gnome session client */
 
+#if 0
+
+typedef struct
+{
+	GtkWidget *dialog;
+	GtkWidget *label;
+	guint timeout_id;
+	guint ticks;
+	int response;
+	int key;
+} InteractData;
+
+static void
+confirm_shutdown_dialog_update_timeout_label (InteractData *data)
+{
+	char *text;
+
+	text = g_strdup_printf (ngettext ("Downloads will be aborted and logout proceed in %d second.",
+					  "Downloads will be aborted and logout proceed in %d seconds.",
+					  data->ticks),
+				data->ticks);
+
+	gtk_label_set_text (GTK_LABEL (data->label), text);
+	g_free (text);
+}
+		
+static gboolean
+confirm_shutdown_dialog_tick_cb (InteractData *data)
+{
+	if (data->ticks > 0)
+	{
+		--data->ticks;
+		confirm_shutdown_dialog_update_timeout_label (data);
+		return TRUE;
+	}
+
+	data->timeout_id = 0;
+	gtk_dialog_response (GTK_DIALOG (data->dialog),
+			     GTK_RESPONSE_ACCEPT);
+	return FALSE;
+}
+
+static void
+confirm_shutdown_dialog_response_cb (GtkWidget *dialog,
+				     int response,
+				     InteractData *data)
+{
+	LOG ("confirm_shutdown_dialog_response_cb response %d", response);
+
+	data->response = response;
+
+	gtk_widget_destroy (dialog);
+}
+
+static void
+confirm_shutdown_dialog_accept_cb (InteractData *data,
+				   GObject *zombie)
+{
+	gtk_dialog_response (GTK_DIALOG (data->dialog),
+			     GTK_RESPONSE_ACCEPT);
+}
+
+static void
+confirm_shutdown_dialog_weak_ref_cb (InteractData *data,
+				     GObject *zombie)
+{
+	EphyShell *shell;
+	GObject *dv;
+	int key;
+	gboolean cancel_shutdown;
+
+	LOG ("confirm_shutdown_dialog_weak_ref_cb response %d", data->response);
+
+	shell = ephy_shell_get_default ();
+	if (shell != NULL)
+	{
+		g_object_weak_unref (G_OBJECT (shell),
+				     (GWeakNotify) confirm_shutdown_dialog_accept_cb,
+				     data);
+
+		dv = ephy_embed_shell_get_downloader_view_nocreate (ephy_embed_shell_get_default ());
+		if (dv != NULL)
+		{
+			g_object_weak_unref (dv,
+					     (GWeakNotify) confirm_shutdown_dialog_accept_cb,
+					     data);
+		}
+	}
+
+	if (data->timeout_id != 0)
+	{
+		g_source_remove (data->timeout_id);
+	}
+
+	key = data->key;
+	cancel_shutdown = data->response != GTK_RESPONSE_ACCEPT;
+
+	g_free (data);
+
+	gnome_interaction_key_return (key, cancel_shutdown);
+}
+
+static void
+confirm_shutdown_cb (GnomeClient *client,
+		     int key,
+		     GnomeDialogType dialog_type,
+		     gpointer user_data)
+{
+	GObject *dv;
+	GtkWidget *dialog, *box;
+	InteractData *data;
+
+	/* FIXME: Can this happen: We already quit? */
+	if (ephy_shell_get_default () == NULL)
+	{
+		gnome_interaction_key_return (key, FALSE);
+		return;
+	}
+
+	dv = ephy_embed_shell_get_downloader_view_nocreate (ephy_embed_shell_get_default ());
+
+	/* Check if there are still downloads pending */
+	if (dv == NULL)
+	{
+		gnome_interaction_key_return (key, FALSE);
+		return;
+	}
+
+	dialog = gtk_message_dialog_new
+		(NULL,
+		 GTK_DIALOG_MODAL,
+		 GTK_MESSAGE_WARNING,
+		 GTK_BUTTONS_NONE,
+		 _("Abort pending downloads?"));
+
+	gtk_message_dialog_format_secondary_text
+		(GTK_MESSAGE_DIALOG (dialog),
+		 _("There are still downloads pending. If you log out, "
+		   "they will be aborted and lost."));
+
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       _("_Cancel Logout"), GTK_RESPONSE_REJECT);
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       _("_Abort Downloads"), GTK_RESPONSE_ACCEPT);
+
+	gtk_window_set_title (GTK_WINDOW (dialog), "");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_REJECT);
+
+	data = g_new (InteractData, 1);
+	data->dialog = dialog;
+	data->response = GTK_RESPONSE_REJECT;
+	data->key = key;
+
+	/* This isn't very exact, but it's good enough here */
+	data->timeout_id = g_timeout_add (1000,
+					  (GSourceFunc) confirm_shutdown_dialog_tick_cb,
+					  data);
+	data->ticks = 60;
+
+	/* Add timeout label */
+	data->label = gtk_label_new (NULL);
+	gtk_label_set_line_wrap (GTK_LABEL (data->label), TRUE);
+	confirm_shutdown_dialog_update_timeout_label (data);
+
+	box = ephy_gui_message_dialog_get_content_box (dialog);
+	gtk_box_pack_end (GTK_BOX (box), data->label, FALSE, FALSE, 0);
+	gtk_widget_show (data->label);
+
+	/* When we're quitting, un-veto the shutdown  */
+	g_object_weak_ref (G_OBJECT (ephy_shell_get_default ()),
+			   (GWeakNotify) confirm_shutdown_dialog_accept_cb,
+			   data);
+
+	/* When the download finishes, un-veto the shutdown */
+	g_object_weak_ref (dv,
+			   (GWeakNotify) confirm_shutdown_dialog_accept_cb,
+			   data);
+
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (confirm_shutdown_dialog_response_cb), data);
+	g_object_weak_ref (G_OBJECT (dialog),
+			   (GWeakNotify) confirm_shutdown_dialog_weak_ref_cb,
+			   data);
+
+	gtk_window_present (GTK_WINDOW (dialog));
+}
+
+#endif /* if 0 */
+
 static gboolean
 save_yourself_cb (GnomeClient *client,
-		  gint phase,
+		  int phase,
 		  GnomeSaveStyle save_style,
 		  gboolean shutdown,
 		  GnomeInteractStyle interact_style,
@@ -171,6 +362,20 @@ save_yourself_cb (GnomeClient *client,
 	ephy_session_save (session, save_to);
 
 	g_free (save_to);
+
+#if 0
+	/* If we're shutting down, check if there are downloads
+	 * remaining, since they can't be restarted.
+	 */
+	if (shutdown &&
+	    ephy_embed_shell_get_downloader_view_nocreate (ephy_embed_shell_get_default ()) != NULL)
+	{
+		gnome_client_request_interaction (client,
+						  GNOME_DIALOG_NORMAL,
+						  (GnomeInteractFunction) confirm_shutdown_cb,
+						  session);
+	}
+#endif
 
 	return TRUE;
 }
