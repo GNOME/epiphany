@@ -342,7 +342,6 @@ button_press_cb (GtkWidget *button,
 		if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
 		{
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-			button_toggled_cb (button, action);
 
 			return TRUE;
 		}

@@ -31,6 +31,7 @@
 #include "ephy-shell.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
+#include "ephy-dnd.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtkwidget.h>
@@ -48,6 +49,10 @@
 #include <libgnomevfs/gnome-vfs-uri.h>
 
 #include <string.h>
+
+static const GtkTargetEntry drag_types[] = {
+  {EPHY_DND_URL_TYPE, 0, 0},
+};
 
 /* FIXME tweak this, or make it configurable? (bug 148093) */
 #define ENTRY_WIDTH_CHARS	12
@@ -414,6 +419,21 @@ button_release_cb (GtkWidget *widget,
 	return FALSE;
 }
 
+static void
+drag_data_get_cb (GtkWidget          *widget,
+		  GdkDragContext     *context,
+		  GtkSelectionData   *selection_data,
+		  guint               info,
+		  guint32             time,
+		  GtkAction          *action)
+{
+	EphyNode *node = ephy_bookmark_action_get_bookmark (EPHY_BOOKMARK_ACTION (action));
+	const char *location = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
+
+	g_return_if_fail (location != NULL);
+
+	gtk_selection_data_set (selection_data, selection_data->target, 8, (unsigned char *)location, strlen (location));
+}
 
 static void
 connect_proxy (GtkAction *action, GtkWidget *proxy)
@@ -448,6 +468,11 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		entry = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "entry"));
 		g_signal_connect (entry, "activate", G_CALLBACK (activate_cb), action);
 		g_signal_connect (entry, "key-press-event", G_CALLBACK (entry_key_press_cb), action);
+
+		g_signal_connect (button, "drag-data-get",
+				  G_CALLBACK (drag_data_get_cb), action);
+		gtk_drag_source_set (button, GDK_BUTTON1_MASK, drag_types,
+				     G_N_ELEMENTS (drag_types), GDK_ACTION_COPY);
 	}
 	else if (GTK_IS_MENU_ITEM (proxy))
 	{
