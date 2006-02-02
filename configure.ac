@@ -240,7 +240,7 @@ AC_MSG_RESULT([$result])
 
 # changed from nsIXULChromeRegistry in 1.8a4
 
-AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/chrome/nsIChromeRegistrySea.h],
+GECKO_CHECK_HEADERS([],[chrome/nsIChromeRegistrySea.h],
 	[AC_DEFINE([HAVE_CHROME_NSICHROMEREGISTRYSEA_H], [1], [Define if nsIChromeRegistrySea.h exists])])
 
 # changed location in 1.8a6
@@ -301,24 +301,8 @@ AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "$enable_psm" = "yes" -a "$have_psm" = "
 # Not a simple file check due to the header being in the SDK since 1.8a6
 # https://bugzilla.mozilla.org/show_bug.cgi?id=271068
 
-if test "$MOZILLA_FLAVOUR" = "mozilla"; then
-	AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsIPassword.h],
-		[AC_DEFINE([HAVE_NSIPASSWORD_H],[1],
-		[Define if mozilla nsIPassword header is available])],
-		[AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/wallet/nsIPassword.h],
-			[AC_DEFINE([HAVE_NSIPASSWORD_H],[1],
-			[Define if mozilla nsIPassword header is available]) have_password_h=yes])],
-			[have_password_h=no])
-elif test "$MOZILLA_FLAVOUR" = "toolkit"; then
-	AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/passwordmgr/nsIPassword.h],
-		[AC_DEFINE([HAVE_NSIPASSWORD_H],[1],
-			[Define if mozilla nsIPassword header is available]) have_password_h=yes],
-		[have_password_h=no])
-fi
-
-if test "x$have_password_h" = "xno"; then
-	AC_MSG_WARN([nsIPassword.h not found; personal data manger will have no passwords support!])
-fi
+GECKO_CHECK_HEADERS([passwordmgr wallet],[nsIPassword.h],
+	[],[AC_MSG_WARN([nsIPassword.h not found; personal data manger will have no passwords support!])])
 
 # Check whether to enable our filepicker component
 
@@ -337,6 +321,10 @@ AM_CONDITIONAL([ENABLE_FILEPICKER],[test "x$enable_filepicker" = "xyes"])
 if test "x$enable_filepicker" = "xyes"; then
 	AC_DEFINE([ENABLE_FILEPICKER],[1],[Define to enable the native filepicker])
 fi
+
+# Check for nsINonBlockingAlertService
+
+GECKO_CHECK_HEADERS([windowwatcher],[nsINonBlockingAlertService.h])
 
 # Check for some contractIDs that we need but are provided by extensions
 # which may or may not have been built.
