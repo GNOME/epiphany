@@ -127,7 +127,9 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI, const nsAString & aTi
 	aURI->GetSpec(spec);
 
 	if (spec.Length () > MAX_URL_LENGTH) return NS_OK;
-	
+
+	nsEmbedString uTitle (aTitle);
+
 	/* This depends on the assumption that 
 	 * typeof(PRUnichar) == typeof (gunichar2) == uint16,
 	 * which should be pretty safe.
