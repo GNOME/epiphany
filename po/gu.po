@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-01 05:39+0100\n"
-"PO-Revision-Date: 2006-02-01 12:18+0530\n"
+"POT-Creation-Date: 2006-02-03 06:07+0100\n"
+"PO-Revision-Date: 2006-02-03 16:23+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -14,6 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -141,8 +142,8 @@ msgid "Epiphany Web Browser"
 msgstr "એપીફની વૅબ બ્રાઉઝર"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:524
-#: ../src/ephy-main.c:573 ../src/ephy-main.c:592
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:500
+#: ../src/ephy-main.c:549 ../src/ephy-main.c:574
 msgid "Web Browser"
 msgstr "વેબ બ્રાઉઝર"
 
@@ -531,7 +532,7 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5 આંગળીની છાપ:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1015
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1036
 msgid "Organization:"
 msgstr "સંસ્થા:"
 
@@ -560,7 +561,7 @@ msgid "Cookies"
 msgstr "કુકીઓ"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:105
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:106
 msgid "Downloads"
 msgstr "ડાઉનલોડ"
 
@@ -855,7 +856,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "બાકી રહેલું"
 
-#: ../embed/ephy-embed-shell.c:235
+#: ../embed/ephy-embed-shell.c:243
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "એપીફની હમણાં વાપરી શકાશે નહિં. મોઝિલ્લા પ્રારંભમાં નિષ્ફળ."
 
@@ -1254,24 +1255,24 @@ msgstr "બીજા"
 msgid "Local files"
 msgstr "સ્થાનિક ફાઇલો"
 
-#: ../embed/mozilla/ContentHandler.cpp:172
+#: ../embed/mozilla/ContentHandler.cpp:178
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:408
 msgid "Save"
 msgstr "આ રીતે સંગ્રહિત કરો"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:293
+#: ../embed/mozilla/ContentHandler.cpp:299
 msgid "File Type:|Unknown"
 msgstr "અજ્ઞાત"
 
-#: ../embed/mozilla/ContentHandler.cpp:328
+#: ../embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "શું આ અસુરક્ષિત ફાઈલો ડાઉનલોડ કરવી છે?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:334
+#: ../embed/mozilla/ContentHandler.cpp:340
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1284,14 +1285,14 @@ msgstr ""
 "“%s” ને ખોલવાનું અસુરક્ષિત છે કારણ કે સંભવિત છે કે તે તમારા દસ્તાવેજોને નષ્ટ કરી નાંખે અથવા "
 "તમારા ખાનગીપણાનો ભંગ કરે. તમે તેને એની જગ્યાએ ડાઉનલોડ કરી શકો છો."
 
-#: ../embed/mozilla/ContentHandler.cpp:344
+#: ../embed/mozilla/ContentHandler.cpp:350
 msgid "Open this file?"
 msgstr "શું આ ફાઇલ ખોલવી છે?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:351
+#: ../embed/mozilla/ContentHandler.cpp:357
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1302,13 +1303,13 @@ msgstr ""
 "\n"
 "તમે “%s” ને “%s” ની મદદથી ખોલી અથવા સંગ્રહી શકો છો."
 
-#: ../embed/mozilla/ContentHandler.cpp:359
+#: ../embed/mozilla/ContentHandler.cpp:365
 msgid "Download this file?"
 msgstr "શું આ ફાઈલ ડાઉનલોડ કરવી છે?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:365
+#: ../embed/mozilla/ContentHandler.cpp:371
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1320,7 +1321,7 @@ msgstr ""
 "તમારી પાસે “%s” ને ખોલી શકે તેવો કોઈ કાર્યક્રમ નથી. તેની જગ્યાએ તમે એને ડાઉનલોડ કરી "
 "શકો છો."
 
-#: ../embed/mozilla/ContentHandler.cpp:370
+#: ../embed/mozilla/ContentHandler.cpp:376
 msgid "_Save As..."
 msgstr "આ રીતે સંગ્રહ કરો (_S)..."
 
@@ -1588,82 +1589,82 @@ msgstr "ઈન્ટરનેટ આર્ચીવમાં"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks.c:1111 ../src/ephy-session.c:775
+#: ../src/bookmarks/ephy-bookmarks.c:1111 ../src/ephy-session.c:1314
 msgid "Untitled"
 msgstr "શીર્ષક વગરનું"
 
-#: ../embed/mozilla/EphyPromptService.cpp:195
+#: ../embed/mozilla/EphyPromptService.cpp:197
 msgid "_Abort Script"
 msgstr "સ્ક્રિપ્ટ અડધેથી બંધ કરો (_A)"
 
-#: ../embed/mozilla/EphyPromptService.cpp:263
+#: ../embed/mozilla/EphyPromptService.cpp:265
 msgid "Don't Save"
 msgstr "સંગ્રહો નહિં"
 
-#: ../embed/mozilla/EphyPromptService.cpp:762
+#: ../embed/mozilla/EphyPromptService.cpp:805
 msgid "_User:"
 msgstr "વપરાશકર્તા (_U):"
 
-#: ../embed/mozilla/EphyPromptService.cpp:763
-#: ../embed/mozilla/EphyPromptService.cpp:790
-#: ../embed/mozilla/GtkNSSDialogs.cpp:795
-#: ../embed/mozilla/GtkNSSDialogs.cpp:905
+#: ../embed/mozilla/EphyPromptService.cpp:806
+#: ../embed/mozilla/EphyPromptService.cpp:833
+#: ../embed/mozilla/GtkNSSDialogs.cpp:811
+#: ../embed/mozilla/GtkNSSDialogs.cpp:926
 msgid "_Password:"
 msgstr "પાસવર્ડ (_P):"
 
-#: ../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
+#: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
 #: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "All files"
 msgstr "બધી ફાઇલો"
 
-#: ../embed/mozilla/FilePicker.cpp:157 ../lib/ephy-file-chooser.c:355
+#: ../embed/mozilla/FilePicker.cpp:158 ../lib/ephy-file-chooser.c:355
 msgid "Web pages"
 msgstr "વેબ પાનાંઓ"
 
-#: ../embed/mozilla/FilePicker.cpp:165
+#: ../embed/mozilla/FilePicker.cpp:166
 msgid "Text files"
 msgstr "લેખન ફાઈલો"
 
-#: ../embed/mozilla/FilePicker.cpp:170 ../lib/ephy-file-chooser.c:363
+#: ../embed/mozilla/FilePicker.cpp:171 ../lib/ephy-file-chooser.c:363
 msgid "Images"
 msgstr "ચિત્રો"
 
-#: ../embed/mozilla/FilePicker.cpp:178
+#: ../embed/mozilla/FilePicker.cpp:179
 msgid "XML files"
 msgstr "XML ફાઇલો"
 
-#: ../embed/mozilla/FilePicker.cpp:183
+#: ../embed/mozilla/FilePicker.cpp:184
 msgid "XUL files"
 msgstr "XUL ફાઇલો"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:156
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:162
 msgid "_Select Certificate"
 msgstr "પ્રમાણપત્ર પસંદ કરો (_S)"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:202
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:208
 #, c-format
 msgid "Choose a certificate to present as identification to “%s”."
 msgstr "“%s” ના સૂચક તરીકે રજૂ કરવા માટે પ્રમાણપત્ર પસંદ કરો."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:211
 msgid "Select a certificate to identify yourself."
 msgstr "તમારી પોતાની ઓળખ માટે પ્રમાણપત્ર પસંદ કરો."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:242
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:248
 msgid "Certificate _Details"
 msgstr "પ્રમાણપત્રની વિગતો (_D)"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:235
-#: ../embed/mozilla/GtkNSSDialogs.cpp:547
+#: ../embed/mozilla/GtkNSSDialogs.cpp:241
+#: ../embed/mozilla/GtkNSSDialogs.cpp:558
 msgid "_View Certificate"
 msgstr "પ્રમાણપત્ર જુઓ (_V)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:243
+#: ../embed/mozilla/GtkNSSDialogs.cpp:249
 msgid "_Accept"
 msgstr "સ્વીકારો (_A)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:310
+#: ../embed/mozilla/GtkNSSDialogs.cpp:316
 #, c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
@@ -1673,16 +1674,16 @@ msgstr ""
 "સાઈટ “%s” એ “%s” માટે સુરક્ષાની જાણકારી મોકલે છે. એ સંભવિત છે કે કદાચ કોઈ તમારી "
 "ખાનગી માહિતી મેળવવા માટે તમારી સંપર્ક માટેની જાણકારી મેળવી લે."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:316
+#: ../embed/mozilla/GtkNSSDialogs.cpp:322
 #, c-format
 msgid "You should only accept the security information if you trust “%s” and “%s”."
 msgstr "જો તમને “%s” અને “%s” પર વિશ્વાસ હોય તો તમારે માત્ર સુરક્ષાની જાણકારી સ્વીકારવી જોઈએ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:321
+#: ../embed/mozilla/GtkNSSDialogs.cpp:327
 msgid "Accept incorrect security information?"
 msgstr "શું તમે ખોટી સુરક્ષા જાણકારી સ્વીકારવા માગો છો?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:358
 #, c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
@@ -1691,7 +1692,7 @@ msgstr ""
 "“%s” પર આપોઆપ વિશ્વાસ કરવાનું શક્ય હતું નહિં. એ સંભવિત છે કે કદાચ કોઈ તમારી ખાનગી "
 "માહિતી મેળવવા માટે તમારી સંપર્ક માટેની જાણકારી મેળવી લે."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:358
+#: ../embed/mozilla/GtkNSSDialogs.cpp:364
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
@@ -1700,34 +1701,34 @@ msgstr ""
 "તમારે સાઈટ સાથે ત્યારે જ માત્ર જોડાવું જોઈએ જ્યારે તમે ચોક્કસ હોવ કે તમે “%s” સાથે જોડાયેલ "
 "છો."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:369
 msgid "Connect to untrusted site?"
 msgstr "શું તમે અવિશ્વાસુ સાઈટ સાથે સંપર્ક સાધવા માંગો છો?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:367
+#: ../embed/mozilla/GtkNSSDialogs.cpp:373
 msgid "_Trust this security information from now on"
 msgstr "હવે પછી આ સુરક્ષા જાણકારી પર વિશ્વાસ મૂકો (_T)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:374
 msgid "Co_nnect"
 msgstr "સંપર્ક કરો (_n)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:427
+#: ../embed/mozilla/GtkNSSDialogs.cpp:433
 msgid "Accept expired security information?"
 msgstr "સમય મર્યાદા પૂરી થયેલ હોય તેવી સુરક્ષા જાણકારી સ્વીકારવા માંગો છો?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:429
+#: ../embed/mozilla/GtkNSSDialogs.cpp:435
 #, c-format
 msgid "The security information for “%s” expired on %s."
 msgstr "“%s” માટેની સુરક્ષા જાણકારીની સમયમર્યાદા %s પર પૂરી થાય છે."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:435
+#: ../embed/mozilla/GtkNSSDialogs.cpp:441
 msgid "Accept not yet valid security information?"
 msgstr "હજુ સુધી માન્ય સુરક્ષા જાણકારી સ્વીકારાઈ નથી?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:437
+#: ../embed/mozilla/GtkNSSDialogs.cpp:443
 #, c-format
 msgid "The security information for “%s” isn't valid until %s."
 msgstr "“%s” માટેની સુરક્ષા જાણકારી જ્યાં સુધી %s નહિં થાય ત્યાં સુધી માન્ય નથી."
@@ -1735,42 +1736,42 @@ msgstr "“%s” માટેની સુરક્ષા જાણકારી 
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:453
+#: ../embed/mozilla/GtkNSSDialogs.cpp:459
 msgid "%a %d %b %Y"
 msgstr "%a %d %b %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:461
+#: ../embed/mozilla/GtkNSSDialogs.cpp:467
 msgid "You should ensure that your computer's time is correct."
 msgstr "તમારે ખાતરી કરવી જોઈએ કે તમારા કેમ્પ્યુટરનો સમય સાચો છે ને."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:507
+#: ../embed/mozilla/GtkNSSDialogs.cpp:513
 #, c-format
 msgid "Cannot establish connection to “%s”."
 msgstr "“%s” નો સંપર્ક સ્થાપિત કરી શકાતો નથી."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:510
+#: ../embed/mozilla/GtkNSSDialogs.cpp:516
 #, c-format
 msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
 msgstr "“%s” માંથી સર્ટીફીકેશન રીવોકેશન લીસ્ટ (CRL) સુધારાવાની જરૂર છે."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:515
+#: ../embed/mozilla/GtkNSSDialogs.cpp:521
 msgid "Please ask your system administrator for assistance."
 msgstr "મદદ માટે મહેરબાની કરીને તમારા સિસ્ટમ સંચાલકને પૂછો."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:545
+#: ../embed/mozilla/GtkNSSDialogs.cpp:556
 msgid "Trust new Certificate Authority?"
 msgstr "શું નવા પ્રમાણપત્રના અધિકાર પર વિશ્વાસ કરો છો?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:550
+#: ../embed/mozilla/GtkNSSDialogs.cpp:561
 msgid "_Trust CA"
 msgstr "CA પર વિશ્વાસ કરો (_T)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:572
+#: ../embed/mozilla/GtkNSSDialogs.cpp:583
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr "વેબ સાઈટો ઓળખવા માટે શું નવા પ્રમાણપત્ર સત્તાધિકારી “%s” પર વિશ્વાસ કરવો છે?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:577
+#: ../embed/mozilla/GtkNSSDialogs.cpp:588
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1778,109 +1779,109 @@ msgstr ""
 "પ્રમાણપત્રના અધિકાર પર વિશ્વાસ મૂકતા પહેલા તમારે ચકાસવુ જોઈએ કે પ્રમાણપત્ર "
 "સર્વાધિકારવાળુ છે."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:648
+#: ../embed/mozilla/GtkNSSDialogs.cpp:659
 msgid "Certificate already exists."
 msgstr "પ્રમાણપત્ર પહેલેથી જ હાજર છે."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:649
+#: ../embed/mozilla/GtkNSSDialogs.cpp:660
 msgid "The certificate has already been imported."
 msgstr "પ્રમાણપત્રનો પહેલેથી જ આયાત થઈ ગયો છે."
 
 #. Translators: this is the action of the certificate being exported to a backup file
-#: ../embed/mozilla/GtkNSSDialogs.cpp:775
+#: ../embed/mozilla/GtkNSSDialogs.cpp:791
 msgid "_Back Up Certificate"
 msgstr "બેક-અપ પ્રમાણપત્ર (_B)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:782
+#: ../embed/mozilla/GtkNSSDialogs.cpp:798
 msgid "Select password."
 msgstr "પાસવર્ડ પસંદ કરો."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:783
+#: ../embed/mozilla/GtkNSSDialogs.cpp:799
 msgid "Select a password to protect this certificate."
 msgstr "આ પ્રમાણપત્રની સુરક્ષા કરવા માટે પાસવર્ડ પસંદ કરો."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:809
+#: ../embed/mozilla/GtkNSSDialogs.cpp:825
 msgid "Con_firm password:"
 msgstr "પાસવર્ડની ખાતરી કરો (_f):"
 
 #. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:821
+#: ../embed/mozilla/GtkNSSDialogs.cpp:837
 msgid "Password quality:"
 msgstr "પાસવર્ડની ગુણવત્તા:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:878
+#: ../embed/mozilla/GtkNSSDialogs.cpp:899
 msgid "I_mport Certificate"
 msgstr "પ્રમાણપત્રની આયાત કરો"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:894
+#: ../embed/mozilla/GtkNSSDialogs.cpp:915
 msgid "Password required."
 msgstr "પાસવર્ડ જરુરી છે."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:895
+#: ../embed/mozilla/GtkNSSDialogs.cpp:916
 msgid "Enter the password for this certificate."
 msgstr "આ પ્રમાણપત્ર માટે પાસવર્ડ દાખલ કરો."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:984
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1005
 msgid "Certificate Revocation List Imported"
 msgstr "Certificate Revocation List (CRL) ની આયાત થઈ"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:994
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1015
 msgid "Certificate Revocation List (CRL) successfully imported"
 msgstr "Certificate Revocation List (CRL) ની સફળતાપૂર્વક આયાત થઈ"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1019
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1040
 msgid "Unit:"
 msgstr "એકમ:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1023
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1044
 msgid "Next Update:"
 msgstr "પછી સુધારો:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1050
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1071
 msgid "Not part of certificate"
 msgstr "પ્રમાણપત્રનો ભાગ નથી"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
 msgid "Certificate Properties"
 msgstr "પ્રમાણપત્રના ગુણધર્મો"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1362
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1387
 msgid "This certificate has been verified for the following uses:"
 msgstr "નીચેના વપરાશો માટે આ પ્રમાણપત્ર ચકાસાઈ ગયુ છે:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1390
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "આ પ્રમાણપત્રને ચકાસી શકાયુ નથી કારણકે તે નિરર્થક છે."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1393
 msgid "Could not verify this certificate because it has expired."
 msgstr "આ પ્રમાણપત્રને ચકાસી શકાયુ નથી કારણકે તેની સમયમર્યાદા પૂરી થઈ ગઈ છે."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1371
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1396
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "આ પ્રમાણપત્રને ચકાસી શકાયુ નથી કારણકે તે વિશ્વાસુ નથી."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1374
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1399
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr "આ પ્રમાણપત્રને ચકાસી શકાયુ નથી કારણકે તે મુદ્દો વિશ્વાસુ નથી."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1377
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1402
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "આ પ્રમાણપત્રને ચકાસી શકાયુ નથી કારણકે મુદ્દો ઘડનાર અજાણ્યો છે."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1380
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1405
 msgid "Could not verify this certificate because the CA certificate is invalid."
 msgstr "આ પ્રમાણપત્રને ચકાસી શકાયુ નથી કારણકે CA પ્રમાણપત્ર અમાન્ય છે."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1385
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1410
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "અજાણ્યા કારણોને લીધે આ પ્રમાણપત્રને ચકાસી શકાયુ નથી."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:230
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:235
 msgid "Generating Private Key."
 msgstr "ખાનગી કી બનાવી રહ્યુ છે."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:231
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:236
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
@@ -1888,30 +1889,30 @@ msgstr ""
 "જ્યાં સુધી નવી ખાનગી કી બની ન જાય ત્યાં સુધી મહેરબાની કરીને રાહ જુઓ. આ પ્રક્રિયા થોડી "
 "મિનિટો લેશે."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "Security Notice"
 msgstr "સુરક્ષા સૂચન"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
 msgid "This page is loaded over a secure connection"
 msgstr "આ પાનું સુરક્ષિત જોડાણ ઉપર લવાઈ ગયું"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
 msgid "The padlock icon in the statusbar indicates whether a page is secure."
 msgstr "પરિસ્થિતિદર્શક પટ્ટીમાંનું પેડલોક ચિહ્ન સૂચવે છે કે શું પાનું સુરક્ષિત છે."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid "Security Warning"
 msgstr "સુરક્ષા ચેતવણી"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid "This page is loaded over a low security connection"
 msgstr "પાનું ઓછી સુરક્ષા જોડાણ હેઠળ લવાયું"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -1919,11 +1920,11 @@ msgstr ""
 "આ પાનાં પર કોઈ પણ જાણકારી તમે જુઓ અથવા દાખલ કરો તે ત્રીજી વ્યક્તિ દ્વારા સહેલાઈથી "
 "જાણી શકાઈ હશે."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "આ પાનાંનો અમુક ભાગ અસુરક્ષિત જોડાણ ઉપર લવાઈ ગયો છે"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1931,12 +1932,12 @@ msgstr ""
 "અમુક જાણકારી જે તમે જુઓ છો અથવા દાખલ કરો છો તે અસુરક્ષિત જોડાણો ઉપર મોકલાશે, અને "
 "ત્રીજી વ્યક્તિ દ્વારા સરળતાથી જાણી શકાશે."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid "Send this information over an insecure connection?"
 msgstr "આ જાણકારી અસુરક્ષિત જોડાણ ઉપર મોકલવી છે?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1944,12 +1945,12 @@ msgstr ""
 "તમે દાખલ કરેલ જાણકારી અસુરક્ષિત જોડાણ ઉપર મોકલાશે, અને ત્રીજી વ્યક્તિ દ્વારા સહેલાઈથી "
 "જાણી શકાઈ હશે."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "_Send"
 msgstr "મોકલો (_S)"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2026,32 +2027,32 @@ msgstr ""
 "જીકોન્ફ ભૂલ:\n"
 " %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:806
+#: ../lib/egg/egg-editable-toolbar.c:828
 #, c-format
 msgid "Hide “%s”"
 msgstr "“%s” છુપાવો"
 
-#: ../lib/egg/egg-editable-toolbar.c:1240
+#: ../lib/egg/egg-editable-toolbar.c:1264
 msgid "_Move on Toolbar"
 msgstr "સાધનપટ્ટીમાં ખસેડો (_M)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1241
+#: ../lib/egg/egg-editable-toolbar.c:1265
 msgid "Move the selected item on the toolbar"
 msgstr "પસંદ કરેલ વસ્તુને સાધનપટ્ટી પર ખસેડો"
 
-#: ../lib/egg/egg-editable-toolbar.c:1242
+#: ../lib/egg/egg-editable-toolbar.c:1266
 msgid "_Remove from Toolbar"
 msgstr "સાધનપટ્ટીમાંથી કાઢી નાખો (_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1243
+#: ../lib/egg/egg-editable-toolbar.c:1267
 msgid "Remove the selected item from the toolbar"
 msgstr "પસંદ કરેલ વસ્તુને સાધનપટ્ટીમાંથી દૂર કરો"
 
-#: ../lib/egg/egg-editable-toolbar.c:1244
+#: ../lib/egg/egg-editable-toolbar.c:1268
 msgid "_Remove Toolbar"
 msgstr "સાધનદર્શકપટ્ટી કાઢી નાખો (_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1245
+#: ../lib/egg/egg-editable-toolbar.c:1269
 msgid "Remove the selected toolbar"
 msgstr "પસંદ કરેલ સાધનપટ્ટી દૂર કરો"
 
@@ -2063,17 +2064,17 @@ msgstr "વિભાજક"
 msgid "All supported types"
 msgstr "બધા આધારભૂત પ્રકારો"
 
-#: ../lib/ephy-file-helpers.c:292
+#: ../lib/ephy-file-helpers.c:300
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "“%s” માં કામચલાઉ ડિરેક્ટરી બનાવી શક્યા નહિં."
 
-#: ../lib/ephy-file-helpers.c:360
+#: ../lib/ephy-file-helpers.c:368
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "ફાઈલ “%s” હાજર છે. મહેરબાની કરીને તેને રસ્તાની બહાર ખસેડો."
 
-#: ../lib/ephy-file-helpers.c:371
+#: ../lib/ephy-file-helpers.c:379
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "ડિરેક્ટરી “%s” બનાવવામાં નિષ્ફળ."
@@ -2277,7 +2278,7 @@ msgstr "ઇતિહાસ"
 
 #: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:777
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1596
-#: ../src/bookmarks/ephy-topic-action.c:405 ../src/ephy-window.c:1294
+#: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "બુકમાર્ક"
 
@@ -2358,7 +2359,7 @@ msgstr "એપીફની ડેસ્કટોપ ફાઈલ પ્લગઈ
 msgid "This plugin handles “.desktop” files containing web links."
 msgstr "આ પ્લગઈન વેબ કડીઓ સમાવતી “.desktop” ફાઈલો નિયંત્રિત કરે છે."
 
-#: ../src/bookmarks/ephy-bookmark-action.c:285
+#: ../src/bookmarks/ephy-bookmark-action.c:290
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -2887,7 +2888,7 @@ msgstr "સંબંધિત"
 msgid "Quick Topic"
 msgstr "ઝડપી મુદ્દો"
 
-#: ../src/bookmarks/ephy-topics-entry.c:356
+#: ../src/bookmarks/ephy-topics-entry.c:358
 #, c-format
 msgid "Create topic “%s”"
 msgstr "મુદ્દો “%s” બનાવો"
@@ -3065,15 +3066,15 @@ msgstr "બુકમાર્ક ઉમેરો"
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:86 ../src/ephy-main.c:117
+#: ../src/ephy-main.c:86
 msgid "Start a private instance"
 msgstr "ખાનગી ઘટક શરૂ કરો"
 
-#: ../src/ephy-main.c:459
+#: ../src/ephy-main.c:435
 msgid "Could not start GNOME Web Browser"
 msgstr "જીનોમ વેબ બ્રાઉઝર શરૂ કરી શક્યા નહિં"
 
-#: ../src/ephy-main.c:462
+#: ../src/ephy-main.c:438
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -3082,11 +3083,11 @@ msgstr ""
 "નીચેની ભૂલોને કારણે શરૂઆત કરવાનું નિષ્ફળ ગયું:\n"
 "%s"
 
-#: ../src/ephy-main.c:502 ../src/ephy-main.c:504 ../src/window-commands.c:752
+#: ../src/ephy-main.c:478 ../src/ephy-main.c:480 ../src/window-commands.c:752
 msgid "GNOME Web Browser"
 msgstr "જીનોમ વેબ બ્રાઉઝર"
 
-#: ../src/ephy-main.c:505
+#: ../src/ephy-main.c:481
 msgid "GNOME Web Browser options"
 msgstr "જીનોમ વેબ બ્રાઉઝર વિકલ્પો"
 
@@ -3094,11 +3095,36 @@ msgstr "જીનોમ વેબ બ્રાઉઝર વિકલ્પો"
 msgid "Close tab"
 msgstr "ટેબ બંધ કરો"
 
-#: ../src/ephy-session.c:378
+#: ../src/ephy-session.c:158
+#, c-format
+msgid "Downloads will be aborted and logout proceed in %d second."
+msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
+msgstr[0] "ડાઉનલોડ અડધેથી બંધ થઈ જશે અને બહાર નીકળવાનું %d સેકન્ડમાં શરૂ થશે."
+msgstr[1] "ડાઉનલોડ અડધેથી બંધ થઈ જશે અને બહાર નીકળવાનું %d સેકન્ડોમાં શરૂ થશે."
+
+#: ../src/ephy-session.c:274
+msgid "Abort pending downloads?"
+msgstr "શું બાકી રહેલ ડાઉનલોડ અડધેથી બંધ કરવાના છે?"
+
+#: ../src/ephy-session.c:278
+msgid ""
+"There are still downloads pending. If you log out, they will be aborted and "
+"lost."
+msgstr "ત્યાં હજુ પણ ડાઉનલોડ બાકી રહેલ છે. જો તમે બહાર નીકળો, તો તેઓ અડધેથી બંધ થઈ જશે અને નષ્ટ થઈ જશે."
+
+#: ../src/ephy-session.c:282
+msgid "_Cancel Logout"
+msgstr "બહાર નીકળવાનું રદ કરો (_C)"
+
+#: ../src/ephy-session.c:284
+msgid "_Abort Downloads"
+msgstr "ડાઉનલોડ અડધેથી બંધ કરો (_A)"
+
+#: ../src/ephy-session.c:609
 msgid "Recover previous browser windows and tabs?"
 msgstr "પહેલાની બ્રાઉઝર વિન્ડો અને ટેબો પુનઃ પ્રાપ્ત કરવી છે?"
 
-#: ../src/ephy-session.c:382
+#: ../src/ephy-session.c:613
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -3106,15 +3132,15 @@ msgstr ""
 "એપીફની છેલ્લી વાર ચાલ્યું હતું ત્યારે તે અનિચ્છનીય રીતે ઉત્સાહિત થઈ ગયું હોય એવું લાગે છે. તમે "
 "ખોલેલી વિન્ડો અને ટેબો પાછી મેળવી શકો છો."
 
-#: ../src/ephy-session.c:386
+#: ../src/ephy-session.c:617
 msgid "_Don't Recover"
 msgstr "પાછું ન લાવો: (_D)"
 
-#: ../src/ephy-session.c:388
+#: ../src/ephy-session.c:619
 msgid "_Recover"
 msgstr "પાછું લાવો: (_R)"
 
-#: ../src/ephy-session.c:390
+#: ../src/ephy-session.c:621
 msgid "Crash Recovery"
 msgstr "ભંગાણમાંથી પાછા આવો"
 
