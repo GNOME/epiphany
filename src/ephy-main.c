@@ -86,8 +86,6 @@ static const GOptionEntry option_entries[] =
 	  N_("Load the given session file"), N_("FILE") },
 	{ "add-bookmark", 't', 0, G_OPTION_ARG_STRING, &bookmark_url,
 	  N_("Add a bookmark"), N_("URL") },
-	{ "private-instance", 0, 0, G_OPTION_ARG_NONE, &private_instance,
-	  N_("Start a private instance"), NULL },
 	{ G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_STRING_ARRAY, &extra_arguments,
 	  "", "" },
 	{ NULL }
@@ -119,7 +117,7 @@ static GOptionEntry debug_option_entries[] =
 {
 	{ "private-instance", 0, 0, G_OPTION_ARG_NONE, &private_instance,
 	  "Start a private instance", NULL },
-	{ "profile", 'p', 0, G_OPTION_ARG_STRING, &profile_directory,
+	{ "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
 	  "Profile directory to use in the private instance (default: a newly created directory in tmpdir)", "DIR" },
 	{ "keep-profile", 0, 0, G_OPTION_ARG_NONE, &keep_profile_directory,
 	  "Don't delete the profile directory on exit (default: delete the temp profile on exit)", NULL },
@@ -516,6 +514,8 @@ main (int argc,
 
 	if (!g_option_context_parse (option_context, &argc, &argv, &error))
 	{
+		g_option_context_free (option_context);
+
 		g_print ("%s\n", error->message);
 		g_error_free (error);
 		exit (1);
