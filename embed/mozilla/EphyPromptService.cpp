@@ -878,7 +878,7 @@ EphyPromptService::ShowNonBlockingAlert (nsIDOMWindow *aParent,
 	if (!prompt) return NS_ERROR_OUT_OF_MEMORY;
 
 	prompt->AddStockButton (GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
-	prompt->ShowAndForget ();
+	Prompter::ShowAndForget (prompt);
 
 	return NS_OK;
 }
