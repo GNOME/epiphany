@@ -8,8 +8,8 @@ msgid ""
 ""
 msgstr "Project-Id-Version: Epiphany Gnome HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-01 05:39+0100\n"
-"PO-Revision-Date: 2006-02-01 16:31+1030\n"
+"POT-Creation-Date: 2006-02-03 06:07+0100\n"
+"PO-Revision-Date: 2006-02-03 18:07+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -131,8 +131,8 @@ msgid "Epiphany Web Browser"
 msgstr "Bộ Duyệt Mạng Epiphany"
 
 #.sets the name to appear in the window list applet when grouping windows
-#:../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:524
-#:../src/ephy-main.c:573 ../src/ephy-main.c:592
+#:../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:500
+#:../src/ephy-main.c:549 ../src/ephy-main.c:574
 msgid "Web Browser"
 msgstr "Bộ duyệt Mạng"
 
@@ -522,7 +522,7 @@ msgid "MD5 Fingerprint:"
 msgstr "Dấu tay MD5:"
 
 #:../data/glade/certificate-dialogs.glade.h:15
-#:../embed/mozilla/GtkNSSDialogs.cpp:1015
+#:../embed/mozilla/GtkNSSDialogs.cpp:1036
 msgid "Organization:"
 msgstr "Tổ chức:"
 
@@ -551,7 +551,7 @@ msgid "Cookies"
 msgstr "Cookie"
 
 #.The name of the default downloads folder
-#:../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:105
+#:../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:106
 msgid "Downloads"
 msgstr "Tải về"
 
@@ -843,7 +843,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Còn lại"
 
-#:../embed/ephy-embed-shell.c:235
+#:../embed/ephy-embed-shell.c:243
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Hiện không thể dùng Epiphany vì không khởi động được Mozilla."
 
@@ -1242,24 +1242,24 @@ msgstr "Khác"
 msgid "Local files"
 msgstr "Tập tin cục bộ"
 
-#:../embed/mozilla/ContentHandler.cpp:172
+#:../embed/mozilla/ContentHandler.cpp:178
 #:../embed/mozilla/EphyHeaderSniffer.cpp:408
 msgid "Save"
 msgstr "Lưu"
 
 #.Translators: The text before the "|" is context to help you decide on
 #.* the correct translation. You MUST OMIT it in the translated string.
-#:../embed/mozilla/ContentHandler.cpp:293
+#:../embed/mozilla/ContentHandler.cpp:299
 msgid "File Type:|Unknown"
 msgstr "Không biết"
 
-#:../embed/mozilla/ContentHandler.cpp:328
+#:../embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "Tải về tập tin có thể bất an này không?"
 
 #.translators: First %s is the file type description,
 #.Second %s is the file name
-#:../embed/mozilla/ContentHandler.cpp:334
+#:../embed/mozilla/ContentHandler.cpp:340
 #,c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1272,14 +1272,14 @@ msgstr "Kiểu tập tin: « %s ».\n"
 "phạm sự riêng tư của bạn. Mở trực tiếp tập tin « %s » là bất an. Thay vì vậy "
 "bạn có thể tải về nó."
 
-#:../embed/mozilla/ContentHandler.cpp:344
+#:../embed/mozilla/ContentHandler.cpp:350
 msgid "Open this file?"
 msgstr "Mở tập tin này không?"
 
 #.translators: First %s is the file type description,
 #.Second %s is the file name,
 #.Third %s is the application used to open the file
-#:../embed/mozilla/ContentHandler.cpp:351
+#:../embed/mozilla/ContentHandler.cpp:357
 #,c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1289,13 +1289,13 @@ msgstr "Kiểu tập tin: « %s ».\n"
 "\n"
 "Bạn có thể mở « %s » bằng « %s », hoặc lưu nó."
 
-#:../embed/mozilla/ContentHandler.cpp:359
+#:../embed/mozilla/ContentHandler.cpp:365
 msgid "Download this file?"
 msgstr "Tải tập tin này về chứ?"
 
 #.translators: First %s is the file type description,
 #.Second %s is the file name
-#:../embed/mozilla/ContentHandler.cpp:365
+#:../embed/mozilla/ContentHandler.cpp:371
 #,c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1306,7 +1306,7 @@ msgstr "Kiểu tập tin: « %s ».\n"
 "Hiện thời bạn không có ứng dụng có thể mở « %s ». Thay vì bạn có thể tải về "
 "nó."
 
-#:../embed/mozilla/ContentHandler.cpp:370
+#:../embed/mozilla/ContentHandler.cpp:376
 msgid "_Save As..."
 msgstr "Lư_u là..."
 
@@ -1577,82 +1577,82 @@ msgstr "trong Kho Mạng"
 
 #:../embed/mozilla/EphyHeaderSniffer.cpp:364
 #:../src/bookmarks/ephy-bookmarks-import.c:245
-#:../src/bookmarks/ephy-bookmarks.c:1111 ../src/ephy-session.c:775
+#:../src/bookmarks/ephy-bookmarks.c:1111 ../src/ephy-session.c:1314
 msgid "Untitled"
 msgstr "Không tên"
 
-#:../embed/mozilla/EphyPromptService.cpp:195
+#:../embed/mozilla/EphyPromptService.cpp:197
 msgid "_Abort Script"
 msgstr "_Hủy tập lệnh"
 
-#:../embed/mozilla/EphyPromptService.cpp:263
+#:../embed/mozilla/EphyPromptService.cpp:265
 msgid "Don't Save"
 msgstr "Không lưu"
 
-#:../embed/mozilla/EphyPromptService.cpp:762
+#:../embed/mozilla/EphyPromptService.cpp:805
 msgid "_User:"
 msgstr "_Người dùng:"
 
-#:../embed/mozilla/EphyPromptService.cpp:763
-#:../embed/mozilla/EphyPromptService.cpp:790
-#:../embed/mozilla/GtkNSSDialogs.cpp:795
-#:../embed/mozilla/GtkNSSDialogs.cpp:905
+#:../embed/mozilla/EphyPromptService.cpp:806
+#:../embed/mozilla/EphyPromptService.cpp:833
+#:../embed/mozilla/GtkNSSDialogs.cpp:811
+#:../embed/mozilla/GtkNSSDialogs.cpp:926
 msgid "_Password:"
 msgstr "_Mật khẩu:"
 
-#:../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
+#:../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
 #:../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "All files"
 msgstr "Mọi tập tin"
 
-#:../embed/mozilla/FilePicker.cpp:157 ../lib/ephy-file-chooser.c:355
+#:../embed/mozilla/FilePicker.cpp:158 ../lib/ephy-file-chooser.c:355
 msgid "Web pages"
 msgstr "Trang Mạng"
 
-#:../embed/mozilla/FilePicker.cpp:165
+#:../embed/mozilla/FilePicker.cpp:166
 msgid "Text files"
 msgstr "Tập tin văn bản"
 
-#:../embed/mozilla/FilePicker.cpp:170 ../lib/ephy-file-chooser.c:363
+#:../embed/mozilla/FilePicker.cpp:171 ../lib/ephy-file-chooser.c:363
 msgid "Images"
 msgstr "Ảnh"
 
-#:../embed/mozilla/FilePicker.cpp:178
+#:../embed/mozilla/FilePicker.cpp:179
 msgid "XML files"
 msgstr "Tập tin XML"
 
-#:../embed/mozilla/FilePicker.cpp:183
+#:../embed/mozilla/FilePicker.cpp:184
 msgid "XUL files"
 msgstr "Tập tin XUL"
 
-#:../embed/mozilla/GtkNSSClientAuthDialogs.cpp:156
+#:../embed/mozilla/GtkNSSClientAuthDialogs.cpp:162
 msgid "_Select Certificate"
 msgstr "_Chọn chứng nhận"
 
-#:../embed/mozilla/GtkNSSClientAuthDialogs.cpp:202
+#:../embed/mozilla/GtkNSSClientAuthDialogs.cpp:208
 #,c-format
 msgid "Choose a certificate to present as identification to “%s”."
 msgstr "Chọn chứng nhận sẽ nhận diện bạn với « %s »."
 
-#:../embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
+#:../embed/mozilla/GtkNSSClientAuthDialogs.cpp:211
 msgid "Select a certificate to identify yourself."
 msgstr "Chọn chứng nhận để định danh chính bạn."
 
-#:../embed/mozilla/GtkNSSClientAuthDialogs.cpp:242
+#:../embed/mozilla/GtkNSSClientAuthDialogs.cpp:248
 msgid "Certificate _Details"
 msgstr "_Chi tiết chứng nhận"
 
 #.Add the buttons
-#:../embed/mozilla/GtkNSSDialogs.cpp:235
-#:../embed/mozilla/GtkNSSDialogs.cpp:547
+#:../embed/mozilla/GtkNSSDialogs.cpp:241
+#:../embed/mozilla/GtkNSSDialogs.cpp:558
 msgid "_View Certificate"
 msgstr "_Xem chứng nhận"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:243
+#:../embed/mozilla/GtkNSSDialogs.cpp:249
 msgid "_Accept"
 msgstr "_Chấp nhận"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:310
+#:../embed/mozilla/GtkNSSDialogs.cpp:316
 #,c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
@@ -1661,17 +1661,17 @@ msgid ""
 msgstr "Địa chỉ « %s » trả về thông tin bảo mật cho « %s ». Có thể có ai đó đã theo "
 "dõi cuộc liên lạc của bạn để lấy được những thông tin bí mật của bạn."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:316
+#:../embed/mozilla/GtkNSSDialogs.cpp:322
 #,c-format
 msgid ""
 "You should only accept the security information if you trust “%s” and “%s”."
 msgstr "Bạn chỉ nên chấp nhận thông tin bảo mật nếu bạn tin cậy « %s » và « %s »."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:321
+#:../embed/mozilla/GtkNSSDialogs.cpp:327
 msgid "Accept incorrect security information?"
 msgstr "Chấp nhận thông tin bảo mật không đúng sao?"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:352
+#:../embed/mozilla/GtkNSSDialogs.cpp:358
 #,c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
@@ -1679,41 +1679,41 @@ msgid ""
 msgstr "Trình duyệt của bạn không thể tự động tin cậy « %s ». Có thể có ai đó đã "
 "theo dõi cuộc liên lạc của bạn và lấy được những thông tin bí mật của bạn."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:358
+#:../embed/mozilla/GtkNSSDialogs.cpp:364
 #,c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
 "“%s”."
 msgstr "Bạn chỉ nên kết nối đến nơi này nếu bạn chắc chắn đã kết nối đến « %s »."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:363
+#:../embed/mozilla/GtkNSSDialogs.cpp:369
 msgid "Connect to untrusted site?"
 msgstr "Kết nối đến địa chỉ không đáng tin cậy sao?"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:367
+#:../embed/mozilla/GtkNSSDialogs.cpp:373
 msgid "_Trust this security information from now on"
 msgstr "_Tin cậy thông tin bảo mật này từ giờ này suốt."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:368
+#:../embed/mozilla/GtkNSSDialogs.cpp:374
 msgid "Co_nnect"
 msgstr "_Kết nối"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:427
+#:../embed/mozilla/GtkNSSDialogs.cpp:433
 msgid "Accept expired security information?"
 msgstr "Chấp nhận thông tin bảo mật đã hết hạn sao?"
 
 #.Translators: first %s is a hostname, second %s is a time/date
-#:../embed/mozilla/GtkNSSDialogs.cpp:429
+#:../embed/mozilla/GtkNSSDialogs.cpp:435
 #,c-format
 msgid "The security information for “%s” expired on %s."
 msgstr "Thông tin bảo mật cho « %s » đã hết hạn lúc %s."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:435
+#:../embed/mozilla/GtkNSSDialogs.cpp:441
 msgid "Accept not yet valid security information?"
 msgstr "Chấp nhận thông tin bảo mật chưa hợp lệ sao?"
 
 #.Translators: first %s is a hostname, second %s is a time/date
-#:../embed/mozilla/GtkNSSDialogs.cpp:437
+#:../embed/mozilla/GtkNSSDialogs.cpp:443
 #,c-format
 msgid "The security information for “%s” isn't valid until %s."
 msgstr "Thông tin bảo mật cho « %s » vẫn chưa hợp lệ cho đến khi %s."
@@ -1721,217 +1721,217 @@ msgstr "Thông tin bảo mật cho « %s » vẫn chưa hợp lệ cho đến kh
 #.To translators: this a time format that is used while displaying the
 #.* expiry or start date of an SSL certificate, for the format see
 #.* strftime(3)
-#:../embed/mozilla/GtkNSSDialogs.cpp:453
+#:../embed/mozilla/GtkNSSDialogs.cpp:459
 msgid "%a %d %b %Y"
 msgstr "%a %A, ngày %e, %B, năm %Y"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:461
+#:../embed/mozilla/GtkNSSDialogs.cpp:467
 msgid "You should ensure that your computer's time is correct."
 msgstr "Bạn nên chắc chắn rằng thời gian trên máy tính bạn là đúng."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:507
+#:../embed/mozilla/GtkNSSDialogs.cpp:513
 #,c-format
 msgid "Cannot establish connection to “%s”."
 msgstr "Không thể kết nối được đến « %s »."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:510
+#:../embed/mozilla/GtkNSSDialogs.cpp:516
 #,c-format
 msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
 msgstr "Danh sách thu hồi chứng nhận (CRL) từ « %s » cần được cập nhật."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:515
+#:../embed/mozilla/GtkNSSDialogs.cpp:521
 msgid "Please ask your system administrator for assistance."
 msgstr "Hãy yêu cầu trợ giúp từ quản trị viên hệ thống của bạn."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:545
+#:../embed/mozilla/GtkNSSDialogs.cpp:556
 msgid "Trust new Certificate Authority?"
 msgstr "Tin cậy Certificate Authority mới không?"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:550
+#:../embed/mozilla/GtkNSSDialogs.cpp:561
 msgid "_Trust CA"
 msgstr "_Tin cậy CA"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:572
+#:../embed/mozilla/GtkNSSDialogs.cpp:583
 #,c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr "Tin cậy Nhà Cầm Quyền Chứng Nhận « %s » sẽ nhận diện chỗ Mạng không?"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:577
+#:../embed/mozilla/GtkNSSDialogs.cpp:588
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
 msgstr "Trước khi tin cậy Certificate Authority (CA) bạn nên kiểm tra để đảm bảo "
 "chứng nhận là đáng tin cậy."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:648
+#:../embed/mozilla/GtkNSSDialogs.cpp:659
 msgid "Certificate already exists."
 msgstr "Chứng nhận đã có."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:649
+#:../embed/mozilla/GtkNSSDialogs.cpp:660
 msgid "The certificate has already been imported."
 msgstr "Chứng nhận này đã được nhập."
 
 #.Translators: this is the action of the certificate being exported to a backup file
-#:../embed/mozilla/GtkNSSDialogs.cpp:775
+#:../embed/mozilla/GtkNSSDialogs.cpp:791
 msgid "_Back Up Certificate"
 msgstr "_Sao lưu chứng nhận."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:782
+#:../embed/mozilla/GtkNSSDialogs.cpp:798
 msgid "Select password."
 msgstr "Chọn mật khẩu."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:783
+#:../embed/mozilla/GtkNSSDialogs.cpp:799
 msgid "Select a password to protect this certificate."
 msgstr "Chọn mật khẩu để bảo vệ chứng nhận này."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:809
+#:../embed/mozilla/GtkNSSDialogs.cpp:825
 msgid "Con_firm password:"
 msgstr "_Xác nhận mật khẩu:"
 
 #.TODO: We need a better password quality meter
-#:../embed/mozilla/GtkNSSDialogs.cpp:821
+#:../embed/mozilla/GtkNSSDialogs.cpp:837
 msgid "Password quality:"
 msgstr "Chất lượng mật khẩu:"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:878
+#:../embed/mozilla/GtkNSSDialogs.cpp:899
 msgid "I_mport Certificate"
 msgstr "_Nập Chứng nhận."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:894
+#:../embed/mozilla/GtkNSSDialogs.cpp:915
 msgid "Password required."
 msgstr "Yêu cầu mật khẩu."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:895
+#:../embed/mozilla/GtkNSSDialogs.cpp:916
 msgid "Enter the password for this certificate."
 msgstr "Nhập mật khẩu cho chứng nhận này."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:984
+#:../embed/mozilla/GtkNSSDialogs.cpp:1005
 msgid "Certificate Revocation List Imported"
 msgstr "Danh sách Thu hồi Chứng nhận đã nhập"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:994
+#:../embed/mozilla/GtkNSSDialogs.cpp:1015
 msgid "Certificate Revocation List (CRL) successfully imported"
 msgstr "Danh sách Thu hồi Chứng nhận đã được nhập"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:1019
+#:../embed/mozilla/GtkNSSDialogs.cpp:1040
 msgid "Unit:"
 msgstr "Đơn vị:"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:1023
+#:../embed/mozilla/GtkNSSDialogs.cpp:1044
 msgid "Next Update:"
 msgstr "Lần cập nhật kế:"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:1050
+#:../embed/mozilla/GtkNSSDialogs.cpp:1071
 msgid "Not part of certificate"
 msgstr "Không phải phần của chứng nhận"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:1340
+#:../embed/mozilla/GtkNSSDialogs.cpp:1365
 msgid "Certificate Properties"
 msgstr "Thuộc tính Chứng nhận"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:1362
+#:../embed/mozilla/GtkNSSDialogs.cpp:1387
 msgid "This certificate has been verified for the following uses:"
 msgstr "Chứnh nhận này được xác nhận để sử dụng như theo:"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:1365
+#:../embed/mozilla/GtkNSSDialogs.cpp:1390
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Không thể xác nhận chứng nhận này vì đã bị hủy bỏ."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:1368
+#:../embed/mozilla/GtkNSSDialogs.cpp:1393
 msgid "Could not verify this certificate because it has expired."
 msgstr "Không thể xác nhận chứng nhận này vì đã quá hạn."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:1371
+#:../embed/mozilla/GtkNSSDialogs.cpp:1396
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Không thể xác nhận chứng nhận này vì không đáng tin cậy."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:1374
+#:../embed/mozilla/GtkNSSDialogs.cpp:1399
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr "Không thể xác nhận chứng nhận này vì người/tổ chức phát hành nó không đánh "
 "tin cây"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:1377
+#:../embed/mozilla/GtkNSSDialogs.cpp:1402
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Không thể xác nhận chứng nhận này vì không biết người/tổ chức phát hành nó"
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:1380
+#:../embed/mozilla/GtkNSSDialogs.cpp:1405
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr "Không thể xác nhận chứng nhận này vì chứng nhận CA không hợp lệ."
 
-#:../embed/mozilla/GtkNSSDialogs.cpp:1385
+#:../embed/mozilla/GtkNSSDialogs.cpp:1410
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Không thể xác nhận chứng nhận này: lý do không rõ."
 
-#:../embed/mozilla/GtkNSSKeyPairDialogs.cpp:230
+#:../embed/mozilla/GtkNSSKeyPairDialogs.cpp:235
 msgid "Generating Private Key."
 msgstr "Phát sinh khoá riêng tư..."
 
-#:../embed/mozilla/GtkNSSKeyPairDialogs.cpp:231
+#:../embed/mozilla/GtkNSSKeyPairDialogs.cpp:236
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
 msgstr "Hãy chờ phát sinh khóa riêng tư mới. Tiến trình này có thể mất vài phút."
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "Security Notice"
 msgstr "Thông cáo bảo mật"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
 msgid "This page is loaded over a secure connection"
 msgstr "Đã nạp trang này qua kết nối bảo mật"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
 msgid "The padlock icon in the statusbar indicates whether a page is secure."
 msgstr "Biểu tượng cái khóa móc trong thanh trạng thái ngụ ý nếu trang đó an toàn "
 "hay không."
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid "Security Warning"
 msgstr "Cảnh báo bảo mật"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid "This page is loaded over a low security connection"
 msgstr "Đã nạp trang này qua kết nối bảo mật thấp"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
 msgstr "Mọi thông tin bạn xem hoặc nhập trên trang này có thể bị lấy do người khác"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "Đã nạp phần trang này qua kết nối không bảo mật"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr "Một phần thông tin bạn xem hoặc nhập sẽ được gởi qua kết nối không bảo mật "
 "nên có thể bị lấy do người khác"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid "Send this information over an insecure connection?"
 msgstr "Gởi thông tin này qua kết nối không bảo mật sao?"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr "Thông tin bạn nhập sẽ được gởi qua kết nối không bảo mật nên có thể bị lấy "
 "một cách dễ dàng do người khác"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "_Send"
 msgstr "_Gởi"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2005,32 +2005,32 @@ msgid ""
 msgstr "Gặp lỗi loại GConf:\n"
 "  %s"
 
-#:../lib/egg/egg-editable-toolbar.c:806
+#:../lib/egg/egg-editable-toolbar.c:828
 #,c-format
 msgid "Hide “%s”"
 msgstr "Ẩn « %s »"
 
-#:../lib/egg/egg-editable-toolbar.c:1240
+#:../lib/egg/egg-editable-toolbar.c:1264
 msgid "_Move on Toolbar"
 msgstr "_Di chuyển trên thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1241
+#:../lib/egg/egg-editable-toolbar.c:1265
 msgid "Move the selected item on the toolbar"
 msgstr "Di chuyển mục đã chọn trong thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1242
+#:../lib/egg/egg-editable-toolbar.c:1266
 msgid "_Remove from Toolbar"
 msgstr "_Bỏ ra thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1243
+#:../lib/egg/egg-editable-toolbar.c:1267
 msgid "Remove the selected item from the toolbar"
 msgstr "Gỡ bỏ mục đã chọn ra thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1244
+#:../lib/egg/egg-editable-toolbar.c:1268
 msgid "_Remove Toolbar"
 msgstr "_Bỏ thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1245
+#:../lib/egg/egg-editable-toolbar.c:1269
 msgid "Remove the selected toolbar"
 msgstr "Gỡ bỏ thanh công cụ đã chọn"
 
@@ -2042,17 +2042,17 @@ msgstr "Thanh ngăn cách"
 msgid "All supported types"
 msgstr "Mọi loại được hỗ trợ"
 
-#:../lib/ephy-file-helpers.c:292
+#:../lib/ephy-file-helpers.c:300
 #,c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Không thể tạo thư mục tạm thời trong « %s »."
 
-#:../lib/ephy-file-helpers.c:360
+#:../lib/ephy-file-helpers.c:368
 #,c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Tập tin « %s » đã có. Hãy chuyển nó ra."
 
-#:../lib/ephy-file-helpers.c:371
+#:../lib/ephy-file-helpers.c:379
 #,c-format
 msgid "Failed to create directory “%s”."
 msgstr "Việc tạo thư mục « %s » bị lỗi."
@@ -2256,7 +2256,7 @@ msgstr "Lược sử"
 
 #:../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:777
 #:../src/bookmarks/ephy-bookmarks-editor.c:1596
-#:../src/bookmarks/ephy-topic-action.c:405 ../src/ephy-window.c:1294
+#:../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Đánh dấu"
 
@@ -2336,7 +2336,7 @@ msgstr "Bộ cầm phít tập tin .desktop Epiphany"
 msgid "This plugin handles “.desktop” files containing web links."
 msgstr "Bộ cầm phít này quản lý tập tin « .desktop » chứa liên kết Mạng."
 
-#:../src/bookmarks/ephy-bookmark-action.c:285
+#:../src/bookmarks/ephy-bookmark-action.c:290
 #,c-format
 msgid "%s:"
 msgstr "%s:"
@@ -2859,7 +2859,7 @@ msgstr "Liên quan"
 msgid "Quick Topic"
 msgstr "Chủ đề nhanh"
 
-#:../src/bookmarks/ephy-topics-entry.c:356
+#:../src/bookmarks/ephy-topics-entry.c:358
 #,c-format
 msgid "Create topic “%s”"
 msgstr "Tạo chủ đề « %s »"
@@ -3036,15 +3036,15 @@ msgstr "Thêm đánh dấu"
 msgid "URL"
 msgstr "Địa chỉ Mạng"
 
-#:../src/ephy-main.c:86 ../src/ephy-main.c:117
+#:../src/ephy-main.c:86
 msgid "Start a private instance"
 msgstr "Sở khởi một tức thời riêng"
 
-#:../src/ephy-main.c:459
+#:../src/ephy-main.c:435
 msgid "Could not start GNOME Web Browser"
 msgstr "Không thể khởi chạy Bộ duyệt Mạng Gnome"
 
-#:../src/ephy-main.c:462
+#:../src/ephy-main.c:438
 #,c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -3052,11 +3052,11 @@ msgid ""
 msgstr "Việc khởi chạy thất bại vì lỗi theo đây:\n"
 "%s"
 
-#:../src/ephy-main.c:502 ../src/ephy-main.c:504 ../src/window-commands.c:752
+#:../src/ephy-main.c:478 ../src/ephy-main.c:480 ../src/window-commands.c:752
 msgid "GNOME Web Browser"
 msgstr "Bộ duyệt Mạng Gnome"
 
-#:../src/ephy-main.c:505
+#:../src/ephy-main.c:481
 msgid "GNOME Web Browser options"
 msgstr "Tùy chọn của Bộ duyệt Mạng Gnome"
 
@@ -3064,26 +3064,50 @@ msgstr "Tùy chọn của Bộ duyệt Mạng Gnome"
 msgid "Close tab"
 msgstr "Đóng thanh"
 
-#:../src/ephy-session.c:378
+#:../src/ephy-session.c:158
+#,c-format
+msgid "Downloads will be aborted and logout proceed in %d second."
+msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
+msgstr[0] "Sẽ hủy bỏ mọi việc tải về và đăng xuất sau %d giây."
+
+#:../src/ephy-session.c:274
+msgid "Abort pending downloads?"
+msgstr "Hủy bỏ tải về không?"
+
+#:../src/ephy-session.c:278
+msgid ""
+"There are still downloads pending. If you log out, they will be aborted and "
+"lost."
+msgstr "Vẫn còn có tập tin đang tải về. Việc đăng xuất sẽ hủy bỏ tải về và hủy các tập tin đó."
+
+#:../src/ephy-session.c:282
+msgid "_Cancel Logout"
+msgstr "Th_ôi đăng xuất"
+
+#:../src/ephy-session.c:284
+msgid "_Abort Downloads"
+msgstr "_Hủy bỏ tải về"
+
+#:../src/ephy-session.c:609
 msgid "Recover previous browser windows and tabs?"
 msgstr "Phục hồi các cửa sổ và thanh trước của trình duyệt chứ?"
 
-#:../src/ephy-session.c:382
+#:../src/ephy-session.c:613
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
 msgstr "Hình như trình Epiphany đã thoát bất ngờ trong lần chạy trước. Có thể phục "
 "hồi các cửa sổ và thanh đều đã mở..."
 
-#:../src/ephy-session.c:386
+#:../src/ephy-session.c:617
 msgid "_Don't Recover"
 msgstr "K_hông phục hồi"
 
-#:../src/ephy-session.c:388
+#:../src/ephy-session.c:619
 msgid "_Recover"
 msgstr "Phụ_c hồi"
 
-#:../src/ephy-session.c:390
+#:../src/ephy-session.c:621
 msgid "Crash Recovery"
 msgstr "Phục hồi sau bị hỏng"
 
