@@ -87,7 +87,7 @@ public:
 	void GetSelected (PRInt32*);
 
 	PRInt32 Run (PRBool * = nsnull);
-	static void ShowAndForget (Prompter*);
+	void Show ();
 
 	PRBool IsCalledFromScript ();
 	void PerformScriptAbortion ();
@@ -531,24 +531,18 @@ DeletePrompter (gpointer aPromptPtr,
 	delete prompt;
 }
 
-static void
-DestroyOnResonse (GtkWidget *aDialog,
-		  int aResponse,
-		  gpointer aUserData)
+void
+Prompter::Show ()
 {
-	gtk_widget_destroy (aDialog);
-}
+	gtk_window_set_modal (GTK_WINDOW (mDialog), FALSE);
 
-/* static */ void
-Prompter::ShowAndForget (Prompter *aPrompt)
-{
-	g_signal_connect (aPrompt->mDialog, "response",
-			  G_CALLBACK (DestroyOnResonse), NULL);
-	g_object_weak_ref (G_OBJECT (aPrompt->mDialog),
+	g_signal_connect (mDialog, "response",
+			  G_CALLBACK (gtk_widget_destroy), NULL);
+	g_object_weak_ref (G_OBJECT (mDialog),
 			   (GWeakNotify) DeletePrompter,
-			   NS_STATIC_CAST (gpointer, aPrompt));
+			   NS_STATIC_CAST (gpointer, this));
 
-	gtk_widget_show (GTK_WIDGET (aPrompt->mDialog));
+	gtk_widget_show (GTK_WIDGET (mDialog));
 }
 
 PRBool
@@ -878,7 +872,7 @@ EphyPromptService::ShowNonBlockingAlert (nsIDOMWindow *aParent,
 	if (!prompt) return NS_ERROR_OUT_OF_MEMORY;
 
 	prompt->AddStockButton (GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
-	Prompter::ShowAndForget (prompt);
+	prompt->Show ();
 
 	return NS_OK;
 }
