@@ -60,13 +60,17 @@ static GQuark startup_error_quark = 0;
 static gboolean open_in_new_tab = FALSE;
 static gboolean open_in_new_window = FALSE;
 static gboolean open_as_bookmarks_editor = FALSE;
-static gboolean private_instance = FALSE;
 //static gboolean reload_plugins = FALSE;
 
 static char *session_filename = NULL;
 static char *bookmark_url = NULL;
 static char *bookmarks_file = NULL;
 static char **extra_arguments = NULL;
+
+/* Only set from options in debug builds */
+static gboolean private_instance = FALSE;
+static gboolean keep_profile_directory = FALSE;
+static char *profile_directory = NULL;
 
 static const GOptionEntry option_entries[] =
 {
@@ -111,9 +115,6 @@ static const GOptionEntry libgnome_option_entries[] =
 #endif /* !GNOME_PARAM_GOPTION_CONTEXT */
 
 #ifdef GNOME_ENABLE_DEBUG
-static gboolean keep_profile_directory = FALSE;
-static char *profile_directory = NULL;
-
 static GOptionEntry debug_option_entries[] =
 {
 	{ "private-instance", 0, 0, G_OPTION_ARG_NONE, &private_instance,
