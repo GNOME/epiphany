@@ -230,7 +230,7 @@ drag_data_delete_cb (GtkWidget          *widget,
   toolbar_pos = get_toolbar_position (etoolbar, widget->parent);
 
   egg_toolbars_model_remove_item (etoolbar->priv->model,
-			          toolbar_pos, pos);
+				  toolbar_pos, pos);
 }
 
 static void
@@ -238,7 +238,23 @@ drag_begin_cb (GtkWidget          *widget,
 	       GdkDragContext     *context,
 	       EggEditableToolbar *etoolbar)
 {
+  GtkAction *action;
+  gint flags;
+  
   gtk_widget_hide (widget);
+
+  action = g_object_get_data (G_OBJECT (widget), "gtk-action");
+  if (action == NULL) return;
+  
+  flags = egg_toolbars_model_get_name_flags (etoolbar->priv->model,
+					     gtk_action_get_name (action));
+  if (!(flags & EGG_TB_MODEL_NAME_INFINITE))
+    {
+      flags &= ~EGG_TB_MODEL_NAME_USED;
+      egg_toolbars_model_set_name_flags (etoolbar->priv->model,
+					 gtk_action_get_name (action),
+					 flags);
+    }
 }
 
 static void
@@ -246,7 +262,26 @@ drag_end_cb (GtkWidget          *widget,
 	     GdkDragContext     *context,
 	     EggEditableToolbar *etoolbar)
 {
-  gtk_widget_show (widget);
+  GtkAction *action;
+  gint flags;
+ 
+  if (gtk_widget_get_parent (widget) != NULL)
+    {
+      gtk_widget_show (widget);
+
+      action = g_object_get_data (G_OBJECT (widget), "gtk-action");
+      if (action == NULL) return;
+      
+      flags = egg_toolbars_model_get_name_flags (etoolbar->priv->model,
+						 gtk_action_get_name (action));
+      if (!(flags & EGG_TB_MODEL_NAME_INFINITE))
+        {
+	  flags |= EGG_TB_MODEL_NAME_USED;
+	  egg_toolbars_model_set_name_flags (etoolbar->priv->model,
+					     gtk_action_get_name (action),
+					     flags);
+	}
+    }
 }
 
 static void
@@ -557,12 +592,17 @@ toolbar_drag_data_received_cb (GtkToolbar         *toolbar,
   
   int ipos = -1;
   char *name = NULL;
+  gboolean used = FALSE;
   
   /* Find out where the drop is occuring, and the name of what is being dropped. */
   if (selection_data->length >= 0)
     {
       ipos = gtk_toolbar_get_drop_index (toolbar, x, y);
       name = egg_toolbars_model_get_name (etoolbar->priv->model, type, data, FALSE);
+      if (name != NULL)
+	{
+	  used = ((egg_toolbars_model_get_name_flags (etoolbar->priv->model, name) & EGG_TB_MODEL_NAME_USED) != 0);
+        }
     }
 
   /* If we just want a highlight item, then . */
@@ -570,7 +610,7 @@ toolbar_drag_data_received_cb (GtkToolbar         *toolbar,
     {
       etoolbar->priv->dnd_pending--;
       
-      if (name != NULL && etoolbar->priv->dnd_toolbar == toolbar)
+      if (name != NULL && etoolbar->priv->dnd_toolbar == toolbar && !used)
         {
           etoolbar->priv->dnd_toolitem = create_item_from_action (etoolbar, name);
           gtk_toolbar_set_drop_highlight_item (etoolbar->priv->dnd_toolbar,
@@ -589,7 +629,7 @@ toolbar_drag_data_received_cb (GtkToolbar         *toolbar,
           name = egg_toolbars_model_get_name (etoolbar->priv->model, type, data, TRUE);
         }
   
-      if (name != NULL)
+      if (name != NULL && !used)
         {
           gint tpos = get_toolbar_position (etoolbar, GTK_WIDGET (toolbar));
           egg_toolbars_model_add_item (etoolbar->priv->model, tpos, ipos, name);

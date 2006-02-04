@@ -52,6 +52,13 @@ typedef enum
   EGG_TB_MODEL_HIDDEN            = 1 << 6
 } EggTbModelFlags;
 
+typedef enum
+{
+  EGG_TB_MODEL_NAME_USED         = 1 << 0,
+  EGG_TB_MODEL_NAME_INFINITE     = 1 << 1,
+  EGG_TB_MODEL_NAME_KNOWN        = 1 << 2
+} EggTbModelNameFlags;
+
 struct EggToolbarsModel
 {
   GObject parent_object;
@@ -105,9 +112,11 @@ struct EggToolbarsItemType
 GType		  egg_toolbars_model_flags_get_type (void);
 GType		  egg_toolbars_model_get_type       (void);
 EggToolbarsModel *egg_toolbars_model_new	    (void);
-gboolean          egg_toolbars_model_load           (EggToolbarsModel *model,
+gboolean          egg_toolbars_model_load_names     (EggToolbarsModel *model,
 						     const char *xml_file);
-void              egg_toolbars_model_save           (EggToolbarsModel *model,
+gboolean          egg_toolbars_model_load_toolbars  (EggToolbarsModel *model,
+						     const char *xml_file);
+void              egg_toolbars_model_save_toolbars  (EggToolbarsModel *model,
 						     const char *xml_file,
 						     const char *version);
 
@@ -126,12 +135,12 @@ char *            egg_toolbars_model_get_data       (EggToolbarsModel *model,
                                                      const char       *name);
 
 /* Functions for retrieving what items are available for adding to the toolbars. */
-GPtrArray *       egg_toolbars_model_get_avail      (EggToolbarsModel *model);
-gint              egg_toolbars_model_get_n_avail    (EggToolbarsModel *model,
-                                                     const char       *name);
-void              egg_toolbars_model_set_n_avail    (EggToolbarsModel *model,
-                                                     const char       *name,
-                                                     gint              count);
+GPtrArray *       egg_toolbars_model_get_name_avail (EggToolbarsModel *model);
+gint              egg_toolbars_model_get_name_flags (EggToolbarsModel *model,
+						     const char *name);
+void              egg_toolbars_model_set_name_flags (EggToolbarsModel *model,
+						     const char *name,
+						     gint flags);
 
 /* Functions for manipulating flags on individual toolbars. */
 EggTbModelFlags   egg_toolbars_model_get_flags      (EggToolbarsModel *model,

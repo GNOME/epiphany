@@ -1619,18 +1619,27 @@
 ;  (return-type "EggToolbarsModel*")
 ;)
 
-(define-method load
+(define-method load_names
   (of-object "EggToolbarsModel")
-  (c-name "egg_toolbars_model_load")
+  (c-name "egg_toolbars_model_load_names")
   (return-type "gboolean")
   (parameters
     '("const-char*" "xml_file")
   )
 )
 
-(define-method save
+(define-method load_toolbars
   (of-object "EggToolbarsModel")
-  (c-name "egg_toolbars_model_save")
+  (c-name "egg_toolbars_model_load_toolbars")
+  (return-type "gboolean")
+  (parameters
+    '("const-char*" "xml_file")
+  )
+)
+
+(define-method save_toolbars
+  (of-object "EggToolbarsModel")
+  (c-name "egg_toolbars_model_save_toolbars")
   (return-type "none")
   (parameters
     '("const-char*" "xml_file")
@@ -1676,24 +1685,24 @@
 ;  )
 ;)
 
-(define-method get_avail
+(define-method get_name_avail
   (of-object "EggToolbarsModel")
-  (c-name "egg_toolbars_model_get_avail")
+  (c-name "egg_toolbars_model_get_name_avail")
   (return-type "GPtrArray*")
 )
 
-(define-method get_n_avail
+(define-method get_name_flags
   (of-object "EggToolbarsModel")
-  (c-name "egg_toolbars_model_get_n_avail")
+  (c-name "egg_toolbars_model_get_name_flags")
   (return-type "gint")
   (parameters
     '("const-char*" "name")
   )
 )
 
-(define-method set_n_avail
+(define-method set_name_flags
   (of-object "EggToolbarsModel")
-  (c-name "egg_toolbars_model_set_n_avail")
+  (c-name "egg_toolbars_model_set_name_flags")
   (return-type "none")
   (parameters
     '("const-char*" "name")

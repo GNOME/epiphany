@@ -143,7 +143,7 @@ build_menu (GtkWidget *placeholder, EggToolbarsModel *model)
 	GPtrArray *children, *topics;
 	
 	const char *name, *action;
-	gint i, priority = -1, ptmp;
+	gint i, priority = -1, ptmp, flags;
 	
 	/* Get a sorted list of topics. */
 	eb = ephy_shell_get_bookmarks (ephy_shell);
@@ -160,7 +160,8 @@ build_menu (GtkWidget *placeholder, EggToolbarsModel *model)
 		node = g_ptr_array_index (topics, i);
 		
 		action = ephy_topic_action_name (node);
-		if (egg_toolbars_model_get_n_avail (model, action) < 0)
+		flags = egg_toolbars_model_get_name_flags (model, action);
+		if (flags & EGG_TB_MODEL_NAME_USED)
 		  continue;
 		
 		ptmp = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);

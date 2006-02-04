@@ -65,7 +65,7 @@ struct EggToolbarsModelPrivate
 {
   GNode *toolbars;
   GList *types;
-  GHashTable *avail;
+  GHashTable *flags;
 };
 
 GType
@@ -223,9 +223,9 @@ safe_save_xml (const char *xml_file, xmlDocPtr doc)
 }
 
 void
-egg_toolbars_model_save (EggToolbarsModel *model,
-			 const char *xml_file,
-			 const char *version)
+egg_toolbars_model_save_toolbars (EggToolbarsModel *model,
+				  const char *xml_file,
+				  const char *version)
 {
   xmlDocPtr doc;
   xmlNodePtr root;
@@ -237,6 +237,32 @@ egg_toolbars_model_save (EggToolbarsModel *model,
   xmlSetProp (root, (const xmlChar*) "version", (const xmlChar*) version);
   safe_save_xml (xml_file, doc);
   xmlFreeDoc (doc);
+}
+
+static gboolean
+is_unique (EggToolbarsModel *model,
+	   EggToolbarsItem *idata)
+{
+  EggToolbarsItem *idata2;
+  GNode *toolbar, *item;
+  
+   
+  for(toolbar = g_node_first_child (model->priv->toolbars);
+      toolbar != NULL; toolbar = g_node_next_sibling (toolbar))
+    {
+      for(item = g_node_first_child (toolbar);
+	  item != NULL; item = g_node_next_sibling (item))
+        {
+	  idata2 = item->data;
+	  
+	  if (idata != idata2 && strcmp (idata->name, idata2->name) == 0)
+	    {
+	      return FALSE;
+	    }
+	}
+    }
+  
+  return TRUE;
 }
 
 static GNode *
@@ -255,18 +281,18 @@ static GNode *
 item_node_new (const char *name, EggToolbarsModel *model)
 {
   EggToolbarsItem *item;
-  int count;
+  int flags;
 
   g_return_val_if_fail (name != NULL, NULL);
 
   item = g_new (EggToolbarsItem, 1);
   item->name = g_strdup (name);
 
-  count = GPOINTER_TO_INT (g_hash_table_lookup (model->priv->avail, item->name));
-  if (count > G_MININT && count < G_MAXINT)
-    g_hash_table_insert (model->priv->avail,
+  flags = GPOINTER_TO_INT (g_hash_table_lookup (model->priv->flags, item->name));
+  if ((flags & EGG_TB_MODEL_NAME_INFINITE) == 0)
+    g_hash_table_insert (model->priv->flags,
 			 g_strdup (item->name),
-			 GINT_TO_POINTER (count - 1));
+			 GINT_TO_POINTER (flags | EGG_TB_MODEL_NAME_USED));
 
   return g_node_new (item);
 }
@@ -275,13 +301,13 @@ static void
 item_node_free (GNode *item_node, EggToolbarsModel *model)
 {
   EggToolbarsItem *item = item_node->data;
-  int count;
+  int flags;
 
-  count = GPOINTER_TO_INT (g_hash_table_lookup (model->priv->avail, item->name));
-  if (count < G_MAXINT - 1)
-    g_hash_table_insert (model->priv->avail,
+  flags = GPOINTER_TO_INT (g_hash_table_lookup (model->priv->flags, item->name));
+  if ((flags & EGG_TB_MODEL_NAME_INFINITE) == 0 && is_unique (model, item))
+    g_hash_table_insert (model->priv->flags,
 			 g_strdup (item->name),
-			 GINT_TO_POINTER (count + 1));
+			 GINT_TO_POINTER (flags & ~EGG_TB_MODEL_NAME_USED));
 
   g_free (item->name);
   g_free (item);
@@ -582,8 +608,8 @@ parse_toolbars (EggToolbarsModel *model,
 }
 
 gboolean
-egg_toolbars_model_load (EggToolbarsModel *model,
-			 const char *xml_file)
+egg_toolbars_model_load_toolbars (EggToolbarsModel *model,
+				  const char *xml_file)
 {
   xmlDocPtr doc;
   xmlNodePtr root;
@@ -601,6 +627,70 @@ egg_toolbars_model_load (EggToolbarsModel *model,
   root = xmlDocGetRootElement (doc);
 
   parse_toolbars (model, root->children);
+
+  xmlFreeDoc (doc);
+
+  return TRUE;
+}
+
+static void
+parse_available_list (EggToolbarsModel *model,
+		      xmlNodePtr        child)
+{
+  gint flags;
+  
+  while (child)
+    {
+      if (xmlStrEqual (child->name, (const xmlChar*) "toolitem"))
+	{
+	  xmlChar *name;
+
+	  name = xmlGetProp (child, (const xmlChar*) "name");
+	  flags = egg_toolbars_model_get_name_flags
+	    (model, (const char*)name);
+	  egg_toolbars_model_set_name_flags
+	    (model, (const char*)name, flags | EGG_TB_MODEL_NAME_KNOWN);
+	  xmlFree (name);
+	}
+      child = child->next;
+    }
+}
+
+static void
+parse_names (EggToolbarsModel *model,
+	     xmlNodePtr        child)
+{
+  while (child)
+    {
+      if (xmlStrEqual (child->name, (const xmlChar*) "available"))
+	{
+	  parse_available_list (model, child->children);
+	}
+
+      child = child->next;
+    }
+}
+
+gboolean
+egg_toolbars_model_load_names (EggToolbarsModel *model,
+			       const char *xml_file)
+{
+  xmlDocPtr doc;
+  xmlNodePtr root;
+
+  g_return_val_if_fail (EGG_IS_TOOLBARS_MODEL (model), FALSE);
+
+  if (!xml_file || !g_file_test (xml_file, G_FILE_TEST_EXISTS)) return FALSE;
+
+  doc = xmlParseFile (xml_file);
+  if (doc == NULL)
+  {
+    g_warning ("Failed to load XML data from %s", xml_file);
+    return FALSE;
+  }
+  root = xmlDocGetRootElement (doc);
+
+  parse_names (model, root->children);
 
   xmlFreeDoc (doc);
 
@@ -663,8 +753,10 @@ egg_toolbars_model_init (EggToolbarsModel *model)
   model->priv =EGG_TOOLBARS_MODEL_GET_PRIVATE (model);
 
   model->priv->toolbars = g_node_new (NULL);
-  model->priv->avail = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-  egg_toolbars_model_set_n_avail (model, "_separator", G_MAXINT);
+  model->priv->flags = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  egg_toolbars_model_set_name_flags (model, "_separator", 
+				     EGG_TB_MODEL_NAME_KNOWN |
+				     EGG_TB_MODEL_NAME_INFINITE);
 }
 
 static void
@@ -675,7 +767,7 @@ egg_toolbars_model_finalize (GObject *object)
   g_node_children_foreach (model->priv->toolbars, G_TRAVERSE_ALL,
     			   (GNodeForeachFunc) toolbar_node_free, model);
   g_node_destroy (model->priv->toolbars);
-  g_hash_table_destroy (model->priv->avail);
+  g_hash_table_destroy (model->priv->flags);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -891,25 +983,27 @@ egg_toolbars_model_set_types (EggToolbarsModel *model, GList *types)
 static void
 fill_avail_array (gpointer key, gpointer value, GPtrArray *array)
 {
-  if (GPOINTER_TO_INT (value) > 0) g_ptr_array_add (array, key);
+  int flags = GPOINTER_TO_INT (value);
+  if ((flags & EGG_TB_MODEL_NAME_KNOWN) && !(flags & EGG_TB_MODEL_NAME_USED))
+      g_ptr_array_add (array, key);
 }
 
 GPtrArray *
-egg_toolbars_model_get_avail (EggToolbarsModel *model)
+egg_toolbars_model_get_name_avail (EggToolbarsModel *model)
 {
   GPtrArray *array = g_ptr_array_new ();
-  g_hash_table_foreach (model->priv->avail, (GHFunc) fill_avail_array, array);
+  g_hash_table_foreach (model->priv->flags, (GHFunc) fill_avail_array, array);
   return array;
 }
 
 gint
-egg_toolbars_model_get_n_avail (EggToolbarsModel *model, const char *name)
+egg_toolbars_model_get_name_flags (EggToolbarsModel *model, const char *name)
 {
-  return GPOINTER_TO_INT (g_hash_table_lookup (model->priv->avail, name));
+  return GPOINTER_TO_INT (g_hash_table_lookup (model->priv->flags, name));
 }
 
 void
-egg_toolbars_model_set_n_avail (EggToolbarsModel *model, const char *name, gint count)
+egg_toolbars_model_set_name_flags (EggToolbarsModel *model, const char *name, gint flags)
 {
-  g_hash_table_insert (model->priv->avail, g_strdup (name), GINT_TO_POINTER (count));
+  g_hash_table_insert (model->priv->flags, g_strdup (name), GINT_TO_POINTER (flags));
 }

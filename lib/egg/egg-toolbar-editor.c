@@ -532,7 +532,7 @@ update_editor_sheet (EggToolbarEditor *editor)
   GtkWidget *viewport;
 
   g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (editor));
-
+  
   /* Create new table. */
   table = gtk_table_new (0, 0, TRUE);
   editor->priv->table = table;
@@ -544,16 +544,18 @@ update_editor_sheet (EggToolbarEditor *editor)
                      GDK_ACTION_MOVE | GDK_ACTION_COPY);
   
   /* Build two lists of items (one for copying, one for moving). */
-  items = egg_toolbars_model_get_avail (editor->priv->model);
+  items = egg_toolbars_model_get_name_avail (editor->priv->model);
   while (items->len > 0)
     {
       GtkWidget *item;
       const char *name;
+      gint flags;
       
       name = g_ptr_array_index (items, 0);
       g_ptr_array_remove_index_fast (items, 0);
       
-      if (egg_toolbars_model_get_n_avail (editor->priv->model, name) == 1)
+      flags = egg_toolbars_model_get_name_flags (editor->priv->model, name);
+      if ((flags & EGG_TB_MODEL_NAME_INFINITE) == 0)
         {
           item = editor_create_item_from_name (editor, name, GDK_ACTION_MOVE);
           if (item != NULL)

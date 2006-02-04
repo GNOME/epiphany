@@ -98,7 +98,7 @@ build_menu_for_topic (GtkWidget *placeholder, EggToolbarsModel *model, EphyNode 
 	EphyNode *node;
 	GPtrArray *children, *bookmarks;
 	const char *name, *action;
-	gint i;
+	gint i, flags;
 	
 	children = ephy_node_get_children (topic);
 	bookmarks = g_ptr_array_sized_new (children->len);
@@ -113,7 +113,8 @@ build_menu_for_topic (GtkWidget *placeholder, EggToolbarsModel *model, EphyNode 
 		node = g_ptr_array_index (bookmarks, i);
 		
 		action = ephy_bookmark_action_name (node);
-		if (egg_toolbars_model_get_n_avail (model, action) < 0)
+		flags = egg_toolbars_model_get_name_flags (model, action);
+		if (flags & EGG_TB_MODEL_NAME_USED)
 		  continue;
 		
 		name = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);

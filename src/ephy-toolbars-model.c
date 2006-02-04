@@ -80,7 +80,7 @@ save_changes_idle (EphyToolbarsModel *model)
 {
 	LOG ("Saving toolbars model");
 
-	egg_toolbars_model_save
+	egg_toolbars_model_save_toolbars
 		(EGG_TOOLBARS_MODEL (model),
 		 model->priv->xml_file,
 		 EPHY_TOOLBARS_XML_VERSION);
@@ -182,29 +182,9 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 	gboolean success;
 	int i;
 
-	egg_toolbars_model_set_n_avail (eggmodel, "NavigationBack", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "NavigationForward", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "NavigationUp", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "ViewStop", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "ViewReload", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "GoHome", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "GoHistory", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "GoBookmarks", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "FileNewTab", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "FileNewWindow", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "FileOpen", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "FileSaveAs", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "FilePrint", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "FileBookmarkPage", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "ViewFullscreen", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "EditFind", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "Location", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "ToolbarGo", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "Zoom", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "ViewZoomOut", 1);
-	egg_toolbars_model_set_n_avail (eggmodel, "ViewZoomIn", 1);
+	egg_toolbars_model_load_names (eggmodel, ephy_file ("epiphany-toolbar.xml"));
   
-	success = egg_toolbars_model_load (eggmodel, model->priv->xml_file);
+	success = egg_toolbars_model_load_toolbars (eggmodel, model->priv->xml_file);
 	LOG ("Loading the toolbars was %ssuccessful", success ? "" : "un");
 
 	/* maybe an old format, try to migrate: load the old layout, and
@@ -217,7 +197,7 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 		old_xml = g_build_filename (ephy_dot_dir (),
 					    "epiphany-toolbars-2.xml",
 					    NULL);
-		success = egg_toolbars_model_load (eggmodel, old_xml);
+		success = egg_toolbars_model_load_toolbars (eggmodel, old_xml);
 		g_free (old_xml);
 
 		if (success == TRUE)
@@ -225,7 +205,7 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 			old_xml = g_build_filename (ephy_dot_dir (),
 						    "epiphany-bookmarksbar.xml",
 						    NULL);
-			egg_toolbars_model_load (eggmodel, old_xml);
+			egg_toolbars_model_load_toolbars (eggmodel, old_xml);
 			g_free (old_xml);
 		}
 
@@ -239,7 +219,7 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 		old_xml = g_build_filename (ephy_dot_dir (),
 					    "epiphany-toolbars.xml",
 					    NULL);
-		success = egg_toolbars_model_load (eggmodel, old_xml);
+		success = egg_toolbars_model_load_toolbars (eggmodel, old_xml);
 		g_free (old_xml);
 
 		LOG ("Migration was %ssuccessful", success ? "" : "un");
@@ -248,7 +228,7 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 	/* Still no success, load the default toolbars */
 	if (success == FALSE)
 	{
-		success = egg_toolbars_model_load
+		success = egg_toolbars_model_load_toolbars
 				(eggmodel, ephy_file ("epiphany-toolbar.xml"));
 		LOG ("Loading the default toolbars was %ssuccessful", success ? "" : "un");
 	}
