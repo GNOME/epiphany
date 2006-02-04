@@ -675,7 +675,7 @@ ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 			xml = ephy_file ("epiphany-fs-toolbar.xml");
 			g_return_val_if_fail (xml != NULL, NULL);
 
-			success = egg_toolbars_model_load
+			success = egg_toolbars_model_load_toolbars
 				(shell->priv->fs_toolbars_model, xml);
 			g_return_val_if_fail (success, NULL);
 		}
