@@ -1189,26 +1189,23 @@ ephy_bookmarks_find_bookmark (EphyBookmarks *eb,
 static gboolean
 is_similar (const char *url1, const char *url2)
 {
-	while(*url1 == *url2 && *url1 != '\0' && 
-	      *url1 != '#' && *url1 != '?')
-	{
-		url1++;
-		url2++;
-	}
-	if(*url1 == *url2) return TRUE;
-	if(*url1 == '\0')
-	{
-		if(*url2 == '#') return TRUE;
-		if(*url2 == '?') return TRUE;
-		if(*url2 == '/' && *(url2+1) == '\0') return TRUE;
-	}
-	if(*url2 == '\0')
-	{
-		if(*url1 == '#') return TRUE;
-		if(*url1 == '?') return TRUE;
-		if(*url1 == '/' && *(url1+1) == '\0') return TRUE;
-	}
-	return FALSE;
+	int i, j;
+	
+	for (i = 0; url1[i]; i++)
+	  if (url1[i] == '#' || url1[i] == '?')
+	    break;
+	while(i>0 && url1[i] == '/')
+	  i--;
+	
+	for (j = 0; url2[j]; j++)
+	  if (url2[j] == '#' || url2[j] == '?')
+	    break;
+	while(j>0 && url2[j] == '/') 
+	  j--;
+	
+	if (i != j) return FALSE;
+	if (strncmp (url1, url2, i) != 0) return FALSE;
+	return TRUE;
 }
 
 gint
