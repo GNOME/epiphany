@@ -1,5 +1,19 @@
 2006-02-04  Peter Harvey  <peter.a.harvey@gmail.com>
 
+	* src/bookmarks/ephy-bookmark-properties.c
+	* src/bookmarks/ephy-bookmarks-ui.c
+	* src/bookmarks/ephy-bookmarks-ui.h
+	* src/ephy-history-window.c
+	* src/popup-commands.c
+	* src/window-commands.c
+
+	Restore transient status to the properties dialog when
+	creating a new bookmark. Leave the topics entry sensitive, 
+	and store the expanded state of the list. Make the similar
+	button a toggle button. Removed unused function to add topic.
+
+2006-02-04  Peter Harvey  <peter.a.harvey@gmail.com>
+
 	* src/bookmarks/ephy-bookmarks.c
 	
 	Improve code quality of function to determine similar bookmarks.

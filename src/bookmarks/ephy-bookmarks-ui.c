@@ -418,7 +418,8 @@ properties_dialog_destroy_cb (EphyBookmarkProperties *dialog,
 }
 
 void
-ephy_bookmarks_ui_add_bookmark (const char *location, 
+ephy_bookmarks_ui_add_bookmark (GtkWindow *parent,
+				const char *location, 
 				const char *title)
 {
 	EphyBookmarks *bookmarks;
@@ -434,205 +435,18 @@ ephy_bookmarks_ui_add_bookmark (const char *location,
 	}
 	
 	dialog = ephy_bookmark_properties_new (bookmarks, bookmark, TRUE);
-	
+
+	g_assert (parent != NULL);
+
+	gtk_window_group_add_window (ephy_gui_ensure_window_group (parent),
+				     GTK_WINDOW (dialog));
+	gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
+
 	g_signal_connect (dialog, "destroy",
 			  G_CALLBACK (properties_dialog_destroy_cb), bookmark);
 	g_hash_table_insert (properties_dialogs,
 			     bookmark, dialog);
 	
-	gtk_window_present_with_time (GTK_WINDOW (dialog),
-				      gtk_get_current_event_time ());
-}
-
-static EphyNode *
-find_topic (const char *name)
-{
-	EphyBookmarks *bookmarks;
-	GPtrArray *children;
-	EphyNode *node;
-	int i;
-	
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	node = ephy_bookmarks_get_keywords (bookmarks);
-	children = ephy_node_get_children (node);
-	node = NULL;
-	for (i = 0; i < children->len; i++)
-	{
-		const char *title;
-		
-		node = g_ptr_array_index (children, i);
-		title = ephy_node_get_property_string (node, EPHY_NODE_KEYWORD_PROP_NAME);
-		
-		if (g_utf8_collate (title, name) == 0)
-		{
-			return node;
-		}
-	}
-	
-	return NULL;
-}
-
-static void
-dialog_node_destroy_cb (EphyNode *node,
-			GtkWidget *dialog)
-{
-	gtk_widget_destroy (dialog);
-}
-
-static void
-add_topic_changed_cb (GtkEntry *entry,
-		      GtkDialog *dialog)
-{
-	const char *title;
-
-	title = gtk_entry_get_text (entry);
-
-	gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_ACCEPT,
-					   title[0] != '\0');
-}
-
-static void 
-add_topic_response_cb (GtkWidget *dialog,
-		       int response,
-		       EphyNode *bookmark)
-{
-	EphyBookmarks *bookmarks;
-	GtkEntry *entry;
-	EphyNode *topic;
-	const char *name;
-
-	if (response != GTK_RESPONSE_ACCEPT)
-	{
-		gtk_widget_destroy (dialog);
-		return;
-	}
-
-	entry = g_object_get_data (G_OBJECT (dialog), "name");
-	name = gtk_entry_get_text (entry);
-	g_return_if_fail (name != NULL && name[0] != '\0');
-	
-	topic = find_topic (name);
-	if (topic != NULL)
-	{
-		GtkWidget *message;
-
-		message = gtk_message_dialog_new
-			(GTK_WINDOW (dialog),
-			 GTK_DIALOG_DESTROY_WITH_PARENT,
-			 GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
-			 _("You already have a topic named “%s”"),
-			 ephy_node_get_property_string (topic, EPHY_NODE_KEYWORD_PROP_NAME));
-		gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (message),
-							  "%s",
-							  _("Please use a different topic name."));
-
-		g_signal_connect (message, "response",
-				  G_CALLBACK (gtk_widget_destroy), NULL);
-
-		gtk_window_group_add_window 
-			(ephy_gui_ensure_window_group (GTK_WINDOW (dialog)),
-						       GTK_WINDOW (message));
-
-		gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-		gtk_window_present_with_time (GTK_WINDOW (message),
-					      gtk_get_current_event_time ());
-		
-		return;
-	}
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	topic = ephy_bookmarks_add_keyword (bookmarks, name);
-	ephy_bookmarks_set_keyword (bookmarks, topic, bookmark);				    
-	
-	gtk_widget_destroy (dialog);
-}
-
-void
-ephy_bookmarks_ui_add_topic (GtkWidget *parent,
-			     EphyNode *bookmark)
-{
-	GtkWidget *dialog, *hbox, *entry, *label;
-	GtkContainer *container;
-	GList *children;
-
-	g_assert (parent != NULL);
-
-	if (bookmark != NULL)
-	{
-		dialog = gtk_message_dialog_new
-			(GTK_WINDOW (parent),
-			 GTK_DIALOG_DESTROY_WITH_PARENT,
-			 GTK_MESSAGE_QUESTION,
-			 GTK_BUTTONS_NONE,
-			 _("New topic for “%s”"),
-			 ephy_node_get_property_string (bookmark, EPHY_NODE_BMK_PROP_TITLE));
-	}
-	else
-	{
-		dialog = gtk_message_dialog_new
-			(GTK_WINDOW (parent),
-			 GTK_DIALOG_DESTROY_WITH_PARENT,
-			 GTK_MESSAGE_QUESTION,
-			 GTK_BUTTONS_NONE,
-			 _("New topic"));
-	}
-	
-	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-						  "%s",
-						  _("Enter a unique name for the topic."));
-			
-	hbox = gtk_hbox_new (FALSE, 12);
-	gtk_widget_show (hbox);
-	
-	entry = gtk_entry_new ();
-	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-	gtk_widget_show (entry);
-	
-	label = gtk_label_new_with_mnemonic ("_Name:");
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-	gtk_widget_show (label);
-	
-	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
-	gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-	
-	/* Get the hbox which is the first child of the main vbox */
-	children = gtk_container_get_children (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox));
-	container = GTK_CONTAINER (children->data);
-	g_list_free (children);
-
-	/* Get the vbox which is the second child of the hbox */
-	children = gtk_container_get_children (container);
-	container = GTK_CONTAINER (children->next->data);
-	g_list_free (children);
-	gtk_box_pack_start (GTK_BOX (container), hbox, FALSE, FALSE, 0);
-
-	g_object_set_data (G_OBJECT (dialog), "name", entry);
-
-	gtk_dialog_add_button (GTK_DIALOG (dialog),
-			       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-	gtk_dialog_add_button (GTK_DIALOG (dialog),
-			       _("Create"), GTK_RESPONSE_ACCEPT);
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-
-	gtk_window_set_title (GTK_WINDOW (dialog), _("New Topic"));
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
-
-	g_signal_connect (dialog, "response",
-			  G_CALLBACK (add_topic_response_cb), bookmark);
-
-	add_topic_changed_cb (GTK_ENTRY (entry), GTK_DIALOG (dialog));
-	g_signal_connect (entry, "changed",
-			  G_CALLBACK (add_topic_changed_cb), dialog);
-
-	ephy_node_signal_connect_object (bookmark, EPHY_NODE_DESTROY,
-					 (EphyNodeCallback) dialog_node_destroy_cb,
-					 G_OBJECT (dialog));
-
-	gtk_window_group_add_window 
-		(ephy_gui_ensure_window_group (GTK_WINDOW (parent)),
-		 GTK_WINDOW (dialog));
-
-	gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 	gtk_window_present_with_time (GTK_WINDOW (dialog),
 				      gtk_get_current_event_time ());
 }
@@ -658,7 +472,7 @@ ephy_bookmarks_ui_show_bookmark (EphyNode *bookmark)
 	if (dialog == NULL)
 	{
 		dialog = ephy_bookmark_properties_new (bookmarks, bookmark, FALSE);
-
+		
 		g_signal_connect (dialog, "destroy",
 				  G_CALLBACK (properties_dialog_destroy_cb), bookmark);
 		g_hash_table_insert (properties_dialogs,
@@ -853,9 +667,14 @@ ephy_bookmarks_ui_attach_toolbar_model (EggToolbarsModel *model)
 					 (EphyNodeCallback)toolbar_node_removed_cb,
 					 G_OBJECT (model));
 
-	egg_toolbars_model_set_n_avail (model, "AddTopicToToolbar", G_MAXINT);
-	egg_toolbars_model_set_n_avail (model, "AddBookmarkToToolbar", G_MAXINT);
-	egg_toolbars_model_set_n_avail (model, "RelatedTopic", 1);
+	egg_toolbars_model_set_name_flags (model, "AddTopicToToolbar", 
+					   EGG_TB_MODEL_NAME_KNOWN |
+					   EGG_TB_MODEL_NAME_INFINITE);
+	egg_toolbars_model_set_name_flags (model, "AddBookmarkToToolbar", 
+					   EGG_TB_MODEL_NAME_KNOWN |
+					   EGG_TB_MODEL_NAME_INFINITE);
+	egg_toolbars_model_set_name_flags (model, "RelatedTopic", 
+					   EGG_TB_MODEL_NAME_KNOWN);
 }
 
 

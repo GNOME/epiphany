@@ -489,7 +489,7 @@ cmd_bookmark_link (GtkAction *action,
 		location = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_LOCATION);
 		title = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_TITLE);
 
-		ephy_bookmarks_ui_add_bookmark (location, title);
+		ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (editor), location, title);
 	}
 
 	g_list_free (selection);

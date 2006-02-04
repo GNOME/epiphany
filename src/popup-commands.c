@@ -127,7 +127,7 @@ popup_cmd_bookmark_link (GtkAction *action,
 		location = rel;
 	}
 
-	ephy_bookmarks_ui_add_bookmark (location, title);
+	ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window), location, title);
 }
 
 static void

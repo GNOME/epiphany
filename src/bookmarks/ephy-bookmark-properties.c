@@ -27,6 +27,7 @@
 #include "ephy-bookmarks-ui.h"
 #include "ephy-topics-entry.h"
 #include "ephy-topics-palette.h"
+#include "ephy-node-common.h"
 #include "ephy-stock-icons.h"
 #include "ephy-debug.h"
 #include "ephy-shell.h"
@@ -174,13 +175,13 @@ ephy_bookmark_properties_set_bookmark (EphyBookmarkProperties *properties,
 }
 
 static void
-activate_merge_cb (GtkMenuItem *item,
-		   EphyBookmarkProperties *properties)
+similar_merge_cb (GtkMenuItem *item,
+		  EphyBookmarkProperties *properties)
 {
 	EphyBookmarkPropertiesPrivate *priv = properties->priv;
 	GPtrArray *topics;
 	EphyNode *node, *topic;
-	gint i, j;
+	gint i, j, priority;
 
 	GPtrArray *identical = g_ptr_array_new ();
 	
@@ -196,6 +197,11 @@ activate_merge_cb (GtkMenuItem *item,
 		for (j = 0; j < topics->len; j++)
 		{
 			topic = g_ptr_array_index (topics, j);
+			
+			priority = ephy_node_get_property_int
+			  (topic, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+			if (priority != EPHY_NODE_NORMAL_PRIORITY)
+			  continue;
 
 			if (ephy_node_has_child (topic, node))
 			{
@@ -212,25 +218,39 @@ activate_merge_cb (GtkMenuItem *item,
 }
 
 static void
-activate_show_cb (GtkMenuItem *item,
-		  EphyNode *node)
+similar_show_cb (GtkMenuItem *item,
+		 EphyNode *node)
 {
 	ephy_bookmarks_ui_show_bookmark (node);
 }
 
 static void
-show_duplicate_cb (GtkButton *button,
-		   EphyBookmarkProperties *properties)
+similar_deactivate_cb (GtkMenuShell *ms,
+		       GtkWidget *button)
+{
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
+	gtk_button_released (GTK_BUTTON (button));
+}
+
+static void
+similar_toggled_cb (GtkWidget *button,
+		    EphyBookmarkProperties *properties)
 {
 	EphyBookmarkPropertiesPrivate *priv = properties->priv;
 	EphyNode *node;
 	GtkMenuShell *menu;
 	GtkWidget *item, *image;
+	GPtrArray *identical, *similar;
 	char *label;
 	gint i;
 	
-	GPtrArray *identical = g_ptr_array_new ();
-	GPtrArray *similar = g_ptr_array_new ();
+	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+	{
+		return;
+	}
+	
+	identical = g_ptr_array_new ();
+	similar = g_ptr_array_new ();
 
 	ephy_bookmarks_get_similar (priv->bookmarks,
 				    priv->bookmark,
@@ -251,7 +271,7 @@ show_duplicate_cb (GtkButton *button,
 			g_free (label);
 			image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU);
 			gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-			g_signal_connect (item, "activate", G_CALLBACK (activate_merge_cb), properties);
+			g_signal_connect (item, "activate", G_CALLBACK (similar_merge_cb), properties);
 			gtk_widget_show (image);
 			gtk_widget_show (item);
 			gtk_menu_shell_append (menu, item);
@@ -267,7 +287,7 @@ show_duplicate_cb (GtkButton *button,
 							 ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE));
 				item = gtk_image_menu_item_new_with_label (label);
 				g_free (label);
-				g_signal_connect (item, "activate", G_CALLBACK (activate_show_cb), node);
+				g_signal_connect (item, "activate", G_CALLBACK (similar_show_cb), node);
 				gtk_widget_show (item);
 				gtk_menu_shell_append (menu, item);
 			}
@@ -289,19 +309,54 @@ show_duplicate_cb (GtkButton *button,
 							 ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE));
 				item = gtk_image_menu_item_new_with_label (label);
 				g_free (label);
-				g_signal_connect (item, "activate", G_CALLBACK (activate_show_cb), node);
+				g_signal_connect (item, "activate", G_CALLBACK (similar_show_cb), node);
 				gtk_widget_show (item);
 				gtk_menu_shell_append (menu, item);
 			}
 		}
 		
+		g_signal_connect_object (menu, "deactivate",
+					 G_CALLBACK (similar_deactivate_cb), button, 0);
+		
 		gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
 				ephy_gui_menu_position_under_widget, button,
-				0, gtk_get_current_event_time ());
+				1, gtk_get_current_event_time ());
 	}
 		
 	g_ptr_array_free (similar, TRUE);
 	g_ptr_array_free (identical, TRUE);
+}
+
+static gboolean
+similar_release_cb (GtkWidget *button,
+		    GdkEventButton *event,
+		    EphyBookmarkProperties *properties)
+{
+	if (event->button == 1)
+	{
+		gtk_toggle_button_set_active
+			(GTK_TOGGLE_BUTTON (button), FALSE);
+	}
+
+	return FALSE;
+}
+
+static gboolean
+similar_press_cb (GtkWidget *button,
+		  GdkEventButton *event,
+		  EphyBookmarkProperties *properties)
+{
+	if (event->button == 1)
+	{
+		if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+		{
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+
+			return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 static void
@@ -401,15 +456,14 @@ location_entry_changed_cb (GtkWidget *entry,
 }
 
 static void
-toggled_cb (GtkToggleButton *button,
-	    EphyBookmarkProperties *properties)
+list_toggled_cb (GtkToggleButton *button,
+		 EphyBookmarkProperties *properties)
 {
 	EphyBookmarkPropertiesPrivate *priv = properties->priv;
 	GdkGeometry geometry;
 	
 	if(gtk_toggle_button_get_active (button))
 	{
-		g_object_set (priv->entry, "sensitive", FALSE, NULL);
 		gtk_widget_show (priv->palette);
 	
 		geometry.min_width = -1;
@@ -420,7 +474,6 @@ toggled_cb (GtkToggleButton *button,
 	}
 	else
 	{
-		g_object_set (priv->entry, "sensitive", TRUE, NULL);
 		gtk_widget_hide (priv->palette);
 		
 		geometry.max_height = -1;
@@ -430,7 +483,6 @@ toggled_cb (GtkToggleButton *button,
 					       &geometry, GDK_HINT_MAX_SIZE);
 	}
 }
-
 
 static void
 ephy_bookmark_properties_init (EphyBookmarkProperties *properties)
@@ -464,7 +516,6 @@ ephy_bookmark_properties_constructor (GType type,
 
 	gtk_window_set_icon_name (window, STOCK_BOOKMARK);
 	gtk_window_set_type_hint (window, GDK_WINDOW_TYPE_HINT_NORMAL);
-	ephy_gui_ensure_window_group (window);
 
 	g_signal_connect (properties, "response",
 			  G_CALLBACK (bookmark_properties_response_cb), properties);
@@ -472,11 +523,14 @@ ephy_bookmark_properties_constructor (GType type,
 	g_signal_connect (properties, "destroy",
 			  G_CALLBACK (bookmark_properties_destroy_cb), properties);
 
-	ephy_state_add_window (widget,
-			       "bookmark_properties",
-			       290, 280, FALSE,
-			       EPHY_STATE_WINDOW_SAVE_SIZE |
-			       EPHY_STATE_WINDOW_SAVE_POSITION);
+	if (!priv->creating)
+	{
+		ephy_state_add_window (widget,
+				       "bookmark_properties",
+				       290, 280, FALSE,
+				       EPHY_STATE_WINDOW_SAVE_POSITION |
+				       EPHY_STATE_WINDOW_SAVE_SIZE);
+	}
 
 	update_window_title (properties);
 
@@ -551,14 +605,16 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_widget_show (widget);
 	button = gtk_toggle_button_new_with_label ("");
 	gtk_button_set_image (GTK_BUTTON (button), widget);
-	g_signal_connect (button, "toggled", G_CALLBACK (toggled_cb), properties);
-	toggled_cb (GTK_TOGGLE_BUTTON (button), properties);
+	ephy_state_add_toggle (button, "bookmark_properties_list", FALSE);
+	g_signal_connect (button, "toggled", G_CALLBACK (list_toggled_cb), properties);
+	list_toggled_cb (GTK_TOGGLE_BUTTON (button), properties);
 	gtk_widget_show (button);
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
 	
-	gtk_box_pack_start (GTK_BOX (dialog->vbox), table, TRUE, TRUE, 0);
-	
-	priv->warning = gtk_button_new ();
+	gtk_box_pack_start (GTK_BOX (dialog->vbox), table, TRUE, TRUE, 0); 
+
+	priv->warning = gtk_toggle_button_new ();
+	gtk_button_set_focus_on_click (GTK_BUTTON (priv->warning), FALSE);
 	gtk_button_set_use_underline (GTK_BUTTON (priv->warning), TRUE);
 	text = g_strdup_printf (ngettext("%d _Similar", "%d _Similar", 0), 0);
 	gtk_button_set_label (GTK_BUTTON (priv->warning), text);
@@ -568,8 +624,12 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_button_set_image (GTK_BUTTON (priv->warning), widget);
 	g_object_set (priv->warning, "sensitive", FALSE, NULL);
 	gtk_widget_show (priv->warning);
-	g_signal_connect (priv->warning, "clicked",
-			  G_CALLBACK(show_duplicate_cb), properties);
+	g_signal_connect (priv->warning, "toggled",
+			  G_CALLBACK (similar_toggled_cb), properties);
+	g_signal_connect (priv->warning, "button-press-event",
+			  G_CALLBACK (similar_press_cb), properties);
+	g_signal_connect (priv->warning, "button-release-event",
+			  G_CALLBACK (similar_release_cb), properties);
 		
 	gtk_dialog_add_button (dialog,
 			       GTK_STOCK_HELP,
