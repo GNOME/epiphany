@@ -49,6 +49,10 @@ void  ephy_state_add_expander	(GtkWidget *expander,
 				 const char *name,
 				 gboolean default_state);
 
+void  ephy_state_add_toggle	(GtkWidget *toggle,
+				 const char *name,
+				 gboolean default_state);
+
 void  ephy_state_save		(void);
 
 G_END_DECLS
