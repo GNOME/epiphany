@@ -605,7 +605,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_widget_show (widget);
 	button = gtk_toggle_button_new_with_label ("");
 	gtk_button_set_image (GTK_BUTTON (button), widget);
-	ephy_state_add_toggle (button, "bookmark_properties_list", FALSE);
+	ephy_state_add_expander (button, "bookmark_properties_list", FALSE);
 	g_signal_connect (button, "toggled", G_CALLBACK (list_toggled_cb), properties);
 	list_toggled_cb (GTK_TOGGLE_BUTTON (button), properties);
 	gtk_widget_show (button);
@@ -658,7 +658,7 @@ ephy_bookmark_properties_constructor (GType type,
 		gtk_dialog_set_default_response (dialog, GTK_RESPONSE_CLOSE);
 	}
 
-	update_warning_idle (properties);
+	update_warning (properties);
 	
 	return object;
 }

@@ -468,46 +468,6 @@ sync_expander_cb (GtkExpander *expander,
 	g_value_unset (&value);
 }
 
-void 
-ephy_state_add_expander	(GtkWidget *expander,
-			 const char *name,
-			 gboolean default_state)
-{
-	EphyNode *node;
-	gboolean expanded;
-
-	ensure_states ();
-
-	node = find_by_name (name);
-	if (node == NULL)
-	{
-		GValue value = { 0, };
-
-		node = ephy_node_new (states_db);
-		ephy_node_add_child (states, node);
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, name);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_NAME,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_BOOLEAN);
-		g_value_set_boolean (&value, default_state);
-		ephy_node_set_property
-			(node, EPHY_NODE_STATE_PROP_ACTIVE, &value);
-		g_value_unset (&value);
-	}
-
-	expanded = ephy_node_get_property_boolean
-		(node, EPHY_NODE_STATE_PROP_ACTIVE);
-
-	gtk_expander_set_expanded (GTK_EXPANDER (expander), expanded);
-
-	g_signal_connect (expander, "notify::expanded",
-			  G_CALLBACK (sync_expander_cb), node);
-}
-
 static void
 sync_toggle_cb (GtkToggleButton *toggle,
 		GParamSpec *pspec,
@@ -522,9 +482,9 @@ sync_toggle_cb (GtkToggleButton *toggle,
 }
 
 void 
-ephy_state_add_toggle (GtkWidget *toggle,
-		       const char *name,
-		       gboolean default_state)
+ephy_state_add_expander (GtkWidget *widget,
+			 const char *name,
+			 gboolean default_state)
 {
 	EphyNode *node;
 	gboolean active;
@@ -555,10 +515,18 @@ ephy_state_add_toggle (GtkWidget *toggle,
 	active = ephy_node_get_property_boolean
 		(node, EPHY_NODE_STATE_PROP_ACTIVE);
 
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), active);
-
-	g_signal_connect (toggle, "notify::active",
-			  G_CALLBACK (sync_toggle_cb), node);
+	if (GTK_IS_TOGGLE_BUTTON (widget))
+	{
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), active);
+		g_signal_connect (widget, "notify::active",
+				  G_CALLBACK (sync_toggle_cb), node);
+	}
+	else if (GTK_IS_EXPANDER (widget))
+	{
+		gtk_expander_set_expanded (GTK_EXPANDER (widget), active);
+		g_signal_connect (widget, "notify::expanded",
+				  G_CALLBACK (sync_expander_cb), node);
+	}
 }
 
 void
