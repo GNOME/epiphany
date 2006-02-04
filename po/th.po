@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.th\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-31 11:29+0700\n"
-"PO-Revision-Date: 2006-01-31 11:46+0700\n"
+"POT-Creation-Date: 2006-02-04 09:27+0700\n"
+"PO-Revision-Date: 2006-02-04 09:35+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
@@ -128,8 +128,8 @@ msgid "Epiphany Web Browser"
 msgstr "เว็บเบราว์เซอร์ Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: data/epiphany.desktop.in.in.h:3 src/ephy-main.c:539
-#: src/ephy-main.c:588 src/ephy-main.c:607
+#: data/epiphany.desktop.in.in.h:3 src/ephy-main.c:499
+#: src/ephy-main.c:550 src/ephy-main.c:575
 msgid "Web Browser"
 msgstr "เว็บเบราว์เซอร์"
 
@@ -514,7 +514,7 @@ msgid "MD5 Fingerprint:"
 msgstr "ลายนิ้วมือ MD5:"
 
 #: data/glade/certificate-dialogs.glade.h:15
-#: embed/mozilla/GtkNSSDialogs.cpp:1015
+#: embed/mozilla/GtkNSSDialogs.cpp:1036
 msgid "Organization:"
 msgstr "องค์กร:"
 
@@ -543,7 +543,7 @@ msgid "Cookies"
 msgstr "คุกกี้"
 
 #. The name of the default downloads folder
-#: data/glade/epiphany.glade.h:4 lib/ephy-file-helpers.c:105
+#: data/glade/epiphany.glade.h:4 lib/ephy-file-helpers.c:106
 msgid "Downloads"
 msgstr "ดาวน์โหลด"
 
@@ -837,7 +837,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "เหลืออีก"
 
-#: embed/ephy-embed-shell.c:235
+#: embed/ephy-embed-shell.c:243
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "ไม่สามารถใช้ Epiphany ได้เนื่องจากการเริ่มทำงานของ Mozilla ล้มเหลว"
 
@@ -1236,24 +1236,24 @@ msgstr "อื่นๆ"
 msgid "Local files"
 msgstr "แฟ้มในเครื่อง"
 
-#: embed/mozilla/ContentHandler.cpp:172
+#: embed/mozilla/ContentHandler.cpp:178
 #: embed/mozilla/EphyHeaderSniffer.cpp:408
 msgid "Save"
 msgstr "บันทึก"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: embed/mozilla/ContentHandler.cpp:293
+#: embed/mozilla/ContentHandler.cpp:299
 msgid "File Type:|Unknown"
 msgstr "ไม่ทราบ"
 
-#: embed/mozilla/ContentHandler.cpp:328
+#: embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "จะดาวน์โหลดแฟ้มที่ไม่น่าปลอดภัยนี้หรือไม่?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: embed/mozilla/ContentHandler.cpp:334
+#: embed/mozilla/ContentHandler.cpp:340
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1266,14 +1266,14 @@ msgstr ""
 "ไม่ปลอดภัยที่จะเปิดแฟ้ม “%s” เพราะอาจสร้างความเสียหายให้กับแฟ้มเอกสารของคุณ "
 "หรือรุกล้ำความเป็นส่วนตัวของคุณได้ แต่คุณสามารถบันทึกลงดิสก์แทนได้"
 
-#: embed/mozilla/ContentHandler.cpp:344
+#: embed/mozilla/ContentHandler.cpp:350
 msgid "Open this file?"
 msgstr "จะเปิดแฟ้มนี้หรือไม่?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: embed/mozilla/ContentHandler.cpp:351
+#: embed/mozilla/ContentHandler.cpp:357
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1284,13 +1284,13 @@ msgstr ""
 "\n"
 "คุณสามารถเปิดแฟ้ม “%s” ด้วย “%s” หรือจะบันทึกลงดิสก์ก็ได้"
 
-#: embed/mozilla/ContentHandler.cpp:359
+#: embed/mozilla/ContentHandler.cpp:365
 msgid "Download this file?"
 msgstr "ดาวน์โหลดแฟ้มนี้หรือไม่?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: embed/mozilla/ContentHandler.cpp:365
+#: embed/mozilla/ContentHandler.cpp:371
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1301,7 +1301,7 @@ msgstr ""
 "\n"
 "คุณไม่มีโปรแกรมที่จะเปิด “%s” แต่คุณสามารถดาวน์โหลดแทนก็ได้"
 
-#: embed/mozilla/ContentHandler.cpp:370
+#: embed/mozilla/ContentHandler.cpp:376
 msgid "_Save As..."
 msgstr "บันทึกเป็_น..."
 
@@ -1382,8 +1382,8 @@ msgid ""
 "Configuration Tool in Desktop > System Settings > Server Settings > "
 "Services, or</ul><ul><li>the port number %d is wrong.</li></ul>"
 msgstr ""
-"<ul><li>บริการ %s ไม่ทำงาน</li>กรุณาเปิดบริการผ่านเครื่องมือตั้งค่าบริการในเมนู "
-"พื้นโต๊ะ > ดูแลระบบ > บริการระบบ หรือ</ul><ul><li>หมายเลขพอร์ต %d ไม่ถูกต้อง</li></ul>"
+"<ul><li>บริการ %s ไม่ทำงาน</li>กรุณาเปิดบริการผ่านเครื่องมือตั้งค่าบริการในเมนู พื้นโต๊ะ > "
+"ดูแลระบบ > บริการระบบ หรือ</ul><ul><li>หมายเลขพอร์ต %d ไม่ถูกต้อง</li></ul>"
 
 #: embed/mozilla/EphyAboutModule.cpp:281
 #, c-format
@@ -1573,82 +1573,82 @@ msgstr "ในกรุอินเทอร์เน็ต"
 
 #: embed/mozilla/EphyHeaderSniffer.cpp:364
 #: src/bookmarks/ephy-bookmarks-import.c:245
-#: src/bookmarks/ephy-bookmarks.c:1111 src/ephy-session.c:775
+#: src/bookmarks/ephy-bookmarks.c:1111 src/ephy-session.c:1314
 msgid "Untitled"
 msgstr "ไม่มีชื่อ"
 
-#: embed/mozilla/EphyPromptService.cpp:195
+#: embed/mozilla/EphyPromptService.cpp:197
 msgid "_Abort Script"
 msgstr "เ_ลิกทำสคริปต์"
 
-#: embed/mozilla/EphyPromptService.cpp:263
+#: embed/mozilla/EphyPromptService.cpp:265
 msgid "Don't Save"
 msgstr "ไ_ม่บันทึก"
 
-#: embed/mozilla/EphyPromptService.cpp:762
+#: embed/mozilla/EphyPromptService.cpp:799
 msgid "_User:"
 msgstr "_ผู้ใช้:"
 
-#: embed/mozilla/EphyPromptService.cpp:763
-#: embed/mozilla/EphyPromptService.cpp:790
-#: embed/mozilla/GtkNSSDialogs.cpp:795
-#: embed/mozilla/GtkNSSDialogs.cpp:905
+#: embed/mozilla/EphyPromptService.cpp:800
+#: embed/mozilla/EphyPromptService.cpp:827
+#: embed/mozilla/GtkNSSDialogs.cpp:811
+#: embed/mozilla/GtkNSSDialogs.cpp:926
 msgid "_Password:"
 msgstr "_รหัสผ่าน:"
 
-#: embed/mozilla/FilePicker.cpp:152 embed/mozilla/FilePicker.cpp:445
+#: embed/mozilla/FilePicker.cpp:153 embed/mozilla/FilePicker.cpp:451
 #: lib/ephy-file-chooser.c:371 src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "All files"
 msgstr "ทุกชนิด"
 
-#: embed/mozilla/FilePicker.cpp:157 lib/ephy-file-chooser.c:355
+#: embed/mozilla/FilePicker.cpp:158 lib/ephy-file-chooser.c:355
 msgid "Web pages"
 msgstr "หน้าเว็บ"
 
-#: embed/mozilla/FilePicker.cpp:165
+#: embed/mozilla/FilePicker.cpp:166
 msgid "Text files"
 msgstr "แฟ้มข้อความ"
 
-#: embed/mozilla/FilePicker.cpp:170 lib/ephy-file-chooser.c:363
+#: embed/mozilla/FilePicker.cpp:171 lib/ephy-file-chooser.c:363
 msgid "Images"
 msgstr "รูปภาพ"
 
-#: embed/mozilla/FilePicker.cpp:178
+#: embed/mozilla/FilePicker.cpp:179
 msgid "XML files"
 msgstr "แฟ้ม XML"
 
-#: embed/mozilla/FilePicker.cpp:183
+#: embed/mozilla/FilePicker.cpp:184
 msgid "XUL files"
 msgstr "แฟ้ม XUL"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:156
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:162
 msgid "_Select Certificate"
 msgstr "เ_ลือกใบรับรอง"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:202
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:208
 #, c-format
 msgid "Choose a certificate to present as identification to “%s”."
 msgstr "เลือกใบรับรองที่จะใช้แสดงตัวตนของ “%s”"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:211
 msgid "Select a certificate to identify yourself."
 msgstr "เลือกใบรับรองที่จะใช้แสดงตัวตนของคุณ"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:242
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:248
 msgid "Certificate _Details"
 msgstr "_รายละเอียดใบรับรอง"
 
 #. Add the buttons
-#: embed/mozilla/GtkNSSDialogs.cpp:235
-#: embed/mozilla/GtkNSSDialogs.cpp:547
+#: embed/mozilla/GtkNSSDialogs.cpp:241
+#: embed/mozilla/GtkNSSDialogs.cpp:558
 msgid "_View Certificate"
 msgstr "_ดูใบรับรอง"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:243
+#: embed/mozilla/GtkNSSDialogs.cpp:249
 msgid "_Accept"
 msgstr "_ยอมรับ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:310
+#: embed/mozilla/GtkNSSDialogs.cpp:316
 #, c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
@@ -1658,17 +1658,17 @@ msgstr ""
 "ไซต์ “%s” คืนค่าข้อมูลระบบรักษาความปลอดภัยของ “%s” มาให้ "
 "เป็นไปได้ว่าอาจมีใครดักข้อมูลการสื่อสารของคุณอยู่ เพื่อล้วงข้อมูลที่เป็นความลับของคุณ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:316
+#: embed/mozilla/GtkNSSDialogs.cpp:322
 #, c-format
 msgid ""
 "You should only accept the security information if you trust “%s” and “%s”."
 msgstr "คุณควรยอมรับข้อมูลระบบรักษาความปลอดภัยนี้ ก็ต่อเมื่อคุณเชื่อถือทั้ง “%s” และ “%s” เท่านั้น"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:321
+#: embed/mozilla/GtkNSSDialogs.cpp:327
 msgid "Accept incorrect security information?"
 msgstr "ยอมรับข้อมูลระบบรักษาความปลอดภัยที่ไม่ถูกต้องหรือไม่?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:352
+#: embed/mozilla/GtkNSSDialogs.cpp:358
 #, c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
@@ -1677,41 +1677,41 @@ msgstr ""
 "ไม่สามารถเชื่อถือ “%s” โดยอัตโนมัติได้ เป็นไปได้ว่าอาจมีใครดักข้อมูลการสื่อสารของคุณอยู่ "
 "เพื่อล้วงข้อมูลที่เป็นความลับของคุณ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:358
+#: embed/mozilla/GtkNSSDialogs.cpp:364
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
 "“%s”."
 msgstr "คุณควรเชื่อมต่อไปยังไซต์นี้ ก็ต่อเมื่อคุณแน่ใจว่ากำลังเชื่อมต่อไปยัง “%s” จริงๆ เท่านั้น"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:363
+#: embed/mozilla/GtkNSSDialogs.cpp:369
 msgid "Connect to untrusted site?"
 msgstr "เชื่อมต่อไปยังไซต์ที่ไม่น่าเชื่อถือหรือไม่?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:367
+#: embed/mozilla/GtkNSSDialogs.cpp:373
 msgid "_Trust this security information from now on"
 msgstr "เ_ชื่อถือข้อมูลระบบรักษาความปลอดภัยนี้นับจากนี้ไป"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:368
+#: embed/mozilla/GtkNSSDialogs.cpp:374
 msgid "Co_nnect"
 msgstr "เ_ชื่อมต่อ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:427
+#: embed/mozilla/GtkNSSDialogs.cpp:433
 msgid "Accept expired security information?"
 msgstr "ยอมรับข้อมูลระบบรักษาความปลอดภัยที่หมดอายุแล้วหรือไม่?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: embed/mozilla/GtkNSSDialogs.cpp:429
+#: embed/mozilla/GtkNSSDialogs.cpp:435
 #, c-format
 msgid "The security information for “%s” expired on %s."
 msgstr "ข้อมูลระบบรักษาความปลอดภัยของ “%s” หมดอายุลงแล้วเมื่อ %s"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:435
+#: embed/mozilla/GtkNSSDialogs.cpp:441
 msgid "Accept not yet valid security information?"
 msgstr "ยอมรับข้อมูลระบบรักษาความปลอดภัยที่ยังไม่มีผลหรือไม่?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: embed/mozilla/GtkNSSDialogs.cpp:437
+#: embed/mozilla/GtkNSSDialogs.cpp:443
 #, c-format
 msgid "The security information for “%s” isn't valid until %s."
 msgstr "ข้อมูลระบบรักษาความปลอดภัยของ “%s” ยังไม่มีผลจนกว่าจะถึง %s"
@@ -1719,190 +1719,190 @@ msgstr "ข้อมูลระบบรักษาความปลอดภ
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: embed/mozilla/GtkNSSDialogs.cpp:453
+#: embed/mozilla/GtkNSSDialogs.cpp:459
 msgid "%a %d %b %Y"
 msgstr "%a %d %b %Ey"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:461
+#: embed/mozilla/GtkNSSDialogs.cpp:467
 msgid "You should ensure that your computer's time is correct."
 msgstr "คุณควรแน่ใจด้วยว่านาฬิกาของเครื่องคุณตั้งไว้ถูกต้อง"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:507
+#: embed/mozilla/GtkNSSDialogs.cpp:513
 #, c-format
 msgid "Cannot establish connection to “%s”."
 msgstr "ไม่สามารถเชื่อมต่อไปยัง “%s”"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:510
+#: embed/mozilla/GtkNSSDialogs.cpp:516
 #, c-format
 msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
 msgstr "จำเป็นต้องอัพเดตรายการการเพิกถอนใบรับรอง (CRL) จาก “%s”"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:515
+#: embed/mozilla/GtkNSSDialogs.cpp:521
 msgid "Please ask your system administrator for assistance."
 msgstr "กรุณาขอความช่วยเหลือจากผู้ดูแลระบบของคุณ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:545
+#: embed/mozilla/GtkNSSDialogs.cpp:556
 msgid "Trust new Certificate Authority?"
 msgstr "เชื่อถือหน่วยงานออกใบรับรองหน่วยงานใหม่หรือไม่?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:550
+#: embed/mozilla/GtkNSSDialogs.cpp:561
 msgid "_Trust CA"
 msgstr "เ_ชื่อถือหน่วยงานออกใบรับรอง"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:572
+#: embed/mozilla/GtkNSSDialogs.cpp:583
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr "เชื่อถือหน่วยงานออกใบรับรอง “%s” ในการตรวจสอบตัวตนเว็บต่างๆ หรือไม่?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:577
+#: embed/mozilla/GtkNSSDialogs.cpp:588
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
 msgstr "ก่อนที่จะเชื่อถือหน่วยงานออกใบรับรอง (CA) คุณควรตรวจสอบด้วย ว่าใบรับรองเป็นของจริง"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:648
+#: embed/mozilla/GtkNSSDialogs.cpp:659
 msgid "Certificate already exists."
 msgstr "มีใบรับรองอยู่แล้ว"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:649
+#: embed/mozilla/GtkNSSDialogs.cpp:660
 msgid "The certificate has already been imported."
 msgstr "เคยนำเข้าใบรับรองนี้มาก่อนแล้ว"
 
 #. Translators: this is the action of the certificate being exported to a backup file
-#: embed/mozilla/GtkNSSDialogs.cpp:775
+#: embed/mozilla/GtkNSSDialogs.cpp:791
 msgid "_Back Up Certificate"
 msgstr "_สำรองข้อมูลใบรับรอง"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:782
+#: embed/mozilla/GtkNSSDialogs.cpp:798
 msgid "Select password."
 msgstr "เลือกรหัสผ่าน"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:783
+#: embed/mozilla/GtkNSSDialogs.cpp:799
 msgid "Select a password to protect this certificate."
 msgstr "เลือกรหัสผ่านเพื่อปกป้องข้อมูลใบรับรองนี้"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:809
+#: embed/mozilla/GtkNSSDialogs.cpp:825
 msgid "Con_firm password:"
 msgstr "_ยืนยันรหัสผ่าน:"
 
 #. TODO: We need a better password quality meter
-#: embed/mozilla/GtkNSSDialogs.cpp:821
+#: embed/mozilla/GtkNSSDialogs.cpp:837
 msgid "Password quality:"
 msgstr "คุณภาพรหัสผ่าน:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:878
+#: embed/mozilla/GtkNSSDialogs.cpp:899
 msgid "I_mport Certificate"
 msgstr "_นำเข้ารหัสผ่าน"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:894
+#: embed/mozilla/GtkNSSDialogs.cpp:915
 msgid "Password required."
 msgstr "ต้องการรหัสผ่าน"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:895
+#: embed/mozilla/GtkNSSDialogs.cpp:916
 msgid "Enter the password for this certificate."
 msgstr "กรุณาป้อนรหัสผ่านสำหรับใบรับรองนี้"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:984
+#: embed/mozilla/GtkNSSDialogs.cpp:1005
 msgid "Certificate Revocation List Imported"
 msgstr "นำเข้ารายการการเพิกถอนใบรับรองเรียบร้อยแล้ว"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:994
+#: embed/mozilla/GtkNSSDialogs.cpp:1015
 msgid "Certificate Revocation List (CRL) successfully imported"
 msgstr "นำเข้ารายการการเพิกถอนใบรับรอง (CRL) สำเร็จแล้ว"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1019
+#: embed/mozilla/GtkNSSDialogs.cpp:1040
 msgid "Unit:"
 msgstr "แผนก:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1023
+#: embed/mozilla/GtkNSSDialogs.cpp:1044
 msgid "Next Update:"
 msgstr "อัพเดตครั้งต่อไป:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1050
+#: embed/mozilla/GtkNSSDialogs.cpp:1071
 msgid "Not part of certificate"
 msgstr "ไม่ใช่ส่วนหนึ่งของใบรับรอง"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1340
+#: embed/mozilla/GtkNSSDialogs.cpp:1365
 msgid "Certificate Properties"
 msgstr "ข้อมูลของใบรับรอง"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1362
+#: embed/mozilla/GtkNSSDialogs.cpp:1387
 msgid "This certificate has been verified for the following uses:"
 msgstr "ใบรับรองนี้ผ่านการตรวจสอบแล้วสำหรับการใช้งานต่อไปนี้:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1365
+#: embed/mozilla/GtkNSSDialogs.cpp:1390
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "ไม่สามารถตรวจสอบใบรับรองนี้ได้ เพราะใบรับรองถูกเพิกถอนแล้ว"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1368
+#: embed/mozilla/GtkNSSDialogs.cpp:1393
 msgid "Could not verify this certificate because it has expired."
 msgstr "ไม่สามารถตรวจสอบใบรับรองนี้ได้ เพราะใบรับรองหมดอายุแล้ว"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1371
+#: embed/mozilla/GtkNSSDialogs.cpp:1396
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "ไม่สามารถตรวจสอบใบรับรองนี้ได้ เพราะใบรับรองไม่ได้รับความเชื่อถือ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1374
+#: embed/mozilla/GtkNSSDialogs.cpp:1399
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr "ไม่สามารถตรวจสอบใบรับรองนี้ได้ เพราะผู้ออกใบรับรองไม่ได้รับความเชื่อถือ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1377
+#: embed/mozilla/GtkNSSDialogs.cpp:1402
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "ไม่สามารถตรวจสอบใบรับรองนี้ได้ เพราะไม่รู้จักผู้ออกใบรับรอง"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1380
+#: embed/mozilla/GtkNSSDialogs.cpp:1405
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr "ไม่สามารถตรวจสอบใบรับรองนี้ได้ เพราะใบรับรอง CA ใช้ไม่ได้"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1385
+#: embed/mozilla/GtkNSSDialogs.cpp:1410
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "ไม่สามารถตรวจสอบใบรับรองนี้ได้ โดยไม่ทราบสาเหตุ"
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:230
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:235
 msgid "Generating Private Key."
 msgstr "กำลังสร้างกุญแจส่วนตัว"
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:231
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:236
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
 msgstr "กรุณารอสักครู่ ระหว่างสร้างกุญแจส่วนตัว กระบวนการนี้อาจใช้เวลาสองสามนาที"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "Security Notice"
 msgstr "ข้อสังเกตเกี่ยวกับการรักษาความปลอดภัย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
 msgid "This page is loaded over a secure connection"
 msgstr "หน้านี้ถูกโหลดผ่านการเชื่อมต่อนิรภัย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
 msgid "The padlock icon in the statusbar indicates whether a page is secure."
 msgstr "ไอคอนรูปแม่กุญแจในแถบสถานะจะบ่งชี้ว่าหน้านี้อยู่ในสถานะนิรภัยหรือไม่"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid "Security Warning"
 msgstr "คำเตือนเกี่ยวกับการรักษาความปลอดภัย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid "This page is loaded over a low security connection"
 msgstr "หน้านี้ถูกโหลดผ่านการเชื่อมต่อที่มีความนิรภัยต่ำ"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
 msgstr "ข้อมูลใดๆ ที่คุณเห็นหรือป้อนในหน้านี้ สามารถถูกบุคคลที่สามดักได้อย่างง่ายดาย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "บางส่วนของหน้านี้ถูกโหลดผ่านการเชื่อมต่อที่ไม่นิรภัย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1910,23 +1910,23 @@ msgstr ""
 "ข้อมูลบางส่วนที่คุณเห็นหรือป้อนจะถูกส่งผ่านการเชื่อมต่อที่ไม่นิรภัย "
 "และสามารถถูกบุคคลที่สามดักได้อย่างง่ายดาย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid "Send this information over an insecure connection?"
 msgstr "จะส่งข้อมูลเหล่านี้ผ่านการเชื่อมต่อที่ไม่นิรภัยหรือไม่?"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr "ข้อมูลที่คุณป้อนจะถูกส่งผ่านการเชื่อมต่อที่ไม่นิรภัย และสามารถถูกบุคคลที่สามดักได้อย่างง่ายดาย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "_Send"
 msgstr "_ส่ง"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2003,32 +2003,32 @@ msgstr ""
 "ข้อผิดพลาดของ GConf:\n"
 "  %s"
 
-#: lib/egg/egg-editable-toolbar.c:806
+#: lib/egg/egg-editable-toolbar.c:828
 #, c-format
 msgid "Hide “%s”"
 msgstr "ซ่อน “%s”"
 
-#: lib/egg/egg-editable-toolbar.c:1240
+#: lib/egg/egg-editable-toolbar.c:1264
 msgid "_Move on Toolbar"
 msgstr "_ย้ายที่ในแถบเครื่องมือ"
 
-#: lib/egg/egg-editable-toolbar.c:1241
+#: lib/egg/egg-editable-toolbar.c:1265
 msgid "Move the selected item on the toolbar"
 msgstr "ย้ายรายการที่เลือกในแถบเครื่องมือ"
 
-#: lib/egg/egg-editable-toolbar.c:1242
+#: lib/egg/egg-editable-toolbar.c:1266
 msgid "_Remove from Toolbar"
 msgstr "_ลบออกจากแถบเครื่องมือ"
 
-#: lib/egg/egg-editable-toolbar.c:1243
+#: lib/egg/egg-editable-toolbar.c:1267
 msgid "Remove the selected item from the toolbar"
 msgstr "ลบรายการที่เลือกออกจากแถบเครื่องมือ"
 
-#: lib/egg/egg-editable-toolbar.c:1244
+#: lib/egg/egg-editable-toolbar.c:1268
 msgid "_Remove Toolbar"
 msgstr "_ลบแถบเครื่องมือ"
 
-#: lib/egg/egg-editable-toolbar.c:1245
+#: lib/egg/egg-editable-toolbar.c:1269
 msgid "Remove the selected toolbar"
 msgstr "ลบแถบเครื่องมือที่เลือก"
 
@@ -2040,17 +2040,17 @@ msgstr "เส้นแบ่ง"
 msgid "All supported types"
 msgstr "ทุกชนิดที่สนับสนุน"
 
-#: lib/ephy-file-helpers.c:292
+#: lib/ephy-file-helpers.c:300
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "ไม่สามารถสร้างไดเรกทอรีชั่วคราวใน “%s”"
 
-#: lib/ephy-file-helpers.c:360
+#: lib/ephy-file-helpers.c:368
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "มีแฟ้ม “%s” อยู่แล้ว กรุณาย้ายตำแหน่ง"
 
-#: lib/ephy-file-helpers.c:371
+#: lib/ephy-file-helpers.c:379
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "ไม่สามารถสร้างไดเรกทอรี “%s”"
@@ -2254,7 +2254,7 @@ msgstr "ประวัติ"
 
 #: lib/ephy-stock-icons.c:57 src/bookmarks/ephy-bookmarks-editor.c:777
 #: src/bookmarks/ephy-bookmarks-editor.c:1596
-#: src/bookmarks/ephy-topic-action.c:405 src/ephy-window.c:1294
+#: src/bookmarks/ephy-topic-action.c:404 src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "ที่คั่นหน้า"
 
@@ -2335,7 +2335,7 @@ msgstr "ปลั๊กอินแฟ้มเดสก์ท็อปสำห
 msgid "This plugin handles “.desktop” files containing web links."
 msgstr "ปลั๊กอินนี้จัดการแฟ้ม “.desktop” ที่มีลิงก์ไปยังเว็บ"
 
-#: src/bookmarks/ephy-bookmark-action.c:285
+#: src/bookmarks/ephy-bookmark-action.c:290
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -2862,7 +2862,7 @@ msgstr "ที่เกี่ยวข้อง"
 msgid "Quick Topic"
 msgstr "เพิ่มหมวดอย่างเร็ว"
 
-#: src/bookmarks/ephy-topics-entry.c:356
+#: src/bookmarks/ephy-topics-entry.c:358
 #, c-format
 msgid "Create topic “%s”"
 msgstr "สร้างหมวด “%s”"
@@ -3007,47 +3007,43 @@ msgstr[1] "%d วันก่อน"
 msgid "Sites"
 msgstr "ไซต์"
 
-#: src/ephy-main.c:74
+#: src/ephy-main.c:78
 msgid "Open a new tab in an existing browser window"
 msgstr "เปิดแท็บใหม่ในหน้าต่างเบราว์เซอร์ปัจจุบัน"
 
-#: src/ephy-main.c:76
+#: src/ephy-main.c:80
 msgid "Open a new browser window"
 msgstr "เปิดเบราว์เซอร์หน้าต่างใหม่"
 
-#: src/ephy-main.c:78
+#: src/ephy-main.c:82
 msgid "Launch the bookmarks editor"
 msgstr "เรียกตัวแก้ไขที่คั่นหน้า"
 
-#: src/ephy-main.c:80
+#: src/ephy-main.c:84
 msgid "Import bookmarks from the given file"
 msgstr "นำเข้าที่คั่นหน้าจากแฟ้ม"
 
-#: src/ephy-main.c:80 src/ephy-main.c:82
+#: src/ephy-main.c:84 src/ephy-main.c:86
 msgid "FILE"
 msgstr "FILE"
 
-#: src/ephy-main.c:82
+#: src/ephy-main.c:86
 msgid "Load the given session file"
 msgstr "โหลดแฟ้มวาระที่กำหนด"
 
-#: src/ephy-main.c:84
+#: src/ephy-main.c:88
 msgid "Add a bookmark"
 msgstr "เพิ่มที่คั่นหน้า"
 
-#: src/ephy-main.c:84
+#: src/ephy-main.c:88
 msgid "URL"
 msgstr "URL"
 
-#: src/ephy-main.c:86 src/ephy-main.c:117
-msgid "Start a private instance"
-msgstr ""
-
-#: src/ephy-main.c:474
+#: src/ephy-main.c:434
 msgid "Could not start GNOME Web Browser"
 msgstr "ไม่สามารถเรียกใช้เว็บเบราว์เซอร์ของ GNOME"
 
-#: src/ephy-main.c:477
+#: src/ephy-main.c:437
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -3056,11 +3052,11 @@ msgstr ""
 "ไม่สามารถเริ่มการทำงานได้ เนื่องจากข้อผิดพลาดต่อไปนี้:\n"
 "%s"
 
-#: src/ephy-main.c:517 src/ephy-main.c:519 src/window-commands.c:752
+#: src/ephy-main.c:477 src/ephy-main.c:479 src/window-commands.c:752
 msgid "GNOME Web Browser"
 msgstr "เว็บเบราว์เซอร์ของ GNOME"
 
-#: src/ephy-main.c:520
+#: src/ephy-main.c:480
 msgid "GNOME Web Browser options"
 msgstr "ตัวเลือกสำหรับเว็บเบราว์เซอร์ของ GNOME"
 
@@ -3068,11 +3064,38 @@ msgstr "ตัวเลือกสำหรับเว็บเบราว์
 msgid "Close tab"
 msgstr "ปิดแท็บ"
 
-#: src/ephy-session.c:378
+#: src/ephy-session.c:158
+#, c-format
+msgid "Downloads will be aborted and logout proceed in %d second."
+msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
+msgstr[0] "การดาวน์โหลดทั้งหมดจะถูกยกเลิก และจะออกจากระบบภายใน %d วินาที"
+msgstr[1] "การดาวน์โหลดทั้งหมดจะถูกยกเลิก และจะออกจากระบบภายใน %d วินาที"
+
+#: src/ephy-session.c:274
+msgid "Abort pending downloads?"
+msgstr "เลิกการดาวน์โหลดข้อมูลที่ยังค้างอยู่หรือไม่"
+
+#: src/ephy-session.c:278
+msgid ""
+"There are still downloads pending. If you log out, they will be aborted and "
+"lost."
+msgstr ""
+"ยังมีการดาวน์โหลดที่ยังค้างอยู่ ถ้าคุณออกจากระบบตอนนี้ จะยกเลิกการดาวน์โหลดทั้งหมด "
+"และข้อมูลที่ดาวน์โหลดจะสูญหาย"
+
+#: src/ephy-session.c:282
+msgid "_Cancel Logout"
+msgstr "_ยกเลิกการออกจากระบบ"
+
+#: src/ephy-session.c:284
+msgid "_Abort Downloads"
+msgstr "เ_ลิกดาวน์โหลด"
+
+#: src/ephy-session.c:609
 msgid "Recover previous browser windows and tabs?"
 msgstr "จะเรียกหน้าต่างและแท็บเดิมของเบราว์เซอร์คืนมาหรือไม่?"
 
-#: src/ephy-session.c:382
+#: src/ephy-session.c:613
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -3080,15 +3103,15 @@ msgstr ""
 "ดูเหมือนว่า Epiphany จะตายกลางคันในการทำงานครั้งก่อน "
 "คุณสามารถเรียกหน้าต่างและแท็บที่เปิดไว้ในครั้งนั้นคืนมาได้"
 
-#: src/ephy-session.c:386
+#: src/ephy-session.c:617
 msgid "_Don't Recover"
 msgstr "ไ_ม่ต้องเรียกคืน"
 
-#: src/ephy-session.c:388
+#: src/ephy-session.c:619
 msgid "_Recover"
 msgstr "เ_รียกคืน"
 
-#: src/ephy-session.c:390
+#: src/ephy-session.c:621
 msgid "Crash Recovery"
 msgstr "การเรียกคืนจากการพัง"
 
