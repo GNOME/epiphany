@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-31 23:22+0100\n"
-"PO-Revision-Date: 2006-02-01 00:35+0100\n"
+"POT-Creation-Date: 2006-02-04 14:45+0100\n"
+"PO-Revision-Date: 2006-02-04 14:55+0100\n"
 "Last-Translator: Reinout van Schouwen <reinout@cs.vu.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,11 +20,11 @@ msgstr ""
 
 #: ../data/epiphany-lockdown.schemas.in.h:1
 msgid ""
-"A list of protocols to be considered safev in addition to the default, when "
+"A list of protocols to be considered safe in addition to the default, when "
 "disable_unsafe_protocols is enabled."
 msgstr ""
 "Een lijst van protocollen die, naast de standaardprotocollen, als veilig "
-"beschouwd zullen worden wanneer disable_unsafe_protocols is ingeschakeld."
+"beschouwd dienen te worden wanneer disable_unsafe_protocols is ingeschakeld."
 
 #: ../data/epiphany-lockdown.schemas.in.h:2
 msgid "Additional safe protocols"
@@ -162,8 +162,8 @@ msgstr "Epiphany webbrowser"
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:524
-#: ../src/ephy-main.c:573 ../src/ephy-main.c:592
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:499
+#: ../src/ephy-main.c:550 ../src/ephy-main.c:575
 msgid "Web Browser"
 msgstr "Webbrowser"
 
@@ -603,7 +603,7 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5 vingerafdruk:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1015
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1036
 msgid "Organization:"
 msgstr "Organisatie:"
 
@@ -639,7 +639,7 @@ msgstr "Cookies"
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:105
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:106
 msgid "Downloads"
 msgstr "Downloads"
 
@@ -999,7 +999,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Te gaan"
 
-#: ../embed/ephy-embed-shell.c:235
+#: ../embed/ephy-embed-shell.c:243
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr ""
 "Epiphany kan nu niet gebruikt worden. Initialisatie van Mozilla mislukt."
@@ -1486,27 +1486,27 @@ msgid "Local files"
 msgstr "Lokale bestanden"
 
 # src/menubar.c:63
-#: ../embed/mozilla/ContentHandler.cpp:172
+#: ../embed/mozilla/ContentHandler.cpp:178
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:408
 msgid "Save"
 msgstr "Opslaan"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:293
+#: ../embed/mozilla/ContentHandler.cpp:299
 msgid "File Type:|Unknown"
 msgstr "Onbekend"
 
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../embed/mozilla/ContentHandler.cpp:328
+#: ../embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "Dit mogelijkerwijs onveilige bestand downloaden?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:334
+#: ../embed/mozilla/ContentHandler.cpp:340
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1521,14 +1521,14 @@ msgstr ""
 "downloaden."
 
 # src/menubar.c:34
-#: ../embed/mozilla/ContentHandler.cpp:344
+#: ../embed/mozilla/ContentHandler.cpp:350
 msgid "Open this file?"
 msgstr "Dit bestand openen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:351
+#: ../embed/mozilla/ContentHandler.cpp:357
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1542,13 +1542,13 @@ msgstr ""
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../embed/mozilla/ContentHandler.cpp:359
+#: ../embed/mozilla/ContentHandler.cpp:365
 msgid "Download this file?"
 msgstr "Dit bestand downloaden?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:365
+#: ../embed/mozilla/ContentHandler.cpp:371
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1561,7 +1561,7 @@ msgstr ""
 "plaats daarvan downloaden."
 
 # src/menubar.c:63
-#: ../embed/mozilla/ContentHandler.cpp:370
+#: ../embed/mozilla/ContentHandler.cpp:376
 msgid "_Save As..."
 msgstr "Opslaan _als..."
 
@@ -1657,8 +1657,8 @@ msgid ""
 "<ul><li>some service isn't started, or</li><li>the port number %d is wrong.</"
 "li></ul>"
 msgstr ""
-"<ul><li>een bepaalde dienst is niet gestart, of</li><li>het poortnummer "
-"%d is onjuist.</li></ul>"
+"<ul><li>een bepaalde dienst is niet gestart, of</li><li>het poortnummer %d "
+"is onjuist.</li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:290
 msgid ""
@@ -1857,13 +1857,13 @@ msgstr "in het Internet Archive"
 # src/window.c:2279
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks.c:1111 ../src/ephy-session.c:775
+#: ../src/bookmarks/ephy-bookmarks.c:1111 ../src/ephy-session.c:1314
 msgid "Untitled"
 msgstr "Naamloos"
 
 # ui/epiphany.glade.h:95
 # ui/preferences.glade.h:139
-#: ../embed/mozilla/EphyPromptService.cpp:195
+#: ../embed/mozilla/EphyPromptService.cpp:197
 msgid "_Abort Script"
 msgstr "S_cript onderbreken"
 
@@ -1871,80 +1871,80 @@ msgstr "S_cript onderbreken"
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: ../embed/mozilla/EphyPromptService.cpp:263
+#: ../embed/mozilla/EphyPromptService.cpp:265
 msgid "Don't Save"
 msgstr "Niet opslaan"
 
-#: ../embed/mozilla/EphyPromptService.cpp:762
+#: ../embed/mozilla/EphyPromptService.cpp:799
 msgid "_User:"
 msgstr "_Gebruiker:"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
-#: ../embed/mozilla/EphyPromptService.cpp:763
-#: ../embed/mozilla/EphyPromptService.cpp:790
-#: ../embed/mozilla/GtkNSSDialogs.cpp:795
-#: ../embed/mozilla/GtkNSSDialogs.cpp:905
+#: ../embed/mozilla/EphyPromptService.cpp:800
+#: ../embed/mozilla/EphyPromptService.cpp:827
+#: ../embed/mozilla/GtkNSSDialogs.cpp:811
+#: ../embed/mozilla/GtkNSSDialogs.cpp:926
 msgid "_Password:"
 msgstr "_Wachtwoord:"
 
 # src/history.c:845
-#: ../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
+#: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
 #: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "All files"
 msgstr "Alle bestanden"
 
-#: ../embed/mozilla/FilePicker.cpp:157 ../lib/ephy-file-chooser.c:355
+#: ../embed/mozilla/FilePicker.cpp:158 ../lib/ephy-file-chooser.c:355
 msgid "Web pages"
 msgstr "Webpagina's"
 
-#: ../embed/mozilla/FilePicker.cpp:165
+#: ../embed/mozilla/FilePicker.cpp:166
 msgid "Text files"
 msgstr "Tekstbestanden"
 
 # src/history.c:845
-#: ../embed/mozilla/FilePicker.cpp:170 ../lib/ephy-file-chooser.c:363
+#: ../embed/mozilla/FilePicker.cpp:171 ../lib/ephy-file-chooser.c:363
 msgid "Images"
 msgstr "Afbeeldingen"
 
 # src/history.c:845
-#: ../embed/mozilla/FilePicker.cpp:178
+#: ../embed/mozilla/FilePicker.cpp:179
 msgid "XML files"
 msgstr "XML-bestanden"
 
 # src/history.c:845
-#: ../embed/mozilla/FilePicker.cpp:183
+#: ../embed/mozilla/FilePicker.cpp:184
 msgid "XUL files"
 msgstr "XUL-bestanden"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:156
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:162
 msgid "_Select Certificate"
 msgstr "_Certificaat selecteren"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:202
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:208
 #, c-format
 msgid "Choose a certificate to present as identification to “%s”."
 msgstr "Kies een certificaat om aan ‘%s’ te geven ter identificatie."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:211
 msgid "Select a certificate to identify yourself."
 msgstr "Kies een certificaat om uzelf mee te identificeren."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:242
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:248
 msgid "Certificate _Details"
 msgstr "Certificaat-_details"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:235
-#: ../embed/mozilla/GtkNSSDialogs.cpp:547
+#: ../embed/mozilla/GtkNSSDialogs.cpp:241
+#: ../embed/mozilla/GtkNSSDialogs.cpp:558
 msgid "_View Certificate"
 msgstr "_Certificaat weergeven"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:243
+#: ../embed/mozilla/GtkNSSDialogs.cpp:249
 msgid "_Accept"
 msgstr "_Accepteren"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:310
+#: ../embed/mozilla/GtkNSSDialogs.cpp:316
 #, c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
@@ -1955,7 +1955,7 @@ msgstr ""
 "iemand uw verbinding onderschept om zo uw vertrouwelijke informatie te "
 "bemachtigen."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:316
+#: ../embed/mozilla/GtkNSSDialogs.cpp:322
 #, c-format
 msgid ""
 "You should only accept the security information if you trust “%s” and “%s”."
@@ -1963,11 +1963,11 @@ msgstr ""
 "U zou de beveiligingsinformatie alleen moeten accepteren als u ‘%s’ zowel "
 "als ‘%s’ vertrouwt."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:321
+#: ../embed/mozilla/GtkNSSDialogs.cpp:327
 msgid "Accept incorrect security information?"
 msgstr "Incorrecte beveiligingsinformatie accepteren?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:358
 #, c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
@@ -1977,7 +1977,7 @@ msgstr ""
 "iemand uw communicatie onderschept om zo uw vertrouwelijke informatie te "
 "bemachtigen."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:358
+#: ../embed/mozilla/GtkNSSDialogs.cpp:364
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
@@ -1986,34 +1986,34 @@ msgstr ""
 "Het is aangeraden alleen verbinding te maken met de pagina als u zeker weet "
 "dat u verbonden bent met ‘%s’."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:369
 msgid "Connect to untrusted site?"
 msgstr "Verbinden met onbetrouwbare website?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:367
+#: ../embed/mozilla/GtkNSSDialogs.cpp:373
 msgid "_Trust this security information from now on"
 msgstr "Deze beveiligingsinformatie van nu af aan ver_trouwen"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:374
 msgid "Co_nnect"
 msgstr "_Verbinden"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:427
+#: ../embed/mozilla/GtkNSSDialogs.cpp:433
 msgid "Accept expired security information?"
 msgstr "Vervallen beveiligingsinformatie accepteren?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:429
+#: ../embed/mozilla/GtkNSSDialogs.cpp:435
 #, c-format
 msgid "The security information for “%s” expired on %s."
 msgstr "De beveiligingsinformatie voor ‘%s’ verviel op %s."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:435
+#: ../embed/mozilla/GtkNSSDialogs.cpp:441
 msgid "Accept not yet valid security information?"
 msgstr "Beveiligingsinformatie die nog niet geldig is accepteren?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:437
+#: ../embed/mozilla/GtkNSSDialogs.cpp:443
 #, c-format
 msgid "The security information for “%s” isn't valid until %s."
 msgstr "De beveiligingsinformatie voor ‘%s’ is pas geldig vanaf %s."
@@ -2021,46 +2021,46 @@ msgstr "De beveiligingsinformatie voor ‘%s’ is pas geldig vanaf %s."
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:453
+#: ../embed/mozilla/GtkNSSDialogs.cpp:459
 msgid "%a %d %b %Y"
 msgstr "%a %d %b %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:461
+#: ../embed/mozilla/GtkNSSDialogs.cpp:467
 msgid "You should ensure that your computer's time is correct."
 msgstr ""
 "U dient zich er van te verzekeren dat de tijd op uw computer correct is."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:507
+#: ../embed/mozilla/GtkNSSDialogs.cpp:513
 #, c-format
 msgid "Cannot establish connection to “%s”."
 msgstr "Kan geen verbinding maken met ‘%s’."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:510
+#: ../embed/mozilla/GtkNSSDialogs.cpp:516
 #, c-format
 msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
 msgstr ""
 "De certificaat-intrekkingslijst (CRL) van ‘%s’ dient bijgewerkt te worden."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:515
+#: ../embed/mozilla/GtkNSSDialogs.cpp:521
 msgid "Please ask your system administrator for assistance."
 msgstr "Vraag uw systeembeheerder om assistentie."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:545
+#: ../embed/mozilla/GtkNSSDialogs.cpp:556
 msgid "Trust new Certificate Authority?"
 msgstr "Nieuwe certificaatauthoriteit vertrouwen?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:550
+#: ../embed/mozilla/GtkNSSDialogs.cpp:561
 msgid "_Trust CA"
 msgstr "CA _Vertrouwen"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:572
+#: ../embed/mozilla/GtkNSSDialogs.cpp:583
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr ""
 "Vertrouwen op de nieuwe certificaatautoriteit ‘%s’ om webpagina's te "
 "identificeren?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:577
+#: ../embed/mozilla/GtkNSSDialogs.cpp:588
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -2068,55 +2068,55 @@ msgstr ""
 "Voordat u een certificaatauthoriteit (CA) vertrouwt, zou u er zeker van "
 "moeten zijn dat dit certificaat echt is."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:648
+#: ../embed/mozilla/GtkNSSDialogs.cpp:659
 msgid "Certificate already exists."
 msgstr "Certificaat bestaat al."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:649
+#: ../embed/mozilla/GtkNSSDialogs.cpp:660
 msgid "The certificate has already been imported."
 msgstr "Het certificaat is al geïmporteerd."
 
 #. Translators: this is the action of the certificate being exported to a backup file
-#: ../embed/mozilla/GtkNSSDialogs.cpp:775
+#: ../embed/mozilla/GtkNSSDialogs.cpp:791
 msgid "_Back Up Certificate"
 msgstr "_Reservekopie maken van certificaat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:782
+#: ../embed/mozilla/GtkNSSDialogs.cpp:798
 msgid "Select password."
 msgstr "Kies wachtwoord."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:783
+#: ../embed/mozilla/GtkNSSDialogs.cpp:799
 msgid "Select a password to protect this certificate."
 msgstr "Kies een wachtwoord om dit certificaat mee te beschermen."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:809
+#: ../embed/mozilla/GtkNSSDialogs.cpp:825
 msgid "Con_firm password:"
 msgstr "Wachtwoord (_nogmaals):"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
 #. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:821
+#: ../embed/mozilla/GtkNSSDialogs.cpp:837
 msgid "Password quality:"
 msgstr "Wachtwoordkwaliteit:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:878
+#: ../embed/mozilla/GtkNSSDialogs.cpp:899
 msgid "I_mport Certificate"
 msgstr "_Certificaat importeren"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:894
+#: ../embed/mozilla/GtkNSSDialogs.cpp:915
 msgid "Password required."
 msgstr "Wachtwoord vereist."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:895
+#: ../embed/mozilla/GtkNSSDialogs.cpp:916
 msgid "Enter the password for this certificate."
 msgstr "Geef het wachtwoord voor dit certificaat."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:984
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1005
 msgid "Certificate Revocation List Imported"
 msgstr "Certificaat-intrekkingslijst geïmporteerd"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:994
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1015
 msgid "Certificate Revocation List (CRL) successfully imported"
 msgstr "De certificaat-intrekkingslijst (CRL) is succesvol geïmporteerd"
 
@@ -2126,61 +2126,61 @@ msgstr "De certificaat-intrekkingslijst (CRL) is succesvol geïmporteerd"
 # src/misc.c:354
 # src/mozcallbacks.c:225
 # src/window.c:2279
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1019
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1040
 msgid "Unit:"
 msgstr "Afdeling:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1023
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1044
 msgid "Next Update:"
 msgstr "Volgende vernieuwing:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1050
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1071
 msgid "Not part of certificate"
 msgstr "Niet deel van certificaat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
 msgid "Certificate Properties"
 msgstr "Certificaateigenschappen"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1362
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1387
 msgid "This certificate has been verified for the following uses:"
 msgstr "Dit certificaat is geverifieerd voor de volgende doeleinden:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1390
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Kan certificaat niet verifiëren omdat deze reeds ingetrokken is."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1393
 msgid "Could not verify this certificate because it has expired."
 msgstr "Kan certificaat niet verifiëren omdat deze verlopen is."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1371
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1396
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Kan certificaat niet verifiëren omdat deze onbetrouwbaar is."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1374
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1399
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "Kan certificaat niet verifiëren omdat de uitgever ervan onbetrouwbaar is."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1377
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1402
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Kan certificaat niet verifiëren omdat de uitgever onbekend is."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1380
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1405
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr "Kan certificaat niet verifiëren omdat het ongeldig is."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1385
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1410
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Kan certificaat niet verifiëren wegens onbekende redenen."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:230
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:235
 msgid "Generating Private Key."
 msgstr "Genereren van privésleutel."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:231
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:236
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
@@ -2188,31 +2188,31 @@ msgstr ""
 "Een ogenblik geduld alstublieft. De nieuwe privé-sleutel wordt gegenereerd. "
 "Dit kan even duren."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "Security Notice"
 msgstr "Beveiligingsmededeling"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
 msgid "This page is loaded over a secure connection"
 msgstr "Deze pagina is geladen over een beveiligde verbinding"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
 msgid "The padlock icon in the statusbar indicates whether a page is secure."
 msgstr ""
 "Het hangslotpictogram in de statusbalk geeft aan of een pagina beveiligd is."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid "Security Warning"
 msgstr "Beveiligingswaarschuwing"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid "This page is loaded over a low security connection"
 msgstr "Deze pagina is geladen over een laag beveiligde verbinding"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -2220,12 +2220,12 @@ msgstr ""
 "Alle informatie die u ziet of invoert op deze pagina kan makkelijk "
 "onderschept worden door derden."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr ""
 "Sommige delen van deze pagina zijn geladen over een onbeveiligde verbinding."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -2233,12 +2233,12 @@ msgstr ""
 "Sommige informatie die u ziet of invoert zal over een onbeveiligde "
 "verbinding verstuurd worden en kan makkelijk onderschept worden door derden."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid "Send this information over an insecure connection?"
 msgstr "Deze informatie over een onbeveiligde verbinding versturen?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -2248,12 +2248,12 @@ msgstr ""
 
 # src/bookmarks_editor.c:942
 # src/menubar.c:34
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "_Send"
 msgstr "Ve_rsturen"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2341,35 +2341,35 @@ msgstr ""
 "  %s"
 
 # src/context.c:1075
-#: ../lib/egg/egg-editable-toolbar.c:806
+#: ../lib/egg/egg-editable-toolbar.c:868
 #, c-format
 msgid "Hide “%s”"
 msgstr "‘%s’ verbergen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1240
+#: ../lib/egg/egg-editable-toolbar.c:1304
 msgid "_Move on Toolbar"
 msgstr "Ver_plaatsen op werkbalk"
 
-#: ../lib/egg/egg-editable-toolbar.c:1241
+#: ../lib/egg/egg-editable-toolbar.c:1305
 msgid "Move the selected item on the toolbar"
 msgstr "Geselecteerd item op de werkbalk verplaatsen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1242
+#: ../lib/egg/egg-editable-toolbar.c:1306
 msgid "_Remove from Toolbar"
 msgstr "Ver_wijderen van werkbalk"
 
-#: ../lib/egg/egg-editable-toolbar.c:1243
+#: ../lib/egg/egg-editable-toolbar.c:1307
 msgid "Remove the selected item from the toolbar"
 msgstr "Geselecteerd item van de werkbalk verwijderen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1244
+#: ../lib/egg/egg-editable-toolbar.c:1308
 msgid "_Remove Toolbar"
 msgstr "_Werkbalk verwijderen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1245
+#: ../lib/egg/egg-editable-toolbar.c:1309
 msgid "Remove the selected toolbar"
 msgstr "Geselecteerde werkbalk verwijderen"
 
@@ -2381,17 +2381,17 @@ msgstr "Scheidingsteken"
 msgid "All supported types"
 msgstr "Alle ondersteunde types"
 
-#: ../lib/ephy-file-helpers.c:292
+#: ../lib/ephy-file-helpers.c:300
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Kan geen tijdelijke map aanmaken in ‘%s’."
 
-#: ../lib/ephy-file-helpers.c:360
+#: ../lib/ephy-file-helpers.c:368
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Het bestand ‘%s’ bestaat. Haal het alstublieft uit de weg."
 
-#: ../lib/ephy-file-helpers.c:371
+#: ../lib/ephy-file-helpers.c:379
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Aanmaken van de map ‘%s’ is mislukt."
@@ -2609,7 +2609,7 @@ msgstr "Geschiedenis"
 # src/menubar.c:571
 #: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:777
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1596
-#: ../src/bookmarks/ephy-topic-action.c:405 ../src/ephy-window.c:1294
+#: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Bladwijzers"
 
@@ -2694,22 +2694,22 @@ msgstr "Epiphany desktopbestand-plugin"
 msgid "This plugin handles “.desktop” files containing web links."
 msgstr "Deze plugin kan ‘.desktop’-bestanden met webverwijzingen afhandelen."
 
-#: ../src/bookmarks/ephy-bookmark-action.c:285
+#: ../src/bookmarks/ephy-bookmark-action.c:290
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:92
-#: ../src/bookmarks/ephy-bookmark-properties.c:563
+#: ../src/bookmarks/ephy-bookmark-properties.c:93
+#: ../src/bookmarks/ephy-bookmark-properties.c:619
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d Gelij_kende"
 msgstr[1] "%d Gelij_kende"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:246
+#: ../src/bookmarks/ephy-bookmark-properties.c:266
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
@@ -2717,27 +2717,27 @@ msgstr[0] "Samen_voegen met %d identieke bladwijzer"
 msgstr[1] "Samen_voegen met %d identieke bladwijzers"
 
 # src/menubar.c:63
-#: ../src/bookmarks/ephy-bookmark-properties.c:266
-#: ../src/bookmarks/ephy-bookmark-properties.c:288
+#: ../src/bookmarks/ephy-bookmark-properties.c:286
+#: ../src/bookmarks/ephy-bookmark-properties.c:308
 #, c-format
 msgid "Show “%s”"
 msgstr "‘%s’ tonen"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:379
+#: ../src/bookmarks/ephy-bookmark-properties.c:434
 #, c-format
 msgid "“%s” Properties"
 msgstr "‘%s’-eigenschappen"
 
 # ui/epiphany.glade.h:121
-#: ../src/bookmarks/ephy-bookmark-properties.c:503
+#: ../src/bookmarks/ephy-bookmark-properties.c:557
 msgid "_Title:"
 msgstr "Tit_el:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:518
+#: ../src/bookmarks/ephy-bookmark-properties.c:572
 msgid "A_ddress:"
 msgstr "A_dres:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:528
+#: ../src/bookmarks/ephy-bookmark-properties.c:582
 msgid "T_opics:"
 msgstr "_Onderwerpen:"
 
@@ -3260,7 +3260,7 @@ msgstr "Lokale pagina's"
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:317
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:318
 msgid "Quick Bookmark"
 msgstr "Snelle bladwijzer"
 
@@ -3283,40 +3283,6 @@ msgstr "Deze bladwijzer openen in een nieuw tabblad"
 msgid "Open this bookmark in a new window"
 msgstr "Deze bladwijzer openen in een nieuw venster"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:523
-#, c-format
-msgid "You already have a topic named “%s”"
-msgstr "U heeft al een onderwerp met de titel ‘%s’"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:527
-msgid "Please use a different topic name."
-msgstr "Gebruik alstublieft een andere naam."
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:567
-#, c-format
-msgid "New topic for “%s”"
-msgstr "Nieuw onderwerp voor ‘%s’"
-
-# ui/preferences.glade.h:195
-#: ../src/bookmarks/ephy-bookmarks-ui.c:577
-msgid "New topic"
-msgstr "Nieuw onderwerp"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:582
-msgid "Enter a unique name for the topic."
-msgstr "Voer een unieke naam in voor het onderwerp."
-
-# src/menubar.c:468
-# ui/preferences.glade.h:262
-#: ../src/bookmarks/ephy-bookmarks-ui.c:614
-msgid "Create"
-msgstr "Maken"
-
-# ui/preferences.glade.h:195
-#: ../src/bookmarks/ephy-bookmarks-ui.c:617
-msgid "New Topic"
-msgstr "Nieuw onderwerp"
-
 # src/context.c:66
 #: ../src/bookmarks/ephy-open-tabs-action.c:65
 msgid "Open in New _Tabs"
@@ -3328,11 +3294,11 @@ msgstr "In _nieuwe tabbladen openen"
 msgid "Related"
 msgstr "Gerelateerd"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:316
+#: ../src/bookmarks/ephy-topic-factory-action.c:317
 msgid "Quick Topic"
 msgstr "Snel onderwerp"
 
-#: ../src/bookmarks/ephy-topics-entry.c:356
+#: ../src/bookmarks/ephy-topics-entry.c:358
 #, c-format
 msgid "Create topic “%s”"
 msgstr "Onderwerp ‘%s’ aanmaken"
@@ -3507,54 +3473,50 @@ msgid "Sites"
 msgstr "Sites"
 
 # src/main.c:102
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:78
 msgid "Open a new tab in an existing browser window"
 msgstr "Een nieuw tabblad openen in een bestaand browservenster"
 
 # src/context.c:60
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:80
 msgid "Open a new browser window"
 msgstr "Een nieuw browservenster openen"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:82
 msgid "Launch the bookmarks editor"
 msgstr "Bladwijzerbeheer starten"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:84
 msgid "Import bookmarks from the given file"
 msgstr "Bladwijzers importeren van het gegeven bestand"
 
-#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
+#: ../src/ephy-main.c:84 ../src/ephy-main.c:86
 msgid "FILE"
 msgstr "BESTAND"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:86
 msgid "Load the given session file"
 msgstr "Het gegeven sessiebestand laden"
 
 # src/menubar.c:571
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:88
 msgid "Add a bookmark"
 msgstr "Bladwijzer toevoegen"
 
 # src/main.c:134
 # ui/bookmarks.glade.h:41
 # ui/epiphany.glade.h:125
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:88
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:86 ../src/ephy-main.c:117
-msgid "Start a private instance"
-msgstr "Privé-instantie starten"
-
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-main.c:459
+#: ../src/ephy-main.c:434
 msgid "Could not start GNOME Web Browser"
 msgstr "Kon GNOME-webbrowser niet opstarten"
 
-#: ../src/ephy-main.c:462
+#: ../src/ephy-main.c:437
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -3565,13 +3527,13 @@ msgstr ""
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-main.c:502 ../src/ephy-main.c:504 ../src/window-commands.c:752
+#: ../src/ephy-main.c:477 ../src/ephy-main.c:479 ../src/window-commands.c:753
 msgid "GNOME Web Browser"
 msgstr "GNOME-webbrowser"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/ephy-main.c:505
+#: ../src/ephy-main.c:480
 msgid "GNOME Web Browser options"
 msgstr "Opties voor GNOME-webbrowser"
 
@@ -3581,12 +3543,40 @@ msgstr "Opties voor GNOME-webbrowser"
 msgid "Close tab"
 msgstr "Tabblad sluiten"
 
-#: ../src/ephy-session.c:378
+#: ../src/ephy-session.c:158
+#, c-format
+msgid "Downloads will be aborted and logout proceed in %d second."
+msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
+msgstr[0] "Downloads zullen worden afgebroken en het afmelden gaat door binnen %d seconde."
+msgstr[1] "Downloads zullen worden afgebroken en het afmelden gaat door binnen %d seconden."
+
+#: ../src/ephy-session.c:274
+msgid "Abort pending downloads?"
+msgstr "Lopende downloads afbreken?"
+
+#: ../src/ephy-session.c:278
+msgid ""
+"There are still downloads pending. If you log out, they will be aborted and "
+"lost."
+msgstr ""
+"Er zijn nog downloads bezig. Als u zich afmeldt, worden deze afgebroken en "
+"zijn ze verloren."
+
+#: ../src/ephy-session.c:282
+msgid "_Cancel Logout"
+msgstr "Afmelden _annuleren"
+
+# ui/preferences.glade.h:157
+#: ../src/ephy-session.c:284
+msgid "_Abort Downloads"
+msgstr "_Downloads afbreken"
+
+#: ../src/ephy-session.c:609
 msgid "Recover previous browser windows and tabs?"
 msgstr "Eerdere browservensters en -tabbladen herstellen?"
 
 # ui/epiphany.glade.h:53
-#: ../src/ephy-session.c:382
+#: ../src/ephy-session.c:613
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -3595,17 +3585,17 @@ msgstr ""
 "is afgesloten. U kunt de geopende vensters en tabbladen herstellen."
 
 # src/bookmarks_editor.c:943
-#: ../src/ephy-session.c:386
+#: ../src/ephy-session.c:617
 msgid "_Don't Recover"
 msgstr "_Niet herstellen"
 
 # src/bookmarks_editor.c:943
-#: ../src/ephy-session.c:388
+#: ../src/ephy-session.c:619
 msgid "_Recover"
 msgstr "He_rstellen"
 
 # ui/epiphany.glade.h:51
-#: ../src/ephy-session.c:390
+#: ../src/ephy-session.c:621
 msgid "Crash Recovery"
 msgstr "Herstellen na vastlopen"
 
@@ -4340,12 +4330,12 @@ msgstr "Do_cument sluiten"
 
 # src/bookmarks_editor.c:942
 # src/menubar.c:34
-#: ../src/ephy-window.c:1284 ../src/window-commands.c:279
+#: ../src/ephy-window.c:1284 ../src/window-commands.c:280
 msgid "Open"
 msgstr "Openen"
 
 # src/menubar.c:63
-#: ../src/ephy-window.c:1286 ../src/window-commands.c:305
+#: ../src/ephy-window.c:1286 ../src/window-commands.c:306
 msgid "Save As"
 msgstr "Opslaan als"
 
@@ -4628,23 +4618,23 @@ msgstr[1] "Systeemtalen (%s)"
 msgid "Select a Directory"
 msgstr "Kies een map"
 
-#: ../src/window-commands.c:710 ../src/window-commands.c:727
+#: ../src/window-commands.c:711 ../src/window-commands.c:728
 msgid "Contact us at:"
 msgstr "Wij zijn te bereiken op:"
 
-#: ../src/window-commands.c:713
+#: ../src/window-commands.c:714
 msgid "Contributors:"
 msgstr "Met bijdragen van:"
 
-#: ../src/window-commands.c:718
+#: ../src/window-commands.c:719
 msgid "Past developers:"
 msgstr "Ex-ontwikkelaars:"
 
-#: ../src/window-commands.c:728
+#: ../src/window-commands.c:729
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> of <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:733
+#: ../src/window-commands.c:734
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4653,32 +4643,31 @@ msgid ""
 msgstr ""
 "De GNOME webbrowser is vrije software; U mag het herdistribueren en/of "
 "wijzigen onder de voorwaarden van de GNU General Public License als "
-"gepubliceerd door the Free Software Foundation; ofwel versie 2, als "
-"ook (uw eigen optie) elke latere versie."
+"gepubliceerd door the Free Software Foundation; ofwel versie 2, als ook (uw "
+"eigen optie) elke latere versie."
 
-#: ../src/window-commands.c:737
+#: ../src/window-commands.c:738
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 msgstr ""
-"Dit programma wordt gedistribueerd in de hoop dat het bruikbaar "
-"zal zijn, maar ZONDER ENIGE GARANTIE; zelfs zonder de impliciete "
-"garantie voor VERKOOPBAARHEID of GESCHIKTHEID VOOR EEN "
-"SPECIFIEK DOEL. Zie de GNU General Public License voor meer "
-"details."
+"Dit programma wordt gedistribueerd in de hoop dat het bruikbaar zal zijn, "
+"maar ZONDER ENIGE GARANTIE; zelfs zonder de impliciete garantie voor "
+"VERKOOPBAARHEID of GESCHIKTHEID VOOR EEN SPECIFIEK DOEL. Zie de GNU General "
+"Public License voor meer details."
 
-#: ../src/window-commands.c:741
+#: ../src/window-commands.c:742
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
 msgstr ""
-"U zou een kopie ontvangen moeten hebben van de GNU General "
-"Public License bij de GNOME webbrowser; indien dit niet het geval is, "
-"schrijf dan een brief naar de Free Software Foundation, Inc., "
-"59 Temple Place - Suite 330, Boston, MA 02111-1307, USA"
+"U zou een kopie ontvangen moeten hebben van de GNU General Public License "
+"bij de GNOME webbrowser; indien dit niet het geval is, schrijf dan een brief "
+"naar de Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, "
+"MA 02111-1307, USA"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -4688,7 +4677,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:766
+#: ../src/window-commands.c:767
 msgid "translator-credits"
 msgstr ""
 "Vincent van Adrighem \n"
@@ -4700,9 +4689,37 @@ msgstr ""
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: ../src/window-commands.c:769
+#: ../src/window-commands.c:770
 msgid "GNOME Web Browser Website"
 msgstr "Webstek van de GNOME-webbrowser"
+
+#~ msgid "You already have a topic named “%s”"
+#~ msgstr "U heeft al een onderwerp met de titel ‘%s’"
+
+#~ msgid "Please use a different topic name."
+#~ msgstr "Gebruik alstublieft een andere naam."
+
+#~ msgid "New topic for “%s”"
+#~ msgstr "Nieuw onderwerp voor ‘%s’"
+
+# ui/preferences.glade.h:195
+#~ msgid "New topic"
+#~ msgstr "Nieuw onderwerp"
+
+#~ msgid "Enter a unique name for the topic."
+#~ msgstr "Voer een unieke naam in voor het onderwerp."
+
+# src/menubar.c:468
+# ui/preferences.glade.h:262
+#~ msgid "Create"
+#~ msgstr "Maken"
+
+# ui/preferences.glade.h:195
+#~ msgid "New Topic"
+#~ msgstr "Nieuw onderwerp"
+
+#~ msgid "Start a private instance"
+#~ msgstr "Privé-instantie starten"
 
 #~ msgid "_Merge"
 #~ msgstr "_Samenvoegen"
