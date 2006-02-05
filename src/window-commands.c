@@ -744,8 +744,15 @@ window_cmd_help_about (GtkAction *action,
 		   "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA")
 	};
 
-	char *licence;
+	EphyEmbedShell *shell;
+	EphyEmbedSingle *single;
+	char *licence, *comments;
 
+	shell = ephy_embed_shell_get_default ();
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (shell));
+
+	comments = g_strdup_printf (_("Using “%s” backend"),
+				    ephy_embed_single_get_backend_name (single));
 	licence = g_strdup_printf ("%s\n\n%s\n\n%s",
 				   _(licence_part[0]), _(licence_part[1]), _(licence_part[2]));
 
@@ -755,6 +762,7 @@ window_cmd_help_about (GtkAction *action,
 			       "copyright", "Copyright © 2002-2004 Marco Pesenti Gritti\n"
 					    "Copyright © 2003-2006 The GNOME Web Browser Developers",
 			       "authors", authors,
+			       "comments", comments,
 			       "documenters", documenters,
 				/* Translators: This is a special message that shouldn't be translated
 				 * literally. It is used in the about box to give credits to
@@ -772,6 +780,7 @@ window_cmd_help_about (GtkAction *action,
 			       "wrap-license", TRUE,
 			       NULL);
 
+	g_free (comments);
 	g_free (licence);
 }
 
