@@ -64,3 +64,6 @@ pref("accessibility.typeaheadfind", false);
 
 // disable pings
 pref("browser.send_pings", false);
+
+// disable blink tags
+pref("browser.blink_allowed", false);
