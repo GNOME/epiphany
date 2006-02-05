@@ -177,7 +177,7 @@ seamonkey) min_version=1.0 ;;
 xulrunner) min_version=1.8 ;;
 esac
 
-PKG_CHECK_MODULES([GECKO],[$MOZILLA-gtkmozembed >= $min_version $MOZILLA-xpcom >= $min_version])
+PKG_CHECK_MODULES([GECKO],[${gecko_cv_gecko}-xpcom >= $min_version $gecko_cv_extra_pkg_dependencies])
 AC_SUBST([GECKO_CFLAGS])
 AC_SUBST([GECKO_LIBS])
 

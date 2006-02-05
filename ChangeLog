@@ -1,5 +1,19 @@
 2006-02-05  Christian Persch  <chpe@cvs.gnome.org>
 
+	* m4/gecko.m4:
+	* configure.ac:
+	* embed/mozilla/Makefile.am:
+
+	Changes to support xulrunner trunk (gecko 1.9).
+
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Go back to continuing after failed GetPassword;
+	fixes getting the password list in case one item
+	is corrupted.
+
+2006-02-05  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/window-commands.c:
 
 	Show the backend in the about box.

@@ -446,21 +446,15 @@ mozilla_init_single (MozillaEmbedSingle *mes)
 			  mes);
 }
 
-static void
-mozilla_init_home (void)
-{
-	char *mozilla_five_home;
-        mozilla_five_home = g_strdup (g_getenv ("MOZILLA_FIVE_HOME"));
-        gtk_moz_embed_set_comp_path (mozilla_five_home);
-        g_free (mozilla_five_home);
-}
-
 void
 mozilla_init_profile (void)
 {
 	char *profile_path;
 	profile_path = g_build_filename (ephy_dot_dir (), 
-					 MOZILLA_PROFILE_DIR, 
+					 MOZILLA_PROFILE_DIR,
+#ifdef HAVE_GECKO_1_9
+					 "epiphany",
+#endif
 					 NULL);
         gtk_moz_embed_set_profile_path (profile_path, MOZILLA_PROFILE_NAME);
         g_free (profile_path);
@@ -729,11 +723,15 @@ impl_init (EphyEmbedSingle *esingle)
 
 	/* Pre initialization */
 	mozilla_init_plugin_path ();
-	mozilla_init_home ();
+
 	mozilla_init_profile ();
 
 	/* Set mozilla binary path */
 	gtk_moz_embed_set_comp_path (MOZILLA_HOME);
+
+#ifdef HAVE_GECKO_1_9
+	gtk_moz_embed_set_path (MOZILLA_HOME);
+#endif
 
 #if defined(HAVE_MOZILLA_TOOLKIT) && defined(HAVE_GECKO_1_8)
 
@@ -1067,15 +1065,7 @@ impl_list_passwords (EphyPasswordManager *manager)
 				   NS_CSTRING_ENCODING_UTF8, userName);
 
 		rv = nsPassword->GetPassword (unicodeName);
-		if (NS_FAILED (rv))
-		{
-			/* this usually means we couldn't decrypt the password, due to
-			 * the master password being unavailable. Don't continue since that
-			 * would lead to endless prompting for the master password; abort
-			 * instead.
-			 */
-			break;
-		}
+		if (NS_FAILED (rv)) continue;
 
 		nsEmbedCString userPassword;
 		NS_UTF16ToCString (unicodeName,

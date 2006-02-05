@@ -81,16 +81,19 @@ fi
 
 if test "$gecko_cv_have_gecko" = "yes"; then
 
+gecko_cv_extra_pkg_dependencies=
+
 case "$gecko_cv_gecko" in
-mozilla) gecko_cv_gecko_flavour=mozilla ;;
-seamonkey) gecko_cv_gecko_flavour=mozilla ;;
-*firefox) gecko_cv_gecko_flavour=toolkit ;;
+mozilla) gecko_cv_gecko_flavour=mozilla gecko_cv_extra_pkg_dependencies="$gecko_cv_extra_pkg_dependencies ${gecko_cv_gecko}-gtkmozembed" ;;
+seamonkey) gecko_cv_gecko_flavour=mozilla gecko_cv_extra_pkg_dependencies="$gecko_cv_extra_pkg_dependencies ${gecko_cv_gecko}-gtkmozembed" ;;
+*firefox) gecko_cv_gecko_flavour=toolkit  gecko_cv_extra_pkg_dependencies="$gecko_cv_extra_pkg_dependencies ${gecko_cv_gecko}-gtkmozembed" ;;
+XXxulrunner) gecko_cv_gecko_flavour=toolkit gecko_cv_extra_pkg_dependencies="$gecko_cv_extra_pkg_dependencies ${gecko_cv_gecko}-gtkmozembed" ;;
 xulrunner) gecko_cv_gecko_flavour=toolkit ;;
 esac
 
-_GECKO_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir ${gecko_cv_gecko}-gtkmozembed`"
-_GECKO_HOME="`$PKG_CONFIG --variable=libdir ${gecko_cv_gecko}-gtkmozembed`"
-_GECKO_PREFIX="`$PKG_CONFIG --variable=prefix ${gecko_cv_gecko}-gtkmozembed`"
+_GECKO_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir ${gecko_cv_gecko}-xpcom`"
+_GECKO_HOME="`$PKG_CONFIG --variable=libdir ${gecko_cv_gecko}-xpcom`"
+_GECKO_PREFIX="`$PKG_CONFIG --variable=prefix ${gecko_cv_gecko}-xpcom`"
 
 fi # if gecko_cv_have_gecko
 

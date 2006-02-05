@@ -104,6 +104,7 @@ mozilla_include_subdirs = \
 	fastfind		\
 	helperAppDlg		\
 	gfx			\
+	gtkembedmoz		\
 	history			\
 	js			\
 	layout			\
