@@ -591,5 +591,8 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 void
 ephy_find_toolbar_request_close (EphyFindToolbar *toolbar)
 {
-	g_signal_emit (toolbar, signals[CLOSE], 0);
+	if (GTK_WIDGET_VISIBLE (GTK_WIDGET (toolbar)))
+	{
+		g_signal_emit (toolbar, signals[CLOSE], 0);
+	}
 }

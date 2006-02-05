@@ -113,3 +113,6 @@ pref("xpinstall.enabled", false);
 
 // enable typeahead find
 pref("accessibility.typeaheadfind", false);
+
+// we don't do blinking!
+pref("browser.blink_allowed", false);
