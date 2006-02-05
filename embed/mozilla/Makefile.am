@@ -143,6 +143,7 @@ libephymozillaembed_la_CPPFLAGS = \
 	-DPLUGINDIR=\"$(libdir)/epiphany/$(EPIPHANY_MAJOR)/plugins\"		\
 	-DMOZILLA_HOME=\"$(MOZILLA_HOME)\"	\
 	-DMOZILLA_PREFIX=\"$(MOZILLA_PREFIX)\"	\
+	-DEPIPHANY_MAJOR=\"$(EPIPHANY_MAJOR)\"	\
 	-DALLOW_PRIVATE_API			\
 	$(AM_CPPFLAGS)
 

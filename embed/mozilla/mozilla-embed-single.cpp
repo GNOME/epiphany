@@ -297,17 +297,17 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 
 #ifdef HAVE_GECKO_1_8
 	/* FIXME: maybe only set the major version ("1.6", "1.8") here? */
-	pref->SetCharPref ("general.useragent.extra.epiphany", "Epiphany/" VERSION);
+	pref->SetCharPref ("general.useragent.extra.epiphany", "Epiphany/" EPIPHANY_MAJOR);
 
 	/* Unset old prefs, otherwise they end up in the user agent string too */
 	pref->ClearUserPref ("general.useragent.vendor");
 	pref->ClearUserPref ("general.useragent.vendorSub");
 #else
 	pref->SetCharPref ("general.useragent.vendor", "Epiphany");
-	pref->SetCharPref ("general.useragent.vendorSub", VERSION);
+	pref->SetCharPref ("general.useragent.vendorSub", EPIPHANY_MAJOR);
 #endif
 
-	/* Open ftp uris with an external handler if one is setup */
+	/* Don't open ftp uris with an external handler if one is setup */
 	pref->SetBoolPref ("network.protocol-handler.external.ftp", PR_FALSE);	
 
 	return TRUE;
