@@ -81,13 +81,10 @@ fi
 
 if test "$gecko_cv_have_gecko" = "yes"; then
 
-gecko_cv_extra_pkg_dependencies=
-
 case "$gecko_cv_gecko" in
-mozilla) gecko_cv_gecko_flavour=mozilla gecko_cv_extra_pkg_dependencies="$gecko_cv_extra_pkg_dependencies ${gecko_cv_gecko}-gtkmozembed" ;;
-seamonkey) gecko_cv_gecko_flavour=mozilla gecko_cv_extra_pkg_dependencies="$gecko_cv_extra_pkg_dependencies ${gecko_cv_gecko}-gtkmozembed" ;;
-*firefox) gecko_cv_gecko_flavour=toolkit  gecko_cv_extra_pkg_dependencies="$gecko_cv_extra_pkg_dependencies ${gecko_cv_gecko}-gtkmozembed" ;;
-XXxulrunner) gecko_cv_gecko_flavour=toolkit gecko_cv_extra_pkg_dependencies="$gecko_cv_extra_pkg_dependencies ${gecko_cv_gecko}-gtkmozembed" ;;
+mozilla) gecko_cv_gecko_flavour=mozilla ;;
+seamonkey) gecko_cv_gecko_flavour=mozilla ;;
+*firefox) gecko_cv_gecko_flavour=toolkit  ;;
 xulrunner) gecko_cv_gecko_flavour=toolkit ;;
 esac
 
@@ -280,7 +277,17 @@ $1[]_VERSION=$gecko_cv_gecko_version
 $1[]_VERSION_MAJOR=$gecko_cv_gecko_version_major
 $1[]_VERSION_MINOR=$gecko_cv_gecko_version_minor
 
-])
+# **************************************************
+# Packages that we need to check for with pkg-config 
+# **************************************************
+
+if test "$gecko_cv_gecko" = "xulrunner" -a "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "9"; then
+	gecko_cv_extra_pkg_dependencies=
+else
+	gecko_cv_extra_pkg_dependencies="${gecko_cv_gecko}-gtkmozembed"
+fi
+
+$1[]_EXTRA_PKG_DEPENDENCIES="$gecko_cv_extra_pkg_dependencies"
 
 # ***************************************************************************
 # ***************************************************************************
@@ -443,7 +450,7 @@ AC_PATH_PROG([XPIDL],[xpidl],[no],[$_GECKO_LIBDIR:$PATH])
 
 XPIDL_IDLDIR="`$PKG_CONFIG --variable=idldir ${gecko_cv_gecko}-xpcom`"
 
-# Older gecko's don't have this variable, see
+# Older geckos don't have this variable, see
 # https://bugzilla.mozilla.org/show_bug.cgi?id=240473
 
 if test -z "$XPIDL_IDLDIR" -o ! -f "$XPIDL_IDLDIR/nsISupports.idl"; then

@@ -30,7 +30,7 @@ EPIPHANY_API_VERSION=1.10
 AC_SUBST([EPIPHANY_MAJOR])
 AC_SUBST([EPIPHANY_API_VERSION])
 
-AM_INIT_AUTOMAKE([1.9 dist-bzip2 no-dist-gzip check-news])
+AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip])
 
 AM_MAINTAINER_MODE
 
@@ -48,7 +48,7 @@ AC_HEADER_STDC
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
 
-IT_PROG_INTLTOOL([0.34.1])
+IT_PROG_INTLTOOL([0.34.2])
 
 PKG_PROG_PKG_CONFIG
 
@@ -82,6 +82,7 @@ DBUS_GLIB_REQUIRED=0.35
 
 PKG_CHECK_MODULES([DEPENDENCIES], [\
 		  glib-2.0 >= $GLIB_REQUIRED \
+		  gmodule-2.0 \
 		  gtk+-2.0 >= $GTK_REQUIRED \
 		  libxml-2.0 >= $LIBXML_REQUIRED \
 		  libxslt >= $LIBXSLT_REQUIRED \
@@ -240,8 +241,7 @@ AC_MSG_RESULT([$result])
 
 # changed from nsIXULChromeRegistry in 1.8a4
 
-GECKO_CHECK_HEADERS([],[chrome/nsIChromeRegistrySea.h],
-	[AC_DEFINE([HAVE_CHROME_NSICHROMEREGISTRYSEA_H], [1], [Define if nsIChromeRegistrySea.h exists])])
+GECKO_CHECK_HEADERS([],[chrome/nsIChromeRegistrySea.h])
 
 # changed location in 1.8a6
 
@@ -272,11 +272,6 @@ GECKO_COMPILE_IFELSE([fastfind],
 	[result=no])
 
 AC_MSG_RESULT([$result])
-
-# Needed since 1.8b2
-# Define this down here so it doesn't affect the API checks above
-
-AC_DEFINE([MOZILLA_INTERNAL_API],[1],[Define for access to internal mozilla API])
 
 # Make sure we don't accidentally build without PSM support
 
@@ -310,7 +305,7 @@ AC_MSG_CHECKING([whether to enable native gtk+ filepicker])
 AC_ARG_ENABLE([filepicker],
 	AS_HELP_STRING([--enable-filepicker],[Whether to enable the gtk+ native filepicker; not needed when the mozilla build itself has native gtk+ filepicker enabled (default:enabled)]),
 	[],
-	[if test "$MOZILLA_VERSION_MAJOR" = "1" -a "$MOZILLA_VERSION_MINOR" -ge "8"; then
+	[if test "$gecko_cv_gecko_version_major" = 1 -a "$gecko_cv_gecko_version_minor" -ge "8"; then
 		enable_filepicker=no
  	 else
 		enable_filepicker=yes
@@ -345,6 +340,11 @@ if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor"
 	GECKO_CHECK_CONTRACTID([@mozilla.org/permissions/contentblocker;1],
 		[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
 fi
+
+# Needed since 1.8b2
+# Define this down here so it doesn't affect the API checks above
+
+AC_DEFINE([MOZILLA_INTERNAL_API],[1],[Define for access to internal mozilla API])
 
 # ***************
 # Multimedia keys
@@ -564,11 +564,18 @@ if test "$enable_network_manager" != "no"; then
 	fi
 fi
 
-if test "x$enable_network_manager" = "xyes"; then
+if test "$enable_network_manager" = "yes"; then
 	AC_DEFINE([ENABLE_NETWORK_MANAGER],[1],[Define for NetworkManager support])
 fi
 
-AM_CONDITIONAL([ENABLE_NETWORK_MANAGER],[test "x$enable_network_manager" = "xyes"])
+AM_CONDITIONAL([ENABLE_NETWORK_MANAGER],[test "$enable_network_manager" = "yes"])
+
+# ************
+# Misc defines
+# ************
+
+# uninstalled share dir to search data
+AC_DEFINE_UNQUOTED([SHARE_UNINSTALLED_DIR], ["`pwd`/data"], [path to source data dir])
 
 # *******************************
 # Add warning flags
@@ -586,14 +593,12 @@ AC_SUBST([AM_LDFLAGS])
 # Internationalization
 # ******************************* 
 
-AC_MSG_CHECKING([for iso-codes package])
-have_iso_codes=no
-if $PKG_CONFIG --exists iso-codes --atleast-version=0.35; then
-	have_iso_codes=yes
-fi
-AC_MSG_RESULT([$have_iso_codes])
+ISO_CODES_REQUIRED=0.35
 
-if test "x$have_iso_codes" = "xyes"; then
+PKG_CHECK_EXISTS([iso-codes >= $ISO_CODES_REQUIRED],
+	[have_iso_codes=yes],[have_iso_codes=no])
+
+if test "$have_iso_codes" = "yes"; then
 	AC_MSG_CHECKING([whether iso-codes has iso-639 and iso-3166 domains])
 	if $PKG_CONFIG --variable=domains iso-codes | grep -q 639 && \
 	   $PKG_CONFIG --variable=domains iso-codes | grep -q 3166 ; then
@@ -605,7 +610,7 @@ if test "x$have_iso_codes" = "xyes"; then
 	AC_MSG_RESULT([$result])
 fi
 
-if test "x$have_iso_codes" = "xyes"; then
+if test "$have_iso_codes" = "yes"; then
 	AC_DEFINE_UNQUOTED([ISO_CODES_PREFIX],["`$PKG_CONFIG --variable=prefix iso-codes`"],[ISO codes prefix])
 	AC_DEFINE([HAVE_ISO_CODES],[1],[Define if you have the iso-codes package])
 else
@@ -613,22 +618,17 @@ else
 fi
 
 # Translators: new languages must be added to the po/LINGUAS file
-ALL_LINGUAS="`cat "$srcdir/po/LINGUAS" | grep -v '^#'`"
-
-AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
 
 GETTEXT_PACKAGE=epiphany
 AC_SUBST([GETTEXT_PACKAGE])
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[Gettext package])
-AM_GLIB_GNU_GETTEXT
-AM_GLIB_DEFINE_LOCALEDIR([GNOMELOCALEDIR])
 
-# uninstalled share dir to search data
-AC_DEFINE_UNQUOTED([SHARE_UNINSTALLED_DIR], ["`pwd`/data"], [path to source data dir])
+AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.14])
 
-# *****************
-# API Documentation
-# *****************
+# *************
+# Documentation
+# *************
 
 GNOME_DOC_INIT
 GTK_DOC_CHECK([1.0])

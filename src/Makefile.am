@@ -115,6 +115,7 @@ libephymain_la_CPPFLAGS = \
 	-DEXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/extensions"\" 	\
 	-DLOADER_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/loaders"\"		\
 	-DDATADIR=\""$(datadir)"\" 	\
+	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
 	$(AM_CPPFLAGS)
 
 libephymain_la_CFLAGS = \
@@ -193,6 +194,8 @@ epiphany_CPPFLAGS = \
 	-I$(top_srcdir)/lib   		\
 	-I$(top_srcdir)/src/bookmarks   \
 	-DDATADIR=\""$(datadir)"\" 	\
+	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
+	$(INCINTL)			\
 	$(AM_CPPFLAGS)
 
 epiphany_CFLAGS = \
@@ -214,7 +217,7 @@ epiphany_LDADD = \
 	$(GECKO_LIBS) \
 	$(DEPENDENCIES_LIBS) \
 	$(DBUS_LIBS) \
-	$(INTLLIBS)
+	$(LIBINTL)
 
 if ENABLE_PYTHON
 epiphany_LDADD += \

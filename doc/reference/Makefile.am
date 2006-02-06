@@ -154,7 +154,8 @@ GTKDOC_CFLAGS = -I$(top_srcdir)/src \
 		-I$(top_builddir)/lib/egg \
 		$(DEPENDENCIES_CFLAGS) \
 		$(GECKO_CFLAGS) \
-		$(DBUS_CFLAGS)
+		$(DBUS_CFLAGS) \
+		$(INCINTL)
 
 GTKDOC_LIBS = \
 	$(top_builddir)/src/libephymain.la \
@@ -167,8 +168,8 @@ GTKDOC_LIBS = \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(GECKO_LIBS)	\
 	$(DEPENDENCIES_LIBS) \
-	$(DBUS_LIBS)
-	$(INTLLIBS)
+	$(DBUS_LIBS) \
+	$(LIBINTL)
 
 if ENABLE_PYTHON
 GTKDOC_LIBS += \

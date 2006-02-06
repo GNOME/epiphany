@@ -1,3 +1,4 @@
+gladedir = $(pkgdatadir)/glade
 glade_DATA = \
 	certificate-dialogs.glade \
 	epiphany.glade  	\
@@ -9,6 +10,4 @@ glade_DATA += \
 	certs-manager.glade
 endif
 
-gladedir = $(pkgdatadir)/glade
-
-EXTRA_DIST = $(glade_DATA)
+EXTRA_DIST = $(glade_DATA) certs-manager.glade
