@@ -65,7 +65,7 @@ static gboolean open_as_bookmarks_editor = FALSE;
 static char *session_filename = NULL;
 static char *bookmark_url = NULL;
 static char *bookmarks_file = NULL;
-static char **extra_arguments = NULL;
+static char **arguments = NULL;
 
 /* Only set from options in debug builds */
 static gboolean private_instance = FALSE;
@@ -86,7 +86,7 @@ static const GOptionEntry option_entries[] =
 	  N_("Load the given session file"), N_("FILE") },
 	{ "add-bookmark", 't', 0, G_OPTION_ARG_STRING, &bookmark_url,
 	  N_("Add a bookmark"), N_("URL") },
-	{ G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_STRING_ARRAY, &extra_arguments,
+	{ G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_STRING_ARRAY, &arguments,
 	  "", "" },
 	{ NULL }
 };
@@ -241,23 +241,6 @@ shell_weak_notify (gpointer data,
 	}
 }
 
-#if 0
-static char *
-path_from_command_line_arg (const char *arg)
-{
-	char path[PATH_MAX];
-
-	if (realpath (arg, path) != NULL)
-	{
-		return g_strdup (path);
-	}
-	else
-	{
-		return g_strdup (arg);
-	}
-}
-#endif
-
 static void
 unref_proxy_reply_cb (DBusGProxy *proxy,
 		      GError *error,
@@ -297,23 +280,23 @@ open_urls (DBusGProxy *proxy,
 		g_string_append (options, "new-tab,");
 	}
 
-	if (extra_arguments == NULL)
+	if (arguments == NULL)
 	{
 		uris = (char **) empty_arguments;
 	}
 	else
 	{
-		uris = (char **) extra_arguments;
+		uris = (char **) arguments;
 	}
 
 	org_gnome_Epiphany_load_ur_ilist_async
 		(proxy, (const char **) uris, options->str, user_time,
 		 unref_proxy_reply_cb, NULL);
 	
-	if (extra_arguments != NULL)
+	if (arguments != NULL)
 	{
-		g_strfreev (extra_arguments);
-		extra_arguments = NULL;
+		g_strfreev (arguments);
+		arguments = NULL;
 	}
 
 	g_string_free (options, TRUE);
@@ -395,7 +378,7 @@ queue_commands (guint32 user_time)
 	/* Don't queue any window openings if no extra arguments given,
 	 * since session autoresume will open one for us.
 	 */
-	else if (extra_arguments != NULL)
+	else if (arguments != NULL)
 	{
 		GString *options;
 
@@ -413,11 +396,11 @@ queue_commands (guint32 user_time)
 		ephy_session_queue_command (session,
 					    EPHY_SESSION_CMD_OPEN_URIS,
 					    options->str,
-					    extra_arguments,
+					    arguments,
 					    user_time, FALSE);
 
-		g_strfreev (extra_arguments);
-		extra_arguments = NULL;
+		g_strfreev (arguments);
+		arguments = NULL;
 	}
 }
 
@@ -559,10 +542,33 @@ main (int argc,
 
 #endif /* GNOME_PARAM_GOPTION_CONTEXT */
 
-	if (extra_arguments != NULL &&
+	if (arguments != NULL &&
 	    eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL))
 	{
 		exit (1);
+	}
+
+	/* Make URIs from arguments, to support filename args */
+	if (arguments != NULL)
+	{
+		guint i;
+
+		for (i = 0; arguments[i] != NULL; ++i)
+		{
+			char *path = NULL;
+
+			path = realpath (arguments[i], NULL);
+			if (path != NULL)
+			{
+				g_free (arguments[i]);
+				arguments[i] = g_strdup (path);
+				free (path);
+			}
+			/* FIXME: I'd use gnome_vfs_make_uri_from_shell_arg
+			 * but then "epiphany www.gnome.org" would try to open
+			 * a local file, not a web address.
+			 */
+		}
 	}
 
 	/* Get a timestamp manually if need be */
