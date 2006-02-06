@@ -379,7 +379,11 @@ GECKO_RUN_IFELSE([],
 #include <nsILocalFile.h>
 #include <nsIServiceManager.h>
 #include <nsIComponentRegistrar.h>
+#ifdef HAVE_GECKO_1_8
+#include <nsStringAPI.h>
+#else
 #include <nsString.h>
+#endif
 ]],[[
 // redirect unwanted mozilla debug output
 freopen ("/dev/null", "w", stdout);
