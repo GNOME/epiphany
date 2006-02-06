@@ -48,7 +48,7 @@ AC_HEADER_STDC
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
 
-IT_PROG_INTLTOOL([0.34.2])
+IT_PROG_INTLTOOL([0.34.1])
 
 PKG_PROG_PKG_CONFIG
 
@@ -618,17 +618,22 @@ else
 fi
 
 # Translators: new languages must be added to the po/LINGUAS file
+ALL_LINGUAS="`cat "$srcdir/po/LINGUAS" | grep -v '^#'`"
+
+AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
 
 GETTEXT_PACKAGE=epiphany
 AC_SUBST([GETTEXT_PACKAGE])
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[Gettext package])
+AM_GLIB_GNU_GETTEXT
+AM_GLIB_DEFINE_LOCALEDIR([GNOMELOCALEDIR])
 
-AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION([0.14])
+# uninstalled share dir to search data
+AC_DEFINE_UNQUOTED([SHARE_UNINSTALLED_DIR], ["`pwd`/data"], [path to source data dir])
 
-# *************
-# Documentation
-# *************
+# *****************
+# API Documentation
+# *****************
 
 GNOME_DOC_INIT
 GTK_DOC_CHECK([1.0])
