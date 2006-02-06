@@ -84,7 +84,7 @@ if test "$gecko_cv_have_gecko" = "yes"; then
 case "$gecko_cv_gecko" in
 mozilla) gecko_cv_gecko_flavour=mozilla ;;
 seamonkey) gecko_cv_gecko_flavour=mozilla ;;
-*firefox) gecko_cv_gecko_flavour=toolkit  ;;
+*firefox) gecko_cv_gecko_flavour=toolkit ;;
 xulrunner) gecko_cv_gecko_flavour=toolkit ;;
 esac
 
@@ -288,6 +288,8 @@ else
 fi
 
 $1[]_EXTRA_PKG_DEPENDENCIES="$gecko_cv_extra_pkg_dependencies"
+
+])
 
 # ***************************************************************************
 # ***************************************************************************
