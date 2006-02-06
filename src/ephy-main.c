@@ -86,7 +86,7 @@ static const GOptionEntry option_entries[] =
 	  N_("Load the given session file"), N_("FILE") },
 	{ "add-bookmark", 't', 0, G_OPTION_ARG_STRING, &bookmark_url,
 	  N_("Add a bookmark"), N_("URL") },
-	{ G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_STRING_ARRAY, &arguments,
+	{ G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &arguments,
 	  "", "" },
 	{ NULL }
 };
@@ -555,19 +555,44 @@ main (int argc,
 
 		for (i = 0; arguments[i] != NULL; ++i)
 		{
-			char *path = NULL;
+			char *uri, *path = NULL;
 
 			path = realpath (arguments[i], NULL);
 			if (path != NULL)
 			{
-				g_free (arguments[i]);
-				arguments[i] = g_strdup (path);
+				uri = g_locale_to_utf8 (path, -1, 
+							NULL, NULL, &error);
 				free (path);
 			}
-			/* FIXME: I'd use gnome_vfs_make_uri_from_shell_arg
-			 * but then "epiphany www.gnome.org" would try to open
-			 * a local file, not a web address.
-			 */
+			else
+			{
+				uri = g_locale_to_utf8 (arguments[i], -1, 
+							NULL, NULL, &error);
+			}
+
+			if (uri != NULL)
+			{
+				g_free (arguments[i]);
+
+				/* If it's a file, use gnome_vfs_make_uri_from_shell_arg,
+				 * so we get the right escaping.
+				 */
+				if (path != NULL)
+				{
+					arguments[i] = gnome_vfs_make_uri_from_shell_arg (uri);
+				}
+				else
+				{
+					arguments[i] = uri;
+				}
+			}
+			else
+			{
+				g_print ("Could not convert '%s' to UTF-8: %s!\n",
+					 arguments[i], error->message);
+				g_error_free (error);
+				exit (1);
+			}
 		}
 	}
 
