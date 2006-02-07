@@ -856,59 +856,67 @@ ephy_node_new_from_xml (EphyNodeDb *db, xmlNodePtr xml_node)
 				ephy_node_emit_signal (parent, EPHY_NODE_CHILD_ADDED, node);
 			}
 		} else if (strcmp ((const char *)xml_child->name, "property") == 0) {
-			GType value_type;
 			GValue *value;
+			xmlChar *xmlType, *xmlValue;
 			int property_id;
 
 			xml = xmlGetProp (xml_child, (const xmlChar *)"id");
 			property_id = atoi ((const char *)xml);
 			xmlFree (xml);
 
-			xml = xmlGetProp (xml_child, (const xmlChar *)"value_type");
-			value_type = g_type_from_name ((const gchar *)xml);
-			xmlFree (xml);
+			xmlType = xmlGetProp (xml_child, (const xmlChar *)"value_type");
+			xmlValue = xmlNodeGetContent (xml_child);
 
-			xml = xmlNodeGetContent (xml_child);
 			value = g_new0 (GValue, 1);
-			g_value_init (value, value_type);
 
-			switch (value_type)
+			if (xmlStrEqual (xmlType, (const xmlChar *) "gchararray"))
 			{
-			case G_TYPE_STRING:
-				g_value_set_string (value, (const gchar *)xml);
-				break;
-			case G_TYPE_INT:
-				g_value_set_int (value, atoi ((const char *)xml));
-				break;
-			case G_TYPE_BOOLEAN:
-				g_value_set_boolean (value, atoi ((const char *)xml));
-				break;
-			case G_TYPE_LONG:
-				g_value_set_long (value, atol ((const char *)xml));
-				break;
-			case G_TYPE_FLOAT:
-				g_value_set_float (value, g_ascii_strtod ((const gchar *)xml, NULL));
-				break;
-			case G_TYPE_DOUBLE:
-				g_value_set_double (value, g_ascii_strtod ((const gchar *)xml, NULL));
-				break;
-			case G_TYPE_POINTER:
+				g_value_init (value, G_TYPE_STRING);
+				g_value_set_string (value, (const gchar *)xmlValue);
+			}
+			else if (xmlStrEqual (xmlType, (const xmlChar *) "gint"))
+			{
+				g_value_init (value, G_TYPE_INT);
+				g_value_set_int (value, atoi ((const char *)xmlValue));
+			}
+			else if (xmlStrEqual (xmlType, (const xmlChar *) "gboolean"))
+			{
+				g_value_init (value, G_TYPE_BOOLEAN);
+				g_value_set_boolean (value, atoi ((const char *)xmlValue));
+			}
+			else if (xmlStrEqual (xmlType, (const xmlChar *) "glong"))
+			{
+				g_value_init (value, G_TYPE_LONG);
+				g_value_set_long (value, atol ((const char *)xmlValue));
+			}
+			else if (xmlStrEqual (xmlType, (const xmlChar *) "gfloat"))
+			{
+				g_value_init (value, G_TYPE_FLOAT);
+				g_value_set_float (value, g_ascii_strtod ((const gchar *)xmlValue, NULL));
+			}
+			else if (xmlStrEqual (xmlType, (const xmlChar *) "gdouble"))
+			{
+				g_value_init (value, G_TYPE_DOUBLE);
+				g_value_set_double (value, g_ascii_strtod ((const gchar *)xmlValue, NULL));
+			}
+			else if (xmlStrEqual (xmlType, (const xmlChar *) "gpointer"))
 			{
 				EphyNode *property_node;
 
-				property_node = ephy_node_db_get_node_from_id (db, atol ((const char *)xml));
+				property_node = ephy_node_db_get_node_from_id (db, atol ((const char *)xmlValue));
 
 				g_value_set_pointer (value, property_node);
 				break;
 			}
-			default:
+			else
+			{
 				g_assert_not_reached ();
-				break;
 			}
 
 			real_set_property (node, property_id, value);
 
-			xmlFree (xml);
+			xmlFree (xmlValue);
+			xmlFree (xmlType);
 		}
 	}
 
