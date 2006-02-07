@@ -45,7 +45,8 @@ typedef struct
 {
 	char *identifier;
 	GKeyFile *keyfile;
-	gboolean active;
+	guint active  :1;
+	guint enabled :1;
 } EphyExtensionInfo;
 	
 struct _EphyExtensionsManagerClass

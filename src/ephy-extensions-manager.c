@@ -723,8 +723,6 @@ load_extension (EphyExtensionsManager *manager,
 	if (info->extension != NULL)
 	{
 		info->info.active = TRUE;
-
-		g_signal_emit (manager, signals[CHANGED], 0, info);
 	}
 	else
 	{
@@ -783,8 +781,6 @@ unload_extension (EphyExtensionsManager *manager,
 
 	info->info.active = FALSE;
 	info->extension = NULL;
-
-	g_signal_emit (manager, signals[CHANGED], 0, info);
 }
 
 static void
@@ -820,6 +816,8 @@ sync_loaded_extensions (EphyExtensionsManager *manager)
 
 	for (l = manager->priv->data; l != NULL; l = l->next)
 	{
+		gboolean changed;
+		
 		info = (ExtensionInfo *) l->data;
 
 		active = (g_slist_find_custom (active_extensions,
@@ -831,6 +829,10 @@ sync_loaded_extensions (EphyExtensionsManager *manager)
 		     active ? "" : "not ",
 		     info->info.active ? "" : "not ");
 
+		changed = ( info->info.enabled != active );
+
+		info->info.enabled = active;
+
 		if (active != info->info.active)
 		{
 			if (active)
@@ -841,6 +843,16 @@ sync_loaded_extensions (EphyExtensionsManager *manager)
 			{
 				unload_extension (manager, info);
 			}
+
+			if (active == info->info.active)
+			{
+				changed = TRUE;
+			}
+		}
+		
+		if (changed)
+		{
+			g_signal_emit (manager, signals[CHANGED], 0, info);
 		}
 	}
 

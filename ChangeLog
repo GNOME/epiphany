@@ -1,3 +1,13 @@
+2006-02-07  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* src/ephy-extensions-manager.c: (load_extension),
+	(unload_extension), (sync_loaded_extensions):
+	* src/ephy-extensions-manager.h:
+
+	Add an 'enabled' flag in the EphyExtensionInfo struct to
+	track whether gconf says it should be loaded. The
+	'active' flag is whether it is actually loaded.
+
 2006-02-07  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed-single.cpp:
