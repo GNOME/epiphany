@@ -452,9 +452,6 @@ mozilla_init_profile (void)
 	char *profile_path;
 	profile_path = g_build_filename (ephy_dot_dir (), 
 					 MOZILLA_PROFILE_DIR,
-#ifdef HAVE_GECKO_1_9
-					 "epiphany",
-#endif
 					 NULL);
         gtk_moz_embed_set_profile_path (profile_path, MOZILLA_PROFILE_NAME);
         g_free (profile_path);
@@ -726,11 +723,11 @@ impl_init (EphyEmbedSingle *esingle)
 
 	mozilla_init_profile ();
 
-	/* Set mozilla binary path */
-	gtk_moz_embed_set_comp_path (MOZILLA_HOME);
-
 #ifdef HAVE_GECKO_1_9
 	gtk_moz_embed_set_path (MOZILLA_HOME);
+#else
+	/* Set mozilla binary path */
+	gtk_moz_embed_set_comp_path (MOZILLA_HOME);
 #endif
 
 #if defined(HAVE_MOZILLA_TOOLKIT) && defined(HAVE_GECKO_1_8)

@@ -1,5 +1,13 @@
 2006-02-07  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/mozilla-embed-single.cpp:
+	
+	Remove workaround for broken profile now that
+	https://bugzilla.mozilla.org/show_bug.cgi?id=326013
+	is fixed.
+
+2006-02-07  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-node.c: (ephy_node_new_from_xml):
 
 	Save tons of g_type_from_name calls.
