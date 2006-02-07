@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-31 21:30+0200\n"
+"POT-Creation-Date: 2006-02-07 07:35+0200\n"
 "PO-Revision-Date: 2006-01-31 21:45+0200\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists."
@@ -136,8 +136,8 @@ msgid "Epiphany Web Browser"
 msgstr "Epiphany, WWW-selain"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:539
-#: ../src/ephy-main.c:588 ../src/ephy-main.c:607
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:482
+#: ../src/ephy-main.c:533 ../src/ephy-main.c:606
 msgid "Web Browser"
 msgstr "WWW-selain"
 
@@ -537,7 +537,7 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5-sormenjälki:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1015
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1036
 msgid "Organization:"
 msgstr "Organisaatio:"
 
@@ -566,7 +566,7 @@ msgid "Cookies"
 msgstr "Evästeet"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:105
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:106
 msgid "Downloads"
 msgstr "Tallennukset"
 
@@ -836,18 +836,6 @@ msgid_plural "%d downloads"
 msgstr[0] "%d tallennus"
 msgstr[1] "%d tallennusta"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:585 ../embed/downloader-view.c:598
-msgid "download status|Unknown"
-msgstr "tuntematon"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:590
-msgid "download status|Failed"
-msgstr "epäonnistui"
-
 #: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:863
 msgid "File"
 msgstr "Tiedosto"
@@ -860,7 +848,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Jäljellä"
 
-#: ../embed/ephy-embed-shell.c:235
+#: ../embed/ephy-embed-shell.c:243
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphanya ei voi käyttää nyt: Mozillan alustus ei onnistunut."
 
@@ -1259,24 +1247,18 @@ msgstr "Muut"
 msgid "Local files"
 msgstr "Paikalliset tiedostot"
 
-#: ../embed/mozilla/ContentHandler.cpp:172
+#: ../embed/mozilla/ContentHandler.cpp:178
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:408
 msgid "Save"
 msgstr "Tallenna"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:293
-msgid "File Type:|Unknown"
-msgstr "Tuntematon"
-
-#: ../embed/mozilla/ContentHandler.cpp:328
+#: ../embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "Tallennetaanko mahdollisesti turvaton tiedosto?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:334
+#: ../embed/mozilla/ContentHandler.cpp:340
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1289,14 +1271,14 @@ msgstr ""
 "Tiedoston \"%s\" avaaminen ei ole turvallista, sillä se saattaa vaurioittaa "
 "asiakirjojasi tai loukata yksityisyyttäsi. Voit kuitenkin noutaa sen levylle."
 
-#: ../embed/mozilla/ContentHandler.cpp:344
+#: ../embed/mozilla/ContentHandler.cpp:350
 msgid "Open this file?"
 msgstr "Avataanko tiedosto?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:351
+#: ../embed/mozilla/ContentHandler.cpp:357
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1307,13 +1289,13 @@ msgstr ""
 "\n"
 "Voit avata tiedoston \"%s\" ohjelmalla \"%s\" tai tallentaa sen."
 
-#: ../embed/mozilla/ContentHandler.cpp:359
+#: ../embed/mozilla/ContentHandler.cpp:365
 msgid "Download this file?"
 msgstr "Tallennetaanko tiedosto?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:365
+#: ../embed/mozilla/ContentHandler.cpp:371
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1325,7 +1307,7 @@ msgstr ""
 "Tiedoton \"%s\" avaamiseen ei löydy yhtäkäään ohjelmaa. Voit kuitenkin "
 "noutaa sen levylle."
 
-#: ../embed/mozilla/ContentHandler.cpp:370
+#: ../embed/mozilla/ContentHandler.cpp:376
 msgid "_Save As..."
 msgstr "_Tallenna nimellä..."
 
@@ -1419,16 +1401,16 @@ msgid ""
 "<ul><li>some service isn't started, or</li><li>the port number %d is wrong.</"
 "li></ul>"
 msgstr ""
-"<ul><li>joku palvelu ei ole käynnistetty</li><li>porttinumero %d on "
-"väärä.</li></ul>"
+"<ul><li>joku palvelu ei ole käynnistetty</li><li>porttinumero %d on väärä.</"
+"li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:290
 msgid ""
 "<ul><li>some service isn't started, or</li><li>you got the port number wrong."
 "</li></ul>"
 msgstr ""
-"<ul><li>joku palvelu ei ole käynnistetty</li><li>porttinumero on väärä."
-"</li></ul>"
+"<ul><li>joku palvelu ei ole käynnistetty</li><li>porttinumero on väärä.</"
+"li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:298
 #: ../embed/mozilla/EphyAboutModule.cpp:316
@@ -1593,96 +1575,84 @@ msgstr ""
 "Sivua \"%s\" tässä välilehdessä ei oltu ladattu kokonaan, kun selain kaatui. "
 "Tämä sivu on voinut aiheuttaa kaatumisen."
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:659
-msgid "You may find an old version:|in the Google Cache"
-msgstr "Googlen välimuistista"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:667
-msgid "You may find an old version:|in the Internet Archive"
-msgstr "Internet Archivesta"
-
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks.c:1111 ../src/ephy-session.c:775
+#: ../src/bookmarks/ephy-bookmarks.c:1111 ../src/ephy-session.c:1314
 msgid "Untitled"
 msgstr "Nimetön"
 
-#: ../embed/mozilla/EphyPromptService.cpp:195
+#: ../embed/mozilla/EphyPromptService.cpp:197
 msgid "_Abort Script"
 msgstr "_Keskeytä skripti"
 
-#: ../embed/mozilla/EphyPromptService.cpp:263
+#: ../embed/mozilla/EphyPromptService.cpp:265
 msgid "Don't Save"
 msgstr "Älä tallenna"
 
-#: ../embed/mozilla/EphyPromptService.cpp:762
+#: ../embed/mozilla/EphyPromptService.cpp:799
 msgid "_User:"
 msgstr "_Käyttäjä:"
 
-#: ../embed/mozilla/EphyPromptService.cpp:763
-#: ../embed/mozilla/EphyPromptService.cpp:790
-#: ../embed/mozilla/GtkNSSDialogs.cpp:795
-#: ../embed/mozilla/GtkNSSDialogs.cpp:905
+#: ../embed/mozilla/EphyPromptService.cpp:800
+#: ../embed/mozilla/EphyPromptService.cpp:827
+#: ../embed/mozilla/GtkNSSDialogs.cpp:811
+#: ../embed/mozilla/GtkNSSDialogs.cpp:926
 msgid "_Password:"
 msgstr "_Salasana:"
 
-#: ../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
+#: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
 #: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "All files"
 msgstr "Kaikki tiedostot"
 
-#: ../embed/mozilla/FilePicker.cpp:157 ../lib/ephy-file-chooser.c:355
+#: ../embed/mozilla/FilePicker.cpp:158 ../lib/ephy-file-chooser.c:355
 msgid "Web pages"
 msgstr "WWW-sivut"
 
-#: ../embed/mozilla/FilePicker.cpp:165
+#: ../embed/mozilla/FilePicker.cpp:166
 msgid "Text files"
 msgstr "Tekstitiedostot"
 
-#: ../embed/mozilla/FilePicker.cpp:170 ../lib/ephy-file-chooser.c:363
+#: ../embed/mozilla/FilePicker.cpp:171 ../lib/ephy-file-chooser.c:363
 msgid "Images"
 msgstr "Kuvat"
 
-#: ../embed/mozilla/FilePicker.cpp:178
+#: ../embed/mozilla/FilePicker.cpp:179
 msgid "XML files"
 msgstr "XML-tiedostot"
 
-#: ../embed/mozilla/FilePicker.cpp:183
+#: ../embed/mozilla/FilePicker.cpp:184
 msgid "XUL files"
 msgstr "XUL-tiedostot"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:156
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:162
 msgid "_Select Certificate"
 msgstr "_Valitse varmenne"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:202
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:208
 #, c-format
 msgid "Choose a certificate to present as identification to “%s”."
 msgstr "Valitse sivustolle \"%s\" tunnisteena esitettävä varmenne."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:211
 msgid "Select a certificate to identify yourself."
 msgstr "Valitse varmenne, jolla todistat henkilöllisyytesi."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:242
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:248
 msgid "Certificate _Details"
 msgstr "Varmenteen _lisätiedot"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:235
-#: ../embed/mozilla/GtkNSSDialogs.cpp:547
+#: ../embed/mozilla/GtkNSSDialogs.cpp:241
+#: ../embed/mozilla/GtkNSSDialogs.cpp:558
 msgid "_View Certificate"
 msgstr "_Näytä varmenne"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:243
+#: ../embed/mozilla/GtkNSSDialogs.cpp:249
 msgid "_Accept"
 msgstr "_Hyväksy"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:310
+#: ../embed/mozilla/GtkNSSDialogs.cpp:316
 #, c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
@@ -1692,7 +1662,7 @@ msgstr ""
 "Sivusto \"%s\" palautti sivuston \"%s\" turvatiedot. On mahdollista, että "
 "joku salakuuntelee yhteyttäsi kerätäkseen luottamuksellisia tietojasi."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:316
+#: ../embed/mozilla/GtkNSSDialogs.cpp:322
 #, c-format
 msgid ""
 "You should only accept the security information if you trust “%s” and “%s”."
@@ -1700,11 +1670,11 @@ msgstr ""
 "Nämä turvatiedot tulisi hyväksyä vain, jos luotat varmentajiin \"%s\" ja \"%s"
 "\"."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:321
+#: ../embed/mozilla/GtkNSSDialogs.cpp:327
 msgid "Accept incorrect security information?"
 msgstr "Hyväksytäänkö virheelliset turvatiedot?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:358
 #, c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
@@ -1713,7 +1683,7 @@ msgstr ""
 "Selaimesi ei automaattisesti luota sivustoon \"%s\". On mahdollista, että "
 "joku salakuuntelee yhteyttäsi kerätäkseen luottamuksellisia tietojasi."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:358
+#: ../embed/mozilla/GtkNSSDialogs.cpp:364
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
@@ -1722,34 +1692,34 @@ msgstr ""
 "Yhteys tulisi ottaa vain,  jos olet varma että olet yhteydessä sivustoon \"%s"
 "\"."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:369
 msgid "Connect to untrusted site?"
 msgstr "Yhdistä epäluotettuun sivustoon?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:367
+#: ../embed/mozilla/GtkNSSDialogs.cpp:373
 msgid "_Trust this security information from now on"
 msgstr "Luo_ta näihin turvatietoihin tästä eteenpäin"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:374
 msgid "Co_nnect"
 msgstr "_Yhdistä"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:427
+#: ../embed/mozilla/GtkNSSDialogs.cpp:433
 msgid "Accept expired security information?"
 msgstr "Hyväksytäänkö vanhentuneet turvatiedot?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:429
+#: ../embed/mozilla/GtkNSSDialogs.cpp:435
 #, c-format
 msgid "The security information for “%s” expired on %s."
 msgstr "Sivuston \"%s\" turvatiedot vanhentuivat %s."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:435
+#: ../embed/mozilla/GtkNSSDialogs.cpp:441
 msgid "Accept not yet valid security information?"
 msgstr "Hyväksytäänkö vielä voimaan tulemattomat turvatiedot?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:437
+#: ../embed/mozilla/GtkNSSDialogs.cpp:443
 #, c-format
 msgid "The security information for “%s” isn't valid until %s."
 msgstr "Sivuston \"%s\" turvatiedot tulevat voimaan vasta %s."
@@ -1757,43 +1727,43 @@ msgstr "Sivuston \"%s\" turvatiedot tulevat voimaan vasta %s."
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:453
+#: ../embed/mozilla/GtkNSSDialogs.cpp:459
 msgid "%a %d %b %Y"
 msgstr "%a %e. %Bta %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:461
+#: ../embed/mozilla/GtkNSSDialogs.cpp:467
 msgid "You should ensure that your computer's time is correct."
 msgstr "Varmista, että tietokoneesi kello on oikeassa ajassa."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:507
+#: ../embed/mozilla/GtkNSSDialogs.cpp:513
 #, c-format
 msgid "Cannot establish connection to “%s”."
 msgstr "Yhteyttä kohteeseen \"%s\" ei voi avata."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:510
+#: ../embed/mozilla/GtkNSSDialogs.cpp:516
 #, c-format
 msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
 msgstr "Varmenteiden sulkulista (CRL) lähteestä \"%s\" täytyy päivittää."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:515
+#: ../embed/mozilla/GtkNSSDialogs.cpp:521
 msgid "Please ask your system administrator for assistance."
 msgstr "Pyydä järjestelmäsi ylläpitäjältä neuvoa."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:545
+#: ../embed/mozilla/GtkNSSDialogs.cpp:556
 msgid "Trust new Certificate Authority?"
 msgstr "Luotetaanko uuteen varmenneviranomaiseen?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:550
+#: ../embed/mozilla/GtkNSSDialogs.cpp:561
 msgid "_Trust CA"
 msgstr "_Luota varmenneviranomaiseen"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:572
+#: ../embed/mozilla/GtkNSSDialogs.cpp:583
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr ""
 "Luotetaanko uuteen varmenneviranomaiseen \"%s\" www-sivustojen varmentajana?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:577
+#: ../embed/mozilla/GtkNSSDialogs.cpp:588
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1801,146 +1771,146 @@ msgstr ""
 "Ennen varmenneviranomaiseen (CA) luottamista, tulisi tarkistaa, että "
 "varmenne on aito."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:648
+#: ../embed/mozilla/GtkNSSDialogs.cpp:659
 msgid "Certificate already exists."
 msgstr "Varmenne on jo olemassa."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:649
+#: ../embed/mozilla/GtkNSSDialogs.cpp:660
 msgid "The certificate has already been imported."
 msgstr "Varmenne on jo tuotu."
 
 #. Translators: this is the action of the certificate being exported to a backup file
-#: ../embed/mozilla/GtkNSSDialogs.cpp:775
+#: ../embed/mozilla/GtkNSSDialogs.cpp:791
 msgid "_Back Up Certificate"
 msgstr "_Varmuuskopioi varmenne"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:782
+#: ../embed/mozilla/GtkNSSDialogs.cpp:798
 msgid "Select password."
 msgstr "Valitse salasana."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:783
+#: ../embed/mozilla/GtkNSSDialogs.cpp:799
 msgid "Select a password to protect this certificate."
 msgstr "Valitse tätä varmennetta suojaava salasana."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:809
+#: ../embed/mozilla/GtkNSSDialogs.cpp:825
 msgid "Con_firm password:"
 msgstr "_Salasanan tarkistus:"
 
 #. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:821
+#: ../embed/mozilla/GtkNSSDialogs.cpp:837
 msgid "Password quality:"
 msgstr "Salasanan laatu:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:878
+#: ../embed/mozilla/GtkNSSDialogs.cpp:899
 msgid "I_mport Certificate"
 msgstr "T_uo varmenne"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:894
+#: ../embed/mozilla/GtkNSSDialogs.cpp:915
 msgid "Password required."
 msgstr "Salasana on pakollinen."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:895
+#: ../embed/mozilla/GtkNSSDialogs.cpp:916
 msgid "Enter the password for this certificate."
 msgstr "Kirjoita tämän varmenteen salasana."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:984
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1005
 msgid "Certificate Revocation List Imported"
 msgstr "Varmenteiden sulkulista (CRL) tuotu"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:994
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1015
 msgid "Certificate Revocation List (CRL) successfully imported"
 msgstr "Varmenteiden sulkulistan (CRL) tuonti onnistui"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1019
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1040
 msgid "Unit:"
 msgstr "Yksikkö:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1023
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1044
 msgid "Next Update:"
 msgstr "Seuraava päivitys:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1050
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1071
 msgid "Not part of certificate"
 msgstr "Ei ole varmenteen osa"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
 msgid "Certificate Properties"
 msgstr "Varmenteen ominaisuudet"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1362
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1387
 msgid "This certificate has been verified for the following uses:"
 msgstr "Tämän varmenteen sopivuus seuraaviin käyttötapoihin on tarkistettu:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1390
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Varmenteen tarkistaminen epäonnistui, koska varmenne on mitätöity."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1393
 msgid "Could not verify this certificate because it has expired."
 msgstr "Varmenteen tarkistaminen epäonnistui, koska varmenne on vanhentunut."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1371
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1396
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Varmenteen tarkistaminen epäonnistui, koska varmenne ei ole luotettu."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1374
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1399
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "Varmenteen tarkistaminen epäonnistui, koska varmenteen myöntäjä ei ole "
 "luotettu."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1377
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1402
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr ""
 "Varmenteen tarkistaminen epäonnistui, koska varmenteen myöntäjä on "
 "tuntematon."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1380
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1405
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "Varmenteen tarkistaminen epäonnistui, koska varmenneviranomaisen (CA) "
 "varmenne on virheellinen."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1385
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1410
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Varmenteen tarkistaminen epäonnistui tuntemattomasta syystä."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:230
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:235
 msgid "Generating Private Key."
 msgstr "Salainen avain muodostuu."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:231
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:236
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
 msgstr ""
 "Odota hetki, kun uusi salainen avain muodostuu. Tämä voi viedä hetkisen."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "Security Notice"
 msgstr "Turvallisuusilmoitus"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
 msgid "This page is loaded over a secure connection"
 msgstr "Tämä sivu on ladattu turvallisen yhteyden kautta"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
 msgid "The padlock icon in the statusbar indicates whether a page is secure."
 msgstr "Lukonkuva tilarivillä ilmaisee, onko sivu turvallinen."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid "Security Warning"
 msgstr "Turvallisuusvaroitus"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid "This page is loaded over a low security connection"
 msgstr "Tämä sivu on ladattu heikosti turvallisen yhteyden kautta"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -1948,11 +1918,11 @@ msgstr ""
 "Kaikki tiedot jotka sivulla näkyvät tai sinne kirjoitat, voi kuka tahansa "
 "nähdä."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "Osa sivusta on ladattu turvattoman yhteyden kautta"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1960,12 +1930,12 @@ msgstr ""
 "Osa näkyvistä tiedoista tai kirjoittamistasi tiedoista kulkevat turvattoman "
 "yhteyden yli, joten kuka tahansa voi helposti nähdä ne."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid "Send this information over an insecure connection?"
 msgstr "Lähetetäänkö nämä tiedot turvattoman yhteyden kautta?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1973,12 +1943,12 @@ msgstr ""
 "Kirjoittamasi tiedot lähetetään turvattoman yhteyden kautta, joten kuka "
 "tahansa voi helposti nähdä ne."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "_Send"
 msgstr "_Lähetä"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2056,32 +2026,32 @@ msgstr ""
 "GConf-virhe:\n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:806
+#: ../lib/egg/egg-editable-toolbar.c:868
 #, c-format
 msgid "Hide “%s”"
 msgstr "Piilota \"%s\""
 
-#: ../lib/egg/egg-editable-toolbar.c:1240
+#: ../lib/egg/egg-editable-toolbar.c:1304
 msgid "_Move on Toolbar"
 msgstr "_Siirrä työkalupalkissa"
 
-#: ../lib/egg/egg-editable-toolbar.c:1241
+#: ../lib/egg/egg-editable-toolbar.c:1305
 msgid "Move the selected item on the toolbar"
 msgstr "Siirrä valittu kohta työkalupalkkiin"
 
-#: ../lib/egg/egg-editable-toolbar.c:1242
+#: ../lib/egg/egg-editable-toolbar.c:1306
 msgid "_Remove from Toolbar"
 msgstr "_Poista työkalupalkista"
 
-#: ../lib/egg/egg-editable-toolbar.c:1243
+#: ../lib/egg/egg-editable-toolbar.c:1307
 msgid "Remove the selected item from the toolbar"
 msgstr "Poista valittu kohta työkalupalkista"
 
-#: ../lib/egg/egg-editable-toolbar.c:1244
+#: ../lib/egg/egg-editable-toolbar.c:1308
 msgid "_Remove Toolbar"
 msgstr "_Poista työkalupalkki"
 
-#: ../lib/egg/egg-editable-toolbar.c:1245
+#: ../lib/egg/egg-editable-toolbar.c:1309
 msgid "Remove the selected toolbar"
 msgstr "Poista valittu työkalupalkki"
 
@@ -2093,17 +2063,17 @@ msgstr "Erotin"
 msgid "All supported types"
 msgstr "Kaikki tuetut tyypit"
 
-#: ../lib/ephy-file-helpers.c:292
+#: ../lib/ephy-file-helpers.c:300
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Väliaikaiskansiota hakemistoon \"%s\" ei voi luoda."
 
-#: ../lib/ephy-file-helpers.c:360
-#,  c-format
+#: ../lib/ephy-file-helpers.c:368
+#, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Tiedosto \"%s\" on jo olemassa, siirrä se pois tieltä."
 
-#: ../lib/ephy-file-helpers.c:371
+#: ../lib/ephy-file-helpers.c:379
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Kansiota \"%s\" ei voi luoda."
@@ -2309,7 +2279,7 @@ msgstr "Historiikki"
 
 #: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:777
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1596
-#: ../src/bookmarks/ephy-topic-action.c:405 ../src/ephy-window.c:1294
+#: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
 
@@ -2390,48 +2360,48 @@ msgstr "Epiphanyn työpöytätiedostojen liitännäinen"
 msgid "This plugin handles “.desktop” files containing web links."
 msgstr "Tämä liitännäinen osaa etsiä www-linkkejä \".desktop\"-tiedostoista."
 
-#: ../src/bookmarks/ephy-bookmark-action.c:285
+#: ../src/bookmarks/ephy-bookmark-action.c:290
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:92
-#: ../src/bookmarks/ephy-bookmark-properties.c:563
+#: ../src/bookmarks/ephy-bookmark-properties.c:93
+#: ../src/bookmarks/ephy-bookmark-properties.c:619
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d _samanlainen"
 msgstr[1] "%d _samanlaista"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:246
+#: ../src/bookmarks/ephy-bookmark-properties.c:266
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "_Yhdistä %d identtisen kirjanmerkin kanssa"
 msgstr[1] "_Yhdistä %d identtisen kirjanmerkin kanssa"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:266
-#: ../src/bookmarks/ephy-bookmark-properties.c:288
+#: ../src/bookmarks/ephy-bookmark-properties.c:286
+#: ../src/bookmarks/ephy-bookmark-properties.c:308
 #, c-format
 msgid "Show “%s”"
 msgstr "Näytä \"%s\""
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:379
+#: ../src/bookmarks/ephy-bookmark-properties.c:434
 #, c-format
 msgid "“%s” Properties"
 msgstr "\"%s\" ominaisuudet"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:503
+#: ../src/bookmarks/ephy-bookmark-properties.c:557
 msgid "_Title:"
 msgstr "_Otsikko:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:518
+#: ../src/bookmarks/ephy-bookmark-properties.c:572
 msgid "A_ddress:"
 msgstr "_Osoite:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:528
+#: ../src/bookmarks/ephy-bookmark-properties.c:582
 msgid "T_opics:"
 msgstr "_Aiheet:"
 
@@ -2828,36 +2798,7 @@ msgstr "_Päivitä"
 msgid "Update Bookmark?"
 msgstr "Päivitetäänkö kirjanmerkki?"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:869
-msgid "bookmarks|All"
-msgstr "Kaikki"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:905
-msgid "bookmarks|Most Visited"
-msgstr "Useimmin vieraillut"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. Translators: this topic contains the not categorized bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:924
-msgid "bookmarks|Not Categorized"
-msgstr "Luokittelemattomat"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. Translators: this is an automatic topic containing local websites bookmarks
-#. * autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:949
-msgid "bookmarks|Local Sites"
-msgstr "Paikalliset sivustot"
-
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:317
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:318
 msgid "Quick Bookmark"
 msgstr "Nopea kirjanmerkki"
 
@@ -2878,36 +2819,6 @@ msgstr "Avaa kirjanmerkki uuteen välilehteen"
 msgid "Open this bookmark in a new window"
 msgstr "Avaa kirjanmerkki uuteen ikkunaan"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:523
-#, c-format
-msgid "You already have a topic named “%s”"
-msgstr "Aihe nimellä \"%s\" on jo olemassa"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:527
-msgid "Please use a different topic name."
-msgstr "Valitse aiheelle toinen nimi."
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:567
-#, c-format
-msgid "New topic for “%s”"
-msgstr "Uusi aihe \"%s\""
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:577
-msgid "New topic"
-msgstr "Uusi aihe"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:582
-msgid "Enter a unique name for the topic."
-msgstr "Anna aiheelle yksilöllinen nimi."
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:614
-msgid "Create"
-msgstr "Luo"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:617
-msgid "New Topic"
-msgstr "Uusi aihe"
-
 #: ../src/bookmarks/ephy-open-tabs-action.c:65
 msgid "Open in New _Tabs"
 msgstr "Avaa uusissa _välilehdissä"
@@ -2916,11 +2827,11 @@ msgstr "Avaa uusissa _välilehdissä"
 msgid "Related"
 msgstr "Liittyy"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:316
+#: ../src/bookmarks/ephy-topic-factory-action.c:317
 msgid "Quick Topic"
 msgstr "Nopea aihe"
 
-#: ../src/bookmarks/ephy-topics-entry.c:356
+#: ../src/bookmarks/ephy-topics-entry.c:358
 #, c-format
 msgid "Create topic “%s”"
 msgstr "Luo aihe \"%s\""
@@ -3066,47 +2977,43 @@ msgstr[1] "Viimeisimmät %d päivää"
 msgid "Sites"
 msgstr "Sivustot"
 
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:78
 msgid "Open a new tab in an existing browser window"
 msgstr "Avaa uusi välilehti olemassaolevaan selainikkunaan"
 
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:80
 msgid "Open a new browser window"
 msgstr "Avaa uusi selainikkuna"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:82
 msgid "Launch the bookmarks editor"
 msgstr "Käynnistä kirjanmerkkimuokkain"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:84
 msgid "Import bookmarks from the given file"
 msgstr "Tuo kirjanmerkkejä annetusta tiedostosta"
 
-#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
+#: ../src/ephy-main.c:84 ../src/ephy-main.c:86
 msgid "FILE"
 msgstr "TIEDOSTO"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:86
 msgid "Load the given session file"
 msgstr "Lataa annettu istuntotiedosto"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:88
 msgid "Add a bookmark"
 msgstr "Lisää kirjanmerkki"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:88
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:86 ../src/ephy-main.c:117
-msgid "Start a private instance"
-msgstr "Käynistä erillinen instanssi"
-
-#: ../src/ephy-main.c:474
+#: ../src/ephy-main.c:417
 msgid "Could not start GNOME Web Browser"
 msgstr "Gnomen webselainta ei voi käynnistää"
 
-#: ../src/ephy-main.c:477
+#: ../src/ephy-main.c:420
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -3115,11 +3022,11 @@ msgstr ""
 "Käynnistys ei onnistunut seuraavan virheen takia:\n"
 "%s"
 
-#: ../src/ephy-main.c:517 ../src/ephy-main.c:519 ../src/window-commands.c:752
+#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:760
 msgid "GNOME Web Browser"
 msgstr "Gnomen webselain"
 
-#: ../src/ephy-main.c:520
+#: ../src/ephy-main.c:463
 msgid "GNOME Web Browser options"
 msgstr "Gnomen webselain"
 
@@ -3127,11 +3034,38 @@ msgstr "Gnomen webselain"
 msgid "Close tab"
 msgstr "Sulje välilehti"
 
-#: ../src/ephy-session.c:378
+#: ../src/ephy-session.c:158
+#, c-format
+msgid "Downloads will be aborted and logout proceed in %d second."
+msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
+msgstr[0] "Noudot keskeytetään ja uloskirjautuminen jatkuu %d sekunnin päästä."
+msgstr[1] "Noudot keskeytetään ja uloskirjautuminen jatkuu %d sekunnin päästä."
+
+#: ../src/ephy-session.c:274
+msgid "Abort pending downloads?"
+msgstr "Keskeytetäänkö valmistumattomat noudot?"
+
+#: ../src/ephy-session.c:278
+msgid ""
+"There are still downloads pending. If you log out, they will be aborted and "
+"lost."
+msgstr ""
+"Noutoja on vielä kesken. Jos kirjaudut ulos, noudot keskeytetään ja noudetut "
+"tiedostot hukataan."
+
+#: ../src/ephy-session.c:282
+msgid "_Cancel Logout"
+msgstr "_Keskeytä uloskirjautuminen"
+
+#: ../src/ephy-session.c:284
+msgid "_Abort Downloads"
+msgstr "_Keskeytä noudot"
+
+#: ../src/ephy-session.c:609
 msgid "Recover previous browser windows and tabs?"
 msgstr "Palautetaanko edelliset selainikkunat ja välilehdet?"
 
-#: ../src/ephy-session.c:382
+#: ../src/ephy-session.c:613
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -3139,15 +3073,15 @@ msgstr ""
 "Epiphany vaikuttaa viime kerralla kaatuneen, tai se on suljettu väkisin. "
 "Voit palauttaa viimeksi auki olleet ikkunat ja välilehdet nyt."
 
-#: ../src/ephy-session.c:386
+#: ../src/ephy-session.c:617
 msgid "_Don't Recover"
 msgstr "_Älä palauta"
 
-#: ../src/ephy-session.c:388
+#: ../src/ephy-session.c:619
 msgid "_Recover"
 msgstr "_Palauta"
 
-#: ../src/ephy-session.c:390
+#: ../src/ephy-session.c:621
 msgid "Crash Recovery"
 msgstr "Kaatumisesta palautuminen"
 
@@ -3756,11 +3690,11 @@ msgstr "Jos suljet asiakirjan tästä huolimatta, menetät nämä tiedot."
 msgid "Close _Document"
 msgstr "_Sulje asiakirja"
 
-#: ../src/ephy-window.c:1284 ../src/window-commands.c:279
+#: ../src/ephy-window.c:1284 ../src/window-commands.c:280
 msgid "Open"
 msgstr "Avaa"
 
-#: ../src/ephy-window.c:1286 ../src/window-commands.c:305
+#: ../src/ephy-window.c:1286 ../src/window-commands.c:306
 msgid "Save As"
 msgstr "Tallenna nimellä"
 
@@ -3963,29 +3897,6 @@ msgstr "Sulje tulosteen esikatselu"
 msgid "Default"
 msgstr "Oletus"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: the first %s is the language name, and the
-#. * second %s is the locale name. Example:
-#. * "French (France)"
-#.
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:993 ../src/prefs-dialog.c:1001
-#, c-format
-msgid "language|%s (%s)"
-msgstr "%s (%s)"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: this refers to a user-define language code
-#. * (one which isn't in our built-in list).
-#.
-#: ../src/prefs-dialog.c:1012
-#, c-format
-msgid "language|User defined (%s)"
-msgstr "Käyttäjän määrittelemä (%s)"
-
 #: ../src/prefs-dialog.c:1034
 #, c-format
 msgid "System language (%s)"
@@ -3997,23 +3908,23 @@ msgstr[1] "Järjestelmän kielet (%s)"
 msgid "Select a Directory"
 msgstr "Valitse kansio"
 
-#: ../src/window-commands.c:710 ../src/window-commands.c:727
+#: ../src/window-commands.c:711 ../src/window-commands.c:728
 msgid "Contact us at:"
 msgstr "Ota yhteyttä osoitteessa:"
 
-#: ../src/window-commands.c:713
+#: ../src/window-commands.c:714
 msgid "Contributors:"
 msgstr "Avustajat:"
 
-#: ../src/window-commands.c:718
+#: ../src/window-commands.c:719
 msgid "Past developers:"
 msgstr "Aikaisemmat kehittäjät:"
 
-#: ../src/window-commands.c:728
+#: ../src/window-commands.c:729
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> tai <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:733
+#: ../src/window-commands.c:734
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4025,7 +3936,7 @@ msgstr ""
 "Free Software Foundation on ne julkaissut; joko Lisenssin version 2, tai "
 "(valinnan mukaan) minkä tahansa myöhemmän version mukaisesti."
 
-#: ../src/window-commands.c:737
+#: ../src/window-commands.c:738
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4037,7 +3948,7 @@ msgstr ""
 "hyväksyttävästä laadusta tai soveltuvuudesta tiettyyn tarkoitukseen. Katso "
 "GPL lisenssistä lisää yksityiskohtia."
 
-#: ../src/window-commands.c:741
+#: ../src/window-commands.c:742
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4047,6 +3958,11 @@ msgstr ""
 "kirjoita osoitteeseen Free Software Foundation Inc., 59 Temple Place – Suite "
 "330, Boston, MA 02111-1307, USA."
 
+#: ../src/window-commands.c:754
+#, c-format
+msgid "Using “%s” backend"
+msgstr "Käytetään \"%s\" -taustajärjestelmää"
+
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
 #. * the translators.
@@ -4055,7 +3971,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:766
+#: ../src/window-commands.c:775
 msgid "translator-credits"
 msgstr ""
 "Pauli Virtanen, 2003-2005\n"
@@ -4063,9 +3979,66 @@ msgstr ""
 "\n"
 "http://gnome.fi/"
 
-#: ../src/window-commands.c:769
+#: ../src/window-commands.c:778
 msgid "GNOME Web Browser Website"
 msgstr "Gnomen wwwselaimen www-sivu"
+
+#~ msgid "download status|Unknown"
+#~ msgstr "tuntematon"
+
+#~ msgid "download status|Failed"
+#~ msgstr "epäonnistui"
+
+#~ msgid "File Type:|Unknown"
+#~ msgstr "Tuntematon"
+
+#~ msgid "You may find an old version:|in the Google Cache"
+#~ msgstr "Googlen välimuistista"
+
+#~ msgid "You may find an old version:|in the Internet Archive"
+#~ msgstr "Internet Archivesta"
+
+#~ msgid "bookmarks|All"
+#~ msgstr "Kaikki"
+
+#~ msgid "bookmarks|Most Visited"
+#~ msgstr "Useimmin vieraillut"
+
+#~ msgid "bookmarks|Not Categorized"
+#~ msgstr "Luokittelemattomat"
+
+#~ msgid "bookmarks|Local Sites"
+#~ msgstr "Paikalliset sivustot"
+
+#~ msgid "You already have a topic named “%s”"
+#~ msgstr "Aihe nimellä \"%s\" on jo olemassa"
+
+#~ msgid "Please use a different topic name."
+#~ msgstr "Valitse aiheelle toinen nimi."
+
+#~ msgid "New topic for “%s”"
+#~ msgstr "Uusi aihe \"%s\""
+
+#~ msgid "New topic"
+#~ msgstr "Uusi aihe"
+
+#~ msgid "Enter a unique name for the topic."
+#~ msgstr "Anna aiheelle yksilöllinen nimi."
+
+#~ msgid "Create"
+#~ msgstr "Luo"
+
+#~ msgid "New Topic"
+#~ msgstr "Uusi aihe"
+
+#~ msgid "Start a private instance"
+#~ msgstr "Käynistä erillinen instanssi"
+
+#~ msgid "language|%s (%s)"
+#~ msgstr "%s (%s)"
+
+#~ msgid "language|User defined (%s)"
+#~ msgstr "Käyttäjän määrittelemä (%s)"
 
 #~ msgid "Autowrap for find in page"
 #~ msgstr "Siirry sivun lopusta takaisin alkuun sivulta etsittäessä"
