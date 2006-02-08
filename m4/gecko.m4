@@ -284,8 +284,10 @@ $1[]_VERSION_MINOR=$gecko_cv_gecko_version_minor
 gecko_cv_extra_libs=
 gecko_cv_extra_pkg_dependencies=
 
-if test "$gecko_cv_gecko" != "xulrunner" -a "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "9"; then
-	gecko_cv_extra_libs="-lxul"
+if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "9"; then
+	if test "$gecko_cv_gecko" != "xulrunner"; then
+		gecko_cv_extra_libs="-lxul"
+	fi
 else
 	gecko_cv_extra_pkg_dependencies="${gecko_cv_gecko}-gtkmozembed"
 fi
