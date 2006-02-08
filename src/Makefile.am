@@ -215,6 +215,7 @@ epiphany_LDADD = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(GECKO_LIBS) \
+	$(MOZILLA_EXTRA_LIBS) \
 	$(DEPENDENCIES_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)

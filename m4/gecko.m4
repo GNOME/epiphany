@@ -281,13 +281,17 @@ $1[]_VERSION_MINOR=$gecko_cv_gecko_version_minor
 # Packages that we need to check for with pkg-config 
 # **************************************************
 
-if test "$gecko_cv_gecko" = "xulrunner" -a "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "9"; then
-	gecko_cv_extra_pkg_dependencies=
+gecko_cv_extra_libs=
+gecko_cv_extra_pkg_dependencies=
+
+if test "$gecko_cv_gecko" != "xulrunner" -a "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "9"; then
+	gecko_cv_extra_libs="-lxul"
 else
 	gecko_cv_extra_pkg_dependencies="${gecko_cv_gecko}-gtkmozembed"
 fi
 
 $1[]_EXTRA_PKG_DEPENDENCIES="$gecko_cv_extra_pkg_dependencies"
+$1[]_EXTRA_LIBS="$gecko_cv_extra_libs"
 
 ])
 
