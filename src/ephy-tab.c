@@ -535,7 +535,7 @@ popups_manager_add (EphyTab *tab,
 
 	popup = g_new0 (PopupInfo, 1);
 
-	popup->url = g_strdup (url);
+	popup->url = (url == NULL) ? NULL : g_strdup (url);
 	popup->name = g_strdup (name);
 	popup->features = g_strdup (features);
 
@@ -651,14 +651,17 @@ popups_manager_show (PopupInfo *popup,
 	EphyEmbed *embed;
 	EphyEmbedSingle *single;
 
-	embed = ephy_tab_get_embed (tab);
+	/* Only show popup with non NULL url */
+	if (popup->url != NULL)
+	{
+		embed = ephy_tab_get_embed (tab);
 
-	single = EPHY_EMBED_SINGLE
-		(ephy_embed_shell_get_embed_single (embed_shell));
+		single = EPHY_EMBED_SINGLE
+			(ephy_embed_shell_get_embed_single (embed_shell));
 
-	ephy_embed_single_open_window (single, embed, popup->url,
-				       popup->name, popup->features);
-
+		ephy_embed_single_open_window (single, embed, popup->url,
+				popup->name, popup->features);
+	}
 	popups_manager_free_info (popup);
 }
 

@@ -358,12 +358,15 @@ EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 
 	nsCOMPtr<nsIURI> popupWindowURI;
 	popupEvent->GetPopupWindowURI (getter_AddRefs (popupWindowURI));
-	NS_ENSURE_TRUE (popupWindowURI, NS_ERROR_FAILURE);
-
-	nsresult rv;
+	
 	nsEmbedCString popupWindowURIString;
-	rv = popupWindowURI->GetSpec (popupWindowURIString);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+	nsresult rv;
+
+	if (popupWindowURI)
+	{
+		rv = popupWindowURI->GetSpec (popupWindowURIString);
+		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+	}
 
 	nsEmbedString popupWindowFeatures;
 	rv = popupEvent->GetPopupWindowFeatures (popupWindowFeatures);
@@ -386,7 +389,7 @@ EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 #endif
 
 	g_signal_emit_by_name(mOwner->mEmbed, "ge-popup-blocked",
-			      popupWindowURIString.get(),
+			      popupWindowURI == NULL ? NULL : popupWindowURIString.get(),
 			      popupWindowNameString.get(),
 			      popupWindowFeaturesString.get());
 

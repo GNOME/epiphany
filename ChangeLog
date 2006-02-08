@@ -1,3 +1,12 @@
+2006-02-08  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* embed/mozilla/EphyBrowser.cpp: (HandleEvent):
+	* src/ephy-tab.c: (popups_manager_add),(popups_manager_show):
+
+	Block popup with NULL url (javascript:window.open() for instance).
+	but don't show them when unblocking.
+	Bug #155009.
+ 
 2006-02-08  Christian Persch  <chpe@cvs.gnome.org>
 
 	* m4/gecko.m4:
