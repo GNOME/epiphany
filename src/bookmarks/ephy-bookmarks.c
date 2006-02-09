@@ -660,6 +660,61 @@ update_bookmark_editing (EphyBookmarks *eb)
 }
 
 static void
+fix_hierarchy_topic (EphyBookmarks *eb,
+		     EphyNode *topic)
+{
+	GPtrArray *children;
+	EphyNode *bookmark;
+	const char *name;
+	char **split;
+	int i, j;
+
+	children = ephy_node_get_children (topic);
+	name = ephy_node_get_property_string (topic, EPHY_NODE_KEYWORD_PROP_NAME);
+	split = g_strsplit (name, "->", -1);
+	
+	for (i = 0; split[i]; i++)
+	{
+		if (split[i][0] == '\0') continue;
+		
+		topic = ephy_bookmarks_find_keyword (eb, split[i], FALSE);
+		if (topic == NULL)
+		{
+			topic = ephy_bookmarks_add_keyword (eb, split[i]);
+		}
+		for (j = 0; j < children->len; j++)
+		{
+			bookmark = g_ptr_array_index (children, j);
+			ephy_bookmarks_set_keyword (eb, topic, bookmark);
+		}
+	}
+	
+	g_strfreev (split);
+}
+
+static void
+fix_hierarchy (EphyBookmarks *eb)
+{
+	GPtrArray *topics;
+	EphyNode *topic;
+	const char *name;
+	int i;
+	
+	topics = ephy_node_get_children (eb->priv->keywords);
+	for (i = (int)topics->len - 1; i >= 0; i--)
+	{
+		topic = (EphyNode *)g_ptr_array_index (topics, i);
+		name = ephy_node_get_property_string
+			(topic, EPHY_NODE_KEYWORD_PROP_NAME);
+		if (strstr (name, "->") != NULL)
+		{
+			fix_hierarchy_topic (eb, topic);
+			ephy_node_remove_child (eb->priv->keywords, topic);
+		}
+	}
+}
+
+static void
 disable_bookmark_editing_notifier (GConfClient *client,
 				   guint cnxn_id,
 				   GConfEntry *entry,
@@ -995,6 +1050,8 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	{
 		ephy_bookmarks_init_defaults (eb);
 	}
+	
+	fix_hierarchy (eb);
 
 	eb->priv->disable_bookmark_editing_notifier_id = eel_gconf_notification_add
 		(CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING,
