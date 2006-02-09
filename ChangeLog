@@ -1,3 +1,28 @@
+2006-02-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmark-action-group.c: (node_changed_cb),
+	(node_added_cb), (node_removed_cb), (ephy_bookmark_group_new):
+	* src/bookmarks/ephy-bookmark-action.c:
+	(ephy_bookmark_action_sync_smart_url),
+	(ephy_bookmark_action_sync_icon), (connect_proxy),
+	(ephy_bookmark_action_set_bookmark),
+	(ephy_bookmark_action_get_property), (ephy_bookmark_action_init),
+	(ephy_bookmark_action_dispose), (ephy_bookmark_action_class_init),
+	(ephy_bookmark_action_get_type):
+	* src/bookmarks/ephy-bookmark-action.h:
+	* src/bookmarks/ephy-bookmarks-ui.c:
+	(ephy_bookmarks_ui_attach_window):
+	* src/bookmarks/ephy-open-tabs-action.c: (activate_cb),
+	(node_added_cb), (node_removed_cb), (ephy_open_tabs_group_new),
+	(ephy_open_tabs_action_name):
+	* src/bookmarks/ephy-related-action.c: (node_changed),
+	(node_destroyed), (open_link), (ephy_related_action_new):
+	* src/bookmarks/ephy-topics-entry.c:
+	* src/bookmarks/ephy-topics-entry.h:
+
+	Misc code cleanups: fewer gobject casts, disconnect handlers,
+	save a few strdups etc.
+
 2006-02-09  Peter Harvey  <peter.a.harvey@gmail.com>
 
 	* src/bookmarks/ephy-topics-entry.c

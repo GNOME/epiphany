@@ -18,78 +18,99 @@
  *  $Id$
  */
 
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
-
-#include <gtk/gtktoolitem.h>
-#include <glib/gi18n.h>
-#include <libgnomevfs/gnome-vfs-uri.h>
-#include <string.h>
 
 #include "ephy-open-tabs-action.h"
+
 #include "ephy-bookmarks.h"
 #include "ephy-node-common.h"
 #include "ephy-link-action.h"
 #include "ephy-link.h"
 
+#include <glib/gi18n.h>
+#include <gtk/gtktoolitem.h>
+
+#include <libgnomevfs/gnome-vfs-uri.h>
+
+#include <string.h>
+
 static void
-activate_cb (GtkAction *action, gpointer dummy)
+activate_cb (GtkAction *action,
+	    gpointer dummy)
 {
-	EphyLink *link = g_object_get_data (G_OBJECT (action), "ephy-link");
-	EphyNode *node = g_object_get_data (G_OBJECT (action), "ephy-node");
-	GPtrArray *children = ephy_node_get_children (node);
+	GObject *object = G_OBJECT (action);
+	EphyLink *link;
+	EphyNode *node;
+	GPtrArray *children;
 	EphyTab *tab = 0;
-
-	gint i;
 	const char *url;
+	guint i;
 
-	for (i = 0; i < children->len; i++)
+	link = g_object_get_data (object, "ephy-link");
+	node = g_object_get_data (object, "ephy-node");
+
+	children = ephy_node_get_children (node);
+	for (i = 0; i < children->len; ++i)
 	{
 		node = g_ptr_array_index (children, i);
+
 		url = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
-		tab = ephy_link_open (link, url, tab, EPHY_LINK_NEW_TAB);
+		tab = ephy_link_open (link, url, tab,
+				      EPHY_LINK_NEW_TAB | ephy_link_flags_from_current_event ());
 	}
 }
 
 static void
-node_added_cb (EphyNode *parent, EphyNode *child, GObject *object)
+node_added_cb (EphyNode *parent,
+	       EphyNode *child,
+	       GtkActionGroup *action_group)
 {
-	GtkActionGroup *actions = GTK_ACTION_GROUP (object);
+	GObject *action_object;
 	GtkAction *action;
 	char *name, *accel;
 	
 	name = ephy_open_tabs_action_name (child);
-	g_return_if_fail (name);
+	g_assert (name != NULL);
 
+	/* FIXME !!!! */
 	action = gtk_action_new (name, _("Open in New _Tabs"), "Open this topic in tabs", NULL);
+	action_object = G_OBJECT (action);
+
+	g_object_set_data (action_object, "ephy-node", child);
+	g_object_set_data (action_object, "ephy-link", EPHY_LINK (action_group));
 	
-	g_object_set_data (G_OBJECT (action), "ephy-node", child);
-	g_object_set_data (G_OBJECT (action), "ephy-link", EPHY_LINK (object));
-	
-	g_signal_connect (G_OBJECT (action), "activate",
+	g_signal_connect (action, "activate",
 			  G_CALLBACK (activate_cb), NULL);
-	
+
 	accel = g_strjoin ("/", "<Actions>",
-			   gtk_action_group_get_name (actions),
+			   gtk_action_group_get_name (action_group),
 			   name,
 			   NULL);
+
 	gtk_action_set_accel_path (action, accel);
-	gtk_action_group_add_action (actions, action);
+	gtk_action_group_add_action (action_group, action);
 	g_object_unref (action);
+
 	g_free (accel);
 	g_free (name);
 }
 
 static void
-node_removed_cb (EphyNode *parent, EphyNode *child, guint index, GObject *object)
+node_removed_cb (EphyNode *parent,
+		 EphyNode *child,
+		 guint index,
+		 GtkActionGroup *action_group)
 {
-	char *name = ephy_open_tabs_action_name (child);
+	GtkAction *action;
+	char *name;
+
+	name = ephy_open_tabs_action_name (child);
+
+	// FIXME can this really ever be NULL ??
 	if (name)
 	{
-		GtkActionGroup *actions = GTK_ACTION_GROUP (object);
-		GtkAction *action = gtk_action_group_get_action (actions, name);
-		if (action) gtk_action_group_remove_action (actions, action);
+		action = gtk_action_group_get_action (action_group, name);
+		if (action) gtk_action_group_remove_action (action_group, action);
 		g_free (name);
 	}
 }
@@ -97,25 +118,31 @@ node_removed_cb (EphyNode *parent, EphyNode *child, guint index, GObject *object
 GtkActionGroup *
 ephy_open_tabs_group_new (EphyNode *node)
 {
-	GPtrArray *children = ephy_node_get_children (node);
-	GObject *actions = G_OBJECT (ephy_link_action_group_new ("OpenTabsActions"));
-	gint i;
+	GPtrArray *children;
+	GtkActionGroup *action_group;
+	guint i;
 	
-	for (i = 0; i < children->len; i++)
-	  node_added_cb (node, g_ptr_array_index (children, i), actions);
-	
-	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_ADDED,
-					 (EphyNodeCallback)node_added_cb,
-					 actions);
-	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_REMOVED,
-					 (EphyNodeCallback)node_removed_cb,
-					 actions);
+	children = ephy_node_get_children (node);
+	action_group = (GtkActionGroup *) ephy_link_action_group_new ("OpenTabsActions");
 
-	return GTK_ACTION_GROUP (actions);
+	for (i = 0; i < children->len; i++)
+	{
+		  node_added_cb (node, g_ptr_array_index (children, i),
+				 action_group);
+	}
+
+	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_ADDED,
+					 (EphyNodeCallback) node_added_cb,
+					 (GObject *) action_group);
+	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_REMOVED,
+					 (EphyNodeCallback) node_removed_cb,
+					 (GObject *) action_group);
+
+	return action_group;
 }
 
 char *
 ephy_open_tabs_action_name (EphyNode *node)
 {
-	return g_strdup_printf("OpenTabs%u", ephy_node_get_id (node));
+	return g_strdup_printf("OpTb%u", ephy_node_get_id (node));
 }

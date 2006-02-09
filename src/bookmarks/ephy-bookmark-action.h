@@ -37,6 +37,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_BOOKMARK_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((obj), EPHY_TYPE_BOOKMARK_ACTION))
 #define EPHY_BOOKMARK_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkActionClass))
 
+#define EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE		32 /* >= strlen ("Bmk") + max size of gulong + 1 */
+#define EPHY_BOOKMARK_ACTION_NAME_PRINTF(buffer,node)	(g_snprintf (buffer, sizeof (buffer), "Bmk%u", ephy_node_get_id (node)))
+
 typedef struct _EphyBookmarkAction		EphyBookmarkAction;
 typedef struct _EphyBookmarkActionPrivate	EphyBookmarkActionPrivate;
 typedef struct _EphyBookmarkActionClass		EphyBookmarkActionClass;

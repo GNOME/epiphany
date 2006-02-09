@@ -20,31 +20,38 @@
 
 #include "config.h"
 
-#include <gtk/gtk.h>
-#include <gtk/gtkaction.h>
-#include <gtk/gtkactiongroup.h>
-#include <glib/gi18n.h>
+#include "ephy-related-action.h"
 
 #include "ephy-window.h"
 #include "ephy-bookmarks.h"
 #include "ephy-shell.h"
 #include "ephy-node-common.h"
 #include "ephy-stock-icons.h"
-#include "ephy-related-action.h"
+
+#include <gtk/gtk.h>
+#include <gtk/gtkaction.h>
+#include <gtk/gtkactiongroup.h>
+#include <glib/gi18n.h>
 
 static void
-node_changed (EphyNode *node, guint propertyid, GObject *object)
+node_changed (EphyNode *node,
+	      guint propertyid,
+	      EphyTopicAction *action)
 {
-	ephy_topic_action_updated (EPHY_TOPIC_ACTION (object));
+	ephy_topic_action_updated (action);
 }
 
 static void
-node_destroyed (EphyNode *node, GObject *object)
+node_destroyed (EphyNode *node,
+		EphyTopicAction *action)
 {
-	EphyBookmarks *eb = ephy_shell_get_bookmarks (ephy_shell);
-	
-	ephy_topic_action_set_topic (EPHY_TOPIC_ACTION (object),
-				     ephy_bookmarks_get_favorites (eb));
+	EphyBookmarks *eb;
+	EphyNode *favorites;
+
+	eb = ephy_shell_get_bookmarks (ephy_shell_get_default ());
+	favorites = ephy_bookmarks_get_favorites (eb);
+
+	ephy_topic_action_set_topic (action, favorites);
 }
 
 static EphyTab *
@@ -53,56 +60,57 @@ open_link (EphyLink *link,
 	   EphyTab *tab,
 	   EphyLinkFlags flags)
 {
-	EphyBookmarks *eb = ephy_shell_get_bookmarks (ephy_shell);
-	EphyNode *bookmark = ephy_bookmarks_find_bookmark (eb, address);
+	EphyBookmarks *eb;
+	EphyNode *bookmark;
 	EphyNode *topic, *chosen = NULL;
+	GPtrArray *topics;
+	gint i, tmp, best = 0;
 	
-	if (bookmark != NULL)
+	eb = ephy_shell_get_bookmarks (ephy_shell_get_default ());
+	bookmark = ephy_bookmarks_find_bookmark (eb, address);
+	if (bookmark == NULL) return NULL;
+
+	topic = ephy_topic_action_get_topic (EPHY_TOPIC_ACTION (link));
+	tmp = ephy_node_get_property_int (topic, EPHY_NODE_KEYWORD_PROP_PRIORITY);                
+	if (tmp == EPHY_NODE_NORMAL_PRIORITY &&
+	    ephy_node_has_child (topic, bookmark))
 	{
-		GPtrArray *topics;
-		gint i, tmp, best = 0;
-		
-		topic = ephy_topic_action_get_topic (EPHY_TOPIC_ACTION (link));
-		tmp = ephy_node_get_property_int (topic, EPHY_NODE_KEYWORD_PROP_PRIORITY);                
+		return NULL;
+	}                
+	ephy_node_signal_disconnect_object (topic, EPHY_NODE_CHANGED,
+					    (EphyNodeCallback) node_changed,
+					    G_OBJECT (link));
+	ephy_node_signal_disconnect_object (topic, EPHY_NODE_DESTROY,
+					    (EphyNodeCallback) node_destroyed,
+					    G_OBJECT (link));
+
+	topics = ephy_node_get_children (ephy_bookmarks_get_keywords (eb));                
+	for (i = 0; i < topics->len; i++)
+	{
+		topic = g_ptr_array_index (topics, i);
+		tmp = ephy_node_get_property_int (topic, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 		if (tmp == EPHY_NODE_NORMAL_PRIORITY &&
 		    ephy_node_has_child (topic, bookmark))
 		{
-			return NULL;
-		}                
-		ephy_node_signal_disconnect_object (topic, EPHY_NODE_CHANGED,
-						    (EphyNodeCallback) node_changed,
-						    G_OBJECT (link));
-		ephy_node_signal_disconnect_object (topic, EPHY_NODE_DESTROY,
-						    (EphyNodeCallback) node_destroyed,
-						    G_OBJECT (link));
-		
-		topics = ephy_node_get_children (ephy_bookmarks_get_keywords (eb));                
-		for (i = 0; i < topics->len; i++)
-		{
-			topic = g_ptr_array_index (topics, i);
-			tmp = ephy_node_get_property_int (topic, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-			if (tmp == EPHY_NODE_NORMAL_PRIORITY &&
-			    ephy_node_has_child (topic, bookmark))
+			tmp = ephy_node_get_n_children (topic);
+			if (chosen == NULL ||
+			    (tmp >= 10 && tmp <= best))
 			{
-				tmp = ephy_node_get_n_children (topic);
-				if (chosen == NULL || (tmp >= 10 && tmp <= best))
-				{
-					chosen = topic;
-					best = tmp;
-				}
+				chosen = topic;
+				best = tmp;
 			}
 		}
-		
-		if (chosen == NULL) chosen = ephy_bookmarks_get_favorites (eb);
-		
-		ephy_topic_action_set_topic (EPHY_TOPIC_ACTION (link), chosen);
-		ephy_node_signal_connect_object (chosen, EPHY_NODE_CHANGED,
-						 (EphyNodeCallback) node_changed,
-						 G_OBJECT (link));
-		ephy_node_signal_connect_object (chosen, EPHY_NODE_DESTROY,
-						 (EphyNodeCallback) node_destroyed,
-						 G_OBJECT (link));
 	}
+
+	if (chosen == NULL) chosen = ephy_bookmarks_get_favorites (eb);
+
+	ephy_topic_action_set_topic (EPHY_TOPIC_ACTION (link), chosen);
+	ephy_node_signal_connect_object (chosen, EPHY_NODE_CHANGED,
+					 (EphyNodeCallback) node_changed,
+					 G_OBJECT (link));
+	ephy_node_signal_connect_object (chosen, EPHY_NODE_DESTROY,
+					 (EphyNodeCallback) node_destroyed,
+					 G_OBJECT (link));
 
 	return NULL;
 }
@@ -151,24 +159,28 @@ ephy_related_action_get_type (void)
 }
 
 GtkAction *
-ephy_related_action_new (EphyLink *link, GtkUIManager *manager, char * name)
+ephy_related_action_new (EphyLink *link,
+			 GtkUIManager *manager,
+			 char * name)
 {
-	EphyBookmarks *eb = ephy_shell_get_bookmarks (ephy_shell);
-	EphyNode *favorites = ephy_bookmarks_get_favorites (eb);
+	EphyBookmarks *eb;
+	EphyNode *favorites;
+	EphyRelatedAction *action;
+ 
+	eb = ephy_shell_get_bookmarks (ephy_shell);
+	favorites = ephy_bookmarks_get_favorites (eb);
 
-	EphyRelatedAction *action = 
-	  EPHY_RELATED_ACTION (g_object_new (EPHY_TYPE_RELATED_ACTION,
-					     "name", name,
-					     "topic", favorites,
-					     "short_label", _("Related"),
-					     "stock-id", GTK_STOCK_INDEX,
-					     "manager", manager,
-					     NULL));
+	action = (EphyRelatedAction *) (g_object_new (EPHY_TYPE_RELATED_ACTION,
+						      "name", name,
+						      "topic", favorites,
+						      "short_label", _("Related"),
+						      "stock-id", GTK_STOCK_INDEX,
+						      "manager", manager,
+						      NULL));
 	
-	g_signal_connect_object (G_OBJECT (link), "open-link",
+	g_signal_connect_object (link, "open-link",
 				 G_CALLBACK (ephy_link_open), action,
 				 G_CONNECT_SWAPPED);
 	
-	return GTK_ACTION (action);
+	return (GtkAction *) action;
 }
-

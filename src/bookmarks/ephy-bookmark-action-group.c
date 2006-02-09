@@ -87,13 +87,14 @@ node_changed_cb (EphyNode *parent,
 	char *name;
 	
 	name = ephy_bookmark_action_name (child);
-	g_return_if_fail (name);
+	g_assert (name != NULL);
+
 	action = gtk_action_group_get_action (actions, name);
 	
 	if (action)
 	{
 		ephy_bookmark_action_updated
-		  (EPHY_BOOKMARK_ACTION (action));
+			(EPHY_BOOKMARK_ACTION (action));
 	}
 	
 	g_free (name);
@@ -102,7 +103,7 @@ node_changed_cb (EphyNode *parent,
 static void
 node_added_cb (EphyNode *parent,
 	       EphyNode *child,
-	       GtkActionGroup *actions)
+	       GtkActionGroup *action_group)
 {
 	GtkAction *action;
 	char *name, *accel;
@@ -110,72 +111,77 @@ node_added_cb (EphyNode *parent,
 	name = ephy_bookmark_action_name (child);
 	action = ephy_bookmark_action_new (child, name);
 	accel = g_strjoin ("/", "<Actions>",
-			   gtk_action_group_get_name (actions),
+			   gtk_action_group_get_name (action_group),
 			   name, NULL);
 	gtk_action_set_accel_path (action, accel);
-	gtk_action_group_add_action (actions, action);
+	gtk_action_group_add_action (action_group, action);
 	g_object_unref (action);
+
 	g_free (accel);
 	g_free (name);
 
 	ephy_bookmark_action_updated (EPHY_BOOKMARK_ACTION (action));
 	
-	g_signal_connect_swapped (G_OBJECT(action), "open-link",
-				  G_CALLBACK (ephy_link_open), actions);
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), action_group);
 }
 
 static void
 node_removed_cb (EphyNode *parent,
 		 EphyNode *child,
 		 guint index,
-		 GtkActionGroup *actions)
+		 GtkActionGroup *action_group)
 {
 	GtkAction *action;
-	char *name;
-	
-	name = ephy_bookmark_action_name (child);
-	g_return_if_fail (name);
-	action = gtk_action_group_get_action (actions, name);
+	char name[EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE];
+
+	EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, child);
+
+	action = gtk_action_group_get_action (action_group, name);
 	
 	if (action)
 	{
-		gtk_action_group_remove_action (actions, action);
+		gtk_action_group_remove_action (action_group, action);
 	}
-	
-	g_free (name);
 }
 
 GtkActionGroup *
 ephy_bookmark_group_new (EphyNode *node)
 {
-	EphyBookmarks *bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	EphyNode *smart = ephy_bookmarks_get_smart_bookmarks (bookmarks);
-	
-	GPtrArray *children = ephy_node_get_children (node);
-	GObject *actions = (GObject *) ephy_link_action_group_new ("BA");
+	EphyBookmarks *bookmarks;
+	EphyNode *smart;
+	GPtrArray *children;
+	GtkActionGroup *action_group;
 	guint i;
 	
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	smart = ephy_bookmarks_get_smart_bookmarks (bookmarks);
+
+	action_group = (GtkActionGroup *) ephy_link_action_group_new ("BA");
+
+	children = ephy_node_get_children (node);
 	for (i = 0; i < children->len; i++)
 	{
-		node_added_cb (node, g_ptr_array_index (children, i), (GtkActionGroup *) actions);
+		node_added_cb (node, g_ptr_array_index (children, i),
+			       action_group);
 	}
 	
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_ADDED,
-					 (EphyNodeCallback)node_added_cb,
-					 actions);
+					 (EphyNodeCallback) node_added_cb,
+					 (GObject *) action_group);
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_REMOVED,
-					 (EphyNodeCallback)node_removed_cb,
-					 actions);
+					 (EphyNodeCallback) node_removed_cb,
+					 (GObject *) action_group);
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_CHANGED,
-					 (EphyNodeCallback)node_changed_cb,
-					 actions);
+					 (EphyNodeCallback) node_changed_cb,
+					 (GObject *) action_group);
 	
 	ephy_node_signal_connect_object (smart, EPHY_NODE_CHILD_ADDED,
-					 (EphyNodeCallback)smart_added_cb,
-					 actions);
+					 (EphyNodeCallback) smart_added_cb,
+					 (GObject *) action_group);
 	ephy_node_signal_connect_object (smart, EPHY_NODE_CHILD_REMOVED,
-					 (EphyNodeCallback)smart_removed_cb,
-					 actions);
+					 (EphyNodeCallback) smart_removed_cb,
+					 (GObject *) action_group);
 	
-	return GTK_ACTION_GROUP (actions);
+	return action_group;
 }

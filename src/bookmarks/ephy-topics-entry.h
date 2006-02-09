@@ -22,7 +22,8 @@
 #define EPHY_TOPICS_ENTRY_H
 
 #include "ephy-bookmarks.h"
-#include <gtk/gtk.h>
+
+#include <gtk/gtkentry.h>
 
 G_BEGIN_DECLS
 

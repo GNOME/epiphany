@@ -251,14 +251,14 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 	/* Create the self-maintaining action groups for bookmarks and topics */
 	actions = ephy_bookmark_group_new (bookmarks);
 	gtk_ui_manager_insert_action_group (manager, actions, -1);
-	g_signal_connect_object (G_OBJECT (actions), "open-link",
+	g_signal_connect_object (actions, "open-link",
 				 G_CALLBACK (ephy_link_open), G_OBJECT (window),
 				 G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-	g_object_unref (G_OBJECT (actions));
+	g_object_unref (actions);
 	
 	actions = ephy_topic_group_new (topics, manager);
 	gtk_ui_manager_insert_action_group (manager, actions, -1);
-	g_object_unref (G_OBJECT (actions));
+	g_object_unref (actions);
 
 	actions = ephy_open_tabs_group_new (topics);
 	gtk_ui_manager_insert_action_group (manager, actions, -1);

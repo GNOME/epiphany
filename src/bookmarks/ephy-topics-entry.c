@@ -27,6 +27,7 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtktreeselection.h>
+#include <gtk/gtkentry.h>
 #include <gtk/gtkentrycompletion.h>
 #include <string.h>
 

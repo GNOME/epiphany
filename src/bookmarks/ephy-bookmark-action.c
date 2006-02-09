@@ -59,9 +59,6 @@ static const GtkTargetEntry drag_types[] = {
 #define TOOLITEM_WIDTH_CHARS	20
 #define LABEL_WIDTH_CHARS       32
 
-static void ephy_bookmark_action_init       (EphyBookmarkAction *action);
-static void ephy_bookmark_action_class_init (EphyBookmarkActionClass *class);
-
 #define EPHY_BOOKMARK_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkActionPrivate))
 
 struct _EphyBookmarkActionPrivate
@@ -81,35 +78,7 @@ enum
 	PROP_ICON
 };
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_bookmark_action_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		static const GTypeInfo type_info =
-		{
-			sizeof (EphyBookmarkActionClass),
-			(GBaseInitFunc) NULL,
-			(GBaseFinalizeFunc) NULL,
-			(GClassInitFunc) ephy_bookmark_action_class_init,
-			(GClassFinalizeFunc) NULL,
-			NULL,
-			sizeof (EphyBookmarkAction),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_bookmark_action_init,
-		};
-
-		type = g_type_register_static (EPHY_TYPE_LINK_ACTION,
-					       "EphyBookmarkAction",
-					       &type_info, 0);
-	}
-
-	return type;
-}
+static GObjectClass *parent_class;
 
 static GtkWidget *
 create_tool_item (GtkAction *action)
@@ -157,7 +126,9 @@ create_tool_item (GtkAction *action)
 }
 
 static void
-ephy_bookmark_action_sync_smart_url (GtkAction *gaction, GParamSpec *pspec, GtkWidget *proxy)
+ephy_bookmark_action_sync_smart_url (GtkAction *gaction,
+				     GParamSpec *pspec,
+				     GtkWidget *proxy)
 {
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
@@ -203,7 +174,9 @@ favicon_cache_changed_cb (EphyFaviconCache *cache,
 }
 
 static void
-ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget *proxy)
+ephy_bookmark_action_sync_icon (GtkAction *action,
+				GParamSpec *pspec,
+				GtkWidget *proxy)
 {
 	EphyBookmarkAction *bma = EPHY_BOOKMARK_ACTION (action);
 	const char *icon_location;
@@ -214,9 +187,9 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 
 	icon_location = ephy_node_get_property_string (bma->priv->node,
 						       EPHY_NODE_BMK_PROP_ICON);
-	
+
 	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache
-		(EPHY_EMBED_SHELL (ephy_shell)));
+		(ephy_embed_shell_get_default ()));
 
 	if (icon_location && *icon_location)
 	{
@@ -436,7 +409,8 @@ drag_data_get_cb (GtkWidget          *widget,
 }
 
 static void
-connect_proxy (GtkAction *action, GtkWidget *proxy)
+connect_proxy (GtkAction *action,
+	       GtkWidget *proxy)
 {
 	GtkWidget *button, *entry;
 
@@ -530,17 +504,20 @@ ephy_bookmark_action_get_bookmark (EphyBookmarkAction *action)
 void
 ephy_bookmark_action_set_bookmark (EphyBookmarkAction *action,
 				   EphyNode *node)
-{        
+{
+	EphyBookmarkActionPrivate *priv = action->priv;
+	GObject *object = G_OBJECT (action);
+
 	g_return_if_fail (node != NULL);
-	
-	action->priv->node = node;
-	
-	g_object_freeze_notify (G_OBJECT (action));
-	
-	g_object_notify (G_OBJECT (action), "bookmark");
+
+	priv->node = node;
+
+	g_object_freeze_notify (object);
+
+	g_object_notify (object, "bookmark");
 	ephy_bookmark_action_updated (action);
-	
-	g_object_thaw_notify (G_OBJECT (action));        
+
+	g_object_thaw_notify (object);
 }
 
 static void
@@ -572,37 +549,57 @@ ephy_bookmark_action_get_property (GObject *object,
 				   GParamSpec *pspec)
 {
 	EphyBookmarkAction *action = EPHY_BOOKMARK_ACTION (object);
+	EphyBookmarkActionPrivate *priv = action->priv;
 
-	g_return_if_fail (action->priv->node != NULL);
+	g_return_if_fail (priv->node != NULL);
 
 	switch (prop_id)
 	{
 		case PROP_BOOKMARK:
-			g_value_set_pointer (value, action->priv->node);
+			g_value_set_pointer (value, priv->node);
 			break;
 		case PROP_TOOLTIP:
 		case PROP_LOCATION:
 			g_value_set_string (value,
-				ephy_node_get_property_string (action->priv->node,
+				ephy_node_get_property_string (priv->node,
 					EPHY_NODE_BMK_PROP_LOCATION));
 			break;
 		case PROP_SMART_URL:
-			g_value_set_boolean (value, action->priv->smart_url);
+			g_value_set_boolean (value, priv->smart_url);
 			break;
 		case PROP_ICON:
 			g_value_set_string (value,
-				ephy_node_get_property_string (action->priv->node,
+				ephy_node_get_property_string (priv->node,
 					EPHY_NODE_BMK_PROP_ICON));
 			break;
 	}
 }
 
 static void
-ephy_bookmark_action_finalize (GObject *object)
+ephy_bookmark_action_init (EphyBookmarkAction *action)
 {
-	LOG ("Bookmark action %p finalized", object);
+	action->priv = EPHY_BOOKMARK_ACTION_GET_PRIVATE (action);
+	
+	action->priv->cache_handler = 0;
+}
 
-	parent_class->finalize (object);
+static void
+ephy_bookmark_action_dispose (GObject *object)
+{
+	EphyBookmarkAction *action = (EphyBookmarkAction *) object;
+	EphyBookmarkActionPrivate *priv = action->priv;
+	GObject *cache;
+
+	if (priv->cache_handler != 0)
+	{
+		cache = ephy_embed_shell_get_favicon_cache
+				(ephy_embed_shell_get_default ());
+
+		g_signal_handler_disconnect (cache, priv->cache_handler);
+		priv->cache_handler = 0;
+	}
+
+	parent_class->dispose (object);
 }
 
 static void
@@ -618,15 +615,15 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 	action_class->menu_item_type = GTK_TYPE_IMAGE_MENU_ITEM;
 	action_class->connect_proxy = connect_proxy;
 
-	object_class->finalize = ephy_bookmark_action_finalize;
+	object_class->dispose = ephy_bookmark_action_dispose;
 	object_class->set_property = ephy_bookmark_action_set_property;
 	object_class->get_property = ephy_bookmark_action_get_property;
 
 	g_object_class_install_property (object_class,
 					 PROP_BOOKMARK,
 					 g_param_spec_pointer ("bookmark",
-							       "Bookmark",
-							       "Bookmark",
+							       "bookmark",
+							       "bookmark",
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							       G_PARAM_CONSTRUCT_ONLY));
 
@@ -634,41 +631,62 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 	g_object_class_install_property (object_class,
 					 PROP_TOOLTIP,
 					 g_param_spec_string  ("tooltip",
-							       "Tooltip",
-							       "Tooltip",
+							       "tooltip",
+							       "tooltip",
 							       NULL,
 							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 	
 	g_object_class_install_property (object_class,
 					 PROP_LOCATION,
 					 g_param_spec_string  ("location",
-							       "Location",
-							       "Location",
+							       "location",
+							       "location",
 							       NULL,
 							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 	g_object_class_install_property (object_class,
 					 PROP_SMART_URL,
 					 g_param_spec_boolean  ("smarturl",
-								"Smart url",
-								"Smart url",
+								"smarturl",
+								"smarturl",
 								FALSE,
 								G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 	g_object_class_install_property (object_class,
 					 PROP_ICON,
 					 g_param_spec_string  ("icon",
-							       "Icon",
-							       "Icon",
+							       "icon",
+							       "icon",
 							       NULL,
 							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof(EphyBookmarkActionPrivate));
 }
 
-static void
-ephy_bookmark_action_init (EphyBookmarkAction *action)
+GType
+ephy_bookmark_action_get_type (void)
 {
-	action->priv = EPHY_BOOKMARK_ACTION_GET_PRIVATE (action);
-	action->priv->cache_handler = 0;
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GTypeInfo type_info =
+		{
+			sizeof (EphyBookmarkActionClass),
+			(GBaseInitFunc) NULL,
+			(GBaseFinalizeFunc) NULL,
+			(GClassInitFunc) ephy_bookmark_action_class_init,
+			(GClassFinalizeFunc) NULL,
+			NULL,
+			sizeof (EphyBookmarkAction),
+			0, /* n_preallocs */
+			(GInstanceInitFunc) ephy_bookmark_action_init,
+		};
+
+		type = g_type_register_static (EPHY_TYPE_LINK_ACTION,
+					       "EphyBookmarkAction",
+					       &type_info, 0);
+	}
+
+	return type;
 }
 
 char *
