@@ -166,7 +166,7 @@ update_widget (EphyTopicsEntry *entry)
 	gint i, priority, pos;
 	const char *title;
 	char *tmp1, *tmp2;
-	gboolean update_text;
+	gboolean is_focus;
 	
 	/* Prevent any changes to the database */
 	if(priv->lock) return;
@@ -191,8 +191,8 @@ update_widget (EphyTopicsEntry *entry)
 	g_ptr_array_sort (topics, ephy_bookmarks_compare_topic_pointers);
 	gtk_list_store_clear (priv->store);	
 
-	update_text = !GTK_WIDGET_HAS_FOCUS (GTK_WIDGET (entry));
-	if (update_text)
+	g_object_get (entry, "is-focus", &is_focus, NULL);
+	if (!is_focus)
 	{
 		gtk_editable_delete_text (editable, 0, -1);
 	}
@@ -202,7 +202,7 @@ update_widget (EphyTopicsEntry *entry)
 		node = g_ptr_array_index (topics, i);
 		title = ephy_node_get_property_string (node, EPHY_NODE_KEYWORD_PROP_NAME);
 		  
-		if (update_text && ephy_node_has_child (node, priv->bookmark))
+		if (!is_focus && ephy_node_has_child (node, priv->bookmark))
 		{
 			gtk_editable_insert_text (editable, title, -1, &pos);
 			gtk_editable_insert_text (editable, ", ", -1, &pos);
@@ -218,7 +218,7 @@ update_widget (EphyTopicsEntry *entry)
 	}
 	
 	
-	if (update_text)
+	if (!is_focus)
 	{
 		gtk_editable_set_position (editable, -1);
 	}
@@ -457,13 +457,54 @@ match_selected_cb (GtkEntryCompletion *completion,
 	return TRUE;
 }
 
-static gboolean
-focus_out_cb (GtkEditable *editable,
-	      GdkEventFocus *event,
-	      gpointer user_data)
-{
-	update_widget (EPHY_TOPICS_ENTRY (editable));
-	return FALSE;
+static void
+activate_cb (GtkEditable *editable,
+	     gpointer user_data)
+{	
+	EphyTopicsEntry *entry = EPHY_TOPICS_ENTRY (editable);
+	EphyTopicsEntryPrivate *priv = entry->priv;
+	GtkEntryCompletion *completion = gtk_entry_get_completion (GTK_ENTRY (entry));
+
+	GValue value = { 0, };
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gboolean valid;
+	
+	if (priv->key == NULL || priv->key[0] == '\0')
+	{
+		gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+		return;
+	}
+	else
+	{
+		gtk_entry_set_activates_default (GTK_ENTRY (entry), FALSE);
+	}
+	
+	/* Loop through the completion model and find the first item to use, if any. */
+	model = GTK_TREE_MODEL (priv->store);
+	valid = gtk_tree_model_get_iter_first (model, &iter);
+	while (valid && !match_func (completion, NULL, &iter, NULL))
+	{
+		valid = gtk_tree_model_iter_next (model, &iter);
+	}
+
+	if (valid)
+	{
+		gtk_tree_model_get_value (model, &iter, COLUMN_TITLE, &value);
+		
+		/* See if there were any others. */
+		valid = gtk_tree_model_iter_next (model, &iter);
+		while (valid && !match_func (completion, NULL, &iter, NULL))
+		{
+			valid = gtk_tree_model_iter_next (model, &iter);
+		}
+		
+		if (!valid)
+		{
+			insert_text (EPHY_TOPICS_ENTRY (editable), g_value_get_string (&value));
+			g_value_unset (&value);
+		}
+	}	
 }
 
 static void
@@ -561,16 +602,19 @@ ephy_topics_entry_constructor (GType type,
 	g_signal_connect (priv->completion, "action-activated",
 			  G_CALLBACK (action_cb), NULL);
 	
-	g_signal_connect (object, "focus-out-event",
-			  G_CALLBACK (focus_out_cb), NULL);
+	g_signal_connect (object, "activate",
+			  G_CALLBACK (activate_cb), NULL);
+	
 	g_signal_connect (object, "changed",
 			  G_CALLBACK (update_database), NULL);
-
+	g_signal_connect (object, "notify::is-focus",
+			  G_CALLBACK (update_widget), NULL);
 	g_signal_connect (object, "notify::cursor-position",
 			  G_CALLBACK (update_key), NULL);
 	g_signal_connect (object, "notify::text",
 			  G_CALLBACK (update_key), NULL);
 	
+	update_key (entry);
 	update_widget (entry);
 	
 	return object;
