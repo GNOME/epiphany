@@ -26,16 +26,42 @@
 
 #include <gtk/gtk.h>
 
-void  ephy_bookmarks_ui_attach_window        (EphyWindow *window);
-void  ephy_bookmarks_ui_detach_window        (EphyWindow *window);
+G_BEGIN_DECLS
 
-void  ephy_bookmarks_ui_attach_toolbar_model (EggToolbarsModel *model);
-void  ephy_bookmarks_ui_detach_toolbar_model (EggToolbarsModel *model);
+#define EPHY_BOOKMARKS_UI_ACTION_NAME_BUFFER_SIZE	32
 
-void ephy_bookmarks_ui_add_bookmark  (GtkWindow *parent,
-				      const char *location,
-				      const char *title);
+#define EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE		EPHY_BOOKMARKS_UI_ACTION_NAME_BUFFER_SIZE
+#define EPHY_BOOKMARK_ACTION_NAME_FORMAT		"Bmk%u"
+#define EPHY_BOOKMARK_ACTION_NAME_FORMAT_ARG(node)	(ephy_node_get_id (node))
+#define EPHY_BOOKMARK_ACTION_NAME_PRINTF(buffer,node)	(g_snprintf (buffer, sizeof (buffer), EPHY_BOOKMARK_ACTION_NAME_FORMAT, EPHY_BOOKMARK_ACTION_NAME_FORMAT_ARG (node)))
+#define EPHY_BOOKMARK_ACTION_NAME_STRDUP_PRINTF(node)	(g_strdup_printf (EPHY_BOOKMARK_ACTION_NAME_FORMAT, EPHY_BOOKMARK_ACTION_NAME_FORMAT_ARG (node)))
 
-void ephy_bookmarks_ui_show_bookmark (EphyNode *bookmark);
+#define EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE		EPHY_BOOKMARKS_UI_ACTION_NAME_BUFFER_SIZE
+#define EPHY_TOPIC_ACTION_NAME_FORMAT			"Tp%u"
+#define EPHY_TOPIC_ACTION_NAME_FORMAT_ARG(node)		(ephy_node_get_id (node))
+#define EPHY_TOPIC_ACTION_NAME_PRINTF(buffer,node)	(g_snprintf (buffer, sizeof (buffer), EPHY_TOPIC_ACTION_NAME_FORMAT, EPHY_TOPIC_ACTION_NAME_FORMAT_ARG (node)))
+#define EPHY_TOPIC_ACTION_NAME_STRDUP_PRINTF(node)	(g_strdup_printf (EPHY_TOPIC_ACTION_NAME_FORMAT, EPHY_TOPIC_ACTION_NAME_FORMAT_ARG (node)))
+
+#define EPHY_OPEN_TABS_ACTION_NAME_BUFFER_SIZE		EPHY_BOOKMARKS_UI_ACTION_NAME_BUFFER_SIZE
+#define EPHY_OPEN_TABS_ACTION_NAME_FORMAT		"OpTb%u"
+#define EPHY_OPEN_TABS_ACTION_NAME_FORMAT_ARG(node)	(ephy_node_get_id (node))
+#define EPHY_OPEN_TABS_ACTION_NAME_PRINTF(buffer,node)	(g_snprintf (buffer, sizeof (buffer), EPHY_OPEN_TABS_ACTION_NAME_FORMAT, EPHY_OPEN_TABS_ACTION_NAME_FORMAT_ARG (node)))
+#define EPHY_OPEN_TABS_ACTION_NAME_STRDUP_PRINTF(node)	(g_strdup_printf (EPHY_OPEN_TABS_ACTION_NAME_FORMAT, EPHY_OPEN_TABS_ACTION_NAME_FORMAT_ARG (node)))
+
+void	ephy_bookmarks_ui_attach_window		(EphyWindow *window);
+
+void	ephy_bookmarks_ui_detach_window		(EphyWindow *window);
+
+void	ephy_bookmarks_ui_attach_toolbar_model	(EggToolbarsModel *model);
+
+void	ephy_bookmarks_ui_detach_toolbar_model	(EggToolbarsModel *model);
+
+void	ephy_bookmarks_ui_add_bookmark		(GtkWindow *parent,
+						 const char *location,
+						 const char *title);
+
+void	ephy_bookmarks_ui_show_bookmark		(EphyNode *bookmark);
+
+G_END_DECLS
 
 #endif

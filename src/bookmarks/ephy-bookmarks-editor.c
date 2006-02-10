@@ -434,7 +434,6 @@ cmd_toolbar (GtkAction *action,
 	EphyNode *node;
 	gboolean show;
 	const char *tname;
-	char *name;
 	gint flags, tpos;
 	GList *selection;
 	GList *l;
@@ -455,18 +454,23 @@ cmd_toolbar (GtkAction *action,
 	
 	if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->bm_view)))
 	{
+		char name[EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE];
+
 		selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->bm_view));
 		
 		node = selection->data;
-		name = ephy_bookmark_action_name (node);
+
+		EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, node);
+
 		flags = egg_toolbars_model_get_name_flags (model, name);
 		show = ((flags & EGG_TB_MODEL_NAME_USED) == 0);
-		g_free (name);
 
 		for (l = selection; l; l = l->next)
 		{
 			node = l->data;
-			name = ephy_bookmark_action_name (node);
+
+			EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, node);
+
 			flags = egg_toolbars_model_get_name_flags (model, name);
 			if(show && ((flags & EGG_TB_MODEL_NAME_USED) == 0))
 			{
@@ -476,25 +480,29 @@ cmd_toolbar (GtkAction *action,
 			{
 				egg_toolbars_model_delete_item (model, name);
 			}
-			g_free (name);
 		}
 
 		g_list_free (selection);
 	}
 	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->key_view)))
 	{
+		char name[EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE];
+
 		selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->key_view));
 	  
 		node = selection->data;
-		name = ephy_topic_action_name (node);
+
+		EPHY_TOPIC_ACTION_NAME_PRINTF (name, node);
+
 		flags = egg_toolbars_model_get_name_flags (model, name);
 		show = ((flags & EGG_TB_MODEL_NAME_USED) == 0);
-		g_free (name);
 
 		for (l = selection; l; l = l->next)
 		{
 			node = l->data;
-			name = ephy_topic_action_name (node);
+
+			EPHY_TOPIC_ACTION_NAME_PRINTF (name, node);
+
 			flags = egg_toolbars_model_get_name_flags (model, name);
 			if(show && ((flags & EGG_TB_MODEL_NAME_USED) == 0))
 			{
@@ -504,7 +512,6 @@ cmd_toolbar (GtkAction *action,
 			{
 				egg_toolbars_model_delete_item (model, name);
 			}
-			g_free (name);
 		}
 
 		g_list_free (selection);
@@ -1250,7 +1257,6 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	GList *selected;
 	GtkWidget *focus_widget;
 	int num_bmk_selected;
-	char *name;
 
 	LOG ("Update menu sensitivity");
 
@@ -1296,16 +1302,17 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	{
 		EphyNode *node = selected->data;
 		EphyNodePriority priority;
+		char name[EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE];
 
 		priority = ephy_node_get_property_int
 			(node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 		if (priority == -1) priority = EPHY_NODE_NORMAL_PRIORITY;
 		key_normal = (priority == EPHY_NODE_NORMAL_PRIORITY);
 
-		name = ephy_topic_action_name (node);
+		EPHY_TOPIC_ACTION_NAME_PRINTF (name, node);
+
 		ontoolbar = ((egg_toolbars_model_get_name_flags (model, name)
 			      & EGG_TB_MODEL_NAME_USED) != 0);
-		g_free (name);
 
 		g_list_free (selected);
 	}
@@ -1314,17 +1321,16 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	if (bmk_focus && selected)
 	{
 		EphyNode *node = selected->data;
-		guint id;
+		char name[EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE];
 
 		g_return_if_fail (node != NULL);
 
-		id = ephy_node_get_id (node);
 		mutable = !ephy_node_get_property_boolean (node, EPHY_NODE_BMK_PROP_IMMUTABLE);
 		
-		name = ephy_bookmark_action_name (node);
+		EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, node);
+
 		ontoolbar = ((egg_toolbars_model_get_name_flags (model, name)
 			      & EGG_TB_MODEL_NAME_USED) != 0);
-		g_free (name);
 
 		g_list_free (selected);
 	}

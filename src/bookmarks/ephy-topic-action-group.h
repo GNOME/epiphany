@@ -29,7 +29,8 @@
 
 G_BEGIN_DECLS
 
-GtkActionGroup * ephy_topic_group_new (EphyNode *node, GtkUIManager *manager);
+GtkActionGroup	*ephy_topic_action_group_new	(EphyNode *node,
+						 GtkUIManager *manager);
 
 G_END_DECLS
 

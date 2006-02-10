@@ -23,6 +23,7 @@
 #include "ephy-open-tabs-action.h"
 
 #include "ephy-bookmarks.h"
+#include "ephy-bookmarks-ui.h"
 #include "ephy-node-common.h"
 #include "ephy-link-action.h"
 #include "ephy-link.h"
@@ -67,14 +68,14 @@ node_added_cb (EphyNode *parent,
 {
 	GObject *action_object;
 	GtkAction *action;
-	char *name, *accel;
-	
-	name = ephy_open_tabs_action_name (child);
-	g_assert (name != NULL);
+	char name[EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE];
+	char accel[256];
 
+	EPHY_TOPIC_ACTION_NAME_PRINTF (name, child);
+	
 	/* FIXME !!!! */
 	action = gtk_action_new (name, _("Open in New _Tabs"), "Open this topic in tabs", NULL);
-	action_object = G_OBJECT (action);
+	action_object = (GObject *) action;
 
 	g_object_set_data (action_object, "ephy-node", child);
 	g_object_set_data (action_object, "ephy-link", EPHY_LINK (action_group));
@@ -82,17 +83,13 @@ node_added_cb (EphyNode *parent,
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (activate_cb), NULL);
 
-	accel = g_strjoin ("/", "<Actions>",
-			   gtk_action_group_get_name (action_group),
-			   name,
-			   NULL);
+	g_snprintf (accel, sizeof (accel), "<Actions>/%s/%s",
+		    gtk_action_group_get_name (action_group),
+		    name);
 
 	gtk_action_set_accel_path (action, accel);
 	gtk_action_group_add_action (action_group, action);
 	g_object_unref (action);
-
-	g_free (accel);
-	g_free (name);
 }
 
 static void
@@ -102,16 +99,15 @@ node_removed_cb (EphyNode *parent,
 		 GtkActionGroup *action_group)
 {
 	GtkAction *action;
-	char *name;
+	char name[EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE];
 
-	name = ephy_open_tabs_action_name (child);
+	EPHY_TOPIC_ACTION_NAME_PRINTF (name, child);
+		
+	action = gtk_action_group_get_action (action_group, name);
 
-	// FIXME can this really ever be NULL ??
-	if (name)
+	if (action != NULL)
 	{
-		action = gtk_action_group_get_action (action_group, name);
-		if (action) gtk_action_group_remove_action (action_group, action);
-		g_free (name);
+		gtk_action_group_remove_action (action_group, action);
 	}
 }
 
@@ -139,10 +135,4 @@ ephy_open_tabs_group_new (EphyNode *node)
 					 (GObject *) action_group);
 
 	return action_group;
-}
-
-char *
-ephy_open_tabs_action_name (EphyNode *node)
-{
-	return g_strdup_printf("OpTb%u", ephy_node_get_id (node));
 }

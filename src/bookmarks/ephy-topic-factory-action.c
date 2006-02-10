@@ -27,6 +27,7 @@
 
 #include "ephy-topic-factory-action.h"
 #include "ephy-topic-action.h"
+#include "ephy-bookmarks-ui.h"
 #include "ephy-shell.h"
 #include "ephy-stock-icons.h"
 #include "egg-editable-toolbar.h"
@@ -141,8 +142,9 @@ build_menu (GtkWidget *placeholder, EggToolbarsModel *model)
 	EphyBookmarks *eb;
 	EphyNode *node;
 	GPtrArray *children, *topics;
-	
-	const char *name, *action;
+
+	const char *name;
+	char action[EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE];
 	gint i, priority = -1, ptmp, flags;
 	
 	/* Get a sorted list of topics. */
@@ -158,8 +160,9 @@ build_menu (GtkWidget *placeholder, EggToolbarsModel *model)
 	for (i = 0; i < topics->len; i++)
 	{
 		node = g_ptr_array_index (topics, i);
-		
-		action = ephy_topic_action_name (node);
+
+		EPHY_TOPIC_ACTION_NAME_PRINTF (action, node);
+
 		flags = egg_toolbars_model_get_name_flags (model, action);
 		if (flags & EGG_TB_MODEL_NAME_USED)
 		  continue;

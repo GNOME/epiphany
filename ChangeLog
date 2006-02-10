@@ -1,5 +1,37 @@
 2006-02-10  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmark-action-group.c: (smart_added_cb),
+	(smart_removed_cb), (node_changed_cb), (node_added_cb),
+	(node_removed_cb):
+	* src/bookmarks/ephy-bookmark-action.c: (ephy_bookmark_action_new):
+	* src/bookmarks/ephy-bookmark-action.h:
+	* src/bookmarks/ephy-bookmark-factory-action.c:
+	(build_menu_for_topic):
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_toolbar),
+	(ephy_bookmarks_editor_update_menu):
+	* src/bookmarks/ephy-bookmarks-menu.c: (append_bookmarks),
+	(append_menu), (ephy_bookmarks_menu_build):
+	* src/bookmarks/ephy-bookmarks-ui.c:
+	(ephy_bookmarks_ui_attach_window), (topic_has_data),
+	(topic_get_data), (topic_get_name), (bookmark_has_data),
+	(bookmark_get_data), (bookmark_get_name), (bookmark_new_name),
+	(toolbar_node_removed_cb):
+	* src/bookmarks/ephy-bookmarks-ui.h:
+	* src/bookmarks/ephy-open-tabs-action.c: (node_added_cb),
+	(node_removed_cb), (ephy_open_tabs_group_new):
+	* src/bookmarks/ephy-open-tabs-action.h:
+	* src/bookmarks/ephy-topic-action-group.c: (node_changed_cb),
+	(node_added_cb), (node_removed_cb), (ephy_topic_action_group_new):
+	* src/bookmarks/ephy-topic-action-group.h:
+	* src/bookmarks/ephy-topic-action.c: (ephy_topic_action_new):
+	* src/bookmarks/ephy-topic-action.h:
+	* src/bookmarks/ephy-topic-factory-action.c: (build_menu):
+
+	Remove *_action_name functions, and use static buffers instead.
+	Minor cleanups.
+
+2006-02-10  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/mozilla-embed-single.cpp:
 
 	Use NS_LogInit()/NS_LogTerm().

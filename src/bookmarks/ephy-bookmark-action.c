@@ -689,24 +689,14 @@ ephy_bookmark_action_get_type (void)
 	return type;
 }
 
-char *
-ephy_bookmark_action_name (EphyNode *node)
-{
-	return g_strdup_printf("Bmk%u", ephy_node_get_id (node));
-}
-
 GtkAction *
-ephy_bookmark_action_new (EphyNode *node, char *name)
+ephy_bookmark_action_new (EphyNode *node,
+			  const char *name)
 {
-	GtkAction *action;
-	
-	if(!name) name = ephy_bookmark_action_name (node);
-	g_return_val_if_fail (name, NULL);
-	
-	action =  GTK_ACTION (g_object_new (EPHY_TYPE_BOOKMARK_ACTION,
-					    "name", name,
-					    "bookmark", node,
-					    NULL));
+	g_assert (name != NULL);
 
-	return action;
+	return  GTK_ACTION (g_object_new (EPHY_TYPE_BOOKMARK_ACTION,
+					  "name", name,
+					  "bookmark", node,
+					  NULL));
 }

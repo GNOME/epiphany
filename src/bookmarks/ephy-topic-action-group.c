@@ -25,102 +25,104 @@
 #include "ephy-node.h"
 #include "ephy-node-common.h"
 #include "ephy-bookmarks.h"
+#include "ephy-bookmarks-ui.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtkaction.h>
 #include <gtk/gtkactiongroup.h>
-#include <string.h>
-
 
 static void
 node_changed_cb (EphyNode *parent, 
 		 EphyNode *child, 
 		 guint property_id, 
-		 GtkActionGroup *actions)
+		 GtkActionGroup *action_group)
 {
 	GtkAction *action;
-	char *name;
-	
-	name = ephy_topic_action_name (child);
-	g_return_if_fail (name != NULL);
-	action = gtk_action_group_get_action (actions, name);
+	char name[EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE];
+
+	EPHY_TOPIC_ACTION_NAME_PRINTF (name, child);
+
+	action = gtk_action_group_get_action (action_group, name);
 	
 	if (property_id == EPHY_NODE_KEYWORD_PROP_NAME)
 	{
 		ephy_topic_action_updated (EPHY_TOPIC_ACTION (action));
 	}
-	
-	g_free (name);
 }
 
 static void
 node_added_cb (EphyNode *parent,
 	       EphyNode *child,
-	       GtkActionGroup *actions)
+	       GtkActionGroup *action_group)
 {
 	GtkUIManager *manager;
 	GtkAction *action;
-	char *name, *accel;
-		
-	manager = g_object_get_data ((GObject *)actions, "ui-manager");
-	name = ephy_topic_action_name (child);
-	action = ephy_topic_action_new (child, manager, name);
-	accel = g_strjoin ("/", "<Actions>",
-			   gtk_action_group_get_name (actions),
-			   name, NULL);
-	gtk_action_set_accel_path (action, accel);
-	gtk_action_group_add_action (actions, action);
-	g_object_unref (action);
-	g_free (accel);
-	g_free (name);
+	char name[EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE];
+	char accel[256];
 
-	ephy_topic_action_updated (EPHY_TOPIC_ACTION (action));
+	EPHY_TOPIC_ACTION_NAME_PRINTF (name, child);
+
+	manager = g_object_get_data ((GObject *) action_group, "ui-manager");
+
+	action = ephy_topic_action_new (child, manager, name);
+
+	g_snprintf (accel, sizeof (accel), "<Actions>/%s/%s",
+		    gtk_action_group_get_name (action_group),
+		    name);
+	gtk_action_set_accel_path (action, accel);
+
+	gtk_action_group_add_action (action_group, action);
+	g_object_unref (action);
+
+	ephy_topic_action_updated ((EphyTopicAction *) action);
 }
 
 static void
 node_removed_cb (EphyNode *parent,
 		 EphyNode *child, guint index,
-		 GtkActionGroup *actions)
+		 GtkActionGroup *action_group)
 {
 	GtkAction *action;
-	char *name;
+	char name[EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE];
+
+	EPHY_TOPIC_ACTION_NAME_PRINTF (name, child);
 	
-	name = ephy_topic_action_name (child);
-	g_return_if_fail (name != NULL);
-	action = gtk_action_group_get_action (actions, name);
+	action = gtk_action_group_get_action (action_group, name);
 	
 	if (action)
 	{
-		gtk_action_group_remove_action (actions, action);
+		gtk_action_group_remove_action (action_group, action);
 	}
-	
-	g_free (name);
 }
 
 GtkActionGroup *
-ephy_topic_group_new (EphyNode *node,
-		      GtkUIManager *manager)
+ephy_topic_action_group_new (EphyNode *node,
+			     GtkUIManager *manager)
 {
-	GPtrArray *children = ephy_node_get_children (node);
-	GObject *actions = (GObject *) gtk_action_group_new ("TopicActions");
-	gint i;
+	GPtrArray *children;
+	GtkActionGroup *action_group;
+	int i;
 	
-	g_object_set_data (G_OBJECT (actions), "ui-manager", manager);
+	children = ephy_node_get_children (node);
+	action_group = gtk_action_group_new ("TpAc");
+
+	g_object_set_data ((GObject *) action_group, "ui-manager", manager);
 	
 	for (i = 0; i < children->len; i++)
 	{
-		node_added_cb (node, g_ptr_array_index (children, i), (GtkActionGroup *)actions);
+		node_added_cb (node, g_ptr_array_index (children, i), 
+			       action_group);
 	}
 	
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_ADDED,
-					 (EphyNodeCallback)node_added_cb,
-					 actions);
+					 (EphyNodeCallback) node_added_cb,
+					 (GObject *) action_group);
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_REMOVED,
-					 (EphyNodeCallback)node_removed_cb,
-					 actions);
+					 (EphyNodeCallback) node_removed_cb,
+					 (GObject *) action_group);
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_CHANGED,
-					 (EphyNodeCallback)node_changed_cb,
-					 actions);
+					 (EphyNodeCallback) node_changed_cb,
+					 (GObject *) action_group);
 	
-	return GTK_ACTION_GROUP (actions);
+	return (GtkActionGroup *) action_group;
 }

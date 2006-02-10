@@ -51,20 +51,23 @@ enum
 /* Construct a block of bookmark actions, postfixing the names with a topic id
  * to allow different. */
 static void
-append_bookmarks (GString *string, const GPtrArray *bookmarks, gint instance)
+append_bookmarks (GString *string,
+		  const GPtrArray *bookmarks,
+		  int instance)
 {
-	char *name;
+	EphyNode *child;
+	char name[EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE];
+
 	long i;
 	
 	for (i = 0; i < bookmarks->len; i++)
 	{
-		name = ephy_bookmark_action_name (g_ptr_array_index (bookmarks, i));
-		if (name)
-		{
-			g_string_append_printf (string, "<menuitem action=\"%s\" name=\"%s-%d\"/>",
-						name, name, instance);
-			g_free (name);
-		}
+		child = g_ptr_array_index (bookmarks, i);
+
+		EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, child);
+
+		g_string_append_printf (string, "<menuitem action=\"%s\" name=\"%s-%d\"/>",
+					name, name, instance);
 	}
 }
 
@@ -86,7 +89,7 @@ append_menu (GString *string, const GPtrArray *topics, const GPtrArray *bookmark
 		EphyNode *topic;
 		gint size, total;
 		gboolean separate = FALSE;
-		char *name;
+		char name[EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE];
 		
 		/* Get the subtopics, uncovered bookmarks, and subtopic sizes. */
 		sizes = g_array_sized_new (FALSE, FALSE, sizeof(int), topics->len);
@@ -133,17 +136,14 @@ append_menu (GString *string, const GPtrArray *topics, const GPtrArray *bookmark
 		{
 			topic = g_ptr_array_index (submenus, i);
 			ephy_nodes_get_covered (topic, bookmarks, subset);
-			
-			name = ephy_topic_action_name (topic);
-			if (name)
-			{
-				g_string_append_printf (string, "<menu name=\"%s\" action=\"%s\">",
-							name, name);
-				append_menu (string, topics, subset, flags);
-				g_string_append (string, "</menu>");
-				separate = TRUE;
-				g_free (name);
-			}
+
+			EPHY_TOPIC_ACTION_NAME_PRINTF (name, topic);
+				
+			g_string_append_printf (string, "<menu name=\"%s\" action=\"%s\">",
+						name, name);
+			append_menu (string, topics, subset, flags);
+			g_string_append (string, "</menu>");
+			separate = TRUE;
 		}
 		
 		/* Build a list of bookmarks which don't appear in any subdivision yet. */
@@ -252,17 +252,17 @@ ephy_bookmarks_menu_build (GString *string, EphyNode *parent)
 	/* Otherwise, build the menu with "Open in tabs". */
 	else
 	{
-		char *name;
+		char name[EPHY_OPEN_TABS_ACTION_NAME_BUFFER_SIZE];
 
 		append_menu (string, topics, children, flags);
 		g_ptr_array_free (topics, TRUE);
 	
 		if (children->len > 1)
 		{
-			name = ephy_open_tabs_action_name (node);
+			EPHY_OPEN_TABS_ACTION_NAME_PRINTF (name, node);
+
 			g_string_append_printf
-			  (string, "<separator/><menuitem action=\"%s\" name=\"OpenTabs\"/>", name);
-			g_free (name);
+				(string, "<separator/><menuitem action=\"%s\" name=\"OpenTabs\"/>", name);
 		}
 	}
 }

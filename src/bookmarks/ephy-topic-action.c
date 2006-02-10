@@ -583,18 +583,12 @@ ephy_topic_action_get_type (void)
 	return type;
 }
 
-char *
-ephy_topic_action_name (EphyNode *node)
-{
-	return g_strdup_printf("Tpc%u", ephy_node_get_id (node));
-}
-
 GtkAction *
 ephy_topic_action_new (EphyNode *node,
 		       GtkUIManager *manager,
-		       char *name)
+		       const char *name)
 {
-	g_return_val_if_fail (name, NULL);
+	g_assert (name != NULL);
 
 	return GTK_ACTION (g_object_new (EPHY_TYPE_TOPIC_ACTION,
 					 "name", name,

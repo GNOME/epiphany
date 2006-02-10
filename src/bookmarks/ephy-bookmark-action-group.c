@@ -24,6 +24,7 @@
 #include "ephy-bookmark-action-group.h"
 #include "ephy-bookmark-action.h"
 #include "ephy-bookmarks.h"
+#include "ephy-bookmarks-ui.h"
 #include "ephy-link.h"
 #include "ephy-node.h"
 #include "ephy-node-common.h"
@@ -36,68 +37,57 @@
 static void
 smart_added_cb (EphyNode *parent, 
 		EphyNode *child,
-		GtkActionGroup *actions)
+		GtkActionGroup *action_group)
 {
 	GtkAction *action;
-	char *name;
-	
-	name = ephy_bookmark_action_name (child);
-	g_return_if_fail (name);
-	action = gtk_action_group_get_action (actions, name);
-	
-	if (action)
-	{
-		ephy_bookmark_action_updated
-		  (EPHY_BOOKMARK_ACTION (action));
-	}
-	
-	g_free (name);
-}
+	char name[EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE];
 
+	EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, child);
+
+	action = gtk_action_group_get_action (action_group, name);
+	
+	if (action != NULL)
+	{
+		ephy_bookmark_action_updated ((EphyBookmarkAction *) action);
+	}
+}
 
 static void
 smart_removed_cb (EphyNode *parent,
 		  EphyNode *child,
 		  guint index, 
-		  GtkActionGroup *actions)
+		  GtkActionGroup *action_group)
 {
 	GtkAction *action;
-	char *name;
+	char name[EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE];
+
+	EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, child);
+
+	action = gtk_action_group_get_action (action_group, name);
 	
-	name = ephy_bookmark_action_name (child);
-	g_return_if_fail (name);
-	action = gtk_action_group_get_action (actions, name);
-	
-	if (action)
+	if (action != NULL)
 	{
-		ephy_bookmark_action_updated
-		  (EPHY_BOOKMARK_ACTION (action));
+		ephy_bookmark_action_updated ((EphyBookmarkAction *) action);
 	}
-	
-	g_free (name);
 }
 
 static void
 node_changed_cb (EphyNode *parent,
 		 EphyNode *child,
 		 guint property_id,
-		 GtkActionGroup *actions)
+		 GtkActionGroup *action_group)
 {
 	GtkAction *action;
-	char *name;
-	
-	name = ephy_bookmark_action_name (child);
-	g_assert (name != NULL);
+	char name[EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE];
 
-	action = gtk_action_group_get_action (actions, name);
+	EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, child);
+
+	action = gtk_action_group_get_action (action_group, name);
 	
-	if (action)
+	if (action != NULL)
 	{
-		ephy_bookmark_action_updated
-			(EPHY_BOOKMARK_ACTION (action));
+		ephy_bookmark_action_updated ((EphyBookmarkAction *) action);
 	}
-	
-	g_free (name);
 }
 
 static void
@@ -106,22 +96,22 @@ node_added_cb (EphyNode *parent,
 	       GtkActionGroup *action_group)
 {
 	GtkAction *action;
-	char *name, *accel;
-		
-	name = ephy_bookmark_action_name (child);
+	char name[EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE];
+	char accel[256];
+
+	EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, child);
+
 	action = ephy_bookmark_action_new (child, name);
-	accel = g_strjoin ("/", "<Actions>",
-			   gtk_action_group_get_name (action_group),
-			   name, NULL);
+
+	g_snprintf (accel, sizeof (accel), "<Actions>/%s/%s",
+		    gtk_action_group_get_name (action_group),
+		    name);
 	gtk_action_set_accel_path (action, accel);
 	gtk_action_group_add_action (action_group, action);
 	g_object_unref (action);
 
-	g_free (accel);
-	g_free (name);
+	ephy_bookmark_action_updated ((EphyBookmarkAction *) action);
 
-	ephy_bookmark_action_updated (EPHY_BOOKMARK_ACTION (action));
-	
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), action_group);
 }
@@ -139,7 +129,7 @@ node_removed_cb (EphyNode *parent,
 
 	action = gtk_action_group_get_action (action_group, name);
 	
-	if (action)
+	if (action != NULL)
 	{
 		gtk_action_group_remove_action (action_group, action);
 	}

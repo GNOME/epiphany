@@ -256,7 +256,7 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 				 G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 	g_object_unref (actions);
 	
-	actions = ephy_topic_group_new (topics, manager);
+	actions = ephy_topic_action_group_new (topics, manager);
 	gtk_ui_manager_insert_action_group (manager, actions, -1);
 	g_object_unref (actions);
 
@@ -496,11 +496,14 @@ topic_has_data (EggToolbarsItemType *type,
 	EphyNode *node, *topics;
 	guint node_id;
 	
-	if (sscanf (name, "OpenTopic%u", &node_id) != 1 &&
-	    sscanf (name, "Tpc%u", &node_id) != 1) return FALSE;
+	if (sscanf (name, "OpenTopic%u" /* FIXME!! */, &node_id) != 1 &&
+	    sscanf (name, EPHY_TOPIC_ACTION_NAME_FORMAT, &node_id) != 1) return FALSE;
+
 	node = ephy_bookmarks_get_from_id (eb, node_id);
-	if (!node) return FALSE;
+	if (node == NULL) return FALSE;
+
 	topics = ephy_bookmarks_get_keywords (eb);
+
 	return ephy_node_has_child (topics, node);
 }
 
@@ -511,22 +514,26 @@ topic_get_data (EggToolbarsItemType *type,
 	EphyNode *node;
 	guint node_id;
 	
-	if (sscanf (name, "OpenTopic%u", &node_id) != 1 &&
-	    sscanf (name, "Tpc%u", &node_id) != 1) return NULL;
+	if (sscanf (name, "OpenTopic%u" /* FIXME!! */, &node_id) != 1 &&
+	    sscanf (name, EPHY_TOPIC_ACTION_NAME_FORMAT, &node_id) != 1) return NULL;
+
 	node = ephy_bookmarks_get_from_id (eb, node_id);
-	if (!node) return NULL;
+	if (node == NULL) return NULL;
+
 	return ephy_bookmarks_get_topic_uri (eb, node);
 }
 
 static char *
 topic_get_name (EggToolbarsItemType *type,
-		const char *name)
+		const char *data)
 {
-	EphyNode *topic = ephy_bookmarks_find_keyword (eb, name, FALSE);
-	if (topic == NULL) return NULL;
-	return ephy_topic_action_name (topic);
-}
+	EphyNode *topic;
 
+	topic = ephy_bookmarks_find_keyword (eb, data, FALSE);
+	if (topic == NULL) return NULL;
+
+	return EPHY_TOPIC_ACTION_NAME_STRDUP_PRINTF (topic);
+}
 
 static gboolean
 bookmark_has_data (EggToolbarsItemType *type,
@@ -534,12 +541,13 @@ bookmark_has_data (EggToolbarsItemType *type,
 {
 	EphyNode *node;
 	guint node_id;
-	
-	if (sscanf (name, "OpenBmk%u", &node_id) != 1 &&
-	    sscanf (name, "Bmk%u", &node_id) != 1) return FALSE;
+
+	if (sscanf (name, "OpenBmk%u" /* FIXME!! */, &node_id) != 1 &&
+	    sscanf (name, EPHY_BOOKMARK_ACTION_NAME_FORMAT, &node_id) != 1) return FALSE;
+
 	node = ephy_bookmarks_get_from_id (eb, node_id);
-	if (!node) return FALSE;
-	
+	if (node == NULL) return FALSE;
+
 	return (ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION) != NULL);
 }
 
@@ -549,12 +557,13 @@ bookmark_get_data (EggToolbarsItemType *type,
 {
 	EphyNode *node;
 	guint node_id;
-	
-	if (sscanf (name, "OpenBmk%u", &node_id) != 1 &&
-	    sscanf (name, "Bmk%u", &node_id) != 1) return NULL;
+
+	if (sscanf (name, "OpenBmk%u" /* FIXME!! */, &node_id) != 1 &&
+	    sscanf (name, EPHY_BOOKMARK_ACTION_NAME_FORMAT, &node_id) != 1) return NULL;
+
 	node = ephy_bookmarks_get_from_id (eb, node_id);
-	if (!node) return NULL;
-	
+	if (node == NULL) return NULL;
+
 	return g_strdup (ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION));
 }
 
@@ -566,17 +575,19 @@ bookmark_get_name (EggToolbarsItemType *type,
 	gchar **netscape_url;
 
 	netscape_url = g_strsplit (data, "\n", 2);
-	if (!netscape_url || !netscape_url[0])
+	if (netscape_url == NULL || netscape_url[0] == '\0')
 	{
 		g_strfreev (netscape_url);
+
 		return NULL;
 	}
 
 	node = ephy_bookmarks_find_bookmark (eb, netscape_url[0]);
 	g_strfreev (netscape_url);
 
-	if (!node) return NULL;
-	return ephy_bookmark_action_name (node);
+	if (node == NULL) return NULL;
+
+	return EPHY_BOOKMARK_ACTION_NAME_STRDUP_PRINTF (node);
 }
 
 static char *
@@ -587,49 +598,53 @@ bookmark_new_name (EggToolbarsItemType *type,
 	gchar **netscape_url;
 
 	netscape_url = g_strsplit (data, "\n", 2);
-	if (!netscape_url || !netscape_url[0])
+	if (netscape_url == NULL || netscape_url[0] == '\0' || g_strv_length (netscape_url) < 2)
 	{
 		g_strfreev (netscape_url);
+
 		return NULL;
 	}
 
 	node = ephy_bookmarks_add (eb, netscape_url[1], netscape_url[0]);
-
 	g_strfreev (netscape_url);
 
-	return ephy_bookmark_action_name (node);
+	return EPHY_BOOKMARK_ACTION_NAME_STRDUP_PRINTF (node);
 }
 
 static void
-toolbar_node_removed_cb (EphyNode *parent, EphyNode *child, guint index, EggToolbarsModel *model)
+toolbar_node_removed_cb (EphyNode *parent,
+			 EphyNode *child,
+			 guint index,
+			 EggToolbarsModel *model)
 {
-	gint i, j;
-	char *nid = NULL;
+	char name[EPHY_BOOKMARKS_UI_ACTION_NAME_BUFFER_SIZE];
 	const char *id;
+	int i, j;
 	
 	switch (ephy_node_get_id (parent))
 	{
 		case BOOKMARKS_NODE_ID:
-			nid = ephy_bookmark_action_name (child);
+			EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, child);
 			break;
 		case KEYWORDS_NODE_ID:
-			nid = ephy_topic_action_name (child);
+			EPHY_TOPIC_ACTION_NAME_PRINTF (name, child);
 			break;
 	 	default:
 			return;
 	}
 
-	for (i=egg_toolbars_model_n_toolbars(model)-1; i>=0; i--)
-	  for (j=egg_toolbars_model_n_items(model, i)-1; j>=0; j--)
-	  {
-		  id = egg_toolbars_model_item_nth (model, i, j);
-		  if (!strcmp (id, nid))
-		  {
-			  egg_toolbars_model_remove_item (model, i, j);
-		  }
-	  }
-	
-	free (nid);
+	for (i = (int) egg_toolbars_model_n_toolbars(model) - 1; i >= 0; --i)
+	{
+		for (j = (int) egg_toolbars_model_n_items (model, i) - 1; j >= 0; --j)
+		{
+			id = egg_toolbars_model_item_nth (model, i, j);
+
+			if (strcmp (id, name) == 0)
+			{
+				egg_toolbars_model_remove_item (model, i, j);
+			}
+		}
+	}
 }
 
 void

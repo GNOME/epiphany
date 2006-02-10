@@ -37,9 +37,6 @@ G_BEGIN_DECLS
 #define EPHY_IS_BOOKMARK_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((obj), EPHY_TYPE_BOOKMARK_ACTION))
 #define EPHY_BOOKMARK_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkActionClass))
 
-#define EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE		32 /* >= strlen ("Bmk") + max size of gulong + 1 */
-#define EPHY_BOOKMARK_ACTION_NAME_PRINTF(buffer,node)	(g_snprintf (buffer, sizeof (buffer), "Bmk%u", ephy_node_get_id (node)))
-
 typedef struct _EphyBookmarkAction		EphyBookmarkAction;
 typedef struct _EphyBookmarkActionPrivate	EphyBookmarkActionPrivate;
 typedef struct _EphyBookmarkActionClass		EphyBookmarkActionClass;
@@ -58,22 +55,21 @@ struct _EphyBookmarkActionClass
 };
 
 
-GType       ephy_bookmark_action_get_type (void);
+GType		ephy_bookmark_action_get_type		(void);
 
-char *      ephy_bookmark_action_name     (EphyNode *node);
+GtkAction      *ephy_bookmark_action_new		(EphyNode *node,
+							 const char *name);
 
-GtkAction * ephy_bookmark_action_new      (EphyNode *node, char *name);
+void		ephy_bookmark_action_set_bookmark	(EphyBookmarkAction *action,
+		 					 EphyNode *node);
 
+EphyNode       *ephy_bookmark_action_get_bookmark	(EphyBookmarkAction *action);
 
-void        ephy_bookmark_action_set_bookmark (EphyBookmarkAction *action, EphyNode *node);
+void		ephy_bookmark_action_updated		(EphyBookmarkAction *action);
 
-EphyNode *  ephy_bookmark_action_get_bookmark (EphyBookmarkAction *action);
-
-void        ephy_bookmark_action_updated      (EphyBookmarkAction *action);
-
-void        ephy_bookmark_action_activate     (EphyBookmarkAction *action,
-					       GtkWidget *widget,
-					       EphyLinkFlags flags);
+void		ephy_bookmark_action_activate		(EphyBookmarkAction *action,
+							 GtkWidget *widget,
+							 EphyLinkFlags flags);
 
 G_END_DECLS
 

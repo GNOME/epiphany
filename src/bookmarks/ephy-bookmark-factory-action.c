@@ -25,6 +25,7 @@
 
 #include "ephy-bookmark-factory-action.h"
 #include "ephy-bookmark-action.h"
+#include "ephy-bookmarks-ui.h"
 #include "ephy-node-common.h"
 #include "ephy-shell.h"
 #include "ephy-stock-icons.h"
@@ -97,7 +98,8 @@ build_menu_for_topic (GtkWidget *placeholder, EggToolbarsModel *model, EphyNode 
 	GtkWidget *menu, *item;
 	EphyNode *node;
 	GPtrArray *children, *bookmarks;
-	const char *name, *action;
+	const char *name;
+	char action[EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE];
 	gint i, flags;
 	
 	children = ephy_node_get_children (topic);
@@ -112,10 +114,11 @@ build_menu_for_topic (GtkWidget *placeholder, EggToolbarsModel *model, EphyNode 
 	{
 		node = g_ptr_array_index (bookmarks, i);
 		
-		action = ephy_bookmark_action_name (node);
+		EPHY_BOOKMARK_ACTION_NAME_PRINTF (action, node);
+
 		flags = egg_toolbars_model_get_name_flags (model, action);
 		if (flags & EGG_TB_MODEL_NAME_USED)
-		  continue;
+			continue;
 		
 		name = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
 		item = gtk_menu_item_new_with_label (name);

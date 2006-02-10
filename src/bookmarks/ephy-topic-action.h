@@ -55,18 +55,18 @@ struct _EphyTopicActionClass
 };
 
 
-GType       ephy_topic_action_get_type (void);
+GType		ephy_topic_action_get_type	(void);
 
-char *      ephy_topic_action_name     (EphyNode *node);
+GtkAction      *ephy_topic_action_new		(EphyNode *node,
+						 GtkUIManager *manager,
+						 const char *name);
 
-GtkAction * ephy_topic_action_new      (EphyNode *node, GtkUIManager *manager, char *name);
+void		ephy_topic_action_set_topic	(EphyTopicAction *action,
+						 EphyNode *node);
 
+EphyNode       *ephy_topic_action_get_topic	(EphyTopicAction *action);
 
-void        ephy_topic_action_set_topic (EphyTopicAction *action, EphyNode *node);
-
-EphyNode *  ephy_topic_action_get_topic (EphyTopicAction *action);
-
-void        ephy_topic_action_updated   (EphyTopicAction *action);
+void		ephy_topic_action_updated	(EphyTopicAction *action);
 
 G_END_DECLS
 

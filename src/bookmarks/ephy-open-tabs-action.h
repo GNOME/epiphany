@@ -25,8 +25,6 @@
 
 #include "ephy-node.h"
 
-char *           ephy_open_tabs_action_name (EphyNode *node);
-
-GtkActionGroup * ephy_open_tabs_group_new   (EphyNode *node);
+GtkActionGroup	*ephy_open_tabs_group_new	(EphyNode *node);
 
 #endif
