@@ -63,6 +63,8 @@ typedef nsEmbedCString nsDependentCString;
 #define MAX_TITLE_LENGTH	256
 #define MAX_BUTTON_TEXT_LENGTH	128
 
+#define LIBGNOMEUI_DOMAIN "libgnomeui-2.0"
+
 enum
 {
 	RESPONSE_ABORT_SCRIPT = 42
@@ -796,8 +798,8 @@ EphyPromptService::PromptUsernameAndPassword (nsIDOMWindow *aParent,
 	Prompter prompt (GTK_STOCK_DIALOG_AUTHENTICATION, aParent, aDialogTitle, aText);
 	prompt.AddStockButton (GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 	prompt.AddStockButton (GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
-	prompt.AddEntry (_("_User:"), *aUsername, PR_FALSE);
-	prompt.AddEntry (_("_Password:"), *aPassword, PR_TRUE);
+	prompt.AddEntry (dgettext (LIBGNOMEUI_DOMAIN,"_Username:"), *aUsername, PR_FALSE);
+	prompt.AddEntry (dgettext (LIBGNOMEUI_DOMAIN,"_Password:"), *aPassword, PR_TRUE);
 	prompt.AddCheckbox (aCheckMsg, aCheckState);
 
 	PRInt32 response = prompt.Run (_retval);
@@ -824,7 +826,7 @@ EphyPromptService::PromptPassword (nsIDOMWindow *aParent,
 	Prompter prompt (GTK_STOCK_DIALOG_AUTHENTICATION, aParent, aDialogTitle, aText);
 	prompt.AddStockButton (GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 	prompt.AddStockButton (GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
-	prompt.AddEntry (_("_Password:"), *aPassword, PR_TRUE);
+	prompt.AddEntry (dgettext (LIBGNOMEUI_DOMAIN, "_Password:"), *aPassword, PR_TRUE);
 	prompt.AddCheckbox (aCheckMsg, aCheckState);
 
 	// FIXME: Add a CAPSLOCK indicator?
