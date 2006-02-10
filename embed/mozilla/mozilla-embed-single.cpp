@@ -718,6 +718,10 @@ impl_init (EphyEmbedSingle *esingle)
 {
 	MozillaEmbedSingle *single = MOZILLA_EMBED_SINGLE (esingle);
 
+#ifdef HAVE_GECKO_1_9
+	NS_LogInit ();
+#endif
+
 	/* Pre initialization */
 	mozilla_init_plugin_path ();
 
@@ -837,6 +841,10 @@ mozilla_embed_single_finalize (GObject *object)
 	mozilla_notifiers_shutdown ();
 
 	gtk_moz_embed_pop_startup ();
+
+#ifdef HAVE_GECKO_1_9
+	NS_LogTerm ();
+#endif
 
 	g_free (mes->priv->user_prefs);
 
