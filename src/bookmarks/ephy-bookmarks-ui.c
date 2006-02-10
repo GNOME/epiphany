@@ -496,8 +496,7 @@ topic_has_data (EggToolbarsItemType *type,
 	EphyNode *node, *topics;
 	guint node_id;
 	
-	if (sscanf (name, "OpenTopic%u" /* FIXME!! */, &node_id) != 1 &&
-	    sscanf (name, EPHY_TOPIC_ACTION_NAME_FORMAT, &node_id) != 1) return FALSE;
+	if (sscanf (name, EPHY_TOPIC_ACTION_NAME_FORMAT, &node_id) != 1) return FALSE;
 
 	node = ephy_bookmarks_get_from_id (eb, node_id);
 	if (node == NULL) return FALSE;
@@ -514,11 +513,10 @@ topic_get_data (EggToolbarsItemType *type,
 	EphyNode *node;
 	guint node_id;
 	
-	if (sscanf (name, "OpenTopic%u" /* FIXME!! */, &node_id) != 1 &&
-	    sscanf (name, EPHY_TOPIC_ACTION_NAME_FORMAT, &node_id) != 1) return NULL;
+	if (sscanf (name, EPHY_TOPIC_ACTION_NAME_FORMAT, &node_id) != 1) return NULL;
 
 	node = ephy_bookmarks_get_from_id (eb, node_id);
-	if (node == NULL) return NULL;
+	g_return_val_if_fail (node != NULL, NULL);
 
 	return ephy_bookmarks_get_topic_uri (eb, node);
 }
@@ -542,8 +540,7 @@ bookmark_has_data (EggToolbarsItemType *type,
 	EphyNode *node;
 	guint node_id;
 
-	if (sscanf (name, "OpenBmk%u" /* FIXME!! */, &node_id) != 1 &&
-	    sscanf (name, EPHY_BOOKMARK_ACTION_NAME_FORMAT, &node_id) != 1) return FALSE;
+	if (sscanf (name, EPHY_BOOKMARK_ACTION_NAME_FORMAT, &node_id) != 1) return FALSE;
 
 	node = ephy_bookmarks_get_from_id (eb, node_id);
 	if (node == NULL) return FALSE;
@@ -558,11 +555,10 @@ bookmark_get_data (EggToolbarsItemType *type,
 	EphyNode *node;
 	guint node_id;
 
-	if (sscanf (name, "OpenBmk%u" /* FIXME!! */, &node_id) != 1 &&
-	    sscanf (name, EPHY_BOOKMARK_ACTION_NAME_FORMAT, &node_id) != 1) return NULL;
+	if (sscanf (name, EPHY_BOOKMARK_ACTION_NAME_FORMAT, &node_id) != 1) return NULL;
 
 	node = ephy_bookmarks_get_from_id (eb, node_id);
-	if (node == NULL) return NULL;
+	g_return_val_if_fail (node != NULL, NULL);
 
 	return g_strdup (ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION));
 }
@@ -618,8 +614,6 @@ toolbar_node_removed_cb (EphyNode *parent,
 			 EggToolbarsModel *model)
 {
 	char name[EPHY_BOOKMARKS_UI_ACTION_NAME_BUFFER_SIZE];
-	const char *id;
-	int i, j;
 	
 	switch (ephy_node_get_id (parent))
 	{
@@ -633,18 +627,7 @@ toolbar_node_removed_cb (EphyNode *parent,
 			return;
 	}
 
-	for (i = (int) egg_toolbars_model_n_toolbars(model) - 1; i >= 0; --i)
-	{
-		for (j = (int) egg_toolbars_model_n_items (model, i) - 1; j >= 0; --j)
-		{
-			id = egg_toolbars_model_item_nth (model, i, j);
-
-			if (strcmp (id, name) == 0)
-			{
-				egg_toolbars_model_remove_item (model, i, j);
-			}
-		}
-	}
+	egg_toolbars_model_delete_item (model, name);
 }
 
 void

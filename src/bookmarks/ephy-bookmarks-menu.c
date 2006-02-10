@@ -48,12 +48,11 @@ enum
     BUILD_CHILD_SUBMENUS = 1 << 3
 };
 
-/* Construct a block of bookmark actions, postfixing the names with a topic id
- * to allow different. */
+/* Construct a block of bookmark actions. Note that no bookmark action appears
+ * more than once in a menu, so no need to supply names. */
 static void
 append_bookmarks (GString *string,
-		  const GPtrArray *bookmarks,
-		  int instance)
+		  const GPtrArray *bookmarks)
 {
 	EphyNode *child;
 	char name[EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE];
@@ -66,8 +65,7 @@ append_bookmarks (GString *string,
 
 		EPHY_BOOKMARK_ACTION_NAME_PRINTF (name, child);
 
-		g_string_append_printf (string, "<menuitem action=\"%s\" name=\"%s-%d\"/>",
-					name, name, instance);
+		g_string_append_printf (string, "<menuitem action=\"%s\"/>", name);
 	}
 }
 
@@ -160,7 +158,7 @@ append_menu (GString *string, const GPtrArray *topics, const GPtrArray *bookmark
 			g_ptr_array_sort (subset, ephy_bookmarks_compare_bookmark_pointers);
 			
 			if (separate) g_string_append (string, "<separator/>");
-			append_bookmarks (string, subset, i+1);
+			append_bookmarks (string, subset);
 			separate = TRUE;
 			
 			/* Record that each bookmark has been added. */
@@ -189,7 +187,7 @@ append_menu (GString *string, const GPtrArray *topics, const GPtrArray *bookmark
 	
 	/* Create the final subdivision (uncovered bookmarks). */
 	g_ptr_array_sort (uncovered, ephy_bookmarks_compare_bookmark_pointers);
-	append_bookmarks (string, uncovered, 0);
+	append_bookmarks (string, uncovered);
 	g_ptr_array_free (uncovered, TRUE);        
 }
 
