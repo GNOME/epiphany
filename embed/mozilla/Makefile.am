@@ -15,6 +15,8 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyFind.h			\
 	EphyHistoryListener.cpp		\
 	EphyHistoryListener.h		\
+	EphyPromptService.cpp           \
+	EphyPromptService.h             \
 	EphySidebar.cpp			\
 	EphySidebar.h			\
 	EphySingle.cpp			\
@@ -70,11 +72,19 @@ if HAVE_GECKO_1_8
 libephymozillaembed_la_SOURCES += \
 	EphyAboutModule.cpp		\
 	EphyAboutModule.h
+
+if HAVE_MOZILLA_TOOLKIT
+libephymozillaembed_la_SOURCES += \
+	EphyDirectoryProvider.cpp       \
+	EphyDirectoryProvider.h
+endif
+
 endif
 
 mozilla_include_subdirs = \
 	caps			\
 	chardet			\
+	chrome			\
 	commandhandler		\
 	content			\
 	cookie			\

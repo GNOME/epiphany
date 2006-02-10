@@ -1,3 +1,28 @@
+2006-02-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* NEWS:
+	* configure.ac:
+	* data/Makefile.am:
+	A data/chrome/.cvsignore:
+	A data/chrome/Makefile.am:
+	A data/chrome/about.xhtml:
+	A data/chrome/brand.dtd.in:
+	A data/chrome/brand.properties.in:
+	A data/chrome/epiphany.manifest.in:
+	A embed/mozilla/EphyDirectoryProvider.cpp:
+	A embed/mozilla/EphyDirectoryProvider.h:
+	A embed/mozilla/EphyPromptService.cpp:
+	A embed/mozilla/EphyPromptService.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* po/POTFILES.skip:
+
+	Merge the chrome stuff from HEAD; it's needed in order
+	to work with password manager on xulrunner.
+	Merge prompt service from HEAD to fix the button underline
+	bug and to fix the JS context stack problem.
+
 2006-02-05  Christian Persch  <chpe@cvs.gnome.org>
 	
 	* configure.ac:

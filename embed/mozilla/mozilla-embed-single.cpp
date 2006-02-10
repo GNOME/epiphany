@@ -33,6 +33,7 @@
 #include "glib.h"
 #include "ephy-debug.h"
 #include "gtkmozembed.h"
+#include "gtkmozembed_internal.h"
 #include "mozilla-embed.h"
 #include "ephy-file-helpers.h"
 #include "mozilla-notifiers.h"
@@ -88,6 +89,10 @@
 #include <nsIIDNService.h>
 #endif /* ALLOW_PRIVATE_API */
 
+#if defined(HAVE_MOZILLA_TOOLKIT) && defined(HAVE_GECKO_1_8)
+#include "EphyDirectoryProvider.h"
+#endif
+
 #include <stdlib.h>
 
 #define MOZILLA_PROFILE_DIR  "/mozilla"
@@ -113,7 +118,6 @@ static void ephy_cookie_manager_iface_init	(EphyCookieManagerIface *iface);
 static void ephy_password_manager_iface_init	(EphyPasswordManagerIface *iface);
 static void ephy_permission_manager_iface_init	(EphyPermissionManagerIface *iface);
 static void mozilla_embed_single_init		(MozillaEmbedSingle *ges);
-static gboolean have_gnome_url_handler		(const gchar *protocol);
 
 static GObjectClass *parent_class = NULL;
 
@@ -403,30 +407,6 @@ mozilla_init_profile (void)
         g_free (profile_path);
 }
 
-static gboolean
-have_gnome_url_handler (const gchar *protocol)
-{
-	gchar *key, *cmd;
-	gboolean rv;
-
-	key = g_strdup_printf ("/desktop/gnome/url-handlers/%s/command", 
-			       protocol);
-	cmd = eel_gconf_get_string (key);
-	g_free (key);
-
-	rv = (cmd != NULL && strstr (cmd, "epiphany") == NULL);
-	g_free (cmd);
-
-	if (!rv) return rv;
-
-	key = g_strdup_printf ("/desktop/gnome/url-handlers/%s/enabled", 
-			       protocol);
-	rv = eel_gconf_get_boolean (key);
-	g_free (key);
-
-	return rv;
-}
-
 #if defined(MOZ_NSIXULCHROMEREGISTRY_SELECTSKIN) || defined(HAVE_CHROME_NSICHROMEREGISTRYSEA_H)
 static nsresult
 getUILang (nsAString& aUILang)
@@ -514,6 +494,14 @@ init_services (MozillaEmbedSingle *single)
 
 	/* Set mozilla binary path */
 	gtk_moz_embed_set_comp_path (MOZILLA_HOME);
+
+#if defined(HAVE_MOZILLA_TOOLKIT) && defined(HAVE_GECKO_1_8)
+
+        nsCOMPtr<nsIDirectoryServiceProvider> dp = new EphyDirectoryProvider ();
+        if (!dp) return FALSE;
+
+        gtk_moz_embed_set_directory_service_provider (dp);
+#endif
 
 	/* Fire up the beast */
 	gtk_moz_embed_push_startup ();

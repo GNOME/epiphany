@@ -219,6 +219,12 @@ AC_SUBST([MOZILLA_HOME])
 MOZILLA_PREFIX="`$PKG_CONFIG --variable=prefix $MOZILLA-gtkmozembed`"
 AC_SUBST([MOZILLA_PREFIX])
 
+if test "$flavour" = "toolkit"; then
+        AC_DEFINE([HAVE_MOZILLA_TOOLKIT],[1],[Define if mozilla is of the toolkit flavour])
+fi
+
+AM_CONDITIONAL([HAVE_MOZILLA_TOOLKIT],[test "$flavour" = "toolkit"])
+
 AC_ARG_ENABLE([cpp-rtti],
 	      AS_HELP_STRING([--enable-cpp-rtti],[Enable C++ RTTI]),[],
 	      [enable_cpp_rtti=no])
@@ -756,6 +762,9 @@ data/epiphany-1.8.pc
 data/glade/Makefile
 data/art/Makefile
 data/ui/Makefile
+data/chrome/Makefile
+data/chrome/brand.dtd
+data/chrome/brand.properties
 doc/Makefile
 doc/reference/Makefile
 idl/Makefile

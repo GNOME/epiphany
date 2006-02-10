@@ -29,6 +29,7 @@
 #include "MozDownload.h"
 #include "EphyContentPolicy.h"
 #include "EphySidebar.h"
+#include "EphyPromptService.h"
 
 #ifdef ENABLE_FILEPICKER
 #include "FilePicker.h"
@@ -63,6 +64,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(MozGlobalHistory)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GPrintingPromptService)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyContentPolicy)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphySidebar)
+NS_GENERIC_FACTORY_CONSTRUCTOR(EphyPromptService)
 
 #ifdef ENABLE_FILEPICKER
 NS_GENERIC_FACTORY_CONSTRUCTOR(GFilePicker)
@@ -219,6 +221,12 @@ static const nsModuleComponentInfo sAppComps[] = {
 	EphyAboutModuleConstructor
 },
 #endif
+	{
+		EPHY_PROMPT_SERVICE_CLASSNAME,
+		EPHY_PROMPT_SERVICE_IID,
+		"@mozilla.org/embedcomp/prompt-service;1",
+		EphyPromptServiceConstructor
+	},
 };
 
 #if defined(HAVE_MOZILLA_PSM) && !defined(HAVE_GECKO_1_8)

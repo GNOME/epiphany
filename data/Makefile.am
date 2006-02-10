@@ -1,4 +1,4 @@
-SUBDIRS = ui art glade
+SUBDIRS = ui art glade chrome
 
 @INTLTOOL_SERVER_RULE@
 @INTLTOOL_DESKTOP_RULE@
