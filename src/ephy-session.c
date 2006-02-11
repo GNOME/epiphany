@@ -138,8 +138,6 @@ ephy_session_get_type (void)
 
 /* Gnome session client */
 
-#if 0
-
 typedef struct
 {
 	GtkWidget *dialog;
@@ -327,8 +325,6 @@ confirm_shutdown_cb (GnomeClient *client,
 	gtk_window_present (GTK_WINDOW (dialog));
 }
 
-#endif /* if 0 */
-
 static gboolean
 save_yourself_cb (GnomeClient *client,
 		  int phase,
@@ -363,7 +359,6 @@ save_yourself_cb (GnomeClient *client,
 
 	g_free (save_to);
 
-#if 0
 	/* If we're shutting down, check if there are downloads
 	 * remaining, since they can't be restarted.
 	 */
@@ -375,7 +370,6 @@ save_yourself_cb (GnomeClient *client,
 						  (GnomeInteractFunction) confirm_shutdown_cb,
 						  session);
 	}
-#endif
 
 	return TRUE;
 }
