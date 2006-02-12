@@ -152,6 +152,8 @@ ephy_net_monitor_check_for_active_device (EphyNetMonitor *monitor,
 					DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &networks, &num_networks,
 					DBUS_TYPE_INVALID))
 		{
+			LOG ("EphyNetMonitor found %s active device", active ? "at least 1" : "no");
+
 			dbus_message_unref (reply);
 
 			/* found one active device */
@@ -177,7 +179,7 @@ ephy_net_monitor_check_for_active_device (EphyNetMonitor *monitor,
 		}
 	}
 
-	return active;
+	return status;
 }
 
 /* This is the heart of Net Monitor monitor */
