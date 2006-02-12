@@ -443,13 +443,15 @@ cmd_toolbar (GtkAction *action,
 	for (tpos = 0; tpos < egg_toolbars_model_n_toolbars (model); tpos++)
 	{
 		tname = egg_toolbars_model_toolbar_nth (model, tpos);
-		if (tname != NULL && strcmp (tname, "Bookmarks") == 0)
-		  break;
+
+		if (tname != NULL &&
+		    strcmp (tname, "BookmarksBar") == 0)
+			break;
 	}
 	
 	if (tpos == egg_toolbars_model_n_toolbars (model))
 	{		
-		tpos = egg_toolbars_model_add_toolbar (model, -1, "Bookmarks");
+		tpos = egg_toolbars_model_add_toolbar (model, -1, "BookmarksBar");
 	}
 	
 	if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->bm_view)))
