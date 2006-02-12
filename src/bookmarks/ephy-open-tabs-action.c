@@ -68,10 +68,10 @@ node_added_cb (EphyNode *parent,
 {
 	GObject *action_object;
 	GtkAction *action;
-	char name[EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE];
+	char name[EPHY_OPEN_TABS_ACTION_NAME_BUFFER_SIZE];
 	char accel[256];
 
-	EPHY_TOPIC_ACTION_NAME_PRINTF (name, child);
+	EPHY_OPEN_TABS_ACTION_NAME_PRINTF (name, child);
 	
 	/* FIXME !!!! */
 	action = gtk_action_new (name, _("Open in New _Tabs"), "Open this topic in tabs", NULL);
@@ -99,9 +99,9 @@ node_removed_cb (EphyNode *parent,
 		 GtkActionGroup *action_group)
 {
 	GtkAction *action;
-	char name[EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE];
+	char name[EPHY_OPEN_TABS_ACTION_NAME_BUFFER_SIZE];
 
-	EPHY_TOPIC_ACTION_NAME_PRINTF (name, child);
+	EPHY_OPEN_TABS_ACTION_NAME_PRINTF (name, child);
 		
 	action = gtk_action_group_get_action (action_group, name);
 
