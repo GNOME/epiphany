@@ -123,7 +123,9 @@ build_menu_for_topic (GtkWidget *placeholder, EggToolbarsModel *model, EphyNode 
 		name = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
 		item = gtk_menu_item_new_with_label (name);
 
-		g_object_set_data_full (G_OBJECT (item), "ephy-action", (gpointer) action, g_free);
+		/* FIXME: set the |node| instead here! */
+		g_object_set_data_full (G_OBJECT (item), "ephy-action",
+					g_strdup (action), g_free);
 		g_signal_connect (item, "activate", G_CALLBACK (activate_item_cb), placeholder);
 		gtk_widget_show (item);
 		
