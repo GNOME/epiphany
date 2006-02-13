@@ -498,35 +498,6 @@ ephy_gui_window_update_user_time (GtkWidget *window,
 
 }
 
-/* gtk+ bug 166379 */
-/* adapted from gtk+/gtk/gtkwindow.c */
-void
-ephy_gui_window_present (GtkWindow *window,
-			 guint32 user_time)
-{
-	GtkWidget *widget;
-	
-	g_return_if_fail (GTK_IS_WINDOW (window));
-	
-	widget = GTK_WIDGET (window);
-	
-	if (GTK_WIDGET_VISIBLE (window))
-	{
-		g_assert (widget->window != NULL);
-
-		gdk_window_show (widget->window);
-
-		/* note that gdk_window_focus() will also move the window to
-		* the current desktop, for WM spec compliant window managers.
-		*/
-		gdk_window_focus (widget->window, user_time);
-	}
-	else
-	{
-		gtk_widget_show (widget);
-	}
-}
-
 /* Pending gtk+ bug http://bugzilla.gnome.org/show_bug.cgi?id=328069 */
 GtkWidget *
 ephy_gui_message_dialog_get_content_box (GtkWidget *dialog)

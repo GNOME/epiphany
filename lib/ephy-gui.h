@@ -77,9 +77,6 @@ void		ephy_gui_help				 (GtkWindow *parent,
 void		ephy_gui_window_update_user_time	 (GtkWidget *window,
 							  guint32 user_time);
 
-void		ephy_gui_window_present			 (GtkWindow *window,
-							  guint32 user_time);
-
 GtkWidget      *ephy_gui_message_dialog_get_content_box	 (GtkWidget *dialog);
 
 G_END_DECLS
