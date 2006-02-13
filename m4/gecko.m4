@@ -210,9 +210,13 @@ AC_LANG_POP([C++])
 if test "$gecko_cv_have_debug" = "yes"; then
 	_GECKO_EXTRA_CXXFLAGS="$_GECKO_EXTRA_CXXFLAGS -DDEBUG -D_DEBUG"
 	AM_CXXFLAGS="-DDEBUG -D_DEBUG $AM_CXXFLAGS"
+
+	AC_DEFINE([HAVE_GECKO_DEBUG],[1],[Define if gecko is a debug build])
 fi
 
 fi # if gecko_cv_have_gecko
+
+AM_CONDITIONAL([HAVE_GECKO_DEBUG],[test "$gecko_cv_have_debug" = "yes"])
 
 # ***********************
 # Check for gecko version
