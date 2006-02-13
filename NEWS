@@ -1,4 +1,36 @@
 ==============
+Epiphany 1.9.7
+==============
+
+Changes:
+	* Show the backend in the about box.
+	* Disable blink tags
+	* Reversed some regressions: Add tooltips to toolitems again,
+          Restore the 'Show on Toolbar' functionality.
+        * Topic chooser: Add enter-to-auto-complete when there is just one
+          possible match. Will close dialog if no current key. Will do nothing
+          otherwise.
+
+Bug fixes:
+	* Warn the user on logout when there are unfinished downloads. 
+	  Bug #128048.
+	* Fix removing zeroconf bookmarks when the service disappears,
+	  and updating them when they reappear. Bugs #329637, #330883.
+	* Block popup with NULL url (javascript:window.open() for instance)
+	  but don't show them when unblocking. Bug #155009.
+	* Fix opening of local files. Bug #330104.
+	* Push a null JS context on the stack when we run a recursive mainloop. 
+	  Fixes the epiphany equivalent of camino bug
+	  https://bugzilla.mozilla.org/show_bug.cgi?id=179307.
+	* Fix some memory leaks.
+	* Queue commands received from the main and remote instances,
+	  and process them after autoresume has completed. Bug #328286.
+	* Use GTK_STOCK_DIALOG_AUTHENTICATION. Bug #329438.
+
+Contributors to this release: Christian Persch, Jean-François Rameau, Peter
+Harvey and Crispin Flowerday.
+
+==============
 Epiphany 1.9.6
 ==============
 
