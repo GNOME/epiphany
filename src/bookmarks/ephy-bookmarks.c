@@ -341,41 +341,46 @@ ephy_bookmarks_update_favorites (EphyBookmarks *eb)
 }
 
 static gboolean
-add_to_favorites (EphyBookmarks *eb, EphyNode *node, EphyHistory *eh)
+add_to_favorites (EphyBookmarks *bookmarks,
+		  EphyNode *node,
+		  EphyHistory *history)
 {
+	EphyBookmarksPrivate *priv = bookmarks->priv;
 	const char *url;
 	gboolean full_menu;
 	double score;
 
-	if (ephy_node_has_child (eb->priv->favorites, node)) return FALSE;
+	if (ephy_node_has_child (priv->favorites, node)) return FALSE;
 
 	url = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
-	score = get_history_item_score (eh, url);
-	full_menu = ephy_node_get_n_children (eb->priv->favorites)
+	score = get_history_item_score (history, url);
+	full_menu = ephy_node_get_n_children (priv->favorites)
 		    >= MAX_FAVORITES_NUM;
-	if (full_menu && score < eb->priv->lower_score) return FALSE;
+	if (full_menu && score < priv->lower_score) return FALSE;
 
-	if (eb->priv->lower_fav && full_menu)
+	if (priv->lower_fav && full_menu)
 	{
-		ephy_node_remove_child (eb->priv->favorites,
-					eb->priv->lower_fav);
+		ephy_node_remove_child (priv->favorites,
+					priv->lower_fav);
 	}
 
-	ephy_node_add_child (eb->priv->favorites, node);
-	ephy_bookmarks_update_favorites (eb);
+	ephy_node_add_child (priv->favorites, node);
+	ephy_bookmarks_update_favorites (bookmarks);
 
 	return TRUE;
 }
 
 static void
-history_site_visited_cb (EphyHistory *gh, const char *url, EphyBookmarks *eb)
+history_site_visited_cb (EphyHistory *history,
+			 const char *url,
+			 EphyBookmarks *bookmarks)
 {
 	EphyNode *node;
 
-	node = ephy_bookmarks_find_bookmark (eb, url);
+	node = ephy_bookmarks_find_bookmark (bookmarks, url);
 	if (node == NULL) return;
 
-	add_to_favorites (eb, node, gh);
+	add_to_favorites (bookmarks, node, history);
 }
 
 static void
@@ -408,7 +413,8 @@ clear_favorites (EphyBookmarks *bookmarks)
 }
 
 static void
-history_cleared_cb (EphyHistory *history, EphyBookmarks *bookmarks)
+history_cleared_cb (EphyHistory *history,
+		    EphyBookmarks *bookmarks)
 {
 	clear_favorites (bookmarks);
 }
@@ -758,6 +764,49 @@ backup_file (const char *original_filename, const char *extension)
 
 #ifdef ENABLE_ZEROCONF
 
+static char *
+get_id_for_service (const GnomeVFSDNSSDService *service)
+{
+	/* FIXME: limit length! */
+	return g_strdup_printf ("%s\1%s\1%s",
+				service->type,
+				service->domain,
+				service->name);
+}
+
+static EphyNode *
+get_node_for_service (EphyBookmarks *bookmarks,
+		      const GnomeVFSDNSSDService *service)
+{
+	EphyBookmarksPrivate *priv = bookmarks->priv;
+	EphyNode *kid, *node = NULL;
+	GPtrArray *children;
+	char *search_id;
+	const char *id;
+	guint i;
+
+	search_id = get_id_for_service (service);
+
+	children = ephy_node_get_children (priv->local);
+	for (i = 0; i < children->len; i++)
+	{
+		kid = g_ptr_array_index (children, i);
+
+		id = ephy_node_get_property_string (kid,
+						    EPHY_NODE_BMK_PROP_SERVICE_ID);
+
+		if (g_str_equal (id, search_id))
+		{
+			node = kid;
+			break;
+		}
+	}
+
+	g_free (search_id);
+
+	return node;
+}
+
 static void
 resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 	    GnomeVFSResult result,
@@ -777,6 +826,14 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 
 	priv->resolve_list = g_list_remove (priv->resolve_list, handle);
 
+	/* Remove the existing node */
+	node = get_node_for_service (bookmarks, service);
+	if (node != NULL)
+	{
+		ephy_node_unref (node);
+	}
+
+	/* Error, don't add the service */
 	if (result != GNOME_VFS_OK) return;
 
 	if (text != NULL)
@@ -791,16 +848,23 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 	url = g_strdup_printf ("http://%s:%d%s", host, port, path);
 
 	node = ephy_node_new (priv->db);
-	if (node == NULL) return;
+	g_assert (node != NULL);
 
 	/* don't allow dragging this node */
 	ephy_node_set_is_drag_source (node, FALSE);
 
 	g_value_init (&value, G_TYPE_STRING);
+	g_value_take_string (&value, get_id_for_service (service));
+	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_SERVICE_ID, &value);
+	g_value_unset (&value);
+
+	/* FIXME: limit length! */
+	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, service->name);
 	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_TITLE, &value);
 	g_value_unset (&value);
 
+	/* FIXME: limit length! */
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_take_string (&value, url);
 	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_LOCATION, &value);
@@ -823,25 +887,16 @@ browse_cb (GnomeVFSDNSSDBrowseHandle *handle,
 {
 	EphyBookmarksPrivate *priv = bookmarks->priv;
 	GnomeVFSDNSSDResolveHandle *reshandle = NULL;
-	GPtrArray *children;
-	EphyNode *kid;
-	const char *title;
-	guint i;
 
 	if (status == GNOME_VFS_DNS_SD_SERVICE_REMOVED)
 	{
-		/* Find the bookmark to remove */
-		children = ephy_node_get_children (priv->local);
-		for (i = 0; i < children->len; i++)
-		{
-			kid = g_ptr_array_index (children, i);
-			title = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_TITLE);
+		EphyNode *node;
 
-			if (g_str_equal (title, service->name))
-			{
-				ephy_node_remove_child (priv->local, kid);
-				break;
-			}
+		node = get_node_for_service (bookmarks, service);
+
+		if (node != NULL)
+		{
+			ephy_node_unref (node);
 		}
 
 		return;
