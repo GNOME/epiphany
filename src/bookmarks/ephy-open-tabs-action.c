@@ -74,7 +74,8 @@ node_added_cb (EphyNode *parent,
 	EPHY_OPEN_TABS_ACTION_NAME_PRINTF (name, child);
 	
 	/* FIXME !!!! */
-	action = gtk_action_new (name, _("Open in New _Tabs"), "Open this topic in tabs", NULL);
+	action = gtk_action_new (name, _("Open in New _Tabs"),
+				 _("Open the bookmarks in this topic in new tabs"), NULL);
 	action_object = (GObject *) action;
 
 	g_object_set_data (action_object, "ephy-node", child);

@@ -137,8 +137,8 @@ append_menu (GString *string, const GPtrArray *topics, const GPtrArray *bookmark
 
 			EPHY_TOPIC_ACTION_NAME_PRINTF (name, topic);
 				
-			g_string_append_printf (string, "<menu name=\"%s\" action=\"%s\">",
-						name, name);
+			g_string_append_printf (string, "<menu action=\"%s\">",
+						name);
 			append_menu (string, topics, subset, flags);
 			g_string_append (string, "</menu>");
 			separate = TRUE;

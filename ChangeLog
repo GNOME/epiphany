@@ -1,5 +1,20 @@
 2006-02-14  Christian Persch  <chpe@cvs.gnome.org>
 	
+	* src/bookmarks/ephy-bookmarks-export.c: (write_rdf):
+
+	Don't export the local bookmarks.
+
+	* src/bookmarks/ephy-bookmarks-menu.c: (append_menu):
+
+	Remove "name" attribute in the UI string, since it's set
+	to same value as "action".
+
+	* src/bookmarks/ephy-open-tabs-action.c: (node_added_cb):
+	
+	Fix untranslated string!
+
+2006-02-14  Christian Persch  <chpe@cvs.gnome.org>
+	
 	* lib/ephy-gui.c:
 	* lib/ephy-gui.h:
 

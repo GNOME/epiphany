@@ -94,6 +94,9 @@ write_rdf (EphyBookmarks *bookmarks,
 	GPtrArray *children;
 	char *file_uri;
 	int i, ret;
+#ifdef ENABLE_ZEROCONF
+	EphyNode *local;
+#endif
 
 	START_PROFILER ("Writing RDF")
 
@@ -168,6 +171,9 @@ write_rdf (EphyBookmarks *bookmarks,
 	bmks = ephy_bookmarks_get_bookmarks (bookmarks);
 	topics = ephy_bookmarks_get_keywords (bookmarks);
 	smart_bmks = ephy_bookmarks_get_smart_bookmarks (bookmarks);
+#ifdef ENABLE_ZEROCONF
+	local = ephy_bookmarks_get_local (bookmarks);
+#endif
 
 	children = ephy_node_get_children (bmks);
 	for (i=0; i < children->len; i++)
@@ -178,6 +184,11 @@ write_rdf (EphyBookmarks *bookmarks,
 		gboolean smart_url;
 
 		kid = g_ptr_array_index (children, i);
+
+#ifdef ENABLE_ZEROCONF
+		/* Don't export the local bookmarks */
+		if (ephy_node_has_child (local, kid)) continue;
+#endif
 
 		ret = xmlTextWriterStartElementNS
 			(writer,
@@ -238,6 +249,11 @@ write_rdf (EphyBookmarks *bookmarks,
 		gboolean smart_url;
 
 		kid = g_ptr_array_index (children, i);
+
+#ifdef ENABLE_ZEROCONF
+		/* Don't export the local bookmarks */
+		if (ephy_node_has_child (local, kid)) continue;
+#endif
 
 		smart_url = ephy_node_has_child (smart_bmks, kid);
 		url = ephy_node_get_property_string
