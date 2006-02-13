@@ -45,7 +45,7 @@ typedef gboolean (* EphyFileMonitorDelayFunc) (EphyFileMonitor*, gpointer);
 
 gboolean    ephy_file_helpers_init       (const char *profile_dir,
 					  gboolean private_profile,
-					  gboolean delete_profile_on_exit,
+					  gboolean keep_temp_dir,
 					  GError **error);
 
 const char *ephy_file                    (const char *filename);
@@ -98,6 +98,8 @@ EphyFileMonitor *ephy_file_monitor_add	 (const char *uri,
 					  gpointer user_data);
 
 void	   ephy_file_monitor_cancel	 (EphyFileMonitor *monitor);
+
+void	   ephy_file_delete_directory	 (const char *path);
 
 G_END_DECLS
 

@@ -34,6 +34,7 @@
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <libgnomevfs/gnome-vfs-file-info.h>
 #include <libgnomevfs/gnome-vfs-ops.h>
+#include <libgnomevfs/gnome-vfs-directory.h>
 #include <libxml/xmlreader.h>
 
 /* bug http://bugzilla.gnome.org/show_bug.cgi?id=156687 */
@@ -61,7 +62,7 @@ static GHashTable *files = NULL;
 static GHashTable *mime_table = NULL;
 
 static gboolean have_private_profile = FALSE;
-static gboolean delete_profile_on_exit = FALSE;
+static gboolean keep_temp_directory = FALSE; /* for debug purposes */
 static char *dot_dir = NULL;
 static char *tmp_dir = NULL;
 static GList *del_on_exit = NULL;
@@ -260,7 +261,7 @@ ephy_dot_dir (void)
 gboolean
 ephy_file_helpers_init (const char *profile_dir,
 			gboolean private_profile,
-			gboolean delete_profile,
+			gboolean keep_temp_dir,
 			GError **error)
 {
 	const char *uuid;
@@ -284,7 +285,7 @@ ephy_file_helpers_init (const char *profile_dir,
 				       (GDestroyNotify) g_free);
 
 	have_private_profile = private_profile;
-	delete_profile_on_exit = delete_profile;
+	keep_temp_directory = keep_temp_dir;
 
 	if (private_profile && profile_dir != NULL)
 	{
@@ -344,15 +345,23 @@ ephy_file_helpers_shutdown (void)
 		mime_table = NULL;
 	}
 
+	g_free (dot_dir);
+	dot_dir = NULL;
+
 	if (tmp_dir != NULL)
 	{
-		rmdir (tmp_dir);
+		if (!keep_temp_directory)
+		{
+			/* recursively delete the contents */
+			ephy_file_delete_directory (tmp_dir);
+
+			/* delete the directory itself too */
+			rmdir (tmp_dir);
+		}
+
 		g_free (tmp_dir);
 		tmp_dir = NULL;
 	}
-
-	g_free (dot_dir);
-	dot_dir = NULL;
 }
 
 gboolean
@@ -479,8 +488,7 @@ failed:
 void
 ephy_file_delete_on_exit (const char *path)
 {
-	del_on_exit = g_list_prepend (del_on_exit,
-				      g_strdup (path));
+	/* does nothing now */
 }
 
 static void
@@ -1159,4 +1167,10 @@ ephy_file_monitor_cancel (EphyFileMonitor *monitor)
 
 	g_free (monitor->uri);
 	g_free (monitor);
+}
+
+void
+ephy_file_delete_directory (const char *path)
+{
+	/* FIXME not implemented yet */
 }

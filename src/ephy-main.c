@@ -69,7 +69,7 @@ static char **arguments = NULL;
 
 /* Only set from options in debug builds */
 static gboolean private_instance = FALSE;
-static gboolean keep_profile_directory = FALSE;
+static gboolean keep_temp_directory = FALSE;
 static char *profile_directory = NULL;
 
 static const GOptionEntry option_entries[] =
@@ -86,6 +86,10 @@ static const GOptionEntry option_entries[] =
 	  N_("Load the given session file"), N_("FILE") },
 	{ "add-bookmark", 't', 0, G_OPTION_ARG_STRING, &bookmark_url,
 	  N_("Add a bookmark"), N_("URL") },
+	{ "private-instance", 0, 0, G_OPTION_ARG_NONE, &private_instance,
+	  N_("Start a private instance"), NULL },
+	{ "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
+	  N_("Profile directory to use in the private instance"), N_("DIR") },
 	{ G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &arguments,
 	  "", "" },
 	{ NULL }
@@ -115,12 +119,8 @@ static const GOptionEntry libgnome_option_entries[] =
 #ifdef GNOME_ENABLE_DEBUG
 static GOptionEntry debug_option_entries[] =
 {
-	{ "private-instance", 0, 0, G_OPTION_ARG_NONE, &private_instance,
-	  "Start a private instance", NULL },
-	{ "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
-	  "Profile directory to use in the private instance (default: a newly created directory in tmpdir)", "DIR" },
-	{ "keep-profile", 0, 0, G_OPTION_ARG_NONE, &keep_profile_directory,
-	  "Don't delete the profile directory on exit (default: delete the temp profile on exit)", NULL },
+	{ "keep-tempdir", 0, 0, G_OPTION_ARG_NONE, &keep_temp_directory,
+	  "Don't delete the temporary directory on exit", NULL },
 	{ NULL }
 };
 #endif /* GNOME_ENABLE_DEBUG */
@@ -542,9 +542,23 @@ main (int argc,
 
 #endif /* GNOME_PARAM_GOPTION_CONTEXT */
 
+	/* Some argument sanity checks*/
+	if (arguments != NULL && (session_filename != NULL || open_as_bookmarks_editor))
+	{
+		g_print ("Cannot use --bookmarks-editor or --load-session with URL arguments\n");
+		exit (1);
+	}
+
+	if (profile_directory != NULL && private_instance == FALSE)
+	{
+		g_print ("--profile can only be used in combination with --private-instance\n");
+		exit (1);
+	}
+
 	if (arguments != NULL &&
 	    eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL))
 	{
+		g_print ("URL loading is locked down\n");
 		exit (1);
 	}
 
@@ -580,6 +594,7 @@ main (int argc,
 				if (path != NULL)
 				{
 					arguments[i] = gnome_vfs_make_uri_from_shell_arg (uri);
+					g_free (uri);
 				}
 				else
 				{
@@ -662,7 +677,7 @@ main (int argc,
 
 	if (!ephy_file_helpers_init (profile_directory,
 				     private_instance,
-				     !keep_profile_directory,
+				     keep_temp_directory,
 				     &error))
 	{
 		_ephy_dbus_release ();
