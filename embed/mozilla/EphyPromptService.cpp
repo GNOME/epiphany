@@ -796,7 +796,7 @@ EphyPromptService::PromptUsernameAndPassword (nsIDOMWindow *aParent,
 	Prompter prompt (GTK_STOCK_DIALOG_AUTHENTICATION, aParent, aDialogTitle, aText);
 	prompt.AddStockButton (GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 	prompt.AddStockButton (GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
-	prompt.AddEntry (_("_User:"), *aUsername, PR_FALSE);
+	prompt.AddEntry (_("_Username:"), *aUsername, PR_FALSE);
 	prompt.AddEntry (_("_Password:"), *aPassword, PR_TRUE);
 	prompt.AddCheckbox (aCheckMsg, aCheckState);
 
