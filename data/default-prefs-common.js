@@ -51,10 +51,19 @@ pref("font.size.unit", "pt");
 
 // protocols
 pref("network.protocol-handler.external.ftp", false);
-pref("network.protocol-handler.external.news", true);
-pref("network.protocol-handler.external.mailto", true);
 pref("network.protocol-handler.external.irc", true);
+pref("network.protocol-handler.external.mailto", true);
+pref("network.protocol-handler.external.news", true);
+pref("network.protocol-handler.external.nntp", true);
+pref("network.protocol-handler.external.snews", true);
 pref("network.protocol-handler.external.webcal", true);
+// but don't show warnings for these
+pref("network.protocol-handler.warn-external.irc", false);
+pref("network.protocol-handler.warn-external.mailto", false);
+pref("network.protocol-handler.warn-external.news", false);
+pref("network.protocol-handler.warn-external.nntp", false);
+pref("network.protocol-handler.warn-external.snews", false);
+pref("network.protocol-handler.warn-external.webcal", false);
 
 // disable xpinstall
 pref("xpinstall.enabled", false);
