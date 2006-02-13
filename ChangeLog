@@ -1,5 +1,14 @@
 2006-02-13  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks.c: (resolve_cb), (browse_cb),
+	(ephy_local_bookmarks_init), (ephy_local_bookmarks_stop),
+	(ephy_bookmarks_finalize), (ephy_bookmarks_new):
+
+	Fix crash when resolve returns an error, bug #331028.
+	Restructure 0conf code.
+
+2006-02-13  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-bookmarks.c: (add_to_favorites),
 	(history_site_visited_cb), (history_cleared_cb),
 	(get_id_for_service), (get_node_for_service), (resolve_cb),

@@ -51,7 +51,7 @@
 #define BOOKMARKS_SAVE_DELAY (3 * 1000) /* ms */
 #define MAX_FAVORITES_NUM 10
 #define UPDATE_URI_DATA_KEY "updated-uri"
-#define SD_RESOLVE_TIMEOUT (3 * 1000) /* ms */
+#define SD_RESOLVE_TIMEOUT 0 /* ms; 0 means no timeout */
 
 #define EPHY_BOOKMARKS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS, EphyBookmarksPrivate))
 
@@ -76,7 +76,7 @@ struct _EphyBookmarksPrivate
 	/* Local sites */
 	EphyNode *local;
 	GnomeVFSDNSSDBrowseHandle *browse_handle;
-	GList *resolve_list;
+	GHashTable *resolve_handles;
 #endif
 };
 
@@ -807,6 +807,13 @@ get_node_for_service (EphyBookmarks *bookmarks,
 	return node;
 }
 
+typedef struct
+{
+	EphyBookmarks *bookmarks;
+	EphyNode *node;
+	guint new_node : 1;
+} ResolveData;
+
 static void
 resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 	    GnomeVFSResult result,
@@ -816,25 +823,23 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 	    /* const */ GHashTable *text,
 	    int text_raw_len,
 	    const char *text_raw,
-	    EphyBookmarks *bookmarks)
+	    ResolveData *data)
 {
+	EphyBookmarks *bookmarks = data->bookmarks;
 	EphyBookmarksPrivate *priv = bookmarks->priv;
-	EphyNode *node;
+	EphyNode *node = data->node;
 	GValue value = { 0, };
 	const char *path = NULL;
 	char *url;
 
-	priv->resolve_list = g_list_remove (priv->resolve_list, handle);
-
-	/* Remove the existing node */
-	node = get_node_for_service (bookmarks, service);
-	if (node != NULL)
-	{
-		ephy_node_unref (node);
-	}
+	g_hash_table_steal (priv->resolve_handles, node);
 
 	/* Error, don't add the service */
-	if (result != GNOME_VFS_OK) return;
+	if (result != GNOME_VFS_OK)
+	{
+		ephy_node_unref (node);
+		return;
+	}
 
 	if (text != NULL)
 	{
@@ -845,38 +850,23 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 		path = "/";
 	}
 
+	LOG ("0conf RESOLVED type=%s domain=%s name=%s => host=%s port=%d path=%s\n",
+	    service->type, service->domain, service->name,
+	    host, port, path);
+
+	/* FIXME: limit length! */
 	url = g_strdup_printf ("http://%s:%d%s", host, port, path);
 
-	node = ephy_node_new (priv->db);
-	g_assert (node != NULL);
-
-	/* don't allow dragging this node */
-	ephy_node_set_is_drag_source (node, FALSE);
-
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_take_string (&value, get_id_for_service (service));
-	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_SERVICE_ID, &value);
-	g_value_unset (&value);
-
-	/* FIXME: limit length! */
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, service->name);
-	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_TITLE, &value);
-	g_value_unset (&value);
-
-	/* FIXME: limit length! */
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_take_string (&value, url);
 	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_LOCATION, &value);
 	g_value_unset (&value);
 
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, TRUE);
-	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_IMMUTABLE, &value);
-	g_value_unset (&value);
-
-	ephy_node_add_child (priv->bookmarks, node);
-	ephy_node_add_child (priv->local, node);
+	if (data->new_node)
+	{
+		ephy_node_add_child (priv->bookmarks, node);
+		ephy_node_add_child (priv->local, node);
+	}
 }
 
 static void
@@ -887,15 +877,20 @@ browse_cb (GnomeVFSDNSSDBrowseHandle *handle,
 {
 	EphyBookmarksPrivate *priv = bookmarks->priv;
 	GnomeVFSDNSSDResolveHandle *reshandle = NULL;
+	ResolveData *data;
+	EphyNode *node;
+	GValue value = { 0, };
+	gboolean new_node = FALSE;
+
+	if (service == NULL) return;
+
+	node = get_node_for_service (bookmarks, service);
 
 	if (status == GNOME_VFS_DNS_SD_SERVICE_REMOVED)
 	{
-		EphyNode *node;
-
-		node = get_node_for_service (bookmarks, service);
-
 		if (node != NULL)
 		{
+			g_hash_table_remove (priv->resolve_handles, node);
 			ephy_node_unref (node);
 		}
 
@@ -904,22 +899,70 @@ browse_cb (GnomeVFSDNSSDBrowseHandle *handle,
 
 	/* status == GNOME_VFS_DNS_SD_SERVICE_ADDED */
 
+	LOG ("0conf ADD: type=%s domain=%s name=%s\n",
+	      service->type, service->domain, service->name);
+
+	if (node != NULL &&
+	    g_hash_table_lookup (priv->resolve_handles, node) != NULL) return;
+
+	if (node == NULL)
+	{
+		node = ephy_node_new (priv->db);
+		g_assert (node != NULL);
+
+		new_node = TRUE;
+
+		/* don't allow dragging this node */
+		ephy_node_set_is_drag_source (node, FALSE);
+
+		g_value_init (&value, G_TYPE_STRING);
+		g_value_take_string (&value, get_id_for_service (service));
+		ephy_node_set_property (node, EPHY_NODE_BMK_PROP_SERVICE_ID, &value);
+		g_value_unset (&value);
+
+		/* FIXME: limit length! */
+		g_value_init (&value, G_TYPE_STRING);
+		g_value_set_string (&value, service->name);
+		ephy_node_set_property (node, EPHY_NODE_BMK_PROP_TITLE, &value);
+		g_value_unset (&value);
+
+		g_value_init (&value, G_TYPE_BOOLEAN);
+		g_value_set_boolean (&value, TRUE);
+		ephy_node_set_property (node, EPHY_NODE_BMK_PROP_IMMUTABLE, &value);
+		g_value_unset (&value);
+	}
+
+	data = g_new (ResolveData, 1);
+	data->bookmarks = bookmarks;
+	data->node = node;
+	data->new_node = new_node;
+
 	if (gnome_vfs_dns_sd_resolve (&reshandle,
 				      service->name, service->type, service->domain,
 				      SD_RESOLVE_TIMEOUT,
 				      (GnomeVFSDNSSDResolveCallback) resolve_cb,
-				      bookmarks,
-				      NULL) == GNOME_VFS_OK)
+				      data,
+				      (GDestroyNotify) g_free) != GNOME_VFS_OK)
 	{
-		priv->resolve_list =
-			g_list_prepend (priv->resolve_list, reshandle);
+		ephy_node_unref (node);
+		g_free (data);
+
+		return;
 	}
+
+	g_hash_table_insert (priv->resolve_handles,
+			     node, reshandle);
 }
 
 static void
 ephy_local_bookmarks_init (EphyBookmarks *bookmarks)
 {
 	EphyBookmarksPrivate *priv = bookmarks->priv;
+
+	priv->resolve_handles =
+		g_hash_table_new_full (g_direct_hash, g_direct_equal,
+				       NULL,
+				       (GDestroyNotify) gnome_vfs_dns_sd_cancel_resolve);
 
 	if (gnome_vfs_dns_sd_browse (&priv->browse_handle,
 				     "local", "_http._tcp",
@@ -944,10 +987,11 @@ ephy_local_bookmarks_stop (EphyBookmarks *bookmarks)
 		ephy_node_remove_child (priv->keywords, priv->local);
 	}
 
-	g_list_foreach (priv->resolve_list,
-			(GFunc) gnome_vfs_dns_sd_cancel_resolve, NULL);
-	g_list_free (priv->resolve_list);
-	priv->resolve_list = NULL;
+	if (priv->resolve_handles != NULL)
+	{
+		g_hash_table_destroy (priv->resolve_handles);
+		priv->resolve_handles = NULL;
+	}
 }
 
 #endif /* ENABLE_ZEROCONF */
@@ -1121,29 +1165,30 @@ static void
 ephy_bookmarks_finalize (GObject *object)
 {
 	EphyBookmarks *eb = EPHY_BOOKMARKS (object);
+	EphyBookmarksPrivate *priv = eb->priv;
 
-	eel_gconf_notification_remove (eb->priv->disable_bookmark_editing_notifier_id);
+	eel_gconf_notification_remove (priv->disable_bookmark_editing_notifier_id);
 
-	if (eb->priv->save_timeout_id != 0)
+	if (priv->save_timeout_id != 0)
 	{
-		g_source_remove (eb->priv->save_timeout_id);
+		g_source_remove (priv->save_timeout_id);
 	}
+
+	ephy_bookmarks_save (eb);
 
 #ifdef ENABLE_ZEROCONF
 	ephy_local_bookmarks_stop (eb);
 #endif
 
-	ephy_bookmarks_save (eb);
+	ephy_node_unref (priv->bookmarks);
+	ephy_node_unref (priv->keywords);
+	ephy_node_unref (priv->favorites);
+	ephy_node_unref (priv->notcategorized);
 
-	ephy_node_unref (eb->priv->bookmarks);
-	ephy_node_unref (eb->priv->keywords);
-	ephy_node_unref (eb->priv->favorites);
-	ephy_node_unref (eb->priv->notcategorized);
+	g_object_unref (priv->db);
 
-	g_object_unref (eb->priv->db);
-
-	g_free (eb->priv->xml_file);
-	g_free (eb->priv->rdf_file);
+	g_free (priv->xml_file);
+	g_free (priv->rdf_file);
 
 	LOG ("Bookmarks finalized");
 
@@ -1153,11 +1198,7 @@ ephy_bookmarks_finalize (GObject *object)
 EphyBookmarks *
 ephy_bookmarks_new (void)
 {
-	EphyBookmarks *eb;
-
-	eb = EPHY_BOOKMARKS (g_object_new (EPHY_TYPE_BOOKMARKS, NULL));
-
-	return eb;
+	return EPHY_BOOKMARKS (g_object_new (EPHY_TYPE_BOOKMARKS, NULL));
 }
 
 static void
