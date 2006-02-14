@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-10 15:08+0100\n"
-"PO-Revision-Date: 2006-02-10 15:09+0100\n"
+"POT-Creation-Date: 2006-02-14 13:57+0100\n"
+"PO-Revision-Date: 2006-02-14 13:59+0100\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego <trasno@ceu.fi.udc.es>\n"
 "MIME-Version: 1.0\n"
@@ -136,7 +136,7 @@ msgstr "Navegador web Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:482
-#: ../src/ephy-main.c:533 ../src/ephy-main.c:606
+#: ../src/ephy-main.c:533 ../src/ephy-main.c:621
 msgid "Web Browser"
 msgstr "Navegador web"
 
@@ -569,7 +569,7 @@ msgid "Cookies"
 msgstr "Cookies"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:106
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:107
 msgid "Downloads"
 msgstr "Descargas"
 
@@ -839,7 +839,7 @@ msgid_plural "%d downloads"
 msgstr[0] "%d descarga"
 msgstr[1] "%d descargas"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:958
+#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:985
 msgid "File"
 msgstr "Arquivo"
 
@@ -1577,7 +1577,7 @@ msgstr ""
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks.c:1168 ../src/ephy-session.c:1314
+#: ../src/bookmarks/ephy-bookmarks.c:1264 ../src/ephy-session.c:1308
 msgid "Untitled"
 msgstr "Sen título"
 
@@ -1590,8 +1590,8 @@ msgid "Don't Save"
 msgstr "Non gardar"
 
 #: ../embed/mozilla/EphyPromptService.cpp:799
-msgid "_User:"
-msgstr "_Usuario:"
+msgid "_Username:"
+msgstr "Nome de _usuario:"
 
 #: ../embed/mozilla/EphyPromptService.cpp:800
 #: ../embed/mozilla/EphyPromptService.cpp:827
@@ -1601,7 +1601,7 @@ msgid "_Password:"
 msgstr "_Contrasinal:"
 
 #: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:741
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "All files"
 msgstr "Tódolos arquivos"
 
@@ -2053,17 +2053,17 @@ msgstr "Separador"
 msgid "All supported types"
 msgstr "Todos os tipos soportados"
 
-#: ../lib/ephy-file-helpers.c:300
+#: ../lib/ephy-file-helpers.c:301
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Non se puido crear o directorio temporal en “%s”."
 
-#: ../lib/ephy-file-helpers.c:368
+#: ../lib/ephy-file-helpers.c:377
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "O ficheiro “%s” xa existe. Móvao fora da ruta."
 
-#: ../lib/ephy-file-helpers.c:379
+#: ../lib/ephy-file-helpers.c:388
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Fallou ao crear o directorio “%s”."
@@ -2265,8 +2265,8 @@ msgstr "Fiestras emerxentes"
 msgid "History"
 msgstr "Historial"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:872
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1715
+#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1741
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Marcadores"
@@ -2438,7 +2438,7 @@ msgstr "Crear un novo tema"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1332
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
 #: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
@@ -2452,7 +2452,7 @@ msgstr "Abrir o marcador seleccionado nunha nova fiestra"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1335
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
 #: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
@@ -2526,7 +2526,7 @@ msgid "Cut the selection"
 msgstr "Cortar a selección"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1345
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1371
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:168
 msgid "_Copy"
@@ -2632,38 +2632,38 @@ msgstr ""
 msgid "_Delete Topic"
 msgstr "_Borrar tema"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:604
+#: ../src/bookmarks/ephy-bookmarks-editor.c:631
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:608
-#: ../src/bookmarks/ephy-bookmarks-editor.c:612
+#: ../src/bookmarks/ephy-bookmarks-editor.c:635
+#: ../src/bookmarks/ephy-bookmarks-editor.c:639
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:617
+#: ../src/bookmarks/ephy-bookmarks-editor.c:644
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Perfil “%s” de Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:621
+#: ../src/bookmarks/ephy-bookmarks-editor.c:648
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:625
+#: ../src/bookmarks/ephy-bookmarks-editor.c:652
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:654
+#: ../src/bookmarks/ephy-bookmarks-editor.c:681
 msgid "Import failed"
 msgstr "Fallou a importación"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:656
+#: ../src/bookmarks/ephy-bookmarks-editor.c:683
 msgid "Import Failed"
 msgstr "Fallou a importación"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:659
+#: ../src/bookmarks/ephy-bookmarks-editor.c:686
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2672,63 +2672,63 @@ msgstr ""
 "Os marcadores desde “%s” non se puideron importar debido a que o ficheiro "
 "está corrompido ou é un tipo non soportado."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:722
+#: ../src/bookmarks/ephy-bookmarks-editor.c:749
 msgid "Import bookmarks from file"
 msgstr "Importar marcadores desde arquivo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:729
+#: ../src/bookmarks/ephy-bookmarks-editor.c:756
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Marcadores de Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:733
+#: ../src/bookmarks/ephy-bookmarks-editor.c:760
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Marcadores de Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:737
+#: ../src/bookmarks/ephy-bookmarks-editor.c:764
 msgid "Epiphany bookmarks"
 msgstr "Marcadores de Epiphany"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:860
+#: ../src/bookmarks/ephy-bookmarks-editor.c:887
 msgid "Export Bookmarks"
 msgstr "Exportar marcadores"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:875
+#: ../src/bookmarks/ephy-bookmarks-editor.c:902
 msgid "File format:"
 msgstr "Formato do arquivo:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:918
+#: ../src/bookmarks/ephy-bookmarks-editor.c:945
 msgid "Import Bookmarks"
 msgstr "Importar marcadores"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:924
+#: ../src/bookmarks/ephy-bookmarks-editor.c:951
 msgid "I_mport"
 msgstr "I_mportar"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:938
+#: ../src/bookmarks/ephy-bookmarks-editor.c:965
 msgid "Import bookmarks from:"
 msgstr "Importar marcadores desde:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1341
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "_Copiar enderezo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1582
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1608
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Buscar:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1779
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1805
 msgid "Topics"
 msgstr "Temas"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1849
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1875
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Título"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1855
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1881
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Enderezo"
@@ -2771,30 +2771,30 @@ msgid "Work"
 msgstr "Traballo"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:470
+#: ../src/bookmarks/ephy-bookmarks.c:476
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Quere actualizar o marcador “%s”?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:475
+#: ../src/bookmarks/ephy-bookmarks.c:481
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "A páxina marcada moveuse a “%s”."
 
-#: ../src/bookmarks/ephy-bookmarks.c:479
+#: ../src/bookmarks/ephy-bookmarks.c:485
 msgid "_Don't Update"
 msgstr "_Non actualizar"
 
-#: ../src/bookmarks/ephy-bookmarks.c:481
+#: ../src/bookmarks/ephy-bookmarks.c:487
 msgid "_Update"
 msgstr "_Actualizar"
 
-#: ../src/bookmarks/ephy-bookmarks.c:484
+#: ../src/bookmarks/ephy-bookmarks.c:490
 msgid "Update Bookmark?"
 msgstr "¿Actualizar marcador?"
 
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:318
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
 msgstr "Marcador rápido"
 
@@ -2816,15 +2816,19 @@ msgid "Open this bookmark in a new window"
 msgstr "Abre este marcador nunha fiestra nova"
 
 #. FIXME !!!!
-#: ../src/bookmarks/ephy-open-tabs-action.c:76
+#: ../src/bookmarks/ephy-open-tabs-action.c:77
 msgid "Open in New _Tabs"
 msgstr "Abrir en _solapas novas"
+
+#: ../src/bookmarks/ephy-open-tabs-action.c:78
+msgid "Open the bookmarks in this topic in new tabs"
+msgstr "Abre os marcadores neste tema en solapas novas"
 
 #: ../src/bookmarks/ephy-related-action.c:176
 msgid "Related"
 msgstr "Relacionado"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:317
+#: ../src/bookmarks/ephy-topic-factory-action.c:322
 msgid "Quick Topic"
 msgstr "Tópico rápido"
 
@@ -3007,6 +3011,18 @@ msgstr "Engadir marcador"
 msgid "URL"
 msgstr "URL"
 
+#: ../src/ephy-main.c:90
+msgid "Start a private instance"
+msgstr "Iniciar unha instancia privada"
+
+#: ../src/ephy-main.c:92
+msgid "Profile directory to use in the private instance"
+msgstr "Directorio de perfil a usar na instancia privada"
+
+#: ../src/ephy-main.c:92
+msgid "DIR"
+msgstr "DIR"
+
 #: ../src/ephy-main.c:417
 msgid "Could not start GNOME Web Browser"
 msgstr "Non se puido iniciar o Navegador web de Gnome"
@@ -3032,36 +3048,36 @@ msgstr "Opcións do Navegador web de Gnome"
 msgid "Close tab"
 msgstr "Pechar solapa"
 
-#: ../src/ephy-session.c:158
+#: ../src/ephy-session.c:156
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "As descargas abortaranse e procederase a saír da sesión en %d segundo."
 msgstr[1] "As descargas abortaranse e procederase a saír da sesión en %d segundos."
 
-#: ../src/ephy-session.c:274
+#: ../src/ephy-session.c:272
 msgid "Abort pending downloads?"
 msgstr "Abortar as descargas pendentes?"
 
-#: ../src/ephy-session.c:278
+#: ../src/ephy-session.c:276
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
 msgstr "Aínda hai descargas pendentes. Se sae da sesión, abortaranse e perderanse."
 
-#: ../src/ephy-session.c:282
+#: ../src/ephy-session.c:280
 msgid "_Cancel Logout"
 msgstr "_Cancelar saída"
 
-#: ../src/ephy-session.c:284
+#: ../src/ephy-session.c:282
 msgid "_Abort Downloads"
 msgstr "_Abortar descargas"
 
-#: ../src/ephy-session.c:609
+#: ../src/ephy-session.c:603
 msgid "Recover previous browser windows and tabs?"
 msgstr "¿Quere recuperar as fiestras e solapas anteriores?"
 
-#: ../src/ephy-session.c:613
+#: ../src/ephy-session.c:607
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -3069,15 +3085,15 @@ msgstr ""
 "Epiphany parece que saiu de forma inesperada a última vez que se executou. "
 "Pode recuperar as fiestras e solapas abertas."
 
-#: ../src/ephy-session.c:617
+#: ../src/ephy-session.c:611
 msgid "_Don't Recover"
 msgstr "_Non recuperar"
 
-#: ../src/ephy-session.c:619
+#: ../src/ephy-session.c:613
 msgid "_Recover"
 msgstr "_Recuperar"
 
-#: ../src/ephy-session.c:621
+#: ../src/ephy-session.c:615
 msgid "Crash Recovery"
 msgstr "Recuperación de colgue"
 
