@@ -4,14 +4,14 @@
 # Takuro Ashie <ashie@homa.ne.jp>, 2001.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2001-2003.
 # KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>, 2003.
-# Takeshi AIHANA <aihana@gnome.gr.jp>, 2004,2005.
+# Takeshi AIHANA <aihana@gnome.gr.jp>, 2004-2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-19 13:55+0900\n"
-"PO-Revision-Date: 2005-12-18 16:17+0900\n"
+"POT-Creation-Date: 2006-02-15 01:40+0900\n"
+"PO-Revision-Date: 2006-02-15 01:38+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -135,8 +135,8 @@ msgid "Epiphany Web Browser"
 msgstr "Epiphany ウェブ・ブラウザ"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:223
-#: ../src/ephy-main.c:234
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:482
+#: ../src/ephy-main.c:533 ../src/ephy-main.c:621
 msgid "Web Browser"
 msgstr "GNOME ウェブ・ブラウザ"
 
@@ -168,8 +168,8 @@ msgid "Automatic downloads"
 msgstr "自動ダウンロード"
 
 #: ../data/epiphany.schemas.in.h:7
-msgid "Autowrap for find in page"
-msgstr "ページ内検索での自動折り返し"
+msgid "Automatically manage offline status with NetworkManager"
+msgstr "NetworkManager でオフラインの状態を自動的に管理する"
 
 #: ../data/epiphany.schemas.in.h:8
 msgid "Browse with caret"
@@ -243,54 +243,43 @@ msgid "Enable JavaScript"
 msgstr "JavaScript を使用する"
 
 #: ../data/epiphany.schemas.in.h:16
-msgid ""
-"For find in page, whether to start again at the beginning after reaching the "
-"end of the page."
-msgstr ""
-"ページ内を検索する場合、ページの終端に到達したら先頭に戻って再検索するかどう"
-"かを設定します。"
-
-#: ../data/epiphany.schemas.in.h:17
 msgid "History pages time range"
 msgstr "履歴ページでの時間帯"
 
-#: ../data/epiphany.schemas.in.h:18
+#: ../data/epiphany.schemas.in.h:17
 msgid "Home page"
 msgstr "ホーム・ページ"
 
-#: ../data/epiphany.schemas.in.h:19
+#: ../data/epiphany.schemas.in.h:18
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
-msgstr "アニメーション画像をどう表示するか。可能な値は \"normal\"、\"once\"、"
+msgstr ""
+"アニメーション画像をどう表示するか。可能な値は \"normal\"、\"once\"、"
 "\"disabled\""
 
-#: ../data/epiphany.schemas.in.h:20
+#: ../data/epiphany.schemas.in.h:19
 msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
-#: ../data/epiphany.schemas.in.h:21
+#: ../data/epiphany.schemas.in.h:20
 msgid "Image animation mode"
 msgstr "画像アニメーションモード"
 
-#: ../data/epiphany.schemas.in.h:22
+#: ../data/epiphany.schemas.in.h:21
 msgid "Languages"
 msgstr "言語"
 
-#: ../data/epiphany.schemas.in.h:23
+#: ../data/epiphany.schemas.in.h:22
 msgid "Lists the active extensions."
 msgstr "アクティブ・エクステンションの一覧です。"
 
-#: ../data/epiphany.schemas.in.h:24
-msgid "Match case for find in page"
-msgstr "ページ内検索で大/小文字を区別する"
-
-#: ../data/epiphany.schemas.in.h:25
+#: ../data/epiphany.schemas.in.h:23
 msgid ""
 "Middle click to open the web page pointed to by the currently selected text"
 msgstr "中ボタンのクリックで現在選択中の文字が指すウェブ・ページを開く"
 
-#: ../data/epiphany.schemas.in.h:26
+#: ../data/epiphany.schemas.in.h:24
 msgid ""
 "Middle clicking on the main view pane will open the web page pointed to by "
 "the currently selected text."
@@ -298,23 +287,23 @@ msgstr ""
 "メイン表示ペインの上で、マウスの中ボタンをクリックすると、現在選択中のテキス"
 "トが指しているウェブ・ページを開きます。"
 
-#: ../data/epiphany.schemas.in.h:27
+#: ../data/epiphany.schemas.in.h:25
 msgid "Minimum font size"
 msgstr "最小フォントサイズ"
 
-#: ../data/epiphany.schemas.in.h:28
+#: ../data/epiphany.schemas.in.h:26
 msgid "Preferred languages, two letter codes."
 msgstr "表示で優先する言語で、二文字で指定します。"
 
-#: ../data/epiphany.schemas.in.h:29
+#: ../data/epiphany.schemas.in.h:27
 msgid "Show bookmarks bar by default"
 msgstr "デフォルトでブックマーク・バーを表示する"
 
-#: ../data/epiphany.schemas.in.h:30
+#: ../data/epiphany.schemas.in.h:28
 msgid "Show statusbar by default"
 msgstr "デフォルトでステータスバー表示する"
 
-#: ../data/epiphany.schemas.in.h:31
+#: ../data/epiphany.schemas.in.h:29
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -322,27 +311,27 @@ msgstr ""
 "履歴ページに表示する訪問先の時間帯です。設定可能な値: \"ever\"、"
 "\"last_two_days\"、\"last_three_days\"、\"today\""
 
-#: ../data/epiphany.schemas.in.h:32
+#: ../data/epiphany.schemas.in.h:30
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "タブが一つしか表示されていなくても、タブ・バーを表示します。"
 
-#: ../data/epiphany.schemas.in.h:33
+#: ../data/epiphany.schemas.in.h:31
 msgid "Show toolbars by default"
 msgstr "デフォルトでツールバーを表示する"
 
-#: ../data/epiphany.schemas.in.h:34
+#: ../data/epiphany.schemas.in.h:32
 msgid "Size of disk cache"
 msgstr "ディスク・キャッシュの大きさ"
 
-#: ../data/epiphany.schemas.in.h:35
+#: ../data/epiphany.schemas.in.h:33
 msgid "Size of disk cache, in MB."
 msgstr "ディスク・キャッシュの大きさです (Mバイト単位)。"
 
-#: ../data/epiphany.schemas.in.h:36
+#: ../data/epiphany.schemas.in.h:34
 msgid "The bookmark information shown in the editor view"
 msgstr "編集ウィンドウの中にブックマーク情報を表示する"
 
-#: ../data/epiphany.schemas.in.h:37
+#: ../data/epiphany.schemas.in.h:35
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -350,11 +339,11 @@ msgstr ""
 "ブックマーク編集ウィンドウの中にブックマーク情報を表示します。設定可能な値: "
 "\"address\"、\"title\""
 
-#: ../data/epiphany.schemas.in.h:38
+#: ../data/epiphany.schemas.in.h:36
 msgid "The currently selected fonts language"
 msgstr "現在選択しているフォントと言語"
 
-#: ../data/epiphany.schemas.in.h:39
+#: ../data/epiphany.schemas.in.h:37
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -373,16 +362,16 @@ msgstr ""
 "語)、\"x-western\" (ラテン文字で記述される言語)、\"x-tamil\" (タミル語)、\"x-"
 "devanagari\" (デーヴァナーガリー文字)"
 
-#: ../data/epiphany.schemas.in.h:40
+#: ../data/epiphany.schemas.in.h:38
 msgid "The downloads folder"
 msgstr "ダウンロード・フォルダ"
 
-#: ../data/epiphany.schemas.in.h:41
+#: ../data/epiphany.schemas.in.h:39
 msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr ""
 "文字コードの自動検出機能です。空文字列を指定すると自動検出は無効になります。"
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:40
 msgid ""
 "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
 "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
@@ -404,11 +393,11 @@ msgstr ""
 "\"zhtw_parallel_state_machine\" (繁体字中国語の文字コードを自動検出)、そして "
 "\"universal_charset_detector\" (ほとんどのエンコーディングを自動検出)"
 
-#: ../data/epiphany.schemas.in.h:43
+#: ../data/epiphany.schemas.in.h:41
 msgid "The page information shown in the history view"
 msgstr "履歴ダイアログの中にページ情報を表示する"
 
-#: ../data/epiphany.schemas.in.h:44
+#: ../data/epiphany.schemas.in.h:42
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"address\", \"title\"."
@@ -416,7 +405,7 @@ msgstr ""
 "履歴ダイアログの中にページ情報を表示します。設定可能な値: \"address\"、"
 "\"title\""
 
-#: ../data/epiphany.schemas.in.h:45
+#: ../data/epiphany.schemas.in.h:43
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -425,11 +414,11 @@ msgstr ""
 "フォルト・フォルダを示す \"Downloads\"、あるいはデスクトップのフォルダを示す "
 "\"Desktop\" のいずれかです。"
 
-#: ../data/epiphany.schemas.in.h:46
+#: ../data/epiphany.schemas.in.h:44
 msgid "Toolbar style"
 msgstr "ツールバーのスタイル"
 
-#: ../data/epiphany.schemas.in.h:47
+#: ../data/epiphany.schemas.in.h:45
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -439,25 +428,25 @@ msgstr ""
 "用する)、\"both\" (ラベルとアイコン)、\"both-horiz\" (アイコンの横にラベル)、"
 "\"icons\"、\"text\""
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:46
 msgid "Use own colors"
 msgstr "カスタムの色を使用する"
 
-#: ../data/epiphany.schemas.in.h:49
+#: ../data/epiphany.schemas.in.h:47
 msgid "Use own fonts"
 msgstr "カスタムのフォントを使用する"
 
-#: ../data/epiphany.schemas.in.h:50
+#: ../data/epiphany.schemas.in.h:48
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "ページで指定されている色ではなく、設定でカスタマイズした色を使います。"
 
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:49
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr ""
 "ページで指定されているフォントでなく、設定でカスタマイズしたフォントを使いま"
 "す。"
 
-#: ../data/epiphany.schemas.in.h:52
+#: ../data/epiphany.schemas.in.h:50
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -465,7 +454,7 @@ msgstr ""
 "ブラウザでファイルを開けなかった場合、ファイルをダウンロード・フォルダへ自動"
 "的にダウンロードして、適切なアプリケーションで開きます。"
 
-#: ../data/epiphany.schemas.in.h:53
+#: ../data/epiphany.schemas.in.h:51
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -474,23 +463,23 @@ msgstr ""
 "\"current site\" (現在見ているサーバからのみ)、\"nowhere\" (どこからも受けつ"
 "けない)"
 
-#: ../data/epiphany.schemas.in.h:54
+#: ../data/epiphany.schemas.in.h:52
 msgid "Whether to print the date in the footer"
 msgstr "日付をフッタに印刷するかどうか"
 
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:53
 msgid "Whether to print the page address in the header"
 msgstr "ページのアドレスをヘッダに印刷するかどうか"
 
-#: ../data/epiphany.schemas.in.h:56
+#: ../data/epiphany.schemas.in.h:54
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "フッタにページ番号 (何ページ目/全ページ) を印刷するかどうか"
 
-#: ../data/epiphany.schemas.in.h:57
+#: ../data/epiphany.schemas.in.h:55
 msgid "Whether to print the page title in the header"
 msgstr "ページのタイトルをヘッダに印刷するかどうか"
 
-#: ../data/epiphany.schemas.in.h:58
+#: ../data/epiphany.schemas.in.h:56
 msgid "x-western"
 msgstr "ja"
 
@@ -552,7 +541,7 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5 指紋:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1015
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1036
 msgid "Organization:"
 msgstr "組織 (O):"
 
@@ -581,7 +570,7 @@ msgid "Cookies"
 msgstr "クッキー"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:101
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:107
 msgid "Downloads"
 msgstr "ダウンロード"
 
@@ -658,7 +647,7 @@ msgstr "言語の選択(_A):"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:13
-#: ../lib/widgets/ephy-location-entry.c:580 ../src/ephy-history-window.c:261
+#: ../lib/widgets/ephy-location-entry.c:582 ../src/ephy-history-window.c:261
 msgid "Cl_ear"
 msgstr "クリア(_E)"
 
@@ -692,11 +681,11 @@ msgstr "言語"
 
 #: ../data/glade/prefs-dialog.glade.h:22
 msgid "Let web pages specify their own _colors"
-msgstr "ウェブページが独自の色を指定できるように(_C)"
+msgstr "ウェブ・ページが指定する色に従う(_C)"
 
 #: ../data/glade/prefs-dialog.glade.h:23
 msgid "Let web pages specify their own _fonts"
-msgstr "ウェブページが独自のフォントを指定できるように(_F)"
+msgstr "ウェブ・ページが指定するフォントに従う(_F)"
 
 #: ../data/glade/prefs-dialog.glade.h:24
 msgid "MB"
@@ -724,10 +713,9 @@ msgstr "空のページをセットする(_B)"
 
 #: ../data/glade/prefs-dialog.glade.h:30
 msgid "Use custom _stylesheet"
-msgstr "カスタムスタイルシートを使用(_S)"
+msgstr "スタイルシートをカスタマイズする(_S)"
 
 #: ../data/glade/prefs-dialog.glade.h:31
-#: ../src/bookmarks/ephy-bookmark-properties.c:596
 msgid "_Address:"
 msgstr "アドレス(_A):"
 
@@ -737,7 +725,7 @@ msgstr "常に受け入れる(_A)"
 
 #: ../data/glade/prefs-dialog.glade.h:33
 msgid "_Detailed Font Settings..."
-msgstr "詳細フォント設定(_D)..."
+msgstr "フォントの詳細設定(_D)..."
 
 #: ../data/glade/prefs-dialog.glade.h:34
 msgid "_Disk space:"
@@ -749,7 +737,7 @@ msgstr "ダウンロード・フォルダ(_D):"
 
 #: ../data/glade/prefs-dialog.glade.h:36
 msgid "_Edit Stylesheet..."
-msgstr "スタイルシートを編集(_E)..."
+msgstr "スタイルシートの編集(_E)..."
 
 #: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Fixed width:"
@@ -836,11 +824,12 @@ msgstr "再開(_R)"
 msgid ""
 "%s\n"
 "%s of %s"
-msgstr "%s\n"
+msgstr ""
+"%s\n"
 "%s / %s"
 
 #: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#: ../src/ephy-window.c:1469
+#: ../src/ephy-window.c:1468
 msgid "Unknown"
 msgstr "不明"
 
@@ -851,19 +840,7 @@ msgid_plural "%d downloads"
 msgstr[0] "%d 個ダウンロード"
 msgstr[1] "%d 個ダウンロード"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:585 ../embed/downloader-view.c:598
-msgid "download status|Unknown"
-msgstr "不明"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:590
-msgid "download status|Failed"
-msgstr "失敗"
-
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:803
+#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:985
 msgid "File"
 msgstr "ファイル"
 
@@ -875,7 +852,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "残り"
 
-#: ../embed/ephy-embed-shell.c:235
+#: ../embed/ephy-embed-shell.c:243
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "現在、Epiphany は利用できません。Mozilla の初期化に失敗しました。"
 
@@ -1262,36 +1239,30 @@ msgstr "ウクライナ語"
 msgid "Unknown (%s)"
 msgstr "不明 (%s)"
 
-#: ../embed/ephy-history.c:550 ../src/bookmarks/ephy-bookmark-properties.c:613
+#: ../embed/ephy-history.c:558
 msgid "All"
 msgstr "全て"
 
-#: ../embed/ephy-history.c:713
+#: ../embed/ephy-history.c:721
 msgid "Others"
 msgstr "その他"
 
-#: ../embed/ephy-history.c:719
+#: ../embed/ephy-history.c:727
 msgid "Local files"
 msgstr "ローカル・ファイル"
 
-#: ../embed/mozilla/ContentHandler.cpp:172
+#: ../embed/mozilla/ContentHandler.cpp:178
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:408
 msgid "Save"
 msgstr "保存"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:293
-msgid "File Type:|Unknown"
-msgstr "不明"
-
-#: ../embed/mozilla/ContentHandler.cpp:328
+#: ../embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "この安全ではなさそうなファイルをダウンロードしますか？"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:334
+#: ../embed/mozilla/ContentHandler.cpp:340
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1304,14 +1275,14 @@ msgstr ""
 "\"%s\" を開くと潜在的にドキュメントを破壊するか、またはプライバシーを侵害する"
 "可能性あります。ただしダウンロードは可能です。"
 
-#: ../embed/mozilla/ContentHandler.cpp:344
+#: ../embed/mozilla/ContentHandler.cpp:350
 msgid "Open this file?"
 msgstr "このファイルを開きますか？"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:351
+#: ../embed/mozilla/ContentHandler.cpp:357
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1322,13 +1293,13 @@ msgstr ""
 "\n"
 "\"%s\" を \"%s\" で開くか、または保存できます。"
 
-#: ../embed/mozilla/ContentHandler.cpp:359
+#: ../embed/mozilla/ContentHandler.cpp:365
 msgid "Download this file?"
 msgstr "このファイルをダウンロードしますか？"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:365
+#: ../embed/mozilla/ContentHandler.cpp:371
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1339,7 +1310,7 @@ msgstr ""
 "\n"
 "\"%s\" を開く適当なアプリケーションがありませんが、ダウンロードは可能です。"
 
-#: ../embed/mozilla/ContentHandler.cpp:370
+#: ../embed/mozilla/ContentHandler.cpp:376
 msgid "_Save As..."
 msgstr "別名で保存(_S)..."
 
@@ -1412,11 +1383,44 @@ msgstr "接続を拒否しました: \"%s\""
 msgid "“%s” refused the connection."
 msgstr "\"%s\" が接続を拒否しました。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:253
+#: ../embed/mozilla/EphyAboutModule.cpp:260
+msgid "Likely causes of the problem are"
+msgstr "考えられる問題は"
+
 #: ../embed/mozilla/EphyAboutModule.cpp:270
-#: ../embed/mozilla/EphyAboutModule.cpp:289
-#: ../embed/mozilla/EphyAboutModule.cpp:346
-#: ../embed/mozilla/EphyAboutModule.cpp:377
+#, c-format
+msgid ""
+"<ul><li>the service %s isn't started.</li>Try to start it using the Services "
+"Configuration Tool in Desktop > System Settings > Server Settings > "
+"Services, or</ul><ul><li>the port number %d is wrong.</li></ul>"
+msgstr ""
+"<ul><li>%s というサービスが起動されていません。</li>メニューから [デスクトッ"
+"プ] -> [システム設定]->[サービスの設定]->[サービス]のサービス設定ツールを使っ"
+"て起動してみるか、または</ul><ul><li>ポート番号 %d が間違っています。</li></"
+"ul>"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:281
+#, c-format
+msgid ""
+"<ul><li>some service isn't started, or</li><li>the port number %d is wrong.</"
+"li></ul>"
+msgstr ""
+"<ul><li>サービスがいくつか起動されていないか、または</li><li>ポート番号 %d が"
+"間違っています。</li></ul>"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:290
+msgid ""
+"<ul><li>some service isn't started, or</li><li>you got the port number wrong."
+"</li></ul>"
+msgstr ""
+"<ul><li>サービスがいくつか起動されていないか、または</li><li>間違ったポート番"
+"号になっています。</li></ul>"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:298
+#: ../embed/mozilla/EphyAboutModule.cpp:316
+#: ../embed/mozilla/EphyAboutModule.cpp:335
+#: ../embed/mozilla/EphyAboutModule.cpp:392
+#: ../embed/mozilla/EphyAboutModule.cpp:423
 msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
@@ -1424,130 +1428,130 @@ msgstr ""
 "サーバが混雑しているか、あるいはお使いのネットワークの問題かもしれません。後"
 "でもう一度試してみて下さい。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:255
-#: ../embed/mozilla/EphyAboutModule.cpp:272
-#: ../embed/mozilla/EphyAboutModule.cpp:291
-#: ../embed/mozilla/EphyAboutModule.cpp:313
-#: ../embed/mozilla/EphyAboutModule.cpp:348
-#: ../embed/mozilla/EphyAboutModule.cpp:379
+#: ../embed/mozilla/EphyAboutModule.cpp:300
+#: ../embed/mozilla/EphyAboutModule.cpp:318
+#: ../embed/mozilla/EphyAboutModule.cpp:337
+#: ../embed/mozilla/EphyAboutModule.cpp:359
+#: ../embed/mozilla/EphyAboutModule.cpp:394
+#: ../embed/mozilla/EphyAboutModule.cpp:425
 msgid "There may be an old version of the page you wanted:"
 msgstr "ご覧になりたいページの古い版があるかもしれません:"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:264
+#: ../embed/mozilla/EphyAboutModule.cpp:310
 #, c-format
 msgid "“%s” Interrupted the Connection"
 msgstr "接続を中断しました: \"%s\""
 
-#: ../embed/mozilla/EphyAboutModule.cpp:268
+#: ../embed/mozilla/EphyAboutModule.cpp:314
 #, c-format
 msgid "“%s” interrupted the connection."
 msgstr "\"%s\" が接続を中断しました。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:281
+#: ../embed/mozilla/EphyAboutModule.cpp:327
 #, c-format
 msgid "“%s” is not Responding"
 msgstr "応答がありません: \"%s\""
 
-#: ../embed/mozilla/EphyAboutModule.cpp:285
+#: ../embed/mozilla/EphyAboutModule.cpp:331
 #, c-format
 msgid "“%s” is not responding."
 msgstr "\"%s\" から応答がありません。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:287
+#: ../embed/mozilla/EphyAboutModule.cpp:333
 msgid "The connection was lost because the server took too long to respond."
 msgstr "サーバからの応答に時間がかかっているので接続を中断しました。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:295
+#: ../embed/mozilla/EphyAboutModule.cpp:341
 msgid "Invalid Address"
 msgstr "アドレスが間違っています"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:296
+#: ../embed/mozilla/EphyAboutModule.cpp:342
 msgid "Invalid address."
 msgstr "アドレスが間違っています。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:297
+#: ../embed/mozilla/EphyAboutModule.cpp:343
 msgid "The address you entered is not valid."
 msgstr "入力したアドレスは正しくありません。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:306
+#: ../embed/mozilla/EphyAboutModule.cpp:352
 #, c-format
 msgid "“%s” Redirected Too Many Times"
 msgstr "複数回リダイレクトしました\" \"%s\""
 
-#: ../embed/mozilla/EphyAboutModule.cpp:310
+#: ../embed/mozilla/EphyAboutModule.cpp:356
 #, c-format
 msgid "“%s” redirected too many times."
 msgstr "\"%s\" が複数回リダイレクトしました。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:312
+#: ../embed/mozilla/EphyAboutModule.cpp:358
 msgid "The redirection has been stopped for security reasons."
 msgstr "セキュリティ保護のためリダイレクションを停止しました。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:322
+#: ../embed/mozilla/EphyAboutModule.cpp:368
 #, c-format
 msgid "“%s” Requires an Encrypted Connection"
 msgstr "暗号化接続を要求しています: \"%s\""
 
-#: ../embed/mozilla/EphyAboutModule.cpp:326
+#: ../embed/mozilla/EphyAboutModule.cpp:372
 #, c-format
 msgid "“%s” requires an encrypted connection."
 msgstr "\"%s\" が暗号化接続を要求しています。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:328
+#: ../embed/mozilla/EphyAboutModule.cpp:374
 msgid ""
 "The document could not be loaded because encryption support is not installed."
 msgstr ""
 "暗号化サポートをインストールしていないので、ドキュメントを読み込むことができ"
 "ませんでした。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:338
+#: ../embed/mozilla/EphyAboutModule.cpp:384
 #, c-format
 msgid "“%s” Dropped the Connection"
 msgstr "接続をドロップしました: \"%s\""
 
-#: ../embed/mozilla/EphyAboutModule.cpp:342
+#: ../embed/mozilla/EphyAboutModule.cpp:388
 #, c-format
 msgid "“%s” dropped the connection."
 msgstr "\"%s\" が接続をドロップしました。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:344
-#: ../embed/mozilla/EphyAboutModule.cpp:375
+#: ../embed/mozilla/EphyAboutModule.cpp:390
+#: ../embed/mozilla/EphyAboutModule.cpp:421
 msgid "The server dropped the connection before any data could be read."
 msgstr "データを読み込む前にサーバが接続を断しました。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:355
+#: ../embed/mozilla/EphyAboutModule.cpp:401
 msgid "Cannot Load Document Whilst Working Offline"
 msgstr "ドキュメントを読み込めません"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:356
+#: ../embed/mozilla/EphyAboutModule.cpp:402
 msgid "Cannot load document whilst working offline."
 msgstr "オフライン・モードの間はドキュメントを読み込めません。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:357
+#: ../embed/mozilla/EphyAboutModule.cpp:403
 msgid "To view this document, disable “Work Offline” and try again."
 msgstr ""
 "このドキュメントを表示するには、\"オフラインで動作\" を有効にしてもう一度実行"
 "してみて下さい。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:369
+#: ../embed/mozilla/EphyAboutModule.cpp:415
 #, c-format
 msgid "“%s” Denied Access to Port “%d”"
 msgstr "\"%s\" がポート \"%d\" へのアクセスを拒否しました"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:373
+#: ../embed/mozilla/EphyAboutModule.cpp:419
 #, c-format
 msgid "“%s” denied access to port “%d”."
 msgstr "\"%s\" がポート \"%d\" へのアクセスを拒否しました。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:384
+#: ../embed/mozilla/EphyAboutModule.cpp:430
 msgid "Could not Connect to Proxy Server"
 msgstr "プロキシ・サーバへ接続できませんでした"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:385
+#: ../embed/mozilla/EphyAboutModule.cpp:431
 msgid "Could not connect to proxy server."
 msgstr "プロキシ・サーバへ接続できませんでした。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:386
+#: ../embed/mozilla/EphyAboutModule.cpp:432
 msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
@@ -1555,19 +1559,19 @@ msgstr ""
 "プロキシ・サーバの設定を確認して下さい。それでも接続に失敗する場合は、プロキ"
 "シ・サーバ自身、あるいはネットワークの接続に問題があるかもしれません。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:394
+#: ../embed/mozilla/EphyAboutModule.cpp:440
 msgid "Could not Display Content"
 msgstr "コンテンツを表示できませんでした"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:395
+#: ../embed/mozilla/EphyAboutModule.cpp:441
 msgid "Could not display content."
 msgstr "コンテンツを表示できませんでした。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:396
+#: ../embed/mozilla/EphyAboutModule.cpp:442
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr "そのページはサポートしていない、あるいはおかしな圧縮フォームです。"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:486
+#: ../embed/mozilla/EphyAboutModule.cpp:532
 #, c-format
 msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
@@ -1576,96 +1580,84 @@ msgstr ""
 "ブラウザがクラッシュしたため、このタブのページ \"%s\" は完全に読み込まれませ"
 "んでした。"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:613
-msgid "You may find an old version:|in the Google Cache"
-msgstr "Google キャッシュから"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:621
-msgid "You may find an old version:|in the Internet Archive"
-msgstr "インターネットのアーカイブから"
-
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks.c:1111 ../src/ephy-session.c:775
+#: ../src/bookmarks/ephy-bookmarks.c:1264 ../src/ephy-session.c:1308
 msgid "Untitled"
 msgstr "名前なし"
 
-#: ../embed/mozilla/EphyPromptService.cpp:193
+#: ../embed/mozilla/EphyPromptService.cpp:197
 msgid "_Abort Script"
 msgstr "スクリプトを中止(_A)"
 
-#: ../embed/mozilla/EphyPromptService.cpp:261
+#: ../embed/mozilla/EphyPromptService.cpp:265
 msgid "Don't Save"
 msgstr "保存しない"
 
-#: ../embed/mozilla/EphyPromptService.cpp:742
-msgid "_User:"
-msgstr "ユーザー(_U):"
+#: ../embed/mozilla/EphyPromptService.cpp:799
+msgid "_Username:"
+msgstr "ユーザ名(_U):"
 
-#: ../embed/mozilla/EphyPromptService.cpp:743
-#: ../embed/mozilla/EphyPromptService.cpp:770
-#: ../embed/mozilla/GtkNSSDialogs.cpp:795
-#: ../embed/mozilla/GtkNSSDialogs.cpp:905
+#: ../embed/mozilla/EphyPromptService.cpp:800
+#: ../embed/mozilla/EphyPromptService.cpp:827
+#: ../embed/mozilla/GtkNSSDialogs.cpp:811
+#: ../embed/mozilla/GtkNSSDialogs.cpp:926
 msgid "_Password:"
 msgstr "パスワード(_P):"
 
-#: ../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:642
+#: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "All files"
 msgstr "全てのファイル"
 
-#: ../embed/mozilla/FilePicker.cpp:157 ../lib/ephy-file-chooser.c:355
+#: ../embed/mozilla/FilePicker.cpp:158 ../lib/ephy-file-chooser.c:355
 msgid "Web pages"
 msgstr "ウェブ・ページ (Epiphany)"
 
-#: ../embed/mozilla/FilePicker.cpp:165
+#: ../embed/mozilla/FilePicker.cpp:166
 msgid "Text files"
 msgstr "通常のファイル"
 
-#: ../embed/mozilla/FilePicker.cpp:170 ../lib/ephy-file-chooser.c:363
+#: ../embed/mozilla/FilePicker.cpp:171 ../lib/ephy-file-chooser.c:363
 msgid "Images"
 msgstr "画像"
 
-#: ../embed/mozilla/FilePicker.cpp:178
+#: ../embed/mozilla/FilePicker.cpp:179
 msgid "XML files"
 msgstr "XML ファイル"
 
-#: ../embed/mozilla/FilePicker.cpp:183
+#: ../embed/mozilla/FilePicker.cpp:184
 msgid "XUL files"
 msgstr "XUL ファイル"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:156
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:162
 msgid "_Select Certificate"
 msgstr "証明書の選択(_S)"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:202
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:208
 #, c-format
 msgid "Choose a certificate to present as identification to “%s”."
 msgstr "\"%s\" の身元情報を提供する証明書を選択して下さい。"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:211
 msgid "Select a certificate to identify yourself."
 msgstr "あなた自身を識別する証明書を選択して下さい。"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:242
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:248
 msgid "Certificate _Details"
 msgstr "証明書の詳細"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:235
-#: ../embed/mozilla/GtkNSSDialogs.cpp:547
+#: ../embed/mozilla/GtkNSSDialogs.cpp:241
+#: ../embed/mozilla/GtkNSSDialogs.cpp:558
 msgid "_View Certificate"
 msgstr "証明書の表示(_V)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:243
+#: ../embed/mozilla/GtkNSSDialogs.cpp:249
 msgid "_Accept"
 msgstr "受け入れる(_A)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:310
+#: ../embed/mozilla/GtkNSSDialogs.cpp:316
 #, c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
@@ -1675,18 +1667,18 @@ msgstr ""
 "サイト \"%s\" が \"%s\" のセキュリティ情報を返してきました。誰かがあなたの機"
 "密情報を入手するために通信内容を傍受するおそれがあります。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:316
+#: ../embed/mozilla/GtkNSSDialogs.cpp:322
 #, c-format
 msgid ""
 "You should only accept the security information if you trust “%s” and “%s”."
 msgstr ""
 "\"%s\" と \"%s\" を信用する場合はセキュリティ情報のみ受け入れて下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:321
+#: ../embed/mozilla/GtkNSSDialogs.cpp:327
 msgid "Accept incorrect security information?"
 msgstr "不確かなセキュリティ情報を受け入れますか？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:358
 #, c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
@@ -1695,7 +1687,7 @@ msgstr ""
 "自動的に \"%s\" を信用できませんでした。誰かがあなたの機密情報を入手するため"
 "に通信内容を傍受するおそれがあります。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:358
+#: ../embed/mozilla/GtkNSSDialogs.cpp:364
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
@@ -1703,34 +1695,34 @@ msgid ""
 msgstr ""
 "\"%s\" に接続していると確信がある場合に、そのサイトへ接続のみ行って下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:369
 msgid "Connect to untrusted site?"
 msgstr "信用できないサイトに接続しますか？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:367
+#: ../embed/mozilla/GtkNSSDialogs.cpp:373
 msgid "_Trust this security information from now on"
 msgstr "これ以降このセキュリティ情報を信用する(_T)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:374
 msgid "Co_nnect"
 msgstr "接続する(_N)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:427
+#: ../embed/mozilla/GtkNSSDialogs.cpp:433
 msgid "Accept expired security information?"
 msgstr "期限切れのセキュリティ情報を受け入れますか？"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:429
+#: ../embed/mozilla/GtkNSSDialogs.cpp:435
 #, c-format
 msgid "The security information for “%s” expired on %s."
 msgstr "\"%s\" のセキュリティ情報は %s で有効期限が切れています。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:435
+#: ../embed/mozilla/GtkNSSDialogs.cpp:441
 msgid "Accept not yet valid security information?"
 msgstr "まだ不正なセキュリティ情報を受け入れますか？"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:437
+#: ../embed/mozilla/GtkNSSDialogs.cpp:443
 #, c-format
 msgid "The security information for “%s” isn't valid until %s."
 msgstr "\"%s\" のセキュリティ情報は %s まで不正な状態にあります。"
@@ -1738,155 +1730,155 @@ msgstr "\"%s\" のセキュリティ情報は %s まで不正な状態にあり�
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:453
+#: ../embed/mozilla/GtkNSSDialogs.cpp:459
 msgid "%a %d %b %Y"
 msgstr "%Y年%b %d日 (%a)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:461
+#: ../embed/mozilla/GtkNSSDialogs.cpp:467
 msgid "You should ensure that your computer's time is correct."
 msgstr "お使いのコンピュータの時刻が正しいことを確認して下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:507
+#: ../embed/mozilla/GtkNSSDialogs.cpp:513
 #, c-format
 msgid "Cannot establish connection to “%s”."
 msgstr "\"%s\" への接続を確立できません。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:510
+#: ../embed/mozilla/GtkNSSDialogs.cpp:516
 #, c-format
 msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
 msgstr "\"%s\" の証明書失効リスト (CRL) を更新する必要があります。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:515
+#: ../embed/mozilla/GtkNSSDialogs.cpp:521
 msgid "Please ask your system administrator for assistance."
 msgstr "システム管理者にヘルプを依頼して下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:545
+#: ../embed/mozilla/GtkNSSDialogs.cpp:556
 msgid "Trust new Certificate Authority?"
 msgstr "新しい認証局 (CA) を信用しますか？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:550
+#: ../embed/mozilla/GtkNSSDialogs.cpp:561
 msgid "_Trust CA"
 msgstr "CA を信用する(_T)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:572
+#: ../embed/mozilla/GtkNSSDialogs.cpp:583
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr ""
 "ウェブ・サイトを識別するために新しい認証局 (CA) \"%s\" を信用しますか？"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:577
+#: ../embed/mozilla/GtkNSSDialogs.cpp:588
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
 msgstr ""
 "認証局 (CA) を信用する前に証明書が信頼できるかどうか確認する必要があります。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:648
+#: ../embed/mozilla/GtkNSSDialogs.cpp:659
 msgid "Certificate already exists."
 msgstr "証明書は既に存在します。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:649
+#: ../embed/mozilla/GtkNSSDialogs.cpp:660
 msgid "The certificate has already been imported."
 msgstr "証明書は既にインポートされています。"
 
 #. Translators: this is the action of the certificate being exported to a backup file
-#: ../embed/mozilla/GtkNSSDialogs.cpp:775
+#: ../embed/mozilla/GtkNSSDialogs.cpp:791
 msgid "_Back Up Certificate"
 msgstr "証明書のバックアップ(_B)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:782
+#: ../embed/mozilla/GtkNSSDialogs.cpp:798
 msgid "Select password."
 msgstr "パスワードを選択して下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:783
+#: ../embed/mozilla/GtkNSSDialogs.cpp:799
 msgid "Select a password to protect this certificate."
 msgstr "この証明書を保護するパスワードを選択して下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:809
+#: ../embed/mozilla/GtkNSSDialogs.cpp:825
 msgid "Con_firm password:"
 msgstr "パスワードの確認(_F):"
 
 #. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:821
+#: ../embed/mozilla/GtkNSSDialogs.cpp:837
 msgid "Password quality:"
 msgstr "パスワードの品質:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:878
+#: ../embed/mozilla/GtkNSSDialogs.cpp:899
 msgid "I_mport Certificate"
 msgstr "証明書のインポート(_M)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:894
+#: ../embed/mozilla/GtkNSSDialogs.cpp:915
 msgid "Password required."
 msgstr "パスワードが必要です。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:895
+#: ../embed/mozilla/GtkNSSDialogs.cpp:916
 msgid "Enter the password for this certificate."
 msgstr "この証明書のパスワードを入力して下さい。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:984
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1005
 msgid "Certificate Revocation List Imported"
 msgstr "インポートする証明書失効リスト (CRL)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:994
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1015
 msgid "Certificate Revocation List (CRL) successfully imported"
 msgstr "証明書失効リストのインポートが完了しました"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1019
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1040
 msgid "Unit:"
 msgstr "単位:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1023
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1044
 msgid "Next Update:"
 msgstr "次回の更新:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1050
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1071
 msgid "Not part of certificate"
 msgstr "証明書の一部ではありません"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
 msgid "Certificate Properties"
 msgstr "証明書のプロパティ"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1362
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1387
 msgid "This certificate has been verified for the following uses:"
 msgstr "この証明書は次の使用に対して確認済みです:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1390
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "この証明書は失効しているので、正しいかものか確認できませんでした。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1393
 msgid "Could not verify this certificate because it has expired."
 msgstr ""
 "この証明書は有効期限が切れているので、正しいものか確認できませんでした。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1371
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1396
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "この証明書は信用されていないので、正しいものか確認できませんでした。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1374
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1399
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "この証明書は発行者が信用されていないので、正しいものか確認できませんでした。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1377
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1402
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "この証明書は発行者が不明なため、正しいものか確認できませんでした。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1380
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1405
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr "この証明書は CA 証明書が不正なので、正しいものか確認できませんでした。"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1385
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1410
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "この証明書は不明な理由で正しいものか確認できませんでした。"
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:230
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:235
 msgid "Generating Private Key."
 msgstr "秘密鍵を生成しています。"
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:231
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:236
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
@@ -1894,32 +1886,32 @@ msgstr ""
 "新しい秘密鍵が生成されるまでしばらくお待ち下さい。この処理は数分間かかりま"
 "す。"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "Security Notice"
 msgstr "セキュリティの通知"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
 msgid "This page is loaded over a secure connection"
 msgstr "このページはセキュアな接続を介して読み込まれました"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
 msgid "The padlock icon in the statusbar indicates whether a page is secure."
 msgstr ""
 "ステータスバーにある PadLock アイコンは、表示しているページがセキュアであるか"
 "どうかを示します。"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid "Security Warning"
 msgstr "セキュリティの警告"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid "This page is loaded over a low security connection"
 msgstr "このページは低レベルのセキュリティ接続を介して読み込まれました"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -1927,12 +1919,12 @@ msgstr ""
 "このページで表示されている情報または入力した情報は第三者から簡単に傍受される"
 "恐れがあります。"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr ""
 "このページのいくつかの部分はセキュアではない接続を介して読み込まれました"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1940,12 +1932,12 @@ msgstr ""
 "このページで表示されている情報または入力した情報はセキュアではない接続を介し"
 "て送信され、第三者から簡単に傍受される恐れがあります。"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid "Send this information over an insecure connection?"
 msgstr "この情報をセキュアではない接続を介して送信しますか？"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1953,12 +1945,12 @@ msgstr ""
 "このページで入力した情報はセキュアではない接続を介して送信され、第三者から簡"
 "単に傍受される恐れがあります。"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "_Send"
 msgstr "送信する(_S)"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -1981,7 +1973,7 @@ msgstr "ファイル"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:293
+#: ../embed/mozilla/mozilla-embed-single.cpp:287
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
@@ -2018,7 +2010,7 @@ msgstr "終了(_T):"
 msgid "Sets the end of the range of pages to be printed"
 msgstr "印刷する終了ページを指定して下さい"
 
-#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1289
+#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1288
 msgid "Print"
 msgstr "印刷"
 
@@ -2035,27 +2027,32 @@ msgstr ""
 "GConf エラー:\n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:1060
+#: ../lib/egg/egg-editable-toolbar.c:868
+#, c-format
+msgid "Hide “%s”"
+msgstr "\"%s\" を隱す"
+
+#: ../lib/egg/egg-editable-toolbar.c:1304
 msgid "_Move on Toolbar"
 msgstr "ツールバー上で移動(_M)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1061
+#: ../lib/egg/egg-editable-toolbar.c:1305
 msgid "Move the selected item on the toolbar"
 msgstr "ツールバーの選択したアイテムを移動"
 
-#: ../lib/egg/egg-editable-toolbar.c:1062
+#: ../lib/egg/egg-editable-toolbar.c:1306
 msgid "_Remove from Toolbar"
 msgstr "ツールバーから削除(_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1063
+#: ../lib/egg/egg-editable-toolbar.c:1307
 msgid "Remove the selected item from the toolbar"
 msgstr "ツールバーから選択したアイテムを削除"
 
-#: ../lib/egg/egg-editable-toolbar.c:1064
+#: ../lib/egg/egg-editable-toolbar.c:1308
 msgid "_Remove Toolbar"
 msgstr "ツールバーの削除(_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1065
+#: ../lib/egg/egg-editable-toolbar.c:1309
 msgid "Remove the selected toolbar"
 msgstr "選択したツールバーを削除"
 
@@ -2067,15 +2064,20 @@ msgstr "区切り"
 msgid "All supported types"
 msgstr "サポートしている全種類"
 
-#: ../lib/ephy-file-helpers.c:330
+#: ../lib/ephy-file-helpers.c:301
 #, c-format
-msgid "\"%s\" exists, please move it out of the way."
-msgstr "\"%s\" は存在します。別の場所に移動して下さい。"
+msgid "Could not create a temporary directory in “%s”."
+msgstr "\"%s\" に作業用フォルダを生成できませんでした。"
 
-#: ../lib/ephy-file-helpers.c:336
+#: ../lib/ephy-file-helpers.c:377
 #, c-format
-msgid "Failed to create directory \"%s\"."
-msgstr "フォルダ \"%s\" を作成できませんでした。"
+msgid "The file “%s” exists. Please move it out of the way."
+msgstr "ファイル \"%s\" は存在します。別の場所に移動して下さい。"
+
+#: ../lib/ephy-file-helpers.c:388
+#, c-format
+msgid "Failed to create directory “%s”."
+msgstr "フォルダ \"%s\" の生成に失敗しました。"
 
 #: ../lib/ephy-gui.c:328
 #, c-format
@@ -2275,9 +2277,9 @@ msgstr "ウィンドウのポップアップ"
 msgid "History"
 msgstr "履歴"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1535
-#: ../src/bookmarks/ephy-topic-action.c:402 ../src/ephy-window.c:1295
+#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1741
+#: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "ブックマーク"
 
@@ -2325,7 +2327,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:818
+#: ../lib/widgets/ephy-location-entry.c:820
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "このアイコンをドラッグ＆ドロップすると、このページのリンクを生成します"
 
@@ -2360,260 +2362,279 @@ msgid "This plugin handles “.desktop” files containing web links."
 msgstr ""
 "このプラグインは \".desktop\" ファイルに含まれるウェブのリンクを扱います。"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:287
+#: ../src/bookmarks/ephy-bookmark-action.c:263
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:294
+#. Translators: This string is used when counting bookmarks that
+#. * are similar to each other
+#: ../src/bookmarks/ephy-bookmark-properties.c:93
+#: ../src/bookmarks/ephy-bookmark-properties.c:619
+#, c-format
+msgid "%d _Similar"
+msgid_plural "%d _Similar"
+msgstr[0] "類似エントリ %d個"
+msgstr[1] "類似エントリ %d個"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:266
+#, c-format
+msgid "_Unify With %d Identical Bookmark"
+msgid_plural "_Unify With %d Identical Bookmarks"
+msgstr[0] "%d個の同一ブックマークと統合する(_U)"
+msgstr[1] "%d個の同一ブックマークと統合する(_U)"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:286
+#: ../src/bookmarks/ephy-bookmark-properties.c:308
+#, c-format
+msgid "Show “%s”"
+msgstr "\"%s\" を表示する"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:434
 #, c-format
 msgid "“%s” Properties"
 msgstr "\"%s\" のプロパティ"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:433
-msgid "Open Icon"
-msgstr "アイコンを開く"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:506
-msgid "From file..."
-msgstr "ファイルから..."
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:508
-msgid "None"
-msgstr "なし"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:509 ../src/prefs-dialog.c:412
-msgid "Default"
-msgstr "デフォルト"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:581
+#: ../src/bookmarks/ephy-bookmark-properties.c:557
 msgid "_Title:"
 msgstr "タイトル(_T):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:604
-msgid "I_con:"
-msgstr "アイコン(_C):"
+#: ../src/bookmarks/ephy-bookmark-properties.c:572
+msgid "A_ddress:"
+msgstr "アドレス(_D):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:614
-#: ../src/bookmarks/ephy-topics-palette.c:274
-msgid "Subtopics"
-msgstr "サブトピック"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:615
+#: ../src/bookmarks/ephy-bookmark-properties.c:582
 msgid "T_opics:"
 msgstr "トピック(_O):"
 
-#. File Menu
-#: ../src/bookmarks/ephy-bookmark-properties.c:650
-#: ../src/bookmarks/ephy-bookmarks-editor.c:171
-msgid "_New Topic"
-msgstr "新しいトピック(_N)"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:97
+msgid "Mozilla (HTML)"
+msgstr "Mozilla (HTML 形式)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:135
+#: ../src/bookmarks/ephy-bookmarks-editor.c:98
+msgid "Epiphany (RDF)"
+msgstr "Epiphany (RDF 形式)"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:150
 msgid "Remove from this topic"
 msgstr "このトピックを削除する"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
 #: ../src/ephy-history-window.c:163 ../src/ephy-window.c:115
 msgid "_File"
 msgstr "ファイル(_F)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:180
 #: ../src/ephy-history-window.c:164 ../src/ephy-window.c:116
 msgid "_Edit"
 msgstr "編集(_E)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
 #: ../src/ephy-history-window.c:165 ../src/ephy-window.c:117
 msgid "_View"
 msgstr "表示(_V)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
 #: ../src/ephy-history-window.c:166 ../src/ephy-window.c:122
 msgid "_Help"
 msgstr "ヘルプ(_H)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:172
+#. File Menu
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186
+msgid "_New Topic"
+msgstr "新しいトピック(_N)"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Create a new topic"
 msgstr "新しいトピックを作成します"
 
+#. FIXME ngettext
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:174
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1159
-#: ../src/bookmarks/ephy-bookmarks-ui.c:268 ../src/ephy-history-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
+#: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "新しいウィンドウで開く(_W)"
 msgstr[1] "新しい複数のウィンドウで開く(_W)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:175
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Open the selected bookmark in a new window"
 msgstr "選択したブックマークを新しいウインドウで開きます"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:177
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1162
-#: ../src/bookmarks/ephy-bookmarks-ui.c:257 ../src/ephy-history-window.c:173
+#. FIXME ngettext
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
+#: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "新しいタブで開く(_T)"
 msgstr[1] "新しい複数のタブで開く(_T)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Open the selected bookmark in a new tab"
 msgstr "選択したブックマークを新しいタブで開きます"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195
 msgid "_Rename..."
 msgstr "名前の変更(_R)..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "Rename the selected bookmark or topic"
 msgstr "選択したブックマークあるいはトピックの名前を変更します"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
 #: ../src/ephy-history-window.c:176
 msgid "_Delete"
 msgstr "削除(_D)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198
 msgid "Delete the selected bookmark or topic"
 msgstr "選択したブックマークあるいはトピックを削除します"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:185
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "_Properties"
 msgstr "プロパティ(_P)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:186
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
 msgid "View or modify the properties of the selected bookmark"
 msgstr "選択したブックマークのプロパティを表示したり変更したりします"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "_Import Bookmarks..."
 msgstr "ブックマークのインポート(_I)..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr ""
 "ブックマークを他のブラウザまたはブックマーク・ファイルからインポートします"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:191
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
 msgid "_Export Bookmarks..."
 msgstr "ブックマークのエキスポート(_E)..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/bookmarks/ephy-bookmarks-editor.c:207
 msgid "Export bookmarks to a file"
 msgstr "ブックマークをファイルへエキスポートします"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:152
+#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:153
 msgid "_Close"
 msgstr "閉じる(_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
+#: ../src/bookmarks/ephy-bookmarks-editor.c:210
 msgid "Close the bookmarks window"
 msgstr "ブックマーク編集ウィンドウを閉じます"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:199
-#: ../src/ephy-history-window.c:187 ../src/ephy-window.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
+#: ../src/ephy-history-window.c:187 ../src/ephy-window.c:165
 msgid "Cu_t"
 msgstr "切り取り(_T)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:215
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:166
 msgid "Cut the selection"
 msgstr "選択範囲を切り取ります"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:217
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1371
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:168
 msgid "_Copy"
 msgstr "コピー(_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:203
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:218
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:169
 msgid "Copy the selection"
 msgstr "選択範囲をコピーします"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
-#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:220
+#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:171
 msgid "_Paste"
 msgstr "貼り付け(_P)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:206
+#: ../src/bookmarks/ephy-bookmarks-editor.c:221
 #: ../src/ephy-history-window.c:194
 msgid "Paste the clipboard"
 msgstr "クリップボードから貼り付けます"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
-#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:223
+#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:174
 msgid "Select _All"
 msgstr "全て選択(_A)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/bookmarks/ephy-bookmarks-editor.c:224
 msgid "Select all bookmarks or text"
 msgstr "全てのブックマークまたは文字を選択します"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:264
+#: ../src/bookmarks/ephy-bookmarks-editor.c:228
+#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:265
 msgid "_Contents"
 msgstr "目次(_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:214
+#: ../src/bookmarks/ephy-bookmarks-editor.c:229
 msgid "Display bookmarks help"
 msgstr "ブックマーク編集のヘルプを表示します"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:216
-#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:267
+#: ../src/bookmarks/ephy-bookmarks-editor.c:231
+#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:268
 msgid "_About"
 msgstr "情報(_A)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:268
+#: ../src/bookmarks/ephy-bookmarks-editor.c:232
+#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:269
 msgid "Display credits for the web browser creators"
 msgstr "ウェブ・ブラウザを開発した人達のクレジットを表示します"
 
+#: ../src/bookmarks/ephy-bookmarks-editor.c:237
+msgid "_Show on Toolbar"
+msgstr "ツールバーに表示する(_S)"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:238
+msgid "Show the selected bookmark on a toolbar"
+msgstr "選択したブックマークをツールバーに表示します"
+
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:230
+#: ../src/bookmarks/ephy-bookmarks-editor.c:251
 #: ../src/ephy-history-window.c:222
 msgid "_Title"
 msgstr "タイトル(_T)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:231
+#: ../src/bookmarks/ephy-bookmarks-editor.c:252
 #: ../src/ephy-history-window.c:223
 msgid "Show only the title column"
 msgstr "タイトルのカラムのみ表示します"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:232
+#: ../src/bookmarks/ephy-bookmarks-editor.c:253
 #: ../src/ephy-history-window.c:226
 msgid "T_itle and Address"
 msgstr "タイトルとアドレス(_I)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:233
+#: ../src/bookmarks/ephy-bookmarks-editor.c:254
 #: ../src/ephy-history-window.c:227
 msgid "Show both the title and address columns"
 msgstr "タイトルとアドレスのカラムの両方を表示します"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:274
+#: ../src/bookmarks/ephy-bookmarks-editor.c:295
 msgid "Type a topic"
 msgstr "トピックを入力して下さい"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:392
+#: ../src/bookmarks/ephy-bookmarks-editor.c:413
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "トピック \"%s\" を削除しますか？"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:395
+#: ../src/bookmarks/ephy-bookmarks-editor.c:416
 msgid "Delete this topic?"
 msgstr "このトピックを削除しますか？"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:397
+#: ../src/bookmarks/ephy-bookmarks-editor.c:418
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -2621,42 +2642,42 @@ msgstr ""
 "このトピックを削除すると、他のトピックにも該当するものを除いて、全てのブック"
 "マークが \"未分類\" になります。ブックマークは削除されません。"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:400
+#: ../src/bookmarks/ephy-bookmarks-editor.c:421
 msgid "_Delete Topic"
 msgstr "トピックの削除(_D)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:505
+#: ../src/bookmarks/ephy-bookmarks-editor.c:631
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:509
-#: ../src/bookmarks/ephy-bookmarks-editor.c:513
+#: ../src/bookmarks/ephy-bookmarks-editor.c:635
+#: ../src/bookmarks/ephy-bookmarks-editor.c:639
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:518
+#: ../src/bookmarks/ephy-bookmarks-editor.c:644
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla の \"%s\" プロファイル"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:522
+#: ../src/bookmarks/ephy-bookmarks-editor.c:648
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:526
+#: ../src/bookmarks/ephy-bookmarks-editor.c:652
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:555
+#: ../src/bookmarks/ephy-bookmarks-editor.c:681
 msgid "Import failed"
 msgstr "インポート失敗"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:557
+#: ../src/bookmarks/ephy-bookmarks-editor.c:683
 msgid "Import Failed"
 msgstr "インポートに失敗しました"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:560
+#: ../src/bookmarks/ephy-bookmarks-editor.c:686
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2665,71 +2686,63 @@ msgstr ""
 "ファイルが壊れているか、あるいはサポートしていない種類のため \"%s\" からの"
 "ブックマークのインポートに失敗しました。"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:623
+#: ../src/bookmarks/ephy-bookmarks-editor.c:749
 msgid "Import bookmarks from file"
 msgstr "ファイルからブックマークをインポートします"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:630
+#: ../src/bookmarks/ephy-bookmarks-editor.c:756
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla ブックマーク"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:634
+#: ../src/bookmarks/ephy-bookmarks-editor.c:760
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror ブックマーク"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:638
+#: ../src/bookmarks/ephy-bookmarks-editor.c:764
 msgid "Epiphany bookmarks"
 msgstr "Epiphany ブックマーク"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:672
+#: ../src/bookmarks/ephy-bookmarks-editor.c:887
 msgid "Export Bookmarks"
 msgstr "ブックマークのエキスポート"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:687
+#: ../src/bookmarks/ephy-bookmarks-editor.c:902
 msgid "File format:"
 msgstr "ファイルの種類:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:690
-msgid "Epiphany (RDF)"
-msgstr "Epiphany (RDF 形式)"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:691
-msgid "Mozilla (HTML)"
-msgstr "Mozilla (HTML 形式)"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
+#: ../src/bookmarks/ephy-bookmarks-editor.c:945
 msgid "Import Bookmarks"
 msgstr "ブックマークのインポート"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:769
+#: ../src/bookmarks/ephy-bookmarks-editor.c:951
 msgid "I_mport"
 msgstr "インポート(_M)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:783
+#: ../src/bookmarks/ephy-bookmarks-editor.c:965
 msgid "Import bookmarks from:"
 msgstr "インポートするブックマーク:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "アドレスのコピー(_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1402
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1608
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "検索(_S):"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1597
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1805
 msgid "Topics"
 msgstr "トピック"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1667
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1875
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "タイトル"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1673
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1881
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "アドレス"
@@ -2772,164 +2785,71 @@ msgid "Work"
 msgstr "仕事"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:470
+#: ../src/bookmarks/ephy-bookmarks.c:476
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "ブックマーク \"%s\" を更新しますか？"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:475
+#: ../src/bookmarks/ephy-bookmarks.c:481
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "ブックマークしたページは \"%s\" へ移動しました。"
 
-#: ../src/bookmarks/ephy-bookmarks.c:479
+#: ../src/bookmarks/ephy-bookmarks.c:485
 msgid "_Don't Update"
 msgstr "更新しない(_D)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:481
+#: ../src/bookmarks/ephy-bookmarks.c:487
 msgid "_Update"
 msgstr "更新する(_U)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:484
+#: ../src/bookmarks/ephy-bookmarks.c:490
 msgid "Update Bookmark?"
 msgstr "ブックマークを更新しますか？"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:869
-msgid "bookmarks|All"
-msgstr "全て"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:905
-msgid "bookmarks|Most Visited"
-msgstr "訪問数上位"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. Translators: this topic contains the not categorized bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:924
-msgid "bookmarks|Not Categorized"
-msgstr "未分類のもの"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. Translators: this is an automatic topic containing local websites bookmarks
-#. * autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:949
-msgid "bookmarks|Local Sites"
-msgstr "ローカルなサイト"
-
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:316
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
 msgstr "クィック・ブックマーク"
 
 #. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-ui.c:246
+#: ../src/bookmarks/ephy-bookmarks-ui.c:290
 msgid "Properties"
 msgstr "プロパティ"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:247
+#: ../src/bookmarks/ephy-bookmarks-ui.c:291
 msgid "Show properties for this bookmark"
 msgstr "このブックマークのプロパティを表示"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:258
+#: ../src/bookmarks/ephy-bookmarks-ui.c:303
 msgid "Open this bookmark in a new tab"
 msgstr "このブックマークを新しいタブで開く"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:269
+#: ../src/bookmarks/ephy-bookmarks-ui.c:315
 msgid "Open this bookmark in a new window"
 msgstr "このブックマークを新しいウィンドウで開く"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:453
-msgid "Bookmark exists"
-msgstr "ブックマークが存在しています"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:456
-#, c-format
-msgid "You already have a bookmark titled “%s” for this page."
-msgstr "\"%s\" というブックマークは既に存在します。"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:466
-msgid "_Create New"
-msgstr "新しいトピックを作成(_C)"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:472
-msgid "_View Properties"
-msgstr "プロパティの表示(_V)"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:481
-msgid "Bookmark Exists"
-msgstr "ブックマークが存在しています"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:569
-#, c-format
-msgid ""
-"You already have a topic named “%s”.\n"
-"Please use a new topic name."
-msgstr "\"%s\" というトピックは既にあります\n"
-"新しいトピック名を使って下さい"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:610
-#, c-format
-msgid "New topic for “%s”"
-msgstr "\"%s\" の新しいトピック"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:624
-msgid "New topic"
-msgstr "新しいトピック"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:628
-msgid "Enter a unique name for the topic."
-msgstr "トピックの固有な名前を入力して下さい"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:660
-msgid "Create"
-msgstr "作成"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:663
-msgid "New Topic"
-msgstr "新しいトピック"
-
-#: ../src/bookmarks/ephy-open-tabs-action.c:64
+#. FIXME !!!!
+#: ../src/bookmarks/ephy-open-tabs-action.c:77
 msgid "Open in New _Tabs"
 msgstr "新しいタブで開く(_T)"
 
-#: ../src/bookmarks/ephy-related-action.c:161
+#: ../src/bookmarks/ephy-open-tabs-action.c:78
+msgid "Open the bookmarks in this topic in new tabs"
+msgstr "新しいタブの中にこのトピックのブックマークを開きます"
+
+#: ../src/bookmarks/ephy-related-action.c:176
 msgid "Related"
 msgstr "関連付け"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:315
+#: ../src/bookmarks/ephy-topic-factory-action.c:322
 msgid "Quick Topic"
 msgstr "クィック・トピック"
 
-#: ../src/bookmarks/ephy-topics-palette.c:203
-msgid "No topics"
-msgstr "トピックなし"
-
-#: ../src/bookmarks/ephy-topics-palette.c:273
-msgid "Selection"
-msgstr "選択"
-
-#: ../src/bookmarks/ephy-topics-palette.c:273
-msgid "No selected topics"
-msgstr "トピックが選択されていません"
-
-#: ../src/bookmarks/ephy-topics-palette.c:274
-msgid "No more subtopics"
-msgstr "もうサブトピックがありません"
-
-#: ../src/bookmarks/ephy-topics-palette.c:275
-msgid "Other"
-msgstr "その他"
-
-#: ../src/bookmarks/ephy-topics-palette.c:275
-msgid "No other topics"
-msgstr "他にトピックがありません"
+#: ../src/bookmarks/ephy-topics-entry.c:359
+#, c-format
+msgid "Create topic “%s”"
+msgstr "トピック \"%s\" の生成"
 
 #: ../src/ephy-encoding-dialog.c:340
 msgid "Encodings"
@@ -3071,47 +2991,107 @@ msgstr[1] "%d 日前"
 msgid "Sites"
 msgstr "サイト"
 
-#: ../src/ephy-main.c:60
-msgid "Open a new tab in an existing window"
+#: ../src/ephy-main.c:78
+msgid "Open a new tab in an existing browser window"
 msgstr "既存のウィンドウで新しいタブを開く"
 
-#: ../src/ephy-main.c:63
-msgid "Run in full screen mode"
-msgstr "フルスクリーン・モードで起動する"
+#: ../src/ephy-main.c:80
+msgid "Open a new browser window"
+msgstr "新しいウィンドウを開く"
 
-#: ../src/ephy-main.c:66
-msgid "Load the given session file"
-msgstr "指定したセッションを読み込む"
+#: ../src/ephy-main.c:82
+msgid "Launch the bookmarks editor"
+msgstr "ブックマーク・エディタを起動する"
 
-#: ../src/ephy-main.c:67 ../src/ephy-main.c:73
-msgid "FILE"
-msgstr "FILE"
-
-#: ../src/ephy-main.c:69
-msgid "Add a bookmark (don't open any window)"
-msgstr "ブックマークを追加する (ウィンドウは開かない)"
-
-#: ../src/ephy-main.c:70
-msgid "URL"
-msgstr "URL"
-
-#: ../src/ephy-main.c:72
+#: ../src/ephy-main.c:84
 msgid "Import bookmarks from the given file"
 msgstr "指定されたファイルからブックマークをインポートする"
 
-#: ../src/ephy-main.c:75
-msgid "Launch the bookmarks editor"
-msgstr "ブックマーク・エディタを起動する"
+#: ../src/ephy-main.c:84 ../src/ephy-main.c:86
+msgid "FILE"
+msgstr "FILE"
+
+#: ../src/ephy-main.c:86
+msgid "Load the given session file"
+msgstr "指定したセッションを読み込む"
+
+#: ../src/ephy-main.c:88
+msgid "Add a bookmark"
+msgstr "ブックマークへ追加する"
+
+#: ../src/ephy-main.c:88
+msgid "URL"
+msgstr "URL"
+
+#: ../src/ephy-main.c:90
+msgid "Start a private instance"
+msgstr "プライベートなインスタンスを起動する"
+
+#: ../src/ephy-main.c:92
+msgid "Profile directory to use in the private instance"
+msgstr "プライベートなインスタンスで使用するプロファイルのフォルダを指定する"
+
+#: ../src/ephy-main.c:92
+msgid "DIR"
+msgstr "DIR"
+
+#: ../src/ephy-main.c:417
+msgid "Could not start GNOME Web Browser"
+msgstr "GNOME ウェブ・ブラウザを起動できませんでした"
+
+#: ../src/ephy-main.c:420
+#, c-format
+msgid ""
+"Startup failed because of the following error:\n"
+"%s"
+msgstr ""
+"次のエラーが発生したため起動に失敗しました:\n"
+"%s"
+
+#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:760
+msgid "GNOME Web Browser"
+msgstr "GNOME ウェブ・ブラウザ"
+
+#: ../src/ephy-main.c:463
+msgid "GNOME Web Browser options"
+msgstr "GNOME ウェブ・ブラウザのオプション"
 
 #: ../src/ephy-notebook.c:1092
 msgid "Close tab"
 msgstr "タブを閉じます"
 
-#: ../src/ephy-session.c:378
+#: ../src/ephy-session.c:156
+#, c-format
+msgid "Downloads will be aborted and logout proceed in %d second."
+msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
+msgstr[0] "ダウンロードを中止して %d秒後にログアウトします。"
+msgstr[1] "ダウンロードを中止して %d秒後にログアウトします。"
+
+#: ../src/ephy-session.c:272
+msgid "Abort pending downloads?"
+msgstr "保留中のダウンロードを中止しますか？"
+
+#: ../src/ephy-session.c:276
+msgid ""
+"There are still downloads pending. If you log out, they will be aborted and "
+"lost."
+msgstr ""
+"まだ保留中のダウンロードがあります。ログアウトすると、それらのダウンロードが"
+"途中で中止されてしまい結果が残りません。"
+
+#: ../src/ephy-session.c:280
+msgid "_Cancel Logout"
+msgstr "ログアウトをキャンセルする(_C)"
+
+#: ../src/ephy-session.c:282
+msgid "_Abort Downloads"
+msgstr "中止する(_A)"
+
+#: ../src/ephy-session.c:603
 msgid "Recover previous browser windows and tabs?"
 msgstr "前回のウィンドウとタブを復元しますか？"
 
-#: ../src/ephy-session.c:382
+#: ../src/ephy-session.c:607
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -3119,57 +3099,71 @@ msgstr ""
 "Epiphany が前回の実行中に突然クラッシュして強制終了したようです。その時の状態"
 "に復元することが可能です。"
 
-#: ../src/ephy-session.c:386
+#: ../src/ephy-session.c:611
 msgid "_Don't Recover"
 msgstr "復元しない(_D)"
 
-#: ../src/ephy-session.c:388
+#: ../src/ephy-session.c:613
 msgid "_Recover"
 msgstr "復元する(_R)"
 
-#: ../src/ephy-session.c:390
+#: ../src/ephy-session.c:615
 msgid "Crash Recovery"
 msgstr "Epiphany クラッシュ・リカバリ"
 
-#: ../src/ephy-shell.c:216
+#: ../src/ephy-shell.c:201
 msgid "Sidebar extension required"
 msgstr "要サイドバー拡張プラグイン"
 
-#: ../src/ephy-shell.c:218
+#: ../src/ephy-shell.c:203
 msgid "Sidebar Extension Required"
 msgstr "サイドバーの拡張プラグインが必要です"
 
-#: ../src/ephy-shell.c:222
+#: ../src/ephy-shell.c:207
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr ""
 "クリックしたリンクを開くには、サイドバー拡張がインストールされている必要があ"
 "ります。"
 
-#: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2264 ../src/ephy-tab.c:2299
+#. Translators: this is displayed in the statusbar; choose a short word
+#. * or even an abbreviation.
+#.
+#: ../src/ephy-statusbar.c:114
+msgid "Caret"
+msgstr "キャレット"
+
+#. Translators: this is the tooltip on the "Caret" icon
+#. * in the statusbar.
+#.
+#: ../src/ephy-statusbar.c:122
+msgid "In keyboard selection mode, press F7 to exit"
+msgstr "キーボード選択モードで [F7] を押下すると終了します"
+
+#: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2269 ../src/ephy-tab.c:2304
 msgid "Blank page"
 msgstr "空のページ"
 
 #. translators: %s here is the address of the web page
-#: ../src/ephy-tab.c:916 ../src/ephy-tab.c:1667
+#: ../src/ephy-tab.c:919 ../src/ephy-tab.c:1670
 #, c-format
 msgid "Loading “%s”..."
 msgstr "\"%s\" の読み込み中..."
 
-#: ../src/ephy-tab.c:920
+#: ../src/ephy-tab.c:923
 msgid "Loading..."
 msgstr "読み込み中..."
 
-#: ../src/ephy-tab.c:1651
+#: ../src/ephy-tab.c:1654
 #, c-format
 msgid "Redirecting to “%s”..."
 msgstr "\"%s\" へリダイレクト中..."
 
-#: ../src/ephy-tab.c:1655
+#: ../src/ephy-tab.c:1658
 #, c-format
 msgid "Transferring data from “%s”..."
 msgstr "\"%s\" からデータの転送中..."
 
-#: ../src/ephy-tab.c:1659
+#: ../src/ephy-tab.c:1662
 #, c-format
 msgid "Waiting for authorization from “%s”..."
 msgstr "\"%s\" からの認証待ちです..."
@@ -3189,11 +3183,11 @@ msgid "Toolbar Editor"
 msgstr "ツールバー・エディタ"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:217
+#: ../src/ephy-toolbar-editor.c:220
 msgid "Toolbar _button labels:"
 msgstr "ツールバー・ボタンのラベル(_B):"
 
-#: ../src/ephy-toolbar-editor.c:285
+#: ../src/ephy-toolbar-editor.c:288
 msgid "_Add a New Toolbar"
 msgstr "新しいツールバーの追加(_A)"
 
@@ -3282,539 +3276,543 @@ msgstr "ツール(_O)"
 msgid "_Tabs"
 msgstr "タブ(_T)"
 
+#: ../src/ephy-window.c:123
+msgid "_Toolbars"
+msgstr "ツールバー(_T)"
+
 #. File menu
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:129
 msgid "_New Window"
 msgstr "新しいウィンドウ(_N)"
 
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:130
 msgid "Open a new window"
 msgstr "新しいウィンドウを開きます"
 
-#: ../src/ephy-window.c:131
+#: ../src/ephy-window.c:132
 msgid "New _Tab"
 msgstr "新しいタブ(_T)"
 
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:133
 msgid "Open a new tab"
 msgstr "新しいタブを開きます"
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:135
 msgid "_Open..."
 msgstr "開く(_O)..."
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:136
 msgid "Open a file"
 msgstr "ファイルを開きます"
 
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:138
 msgid "Save _As..."
 msgstr "別名で保存(_A)..."
 
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:139
 msgid "Save the current page"
 msgstr "このページを保存します"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:141
 msgid "Print Set_up..."
 msgstr "印刷の設定(_U)..."
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:142
 msgid "Setup the page settings for printing"
 msgstr "印刷するページを設定します"
 
-#: ../src/ephy-window.c:143
+#: ../src/ephy-window.c:144
 msgid "Print Pre_view"
 msgstr "印刷プレビュー(_V)"
 
-#: ../src/ephy-window.c:144
+#: ../src/ephy-window.c:145
 msgid "Print preview"
 msgstr "印刷プレビューを表示します"
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:147
 msgid "_Print..."
 msgstr "印刷(_P)..."
 
-#: ../src/ephy-window.c:147
+#: ../src/ephy-window.c:148
 msgid "Print the current page"
 msgstr "このページを印刷します"
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:150
 msgid "S_end Link by Email..."
 msgstr "リンクを E-メールで送信(_E)..."
 
-#: ../src/ephy-window.c:150
+#: ../src/ephy-window.c:151
 msgid "Send a link of the current page"
 msgstr "このページのアドレスをメールで送信します"
 
-#: ../src/ephy-window.c:153
+#: ../src/ephy-window.c:154
 msgid "Close this tab"
 msgstr "このタブを閉じます"
 
 #. Edit menu
-#: ../src/ephy-window.c:158
+#: ../src/ephy-window.c:159
 msgid "_Undo"
 msgstr "元に戻す(_U)"
 
-#: ../src/ephy-window.c:159
+#: ../src/ephy-window.c:160
 msgid "Undo the last action"
 msgstr "最後に実行した操作を元に戻します"
 
-#: ../src/ephy-window.c:161
+#: ../src/ephy-window.c:162
 msgid "Re_do"
 msgstr "やり直す(_D)"
 
-#: ../src/ephy-window.c:162
+#: ../src/ephy-window.c:163
 msgid "Redo the last undone action"
 msgstr "最後に実行した操作をやり直します"
 
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:172
 msgid "Paste clipboard"
 msgstr "クリップボードの内容を貼り付けます"
 
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:175
 msgid "Select the entire page"
 msgstr "ページ全体を選択します"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:177
 msgid "_Find..."
 msgstr "検索(_F)..."
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:178
 msgid "Find a word or phrase in the page"
 msgstr "ページ内の単語や文字列を検索します"
 
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:180
 msgid "Find Ne_xt"
 msgstr "次を検索(_X)"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:181
 msgid "Find next occurrence of the word or phrase"
 msgstr "前方に出現する単語または文字列を検索します"
 
-#: ../src/ephy-window.c:182
+#: ../src/ephy-window.c:183
 msgid "Find Pre_vious"
 msgstr "前を検索(_V)"
 
-#: ../src/ephy-window.c:183
+#: ../src/ephy-window.c:184
 msgid "Find previous occurrence of the word or phrase"
 msgstr "後方に出現する単語または文字列を検索します"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:186
 msgid "P_ersonal Data"
 msgstr "個人データ(_E)"
 
-#: ../src/ephy-window.c:186
+#: ../src/ephy-window.c:187
 msgid "View and remove cookies and passwords"
 msgstr "クッキーやパスワードを表示したり削除します"
 
-#: ../src/ephy-window.c:189
+#: ../src/ephy-window.c:190
 msgid "Cert_ificates"
 msgstr "証明書(_I)"
 
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:191
 msgid "Manage Certificates"
 msgstr "証明書を管理します"
 
-#: ../src/ephy-window.c:193
-msgid "T_oolbars"
-msgstr "ツールバー(_O)"
-
 #: ../src/ephy-window.c:194
-msgid "Customize toolbars"
-msgstr "ツールバーをカスタマイズします"
-
-#: ../src/ephy-window.c:196
 msgid "P_references"
 msgstr "設定(_R)"
 
-#: ../src/ephy-window.c:197
+#: ../src/ephy-window.c:195
 msgid "Configure the web browser"
 msgstr "ウェブ・ブラウザを設定します"
 
 #. View menu
-#: ../src/ephy-window.c:202 ../src/ephy-window.c:205
+#: ../src/ephy-window.c:200
+msgid "_Customize Toolbars..."
+msgstr "ツールバーのカスタマイズ(_C)"
+
+#: ../src/ephy-window.c:201
+msgid "Customize toolbars"
+msgstr "ツールバーをカスタマイズします"
+
+#: ../src/ephy-window.c:203 ../src/ephy-window.c:206
 msgid "_Stop"
 msgstr "中止(_S)"
 
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:204
 msgid "Stop current data transfer"
 msgstr "このページのデータ転送を中止します"
 
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:208
 msgid "_Reload"
 msgstr "再読み込み(_R)"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:209
 msgid "Display the latest content of the current page"
 msgstr "このページを最新の内容に更新します"
 
-#: ../src/ephy-window.c:210
-msgid "Zoom _In"
-msgstr "拡大する(_I)"
-
 #: ../src/ephy-window.c:211
+msgid "_Larger Text"
+msgstr "文字を大きくする(_L)"
+
+#: ../src/ephy-window.c:212
 msgid "Increase the text size"
 msgstr "文字を大きくします"
 
-#: ../src/ephy-window.c:213
-msgid "Zoom _Out"
-msgstr "縮小する(_O)"
-
 #: ../src/ephy-window.c:214
+msgid "S_maller Text"
+msgstr "文字を小さくする(_M)"
+
+#: ../src/ephy-window.c:215
 msgid "Decrease the text size"
 msgstr "文字を小さくします"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:217
 msgid "_Normal Size"
 msgstr "通常の大きさ(_N)"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:218
 msgid "Use the normal text size"
 msgstr "文字を通常の大きさにします"
 
-#: ../src/ephy-window.c:219
+#: ../src/ephy-window.c:220
 msgid "Text _Encoding"
 msgstr "エンコーディング(_E)"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:221
 msgid "Change the text encoding"
 msgstr "文字のエンコーディングを変更します"
 
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:223
 msgid "_Page Source"
 msgstr "ページのソース(_P)"
 
-#: ../src/ephy-window.c:223
+#: ../src/ephy-window.c:224
 msgid "View the source code of the page"
 msgstr "このページのソース・コードを表示します"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:229
 msgid "_Add Bookmark..."
 msgstr "ブックマークの追加(_A)..."
 
-#: ../src/ephy-window.c:229 ../src/ephy-window.c:303
+#: ../src/ephy-window.c:230 ../src/ephy-window.c:304
 msgid "Add a bookmark for the current page"
 msgstr "このページのブックマークを追加します"
 
-#: ../src/ephy-window.c:231
+#: ../src/ephy-window.c:232
 msgid "_Edit Bookmarks"
 msgstr "ブックマークの編集(_E)"
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:233
 msgid "Open the bookmarks window"
 msgstr "ブックマーク編集ウィンドウを開きます"
 
 #. Go menu
-#: ../src/ephy-window.c:237
+#: ../src/ephy-window.c:238
 msgid "_Location..."
 msgstr "場所(_L)..."
 
-#: ../src/ephy-window.c:238
+#: ../src/ephy-window.c:239
 msgid "Go to a specified location"
 msgstr "指定した場所へ移動します"
 
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:241
 msgid "H_istory"
 msgstr "履歴(_I)"
 
-#: ../src/ephy-window.c:241
+#: ../src/ephy-window.c:242
 msgid "Open the history window"
 msgstr "履歴ウインドウを開きます"
 
 #. Tabs menu
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:247
 msgid "_Previous Tab"
 msgstr "前のタブへ(_P)"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:248
 msgid "Activate previous tab"
 msgstr "前のタブを開きます"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:250
 msgid "_Next Tab"
 msgstr "次のタブへ(_N)"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:251
 msgid "Activate next tab"
 msgstr "次のタブを開きます"
 
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:253
 msgid "Move Tab _Left"
 msgstr "タブを左へ移動(_L)"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:254
 msgid "Move current tab to left"
 msgstr "このタブを左へ移動します"
 
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:256
 msgid "Move Tab _Right"
 msgstr "タブを右へ移動(_R)"
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:257
 msgid "Move current tab to right"
 msgstr "このタブを右へ移動します"
 
-#: ../src/ephy-window.c:258
+#: ../src/ephy-window.c:259
 msgid "_Detach Tab"
 msgstr "タブを閉じる(_D)"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:260
 msgid "Detach current tab"
 msgstr "このタブを取り外します"
 
-#: ../src/ephy-window.c:265
+#: ../src/ephy-window.c:266
 msgid "Display web browser help"
 msgstr "ウェブ・ブラウザのヘルプを表示します"
 
 #. File Menu
-#: ../src/ephy-window.c:276
+#: ../src/ephy-window.c:277
 msgid "_Work Offline"
 msgstr "オフラインで動作(_W)"
 
-#: ../src/ephy-window.c:277
+#: ../src/ephy-window.c:278
 msgid "Switch to offline mode"
 msgstr "オフライン・モードに切り替えます"
 
 #. View Menu
-#: ../src/ephy-window.c:282
-msgid "_Toolbar"
-msgstr "ツールバー(_T)"
-
 #: ../src/ephy-window.c:283
+msgid "_Show Toolbars"
+msgstr "ツールバーの表示(_S)"
+
+#: ../src/ephy-window.c:284
 msgid "Show or hide toolbar"
 msgstr "ツールバーの表示/非表示を切り替えます"
 
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:286
 msgid "St_atusbar"
 msgstr "ステータスバー(_A)"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:287
 msgid "Show or hide statusbar"
 msgstr "ステータスバーの表示/非表示を切り替えます"
 
-#: ../src/ephy-window.c:288
+#: ../src/ephy-window.c:289
 msgid "_Fullscreen"
 msgstr "フルスクリーン(_F)"
 
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:290
 msgid "Browse at full screen"
 msgstr "フルスクリーン表示で閲覧します"
 
-#: ../src/ephy-window.c:291
+#: ../src/ephy-window.c:292
 msgid "Popup _Windows"
 msgstr "ウィンドウのポップアップ(_W)"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:293
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "このサイトからの期待しないウィンドウのポップアップを制御します"
 
-#: ../src/ephy-window.c:294
+#: ../src/ephy-window.c:295
 msgid "Selection Caret"
 msgstr "キャレットで選択"
 
 #. Document
-#: ../src/ephy-window.c:302
+#: ../src/ephy-window.c:303
 msgid "Add Boo_kmark..."
 msgstr "ブックマークの追加(_K)..."
 
 #. Framed document
-#: ../src/ephy-window.c:308
+#: ../src/ephy-window.c:309
 msgid "Show Only _This Frame"
 msgstr "このフレームだけ表示する(_T)"
 
-#: ../src/ephy-window.c:309
+#: ../src/ephy-window.c:310
 msgid "Show only this frame in this window"
 msgstr "ウィンドウの中にこのフレームだけ表示します"
 
 #. Links
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:315
 msgid "_Open Link"
 msgstr "リンク先を開く(_O)"
 
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:316
 msgid "Open link in this window"
 msgstr "このウィンドウの中にリンク先を開きます"
 
-#: ../src/ephy-window.c:317
+#: ../src/ephy-window.c:318
 msgid "Open Link in New _Window"
 msgstr "リンク先を新しいウィンドウで開く(_W)"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:319
 msgid "Open link in a new window"
 msgstr "新しいウィンドウの中にリンク先を開きます"
 
-#: ../src/ephy-window.c:320
+#: ../src/ephy-window.c:321
 msgid "Open Link in New _Tab"
 msgstr "リンク先を新しいタブで開く(_T)"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:322
 msgid "Open link in a new tab"
 msgstr "新しいタブの中にリンク先を開きます"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:324
 msgid "_Download Link"
 msgstr "リンク先のダウンロード(_D)"
 
-#: ../src/ephy-window.c:325
+#: ../src/ephy-window.c:326
 msgid "_Save Link As..."
 msgstr "リンク先を別名で保存する(_S)..."
 
-#: ../src/ephy-window.c:326
+#: ../src/ephy-window.c:327
 msgid "Save link with a different name"
 msgstr "リンク先に名前を付けて保存します"
 
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:329
 msgid "_Bookmark Link..."
 msgstr "リンク先をブックマークする(_B)..."
 
-#: ../src/ephy-window.c:330
+#: ../src/ephy-window.c:331
 msgid "_Copy Link Address"
 msgstr "リンク先のコピー(_C)"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:337
 msgid "_Send Email..."
 msgstr "E-メールの送信(_S)..."
 
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:339
 msgid "_Copy Email Address"
 msgstr "メール・アドレスのコピー(_C)"
 
 #. Images
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:344
 msgid "Open _Image"
 msgstr "画像を開く(_I)"
 
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:346
 msgid "_Save Image As..."
 msgstr "画像を別名で保存(_S)..."
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:348
 msgid "_Use Image As Background"
 msgstr "画像を背景として使用(_U)"
 
-#: ../src/ephy-window.c:349
+#: ../src/ephy-window.c:350
 msgid "Copy I_mage Address"
 msgstr "画像のアドレスをコピー(_M)"
 
-#: ../src/ephy-window.c:351
+#: ../src/ephy-window.c:352
 msgid "St_art Animation"
 msgstr "アニメーションを開始(_A)"
 
-#: ../src/ephy-window.c:353
+#: ../src/ephy-window.c:354
 msgid "St_op Animation"
 msgstr "アニメーションを停止(_O)"
 
-#: ../src/ephy-window.c:707
+#: ../src/ephy-window.c:708
 msgid "There are unsubmitted changes to form elements"
 msgstr "フォームに提出されていない変更点があります。"
 
-#: ../src/ephy-window.c:711
+#: ../src/ephy-window.c:712
 msgid "If you close the document anyway, you will lose that information."
 msgstr "いずれにしろドキュメントを閉じると、その情報は失われます。"
 
-#: ../src/ephy-window.c:715
+#: ../src/ephy-window.c:716
 msgid "Close _Document"
 msgstr "ドキュメントを閉じる(_D)"
 
-#: ../src/ephy-window.c:1285 ../src/window-commands.c:279
+#: ../src/ephy-window.c:1284 ../src/window-commands.c:280
 msgid "Open"
 msgstr "開く"
 
-#: ../src/ephy-window.c:1287 ../src/window-commands.c:305
+#: ../src/ephy-window.c:1286 ../src/window-commands.c:306
 msgid "Save As"
 msgstr "別名で保存(_A)..."
 
-#: ../src/ephy-window.c:1291
+#: ../src/ephy-window.c:1290
 msgid "Bookmark"
 msgstr "ブックマーク"
 
-#: ../src/ephy-window.c:1293
+#: ../src/ephy-window.c:1292
 msgid "Find"
 msgstr "検索"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1306
+#: ../src/ephy-window.c:1305
 msgid "Larger"
 msgstr "より大きく"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1309
+#: ../src/ephy-window.c:1308
 msgid "Smaller"
 msgstr "より小さく"
 
-#: ../src/ephy-window.c:1472
+#: ../src/ephy-window.c:1471
 msgid "Insecure"
 msgstr "セキュアでない"
 
-#: ../src/ephy-window.c:1477
+#: ../src/ephy-window.c:1476
 msgid "Broken"
 msgstr "壊れています"
 
-#: ../src/ephy-window.c:1490
+#: ../src/ephy-window.c:1489
 msgid "Low"
 msgstr "低"
 
-#: ../src/ephy-window.c:1497
+#: ../src/ephy-window.c:1496
 msgid "High"
 msgstr "高"
 
-#: ../src/ephy-window.c:1507
+#: ../src/ephy-window.c:1506
 #, c-format
 msgid "Security level: %s"
 msgstr "セキュリティのレベル: %s"
 
-#: ../src/ephy-window.c:1547
+#: ../src/ephy-window.c:1546
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d 個のポップアップ・ウィンドウを隠す"
 msgstr[1] "%d 個のポップアップ・ウィンドウを隠す"
 
-#: ../src/ephy-window.c:1842
+#: ../src/ephy-window.c:1841
 #, c-format
 msgid "Open image “%s”"
 msgstr "画像 \"%s\" を開きます"
 
-#: ../src/ephy-window.c:1847
+#: ../src/ephy-window.c:1846
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "この画像 \"%s\" をデスクトップの背景にセットします"
 
-#: ../src/ephy-window.c:1852
+#: ../src/ephy-window.c:1851
 #, c-format
 msgid "Save image “%s”"
 msgstr "画像 \"%s\" を保存します"
 
-#: ../src/ephy-window.c:1857
+#: ../src/ephy-window.c:1856
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "画像のアドレス \"%s\" をコピーします"
 
-#: ../src/ephy-window.c:1870
+#: ../src/ephy-window.c:1869
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "アドレス \"%s\" へ E-メールを送信します"
 
-#: ../src/ephy-window.c:1876
+#: ../src/ephy-window.c:1875
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "E-メール・アドレス \"%s\" をコピーします"
 
-#: ../src/ephy-window.c:1888
+#: ../src/ephy-window.c:1887
 #, c-format
 msgid "Save link “%s”"
 msgstr "リンク先 \"%s\" を保存します"
 
-#: ../src/ephy-window.c:1894
+#: ../src/ephy-window.c:1893
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "リンク先 \"%s\" をブックマークに追加します"
 
-#: ../src/ephy-window.c:1900
+#: ../src/ephy-window.c:1899
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "リンク先のアドレス \"%s\" をコピーします"
@@ -3923,28 +3921,9 @@ msgstr "閉じる"
 msgid "Close print preview"
 msgstr "印刷プレビューを閉じます"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: the first %s is the language name, and the
-#. * second %s is the locale name. Example:
-#. * "French (France)"
-#.
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:993 ../src/prefs-dialog.c:1001
-#, c-format
-msgid "language|%s (%s)"
-msgstr "%s (%s)"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: this refers to a user-define language code
-#. * (one which isn't in our built-in list).
-#.
-#: ../src/prefs-dialog.c:1012
-#, c-format
-msgid "language|User defined (%s)"
-msgstr "ユーザ定義 (%s)"
+#: ../src/prefs-dialog.c:412
+msgid "Default"
+msgstr "デフォルト"
 
 #: ../src/prefs-dialog.c:1034
 #, c-format
@@ -3957,25 +3936,58 @@ msgstr[1] "システム言語 (%s)"
 msgid "Select a Directory"
 msgstr "フォルダの選択"
 
-#: ../src/window-commands.c:710 ../src/window-commands.c:727
+#: ../src/window-commands.c:711 ../src/window-commands.c:728
 msgid "Contact us at:"
 msgstr "連絡先:"
 
-#: ../src/window-commands.c:713
+#: ../src/window-commands.c:714
 msgid "Contributors:"
 msgstr "貢献者:"
 
-#: ../src/window-commands.c:718
+#: ../src/window-commands.c:719
 msgid "Past developers:"
 msgstr "前バージョンの開発者:"
 
-#: ../src/window-commands.c:728
+#: ../src/window-commands.c:729
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> または <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:733
-msgid "GNOME Web Browser"
-msgstr "GNOME ウェブ・ブラウザ"
+#: ../src/window-commands.c:734
+msgid ""
+"The GNOME Web Browser is free software; you can redistribute it and/or "
+"modify it under the terms of the GNU General Public License as published by "
+"the Free Software Foundation; either version 2 of the License, or (at your "
+"option) any later version."
+msgstr ""
+"この GNOME ウェブ・ブラウザはフリーソフトウェアです;フリーソフトウェア財団が"
+"提供する GNU 一般公有使用許諾契約書の第二版、あるいはそれ以降の版が定める条項"
+"の下で本プログラムを再頒布または変更することができます。"
+
+#: ../src/window-commands.c:738
+msgid ""
+"The GNOME Web Browser is distributed in the hope that it will be useful, but "
+"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
+"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details."
+msgstr ""
+"この GNOME ウェブ・ブラウザは有用とは思いますが、その頒布にあたっては市場性及"
+"び特定の目的、その適合性についての暗黙の保証を含めて、いかなる保証も行ないま"
+"せん。詳細については GNU 一般公有使用許諾契約書をご覧下さい。"
+
+#: ../src/window-commands.c:742
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
+"59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
+msgstr ""
+"あなたは、本プログラムと一緒に GNU 一般公有使用許諾契約書の写しを受け取ってい"
+"るはずです。そうでない場合は、Free Software Foundation, Inc., 59 Temple "
+"Place - Suite 330, Boston, MA 02111-1307, USA へ手紙を書いて下さい。"
+
+#: ../src/window-commands.c:754
+#, c-format
+msgid "Using “%s” backend"
+msgstr "バックエンドは \"%s\""
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3985,63 +3997,17 @@ msgstr "GNOME ウェブ・ブラウザ"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:747
+#: ../src/window-commands.c:775
 msgid "translator-credits"
 msgstr ""
 "相花 毅 <aihana@gnome.gr.jp>\n"
+"佐藤 暁 <ss@gnome.gr.jp>\n"
 "KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>\n"
 "Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Takuro Ashie <ashie@homa.ne.jp>\n"
 "Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "日本GNOMEユーザー会 http://www.gnome.gr.jp"
 
-#: ../src/window-commands.c:750
+#: ../src/window-commands.c:778
 msgid "GNOME Web Browser Website"
 msgstr "GNOME ウェブ・ブラウザのウェブサイト"
-
-#~ msgid "Epiphany automation"
-#~ msgstr "Epiphany オートメーション"
-
-#~ msgid "<b>Fonts</b>"
-#~ msgstr "<b>フォント</b>"
-
-#~ msgid "Al_ways use the desktop theme colors"
-#~ msgstr "常にデスクトップのテーマの色を使用する(_W)"
-
-#~ msgid "Always use _these fonts"
-#~ msgstr "常にこれらのフォントを使う(_T)"
-
-#~ msgid "Fonts and Colors"
-#~ msgstr "フォントと色"
-
-#~ msgid "Close Tab"
-#~ msgstr "タブを閉じる"
-
-#~ msgid "Add Bookmark"
-#~ msgstr "ブックマークへ追加"
-
-#~ msgid "Duplicated Bookmark"
-#~ msgstr "重複したブックマーク"
-
-#~ msgid ""
-#~ "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
-#~ "use bonobo-activation-sysconf to configure the search path for bonobo "
-#~ "server files."
-#~ msgstr ""
-#~ "Bonobo がファイル GNOME_Epiphany_Automation.server を見つけられませんでし"
-#~ "た。Bonobo サーバ・ファイルを検索するパスを選定する場合は、ツール `bonobo-"
-#~ "activation-sysconf` を使用して下さい。"
-
-#~ msgid ""
-#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
-#~ "attempting to register the automation server"
-#~ msgstr ""
-#~ "Bonobo がオートメーション・サーバに登録する際に予期しないエラーが発生した"
-#~ "ため、現在、Epiphany は利用できません。"
-
-#~ msgid ""
-#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
-#~ "attempting to locate the automation object."
-#~ msgstr ""
-#~ "Bonobo がオートメーション・オブジェクトの場所を特定する際に予期しないエ"
-#~ "ラーが発生したため、現在、Epiphany は利用できません。"
