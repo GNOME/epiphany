@@ -426,19 +426,11 @@ delete_topic_dialog_construct (GtkWindow *parent,
 	return dialog;
 }
 
-static void
-cmd_toolbar (GtkAction *action,
-	     EphyBookmarksEditor *editor)
+static gint
+get_bookmarks_bar (EggToolbarsModel *model)
 {
-	EggToolbarsModel *model;
-	EphyNode *node;
-	gboolean show;
+	gint tpos;
 	const char *tname;
-	gint flags, tpos;
-	GList *selection;
-	GList *l;
-	
-	model = EGG_TOOLBARS_MODEL (ephy_shell_get_toolbars_model (ephy_shell_get_default (), FALSE));
 	
 	for (tpos = 0; tpos < egg_toolbars_model_n_toolbars (model); tpos++)
 	{
@@ -454,6 +446,22 @@ cmd_toolbar (GtkAction *action,
 		tpos = egg_toolbars_model_add_toolbar (model, -1, "BookmarksBar");
 	}
 	
+	return tpos;
+}
+
+static void
+cmd_toolbar (GtkAction *action,
+	     EphyBookmarksEditor *editor)
+{
+	EggToolbarsModel *model;
+	EphyNode *node;
+	gboolean show;
+	gint flags, tpos = 0;
+	GList *selection;
+	GList *l;
+	
+	model = EGG_TOOLBARS_MODEL (ephy_shell_get_toolbars_model (ephy_shell_get_default (), FALSE));
+		
 	if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->bm_view)))
 	{
 		char name[EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE];
@@ -466,6 +474,11 @@ cmd_toolbar (GtkAction *action,
 
 		flags = egg_toolbars_model_get_name_flags (model, name);
 		show = ((flags & EGG_TB_MODEL_NAME_USED) == 0);
+		
+		if (show)
+		{
+			tpos = get_bookmarks_bar (model);
+		}
 
 		for (l = selection; l; l = l->next)
 		{
@@ -498,6 +511,11 @@ cmd_toolbar (GtkAction *action,
 
 		flags = egg_toolbars_model_get_name_flags (model, name);
 		show = ((flags & EGG_TB_MODEL_NAME_USED) == 0);
+
+		if (show)
+		{
+			tpos = get_bookmarks_bar (model);
+		}
 
 		for (l = selection; l; l = l->next)
 		{

@@ -872,8 +872,10 @@ egg_toolbars_model_delete_item (EggToolbarsModel *model,
       item = g_node_first_child (toolbar);
       ipos = 0;
       
+      /* Don't delete toolbars that were already empty */
       if (item == NULL)
         {
+	  toolbar = g_node_next_sibling (toolbar);
 	  continue;
         }
       
