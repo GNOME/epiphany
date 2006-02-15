@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany Web Browser HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-12 06:16+0100\n"
-"PO-Revision-Date: 2006-02-12 09:23+0200\n"
+"POT-Creation-Date: 2006-02-15 06:03+0100\n"
+"PO-Revision-Date: 2006-02-15 10:37+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -134,7 +134,7 @@ msgstr "Epiphany veebibrauser"
 
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:482
-#: ../src/ephy-main.c:533 ../src/ephy-main.c:606
+#: ../src/ephy-main.c:533 ../src/ephy-main.c:621
 msgid "Web Browser"
 msgstr "Veebisirvija"
 
@@ -536,7 +536,7 @@ msgid "Cookies"
 msgstr "Küpsised"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:106
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:107
 msgid "Downloads"
 msgstr "Allalaadimised"
 
@@ -598,7 +598,7 @@ msgstr "Keele lisamine"
 
 #: ../data/glade/prefs-dialog.glade.h:10
 msgid "Allow popup _windows"
-msgstr "Luba hü_pikaknad "
+msgstr "Hü_pikaknad lubatud"
 
 #: ../data/glade/prefs-dialog.glade.h:11
 msgid "Au_todetect:"
@@ -606,7 +606,7 @@ msgstr "Au_tomaattuvastus:"
 
 #: ../data/glade/prefs-dialog.glade.h:12
 msgid "Choose a l_anguage:"
-msgstr "Vali _Keel:"
+msgstr "Vali _keel:"
 
 #. Translators: the mnemonic shouldn't conflict with any of the
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
@@ -623,19 +623,19 @@ msgstr "_Vaikimisi:"
 
 #: ../data/glade/prefs-dialog.glade.h:15
 msgid "Enable Java_Script"
-msgstr "Luba Java_Script"
+msgstr "Ja_vaScript lubatud"
 
 #: ../data/glade/prefs-dialog.glade.h:16
 msgid "Enable _Java"
-msgstr "Luba _Java"
+msgstr "_Java lubatud"
 
 #: ../data/glade/prefs-dialog.glade.h:17
 msgid "Fonts"
-msgstr ""
+msgstr "Kirjatüübid"
 
 #: ../data/glade/prefs-dialog.glade.h:18
 msgid "Fonts & Style"
-msgstr ""
+msgstr "Kirjatüübid ja laad"
 
 #: ../data/glade/prefs-dialog.glade.h:19
 msgid "For l_anguage:"
@@ -659,7 +659,7 @@ msgstr "MB"
 
 #: ../data/glade/prefs-dialog.glade.h:25
 msgid "Only _from sites you visit"
-msgstr "Ainult külastatavatest _saitidest"
+msgstr "Ainult _külastatavatest saitidest"
 
 #: ../data/glade/prefs-dialog.glade.h:26
 msgid "Preferences"
@@ -806,7 +806,7 @@ msgid_plural "%d downloads"
 msgstr[0] "%d allalaadimine"
 msgstr[1] "%d allalaadimist"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:965
+#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:985
 msgid "File"
 msgstr "Fail"
 
@@ -1532,7 +1532,7 @@ msgstr ""
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks.c:1168 ../src/ephy-session.c:1308
+#: ../src/bookmarks/ephy-bookmarks.c:1264 ../src/ephy-session.c:1308
 msgid "Untitled"
 msgstr "Nimetu"
 
@@ -1545,8 +1545,8 @@ msgid "Don't Save"
 msgstr "Ära salvesta"
 
 #: ../embed/mozilla/EphyPromptService.cpp:799
-msgid "_User:"
-msgstr "_Kasutaja:"
+msgid "_Username:"
+msgstr "_Kasutajanimi:"
 
 #: ../embed/mozilla/EphyPromptService.cpp:800
 #: ../embed/mozilla/EphyPromptService.cpp:827
@@ -1556,7 +1556,7 @@ msgid "_Password:"
 msgstr "_Parool:"
 
 #: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:748
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "All files"
 msgstr "Kõik failid"
 
@@ -2006,17 +2006,17 @@ msgstr "Eraldaja"
 msgid "All supported types"
 msgstr "Kõik toetatud tüübid"
 
-#: ../lib/ephy-file-helpers.c:300
+#: ../lib/ephy-file-helpers.c:301
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Ajutist kataloogi pole võimalik „%s” alla luua."
 
-#: ../lib/ephy-file-helpers.c:368
+#: ../lib/ephy-file-helpers.c:377
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Fail „%s” on juba olemas, palun tõsta see eest ära."
 
-#: ../lib/ephy-file-helpers.c:379
+#: ../lib/ephy-file-helpers.c:388
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Tõrge kataloogi „%s” loomisel."
@@ -2219,8 +2219,8 @@ msgstr "Hüpikaknad "
 msgid "History"
 msgstr "Ajalugu"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:879
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1721
+#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1741
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Järjehoidjad"
@@ -2390,7 +2390,7 @@ msgstr "Loo uus teema"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1338
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
 #: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
@@ -2404,7 +2404,7 @@ msgstr "Avab valitud järjehoidja uues aknas"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1341
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
 #: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
@@ -2414,7 +2414,7 @@ msgstr[1] "A_va uutes sakkides"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Open the selected bookmark in a new tab"
-msgstr "Ava valitud järjehoidja uues sakis"
+msgstr "Valitud järjehoidja avamine uues sakis"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:195
 msgid "_Rename..."
@@ -2439,7 +2439,7 @@ msgstr "_Omadused"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:201
 msgid "View or modify the properties of the selected bookmark"
-msgstr "Vaata või muuda omadusi valitud järjehoidjal"
+msgstr "Valitud järjehoidja omaduste vaatamine või muutmine"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "_Import Bookmarks..."
@@ -2479,7 +2479,7 @@ msgid "Cut the selection"
 msgstr "Lõika valik"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1351
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1371
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:168
 msgid "_Copy"
@@ -2585,101 +2585,101 @@ msgstr ""
 msgid "_Delete Topic"
 msgstr "_Kustuta teema"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:611
+#: ../src/bookmarks/ephy-bookmarks-editor.c:631
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:615
-#: ../src/bookmarks/ephy-bookmarks-editor.c:619
+#: ../src/bookmarks/ephy-bookmarks-editor.c:635
+#: ../src/bookmarks/ephy-bookmarks-editor.c:639
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:624
+#: ../src/bookmarks/ephy-bookmarks-editor.c:644
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla „%s“ profiil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:628
+#: ../src/bookmarks/ephy-bookmarks-editor.c:648
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:632
+#: ../src/bookmarks/ephy-bookmarks-editor.c:652
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:661
+#: ../src/bookmarks/ephy-bookmarks-editor.c:681
 msgid "Import failed"
 msgstr "Tõrge importimisel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:663
+#: ../src/bookmarks/ephy-bookmarks-editor.c:683
 msgid "Import Failed"
 msgstr "Tõrge importimisel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:666
+#: ../src/bookmarks/ephy-bookmarks-editor.c:686
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
 msgstr ""
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:729
+#: ../src/bookmarks/ephy-bookmarks-editor.c:749
 msgid "Import bookmarks from file"
 msgstr "Järjehoidjate importimine failist"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:736
+#: ../src/bookmarks/ephy-bookmarks-editor.c:756
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefoxi/Mozilla järjehoidjad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:740
+#: ../src/bookmarks/ephy-bookmarks-editor.c:760
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeoni/Konquerori järjehoidjad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:744
+#: ../src/bookmarks/ephy-bookmarks-editor.c:764
 msgid "Epiphany bookmarks"
 msgstr "Epiphany järjehoidjad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:867
+#: ../src/bookmarks/ephy-bookmarks-editor.c:887
 msgid "Export Bookmarks"
 msgstr "Järjehoidjate eksportimine"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:882
+#: ../src/bookmarks/ephy-bookmarks-editor.c:902
 msgid "File format:"
 msgstr "Failivorming:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:925
+#: ../src/bookmarks/ephy-bookmarks-editor.c:945
 msgid "Import Bookmarks"
 msgstr "Järjehoidjate importimine"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:931
+#: ../src/bookmarks/ephy-bookmarks-editor.c:951
 msgid "I_mport"
 msgstr "_Impordi"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:945
+#: ../src/bookmarks/ephy-bookmarks-editor.c:965
 msgid "Import bookmarks from:"
 msgstr "Kustkohast järjehoidjaid imporditakse:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1347
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "_Kopeeri lehe aadress"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1588
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1608
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Otsi:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1785
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1805
 msgid "Topics"
 msgstr "Teemad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1855
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1875
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Pealkiri"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1861
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1881
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Aadress"
@@ -2722,30 +2722,30 @@ msgid "Work"
 msgstr "Töö"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:470
+#: ../src/bookmarks/ephy-bookmarks.c:476
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Kas uuendada järjehoidjat „%s“?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:475
+#: ../src/bookmarks/ephy-bookmarks.c:481
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr ""
 
-#: ../src/bookmarks/ephy-bookmarks.c:479
+#: ../src/bookmarks/ephy-bookmarks.c:485
 msgid "_Don't Update"
 msgstr "Ä_ra uuenda"
 
-#: ../src/bookmarks/ephy-bookmarks.c:481
+#: ../src/bookmarks/ephy-bookmarks.c:487
 msgid "_Update"
 msgstr "_Uuenda"
 
-#: ../src/bookmarks/ephy-bookmarks.c:484
+#: ../src/bookmarks/ephy-bookmarks.c:490
 msgid "Update Bookmark?"
 msgstr "Uuendada järjehoidjat?"
 
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:321
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
 msgstr "Kiirjärjehoidja"
 
@@ -2760,7 +2760,7 @@ msgstr "Selle järjehoidja omaduste näitamine"
 
 #: ../src/bookmarks/ephy-bookmarks-ui.c:303
 msgid "Open this bookmark in a new tab"
-msgstr "Ava valitud järjehoidja uues sakis"
+msgstr "Selle järjehoidja avamine uues sakis"
 
 #: ../src/bookmarks/ephy-bookmarks-ui.c:315
 msgid "Open this bookmark in a new window"
@@ -2771,13 +2771,17 @@ msgstr "Valitud järjehoidja avamine uues aknas"
 msgid "Open in New _Tabs"
 msgstr "A_va uues sakis"
 
+#: ../src/bookmarks/ephy-open-tabs-action.c:78
+msgid "Open the bookmarks in this topic in new tabs"
+msgstr "Selle teema järjehoidjate avamine uutes sakkides"
+
 #: ../src/bookmarks/ephy-related-action.c:176
 msgid "Related"
 msgstr "Seotud"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:320
+#: ../src/bookmarks/ephy-topic-factory-action.c:322
 msgid "Quick Topic"
-msgstr ""
+msgstr "Kiirteema"
 
 #: ../src/bookmarks/ephy-topics-entry.c:359
 #, c-format
@@ -2843,15 +2847,15 @@ msgstr "Mine"
 
 #: ../src/ephy-history-window.c:171
 msgid "Open the selected history link in a new window"
-msgstr "Ava valitud viit uues aknas"
+msgstr "Valitud ajalooviida avamine uues aknas"
 
 #: ../src/ephy-history-window.c:174
 msgid "Open the selected history link in a new tab"
-msgstr "Ava valitud viit uues sakis"
+msgstr "Valitud ajalooviida avamine uues sakis"
 
 #: ../src/ephy-history-window.c:177
 msgid "Delete the selected history link"
-msgstr "Kustuta valitud viit"
+msgstr "Valitud viida kustutamine"
 
 #: ../src/ephy-history-window.c:179
 msgid "Add _Bookmark..."
@@ -2948,7 +2952,7 @@ msgstr "FAIL"
 
 #: ../src/ephy-main.c:86
 msgid "Load the given session file"
-msgstr "Lae valitud sessioonifail"
+msgstr "Valitud seansifaili laadimine"
 
 #: ../src/ephy-main.c:88
 msgid "Add a bookmark"
@@ -2957,6 +2961,18 @@ msgstr "Järjehoidja lisamine"
 #: ../src/ephy-main.c:88
 msgid "URL"
 msgstr "URL"
+
+#: ../src/ephy-main.c:90
+msgid "Start a private instance"
+msgstr "Privaatinstantsi käivitamine"
+
+#: ../src/ephy-main.c:92
+msgid "Profile directory to use in the private instance"
+msgstr "Privaatinstantsi jaoks määratud profiili kataloog"
+
+#: ../src/ephy-main.c:92
+msgid "DIR"
+msgstr "KATALOOG"
 
 #: ../src/ephy-main.c:417
 msgid "Could not start GNOME Web Browser"
@@ -2968,6 +2984,8 @@ msgid ""
 "Startup failed because of the following error:\n"
 "%s"
 msgstr ""
+"Tõrge käivitamisel järgneva veat tõttu:\n"
+"%s"
 
 #: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:760
 msgid "GNOME Web Browser"
@@ -3514,7 +3532,7 @@ msgstr "_Täisekraanvaade"
 
 #: ../src/ephy-window.c:290
 msgid "Browse at full screen"
-msgstr "Vaata täisekraanis"
+msgstr "Täisekraanivaate sisselülitamine"
 
 #: ../src/ephy-window.c:292
 msgid "Popup _Windows"
@@ -3549,7 +3567,7 @@ msgstr "A_va viit"
 
 #: ../src/ephy-window.c:316
 msgid "Open link in this window"
-msgstr "Ava viit selles aknas"
+msgstr "Viida avamine selles aknas"
 
 #: ../src/ephy-window.c:318
 msgid "Open Link in New _Window"
@@ -3557,7 +3575,7 @@ msgstr "Ava _viit uues aknas"
 
 #: ../src/ephy-window.c:319
 msgid "Open link in a new window"
-msgstr "Ava viit uues aknas"
+msgstr "Viida avamine uues aknas"
 
 #: ../src/ephy-window.c:321
 msgid "Open Link in New _Tab"
@@ -3565,7 +3583,7 @@ msgstr "Ava _viit uues sakis"
 
 #: ../src/ephy-window.c:322
 msgid "Open link in a new tab"
-msgstr "Ava viit uues sakis"
+msgstr "Viida avamine uues sakis"
 
 #: ../src/ephy-window.c:324
 msgid "_Download Link"
@@ -3616,11 +3634,11 @@ msgstr "Kopeeri p_ildi aadress"
 
 #: ../src/ephy-window.c:352
 msgid "St_art Animation"
-msgstr ""
+msgstr "Käivita _animatsioon"
 
 #: ../src/ephy-window.c:354
 msgid "St_op Animation"
-msgstr ""
+msgstr "Seiska animatsio_on"
 
 #: ../src/ephy-window.c:708
 msgid "There are unsubmitted changes to form elements"
@@ -3692,22 +3710,22 @@ msgstr[1] "%d peidetud hüpikakent"
 #: ../src/ephy-window.c:1841
 #, c-format
 msgid "Open image “%s”"
-msgstr "Ava pilt „%s“"
+msgstr "Pildi „%s“ avamine"
 
 #: ../src/ephy-window.c:1846
 #, c-format
 msgid "Use as desktop background “%s”"
-msgstr "Kasuta pilti taustana „%s“"
+msgstr "Pildi „%s“ kasutamine töölaua taustana"
 
 #: ../src/ephy-window.c:1851
 #, c-format
 msgid "Save image “%s”"
-msgstr "Salvesta pilt „%s“"
+msgstr "Pildi „%s“ salvestamine"
 
 #: ../src/ephy-window.c:1856
 #, c-format
 msgid "Copy image address “%s”"
-msgstr "Kopeeri pildi aadress „%s“"
+msgstr "Pildi aadressi „%s“ kopeerimine"
 
 #: ../src/ephy-window.c:1869
 #, c-format
@@ -3717,22 +3735,22 @@ msgstr "E-posti saatmine aadressile „%s“"
 #: ../src/ephy-window.c:1875
 #, c-format
 msgid "Copy email address “%s”"
-msgstr "Kopeeri e-posti aadress „%s“"
+msgstr "E-posti aadressi „%s“ kopeerimine"
 
 #: ../src/ephy-window.c:1887
 #, c-format
 msgid "Save link “%s”"
-msgstr "Salvesta viit „%s“"
+msgstr "Viida „%s“ salvestamine"
 
 #: ../src/ephy-window.c:1893
 #, c-format
 msgid "Bookmark link “%s”"
-msgstr "Lisa viit „%s“ järjehoidjatesse"
+msgstr "Viida „%s“ lisamine järjehoidjatesse"
 
 #: ../src/ephy-window.c:1899
 #, c-format
 msgid "Copy link's address “%s”"
-msgstr "Kopeeri viida aadress „%s“"
+msgstr "Viida aadressi „%s“ kopeerimine"
 
 #: ../src/pdm-dialog.c:378
 msgid "Cookie Properties"
@@ -3915,39 +3933,6 @@ msgstr ""
 msgid "GNOME Web Browser Website"
 msgstr "GNOME Veebisirvija sait"
 
-#~ msgid "download status|Unknown"
-#~ msgstr "Teadmata"
-
-#~ msgid "download status|Failed"
-#~ msgstr "Nurjunud"
-
-#~ msgid "File Type:|Unknown"
-#~ msgstr "Tundmatu"
-
-#~ msgid "You may find an old version:|in the Google Cache"
-#~ msgstr "Google'i vahemälust"
-
-#~ msgid "You may find an old version:|in the Internet Archive"
-#~ msgstr "Internetiarhiivist"
-
-#~ msgid "bookmarks|All"
-#~ msgstr "Kõik"
-
-#~ msgid "bookmarks|Most Visited"
-#~ msgstr "Tihedamini külastatud"
-
-#~ msgid "bookmarks|Not Categorized"
-#~ msgstr "Kategoriseerimata"
-
-#~ msgid "bookmarks|Local Sites"
-#~ msgstr "Kohalikud lehed"
-
-#~ msgid "language|%s (%s)"
-#~ msgstr "%s (%s)"
-
-#~ msgid "language|User defined (%s)"
-#~ msgstr "Kasutaja kirjeldatud (%s)"
-
 #~ msgid "Epiphany automation"
 #~ msgstr "Epiphany automaatika"
 
@@ -4055,24 +4040,6 @@ msgstr "GNOME Veebisirvija sait"
 #~ msgid "_Show in Bookmarks Bar"
 #~ msgstr "_Näita järjehoidjaribal"
 
-#~ msgid "Empty"
-#~ msgstr "Tühi"
-
-#~ msgid "Back"
-#~ msgstr "Tagasi"
-
-#~ msgid "Go back"
-#~ msgstr "Tagasiliikumine"
-
-#~ msgid "Forward"
-#~ msgstr "Edasi"
-
-#~ msgid "Go forward"
-#~ msgstr "Edasiliikumine"
-
-#~ msgid "Up"
-#~ msgstr "Üles"
-
 #~ msgid "S_end To..."
 #~ msgstr "Saa_da..."
 
@@ -4081,12 +4048,3 @@ msgstr "GNOME Veebisirvija sait"
 
 #~ msgid "_Save Background As..."
 #~ msgstr "_Salvesta taustapilt kui..."
-
-#~ msgid "Save background image '%s'"
-#~ msgstr "Salvesta taustapilt '%s'"
-
-#~ msgid "Save Background As"
-#~ msgstr "Salvesta taustapilt kui"
-
-#~ msgid "Check this out!"
-#~ msgstr "Vaata seda!"
