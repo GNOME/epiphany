@@ -1286,9 +1286,12 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 		PRBool isVisible = PR_FALSE;
 		nsresult rv;
 		computedStyle = nsnull;
-		rv = defaultCSSView->GetComputedStyle (formElement, EmptyString,
-						       getter_AddRefs (computedStyle));
-		if (NS_SUCCEEDED (rv) && computedStyle)
+
+		/* Check defaultCSSView for NULL, see bug #327764 */
+		if (defaultCSSView &&
+		    NS_SUCCEEDED (defaultCSSView->GetComputedStyle (formElement, EmptyString,
+				  				    getter_AddRefs (computedStyle))) &&
+		    computedStyle)
 		{
 			rv = computedStyle->GetPropertyCSSValue(visibilityAttr, getter_AddRefs (cssValue));
 			if (NS_SUCCEEDED (rv) && cssValue)
@@ -1328,9 +1331,11 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 
 			isVisible = PR_FALSE;
 			computedStyle = nsnull;
-			rv = defaultCSSView->GetComputedStyle (domElement, EmptyString,
-							       getter_AddRefs (computedStyle));
-			if (NS_SUCCEEDED (rv) && computedStyle)
+			/* Check defaultCSSView for NULL, see bug #327764 */
+			if (defaultCSSView &&
+			    NS_SUCCEEDED (defaultCSSView->GetComputedStyle (domElement, EmptyString,
+					  				    getter_AddRefs (computedStyle))) &&
+			    computedStyle)
 			{
 				rv = computedStyle->GetPropertyCSSValue(visibilityAttr, getter_AddRefs (cssValue));
 				if (NS_SUCCEEDED (rv) && cssValue)
