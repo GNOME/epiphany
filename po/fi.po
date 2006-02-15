@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-12 09:24+0200\n"
-"PO-Revision-Date: 2006-02-12 09:30+0200\n"
+"POT-Creation-Date: 2006-02-15 04:22+0200\n"
+"PO-Revision-Date: 2006-02-15 04:21+0200\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists."
 "sourceforge.net>\n"
@@ -137,7 +137,7 @@ msgstr "Epiphany, WWW-selain"
 
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:482
-#: ../src/ephy-main.c:533 ../src/ephy-main.c:606
+#: ../src/ephy-main.c:533 ../src/ephy-main.c:621
 msgid "Web Browser"
 msgstr "WWW-selain"
 
@@ -566,7 +566,7 @@ msgid "Cookies"
 msgstr "Evästeet"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:106
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:107
 msgid "Downloads"
 msgstr "Tallennukset"
 
@@ -836,7 +836,7 @@ msgid_plural "%d downloads"
 msgstr[0] "%d tallennus"
 msgstr[1] "%d tallennusta"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:965
+#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:985
 msgid "File"
 msgstr "Tiedosto"
 
@@ -1577,7 +1577,7 @@ msgstr ""
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks.c:1168 ../src/ephy-session.c:1308
+#: ../src/bookmarks/ephy-bookmarks.c:1264 ../src/ephy-session.c:1308
 msgid "Untitled"
 msgstr "Nimetön"
 
@@ -1590,8 +1590,8 @@ msgid "Don't Save"
 msgstr "Älä tallenna"
 
 #: ../embed/mozilla/EphyPromptService.cpp:799
-msgid "_User:"
-msgstr "_Käyttäjä:"
+msgid "_Username:"
+msgstr "_Käyttäjätunnus:"
 
 #: ../embed/mozilla/EphyPromptService.cpp:800
 #: ../embed/mozilla/EphyPromptService.cpp:827
@@ -1601,7 +1601,7 @@ msgid "_Password:"
 msgstr "_Salasana:"
 
 #: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:748
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "All files"
 msgstr "Kaikki tiedostot"
 
@@ -2063,17 +2063,17 @@ msgstr "Erotin"
 msgid "All supported types"
 msgstr "Kaikki tuetut tyypit"
 
-#: ../lib/ephy-file-helpers.c:300
+#: ../lib/ephy-file-helpers.c:301
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Väliaikaiskansiota hakemistoon \"%s\" ei voi luoda."
 
-#: ../lib/ephy-file-helpers.c:368
+#: ../lib/ephy-file-helpers.c:377
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Tiedosto \"%s\" on jo olemassa, siirrä se pois tieltä."
 
-#: ../lib/ephy-file-helpers.c:379
+#: ../lib/ephy-file-helpers.c:388
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Kansiota \"%s\" ei voi luoda."
@@ -2277,8 +2277,8 @@ msgstr "Ponnahdusikkunat"
 msgid "History"
 msgstr "Historiikki"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:879
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1721
+#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1741
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
@@ -2450,7 +2450,7 @@ msgstr "Luo uusi aihe"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1338
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
 #: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
@@ -2464,7 +2464,7 @@ msgstr "Avaa valittu kirjanmerkki uuteen ikkunaan"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1341
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
 #: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
@@ -2538,7 +2538,7 @@ msgid "Cut the selection"
 msgstr "Leikkaa valinta"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1351
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1371
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:168
 msgid "_Copy"
@@ -2644,38 +2644,38 @@ msgstr ""
 msgid "_Delete Topic"
 msgstr "_Poista aihe"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:611
+#: ../src/bookmarks/ephy-bookmarks-editor.c:631
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:615
-#: ../src/bookmarks/ephy-bookmarks-editor.c:619
+#: ../src/bookmarks/ephy-bookmarks-editor.c:635
+#: ../src/bookmarks/ephy-bookmarks-editor.c:639
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:624
+#: ../src/bookmarks/ephy-bookmarks-editor.c:644
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozillan \"%s\"-profiili"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:628
+#: ../src/bookmarks/ephy-bookmarks-editor.c:648
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:632
+#: ../src/bookmarks/ephy-bookmarks-editor.c:652
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:661
+#: ../src/bookmarks/ephy-bookmarks-editor.c:681
 msgid "Import failed"
 msgstr "Tuonti epäonnistui"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:663
+#: ../src/bookmarks/ephy-bookmarks-editor.c:683
 msgid "Import Failed"
 msgstr "Tuonti epäonnistui"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:666
+#: ../src/bookmarks/ephy-bookmarks-editor.c:686
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2684,63 +2684,63 @@ msgstr ""
 "Tiedoston \"%s\" sisältämien kirjanmerkkien tuonti ei onnistunut, koska "
 "tiedosto on vioittunut tai tuntematonta tyyppiä."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:729
+#: ../src/bookmarks/ephy-bookmarks-editor.c:749
 msgid "Import bookmarks from file"
 msgstr "Tuo kirjanmerkit tiedostosta"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:736
+#: ../src/bookmarks/ephy-bookmarks-editor.c:756
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefoxin tai Mozillan kirjanmerkit"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:740
+#: ../src/bookmarks/ephy-bookmarks-editor.c:760
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeonin tai Konquerorin kirjanmerkit"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:744
+#: ../src/bookmarks/ephy-bookmarks-editor.c:764
 msgid "Epiphany bookmarks"
 msgstr "Epiphanyn kirjanmerkit"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:867
+#: ../src/bookmarks/ephy-bookmarks-editor.c:887
 msgid "Export Bookmarks"
 msgstr "Tuo kirjanmerkit"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:882
+#: ../src/bookmarks/ephy-bookmarks-editor.c:902
 msgid "File format:"
 msgstr "Tiedostomuoto:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:925
+#: ../src/bookmarks/ephy-bookmarks-editor.c:945
 msgid "Import Bookmarks"
 msgstr "Tuo kirjanmerkit"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:931
+#: ../src/bookmarks/ephy-bookmarks-editor.c:951
 msgid "I_mport"
 msgstr "T_uo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:945
+#: ../src/bookmarks/ephy-bookmarks-editor.c:965
 msgid "Import bookmarks from:"
 msgstr "Tuo kirjanmerkit:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1347
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "_Kopioi osoite"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1588
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1608
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Etsi:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1785
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1805
 msgid "Topics"
 msgstr "Aiheet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1855
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1875
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Otsikko"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1861
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1881
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Osoite"
@@ -2783,30 +2783,30 @@ msgid "Work"
 msgstr "Työ"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:470
+#: ../src/bookmarks/ephy-bookmarks.c:476
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Päivitetäänkö kirjanmerkki \"%s\"?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:475
+#: ../src/bookmarks/ephy-bookmarks.c:481
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "Kirjanmerkin sisältämä sivu on siirretty osoitteeseen \"%s\"."
 
-#: ../src/bookmarks/ephy-bookmarks.c:479
+#: ../src/bookmarks/ephy-bookmarks.c:485
 msgid "_Don't Update"
 msgstr "_Älä päivitä"
 
-#: ../src/bookmarks/ephy-bookmarks.c:481
+#: ../src/bookmarks/ephy-bookmarks.c:487
 msgid "_Update"
 msgstr "_Päivitä"
 
-#: ../src/bookmarks/ephy-bookmarks.c:484
+#: ../src/bookmarks/ephy-bookmarks.c:490
 msgid "Update Bookmark?"
 msgstr "Päivitetäänkö kirjanmerkki?"
 
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:321
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
 msgstr "Nopea kirjanmerkki"
 
@@ -2832,11 +2832,15 @@ msgstr "Avaa kirjanmerkki uuteen ikkunaan"
 msgid "Open in New _Tabs"
 msgstr "Avaa uusissa _välilehdissä"
 
+#: ../src/bookmarks/ephy-open-tabs-action.c:78
+msgid "Open the bookmarks in this topic in new tabs"
+msgstr "Avaa tähän aiheen kirjanmerkit uusiin välilehtiin"
+
 #: ../src/bookmarks/ephy-related-action.c:176
 msgid "Related"
 msgstr "Liittyy"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:320
+#: ../src/bookmarks/ephy-topic-factory-action.c:322
 msgid "Quick Topic"
 msgstr "Nopea aihe"
 
@@ -3017,6 +3021,18 @@ msgstr "Lisää kirjanmerkki"
 #: ../src/ephy-main.c:88
 msgid "URL"
 msgstr "URL"
+
+#: ../src/ephy-main.c:90
+msgid "Start a private instance"
+msgstr "Käynistä erillinen instanssi"
+
+#: ../src/ephy-main.c:92
+msgid "Profile directory to use in the private instance"
+msgstr "Henkilökohtaisille tiedoille käytetty profiilihakemisto"
+
+#: ../src/ephy-main.c:92
+msgid "DIR"
+msgstr "DIR"
 
 #: ../src/ephy-main.c:417
 msgid "Could not start GNOME Web Browser"
@@ -4039,9 +4055,6 @@ msgstr "Gnomen wwwselaimen www-sivu"
 
 #~ msgid "New Topic"
 #~ msgstr "Uusi aihe"
-
-#~ msgid "Start a private instance"
-#~ msgstr "Käynistä erillinen instanssi"
 
 #~ msgid "language|%s (%s)"
 #~ msgstr "%s (%s)"
