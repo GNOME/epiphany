@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-11 00:12+0100\n"
-"PO-Revision-Date: 2006-02-11 00:41+0100\n"
+"POT-Creation-Date: 2006-02-16 20:51+0100\n"
+"PO-Revision-Date: 2006-02-16 21:04+0100\n"
 "Last-Translator: Reinout van Schouwen <reinout@cs.vu.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -163,7 +163,7 @@ msgstr "Epiphany webbrowser"
 # epiphany.desktop.in.h:2
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:482
-#: ../src/ephy-main.c:533 ../src/ephy-main.c:606
+#: ../src/ephy-main.c:533 ../src/ephy-main.c:621
 msgid "Web Browser"
 msgstr "Webbrowser"
 
@@ -639,7 +639,7 @@ msgstr "Cookies"
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:106
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:107
 msgid "Downloads"
 msgstr "Downloads"
 
@@ -970,7 +970,7 @@ msgstr[1] "%d downloads"
 # src/bookmarks_editor.c:941
 # src/bookmarks_editor.c:1148
 # src/menubar.c:565
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:965
+#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:985
 msgid "File"
 msgstr "Bestand"
 
@@ -1824,7 +1824,7 @@ msgstr ""
 # src/window.c:2279
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks.c:1168 ../src/ephy-session.c:1314
+#: ../src/bookmarks/ephy-bookmarks.c:1264 ../src/ephy-session.c:1308
 msgid "Untitled"
 msgstr "Naamloos"
 
@@ -1843,8 +1843,8 @@ msgid "Don't Save"
 msgstr "Niet opslaan"
 
 #: ../embed/mozilla/EphyPromptService.cpp:799
-msgid "_User:"
-msgstr "_Gebruiker:"
+msgid "_Username:"
+msgstr "_Gebruikersnaam:"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
@@ -1857,7 +1857,7 @@ msgstr "_Wachtwoord:"
 
 # src/history.c:845
 #: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:748
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "All files"
 msgstr "Alle bestanden"
 
@@ -2348,17 +2348,17 @@ msgstr "Scheidingsteken"
 msgid "All supported types"
 msgstr "Alle ondersteunde types"
 
-#: ../lib/ephy-file-helpers.c:300
+#: ../lib/ephy-file-helpers.c:301
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Kan geen tijdelijke map aanmaken in ‘%s’."
 
-#: ../lib/ephy-file-helpers.c:368
+#: ../lib/ephy-file-helpers.c:377
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Het bestand ‘%s’ bestaat. Haal het alstublieft uit de weg."
 
-#: ../lib/ephy-file-helpers.c:379
+#: ../lib/ephy-file-helpers.c:388
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Aanmaken van de map ‘%s’ is mislukt."
@@ -2574,8 +2574,8 @@ msgid "History"
 msgstr "Geschiedenis"
 
 # src/menubar.c:571
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:879
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1721
+#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1741
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Bladwijzers"
@@ -2766,7 +2766,7 @@ msgstr "Nieuw onderwerp aanmaken"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1338
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
 #: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
@@ -2781,7 +2781,7 @@ msgstr "Geselecteerde bladwijzer openen in een nieuw venster"
 # src/context.c:66
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1341
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
 #: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
@@ -2876,7 +2876,7 @@ msgstr "Selectie knippen"
 # src/bookmarks_editor.c:1167
 # src/menubar.c:38
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1351
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1371
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:168
 msgid "_Copy"
@@ -2995,18 +2995,18 @@ msgstr ""
 msgid "_Delete Topic"
 msgstr "Onderwerp _verwijderen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:611
+#: ../src/bookmarks/ephy-bookmarks-editor.c:631
 msgid "Firefox"
 msgstr "Firefox"
 
 # src/menubar.c:571
-#: ../src/bookmarks/ephy-bookmarks-editor.c:615
-#: ../src/bookmarks/ephy-bookmarks-editor.c:619
+#: ../src/bookmarks/ephy-bookmarks-editor.c:635
+#: ../src/bookmarks/ephy-bookmarks-editor.c:639
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:624
+#: ../src/bookmarks/ephy-bookmarks-editor.c:644
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla ‘%s’-profiel"
@@ -3017,24 +3017,24 @@ msgstr "Mozilla ‘%s’-profiel"
 # src/mozilla/PromptService.cpp:666
 # src/window.c:191
 # ui/epiphany.glade.h:50
-#: ../src/bookmarks/ephy-bookmarks-editor.c:628
+#: ../src/bookmarks/ephy-bookmarks-editor.c:648
 msgid "Galeon"
 msgstr "Galeon"
 
 # src/bookmarks_editor.c:981
-#: ../src/bookmarks/ephy-bookmarks-editor.c:632
+#: ../src/bookmarks/ephy-bookmarks-editor.c:652
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:661
+#: ../src/bookmarks/ephy-bookmarks-editor.c:681
 msgid "Import failed"
 msgstr "Importeren mislukt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:663
+#: ../src/bookmarks/ephy-bookmarks-editor.c:683
 msgid "Import Failed"
 msgstr "Importeren mislukt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:666
+#: ../src/bookmarks/ephy-bookmarks-editor.c:686
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -3047,22 +3047,22 @@ msgstr ""
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: ../src/bookmarks/ephy-bookmarks-editor.c:729
+#: ../src/bookmarks/ephy-bookmarks-editor.c:749
 msgid "Import bookmarks from file"
 msgstr "Bladwijzers importeren uit een bestand"
 
 # src/bookmarks_editor.c:1111
-#: ../src/bookmarks/ephy-bookmarks-editor.c:736
+#: ../src/bookmarks/ephy-bookmarks-editor.c:756
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla-bladwijzers"
 
 # src/bookmarks_editor.c:981
-#: ../src/bookmarks/ephy-bookmarks-editor.c:740
+#: ../src/bookmarks/ephy-bookmarks-editor.c:760
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror-bladwijzers"
 
 # src/bookmarks_editor.c:981
-#: ../src/bookmarks/ephy-bookmarks-editor.c:744
+#: ../src/bookmarks/ephy-bookmarks-editor.c:764
 msgid "Epiphany bookmarks"
 msgstr "Epiphany-bladwijzers"
 
@@ -3070,12 +3070,12 @@ msgstr "Epiphany-bladwijzers"
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: ../src/bookmarks/ephy-bookmarks-editor.c:867
+#: ../src/bookmarks/ephy-bookmarks-editor.c:887
 msgid "Export Bookmarks"
 msgstr "Bladwijzers exporteren"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:882
+#: ../src/bookmarks/ephy-bookmarks-editor.c:902
 msgid "File format:"
 msgstr "Bestandsformaat:"
 
@@ -3083,11 +3083,11 @@ msgstr "Bestandsformaat:"
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: ../src/bookmarks/ephy-bookmarks-editor.c:925
+#: ../src/bookmarks/ephy-bookmarks-editor.c:945
 msgid "Import Bookmarks"
 msgstr "Bladwijzers importeren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:931
+#: ../src/bookmarks/ephy-bookmarks-editor.c:951
 msgid "I_mport"
 msgstr "I_mporteren"
 
@@ -3095,32 +3095,32 @@ msgstr "I_mporteren"
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: ../src/bookmarks/ephy-bookmarks-editor.c:945
+#: ../src/bookmarks/ephy-bookmarks-editor.c:965
 msgid "Import bookmarks from:"
 msgstr "Bladwijzers importeren uit:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1347
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "Adres _kopiëren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1588
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1608
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Zoeken:"
 
 # ui/preferences.glade.h:195
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1785
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1805
 msgid "Topics"
 msgstr "Onderwerpen"
 
 # ui/epiphany.glade.h:121
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1855
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1875
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Titel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1861
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1881
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Adres"
@@ -3166,13 +3166,13 @@ msgstr "Werk"
 
 # src/bookmarks_editor.c:981
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:470
+#: ../src/bookmarks/ephy-bookmarks.c:476
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Bladwijzer ‘%s’ bijwerken?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:475
+#: ../src/bookmarks/ephy-bookmarks.c:481
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "De pagina waar de bladwijzer naar verwijst is verhuisd naar ‘%s’."
@@ -3181,14 +3181,14 @@ msgstr "De pagina waar de bladwijzer naar verwijst is verhuisd naar ‘%s’."
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: ../src/bookmarks/ephy-bookmarks.c:479
+#: ../src/bookmarks/ephy-bookmarks.c:485
 msgid "_Don't Update"
 msgstr "_Niet bijwerken"
 
 # src/bookmarks_editor.c:949
 # src/bookmarks_editor.c:1169
 # src/menubar.c:39
-#: ../src/bookmarks/ephy-bookmarks.c:481
+#: ../src/bookmarks/ephy-bookmarks.c:487
 msgid "_Update"
 msgstr "_Bijwerken"
 
@@ -3196,7 +3196,7 @@ msgstr "_Bijwerken"
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: ../src/bookmarks/ephy-bookmarks.c:484
+#: ../src/bookmarks/ephy-bookmarks.c:490
 msgid "Update Bookmark?"
 msgstr "Bladwijzer bijwerken?"
 
@@ -3204,7 +3204,7 @@ msgstr "Bladwijzer bijwerken?"
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:321
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
 msgstr "Snelle bladwijzer"
 
@@ -3233,13 +3233,17 @@ msgstr "Deze bladwijzer openen in een nieuw venster"
 msgid "Open in New _Tabs"
 msgstr "In _nieuwe tabbladen openen"
 
+#: ../src/bookmarks/ephy-open-tabs-action.c:78
+msgid "Open the bookmarks in this topic in new tabs"
+msgstr "De bladwijzers in dit onderwerp in nieuwe tabbladen openen"
+
 # src/menubar.c:468
 # ui/preferences.glade.h:262
 #: ../src/bookmarks/ephy-related-action.c:176
 msgid "Related"
 msgstr "Gerelateerd"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:320
+#: ../src/bookmarks/ephy-topic-factory-action.c:322
 msgid "Quick Topic"
 msgstr "Snel onderwerp"
 
@@ -3455,6 +3459,18 @@ msgstr "Bladwijzer toevoegen"
 msgid "URL"
 msgstr "URL"
 
+#: ../src/ephy-main.c:90
+msgid "Start a private instance"
+msgstr "Privé-instantie starten"
+
+#: ../src/ephy-main.c:92
+msgid "Profile directory to use in the private instance"
+msgstr "Te gebruiken profielmap in de privé-instantie"
+
+#: ../src/ephy-main.c:92
+msgid "DIR"
+msgstr "MAP"
+
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
 #: ../src/ephy-main.c:417
@@ -3488,7 +3504,7 @@ msgstr "Opties voor GNOME-webbrowser"
 msgid "Close tab"
 msgstr "Tabblad sluiten"
 
-#: ../src/ephy-session.c:158
+#: ../src/ephy-session.c:156
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
@@ -3499,11 +3515,11 @@ msgstr[1] ""
 "Downloads zullen worden afgebroken en het afmelden gaat door binnen %d "
 "seconden."
 
-#: ../src/ephy-session.c:274
+#: ../src/ephy-session.c:272
 msgid "Abort pending downloads?"
 msgstr "Lopende downloads afbreken?"
 
-#: ../src/ephy-session.c:278
+#: ../src/ephy-session.c:276
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
@@ -3511,21 +3527,21 @@ msgstr ""
 "Er zijn nog downloads bezig. Als u zich afmeldt, worden deze afgebroken en "
 "zijn ze verloren."
 
-#: ../src/ephy-session.c:282
+#: ../src/ephy-session.c:280
 msgid "_Cancel Logout"
 msgstr "Afmelden _annuleren"
 
 # ui/preferences.glade.h:157
-#: ../src/ephy-session.c:284
+#: ../src/ephy-session.c:282
 msgid "_Abort Downloads"
 msgstr "_Downloads afbreken"
 
-#: ../src/ephy-session.c:609
+#: ../src/ephy-session.c:603
 msgid "Recover previous browser windows and tabs?"
 msgstr "Eerdere browservensters en -tabbladen herstellen?"
 
 # ui/epiphany.glade.h:53
-#: ../src/ephy-session.c:613
+#: ../src/ephy-session.c:607
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -3534,17 +3550,17 @@ msgstr ""
 "is afgesloten. U kunt de geopende vensters en tabbladen herstellen."
 
 # src/bookmarks_editor.c:943
-#: ../src/ephy-session.c:617
+#: ../src/ephy-session.c:611
 msgid "_Don't Recover"
 msgstr "_Niet herstellen"
 
 # src/bookmarks_editor.c:943
-#: ../src/ephy-session.c:619
+#: ../src/ephy-session.c:613
 msgid "_Recover"
 msgstr "He_rstellen"
 
 # ui/epiphany.glade.h:51
-#: ../src/ephy-session.c:621
+#: ../src/ephy-session.c:615
 msgid "Crash Recovery"
 msgstr "Herstellen na vastlopen"
 
@@ -4687,9 +4703,6 @@ msgstr "Webstek van de GNOME-webbrowser"
 # ui/preferences.glade.h:195
 #~ msgid "New Topic"
 #~ msgstr "Nieuw onderwerp"
-
-#~ msgid "Start a private instance"
-#~ msgstr "Privé-instantie starten"
 
 #~ msgid "_Merge"
 #~ msgstr "_Samenvoegen"
