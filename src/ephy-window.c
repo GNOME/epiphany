@@ -2805,7 +2805,7 @@ ephy_window_state_event (GtkWidget *widget,
 		g_signal_handlers_unblock_by_func
 			(action, G_CALLBACK (window_cmd_view_fullscreen), window);
 
-		action = gtk_action_group_get_action (action_group, "EditToolbar");
+		action = gtk_action_group_get_action (action_group, "ViewToolbarEditor");
 		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, fullscreen);
 	}
 
