@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 1.9.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-13 00:11+0100\n"
-"PO-Revision-Date: 2006-02-13 00:23+0100\n"
+"POT-Creation-Date: 2006-02-18 12:37+0100\n"
+"PO-Revision-Date: 2006-02-18 12:44+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -133,7 +133,7 @@ msgstr "Epiphany nettleser"
 
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:482
-#: ../src/ephy-main.c:533 ../src/ephy-main.c:606
+#: ../src/ephy-main.c:533 ../src/ephy-main.c:621
 msgid "Web Browser"
 msgstr "Nettleser"
 
@@ -557,7 +557,7 @@ msgid "Cookies"
 msgstr "Informasjonskapsler"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:106
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:107
 msgid "Downloads"
 msgstr "Nedlastinger"
 
@@ -827,7 +827,7 @@ msgid_plural "%d downloads"
 msgstr[0] "%d nedlasting"
 msgstr[1] "%d nedlastinger"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:965
+#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:985
 msgid "File"
 msgstr "Fil"
 
@@ -1380,20 +1380,27 @@ msgid ""
 "<ul><li>the service %s isn't started.</li>Try to start it using the Services "
 "Configuration Tool in Desktop > System Settings > Server Settings > "
 "Services, or</ul><ul><li>the port number %d is wrong.</li></ul>"
-msgstr "<ul><li>tjenesten %s er ikke startet.</li>Prøv å starte denne fra konfigurasjonsverktøyet for tjenester.</ul><ul><li>Alternativt kan port nummer %d være feil.</li></ul>"
+msgstr ""
+"<ul><li>tjenesten %s er ikke startet.</li>Prøv å starte denne fra "
+"konfigurasjonsverktøyet for tjenester.</ul><ul><li>Alternativt kan port "
+"nummer %d være feil.</li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:281
 #, c-format
 msgid ""
 "<ul><li>some service isn't started, or</li><li>the port number %d is wrong.</"
 "li></ul>"
-msgstr "<ul><li>en tjeneste er ikke startet eller</li><li>port nummer %d er feil.</li></ul>"
+msgstr ""
+"<ul><li>en tjeneste er ikke startet eller</li><li>port nummer %d er feil.</"
+"li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:290
 msgid ""
 "<ul><li>some service isn't started, or</li><li>you got the port number wrong."
 "</li></ul>"
-msgstr "<ul><li>en tjeneste er ikke startet eller </li><li>feil port nummer er brukt</li></ul>"
+msgstr ""
+"<ul><li>en tjeneste er ikke startet eller </li><li>feil port nummer er "
+"brukt</li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:298
 #: ../embed/mozilla/EphyAboutModule.cpp:316
@@ -1563,7 +1570,7 @@ msgstr ""
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks.c:1168 ../src/ephy-session.c:1308
+#: ../src/bookmarks/ephy-bookmarks.c:1264 ../src/ephy-session.c:1308
 msgid "Untitled"
 msgstr "Uten tittel"
 
@@ -1576,8 +1583,8 @@ msgid "Don't Save"
 msgstr "Ikke lagre"
 
 #: ../embed/mozilla/EphyPromptService.cpp:799
-msgid "_User:"
-msgstr "Br_uker:"
+msgid "_Username:"
+msgstr "Br_ukernavn:"
 
 #: ../embed/mozilla/EphyPromptService.cpp:800
 #: ../embed/mozilla/EphyPromptService.cpp:827
@@ -1587,7 +1594,7 @@ msgid "_Password:"
 msgstr "_Passord:"
 
 #: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:748
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "All files"
 msgstr "Alle filer"
 
@@ -2045,17 +2052,17 @@ msgstr "Skillelinje"
 msgid "All supported types"
 msgstr "Alle støttede typer"
 
-#: ../lib/ephy-file-helpers.c:300
+#: ../lib/ephy-file-helpers.c:301
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Kunne ikke opprette midlertidig katalog i «%s»."
 
-#: ../lib/ephy-file-helpers.c:368
+#: ../lib/ephy-file-helpers.c:377
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Filen «%s» eksisterer. Vennligst flytt den."
 
-#: ../lib/ephy-file-helpers.c:379
+#: ../lib/ephy-file-helpers.c:388
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Kunne ikke opprette katalog «%s»."
@@ -2259,8 +2266,8 @@ msgstr "Sprettoppvinduer"
 msgid "History"
 msgstr "Historie"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:879
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1721
+#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1741
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Bokmerker"
@@ -2356,15 +2363,15 @@ msgstr "%s:"
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d _lik"
+msgstr[1] "%d _like"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:266
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Slå _sammen med %d identisk bokmerke"
+msgstr[1] "Slå _sammen med %d identiske bokmerker"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:286
 #: ../src/bookmarks/ephy-bookmark-properties.c:308
@@ -2435,7 +2442,7 @@ msgstr "Opprett et nytt emne"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1338
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
 #: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
@@ -2449,7 +2456,7 @@ msgstr "Åpne valgte bokmerker i et nytt vindu"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1341
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
 #: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
@@ -2524,7 +2531,7 @@ msgid "Cut the selection"
 msgstr "Klipp ut utvalget"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1351
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1371
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:168
 msgid "_Copy"
@@ -2630,38 +2637,38 @@ msgstr ""
 msgid "_Delete Topic"
 msgstr "_Slett emne"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:611
+#: ../src/bookmarks/ephy-bookmarks-editor.c:631
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:615
-#: ../src/bookmarks/ephy-bookmarks-editor.c:619
+#: ../src/bookmarks/ephy-bookmarks-editor.c:635
+#: ../src/bookmarks/ephy-bookmarks-editor.c:639
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:624
+#: ../src/bookmarks/ephy-bookmarks-editor.c:644
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla «%s»-profil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:628
+#: ../src/bookmarks/ephy-bookmarks-editor.c:648
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:632
+#: ../src/bookmarks/ephy-bookmarks-editor.c:652
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:661
+#: ../src/bookmarks/ephy-bookmarks-editor.c:681
 msgid "Import failed"
 msgstr "Import feilet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:663
+#: ../src/bookmarks/ephy-bookmarks-editor.c:683
 msgid "Import Failed"
 msgstr "Import feilet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:666
+#: ../src/bookmarks/ephy-bookmarks-editor.c:686
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2670,63 +2677,63 @@ msgstr ""
 "Bokmerkene fra «%s» kunne ikke importeres fordi filen er korrupt eller av en "
 "type som ikke er støttet."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:729
+#: ../src/bookmarks/ephy-bookmarks-editor.c:749
 msgid "Import bookmarks from file"
 msgstr "Importer bokmerker fra fil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:736
+#: ../src/bookmarks/ephy-bookmarks-editor.c:756
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Bokmerker fra Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:740
+#: ../src/bookmarks/ephy-bookmarks-editor.c:760
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Bokmerker fra Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:744
+#: ../src/bookmarks/ephy-bookmarks-editor.c:764
 msgid "Epiphany bookmarks"
 msgstr "Bokmerker fra Epiphany"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:867
+#: ../src/bookmarks/ephy-bookmarks-editor.c:887
 msgid "Export Bookmarks"
 msgstr "Eksporter bokmerker"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:882
+#: ../src/bookmarks/ephy-bookmarks-editor.c:902
 msgid "File format:"
 msgstr "Filformat:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:925
+#: ../src/bookmarks/ephy-bookmarks-editor.c:945
 msgid "Import Bookmarks"
 msgstr "Importer bokmerker"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:931
+#: ../src/bookmarks/ephy-bookmarks-editor.c:951
 msgid "I_mport"
 msgstr "I_mport"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:945
+#: ../src/bookmarks/ephy-bookmarks-editor.c:965
 msgid "Import bookmarks from:"
 msgstr "Importer bokmerker fra:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1347
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "_Kopier adresse"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1588
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1608
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Søk:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1785
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1805
 msgid "Topics"
 msgstr "Emner"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1855
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1875
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Tittel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1861
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1881
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Adresse"
@@ -2769,26 +2776,26 @@ msgid "Work"
 msgstr "Arbeid"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:470
+#: ../src/bookmarks/ephy-bookmarks.c:476
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Oppdater bokmerke «%s»?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:475
+#: ../src/bookmarks/ephy-bookmarks.c:481
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "Siden bokmerket peker til er flyttet til «%s»."
 
-#: ../src/bookmarks/ephy-bookmarks.c:479
+#: ../src/bookmarks/ephy-bookmarks.c:485
 msgid "_Don't Update"
 msgstr "_Ikke oppdater"
 
-#: ../src/bookmarks/ephy-bookmarks.c:481
+#: ../src/bookmarks/ephy-bookmarks.c:487
 msgid "_Update"
 msgstr "_Oppdater"
 
-#: ../src/bookmarks/ephy-bookmarks.c:484
+#: ../src/bookmarks/ephy-bookmarks.c:490
 msgid "Update Bookmark?"
 msgstr "Oppdater bokmerke?"
 
@@ -2818,6 +2825,10 @@ msgstr "Åpne dette bokmerket i et nytt vindu"
 #: ../src/bookmarks/ephy-open-tabs-action.c:77
 msgid "Open in New _Tabs"
 msgstr "Åpne i nye _faner"
+
+#: ../src/bookmarks/ephy-open-tabs-action.c:78
+msgid "Open the bookmarks in this topic in new tabs"
+msgstr "Åpne bokmerkene i dette emnet i en ny fane"
 
 #: ../src/bookmarks/ephy-related-action.c:176
 msgid "Related"
@@ -3004,6 +3015,18 @@ msgstr "Legg til bokmerke"
 msgid "URL"
 msgstr "Adresse"
 
+#: ../src/ephy-main.c:90
+msgid "Start a private instance"
+msgstr "Start en privat instans"
+
+#: ../src/ephy-main.c:92
+msgid "Profile directory to use in the private instance"
+msgstr "Profilkatalog som skal brukes i den private instansen"
+
+#: ../src/ephy-main.c:92
+msgid "DIR"
+msgstr "KAT"
+
 #: ../src/ephy-main.c:417
 msgid "Could not start GNOME Web Browser"
 msgstr "Kunne ikke starte GNOME Nettleser"
@@ -3033,8 +3056,8 @@ msgstr "Lukk fane"
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Nedlastinger vil bli avbrutt og utlogging fortsetter om %d sekund"
+msgstr[1] "Nedlastinger vil bli avbrutt og utlogging fortsetter om %d sekunder"
 
 #: ../src/ephy-session.c:272
 msgid "Abort pending downloads?"
@@ -3044,7 +3067,9 @@ msgstr "Avbryt utestående nedlastinger?"
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
-msgstr "Du har utestående nedlastinger. Hvis du logger ut vil disse bli avbrutt og gå tapt."
+msgstr ""
+"Du har utestående nedlastinger. Hvis du logger ut vil disse bli avbrutt og "
+"gå tapt."
 
 #: ../src/ephy-session.c:280
 msgid "_Cancel Logout"
@@ -3925,7 +3950,7 @@ msgid ""
 "modify it under the terms of the GNU General Public License as published by "
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
-msgstr ""
+msgstr "GNOME nettleser er fri programvare; du kan redistribuere det og/eller endre det under betingelsene gitt i GNU General Public License som publisert av Free Software Foundation; enten versjon 2 av lisenen eller (hvis du ønsker) enhver senere versjon."
 
 #: ../src/window-commands.c:738
 msgid ""
@@ -3933,14 +3958,14 @@ msgid ""
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
-msgstr ""
+msgstr "GNOME nettleser distribueres i håp om at programmet er nyttig, men uten NOEN GARANTI, ikke engang implisitt garanti om at det er SALGBART eller PASSER ET BESTEMT FORMÅL. Se GNU General Public License for detaljer."
 
 #: ../src/window-commands.c:742
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
-msgstr ""
+msgstr "Du skal ha mottatt en kopi av GNU General Public License sammen med Nautilus. Hvis du ikke har det kan du skrive til Free Software Foundation, Inc. 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA"
 
 #: ../src/window-commands.c:754
 #, c-format
@@ -3962,122 +3987,3 @@ msgstr "Kjartan Maraas <kmaraas@gnome.org>"
 #: ../src/window-commands.c:778
 msgid "GNOME Web Browser Website"
 msgstr "Nettsted for GNOME Nettleser"
-
-#~ msgid "Autowrap for find in page"
-#~ msgstr "Automatisk bryting for søk på siden"
-
-#~ msgid ""
-#~ "For find in page, whether to start again at the beginning after reaching "
-#~ "the end of the page."
-#~ msgstr ""
-#~ "Om søk på siden skal startes på nytt etter å ha nådd slutten på siden."
-
-#~ msgid "Match case for find in page"
-#~ msgstr "Skill mellom store og små bokstaver for søk på siden"
-
-#~ msgid "download status|Unknown"
-#~ msgstr "Ukjent"
-
-#~ msgid "download status|Failed"
-#~ msgstr "Feilet"
-
-#~ msgid "File Type:|Unknown"
-#~ msgstr "Ukjent"
-
-#~ msgid "You may find an old version:|in the Google Cache"
-#~ msgstr "i Google's buffer"
-
-#~ msgid "You may find an old version:|in the Internet Archive"
-#~ msgstr "i the Internet Archive"
-
-#~ msgid "Subtopics"
-#~ msgstr "Underemner"
-
-#~ msgid "bookmarks|All"
-#~ msgstr "Alle"
-
-#~ msgid "bookmarks|Most Visited"
-#~ msgstr "Oftest besøkt"
-
-#~ msgid "bookmarks|Not Categorized"
-#~ msgstr "Ikke kategorisert"
-
-#~ msgid "bookmarks|Local Sites"
-#~ msgstr "bokmerker"
-
-#~ msgid "Bookmark exists"
-#~ msgstr "Bokmerke eksisterer"
-
-#~ msgid "You already have a bookmark titled “%s” for this page."
-#~ msgstr "Du har allerede et bokmerke med tittel «%s» for denne siden."
-
-#~ msgid "_Create New"
-#~ msgstr "_Opprett nytt"
-
-# (ugh)
-#~ msgid "_View Properties"
-#~ msgstr "_Vis egenskaper"
-
-#~ msgid "Bookmark Exists"
-#~ msgstr "Bokmerke eksisterer"
-
-#~ msgid ""
-#~ "You already have a topic named “%s”.\n"
-#~ "Please use a new topic name."
-#~ msgstr ""
-#~ "Du har allerede et emne med navn «%s».\n"
-#~ "Vennligst bruk et nytt emnenavn."
-
-#~ msgid "New topic for “%s”"
-#~ msgstr "Nytt emne for «%s»"
-
-#~ msgid "New topic"
-#~ msgstr "Nytt emne"
-
-#~ msgid "Enter a unique name for the topic."
-#~ msgstr "Oppgi et unikt navn for emnet."
-
-#~ msgid "Create"
-#~ msgstr "Opprett"
-
-#~ msgid "New Topic"
-#~ msgstr "Nytt emne"
-
-#~ msgid "No topics"
-#~ msgstr "Ingen emner"
-
-#~ msgid "Selection"
-#~ msgstr "Utvalg"
-
-#~ msgid "No selected topics"
-#~ msgstr "Ingen emner valgt"
-
-#~ msgid "No more subtopics"
-#~ msgstr "Ingen flere underemner"
-
-#~ msgid "Other"
-#~ msgstr "Andre"
-
-#~ msgid "No other topics"
-#~ msgstr "Ingen andre emner"
-
-#~ msgid "Run in full screen mode"
-#~ msgstr "Kjør i fullskjermmodus"
-
-#~ msgid "Add a bookmark (don't open any window)"
-#~ msgstr "Legg til bokmerke (ikke åpne noen vinduer)"
-
-#~ msgid "T_oolbars"
-#~ msgstr "_Verktøylinjer"
-
-#~ msgid "Zoom _In"
-#~ msgstr "Zoom _inn"
-
-#~ msgid "Zoom _Out"
-#~ msgstr "Zoom _ut"
-
-#~ msgid "language|%s (%s)"
-#~ msgstr "%s (%s)"
-
-#~ msgid "language|User defined (%s)"
-#~ msgstr "Brukerdefinert (%s)"
