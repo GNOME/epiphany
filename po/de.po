@@ -7,13 +7,12 @@
 # Copyright on Galeon translation is held by its translators.
 # Please keep in sync with Galeon translation.
 # 
-# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-12 13:48+0100\n"
-"PO-Revision-Date: 2006-02-12 13:50+0100\n"
+"POT-Creation-Date: 2006-02-18 15:51+0100\n"
+"PO-Revision-Date: 2006-02-18 15:52+0100\n"
 "Last-Translator: Hendrik Richter <hendi@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -141,7 +140,7 @@ msgstr "Epiphany Webbrowser"
 
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:482
-#: ../src/ephy-main.c:533 ../src/ephy-main.c:606
+#: ../src/ephy-main.c:533 ../src/ephy-main.c:621
 msgid "Web Browser"
 msgstr "Webbrowser"
 
@@ -582,7 +581,7 @@ msgid "Cookies"
 msgstr "Cookies"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:106
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:107
 msgid "Downloads"
 msgstr "Downloads"
 
@@ -853,7 +852,7 @@ msgid_plural "%d downloads"
 msgstr[0] "%d Download"
 msgstr[1] "%d Downloads"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:965
+#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:985
 msgid "File"
 msgstr "Datei"
 
@@ -1607,7 +1606,7 @@ msgstr ""
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks.c:1168 ../src/ephy-session.c:1308
+#: ../src/bookmarks/ephy-bookmarks.c:1264 ../src/ephy-session.c:1308
 msgid "Untitled"
 msgstr "Namenlos"
 
@@ -1620,7 +1619,8 @@ msgid "Don't Save"
 msgstr "Nicht speichern"
 
 #: ../embed/mozilla/EphyPromptService.cpp:799
-msgid "_User:"
+#, fuzzy
+msgid "_Username:"
 msgstr "_Benutzer:"
 
 #: ../embed/mozilla/EphyPromptService.cpp:800
@@ -1631,7 +1631,7 @@ msgid "_Password:"
 msgstr "_Passwort:"
 
 #: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:748
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "All files"
 msgstr "Alle Dateien"
 
@@ -1762,7 +1762,7 @@ msgstr "Die Sicherheitsinformationen für »%s« sind bis zum %s ungültig."
 #. * strftime(3)
 #: ../embed/mozilla/GtkNSSDialogs.cpp:459
 msgid "%a %d %b %Y"
-msgstr "%a, den %d.%B %Y"
+msgstr "%a, den %d. %B %Y"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:467
 msgid "You should ensure that your computer's time is correct."
@@ -2106,17 +2106,17 @@ msgstr "Trennlinie"
 msgid "All supported types"
 msgstr "Alle unterstützten Typen"
 
-#: ../lib/ephy-file-helpers.c:300
+#: ../lib/ephy-file-helpers.c:301
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Temporärer Ordner konnte nicht in »%s« angelegt werden."
 
-#: ../lib/ephy-file-helpers.c:368
+#: ../lib/ephy-file-helpers.c:377
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Die Datei »%s« existiert, bitte entfernen Sie sie von dort."
 
-#: ../lib/ephy-file-helpers.c:379
+#: ../lib/ephy-file-helpers.c:388
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Ordner »%s« konnte nicht angelegt werden."
@@ -2323,8 +2323,8 @@ msgstr "Popup-Fenster"
 msgid "History"
 msgstr "Chronik"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:879
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1721
+#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1741
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Lesezeichen"
@@ -2499,7 +2499,7 @@ msgstr "Ein Thema hinzufügen"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1338
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
 #: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
@@ -2513,7 +2513,7 @@ msgstr "Das gewählte Lesezeichen in einem neuen Fenster öffnen"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1341
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
 #: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
@@ -2588,7 +2588,7 @@ msgid "Cut the selection"
 msgstr "Den markierten Text ausschneiden"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1351
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1371
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:168
 msgid "_Copy"
@@ -2694,38 +2694,38 @@ msgstr ""
 msgid "_Delete Topic"
 msgstr "Thema _Löschen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:611
+#: ../src/bookmarks/ephy-bookmarks-editor.c:631
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:615
-#: ../src/bookmarks/ephy-bookmarks-editor.c:619
+#: ../src/bookmarks/ephy-bookmarks-editor.c:635
+#: ../src/bookmarks/ephy-bookmarks-editor.c:639
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:624
+#: ../src/bookmarks/ephy-bookmarks-editor.c:644
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla-Profil »%s«"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:628
+#: ../src/bookmarks/ephy-bookmarks-editor.c:648
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:632
+#: ../src/bookmarks/ephy-bookmarks-editor.c:652
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:661
+#: ../src/bookmarks/ephy-bookmarks-editor.c:681
 msgid "Import failed"
 msgstr "Importieren fehlgeschlagen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:663
+#: ../src/bookmarks/ephy-bookmarks-editor.c:683
 msgid "Import Failed"
 msgstr "Importieren fehlgeschlagen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:666
+#: ../src/bookmarks/ephy-bookmarks-editor.c:686
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2734,63 +2734,63 @@ msgstr ""
 "Die Lesezeichen von »%s« konnten nicht importiert werden, da die Datei "
 "beschädigt ist oder ihr Format nicht unterstützt wird."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:729
+#: ../src/bookmarks/ephy-bookmarks-editor.c:749
 msgid "Import bookmarks from file"
 msgstr "Lesezeichen aus Datei importieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:736
+#: ../src/bookmarks/ephy-bookmarks-editor.c:756
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla-Lesezeichen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:740
+#: ../src/bookmarks/ephy-bookmarks-editor.c:760
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror-Lesezeichen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:744
+#: ../src/bookmarks/ephy-bookmarks-editor.c:764
 msgid "Epiphany bookmarks"
 msgstr "Epiphany-Lesezeichen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:867
+#: ../src/bookmarks/ephy-bookmarks-editor.c:887
 msgid "Export Bookmarks"
 msgstr "Lesezeichen exportieren"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:882
+#: ../src/bookmarks/ephy-bookmarks-editor.c:902
 msgid "File format:"
 msgstr "Dateiformat:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:925
+#: ../src/bookmarks/ephy-bookmarks-editor.c:945
 msgid "Import Bookmarks"
 msgstr "Lesezeichen importieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:931
+#: ../src/bookmarks/ephy-bookmarks-editor.c:951
 msgid "I_mport"
 msgstr "_Importieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:945
+#: ../src/bookmarks/ephy-bookmarks-editor.c:965
 msgid "Import bookmarks from:"
 msgstr "Lesezeichen importieren von:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1347
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "Adresse _kopieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1588
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1608
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Suche:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1785
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1805
 msgid "Topics"
 msgstr "Themen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1855
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1875
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Titel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1861
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1881
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Adresse"
@@ -2833,30 +2833,30 @@ msgid "Work"
 msgstr "Arbeit"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:470
+#: ../src/bookmarks/ephy-bookmarks.c:476
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Soll das Lesezeichen »%s« aktualisiert werden?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:475
+#: ../src/bookmarks/ephy-bookmarks.c:481
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "Die gemerkte Seite befindet sich nun unter »%s«."
 
-#: ../src/bookmarks/ephy-bookmarks.c:479
+#: ../src/bookmarks/ephy-bookmarks.c:485
 msgid "_Don't Update"
 msgstr "_Nicht aktualisieren"
 
-#: ../src/bookmarks/ephy-bookmarks.c:481
+#: ../src/bookmarks/ephy-bookmarks.c:487
 msgid "_Update"
 msgstr "_Aktualisieren"
 
-#: ../src/bookmarks/ephy-bookmarks.c:484
+#: ../src/bookmarks/ephy-bookmarks.c:490
 msgid "Update Bookmark?"
 msgstr "Lesezeichen aktualisieren?"
 
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:321
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
 msgstr "Lesezeichen"
 
@@ -2882,11 +2882,16 @@ msgstr "Dieses Lesezeichen in einem neuen Fenster öffnen"
 msgid "Open in New _Tabs"
 msgstr "In neuen _Reitern öffnen"
 
+#: ../src/bookmarks/ephy-open-tabs-action.c:78
+#, fuzzy
+msgid "Open the bookmarks in this topic in new tabs"
+msgstr "Dieses Lesezeichen in einem neuen Reiter öffnen"
+
 #: ../src/bookmarks/ephy-related-action.c:176
 msgid "Related"
 msgstr "Verwandt"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:320
+#: ../src/bookmarks/ephy-topic-factory-action.c:322
 msgid "Quick Topic"
 msgstr "Thema"
 
@@ -3069,6 +3074,18 @@ msgstr "Lesezeichen hinzufügen"
 #: ../src/ephy-main.c:88
 msgid "URL"
 msgstr "Adresse"
+
+#: ../src/ephy-main.c:90
+msgid "Start a private instance"
+msgstr ""
+
+#: ../src/ephy-main.c:92
+msgid "Profile directory to use in the private instance"
+msgstr ""
+
+#: ../src/ephy-main.c:92
+msgid "DIR"
+msgstr ""
 
 #: ../src/ephy-main.c:417
 msgid "Could not start GNOME Web Browser"
