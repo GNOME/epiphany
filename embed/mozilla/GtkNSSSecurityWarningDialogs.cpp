@@ -229,7 +229,7 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 
 	AutoJSContextStack stack;
 	rv = stack.Init ();
-	if (NS_FAILED (rv));
+	if (NS_FAILED (rv)) return;
 
 	/* Didn't you know it, mozilla SUCKS!
 	 * the "aContext" interface requestor is made from a nsIDOMWindow,
