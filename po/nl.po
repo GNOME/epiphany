@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-16 20:51+0100\n"
-"PO-Revision-Date: 2006-02-16 21:04+0100\n"
+"POT-Creation-Date: 2006-02-22 00:00+0100\n"
+"PO-Revision-Date: 2006-02-22 00:04+0100\n"
 "Last-Translator: Reinout van Schouwen <reinout@cs.vu.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -2307,36 +2307,36 @@ msgstr ""
 "GConf-fout:\n"
 "  %s"
 
-# src/context.c:1075
-#: ../lib/egg/egg-editable-toolbar.c:868
+# src/menubar.c:63
+#: ../lib/egg/egg-editable-toolbar.c:892
 #, c-format
-msgid "Hide “%s”"
-msgstr "‘%s’ verbergen"
+msgid "Show “_%s”"
+msgstr "‘_%s’ tonen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1304
+#: ../lib/egg/egg-editable-toolbar.c:1337
 msgid "_Move on Toolbar"
 msgstr "Ver_plaatsen op werkbalk"
 
-#: ../lib/egg/egg-editable-toolbar.c:1305
+#: ../lib/egg/egg-editable-toolbar.c:1338
 msgid "Move the selected item on the toolbar"
 msgstr "Geselecteerd item op de werkbalk verplaatsen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1306
+#: ../lib/egg/egg-editable-toolbar.c:1339
 msgid "_Remove from Toolbar"
 msgstr "Ver_wijderen van werkbalk"
 
-#: ../lib/egg/egg-editable-toolbar.c:1307
+#: ../lib/egg/egg-editable-toolbar.c:1340
 msgid "Remove the selected item from the toolbar"
 msgstr "Geselecteerd item van de werkbalk verwijderen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1308
-msgid "_Remove Toolbar"
+#: ../lib/egg/egg-editable-toolbar.c:1341
+msgid "_Delete Toolbar"
 msgstr "_Werkbalk verwijderen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1309
+#: ../lib/egg/egg-editable-toolbar.c:1342
 msgid "Remove the selected toolbar"
 msgstr "Geselecteerde werkbalk verwijderen"
 
@@ -2561,7 +2561,7 @@ msgid "select fonts for|Other Scripts"
 msgstr "Overige schriften"
 
 # src/menubar.c:416
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:56
 msgid "Popup Windows"
 msgstr "Opduikvensters"
 
@@ -2569,18 +2569,18 @@ msgstr "Opduikvensters"
 # src/toolbar.c:273
 # ui/epiphany.glade.h:78
 # ui/preferences.glade.h:88
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1179
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1179
 msgid "History"
 msgstr "Geschiedenis"
 
 # src/menubar.c:571
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
+#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:899
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1741
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Bladwijzers"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#: ../lib/ephy-stock-icons.c:59 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Adresingang"
 
@@ -2588,7 +2588,7 @@ msgstr "Adresingang"
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:60
 msgid "_Download"
 msgstr "_Download"
 
@@ -2668,15 +2668,15 @@ msgstr "%s:"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:93
-#: ../src/bookmarks/ephy-bookmark-properties.c:619
+#: ../src/bookmarks/ephy-bookmark-properties.c:92
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d Gelij_kende"
 msgstr[1] "%d Gelij_kende"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:266
+#: ../src/bookmarks/ephy-bookmark-properties.c:265
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
@@ -2684,29 +2684,34 @@ msgstr[0] "Samen_voegen met %d identieke bladwijzer"
 msgstr[1] "Samen_voegen met %d identieke bladwijzers"
 
 # src/menubar.c:63
-#: ../src/bookmarks/ephy-bookmark-properties.c:286
-#: ../src/bookmarks/ephy-bookmark-properties.c:308
+#: ../src/bookmarks/ephy-bookmark-properties.c:285
+#: ../src/bookmarks/ephy-bookmark-properties.c:307
 #, c-format
 msgid "Show “%s”"
 msgstr "‘%s’ tonen"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:434
+#: ../src/bookmarks/ephy-bookmark-properties.c:433
 #, c-format
 msgid "“%s” Properties"
 msgstr "‘%s’-eigenschappen"
 
 # ui/epiphany.glade.h:121
-#: ../src/bookmarks/ephy-bookmark-properties.c:557
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "Tit_el:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:572
+#: ../src/bookmarks/ephy-bookmark-properties.c:567
 msgid "A_ddress:"
 msgstr "A_dres:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:582
+#: ../src/bookmarks/ephy-bookmark-properties.c:577
 msgid "T_opics:"
 msgstr "_Onderwerpen:"
+
+# ui/preferences.glade.h:195
+#: ../src/bookmarks/ephy-bookmark-properties.c:598
+msgid "Sho_w all topics"
+msgstr "Alle o_nderwerpen tonen"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:97
 msgid "Mozilla (HTML)"
@@ -2767,7 +2772,7 @@ msgstr "Nieuw onderwerp aanmaken"
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1358
-#: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2782,7 +2787,7 @@ msgstr "Geselecteerde bladwijzer openen in een nieuw venster"
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1361
-#: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
+#: ../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
@@ -2814,7 +2819,9 @@ msgstr "_Verwijderen"
 msgid "Delete the selected bookmark or topic"
 msgstr "Geselecteerde bladwijzer of onderwerp verwijderen"
 
+#. Add popup menu actions that are specific to the bookmark widgets
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-ui.c:297
 msgid "_Properties"
 msgstr "_Eigenschappen"
 
@@ -3208,22 +3215,17 @@ msgstr "Bladwijzer bijwerken?"
 msgid "Quick Bookmark"
 msgstr "Snelle bladwijzer"
 
-#. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-ui.c:290
-msgid "Properties"
-msgstr "Eigenschappen"
-
 # src/bookmarks_menus.c:525
 # ui/bookmarks.glade.h:47
-#: ../src/bookmarks/ephy-bookmarks-ui.c:291
+#: ../src/bookmarks/ephy-bookmarks-ui.c:298
 msgid "Show properties for this bookmark"
 msgstr "Eigenschappen van deze bladwijzer weergeven"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:303
+#: ../src/bookmarks/ephy-bookmarks-ui.c:310
 msgid "Open this bookmark in a new tab"
 msgstr "Deze bladwijzer openen in een nieuw tabblad"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:315
+#: ../src/bookmarks/ephy-bookmarks-ui.c:322
 msgid "Open this bookmark in a new window"
 msgstr "Deze bladwijzer openen in een nieuw venster"
 
@@ -4126,8 +4128,8 @@ msgstr "Naar offline stand schakelen"
 # src/menubar.c:150
 #. View Menu
 #: ../src/ephy-window.c:283
-msgid "_Show Toolbars"
-msgstr "_Werkbalken tonen"
+msgid "_Hide Toolbars"
+msgstr "_Werkbalken verbergen"
 
 # src/bookmarks_menus.c:525
 # ui/bookmarks.glade.h:47
@@ -4638,6 +4640,17 @@ msgstr ""
 msgid "GNOME Web Browser Website"
 msgstr "Webstek van de GNOME-webbrowser"
 
+# src/context.c:1075
+#~ msgid "Hide “%s”"
+#~ msgstr "‘%s’ verbergen"
+
+#~ msgid "Properties"
+#~ msgstr "Eigenschappen"
+
+# src/menubar.c:150
+#~ msgid "_Show Toolbars"
+#~ msgstr "_Werkbalken tonen"
+
 #~ msgid "download status|Unknown"
 #~ msgstr "Onbekend"
 
@@ -4770,10 +4783,6 @@ msgstr "Webstek van de GNOME-webbrowser"
 # src/menubar.c:571
 #~ msgid "Bookmark Exists"
 #~ msgstr "Bladwijzer bestaat al"
-
-# ui/preferences.glade.h:195
-#~ msgid "No topics"
-#~ msgstr "Geen onderwerpen"
 
 # ui/preferences.glade.h:7
 #~ msgid "Selection"
