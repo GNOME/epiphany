@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Epiphany Web Browser HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-02-15 06:03+0100\n"
-"PO-Revision-Date: 2006-02-15 10:37+0200\n"
+"PO-Revision-Date: 2006-02-18 09:46+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -703,7 +703,7 @@ msgstr "_Allalaadimiskataloog:"
 
 #: ../data/glade/prefs-dialog.glade.h:36
 msgid "_Edit Stylesheet..."
-msgstr ""
+msgstr "_Redigeeri laaditabelit..."
 
 #: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Fixed width:"
@@ -1236,9 +1236,9 @@ msgid ""
 "It is unsafe to open “%s” as it could potentially damage your documents or "
 "invade your privacy. You can download it instead."
 msgstr ""
-"Faili tüüp: “%s”.\n"
+"Faili tüüp: „%s”.\n"
 "\n"
-"“%s” avamine on ebaturvaline ning võib põhjustada kahjustusi sinu "
+"„%s” avamine on ebaturvaline ning võib põhjustada kahjustusi sinu "
 "dokumentidele või riivata sinu turvalisust. Parem oleks see fail alla "
 "laadida."
 
@@ -1256,9 +1256,9 @@ msgid ""
 "\n"
 "You can open “%s” using “%s” or save it."
 msgstr ""
-"Faili tüüp: “%s”.\n"
+"Faili tüüp: „%s”.\n"
 "\n"
-"Sa saad “%s”-i avamiseks kasutada “%s”-i või selle salvestada."
+"Sa saad „%s”-i avamiseks kasutada „%s”-i või selle salvestada."
 
 #: ../embed/mozilla/ContentHandler.cpp:365
 msgid "Download this file?"
@@ -1273,9 +1273,9 @@ msgid ""
 "\n"
 "You have no application able to open “%s”. You can download it instead."
 msgstr ""
-"Faili tüüp: “%s”.\n"
+"Faili tüüp: „%s”.\n"
 "\n"
-"Ühtegi rakendust “%s”-i avamiseks ei ole. Sa saad selle asemel selle alla "
+"Ühtegi rakendust „%s”-i avamiseks ei ole. Sa saad selle asemel selle alla "
 "laadida."
 
 #: ../embed/mozilla/ContentHandler.cpp:376
@@ -1286,21 +1286,20 @@ msgstr "Salvesta _kui..."
 #: ../embed/mozilla/EphyAboutModule.cpp:207
 #, c-format
 msgid "“%s” Protocol is not Supported"
-msgstr "„%s“ protokoll ei ole toetatud."
+msgstr "Protokoll „%s“ pole toetatud."
 
 #. Translators: %s is the name of a protocol, like "http" etc.
 #: ../embed/mozilla/EphyAboutModule.cpp:209
 #, c-format
 msgid "“%s” protocol is not supported."
-msgstr "„%s“ protokoll ei ole toetatud."
+msgstr "Protokoll „%s“ pole toetatud."
 
 #. FIXME: get the list of supported protocols from necko
 #: ../embed/mozilla/EphyAboutModule.cpp:211
 msgid ""
 "Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
 msgstr ""
-"Toetatud protokollid on \"http\", \"https\", \"ftp\", \"file\", \"smb\" ja "
-"\"sftp\"."
+"Toetatud protokollid on „http“, „https“, „ftp“, „file“, „smb“ ja „sftp“."
 
 #. Translators: %s is the path and filename, for example "/home/user/test.html"
 #: ../embed/mozilla/EphyAboutModule.cpp:220
@@ -1385,6 +1384,7 @@ msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
 msgstr ""
+"Server võib olla hõivatud või on sul võrguga probleeme. Proovi hiljem uuesti."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:300
 #: ../embed/mozilla/EphyAboutModule.cpp:318
@@ -1417,7 +1417,7 @@ msgstr "„%s“ ei vasta."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:333
 msgid "The connection was lost because the server took too long to respond."
-msgstr ""
+msgstr "Ühendus katkestati kuna serveri vastus viibis liiga kaua."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:341
 msgid "Invalid Address"
@@ -1459,11 +1459,12 @@ msgstr "„%s“ nõuab krüptitud ühendust."
 msgid ""
 "The document could not be loaded because encryption support is not installed."
 msgstr ""
+"Dokumenti pole võimalik laadida kuna krüptimise tuge pole paigaldatud."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:384
 #, c-format
 msgid "“%s” Dropped the Connection"
-msgstr "„%s“ pani ühenduse maha"
+msgstr "„%s“ loobus ühendusest"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:388
 #, c-format
@@ -1486,16 +1487,18 @@ msgstr "Autonoomses režiimis pole võimalik dokumenti laadida."
 #: ../embed/mozilla/EphyAboutModule.cpp:403
 msgid "To view this document, disable “Work Offline” and try again."
 msgstr ""
+"Selle dokumendi vaatamiseks keela „Siirdu autonoomsesse režiimi” ja proovi "
+"uuesti."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:415
 #, c-format
 msgid "“%s” Denied Access to Port “%d”"
-msgstr "“%s” keelab ligipääsu pordile “%d”."
+msgstr "„%s” keelas ligipääsu pordile „%d”."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:419
 #, c-format
 msgid "“%s” denied access to port “%d”."
-msgstr "„%s“ keelab ligipääsu pordile “%d”."
+msgstr "„%s“ keelas ligipääsu pordile „%d”."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:430
 msgid "Could not Connect to Proxy Server"
@@ -1521,7 +1524,7 @@ msgstr "Sisu pole võimalik kuvada."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:442
 msgid "The page uses an unsupported or invalid form of compression."
-msgstr ""
+msgstr "Leht kasutab toetamata või vigast pakkimise meetodit."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:532
 #, c-format
@@ -1708,7 +1711,7 @@ msgstr "_Usalda sertifitseerimiskeskust"
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr ""
-"Kas usaldada uut sertifitseerimiskeskust “%s” veebisaitide tuvastamiseks?"
+"Kas usaldada uut sertifitseerimiskeskust „%s” veebisaitide tuvastamiseks?"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:588
 msgid ""
@@ -1933,7 +1936,7 @@ msgid ""
 "You were trying to print to a printer using the “%s” driver. This program "
 "requires a PostScript printer driver."
 msgstr ""
-"Sa proovisid printida kasutades “%s” draiverit. See programm vaja "
+"Sa proovisid printida kasutades „%s” draiverit. See programm vaja "
 "PostScripti printeri draiverit."
 
 #: ../embed/print-dialog.c:364
@@ -2510,7 +2513,6 @@ msgid "Select all bookmarks or text"
 msgstr "Vali kõik järjehoidjad või tekst"
 
 #. Help Menu
-#. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:228
 #: ../src/ephy-history-window.c:204 ../src/ephy-window.c:265
 msgid "_Contents"
@@ -2523,7 +2525,7 @@ msgstr "Näita järjehoidjate kohta abimaterjale"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:231
 #: ../src/ephy-history-window.c:207 ../src/ephy-window.c:268
 msgid "_About"
-msgstr "_Info"
+msgstr "_Programmist lähemalt"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:232
 #: ../src/ephy-history-window.c:208 ../src/ephy-window.c:269
@@ -2663,7 +2665,7 @@ msgstr "Kustkohast järjehoidjaid imporditakse:"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1367
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
-msgstr "_Kopeeri lehe aadress"
+msgstr "K_opeeri lehe aadress"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1608
 #: ../src/ephy-history-window.c:1021
@@ -2731,7 +2733,7 @@ msgstr "Kas uuendada järjehoidjat „%s“?"
 #: ../src/bookmarks/ephy-bookmarks.c:481
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
-msgstr ""
+msgstr "Järhehoidjatesse lisatud leht on teisaldatud asukohta „%s“."
 
 #: ../src/bookmarks/ephy-bookmarks.c:485
 msgid "_Don't Update"
@@ -2810,7 +2812,7 @@ msgstr "Ei leitud"
 
 #: ../src/ephy-find-toolbar.c:131
 msgid "Wrapped"
-msgstr ""
+msgstr "Murtud"
 
 #: ../src/ephy-find-toolbar.c:151
 msgid "Find links:"
@@ -2907,11 +2909,11 @@ msgstr ""
 
 #: ../src/ephy-history-window.c:270
 msgid "Clear History"
-msgstr "Puhasta ajalugu"
+msgstr "Ajaloo puhastamine"
 
 #: ../src/ephy-history-window.c:1030
 msgid "Last 30 minutes"
-msgstr "Viimased 30 minutit"
+msgstr "Viimase 30 minuti jooksul"
 
 #: ../src/ephy-history-window.c:1031
 msgid "Today"
@@ -3033,6 +3035,8 @@ msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
 msgstr ""
+"Epiphany viimane töötamine paistab olevat lõppenud ootamatult. Sul on "
+"võimalus taastada avatud aknad ja sakid."
 
 #: ../src/ephy-session.c:611
 msgid "_Don't Recover"
@@ -3100,7 +3104,7 @@ msgstr "Andmete laadimine aadressilt „%s“..."
 #: ../src/ephy-tab.c:1662
 #, c-format
 msgid "Waiting for authorization from “%s”..."
-msgstr "Volituste ootamine “%s”-lt..."
+msgstr "Volituste ootamine „%s”-lt..."
 
 #: ../src/ephy-tabs-menu.c:148
 msgid "Switch to this tab"
@@ -3963,7 +3967,7 @@ msgstr "GNOME Veebisirvija sait"
 #~ msgstr "Sulge sakk"
 
 #~ msgid "You already have a bookmark titled “%s” for this page."
-#~ msgstr "Selle lehe jaoks on sul järjehoidja nimega “%s” juba olemas."
+#~ msgstr "Selle lehe jaoks on sul järjehoidja nimega „%s” juba olemas."
 
 #~ msgid "_View Properties"
 #~ msgstr "_Vaata omadusi"
