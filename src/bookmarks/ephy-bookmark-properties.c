@@ -65,7 +65,6 @@ struct _EphyBookmarkPropertiesPrivate
 	
 	GtkWidget *warning;
 	GtkWidget *entry;
-	GtkWidget *palette;
 };
 
 enum
@@ -456,32 +455,29 @@ location_entry_changed_cb (GtkWidget *entry,
 }
 
 static void
-list_toggled_cb (GtkToggleButton *button,
+list_mapped_cb (GtkWidget *widget,
 		 EphyBookmarkProperties *properties)
 {
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
 	GdkGeometry geometry;
 	
-	if(gtk_toggle_button_get_active (button))
-	{
-		gtk_widget_show (priv->palette);
+	geometry.min_width = -1;
+	geometry.min_height = 230;
+	gtk_window_set_geometry_hints (GTK_WINDOW (properties),
+				       widget, &geometry,
+				       GDK_HINT_MIN_SIZE);
+}
+
+static void
+list_unmapped_cb (GtkWidget *widget,
+		 EphyBookmarkProperties *properties)
+{
+	GdkGeometry geometry;
 	
-		geometry.min_width = -1;
-		geometry.min_height = 230;
-		gtk_window_set_geometry_hints (GTK_WINDOW (properties),
-					       priv->palette, &geometry,
-					       GDK_HINT_MIN_SIZE);
-	}
-	else
-	{
-		gtk_widget_hide (priv->palette);
-		
-		geometry.max_height = -1;
-		geometry.max_width = G_MAXINT;
-		gtk_window_set_geometry_hints (GTK_WINDOW (properties),	
-					       GTK_WIDGET (properties),
-					       &geometry, GDK_HINT_MAX_SIZE);
-	}
+	geometry.max_height = -1;
+	geometry.max_width = G_MAXINT;
+	gtk_window_set_geometry_hints (GTK_WINDOW (properties),	
+				       GTK_WIDGET (properties),
+				       &geometry, GDK_HINT_MAX_SIZE);
 }
 
 static void
@@ -498,8 +494,7 @@ ephy_bookmark_properties_constructor (GType type,
 	GObject *object;
 	EphyBookmarkProperties *properties;
 	EphyBookmarkPropertiesPrivate *priv;
-	GtkWidget *widget, *table, *label, *entry, *button;
-	GtkWidget *container, *palette;
+	GtkWidget *widget, *table, *label, *entry, *container;
 	GtkWindow *window;
 	GtkDialog *dialog;
 	const char *tmp;
@@ -538,7 +533,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_container_set_border_width (GTK_CONTAINER (properties), 5);
 	gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2);
 
-	table = gtk_table_new (4, 3, FALSE);
+	table = gtk_table_new (4, 2, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
 	gtk_table_set_col_spacing (GTK_TABLE (table), 1, 6);
@@ -559,7 +554,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
-	gtk_table_attach (GTK_TABLE (table), entry, 1, 3, 0, 1, GTK_FILL | GTK_EXPAND, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1, GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
 	entry = gtk_entry_new ();
 	tmp = ephy_node_get_property_string (properties->priv->bookmark,
@@ -574,7 +569,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
-	gtk_table_attach (GTK_TABLE (table), entry, 1, 3, 1, 2, GTK_FILL | GTK_EXPAND, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2, GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
 	entry = ephy_topics_entry_new (priv->bookmarks, priv->bookmark);
 	priv->entry = entry;
@@ -586,7 +581,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, 0, 0, 0);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3, GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
-	palette = ephy_topics_palette_new (priv->bookmarks, priv->bookmark);
+	widget = ephy_topics_palette_new (priv->bookmarks, priv->bookmark);
 	container = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
 				  "hadjustment", NULL,
 				  "vadjustment", NULL,
@@ -594,25 +589,21 @@ ephy_bookmark_properties_constructor (GType type,
 				  "vscrollbar_policy", GTK_POLICY_AUTOMATIC,
 				  "shadow_type", GTK_SHADOW_IN,
 				  NULL);
-	priv->palette = container;
-	gtk_container_add (GTK_CONTAINER (container), palette);
-	gtk_widget_show (palette);
-	gtk_table_attach (GTK_TABLE (table), container, 1, 3, 3, 4,
-			  GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
-	gtk_widget_show (container);
-
-	widget = gtk_image_new_from_stock (GTK_STOCK_INDEX, GTK_ICON_SIZE_BUTTON);
+	gtk_container_add (GTK_CONTAINER (container), widget);
 	gtk_widget_show (widget);
-	button = gtk_toggle_button_new_with_label ("");
-	gtk_button_set_image (GTK_BUTTON (button), widget);
-	ephy_state_add_expander (button, "bookmark_properties_list", FALSE);
-	g_signal_connect (button, "toggled", G_CALLBACK (list_toggled_cb), properties);
-	list_toggled_cb (GTK_TOGGLE_BUTTON (button), properties);
-	gtk_widget_show (button);
-	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
+	gtk_widget_show (container);
+	g_signal_connect (container, "map", G_CALLBACK (list_mapped_cb), properties);
+	g_signal_connect (container, "unmap", G_CALLBACK (list_unmapped_cb), properties);
+
+	widget = gtk_expander_new (_("Sho_w all topics"));
+	gtk_expander_set_use_underline (GTK_EXPANDER (widget), TRUE);
+	ephy_state_add_expander (widget, "bookmark_properties_list", FALSE);
+	gtk_container_add (GTK_CONTAINER (widget), container);
+	gtk_widget_show (widget);
+	gtk_table_attach (GTK_TABLE (table), widget, 1, 2, 3, 4, GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
 	
 	gtk_box_pack_start (GTK_BOX (dialog->vbox), table, TRUE, TRUE, 0); 
-
+	
 	priv->warning = gtk_toggle_button_new ();
 	gtk_button_set_focus_on_click (GTK_BUTTON (priv->warning), FALSE);
 	gtk_button_set_use_underline (GTK_BUTTON (priv->warning), TRUE);
