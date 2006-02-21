@@ -37,7 +37,7 @@
 
 #include <string.h>
 
-#define MIN_MENU_SIZE 7
+#define MIN_MENU_SIZE 3
 #define MAX_MENU_SIZE 21
 
 enum

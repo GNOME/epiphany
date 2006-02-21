@@ -119,6 +119,12 @@ ephy_nodes_covered (EphyNode *parent, const GPtrArray *children)
 	return TRUE;
 }
 
+static gint
+compare_chosen (const guint *a, const guint *b, guint *count_c)
+{
+	return (count_c[*b] - count_c[*a]);
+}
+
 /* Returns the subset of parents which provide a covering of children.
  * Arguments other than parents and children arguments are only used if non-null.
  * Uses the _covering array to store the subset of parents.
@@ -130,12 +136,13 @@ ephy_nodes_get_covering (const GPtrArray *parents, const GPtrArray *children,
 {
 	GPtrArray *uncovered = _uncovered?_uncovered:g_ptr_array_sized_new (children->len);
 	GPtrArray *covering = _covering?_covering:g_ptr_array_sized_new (parents->len);
+	GArray *chosen = g_array_sized_new (FALSE, FALSE, sizeof(guint), parents->len);
 	GArray *sizes = _sizes;
 
 	/* Create arrays to store the number of children each parent has which
 	 * are currently not covered, and the number of children it has total. */
-	int *count_u = g_malloc (sizeof(int) * parents->len);
-	int *count_c = g_malloc (sizeof(int) * parents->len);
+	guint *count_u = g_malloc (sizeof(guint) * parents->len);
+	guint *count_c = g_malloc (sizeof(guint) * parents->len);
 	
 	EphyNode *parent;
 	guint i, p;
@@ -168,8 +175,7 @@ ephy_nodes_get_covering (const GPtrArray *parents, const GPtrArray *children,
 		/* Update the arrays of uncovered bookmarks and covering topics. */
 		parent = g_ptr_array_index (parents, p);
 		ephy_nodes_remove_covered (parent, uncovered);
-		g_ptr_array_add (covering, parent);
-		if (sizes) g_array_append_val (sizes, count_c[p]);
+		g_array_append_val (chosen, p);
 		
 		/* Find the next most suitable topic. */
 		count_u[p] = 0;
@@ -189,7 +195,17 @@ ephy_nodes_get_covering (const GPtrArray *parents, const GPtrArray *children,
 		}
 	}
 
+	g_array_sort_with_data (chosen, (GCompareDataFunc)compare_chosen, count_c);
+	
+	for (i = 0; i < chosen->len; i++)
+	{
+		p = g_array_index (chosen, guint, i);
+		g_ptr_array_add (covering, g_ptr_array_index (parents, p));
+		if (sizes) g_array_append_val (sizes, count_c[p]);
+	}
+
 	if (_uncovered != uncovered) g_ptr_array_free (uncovered, TRUE);
+	g_array_free (chosen, TRUE);
 	g_free (count_u);
 	g_free (count_c);
 	
