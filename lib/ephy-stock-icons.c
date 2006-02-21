@@ -48,6 +48,7 @@ ephy_stock_icons_init (void)
 		STOCK_LOCK_INSECURE,
 		STOCK_LOCK_SECURE,
 		STOCK_LOCK_BROKEN,
+		STOCK_DRAG_MODE,
 	};
 
 	static const GtkStockItem items[] =

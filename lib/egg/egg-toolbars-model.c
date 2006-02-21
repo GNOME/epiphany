@@ -123,6 +123,8 @@ egg_toolbars_model_to_xml (EggToolbarsModel *model)
       xmlSetProp (tnode, (const xmlChar*) "name", (const xmlChar*) toolbar->name);
       xmlSetProp (tnode, (const xmlChar*) "hidden",
 		  (toolbar->flags&EGG_TB_MODEL_HIDDEN) ? (const xmlChar*) "true" : (const xmlChar*) "false");
+      xmlSetProp (tnode, (const xmlChar*) "editable",
+		  (toolbar->flags&EGG_TB_MODEL_NOT_EDITABLE) ? (const xmlChar*) "false" : (const xmlChar*) "true");
 
       for (l2 = l1->children; l2 != NULL; l2 = l2->next)
 	{
@@ -586,6 +588,11 @@ parse_toolbars (EggToolbarsModel *model,
 	  string = xmlGetProp (child, (const xmlChar*) "name");
 	  position = egg_toolbars_model_add_toolbar (model, -1, (const char*) string);
           flags = egg_toolbars_model_get_flags (model, position);
+	  xmlFree (string);
+
+	  string = xmlGetProp (child, (const xmlChar*) "editable");
+          if (string && xmlStrEqual (string, (const xmlChar*) "false"))
+            flags |= EGG_TB_MODEL_NOT_EDITABLE;
 	  xmlFree (string);
 
 	  string = xmlGetProp (child, (const xmlChar*) "hidden");

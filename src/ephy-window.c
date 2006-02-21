@@ -280,9 +280,9 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 
 	/* View Menu */
 
-	{ "ViewToolbar", NULL, N_("_Show Toolbars"), "<shift><control>T",
+	{ "ViewToolbar", NULL, N_("_Hide Toolbars"), "<shift><control>T",
 	  N_("Show or hide toolbar"),
-	  G_CALLBACK (ephy_window_view_toolbar_cb), TRUE },
+	  G_CALLBACK (ephy_window_view_toolbar_cb), FALSE },
 	{ "ViewStatusbar", NULL, N_("St_atusbar"), NULL,
 	  N_("Show or hide statusbar"),
 	  G_CALLBACK (ephy_window_view_statusbar_cb), TRUE },
@@ -674,7 +674,7 @@ ephy_window_fullscreen (EphyWindow *window)
 
 	ephy_toolbar_set_show_leave_fullscreen (window->priv->toolbar,
 						!lockdown_fs);
-
+	
 	sync_chromes_visibility (window);
 }
 
@@ -1228,7 +1228,7 @@ update_chromes_actions (EphyWindow *window)
 	g_signal_handlers_block_by_func (G_OBJECT (action),
 		 			 G_CALLBACK (ephy_window_view_toolbar_cb),
 		 			 window);
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), show_toolbar);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), !show_toolbar);
 	g_signal_handlers_unblock_by_func (G_OBJECT (action),
 		 			   G_CALLBACK (ephy_window_view_toolbar_cb),
 		 			   window);
@@ -3652,8 +3652,8 @@ sync_chrome_with_view_toggle (GtkAction *action, EphyWindow *window,
 	gboolean active;
 
 	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
-	window->priv->chrome = active ? window->priv->chrome | chrome_flag :
-					window->priv->chrome & (~chrome_flag);
+	window->priv->chrome = active ? window->priv->chrome & (~chrome_flag) :
+	                                window->priv->chrome | chrome_flag;
 
 	sync_chromes_visibility (window);
 	sync_prefs_with_chrome (window);

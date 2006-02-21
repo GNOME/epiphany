@@ -43,13 +43,14 @@ typedef struct EggToolbarsModelClass	EggToolbarsModelClass;
 typedef enum
 {
   EGG_TB_MODEL_NOT_REMOVABLE	 = 1 << 0,
-  EGG_TB_MODEL_BOTH		 = 1 << 1,
-  EGG_TB_MODEL_BOTH_HORIZ	 = 1 << 2,
-  EGG_TB_MODEL_ICONS		 = 1 << 3,
-  EGG_TB_MODEL_TEXT		 = 1 << 4,
-  EGG_TB_MODEL_STYLES_MASK	 = 0x1F,
-  EGG_TB_MODEL_ACCEPT_ITEMS_ONLY = 1 << 5,
-  EGG_TB_MODEL_HIDDEN            = 1 << 6
+  EGG_TB_MODEL_NOT_EDITABLE	 = 1 << 1,
+  EGG_TB_MODEL_BOTH		 = 1 << 2,
+  EGG_TB_MODEL_BOTH_HORIZ	 = 1 << 3,
+  EGG_TB_MODEL_ICONS		 = 1 << 4,
+  EGG_TB_MODEL_TEXT		 = 1 << 5,
+  EGG_TB_MODEL_STYLES_MASK	 = 0x3C,
+  EGG_TB_MODEL_ACCEPT_ITEMS_ONLY = 1 << 6,
+  EGG_TB_MODEL_HIDDEN            = 1 << 7
 } EggTbModelFlags;
 
 typedef enum

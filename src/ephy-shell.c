@@ -668,6 +668,7 @@ ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 	{
 		if (shell->priv->fs_toolbars_model == NULL)
 		{
+			EggTbModelFlags flags;
 			gboolean success;
 			const char *xml;
 
@@ -678,6 +679,12 @@ ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 			success = egg_toolbars_model_load_toolbars
 				(shell->priv->fs_toolbars_model, xml);
 			g_return_val_if_fail (success, NULL);
+
+			flags = egg_toolbars_model_get_flags 
+			  (shell->priv->fs_toolbars_model, 0);
+			egg_toolbars_model_set_flags
+			  (shell->priv->fs_toolbars_model, 0, 
+			   flags | EGG_TB_MODEL_NOT_REMOVABLE);
 		}
 
 		return G_OBJECT (shell->priv->fs_toolbars_model);

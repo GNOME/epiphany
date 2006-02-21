@@ -38,9 +38,13 @@
 <menu name="ViewMenu" action="View">
 	<placeholder name="ViewTogglesGroup" position="top">
 		<menu name="ToolbarMenu" action="Toolbar">
-		<menuitem name="ViewToolbarEditorMenu" action="ViewToolbarEditor"/>
+		<separator/>
+		<placeholder name="ViewToolbarsGroup" position="top">
+		</placeholder>
+		<separator/>
 		<menuitem name="ViewToolbarMenu" action="ViewToolbar"/>
-		<separator name="ToolbarSep1"/>
+		<menuitem name="ViewToolbarEditorMenu" action="ViewToolbarEditor"/>
+		<separator/>
 		</menu>
 		<menuitem name="ViewStatusbarMenu" action="ViewStatusbar"/>
 	</placeholder>
@@ -169,6 +173,16 @@
 </popup>
 
 <popup name="ToolbarPopup">
+	<placeholder name="SpecificItemsGroup">
+	</placeholder>
+	<separator/>
+     	<menuitem action="MoveToolItem"/>
+ 	<menuitem action="RemoveToolItem"/>    
+	<separator/>
+	<menuitem action="RemoveToolbar"/>
+	<separator/>
+	<placeholder name="ViewToolbarsGroup">
+	</placeholder>
 	<separator/>
         <menuitem action="ViewToolbarEditor"/>
 	<separator/>

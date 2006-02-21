@@ -84,6 +84,9 @@ GtkWidget *         egg_editable_toolbar_get_selected    (EggEditableToolbar   *
 void                egg_editable_toolbar_set_selected    (EggEditableToolbar   *etoolbar,
 							  GtkWidget            *widget);
 
+void              egg_editable_toolbar_add_visibility    (EggEditableToolbar   *etoolbar,
+							  const char           *path);
+
 /* Private Functions */
 
 GtkWidget 	   *_egg_editable_toolbar_new_separator_image (void);

@@ -161,12 +161,19 @@ selected_bookmark_action (EggEditableToolbar *etoolbar,
 {
 	GtkAction *baction;
 	GtkWidget *widget;
-
-	widget = gtk_widget_get_ancestor (egg_editable_toolbar_get_selected (etoolbar),
-					  GTK_TYPE_TOOL_ITEM);
-	baction = widget ? g_object_get_data (G_OBJECT (widget), "gtk-action") : NULL;
-
-	gtk_action_set_visible (action, EPHY_IS_BOOKMARK_ACTION (baction));
+	gboolean visible;
+	
+	visible = FALSE;
+	
+	if (!egg_editable_toolbar_get_edit_mode (etoolbar))
+	{
+		widget = egg_editable_toolbar_get_selected (etoolbar);
+		widget = widget ? gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM) : NULL;
+		baction = widget ? g_object_get_data (G_OBJECT (widget), "gtk-action") : NULL;
+		visible = EPHY_IS_BOOKMARK_ACTION (baction);
+	}
+	  
+	gtk_action_set_visible (action, visible);
 }
 
 static void
@@ -287,7 +294,7 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 	g_object_unref (action);
 
 	/* Add popup menu actions that are specific to the bookmark widgets */
-	action = gtk_action_new ("ToolbarBookmarkProperties", _("Properties"), 
+	action = gtk_action_new ("ToolbarBookmarkProperties", _("_Properties"), 
 				 _("Show properties for this bookmark"), GTK_STOCK_PROPERTIES);
 	g_signal_connect_object (action, "activate",
 				 G_CALLBACK (activate_bookmark_properties), 
@@ -300,7 +307,7 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 
 	/* FIXME ngettext */
 	action = gtk_action_new ("ToolbarBookmarkOpenInTab", _("Open in New _Tab"),
-				 _("Open this bookmark in a new tab"), NULL);
+				 _("Open this bookmark in a new tab"), STOCK_NEW_TAB);
 	g_signal_connect_object (action, "activate",
 				 G_CALLBACK (activate_bookmark_open_tab), 
 				 G_OBJECT (etoolbar), 0);
@@ -312,7 +319,7 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 
 	/* FIXME ngettext */
 	action = gtk_action_new ("ToolbarBookmarkOpenInWindow", _("Open in New _Window"), 
-				 _("Open this bookmark in a new window"), NULL);
+				 _("Open this bookmark in a new window"), GTK_STOCK_NEW);
 	g_signal_connect_object (action, "activate",
 				 G_CALLBACK (activate_bookmark_open_window),
 				 G_OBJECT (etoolbar), 0);
@@ -324,11 +331,11 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
 
 	data->toolbar_menu = gtk_ui_manager_add_ui_from_string (manager,
 	   "<popup name=\"ToolbarPopup\">"
-	   "<separator/>"
+	   "<placeholder name=\"SpecificItemsGroup\">"
 	   "<menuitem action=\"ToolbarBookmarkOpenInTab\"/>"
 	   "<menuitem action=\"ToolbarBookmarkOpenInWindow\"/>"
-	   "<separator/>"
 	   "<menuitem action=\"ToolbarBookmarkProperties\"/>"
+	   "</placeholder>"
 	   "</popup>", -1, NULL);  
 
 	/* Add signal handlers for the bookmark database */

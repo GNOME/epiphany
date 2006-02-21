@@ -52,6 +52,7 @@ static void egg_editable_toolbar_init		(EggEditableToolbar *etoolbar);
 
 #define MIN_TOOLBAR_HEIGHT 20
 #define EGG_ITEM_NAME      "egg-item-name"
+#define STOCK_DRAG_MODE    "stock_drag-mode"
 
 static const GtkTargetEntry dest_drag_types[] = {
   {EGG_TOOLBAR_ITEM_TYPE, GTK_TARGET_SAME_APP, 0},
@@ -62,8 +63,9 @@ enum
   PROP_0,
   PROP_TOOLBARS_MODEL,
   PROP_UI_MANAGER,
-  PROP_VISIBILITY_PATH,
-  PROP_SELECTED
+  PROP_POPUP_PATH,
+  PROP_SELECTED,
+  PROP_EDIT_MODE
 };
 
 enum
@@ -88,11 +90,12 @@ struct _EggEditableToolbarPrivate
   
   GtkWidget *selected;
   GtkActionGroup *actions;
-  guint popup_id;
   
   guint visibility_id;
-  char *visibility_path;
+  GList *visibility_paths;
   GPtrArray *visibility_actions;
+
+  char *popup_path;
 
   guint        dnd_pending;
   GtkToolbar  *dnd_toolbar;
@@ -369,20 +372,34 @@ remove_toolbar_cb (GtkAction          *action,
 }
 
 static void
+popup_context_deactivate (GtkMenuShell *menu,
+			  EggEditableToolbar *etoolbar)
+{
+  egg_editable_toolbar_set_selected (etoolbar, NULL);
+  g_object_notify (G_OBJECT (etoolbar), "selected");
+}
+
+static void
 popup_context_menu_cb (GtkWidget          *toolbar,
                        gint		   x,
                        gint		   y,
                        gint                button_number,
                        EggEditableToolbar *etoolbar)
 {
-  if (etoolbar->priv->popup_id != 0)
+  if (etoolbar->priv->popup_path != NULL)
     {
       GtkMenu *menu;
+      
       egg_editable_toolbar_set_selected (etoolbar, toolbar);
       g_object_notify (G_OBJECT (etoolbar), "selected");
-	
-      menu = GTK_MENU (gtk_ui_manager_get_widget (etoolbar->priv->manager, "/ToolbarPopup"));
+      
+      menu = GTK_MENU (gtk_ui_manager_get_widget (etoolbar->priv->manager, 
+						  etoolbar->priv->popup_path));
+      g_return_if_fail (menu != NULL);
       gtk_menu_popup (menu, NULL, NULL, NULL, NULL, button_number, gtk_get_current_event_time ());
+      g_signal_connect_object (menu, "selection-done",
+			       G_CALLBACK (popup_context_deactivate),
+			       etoolbar, 0);
     }
 }
 
@@ -391,14 +408,20 @@ button_press_event_cb (GtkWidget *widget,
                        GdkEventButton *event,
                        EggEditableToolbar *etoolbar)
 {
-  if (event->button == 3 && etoolbar->priv->popup_id != 0)
+  if (event->button == 3 && etoolbar->priv->popup_path != NULL)
     {
       GtkMenu *menu;
+      
       egg_editable_toolbar_set_selected (etoolbar, widget);
       g_object_notify (G_OBJECT (etoolbar), "selected");
 	
-      menu = GTK_MENU (gtk_ui_manager_get_widget (etoolbar->priv->manager, "/ToolbarPopup"));
+      menu = GTK_MENU (gtk_ui_manager_get_widget (etoolbar->priv->manager, 
+						  etoolbar->priv->popup_path));
+      g_return_val_if_fail (menu != NULL, FALSE);
       gtk_menu_popup (menu, NULL, NULL, NULL, NULL, event->button, event->time);
+      g_signal_connect_object (menu, "selection-done",
+			       G_CALLBACK (popup_context_deactivate),
+			       etoolbar, 0);
       
       return TRUE;
     }
@@ -752,7 +775,7 @@ toggled_visibility_cb (GtkToggleAction *action,
   gboolean visible;
   gint i;
   
-  visible = !gtk_toggle_action_get_active (action);
+  visible = gtk_toggle_action_get_active (action);
   for (i = 0; i < priv->visibility_actions->len; i++)
     if (g_ptr_array_index (priv->visibility_actions, i) == action)
       break;
@@ -792,13 +815,14 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
   EggEditableToolbarPrivate *priv = etoolbar->priv;
   gint n_toolbars, n_items, i, j, k;
   GtkToggleAction *action;
+  GList *list;
   GString *string;
   char action_name[40];
   char *action_label;
   char *tmp;    	
   
   if (priv == NULL || priv->model == NULL || priv->manager == NULL ||
-      priv->visibility_path == NULL || priv->actions == NULL)
+      priv->visibility_paths == NULL || priv->actions == NULL)
     {
       return;
     }
@@ -843,7 +867,7 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
 	  if (j > 0)
 	    {
 	      g_string_append (string, ", ");
-	      if (k > 25)
+	      if (j > 1 && k > 25)
 		{
 		  g_value_unset (&value);
 		  break;
@@ -865,7 +889,7 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
 	k++;
       }
       tmp[k] = 0;
-      action_label = g_strdup_printf (_("Hide “%s”"), tmp);
+      action_label = g_strdup_printf (_("Show “_%s”"), tmp);
       g_free (tmp);
       
       sprintf(action_name, "ToolbarToggle%d", i);
@@ -884,13 +908,18 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
 	  action = g_ptr_array_index (priv->visibility_actions, i);
 	  g_object_set (action, "label", action_label, NULL);
         }
-      
-      gtk_toggle_action_set_active (action, !GTK_WIDGET_VISIBLE
+
+      gtk_action_set_visible (GTK_ACTION (action), (egg_toolbars_model_get_flags (priv->model, i) 
+						    & EGG_TB_MODEL_NOT_REMOVABLE) == 0);
+      gtk_toggle_action_set_active (action, GTK_WIDGET_VISIBLE
 				    (get_dock_nth (etoolbar, i)));
       
-      gtk_ui_manager_add_ui (priv->manager, priv->visibility_id,
-			     priv->visibility_path, action_name, action_name,
-			     GTK_UI_MANAGER_MENUITEM, FALSE);
+      for (list = priv->visibility_paths; list != NULL; list = g_list_next (list))
+        {
+	  gtk_ui_manager_add_ui (priv->manager, priv->visibility_id,
+				 (const char *)list->data, action_name, action_name,
+				 GTK_UI_MANAGER_MENUITEM, FALSE);
+	}
 	    
       g_free (action_label);
     }
@@ -1222,6 +1251,10 @@ egg_editable_toolbar_deconstruct (EggEditableToolbar *toolbar)
   children = gtk_container_get_children (GTK_CONTAINER (toolbar));
   g_list_foreach (children, (GFunc) gtk_widget_destroy, NULL);
   g_list_free (children);
+  
+  children = toolbar->priv->visibility_paths;
+  g_list_foreach (children, (GFunc) g_free, NULL);
+  g_list_free (children);
 }
 
 void
@@ -1301,11 +1334,11 @@ egg_editable_toolbar_set_ui_manager (EggEditableToolbar *etoolbar,
 				     GtkUIManager       *manager)
 {
   static const GtkActionEntry actions[] = {
-    { "MoveToolItem", NULL, N_("_Move on Toolbar"), NULL,
+    { "MoveToolItem", STOCK_DRAG_MODE, N_("_Move on Toolbar"), NULL,
       N_("Move the selected item on the toolbar"), G_CALLBACK (move_item_cb) },
     { "RemoveToolItem", GTK_STOCK_REMOVE, N_("_Remove from Toolbar"), NULL,
       N_("Remove the selected item from the toolbar"), G_CALLBACK (remove_item_cb) },
-    { "RemoveToolbar", GTK_STOCK_REMOVE, N_("_Remove Toolbar"), NULL,
+    { "RemoveToolbar", GTK_STOCK_DELETE, N_("_Delete Toolbar"), NULL,
       N_("Remove the selected toolbar"), G_CALLBACK (remove_toolbar_cb) },
   };
   
@@ -1318,13 +1351,6 @@ egg_editable_toolbar_set_ui_manager (EggEditableToolbar *etoolbar,
   gtk_ui_manager_insert_action_group (manager, etoolbar->priv->actions, -1);
   g_object_unref (etoolbar->priv->actions);
 
-  etoolbar->priv->popup_id = gtk_ui_manager_add_ui_from_string (manager, 
-     "<popup name=\"ToolbarPopup\">"
-     "<menuitem action=\"MoveToolItem\"/>"
-     "<menuitem action=\"RemoveToolItem\"/>"							     
-     "<menuitem action=\"RemoveToolbar\"/>"
-     "</popup>", -1, NULL);  
-  
   toolbar_visibility_refresh (etoolbar);
 }
 
@@ -1337,18 +1363,75 @@ void
 egg_editable_toolbar_set_selected (EggEditableToolbar *etoolbar,
 				   GtkWidget          *widget)
 {
-  gboolean toolitem, toolbar;
+  GtkWidget *toolbar, *toolitem;
+  gboolean editable;
 
   etoolbar->priv->selected = widget;
   
-  toolitem = (gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM) != 0);
-  toolbar = (gtk_widget_get_ancestor (widget, GTK_TYPE_TOOLBAR) != 0);
+  toolbar = (widget != NULL) ? gtk_widget_get_ancestor (widget, GTK_TYPE_TOOLBAR) : NULL;
+  toolitem = (widget != NULL) ? gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM) : NULL;
   
-  gtk_action_set_visible (find_action (etoolbar, "RemoveToolbar"), toolbar && (etoolbar->priv->edit_mode > 0));
-  gtk_action_set_visible (find_action (etoolbar, "RemoveToolItem"), toolitem);
-  gtk_action_set_visible (find_action (etoolbar, "MoveToolItem"), toolitem);
+  if(toolbar != NULL)
+    {
+      gint tpos = get_toolbar_position (etoolbar, toolbar);
+      editable = ((egg_toolbars_model_get_flags (etoolbar->priv->model, tpos) & EGG_TB_MODEL_NOT_EDITABLE) == 0);
+    }
+  else
+    {
+      editable = FALSE;
+    }
   
-  toolbar_visibility_refresh (etoolbar);
+  gtk_action_set_visible (find_action (etoolbar, "RemoveToolbar"), (toolbar != NULL) && (etoolbar->priv->edit_mode > 0));
+  gtk_action_set_visible (find_action (etoolbar, "RemoveToolItem"), (toolitem != NULL) && editable);
+  gtk_action_set_visible (find_action (etoolbar, "MoveToolItem"), (toolitem != NULL) && editable);
+}
+
+static void
+set_edit_mode (EggEditableToolbar *etoolbar,
+	       gboolean mode)
+{
+  EggEditableToolbarPrivate *priv = etoolbar->priv;
+  int i, l, n_items;
+
+  i = priv->edit_mode;
+  if (mode)
+    {
+      priv->edit_mode++;
+    }
+  else
+    {
+      g_return_if_fail (priv->edit_mode > 0);
+      priv->edit_mode--;
+    }
+  i *= priv->edit_mode;
+  
+  if (i == 0)
+    {
+      for (i = get_n_toolbars (etoolbar)-1; i >= 0; i--)
+        {
+          GtkWidget *toolbar;
+          
+          toolbar = get_toolbar_nth (etoolbar, i);
+          n_items = gtk_toolbar_get_n_items (GTK_TOOLBAR (toolbar));
+
+          if (n_items == 0 && priv->edit_mode == 0)
+            {
+              egg_toolbars_model_remove_toolbar (priv->model, i);
+            }
+          else
+            {          
+              for (l = 0; l < n_items; l++)
+                {
+                  GtkToolItem *item;
+              
+                  item = gtk_toolbar_get_nth_item (GTK_TOOLBAR (toolbar), l);
+                  
+                  configure_item_cursor (item, etoolbar);
+                  configure_item_sensitivity (item, etoolbar);
+                }
+            }
+        }
+    }
 }
 
 static void
@@ -1370,8 +1453,11 @@ egg_editable_toolbar_set_property (GObject      *object,
     case PROP_SELECTED:
       egg_editable_toolbar_set_selected (etoolbar, g_value_get_object (value));
       break;
-    case PROP_VISIBILITY_PATH:
-      etoolbar->priv->visibility_path = g_strdup (g_value_get_string (value));
+    case PROP_POPUP_PATH:
+      etoolbar->priv->popup_path = g_strdup (g_value_get_string (value));
+      break;
+    case PROP_EDIT_MODE:
+      set_edit_mode (etoolbar, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1397,6 +1483,9 @@ egg_editable_toolbar_get_property (GObject    *object,
       break;
     case PROP_SELECTED:
       g_value_set_object (value, etoolbar->priv->selected);
+      break;
+    case PROP_EDIT_MODE:
+      g_value_set_boolean (value, etoolbar->priv->edit_mode>0);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1446,35 +1535,43 @@ egg_editable_toolbar_class_init (EggEditableToolbarClass *klass)
 							G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property (object_class,
-				   PROP_VISIBILITY_PATH,
-				   g_param_spec_string ("visibility-path",
-							"visibility-path",
-							"visibility-path",
+				   PROP_POPUP_PATH,
+				   g_param_spec_string ("popup-path",
+							"popup-path",
+							"popup-path",
 							NULL,
 							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+  g_object_class_install_property (object_class,
+				   PROP_EDIT_MODE,
+				   g_param_spec_boolean ("edit-mode",
+							 "Edit-Mode",
+							 "Edit Mode",
+							 FALSE,
+							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_type_class_add_private (object_class, sizeof (EggEditableToolbarPrivate));
 }
 
 GtkWidget *
 egg_editable_toolbar_new (GtkUIManager *manager,
-                          const char *visibility_path)
+                          const char *popup_path)
 {
     return GTK_WIDGET (g_object_new (EGG_TYPE_EDITABLE_TOOLBAR,
                                      "ui-manager", manager,
-                                     "visibility-path", visibility_path,
+                                     "popup-path", popup_path,
                                      NULL));
 }
 
 GtkWidget *
 egg_editable_toolbar_new_with_model (GtkUIManager *manager,
  				     EggToolbarsModel *model,
-                                     const char *visibility_path)
+                                     const char *popup_path)
 {
   return GTK_WIDGET (g_object_new (EGG_TYPE_EDITABLE_TOOLBAR,
                                    "ui-manager", manager,
                                    "model", model,
-                                   "visibility-path", visibility_path,
+                                   "popup-path", popup_path,
 				   NULL));
 }
 
@@ -1490,48 +1587,16 @@ void
 egg_editable_toolbar_set_edit_mode (EggEditableToolbar *etoolbar,
 				    gboolean mode)
 {
-  EggEditableToolbarPrivate *priv = etoolbar->priv;
-  int i, l, n_items;
+  set_edit_mode (etoolbar, mode);
+  g_object_notify (G_OBJECT (etoolbar), "edit-mode");
+}
 
-  i = priv->edit_mode;
-  if (mode)
-    {
-      priv->edit_mode++;
-    }
-  else
-    {
-      g_return_if_fail (priv->edit_mode > 0);
-      priv->edit_mode--;
-    }
-  i *= priv->edit_mode;
-  
-  if (i == 0)
-    {
-      for (i = get_n_toolbars (etoolbar)-1; i >= 0; i--)
-        {
-          GtkWidget *toolbar;
-          
-          toolbar = get_toolbar_nth (etoolbar, i);
-          n_items = gtk_toolbar_get_n_items (GTK_TOOLBAR (toolbar));
-
-          if (n_items == 0 && priv->edit_mode == 0)
-            {
-              egg_toolbars_model_remove_toolbar (priv->model, i);
-            }
-          else
-            {          
-              for (l = 0; l < n_items; l++)
-                {
-                  GtkToolItem *item;
-              
-                  item = gtk_toolbar_get_nth_item (GTK_TOOLBAR (toolbar), l);
-                  
-                  configure_item_cursor (item, etoolbar);
-                  configure_item_sensitivity (item, etoolbar);
-                }
-            }
-        }
-    }
+void
+egg_editable_toolbar_add_visibility (EggEditableToolbar *etoolbar,
+				     const char *path)
+{
+  etoolbar->priv->visibility_paths = g_list_prepend
+	  (etoolbar->priv->visibility_paths, g_strdup (path));
 }
 
 void

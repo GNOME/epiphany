@@ -736,9 +736,19 @@ ephy_toolbar_get_type (void)
 EphyToolbar *
 ephy_toolbar_new (EphyWindow *window)
 {
-	return EPHY_TOOLBAR (g_object_new (EPHY_TYPE_TOOLBAR,
-					   "window", window,
-					   "ui-manager", ephy_window_get_ui_manager (window),
-					   "visibility-path", "/menubar/ViewMenu/ViewTogglesGroup/ToolbarMenu",
-					   NULL));
+	EggEditableToolbar *etoolbar;
+	
+	etoolbar = EGG_EDITABLE_TOOLBAR 
+	  (g_object_new (EPHY_TYPE_TOOLBAR,
+			 "window", window,
+			 "ui-manager", ephy_window_get_ui_manager (window),
+			 "popup-path", "/ToolbarPopup",
+			 NULL));
+	
+	egg_editable_toolbar_add_visibility 
+	  (etoolbar, "/menubar/ViewMenu/ViewTogglesGroup/ToolbarMenu/ViewToolbarsGroup");
+	egg_editable_toolbar_add_visibility 
+	  (etoolbar, "/ToolbarPopup/ViewToolbarsGroup");
+
+	return EPHY_TOOLBAR (etoolbar);
 }
