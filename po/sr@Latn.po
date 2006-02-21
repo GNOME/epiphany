@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-21 00:08+0100\n"
-"PO-Revision-Date: 2006-02-21 00:16+0100\n"
+"POT-Creation-Date: 2006-02-21 22:39+0100\n"
+"PO-Revision-Date: 2006-02-21 22:49+0100\n"
 "Last-Translator: Slobodan D. Sredojević <slobo@akrep.be>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
 "MIME-Version: 1.0\n"
@@ -2026,32 +2026,31 @@ msgstr ""
 "GKonf greška:\n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:868
-#, c-format
-msgid "Hide “%s”"
-msgstr "Sakrij „%s“"
+#: ../lib/egg/egg-editable-toolbar.c:892
+msgid "Show “_%s”"
+msgstr "Prikaži „_%s“"
 
-#: ../lib/egg/egg-editable-toolbar.c:1304
+#: ../lib/egg/egg-editable-toolbar.c:1337
 msgid "_Move on Toolbar"
 msgstr "_Premesti na paletu alata"
 
-#: ../lib/egg/egg-editable-toolbar.c:1305
+#: ../lib/egg/egg-editable-toolbar.c:1338
 msgid "Move the selected item on the toolbar"
 msgstr "Premešta označenu stavku na paletu alata"
 
-#: ../lib/egg/egg-editable-toolbar.c:1306
+#: ../lib/egg/egg-editable-toolbar.c:1339
 msgid "_Remove from Toolbar"
 msgstr "_Ukloni sa palete alatki"
 
-#: ../lib/egg/egg-editable-toolbar.c:1307
+#: ../lib/egg/egg-editable-toolbar.c:1340
 msgid "Remove the selected item from the toolbar"
 msgstr "Uklanja izabranu stavku sa palete alata"
 
-#: ../lib/egg/egg-editable-toolbar.c:1308
-msgid "_Remove Toolbar"
+#: ../lib/egg/egg-editable-toolbar.c:1341
+msgid "_Delete Toolbar"
 msgstr "_Ukloni paletu alata"
 
-#: ../lib/egg/egg-editable-toolbar.c:1309
+#: ../lib/egg/egg-editable-toolbar.c:1342
 msgid "Remove the selected toolbar"
 msgstr "Uklanja izabranu paletu sa alatima"
 
@@ -2267,25 +2266,25 @@ msgstr "zapadni"
 msgid "select fonts for|Other Scripts"
 msgstr "ostala pisma"
 
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:56
 msgid "Popup Windows"
 msgstr "Iskačući prozori"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1179
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1179
 msgid "History"
 msgstr "Istorijat"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
+#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:899
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1741
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Obeleživači"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#: ../lib/ephy-stock-icons.c:59 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Polje za adresu"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:60
 msgid "_Download"
 msgstr "_Preuzmi"
 
@@ -2365,8 +2364,8 @@ msgstr "%s:"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:93
-#: ../src/bookmarks/ephy-bookmark-properties.c:619
+#: ../src/bookmarks/ephy-bookmark-properties.c:92
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -2374,7 +2373,7 @@ msgstr[0] "%d sličnost"
 msgstr[1] "%d sličnosti"
 msgstr[2] "%d sličnosti"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:266
+#: ../src/bookmarks/ephy-bookmark-properties.c:265
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
@@ -2382,28 +2381,32 @@ msgstr[0] "Ujedini sa %d istim obeleživačem"
 msgstr[1] "Ujedini sa %d ista obelećivača"
 msgstr[2] "Ujedini sa %d istih obeleživača"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:286
-#: ../src/bookmarks/ephy-bookmark-properties.c:308
+#: ../src/bookmarks/ephy-bookmark-properties.c:285
+#: ../src/bookmarks/ephy-bookmark-properties.c:307
 #, c-format
 msgid "Show “%s”"
 msgstr "Prikaži „%s“"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:434
+#: ../src/bookmarks/ephy-bookmark-properties.c:433
 #, c-format
 msgid "“%s” Properties"
 msgstr "Osobine obeleživača „%s“"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:557
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "_Naslov:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:572
+#: ../src/bookmarks/ephy-bookmark-properties.c:567
 msgid "A_ddress:"
 msgstr "_Adresa:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:582
+#: ../src/bookmarks/ephy-bookmark-properties.c:577
 msgid "T_opics:"
 msgstr "_Teme:"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:598
+msgid "Sho_w all topics"
+msgstr "Prikaži sve te_me"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:97
 msgid "Mozilla (HTML)"
@@ -2451,7 +2454,7 @@ msgstr "Pravi jednu novu temu"
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1358
-#: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2467,7 +2470,7 @@ msgstr "Otvori izabrani obeleživač u novom prozoru"
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1361
-#: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
+#: ../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
@@ -2496,7 +2499,9 @@ msgstr "_Obriši"
 msgid "Delete the selected bookmark or topic"
 msgstr "Ukloni izabrani obeleživač ili temu"
 
+#. Add popup menu actions that are specific to the bookmark widgets
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-ui.c:297
 msgid "_Properties"
 msgstr "Osob_ine"
 
@@ -2814,20 +2819,15 @@ msgstr "Osveži obeleživač?"
 msgid "Quick Bookmark"
 msgstr "Brz obeleživač"
 
-#. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-ui.c:290
-msgid "Properties"
-msgstr "Osobine"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:291
+#: ../src/bookmarks/ephy-bookmarks-ui.c:298
 msgid "Show properties for this bookmark"
 msgstr "Prikaži osobine za ovaj obeleživač"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:303
+#: ../src/bookmarks/ephy-bookmarks-ui.c:310
 msgid "Open this bookmark in a new tab"
 msgstr "Otvori izabrani obeleživač u jednom novom listu"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:315
+#: ../src/bookmarks/ephy-bookmarks-ui.c:322
 msgid "Open this bookmark in a new window"
 msgstr "Otvori izabrani obeleživač u jednom novom prozoru"
 
@@ -3586,8 +3586,8 @@ msgstr "Pređi u nepovezani režim"
 
 #. View Menu
 #: ../src/ephy-window.c:283
-msgid "_Show Toolbars"
-msgstr "P_rikaži palete alatki"
+msgid "_Hide Toolbars"
+msgstr "Sakrij palete a_latki"
 
 #: ../src/ephy-window.c:284
 msgid "Show or hide toolbar"
@@ -4023,6 +4023,15 @@ msgstr ""
 msgid "GNOME Web Browser Website"
 msgstr "Veb strana Gnomovog preglednika Interneta"
 
+#~ msgid "Hide “%s”"
+#~ msgstr "Sakrij „%s“"
+
+#~ msgid "Properties"
+#~ msgstr "Osobine"
+
+#~ msgid "_Show Toolbars"
+#~ msgstr "P_rikaži palete alatki"
+
 #~ msgid "download status|Unknown"
 #~ msgstr "Nepoznato"
 
@@ -4128,10 +4137,6 @@ msgstr "Veb strana Gnomovog preglednika Interneta"
 #, fuzzy
 #~ msgid "Bookmark Exists"
 #~ msgstr "Obeleživači"
-
-#, fuzzy
-#~ msgid "No topics"
-#~ msgstr "Teme"
 
 #, fuzzy
 #~ msgid "Selection"
