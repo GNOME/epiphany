@@ -336,29 +336,30 @@ update_key (EphyTopicsEntry *entry)
 	priv->key = 0;
 
 	/* Set the priv->create and priv->key appropriately. */
-	input = g_strndup (start, end-start);
-	g_strstrip (input);
-	if (*input != 0)
+	if (start != end)
 	{
+		input = g_strndup (start, end-start);
+		g_strstrip (input);
 		priv->create = input;
 		
 		input = g_utf8_casefold (input, -1);
 		priv->key = g_utf8_normalize (input, -1, G_NORMALIZE_DEFAULT);
+		g_free (input);
 		
-		if (find_topic (entry, priv->key) != NULL)
+		if (priv->create[0] == '\0' ||
+		    find_topic (entry, priv->key) != NULL)
 		{
 			g_free (priv->create);
 			priv->create = 0;
 		}
-	}
-	g_free (input);
 
-	/* If there is something we can create, then setup the action. */
-	if (priv->create)
-	{
-		input = g_strdup_printf (_("Create topic “%s”"), priv->create);
-		gtk_entry_completion_insert_action_text (priv->completion, 0, input);
-		g_free (input);
+		/* If there is something we can create, then setup the action. */
+		else
+		{
+			input = g_strdup_printf (_("Create topic “%s”"), priv->create);
+			gtk_entry_completion_insert_action_text (priv->completion, 0, input);
+			g_free (input);
+		}
 	}
 }
 
@@ -376,49 +377,34 @@ match_func (GtkEntryCompletion *completion,
 	GValue value = { 0, };
 	EphyNode *node;
 	
+	if (priv->key == NULL)
+	{
+		return FALSE;
+	}
+	
 	/* If no node at all (this happens for unknown reasons) then don't show. */
 	gtk_tree_model_get_value (model, iter, COLUMN_NODE, &value);
 	node = g_value_get_pointer (&value);
+	g_value_unset (&value);
 	if (node == NULL)
 	{
-		g_value_unset (&value);
 		result = FALSE;
 	}
 
-	/* If it's already selected, don't show it. */
+	/* If it's already selected, don't show it unless we're editing it. */
 	else if (ephy_node_has_child (node, priv->bookmark))
 	{
+		gtk_tree_model_get_value (model, iter, COLUMN_KEY, &value);
+		result = (strcmp (g_value_get_string (&value), priv->key) == 0);
 		g_value_unset (&value);
-		if (priv->key == NULL)
-		{
-			result = FALSE;
-		}
-		
-		/* Unless it's the one we're currently editing. */
-		else
-		{
-			gtk_tree_model_get_value (model, iter, COLUMN_KEY, &value);
-			result = (strcmp (g_value_get_string (&value), priv->key) == 0);
-			g_value_unset (&value);
-		}
 	}
 	
-	/* If it's not selected, assume we show it. */
+	/* If it's not selected, show it if it matches. */
 	else
 	{
+		gtk_tree_model_get_value (model, iter, COLUMN_KEY, &value);
+		result = (g_str_has_prefix (g_value_get_string (&value), priv->key));
 		g_value_unset (&value);
-		if (priv->key == NULL)
-		{
-			result = TRUE;
-		}
-		
-		/* Unless it's not matching the current key. */
-		else
-		{
-			gtk_tree_model_get_value (model, iter, COLUMN_KEY, &value);
-			result = (g_str_has_prefix (g_value_get_string (&value), priv->key));
-			g_value_unset (&value);
-		}
 	}
 	
 	return result;
@@ -505,7 +491,7 @@ activate_cb (GtkEditable *editable,
 			insert_text (EPHY_TOPICS_ENTRY (editable), g_value_get_string (&value));
 			g_value_unset (&value);
 		}
-	}	
+	}
 }
 
 static void
