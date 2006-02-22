@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-14 13:57+0100\n"
-"PO-Revision-Date: 2006-02-14 13:59+0100\n"
+"POT-Creation-Date: 2006-02-22 03:36+0100\n"
+"PO-Revision-Date: 2006-02-22 03:38+0100\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego <trasno@ceu.fi.udc.es>\n"
 "MIME-Version: 1.0\n"
@@ -2016,32 +2016,32 @@ msgstr ""
 "Erro de GConf:\n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:868
+#: ../lib/egg/egg-editable-toolbar.c:892
 #, c-format
-msgid "Hide “%s”"
-msgstr "Agochar “%s”"
+msgid "Show “_%s”"
+msgstr "Amosar “_%s”"
 
-#: ../lib/egg/egg-editable-toolbar.c:1304
+#: ../lib/egg/egg-editable-toolbar.c:1337
 msgid "_Move on Toolbar"
 msgstr "_Mover na barra de ferramentas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1305
+#: ../lib/egg/egg-editable-toolbar.c:1338
 msgid "Move the selected item on the toolbar"
 msgstr "Move o elemento seleccionado na barra de ferramentas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1306
+#: ../lib/egg/egg-editable-toolbar.c:1339
 msgid "_Remove from Toolbar"
 msgstr "_Quitar a barra de ferramentas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1307
+#: ../lib/egg/egg-editable-toolbar.c:1340
 msgid "Remove the selected item from the toolbar"
 msgstr "Quita o elemento seleccionado da barra de ferramentas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1308
-msgid "_Remove Toolbar"
-msgstr "_Quitar a barra de ferramentas"
+#: ../lib/egg/egg-editable-toolbar.c:1341
+msgid "_Delete Toolbar"
+msgstr "_Borrar a barra de ferramentas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1309
+#: ../lib/egg/egg-editable-toolbar.c:1342
 msgid "Remove the selected toolbar"
 msgstr "Elimina a barra de ferramentas seleccionada"
 
@@ -2257,25 +2257,25 @@ msgstr "Occidental"
 msgid "select fonts for|Other Scripts"
 msgstr "Otras escrituras"
 
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:56
 msgid "Popup Windows"
 msgstr "Fiestras emerxentes"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1179
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1179
 msgid "History"
 msgstr "Historial"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
+#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:899
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1741
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Marcadores"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#: ../lib/ephy-stock-icons.c:59 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Entrada de enderezo"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:60
 msgid "_Download"
 msgstr "_Descargar"
 
@@ -2355,43 +2355,47 @@ msgstr "%s:"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:93
-#: ../src/bookmarks/ephy-bookmark-properties.c:619
+#: ../src/bookmarks/ephy-bookmark-properties.c:92
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d _similar"
 msgstr[1] "%d _similares"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:266
+#: ../src/bookmarks/ephy-bookmark-properties.c:265
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "_Unificar con %d marcador idéntico"
 msgstr[1] "_Unificar con %d marcadores idénticos"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:286
-#: ../src/bookmarks/ephy-bookmark-properties.c:308
+#: ../src/bookmarks/ephy-bookmark-properties.c:285
+#: ../src/bookmarks/ephy-bookmark-properties.c:307
 #, c-format
 msgid "Show “%s”"
 msgstr "Amosar “%s”"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:434
+#: ../src/bookmarks/ephy-bookmark-properties.c:433
 #, c-format
 msgid "“%s” Properties"
 msgstr "“%s” Propiedades"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:557
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "_Título:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:572
+#: ../src/bookmarks/ephy-bookmark-properties.c:567
 msgid "A_ddress:"
 msgstr "En_derezo:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:582
+#: ../src/bookmarks/ephy-bookmark-properties.c:577
 msgid "T_opics:"
 msgstr "Te_mas:"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:598
+msgid "Sho_w all topics"
+msgstr "Amosa_r tódolos temas"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:97
 msgid "Mozilla (HTML)"
@@ -2439,7 +2443,7 @@ msgstr "Crear un novo tema"
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1358
-#: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2453,7 +2457,7 @@ msgstr "Abrir o marcador seleccionado nunha nova fiestra"
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1361
-#: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
+#: ../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
@@ -2481,7 +2485,9 @@ msgstr "_Borrar"
 msgid "Delete the selected bookmark or topic"
 msgstr "Borrar o marcador ou tema seleccionado"
 
+#. Add popup menu actions that are specific to the bookmark widgets
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-ui.c:297
 msgid "_Properties"
 msgstr "_Propiedades"
 
@@ -2798,20 +2804,15 @@ msgstr "¿Actualizar marcador?"
 msgid "Quick Bookmark"
 msgstr "Marcador rápido"
 
-#. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-ui.c:290
-msgid "Properties"
-msgstr "Propiedades"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:291
+#: ../src/bookmarks/ephy-bookmarks-ui.c:298
 msgid "Show properties for this bookmark"
 msgstr "Amosa as propiedades para este marcador"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:303
+#: ../src/bookmarks/ephy-bookmarks-ui.c:310
 msgid "Open this bookmark in a new tab"
 msgstr "Abre este marcador nunha solapa nova"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:315
+#: ../src/bookmarks/ephy-bookmarks-ui.c:322
 msgid "Open this bookmark in a new window"
 msgstr "Abre este marcador nunha fiestra nova"
 
@@ -3561,8 +3562,8 @@ msgstr "Cambiar a modo desconectado"
 
 #. View Menu
 #: ../src/ephy-window.c:283
-msgid "_Show Toolbars"
-msgstr "A_mosar barra de ferramentas"
+msgid "_Hide Toolbars"
+msgstr "Agoc_har as barras de ferramentas"
 
 #: ../src/ephy-window.c:284
 msgid "Show or hide toolbar"
