@@ -5,14 +5,15 @@
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2001-2003.
 # KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>, 2003.
 # Takeshi AIHANA <aihana@gnome.gr.jp>, 2004-2006.
+# Satoru SATOH <ss@gnome.gr.jp>, 2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-15 01:40+0900\n"
-"PO-Revision-Date: 2006-02-15 01:38+0900\n"
-"Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
+"POT-Creation-Date: 2006-02-22 20:44+0900\n"
+"PO-Revision-Date: 2006-02-22 20:47+0900\n"
+"Last-Translator: Satoru SATOh <@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2027,32 +2028,32 @@ msgstr ""
 "GConf エラー:\n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:868
+#: ../lib/egg/egg-editable-toolbar.c:892
 #, c-format
-msgid "Hide “%s”"
-msgstr "\"%s\" を隱す"
+msgid "Show “_%s”"
+msgstr "“%s“ を表示"
 
-#: ../lib/egg/egg-editable-toolbar.c:1304
+#: ../lib/egg/egg-editable-toolbar.c:1337
 msgid "_Move on Toolbar"
 msgstr "ツールバー上で移動(_M)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1305
+#: ../lib/egg/egg-editable-toolbar.c:1338
 msgid "Move the selected item on the toolbar"
 msgstr "ツールバーの選択したアイテムを移動"
 
-#: ../lib/egg/egg-editable-toolbar.c:1306
+#: ../lib/egg/egg-editable-toolbar.c:1339
 msgid "_Remove from Toolbar"
 msgstr "ツールバーから削除(_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1307
+#: ../lib/egg/egg-editable-toolbar.c:1340
 msgid "Remove the selected item from the toolbar"
 msgstr "ツールバーから選択したアイテムを削除"
 
-#: ../lib/egg/egg-editable-toolbar.c:1308
-msgid "_Remove Toolbar"
-msgstr "ツールバーの削除(_R)"
+#: ../lib/egg/egg-editable-toolbar.c:1341
+msgid "_Delete Toolbar"
+msgstr "ツールバーの削除(_D)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1309
+#: ../lib/egg/egg-editable-toolbar.c:1342
 msgid "Remove the selected toolbar"
 msgstr "選択したツールバーを削除"
 
@@ -2269,25 +2270,25 @@ msgstr "西欧"
 msgid "select fonts for|Other Scripts"
 msgstr "その他のスクリプト"
 
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:56
 msgid "Popup Windows"
 msgstr "ウィンドウのポップアップ"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1179
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1179
 msgid "History"
 msgstr "履歴"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
+#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:899
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1741
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "ブックマーク"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#: ../lib/ephy-stock-icons.c:59 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "アドレス・エントリ"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:60
 msgid "_Download"
 msgstr "ダウンロード(_D)"
 
@@ -2369,43 +2370,47 @@ msgstr "%s:"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:93
-#: ../src/bookmarks/ephy-bookmark-properties.c:619
+#: ../src/bookmarks/ephy-bookmark-properties.c:92
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "類似エントリ %d個"
 msgstr[1] "類似エントリ %d個"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:266
+#: ../src/bookmarks/ephy-bookmark-properties.c:265
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "%d個の同一ブックマークと統合する(_U)"
 msgstr[1] "%d個の同一ブックマークと統合する(_U)"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:286
-#: ../src/bookmarks/ephy-bookmark-properties.c:308
+#: ../src/bookmarks/ephy-bookmark-properties.c:285
+#: ../src/bookmarks/ephy-bookmark-properties.c:307
 #, c-format
 msgid "Show “%s”"
 msgstr "\"%s\" を表示する"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:434
+#: ../src/bookmarks/ephy-bookmark-properties.c:433
 #, c-format
 msgid "“%s” Properties"
 msgstr "\"%s\" のプロパティ"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:557
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "タイトル(_T):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:572
+#: ../src/bookmarks/ephy-bookmark-properties.c:567
 msgid "A_ddress:"
 msgstr "アドレス(_D):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:582
+#: ../src/bookmarks/ephy-bookmark-properties.c:577
 msgid "T_opics:"
 msgstr "トピック(_O):"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:598
+msgid "Sho_w all topics"
+msgstr "すべてのトピックを表示(_W)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:97
 msgid "Mozilla (HTML)"
@@ -2453,7 +2458,7 @@ msgstr "新しいトピックを作成します"
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1358
-#: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2467,7 +2472,7 @@ msgstr "選択したブックマークを新しいウインドウで開きます
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1361
-#: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
+#: ../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
@@ -2495,7 +2500,9 @@ msgstr "削除(_D)"
 msgid "Delete the selected bookmark or topic"
 msgstr "選択したブックマークあるいはトピックを削除します"
 
+#. Add popup menu actions that are specific to the bookmark widgets
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-ui.c:297
 msgid "_Properties"
 msgstr "プロパティ(_P)"
 
@@ -2812,20 +2819,15 @@ msgstr "ブックマークを更新しますか？"
 msgid "Quick Bookmark"
 msgstr "クィック・ブックマーク"
 
-#. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-ui.c:290
-msgid "Properties"
-msgstr "プロパティ"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:291
+#: ../src/bookmarks/ephy-bookmarks-ui.c:298
 msgid "Show properties for this bookmark"
 msgstr "このブックマークのプロパティを表示"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:303
+#: ../src/bookmarks/ephy-bookmarks-ui.c:310
 msgid "Open this bookmark in a new tab"
 msgstr "このブックマークを新しいタブで開く"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:315
+#: ../src/bookmarks/ephy-bookmarks-ui.c:322
 msgid "Open this bookmark in a new window"
 msgstr "このブックマークを新しいウィンドウで開く"
 
@@ -3577,8 +3579,8 @@ msgstr "オフライン・モードに切り替えます"
 
 #. View Menu
 #: ../src/ephy-window.c:283
-msgid "_Show Toolbars"
-msgstr "ツールバーの表示(_S)"
+msgid "_Hide Toolbars"
+msgstr "ツールバーを隠す(_H)"
 
 #: ../src/ephy-window.c:284
 msgid "Show or hide toolbar"
@@ -4011,3 +4013,12 @@ msgstr ""
 #: ../src/window-commands.c:778
 msgid "GNOME Web Browser Website"
 msgstr "GNOME ウェブ・ブラウザのウェブサイト"
+
+#~ msgid "Hide “%s”"
+#~ msgstr "\"%s\" を隱す"
+
+#~ msgid "Properties"
+#~ msgstr "プロパティ"
+
+#~ msgid "_Show Toolbars"
+#~ msgstr "ツールバーの表示(_S)"
