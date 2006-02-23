@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-16 20:36+0000\n"
-"PO-Revision-Date: 2006-02-16 20:56+0000\n"
+"POT-Creation-Date: 2006-02-23 18:56+0000\n"
+"PO-Revision-Date: 2006-02-23 18:56+0000\n"
 "Last-Translator: Crispin Flowerday <gnome@flowerday.cx>\n"
 "Language-Team: English/GB <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2013,32 +2013,32 @@ msgstr ""
 "GConf error:\n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:868
+#: ../lib/egg/egg-editable-toolbar.c:892
 #, c-format
-msgid "Hide “%s”"
-msgstr "Hide “%s”"
+msgid "Show “_%s”"
+msgstr "Show “_%s”"
 
-#: ../lib/egg/egg-editable-toolbar.c:1304
+#: ../lib/egg/egg-editable-toolbar.c:1337
 msgid "_Move on Toolbar"
 msgstr "_Move on Toolbar"
 
-#: ../lib/egg/egg-editable-toolbar.c:1305
+#: ../lib/egg/egg-editable-toolbar.c:1338
 msgid "Move the selected item on the toolbar"
 msgstr "Move the selected item on the toolbar"
 
-#: ../lib/egg/egg-editable-toolbar.c:1306
+#: ../lib/egg/egg-editable-toolbar.c:1339
 msgid "_Remove from Toolbar"
 msgstr "_Remove from Toolbar"
 
-#: ../lib/egg/egg-editable-toolbar.c:1307
+#: ../lib/egg/egg-editable-toolbar.c:1340
 msgid "Remove the selected item from the toolbar"
 msgstr "Remove the selected item from the toolbar"
 
-#: ../lib/egg/egg-editable-toolbar.c:1308
-msgid "_Remove Toolbar"
-msgstr "_Remove Toolbar"
+#: ../lib/egg/egg-editable-toolbar.c:1341
+msgid "_Delete Toolbar"
+msgstr "_Delete Toolbar"
 
-#: ../lib/egg/egg-editable-toolbar.c:1309
+#: ../lib/egg/egg-editable-toolbar.c:1342
 msgid "Remove the selected toolbar"
 msgstr "Remove the selected toolbar"
 
@@ -2256,25 +2256,25 @@ msgstr "Western"
 msgid "select fonts for|Other Scripts"
 msgstr "Other Scripts"
 
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:56
 msgid "Popup Windows"
 msgstr "Popup Windows"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1179
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1179
 msgid "History"
 msgstr "History"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
+#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:899
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1741
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Bookmarks"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#: ../lib/ephy-stock-icons.c:59 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Address Entry"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:60
 msgid "_Download"
 msgstr "_Download"
 
@@ -2354,43 +2354,47 @@ msgstr "%s:"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:93
-#: ../src/bookmarks/ephy-bookmark-properties.c:619
+#: ../src/bookmarks/ephy-bookmark-properties.c:92
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d _Similar"
 msgstr[1] "%d _Similar"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:266
+#: ../src/bookmarks/ephy-bookmark-properties.c:265
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "_Unify With %d Identical Bookmark"
 msgstr[1] "_Unify With %d Identical Bookmarks"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:286
-#: ../src/bookmarks/ephy-bookmark-properties.c:308
+#: ../src/bookmarks/ephy-bookmark-properties.c:285
+#: ../src/bookmarks/ephy-bookmark-properties.c:307
 #, c-format
 msgid "Show “%s”"
 msgstr "Show “%s”"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:434
+#: ../src/bookmarks/ephy-bookmark-properties.c:433
 #, c-format
 msgid "“%s” Properties"
 msgstr "“%s” Properties"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:557
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "_Title:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:572
+#: ../src/bookmarks/ephy-bookmark-properties.c:567
 msgid "A_ddress:"
 msgstr "A_ddress:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:582
+#: ../src/bookmarks/ephy-bookmark-properties.c:577
 msgid "T_opics:"
 msgstr "T_opics:"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:598
+msgid "Sho_w all topics"
+msgstr "Sho_w all topics"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:97
 msgid "Mozilla (HTML)"
@@ -2438,7 +2442,7 @@ msgstr "Create a new topic"
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1358
-#: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2452,7 +2456,7 @@ msgstr "Open the selected bookmark in a new window"
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1361
-#: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
+#: ../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
@@ -2480,7 +2484,9 @@ msgstr "_Delete"
 msgid "Delete the selected bookmark or topic"
 msgstr "Delete the selected bookmark or topic"
 
+#. Add popup menu actions that are specific to the bookmark widgets
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-ui.c:297
 msgid "_Properties"
 msgstr "_Properties"
 
@@ -2796,20 +2802,15 @@ msgstr "Update Bookmark?"
 msgid "Quick Bookmark"
 msgstr "Quick Bookmark"
 
-#. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-ui.c:290
-msgid "Properties"
-msgstr "Properties"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:291
+#: ../src/bookmarks/ephy-bookmarks-ui.c:298
 msgid "Show properties for this bookmark"
 msgstr "Show properties for this bookmark"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:303
+#: ../src/bookmarks/ephy-bookmarks-ui.c:310
 msgid "Open this bookmark in a new tab"
 msgstr "Open this bookmark in a new tab"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:315
+#: ../src/bookmarks/ephy-bookmarks-ui.c:322
 msgid "Open this bookmark in a new window"
 msgstr "Open this bookmark in a new window"
 
@@ -3034,7 +3035,7 @@ msgstr ""
 "Startup failed because of the following error:\n"
 "%s"
 
-#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:760
+#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:766
 msgid "GNOME Web Browser"
 msgstr "GNOME Web Browser"
 
@@ -3561,8 +3562,8 @@ msgstr "Switch to offline mode"
 
 #. View Menu
 #: ../src/ephy-window.c:283
-msgid "_Show Toolbars"
-msgstr "_Show Toolbars"
+msgid "_Hide Toolbars"
+msgstr "_Hide Toolbars"
 
 #: ../src/ephy-window.c:284
 msgid "Show or hide toolbar"
@@ -3920,23 +3921,23 @@ msgstr[1] "System languages (%s)"
 msgid "Select a Directory"
 msgstr "Select a Directory"
 
-#: ../src/window-commands.c:711 ../src/window-commands.c:728
+#: ../src/window-commands.c:714 ../src/window-commands.c:731
 msgid "Contact us at:"
 msgstr "Contact us at:"
 
-#: ../src/window-commands.c:714
+#: ../src/window-commands.c:717
 msgid "Contributors:"
 msgstr "Contributors:"
 
-#: ../src/window-commands.c:719
+#: ../src/window-commands.c:722
 msgid "Past developers:"
 msgstr "Past developers:"
 
-#: ../src/window-commands.c:729
+#: ../src/window-commands.c:732
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:734
+#: ../src/window-commands.c:737
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3948,7 +3949,7 @@ msgstr ""
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
 
-#: ../src/window-commands.c:738
+#: ../src/window-commands.c:741
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3960,7 +3961,7 @@ msgstr ""
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 
-#: ../src/window-commands.c:742
+#: ../src/window-commands.c:745
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3970,7 +3971,7 @@ msgstr ""
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
 
-#: ../src/window-commands.c:754
+#: ../src/window-commands.c:757
 #, c-format
 msgid "Using “%s” backend"
 msgstr "Using “%s” backend"
@@ -3983,16 +3984,25 @@ msgstr "Using “%s” backend"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:775
+#: ../src/window-commands.c:781
 msgid "translator-credits"
 msgstr ""
 "Christian Persch <chpe@gnome.org>\n"
 "Gareth Owen <gowen72@yahoo.com>\n"
-"Crispin Flowerday <crispin@flowerday.cx>"
+"Crispin Flowerday <gnome@flowerday.cx>"
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:784
 msgid "GNOME Web Browser Website"
 msgstr "GNOME Web Browser Website"
+
+#~ msgid "Hide “%s”"
+#~ msgstr "Hide “%s”"
+
+#~ msgid "Properties"
+#~ msgstr "Properties"
+
+#~ msgid "_Show Toolbars"
+#~ msgstr "_Show Toolbars"
 
 #~ msgid "Autowrap for find in page"
 #~ msgstr "Autowrap for find in page"
@@ -4073,9 +4083,6 @@ msgstr "GNOME Web Browser Website"
 
 #~ msgid "New Topic"
 #~ msgstr "New Topic"
-
-#~ msgid "No topics"
-#~ msgstr "No topics"
 
 #~ msgid "Selection"
 #~ msgstr "Selection"
