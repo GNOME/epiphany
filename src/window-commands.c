@@ -332,18 +332,21 @@ void
 window_cmd_file_close_window (GtkAction *action,
 		              EphyWindow *window)
 {
-	EphyEmbed *embed;
+	GtkWidget *notebook;
+	EphyTab *tab;
+
+	notebook = ephy_window_get_notebook (window);
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_QUIT) &&
-	    gtk_notebook_get_n_pages (GTK_NOTEBOOK (ephy_window_get_notebook (window))) == 1)
+	    gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) == 1)
 	{
 		return;
 	}
 
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
+	tab = ephy_window_get_active_tab (window);
+	g_return_if_fail (tab != NULL);
 
-	ephy_embed_close (embed);
+	g_signal_emit_by_name (notebook, "tab-close-request", tab);
 }
 
 void
@@ -753,8 +756,11 @@ window_cmd_help_about (GtkAction *action,
 
 	comments = g_strdup_printf (_("Using “%s” backend"),
 				    ephy_embed_single_get_backend_name (single));
-	licence = g_strdup_printf ("%s\n\n%s\n\n%s",
-				   _(licence_part[0]), _(licence_part[1]), _(licence_part[2]));
+	licence = g_strjoin ("\n\n",
+			     _(licence_part[0]),
+			     _(licence_part[1]),
+			     _(licence_part[2]),
+			    NULL);
 
 	gtk_show_about_dialog (GTK_WINDOW (window),
 			       "name", _("GNOME Web Browser"),

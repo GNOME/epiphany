@@ -1,5 +1,13 @@
 2006-02-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/window-commands.c: (window_cmd_file_close_window),
+	(window_cmd_help_about):
+
+	Use the same machanism for Ctrl-W as clicking the tab's
+	close button. Fixes bug #319530.
+
+2006-02-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* m4/gecko.m4:
 	
 	Added GECKO_CHECK_CONTRACTIDS. Fix variable name quoting in
