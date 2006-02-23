@@ -2,6 +2,18 @@
 
 	* m4/gecko.m4:
 	
+	Added GECKO_CHECK_CONTRACTIDS. Fix variable name quoting in
+	GECKO_GECKO_CONTRACTID.
+
+	* configure.ac:
+	
+	Check with GECKO_CHECK_CONTRACTIDS.
+	Remove redundant check for typeaheadfind.
+
+2006-02-23  Christian Persch  <chpe@cvs.gnome.org>
+
+	* m4/gecko.m4:
+	
 	Refactored. Added GECKO_XPCOM_PROGRAM modelled after AC_LANG_PROGRAM
 	but which produces a program which uses	XPCOM; and made
 	GECKO_CHECK_CONTRACTID use this.

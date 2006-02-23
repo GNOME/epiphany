@@ -365,9 +365,9 @@ AC_DEFUN([GECKO_RUN_IFELSE],[_GECKO_DISPATCH([AC_RUN_IFELSE],$@)])
 # ***************************************************************************
 # ***************************************************************************
 
-# GECKO_PROGRAM([PROLOGUE], [BODY])
+# GECKO_XPCOMPROGRAM([PROLOGUE], [BODY])
 #
-# Produce a template program which starts XPCOM up and shuts it down after
+# Produce a template C++ program which starts XPCOM up and shuts it down after
 # the BODY part has run. In BODY, the the following variables are predeclared:
 #
 # nsresult rv
@@ -425,7 +425,7 @@ m4_shiftn(1,$@)
 NS_ShutdownXPCOM (nsnull);
 exit (retval ? EXIT_SUCCESS : EXIT_FAILURE);
 ]])
-]) # GECKO_PROGRAM
+]) # GECKO_XPCOM_PROGRAM
 
 # ***************************************************************************
 # ***************************************************************************
@@ -441,7 +441,7 @@ AC_DEFUN([GECKO_CHECK_CONTRACTID],
 AS_VAR_PUSHDEF([gecko_cv_have_CID],[gecko_cv_have_$1])
 
 AC_CACHE_CHECK([for the $1 XPCOM component],
-[gecko_cv_have_CID],
+gecko_cv_have_CID,
 [
 AS_VAR_SET(gecko_cv_have_CID,[no])
 
@@ -474,7 +474,33 @@ fi
 
 AS_VAR_POPDEF([gecko_cv_have_CID])
 
-])
+]) # GECKO_CHECK_CONTRACTID
+
+# GECKO_CHECK_CONTRACTIDS(CONTRACTID, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+#
+# Checks wheter CONTRACTIDs are registered contract IDs.
+# If ACTION-IF-NOT-FOUND is given, it is executed when one of the contract IDs
+# is not found and the missing contract ID is in the |as_contractid| variable.
+
+AC_DEFUN([GECKO_CHECK_CONTRACTIDS],
+[AC_REQUIRE([GECKO_INIT])dnl
+
+result=yes
+as_contractid=
+for as_contractid in $1
+do
+	GECKO_CHECK_CONTRACTID([$as_contractid],[],[result=no; break;])
+done
+
+if test "$result" = "yes"; then
+	ifelse([$2],,[:],[$2])
+else
+	ifelse([$3],,[AC_MSG_FAILURE([dnl
+Contract ID "$as_contractid" is not registered, but $PACKAGE_NAME depends on it.])],
+	[$3])
+fi
+
+]) # GECKO_CHECK_CONTRACTIDS
 
 # ***************************************************************************
 # ***************************************************************************

@@ -261,24 +261,13 @@ AC_MSG_RESULT([$have_psm])
 
 # This is only present on toolkit
 
-AC_MSG_CHECKING([for toolkit's nsITypeAheadFind])
+if test "$gecko_cv_gecko_flavour" = "toolkit"; then
 
-GECKO_COMPILE_IFELSE([fastfind],
-	[AC_LANG_PROGRAM(
-		[[#include <nsITypeAheadFind.h>]],
-		[[nsITypeAheadFind *p;
-		  p->SetDocShell(nsnull);]]
-	)],
-	[AC_DEFINE([HAVE_TYPEAHEADFIND],[1],[Define if we have tookit's typeaheadfind]) have_typeaheadfind=yes],
-	[have_typeaheadfind=no])
-
-AC_MSG_RESULT([$have_typeaheadfind])
+AC_DEFINE([HAVE_TYPEAHEADFIND],[1],[Define if we have tookit's typeaheadfind])
 
 # Make sure we DON'T have the typeaheadfind extension
 
-if test "$have_typeaheadfind" = "yes"; then
-
-AC_MSG_CHECKING([whether the typeaheadfind extension was enabled])
+AC_MSG_CHECKING([whether typeaheadfind is broken])
 
 GECKO_RUN_IFELSE([],
 [GECKO_XPCOM_PROGRAM(
@@ -295,20 +284,20 @@ if (NS_FAILED (rv) || !classID) break;
 nsCID badClassID = { 0x46590685, 0xbc00, 0x4aac,
 		     { 0xab, 0xed, 0x2c, 0x10, 0xa5, 0xb9, 0x45, 0xa4 } };
 
-retval = ! classID->Equals(badClassID);
+retval = ! classID->Equals (badClassID);
 ]]
 )],
-[have_typeaheadfind_ext=no],
-[have_typeaheadfind_ext=yes],
-[have_typeaheadfind_ext=maybe])
+[have_broken_typeaheadfind=no],
+[have_broken_typeaheadfind=yes],
+[have_broken_typeaheadfind=maybe])
 
-AC_MSG_RESULT([$have_typeaheadfind_ext])
+AC_MSG_RESULT([$have_broken_typeaheadfind])
 
-if test "$have_typeaheadfind_ext" = "yes"; then
-	AC_MSG_ERROR([You must not compile gecko with the "typeaheadfind" extension enabled!])
+if test "$have_broken_typeaheadfind" = "yes"; then
+	AC_MSG_ERROR([You must not compile $gecko_cv_gecko with the "typeaheadfind" extension enabled!])
 fi
 
-fi # have_typeaheadfind = yes
+fi # gecko_cv_gecko_flavour = toolkit
 
 # Make sure we don't accidentally build without PSM support
 
@@ -361,22 +350,16 @@ GECKO_CHECK_HEADERS([windowwatcher],[nsINonBlockingAlertService.h])
 # Check for some contractIDs that we need but are provided by extensions
 # which may or may not have been built.
 
+REQUIRED_CONTRACTS="@mozilla.org/permissionmanager;1 @mozilla.org/PopupWindowManager;1 @mozilla.org/cookie/permission;1"
 REQUIRED_EXTENSIONS="cookie"
+
 if test "$gecko_cv_gecko_version_major" = 1 -a "$gecko_cv_gecko_version_minor" -ge "8"; then
+	REQUIRED_CONTRACTS="$REQUIRED_CONTRACTS @mozilla.org/permissions/contentblocker;1"
 	REQUIRED_EXTENSIONS="$REQUIRED_EXTENSIONS,permissions"
 fi
 
-GECKO_CHECK_CONTRACTID([@mozilla.org/permissionmanager;1],
-	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
-GECKO_CHECK_CONTRACTID([@mozilla.org/PopupWindowManager;1],
-	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
-GECKO_CHECK_CONTRACTID([@mozilla.org/cookie/permission;1],
-	[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
-	
-if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "8"; then
-	GECKO_CHECK_CONTRACTID([@mozilla.org/permissions/contentblocker;1],
-		[],[AC_MSG_ERROR([Gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
-fi
+GECKO_CHECK_CONTRACTIDS([$REQUIRED_CONTRACTS],
+	[],[AC_MSG_ERROR([$gecko_cv_gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
 
 # Needed since 1.8b2
 # Define this down here so it doesn't affect the API checks above
