@@ -269,10 +269,46 @@ GECKO_COMPILE_IFELSE([fastfind],
 		[[nsITypeAheadFind *p;
 		  p->SetDocShell(nsnull);]]
 	)],
-	[AC_DEFINE([HAVE_TYPEAHEADFIND],[1],[Define if we have tookit's typeaheadfind]) result=yes],
-	[result=no])
+	[AC_DEFINE([HAVE_TYPEAHEADFIND],[1],[Define if we have tookit's typeaheadfind]) have_typeaheadfind=yes],
+	[have_typeaheadfind=no])
 
-AC_MSG_RESULT([$result])
+AC_MSG_RESULT([$have_typeaheadfind])
+
+# Make sure we DON'T have the typeaheadfind extension
+
+if test "$have_typeaheadfind" = "yes"; then
+
+AC_MSG_CHECKING([whether the typeaheadfind extension was enabled])
+
+GECKO_RUN_IFELSE([],
+[GECKO_XPCOM_PROGRAM(
+[[#include <nsIComponentRegistrar.h>]],
+[[
+nsCOMPtr<nsIComponentRegistrar> registrar;
+rv = NS_GetComponentRegistrar (getter_AddRefs (registrar));
+if (NS_FAILED (rv)) break;
+
+nsCID *classID = nsnull;
+rv = registrar->ContractIDToCID ("@mozilla.org/typeaheadfind;1", &classID);
+if (NS_FAILED (rv) || !classID) break;
+
+nsCID badClassID = { 0x46590685, 0xbc00, 0x4aac,
+		     { 0xab, 0xed, 0x2c, 0x10, 0xa5, 0xb9, 0x45, 0xa4 } };
+
+retval = ! classID->Equals(badClassID);
+]]
+)],
+[have_typeaheadfind_ext=no],
+[have_typeaheadfind_ext=yes],
+[have_typeaheadfind_ext=maybe])
+
+AC_MSG_RESULT([$have_typeaheadfind_ext])
+
+if test "$have_typeaheadfind_ext" = "yes"; then
+	AC_MSG_ERROR([You must not compile gecko with the "typeaheadfind" extension enabled!])
+fi
+
+fi # have_typeaheadfind = yes
 
 # Make sure we don't accidentally build without PSM support
 

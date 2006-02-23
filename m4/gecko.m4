@@ -1,5 +1,5 @@
 # Copyright (C) 2000-2004 Marco Pesenti Gritti
-# Copyright (C) 2003, 2004, 2005 Christian Persch
+# Copyright (C) 2003, 2004, 2005, 2006 Christian Persch
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -305,9 +305,9 @@ $1[]_EXTRA_LIBS="$gecko_cv_extra_libs"
 # ***************************************************************************
 # ***************************************************************************
 
-# GECKO_DISPATCH([MACRO], [INCLUDEDIRS], ...)
+# _GECKO_DISPATCH(MACRO, INCLUDEDIRS, ...)
 
-m4_define([GECKO_DISPATCH],
+m4_define([_GECKO_DISPATCH],
 [
 
 if test "$gecko_cv_have_gecko" != "yes"; then
@@ -351,15 +351,81 @@ AC_LANG_POP([C++])
 
 # GECKO_CHECK_HEADERS(INCLUDEDIRS, HEADERS, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [INCLUDES])
 
-AC_DEFUN([GECKO_CHECK_HEADERS],[GECKO_DISPATCH([AC_CHECK_HEADERS],$@)])
+AC_DEFUN([GECKO_CHECK_HEADERS],[_GECKO_DISPATCH([AC_CHECK_HEADERS],$@)])
 
 # GECKO_COMPILE_IFELSE(INCLUDEDIRS, PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 
-AC_DEFUN([GECKO_COMPILE_IFELSE],[GECKO_DISPATCH([AC_COMPILE_IFELSE],$@)])
+AC_DEFUN([GECKO_COMPILE_IFELSE],[_GECKO_DISPATCH([AC_COMPILE_IFELSE],$@)])
 
 # GECKO_RUN_IFELSE(INCLUDEDIRS, PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 
-AC_DEFUN([GECKO_RUN_IFELSE],[GECKO_DISPATCH([AC_RUN_IFELSE],$@)])
+AC_DEFUN([GECKO_RUN_IFELSE],[_GECKO_DISPATCH([AC_RUN_IFELSE],$@)])
+
+# ***************************************************************************
+# ***************************************************************************
+# ***************************************************************************
+
+# GECKO_PROGRAM([PROLOGUE], [BODY])
+#
+# Produce a template program which starts XPCOM up and shuts it down after
+# the BODY part has run. In BODY, the the following variables are predeclared:
+#
+# nsresult rv
+# PRBool retval (set to PR_FALSE)
+#
+# The program's exit status will be EXIT_FAILURE if you retval is PR_FALSE;
+# else it will be EXIT_SUCCESS.
+#
+# To jump out of the BODY and exit the test program, you can use |break|.
+
+AC_DEFUN([GECKO_XPCOM_PROGRAM],
+[AC_LANG_PROGRAM([[
+#include <mozilla-config.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <nsXPCOM.h>
+#include <nsCOMPtr.h>
+#include <nsILocalFile.h>
+#include <nsIServiceManager.h>
+#ifdef HAVE_GECKO_1_8
+#include <nsStringAPI.h>
+#else
+#include <nsString.h>
+#endif
+]]
+[$1],
+[[
+// redirect unwanted mozilla debug output to the bit bucket
+freopen ("/dev/null", "w", stdout);
+freopen ("/dev/null", "w", stderr);
+
+nsresult rv;
+nsCOMPtr<nsILocalFile> directory;
+rv = NS_NewNativeLocalFile (NS_LITERAL_CSTRING("$_GECKO_HOME"), PR_FALSE,
+			    getter_AddRefs (directory));
+if (NS_FAILED (rv) || !directory) {
+	exit (EXIT_FAILURE);
+}
+
+rv = NS_InitXPCOM2 (nsnull, directory, nsnull);
+if (NS_FAILED (rv)) {
+	exit (EXIT_FAILURE);
+}
+
+PRBool retval = PR_FALSE;
+
+// now put in the BODY, scoped with do...while(0) to ensure we don't hold a
+// COMptr after XPCOM shutdown and so we can jump out with a simple |break|.
+do {
+]]
+m4_shiftn(1,$@)
+[[
+} while (0);
+	
+NS_ShutdownXPCOM (nsnull);
+exit (retval ? EXIT_SUCCESS : EXIT_FAILURE);
+]])
+]) # GECKO_PROGRAM
 
 # ***************************************************************************
 # ***************************************************************************
@@ -380,51 +446,16 @@ AC_CACHE_CHECK([for the $1 XPCOM component],
 AS_VAR_SET(gecko_cv_have_CID,[no])
 
 GECKO_RUN_IFELSE([],
-[AC_LANG_PROGRAM([[
-#include <mozilla-config.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <nsXPCOM.h>
-#include <nsCOMPtr.h>
-#include <nsILocalFile.h>
-#include <nsIServiceManager.h>
+[GECKO_XPCOM_PROGRAM([[
 #include <nsIComponentRegistrar.h>
-#ifdef HAVE_GECKO_1_8
-#include <nsStringAPI.h>
-#else
-#include <nsString.h>
-#endif
 ]],[[
-// redirect unwanted mozilla debug output
-freopen ("/dev/null", "w", stdout);
-freopen ("/dev/null", "w", stderr);
-
-nsresult rv;
-nsCOMPtr<nsILocalFile> directory;
-rv = NS_NewNativeLocalFile (NS_LITERAL_CSTRING("$_GECKO_HOME"), PR_FALSE, getter_AddRefs (directory));
-if (NS_FAILED (rv) || !directory) {
-	exit (EXIT_FAILURE);
-}
-
-nsCOMPtr<nsIServiceManager> sm;
-rv = NS_InitXPCOM2 (getter_AddRefs (sm), directory, nsnull);
-if (NS_FAILED (rv)) {
-	exit (EXIT_FAILURE);
-}
-
-nsCOMPtr<nsIComponentRegistrar> registar (do_QueryInterface (sm, &rv));
-sm = nsnull; // release service manager
-if (NS_FAILED (rv)) {
-	NS_ShutdownXPCOM (nsnull);
-	exit (EXIT_FAILURE);
-}
+nsCOMPtr<nsIComponentRegistrar> registrar;
+rv = NS_GetComponentRegistrar (getter_AddRefs (registrar));
+if (NS_FAILED (rv)) break;
 
 PRBool isRegistered = PR_FALSE;
-rv = registar->IsContractIDRegistered ("$1", &isRegistered);
-registar = nsnull; // release registar before shutdown
-	
-NS_ShutdownXPCOM (nsnull);
-exit (isRegistered ? EXIT_SUCCESS : EXIT_FAILURE);
+rv = registrar->IsContractIDRegistered ("$1", &isRegistered);
+retval = NS_SUCCEEDED (rv) && isRegistered;
 ]])
 ],
 [AS_VAR_SET(gecko_cv_have_CID,[yes])],

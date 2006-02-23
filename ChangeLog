@@ -1,3 +1,15 @@
+2006-02-23  Christian Persch  <chpe@cvs.gnome.org>
+
+	* m4/gecko.m4:
+	
+	Refactored. Added GECKO_XPCOM_PROGRAM modelled after AC_LANG_PROGRAM
+	but which produces a program which uses	XPCOM; and made
+	GECKO_CHECK_CONTRACTID use this.
+
+	* configure.ac:
+
+	Add a check for the gecko typeaheadfind extension. Bug #329118.
+
 2006-02-22  Peter Harvey  <peter.a.harvey@gmail.com>
 
 	* src/bookmarks/ephy-topics-entry.c
