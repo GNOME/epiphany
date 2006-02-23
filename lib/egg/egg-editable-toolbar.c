@@ -889,6 +889,13 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
 	k++;
       }
       tmp[k] = 0;
+      /* Translaters: This string is for a toggle to display a toolbar.
+       * The name of the toolbar is automatically computed from the widgets
+       * on the toolbar, and is placed at the %s. Note the _ before the %s
+       * which is used to add mnemonics. We know that this is likely to
+       * produce duplicates, but don't worry about it. If your language
+       * normally has a mnemonic at the start, please use the _. If not,
+       * please remove. */
       action_label = g_strdup_printf (_("Show “_%s”"), tmp);
       g_free (tmp);
       
