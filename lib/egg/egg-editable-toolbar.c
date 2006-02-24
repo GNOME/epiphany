@@ -817,6 +817,7 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
   GtkToggleAction *action;
   GList *list;
   GString *string;
+  gboolean showing;
   char action_name[40];
   char *action_label;
   char *tmp;    	
@@ -838,6 +839,8 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
     }  
   
   priv->visibility_id = gtk_ui_manager_new_merge_id (priv->manager);
+  
+  showing = GTK_WIDGET_VISIBLE (etoolbar);
   
   n_toolbars = egg_toolbars_model_n_toolbars (priv->model);
   for (i = 0; i < n_toolbars; i++)
@@ -918,6 +921,7 @@ toolbar_visibility_refresh (EggEditableToolbar *etoolbar)
 
       gtk_action_set_visible (GTK_ACTION (action), (egg_toolbars_model_get_flags (priv->model, i) 
 						    & EGG_TB_MODEL_NOT_REMOVABLE) == 0);
+      gtk_action_set_sensitive (GTK_ACTION (action), showing);
       gtk_toggle_action_set_active (action, GTK_WIDGET_VISIBLE
 				    (get_dock_nth (etoolbar, i)));
       
@@ -1306,6 +1310,9 @@ egg_editable_toolbar_init (EggEditableToolbar *etoolbar)
   priv = etoolbar->priv = EGG_EDITABLE_TOOLBAR_GET_PRIVATE (etoolbar);
 
   priv->save_hidden = TRUE;
+  
+  g_signal_connect (etoolbar, "notify::visible",
+		    G_CALLBACK (toolbar_visibility_refresh), NULL);
 }
 
 static void
