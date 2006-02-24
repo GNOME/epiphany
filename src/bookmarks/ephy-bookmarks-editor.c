@@ -628,7 +628,23 @@ add_bookmarks_source (const char *file,
 
 		if (strcmp (p, "firefox") == 0)
 		{
-			description = g_strdup (_("Firefox"));
+			const char *profile = NULL, *dot;
+
+			if (path[i+1] != NULL)
+			{
+				dot = strchr (path[i+1], '.');
+				profile = dot ? dot + 1 : path[i+1];
+			}
+
+			if (profile != NULL && strcmp (profile, "default") != 0)
+			{
+				/* FIXME: proper i18n after freeze */
+				description = g_strdup_printf ("%s “%s”", _("Firefox"), profile);
+			}
+			else
+			{
+				description = g_strdup (_("Firefox"));
+			}
 		}
 		else if (strcmp (p, ".firefox") == 0)
 		{
