@@ -415,6 +415,51 @@ toolbar_reconfigured_cb (GtkToolItem *toolitem,
 	ephy_bookmark_action_sync_icon (action, NULL, GTK_WIDGET (toolitem));
 }
 
+
+static gboolean
+set_tooltip_cb (GtkToolItem *toolitem,
+		GtkTooltips *tooltips,
+		gchar *tip_text,
+		gchar *tip_private,
+		GtkAction *action)
+{
+	EphyBookmarks *bookmarks;
+	EphyNode *node;
+	GtkWidget *button;
+	
+	const char *title, *location;
+	char *tooltip;
+	
+	node = ephy_bookmark_action_get_bookmark (EPHY_BOOKMARK_ACTION (action));
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
+	title = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
+	location = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
+	tooltip = NULL;
+	
+	if (strstr (location, "%s") != NULL)
+	{
+		GnomeVFSURI *uri = gnome_vfs_uri_new (location);
+		if (uri != NULL)
+		{
+			tooltip = g_strconcat
+			  (title, "\n", gnome_vfs_uri_get_scheme (uri),
+			   "://", gnome_vfs_uri_get_host_name (uri), NULL);
+			gnome_vfs_uri_unref (uri);
+		}
+	}
+	if (tooltip == NULL)
+	{
+		tooltip = g_strconcat (title, "\n", location, NULL);
+	}
+	
+	button = g_object_get_data (G_OBJECT (toolitem), "button");
+	gtk_tooltips_set_tip (tooltips, button, tooltip, NULL);
+	g_free (tooltip);
+	
+	return TRUE;
+}
+
+
 static void
 connect_proxy (GtkAction *action,
 	       GtkWidget *proxy)
@@ -438,8 +483,11 @@ connect_proxy (GtkAction *action,
 		ephy_bookmark_action_sync_label (action, NULL, proxy);
 		g_signal_connect_object (action, "notify::label",
 					 G_CALLBACK (ephy_bookmark_action_sync_label), proxy, 0);
+		
 		g_signal_connect (proxy, "toolbar-reconfigured",
 				  G_CALLBACK (toolbar_reconfigured_cb), action);
+		g_signal_connect (proxy, "set-tooltip", 
+				  G_CALLBACK (set_tooltip_cb), action);
 
 		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
 		g_signal_connect (button, "clicked", G_CALLBACK (activate_cb), action);
