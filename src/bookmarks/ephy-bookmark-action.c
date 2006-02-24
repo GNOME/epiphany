@@ -409,6 +409,13 @@ drag_data_get_cb (GtkWidget          *widget,
 }
 
 static void
+toolbar_reconfigured_cb (GtkToolItem *toolitem,
+			 GtkAction *action)
+{
+	ephy_bookmark_action_sync_icon (action, NULL, GTK_WIDGET (toolitem));
+}
+
+static void
 connect_proxy (GtkAction *action,
 	       GtkWidget *proxy)
 {
@@ -431,6 +438,8 @@ connect_proxy (GtkAction *action,
 		ephy_bookmark_action_sync_label (action, NULL, proxy);
 		g_signal_connect_object (action, "notify::label",
 					 G_CALLBACK (ephy_bookmark_action_sync_label), proxy, 0);
+		g_signal_connect (proxy, "toolbar-reconfigured",
+				  G_CALLBACK (toolbar_reconfigured_cb), action);
 
 		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
 		g_signal_connect (button, "clicked", G_CALLBACK (activate_cb), action);
