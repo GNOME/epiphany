@@ -250,9 +250,6 @@ update_list (EphyTopicsPalette *palette)
 	{
 		valid = gtk_list_store_remove (palette->priv->store, &iter);
 	}
-	
-	gtk_tree_selection_unselect_all
-	  (gtk_tree_view_get_selection (GTK_TREE_VIEW (palette)));
 }
 
 static void
@@ -424,7 +421,7 @@ ephy_topics_palette_constructor (GType type,
 	gtk_tree_view_set_enable_search (GTK_TREE_VIEW (object), TRUE);
 	gtk_tree_view_set_search_column (GTK_TREE_VIEW (object), COLUMN_TITLE);
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (object), FALSE);
-	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (object)), GTK_SELECTION_BROWSE);
+	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (object)), GTK_SELECTION_NONE);
 	
 	update_list (palette);
     
