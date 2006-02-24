@@ -1262,10 +1262,6 @@ egg_editable_toolbar_deconstruct (EggEditableToolbar *toolbar)
   children = gtk_container_get_children (GTK_CONTAINER (toolbar));
   g_list_foreach (children, (GFunc) gtk_widget_destroy, NULL);
   g_list_free (children);
-  
-  children = toolbar->priv->visibility_paths;
-  g_list_foreach (children, (GFunc) g_free, NULL);
-  g_list_free (children);
 }
 
 void
@@ -1320,6 +1316,7 @@ egg_editable_toolbar_dispose (GObject *object)
 {
   EggEditableToolbar *etoolbar = EGG_EDITABLE_TOOLBAR (object);
   EggEditableToolbarPrivate *priv = etoolbar->priv;
+  GList *children;
 
   if (priv->fixed_toolbar != NULL)
     {
@@ -1327,8 +1324,22 @@ egg_editable_toolbar_dispose (GObject *object)
       priv->fixed_toolbar = NULL;
     }
 
+  if (priv->visibility_paths)
+    {
+      children = priv->visibility_paths;
+      g_list_foreach (children, (GFunc) g_free, NULL);
+      g_list_free (children);
+      priv->visibility_paths = NULL;
+    }
+
   if (priv->manager != NULL)
     {
+      if (priv->visibility_id)
+        {
+	  gtk_ui_manager_remove_ui (priv->manager, priv->visibility_id);
+	  priv->visibility_id = 0;
+	}
+
       g_object_unref (priv->manager);
       priv->manager = NULL;
     }
