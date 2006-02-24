@@ -8,8 +8,8 @@ msgid ""
 ""
 msgstr "Project-Id-Version: Epiphany Gnome HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-21 05:49+0100\n"
-"PO-Revision-Date: 2006-02-21 17:50+1030\n"
+"POT-Creation-Date: 2006-02-24 07:57+0100\n"
+"PO-Revision-Date: 2006-02-24 21:46+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1975,32 +1975,39 @@ msgid ""
 msgstr "Gặp lỗi loại GConf:\n"
 "  %s"
 
-#:../lib/egg/egg-editable-toolbar.c:868
+#.Translaters: This string is for a toggle to display a toolbar.
+#.* The name of the toolbar is automatically computed from the widgets
+#.* on the toolbar, and is placed at the %s. Note the _ before the %s
+#.* which is used to add mnemonics. We know that this is likely to
+#.* produce duplicates, but don't worry about it. If your language
+#.* normally has a mnemonic at the start, please use the _. If not,
+#.* please remove.
+#:../lib/egg/egg-editable-toolbar.c:899
 #,c-format
-msgid "Hide “%s”"
-msgstr "Ẩn « %s »"
+msgid "Show “_%s”"
+msgstr "Hiện « _%s »"
 
-#:../lib/egg/egg-editable-toolbar.c:1304
+#:../lib/egg/egg-editable-toolbar.c:1344
 msgid "_Move on Toolbar"
 msgstr "_Di chuyển trên thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1305
+#:../lib/egg/egg-editable-toolbar.c:1345
 msgid "Move the selected item on the toolbar"
 msgstr "Di chuyển mục đã chọn trong thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1306
+#:../lib/egg/egg-editable-toolbar.c:1346
 msgid "_Remove from Toolbar"
 msgstr "_Bỏ ra thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1307
+#:../lib/egg/egg-editable-toolbar.c:1347
 msgid "Remove the selected item from the toolbar"
 msgstr "Gỡ bỏ mục đã chọn ra thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1308
-msgid "_Remove Toolbar"
-msgstr "_Bỏ thanh công cụ"
+#:../lib/egg/egg-editable-toolbar.c:1348
+msgid "_Delete Toolbar"
+msgstr "_Xoá bỏ thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1309
+#:../lib/egg/egg-editable-toolbar.c:1349
 msgid "Remove the selected toolbar"
 msgstr "Gỡ bỏ thanh công cụ đã chọn"
 
@@ -2216,25 +2223,25 @@ msgstr "tiếng Âu tây"
 msgid "select fonts for|Other Scripts"
 msgstr "chữ khác"
 
-#:../lib/ephy-stock-icons.c:55
+#:../lib/ephy-stock-icons.c:56
 msgid "Popup Windows"
 msgstr "Cửa sổ bất lên"
 
-#:../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1179
+#:../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1179
 msgid "History"
 msgstr "Lược sử"
 
-#:../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
+#:../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:899
 #:../src/bookmarks/ephy-bookmarks-editor.c:1741
 #:../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Đánh dấu"
 
-#:../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#:../lib/ephy-stock-icons.c:59 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Mục địa chỉ"
 
-#:../lib/ephy-stock-icons.c:59
+#:../lib/ephy-stock-icons.c:60
 msgid "_Download"
 msgstr "_Tải về"
 
@@ -2313,41 +2320,45 @@ msgstr "%s:"
 
 #.Translators: This string is used when counting bookmarks that
 #.* are similar to each other
-#:../src/bookmarks/ephy-bookmark-properties.c:93
-#:../src/bookmarks/ephy-bookmark-properties.c:619
+#:../src/bookmarks/ephy-bookmark-properties.c:92
+#:../src/bookmarks/ephy-bookmark-properties.c:610
 #,c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d T_ương tự"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:266
+#:../src/bookmarks/ephy-bookmark-properties.c:265
 #,c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "_Hợp nhất với %d Đánh dấu trùng"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:286
-#:../src/bookmarks/ephy-bookmark-properties.c:308
+#:../src/bookmarks/ephy-bookmark-properties.c:285
+#:../src/bookmarks/ephy-bookmark-properties.c:307
 #,c-format
 msgid "Show “%s”"
 msgstr "Hiện « %s »"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:434
+#:../src/bookmarks/ephy-bookmark-properties.c:433
 #,c-format
 msgid "“%s” Properties"
 msgstr "Thuộc tính « %s »"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:557
+#:../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "_Tiêu đề:"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:572
+#:../src/bookmarks/ephy-bookmark-properties.c:567
 msgid "A_ddress:"
 msgstr "Đị_a chỉ:"
 
-#:../src/bookmarks/ephy-bookmark-properties.c:582
+#:../src/bookmarks/ephy-bookmark-properties.c:577
 msgid "T_opics:"
 msgstr "C_hủ đề:"
+
+#:../src/bookmarks/ephy-bookmark-properties.c:598
+msgid "Sho_w all topics"
+msgstr "_Hiện mọi chủ đề"
 
 #:../src/bookmarks/ephy-bookmarks-editor.c:97
 msgid "Mozilla (HTML)"
@@ -2395,7 +2406,7 @@ msgstr "Tạo chủ đề mới"
 #.File Menu
 #:../src/bookmarks/ephy-bookmarks-editor.c:189
 #:../src/bookmarks/ephy-bookmarks-editor.c:1358
-#:../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
+#:../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
 #:../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2408,7 +2419,7 @@ msgstr "Mở đánh dấu được chọn trong cửa sổ mới"
 #.FIXME ngettext
 #:../src/bookmarks/ephy-bookmarks-editor.c:192
 #:../src/bookmarks/ephy-bookmarks-editor.c:1361
-#:../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
+#:../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
 #:../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
@@ -2435,7 +2446,9 @@ msgstr "_Xóa bỏ"
 msgid "Delete the selected bookmark or topic"
 msgstr "Xóa bỏ đánh dấu hoặc chủ đề được chọn"
 
+#.Add popup menu actions that are specific to the bookmark widgets
 #:../src/bookmarks/ephy-bookmarks-editor.c:200
+#:../src/bookmarks/ephy-bookmarks-ui.c:297
 msgid "_Properties"
 msgstr "_Thuộc tính"
 
@@ -2749,20 +2762,15 @@ msgstr "Cập nhật đánh dấu chứ?"
 msgid "Quick Bookmark"
 msgstr "Đánh dấu nhânh"
 
-#.Add popup menu actions that are specific to the bookmark widgets
-#:../src/bookmarks/ephy-bookmarks-ui.c:290
-msgid "Properties"
-msgstr "Thuộc tính"
-
-#:../src/bookmarks/ephy-bookmarks-ui.c:291
+#:../src/bookmarks/ephy-bookmarks-ui.c:298
 msgid "Show properties for this bookmark"
 msgstr "Hiển thị thuộc tính của đánh dấu này"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:303
+#:../src/bookmarks/ephy-bookmarks-ui.c:310
 msgid "Open this bookmark in a new tab"
 msgstr "Mở đánh dấu này trong thanh mới"
 
-#:../src/bookmarks/ephy-bookmarks-ui.c:315
+#:../src/bookmarks/ephy-bookmarks-ui.c:322
 msgid "Open this bookmark in a new window"
 msgstr "Mở đánh dấu này trong cửa sổ mới"
 
@@ -2984,7 +2992,7 @@ msgid ""
 msgstr "Việc khởi chạy thất bại vì lỗi theo đây:\n"
 "%s"
 
-#:../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:760
+#:../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:766
 msgid "GNOME Web Browser"
 msgstr "Bộ duyệt Mạng Gnome"
 
@@ -3509,8 +3517,8 @@ msgstr "Chuyển sang chế độ ngoại tuyến"
 
 #.View Menu
 #:../src/ephy-window.c:283
-msgid "_Show Toolbars"
-msgstr "_Hiện các Thanh Công cụ"
+msgid "_Hide Toolbars"
+msgstr "Ẩ_n các thanh công cụ"
 
 #:../src/ephy-window.c:284
 msgid "Show or hide toolbar"
@@ -3866,23 +3874,23 @@ msgstr[0] "Ngôn ngữ hệ thống (%s)"
 msgid "Select a Directory"
 msgstr "Chọn thư mục"
 
-#:../src/window-commands.c:711 ../src/window-commands.c:728
+#:../src/window-commands.c:714 ../src/window-commands.c:731
 msgid "Contact us at:"
 msgstr "Liên hệ chúng tôi tại:"
 
-#:../src/window-commands.c:714
+#:../src/window-commands.c:717
 msgid "Contributors:"
 msgstr "Người đóng góp"
 
-#:../src/window-commands.c:719
+#:../src/window-commands.c:722
 msgid "Past developers:"
 msgstr "Lập trình viên trước:"
 
-#:../src/window-commands.c:729
+#:../src/window-commands.c:732
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> hay <gnome-doc-list@gnome.org>"
 
-#:../src/window-commands.c:734
+#:../src/window-commands.c:737
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3893,7 +3901,7 @@ msgstr "Bộ duyệt Mạng Gnome là phần mềm tự do; bạn có thể phá
 "bởi Tổ chức Phần mềm Tự do, hoặc phiên bản 2 của Quyền này, hoặc (tùy chọn) "
 "bất cứ phiên bản sau nào."
 
-#:../src/window-commands.c:738
+#:../src/window-commands.c:741
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3904,7 +3912,7 @@ msgstr "Bộ duyệt Mạng Gnome được phát hành vì chúng tôi mong mu�
 "khả năng làm việc dứt khoát. Hãy xem Quyền Công Chung GNU (GPL) để tìm chi "
 "tiết."
 
-#:../src/window-commands.c:742
+#:../src/window-commands.c:745
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3915,7 +3923,7 @@ msgstr "Bạn nên đã nhận một bản sao của Quyền Công Chung GNU cù
 "59 Temple Place, Suite 330,\n"
 "Boston, MA  02111-1307  USA (Mỹ)"
 
-#:../src/window-commands.c:754
+#:../src/window-commands.c:757
 #,c-format
 msgid "Using “%s” backend"
 msgstr "Đang dùng hậu phương « %s »"
@@ -3928,10 +3936,10 @@ msgstr "Đang dùng hậu phương « %s »"
 #.* this translation; in that case, please write each of them on a separate
 #.* line seperated by newlines (\n).
 #.
-#:../src/window-commands.c:775
+#:../src/window-commands.c:781
 msgid "translator-credits"
 msgstr "Nhóm Việt hoá GNOME (http://gnomevi.sourceforge.net)"
 
-#:../src/window-commands.c:778
+#:../src/window-commands.c:784
 msgid "GNOME Web Browser Website"
 msgstr "Chỗ Mạng của Bộ duyệt Mạng Gnome"
