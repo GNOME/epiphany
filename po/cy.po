@@ -2,14 +2,14 @@
 # www.kyfieithu.co.uk <kyfieithu@dotmon.com>, 2003.
 # Kevin Willoughby, 2003.
 # Dafydd Harries <daf@muse.19inch.net>, 2003, 2004.
-# Rhys Jones <rhys@sucs.org>, 2004, 2005.
+# Rhys Jones <rhys@sucs.org>, 2004-2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-24 23:28+0100\n"
-"PO-Revision-Date: 2005-08-24 13:26-0000\n"
+"POT-Creation-Date: 2006-02-25 12:28+0000\n"
+"PO-Revision-Date: 2006-02-20 22:26-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
@@ -17,22 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural= (n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != "
 "11) ? 2 : 3;\n"
-
-#: ../data/GNOME_Epiphany_Automation.server.in.h:1
-msgid "Epiphany automation"
-msgstr "Awtomeiddio Epiphany"
-
-#: ../data/bme.desktop.in.h:1
-msgid "Browse and organize your bookmarks"
-msgstr "Pori a threfnu eich llyfrnodau"
-
-#: ../data/bme.desktop.in.h:2
-msgid "Epiphany Web Bookmarks"
-msgstr "Llyfrnodau Gwe Epiphany"
-
-#: ../data/bme.desktop.in.h:3
-msgid "Web Bookmarks"
-msgstr "Llyfrnodau Gwe"
 
 #: ../data/epiphany-lockdown.schemas.in.h:1
 msgid ""
@@ -104,35 +88,55 @@ msgstr ""
 "a https."
 
 #: ../data/epiphany-lockdown.schemas.in.h:15
+msgid "Epiphany cannot quit"
+msgstr "Ni all Epiphany orffen"
+
+#: ../data/epiphany-lockdown.schemas.in.h:16
 msgid "Hide menubar by default"
 msgstr "Cuddio'r bar dewis yn rhagosodedig"
 
-#: ../data/epiphany-lockdown.schemas.in.h:16
+#: ../data/epiphany-lockdown.schemas.in.h:17
 msgid ""
 "Hide the menubar by default. The menubar can still be accessed using F10."
 msgstr ""
 "Cuddio'r bar dewislen fel rhagosodiad. Gellir cyrraedd y bar dewislen o hyd "
 "gan ddefnyddio F10."
 
-#: ../data/epiphany-lockdown.schemas.in.h:17
+#: ../data/epiphany-lockdown.schemas.in.h:18
 msgid "Lock in fullscreen mode"
 msgstr "Cloi yn y modd llond y sgrin"
 
-#: ../data/epiphany-lockdown.schemas.in.h:18
+#: ../data/epiphany-lockdown.schemas.in.h:19
 msgid "Locks Epiphany in fullscreen mode."
 msgstr "Cloi Epiphany yn y modd llond y sgrin."
 
-#: ../data/epiphany.desktop.in.h:1
+#: ../data/epiphany-lockdown.schemas.in.h:20
+msgid "User is not allowed to close Epiphany"
+msgstr "Nid oes gan y defnyddiwr hawl i gau Epiphany"
+
+#: ../data/bme.desktop.in.in.h:1
+msgid "Browse and organize your bookmarks"
+msgstr "Pori a threfnu eich llyfrnodau"
+
+#: ../data/bme.desktop.in.in.h:2
+msgid "Epiphany Web Bookmarks"
+msgstr "Llyfrnodau Gwe Epiphany"
+
+#: ../data/bme.desktop.in.in.h:3
+msgid "Web Bookmarks"
+msgstr "Llyfrnodau Gwe"
+
+#: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
 msgstr "Pori'r we"
 
-#: ../data/epiphany.desktop.in.h:2 ../src/window-commands.c:779
+#: ../data/epiphany.desktop.in.in.h:2
 msgid "Epiphany Web Browser"
 msgstr "Y Porwr Gwe Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.h:3 ../src/ephy-main.c:222
-#: ../src/ephy-main.c:233
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:482
+#: ../src/ephy-main.c:533 ../src/ephy-main.c:621
 msgid "Web Browser"
 msgstr "Porwr Gwe"
 
@@ -164,8 +168,8 @@ msgid "Automatic downloads"
 msgstr "Llwythiadau i lawr sy'n awtomatig"
 
 #: ../data/epiphany.schemas.in.h:7
-msgid "Autowrap for find in page"
-msgstr "Amlapio awtomatig ar gyfer canfod yn y dudalen"
+msgid "Automatically manage offline status with NetworkManager"
+msgstr "Rheoli'r statws all-lein yn awtomatig gyda NetworkManager"
 
 #: ../data/epiphany.schemas.in.h:8
 msgid "Browse with caret"
@@ -234,36 +238,36 @@ msgid "Enable JavaScript"
 msgstr "Galluogi JavaScript"
 
 #: ../data/epiphany.schemas.in.h:16
-msgid ""
-"For find in page, whether to start again at the beginning after reaching the "
-"end of the page."
-msgstr ""
-"Wrth ganfod yn y dudalen, a ddylid ailgychwyn ar y dechrau ar ôl cyrraedd "
-"diwedd y dudalen."
-
-#: ../data/epiphany.schemas.in.h:17
 msgid "History pages time range"
 msgstr "Amrediad amser tudalennau hanes"
 
-#: ../data/epiphany.schemas.in.h:18
+#: ../data/epiphany.schemas.in.h:17
 msgid "Home page"
 msgstr "Tudalen gartref"
+
+#: ../data/epiphany.schemas.in.h:18
+msgid ""
+"How to present animated images. Possible values are \"normal\", \"once\" and "
+"\"disabled\"."
+msgstr ""
+"Sut i gyflwyno delweddau wedi'u hanimeiddio. Gwerthoedd posib yw \"arferol"
+"\", \"unwaith\" ac \"analluogi\"."
 
 #: ../data/epiphany.schemas.in.h:19
 msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
 #: ../data/epiphany.schemas.in.h:20
+msgid "Image animation mode"
+msgstr "Modd animeiddio delweddau"
+
+#: ../data/epiphany.schemas.in.h:21
 msgid "Languages"
 msgstr "Ieithoedd"
 
-#: ../data/epiphany.schemas.in.h:21
+#: ../data/epiphany.schemas.in.h:22
 msgid "Lists the active extensions."
 msgstr "Rhestru'r estyniadau sy'n weithredol."
-
-#: ../data/epiphany.schemas.in.h:22
-msgid "Match case for find in page"
-msgstr "Cydweddu prif lythrennau/llythrennau bach wrth ganfod yn y dudalen"
 
 #: ../data/epiphany.schemas.in.h:23
 msgid ""
@@ -281,18 +285,22 @@ msgstr ""
 "testun detholedig yn cyfeirio ato."
 
 #: ../data/epiphany.schemas.in.h:25
+msgid "Minimum font size"
+msgstr "Maint ffont isaf"
+
+#: ../data/epiphany.schemas.in.h:26
 msgid "Preferred languages, two letter codes."
 msgstr "Ieithoedd dewisedig, codau dwy lythyren."
 
-#: ../data/epiphany.schemas.in.h:26
+#: ../data/epiphany.schemas.in.h:27
 msgid "Show bookmarks bar by default"
 msgstr "Dangos y bar llyfrnodau yn rhagosodedig"
 
-#: ../data/epiphany.schemas.in.h:27
+#: ../data/epiphany.schemas.in.h:28
 msgid "Show statusbar by default"
 msgstr "Dangos y bar cyflwr yn rhagosodedig"
 
-#: ../data/epiphany.schemas.in.h:28
+#: ../data/epiphany.schemas.in.h:29
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -300,27 +308,27 @@ msgstr ""
 "Dangos y tudalennau hanes ymwelwyd â hwy. Gwerthoedd posib: \"ever\", "
 "\"last_two_days\", \"last_three_days\", \"today\"."
 
-#: ../data/epiphany.schemas.in.h:29
+#: ../data/epiphany.schemas.in.h:30
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "Dangos y bar tabiau hefyd pan fo ond un tab ar agor."
 
-#: ../data/epiphany.schemas.in.h:30
+#: ../data/epiphany.schemas.in.h:31
 msgid "Show toolbars by default"
 msgstr "Dangos y barrau offer yn rhagosodedig"
 
-#: ../data/epiphany.schemas.in.h:31
+#: ../data/epiphany.schemas.in.h:32
 msgid "Size of disk cache"
 msgstr "Maint y storfa ddisg"
 
-#: ../data/epiphany.schemas.in.h:32
+#: ../data/epiphany.schemas.in.h:33
 msgid "Size of disk cache, in MB."
 msgstr "Maint y storfa ddisg, mewn MB."
 
-#: ../data/epiphany.schemas.in.h:33
+#: ../data/epiphany.schemas.in.h:34
 msgid "The bookmark information shown in the editor view"
 msgstr "Y manylion llyfrnod a ddangosir yn yr olwg golygydd"
 
-#: ../data/epiphany.schemas.in.h:34
+#: ../data/epiphany.schemas.in.h:35
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -328,11 +336,11 @@ msgstr ""
 "Y manylion ynghylch llyfrnodau a ddangosir yn yr olwg golygu. Y gwerthoedd "
 "dilys yn y rhestr yw \"address\" a \"title\"."
 
-#: ../data/epiphany.schemas.in.h:35
+#: ../data/epiphany.schemas.in.h:36
 msgid "The currently selected fonts language"
 msgstr "Iaith y ffontiau sydd wedi'u dewis ar hyn o bryd"
 
-#: ../data/epiphany.schemas.in.h:36
+#: ../data/epiphany.schemas.in.h:37
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -348,21 +356,21 @@ msgstr ""
 "canol ewrop), \"x-cyrillic\" (ieithoedd a ysgrifennir â'r wyddor cyrilig), "
 "\"el\" (groeg), \"he\" (hebraeg), \"ja\" (siapanëeg), \"ko\" (corëeg), \"zh-C"
 "\" (tsieinëeg symleiddiedig), \"th\" (siameg) \"zh-TW\" (tsieinëeg "
-"traddodiadol), \"tr\" (twrceg), \"x-unicode\" (ieithoedd eraill), \"x-western"
+"draddodiadol), \"tr\" (twrceg), \"x-unicode\" (ieithoedd eraill), \"x-western"
 "\" (ieithoedd a ysgrifennir yn y sgript lladin), \"x-tamil\" (tamil) ac \"x-"
 "devanagari\" (devanagari)."
 
-#: ../data/epiphany.schemas.in.h:37
+#: ../data/epiphany.schemas.in.h:38
 msgid "The downloads folder"
 msgstr "Y blygell llwytho i lawr"
 
-#: ../data/epiphany.schemas.in.h:38
+#: ../data/epiphany.schemas.in.h:39
 msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr ""
 "Y darganfyddydd amgodion awtomatig. Mae llinyn gwag yn golygu na chaiff y "
 "darganfyddydd ei ddefnyddio."
 
-#: ../data/epiphany.schemas.in.h:39
+#: ../data/epiphany.schemas.in.h:40
 msgid ""
 "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
 "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
@@ -385,11 +393,11 @@ msgstr ""
 "tsieinëeg traddodiadol) ac \"universal_charset_detector \" (darganfod y rhan "
 "fwyaf o amgodiadau)."
 
-#: ../data/epiphany.schemas.in.h:40
+#: ../data/epiphany.schemas.in.h:41
 msgid "The page information shown in the history view"
 msgstr "Y manylion tudalen a ddangosir yn yr olwg hanes"
 
-#: ../data/epiphany.schemas.in.h:41
+#: ../data/epiphany.schemas.in.h:42
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"address\", \"title\"."
@@ -397,7 +405,7 @@ msgstr ""
 "Y wybodaeth ynghylch tudalennau a ddangosir yn yr olwg hanes. Gwerthoedd "
 "dilys yn y rhestr yw \"address\", \"title\"."
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:43
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -406,11 +414,11 @@ msgstr ""
 "ddefnyddio'r blygell sy'n ragosodedig ar gyfer llwytho i lawr, neu \"Penbwrdd"
 "\" i ddefnyddio plygell y penbwrdd."
 
-#: ../data/epiphany.schemas.in.h:43
+#: ../data/epiphany.schemas.in.h:44
 msgid "Toolbar style"
 msgstr "Arddull bar offer"
 
-#: ../data/epiphany.schemas.in.h:44
+#: ../data/epiphany.schemas.in.h:45
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -420,27 +428,27 @@ msgstr ""
 "rhagosodedig GNOME), \"both\" (testun ac eiconau), \"both-horiz\" (testun "
 "gerllaw'r eicon), \"icons\", a \"text\"."
 
-#: ../data/epiphany.schemas.in.h:45
+#: ../data/epiphany.schemas.in.h:46
 msgid "Use own colors"
 msgstr "Defnyddio eich lliwiau eich hun"
 
-#: ../data/epiphany.schemas.in.h:46
+#: ../data/epiphany.schemas.in.h:47
 msgid "Use own fonts"
 msgstr "Defnyddio eich ffontiau eich hun"
 
-#: ../data/epiphany.schemas.in.h:47
+#: ../data/epiphany.schemas.in.h:48
 msgid "Use your own colors instead of the colors the page requests."
 msgstr ""
 "Defnyddio eich lliwiau eich hun yn lle'r lliwiau mae'r dudalen yn gofyn "
 "amdanynt."
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:49
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr ""
 "Defnyddiwch eich ffontiau eich hun yn lle'r ffontiau mae'r dudalen yn gofyn "
 "amdanynt."
 
-#: ../data/epiphany.schemas.in.h:49
+#: ../data/epiphany.schemas.in.h:50
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -449,7 +457,7 @@ msgstr ""
 "awtomatig i'r blygell llwytho i lawr, ac yn cael eu hagor gan y rhaglen "
 "briodol."
 
-#: ../data/epiphany.schemas.in.h:50
+#: ../data/epiphany.schemas.in.h:51
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -457,23 +465,23 @@ msgstr ""
 "O ble i dderbyn bisgedi. Gwerthoedd posib yw \"anywhere\", \"current site\", "
 "\"nowhere\"."
 
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:52
 msgid "Whether to print the date in the footer"
 msgstr "A ddylid argraffu'r dyddiad yn y troedyn"
 
-#: ../data/epiphany.schemas.in.h:52
+#: ../data/epiphany.schemas.in.h:53
 msgid "Whether to print the page address in the header"
 msgstr "A ddylid argraffu cyfeiriad y dudalen yn y pennawd"
 
-#: ../data/epiphany.schemas.in.h:53
+#: ../data/epiphany.schemas.in.h:54
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "A ddylid argraffu rhifau'r dudalen (x o gyfanswm) yn y troedyn"
 
-#: ../data/epiphany.schemas.in.h:54
+#: ../data/epiphany.schemas.in.h:55
 msgid "Whether to print the page title in the header"
 msgstr "A ddylid argraffu teitl y dudalen yn y pennawd"
 
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:56
 msgid "x-western"
 msgstr "x-western"
 
@@ -522,7 +530,7 @@ msgid "Field _Value"
 msgstr "_Gwerth Maes"
 
 #: ../data/glade/certificate-dialogs.glade.h:12
-#: ../data/glade/prefs-dialog.glade.h:23
+#: ../data/glade/prefs-dialog.glade.h:20
 msgid "General"
 msgstr "Cyffredinol"
 
@@ -535,7 +543,7 @@ msgid "MD5 Fingerprint:"
 msgstr "Ôl Bys MD5:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:989
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1036
 msgid "Organization:"
 msgstr "Corff:"
 
@@ -560,118 +568,79 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>_Defnyddio amgodiad gwahanol:</b>"
 
 #: ../data/glade/epiphany.glade.h:3
-msgid "C_ase sensitive"
-msgstr "_Priflythrennau o bwys"
-
-#: ../data/glade/epiphany.glade.h:4
 msgid "Cookies"
 msgstr "Bisgedi"
 
+#. The name of the default downloads folder
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:107
+msgid "Downloads"
+msgstr "Llwythiadau i Lawr"
+
 #: ../data/glade/epiphany.glade.h:5
-msgid "Download Manager"
-msgstr "Trefnydd Llwytho i Lawr"
-
-#: ../data/glade/epiphany.glade.h:6 ../src/ephy-window.c:1127
-msgid "Find"
-msgstr "Canfod"
-
-#: ../data/glade/epiphany.glade.h:7
 msgid "Passwords"
 msgstr "Cyfrineiriau"
 
-#: ../data/glade/epiphany.glade.h:8
-msgid "Personal Data Manager"
-msgstr "Trefnydd Data Personol"
+#: ../data/glade/epiphany.glade.h:6
+msgid "Personal Data"
+msgstr "Data Personol"
 
-#: ../data/glade/epiphany.glade.h:9
+#: ../data/glade/epiphany.glade.h:7
 msgid "Text Encoding"
 msgstr "Amgodiad Testun"
 
-#: ../data/glade/epiphany.glade.h:10 ../src/ephy-encoding-menu.c:358
+#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:358
 msgid "Use the encoding specified by the document"
 msgstr "Defnyddio'r amgodiad a benodir gan y ddogfen"
 
-#: ../data/glade/epiphany.glade.h:11
-msgid "_Find:"
-msgstr "_Canfod:"
+#: ../data/glade/epiphany.glade.h:9
+msgid "_Show password"
+msgstr "_Dangos cyfrinair"
 
-#: ../data/glade/epiphany.glade.h:12
-msgid "_Next"
-msgstr "_Nesaf"
-
-#: ../data/glade/epiphany.glade.h:13 ../embed/downloader-view.c:368
-msgid "_Pause"
-msgstr "_Seibio"
-
-#: ../data/glade/epiphany.glade.h:14
-msgid "_Previous"
-msgstr "_Blaenorol"
-
-#: ../data/glade/epiphany.glade.h:15
-msgid "_Wrap around"
-msgstr "_Amlapio"
-
-#: ../data/glade/prefs-dialog.glade.h:1 ../data/glade/print.glade.h:1
-msgid "<b>Colors</b>"
-msgstr "<b>Lliwiau</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:2
+#: ../data/glade/prefs-dialog.glade.h:1
 msgid "<b>Cookies</b>"
 msgstr "<b>Bisgedi</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:3
+#: ../data/glade/prefs-dialog.glade.h:2
 msgid "<b>Downloads</b>"
 msgstr "<b>Llwythiadau i Lawr</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:4
+#: ../data/glade/prefs-dialog.glade.h:3
 msgid "<b>Encodings</b>"
 msgstr "<b>Amgodiadau</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:5
-msgid "<b>Fonts</b>"
-msgstr "<b>Ffontiau</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:6
+#: ../data/glade/prefs-dialog.glade.h:4
 msgid "<b>Home page</b>"
 msgstr "<b>Tudalen gartref</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:7
+#: ../data/glade/prefs-dialog.glade.h:5
 msgid "<b>Languages</b>"
 msgstr "<b>Ieithoedd</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:8
+#: ../data/glade/prefs-dialog.glade.h:6
 msgid "<b>Temporary Files</b>"
 msgstr "<b>Ffeiliau Dros Dro</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:9
+#: ../data/glade/prefs-dialog.glade.h:7
 msgid "<b>Web Content</b>"
 msgstr "<b>Cynnwys Gwe</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:10
+#: ../data/glade/prefs-dialog.glade.h:8
 msgid "A_utomatically download and open files"
-msgstr "L_lwytho lawr ac agor ffeiliau yn awtomatig"
+msgstr "L_lwytho i lawr ac agor ffeiliau yn awtomatig"
 
-#: ../data/glade/prefs-dialog.glade.h:11
+#: ../data/glade/prefs-dialog.glade.h:9
 msgid "Add Language"
 msgstr "Ychwanegu Iaith"
 
-#: ../data/glade/prefs-dialog.glade.h:12
-msgid "Al_ways use the desktop theme colors"
-msgstr "Defnyddio _lliwiau thema'r penbwrdd bob tro"
-
-#: ../data/glade/prefs-dialog.glade.h:13
+#: ../data/glade/prefs-dialog.glade.h:10
 msgid "Allow popup _windows"
 msgstr "Caniatáu _naid-ffenestri"
 
-#: ../data/glade/prefs-dialog.glade.h:14
-msgid "Always use _these fonts"
-msgstr "Defnyddio'r _ffontiau hyn bob tro"
-
-#: ../data/glade/prefs-dialog.glade.h:15
+#: ../data/glade/prefs-dialog.glade.h:11
 msgid "Au_todetect:"
 msgstr "Darganfod yn _awtomatig:"
 
-#: ../data/glade/prefs-dialog.glade.h:16
+#: ../data/glade/prefs-dialog.glade.h:12
 msgid "Choose a l_anguage:"
 msgstr "Dewiswch _iaith:"
 
@@ -679,61 +648,76 @@ msgstr "Dewiswch _iaith:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.glade.h:17
-#: ../lib/widgets/ephy-location-entry.c:498 ../src/ephy-history-window.c:261
+#: ../data/glade/prefs-dialog.glade.h:13
+#: ../lib/widgets/ephy-location-entry.c:582 ../src/ephy-history-window.c:261
 msgid "Cl_ear"
 msgstr "C_lirio"
 
-#: ../data/glade/prefs-dialog.glade.h:18
+#: ../data/glade/prefs-dialog.glade.h:14
 msgid "De_fault:"
 msgstr "_Rhagosodedig:"
 
-#: ../data/glade/prefs-dialog.glade.h:19
+#: ../data/glade/prefs-dialog.glade.h:15
 msgid "Enable Java_Script"
 msgstr "Galluogi Java_Script"
 
-#: ../data/glade/prefs-dialog.glade.h:20
+#: ../data/glade/prefs-dialog.glade.h:16
 msgid "Enable _Java"
 msgstr "Galluogi _Java"
 
-#: ../data/glade/prefs-dialog.glade.h:21
-msgid "Fonts and Colors"
-msgstr "Ffontiau a Lliwiau"
+#: ../data/glade/prefs-dialog.glade.h:17
+msgid "Fonts"
+msgstr "Ffontiau"
 
-#: ../data/glade/prefs-dialog.glade.h:22
+#: ../data/glade/prefs-dialog.glade.h:18
+msgid "Fonts & Style"
+msgstr "Ffontiau ac Arddull"
+
+#: ../data/glade/prefs-dialog.glade.h:19
 msgid "For l_anguage:"
 msgstr "Ar gyfer _iaith:"
 
-#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1056
+#: ../data/glade/prefs-dialog.glade.h:21 ../src/prefs-dialog.c:1301
 msgid "Language"
 msgstr "Iaith"
 
-#: ../data/glade/prefs-dialog.glade.h:25
+#: ../data/glade/prefs-dialog.glade.h:22
+msgid "Let web pages specify their own _colors"
+msgstr "Gadael i dudalennau bennu eu _lliwiau eu hunain"
+
+#: ../data/glade/prefs-dialog.glade.h:23
+msgid "Let web pages specify their own _fonts"
+msgstr "Gadael i dudalennau bennu eu _ffontiau eu hunain"
+
+#: ../data/glade/prefs-dialog.glade.h:24
 msgid "MB"
 msgstr "MB"
 
-#: ../data/glade/prefs-dialog.glade.h:26
+#: ../data/glade/prefs-dialog.glade.h:25
 msgid "Only _from sites you visit"
 msgstr "Dim ond o safleoedd rydych chi'n _ymweld â hwy"
 
-#: ../data/glade/prefs-dialog.glade.h:27
+#: ../data/glade/prefs-dialog.glade.h:26
 msgid "Preferences"
 msgstr "Hoffterau"
 
-#: ../data/glade/prefs-dialog.glade.h:28
+#: ../data/glade/prefs-dialog.glade.h:27
 msgid "Privacy"
 msgstr "Preifatrwydd"
 
-#: ../data/glade/prefs-dialog.glade.h:29
+#: ../data/glade/prefs-dialog.glade.h:28
 msgid "Set to Current _Page"
 msgstr "Gosod i'r Dudalen _Cyfredol"
 
-#: ../data/glade/prefs-dialog.glade.h:30
+#: ../data/glade/prefs-dialog.glade.h:29
 msgid "Set to _Blank Page"
 msgstr "Gosod i Dudalen _Wag"
 
+#: ../data/glade/prefs-dialog.glade.h:30
+msgid "Use custom _stylesheet"
+msgstr "Defnyddio _tudalen arddull addasedig"
+
 #: ../data/glade/prefs-dialog.glade.h:31
-#: ../src/bookmarks/ephy-bookmark-properties.c:369
 msgid "_Address:"
 msgstr "_Cyfeiriad:"
 
@@ -742,28 +726,40 @@ msgid "_Always accept"
 msgstr "_Derbyn bob tro"
 
 #: ../data/glade/prefs-dialog.glade.h:33
+msgid "_Detailed Font Settings..."
+msgstr "_Gosodiadau Manwl Ffont..."
+
+#: ../data/glade/prefs-dialog.glade.h:34
 msgid "_Disk space:"
 msgstr "Gofod _disg:"
 
-#: ../data/glade/prefs-dialog.glade.h:34
+#: ../data/glade/prefs-dialog.glade.h:35
 msgid "_Download folder:"
 msgstr "_Plygell llwytho i lawr:"
 
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/glade/prefs-dialog.glade.h:36
+msgid "_Edit Stylesheet..."
+msgstr "_Golygu Taflen Arddull..."
+
+#: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Fixed width:"
 msgstr "Lled _penodedig:"
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Minimum size:"
 msgstr "Maint _isaf:"
 
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/glade/prefs-dialog.glade.h:39
 msgid "_Never accept"
 msgstr "Peidio â derby_n"
 
-#: ../data/glade/prefs-dialog.glade.h:38
+#: ../data/glade/prefs-dialog.glade.h:40
 msgid "_Variable width:"
 msgstr "Lled _newidiol:"
+
+#: ../data/glade/print.glade.h:1
+msgid "<b>Colors</b>"
+msgstr "<b>Lliwiau</b>"
 
 #: ../data/glade/print.glade.h:2
 msgid "<b>Footers</b>"
@@ -774,62 +770,58 @@ msgid "<b>Headers</b>"
 msgstr "<b>Penawdau</b>"
 
 #: ../data/glade/print.glade.h:4
-msgid "Appearance"
-msgstr "Ymddangosiad"
-
-#: ../data/glade/print.glade.h:5
 msgid "C_olor"
 msgstr "_Lliw"
 
-#: ../data/glade/print.glade.h:6
+#: ../data/glade/print.glade.h:5
 msgid "P_age title"
 msgstr "Teitl y dud_alen"
 
-#: ../data/glade/print.glade.h:7
+#: ../data/glade/print.glade.h:6
 msgid "Page _numbers"
 msgstr "Rhifau tudale_n"
 
-#: ../data/glade/print.glade.h:8
-msgid "Paper"
-msgstr "Papur"
-
-#: ../data/glade/print.glade.h:9
+#: ../data/glade/print.glade.h:7
 msgid "Print Setup"
 msgstr "Gosodiadau Argraffu"
 
-#: ../data/glade/print.glade.h:10
+#: ../data/glade/print.glade.h:8
 msgid "_Date"
 msgstr "_Dyddiad"
 
-#: ../data/glade/print.glade.h:11
+#: ../data/glade/print.glade.h:9
 msgid "_Grayscale"
 msgstr "_Graddlwyd"
 
-#: ../data/glade/print.glade.h:12
+#: ../data/glade/print.glade.h:10
 msgid "_Page address"
 msgstr "Cyfeiria_d tudalen"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:184
-msgid "_Show Downloader..."
-msgstr "_Dangos y Llwythwr i Lawr..."
+#: ../embed/downloader-view.c:189
+msgid "_Show Downloads"
+msgstr "_Dangos y llwythiadau i lawr"
 
-#: ../embed/downloader-view.c:313
+#: ../embed/downloader-view.c:318
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:317
+#: ../embed/downloader-view.c:322
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:368
+#: ../embed/downloader-view.c:374
+msgid "_Pause"
+msgstr "_Seibio"
+
+#: ../embed/downloader-view.c:374
 msgid "_Resume"
 msgstr "_Ailgychwyn"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:415
+#: ../embed/downloader-view.c:421
 #, c-format
 msgid ""
 "%s\n"
@@ -838,12 +830,12 @@ msgstr ""
 "%s\n"
 "%s o %s"
 
-#: ../embed/downloader-view.c:425 ../embed/downloader-view.c:430
-#: ../src/ephy-window.c:1306
+#: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
+#: ../src/ephy-window.c:1468
 msgid "Unknown"
 msgstr "Anhysbys"
 
-#: ../embed/downloader-view.c:464
+#: ../embed/downloader-view.c:470
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -852,29 +844,22 @@ msgstr[1] "%d llwythiad i lawr"
 msgstr[2] "%d llwythiad i lawr"
 msgstr[3] "%d llwythiad i lawr"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:579 ../embed/downloader-view.c:592
-msgid "download status|Unknown"
-msgstr "Anhysbys"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:584
-msgid "download status|Failed"
-msgstr "Wedi methu"
-
-#: ../embed/downloader-view.c:646 ../src/bookmarks/ephy-bookmarks-editor.c:877
+#: ../embed/downloader-view.c:657
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1001
 msgid "File"
 msgstr "Ffeil"
 
-#: ../embed/downloader-view.c:668
+#: ../embed/downloader-view.c:679
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:679
+#: ../embed/downloader-view.c:690
 msgid "Remaining"
 msgstr "Yn Weddill"
+
+#: ../embed/ephy-embed-shell.c:243
+msgid "Epiphany can't be used now. Mozilla initialization failed."
+msgstr "Ni ellir defnyddio Epiphany ar hyn o bryd. Methwyd cychwyn Mozilla."
 
 #: ../embed/ephy-encodings.c:60
 msgid "Arabic (_IBM-864)"
@@ -1259,140 +1244,190 @@ msgstr "Wcrainaidd"
 msgid "Unknown (%s)"
 msgstr "Anhysbys (%s)"
 
-#: ../embed/ephy-history.c:527
+#: ../embed/ephy-history.c:558
 msgid "All"
 msgstr "Popeth"
 
-#: ../embed/ephy-history.c:701
+#: ../embed/ephy-history.c:721
 msgid "Others"
 msgstr "Eraill"
 
-#: ../embed/ephy-history.c:707
+#: ../embed/ephy-history.c:727
 msgid "Local files"
 msgstr "Ffeiliau lleol"
 
-#: ../embed/mozilla/ContentHandler.cpp:172
-#: ../embed/mozilla/EphyHeaderSniffer.cpp:365
+#: ../embed/mozilla/ContentHandler.cpp:178
+#: ../embed/mozilla/EphyHeaderSniffer.cpp:408
 msgid "Save"
 msgstr "Cadw"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:292
-msgid "File Type:|Unknown"
-msgstr "Anhysbys"
-
-#: ../embed/mozilla/ContentHandler.cpp:327
+#: ../embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "Lwytho'r ffeil all fod yn anniogel i lawr?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:333
+#: ../embed/mozilla/ContentHandler.cpp:340
 #, c-format
 msgid ""
-"File Type: %s.\n"
+"File Type: “%s”.\n"
 "\n"
-"It is unsafe to open \"%s\" as it could potentially damage your documents or "
+"It is unsafe to open “%s” as it could potentially damage your documents or "
 "invade your privacy. You can download it instead."
 msgstr ""
-"Math ffeil: %s.\n"
+"Math ffeil: “%s”.\n"
 "\n"
-"Dyw hi ddim yn ddiogel i agor \"%s\" am y gallai greu difrod i'ch dogfennau, "
+"Dyw hi ddim yn ddiogel i agor “%s” am y gallai greu difrod i'ch dogfennau, "
 "neu ymyrryd ar eich preifatrwydd. Gallwch ei llwytho i lawr yn lle hynny."
 
-#: ../embed/mozilla/ContentHandler.cpp:343
+#: ../embed/mozilla/ContentHandler.cpp:350
 msgid "Open this file?"
 msgstr "Agor y ffeil hon?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:350
+#: ../embed/mozilla/ContentHandler.cpp:357
 #, c-format
 msgid ""
-"File Type: %s.\n"
+"File Type: “%s”.\n"
 "\n"
-"You can open \"%s\" using \"%s\" or save it."
+"You can open “%s” using “%s” or save it."
 msgstr ""
-"Math Ffeil: %s.\n"
+"Math Ffeil: “%s”.\n"
 "\n"
-"Gallwch agor \"%s\" gan ddefnyddio \"%s\", neu ei chadw."
+"Gallwch agor “%s” gan ddefnyddio “%s”, neu ei chadw."
 
-#: ../embed/mozilla/ContentHandler.cpp:358
+#: ../embed/mozilla/ContentHandler.cpp:365
 msgid "Download this file?"
 msgstr "Llwytho'r ffeil hon i lawr?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:364
+#: ../embed/mozilla/ContentHandler.cpp:371
 #, c-format
 msgid ""
-"File Type: %s.\n"
+"File Type: “%s”.\n"
 "\n"
-"You have no application able to open \"%s\". You can download it instead."
+"You have no application able to open “%s”. You can download it instead."
 msgstr ""
-"Math Ffeil: %s.\n"
+"Math Ffeil: “%s”.\n"
 "\n"
-"Does dim rhaglen ar y system fedr agor \"%s\". Gallwch ei llwytho i lawr yn "
+"Does dim rhaglen ar y system fedr agor “%s”. Gallwch ei llwytho i lawr yn "
 "lle hynny."
 
-#: ../embed/mozilla/ContentHandler.cpp:369
+#: ../embed/mozilla/ContentHandler.cpp:376
 msgid "_Save As..."
 msgstr "Cadw _Fel..."
 
 #. Translators: %s is the name of a protocol, like "http" etc.
-#: ../embed/mozilla/EphyAboutModule.cpp:184
+#: ../embed/mozilla/EphyAboutModule.cpp:207
+#, c-format
+msgid "“%s” Protocol is not Supported"
+msgstr "Ni chynhelir y protocol “%s”"
+
+#. Translators: %s is the name of a protocol, like "http" etc.
+#: ../embed/mozilla/EphyAboutModule.cpp:209
 #, c-format
 msgid "“%s” protocol is not supported."
 msgstr "Ni chynhelir y protocol \"%s\""
 
 #. FIXME: get the list of supported protocols from necko
-#: ../embed/mozilla/EphyAboutModule.cpp:186
+#: ../embed/mozilla/EphyAboutModule.cpp:211
 msgid ""
 "Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
 msgstr ""
 "Y protocolau a gynhelir yw “http”, “https”, “ftp”, “file”, “smb” ac “sftp”."
 
 #. Translators: %s is the path and filename, for example "/home/user/test.html"
-#: ../embed/mozilla/EphyAboutModule.cpp:195
+#: ../embed/mozilla/EphyAboutModule.cpp:220
+#, c-format
+msgid "File “%s” not Found"
+msgstr "Ffeil “%s” Heb ei Chanfod"
+
+#. Translators: %s is the path and filename, for example "/home/user/test.html"
+#: ../embed/mozilla/EphyAboutModule.cpp:222
 #, c-format
 msgid "File “%s” not found."
 msgstr "Ffeil \"%s\" heb ei chanfod."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:196
+#: ../embed/mozilla/EphyAboutModule.cpp:223
 msgid "Check the location of the file and try again."
 msgstr "Gwiriwch leoliad y ffeil, a cheisio eto."
 
 #. Translators: %s is the hostname, like "www.example.com"
-#: ../embed/mozilla/EphyAboutModule.cpp:204
+#: ../embed/mozilla/EphyAboutModule.cpp:231
+#, c-format
+msgid "“%s” Could not be Found"
+msgstr "Methu canfod “%s”"
+
+#. Translators: %s is the hostname, like "www.example.com"
+#: ../embed/mozilla/EphyAboutModule.cpp:234
 #, c-format
 msgid "“%s” could not be found."
 msgstr "Methu canfod \"%s\""
 
-#: ../embed/mozilla/EphyAboutModule.cpp:206
+#: ../embed/mozilla/EphyAboutModule.cpp:236
 msgid ""
 "Check that you are connected to the internet, and that the address is "
 "correct."
 msgstr ""
 "Gwiriwch eich bod wedi cysylltu â'r rhyngrwyd, a bod y cyfeiriad yn gywir."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:208
+#: ../embed/mozilla/EphyAboutModule.cpp:238
 msgid "If this page used to exist, you may find an archived version:"
 msgstr ""
 "Os oedd y dudalen yn arfer bodoli, mae'n bosib y dewch o hyd i fersiwn "
 "archif:"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:217
+#: ../embed/mozilla/EphyAboutModule.cpp:247
+#, c-format
+msgid "“%s” Refused the Connection"
+msgstr "Gwrthododd “%s” y cysylltiad."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:251
 #, c-format
 msgid "“%s” refused the connection."
 msgstr "Gwrthododd \"%s\" y cysylltiad."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:219
-#: ../embed/mozilla/EphyAboutModule.cpp:232
-#: ../embed/mozilla/EphyAboutModule.cpp:247
-#: ../embed/mozilla/EphyAboutModule.cpp:291
+#: ../embed/mozilla/EphyAboutModule.cpp:260
+msgid "Likely causes of the problem are"
+msgstr "Achosion posib y broblem yw"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:270
+#, c-format
+msgid ""
+"<ul><li>the service %s isn't started.</li>Try to start it using the Services "
+"Configuration Tool in Desktop > System Settings > Server Settings > "
+"Services, or</ul><ul><li>the port number %d is wrong.</li></ul>"
+msgstr ""
+"<ul><li>nid yw'r gwasanaeth %s wedi ei gychwyn.</li>Ceisiwch ei gychwyn "
+"drwy'r Arf Cyflunio Gwasanaethau o fewn Bwrdd Gwaith > Gosodiadau System > "
+"Gosodiadau Gweinydd > Gosodiadau, neu </ul><ul><li>mae'r rhif porth %d yn "
+"anghywir.</li></ul>"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:281
+#, c-format
+msgid ""
+"<ul><li>some service isn't started, or</li><li>the port number %d is wrong.</"
+"li></ul>"
+msgstr ""
+"<ul><li>nid yw'r gwasanaeth wedi ei gychwyn, neu </li><li>mae'r rhif porth %"
+"d yn anghywir.</li></ul>"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:290
+msgid ""
+"<ul><li>some service isn't started, or</li><li>you got the port number wrong."
+"</li></ul>"
+msgstr ""
+"<ul><li>nid yw'r gwasanaeth wedi ei gychwyn, neu </li><li>roedd y rhif porth "
+"yn anghywir.</li></ul>"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:298
 #: ../embed/mozilla/EphyAboutModule.cpp:316
+#: ../embed/mozilla/EphyAboutModule.cpp:335
+#: ../embed/mozilla/EphyAboutModule.cpp:392
+#: ../embed/mozilla/EphyAboutModule.cpp:423
 msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
@@ -1400,89 +1435,127 @@ msgstr ""
 "Gall fod y gweinydd yn brysur, neu fod problem cysylltiad rhwydwaith. "
 "Ceisiwch eto'n hwyrach."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:221
-#: ../embed/mozilla/EphyAboutModule.cpp:234
-#: ../embed/mozilla/EphyAboutModule.cpp:249
-#: ../embed/mozilla/EphyAboutModule.cpp:266
-#: ../embed/mozilla/EphyAboutModule.cpp:293
+#: ../embed/mozilla/EphyAboutModule.cpp:300
 #: ../embed/mozilla/EphyAboutModule.cpp:318
+#: ../embed/mozilla/EphyAboutModule.cpp:337
+#: ../embed/mozilla/EphyAboutModule.cpp:359
+#: ../embed/mozilla/EphyAboutModule.cpp:394
+#: ../embed/mozilla/EphyAboutModule.cpp:425
 msgid "There may be an old version of the page you wanted:"
 msgstr "Gall fod hen fersiwn o'r dudalen oedd angen arnoch:"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:230
+#: ../embed/mozilla/EphyAboutModule.cpp:310
+#, c-format
+msgid "“%s” Interrupted the Connection"
+msgstr "Torrodd “%s” y cysylltiad"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:314
 #, c-format
 msgid "“%s” interrupted the connection."
 msgstr "Torrodd \"%s\" y cysylltiad."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:243
+#: ../embed/mozilla/EphyAboutModule.cpp:327
+#, c-format
+msgid "“%s” is not Responding"
+msgstr "Nid yw “%s” yn ymateb"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:331
 #, c-format
 msgid "“%s” is not responding."
 msgstr "Nid yw \"%s\" yn ymateb."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:245
+#: ../embed/mozilla/EphyAboutModule.cpp:333
 msgid "The connection was lost because the server took too long to respond."
 msgstr "Collwyd y cysylltiad am fod y gweinydd yn cymryd rhy hir i ymateb."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:253
+#: ../embed/mozilla/EphyAboutModule.cpp:341
+msgid "Invalid Address"
+msgstr "Cyfeiriad annilys"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:342
 msgid "Invalid address."
 msgstr "Cyfeiriad annilys."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:254
+#: ../embed/mozilla/EphyAboutModule.cpp:343
 msgid "The address you entered is not valid."
 msgstr "Nid yw'r cyfeiriad a roddoch yn ddilys."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:263
+#: ../embed/mozilla/EphyAboutModule.cpp:352
+#, c-format
+msgid "“%s” Redirected Too Many Times"
+msgstr "“%s” wedi ei ailgyfeirio ormod o weithiau."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:356
 #, c-format
 msgid "“%s” redirected too many times."
 msgstr "\"%s\" wedi ei ailgyfeirio ormod o weithiau."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:265
+#: ../embed/mozilla/EphyAboutModule.cpp:358
 msgid "The redirection has been stopped for security reasons."
 msgstr "Mae'r ailgyfeirio wedi ei atal am resymau diogelwch."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:275
+#: ../embed/mozilla/EphyAboutModule.cpp:368
+#, c-format
+msgid "“%s” Requires an Encrypted Connection"
+msgstr "Mae angen cysylltiad wedi ei amgryptio ar “%s”."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:372
 #, c-format
 msgid "“%s” requires an encrypted connection."
 msgstr "Mae angen cysylltiad wedi ei amgryptio ar \"%s\"."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:277
+#: ../embed/mozilla/EphyAboutModule.cpp:374
 msgid ""
 "The document could not be loaded because encryption support is not installed."
 msgstr ""
 "Methu llwytho'r ddogfen am nad yw'r gynhaliaeth am amgryptio wedi ei osod."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:287
+#: ../embed/mozilla/EphyAboutModule.cpp:384
+#, c-format
+msgid "“%s” Dropped the Connection"
+msgstr "Gollyngodd “%s” y cysylltiad."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:388
 #, c-format
 msgid "“%s” dropped the connection."
 msgstr "Gollyngodd \"%s\" y cysylltiad."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:289
-#: ../embed/mozilla/EphyAboutModule.cpp:314
+#: ../embed/mozilla/EphyAboutModule.cpp:390
+#: ../embed/mozilla/EphyAboutModule.cpp:421
 msgid "The server dropped the connection before any data could be read."
 msgstr "Gollyngodd y gweinydd y cysylltiad cyn medru darllen unrhyw ddata."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:297
-msgid "Cannot load document in offline mode."
-msgstr "Methu llwytho dogfen ym modd all-lein."
+#: ../embed/mozilla/EphyAboutModule.cpp:401
+msgid "Cannot Load Document Whilst Working Offline"
+msgstr "Methu Llwytho Dogfen Wrth Weithio All-Lein"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:298
-msgid ""
-"This document cannot be viewed in offline mode. Set Epiphany to “online” and "
-"try again."
-msgstr ""
-"Methu gweld y ddogfen hon ym modd all-lein. Gosodwch Epiphany \"ar-lein\" a "
-"cheisio eto."
+#: ../embed/mozilla/EphyAboutModule.cpp:402
+msgid "Cannot load document whilst working offline."
+msgstr "Methu llwytho dogfen wrth weithio all-Lein."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:312
+#: ../embed/mozilla/EphyAboutModule.cpp:403
+msgid "To view this document, disable “Work Offline” and try again."
+msgstr "I weld y ddogfen hon, analluogwch “Gweithio All-lein” a cheisio eto."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:415
+#, c-format
+msgid "“%s” Denied Access to Port “%d”"
+msgstr "Gwrthododd “%s” fynediad i borth “%d”"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:419
 #, c-format
 msgid "“%s” denied access to port “%d”."
 msgstr "Gwrthododd \"%s\" fynediad i borth \"%d\"."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:323
+#: ../embed/mozilla/EphyAboutModule.cpp:430
+msgid "Could not Connect to Proxy Server"
+msgstr "Methu cysylltu â'r gweinydd dirprwy"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:431
 msgid "Could not connect to proxy server."
 msgstr "Methu cysylltu â'r gweinydd dirprwy."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:324
+#: ../embed/mozilla/EphyAboutModule.cpp:432
 msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
@@ -1490,192 +1563,221 @@ msgstr ""
 "Gwiriwch y gosodiadau gweinydd dirprwy. Os yw'r cysylltiad dal yn methu, "
 "gall fod problem gyda'ch gweinydd dirprwy neu'ch cysylltiad rhwydwaith."
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:462
-msgid "You may find an old version:|in the Google Cache"
-msgstr "yn storfa copïau cadw Google"
+#: ../embed/mozilla/EphyAboutModule.cpp:440
+msgid "Could not Display Content"
+msgstr "Methu Dangos Cymorth"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:470
-msgid "You may find an old version:|in the Internet Archive"
-msgstr "yn yr Internet Archive"
+#: ../embed/mozilla/EphyAboutModule.cpp:441
+msgid "Could not display content."
+msgstr "Methu dangos cymorth."
 
-#: ../embed/mozilla/EphyHeaderSniffer.cpp:321
+#: ../embed/mozilla/EphyAboutModule.cpp:442
+msgid "The page uses an unsupported or invalid form of compression."
+msgstr ""
+"Mae'r dudalen yn defnyddio modd cywasgu sy'n annilys neu heb ei gynnal."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:532
+#, c-format
+msgid ""
+"The page “%s” in this tab was not fully loaded yet when the web browser "
+"crashed; it could have caused the crash."
+msgstr ""
+"Doedd y dudalen “%s” o fewn y tab hwn heb ei lwytho'n gyfan pan chwalodd y "
+"porwr gwe; fe allai fod wedi achosi'r chwalfa."
+
+#: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarksbar-model.c:350 ../src/window-commands.c:305
+#: ../src/bookmarks/ephy-bookmarks.c:1264 ../src/ephy-session.c:1308
 msgid "Untitled"
 msgstr "Dideitl"
 
-#: ../embed/mozilla/FilePicker.cpp:148 ../lib/ephy-file-chooser.c:371
-#: ../src/bookmarks/ephy-bookmarks-editor.c:719
+#: ../embed/mozilla/EphyPromptService.cpp:197
+msgid "_Abort Script"
+msgstr "_Atal y Sgript"
+
+#: ../embed/mozilla/EphyPromptService.cpp:265
+msgid "Don't Save"
+msgstr "Peidio Cadw"
+
+#: ../embed/mozilla/EphyPromptService.cpp:799
+msgid "_Username:"
+msgstr "_Enw Defnyddiwr:"
+
+#: ../embed/mozilla/EphyPromptService.cpp:800
+#: ../embed/mozilla/EphyPromptService.cpp:827
+#: ../embed/mozilla/GtkNSSDialogs.cpp:811
+#: ../embed/mozilla/GtkNSSDialogs.cpp:926
+msgid "_Password:"
+msgstr "_Cyfrinair:"
+
+#: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:784
 msgid "All files"
 msgstr "Pob ffeil"
 
-#: ../embed/mozilla/FilePicker.cpp:153 ../lib/ephy-file-chooser.c:355
+#: ../embed/mozilla/FilePicker.cpp:158 ../lib/ephy-file-chooser.c:355
 msgid "Web pages"
 msgstr "Tudalennau gwe"
 
-#: ../embed/mozilla/FilePicker.cpp:161
+#: ../embed/mozilla/FilePicker.cpp:166
 msgid "Text files"
 msgstr "Ffeiliau testun"
 
-#: ../embed/mozilla/FilePicker.cpp:166 ../lib/ephy-file-chooser.c:363
+#: ../embed/mozilla/FilePicker.cpp:171 ../lib/ephy-file-chooser.c:363
 msgid "Images"
 msgstr "Delweddau"
 
-#: ../embed/mozilla/FilePicker.cpp:174
+#: ../embed/mozilla/FilePicker.cpp:179
 msgid "XML files"
 msgstr "Ffeiliau XML"
 
-#: ../embed/mozilla/FilePicker.cpp:179
+#: ../embed/mozilla/FilePicker.cpp:184
 msgid "XUL files"
 msgstr "Ffeiliau XUL"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:156
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:162
 msgid "_Select Certificate"
 msgstr "_Dewis Tystysgrif"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:203
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:208
 #, c-format
-msgid "Choose a certificate to present as identification to \"%s\"."
-msgstr "Dewiswch dystysgrif i'w chyflwyno fel dynodiad i \"%s\"."
+msgid "Choose a certificate to present as identification to “%s”."
+msgstr "Dewiswch dystysgrif i'w chyflwyno fel dynodiad i “%s”."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:206
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:211
 msgid "Select a certificate to identify yourself."
 msgstr "Dewiswch dystysgrif i ddynodi chi'ch hun."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:243
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:248
 msgid "Certificate _Details"
 msgstr "_Manylion y Dystysgrif"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:232
-#: ../embed/mozilla/GtkNSSDialogs.cpp:539
+#: ../embed/mozilla/GtkNSSDialogs.cpp:241
+#: ../embed/mozilla/GtkNSSDialogs.cpp:558
 msgid "_View Certificate"
 msgstr "_Gweld y Dystysgrif"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:240
+#: ../embed/mozilla/GtkNSSDialogs.cpp:249
 msgid "_Accept"
 msgstr "_Derbyn"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:304
+#: ../embed/mozilla/GtkNSSDialogs.cpp:316
 #, c-format
 msgid ""
-"The site \"%s\" returned security information for \"%s\". It is possible "
-"that someone is intercepting your communication to obtain your confidential "
-"information."
-msgstr ""
-"Fe wnaeth y safle \"%s\" ddanfon atoch wybodaeth ddiogelwch ar gyfer \"%s\". "
-"Mae'n bosib fod rhywun yn gwrando ar eich cysylltiad er mwyn cael gafael ar "
-"eich gwybodaeth gyfrinachol."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:310
-#, c-format
-msgid ""
-"You should only accept the security information if you trust \"%s\" and \"%s"
-"\"."
-msgstr ""
-"Dim ond os teimlwch y medrwch ymddiried yn \"%s\" a \"%s\" y dylech chi "
-"dderbyn y wybodaeth ddiogelwch."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:315
-msgid "Accept incorrect security information?"
-msgstr "Derbyn y wybodaeth diogelwch anghywir?"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:346
-#, c-format
-msgid ""
-"It was not possible to automatically trust \"%s\". It is possible that "
+"The site “%s” returned security information for “%s”. It is possible that "
 "someone is intercepting your communication to obtain your confidential "
 "information."
 msgstr ""
-"Doedd hi ddim yn bosib ymddiried yn \"%s\" yn awtomatig. Mae'n bosib fod "
+"Fe wnaeth y safle “%s” ddanfon atoch wybodaeth ddiogelwch ar gyfer “%s”.. "
+"Mae'n bosib fod rhywun yn gwrando ar eich cysylltiad er mwyn cael gafael ar "
+"eich gwybodaeth gyfrinachol."
+
+#: ../embed/mozilla/GtkNSSDialogs.cpp:322
+#, c-format
+msgid ""
+"You should only accept the security information if you trust “%s” and “%s”."
+msgstr ""
+"Dim ond os teimlwch y medrwch ymddiried yn “%s” a “%s” y dylech chi dderbyn "
+"y wybodaeth ddiogelwch."
+
+#: ../embed/mozilla/GtkNSSDialogs.cpp:327
+msgid "Accept incorrect security information?"
+msgstr "Derbyn y wybodaeth diogelwch anghywir?"
+
+#: ../embed/mozilla/GtkNSSDialogs.cpp:358
+#, c-format
+msgid ""
+"It was not possible to automatically trust “%s”. It is possible that someone "
+"is intercepting your communication to obtain your confidential information."
+msgstr ""
+"Doedd hi ddim yn bosib ymddiried yn “%s” yn awtomatig. Mae'n bosib fod "
 "rhywun yn gwrando ar eich cysylltiad er mwyn cael gafael ar eich gwybodaeth "
 "gyfrinachol."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:364
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
-"\"%s\"."
+"“%s”."
 msgstr ""
-"Dim ond os ydych yn bendant eich bod wedi cysylltu â \"%s\" ar hyn o bryd y "
-"dylech chi gysylltu â'r safle."
+"Dim ond os ydych yn bendant eich bod wedi cysylltu â “%s” y dylech chi "
+"gysylltu â'r safle."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:357
+#: ../embed/mozilla/GtkNSSDialogs.cpp:369
 msgid "Connect to untrusted site?"
 msgstr "Cysylltu â safle na ymddiriedir ynddo?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:361
+#: ../embed/mozilla/GtkNSSDialogs.cpp:373
 msgid "_Trust this security information from now on"
 msgstr "_Ymddiried yn y wybodaeth ddiogelwch yma o hyn ymlaen"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:362
+#: ../embed/mozilla/GtkNSSDialogs.cpp:374
 msgid "Co_nnect"
 msgstr "Cy_sylltu"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:421
+#: ../embed/mozilla/GtkNSSDialogs.cpp:433
 msgid "Accept expired security information?"
 msgstr "Derbyn gwybodaeth ddiogelwch sydd eisoes wedi darfod?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:422
+#. Translators: first %s is a hostname, second %s is a time/date
+#: ../embed/mozilla/GtkNSSDialogs.cpp:435
 #, c-format
-msgid "The security information for \"%s\" expired on %s."
-msgstr "Mi wnaeth y wybodaeth ddiogelwch ar gyfer \"%s\" ddarfod ar %s."
+msgid "The security information for “%s” expired on %s."
+msgstr "Mi wnaeth y wybodaeth ddiogelwch ar gyfer “%s” ddarfod ar %s."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:428
+#: ../embed/mozilla/GtkNSSDialogs.cpp:441
 msgid "Accept not yet valid security information?"
 msgstr "Derbyn gwybodaeth ddiogelwch nad yw'n ddilys eto?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:429
+#. Translators: first %s is a hostname, second %s is a time/date
+#: ../embed/mozilla/GtkNSSDialogs.cpp:443
 #, c-format
-msgid "The security information for \"%s\" isn't valid until %s."
-msgstr "Nid yw'r wybodaeth ddiogelwch ar gyfer \"%s\" yn ddilys tan %s."
+msgid "The security information for “%s” isn't valid until %s."
+msgstr "Nid yw'r wybodaeth ddiogelwch ar gyfer “%s” yn ddilys tan %s."
 
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:445
+#: ../embed/mozilla/GtkNSSDialogs.cpp:459
 msgid "%a %d %b %Y"
 msgstr "%a %d %b %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:453
+#: ../embed/mozilla/GtkNSSDialogs.cpp:467
 msgid "You should ensure that your computer's time is correct."
 msgstr "Dylech sicrhau fod yr amser ar eich cyfrifiadur yn gywir."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:499
+#: ../embed/mozilla/GtkNSSDialogs.cpp:513
 #, c-format
-msgid "Cannot establish connection to \"%s\"."
-msgstr "Methu cysylltu â \"%s\"."
+msgid "Cannot establish connection to “%s”."
+msgstr "Methu cysylltu â “%s”."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:502
+#: ../embed/mozilla/GtkNSSDialogs.cpp:516
 #, c-format
-msgid "The certificate revocation list (CRL) from \"%s\" needs to be updated."
+msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
 msgstr ""
 "Rhaid diweddaru'r rhestr o dystysgrifau a ddiddymwyd ('certificate "
-"revocation list', CRL) o \"%s\"."
+"revocation list', CRL) o “%s”."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:507
+#: ../embed/mozilla/GtkNSSDialogs.cpp:521
 msgid "Please ask your system administrator for assistance."
 msgstr "Gofynnwch i'ch gweinyddwr systemau am gymorth."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:537
+#: ../embed/mozilla/GtkNSSDialogs.cpp:556
 msgid "Trust new Certificate Authority?"
 msgstr "Ymddiried mewn Awdurdod Tystysgrifo newydd?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:542
+#: ../embed/mozilla/GtkNSSDialogs.cpp:561
 msgid "_Trust CA"
 msgstr "_Ymddiried yn yr AT"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:564
+#: ../embed/mozilla/GtkNSSDialogs.cpp:583
 #, c-format
-msgid "Trust new Certificate Authority \"%s\" to identify web sites?"
+msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr ""
-"Ymddiried yn yr Awdurdod Tystysgrifo newydd \"%s\" i adnabod safleoedd gwe?"
+"Ymddiried yn yr Awdurdod Tystysgrifo newydd “%s” i adnabod safleoedd gwe?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:569
+#: ../embed/mozilla/GtkNSSDialogs.cpp:588
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1683,116 +1785,112 @@ msgstr ""
 "Cyn ymddiried mewn Awdurdod Tystysgrifo (AT) dylech sicrhau fod y dystysgrif "
 "yn ddilys."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:640
+#: ../embed/mozilla/GtkNSSDialogs.cpp:659
 msgid "Certificate already exists."
 msgstr "Tystysgrif yn bodoli eisoes."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:641
+#: ../embed/mozilla/GtkNSSDialogs.cpp:660
 msgid "The certificate has already been imported."
 msgstr "Cafodd y dystysgrif ei mewnforio eisoes."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:766
-msgid "_Backup Certificate"
+#. Translators: this is the action of the certificate being exported to a backup file
+#: ../embed/mozilla/GtkNSSDialogs.cpp:791
+msgid "_Back Up Certificate"
 msgstr "Tystysgrif _Wrth Gefn"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:773
+#: ../embed/mozilla/GtkNSSDialogs.cpp:798
 msgid "Select password."
 msgstr "Dewis cyfrinair."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:774
+#: ../embed/mozilla/GtkNSSDialogs.cpp:799
 msgid "Select a password to protect this certificate."
 msgstr "Dewiswch gyfrinair i ddiogelu'r dystysgrif yma."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:786
-#: ../embed/mozilla/GtkNSSDialogs.cpp:896
-msgid "_Password:"
-msgstr "_Cyfrinair:"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:800
+#: ../embed/mozilla/GtkNSSDialogs.cpp:825
 msgid "Con_firm password:"
 msgstr "Ca_darnhau'r cyfrinair:"
 
 #. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:812
+#: ../embed/mozilla/GtkNSSDialogs.cpp:837
 msgid "Password quality:"
 msgstr "Ansawdd y cyfrinair:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:869
+#: ../embed/mozilla/GtkNSSDialogs.cpp:899
 msgid "I_mport Certificate"
 msgstr "_Mewnforio Tystysgrif"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:885
+#: ../embed/mozilla/GtkNSSDialogs.cpp:915
 msgid "Password required."
 msgstr "Angen cyfrinair."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:886
+#: ../embed/mozilla/GtkNSSDialogs.cpp:916
 msgid "Enter the password for this certificate."
 msgstr "Rhowch y cyfrinair ar gyfer y dystysgrif."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:967
-msgid "Certificate Revocation list successfully imported."
-msgstr "Rhestr Ddiddymu Tystysgrifau wedi ei fewnforio'n llwyddiannus."
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1005
+msgid "Certificate Revocation List Imported"
+msgstr "Wedi Mewnforio Rhestr Ddiddymu Tystysgrifau (CRL)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:968
-msgid "Certificate Revocation list (CRL) imported:"
-msgstr "Rhestr Ddiddymu Tystysgrifau (CRL) fewnforiwyd:"
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1015
+msgid "Certificate Revocation List (CRL) successfully imported"
+msgstr "Rhestr Ddiddymu Tystysgrifau wedi ei fewnforio'n llwyddiannus"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:994
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1040
 msgid "Unit:"
 msgstr "Uned:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:999
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1044
 msgid "Next Update:"
 msgstr "Diweddariad Nesaf:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1026
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1071
 msgid "Not part of certificate"
 msgstr "Nid yn rhan o'r dystysgrif"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1312
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
 msgid "Certificate Properties"
 msgstr "Priodweddau Tystysgrif"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1334
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1387
 msgid "This certificate has been verified for the following uses:"
 msgstr "Mae'r dystysgrif hon wedi ei gwirio ar gyfer y defnyddiau canlynol:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1337
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1390
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Methwyd gwirio'r dystysgrif hon gan ei bod wedi ei ddiddymu."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1393
 msgid "Could not verify this certificate because it has expired."
 msgstr "Methwyd gwirio'r dystysgrif hon gan ei bod wedi darfod."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1343
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1396
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Methwyd gwirio'r dystysgrif hon gan nad oes hyder ynddi."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1346
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1399
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr "Methwyd gwirio'r dystysgrif hon gan nad oes hyder yn y cyflwynwr."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1349
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1402
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Methwyd gwirio'r dystysgrif hon gan fod y cyflwynwr yn anhysbys."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1352
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1405
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "Methwyd gwirio'r dystysgrif hon am nad yw tystysgrif yr awdurdod tystysgrifo "
 "(CA) yn ddilys."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1357
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1410
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Methwyd gwirio'r dystysgrif hon am resymau anhysbys."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:230
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:235
 msgid "Generating Private Key."
 msgstr "Yn Cynhyrchu Allwedd Breifat."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:231
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:236
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
@@ -1800,21 +1898,17 @@ msgstr ""
 "Arhoswch nes i allwedd breifat newydd gael ei chreu. Gallai'r broses hon "
 "gymryd ychydig funudau."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "Security Notice"
 msgstr "Nodyn Diogelwch"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
 msgid "This page is loaded over a secure connection"
 msgstr "Mae'r dudalen hon wedi ei llwytho dros gysylltiad diogel"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
-msgid ""
-"You can always see the security status of a page from the padlock icon on "
-"the statusbar."
-msgstr ""
-"Gallwch weld statws diogelwch tudalen bob amser, drwy'r eicon o glo ar y bar "
-"statws."
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
+msgid "The padlock icon in the statusbar indicates whether a page is secure."
+msgstr "Mae'r eicon clo yn y bar statws yn dynodi a yw'r dudalen yn ddiogel."
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
@@ -1875,7 +1969,7 @@ msgstr ""
 "a roddoch yn cael ei anfon dros gysylltiad anniogel, a gallai trydydd person "
 "gael gafael arno'n hawdd."
 
-#: ../embed/mozilla/MozDownload.cpp:718
+#: ../embed/mozilla/MozDownload.cpp:758
 msgid "Files"
 msgstr "Ffeiliau"
 
@@ -1889,52 +1983,48 @@ msgstr "Ffeiliau"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:229
+#: ../embed/mozilla/mozilla-embed-single.cpp:287
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?hl=cy&ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:582
-msgid "Epiphany can't be used now. Mozilla initialization failed."
-msgstr "Ni ellir defnyddio Epiphany ar hyn o bryd. Methwyd cychwyn Mozilla."
-
-#: ../embed/print-dialog.c:275
+#: ../embed/print-dialog.c:258
 msgid "Generating PDF is not supported"
 msgstr "Ni chynhelir creu ffeiliau PDF"
 
-#: ../embed/print-dialog.c:282
+#: ../embed/print-dialog.c:265
 msgid "Printing is not supported on this printer"
 msgstr "Ni chynhelir argraffu ar yr argraffydd hwn"
 
-#: ../embed/print-dialog.c:285
+#: ../embed/print-dialog.c:268
 #, c-format
 msgid ""
-"You were trying to print to a printer using the \"%s\" driver. This program "
+"You were trying to print to a printer using the “%s” driver. This program "
 "requires a PostScript printer driver."
 msgstr ""
-"Roeddech yn ceisio defnyddio'r gyrrydd \"%s\" er mwyn argraffu. Mae angen "
+"Roeddech yn ceisio defnyddio'r gyrrydd “%s” er mwyn argraffu. Mae angen "
 "gyrrydd PostScript ar y rhaglen hon."
 
-#: ../embed/print-dialog.c:392
+#: ../embed/print-dialog.c:364
 msgid "_From:"
 msgstr "_O:"
 
-#: ../embed/print-dialog.c:405
+#: ../embed/print-dialog.c:377
 msgid "Sets the start of the range of pages to be printed"
 msgstr "Gosod cychwyn y tudalennau i'w printio"
 
-#: ../embed/print-dialog.c:407
+#: ../embed/print-dialog.c:379
 msgid "_To:"
 msgstr "_I:"
 
-#: ../embed/print-dialog.c:420
+#: ../embed/print-dialog.c:392
 msgid "Sets the end of the range of pages to be printed"
 msgstr "Gosod diwedd y tudalennau i'w printio"
 
-#: ../embed/print-dialog.c:435 ../src/ephy-window.c:1123
+#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1288
 msgid "Print"
 msgstr "Argraffu"
 
-#: ../embed/print-dialog.c:443
+#: ../embed/print-dialog.c:415
 msgid "Pages"
 msgstr "Tudalennau"
 
@@ -1947,11 +2037,43 @@ msgstr ""
 "Gwall GConf:\n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:534
-msgid "_Remove Toolbar"
+#. Translaters: This string is for a toggle to display a toolbar.
+#. * The name of the toolbar is automatically computed from the widgets
+#. * on the toolbar, and is placed at the %s. Note the _ before the %s
+#. * which is used to add mnemonics. We know that this is likely to
+#. * produce duplicates, but don't worry about it. If your language
+#. * normally has a mnemonic at the start, please use the _. If not,
+#. * please remove.
+#: ../lib/egg/egg-editable-toolbar.c:902
+#, c-format
+msgid "Show “_%s”"
+msgstr "Dangos “_%s”"
+
+#: ../lib/egg/egg-editable-toolbar.c:1362
+msgid "_Move on Toolbar"
+msgstr "_Symud ar y Bar Offer"
+
+#: ../lib/egg/egg-editable-toolbar.c:1363
+msgid "Move the selected item on the toolbar"
+msgstr "Symud yr eitem a ddewiswyd ar y bar offer"
+
+#: ../lib/egg/egg-editable-toolbar.c:1364
+msgid "_Remove from Toolbar"
+msgstr "_Dileu o'r Bar Offer"
+
+#: ../lib/egg/egg-editable-toolbar.c:1365
+msgid "Remove the selected item from the toolbar"
+msgstr "Tynnu'r eitem a ddewiswyd o'r bar offer"
+
+#: ../lib/egg/egg-editable-toolbar.c:1366
+msgid "_Delete Toolbar"
 msgstr "Gwa_redu'r Bar Offer"
 
-#: ../lib/egg/egg-toolbar-editor.c:555
+#: ../lib/egg/egg-editable-toolbar.c:1367
+msgid "Remove the selected toolbar"
+msgstr "Tynnu'r bar offer a ddewiswyd"
+
+#: ../lib/egg/egg-toolbar-editor.c:439
 msgid "Separator"
 msgstr "Gwahanydd"
 
@@ -1959,70 +2081,54 @@ msgstr "Gwahanydd"
 msgid "All supported types"
 msgstr "Pob math a gynhelir"
 
-#. The name of the default downloads folder
-#: ../lib/ephy-file-helpers.c:96 ../src/prefs-dialog.c:1146
-msgid "Downloads"
-msgstr "Llwythiadau i Lawr"
-
-#: ../lib/ephy-file-helpers.c:270
+#: ../lib/ephy-file-helpers.c:301
 #, c-format
-msgid "%s exists, please move it out of the way."
-msgstr "Mae %s yn bodoli eisoes. Symudwch ef o'r ffordd os gwelwch yn dda."
+msgid "Could not create a temporary directory in “%s”."
+msgstr "Methu creu cyfeiriadur dros dro o fewn “%s”."
 
-#: ../lib/ephy-file-helpers.c:276
+#: ../lib/ephy-file-helpers.c:377
 #, c-format
-msgid "Failed to create directory %s."
-msgstr "Methu creu cyfeiriadur %s."
+msgid "The file “%s” exists. Please move it out of the way."
+msgstr ""
+"Mae'r ffeil “%s” yn bodoli eisoes. Symudwch ef o'r ffordd os gwelwch yn dda."
 
-#: ../lib/ephy-gui.c:329
+#: ../lib/ephy-file-helpers.c:388
 #, c-format
-msgid "Directory %s is not writable"
-msgstr "Methu ysgrifennu at y cyfeiriadur %s"
+msgid "Failed to create directory “%s”."
+msgstr "Methu creu'r cyfeiriadur “%s”."
 
-#: ../lib/ephy-gui.c:333
+#: ../lib/ephy-gui.c:328
+#, c-format
+msgid "Directory “%s” is not writable"
+msgstr "Nid yw'r cyfeiriadur “%s” yn ysgrifenadwy"
+
+#: ../lib/ephy-gui.c:332
 msgid "You do not have permission to create files in this directory."
 msgstr ""
 "Does ddim caniatâd gennych chi i greu ffeiliau o fewn y cyfeiriadur hwn."
 
-#: ../lib/ephy-gui.c:336
-msgid "Directory not writable"
-msgstr "Methu ysgrifennu at y cyfeiriadur"
+#: ../lib/ephy-gui.c:335
+msgid "Directory not Writable"
+msgstr "Cyfeiriadur ddim yn Ysgrifenadwy"
 
-#: ../lib/ephy-gui.c:366
+#: ../lib/ephy-gui.c:365
 #, c-format
-msgid "File %s is not writable"
-msgstr "Methu ysgrifennu at ffeil %s"
+msgid "Cannot overwrite existing file “%s”"
+msgstr "Methu trosysgrifo'r ffeil “%s” sydd eisoes yn bodoli"
 
-#: ../lib/ephy-gui.c:370
-msgid "You do not have permission to overwrite this file."
-msgstr "Does gennych ddim caniatâd i drosysgrifo'r ffeil hon."
+#: ../lib/ephy-gui.c:369
+msgid ""
+"A file with this name already exists and you don't have permission to "
+"overwrite it."
+msgstr ""
+"Mae ffeil gyda'r un enw yn bodoli eisoes, a does gennych chi ddim caniatâd "
+"i'w drosysgrifo."
 
 #: ../lib/ephy-gui.c:372
-msgid "File not writable"
-msgstr "Methu ysgrifennu at y ffeil"
+msgid "Cannot Overwrite File"
+msgstr "Methu Trosysgrifo Ffeil"
 
-#: ../lib/ephy-gui.c:394
-#, c-format
-msgid "Overwrite \"%s\"?"
-msgstr "Trosysgrifo \"%s\"?"
-
-#: ../lib/ephy-gui.c:398
-msgid ""
-"A file with this name already exists. If you choose to overwrite this file, "
-"the contents will be lost."
-msgstr ""
-"Mae ffeil gyda'r un enw yn bodoli eisoes. Os ydych chi'n dewis trosysgrifo'r "
-"ffeil hwn, caiff y cynnwys ei golli."
-
-#: ../lib/ephy-gui.c:402
-msgid "_Overwrite"
-msgstr "_Trosysgrifo"
-
-#: ../lib/ephy-gui.c:404
-msgid "Overwrite File?"
-msgstr "Trosysgrifo'r Ffeil?"
-
-#: ../lib/ephy-gui.c:440
+#: ../lib/ephy-gui.c:409
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Methwyd dangos cymorth: %s"
@@ -2184,28 +2290,24 @@ msgid "select fonts for|Other Scripts"
 msgstr "Sgriptiau Eraill"
 
 #: ../lib/ephy-stock-icons.c:56
-msgid "Close Tab"
-msgstr "Cau Tab"
-
-#: ../lib/ephy-stock-icons.c:57
 msgid "Popup Windows"
 msgstr "Naid-Ffenestri"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-history-window.c:1191
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1179
 msgid "History"
 msgstr "Hanes"
 
-#: ../lib/ephy-stock-icons.c:59 ../src/bookmarks/ephy-bookmarks-editor.c:759
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1630
-#: ../src/bookmarks/ephy-topic-action.c:967 ../src/ephy-window.c:1129
+#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:915
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1757
+#: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Llyfrnodau"
 
-#: ../lib/ephy-stock-icons.c:60 ../src/ephy-toolbar.c:325
+#: ../lib/ephy-stock-icons.c:59 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Cofnod Cyfeiriad"
 
-#: ../lib/ephy-stock-icons.c:61
+#: ../lib/ephy-stock-icons.c:60
 msgid "_Download"
 msgstr "_Llwytho i Lawr"
 
@@ -2245,32 +2347,142 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:590
+#: ../lib/widgets/ephy-location-entry.c:820
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Tynnwch a gollyngwch yr eicon er mwyn creu cyswllt at y dudalen hon"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:295
+#: ../plugins/desktop-file/plugin.cpp:263
+msgid "Unsafe protocol."
+msgstr "Protocol peryglus"
+
+#: ../plugins/desktop-file/plugin.cpp:264
+msgid ""
+"The address has not been loaded, because it refers to an unsafe protocol and "
+"thereby presents a security risk to your system."
+msgstr ""
+"Ni chafodd y cyfeiriad ei lwytho, am ei fod yn cyfeirio at brotocol nad yw'n "
+"ddiogel ac sydd felly yn peri risg i'ch system."
+
+#: ../plugins/desktop-file/plugin.cpp:290
+msgid "No address found."
+msgstr "Dim cyfeiriad wedi'i ganfod."
+
+#: ../plugins/desktop-file/plugin.cpp:291
+msgid "No web address could be found in this file."
+msgstr "Methu canfod cyfeiriad gwe o fewn y ffeil."
+
+#. Translators: "Desktop File" refers to .desktop files containing a link
+#: ../plugins/desktop-file/plugin.cpp:326
+msgid "Epiphany Desktop File Plugin"
+msgstr "Ategyn Ffeil Bwrdd Gwaith Epiphany"
+
+#: ../plugins/desktop-file/plugin.cpp:330
+msgid "This plugin handles “.desktop” files containing web links."
+msgstr ""
+"Mae'r ategyn hwn yn delio â ffeiliau “.desktop” sy'n cynnwys cysylltiadau "
+"gwe."
+
+#: ../src/bookmarks/ephy-bookmark-action.c:263
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:549
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1243
-#: ../src/bookmarks/ephy-topic-action.c:475 ../src/ephy-history-window.c:173
-#: ../src/ephy-history-window.c:711
-msgid "Open in New _Tab"
-msgid_plural "Open in New _Tabs"
-msgstr[0] "Agor mewn _Tabiau Newydd"
-msgstr[1] "Agor mewn _Tab Newydd"
-msgstr[2] "Agor mewn _Tabiau Newydd"
-msgstr[3] "Agor mewn _Tabiau Newydd"
+#. Translators: This string is used when counting bookmarks that
+#. * are similar to each other
+#: ../src/bookmarks/ephy-bookmark-properties.c:92
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
+#, c-format
+msgid "%d _Similar"
+msgid_plural "%d _Similar"
+msgstr[0] "%d yn _Debyg"
+msgstr[1] "%d yn _Debyg"
+msgstr[2] "%d yn _Debyg"
+msgstr[3] "%d yn _Debyg"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:265
+#, c-format
+msgid "_Unify With %d Identical Bookmark"
+msgid_plural "_Unify With %d Identical Bookmarks"
+msgstr[0] "_Uno gyda %d Llyfrnod yr Un Fath"
+msgstr[1] "_Uno gyda %d Lyfrnod yr Un Fath"
+msgstr[2] "_Uno gyda %d Llyfrnod yr Un Fath"
+msgstr[3] "_Uno gyda %d Llyfrnod yr Un Fath"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:285
+#: ../src/bookmarks/ephy-bookmark-properties.c:307
+#, c-format
+msgid "Show “%s”"
+msgstr "Dangos “%s”"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:433
+#, c-format
+msgid "“%s” Properties"
+msgstr "Priodweddau “%s”"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
+msgid "_Title:"
+msgstr "_Teitl:"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:567
+msgid "A_ddress:"
+msgstr "_Cyfeiriad:"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:577
+msgid "T_opics:"
+msgstr "_Pynciau:"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:598
+msgid "Sho_w all topics"
+msgstr "Dangos yr _holl bynciau"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:97
+msgid "Mozilla (HTML)"
+msgstr "Mozilla (HTML)"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:98
+msgid "Epiphany (RDF)"
+msgstr "Epiphany (RDF)"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:150
+msgid "Remove from this topic"
+msgstr "Tynnu o'r pwnc hwn"
+
+#. Toplevel
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
+#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:115
+msgid "_File"
+msgstr "_Ffeil"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:180
+#: ../src/ephy-history-window.c:164 ../src/ephy-window.c:116
+msgid "_Edit"
+msgstr "_Golygu"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/ephy-history-window.c:165 ../src/ephy-window.c:117
+msgid "_View"
+msgstr "_Golwg"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+#: ../src/ephy-history-window.c:166 ../src/ephy-window.c:122
+msgid "_Help"
+msgstr "_Cymorth"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmark-action.c:555
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1240
-#: ../src/ephy-history-window.c:170 ../src/ephy-history-window.c:708
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186
+msgid "_New Topic"
+msgstr "Pwnc _Newydd"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+msgid "Create a new topic"
+msgstr "Creu pwnc newydd"
+
+#. FIXME ngettext
+#. File Menu
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1374
+#: ../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
+#: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Agor mewn _Ffenestr Newydd"
@@ -2278,241 +2490,184 @@ msgstr[1] "Agor mewn _Ffenestri Newydd"
 msgstr[2] "Agor mewn _Ffenestr Newydd"
 msgstr[3] "Agor mewn _Ffenestr Newydd"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:576
-#: ../src/bookmarks/ephy-topic-action.c:797
-msgid "_Remove from Toolbar"
-msgstr "_Dileu o'r Bar Offer"
-
-#: ../src/bookmarks/ephy-bookmark-action.c:589
-#: ../src/bookmarks/ephy-topic-action.c:810
-msgid "Move _Left"
-msgstr "Symud i'r _Chwith"
-
-#: ../src/bookmarks/ephy-bookmark-action.c:596
-#: ../src/bookmarks/ephy-topic-action.c:817
-msgid "Move Ri_ght"
-msgstr "Symud i'r _Dde"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:230
-#, c-format
-msgid "%s Properties"
-msgstr "Priodweddau %s"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:350
-#: ../src/bookmarks/ephy-new-bookmark.c:231
-msgid "_Title:"
-msgstr "_Teitl:"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:392
-#: ../src/bookmarks/ephy-new-bookmark.c:254
-msgid "To_pics:"
-msgstr "_Pynciau:"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:401
-msgid "_Show in bookmarks bar"
-msgstr "Dango_s yn y bar llyfrnodau"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:140
-msgid "Remove from this topic"
-msgstr "Tynnu o'r pwnc hwn"
-
-#. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
-#: ../src/ephy-history-window.c:163 ../src/ephy-window.c:114
-msgid "_File"
-msgstr "_Ffeil"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:171
-#: ../src/ephy-history-window.c:164 ../src/ephy-window.c:115
-msgid "_Edit"
-msgstr "_Golygu"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:172
-#: ../src/ephy-history-window.c:165 ../src/ephy-window.c:116
-msgid "_View"
-msgstr "_Golwg"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
-#: ../src/ephy-history-window.c:166 ../src/ephy-window.c:121
-msgid "_Help"
-msgstr "_Cymorth"
-
-#. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:177
-#: ../src/bookmarks/ephy-new-bookmark.c:294
-msgid "_New Topic"
-msgstr "Pwnc _Newydd"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
-msgid "Create a new topic"
-msgstr "Creu pwnc newydd"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Open the selected bookmark in a new window"
 msgstr "Agor y llyfrnod dewisedig mewn ffenestr newydd"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#. FIXME ngettext
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1377
+#: ../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
+#: ../src/ephy-history-window.c:699
+msgid "Open in New _Tab"
+msgid_plural "Open in New _Tabs"
+msgstr[0] "Agor mewn _Tabiau Newydd"
+msgstr[1] "Agor mewn _Tab Newydd"
+msgstr[2] "Agor mewn _Tabiau Newydd"
+msgstr[3] "Agor mewn _Tabiau Newydd"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Open the selected bookmark in a new tab"
 msgstr "Agor y llyfrnod dewisedig mewn tab newydd"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:186
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195
 msgid "_Rename..."
 msgstr "_Ailenwi..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "Rename the selected bookmark or topic"
 msgstr "Ailenwi'r llyfrnod neu'r pwnc dewisedig"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
 #: ../src/ephy-history-window.c:176
 msgid "_Delete"
 msgstr "_Dileu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198
 msgid "Delete the selected bookmark or topic"
 msgstr "Dileu'r llyfrnod neu'r pwnc dewisedig"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:191
+#. Add popup menu actions that are specific to the bookmark widgets
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-ui.c:297
 msgid "_Properties"
 msgstr "_Priodweddau"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Gweld neu newid priodweddau'r llyfrnod dewisedig"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:194
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "_Import Bookmarks..."
 msgstr "_Mewnforio Llyfrnodau..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Mewnforio llyfrnodau o borwr arall neu o ffeil llyfrnodau"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:197
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
 msgid "_Export Bookmarks..."
 msgstr "_Allforio Llyfrnodau..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:207
 msgid "Export bookmarks to a file"
 msgstr "Allforio llyfrnodau o ffeil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
-#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:154
+#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:153
 msgid "_Close"
 msgstr "_Cau"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
+#: ../src/bookmarks/ephy-bookmarks-editor.c:210
 msgid "Close the bookmarks window"
 msgstr "Cau'r ffenestr llyfrnodau"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
-#: ../src/ephy-history-window.c:187 ../src/ephy-window.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
+#: ../src/ephy-history-window.c:187 ../src/ephy-window.c:165
 msgid "Cu_t"
 msgstr "_Torri"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:206
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:215
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:166
 msgid "Cut the selection"
 msgstr "Torri'r dewisiad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1253
-#: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:721
-#: ../src/ephy-window.c:169
+#: ../src/bookmarks/ephy-bookmarks-editor.c:217
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1387
+#: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
+#: ../src/ephy-window.c:168
 msgid "_Copy"
 msgstr "_Copïo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:218
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:169
 msgid "Copy the selection"
 msgstr "Copïo'r dewisiad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:220
+#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:171
 msgid "_Paste"
 msgstr "_Gludo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/bookmarks/ephy-bookmarks-editor.c:221
 #: ../src/ephy-history-window.c:194
 msgid "Paste the clipboard"
 msgstr "Gludo'r clipfwrdd"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:214
-#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:175
+#: ../src/bookmarks/ephy-bookmarks-editor.c:223
+#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:174
 msgid "Select _All"
 msgstr "Dewis _Popeth"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:215
+#: ../src/bookmarks/ephy-bookmarks-editor.c:224
 msgid "Select all bookmarks or text"
 msgstr "Dewis pob llyfrnod neu destun"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:219
-#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:273
+#: ../src/bookmarks/ephy-bookmarks-editor.c:228
+#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:265
 msgid "_Contents"
 msgstr "_Cynnwys"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:220
+#: ../src/bookmarks/ephy-bookmarks-editor.c:229
 msgid "Display bookmarks help"
 msgstr "Dangos cymorth llyfrnodau"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:222
-#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:276
+#: ../src/bookmarks/ephy-bookmarks-editor.c:231
+#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:268
 msgid "_About"
 msgstr "_Ynghylch"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:223
-#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:277
+#: ../src/bookmarks/ephy-bookmarks-editor.c:232
+#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:269
 msgid "Display credits for the web browser creators"
 msgstr "Dangos y rhestr clod ar gyfer crewyr y porwr gwe"
 
-#. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:231
-msgid "_Show in Bookmarks Bar"
-msgstr "_Dangos yn y Bar Llyfrnodau"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:237
+msgid "_Show on Toolbar"
+msgstr "_Dangos ar y Bar Offer"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:232
-msgid "Show the selected bookmark or topic in the bookmarks bar"
-msgstr "Dangos y llyfrnod neu'r pwnc dewisedig yn y bar llyfrnodau"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:238
+msgid "Show the selected bookmark on a toolbar"
+msgstr "Dangos ar far offer y llyfrnod a ddewiswyd"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:246
+#: ../src/bookmarks/ephy-bookmarks-editor.c:251
 #: ../src/ephy-history-window.c:222
 msgid "_Title"
 msgstr "_Teitl"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:247
+#: ../src/bookmarks/ephy-bookmarks-editor.c:252
 #: ../src/ephy-history-window.c:223
 msgid "Show only the title column"
 msgstr "Dangos y golofn deitl yn unig"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:248
+#: ../src/bookmarks/ephy-bookmarks-editor.c:253
 #: ../src/ephy-history-window.c:226
 msgid "T_itle and Address"
 msgstr "Te_itl a Chyfeiriad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:249
+#: ../src/bookmarks/ephy-bookmarks-editor.c:254
 #: ../src/ephy-history-window.c:227
 msgid "Show both the title and address columns"
 msgstr "Dangos y ddwy golofn, teitl a chyfeiriad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:291
-#: ../src/bookmarks/ephy-topics-selector.c:319
+#: ../src/bookmarks/ephy-bookmarks-editor.c:295
 msgid "Type a topic"
 msgstr "Teipiwch bwnc"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:468
+#: ../src/bookmarks/ephy-bookmarks-editor.c:413
 #, c-format
-msgid "Delete topic \"%s\"?"
-msgstr "Dileu'r pwnc \"%s\"?"
+msgid "Delete topic “%s”?"
+msgstr "Dileu'r pwnc “%s”?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:471
+#: ../src/bookmarks/ephy-bookmarks-editor.c:416
 msgid "Delete this topic?"
 msgstr "Dileu'r pwnc hwn?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:473
+#: ../src/bookmarks/ephy-bookmarks-editor.c:418
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -2521,117 +2676,110 @@ msgstr ""
 "bai eu bod nhw'n perthyn i bynciau eraill hefyd. Fydd y llyfrnodau ddim yn "
 "cael eu dileu."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:476
+#: ../src/bookmarks/ephy-bookmarks-editor.c:421
 msgid "_Delete Topic"
 msgstr "_Dileu Pwnc"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:582
+#. FIXME: proper i18n after freeze
+#: ../src/bookmarks/ephy-bookmarks-editor.c:642
+#: ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:586
-#: ../src/bookmarks/ephy-bookmarks-editor.c:590
+#: ../src/bookmarks/ephy-bookmarks-editor.c:651
+#: ../src/bookmarks/ephy-bookmarks-editor.c:655
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:595
+#: ../src/bookmarks/ephy-bookmarks-editor.c:660
 #, c-format
-msgid "Mozilla \"%s\" profile"
-msgstr "Proffil Mozilla \"%s\""
+msgid "Mozilla “%s” profile"
+msgstr "Proffil “%s” Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:599
+#: ../src/bookmarks/ephy-bookmarks-editor.c:664
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:603
+#: ../src/bookmarks/ephy-bookmarks-editor.c:668
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:632
+#: ../src/bookmarks/ephy-bookmarks-editor.c:697
 msgid "Import failed"
 msgstr "Methwyd mewnforio"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:634
+#: ../src/bookmarks/ephy-bookmarks-editor.c:699
 msgid "Import Failed"
 msgstr "Methwyd Mewnforio"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:637
+#: ../src/bookmarks/ephy-bookmarks-editor.c:702
 #, c-format
 msgid ""
-"The bookmarks from \"%s\" could not be imported because the file is "
-"corrupted or of an unsupported type."
+"The bookmarks from “%s” could not be imported because the file is corrupted "
+"or of an unsupported type."
 msgstr ""
-"Methwyd mewnforio'r llyfrnodau o \"%s\" oherwydd mae'r ffeil yn llygredig "
-"neu o fath ni chynhelir."
+"Methwyd mewnforio'r llyfrnodau o “%s” am fod y ffeil yn llygredig neu o fath "
+"na chynhelir."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:700
+#: ../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "Import bookmarks from file"
 msgstr "Mewnforio llyfrnodau o ffeil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:707
+#: ../src/bookmarks/ephy-bookmarks-editor.c:772
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Llyfrnodau Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:711
+#: ../src/bookmarks/ephy-bookmarks-editor.c:776
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Llyfrnodau Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:715
+#: ../src/bookmarks/ephy-bookmarks-editor.c:780
 msgid "Epiphany bookmarks"
 msgstr "Llyfrnodau Epiphany"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:749
+#: ../src/bookmarks/ephy-bookmarks-editor.c:903
 msgid "Export Bookmarks"
 msgstr "Allforio Llyfrnodau"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:762
+#: ../src/bookmarks/ephy-bookmarks-editor.c:918
 msgid "File format:"
 msgstr "Ffurf ffeil:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:765
-msgid "Epiphany (RDF)"
-msgstr "Epiphany (RDF)"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:766
-msgid "Mozilla (HTML)"
-msgstr "Mozilla (HTML)"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:837
+#: ../src/bookmarks/ephy-bookmarks-editor.c:961
 msgid "Import Bookmarks"
 msgstr "Mewnforio Llyfrnodau"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:843
+#: ../src/bookmarks/ephy-bookmarks-editor.c:967
 msgid "I_mport"
 msgstr "_Mewnforio"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:857
+#: ../src/bookmarks/ephy-bookmarks-editor.c:981
 msgid "Import bookmarks from:"
 msgstr "Mewnforio llyfrnodau o:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1249
-#: ../src/ephy-history-window.c:717
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1383
+#: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "_Copïo'r Cyfeiriad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1497
-#: ../src/ephy-history-window.c:1033
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1624
+#: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Chwilio:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1696
-#: ../src/bookmarks/ephy-topics-selector.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1821
 msgid "Topics"
 msgstr "Pynciau"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1766
-#: ../src/ephy-history-window.c:1316
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1891
+#: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Teitl"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1772
-#: ../src/ephy-history-window.c:1322
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1897
+#: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Cyfeiriadau"
 
@@ -2639,116 +2787,102 @@ msgstr "Cyfeiriadau"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: ../src/bookmarks/ephy-bookmarks.c:96
+#: ../src/bookmarks/ephy-bookmarks.c:95
 msgid "Search the web"
 msgstr "Chwilio'r we"
 
-#: ../src/bookmarks/ephy-bookmarks.c:96
+#: ../src/bookmarks/ephy-bookmarks.c:95
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?hl=cy&q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../src/bookmarks/ephy-bookmarks.c:102
+#: ../src/bookmarks/ephy-bookmarks.c:100
 msgid "Entertainment"
 msgstr "Adloniant"
 
-#: ../src/bookmarks/ephy-bookmarks.c:103
+#: ../src/bookmarks/ephy-bookmarks.c:101
 msgid "News"
 msgstr "Newyddion"
 
-#: ../src/bookmarks/ephy-bookmarks.c:104
+#: ../src/bookmarks/ephy-bookmarks.c:102
 msgid "Shopping"
 msgstr "Siopa"
 
-#: ../src/bookmarks/ephy-bookmarks.c:105
+#: ../src/bookmarks/ephy-bookmarks.c:103
 msgid "Sports"
 msgstr "Chwaraeon"
 
-#: ../src/bookmarks/ephy-bookmarks.c:106
+#: ../src/bookmarks/ephy-bookmarks.c:104
 msgid "Travel"
 msgstr "Teithio"
 
-#: ../src/bookmarks/ephy-bookmarks.c:107
+#: ../src/bookmarks/ephy-bookmarks.c:105
 msgid "Work"
 msgstr "Gwaith"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:585
+#: ../src/bookmarks/ephy-bookmarks.c:476
 #, c-format
-msgid "Update bookmark \"%s\"?"
-msgstr "Diweddaru'r llyfrnod \"%s\"?"
+msgid "Update bookmark “%s”?"
+msgstr "Diweddaru'r llyfrnod “%s”?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:590
+#: ../src/bookmarks/ephy-bookmarks.c:481
 #, c-format
-msgid "The bookmarked page has moved to \"%s\"."
-msgstr "Mae tudalen y llyfrnod wedi symud i \"%s\"."
+msgid "The bookmarked page has moved to “%s”."
+msgstr "Mae tudalen y llyfrnod wedi symud i “%s”."
 
-#: ../src/bookmarks/ephy-bookmarks.c:594
+#: ../src/bookmarks/ephy-bookmarks.c:485
 msgid "_Don't Update"
 msgstr "_Peidio Diweddaru"
 
-#: ../src/bookmarks/ephy-bookmarks.c:596
+#: ../src/bookmarks/ephy-bookmarks.c:487
 msgid "_Update"
 msgstr "_Diweddaru"
 
-#: ../src/bookmarks/ephy-bookmarks.c:599
+#: ../src/bookmarks/ephy-bookmarks.c:490
 msgid "Update Bookmark?"
 msgstr "Diweddaru Llyfrnod?"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:979
-msgid "bookmarks|All"
-msgstr "Pob Un"
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
+msgid "Quick Bookmark"
+msgstr "Llyfrnod Cyflym"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1015
-msgid "bookmarks|Most Visited"
-msgstr "Ymwelir Amlaf"
+#: ../src/bookmarks/ephy-bookmarks-ui.c:298
+msgid "Show properties for this bookmark"
+msgstr "Dangos priodweddau'r llyfrnod hwn"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. Translators: this topic contains the not categorized bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1034
-msgid "bookmarks|Not Categorized"
-msgstr "Heb eu Trefnu"
+#: ../src/bookmarks/ephy-bookmarks-ui.c:310
+msgid "Open this bookmark in a new tab"
+msgstr "Agor y llyfrnod yma mewn tab newydd"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. Translators: this is an automatic topic containing local websites bookmarks
-#. * autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1058
-msgid "bookmarks|Local Sites"
-msgstr "Safleoedd Lleol"
+#: ../src/bookmarks/ephy-bookmarks-ui.c:322
+msgid "Open this bookmark in a new window"
+msgstr "Agor y llyfrnod yma mewn ffenestr newydd"
 
-#: ../src/bookmarks/ephy-new-bookmark.c:275
-msgid "Add Bookmark"
-msgstr "Ychwanegu Llyfrnod"
+#. FIXME !!!!
+#: ../src/bookmarks/ephy-open-tabs-action.c:77
+msgid "Open in New _Tabs"
+msgstr "Agor mewn _Tabiau Newydd"
 
-#: ../src/bookmarks/ephy-new-bookmark.c:312
+#: ../src/bookmarks/ephy-open-tabs-action.c:78
+msgid "Open the bookmarks in this topic in new tabs"
+msgstr "Agor y llyfrnodau o fewn y testun hwn mewn tabiau newydd"
+
+#: ../src/bookmarks/ephy-related-action.c:176
+msgid "Related"
+msgstr "Perthynol"
+
+#: ../src/bookmarks/ephy-topic-factory-action.c:322
+msgid "Quick Topic"
+msgstr "Pwnc Cyflym"
+
+#: ../src/bookmarks/ephy-topics-entry.c:359
 #, c-format
-msgid "You already have a bookmark titled \"%s\" for this page."
-msgstr ""
-"Mae llyfrnod â'r teitl \"%s\" yn bodoli ar gyfer y dudalen hon yn barod."
+msgid "Create topic “%s”"
+msgstr "Creu pwnc “%s”"
 
-#: ../src/bookmarks/ephy-new-bookmark.c:324
-msgid "_View Properties"
-msgstr "_Gweld Priodweddau"
-
-#: ../src/bookmarks/ephy-new-bookmark.c:329
-msgid "Duplicated Bookmark"
-msgstr "Llyfrnod Dyblyg"
-
-#. This is the adjective, not the verb
-#: ../src/bookmarks/ephy-topic-action.c:281
-msgid "Empty"
-msgstr "Gwag"
-
-#: ../src/ephy-encoding-dialog.c:310
+#: ../src/ephy-encoding-dialog.c:340
 msgid "Encodings"
 msgstr "Amgodiadau"
 
@@ -2764,32 +2898,44 @@ msgstr "Amgodiadau eraill"
 msgid "_Automatic"
 msgstr "_Awtomatig"
 
-#: ../src/ephy-find-toolbar.c:437
+#: ../src/ephy-find-toolbar.c:128
+msgid "Not found"
+msgstr "Heb ei ganfod"
+
+#: ../src/ephy-find-toolbar.c:131
+msgid "Wrapped"
+msgstr "Wedi amlapio"
+
+#: ../src/ephy-find-toolbar.c:151
+msgid "Find links:"
+msgstr "Canfod cysylltiadau:"
+
+#: ../src/ephy-find-toolbar.c:151
 msgid "Find:"
 msgstr "Canfod:"
 
-#: ../src/ephy-find-toolbar.c:453 ../src/ephy-find-toolbar.c:454
-msgid "Find Next"
-msgstr "Canfod y Nesaf"
-
-#: ../src/ephy-find-toolbar.c:457
-msgid "Find next occurrence of the search string"
-msgstr "Canfod digwyddiad nesaf y llinyn i'w ganfod"
-
-#: ../src/ephy-find-toolbar.c:464 ../src/ephy-find-toolbar.c:465
+#: ../src/ephy-find-toolbar.c:399
 msgid "Find Previous"
 msgstr "Canfod y Blaenorol"
 
-#: ../src/ephy-find-toolbar.c:468
+#: ../src/ephy-find-toolbar.c:402
 msgid "Find previous occurrence of the search string"
 msgstr "Canfod digwyddiad blaenorol y llinyn i'w ganfod"
 
+#: ../src/ephy-find-toolbar.c:409
+msgid "Find Next"
+msgstr "Canfod y Nesaf"
+
+#: ../src/ephy-find-toolbar.c:412
+msgid "Find next occurrence of the search string"
+msgstr "Canfod digwyddiad nesaf y llinyn i'w ganfod"
+
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:278 ../src/ephy-toolbar.c:628
+#: ../src/ephy-fullscreen-popup.c:277 ../src/ephy-toolbar.c:583
 msgid "Leave Fullscreen"
 msgstr "Gadael Sgrin Lawn"
 
-#: ../src/ephy-go-action.c:71 ../src/ephy-toolbar.c:355
+#: ../src/ephy-go-action.c:71 ../src/ephy-toolbar.c:342
 msgid "Go"
 msgstr "Mynd"
 
@@ -2855,17 +3001,17 @@ msgstr "Mi fydd clirio'r hanes pori yn dileu'r cysylltau hanes am byth."
 msgid "Clear History"
 msgstr "Clirio'r Hanes"
 
-#: ../src/ephy-history-window.c:1042
-msgid "Last 30 Minutes"
-msgstr "Y 30 Munud Ddiwethaf"
+#: ../src/ephy-history-window.c:1030
+msgid "Last 30 minutes"
+msgstr "Y 30 munud ddiwethaf"
 
-#: ../src/ephy-history-window.c:1043
+#: ../src/ephy-history-window.c:1031
 msgid "Today"
 msgstr "Heddiw"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1044 ../src/ephy-history-window.c:1047
-#: ../src/ephy-history-window.c:1051
+#: ../src/ephy-history-window.c:1032 ../src/ephy-history-window.c:1035
+#: ../src/ephy-history-window.c:1039
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
@@ -2874,51 +3020,121 @@ msgstr[1] "Y %d ddiwrnod olaf"
 msgstr[2] "Y %d diwrnod olaf"
 msgstr[3] "Yr %d diwrnod olaf"
 
-#: ../src/ephy-history-window.c:1253
+#: ../src/ephy-history-window.c:1241
 msgid "Sites"
 msgstr "Safleoedd"
 
-#: ../src/ephy-main.c:59
-msgid "Open a new tab in an existing window"
+#: ../src/ephy-main.c:78
+msgid "Open a new tab in an existing browser window"
 msgstr "Agor tab newydd mewn ffenestr sy'n bodoli eisoes"
 
-#: ../src/ephy-main.c:62
-msgid "Run in full screen mode"
-msgstr "Rhedeg yn y modd sgrin lawn"
+#: ../src/ephy-main.c:80
+msgid "Open a new browser window"
+msgstr "Agor ffenestr pori newydd"
 
-#: ../src/ephy-main.c:65
-msgid "Load the given session file"
-msgstr "Llwytho'r ffeil sesiynau penodedig"
-
-#: ../src/ephy-main.c:66 ../src/ephy-main.c:72
-msgid "FILE"
-msgstr "FFEIL"
-
-#: ../src/ephy-main.c:68
-msgid "Add a bookmark (don't open any window)"
-msgstr "Ychwanegu llyfrnod (peidio ag agor unrhyw ffenestr)"
-
-#: ../src/ephy-main.c:69
-msgid "URL"
-msgstr "LAU"
-
-#: ../src/ephy-main.c:71
-msgid "Import bookmarks from the given file"
-msgstr "Mewnforio llyfrnodau o'r ffeil yma"
-
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:82
 msgid "Launch the bookmarks editor"
 msgstr "Cychwyn y golygydd llyfrnodau"
 
-#: ../src/ephy-notebook.c:970
+#: ../src/ephy-main.c:84
+msgid "Import bookmarks from the given file"
+msgstr "Mewnforio llyfrnodau o'r ffeil yma"
+
+#: ../src/ephy-main.c:84 ../src/ephy-main.c:86
+msgid "FILE"
+msgstr "FFEIL"
+
+#: ../src/ephy-main.c:86
+msgid "Load the given session file"
+msgstr "Llwytho'r ffeil sesiynau penodedig"
+
+#: ../src/ephy-main.c:88
+msgid "Add a bookmark"
+msgstr "Ychwanegu llyfrnod"
+
+#: ../src/ephy-main.c:88
+msgid "URL"
+msgstr "LAU"
+
+#: ../src/ephy-main.c:90
+msgid "Start a private instance"
+msgstr "Cychwyn enghraifft breifat"
+
+#: ../src/ephy-main.c:92
+msgid "Profile directory to use in the private instance"
+msgstr "Cyfeiriadur proffil i'w ddefnyddio yn yr enghraifft breifat"
+
+#: ../src/ephy-main.c:92
+msgid "DIR"
+msgstr "CYF"
+
+#: ../src/ephy-main.c:417
+msgid "Could not start GNOME Web Browser"
+msgstr "Methu cychwyn Porwr Gwe GNOME"
+
+#: ../src/ephy-main.c:420
+#, c-format
+msgid ""
+"Startup failed because of the following error:\n"
+"%s"
+msgstr ""
+"Methodd y cychwyn o achos y gwall canlynol:\n"
+"%s"
+
+#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:766
+msgid "GNOME Web Browser"
+msgstr "Porwr Gwe GNOME"
+
+#: ../src/ephy-main.c:463
+msgid "GNOME Web Browser options"
+msgstr "Opsiynau Porwr Gwe GNOME"
+
+#: ../src/ephy-notebook.c:1092
 msgid "Close tab"
 msgstr "Cau tab"
 
-#: ../src/ephy-session.c:377
+#: ../src/ephy-session.c:156
+#, c-format
+msgid "Downloads will be aborted and logout proceed in %d second."
+msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
+msgstr[0] ""
+"Bydd y llwytho i lawr yn cael ei ddiddymu ac allgofnodi yn parhau mewn %d "
+"eiliad."
+msgstr[1] ""
+"Bydd y llwytho i lawr yn cael ei ddiddymu ac allgofnodi yn parhau mewn %d "
+"eiliad."
+msgstr[2] ""
+"Bydd y llwytho i lawr yn cael ei ddiddymu ac allgofnodi yn parhau mewn %d "
+"eiliad."
+msgstr[3] ""
+"Bydd y llwytho i lawr yn cael ei ddiddymu ac allgofnodi yn parhau mewn %d "
+"eiliad."
+
+#: ../src/ephy-session.c:272
+msgid "Abort pending downloads?"
+msgstr "Diddymu'r llwythiadau i lawr sydd i ddod?"
+
+#: ../src/ephy-session.c:276
+msgid ""
+"There are still downloads pending. If you log out, they will be aborted and "
+"lost."
+msgstr ""
+"Mae yna lwythiadau i lawr i ddod. Os wnewch chi allgofnodi, fe gaiff y rhain "
+"eu diddymu a'u colli."
+
+#: ../src/ephy-session.c:280
+msgid "_Cancel Logout"
+msgstr "_Diddymu'r Allgofnodi"
+
+#: ../src/ephy-session.c:282
+msgid "_Abort Downloads"
+msgstr "_Diddymu Llwythiadau i Lawr"
+
+#: ../src/ephy-session.c:603
 msgid "Recover previous browser windows and tabs?"
 msgstr "Adfer y ffenestri a'r tabiau?"
 
-#: ../src/ephy-session.c:381
+#: ../src/ephy-session.c:607
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -2926,90 +3142,73 @@ msgstr ""
 "Ymddengys bod Epiphany wedi chwalu neu wedi cael ei ladd y tro diwethaf y "
 "cafodd ei redeg. Gallwch adfer y tabiau a'r ffenestri gafodd eu hagor."
 
-#: ../src/ephy-session.c:385
+#: ../src/ephy-session.c:611
 msgid "_Don't Recover"
 msgstr "_Peidio Adfer"
 
-#: ../src/ephy-session.c:387
+#: ../src/ephy-session.c:613
 msgid "_Recover"
 msgstr "_Adfer"
 
-#: ../src/ephy-session.c:389
+#: ../src/ephy-session.c:615
 msgid "Crash Recovery"
 msgstr "Adfer ar ôl Chwalfa"
 
-#: ../src/ephy-shell.c:218
+#: ../src/ephy-shell.c:201
 msgid "Sidebar extension required"
 msgstr "Mynnir yr estyniad bar ochr"
 
-#: ../src/ephy-shell.c:220
+#: ../src/ephy-shell.c:203
 msgid "Sidebar Extension Required"
 msgstr "Mynnir yr Estyniad Bar Ochr"
 
-#: ../src/ephy-shell.c:224
+#: ../src/ephy-shell.c:207
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr ""
 "Mae'r cyswllt a glicioch yn mynnu fod yr estyniad bar ochr wedi ei sefydlu."
 
-#: ../src/ephy-shell.c:455
-msgid ""
-"Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
-"use bonobo-activation-sysconf to configure the search path for bonobo server "
-"files."
-msgstr ""
-"Methodd Bonobo ganfod y ffeil GNOME_Epiphany_Automation.server. Medrwch "
-"ddefnyddio bonobo-activation-sysconf er mwyn gosod y llwybr i chwilio ar "
-"gyfer ffeiliau gweinydd bonobo."
+#. Translators: this is displayed in the statusbar; choose a short word
+#. * or even an abbreviation.
+#.
+#: ../src/ephy-statusbar.c:114
+msgid "Caret"
+msgstr "Caret"
 
-#: ../src/ephy-shell.c:462
-msgid ""
-"Epiphany can't be used now, due to an unexpected error from Bonobo when "
-"attempting to register the automation server"
-msgstr ""
-"Ni fedrir defnyddio Epiphany yn awr, oherwydd gwall annisgwyl oddi wrth "
-"Bonobo wrth geisio cychwyn y gweinydd awtomeiddio"
+#. Translators: this is the tooltip on the "Caret" icon
+#. * in the statusbar.
+#.
+#: ../src/ephy-statusbar.c:122
+msgid "In keyboard selection mode, press F7 to exit"
+msgstr "Yn y modd dewis allweddell, gwasgwch F7 i orffen"
 
-#: ../src/ephy-shell.c:479
-msgid ""
-"Epiphany can't be used now, due to an unexpected error from Bonobo when "
-"attempting to locate the automation object."
-msgstr ""
-"Ni fedrir defnyddio Epiphany yn awr, oherwydd gwall annisgwyl yn Bonobo wrth "
-"geisio canfod y gwrthrych awtomeiddio."
-
-#: ../src/ephy-tab.c:483 ../src/ephy-tab.c:2234
+#: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2269 ../src/ephy-tab.c:2304
 msgid "Blank page"
 msgstr "Tudalen wag"
 
 #. translators: %s here is the address of the web page
-#: ../src/ephy-tab.c:911
+#: ../src/ephy-tab.c:919 ../src/ephy-tab.c:1670
 #, c-format
 msgid "Loading “%s”..."
 msgstr "Llwytho “%s”..."
 
-#: ../src/ephy-tab.c:915
+#: ../src/ephy-tab.c:923
 msgid "Loading..."
 msgstr "Llwytho..."
 
-#: ../src/ephy-tab.c:1617
+#: ../src/ephy-tab.c:1654
 #, c-format
-msgid "Redirecting to %s..."
-msgstr "Yn ailgyfeirio i %s..."
+msgid "Redirecting to “%s”..."
+msgstr "Yn ailgyfeirio at “%s”..."
 
-#: ../src/ephy-tab.c:1621
+#: ../src/ephy-tab.c:1658
 #, c-format
-msgid "Transferring data from %s..."
-msgstr "Yn trosglwyddo data o %s..."
+msgid "Transferring data from “%s”..."
+msgstr "Yn trosglwyddo data o “%s”..."
 
-#: ../src/ephy-tab.c:1625
+#: ../src/ephy-tab.c:1662
 #, c-format
-msgid "Waiting for authorization from %s..."
-msgstr "Yn aros am awdurdod o %s..."
-
-#: ../src/ephy-tab.c:1633
-#, c-format
-msgid "Loading %s..."
-msgstr "Yn llwytho %s..."
+msgid "Waiting for authorization from “%s”..."
+msgstr "Yn aros am awdurdod o “%s”..."
 
 #: ../src/ephy-tabs-menu.c:148
 msgid "Switch to this tab"
@@ -3026,588 +3225,590 @@ msgid "Toolbar Editor"
 msgstr "Golygydd Bar Offer"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:219
+#: ../src/ephy-toolbar-editor.c:220
 msgid "Toolbar _button labels:"
 msgstr "_Labeli botymau'r bar offer:"
 
-#: ../src/ephy-toolbar-editor.c:287
+#: ../src/ephy-toolbar-editor.c:288
 msgid "_Add a New Toolbar"
 msgstr "_Ychwanegu Bar Offer Newydd"
 
-#: ../src/ephy-toolbar.c:265
-msgid "Back"
-msgstr "Nôl"
+#: ../src/ephy-toolbar.c:251
+msgid "_Back"
+msgstr "_Nôl"
 
-#: ../src/ephy-toolbar.c:267
-msgid "Go back"
-msgstr "Mynd yn ôl"
+#: ../src/ephy-toolbar.c:253
+msgid "Go to the previous visited page"
+msgstr "Mynd i'r dudalen flaenorol"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:271
+#: ../src/ephy-toolbar.c:257
 msgid "Back history"
 msgstr "Rhestr o'r safleoedd cyn hwn"
 
-#: ../src/ephy-toolbar.c:284
-msgid "Forward"
-msgstr "Ymlaen"
+#: ../src/ephy-toolbar.c:271
+msgid "_Forward"
+msgstr "_Ymlaen"
 
-#: ../src/ephy-toolbar.c:286
-msgid "Go forward"
-msgstr "Mynd ymlaen"
+#: ../src/ephy-toolbar.c:273
+msgid "Go to the next visited page"
+msgstr "Mynd i'r dudalen nesaf"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:290
+#: ../src/ephy-toolbar.c:277
 msgid "Forward history"
 msgstr "Rhestr o'r safleoedd yn dilyn hwn"
 
-#: ../src/ephy-toolbar.c:302
-msgid "Up"
-msgstr "I Fyny"
+#: ../src/ephy-toolbar.c:290
+msgid "_Up"
+msgstr "I _Fyny"
 
-#: ../src/ephy-toolbar.c:304 ../src/ephy-window.c:244
+#: ../src/ephy-toolbar.c:292
 msgid "Go up one level"
 msgstr "Mynd i fyny un lefel"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:308
+#: ../src/ephy-toolbar.c:296
 msgid "List of upper levels"
 msgstr "Rhestr o lefelau uwch"
 
-#: ../src/ephy-toolbar.c:327
+#: ../src/ephy-toolbar.c:314
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "Rhowch gyfeiriad gwe i'w agor, neu gymal i'w chwilio amdano"
 
-#: ../src/ephy-toolbar.c:343
+#: ../src/ephy-toolbar.c:330
 msgid "Zoom"
 msgstr "Chwyddo"
 
-#: ../src/ephy-toolbar.c:345
+#: ../src/ephy-toolbar.c:332
 msgid "Adjust the text size"
 msgstr "Addasu maint y testun"
 
-#: ../src/ephy-toolbar.c:357
+#: ../src/ephy-toolbar.c:344
 msgid "Go to the address entered in the address entry"
 msgstr "Mynd i'r cyfeiriad a roddwyd yn y maes cyfeiriad"
 
-#: ../src/ephy-toolbar.c:366
+#: ../src/ephy-toolbar.c:353
 msgid "_Home"
 msgstr "_Gartref"
 
-#: ../src/ephy-toolbar.c:368
+#: ../src/ephy-toolbar.c:355
 msgid "Go to the home page"
 msgstr "Mynd i'r dudalen gartref"
 
-#: ../src/ephy-window.c:117
+#: ../src/ephy-window.c:118
 msgid "_Bookmarks"
 msgstr "_Llyfrnodau"
 
-#: ../src/ephy-window.c:118
+#: ../src/ephy-window.c:119
 msgid "_Go"
 msgstr "_Mynd"
 
-#: ../src/ephy-window.c:119
+#: ../src/ephy-window.c:120
 msgid "T_ools"
 msgstr "_Offer"
 
-#: ../src/ephy-window.c:120
+#: ../src/ephy-window.c:121
 msgid "_Tabs"
 msgstr "_Tabiau"
 
+#: ../src/ephy-window.c:123
+msgid "_Toolbars"
+msgstr "_Barrau Offer"
+
 #. File menu
-#: ../src/ephy-window.c:127
+#: ../src/ephy-window.c:129
 msgid "_New Window"
 msgstr "Ffenestr _Newydd"
 
-#: ../src/ephy-window.c:128
+#: ../src/ephy-window.c:130
 msgid "Open a new window"
 msgstr "Agor ffenestr newydd"
 
-#: ../src/ephy-window.c:130
+#: ../src/ephy-window.c:132
 msgid "New _Tab"
 msgstr "_Tab Newydd"
 
-#: ../src/ephy-window.c:131
+#: ../src/ephy-window.c:133
 msgid "Open a new tab"
 msgstr "Agor tab newydd"
 
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:135
 msgid "_Open..."
 msgstr "_Agor..."
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:136
 msgid "Open a file"
 msgstr "Agor ffeil"
 
-#: ../src/ephy-window.c:136 ../src/ephy-window.c:139
+#: ../src/ephy-window.c:138
 msgid "Save _As..."
 msgstr "Cadw _Fel..."
 
-#: ../src/ephy-window.c:137 ../src/ephy-window.c:140
+#: ../src/ephy-window.c:139
 msgid "Save the current page"
 msgstr "Cadw'r dudalen gyfredol"
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:141
 msgid "Print Set_up..."
 msgstr "_Gosodiadau Argraffu..."
 
-#: ../src/ephy-window.c:143
+#: ../src/ephy-window.c:142
 msgid "Setup the page settings for printing"
 msgstr "Gosod yr opsiynau tudalen ar gyfer argraffu"
 
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:144
 msgid "Print Pre_view"
 msgstr "_Rhagolwg Argraffu"
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:145
 msgid "Print preview"
 msgstr "Rhagolwg argraffu"
 
-#: ../src/ephy-window.c:148
+#: ../src/ephy-window.c:147
 msgid "_Print..."
 msgstr "_Argraffu..."
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:148
 msgid "Print the current page"
 msgstr "Argraffu'r dudalen gyfredol"
 
-#: ../src/ephy-window.c:151
-msgid "S_end To..."
-msgstr "_Anfon I..."
+#: ../src/ephy-window.c:150
+msgid "S_end Link by Email..."
+msgstr "_Anfon Cyswllt drwy E-bost..."
 
-#: ../src/ephy-window.c:152
+#: ../src/ephy-window.c:151
 msgid "Send a link of the current page"
 msgstr "Anfon cyswllt o'r dudalen gyfredol"
 
-#: ../src/ephy-window.c:155
+#: ../src/ephy-window.c:154
 msgid "Close this tab"
 msgstr "Cau'r tab hwn"
 
 #. Edit menu
-#: ../src/ephy-window.c:160
+#: ../src/ephy-window.c:159
 msgid "_Undo"
 msgstr "_Dadwneud"
 
-#: ../src/ephy-window.c:161
+#: ../src/ephy-window.c:160
 msgid "Undo the last action"
 msgstr "Dadwneud y weithred ddiweddaraf"
 
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:162
 msgid "Re_do"
 msgstr "_Ail-wneud"
 
-#: ../src/ephy-window.c:164
+#: ../src/ephy-window.c:163
 msgid "Redo the last undone action"
 msgstr "Ail-wneud y weithred olaf gafodd ei ddadwneud"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:172
 msgid "Paste clipboard"
 msgstr "Gludo'r clipfwrdd"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:175
 msgid "Select the entire page"
 msgstr "Dewis y dudalen gyfan"
 
-#: ../src/ephy-window.c:178
+#: ../src/ephy-window.c:177
 msgid "_Find..."
 msgstr "_Canfod..."
 
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:178
 msgid "Find a word or phrase in the page"
 msgstr "Canfod gair neu frawddeg yn y dudalen"
 
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:180
 msgid "Find Ne_xt"
 msgstr "Canfod y _Nesaf"
 
-#: ../src/ephy-window.c:182
+#: ../src/ephy-window.c:181
 msgid "Find next occurrence of the word or phrase"
 msgstr "Canfod digwyddiad nesaf y gair neu frawddeg"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:183
 msgid "Find Pre_vious"
 msgstr "Canfod y _Blaenorol"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:184
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Canfod digwyddiad blaenorol y gair neu frawddeg"
 
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:186
 msgid "P_ersonal Data"
 msgstr "Data P_ersonol"
 
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:187
 msgid "View and remove cookies and passwords"
 msgstr "Gwylio a gwaredu bisgedi a chyfrineiriau"
 
 #: ../src/ephy-window.c:190
-msgid "T_oolbars"
-msgstr "Barrau _Offer"
+msgid "Cert_ificates"
+msgstr "_Tystysgrifau"
 
 #: ../src/ephy-window.c:191
-msgid "Customize toolbars"
-msgstr "Addasu barrau offer"
+msgid "Manage Certificates"
+msgstr "Rheoli Tystysgrifau"
 
-#: ../src/ephy-window.c:193
+#: ../src/ephy-window.c:194
 msgid "P_references"
 msgstr "_Hoffterau"
 
-#: ../src/ephy-window.c:194
+#: ../src/ephy-window.c:195
 msgid "Configure the web browser"
 msgstr "Cyflunio'r porwr gwe"
 
 #. View menu
-#: ../src/ephy-window.c:199 ../src/ephy-window.c:202
+#: ../src/ephy-window.c:200
+msgid "_Customize Toolbars..."
+msgstr "_Addasu Barrau Offer..."
+
+#: ../src/ephy-window.c:201
+msgid "Customize toolbars"
+msgstr "Addasu barrau offer"
+
+#: ../src/ephy-window.c:203 ../src/ephy-window.c:206
 msgid "_Stop"
 msgstr "_Atal"
 
-#: ../src/ephy-window.c:200
+#: ../src/ephy-window.c:204
 msgid "Stop current data transfer"
 msgstr "Atal y llwythiad data cyfredol"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:208
 msgid "_Reload"
 msgstr "_Ail-lwytho"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:209
 msgid "Display the latest content of the current page"
 msgstr "Dangos cynnwys diweddaraf y dudalen gyfredol"
 
-#: ../src/ephy-window.c:210
-msgid "Zoom _In"
-msgstr "_Chwyddo"
-
 #: ../src/ephy-window.c:211
+msgid "_Larger Text"
+msgstr "Testun _Mwy"
+
+#: ../src/ephy-window.c:212
 msgid "Increase the text size"
 msgstr "Cynyddu maint y testun"
 
-#: ../src/ephy-window.c:213
-msgid "Zoom _Out"
-msgstr "Cre_bachu"
-
 #: ../src/ephy-window.c:214
+msgid "S_maller Text"
+msgstr "Testun _Llai"
+
+#: ../src/ephy-window.c:215
 msgid "Decrease the text size"
 msgstr "Lleihau maint y testun"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:217
 msgid "_Normal Size"
 msgstr "Maint _Arferol"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:218
 msgid "Use the normal text size"
 msgstr "Defnyddio'r maint testun arferol"
 
-#: ../src/ephy-window.c:219
+#: ../src/ephy-window.c:220
 msgid "Text _Encoding"
 msgstr "_Amgodiad Testun"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:221
 msgid "Change the text encoding"
 msgstr "Newid amgodiad y testun"
 
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:223
 msgid "_Page Source"
 msgstr "Ffynhonnell y _Dudalen"
 
-#: ../src/ephy-window.c:223
+#: ../src/ephy-window.c:224
 msgid "View the source code of the page"
 msgstr "Gweld cod ffynhonnell y dudalen"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:229
 msgid "_Add Bookmark..."
 msgstr "_Ychwanegu Llyfrnod..."
 
-#: ../src/ephy-window.c:229 ../src/ephy-window.c:317
+#: ../src/ephy-window.c:230 ../src/ephy-window.c:304
 msgid "Add a bookmark for the current page"
 msgstr "Ychwanegu llyfrnod ar gyfer y dudalen gyfredol"
 
-#: ../src/ephy-window.c:231
+#: ../src/ephy-window.c:232
 msgid "_Edit Bookmarks"
 msgstr "_Golygu Llyfrnodau"
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:233
 msgid "Open the bookmarks window"
 msgstr "Agor y ffenestr llyfrnodau"
 
 #. Go menu
-#: ../src/ephy-window.c:237
-msgid "_Back"
-msgstr "_Nôl"
-
 #: ../src/ephy-window.c:238
-msgid "Go to the previous visited page"
-msgstr "Mynd i'r dudalen flaenorol"
-
-#: ../src/ephy-window.c:240
-msgid "_Forward"
-msgstr "_Ymlaen"
-
-#: ../src/ephy-window.c:241
-msgid "Go to the next visited page"
-msgstr "Mynd i'r dudalen nesaf"
-
-#: ../src/ephy-window.c:243
-msgid "_Up"
-msgstr "I _Fyny"
-
-#: ../src/ephy-window.c:246
 msgid "_Location..."
 msgstr "_Lleoliad..."
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:239
 msgid "Go to a specified location"
 msgstr "Mynd i leoliad penodol"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:241
 msgid "H_istory"
 msgstr "_Hanes"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:242
 msgid "Open the history window"
 msgstr "Agor y ffenestr hanes"
 
 #. Tabs menu
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:247
 msgid "_Previous Tab"
 msgstr "Tab _Blaenorol"
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:248
 msgid "Activate previous tab"
 msgstr "Gweithredu'r tab blaenorol"
 
-#: ../src/ephy-window.c:258
+#: ../src/ephy-window.c:250
 msgid "_Next Tab"
 msgstr "Tab _Nesaf"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:251
 msgid "Activate next tab"
 msgstr "Gweithredu'r tab nesaf"
 
-#: ../src/ephy-window.c:261
+#: ../src/ephy-window.c:253
 msgid "Move Tab _Left"
 msgstr "Symud y Tab i'r _Chwith"
 
-#: ../src/ephy-window.c:262
+#: ../src/ephy-window.c:254
 msgid "Move current tab to left"
 msgstr "Symud y tab cyfredol i'r chwith"
 
-#: ../src/ephy-window.c:264
+#: ../src/ephy-window.c:256
 msgid "Move Tab _Right"
 msgstr "Symud y Tab i'r _Dde"
 
-#: ../src/ephy-window.c:265
+#: ../src/ephy-window.c:257
 msgid "Move current tab to right"
 msgstr "Symud y tab cyfredol i'r dde"
 
-#: ../src/ephy-window.c:267
+#: ../src/ephy-window.c:259
 msgid "_Detach Tab"
 msgstr "_Datglymu'r Tab"
 
-#: ../src/ephy-window.c:268
+#: ../src/ephy-window.c:260
 msgid "Detach current tab"
 msgstr "Datglymu'r tab cyfredol"
 
-#: ../src/ephy-window.c:274
+#: ../src/ephy-window.c:266
 msgid "Display web browser help"
 msgstr "Dangos cymorth y porwr gwe"
 
 #. File Menu
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:277
 msgid "_Work Offline"
 msgstr "Gweithio _All-lein"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:278
 msgid "Switch to offline mode"
 msgstr "Newid i'r modd all-lein"
 
 #. View Menu
-#: ../src/ephy-window.c:291
-msgid "_Toolbar"
-msgstr "_Bar Offer"
+#: ../src/ephy-window.c:283
+msgid "_Hide Toolbars"
+msgstr "_Barrau Offer"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:284
 msgid "Show or hide toolbar"
 msgstr "Dangos neu guddio'r bar offer"
 
-#: ../src/ephy-window.c:294
-msgid "_Bookmarks Bar"
-msgstr "_Bar Llyfrnodau"
-
-#: ../src/ephy-window.c:295
-msgid "Show or hide bookmarks bar"
-msgstr "Dangos neu guddio'r bar llyfrnodau"
-
-#: ../src/ephy-window.c:297
+#: ../src/ephy-window.c:286
 msgid "St_atusbar"
 msgstr "B_ar Cyflwr"
 
-#: ../src/ephy-window.c:298
+#: ../src/ephy-window.c:287
 msgid "Show or hide statusbar"
 msgstr "Dangos neu guddio'r bar cyflwr"
 
-#: ../src/ephy-window.c:300
+#: ../src/ephy-window.c:289
 msgid "_Fullscreen"
 msgstr "_Sgrin Lawn"
 
-#: ../src/ephy-window.c:301
+#: ../src/ephy-window.c:290
 msgid "Browse at full screen"
 msgstr "Pori mewn sgrin lawn"
 
-#: ../src/ephy-window.c:303
+#: ../src/ephy-window.c:292
 msgid "Popup _Windows"
 msgstr "_Naid-Ffenestri"
 
-#: ../src/ephy-window.c:304
+#: ../src/ephy-window.c:293
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Dangos neu guddio naid-ffenestri diofyn o'r safle hwn"
 
-#: ../src/ephy-window.c:306
+#: ../src/ephy-window.c:295
 msgid "Selection Caret"
 msgstr "Caret Dewisiad"
 
 #. Document
-#: ../src/ephy-window.c:314
-msgid "_Save Background As..."
-msgstr "_Cadw'r Cefndir Fel..."
-
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:303
 msgid "Add Boo_kmark..."
 msgstr "_Ychwanegu Llyfrnod..."
 
 #. Framed document
-#: ../src/ephy-window.c:322
-msgid "Show Only This _Frame"
+#: ../src/ephy-window.c:309
+msgid "Show Only _This Frame"
 msgstr "Dangos y _Ffrâm Hon yn Unig"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:310
 msgid "Show only this frame in this window"
 msgstr "Dangos dim ond y ffrâm hon yn y ffenest hon"
 
 #. Links
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:315
 msgid "_Open Link"
 msgstr "_Agor y Cyswllt"
 
-#: ../src/ephy-window.c:329
+#: ../src/ephy-window.c:316
 msgid "Open link in this window"
 msgstr "Agor y cyswllt yn y ffenest hon"
 
-#: ../src/ephy-window.c:331
+#: ../src/ephy-window.c:318
 msgid "Open Link in New _Window"
 msgstr "Agor Cyswllt mewn Ffenest _Newydd"
 
-#: ../src/ephy-window.c:332
+#: ../src/ephy-window.c:319
 msgid "Open link in a new window"
 msgstr "Agor y cyswllt mewn ffenest newydd"
 
-#: ../src/ephy-window.c:334
+#: ../src/ephy-window.c:321
 msgid "Open Link in New _Tab"
 msgstr "Agor Cyswllt mewn _Tab Newydd"
 
-#: ../src/ephy-window.c:335
+#: ../src/ephy-window.c:322
 msgid "Open link in a new tab"
 msgstr "Agor y cyswllt mewn tab newydd"
 
-#: ../src/ephy-window.c:337
+#: ../src/ephy-window.c:324
 msgid "_Download Link"
 msgstr "_Llwytho'r Cyswllt i Lawr"
 
-#: ../src/ephy-window.c:339
+#: ../src/ephy-window.c:326
 msgid "_Save Link As..."
 msgstr "Cadw'r Cyswllt _Fel..."
 
-#: ../src/ephy-window.c:340
+#: ../src/ephy-window.c:327
 msgid "Save link with a different name"
 msgstr "Cadw'r cyswllt gydag enw gwahanol"
 
-#: ../src/ephy-window.c:342
+#: ../src/ephy-window.c:329
 msgid "_Bookmark Link..."
 msgstr "_Creu Llyfrnod ar gyfer y Cyswllt..."
 
-#: ../src/ephy-window.c:344
+#: ../src/ephy-window.c:331
 msgid "_Copy Link Address"
 msgstr "_Copïo Cyfeiriad y Cyswllt"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:350
+#: ../src/ephy-window.c:337
 msgid "_Send Email..."
 msgstr "_Anfon E-bost at..."
 
-#: ../src/ephy-window.c:352
+#: ../src/ephy-window.c:339
 msgid "_Copy Email Address"
 msgstr "_Copïo Cyfeiriad E-bost"
 
 #. Images
-#: ../src/ephy-window.c:357
+#: ../src/ephy-window.c:344
 msgid "Open _Image"
 msgstr "Agor y _Ddelwedd"
 
-#: ../src/ephy-window.c:359
+#: ../src/ephy-window.c:346
 msgid "_Save Image As..."
 msgstr "_Cadw'r Ddelwedd Fel..."
 
-#: ../src/ephy-window.c:361
+#: ../src/ephy-window.c:348
 msgid "_Use Image As Background"
 msgstr "_Defnyddio'r Ddelwedd Fel Cefndir"
 
-#: ../src/ephy-window.c:363
+#: ../src/ephy-window.c:350
 msgid "Copy I_mage Address"
 msgstr "_Copïo Cyfeiriad y Ddelwedd"
 
-#: ../src/ephy-window.c:664
+#: ../src/ephy-window.c:352
+msgid "St_art Animation"
+msgstr "_Cychwyn yr Animeiddiad"
+
+#: ../src/ephy-window.c:354
+msgid "St_op Animation"
+msgstr "_Gorffen yr Animeiddiad"
+
+#: ../src/ephy-window.c:708
 msgid "There are unsubmitted changes to form elements"
 msgstr "Mae yna newidiadau i elfennau'r ffurflen sydd heb eu danfon"
 
-#: ../src/ephy-window.c:668
+#: ../src/ephy-window.c:712
 msgid "If you close the document anyway, you will lose that information."
 msgstr ""
 "Os byddwch yn cau'r ddogfen er gwaetha hyn, fe gollwch y wybodaeth hynny."
 
-#: ../src/ephy-window.c:672
+#: ../src/ephy-window.c:716
 msgid "Close _Document"
 msgstr "_Cau'r Ddogfen"
 
-#: ../src/ephy-window.c:1119 ../src/window-commands.c:357
+#: ../src/ephy-window.c:1284 ../src/window-commands.c:280
 msgid "Open"
 msgstr "Agor"
 
-#: ../src/ephy-window.c:1121 ../src/window-commands.c:383
+#: ../src/ephy-window.c:1286 ../src/window-commands.c:306
 msgid "Save As"
 msgstr "Cadw Fel"
 
-#: ../src/ephy-window.c:1125
+#: ../src/ephy-window.c:1290
 msgid "Bookmark"
 msgstr "Llyfrnod"
 
-#: ../src/ephy-window.c:1309
+#: ../src/ephy-window.c:1292
+msgid "Find"
+msgstr "Canfod"
+
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1305
+msgid "Larger"
+msgstr "Mwy"
+
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1308
+msgid "Smaller"
+msgstr "Llai"
+
+#: ../src/ephy-window.c:1471
 msgid "Insecure"
 msgstr "Anniogel"
 
-#: ../src/ephy-window.c:1314
+#: ../src/ephy-window.c:1476
 msgid "Broken"
 msgstr "Wedi Torri"
 
-#: ../src/ephy-window.c:1322
+#: ../src/ephy-window.c:1489
 msgid "Low"
 msgstr "Isel"
 
-#: ../src/ephy-window.c:1329
+#: ../src/ephy-window.c:1496
 msgid "High"
 msgstr "Uchel"
 
-#: ../src/ephy-window.c:1338
+#: ../src/ephy-window.c:1506
 #, c-format
 msgid "Security level: %s"
 msgstr "Safon Diogelwch: %s"
 
-#: ../src/ephy-window.c:1378
+#: ../src/ephy-window.c:1546
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
@@ -3616,119 +3817,114 @@ msgstr[1] "%d naid-ffenest gudd"
 msgstr[2] "%d naid-ffenest cudd"
 msgstr[3] "%d naid-ffenest cudd"
 
-#: ../src/ephy-window.c:1660
+#: ../src/ephy-window.c:1841
 #, c-format
-msgid "Save background image '%s'"
-msgstr "Cadw'r cefndir '%s'"
+msgid "Open image “%s”"
+msgstr "Agor y ddelwedd “%s”"
 
-#: ../src/ephy-window.c:1674
+#: ../src/ephy-window.c:1846
 #, c-format
-msgid "Open image '%s'"
-msgstr "Agor y ddelwedd '%s'"
+msgid "Use as desktop background “%s”"
+msgstr "Defnyddio “%s” fel cefndir y penbwrdd"
 
-#: ../src/ephy-window.c:1679
+#: ../src/ephy-window.c:1851
 #, c-format
-msgid "Use as desktop background '%s'"
-msgstr "Defnyddio '%s' fel cefndir y penbwrdd"
+msgid "Save image “%s”"
+msgstr "Cadw delwedd “%s”"
 
-#: ../src/ephy-window.c:1684
+#: ../src/ephy-window.c:1856
 #, c-format
-msgid "Save image '%s'"
-msgstr "Cadw delwedd '%s'"
+msgid "Copy image address “%s”"
+msgstr "Copïo'r cyfeiriad delwedd “%s”"
 
-#: ../src/ephy-window.c:1689
+#: ../src/ephy-window.c:1869
 #, c-format
-msgid "Copy image address '%s'"
-msgstr "Copïo'r cyfeiriad delwedd '%s'"
+msgid "Send email to address “%s”"
+msgstr "Anfon e-bost at y cyfeiriad “%s”"
 
-#: ../src/ephy-window.c:1702
+#: ../src/ephy-window.c:1875
 #, c-format
-msgid "Send email to address '%s'"
-msgstr "Anfon e-bost at y cyfeiriad '%s'"
+msgid "Copy email address “%s”"
+msgstr "Copïo cyfeiriad e-bost “%s”"
 
-#: ../src/ephy-window.c:1708
+#: ../src/ephy-window.c:1887
 #, c-format
-msgid "Copy email address '%s'"
-msgstr "Copïo cyfeiriad e-bost '%s'"
+msgid "Save link “%s”"
+msgstr "Cadw'r cyswllt “%s”"
 
-#: ../src/ephy-window.c:1720
+#: ../src/ephy-window.c:1893
 #, c-format
-msgid "Save link '%s'"
-msgstr "Cadw'r cyswllt '%s'"
+msgid "Bookmark link “%s”"
+msgstr "Creu llyfrnod i'r cyswllt “%s”"
 
-#: ../src/ephy-window.c:1726
+#: ../src/ephy-window.c:1899
 #, c-format
-msgid "Bookmark link '%s'"
-msgstr "Creu llyfrnod i'r cyswllt '%s'"
+msgid "Copy link's address “%s”"
+msgstr "Copïo cyfeiriad y cyswllt “%s”"
 
-#: ../src/ephy-window.c:1732
-#, c-format
-msgid "Copy link's address '%s'"
-msgstr "Copïo cyfeiriad y cyswllt '%s'"
-
-#: ../src/pdm-dialog.c:414
-msgid "Domain"
-msgstr "Parth"
-
-#: ../src/pdm-dialog.c:426
-msgid "Name"
-msgstr "Enw"
-
-#: ../src/pdm-dialog.c:658
-msgid "Host"
-msgstr "Gwesteiwr"
-
-#: ../src/pdm-dialog.c:670
-msgid "User Name"
-msgstr "Enw Defnyddiwr"
-
-#: ../src/pdm-dialog.c:902
+#: ../src/pdm-dialog.c:378
 msgid "Cookie Properties"
 msgstr "Priodweddau Bisgedi"
 
-#: ../src/pdm-dialog.c:918
+#: ../src/pdm-dialog.c:395
 msgid "Content:"
 msgstr "Cynnwys:"
 
-#: ../src/pdm-dialog.c:934
+#: ../src/pdm-dialog.c:411
 msgid "Path:"
 msgstr "Llwybr:"
 
-#: ../src/pdm-dialog.c:950
+#: ../src/pdm-dialog.c:427
 msgid "Send for:"
 msgstr "Anfon am:"
 
-#: ../src/pdm-dialog.c:959
+#: ../src/pdm-dialog.c:436
 msgid "Encrypted connections only"
 msgstr "Cysylltiadau wedi'u hamgryptio yn unig"
 
-#: ../src/pdm-dialog.c:959
+#: ../src/pdm-dialog.c:436
 msgid "Any type of connection"
 msgstr "Unrhyw fath o gysylltiad"
 
-#: ../src/pdm-dialog.c:965
+#: ../src/pdm-dialog.c:442
 msgid "Expires:"
 msgstr "Yn Darfod:"
 
-#: ../src/pdm-dialog.c:976
+#: ../src/pdm-dialog.c:453
 msgid "End of current session"
 msgstr "Diwedd y sesiwn gyfredol"
 
-#: ../src/popup-commands.c:239
-msgid "Download Link"
-msgstr "Lawrlwytho'r Cyswllt"
+#: ../src/pdm-dialog.c:589
+msgid "Domain"
+msgstr "Parth"
 
-#: ../src/popup-commands.c:247
+#: ../src/pdm-dialog.c:600
+msgid "Name"
+msgstr "Enw"
+
+#: ../src/pdm-dialog.c:998
+msgid "Host"
+msgstr "Gwesteiwr"
+
+#: ../src/pdm-dialog.c:1010
+msgid "User Name"
+msgstr "Enw Defnyddiwr"
+
+#: ../src/pdm-dialog.c:1022
+msgid "User Password"
+msgstr "Cyfrinair Defnyddiwr"
+
+#: ../src/popup-commands.c:232
+msgid "Download Link"
+msgstr "Llwytho Cyswllt i Lawr"
+
+#: ../src/popup-commands.c:240
 msgid "Save Link As"
 msgstr "Cadw'r Cyswllt Fel"
 
-#: ../src/popup-commands.c:254
+#: ../src/popup-commands.c:247
 msgid "Save Image As"
 msgstr "Cadw'r Ddelwedd Fel"
-
-#: ../src/popup-commands.c:346
-msgid "Save Background As"
-msgstr "Cadw'r Cefndir Fel"
 
 #: ../src/ppview-toolbar.c:89
 msgid "First"
@@ -3770,32 +3966,12 @@ msgstr "Cau"
 msgid "Close print preview"
 msgstr "Cau'r rhagolwg argraffu"
 
-# Dydw i ddim yn sicr fy mod yn deall hyn...
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: the first %s is the language name, and the
-#. * second %s is the locale name. Example:
-#. * "French (France)"
-#.
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:760 ../src/prefs-dialog.c:768
-#, c-format
-msgid "language|%s (%s)"
-msgstr "%s (%s)"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: this refers to a user-define language code
-#. * (one which isn't in our built-in list).
-#.
-#: ../src/prefs-dialog.c:779
-#, c-format
-msgid "language|User defined (%s)"
-msgstr "Hunan-ddewisiad (%s)"
+#: ../src/prefs-dialog.c:412
+msgid "Default"
+msgstr "Rhagosodiad"
 
 # Dydw i ddim yn sicr fy mod yn deall hyn...
-#: ../src/prefs-dialog.c:801
+#: ../src/prefs-dialog.c:1034
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -3804,25 +3980,64 @@ msgstr[1] "Ieithoedd y system (%s)"
 msgstr[2] "Ieithoedd y system (%s)"
 msgstr[3] "Ieithoedd y system (%s)"
 
-#: ../src/prefs-dialog.c:1366
-msgid "Select a directory"
-msgstr "Dewiswch gyfeiriadur"
+#: ../src/prefs-dialog.c:1421
+msgid "Select a Directory"
+msgstr "Dewiswch Gyfeiriadur"
 
-#: ../src/window-commands.c:153
-msgid "Check this out!"
-msgstr "Edrychwch ar hyn!"
-
-#: ../src/window-commands.c:757 ../src/window-commands.c:773
+#: ../src/window-commands.c:714 ../src/window-commands.c:731
 msgid "Contact us at:"
 msgstr "Cysylltwch â ni at:"
 
-#: ../src/window-commands.c:760
+#: ../src/window-commands.c:717
 msgid "Contributors:"
 msgstr "Cyfranwyr:"
 
-#: ../src/window-commands.c:764
+#: ../src/window-commands.c:722
 msgid "Past developers:"
 msgstr "Datblygwyr y gorffennol:"
+
+#: ../src/window-commands.c:732
+msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
+msgstr "<epiphany-list@gnome.org> neu <gnome-doc-list@gnome.org>"
+
+#: ../src/window-commands.c:737
+msgid ""
+"The GNOME Web Browser is free software; you can redistribute it and/or "
+"modify it under the terms of the GNU General Public License as published by "
+"the Free Software Foundation; either version 2 of the License, or (at your "
+"option) any later version."
+msgstr ""
+"Meddalwedd rhydd yw Porwr Gwe GNOME; gallwch ei ailddosbarthu ac/neu ei "
+"newid o dan dermau Trwydded Gyffredinol Gyhoeddus GNU a gyhoeddir gan y Free "
+"Software Foundation; naill ai fersiwn 2 y drwydded, neu (ar eich dewis chi) "
+"unrhyw fersiwn ddiweddarach."
+
+#: ../src/window-commands.c:741
+msgid ""
+"The GNOME Web Browser is distributed in the hope that it will be useful, but "
+"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
+"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details."
+msgstr ""
+"Dosberthir Porwr Gwe GNOME yn y gobaith y bydd yn ddefnyddiol, ond HEB "
+"UNRHYW WARANT; heb hyd yn oed awgrym o warant o FASNACHEIDDRWYDD nag "
+"ADDASRWYDD AR GYFER PWRPAS PENODOL. Gweler Trwydded Gyhoeddus Gyffredinol "
+"GNU am fwy o wybodaeth."
+
+#: ../src/window-commands.c:745
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
+"59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
+msgstr ""
+"Dylech fod wedi derbyn copi o Drwydded Gyhoeddus Gyffredinol GNU gyda'r "
+"rhaglen hon; os nad ydych, ysgrifennwch at: Free Software Foundation, Inc., "
+"59 Temple Place - Suite 330, Boston, MA 02111-1307, USA"
+
+#: ../src/window-commands.c:757
+#, c-format
+msgid "Using “%s” backend"
+msgstr "Defnyddio ochr gefn “%s”"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3832,7 +4047,7 @@ msgstr "Datblygwyr y gorffennol:"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:793
+#: ../src/window-commands.c:781
 msgid "translator-credits"
 msgstr ""
 "Keith Willoughby <keith@flat222.org>\n"
@@ -3840,102 +4055,219 @@ msgstr ""
 "Chris M. Jackson <chris@www.linux.org.uk>\n"
 "Rhys Jones <rhys@sucs.org>"
 
-#~ msgid "Enable Java."
-#~ msgstr "Galluogi Java."
+#: ../src/window-commands.c:784
+msgid "GNOME Web Browser Website"
+msgstr "Safle Porwr Gwe GNOME"
 
-#~ msgid "Enable JavaScript."
-#~ msgstr "Galluogi JavaScript."
+#~ msgid "Hide “%s”"
+#~ msgstr "Llwytho “%s”"
 
-#~ msgid "Filename to print to"
-#~ msgstr "Enw ffeil i argraffu iddo"
+#~ msgid "Properties"
+#~ msgstr "Priodweddau"
 
-#~ msgid "Filename to print to."
-#~ msgstr "Enw ffeil i argraffu iddo."
+#~ msgid "_Show Toolbars"
+#~ msgstr "_Dangos Barrau Offer"
 
-#~ msgid "Match case for find in page."
-#~ msgstr "Cydweddu prif lythrennau/llythrennau bach wrth ganfod yn y dudalen."
-
-#~ msgid "Paper type"
-#~ msgstr "Math papur"
+#~ msgid "Autowrap for find in page"
+#~ msgstr "Amlapio awtomatig ar gyfer canfod yn y dudalen"
 
 #~ msgid ""
-#~ "Paper type. Supported values are \"A4\", \"Letter\", \"Legal\" and "
-#~ "\"Executive\"."
+#~ "For find in page, whether to start again at the beginning after reaching "
+#~ "the end of the page."
 #~ msgstr ""
-#~ "Math papur. Gwerthoedd cynhaledig: \"A4\", \"Letter\", \"Legal\" ac "
-#~ "\"Executive\"."
+#~ "Wrth ganfod yn y dudalen, a ddylid ailgychwyn ar y dechrau ar ôl cyrraedd "
+#~ "diwedd y dudalen."
 
-#~ msgid "Printer name"
-#~ msgstr "Enw'r argraffydd"
+#~ msgid "Match case for find in page"
+#~ msgstr "Cydweddu prif lythrennau/llythrennau bach wrth ganfod yn y dudalen"
 
-#~ msgid "Printer name."
-#~ msgstr "Enw'r argraffydd."
+#~ msgid "C_ase sensitive"
+#~ msgstr "_Priflythrennau o bwys"
 
-#~ msgid "Printing bottom margin"
-#~ msgstr "Yr ymyl gwaelod argraffu"
+#~ msgid "Download Manager"
+#~ msgstr "Trefnydd Llwytho i Lawr"
 
-#~ msgid "Printing bottom margin (in mm)."
-#~ msgstr "Yr ymyl gwaelod argraffu (mewn mm)."
+#~ msgid "Personal Data Manager"
+#~ msgstr "Trefnydd Data Personol"
 
-#~ msgid "Printing left margin"
-#~ msgstr "Yr ymyl chwith argraffu"
+#~ msgid "_Find:"
+#~ msgstr "_Canfod:"
 
-#~ msgid "Printing left margin (in mm)."
-#~ msgstr "Yr ymyl chwith argraffu (mewn mm)."
+#~ msgid "_Next"
+#~ msgstr "_Nesaf"
 
-#~ msgid "Printing right margin"
-#~ msgstr "Yr ymyl dde argraffu"
+#~ msgid "_Previous"
+#~ msgstr "_Blaenorol"
 
-#~ msgid "Printing right margin (in mm)."
-#~ msgstr "Yr ymyl dde argraffu (mewn mm)."
+#~ msgid "_Wrap around"
+#~ msgstr "_Amlapio"
 
-#~ msgid "Printing top margin"
-#~ msgstr "Yr ymyl brig argraffu"
+#~ msgid "<b>Fonts</b>"
+#~ msgstr "<b>Ffontiau</b>"
 
-#~ msgid "Printing top margin (in mm)."
-#~ msgstr "Yr ymyl brig argraffu (mewn mm)."
+#~ msgid "Al_ways use the desktop theme colors"
+#~ msgstr "Defnyddio _lliwiau thema'r penbwrdd bob tro"
 
-#~ msgid "Show bookmarks bar by default."
-#~ msgstr "Dangos y bar llyfrnodau yn rhagosodedig."
+#~ msgid "Always use _these fonts"
+#~ msgstr "Defnyddio'r _ffontiau hyn bob tro"
 
-#~ msgid "Show statusbar by default."
-#~ msgstr "Dangos y bar cyflwr yn rhagosodedig."
+#~ msgid "Fonts and Colors"
+#~ msgstr "Ffontiau a Lliwiau"
 
-#~ msgid "Show toolbars by default."
-#~ msgstr "Dangos y barrau offer yn rhagosodedig."
+#~ msgid "Appearance"
+#~ msgstr "Ymddangosiad"
 
-#~ msgid "The path of the folder where downloads are saved."
-#~ msgstr "Llwybr y plygell lle cedwir lawrlwythiadau."
+#~ msgid "Paper"
+#~ msgstr "Papur"
 
-#~ msgid "Use caret browsing mode."
-#~ msgstr "Defnyddio'r modd pori caret."
+#~ msgid "download status|Unknown"
+#~ msgstr "Anhysbys"
 
-#~ msgid "Whether to print the date in the footer."
-#~ msgstr "A ddylid argraffu'r dyddiad yn y troedyn."
+#~ msgid "download status|Failed"
+#~ msgstr "Wedi methu"
 
-#~ msgid "Whether to print the page address in the header."
-#~ msgstr "A ddylid argraffu cyfeiriad y dudalen yn y pennawd."
+#~ msgid "File Type:|Unknown"
+#~ msgstr "Anhysbys"
 
-#~ msgid "Whether to print the page numbers (x of total) in the footer."
-#~ msgstr "A ddylid argraffu rhifau'r dudalen (x o gyfanswm) yn y troedyn."
+#~ msgid ""
+#~ "This document cannot be viewed in offline mode. Set Epiphany to “online” "
+#~ "and try again."
+#~ msgstr ""
+#~ "Methu gweld y ddogfen hon ym modd all-lein. Gosodwch Epiphany \"ar-lein\" "
+#~ "a cheisio eto."
 
-#~ msgid "Whether to print the page title in the header."
-#~ msgstr "A ddylid argraffu teitl y dudalen yn y pennawd."
+#~ msgid "You may find an old version:|in the Google Cache"
+#~ msgstr "yn storfa copïau cadw Google"
 
-#~ msgid "<b>Margins (in mm)</b>"
-#~ msgstr "<b>Ymylon (mewn mm)</b>"
+#~ msgid "You may find an old version:|in the Internet Archive"
+#~ msgstr "yn yr Internet Archive"
 
-#~ msgid "<b>Orientation</b>"
-#~ msgstr "<b>Cyfeiriadaeth</b>"
+#~ msgid ""
+#~ "You can always see the security status of a page from the padlock icon on "
+#~ "the statusbar."
+#~ msgstr ""
+#~ "Gallwch weld statws diogelwch tudalen bob amser, drwy'r eicon o glo ar y "
+#~ "bar statws."
 
-#~ msgid "<b>Page Range</b>"
-#~ msgstr "<b>Amrediad Tudalennau</b>"
+#~ msgid "File %s is not writable"
+#~ msgstr "Methu ysgrifennu at ffeil %s"
 
-#~ msgid "<b>Print To</b>"
-#~ msgstr "<b>Argraffu I</b>"
+#~ msgid "You do not have permission to overwrite this file."
+#~ msgstr "Does gennych ddim caniatâd i drosysgrifo'r ffeil hon."
 
-#~ msgid "<b>Size</b>"
-#~ msgstr "<b>Maint</b>"
+#~ msgid "File not writable"
+#~ msgstr "Methu ysgrifennu at y ffeil"
 
-#~ msgid "A_4"
-#~ msgstr "A_4"
+#~ msgid "Overwrite \"%s\"?"
+#~ msgstr "Trosysgrifo \"%s\"?"
+
+#~ msgid "_Overwrite"
+#~ msgstr "_Trosysgrifo"
+
+#~ msgid "Close Tab"
+#~ msgstr "Cau Tab"
+
+#~ msgid "Move _Left"
+#~ msgstr "Symud i'r _Chwith"
+
+#~ msgid "Move Ri_ght"
+#~ msgstr "Symud i'r _Dde"
+
+#~ msgid "_Show in bookmarks bar"
+#~ msgstr "Dango_s yn y bar llyfrnodau"
+
+#~ msgid "_Show in Bookmarks Bar"
+#~ msgstr "_Dangos yn y Bar Llyfrnodau"
+
+#~ msgid "bookmarks|All"
+#~ msgstr "Pob Un"
+
+#~ msgid "bookmarks|Most Visited"
+#~ msgstr "Ymwelir Amlaf"
+
+#~ msgid "bookmarks|Not Categorized"
+#~ msgstr "Heb eu Trefnu"
+
+#~ msgid "bookmarks|Local Sites"
+#~ msgstr "Safleoedd Lleol"
+
+#~ msgid "You already have a bookmark titled \"%s\" for this page."
+#~ msgstr ""
+#~ "Mae llyfrnod â'r teitl \"%s\" yn bodoli ar gyfer y dudalen hon yn barod."
+
+#~ msgid "_View Properties"
+#~ msgstr "_Gweld Priodweddau"
+
+#~ msgid "Empty"
+#~ msgstr "Gwag"
+
+#~ msgid "Run in full screen mode"
+#~ msgstr "Rhedeg yn y modd sgrin lawn"
+
+#~ msgid "Add a bookmark (don't open any window)"
+#~ msgstr "Ychwanegu llyfrnod (peidio ag agor unrhyw ffenestr)"
+
+#~ msgid ""
+#~ "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
+#~ "use bonobo-activation-sysconf to configure the search path for bonobo "
+#~ "server files."
+#~ msgstr ""
+#~ "Methodd Bonobo ganfod y ffeil GNOME_Epiphany_Automation.server. Medrwch "
+#~ "ddefnyddio bonobo-activation-sysconf er mwyn gosod y llwybr i chwilio ar "
+#~ "gyfer ffeiliau gweinydd bonobo."
+
+#~ msgid ""
+#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
+#~ "attempting to register the automation server"
+#~ msgstr ""
+#~ "Ni fedrir defnyddio Epiphany yn awr, oherwydd gwall annisgwyl oddi wrth "
+#~ "Bonobo wrth geisio cychwyn y gweinydd awtomeiddio"
+
+#~ msgid ""
+#~ "Epiphany can't be used now, due to an unexpected error from Bonobo when "
+#~ "attempting to locate the automation object."
+#~ msgstr ""
+#~ "Ni fedrir defnyddio Epiphany yn awr, oherwydd gwall annisgwyl yn Bonobo "
+#~ "wrth geisio canfod y gwrthrych awtomeiddio."
+
+#~ msgid "Loading %s..."
+#~ msgstr "Yn llwytho %s..."
+
+#~ msgid "Back"
+#~ msgstr "Nôl"
+
+#~ msgid "Go back"
+#~ msgstr "Mynd yn ôl"
+
+#~ msgid "Forward"
+#~ msgstr "Ymlaen"
+
+#~ msgid "Go forward"
+#~ msgstr "Mynd ymlaen"
+
+#~ msgid "Up"
+#~ msgstr "I Fyny"
+
+#~ msgid "S_end To..."
+#~ msgstr "_Anfon I..."
+
+#~ msgid "T_oolbars"
+#~ msgstr "Barrau _Offer"
+
+#~ msgid "Zoom _In"
+#~ msgstr "_Chwyddo"
+
+#~ msgid "Zoom _Out"
+#~ msgstr "Cre_bachu"
+
+#~ msgid "_Bookmarks Bar"
+#~ msgstr "_Bar Llyfrnodau"
+
+#~ msgid "_Save Background As..."
+#~ msgstr "_Cadw'r Cefndir Fel..."
+
+#~ msgid "Save background image '%s'"
+#~ msgstr "Cadw'r cefndir '%s'"
+
+#~ msgid "Save Background As"
+#~ msgstr "Cadw'r Cefndir Fel"
