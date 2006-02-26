@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 1.9.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-18 12:37+0100\n"
-"PO-Revision-Date: 2006-02-18 12:44+0100\n"
+"POT-Creation-Date: 2006-02-26 13:54+0100\n"
+"PO-Revision-Date: 2006-02-26 13:55+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -827,7 +827,8 @@ msgid_plural "%d downloads"
 msgstr[0] "%d nedlasting"
 msgstr[1] "%d nedlastinger"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:985
+#: ../embed/downloader-view.c:657
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1001
 msgid "File"
 msgstr "Fil"
 
@@ -1594,7 +1595,7 @@ msgid "_Password:"
 msgstr "_Passord:"
 
 #: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:768
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:784
 msgid "All files"
 msgstr "Alle filer"
 
@@ -2015,32 +2016,39 @@ msgstr ""
 "GConf feil:\n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:868
+#. Translaters: This string is for a toggle to display a toolbar.
+#. * The name of the toolbar is automatically computed from the widgets
+#. * on the toolbar, and is placed at the %s. Note the _ before the %s
+#. * which is used to add mnemonics. We know that this is likely to
+#. * produce duplicates, but don't worry about it. If your language
+#. * normally has a mnemonic at the start, please use the _. If not,
+#. * please remove.
+#: ../lib/egg/egg-editable-toolbar.c:902
 #, c-format
-msgid "Hide “%s”"
-msgstr "Skjul «%s»"
+msgid "Show “_%s”"
+msgstr "Vis «_%s»"
 
-#: ../lib/egg/egg-editable-toolbar.c:1304
+#: ../lib/egg/egg-editable-toolbar.c:1362
 msgid "_Move on Toolbar"
 msgstr "_Flytt på verktøylinje"
 
-#: ../lib/egg/egg-editable-toolbar.c:1305
+#: ../lib/egg/egg-editable-toolbar.c:1363
 msgid "Move the selected item on the toolbar"
 msgstr "Flytt valgt oppføring på verktøylinjen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1306
+#: ../lib/egg/egg-editable-toolbar.c:1364
 msgid "_Remove from Toolbar"
 msgstr "Fje_rn verktøylinje"
 
-#: ../lib/egg/egg-editable-toolbar.c:1307
+#: ../lib/egg/egg-editable-toolbar.c:1365
 msgid "Remove the selected item from the toolbar"
 msgstr "Fjern valgt oppføring fra verktøylinjen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1308
-msgid "_Remove Toolbar"
-msgstr "Fje_rn verktøylinje"
+#: ../lib/egg/egg-editable-toolbar.c:1366
+msgid "_Delete Toolbar"
+msgstr "_Fjern verktøylinje"
 
-#: ../lib/egg/egg-editable-toolbar.c:1309
+#: ../lib/egg/egg-editable-toolbar.c:1367
 msgid "Remove the selected toolbar"
 msgstr "Fjern valgt verktøylinje"
 
@@ -2258,25 +2266,25 @@ msgstr "Vestlig"
 msgid "select fonts for|Other Scripts"
 msgstr "Andre"
 
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:56
 msgid "Popup Windows"
 msgstr "Sprettoppvinduer"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1179
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1179
 msgid "History"
 msgstr "Historie"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1741
+#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:915
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1757
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Bokmerker"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#: ../lib/ephy-stock-icons.c:59 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Adressefelt"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:60
 msgid "_Download"
 msgstr "Last ne_d"
 
@@ -2358,44 +2366,48 @@ msgstr "%s:"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:93
-#: ../src/bookmarks/ephy-bookmark-properties.c:619
+#: ../src/bookmarks/ephy-bookmark-properties.c:92
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d _lik"
 msgstr[1] "%d _like"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:266
+#: ../src/bookmarks/ephy-bookmark-properties.c:265
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "Slå _sammen med %d identisk bokmerke"
 msgstr[1] "Slå _sammen med %d identiske bokmerker"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:286
-#: ../src/bookmarks/ephy-bookmark-properties.c:308
+#: ../src/bookmarks/ephy-bookmark-properties.c:285
+#: ../src/bookmarks/ephy-bookmark-properties.c:307
 #, c-format
 msgid "Show “%s”"
 msgstr "Vis «%s»"
 
 # (ugh)
-#: ../src/bookmarks/ephy-bookmark-properties.c:434
+#: ../src/bookmarks/ephy-bookmark-properties.c:433
 #, c-format
 msgid "“%s” Properties"
 msgstr "Egenskaper for «%s»"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:557
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "_Tittel:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:572
+#: ../src/bookmarks/ephy-bookmark-properties.c:567
 msgid "A_ddress:"
 msgstr "A_dresse:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:582
+#: ../src/bookmarks/ephy-bookmark-properties.c:577
 msgid "T_opics:"
 msgstr "Em_ner:"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:598
+msgid "Sho_w all topics"
+msgstr "_Vis alle emner"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:97
 msgid "Mozilla (HTML)"
@@ -2442,8 +2454,8 @@ msgstr "Opprett et nytt emne"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
-#: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1374
+#: ../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2456,8 +2468,8 @@ msgstr "Åpne valgte bokmerker i et nytt vindu"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
-#: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1377
+#: ../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
@@ -2486,7 +2498,9 @@ msgid "Delete the selected bookmark or topic"
 msgstr "Slett valgt bokmerke eller emne"
 
 # (ugh)
+#. Add popup menu actions that are specific to the bookmark widgets
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-ui.c:297
 msgid "_Properties"
 msgstr "Egenska_per"
 
@@ -2531,7 +2545,7 @@ msgid "Cut the selection"
 msgstr "Klipp ut utvalget"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1371
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1387
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:168
 msgid "_Copy"
@@ -2637,38 +2651,40 @@ msgstr ""
 msgid "_Delete Topic"
 msgstr "_Slett emne"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:631
+#. FIXME: proper i18n after freeze
+#: ../src/bookmarks/ephy-bookmarks-editor.c:642
+#: ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:635
-#: ../src/bookmarks/ephy-bookmarks-editor.c:639
+#: ../src/bookmarks/ephy-bookmarks-editor.c:651
+#: ../src/bookmarks/ephy-bookmarks-editor.c:655
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:644
+#: ../src/bookmarks/ephy-bookmarks-editor.c:660
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla «%s»-profil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:648
+#: ../src/bookmarks/ephy-bookmarks-editor.c:664
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:652
+#: ../src/bookmarks/ephy-bookmarks-editor.c:668
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:681
+#: ../src/bookmarks/ephy-bookmarks-editor.c:697
 msgid "Import failed"
 msgstr "Import feilet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:683
+#: ../src/bookmarks/ephy-bookmarks-editor.c:699
 msgid "Import Failed"
 msgstr "Import feilet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:686
+#: ../src/bookmarks/ephy-bookmarks-editor.c:702
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2677,63 +2693,63 @@ msgstr ""
 "Bokmerkene fra «%s» kunne ikke importeres fordi filen er korrupt eller av en "
 "type som ikke er støttet."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:749
+#: ../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "Import bookmarks from file"
 msgstr "Importer bokmerker fra fil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:756
+#: ../src/bookmarks/ephy-bookmarks-editor.c:772
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Bokmerker fra Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:760
+#: ../src/bookmarks/ephy-bookmarks-editor.c:776
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Bokmerker fra Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:764
+#: ../src/bookmarks/ephy-bookmarks-editor.c:780
 msgid "Epiphany bookmarks"
 msgstr "Bokmerker fra Epiphany"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:887
+#: ../src/bookmarks/ephy-bookmarks-editor.c:903
 msgid "Export Bookmarks"
 msgstr "Eksporter bokmerker"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:902
+#: ../src/bookmarks/ephy-bookmarks-editor.c:918
 msgid "File format:"
 msgstr "Filformat:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:945
+#: ../src/bookmarks/ephy-bookmarks-editor.c:961
 msgid "Import Bookmarks"
 msgstr "Importer bokmerker"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:951
+#: ../src/bookmarks/ephy-bookmarks-editor.c:967
 msgid "I_mport"
 msgstr "I_mport"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:965
+#: ../src/bookmarks/ephy-bookmarks-editor.c:981
 msgid "Import bookmarks from:"
 msgstr "Importer bokmerker fra:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1383
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "_Kopier adresse"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1608
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1624
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Søk:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1805
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1821
 msgid "Topics"
 msgstr "Emner"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1875
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1891
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Tittel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1881
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1897
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Adresse"
@@ -2803,21 +2819,15 @@ msgstr "Oppdater bokmerke?"
 msgid "Quick Bookmark"
 msgstr "Hurtigbokmerke"
 
-# (ugh)
-#. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-ui.c:290
-msgid "Properties"
-msgstr "Egenskaper"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:291
+#: ../src/bookmarks/ephy-bookmarks-ui.c:298
 msgid "Show properties for this bookmark"
 msgstr "Vis egenskaper for dette bokmerket"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:303
+#: ../src/bookmarks/ephy-bookmarks-ui.c:310
 msgid "Open this bookmark in a new tab"
 msgstr "Åpne dette bokmerket i en ny fane"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:315
+#: ../src/bookmarks/ephy-bookmarks-ui.c:322
 msgid "Open this bookmark in a new window"
 msgstr "Åpne dette bokmerket i et nytt vindu"
 
@@ -3040,7 +3050,7 @@ msgstr ""
 "Oppstart feilet på grunn av følgende feil:\n"
 "%s"
 
-#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:760
+#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:766
 msgid "GNOME Web Browser"
 msgstr "GNOME Nettleser"
 
@@ -3568,8 +3578,8 @@ msgstr "Bytt til frakoblet modus"
 
 #. View Menu
 #: ../src/ephy-window.c:283
-msgid "_Show Toolbars"
-msgstr "Vi_s verktøylinjer"
+msgid "_Hide Toolbars"
+msgstr "S_kjul verktøylinjer"
 
 #: ../src/ephy-window.c:284
 msgid "Show or hide toolbar"
@@ -3928,46 +3938,56 @@ msgstr[1] "Systemspråk [%s]"
 msgid "Select a Directory"
 msgstr "Velg en katalog"
 
-#: ../src/window-commands.c:711 ../src/window-commands.c:728
+#: ../src/window-commands.c:714 ../src/window-commands.c:731
 msgid "Contact us at:"
 msgstr "Kontakt oss her:"
 
-#: ../src/window-commands.c:714
+#: ../src/window-commands.c:717
 msgid "Contributors:"
 msgstr "Bidragsytere:"
 
-#: ../src/window-commands.c:719
+#: ../src/window-commands.c:722
 msgid "Past developers:"
 msgstr "Tidligere utviklere:"
 
-#: ../src/window-commands.c:729
+#: ../src/window-commands.c:732
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> eller <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:734
+#: ../src/window-commands.c:737
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
-msgstr "GNOME nettleser er fri programvare; du kan redistribuere det og/eller endre det under betingelsene gitt i GNU General Public License som publisert av Free Software Foundation; enten versjon 2 av lisenen eller (hvis du ønsker) enhver senere versjon."
+msgstr ""
+"GNOME nettleser er fri programvare; du kan redistribuere det og/eller endre "
+"det under betingelsene gitt i GNU General Public License som publisert av "
+"Free Software Foundation; enten versjon 2 av lisenen eller (hvis du ønsker) "
+"enhver senere versjon."
 
-#: ../src/window-commands.c:738
+#: ../src/window-commands.c:741
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
-msgstr "GNOME nettleser distribueres i håp om at programmet er nyttig, men uten NOEN GARANTI, ikke engang implisitt garanti om at det er SALGBART eller PASSER ET BESTEMT FORMÅL. Se GNU General Public License for detaljer."
+msgstr ""
+"GNOME nettleser distribueres i håp om at programmet er nyttig, men uten NOEN "
+"GARANTI, ikke engang implisitt garanti om at det er SALGBART eller PASSER ET "
+"BESTEMT FORMÅL. Se GNU General Public License for detaljer."
 
-#: ../src/window-commands.c:742
+#: ../src/window-commands.c:745
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
-msgstr "Du skal ha mottatt en kopi av GNU General Public License sammen med Nautilus. Hvis du ikke har det kan du skrive til Free Software Foundation, Inc. 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA"
+msgstr ""
+"Du skal ha mottatt en kopi av GNU General Public License sammen med "
+"Nautilus. Hvis du ikke har det kan du skrive til Free Software Foundation, "
+"Inc. 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA"
 
-#: ../src/window-commands.c:754
+#: ../src/window-commands.c:757
 #, c-format
 msgid "Using “%s” backend"
 msgstr "Bruker motor «%s»"
@@ -3980,10 +4000,10 @@ msgstr "Bruker motor «%s»"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:775
+#: ../src/window-commands.c:781
 msgid "translator-credits"
 msgstr "Kjartan Maraas <kmaraas@gnome.org>"
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:784
 msgid "GNOME Web Browser Website"
 msgstr "Nettsted for GNOME Nettleser"
