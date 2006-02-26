@@ -14,6 +14,8 @@ Stuff to port to new glib/gtk+ APIs:
 - use GtkStatusIcon instead of EggStatusIcon
 - use g_intern_static_string for static type name registrations
   and g_object_set_data
+- use gtk_widget_get_action in toolbar code instead of g_object_get_data (., "gtk-action")
+- use GtkNotebook DND
 
 Stuff to do when dropping support for mozilla < 1.7:
 - use dependent strings
