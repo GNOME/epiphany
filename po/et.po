@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany Web Browser HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-15 06:03+0100\n"
-"PO-Revision-Date: 2006-02-18 09:46+0200\n"
+"POT-Creation-Date: 2006-02-25 06:03+0100\n"
+"PO-Revision-Date: 2006-02-25 19:14+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -350,6 +350,8 @@ msgstr "Allalaadimiskataloog"
 #: ../data/epiphany.schemas.in.h:39
 msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr ""
+"Kooditabeli automaattuvastaja. Tühi string tähendab, et automaattuvastus on "
+"välja lülitatud."
 
 #: ../data/epiphany.schemas.in.h:40
 msgid ""
@@ -420,6 +422,8 @@ msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
 msgstr ""
+"Kui faile pole veebisirvija poolt võimalik avada, siis laaditakse need "
+"automaatselt allalaadimiste kataloogi ja avatakse sobiva rakendusega."
 
 #: ../data/epiphany.schemas.in.h:51
 msgid ""
@@ -647,11 +651,11 @@ msgstr "Keel"
 
 #: ../data/glade/prefs-dialog.glade.h:22
 msgid "Let web pages specify their own _colors"
-msgstr ""
+msgstr "Veebilehed võivad määrata omi _värvuseid"
 
 #: ../data/glade/prefs-dialog.glade.h:23
 msgid "Let web pages specify their own _fonts"
-msgstr ""
+msgstr "Veebilehed võivad määrata omi _kirjatüüpe"
 
 #: ../data/glade/prefs-dialog.glade.h:24
 msgid "MB"
@@ -691,7 +695,7 @@ msgstr "Alati _lubatud"
 
 #: ../data/glade/prefs-dialog.glade.h:33
 msgid "_Detailed Font Settings..."
-msgstr ""
+msgstr "Üksikasjalikud _kirjatüübi sätted..."
 
 #: ../data/glade/prefs-dialog.glade.h:34
 msgid "_Disk space:"
@@ -806,7 +810,8 @@ msgid_plural "%d downloads"
 msgstr[0] "%d allalaadimine"
 msgstr[1] "%d allalaadimist"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:985
+#: ../embed/downloader-view.c:657
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1001
 msgid "File"
 msgstr "Fail"
 
@@ -1368,6 +1373,8 @@ msgid ""
 "<ul><li>some service isn't started, or</li><li>the port number %d is wrong.</"
 "li></ul>"
 msgstr ""
+"<ul><li>mõned teenused pole käivutatud või</li><li>on pordinumber %d vale."
+"</li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:290
 msgid ""
@@ -1458,8 +1465,7 @@ msgstr "„%s“ nõuab krüptitud ühendust."
 #: ../embed/mozilla/EphyAboutModule.cpp:374
 msgid ""
 "The document could not be loaded because encryption support is not installed."
-msgstr ""
-"Dokumenti pole võimalik laadida kuna krüptimise tuge pole paigaldatud."
+msgstr "Dokumenti pole võimalik laadida kuna krüptimise tuge pole paigaldatud."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:384
 #, c-format
@@ -1559,7 +1565,7 @@ msgid "_Password:"
 msgstr "_Parool:"
 
 #: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:768
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:784
 msgid "All files"
 msgstr "Kõik failid"
 
@@ -1972,32 +1978,39 @@ msgstr ""
 "GConfi viga:\n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:868
+#. Translaters: This string is for a toggle to display a toolbar.
+#. * The name of the toolbar is automatically computed from the widgets
+#. * on the toolbar, and is placed at the %s. Note the _ before the %s
+#. * which is used to add mnemonics. We know that this is likely to
+#. * produce duplicates, but don't worry about it. If your language
+#. * normally has a mnemonic at the start, please use the _. If not,
+#. * please remove.
+#: ../lib/egg/egg-editable-toolbar.c:902
 #, c-format
-msgid "Hide “%s”"
-msgstr "Peida „%s“"
+msgid "Show “_%s”"
+msgstr "Näita „_%s“"
 
-#: ../lib/egg/egg-editable-toolbar.c:1304
+#: ../lib/egg/egg-editable-toolbar.c:1362
 msgid "_Move on Toolbar"
 msgstr "_Tõsta tööriistaribale"
 
-#: ../lib/egg/egg-editable-toolbar.c:1305
+#: ../lib/egg/egg-editable-toolbar.c:1363
 msgid "Move the selected item on the toolbar"
 msgstr "Valitud kirje tõstmine tööriistaribale"
 
-#: ../lib/egg/egg-editable-toolbar.c:1306
+#: ../lib/egg/egg-editable-toolbar.c:1364
 msgid "_Remove from Toolbar"
 msgstr "_Eemalda tööriistaribalt"
 
-#: ../lib/egg/egg-editable-toolbar.c:1307
+#: ../lib/egg/egg-editable-toolbar.c:1365
 msgid "Remove the selected item from the toolbar"
 msgstr "Valitud kirje eemaldamine tööriistaribalt"
 
-#: ../lib/egg/egg-editable-toolbar.c:1308
-msgid "_Remove Toolbar"
+#: ../lib/egg/egg-editable-toolbar.c:1366
+msgid "_Delete Toolbar"
 msgstr "_Eemalda tööriistariba"
 
-#: ../lib/egg/egg-editable-toolbar.c:1309
+#: ../lib/egg/egg-editable-toolbar.c:1367
 msgid "Remove the selected toolbar"
 msgstr "Valitud tööriistariba eemaldamine"
 
@@ -2214,25 +2227,25 @@ msgstr "Lääne"
 msgid "select fonts for|Other Scripts"
 msgstr "Muud kirjaviisid"
 
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:56
 msgid "Popup Windows"
 msgstr "Hüpikaknad "
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1179
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1179
 msgid "History"
 msgstr "Ajalugu"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1741
+#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:915
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1757
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Järjehoidjad"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#: ../lib/ephy-stock-icons.c:59 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Aadressi sisestus"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:60
 msgid "_Download"
 msgstr "_Lae alla"
 
@@ -2310,43 +2323,47 @@ msgstr "%s:"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:93
-#: ../src/bookmarks/ephy-bookmark-properties.c:619
+#: ../src/bookmarks/ephy-bookmark-properties.c:92
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "%d _sarnane"
 msgstr[1] "%d _sarnast"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:266
+#: ../src/bookmarks/ephy-bookmark-properties.c:265
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:286
-#: ../src/bookmarks/ephy-bookmark-properties.c:308
+#: ../src/bookmarks/ephy-bookmark-properties.c:285
+#: ../src/bookmarks/ephy-bookmark-properties.c:307
 #, c-format
 msgid "Show “%s”"
 msgstr "Näita „%s“"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:434
+#: ../src/bookmarks/ephy-bookmark-properties.c:433
 #, c-format
 msgid "“%s” Properties"
 msgstr "„%s“ omadused"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:557
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "_Pealkiri:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:572
+#: ../src/bookmarks/ephy-bookmark-properties.c:567
 msgid "A_ddress:"
 msgstr "_Aadress:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:582
+#: ../src/bookmarks/ephy-bookmark-properties.c:577
 msgid "T_opics:"
 msgstr "_Teemad:"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:598
+msgid "Sho_w all topics"
+msgstr ""
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:97
 msgid "Mozilla (HTML)"
@@ -2393,8 +2410,8 @@ msgstr "Loo uus teema"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
-#: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1374
+#: ../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2407,8 +2424,8 @@ msgstr "Avab valitud järjehoidja uues aknas"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
-#: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1377
+#: ../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
@@ -2436,7 +2453,9 @@ msgstr "_Kustuta"
 msgid "Delete the selected bookmark or topic"
 msgstr "Kustuta valitud järjehoidja või teema"
 
+#. Add popup menu actions that are specific to the bookmark widgets
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-ui.c:297
 msgid "_Properties"
 msgstr "_Omadused"
 
@@ -2482,7 +2501,7 @@ msgid "Cut the selection"
 msgstr "Lõika valik"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1371
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1387
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:168
 msgid "_Copy"
@@ -2513,6 +2532,7 @@ msgid "Select all bookmarks or text"
 msgstr "Vali kõik järjehoidjad või tekst"
 
 #. Help Menu
+#. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:228
 #: ../src/ephy-history-window.c:204 ../src/ephy-window.c:265
 msgid "_Contents"
@@ -2587,101 +2607,103 @@ msgstr ""
 msgid "_Delete Topic"
 msgstr "_Kustuta teema"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:631
+#. FIXME: proper i18n after freeze
+#: ../src/bookmarks/ephy-bookmarks-editor.c:642
+#: ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:635
-#: ../src/bookmarks/ephy-bookmarks-editor.c:639
+#: ../src/bookmarks/ephy-bookmarks-editor.c:651
+#: ../src/bookmarks/ephy-bookmarks-editor.c:655
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:644
+#: ../src/bookmarks/ephy-bookmarks-editor.c:660
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla „%s“ profiil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:648
+#: ../src/bookmarks/ephy-bookmarks-editor.c:664
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:652
+#: ../src/bookmarks/ephy-bookmarks-editor.c:668
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:681
+#: ../src/bookmarks/ephy-bookmarks-editor.c:697
 msgid "Import failed"
 msgstr "Tõrge importimisel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:683
+#: ../src/bookmarks/ephy-bookmarks-editor.c:699
 msgid "Import Failed"
 msgstr "Tõrge importimisel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:686
+#: ../src/bookmarks/ephy-bookmarks-editor.c:702
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
 msgstr ""
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:749
+#: ../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "Import bookmarks from file"
 msgstr "Järjehoidjate importimine failist"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:756
+#: ../src/bookmarks/ephy-bookmarks-editor.c:772
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefoxi/Mozilla järjehoidjad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:760
+#: ../src/bookmarks/ephy-bookmarks-editor.c:776
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeoni/Konquerori järjehoidjad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:764
+#: ../src/bookmarks/ephy-bookmarks-editor.c:780
 msgid "Epiphany bookmarks"
 msgstr "Epiphany järjehoidjad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:887
+#: ../src/bookmarks/ephy-bookmarks-editor.c:903
 msgid "Export Bookmarks"
 msgstr "Järjehoidjate eksportimine"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:902
+#: ../src/bookmarks/ephy-bookmarks-editor.c:918
 msgid "File format:"
 msgstr "Failivorming:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:945
+#: ../src/bookmarks/ephy-bookmarks-editor.c:961
 msgid "Import Bookmarks"
 msgstr "Järjehoidjate importimine"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:951
+#: ../src/bookmarks/ephy-bookmarks-editor.c:967
 msgid "I_mport"
 msgstr "_Impordi"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:965
+#: ../src/bookmarks/ephy-bookmarks-editor.c:981
 msgid "Import bookmarks from:"
 msgstr "Kustkohast järjehoidjaid imporditakse:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1383
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "K_opeeri lehe aadress"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1608
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1624
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Otsi:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1805
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1821
 msgid "Topics"
 msgstr "Teemad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1875
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1891
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Pealkiri"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1881
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1897
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Aadress"
@@ -2751,20 +2773,15 @@ msgstr "Uuendada järjehoidjat?"
 msgid "Quick Bookmark"
 msgstr "Kiirjärjehoidja"
 
-#. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-ui.c:290
-msgid "Properties"
-msgstr "Omadused"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:291
+#: ../src/bookmarks/ephy-bookmarks-ui.c:298
 msgid "Show properties for this bookmark"
 msgstr "Selle järjehoidja omaduste näitamine"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:303
+#: ../src/bookmarks/ephy-bookmarks-ui.c:310
 msgid "Open this bookmark in a new tab"
 msgstr "Selle järjehoidja avamine uues sakis"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:315
+#: ../src/bookmarks/ephy-bookmarks-ui.c:322
 msgid "Open this bookmark in a new window"
 msgstr "Valitud järjehoidja avamine uues aknas"
 
@@ -2989,7 +3006,7 @@ msgstr ""
 "Tõrge käivitamisel järgneva veat tõttu:\n"
 "%s"
 
-#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:760
+#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:766
 msgid "GNOME Web Browser"
 msgstr "GNOME Veebisirvija"
 
@@ -3515,8 +3532,8 @@ msgstr "Lülitumine autonoomsesse režiimi"
 
 #. View Menu
 #: ../src/ephy-window.c:283
-msgid "_Show Toolbars"
-msgstr "Näita _tööriistaribasid"
+msgid "_Hide Toolbars"
+msgstr "_Peida tööriistariba"
 
 #: ../src/ephy-window.c:284
 msgid "Show or hide toolbar"
@@ -3875,46 +3892,57 @@ msgstr[1] "Süsteemsed keeled (%s)"
 msgid "Select a Directory"
 msgstr "Kataloogi valimine"
 
-#: ../src/window-commands.c:711 ../src/window-commands.c:728
+#: ../src/window-commands.c:714 ../src/window-commands.c:731
 msgid "Contact us at:"
 msgstr "Võta meiega ühendust:"
 
-#: ../src/window-commands.c:714
+#: ../src/window-commands.c:717
 msgid "Contributors:"
 msgstr "Kaastöötajad:"
 
-#: ../src/window-commands.c:719
+#: ../src/window-commands.c:722
 msgid "Past developers:"
 msgstr "Eelmised arendajad:"
 
-#: ../src/window-commands.c:729
+#: ../src/window-commands.c:732
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> või <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:734
+#: ../src/window-commands.c:737
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
 msgstr ""
+"GNOME Veebisirvija on vaba tarkvara. Te võite seda edasi levitada ja/või "
+"muuta vastavalt GNU Üldise Avaliku Litsentsi tingimustele, nagu need on "
+"Vaba Tarkvara Fondi poolt avaldatud; kas Litsentsi versioon number 2 või "
+"(vastavalt Teie valikule) ükskõik milline hilisem versioon."
 
-#: ../src/window-commands.c:738
+#: ../src/window-commands.c:741
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 msgstr ""
+"GNOME Veebisirvijat levitatakse lootuses, et see on kasulik, kuid ILMA "
+"IGASUGUSE GARANTIITA; isegi KESKMISE/TAVALISE KVALITEEDI GARANTIITA või "
+"SOBIVUSELE TEATUD KINDLAKS EESMÄRGIKS.  Üksikasjade suhtes vaata GNU Üldist "
+"Avalikku Litsentsi ja Unicode autoriõiguseid."
 
-#: ../src/window-commands.c:742
+#: ../src/window-commands.c:745
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
 msgstr ""
+"Te peaks olema saanud GNU Üldise Avaliku Litsentsi koopia koos selle "
+"programmiga, kui ei, siis kontakteeruge Free Software Foundation'iga, 59 "
+"Temple Place - Suite 330, Boston, MA 02111-1307, USA"
 
-#: ../src/window-commands.c:754
+#: ../src/window-commands.c:757
 #, c-format
 msgid "Using “%s” backend"
 msgstr ""
@@ -3927,15 +3955,24 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:775
+#: ../src/window-commands.c:781
 msgid "translator-credits"
 msgstr ""
 "Priit Laes <amd@store20.com>, 2003-2005.\n"
 "Ivar Smolin <okul@linux.ee>, 2005, 2006."
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:784
 msgid "GNOME Web Browser Website"
 msgstr "GNOME Veebisirvija sait"
+
+#~ msgid "Hide “%s”"
+#~ msgstr "Peida „%s“"
+
+#~ msgid "Properties"
+#~ msgstr "Omadused"
+
+#~ msgid "_Show Toolbars"
+#~ msgstr "Näita _tööriistaribasid"
 
 #~ msgid "Epiphany automation"
 #~ msgstr "Epiphany automaatika"
