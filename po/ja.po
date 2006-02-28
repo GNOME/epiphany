@@ -5,15 +5,14 @@
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2001-2003.
 # KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>, 2003.
 # Takeshi AIHANA <aihana@gnome.gr.jp>, 2004-2006.
-# Satoru SATOH <ss@gnome.gr.jp>, 2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-22 20:44+0900\n"
-"PO-Revision-Date: 2006-02-22 20:47+0900\n"
-"Last-Translator: Satoru SATOh <@gnome.gr.jp>\n"
+"POT-Creation-Date: 2006-02-28 22:37+0900\n"
+"PO-Revision-Date: 2006-02-28 22:36+0900\n"
+"Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,11 +29,11 @@ msgstr ""
 
 #: ../data/epiphany-lockdown.schemas.in.h:2
 msgid "Additional safe protocols"
-msgstr "安全な追加プロトコル"
+msgstr "安全な追加プロトコルのリスト"
 
 #: ../data/epiphany-lockdown.schemas.in.h:3
 msgid "Disable JavaScript chrome control"
-msgstr "JavaScript Chrome 制御は無効"
+msgstr "JavaScript の Chrome 制御を無効にする"
 
 #: ../data/epiphany-lockdown.schemas.in.h:4
 msgid "Disable JavaScript's control over window chrome."
@@ -143,7 +142,7 @@ msgstr "GNOME ウェブ・ブラウザ"
 
 #: ../data/epiphany.schemas.in.h:1
 msgid "Active extensions"
-msgstr "アクティブ・エクステンション"
+msgstr "アクティブ・エクステンションの一覧"
 
 #: ../data/epiphany.schemas.in.h:2
 msgid "Address of the user's home page."
@@ -151,7 +150,7 @@ msgstr "ユーザのホームページのアドレスです。"
 
 #: ../data/epiphany.schemas.in.h:3
 msgid "Allow popups"
-msgstr "ポップアップの許可"
+msgstr "ポップアップを許可する"
 
 #: ../data/epiphany.schemas.in.h:4
 msgid ""
@@ -166,7 +165,7 @@ msgstr "常にタブ・バーを表示する"
 
 #: ../data/epiphany.schemas.in.h:6
 msgid "Automatic downloads"
-msgstr "自動ダウンロード"
+msgstr "自動ダウンロードを有効にするかどうか"
 
 #: ../data/epiphany.schemas.in.h:7
 msgid "Automatically manage offline status with NetworkManager"
@@ -174,11 +173,11 @@ msgstr "NetworkManager でオフラインの状態を自動的に管理する"
 
 #: ../data/epiphany.schemas.in.h:8
 msgid "Browse with caret"
-msgstr "キャレット文字で閲覧"
+msgstr "キャレット・モードで閲覧する"
 
 #: ../data/epiphany.schemas.in.h:9
 msgid "Cookie accept"
-msgstr "クッキーの受諾"
+msgstr "クッキーの許可"
 
 #: ../data/epiphany.schemas.in.h:10
 msgid "Default encoding"
@@ -369,8 +368,7 @@ msgstr "ダウンロード・フォルダ"
 
 #: ../data/epiphany.schemas.in.h:39
 msgid "The encoding autodetector. Empty string means autodetect is off"
-msgstr ""
-"文字コードの自動検出機能です。空文字列を指定すると自動検出は無効になります。"
+msgstr "文字コードの自動検出機能"
 
 #: ../data/epiphany.schemas.in.h:40
 msgid ""
@@ -384,9 +382,9 @@ msgid ""
 "\"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) "
 "and \"universal_charset_detector\" (autodetect most encodings)."
 msgstr ""
-"文字コードの自動検出機能です。設定可能な値: \"\" (空文字列で、自動検出機能は"
-"オフ), \"cjk_parallel_state_machine\" (東アジアの文字コードを自動検出), "
-"\"ja_parallel_state_machine\" (日本語の文字コードを自動検出), "
+"文字コードの自動検出機能です。設定可能な値: \"\" (空にすると、この自動検出機"
+"能は無効になります), \"cjk_parallel_state_machine\" (東アジアの文字コードを自"
+"動検出), \"ja_parallel_state_machine\" (日本語の文字コードを自動検出), "
 "\"ko_parallel_state_machine\" (ハングルの文字コードを自動検出), \"ruprob"
 "\" (ロシアの文字コードを自動検出), \"ukprob\" (ウクライナの文字コードを自動検"
 "出), \"zh_parallel_state_machine\" (中国語の文字コードを自動検出), "
@@ -460,9 +458,9 @@ msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
 msgstr ""
-"クッキーを許可する場所です。設定可能な値: \"anywhere\" (どこからでも)、"
-"\"current site\" (現在見ているサーバからのみ)、\"nowhere\" (どこからも受けつ"
-"けない)"
+"クッキーを許可するサーバの種類を指定します。設定可能な値: \"anywhere\" (どこ"
+"からでも)、\"current site\" (現在閲覧しているサーバからのみ)、\"nowhere\" (ど"
+"こからも受けつけない)"
 
 #: ../data/epiphany.schemas.in.h:52
 msgid "Whether to print the date in the footer"
@@ -841,7 +839,8 @@ msgid_plural "%d downloads"
 msgstr[0] "%d 個ダウンロード"
 msgstr[1] "%d 個ダウンロード"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:985
+#: ../embed/downloader-view.c:657
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1001
 msgid "File"
 msgstr "ファイル"
 
@@ -1607,7 +1606,7 @@ msgid "_Password:"
 msgstr "パスワード(_P):"
 
 #: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:768
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:784
 msgid "All files"
 msgstr "全てのファイル"
 
@@ -2028,34 +2027,41 @@ msgstr ""
 "GConf エラー:\n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:892
+#. Translaters: This string is for a toggle to display a toolbar.
+#. * The name of the toolbar is automatically computed from the widgets
+#. * on the toolbar, and is placed at the %s. Note the _ before the %s
+#. * which is used to add mnemonics. We know that this is likely to
+#. * produce duplicates, but don't worry about it. If your language
+#. * normally has a mnemonic at the start, please use the _. If not,
+#. * please remove.
+#: ../lib/egg/egg-editable-toolbar.c:902
 #, c-format
 msgid "Show “_%s”"
-msgstr "“%s“ を表示"
+msgstr "\"%s\" を表示する"
 
-#: ../lib/egg/egg-editable-toolbar.c:1337
+#: ../lib/egg/egg-editable-toolbar.c:1362
 msgid "_Move on Toolbar"
 msgstr "ツールバー上で移動(_M)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1338
+#: ../lib/egg/egg-editable-toolbar.c:1363
 msgid "Move the selected item on the toolbar"
-msgstr "ツールバーの選択したアイテムを移動"
+msgstr "選択したアイテムをツールバー上で移動します"
 
-#: ../lib/egg/egg-editable-toolbar.c:1339
+#: ../lib/egg/egg-editable-toolbar.c:1364
 msgid "_Remove from Toolbar"
 msgstr "ツールバーから削除(_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1340
+#: ../lib/egg/egg-editable-toolbar.c:1365
 msgid "Remove the selected item from the toolbar"
-msgstr "ツールバーから選択したアイテムを削除"
+msgstr "選択したアイテムをツールバーから削除します"
 
-#: ../lib/egg/egg-editable-toolbar.c:1341
+#: ../lib/egg/egg-editable-toolbar.c:1366
 msgid "_Delete Toolbar"
-msgstr "ツールバーの削除(_D)"
+msgstr "ツールバーの削除(_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1342
+#: ../lib/egg/egg-editable-toolbar.c:1367
 msgid "Remove the selected toolbar"
-msgstr "選択したツールバーを削除"
+msgstr "選択したツールバーを削除します"
 
 #: ../lib/egg/egg-toolbar-editor.c:439
 msgid "Separator"
@@ -2278,8 +2284,8 @@ msgstr "ウィンドウのポップアップ"
 msgid "History"
 msgstr "履歴"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:899
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1741
+#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:915
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1757
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "ブックマーク"
@@ -2410,7 +2416,7 @@ msgstr "トピック(_O):"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:598
 msgid "Sho_w all topics"
-msgstr "すべてのトピックを表示(_W)"
+msgstr "全てのトピックを表示する(_W)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:97
 msgid "Mozilla (HTML)"
@@ -2457,7 +2463,7 @@ msgstr "新しいトピックを作成します"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1374
 #: ../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
@@ -2471,7 +2477,7 @@ msgstr "選択したブックマークを新しいウインドウで開きます
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1377
 #: ../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
@@ -2548,7 +2554,7 @@ msgid "Cut the selection"
 msgstr "選択範囲を切り取ります"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1371
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1387
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:168
 msgid "_Copy"
@@ -2653,38 +2659,40 @@ msgstr ""
 msgid "_Delete Topic"
 msgstr "トピックの削除(_D)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:631
+#. FIXME: proper i18n after freeze
+#: ../src/bookmarks/ephy-bookmarks-editor.c:642
+#: ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:635
-#: ../src/bookmarks/ephy-bookmarks-editor.c:639
+#: ../src/bookmarks/ephy-bookmarks-editor.c:651
+#: ../src/bookmarks/ephy-bookmarks-editor.c:655
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:644
+#: ../src/bookmarks/ephy-bookmarks-editor.c:660
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla の \"%s\" プロファイル"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:648
+#: ../src/bookmarks/ephy-bookmarks-editor.c:664
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:652
+#: ../src/bookmarks/ephy-bookmarks-editor.c:668
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:681
+#: ../src/bookmarks/ephy-bookmarks-editor.c:697
 msgid "Import failed"
 msgstr "インポート失敗"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:683
+#: ../src/bookmarks/ephy-bookmarks-editor.c:699
 msgid "Import Failed"
 msgstr "インポートに失敗しました"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:686
+#: ../src/bookmarks/ephy-bookmarks-editor.c:702
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2693,63 +2701,63 @@ msgstr ""
 "ファイルが壊れているか、あるいはサポートしていない種類のため \"%s\" からの"
 "ブックマークのインポートに失敗しました。"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:749
+#: ../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "Import bookmarks from file"
 msgstr "ファイルからブックマークをインポートします"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:756
+#: ../src/bookmarks/ephy-bookmarks-editor.c:772
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla ブックマーク"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:760
+#: ../src/bookmarks/ephy-bookmarks-editor.c:776
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror ブックマーク"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:764
+#: ../src/bookmarks/ephy-bookmarks-editor.c:780
 msgid "Epiphany bookmarks"
 msgstr "Epiphany ブックマーク"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:887
+#: ../src/bookmarks/ephy-bookmarks-editor.c:903
 msgid "Export Bookmarks"
 msgstr "ブックマークのエキスポート"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:902
+#: ../src/bookmarks/ephy-bookmarks-editor.c:918
 msgid "File format:"
 msgstr "ファイルの種類:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:945
+#: ../src/bookmarks/ephy-bookmarks-editor.c:961
 msgid "Import Bookmarks"
 msgstr "ブックマークのインポート"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:951
+#: ../src/bookmarks/ephy-bookmarks-editor.c:967
 msgid "I_mport"
 msgstr "インポート(_M)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:965
+#: ../src/bookmarks/ephy-bookmarks-editor.c:981
 msgid "Import bookmarks from:"
 msgstr "インポートするブックマーク:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1383
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "アドレスのコピー(_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1608
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1624
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "検索(_S):"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1805
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1821
 msgid "Topics"
 msgstr "トピック"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1875
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1891
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "タイトル"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1881
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1897
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "アドレス"
@@ -3050,7 +3058,7 @@ msgstr ""
 "次のエラーが発生したため起動に失敗しました:\n"
 "%s"
 
-#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:760
+#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:766
 msgid "GNOME Web Browser"
 msgstr "GNOME ウェブ・ブラウザ"
 
@@ -3132,14 +3140,14 @@ msgstr ""
 #.
 #: ../src/ephy-statusbar.c:114
 msgid "Caret"
-msgstr "キャレット"
+msgstr "[キャレット]"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
 #: ../src/ephy-statusbar.c:122
 msgid "In keyboard selection mode, press F7 to exit"
-msgstr "キーボード選択モードで [F7] を押下すると終了します"
+msgstr "[F7] キーを押下してキャレット選択モードを切り替えます"
 
 #: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2269 ../src/ephy-tab.c:2304
 msgid "Blank page"
@@ -3938,23 +3946,23 @@ msgstr[1] "システム言語 (%s)"
 msgid "Select a Directory"
 msgstr "フォルダの選択"
 
-#: ../src/window-commands.c:711 ../src/window-commands.c:728
+#: ../src/window-commands.c:714 ../src/window-commands.c:731
 msgid "Contact us at:"
 msgstr "連絡先:"
 
-#: ../src/window-commands.c:714
+#: ../src/window-commands.c:717
 msgid "Contributors:"
 msgstr "貢献者:"
 
-#: ../src/window-commands.c:719
+#: ../src/window-commands.c:722
 msgid "Past developers:"
 msgstr "前バージョンの開発者:"
 
-#: ../src/window-commands.c:729
+#: ../src/window-commands.c:732
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> または <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:734
+#: ../src/window-commands.c:737
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3965,7 +3973,7 @@ msgstr ""
 "提供する GNU 一般公有使用許諾契約書の第二版、あるいはそれ以降の版が定める条項"
 "の下で本プログラムを再頒布または変更することができます。"
 
-#: ../src/window-commands.c:738
+#: ../src/window-commands.c:741
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3976,7 +3984,7 @@ msgstr ""
 "び特定の目的、その適合性についての暗黙の保証を含めて、いかなる保証も行ないま"
 "せん。詳細については GNU 一般公有使用許諾契約書をご覧下さい。"
 
-#: ../src/window-commands.c:742
+#: ../src/window-commands.c:745
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3986,7 +3994,7 @@ msgstr ""
 "るはずです。そうでない場合は、Free Software Foundation, Inc., 59 Temple "
 "Place - Suite 330, Boston, MA 02111-1307, USA へ手紙を書いて下さい。"
 
-#: ../src/window-commands.c:754
+#: ../src/window-commands.c:757
 #, c-format
 msgid "Using “%s” backend"
 msgstr "バックエンドは \"%s\""
@@ -3999,7 +4007,7 @@ msgstr "バックエンドは \"%s\""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:775
+#: ../src/window-commands.c:781
 msgid "translator-credits"
 msgstr ""
 "相花 毅 <aihana@gnome.gr.jp>\n"
@@ -4010,15 +4018,6 @@ msgstr ""
 "Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "日本GNOMEユーザー会 http://www.gnome.gr.jp"
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:784
 msgid "GNOME Web Browser Website"
 msgstr "GNOME ウェブ・ブラウザのウェブサイト"
-
-#~ msgid "Hide “%s”"
-#~ msgstr "\"%s\" を隱す"
-
-#~ msgid "Properties"
-#~ msgstr "プロパティ"
-
-#~ msgid "_Show Toolbars"
-#~ msgstr "ツールバーの表示(_S)"
