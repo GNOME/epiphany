@@ -1,7 +1,7 @@
 # German Epiphany translation.
 # Copyright (C) 2002-2004 Marco Pesenti Gritti
 # Christian Neumair <chris@gnome-de.org>, 2003, 2004.
-# Hendrik Richter <hendi@gnome-de.org>, 2004, 2005, 2006.
+# Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006.
 #
 # Based on German Galeon translation.
 # Copyright on Galeon translation is held by its translators.
@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-18 15:51+0100\n"
-"PO-Revision-Date: 2006-02-18 15:52+0100\n"
-"Last-Translator: Hendrik Richter <hendi@gnome-de.org>\n"
+"POT-Creation-Date: 2006-03-01 18:08+0100\n"
+"PO-Revision-Date: 2006-03-01 18:17+0100\n"
+"Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -852,7 +852,20 @@ msgid_plural "%d downloads"
 msgstr[0] "%d Download"
 msgstr[1] "%d Downloads"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:985
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/downloader-view.c:585 ../embed/downloader-view.c:598
+msgid "download status|Unknown"
+msgstr "Unbekannt"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/downloader-view.c:590
+msgid "download status|Failed"
+msgstr "Fehlgeschlagen"
+
+#: ../embed/downloader-view.c:657
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1001
 msgid "File"
 msgstr "Datei"
 
@@ -1270,6 +1283,12 @@ msgstr "Lokale Dateien"
 msgid "Save"
 msgstr "Speichern"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/ContentHandler.cpp:299
+msgid "File Type:|Unknown"
+msgstr "Unbekannt"
+
 #: ../embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "Die möglicherweise unsichere Datei herunterladen?"
@@ -1604,6 +1623,18 @@ msgstr ""
 "Die Seite »%s« in diesem Reiter wurde nicht vollständig geladen, als Ihr "
 "Browser abstürzte. Möglicherweise hat sie den Absturz verursacht."
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/EphyAboutModule.cpp:659
+msgid "You may find an old version:|in the Google Cache"
+msgstr "im Google-Cache"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/EphyAboutModule.cpp:667
+msgid "You may find an old version:|in the Internet Archive"
+msgstr "im Internet-Archiv"
+
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
 #: ../src/bookmarks/ephy-bookmarks.c:1264 ../src/ephy-session.c:1308
@@ -1619,7 +1650,6 @@ msgid "Don't Save"
 msgstr "Nicht speichern"
 
 #: ../embed/mozilla/EphyPromptService.cpp:799
-#, fuzzy
 msgid "_Username:"
 msgstr "_Benutzer:"
 
@@ -1631,7 +1661,7 @@ msgid "_Password:"
 msgstr "_Passwort:"
 
 #: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:768
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:784
 msgid "All files"
 msgstr "Alle Dateien"
 
@@ -2069,32 +2099,39 @@ msgstr ""
 "GConf-Fehler:\n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:868
+#. Translaters: This string is for a toggle to display a toolbar.
+#. * The name of the toolbar is automatically computed from the widgets
+#. * on the toolbar, and is placed at the %s. Note the _ before the %s
+#. * which is used to add mnemonics. We know that this is likely to
+#. * produce duplicates, but don't worry about it. If your language
+#. * normally has a mnemonic at the start, please use the _. If not,
+#. * please remove.
+#: ../lib/egg/egg-editable-toolbar.c:902
 #, c-format
-msgid "Hide “%s”"
-msgstr "»%s« ausblenden"
+msgid "Show “_%s”"
+msgstr "»_%s« anzeigen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1304
+#: ../lib/egg/egg-editable-toolbar.c:1362
 msgid "_Move on Toolbar"
 msgstr "Auf Werkzeugleiste _verschieben"
 
-#: ../lib/egg/egg-editable-toolbar.c:1305
+#: ../lib/egg/egg-editable-toolbar.c:1363
 msgid "Move the selected item on the toolbar"
 msgstr "Das gewählte Objekt auf die Werkzeugleiste verschieben"
 
-#: ../lib/egg/egg-editable-toolbar.c:1306
+#: ../lib/egg/egg-editable-toolbar.c:1364
 msgid "_Remove from Toolbar"
 msgstr "Aus Werkzeugleiste _entfernen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1307
+#: ../lib/egg/egg-editable-toolbar.c:1365
 msgid "Remove the selected item from the toolbar"
 msgstr "Das gewählte Objekt aus der Werkzeugleiste entfernen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1308
-msgid "_Remove Toolbar"
+#: ../lib/egg/egg-editable-toolbar.c:1366
+msgid "_Delete Toolbar"
 msgstr "Werkzeugleiste _entfernen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1309
+#: ../lib/egg/egg-editable-toolbar.c:1367
 msgid "Remove the selected toolbar"
 msgstr "Die gewählte Werkzeugleiste entfernen"
 
@@ -2315,25 +2352,25 @@ msgstr "Westlich"
 msgid "select fonts for|Other Scripts"
 msgstr "Weitere Schriften"
 
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:56
 msgid "Popup Windows"
 msgstr "Popup-Fenster"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1179
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1179
 msgid "History"
 msgstr "Chronik"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:899
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1741
+#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:915
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1757
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Lesezeichen"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#: ../lib/ephy-stock-icons.c:59 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Adresseintrag"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:60
 msgid "_Download"
 msgstr "_Herunterladen"
 
@@ -2415,8 +2452,8 @@ msgstr "%s:"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:93
-#: ../src/bookmarks/ephy-bookmark-properties.c:619
+#: ../src/bookmarks/ephy-bookmark-properties.c:92
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -2424,35 +2461,39 @@ msgstr[0] "%d _ähnliches"
 msgstr[1] "%d _ähnliche"
 
 # CHECK
-#: ../src/bookmarks/ephy-bookmark-properties.c:266
+#: ../src/bookmarks/ephy-bookmark-properties.c:265
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "Mit %d identischen Lesezeichen vereinen"
 msgstr[1] "Mit %d identischen Lesezeichen vereinen"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:286
-#: ../src/bookmarks/ephy-bookmark-properties.c:308
+#: ../src/bookmarks/ephy-bookmark-properties.c:285
+#: ../src/bookmarks/ephy-bookmark-properties.c:307
 #, c-format
 msgid "Show “%s”"
 msgstr "»%s« anzeigen…"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:434
+#: ../src/bookmarks/ephy-bookmark-properties.c:433
 #, c-format
 msgid "“%s” Properties"
 msgstr "Eigenschaften von »%s«"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:557
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:572
+#: ../src/bookmarks/ephy-bookmark-properties.c:567
 msgid "A_ddress:"
 msgstr "_Adresse:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:582
+#: ../src/bookmarks/ephy-bookmark-properties.c:577
 msgid "T_opics:"
 msgstr "T_hemen:"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:598
+msgid "Sho_w all topics"
+msgstr "A_lle Themen anzeigen"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:97
 msgid "Mozilla (HTML)"
@@ -2499,8 +2540,8 @@ msgstr "Ein Thema hinzufügen"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
-#: ../src/bookmarks/ephy-bookmarks-ui.c:314 ../src/ephy-history-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1374
+#: ../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2513,8 +2554,8 @@ msgstr "Das gewählte Lesezeichen in einem neuen Fenster öffnen"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
-#: ../src/bookmarks/ephy-bookmarks-ui.c:302 ../src/ephy-history-window.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1377
+#: ../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
@@ -2542,7 +2583,9 @@ msgstr "_Löschen"
 msgid "Delete the selected bookmark or topic"
 msgstr "Das gewählte Lesezeichen oder Thema löschen"
 
+#. Add popup menu actions that are specific to the bookmark widgets
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-ui.c:297
 msgid "_Properties"
 msgstr "Ei_genschaften"
 
@@ -2588,7 +2631,7 @@ msgid "Cut the selection"
 msgstr "Den markierten Text ausschneiden"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1371
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1387
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:168
 msgid "_Copy"
@@ -2694,38 +2737,40 @@ msgstr ""
 msgid "_Delete Topic"
 msgstr "Thema _Löschen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:631
+#. FIXME: proper i18n after freeze
+#: ../src/bookmarks/ephy-bookmarks-editor.c:642
+#: ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:635
-#: ../src/bookmarks/ephy-bookmarks-editor.c:639
+#: ../src/bookmarks/ephy-bookmarks-editor.c:651
+#: ../src/bookmarks/ephy-bookmarks-editor.c:655
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:644
+#: ../src/bookmarks/ephy-bookmarks-editor.c:660
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla-Profil »%s«"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:648
+#: ../src/bookmarks/ephy-bookmarks-editor.c:664
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:652
+#: ../src/bookmarks/ephy-bookmarks-editor.c:668
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:681
+#: ../src/bookmarks/ephy-bookmarks-editor.c:697
 msgid "Import failed"
 msgstr "Importieren fehlgeschlagen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:683
+#: ../src/bookmarks/ephy-bookmarks-editor.c:699
 msgid "Import Failed"
 msgstr "Importieren fehlgeschlagen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:686
+#: ../src/bookmarks/ephy-bookmarks-editor.c:702
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2734,63 +2779,63 @@ msgstr ""
 "Die Lesezeichen von »%s« konnten nicht importiert werden, da die Datei "
 "beschädigt ist oder ihr Format nicht unterstützt wird."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:749
+#: ../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "Import bookmarks from file"
 msgstr "Lesezeichen aus Datei importieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:756
+#: ../src/bookmarks/ephy-bookmarks-editor.c:772
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla-Lesezeichen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:760
+#: ../src/bookmarks/ephy-bookmarks-editor.c:776
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror-Lesezeichen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:764
+#: ../src/bookmarks/ephy-bookmarks-editor.c:780
 msgid "Epiphany bookmarks"
 msgstr "Epiphany-Lesezeichen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:887
+#: ../src/bookmarks/ephy-bookmarks-editor.c:903
 msgid "Export Bookmarks"
 msgstr "Lesezeichen exportieren"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:902
+#: ../src/bookmarks/ephy-bookmarks-editor.c:918
 msgid "File format:"
 msgstr "Dateiformat:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:945
+#: ../src/bookmarks/ephy-bookmarks-editor.c:961
 msgid "Import Bookmarks"
 msgstr "Lesezeichen importieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:951
+#: ../src/bookmarks/ephy-bookmarks-editor.c:967
 msgid "I_mport"
 msgstr "_Importieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:965
+#: ../src/bookmarks/ephy-bookmarks-editor.c:981
 msgid "Import bookmarks from:"
 msgstr "Lesezeichen importieren von:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1383
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "Adresse _kopieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1608
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1624
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "_Suche:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1805
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1821
 msgid "Topics"
 msgstr "Themen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1875
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1891
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "Titel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1881
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1897
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "Adresse"
@@ -2856,24 +2901,48 @@ msgstr "_Aktualisieren"
 msgid "Update Bookmark?"
 msgstr "Lesezeichen aktualisieren?"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains all bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1023
+msgid "bookmarks|All"
+msgstr "Alle"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the most used bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1059
+msgid "bookmarks|Most Visited"
+msgstr "Meistbesucht"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the not categorized bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1078
+msgid "bookmarks|Not Categorized"
+msgstr "Nicht kategorisiert"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this is an automatic topic containing local websites bookmarks
+#. * autodiscovered with zeroconf.
+#: ../src/bookmarks/ephy-bookmarks.c:1103
+msgid "bookmarks|Local Sites"
+msgstr "Lokale Seiten"
+
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
 msgstr "Lesezeichen"
 
-#. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-ui.c:290
-msgid "Properties"
-msgstr "Eigenschaften"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:291
+#: ../src/bookmarks/ephy-bookmarks-ui.c:298
 msgid "Show properties for this bookmark"
 msgstr "Die Eigenschaften dieses Lesezeichens anzeigen"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:303
+#: ../src/bookmarks/ephy-bookmarks-ui.c:310
 msgid "Open this bookmark in a new tab"
 msgstr "Dieses Lesezeichen in einem neuen Reiter öffnen"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:315
+#: ../src/bookmarks/ephy-bookmarks-ui.c:322
 msgid "Open this bookmark in a new window"
 msgstr "Dieses Lesezeichen in einem neuen Fenster öffnen"
 
@@ -2883,9 +2952,8 @@ msgid "Open in New _Tabs"
 msgstr "In neuen _Reitern öffnen"
 
 #: ../src/bookmarks/ephy-open-tabs-action.c:78
-#, fuzzy
 msgid "Open the bookmarks in this topic in new tabs"
-msgstr "Dieses Lesezeichen in einem neuen Reiter öffnen"
+msgstr "Lesezeichen in diesem Thema in neuen Reitern öffnen"
 
 #: ../src/bookmarks/ephy-related-action.c:176
 msgid "Related"
@@ -3077,15 +3145,16 @@ msgstr "Adresse"
 
 #: ../src/ephy-main.c:90
 msgid "Start a private instance"
-msgstr ""
+msgstr "Private Sitzung starten"
 
 #: ../src/ephy-main.c:92
 msgid "Profile directory to use in the private instance"
-msgstr ""
+msgstr "Profilverzeichnis für Private Sitzungen"
 
+# CHECK
 #: ../src/ephy-main.c:92
 msgid "DIR"
-msgstr ""
+msgstr "VERZ"
 
 #: ../src/ephy-main.c:417
 msgid "Could not start GNOME Web Browser"
@@ -3100,7 +3169,7 @@ msgstr ""
 "Der Webbrowser konnte nicht gestartet werden:\n"
 "%s"
 
-#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:760
+#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:766
 msgid "GNOME Web Browser"
 msgstr "Webbrowser"
 
@@ -3631,8 +3700,8 @@ msgstr "In den Offline-Modus wechseln"
 
 #. View Menu
 #: ../src/ephy-window.c:283
-msgid "_Show Toolbars"
-msgstr "_Werkzeugleisten"
+msgid "_Hide Toolbars"
+msgstr "Werkzeugleisten _verbergen"
 
 #: ../src/ephy-window.c:284
 msgid "Show or hide toolbar"
@@ -3980,6 +4049,29 @@ msgstr "Druckvorschau schließen"
 msgid "Default"
 msgstr "Vorgabe:"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../src/prefs-dialog.c:993 ../src/prefs-dialog.c:1001
+#, c-format
+msgid "language|%s (%s)"
+msgstr "%s (%s)"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: ../src/prefs-dialog.c:1012
+#, c-format
+msgid "language|User defined (%s)"
+msgstr "Benutzerdefiniert (%s)"
+
 #: ../src/prefs-dialog.c:1034
 #, c-format
 msgid "System language (%s)"
@@ -3991,23 +4083,23 @@ msgstr[1] "Systemsprachen (%s)"
 msgid "Select a Directory"
 msgstr "Wählen Sie einen Ordner"
 
-#: ../src/window-commands.c:711 ../src/window-commands.c:728
+#: ../src/window-commands.c:714 ../src/window-commands.c:731
 msgid "Contact us at:"
 msgstr "Sie erreichen uns unter:"
 
-#: ../src/window-commands.c:714
+#: ../src/window-commands.c:717
 msgid "Contributors:"
 msgstr "Mitwirkende"
 
-#: ../src/window-commands.c:719
+#: ../src/window-commands.c:722
 msgid "Past developers:"
 msgstr "Vorherige Entwickler"
 
-#: ../src/window-commands.c:729
+#: ../src/window-commands.c:732
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> oder <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:734
+#: ../src/window-commands.c:737
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4019,7 +4111,7 @@ msgstr ""
 "veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 2 "
 "der Lizenz oder (nach Ihrer Option) jeder späteren Version."
 
-#: ../src/window-commands.c:738
+#: ../src/window-commands.c:741
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4031,7 +4123,7 @@ msgstr ""
 "implizierte Garantie der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN "
 "BESTIMMTEN ZWECK.  Details finden Sie in der GNU General Public License."
 
-#: ../src/window-commands.c:742
+#: ../src/window-commands.c:745
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4041,7 +4133,7 @@ msgstr ""
 "Webbrowser erhalten haben. Falls nicht, schreiben Sie an die Free Software "
 "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA."
 
-#: ../src/window-commands.c:754
+#: ../src/window-commands.c:757
 #, c-format
 msgid "Using “%s” backend"
 msgstr "Verwende Backend »%s«"
@@ -4054,48 +4146,24 @@ msgstr "Verwende Backend »%s«"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:775
+#: ../src/window-commands.c:781
 msgid "translator-credits"
 msgstr ""
 "Christian Neumair <chris@gnome-de.org>\n"
-"Hendrik Richter <hendi@gnome-de.org>"
+"Hendrik Richter <hendrikr@gnome.org>"
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:784
 msgid "GNOME Web Browser Website"
 msgstr "Webbrowser"
 
-#~ msgid "download status|Unknown"
-#~ msgstr "Unbekannt"
+#~ msgid "Hide “%s”"
+#~ msgstr "»%s« ausblenden"
 
-#~ msgid "download status|Failed"
-#~ msgstr "Fehlgeschlagen"
+#~ msgid "Properties"
+#~ msgstr "Eigenschaften"
 
-#~ msgid "File Type:|Unknown"
-#~ msgstr "Unbekannt"
-
-#~ msgid "You may find an old version:|in the Google Cache"
-#~ msgstr "im Google-Cache"
-
-#~ msgid "You may find an old version:|in the Internet Archive"
-#~ msgstr "im Internet-Archiv"
-
-#~ msgid "bookmarks|All"
-#~ msgstr "Alle"
-
-#~ msgid "bookmarks|Most Visited"
-#~ msgstr "Meistbesucht"
-
-#~ msgid "bookmarks|Not Categorized"
-#~ msgstr "Nicht kategorisiert"
-
-#~ msgid "bookmarks|Local Sites"
-#~ msgstr "Lokale Seiten"
-
-#~ msgid "language|%s (%s)"
-#~ msgstr "%s (%s)"
-
-#~ msgid "language|User defined (%s)"
-#~ msgstr "Benutzerdefiniert (%s)"
+#~ msgid "_Show Toolbars"
+#~ msgstr "_Werkzeugleisten"
 
 #~ msgid "You already have a topic named “%s”"
 #~ msgstr "Es existiert bereits ein Thema namens »%s«"
