@@ -57,7 +57,7 @@ struct _EphyDbusPrivate
 	guint session_reconnect_timeout_id;
 	guint system_reconnect_timeout_id;
 	guint is_session_service_owner : 1;
-	guint claim_name : 1;
+	guint register_name : 1;
 };
 
 enum
@@ -256,7 +256,7 @@ ephy_dbus_connect_to_session_bus (EphyDbus *ephy_dbus,
 		(dbus_g_connection_get_connection (priv->session_bus),
 		 session_filter_func, ephy_dbus, NULL);
 
-	if (priv->claim_name == FALSE) return TRUE;
+	if (priv->register_name == FALSE) return TRUE;
 
 	dbus_g_object_type_install_info (EPHY_TYPE_DBUS,
 					 &dbus_glib_ephy_activation_object_info);
@@ -398,7 +398,7 @@ ephy_dbus_set_property (GObject *object,
 	switch (prop_id)
 	{
 		case PROP_CLAIM_NAME:
-			priv->claim_name = g_value_get_boolean (value);
+			priv->register_name = g_value_get_boolean (value);
 			break;
 	}
 }
@@ -439,9 +439,9 @@ ephy_dbus_class_init (EphyDbusClass *klass)
 	g_object_class_install_property
 		(object_class,
 		 PROP_CLAIM_NAME,
-		 g_param_spec_boolean ("claim-name",
-				       "claim-name",
-				       "claim-name",
+		 g_param_spec_boolean ("register-name",
+				       "register-name",
+				       "register-name",
 				       TRUE,
 				       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
@@ -541,7 +541,7 @@ ephy_dbus_get_proxy (EphyDbus *dbus,
 /* private API */
 
 gboolean
-_ephy_dbus_startup (gboolean claim_name,
+_ephy_dbus_startup (gboolean connect_and_register_name,
 		    GError **error)
 {
 	g_assert (ephy_dbus_instance == NULL);
@@ -549,8 +549,10 @@ _ephy_dbus_startup (gboolean claim_name,
 	ephy_dbus_error_quark = g_quark_from_static_string ("ephy-dbus-error");
 		
 	ephy_dbus_instance = g_object_new (EPHY_TYPE_DBUS,
-					   "claim-name", claim_name,
+					   "register-name", connect_and_register_name,
 					   NULL);
+
+	if (!connect_and_register_name) return TRUE;
 
 	/* We only connect to the session bus on startup*/
 	return ephy_dbus_connect_to_session_bus (ephy_dbus_instance, error);
