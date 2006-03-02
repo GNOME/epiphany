@@ -1072,6 +1072,9 @@ EventContext::CheckKeyPress (nsIDOMKeyEvent *aEvent)
 	rv = node->GetOwnerDocument (getter_AddRefs (doc));
 	NS_ENSURE_SUCCESS (rv, retval);
 
+	nsCOMPtr<nsIDOMXULDocument> xul_document (do_QueryInterface(doc, &rv));
+	if (xul_document) return retval;
+
 	nsCOMPtr<nsIDOMNSHTMLDocument> htmlDoc (do_QueryInterface (doc));
 	if (htmlDoc)
 	{
