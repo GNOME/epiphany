@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-25 12:28+0000\n"
-"PO-Revision-Date: 2006-02-20 22:26-0000\n"
+"POT-Creation-Date: 2006-03-02 17:38+0000\n"
+"PO-Revision-Date: 2006-03-02 12:26-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
@@ -844,6 +844,18 @@ msgstr[1] "%d llwythiad i lawr"
 msgstr[2] "%d llwythiad i lawr"
 msgstr[3] "%d llwythiad i lawr"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/downloader-view.c:585 ../embed/downloader-view.c:598
+msgid "download status|Unknown"
+msgstr "Anhysbys"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/downloader-view.c:590
+msgid "download status|Failed"
+msgstr "Wedi methu"
+
 #: ../embed/downloader-view.c:657
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1001
 msgid "File"
@@ -1261,6 +1273,12 @@ msgstr "Ffeiliau lleol"
 msgid "Save"
 msgstr "Cadw"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/ContentHandler.cpp:299
+msgid "File Type:|Unknown"
+msgstr "Anhysbys"
+
 #: ../embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "Lwytho'r ffeil all fod yn anniogel i lawr?"
@@ -1584,6 +1602,18 @@ msgid ""
 msgstr ""
 "Doedd y dudalen “%s” o fewn y tab hwn heb ei lwytho'n gyfan pan chwalodd y "
 "porwr gwe; fe allai fod wedi achosi'r chwalfa."
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/EphyAboutModule.cpp:659
+msgid "You may find an old version:|in the Google Cache"
+msgstr "yn storfa copïau cadw Google"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/EphyAboutModule.cpp:667
+msgid "You may find an old version:|in the Internet Archive"
+msgstr "yn yr Internet Archive"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
@@ -2844,6 +2874,35 @@ msgstr "_Diweddaru"
 msgid "Update Bookmark?"
 msgstr "Diweddaru Llyfrnod?"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains all bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1023
+msgid "bookmarks|All"
+msgstr "Pob Un"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the most used bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1059
+msgid "bookmarks|Most Visited"
+msgstr "Ymwelir Amlaf"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the not categorized bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1078
+msgid "bookmarks|Not Categorized"
+msgstr "Heb eu Trefnu"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this is an automatic topic containing local websites bookmarks
+#. * autodiscovered with zeroconf.
+#: ../src/bookmarks/ephy-bookmarks.c:1103
+msgid "bookmarks|Local Sites"
+msgstr "Safleoedd Lleol"
+
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
 msgstr "Llyfrnod Cyflym"
@@ -3971,6 +4030,30 @@ msgid "Default"
 msgstr "Rhagosodiad"
 
 # Dydw i ddim yn sicr fy mod yn deall hyn...
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../src/prefs-dialog.c:993 ../src/prefs-dialog.c:1001
+#, c-format
+msgid "language|%s (%s)"
+msgstr "%s (%s)"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: ../src/prefs-dialog.c:1012
+#, c-format
+msgid "language|User defined (%s)"
+msgstr "Diffiniwyd gan y defnyddiwr (%s)"
+
+# Dydw i ddim yn sicr fy mod yn deall hyn...
 #: ../src/prefs-dialog.c:1034
 #, c-format
 msgid "System language (%s)"
@@ -4120,27 +4203,12 @@ msgstr "Safle Porwr Gwe GNOME"
 #~ msgid "Paper"
 #~ msgstr "Papur"
 
-#~ msgid "download status|Unknown"
-#~ msgstr "Anhysbys"
-
-#~ msgid "download status|Failed"
-#~ msgstr "Wedi methu"
-
-#~ msgid "File Type:|Unknown"
-#~ msgstr "Anhysbys"
-
 #~ msgid ""
 #~ "This document cannot be viewed in offline mode. Set Epiphany to “online” "
 #~ "and try again."
 #~ msgstr ""
 #~ "Methu gweld y ddogfen hon ym modd all-lein. Gosodwch Epiphany \"ar-lein\" "
 #~ "a cheisio eto."
-
-#~ msgid "You may find an old version:|in the Google Cache"
-#~ msgstr "yn storfa copïau cadw Google"
-
-#~ msgid "You may find an old version:|in the Internet Archive"
-#~ msgstr "yn yr Internet Archive"
 
 #~ msgid ""
 #~ "You can always see the security status of a page from the padlock icon on "
@@ -4178,18 +4246,6 @@ msgstr "Safle Porwr Gwe GNOME"
 
 #~ msgid "_Show in Bookmarks Bar"
 #~ msgstr "_Dangos yn y Bar Llyfrnodau"
-
-#~ msgid "bookmarks|All"
-#~ msgstr "Pob Un"
-
-#~ msgid "bookmarks|Most Visited"
-#~ msgstr "Ymwelir Amlaf"
-
-#~ msgid "bookmarks|Not Categorized"
-#~ msgstr "Heb eu Trefnu"
-
-#~ msgid "bookmarks|Local Sites"
-#~ msgstr "Safleoedd Lleol"
 
 #~ msgid "You already have a bookmark titled \"%s\" for this page."
 #~ msgstr ""
