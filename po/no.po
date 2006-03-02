@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 1.9.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-26 13:54+0100\n"
-"PO-Revision-Date: 2006-02-26 13:55+0100\n"
+"POT-Creation-Date: 2006-03-02 10:01+0100\n"
+"PO-Revision-Date: 2006-03-02 10:03+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -827,6 +827,18 @@ msgid_plural "%d downloads"
 msgstr[0] "%d nedlasting"
 msgstr[1] "%d nedlastinger"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/downloader-view.c:585 ../embed/downloader-view.c:598
+msgid "download status|Unknown"
+msgstr "Ukjent"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/downloader-view.c:590
+msgid "download status|Failed"
+msgstr "Feilet"
+
 #: ../embed/downloader-view.c:657
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1001
 msgid "File"
@@ -1244,6 +1256,12 @@ msgstr "Lokale filer"
 msgid "Save"
 msgstr "Lagre"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/ContentHandler.cpp:299
+msgid "File Type:|Unknown"
+msgstr "Ukjent"
+
 #: ../embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "Laste ned mulig utrygg fil?"
@@ -1568,6 +1586,18 @@ msgid ""
 msgstr ""
 "Siden «%s» i denne fanen var ikke ferdig lastet når nettleseren krasjet. Den "
 "kan ha forårsaket krasjet."
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/EphyAboutModule.cpp:659
+msgid "You may find an old version:|in the Google Cache"
+msgstr "i Google-bufferen"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/EphyAboutModule.cpp:667
+msgid "You may find an old version:|in the Internet Archive"
+msgstr "i internettarkivet"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
@@ -2815,6 +2845,35 @@ msgstr "_Oppdater"
 msgid "Update Bookmark?"
 msgstr "Oppdater bokmerke?"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains all bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1023
+msgid "bookmarks|All"
+msgstr "Alle"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the most used bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1059
+msgid "bookmarks|Most Visited"
+msgstr "Oftest besøkt"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the not categorized bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1078
+msgid "bookmarks|Not Categorized"
+msgstr "Ikke kategorisert"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this is an automatic topic containing local websites bookmarks
+#. * autodiscovered with zeroconf.
+#: ../src/bookmarks/ephy-bookmarks.c:1103
+msgid "bookmarks|Local Sites"
+msgstr "Lokale nettsteder"
+
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
 msgstr "Hurtigbokmerke"
@@ -3926,6 +3985,29 @@ msgstr "Lukk forhåndsvisning av utskrift"
 #: ../src/prefs-dialog.c:412
 msgid "Default"
 msgstr "Forvalgt"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../src/prefs-dialog.c:993 ../src/prefs-dialog.c:1001
+#, c-format
+msgid "language|%s (%s)"
+msgstr "%s (%s)"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: ../src/prefs-dialog.c:1012
+#, c-format
+msgid "language|User defined (%s)"
+msgstr "Brukerdefinert (%s)"
 
 #: ../src/prefs-dialog.c:1034
 #, c-format
