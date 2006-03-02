@@ -318,11 +318,12 @@ ephy_encoding_menu_view_dialog_cb (GtkAction *action, EphyEncodingMenu *menu)
 {
 	if (menu->priv->dialog == NULL)
 	{
+		EphyEncodingDialog **dialog = &menu->priv->dialog;
 		menu->priv->dialog = ephy_encoding_dialog_new
 					(menu->priv->window);
 
 		g_object_add_weak_pointer(G_OBJECT (menu->priv->dialog),
-					  (gpointer *) &menu->priv->dialog);
+					  (gpointer *)dialog);
 	}
 
 	ephy_dialog_show (EPHY_DIALOG (menu->priv->dialog));

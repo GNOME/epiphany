@@ -283,9 +283,12 @@ cmd_clear (GtkAction *action,
 {
 	if (editor->priv->confirmation_dialog == NULL)
 	{
+		GtkWidget **confirmation_dialog;
+
 		editor->priv->confirmation_dialog = confirmation_dialog_construct (editor);
+		confirmation_dialog = &editor->priv->confirmation_dialog;
 		g_object_add_weak_pointer (G_OBJECT (editor->priv->confirmation_dialog),
-					   (gpointer *) &editor->priv->confirmation_dialog);
+					   (gpointer *) confirmation_dialog);
 	}
 
 	gtk_widget_show (editor->priv->confirmation_dialog);
@@ -628,9 +631,10 @@ ephy_history_window_finalize (GObject *object)
 
 	if (editor->priv->window)
 	{
+		GtkWidget **window = &editor->priv->window;
 		g_object_remove_weak_pointer
                         (G_OBJECT(editor->priv->window),
-                         (gpointer *)&editor->priv->window);
+                         (gpointer *)window);
 	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -1356,18 +1360,21 @@ void
 ephy_history_window_set_parent (EphyHistoryWindow *ebe,
 				GtkWidget *window)
 {
+	GtkWindow **widget;
 	if (ebe->priv->window)
 	{
+		widget = &ebe->priv->window;
 		g_object_remove_weak_pointer
                         (G_OBJECT(ebe->priv->window),
-                         (gpointer *)&ebe->priv->window);
+                         (gpointer *)widget);
 	}
 
 	ebe->priv->window = window;
+	widget = &ebe->priv->window;
 
 	g_object_add_weak_pointer
                         (G_OBJECT(ebe->priv->window),
-                         (gpointer *)&ebe->priv->window);
+			(gpointer *)widget);
 
 }
 

@@ -815,10 +815,14 @@ ephy_shell_get_pdm_dialog (EphyShell *shell)
 {
 	if (shell->priv->pdm_dialog == NULL)
 	{
+		GObject **dialog;
+
 		shell->priv->pdm_dialog = g_object_new (EPHY_TYPE_PDM_DIALOG, NULL);
 
+		dialog = &shell->priv->pdm_dialog;
+
 		g_object_add_weak_pointer (shell->priv->pdm_dialog,
-					   (gpointer *) &shell->priv->pdm_dialog);
+					   (gpointer *) dialog);
 	}
 
 	return shell->priv->pdm_dialog;
@@ -829,10 +833,14 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 {
 	if (shell->priv->prefs_dialog == NULL)
 	{
+		GObject **dialog;
+
 		shell->priv->prefs_dialog = g_object_new (EPHY_TYPE_PREFS_DIALOG, NULL);
 
+		dialog  = &shell->priv->prefs_dialog;
+
 		g_object_add_weak_pointer (shell->priv->prefs_dialog,
-					   (gpointer *) &shell->priv->prefs_dialog);
+					   (gpointer *) dialog);
 	}
 
 	return shell->priv->prefs_dialog;
@@ -843,10 +851,14 @@ ephy_shell_get_print_setup_dialog (EphyShell *shell)
 {
 	if (shell->priv->print_setup_dialog == NULL)
 	{
+		GObject **dialog;
+
 		shell->priv->print_setup_dialog = G_OBJECT (ephy_print_setup_dialog_new ());
 
+		dialog = &shell->priv->print_setup_dialog;
+
 		g_object_add_weak_pointer (shell->priv->print_setup_dialog,
-					   (gpointer *) &shell->priv->print_setup_dialog);
+					   (gpointer *) dialog);
 	}
 
 	return shell->priv->print_setup_dialog;

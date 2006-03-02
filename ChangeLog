@@ -1,3 +1,16 @@
+2006-03-02  Jean-François Rameau  <jframeau@cvs.gnome.org>
+	
+	* embed/ephy-embed-shell.c:(ephy_embed_shell_dispose):
+	* src/ephy-encoding-menu.c: (ephy_encoding_menu_view_dialog_cb):
+	* src/ephy-history-window.c: (cmd_clear), (ephy_history_window_finalize):
+	* src/ephy-shell.c: (ephy_shell_get_pdm_dialog),(ephy_shell_get_prefs_dialog),
+	(ephy_shell_get_print_setup_dialog):
+	* src/prefs-dialog.c: (prefs_dialog_finalize), (font_prefs_button_clicked_cb),
+	(language_editor_add_button_clicked_cb):
+	* src/bookmarks/ephy-bookmarks-editor.c: (ephy_bookmarks_editor_finalize):
+	
+	Fix gcc 4.1 warnings (dereferencing type-punned pointer will break strict-aliasing rules).
+
 2006-03-02  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/GtkNSSDialogs.cpp:

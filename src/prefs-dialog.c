@@ -329,17 +329,21 @@ prefs_dialog_finalize (GObject *object)
 
 	if (priv->fonts_dialog != NULL)
 	{
+		EphyDialog **fonts_dialog = &priv->fonts_dialog;
+
 		g_object_remove_weak_pointer
 			(G_OBJECT (priv->fonts_dialog),
-			(gpointer *) &priv->fonts_dialog);
+			(gpointer *) fonts_dialog);
 		g_object_unref (priv->fonts_dialog);
 	}
 
 	if (priv->add_lang_dialog != NULL)
 	{
+		EphyDialog **add_lang_dialog = &priv->add_lang_dialog;
+
 		g_object_remove_weak_pointer
 				(G_OBJECT (priv->add_lang_dialog),
-				 (gpointer *) &priv->add_lang_dialog);
+				 (gpointer *) add_lang_dialog);
 		g_object_unref (priv->add_lang_dialog);
 	}
 
@@ -616,11 +620,15 @@ font_prefs_button_clicked_cb (GtkWidget *button,
 
 	if (priv->fonts_dialog == NULL)
 	{
+		EphyDialog **fonts_dialog;
+
 		priv->fonts_dialog = setup_fonts_dialog (pd);
+
+		fonts_dialog = &priv->fonts_dialog;
 
 		g_object_add_weak_pointer
 			(G_OBJECT (priv->fonts_dialog),
-			(gpointer *) &priv->fonts_dialog);
+			(gpointer *) fonts_dialog);
 	}
 
 	ephy_dialog_show (priv->fonts_dialog);
@@ -1143,11 +1151,15 @@ language_editor_add_button_clicked_cb (GtkWidget *button,
 {
 	if (pd->priv->add_lang_dialog == NULL)
 	{
+		EphyDialog **add_lang_dialog;
+
 		pd->priv->add_lang_dialog = setup_add_language_dialog (pd);
+
+		add_lang_dialog = &pd->priv->add_lang_dialog;
 
 		g_object_add_weak_pointer
 			(G_OBJECT (pd->priv->add_lang_dialog),
-			(gpointer *) &pd->priv->add_lang_dialog);
+			(gpointer *) add_lang_dialog);
 	}
 
 	ephy_dialog_show (pd->priv->add_lang_dialog);

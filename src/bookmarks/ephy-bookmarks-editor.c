@@ -1250,9 +1250,10 @@ ephy_bookmarks_editor_finalize (GObject *object)
 
 	if (editor->priv->window)
 	{
+		GtkWidget **window = &editor->priv->window;
 		g_object_remove_weak_pointer
 			(G_OBJECT(editor->priv->window),
-			 (gpointer *)&editor->priv->window);
+			 (gpointer *)window);
 	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -1939,18 +1940,21 @@ void
 ephy_bookmarks_editor_set_parent (EphyBookmarksEditor *ebe,
 				  GtkWidget *window)
 {
+	GtkWidget **w;
 	if (ebe->priv->window)
 	{
+		w = &ebe->priv->window;
 		g_object_remove_weak_pointer
 			(G_OBJECT(ebe->priv->window),
-			 (gpointer *)&ebe->priv->window);
+			 (gpointer *)w);
 	}
 
 	ebe->priv->window = window;
+	w = &ebe->priv->window;
 
 	g_object_add_weak_pointer
 			(G_OBJECT(ebe->priv->window),
-			 (gpointer *)&ebe->priv->window);
+			 (gpointer *)w);
 
 }
 

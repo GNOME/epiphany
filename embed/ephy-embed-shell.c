@@ -100,10 +100,11 @@ ephy_embed_shell_dispose (GObject *object)
 
 	if (priv->downloader_view != NULL)
 	{
+		DownloaderView **downloader_view = &priv->downloader_view;
 		LOG ("Unref downloader");
 		g_object_remove_weak_pointer
 			(G_OBJECT (priv->downloader_view),
-			 (gpointer *) &priv->downloader_view);
+			 (gpointer *) downloader_view);
 		g_object_unref (priv->downloader_view);
 		priv->downloader_view = NULL;
 	}
@@ -193,10 +194,12 @@ ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell)
 
 	if (shell->priv->downloader_view == NULL)
 	{
+		DownloaderView **downloader_view;
 		shell->priv->downloader_view = downloader_view_new ();
+		downloader_view = &shell->priv->downloader_view;
 		g_object_add_weak_pointer
 			(G_OBJECT(shell->priv->downloader_view),
-			 (gpointer *)&shell->priv->downloader_view);
+			 (gpointer *) downloader_view);
 	}
 
 	return G_OBJECT (shell->priv->downloader_view);
