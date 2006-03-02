@@ -1360,7 +1360,7 @@ void
 ephy_history_window_set_parent (EphyHistoryWindow *ebe,
 				GtkWidget *window)
 {
-	GtkWindow **widget;
+	GtkWidget **widget;
 	if (ebe->priv->window)
 	{
 		widget = &ebe->priv->window;
