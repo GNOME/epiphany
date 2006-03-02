@@ -68,8 +68,6 @@ EphyContentPolicy::~EphyContentPolicy()
 GtkWidget *
 EphyContentPolicy::GetEmbedFromContext (nsISupports *aContext)
 {
-	GtkWidget *ret;
-
 	/*
 	 * aContext is either an nsIDOMWindow, an nsIDOMNode, or NULL. If it's
 	 * an nsIDOMNode, we need the nsIDOMWindow to get the EphyEmbed.
@@ -102,10 +100,10 @@ EphyContentPolicy::GetEmbedFromContext (nsISupports *aContext)
 	}
 	NS_ENSURE_TRUE (window, NULL);
 
-	ret = EphyUtils::FindEmbed (window);
-	if (EPHY_IS_EMBED (ret)) return GTK_WIDGET (ret);
+	GtkWidget *embed = EphyUtils::FindEmbed (window);
+	if (!EPHY_IS_EMBED (embed)) NULL;
 
-	return NULL;
+	return embed;
 }
 
 #if MOZ_NSICONTENTPOLICY_VARIANT == 2
@@ -140,7 +138,20 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 	EphyAdBlockManager *adblock_manager = 
 		EPHY_ADBLOCK_MANAGER (ephy_embed_shell_get_adblock_manager (embed_shell));
 
-	if (!ephy_adblock_manager_should_load (adblock_manager, spec.get (), AdUriCheckType (aContentType)))
+	static PRBool kBlockType[nsIContentPolicy::TYPE_REFRESH + 1] = {
+		PR_FALSE /* unused/unknown, don't block */,
+		PR_TRUE  /* TYPE_OTHER */,
+		PR_TRUE  /* TYPE_SCRIPT */,
+		PR_TRUE  /* TYPE_IMAGE */,
+		PR_FALSE /* TYPE_STYLESHEET */,
+		PR_TRUE  /* TYPE_OBJECT */,
+		PR_FALSE /* TYPE_DOCUMENT */,
+		PR_TRUE  /* TYPE_SUBDOCUMENT */,
+		PR_TRUE  /* TYPE_REFRESH */
+	};
+
+	if (kBlockType[aContentType < G_N_ELEMENTS (kBlockType) ? aContentType : 0] &&
+	    !ephy_adblock_manager_should_load (adblock_manager, spec.get (), AdUriCheckType (aContentType)))
 	{
 		*aDecision = nsIContentPolicy::REJECT_REQUEST;
 
