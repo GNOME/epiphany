@@ -69,44 +69,60 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 		       const char *filename)
 {
 	const char *type;
+	char *basename;
 	gboolean success = FALSE;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
+
+	g_return_val_if_fail (filename != NULL, FALSE);
 
 	type = gnome_vfs_get_file_mime_type (filename, NULL, FALSE);
 
 	LOG ("Importing bookmarks of type %s", type ? type : "(null)");
 
-	if (type == NULL)
-	{
-		g_warning ("Couldn't determine the type of the bookmarks file %s!\n", filename);
-	}
-	else if (strcmp (type, "application/x-mozilla-bookmarks") == 0)
-	{
-		success = ephy_bookmarks_import_mozilla (bookmarks, filename);
-	}
-	else if (strcmp (type, "application/x-xbel") == 0)
-	{
-		success = ephy_bookmarks_import_xbel (bookmarks, filename);
-	}
-	else if (strcmp (type, "application/rdf+xml") == 0 ||
-		 strcmp (type, "text/rdf") == 0)
+	if (type != NULL && (strcmp (type, "application/rdf+xml") == 0 ||
+			     strcmp (type, "text/rdf") == 0))
 	{
 		success = ephy_bookmarks_import_rdf (bookmarks, filename);
 	}
-	else if (strstr (filename, MOZILLA_BOOKMARKS_DIR) != NULL ||
+	else if ((type != NULL && strcmp (type, "application/x-xbel") == 0) ||
+		 strstr (filename, GALEON_BOOKMARKS_DIR) != NULL ||
+		 strstr (filename, KDE_BOOKMARKS_DIR) != NULL)
+	{
+		success = ephy_bookmarks_import_xbel (bookmarks, filename);
+	}
+	else if ((type != NULL && strcmp (type, "application/x-mozilla-bookmarks") == 0) ||
+	         strstr (filename, MOZILLA_BOOKMARKS_DIR) != NULL ||
                  strstr (filename, FIREFOX_BOOKMARKS_DIR_0) != NULL ||
                  strstr (filename, FIREFOX_BOOKMARKS_DIR_1) != NULL ||
 		 strstr (filename, FIREFOX_BOOKMARKS_DIR_2) != NULL)
 	{
 		success = ephy_bookmarks_import_mozilla (bookmarks, filename);
 	}
-	else if (strstr (filename, GALEON_BOOKMARKS_DIR) != NULL ||
-		 strstr (filename, KDE_BOOKMARKS_DIR) != NULL)
+	else if (type == NULL)
 	{
-		success = ephy_bookmarks_import_xbel (bookmarks, filename);
+		basename = g_path_get_basename (filename);
+
+		if (g_str_has_suffix (basename, ".rdf"))
+		{
+			success = ephy_bookmarks_import_rdf (bookmarks, filename);
+		}
+		else if (g_str_has_suffix (basename, ".xbel"))
+		{
+			success = ephy_bookmarks_import_xbel (bookmarks, filename);
+		}
+		else if (g_str_has_suffix (basename, ".html"))
+		{
+			success = ephy_bookmarks_import_mozilla (bookmarks, filename);
+		}
+		else
+		{
+			/* else FIXME: put up some UI to warn user about unrecognised format? */
+			g_warning ("Couldn't determine the type of the bookmarks file %s!\n", filename);
+		}
+
+		g_free (basename);
 	}
-	/* else FIXME: put up some UI to warn user about unrecognised format? */
 
 	return success;
 }

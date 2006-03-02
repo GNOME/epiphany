@@ -449,7 +449,64 @@ main (int argc,
 	/* check libxml2 API version epiphany was compiled with against the
 	 * version we're running with.
 	 */
-	LIBXML_TEST_VERSION
+	LIBXML_TEST_VERSION;
+
+	/* If we're given -remote arguments, translate them */
+	if (argc >= 2 &&
+	    strcmp (argv[1], "-remote") == 0)
+	{
+		const char *opening, *closing;
+		char *command, *argument;
+		char **arguments;
+
+		if (argc != 3)
+		{
+			g_print ("-remote allows exactly one argument\n");
+			exit (1);
+		}
+
+		opening = strchr (argv[2], '(');
+		closing = strchr (argv[2], ')');
+
+		if (opening == NULL ||
+		    closing == NULL ||
+		    opening == argv[2] ||
+		    opening + 1 >= closing)
+		{
+			g_print ("Invalid argument for -remote\n");
+			exit (1);
+		}
+
+		command = g_strstrip (g_strndup (argv[2], opening - argv[2]));
+
+		/* See http://lxr.mozilla.org/seamonkey/source/xpfe/components/xremote/src/XRemoteService.cpp
+		 * for the commands that mozilla supports; we'll just support openURL here.
+		 */
+		if (g_ascii_strcasecmp (command, "openURL") != 0)
+		{
+			g_print ("-remote command \"%s\" not supported\n", command);
+			g_free (command);
+			exit (1);
+		}
+
+		g_free (command);
+
+		argument = g_strstrip (g_strndup (opening + 1, closing - opening - 1));
+		arguments = g_strsplit (argument, ",", -1);
+		g_free (argument);
+		if (arguments == NULL)
+		{
+			g_print ("Invalid argument for -remote\n");
+
+			exit (1);
+		}
+
+		/* replace arguments */
+		argv[1] = g_strstrip (g_strdup (arguments[0]));
+		argc = 2;
+
+		g_strfreev (arguments);
+	}
 
 	/* Initialise our debug helpers */
 	ephy_debug_init ();
@@ -569,14 +626,21 @@ main (int argc,
 
 		for (i = 0; arguments[i] != NULL; ++i)
 		{
-			char *uri, *path = NULL;
+			char *uri, *path;
+#ifdef PATH_MAX
+			char rpath[PATH_MAX];
+#else
+			char *rpath = NULL;
+#endif
 
-			path = realpath (arguments[i], NULL);
+			path = realpath (arguments[i], rpath);
 			if (path != NULL)
 			{
 				uri = g_locale_to_utf8 (path, -1, 
 							NULL, NULL, &error);
+#ifndef PATH_MAX
 				free (path);
+#endif
 			}
 			else
 			{
