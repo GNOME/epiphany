@@ -3646,14 +3646,17 @@ sync_prefs_with_chrome (EphyWindow *window)
 }
 
 static void
-sync_chrome_with_view_toggle (GtkAction *action, EphyWindow *window,
-			      EphyEmbedChrome chrome_flag)
+sync_chrome_with_view_toggle (GtkAction *action,
+			      EphyWindow *window,
+			      EphyEmbedChrome chrome_flag,
+			      gboolean invert)
 {
 	gboolean active;
 
 	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
-	window->priv->chrome = active ? window->priv->chrome & (~chrome_flag) :
-	                                window->priv->chrome | chrome_flag;
+	window->priv->chrome = (active != invert) ?
+	  				window->priv->chrome | chrome_flag :
+	  				window->priv->chrome & (~chrome_flag);
 
 	sync_chromes_visibility (window);
 	sync_prefs_with_chrome (window);
@@ -3664,7 +3667,7 @@ ephy_window_view_statusbar_cb (GtkAction *action,
 			       EphyWindow *window)
 {
 	sync_chrome_with_view_toggle (action, window,
-				      EPHY_EMBED_CHROME_STATUSBAR);
+				      EPHY_EMBED_CHROME_STATUSBAR, FALSE);
 }
 
 static void
@@ -3672,7 +3675,7 @@ ephy_window_view_toolbar_cb (GtkAction *action,
 			     EphyWindow *window)
 {
 	sync_chrome_with_view_toggle (action, window,
-				      EPHY_EMBED_CHROME_TOOLBAR);
+				      EPHY_EMBED_CHROME_TOOLBAR, TRUE);
 }
 
 static void
