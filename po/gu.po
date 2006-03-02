@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-22 05:45+0100\n"
-"PO-Revision-Date: 2006-02-22 10:35+0530\n"
+"POT-Creation-Date: 2006-03-02 05:31+0100\n"
+"PO-Revision-Date: 2006-03-02 10:11+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -14,6 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -835,7 +836,20 @@ msgid_plural "%d downloads"
 msgstr[0] "%d ડાઉનલોડ"
 msgstr[1] "%d ડાઉનલોડ"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:985
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/downloader-view.c:585 ../embed/downloader-view.c:598
+msgid "download status|Unknown"
+msgstr "અજ્ઞાત"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/downloader-view.c:590
+msgid "download status|Failed"
+msgstr "નિષ્ફળ"
+
+#: ../embed/downloader-view.c:657
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1001
 msgid "File"
 msgstr "ફાઇલ"
 
@@ -1252,6 +1266,12 @@ msgstr "સ્થાનિક ફાઇલો"
 msgid "Save"
 msgstr "આ રીતે સંગ્રહિત કરો"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/ContentHandler.cpp:299
+msgid "File Type:|Unknown"
+msgstr "અજ્ઞાત"
+
 #: ../embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "શું આ અસુરક્ષિત ફાઈલો ડાઉનલોડ કરવી છે?"
@@ -1561,6 +1581,18 @@ msgstr ""
 "આ ટેબમાંનું પાનું “%s” હજું સુધી સંપૂર્ણપણે લવાઈ ગયું નથી જ્યારે વેબ બ્રાઉઝર નષ્ટ થઈ ગયું; તેણે નષ્ટ "
 "કરી નાંખ્યું હશે."
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/EphyAboutModule.cpp:659
+msgid "You may find an old version:|in the Google Cache"
+msgstr "ગુગલ કેશમાં"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/EphyAboutModule.cpp:667
+msgid "You may find an old version:|in the Internet Archive"
+msgstr "ઈન્ટરનેટ પેટીમાં"
+
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks-import.c:245
 #: ../src/bookmarks/ephy-bookmarks.c:1264 ../src/ephy-session.c:1308
@@ -1587,7 +1619,7 @@ msgid "_Password:"
 msgstr "પાસવર્ડ (_P):"
 
 #: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:768
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:784
 msgid "All files"
 msgstr "બધી ફાઇલો"
 
@@ -2001,32 +2033,39 @@ msgstr ""
 "જીકોન્ફ ભૂલ:\n"
 " %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:892
+#. Translaters: This string is for a toggle to display a toolbar.
+#. * The name of the toolbar is automatically computed from the widgets
+#. * on the toolbar, and is placed at the %s. Note the _ before the %s
+#. * which is used to add mnemonics. We know that this is likely to
+#. * produce duplicates, but don't worry about it. If your language
+#. * normally has a mnemonic at the start, please use the _. If not,
+#. * please remove.
+#: ../lib/egg/egg-editable-toolbar.c:902
 #, c-format
 msgid "Show “_%s”"
 msgstr "“_%s” બતાવો"
 
-#: ../lib/egg/egg-editable-toolbar.c:1337
+#: ../lib/egg/egg-editable-toolbar.c:1362
 msgid "_Move on Toolbar"
 msgstr "સાધનપટ્ટીમાં ખસેડો (_M)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1338
+#: ../lib/egg/egg-editable-toolbar.c:1363
 msgid "Move the selected item on the toolbar"
 msgstr "પસંદ કરેલ વસ્તુને સાધનપટ્ટી પર ખસેડો"
 
-#: ../lib/egg/egg-editable-toolbar.c:1339
+#: ../lib/egg/egg-editable-toolbar.c:1364
 msgid "_Remove from Toolbar"
 msgstr "સાધનપટ્ટીમાંથી કાઢી નાખો (_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1340
+#: ../lib/egg/egg-editable-toolbar.c:1365
 msgid "Remove the selected item from the toolbar"
 msgstr "પસંદ કરેલ વસ્તુને સાધનપટ્ટીમાંથી દૂર કરો"
 
-#: ../lib/egg/egg-editable-toolbar.c:1341
+#: ../lib/egg/egg-editable-toolbar.c:1366
 msgid "_Delete Toolbar"
 msgstr "સાધનદર્શકપટ્ટી કાઢી નાખો (_D)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1342
+#: ../lib/egg/egg-editable-toolbar.c:1367
 msgid "Remove the selected toolbar"
 msgstr "પસંદ કરેલ સાધનપટ્ટી દૂર કરો"
 
@@ -2250,8 +2289,8 @@ msgstr "પોપ-અપ વિન્ડો"
 msgid "History"
 msgstr "ઇતિહાસ"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:899
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1741
+#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:915
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1757
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "બુકમાર્ક"
@@ -2427,7 +2466,7 @@ msgstr "નવો મુદ્દો બનાવો"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1358
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1374
 #: ../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
 #: ../src/ephy-history-window.c:696
 msgid "Open in New _Window"
@@ -2441,7 +2480,7 @@ msgstr "પસંદ કરેલ બુકમાર્કને નવી વ�
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1361
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1377
 #: ../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
 #: ../src/ephy-history-window.c:699
 msgid "Open in New _Tab"
@@ -2517,7 +2556,7 @@ msgid "Cut the selection"
 msgstr "પસંદ કરાયેલને કાપો"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1371
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1387
 #: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
 #: ../src/ephy-window.c:168
 msgid "_Copy"
@@ -2622,38 +2661,40 @@ msgstr ""
 msgid "_Delete Topic"
 msgstr "મુદ્દો કાઢી નાંખો (_D)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:631
+#. FIXME: proper i18n after freeze
+#: ../src/bookmarks/ephy-bookmarks-editor.c:642
+#: ../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "Firefox"
 msgstr "ફાયરફોક્સ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:635
-#: ../src/bookmarks/ephy-bookmarks-editor.c:639
+#: ../src/bookmarks/ephy-bookmarks-editor.c:651
+#: ../src/bookmarks/ephy-bookmarks-editor.c:655
 msgid "Firebird"
 msgstr "ફાયરબર્ડ"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:644
+#: ../src/bookmarks/ephy-bookmarks-editor.c:660
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "મોઝિલ્લા “%s” રૂપરેખા"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:648
+#: ../src/bookmarks/ephy-bookmarks-editor.c:664
 msgid "Galeon"
 msgstr "ગેલિયન"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:652
+#: ../src/bookmarks/ephy-bookmarks-editor.c:668
 msgid "Konqueror"
 msgstr "કોન્કરર"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:681
+#: ../src/bookmarks/ephy-bookmarks-editor.c:697
 msgid "Import failed"
 msgstr "આયાત નિષ્ફળ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:683
+#: ../src/bookmarks/ephy-bookmarks-editor.c:699
 msgid "Import Failed"
 msgstr "આયાત નિષ્ફળ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:686
+#: ../src/bookmarks/ephy-bookmarks-editor.c:702
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2662,63 +2703,63 @@ msgstr ""
 "“%s” માંની બુકમાર્કો આયાત કરી શકાઈ નહિં કારણ કે ફાઈલ બગડી ગયેલ હતી અથવા તેનો પ્રકાર "
 "બિનઆધારભૂત હતો."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:749
+#: ../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "Import bookmarks from file"
 msgstr "બુકમાર્ક આયાત કરો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:756
+#: ../src/bookmarks/ephy-bookmarks-editor.c:772
 msgid "Firefox/Mozilla bookmarks"
 msgstr "ફાયરફોક્સ/મોઝિલ્લા બુકમાર્કો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:760
+#: ../src/bookmarks/ephy-bookmarks-editor.c:776
 msgid "Galeon/Konqueror bookmarks"
 msgstr "ગેલિયન/કોન્કરર બુકમાર્કો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:764
+#: ../src/bookmarks/ephy-bookmarks-editor.c:780
 msgid "Epiphany bookmarks"
 msgstr "એપિફની બુકમાર્કો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:887
+#: ../src/bookmarks/ephy-bookmarks-editor.c:903
 msgid "Export Bookmarks"
 msgstr "બુકમાર્કો નિકાસ કરો"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:902
+#: ../src/bookmarks/ephy-bookmarks-editor.c:918
 msgid "File format:"
 msgstr "ફાઈલ બંધારણ:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:945
+#: ../src/bookmarks/ephy-bookmarks-editor.c:961
 msgid "Import Bookmarks"
 msgstr "બુકમાર્ક આયાત કરો"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:951
+#: ../src/bookmarks/ephy-bookmarks-editor.c:967
 msgid "I_mport"
 msgstr "આયાત કરો (_m)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:965
+#: ../src/bookmarks/ephy-bookmarks-editor.c:981
 msgid "Import bookmarks from:"
 msgstr "આમાંથી બુકમાર્ક આયાત કરો:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1367
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1383
 #: ../src/ephy-history-window.c:705
 msgid "_Copy Address"
 msgstr "સરનામાની નકલ કરો (_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1608
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1624
 #: ../src/ephy-history-window.c:1021
 msgid "_Search:"
 msgstr "શોધો (_S):"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1805
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1821
 msgid "Topics"
 msgstr "મુદ્દાઓ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1875
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1891
 #: ../src/ephy-history-window.c:1304
 msgid "Title"
 msgstr "શીર્ષક"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1881
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1897
 #: ../src/ephy-history-window.c:1310
 msgid "Address"
 msgstr "સરનામું"
@@ -2783,6 +2824,35 @@ msgstr "સુધારો (_U)"
 #: ../src/bookmarks/ephy-bookmarks.c:490
 msgid "Update Bookmark?"
 msgstr "બુકમાર્ક સુધારવી છે?"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains all bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1023
+msgid "bookmarks|All"
+msgstr "બધી"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the most used bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1059
+msgid "bookmarks|Most Visited"
+msgstr "ખૂબ મુલાકાત લેવાયેલ"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the not categorized bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1078
+msgid "bookmarks|Not Categorized"
+msgstr "બિનવર્ગીકૃત"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this is an automatic topic containing local websites bookmarks
+#. * autodiscovered with zeroconf.
+#: ../src/bookmarks/ephy-bookmarks.c:1103
+msgid "bookmarks|Local Sites"
+msgstr "સ્થાનિક સાઈટો"
 
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
@@ -3020,7 +3090,7 @@ msgstr ""
 "નીચેની ભૂલોને કારણે શરૂઆત કરવાનું નિષ્ફળ ગયું:\n"
 "%s"
 
-#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:760
+#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:766
 msgid "GNOME Web Browser"
 msgstr "જીનોમ વેબ બ્રાઉઝર"
 
@@ -3904,6 +3974,29 @@ msgstr "છાપવા માટેનું પૂર્વદર્શન બ
 msgid "Default"
 msgstr "મૂળભૂત"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../src/prefs-dialog.c:993 ../src/prefs-dialog.c:1001
+#, c-format
+msgid "language|%s (%s)"
+msgstr "%s (%s)"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: ../src/prefs-dialog.c:1012
+#, c-format
+msgid "language|User defined (%s)"
+msgstr "વપરાશકર્તા વ્યાખ્યાયિત (%s)"
+
 #: ../src/prefs-dialog.c:1034
 #, c-format
 msgid "System language (%s)"
@@ -3915,23 +4008,23 @@ msgstr[1] "સિસ્ટમની ભાષાઓ (%s)"
 msgid "Select a Directory"
 msgstr "ડિરેક્ટરી પસંદ કરો"
 
-#: ../src/window-commands.c:711 ../src/window-commands.c:728
+#: ../src/window-commands.c:714 ../src/window-commands.c:731
 msgid "Contact us at:"
 msgstr "અમારો અંહિ સંપર્ક કરો:"
 
-#: ../src/window-commands.c:714
+#: ../src/window-commands.c:717
 msgid "Contributors:"
 msgstr "ફાળો આપનારાઓ:"
 
-#: ../src/window-commands.c:719
+#: ../src/window-commands.c:722
 msgid "Past developers:"
 msgstr "જૂના વિકાસકર્તાઓ:"
 
-#: ../src/window-commands.c:729
+#: ../src/window-commands.c:732
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> અથવા <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:734
+#: ../src/window-commands.c:737
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3943,7 +4036,7 @@ msgstr ""
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
 
-#: ../src/window-commands.c:738
+#: ../src/window-commands.c:741
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3955,7 +4048,7 @@ msgstr ""
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 
-#: ../src/window-commands.c:742
+#: ../src/window-commands.c:745
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3965,7 +4058,7 @@ msgstr ""
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
 
-#: ../src/window-commands.c:754
+#: ../src/window-commands.c:757
 #, c-format
 msgid "Using “%s” backend"
 msgstr "“%s” ને પાશ્વભાગમાં વાપરીને"
@@ -3978,11 +4071,11 @@ msgstr "“%s” ને પાશ્વભાગમાં વાપરીને"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:775
+#: ../src/window-commands.c:781
 msgid "translator-credits"
 msgstr "અંકિત પટેલ <ankit644@yahoo.com>"
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:784
 msgid "GNOME Web Browser Website"
 msgstr "જીનોમ વેબ બ્રાઉઝર વેબસાઈટ"
 
