@@ -80,8 +80,8 @@ GtkNSSKeyPairDialogs::~GtkNSSKeyPairDialogs ()
 	LOG ("GtkNSSKeyPairDialogs dtor (%p)", this);
 }
 
-NS_IMPL_ISUPPORTS1 (GtkNSSKeyPairDialogs, 
-		    nsIGeneratingKeypairInfoDialogs)
+NS_IMPL_THREADSAFE_ISUPPORTS1 (GtkNSSKeyPairDialogs,
+			       nsIGeneratingKeypairInfoDialogs)
 
 #ifdef HAVE_GECKO_1_8
 

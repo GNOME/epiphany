@@ -64,9 +64,7 @@
 #include <gtk/gtkvbox.h>
 #include <gtk/gtklabel.h>
 
-/* FIXME why threadsafe? it's proxied by nsSecureBrowserImpl */
-/* NS_IMPL_THREADSAFE_ISUPPORTS1 (GtkNSSSecurityWarningDialogs, nsISecurityWarningDialogs) */
-NS_IMPL_ISUPPORTS1 (GtkNSSSecurityWarningDialogs, nsISecurityWarningDialogs)
+NS_IMPL_THREADSAFE_ISUPPORTS1 (GtkNSSSecurityWarningDialogs, nsISecurityWarningDialogs)
 
 #define ENTER_SITE_PREF      "security.warn_entering_secure"
 #define WEAK_SITE_PREF       "security.warn_entering_weak"

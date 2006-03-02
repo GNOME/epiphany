@@ -98,9 +98,9 @@ GtkNSSDialogs::~GtkNSSDialogs ()
 {
 }
 
-NS_IMPL_ISUPPORTS2 (GtkNSSDialogs, 
-		    nsICertificateDialogs,
-		    nsIBadCertListener)
+NS_IMPL_THREADSAFE_ISUPPORTS2 (GtkNSSDialogs, 
+			       nsICertificateDialogs,
+			       nsIBadCertListener)
 
 /**
  *  Call the mozilla service to display a certificate
@@ -111,7 +111,7 @@ view_certificate (nsIInterfaceRequestor *ctx, nsIX509Cert *cert)
 	nsresult rv;
 	nsCOMPtr<nsICertificateDialogs> certDialogs =
 		do_GetService (NS_CERTIFICATEDIALOGS_CONTRACTID, &rv);
-	g_return_if_fail (NS_SUCCEEDED (rv));
+	NS_ENSURE_SUCCESS (rv, );
 
 	certDialogs->ViewCert (ctx, cert);
 }
