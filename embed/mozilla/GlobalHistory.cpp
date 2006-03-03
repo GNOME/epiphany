@@ -38,7 +38,7 @@
 #ifdef HAVE_NSIGLOBALHISTORY3_H
 NS_IMPL_ISUPPORTS2 (MozGlobalHistory, nsIGlobalHistory2, nsIGlobalHistory3)
 #else
-NS_IMPL_ISUPPORTS2 (MozGlobalHistory, nsIGlobalHistory2)
+NS_IMPL_ISUPPORTS1 (MozGlobalHistory, nsIGlobalHistory2)
 #endif /* HAVE_NSIGLOBALHISTORY3_H */
 
 MozGlobalHistory::MozGlobalHistory ()
