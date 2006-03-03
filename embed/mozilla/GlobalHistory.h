@@ -24,7 +24,11 @@
 
 #include "ephy-history.h"
 
+#ifdef HAVE_NSIGLOBALHISTORY3_H
+#include <nsIGlobalHistory3.h>
+#else
 #include <nsIGlobalHistory2.h>
+#endif /* HAVE_NSIGLOBALHISTORY3_H */
 
 #include <nsCOMPtr.h>
 #include <nsAutoPtr.h>
@@ -40,7 +44,11 @@
 	{ 0xb7, 0x9e, 0xf7, 0xaa, 0x49, 0xeb, 0x6a, 0x15}	\
 }
 
+#ifdef HAVE_NSIGLOBALHISTORY3_H
+class MozGlobalHistory: public nsIGlobalHistory3
+#else
 class MozGlobalHistory: public nsIGlobalHistory2
+#endif /* HAVE_NSIGLOBALHISTORY3_H */
 {
 	public:
 		MozGlobalHistory ();
@@ -48,6 +56,9 @@ class MozGlobalHistory: public nsIGlobalHistory2
 
 		NS_DECL_ISUPPORTS
 		NS_DECL_NSIGLOBALHISTORY2
+#ifdef HAVE_NSIGLOBALHISTORY3_H
+		NS_DECL_NSIGLOBALHISTORY3
+#endif /* HAVE_NSIGLOBALHISTORY3_H */
 
 	private:
 		EphyHistory *mGlobalHistory;

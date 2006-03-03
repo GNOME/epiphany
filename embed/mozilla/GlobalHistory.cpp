@@ -35,7 +35,11 @@
 #define MAX_TITLE_LENGTH	2048
 #define MAX_URL_LENGTH		16384
 
-NS_IMPL_ISUPPORTS1 (MozGlobalHistory, nsIGlobalHistory2)
+#ifdef HAVE_NSIGLOBALHISTORY3_H
+NS_IMPL_ISUPPORTS2 (MozGlobalHistory, nsIGlobalHistory2, nsIGlobalHistory3)
+#else
+NS_IMPL_ISUPPORTS2 (MozGlobalHistory, nsIGlobalHistory2)
+#endif /* HAVE_NSIGLOBALHISTORY3_H */
 
 MozGlobalHistory::MozGlobalHistory ()
 {
@@ -156,7 +160,7 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI,
 	return NS_OK;
 }
 
-#ifdef HAVE_GECKO_1_9
+#ifdef HAVE_NSIGLOBALHISTORY3_H
 /* unsigned long getURIGeckoFlags(in nsIURI aURI); */
 NS_IMETHODIMP
 MozGlobalHistory::GetURIGeckoFlags(nsIURI *aURI,
@@ -209,4 +213,19 @@ MozGlobalHistory::SetURIGeckoFlags(nsIURI *aURI,
 
 	return NS_ERROR_FAILURE;
 }
-#endif /* HAVE_GECKO_1_9 */
+
+/* void addDocumentRedirect (in nsIChannel 
+   		             aOldChannel, 
+			     in nsIChannel aNewChannel, 
+			     in PRInt32 aFlags, 
+			     in boolean aTopLevel); */
+NS_IMETHODIMP 
+MozGlobalHistory::AddDocumentRedirect(nsIChannel *aOldChannel, 
+				      nsIChannel *aNewChannel, 
+				      PRInt32 aFlags, 
+				      PRBool aTopLevel)
+{
+    return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+#endif /* HAVE_NSIGLOBALHISTORY3_H */

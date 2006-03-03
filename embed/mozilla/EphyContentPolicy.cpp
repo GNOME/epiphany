@@ -101,7 +101,7 @@ EphyContentPolicy::GetEmbedFromContext (nsISupports *aContext)
 	NS_ENSURE_TRUE (window, NULL);
 
 	GtkWidget *embed = EphyUtils::FindEmbed (window);
-	if (!EPHY_IS_EMBED (embed)) NULL;
+	if (!EPHY_IS_EMBED (embed)) return NULL;
 
 	return embed;
 }
