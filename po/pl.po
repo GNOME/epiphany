@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-25 23:02+0100\n"
+"POT-Creation-Date: 2006-03-05 12:39+0100\n"
 "PO-Revision-Date: 2006-02-25 00:14+0200\n"
 "Last-Translator: GNOME PL Team <translators@gnomepl.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -141,8 +141,8 @@ msgid "Epiphany Web Browser"
 msgstr "Przeglądarka WWW Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:482
-#: ../src/ephy-main.c:533 ../src/ephy-main.c:621
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:539
+#: ../src/ephy-main.c:590 ../src/ephy-main.c:685
 msgid "Web Browser"
 msgstr "Przeglądarka WWW"
 
@@ -257,8 +257,8 @@ msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
 msgstr ""
-"Sposób przedstawienia animowanych obrazów. Możliwe wartości to \"normal\" "
-"(zwykłe), \"once\" (pojedyncze) i \"disabled\" (wyłączone)."
+"Sposób przedstawienia animowanych obrazów. Możliwe wartości to \"normal"
+"\" (zwykłe), \"once\" (pojedyncze) i \"disabled\" (wyłączone)."
 
 #: ../data/epiphany.schemas.in.h:19
 msgid "ISO-8859-1"
@@ -593,7 +593,7 @@ msgstr "Dane osobiste"
 msgid "Text Encoding"
 msgstr "Kodowanie tekstu"
 
-#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:358
+#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:359
 msgid "Use the encoding specified by the document"
 msgstr "Używanie kodowania określonego przez dokument"
 
@@ -682,7 +682,7 @@ msgstr "Czcionki i style"
 msgid "For l_anguage:"
 msgstr "Dla ję_zyka:"
 
-#: ../data/glade/prefs-dialog.glade.h:21 ../src/prefs-dialog.c:1301
+#: ../data/glade/prefs-dialog.glade.h:21 ../src/prefs-dialog.c:1313
 msgid "Language"
 msgstr "Język"
 
@@ -848,6 +848,18 @@ msgstr[0] "%d pobranie"
 msgstr[1] "%d pobrania"
 msgstr[2] "%d pobrań"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/downloader-view.c:585 ../embed/downloader-view.c:598
+msgid "download status|Unknown"
+msgstr "Nieznany"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/downloader-view.c:590
+msgid "download status|Failed"
+msgstr "Nie powiodło się"
+
 #: ../embed/downloader-view.c:657
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1001
 msgid "File"
@@ -861,7 +873,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Pozostało"
 
-#: ../embed/ephy-embed-shell.c:243
+#: ../embed/ephy-embed-shell.c:246
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Nie można teraz użyć Epiphany. Nie powiodła się inicjalizacja Mozilli."
 
@@ -1265,6 +1277,12 @@ msgstr "Pliki lokalne"
 msgid "Save"
 msgstr "Zapisz"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/ContentHandler.cpp:299
+msgid "File Type:|Unknown"
+msgstr "Nieznany"
+
 #: ../embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "Czy pobrać potencjalnie niebezpieczny plik?"
@@ -1405,8 +1423,8 @@ msgid ""
 "Services, or</ul><ul><li>the port number %d is wrong.</li></ul>"
 msgstr ""
 "<ul><li>usługa %s nie jest uruchomiona.</li>Spróbuj uruchomić ją przy pomocy "
-"narzędzia ustawień usług z menu Środowisko > Administracja > Usługi, lub</ul>"
-"<ul><li>numer portu %d jest zły.</li><ul>"
+"narzędzia ustawień usług z menu Środowisko > Administracja > Usługi, lub</"
+"ul><ul><li>numer portu %d jest zły.</li><ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:281
 #, c-format
@@ -1541,8 +1559,8 @@ msgstr "Nie można wczytać dokumentu podczas pracy bez podłączenia."
 #: ../embed/mozilla/EphyAboutModule.cpp:403
 msgid "To view this document, disable “Work Offline” and try again."
 msgstr ""
-"Aby wyświetlić dokument, wyłącz \"Pracuj bez podłączenia\" i spróbuj "
-"jeszcze raz."
+"Aby wyświetlić dokument, wyłącz \"Pracuj bez podłączenia\" i spróbuj jeszcze "
+"raz."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:415
 #, c-format
@@ -1592,8 +1610,20 @@ msgstr ""
 "Strona \"%s\" w tej zakładce nie została w pełni wczytana podczas ostatniego "
 "zakończenia z błędem przeglądarki; mogła ona spowodować błąd."
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/EphyAboutModule.cpp:659
+msgid "You may find an old version:|in the Google Cache"
+msgstr "w buforze Google"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../embed/mozilla/EphyAboutModule.cpp:667
+msgid "You may find an old version:|in the Internet Archive"
+msgstr "w archiwum internetowym"
+
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
-#: ../src/bookmarks/ephy-bookmarks-import.c:245
+#: ../src/bookmarks/ephy-bookmarks-import.c:261
 #: ../src/bookmarks/ephy-bookmarks.c:1264 ../src/ephy-session.c:1308
 msgid "Untitled"
 msgstr "BezNazwy"
@@ -1778,8 +1808,8 @@ msgstr "_Zaufaj CA"
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr ""
-"Zaufać nowemu ośrodkowi certyfikacji (CA) \"%s\" identyfikującemu "
-"witryny sieciowe?"
+"Zaufać nowemu ośrodkowi certyfikacji (CA) \"%s\" identyfikującemu witryny "
+"sieciowe?"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:588
 msgid ""
@@ -1907,30 +1937,31 @@ msgstr ""
 "Poczekaj chwilę aż nowy klucz prywatny zostanie wygenerowany. Ten proces "
 "może zająć kilka minut."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:91
 msgid "Security Notice"
 msgstr "Uwaga o zabezpieczeniach"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
 msgid "This page is loaded over a secure connection"
 msgstr "Ta strona zastała wczytana poprzez bezpieczne połączenie"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "The padlock icon in the statusbar indicates whether a page is secure."
-msgstr "Ikona kłódki na pasku stanu wskazuje czy połączenie ze stroną jes bezpieczne."
+msgstr ""
+"Ikona kłódki na pasku stanu wskazuje czy połączenie ze stroną jes bezpieczne."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:109
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:137
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:156
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:176
 msgid "Security Warning"
 msgstr "Ostrzeżenie o zabezpieczeniach"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
 msgid "This page is loaded over a low security connection"
 msgstr "Ta strona została wczytana poprzez słabo zabezpieczone połączenie"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -1938,13 +1969,13 @@ msgstr ""
 "Wszystkie informacje jakie są widoczne lub zostały wprowadzone na tej "
 "stronie, mogą być z łatwością przechwycone."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr ""
 "Część elementów tej strony została wczytana poprzez niezabezpieczone "
 "połączenie"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1952,12 +1983,12 @@ msgstr ""
 "Część informacji jakie są widoczne lub zostały wprowadzone na tej stronie, "
 "może być z łatwością przechwycona."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
 msgid "Send this information over an insecure connection?"
 msgstr "Wysłać dane poprzez niezabezpieczone połączenie?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1965,12 +1996,12 @@ msgstr ""
 "Dane jakie zostały wprowadzone, zostaną wysłane poprzez niezabezpieczone "
 "połączenie i mogą być z łatwością przechwycone."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:161
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:182
 msgid "_Send"
 msgstr "_Wyślij"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2129,8 +2160,7 @@ msgstr "Nie można nadpisać istniejącego pliku \"%s\""
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
-msgstr ""
-"Plik o tej nazwie już istnieje i nie masz uprawnień do nadpisania go."
+msgstr "Plik o tej nazwie już istnieje i nie masz uprawnień do nadpisania go."
 
 #: ../lib/ephy-gui.c:372
 msgid "Cannot Overwrite File"
@@ -2301,12 +2331,12 @@ msgstr "Innych alfabetów"
 msgid "Popup Windows"
 msgstr "Wyskakujące okna"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1179
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1183
 msgid "History"
 msgstr "Historia"
 
 #: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:915
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1757
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1758
 #: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Zakładki"
@@ -2368,8 +2398,8 @@ msgid ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
 msgstr ""
-"Adres nie został wczytany, ponieważ odnosi się on do niebezpieczniego protokołu "
-"i stwarza zagrożenie bezpieczeństwa dla systemu." 
+"Adres nie został wczytany, ponieważ odnosi się on do niebezpieczniego "
+"protokołu i stwarza zagrożenie bezpieczeństwa dla systemu."
 
 #: ../plugins/desktop-file/plugin.cpp:290
 msgid "No address found."
@@ -2484,9 +2514,9 @@ msgstr "Tworzy nowy temat"
 #. FIXME ngettext
 #. File Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1374
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1375
 #: ../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
-#: ../src/ephy-history-window.c:696
+#: ../src/ephy-history-window.c:700
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Otwórz w no_wym oknie"
@@ -2499,9 +2529,9 @@ msgstr "Otwiera wybraną zakładkę w nowym oknie"
 
 #. FIXME ngettext
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1377
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1378
 #: ../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
-#: ../src/ephy-history-window.c:699
+#: ../src/ephy-history-window.c:703
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Otwórz w nowym pane_lu"
@@ -2576,8 +2606,8 @@ msgid "Cut the selection"
 msgstr "Wycina zaznaczenie"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1387
-#: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1388
+#: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:713
 #: ../src/ephy-window.c:168
 msgid "_Copy"
 msgstr "S_kopiuj"
@@ -2761,27 +2791,27 @@ msgstr "Zai_mportuj"
 msgid "Import bookmarks from:"
 msgstr "Import zakładek z:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1383
-#: ../src/ephy-history-window.c:705
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1384
+#: ../src/ephy-history-window.c:709
 msgid "_Copy Address"
 msgstr "_Skopiuj adres"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1624
-#: ../src/ephy-history-window.c:1021
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1625
+#: ../src/ephy-history-window.c:1025
 msgid "_Search:"
 msgstr "Z_najdź:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1821
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1822
 msgid "Topics"
 msgstr "Tematy"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1891
-#: ../src/ephy-history-window.c:1304
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1892
+#: ../src/ephy-history-window.c:1308
 msgid "Title"
 msgstr "Tytuł"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1897
-#: ../src/ephy-history-window.c:1310
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1898
+#: ../src/ephy-history-window.c:1314
 msgid "Address"
 msgstr "Adres"
 
@@ -2846,6 +2876,35 @@ msgstr "A_ktualizuj"
 msgid "Update Bookmark?"
 msgstr "Zaktualizować zakładkę?"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains all bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1023
+msgid "bookmarks|All"
+msgstr "Wszystkie"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the most used bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1059
+msgid "bookmarks|Most Visited"
+msgstr "Najpopularniejsze"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the not categorized bookmarks
+#: ../src/bookmarks/ephy-bookmarks.c:1078
+msgid "bookmarks|Not Categorized"
+msgstr "Niesklasyfikowane"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this is an automatic topic containing local websites bookmarks
+#. * autodiscovered with zeroconf.
+#: ../src/bookmarks/ephy-bookmarks.c:1103
+msgid "bookmarks|Local Sites"
+msgstr "Strony lokalne"
+
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
 msgstr "Szybka zakładka"
@@ -2862,6 +2921,7 @@ msgstr "Otwiera zakładkę w nowym panelu"
 msgid "Open this bookmark in a new window"
 msgstr "Otwiera zakładkę w nowym oknie"
 
+#. FIXME !!!!
 #: ../src/bookmarks/ephy-open-tabs-action.c:77
 msgid "Open in New _Tabs"
 msgstr "Otwórz w nowych pane_lach"
@@ -2887,15 +2947,15 @@ msgstr "Tworzy temat \"%s\""
 msgid "Encodings"
 msgstr "Kodowania"
 
-#: ../src/ephy-encoding-menu.c:350
+#: ../src/ephy-encoding-menu.c:351
 msgid "_Other..."
 msgstr "Inn_e..."
 
-#: ../src/ephy-encoding-menu.c:351
+#: ../src/ephy-encoding-menu.c:352
 msgid "Other encodings"
 msgstr "Inne kodowania"
 
-#: ../src/ephy-encoding-menu.c:357
+#: ../src/ephy-encoding-menu.c:358
 msgid "_Automatic"
 msgstr "_Automatyczne"
 
@@ -3004,17 +3064,17 @@ msgstr ""
 msgid "Clear History"
 msgstr "Czyści historię"
 
-#: ../src/ephy-history-window.c:1030
+#: ../src/ephy-history-window.c:1034
 msgid "Last 30 minutes"
 msgstr "Ostatnie 30 minut"
 
-#: ../src/ephy-history-window.c:1031
+#: ../src/ephy-history-window.c:1035
 msgid "Today"
 msgstr "Dzisiaj"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1032 ../src/ephy-history-window.c:1035
-#: ../src/ephy-history-window.c:1039
+#: ../src/ephy-history-window.c:1036 ../src/ephy-history-window.c:1039
+#: ../src/ephy-history-window.c:1043
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
@@ -3022,7 +3082,7 @@ msgstr[0] "Ostatni %d dzień"
 msgstr[1] "Ostatnie %d dni"
 msgstr[2] "Ostatnie %d dni"
 
-#: ../src/ephy-history-window.c:1241
+#: ../src/ephy-history-window.c:1245
 msgid "Sites"
 msgstr "Witryny"
 
@@ -3083,11 +3143,11 @@ msgstr ""
 "Uruchomienie nie powiodło się z powodu błędu:\n"
 "%s"
 
-#: ../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:766
+#: ../src/ephy-main.c:517 ../src/ephy-main.c:519 ../src/window-commands.c:766
 msgid "GNOME Web Browser"
 msgstr "Przeglądarka internetowa GNOME"
 
-#: ../src/ephy-main.c:463
+#: ../src/ephy-main.c:520
 msgid "GNOME Web Browser options"
 msgstr "Opcje przeglądarki internetowej GNOME"
 
@@ -3959,11 +4019,34 @@ msgstr "Zamknij"
 msgid "Close print preview"
 msgstr "Zamyka podgląd wydruku"
 
-#: ../src/prefs-dialog.c:412
+#: ../src/prefs-dialog.c:416
 msgid "Default"
 msgstr "Domyślne"
 
-#: ../src/prefs-dialog.c:1034
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: ../src/prefs-dialog.c:1001 ../src/prefs-dialog.c:1009
+#, c-format
+msgid "language|%s (%s)"
+msgstr "%s (%s)"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: ../src/prefs-dialog.c:1020
+#, c-format
+msgid "language|User defined (%s)"
+msgstr "Zdefiniowany przez użytkownika (%s)"
+
+#: ../src/prefs-dialog.c:1042
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -3971,7 +4054,7 @@ msgstr[0] "Język systemu (%s)"
 msgstr[1] "Języki systemu (%s)"
 msgstr[2] "Języków systemu (%s)"
 
-#: ../src/prefs-dialog.c:1421
+#: ../src/prefs-dialog.c:1433
 msgid "Select a Directory"
 msgstr "Wybierz katalog"
 
@@ -4012,7 +4095,8 @@ msgid ""
 msgstr ""
 "Przeglądarka internetowa GNOME jest rozpowszechniana w nadziei, że będzie "
 "użyteczna, ale BEZ ŻADNEJ GWARANCJI, w tym bez gwarancji PRZYDATNOŚCI DO "
-"KONKRETNEGO ZASTOSOWANIA. Szczegóły można znaleźć w GNU General Public License."
+"KONKRETNEGO ZASTOSOWANIA. Szczegóły można znaleźć w GNU General Public "
+"License."
 
 #: ../src/window-commands.c:745
 msgid ""
@@ -4044,4 +4128,3 @@ msgstr "GNOME PL Team <translators@gnomepl.org>"
 #: ../src/window-commands.c:784
 msgid "GNOME Web Browser Website"
 msgstr "Strona przeglądarki internetowej GNOME"
-
