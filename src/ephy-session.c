@@ -1646,4 +1646,10 @@ ephy_session_queue_command (EphySession *session,
 	}
 
 	session_command_queue_next (session);
+
+	if (priv->resume_dialog != NULL)
+	{
+		gtk_window_present_with_time (GTK_WINDOW (priv->resume_dialog),
+					      user_time);
+	}
 }
