@@ -187,6 +187,11 @@ AC_SUBST([GECKO_LIBS])
 # now tests for mozilla API variance
 # **********************************
 
+# First build a test program to see whether compiling and running XPCOM
+# programs works at all, so we don't get false test failures below
+
+GECKO_XPCOM_PROGRAM_CHECK
+
 # Changed from PRUnichar* to nsAString& in 1.8a1 and on aviary branch
 
 AC_MSG_CHECKING([whether nsIFilePicker methods expect nsAString&])
@@ -344,8 +349,14 @@ if test "x$enable_filepicker" = "xyes"; then
 fi
 
 # Check for nsINonBlockingAlertService
+# Added in 1.8.1 and 1.9
 
 GECKO_CHECK_HEADERS([windowwatcher],[nsINonBlockingAlertService.h])
+
+# Check for nsIGlobalHistory3
+# Added in 1.8.1 and 1.9
+
+GECKO_CHECK_HEADERS([docshell],[nsIGlobalHistory3.h])
 
 # Check for some contractIDs that we need but are provided by extensions
 # which may or may not have been built.
@@ -360,10 +371,6 @@ fi
 
 GECKO_CHECK_CONTRACTIDS([$REQUIRED_CONTRACTS],
 	[],[AC_MSG_ERROR([$gecko_cv_gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
-
-# Check for nsIGlobalHistory3
-
-GECKO_CHECK_HEADERS([docshell],[nsIGlobalHistory3.h])
 
 # Needed since 1.8b2
 # Define this down here so it doesn't affect the API checks above

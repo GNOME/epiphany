@@ -365,7 +365,7 @@ AC_DEFUN([GECKO_RUN_IFELSE],[_GECKO_DISPATCH([AC_RUN_IFELSE],$@)])
 # ***************************************************************************
 # ***************************************************************************
 
-# GECKO_XPCOMPROGRAM([PROLOGUE], [BODY])
+# GECKO_XPCOM_PROGRAM([PROLOGUE], [BODY])
 #
 # Produce a template C++ program which starts XPCOM up and shuts it down after
 # the BODY part has run. In BODY, the the following variables are predeclared:
@@ -373,7 +373,7 @@ AC_DEFUN([GECKO_RUN_IFELSE],[_GECKO_DISPATCH([AC_RUN_IFELSE],$@)])
 # nsresult rv
 # PRBool retval (set to PR_FALSE)
 #
-# The program's exit status will be EXIT_FAILURE if you retval is PR_FALSE;
+# The program's exit status will be EXIT_FAILURE if retval is PR_FALSE;
 # else it will be EXIT_SUCCESS.
 #
 # To jump out of the BODY and exit the test program, you can use |break|.
@@ -431,6 +431,38 @@ exit (retval ? EXIT_SUCCESS : EXIT_FAILURE);
 # ***************************************************************************
 # ***************************************************************************
 
+# GECKO_XPCOM_PROGRAM_CHECK([ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [ACTION-IF-CROSS-COMPILING])
+#
+# Checks whether we can build and run any XPCOM test programs at all
+
+AC_DEFUN([GECKO_XPCOM_PROGRAM_CHECK],
+[AC_REQUIRE([GECKO_INIT])dnl
+
+AC_CACHE_CHECK([whether we can compile and run XPCOM programs],
+[gecko_cv_xpcom_program_check],
+[
+gecko_cv_xpcom_program_check=no
+
+GECKO_RUN_IFELSE([],
+	[GECKO_XPCOM_PROGRAM([],[[retval = PR_TRUE;]])],
+	[gecko_cv_xpcom_program_check=yes],
+	[gecko_cv_xpcom_program_check=no],
+	[gecko_cv_xpcom_program_check=maybe])
+])
+
+if test "$gecko_cv_xpcom_program_check" = "yes"; then
+	ifelse([$2],,[:],[$2])
+else
+	ifelse([$3],,[AC_MSG_FAILURE([Cannot compile and run XPCOM programs])],
+	[$3])
+fi
+
+]) # GECKO_XPCOM_PROGRAM_CHECK
+
+# ***************************************************************************
+# ***************************************************************************
+# ***************************************************************************
+
 # GECKO_CHECK_CONTRACTID(CONTRACTID, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 #
 # Checks wheter CONTRACTID is a registered contract ID
@@ -467,7 +499,7 @@ retval = NS_SUCCEEDED (rv) && isRegistered;
 if test AS_VAR_GET(gecko_cv_have_CID) = "yes"; then
 	ifelse([$2],,[:],[$2])
 else
-	ifelse([$3],,[AC_MSG_FAILURE([dnl
+	ifelse([$3],,[AC_MSG_ERROR([dnl
 Contract ID "$1" is not registered, but $PACKAGE_NAME depends on it.])],
 	[$3])
 fi
@@ -495,7 +527,7 @@ done
 if test "$result" = "yes"; then
 	ifelse([$2],,[:],[$2])
 else
-	ifelse([$3],,[AC_MSG_FAILURE([dnl
+	ifelse([$3],,[AC_MSG_ERROR([dnl
 Contract ID "$as_contractid" is not registered, but $PACKAGE_NAME depends on it.])],
 	[$3])
 fi
