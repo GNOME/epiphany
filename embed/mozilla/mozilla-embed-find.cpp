@@ -46,9 +46,7 @@ impl_set_embed (EphyEmbedFind *efind,
 	MozillaEmbedFind *find = MOZILLA_EMBED_FIND (efind);
 	MozillaEmbedFindPrivate *priv = find->priv;
 
-	nsresult rv;
-	rv = priv->find->SetEmbed (embed);
-	g_return_if_fail (NS_SUCCEEDED (rv));
+	priv->find->SetEmbed (embed);
 }
 
 static void

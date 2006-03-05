@@ -296,7 +296,6 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
         }
 
 #ifdef HAVE_GECKO_1_8
-	/* FIXME: maybe only set the major version ("1.6", "1.8") here? */
 	pref->SetCharPref ("general.useragent.extra.epiphany", "Epiphany/" EPIPHANY_MAJOR);
 
 	/* Unset old prefs, otherwise they end up in the user agent string too */
