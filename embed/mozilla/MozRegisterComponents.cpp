@@ -106,7 +106,7 @@ RegisterCategories (void)
 					nsnull);
 
 	/* Unregister the XPI install trigger, so we can just download .xpi files */
-	rv |= catMan->DeleteCategoryEntry (JAVASCRIPT_GLOBAL_PROPERTY_CATEGORY,
+	rv |= catMan->DeleteCategoryEntry (JAVASCRIPT_GLOBAL_CONSTRUCTOR_CATEGORY,
 					   "InstallVersion",
 					   PR_FALSE /* don't persist */);
 	rv |= catMan->DeleteCategoryEntry (JAVASCRIPT_GLOBAL_PROPERTY_CATEGORY,
