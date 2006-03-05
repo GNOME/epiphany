@@ -1,5 +1,16 @@
 2006-03-05  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/mime-types-permissions.xml:
+	
+	Mark application/x-xpinstall as unsafe.
+
+	* embed/mozilla/MozRegisterComponents.cpp:
+
+	Unregister xpinstall content handler and JS objects;
+	fixes download of .xpi files.
+
+2006-03-05  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.ac:
 	* m4/gecko.m4:
 

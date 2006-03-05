@@ -53,6 +53,8 @@
 #include <nsCOMPtr.h>
 #include <nsILocalFile.h>
 #include <nsNetCID.h>
+#include <nsIScriptNameSpaceManager.h>
+#include <nsCURILoader.h>
 
 #include <glib/gmessages.h>
 
@@ -76,42 +78,43 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSKeyPairDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSSecurityWarningDialogs)
 #endif
 
+#define XPINSTALL_CONTRACTID NS_CONTENT_HANDLER_CONTRACTID_PREFIX "application/x-xpinstall"
 
 /* class information */ 
 NS_DECL_CLASSINFO(EphySidebar)
 
-static NS_METHOD
-RegisterContentPolicy(nsIComponentManager *aCompMgr, nsIFile *aPath,
-		      const char *registryLocation, const char *componentType,
-		      const nsModuleComponentInfo *info)
+static nsresult
+RegisterCategories (void)
 {
-	nsCOMPtr<nsICategoryManager> cm =
-		do_GetService(NS_CATEGORYMANAGER_CONTRACTID);
-	NS_ENSURE_TRUE (cm, NS_ERROR_FAILURE);
-
 	nsresult rv;
-	char *oldval = nsnull;
-	rv = cm->AddCategoryEntry ("content-policy",
-				   EPHY_CONTENT_POLICY_CONTRACTID,
-				   EPHY_CONTENT_POLICY_CONTRACTID,
-				   PR_TRUE, PR_TRUE, &oldval);
-	if (oldval)
-		nsMemory::Free (oldval);
+	nsCOMPtr<nsICategoryManager> catMan =
+		do_GetService(NS_CATEGORYMANAGER_CONTRACTID, &rv);
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	rv = catMan->AddCategoryEntry ("content-policy",
+				       EPHY_CONTENT_POLICY_CONTRACTID,
+				       EPHY_CONTENT_POLICY_CONTRACTID,
+				       PR_FALSE /* don't persist */,
+				       PR_TRUE /* replace */,
+				       nsnull);
+
+	rv |= catMan->AddCategoryEntry (JAVASCRIPT_GLOBAL_PROPERTY_CATEGORY,
+					"sidebar",
+					NS_SIDEBAR_CONTRACTID,
+					PR_FALSE /* don't persist */,
+					PR_TRUE /* replace */,
+					nsnull);
+
+	/* Unregister the XPI install trigger, so we can just download .xpi files */
+	rv |= catMan->DeleteCategoryEntry (JAVASCRIPT_GLOBAL_PROPERTY_CATEGORY,
+					   "InstallVersion",
+					   PR_FALSE /* don't persist */);
+	rv |= catMan->DeleteCategoryEntry (JAVASCRIPT_GLOBAL_PROPERTY_CATEGORY,
+					   "InstallTrigger",
+					   PR_FALSE /* don't persist */);
+	NS_ENSURE_SUCCESS (rv, rv);
+
 	return rv;
-}
-
-static NS_METHOD
-RegisterSidebar(nsIComponentManager *aCompMgr, nsIFile *aPath,
-                const char *registryLocation, const char *componentType,
-                const nsModuleComponentInfo *info)
-{
-	nsCOMPtr<nsICategoryManager> cm =
-		do_GetService(NS_CATEGORYMANAGER_CONTRACTID);
-	NS_ENSURE_TRUE (cm, NS_ERROR_FAILURE);
-
-	return cm->AddCategoryEntry("JavaScript global property",
-				    "sidebar", NS_SIDEBAR_CONTRACTID,
-				    PR_FALSE, PR_TRUE, nsnull);
 }
 
 static const nsModuleComponentInfo sAppComps[] = {
@@ -188,14 +191,13 @@ static const nsModuleComponentInfo sAppComps[] = {
 		EPHY_CONTENT_POLICY_CID,
 		EPHY_CONTENT_POLICY_CONTRACTID,
 		EphyContentPolicyConstructor,
-		RegisterContentPolicy
 	},
 	{
 		EPHY_SIDEBAR_CLASSNAME,
 		EPHY_SIDEBAR_CID,
 		NS_SIDEBAR_CONTRACTID,
 		EphySidebarConstructor,
-		RegisterSidebar,
+		nsnull /* no register func */,
 		nsnull /* no unregister func */,
 		nsnull /* no factory destructor */,
 		NS_CI_INTERFACE_GETTER_NAME(EphySidebar),
@@ -324,6 +326,29 @@ mozilla_register_components (void)
 				ret = FALSE;
 			}
 		}
+	}
+
+	rv = RegisterCategories();
+	ret = NS_SUCCEEDED (rv); 
+
+	/* Unregister xpinstall content handler */
+	nsCID *cidPtr = nsnull;
+	rv = cr->ContractIDToCID (XPINSTALL_CONTRACTID, &cidPtr);
+	if (NS_SUCCEEDED (rv) && cidPtr)
+	{
+		nsCOMPtr<nsIFactory> factory;
+		rv = cm->GetClassObject (*cidPtr, NS_GET_IID (nsIFactory),
+					 getter_AddRefs (factory));
+		if (NS_SUCCEEDED (rv))
+		{
+			rv = cr->UnregisterFactory (*cidPtr, factory);
+		}
+
+		nsMemory::Free (cidPtr);
+	}
+	if (NS_FAILED (rv))
+	{
+		g_warning ("Failed to unregister xpinstall content handler!\n");
 	}
 
 #if defined(HAVE_MOZILLA_PSM) && !defined(HAVE_GECKO_1_8)
