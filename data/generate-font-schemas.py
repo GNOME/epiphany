@@ -60,7 +60,7 @@ def append_schemas(docNode, schemalistNode, group):
 		      "string", "monospace", "Monospace font",
 		      "Monospaced font for \"" + group + "\"")
 	append_schema(doc, schemalistNode, base + "variable_font_size_" + group,
-		      "int", "11", "Proportional font size",
+		      "int", "10", "Proportional font size",
 		      "Variable width font size for \"" + group + "\"")
 	append_schema(doc, schemalistNode, base + "font_variable_" + group,
 		      "string", "sans-serif", "Proportional font",
