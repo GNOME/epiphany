@@ -161,6 +161,9 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI,
 }
 
 #ifdef HAVE_NSIGLOBALHISTORY3_H
+
+#ifdef HAVE_GECKO_1_9
+
 /* unsigned long getURIGeckoFlags(in nsIURI aURI); */
 NS_IMETHODIMP
 MozGlobalHistory::GetURIGeckoFlags(nsIURI *aURI,
@@ -213,6 +216,8 @@ MozGlobalHistory::SetURIGeckoFlags(nsIURI *aURI,
 
 	return NS_ERROR_FAILURE;
 }
+
+#endif /* HAVE_GECKO_1_9 */
 
 /* void addDocumentRedirect (in nsIChannel 
    		             aOldChannel, 
