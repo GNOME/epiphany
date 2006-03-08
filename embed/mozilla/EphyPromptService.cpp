@@ -70,7 +70,7 @@ enum
 	RESPONSE_ABORT_SCRIPT = 42
 };
 
-#define RETVAL(r) ((r) == GTK_RESPONSE_DELETE_EVENT ? NS_ERROR_FAILURE : NS_OK)
+#define RETVAL(r) (NS_OK)
 
 class Prompter
 {
