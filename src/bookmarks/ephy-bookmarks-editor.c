@@ -93,9 +93,10 @@ static const struct
 	const char *extension;
 }
 export_formats [] = 
+/* Don't add or reoder those entries without updating export_dialog_response_cb too! */
 {
-	{ N_("Mozilla (HTML)"), "html" },
-	{ N_("Epiphany (RDF)"), "rdf" }
+	{ N_("Epiphany (RDF)"), "rdf" },
+	{ N_("Mozilla (HTML)"), "html" }
 };
 
 static void ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass);
