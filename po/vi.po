@@ -8,8 +8,8 @@ msgid ""
 ""
 msgstr "Project-Id-Version: Epiphany Gnome HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-24 07:57+0100\n"
-"PO-Revision-Date: 2006-02-24 21:46+1030\n"
+"POT-Creation-Date: 2006-03-10 05:38+0100\n"
+"PO-Revision-Date: 2006-03-10 18:14+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -131,8 +131,8 @@ msgid "Epiphany Web Browser"
 msgstr "Bộ Duyệt Mạng Epiphany"
 
 #.sets the name to appear in the window list applet when grouping windows
-#:../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:482
-#:../src/ephy-main.c:533 ../src/ephy-main.c:621
+#:../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:539
+#:../src/ephy-main.c:590 ../src/ephy-main.c:685
 msgid "Web Browser"
 msgstr "Bộ duyệt Mạng"
 
@@ -567,7 +567,7 @@ msgstr "Dữ liệu cá nhân"
 msgid "Text Encoding"
 msgstr "Bảng mã chữ"
 
-#:../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:358
+#:../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:359
 msgid "Use the encoding specified by the document"
 msgstr "Dùng bảng mã do tài liệu tự xác định"
 
@@ -656,7 +656,7 @@ msgstr "Phông chữ và Kiểu dáng"
 msgid "For l_anguage:"
 msgstr "Cho n_gôn ngữ:"
 
-#:../data/glade/prefs-dialog.glade.h:21 ../src/prefs-dialog.c:1301
+#:../data/glade/prefs-dialog.glade.h:21 ../src/prefs-dialog.c:1313
 msgid "Language"
 msgstr "Ngôn ngữ"
 
@@ -819,19 +819,32 @@ msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d tập tin tải về"
 
-#:../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:985
+#.Translators: The text before the "|" is context to help you decide on
+#.* the correct translation. You MUST OMIT it in the translated string.
+#:../embed/downloader-view.c:585 ../embed/downloader-view.c:598
+msgid "download status|Unknown"
+msgstr "Không rõ"
+
+#.Translators: The text before the "|" is context to help you decide on
+#.* the correct translation. You MUST OMIT it in the translated string.
+#:../embed/downloader-view.c:590
+msgid "download status|Failed"
+msgstr "Bị lỗi"
+
+#:../embed/downloader-view.c:657
+#:../src/bookmarks/ephy-bookmarks-editor.c:1001
 msgid "File"
 msgstr "Tập tin"
 
-#:../embed/downloader-view.c:679
+#:../embed/downloader-view.c:680
 msgid "%"
 msgstr "%"
 
-#:../embed/downloader-view.c:690
+#:../embed/downloader-view.c:691
 msgid "Remaining"
 msgstr "Còn lại"
 
-#:../embed/ephy-embed-shell.c:243
+#:../embed/ephy-embed-shell.c:246
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Hiện không thể dùng Epiphany vì không khởi động được Mozilla."
 
@@ -1235,6 +1248,12 @@ msgstr "Tập tin cục bộ"
 msgid "Save"
 msgstr "Lưu"
 
+#.Translators: The text before the "|" is context to help you decide on
+#.* the correct translation. You MUST OMIT it in the translated string.
+#:../embed/mozilla/ContentHandler.cpp:299
+msgid "File Type:|Unknown"
+msgstr "Không rõ"
+
 #:../embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "Tải về tập tin có thể bất an này không?"
@@ -1545,8 +1564,20 @@ msgid ""
 msgstr "Trang « %s » trong thanh này chưa tải đầy đủ khi trình duyệt sụp đổ; có lẽ "
 "nó gây ra sụp đổ."
 
+#.Translators: The text before the "|" is context to help you decide on
+#.* the correct translation. You MUST OMIT it in the translated string.
+#:../embed/mozilla/EphyAboutModule.cpp:659
+msgid "You may find an old version:|in the Google Cache"
+msgstr "Có lẽ bạn sẽ tìm một phiên bản cũ trong Bộ nhớ tạm Google (Google Cache)"
+
+#.Translators: The text before the "|" is context to help you decide on
+#.* the correct translation. You MUST OMIT it in the translated string.
+#:../embed/mozilla/EphyAboutModule.cpp:667
+msgid "You may find an old version:|in the Internet Archive"
+msgstr "Có lẽ bạn sẽ tìm một phiên bản cũ trong Kho Mạng (Internet Archive)"
+
 #:../embed/mozilla/EphyHeaderSniffer.cpp:364
-#:../src/bookmarks/ephy-bookmarks-import.c:245
+#:../src/bookmarks/ephy-bookmarks-import.c:261
 #:../src/bookmarks/ephy-bookmarks.c:1264 ../src/ephy-session.c:1308
 msgid "Untitled"
 msgstr "Không tên"
@@ -1571,7 +1602,7 @@ msgid "_Password:"
 msgstr "_Mật khẩu:"
 
 #:../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
-#:../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:768
+#:../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:784
 msgid "All files"
 msgstr "Mọi tập tin"
 
@@ -1843,65 +1874,65 @@ msgid ""
 "few minutes."
 msgstr "Hãy chờ phát sinh khóa riêng tư mới. Tiến trình này có thể mất vài phút."
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:91
 msgid "Security Notice"
 msgstr "Thông cáo bảo mật"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
 msgid "This page is loaded over a secure connection"
 msgstr "Đã nạp trang này qua kết nối bảo mật"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "The padlock icon in the statusbar indicates whether a page is secure."
 msgstr "Biểu tượng cái khóa móc trong thanh trạng thái ngụ ý nếu trang đó an toàn "
 "hay không."
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:109
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:137
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:156
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:176
 msgid "Security Warning"
 msgstr "Cảnh báo bảo mật"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
 msgid "This page is loaded over a low security connection"
 msgstr "Đã nạp trang này qua kết nối bảo mật thấp"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
 msgstr "Mọi thông tin bạn xem hoặc nhập trên trang này có thể bị lấy do người khác"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "Đã nạp phần trang này qua kết nối không bảo mật"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr "Một phần thông tin bạn xem hoặc nhập sẽ được gởi qua kết nối không bảo mật "
 "nên có thể bị lấy do người khác"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
 msgid "Send this information over an insecure connection?"
 msgstr "Gởi thông tin này qua kết nối không bảo mật sao?"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr "Thông tin bạn nhập sẽ được gởi qua kết nối không bảo mật nên có thể bị lấy "
 "một cách dễ dàng do người khác"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:161
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:182
 msgid "_Send"
 msgstr "_Gởi"
 
-#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
+#:../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -1982,32 +2013,32 @@ msgstr "Gặp lỗi loại GConf:\n"
 #.* produce duplicates, but don't worry about it. If your language
 #.* normally has a mnemonic at the start, please use the _. If not,
 #.* please remove.
-#:../lib/egg/egg-editable-toolbar.c:899
+#:../lib/egg/egg-editable-toolbar.c:902
 #,c-format
 msgid "Show “_%s”"
 msgstr "Hiện « _%s »"
 
-#:../lib/egg/egg-editable-toolbar.c:1344
+#:../lib/egg/egg-editable-toolbar.c:1362
 msgid "_Move on Toolbar"
 msgstr "_Di chuyển trên thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1345
+#:../lib/egg/egg-editable-toolbar.c:1363
 msgid "Move the selected item on the toolbar"
 msgstr "Di chuyển mục đã chọn trong thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1346
+#:../lib/egg/egg-editable-toolbar.c:1364
 msgid "_Remove from Toolbar"
 msgstr "_Bỏ ra thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1347
+#:../lib/egg/egg-editable-toolbar.c:1365
 msgid "Remove the selected item from the toolbar"
 msgstr "Gỡ bỏ mục đã chọn ra thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1348
+#:../lib/egg/egg-editable-toolbar.c:1366
 msgid "_Delete Toolbar"
 msgstr "_Xoá bỏ thanh công cụ"
 
-#:../lib/egg/egg-editable-toolbar.c:1349
+#:../lib/egg/egg-editable-toolbar.c:1367
 msgid "Remove the selected toolbar"
 msgstr "Gỡ bỏ thanh công cụ đã chọn"
 
@@ -2227,12 +2258,12 @@ msgstr "chữ khác"
 msgid "Popup Windows"
 msgstr "Cửa sổ bất lên"
 
-#:../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1179
+#:../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1183
 msgid "History"
 msgstr "Lược sử"
 
-#:../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:899
-#:../src/bookmarks/ephy-bookmarks-editor.c:1741
+#:../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:915
+#:../src/bookmarks/ephy-bookmarks-editor.c:1758
 #:../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Đánh dấu"
@@ -2405,9 +2436,9 @@ msgstr "Tạo chủ đề mới"
 #.FIXME ngettext
 #.File Menu
 #:../src/bookmarks/ephy-bookmarks-editor.c:189
-#:../src/bookmarks/ephy-bookmarks-editor.c:1358
+#:../src/bookmarks/ephy-bookmarks-editor.c:1375
 #:../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
-#:../src/ephy-history-window.c:696
+#:../src/ephy-history-window.c:700
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Mở trong _cửa sổ mới"
@@ -2418,9 +2449,9 @@ msgstr "Mở đánh dấu được chọn trong cửa sổ mới"
 
 #.FIXME ngettext
 #:../src/bookmarks/ephy-bookmarks-editor.c:192
-#:../src/bookmarks/ephy-bookmarks-editor.c:1361
+#:../src/bookmarks/ephy-bookmarks-editor.c:1378
 #:../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
-#:../src/ephy-history-window.c:699
+#:../src/ephy-history-window.c:703
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Mở trong _thanh mới"
@@ -2493,8 +2524,8 @@ msgid "Cut the selection"
 msgstr "Cắt phần được chọn"
 
 #:../src/bookmarks/ephy-bookmarks-editor.c:217
-#:../src/bookmarks/ephy-bookmarks-editor.c:1371
-#:../src/ephy-history-window.c:190 ../src/ephy-history-window.c:709
+#:../src/bookmarks/ephy-bookmarks-editor.c:1388
+#:../src/ephy-history-window.c:190 ../src/ephy-history-window.c:713
 #:../src/ephy-window.c:168
 msgid "_Copy"
 msgstr "Sao _chép"
@@ -2597,38 +2628,40 @@ msgstr "Khi xóa bỏ chủ đề này thì tất cả đánh dấu của nó s�
 msgid "_Delete Topic"
 msgstr "_Xóa bỏ chủ đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:631
+#.FIXME: proper i18n after freeze
+#:../src/bookmarks/ephy-bookmarks-editor.c:642
+#:../src/bookmarks/ephy-bookmarks-editor.c:646
 msgid "Firefox"
 msgstr "Firefox"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:635
-#:../src/bookmarks/ephy-bookmarks-editor.c:639
+#:../src/bookmarks/ephy-bookmarks-editor.c:651
+#:../src/bookmarks/ephy-bookmarks-editor.c:655
 msgid "Firebird"
 msgstr "Firebird"
 
 #.Translators: The %s is the name of a Mozilla profile.
-#:../src/bookmarks/ephy-bookmarks-editor.c:644
+#:../src/bookmarks/ephy-bookmarks-editor.c:660
 #,c-format
 msgid "Mozilla “%s” profile"
 msgstr "Hồ sơ Mozilla « %s »"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:648
+#:../src/bookmarks/ephy-bookmarks-editor.c:664
 msgid "Galeon"
 msgstr "Galeon"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:652
+#:../src/bookmarks/ephy-bookmarks-editor.c:668
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:681
+#:../src/bookmarks/ephy-bookmarks-editor.c:697
 msgid "Import failed"
 msgstr "Không nạp được"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:683
+#:../src/bookmarks/ephy-bookmarks-editor.c:699
 msgid "Import Failed"
 msgstr "Không nạp được"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:686
+#:../src/bookmarks/ephy-bookmarks-editor.c:702
 #,c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2636,64 +2669,64 @@ msgid ""
 msgstr "Không thể nạp những đánh dấu từ « %s » vì tập tin bị hỏng hoặc có kiểu chưa "
 "được hỗ trợ."
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:749
+#:../src/bookmarks/ephy-bookmarks-editor.c:765
 msgid "Import bookmarks from file"
 msgstr "Nập đánh dấu từ tập tin"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:756
+#:../src/bookmarks/ephy-bookmarks-editor.c:772
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Đánh dấu loại Firefox/Mozilla"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:760
+#:../src/bookmarks/ephy-bookmarks-editor.c:776
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Đánh dấu loại Galeon/Konqueror"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:764
+#:../src/bookmarks/ephy-bookmarks-editor.c:780
 msgid "Epiphany bookmarks"
 msgstr "Đánh dấu Epiphany"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:887
+#:../src/bookmarks/ephy-bookmarks-editor.c:903
 msgid "Export Bookmarks"
 msgstr "Xuất đánh dấu"
 
 #.Make a format selection combo & label
-#:../src/bookmarks/ephy-bookmarks-editor.c:902
+#:../src/bookmarks/ephy-bookmarks-editor.c:918
 msgid "File format:"
 msgstr "Khuôn dạng tập tin"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:945
+#:../src/bookmarks/ephy-bookmarks-editor.c:961
 msgid "Import Bookmarks"
 msgstr "Nập đánh dấu"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:951
+#:../src/bookmarks/ephy-bookmarks-editor.c:967
 msgid "I_mport"
 msgstr "_Nập"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:965
+#:../src/bookmarks/ephy-bookmarks-editor.c:981
 msgid "Import bookmarks from:"
 msgstr "_Nập đánh dấu từ:"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1367
-#:../src/ephy-history-window.c:705
+#:../src/bookmarks/ephy-bookmarks-editor.c:1384
+#:../src/ephy-history-window.c:709
 msgid "_Copy Address"
 msgstr "_Sao chép địa chỉ"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1608
-#:../src/ephy-history-window.c:1021
+#:../src/bookmarks/ephy-bookmarks-editor.c:1625
+#:../src/ephy-history-window.c:1025
 msgid "_Search:"
 msgstr "_Tìm kiếm:"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1805
+#:../src/bookmarks/ephy-bookmarks-editor.c:1822
 msgid "Topics"
 msgstr "Chủ đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1875
-#:../src/ephy-history-window.c:1304
+#:../src/bookmarks/ephy-bookmarks-editor.c:1892
+#:../src/ephy-history-window.c:1308
 msgid "Title"
 msgstr "Tiêu đề"
 
-#:../src/bookmarks/ephy-bookmarks-editor.c:1881
-#:../src/ephy-history-window.c:1310
+#:../src/bookmarks/ephy-bookmarks-editor.c:1898
+#:../src/ephy-history-window.c:1314
 msgid "Address"
 msgstr "Địa chỉ"
 
@@ -2758,6 +2791,35 @@ msgstr "_Cập nhật"
 msgid "Update Bookmark?"
 msgstr "Cập nhật đánh dấu chứ?"
 
+#.Translators: The text before the "|" is context to help you decide on
+#.* the correct translation. You MUST OMIT it in the translated string.
+#.Translators: this topic contains all bookmarks
+#:../src/bookmarks/ephy-bookmarks.c:1023
+msgid "bookmarks|All"
+msgstr "Tất cả"
+
+#.Translators: The text before the "|" is context to help you decide on
+#.* the correct translation. You MUST OMIT it in the translated string.
+#.Translators: this topic contains the most used bookmarks
+#:../src/bookmarks/ephy-bookmarks.c:1059
+msgid "bookmarks|Most Visited"
+msgstr "Hay xem nhất"
+
+#.Translators: The text before the "|" is context to help you decide on
+#.* the correct translation. You MUST OMIT it in the translated string.
+#.Translators: this topic contains the not categorized bookmarks
+#:../src/bookmarks/ephy-bookmarks.c:1078
+msgid "bookmarks|Not Categorized"
+msgstr "Chưa phân loại"
+
+#.Translators: The text before the "|" is context to help you decide on
+#.* the correct translation. You MUST OMIT it in the translated string.
+#.Translators: this is an automatic topic containing local websites bookmarks
+#.* autodiscovered with zeroconf.
+#:../src/bookmarks/ephy-bookmarks.c:1103
+msgid "bookmarks|Local Sites"
+msgstr "Nơi cục bộ"
+
 #:../src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
 msgstr "Đánh dấu nhânh"
@@ -2800,15 +2862,15 @@ msgstr "Tạo chủ đề « %s »"
 msgid "Encodings"
 msgstr "Bảng mã"
 
-#:../src/ephy-encoding-menu.c:350
+#:../src/ephy-encoding-menu.c:351
 msgid "_Other..."
 msgstr "_Khác..."
 
-#:../src/ephy-encoding-menu.c:351
+#:../src/ephy-encoding-menu.c:352
 msgid "Other encodings"
 msgstr "Bảng mã khác"
 
-#:../src/ephy-encoding-menu.c:357
+#:../src/ephy-encoding-menu.c:358
 msgid "_Automatic"
 msgstr "_Tự động"
 
@@ -2916,23 +2978,23 @@ msgstr "Xóa sạch lược sử duyệt sẽ làm cho mọi liên kết trong l
 msgid "Clear History"
 msgstr "_Xoá lược sử"
 
-#:../src/ephy-history-window.c:1030
+#:../src/ephy-history-window.c:1034
 msgid "Last 30 minutes"
 msgstr "30 phút trước"
 
-#:../src/ephy-history-window.c:1031
+#:../src/ephy-history-window.c:1035
 msgid "Today"
 msgstr "Hôm nay"
 
 #.keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#:../src/ephy-history-window.c:1032 ../src/ephy-history-window.c:1035
-#:../src/ephy-history-window.c:1039
+#:../src/ephy-history-window.c:1036 ../src/ephy-history-window.c:1039
+#:../src/ephy-history-window.c:1043
 #,c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "%d ngày trước"
 
-#:../src/ephy-history-window.c:1241
+#:../src/ephy-history-window.c:1245
 msgid "Sites"
 msgstr "Chỗ Mạng"
 
@@ -2992,11 +3054,11 @@ msgid ""
 msgstr "Việc khởi chạy thất bại vì lỗi theo đây:\n"
 "%s"
 
-#:../src/ephy-main.c:460 ../src/ephy-main.c:462 ../src/window-commands.c:766
+#:../src/ephy-main.c:517 ../src/ephy-main.c:519 ../src/window-commands.c:766
 msgid "GNOME Web Browser"
 msgstr "Bộ duyệt Mạng Gnome"
 
-#:../src/ephy-main.c:463
+#:../src/ephy-main.c:520
 msgid "GNOME Web Browser options"
 msgstr "Tùy chọn của Bộ duyệt Mạng Gnome"
 
@@ -3860,17 +3922,40 @@ msgstr "Đóng"
 msgid "Close print preview"
 msgstr "Đóng của sổ xem in trước"
 
-#:../src/prefs-dialog.c:412
+#:../src/prefs-dialog.c:416
 msgid "Default"
 msgstr "Mặc định"
 
-#:../src/prefs-dialog.c:1034
+#.Translators: The text before the "|" is context to help you decide on
+#.* the correct translation. You MUST OMIT it in the translated string.
+#.* Translators: the first %s is the language name, and the
+#.* second %s is the locale name. Example:
+#.* "French (France)"
+#.
+#.Translators: The text before the "|" is context to help you decide on
+#.* the correct translation. You MUST OMIT it in the translated string.
+#:../src/prefs-dialog.c:1001 ../src/prefs-dialog.c:1009
+#,c-format
+msgid "language|%s (%s)"
+msgstr "%s (%s)"
+
+#.Translators: The text before the "|" is context to help you decide on
+#.* the correct translation. You MUST OMIT it in the translated string.
+#.* Translators: this refers to a user-define language code
+#.* (one which isn't in our built-in list).
+#.
+#:../src/prefs-dialog.c:1020
+#,c-format
+msgid "language|User defined (%s)"
+msgstr "Tự định nghĩa (%s)"
+
+#:../src/prefs-dialog.c:1042
 #,c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Ngôn ngữ hệ thống (%s)"
 
-#:../src/prefs-dialog.c:1421
+#:../src/prefs-dialog.c:1433
 msgid "Select a Directory"
 msgstr "Chọn thư mục"
 
