@@ -45,14 +45,147 @@
  */
 #include <glib/gi18n.h>
 
+#define DESKTOP_FILE_MIME_TYPE	"application/x-desktop"
+#define URL_FILE_MIME_TYPE_1	"text/x-uri"
+#define URL_FILE_MIME_TYPE_2	"application/x-mswinurl"
+
 static const char kDesktopEntry[] = "Desktop Entry";
+static const char kInternetShortcut[] = "InternetShortcut";
+static const char kInternetShortcutW[] = "InternetShortcut.W";
+
+typedef enum
+{
+	FORMAT_DESKTOP_FILE,
+	FORMAT_URL_FILE
+} FileFormat;
 
 typedef struct {
 	NPP instance;
+	guint format : 2;
 	guint handled : 1;
 } Plugin;
 
 static NPNetscapeFuncs mozilla_functions;
+
+static char *
+parse_desktop_file (const char *filename)
+{
+	GKeyFile *keyfile = g_key_file_new ();
+	if (!g_key_file_load_from_file (keyfile, filename, (GKeyFileFlags) 0, NULL)) {
+		/* Not a valid key file */
+		g_key_file_free (keyfile);
+		return NULL;
+	}
+
+	char *group = g_key_file_get_start_group (keyfile);
+	if (!group || strcmp (group, kDesktopEntry) != 0) {
+		/* Not a valid Desktop file */
+		g_free (group);
+		g_key_file_free (keyfile);
+		return NULL;
+	}
+	g_free (group);
+
+	char *encoding = g_key_file_get_string (keyfile, kDesktopEntry, "Encoding", NULL);
+	if (!encoding || strcmp (encoding, "UTF-8") != 0) {
+		/* Not a properly encoded desktop file */
+		g_free (encoding);
+		g_key_file_free (keyfile);
+		return NULL;
+	}
+	g_free (encoding);
+
+	char *type = g_key_file_get_string (keyfile, kDesktopEntry, "Type", NULL);
+	if (!type || strcmp (type, "Link") != 0) {
+		/* Not a "Link" file */
+		g_free (type);
+		g_key_file_free (keyfile);
+		return NULL;
+	}
+	g_free (type);
+
+	char *url = g_key_file_get_string (keyfile, kDesktopEntry, "URL", NULL);
+	if (!url || !url[0]) {
+		/* Not a valid URL */
+		g_free (url);
+		g_key_file_free (keyfile);
+		return NULL;
+	}
+
+	g_key_file_free (keyfile);
+
+	return url;
+}
+
+static char *
+parse_url_file (const char *filename)
+{
+	char *contents = NULL;
+	gsize len = 0;
+	if (!g_file_get_contents (filename, &contents, &len, NULL)) {
+		return NULL;
+	}
+
+	/* URL files are encoded in MS-ANSI, so convert to UTF-8 first */
+	gsize bytes_read, bytes_written;
+	char *converted = g_convert (contents, len, "UTF-8", "MS-ANSI",
+				     &bytes_read, &bytes_written, NULL);
+	g_free (contents);
+	if (converted == NULL) {
+		return NULL;
+	}
+
+	/* Now load as keyfile */
+	GKeyFile *keyfile = g_key_file_new ();
+	if (!g_key_file_load_from_data (keyfile, converted, strlen (converted), (GKeyFileFlags) 0, NULL)) {
+		/* Not a valid key file */
+		g_free (converted);
+		g_key_file_free (keyfile);
+		return NULL;
+	}
+	g_free (converted);
+
+	/* First try the [InternetShortcut.W] section */
+	if (g_key_file_has_group (keyfile, kInternetShortcutW))
+	{
+		char *entry = g_key_file_get_string (keyfile, kInternetShortcutW, "URL", NULL);
+		if (!entry || !entry[0]) {
+			g_free (entry);
+			g_key_file_free (keyfile);
+			return NULL;
+		}
+
+		/* The URL is encoded in UTF-7 */
+		char *url = g_convert (entry, strlen (entry), "UTF-8", "UTF-7",
+				       &bytes_read, &bytes_written, NULL);
+		g_free (entry);
+		if (!url || !url[0]) {
+			g_free (url);
+			g_key_file_free (keyfile);
+			return NULL;
+		}
+
+		g_key_file_free (keyfile);
+
+		return url;
+	}
+
+	/* No [InternetShortcut.W] section, fallback to [InternetShortcut] */
+	if (g_key_file_has_group (keyfile, kInternetShortcut))
+	{
+		char *url = g_key_file_get_string (keyfile, kInternetShortcut, "URL", NULL);
+		if (!url || !url[0]) {
+			g_free (url);
+			g_key_file_free (keyfile);
+			return NULL;
+		}
+
+		return url;
+	}
+
+	g_key_file_free (keyfile);
+	return NULL;
+}
 
 static void
 show_error_dialog (NPP instance,
@@ -180,12 +313,24 @@ plugin_new_stream (NPP instance,
 		   NPBool seekable,
 		   guint16 *stype)
 {
-	if (instance == NULL)
+	if (instance == NULL || type == NULL)
 		return NPERR_INVALID_INSTANCE_ERROR;
 
 	Plugin *plugin = (Plugin *) instance->pdata;
 	if (plugin == NULL)
 		return NPERR_INVALID_INSTANCE_ERROR;
+
+	if (type && strcmp (type, DESKTOP_FILE_MIME_TYPE) == 0) {
+		plugin->format = FORMAT_DESKTOP_FILE;
+	}
+	else if (type && (strcmp (type, URL_FILE_MIME_TYPE_1) == 0 ||
+			  strcmp (type, URL_FILE_MIME_TYPE_2) == 0)) {
+		plugin->format = FORMAT_URL_FILE;
+	}
+	else
+	{
+		return NPERR_INVALID_PARAM;
+	}
 
 	*stype = NP_ASFILEONLY;
 
@@ -209,45 +354,14 @@ plugin_stream_as_file (NPP instance,
 	if (!filename)
 		return NPERR_INVALID_PARAM;
 
-	GKeyFile *keyfile = g_key_file_new ();
-	if (!g_key_file_load_from_file (keyfile, filename, (GKeyFileFlags) 0, NULL)) {
-		/* Not a valid key file */
-		g_key_file_free (keyfile);
-		return NPERR_GENERIC_ERROR;
+	char *url = NULL;
+	if (plugin->format == FORMAT_DESKTOP_FILE) {
+		url = parse_desktop_file (filename);
+	} else if (plugin->format == FORMAT_URL_FILE) {
+		url = parse_url_file (filename);
 	}
 
-	char *group = g_key_file_get_start_group (keyfile);
-	if (!group || strcmp (group, kDesktopEntry) != 0) {
-		/* Not a valid Desktop file */
-		g_free (group);
-		g_key_file_free (keyfile);
-		return NPERR_GENERIC_ERROR;
-	}
-	g_free (group);
-
-	char *encoding = g_key_file_get_string (keyfile, kDesktopEntry, "Encoding", NULL);
-	if (!encoding || strcmp (encoding, "UTF-8") != 0) {
-		/* Not a properly encoded desktop file */
-		g_free (encoding);
-		g_key_file_free (keyfile);
-		return NPERR_GENERIC_ERROR;
-	}
-	g_free (encoding);
-
-	char *type = g_key_file_get_string (keyfile, kDesktopEntry, "Type", NULL);
-	if (!type || strcmp (type, "Link") != 0) {
-		/* Not a "Link" file */
-		g_free (type);
-		g_key_file_free (keyfile);
-		return NPERR_GENERIC_ERROR;
-	}
-	g_free (type);
-
-	char *url = g_key_file_get_string (keyfile, kDesktopEntry, "URL", NULL);
-	if (!url || !url[0]) {
-		/* Not a valid URL */
-		g_free (url);
-		g_key_file_free (keyfile);
+	if (!url) {
 		return NPERR_GENERIC_ERROR;
 	}
 
@@ -268,7 +382,6 @@ plugin_stream_as_file (NPP instance,
 	}
 
 	g_free (url);
-	g_key_file_free (keyfile);
 
 	return NPERR_NO_ERROR;
 }
@@ -286,6 +399,9 @@ plugin_destroy_stream (NPP instance,
 		return NPERR_INVALID_INSTANCE_ERROR;
 
 	if (!plugin->handled) {
+		/* Load blank page, so that further drags to the embed work */
+		mozilla_functions.geturl (instance, "about:blank", "_top");
+
 		show_error_dialog (instance,
 				   _("No address found."),
 				   _("No web address could be found in this file."));
@@ -298,8 +414,8 @@ static int32
 plugin_write_ready (NPP instance,
 		    NPStream *stream)
 {
-	/* Ready to read 4 MB - should do. Can always get more. */
-	return 4096;
+	/* Ready to read 8 KB - should do. Can always get more. */
+	return 8192;
 }
 
 static int32
@@ -327,7 +443,7 @@ plugin_get_value (NPP instance,
 		break;
 
 	case NPPVpluginDescriptionString:
-		*((char **) value) = _("This plugin handles “.desktop” files containing web links.");
+		*((char **) value) = _("This plugin handles “.desktop” and “.url” files containing web links.");
 		break;
 
 	case NPPVpluginNeedsXEmbed:
@@ -353,7 +469,9 @@ NP_GetValue (void *future,
 char *
 NP_GetMIMEDescription (void)
 {
-	return "application/x-desktop:desktop:desktop configuration file;";
+	return DESKTOP_FILE_MIME_TYPE ":desktop:desktop link file;"
+	       URL_FILE_MIME_TYPE_1 ":url:URL file;"
+	       URL_FILE_MIME_TYPE_2 "::URL file;";
 }
 
 NPError

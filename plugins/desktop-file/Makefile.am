@@ -6,7 +6,8 @@ libdesktopfileplugin_la_SOURCES = \
 
 gecko_include_subdirs = \
 	.	\
-	dom
+	dom	\
+	plugin
 
 libdesktopfileplugin_la_CPPFLAGS = \
 	-DG_LOG_DOMAIN=\"ephy-desktop-file-plugin\" \
