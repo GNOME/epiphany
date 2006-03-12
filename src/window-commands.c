@@ -725,6 +725,7 @@ window_cmd_help_about (GtkAction *action,
 	};
 	const char * const documenters[] = {
 		"Piers Cornwell", 
+		"Victor Osadci",
 		"Patanjali Somayaji",
 		"David Bordoley",
 		"",
