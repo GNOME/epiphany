@@ -278,10 +278,12 @@ GECKO_RUN_IFELSE([],
 [GECKO_XPCOM_PROGRAM(
 [[#include <nsIComponentRegistrar.h>]],
 [[
+status = 99;
 nsCOMPtr<nsIComponentRegistrar> registrar;
 rv = NS_GetComponentRegistrar (getter_AddRefs (registrar));
 if (NS_FAILED (rv)) break;
 
+status = 98;
 nsCID *classID = nsnull;
 rv = registrar->ContractIDToCID ("@mozilla.org/typeaheadfind;1", &classID);
 if (NS_FAILED (rv) || !classID) break;
@@ -289,7 +291,7 @@ if (NS_FAILED (rv) || !classID) break;
 nsCID badClassID = { 0x46590685, 0xbc00, 0x4aac,
 		     { 0xab, 0xed, 0x2c, 0x10, 0xa5, 0xb9, 0x45, 0xa4 } };
 
-retval = ! classID->Equals (badClassID);
+status = classID->Equals (badClassID) ? 97 : EXIT_SUCCESS;
 ]]
 )],
 [have_broken_typeaheadfind=no],

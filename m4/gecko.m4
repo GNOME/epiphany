@@ -289,9 +289,7 @@ gecko_cv_extra_libs=
 gecko_cv_extra_pkg_dependencies=
 
 if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "9"; then
-	if test "$gecko_cv_gecko" != "xulrunner"; then
-		gecko_cv_extra_libs="-lxul"
-	fi
+	gecko_cv_extra_libs="-lxul"
 else
 	gecko_cv_extra_pkg_dependencies="${gecko_cv_gecko}-gtkmozembed"
 fi
@@ -371,10 +369,11 @@ AC_DEFUN([GECKO_RUN_IFELSE],[_GECKO_DISPATCH([AC_RUN_IFELSE],$@)])
 # the BODY part has run. In BODY, the the following variables are predeclared:
 #
 # nsresult rv
-# PRBool retval (set to PR_FALSE)
+# int status = 1 (EXIT_FAILURE)
 #
-# The program's exit status will be EXIT_FAILURE if retval is PR_FALSE;
-# else it will be EXIT_SUCCESS.
+# The program's exit status will be |status|; set it to 0 (or EXIT_SUCCESS)
+# to indicate success and to a value between 1 (EXIT_FAILURE) and 120 to
+# indicate failure.
 #
 # To jump out of the BODY and exit the test program, you can use |break|.
 
@@ -397,22 +396,22 @@ AC_DEFUN([GECKO_XPCOM_PROGRAM],
 [[
 // redirect unwanted mozilla debug output to the bit bucket
 freopen ("/dev/null", "w", stdout);
-freopen ("/dev/null", "w", stderr);
+//freopen ("/dev/null", "w", stderr);
 
 nsresult rv;
 nsCOMPtr<nsILocalFile> directory;
 rv = NS_NewNativeLocalFile (NS_LITERAL_CSTRING("$_GECKO_HOME"), PR_FALSE,
 			    getter_AddRefs (directory));
 if (NS_FAILED (rv) || !directory) {
-	exit (EXIT_FAILURE);
+	exit (126);
 }
 
 rv = NS_InitXPCOM2 (nsnull, directory, nsnull);
 if (NS_FAILED (rv)) {
-	exit (EXIT_FAILURE);
+	exit (125);
 }
 
-PRBool retval = PR_FALSE;
+int status = EXIT_FAILURE;
 
 // now put in the BODY, scoped with do...while(0) to ensure we don't hold a
 // COMptr after XPCOM shutdown and so we can jump out with a simple |break|.
@@ -423,7 +422,7 @@ m4_shiftn(1,$@)
 } while (0);
 	
 NS_ShutdownXPCOM (nsnull);
-exit (retval ? EXIT_SUCCESS : EXIT_FAILURE);
+exit (status);
 ]])
 ]) # GECKO_XPCOM_PROGRAM
 
@@ -444,7 +443,7 @@ AC_CACHE_CHECK([whether we can compile and run XPCOM programs],
 gecko_cv_xpcom_program_check=no
 
 GECKO_RUN_IFELSE([],
-	[GECKO_XPCOM_PROGRAM([],[[retval = PR_TRUE;]])],
+	[GECKO_XPCOM_PROGRAM([],[[status = EXIT_SUCCESS;]])],
 	[gecko_cv_xpcom_program_check=yes],
 	[gecko_cv_xpcom_program_check=no],
 	[gecko_cv_xpcom_program_check=maybe])
@@ -481,13 +480,17 @@ GECKO_RUN_IFELSE([],
 [GECKO_XPCOM_PROGRAM([[
 #include <nsIComponentRegistrar.h>
 ]],[[
+status = 99;
 nsCOMPtr<nsIComponentRegistrar> registrar;
 rv = NS_GetComponentRegistrar (getter_AddRefs (registrar));
 if (NS_FAILED (rv)) break;
 
+status = 98;
 PRBool isRegistered = PR_FALSE;
 rv = registrar->IsContractIDRegistered ("$1", &isRegistered);
-retval = NS_SUCCEEDED (rv) && isRegistered;
+if (NS_FAILED (rv)) break;
+
+status = isRegistered ? EXIT_SUCCESS : 97;
 ]])
 ],
 [AS_VAR_SET(gecko_cv_have_CID,[yes])],
