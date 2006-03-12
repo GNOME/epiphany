@@ -373,7 +373,7 @@ prefs_dialog_show_help (EphyDialog *dialog)
 
 	static char * const help_preferences[] = {
 		"general-preferences",
-		"fonts-and-colors-preferences",
+		"fonts-and-style-preferences",
 		"privacy-preferences",
 		"language-preferences"
 	};
@@ -494,7 +494,7 @@ font_prefs_dialog_response_cb (GtkWidget *widget,
 {
 	if (response == GTK_RESPONSE_HELP)
 	{
-		/* FIXME */
+		ephy_gui_help (GTK_WINDOW (widget), "epiphany", "fonts-and-style-preferences");
 		return;
 	}
 
