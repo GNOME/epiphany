@@ -47,6 +47,10 @@
 	  <year>2006</year>
 	  <holder>Reinout van Schouwen</holder>
 	</copyright>
+	<copyright>
+	  <year>2006</year>
+	  <holder>Victor Osadci</holder>
+	</copyright>
 
 <!-- translators: uncomment this:
 
@@ -100,6 +104,14 @@
 	  <address><email>reinouts@gnome.org</email></address> 
 	</affiliation> 
 	  </author>
+	  <author> 
+	<firstname>Victor</firstname> 
+	<surname>Osadci</surname> 
+	<affiliation> 
+	  <orgname>GNOME Documentation Project</orgname> 
+	  <address><email>Victor.Osadci.GNOME@xhtml.md</email></address> 
+	</affiliation> 
+	  </author> 
 
 	</authorgroup>
 
@@ -146,7 +158,7 @@
 			<listitem>
 			  <para>
 				Choose <menuchoice> <guisubmenu>Internet</guisubmenu>
-				<guimenuitem>Web Browser</guimenuitem> </menuchoice>.
+				<guimenuitem>Epiphany Web Browser</guimenuitem> </menuchoice>.
 			  </para>
 			</listitem>
 		  </varlistentry>
@@ -174,7 +186,7 @@
 			<listitem>
 		  <para>
 				Choose <menuchoice> <guisubmenu>Internet</guisubmenu>
-				<guimenuitem>Web Bookmarks</guimenuitem> </menuchoice>. 
+				<guimenuitem>Epiphany Bookmarks</guimenuitem> </menuchoice>. 
 			  </para>
 			</listitem>
 		  </varlistentry>
@@ -209,7 +221,7 @@
 			</term>
 			<listitem>
 			  <para>
-				Click on the Bookmarks button in the toolbar of the
+				Press the Bookmarks button in the toolbar of the
 				main window. 
 			  </para>
 			</listitem>
@@ -234,7 +246,7 @@
 			<imagedata fileref="figures/ephy-screenshot.png" format="PNG"/>
 		  </imageobject>
 		  <textobject>
-			<phrase>A page being displayed in a browser window. Callouts: Menubar, toolbar, address entry, bookmarks bar, view pane</phrase>
+			<phrase>A page being displayed in a browser window. Callouts: Menubar, toolbar, address entry, view pane</phrase>
 		  </textobject>
 		</mediaobject>
 	  </screenshot>
@@ -277,12 +289,14 @@
 		  <row>
 			<entry valign="top">
 			  <para>
-				Toolbar
+				Toolbars
 			  </para>
 			</entry>
 			<entry valign="top">
 			  <para>
-				Contains buttons that you use to perform tasks in a browser window.
+				Contain buttons that you use to perform tasks in a browser window. 
+				Menus, buttons and text fields that you use for high-speed access to 
+				bookmarks and web searches are also located here.
 			  </para>
 			</entry>
 		  </row>
@@ -296,19 +310,6 @@
 			  <para>
 				Drop-down combination box that you use to enter web addresses or 
 				search terms.
-			  </para>
-			</entry>
-		  </row>
-	  <row>
-			<entry colname="colspec0" valign="top">
-			  <para>
-				Bookmarks bar
-			  </para>
-			</entry>
-			<entry colname="colspec1" valign="top">
-			  <para>
-				Contains menus, buttons and text fields that you use for highspeed 
-				access to bookmarks and web searches.
 			  </para>
 			</entry>
 		  </row>
@@ -340,12 +341,13 @@
 	  </tgroup>
 	</table>
 	<para>
-	  You can also open a popup menu from browser windows. To open 
-	  this popup menu right-click in a browser window. The items in 
+	  You can also open a context menu from browser windows. To open 
+	  this context menu right-click in a browser window. The items in 
 	  this menu depend on where you right-click. For example, when 
-	  you right-click on a link, you can choose items related to the 
-	  link. When you right-click on the web page itself, you can 
-	  choose items related to the display of the web page.
+	  you open the context menu of a link, you can choose items related to the 
+	  link. When you open the context menu on the web page itself, you can 
+	  choose items related to the display of the web page. By opening the 
+	  context menu of a toolbar item you can choose items related to that toolbar.
 	</para>
   </sect1>
 
@@ -362,7 +364,7 @@
 			for in the Bookmarks database and the History database. If
 			there are any matches, these are shown in a drop down list
 			and can be selected by you. The selected web page will be
-			loaded in the browser window or tab. 
+			loaded in the browser window. 
 		  </para>
 		  <para>
 			You can type in a bookmark topic or a term that is
@@ -378,24 +380,21 @@
 		  <para>
 			The toolbar contains a number of shortcuts to commonly 
 			used functions. You can use the toolbar to navigate 
-			through your web history by clicking the back and 
+			through your web history by pressing the back and 
 			forward buttons. In addition it is possible to stop the 
-			loading of pages by clicking the stop button. Finally 
-			pages may be reloaded by clicking the reload button.
+			loading of pages by pressing the stop button. Finally, 
+			pages may be reloaded by pressing the reload button.
 		  </para>
 		  <para>
 			You can customize the buttons which appear on your 
 			toolbar by using the Toolbar Editor: for details, see 
 			<xref linkend="to-edit-toolbars"/>.
 		  </para>
-		</sect2>
-	<sect2 id="using-bookmarks-bar">
-		  <title>Using the Bookmarks Bar</title>
 		  <para>
-			The Bookmarks Bar allows you to have links to your favorite 
+			You can also have links to your favorite 
 			websites on a toolbar for easy access. For details on 
-			adding bookmarks to the bookmarks bar, see <xref 
-			linkend="to-add-bookmark-or-topic-to-bookmarks-bar"/>.
+			adding bookmarks to the toolbar, see <xref 
+			linkend="to-add-bookmark-or-topic-to-toolbar"/>.
 		  </para>
 		</sect2>
 	<sect2 id="using-fullscreen-mode">
@@ -407,14 +406,10 @@
 			</guimenuitem> </menuchoice>.
 		  </para>
 		  <para>
-			When in Fullscreen mode, only a minimal toolbar is shown. You
-			can toggle its visibility by right-clicking on a blank area
-			of the page and choosing <menuchoice> <guimenuitem>New 
-			Toolbar</guimenuitem> </menuchoice> or by pressing 
-			<keycap>Ctrl-Shift-T</keycap>.
+			When in Fullscreen mode, only a minimal toolbar is shown.
 		  </para>
 		  <para>
-			You can exit Fullscreen mode by clicking <guibutton>Leave 
+			You can exit Fullscreen mode by pressing <guibutton>Leave 
 			Fullscreen</guibutton>.
 		  </para>
 		</sect2>
@@ -441,8 +436,8 @@
 			To open a file, choose <menuchoice> <guimenu>File
 			</guimenu> <guimenuitem>Open...</guimenuitem>
 			</menuchoice> to display the <guilabel>Open File</guilabel> 
-			dialog. Select the file that you want to open, then click 
-			<guibutton>OK</guibutton>. The file is displayed in the 
+			dialog. Select the file that you want to open, then press 
+			<guibutton>Open</guibutton>. The file is displayed in the 
 			browser window.
 		  </para>
 		</sect2>
@@ -450,9 +445,9 @@
 		  <title>To Save a Page to a File</title>
 		  <para>
 			 To save a page to a file, choose <menuchoice> <guimenu>
-			 File</guimenu> <guimenuitem>Save As</guimenuitem> 
+			 File</guimenu> <guimenuitem>Save As...</guimenuitem> 
 			 </menuchoice>. Enter a name for the file in the <guilabel>
-			 Save As</guilabel> dialog box, then click <guibutton>OK
+			 Save As</guilabel> dialog box, then press <guibutton>Save
 			 </guibutton>.
 		  </para>
 		</sect2>
@@ -474,7 +469,7 @@
 			  <term>Colors</term>
 			  <listitem>
 				<para>
-				  Print in grayscale or color.
+				  Print in gray-scale or color.
 				</para>
 			  </listitem>
 			</varlistentry>
@@ -482,7 +477,7 @@
 			  <term>Footers</term>
 			  <listitem>
 				<para>
-				  Choose whether to display page numbers and current date
+				  Choose whether to display page numbers and the current date
 				  at the bottom of every page.
 				</para>
 			  </listitem>
@@ -528,9 +523,9 @@
 		  <title>To Print a Page</title>
 		  <para>
 			To print a page, choose <menuchoice> <guimenu>File</guimenu>
-			<guimenuitem>Print</guimenuitem> </menuchoice>. Enter the 
+			<guimenuitem>Print...</guimenuitem> </menuchoice>. Select the 
 			name of the printer in the <guilabel>Printer</guilabel> 
-			field or enter a name in the <guilabel>File</guilabel> field 
+			list or enter a name in the <guilabel>Location</guilabel> field 
 			to print to a file.
 		  </para>
 		  <para>
@@ -549,8 +544,9 @@
 			  <listitem>
 				<para>
 				  Choose <menuchoice> <guimenu>Edit</guimenu> 
-				  <guimenuitem>Find</guimenuitem> </menuchoice> to 
-				  display the <guilabel>Find</guilabel> dialog.
+				  <guimenuitem>Find...</guimenuitem> </menuchoice> to 
+				  display the <guilabel>Find</guilabel> dialog at the bottom of the 
+				  browser window.
 				</para>
 			  </listitem>
 			  <listitem>
@@ -561,21 +557,13 @@
 			  </listitem>
 			  <listitem>
 				<para>
-				  Select the <guilabel>Case sensitive</guilabel> 
-				  option to only find occurrences of the string that 
-				  match the case of the text that you type.
+				Type capital letters to only find occurrences of the string that 
+				match the case of the text that you type.
 				</para>
 			  </listitem>
 			  <listitem>
 				<para>
-				  Select the <guilabel>Wrap around</guilabel> option to 
-				  search to the end of the page and then continue the 
-				  search from the beginning of the page.
-				</para>
-			  </listitem>
-			  <listitem>
-				<para>
-				  Click <guibutton>Next</guibutton> to search the page
+				  Press <guibutton>Find Next</guibutton> to search the page
 				  for the first occurrence of the string. If the string 
 				  is found, the cursor is moved to the string, and the 
 				  string is selected.
@@ -583,23 +571,32 @@
 			  </listitem>
 			  <listitem>
 				<para>
-				  To find the next occurrence of the string, click
-				  <guibutton>Next</guibutton>.
+				  To find the next occurrence of the string, press
+				  <guibutton>Find Next</guibutton>.
 				</para>
 			  </listitem>
 			  <listitem>
 				<para>
-				  To find the previous occurrence of the string, click
-				  <guibutton>Previous</guibutton>.
+				  To find the previous occurrence of the string, press
+				  <guibutton>Find Previous</guibutton>.
 				</para>
 			  </listitem>
 			  <listitem>
 				<para>
-				  To finish the search, click <guibutton>Close
-				  </guibutton>.
+				  To finish the search, click outside of the search bar.
 				</para>
 			  </listitem>
 			</orderedlist>
+		  <para>
+			<note>
+			  <title>Wrap Around</title>
+			  <para>
+				When &fr; has reached the end of the page, the search will be 
+				continued from the beginning of the page. The message 
+				<guilabel>Wrapped</guilabel> will be shown in the search bar.
+			  </para>
+			</note>
+		  </para>
 		</sect2>	
 	<sect2 id="to-change-zoom">
 	  <title>To Change the Zoom Factor</title>
@@ -614,7 +611,7 @@
 			</term>			
 			<listitem>
 			 <para>
-			  Click on the Larger button in the toolbar of the main window.
+			  Press the <guibutton>Larger</guibutton> button in the toolbar of the main window.
 			 </para>
 			</listitem>
 			</varlistentry>
@@ -624,7 +621,7 @@
 			 </term>
 			<listitem>
 			 <para>
-			  Click on the Smaller button in the toolbar of the main window.
+			  Press the <guibutton>Smaller</guibutton> button in the toolbar of the main window.
 			 </para>
 			</listitem>
 			</varlistentry>
@@ -635,14 +632,14 @@
 		  <itemizedlist>
 			<listitem>
 			  <para>To enlarge the view of a page, choose <menuchoice>
-				<guimenu>View</guimenu><guimenuitem>Zoom In</guimenuitem>
+				<guimenu>View</guimenu><guimenuitem>Larger Text</guimenuitem>
 				</menuchoice>.
 			  </para>
 			</listitem>
 			<listitem>
 			  <para>
 				To shrink the view of a page, choose <menuchoice>
-				<guimenu>View</guimenu><guimenuitem>Zoom Out</guimenuitem>
+				<guimenu>View</guimenu><guimenuitem>Smaller Text</guimenuitem>
 				</menuchoice>.
 			  </para>
 			</listitem>
@@ -672,7 +669,7 @@
 			windows, choose <menuchoice><guimenu>View</guimenu>
 			<guimenuitem>Popup Windows</guimenuitem></menuchoice>. When the 
 			popups for the page are hidden, the blocked popup icon will show
-			in the statusbar. The tooltip for this icons shows how many popup
+			in the status bar. The tooltip for this icons shows how many popup
 			windows have been blocked.
 		  </para>
 		  <para>
@@ -700,8 +697,8 @@
 			  <term>To open a link in a new tab</term>
 			  <listitem>
 				<para>
-				  Right click it and select <guimenuitem>Open Link in New 
-				  Tab</guimenuitem>, click with the middle mouse button.
+				  Select <guimenuitem>Open Link in New Tab</guimenuitem> from 
+				  the link context menu, or click with the middle mouse button.
 				</para>
 			  </listitem>
 			</varlistentry>
@@ -709,8 +706,8 @@
 			  <term>To open a link in a new window</term>
 			  <listitem>
 				<para>
-				  Right-click it and select <guimenuitem>Open Link in 
-				  New Window</guimenuitem>.
+				  Select <guimenuitem>Open Link in New Window</guimenuitem>
+				  from the link context menu.
 				</para>
 			  </listitem>
 			</varlistentry>
@@ -719,8 +716,9 @@
 	<sect2 id="to-download-link">
 		  <title>To Download a Link</title>
 		  <para>
-			To save the target of a link, right click it and select 
-			<guimenuitem>Download Link</guimenuitem>. The linked file or 
+			To save the target of a link, select 
+			<guimenuitem>Download Link</guimenuitem> from the link 
+			context menu. The linked file or 
 			document will be saved to your download folder which you can 
 			set in <xref linkend="general-preferences"/>.
 		  </para>
@@ -728,7 +726,7 @@
 	<sect2 id="to-switch-between-tabs">
 		  <title>To Switch in Between Tabs</title>
 		  <para>
-			Click the header of a tab to switch to it.
+			Select the header of a tab to switch to it.
 		  </para>
 		</sect2>
 	<sect2 id="to-move-tabs">
@@ -740,14 +738,9 @@
 			<guimenuitem>Move Tab Right</guimenuitem></menuchoice> to 
 			move the current tab. You can also drag tabs to reorder them.
 		  </para>
-		  <para>
-			To move the current tab to a new window choose <menuchoice> 
-			<guimenu>Tabs</guimenu> <guimenuitem>Detach Tab</guimenuitem>
-			</menuchoice>.
-		  </para>
 		   <tip>
 			 <para>
-			   You can also access these options by right-clicking the
+			   You can also access these options by opening the context menu of the 
 			   tab header.
 			 </para>
 		   </tip>
@@ -781,33 +774,28 @@
 			</itemizedlist>
 		  </para>
 		  <para>
-			The hierarchical way of organising bookmarks does not work
-			well for most people. Instead of this approach, &fr;
-			follows a database like approach. An address related to a
+			&fr; follows a database like approach to organise bookmarks. 
+			An address related to a
 			bookmark is stored with some metadata associated with
 			it. This metadata is then used to retrieve a bookmark
-			later. Future versions of &fr; will provide useful ways of
-			searching for and retrieving bookmarks using this
-			database. 
+			later.
 		  </para>
 		  <para>
 			In the &fr; bookmark system, addresses are organised by
-			associating each address with one or more topic. For
+			associating each address with one or more topics. For
 			example, if one were to store a bookmark for
 			<ulink type="http" url="http://developer.gnome.org">GNOME
 			Developers home page</ulink>, in any other browser, the user
 			might store it under the following hierarchy:
 			<programlisting>
-			Development -> GNOME -> GNOME developers home page
-			</programlisting>
+Development -> GNOME -> GNOME developers home page</programlisting>
 	  </para>
 		  <para>
 			In &fr;, the same page could be associated with two
 			topics: 
 			<programlisting>
-			Development -> GNOME developers home page
-			GNOME -> GNOME developers home page
-			</programlisting>
+Development -> GNOME developers home page
+GNOME -> GNOME developers home page</programlisting>
 			Now the user can access this bookmark by typing the  
 			topic "GNOME" or "Development" in the location
 			bar. The user can also type in any of the words "GNOME",
@@ -818,12 +806,33 @@
 		  </para>
 		  <para>
 			<note>
-			  <title>No Subtopics</title>
+			  <title>Subtopics</title>
 			  <para>
-				&fr; allows only a single level of topics. Topics cannot
-				have sub-topics. 
+				&fr; allows you to create a single level of topics. Sub-topics are 
+				created automatically based on your existing bookmarks and topics.
 			  </para>
 			</note>
+		  </para>
+		  <para>
+		  As a user, you may have a very specific way of arrange your 
+		  bookmarks into a hierarchy. Epiphany does not support the ability to 
+		  explicitly construct a hierarchy, and so sometimes you might get 
+		  frustrated that the hierarchy &fr;  builds isn't exactly what you want. 
+		  </para>
+		  <para>
+		  To ensure that you get the best hierarchy possible:
+			<itemizedlist>
+			  <listitem>
+			   <para>
+				 Use topics that will come to mind first when trying to recall the bookmark.
+			   </para>
+			  </listitem>
+			  <listitem>
+			   <para>
+				 Use multiple topics for bookmarks.
+			   </para>
+			  </listitem>
+			</itemizedlist>
 		  </para>
 		</sect2>
 		<sect2 id="to-access-a-bookmark">
@@ -839,12 +848,11 @@
 			collection can be directly edited from the desktop. In the
 			same place, it is now possible to edit the bookmark title
 			inline, add more topics, remove bookmarks, associate them
-			to more topics with drag and drop, edit properties of a
+			with more topics with drag and drop, edit properties of a
 			bookmark, etc. 
 		  </para>
 		  <para>
-			The bookmarks can also be
-			accessed by: 
+			The bookmarks can also be accessed by: 
 			<itemizedlist>
 			  <listitem>
 			   <para>
@@ -870,12 +878,9 @@
 			  </listitem>
 			  <listitem>
 			   <para>
-				 The bookmark bar can also be used to access your bookmarks. 
-				 Choose <menuchoice><guimenu>View</guimenu><guimenuitem>Bookmarks 
-				 Bar</guimenuitem></menuchoice> to add the Bookmark bar. 
-				 However, each topic and bookmark needs to be configured in 
-				 the Bookmarks dialog to be shown on this bar. This can be 
-				 used to organise most frequently used bookmarks. 
+				 Bookmarks and topics can be added to the toolbars for easy access. 
+				 To add a bookmark or topic to a toolbar, drag it from the bookmarks 
+				 window to the toolbar.
 			   </para>
 			  </listitem>
 			</itemizedlist>
@@ -904,7 +909,7 @@
 				  <listitem>
 					<para>
 					  To bookmark a link in the currently viewed page, 
-					  right click on the link and choose <menuchoice>
+					  open the link context menu and choose <menuchoice>
 					  <guimenuitem>Bookmark Link...</guimenuitem>
 					  </menuchoice>.
 					</para>
@@ -920,10 +925,10 @@
 				<para>
 				  To bookmark the currently selected history link, 
 				  choose <menuchoice><guimenu>File</guimenu>
-				  <guimenuitem>Bookmark Link...</guimenuitem>
-				  </menuchoice>. Alternatively, right-click on the
-				  history link in the history window, then choose 
-				  <guimenuitem>Bookmark Link..</guimenuitem>.
+				  <guimenuitem>Add Bookmark...</guimenuitem>
+				  </menuchoice>. Alternatively, choose 
+				  <guimenuitem>Add Bookmark...</guimenuitem> from the history 
+				  link context menu in the history window.
 				</para>
 			  </listitem>
 			</varlistentry>
@@ -976,8 +981,8 @@
 				  </entry>
 				  <entry colname="colspec2" valign="top">
 					<para>
-					  Press-and-hold <keycap>Shift</keycap>. Click on the 
-					  first bookmark in the group, then click on the last 
+					  Press-and-hold <keycap>Shift</keycap>. Select the 
+					  first bookmark in the group, then select the last 
 					  bookmark in the group.
 					</para>
 				  </entry>
@@ -990,8 +995,8 @@
 				  </entry>
 				  <entry colname="colspec2" valign="top">
 					<para>
-					  Press-and-hold <keycap>Ctrl</keycap>. Click on the 
-					  bookmark that you want to select.
+					  Press-and-hold <keycap>Ctrl</keycap>. Select the 
+					  bookmarks one by one.
 					</para>
 				  </entry>
 				</row>
@@ -1026,10 +1031,10 @@
 				  </listitem>
 				 <listitem>
 				   <para>
-					  Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Open in 
-					  New Window</guimenuitem></menuchoice>. Alternatively, right-click 
-					  on the bookmark, then choose <menuchoice><guimenuitem>Open in New 
-					  Window</guimenuitem></menuchoice>.
+					  Choose <menuchoice><guimenu>File</guimenu><guimenuitem>
+					  Open in New Window</guimenuitem></menuchoice>. Alternatively,
+					  choose <menuchoice><guimenuitem>Open in New Window
+					  </guimenuitem></menuchoice> from the context menu of the bookmark.
 				   </para>
 				 </listitem>
 			   </orderedlist>
@@ -1048,10 +1053,10 @@
 				 </listitem>
 				 <listitem>
 				   <para>
-					 Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Open 
-					 in New Tab</guimenuitem></menuchoice>. Alternatively, 
-					 right-click on the bookmark, then choose <menuchoice>
-					 <guimenuitem>Open in New Tab</guimenuitem></menuchoice>.
+					 Choose <menuchoice><guimenu>File</guimenu><guimenuitem>
+					 Open in New Tab</guimenuitem></menuchoice>. Alternatively, 
+					 choose <menuchoice><guimenuitem>Open in New Tab</guimenuitem>
+					 </menuchoice> from the context menu of the bookmark.
 				   </para>
 				 </listitem>
 			   </orderedlist>
@@ -1072,19 +1077,20 @@
 	<sect2 id="to-add-bookmark-to-topic">
 		  <title>To Add a Bookmark to a Topic</title>
 		  <para>
-			To add a bookmark to a topic, right-click its entry in the bookmarks 
-			window and choose <guimenuitem>Properties</guimenuitem>. From the 
-			<guilabel>Topics</guilabel> list, select each topic to add this 
-			bookmark to, and click <guibutton>Close</guibutton>.
+			To add a bookmark to a topic, choose <guimenuitem>Properties
+			</guimenuitem> from the bookmarks context menu in the bookmarks 
+			window. From the <guilabel>Topics</guilabel> list, select each 
+			topic to add this bookmark to, and press <guibutton>Close</guibutton>.
 		  </para>
 		</sect2>
 	<sect2 id="to-remove-bookmark-from-topic">
 		  <title>To Remove a Bookmark From a Topic</title>
 		  <para>
-			To remove a bookmark from a topic, right-click its entry in the bookmarks 
-			window and choose <guimenuitem>Properties</guimenuitem>. From the 
-			<guilabel>Topics</guilabel> list, deselect each topic from which you 
-			wish to remove this bookmark, then click <guibutton>Close</guibutton>.
+			To remove a bookmark from a topic, choose <guimenuitem>Properties
+			</guimenuitem> from the bookmarks context menu in the bookmarks 
+			window. From the 
+			<guilabel>Topics</guilabel> list, remove each topic from which you 
+			wish to remove this bookmark, then press <guibutton>Close</guibutton>.
 		  </para>
 		</sect2>
 	<sect2 id="to-rename-bookmark-or-topic">
@@ -1101,8 +1107,8 @@
 			<listitem>
 			  <para>
 				Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Rename...</guimenuitem>
-		</menuchoice>. Alternatively, right-click on the bookmark
-		or topic in the view pane, then choose <guimenuitem>Rename...</guimenuitem>.
+		</menuchoice>. Alternatively, choose <guimenuitem>Rename...</guimenuitem>
+		  from the context menu of the bookmark or topic.
 			The name of the bookmark or topic is selected.</para>
 			  </listitem>
 			  <listitem>
@@ -1128,9 +1134,9 @@
 			<listitem>
 			  <para>
 				Choose <menuchoice><guimenu>File</guimenu><guimenuitem>
-				Delete</guimenuitem></menuchoice>. Alternatively, 
-				right-click on the bookmarks or topic in the bookmarks 
-				window, then choose <guimenuitem>Delete</guimenuitem>.
+				Delete</guimenuitem></menuchoice>. Alternatively, choose
+				<guimenuitem>Delete</guimenuitem> from context menu of the
+				bookmark or topic.
 			  </para>
 			</listitem>
 		  </orderedlist>
@@ -1138,9 +1144,9 @@
 	<sect2 id="to-edit-bookmark-properties">
 	  <title>To Edit a Bookmark's Properties</title>
 		  <para>
-			To edit a bookmark's properties such as it's title and address
-			right click it's entry in the bookmarks window and select 
-			<guimenuitem>Properties</guimenuitem>.
+			To edit a bookmark's properties, such as it's title and address,
+			select <guimenuitem>Properties</guimenuitem> from the bookmark's 
+			context menu in the bookmarks window.
 		  </para>
 		</sect2>
 	<sect2 id="to-search-bookmarks">
@@ -1166,16 +1172,16 @@
 			  <para>
 				Choose <menuchoice><guimenu>Edit</guimenu><guimenuitem>
 				Copy Address</guimenuitem></menuchoice>. Alternatively, 
-				right-click on the bookmark, then choose <guimenuitem>Copy 
-				Address</guimenuitem>.
+				choose <guimenuitem>Copy Address</guimenuitem> from the 
+				bookmark's context menu.
 			  </para>
 			</listitem>
 		  </orderedlist>
 		</sect2>
-	<sect2 id="to-add-bookmark-or-topic-to-bookmarks-bar">
-		  <title>To Add a Bookmark or Topic to the Bookmarks Bar</title>
+	<sect2 id="to-add-bookmark-or-topic-to-toolbar">
+		  <title>To Add a Bookmark or Topic to the Toolbar</title>
 		  <para>
-			You can add a bookmark or topic to the bookmarks bar in the following ways:
+			You can add a bookmark or topic to the toolbar in the following ways:
 		  </para>
 		  <variablelist>
 			<varlistentry>
@@ -1186,7 +1192,7 @@
 				<para>
 				  Select the bookmark or topic you wish to add, and choose 
 				  <menuchoice><guisubmenu>File</guisubmenu><guimenuitem>
-				  Show in Bookmarks Bar</guimenuitem></menuchoice>.
+				  Show on Toolbar</guimenuitem></menuchoice>.
 				</para>
 			  </listitem>
 			</varlistentry>
@@ -1197,16 +1203,16 @@
 			 <listitem>
 			   <para>
 				 You can drag and drop bookmarks and topics from the 
-				 bookmarks window onto the bookmarks bar.
+				 bookmarks window onto the toolbar.
 			   </para>
 			 </listitem>
 		   </varlistentry>
 		 </variablelist>
 		</sect2>
-	<sect2 id="to-remove-bookmark-or-topic-from-bookmarks-bar">
-		  <title>To Remove a Bookmark or Topic From the Bookmarks Bar</title>
+	<sect2 id="to-remove-bookmark-or-topic-from-toolbar">
+		  <title>To Remove a Bookmark or Topic From the Toolbar</title>
 		  <para>
-			You can remove a bookmark or topic from the bookmarks bar in the following ways:
+			You can remove a bookmark or topic from the toolbar in the following ways:
 		  </para>
 		  <variablelist>
 			<varlistentry>
@@ -1217,7 +1223,7 @@
 				<para>
 				  Select the bookmark or topic you wish to remove, and choose 
 				  <menuchoice><guisubmenu>File</guisubmenu><guimenuitem>Show 
-				  in Bookmarks Bar</guimenuitem></menuchoice>.
+				  on Toolbar</guimenuitem></menuchoice>.
 				</para>
 			  </listitem>
 			</varlistentry>
@@ -1227,7 +1233,7 @@
 			  </term>
 			  <listitem>
 				<para>
-				  You can remove bookmarks and topics from the bookmarks bar 
+				  You can remove bookmarks and topics from the toolbar 
 		  using the toolbar editor as described in the section
 		  <xref linkend="to-edit-toolbars"/>.
 				</para>
@@ -1266,7 +1272,7 @@
 			</figure>
 			<para>
 			  It is also possible to add a Smart Bookmark to a toolbar by selecting 
-			  <guimenuitem>Show in Bookmarks Bar</guimenuitem> in the bookmark's 
+			  <guimenuitem>Show on Toolbar</guimenuitem> in the bookmark's 
 			  property dialog. If you do so, you will see its name and a text box, 
 			  as shown in <xref linkend="ephy-bookmarkbar-smartbookmark-screenshot"/>. 
 			  You can enter text into the box and press enter to perform the function of 
@@ -1317,10 +1323,10 @@
 			  </listitem>
 			  <listitem>
 				<para>
-				  (Optional) If you want the Smart Bookmark to appear in the bookmarks
-				  bar, as shown in 
+				  (Optional) If you want the Smart Bookmark to appear on the toolbar, 
+				  as shown in 
 				  <xref linkend="ephy-bookmarkbar-smartbookmark-screenshot"/>, select 
-				  <guimenuitem>Show in Bookmarks Bar</guimenuitem> in the bookmark's 
+				  <guimenuitem>Show on Toolbar</guimenuitem> in the bookmark's 
 				  <guimenuitem>Properties</guimenuitem> dialog.
 				</para>
 			  </listitem>
@@ -1408,8 +1414,9 @@
 					<para>
 					  Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Open 
 					  in New Window</guimenuitem></menuchoice>. Alternatively, 
-					  right-click on the history link, then choose <menuchoice>
-					  <guimenuitem>Open in New Window</guimenuitem></menuchoice>.
+					  choose <menuchoice><guimenuitem>Open in New Window
+					  </guimenuitem></menuchoice> from the context menu of the 
+					  history link.
 					</para>
 				  </listitem>
 				 </orderedlist>
@@ -1430,8 +1437,9 @@
 					 <para>
 					   Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Open 
 					   in New Tab</guimenuitem></menuchoice>. Alternatively, 
-					   right-click on the history link, then choose <menuchoice>
-					   <guimenuitem>Open in New Tab</guimenuitem></menuchoice>.
+					   choose <menuchoice><guimenuitem>Open in New Tab
+					   </guimenuitem></menuchoice> from the context menu of the
+					   history link.
 					 </para>
 				   </listitem>
 				 </orderedlist>
@@ -1453,8 +1461,8 @@
 			<listitem>
 			  <para>
 				Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Delete</guimenuitem>
-				</menuchoice>. Alternatively, right-click on the history link, then 
-				choose <guimenuitem>Delete</guimenuitem>.
+				</menuchoice>. Alternatively, choose <guimenuitem>Delete
+				</guimenuitem> from the context menu of the history link.
 			  </para>
 			</listitem>
 		  </orderedlist>
@@ -1492,21 +1500,47 @@
 			<listitem>
 			  <para>
 				Choose <menuchoice><guimenu>Edit</guimenu><guimenuitem>Copy 
-				Address</guimenuitem></menuchoice>. Alternatively, 
-				right-click on the history link, then choose 
-				<guimenuitem>Copy Address</guimenuitem>.
+				Address</guimenuitem></menuchoice>. Alternatively, choose 
+				<guimenuitem>Copy Address</guimenuitem> from context menu 
+				of the history link.
 			  </para>
 			</listitem>
 		  </orderedlist>
 		</sect2>
+	<sect2 id="to-create-bookmark-from-history-address">
+		  <title>To Create a Bookmark from a History Link</title>
+		  <para>
+			To create a bookmark from a history link perform the following 
+			steps:
+		  </para>
+		  <orderedlist>
+			<listitem>
+			  <para>
+				Select the history link.
+			  </para>
+			</listitem>
+			<listitem>
+			  <para>
+				Choose <menuchoice><guimenu>File</guimenu><guimenuitem>
+				Add Bookmark...</guimenuitem></menuchoice>. Alternatively, 
+				choose <guimenuitem>Add Bookmark...</guimenuitem> from the 
+				context menu of the history link.
+			  </para>
+			</listitem>
+		  </orderedlist>
+		  <para>
+		  For more information on bookmarks, see <xref
+			linkend="overview-of-bookmarks"/>.
+			</para>
+		</sect2>
   </sect1>
 
 <!-- ============= Managing Your Passwords and Cookies ============ -->
-  <sect1 id="ephy-managing-passwords-cookies">
-	<title>Managing Your Passwords and Cookies</title>
+  <sect1 id="ephy-managing-cookies-passwords">
+	<title>Managing Your Cookies and Passwords</title>
 	<para>
 	  &fr; stores your cookies and passwords in the Personal Data Manager
-	  which can be accessed by clicking <menuchoice> <guimenu>Edit</guimenu> 
+	  which can be accessed by choosing <menuchoice> <guimenu>Edit</guimenu> 
 	  <guisubmenu>Personal Data</guisubmenu> </menuchoice>.
 	</para>
 	<sect2 id="managing-cookies">
@@ -1522,14 +1556,14 @@
 	  <itemizedlist>
 		<listitem>
 		  <para>
-			To view the contents of a cookie, select its entry in the list and click 
+			To view the contents of a cookie, select its entry in the list and press 
 			<guibutton>Properties</guibutton>.
 		  </para>
 		</listitem>
 		<listitem>
 		  <para>
-			To delete cookies, select all the cookies you want to delete, and click the 
-			<guibutton>Delete</guibutton> button.
+			To delete cookies, select all the cookies you want to delete, and press the 
+			<guibutton>Remove</guibutton> button.
 		  </para>
 		</listitem>
 	  </itemizedlist>
@@ -1588,8 +1622,15 @@
 	  <itemizedlist>
 		<listitem>
 		  <para>
-			To delete passwords, select all the entries you want to delete, and click the 
-			<guibutton>Delete</guibutton> button.
+			To delete passwords, select all the entries you want to delete, and press the 
+			<guibutton>Remove</guibutton> button.
+		  </para>
+		</listitem>
+		<listitem>
+		  <para>
+		  The password content is normally hidden to protect your privacy. You 
+		  can use the <guilabel>Show password</guilabel> toggle to reveal 
+		  a previously saved password.
 		  </para>
 		</listitem>
 	  </itemizedlist>
@@ -1625,8 +1666,16 @@
 		</listitem>
 	  </itemizedlist>
 	  <para>
-		To cancel a download, select its entry in the download manager and click <guibutton>
-		Stop</guibutton>. 
+		To cancel a download, select its entry in the download manager and press <guibutton>
+		Stop</guibutton>.
+	  </para>
+	  <para>
+		To pause a download, select its entry in the download manager and press <guibutton>
+		Pause</guibutton>.
+	  </para>
+	  <para>
+		To resume a download, select its entry in the download manager and press <guibutton>
+		Resume</guibutton>.
 	  </para>
 	  <note>
 		<para>
@@ -1639,7 +1688,7 @@
   <sect1 id="ephy-certificates">
 	<title>Certificates &amp; Online Security</title>
 	<para>
-	  When using sites which require you to login, or when using online
+	  When using sites which require you to login, or when using on-line
 	  shopping, it is important to know that the information you submit 
 	  is secure. &fr; offers a number of features to help you do this.
 	</para>
@@ -1681,6 +1730,10 @@
 		  </listitem>
 		</varlistentry>
 	  </variablelist>
+	  <para>
+	  In addition, &fr; displays the address entry using a yellow background 
+	  to show you that the current site is secure.
+	  </para>
 	</sect2>
 	<sect2 id="using-certificate-viewer">
 	  <title>Using Certificate Viewer</title>
@@ -1813,13 +1866,13 @@
 			  <listitem>
 				<para>
 				  Choose the page displayed when the <guibutton>Home</guibutton>
-				  button on the toolbar is clicked, and also when &fr; is launched, by 
+				  button on the toolbar is pressed, and also when &fr; is launched, by 
 				  entering an address in the <guilabel>Home page</guilabel> section.
 				</para>
 			  </listitem>
 			  <listitem>
 				<para>
-				  Choose the folder for downloaded files by clicking the <guilabel>
+				  Choose the folder for downloaded files by pressing the <guilabel>
 				  Download folder</guilabel> button and selecting a folder. If you
 				  select <guilabel>Automatically download and open files</guilabel>
 				  you will not be prompted before files are download or opened.
@@ -1827,37 +1880,45 @@
 			  </listitem>
 			</itemizedlist>
 		  </sect3>
-		  <sect3 id="fonts-and-colors-preferences">
-			<title>Fonts and Colors Preferences</title>
+		  <sect3 id="fonts-and-style-preferences">
+			<title>Fonts and Style Preferences</title>
 			<para>
 			  This section allows you to configure the style of text and the colors used
 			  on web pages.
 			</para>
 			<para>
-			  You can choose different font styles and sizes depending on the language 
-			  that a page is written in. First select the language you want to configure 
+			  You can set a minimum size for web page fonts by using the <guilabel>
+			  Minimum size</guilabel> spin box. Fonts smaller than this value will be 
+			  increased to this size.
+			</para>
+			<para>
+			  You can also choose different font styles and sizes depending on the language 
+			  that a page is written using the <guibutton>Detailed Font Settings</guibutton> 
+			  button. First select the language you want to configure 
 			  from the <guilabel>For language</guilabel> drop-down list. To 
 			  set the font for standard text, where the width of characters varies, 
 			  use the <guilabel>Variable width</guilabel> drop down list 
 			  and spin box. To set the font for fixed width text, where the width of 
 			  characters is always the same, use the <guilabel>Fixed width</guilabel> 
-			  drop down list and spin box.
-			</para>
-			<para>
-			  You can also set a minimum size for web page fonts by using the <guilabel>
-			  Minimum size</guilabel> spin box. Fonts smaller than this value will be 
-			  increased to this size.
+			  drop down list and spin box. To set the minimum font size, use the 
+			  <guilabel>Minimum size</guilabel> spin box.
 			</para>
 			<para>
 			  Web pages often specify their own font styles and sizes. You can make &fr; 
-			  only use the fonts that you have chosen by selecting the <guilabel>Always 
-			  use these fonts</guilabel> option.
+			  only use the fonts that you have chosen by deselecting the <guilabel>
+			  Let web pages specify their own fonts</guilabel> option.
 			</para>
 			<para>
-			  Web pages may also specify their own colors for the background and for 
-			  fonts. You can make &fr; always use the colors specifed by your current 
-			  desktop theme by selecting the <guilabel>Always use the desktop theme 
+			  Web pages may also specify their own colors for the background and 
+			  fonts. You can make &fr; always use the colors specified by your current 
+			  desktop theme by deselecting the <guilabel>Let web pages specify their own 
 			  colors</guilabel> option.
+			</para>
+			<para>
+			  You can make &fr; use styles defined in your own stylesheet by selecting 
+			  the <guilabel>Use custom stylesheet</guilabel> option. The <guibutton>
+			  Edit Stylesheet</guibutton> button will open your default text editor so that 
+			  you can edit the stylesheet.
 			</para>
 		  </sect3>
 		  <sect3 id="privacy-preferences">
@@ -1928,7 +1989,7 @@
 			  faster loading of the content when you next view them. The <guilabel>Disk 
 			  space</guilabel> spin box allows you to specify the maximum amount of space 
 			  &fr; can use for these files. Setting this value to zero will cause &fr; to 
-			  never store temporary files. These temporary files can be removed by clicking 
+			  never store temporary files. These temporary files can be removed by pressing 
 			  the <guibutton>Clear</guibutton> button.
 			</para>
 		  </sect3>
@@ -1950,13 +2011,12 @@
 			</para>
 			<para>
 			  Some web sites have pages which are available in a number of different 
-			  languages. You can set your prefered language by selecting an entry from
-			  the <guilabel>Language</guilabel> drop down list. If you would
-			  like to set one or more fall back languages, in case your prefered 
-			  language isn't available, click <guibutton>More</guibutton> and add 
-			  your back up languages to the list. Entries are listed in the order 
-			  they will be checked with your prefered language at the top. You can 
-			  reorder entries by dragging them.
+			  languages. You can set your prefered languages by adding entries from
+			  the <guilabel>Language</guilabel> list using the <guibutton>Add
+			  </guibutton> button. Entries are listed in the order 
+			  they will be checked, with your prefered language at the top. You can 
+			  reorder entries by dragging them or using the <guibutton>Up</guibutton> 
+			  and <guibutton>Down</guibutton> buttons.
 			</para>
 		  </sect3>
 		</sect2>
@@ -1971,22 +2031,28 @@
 				<para>
 				  To hide the toolbars, choose <menuchoice>
 				  <guimenu>View</guimenu><guimenuitem>Toolbars
+				  </guimenuitem><guimenuitem>Hide Toolbars
 				  </guimenuitem></menuchoice>. To display the
-				  toolbar again, choose <menuchoice><guimenu>
+				  toolbars again, choose <menuchoice><guimenu>
 				  View</guimenu><guimenuitem>Toolbars</guimenuitem>
+				  <guimenuitem>Hide Toolbars</guimenuitem>
 				  </menuchoice> again.
 				</para>
 			  </listitem>
+
 			  <listitem>
 				<para>
-				  To hide the bookmarks bar, choose <menuchoice>
-				  <guimenu>View</guimenu><guimenuitem>Bookmarks Bar
-				  </guimenuitem></menuchoice>. To display the bookmarks 
-				  bar again, choose <menuchoice><guimenu>View</guimenu>
-				  <guimenuitem>Bookmarks Bar</guimenuitem></menuchoice> 
-				  again.
+				  To hide a particular toolbar, choose <menuchoice>
+				  <guimenu>View</guimenu><guimenuitem>Toolbars
+				  </guimenuitem><guimenuitem>Show 
+				  </guimenuitem></menuchoice>, followed by the name of the toolbar.
+				  To display the toolbar again, choose <menuchoice><guimenu>
+				  View</guimenu><guimenuitem>Toolbars</guimenuitem>
+				  <guimenuitem>Show </guimenuitem></menuchoice>, followed 
+				  by the name of the toolbar.
 				</para>
 			  </listitem>
+
 			  <listitem>
 				<para>
 				  To hide the statusbar, choose <menuchoice><guimenu>
@@ -2013,15 +2079,16 @@
 			<listitem>
 			  <para>
 				To add or remove buttons from your toolbar, select 
-				<menuchoice><guimenu>Edit</guimenu><guimenuitem> 
-				Toolbars</guimenuitem></menuchoice>. Drag icons to and 
+				<menuchoice><guimenu>Edit</guimenu><guimenuitem>
+				Toolbars</guimenuitem><guimenuitem>Customize Toolbars</guimenuitem>
+				</menuchoice>. Drag icons to and 
 				from the editor to add or remove them from your toolbar.
 			  </para>
 			</listitem>
 			<listitem>
 			  <para>
-				To add a new toolbar, click <guibutton>Add Toolbar
-				</guibutton> in the toolbar editor.
+				To add a new toolbar, press <guibutton>Add Toolbar</guibutton> 
+				in the toolbar editor.
 			  </para>
 			</listitem>
 			<listitem>
@@ -2088,7 +2155,10 @@
 		  <row>
 			<entry colname="colspec0" valign="top">
 			  <para>
-				<keycap>Ctrl-O</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>O</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry colname="colspec1" valign="top">
@@ -2100,7 +2170,11 @@
 	  <row>
 			<entry colname="colspec0" valign="top">
 			  <para>
-				<keycap>Shift-Ctrl-S</keycap>
+			  <keycombo>
+				  <keycap>Shift</keycap>
+				  <keycap>Ctrl</keycap>
+				  <keycap>S</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry colname="colspec1" valign="top">
@@ -2112,7 +2186,10 @@
 		  <row>
 			<entry valign="top">
 			  <para>
-				<keycap>Ctrl-P</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>P</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry valign="top">
@@ -2124,7 +2201,10 @@
 		  <row>
 			<entry colname="colspec0" valign="top">
 			  <para>
-				<keycap>Ctrl-W</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>W</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry colname="colspec1" valign="top">
@@ -2136,7 +2216,7 @@
 		  <row>
 			<entry colname="colspec0" valign="top">
 			  <para>
-				<keycap>F1</keycap>
+				  <keycap>F1</keycap>
 			  </para>
 			</entry>
 			<entry colname="colspec1" valign="top">
@@ -2148,7 +2228,7 @@
 		  <row>
 			<entry colname="colspec0" valign="top">
 			  <para>
-				<keycap>F7</keycap>
+				  <keycap>F7</keycap>
 			  </para>
 			</entry>
 			<entry colname="colspec1" valign="top">
@@ -2160,48 +2240,61 @@
 		  <row>
 			<entry colname="colspec0" valign="top">
 			  <para>
-				<keycap>Ctrl-D</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>D</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry colname="colspec1" valign="top">
 			  <para>
-				Bookmark current page.
+				Bookmark the current page.
 			  </para>
 			</entry>
 		  </row>
 		  <row>
 			<entry colname="colspec0" valign="top">
 			  <para>
-				<keycap>Ctrl-B</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>B</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry colname="colspec1" valign="top">
 			  <para>
-				Show bookmarks manager.
+				Show the bookmarks manager.
 			  </para>
 			</entry>
 		  </row>
 		  <row>
 			<entry colname="colspec0" valign="top">
 			  <para>
-				<keycap>Ctrl-H</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>H</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry colname="colspec1" valign="top">
 			  <para>
-				Show history manager.
+				Show the history manager.
 			  </para>
 			</entry>
 		  </row>
 		  <row>
 			<entry colname="colspec0" valign="top">
 			  <para>
-				<keycap>Shift-Ctrl-T</keycap>
+			  <keycombo>
+				  <keycap>Shift</keycap>
+				  <keycap>Ctrl</keycap>
+				  <keycap>T</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry colname="colspec1" valign="top">
 			  <para>
-				Toggle toolbar display.
+				Toggle the display of the toolbar.
 			  </para>
 			</entry>
 		  </row>
@@ -2233,7 +2326,10 @@
 		  <row>
 			<entry colname="colspec0" valign="top">
 			  <para>
-				<keycap>Ctrl-N</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>N</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry colname="colspec1" valign="top">
@@ -2245,7 +2341,10 @@
 	  <row>
 			<entry colname="colspec0" valign="top">
 			  <para>
-				<keycap>Ctrl-T</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>T</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry colname="colspec1" valign="top">
@@ -2257,7 +2356,10 @@
 		  <row>
 			<entry colname="colspec0" valign="top">
 			  <para>
-				<keycap>Ctrl-L</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>L</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry colname="colspec1" valign="top">
@@ -2269,7 +2371,10 @@
 		  <row>
 			<entry valign="top">
 			  <para>
-				<keycap>Alt-Left</keycap>
+			  <keycombo>
+				  <keycap>Alt</keycap>
+				  <keycap>Left</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry valign="top">
@@ -2281,7 +2386,10 @@
 		  <row>
 			<entry valign="top">
 			  <para>
-				<keycap>Alt-Right</keycap>
+			  <keycombo>
+				  <keycap>Alt</keycap>
+				  <keycap>Right</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry valign="top">
@@ -2293,7 +2401,10 @@
 		  <row>
 			<entry valign="top">
 			  <para>
-				<keycap>Alt-Up</keycap>
+			  <keycombo>
+				  <keycap>Alt</keycap>
+				  <keycap>Up</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry valign="top">
@@ -2305,7 +2416,10 @@
 		  <row>
 			<entry valign="top">
 			  <para>
-				<keycap>Alt-Home</keycap>
+			  <keycombo>
+				  <keycap>Alt</keycap>
+				  <keycap>Home</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry valign="top">
@@ -2334,19 +2448,22 @@
 			</entry>
 			<entry valign="top">
 			  <para>
-				Switch to next frame.
+				Switch to the next frame.
 			  </para>
 			</entry>
 		  </row>
 		  <row>
 			<entry valign="top">
 			  <para>
-				<keycap>Shift-F6</keycap>
+			  <keycombo>
+				  <keycap>Shift</keycap>
+				  <keycap>F6</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry valign="top">
 			  <para>
-				Switch to previous frame.
+				Switch to the previous frame.
 			  </para>
 			</entry>
 		  </row>
@@ -2378,60 +2495,62 @@
 		  <row>
 			<entry valign="top">
 			  <para>
-				<keycap>Ctrl-Page Up</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>Page Up</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry valign="top">
 			  <para>
-				Focus next tab.
-			  </para>
-			</entry>
-		  </row>
-		  <row>
-			<entry valign="top">
-			  <para>
-				<keycap>Ctrl-Page Down</keycap>
-			  </para>
-			</entry>
-			<entry valign="top">
-			  <para>
-				Focus previous tab.
+				Focus the next tab.
 			  </para>
 			</entry>
 		  </row>
 		  <row>
 			<entry valign="top">
 			  <para>
-				<keycap>Shift-Ctrl-Page Up</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>Page Down</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry valign="top">
 			  <para>
-				Move tab left.
-			  </para>
-			</entry>
-		  </row>
-		  <row>
-			<entry valign="top">
-			  <para>
-				<keycap>Shift-Ctrl-Page Down</keycap>
-			  </para>
-			</entry>
-			<entry valign="top">
-			  <para>
-				Move tab right.
+				Focus the previous tab.
 			  </para>
 			</entry>
 		  </row>
 		  <row>
 			<entry valign="top">
 			  <para>
-				<keycap>Shift-Ctrl-M</keycap>
+			  <keycombo>
+				  <keycap>Shift</keycap>
+				  <keycap>Ctrl</keycap>
+				  <keycap>Page Up</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry valign="top">
 			  <para>
-				Detach tab.
+				Move the tab left.
+			  </para>
+			</entry>
+		  </row>
+		  <row>
+			<entry valign="top">
+			  <para>
+			  <keycombo>
+				  <keycap>Shift</keycap>
+				  <keycap>Ctrl</keycap>
+				  <keycap>Page Down</keycap>
+				</keycombo>
+			  </para>
+			</entry>
+			<entry valign="top">
+			  <para>
+				Move the tab right.
 			  </para>
 			</entry>
 		  </row>
@@ -2475,36 +2594,60 @@
 		  <row>
 			<entry valign="top">
 			  <para>
-				<keycap>Ctrl-+</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>+</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry valign="top">
 			  <para>
-				Zoom text larger.
-			  </para>
-			</entry>
-		  </row>
-		  <row>
-			<entry valign="top">
-			  <para>
-				<keycap>Ctrl--</keycap>
-			  </para>
-			</entry>
-			<entry valign="top">
-			  <para>
-				Zoom text smaller.
+				Zoom the text larger.
 			  </para>
 			</entry>
 		  </row>
 		  <row>
 			<entry valign="top">
 			  <para>
-				<keycap>Ctrl-U</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>-</keycap>
+				</keycombo>
 			  </para>
 			</entry>
 			<entry valign="top">
 			  <para>
-				View page source.
+				Zoom the text smaller.
+			  </para>
+			</entry>
+		  </row>
+		  <row>
+			<entry valign="top">
+			  <para>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>0</keycap>
+				</keycombo>
+			  </para>
+			</entry>
+			<entry valign="top">
+			  <para>
+				Display the text at the normal size.
+			  </para>
+			</entry>
+		  </row>
+		  <row>
+			<entry valign="top">
+			  <para>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <keycap>U</keycap>
+				</keycombo>
+			  </para>
+			</entry>
+			<entry valign="top">
+			  <para>
+				View the page source.
 			  </para>
 			</entry>
 		  </row>
@@ -2539,36 +2682,42 @@
 		  <row>
 			<entry valign="top">
 			  <para>
-				<keycap>Middle-click (On a link)</keycap>
+				<mousebutton>Middle-click</mousebutton> (On a link)
 			  </para>
 			</entry>
 			<entry valign="top">
 			  <para>
-				Open link in a new tab.
-			  </para>
-			</entry>
-		  </row>
-		  <row>
-			<entry valign="top">
-			  <para>
-				<keycap>Ctrl-Click (On a link)</keycap>
-			  </para>
-			</entry>
-			<entry valign="top">
-			  <para>
-				Open link in a new tab.
+				Open the link in a new tab.
 			  </para>
 			</entry>
 		  </row>
 		  <row>
 			<entry valign="top">
 			  <para>
-				<keycap>Shift-Click (On a link)</keycap>
+			  <keycombo>
+				  <keycap>Ctrl</keycap>
+				  <mousebutton>Click</mousebutton>
+				</keycombo> (On a link)
 			  </para>
 			</entry>
 			<entry valign="top">
 			  <para>
-				Download link.
+				Open the link in a new tab.
+			  </para>
+			</entry>
+		  </row>
+		  <row>
+			<entry valign="top">
+			  <para>
+			  <keycombo>
+				  <keycap>Shift</keycap>
+				  <mousebutton>Click</mousebutton>
+				</keycombo> (On a link)
+			  </para>
+			</entry>
+			<entry valign="top">
+			  <para>
+				Download the link.
 			  </para>
 			</entry>
 		  </row>
