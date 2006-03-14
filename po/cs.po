@@ -8,15 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-11 05:29+0100\n"
-"PO-Revision-Date: 2006-02-25 23:30+0100\n"
-"Last-Translator: Petr Tomeš <ptomes@gmail.com>\n"
+"POT-Creation-Date: 2006-03-13 13:44+0100\n"
+"PO-Revision-Date: 2006-03-14 01:53+0100\n"
+"Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: ../data/epiphany-lockdown.schemas.in.h:1
 msgid ""
@@ -97,7 +96,8 @@ msgstr "Implicitně skrývat panel nabídky"
 #: ../data/epiphany-lockdown.schemas.in.h:17
 msgid ""
 "Hide the menubar by default. The menubar can still be accessed using F10."
-msgstr "Implicitně skrýt panel nabídky. Panel nabídky lze přesto použít pomocí F10."
+msgstr ""
+"Implicitně skrýt panel nabídky. Panel nabídky lze přesto použít pomocí F10."
 
 #: ../data/epiphany-lockdown.schemas.in.h:18
 msgid "Lock in fullscreen mode"
@@ -2353,11 +2353,11 @@ msgstr "400 %"
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Odkaz na tuto stránku vytvoříte přetažením této ikony"
 
-#: ../plugins/desktop-file/plugin.cpp:263
+#: ../plugins/desktop-file/plugin.cpp:377
 msgid "Unsafe protocol."
 msgstr "Nebezpečný protokol."
 
-#: ../plugins/desktop-file/plugin.cpp:264
+#: ../plugins/desktop-file/plugin.cpp:378
 msgid ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
@@ -2365,23 +2365,22 @@ msgstr ""
 "Adresa nebyla načtena, protože se odkazuje na nebezpečný protokol a tím "
 "ohrožuje zabezpečení vašeho systému."
 
-#: ../plugins/desktop-file/plugin.cpp:290
+#: ../plugins/desktop-file/plugin.cpp:406
 msgid "No address found."
 msgstr "Nebyla nalezena žádná adresa."
 
-#: ../plugins/desktop-file/plugin.cpp:291
+#: ../plugins/desktop-file/plugin.cpp:407
 msgid "No web address could be found in this file."
 msgstr "V tomto souboru nebyla nalezena žádná WWW adresa."
 
 #. Translators: "Desktop File" refers to .desktop files containing a link
-#: ../plugins/desktop-file/plugin.cpp:326
+#: ../plugins/desktop-file/plugin.cpp:442
 msgid "Epiphany Desktop File Plugin"
 msgstr "Zásuvný modul Epiphany pro soubory desktop"
 
-#: ../plugins/desktop-file/plugin.cpp:330
-msgid "This plugin handles “.desktop” files containing web links."
-msgstr ""
-"Tento zásuvný modul zpracovává soubory „.desktop” obsahující odkazy na WWW."
+#: ../plugins/desktop-file/plugin.cpp:446
+msgid "This plugin handles “.desktop” and “.url” files containing web links."
+msgstr "Tento zásuvný modul zpracovává soubory „.desktop” a „.url” obsahující odkazy na WWW."
 
 #: ../src/bookmarks/ephy-bookmark-action.c:263
 #, c-format
@@ -3106,7 +3105,7 @@ msgstr ""
 "Spouštění selhalo kvůli následující chybě:\n"
 "%s"
 
-#: ../src/ephy-main.c:517 ../src/ephy-main.c:519 ../src/window-commands.c:766
+#: ../src/ephy-main.c:517 ../src/ephy-main.c:519 ../src/window-commands.c:767
 msgid "GNOME Web Browser"
 msgstr "GNOME Prohlížeč WWW"
 
@@ -4021,7 +4020,7 @@ msgstr[2] "Jazyky systému (%s)"
 msgid "Select a Directory"
 msgstr "Vyberte adresář"
 
-#: ../src/window-commands.c:714 ../src/window-commands.c:731
+#: ../src/window-commands.c:714 ../src/window-commands.c:732
 msgid "Contact us at:"
 msgstr "Kontaktujte nás na:"
 
@@ -4033,11 +4032,11 @@ msgstr "Spolupracovníci:"
 msgid "Past developers:"
 msgstr "Dřívější vývojáři"
 
-#: ../src/window-commands.c:732
+#: ../src/window-commands.c:733
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> nebo <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:737
+#: ../src/window-commands.c:738
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4045,7 +4044,7 @@ msgid ""
 "option) any later version."
 msgstr ""
 
-#: ../src/window-commands.c:741
+#: ../src/window-commands.c:742
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4053,14 +4052,14 @@ msgid ""
 "more details."
 msgstr ""
 
-#: ../src/window-commands.c:745
+#: ../src/window-commands.c:746
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
 msgstr ""
 
-#: ../src/window-commands.c:757
+#: ../src/window-commands.c:758
 #, c-format
 msgid "Using “%s” backend"
 msgstr "Používám backend „%s”"
@@ -4073,11 +4072,11 @@ msgstr "Používám backend „%s”"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:781
+#: ../src/window-commands.c:782
 msgid "translator-credits"
 msgstr "Miloslav Trmač <mitr@volny.cz>"
 
-#: ../src/window-commands.c:784
+#: ../src/window-commands.c:785
 msgid "GNOME Web Browser Website"
 msgstr "WWW stránky GNOME Prohlížeče WWW"
 
