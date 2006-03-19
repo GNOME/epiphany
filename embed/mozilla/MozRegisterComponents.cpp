@@ -54,6 +54,10 @@
 #include <nsILocalFile.h>
 #include <nsNetCID.h>
 
+#ifdef HAVE_GECKO_1_9
+#include <nsIClassInfoImpl.h>
+#endif
+
 #include <glib/gmessages.h>
 
 NS_GENERIC_FACTORY_CONSTRUCTOR(MozDownload)

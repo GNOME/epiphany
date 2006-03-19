@@ -27,6 +27,10 @@
 #include <nsCRT.h>
 #include <nsIProgrammingLanguage.h>
 
+#ifdef HAVE_GECKO_1_9
+#include <nsIClassInfoImpl.h>
+#endif
+
 #undef MOZILLA_INTERNAL_API
 #include <nsEmbedString.h>
 #define MOZILLA_INTERNAL_API 1
