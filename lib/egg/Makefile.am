@@ -2,19 +2,13 @@ EGGSOURCES = \
 	eggtreemultidnd.c \
 	egg-editable-toolbar.c \
 	egg-toolbars-model.c \
-	egg-toolbar-editor.c \
-	eggstatusicon.c \
-	eggtrayicon.c \
-	eggtraymanager.c
+	egg-toolbar-editor.c
 
 EGGHEADERS = \
 	eggtreemultidnd.h \
 	egg-editable-toolbar.h \
 	egg-toolbars-model.h \
-	egg-toolbar-editor.h \
-	eggstatusicon.h \
-	eggtrayicon.h \
-	eggtraymanager.h
+	egg-toolbar-editor.h
 
 noinst_HEADERS = \
 	$(EGGHEADERS) \

@@ -1,3 +1,24 @@
+2006-03-20  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/downloader-view.c: (status_icon_popup_menu_cb),
+	(show_status_icon), (downloader_view_init),
+	(downloader_view_finalize), (update_status_icon),
+	(download_changed_cb), (downloader_view_add_download),
+	(downloader_view_remove_download),
+	(download_dialog_delete_event_cb):
+
+	Use GtkStatusIcon.
+
+	* lib/egg/Makefile.am:
+	* lib/egg/eggstatusicon.c:
+	* lib/egg/eggstatusicon.h:
+	* lib/egg/eggtrayicon.c:
+	* lib/egg/eggtrayicon.h:
+	* lib/egg/eggtraymanager.c:
+	* lib/egg/eggtraymanager.h:
+
+	Remove egg status icons files.
+
 2006-03-19  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* embed/mozilla/EphySidebar.cpp:
