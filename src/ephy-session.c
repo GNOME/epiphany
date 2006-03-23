@@ -431,18 +431,20 @@ net_stop_cb (EphyEmbed *embed,
 }
 
 static void
-tab_added_cb (GtkWidget *notebook,
-	      EphyTab *tab,
-	      EphySession *session)
+notebook_page_added_cb (GtkWidget *notebook,
+			EphyTab *tab,
+			guint position,
+			EphySession *session)
 {
 	g_signal_connect (ephy_tab_get_embed (tab), "net-stop",
 			  G_CALLBACK (net_stop_cb), session);
 }
 
 static void
-tab_removed_cb (GtkWidget *notebook,
-		EphyTab *tab,
-		EphySession *session)
+notebook_page_removed_cb (GtkWidget *notebook,
+			  EphyTab *tab,
+			  guint position,
+			  EphySession *session)
 {
 	ephy_session_save (session, SESSION_CRASHED);
 
@@ -451,8 +453,10 @@ tab_removed_cb (GtkWidget *notebook,
 }
 
 static void
-tabs_reordered_cb (GtkWidget *notebook,
-		   EphySession *session)
+notebook_page_reordered_cb (GtkWidget *notebook,
+			    GtkWidget *tab,
+			    guint position,
+			    EphySession *session)
 {
 	ephy_session_save (session, SESSION_CRASHED);
 }
@@ -820,12 +824,12 @@ impl_attach_window (EphyExtension *extension,
 			  G_CALLBACK (window_focus_in_event_cb), session);
 
 	notebook = ephy_window_get_notebook (window);
-	g_signal_connect (notebook, "tab-added",
-			  G_CALLBACK (tab_added_cb), session);
-	g_signal_connect (notebook, "tab-removed",
-			  G_CALLBACK (tab_removed_cb), session);
-	g_signal_connect (notebook, "tabs-reordered",
-			  G_CALLBACK (tabs_reordered_cb), session);
+	g_signal_connect (notebook, "page-added",
+			  G_CALLBACK (notebook_page_added_cb), session);
+	g_signal_connect (notebook, "page-removed",
+			  G_CALLBACK (notebook_page_removed_cb), session);
+	g_signal_connect (notebook, "page-reordered",
+			  G_CALLBACK (notebook_page_reordered_cb), session);
 
 	/* Set unique identifier as role, so that on restore, the WM can
 	 * place the window on the right workspace

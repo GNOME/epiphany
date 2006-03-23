@@ -2888,12 +2888,6 @@
   (return-type "GType")
 )
 
-(define-function ephy_notebook_new
-  (c-name "ephy_notebook_new")
-  (is-constructor-of "EphyNotebook")
-  (return-type "GtkWidget*")
-)
-
 (define-method add_tab
   (of-object "EphyNotebook")
   (c-name "ephy_notebook_add_tab")
@@ -2902,26 +2896,6 @@
     '("EphyTab*" "tab")
     '("int" "position")
     '("gboolean" "jump_to")
-  )
-)
-
-(define-method remove_tab
-  (of-object "EphyNotebook")
-  (c-name "ephy_notebook_remove_tab")
-  (return-type "none")
-  (parameters
-    '("EphyTab*" "tab")
-  )
-)
-
-(define-method move_tab
-  (of-object "EphyNotebook")
-  (c-name "ephy_notebook_move_tab")
-  (return-type "none")
-  (parameters
-    '("EphyNotebook*" "dest")
-    '("EphyTab*" "tab")
-    '("int" "dest_position")
   )
 )
 

@@ -833,61 +833,32 @@ void
 window_cmd_tabs_move_left  (GtkAction *action,
 			    EphyWindow *window)
 {
-	GtkWidget *notebook;
+	GtkWidget *child;
+	GtkNotebook *notebook;
 	int page;
 
-	notebook = ephy_window_get_notebook (window);
-	page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+	notebook = GTK_NOTEBOOK (ephy_window_get_notebook (window));
+	page = gtk_notebook_get_current_page (notebook);
+	if (page < 1) return;
 
-	if (page > 0)
-	{
-		GtkWidget *child;
-
-		child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page);
-		ephy_notebook_move_tab (EPHY_NOTEBOOK (notebook), NULL,
-					EPHY_TAB (child), page - 1);
-	}
+	child = gtk_notebook_get_nth_page (notebook, page);
+	gtk_notebook_reorder_child (notebook, child, page - 1);
 }
 
 void window_cmd_tabs_move_right (GtkAction *action,
 				 EphyWindow *window)
 {
-	GtkWidget *notebook;
-	int page;
-	int last_page;
+	GtkWidget *child;
+	GtkNotebook *notebook;
+	int page, n_pages;
 
-	notebook = ephy_window_get_notebook (window);
-	page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
-	last_page = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) - 1;
+	notebook = GTK_NOTEBOOK (ephy_window_get_notebook (window));
+	page = gtk_notebook_get_current_page (notebook);
+	n_pages = gtk_notebook_get_n_pages (notebook) - 1;
+	if (page > n_pages - 1) return;
 
-	if (page != last_page)
-	{
-		GtkWidget *child;
-
-		child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page);
-		ephy_notebook_move_tab (EPHY_NOTEBOOK (notebook), NULL,
-					EPHY_TAB (child), page + 1);
-	}
-}
-
-void
-window_cmd_tabs_detach  (GtkAction *action,
-			 EphyWindow *window)
-{
-	EphyTab *tab;
-	GtkWidget *nb;
-	EphyWindow *new_win;
-
-	nb = ephy_window_get_notebook (window);
-	if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb)) <= 1) return;
-
-	tab = ephy_window_get_active_tab (window);
-
-	new_win = ephy_window_new ();
-	ephy_notebook_move_tab (EPHY_NOTEBOOK (ephy_window_get_notebook (window)),
-				EPHY_NOTEBOOK (ephy_window_get_notebook (new_win)),
-				tab, 0);
-	gtk_widget_show (GTK_WIDGET (new_win));
+	child = gtk_notebook_get_nth_page (notebook, page);
+	gtk_notebook_reorder_child (notebook, child, page + 1);
 }
 
 void

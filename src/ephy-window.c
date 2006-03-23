@@ -87,7 +87,7 @@ static EphyTab *ephy_window_open_link		(EphyLink *link,
 						 const char *address,
 						 EphyTab *tab,
 						 EphyLinkFlags flags);
-static void ephy_window_notebook_switch_page_cb	(GtkNotebook *notebook,
+static void notebook_switch_page_cb		(GtkNotebook *notebook,
 						 GtkNotebookPage *page,
 						 guint page_num,
 						 EphyWindow *window);
@@ -256,9 +256,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "TabsMoveRight", NULL, N_("Move Tab _Right"), "<shift><control>Page_Down",
 	  N_("Move current tab to right"),
 	  G_CALLBACK (window_cmd_tabs_move_right) },
-	{ "TabsDetach", NULL, N_("_Detach Tab"), "<shift><control>M",
-	  N_("Detach current tab"),
-	  G_CALLBACK (window_cmd_tabs_detach) },
 
 	/* Help menu */
 
@@ -398,7 +395,6 @@ static const struct
 #define SETTINGS_CONNECTION_DATA_KEY	"EphyWindowSettings"
 
 /* Until https://bugzilla.mozilla.org/show_bug.cgi?id=296002 is fixed */
-#define KEEP_TAB_IN_SAME_TOPLEVEL
 
 #define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
 
@@ -2203,35 +2199,28 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 static void
 update_tabs_menu_sensitivity (EphyWindow *window)
 {
-	gboolean prev_tab, next_tab, move_left, move_right, detach;
+	EphyWindowPrivate *priv = window->priv;
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	int current;
-	int last;
+	GtkNotebook *notebook;
+	int page, n_pages;
+	gboolean not_first, not_last;
 
-	current = gtk_notebook_get_current_page
-		(GTK_NOTEBOOK (window->priv->notebook));
-	last = gtk_notebook_get_n_pages
-		(GTK_NOTEBOOK (window->priv->notebook)) - 1;
-	prev_tab = move_left = (current > 0);
-	next_tab = move_right = (current < last);
-	detach = gtk_notebook_get_n_pages
-		(GTK_NOTEBOOK (window->priv->notebook)) > 1;
+	notebook = GTK_NOTEBOOK (priv->notebook);
+	page = gtk_notebook_get_current_page (notebook);
+	n_pages = gtk_notebook_get_n_pages (notebook);
+	not_first = page > 0;
+	not_last = page + 1 < n_pages;
 
-	action_group = window->priv->action_group;
+	action_group = priv->action_group;
 	action = gtk_action_group_get_action (action_group, "TabsPrevious");
-	gtk_action_set_sensitive (action, prev_tab);
+	gtk_action_set_sensitive (action, not_first);
 	action = gtk_action_group_get_action (action_group, "TabsNext");
-	gtk_action_set_sensitive (action, next_tab);
+	gtk_action_set_sensitive (action, not_last);
 	action = gtk_action_group_get_action (action_group, "TabsMoveLeft");
-	gtk_action_set_sensitive (action, move_left);
+	gtk_action_set_sensitive (action, not_first);
 	action = gtk_action_group_get_action (action_group, "TabsMoveRight");
-	gtk_action_set_sensitive (action, move_right);
-	action = gtk_action_group_get_action (action_group, "TabsDetach");
-	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, !detach);
-#ifdef KEEP_TAB_IN_SAME_TOPLEVEL
-	gtk_action_set_visible (action, FALSE);
-#endif
+	gtk_action_set_sensitive (action, not_last);
 }
 
 static gboolean
@@ -2264,14 +2253,15 @@ embed_modal_alert_cb (EphyEmbed *embed,
 }
 
 static gboolean
-idle_tab_remove_cb (EphyTab *tab)
+idle_tab_remove_cb (GtkWidget *tab)
 {
 	GtkWidget *toplevel;
 	EphyWindow *window;
 	EphyWindowPrivate *priv;
-	EphyNotebook *notebook;
+	GtkNotebook *notebook;
+	int position;
 
-	toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tab));
+	toplevel = gtk_widget_get_toplevel (tab);
 	if (!EPHY_IS_WINDOW (toplevel)) return FALSE; /* FIXME should this ever occur? */
 
 	window = EPHY_WINDOW (toplevel);
@@ -2281,8 +2271,10 @@ idle_tab_remove_cb (EphyTab *tab)
 
 	g_hash_table_remove (priv->tabs_to_remove, tab);
 
-	notebook = EPHY_NOTEBOOK (ephy_window_get_notebook (window));
-	ephy_notebook_remove_tab (notebook, tab);
+	notebook = GTK_NOTEBOOK (ephy_window_get_notebook (window));
+
+	position = gtk_notebook_page_num (notebook, tab);
+	gtk_notebook_remove_page (notebook, position);
 
 	/* don't run again */
 	return FALSE;
@@ -2404,22 +2396,26 @@ notebook_popup_menu_cb (GtkNotebook *notebook,
 }
 
 static void
-tab_added_cb (EphyNotebook *notebook,
-	      EphyTab *tab,
-	      EphyWindow *window)
+notebook_page_added_cb (EphyNotebook *notebook,
+			EphyTab *tab,
+			guint position,
+			EphyWindow *window)
 {
+	EphyWindowPrivate *priv = window->priv;
 	EphyExtension *manager;
 	EphyEmbed *embed;
 
+	LOG ("page-added   notebook %p tab %p position %u\n", notebook, tab, position);
+
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
-	window->priv->num_tabs++;
+	priv->num_tabs++;
 
 	update_tabs_menu_sensitivity (window);
 
-	g_signal_connect_object (G_OBJECT (tab), "notify::visibility",
+	g_signal_connect_object (tab, "notify::visibility",
 				 G_CALLBACK (sync_tab_visibility), window, 0);
-	g_signal_connect_object (G_OBJECT (tab), "open-link",
+	g_signal_connect_object (tab, "open-link",
 				 G_CALLBACK (ephy_link_open), window,
 				 G_CONNECT_SWAPPED);
 
@@ -2441,12 +2437,18 @@ tab_added_cb (EphyNotebook *notebook,
 }
 
 static void
-tab_removed_cb (EphyNotebook *notebook,
-		EphyTab *tab,
-		EphyWindow *window)
+notebook_page_removed_cb (EphyNotebook *notebook,
+			  EphyTab *tab,
+			  guint position,
+			  EphyWindow *window)
 {
+	EphyWindowPrivate *priv = window->priv;
 	EphyExtension *manager;
 	EphyEmbed *embed;
+
+	LOG ("page-removed notebook %p tab %p position %u\n", notebook, tab, position);
+
+	if (priv->closing) return;
 
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
@@ -2461,9 +2463,9 @@ tab_removed_cb (EphyNotebook *notebook,
 					      G_CALLBACK (ephy_link_open),
 					      window);	
 
-	window->priv->num_tabs--;
+	priv->num_tabs--;
 
-	if (window->priv->num_tabs > 0)
+	if (priv->num_tabs > 0)
 	{
 		update_tabs_menu_sensitivity (window);
 	}
@@ -2474,42 +2476,24 @@ tab_removed_cb (EphyNotebook *notebook,
 	g_signal_handlers_disconnect_by_func
 		(embed, G_CALLBACK (embed_modal_alert_cb), window);
 	g_signal_handlers_disconnect_by_func
-			(embed, G_CALLBACK (embed_close_request_cb), window);
+		(embed, G_CALLBACK (embed_close_request_cb), window);
 	g_signal_handlers_disconnect_by_func
-			(embed, G_CALLBACK (embed_destroy_browser_cb), window);
+		(embed, G_CALLBACK (embed_destroy_browser_cb), window);
 }
 
 static void
-tab_detached_cb (EphyNotebook *notebook,
-		 EphyTab *tab,
-		 gpointer data)
-{
-	EphyWindow *window;
-
-	g_return_if_fail (EPHY_IS_TAB (tab));
-
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN))
-	{
-		return;
-	}
-
-	window = ephy_window_new ();
-	ephy_notebook_move_tab (notebook,
-				EPHY_NOTEBOOK (ephy_window_get_notebook (window)),
-				tab, 0);
-	gtk_widget_show (GTK_WIDGET (window));
-}
-
-static void
-tabs_reordered_cb (EphyNotebook *notebook, EphyWindow *window)
+notebook_page_reordered_cb (EphyNotebook *notebook,
+			    EphyTab *tab,
+			    guint position,
+			    EphyWindow *window)
 {
 	update_tabs_menu_sensitivity (window);
 }
 
 static void
-tab_close_request_cb (EphyNotebook *notebook,
-		      EphyTab *tab,
-		      EphyWindow *window)
+notebook_page_close_request_cb (EphyNotebook *notebook,
+				EphyTab *tab,
+				EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
 	EphyEmbed *embed;
@@ -2535,28 +2519,25 @@ setup_notebook (EphyWindow *window)
 {
 	GtkNotebook *notebook;
 
-	notebook = GTK_NOTEBOOK (ephy_notebook_new ());
+	notebook = GTK_NOTEBOOK (g_object_new (EPHY_TYPE_NOTEBOOK, NULL));
 
-	g_signal_connect_after (G_OBJECT (notebook), "switch_page",
-				G_CALLBACK (
-				ephy_window_notebook_switch_page_cb),
+	g_signal_connect_after (notebook, "switch-page",
+				G_CALLBACK (notebook_switch_page_cb),
 				window);
 
 	g_signal_connect (notebook, "popup-menu",
 			  G_CALLBACK (notebook_popup_menu_cb), window);
 	g_signal_connect (notebook, "button-press-event",
-			  G_CALLBACK(notebook_button_press_cb), window);
+			  G_CALLBACK (notebook_button_press_cb), window);
 
-	g_signal_connect (G_OBJECT (notebook), "tab_added",
-			  G_CALLBACK (tab_added_cb), window);
-	g_signal_connect (G_OBJECT (notebook), "tab_removed",
-			  G_CALLBACK (tab_removed_cb), window);
-	g_signal_connect (G_OBJECT (notebook), "tab_detached",
-			  G_CALLBACK (tab_detached_cb), NULL);
-	g_signal_connect (G_OBJECT (notebook), "tabs_reordered",
-			  G_CALLBACK (tabs_reordered_cb), window);
-	g_signal_connect (G_OBJECT (notebook), "tab_close_request",
-			  G_CALLBACK (tab_close_request_cb), window);
+	g_signal_connect (notebook, "page-added",
+			  G_CALLBACK (notebook_page_added_cb), window);
+	g_signal_connect (notebook, "page-removed",
+			  G_CALLBACK (notebook_page_removed_cb), window);
+	g_signal_connect (notebook, "page-reordered",
+			  G_CALLBACK (notebook_page_reordered_cb), window);
+	g_signal_connect (notebook, "tab-close-request",
+			  G_CALLBACK (notebook_page_close_request_cb), window);
 
 	return notebook;
 }
@@ -3432,8 +3413,11 @@ void
 ephy_window_remove_tab (EphyWindow *window,
 			EphyTab *tab)
 {
+	EphyWindowPrivate *priv = window->priv;
 	EphyEmbed *embed;
+	GtkNotebook *notebook;
 	gboolean modified;
+	int position;
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 	g_return_if_fail (EPHY_IS_TAB (tab));
@@ -3449,7 +3433,9 @@ ephy_window_remove_tab (EphyWindow *window,
 		return;
 	}
 
-	ephy_notebook_remove_tab (EPHY_NOTEBOOK (window->priv->notebook), tab);
+	notebook = GTK_NOTEBOOK (priv->notebook);
+	position = gtk_notebook_page_num (notebook, GTK_WIDGET (tab));
+	gtk_notebook_remove_page (notebook, position);
 }
 
 /**
@@ -3570,14 +3556,16 @@ ephy_window_get_tabs (EphyWindow *window)
 }
 
 static void
-ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
-				     GtkNotebookPage *page,
-				     guint page_num,
-				     EphyWindow *window)
+notebook_switch_page_cb (GtkNotebook *notebook,
+			 GtkNotebookPage *page,
+			 guint page_num,
+			 EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
 	EphyTab *tab;
 	EphyEmbed *embed;
+
+	LOG ("switch-page notebook %p position %u\n", notebook, page_num);
 
 	if (priv->closing) return;
 

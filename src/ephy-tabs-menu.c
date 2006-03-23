@@ -130,9 +130,10 @@ sync_tab_title (EphyTab *tab,
 }
 
 static void
-tab_added_cb (EphyNotebook *notebook,
-	      EphyTab *tab,
-	      EphyTabsMenu *menu)
+notebook_page_added_cb (EphyNotebook *notebook,
+			EphyTab *tab,
+			guint position,
+			EphyTabsMenu *menu)
 {
 	EphyTabsMenuPrivate *priv = menu->priv;
 	GtkAction *action;
@@ -176,9 +177,10 @@ tab_added_cb (EphyNotebook *notebook,
 }
 
 static void
-tab_removed_cb (EphyNotebook *notebook,
-		EphyTab *tab,
-		EphyTabsMenu *menu)
+notebook_page_removed_cb (EphyNotebook *notebook,
+			  EphyTab *tab,
+			  guint position,
+			  EphyTabsMenu *menu)
 {
 	EphyTabsMenuPrivate *priv = menu->priv;
 	GtkAction *action;
@@ -201,8 +203,10 @@ tab_removed_cb (EphyNotebook *notebook,
 }
 
 static void
-tabs_reordered_cb (EphyNotebook *notebook,
-		   EphyTabsMenu *menu)
+notebook_page_reordered_cb (EphyNotebook *notebook,
+			    EphyTab *tab,
+			    guint position,
+			    EphyTabsMenu *menu)
 {
 	LOG ("tabs_reordered_cb");
  
@@ -278,12 +282,12 @@ ephy_tabs_menu_set_window (EphyTabsMenu *menu,
 			  G_CALLBACK (sync_active_tab), menu);
 
 	notebook = ephy_window_get_notebook (window);
-	g_signal_connect_object (notebook, "tab_added",
-				 G_CALLBACK (tab_added_cb), menu, 0);
-	g_signal_connect_object (notebook, "tab_removed",
-				 G_CALLBACK (tab_removed_cb), menu, 0);
-	g_signal_connect_object (notebook, "tabs_reordered",
-				 G_CALLBACK (tabs_reordered_cb), menu, 0);
+	g_signal_connect_object (notebook, "page-added",
+				 G_CALLBACK (notebook_page_added_cb), menu, 0);
+	g_signal_connect_object (notebook, "page-removed",
+				 G_CALLBACK (notebook_page_removed_cb), menu, 0);
+	g_signal_connect_object (notebook, "page-reordered",
+				 G_CALLBACK (notebook_page_reordered_cb), menu, 0);
 }
 
 static void

@@ -1,3 +1,29 @@
+2006-03-23  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.ac:
+	* data/ui/epiphany-ui.xml:
+	* src/ephy-lockdown.c: (update_window):
+	* src/ephy-notebook.c: (ephy_notebook_class_init),
+	(button_press_cb), (ephy_notebook_init),
+	(tab_label_weak_notify_cb), (build_tab_label):
+	* src/ephy-notebook.h:
+	* src/ephy-session.c: (notebook_page_added_cb),
+	(notebook_page_removed_cb), (notebook_page_reordered_cb),
+	(impl_attach_window):
+	* src/ephy-tabs-menu.c: (notebook_page_added_cb),
+	(notebook_page_removed_cb), (notebook_page_reordered_cb),
+	(ephy_tabs_menu_set_window):
+	* src/ephy-window.c: (update_tabs_menu_sensitivity),
+	(idle_tab_remove_cb), (notebook_page_added_cb),
+	(notebook_page_removed_cb), (notebook_page_reordered_cb),
+	(notebook_page_close_request_cb), (setup_notebook),
+	(ephy_window_remove_tab), (notebook_switch_page_cb):
+	* src/epiphany.defs:
+	* src/window-commands.c: (window_cmd_tabs_move_left),
+	(window_cmd_tabs_move_right):
+	
+	Port notebook DND to gtk+ 2.9.
+
 2006-03-20  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/downloader-view.c: (status_icon_popup_menu_cb),

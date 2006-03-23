@@ -201,8 +201,6 @@ update_window (EphyWindow *window,
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, fullscreen);
 	action = gtk_action_group_get_action (action_group, "ViewFullscreen");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, fullscreen);
-	action = gtk_action_group_get_action (action_group, "TabsDetach");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, fullscreen);
 
 	if (fullscreen)
 	{
