@@ -1,5 +1,15 @@
 2006-03-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/downloader-view.c: (show_status_icon),
+	(downloader_view_init), (downloader_view_finalize),
+	(update_status_icon), (download_changed_cb),
+	(downloader_view_add_download), (downloader_view_remove_download),
+	(download_dialog_delete_event_cb):
+
+	Remove #ifdef:s now that we depend on gtk+ 2.9.
+
+2006-03-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.ac:
 	* data/ui/epiphany-ui.xml:
 	* src/ephy-lockdown.c: (update_window):

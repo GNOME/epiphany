@@ -45,13 +45,9 @@
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmain.h>
+#include <gtk/gtkstatusicon.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <libgnomeui/gnome-icon-lookup.h>
-
-#if GTK_CHECK_VERSION(2,9,0)
-#define HAVE_STATUS_ICON
-#include <gtk/gtkstatusicon.h>
-#endif
 
 #define CONF_DOWNLOADING_SHOW_DETAILS "/apps/epiphany/dialogs/downloader_show_details"
 
@@ -85,9 +81,7 @@ struct _DownloaderViewPrivate
 	GtkWidget *pause_button;
 	GtkWidget *abort_button;
 
-#ifdef HAVE_STATUS_ICON
 	GtkStatusIcon *status_icon;
-#endif
 
 	guint idle_unref : 1;
 };
@@ -176,7 +170,6 @@ downloader_view_class_init (DownloaderViewClass *klass)
 	g_type_class_add_private (object_class, sizeof(DownloaderViewPrivate));
 }
 
-#ifdef HAVE_STATUS_ICON
 static void
 show_downloader_cb (DownloaderView *dv)
 {
@@ -220,7 +213,6 @@ show_status_icon (DownloaderView *dv)
 	g_signal_connect (dv->priv->status_icon, "popup-menu",
 			  G_CALLBACK (status_icon_popup_menu_cb), dv);
 }
-#endif /* HAVE_STATUS_ICON */
 
 static gboolean
 remove_download (EphyDownload *download,
@@ -273,9 +265,7 @@ downloader_view_init (DownloaderView *dv)
 
 	downloader_view_build_ui (dv);
 
-#ifdef HAVE_STATUS_ICON
 	show_status_icon (dv);
-#endif
 
 	g_signal_connect_object (embed_shell, "prepare_close",
 				 G_CALLBACK (prepare_close_cb), dv, 0);
@@ -287,10 +277,8 @@ downloader_view_finalize (GObject *object)
 	DownloaderView *dv = EPHY_DOWNLOADER_VIEW (object);
 	gboolean idle_unref = dv->priv->idle_unref;
 
-#ifdef HAVE_STATUS_ICON
 	g_object_unref (dv->priv->status_icon);
 	g_hash_table_destroy (dv->priv->downloads_hash);
-#endif
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 
@@ -471,7 +459,6 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	update_buttons (dv);
 }
 
-#ifdef HAVE_STATUS_ICON
 static void
 update_status_icon (DownloaderView *dv)
 {
@@ -488,15 +475,12 @@ update_status_icon (DownloaderView *dv)
 				     downloadstring);
 	g_free (downloadstring);
 }
-#endif
 
 static void
 download_changed_cb (EphyDownload *download, DownloaderView *dv)
 {
 	update_download_row (dv, download);
-#ifdef HAVE_STATUS_ICON
 	update_status_icon (dv);
-#endif
 }
 
 void
@@ -529,9 +513,7 @@ downloader_view_add_download (DownloaderView *dv,
 			     row_ref);
 
 	update_download_row (dv, download);
-#ifdef HAVE_STATUS_ICON
 	update_status_icon (dv);
-#endif
 
 	selection = gtk_tree_view_get_selection
 		(GTK_TREE_VIEW(dv->priv->treeview));
@@ -813,9 +795,7 @@ downloader_view_remove_download (DownloaderView *dv, EphyDownload *download)
 		gtk_tree_row_reference_free (row_ref);
 	}
 
-#ifdef HAVE_STATUS_ICON
 	update_status_icon (dv);
-#endif
 
 	/* Close the dialog if there are no more downloads */
 
@@ -869,14 +849,12 @@ download_dialog_delete_event_cb (GtkWidget *window,
 				 GdkEventAny *event,
 				 DownloaderView *dv)
 {
-#ifdef HAVE_STATUS_ICON
 	DownloaderViewPrivate *priv = dv->priv;
 
 	if (gtk_status_icon_is_embedded (priv->status_icon))
 	{
 		gtk_widget_hide (window);
 	}
-#endif
 
 	return TRUE;
 }
