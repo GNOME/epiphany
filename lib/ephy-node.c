@@ -689,7 +689,7 @@ write_parent (guint id,
 	if (data->ret < 0) return;
 
 	data->ret = xmlTextWriterWriteFormatAttribute
-			(writer, (const xmlChar *)"id", "%ld", node_info->node->id);
+			(writer, (const xmlChar *)"id", "%d", node_info->node->id);
 	if (data->ret < 0) return;
 
 	data->ret = xmlTextWriterEndElement (writer); /* parent */
@@ -713,7 +713,7 @@ ephy_node_write_to_xml(EphyNode *node,
 	if (ret < 0) goto out;
 
 	/* write node id */
-	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"id", "%ld", node->id);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"id", "%d", node->id);
 	if (ret < 0) goto out;
 
 	/* write node properties */
