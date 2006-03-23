@@ -95,27 +95,6 @@ static const GOptionEntry option_entries[] =
 	{ NULL }
 };
 
-#ifndef GNOME_PARAM_GOPTION_CONTEXT
-/* libgnome < 2.13 compat */
-static char *sm_client_id = NULL;
-static char *sm_config_prefix = NULL;
-static gboolean sm_disable = FALSE;
-static gboolean disable_crash_dialog = FALSE;
-
-static const GOptionEntry libgnome_option_entries[] =
-{
-	{ "sm-client-id", 0, 0, G_OPTION_ARG_STRING, &sm_client_id,
-	  "Specify session management ID", "ID" },
-	{ "sm-config-prefix", 0, 0, G_OPTION_ARG_STRING, &sm_config_prefix,
-	  "Specify prefix of saved configuration", "PREFIX" },
-	{ "sm-disable", 0, 0, G_OPTION_ARG_NONE, &sm_disable,
-	  "Disable connection to session manager", NULL },
-	{ "disable-crash-dialog", 0, 0, G_OPTION_ARG_NONE, &disable_crash_dialog,
-	  "Disable Crash Dialog", NULL },
-	{ NULL }
-};
-#endif /* !GNOME_PARAM_GOPTION_CONTEXT */
-
 #ifdef GNOME_ENABLE_DEBUG
 static GOptionEntry debug_option_entries[] =
 {
@@ -429,6 +408,7 @@ int
 main (int argc,
       char *argv[])
 {
+	GnomeProgram *program;
 	GOptionContext *option_context;
 	GOptionGroup *option_group;
 	DBusGProxy *proxy;
@@ -532,72 +512,17 @@ main (int argc,
 	g_option_context_add_group (option_context, option_group);
 #endif /* GNOME_ENABLE_DEBUG */
 
-#ifdef GNOME_PARAM_GOPTION_CONTEXT
-	gnome_program_init (PACKAGE, VERSION,
-			    LIBGNOMEUI_MODULE, argc, argv,
-			    GNOME_PARAM_GOPTION_CONTEXT, option_context,
-			    GNOME_PARAM_HUMAN_READABLE_NAME, _("Web Browser"),
-			    GNOME_PARAM_APP_DATADIR, DATADIR,
-			    NULL);
+	program = gnome_program_init (PACKAGE, VERSION,
+				      LIBGNOMEUI_MODULE, argc, argv,
+				      GNOME_PARAM_GOPTION_CONTEXT, option_context,
+				      GNOME_PARAM_HUMAN_READABLE_NAME, _("Web Browser"),
+				      GNOME_PARAM_APP_DATADIR, DATADIR,
+				      NULL);
 
-#else /* !GNOME_PARAM_GOPTION_CONTEXT */
-
-	option_group = g_option_group_new ("gnome-compat", "GNOME GUI Library",
-					   "Show GNOME GUI options", NULL, NULL);
-	g_option_group_set_translation_domain (option_group, "libgnomeui-2.0");
-	g_option_group_add_entries (option_group, libgnome_option_entries);
-	g_option_context_add_group (option_context, option_group);
-
-	/* Add the gtk+ option group, but don't open the default display! */
-	option_group = gtk_get_option_group (FALSE);
-	g_option_context_add_group (option_context, option_group);
-
-	if (!g_option_context_parse (option_context, &argc, &argv, &error))
-	{
-		g_option_context_free (option_context);
-
-		g_print ("%s\n", error->message);
-		g_error_free (error);
-		exit (1);
-	}
-
-	fake_argv_array = g_ptr_array_new ();
-	
-	g_ptr_array_add (fake_argv_array, g_strdup (g_get_prgname ()));
-	if (sm_disable)
-	{
-		g_ptr_array_add (fake_argv_array, g_strdup ("--sm-disable"));
-	}
-	if (sm_client_id != NULL)
-	{
-		g_ptr_array_add (fake_argv_array, g_strdup ("--sm-client-id"));
-		g_ptr_array_add (fake_argv_array, sm_client_id);
-	}
-	if (sm_config_prefix != NULL)
-	{
-		g_ptr_array_add (fake_argv_array, g_strdup ("--sm-config-prefix"));
-		g_ptr_array_add (fake_argv_array, sm_config_prefix);
-	}
-	if (disable_crash_dialog)
-	{
-		g_ptr_array_add (fake_argv_array, g_strdup ("--disable-crash-dialog"));
-	}
-
-	gnome_program_init (PACKAGE, VERSION,
-			    LIBGNOMEUI_MODULE,
-			    fake_argv_array->len,
-			    (char**) fake_argv_array->pdata,
-			    GNOME_PARAM_HUMAN_READABLE_NAME, _("Web Browser"),
-			    GNOME_PARAM_APP_DATADIR, DATADIR,
-			    NULL);
-
-	g_ptr_array_add (fake_argv_array, NULL);
-	g_strfreev ((char**) g_ptr_array_free (fake_argv_array, FALSE));
-
-	g_option_context_free (option_context);
-	option_context = NULL;
-
-#endif /* GNOME_PARAM_GOPTION_CONTEXT */
+	/* libgnome keeps a reference to the global program, so drop
+	 * our reference here, to simplify cleanup on the many exit paths.
+	 */
+	g_object_unref (program);
 
 	/* Some argument sanity checks*/
 	if (arguments != NULL && (session_filename != NULL || open_as_bookmarks_editor))
@@ -734,6 +659,7 @@ main (int argc,
 		_ephy_dbus_release ();
 
 		gdk_notify_startup_complete ();
+
 		exit (0);
 	}
 

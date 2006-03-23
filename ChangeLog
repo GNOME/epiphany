@@ -1,5 +1,13 @@
 2006-03-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* configure.ac:
+	* src/ephy-main.c: (main):
+
+	Drop compat code for libgnome < 2.14.
+	Fix refcount leak.
+
+2006-03-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/downloader-view.c: (show_status_icon),
 	(downloader_view_init), (downloader_view_finalize),
 	(update_status_icon), (download_changed_cb),
