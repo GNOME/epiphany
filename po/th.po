@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.th\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-25 14:29+0700\n"
+"POT-Creation-Date: 2006-03-25 12:25+0700\n"
 "PO-Revision-Date: 2006-02-25 14:37+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: data/epiphany-lockdown.schemas.in.h:1
 msgid ""
@@ -128,8 +128,8 @@ msgid "Epiphany Web Browser"
 msgstr "เว็บเบราว์เซอร์ Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: data/epiphany.desktop.in.in.h:3 src/ephy-main.c:482
-#: src/ephy-main.c:533 src/ephy-main.c:621
+#: data/epiphany.desktop.in.in.h:3 src/ephy-main.c:539
+#: src/ephy-main.c:590 src/ephy-main.c:685
 msgid "Web Browser"
 msgstr "เว็บเบราว์เซอร์"
 
@@ -559,7 +559,7 @@ msgstr "ข้อมูลส่วนตัว"
 msgid "Text Encoding"
 msgstr "รหัสอักขระ"
 
-#: data/glade/epiphany.glade.h:8 src/ephy-encoding-menu.c:358
+#: data/glade/epiphany.glade.h:8 src/ephy-encoding-menu.c:359
 msgid "Use the encoding specified by the document"
 msgstr "ใช้รหัสอักขระที่ระบุในเอกสาร"
 
@@ -648,7 +648,7 @@ msgstr "แบบอักษรและรูปลักษณ์"
 msgid "For l_anguage:"
 msgstr "สำหรับ_ภาษา:"
 
-#: data/glade/prefs-dialog.glade.h:21 src/prefs-dialog.c:1301
+#: data/glade/prefs-dialog.glade.h:21 src/prefs-dialog.c:1313
 msgid "Language"
 msgstr "ภาษา"
 
@@ -813,20 +813,32 @@ msgid_plural "%d downloads"
 msgstr[0] "มีรายการดาวน์โหลด %d รายการ"
 msgstr[1] "มีรายการดาวน์โหลด %d รายการ"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/downloader-view.c:585 embed/downloader-view.c:598
+msgid "download status|Unknown"
+msgstr "ไม่ทราบ"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/downloader-view.c:590
+msgid "download status|Failed"
+msgstr "ไม่สำเร็จ"
+
 #: embed/downloader-view.c:657
-#: src/bookmarks/ephy-bookmarks-editor.c:1001
+#: src/bookmarks/ephy-bookmarks-editor.c:1002
 msgid "File"
 msgstr "แฟ้ม"
 
-#: embed/downloader-view.c:679
+#: embed/downloader-view.c:680
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:690
+#: embed/downloader-view.c:691
 msgid "Remaining"
 msgstr "เหลืออีก"
 
-#: embed/ephy-embed-shell.c:243
+#: embed/ephy-embed-shell.c:246
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "ไม่สามารถใช้ Epiphany ได้เนื่องจากการเริ่มทำงานของ Mozilla ล้มเหลว"
 
@@ -1230,6 +1242,12 @@ msgstr "แฟ้มในเครื่อง"
 msgid "Save"
 msgstr "บันทึก"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/mozilla/ContentHandler.cpp:299
+msgid "File Type:|Unknown"
+msgstr "ไม่ทราบ"
+
 #: embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "จะดาวน์โหลดแฟ้มที่ไม่น่าปลอดภัยนี้หรือไม่?"
@@ -1542,8 +1560,20 @@ msgstr ""
 "หน้าเว็บ “%s” ในแท็บนี้ยังโหลดไม่เสร็จขณะที่เว็บเบราว์เซอร์ตาย "
 "เป็นไปได้ว่าเว็บเบราว์เซอร์อาจตายเพราะหน้านี้"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/mozilla/EphyAboutModule.cpp:659
+msgid "You may find an old version:|in the Google Cache"
+msgstr "ในแคชของ Google"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/mozilla/EphyAboutModule.cpp:667
+msgid "You may find an old version:|in the Internet Archive"
+msgstr "ในกรุอินเทอร์เน็ต"
+
 #: embed/mozilla/EphyHeaderSniffer.cpp:364
-#: src/bookmarks/ephy-bookmarks-import.c:245
+#: src/bookmarks/ephy-bookmarks-import.c:261
 #: src/bookmarks/ephy-bookmarks.c:1264 src/ephy-session.c:1308
 msgid "Untitled"
 msgstr "ไม่มีชื่อ"
@@ -1568,7 +1598,7 @@ msgid "_Password:"
 msgstr "_รหัสผ่าน:"
 
 #: embed/mozilla/FilePicker.cpp:153 embed/mozilla/FilePicker.cpp:451
-#: lib/ephy-file-chooser.c:371 src/bookmarks/ephy-bookmarks-editor.c:784
+#: lib/ephy-file-chooser.c:371 src/bookmarks/ephy-bookmarks-editor.c:785
 msgid "All files"
 msgstr "ทุกชนิด"
 
@@ -1840,40 +1870,40 @@ msgid ""
 "few minutes."
 msgstr "กรุณารอสักครู่ ระหว่างสร้างกุญแจส่วนตัว กระบวนการนี้อาจใช้เวลาสองสามนาที"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:91
 msgid "Security Notice"
 msgstr "ข้อสังเกตเกี่ยวกับการรักษาความปลอดภัย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
 msgid "This page is loaded over a secure connection"
 msgstr "หน้านี้ถูกโหลดผ่านการเชื่อมต่อนิรภัย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "The padlock icon in the statusbar indicates whether a page is secure."
 msgstr "ไอคอนรูปแม่กุญแจในแถบสถานะจะบ่งชี้ว่าหน้านี้อยู่ในสถานะนิรภัยหรือไม่"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:109
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:137
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:156
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:176
 msgid "Security Warning"
 msgstr "คำเตือนเกี่ยวกับการรักษาความปลอดภัย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
 msgid "This page is loaded over a low security connection"
 msgstr "หน้านี้ถูกโหลดผ่านการเชื่อมต่อที่มีความนิรภัยต่ำ"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
 msgstr "ข้อมูลใดๆ ที่คุณเห็นหรือป้อนในหน้านี้ สามารถถูกบุคคลที่สามดักได้อย่างง่ายดาย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "บางส่วนของหน้านี้ถูกโหลดผ่านการเชื่อมต่อที่ไม่นิรภัย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1881,23 +1911,23 @@ msgstr ""
 "ข้อมูลบางส่วนที่คุณเห็นหรือป้อนจะถูกส่งผ่านการเชื่อมต่อที่ไม่นิรภัย "
 "และสามารถถูกบุคคลที่สามดักได้อย่างง่ายดาย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
 msgid "Send this information over an insecure connection?"
 msgstr "จะส่งข้อมูลเหล่านี้ผ่านการเชื่อมต่อที่ไม่นิรภัยหรือไม่?"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr "ข้อมูลที่คุณป้อนจะถูกส่งผ่านการเชื่อมต่อที่ไม่นิรภัย และสามารถถูกบุคคลที่สามดักได้อย่างง่ายดาย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:161
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:182
 msgid "_Send"
 msgstr "_ส่ง"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -1984,7 +2014,7 @@ msgstr ""
 #: lib/egg/egg-editable-toolbar.c:902
 #, c-format
 msgid "Show “_%s”"
-msgstr "แสดง “_%s”"
+msgstr "แสดงแถบ “_%s”"
 
 #: lib/egg/egg-editable-toolbar.c:1362
 msgid "_Move on Toolbar"
@@ -2226,12 +2256,12 @@ msgstr "ภาษาอื่น"
 msgid "Popup Windows"
 msgstr "หน้าต่างป็อบอัพ"
 
-#: lib/ephy-stock-icons.c:57 src/ephy-history-window.c:1179
+#: lib/ephy-stock-icons.c:57 src/ephy-history-window.c:1183
 msgid "History"
 msgstr "ประวัติ"
 
-#: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:915
-#: src/bookmarks/ephy-bookmarks-editor.c:1757
+#: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:916
+#: src/bookmarks/ephy-bookmarks-editor.c:1759
 #: src/bookmarks/ephy-topic-action.c:404 src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "ที่คั่นหน้า"
@@ -2362,235 +2392,235 @@ msgstr "ห_มวด:"
 msgid "Sho_w all topics"
 msgstr "แสด_งทุกหมวด"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:97
-msgid "Mozilla (HTML)"
-msgstr "Mozilla (HTML)"
-
 #: src/bookmarks/ephy-bookmarks-editor.c:98
 msgid "Epiphany (RDF)"
 msgstr "Epiphany (RDF)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:150
+#: src/bookmarks/ephy-bookmarks-editor.c:99
+msgid "Mozilla (HTML)"
+msgstr "Mozilla (HTML)"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:151
 msgid "Remove from this topic"
 msgstr "ลบออกจากหมวดนี้"
 
 #. Toplevel
-#: src/bookmarks/ephy-bookmarks-editor.c:179
+#: src/bookmarks/ephy-bookmarks-editor.c:180
 #: src/ephy-history-window.c:163 src/ephy-window.c:115
 msgid "_File"
 msgstr "แ_ฟ้ม"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:180
+#: src/bookmarks/ephy-bookmarks-editor.c:181
 #: src/ephy-history-window.c:164 src/ephy-window.c:116
 msgid "_Edit"
 msgstr "แ_ก้ไข"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:181
+#: src/bookmarks/ephy-bookmarks-editor.c:182
 #: src/ephy-history-window.c:165 src/ephy-window.c:117
 msgid "_View"
 msgstr "_มุมมอง"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:182
+#: src/bookmarks/ephy-bookmarks-editor.c:183
 #: src/ephy-history-window.c:166 src/ephy-window.c:122
 msgid "_Help"
 msgstr "_วิธีใช้"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:186
+#: src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "_New Topic"
 msgstr "เพิ่มห_มวด"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:187
+#: src/bookmarks/ephy-bookmarks-editor.c:188
 msgid "Create a new topic"
 msgstr "เพิ่มหมวดใหม่"
 
 #. FIXME ngettext
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:189
-#: src/bookmarks/ephy-bookmarks-editor.c:1374
+#: src/bookmarks/ephy-bookmarks-editor.c:190
+#: src/bookmarks/ephy-bookmarks-editor.c:1376
 #: src/bookmarks/ephy-bookmarks-ui.c:321 src/ephy-history-window.c:170
-#: src/ephy-history-window.c:696
+#: src/ephy-history-window.c:700
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "เปิดในห_น้าต่างใหม่"
 msgstr[1] "เปิดในห_น้าต่างใหม่"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:190
+#: src/bookmarks/ephy-bookmarks-editor.c:191
 msgid "Open the selected bookmark in a new window"
 msgstr "เปิดที่คั่นหน้าในหน้าต่างใหม่"
 
 #. FIXME ngettext
-#: src/bookmarks/ephy-bookmarks-editor.c:192
-#: src/bookmarks/ephy-bookmarks-editor.c:1377
+#: src/bookmarks/ephy-bookmarks-editor.c:193
+#: src/bookmarks/ephy-bookmarks-editor.c:1379
 #: src/bookmarks/ephy-bookmarks-ui.c:309 src/ephy-history-window.c:173
-#: src/ephy-history-window.c:699
+#: src/ephy-history-window.c:703
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "เปิดในแ_ท็บใหม่"
 msgstr[1] "เปิดในแ_ท็บใหม่"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:193
+#: src/bookmarks/ephy-bookmarks-editor.c:194
 msgid "Open the selected bookmark in a new tab"
 msgstr "เปิดที่คั่นหน้าในแท็บใหม่"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:195
+#: src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "_Rename..."
 msgstr "เ_ปลี่ยนชื่อ..."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:196
+#: src/bookmarks/ephy-bookmarks-editor.c:197
 msgid "Rename the selected bookmark or topic"
 msgstr "เปลี่ยนชื่อที่คั่นหน้า"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:197
+#: src/bookmarks/ephy-bookmarks-editor.c:198
 #: src/ephy-history-window.c:176
 msgid "_Delete"
 msgstr "_ลบ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:198
+#: src/bookmarks/ephy-bookmarks-editor.c:199
 msgid "Delete the selected bookmark or topic"
 msgstr "ลบที่คั่นหน้า"
 
 #. Add popup menu actions that are specific to the bookmark widgets
-#: src/bookmarks/ephy-bookmarks-editor.c:200
+#: src/bookmarks/ephy-bookmarks-editor.c:201
 #: src/bookmarks/ephy-bookmarks-ui.c:297
 msgid "_Properties"
 msgstr "คุณ_สมบัติ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:201
+#: src/bookmarks/ephy-bookmarks-editor.c:202
 msgid "View or modify the properties of the selected bookmark"
 msgstr "ดูหรือแก้ไขคุณสมบัติของที่คั่นหน้า"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:203
+#: src/bookmarks/ephy-bookmarks-editor.c:204
 msgid "_Import Bookmarks..."
 msgstr "นำเ_ข้าที่คั่นหน้า..."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:204
+#: src/bookmarks/ephy-bookmarks-editor.c:205
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "นำเข้าที่คั่นหน้าจากเบราว์เซอร์อื่นหรือจากแฟ้มที่คั่นหน้า"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:206
+#: src/bookmarks/ephy-bookmarks-editor.c:207
 msgid "_Export Bookmarks..."
 msgstr "ส่ง_ออกที่คั่นหน้า..."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:207
+#: src/bookmarks/ephy-bookmarks-editor.c:208
 msgid "Export bookmarks to a file"
 msgstr "ส่งออกที่คั่นหน้าไปยังแฟ้ม"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:209
+#: src/bookmarks/ephy-bookmarks-editor.c:210
 #: src/ephy-history-window.c:182 src/ephy-window.c:153
 msgid "_Close"
 msgstr "ปิ_ด"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:210
+#: src/bookmarks/ephy-bookmarks-editor.c:211
 msgid "Close the bookmarks window"
 msgstr "ปิดหน้าต่างที่คั่นหน้า"
 
 #. Edit Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:214
+#: src/bookmarks/ephy-bookmarks-editor.c:215
 #: src/ephy-history-window.c:187 src/ephy-window.c:165
 msgid "Cu_t"
 msgstr "_ตัด"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:215
+#: src/bookmarks/ephy-bookmarks-editor.c:216
 #: src/ephy-history-window.c:188 src/ephy-window.c:166
 msgid "Cut the selection"
 msgstr "ตัดส่วนที่เลือก"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:217
-#: src/bookmarks/ephy-bookmarks-editor.c:1387
-#: src/ephy-history-window.c:190 src/ephy-history-window.c:709
+#: src/bookmarks/ephy-bookmarks-editor.c:218
+#: src/bookmarks/ephy-bookmarks-editor.c:1389
+#: src/ephy-history-window.c:190 src/ephy-history-window.c:713
 #: src/ephy-window.c:168
 msgid "_Copy"
 msgstr "_คัดลอก"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:218
+#: src/bookmarks/ephy-bookmarks-editor.c:219
 #: src/ephy-history-window.c:191 src/ephy-window.c:169
 msgid "Copy the selection"
 msgstr "คัดลอกส่วนที่เลือก"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:220
+#: src/bookmarks/ephy-bookmarks-editor.c:221
 #: src/ephy-history-window.c:193 src/ephy-window.c:171
 msgid "_Paste"
 msgstr "_แปะ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:221
+#: src/bookmarks/ephy-bookmarks-editor.c:222
 #: src/ephy-history-window.c:194
 msgid "Paste the clipboard"
 msgstr "แปะจากคลิปบอร์ด"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:223
+#: src/bookmarks/ephy-bookmarks-editor.c:224
 #: src/ephy-history-window.c:196 src/ephy-window.c:174
 msgid "Select _All"
 msgstr "เลือกทั้ง_หมด"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:224
+#: src/bookmarks/ephy-bookmarks-editor.c:225
 msgid "Select all bookmarks or text"
 msgstr "เลือกที่คั่นหน้าหรือข้อความทั้งหมด"
 
 #. Help Menu
 #. Help menu
-#: src/bookmarks/ephy-bookmarks-editor.c:228
+#: src/bookmarks/ephy-bookmarks-editor.c:229
 #: src/ephy-history-window.c:204 src/ephy-window.c:265
 msgid "_Contents"
 msgstr "เนื้อ_หา"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:229
+#: src/bookmarks/ephy-bookmarks-editor.c:230
 msgid "Display bookmarks help"
 msgstr "แสดงวิธีใช้ที่คั่นหน้า"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:231
+#: src/bookmarks/ephy-bookmarks-editor.c:232
 #: src/ephy-history-window.c:207 src/ephy-window.c:268
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:232
+#: src/bookmarks/ephy-bookmarks-editor.c:233
 #: src/ephy-history-window.c:208 src/ephy-window.c:269
 msgid "Display credits for the web browser creators"
 msgstr "แสดงชื่อผู้จัดทำเบราว์เซอร์"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:237
+#: src/bookmarks/ephy-bookmarks-editor.c:238
 msgid "_Show on Toolbar"
 msgstr "แ_สดงบนแถบเครื่องมือ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:238
+#: src/bookmarks/ephy-bookmarks-editor.c:239
 msgid "Show the selected bookmark on a toolbar"
 msgstr "แสดงที่คั่นหน้าที่เลือกบนแถบเครื่องมือ"
 
 #. View Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:251
+#: src/bookmarks/ephy-bookmarks-editor.c:252
 #: src/ephy-history-window.c:222
 msgid "_Title"
 msgstr "_ชื่อ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:252
+#: src/bookmarks/ephy-bookmarks-editor.c:253
 #: src/ephy-history-window.c:223
 msgid "Show only the title column"
 msgstr "แสดงเฉพาะชื่อ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:253
+#: src/bookmarks/ephy-bookmarks-editor.c:254
 #: src/ephy-history-window.c:226
 msgid "T_itle and Address"
 msgstr "ชื่อและ_ตำแหน่ง"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:254
+#: src/bookmarks/ephy-bookmarks-editor.c:255
 #: src/ephy-history-window.c:227
 msgid "Show both the title and address columns"
 msgstr "แสดงทั้งคอลัมน์ชื่อและตำแหน่ง"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:295
+#: src/bookmarks/ephy-bookmarks-editor.c:296
 msgid "Type a topic"
 msgstr "ป้อนหมวด"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:413
+#: src/bookmarks/ephy-bookmarks-editor.c:414
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "จะลบหมวด “%s” หรือไม่?"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:416
+#: src/bookmarks/ephy-bookmarks-editor.c:417
 msgid "Delete this topic?"
 msgstr "จะลบหมวดนี้หรือไม่?"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:418
+#: src/bookmarks/ephy-bookmarks-editor.c:419
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -2598,108 +2628,108 @@ msgstr ""
 "การลบหมวดนี้ จะทำให้ที่คั่นหน้าทั้งหลายในหมวดดังกล่าวไม่มีหมวดหมู่ "
 "ยกเว้นจะถูกจัดให้อยู่ในหมวดอื่นด้วยอยู่แล้ว แต่จะไม่ลบที่คั่นหน้าพวกนั้น"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:421
+#: src/bookmarks/ephy-bookmarks-editor.c:422
 msgid "_Delete Topic"
 msgstr "_ลบหมวด"
 
 #. FIXME: proper i18n after freeze
-#: src/bookmarks/ephy-bookmarks-editor.c:642
-#: src/bookmarks/ephy-bookmarks-editor.c:646
+#: src/bookmarks/ephy-bookmarks-editor.c:643
+#: src/bookmarks/ephy-bookmarks-editor.c:647
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:651
-#: src/bookmarks/ephy-bookmarks-editor.c:655
+#: src/bookmarks/ephy-bookmarks-editor.c:652
+#: src/bookmarks/ephy-bookmarks-editor.c:656
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: src/bookmarks/ephy-bookmarks-editor.c:660
+#: src/bookmarks/ephy-bookmarks-editor.c:661
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "โพรไฟล์ “%s” ของ Mozilla"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:664
+#: src/bookmarks/ephy-bookmarks-editor.c:665
 msgid "Galeon"
 msgstr "Galeon"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:668
+#: src/bookmarks/ephy-bookmarks-editor.c:669
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:697
+#: src/bookmarks/ephy-bookmarks-editor.c:698
 msgid "Import failed"
 msgstr "นำเข้าไม่สำเร็จ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:699
+#: src/bookmarks/ephy-bookmarks-editor.c:700
 msgid "Import Failed"
 msgstr "นำเข้าไม่สำเร็จ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:702
+#: src/bookmarks/ephy-bookmarks-editor.c:703
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
 msgstr "ไม่สามารถนำเข้าที่คั่นหน้าจาก “%s” ได้ เพราะแฟ้มเสียอยู่ หรือเป็นชนิดที่ไม่สนับสนุน"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:765
+#: src/bookmarks/ephy-bookmarks-editor.c:766
 msgid "Import bookmarks from file"
 msgstr "นำเข้าที่คั่นหน้าจากแฟ้ม"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:772
+#: src/bookmarks/ephy-bookmarks-editor.c:773
 msgid "Firefox/Mozilla bookmarks"
 msgstr "ที่คั่นหน้าของ Firefox/Mozilla"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:776
+#: src/bookmarks/ephy-bookmarks-editor.c:777
 msgid "Galeon/Konqueror bookmarks"
 msgstr "ที่คั่นหน้าของ Galeon/Konqueror"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:780
+#: src/bookmarks/ephy-bookmarks-editor.c:781
 msgid "Epiphany bookmarks"
 msgstr "ที่คั่นหน้าของ Epiphany"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:903
+#: src/bookmarks/ephy-bookmarks-editor.c:904
 msgid "Export Bookmarks"
 msgstr "ส่งออกที่คั่นหน้า"
 
 #. Make a format selection combo & label
-#: src/bookmarks/ephy-bookmarks-editor.c:918
+#: src/bookmarks/ephy-bookmarks-editor.c:919
 msgid "File format:"
 msgstr "รูปแบบแฟ้ม:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:961
+#: src/bookmarks/ephy-bookmarks-editor.c:962
 msgid "Import Bookmarks"
 msgstr "นำเข้าที่คั่นหน้า"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:967
+#: src/bookmarks/ephy-bookmarks-editor.c:968
 msgid "I_mport"
 msgstr "นำเ_ข้า"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:981
+#: src/bookmarks/ephy-bookmarks-editor.c:982
 msgid "Import bookmarks from:"
 msgstr "นำเข้าที่คั่นหน้าจาก:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1383
-#: src/ephy-history-window.c:705
+#: src/bookmarks/ephy-bookmarks-editor.c:1385
+#: src/ephy-history-window.c:709
 msgid "_Copy Address"
 msgstr "_คัดลอกตำแหน่ง"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1624
-#: src/ephy-history-window.c:1021
+#: src/bookmarks/ephy-bookmarks-editor.c:1626
+#: src/ephy-history-window.c:1025
 msgid "_Search:"
 msgstr "_ค้นหา:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1821
+#: src/bookmarks/ephy-bookmarks-editor.c:1823
 msgid "Topics"
 msgstr "หมวด"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1891
-#: src/ephy-history-window.c:1304
+#: src/bookmarks/ephy-bookmarks-editor.c:1893
+#: src/ephy-history-window.c:1308
 msgid "Title"
 msgstr "ชื่อ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1897
-#: src/ephy-history-window.c:1310
+#: src/bookmarks/ephy-bookmarks-editor.c:1899
+#: src/ephy-history-window.c:1314
 msgid "Address"
 msgstr "ตำแหน่ง"
 
@@ -2764,6 +2794,35 @@ msgstr "_อัพเดต"
 msgid "Update Bookmark?"
 msgstr "อัพเดตที่คั่นหน้าหรือไม่?"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains all bookmarks
+#: src/bookmarks/ephy-bookmarks.c:1023
+msgid "bookmarks|All"
+msgstr "ทั้งหมด"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the most used bookmarks
+#: src/bookmarks/ephy-bookmarks.c:1059
+msgid "bookmarks|Most Visited"
+msgstr "ไปบ่อย"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the not categorized bookmarks
+#: src/bookmarks/ephy-bookmarks.c:1078
+msgid "bookmarks|Not Categorized"
+msgstr "ไม่มีหมวด"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this is an automatic topic containing local websites bookmarks
+#. * autodiscovered with zeroconf.
+#: src/bookmarks/ephy-bookmarks.c:1103
+msgid "bookmarks|Local Sites"
+msgstr "ไซต์ท้องถิ่น"
+
 #: src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
 msgstr "เพิ่มที่คั่นหน้าอย่างเร็ว"
@@ -2806,15 +2865,15 @@ msgstr "สร้างหมวด “%s”"
 msgid "Encodings"
 msgstr "รหัสอักขระ"
 
-#: src/ephy-encoding-menu.c:350
+#: src/ephy-encoding-menu.c:351
 msgid "_Other..."
 msgstr "_อื่นๆ..."
 
-#: src/ephy-encoding-menu.c:351
+#: src/ephy-encoding-menu.c:352
 msgid "Other encodings"
 msgstr "รหัสอื่น"
 
-#: src/ephy-encoding-menu.c:357
+#: src/ephy-encoding-menu.c:358
 msgid "_Automatic"
 msgstr "อัตโ_นมัติ"
 
@@ -2921,24 +2980,24 @@ msgstr "การล้างประวัติการเข้าเว็
 msgid "Clear History"
 msgstr "ล้างประวัติ"
 
-#: src/ephy-history-window.c:1030
+#: src/ephy-history-window.c:1034
 msgid "Last 30 minutes"
 msgstr "30 นาทีก่อน"
 
-#: src/ephy-history-window.c:1031
+#: src/ephy-history-window.c:1035
 msgid "Today"
 msgstr "วันนี้"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: src/ephy-history-window.c:1032 src/ephy-history-window.c:1035
-#: src/ephy-history-window.c:1039
+#: src/ephy-history-window.c:1036 src/ephy-history-window.c:1039
+#: src/ephy-history-window.c:1043
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "%d วันก่อน"
 msgstr[1] "%d วันก่อน"
 
-#: src/ephy-history-window.c:1241
+#: src/ephy-history-window.c:1245
 msgid "Sites"
 msgstr "ไซต์"
 
@@ -2999,11 +3058,11 @@ msgstr ""
 "ไม่สามารถเริ่มการทำงานได้ เนื่องจากข้อผิดพลาดต่อไปนี้:\n"
 "%s"
 
-#: src/ephy-main.c:460 src/ephy-main.c:462 src/window-commands.c:766
+#: src/ephy-main.c:517 src/ephy-main.c:519 src/window-commands.c:767
 msgid "GNOME Web Browser"
 msgstr "เว็บเบราว์เซอร์ของ GNOME"
 
-#: src/ephy-main.c:463
+#: src/ephy-main.c:520
 msgid "GNOME Web Browser options"
 msgstr "ตัวเลือกสำหรับเว็บเบราว์เซอร์ของ GNOME"
 
@@ -3686,7 +3745,7 @@ msgstr "ค้นหา"
 #. Translators: This refers to text size
 #: src/ephy-window.c:1305
 msgid "Larger"
-msgstr "ใหญ่ขึ้้น"
+msgstr "ใหญ่ขึ้น"
 
 #. Translators: This refers to text size
 #: src/ephy-window.c:1308
@@ -3870,22 +3929,45 @@ msgstr "ปิด"
 msgid "Close print preview"
 msgstr "ปิดหน้าต่างตัวอย่างก่อนพิมพ์"
 
-#: src/prefs-dialog.c:412
+#: src/prefs-dialog.c:416
 msgid "Default"
 msgstr "ค่าปริยาย"
 
-#: src/prefs-dialog.c:1034
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: src/prefs-dialog.c:1001 src/prefs-dialog.c:1009
+#, c-format
+msgid "language|%s (%s)"
+msgstr "%s (%s)"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: src/prefs-dialog.c:1020
+#, c-format
+msgid "language|User defined (%s)"
+msgstr "กำหนดเอง (%s)"
+
+#: src/prefs-dialog.c:1042
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "ภาษาของระบบ (%s)"
 msgstr[1] "ภาษาของระบบ (%s)"
 
-#: src/prefs-dialog.c:1421
+#: src/prefs-dialog.c:1433
 msgid "Select a Directory"
 msgstr "เลือกไดเรกทอรี"
 
-#: src/window-commands.c:714 src/window-commands.c:731
+#: src/window-commands.c:714 src/window-commands.c:732
 msgid "Contact us at:"
 msgstr "ติดต่อเราได้ที่:"
 
@@ -3897,11 +3979,11 @@ msgstr "ผู้ร่วมสมทบงาน:"
 msgid "Past developers:"
 msgstr "ผู้พัฒนาในอดีต"
 
-#: src/window-commands.c:732
+#: src/window-commands.c:733
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
 msgstr "<epiphany-list@gnome.org> หรือ <gnome-doc-list@gnome.org>"
 
-#: src/window-commands.c:737
+#: src/window-commands.c:738
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3912,7 +3994,7 @@ msgstr ""
 "ภายใต้เงื่อนไขของ GNU General Public License ที่เผยแพร่โดยมูลนิธิซอฟต์แวร์เสรี\n"
 "ไม่ว่าจะเป็นสัญญาอนุญาตรุ่นที่ 2 หรือรุ่นถัดมา (ตามแต่คุณจะเลือก)"
 
-#: src/window-commands.c:741
+#: src/window-commands.c:742
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3924,7 +4006,7 @@ msgstr ""
 "หรือ _ความเหมาะสมสำหรับวัตถุประสงค์เฉพาะกิจใดๆ_ กรุณาอ่าน\n"
 "GNU General Public License เพื่อดูรายละเอียดเพิ่มเติม"
 
-#: src/window-commands.c:745
+#: src/window-commands.c:746
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3935,7 +4017,7 @@ msgstr ""
 "ถ้าคุณไม่ได้รับ กรุณาติดต่อไปที่ Free Software Foundation, Inc., \n"
 "59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
 
-#: src/window-commands.c:757
+#: src/window-commands.c:758
 #, c-format
 msgid "Using “%s” backend"
 msgstr "กำลังใช้แบ็กเอนด์ “%s”"
@@ -3948,7 +4030,7 @@ msgstr "กำลังใช้แบ็กเอนด์ “%s”"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:781
+#: src/window-commands.c:782
 msgid "translator-credits"
 msgstr ""
 "อิสริยะ ไพรีพ่ายฤทธิ์\n"
@@ -3957,7 +4039,7 @@ msgstr ""
 "ถ้ามีเวลาโปรดมาช่วยกันแปล :-)\n"
 "http://gnome-th.sf.net"
 
-#: src/window-commands.c:784
+#: src/window-commands.c:785
 msgid "GNOME Web Browser Website"
 msgstr "เว็บไซต์ของเว็บเบราว์เซอร์ของ GNOME"
 
@@ -3969,33 +4051,6 @@ msgstr "เว็บไซต์ของเว็บเบราว์เซอ
 
 #~ msgid "_Show Toolbars"
 #~ msgstr "แสดงแถบเ_ครื่องมือ"
-
-#~ msgid "download status|Unknown"
-#~ msgstr "ไม่ทราบ"
-
-#~ msgid "download status|Failed"
-#~ msgstr "ไม่สำเร็จ"
-
-#~ msgid "File Type:|Unknown"
-#~ msgstr "ไม่ทราบ"
-
-#~ msgid "You may find an old version:|in the Google Cache"
-#~ msgstr "ในแคชของ Google"
-
-#~ msgid "You may find an old version:|in the Internet Archive"
-#~ msgstr "ในกรุอินเทอร์เน็ต"
-
-#~ msgid "bookmarks|All"
-#~ msgstr "ทั้งหมด"
-
-#~ msgid "bookmarks|Most Visited"
-#~ msgstr "ไปบ่อย"
-
-#~ msgid "bookmarks|Not Categorized"
-#~ msgstr "ไม่มีหมวด"
-
-#~ msgid "bookmarks|Local Sites"
-#~ msgstr "ไซต์ท้องถิ่น"
 
 #~ msgid "You already have a topic named “%s”"
 #~ msgstr "คุณมีหัวข้อชื่อ “%s” อยู่แล้ว"
@@ -4017,12 +4072,6 @@ msgstr "เว็บไซต์ของเว็บเบราว์เซอ
 
 #~ msgid "New Topic"
 #~ msgstr "หมวดใหม่"
-
-#~ msgid "language|%s (%s)"
-#~ msgstr "%s (%s)"
-
-#~ msgid "language|User defined (%s)"
-#~ msgstr "กำหนดเอง (%s)"
 
 #~ msgid "_Merge"
 #~ msgstr "_รวมกัน"
