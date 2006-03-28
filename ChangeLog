@@ -1,3 +1,15 @@
+2006-03-28  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* configure.ac:
+
+	Do not force GTK_DISABLE_DEPRECATED because we use
+	gtk_object_sink which is deprecated (EphyPromptService.cpp).
+
+	* embed/mozilla/EphyContentPolicy.cpp: (ShouldLoad).
+
+	Mozilla backend now supports adblock.
+	Fix #335919.
+
 2006-03-23  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-node.c: (write_parent), (ephy_node_write_to_xml):

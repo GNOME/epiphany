@@ -132,8 +132,8 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 	if (isHttps) return NS_OK;
 
 	/* is this url allowed ? */
-	nsEmbedCString spec;
-	aContentLocation->GetSpec(spec);
+	nsEmbedCString contentSpec;
+	aContentLocation->GetSpec (contentSpec);
 
 	EphyAdBlockManager *adblock_manager = 
 		EPHY_ADBLOCK_MANAGER (ephy_embed_shell_get_adblock_manager (embed_shell));
@@ -151,7 +151,9 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 	};
 
 	if (kBlockType[aContentType < G_N_ELEMENTS (kBlockType) ? aContentType : 0] &&
-	    !ephy_adblock_manager_should_load (adblock_manager, spec.get (), AdUriCheckType (aContentType)))
+	    !ephy_adblock_manager_should_load (adblock_manager, 
+					       contentSpec.get (), 
+					       AdUriCheckType (aContentType)))
 	{
 		*aDecision = nsIContentPolicy::REJECT_REQUEST;
 
@@ -159,7 +161,9 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 
 		if (embed) 
 		{
-			g_signal_emit_by_name (embed, "content-blocked", spec.get ());
+			g_signal_emit_by_name (embed,
+					       "content-blocked", 
+					       contentSpec.get ());
 		}
 		return NS_OK;
 	}
@@ -168,8 +172,6 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 	aContentLocation->SchemeIs ("http", &isHttp);
 	if (isHttp) return NS_OK;
 
-	nsEmbedCString contentSpec;
-	aContentLocation->GetSpec (contentSpec);
 	if (strcmp (contentSpec.get(), "about:blank") == 0) return NS_OK;
 
 	nsEmbedCString contentScheme;
@@ -212,10 +214,9 @@ NS_IMETHODIMP EphyContentPolicy::ShouldLoad(PRInt32 aContentType,
 
 	*_retval = PR_TRUE;
 
-	PRBool isHttp = PR_FALSE, isHttps = PR_FALSE;
-	aContentLocation->SchemeIs ("http", &isHttp);
+	PRBool isHttps = PR_FALSE;
 	aContentLocation->SchemeIs ("https", &isHttps);
-	if (isHttp || isHttps) return NS_OK;
+	if (isHttps) return NS_OK;
 
 	/* We have to always allow these, else forms and scrollbars break */
 	PRBool isChrome = PR_FALSE, isResource = PR_FALSE;
@@ -225,6 +226,44 @@ NS_IMETHODIMP EphyContentPolicy::ShouldLoad(PRInt32 aContentType,
 
 	nsEmbedCString contentSpec;
 	aContentLocation->GetSpec (contentSpec);
+
+	EphyAdBlockManager *adblock_manager = 
+		EPHY_ADBLOCK_MANAGER (ephy_embed_shell_get_adblock_manager (embed_shell));
+
+	/* try to remap 1.7 types to 1.8 */
+	static struct {PRBool should_block; PRUint32 remap;} kBlockType[nsIContentPolicy::DOCUMENT + 1] = {
+		{PR_TRUE  /* TYPE_OTHER */, 1},
+		{PR_TRUE  /* TYPE_SCRIPT */,2}, 
+		{PR_TRUE  /* TYPE_IMAGE */, 3},
+		{PR_FALSE /* TYPE_STYLESHEET */, 4},
+		{PR_TRUE  /* TYPE_OBJECT */, 5},
+		{PR_TRUE  /* TYPE_SUBDOCUMENT */, 7},
+		{PR_TRUE  /* TYPE_CONTROL_TAG */, 1},
+		{PR_TRUE  /* TYPE_RAW_URL */, 1},
+		{PR_FALSE /* TYPE_DOCUMENT */, 6}
+	};
+
+	PRUint32 indexPolicy = aContentType < G_N_ELEMENTS (kBlockType) ? aContentType : 1;
+	if (kBlockType[indexPolicy].should_block &&
+	    !ephy_adblock_manager_should_load (adblock_manager, 
+					       contentSpec.get (), 
+					       AdUriCheckType (kBlockType[indexPolicy].remap)))
+	{
+		*_retval = PR_FALSE;
+
+		GtkWidget *embed = GetEmbedFromContext (aContext); 
+
+		if (embed) 
+		{
+			g_signal_emit_by_name (embed, "content-blocked", contentSpec.get ());
+		}
+		return NS_OK;
+	}
+
+	PRBool isHttp = PR_FALSE;
+	aContentLocation->SchemeIs ("http", &isHttp);
+	if (isHttp) return NS_OK;
+
 	if (strcmp (contentSpec.get(), "about:blank") == 0) return NS_OK;
 
 	nsEmbedCString contentScheme;
