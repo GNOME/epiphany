@@ -872,8 +872,7 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	p->user_changed = TRUE;
 
 	p->tips = gtk_tooltips_new ();
-	g_object_ref (p->tips);
-	gtk_object_sink (GTK_OBJECT (p->tips));
+	g_object_ref_sink (p->tips);
 
 	ephy_location_entry_construct_contents (le);
 

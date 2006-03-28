@@ -68,8 +68,6 @@ enum
 	RESPONSE_ABORT_SCRIPT = 42
 };
 
-#define RETVAL(r) (NS_OK)
-
 class Prompter
 {
 public:
@@ -135,8 +133,7 @@ Prompter::Prompter (const char *aStock,
 	mEntries[0] = mEntries[1] = nsnull;
 
 	mDialog = GTK_DIALOG (gtk_dialog_new ());
-	g_object_ref (mDialog);
-	gtk_object_sink (GTK_OBJECT (mDialog));
+	g_object_ref_sink (mDialog);
 
 	char *title = NULL;
 	if (aTitle)
@@ -663,9 +660,9 @@ EphyPromptService::Alert (nsIDOMWindow *aParent,
 {
 	Prompter prompt (GTK_STOCK_DIALOG_INFO, aParent, aDialogTitle, aText);
 	prompt.AddStockButton (GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
-	PRInt32 response = prompt.Run ();
+	prompt.Run ();
 
-	return RETVAL(response);
+	return NS_OK;
 }
 
 /* void alertCheck (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, in wstring aCheckMsg, inout boolean aCheckState); */
@@ -680,10 +677,10 @@ EphyPromptService::AlertCheck (nsIDOMWindow *aParent,
 	prompt.AddStockButton (GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
 	prompt.AddCheckbox (aCheckMsg, aCheckState);
 
-	PRInt32 response = prompt.Run ();
+	prompt.Run ();
 	prompt.GetCheckboxState (aCheckState);
 
-	return RETVAL(response);
+	return NS_OK;
 }
 
 /* boolean confirm (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText); */
@@ -698,9 +695,9 @@ EphyPromptService::Confirm (nsIDOMWindow *aParent,
 	Prompter prompt (GTK_STOCK_DIALOG_QUESTION, aParent, aDialogTitle, aText);
 	prompt.AddStockButton (GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 	prompt.AddStockButton (GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
-	PRInt32 response = prompt.Run (_retval);
+	prompt.Run (_retval);
 
-	return RETVAL(response);
+	return NS_OK;
 }
 
 /* boolean confirmCheck (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, in wstring aCheckMsg, inout boolean aCheckState); */
@@ -719,10 +716,10 @@ EphyPromptService::ConfirmCheck (nsIDOMWindow *aParent,
 	prompt.AddStockButton (GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
 	prompt.AddCheckbox (aCheckMsg, aCheckState);
 
-	PRInt32 response = prompt.Run (_retval);
+	prompt.Run (_retval);
 	prompt.GetCheckboxState (aCheckState);
 
-	return RETVAL(response);
+	return NS_OK;
 }
 
 /* PRInt32 confirmEx (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, in unsigned long aButtonFlags, in wstring aButton0Title, in wstring aButton1Title, in wstring aButton2Title, in wstring aCheckMsg, inout boolean aCheckState); */
@@ -745,11 +742,10 @@ EphyPromptService::ConfirmEx (nsIDOMWindow *aParent,
 				    aButton1Title, aButton2Title);
 	prompt.AddCheckbox (aCheckMsg, aCheckState);
 
-	PRInt32 response = prompt.Run (nsnull);
-	*_retval = response;
+	*_retval = prompt.Run (nsnull);
 	prompt.GetCheckboxState (aCheckState);
 
-	return RETVAL(response);
+	return NS_OK;
 }
 
 /* boolean prompt (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, inout wstring aValue, in wstring aCheckMsg, inout boolean aCheckState); */
@@ -771,11 +767,11 @@ EphyPromptService::Prompt (nsIDOMWindow *aParent,
 	prompt.AddEntry (nsnull, *aValue, PR_FALSE);
 	prompt.AddCheckbox (aCheckMsg, aCheckState);
 
-	PRInt32 response = prompt.Run (_retval);
+	prompt.Run (_retval);
 	prompt.GetText (0, aValue);
 	prompt.GetCheckboxState (aCheckState);
 
-	return RETVAL(response);
+	return NS_OK;
 }
 
 /* boolean promptUsernameAndPassword (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, inout wstring aUsername, inout wstring aPassword, in wstring aCheckMsg, inout boolean aCheckState); */
@@ -800,12 +796,12 @@ EphyPromptService::PromptUsernameAndPassword (nsIDOMWindow *aParent,
 	prompt.AddEntry (_("_Password:"), *aPassword, PR_TRUE);
 	prompt.AddCheckbox (aCheckMsg, aCheckState);
 
-	PRInt32 response = prompt.Run (_retval);
+	prompt.Run (_retval);
 	prompt.GetText (0, aUsername);
 	prompt.GetText (1, aPassword);
 	prompt.GetCheckboxState (aCheckState);
 
-	return RETVAL(response);
+	return NS_OK;
 }
 
 /* boolean promptPassword (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, inout wstring aPassword, in wstring aCheckMsg, inout boolean aCheckState); */
@@ -829,11 +825,11 @@ EphyPromptService::PromptPassword (nsIDOMWindow *aParent,
 
 	// FIXME: Add a CAPSLOCK indicator?
 
-	PRInt32 response = prompt.Run (_retval);
+	prompt.Run (_retval);
 	prompt.GetText (0, aPassword);
 	prompt.GetCheckboxState (aCheckState);
 
-	return RETVAL(response);
+	return NS_OK;
 }
 
 /* boolean select (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, in PRUint32 aCount, [array, size_is (aCount)] in wstring aSelectList, out long aOutSelection); */
@@ -854,10 +850,10 @@ EphyPromptService::Select (nsIDOMWindow *aParent,
 	prompt.AddStockButton (GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
 	prompt.AddSelect (aCount, aSelectList, *aOutSelection);
 
-	PRInt32 response = prompt.Run (_retval);
+	prompt.Run (_retval);
 	prompt.GetSelected (aOutSelection);
 
-	return RETVAL(response);
+	return NS_OK;
 }
 
 #if HAVE_NSINONBLOCKINGALERTSERVICE_H

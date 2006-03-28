@@ -239,8 +239,7 @@ ephy_fullscreen_popup_constructor (GType type,
 	gtk_window_set_resizable (window, FALSE);
 
 	priv->tooltips = gtk_tooltips_new ();
-	g_object_ref (G_OBJECT (priv->tooltips));
-	gtk_object_sink (GTK_OBJECT (priv->tooltips));
+	g_object_ref_sink (priv->tooltips);
 
 	hbox = gtk_hbox_new (FALSE, 2);
 	gtk_container_add (GTK_CONTAINER (window), hbox);

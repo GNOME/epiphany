@@ -1,3 +1,15 @@
+2006-03-28  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/EphyPromptService.cpp:
+	* lib/egg/egg-editable-toolbar.c: (egg_editable_toolbar_set_fixed):
+	* lib/widgets/ephy-location-entry.c: (ephy_location_entry_init):
+	* lib/widgets/ephy-zoom-control.c: (ephy_zoom_control_init):
+	* src/ephy-fullscreen-popup.c: (ephy_fullscreen_popup_constructor):
+	* src/ephy-notebook.c: (ephy_notebook_init):
+	* src/ephy-statusbar.c: (ephy_statusbar_init):
+
+	Use g_object_ref_sink().
+
 2006-03-28  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* embed/mozilla/EphyContentPolicy.cpp: (ShouldLoad).

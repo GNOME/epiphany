@@ -484,8 +484,7 @@ ephy_notebook_init (EphyNotebook *notebook)
 	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (notebook), FALSE);
 
 	notebook->priv->title_tips = gtk_tooltips_new ();
-	g_object_ref (G_OBJECT (notebook->priv->title_tips));
-	gtk_object_sink (GTK_OBJECT (notebook->priv->title_tips));
+	g_object_ref_sink (notebook->priv->title_tips);
 
 	notebook->priv->show_tabs = TRUE;
 	notebook->priv->dnd_enabled = TRUE;

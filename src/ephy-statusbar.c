@@ -221,8 +221,7 @@ ephy_statusbar_init (EphyStatusbar *t)
 	t->priv = EPHY_STATUSBAR_GET_PRIVATE (t);
 
 	t->tooltips = gtk_tooltips_new ();
-	g_object_ref (G_OBJECT (t->tooltips));
-	gtk_object_sink (GTK_OBJECT (t->tooltips));
+	g_object_ref_sink (t->tooltips);
 
 	t->priv->icon_container = gtk_hbox_new (FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (t), t->priv->icon_container, FALSE, FALSE, 0);
