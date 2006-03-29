@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Epiphany Web Browser 2.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-14 13:46+0100\n"
-"PO-Revision-Date: 2006-03-12 00:03+0200\n"
+"PO-Revision-Date: 2006-03-28 21:02+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -271,14 +271,16 @@ msgstr "Aktiivsete laienduste loend."
 msgid ""
 "Middle click to open the web page pointed to by the currently selected text"
 msgstr ""
-"Klikk keskmisel hiirenupul avab veebilehe, millele viitab hetkel valitud "
-"tekst"
+"Keskmise hiirenupuga klõpsamine avab veebilehe, millele viitab hetkel "
+"valitud tekst"
 
 #: ../data/epiphany.schemas.in.h:24
 msgid ""
 "Middle clicking on the main view pane will open the web page pointed to by "
 "the currently selected text."
 msgstr ""
+"Vaatepaanil keskmise hiirenupuga klõpsamine avab veebilehe, millele viitab "
+"hetkel valitud tekst."
 
 #: ../data/epiphany.schemas.in.h:25
 msgid "Minimum font size"
@@ -301,6 +303,9 @@ msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
 msgstr ""
+"Milliseid külastatuid lehti ajaloos näidatakse. Võimalikud väärtused on "
+"\"ever\" (kõiki), \"last_two_days\" (viimase kahe päeva jooksul), "
+"\"last_three_days\" (viimase kolme päeva jooksul), \"today\" (täna)."
 
 #: ../data/epiphany.schemas.in.h:30
 msgid "Show the tab bar also when there is only one tab open."
@@ -320,19 +325,19 @@ msgstr "Kettapuhvri suurus megabaitides."
 
 #: ../data/epiphany.schemas.in.h:34
 msgid "The bookmark information shown in the editor view"
-msgstr "Järjehoidja andmed, mida kuvatakse redaktorivaates"
+msgstr "Redaktorivaates kuvatavad järjehoidja andmed"
 
 #: ../data/epiphany.schemas.in.h:35
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
 msgstr ""
-"Järjehoidja andmed, mida kuvatakse redaktorivaates. Loendi võimalikud "
-"väärtused on \"aadress\" ja \"pealkiri\"."
+"Redaktorivaates kuvatavad järjehoidja andmed. Loendi võimalikud väärtused on "
+"\"address\" (aadress) ja \"title\" (pealkiri)."
 
 #: ../data/epiphany.schemas.in.h:36
 msgid "The currently selected fonts language"
-msgstr ""
+msgstr "Käesolevaga valitud kirjatüüpide keel"
 
 #: ../data/epiphany.schemas.in.h:37
 msgid ""
@@ -345,6 +350,13 @@ msgid ""
 "written in latin script), \"x-tamil\" (tamil) and \"x-devanagari"
 "\" (devanagari)."
 msgstr ""
+"Käesolevaga valitud kirjatüüpide keel Võimalikud väärtused on \"ar\" "
+"(araabia), \"x-baltic\" (balti keeled), \"x-central-euro\" (kesk-euroopa "
+"keeled), \"x-cyrillic\" (kirillitsat kasutavad keeled), \"el\" (kreeka), "
+"\"he\" (heebrea), \"ja\" (jaapani), \"ko\" (kore), \"zh-CN\" (lihtsustatud "
+"hiina), \"th\" (tai), \"zh-TW\" (traditsiooniline hiina), \"tr\" (türgi), "
+"\"x-unicode\" (muud keeled), \"x-western\" (ladina tähestikku kasutavad "
+"keeled), \"x-tamil\" (tamili) and \"x-devanagari\" (devanagaari)."
 
 #: ../data/epiphany.schemas.in.h:38
 msgid "The downloads folder"
@@ -386,16 +398,21 @@ msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"address\", \"title\"."
 msgstr ""
+"Ajaloovaates kuvatava lehe andmed. Võimalikud väärtused on \"address\" "
+"(aadress) ja \"title\" (pealkiri)."
 
 #: ../data/epiphany.schemas.in.h:43
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
 msgstr ""
+"Allalaadimiste kataloogi nimi või \"Downloads\" kui kasutatakse "
+"allalaadimiste vaikimisi kausta või \"Desktop\" kui allalaadimised toimuvad "
+"töölauale."
 
 #: ../data/epiphany.schemas.in.h:44
 msgid "Toolbar style"
-msgstr "Tööriistariba stiil"
+msgstr "Tööriistariba laad"
 
 #: ../data/epiphany.schemas.in.h:45
 msgid ""
@@ -403,6 +420,9 @@ msgid ""
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
 "\"text\"."
 msgstr ""
+"Tööriistariba laad. Võimalikud väärtused on  \"\" (GNOME vaikimisi laad), "
+"\"both\" (tekst ja ikoonid), \"both-horiz\" (teksti ikoonide kõrval), "
+"\"icons\" (ikoonid), ja \"text\" (tekst)."
 
 #: ../data/epiphany.schemas.in.h:46
 msgid "Use own colors"
@@ -438,19 +458,19 @@ msgstr ""
 
 #: ../data/epiphany.schemas.in.h:52
 msgid "Whether to print the date in the footer"
-msgstr "Kas printida kuupäev jaluses"
+msgstr "Kas jaluses prinditakse kuupäeva"
 
 #: ../data/epiphany.schemas.in.h:53
 msgid "Whether to print the page address in the header"
-msgstr "Kas printida lehe aadress päises"
+msgstr "Kas päises prinditakse lehe aadress"
 
 #: ../data/epiphany.schemas.in.h:54
 msgid "Whether to print the page numbers (x of total) in the footer"
-msgstr "Kas printida leheküljenumbreid (y x-st) jaluses"
+msgstr "Kas jaluses prinditakse leheküljenumbreid (x koguarvust)"
 
 #: ../data/epiphany.schemas.in.h:55
 msgid "Whether to print the page title in the header"
-msgstr "Kas printida lehe pealkirja päises"
+msgstr "Kas päises prinditakse lehe pealkiri"
 
 #: ../data/epiphany.schemas.in.h:56
 msgid "x-western"
