@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Epiphany Web Browser HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-03 05:56+0100\n"
-"PO-Revision-Date: 2006-03-17 11:14+0200\n"
+"PO-Revision-Date: 2006-03-29 19:11+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -84,6 +84,8 @@ msgid ""
 "Disables loading of content from unsafe protocols. Safe protocols are http "
 "and https."
 msgstr ""
+"Mitteohutute protokollide kaudu sisu laadimise keelamine. Ohutud protokollid "
+"on http ja https."
 
 #: ../data/epiphany-lockdown.schemas.in.h:15
 msgid "Epiphany cannot quit"
@@ -271,14 +273,16 @@ msgstr "Aktiivsete laienduste loend."
 msgid ""
 "Middle click to open the web page pointed to by the currently selected text"
 msgstr ""
-"Klikk keskmisel hiirenupul avab veebilehe, millele viitab hetkel valitud "
-"tekst"
+"Keskmise hiirenupuga klõpsamine avab veebilehe, millele viitab hetkel "
+"valitud tekst"
 
 #: ../data/epiphany.schemas.in.h:24
 msgid ""
 "Middle clicking on the main view pane will open the web page pointed to by "
 "the currently selected text."
 msgstr ""
+"Vaatepaanil keskmise hiirenupuga klõpsamine avab veebilehe, millele viitab "
+"hetkel valitud tekst."
 
 #: ../data/epiphany.schemas.in.h:25
 msgid "Minimum font size"
@@ -301,6 +305,9 @@ msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
 msgstr ""
+"Milliseid külastatuid lehti ajaloos näidatakse. Võimalikud väärtused on "
+"\"ever\" (kõiki), \"last_two_days\" (viimase kahe päeva jooksul), "
+"\"last_three_days\" (viimase kolme päeva jooksul), \"today\" (täna)."
 
 #: ../data/epiphany.schemas.in.h:30
 msgid "Show the tab bar also when there is only one tab open."
@@ -320,19 +327,19 @@ msgstr "Kettapuhvri suurus megabaitides."
 
 #: ../data/epiphany.schemas.in.h:34
 msgid "The bookmark information shown in the editor view"
-msgstr "Järjehoidja andmed, mida kuvatakse redaktorivaates"
+msgstr "Redaktorivaates kuvatavad järjehoidja andmed"
 
 #: ../data/epiphany.schemas.in.h:35
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
 msgstr ""
-"Järjehoidja andmed, mida kuvatakse redaktorivaates. Loendi võimalikud "
-"väärtused on \"aadress\" ja \"pealkiri\"."
+"Redaktorivaates kuvatavad järjehoidja andmed. Loendi võimalikud väärtused on "
+"\"address\" (aadress) ja \"title\" (pealkiri)."
 
 #: ../data/epiphany.schemas.in.h:36
 msgid "The currently selected fonts language"
-msgstr ""
+msgstr "Käesolevaga valitud kirjatüüpide keel"
 
 #: ../data/epiphany.schemas.in.h:37
 msgid ""
@@ -345,6 +352,13 @@ msgid ""
 "written in latin script), \"x-tamil\" (tamil) and \"x-devanagari"
 "\" (devanagari)."
 msgstr ""
+"Käesolevaga valitud kirjatüüpide keel Võimalikud väärtused on \"ar\" "
+"(araabia), \"x-baltic\" (balti keeled), \"x-central-euro\" (kesk-euroopa "
+"keeled), \"x-cyrillic\" (kirillitsat kasutavad keeled), \"el\" (kreeka), "
+"\"he\" (heebrea), \"ja\" (jaapani), \"ko\" (kore), \"zh-CN\" (lihtsustatud "
+"hiina), \"th\" (tai), \"zh-TW\" (traditsiooniline hiina), \"tr\" (türgi), "
+"\"x-unicode\" (muud keeled), \"x-western\" (ladina tähestikku kasutavad "
+"keeled), \"x-tamil\" (tamili) and \"x-devanagari\" (devanagaari)."
 
 #: ../data/epiphany.schemas.in.h:38
 msgid "The downloads folder"
@@ -386,16 +400,21 @@ msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"address\", \"title\"."
 msgstr ""
+"Ajaloovaates kuvatava lehe andmed. Võimalikud väärtused on \"address\" "
+"(aadress) ja \"title\" (pealkiri)."
 
 #: ../data/epiphany.schemas.in.h:43
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
 msgstr ""
+"Allalaadimiste kataloogi nimi või \"Downloads\" kui kasutatakse "
+"allalaadimiste vaikimisi kausta või \"Desktop\" kui allalaadimised toimuvad "
+"töölauale."
 
 #: ../data/epiphany.schemas.in.h:44
 msgid "Toolbar style"
-msgstr "Tööriistariba stiil"
+msgstr "Tööriistariba laad"
 
 #: ../data/epiphany.schemas.in.h:45
 msgid ""
@@ -403,6 +422,9 @@ msgid ""
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
 "\"text\"."
 msgstr ""
+"Tööriistariba laad. Võimalikud väärtused on  \"\" (GNOME vaikimisi laad), "
+"\"both\" (tekst ja ikoonid), \"both-horiz\" (teksti ikoonide kõrval), "
+"\"icons\" (ikoonid), ja \"text\" (tekst)."
 
 #: ../data/epiphany.schemas.in.h:46
 msgid "Use own colors"
@@ -438,19 +460,19 @@ msgstr ""
 
 #: ../data/epiphany.schemas.in.h:52
 msgid "Whether to print the date in the footer"
-msgstr "Kas printida kuupäev jaluses"
+msgstr "Kas jaluses prinditakse kuupäeva"
 
 #: ../data/epiphany.schemas.in.h:53
 msgid "Whether to print the page address in the header"
-msgstr "Kas printida lehe aadress päises"
+msgstr "Kas päises prinditakse lehe aadress"
 
 #: ../data/epiphany.schemas.in.h:54
 msgid "Whether to print the page numbers (x of total) in the footer"
-msgstr "Kas printida leheküljenumbreid (y x-st) jaluses"
+msgstr "Kas jaluses prinditakse leheküljenumbreid (x koguarvust)"
 
 #: ../data/epiphany.schemas.in.h:55
 msgid "Whether to print the page title in the header"
-msgstr "Kas printida lehe pealkirja päises"
+msgstr "Kas päises prinditakse lehe pealkiri"
 
 #: ../data/epiphany.schemas.in.h:56
 msgid "x-western"
@@ -1378,7 +1400,7 @@ msgstr "„%s“ keeldus ühendusest."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:260
 msgid "Likely causes of the problem are"
-msgstr ""
+msgstr "Probleemi võimalikud põhjused on"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:270
 #, c-format
@@ -1402,6 +1424,8 @@ msgid ""
 "<ul><li>some service isn't started, or</li><li>you got the port number wrong."
 "</li></ul>"
 msgstr ""
+"<ul><li>mõni teenus pole käivitatud, või</li><li>on sul vale pordinumber."
+"</li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:298
 #: ../embed/mozilla/EphyAboutModule.cpp:316
@@ -1540,6 +1564,8 @@ msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
 msgstr ""
+"Kontrolli oma proksi serveri sätteid. Kui ühendus ikka ei õnnestu, siis võib "
+"probleem olla sinu proksi serveris või võrguühenduses."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:440
 msgid "Could not Display Content"
@@ -3128,14 +3154,14 @@ msgstr ""
 #.
 #: ../src/ephy-statusbar.c:114
 msgid "Caret"
-msgstr ""
+msgstr "Kursor"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
 #: ../src/ephy-statusbar.c:122
 msgid "In keyboard selection mode, press F7 to exit"
-msgstr ""
+msgstr "Klaviatuuriga valimise režiimis vajuta lõpetamiseks F7"
 
 #: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2269 ../src/ephy-tab.c:2304
 msgid "Blank page"
@@ -4011,7 +4037,7 @@ msgstr ""
 #: ../src/window-commands.c:757
 #, c-format
 msgid "Using “%s” backend"
-msgstr ""
+msgstr "Taustaprogrammi „%s“ kasutamine"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -4031,18 +4057,6 @@ msgstr ""
 msgid "GNOME Web Browser Website"
 msgstr "GNOME Veebisirvija sait"
 
-#~ msgid "Hide “%s”"
-#~ msgstr "Peida „%s“"
-
-#~ msgid "Properties"
-#~ msgstr "Omadused"
-
-#~ msgid "_Show Toolbars"
-#~ msgstr "Näita _tööriistaribasid"
-
-#~ msgid "Epiphany automation"
-#~ msgstr "Epiphany automaatika"
-
 #~ msgid "Autowrap for find in page"
 #~ msgstr "Otsinguga lõppu jõudes jätka lehe algusest"
 
@@ -4053,21 +4067,6 @@ msgstr "GNOME Veebisirvija sait"
 
 #~ msgid "Match case for find in page"
 #~ msgstr "Otsing on tõstutundlik"
-
-#~ msgid "<b>Fonts</b>"
-#~ msgstr "<b>Kirjatüübid</b>"
-
-#~ msgid "Al_ways use the desktop theme colors"
-#~ msgstr "A_lati kasuta töölaua teema värve"
-
-#~ msgid "Always use _these fonts"
-#~ msgstr "Kasuta alati neid kirjatüü_pe"
-
-#~ msgid "Fonts and Colors"
-#~ msgstr "Kirjastiilid ja värvid"
-
-#~ msgid "Close Tab"
-#~ msgstr "Sulge sakk"
 
 #~ msgid "You already have a bookmark titled “%s” for this page."
 #~ msgstr "Selle lehe jaoks on sul järjehoidja nimega „%s” juba olemas."
@@ -4092,12 +4091,6 @@ msgstr "GNOME Veebisirvija sait"
 
 #~ msgid "Zoom _Out"
 #~ msgstr "_Vähenda"
-
-#~ msgid "Appearance"
-#~ msgstr "Välimus"
-
-#~ msgid "Paper"
-#~ msgstr "Paber"
 
 #~ msgid "Download Manager"
 #~ msgstr "Allalaadimishaldur"
