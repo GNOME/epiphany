@@ -454,11 +454,10 @@ EnableResponse (GtkDialog *aDialog)
 }
 
 static void
-RemoveTimeout (GObject *aDialog)
+RemoveTimeout (gpointer idptr)
 {
-	guint timeout;
+	guint timeout = GPOINTER_TO_UINT (idptr);
 
-	timeout = GPOINTER_TO_UINT (g_object_get_data (aDialog, TIMEOUT_DATA_KEY));
 	g_return_if_fail (timeout != 0);
 
 	g_source_remove (timeout);
