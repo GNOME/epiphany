@@ -215,7 +215,6 @@ transform_image_animation_mode (GConfEntry *gcentry,
 {
 	GConfValue *gcvalue;
 	const char *mode;
-	int mozilla_mode = 0;
 
 	gcvalue = gconf_entry_get_value (gcentry);
 	if (gcvalue == NULL ||
@@ -224,21 +223,13 @@ transform_image_animation_mode (GConfEntry *gcentry,
 	mode = gconf_value_get_string (gcvalue);
 	if (mode == NULL) return FALSE;
 
-	if (strcmp (mode, "normal") == 0)
+	if (strcmp (mode, "disabled") == 0)
 	{
-		mozilla_mode = 0;
-	}
-	else if (strcmp (mode, "once") == 0)
-	{
-		mozilla_mode = 1;
-	}
-	else if (strcmp (mode, "disabled") == 0)
-	{
-		mozilla_mode = 2;
+		mode = "none";
 	}
 
-	g_value_init (value, G_TYPE_INT);
-	g_value_set_int (value, mozilla_mode);
+	g_value_init (value, G_TYPE_STRING);
+	g_value_set_string (value, mode);
 
 	return TRUE;
 }
