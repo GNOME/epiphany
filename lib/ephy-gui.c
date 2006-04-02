@@ -391,29 +391,39 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 }
 
 void
-ephy_gui_help (GtkWindow *parent,
-	       const char *file_name,
-               const char *link_id)
+ephy_gui_help_with_doc_id (GtkWindow *parent,
+			   const char *doc_id,
+			   const char *file_name,
+			   const char *link_id)
 {
-	GError *err = NULL;
+	GError *error = NULL;
 
-	gnome_help_display (file_name, link_id, &err);
+	gnome_help_display_with_doc_id (NULL, doc_id, file_name, link_id, &error);
 
-	if (err != NULL)
+	if (error != NULL)
 	{
 		GtkWidget *dialog;
+
 		dialog = gtk_message_dialog_new (parent,
 						 GTK_DIALOG_DESTROY_WITH_PARENT,
 						 GTK_MESSAGE_ERROR,
 						 GTK_BUTTONS_OK,
-						 _("Could not display help: %s"), err->message);
-		g_signal_connect (G_OBJECT (dialog), "response",
-				  G_CALLBACK (gtk_widget_destroy),
-				  NULL);
-		gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
+						 _("Could not display help: %s"),
+						 error->message);
+		g_error_free (error);
+
+		g_signal_connect (dialog, "response",
+				  G_CALLBACK (gtk_widget_destroy), NULL);
 		gtk_widget_show (dialog);
-		g_error_free (err);
 	}
+}
+
+void
+ephy_gui_help (GtkWindow *parent,
+	       const char *file_name,
+               const char *link_id)
+{
+	ephy_gui_help_with_doc_id (parent, NULL, file_name, link_id);
 }
 
 void
