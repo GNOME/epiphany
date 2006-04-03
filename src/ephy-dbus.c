@@ -484,10 +484,19 @@ ephy_dbus_get_default (void)
 	return ephy_dbus_instance;
 }
 
+/**
+ * ephy_dbus_get_bus:
+ * @dbus:
+ * @kind:
+ * 
+ * Returns: the #DBusGConnection for the @kind DBUS, or %NULL
+ * if a connection could not be established.
+ */
 DBusGConnection *
 ephy_dbus_get_bus (EphyDbus *dbus,
 		   EphyDbusBus kind)
 {
+	EphyDbusPrivate *priv = dbus->priv;
 	DBusGConnection *bus = NULL;
 
 	g_return_val_if_fail (EPHY_IS_DBUS (dbus), NULL);
@@ -495,22 +504,26 @@ ephy_dbus_get_bus (EphyDbus *dbus,
 	if (kind == EPHY_DBUS_SYSTEM)
 	{
 		/* We connect lazily to the system bus */
-		if (dbus->priv->system_bus == NULL)
+		if (priv->system_bus == NULL)
 		{
 			ephy_dbus_connect_to_system_bus (dbus, NULL);
 		}
-		bus = dbus->priv->system_bus;
+
+		bus = priv->system_bus;
 	}
 	else if (kind == EPHY_DBUS_SESSION)
 	{
-		bus = dbus->priv->session_bus;
+		if (priv->session_bus == NULL)
+		{
+			ephy_dbus_connect_to_session_bus (dbus, NULL);
+		}
+
+		bus = priv->session_bus;
 	}
 	else
 	{
 		g_assert_not_reached ();
 	}
-
-	g_assert (bus != NULL);
 
 	return bus;
 }

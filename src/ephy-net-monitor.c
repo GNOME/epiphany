@@ -103,6 +103,8 @@ ephy_net_monitor_check_for_active_device (EphyNetMonitor *monitor,
 	NMActStage	act_stage = NM_ACT_STAGE_UNKNOWN;
 	NetworkStatus status = NETWORK_DOWN;
 
+	if (priv->bus == NULL) return NETWORK_UP;
+
 	for (i = 0; i < num; i++)
 	{
 		const char *path = all_path [i];
@@ -338,7 +340,7 @@ ephy_net_monitor_attach_to_dbus (EphyNetMonitor *monitor)
 	dbus = ephy_dbus_get_default ();
 
 	g_connection = ephy_dbus_get_bus (dbus, EPHY_DBUS_SYSTEM);
-	g_return_if_fail (g_connection != NULL);
+	if (g_connection == NULL) return;
 	
 	priv->bus = dbus_g_connection_get_connection (g_connection);
 
@@ -408,7 +410,6 @@ ephy_net_monitor_startup (EphyNetMonitor *monitor)
 	g_signal_connect (dbus, "disconnected",  
 			  G_CALLBACK (disconnect_from_system_bus_cb), monitor);
 
-	/* FIXME what if the system bus isn't available right now? */
 	ephy_net_monitor_check_network (monitor);
 }
 
