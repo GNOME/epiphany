@@ -1,3 +1,12 @@
+2006-04-03  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-dbus.c: (ephy_dbus_get_bus):
+	* src/ephy-net-monitor.c:
+	(ephy_net_monitor_check_for_active_device),
+	(ephy_net_monitor_attach_to_dbus), (ephy_net_monitor_startup):
+
+	Don't crash when we cannot connect to the system dbus. Bug #336557.
+
 2006-04-02  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-gui.c: (ephy_gui_help_with_doc_id), (ephy_gui_help):
