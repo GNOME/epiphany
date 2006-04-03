@@ -206,7 +206,6 @@ show_status_icon (DownloaderView *dv)
 	DownloaderViewPrivate *priv = dv->priv;
 
 	priv->status_icon = gtk_status_icon_new_from_stock (EPHY_STOCK_DOWNLOAD);
-	g_object_ref_sink (priv->status_icon);
 
 	g_signal_connect_swapped (priv->status_icon, "activate",
 				  G_CALLBACK (show_downloader_cb), dv);
@@ -275,9 +274,15 @@ static void
 downloader_view_finalize (GObject *object)
 {
 	DownloaderView *dv = EPHY_DOWNLOADER_VIEW (object);
+	DownloaderViewPrivate *priv = dv->priv;
 	gboolean idle_unref = dv->priv->idle_unref;
 
-	g_object_unref (dv->priv->status_icon);
+	if (priv->status_icon != NULL)
+	{
+		g_object_unref (priv->status_icon);
+		priv->status_icon = NULL;
+	}
+
 	g_hash_table_destroy (dv->priv->downloads_hash);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
