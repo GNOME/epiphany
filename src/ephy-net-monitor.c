@@ -72,223 +72,67 @@ ephy_net_monitor_set_net_status (EphyNetMonitor *monitor,
 	g_object_notify (G_OBJECT (monitor), "network-status");
 }
 
-static NetworkStatus
-ephy_net_monitor_check_for_active_device (EphyNetMonitor *monitor,
-					  char *all_path[],
-					  int num)
+static void 
+ephy_net_monitor_dbus_notify (DBusPendingCall *pending,
+                    	      EphyNetMonitor *monitor) 
 {
-	EphyNetMonitorPrivate *priv = monitor->priv;
-	int i;
-	DBusMessage *	message = NULL;
-	DBusMessage *	reply = NULL;
-	const char *	iface = NULL;
-	char *		op = NULL;
-	dbus_uint32_t	type = 0;
-	const char *	udi = NULL;
-	dbus_bool_t	active = FALSE;
-	const char *	ip4_address = NULL;
-	const char *	broadcast = NULL;
-	const char *	subnetmask = NULL;
-	const char *	hw_addr = NULL;
-	const char *	route = NULL;
-	const char *	primary_dns = NULL;
-	const char *	secondary_dns = NULL;
-	dbus_uint32_t	mode = 0;
-	dbus_int32_t	strength = -1;
-	char *		active_network_path = NULL;
-	dbus_bool_t	link_active = FALSE;
-	dbus_uint32_t	caps = NM_DEVICE_CAP_NONE;
-	char **		networks = NULL;
-	int		num_networks = 0;
-	NMActStage	act_stage = NM_ACT_STAGE_UNKNOWN;
-	NetworkStatus status = NETWORK_DOWN;
+	DBusMessage* msg = dbus_pending_call_steal_reply (pending);
+	
+	LOG ("EphyNetMonitor getting response from dbus");
 
-	if (priv->bus == NULL) return NETWORK_UP;
+	if (!msg) return;
 
-	for (i = 0; i < num; i++)
+	if (dbus_message_get_type(msg) == DBUS_MESSAGE_TYPE_METHOD_RETURN) 
 	{
-		const char *path = all_path [i];
-		DBusError error;
+		dbus_uint32_t result;
 
-		message = dbus_message_new_method_call (NM_DBUS_SERVICE, 
-							path, 
-							NM_DBUS_INTERFACE_DEVICES, 
-							"getProperties");
-		if (message == NULL)
+		if (dbus_message_get_args (msg, NULL, DBUS_TYPE_UINT32, &result,
+					  DBUS_TYPE_INVALID)) 
 		{
-			g_warning ("EphyNetMonitor: couldn't allocate the dbus message");
-			status = NETWORK_UP;
-			break;
+			NetworkStatus net_status;
+
+			net_status = result == NM_STATE_CONNECTED ? NETWORK_UP : NETWORK_DOWN;
+
+			LOG ("EphyNetMonitor guesses the network is %s", 
+					net_status != NETWORK_DOWN ? "up" : "down");
+
+			ephy_net_monitor_set_net_status (monitor, net_status);
 		}
-
-		reply = dbus_connection_send_with_reply_and_block (priv->bus, message, -1, NULL);
-		dbus_message_unref (message);
-
-		if (reply == NULL)
-		{
-			g_warning ("EphyNetMonitor: "
-				   "didn't get a reply from NetworkManager for device %s.\n", path);
-			status = NETWORK_UP;
-			break;
-		}
-
-		dbus_error_init (&error);
-		if (dbus_message_get_args (reply, &error, DBUS_TYPE_OBJECT_PATH, &op,
-					DBUS_TYPE_STRING, &iface,
-					DBUS_TYPE_UINT32, &type,
-					DBUS_TYPE_STRING, &udi,
-					DBUS_TYPE_BOOLEAN,&active,
-					DBUS_TYPE_UINT32, &act_stage,
-					DBUS_TYPE_STRING, &ip4_address,
-					DBUS_TYPE_STRING, &subnetmask,
-					DBUS_TYPE_STRING, &broadcast,
-					DBUS_TYPE_STRING, &hw_addr,
-					DBUS_TYPE_STRING, &route,
-					DBUS_TYPE_STRING, &primary_dns,
-					DBUS_TYPE_STRING, &secondary_dns,
-					DBUS_TYPE_UINT32, &mode,
-					DBUS_TYPE_INT32,  &strength,
-					DBUS_TYPE_BOOLEAN,&link_active,
-					DBUS_TYPE_UINT32, &caps,
-					DBUS_TYPE_STRING, &active_network_path,
-					DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &networks, &num_networks,
-					DBUS_TYPE_INVALID))
-		{
-			LOG ("EphyNetMonitor found %s active device", active ? "at least 1" : "no");
-
-			dbus_message_unref (reply);
-
-			/* found one active device */
-			if (active)
-			{
-				status = NETWORK_UP;
-				break;
-			}
-		}
-		else
-		{
-			g_warning ("EphyNetMonitor: "
-				   "unexpected reply from NetworkManager for device %s.\n", path);
-			if (dbus_error_is_set(&error))
-			{
-				g_warning ("EphyNetMonitor: %s: %s", error.name, error.message);
-				dbus_error_free(&error);
-			}
-
-			status = NETWORK_UP;
-
-			break;
-		}
+		dbus_message_unref (msg);
 	}
-
-	return status;
 }
 
 /* This is the heart of Net Monitor monitor */
 /* ATM, if there is an active device, we say that network is up: that's all ! */
-static gboolean
-ephy_net_monitor_network_status (EphyNetMonitor *monitor)
+static void
+ephy_net_monitor_check_network (EphyNetMonitor *monitor)
 {
 	EphyNetMonitorPrivate *priv = monitor->priv;
-	DBusMessage *message, *reply;
-	DBusError error;
-	NetworkStatus net_status;
+	DBusMessage *message;
+	DBusPendingCall* reply;
+
+	LOG ("EphyNetMonitor checking network");
 
 	/* ask to Network Manager if there is at least one active device */
 	message = dbus_message_new_method_call (NM_DBUS_SERVICE, 
 						NM_DBUS_PATH, 
 						NM_DBUS_INTERFACE, 
-						"getDevices");
+						"state");
 
 	if (message == NULL)
 	{
 		g_warning ("Couldn't allocate the dbus message");
-		/* fallbak: let's Epiphany roll */
-		return NETWORK_UP;
-	}
-	dbus_error_init (&error);
-	reply = dbus_connection_send_with_reply_and_block (priv->bus, 
-						 	   message, 
-							   -1, 
-							   &error);
-	if (dbus_error_is_set (&error))
-	{
-		if (dbus_error_has_name (&error, NM_DBUS_NO_DEVICES_ERROR))
-		{
-			LOG ("EphyNetMonitor: Network Manager says - no available network devices -");
-
-			net_status = NETWORK_DOWN;
-		}
-		else
-		{
-			LOG ("EphyNetMonitor can't talk to Network Manager: %s: %s", 
-			     error.name, error.message);
-
-			/* fallback */
-			net_status = NETWORK_UP;
-		}
-
-		dbus_error_free(&error);
-	}
-	else
-	{
-		if (reply == NULL)
-		{
-			g_warning("EphyNetMonitor got NULL reply");
-
-			/* fallback */			
-			net_status = NETWORK_UP;
-		}
-		else
-		{
-			/* check if we have at least one active device */
-			char **paths = NULL;
-			int num = -1;
-
-			if (!dbus_message_get_args (reply, 
-						    NULL, 
-						    DBUS_TYPE_ARRAY, 
-						    DBUS_TYPE_OBJECT_PATH, 
-						    &paths, 
-						    &num, 
-						    DBUS_TYPE_INVALID))
-			{
-				g_warning ("EphyNetMonitor: unexpected reply from NetworkManager");
-				dbus_message_unref (reply);
-				net_status = NETWORK_UP;
-			}
-			else
-			{
-				net_status = ephy_net_monitor_check_for_active_device
-						(monitor, paths, num);
-			}
-		}
+		/* fallback: let's Epiphany roll */
+		return;
 	}
 
-	if (reply)
+	if (dbus_connection_send_with_reply (priv->bus, message, &reply, -1)) 
 	{
-		dbus_message_unref (reply);
+		dbus_pending_call_set_notify (reply, ephy_net_monitor_dbus_notify, monitor, NULL);
+		dbus_pending_call_unref (reply);
 	}
 	
-	if (message)
-	{
-		dbus_message_unref (message);
-	}
-
-	return net_status;
-}
-
-static void
-ephy_net_monitor_check_network (EphyNetMonitor *monitor)
-{
-	NetworkStatus net_status;
-	
-	net_status = ephy_net_monitor_network_status (monitor);
-
-	LOG ("EphyNetMonitor guesses the network is %s", 
-	     net_status != NETWORK_DOWN ? "up" : "down");
-
-	ephy_net_monitor_set_net_status (monitor, net_status);
+	dbus_message_unref (message);
 }
 
 /* Filters all the messages from Network Manager */
@@ -319,7 +163,7 @@ filter_func (DBusConnection *connection,
 	{
 		LOG ("EphyNetMonitor catches DeviceNowActive signal");
 
-		ephy_net_monitor_set_net_status (monitor, NETWORK_UP);
+		ephy_net_monitor_check_network (monitor);
 
 		return DBUS_HANDLER_RESULT_HANDLED;
 	}
