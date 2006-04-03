@@ -69,6 +69,7 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 #include "egg-toolbars-model.h"
+#include "ephy-prefs.h"
 
 static const GtkTargetEntry topic_drag_dest_types [] =
 {
@@ -1752,6 +1753,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	EphyNode *node;
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
+	GtkAction *action;
 	int col_id, url_col_id, title_col_id, details_value;
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (editor));
@@ -1935,6 +1937,11 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			       130);
 
 	set_columns_visibility (editor, details_value);
+
+	/* Lockdown settings */
+	action = gtk_action_group_get_action (action_group, "Export");
+	gtk_action_set_sensitive (action,
+				  eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK) == FALSE);
 }
 
 void
