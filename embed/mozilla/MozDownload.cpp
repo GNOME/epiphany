@@ -554,13 +554,16 @@ MozDownload::OnProgressChange (nsIWebProgress *aWebProgress,
 
 	mLastUpdate = now;
 
-	if (aMaxTotalProgress == -1)
+	if (aMaxTotalProgress < 0)
 	{
             mPercentComplete = -1;
 	}
 	else
 	{
-	        mPercentComplete = (PRInt32)(((float)aCurTotalProgress / (float)aMaxTotalProgress) * 100.0 + 0.5);
+		/* Make sure not to round up, so we don't display 100% unless
+		 * it's really finished! 
+		 */
+	        mPercentComplete = (PRInt32)(((float)aCurTotalProgress / (float)aMaxTotalProgress) * 100.0);
 	}
 
 	mTotalProgress = aMaxTotalProgress;
