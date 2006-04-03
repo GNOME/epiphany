@@ -554,7 +554,7 @@ MozDownload::OnProgressChange (nsIWebProgress *aWebProgress,
 
 	mLastUpdate = now;
 
-	if (aMaxTotalProgress < 0)
+	if (aMaxTotalProgress <= 0)
 	{
             mPercentComplete = -1;
 	}
