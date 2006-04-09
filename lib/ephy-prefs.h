@@ -38,6 +38,9 @@ G_BEGIN_DECLS
 #define CONF_DESKTOP_IS_HOME_DIR		"/apps/nautilus/preferences/desktop_is_home_dir"
 #define CONF_NETWORK_MANAGED			"/apps/epiphany/general/managed_network"
 
+/* i18n pref */
+#define CONF_GECKO_ENABLE_PANGO			"/apps/epiphany/web/enable_pango"
+
 /* Directories */
 #define CONF_STATE_SAVE_DIR		"/apps/epiphany/directories/save"
 #define CONF_STATE_SAVE_IMAGE_DIR	"/apps/epiphany/directories/saveimage"
