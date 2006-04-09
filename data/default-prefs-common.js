@@ -76,3 +76,6 @@ pref("browser.send_pings", false);
 
 // disable blink tags
 pref("browser.blink_allowed", false);
+
+// enable spatial navigation (only works if the extension is built with gecko)
+pref("snav.enabled", true);
