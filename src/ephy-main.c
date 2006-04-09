@@ -91,7 +91,7 @@ static const GOptionEntry option_entries[] =
 	{ "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
 	  N_("Profile directory to use in the private instance"), N_("DIR") },
 	{ G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &arguments,
-	  "", "" },
+	  "", N_("URL ...")},
 	{ NULL }
 };
 
@@ -415,6 +415,7 @@ main (int argc,
 	GError *error = NULL;
 	guint32 user_time;
 	const char *env;
+	gboolean enable_pango;
 #ifndef GNOME_PARAM_GOPTION_CONTEXT
 	GPtrArray *fake_argv_array;
 #endif
@@ -494,7 +495,7 @@ main (int argc,
 	/* get this early, since gdk will unset the env var */
 	user_time = get_startup_id ();
 
-	option_context = g_option_context_new (_("GNOME Web Browser"));
+	option_context = g_option_context_new ("");
 	option_group = g_option_group_new ("epiphany",
 					   N_("GNOME Web Browser"),
 					   N_("GNOME Web Browser options"),
@@ -685,14 +686,24 @@ main (int argc,
 	gtk_about_dialog_set_url_hook (handle_url, NULL, NULL);
 	gtk_about_dialog_set_email_hook (handle_email, NULL, NULL);
 
-	/* Work around bug #328844 */
+	/* Work around bug #328844, and avoid the gecko+pango performance problem */
 	env = g_getenv ("MOZ_ENABLE_PANGO");
-	if (env == NULL ||
-	    env[0] == '\0' ||
-	    strcmp (env, "0") == 0)
+	enable_pango = env != NULL &&
+		       env[0] != '\0' &&
+		       g_ascii_strtoull (env, NULL, 10) != 0;
+
+	if (eel_gconf_get_boolean (CONF_GECKO_ENABLE_PANGO))
+	{
+		g_print ("NOTE: Enabling gecko pango renderer; this may cause performance degradation.\n"
+			 "You can set " CONF_GECKO_ENABLE_PANGO " to \"false\" to disable it.\n");
+	}
+	else if (!enable_pango)
 	{
 		g_setenv ("MOZ_DISABLE_PANGO", "1", TRUE);
 	}
+
+	/* Work-around Flash Player crash */
+	g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
 
 	/* Now create the shell */
 	_ephy_shell_create_instance ();
