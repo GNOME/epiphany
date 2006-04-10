@@ -923,6 +923,19 @@ update_load_state (MozillaEmbed *membed, gint state)
 				       priv->browser->GetDocumentType ());
 	}
 
+#ifdef HAVE_GECKO_1_8
+	if (state & GTK_MOZ_EMBED_FLAG_RESTORING &&
+	    priv->load_state == MOZILLA_EMBED_LOAD_STARTED)
+	{
+		priv->load_state = MOZILLA_EMBED_LOAD_LOADING;
+
+		char *address;
+		address = gtk_moz_embed_get_location (GTK_MOZ_EMBED (membed));
+		g_signal_emit_by_name (membed, "ge-content-change", address);
+		g_free (address);
+	}
+#endif
+
 	if (state & GTK_MOZ_EMBED_FLAG_IS_NETWORK)
 	{
 		if (state & GTK_MOZ_EMBED_FLAG_START)
