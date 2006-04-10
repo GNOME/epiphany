@@ -1,3 +1,36 @@
+Epiphany 2.14.1
+==============
+
+Changes:
+	* Hooks have been added for the new epiphany-extensions
+	documentation, written by Baptiste Mille-mathias 
+
+Bug fixes:
+	* Enable pango for some indic languages, which depend on it for correct
+	rendering. Bug #335799.
+	* Improve the current code (less complex) and add a timeouted call
+	to NetworkManager when requesting network status. Bug #330479.
+	* Disable export when locked down. Bug #337028.
+	* Make sure we don't show "100%" on downloads unless they're really
+	completed.
+	* Don't crash when we cannot connect to the system dbus. Bug #336557.
+	* Mozilla backend now supports adblock. Fix #335919.
+	* Add support for local directory monitoring (in addition to local file
+	monitoring). Bug #332049.
+	* Add support for IE link files. Bug #330735.
+	
+Contributors to this release:
+Wouter Bolsterlee, Jean-François Rameau, Christian Persch.
+
+Documentation updates:
+Victor Osadci.
+
+Updated translations:
+Jérémy Le Floc'h (br), Lukas Novotny (cs), Mindu Dorji (dz), Ivar Smolin (et),
+Ilkka Tuohela (fi), Ignacio Casal Quinteiro (gl), Mohammad DAMT (id),
+Francesco Marletta (it), alina (ka), Theppitak Karoonboonyanan (th).
+
+
 ===============
 Epiphany 2.14.0
 ===============
