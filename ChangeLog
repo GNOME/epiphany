@@ -1,5 +1,12 @@
 2006-04-10  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-find-toolbar.c:
+
+	Don't set find next/prev insensitive since that's redundant with
+	the status indication, and breaks find while the document is loading.
+
+2006-04-10  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/mozilla-embed.cpp:
 
 	Emit document-change event on fastback restore. Fixes bug #312785.

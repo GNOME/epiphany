@@ -102,17 +102,6 @@ get_find (EphyFindToolbar *toolbar)
 }
 
 static void
-set_controls (EphyFindToolbar *toolbar,
-	      gboolean can_find_next,
-	      gboolean can_find_prev)
-{
-	EphyFindToolbarPrivate *priv = toolbar->priv;
-
-	gtk_widget_set_sensitive (GTK_WIDGET (priv->next), can_find_next);
-	gtk_widget_set_sensitive (GTK_WIDGET (priv->prev), can_find_prev);
-}
-
-static void
 set_status (EphyFindToolbar *toolbar,
 	    EphyEmbedFindResult result)
 {
@@ -149,14 +138,6 @@ clear_status (EphyFindToolbar *toolbar)
 	gtk_label_set_text (GTK_LABEL (priv->status_label), "");
 	gtk_label_set_text (GTK_LABEL (priv->label),
 			    priv->links_only ? _("Find links:") : _("Find:"));
-}
-
-static void
-tab_content_changed_cb (EphyEmbed *embed,
-			const char *uri,
-			EphyFindToolbar *toolbar)
-{
-	set_controls (toolbar, TRUE, TRUE);
 }
 
 #ifdef HAVE_TYPEAHEADFIND
@@ -219,7 +200,7 @@ entry_changed_cb (GtkEntry *entry,
 #ifdef HAVE_TYPEAHEADFIND
 	EphyEmbedFindResult result;
 #endif
-	gboolean found = TRUE, case_sensitive;
+	gboolean case_sensitive;
 
 	text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
 
@@ -234,10 +215,8 @@ entry_changed_cb (GtkEntry *entry,
 #ifdef HAVE_TYPEAHEADFIND
 	result = ephy_embed_find_find (get_find (toolbar), text, priv->links_only);
 
-	found = result != EPHY_EMBED_FIND_NOTFOUND;
 	set_status (toolbar, result);
 #endif
-	set_controls (toolbar, found, found);
 }
 
 static gboolean
@@ -600,12 +579,8 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 	priv->embed = embed;
 	if (embed != NULL)
 	{
-		set_controls (toolbar, TRUE, TRUE);
 		clear_status (toolbar);
 
-		g_signal_connect_object (embed, "ge-content-change",
-					 G_CALLBACK (tab_content_changed_cb),
-					 toolbar, G_CONNECT_AFTER);
 #ifdef HAVE_TYPEAHEADFIND
 		g_signal_connect_object (embed, "ge-search-key-press",
 					 G_CALLBACK (tab_search_key_press_cb),
@@ -625,12 +600,9 @@ void
 ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
 {
 	EphyEmbedFindResult result;
-	gboolean found;
 
 	result = ephy_embed_find_find_again (get_find (toolbar), TRUE);
 
-	found = result != EPHY_EMBED_FIND_NOTFOUND;
-	set_controls (toolbar, found, found);
 	set_status (toolbar, result);
 }
 
@@ -638,11 +610,9 @@ void
 ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 {
 	EphyEmbedFindResult result;
-	gboolean found;
 
 	result = ephy_embed_find_find_again (get_find (toolbar), FALSE);
-	found = result != EPHY_EMBED_FIND_NOTFOUND;
-	set_controls (toolbar, found, found);
+
 	set_status (toolbar, result);
 }
 
