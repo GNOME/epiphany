@@ -190,6 +190,7 @@ static const char languages[][7] =
 "en-za",
 "en-zm",
 "en-zw",
+"eo",
 "es",
 "es-ar",
 "es-bo",
