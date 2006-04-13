@@ -86,7 +86,7 @@ static const GOptionEntry option_entries[] =
 	  N_("Load the given session file"), N_("FILE") },
 	{ "add-bookmark", 't', 0, G_OPTION_ARG_STRING, &bookmark_url,
 	  N_("Add a bookmark"), N_("URL") },
-	{ "private-instance", 0, 0, G_OPTION_ARG_NONE, &private_instance,
+	{ "private-instance", 'p', 0, G_OPTION_ARG_NONE, &private_instance,
 	  N_("Start a private instance"), NULL },
 	{ "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
 	  N_("Profile directory to use in the private instance"), N_("DIR") },
