@@ -337,9 +337,13 @@ update_favicon (EphyLocationEntry *entry)
 	}
 	else
 	{
-		gtk_image_set_from_stock (image,
-					  GTK_STOCK_NEW,
-					  GTK_ICON_SIZE_MENU);
+		/* Here we could consider using fallback favicon that matches
+		 * the page MIME type, though text/html should be good enough
+		 * most of the time. See #337140
+		 */
+		gtk_image_set_from_icon_name (image,
+					      "text-html",
+					      GTK_ICON_SIZE_MENU);
 	}
 }
 
