@@ -45,8 +45,12 @@
 #include <nsIASN1Sequence.h>
 #include <nsICRLInfo.h>
 #include <nsISimpleEnumerator.h>
-#include <nsIArray.h>
 #include <nsIDOMWindow.h>
+#include <nsIArray.h>
+#ifdef HAVE_NSIMUTABLEARRAY_H
+#include <nsIMutableArray.h>
+#endif
+
 #undef MOZILLA_INTERNAL_API
 #include <nsEmbedString.h>
 #define MOZILLA_INTERNAL_API 1

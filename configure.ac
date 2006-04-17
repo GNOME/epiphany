@@ -363,6 +363,16 @@ GECKO_CHECK_HEADERS([windowwatcher],[nsINonBlockingAlertService.h])
 
 GECKO_CHECK_HEADERS([docshell],[nsIGlobalHistory3.h])
 
+# Check for nsIIOService2.h
+# Added in 1.9
+
+GECKO_CHECK_HEADERS([necko],[nsIIOService2.h])
+
+# Check for nsIMutableArray.h
+# Split out into its own header in 1.9
+
+GECKO_CHECK_HEADERS([xpcom],[nsIMutableArray.h])
+	
 # Check for some contractIDs that we need but are provided by extensions
 # which may or may not have been built.
 
