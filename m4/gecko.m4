@@ -182,8 +182,13 @@ AC_RUN_IFELSE(
 	[AC_LANG_SOURCE(
 		[[#include <mozilla-config.h>
 		  #include <string.h>
+		  #include <stdlib.h>
                   int main(void) {
-		    return strcmp (MOZ_DEFAULT_TOOLKIT, "gtk2") != 0;
+		    if (strcmp (MOZ_DEFAULT_TOOLKIT, "gtk2") == 0 ||
+		        strcmp (MOZ_DEFAULT_TOOLKIT, "cairo-gtk2") == 0)
+			    return EXIT_SUCCESS;
+		
+		    return EXIT_FAILURE;
 		  } ]]
 	)],
 	[result=yes],
@@ -396,7 +401,6 @@ AC_DEFUN([GECKO_XPCOM_PROGRAM],
 [[
 // redirect unwanted mozilla debug output to the bit bucket
 freopen ("/dev/null", "w", stdout);
-//freopen ("/dev/null", "w", stderr);
 
 nsresult rv;
 nsCOMPtr<nsILocalFile> directory;
