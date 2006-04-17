@@ -1,5 +1,13 @@
 2006-04-13  Christian Persch  <chpe@cvs.gnome.org>
 
+	* configure.ac:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+
+	Check for nsIMutableArray.h and include it if found. Fixes build with
+	gecko trunk.
+
+2006-04-13  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-main.c:
 
 	Add -p as short option format for --private-instance.
