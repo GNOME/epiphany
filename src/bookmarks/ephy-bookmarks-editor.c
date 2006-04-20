@@ -764,7 +764,7 @@ import_dialog_response_cb (GtkDialog *dialog,
 			EphyFileChooser *dialog;
 			GtkFileFilter *filter;
 
-			dialog = ephy_file_chooser_new (_("Import bookmarks from file"),
+			dialog = ephy_file_chooser_new (_("Import Bookmarks from File"),
 							GTK_WIDGET (editor),
 							GTK_FILE_CHOOSER_ACTION_OPEN,
 							NULL, EPHY_FILE_FILTER_NONE);
