@@ -121,6 +121,7 @@ enum
 	HOMEPAGE_BLANK_PROP,
 	AUTO_OPEN_PROP,
 	DOWNLOAD_PATH_HBOX_PROP,
+	DOWNLOAD_PATH_LABEL_PROP,
 
 	/* Fonts and Colors */
 	USE_FONTS_PROP,
@@ -166,6 +167,7 @@ EphyDialogProperty properties [] =
 	{ "homepage_blank_button",		NULL,			  PT_NORMAL,	0 },
 	{ "automatic_downloads_checkbutton",	CONF_AUTO_DOWNLOADS,      PT_AUTOAPPLY,	0 },
 	{ "download_button_hbox",		NULL,			  PT_NORMAL,	0 },
+	{ "download_button_label",		NULL,			  PT_NORMAL,	0 },
 
 	/* Fonts and Colors */
 	{ "use_fonts_checkbutton",	CONF_RENDERING_USE_OWN_FONTS,	PT_AUTOAPPLY | PT_INVERTED,	0 },
@@ -1419,7 +1421,7 @@ download_path_changed_cb (GtkFileChooser *button)
 static void
 create_download_path_button (EphyDialog *dialog)
 {
-	GtkWidget *parent, *hbox, *button;
+	GtkWidget *parent, *hbox, *label, *button;
 	EphyFileChooser *fc;
 	char *dir;
 
@@ -1427,6 +1429,7 @@ create_download_path_button (EphyDialog *dialog)
 
 	ephy_dialog_get_controls (dialog,
 				  properties[DOWNLOAD_PATH_HBOX_PROP].id, &hbox,
+				  properties[DOWNLOAD_PATH_LABEL_PROP].id, &label,
 				  properties[WINDOW_PROP].id, &parent,
 				  NULL);
 
@@ -1444,6 +1447,7 @@ create_download_path_button (EphyDialog *dialog)
 						 DOWNLOAD_BUTTON_WIDTH);
 	g_signal_connect (button, "current-folder-changed",
 			  G_CALLBACK (download_path_changed_cb), dialog);
+	gtk_label_set_mnemonic_widget (GTK_LABEL (label), button);
 	gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 	gtk_widget_show (button);
 
