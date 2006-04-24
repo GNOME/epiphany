@@ -755,8 +755,9 @@ window_cmd_help_about (GtkAction *action,
 	shell = ephy_embed_shell_get_default ();
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (shell));
 
-	comments = g_strdup_printf (_("Using “%s” backend"),
-				    ephy_embed_single_get_backend_name (single));
+	comments = g_strdup_printf (_("Lets you view web pages and find information on the internet.\n"
+				      "Powered by Gecko %s"),
+				      ephy_embed_single_get_backend_name (single) + strlen ("gecko-"));
 	licence = g_strjoin ("\n\n",
 			     _(licence_part[0]),
 			     _(licence_part[1]),

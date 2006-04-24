@@ -15,7 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 
-AC_INIT([GNOME Web Browser],[2.15.0],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[2.15.1],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
@@ -27,8 +27,13 @@ AC_CONFIG_SRCDIR([configure.ac])
 
 EPIPHANY_MAJOR=2.15
 EPIPHANY_API_VERSION=2.15
+
+# This should stay at the major version of the latest stable releases
+EPIPHANY_UA_VERSION=2.14
+
 AC_SUBST([EPIPHANY_MAJOR])
 AC_SUBST([EPIPHANY_API_VERSION])
+AC_SUBST([EPIPHANY_UA_VERSION])
 
 AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip])
 
@@ -48,7 +53,7 @@ AC_HEADER_STDC
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
 
-IT_PROG_INTLTOOL([0.34.1])
+IT_PROG_INTLTOOL([0.34.90])
 
 PKG_PROG_PKG_CONFIG
 
@@ -662,11 +667,6 @@ if test "$have_iso_codes" = "yes"; then
 else
 	AC_MSG_ERROR([iso-codes is required])
 fi
-
-# Translators: new languages must be added to the po/LINGUAS file
-ALL_LINGUAS="`cat "$srcdir/po/LINGUAS" | grep -v '^#'`"
-
-AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
 
 GETTEXT_PACKAGE=epiphany
 AC_SUBST([GETTEXT_PACKAGE])
