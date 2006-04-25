@@ -54,7 +54,6 @@ struct _EphyTabsMenuPrivate
 	GtkActionGroup *action_group;
 	GtkAction *anchor_action;
 	guint ui_id;
-	guint num;
 };
 
 enum
@@ -142,7 +141,8 @@ notebook_page_added_cb (EphyNotebook *notebook,
 
 	LOG ("tab_added_cb tab=%p", tab);
 
-	g_snprintf (verb, sizeof (verb), ACTION_VERB_FORMAT, priv->num++);
+	g_snprintf (verb, sizeof (verb), ACTION_VERB_FORMAT,
+		    _ephy_tab_get_id (tab));
   
 	action = g_object_new (GTK_TYPE_RADIO_ACTION,
 			       "name", verb,
@@ -250,6 +250,7 @@ sync_active_tab (EphyWindow *window,
 	/* happens initially, since the ::active-tab comes before
 	* the ::tab-added signal
 	*/
+	/* FIXME that's not true with gtk+ 2.9 anymore */
 	if (action == NULL) return;
 
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);

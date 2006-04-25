@@ -78,6 +78,8 @@
 
 struct _EphyTabPrivate
 {
+	guint id;
+
 	char *status_message;
 	char *link_message;
 	char *address;
@@ -146,7 +148,15 @@ typedef struct
 	char *features;
 } PopupInfo;
 
-static GObjectClass *parent_class = NULL;
+static GObjectClass *parent_class;
+
+/* We need to assign unique IDs to tabs, otherwise accels get confused in the
+ * tabs menu (bug #339548). We could use a serial #, but the ID is used in the
+ * action name which is stored in a GQuark and so we should use them sparingly.
+ */
+
+static GArray *tabs_id_array = NULL;
+static guint n_tabs = 0;
 
 /* internal functions, accessible only from this file */
 static void	ephy_tab_set_load_status	(EphyTab *tab,
@@ -821,6 +831,7 @@ ephy_tab_finalize (GObject *object)
 {
 	EphyTab *tab = EPHY_TAB (object);
 	EphyTabPrivate *priv = tab->priv;
+	guint id = priv->id;
 
 	if (priv->icon != NULL)
 	{
@@ -844,6 +855,14 @@ ephy_tab_finalize (GObject *object)
 #endif
 
 	LOG ("EphyTab finalized %p", tab);
+
+	/* Remove the ID */
+	g_array_index (tabs_id_array, gpointer, id) = NULL;
+	if (--n_tabs == 0)
+	{
+		g_array_free (tabs_id_array, TRUE);
+		tabs_id_array = NULL;
+	}
 }
 
 static gboolean
@@ -2039,10 +2058,40 @@ ephy_tab_init (EphyTab *tab)
 	EphyTabPrivate *priv;
 	GObject *embed;
 	EphyFaviconCache *cache;
+	guint id;
 
 	LOG ("EphyTab initialising %p", tab);
 
 	priv = tab->priv = EPHY_TAB_GET_PRIVATE (tab);
+
+	/* Make tab ID */
+	++n_tabs;
+
+	if (tabs_id_array == NULL)
+	{
+		tabs_id_array = g_array_sized_new (FALSE /* zero-terminate */,
+					       TRUE /* clear */,
+					       sizeof (gpointer),
+					       64 /* initial size */);
+	}
+
+	for (id = 0; id < tabs_id_array->len; ++id)
+	{
+		if (g_array_index (tabs_id_array, gpointer, id) == NULL) break;
+	}
+
+	priv->id = id;
+
+	/* Grow array if necessary */
+	if (id >= tabs_id_array->len)
+	{
+		g_array_append_val (tabs_id_array, tab);
+		g_assert (g_array_index (tabs_id_array, gpointer, id) == tab);
+	}
+	else
+	{
+		g_array_index (tabs_id_array, gpointer, id) = tab;
+	}
 
 	tab->priv->total_requests = 0;
 	tab->priv->cur_requests = 0;
@@ -2465,4 +2514,13 @@ ephy_tab_get_zoom (EphyTab *tab)
 	g_return_val_if_fail (EPHY_IS_TAB (tab), 1.0);
 
 	return tab->priv->zoom;
+}
+
+/* private */
+guint
+_ephy_tab_get_id (EphyTab *tab)
+{
+	g_return_val_if_fail (EPHY_IS_TAB (tab), (guint) -1);
+
+	return tab->priv->id;
 }

@@ -121,6 +121,9 @@ gboolean		ephy_tab_get_visibility		(EphyTab *tab);
 
 float			ephy_tab_get_zoom		(EphyTab *tab);
 
+/* private */
+guint		       _ephy_tab_get_id			(EphyTab *tab);
+
 G_END_DECLS
 
 #endif
