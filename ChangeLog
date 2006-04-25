@@ -1,3 +1,14 @@
+2006-04-25  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-tab.c: (ephy_tab_finalize), (ephy_tab_init),
+	(ephy_tab_get_zoom), (_ephy_tab_get_id):
+	* src/ephy-tab.h:
+	* src/ephy-tabs-menu.c: (notebook_page_added_cb),
+	(sync_active_tab):
+
+	Make sure each tab has its own unique ID, so accel paths don't
+	conflict between windows. Fixes bug #339548.
+
 2006-04-19  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/glade/prefs-dialog.glade:
