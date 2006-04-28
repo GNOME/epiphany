@@ -58,6 +58,7 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkuimanager.h>
 #include <gtk/gtkclipboard.h>
+#include <libgnomevfs/gnome-vfs.h>
 #include <libgnomevfs/gnome-vfs-result.h>
 #include <libgnomevfs/gnome-vfs-monitor.h>
 #include <libgnomevfs/gnome-vfs-ops.h>
@@ -1331,46 +1332,62 @@ ephy_tab_file_monitor_cb (GnomeVFSMonitorHandle *handle,
 			  GnomeVFSMonitorEventType event_type,
 			  EphyTab *tab)
 {
+	gboolean uri_is_directory;
+	gboolean should_reload;
+	char* local_path;
 	EphyTabPrivate *priv = tab->priv;
 
 	LOG ("File '%s' has changed, scheduling reload", monitor_uri);
 
+	local_path = gnome_vfs_get_local_path_from_uri(monitor_uri);
+	uri_is_directory = g_file_test(local_path, G_FILE_TEST_IS_DIR);
+	g_free(local_path);
+
 	switch (event_type)
 	{
+		/* These events will always trigger a reload: */
 		case GNOME_VFS_MONITOR_EVENT_CHANGED:
 		case GNOME_VFS_MONITOR_EVENT_CREATED:
-			/* We make a lot of assumptions here, but basically we know
-			 * that we just have to reload, by construction.
-			 * Delay the reload a little bit so we don't endlessly
-			 * reload while a file is written.
-			 */
-			if (priv->reload_delay_ticks == 0)
-			{
-				priv->reload_delay_ticks = 1;
-			}
-			else
-			{
-				/* Exponential backoff */
-				priv->reload_delay_ticks = MIN (priv->reload_delay_ticks * 2,
-								RELOAD_DELAY_MAX_TICKS);
-			}
-
-			if (priv->reload_scheduled_id == 0)
-			{
-				priv->reload_scheduled_id =
-					g_timeout_add (RELOAD_DELAY,
-						       (GSourceFunc) ephy_file_monitor_reload_cb,
-						       tab);
-			}
-
+			should_reload = TRUE;
 			break;
 
+		/* These events will only trigger a reload for directories: */
 		case GNOME_VFS_MONITOR_EVENT_DELETED:
+		case GNOME_VFS_MONITOR_EVENT_METADATA_CHANGED:
+			should_reload = uri_is_directory;
+			break;
+
+		/* These events don't trigger a reload: */
 		case GNOME_VFS_MONITOR_EVENT_STARTEXECUTING:
 		case GNOME_VFS_MONITOR_EVENT_STOPEXECUTING:
-		case GNOME_VFS_MONITOR_EVENT_METADATA_CHANGED:
 		default:
+			should_reload = FALSE;
 			break;
+	}
+
+	if (should_reload) {
+		/* We make a lot of assumptions here, but basically we know
+		 * that we just have to reload, by construction.
+		 * Delay the reload a little bit so we don't endlessly
+		 * reload while a file is written.
+		 */
+		if (priv->reload_delay_ticks == 0)
+		{
+			priv->reload_delay_ticks = 1;
+		}
+		else
+		{
+			/* Exponential backoff */
+			priv->reload_delay_ticks = MIN (priv->reload_delay_ticks * 2,
+					RELOAD_DELAY_MAX_TICKS);
+		}
+
+		if (priv->reload_scheduled_id == 0)
+		{
+			priv->reload_scheduled_id =
+				g_timeout_add (RELOAD_DELAY,
+						(GSourceFunc) ephy_file_monitor_reload_cb, tab);
+		}
 	}
 }
 
@@ -1381,6 +1398,8 @@ ephy_tab_update_file_monitor (EphyTab *tab,
 	EphyTabPrivate *priv = tab->priv;
 	GnomeVFSMonitorHandle *handle = NULL;
 	gboolean local;
+	char* local_path;
+	GnomeVFSMonitorType monitor_type;
 
 	if (priv->monitor != NULL &&
 	    priv->address != NULL && address != NULL &&
@@ -1396,8 +1415,14 @@ ephy_tab_update_file_monitor (EphyTab *tab,
 	local = g_str_has_prefix (address, "file://");
 	if (local == FALSE) return;
 	
+	local_path = gnome_vfs_get_local_path_from_uri(address);
+	monitor_type = g_file_test(local_path, G_FILE_TEST_IS_DIR)
+		? GNOME_VFS_MONITOR_DIRECTORY
+		: GNOME_VFS_MONITOR_FILE;
+	g_free(local_path);
+
 	if (gnome_vfs_monitor_add (&handle, address,
-				   GNOME_VFS_MONITOR_FILE,
+				   monitor_type,
 				   (GnomeVFSMonitorCallback) ephy_tab_file_monitor_cb,
 				   tab) == GNOME_VFS_OK)
 	{
