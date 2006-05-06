@@ -1,7 +1,6 @@
 # French translation of epiphany.
-# Copyright (C) 2000-2005 Free Software Foundation, Inc.
+# Copyright (C) 2000-2006 Free Software Foundation, Inc.
 # This file is distributed under the same license as the epiphany package.
-# 
 # maintainer: Christophe Fergeau <teuf@users.sourceforge.net>, 2000-2002.
 # Christophe Merlet (RedFox) <redfox@redfoxcenter.org>, 2001-2005.
 # Cedric De Wilde <daique@tiscalinet.be>, 2001.
@@ -11,15 +10,18 @@
 # Olivier Cortes <olivier.cortes@ryxeo.com>, 2004.
 # Vincent Carriere <carriere_vincent@yahoo.fr>, 2005.
 # Xavier Claessens <x_claessens@skynet.be>, 2005.
-# 
+# Guillaume Desmottes <cass@skynet.be>, 2006.
+# ZeBob <zebob.m@gmail.com>, 2006.
+# Jonathan Ernst <jonathan@ernstfamily.ch>, 2006.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany 1.8.4\n"
+"Project-Id-Version: epiphany 2.14.1.90\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-03 22:09+0100\n"
-"PO-Revision-Date: 2006-01-03 22:03+0100\n"
-"Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
-"Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
+"POT-Creation-Date: 2006-05-06 14:16+0200\n"
+"PO-Revision-Date: 2006-05-04 10:12+0100\n"
+"Last-Translator: Jonathan Ernst <jonathan@ernstfamily.ch>\n"
+"Language-Team: French <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -95,9 +97,8 @@ msgstr ""
 "protocoles sûrs sont http et https."
 
 #: ../data/epiphany-lockdown.schemas.in.h:15
-#, fuzzy
 msgid "Epiphany cannot quit"
-msgstr "Automatisation Epiphany"
+msgstr "Epiphany ne peut pas être fermé"
 
 #: ../data/epiphany-lockdown.schemas.in.h:16
 msgid "Hide menubar by default"
@@ -107,7 +108,7 @@ msgstr "Masquer la barre de menus par défaut"
 msgid ""
 "Hide the menubar by default. The menubar can still be accessed using F10."
 msgstr ""
-"Masquer la barre de menu par défaut. La barre de menu reste accessible en "
+"Masquer la barre de menus par défaut. La barre de menus reste accessible en "
 "utilisant F10."
 
 #: ../data/epiphany-lockdown.schemas.in.h:18
@@ -120,7 +121,7 @@ msgstr "Bloque Epiphany en mode plein écran."
 
 #: ../data/epiphany-lockdown.schemas.in.h:20
 msgid "User is not allowed to close Epiphany"
-msgstr ""
+msgstr "L'utilisateur n'est pas autorisé à fermer Epiphany"
 
 #: ../data/bme.desktop.in.in.h:1
 msgid "Browse and organize your bookmarks"
@@ -128,23 +129,23 @@ msgstr "Parcourir et organiser vos signets"
 
 #: ../data/bme.desktop.in.in.h:2
 msgid "Epiphany Web Bookmarks"
-msgstr "Signets Web d'Epiphany"
+msgstr "Signets web d'Epiphany"
 
 #: ../data/bme.desktop.in.in.h:3
 msgid "Web Bookmarks"
-msgstr "Signets Web"
+msgstr "Signets web"
 
 #: ../data/epiphany.desktop.in.in.h:1
 msgid "Browse the web"
-msgstr "Naviguer sur Internet"
+msgstr "Naviguer sur le web"
 
 #: ../data/epiphany.desktop.in.in.h:2
 msgid "Epiphany Web Browser"
-msgstr "Navigateur Web Epiphany"
+msgstr "Navigateur web Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:221
-#: ../src/ephy-main.c:232
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:540
+#: ../src/ephy-main.c:591 ../src/ephy-main.c:686
 msgid "Web Browser"
 msgstr "Navigateur Web"
 
@@ -158,7 +159,7 @@ msgstr "Aller à la page de démarrage."
 
 #: ../data/epiphany.schemas.in.h:3
 msgid "Allow popups"
-msgstr "Autoriser les fenêtres popups"
+msgstr "Autoriser les fenêtres popup"
 
 #: ../data/epiphany.schemas.in.h:4
 msgid ""
@@ -176,8 +177,8 @@ msgid "Automatic downloads"
 msgstr "Téléchargements automatiques"
 
 #: ../data/epiphany.schemas.in.h:7
-msgid "Autowrap for find in page"
-msgstr "Retourner à la ligne automatiquement pour rechercher dans la page"
+msgid "Automatically manage offline status with NetworkManager"
+msgstr "Gérer automatiquement l'état de connexion avec NetworkManager"
 
 #: ../data/epiphany.schemas.in.h:8
 msgid "Browse with caret"
@@ -248,36 +249,37 @@ msgid "Enable JavaScript"
 msgstr "Activer JavaScript"
 
 #: ../data/epiphany.schemas.in.h:16
-msgid ""
-"For find in page, whether to start again at the beginning after reaching the "
-"end of the page."
-msgstr ""
-"Possibilité de recommencer la recherche au début après avoir atteint la fin "
-"de la page"
-
-#: ../data/epiphany.schemas.in.h:17
 msgid "History pages time range"
 msgstr "Intervalle temporel des pages d'historique"
 
-#: ../data/epiphany.schemas.in.h:18
+#: ../data/epiphany.schemas.in.h:17
 msgid "Home page"
 msgstr "Page d'accueil"
+
+#: ../data/epiphany.schemas.in.h:18
+msgid ""
+"How to present animated images. Possible values are \"normal\", \"once\" and "
+"\"disabled\"."
+msgstr ""
+"Manière dont sont présentées les images animées. Les valeurs possibles sont "
+"« normal » (normale), « once » (une seule lecture) et "
+"« disabled » (désactivée)."
 
 #: ../data/epiphany.schemas.in.h:19
 msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
 #: ../data/epiphany.schemas.in.h:20
+msgid "Image animation mode"
+msgstr "Mode d'animation des images"
+
+#: ../data/epiphany.schemas.in.h:21
 msgid "Languages"
 msgstr "Langues"
 
-#: ../data/epiphany.schemas.in.h:21
-msgid "Lists the active extensions."
-msgstr "Liste les extensions actives"
-
 #: ../data/epiphany.schemas.in.h:22
-msgid "Match case for find in page"
-msgstr "Indique si la recherche est sensible à la casse"
+msgid "Lists the active extensions."
+msgstr "Liste les extensions actives."
 
 #: ../data/epiphany.schemas.in.h:23
 msgid ""
@@ -295,18 +297,22 @@ msgstr ""
 "web pointée par le texte actuellement sélectionné."
 
 #: ../data/epiphany.schemas.in.h:25
+msgid "Minimum font size"
+msgstr "Taille de police minimale"
+
+#: ../data/epiphany.schemas.in.h:26
 msgid "Preferred languages, two letter codes."
 msgstr "Langues préférées (codes à 2 lettres)."
 
-#: ../data/epiphany.schemas.in.h:26
+#: ../data/epiphany.schemas.in.h:27
 msgid "Show bookmarks bar by default"
 msgstr "Afficher la barre de signets par défaut"
 
-#: ../data/epiphany.schemas.in.h:27
+#: ../data/epiphany.schemas.in.h:28
 msgid "Show statusbar by default"
 msgstr "Afficher la barre d'état par défaut"
 
-#: ../data/epiphany.schemas.in.h:28
+#: ../data/epiphany.schemas.in.h:29
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -315,29 +321,29 @@ msgstr ""
 "« last_two_days » (les deux derniers jours), « last_three_days » (les trois "
 "derniers jours), « today » (aujourd'hui)."
 
-#: ../data/epiphany.schemas.in.h:29
+#: ../data/epiphany.schemas.in.h:30
 msgid "Show the tab bar also when there is only one tab open."
 msgstr ""
 "Toujours afficher la barre des onglets même s'il n'y en a qu'un seul "
 "d'ouvert."
 
-#: ../data/epiphany.schemas.in.h:30
+#: ../data/epiphany.schemas.in.h:31
 msgid "Show toolbars by default"
 msgstr "Afficher les barres d'outils par défaut"
 
-#: ../data/epiphany.schemas.in.h:31
+#: ../data/epiphany.schemas.in.h:32
 msgid "Size of disk cache"
 msgstr "Taille du cache disque"
 
-#: ../data/epiphany.schemas.in.h:32
+#: ../data/epiphany.schemas.in.h:33
 msgid "Size of disk cache, in MB."
 msgstr "Taille du cache disque en Mo."
 
-#: ../data/epiphany.schemas.in.h:33
+#: ../data/epiphany.schemas.in.h:34
 msgid "The bookmark information shown in the editor view"
 msgstr "Les informations des signets affichées dans la vue de l'éditeur"
 
-#: ../data/epiphany.schemas.in.h:34
+#: ../data/epiphany.schemas.in.h:35
 msgid ""
 "The bookmark information shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -345,11 +351,11 @@ msgstr ""
 "Les informations des signets affichées dans la vue de l'éditeur. Les valeurs "
 "valides pour la liste sont « address » (adresse) et « title » (titre)."
 
-#: ../data/epiphany.schemas.in.h:35
+#: ../data/epiphany.schemas.in.h:36
 msgid "The currently selected fonts language"
 msgstr "La langue des polices actuellement sélectionnée"
 
-#: ../data/epiphany.schemas.in.h:36
+#: ../data/epiphany.schemas.in.h:37
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -369,17 +375,17 @@ msgstr ""
 "« x-western » (langues latines, Europe de l'Ouest et États-Unis), « x-"
 "tamil » (tamoul) et « x-devanagari » (devanâgarî)."
 
-#: ../data/epiphany.schemas.in.h:37
-msgid "The downloads folder"
-msgstr "Le dossier de téléchargements"
-
 #: ../data/epiphany.schemas.in.h:38
-msgid "The encoding autodetector. Empty string means autodetect is off"
-msgstr ""
-"L'autodétection du codage. Une chaîne vide signifie que l'autodétection est "
-"désactivée"
+msgid "The downloads folder"
+msgstr "Le dossier des téléchargements"
 
 #: ../data/epiphany.schemas.in.h:39
+msgid "The encoding autodetector. Empty string means autodetect is off"
+msgstr ""
+"L'autodétection du codage des caractères. Une chaîne vide signifie que "
+"l'autodétection est désactivée"
+
+#: ../data/epiphany.schemas.in.h:40
 msgid ""
 "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
 "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
@@ -391,22 +397,23 @@ msgid ""
 "\"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) "
 "and \"universal_charset_detector\" (autodetect most encodings)."
 msgstr ""
-"L'autodétection du codage. Les entrées valides sont «» (autodétecteur "
-"désactivé), « cjk_parallel_state_machine » (autodétecte les codages est-"
-"asiatiques), « ja_parallel_state_machine » (autodétecte les codages "
-"japonais), « ko_parallel_state_machine » (autodétecte les codages coréens), "
-"« ruprob » (autodétecte les codages russes), « ukprob » (autodétecte les "
-"codages ukrainiens), « zh_parallel_state_machine » (autodétecte les codages "
-"chinois), « zhcn_parallel_state_machine » (autodétecte les codages chinois "
+"L'autodétection du codage des caractères. Les entrées valides sont "
+"« » (autodétecteur désactivé), « cjk_parallel_state_machine » (autodétecte "
+"les codages est-asiatiques), « ja_parallel_state_machine » (autodétecte les "
+"codages japonais), « ko_parallel_state_machine » (autodétecte les codages "
+"coréens), « ruprob » (autodétecte les codages russes), "
+"« ukprob » (autodétecte les codages ukrainiens), "
+"« zh_parallel_state_machine » (autodétecte les codages chinois), "
+"« zhcn_parallel_state_machine » (autodétecte les codages chinois "
 "simplifiés), « zhtw_parallel_state_machine » (autodétecte les codages "
 "chinois traditionnels) et « universal_charset_detector » (autodétecte la "
 "plupart des codages)."
 
-#: ../data/epiphany.schemas.in.h:40
+#: ../data/epiphany.schemas.in.h:41
 msgid "The page information shown in the history view"
 msgstr "Les informations sur la page affichées dans la vue d'historique"
 
-#: ../data/epiphany.schemas.in.h:41
+#: ../data/epiphany.schemas.in.h:42
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"address\", \"title\"."
@@ -414,88 +421,87 @@ msgstr ""
 "La page d'informations affichée dans la vue d'historique. Les valeurs "
 "valides dans la liste sont « address » (adresse), « title » (titre)."
 
-#: ../data/epiphany.schemas.in.h:42
+#: ../data/epiphany.schemas.in.h:43
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
 msgstr ""
-"Le chemin du répertoire où télécharger les fichiers; ou \"Téléchargements\" "
-"pour utiliser le répertoire par défaut, ou \"Bureau\" pour télécharger sur "
+"Le chemin du dossier où télécharger les fichiers ; ou « Téléchargements » "
+"pour utiliser le dossier par défaut, ou « Bureau » pour télécharger sur "
 "votre bureau."
 
-#: ../data/epiphany.schemas.in.h:43
+#: ../data/epiphany.schemas.in.h:44
 msgid "Toolbar style"
 msgstr "Style de la barre d'outils"
 
-#: ../data/epiphany.schemas.in.h:44
+#: ../data/epiphany.schemas.in.h:45
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
 "\"text\"."
 msgstr ""
-"Style de la barre d'outils. Les valeurs autorisées sont «» (utilise le style "
-"par défaut de GNOME), « both » (texte et icônes), « both-horiz » (texte à "
-"côté des icônes), « icons » (icônes seules), et « text » (texte seul)."
+"Style de la barre d'outils. Les valeurs autorisées sont « » (utilise le "
+"style par défaut de GNOME), « both » (texte et icônes), « both-"
+"horiz » (texte à côté des icônes), « icons » (icônes seules), et "
+"« text » (texte seul)."
 
-#: ../data/epiphany.schemas.in.h:45
+#: ../data/epiphany.schemas.in.h:46
 msgid "Use own colors"
 msgstr "Utiliser les couleurs personnalisées"
 
-#: ../data/epiphany.schemas.in.h:46
+#: ../data/epiphany.schemas.in.h:47
 msgid "Use own fonts"
 msgstr "Utiliser les polices personnalisées"
 
-#: ../data/epiphany.schemas.in.h:47
+#: ../data/epiphany.schemas.in.h:48
 msgid "Use your own colors instead of the colors the page requests."
 msgstr ""
 "Utiliser les couleurs choisies par l'utilisateur à la place de celles "
 "spécifiées par le document."
 
-#: ../data/epiphany.schemas.in.h:48
+#: ../data/epiphany.schemas.in.h:49
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr ""
 "Utiliser les polices par défaut à la place de celles spécifiées par le "
 "document."
 
-#: ../data/epiphany.schemas.in.h:49
+#: ../data/epiphany.schemas.in.h:50
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
 msgstr ""
-"Lorsque les fichiers ne peuvent être ouvert par le navigateur, ils sont "
+"Lorsque les fichiers ne peuvent être ouverts par le navigateur, ils sont "
 "automatiquement téléchargés dans le dossier de téléchargements et ouverts "
 "avec l'application appropriée."
 
-#: ../data/epiphany.schemas.in.h:50
+#: ../data/epiphany.schemas.in.h:51
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
 msgstr ""
 "L'origine des cookies que vous voulez accepter. Les valeurs possibles sont "
 "« anywhere » (depuis n'importe où), « current site » (seulement depuis le "
-"site courant) et « nowhere » (depuis nulle part, donc n'accepter aucun "
-"cookie)."
+"site courant) et « nowhere » (n'accepter aucun cookie)."
 
-#: ../data/epiphany.schemas.in.h:51
+#: ../data/epiphany.schemas.in.h:52
 msgid "Whether to print the date in the footer"
 msgstr "Indique si la date doit être imprimée dans le pied de page"
 
-#: ../data/epiphany.schemas.in.h:52
+#: ../data/epiphany.schemas.in.h:53
 msgid "Whether to print the page address in the header"
 msgstr ""
-"Indique si l'URL de la page doit être imprimé dans l'en-tête de la page"
-
-#: ../data/epiphany.schemas.in.h:53
-msgid "Whether to print the page numbers (x of total) in the footer"
-msgstr ""
-"Indique si les numéros de pages doivent être imprimés dans le pied de page"
+"Indique si l'adresse de la page doit être imprimée dans l'en-tête de la page"
 
 #: ../data/epiphany.schemas.in.h:54
+msgid "Whether to print the page numbers (x of total) in the footer"
+msgstr "Indique si le numéro de page doit être imprimés dans le pied de page"
+
+#: ../data/epiphany.schemas.in.h:55
 msgid "Whether to print the page title in the header"
 msgstr ""
 "Indique si le titre de la page doit être imprimé dans l'en-tête de la page"
 
-#: ../data/epiphany.schemas.in.h:55
+#: ../data/epiphany.schemas.in.h:56
 msgid "x-western"
 msgstr "x-western"
 
@@ -544,7 +550,7 @@ msgid "Field _Value"
 msgstr "_Valeur du champ"
 
 #: ../data/glade/certificate-dialogs.glade.h:12
-#: ../data/glade/prefs-dialog.glade.h:23
+#: ../data/glade/prefs-dialog.glade.h:20
 msgid "General"
 msgstr "Général"
 
@@ -557,13 +563,13 @@ msgid "MD5 Fingerprint:"
 msgstr "Empreinte numérique MD5 :"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1015
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1040
 msgid "Organization:"
 msgstr "Organisation :"
 
 #: ../data/glade/certificate-dialogs.glade.h:16
 msgid "Organizational Unit:"
-msgstr "Unité organisationelle :"
+msgstr "Unité organisationnelle :"
 
 #: ../data/glade/certificate-dialogs.glade.h:17
 msgid "SHA1 Fingerprint:"
@@ -579,14 +585,14 @@ msgstr "<b>_Automatique</b>"
 
 #: ../data/glade/epiphany.glade.h:2
 msgid "<b>_Use a different encoding:</b>"
-msgstr "<b>_Utiliser un encodage différent :</b>"
+msgstr "<b>_Utiliser un codage différent :</b>"
 
 #: ../data/glade/epiphany.glade.h:3
 msgid "Cookies"
 msgstr "Cookies"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:97
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:107
 msgid "Downloads"
 msgstr "Téléchargements"
 
@@ -595,84 +601,66 @@ msgid "Passwords"
 msgstr "Mots de passe"
 
 #: ../data/glade/epiphany.glade.h:6
-#, fuzzy
 msgid "Personal Data"
-msgstr "Données _personnelles"
+msgstr "Données personnelles"
 
 #: ../data/glade/epiphany.glade.h:7
 msgid "Text Encoding"
-msgstr "Encodage du texte"
+msgstr "Codage du texte"
 
-#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:358
+#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:359
 msgid "Use the encoding specified by the document"
 msgstr "Utiliser le codage spécifié par le document"
 
 #: ../data/glade/epiphany.glade.h:9
-#, fuzzy
 msgid "_Show password"
-msgstr "Sélectionner le mot de passe."
+msgstr "_Afficher le mot de passe"
 
-#: ../data/glade/prefs-dialog.glade.h:1 ../data/glade/print.glade.h:1
-msgid "<b>Colors</b>"
-msgstr "<b>Couleurs</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:2
+#: ../data/glade/prefs-dialog.glade.h:1
 msgid "<b>Cookies</b>"
 msgstr "<b>Cookies</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:3
+#: ../data/glade/prefs-dialog.glade.h:2
 msgid "<b>Downloads</b>"
 msgstr "<b>Téléchargements</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:4
+#: ../data/glade/prefs-dialog.glade.h:3
 msgid "<b>Encodings</b>"
-msgstr "<b>Encodages</b>"
+msgstr "<b>Codages</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:5
-msgid "<b>Fonts</b>"
-msgstr "<b>Polices</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:6
+#: ../data/glade/prefs-dialog.glade.h:4
 msgid "<b>Home page</b>"
 msgstr "<b>Page d'accueil</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:7
+#: ../data/glade/prefs-dialog.glade.h:5
 msgid "<b>Languages</b>"
 msgstr "<b>Langues</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:8
+#: ../data/glade/prefs-dialog.glade.h:6
 msgid "<b>Temporary Files</b>"
 msgstr "<b>Fichiers temporaires</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:9
+#: ../data/glade/prefs-dialog.glade.h:7
 msgid "<b>Web Content</b>"
-msgstr "<b>Contenu Web</b>"
+msgstr "<b>Contenu web</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:10
+#: ../data/glade/prefs-dialog.glade.h:8
 msgid "A_utomatically download and open files"
 msgstr "Télécharger et ouvrir les fichiers _automatiquement"
 
-#: ../data/glade/prefs-dialog.glade.h:11
+#: ../data/glade/prefs-dialog.glade.h:9
 msgid "Add Language"
 msgstr "Ajouter une langue"
 
-#: ../data/glade/prefs-dialog.glade.h:12
-msgid "Al_ways use the desktop theme colors"
-msgstr "Toujours utiliser les _couleurs du thème du bureau"
-
-#: ../data/glade/prefs-dialog.glade.h:13
+#: ../data/glade/prefs-dialog.glade.h:10
 msgid "Allow popup _windows"
-msgstr "Autoriser les fenêtres _popups"
+msgstr "Autoriser les fenêtres _popup"
 
-#: ../data/glade/prefs-dialog.glade.h:14
-msgid "Always use _these fonts"
-msgstr "Toujours utiliser ces _polices"
-
-#: ../data/glade/prefs-dialog.glade.h:15
+#: ../data/glade/prefs-dialog.glade.h:11
 msgid "Au_todetect:"
 msgstr "Détection _automatique :"
 
-#: ../data/glade/prefs-dialog.glade.h:16
+#: ../data/glade/prefs-dialog.glade.h:12
 msgid "Choose a l_anguage:"
 msgstr "Choisir une _langue :"
 
@@ -680,61 +668,76 @@ msgstr "Choisir une _langue :"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.glade.h:17
-#: ../lib/widgets/ephy-location-entry.c:580 ../src/ephy-history-window.c:261
+#: ../data/glade/prefs-dialog.glade.h:13
+#: ../lib/widgets/ephy-location-entry.c:582 ../src/ephy-history-window.c:261
 msgid "Cl_ear"
 msgstr "E_ffacer"
 
-#: ../data/glade/prefs-dialog.glade.h:18
+#: ../data/glade/prefs-dialog.glade.h:14
 msgid "De_fault:"
 msgstr "I_mplicite :"
 
-#: ../data/glade/prefs-dialog.glade.h:19
+#: ../data/glade/prefs-dialog.glade.h:15
 msgid "Enable Java_Script"
 msgstr "Activer Java_Script"
 
-#: ../data/glade/prefs-dialog.glade.h:20
+#: ../data/glade/prefs-dialog.glade.h:16
 msgid "Enable _Java"
 msgstr "Activer _Java"
 
-#: ../data/glade/prefs-dialog.glade.h:21
-msgid "Fonts and Colors"
-msgstr "Polices/Couleurs"
+#: ../data/glade/prefs-dialog.glade.h:17
+msgid "Fonts"
+msgstr "Polices"
 
-#: ../data/glade/prefs-dialog.glade.h:22
+#: ../data/glade/prefs-dialog.glade.h:18
+msgid "Fonts & Style"
+msgstr "Polices et styles"
+
+#: ../data/glade/prefs-dialog.glade.h:19
 msgid "For l_anguage:"
 msgstr "Pour la _langue :"
 
-#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1037
+#: ../data/glade/prefs-dialog.glade.h:21 ../src/prefs-dialog.c:1315
 msgid "Language"
 msgstr "Langue"
 
-#: ../data/glade/prefs-dialog.glade.h:25
-msgid "MB"
-msgstr "Mo"
+#: ../data/glade/prefs-dialog.glade.h:22
+msgid "Let web pages specify their own _colors"
+msgstr "Autoriser les pages web à spécifier leurs propres _couleurs"
 
-#: ../data/glade/prefs-dialog.glade.h:26
+#: ../data/glade/prefs-dialog.glade.h:23
+msgid "Let web pages specify their own _fonts"
+msgstr "Autoriser les pages web à spécifier leurs propres _polices"
+
+#: ../data/glade/prefs-dialog.glade.h:24
+msgid "MB"
+msgstr "Mio"
+
+#: ../data/glade/prefs-dialog.glade.h:25
 msgid "Only _from sites you visit"
 msgstr "_Uniquement ceux des sites que vous visitez"
 
-#: ../data/glade/prefs-dialog.glade.h:27
+#: ../data/glade/prefs-dialog.glade.h:26
 msgid "Preferences"
 msgstr "Préférences"
 
-#: ../data/glade/prefs-dialog.glade.h:28
+#: ../data/glade/prefs-dialog.glade.h:27
 msgid "Privacy"
 msgstr "Confidentialité"
 
-#: ../data/glade/prefs-dialog.glade.h:29
+#: ../data/glade/prefs-dialog.glade.h:28
 msgid "Set to Current _Page"
 msgstr "Choisir la page _actuelle"
 
-#: ../data/glade/prefs-dialog.glade.h:30
+#: ../data/glade/prefs-dialog.glade.h:29
 msgid "Set to _Blank Page"
 msgstr "Utiliser une page _vide"
 
+#: ../data/glade/prefs-dialog.glade.h:30
+msgid "Use custom _stylesheet"
+msgstr "Utiliser une feuille de _style personnalisée"
+
 #: ../data/glade/prefs-dialog.glade.h:31
-#: ../src/bookmarks/ephy-bookmark-properties.c:340
 msgid "_Address:"
 msgstr "_Adresse :"
 
@@ -743,28 +746,40 @@ msgid "_Always accept"
 msgstr "_Toujours les accepter"
 
 #: ../data/glade/prefs-dialog.glade.h:33
+msgid "_Detailed Font Settings..."
+msgstr "Paramètres _détaillés des polices..."
+
+#: ../data/glade/prefs-dialog.glade.h:34
 msgid "_Disk space:"
 msgstr "_Espace disque :"
 
-#: ../data/glade/prefs-dialog.glade.h:34
-msgid "_Download folder:"
-msgstr "Dossier de _téléchargement :"
-
 #: ../data/glade/prefs-dialog.glade.h:35
+msgid "_Download folder:"
+msgstr "Dossier des _téléchargements :"
+
+#: ../data/glade/prefs-dialog.glade.h:36
+msgid "_Edit Stylesheet..."
+msgstr "É_diter la feuille de style..."
+
+#: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Fixed width:"
 msgstr "Largeur _constante :"
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Minimum size:"
 msgstr "Taille _minimale :"
 
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/glade/prefs-dialog.glade.h:39
 msgid "_Never accept"
 msgstr "_Ne jamais les accepter"
 
-#: ../data/glade/prefs-dialog.glade.h:38
+#: ../data/glade/prefs-dialog.glade.h:40
 msgid "_Variable width:"
 msgstr "Largeur _variable :"
+
+#: ../data/glade/print.glade.h:1
+msgid "<b>Colors</b>"
+msgstr "<b>Couleurs</b>"
 
 #: ../data/glade/print.glade.h:2
 msgid "<b>Footers</b>"
@@ -804,9 +819,8 @@ msgstr "_Adresse de la page"
 
 #. this opens the downloader window, or brings it to the foreground if already open
 #: ../embed/downloader-view.c:189
-#, fuzzy
 msgid "_Show Downloads"
-msgstr "_Afficher le gestionnaire de téléchargements..."
+msgstr "_Afficher le gestionnaire des téléchargements..."
 
 #: ../embed/downloader-view.c:318
 #, c-format
@@ -834,10 +848,10 @@ msgid ""
 "%s of %s"
 msgstr ""
 "%s\n"
-"%s of %s"
+"%s sur %s"
 
 #: ../embed/downloader-view.c:431 ../embed/downloader-view.c:436
-#: ../src/ephy-window.c:1454
+#: ../src/ephy-window.c:1468
 msgid "Unknown"
 msgstr "Inconnu"
 
@@ -860,17 +874,22 @@ msgstr "Inconnu"
 msgid "download status|Failed"
 msgstr "Échec"
 
-#: ../embed/downloader-view.c:657 ../src/bookmarks/ephy-bookmarks-editor.c:803
+#: ../embed/downloader-view.c:657
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1003
 msgid "File"
 msgstr "Fichier"
 
-#: ../embed/downloader-view.c:679
+#: ../embed/downloader-view.c:680
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:690
+#: ../embed/downloader-view.c:691
 msgid "Remaining"
 msgstr "Restant"
+
+#: ../embed/ephy-embed-shell.c:246
+msgid "Epiphany can't be used now. Mozilla initialization failed."
+msgstr "Epiphany ne peut être démarré. L'initialisation de Mozilla a échouée."
 
 #: ../embed/ephy-encodings.c:60
 msgid "Arabic (_IBM-864)"
@@ -1086,7 +1105,7 @@ msgstr "R_oumain (ISO-8859-16)"
 
 #: ../embed/ephy-encodings.c:113
 msgid "South _European (ISO-8859-3)"
-msgstr "_Europe du sud (ISO-8859-3)"
+msgstr "_Europe méridionale (ISO-8859-3)"
 
 #: ../embed/ephy-encodings.c:114
 msgid "Thai (TIS-_620)"
@@ -1255,120 +1274,120 @@ msgstr "Ukrainien"
 msgid "Unknown (%s)"
 msgstr "Inconnu (%s)"
 
-#: ../embed/ephy-history.c:550
+#: ../embed/ephy-history.c:558
 msgid "All"
 msgstr "Tout"
 
-#: ../embed/ephy-history.c:713
+#: ../embed/ephy-history.c:721
 msgid "Others"
 msgstr "Autres"
 
-#: ../embed/ephy-history.c:719
+#: ../embed/ephy-history.c:727
 msgid "Local files"
 msgstr "Fichiers locaux"
 
-#: ../embed/mozilla/ContentHandler.cpp:172
+#: ../embed/mozilla/ContentHandler.cpp:178
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:408
 msgid "Save"
 msgstr "Enregistrer"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:293
+#: ../embed/mozilla/ContentHandler.cpp:299
 msgid "File Type:|Unknown"
 msgstr "Inconnu"
 
-#: ../embed/mozilla/ContentHandler.cpp:328
+#: ../embed/mozilla/ContentHandler.cpp:334
 msgid "Download this potentially unsafe file?"
 msgstr "Télécharger ce fichier potentiellement non sûr ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:334
-#, fuzzy, c-format
+#: ../embed/mozilla/ContentHandler.cpp:340
+#, c-format
 msgid ""
 "File Type: “%s”.\n"
 "\n"
 "It is unsafe to open “%s” as it could potentially damage your documents or "
 "invade your privacy. You can download it instead."
 msgstr ""
-"Type de fichier: %s.\n"
+"Type de fichier : « %s ».\n"
 "\n"
-"Ce n'est pas sûr d'ouvrir «%s» car il peut éventuellement endommager vos "
-"documents ou envahir votre vie privée. Il n'est pas sûr de l'ouvrir "
-"directement. Vous pourriez plutôt l'enregistrer sur le disque."
+"Il n'est pas sûr d'ouvrir directement « %s » car il pourrait éventuellement "
+"endommager vos documents ou violer votre sphère privée. Vous pourriez plutôt "
+"le télécharger."
 
-#: ../embed/mozilla/ContentHandler.cpp:344
+#: ../embed/mozilla/ContentHandler.cpp:350
 msgid "Open this file?"
-msgstr "Ouvre ce fichier ?"
+msgstr "Ouvrir ce fichier ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:351
-#, fuzzy, c-format
+#: ../embed/mozilla/ContentHandler.cpp:357
+#, c-format
 msgid ""
 "File Type: “%s”.\n"
 "\n"
 "You can open “%s” using “%s” or save it."
 msgstr ""
-"Type de fichier: %s.\n"
+"Type de fichier : « %s ».\n"
 "\n"
-"Vous pouvez ouvrir «%s» en utilisant «%s» ou le sauver."
+"Vous pouvez ouvrir « %s » en utilisant « %s » ou l'enregister."
 
-#: ../embed/mozilla/ContentHandler.cpp:359
+#: ../embed/mozilla/ContentHandler.cpp:365
 msgid "Download this file?"
 msgstr "Télécharger ce fichier ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:365
-#, fuzzy, c-format
+#: ../embed/mozilla/ContentHandler.cpp:371
+#, c-format
 msgid ""
 "File Type: “%s”.\n"
 "\n"
 "You have no application able to open “%s”. You can download it instead."
 msgstr ""
-"Type de fichier: %s.\n"
+"Type de fichier : « %s ».\n"
 "\n"
-"Vous n'avez aucune application pour ouvrir «%s». Vous pouvez plutôt le "
-"télécharger."
+"Vous n'avez aucune application par défaut pour ouvrir « %s ». Vous pouvez "
+"plutôt le télécharger."
 
-#: ../embed/mozilla/ContentHandler.cpp:370
+#: ../embed/mozilla/ContentHandler.cpp:376
 msgid "_Save As..."
 msgstr "_Enregistrer sous..."
 
 #. Translators: %s is the name of a protocol, like "http" etc.
 #: ../embed/mozilla/EphyAboutModule.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "“%s” Protocol is not Supported"
-msgstr "Le protocole «%s» n'est pas supporté."
+msgstr "Le protocole « %s » n'est pas supporté"
 
 #. Translators: %s is the name of a protocol, like "http" etc.
 #: ../embed/mozilla/EphyAboutModule.cpp:209
 #, c-format
 msgid "“%s” protocol is not supported."
-msgstr "Le protocole «%s» n'est pas supporté."
+msgstr "Le protocole « %s » n'est pas supporté."
 
 #. FIXME: get the list of supported protocols from necko
 #: ../embed/mozilla/EphyAboutModule.cpp:211
 msgid ""
 "Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
 msgstr ""
-"Les protocoles supportés sont «http», «https», «ftp», «file», «smb» et "
-"«sftp»."
+"Les protocoles supportés sont « http », « https », « ftp », « file», « smb » "
+"et « sftp »."
 
 #. Translators: %s is the path and filename, for example "/home/user/test.html"
 #: ../embed/mozilla/EphyAboutModule.cpp:220
-#, fuzzy, c-format
+#, c-format
 msgid "File “%s” not Found"
-msgstr "Fichier «%s» non trouvé."
+msgstr "Fichier « %s » non trouvé"
 
 #. Translators: %s is the path and filename, for example "/home/user/test.html"
 #: ../embed/mozilla/EphyAboutModule.cpp:222
 #, c-format
 msgid "File “%s” not found."
-msgstr "Fichier «%s» non trouvé."
+msgstr "Fichier « %s » non trouvé."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:223
 msgid "Check the location of the file and try again."
@@ -1376,22 +1395,22 @@ msgstr "Vérifiez l'emplacement du fichier et réessayez."
 
 #. Translators: %s is the hostname, like "www.example.com"
 #: ../embed/mozilla/EphyAboutModule.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "“%s” Could not be Found"
-msgstr "«%s» ne peut être trouvé"
+msgstr "« %s » ne peut être trouvé"
 
 #. Translators: %s is the hostname, like "www.example.com"
 #: ../embed/mozilla/EphyAboutModule.cpp:234
 #, c-format
 msgid "“%s” could not be found."
-msgstr "«%s» ne peut être trouvé"
+msgstr "« %s » ne peut être trouvé"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:236
 msgid ""
 "Check that you are connected to the internet, and that the address is "
 "correct."
 msgstr ""
-"Vérifiez que vous êtes connecté à internet, et que l'adresse est correcte."
+"Vérifiez que vous êtes connecté à Internet et que l'adresse est correcte."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:238
 msgid "If this page used to exist, you may find an archived version:"
@@ -1399,20 +1418,53 @@ msgstr ""
 "Si cette page quitte souvent, vous pouvez trouver une version d'archive :"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "“%s” Refused the Connection"
-msgstr "«%s» a refusé la connexion."
+msgstr "« %s » a refusé la connexion"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:251
 #, c-format
 msgid "“%s” refused the connection."
-msgstr "«%s» a refusé la connexion."
+msgstr "« %s » a refusé la connexion."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:253
+#: ../embed/mozilla/EphyAboutModule.cpp:260
+msgid "Likely causes of the problem are"
+msgstr "Les causes probables du problème sont"
+
 #: ../embed/mozilla/EphyAboutModule.cpp:270
-#: ../embed/mozilla/EphyAboutModule.cpp:289
-#: ../embed/mozilla/EphyAboutModule.cpp:346
-#: ../embed/mozilla/EphyAboutModule.cpp:377
+#, c-format
+msgid ""
+"<ul><li>the service %s isn't started.</li>Try to start it using the Services "
+"Configuration Tool in Desktop > System Settings > Server Settings > "
+"Services, or</ul><ul><li>the port number %d is wrong.</li></ul>"
+msgstr ""
+"<ul><li>le service %s n'est pas démarré.</li>Essayez de le démarrer en "
+"utilisant l'outil de configuration des services dans Bureau > Paramètres de "
+"système > Paramètre de serveur > Services, ou</ul><ul><li>le numéro de port %"
+"d est erroné.</li></ul>"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:281
+#, c-format
+msgid ""
+"<ul><li>some service isn't started, or</li><li>the port number %d is wrong.</"
+"li></ul>"
+msgstr ""
+"<ul><li>un service n'est pas démarré ou</li><li>le numéro de port %d est "
+"erroné.</li></ul>"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:290
+msgid ""
+"<ul><li>some service isn't started, or</li><li>you got the port number wrong."
+"</li></ul>"
+msgstr ""
+"<ul><li>un service n'est pas démarré ou</li><li>le numéro de port est erroné."
+"</li></ul>"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:298
+#: ../embed/mozilla/EphyAboutModule.cpp:316
+#: ../embed/mozilla/EphyAboutModule.cpp:335
+#: ../embed/mozilla/EphyAboutModule.cpp:392
+#: ../embed/mozilla/EphyAboutModule.cpp:423
 msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
@@ -1420,235 +1472,252 @@ msgstr ""
 "Le serveur est peut-être occupé ou vous avez un problème de connexion. "
 "Réessayez plus tard."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:255
-#: ../embed/mozilla/EphyAboutModule.cpp:272
-#: ../embed/mozilla/EphyAboutModule.cpp:291
-#: ../embed/mozilla/EphyAboutModule.cpp:313
-#: ../embed/mozilla/EphyAboutModule.cpp:348
-#: ../embed/mozilla/EphyAboutModule.cpp:379
+#: ../embed/mozilla/EphyAboutModule.cpp:300
+#: ../embed/mozilla/EphyAboutModule.cpp:318
+#: ../embed/mozilla/EphyAboutModule.cpp:337
+#: ../embed/mozilla/EphyAboutModule.cpp:359
+#: ../embed/mozilla/EphyAboutModule.cpp:394
+#: ../embed/mozilla/EphyAboutModule.cpp:425
 msgid "There may be an old version of the page you wanted:"
-msgstr "Il y a peut-être une ancienne version de la page que vous voulez:"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:264
-#, fuzzy, c-format
-msgid "“%s” Interrupted the Connection"
-msgstr "«%s» a interrompu la connection."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:268
-#, c-format
-msgid "“%s” interrupted the connection."
-msgstr "«%s» a interrompu la connection."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:281
-#, fuzzy, c-format
-msgid "“%s” is not Responding"
-msgstr "«%s» ne répond plus."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:285
-#, c-format
-msgid "“%s” is not responding."
-msgstr "«%s» ne répond plus."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:287
-msgid "The connection was lost because the server took too long to respond."
-msgstr ""
-"La connexion a été coupée car le serveur a prit trop de temps pour répondre."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:295
-#, fuzzy
-msgid "Invalid Address"
-msgstr "Adresse invalide."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:296
-msgid "Invalid address."
-msgstr "Adresse invalide."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:297
-msgid "The address you entered is not valid."
-msgstr "L'adresse que vous avez introduite est invalide."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:306
-#, fuzzy, c-format
-msgid "“%s” Redirected Too Many Times"
-msgstr "«%s» redirigé trop de fois."
+msgstr "Il existe peut-être une ancienne version de la page que vous désirez :"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:310
 #, c-format
+msgid "“%s” Interrupted the Connection"
+msgstr "« %s » a interrompu la connexion"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:314
+#, c-format
+msgid "“%s” interrupted the connection."
+msgstr "« %s » a interrompu la connexion."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:327
+#, c-format
+msgid "“%s” is not Responding"
+msgstr "« %s » ne répond plus"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:331
+#, c-format
+msgid "“%s” is not responding."
+msgstr "« %s » ne répond plus."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:333
+msgid "The connection was lost because the server took too long to respond."
+msgstr ""
+"La connexion a été coupée car le serveur a mis trop de temps pour répondre."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:341
+msgid "Invalid Address"
+msgstr "Adresse invalide"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:342
+msgid "Invalid address."
+msgstr "Adresse invalide."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:343
+msgid "The address you entered is not valid."
+msgstr "L'adresse que vous avez introduite est invalide."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:352
+#, c-format
+msgid "“%s” Redirected Too Many Times"
+msgstr "« %s » a été redirigé de trop nombreuses fois"
+
+#: ../embed/mozilla/EphyAboutModule.cpp:356
+#, c-format
 msgid "“%s” redirected too many times."
-msgstr "«%s» redirigé trop de fois."
+msgstr "« %s » a été redirigé de trop nombreuses fois."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:312
+#: ../embed/mozilla/EphyAboutModule.cpp:358
 msgid "The redirection has been stopped for security reasons."
-msgstr "La redirection a été stoppée pour des raisons de sécurité."
+msgstr "La redirection a été arrêtée pour des raisons de sécurité."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:322
-#, fuzzy, c-format
+#: ../embed/mozilla/EphyAboutModule.cpp:368
+#, c-format
 msgid "“%s” Requires an Encrypted Connection"
-msgstr "«%s» nécessite une connexion cryptée."
+msgstr "« %s » nécessite une connexion chiffrée"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:326
+#: ../embed/mozilla/EphyAboutModule.cpp:372
 #, c-format
 msgid "“%s” requires an encrypted connection."
-msgstr "«%s» nécessite une connexion cryptée."
+msgstr "« %s » nécessite une connexion chiffrée."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:328
+#: ../embed/mozilla/EphyAboutModule.cpp:374
 msgid ""
 "The document could not be loaded because encryption support is not installed."
 msgstr ""
-"Le document ne peut être chargé car le support d'encryption n'est pas "
+"Le document ne peut être chargé car le support du chiffrement n'est pas "
 "installé."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:338
-#, fuzzy, c-format
+#: ../embed/mozilla/EphyAboutModule.cpp:384
+#, c-format
 msgid "“%s” Dropped the Connection"
-msgstr "«%s» a fermé la connexion."
+msgstr "« %s » a fermé la connexion"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:342
+#: ../embed/mozilla/EphyAboutModule.cpp:388
 #, c-format
 msgid "“%s” dropped the connection."
-msgstr "«%s» a fermé la connexion."
+msgstr "« %s » a fermé la connexion."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:344
-#: ../embed/mozilla/EphyAboutModule.cpp:375
+#: ../embed/mozilla/EphyAboutModule.cpp:390
+#: ../embed/mozilla/EphyAboutModule.cpp:421
 msgid "The server dropped the connection before any data could be read."
 msgstr ""
-"Le serveur a fermé la connexion avant qu'aucune données n'aie pu être lue."
+"Le serveur a fermé la connexion avant qu'aucune donnée n'ait pu être lue."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:355
-#, fuzzy
+#: ../embed/mozilla/EphyAboutModule.cpp:401
 msgid "Cannot Load Document Whilst Working Offline"
-msgstr "Ne peut charger un document en mode déconnecté."
+msgstr "Ne peut charger ce document en mode déconnecté"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:356
-#, fuzzy
+#: ../embed/mozilla/EphyAboutModule.cpp:402
 msgid "Cannot load document whilst working offline."
-msgstr "Ne peut charger un document en mode déconnecté."
+msgstr "Ne peut charger le document en mode déconnecté."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:357
+#: ../embed/mozilla/EphyAboutModule.cpp:403
 msgid "To view this document, disable “Work Offline” and try again."
 msgstr ""
+"Pour afficher ce document, désactivez le « Travailler en mode déconnecté » "
+"et réessayez."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:369
-#, fuzzy, c-format
+#: ../embed/mozilla/EphyAboutModule.cpp:415
+#, c-format
 msgid "“%s” Denied Access to Port “%d”"
-msgstr "«%s» a refusé la connexion au port «%d»"
+msgstr "« %s » a refusé la connexion au port « %d »"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:373
+#: ../embed/mozilla/EphyAboutModule.cpp:419
 #, c-format
 msgid "“%s” denied access to port “%d”."
-msgstr "«%s» a refusé la connexion au port «%d»"
+msgstr "« %s » a refusé la connexion au port « %d »."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:384
-#, fuzzy
+#: ../embed/mozilla/EphyAboutModule.cpp:430
 msgid "Could not Connect to Proxy Server"
-msgstr "Impossible de se connecter au serveur proxy."
+msgstr "Impossible de se connecter au serveur proxy"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:385
+#: ../embed/mozilla/EphyAboutModule.cpp:431
 msgid "Could not connect to proxy server."
 msgstr "Impossible de se connecter au serveur proxy."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:386
+#: ../embed/mozilla/EphyAboutModule.cpp:432
 msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
 msgstr ""
 "Vérifiez vos configurations de serveur proxy. Si la connexion échoue encore, "
-"il pourrait avoir un problème sur votre serveur proxy ou votre connexion "
+"il se peut qu'il ait un problème sur votre serveur proxy ou votre connexion "
 "réseau."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:394
-#, fuzzy
+#: ../embed/mozilla/EphyAboutModule.cpp:440
 msgid "Could not Display Content"
-msgstr "Impossible d'afficher l'aide : %s"
+msgstr "Impossible d'afficher le contenu"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:395
-#, fuzzy
+#: ../embed/mozilla/EphyAboutModule.cpp:441
 msgid "Could not display content."
-msgstr "Impossible d'afficher l'aide : %s"
+msgstr "Impossible d'afficher le contenu."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:396
+#: ../embed/mozilla/EphyAboutModule.cpp:442
 msgid "The page uses an unsupported or invalid form of compression."
-msgstr ""
+msgstr "Cette page utilise une forme de compression non supportée ou invalide."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:486
+#: ../embed/mozilla/EphyAboutModule.cpp:532
 #, c-format
 msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
 "crashed; it could have caused the crash."
 msgstr ""
+"La page « %s » de cet onglet n'était pas complètement chargée lorsque le "
+"navigateur web a planté ; il se pourrait qu'elle soit la cause du problème."
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:613
+#: ../embed/mozilla/EphyAboutModule.cpp:659
 msgid "You may find an old version:|in the Google Cache"
-msgstr "Dans la cache google"
+msgstr "dans le cache de Google"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:621
+#: ../embed/mozilla/EphyAboutModule.cpp:667
 msgid "You may find an old version:|in the Internet Archive"
-msgstr "Dans les Archives Internet"
+msgstr "dans les Archives Internet"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
-#: ../src/bookmarks/ephy-bookmarks-import.c:245
-#: ../src/bookmarks/ephy-bookmarks-ui.c:481 ../src/ephy-session.c:775
+#: ../src/bookmarks/ephy-bookmarks-import.c:261
+#: ../src/bookmarks/ephy-bookmarks.c:1264 ../src/ephy-session.c:1308
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: ../embed/mozilla/FilePicker.cpp:152 ../embed/mozilla/FilePicker.cpp:445
-#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:642
+#: ../embed/mozilla/EphyPromptService.cpp:197
+msgid "_Abort Script"
+msgstr "_Arrêter le script"
+
+#: ../embed/mozilla/EphyPromptService.cpp:265
+msgid "Don't Save"
+msgstr "Ne pas enregistrer"
+
+#: ../embed/mozilla/EphyPromptService.cpp:798
+msgid "_Username:"
+msgstr "Nom d'_utilisateur :"
+
+#: ../embed/mozilla/EphyPromptService.cpp:799
+#: ../embed/mozilla/EphyPromptService.cpp:826
+#: ../embed/mozilla/GtkNSSDialogs.cpp:815
+#: ../embed/mozilla/GtkNSSDialogs.cpp:930
+msgid "_Password:"
+msgstr "_Mot de passe :"
+
+#: ../embed/mozilla/FilePicker.cpp:153 ../embed/mozilla/FilePicker.cpp:451
+#: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:786
 msgid "All files"
 msgstr "Tous les fichiers"
 
-#: ../embed/mozilla/FilePicker.cpp:157 ../lib/ephy-file-chooser.c:355
+#: ../embed/mozilla/FilePicker.cpp:158 ../lib/ephy-file-chooser.c:355
 msgid "Web pages"
 msgstr "Pages Web"
 
-#: ../embed/mozilla/FilePicker.cpp:165
+#: ../embed/mozilla/FilePicker.cpp:166
 msgid "Text files"
 msgstr "Fichiers texte"
 
-#: ../embed/mozilla/FilePicker.cpp:170 ../lib/ephy-file-chooser.c:363
+#: ../embed/mozilla/FilePicker.cpp:171 ../lib/ephy-file-chooser.c:363
 msgid "Images"
 msgstr "Images"
 
-#: ../embed/mozilla/FilePicker.cpp:178
+#: ../embed/mozilla/FilePicker.cpp:179
 msgid "XML files"
 msgstr "Fichiers XML"
 
-#: ../embed/mozilla/FilePicker.cpp:183
+#: ../embed/mozilla/FilePicker.cpp:184
 msgid "XUL files"
 msgstr "Fichiers XUL"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:156
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:162
 msgid "_Select Certificate"
 msgstr "_Sélectionner le certificat"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:202
-#, fuzzy, c-format
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:208
+#, c-format
 msgid "Choose a certificate to present as identification to “%s”."
 msgstr "Choisir un certificat à présenter comme identification à « %s »."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:211
 msgid "Select a certificate to identify yourself."
 msgstr "Sélectionner un certificat qui vous identifie."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:242
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:248
 msgid "Certificate _Details"
 msgstr "_Détails du certificat"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:235
-#: ../embed/mozilla/GtkNSSDialogs.cpp:547
+#: ../embed/mozilla/GtkNSSDialogs.cpp:245
+#: ../embed/mozilla/GtkNSSDialogs.cpp:562
 msgid "_View Certificate"
 msgstr "_Voir le certificat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:243
+#: ../embed/mozilla/GtkNSSDialogs.cpp:253
 msgid "_Accept"
 msgstr "_Accepter"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:310
-#, fuzzy, c-format
+#: ../embed/mozilla/GtkNSSDialogs.cpp:320
+#, c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
 "someone is intercepting your communication to obtain your confidential "
@@ -1656,68 +1725,68 @@ msgid ""
 msgstr ""
 "Le site « %s » a retourné des informations de sécurité pour « %s ». Il est "
 "possible que quelqu'un soit en train d'intercepter votre communication pour "
-"obtenir vos informations confidentielles."
+"obtenir des informations confidentielles vous concernant."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:316
-#, fuzzy, c-format
+#: ../embed/mozilla/GtkNSSDialogs.cpp:326
+#, c-format
 msgid ""
 "You should only accept the security information if you trust “%s” and “%s”."
 msgstr ""
-"Vous devriez accepter les informations de sécurité seulement si vous avez "
+"Vous ne devriez accepter les informations de sécurité que si vous avez "
 "confiance en « %s » et « %s »."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:321
+#: ../embed/mozilla/GtkNSSDialogs.cpp:331
 msgid "Accept incorrect security information?"
 msgstr "Accepter les informations de sécurité incorrectes ?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:352
-#, fuzzy, c-format
+#: ../embed/mozilla/GtkNSSDialogs.cpp:362
+#, c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
 "is intercepting your communication to obtain your confidential information."
 msgstr ""
-"Votre navigateur a été incapable de valider « %s ». Il est possible que "
-"quelqu'un soit en train d'intercepter votre communication pour obtenir des "
-"informations confidentielles vous concernant."
+"Votre navigateur a été incapable de valider automatiquement « %s ». Il est "
+"possible que quelqu'un soit en train d'intercepter votre communication pour "
+"obtenir des informations confidentielles vous concernant."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:358
-#, fuzzy, c-format
+#: ../embed/mozilla/GtkNSSDialogs.cpp:368
+#, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
 "“%s”."
 msgstr ""
-"Vous devriez vous connecter au site seulement si vous êtes certain d'être "
+"Vous ne devriez vous connecter au site que si vous êtes certain d'être "
 "connecté à « %s »."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:373
 msgid "Connect to untrusted site?"
 msgstr "Se connecter au site non sûr ?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:367
+#: ../embed/mozilla/GtkNSSDialogs.cpp:377
 msgid "_Trust this security information from now on"
 msgstr "_Faire confiance dorénavant à ces informations de sécurité"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:378
 msgid "Co_nnect"
-msgstr "Co_nnecter"
+msgstr "Se co_nnecter"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:427
+#: ../embed/mozilla/GtkNSSDialogs.cpp:437
 msgid "Accept expired security information?"
 msgstr "Accepter les informations de sécurité qui ont expiré ?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:429
-#, fuzzy, c-format
+#: ../embed/mozilla/GtkNSSDialogs.cpp:439
+#, c-format
 msgid "The security information for “%s” expired on %s."
-msgstr "Les informations de sécurités pour « %s » ont expiré le %s."
+msgstr "Les informations de sécurité pour « %s » ont expiré le %s."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:435
+#: ../embed/mozilla/GtkNSSDialogs.cpp:445
 msgid "Accept not yet valid security information?"
 msgstr "Accepter les informations de sécurité qui ne sont pas encore valides ?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:437
-#, fuzzy, c-format
+#: ../embed/mozilla/GtkNSSDialogs.cpp:447
+#, c-format
 msgid "The security information for “%s” isn't valid until %s."
 msgstr ""
 "Les informations de sécurité pour « %s » ne sont pas valides avant le %s."
@@ -1725,47 +1794,47 @@ msgstr ""
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:453
+#: ../embed/mozilla/GtkNSSDialogs.cpp:463
 msgid "%a %d %b %Y"
 msgstr "%a %d %b %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:461
+#: ../embed/mozilla/GtkNSSDialogs.cpp:471
 msgid "You should ensure that your computer's time is correct."
 msgstr ""
 "Assurez-vous que l'heure et la date de votre ordinateur sont correctes."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:507
-#, fuzzy, c-format
+#: ../embed/mozilla/GtkNSSDialogs.cpp:517
+#, c-format
 msgid "Cannot establish connection to “%s”."
 msgstr "Impossible d'établir la connexion à « %s »."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:510
-#, fuzzy, c-format
+#: ../embed/mozilla/GtkNSSDialogs.cpp:520
+#, c-format
 msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
 msgstr ""
 "La liste de révocation des certificats (LRC) de « %s » a besoin d'être mise "
 "à jour."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:515
+#: ../embed/mozilla/GtkNSSDialogs.cpp:525
 msgid "Please ask your system administrator for assistance."
 msgstr "Demandez assistance à votre administrateur système."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:545
+#: ../embed/mozilla/GtkNSSDialogs.cpp:560
 msgid "Trust new Certificate Authority?"
 msgstr "Faire confiance à la nouvelle autorité de certification ?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:550
+#: ../embed/mozilla/GtkNSSDialogs.cpp:565
 msgid "_Trust CA"
 msgstr "_Faire confiance à l'AC"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:572
-#, fuzzy, c-format
+#: ../embed/mozilla/GtkNSSDialogs.cpp:587
+#, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr ""
-"Faire confiance à la nouvelle autorité de certification «%s» pour identifier "
-"les sites web ?"
+"Faire confiance à la nouvelle autorité de certification « %s » pour "
+"identifier les sites web ?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:577
+#: ../embed/mozilla/GtkNSSDialogs.cpp:592
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1773,120 +1842,112 @@ msgstr ""
 "Avant de faire confiance à une autorité de certification (AC), vérifiez que "
 "le certificat est authentique."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:648
+#: ../embed/mozilla/GtkNSSDialogs.cpp:663
 msgid "Certificate already exists."
 msgstr "Le certificat existe déjà."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:649
+#: ../embed/mozilla/GtkNSSDialogs.cpp:664
 msgid "The certificate has already been imported."
 msgstr "Le certificat a déjà été importé."
 
 #. Translators: this is the action of the certificate being exported to a backup file
-#: ../embed/mozilla/GtkNSSDialogs.cpp:775
-#, fuzzy
+#: ../embed/mozilla/GtkNSSDialogs.cpp:795
 msgid "_Back Up Certificate"
-msgstr "Certificat de _sauvegarde"
+msgstr "_Sauvegarder le certificat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:782
+#: ../embed/mozilla/GtkNSSDialogs.cpp:802
 msgid "Select password."
 msgstr "Sélectionner le mot de passe."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:783
+#: ../embed/mozilla/GtkNSSDialogs.cpp:803
 msgid "Select a password to protect this certificate."
 msgstr "Sélectionnez un mot de passe pour protéger ce certificat."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:795
-#: ../embed/mozilla/GtkNSSDialogs.cpp:905
-msgid "_Password:"
-msgstr "_Mot de passe :"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:809
+#: ../embed/mozilla/GtkNSSDialogs.cpp:829
 msgid "Con_firm password:"
 msgstr "_Confirmez le mot de passe :"
 
 #. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:821
+#: ../embed/mozilla/GtkNSSDialogs.cpp:841
 msgid "Password quality:"
 msgstr "Qualité du mot de passe :"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:878
+#: ../embed/mozilla/GtkNSSDialogs.cpp:903
 msgid "I_mport Certificate"
 msgstr "I_mporter le certificat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:894
+#: ../embed/mozilla/GtkNSSDialogs.cpp:919
 msgid "Password required."
 msgstr "Mot de passe nécessaire."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:895
+#: ../embed/mozilla/GtkNSSDialogs.cpp:920
 msgid "Enter the password for this certificate."
 msgstr "Saisissez le mot de passe pour ce certificat."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:984
-#, fuzzy
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1009
 msgid "Certificate Revocation List Imported"
-msgstr "Liste de révocation des certificats (LRC) importée :"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:994
-#, fuzzy
-msgid "Certificate Revocation List (CRL) successfully imported"
-msgstr "Liste de révocation des certificats importée avec succès."
+msgstr "Liste de révocation des certificats importée"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1019
+msgid "Certificate Revocation List (CRL) successfully imported"
+msgstr "Liste de révocation des certificats (LRC) importée avec succès"
+
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1044
 msgid "Unit:"
 msgstr "Unité :"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1023
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1048
 msgid "Next Update:"
 msgstr "Prochaine mise à jour :"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1050
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1075
 msgid "Not part of certificate"
 msgstr "Ne fait pas partie du certificat."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1340
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1369
 msgid "Certificate Properties"
 msgstr "Propriétés du certificat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1362
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1391
 msgid "This certificate has been verified for the following uses:"
 msgstr "Ce certificat a été vérifié pour les usages suivants :"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1365
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1394
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Impossible de vérifier ce certificat car il a été révoqué."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1368
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1397
 msgid "Could not verify this certificate because it has expired."
 msgstr "Impossible de vérifier ce certificat car il a expiré."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1371
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1400
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Impossible de vérifier ce certificat car il n'est pas sûr."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1374
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1403
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr "Impossible de vérifier ce certificat car l'émetteur n'est pas sûr."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1377
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1406
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Impossible de vérifier ce certificat car l'émetteur est inconnu."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1380
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1409
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "Impossible de vérifier ce certificat car le certificat de l'autorité de "
 "certification n'est pas valide."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1385
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1414
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Impossible de vérifier ce certificat pour des raisons inconnues."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:230
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:235
 msgid "Generating Private Key."
 msgstr "Génération de la clé privée."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:231
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:236
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
@@ -1894,30 +1955,30 @@ msgstr ""
 "Veuillez attendre pendant qu'une nouvelle clé privée est générée. Cela peut "
 "prendre quelques minutes."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:91
 msgid "Security Notice"
 msgstr "Niveau de sécurité"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
 msgid "This page is loaded over a secure connection"
 msgstr "Cette page est chargée via une connexion sécurisée"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "The padlock icon in the statusbar indicates whether a page is secure."
-msgstr ""
+msgstr "L'icône cadenas de la barre d'état indique si une page est sécurisée."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:109
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:137
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:156
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:176
 msgid "Security Warning"
 msgstr "Avertissement de sécurité"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
 msgid "This page is loaded over a low security connection"
 msgstr "Cette page est chargée via une connexion peu sûre"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -1925,39 +1986,39 @@ msgstr ""
 "Toutes les informations que vous consultez ou saisissez sur cette page "
 "pourrait être facilement interceptées par un intermédiaire."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr ""
-"Certaines parties de cette page sont chargées via une connexion non sécurisé"
+"Certaines parties de cette page sont chargées via une connexion non sécurisée"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr ""
 "Certaines informations que vous consultez ou saisissez seront envoyées via "
-"un connexion non sûre. Elles pourront facilement être interceptées par un "
-"intermédiaire."
+"un connexion non sécurisée. Elles pourront facilement être interceptées par "
+"un intermédiaire."
+
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
+msgid "Send this information over an insecure connection?"
+msgstr "Envoyer ces informations via un connexion non sécurisée ?"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
-msgid "Send this information over an insecure connection?"
-msgstr "Envoyer ces informations via un connexion non sûre ?"
-
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr ""
-"Les informations que vous avez saisis seront envoyées via une connexion non "
+"Les informations que vous avez saisies seront envoyées via une connexion non "
 "sûre. Elles pourront être facilement interceptées par un intermédiaire."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:161
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:182
 msgid "_Send"
 msgstr "_Envoyer"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -1966,9 +2027,9 @@ msgstr ""
 "Bien que cette page ait été chargée via une connexion sécurisée, les "
 "informations que vous avez saisies seront envoyées via une une connexion non "
 "sécurisée. Elles pourront donc être facilement interceptées par un "
-"intermédiaire. "
+"intermédiaire."
 
-#: ../embed/mozilla/MozDownload.cpp:758
+#: ../embed/mozilla/MozDownload.cpp:761
 msgid "Files"
 msgstr "Fichiers"
 
@@ -1982,13 +2043,9 @@ msgstr "Fichiers"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:263
+#: ../embed/mozilla/mozilla-embed-single.cpp:287
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.fr/search?hl=fr&ie=UTF-8&oe=UTF-8&q="
-
-#: ../embed/mozilla/mozilla-embed-single.cpp:595
-msgid "Epiphany can't be used now. Mozilla initialization failed."
-msgstr "Epiphany ne peut être démarré. L'initialisation de Mozilla a échouée."
 
 #: ../embed/print-dialog.c:258
 msgid "Generating PDF is not supported"
@@ -1996,16 +2053,16 @@ msgstr "La réalisation de PDF n'est pas supportée"
 
 #: ../embed/print-dialog.c:265
 msgid "Printing is not supported on this printer"
-msgstr "L'impression n'est pas supporté par cette imprimante"
+msgstr "L'impression vers cette imprimante n'est pas supportée"
 
 #: ../embed/print-dialog.c:268
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You were trying to print to a printer using the “%s” driver. This program "
 "requires a PostScript printer driver."
 msgstr ""
-"Vous tentez d'imprimer sur une imprimante en utilisant le driver «%s». Ce "
-"programme nécessite un driver d'imprimante PostScript."
+"Vous tentez d'imprimer sur une imprimante en utilisant le pilote « %s ». Ce "
+"programme nécessite un pilote d'imprimante PostScript."
 
 #: ../embed/print-dialog.c:364
 msgid "_From:"
@@ -2013,7 +2070,7 @@ msgstr "_De :"
 
 #: ../embed/print-dialog.c:377
 msgid "Sets the start of the range of pages to be printed"
-msgstr "Défini la première page à être imprimée"
+msgstr "Définit la première page à être imprimée"
 
 #: ../embed/print-dialog.c:379
 msgid "_To:"
@@ -2021,9 +2078,9 @@ msgstr "_À :"
 
 #: ../embed/print-dialog.c:392
 msgid "Sets the end of the range of pages to be printed"
-msgstr "Défini la dernière page à être imprimée"
+msgstr "Définit la dernière page à être imprimée"
 
-#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1280
+#: ../embed/print-dialog.c:407 ../src/ephy-window.c:1288
 msgid "Print"
 msgstr "Imprimer"
 
@@ -2040,18 +2097,41 @@ msgstr ""
 "Erreur GConf : \n"
 "  %s"
 
-#: ../lib/egg/egg-editable-toolbar.c:487
-#, fuzzy
-msgid "_Move on Toolbar"
-msgstr "_Enlever de la barre d'outils"
+#. Translaters: This string is for a toggle to display a toolbar.
+#. * The name of the toolbar is automatically computed from the widgets
+#. * on the toolbar, and is placed at the %s. Note the _ before the %s
+#. * which is used to add mnemonics. We know that this is likely to
+#. * produce duplicates, but don't worry about it. If your language
+#. * normally has a mnemonic at the start, please use the _. If not,
+#. * please remove.
+#: ../lib/egg/egg-editable-toolbar.c:902
+#, c-format
+msgid "Show “_%s”"
+msgstr "Afficher « _%s »"
 
-#: ../lib/egg/egg-editable-toolbar.c:495
+#: ../lib/egg/egg-editable-toolbar.c:1362
+msgid "_Move on Toolbar"
+msgstr "_Déplacer sur la barre d'outils"
+
+#: ../lib/egg/egg-editable-toolbar.c:1363
+msgid "Move the selected item on the toolbar"
+msgstr "Déplacer l'élément sélectionné sur la barre d'outils"
+
+#: ../lib/egg/egg-editable-toolbar.c:1364
 msgid "_Remove from Toolbar"
 msgstr "_Enlever de la barre d'outils"
 
-#: ../lib/egg/egg-editable-toolbar.c:524
-msgid "_Remove Toolbar"
+#: ../lib/egg/egg-editable-toolbar.c:1365
+msgid "Remove the selected item from the toolbar"
+msgstr "Enlever l'élément sélectionné de la barre d'outils"
+
+#: ../lib/egg/egg-editable-toolbar.c:1366
+msgid "_Delete Toolbar"
 msgstr "_Enlever la barre d'outils"
+
+#: ../lib/egg/egg-editable-toolbar.c:1367
+msgid "Remove the selected toolbar"
+msgstr "Enlever la barre d'outils sélectionnée"
 
 #: ../lib/egg/egg-toolbar-editor.c:439
 msgid "Separator"
@@ -2061,50 +2141,52 @@ msgstr "Séparateur"
 msgid "All supported types"
 msgstr "Tous les types supportés"
 
-#: ../lib/ephy-file-helpers.c:326
-#, fuzzy, c-format
-msgid "\"%s\" exists, please move it out of the way."
-msgstr "%s existe, veuillez le déplacer ailleurs."
+#: ../lib/ephy-file-helpers.c:301
+#, c-format
+msgid "Could not create a temporary directory in “%s”."
+msgstr "Impossible de créer le dossier temporaire dans « %s »."
 
-#: ../lib/ephy-file-helpers.c:332
-#, fuzzy, c-format
-msgid "Failed to create directory \"%s\"."
-msgstr "Impossible de créer le dossier %s."
+#: ../lib/ephy-file-helpers.c:377
+#, c-format
+msgid "The file “%s” exists. Please move it out of the way."
+msgstr "Le fichier « %s » existe. Veuillez le déplacer."
+
+#: ../lib/ephy-file-helpers.c:388
+#, c-format
+msgid "Failed to create directory “%s”."
+msgstr "Impossible de créer le dossier « %s »."
 
 #: ../lib/ephy-gui.c:328
-#, fuzzy, c-format
+#, c-format
 msgid "Directory “%s” is not writable"
-msgstr "Le répertoire %s est protégé en écriture"
+msgstr "Le dossier « %s » est protégé en écriture"
 
 #: ../lib/ephy-gui.c:332
 msgid "You do not have permission to create files in this directory."
-msgstr "Vous n'avez pas la permission de créer un fichier dans ce répertoire."
+msgstr "Vous n'avez pas la permission de créer un fichier dans ce dossier."
 
 #: ../lib/ephy-gui.c:335
-#, fuzzy
 msgid "Directory not Writable"
-msgstr "Répertoire protégé en écriture"
+msgstr "Dossier protégé en écriture"
 
 #: ../lib/ephy-gui.c:365
 #, c-format
 msgid "Cannot overwrite existing file “%s”"
-msgstr ""
+msgstr "Impossible d'écraser le fichier existant « %s »"
 
 #: ../lib/ephy-gui.c:369
-#, fuzzy
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
 msgstr ""
-"Un fichier avec ce nom existe déjà. Si vous choisissez d'écraser ce fichier, "
-"son contenu sera perdu."
+"Un fichier avec ce nom existe déjà et vous n'avez pas la permission de "
+"l'écraser."
 
 #: ../lib/ephy-gui.c:372
-#, fuzzy
 msgid "Cannot Overwrite File"
-msgstr "Écraser le fichier ?"
+msgstr "Impossible d'écraser le fichier"
 
-#: ../lib/ephy-gui.c:409
+#: ../lib/ephy-gui.c:411
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Impossible d'afficher l'aide : %s"
@@ -2265,29 +2347,25 @@ msgstr "Western"
 msgid "select fonts for|Other Scripts"
 msgstr "Autre scripts"
 
-#: ../lib/ephy-stock-icons.c:54
-msgid "Close Tab"
-msgstr "Fermer l'onglet"
-
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:56
 msgid "Popup Windows"
 msgstr "Fenêtres popups"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1191
+#: ../lib/ephy-stock-icons.c:57 ../src/ephy-history-window.c:1183
 msgid "History"
 msgstr "Historique"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:684
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1535
-#: ../src/bookmarks/ephy-topic-action.c:344 ../src/ephy-window.c:1286
+#: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:917
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1761
+#: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1294
 msgid "Bookmarks"
 msgstr "Signets"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:312
+#: ../lib/ephy-stock-icons.c:59 ../src/ephy-toolbar.c:312
 msgid "Address Entry"
 msgstr "Adresse"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:60
 msgid "_Download"
 msgstr "_Télécharger"
 
@@ -2327,271 +2405,321 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:818
+#: ../lib/widgets/ephy-location-entry.c:820
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Glissez et déposez cette icône pour créer un lien vers cette page"
 
 #: ../plugins/desktop-file/plugin.cpp:263
-#, fuzzy
 msgid "Unsafe protocol."
-msgstr "Désactiver les protocoles non sécurisés"
+msgstr "Protocole non sécurisé."
 
 #: ../plugins/desktop-file/plugin.cpp:264
 msgid ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
 msgstr ""
+"L'adresse n'a pas été chargée car elle fait référence à un protocole non sûr "
+"et présente donc un risque pour la sécurité de votre système."
 
 #: ../plugins/desktop-file/plugin.cpp:290
 msgid "No address found."
-msgstr ""
+msgstr "Aucune adresse trouvée."
 
 #: ../plugins/desktop-file/plugin.cpp:291
 msgid "No web address could be found in this file."
-msgstr ""
+msgstr "Aucune adresse web n'a pu être trouvée dans ce fichier."
 
 #. Translators: "Desktop File" refers to .desktop files containing a link
 #: ../plugins/desktop-file/plugin.cpp:326
 msgid "Epiphany Desktop File Plugin"
-msgstr ""
+msgstr "Greffon d'Epiphany pour les raccourcis du bureau"
 
 #: ../plugins/desktop-file/plugin.cpp:330
 msgid "This plugin handles “.desktop” files containing web links."
 msgstr ""
+"Ce greffon gère les fichiers « .desktop » contenant des liens vers des pages "
+"web."
 
-#: ../src/bookmarks/ephy-bookmark-action.c:284
+#: ../src/bookmarks/ephy-bookmark-action.c:263
 #, c-format
 msgid "%s:"
 msgstr "%s :"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:395
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1162
-#: ../src/ephy-history-window.c:173 ../src/ephy-history-window.c:711
-msgid "Open in New _Tab"
-msgid_plural "Open in New _Tabs"
-msgstr[0] "Ouvrir dans un nouvel _onglet"
-msgstr[1] "Ouvrir dans de nouveaux _onglets"
+#. Translators: This string is used when counting bookmarks that
+#. * are similar to each other
+#: ../src/bookmarks/ephy-bookmark-properties.c:92
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
+#, c-format
+msgid "%d _Similar"
+msgid_plural "%d _Similar"
+msgstr[0] "%d _similaire"
+msgstr[1] "%d _similaires"
 
-#. File Menu
-#: ../src/bookmarks/ephy-bookmark-action.c:401
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1159
-#: ../src/ephy-history-window.c:170 ../src/ephy-history-window.c:708
-msgid "Open in New _Window"
-msgid_plural "Open in New _Windows"
-msgstr[0] "Ouvrir dans une nouvelle _fenêtre"
-msgstr[1] "Ouvrir dans de nouvelles _fenêtres"
+#: ../src/bookmarks/ephy-bookmark-properties.c:265
+#, c-format
+msgid "_Unify With %d Identical Bookmark"
+msgid_plural "_Unify With %d Identical Bookmarks"
+msgstr[0] "Ré_unir avec %d signet identique"
+msgstr[1] "Ré_unir avec les %d signets identiques"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:225
-#, fuzzy, c-format
+#: ../src/bookmarks/ephy-bookmark-properties.c:285
+#: ../src/bookmarks/ephy-bookmark-properties.c:307
+#, c-format
+msgid "Show “%s”"
+msgstr "Afficher « %s »"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:433
+#, c-format
 msgid "“%s” Properties"
-msgstr "Propriétés de %s"
+msgstr "Propriétés de « %s »"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:321
-#: ../src/bookmarks/ephy-new-bookmark.c:231
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "_Titre :"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:363
-#: ../src/bookmarks/ephy-new-bookmark.c:254
-msgid "To_pics:"
+#: ../src/bookmarks/ephy-bookmark-properties.c:567
+msgid "A_ddress:"
+msgstr "A_dresse :"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:577
+msgid "T_opics:"
 msgstr "_Sujets :"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:134
+#: ../src/bookmarks/ephy-bookmark-properties.c:598
+msgid "Sho_w all topics"
+msgstr "A_fficher tous les sujets"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:99
+msgid "Epiphany (RDF)"
+msgstr "Epiphany (RDF)"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:100
+msgid "Mozilla (HTML)"
+msgstr "Mozilla (HTML)"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:152
 msgid "Remove from this topic"
 msgstr "Enlever de ce sujet"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:163
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
 #: ../src/ephy-history-window.c:163 ../src/ephy-window.c:115
 msgid "_File"
 msgstr "_Fichier"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
 #: ../src/ephy-history-window.c:164 ../src/ephy-window.c:116
 msgid "_Edit"
-msgstr "_Édition"
+msgstr "É_dition"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183
 #: ../src/ephy-history-window.c:165 ../src/ephy-window.c:117
 msgid "_View"
 msgstr "Afficha_ge"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:184
 #: ../src/ephy-history-window.c:166 ../src/ephy-window.c:122
 msgid "_Help"
 msgstr "_Aide"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
-#: ../src/bookmarks/ephy-new-bookmark.c:294
+#: ../src/bookmarks/ephy-bookmarks-editor.c:188
 msgid "_New Topic"
 msgstr "_Nouveau sujet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:171
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
 msgid "Create a new topic"
 msgstr "Créer un nouveau sujet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:174
+#. FIXME ngettext
+#. File Menu
+#: ../src/bookmarks/ephy-bookmarks-editor.c:191
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1377
+#: ../src/bookmarks/ephy-bookmarks-ui.c:321 ../src/ephy-history-window.c:170
+#: ../src/ephy-history-window.c:700
+msgid "Open in New _Window"
+msgid_plural "Open in New _Windows"
+msgstr[0] "Ouvrir dans une nouvelle _fenêtre"
+msgstr[1] "Ouvrir dans de nouvelles _fenêtres"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192
 msgid "Open the selected bookmark in a new window"
-msgstr "Charger le signet sélectionné dans une nouvelle fenêtre"
+msgstr "Ouvre le signet sélectionné dans une nouvelle fenêtre"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:177
+#. FIXME ngettext
+#: ../src/bookmarks/ephy-bookmarks-editor.c:194
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1380
+#: ../src/bookmarks/ephy-bookmarks-ui.c:309 ../src/ephy-history-window.c:173
+#: ../src/ephy-history-window.c:703
+msgid "Open in New _Tab"
+msgid_plural "Open in New _Tabs"
+msgstr[0] "Ouvrir dans un nouvel ongle_t"
+msgstr[1] "Ouvrir dans de nouveaux ongle_ts"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195
 msgid "Open the selected bookmark in a new tab"
-msgstr "Charge le signet sélectionné dans un nouvel onglet"
+msgstr "Ouvre le signet sélectionné dans un nouvel onglet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:179
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
 msgid "_Rename..."
 msgstr "_Renommer..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198
 msgid "Rename the selected bookmark or topic"
 msgstr "Renomme le signet ou le sujet sélectionné"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/bookmarks/ephy-bookmarks-editor.c:199
 #: ../src/ephy-history-window.c:176
 msgid "_Delete"
 msgstr "_Supprimer"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "Delete the selected bookmark or topic"
 msgstr "Supprime le signet ou le sujet sélectionné"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#. Add popup menu actions that are specific to the bookmark widgets
+#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/bookmarks/ephy-bookmarks-ui.c:297
 msgid "_Properties"
 msgstr "_Propriétés"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:185
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Affiche ou modifie les propriétés du signet sélectionné"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:205
 msgid "_Import Bookmarks..."
 msgstr "_Importer les signets..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr ""
 "Importe les signets d'un autre navigateur ou depuis un fichier de signets"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:190
+#: ../src/bookmarks/ephy-bookmarks-editor.c:208
 msgid "_Export Bookmarks..."
 msgstr "_Exporter les signets..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:191
+#: ../src/bookmarks/ephy-bookmarks-editor.c:209
 msgid "Export bookmarks to a file"
 msgstr "Exporter les signets dans un fichier"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:152
+#: ../src/bookmarks/ephy-bookmarks-editor.c:211
+#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:153
 msgid "_Close"
 msgstr "_Fermer"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:194
+#: ../src/bookmarks/ephy-bookmarks-editor.c:212
 msgid "Close the bookmarks window"
 msgstr "Ferme la fenêtre des signets"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
-#: ../src/ephy-history-window.c:187 ../src/ephy-window.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:216
+#: ../src/ephy-history-window.c:187 ../src/ephy-window.c:165
 msgid "Cu_t"
 msgstr "Co_uper"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:199
-#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:217
+#: ../src/ephy-history-window.c:188 ../src/ephy-window.c:166
 msgid "Cut the selection"
 msgstr "Coupe la sélection"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1172
-#: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:721
-#: ../src/ephy-window.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:219
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1390
+#: ../src/ephy-history-window.c:190 ../src/ephy-history-window.c:713
+#: ../src/ephy-window.c:168
 msgid "_Copy"
 msgstr "_Copier"
 
 #  Vérifier le contexte
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:220
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:169
 msgid "Copy the selection"
 msgstr "Copie la sélection"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
-#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:222
+#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:171
 msgid "_Paste"
 msgstr "C_oller"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/bookmarks/ephy-bookmarks-editor.c:223
 #: ../src/ephy-history-window.c:194
 msgid "Paste the clipboard"
 msgstr "Colle le contenu du presse-papiers"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:207
-#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:225
+#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:174
 msgid "Select _All"
 msgstr "_Tout sélectionner"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:226
 msgid "Select all bookmarks or text"
 msgstr "Sélectionne tous les signets ou le texte"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:264
+#: ../src/bookmarks/ephy-bookmarks-editor.c:230
+#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:265
 msgid "_Contents"
 msgstr "_Sommaire"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/bookmarks/ephy-bookmarks-editor.c:231
 msgid "Display bookmarks help"
 msgstr "Affiche l'aide des signets"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:215
-#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:267
+#: ../src/bookmarks/ephy-bookmarks-editor.c:233
+#: ../src/ephy-history-window.c:207 ../src/ephy-window.c:268
 msgid "_About"
 msgstr "À _propos"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:216
-#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:268
+#: ../src/bookmarks/ephy-bookmarks-editor.c:234
+#: ../src/ephy-history-window.c:208 ../src/ephy-window.c:269
 msgid "Display credits for the web browser creators"
 msgstr "Affiche les noms des créateurs du navigateur"
 
+#: ../src/bookmarks/ephy-bookmarks-editor.c:239
+msgid "_Show on Toolbar"
+msgstr "_Afficher sur la barre de signets"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:240
+msgid "Show the selected bookmark on a toolbar"
+msgstr "Affiche le signet sélectionné sur la barre de signets"
+
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:229
+#: ../src/bookmarks/ephy-bookmarks-editor.c:253
 #: ../src/ephy-history-window.c:222
 msgid "_Title"
 msgstr "_Titre"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:230
+#: ../src/bookmarks/ephy-bookmarks-editor.c:254
 #: ../src/ephy-history-window.c:223
 msgid "Show only the title column"
 msgstr "Affiche seulement la colonne de titres"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:231
+#: ../src/bookmarks/ephy-bookmarks-editor.c:255
 #: ../src/ephy-history-window.c:226
 msgid "T_itle and Address"
 msgstr "T_itre et Adresse"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:232
+#: ../src/bookmarks/ephy-bookmarks-editor.c:256
 #: ../src/ephy-history-window.c:227
 msgid "Show both the title and address columns"
 msgstr "Affiche les colonnes de titres et d'adresses"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:273
-#: ../src/bookmarks/ephy-topics-selector.c:319
+#: ../src/bookmarks/ephy-bookmarks-editor.c:297
 msgid "Type a topic"
 msgstr "Saisissez un sujet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:391
-#, fuzzy, c-format
+#: ../src/bookmarks/ephy-bookmarks-editor.c:415
+#, c-format
 msgid "Delete topic “%s”?"
 msgstr "Supprimer le sujet « %s » ?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:394
+#: ../src/bookmarks/ephy-bookmarks-editor.c:418
 msgid "Delete this topic?"
 msgstr "Supprimer ce sujet ?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:396
+#: ../src/bookmarks/ephy-bookmarks-editor.c:420
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -2600,43 +2728,45 @@ msgstr ""
 "qu'ils appartiennent aussi à d'autres sujets. Les signets ne seront pas "
 "effacés."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:399
+#: ../src/bookmarks/ephy-bookmarks-editor.c:423
 msgid "_Delete Topic"
 msgstr "_Supprimer le sujet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:505
+#. FIXME: proper i18n after freeze
+#: ../src/bookmarks/ephy-bookmarks-editor.c:644
+#: ../src/bookmarks/ephy-bookmarks-editor.c:648
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:509
-#: ../src/bookmarks/ephy-bookmarks-editor.c:513
+#: ../src/bookmarks/ephy-bookmarks-editor.c:653
+#: ../src/bookmarks/ephy-bookmarks-editor.c:657
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:518
-#, fuzzy, c-format
+#: ../src/bookmarks/ephy-bookmarks-editor.c:662
+#, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Profil Mozilla « %s »"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:522
+#: ../src/bookmarks/ephy-bookmarks-editor.c:666
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:526
+#: ../src/bookmarks/ephy-bookmarks-editor.c:670
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:555
+#: ../src/bookmarks/ephy-bookmarks-editor.c:699
 msgid "Import failed"
 msgstr "L'importation a échouée"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:557
+#: ../src/bookmarks/ephy-bookmarks-editor.c:701
 msgid "Import Failed"
 msgstr "L'importation a échouée"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:560
-#, fuzzy, c-format
+#: ../src/bookmarks/ephy-bookmarks-editor.c:704
+#, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
@@ -2644,73 +2774,64 @@ msgstr ""
 "Les signets de « %s » ne pourront pas être importés car le fichier est "
 "corrompu ou d'un type non supporté."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:623
+#: ../src/bookmarks/ephy-bookmarks-editor.c:767
 msgid "Import bookmarks from file"
 msgstr "Importer les signets à partir d'un fichier"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:630
+#: ../src/bookmarks/ephy-bookmarks-editor.c:774
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Signets de Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:634
+#: ../src/bookmarks/ephy-bookmarks-editor.c:778
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Signets de Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:638
+#: ../src/bookmarks/ephy-bookmarks-editor.c:782
 msgid "Epiphany bookmarks"
 msgstr "Signets d'Epiphany"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:672
+#: ../src/bookmarks/ephy-bookmarks-editor.c:905
 msgid "Export Bookmarks"
 msgstr "Exporter les signets"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:687
+#: ../src/bookmarks/ephy-bookmarks-editor.c:920
 msgid "File format:"
 msgstr "Type de fichier : "
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:690
-msgid "Epiphany (RDF)"
-msgstr "Epiphany (RDF)"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:691
-msgid "Mozilla (HTML)"
-msgstr "Mozilla (HTML)"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
+#: ../src/bookmarks/ephy-bookmarks-editor.c:963
 msgid "Import Bookmarks"
 msgstr "Importer des signets"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:769
+#: ../src/bookmarks/ephy-bookmarks-editor.c:969
 msgid "I_mport"
 msgstr "I_mporter"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:783
+#: ../src/bookmarks/ephy-bookmarks-editor.c:983
 msgid "Import bookmarks from:"
 msgstr "Importer les signets à partir de :"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1168
-#: ../src/ephy-history-window.c:717
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1386
+#: ../src/ephy-history-window.c:709
 msgid "_Copy Address"
 msgstr "_Copier l'adresse"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1402
-#: ../src/ephy-history-window.c:1033
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1627
+#: ../src/ephy-history-window.c:1025
 msgid "_Search:"
 msgstr "_Rechercher :"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1597
-#: ../src/bookmarks/ephy-topics-selector.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1825
 msgid "Topics"
 msgstr "Sujets"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1667
-#: ../src/ephy-history-window.c:1316
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1895
+#: ../src/ephy-history-window.c:1308
 msgid "Title"
 msgstr "Titre"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1673
-#: ../src/ephy-history-window.c:1322
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1901
+#: ../src/ephy-history-window.c:1314
 msgid "Address"
 msgstr "Adresse"
 
@@ -2718,169 +2839,175 @@ msgstr "Adresse"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: ../src/bookmarks/ephy-bookmarks.c:96
+#: ../src/bookmarks/ephy-bookmarks.c:95
 msgid "Search the web"
-msgstr "Rechercher sur Internet"
+msgstr "Rechercher sur le web"
 
-#: ../src/bookmarks/ephy-bookmarks.c:96
+#: ../src/bookmarks/ephy-bookmarks.c:95
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.fr/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../src/bookmarks/ephy-bookmarks.c:101
+#: ../src/bookmarks/ephy-bookmarks.c:100
 msgid "Entertainment"
 msgstr "Loisirs"
 
-#: ../src/bookmarks/ephy-bookmarks.c:102
+#: ../src/bookmarks/ephy-bookmarks.c:101
 msgid "News"
 msgstr "Nouvelles"
 
-#: ../src/bookmarks/ephy-bookmarks.c:103
+#: ../src/bookmarks/ephy-bookmarks.c:102
 msgid "Shopping"
-msgstr "Emplêtes"
+msgstr "Emplettes"
 
-#: ../src/bookmarks/ephy-bookmarks.c:104
+#: ../src/bookmarks/ephy-bookmarks.c:103
 msgid "Sports"
 msgstr "Sports"
 
-#: ../src/bookmarks/ephy-bookmarks.c:105
+#: ../src/bookmarks/ephy-bookmarks.c:104
 msgid "Travel"
 msgstr "Voyages"
 
-#: ../src/bookmarks/ephy-bookmarks.c:106
+#: ../src/bookmarks/ephy-bookmarks.c:105
 msgid "Work"
 msgstr "Travail"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:471
-#, fuzzy, c-format
+#: ../src/bookmarks/ephy-bookmarks.c:476
+#, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Mettre à jour le signet « %s » ?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:476
-#, fuzzy, c-format
+#: ../src/bookmarks/ephy-bookmarks.c:481
+#, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "La page mise en signet a été déplacée vers « %s »."
 
-#: ../src/bookmarks/ephy-bookmarks.c:480
+#: ../src/bookmarks/ephy-bookmarks.c:485
 msgid "_Don't Update"
 msgstr "_Ne pas mettre à jour"
 
-#: ../src/bookmarks/ephy-bookmarks.c:482
+#: ../src/bookmarks/ephy-bookmarks.c:487
 msgid "_Update"
 msgstr "_Mettre à jour"
 
-#: ../src/bookmarks/ephy-bookmarks.c:485
+#: ../src/bookmarks/ephy-bookmarks.c:490
 msgid "Update Bookmark?"
 msgstr "Mettre à jour le signet ?"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:873
+#: ../src/bookmarks/ephy-bookmarks.c:1023
 msgid "bookmarks|All"
 msgstr "Tous"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:909
+#: ../src/bookmarks/ephy-bookmarks.c:1059
 msgid "bookmarks|Most Visited"
 msgstr "Les plus visités"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this topic contains the not categorized bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:928
+#: ../src/bookmarks/ephy-bookmarks.c:1078
 msgid "bookmarks|Not Categorized"
-msgstr "Non classé"
+msgstr "Non classés"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this is an automatic topic containing local websites bookmarks
 #. * autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:953
+#: ../src/bookmarks/ephy-bookmarks.c:1103
 msgid "bookmarks|Local Sites"
 msgstr "Sites locaux"
 
-#: ../src/bookmarks/ephy-new-bookmark.c:275
-msgid "Add Bookmark"
-msgstr "Ajouter un signet"
-
-#: ../src/bookmarks/ephy-new-bookmark.c:312
-#, fuzzy, c-format
-msgid "You already have a bookmark titled “%s” for this page."
-msgstr "Il y a déjà un signet dont le titre est « %s » pour cette page."
-
-#: ../src/bookmarks/ephy-new-bookmark.c:324
-msgid "_View Properties"
-msgstr "_Propriétés"
-
-#: ../src/bookmarks/ephy-new-bookmark.c:329
-msgid "Duplicated Bookmark"
-msgstr "Signet dupliqué"
-
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:316
-#, fuzzy
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
 msgid "Quick Bookmark"
-msgstr "Signet dupliqué"
+msgstr "Signet rapide"
 
-#: ../src/bookmarks/ephy-open-tabs-action.c:64
-#, fuzzy
+#: ../src/bookmarks/ephy-bookmarks-ui.c:298
+msgid "Show properties for this bookmark"
+msgstr "Afficher les propriétés de ce signet"
+
+#: ../src/bookmarks/ephy-bookmarks-ui.c:310
+msgid "Open this bookmark in a new tab"
+msgstr "Ouvrir ce signet dans un nouvel onglet"
+
+#: ../src/bookmarks/ephy-bookmarks-ui.c:322
+msgid "Open this bookmark in a new window"
+msgstr "Ouvrir ce signet dans une nouvelle fenêtre"
+
+#. FIXME !!!!
+#: ../src/bookmarks/ephy-open-tabs-action.c:77
 msgid "Open in New _Tabs"
-msgstr "Ouvrir dans un nouvel _onglet"
+msgstr "Ouvrir dans un nouvel ongle_t"
 
-#: ../src/bookmarks/ephy-related-action.c:161
-#, fuzzy
+#: ../src/bookmarks/ephy-open-tabs-action.c:78
+msgid "Open the bookmarks in this topic in new tabs"
+msgstr "Ouvrir les signets de ce sujet dans de nouveaux onglets"
+
+#: ../src/bookmarks/ephy-related-action.c:176
 msgid "Related"
-msgstr "_Recharger"
+msgstr "Similaire"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:315
+#: ../src/bookmarks/ephy-topic-factory-action.c:322
 msgid "Quick Topic"
-msgstr ""
+msgstr "Sujet rapide"
+
+#: ../src/bookmarks/ephy-topics-entry.c:359
+#, c-format
+msgid "Create topic “%s”"
+msgstr "Créer le sujet « %s »"
 
 #: ../src/ephy-encoding-dialog.c:340
 msgid "Encodings"
-msgstr "Encodages"
+msgstr "Codages"
 
-#: ../src/ephy-encoding-menu.c:350
+#: ../src/ephy-encoding-menu.c:351
 msgid "_Other..."
 msgstr "_Autre..."
 
-#: ../src/ephy-encoding-menu.c:351
+#: ../src/ephy-encoding-menu.c:352
 msgid "Other encodings"
-msgstr "Autres encodages"
+msgstr "Autres codages"
 
-#: ../src/ephy-encoding-menu.c:357
+#: ../src/ephy-encoding-menu.c:358
 msgid "_Automatic"
 msgstr "_Automatique"
 
-#: ../src/ephy-find-toolbar.c:128
+#: ../src/ephy-find-toolbar.c:117
 msgid "Not found"
-msgstr ""
+msgstr "Non trouvé"
 
-#: ../src/ephy-find-toolbar.c:131
+#: ../src/ephy-find-toolbar.c:120
 msgid "Wrapped"
-msgstr ""
+msgstr "Bas de page atteint"
 
-#: ../src/ephy-find-toolbar.c:388
+#: ../src/ephy-find-toolbar.c:140
+msgid "Find links:"
+msgstr "Rechercher des liens :"
+
+#: ../src/ephy-find-toolbar.c:140
 msgid "Find:"
 msgstr "Rechercher :"
 
-#: ../src/ephy-find-toolbar.c:404 ../src/ephy-find-toolbar.c:405
+#: ../src/ephy-find-toolbar.c:378
 msgid "Find Previous"
 msgstr "Rechercher le précédent"
 
-#: ../src/ephy-find-toolbar.c:408
+#: ../src/ephy-find-toolbar.c:381
 msgid "Find previous occurrence of the search string"
 msgstr "Recherche la précédente occurrence de la chaîne"
 
-#: ../src/ephy-find-toolbar.c:415 ../src/ephy-find-toolbar.c:416
+#: ../src/ephy-find-toolbar.c:388
 msgid "Find Next"
 msgstr "Rechercher le suivant"
 
-#: ../src/ephy-find-toolbar.c:419
+#: ../src/ephy-find-toolbar.c:391
 msgid "Find next occurrence of the search string"
 msgstr "Recherche la prochaine occurrence de la chaîne"
 
@@ -2958,131 +3085,206 @@ msgstr ""
 msgid "Clear History"
 msgstr "Purger l'historique"
 
-#: ../src/ephy-history-window.c:1042
-#, fuzzy
+#: ../src/ephy-history-window.c:1034
 msgid "Last 30 minutes"
 msgstr "Les dernières 30 minutes"
 
-#: ../src/ephy-history-window.c:1043
+#: ../src/ephy-history-window.c:1035
 msgid "Today"
 msgstr "Aujourd'hui"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1044 ../src/ephy-history-window.c:1047
-#: ../src/ephy-history-window.c:1051
+#: ../src/ephy-history-window.c:1036 ../src/ephy-history-window.c:1039
+#: ../src/ephy-history-window.c:1043
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
-msgstr[0] "Le %.0ddernier jour"
+msgstr[0] "Le %d dernier jour"
 msgstr[1] "Les %d derniers jours"
 
-#: ../src/ephy-history-window.c:1253
+#: ../src/ephy-history-window.c:1245
 msgid "Sites"
 msgstr "Sites"
 
-#: ../src/ephy-main.c:58
-msgid "Open a new tab in an existing window"
-msgstr "Ouvre un nouvel onglet dans une fenêtre existante"
+#: ../src/ephy-main.c:78
+msgid "Open a new tab in an existing browser window"
+msgstr "Ouvrir un nouvel onglet dans une fenêtre existante"
 
-#: ../src/ephy-main.c:61
-msgid "Run in full screen mode"
-msgstr "Lancer en mode plein écran"
+#: ../src/ephy-main.c:80
+msgid "Open a new browser window"
+msgstr "Ouvrir une nouvelle fenêtre"
 
-#: ../src/ephy-main.c:64
-msgid "Load the given session file"
-msgstr "Charger le fichier de session spécifié"
-
-#: ../src/ephy-main.c:65 ../src/ephy-main.c:71
-msgid "FILE"
-msgstr "FICHIER"
-
-#: ../src/ephy-main.c:67
-msgid "Add a bookmark (don't open any window)"
-msgstr "Ajoute un signet (n'ouvre aucune fenêtre)"
-
-#: ../src/ephy-main.c:68
-msgid "URL"
-msgstr "URL"
-
-#: ../src/ephy-main.c:70
-msgid "Import bookmarks from the given file"
-msgstr " Importer les signets depuis le fichier donné"
-
-#: ../src/ephy-main.c:73
+#: ../src/ephy-main.c:82
 msgid "Launch the bookmarks editor"
 msgstr "Lancer l'éditeur de signets"
 
-#: ../src/ephy-notebook.c:1086
+#: ../src/ephy-main.c:84
+msgid "Import bookmarks from the given file"
+msgstr "Importer les signets depuis le fichier donné"
+
+#: ../src/ephy-main.c:84 ../src/ephy-main.c:86
+msgid "FILE"
+msgstr "FICHIER"
+
+#: ../src/ephy-main.c:86
+msgid "Load the given session file"
+msgstr "Charger le fichier de session spécifié"
+
+#: ../src/ephy-main.c:88
+msgid "Add a bookmark"
+msgstr "Ajouter un signet"
+
+#: ../src/ephy-main.c:88
+msgid "URL"
+msgstr "URL"
+
+#: ../src/ephy-main.c:90
+msgid "Start a private instance"
+msgstr "Démarrer une instance privée"
+
+#: ../src/ephy-main.c:92
+msgid "Profile directory to use in the private instance"
+msgstr "Dossier du profil à utiliser dans l'instance privée"
+
+#: ../src/ephy-main.c:92
+msgid "DIR"
+msgstr "REP"
+
+#: ../src/ephy-main.c:417
+msgid "Could not start GNOME Web Browser"
+msgstr "Impossible de démarrer le navigateur web de GNOME"
+
+#: ../src/ephy-main.c:420
+#, c-format
+msgid ""
+"Startup failed because of the following error:\n"
+"%s"
+msgstr ""
+"Échec du démarrage suite à l'erreur suivante :\n"
+"%s"
+
+#: ../src/ephy-main.c:518 ../src/ephy-main.c:520 ../src/window-commands.c:767
+msgid "GNOME Web Browser"
+msgstr "Navigateur web de GNOME"
+
+#: ../src/ephy-main.c:521
+msgid "GNOME Web Browser options"
+msgstr "Préférences du navigateur web de GNOME"
+
+#: ../src/ephy-notebook.c:1092
 msgid "Close tab"
 msgstr "Fermer l'onglet"
 
-#: ../src/ephy-session.c:378
+#: ../src/ephy-session.c:156
+#, c-format
+msgid "Downloads will be aborted and logout proceed in %d second."
+msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
+msgstr[0] ""
+"Les téléchargements seront annulés lors de la déconnexion dans %d seconde."
+msgstr[1] ""
+"Les téléchargements seront annulés lors de la déconnexion dans %d secondes."
+
+#: ../src/ephy-session.c:272
+msgid "Abort pending downloads?"
+msgstr "Annuler les téléchargements en attente ?"
+
+#: ../src/ephy-session.c:276
+msgid ""
+"There are still downloads pending. If you log out, they will be aborted and "
+"lost."
+msgstr ""
+"Il reste des téléchargements en attente. Si vous vous déconnectez, ils "
+"seront annulés et perdus."
+
+#: ../src/ephy-session.c:280
+msgid "_Cancel Logout"
+msgstr "Ne pas se dé_connecter"
+
+#: ../src/ephy-session.c:282
+msgid "_Abort Downloads"
+msgstr "_Annuler les téléchargements"
+
+#: ../src/ephy-session.c:603
 msgid "Recover previous browser windows and tabs?"
 msgstr "Rétablir les fenêtres et onglets précédents ?"
 
-#: ../src/ephy-session.c:382
+#: ../src/ephy-session.c:607
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
 msgstr ""
-"Epiphany a apparemment planté ou n'a pas été quitté correctement la dernière "
-"fois que vous l'avez utilisé. Vous pouvez récupérer les fenêtres et les "
-"onglets ouverts."
+"Epiphany n'a apparemment pas été quitté correctement la dernière fois que "
+"vous l'avez utilisé. Vous pouvez rétablir les fenêtres et les onglets "
+"ouverts."
 
-#: ../src/ephy-session.c:386
+#: ../src/ephy-session.c:611
 msgid "_Don't Recover"
 msgstr "_Ne pas rétablir"
 
-#: ../src/ephy-session.c:388
+#: ../src/ephy-session.c:613
 msgid "_Recover"
 msgstr "_Rétablir"
 
-#: ../src/ephy-session.c:390
+#: ../src/ephy-session.c:615
 msgid "Crash Recovery"
-msgstr "Récupération des plantages"
+msgstr "Récupération post-plantage"
 
-#: ../src/ephy-shell.c:216
+#: ../src/ephy-shell.c:201
 msgid "Sidebar extension required"
 msgstr "Extension panneau latéral requise"
 
-#: ../src/ephy-shell.c:218
+#: ../src/ephy-shell.c:203
 msgid "Sidebar Extension Required"
 msgstr "Extension panneau latéral requise"
 
-#: ../src/ephy-shell.c:222
+#: ../src/ephy-shell.c:207
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr ""
 "Le lien sur lequel vous avez cliqué nécessite l'installation de l'extension "
 "panneau latéral."
 
-#: ../src/ephy-tab.c:481 ../src/ephy-tab.c:2264 ../src/ephy-tab.c:2299
+#. Translators: this is displayed in the statusbar; choose a short word
+#. * or even an abbreviation.
+#.
+#: ../src/ephy-statusbar.c:114
+msgid "Caret"
+msgstr "Caret"
+
+#. Translators: this is the tooltip on the "Caret" icon
+#. * in the statusbar.
+#.
+#: ../src/ephy-statusbar.c:122
+msgid "In keyboard selection mode, press F7 to exit"
+msgstr "En mode de sélection clavier, appuyez sur F7 pour fermer"
+
+#: ../src/ephy-tab.c:492 ../src/ephy-tab.c:2343 ../src/ephy-tab.c:2378
 msgid "Blank page"
 msgstr "Page vide"
 
 #. translators: %s here is the address of the web page
-#: ../src/ephy-tab.c:916 ../src/ephy-tab.c:1667
+#: ../src/ephy-tab.c:939 ../src/ephy-tab.c:1714
 #, c-format
 msgid "Loading “%s”..."
-msgstr "Chargement de «%s»..."
+msgstr "Chargement de « %s »..."
 
-#: ../src/ephy-tab.c:920
+#: ../src/ephy-tab.c:943
 msgid "Loading..."
 msgstr "Chargement..."
 
-#: ../src/ephy-tab.c:1651
-#, fuzzy, c-format
+#: ../src/ephy-tab.c:1698
+#, c-format
 msgid "Redirecting to “%s”..."
-msgstr "Redirection vers %s..."
+msgstr "Redirection vers « %s »..."
 
-#: ../src/ephy-tab.c:1655
-#, fuzzy, c-format
+#: ../src/ephy-tab.c:1702
+#, c-format
 msgid "Transferring data from “%s”..."
-msgstr "Transfert de données depuis %s..."
+msgstr "Transfert de données depuis « %s »..."
 
-#: ../src/ephy-tab.c:1659
-#, fuzzy, c-format
+#: ../src/ephy-tab.c:1706
+#, c-format
 msgid "Waiting for authorization from “%s”..."
-msgstr "En attente d'autorisation par %s..."
+msgstr "En attente d'autorisation par « %s »..."
 
 #: ../src/ephy-tabs-menu.c:148
 msgid "Switch to this tab"
@@ -3099,11 +3301,11 @@ msgid "Toolbar Editor"
 msgstr "Éditeur de la barre d'outils"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:217
+#: ../src/ephy-toolbar-editor.c:220
 msgid "Toolbar _button labels:"
 msgstr "Étiquettes des _boutons de la barre d'outils :"
 
-#: ../src/ephy-toolbar-editor.c:285
+#: ../src/ephy-toolbar-editor.c:288
 msgid "_Add a New Toolbar"
 msgstr "A_jouter une nouvelle barre d'outils"
 
@@ -3190,530 +3392,548 @@ msgstr "Ou_tils"
 
 #: ../src/ephy-window.c:121
 msgid "_Tabs"
-msgstr "_Onglets"
+msgstr "Ongle_ts"
+
+#: ../src/ephy-window.c:123
+msgid "_Toolbars"
+msgstr "Barre d'_outils"
 
 #. File menu
-#: ../src/ephy-window.c:128
-msgid "_New Window"
-msgstr "Nouvelle _fenêtre"
-
 #: ../src/ephy-window.c:129
+msgid "_New Window"
+msgstr "Nouvelle fe_nêtre"
+
+#: ../src/ephy-window.c:130
 msgid "Open a new window"
 msgstr "Ouvre une nouvelle fenêtre"
 
-#: ../src/ephy-window.c:131
-msgid "New _Tab"
-msgstr "Nouvel _onglet"
-
 #: ../src/ephy-window.c:132
+msgid "New _Tab"
+msgstr "Nouvel ongle_t"
+
+#: ../src/ephy-window.c:133
 msgid "Open a new tab"
 msgstr "Ouvre un nouvel onglet"
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:135
 msgid "_Open..."
 msgstr "_Ouvrir..."
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:136
 msgid "Open a file"
 msgstr "Ouvre un fichier"
 
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:138
 msgid "Save _As..."
 msgstr "Enregistrer _sous..."
 
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:139
 msgid "Save the current page"
 msgstr "Enregistre la page courante"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:141
 msgid "Print Set_up..."
 msgstr "_Configuration de l'impression..."
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:142
 msgid "Setup the page settings for printing"
 msgstr "Configure la mise en page pour l'impression"
 
-#: ../src/ephy-window.c:143
-msgid "Print Pre_view"
-msgstr "_Aperçu avant impression"
-
 #: ../src/ephy-window.c:144
+msgid "Print Pre_view"
+msgstr "Aperçu a_vant impression"
+
+#: ../src/ephy-window.c:145
 msgid "Print preview"
 msgstr "Aperçu avant impression"
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:147
 msgid "_Print..."
 msgstr "_Imprimer..."
 
-#: ../src/ephy-window.c:147
+#: ../src/ephy-window.c:148
 msgid "Print the current page"
 msgstr "Imprime la page courante"
 
-#: ../src/ephy-window.c:149
-#, fuzzy
-msgid "S_end Link by Email..."
-msgstr "_Envoyer un courriel..."
-
 #: ../src/ephy-window.c:150
+msgid "S_end Link by Email..."
+msgstr "_Envoyer le lien par courriel..."
+
+#: ../src/ephy-window.c:151
 msgid "Send a link of the current page"
 msgstr "Envoie un lien de la page courante"
 
-#: ../src/ephy-window.c:153
+#: ../src/ephy-window.c:154
 msgid "Close this tab"
 msgstr "Ferme cet onglet"
 
 #. Edit menu
-#: ../src/ephy-window.c:158
+#: ../src/ephy-window.c:159
 msgid "_Undo"
 msgstr "A_nnuler"
 
 #  Vérifier le contexte
-#: ../src/ephy-window.c:159
+#: ../src/ephy-window.c:160
 msgid "Undo the last action"
 msgstr "Annule la dernière action"
 
-#: ../src/ephy-window.c:161
+#: ../src/ephy-window.c:162
 msgid "Re_do"
 msgstr "Re_faire"
 
 #  Vérifier le contexte
-#: ../src/ephy-window.c:162
+#: ../src/ephy-window.c:163
 msgid "Redo the last undone action"
 msgstr "Refait la dernière action annulée"
 
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:172
 msgid "Paste clipboard"
 msgstr "Colle le contenu du presse-papiers"
 
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:175
 msgid "Select the entire page"
 msgstr "Sélectionne la totalité de la page"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:177
 msgid "_Find..."
 msgstr "_Rechercher..."
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:178
 msgid "Find a word or phrase in the page"
 msgstr "Recherche un mot ou une phrase dans la page"
 
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:180
 msgid "Find Ne_xt"
 msgstr "Rechercher le _suivant"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:181
 msgid "Find next occurrence of the word or phrase"
 msgstr "Recherche la prochaine occurrence du mot ou de la chaîne"
 
-#: ../src/ephy-window.c:182
+#: ../src/ephy-window.c:183
 msgid "Find Pre_vious"
 msgstr "Rechercher le _précédent"
 
-#: ../src/ephy-window.c:183
+#: ../src/ephy-window.c:184
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Recherche la précédente occurrence du mot ou de la chaîne"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:186
 msgid "P_ersonal Data"
 msgstr "Données _personnelles"
 
-#: ../src/ephy-window.c:186
+#: ../src/ephy-window.c:187
 msgid "View and remove cookies and passwords"
 msgstr "Affiche et supprime les cookies et mots de passe"
 
-#: ../src/ephy-window.c:189
-#, fuzzy
-msgid "Cert_ificates"
-msgstr "Champs du certi_ficat"
-
 #: ../src/ephy-window.c:190
-#, fuzzy
-msgid "Manage Certificates"
-msgstr "_Voir le certificat"
+msgid "Cert_ificates"
+msgstr "Cert_ificats"
 
-#: ../src/ephy-window.c:193
-msgid "T_oolbars"
-msgstr "_Barre d'outils"
+#: ../src/ephy-window.c:191
+msgid "Manage Certificates"
+msgstr "Gérer les certificats"
 
 #: ../src/ephy-window.c:194
-msgid "Customize toolbars"
-msgstr "Personnalise les barres d'outils"
-
-#: ../src/ephy-window.c:196
 msgid "P_references"
 msgstr "P_références"
 
-#: ../src/ephy-window.c:197
+#: ../src/ephy-window.c:195
 msgid "Configure the web browser"
-msgstr "Configure le navigateur Web"
+msgstr "Configure le navigateur web"
 
 #. View menu
-#: ../src/ephy-window.c:202 ../src/ephy-window.c:205
+#: ../src/ephy-window.c:200
+msgid "_Customize Toolbars..."
+msgstr "Personnalise les barres d'_outils..."
+
+#: ../src/ephy-window.c:201
+msgid "Customize toolbars"
+msgstr "Personnalise les barres d'outils"
+
+#: ../src/ephy-window.c:203 ../src/ephy-window.c:206
 msgid "_Stop"
 msgstr "_Arrêter"
 
-#: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:204
 msgid "Stop current data transfer"
 msgstr "Arrête le transfert de données en cours"
 
-#: ../src/ephy-window.c:207
+#: ../src/ephy-window.c:208
 msgid "_Reload"
 msgstr "_Recharger"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:209
 msgid "Display the latest content of the current page"
 msgstr "Affiche le contenu le plus récent pour la page en cours"
 
-#: ../src/ephy-window.c:210
-msgid "Zoom _In"
-msgstr "Zoom a_vant"
-
 #: ../src/ephy-window.c:211
+msgid "_Larger Text"
+msgstr "A_grandir le texte"
+
+#: ../src/ephy-window.c:212
 msgid "Increase the text size"
 msgstr "Augmente la taille du texte"
 
-#: ../src/ephy-window.c:213
-msgid "Zoom _Out"
-msgstr "Zoom a_rrière"
-
 #: ../src/ephy-window.c:214
+msgid "S_maller Text"
+msgstr "_Diminuer le texte"
+
+#: ../src/ephy-window.c:215
 msgid "Decrease the text size"
 msgstr "Diminue la taille du texte"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:217
 msgid "_Normal Size"
 msgstr "Taille _normale"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:218
 msgid "Use the normal text size"
 msgstr "Utilise la taille normale du texte"
 
-#: ../src/ephy-window.c:219
+#: ../src/ephy-window.c:220
 msgid "Text _Encoding"
 msgstr "_Encodage du texte"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:221
 msgid "Change the text encoding"
 msgstr "Modifie l'encodage du texte"
 
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:223
 msgid "_Page Source"
 msgstr "_Source de la page"
 
-#: ../src/ephy-window.c:223
+#: ../src/ephy-window.c:224
 msgid "View the source code of the page"
 msgstr "Affiche le code source de la page"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:229
 msgid "_Add Bookmark..."
 msgstr "A_jouter un signet..."
 
-#: ../src/ephy-window.c:229 ../src/ephy-window.c:303
+#: ../src/ephy-window.c:230 ../src/ephy-window.c:304
 msgid "Add a bookmark for the current page"
 msgstr "Ajoute un signet vers la page courante"
 
-#: ../src/ephy-window.c:231
-msgid "_Edit Bookmarks"
-msgstr "_Éditer les signets"
-
 #: ../src/ephy-window.c:232
+msgid "_Edit Bookmarks"
+msgstr "É_diter les signets"
+
+#: ../src/ephy-window.c:233
 msgid "Open the bookmarks window"
 msgstr "Ouvre l'éditeur de signets"
 
 #. Go menu
-#: ../src/ephy-window.c:237
+#: ../src/ephy-window.c:238
 msgid "_Location..."
 msgstr "_Emplacement..."
 
-#: ../src/ephy-window.c:238
+#: ../src/ephy-window.c:239
 msgid "Go to a specified location"
 msgstr "Va à l'emplacement spécifié"
 
-#: ../src/ephy-window.c:240
+#: ../src/ephy-window.c:241
 msgid "H_istory"
 msgstr "H_istorique"
 
-#: ../src/ephy-window.c:241
+#: ../src/ephy-window.c:242
 msgid "Open the history window"
 msgstr "Ouvre la fenêtre d'historique"
 
 #. Tabs menu
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:247
 msgid "_Previous Tab"
 msgstr "Onglet _précédent"
 
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:248
 msgid "Activate previous tab"
 msgstr "Active l'onglet précédent"
 
-#: ../src/ephy-window.c:249
+#: ../src/ephy-window.c:250
 msgid "_Next Tab"
 msgstr "Onglet _suivant"
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:251
 msgid "Activate next tab"
 msgstr "Active l'onglet suivant"
 
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:253
 msgid "Move Tab _Left"
 msgstr "Déplacer l'onglet vers la _gauche"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:254
 msgid "Move current tab to left"
 msgstr "Déplace l'onglet courant vers la gauche"
 
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:256
 msgid "Move Tab _Right"
 msgstr "Déplacer l'onglet vers la _droite"
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:257
 msgid "Move current tab to right"
 msgstr "Déplace l'onglet courant vers la droite"
 
-#: ../src/ephy-window.c:258
+#: ../src/ephy-window.c:259
 msgid "_Detach Tab"
 msgstr "_Détacher l'onglet"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:260
 msgid "Detach current tab"
 msgstr "Détache l'onglet courant"
 
-#: ../src/ephy-window.c:265
+#: ../src/ephy-window.c:266
 msgid "Display web browser help"
 msgstr "Affiche l'aide du navigateur"
 
 #. File Menu
-#: ../src/ephy-window.c:276
+#: ../src/ephy-window.c:277
 msgid "_Work Offline"
 msgstr "T_ravailler en mode déconnecté (hors-ligne)"
 
-#: ../src/ephy-window.c:277
+#: ../src/ephy-window.c:278
 msgid "Switch to offline mode"
-msgstr "Basculer le mode déconnecté"
+msgstr "Basculer en mode déconnecté"
 
 #. View Menu
-#: ../src/ephy-window.c:282
-msgid "_Toolbar"
-msgstr "Barre d'_outils"
-
 #: ../src/ephy-window.c:283
+msgid "_Hide Toolbars"
+msgstr "Cac_her la barre d'outils"
+
+#: ../src/ephy-window.c:284
 msgid "Show or hide toolbar"
 msgstr "Affiche ou masque la barre d'outils"
 
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:286
 msgid "St_atusbar"
 msgstr "Barre d'é_tat"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:287
 msgid "Show or hide statusbar"
 msgstr "Affiche ou masque la barre d'état"
 
-#: ../src/ephy-window.c:288
+#: ../src/ephy-window.c:289
 msgid "_Fullscreen"
 msgstr "_Plein écran"
 
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:290
 msgid "Browse at full screen"
 msgstr "Navigue en mode plein écran"
 
-#: ../src/ephy-window.c:291
+#: ../src/ephy-window.c:292
 msgid "Popup _Windows"
 msgstr "Fenêtres _popups"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:293
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Affiche ou masque les fenêtres popups non sollicitées de ce site"
 
-#: ../src/ephy-window.c:294
+#: ../src/ephy-window.c:295
 msgid "Selection Caret"
 msgstr "Curseur de sélection"
 
 #. Document
-#: ../src/ephy-window.c:302
+#: ../src/ephy-window.c:303
 msgid "Add Boo_kmark..."
 msgstr "Ajouter un _signet..."
 
 #. Framed document
-#: ../src/ephy-window.c:308
-#, fuzzy
+#: ../src/ephy-window.c:309
 msgid "Show Only _This Frame"
 msgstr "Afficher seulement ce _cadre"
 
-#: ../src/ephy-window.c:309
+#: ../src/ephy-window.c:310
 msgid "Show only this frame in this window"
 msgstr "Affiche seulement ce cadre dans cette fenêtre"
 
 #. Links
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:315
 msgid "_Open Link"
 msgstr "_Ouvrir le lien"
 
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:316
 msgid "Open link in this window"
 msgstr "Ouvre le lien dans cette fenêtre"
 
-#: ../src/ephy-window.c:317
+#: ../src/ephy-window.c:318
 msgid "Open Link in New _Window"
 msgstr "Ouvrir le lien dans une nouvelle _fenêtre"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:319
 msgid "Open link in a new window"
 msgstr "Ouvre le lien dans une nouvelle fenêtre"
 
-#: ../src/ephy-window.c:320
-msgid "Open Link in New _Tab"
-msgstr "Ouvrir dans un nouvel _onglet"
-
 #: ../src/ephy-window.c:321
+msgid "Open Link in New _Tab"
+msgstr "Ouvrir dans un nouvel ongle_t"
+
+#: ../src/ephy-window.c:322
 msgid "Open link in a new tab"
 msgstr "Ouvre le lien dans un nouvel onglet"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:324
 msgid "_Download Link"
-msgstr "_Télécharger le lien"
+msgstr "Télé_charger le lien"
 
-#: ../src/ephy-window.c:325
+#: ../src/ephy-window.c:326
 msgid "_Save Link As..."
 msgstr "_Enregistrer le lien sous..."
 
-#: ../src/ephy-window.c:326
+#: ../src/ephy-window.c:327
 msgid "Save link with a different name"
 msgstr "Enregistre le lien sous un nom différent"
 
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:329
 msgid "_Bookmark Link..."
 msgstr "Créer un _signet avec ce lien..."
 
-#: ../src/ephy-window.c:330
+#: ../src/ephy-window.c:331
 msgid "_Copy Link Address"
 msgstr "_Copier l'adresse du lien"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:337
 msgid "_Send Email..."
 msgstr "_Envoyer un courriel..."
 
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:339
 msgid "_Copy Email Address"
 msgstr "_Copier l'adresse électronique"
 
 #. Images
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:344
 msgid "Open _Image"
 msgstr "Ouvrir l'_image"
 
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:346
 msgid "_Save Image As..."
 msgstr "_Enregistrer l'image sous..."
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:348
 msgid "_Use Image As Background"
 msgstr "_Utiliser cette image comme arrière-plan"
 
-#: ../src/ephy-window.c:349
+#: ../src/ephy-window.c:350
 msgid "Copy I_mage Address"
 msgstr "Copier l'adresse de l'i_mage"
 
-#: ../src/ephy-window.c:701
+#: ../src/ephy-window.c:352
+msgid "St_art Animation"
+msgstr "_Démarrer l'animation"
+
+#: ../src/ephy-window.c:354
+msgid "St_op Animation"
+msgstr "_Arrêter l'animation"
+
+#: ../src/ephy-window.c:708
 msgid "There are unsubmitted changes to form elements"
 msgstr "Il y a des changements non soumis dans des éléments du formulaire"
 
-#: ../src/ephy-window.c:705
+#: ../src/ephy-window.c:712
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Si vous fermez malgré tout le document, vous perdrez ces informations."
 
-#: ../src/ephy-window.c:709
+#: ../src/ephy-window.c:716
 msgid "Close _Document"
 msgstr "_Fermer le document"
 
-#: ../src/ephy-window.c:1276 ../src/window-commands.c:295
+#: ../src/ephy-window.c:1284 ../src/window-commands.c:280
 msgid "Open"
 msgstr "Ouvrir"
 
-#: ../src/ephy-window.c:1278 ../src/window-commands.c:321
+#: ../src/ephy-window.c:1286 ../src/window-commands.c:306
 msgid "Save As"
 msgstr "Enregistrer sous"
 
-#: ../src/ephy-window.c:1282
+#: ../src/ephy-window.c:1290
 msgid "Bookmark"
 msgstr "Signet"
 
-#: ../src/ephy-window.c:1284
+#: ../src/ephy-window.c:1292
 msgid "Find"
 msgstr "Rechercher"
 
-#: ../src/ephy-window.c:1457
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1305
+msgid "Larger"
+msgstr "Plus grand"
+
+#. Translators: This refers to text size
+#: ../src/ephy-window.c:1308
+msgid "Smaller"
+msgstr "Plus petit"
+
+#: ../src/ephy-window.c:1471
 msgid "Insecure"
 msgstr "Non sécurisé"
 
-#: ../src/ephy-window.c:1462
+#: ../src/ephy-window.c:1476
 msgid "Broken"
 msgstr "Invalide"
 
-#: ../src/ephy-window.c:1475
+#: ../src/ephy-window.c:1489
 msgid "Low"
 msgstr "Faible"
 
-#: ../src/ephy-window.c:1482
+#: ../src/ephy-window.c:1496
 msgid "High"
 msgstr "Haut"
 
-#: ../src/ephy-window.c:1492
+#: ../src/ephy-window.c:1506
 #, c-format
 msgid "Security level: %s"
 msgstr "Niveau de sécurité : %s"
 
-#: ../src/ephy-window.c:1532
+#: ../src/ephy-window.c:1546
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d fenêtre popup cachée"
 msgstr[1] "%d fenêtres popups cachées"
 
-#: ../src/ephy-window.c:1827
-#, fuzzy, c-format
+#: ../src/ephy-window.c:1841
+#, c-format
 msgid "Open image “%s”"
 msgstr "Ouvrir l'image « %s »"
 
-#: ../src/ephy-window.c:1832
-#, fuzzy, c-format
+#: ../src/ephy-window.c:1846
+#, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Utiliser « %s » comme arrière-plan du bureau"
 
-#: ../src/ephy-window.c:1837
-#, fuzzy, c-format
+#: ../src/ephy-window.c:1851
+#, c-format
 msgid "Save image “%s”"
 msgstr "Enregistrer l'image « %s »"
 
-#: ../src/ephy-window.c:1842
-#, fuzzy, c-format
+#: ../src/ephy-window.c:1856
+#, c-format
 msgid "Copy image address “%s”"
 msgstr "Copier l'adresse de l'image « %s »"
 
-#: ../src/ephy-window.c:1855
-#, fuzzy, c-format
+#: ../src/ephy-window.c:1869
+#, c-format
 msgid "Send email to address “%s”"
 msgstr "Envoyer un courriel à l'adresse « %s »"
 
-#: ../src/ephy-window.c:1861
-#, fuzzy, c-format
+#: ../src/ephy-window.c:1875
+#, c-format
 msgid "Copy email address “%s”"
 msgstr "Copier l'adresse électronique « %s »"
 
-#: ../src/ephy-window.c:1873
-#, fuzzy, c-format
+#: ../src/ephy-window.c:1887
+#, c-format
 msgid "Save link “%s”"
 msgstr "Enregistrer le lien « %s »"
 
-#: ../src/ephy-window.c:1879
-#, fuzzy, c-format
+#: ../src/ephy-window.c:1893
+#, c-format
 msgid "Bookmark link “%s”"
 msgstr "Ajouter le lien « %s » aux signets"
 
-#: ../src/ephy-window.c:1885
-#, fuzzy, c-format
+#: ../src/ephy-window.c:1899
+#, c-format
 msgid "Copy link's address “%s”"
 msgstr "Copier l'adresse du lien « %s »"
 
@@ -3766,19 +3986,18 @@ msgid "User Name"
 msgstr "Nom d'utilisateur"
 
 #: ../src/pdm-dialog.c:1022
-#, fuzzy
 msgid "User Password"
-msgstr "Mots de passe"
+msgstr "Mot de passe de l'utilisateur"
 
-#: ../src/popup-commands.c:239
+#: ../src/popup-commands.c:232
 msgid "Download Link"
 msgstr "Télécharger le lien"
 
-#: ../src/popup-commands.c:247
+#: ../src/popup-commands.c:240
 msgid "Save Link As"
 msgstr "Enregistrer le lien sous..."
 
-#: ../src/popup-commands.c:254
+#: ../src/popup-commands.c:247
 msgid "Save Image As"
 msgstr "Enregistrer l'image sous..."
 
@@ -3822,6 +4041,10 @@ msgstr "Fermer"
 msgid "Close print preview"
 msgstr "Fermer l'aperçu avant impression"
 
+#: ../src/prefs-dialog.c:418
+msgid "Default"
+msgstr "Par défaut"
+
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. * Translators: the first %s is the language name, and the
@@ -3830,7 +4053,7 @@ msgstr "Fermer l'aperçu avant impression"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:729 ../src/prefs-dialog.c:737
+#: ../src/prefs-dialog.c:1003 ../src/prefs-dialog.c:1011
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -3840,43 +4063,76 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:748
+#: ../src/prefs-dialog.c:1022
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "Définie par l'utilisateur (%s)"
 
-#: ../src/prefs-dialog.c:770
+#: ../src/prefs-dialog.c:1044
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Langue du système (%s)"
 msgstr[1] "Langues du système (%s)"
 
-#: ../src/prefs-dialog.c:1157
-#, fuzzy
+#: ../src/prefs-dialog.c:1436
 msgid "Select a Directory"
 msgstr "Sélectionnez un dossier"
 
-#: ../src/window-commands.c:726 ../src/window-commands.c:743
+#: ../src/window-commands.c:714 ../src/window-commands.c:732
 msgid "Contact us at:"
 msgstr "Contactez nous à :"
 
-#: ../src/window-commands.c:729
+#: ../src/window-commands.c:717
 msgid "Contributors:"
 msgstr "Contributeurs :"
 
-#: ../src/window-commands.c:734
+#: ../src/window-commands.c:722
 msgid "Past developers:"
 msgstr "Anciens développeurs :"
 
-#: ../src/window-commands.c:744
+#: ../src/window-commands.c:733
 msgid "<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"
-msgstr ""
+msgstr "<epiphany-list@gnome.org> ou <gnome-doc-list@gnome.org>"
 
-#: ../src/window-commands.c:749
-#, fuzzy
-msgid "GNOME Web Browser"
-msgstr "Navigateur Web"
+#: ../src/window-commands.c:738
+msgid ""
+"The GNOME Web Browser is free software; you can redistribute it and/or "
+"modify it under the terms of the GNU General Public License as published by "
+"the Free Software Foundation; either version 2 of the License, or (at your "
+"option) any later version."
+msgstr ""
+"Le navigateur web de GNOME est un logiciel libre ; vous pouvez le "
+"redistribuer et/ou lemodifier conformément aux dispositions de la Licence "
+"Publique Générale GNU,telle que publiée par la Free Software Foundation ; "
+"version 2 de lalicence, ou (à votre choix) toute version ultérieure."
+
+#: ../src/window-commands.c:742
+msgid ""
+"The GNOME Web Browser is distributed in the hope that it will be useful, but "
+"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
+"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details."
+msgstr ""
+"Le navigateur web de GNOME est distribué dans l'espoir qu'il sera utile,mais "
+"SANS AUCUNE GARANTIE ; sans même la garantie implicitede COMMERCIALISATION "
+"ou D'ADAPTATION À UN OBJET PARTICULIER.Pour plus de détails, voir la Licence "
+"Publique Générale GNU."
+
+#: ../src/window-commands.c:746
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
+"59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
+msgstr ""
+"Un exemplaire de la Licence Publique Générale GNU doit être fourni avecle "
+"navigateur web de GNOME ; si ce n'est pas le cas, écrivez à la Free Software "
+"Foundation, Inc.,59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
+
+#: ../src/window-commands.c:758
+#, c-format
+msgid "Using “%s” backend"
+msgstr "Utilise « %s » comme moteur"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3886,7 +4142,7 @@ msgstr "Navigateur Web"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:763
+#: ../src/window-commands.c:782
 msgid "translator-credits"
 msgstr ""
 "Mainteneur :\n"
@@ -3899,12 +4155,67 @@ msgstr ""
 "Olivier Cortes <olivier.cortes@ryxeo.com>\n"
 "Vincent Carriere <carriere_vincent@yahoo.fr>\n"
 "Sébastien Bacher <seb128@debian.org>\n"
-"Xavier Claessens <x_claessens@skynet.be>"
+"Xavier Claessens <x_claessens@skynet.be>\n"
+"Guillaume Desmottes <cass@skynet.be>\n"
+"Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>\n"
+"ZeBob <zebob.m@gmail.com\n"
+"Jonathan Ernst <jonathan@ernstfamily.ch>"
 
-#: ../src/window-commands.c:766
-#, fuzzy
+#: ../src/window-commands.c:785
 msgid "GNOME Web Browser Website"
-msgstr "Navigateur Web"
+msgstr "Site web du navigateur web de GNOME"
+
+#~ msgid "Autowrap for find in page"
+#~ msgstr "Recherche circulaire dans la page"
+
+#~ msgid ""
+#~ "For find in page, whether to start again at the beginning after reaching "
+#~ "the end of the page."
+#~ msgstr ""
+#~ "Possibilité de recommencer la recherche au début après avoir atteint la "
+#~ "fin de la page"
+
+#~ msgid "Match case for find in page"
+#~ msgstr "Indique si la recherche est sensible à la casse"
+
+#~ msgid "<b>Fonts</b>"
+#~ msgstr "<b>Polices</b>"
+
+#~ msgid "Al_ways use the desktop theme colors"
+#~ msgstr "Toujours utiliser les _couleurs du thème du bureau"
+
+#~ msgid "Always use _these fonts"
+#~ msgstr "Toujours utiliser ces _polices"
+
+#~ msgid "Fonts and Colors"
+#~ msgstr "Polices/Couleurs"
+
+#~ msgid "Close Tab"
+#~ msgstr "Fermer l'onglet"
+
+#~ msgid "You already have a bookmark titled “%s” for this page."
+#~ msgstr "Il y a déjà un signet dont le titre est « %s » pour cette page."
+
+#~ msgid "_View Properties"
+#~ msgstr "_Propriétés"
+
+#~ msgid "Duplicated Bookmark"
+#~ msgstr "Signet dupliqué"
+
+#~ msgid "Run in full screen mode"
+#~ msgstr "Lancer en mode plein écran"
+
+#~ msgid "Add a bookmark (don't open any window)"
+#~ msgstr "Ajoute un signet (n'ouvre aucune fenêtre)"
+
+#~ msgid "T_oolbars"
+#~ msgstr "_Barre d'outils"
+
+#~ msgid "Zoom _In"
+#~ msgstr "Zoom a_vant"
+
+#~ msgid "Zoom _Out"
+#~ msgstr "Zoom a_rrière"
 
 #~ msgid "C_ase sensitive"
 #~ msgstr "Sensible à la c_asse"
@@ -3938,7 +4249,7 @@ msgstr "Navigateur Web"
 #~ "and try again."
 #~ msgstr ""
 #~ "Ce document ne peut être affiché en mode déconnecté. Mettez Epiphany en "
-#~ "mode«connecté» et réessayez."
+#~ "mode « connecté » et réessayez."
 
 #~ msgid ""
 #~ "You can always see the security status of a page from the padlock icon on "
@@ -3973,9 +4284,6 @@ msgstr "Navigateur Web"
 
 #~ msgid "_Show in Bookmarks Bar"
 #~ msgstr "_Afficher dans la barre de signets"
-
-#~ msgid "Show the selected bookmark or topic in the bookmarks bar"
-#~ msgstr "Affiche le signet ou le sujet sélectionné dans la barre de signets"
 
 #~ msgid "Empty"
 #~ msgstr "Vide"
@@ -4026,9 +4334,6 @@ msgstr "Navigateur Web"
 
 #~ msgid "_Bookmarks Bar"
 #~ msgstr "Barre de _signets"
-
-#~ msgid "Show or hide bookmarks bar"
-#~ msgstr "Affiche ou masque la barre de signets"
 
 #~ msgid "_Save Background As..."
 #~ msgstr "_Enregistrer l'arrière-plan sous..."
