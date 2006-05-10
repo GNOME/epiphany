@@ -21,31 +21,32 @@
 */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "mozilla-notifiers.h"
-
-#include "eel-gconf-extensions.h"
-#include "ephy-prefs.h"
-#include "ephy-embed-prefs.h"
-#include "ephy-langs.h"
-#include "ephy-node.h"
-#include "ephy-encodings.h"
-#include "ephy-embed-shell.h"
-#include "ephy-debug.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include <glib/gi18n.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtksettings.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 
 #include <nsCOMPtr.h>
-#include <nsIServiceManager.h>
 #include <nsIPrefService.h>
+#include <nsIServiceManager.h>
 #include <nsMemory.h>
+#include <nsServiceManagerUtils.h>
+
+#include "eel-gconf-extensions.h"
+#include "ephy-debug.h"
+#include "ephy-embed-prefs.h"
+#include "ephy-embed-shell.h"
+#include "ephy-encodings.h"
+#include "ephy-langs.h"
+#include "ephy-node.h"
+#include "ephy-prefs.h"
+
+#include "mozilla-notifiers.h"
 
 /* define to migrate epiphany 1.0 font preferences */
 #define MIGRATE_PIXEL_SIZE

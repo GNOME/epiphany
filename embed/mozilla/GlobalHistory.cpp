@@ -20,17 +20,16 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
+
+#include <nsStringAPI.h>
+
+#include <nsIURI.h>
 
 #include "ephy-embed-shell.h"
 
 #include "GlobalHistory.h"
 
-#include <nsIURI.h>
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
 
 #define MAX_TITLE_LENGTH	2048
 #define MAX_URL_LENGTH		16384
@@ -53,18 +52,11 @@ MozGlobalHistory::~MozGlobalHistory ()
 {
 }
 
-#ifdef HAVE_GECKO_1_8
 /* void addURI (in nsIURI aURI, in boolean aRedirect, in boolean aToplevel, in nsIURI aReferrer); */
 NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI,
 				       PRBool aRedirect,
 				       PRBool aToplevel,
 				       nsIURI *aReferrer)
-#else
-/* void addURI (in nsIURI aURI, in boolean aRedirect, in boolean aToplevel); */
-NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI,
-				       PRBool aRedirect,
-				       PRBool aToplevel)
-#endif
 {
 	nsresult rv;
 
@@ -101,7 +93,7 @@ NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI,
 		}
 	}
 
-	nsEmbedCString spec;
+	nsCString spec;
 	rv = aURI->GetSpec(spec);
 	NS_ENSURE_TRUE (NS_SUCCEEDED(rv) && spec.Length(), rv);
 
@@ -120,7 +112,7 @@ NS_IMETHODIMP MozGlobalHistory::IsVisited(nsIURI *aURI,
 
 	*_retval = PR_FALSE;
 
-	nsEmbedCString spec;
+	nsCString spec;
 	aURI->GetSpec(spec);
 
 	if (spec.Length () > MAX_URL_LENGTH) return NS_OK;
@@ -136,12 +128,12 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI,
 {
 	NS_ENSURE_ARG (aURI);
 
-	nsEmbedCString spec;
+	nsCString spec;
 	aURI->GetSpec(spec);
 
 	if (spec.Length () > MAX_URL_LENGTH) return NS_OK;
 
-	nsEmbedString uTitle (aTitle);
+	nsString uTitle (aTitle);
 
 	/* This depends on the assumption that 
 	 * typeof(PRUnichar) == typeof (gunichar2) == uint16,
@@ -171,7 +163,7 @@ MozGlobalHistory::GetURIGeckoFlags(nsIURI *aURI,
 {
 	*aFlags = 0;
 
-	nsEmbedCString spec;
+	nsCString spec;
 	aURI->GetSpec(spec);
 
 	if (spec.Length () > MAX_URL_LENGTH) return NS_OK;
@@ -196,7 +188,7 @@ NS_IMETHODIMP
 MozGlobalHistory::SetURIGeckoFlags(nsIURI *aURI,
 				   PRUint32 aFlags)
 {
-	nsEmbedCString spec;
+	nsCString spec;
 	aURI->GetSpec(spec);
 
 	if (spec.Length () > MAX_URL_LENGTH) return NS_OK;

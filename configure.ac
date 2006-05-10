@@ -179,12 +179,15 @@ AC_SUBST([MOZILLA_HOME])
 AC_SUBST([MOZILLA_PREFIX])
 AC_SUBST([MOZILLA_EXTRA_LIBS])
 
-case "$MOZILLA" in
-mozilla) min_version=1.7.9 ;;
-seamonkey) min_version=1.0 ;;
-*firefox) min_version=1.0.5 ;;
-*thunderbird) min_version=1.0.5 ;;
+# if test "$gecko_cv_gecko_flavour" != "toolkit"; then
+#	AC_MSG_ERROR(["$gecko_cv_gecko_flavour" flavoured geckos aren't tasty enough!])
+# fi
+
+case "$gecko_cv_gecko" in
 xulrunner) min_version=1.8 ;;
+*firefox) min_version=1.5 ;;
+seamonkey) min_version=1.0 ;;
+*) AC_MSG_ERROR([Unsupported gecko "$gecko_cv_gecko"]) ;;
 esac
 
 PKG_CHECK_MODULES([GECKO],[${gecko_cv_gecko}-xpcom >= $min_version $gecko_cv_extra_pkg_dependencies])
@@ -199,84 +202,6 @@ AC_SUBST([GECKO_LIBS])
 # programs works at all, so we don't get false test failures below
 
 GECKO_XPCOM_PROGRAM_CHECK
-
-# Changed from PRUnichar* to nsAString& in 1.8a1 and on aviary branch
-
-AC_MSG_CHECKING([whether nsIFilePicker methods expect nsAString&])
-
-GECKO_COMPILE_IFELSE([widget],
-	[AC_LANG_PROGRAM(
-		[[#include <nsEmbedString.h>
-		  #include <nsIFilePicker.h>]],
-		[[nsIFilePicker *p;
-		  p->SetDefaultString (nsEmbedString());]]
-	)],
-	[AC_DEFINE([MOZ_NSIFILEPICKER_NSASTRING_],[1],[Define if nsIFilePicker uses nsAString&]) result=yes],
-	[result=no])
-
-AC_MSG_RESULT([$result])
-
-# Changed in 1.8a1 and again in 1.8a3 to its present form (variant 2);
-# variant 1 is on 1.7 branch. Aviary branch also has variant 2.
-
-AC_MSG_CHECKING([for nsIContentPolicy API])
-
-GECKO_COMPILE_IFELSE([content],
-	[AC_LANG_PROGRAM(
-		[[#include <nsEmbedString.h>
-		  #include <nsIURI.h>
-		  #include <nsIContentPolicy.h>]],
-		[[nsIContentPolicy *p;
-		  nsISupports *arg4;
-		  p->ShouldLoad(0,nsnull,nsnull,arg4,nsEmbedCString(),nsnull,nsnull);]]
-	)],
-	[variant=2],
-	[variant=1])
-
-AC_MSG_RESULT([variant $variant])
-
-AC_DEFINE_UNQUOTED([MOZ_NSICONTENTPOLICY_VARIANT], [$variant], [Define the nsIContentPolicy API variant])
-
-# Firefox doesn't have this API (?)
-
-AC_MSG_CHECKING([for nsIXULChromeRegistry API])
-
-GECKO_COMPILE_IFELSE([content],
-	[AC_LANG_PROGRAM(
-		[[#include <nsEmbedString.h>
-		  #include <nsIChromeRegistry.h>]],
-		[[nsIXULChromeRegistry *p;
-		  p->SelectSkin (nsEmbedCString(), PR_FALSE);]]
-	)],
-	[AC_DEFINE([MOZ_NSIXULCHROMEREGISTRY_SELECTSKIN],[1],[Define if nsIXULChromeRegistry::SelectSkin exists]) result=yes],
-	[result=no])
-
-AC_MSG_RESULT([$result])
-
-# changed from nsIXULChromeRegistry in 1.8a4
-
-GECKO_CHECK_HEADERS([],[chrome/nsIChromeRegistrySea.h])
-
-# changed location in 1.8a6
-
-AC_MSG_CHECKING([for mozilla security compoment])
-
-GECKO_COMPILE_IFELSE([pipnss],
-	[AC_LANG_PROGRAM(
-		[[#include <nsIX509Cert.h>]],
-		[[nsIX509Cert *c;
-		  c->GetIssuer (nsnull);]]
-	)],
-	[have_psm=yes],
-	[have_psm=no])
-
-AC_MSG_RESULT([$have_psm])
-
-# This is only present on toolkit
-
-if test "$gecko_cv_gecko_flavour" = "toolkit"; then
-
-AC_DEFINE([HAVE_TYPEAHEADFIND],[1],[Define if we have tookit's typeaheadfind])
 
 # Make sure we DON'T have the typeaheadfind extension
 
@@ -312,7 +237,9 @@ if test "$have_broken_typeaheadfind" = "yes"; then
 	AC_MSG_ERROR([You must not compile $gecko_cv_gecko with the "typeaheadfind" extension enabled!])
 fi
 
-fi # gecko_cv_gecko_flavour = toolkit
+# Check for PSM header(s) to infer PSM presence
+
+GECKO_CHECK_HEADERS([pipnss],[nsIX509Cert.h],[have_psm=yes],[have_psm=no])
 
 # Make sure we don't accidentally build without PSM support
 
@@ -333,12 +260,6 @@ if test "$enable_psm" = "yes" -a "$have_psm" = "yes"; then
 fi
 
 AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "$enable_psm" = "yes" -a "$have_psm" = "yes"])
-
-# Not a simple file check due to the header being in the SDK since 1.8a6
-# https://bugzilla.mozilla.org/show_bug.cgi?id=271068
-
-GECKO_CHECK_HEADERS([passwordmgr wallet],[nsIPassword.h],
-	[],[AC_MSG_WARN([nsIPassword.h not found; personal data manger will have no passwords support!])])
 
 # Check whether to enable our filepicker component
 
@@ -391,11 +312,6 @@ fi
 
 GECKO_CHECK_CONTRACTIDS([$REQUIRED_CONTRACTS],
 	[],[AC_MSG_ERROR([$gecko_cv_gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
-
-# Needed since 1.8b2
-# Define this down here so it doesn't affect the API checks above
-
-AC_DEFINE([MOZILLA_INTERNAL_API],[1],[Define for access to internal mozilla API])
 
 # ***************
 # Multimedia keys

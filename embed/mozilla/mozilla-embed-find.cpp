@@ -20,15 +20,15 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
+
+#include "ephy-debug.h"
+#include "ephy-embed-find.h"
+#include "ephy-embed-shell.h"
 
 #include "EphyFind.h"
 
 #include "mozilla-embed-find.h"
-#include "ephy-embed-find.h"
-#include "ephy-embed-shell.h"
-#include "ephy-debug.h"
 
 #define MOZILLA_EMBED_FIND_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED_FIND, MozillaEmbedFindPrivate))
 

@@ -21,40 +21,25 @@
 #include "mozilla-config.h"
 #include "config.h"
 
-#include "EphyPromptService.h"
-#include "AutoJSContextStack.h"
-
-#include <nsCOMPtr.h>
-#include <nsIDOMWindow.h>
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-
-#if 0
-#include <nsIPrincipal.h>
-#include <nsIScriptSecurityManager.h>
-#include <nsIServiceManager.h>
-#endif
-
-#if 0
-#include "AutoEventQueue.h"
-#endif
-
-#include "EphyUtils.h"
-
 #include <glib.h>
 #include <glib-object.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#include <nsStringAPI.h>
+
+#include <nsCOMPtr.h>
+#include <nsIDOMWindow.h>
+#include <nsServiceManagerUtils.h>
+
 #include "ephy-embed-shell.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
 
-#ifndef HAVE_GECKO_1_8
-typedef nsEmbedString nsDependentString;
-typedef nsEmbedCString nsDependentCString;
-#endif
+#include "AutoJSContextStack.h"
+#include "EphyUtils.h"
+
+#include "EphyPromptService.h"
 
 #define TIMEOUT			1000 /* ms */
 #define TIMEOUT_DATA_KEY	"timeout"
@@ -377,7 +362,7 @@ Prompter::AddEntry (const char *aLabel,
 
 	if (aValue)
 	{
-		nsEmbedCString cValue;
+		nsCString cValue;
 		NS_UTF16ToCString (nsDependentString(aValue),
 				   NS_CSTRING_ENCODING_UTF8, cValue);
 
@@ -402,7 +387,7 @@ Prompter::GetText (PRUint32 aNum,
 	const char *text = gtk_entry_get_text (GTK_ENTRY (mEntries[aNum]));
 	if (!text) return;
 
-	nsEmbedString value;
+	nsString value;
 	NS_CStringToUTF16 (nsDependentCString (text),
 			   NS_CSTRING_ENCODING_UTF8, value);
 
@@ -421,7 +406,7 @@ Prompter::AddSelect (PRUint32 aCount,
 		/* FIXME: use "" instead in this case? */
 		if (!aList[i] || !aList[i][0]) continue;
 
-		nsEmbedCString cData;
+		nsCString cData;
 		NS_UTF16ToCString (nsDependentString(aList[i]), NS_CSTRING_ENCODING_UTF8, cData);
 
 		gtk_combo_box_append_text (GTK_COMBO_BOX (mCombo), cData.get());
@@ -544,18 +529,24 @@ Prompter::Show ()
 PRBool
 Prompter::IsCalledFromScript()
 {
-	/* FIXME: implement me! */
 #if 0
+	nsCOMPtr<nsIXPConnect> xpconnect (do_GetService (nsIXPConnect::GetCID()));
+	NS_ENSURE_TRUE (xpconnect, PR_FALSE);
+
 	nsresult rv;
-	nsCOMPtr<nsIScriptSecurityManager> securityManager =
-			do_GetService(NS_SCRIPTSECURITYMANAGER_CONTRACTID, &rv);
+	nsCOMPtr<nsIXPCNativeCallContext> ncc;
+	rv = xpconnect->GetCurrentNativeCallContext (getter_AddRefs (ncc));
 	NS_ENSURE_SUCCESS (rv, PR_FALSE);
 
-	nsCOMPtr<nsIPrincipal> principal;
-	rv = securityManager->GetSubjectPrincipal (getter_AddRefs (principal));
+	if (!ncc) return PR_FALSE;
 
-	g_print ("rv=%x mPrincipal=%p\n", rv, (void*)principal.get());
-	return NS_SUCCEEDED (rv) && principal.get();
+	JSContext *cx = nsnull;
+	rv = ncc->GetJSContext (&cx);
+	g_print ("GetJSContext rv=%x, cx=%p\n", rv, cx);
+
+	NS_ENSURE_SUCCESS (rv, PR_FALSE);
+
+	return cx != nsnull;
 #endif
 	return PR_FALSE;
 }
@@ -563,14 +554,26 @@ Prompter::IsCalledFromScript()
 void
 Prompter::PerformScriptAbortion()
 {
-	/* FIXME: implement me! */
 #if 0
-	nsresult rv;
-	nsCOMPtr<nsIScriptSecurityManager> securityManager =
-			do_GetService(NS_SCRIPTSECURITYMANAGER_CONTRACTID, &rv);
-	NS_ENSURE_SUCCESS (rv, );
+	/* FIXME: can we only stop the calling script, not all scripts in the context? */
 
-	securityManager->DisableCapability ("javascript.enabled");
+	nsCOMPtr<nsIXPConnect> xpconnect (do_GetService (nsIXPConnect::GetCID()));
+	NS_ENSURE_TRUE (xpconnect, );
+
+	nsresult rv;
+	nsCOMPtr<nsIXPCNativeCallContext> ncc;
+	rv = xpconnect->GetCurrentNativeCallContext (getter_AddRefs (ncc));
+	NS_ENSURE_SUCCESS (rv, );
+	NS_ENSURE_TRUE (ncc, );
+
+	JSContext *cx = nsnull;
+	rv = ncc->GetJSContext (&cx);
+	g_print ("GetJSContext rv=%x, cx=%p\n", rv, cx);
+	NS_ENSURE_SUCCESS (rv, );
+	NS_ENSURE_TRUE (cx, );
+
+	g_print ("Would now disable scripts\n");
+//	MozillaPrivate::SetScriptsEnabled (cx, PR_FALSE, PR_FALSE);
 #endif
 }
 

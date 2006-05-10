@@ -44,8 +44,9 @@
 #ifndef GTK_NSSSECURITYDIALOGS_H
 #define GTK_NSSSECURITYDIALOGS_H
 
-#include <nsISecurityWarningDialogs.h>
 #include <gtk/gtkmessagedialog.h>
+
+#include <nsISecurityWarningDialogs.h>
 
 #define GTK_NSSSECURITYWARNINGDIALOGS_CLASSNAME	"Epiphany Security Warning Dialogs Class"
 #define GTK_NSSSECURITYWARNINGDIALOGS_CID \

@@ -39,29 +39,26 @@
  * $Id$
  */
 
+#ifndef EPHY_HEADER_SNIFFER_H
+#define EPHY_HEADER_SNIFFER_H
+
+class nsIDOMDocument;
+class nsIFile;
+class nsIInputStream;
+class nsILocalFile;
+class nsIURI;
+class nsIWebBrowserPersist;
+
+#include <nsCOMPtr.h>
+#include <nsIAuthPrompt.h>
+#include <nsIInterfaceRequestor.h>
+#include <nsIWebProgressListener.h>
+
 #include "mozilla-embed-persist.h"
 #include "ephy-embed-single.h"
 
-#include <nsIWebProgressListener.h>
-#include <nsIWebBrowserPersist.h>
-#include <nsIURI.h>
-#include <nsILocalFile.h>
-#include <nsIInputStream.h>
-#include <nsIDOMDocument.h>
-#include <nsIAuthPrompt.h>
-#include <nsIPromptService.h>
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-
-#ifdef HAVE_GECKO_1_8
-#include <nsIInterfaceRequestor.h>
-#endif
-
 class EphyHeaderSniffer : public nsIWebProgressListener,
-#ifdef HAVE_GECKO_1_8
 			  public nsIInterfaceRequestor,
-#endif
 			  public nsIAuthPrompt
 {
 public:
@@ -73,9 +70,7 @@ public:
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIWEBPROGRESSLISTENER
 	NS_FORWARD_SAFE_NSIAUTHPROMPT(mAuthPrompt)
-#ifdef HAVE_GECKO_1_8
 	NS_DECL_NSIINTERFACEREQUESTOR
-#endif
 
 	nsresult InitiateDownload (nsILocalFile *aDestFile);
 
@@ -92,8 +87,9 @@ private:
 	nsCOMPtr<nsIURI>           mOriginalURI;
 	nsCOMPtr<nsIDOMDocument>   mDocument;
 	nsCOMPtr<nsIInputStream>   mPostData;
-	nsEmbedCString             mContentType;
-	nsEmbedCString             mContentDisposition;
+	nsCString             mContentType;
+	nsCString             mContentDisposition;
 	nsCOMPtr<nsIAuthPrompt>    mAuthPrompt;
 };
 
+#endif /* !EPHY_HEADER_SNIFFER_H */

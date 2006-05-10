@@ -19,22 +19,28 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "EphyDirectoryProvider.h"
-
-#include <nsCOMPtr.h>
-#include <nsIIOService.h>
-#include <nsNetUtil.h>
-#include <nsEnumeratorUtils.h>
-#include <nsILocalFile.h>
-#include <nsAppDirectoryServiceDefs.h>
-#include <nsIToolkitChromeRegistry.h>
-#include <nsIDirectoryService.h>
-#include <nsISupportsArray.h>
-
 #include <string.h>
+
+#ifndef HAVE_GECKO_1_9
+// for nsNetUtil.h
+#define MOZILLA_INTERNAL_API 1
+#endif
+
+#include <nsStringAPI.h>
+
+#include <nsAppDirectoryServiceDefs.h>
+#include <nsCOMPtr.h>
+#include <nsEnumeratorUtils.h>
+#include <nsIDirectoryService.h>
+#include <nsIIOService.h>
+#include <nsILocalFile.h>
+#include <nsISupportsArray.h>
+#include <nsIToolkitChromeRegistry.h>
+#include <nsNetUtil.h>
+
+#include "EphyDirectoryProvider.h"
 
 NS_IMPL_ISUPPORTS2 (EphyDirectoryProvider,
  		    nsIDirectoryServiceProvider,

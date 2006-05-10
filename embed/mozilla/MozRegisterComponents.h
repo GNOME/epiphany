@@ -21,6 +21,8 @@
 #ifndef MOZREGISTERCOMPONENTS_H
 #define MOZREGISTERCOMPONENTS_H
 
+#include <glib.h>
+
 gboolean mozilla_register_components		(void);
 
 #endif /* MOZREGISTERCOMPONENTS_H */

@@ -128,12 +128,10 @@ enum
 	MIN_SIZE_PROP,
 	FONT_PREFS_BUTTON_PROP,
 	USE_COLORS_PROP,
-#ifdef HAVE_GECKO_1_8
 	CSS_CONTAINER_PROP,
 	CSS_CHECKBOX_PROP,
 	CSS_EDIT_BOX_PROP,
 	CSS_EDIT_BUTTON_PROP,
-#endif
 
 	/* Privacy */
 	ALLOW_POPUPS_PROP,
@@ -174,12 +172,10 @@ EphyDialogProperty properties [] =
 	{ "min_size_spinbutton",	CONF_RENDERING_FONT_MIN_SIZE,	PT_AUTOAPPLY,	0 },
 	{ "font_prefs_button",		NULL,				PT_NORMAL,	0 },
 	{ "use_colors_checkbutton",	CONF_RENDERING_USE_OWN_COLORS,	PT_AUTOAPPLY | PT_INVERTED,	0 },
-#ifdef HAVE_GECKO_1_8
 	{ "css_container",		NULL,				PT_NORMAL,	0 },
 	{ "css_checkbox",		CONF_USER_CSS_ENABLED,		PT_AUTOAPPLY,	0 },
 	{ "css_edit_box",		NULL,				PT_NORMAL,	0 },
 	{ "css_edit_button",		NULL,				PT_NORMAL,	0 },
-#endif
 
 	/* Privacy */
 	{ "popups_allow_checkbutton",		CONF_SECURITY_ALLOW_POPUPS,	  PT_AUTOAPPLY, 0 },
@@ -636,8 +632,6 @@ font_prefs_button_clicked_cb (GtkWidget *button,
 	ephy_dialog_show (priv->fonts_dialog);
 }
 
-#ifdef HAVE_GECKO_1_8
-
 static void
 css_checkbox_toggled (GtkToggleButton *button,
 		      GtkWidget *widget)
@@ -662,8 +656,6 @@ css_edit_button_clicked_cb (GtkWidget *button,
 	g_free (css_file);
 	g_free (uri);
 }
-
-#endif /* HAVE_GECKO_1_8 */
 
 static void
 create_node_combo (EphyDialog *dialog,
@@ -1531,9 +1523,7 @@ prefs_dialog_init (PrefsDialog *pd)
 	EphyEncodings *encodings;
 	GtkWidget *window, *curr_button, *blank_button;
 	GtkWidget *clear_cache_button, *font_prefs_button;
-#ifdef HAVE_GECKO_1_8
 	GtkWidget *css_checkbox, *css_edit_box, *css_edit_button, *css_container;
-#endif
 	gboolean sensitive;
 
 	pd->priv = EPHY_PREFS_DIALOG_GET_PRIVATE (pd);
@@ -1553,12 +1543,10 @@ prefs_dialog_init (PrefsDialog *pd)
 		 properties[HOMEPAGE_CURRENT_PROP].id, &curr_button,
 		 properties[HOMEPAGE_BLANK_PROP].id, &blank_button,
 		 properties[FONT_PREFS_BUTTON_PROP].id, &font_prefs_button,
-#ifdef HAVE_GECKO_1_8
 		 properties[CSS_CHECKBOX_PROP].id, &css_checkbox,
 		 properties[CSS_EDIT_BOX_PROP].id, &css_edit_box,
 		 properties[CSS_EDIT_BUTTON_PROP].id, &css_edit_button,
 		 properties[CSS_CONTAINER_PROP].id, &css_container,
-#endif
 		 properties[CLEAR_CACHE_BUTTON_PROP].id, &clear_cache_button,
 		 NULL);
 
@@ -1580,16 +1568,12 @@ prefs_dialog_init (PrefsDialog *pd)
 	g_signal_connect (font_prefs_button, "clicked",
 			  G_CALLBACK (font_prefs_button_clicked_cb), dialog);
 
-#ifdef HAVE_GECKO_1_8
 	css_checkbox_toggled (GTK_TOGGLE_BUTTON (css_checkbox), css_edit_box);
 	g_signal_connect (css_checkbox, "toggled",
 			  G_CALLBACK (css_checkbox_toggled), css_edit_box);
 
 	g_signal_connect (css_edit_button, "clicked",
 			  G_CALLBACK (css_edit_button_clicked_cb), dialog);
-
-	gtk_widget_show (css_container);
-#endif
 
 	g_signal_connect (clear_cache_button, "clicked",
 			  G_CALLBACK (prefs_clear_cache_button_clicked_cb), dialog);

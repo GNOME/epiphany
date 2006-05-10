@@ -22,10 +22,10 @@
 #ifndef MOZILLA_EMBED_EVENT_H
 #define MOZILLA_EMBED_EVENT_H
 
-#include "ephy-embed-event.h"
-
-#include <glib-object.h>
 #include <glib.h>
+#include <glib-object.h>
+
+#include "ephy-embed-event.h"
 
 G_BEGIN_DECLS
 

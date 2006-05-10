@@ -19,32 +19,43 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
-
-#include "mozilla-embed-persist.h"
-#include "mozilla-embed.h"
-#include "ephy-embed-shell.h"
-#include "ephy-file-helpers.h"
-#include "EphyBrowser.h"
-#include "EphyHeaderSniffer.h"
-#include "MozDownload.h"
-#include "EphyUtils.h"
-#include "ephy-debug.h"
 
 #include <stddef.h>
 
-#include <nsIWebBrowserPersist.h>
+#include <nsStringAPI.h>
+
+#include <nsCOMPtr.h>
+#include <nsComponentManagerUtils.h>
 #include <nsCWebBrowserPersist.h>
-#include <nsIHistoryEntry.h>
-#include <nsISHEntry.h>
-#include <nsIDOMSerializer.h>
-#include <nsIIOService.h>
-#include <nsNetCID.h>
-#include <nsNetError.h>
 #include <nsICacheEntryDescriptor.h>
 #include <nsICacheService.h>
 #include <nsICacheSession.h>
+#include <nsIDOMSerializer.h>
+#include <nsIFile.h>
+#include <nsIHistoryEntry.h>
+#include <nsIInputStream.h>
+#include <nsIIOService.h>
+#include <nsILocalFile.h>
+#include <nsISHEntry.h>
+#include <nsIURI.h>
+#include <nsIWebBrowserPersist.h>
+#include <nsNetCID.h>
+#include <nsNetError.h>
+#include <nsServiceManagerUtils.h>
+#include <nsXPCOM.h>
+
+#include "EphyBrowser.h"
+#include "EphyHeaderSniffer.h"
+#include "EphyUtils.h"
+#include "MozDownload.h"
+
+#include "ephy-debug.h"
+#include "ephy-embed-shell.h"
+#include "ephy-file-helpers.h"
+#include "mozilla-embed.h"
+
+#include "mozilla-embed-persist.h"
 
 static void
 mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass);
@@ -127,18 +138,11 @@ impl_cancel (EphyEmbedPersist *persist)
 {
 	nsCOMPtr<nsIWebBrowserPersist> bpersist =
 		MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
-#ifdef HAVE_GECKO_1_8
 	nsCOMPtr<nsICancelable> cancelable (do_QueryInterface (bpersist));
 	if (cancelable)
 	{
 		cancelable->Cancel (NS_BINDING_ABORTED);
 	}
-#else
-	if (bpersist)
-	{
-		bpersist->CancelSave ();
-	}
-#endif
 
 	g_object_unref (persist);
 }
@@ -186,7 +190,7 @@ impl_save (EphyEmbedPersist *persist)
 	if (uri)
 	{
 		/* FIXME: origin charset!! */
-		rv = EphyUtils::NewURI (getter_AddRefs(inURI), nsEmbedCString(uri));
+		rv = EphyUtils::NewURI (getter_AddRefs(inURI), nsCString(uri));
 		NS_ENSURE_SUCCESS (rv, FALSE);
 	}
 	else
@@ -260,20 +264,13 @@ impl_save (EphyEmbedPersist *persist)
 			{
 				nsCOMPtr<nsICacheEntryDescriptor> descriptor;
 
-				nsEmbedCString spec;
+				nsCString spec;
 				inURI->GetSpec (spec);
 
-#ifdef HAVE_GECKO_1_8
 				rv = cacheSession->OpenCacheEntry
 					(spec,
 					 nsICache::ACCESS_READ,
 					 PR_FALSE, getter_AddRefs (descriptor));
-#else
-				rv = cacheSession->OpenCacheEntry
-					(spec.get(),
-					 nsICache::ACCESS_READ,
-					 PR_FALSE, getter_AddRefs (descriptor));
-#endif
 
 				cacheDescriptor = do_QueryInterface (descriptor);
 
@@ -302,7 +299,7 @@ impl_save (EphyEmbedPersist *persist)
 		nsCOMPtr<nsILocalFile> tmpFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
 		NS_ENSURE_TRUE (tmpFile, FALSE);
 
-		tmpFile->InitWithNativePath (nsEmbedCString (tmp_filename));
+		tmpFile->InitWithNativePath (nsCString (tmp_filename));
 		g_free (tmp_filename);
 
 		/* Create an header sniffer and do the save */
@@ -323,7 +320,7 @@ impl_save (EphyEmbedPersist *persist)
 	{
 		/* Filename to save to */
 		nsCOMPtr<nsILocalFile> destFile;
-		NS_NewNativeLocalFile (nsEmbedCString(filename),
+		NS_NewNativeLocalFile (nsCString(filename),
 				       PR_TRUE, getter_AddRefs(destFile));
 	        NS_ENSURE_TRUE (destFile, FALSE);
 
@@ -369,11 +366,11 @@ impl_to_string (EphyEmbedPersist *persist)
 		rv = browser->GetTargetDocument (getter_AddRefs(DOMDocument));
 	}
 
-	nsEmbedCString cOutString;
+	nsCString cOutString;
 	nsCOMPtr<nsIDOMNode> node = do_QueryInterface(DOMDocument);
 	if (node)
 	{
-		nsEmbedString outString;
+		nsString outString;
 		nsCOMPtr<nsIDOMSerializer> serializer;
 		serializer = do_CreateInstance(NS_XMLSERIALIZER_CONTRACTID, &rv);
 		if (serializer)

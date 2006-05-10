@@ -25,10 +25,9 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "ephy-embed.h"
-
-#include <nsISupports.h>
 #include <nsIContentPolicy.h>
+
+#include "ephy-embed.h"
 
 #define EPHY_CONTENT_POLICY_CONTRACTID	"@gnome.org/projects/epiphany/epiphany-content-policy;1"
 #define EPHY_CONTENT_POLICY_CLASSNAME	"Epiphany Content Policy Class"

@@ -21,10 +21,10 @@
 #ifndef MOZILLA_EMBED_PERSIST_H
 #define MOZILLA_EMBED_PERSIST_H
 
-#include "ephy-embed-persist.h"
-
-#include <glib-object.h>
 #include <glib.h>
+#include <glib-object.h>
+
+#include "ephy-embed-persist.h"
 
 G_BEGIN_DECLS
 

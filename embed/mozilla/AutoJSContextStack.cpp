@@ -21,9 +21,9 @@
 #include "mozilla-config.h"
 #include "config.h"
 
-#include "AutoJSContextStack.h"
+#include <nsServiceManagerUtils.h>
 
-#include <nsIServiceManager.h>
+#include "AutoJSContextStack.h"
 
 AutoJSContextStack::~AutoJSContextStack()
 {

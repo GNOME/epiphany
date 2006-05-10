@@ -42,27 +42,28 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "GtkNSSSecurityWarningDialogs.h"
-#include "EphyUtils.h"
-#include "AutoJSContextStack.h"
+#include <glib/gi18n.h>
+#include <gtk/gtkbox.h>
+#include <gtk/gtkdialog.h>
+#include <gtk/gtkhbox.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkvbox.h>
 
 #include <nsCOMPtr.h>
+#include <nsIDOMWindow.h>
+#include <nsIInterfaceRequestor.h>
+#include <nsIInterfaceRequestorUtils.h>
 #include <nsIPrefBranch.h>
 #include <nsIPrefService.h>
 #include <nsIServiceManager.h>
-#include <nsIInterfaceRequestor.h>
-#include <nsIInterfaceRequestorUtils.h>
-#include <nsIDOMWindow.h>
+#include <nsServiceManagerUtils.h>
 
-#include <glib/gi18n.h>
-#include <gtk/gtkdialog.h>
-#include <gtk/gtkbox.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtklabel.h>
+#include "AutoJSContextStack.h"
+#include "EphyUtils.h"
+
+#include "GtkNSSSecurityWarningDialogs.h"
 
 NS_IMPL_THREADSAFE_ISUPPORTS1 (GtkNSSSecurityWarningDialogs, nsISecurityWarningDialogs)
 

@@ -21,47 +21,45 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "EphyUtils.h"
-#include "AutoJSContextStack.h"
-
-#include <nsIDOMWindow.h>
-#include <nsIServiceManager.h>
-#include <nsIInterfaceRequestor.h>
-#include <nsIInterfaceRequestorUtils.h>
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-
-#include <gtk/gtkdialog.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtktextbuffer.h>
-#include <gtk/gtktextview.h>
-#include <gtk/gtkprogressbar.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkscrolledwindow.h>
-#include <gtk/gtktogglebutton.h>
-#include <gtk/gtkexpander.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtktreemodel.h>
+#include <glib/gi18n.h>
 #include <gtk/gtkcelllayout.h>
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcombobox.h>
-#include <glib/gi18n.h>
+#include <gtk/gtkdialog.h>
+#include <gtk/gtkexpander.h>
+#include <gtk/gtkhbox.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkliststore.h>
+#include <gtk/gtkmenuitem.h>
+#include <gtk/gtkoptionmenu.h>
+#include <gtk/gtkprogressbar.h>
+#include <gtk/gtkscrolledwindow.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtktextbuffer.h>
+#include <gtk/gtktextview.h>
+#include <gtk/gtktogglebutton.h>
+#include <gtk/gtktreemodel.h>
+#include <gtk/gtkvbox.h>
 
-#include "GtkNSSClientAuthDialogs.h"
+#include <nsStringAPI.h>
 
+#include <nsIDOMWindow.h>
+#include <nsIInterfaceRequestor.h>
+#include <nsIInterfaceRequestorUtils.h>
+#include <nsIServiceManager.h>
+
+#include "ephy-debug.h"
 #include "ephy-gui.h"
 #include "ephy-state.h"
-#include "ephy-debug.h"
+
+#include "AutoJSContextStack.h"
+#include "EphyUtils.h"
+
+#include "GtkNSSClientAuthDialogs.h"
 
 GtkNSSClientAuthDialogs::GtkNSSClientAuthDialogs()
 {
@@ -201,8 +199,8 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 	
 
-	nsEmbedCString utf8_cn;
-	NS_UTF16ToCString (nsEmbedString (cn),
+	nsCString utf8_cn;
+	NS_UTF16ToCString (nsString (cn),
 			   NS_CSTRING_ENCODING_UTF8, utf8_cn);
 
 	msg = g_markup_printf_escaped (_("Choose a certificate to present as identification to “%s”."),
@@ -218,12 +216,12 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 	for (i = 0; i < count; i++)
 	{
-		nsEmbedCString certnick;
-		nsEmbedCString certdetail;
+		nsCString certnick;
+		nsCString certdetail;
 
-		NS_UTF16ToCString (nsEmbedString (certNickList[i]),
+		NS_UTF16ToCString (nsString (certNickList[i]),
 				   NS_CSTRING_ENCODING_UTF8, certnick);
-		NS_UTF16ToCString (nsEmbedString (certDetailsList[i]),
+		NS_UTF16ToCString (nsString (certDetailsList[i]),
 				   NS_CSTRING_ENCODING_UTF8, certdetail);
 
 		gtk_list_store_append (store, &iter);

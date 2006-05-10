@@ -20,26 +20,27 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "EphySingle.h"
+#include <nsStringAPI.h>
 
-#include "ephy-debug.h"
-
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-#include <nsIURI.h>
-#include <nsIPermissionManager.h>
-#include <nsICookieManager.h>
-#include <nsIServiceManager.h>
+#include <nsICookie.h>
 #include <nsICookie2.h>
-#include <nsIServiceManager.h>
+#include <nsICookieManager.h>
+#include <nsIObserverService.h>
+#include <nsIPermission.h>
+#include <nsIPermissionManager.h>
+#include <nsIURI.h>
+#include <nsServiceManagerUtils.h>
+#include <nsWeakReference.h>
 
 #ifdef ALLOW_PRIVATE_API
 #include <nsIIDNService.h>
 #endif
+
+#include "ephy-debug.h"
+
+#include "EphySingle.h"
 
 NS_IMPL_ISUPPORTS1(EphySingle, nsIObserver)
 
@@ -183,7 +184,7 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 		nsCOMPtr<nsIURI> uri = do_QueryInterface (aSubject);
 		if (uri)
 		{
-			nsEmbedCString spec;
+			nsCString spec;
 			uri->GetSpec (spec);
 
 			g_signal_emit_by_name (EPHY_COOKIE_MANAGER (mOwner), "cookie-rejected", spec.get());
@@ -254,7 +255,7 @@ mozilla_cookie_to_ephy_cookie (nsICookie *cookie)
 {
 	EphyCookie *info;
 
-	nsEmbedCString transfer;
+	nsCString transfer;
 
 	cookie->GetHost (transfer);
 
@@ -262,7 +263,7 @@ mozilla_cookie_to_ephy_cookie (nsICookie *cookie)
 		(do_GetService ("@mozilla.org/network/idn-service;1"));
 	NS_ENSURE_TRUE (idnService, nsnull);
 
-	nsEmbedCString decoded;
+	nsCString decoded;
 	/* ToUTF8 never fails, no need to check return value */
 	idnService->ConvertACEtoUTF8 (transfer, decoded);
 
@@ -305,7 +306,7 @@ EphyPermissionInfo *
 mozilla_permission_to_ephy_permission (nsIPermission *perm)
 {
 	nsresult rv;
-	nsEmbedCString type;
+	nsCString type;
 	rv = perm->GetType(type);
 	NS_ENSURE_SUCCESS (rv, NULL);
 
@@ -326,14 +327,14 @@ mozilla_permission_to_ephy_permission (nsIPermission *perm)
 			break;
 	}
 
-	nsEmbedCString host;
+	nsCString host;
 	perm->GetHost(host);
 
 	nsCOMPtr<nsIIDNService> idnService
 		(do_GetService ("@mozilla.org/network/idn-service;1"));
 	NS_ENSURE_TRUE (idnService, nsnull);
 
-	nsEmbedCString decodedHost;
+	nsCString decodedHost;
 	idnService->ConvertACEtoUTF8 (host, decodedHost);
 
 	return ephy_permission_info_new (decodedHost.get(), type.get(), permission);

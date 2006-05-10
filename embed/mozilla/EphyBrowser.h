@@ -21,24 +21,22 @@
 #ifndef EPHY_BROWSER_H
 #define EPHY_BROWSER_H
 
-#include "config.h"
-
 #include "ephy-embed.h"
 #include <gtk/gtkwidget.h>
 
 #include <gtkmozembed.h>
 #include <nsCOMPtr.h>
-#include <nsIDOMEventListener.h>
 #include <nsIDOMContextMenuListener.h>
-#include <nsIDOMEventTarget.h>
-#include <nsIWebNavigation.h>
-#include <nsISHistory.h>
-#include <nsIWebBrowser.h>
-#include <nsIWebBrowserFocus.h>
 #include <nsIDOMDocument.h>
+#include <nsIDOMEventListener.h>
+#include <nsIDOMEventTarget.h>
 #include <nsIDOMWindow.h>
 #include <nsIPrintSettings.h>
 #include <nsIRequest.h>
+#include <nsISHistory.h>
+#include <nsIWebBrowserFocus.h>
+#include <nsIWebBrowser.h>
+#include <nsIWebNavigation.h>
 
 #ifdef ALLOW_PRIVATE_API
 #include <nsIContentViewer.h>
@@ -187,11 +185,6 @@ public:
 	nsresult Close ();
 
         EphyEmbedDocumentType GetDocumentType ();
-
-#ifndef HAVE_GECKO_1_8
-	nsresult FocusActivate ();
-	nsresult FocusDeactivate ();
-#endif /* !HAVE_GECKO_1_8 */
 
 	nsCOMPtr<nsIWebBrowser> mWebBrowser;
 private:

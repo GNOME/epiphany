@@ -24,6 +24,7 @@
 #include "ephy-x509-cert.h"
 
 #include <glib-object.h>
+
 #include <nsCOMPtr.h>
 #include <nsIX509Cert.h>
 

@@ -21,53 +21,65 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
-
-#include "EventContext.h"
-#include "EphyUtils.h"
-#include "ephy-debug.h"
 
 #include <gdk/gdkkeysyms.h>
 
-#include <nsIInterfaceRequestor.h>
-#include <nsIInterfaceRequestorUtils.h>
-#include <nsIServiceManager.h>
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-#include <nsIDOMEventTarget.h>
-#include <nsIDOMHTMLInputElement.h>
-#include <nsIDOMHTMLObjectElement.h>
-#include <nsIDOMHTMLImageElement.h>
-#include <nsIDOMElement.h>
-#include <nsIURI.h>
+#include <nsStringAPI.h>
+
+#include <nsComponentManagerUtils.h>
+#include <nsIDOM3Node.h>
+#include <nsIDOMAbstractView.h>
 #include <nsIDOMCharacterData.h>
+#include <nsIDOMCSSPrimitiveValue.h>
+#include <nsIDOMCSSStyleDeclaration.h>
+#include <nsIDOMDocument.h>
+#include <nsIDOMDocumentView.h>
+#include <nsIDOMElementCSSInlineStyle.h>
+#include <nsIDOMElement.h>
+#include <nsIDOMEvent.h>
+#include <nsIDOMEventTarget.h>
+#include <nsIDOMEventTarget.h>
+#include <nsIDOMHTMLAnchorElement.h>
 #include <nsIDOMHTMLAreaElement.h>
+#include <nsIDOMHTMLBodyElement.h>
 #include <nsIDOMHTMLButtonElement.h>
+#include <nsIDOMHTMLImageElement.h>
+#include <nsIDOMHTMLInputElement.h>
+#include <nsIDOMHTMLIsIndexElement.h>
 #include <nsIDOMHTMLLabelElement.h>
 #include <nsIDOMHTMLLegendElement.h>
 #include <nsIDOMHTMLMapElement.h>
+#include <nsIDOMHTMLObjectElement.h>
+#include <nsIDOMHTMLSelectElement.h>
 #include <nsIDOMHTMLTextAreaElement.h>
-#include <nsIDOMElementCSSInlineStyle.h>
-#include <nsIDOMCSSStyleDeclaration.h>
-#include <nsIDOM3Node.h>
-#include <nsIDOMCSSPrimitiveValue.h>
+#include <nsIDOMKeyEvent.h>
+#include <nsIDOMMouseEvent.h>
+#include <nsIDOMNode.h>
 #include <nsIDOMNodeList.h>
-#include <nsIDOMDocumentView.h>
-#include <nsIDOMAbstractView.h>
 #include <nsIDOMNSHTMLDocument.h>
 #include <nsIDOMNSUIEvent.h>
-#include <nsIDOMHTMLSelectElement.h>
-#include <nsIDOMHTMLIsIndexElement.h>
+#include <nsIInterfaceRequestor.h>
+#include <nsIInterfaceRequestorUtils.h>
+#include <nsIServiceManager.h>
+#include <nsIURI.h>
 
 #ifdef ALLOW_PRIVATE_API
-#include <nsITextToSubURI.h>
-#include <nsIDOMXULDocument.h>
 #include <nsIDOMNSEvent.h>
 #include <nsIDOMNSHTMLElement.h>
 #include <nsIDOMViewCSS.h>
+#include <nsIDOMViewCSS.h>
+#include <nsIDOMXULDocument.h>
+#include <nsITextToSubURI.h>
 #endif
+
+#include "ephy-debug.h"
+
+#include "EphyBrowser.h"
+#include "EphyUtils.h"
+
+#include "EventContext.h"
+
 
 #define KEY_CODE 256
 
@@ -91,7 +103,7 @@ nsresult EventContext::Init (EphyBrowser *browser)
 
 nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsAString& aResult)
 {
-	nsEmbedString text;
+	nsString text;
 	nsCOMPtr<nsIDOMNode> node;
 	aNode->GetFirstChild(getter_AddRefs(node));
 	PRUint32 depth = 1;
@@ -106,7 +118,7 @@ nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsAString& aResult)
 		{
 			/* Add this text to our collection. */
 			text += ' ';
-			nsEmbedString data;
+			nsString data;
 			charData->GetData(data);
 			text += data;
 		}
@@ -115,7 +127,7 @@ nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsAString& aResult)
 			nsCOMPtr<nsIDOMHTMLImageElement> img(do_QueryInterface(node));
 			if (img)
 			{
-				nsEmbedString altText;
+				nsString altText;
 				img->GetAlt(altText);
 				if (altText.Length())
 				{
@@ -170,7 +182,7 @@ nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsAString& aResult)
 /* FIXME: we should resolve against the element's base, not the document's base */
 nsresult EventContext::ResolveBaseURL (const nsAString &relurl, nsACString &url)
 {
-	nsEmbedCString cRelURL;
+	nsCString cRelURL;
 	NS_UTF16ToCString (relurl, NS_CSTRING_ENCODING_UTF8, cRelURL);	
 
 	return mBaseURI->Resolve (cRelURL, url);
@@ -185,11 +197,11 @@ nsresult EventContext::Unescape (const nsACString &aEscaped, nsACString &aUnesca
 	NS_ENSURE_TRUE (escaper, NS_ERROR_FAILURE);
 
 	nsresult rv;
-	nsEmbedCString encoding;
+	nsCString encoding;
 	rv = mBrowser->GetEncoding (encoding);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-	nsEmbedString unescaped;
+	nsString unescaped;
 	rv = escaper->UnEscapeURIForUI (encoding, aEscaped, unescaped);
 	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && unescaped.Length(), NS_ERROR_FAILURE);
 
@@ -271,16 +283,16 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 	nsCOMPtr<nsIDOMHTMLElement> element = do_QueryInterface(node);
 	if ((nsIDOMNode::ELEMENT_NODE == type) && element)
 	{
-		nsEmbedString uTag;
+		nsString uTag;
 		rv = element->GetLocalName(uTag);
 		if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
-		nsEmbedCString tag;
+		nsCString tag;
 		NS_UTF16ToCString (uTag, NS_CSTRING_ENCODING_UTF8, tag);
 
 		if (g_ascii_strcasecmp (tag.get(), "img") == 0)
 		{
-			nsEmbedString img;
+			nsString img;
 			nsCOMPtr <nsIDOMHTMLImageElement> image = 
 						do_QueryInterface(node, &rv);
 			if (NS_FAILED(rv) || !image) return NS_ERROR_FAILURE;			
@@ -306,13 +318,13 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				do_QueryInterface(parentNode, &rv);
 			if (NS_FAILED(rv) || !area) return NS_ERROR_FAILURE;			
 
-			nsEmbedString mapName;
+			nsString mapName;
 			rv = map->GetName (mapName);
 			if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
 			// Now we are searching for all the images with a usemap attribute
 			nsCOMPtr<nsIDOMNodeList> imgs;
-			rv = mDOMDocument->GetElementsByTagName (nsEmbedString(imgLiteral), 	
+			rv = mDOMDocument->GetElementsByTagName (nsString(imgLiteral), 	
 								 getter_AddRefs (imgs));
 			if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 			
@@ -330,7 +342,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 						do_QueryInterface(aNode, &rv);
 				if (NS_FAILED(rv) || !img) continue;
 			
-				nsEmbedString imgMapName;
+				nsString imgMapName;
 				rv = img->GetUseMap (imgMapName);
 				if (NS_FAILED (rv)) continue;
 
@@ -340,7 +352,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				// Check if the current image is attached to the map we are looking for
 				if (EphyUtils::StringEquals(imgMapName, mapName))
 				{
-					nsEmbedString imgSrc;
+					nsString imgSrc;
 					rv = img->GetSrc (imgSrc);
 					if (NS_FAILED(rv)) continue;
 
@@ -366,21 +378,21 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			object = do_QueryInterface (node);
 			if (!element) return NS_ERROR_FAILURE;
 
-			nsEmbedString value;
+			nsString value;
 			object->GetType(value);
 
-			nsEmbedCString cValue;
+			nsCString cValue;
 			NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
 
 			// MIME types are always lower case
 			if (g_str_has_prefix (cValue.get(), "image/"))
 			{
-				nsEmbedString img;
+				nsString img;
 				
 				rv = object->GetData (img);
 				if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 				
-				nsEmbedCString cImg;
+				nsCString cImg;
 				rv = ResolveBaseURL (img, cImg);
                                 if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
@@ -400,18 +412,18 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			 * look for a background image in the body tag */
 			nsCOMPtr<nsIDOMNodeList> nodeList;
 
-			rv = mDOMDocument->GetElementsByTagName (nsEmbedString(bodyLiteral),
+			rv = mDOMDocument->GetElementsByTagName (nsString(bodyLiteral),
 								 getter_AddRefs (nodeList));
 			if (NS_SUCCEEDED (rv) && nodeList)
 			{
 				nsCOMPtr<nsIDOMNode> bodyNode;
 				nodeList->Item (0, getter_AddRefs (bodyNode));
 
-				nsEmbedString cssurl;
+				nsString cssurl;
 				rv = GetCSSBackground (bodyNode, cssurl);
 				if (NS_SUCCEEDED (rv))
 				{
-					nsEmbedCString bgimg;
+					nsCString bgimg;
 					rv = ResolveBaseURL (cssurl, bgimg);
 					if (NS_FAILED (rv))
 						return NS_ERROR_FAILURE;
@@ -435,18 +447,18 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 		nsCOMPtr <nsIDOMElement> dom_elem = do_QueryInterface(node);
 		if (dom_elem)
 		{
-			nsEmbedString value;
-			dom_elem->GetAttributeNS (nsEmbedString(xlinknsLiteral),
-						  nsEmbedString(typeLiteral), value);
+			nsString value;
+			dom_elem->GetAttributeNS (nsString(xlinknsLiteral),
+						  nsString(typeLiteral), value);
 
-			nsEmbedCString cValue;
+			nsCString cValue;
 			NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
 
 			if (g_ascii_strcasecmp (cValue.get(), "simple") == 0)
 			{
 				info->context |= EPHY_EMBED_CONTEXT_LINK;
-				dom_elem->GetAttributeNS (nsEmbedString(xlinknsLiteral),
-							  nsEmbedString(hrefLiteral), value);
+				dom_elem->GetAttributeNS (nsString(xlinknsLiteral),
+							  nsString(hrefLiteral), value);
 				
 				SetURIProperty (node, "link", value);
 				CheckLinkScheme (value);
@@ -459,17 +471,17 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 		element = do_QueryInterface(node);
 		if ((nsIDOMNode::ELEMENT_NODE == type) && element)
 		{
-			nsEmbedString uTag;
+			nsString uTag;
 			rv = element->GetLocalName(uTag);
 			if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
-			nsEmbedCString tag;
+			nsCString tag;
 			NS_UTF16ToCString (uTag, NS_CSTRING_ENCODING_UTF8, tag);
 
 			/* Link */
 			if (g_ascii_strcasecmp (tag.get(), "a") == 0)
 			{
-				nsEmbedString tmp;
+				nsString tmp;
 
 				rv = GatherTextUnder (node, tmp);
 				if (NS_SUCCEEDED(rv))
@@ -478,7 +490,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				nsCOMPtr <nsIDOMHTMLAnchorElement> anchor =
 					do_QueryInterface(node);
 
-				nsEmbedCString href;
+				nsCString href;
 				anchor->GetHref (tmp);
 				NS_UTF16ToCString (tmp, NS_CSTRING_ENCODING_UTF8, href);
 
@@ -490,8 +502,8 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					char *str = g_strdup (href.get());
 					g_strdelimit (str, "?", '\0');
 
-					nsEmbedCString unescapedHref;
-					rv = Unescape (nsEmbedCString(str), unescapedHref);
+					nsCString unescapedHref;
+					rv = Unescape (nsCString(str), unescapedHref);
 					if (NS_SUCCEEDED (rv) && unescapedHref.Length())
 					{
 						SetStringProperty ("email", unescapedHref.get());
@@ -525,7 +537,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					if (NS_SUCCEEDED(rv))
 						SetStringProperty ("link_type", tmp);
 
-					nsEmbedCString linkType;
+					nsCString linkType;
 					NS_UTF16ToCString (tmp, NS_CSTRING_ENCODING_UTF8, linkType);
 
 					if (g_ascii_strcasecmp (linkType.get(), "text/smartbookmark") == 0)
@@ -541,7 +553,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 							if (image)
 							{
-								nsEmbedString img;
+								nsString img;
 								rv = image->GetSrc (img);
 								if (!NS_FAILED(rv))
 								{
@@ -569,7 +581,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 						do_QueryInterface(node, &rv);
 				if (NS_SUCCEEDED(rv) && area)
 				{
-					nsEmbedString href;
+					nsString href;
 					rv = area->GetHref (href);
 					if (NS_FAILED(rv))
 						return NS_ERROR_FAILURE;
@@ -589,11 +601,11 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 			if (!has_image)
 			{
-				nsEmbedString cssurl;
+				nsString cssurl;
 				rv = GetCSSBackground (node, cssurl);
 				if (NS_SUCCEEDED (rv))
 				{
-					nsEmbedCString bgimg;
+					nsCString bgimg;
 
                                         rv = ResolveBaseURL (cssurl, bgimg);
                                         if (NS_FAILED (rv))
@@ -626,12 +638,12 @@ nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAString& url)
 	NS_ENSURE_TRUE (element, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMCSSStyleDeclaration> decl;
-	mViewCSS->GetComputedStyle (element, nsEmbedString(),
+	mViewCSS->GetComputedStyle (element, nsString(),
 				    getter_AddRefs (decl));
 	NS_ENSURE_TRUE (decl, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMCSSValue> CSSValue;
-	decl->GetPropertyCSSValue (nsEmbedString(bgimage),
+	decl->GetPropertyCSSValue (nsString(bgimage),
 				   getter_AddRefs (CSSValue));
 
 	nsCOMPtr<nsIDOMCSSPrimitiveValue> primitiveValue = 
@@ -694,17 +706,6 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, Mozilla
 			info->button = 3;
 			break;
 
-#ifndef HAVE_GECKO_1_8
-		case 1729:
-			/* This only appears to happen when getting a mouse context menu
-			 * signal, so map it to button 3 (right mouse button)
-			 * http://bugzilla.mozilla.org/show_bug.cgi?id=258193 
-			 * Fixed since 1.8a4
-			 */
-			info->button = 3;
-			break;
-#endif
-
 		case (PRUint16) -1:
 			/* when the user submits a form with Return, mozilla synthesises
 			 * a _mouse_ click event with btn=65535 (-1).
@@ -748,9 +749,9 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, Mozilla
 	nsCOMPtr<nsIDOMNode> OriginalNode = do_QueryInterface(OriginalTarget);
 	if (!OriginalNode) return NS_ERROR_FAILURE;
 
-	nsEmbedString nodename;
+	nsString nodename;
 	OriginalNode->GetNodeName(nodename);
-	nsEmbedCString cNodeName;
+	nsCString cNodeName;
 	NS_UTF16ToCString (nodename, NS_CSTRING_ENCODING_UTF8, cNodeName);
 
 	if (g_ascii_strcasecmp (cNodeName.get(), "xul:scrollbarbutton") == 0 ||
@@ -877,10 +878,10 @@ nsresult EventContext::CheckInput (nsIDOMNode *aNode)
 	element = do_QueryInterface (aNode);
 	if (!element) return NS_ERROR_FAILURE;
 
-	nsEmbedString uValue;
-	element->GetAttribute (nsEmbedString(typeLiteral), uValue);
+	nsString uValue;
+	element->GetAttribute (nsString(typeLiteral), uValue);
 
-	nsEmbedCString value;
+	nsCString value;
 	NS_UTF16ToCString (uValue, NS_CSTRING_ENCODING_UTF8, value);
 
 	if (g_ascii_strcasecmp (value.get(), "image") == 0)
@@ -891,11 +892,11 @@ nsresult EventContext::CheckInput (nsIDOMNode *aNode)
 		if (!input) return NS_ERROR_FAILURE;
 
 		nsresult rv;
-		nsEmbedString img;
+		nsString img;
 		rv = input->GetSrc (img);
 		if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
-		nsEmbedCString cImg;
+		nsCString cImg;
 		rv = ResolveBaseURL (img, cImg);
 		if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 		SetStringProperty ("image", cImg.get());
@@ -925,7 +926,7 @@ nsresult EventContext::CheckLinkScheme (const nsAString &link)
 	if (!uri) return NS_ERROR_FAILURE;
 
 	nsresult rv;
-	nsEmbedCString scheme;
+	nsCString scheme;
 	rv = uri->GetScheme (scheme);
 	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
@@ -973,7 +974,7 @@ nsresult EventContext::SetStringProperty (const char *name, const char *value)
 
 nsresult EventContext::SetStringProperty (const char *name, const nsAString &value)
 {
-	nsEmbedCString cValue;
+	nsCString cValue;
 	NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
 	return SetStringProperty (name, cValue.get());
 }
@@ -986,17 +987,17 @@ nsresult EventContext::SetURIProperty (nsIDOMNode *node, const char *name, const
 	if (NS_SUCCEEDED (rv) && uri)
 	{
 		/* Hide password part */
-		nsEmbedCString user;
+		nsCString user;
 		uri->GetUsername (user);
 		uri->SetUserPass (user);
 
-		nsEmbedCString spec;
+		nsCString spec;
 		uri->GetSpec (spec);
 		rv = SetStringProperty (name, spec.get());
 	}
 	else
 	{
-		rv = SetStringProperty (name, nsEmbedCString(value).get());
+		rv = SetStringProperty (name, nsCString(value).get());
 	}
 
 	return rv;
@@ -1004,7 +1005,7 @@ nsresult EventContext::SetURIProperty (nsIDOMNode *node, const char *name, const
 
 nsresult EventContext::SetURIProperty (nsIDOMNode *node, const char *name, const nsAString &value)
 {
-	nsEmbedCString cValue;
+	nsCString cValue;
 	NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
 	return SetURIProperty (node, name, cValue);
 }
@@ -1045,10 +1046,10 @@ EventContext::CheckKeyPress (nsIDOMKeyEvent *aEvent)
 	nsCOMPtr<nsIDOMHTMLInputElement> inputElement (do_QueryInterface (target));
 	if (inputElement)
 	{
-		nsEmbedString type;
+		nsString type;
 		inputElement->GetType (type);
 
-		nsEmbedCString (cType);
+		nsCString (cType);
 		NS_UTF16ToCString (type, NS_CSTRING_ENCODING_UTF8, cType);
 
 		if (g_ascii_strcasecmp (cType.get(), "text") == 0 ||
@@ -1078,11 +1079,11 @@ EventContext::CheckKeyPress (nsIDOMKeyEvent *aEvent)
 	nsCOMPtr<nsIDOMNSHTMLDocument> htmlDoc (do_QueryInterface (doc));
 	if (htmlDoc)
 	{
-		nsEmbedString uDesign;
+		nsString uDesign;
 		rv = htmlDoc->GetDesignMode (uDesign);
 		NS_ENSURE_SUCCESS (rv, retval);
 
-		nsEmbedCString design;
+		nsCString design;
 		NS_UTF16ToCString (uDesign, NS_CSTRING_ENCODING_UTF8, design);
 
 		retval = g_ascii_strcasecmp (design.get(), "on") != 0;

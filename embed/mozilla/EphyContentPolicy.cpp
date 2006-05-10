@@ -20,28 +20,27 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "EphyContentPolicy.h"
-#include "EphyUtils.h"
-
-#include "ephy-embed-shell.h"
-#include "ephy-embed-single.h"
-#include "eel-gconf-extensions.h"
-#include "ephy-adblock-manager.h"
-#include "ephy-debug.h"
+#include <nsStringAPI.h>
 
 #include <nsCOMPtr.h>
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
 #include <nsIDOMAbstractView.h>
 #include <nsIDOMDocument.h>
 #include <nsIDOMDocumentView.h>
 #include <nsIDOMNode.h>
 #include <nsIDOMWindow.h>
 #include <nsIURI.h>
+
+#include "eel-gconf-extensions.h"
+#include "ephy-adblock-manager.h"
+#include "ephy-debug.h"
+#include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
+
+#include "EphyUtils.h"
+
+#include "EphyContentPolicy.h"
 
 #define CONF_LOCKDOWN_DISABLE_UNSAFE_PROTOCOLS	"/apps/epiphany/lockdown/disable_unsafe_protocols"
 #define CONF_LOCKDOWN_ADDITIONAL_SAFE_PROTOCOLS	"/apps/epiphany/lockdown/additional_safe_protocols"
@@ -106,7 +105,6 @@ EphyContentPolicy::GetEmbedFromContext (nsISupports *aContext)
 	return embed;
 }
 
-#if MOZ_NSICONTENTPOLICY_VARIANT == 2
 NS_IMETHODIMP
 EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 			      nsIURI *aContentLocation,
@@ -132,7 +130,7 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 	if (isHttps) return NS_OK;
 
 	/* is this url allowed ? */
-	nsEmbedCString contentSpec;
+	nsCString contentSpec;
 	aContentLocation->GetSpec (contentSpec);
 
 	EphyAdBlockManager *adblock_manager = 
@@ -174,7 +172,7 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 
 	if (strcmp (contentSpec.get(), "about:blank") == 0) return NS_OK;
 
-	nsEmbedCString contentScheme;
+	nsCString contentScheme;
 	aContentLocation->GetScheme (contentScheme);
 
 	/* first general lockdown check */
@@ -199,96 +197,3 @@ EphyContentPolicy::ShouldProcess(PRUint32 aContentType,
 	*aDecision = nsIContentPolicy::ACCEPT;
 	return NS_OK;
 }
-
-#else
-
-/* boolean shouldLoad (in PRInt32 contentType, in nsIURI contentLocation, in nsISupports ctxt, in nsIDOMWindow window); */
-NS_IMETHODIMP EphyContentPolicy::ShouldLoad(PRInt32 aContentType,
-					    nsIURI *aContentLocation,
-					    nsISupports *aContext,
-					    nsIDOMWindow *aWindow,
-					    PRBool *_retval)
-{
-	NS_ENSURE_ARG (aContentLocation);
-	NS_ENSURE_ARG_POINTER (_retval);
-
-	*_retval = PR_TRUE;
-
-	PRBool isHttps = PR_FALSE;
-	aContentLocation->SchemeIs ("https", &isHttps);
-	if (isHttps) return NS_OK;
-
-	/* We have to always allow these, else forms and scrollbars break */
-	PRBool isChrome = PR_FALSE, isResource = PR_FALSE;
-	aContentLocation->SchemeIs ("chrome", &isChrome);
-	aContentLocation->SchemeIs ("resource", &isResource);
-	if (isChrome || isResource) return NS_OK;
-
-	nsEmbedCString contentSpec;
-	aContentLocation->GetSpec (contentSpec);
-
-	EphyAdBlockManager *adblock_manager = 
-		EPHY_ADBLOCK_MANAGER (ephy_embed_shell_get_adblock_manager (embed_shell));
-
-	/* try to remap 1.7 types to 1.8 */
-	static struct {PRBool should_block; PRUint32 remap;} kBlockType[nsIContentPolicy::DOCUMENT + 1] = {
-		{PR_TRUE  /* TYPE_OTHER */, 1},
-		{PR_TRUE  /* TYPE_SCRIPT */,2}, 
-		{PR_TRUE  /* TYPE_IMAGE */, 3},
-		{PR_FALSE /* TYPE_STYLESHEET */, 4},
-		{PR_TRUE  /* TYPE_OBJECT */, 5},
-		{PR_TRUE  /* TYPE_SUBDOCUMENT */, 7},
-		{PR_TRUE  /* TYPE_CONTROL_TAG */, 1},
-		{PR_TRUE  /* TYPE_RAW_URL */, 1},
-		{PR_FALSE /* TYPE_DOCUMENT */, 6}
-	};
-
-	PRUint32 indexPolicy = aContentType < G_N_ELEMENTS (kBlockType) ? aContentType : 1;
-	if (kBlockType[indexPolicy].should_block &&
-	    !ephy_adblock_manager_should_load (adblock_manager, 
-					       contentSpec.get (), 
-					       AdUriCheckType (kBlockType[indexPolicy].remap)))
-	{
-		*_retval = PR_FALSE;
-
-		GtkWidget *embed = GetEmbedFromContext (aContext); 
-
-		if (embed) 
-		{
-			g_signal_emit_by_name (embed, "content-blocked", contentSpec.get ());
-		}
-		return NS_OK;
-	}
-
-	PRBool isHttp = PR_FALSE;
-	aContentLocation->SchemeIs ("http", &isHttp);
-	if (isHttp) return NS_OK;
-
-	if (strcmp (contentSpec.get(), "about:blank") == 0) return NS_OK;
-
-	nsEmbedCString contentScheme;
-	aContentLocation->GetScheme (contentScheme);
-
-	/* first general lockdown check */
-	if (mLocked &&
-	    !g_slist_find_custom (mSafeProtocols, contentScheme.get(), (GCompareFunc) strcmp))
-	{
-		*_retval = PR_FALSE;
-	}
-	return NS_OK;
-}
-
-/* boolean shouldProcess (in PRInt32 contentType, in nsIURI documentLocation, in nsISupports ctxt, in nsIDOMWindow window); */
-NS_IMETHODIMP EphyContentPolicy::ShouldProcess(PRInt32 contentType,
-					       nsIURI *documentLocation,
-					       nsISupports *ctxt,
-					       nsIDOMWindow *window,
-					       PRBool *_retval)
-{
-	/* This is never called. */
-	LOG ("ShouldProcess: this is quite unexpected!");
-
-	*_retval = PR_TRUE;
-	return NS_OK;
-}
-#endif /* MOZ_NSICONTENTPOLICY_VARIANT == 2 */

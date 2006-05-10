@@ -21,9 +21,12 @@
 #ifndef MOZILLA_DOWNLOAD_H
 #define MOZILLA_DOWNLOAD_H
 
-#include <glib-object.h>
 #include <glib.h>
+#include <glib-object.h>
+
 #include "ephy-download.h"
+
+G_BEGIN_DECLS
 
 #define MOZILLA_TYPE_DOWNLOAD		(mozilla_download_get_type ())
 #define MOZILLA_DOWNLOAD(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), MOZILLA_TYPE_DOWNLOAD, MozillaDownload))
@@ -52,5 +55,7 @@ struct _MozillaDownloadClass
 GType		 mozilla_download_get_type	(void);
 
 EphyDownload	*mozilla_download_new		(MozDownload *download);
+
+G_END_DECLS
 
 #endif

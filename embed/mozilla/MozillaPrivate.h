@@ -18,8 +18,6 @@
  *  $Id$
  */
 
-#include <glib.h>
-
 namespace MozillaPrivate
 {
 }

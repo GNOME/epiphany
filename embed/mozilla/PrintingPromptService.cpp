@@ -21,27 +21,27 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
-
-#include "PrintingPromptService.h"
-#include "EphyUtils.h"
-#include "AutoJSContextStack.h"
 
 #include <gtk/gtkdialog.h>
  
 #include <libgnomeprintui/gnome-print-dialog.h>
 
-#include "print-dialog.h"
-#include "ephy-embed.h"
-#include "ephy-command-manager.h"
 #include "eel-gconf-extensions.h"
-#include "ephy-prefs.h"
+#include "ephy-command-manager.h"
 #include "ephy-debug.h"
+#include "ephy-embed.h"
+#include "ephy-prefs.h"
+#include "print-dialog.h"
 
-#include <nsIPrintSettings.h>
 #include <nsCOMPtr.h>
+#include <nsIPrintSettings.h>
 #include <nsIServiceManager.h>
+
+#include "EphyUtils.h"
+#include "AutoJSContextStack.h"
+
+#include "PrintingPromptService.h"
 
 /* Implementation file */
 NS_IMPL_ISUPPORTS3(GPrintingPromptService, nsIPrintingPromptService, nsIWebProgressListener, nsIPrintProgressParams)

@@ -250,43 +250,6 @@ ephy_gui_menu_position_on_toolbar (GtkMenu   *menu,
 	*push_in = FALSE;
 }
 
-void
-ephy_gui_menu_position_on_panel (GtkMenu *menu,
-				 gint      *x,
-				 gint      *y,
-				 gboolean  *push_in,
-				 gpointer  user_data)
-{
-	GtkWidget *widget = GTK_WIDGET (user_data);
-	GtkRequisition requisition;
-	GdkScreen *screen;
-
-	screen = gtk_widget_get_screen (widget);
-
-	gdk_window_get_origin (widget->window, x, y);
-	gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
-
-	if (GTK_WIDGET_NO_WINDOW (widget))
-	{
-		*x += widget->allocation.x;
-		*y += widget->allocation.y;
-	}
-
-	/* FIXME: Adapt to vertical panels, but egg_tray_icon_get_orientation doesn't seem to work */
-	if (*y > gdk_screen_get_height (screen) / 2)
-	{
-		*y -= requisition.height;
-	}
-	else
-	{
-		*y += widget->allocation.height;
-	}
-
-	*push_in = FALSE;
-
-	ephy_gui_sanitise_popup_position (menu, widget, x, y);
-}
-
 GtkWindowGroup *
 ephy_gui_ensure_window_group (GtkWindow *window)
 {

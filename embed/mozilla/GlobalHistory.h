@@ -22,16 +22,16 @@
 #ifndef EPHY_GLOBAL_HISTORY_H
 #define EPHY_GLOBAL_HISTORY_H
 
-#include "ephy-history.h"
-
 #ifdef HAVE_NSIGLOBALHISTORY3_H
 #include <nsIGlobalHistory3.h>
 #else
 #include <nsIGlobalHistory2.h>
 #endif /* HAVE_NSIGLOBALHISTORY3_H */
 
-#include <nsCOMPtr.h>
 #include <nsAutoPtr.h>
+#include <nsCOMPtr.h>
+
+#include "ephy-history.h"
 
 #include "EphyHistoryListener.h"
 

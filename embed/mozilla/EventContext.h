@@ -21,28 +21,21 @@
 #ifndef EVENT_CONTEXT_H
 #define EVENT_CONTEXT_H
 
-#include "EphyBrowser.h"
-
 #include "ephy-embed.h"
 #include "mozilla-embed-event.h"
 
-#include <nsIDOMEventTarget.h>
-#include <nsIDOMMouseEvent.h>
-#include <nsIDOMKeyEvent.h>
-#include <nsIDOMEvent.h>
-#include <nsIDOMNode.h>
-#include <nsIDOMHTMLAnchorElement.h>
-#include <nsIDOMHTMLAreaElement.h>
-#include <nsIDOMHTMLBodyElement.h>
-#include <nsIDOMDocument.h>
-#include <nsIURI.h>
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-
-#ifdef ALLOW_PRIVATE_API
-#include <nsIDOMViewCSS.h>
-#endif
+class EphyBrowser;
+class nsIDOMDocument;
+class nsIDOMEvent;
+class nsIDOMEventTarget;
+class nsIDOMHTMLAnchorElement;
+class nsIDOMHTMLAreaElement;
+class nsIDOMHTMLBodyElement;
+class nsIDOMKeyEvent;
+class nsIDOMMouseEvent;
+class nsIDOMNode;
+class nsIDOMViewCSS;
+class nsIURI;
 
 class EventContext
 {
@@ -63,7 +56,7 @@ private:
 	nsCOMPtr<nsIDOMDocument> mDOMDocument;
 	nsCOMPtr<nsIDOMViewCSS> mViewCSS;
 	nsCOMPtr<nsIURI> mBaseURI;
-	nsEmbedCString mCharset;
+	nsCString mCharset;
 
 	nsresult GetTargetCoords    (nsIDOMEventTarget *aTarget, PRInt32 *aX, PRInt32 *aY);
 	nsresult GatherTextUnder    (nsIDOMNode* aNode, nsAString& aResult);

@@ -19,62 +19,50 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
-
-#include "EphyFind.h"
-
-#include "ephy-debug.h"
-
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-
-#include <gtkmozembed.h>
-#include <gtkmozembed_internal.h>
-#include <nsCOMPtr.h>
-#include <nsIServiceManager.h>
-#include <nsIInterfaceRequestorUtils.h>
-#include <nsIDOMWindow.h>
-#include <nsIWebBrowser.h>
-#include <nsIWebBrowserFocus.h>
-#include <nsIDOMNode.h>
-#include <nsIDOMElement.h>
-#include <nsIDOMDocument.h>
-#include <nsIDOMDocumentView.h>
-#include <nsIDOMAbstractView.h>
-#include <nsIDOMDocumentEvent.h>
-#include <nsIDOMEvent.h>
-#include <nsIDOMKeyEvent.h>
-#include <nsIDOMEventTarget.h>
-#include <nsIDOMHTMLAnchorElement.h>
-
-#ifdef HAVE_TYPEAHEADFIND
-#include <nsISimpleEnumerator.h>
-#include <nsIDocShell.h>
-#include <nsIDocShellTreeItem.h>
-#include <nsITypeAheadFind.h>
-#include <nsISelectionDisplay.h>
-#include <nsISelectionController.h>
-#else
-#include <nsIWebBrowserFind.h>
-#include <nsMemory.h>
-#endif
 
 #include <glib.h>
 
-#ifdef HAVE_TYPEAHEADFIND
+#include <nsStringAPI.h>
+
+#include <gtkmozembed.h>
+#include <gtkmozembed_internal.h>
+#include <nsComponentManagerUtils.h>
+#include <nsCOMPtr.h>
+#include <nsIDocShell.h>
+#include <nsIDocShellTreeItem.h>
+#include <nsIDOMAbstractView.h>
+#include <nsIDOMDocumentEvent.h>
+#include <nsIDOMDocument.h>
+#include <nsIDOMDocumentView.h>
+#include <nsIDOMElement.h>
+#include <nsIDOMEvent.h>
+#include <nsIDOMEventTarget.h>
+#include <nsIDOMHTMLAnchorElement.h>
+#include <nsIDOMKeyEvent.h>
+#include <nsIDOMNode.h>
+#include <nsIDOMWindow.h>
+#include <nsIInterfaceRequestorUtils.h>
+#include <nsISelectionController.h>
+#include <nsISelectionDisplay.h>
+#include <nsISimpleEnumerator.h>
+#include <nsITypeAheadFind.h>
+#include <nsIWebBrowserFocus.h>
+#include <nsIWebBrowser.h>
+#include <nsServiceManagerUtils.h>
+
+#include "ephy-debug.h"
+
+#include "EphyFind.h"
+
 #define NS_TYPEAHEADFIND_CONTRACTID "@mozilla.org/typeaheadfind;1"
-#endif /* HAVE_TYPEAHEADFIND */
 
 static const PRUnichar kKeyEvents[] = { 'K', 'e', 'y', 'E', 'v', 'e', 'n', 't', 's', '\0' };
 static const PRUnichar kKeyPress[] = { 'k', 'e', 'y', 'p', 'r', 'e', 's', 's', '\0' };
 
 EphyFind::EphyFind ()
 : mCurrentEmbed(nsnull)
-#ifdef HAVE_TYPEAHEADFIND
 , mAttention(PR_FALSE)
-#endif
 {
   LOG ("EphyFind ctor [%p]", this);
 }
@@ -100,7 +88,6 @@ EphyFind::SetEmbed (EphyEmbed *aEmbed)
 				   getter_AddRefs (mWebBrowser));
   NS_ENSURE_TRUE (mWebBrowser, rv);
 
-#ifdef HAVE_TYPEAHEADFIND
   nsCOMPtr<nsIDocShell> docShell (do_GetInterface (mWebBrowser, &rv));
   NS_ENSURE_SUCCESS (rv, rv);
 
@@ -114,22 +101,6 @@ EphyFind::SetEmbed (EphyEmbed *aEmbed)
     rv = mFinder->SetDocShell (docShell);
   }
   NS_ENSURE_SUCCESS (rv, rv);
-#else
-  PRUnichar *string = nsnull;
-  if (mFinder) {
-    mFinder->GetSearchString (&string);
-  }
-
-  mFinder = do_GetInterface (mWebBrowser, &rv);
-  NS_ENSURE_SUCCESS (rv, rv);
-
-  mFinder->SetWrapFind (PR_TRUE);
-
-  if (string) {
-    mFinder->SetSearchString (string);
-    nsMemory::Free (string);    
-  }
-#endif /* HAVE_TYPEAHEADFIND */
 
   mCurrentEmbed = aEmbed;
 
@@ -142,24 +113,13 @@ EphyFind::SetFindProperties (const char *aSearchString,
 {
   if (!mFinder) return;
 
-#ifdef HAVE_TYPEAHEADFIND
   mFinder->SetCaseSensitive (aCaseSensitive);
   /* search string is set on ::Find */
-#else 
-  mFinder->SetMatchCase (aCaseSensitive);
-  
-  nsEmbedString uSearchString;
-  NS_CStringToUTF16 (nsEmbedCString (aSearchString ? aSearchString : ""),
-		     NS_CSTRING_ENCODING_UTF8, uSearchString);
-  
-  mFinder->SetSearchString (uSearchString.get ());
-#endif /* TYPEAHEADFIND */
 }
 
 void
 EphyFind::SetSelectionAttention (PRBool aAttention)
 {
-#ifdef HAVE_TYPEAHEADFIND
   if (aAttention == mAttention) return;
 
   mAttention = aAttention;
@@ -198,7 +158,6 @@ EphyFind::SetSelectionAttention (PRBool aAttention)
 
     controller->SetDisplaySelection (display);
   }
-#endif
 }
 
 EphyEmbedFindResult
@@ -207,11 +166,10 @@ EphyFind::Find (const char *aSearchString,
 {
   if (!mFinder) return EPHY_EMBED_FIND_NOTFOUND;
 
-  nsEmbedString uSearchString;
-  NS_CStringToUTF16 (nsEmbedCString (aSearchString ? aSearchString : ""),
+  nsString uSearchString;
+  NS_CStringToUTF16 (nsCString (aSearchString ? aSearchString : ""),
   		     NS_CSTRING_ENCODING_UTF8, uSearchString);
 
-#ifdef HAVE_TYPEAHEADFIND
   SetSelectionAttention (PR_TRUE);
 
   nsresult rv;
@@ -219,17 +177,6 @@ EphyFind::Find (const char *aSearchString,
   rv = mFinder->Find (uSearchString, aLinksOnly, &found);
 
   return (EphyEmbedFindResult) found;
-#else
-  mFinder->SetSearchString (uSearchString.get ());
-  mFinder->SetFindBackwards (PR_FALSE);
-
-  nsresult rv;
-  PRBool didFind = PR_FALSE;
-  rv = mFinder->FindNext (&didFind);
-        
-  return NS_SUCCEEDED (rv) && didFind ? EPHY_EMBED_FIND_FOUND :
-		  			EPHY_EMBED_FIND_NOTFOUND;
-#endif /* HAVE_TYPEAHEADFIND */
 }
 
 EphyEmbedFindResult
@@ -237,7 +184,6 @@ EphyFind::FindAgain (PRBool aForward)
 {
   if (!mFinder) return EPHY_EMBED_FIND_NOTFOUND;
 
-#ifdef HAVE_TYPEAHEADFIND
   SetSelectionAttention (PR_TRUE);
 
   nsresult rv;
@@ -249,16 +195,6 @@ EphyFind::FindAgain (PRBool aForward)
   }
 
   return (EphyEmbedFindResult) found;
-#else
-  mFinder->SetFindBackwards (!aForward);
-        
-  nsresult rv;
-  PRBool didFind = PR_FALSE;
-  rv = mFinder->FindNext (&didFind);
-
-  return NS_SUCCEEDED (rv) && didFind ? EPHY_EMBED_FIND_FOUND :
-		  EPHY_EMBED_FIND_NOTFOUND;
-#endif /* HAVE_TYPEAHEADFIND */
 }
 
 PRBool
@@ -266,21 +202,8 @@ EphyFind::ActivateLink (GdkModifierType aMask)
 {
 	nsresult rv;
 	nsCOMPtr<nsIDOMElement> link;
-#if defined(HAVE_TYPEAHEADFIND) && defined(HAVE_GECKO_1_8)
 	rv = mFinder->GetFoundLink (getter_AddRefs (link));
 	if (NS_FAILED (rv) || !link) return FALSE;
-#else
-	nsCOMPtr<nsIWebBrowserFocus> focus (do_QueryInterface (mWebBrowser));
-	NS_ENSURE_TRUE (focus, FALSE);
-
-	rv = focus->GetFocusedElement (getter_AddRefs (link));
-	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && link, FALSE);
-
-	/* ensure this is really a link so we don't accidentally submit if we're on a button or so! */
-	/* FIXME: does that work with xlink links? */
-	nsCOMPtr<nsIDOMHTMLAnchorElement> anchor (do_QueryInterface (link));
-	if (!anchor) return FALSE;
-#endif /* HAVE_TYPEAHEADFIND && HAVE_GECKO_1_8 */
 
 	nsCOMPtr<nsIDOMDocument> doc;
 	rv = link->GetOwnerDocument (getter_AddRefs (doc));
@@ -297,13 +220,13 @@ EphyFind::ActivateLink (GdkModifierType aMask)
 	NS_ENSURE_TRUE (docEvent, FALSE);
 
 	nsCOMPtr<nsIDOMEvent> event;
-	rv = docEvent->CreateEvent (nsEmbedString(kKeyEvents), getter_AddRefs (event));
+	rv = docEvent->CreateEvent (nsString(kKeyEvents), getter_AddRefs (event));
 	NS_ENSURE_SUCCESS (rv, FALSE);
 
 	nsCOMPtr<nsIDOMKeyEvent> keyEvent (do_QueryInterface (event));
 	NS_ENSURE_TRUE (keyEvent, FALSE);
 
-	rv = keyEvent->InitKeyEvent (nsEmbedString (kKeyPress),
+	rv = keyEvent->InitKeyEvent (nsString (kKeyPress),
 				     PR_TRUE /* bubble */,
 				     PR_TRUE /* cancelable */,
 				     abstractView,

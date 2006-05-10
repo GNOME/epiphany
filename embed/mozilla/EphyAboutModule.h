@@ -23,7 +23,6 @@
 #ifndef EPHY_ABOUT_MODULE_H
 #define EPHY_ABOUT_MODULE_H
     
-#include <nsError.h>
 #include <nsIAboutModule.h>
 
 /* a9aea13e-21de-4be8-a07e-a05f11658c55 */
@@ -31,10 +30,8 @@
 { 0xa9aea13e, 0x21de, 0x4be8, \
   { 0xa0, 0x7e, 0xa0, 0x5f, 0x11, 0x65, 0x8c, 0x55 } }
 
-#ifdef HAVE_GECKO_1_8
 #define EPHY_ABOUT_NETERROR_CONTRACTID	NS_ABOUT_MODULE_CONTRACTID_PREFIX "neterror"
 #define EPHY_ABOUT_NETERROR_CLASSNAME	"Epiphany about:neterror module"
-#endif
 
 #define EPHY_ABOUT_EPIPHANY_CONTRACTID	NS_ABOUT_MODULE_CONTRACTID_PREFIX "epiphany"
 #define EPHY_ABOUT_EPIPHANY_CLASSNAME	"Epiphany about:epiphany module"
@@ -58,10 +55,8 @@ class EphyAboutModule : public nsIAboutModule
   private:
 	nsresult Redirect(const nsACString&, nsIChannel**);
 	nsresult ParseURL(const char*, nsACString&, nsACString&, nsACString&, nsACString&, nsACString&);
-#ifdef HAVE_GECKO_1_8
 	nsresult GetErrorMessage(nsIURI*, const char*, char**, char**, char**, char**, char**, char**);
 	nsresult CreateErrorPage(nsIURI*, nsIChannel**);
-#endif
 	nsresult CreateRecoverPage(nsIURI*, nsIChannel**);
 	nsresult WritePage(nsIURI*, nsIURI*, nsIURI*, const nsACString&, const char*, const char*, const char*, const char*, const char*, const char*, nsIChannel**);
 	nsresult Write(nsIOutputStream*, const char*);

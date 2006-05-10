@@ -21,8 +21,8 @@
 #ifndef MOZILLA_EMBED_FIND_H
 #define MOZILLA_EMBED_FIND_H
 
-#include <glib-object.h>
 #include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 

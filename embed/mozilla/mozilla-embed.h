@@ -21,12 +21,12 @@
 #ifndef MOZILLA_EMBED_H
 #define MOZILLA_EMBED_H
 
-#include "ephy-embed.h"
+#include <glib.h>
+#include <glib-object.h>
 
 #include <gtkmozembed.h>
 
-#include <glib-object.h>
-#include <glib.h>
+#include "ephy-embed.h"
 
 G_BEGIN_DECLS
 

@@ -22,18 +22,15 @@
 #ifndef CONTENT_HANDLER_H
 #define CONTENT_HANDLER_H
 
-#include "ephy-file-helpers.h"
-
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
 #include <nsCOMPtr.h>
-#include <nsISupports.h>
-#include <nsIURI.h>
 #include <nsIFile.h>
 #include <nsIHelperAppLauncherDialog.h>
+#include <nsIURI.h>
+
+#include "ephy-file-helpers.h"
+
 
 typedef enum
 {
@@ -76,12 +73,8 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	GnomeVFSMimeApplication *mHelperApp;
 	EphyMimePermission mPermission;
 
-	nsEmbedCString mUrl;
-#ifdef HAVE_GECKO_1_8
-	nsEmbedCString mMimeType;
-#else
-	char *mMimeType;
-#endif
+	nsCString mUrl;
+	nsCString mMimeType;
 	PRUint32 mUserTime;
 };
 

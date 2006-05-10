@@ -19,16 +19,14 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "MozillaPrivate.h"
-
-#include <nsIServiceManager.h>
+#define MOZILLA_INTERNAL_API 1
 #include <nsString.h>
-#include <nsPromiseFlatString.h>
 
 #include "ephy-debug.h"
+
+#include "MozillaPrivate.h"
 
 /* IMPORTANT. Put only code that use internal mozilla strings (nsAutoString for
  * example) in this file. Note that you cannot use embed strings here,

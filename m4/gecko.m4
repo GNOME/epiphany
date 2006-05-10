@@ -240,6 +240,9 @@ AC_LANG_PUSH([C++])
 _SAVE_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS -I$_GECKO_INCLUDE_ROOT"
 
+# FIXME!
+gecko_cv_gecko_version_micro=0
+
 AC_EGREP_CPP([\"1\.9],
 	[#include <mozilla-config.h>
 	 MOZILLA_VERSION],
@@ -271,6 +274,10 @@ if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor"
 	AC_DEFINE([HAVE_GECKO_1_8],[1],[Define if we have gecko 1.8])
 	gecko_cv_have_gecko_1_8=yes
 fi
+if test \( "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -gt "8" \) -o \( "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "8" -a "$gecko_cv_gecko_version_micro" -ge "1" \); then
+	AC_DEFINE([HAVE_GECKO_1_8_1],[1],[Define if we have gecko 1.8.1])
+	gecko_cv_have_gecko_1_8_1=yes
+fi
 if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "9"; then
 	AC_DEFINE([HAVE_GECKO_1_9],[1],[Define if we have gecko 1.9])
 	gecko_cv_have_gecko_1_9=yes
@@ -280,11 +287,13 @@ fi # if gecko_cv_have_gecko
 
 AM_CONDITIONAL([HAVE_GECKO_1_7],[test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "7"])
 AM_CONDITIONAL([HAVE_GECKO_1_8],[test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "8"])
+AM_CONDITIONAL([HAVE_GECKO_1_8_1],[test \( "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -gt "8" \) -o \( "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "8" -a "$gecko_cv_gecko_version_micro" -ge "1" \)])
 AM_CONDITIONAL([HAVE_GECKO_1_9],[test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "9"])
 
 $1[]_VERSION=$gecko_cv_gecko_version
 $1[]_VERSION_MAJOR=$gecko_cv_gecko_version_major
 $1[]_VERSION_MINOR=$gecko_cv_gecko_version_minor
+$1[]_VERSION_MICRO=$gecko_cv_gecko_version_micro
 
 # **************************************************
 # Packages that we need to check for with pkg-config 
@@ -322,9 +331,11 @@ AC_LANG_PUSH([C++])
 _SAVE_CPPFLAGS="$CPPFLAGS"
 _SAVE_CXXFLAGS="$CXXFLAGS"
 _SAVE_LDFLAGS="$LDFLAGS"
+_SAVE_LIBS="$LIBS"
 CPPFLAGS="$CPPFLAGS $_GECKO_EXTRA_CPPFLAGS -I$_GECKO_INCLUDE_ROOT $($PKG_CONFIG --cflags-only-I ${gecko_cv_gecko}-xpcom)"
 CXXFLAGS="$CXXFLAGS $_GECKO_EXTRA_CXXFLAGS $($PKG_CONFIG --cflags-only-other ${gecko_cv_gecko}-xpcom)"
-LDFLAGS="$LDFLAGS $_GECKO_EXTRA_LDFLAGS $($PKG_CONFIG --libs ${gecko_cv_gecko}-xpcom) -Wl,--rpath=$_GECKO_HOME"
+LDFLAGS="$LDFLAGS $_GECKO_EXTRA_LDFLAGS -Wl,--rpath=$_GECKO_HOME"
+LIBS="$LIBS $($PKG_CONFIG --libs ${gecko_cv_gecko}-xpcom)"
 
 _GECKO_DISPATCH_INCLUDEDIRS="$2"
 
@@ -343,6 +354,7 @@ m4_indir([$1],m4_shiftn(2,$@))
 CPPFLAGS="$_SAVE_CPPFLAGS"
 CXXFLAGS="$_SAVE_CXXFLAGS"
 LDFLAGS="$_SAVE_LDFLAGS"
+LIBS="$_SAVE_LIBS"
 
 AC_LANG_POP([C++])
 

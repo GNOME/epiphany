@@ -19,19 +19,20 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "mozilla-download.h"
-#include "MozDownload.h"
+#include <nsStringAPI.h>
+
+#include <nsILocalFile.h>
+#include <nsIMIMEInfo.h>
+#include <nsIURI.h>
+#include <nsMemory.h>
 
 #include "ephy-debug.h"
 
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-#include <nsILocalFile.h>
-#include <nsMemory.h>
+#include "MozDownload.h"
+
+#include "mozilla-download.h"
 
 static void mozilla_download_class_init	(MozillaDownloadClass *klass);
 static void mozilla_download_init	(MozillaDownload *ges);
@@ -90,7 +91,7 @@ impl_get_target (EphyDownload *download)
 
 	mozDownload->GetTargetFile (getter_AddRefs (targetFile));
 
-	nsEmbedCString tempPathStr;
+	nsCString tempPathStr;
 	targetFile->GetNativePath (tempPathStr);
 
 	return g_strdup (tempPathStr.get ());
@@ -101,7 +102,7 @@ impl_get_source (EphyDownload *download)
 {
 	nsCOMPtr<nsIURI> uri;
 	MozDownload *mozDownload;
-	nsEmbedCString spec;
+	nsCString spec;
 
 	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
@@ -181,24 +182,14 @@ impl_get_mime (EphyDownload *download)
 {
 	MozDownload *mozDownload;
 	nsCOMPtr<nsIMIMEInfo> mime;
-	nsEmbedCString mimeType;
+	nsCString mimeType;
 
 	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
 	mozDownload->GetMIMEInfo (getter_AddRefs(mime));
         if (!mime) return g_strdup ("application/octet-stream");
 
-#ifdef HAVE_GECKO_1_8
         mime->GetMIMEType(mimeType);
-#else
-	char *tmp = nsnull;
-	mime->GetMIMEType(&tmp);
-	mimeType.Assign(tmp);
-	if (tmp)
-	{
-		nsMemory::Free (tmp);
-	}
-#endif
 
 	return g_strdup (mimeType.get());
 }

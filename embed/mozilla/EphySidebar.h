@@ -23,8 +23,6 @@
 #define EPHY_SIDEBAR_H
 
 #include <nsISidebar.h>
-#include <nsIClassInfo.h>
-#include <nsError.h>
 
 #define EPHY_SIDEBAR_CLASSNAME \
  "Epiphany's Sidebar Implementation"

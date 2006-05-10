@@ -19,30 +19,29 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "EphyHistoryListener.h"
+#include <nsStringAPI.h>
+
+#include <nsCOMPtr.h>
+#include <nsCURILoader.h>
+#include <nsIChannel.h>
+#include <nsIDocumentLoader.h>
+#include <nsIHttpChannel.h>
+#include <nsIRequest.h>
+#include <nsIRequestObserver.h>
+#include <nsISupportsUtils.h>
+#include <nsIURI.h>
+#include <nsIWebProgress.h>
+#include <nsNetCID.h>
+#include <nsServiceManagerUtils.h>
+ 
 #include "EphyUtils.h"
 
 #include "ephy-debug.h"
 
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-#include <nsCOMPtr.h>
-#include <nsIServiceManager.h>
-#include <nsIDocumentLoader.h>
-#include <nsIWebProgress.h>
-#include <nsIRequestObserver.h>
-#include <nsIURI.h>
-#include <nsIRequest.h>
-#include <nsIChannel.h>
-#include <nsIHttpChannel.h>
-#include <nsNetCID.h>
-#include <nsISupportsUtils.h>
-#include <nsCURILoader.h>
- 
+#include "EphyHistoryListener.h"
+
 EphyHistoryListener::EphyHistoryListener ()
 {
 	LOG ("EphyHistoryListener ctor");
@@ -105,9 +104,9 @@ EphyHistoryListener::OnStateChange (nsIWebProgress *aWebProgress,
 	rv = channel->GetURI (getter_AddRefs (fromURI));
 	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && fromURI, rv);
 
-	nsEmbedCString location;
+	nsCString location;
 	rv = httpChannel->GetResponseHeader
-		(nsEmbedCString ("Location"), location);
+		(nsCString ("Location"), location);
 	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && location.Length(), rv);
 
 	nsCOMPtr<nsIURI> toURI;
@@ -115,7 +114,7 @@ EphyHistoryListener::OnStateChange (nsIWebProgress *aWebProgress,
 				nsnull /* use origin charset of fromURI */, fromURI);
 	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && toURI, rv);
 
-	nsEmbedCString fromSpec, toSpec;
+	nsCString fromSpec, toSpec;
 	rv = fromURI->GetSpec (fromSpec);
 	rv |= toURI->GetSpec(toSpec);
 	NS_ENSURE_SUCCESS (rv, rv);

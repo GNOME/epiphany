@@ -7,6 +7,8 @@ libephymozillaembed_la_SOURCES = 	\
 	ContentHandler.h		\
 	EphyAboutModule.cpp		\
 	EphyAboutModule.h		\
+	EphyBadCertRejector.cpp		\
+	EphyBadCertRejector.h		\
 	EphyContentPolicy.cpp		\
 	EphyContentPolicy.h		\
 	EphyHeaderSniffer.cpp		\
@@ -78,20 +80,14 @@ libephymozillaembed_la_SOURCES += \
 	mozilla-x509-cert.h
 endif
 
-if HAVE_GECKO_1_8
-libephymozillaembed_la_SOURCES += \
-	EphyBadCertRejector.cpp		\
-	EphyBadCertRejector.h
-
 if HAVE_MOZILLA_TOOLKIT
 libephymozillaembed_la_SOURCES += \
-	EphyDirectoryProvider.cpp	\
+	EphyDirectoryProvider.cpp       \
 	EphyDirectoryProvider.h
 endif
 
-endif
-
 mozilla_include_subdirs = \
+	.			\
 	caps			\
 	chardet			\
 	chrome			\
@@ -103,6 +99,7 @@ mozilla_include_subdirs = \
 	exthandler		\
 	fastfind		\
 	helperAppDlg		\
+	find			\
 	gfx			\
 	gtkembedmoz		\
 	history			\
@@ -115,6 +112,7 @@ mozilla_include_subdirs = \
 	passwordmgr		\
 	pipboot			\
 	pipnss			\
+	pref			\
 	shistory		\
 	sidebar			\
 	uriloader		\
@@ -128,17 +126,10 @@ mozilla_include_subdirs = \
 	xpcom			\
 	xpconnect
 
-# Grr, damn gentoo has a dodgy header layout
-# http://bugs.gentoo.org/show_bug.cgi?id=100804
-mozilla_include_subdirs += \
-	find			\
-	pref
-
 libephymozillaembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib	    		\
 	-I$(top_srcdir)/embed	    		\
 	-I$(top_srcdir)		    		\
-	-I$(MOZILLA_INCLUDE_ROOT)		\
 	$(addprefix -I$(MOZILLA_INCLUDE_ROOT)/,$(mozilla_include_subdirs))	\
 	-DSHARE_DIR=\"$(pkgdatadir)\"   	\
 	-DPLUGINDIR=\"$(libdir)/epiphany/$(EPIPHANY_MAJOR)/plugins\"		\

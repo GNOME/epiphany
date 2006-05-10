@@ -22,16 +22,16 @@
 #ifndef EPHY_SINGLE_H
 #define EPHY_SINGLE_H
 
-#include "ephy-embed-single.h"
-#include "ephy-cookie-manager.h"
-#include "ephy-permission-manager.h"
-
 #include <nsCOMPtr.h>
 #include <nsIObserver.h>
 #include <nsIObserverService.h>
-#include <nsWeakReference.h>
-#include <nsICookie.h>
-#include <nsIPermission.h>
+
+#include "ephy-cookie-manager.h"
+#include "ephy-embed-single.h"
+#include "ephy-permission-manager.h"
+
+class nsICookie;
+class nsIPermission;
 
 class EphySingle : public nsIObserver
 {

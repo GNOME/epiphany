@@ -20,109 +20,94 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "EphyBrowser.h"
-#include "EphyUtils.h"
-#include "EventContext.h"
+#include <unistd.h>
+
+#include <nsStringAPI.h>
+
+#include <gtkmozembed.h>
+#include <gtkmozembed_internal.h>
+#include <nsIChannel.h>
+#include <nsICommandManager.h>
+#include <nsIContentViewer.h>
+#include <nsIDocCharset.h>
+#include <nsIDocShellTreeItem.h>
+#include <nsIDocShellTreeNode.h>
+#include <nsIDocShellTreeOwner.h>
+#include <nsIDOM3Document.h>
+#include <nsIDOMAbstractView.h>
+#include <nsIDOMAbstractView.h>
+#include <nsIDOMCSSPrimitiveValue.h>
+#include <nsIDOMCSSStyleDeclaration.h>
+#include <nsIDOMCSSStyleDeclaration.h>
+#include <nsIDOMCSSValue.h>
+#include <nsIDOMDocument.h>
+#include <nsIDOMDocumentView.h>
+#include <nsIDOMDocumentView.h>
+#include <nsIDOMElement.h>
+#include <nsIDOMEvent.h>
+#include <nsIDOMEventTarget.h>
+#include <nsIDOMHTMLCollection.h>
+#include <nsIDOMHTMLDocument.h>
+#include <nsIDOMHTMLDocument.h>
+#include <nsIDOMHTMLElement.h>
+#include <nsIDOMHTMLFormElement.h>
+#include <nsIDOMHTMLInputElement.h>
+#include <nsIDOMHTMLTextAreaElement.h>
+#include <nsIDOMKeyEvent.h>
+#include <nsIDOMMouseEvent.h>
+#include <nsIDOMNode.h>
+#include <nsIDOMNSEvent.h>
+#include <nsIDOMNSEventTarget.h>
+#include <nsIDOMPopupBlockedEvent.h>
+#include <nsIDOMViewCSS.h>
+#include <nsIDOMWindow2.h>
+#include <nsIDOMXMLDocument.h>
+#include <nsIHistoryEntry.h>
+#include <nsIInterfaceRequestor.h>
+#include <nsIInterfaceRequestorUtils.h>
+#include <nsIScriptSecurityManager.h>
+#include <nsIServiceManager.h>
+#include <nsISHEntry.h>
+#include <nsISHistory.h>
+#include <nsISHistoryInternal.h>
+#include <nsISimpleEnumerator.h>
+#include <nsIURI.h>
+#include <nsIWebBrowserFocus.h>
+#include <nsIWebBrowserPrint.h>
+#include <nsIWebPageDescriptor.h>
+#include <nsMemory.h>
+#include <nsServiceManagerUtils.h>
+
+#ifdef HAVE_MOZILLA_PSM
+#include <nsICertificateDialogs.h>
+#include <nsISSLStatus.h>
+#include <nsISSLStatusProvider.h>
+#include <nsITransportSecurityInfo.h>
+#include <nsIX509Cert.h>
+#endif
+
+#ifdef ALLOW_PRIVATE_API
+#include <nsIContentPolicy.h>
+#include <nsIDocShell.h>
+#include <nsIDOMWindowInternal.h>
+#include <nsIImageDocument.h>
+#include <nsIMarkupDocumentViewer.h>
+#endif
+
+#include "ephy-debug.h"
 #include "ephy-embed.h"
 #include "ephy-string.h"
 #include "ephy-zoom.h"
-#include "ephy-debug.h"
-#include "print-dialog.h"
-#include "mozilla-embed.h"
 #include "mozilla-embed-event.h"
+#include "mozilla-embed.h"
+#include "print-dialog.h"
 
-#include <gtkmozembed_internal.h>
-#include <unistd.h>
+#include "EphyUtils.h"
+#include "EventContext.h"
 
-#include "nsIInterfaceRequestorUtils.h"
-#include "nsIURI.h"
-#include "nsISimpleEnumerator.h"
-
-#include "nsIContentViewer.h"
-#include "nsIWebBrowserFocus.h"
-#include "nsICommandManager.h"
-#include "nsIWebBrowserPrint.h"
-#include "nsIDocCharset.h"
-#include "nsIDocShellTreeItem.h"
-#include "nsIDocShellTreeNode.h"
-#include "nsIDocShellTreeOwner.h"
-#include "nsIWebPageDescriptor.h"
-#include "nsISHistory.h"
-#include "nsISHistoryInternal.h"
-#include "nsISHEntry.h"
-#include "nsIHistoryEntry.h"
-#include "nsIDOMHTMLDocument.h"
-#include "nsIDOMHTMLCollection.h"
-#include "nsIDOMHTMLElement.h"
-#include "nsIDOMHTMLFormElement.h"
-#include "nsIDOMHTMLInputElement.h"
-#include "nsIDOMHTMLTextAreaElement.h"
-#include "nsIDOMDocument.h"
-#include "nsIDOM3Document.h"
-#include "nsIDOMEvent.h"
-#include "nsIDOMKeyEvent.h"
-#include "nsIDOMMouseEvent.h"
-#include "nsIDOMNSEvent.h"
-#include "nsIDOMEventTarget.h"
-#include "nsIDOMNSEventTarget.h"
-#include "nsIDOMPopupBlockedEvent.h"
-#include "nsIDOMNode.h"
-#include "nsIDOMElement.h"
-#include "nsIDOMWindow2.h"
-#include "nsIDOMDocumentView.h"
-#include "nsIDOMAbstractView.h"
-#undef MOZILLA_INTERNAL_API
-#include "nsEmbedString.h"
-#define MOZILLA_INTERNAL_API 1
-#include "nsMemory.h"
-#include "nsIChannel.h"
-#include "nsIScriptSecurityManager.h"
-#include "nsIServiceManager.h"
-#include "nsIInterfaceRequestor.h"
-#include "nsIDOMHTMLDocument.h"
-#include "nsIDOMXMLDocument.h"
-#include <nsIDOMCSSStyleDeclaration.h>
-#include <nsIDOMCSSStyleDeclaration.h>
-#include <nsIDOMCSSPrimitiveValue.h>
-#include <nsIDOMCSSValue.h>
-#include <nsIDOMViewCSS.h>
-#include <nsIDOMDocumentView.h>
-#include <nsIDOMAbstractView.h>
-
-#ifdef ALLOW_PRIVATE_API
-#include "nsIImageDocument.h"
-/* not frozen yet */
-#include "nsIContentPolicy.h"
-/* will never be frozen */
-#include "nsIDocShell.h"
-#include "nsIMarkupDocumentViewer.h"
-#include <nsIDOMWindowInternal.h>
-#ifdef HAVE_MOZILLA_PSM
-/* not sure about this one: */
-#include <nsITransportSecurityInfo.h>
-/* these are in pipnss/, are they really private? */
-#include <nsISSLStatus.h>
-#include <nsISSLStatusProvider.h>
-#include <nsIX509Cert.h>
-#include <nsICertificateDialogs.h>
-#endif
-#endif
-
-const static PRUnichar kDOMLinkAdded[]		 = { 'D', 'O', 'M', 'L', 'i', 'n', 'k', 'A', 'd', 'd', 'e', 'd', '\0' };
-const static PRUnichar kDOMContentLoaded[]	 = { 'D', 'O', 'M', 'C', 'o', 'n', 't', 'e', 'n', 't', 'L', 'o', 'a', 'd', 'e', 'd', '\0' };
-const static PRUnichar kContextMenu[]		 = { 'c', 'o', 'n', 't', 'e', 'x', 't', 'm', 'e', 'n', 'u', '\0' };
-const static PRUnichar kDOMMouseScroll[]	 = { 'D', 'O', 'M', 'M', 'o', 'u', 's', 'e', 'S', 'c', 'r', 'o', 'l', 'l', '\0' };
-const static PRUnichar kDOMPopupBlocked[]	 = { 'D', 'O', 'M', 'P', 'o', 'p', 'u', 'p', 'B', 'l', 'o', 'c', 'k', 'e', 'd', '\0' };
-const static PRUnichar kDOMWillOpenModalDialog[] = { 'D', 'O', 'M', 'W', 'i', 'l', 'l', 'O', 'p', 'e', 'n', 'M', 'o', 'd', 'a', 'l', 'D', 'i', 'a', 'l', 'o', 'g', '\0' };
-const static PRUnichar kDOMModalDialogClosed[]	 = { 'D', 'O', 'M', 'M', 'o', 'd', 'a', 'l', 'D', 'i', 'a', 'l', 'o', 'g', 'C', 'l', 'o', 's', 'e', 'd', '\0' };
-const static PRUnichar kDOMWindowClose[]	 = { 'D', 'O', 'M', 'W', 'i', 'n', 'd', 'o', 'w', 'C', 'l', 'o', 's', 'e', '\0' };
-const static PRUnichar kHrefAttr[]		 = { 'h', 'r', 'e', 'f', '\0' };
-const static PRUnichar kTypeAttr[]		 = { 't', 'y', 'p', 'e', '\0' };
-const static PRUnichar kTitleAttr[]		 = { 't', 'i', 't', 'l', 'e', '\0' };
-const static PRUnichar kRelAttr[]		 = { 'r', 'e', 'l', '\0' };
+#include "EphyBrowser.h"
 
 NS_IMPL_ISUPPORTS1(EphyEventListener, nsIDOMEventListener)
 
@@ -136,11 +121,11 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 	if (!linkElement) return NS_ERROR_FAILURE;
 
 	nsresult rv;
-	nsEmbedString value;
-	rv = linkElement->GetAttribute (nsEmbedString(kRelAttr), value);
+	nsString value;
+	rv = linkElement->GetAttribute (NS_LITERAL_STRING ("rel"), value);
 	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
-	nsEmbedCString rel;
+	nsCString rel;
 	NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, rel);	
 
 	if (g_ascii_strcasecmp (rel.get(), "SHORTCUT ICON") == 0 ||
@@ -171,13 +156,13 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 		rv = GetDocURI (linkElement, getter_AddRefs (docUri));
 		NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && docUri, NS_ERROR_FAILURE);
 
-		rv = linkElement->GetAttribute (nsEmbedString (kHrefAttr), value);
+		rv = linkElement->GetAttribute (NS_LITERAL_STRING ("href"), value);
 		if (NS_FAILED (rv) || !value.Length()) return NS_ERROR_FAILURE;
 
-		nsEmbedCString cLink;
+		nsCString cLink;
 		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cLink);
 
-		nsEmbedCString faviconUrl;
+		nsCString faviconUrl;
 		rv = docUri->Resolve (cLink, faviconUrl);
 		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
@@ -186,15 +171,10 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 		NS_ENSURE_TRUE (favUri, NS_ERROR_FAILURE);
 
 		/* Only proceed for http favicons. Bug #312291 */
-		PRBool isHttp = PR_FALSE;
+		PRBool isHttp = PR_FALSE, isHttps = PR_FALSE;
 		favUri->SchemeIs ("http", &isHttp);
-#ifdef HAVE_GECKO_1_8
-		PRBool isHttps = PR_FALSE;
 		favUri->SchemeIs ("https", &isHttps);
 		if (!isHttp && !isHttps) return NS_OK;
-#else
-		if (!isHttp) return NS_OK;
-#endif
 
 		/* check if load is allowed */
 		nsCOMPtr<nsIScriptSecurityManager> secMan
@@ -213,10 +193,9 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 		/* refuse if we can't check */
 		NS_ENSURE_TRUE (policy, NS_OK);
 
-#if MOZ_NSICONTENTPOLICY_VARIANT == 2
-		linkElement->GetAttribute (nsEmbedString (kTypeAttr), value);
+		linkElement->GetAttribute (NS_LITERAL_STRING ("type"), value);
 
-		nsEmbedCString cTypeVal;
+		nsCString cTypeVal;
 		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cTypeVal);
 
 		PRInt16 decision = 0;
@@ -226,22 +205,13 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 					 &decision);
 		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 		if (decision != nsIContentPolicy::ACCEPT) return NS_OK;
-#else
-		PRBool shouldLoad = PR_FALSE;
-		rv = policy->ShouldLoad (nsIContentPolicy::IMAGE,
-					 favUri, eventTarget,
-					 domWin,
-					 &shouldLoad);
-		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-		if (!shouldLoad) return NS_OK;
-#endif
 		
 		/* Hide password part */
-		nsEmbedCString user;
+		nsCString user;
 		favUri->GetUsername (user);
 		favUri->SetUserPass (user);
 
-		nsEmbedCString spec;
+		nsCString spec;
 		favUri->GetSpec (spec);
 
 		/* ok, we accept this as a valid favicon for this site */
@@ -249,18 +219,18 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 	}
 	else if (g_ascii_strcasecmp (rel.get (), "alternate") == 0)
 	{
-		linkElement->GetAttribute (nsEmbedString (kTypeAttr), value);
+		linkElement->GetAttribute (NS_LITERAL_STRING ("type"), value);
 
-		nsEmbedCString cTypeVal;
+		nsCString cTypeVal;
 		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cTypeVal);
 
 		if (g_ascii_strcasecmp (cTypeVal.get (), "application/rss+xml") == 0 ||
 		    g_ascii_strcasecmp (cTypeVal.get (), "application/atom+xml") == 0)
 		{
-			rv = linkElement->GetAttribute (nsEmbedString (kHrefAttr), value);
+			rv = linkElement->GetAttribute (NS_LITERAL_STRING ("href"), value);
 			if (NS_FAILED (rv) || !value.Length()) return NS_ERROR_FAILURE;
 
-			nsEmbedCString cLink;
+			nsCString cLink;
 			NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cLink);
 
 			nsCOMPtr<nsIURI> docUri;
@@ -268,17 +238,17 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 			NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && docUri, NS_ERROR_FAILURE);
 
 			/* Hide password part */
-			nsEmbedCString user;
+			nsCString user;
 			docUri->GetUsername (user);
 			docUri->SetUserPass (user);
 
-			nsEmbedCString resolvedLink;
+			nsCString resolvedLink;
 			rv = docUri->Resolve (cLink, resolvedLink);
 			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-			linkElement->GetAttribute (nsEmbedString (kTitleAttr), value);
+			linkElement->GetAttribute (NS_LITERAL_STRING ("title"), value);
 
-			nsEmbedCString cTitle;
+			nsCString cTitle;
 			NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cTitle);
 
 			g_signal_emit_by_name (mOwner->mEmbed, "ge_feed_link",
@@ -300,11 +270,11 @@ EphyMiscDOMEventsListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 	if (!isTrusted) return NS_OK;
 
 	nsresult rv;
-	nsEmbedString type;
+	nsString type;
 	rv = aDOMEvent->GetType (type);
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	nsEmbedCString cType;
+	nsCString cType;
 	NS_UTF16ToCString (type, NS_CSTRING_ENCODING_UTF8, cType);
 
 	if (g_ascii_strcasecmp (cType.get(), "DOMContentLoaded") == 0)
@@ -338,11 +308,11 @@ EphyDOMLinkEventListener::GetDocURI (nsIDOMElement *aElement,
 	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
 	nsresult rv;
-	nsEmbedString spec;
+	nsString spec;
 	rv = doc->GetDocumentURI (spec);
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	nsEmbedCString encoding;
+	nsCString encoding;
 	rv = mOwner->GetEncoding (encoding);
 	NS_ENSURE_SUCCESS (rv, rv);
 
@@ -359,7 +329,7 @@ EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 	nsCOMPtr<nsIURI> popupWindowURI;
 	popupEvent->GetPopupWindowURI (getter_AddRefs (popupWindowURI));
 	
-	nsEmbedCString popupWindowURIString;
+	nsCString popupWindowURIString;
 	nsresult rv;
 
 	if (popupWindowURI)
@@ -368,18 +338,18 @@ EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 	}
 
-	nsEmbedString popupWindowFeatures;
+	nsString popupWindowFeatures;
 	rv = popupEvent->GetPopupWindowFeatures (popupWindowFeatures);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-	nsEmbedCString popupWindowFeaturesString;
+	nsCString popupWindowFeaturesString;
 	NS_UTF16ToCString (popupWindowFeatures,
 			   NS_CSTRING_ENCODING_UTF8,
 			   popupWindowFeaturesString);
 
-	nsEmbedCString popupWindowNameString;
+	nsCString popupWindowNameString;
 #ifdef HAVE_GECKO_1_9
-	nsEmbedString popupWindowName;
+	nsString popupWindowName;
 	rv = popupEvent->GetPopupWindowName (popupWindowName);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
@@ -402,11 +372,11 @@ EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 	NS_ENSURE_TRUE (mOwner, NS_ERROR_FAILURE);
 
 	nsresult rv;
-	nsEmbedString type;
+	nsString type;
 	rv = aDOMEvent->GetType (type);
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	nsEmbedCString cType;
+	nsCString cType;
 	NS_UTF16ToCString (type, NS_CSTRING_ENCODING_UTF8, cType);
 
 	LOG ("ModalAlertListener event %s", cType.get());
@@ -606,54 +576,15 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 #ifdef HAVE_MOZILLA_PSM
-#ifdef HAVE_GECKO_1_8
 	nsCOMPtr<nsIDocShell> docShell (do_GetInterface (mWebBrowser, &rv));
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	rv = docShell->GetSecurityUI (getter_AddRefs (mSecurityInfo));
-	NS_ENSURE_SUCCESS (rv, rv);
-#else
-	/* FIXME: mozilla sucks! nsWebBrowser already has an instance of this,
-	 * but we cannot get to it!
-	 * See https://bugzilla.mozilla.org/show_bug.cgi?id=94974
-	 */
-	/* First try GI */
-	mSecurityInfo = do_GetInterface (mWebBrowser);
-	/* Try to instantiate it under the re-registered contract ID */
-	if (!mSecurityInfo)
-	{
-		/* This will cause all security warning dialogs to be shown
-		 * twice (once by this instance, and another time by nsWebBrowser's
-		 * instance of nsSecurityBrowserUIImpl), but there appears to be
-		 * no other way :-(
-		 */
-		mSecurityInfo = do_CreateInstance("@gnome.org/project/epiphany/hacks/secure-browser-ui;1", &rv);
-		if (NS_SUCCEEDED (rv) && mSecurityInfo)
-		{
-			rv = mSecurityInfo->Init (mDOMWindow);
-			NS_ENSURE_SUCCESS (rv, rv);
-		}
-	}
-	/* Try the original contract ID */
-	if (!mSecurityInfo)
-	{
-		/* This will cause all security warning dialogs to be shown
-		 * twice (once by this instance, and another time by nsWebBrowser's
-		 * instance of nsSecurityBrowserUIImpl), but there appears to be
-		 * no other way :-(
-		 */
-		mSecurityInfo = do_CreateInstance(NS_SECURE_BROWSER_UI_CONTRACTID, &rv);
-		if (NS_SUCCEEDED (rv) && mSecurityInfo)
-		{
-			rv = mSecurityInfo->Init (mDOMWindow);
-			NS_ENSURE_SUCCESS (rv, rv);
-		}
-	}
-#endif /* HAVE_GECKO_1_8 */
 	if (!mSecurityInfo)
 	{
 		g_warning ("Failed to get nsISecureBrowserUI!\n");
  	}
+	NS_ENSURE_SUCCESS (rv, rv);
 #endif /* HAVE_MOZILLA_PSM */
 
 	mInitialized = PR_TRUE;
@@ -687,21 +618,21 @@ EphyBrowser::AttachListeners(void)
 	nsCOMPtr<nsIDOMNSEventTarget> target (do_QueryInterface (mEventTarget, &rv));
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	rv = target->AddEventListener(nsEmbedString(kDOMLinkAdded),
+	rv = target->AddEventListener(NS_LITERAL_STRING ("DOMLinkAdded"),
 				      mDOMLinkEventListener, PR_FALSE, PR_FALSE);
-	rv |= target->AddEventListener(nsEmbedString(kDOMContentLoaded),
+	rv |= target->AddEventListener(NS_LITERAL_STRING ("DOMContentLoaded"),
 				       mMiscDOMEventsListener, PR_FALSE, PR_FALSE);
-	rv |= target->AddEventListener(nsEmbedString(kDOMWindowClose),
+	rv |= target->AddEventListener(NS_LITERAL_STRING ("DOMWindowClose"),
 				       mMiscDOMEventsListener, PR_FALSE, PR_FALSE);
-	rv |= target->AddEventListener(nsEmbedString(kDOMMouseScroll),
+	rv |= target->AddEventListener(NS_LITERAL_STRING ("DOMMouseScroll"),
 				       mDOMScrollEventListener, PR_TRUE /* capture */, PR_FALSE);
-	rv |= target->AddEventListener(nsEmbedString(kDOMPopupBlocked),
+	rv |= target->AddEventListener(NS_LITERAL_STRING ("DOMPopupBlocked"),
 				       mPopupBlockEventListener, PR_FALSE, PR_FALSE);
-	rv |= target->AddEventListener(nsEmbedString(kDOMWillOpenModalDialog),
+	rv |= target->AddEventListener(NS_LITERAL_STRING ("DOMWillOpenModalDialog"),
 				       mModalAlertListener, PR_TRUE, PR_FALSE);
-	rv |= target->AddEventListener(nsEmbedString(kDOMModalDialogClosed),
+	rv |= target->AddEventListener(NS_LITERAL_STRING ("DOMModalDialogClosed"),
 				       mModalAlertListener, PR_TRUE, PR_FALSE);
-	rv |= target->AddEventListener(nsEmbedString(kContextMenu),
+	rv |= target->AddEventListener(NS_LITERAL_STRING ("contextmenu"),
 				       mContextMenuListener, PR_TRUE /* capture */, PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, rv);
 
@@ -714,21 +645,21 @@ EphyBrowser::DetachListeners(void)
 	if (!mEventTarget) return NS_OK;
 
 	nsresult rv;
-	rv = mEventTarget->RemoveEventListener(nsEmbedString(kDOMLinkAdded),
+	rv = mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("DOMLinkAdded"),
 					       mDOMLinkEventListener, PR_FALSE);
-	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMContentLoaded),
+	rv |= mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("DOMContentLoaded"),
 					        mMiscDOMEventsListener, PR_FALSE);
-	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMWindowClose),
+	rv |= mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("DOMWindowClose"),
 						mMiscDOMEventsListener, PR_FALSE);
-	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMMouseScroll),
+	rv |= mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("DOMMouseScroll"),
 						mDOMScrollEventListener, PR_TRUE); /* capture */
-	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMPopupBlocked),
+	rv |= mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("DOMPopupBlocked"),
 					        mPopupBlockEventListener, PR_FALSE);
-	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMWillOpenModalDialog),
+	rv |= mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("DOMWillOpenModalDialog"),
 						mModalAlertListener, PR_TRUE);
-	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kDOMModalDialogClosed),
+	rv |= mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("DOMModalDialogClosed"),
 						mModalAlertListener, PR_TRUE);
-	rv |= mEventTarget->RemoveEventListener(nsEmbedString(kContextMenu),
+	rv |= mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("contextmenu"),
 					        mContextMenuListener, PR_TRUE /* capture */);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
@@ -1145,7 +1076,7 @@ nsresult EphyBrowser::ForceEncoding (const char *encoding)
 	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
 	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
 
-	return mdv->SetForceCharacterSet (nsEmbedCString(encoding));
+	return mdv->SetForceCharacterSet (nsCString(encoding));
 }
 
 nsresult EphyBrowser::GetEncoding (nsACString &encoding)
@@ -1263,9 +1194,9 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 
 	const PRUnichar visibilityLiteral[] = { 'v', 'i', 's', 'i', 'b', 'i', 'l', 'i', 't', 'y', '\0' };
 	const PRUnichar visibleLiteral[] = { 'v', 'i', 's', 'i', 'b', 'l', 'e', '\0' };
-	nsEmbedString visibilityAttr(visibilityLiteral);
-	nsEmbedString visibleAttr(visibleLiteral);
-	nsEmbedString EmptyString;
+	nsString visibilityAttr(visibilityLiteral);
+	nsString visibleAttr(visibleLiteral);
+	nsString EmptyString;
 	nsCOMPtr<nsIDOMCSSStyleDeclaration> computedStyle;
 	nsCOMPtr<nsIDOMCSSValue> cssValue;
 	nsCOMPtr<nsIDOMCSSPrimitiveValue> primitiveValue;
@@ -1296,7 +1227,7 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 			rv = computedStyle->GetPropertyCSSValue(visibilityAttr, getter_AddRefs (cssValue));
 			if (NS_SUCCEEDED (rv) && cssValue)
 			{
-				nsEmbedString value;
+				nsString value;
 				rv = cssValue->GetCssText (value);
 				if (NS_SUCCEEDED (rv) && value.Length ())
 				{
@@ -1340,7 +1271,7 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 				rv = computedStyle->GetPropertyCSSValue(visibilityAttr, getter_AddRefs (cssValue));
 				if (NS_SUCCEEDED (rv) && cssValue)
 				{
-					nsEmbedString value;
+					nsString value;
 					rv = cssValue->GetCssText (value);
 					if (NS_SUCCEEDED (rv) && value.Length ())
 					{
@@ -1367,7 +1298,7 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 					continue;
 				}
 
-				nsEmbedString defaultText, userText;
+				nsString defaultText, userText;
 				areaElement->GetDefaultValue (defaultText);
 				areaElement->GetValue (userText);
 
@@ -1391,15 +1322,15 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 				continue;
 			}
 
-			nsEmbedString type;
+			nsString type;
 			inputElement->GetType(type);
 
-			nsEmbedCString cType;
+			nsCString cType;
 			NS_UTF16ToCString (type, NS_CSTRING_ENCODING_UTF8, cType);
 
 			if (g_ascii_strcasecmp (cType.get(), "text") == 0)
 			{
-				nsEmbedString defaultText, userText;
+				nsString defaultText, userText;
 				PRInt32 max_length;
 				inputElement->GetDefaultValue (defaultText);
 				inputElement->GetValue (userText);
@@ -1486,7 +1417,7 @@ EphyBrowser::GetSecurityInfo (PRUint32 *aState, nsACString &aDescription)
 	rv = mSecurityInfo->GetState (aState);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-	nsEmbedString tooltip;
+	nsString tooltip;
 	rv = mSecurityInfo->GetTooltipText (tooltip);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
@@ -1567,21 +1498,3 @@ EphyBrowser::Close ()
 
 	return domWin->Close();
 }
-
-#ifndef HAVE_GECKO_1_8
-nsresult
-EphyBrowser::FocusActivate ()
-{
-	NS_ENSURE_STATE (mWebBrowserFocus);
-
-	return mWebBrowserFocus->Activate();
-}
-
-nsresult
-EphyBrowser::FocusDeactivate ()
-{
-	NS_ENSURE_STATE (mWebBrowserFocus);
-
-	return mWebBrowserFocus->Deactivate();
-}
-#endif /* !HAVE_GECKO_1_8 */

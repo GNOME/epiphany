@@ -19,28 +19,29 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "EphyUtils.h"
+#include <gtkmozembed.h>
+#include <nsCOMPtr.h>
+#include <nsIDOMWindow.h>
+#include <nsIEmbeddingSiteWindow.h>
+#include <nsIFile.h>
+#include <nsIIOService.h>
+#include <nsIPrintSettings.h>
+#include <nsIServiceManager.h>
+#include <nsIURI.h>
+#include <nsIWebBrowserChrome.h>
+#include <nsIWindowWatcher.h>
+#include <nsServiceManagerUtils.h>
+#include <nsStringAPI.h>
+#include <nsXPCOM.h>
+
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
-#include "print-dialog.h"
 #include "ephy-file-helpers.h"
+#include "print-dialog.h"
 
-#include <nsIIOService.h>
-#include <nsIURI.h>
-#include <nsIFile.h>
-#include <nsIDOMWindow.h>
-#include <nsIServiceManager.h>
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-#include <nsIWindowWatcher.h>
-#include <nsIEmbeddingSiteWindow.h>
-#include <nsIWebBrowserChrome.h>
-#include <gtkmozembed.h>
-#include <nsIPrintSettings.h>
+#include "EphyUtils.h"
 
 nsresult
 EphyUtils::GetIOService (nsIIOService **ioService)
@@ -63,7 +64,7 @@ EphyUtils::NewURI (nsIURI **result,
 		   const char *charset,
 		   nsIURI *baseURI)
 {
-	nsEmbedCString cSpec;
+	nsCString cSpec;
 	NS_UTF16ToCString (spec, NS_CSTRING_ENCODING_UTF8, cSpec);
 
 	return NewURI (result, cSpec, charset, baseURI);
@@ -147,7 +148,7 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 
 	/* FIXME: for CUPS printers, print directly instead of to a tmp file? */
 	const static PRUnichar pName[] = { 'P', 'o', 's', 't', 'S', 'c', 'r', 'i', 'p', 't', '/', 'd', 'e', 'f', 'a', 'u', 'l', 't', '\0' };
-	options->SetPrinterName(nsEmbedString(pName).get());
+	options->SetPrinterName(nsString(pName).get());
 
 	const static int frame_types[] = {
 		nsIPrintSettings::kFramesAsIs,
@@ -216,29 +217,29 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 	}
 
 
-	nsEmbedString tmp;
+	nsString tmp;
 
-	NS_CStringToUTF16 (nsEmbedCString(info->header_left_string),
+	NS_CStringToUTF16 (nsCString(info->header_left_string),
 			   NS_CSTRING_ENCODING_UTF8, tmp);
 	options->SetHeaderStrLeft (tmp.get());
 
-	NS_CStringToUTF16 (nsEmbedCString(info->header_center_string),
+	NS_CStringToUTF16 (nsCString(info->header_center_string),
 			   NS_CSTRING_ENCODING_UTF8, tmp);
 	options->SetHeaderStrCenter (tmp.get());
 
-	NS_CStringToUTF16 (nsEmbedCString(info->header_right_string),
+	NS_CStringToUTF16 (nsCString(info->header_right_string),
 			   NS_CSTRING_ENCODING_UTF8, tmp);
 	options->SetHeaderStrRight (tmp.get());
 
-	NS_CStringToUTF16 (nsEmbedCString(info->footer_left_string),
+	NS_CStringToUTF16 (nsCString(info->footer_left_string),
 			   NS_CSTRING_ENCODING_UTF8, tmp);
 	options->SetFooterStrLeft (tmp.get());
 
-	NS_CStringToUTF16 (nsEmbedCString(info->footer_center_string),
+	NS_CStringToUTF16 (nsCString(info->footer_center_string),
 			   NS_CSTRING_ENCODING_UTF8, tmp);
 	options->SetFooterStrCenter(tmp.get());
 
-	NS_CStringToUTF16 (nsEmbedCString(info->footer_right_string),
+	NS_CStringToUTF16 (nsCString(info->footer_right_string),
 			   NS_CSTRING_ENCODING_UTF8, tmp);
 	options->SetFooterStrRight(tmp.get());
 
@@ -260,7 +261,7 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 		
 		if (info->tempfile == NULL) return NS_ERROR_FAILURE;
 		
-		NS_CStringToUTF16 (nsEmbedCString(info->tempfile),
+		NS_CStringToUTF16 (nsCString(info->tempfile),
 				   NS_CSTRING_ENCODING_UTF8, tmp);
 		options->SetPrintToFile (PR_TRUE);
 		options->SetToFileName (tmp.get());
@@ -321,7 +322,7 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 	}
 #endif /* !HAVE_GECKO_1_9 */
 
-	NS_CStringToUTF16 (nsEmbedCString(paper),
+	NS_CStringToUTF16 (nsCString(paper),
 			   NS_CSTRING_ENCODING_UTF8, tmp);
 	options->SetPaperName (tmp.get());
 	g_free (string);

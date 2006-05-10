@@ -20,31 +20,31 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "mozilla-embed.h"
-#include "mozilla-embed-event.h"
-#include "ephy-embed-single.h"
-#include "ephy-embed-shell.h"
-#include "ephy-command-manager.h"
-#include "ephy-string.h"
-#include "ephy-debug.h"
-
-#include "EphyBrowser.h"
-#include "EventContext.h"
-#include "EphyUtils.h"
+#include <nsStringAPI.h>
 
 #include <gtkmozembed.h>
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-#include <nsMemory.h>
-#include <nsIURI.h>
+#include <nsIDOMKeyEvent.h>
+#include <nsIDOMMouseEvent.h>
 #include <nsIRequest.h>
+#include <nsIURI.h>
 #include <nsIWebNavigation.h>
 #include <nsIWebProgressListener.h>
-#include <nsGfxCIID.h>
+#include <nsMemory.h>
+
+#include "EphyBrowser.h"
+#include "EphyUtils.h"
+#include "EventContext.h"
+
+#include "ephy-command-manager.h"
+#include "ephy-debug.h"
+#include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
+#include "ephy-string.h"
+#include "mozilla-embed-event.h"
+
+#include "mozilla-embed.h"
 
 static void	mozilla_embed_class_init	(MozillaEmbedClass *klass);
 static void	mozilla_embed_init		(MozillaEmbed *gs);
@@ -92,19 +92,11 @@ struct MozillaEmbedPrivate
 {
 	EphyBrowser *browser;
 	MozillaEmbedLoadState load_state;
-#ifndef HAVE_GECKO_1_8
-	guint focus_connected : 1;
-#endif /* !HAVE_GECKO_1_8 */
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
 
 static GObjectClass *parent_class = NULL;
-
-#ifndef HAVE_GECKO_1_8
-static guint fiesid = 0;
-static guint foesid = 0;
-#endif /* !HAVE_GECKO_1_8 */
 
 static void
 impl_manager_do_command (EphyCommandManager *manager,
@@ -201,28 +193,6 @@ mozilla_embed_grab_focus (GtkWidget *widget)
 	}
 }
 
-#ifndef HAVE_GECKO_1_8
-static gboolean
-child_focus_in_event_cb (GtkWidget *child,
-			 GdkEventFocus *event,
-			 MozillaEmbed *embed)
-{
-	embed->priv->browser->FocusActivate ();
-
-	return FALSE;
-}
-
-static gboolean
-child_focus_out_event_cb (GtkWidget *child,
-			  GdkEventFocus *event,
-			  MozillaEmbed *embed)
-{
-	embed->priv->browser->FocusDeactivate ();
-
-	return FALSE;
-}
-#endif /* !HAVE_GECKO_1_8 */
-
 static void
 impl_close (EphyEmbed *embed) 
 {
@@ -246,60 +216,6 @@ mozilla_embed_realize (GtkWidget *widget)
 		g_warning ("EphyBrowser initialization failed for %p\n", widget);
 		return;
 	}
-
-#ifndef HAVE_GECKO_1_8
-	/* HACK ALERT! This depends highly on undocumented interna of
-	 * GtkMozEmbed!
-	 *
-	 * GtkMozEmbed::realize installs focus-[in|out]-event handlers to
-	 * toplevel, and, on the first realize only, to the child.
-	 * GtkMozEmbed disconnects its focus-[in|out]-event handler
-	 * to the toplevel on unrealize, and leaves the ones to the child
-	 * in place. So we don't need to unblock the blocked handlers
-	 * and therefore need no ::unrealize handler.
-	*/
-
-	GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-	gpointer data = ((GtkMozEmbed *) widget)->data;
-
-	guint n;
-
-	n = g_signal_handlers_block_matched (toplevel,
-					     (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
-					     fiesid, 0, NULL, NULL, data);
-	n += g_signal_handlers_block_matched (toplevel,
-					      (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
-					      foesid, 0, NULL, NULL, data);
-	if (n != 2)
-	{
-		g_warning ("Unexpected number (n=%d) of toplevel focus handlers found!\n", n);
-	}
-
-	if (mpriv->focus_connected) return;
-
-	GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
-	g_return_if_fail (child != NULL);
-
-	n = g_signal_handlers_block_matched (child,
-					     (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
-					     fiesid, 0, NULL, NULL, widget);
-	n += g_signal_handlers_block_matched (child,
-					      (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
-					      foesid, 0, NULL, NULL, widget);
-	if (n != 2)
-	{
-		g_warning ("Unexpected number (n=%d) of child focus handlers found!\n", n);
-	}
-
-	g_signal_connect_object (child, "focus-in-event",
-				 G_CALLBACK (child_focus_in_event_cb), widget,
-				 G_CONNECT_AFTER);
-	g_signal_connect_object (child, "focus-out-event",
-				 G_CALLBACK (child_focus_out_event_cb), widget,
-				 G_CONNECT_AFTER);
-
-	mpriv->focus_connected = TRUE;
-#endif /* !HAVE_GECKO_1_8 */
 }
 
 static GObject *
@@ -331,11 +247,6 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 
 	widget_class->grab_focus = mozilla_embed_grab_focus;
 	widget_class->realize = mozilla_embed_realize;
-
-#ifndef HAVE_GECKO_1_8
-	fiesid = g_signal_lookup ("focus-in-event", GTK_TYPE_WIDGET);
-	foesid = g_signal_lookup ("focus-out-event", GTK_TYPE_WIDGET);
-#endif /* !HAVE_GECKO_1_8 */
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
@@ -434,15 +345,15 @@ impl_can_go_forward (EphyEmbed *embed)
 static gboolean
 mozilla_embed_get_uri_parent (MozillaEmbed *membed,
 			      const char *aUri,
-			      nsEmbedCString &aParent)
+			      nsCString &aParent)
 {
         nsresult rv;
-	nsEmbedCString encoding;
+	nsCString encoding;
 	rv = membed->priv->browser->GetEncoding (encoding);
 	if (NS_FAILED (rv)) return FALSE;
 
         nsCOMPtr<nsIURI> uri;
-        rv = EphyUtils::NewURI (getter_AddRefs(uri), nsEmbedCString(aUri), encoding.get());
+        rv = EphyUtils::NewURI (getter_AddRefs(uri), nsCString(aUri), encoding.get());
         if (NS_FAILED(rv) || !uri) return FALSE;
 
 	/* Don't support going 'up' with chrome url's, mozilla handily
@@ -450,12 +361,12 @@ mozilla_embed_get_uri_parent (MozillaEmbed *membed,
 	 * rdf/chrome/src/nsChromeProtocolHandler.cpp::NewURI()
 	 * (the Canonify() call)
 	 */
-	nsEmbedCString scheme;
+	nsCString scheme;
 	rv = uri->GetScheme (scheme);
 	if (NS_FAILED(rv) || !scheme.Length()) return FALSE;
 	if (strcmp (scheme.get(), "chrome") == 0) return FALSE;
 
-	nsEmbedCString path;
+	nsCString path;
 	rv = uri->GetPath(path);
 	if (NS_FAILED(rv) || !path.Length()) return FALSE;
 	if (strcmp (path.get (), "/") == 0) return FALSE;
@@ -466,12 +377,12 @@ mozilla_embed_get_uri_parent (MozillaEmbed *membed,
 	if (slash[1] == '\0')
 	{
 		/* ends with a slash - a directory, go to parent */
-		rv = uri->Resolve (nsEmbedCString(".."), aParent);
+		rv = uri->Resolve (nsCString(".."), aParent);
 	}
 	else
 	{
 		/* it's a file, go to the directory */
-		rv = uri->Resolve (nsEmbedCString("."), aParent);
+		rv = uri->Resolve (nsCString("."), aParent);
 	}
 
 	return NS_SUCCEEDED (rv);
@@ -487,7 +398,7 @@ impl_can_go_up (EphyEmbed *embed)
 	address = ephy_embed_get_location (embed, TRUE);
 	if (address == NULL) return FALSE;
 
-	nsEmbedCString parent;
+	nsCString parent;
 	result = mozilla_embed_get_uri_parent (membed, address, parent);
 	g_free (address);
 
@@ -505,7 +416,7 @@ impl_get_go_up_list (EphyEmbed *embed)
 	if (address == NULL) return NULL;
 
 	s = address;
-	nsEmbedCString parent;
+	nsCString parent;
 	while (mozilla_embed_get_uri_parent (membed, s, parent))
 	{
 		s = g_strdup (parent.get());
@@ -539,7 +450,7 @@ impl_go_up (EphyEmbed *embed)
 	if (uri == NULL) return;
 
 	gboolean rv;
-	nsEmbedCString parent_uri;
+	nsCString parent_uri;
 	rv = mozilla_embed_get_uri_parent (membed, uri, parent_uri);
 	g_free (uri);
 
@@ -591,11 +502,11 @@ impl_get_location (EphyEmbed *embed,
 	if (NS_FAILED (rv) || !furi) furi.swap(uri);
 
 	/* Hide password part */
-	nsEmbedCString user;
+	nsCString user;
 	furi->GetUsername (user);
 	furi->SetUserPass (user);
 
-	nsEmbedCString url;
+	nsCString url;
 	furi->GetSpec (url);
 
 	return url.Length() ? g_strdup (url.get()) : NULL;
@@ -700,7 +611,7 @@ impl_shistory_get_nth (EphyEmbed *embed,
                        char **aTitle)
 {
 	nsresult rv;
-        nsEmbedCString url;
+        nsCString url;
 	PRUnichar *title;
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
@@ -717,8 +628,8 @@ impl_shistory_get_nth (EphyEmbed *embed,
 
 	if (title)
 	{
-		nsEmbedCString cTitle;
-		NS_UTF16ToCString (nsEmbedString(title),
+		nsCString cTitle;
+		NS_UTF16ToCString (nsString(title),
 				   NS_CSTRING_ENCODING_UTF8, cTitle);
 		*aTitle = g_strdup (cTitle.get());
 		nsMemory::Free (title);
@@ -776,7 +687,7 @@ impl_get_security_level (EphyEmbed *embed,
 
 	nsresult rv;
 	PRUint32 state;
-	nsEmbedCString desc;
+	nsCString desc;
 	rv = mpriv->browser->GetSecurityInfo (&state, desc);
 	if (NS_FAILED (rv)) return;
 
@@ -836,7 +747,7 @@ impl_set_encoding (EphyEmbed *embed,
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	nsresult rv;
-	nsEmbedCString currEnc;
+	nsCString currEnc;
 
 	g_return_if_fail (encoding != NULL);
 
@@ -859,7 +770,7 @@ impl_get_encoding (EphyEmbed *embed)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	nsresult rv;
-	nsEmbedCString encoding;
+	nsCString encoding;
 
 	rv = mpriv->browser->GetEncoding (encoding);
 
@@ -876,7 +787,7 @@ impl_has_automatic_encoding (EphyEmbed *embed)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	nsresult rv;
-	nsEmbedCString encoding;
+	nsCString encoding;
 
 	rv = mpriv->browser->GetForcedEncoding (encoding);
 
@@ -923,7 +834,6 @@ update_load_state (MozillaEmbed *membed, gint state)
 				       priv->browser->GetDocumentType ());
 	}
 
-#ifdef HAVE_GECKO_1_8
 	if (state & GTK_MOZ_EMBED_FLAG_RESTORING &&
 	    priv->load_state == MOZILLA_EMBED_LOAD_STARTED)
 	{
@@ -934,7 +844,6 @@ update_load_state (MozillaEmbed *membed, gint state)
 		g_signal_emit_by_name (membed, "ge-content-change", address);
 		g_free (address);
 	}
-#endif
 
 	if (state & GTK_MOZ_EMBED_FLAG_IS_NETWORK)
 	{
@@ -994,9 +903,7 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 		{ GTK_MOZ_EMBED_FLAG_IS_REQUEST, EPHY_EMBED_STATE_IS_REQUEST },
 		{ GTK_MOZ_EMBED_FLAG_IS_DOCUMENT, EPHY_EMBED_STATE_IS_DOCUMENT },
 		{ GTK_MOZ_EMBED_FLAG_IS_NETWORK, EPHY_EMBED_STATE_IS_NETWORK },
-#ifdef HAVE_GECKO_1_8
 		{ GTK_MOZ_EMBED_FLAG_RESTORING, EPHY_EMBED_STATE_RESTORING },
-#endif
 		{ 0, EPHY_EMBED_STATE_UNKNOWN }
 	};
 

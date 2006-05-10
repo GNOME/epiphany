@@ -80,7 +80,6 @@ static const EphyFontsLanguageInfo font_languages [] =
 	/* Translators: The text before the "|" is context to help you decide on
 	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Turkish"),				"tr" },
-#ifdef HAVE_GECKO_1_8
 	/* Translators: The text before the "|" is context to help you decide on
 	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Armenian"),				"x-armn" },
@@ -108,7 +107,6 @@ static const EphyFontsLanguageInfo font_languages [] =
 	/* Translators: The text before the "|" is context to help you decide on
 	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Malayalam"),				"x-mlym" },
-#endif /* HAVE_GECKO_1_8 */
 	/* Translators: The text before the "|" is context to help you decide on
 	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Western"),				"x-western" },

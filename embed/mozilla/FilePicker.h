@@ -23,10 +23,6 @@
 #define EPHY_FILEPICKER_H
 
 #include <nsIFilePicker.h>
-#include <nsISupports.h>
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
 
 #include "ephy-file-chooser.h"
 
@@ -57,7 +53,7 @@ public:
 private:
 	EphyFileChooser *mDialog;
 	PRInt16 mMode;
-	nsEmbedString mDefaultString;
+	nsString mDefaultString;
 };
 
 #endif

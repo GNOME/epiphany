@@ -26,15 +26,13 @@
 #include <nsIWebProgressListener.h>
 #include <nsWeakReference.h>
 
-#include <glib-object.h>
-
 /* 6a9533c6-f068-4e63-8225-5feba0b54d6b */
 #define EPHY_REDIRECTLISTENER_CID \
 { 0x6a9533c6, 0xf068, 0x4e63, { 0x82, 0x25, 0x5f, 0xeb, 0xa0, 0xb5, 0x4d, 0x6b } }
 #define EPHY_REDIRECTLISTENER_CLASSNAME		"Epiphany Redirect Listener Class"
 
 class EphyHistoryListener : public nsIWebProgressListener,
-			     public nsSupportsWeakReference
+			    public nsSupportsWeakReference
 {
 	public:
 		EphyHistoryListener();

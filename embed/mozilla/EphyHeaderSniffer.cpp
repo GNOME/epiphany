@@ -40,35 +40,43 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
-
-#include "MozDownload.h"
-#include "EphyHeaderSniffer.h"
-
-#include "ephy-file-chooser.h"
-#include "ephy-prefs.h"
-#include "ephy-gui.h"
-#include "eel-gconf-extensions.h"
-#include "ephy-debug.h"
 
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
+#include <nsStringAPI.h>
+
+#include <nsComponentManagerUtils.h>
 #include <nsIChannel.h>
-#include <nsIHttpChannel.h>
-#include <nsIURL.h>
-#include <nsIPrefService.h>
-#include <nsIMIMEService.h>
-#include <nsIMIMEInfo.h>
+#include <nsIDOMDocument.h>
 #include <nsIDOMHTMLDocument.h>
 #include <nsIDownload.h>
+#include <nsIHttpChannel.h>
+#include <nsIInputStream.h>
+#include <nsILocalFile.h>
 #include <nsIMIMEHeaderParam.h>
+#include <nsIMIMEInfo.h>
+#include <nsIMIMEService.h>
+#include <nsIPrefService.h>
+#include <nsIPromptService.h>
+#include <nsIURI.h>
+#include <nsIURL.h>
+#include <nsIWebBrowserPersist.h>
 #include <nsIWindowWatcher.h>
+#include <nsServiceManagerUtils.h>
+#include <nsXPCOMCID.h>
 
-#ifdef HAVE_GECKO_1_8
+#include "eel-gconf-extensions.h"
+#include "ephy-debug.h"
+#include "ephy-file-chooser.h"
+#include "ephy-gui.h"
+#include "ephy-prefs.h"
+
 #include "EphyBadCertRejector.h"
-#endif
+#include "MozDownload.h"
+
+#include "EphyHeaderSniffer.h"
 
 EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
 		nsIFile* aFile, nsIURI* aURL, nsIDOMDocument* aDocument, nsIInputStream* aPostData,
@@ -105,22 +113,16 @@ EphyHeaderSniffer::~EphyHeaderSniffer()
 	}
 }
 
-#ifdef HAVE_GECKO_1_8
 NS_IMPL_ISUPPORTS3 (EphyHeaderSniffer,
 		    nsIWebProgressListener,
 		    nsIInterfaceRequestor,
 		    nsIAuthPrompt)
-#else
-NS_IMPL_ISUPPORTS2 (EphyHeaderSniffer,
-		    nsIWebProgressListener,
-		    nsIAuthPrompt)
-#endif
 
 NS_IMETHODIMP
 EphyHeaderSniffer::HandleContent ()
 {
 	gboolean handled = FALSE;
-	nsEmbedCString uriSpec;
+	nsCString uriSpec;
 
 	if (mPostData || !mSingle) return NS_ERROR_FAILURE;
 
@@ -154,7 +156,7 @@ EphyHeaderSniffer::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aReq
 		nsCOMPtr<nsIHttpChannel> httpChannel(do_QueryInterface(channel));
 		if (httpChannel)
 		{
-			httpChannel->GetResponseHeader(nsEmbedCString("content-disposition"),
+			httpChannel->GetResponseHeader(nsCString("content-disposition"),
 						       mContentDisposition);
 		}
     
@@ -215,8 +217,6 @@ EphyHeaderSniffer::OnSecurityChange (nsIWebProgress *aWebProgress, nsIRequest *a
 	return NS_OK;
 }
 
-#ifdef HAVE_GECKO_1_8
-
 /* void getInterface (in nsIIDRef uuid, [iid_is (uuid), retval] out nsQIResult result); */
 NS_IMETHODIMP
 EphyHeaderSniffer::GetInterface(const nsIID & uuid, void * *result)
@@ -243,8 +243,6 @@ EphyHeaderSniffer::GetInterface(const nsIID & uuid, void * *result)
 	return NS_ERROR_NO_INTERFACE;
 }
 
-#endif /* HAVE_GECKO_1_8 */
-
 static void
 filechooser_response_cb (GtkWidget *dialog,
 			 gint response,	
@@ -265,7 +263,7 @@ filechooser_response_cb (GtkWidget *dialog,
 		nsCOMPtr<nsILocalFile> destFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
 		if (destFile)
 		{
-			destFile->InitWithNativePath (nsEmbedCString (filename));
+			destFile->InitWithNativePath (nsCString (filename));
 
 			sniffer->InitiateDownload (destFile);
 		}
@@ -289,7 +287,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	flags = ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (mEmbedPersist));
 	askDownloadDest = flags & EPHY_EMBED_PERSIST_ASK_DESTINATION;
 
-	nsEmbedString defaultFileName;
+	nsString defaultFileName;
 
 	if (!defaultFileName.Length() && mContentDisposition.Length())
 	{
@@ -299,13 +297,13 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		
 		if (mimehdrpar)
 		{
-			nsEmbedCString fallbackCharset;
+			nsCString fallbackCharset;
 			if (mURL)
 			{
 				mURL->GetOriginCharset(fallbackCharset);
 			}
 			
-			nsEmbedString fileName;
+			nsString fileName;
 			
 			rv = mimehdrpar->GetParameter (mContentDisposition, "filename",
 						       fallbackCharset, PR_TRUE, nsnull,
@@ -331,7 +329,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		nsCOMPtr<nsIURL> url(do_QueryInterface(mURL));
 		if (url)
 		{
-			nsEmbedCString fileNameCString;
+			nsCString fileNameCString;
 			url->GetFileName(fileNameCString);
 			NS_CStringToUTF16 (fileNameCString, NS_CSTRING_ENCODING_UTF8,
 					   defaultFileName);
@@ -352,7 +350,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	if (!defaultFileName.Length() && mURL)
 	{
 		/* 4 Use the host. */
-		nsEmbedCString hostName;
+		nsCString hostName;
 		mURL->GetHost(hostName);
 		NS_CStringToUTF16 (hostName, NS_CSTRING_ENCODING_UTF8,
 				   defaultFileName);
@@ -361,12 +359,12 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	/* 5 One last case to handle about:blank and other untitled pages. */
 	if (!defaultFileName.Length())
 	{
-		NS_CStringToUTF16 (nsEmbedCString(_("Untitled")),
+		NS_CStringToUTF16 (nsCString(_("Untitled")),
 				   NS_CSTRING_ENCODING_UTF8, defaultFileName);
 	}
         
 	/* Validate the file name to ensure legality. */
-	nsEmbedCString cDefaultFileName;
+	nsCString cDefaultFileName;
 	NS_UTF16ToCString (defaultFileName, NS_CSTRING_ENCODING_UTF8,
 			   cDefaultFileName);
 	char *default_name = g_strdup (cDefaultFileName.get());

@@ -25,58 +25,35 @@
 
 #include "config.h"
 
-#include "mozilla-embed-single.h"
+#include <stdlib.h>
 
-#include "ephy-cookie-manager.h"
-#include "ephy-password-manager.h"
-#include "ephy-permission-manager.h"
-#include "ephy-certificate-manager.h"
-#include "ephy-embed-shell.h"
-
-#include "glib.h"
-#include "ephy-debug.h"
-#include "gtkmozembed.h"
-#include "gtkmozembed_internal.h"
-#include "mozilla-embed.h"
-#include "ephy-file-helpers.h"
-#include "mozilla-notifiers.h"
-#include "ephy-langs.h"
-#include "eel-gconf-extensions.h"
-#include "ephy-embed-prefs.h"
-#include "MozRegisterComponents.h"
-#include "EphySingle.h"
-#include "EphyBrowser.h"
-#include "EphyUtils.h"
-#include "MozillaPrivate.h"
-#include "mozilla-x509-cert.h"
-
+#include <glib.h>
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
+#include <nsStringAPI.h>
+
+#include <gtkmozembed.h>
+#include <gtkmozembed_internal.h>
+#include <nsComponentManagerUtils.h>
 #include <nsCOMPtr.h>
-#include <nsMemory.h>
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-#include <nsIPrefService.h>
-#include <nsIServiceManager.h>
-#include <nsIWindowWatcher.h>
-#include <nsIIOService.h>
-#include <nsISupportsPrimitives.h>
-#include <nsICookieManager.h>
+#include <nsCPasswordManager.h>
 #include <nsICookie2.h>
 #include <nsICookieManager.h>
+#include <nsICookieManager.h>
+#include <nsIFile.h>
+#include <nsIIOService.h>
+#include <nsILocalFile.h>
 #include <nsIPasswordManager.h>
-#include <nsCPasswordManager.h>
 #include <nsIPermission.h>
 #include <nsIPermissionManager.h>
-#include <nsIFile.h>
-#include <nsILocalFile.h>
+#include <nsIPrefService.h>
+#include <nsIStyleSheetService.h>
+#include <nsISupportsPrimitives.h>
 #include <nsIURI.h>
-
-#if defined(HAVE_MOZILLA_TOOLKIT) && defined(HAVE_GECKO_1_8)
-#include "EphyDirectoryProvider.h"
-#endif
+#include <nsIWindowWatcher.h>
+#include <nsMemory.h>
+#include <nsServiceManagerUtils.h>
 
 #ifdef HAVE_MOZILLA_PSM
 #include <nsIX509Cert.h>
@@ -87,30 +64,40 @@
 #include <nsIPassword.h>
 #endif
 
-#if defined (HAVE_CHROME_NSICHROMEREGISTRYSEA_H)
-#include <chrome/nsIChromeRegistrySea.h>
-#elif defined(MOZ_NSIXULCHROMEREGISTRY_SELECTSKIN)
-#include <nsIChromeRegistry.h>
-#endif
-
 #ifdef ALLOW_PRIVATE_API
-// FIXME: For setting the locale. hopefully gtkmozembed will do itself soon
-#include <nsILocaleService.h>
-#include <nsIHttpAuthManager.h>
 #include <nsICacheService.h>
 #include <nsIFontEnumerator.h>
-#include <nsNetCID.h>
+#include <nsIHttpAuthManager.h>
 #include <nsIIDNService.h>
+#include <nsNetCID.h>
 #endif /* ALLOW_PRIVATE_API */
 
-#include <stdlib.h>
-
-#ifdef HAVE_GECKO_1_8
-#include <nsIURI.h>
-#include <nsIStyleSheetService.h>
-#include "EphyUtils.h"
 #include "ephy-file-helpers.h"
+#include "eel-gconf-extensions.h"
+#include "ephy-certificate-manager.h"
+#include "ephy-cookie-manager.h"
+#include "ephy-debug.h"
+#include "ephy-embed-prefs.h"
+#include "ephy-embed-shell.h"
+#include "ephy-file-helpers.h"
+#include "ephy-langs.h"
+#include "ephy-password-manager.h"
+#include "ephy-permission-manager.h"
+#include "mozilla-embed.h"
+#include "mozilla-notifiers.h"
+#include "MozillaPrivate.h"
+#include "mozilla-x509-cert.h"
+
+#include "EphyBrowser.h"
+#include "EphySingle.h"
+#include "EphyUtils.h"
+#include "MozRegisterComponents.h"
+
+#ifdef HAVE_MOZILLA_TOOLKIT
+#include "EphyDirectoryProvider.h"
 #endif
+
+#include "mozilla-embed-single.h"
 
 #define MOZILLA_PROFILE_DIR  "/mozilla"
 #define MOZILLA_PROFILE_NAME "epiphany"
@@ -127,17 +114,10 @@ struct MozillaEmbedSinglePrivate
 	
 	EphySingle *mSingleObserver;
 
-#ifndef HAVE_GECKO_1_8
-	/* monitor this widget for theme changes*/
-	GtkWidget *theme_window;
-#endif
-
-#ifdef HAVE_GECKO_1_8
 	char *user_css_file;
         guint user_css_enabled_notifier_id;
         EphyFileMonitor *user_css_file_monitor;
         guint user_css_enabled : 1;
-#endif
 
 	guint online : 1;
 };
@@ -259,7 +239,7 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
         /* read our predefined default prefs */
         nsresult rv;
         nsCOMPtr<nsILocalFile> file;
-        NS_NewNativeLocalFile(nsEmbedCString(DEFAULT_PROFILE_FILE),
+        NS_NewNativeLocalFile(nsCString(DEFAULT_PROFILE_FILE),
 			      PR_TRUE, getter_AddRefs(file));
 	if (!file) return FALSE;
 
@@ -295,87 +275,17 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
                 g_warning ("failed to read user preferences, error: %x", rv);
         }
 
-#ifdef HAVE_GECKO_1_8
 	pref->SetCharPref ("general.useragent.extra.epiphany", "Epiphany/" UA_VERSION);
 
 	/* Unset old prefs, otherwise they end up in the user agent string too */
 	pref->ClearUserPref ("general.useragent.vendor");
 	pref->ClearUserPref ("general.useragent.vendorSub");
-#else
-	pref->SetCharPref ("general.useragent.vendor", "Epiphany");
-	pref->SetCharPref ("general.useragent.vendorSub", UA_VERSION);
-#endif
 
 	/* Don't open ftp uris with an external handler if one is setup */
 	pref->SetBoolPref ("network.protocol-handler.external.ftp", PR_FALSE);	
 
 	return TRUE;
 }
-
-#ifndef HAVE_GECKO_1_8
-static char *
-color_to_string (GdkColor color)
-{
-	return g_strdup_printf ("#%.2x%.2x%.2x",
-				color.red >> 8,
-				color.green >> 8,
-				color.blue >> 8);
-}
-
-static void
-mozilla_update_colors (GtkWidget *window,
-                       GtkStyle *previous_style,
-                       MozillaEmbedSingle *mes)
-{
-	nsCOMPtr<nsIPrefService> prefService;
-	GdkColor color;
-	char *str;
-
-        prefService = do_GetService (NS_PREFSERVICE_CONTRACTID);
-	if (!prefService) return;
-
-        nsCOMPtr<nsIPrefBranch> pref;
-        prefService->GetBranch ("", getter_AddRefs(pref));
-	if (!pref) return;
-
-	/* Set the bg color to the text bg color*/
-	color = window->style->base[GTK_STATE_NORMAL];
-	str = color_to_string (color);
-	pref->SetCharPref ("browser.display.background_color", str);		
-	g_free (str);
-
-	/* Set the text color */
-	color = window->style->text[GTK_STATE_NORMAL];
-	str = color_to_string (color);	
-	pref->SetCharPref ("browser.display.foreground_color", str);	
-	g_free (str);
-
-	/* FIXME: We should probably monitor and set link color here too,
-	 * but i'm not really sure what to do about that yet
-	 */
-}
-
-static void
-mozilla_setup_colors (MozillaEmbedSingle *mes)
-{
-	GtkWidget *window;
-
-	/* Create a random window to monitor for theme changes */
-	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	mes->priv->theme_window = window;
-	gtk_widget_realize (window);
-	gtk_widget_ensure_style (window);
-
-	/* monitor theme changes*/
-	g_signal_connect (G_OBJECT (window), "style-set",
-			  G_CALLBACK (mozilla_update_colors), mes);
-	
-	/* Initialize the colors */
-	mozilla_update_colors (window, NULL, mes);
-
-	mes->priv->theme_window = window;
-}			
-#endif
 
 static void 
 mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *moz_single,
@@ -481,41 +391,6 @@ getUILang (nsAString& aUILang)
 }
 #endif
 
-static nsresult
-mozilla_init_chrome (void)
-{
-/* FIXME: can we just omit this on new-toolkit ? */
-#if defined(MOZ_NSIXULCHROMEREGISTRY_SELECTSKIN) || defined(HAVE_CHROME_NSICHROMEREGISTRYSEA_H)
-	nsresult rv;
-	nsEmbedString uiLang;
-
-#ifdef HAVE_CHROME_NSICHROMEREGISTRYSEA_H
-	nsCOMPtr<nsIChromeRegistrySea> chromeRegistry = do_GetService (NS_CHROMEREGISTRY_CONTRACTID);
-#else
-	nsCOMPtr<nsIXULChromeRegistry> chromeRegistry = do_GetService (NS_CHROMEREGISTRY_CONTRACTID);
-#endif
-	NS_ENSURE_TRUE (chromeRegistry, NS_ERROR_FAILURE);
-
-	// Set skin to 'classic' so we get native scrollbars.
-	rv = chromeRegistry->SelectSkin (nsEmbedCString("classic/1.0"), PR_FALSE);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-	// set locale
-	rv = chromeRegistry->SetRuntimeProvider(PR_TRUE);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-	rv = getUILang(uiLang);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-	nsEmbedCString cUILang;
-	NS_UTF16ToCString (uiLang, NS_CSTRING_ENCODING_UTF8, cUILang);
-
-	return chromeRegistry->SelectLocale (cUILang, PR_FALSE);
-#else
-	return NS_OK;
-#endif
-}
-
 static void
 mozilla_init_observer (MozillaEmbedSingle *single)
 {
@@ -532,8 +407,6 @@ mozilla_init_observer (MozillaEmbedSingle *single)
 		return;
 	}
 }
-
-#ifdef HAVE_GECKO_1_8
 
 static void
 user_css_register (MozillaEmbedSingle *single)
@@ -710,8 +583,6 @@ mozilla_stylesheet_shutdown (MozillaEmbedSingle *single)
 	}
 }
 
-#endif /* HAVE_GECKO_1_8 */
-
 static gboolean
 impl_init (EphyEmbedSingle *esingle)
 {
@@ -733,8 +604,7 @@ impl_init (EphyEmbedSingle *esingle)
 	gtk_moz_embed_set_comp_path (MOZILLA_HOME);
 #endif
 
-#if defined(HAVE_MOZILLA_TOOLKIT) && defined(HAVE_GECKO_1_8)
-
+#ifdef HAVE_MOZILLA_TOOLKIT
 	nsCOMPtr<nsIDirectoryServiceProvider> dp = new EphyDirectoryProvider ();
 	if (!dp) return FALSE;
 
@@ -747,9 +617,6 @@ impl_init (EphyEmbedSingle *esingle)
 
 	mozilla_register_components ();
 
-	/* Until gtkmozembed does this itself */
-	mozilla_init_chrome ();
-
 	mozilla_init_single (single);
 
 	if (!mozilla_set_default_prefs (single))
@@ -757,22 +624,13 @@ impl_init (EphyEmbedSingle *esingle)
 		return FALSE;
 	}
 
-#ifndef HAVE_GECKO_1_8
-	/* FIXME: This should be removed when mozilla
-	 * bugs 207000 and 207001 are fixed.
-	 */
-	mozilla_setup_colors (single);
-#endif
-
 	START_PROFILER ("Mozilla prefs notifiers")
 	mozilla_notifiers_init ();
 	STOP_PROFILER ("Mozilla prefs notifiers")
 
 	mozilla_init_observer (single);
 
-#ifdef HAVE_GECKO_1_8
         mozilla_stylesheet_init (single);
-#endif
 
 	return TRUE;
 }
@@ -814,9 +672,7 @@ mozilla_embed_single_dispose (GObject *object)
 	MozillaEmbedSingle *single = MOZILLA_EMBED_SINGLE (object);
 	MozillaEmbedSinglePrivate *priv = single->priv;
 
-#ifdef HAVE_GECKO_1_8
         mozilla_stylesheet_shutdown (single);
-#endif
 
 	if (priv->mSingleObserver)
 	{
@@ -846,13 +702,6 @@ mozilla_embed_single_finalize (GObject *object)
 #endif
 
 	g_free (mes->priv->user_prefs);
-
-#ifndef HAVE_GECKO_1_8
-	if (mes->priv->theme_window)
-	{
-		gtk_widget_destroy (mes->priv->theme_window);
-	}
-#endif
 }
 
 static void
@@ -920,8 +769,8 @@ impl_get_backend_name (EphyEmbedSingle *esingle)
 	return "gecko-1.9";
 #elif defined(HAVE_GECKO_1_8)
 	return "gecko-1.8";
-#elif defined(HAVE_GECKO_1_7)
-	return "gecko-1.7";
+#else
+# error "Undefined/unsupported gecko version!"
 #endif
 }
 
@@ -946,8 +795,8 @@ impl_get_font_list (EphyEmbedSingle *shell,
 	{
 		char *gFontString;
 
-		nsEmbedCString tmp;
-		NS_UTF16ToCString (nsEmbedString(fontArray[i]),
+		nsCString tmp;
+		NS_UTF16ToCString (nsString(fontArray[i]),
 				   NS_CSTRING_ENCODING_UTF8, tmp);
 		gFontString = g_strdup (tmp.get());
 		l = g_list_prepend (l, gFontString);
@@ -1004,13 +853,13 @@ impl_remove_cookie (EphyCookieManager *manager,
 	NS_ENSURE_TRUE (idnService, );
 
 	nsresult rv;
-	nsEmbedCString host;
-	rv = idnService->ConvertUTF8toACE (nsEmbedCString(cookie->domain), host);
+	nsCString host;
+	rv = idnService->ConvertUTF8toACE (nsCString(cookie->domain), host);
 	NS_ENSURE_SUCCESS (rv, );
 
 	cookieManager->Remove (host,
-			       nsEmbedCString(cookie->name),
-			       nsEmbedCString(cookie->path),
+			       nsCString(cookie->name),
+			       nsCString(cookie->path),
 			       PR_FALSE /* block */);
 }
 
@@ -1053,25 +902,25 @@ impl_list_passwords (EphyPasswordManager *manager)
 		passwordEnumerator->GetNext (getter_AddRefs(nsPassword));
 		if (!nsPassword) continue;
 
-		nsEmbedCString transfer;
+		nsCString transfer;
 		rv = nsPassword->GetHost (transfer);
 		if (NS_FAILED (rv)) continue;
 
-		nsEmbedCString host;
+		nsCString host;
 		idnService->ConvertACEtoUTF8 (transfer, host);
 
-		nsEmbedString unicodeName;
+		nsString unicodeName;
 		rv = nsPassword->GetUser (unicodeName);
 		if (NS_FAILED (rv)) continue;
 
-		nsEmbedCString userName;
+		nsCString userName;
 		NS_UTF16ToCString (unicodeName,
 				   NS_CSTRING_ENCODING_UTF8, userName);
 
 		rv = nsPassword->GetPassword (unicodeName);
 		if (NS_FAILED (rv)) continue;
 
-		nsEmbedCString userPassword;
+		nsCString userPassword;
 		NS_UTF16ToCString (unicodeName,
 				   NS_CSTRING_ENCODING_UTF8, userPassword);
 
@@ -1101,12 +950,12 @@ impl_remove_password (EphyPasswordManager *manager,
 	NS_ENSURE_TRUE (idnService, );
 
 	nsresult rv;
-	nsEmbedCString host;
-	rv = idnService->ConvertUTF8toACE (nsEmbedCString(info->host), host);
+	nsCString host;
+	rv = idnService->ConvertUTF8toACE (nsCString(info->host), host);
 	NS_ENSURE_SUCCESS (rv, );
 
-	nsEmbedString userName;
-	NS_CStringToUTF16 (nsEmbedCString(info->username),
+	nsString userName;
+	NS_CStringToUTF16 (nsCString(info->username),
 			   NS_CSTRING_ENCODING_UTF8, userName);
 	pm->RemoveUser (host, userName);
 }
@@ -1126,7 +975,7 @@ impl_permission_manager_add (EphyPermissionManager *manager,
 	if (!pm) return;
 
 	nsCOMPtr<nsIURI> uri;
-        EphyUtils::NewURI(getter_AddRefs(uri), nsEmbedCString(host));
+        EphyUtils::NewURI(getter_AddRefs(uri), nsCString(host));
 	if (!uri) return;
 
 	gboolean allow = (permission == EPHY_PERMISSION_ALLOWED);
@@ -1145,7 +994,7 @@ impl_permission_manager_remove (EphyPermissionManager *manager,
 		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID));
 	if (!pm) return;
 
-	pm->Remove (nsEmbedCString (host), type);
+	pm->Remove (nsCString (host), type);
 }
 
 static void
@@ -1170,7 +1019,7 @@ impl_permission_manager_test (EphyPermissionManager *manager,
 	if (!pm) return EPHY_PERMISSION_DEFAULT;
 
 	nsCOMPtr<nsIURI> uri;
-        EphyUtils::NewURI(getter_AddRefs(uri), nsEmbedCString (host));
+        EphyUtils::NewURI(getter_AddRefs(uri), nsCString (host));
         if (!uri) return EPHY_PERMISSION_DEFAULT;
 
 	nsresult rv;
@@ -1221,7 +1070,7 @@ impl_permission_manager_list (EphyPermissionManager *manager,
 		if (!perm) continue;
 
 		nsresult rv;
-		nsEmbedCString str;
+		nsCString str;
 		rv = perm->GetType(str);
 		if (NS_FAILED (rv)) continue;
 
@@ -1318,8 +1167,8 @@ retrieveCerts (PRUint32 type)
 		   
 		   https://bugzilla.mozilla.org/show_bug.cgi?id=214742
 		*/
-		nsEmbedCString full_string;
-		NS_UTF16ToCString (nsEmbedString(certNameList[i]),
+		nsCString full_string;
+		NS_UTF16ToCString (nsString(certNameList[i]),
 				   NS_CSTRING_ENCODING_UTF8, full_string);
 
 		const char *key = full_string.get();
@@ -1371,8 +1220,8 @@ impl_import (EphyCertificateManager *manager,
 	localFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
 
 	// TODO Is this correct ?
-	nsEmbedString path;
-	NS_CStringToUTF16 (nsEmbedCString(file),
+	nsString path;
+	NS_CStringToUTF16 (nsCString(file),
 			   NS_CSTRING_ENCODING_UTF8, path);
 
 

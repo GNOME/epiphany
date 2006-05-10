@@ -20,18 +20,16 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "mozilla-embed-event.h"
-
-#include "ephy-debug.h"
+#include <glib/ghash.h>
 
 #include <nsCOMPtr.h>
 #include <nsIDOMEvent.h>
 
-#include <glib/ghash.h>
-#include <gtk/gtktypeutils.h>
+#include "ephy-debug.h"
+
+#include "mozilla-embed-event.h"
 
 #define MOZILLA_EMBED_EVENT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED_EVENT, MozillaEmbedEventPrivate))
 

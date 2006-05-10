@@ -21,15 +21,16 @@
 #ifndef TYPEAHEADFIND_H
 #define TYPEAHEADFIND_H
 
-#include "ephy-embed.h"
-#include "ephy-embed-find.h"
-
-#include <nsCOMPtr.h>
 #include <gdk/gdktypes.h>
 
 class nsITypeAheadFind;
 class nsIWebBrowser;
 class nsIWebBrowserFind;
+
+#include <nsCOMPtr.h>
+
+#include "ephy-embed.h"
+#include "ephy-embed-find.h"
 
 class EphyFind
 {
@@ -51,12 +52,8 @@ class EphyFind
 
     nsCOMPtr<nsIWebBrowser> mWebBrowser;
 
-#ifdef HAVE_TYPEAHEADFIND
     nsCOMPtr<nsITypeAheadFind> mFinder;
     PRBool mAttention;
-#else
-    nsCOMPtr<nsIWebBrowserFind> mFinder;
-#endif
 };
 
 #endif /* !TYPEAHEADFIND_H */

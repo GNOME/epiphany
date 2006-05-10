@@ -23,6 +23,7 @@
 #ifndef MOZILLA_NOTIFIERS_H
 #define MOZILLA_NOTIFIERS_H
 
+#include <glib.h>
 #include <glib-object.h>
 #include <gconf/gconf.h>
 

@@ -20,15 +20,13 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "mozilla-x509-cert.h"
+#include <nsStringAPI.h>
+
 #include "ephy-debug.h"
 
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
+#include "mozilla-x509-cert.h"
 
 #define MOZILLA_X509_CERT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), \
                                MOZILLA_TYPE_X509_CERT, MozillaX509CertPrivate))
@@ -128,11 +126,11 @@ impl_get_title (EphyX509Cert *cert)
 
 	/* This title logic is adapted from Mozilla source at
 	   mozilla/security/manager/ssl/src/nsCertTree.cpp */
-	nsEmbedString name;
+	nsString name;
 	m_cert->priv->mozilla_cert->GetCommonName (name);
 	if (name.Length())
 	{
-		nsEmbedCString cname;
+		nsCString cname;
 		NS_UTF16ToCString (name, NS_CSTRING_ENCODING_UTF8, cname);
 
 		m_cert->priv->title = g_strdup (cname.get());
@@ -140,10 +138,10 @@ impl_get_title (EphyX509Cert *cert)
 	else
 	{
 		/* No common name, so get the nickname instead */
-		nsEmbedString nick;
+		nsString nick;
 		m_cert->priv->mozilla_cert->GetNickname (nick);
 
-		nsEmbedCString cnick;
+		nsCString cnick;
 		NS_UTF16ToCString (nick, NS_CSTRING_ENCODING_UTF8, cnick);
 
 		const char * str = cnick.get();

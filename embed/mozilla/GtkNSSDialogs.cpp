@@ -27,64 +27,65 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "EphyUtils.h"
-#include "AutoJSContextStack.h"
+#include <time.h>
+
+#include <glib/gi18n.h>
+#include <gtk/gtkalignment.h>
+#include <gtk/gtkbutton.h>
+#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtkcheckbutton.h>
+#include <gtk/gtkdialog.h>
+#include <gtk/gtkeditable.h>
+#include <gtk/gtkentry.h>
+#include <gtk/gtkhbox.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtkprogressbar.h>
+#include <gtk/gtksizegroup.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtktable.h>
+#include <gtk/gtktextbuffer.h>
+#include <gtk/gtktextview.h>
+#include <gtk/gtktogglebutton.h>
+#include <gtk/gtktreeselection.h>
+#include <gtk/gtktreestore.h>
+#include <gtk/gtktreeview.h>
+#include <gtk/gtkvbox.h>
+#include <gconf/gconf-client.h>
+#include <glade/glade-xml.h>
+
+#include <nsStringAPI.h>
 
 #include <nsCOMPtr.h>
-#include <nsMemory.h>
-#include <nsIServiceManager.h>
-#include <nsIInterfaceRequestor.h>
-#include <nsIInterfaceRequestorUtils.h>
-#include <nsIX509Cert.h>
-#include <nsIX509CertValidity.h>
-#include <nsIX509CertDB.h>
+#include <nsIArray.h>
 #include <nsIASN1Object.h>
 #include <nsIASN1Sequence.h>
 #include <nsICRLInfo.h>
-#include <nsISimpleEnumerator.h>
 #include <nsIDOMWindow.h>
-#include <nsIArray.h>
+#include <nsIInterfaceRequestor.h>
+#include <nsIInterfaceRequestorUtils.h>
+#include <nsIServiceManager.h>
+#include <nsISimpleEnumerator.h>
+#include <nsIX509CertDB.h>
+#include <nsIX509Cert.h>
+#include <nsIX509CertValidity.h>
+#include <nsMemory.h>
+#include <nsServiceManagerUtils.h>
+
 #ifdef HAVE_NSIMUTABLEARRAY_H
 #include <nsIMutableArray.h>
 #endif
 
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-
-#include <glib/gi18n.h>
-#include <gtk/gtkdialog.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkcheckbutton.h>
-#include <gtk/gtktogglebutton.h>
-#include <gtk/gtkalignment.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkmessagedialog.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkeditable.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtktreestore.h>
-#include <gtk/gtktreeview.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtktextbuffer.h>
-#include <gtk/gtktextview.h>
-#include <gtk/gtkprogressbar.h>
-#include <gtk/gtksizegroup.h>
-#include <glade/glade-xml.h>
-#include <gconf/gconf-client.h>
-#include <time.h>
-
-#include "GtkNSSDialogs.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
+
+#include "AutoJSContextStack.h"
+#include "EphyUtils.h"
+
+#include "GtkNSSDialogs.h"
 
 NS_DEFINE_CID (kX509CertCID, NS_IX509CERT_IID);
 NS_DEFINE_CID (kASN1ObjectCID, NS_IASN1OBJECT_IID);
@@ -308,14 +309,14 @@ GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,
 	char *first, *second, *msg;
 	int res;
 
-	nsEmbedString commonName;
+	nsString commonName;
 	cert->GetCommonName (commonName);
 
-	nsEmbedCString cCommonName;
+	nsCString cCommonName;
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
-	nsEmbedCString cTargetUrl (targetURL);
+	nsCString cTargetUrl (targetURL);
 
 	first = g_markup_printf_escaped (_("The site “%s” returned security information for "
 					   "“%s”. It is possible that someone is intercepting "
@@ -351,10 +352,10 @@ GtkNSSDialogs::ConfirmUnknownIssuer (nsIInterfaceRequestor *ctx,
 	char *secondary, *tertiary, *msg;
 	int res;
 
-	nsEmbedString commonName;
+	nsString commonName;
 	cert->GetCommonName (commonName);
 
-	nsEmbedCString cCommonName;
+	nsCString cCommonName;
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
@@ -448,10 +449,10 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 		timeToUse = notBefore;
 	}
 	
-	nsEmbedString commonName;
+	nsString commonName;
 	cert->GetCommonName (commonName);
 
-	nsEmbedCString cCommonName;
+	nsCString cCommonName;
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
@@ -505,14 +506,14 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_ERROR,
 			    &label, NULL);
 
-	nsEmbedString commonName;
+	nsString commonName;
 	cert->GetCommonName (commonName);
 
-	nsEmbedCString cCommonName;
+	nsCString cCommonName;
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
-	nsEmbedCString cTargetUrl (targetURL);
+	nsCString cTargetUrl (targetURL);
 
 	primary = g_markup_printf_escaped (_("Cannot establish connection to “%s”."),
 					   cTargetUrl.get());
@@ -577,10 +578,10 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 			    &label, NULL);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
-	nsEmbedString commonName;
+	nsString commonName;
 	cert->GetCommonName (commonName);
 
-	nsEmbedCString cCommonName;
+	nsCString cCommonName;
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
@@ -872,7 +873,7 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	else
 	{
 		gchar *text = gtk_editable_get_chars (GTK_EDITABLE (entry1), 0, -1);
-		NS_CStringToUTF16 (nsEmbedCString (text),
+		NS_CStringToUTF16 (nsCString (text),
 			           NS_CSTRING_ENCODING_UTF8, _password);
 		g_free (text);
 		*_retval = PR_TRUE;
@@ -945,7 +946,7 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	else
 	{
 		gchar * text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
-		NS_CStringToUTF16 (nsEmbedCString (text),
+		NS_CStringToUTF16 (nsCString (text),
 			           NS_CSTRING_ENCODING_UTF8, _password);
 		g_free (text);
 		*_retval = PR_TRUE;
@@ -1024,7 +1025,7 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
 
-	nsEmbedString org, orgUnit, nextUpdate;
+	nsString org, orgUnit, nextUpdate;
 	rv = crl->GetOrganization (org);
 	if (NS_FAILED(rv)) return rv;
 
@@ -1035,15 +1036,15 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 	if (NS_FAILED(rv)) return rv;
 
 	int row = 0;
-	nsEmbedCString cOrg;
+	nsCString cOrg;
 	NS_UTF16ToCString (org, NS_CSTRING_ENCODING_UTF8, cOrg);
 	set_table_row (table, row, _("Organization:"), cOrg.get ());
 
-	nsEmbedCString cOrgUnit;
+	nsCString cOrgUnit;
 	NS_UTF16ToCString (orgUnit, NS_CSTRING_ENCODING_UTF8, cOrgUnit);
 	set_table_row (table, row, _("Unit:"), cOrgUnit.get ());
 
-	nsEmbedCString cNextUpdate;
+	nsCString cNextUpdate;
 	NS_UTF16ToCString (nextUpdate, NS_CSTRING_ENCODING_UTF8, cNextUpdate);
 	set_table_row (table, row, _("Next Update:"), cNextUpdate.get ());
 
@@ -1078,7 +1079,7 @@ set_label_cert_attribute (GladeXML* gxml, const char* label_id, nsAString &value
 	}
 	else
 	{
-		nsEmbedCString cValue;
+		nsCString cValue;
 		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
 		gtk_label_set_use_markup (GTK_LABEL (label), FALSE);
 		gtk_label_set_text (GTK_LABEL (label), cValue.get());
@@ -1111,11 +1112,11 @@ fill_cert_chain_tree (GtkTreeView *treeview, nsIArray *certChain)
 		gtk_tree_store_append (GTK_TREE_STORE (model), &iter, 
 				       (i == (int)numCerts-1) ? NULL : &parent);
 
-		nsEmbedString value;
+		nsString value;
 		rv = nsCert->GetCommonName (value);
 		if (NS_FAILED(rv)) return FALSE;
 
-		nsEmbedCString cValue;
+		nsCString cValue;
 		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
 
 		nsIX509Cert *nsCertP = nsCert;
@@ -1157,10 +1158,10 @@ fill_cert_chain_tree (GtkTreeView *treeview, nsIArray *certChain)
 static void
 add_asn1_object_to_tree(GtkTreeModel *model, nsIASN1Object *object, GtkTreeIter *parent)
 {
-	nsEmbedString dispNameU;
+	nsString dispNameU;
 	object->GetDisplayName(dispNameU);
 
-	nsEmbedCString cDispNameU;
+	nsCString cDispNameU;
 	NS_UTF16ToCString (dispNameU, NS_CSTRING_ENCODING_UTF8, cDispNameU);
 
 	GtkTreeIter iter;
@@ -1239,10 +1240,10 @@ field_tree_view_selection_changed_cb (GtkTreeSelection *selection,
 
 		gtk_tree_model_get (model, &iter, 1, &object, -1);
 
-		nsEmbedString dispValU;
+		nsString dispValU;
 		object->GetDisplayValue(dispValU);
 
-		nsEmbedCString cDispValU;
+		nsCString cDispValU;
 		NS_UTF16ToCString (dispValU, NS_CSTRING_ENCODING_UTF8, cDispValU);
 
 		gtk_text_buffer_set_text (text_buffer, cDispValU.get(), -1);
@@ -1337,7 +1338,7 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 {
 	GtkWidget *dialog, *widget;
 	GladeXML *gxml;
-	nsEmbedString value;
+	nsString value;
 	PRUint32 verifystate, count;
 	PRUnichar ** usage;
 	GtkSizeGroup * sizegroup;
@@ -1426,8 +1427,8 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 		GtkWidget *indent;
 		for (PRUint32 i = 0 ; i < count ; i++)
 		{
-			nsEmbedCString msg;
-			NS_UTF16ToCString (nsEmbedString(usage[i]),
+			nsCString msg;
+			NS_UTF16ToCString (nsString(usage[i]),
 					   NS_CSTRING_ENCODING_UTF8, msg);
 
 			GtkWidget *label = gtk_label_new(msg.get());

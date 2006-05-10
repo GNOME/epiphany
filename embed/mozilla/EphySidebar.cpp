@@ -20,25 +20,21 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include <nsCOMPtr.h>
-#include <nsCRT.h>
-#include <nsIProgrammingLanguage.h>
+#include <nsStringAPI.h>
+
+#include <nsMemory.h>
 
 #ifdef HAVE_GECKO_1_9
 #include <nsIClassInfoImpl.h>
 #endif
 
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-
-#include "EphySidebar.h"
+#include "ephy-debug.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
-#include "ephy-debug.h"
+
+#include "EphySidebar.h"
 
 NS_IMPL_ISUPPORTS1_CI(EphySidebar, nsISidebar)
 
@@ -56,10 +52,13 @@ EphySidebar::AddPanel (const PRUnichar *aTitle,
 		       const char *aContentURL,
 		       const char *aCustomizeURL)
 {
-	nsEmbedCString title;
+	NS_ENSURE_ARG (aTitle);
+	NS_ENSURE_ARG (aContentURL);
+
+	nsCString title;
 	EphyEmbedSingle *single;
 
-	NS_UTF16ToCString (nsEmbedString(aTitle),
+	NS_UTF16ToCString (nsDependentString(aTitle),
 			   NS_CSTRING_ENCODING_UTF8, title);
 
 	LOG ("Adding sidebar, url=%s title=%s", aContentURL, title.get());
@@ -90,10 +89,14 @@ EphySidebar::AddSearchEngine (const char *aEngineURL,
 			      const PRUnichar *aSuggestedTitle,
 			      const PRUnichar *aSuggestedCategory)
 {
-	nsEmbedCString title;
+	NS_ENSURE_ARG (aSuggestedTitle);
+	NS_ENSURE_ARG (aIconURL);
+	NS_ENSURE_ARG (aEngineURL);
+
+	nsCString title;
 	EphyEmbedSingle *single;
 
-	NS_UTF16ToCString (nsEmbedString(aSuggestedTitle),
+	NS_UTF16ToCString (nsDependentString(aSuggestedTitle),
 			   NS_CSTRING_ENCODING_UTF8, title);
 
 	LOG ("Adding search engine, engineurl=%s iconurl=%s title=%s", aEngineURL, aIconURL, title.get());

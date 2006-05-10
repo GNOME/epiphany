@@ -1473,9 +1473,8 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 			stock_id = STOCK_LOCK_BROKEN;
 			show_lock = TRUE;
 
-			/* Change to HAVE_GECKO_1_8_1 once https://bugzilla.mozilla.org/show_bug.cgi?id=251123 is checked in there */
-#ifndef HAVE_GECKO_1_9
-			/* In Gecko 1.9, we get a useful tooltip here */
+#ifndef HAVE_GECKO_1_8_1
+			/* In Gecko 1.8.1/1.9, we get a useful tooltip here */
 			g_free (description);
 			description = NULL;
 #endif

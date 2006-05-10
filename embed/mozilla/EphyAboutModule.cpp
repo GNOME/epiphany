@@ -22,35 +22,37 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include <nsCOMPtr.h>
-#include <nsIIOService.h>
-#include <nsIServiceManager.h>
-#include <nsIURI.h>
-#include <nsIChannel.h>
-#include <nsIOutputStream.h>
-#include <nsIInputStream.h>
-#include <nsIStorageStream.h>
-#include <nsIInputStreamChannel.h>
-#include <nsIScriptSecurityManager.h>
-#include <nsNetCID.h>
-#include <nsString.h>
-#include <nsEscape.h>
-#include <nsAutoPtr.h>
-#include <nsNetUtil.h>
+#include <string.h>
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include "EphyAboutModule.h"
-#include "EphyRedirectChannel.h"
-#include "EphyUtils.h"
+// we need nsEscape which depends on internal strings :(((
+#define MOZILLA_INTERNAL_API 1
+#include <nsString.h>
+
+#include <nsAutoPtr.h>
+#include <nsCOMPtr.h>
+#include <nsEscape.h>
+#include <nsIChannel.h>
+#include <nsIInputStreamChannel.h>
+#include <nsIInputStream.h>
+#include <nsIIOService.h>
+#include <nsIOutputStream.h>
+#include <nsIScriptSecurityManager.h>
+#include <nsIStorageStream.h>
+#include <nsIURI.h>
+#include <nsNetCID.h>
+#include <nsNetUtil.h>
+#include <nsServiceManagerUtils.h>
 
 #include "ephy-debug.h"
 
-#include <string.h>
+#include "EphyRedirectChannel.h"
+
+#include "EphyAboutModule.h"
 
 EphyAboutModule::EphyAboutModule()
 {
@@ -74,12 +76,10 @@ EphyAboutModule::NewChannel(nsIURI *aURI,
 	nsCAutoString path;
 	aURI->GetPath (path);
 
-#ifdef HAVE_GECKO_1_8
 	if (strncmp (path.get(), "neterror?", strlen ("neterror?")) == 0)
 	{
 		return CreateErrorPage (aURI, _retval);
 	}
-#endif
 
 	if (strncmp (path.get (), "recover?", strlen ("recover?")) == 0)
 	{
@@ -103,16 +103,12 @@ EphyAboutModule::Redirect(const nsACString &aURL,
 	*_retval = nsnull;
 
 	nsresult rv;
-	nsCOMPtr<nsIIOService> ioService;
-	rv = EphyUtils::GetIOService (getter_AddRefs (ioService));
+	nsCOMPtr<nsIURI> uri;
+	rv = NS_NewURI (getter_AddRefs (uri), aURL);
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	nsCOMPtr<nsIChannel> tempChannel;
-	rv = ioService->NewChannel(aURL, nsnull, nsnull, getter_AddRefs(tempChannel));
-	NS_ENSURE_SUCCESS (rv, rv);
-
-	nsCOMPtr<nsIURI> uri;
-	rv = ioService->NewURI(aURL, nsnull, nsnull, getter_AddRefs(uri));
+	rv = NS_NewChannel (getter_AddRefs (tempChannel), uri);
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	tempChannel->SetOriginalURI (uri);
@@ -185,7 +181,6 @@ EphyAboutModule::ParseURL(const char *aURL,
 	return NS_OK;
 }
 
-#ifdef HAVE_GECKO_1_8
 nsresult
 EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 				 const char *aError,
@@ -467,7 +462,7 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 	if (error.IsEmpty () || rawurl.IsEmpty () || url.IsEmpty()) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIURI> uri;
-	rv = EphyUtils::NewURI(getter_AddRefs (uri), url, charset.get());
+	rv = NS_NewURI (getter_AddRefs (uri), url, charset.get());
 	/* FIXME can uri be NULL if the original url was invalid? */
 	NS_ENSURE_SUCCESS (rv, rv);
 
@@ -505,7 +500,6 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 
 	return NS_OK;
 }
-#endif /* HAVE_GECKO_1_8 */
 
 nsresult
 EphyAboutModule::CreateRecoverPage(nsIURI *aRecoverURI,
@@ -525,7 +519,7 @@ EphyAboutModule::CreateRecoverPage(nsIURI *aRecoverURI,
 	if (rawurl.IsEmpty () || url.IsEmpty()) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIURI> uri;
-	rv = EphyUtils::NewURI(getter_AddRefs (uri), url, charset.get());
+	rv = NS_NewURI(getter_AddRefs (uri), url, charset.get());
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	char *secondary = g_strdup_printf

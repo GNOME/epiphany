@@ -21,9 +21,10 @@
 #ifndef __PrintingPromptService_h
 #define __PrintingPromptService_h
 
-#include "nsError.h"
-#include "nsIPrintingPromptService.h"
 #include "print-dialog.h"
+
+#include <nscore.h>
+#include <nsIPrintingPromptService.h>
 
 #define G_PRINTINGPROMPTSERVICE_CID		     \
 { /* 5998a2d3-88ea-4c52-b4bb-4e7abd0d35e0 */         \
@@ -36,7 +37,9 @@
 #define G_PRINTINGPROMPTSERVICE_CLASSNAME "Epiphany's Printing Prompt Service"
 #define G_PRINTINGPROMPTSERVICE_CONTRACTID "@mozilla.org/embedcomp/printingprompt-service;1"
 
-class GPrintingPromptService : public nsIPrintingPromptService, nsIWebProgressListener, nsIPrintProgressParams
+class GPrintingPromptService : public nsIPrintingPromptService,
+			       nsIWebProgressListener,
+			       nsIPrintProgressParams
 {
 public:
   NS_DECL_ISUPPORTS

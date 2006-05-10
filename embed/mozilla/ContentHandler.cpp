@@ -22,93 +22,69 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "ContentHandler.h"
-#include "AutoJSContextStack.h"
-
+#include <glib/gi18n.h>
+#include <gtk/gtkbutton.h>
 #include <gtk/gtkdialog.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtkmain.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkstock.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtkmain.h>
 #include <libgnomevfs/gnome-vfs-mime.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
-#include <glib/gi18n.h>
 
-#include <nsMemory.h>
-#include <nsIURL.h>
+#include <nsStringAPI.h>
+
+#include <nsCExternalHandlerService.h>
+#include <nsComponentManagerUtils.h>
+#include <nsIDOMWindow.h>
+#include <nsIInterfaceRequestorUtils.h>
 #include <nsILocalFile.h>
 #include <nsIMIMEInfo.h>
-#include <nsIInterfaceRequestorUtils.h>
-#include <nsCExternalHandlerService.h>
-#include <nsIDOMWindow.h>
+#include <nsIURL.h>
+#include <nsMemory.h>
 #include <nsNetError.h>
+#include <nsServiceManagerUtils.h>
 
-#ifdef ALLOW_PRIVATE_API
-#include <nsIServiceManager.h>
-#endif
-
-#include "ephy-prefs.h"
-#include "ephy-embed-single.h"
+#include "eel-gconf-extensions.h"
+#include "ephy-debug.h"
 #include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
-#include "ephy-stock-icons.h"
 #include "ephy-gui.h"
-#include "ephy-debug.h"
-#include "eel-gconf-extensions.h"
+#include "ephy-prefs.h"
+#include "ephy-stock-icons.h"
 
-#include "MozDownload.h"
 #include "EphyUtils.h"
+#include "MozDownload.h"
+
+#include "AutoJSContextStack.h"
+
+#include "ContentHandler.h"
 
 /* FIXME: we don't generally have a timestamp for the user action which initiated this
  * content handler.
  */
-#ifdef HAVE_GECKO_1_8
 GContentHandler::GContentHandler()
 : mUserTime(0)
 {
 	LOG ("GContentHandler ctor (%p)", this);
 }
-#else
-GContentHandler::GContentHandler()
-: mMimeType(nsnull)
-, mUserTime(0)
-{
-	LOG ("GContentHandler ctor (%p)", this);
-}
-#endif
 
 GContentHandler::~GContentHandler()
 {
 	LOG ("GContentHandler dtor (%p)", this);
-
-#ifndef HAVE_GECKO_1_8
-	if (mMimeType)
-	{
-		nsMemory::Free (mMimeType);
-	}
-#endif
 }
 
 NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 
-#ifdef HAVE_GECKO_1_8
 /* void show (in nsIHelperAppLauncher aLauncher, in nsISupports aContext, in unsigned long aReason); */
 NS_IMETHODIMP
 GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
 		       nsISupports *aContext,
 		       PRUint32 aReason)
-#else
-/* void show (in nsIHelperAppLauncher aLauncher, in nsISupports aContext); */
-NS_IMETHODIMP
-GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
-		       nsISupports *aContext,
-		       PRBool aForced)
-#endif
 {
 	nsresult rv;
 	EphyEmbedSingle *single;
@@ -122,13 +98,8 @@ GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
-#ifdef HAVE_GECKO_1_8
 	g_signal_emit_by_name (single, "handle_content", mMimeType.get(),
 			       mUrl.get(), &handled);
-#else
-	g_signal_emit_by_name (single, "handle_content", mMimeType,
-			       mUrl.get(), &handled);
-#endif
 
 	if (!handled)
 	{
@@ -136,11 +107,7 @@ GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
 	}
 	else
 	{
-#ifdef HAVE_GECKO_1_8
 		mLauncher->Cancel (NS_BINDING_ABORTED);
-#else
-		mLauncher->Cancel ();
-#endif
 	}
 
 	return NS_OK;
@@ -157,9 +124,9 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	EphyFileChooser *dialog;
 	int response;
 	char *filename = NULL;
-	nsEmbedCString defaultFile;
+	nsCString defaultFile;
 
-	NS_UTF16ToCString (nsEmbedString (aDefaultFile),
+	NS_UTF16ToCString (nsString (aDefaultFile),
 			   NS_CSTRING_ENCODING_UTF8, defaultFile);
 
 	if (mAction != CONTENT_ACTION_SAVEAS)
@@ -205,7 +172,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 		nsCOMPtr <nsILocalFile> destFile (do_CreateInstance(NS_LOCAL_FILE_CONTRACTID));
 		NS_ENSURE_TRUE (destFile, NS_ERROR_FAILURE);
 
-		destFile->InitWithNativePath (nsEmbedCString (filename));
+		destFile->InitWithNativePath (nsCString (filename));
 		g_free (filename);
 
 		NS_IF_ADDREF (*_retval = destFile);
@@ -233,11 +200,7 @@ NS_METHOD GContentHandler::Init ()
 	mLauncher->GetMIMEInfo (getter_AddRefs(MIMEInfo));
 	NS_ENSURE_TRUE (MIMEInfo, NS_ERROR_FAILURE);
 
-#ifdef HAVE_GECKO_1_8
 	rv = MIMEInfo->GetMIMEType (mMimeType);
-#else
-	rv = MIMEInfo->GetMIMEType (&mMimeType);
-#endif
 
 	nsCOMPtr<nsIURI> uri;
 	mLauncher->GetSource (getter_AddRefs(uri));
@@ -278,7 +241,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	GtkWidget *dialog, *button, *image;
 	const char *action_label;
 	const char *mime_description;
-	nsEmbedCString file_name;
+	nsCString file_name;
 			
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (mContext);
 	GtkWindow *parentWindow = GTK_WINDOW (EphyUtils::FindGtkParent(parentDOMWindow));
@@ -287,11 +250,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			(mAction == CONTENT_ACTION_OPEN_TMP) ?
 			GTK_STOCK_OPEN : EPHY_STOCK_DOWNLOAD;
 
-#ifdef HAVE_GECKO_1_8
 	mime_description = gnome_vfs_mime_get_description (mMimeType.get());
-#else
-	mime_description = gnome_vfs_mime_get_description (mMimeType);
-#endif
 	if (mime_description == NULL)
 	{
 		/* Translators: The text before the "|" is context to help you decide on
@@ -301,30 +260,11 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 
 	/* We have one tiny, minor issue, the filename can be empty (""),
 	   is that severe enough to be completely fixed ? */
-#ifdef HAVE_GECKO_1_8
-	{
-		nsEmbedString suggested;
+	nsString suggested;
 		
-		mLauncher->GetSuggestedFileName (suggested);
-		NS_UTF16ToCString (
-			suggested,
-			NS_CSTRING_ENCODING_UTF8, file_name);
-	}
-#else
-	{
-		PRUnichar *suggested = nsnull;
-			
-		mLauncher->GetSuggestedFileName (&suggested);
-		if (suggested != nsnull)
-		{
-			NS_UTF16ToCString (
-				nsEmbedString (suggested),
-				NS_CSTRING_ENCODING_UTF8, file_name);
-				
-			nsMemory::Free (suggested);
-		}
-	}
-#endif
+	mLauncher->GetSuggestedFileName (suggested);
+	NS_UTF16ToCString (suggested,
+			   NS_CSTRING_ENCODING_UTF8, file_name);
 
 	if (mPermission != EPHY_MIME_PERMISSION_SAFE && mHelperApp)
 	{
@@ -413,13 +353,8 @@ NS_METHOD GContentHandler::MIMEInitiateAction (void)
 
 	auto_downloads = eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS);
 
-#ifdef HAVE_GECKO_1_8
 	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType.get());
 	mPermission = ephy_file_check_mime (mMimeType.get());
-#else
-	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType);
-	mPermission = ephy_file_check_mime (mMimeType);
-#endif
 
 	/* HACK! Check that this 'helper application' isn't Epiphany itself,
 	 * see bug #310023.
@@ -482,27 +417,19 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 		char *info;
 		info = g_strdup_printf ("gnome-default:%d:%s", gtk_get_current_event_time(), id);
 
-		nsEmbedString desc;
-		NS_CStringToUTF16 (nsEmbedCString (info),
+		nsString desc;
+		NS_CStringToUTF16 (nsCString (info),
 			           NS_CSTRING_ENCODING_UTF8, desc);
 		g_free (info);
 
 		/* HACK we use the application description to ask
 		   MozDownload to open the file when download
 		   is finished */
-#ifdef HAVE_GECKO_1_8
 		mimeInfo->SetApplicationDescription (desc);
-#else
-		mimeInfo->SetApplicationDescription (desc.get());
-#endif
 	}
 	else
 	{
-#ifdef HAVE_GECKO_1_8
-		mimeInfo->SetApplicationDescription (nsEmbedString ());
-#else
-		mimeInfo->SetApplicationDescription (nsnull);
-#endif
+		mimeInfo->SetApplicationDescription (nsString ());
 	}
 
 	if (mAction == CONTENT_ACTION_OPEN)
@@ -515,11 +442,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	}
 	else if (mAction == CONTENT_ACTION_NONE)
 	{
-#ifdef HAVE_GECKO_1_8
 		mLauncher->Cancel (NS_BINDING_ABORTED);
-#else
-		mLauncher->Cancel ();
-#endif
 	}
 	else
 	{

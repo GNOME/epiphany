@@ -21,17 +21,41 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
+#include <glib/gmessages.h>
+
+#include <nsStringAPI.h>
+
+#include <nsComponentManagerUtils.h>
+#include <nsCOMPtr.h>
+#include <nsDocShellCID.h>
+#include <nsICategoryManager.h>
+#include <nsIComponentManager.h>
+#include <nsIComponentRegistrar.h>
+#include <nsIGenericFactory.h>
+#include <nsILocalFile.h>
+#include <nsIServiceManager.h>
+#include <nsMemory.h>
+#include <nsNetCID.h>
+#include <nsServiceManagerUtils.h>
+
+#ifdef HAVE_GECKO_1_9
+#include <nsIClassInfoImpl.h>
+#endif
+
+#ifdef HAVE_MOZILLA_PSM
+#include <nsISecureBrowserUI.h>
+#endif
+
 #include "ContentHandler.h"
-#include "GlobalHistory.h"
-#include "PrintingPromptService.h"
-#include "MozDownload.h"
-#include "EphyContentPolicy.h"
-#include "EphySidebar.h"
 #include "EphyAboutModule.h"
+#include "EphyContentPolicy.h"
 #include "EphyPromptService.h"
+#include "EphySidebar.h"
+#include "GlobalHistory.h"
+#include "MozDownload.h"
+#include "PrintingPromptService.h"
 
 #ifdef ENABLE_FILEPICKER
 #include "FilePicker.h"
@@ -42,32 +66,16 @@
 #include "GtkNSSDialogs.h"
 #include "GtkNSSKeyPairDialogs.h"
 #include "GtkNSSSecurityWarningDialogs.h"
-#include <nsISecureBrowserUI.h>
 #endif
 
-#include <nsMemory.h>
-#include <nsDocShellCID.h>
-#include <nsIGenericFactory.h>
-#include <nsIComponentRegistrar.h>
-#include <nsICategoryManager.h>
-#include <nsCOMPtr.h>
-#include <nsILocalFile.h>
-#include <nsNetCID.h>
-
-#ifdef HAVE_GECKO_1_9
-#include <nsIClassInfoImpl.h>
-#endif
-
-#include <glib/gmessages.h>
-
-NS_GENERIC_FACTORY_CONSTRUCTOR(MozDownload)
-NS_GENERIC_FACTORY_CONSTRUCTOR(GContentHandler)
-NS_GENERIC_FACTORY_CONSTRUCTOR(MozGlobalHistory)
-NS_GENERIC_FACTORY_CONSTRUCTOR(GPrintingPromptService)
-NS_GENERIC_FACTORY_CONSTRUCTOR(EphyContentPolicy)
-NS_GENERIC_FACTORY_CONSTRUCTOR(EphySidebar)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyAboutModule)
+NS_GENERIC_FACTORY_CONSTRUCTOR(EphyContentPolicy)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyPromptService)
+NS_GENERIC_FACTORY_CONSTRUCTOR(EphySidebar)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GContentHandler)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GPrintingPromptService)
+NS_GENERIC_FACTORY_CONSTRUCTOR(MozDownload)
+NS_GENERIC_FACTORY_CONSTRUCTOR(MozGlobalHistory)
 
 #ifdef ENABLE_FILEPICKER
 NS_GENERIC_FACTORY_CONSTRUCTOR(GFilePicker)
@@ -79,7 +87,6 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSKeyPairDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSSecurityWarningDialogs)
 #endif
-
 
 /* class information */ 
 NS_DECL_CLASSINFO(EphySidebar)
@@ -219,14 +226,12 @@ static const nsModuleComponentInfo sAppComps[] = {
 		EPHY_ABOUT_RECOVER_CONTRACTID,
 		EphyAboutModuleConstructor
 	},
-#ifdef HAVE_GECKO_1_8
 	{
 		EPHY_ABOUT_NETERROR_CLASSNAME,
 		EPHY_ABOUT_MODULE_CID,
 		EPHY_ABOUT_NETERROR_CONTRACTID,
 		EphyAboutModuleConstructor
 	},
-#endif
 	{
 		EPHY_PROMPT_SERVICE_CLASSNAME,
 		EPHY_PROMPT_SERVICE_IID,
@@ -242,43 +247,6 @@ static const nsModuleComponentInfo sAppComps[] = {
 	},
 #endif /* HAVE_NSINONBLOCKINGALERTSERVICE_H */
 };
-
-#if defined(HAVE_MOZILLA_PSM) && !defined(HAVE_GECKO_1_8)
-/* 5999dfd3-571f-4fcf-964b-386879f5cded */
-#define NEW_CID { 0x5999dfd3, 0x571f, 0x4fcf, { 0x96, 0x4b, 0x38, 0x68, 0x79, 0xf5, 0xcd, 0xed } }
-
-static nsresult
-reregister_secure_browser_ui (nsIComponentManager *cm,
-			      nsIComponentRegistrar *cr)
-{
-	NS_ENSURE_ARG (cm);
-	NS_ENSURE_ARG (cr);
-
-	/* Workaround as a result of:
-	 *  https://bugzilla.mozilla.org/show_bug.cgi?id=94974
-	 * see
-	 *  http://bugzilla.gnome.org/show_bug.cgi?id=164670
-	 */
-
-	nsresult rv;
-	nsCOMPtr<nsIFactory> factory;
-	rv = cm->GetClassObjectByContractID (NS_SECURE_BROWSER_UI_CONTRACTID, NS_GET_IID(nsIFactory), getter_AddRefs (factory));
-	NS_ENSURE_SUCCESS (rv, rv);
-
-	nsCID *cidPtr = nsnull;
-	rv = cr->ContractIDToCID(NS_SECURE_BROWSER_UI_CONTRACTID, &cidPtr);
-	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && cidPtr, rv);
-
-	rv = cr->UnregisterFactory (*cidPtr, factory);
-	NS_ENSURE_SUCCESS (rv, rv);
-
-	const nsCID new_cid = NEW_CID;
-	rv = cr->RegisterFactory (new_cid, "Epiphany Secure Browser Class", "@gnome.org/project/epiphany/hacks/secure-browser-ui;1", factory);
-	nsMemory::Free (cidPtr);
-
-	return rv;
-}
-#endif /* defined(HAVE_MOZILLA_PSM) && !defined(HAVE_GECKO_1_8) */
 
 gboolean
 mozilla_register_components (void)
@@ -329,15 +297,6 @@ mozilla_register_components (void)
 			}
 		}
 	}
-
-#if defined(HAVE_MOZILLA_PSM) && !defined(HAVE_GECKO_1_8)
-	/* Workaround for http://bugzilla.gnome.org/show_bug.cgi?id=164670 */
-	rv = reregister_secure_browser_ui (cm, cr);
-	if (NS_FAILED (rv))
-	{
-		g_warning ("Failed to divert the nsISecureBrowserUI implementation!\n");
-	}
-#endif /* defined(HAVE_MOZILLA_PSM) && !defined(HAVE_GECKO_1_8) */
 
 	return ret;
 }

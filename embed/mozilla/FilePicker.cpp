@@ -20,38 +20,33 @@
  */
 
 #include "mozilla-config.h"
-
 #include "config.h"
 
-#include "FilePicker.h"
-#include "EphyUtils.h"
-#include "AutoJSContextStack.h"
+#include <glib/gconvert.h>
+#include <glib/gi18n.h>
+#include <gtk/gtkfilefilter.h>
+#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtkstock.h>
+
+#include <nsStringAPI.h>
 
 #include <nsCOMPtr.h>
-#undef MOZILLA_INTERNAL_API
-#include <nsEmbedString.h>
-#define MOZILLA_INTERNAL_API 1
-#include <nsIServiceManager.h>
-#include <nsIURI.h>
+#include <nsIDOMWindow.h>
 #include <nsIFileURL.h>
 #include <nsILocalFile.h>
 #include <nsIPromptService.h>
-#include <nsIDOMWindow.h>
+#include <nsIServiceManager.h>
+#include <nsIURI.h>
 #include <nsNetCID.h>
 
-#ifndef MOZ_NSIFILEPICKER_NSASTRING_
-#include <nsIDOMWindowInternal.h>
-#endif
-
-#include "ephy-prefs.h"
-#include "ephy-gui.h"
 #include "ephy-debug.h"
+#include "ephy-gui.h"
+#include "ephy-prefs.h"
 
-#include <glib/gconvert.h>
-#include <gtk/gtkfilefilter.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkmessagedialog.h>
-#include <glib/gi18n.h>
+#include "AutoJSContextStack.h"
+#include "EphyUtils.h"
+
+#include "FilePicker.h"
 
 NS_IMPL_ISUPPORTS1(GFilePicker, nsIFilePicker)
 
@@ -87,11 +82,11 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 	NS_ENSURE_TRUE (gtkparent, NS_ERROR_FAILURE);
 #endif
 
-	nsEmbedCString cTitle;
+	nsCString cTitle;
 #ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	NS_UTF16ToCString (title, NS_CSTRING_ENCODING_UTF8, cTitle);
 #else
-	NS_UTF16ToCString (nsEmbedString(title), NS_CSTRING_ENCODING_UTF8, cTitle);
+	NS_UTF16ToCString (nsString(title), NS_CSTRING_ENCODING_UTF8, cTitle);
 #endif
 
 	mMode = mode;
@@ -205,11 +200,11 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar 
 	if (!filter) return NS_ERROR_FAILURE;
 #endif
 
-	nsEmbedCString pattern;
+	nsCString pattern;
 #ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	NS_UTF16ToCString (filter, NS_CSTRING_ENCODING_UTF8, pattern);
 #else
-	NS_UTF16ToCString (nsEmbedString(filter), NS_CSTRING_ENCODING_UTF8, pattern);
+	NS_UTF16ToCString (nsString(filter), NS_CSTRING_ENCODING_UTF8, pattern);
 #endif
 
 	char **patterns;
@@ -224,11 +219,11 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar 
 		gtk_file_filter_add_pattern (filth, g_strstrip (patterns[i]));
 	}
 
-	nsEmbedCString cTitle;
+	nsCString cTitle;
 #ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	NS_UTF16ToCString (title, NS_CSTRING_ENCODING_UTF8, cTitle);
 #else
-	NS_UTF16ToCString (nsEmbedString(title), NS_CSTRING_ENCODING_UTF8, cTitle);
+	NS_UTF16ToCString (nsString(title), NS_CSTRING_ENCODING_UTF8, cTitle);
 #endif
 
 	gtk_file_filter_set_name (filth, cTitle.get());
@@ -272,7 +267,7 @@ NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
 
 	if (mMode == nsIFilePicker::modeSave)
 	{
-		nsEmbedCString defaultString;
+		nsCString defaultString;
 		NS_UTF16ToCString (mDefaultString, NS_CSTRING_ENCODING_UTF8,
 				   defaultString);
 
@@ -338,7 +333,7 @@ NS_IMETHODIMP GFilePicker::GetDisplayDirectory(nsILocalFile **aDisplayDirectory)
 	if (dir != NULL)
 	{
 		nsCOMPtr<nsILocalFile> file = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-		file->InitWithNativePath (nsEmbedCString (dir));
+		file->InitWithNativePath (nsCString (dir));
 		NS_IF_ADDREF (*aDisplayDirectory = file);
 	
 		g_free (dir);
@@ -351,14 +346,14 @@ NS_IMETHODIMP GFilePicker::SetDisplayDirectory(nsILocalFile *aDisplayDirectory)
 {
 	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
-	nsEmbedCString dir;
+	nsCString dir;
 	aDisplayDirectory->GetNativePath (dir);
 
 	LOG ("GFilePicker::SetDisplayDirectory to %s", dir.get());
 
 	if (mDefaultString.Length() && mMode != nsIFilePicker::modeSave)
 	{
-		nsEmbedCString defaultString;
+		nsCString defaultString;
 		NS_UTF16ToCString (mDefaultString, NS_CSTRING_ENCODING_NATIVE_FILESYSTEM,
 				   defaultString);
 
@@ -390,7 +385,7 @@ NS_IMETHODIMP GFilePicker::GetFile(nsILocalFile **aFile)
 	if (filename != NULL)
 	{
 		nsCOMPtr<nsILocalFile> file = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-		file->InitWithNativePath (nsEmbedCString (filename));
+		file->InitWithNativePath (nsCString (filename));
 		NS_IF_ADDREF (*aFile = file);
 	
 		g_free (filename);
