@@ -89,13 +89,10 @@
 #include "mozilla-x509-cert.h"
 
 #include "EphyBrowser.h"
+#include "EphyDirectoryProvider.h"
 #include "EphySingle.h"
 #include "EphyUtils.h"
 #include "MozRegisterComponents.h"
-
-#ifdef HAVE_MOZILLA_TOOLKIT
-#include "EphyDirectoryProvider.h"
-#endif
 
 #include "mozilla-embed-single.h"
 
@@ -604,12 +601,10 @@ impl_init (EphyEmbedSingle *esingle)
 	gtk_moz_embed_set_comp_path (MOZILLA_HOME);
 #endif
 
-#ifdef HAVE_MOZILLA_TOOLKIT
 	nsCOMPtr<nsIDirectoryServiceProvider> dp = new EphyDirectoryProvider ();
 	if (!dp) return FALSE;
 
 	gtk_moz_embed_set_directory_service_provider (dp);
-#endif
 
 	/* Fire up the beast */
 	gtk_moz_embed_push_startup ();

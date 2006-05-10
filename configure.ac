@@ -179,14 +179,13 @@ AC_SUBST([MOZILLA_HOME])
 AC_SUBST([MOZILLA_PREFIX])
 AC_SUBST([MOZILLA_EXTRA_LIBS])
 
-# if test "$gecko_cv_gecko_flavour" != "toolkit"; then
-#	AC_MSG_ERROR(["$gecko_cv_gecko_flavour" flavoured geckos aren't tasty enough!])
-# fi
+if test "$gecko_cv_gecko_flavour" != "toolkit"; then
+	AC_MSG_ERROR(["$gecko_cv_gecko_flavour" flavoured geckos aren't tasty enough!])
+fi
 
 case "$gecko_cv_gecko" in
 xulrunner) min_version=1.8 ;;
 *firefox) min_version=1.5 ;;
-seamonkey) min_version=1.0 ;;
 *) AC_MSG_ERROR([Unsupported gecko "$gecko_cv_gecko"]) ;;
 esac
 

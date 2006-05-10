@@ -11,6 +11,8 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyBadCertRejector.h		\
 	EphyContentPolicy.cpp		\
 	EphyContentPolicy.h		\
+	EphyDirectoryProvider.cpp       \
+	EphyDirectoryProvider.h		\
 	EphyHeaderSniffer.cpp		\
 	EphyHeaderSniffer.h		\
 	EphyBrowser.cpp                 \
@@ -78,12 +80,6 @@ if ENABLE_CERTIFICATE_MANAGER
 libephymozillaembed_la_SOURCES += \
 	mozilla-x509-cert.cpp		\
 	mozilla-x509-cert.h
-endif
-
-if HAVE_MOZILLA_TOOLKIT
-libephymozillaembed_la_SOURCES += \
-	EphyDirectoryProvider.cpp       \
-	EphyDirectoryProvider.h
 endif
 
 mozilla_include_subdirs = \
