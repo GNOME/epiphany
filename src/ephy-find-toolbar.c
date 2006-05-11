@@ -592,8 +592,12 @@ ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
 	EphyEmbedFindResult result;
 
 	result = ephy_embed_find_find_again (get_find (toolbar), TRUE);
-
 	set_status (toolbar, result);
+
+	if (!GTK_WIDGET_VISIBLE(toolbar)) {
+		gtk_widget_show (GTK_WIDGET (toolbar));
+		gtk_widget_grab_focus (GTK_WIDGET (toolbar));
+	}
 }
 
 void
@@ -602,8 +606,12 @@ ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 	EphyEmbedFindResult result;
 
 	result = ephy_embed_find_find_again (get_find (toolbar), FALSE);
-
 	set_status (toolbar, result);
+
+	if (!GTK_WIDGET_VISIBLE(toolbar)) {
+		gtk_widget_show (GTK_WIDGET (toolbar));
+		gtk_widget_grab_focus (GTK_WIDGET (toolbar));
+	}
 }
 
 void
@@ -631,7 +639,6 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 	}
 
 	gtk_widget_show (GTK_WIDGET (toolbar));
-
 	gtk_widget_grab_focus (GTK_WIDGET (toolbar));
 }
 

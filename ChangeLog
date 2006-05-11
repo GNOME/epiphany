@@ -1,3 +1,13 @@
+2006-05-11  Wouter Bolsterlee  <uws+gnome@xs4all.nl>
+
+	* src/ephy-find-toolbar.c: (ephy_find_toolbar_find_next),
+	(ephy_find_toolbar_find_previous), (ephy_find_toolbar_open):
+
+	Display the find bar for "Find Next" and "Find Previous"
+	if it wasn't visible already. Entry focus is handlded
+	with care so that use cases like incremental search work
+	as expected. Fixes bug #333020.
+
 2006-05-11  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-find-toolbar.c: (entry_changed_cb),
