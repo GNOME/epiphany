@@ -441,7 +441,17 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 	}
 	else
 	{
-		g_return_if_reached ();
+		char *text;
+	       
+		text = (char *) gtk_selection_data_get_text (selection_data);
+		if (text != NULL) {
+			ephy_link_open (EPHY_LINK (notebook), text, tab,
+					tab ? 0 : EPHY_LINK_NEW_TAB);
+			g_free (text);
+		}
+		else {
+			g_return_if_reached ();
+		}
 	}
 }
 
@@ -504,6 +514,7 @@ ephy_notebook_init (EphyNotebook *notebook)
 			   GTK_DEST_DEFAULT_DROP,
 			   url_drag_types, G_N_ELEMENTS (url_drag_types),
 			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
+	gtk_drag_dest_add_text_targets (GTK_WIDGET(notebook));
 
 	notebook->priv->tabs_vis_notifier_id = eel_gconf_notification_add
 		(CONF_ALWAYS_SHOW_TABS_BAR,
@@ -689,6 +700,7 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	gtk_drag_dest_set (hbox, GTK_DEST_DEFAULT_ALL,
 			   url_drag_types, G_N_ELEMENTS (url_drag_types),
 			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
+	gtk_drag_dest_add_text_targets (label);
 
 	gtk_widget_show (hbox);
 	gtk_widget_show (label_ebox);
