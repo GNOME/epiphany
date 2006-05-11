@@ -1,5 +1,13 @@
 2006-05-11  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-find-toolbar.c: (entry_changed_cb),
+	(ephy_find_toolbar_set_embed):
+
+	Remove HAVE_TYPEAHEADFIND ifdefs, since we now always have that.
+	Fixes the find bar after the drop of gecko 1.7/non-toolkit.
+
+2006-05-11  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-notebook.c:
 
 	And revert it since it causes a gtk warning.

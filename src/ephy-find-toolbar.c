@@ -140,8 +140,6 @@ clear_status (EphyFindToolbar *toolbar)
 			    priv->links_only ? _("Find links:") : _("Find:"));
 }
 
-#ifdef HAVE_TYPEAHEADFIND
-
 /* Code adapted from gtktreeview.c:gtk_tree_view_key_press() and
  * gtk_tree_view_real_start_interactive_seach()
  */
@@ -176,8 +174,6 @@ tab_search_key_press_cb (EphyEmbed *embed,
 	return FALSE;
 }
 
-#endif /* HAVE_TYPEAHEADFIND */
-
 static void
 find_next_cb (EphyFindToolbar *toolbar)
 {
@@ -197,9 +193,7 @@ entry_changed_cb (GtkEntry *entry,
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	const char *text;
 	char *lowercase;
-#ifdef HAVE_TYPEAHEADFIND
 	EphyEmbedFindResult result;
-#endif
 	gboolean case_sensitive;
 
 	text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
@@ -212,11 +206,9 @@ entry_changed_cb (GtkEntry *entry,
 	g_free (lowercase);
 
 	ephy_embed_find_set_properties (get_find (toolbar), text, case_sensitive);
-#ifdef HAVE_TYPEAHEADFIND
 	result = ephy_embed_find_find (get_find (toolbar), text, priv->links_only);
 
 	set_status (toolbar, result);
-#endif
 }
 
 static gboolean
@@ -581,11 +573,9 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 	{
 		clear_status (toolbar);
 
-#ifdef HAVE_TYPEAHEADFIND
 		g_signal_connect_object (embed, "ge-search-key-press",
 					 G_CALLBACK (tab_search_key_press_cb),
 					 toolbar, 0);
-#endif /* HAVE_TYPEAHEADFIND */
 
 		if (priv->find != NULL)
 		{
