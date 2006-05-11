@@ -6,18 +6,10 @@ SUBDIRS = art chrome glade ui
 @INTLTOOL_XML_RULE@
 
 default_prefs_in_FILES = \
-	default-prefs-common.js		\
-	default-prefs-mozilla.js	\
-	default-prefs-toolkit.js	\
-	default-prefs-gecko-1-8.js
+	default-prefs-common.js
 
 default_prefs_files = \
-	default-prefs-common.js			\
-	default-prefs-$(MOZILLA_FLAVOUR).js
-
-if HAVE_GECKO_1_8
-default_prefs_files += default-prefs-gecko-1-8.js
-endif
+	default-prefs-common.js
 
 default-prefs.js: $(default_prefs_files)
 	cat $^ > $@

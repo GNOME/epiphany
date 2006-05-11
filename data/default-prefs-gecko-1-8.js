@@ -1,8 +1,0 @@
-// use system colours
-pref("browser.display.use_system_colors", true);
-
-// explicitly enable error pages (xulrunner is missing this pref)
-pref("browser.xul.error_pages.enabled", true);
-
-// unset weird xulrunner default UA string
-pref("general.useragent.extra.simple", "");

@@ -68,8 +68,34 @@ pref("network.protocol-handler.warn-external.webcal", false);
 // disable xpinstall
 pref("xpinstall.enabled", false);
 
-// enable typeahead find
-pref("accessibility.typeaheadfind", false);
+// enable plugin finder
+pref("plugin.default_plugin_disabled", true);
+
+// enable locale matching
+pref("intl.locale.matchOS", true);
+
+// enable fixed-up typeaheadfind extension
+pref("accessibility.typeaheadfindsea", false);
+pref("accessibility.typeaheadfindsea.autostart", true);
+pref("accessibility.typeaheadfindsea.linksonly", true);
+
+// disable image resizing
+pref("browser.enable_automatic_image_resizing", false);
+
+// enable password manager
+// need to include those prefs since xulrunner doesn't include them
+pref("signon.rememberSignons", true);
+pref("signon.expireMasterPassword", false);
+pref("signon.SignonFileName", "signons.txt");
+
+// use system colours
+pref("browser.display.use_system_colors", true);
+
+// explicitly enable error pages (xulrunner is missing this pref)
+pref("browser.xul.error_pages.enabled", true);
+
+// unset weird xulrunner default UA string
+pref("general.useragent.extra.simple", "");
 
 // disable pings
 pref("browser.send_pings", false);
