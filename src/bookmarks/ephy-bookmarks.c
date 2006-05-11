@@ -350,6 +350,7 @@ add_to_favorites (EphyBookmarks *bookmarks,
 	gboolean full_menu;
 	double score;
 
+	if (ephy_node_db_is_immutable (priv->db)) return FALSE;
 	if (ephy_node_has_child (priv->favorites, node)) return FALSE;
 
 	url = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
@@ -831,6 +832,10 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 	GValue value = { 0, };
 	const char *path = NULL;
 	char *url;
+	gboolean was_immutable;
+
+	was_immutable = ephy_node_db_is_immutable (priv->db);
+	ephy_node_db_set_immutable (priv->db, FALSE);
 
 	g_hash_table_steal (priv->resolve_handles, node);
 
@@ -838,6 +843,9 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 	if (result != GNOME_VFS_OK)
 	{
 		ephy_node_unref (node);
+
+		ephy_node_db_set_immutable (priv->db, was_immutable);
+
 		return;
 	}
 
@@ -867,6 +875,8 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 		ephy_node_add_child (priv->bookmarks, node);
 		ephy_node_add_child (priv->local, node);
 	}
+	
+	ephy_node_db_set_immutable (priv->db, was_immutable);
 }
 
 static void
@@ -907,6 +917,11 @@ browse_cb (GnomeVFSDNSSDBrowseHandle *handle,
 
 	if (node == NULL)
 	{
+		gboolean was_immutable;
+
+		was_immutable = ephy_node_db_is_immutable (priv->db);
+		ephy_node_db_set_immutable (priv->db, FALSE);
+
 		node = ephy_node_new (priv->db);
 		g_assert (node != NULL);
 
@@ -930,6 +945,8 @@ browse_cb (GnomeVFSDNSSDBrowseHandle *handle,
 		g_value_set_boolean (&value, TRUE);
 		ephy_node_set_property (node, EPHY_NODE_BMK_PROP_IMMUTABLE, &value);
 		g_value_unset (&value);
+
+		ephy_node_db_set_immutable (priv->db, was_immutable);
 	}
 
 	data = g_new (ResolveData, 1);
