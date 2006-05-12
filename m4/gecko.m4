@@ -35,11 +35,18 @@
 # VARIABLE_PREFIX:
 # VARIABLE_INCLUDE_ROOT:
 # VARIABLE_VERSION: The version of the gecko that was found
-# VARIABLE_VERSION_MAJOR:
-# VARIABLE_VERSION_MINOR:
+# VARIABLE_VERSION:
+# VARIABLE_VERSION_INT:
 
 AC_DEFUN([GECKO_INIT],
 [AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+AC_REQUIRE([AC_PROG_AWK])dnl
+
+AC_PROG_AWK
+
+# ************************
+# Check which gecko to use
+# ************************
 
 AC_MSG_CHECKING([which gecko to use])
 
@@ -229,71 +236,86 @@ AM_CONDITIONAL([HAVE_GECKO_DEBUG],[test "$gecko_cv_have_debug" = "yes"])
 
 if test "$gecko_cv_have_gecko" = "yes"; then
 
-AC_MSG_CHECKING([for gecko version])
-
-# We cannot in grep in mozilla-config.h directly, since in some setups
-# (mult-arch for instance) it includes another file with the real
-# definitions.
-
 AC_LANG_PUSH([C++])
 
 _SAVE_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS -I$_GECKO_INCLUDE_ROOT"
 
-# FIXME!
-gecko_cv_gecko_version_micro=0
+AC_CACHE_CHECK([for gecko version],
+	[gecko_cv_gecko_version],
+	[AC_RUN_IFELSE(
+		[AC_LANG_PROGRAM([[
+#include <mozilla-config.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <locale.h>
+]],[[
+FILE *stream;
+const char *version = "";
 
-AC_EGREP_CPP([\"1\.9],
-	[#include <mozilla-config.h>
-	 MOZILLA_VERSION],
-	[gecko_cv_gecko_version_major=1 gecko_cv_gecko_version_minor=9],
-	[AC_EGREP_CPP([\"1\.8],
-		[#include <mozilla-config.h>
-		 MOZILLA_VERSION],
-		[gecko_cv_gecko_version_major=1 gecko_cv_gecko_version_minor=8],
-		[gecko_cv_gecko_version_major=1 gecko_cv_gecko_version_minor=7])
+if (!setlocale (LC_ALL, "C")) return 127;
+
+stream = fopen ("conftest.data", "w");
+if (!stream) return 126;
+
+#ifdef MOZILLA_1_8_BRANCH
+version = "1.8.1";
+#else
+if (strncmp (MOZILLA_VERSION, "1.9", strlen ("1.9")) == 0) {
+	version = "1.9";
+} else if (strncmp (MOZILLA_VERSION, "1.8", strlen ("1.8")) == 0) {
+	version = "1.8";
+} else {
+	version = "1.7";
+}
+#endif
+fprintf (stream, "%s\n", version);
+if (fclose (stream) != 0) return 125;
+
+return EXIT_SUCCESS;
+]])],
+	[gecko_cv_gecko_version="$(cat conftest.data)"],
+	[AC_MSG_FAILURE([could not determine gecko version])],
+	[gecko_cv_gecko_version="1.7"])
 ])
 
 CPPFLAGS="$_SAVE_CPPFLAGS"
 
 AC_LANG_POP([C++])
 
-gecko_cv_gecko_version="$gecko_cv_gecko_version_major.$gecko_cv_gecko_version_minor"
+gecko_cv_gecko_version_int="$(echo "$gecko_cv_gecko_version" | $AWK -F . '{print [$]1 * 1000000 + [$]2 * 1000 + [$]3}')"
 
-AC_MSG_RESULT([$gecko_cv_gecko_version])
-
-if test "$gecko_cv_gecko_version_major" != "1" -o "$gecko_cv_gecko_version_minor" -lt "7" -o "$gecko_cv_gecko_version_minor" -gt "9"; then
+if test "$gecko_cv_gecko_version_int" -lt "1007000" -o "$gecko_cv_gecko_version_int" -gt "1009000"; then
 	AC_MSG_ERROR([Gecko version $gecko_cv_gecko_version is not supported!])
 fi
 
-if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "7"; then
+if test "$gecko_cv_gecko_version_int" -ge "1007000"; then
 	AC_DEFINE([HAVE_GECKO_1_7],[1],[Define if we have gecko 1.7])
 	gecko_cv_have_gecko_1_7=yes
 fi
-if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "8"; then
+if test "$gecko_cv_gecko_version_int" -ge "1008000"; then
 	AC_DEFINE([HAVE_GECKO_1_8],[1],[Define if we have gecko 1.8])
 	gecko_cv_have_gecko_1_8=yes
 fi
-if test \( "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -gt "8" \) -o \( "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "8" -a "$gecko_cv_gecko_version_micro" -ge "1" \); then
+if test "$gecko_cv_gecko_version_int" -ge "1008001"; then
 	AC_DEFINE([HAVE_GECKO_1_8_1],[1],[Define if we have gecko 1.8.1])
 	gecko_cv_have_gecko_1_8_1=yes
 fi
-if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "9"; then
+if test "$gecko_cv_gecko_version_int" -ge "1009000"; then
 	AC_DEFINE([HAVE_GECKO_1_9],[1],[Define if we have gecko 1.9])
 	gecko_cv_have_gecko_1_9=yes
 fi
 
 fi # if gecko_cv_have_gecko
 
-AM_CONDITIONAL([HAVE_GECKO_1_7],[test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "7"])
-AM_CONDITIONAL([HAVE_GECKO_1_8],[test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "8"])
-AM_CONDITIONAL([HAVE_GECKO_1_8_1],[test \( "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -gt "8" \) -o \( "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "8" -a "$gecko_cv_gecko_version_micro" -ge "1" \)])
-AM_CONDITIONAL([HAVE_GECKO_1_9],[test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "9"])
+AM_CONDITIONAL([HAVE_GECKO_1_7],[test "$gecko_cv_gecko_version_int" -ge "1007000"])
+AM_CONDITIONAL([HAVE_GECKO_1_8],[test "$gecko_cv_gecko_version_int" -ge "1008000"])
+AM_CONDITIONAL([HAVE_GECKO_1_8_1],[test "$gecko_cv_gecko_version_int" -ge "1008001"])
+AM_CONDITIONAL([HAVE_GECKO_1_9],[test "$gecko_cv_gecko_version_int" -ge "1009000"])
 
 $1[]_VERSION=$gecko_cv_gecko_version
-$1[]_VERSION_MAJOR=$gecko_cv_gecko_version_major
-$1[]_VERSION_MINOR=$gecko_cv_gecko_version_minor
-$1[]_VERSION_MICRO=$gecko_cv_gecko_version_micro
+$1[]_VERSION_INT=$gecko_cv_gecko_version_int
 
 # **************************************************
 # Packages that we need to check for with pkg-config 
@@ -302,7 +324,7 @@ $1[]_VERSION_MICRO=$gecko_cv_gecko_version_micro
 gecko_cv_extra_libs=
 gecko_cv_extra_pkg_dependencies=
 
-if test "$gecko_cv_gecko_version_major" = "1" -a "$gecko_cv_gecko_version_minor" -ge "9"; then
+if test "$gecko_cv_gecko_version_int" -ge "1009000"; then
 	gecko_cv_extra_libs="-lxul"
 else
 	gecko_cv_extra_pkg_dependencies="${gecko_cv_gecko}-gtkmozembed"
