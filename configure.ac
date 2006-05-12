@@ -179,6 +179,10 @@ AC_SUBST([MOZILLA_HOME])
 AC_SUBST([MOZILLA_PREFIX])
 AC_SUBST([MOZILLA_EXTRA_LIBS])
 
+if test "gecko_cv_gecko_version_int" -lt "1008000"; then
+	AC_MSG_ERROR([Gecko version $gecko_cv_gecko_version is not supported!])
+fi
+
 if test "$gecko_cv_gecko_flavour" != "toolkit"; then
 	AC_MSG_ERROR(["$gecko_cv_gecko_flavour" flavoured geckos aren't tasty enough!])
 fi
