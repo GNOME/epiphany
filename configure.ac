@@ -336,7 +336,7 @@ AC_MSG_CHECKING([whether to enable native gtk+ filepicker])
 AC_ARG_ENABLE([filepicker],
 	AS_HELP_STRING([--enable-filepicker],[Whether to enable the gtk+ native filepicker; not needed when the mozilla build itself has native gtk+ filepicker enabled (default:enabled)]),
 	[],
-	[if test "$gecko_cv_gecko_version_major" = 1 -a "$gecko_cv_gecko_version_minor" -ge "8"; then
+	[if test "$gecko_cv_gecko_version_int" -ge "1008000"; then
 		enable_filepicker=no
  	 else
 		enable_filepicker=yes
@@ -374,7 +374,7 @@ GECKO_CHECK_HEADERS([xpcom],[nsIMutableArray.h])
 REQUIRED_CONTRACTS="@mozilla.org/permissionmanager;1 @mozilla.org/PopupWindowManager;1 @mozilla.org/cookie/permission;1"
 REQUIRED_EXTENSIONS="cookie"
 
-if test "$gecko_cv_gecko_version_major" = 1 -a "$gecko_cv_gecko_version_minor" -ge "8"; then
+if test "$gecko_cv_gecko_version_int" -ge "1008000"; then
 	REQUIRED_CONTRACTS="$REQUIRED_CONTRACTS @mozilla.org/permissions/contentblocker;1"
 	REQUIRED_EXTENSIONS="$REQUIRED_EXTENSIONS,permissions"
 fi
@@ -525,18 +525,14 @@ AC_SUBST([EPIPHANY_FEATURES])
 # Plugins
 # *******
 
-# Gecko 1.9 can handle .desktop files from file: URLs itself, so disable
-# this plugin at least until we handle non-file: URLs
-
-if test "$MOZILLA_VERSION_MAJOR" = "1" -a "$MOZILLA_VERSION_MINOR" -le "8"; then
+# Gecko 1.9 can handle .desktop files from file: URLs itself, but we
+# also support windows .lnk files, so always enable this plugin
 
 AC_MSG_CHECKING([whether to build the deskop file plugin])
 AC_ARG_ENABLE([desktop-file-plugin],
 	AS_HELP_STRING([--disable-desktop-file-plugin],[Disable the desktop file plugin (default: enabled)]),
 	[],[enable_desktop_file_plugin=yes])
 AC_MSG_RESULT([$enable_desktop_file_plugin])
-
-fi
 
 AM_CONDITIONAL([ENABLE_DESKTOP_FILE_PLUGIN],[test "x$enable_desktop_file_plugin" = "xyes"])
 
