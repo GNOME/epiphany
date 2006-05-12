@@ -110,7 +110,7 @@ EphySidebar::AddSearchEngine (const char *aEngineURL,
 	return NS_OK;
 }
 
-#ifdef HAVE_GECKO_1_9
+#ifdef HAVE_GECKO_1_8_1
 
 /* void addMicrosummaryGenerator (in string generatorURL); */
 NS_IMETHODIMP
@@ -119,4 +119,4 @@ EphySidebar::AddMicrosummaryGenerator (const char *generatorURL)
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#endif /* HAVE_GECKO_1_9 */
+#endif /* HAVE_GECKO_1_8_1 */
