@@ -350,7 +350,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				imgMapName.Cut (0,1);
 
 				// Check if the current image is attached to the map we are looking for
-				if (EphyUtils::StringEquals(imgMapName, mapName))
+				if (imgMapName.Equals(mapName))
 				{
 					nsString imgSrc;
 					rv = img->GetSrc (imgSrc);
