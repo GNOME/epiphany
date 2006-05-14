@@ -1,9 +1,9 @@
 .\" Epiphany manpage.
-.\" Copyright (C) 2004 GNOME Foundation, Inc.
+.\" Copyright (C) 2006 GNOME Foundation, Inc.
 .\"
-.TH EPIPHANY "1" "October 2004" "GNOME" ""
+.TH EPIPHANY "1" "May 2006" "GNOME" ""
 .SH NAME
-epiphany \- simple to use web browser
+epiphany \- simple to use web browser for GNOME
 .SH SYNOPSIS
 .B epiphany
 [\fIOPTION\fR...] [url]
@@ -11,34 +11,40 @@ epiphany \- simple to use web browser
 Help options
 .TP
 -?, \fB\-\-help\fR
-Show help message
-.TP
-\fB\-\-usage\fR
-Display brief usage message
+Show help options
 .PP
 Application options
 .TP
 \fB\-n\fR, \fB\-\-new\-tab\fR
 Open a new tab in an existing
-Epiphany window
+browser window
 .TP
-\fB\-f\fR, \fB\-\-fullscreen\fR
-Run Epiphany in full screen mode
+\fB\-\-new\-window\fR
+Open a new browser window
+.TP
+\fB\-b\fR, \fB\-\-bookmarks\-editor\fR
+Launch the bookmarks editor
+.TP
+\fB\-\-import\-bookmarks\fR=\fIFILE\fR
+Import bookmarks from the given file
 .TP
 \fB\-l\fR, \fB\-\-load\-session\fR=\fIFILE\fR
 Load the given session file
 .TP
 \fB\-t\fR, \fB\-\-add\-bookmark\fR=\fIURL\fR
-Add a bookmark (don't open any window)
+Add a bookmark
 .TP
-\fB\-\-import\-bookmarks\fR=\fIFILE\fR
-Import bookmarks from the given file
+\fB\-\-private\-instance\fR
+Start a private instance
 .TP
-\fB\-b\fR, \fB\-\-bookmarks\-editor\fR
-Launch the bookmarks editor
+\fB\-\-profile\fR=\fIFILE\fR
+Profile directory to use in the private instance
 .TP
-\fB\-s\fR, \fB\-\-server\fR
-Used internally by the bonobo interface
+\fB\-\-display\fR=\fIDISPLAY\fR
+X display to use
+.TP
+\fB\-\-version\fR
+Show version
 .PP
 Epiphany has a comprehensive help system.  Run the browser
 and select \fBHelp\fR from the menu.
