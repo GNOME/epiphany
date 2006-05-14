@@ -55,6 +55,13 @@
 
 #define EPHY_BOOKMARKS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS, EphyBookmarksPrivate))
 
+static const char zeroconf_protos[3][6] =
+{
+	"http",
+	"https",
+	"ftp"
+};
+
 struct _EphyBookmarksPrivate
 {
 	gboolean init_defaults;
@@ -75,7 +82,7 @@ struct _EphyBookmarksPrivate
 #ifdef ENABLE_ZEROCONF
 	/* Local sites */
 	EphyNode *local;
-	GnomeVFSDNSSDBrowseHandle *browse_handle;
+	GnomeVFSDNSSDBrowseHandle *browse_handles[G_N_ELEMENTS (zeroconf_protos)];
 	GHashTable *resolve_handles;
 #endif
 };
@@ -833,6 +840,17 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 	const char *path = NULL;
 	char *url;
 	gboolean was_immutable;
+	guint i;
+
+	/* Find the protocol */
+	for (i = 0; i < G_N_ELEMENTS (zeroconf_protos); ++i)
+	{
+		char proto[20];
+
+		g_snprintf (proto, sizeof (proto), "_%s._tcp", zeroconf_protos[i]);
+		if (strcmp (service->type, proto) == 0) break;
+	}
+	if (i == G_N_ELEMENTS (zeroconf_protos)) return;
 
 	was_immutable = ephy_node_db_is_immutable (priv->db);
 	ephy_node_db_set_immutable (priv->db, FALSE);
@@ -858,12 +876,12 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 		path = "/";
 	}
 
-	LOG ("0conf RESOLVED type=%s domain=%s name=%s => host=%s port=%d path=%s\n",
+	LOG ("0conf RESOLVED type=%s domain=%s name=%s => proto=%s host=%s port=%d path=%s\n",
 	    service->type, service->domain, service->name,
-	    host, port, path);
+	    zeroconf_protos[i], host, port, path);
 
 	/* FIXME: limit length! */
-	url = g_strdup_printf ("http://%s:%d%s", host, port, path);
+	url = g_strdup_printf ("%s://%s:%d%s", zeroconf_protos[i], host, port, path);
 
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_take_string (&value, url);
@@ -975,20 +993,28 @@ static void
 ephy_local_bookmarks_init (EphyBookmarks *bookmarks)
 {
 	EphyBookmarksPrivate *priv = bookmarks->priv;
+	guint i;
 
 	priv->resolve_handles =
 		g_hash_table_new_full (g_direct_hash, g_direct_equal,
 				       NULL,
 				       (GDestroyNotify) gnome_vfs_dns_sd_cancel_resolve);
 
-	if (gnome_vfs_dns_sd_browse (&priv->browse_handle,
-				     "local", "_http._tcp",
-				     (GnomeVFSDNSSDBrowseCallback) browse_cb,
-				     bookmarks,
-				     NULL) != GNOME_VFS_OK)
+	for (i = 0; i < G_N_ELEMENTS (zeroconf_protos); ++i)
 	{
-		priv->browse_handle = NULL;
-		ephy_node_remove_child (priv->keywords, priv->local);
+		GnomeVFSDNSSDBrowseHandle *handle = NULL;
+		char proto[20];
+
+		g_snprintf (proto, sizeof (proto), "_%s._tcp", zeroconf_protos[i]);
+
+		if (gnome_vfs_dns_sd_browse (&handle,
+		    			     "local", proto,
+					     (GnomeVFSDNSSDBrowseCallback) browse_cb,
+					     bookmarks,
+					     NULL) == GNOME_VFS_OK)
+		{
+			priv->browse_handles[i] = handle;
+		}
 	}
 }
 
@@ -996,18 +1022,26 @@ static void
 ephy_local_bookmarks_stop (EphyBookmarks *bookmarks)
 {
 	EphyBookmarksPrivate *priv = bookmarks->priv;
+	guint i;
 
-	if (priv->browse_handle != NULL)
+	for (i = 0; i < G_N_ELEMENTS (zeroconf_protos); ++i)
 	{
-		gnome_vfs_dns_sd_stop_browse (priv->browse_handle);
-		priv->browse_handle = NULL;
-		ephy_node_remove_child (priv->keywords, priv->local);
+		if (priv->browse_handles[i] != NULL)
+		{
+			gnome_vfs_dns_sd_stop_browse (priv->browse_handles[i]);
+			priv->browse_handles[i] = NULL;
+		}
 	}
 
 	if (priv->resolve_handles != NULL)
 	{
 		g_hash_table_destroy (priv->resolve_handles);
 		priv->resolve_handles = NULL;
+	}
+
+	if (priv->local != NULL)
+	{
+		ephy_node_remove_child (priv->keywords, priv->local);
 	}
 }
 
