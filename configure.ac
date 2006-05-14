@@ -15,7 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 
-AC_INIT([GNOME Web Browser],[2.15.1.90],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[2.15.2],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
@@ -179,7 +179,7 @@ AC_SUBST([MOZILLA_HOME])
 AC_SUBST([MOZILLA_PREFIX])
 AC_SUBST([MOZILLA_EXTRA_LIBS])
 
-if test "gecko_cv_gecko_version_int" -lt "1008000"; then
+if test "$gecko_cv_gecko_version_int" -lt "1008000"; then
 	AC_MSG_ERROR([Gecko version $gecko_cv_gecko_version is not supported!])
 fi
 
