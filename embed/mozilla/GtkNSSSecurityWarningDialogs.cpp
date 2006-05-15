@@ -214,7 +214,7 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 	PRBool showOnce = PR_FALSE;
 	if (!show && prefBranch && aPrefName)
 	{
-		showOncePref = g_strconcat (aPrefName, ".show_once", NULL);
+		showOncePref = g_strconcat (aPrefName, ".show_once", (char *) NULL);
 		rv = prefBranch->GetBoolPref (showOncePref, &showOnce);
 		if (NS_FAILED (rv)) showOnce = PR_FALSE;
 	}

@@ -157,7 +157,7 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
 
 	dialog = gtk_dialog_new_with_buttons ("", gparent,
-					      GTK_DIALOG_DESTROY_WITH_PARENT, NULL);
+					      GTK_DIALOG_DESTROY_WITH_PARENT, (char *) NULL);
 
 	if (gparent)
 	{

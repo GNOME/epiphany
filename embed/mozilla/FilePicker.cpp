@@ -146,7 +146,7 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 	if (filterMask & nsIFilePicker::filterAll)
 	{
 		ephy_file_chooser_add_pattern_filter (mDialog, _("All files"),
-						      "*", NULL);
+						      "*", (char*) NULL);
 	}
 	if (filterMask & nsIFilePicker::filterHTML)
 	{
@@ -154,7 +154,7 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 						   "text/html",
 						   "application/xhtml+xml",
 						   "text/xml",
-						   NULL);
+						   (char *) NULL);
 	}
 	if (filterMask & nsIFilePicker::filterText)
 	{
@@ -167,17 +167,17 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 						   "image/png",
 						   "image/jpeg",
 						   "image/gif",
-						   NULL);
+						   (char *) NULL);
 	}
 	if (filterMask & nsIFilePicker::filterXML)
 	{
 		ephy_file_chooser_add_pattern_filter (mDialog, _("XML files"),
-						      "*.xml", NULL);
+						      "*.xml", (char *) NULL);
 	}
 	if (filterMask & nsIFilePicker::filterXUL)
 	{
 		ephy_file_chooser_add_pattern_filter (mDialog, _("XUL files"),
-						      "*.xul", NULL);
+						      "*.xul", (char *) NULL);
 	}
 
 	return NS_OK;
@@ -357,7 +357,7 @@ NS_IMETHODIMP GFilePicker::SetDisplayDirectory(nsILocalFile *aDisplayDirectory)
 		NS_UTF16ToCString (mDefaultString, NS_CSTRING_ENCODING_NATIVE_FILESYSTEM,
 				   defaultString);
 
-		char *filename = g_build_filename (dir.get(), defaultString.get(), NULL);
+		char *filename = g_build_filename (dir.get(), defaultString.get(), (char *) NULL);
 		LOG ("Setting filename to %s", filename);
 		gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (mDialog), filename);
 		g_free (filename);

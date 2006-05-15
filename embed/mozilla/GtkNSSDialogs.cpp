@@ -229,7 +229,7 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	
 	dialog = gtk_dialog_new_with_buttons ("", gparent,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
-					      NULL);
+					      (char *) NULL);
 	if (gparent)
 	{
 		gtk_window_group_add_window (ephy_gui_ensure_window_group (gparent),
@@ -499,7 +499,7 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_OK,
 					      GTK_RESPONSE_OK,
-					      NULL);
+					      (char *) NULL);
 
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
@@ -564,7 +564,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 					      NSSDIALOG_RESPONSE_VIEW_CERT,
 					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					      _("_Trust CA"),	GTK_RESPONSE_ACCEPT,
-					      NULL);
+					      (char *) NULL);
 
 	if (gparent)
 	{
@@ -647,7 +647,7 @@ GtkNSSDialogs::NotifyCACertExists (nsIInterfaceRequestor *ctx)
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_OK,
 					      GTK_RESPONSE_OK,
-					      NULL);
+					      (char *) NULL);
 
 	if (gparent)
 	{
@@ -779,7 +779,7 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_CANCEL,
 					      GTK_RESPONSE_CANCEL,
-					      NULL);
+					      (char *) NULL);
 
 	if (gparent)
 	{
@@ -902,7 +902,7 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					      _("I_mport Certificate"), GTK_RESPONSE_OK,
-					      NULL);
+					      (char *) NULL);
 
 	if (gparent)
 	{
@@ -1004,7 +1004,7 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 					      GTK_WINDOW (gparent),
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_OK, GTK_RESPONSE_OK,
-					      NULL);
+					      (char *) NULL);
 
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Certificate Revocation List Imported"));
@@ -1283,7 +1283,7 @@ setup_view_cert_tree (GtkWidget *dialog, GladeXML*gxml, nsIArray *certChain)
 						     0, "Certificate",
 						     renderer,
 						     "text", 0,
-						     NULL);
+						     (char *) NULL);
 
 	GtkTreeSelection *select = gtk_tree_view_get_selection (GTK_TREE_VIEW (chain_tree_view));
 	gtk_tree_selection_set_mode (select, GTK_SELECTION_SINGLE);
@@ -1304,7 +1304,7 @@ setup_view_cert_tree (GtkWidget *dialog, GladeXML*gxml, nsIArray *certChain)
 						     0, "Certificate Field",
 						     renderer,
 						     "text", 0,
-						     NULL);
+						     (char *) NULL);
 
 	select = gtk_tree_view_get_selection (GTK_TREE_VIEW (field_tree_view));
 	gtk_tree_selection_set_mode (select, GTK_SELECTION_SINGLE);

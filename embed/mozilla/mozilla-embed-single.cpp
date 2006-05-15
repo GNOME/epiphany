@@ -328,7 +328,7 @@ mozilla_init_plugin_path ()
 #ifdef HAVE_PRIVATE_PLUGINS
 				":" PLUGINDIR,
 #endif
-				NULL);
+				(char *) NULL);
 
 	g_setenv ("MOZ_PLUGIN_PATH", new_path, TRUE);
 	g_free (new_path);
@@ -358,7 +358,7 @@ mozilla_init_profile (void)
 	char *profile_path;
 	profile_path = g_build_filename (ephy_dot_dir (), 
 					 MOZILLA_PROFILE_DIR,
-					 NULL);
+					 (char *) NULL);
         gtk_moz_embed_set_profile_path (profile_path, MOZILLA_PROFILE_NAME);
         g_free (profile_path);
 }
@@ -546,7 +546,7 @@ mozilla_stylesheet_init (MozillaEmbedSingle *single)
 
 	priv->user_css_file = g_build_filename (ephy_dot_dir (),
 						USER_STYLESHEET_FILENAME,
-						NULL);
+						(char *) NULL);
 
 	user_css_enabled_notify (NULL, 0, NULL, single);
 	priv->user_css_enabled_notifier_id =
@@ -654,7 +654,7 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 				  MOZILLA_PROFILE_DIR,
 				  MOZILLA_PROFILE_NAME,
 				  MOZILLA_PROFILE_FILE,
-				  NULL);
+				  (char *) NULL);
 
 	g_signal_connect_object (embed_shell, "prepare-close",
 				 G_CALLBACK (prepare_close_cb), mes,

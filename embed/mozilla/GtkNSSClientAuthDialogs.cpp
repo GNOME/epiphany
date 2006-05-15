@@ -159,7 +159,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 					      GTK_RESPONSE_CANCEL,
 					      _("_Select Certificate"),
 					      GTK_RESPONSE_OK,
-					      NULL);
+					      (char *) NULL);
 
 	if (gparent)
 	{
@@ -238,7 +238,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
         gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
                                         "text", 0,
-                                        NULL);
+                                        (char *) NULL);
 
 	gtk_widget_show (combo);
 	gtk_box_pack_start (GTK_BOX (vbox), combo, FALSE, TRUE, 0);
