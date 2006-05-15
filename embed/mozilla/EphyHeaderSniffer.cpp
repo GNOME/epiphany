@@ -226,7 +226,7 @@ EphyHeaderSniffer::GetInterface(const nsIID & uuid, void * *result)
 	{
 		EphyEmbedPersistFlags flags;
 
-		g_object_get (mEmbedPersist, "flags", &flags, NULL);
+		g_object_get (mEmbedPersist, "flags", &flags, (char *) NULL);
 
 		if (flags & EPHY_EMBED_PERSIST_NO_CERTDIALOGS)
 		{

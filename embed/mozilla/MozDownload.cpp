@@ -607,7 +607,7 @@ MozDownload::GetInterface(const nsIID & uuid, void * *result)
 	{
 		EphyEmbedPersistFlags flags;
 
-		g_object_get (mEmbedPersist, "flags", &flags, NULL);
+		g_object_get (mEmbedPersist, "flags", &flags, (char *) NULL);
 
 		if (flags & EPHY_EMBED_PERSIST_NO_CERTDIALOGS)
 		{
@@ -782,12 +782,12 @@ GetFilePath (const char *filename)
 
 	if (ephy_ensure_dir_exists (download_dir, NULL))
 	{
-		path = g_build_filename (download_dir, filename, NULL);
+		path = g_build_filename (download_dir, filename, (char *) NULL);
 	}
 	else
 	{
 		home_dir = g_get_home_dir ();
-		path = g_build_filename (home_dir ? home_dir : "/", filename, NULL);
+		path = g_build_filename (home_dir ? home_dir : "/", filename, (char *) NULL);
 	}
 	g_free (download_dir);
 	

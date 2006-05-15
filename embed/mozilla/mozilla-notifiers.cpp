@@ -645,7 +645,7 @@ mozilla_get_dpi ()
 	if (g_object_class_find_property (G_OBJECT_GET_CLASS (G_OBJECT (settings)),
 					  "gtk-xft-dpi"))
 	{
-		g_object_get (G_OBJECT (settings), "gtk-xft-dpi", &dpi, NULL);
+		g_object_get (G_OBJECT (settings), "gtk-xft-dpi", &dpi, (char *) NULL);
 		if (dpi) return INT_ROUND (dpi / PANGO_SCALE);
 	}
 

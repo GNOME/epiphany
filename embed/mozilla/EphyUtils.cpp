@@ -254,7 +254,7 @@ EphyUtils::CollatePrintSettings (EmbedPrintInfo *info,
 		const char *temp_dir;
 		
 		temp_dir = ephy_file_tmp_dir ();
-		base = g_build_filename (temp_dir, "printXXXXXX", NULL);
+		base = g_build_filename (temp_dir, "printXXXXXX", (char *) NULL);
 		info->tempfile = ephy_file_tmp_filename (base, "ps");
 		g_free (base);
 		

@@ -164,7 +164,7 @@ impl_save (EphyEmbedPersist *persist)
 		      "flags", &flags,
 		      "embed", &embed,
 		      "max_size", &max_size,
-		      NULL);
+		      (char *) NULL);
 
 	g_return_val_if_fail (!(flags & EPHY_EMBED_PERSIST_COPY_PAGE)
 			      || embed != NULL, FALSE);	
@@ -294,7 +294,7 @@ impl_save (EphyEmbedPersist *persist)
 	{
 		/* Get a temp filename to save to */
 		char *tmp_filename, *base;
-		base = g_build_filename (g_get_tmp_dir (), "sav-XXXXXX", NULL);
+		base = g_build_filename (g_get_tmp_dir (), "sav-XXXXXX", (char *) NULL);
 		tmp_filename = ephy_file_tmp_filename (base, "html");
 		g_free (base);
 		if (tmp_filename == NULL) return FALSE;
@@ -353,7 +353,7 @@ impl_to_string (EphyEmbedPersist *persist)
 	g_object_get (persist,
 	              "flags", &flags,
 	              "embed", &embed,
-	              NULL);
+	              (char *) NULL);
 	g_object_unref (persist);
 	g_return_val_if_fail (embed != NULL, NULL);
 

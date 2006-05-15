@@ -258,6 +258,6 @@ mozilla_x509_cert_new (nsIX509Cert *moz_cert)
 
 	cert = (MozillaX509Cert*)g_object_new (MOZILLA_TYPE_X509_CERT,
 					       "mozilla-cert", moz_cert,
-					       NULL);
+					       (char *) NULL);
 	return cert;
 }
