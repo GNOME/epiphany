@@ -444,25 +444,14 @@ real_set_property (EphyNode *node,
 	g_ptr_array_index (node->properties, property_id) = value;
 }
 
-void
-ephy_node_set_property (EphyNode *node,
-		        guint property_id,
-		        const GValue *value)
+static inline void
+ephy_node_set_property_internal (EphyNode *node,
+		        	 guint property_id,
+		        	 GValue *value)
 {
-	GValue *new;
 	EphyNodeChange change;
 
-	g_return_if_fail (EPHY_IS_NODE (node));
-	g_return_if_fail (property_id >= 0);
-	g_return_if_fail (value != NULL);
-
-	if (ephy_node_db_is_immutable (node->db)) return;
-
-	new = g_new0 (GValue, 1);
-	g_value_init (new, G_VALUE_TYPE (value));
-	g_value_copy (value, new);
-
-	real_set_property (node, property_id, new);
+	real_set_property (node, property_id, value);
 
 	change.node = node;
 	change.property_id = property_id;
@@ -471,6 +460,26 @@ ephy_node_set_property (EphyNode *node,
 			      &change);
     
 	ephy_node_emit_signal (node, EPHY_NODE_CHANGED, property_id);
+
+}
+
+void
+ephy_node_set_property (EphyNode *node,
+		        guint property_id,
+		        const GValue *value)
+{
+	GValue *new;
+
+	g_return_if_fail (EPHY_IS_NODE (node));
+	g_return_if_fail (value != NULL);
+
+	if (ephy_node_db_is_immutable (node->db)) return;
+
+	new = g_new0 (GValue, 1);
+	g_value_init (new, G_VALUE_TYPE (value));
+	g_value_copy (value, new);
+
+	ephy_node_set_property_internal (node, property_id, new);
 }
 
 gboolean
@@ -481,7 +490,6 @@ ephy_node_get_property (EphyNode *node,
 	GValue *ret;
 
 	g_return_val_if_fail (EPHY_IS_NODE (node), FALSE);
-	g_return_val_if_fail (property_id >= 0, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
 
 	if (property_id >= node->properties->len) {
@@ -499,6 +507,24 @@ ephy_node_get_property (EphyNode *node,
 	return TRUE;
 }
 
+void
+ephy_node_set_property_string (EphyNode *node,
+			       guint property_id,
+			       const char *value)
+{
+	GValue *new;
+
+	g_return_if_fail (EPHY_IS_NODE (node));
+
+	if (ephy_node_db_is_immutable (node->db)) return;
+
+	new = g_new0 (GValue, 1);
+	g_value_init (new, G_TYPE_STRING);
+	g_value_set_string (new, value);
+
+	ephy_node_set_property_internal (node, property_id, new);
+}
+
 const char *
 ephy_node_get_property_string (EphyNode *node,
 			       guint property_id)
@@ -507,7 +533,6 @@ ephy_node_get_property_string (EphyNode *node,
 	const char *retval;
 
 	g_return_val_if_fail (EPHY_IS_NODE (node), NULL);
-	g_return_val_if_fail (property_id >= 0, NULL);
 
 	if (property_id >= node->properties->len) {
 		return NULL;
@@ -523,6 +548,24 @@ ephy_node_get_property_string (EphyNode *node,
 	return retval;
 }
 
+void
+ephy_node_set_property_boolean (EphyNode *node,
+			        guint property_id,
+			        gboolean value)
+{
+	GValue *new;
+
+	g_return_if_fail (EPHY_IS_NODE (node));
+
+	if (ephy_node_db_is_immutable (node->db)) return;
+
+	new = g_new0 (GValue, 1);
+	g_value_init (new, G_TYPE_BOOLEAN);
+	g_value_set_boolean (new, value);
+
+	ephy_node_set_property_internal (node, property_id, new);
+}
+
 gboolean
 ephy_node_get_property_boolean (EphyNode *node,
 			        guint property_id)
@@ -531,7 +574,6 @@ ephy_node_get_property_boolean (EphyNode *node,
 	gboolean retval;
 
 	g_return_val_if_fail (EPHY_IS_NODE (node), FALSE);
-	g_return_val_if_fail (property_id >= 0, FALSE);
 
 	if (property_id >= node->properties->len) {
 		return FALSE;
@@ -547,6 +589,24 @@ ephy_node_get_property_boolean (EphyNode *node,
 	return retval;
 }
 
+void
+ephy_node_set_property_long (EphyNode *node,
+			     guint property_id,
+			     long value)
+{
+	GValue *new;
+
+	g_return_if_fail (EPHY_IS_NODE (node));
+
+	if (ephy_node_db_is_immutable (node->db)) return;
+
+	new = g_new0 (GValue, 1);
+	g_value_init (new, G_TYPE_LONG);
+	g_value_set_long (new, value);
+
+	ephy_node_set_property_internal (node, property_id, new);
+}
+
 long
 ephy_node_get_property_long (EphyNode *node,
 			     guint property_id)
@@ -555,7 +615,6 @@ ephy_node_get_property_long (EphyNode *node,
 	long retval;
 
 	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
-	g_return_val_if_fail (property_id >= 0, -1);
 
 	if (property_id >= node->properties->len) {
 		return -1;
@@ -571,6 +630,24 @@ ephy_node_get_property_long (EphyNode *node,
 	return retval;
 }
 
+void
+ephy_node_set_property_int (EphyNode *node,
+			    guint property_id,
+			    int value)
+{
+	GValue *new;
+
+	g_return_if_fail (EPHY_IS_NODE (node));
+
+	if (ephy_node_db_is_immutable (node->db)) return;
+
+	new = g_new0 (GValue, 1);
+	g_value_init (new, G_TYPE_INT);
+	g_value_set_int (new, value);
+
+	ephy_node_set_property_internal (node, property_id, new);
+}
+
 int
 ephy_node_get_property_int (EphyNode *node,
 			    guint property_id)
@@ -579,7 +656,6 @@ ephy_node_get_property_int (EphyNode *node,
 	int retval;
 
 	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
-	g_return_val_if_fail (property_id >= 0, -1);
 
 	if (property_id >= node->properties->len) {
 		return -1;
@@ -595,6 +671,24 @@ ephy_node_get_property_int (EphyNode *node,
 	return retval;
 }
 
+void
+ephy_node_set_property_double (EphyNode *node,
+			       guint property_id,
+			       double value)
+{
+	GValue *new;
+
+	g_return_if_fail (EPHY_IS_NODE (node));
+
+	if (ephy_node_db_is_immutable (node->db)) return;
+
+	new = g_new0 (GValue, 1);
+	g_value_init (new, G_TYPE_DOUBLE);
+	g_value_set_double (new, value);
+
+	ephy_node_set_property_internal (node, property_id, new);
+}
+
 double
 ephy_node_get_property_double (EphyNode *node,
 			       guint property_id)
@@ -603,7 +697,6 @@ ephy_node_get_property_double (EphyNode *node,
 	double retval;
 
 	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
-	g_return_val_if_fail (property_id >= 0, -1);
 
 	if (property_id >= node->properties->len) {
 		return -1;
@@ -619,6 +712,24 @@ ephy_node_get_property_double (EphyNode *node,
 	return retval;
 }
 
+void
+ephy_node_set_property_float (EphyNode *node,
+			      guint property_id,
+			      float value)
+{
+	GValue *new;
+
+	g_return_if_fail (EPHY_IS_NODE (node));
+
+	if (ephy_node_db_is_immutable (node->db)) return;
+
+	new = g_new0 (GValue, 1);
+	g_value_init (new, G_TYPE_FLOAT);
+	g_value_set_float (new, value);
+
+	ephy_node_set_property_internal (node, property_id, new);
+}
+
 float
 ephy_node_get_property_float (EphyNode *node,
 			      guint property_id)
@@ -627,7 +738,6 @@ ephy_node_get_property_float (EphyNode *node,
 	float retval;
 
 	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
-	g_return_val_if_fail (property_id >= 0, -1);
 
 	if (property_id >= node->properties->len) {
 		return -1;

@@ -89,16 +89,34 @@ gboolean    ephy_node_get_property          (EphyNode *node,
 
 const char *ephy_node_get_property_string   (EphyNode *node,
 					     guint property_id);
+void        ephy_node_set_property_string   (EphyNode *node,
+					     guint property_id,
+					     const char *value);
 gboolean    ephy_node_get_property_boolean  (EphyNode *node,
 					     guint property_id);
+void        ephy_node_set_property_boolean  (EphyNode *node,
+					     guint property_id,
+					     gboolean value);
 long        ephy_node_get_property_long     (EphyNode *node,
 					     guint property_id);
+void        ephy_node_set_property_long     (EphyNode *node,
+					     guint property_id,
+					     long value);
 int         ephy_node_get_property_int      (EphyNode *node,
 					     guint property_id);
+void        ephy_node_set_property_int      (EphyNode *node,
+					     guint property_id,
+					     int value);
 double      ephy_node_get_property_double   (EphyNode *node,
 					     guint property_id);
+void        ephy_node_set_property_double   (EphyNode *node,
+					     guint property_id,
+					     double value);
 float       ephy_node_get_property_float    (EphyNode *node,
 					     guint property_id);
+void        ephy_node_set_property_float    (EphyNode *node,
+					     guint property_id,
+					     float value);
 EphyNode   *ephy_node_get_property_node     (EphyNode *node,
 					     guint property_id);
 

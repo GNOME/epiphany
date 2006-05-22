@@ -2176,12 +2176,32 @@
   )
 )
 
+(define-method set_property_string
+  (of-object "EphyNode")
+  (c-name "ephy_node_set_property_string")
+  (return-type "none")
+  (parameters
+    '("guint" "property_id")
+    '("const-char*" "value")
+  )
+)
+
 (define-method get_property_string
   (of-object "EphyNode")
   (c-name "ephy_node_get_property_string")
   (return-type "const-char*")
   (parameters
     '("guint" "property_id")
+  )
+)
+
+(define-method set_property_boolean
+  (of-object "EphyNode")
+  (c-name "ephy_node_set_property_boolean")
+  (return-type "none")
+  (parameters
+    '("guint" "property_id")
+    '("gboolean" "value")
   )
 )
 
@@ -2194,12 +2214,32 @@
   )
 )
 
+(define-method set_property_long
+  (of-object "EphyNode")
+  (c-name "ephy_node_set_property_long")
+  (return-type "none")
+  (parameters
+    '("guint" "property_id")
+    '("long" "value")
+  )
+)
+
 (define-method get_property_long
   (of-object "EphyNode")
   (c-name "ephy_node_get_property_long")
   (return-type "long")
   (parameters
     '("guint" "property_id")
+  )
+)
+
+(define-method set_property_int
+  (of-object "EphyNode")
+  (c-name "ephy_node_set_property_int")
+  (return-type "none")
+  (parameters
+    '("guint" "property_id")
+    '("int" "value")
   )
 )
 
@@ -2212,12 +2252,32 @@
   )
 )
 
+(define-method set_property_double
+  (of-object "EphyNode")
+  (c-name "ephy_node_set_property_double")
+  (return-type "none")
+  (parameters
+    '("guint" "property_id")
+    '("double" "value")
+  )
+)
+
 (define-method get_property_double
   (of-object "EphyNode")
   (c-name "ephy_node_get_property_double")
   (return-type "double")
   (parameters
     '("guint" "property_id")
+  )
+)
+
+(define-method set_property_float
+  (of-object "EphyNode")
+  (c-name "ephy_node_set_property_float")
+  (return-type "none")
+  (parameters
+    '("guint" "property_id")
+    '("float" "value")
   )
 )
 
