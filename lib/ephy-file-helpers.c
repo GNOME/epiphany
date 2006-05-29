@@ -801,6 +801,7 @@ ephy_file_launch_application (GnomeVFSMimeApplication *application,
 
 	uris = g_list_prepend (NULL, uri);
 
+	/* FIXME multihead! */
 	screen = gdk_screen_get_default ();
 	envp = my_gdk_spawn_make_environment_for_screen (screen, NULL);
 	
@@ -892,10 +893,15 @@ launch_desktop_item (const char *desktop_file,
 		     GError **error)
 {
 	GnomeDesktopItem *item = NULL;
+	GdkScreen *screen;
 	GList *uris = NULL;
 	char *canonical;
 	int ret = -1;
-	char *envp[2] = { EPHY_UUID_ENVSTRING, NULL };
+	char **envp;
+	
+	/* FIXME multihead! */
+	screen = gdk_screen_get_default ();
+	envp = my_gdk_spawn_make_environment_for_screen (screen, NULL);
 
 	item = gnome_desktop_item_new_from_file (desktop_file, 0, NULL);
 	if (item == NULL) return FALSE;
@@ -911,6 +917,7 @@ launch_desktop_item (const char *desktop_file,
 
 	g_list_foreach (uris, (GFunc) g_free, NULL);
 	g_list_free (uris);
+	g_strfreev (envp);
 	gnome_desktop_item_unref (item);
 
 	return ret;
