@@ -425,7 +425,7 @@ keyword_match (const char *list,
 	  
 		next_token:
 
-		while (*p && *p != ' ') p++;
+		while (*p &&  !g_ascii_ispunct(*p)) p++;
 		if (*p) p++;
 	}
 
