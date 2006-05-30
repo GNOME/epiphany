@@ -532,6 +532,9 @@ action_sensitive_cb (GtkAction   *action,
   EggEditableToolbar *etoolbar = EGG_EDITABLE_TOOLBAR
     (gtk_widget_get_ancestor (GTK_WIDGET (item), EGG_TYPE_EDITABLE_TOOLBAR));
 
+  if (etoolbar == NULL)
+    return;
+
   if (etoolbar->priv->edit_mode > 0)
     {
       gtk_widget_set_sensitive (GTK_WIDGET (item), TRUE);
