@@ -594,6 +594,7 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 	gtk_tree_view_column_set_resizable (column, TRUE);
 	gtk_tree_view_column_set_reorderable (column, TRUE);
 	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+	gtk_tree_view_column_set_sort_column_id (column, COL_COOKIES_HOST_KEY);
 
 	gtk_tree_view_insert_column_with_attributes (treeview,
 						     TV_COL_COOKIES_NAME,
@@ -605,6 +606,7 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 	gtk_tree_view_column_set_resizable (column, TRUE);
 	gtk_tree_view_column_set_reorderable (column, TRUE);
 	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+	gtk_tree_view_column_set_sort_column_id (column, COL_COOKIES_NAME);
 
 	gtk_tree_view_set_enable_search (treeview, TRUE);
 	gtk_tree_view_set_search_column (treeview, COL_COOKIES_HOST);
