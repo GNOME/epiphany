@@ -553,7 +553,9 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 	ephy_embed_persist_set_dest (persist, dest);
 	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_NO_VIEW |
 					       EPHY_EMBED_PERSIST_NO_CERTDIALOGS |
-					       EPHY_EMBED_PERSIST_DO_CONVERSION);
+					       EPHY_EMBED_PERSIST_DO_CONVERSION |
+					       EPHY_EMBED_PERSIST_NO_COOKIES
+				               );
 	ephy_embed_persist_set_max_size (persist, EPHY_FAVICON_MAX_SIZE);
 	ephy_embed_persist_set_source (persist, favicon_url);
 

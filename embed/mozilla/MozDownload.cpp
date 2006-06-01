@@ -52,6 +52,7 @@
 
 #include <nsComponentManagerUtils.h>
 #include <nsICancelable.h>
+#include <nsIChannel.h>
 #include <nsIDOMDocument.h>
 #include <nsIFileURL.h>
 #include <nsIIOService.h>
@@ -60,8 +61,9 @@
 #include <nsIObserver.h>
 #include <nsIRequest.h>
 #include <nsIURI.h>
-#include <nsIURI.h>
+#include <nsIWritablePropertyBag2.h>
 #include <nsIWebBrowserPersist.h>
+
 #include <nsMemory.h>
 #include <nsNetError.h>
 #include <nsServiceManagerUtils.h>
@@ -558,7 +560,20 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 	}
 	webPersist->SetPersistFlags(flags);
 
-	if (!domDocument || !isHTML || ephy_flags & EPHY_EMBED_PERSIST_COPY_PAGE)
+	/* Create a new tagged channel if we need to block cookies from server */
+	if (ephy_flags & EPHY_EMBED_PERSIST_NO_COOKIES)
+	{
+		nsCOMPtr<nsIChannel> tmpChannel;
+		rv = ioService->NewChannelFromURI (sourceURI, getter_AddRefs (tmpChannel));
+		NS_ENSURE_SUCCESS (rv, rv);
+
+		nsCOMPtr<nsIWritablePropertyBag2> props = do_QueryInterface(tmpChannel);
+		rv = props->SetPropertyAsBool (NS_LITERAL_STRING("epiphany-blocking-cookies"), PR_TRUE);
+		NS_ENSURE_SUCCESS (rv, rv);
+	
+		rv = webPersist->SaveChannel (tmpChannel, inDestFile);
+	}
+	else if (!domDocument || !isHTML || ephy_flags & EPHY_EMBED_PERSIST_COPY_PAGE)
 	{
 		rv = webPersist->SaveURI (sourceURI, aCacheKey, nsnull,
 					  postData, nsnull, inDestFile);

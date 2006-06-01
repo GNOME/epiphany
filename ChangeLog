@@ -1,3 +1,14 @@
+2006-06-01  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* embed/ephy-embed-persist.h: 
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_download):
+	* embed/mozilla/EphySingle.cpp: 
+	(Init, Detach, ExamineCookies, ExamineResponse, ExamineRequest, Observe):
+	* embed/mozilla/EphySingle.h:
+	* embed/mozilla/MozDownload.cpp: (InitiateMozillaDownload):
+
+	Don't set cookies from favicon downloads. Bug #337835.
+	
 2006-05-30  Frederic Peters  <fpeters@0d.be>
 
 	* src/pdm-dialog.c: (pdm_dialog_cookies_construct):

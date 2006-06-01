@@ -27,9 +27,12 @@
 #include <nsICookie.h>
 #include <nsICookie2.h>
 #include <nsICookieManager.h>
+#include <nsIHttpChannel.h>
 #include <nsIObserverService.h>
 #include <nsIPermission.h>
 #include <nsIPermissionManager.h>
+#include <nsIPropertyBag2.h>
+#include <nsIServiceManager.h>
 #include <nsIURI.h>
 #include <nsServiceManagerUtils.h>
 #include <nsWeakReference.h>
@@ -63,6 +66,8 @@ EphySingle::Init (EphyEmbedSingle *aOwner)
 	rv |= mObserverService->AddObserver (this, "perm-changed", PR_FALSE);
 	rv |= mObserverService->AddObserver (this, "network:offline-status-changed", PR_FALSE);
 	rv |= mObserverService->AddObserver (this, "signonChanged", PR_FALSE);
+	rv |= mObserverService->AddObserver (this, "http-on-examine-response", PR_FALSE);
+	rv |= mObserverService->AddObserver (this, "http-on-modify-request", PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	mOwner = aOwner;
@@ -84,6 +89,8 @@ EphySingle::Detach ()
 		mObserverService->RemoveObserver (this, "perm-changed");
 		mObserverService->RemoveObserver (this, "signonChanged");
 		mObserverService->RemoveObserver (this, "network:offline-status-changed");
+		mObserverService->RemoveObserver (this, "http-on-examine-response");
+		mObserverService->RemoveObserver (this, "http-on-modify-request");
 
 #if 1
 		/* HACK: Work around https://bugzilla.mozilla.org/show_bug.cgi?id=292699 */
@@ -138,6 +145,40 @@ EphySingle::EmitPermissionNotification (const char *name,
 	return NS_OK;
 }
 
+nsresult
+EphySingle::ExamineCookies (nsISupports *aSubject)
+{
+	nsCOMPtr<nsIPropertyBag2> props = do_QueryInterface(aSubject);
+	NS_ENSURE_TRUE (props, NS_ERROR_FAILURE);
+
+	PRBool isBlockingCookiesChannel = PR_FALSE;
+	props->GetPropertyAsBool(
+			NS_LITERAL_STRING("epiphany-blocking-cookies"), 
+			&isBlockingCookiesChannel);
+	if (isBlockingCookiesChannel)
+	{
+		nsCOMPtr<nsIHttpChannel> channel = do_QueryInterface(aSubject);
+		NS_ENSURE_TRUE (channel, NS_ERROR_FAILURE);
+
+		channel->SetRequestHeader(NS_LITERAL_CSTRING("Cookie"),
+					  EmptyCString(), PR_FALSE);
+	}
+
+	return NS_OK;
+}
+
+nsresult
+EphySingle::ExamineResponse (nsISupports *aSubject)
+{
+	return ExamineCookies (aSubject);
+}
+
+nsresult
+EphySingle::ExamineRequest (nsISupports *aSubject)
+{
+	return ExamineCookies (aSubject);
+}
+
 /* void observe (in nsISupports aSubject, in string aTopic, in wstring aData); */
 NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 				  const char *aTopic,
@@ -147,7 +188,15 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 
 	LOG ("EphySingle::Observe topic %s", aTopic);
 
-	if (strcmp (aTopic, "cookie-changed") == 0)
+	if (strcmp (aTopic, "http-on-examine-response") == 0)
+	{
+		rv = ExamineResponse (aSubject);
+	}
+	else if (strcmp (aTopic, "http-on-modify-request") == 0)
+	{
+		rv = ExamineRequest (aSubject);
+	}
+	else if (strcmp (aTopic, "cookie-changed") == 0)
 	{
 		/* "added" */
 		if (aData[0] == 'a')

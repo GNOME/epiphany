@@ -50,7 +50,10 @@ public:
 protected:
 	nsresult EmitCookieNotification (const char *name, nsISupports *aSubject);
 	nsresult EmitPermissionNotification (const char *name, nsISupports *aSubject);
-
+	nsresult ExamineResponse (nsISupports *aSubject);	
+	nsresult ExamineRequest (nsISupports *aSubject);	
+	nsresult ExamineCookies (nsISupports *aSubject);	
+	
 private:
 	nsCOMPtr<nsIObserverService> mObserverService;
 	EphyEmbedSingle *mOwner;
