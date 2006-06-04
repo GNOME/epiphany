@@ -36,7 +36,11 @@
 
 #include "EphySidebar.h"
 
+#ifdef MOZILLA_1_8_BRANCH
+NS_IMPL_ISUPPORTS2_CI(EphySidebar, nsISidebar, nsISidebar_MOZILLA_1_8_BRANCH)
+#else
 NS_IMPL_ISUPPORTS1_CI(EphySidebar, nsISidebar)
+#endif
 
 EphySidebar::EphySidebar()
 {
@@ -110,7 +114,7 @@ EphySidebar::AddSearchEngine (const char *aEngineURL,
 	return NS_OK;
 }
 
-#ifdef HAVE_GECKO_1_8_1
+#ifdef HAVE_GECKO_1_9
 
 /* void addMicrosummaryGenerator (in string generatorURL); */
 NS_IMETHODIMP
@@ -119,4 +123,4 @@ EphySidebar::AddMicrosummaryGenerator (const char *generatorURL)
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#endif /* HAVE_GECKO_1_8_1 */
+#endif /* HAVE_GECKO_1_9 */
