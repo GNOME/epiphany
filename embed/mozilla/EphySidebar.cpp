@@ -36,11 +36,7 @@
 
 #include "EphySidebar.h"
 
-#ifdef MOZILLA_1_8_BRANCH
-NS_IMPL_ISUPPORTS2_CI(EphySidebar, nsISidebar, nsISidebar_MOZILLA_1_8_BRANCH)
-#else
 NS_IMPL_ISUPPORTS1_CI(EphySidebar, nsISidebar)
-#endif
 
 EphySidebar::EphySidebar()
 {
