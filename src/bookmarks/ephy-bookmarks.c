@@ -842,16 +842,6 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 	gboolean was_immutable;
 	guint i;
 
-	/* Find the protocol */
-	for (i = 0; i < G_N_ELEMENTS (zeroconf_protos); ++i)
-	{
-		char proto[20];
-
-		g_snprintf (proto, sizeof (proto), "_%s._tcp", zeroconf_protos[i]);
-		if (strcmp (service->type, proto) == 0) break;
-	}
-	if (i == G_N_ELEMENTS (zeroconf_protos)) return;
-
 	was_immutable = ephy_node_db_is_immutable (priv->db);
 	ephy_node_db_set_immutable (priv->db, FALSE);
 
@@ -866,6 +856,16 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 
 		return;
 	}
+
+	/* Find the protocol */
+	for (i = 0; i < G_N_ELEMENTS (zeroconf_protos); ++i)
+	{
+		char proto[20];
+
+		g_snprintf (proto, sizeof (proto), "_%s._tcp", zeroconf_protos[i]);
+		if (strcmp (service->type, proto) == 0) break;
+	}
+	if (i == G_N_ELEMENTS (zeroconf_protos)) return;
 
 	if (text != NULL)
 	{
