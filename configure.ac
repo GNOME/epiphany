@@ -277,8 +277,8 @@ AC_ARG_ENABLE([filepicker],
  	 fi])
 AC_MSG_RESULT([$enable_filepicker])
 
-AM_CONDITIONAL([ENABLE_FILEPICKER],[test "x$enable_filepicker" = "xyes"])
-if test "x$enable_filepicker" = "xyes"; then
+AM_CONDITIONAL([ENABLE_FILEPICKER],[test "$enable_filepicker" = "yes"])
+if test "$enable_filepicker" = "yes"; then
 	AC_DEFINE([ENABLE_FILEPICKER],[1],[Define to enable the native filepicker])
 fi
 
@@ -301,17 +301,17 @@ GECKO_CHECK_HEADERS([necko],[nsIIOService2.h])
 # Split out into its own header in 1.9
 
 GECKO_CHECK_HEADERS([xpcom],[nsIMutableArray.h])
-	
+
+# Check for spell check extension
+
+GECKO_CHECK_HEADERS([spellchecker],[mozISpellCheckingEngine.h],
+	[have_gecko_spell_checker=yes],[have_gecko_spell_checker=no])
+
 # Check for some contractIDs that we need but are provided by extensions
 # which may or may not have been built.
 
-REQUIRED_CONTRACTS="@mozilla.org/permissionmanager;1 @mozilla.org/PopupWindowManager;1 @mozilla.org/cookie/permission;1"
-REQUIRED_EXTENSIONS="cookie"
-
-if test "$gecko_cv_gecko_version_int" -ge "1008000"; then
-	REQUIRED_CONTRACTS="$REQUIRED_CONTRACTS @mozilla.org/permissions/contentblocker;1"
-	REQUIRED_EXTENSIONS="$REQUIRED_EXTENSIONS,permissions"
-fi
+REQUIRED_CONTRACTS="@mozilla.org/permissionmanager;1 @mozilla.org/PopupWindowManager;1 @mozilla.org/cookie/permission;1 @mozilla.org/permissions/contentblocker;1"
+REQUIRED_EXTENSIONS="cookie,permissions"
 
 GECKO_CHECK_CONTRACTIDS([$REQUIRED_CONTRACTS],
 	[],[AC_MSG_ERROR([$gecko_cv_gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
@@ -536,6 +536,36 @@ fi
 
 AM_CONDITIONAL([ENABLE_NETWORK_MANAGER],[test "$enable_network_manager" = "yes"])
 
+# Enchant spell checking
+
+AC_MSG_CHECKING([whether spell checking support is requested])
+AC_ARG_ENABLE([spell-checker],
+	AS_HELP_STRING([--enable-spell-checker],[Whether to enable spell checking using enchant])
+	[],
+	[if test "$gecko_cv_gecko_version_int" -ge "1008001"; then
+		enable_spell_checker=yes
+	else
+		enable_spellchecker="$have_gecko_spell_checker"
+	fi])
+AC_MSG_RESULT([$enable_spell_checker])
+
+if test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" != "yes"; then
+	AC_MSG_ERROR([Spell check support requested but $gecko_cv_gecko was not compiled with 'spellchecker' extension enabled.])
+fi
+
+if test "$enable_spell_checker" -a "$have_gecko_spell_checker" = "yes"; then
+	# FIXME check which version we really need
+	ENCHANT_REQUIRED=1.0
+
+	PKG_CHECK_MODULES([SPELLCHECKER],[enchant >= $ENCHANT_REQUIRED])
+	AC_SUBST([SPELLCHECKER_CFLAGS])
+	AC_SUBST([SPELLCHECKER_LIBS])
+
+	AC_DEFINE([ENABLE_SPELLCHECKER],[1],[Define to enable the spell checker])
+fi
+
+AM_CONDITIONAL([ENABLE_SPELLCHECKER],[test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" = "yes"])
+
 # ************
 # Misc defines
 # ************
@@ -632,3 +662,19 @@ po/Makefile.in
 [EPIPHANY_API_VERSION=$EPIPHANY_API_VERSION])
 
 AC_OUTPUT
+
+# *************************************
+# *************************************
+
+echo "Epiphany was configured with the following options:"
+echo ""
+echo "Gecko backend              : $gecko_cv_gecko version $gecko_cv_gecko_version"
+echo "PSM support                : $enable_psm"
+echo "Zeroconf bookmarks support : $enable_zeroconf"
+echo "NetworkManager support     : $enable_network_manager"
+echo "Certificate manager        : $enable_certificate_manager (experimental)"
+echo "Python support             : $enable_python"
+echo "Desktop file plugin        : $enable_desktop_file_plugin"
+echo "Spellchecker               : $enable_spell_checker"
+echo "Debug mode                 : $enable_debug"
+echo ""

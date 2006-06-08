@@ -82,6 +82,18 @@ libephymisc_la_CFLAGS = \
 
 libephymisc_la_LIBADD =
 
+if ENABLE_SPELLCHECKER
+libephymisc_la_SOURCES += \
+	ephy-spell-check.c	\
+	ephy-spell-check.h
+
+libephymisc_la_CFLAGS += \
+	$(SPELLCHECKER_CFLAGS)
+
+libephymisc_la_LIBADD += \
+	$(SPELLCHECKER_LIBS)
+endif
+
 BUILT_SOURCES = \
 	ephy-lib-type-builtins.c	\
 	ephy-lib-type-builtins.h	\

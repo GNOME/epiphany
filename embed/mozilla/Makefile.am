@@ -82,6 +82,12 @@ libephymozillaembed_la_SOURCES += \
 	mozilla-x509-cert.h
 endif
 
+if ENABLE_SPELLCHECKER
+libephymozillaembed_la_SOURCES += \
+	GeckoSpellCheckEngine.cpp	\
+	GeckoSpellCheckEngine.h
+endif
+
 mozilla_include_subdirs = \
 	.			\
 	caps			\
@@ -111,6 +117,7 @@ mozilla_include_subdirs = \
 	pref			\
 	shistory		\
 	sidebar			\
+	spellchecker		\
 	uriloader		\
 	uconv			\
 	wallet			\

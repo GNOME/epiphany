@@ -61,6 +61,10 @@
 #include "FilePicker.h"
 #endif
 
+#ifdef ENABLE_SPELLCHECKER
+#include "GeckoSpellCheckEngine.h"
+#endif
+
 #ifdef HAVE_MOZILLA_PSM
 #include "GtkNSSClientAuthDialogs.h"
 #include "GtkNSSDialogs.h"
@@ -79,6 +83,10 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(MozGlobalHistory)
 
 #ifdef ENABLE_FILEPICKER
 NS_GENERIC_FACTORY_CONSTRUCTOR(GFilePicker)
+#endif
+
+#ifdef ENABLE_SPELLCHECKER
+NS_GENERIC_FACTORY_CONSTRUCTOR(GeckoSpellCheckEngine)
 #endif
 
 #ifdef HAVE_MOZILLA_PSM
@@ -246,6 +254,14 @@ static const nsModuleComponentInfo sAppComps[] = {
 		EphyPromptServiceConstructor
 	},
 #endif /* HAVE_NSINONBLOCKINGALERTSERVICE_H */
+#ifdef ENABLE_SPELLCHECKER
+	{
+		GECKO_SPELL_CHECK_ENGINE_CLASSNAME,
+		GECKO_SPELL_CHECK_ENGINE_IID,
+		GECKO_SPELL_CHECK_ENGINE_CONTRACTID,
+		GeckoSpellCheckEngineConstructor
+	}
+#endif /* ENABLE_SPELLCHECK */
 };
 
 gboolean

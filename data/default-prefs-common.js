@@ -105,3 +105,8 @@ pref("browser.blink_allowed", false);
 
 // enable spatial navigation (only works if the extension is built with gecko)
 pref("snav.enabled", true);
+
+// spellcheck
+// pref("extensions.spellcheck.inline.max-misspellings", -1);
+// 0: disabled, 1: only textareas, 2: check textareas and single-line input fields
+pref("layout.spellcheckDefault", 1);

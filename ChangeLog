@@ -1,3 +1,22 @@
+2006-06-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.ac:
+	
+	Check for enchant, and output an overview of the configured
+	options on successful configure.
+
+	* data/default-prefs-common.js:
+	* embed/mozilla/GeckoSpellCheckEngine.cpp:
+	* embed/mozilla/GeckoSpellCheckEngine.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* lib/Makefile.am:
+	* lib/ephy-spell-check.c:
+	* lib/ephy-spell-check.h:
+
+	Spell check support using the gecko 'spellchecker' extension.
+	No corrections context menu or language switching yet.
+
 2006-06-08  Wouter Bolsterlee  <uws+gnome@xs4all.nl>
 
 	* configure.ac: Remove AM_GLIB_DEFINE_LOCALEDIR. Bug
