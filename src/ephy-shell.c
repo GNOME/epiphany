@@ -565,6 +565,15 @@ ephy_shell_new_tab_full (EphyShell *shell,
                 }
         }
 
+	if (previous_embed != NULL)
+	{
+		ephy_embed_shistory_copy (previous_embed,
+					  embed,
+					  TRUE,   /* back history */
+					  FALSE,  /* forward history */
+					  FALSE); /* current index */
+	}
+
 	return tab;
 }
 
