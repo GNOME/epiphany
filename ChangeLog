@@ -1,5 +1,10 @@
 2006-06-08  Wouter Bolsterlee  <uws+gnome@xs4all.nl>
 
+	* configure.ac: Remove AM_GLIB_DEFINE_LOCALEDIR. Bug
+	#343825, patch by Christian Persch.
+
+2006-06-08  Wouter Bolsterlee  <uws+gnome@xs4all.nl>
+
 	* src/ephy-shell.c: (ephy_shell_new_tab_full): copy
 	history over when opening link in new tab/win using
 	context menu. Fixes bug #340742, patch by René Stadler.
@@ -2585,7 +2590,7 @@
 	Override the page that is shown for the about: url so
 	that it doesn't say "Deer Park"
 
-2006-01-14  Chrhristian Persch  <chpe@cvs.gnome.org>
+2006-01-14  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/Makefile.am:
 	* embed/mozilla/mozilla-embed-single.cpp:
