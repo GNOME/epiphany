@@ -60,6 +60,7 @@ PKG_PROG_PKG_CONFIG
 GNOME_DEBUG_CHECK
 GNOME_COMPILE_WARNINGS([maximum])
 GNOME_CXX_WARNINGS
+GNOME_MAINTAINER_MODE_DEFINES
 
 MORE_WARN_FLAGS=
 DEPRECATION_FLAGS=
@@ -74,7 +75,7 @@ if test "x$enable_maintainer_mode" = "xyes"; then
 fi
 
 GLIB_REQUIRED=2.10.1
-GTK_REQUIRED=2.9.0
+GTK_REQUIRED=2.9.2
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
 LIBGLADE_REQUIRED=2.3.1
@@ -83,26 +84,23 @@ LIBGNOME_REQUIRED=2.10.0
 LIBGNOMEUI_REQUIRED=2.6.0
 GNOME_DESKTOP_REQUIRED=2.9.91
 LIBSTARTUP_NOTIFICATION_REQUIRED=0.5
-LIBGNOMEPRINT_REQUIRED=2.4.0
-LIBGNOMEPRINTUI_REQUIRED=2.4.0
 DBUS_GLIB_REQUIRED=0.35
 
-PKG_CHECK_MODULES([DEPENDENCIES], [\
-		  glib-2.0 >= $GLIB_REQUIRED \
-		  gmodule-2.0 \
-		  gtk+-2.0 >= $GTK_REQUIRED \
-		  libxml-2.0 >= $LIBXML_REQUIRED \
-		  libxslt >= $LIBXSLT_REQUIRED \
-		  libgnome-2.0 >= $LIBGNOME_REQUIRED \
-		  libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED \
+PKG_CHECK_MODULES([DEPENDENCIES], [
+		  glib-2.0 >= $GLIB_REQUIRED
+		  gmodule-2.0
+		  gtk+-2.0 >= $GTK_REQUIRED
+		  gtk+-unix-print-2.0 >= $GTK_REQUIRED
+		  libxml-2.0 >= $LIBXML_REQUIRED
+		  libxslt >= $LIBXSLT_REQUIRED
+		  libgnome-2.0 >= $LIBGNOME_REQUIRED
+		  libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED
 		  libglade-2.0 >= $LIBGLADE_REQUIRED \
-		  gnome-vfs-2.0 >= $LIBGNOMEVFS_REQUIRED \
-		  gnome-vfs-module-2.0 \
-		  gconf-2.0 \
-		  gnome-desktop-2.0 >= $GNOME_DESKTOP_REQUIRED \
-		  libstartup-notification-1.0 >= $LIBSTARTUP_NOTIFICATION_REQUIRED \
-		  libgnomeprint-2.2 >= $LIBGNOMEPRINT_REQUIRED \
-		  libgnomeprintui-2.2 >= $LIBGNOMEPRINTUI_REQUIRED \
+		  gnome-vfs-2.0 >= $LIBGNOMEVFS_REQUIRED
+		  gnome-vfs-module-2.0
+		  gconf-2.0
+		  gnome-desktop-2.0 >= $GNOME_DESKTOP_REQUIRED
+		  libstartup-notification-1.0 >= $LIBSTARTUP_NOTIFICATION_REQUIRED
 		  ])
 AC_SUBST([DEPENDENCIES_CFLAGS])
 AC_SUBST([DEPENDENCIES_LIBS])
@@ -269,12 +267,7 @@ AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "$enable_psm" = "yes" -a "$have_psm" = "
 AC_MSG_CHECKING([whether to enable native gtk+ filepicker])
 AC_ARG_ENABLE([filepicker],
 	AS_HELP_STRING([--enable-filepicker],[Whether to enable the gtk+ native filepicker; not needed when the mozilla build itself has native gtk+ filepicker enabled (default:enabled)]),
-	[],
-	[if test "$gecko_cv_gecko_version_int" -ge "1008000"; then
-		enable_filepicker=no
- 	 else
-		enable_filepicker=yes
- 	 fi])
+	[],[enable_filepicker=no])
 AC_MSG_RESULT([$enable_filepicker])
 
 AM_CONDITIONAL([ENABLE_FILEPICKER],[test "$enable_filepicker" = "yes"])
@@ -540,12 +533,12 @@ AM_CONDITIONAL([ENABLE_NETWORK_MANAGER],[test "$enable_network_manager" = "yes"]
 
 AC_MSG_CHECKING([whether spell checking support is requested])
 AC_ARG_ENABLE([spell-checker],
-	AS_HELP_STRING([--enable-spell-checker],[Whether to enable spell checking using enchant])
+	AS_HELP_STRING([--enable-spell-checker],[Whether to enable spell checking using enchant]),
 	[],
 	[if test "$gecko_cv_gecko_version_int" -ge "1008001"; then
 		enable_spell_checker=yes
 	else
-		enable_spellchecker="$have_gecko_spell_checker"
+		enable_spell_checker="$have_gecko_spell_checker"
 	fi])
 AC_MSG_RESULT([$enable_spell_checker])
 
@@ -666,6 +659,7 @@ AC_OUTPUT
 # *************************************
 # *************************************
 
+echo ""
 echo "Epiphany was configured with the following options:"
 echo ""
 echo "Gecko backend              : $gecko_cv_gecko version $gecko_cv_gecko_version"
