@@ -95,6 +95,7 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  libxslt >= $LIBXSLT_REQUIRED
 		  libgnome-2.0 >= $LIBGNOME_REQUIRED
 		  libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED
+		  libgnomeprint-2.2 libgnomeprintui-2.2
 		  libglade-2.0 >= $LIBGLADE_REQUIRED \
 		  gnome-vfs-2.0 >= $LIBGNOMEVFS_REQUIRED
 		  gnome-vfs-module-2.0
@@ -559,6 +560,33 @@ fi
 
 AM_CONDITIONAL([ENABLE_SPELLCHECKER],[test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" = "yes"])
 
+# DSP wrapper
+
+AC_MSG_CHECKING([whether to enable the polypaudio DSP wrapper])
+AC_ARG_ENABLE([polypaudio],
+    AS_HELP_STRING([--enable-polypaudio],[Whether to wrap calls to /dev/dsp using polypaudio]),
+    [],[enable_polypaudio=no])
+AC_MSG_RESULT([$enable_polypaudio])
+
+POLYPDSP_LIBS=
+if test "$enable_polypaudio" = "yes"; then
+    PKG_CHECK_MODULES([POLYPDSP],[polyplib])
+
+    AC_LANG_PUSH([C])
+    _SAVE_LIBS=$LIBS
+    LIBS="$LIBS $POLYPDSP_LIBS"
+
+    AC_CHECK_LIB([polypdsp],[main],
+        [AC_DEFINE([HAVE_POLYPDSP],[1],[Define if libpolypdsp is available])
+         POLYPDSP_LIBS="$POLYPDSP_LIBS -lpolypdsp"],
+        [AC_MSG_ERROR([Polypaudio DSP wrapper was requested but libpolypdsp not found])])
+
+    LIBS="$_SAVE_LIBS"
+    AC_LANG_POP([C])
+fi
+
+AC_SUBST([POLYPDSP_LIBS])
+
 # ************
 # Misc defines
 # ************
@@ -669,6 +697,7 @@ echo "NetworkManager support     : $enable_network_manager"
 echo "Certificate manager        : $enable_certificate_manager (experimental)"
 echo "Python support             : $enable_python"
 echo "Desktop file plugin        : $enable_desktop_file_plugin"
+echo "Polypaudio DSP wrapper     : $enable_polypaudio"
 echo "Spellchecker               : $enable_spell_checker"
 echo "Debug mode                 : $enable_debug"
 echo ""
