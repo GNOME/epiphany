@@ -18,8 +18,8 @@
  *  $Id$
  */
 
-#ifndef EPHY_BAD_CERT_DENIER_H
-#define EPHY_BAD_CERT_DENIER_H
+#ifndef EPHY_BAD_CERT_REJECTOR_H
+#define EPHY_BAD_CERT_REJECTOR_H
 
 #include <nsIBadCertListener.h>
 
