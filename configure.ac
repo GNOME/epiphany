@@ -531,17 +531,20 @@ fi
 AM_CONDITIONAL([ENABLE_NETWORK_MANAGER],[test "$enable_network_manager" = "yes"])
 
 # Enchant spell checking
+# Does not appear to work on gecko 1.8.0, so only offer for >= 1.8.1
 
+if test "$gecko_cv_gecko_version_int" -ge "1008001"; then
+
+# Default to 'disabled' until it's fully functional
 AC_MSG_CHECKING([whether spell checking support is requested])
 AC_ARG_ENABLE([spell-checker],
 	AS_HELP_STRING([--enable-spell-checker],[Whether to enable spell checking using enchant]),
-	[],
-	[if test "$gecko_cv_gecko_version_int" -ge "1008001"; then
-		enable_spell_checker=yes
-	else
-		enable_spell_checker="$have_gecko_spell_checker"
-	fi])
+	[],[enable_spell_checker=no])
 AC_MSG_RESULT([$enable_spell_checker])
+
+else
+	enable_spell_checker=no
+fi # gecko >= 1.8.1
 
 if test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" != "yes"; then
 	AC_MSG_ERROR([Spell check support requested but $gecko_cv_gecko was not compiled with 'spellchecker' extension enabled.])
@@ -660,16 +663,21 @@ AC_OUTPUT
 # *************************************
 # *************************************
 
-echo ""
-echo "Epiphany was configured with the following options:"
-echo ""
-echo "Gecko backend              : $gecko_cv_gecko version $gecko_cv_gecko_version"
-echo "PSM support                : $enable_psm"
-echo "Zeroconf bookmarks support : $enable_zeroconf"
-echo "NetworkManager support     : $enable_network_manager"
-echo "Certificate manager        : $enable_certificate_manager (experimental)"
-echo "Python support             : $enable_python"
-echo "Desktop file plugin        : $enable_desktop_file_plugin"
-echo "Spellchecker               : $enable_spell_checker"
-echo "Debug mode                 : $enable_debug"
-echo ""
+echo "
+Epiphany was configured with the following options:
+        
+	Source code location       : $srcdir
+	Compiler                   : $CC
+	Prefix                     : $prefix
+	Extra debugging support    : $enable_debug
+
+	Gecko backend              : $gecko_cv_gecko version $gecko_cv_gecko_version
+	PSM support                : $enable_psm
+	Zeroconf bookmarks support : $enable_zeroconf
+	NetworkManager support     : $enable_network_manager
+	Certificate manager        : $enable_certificate_manager (experimental)
+	Python support             : $enable_python
+	Desktop file plugin        : $enable_desktop_file_plugin
+	Spellchecker               : $enable_spell_checker (experimental)
+
+"
