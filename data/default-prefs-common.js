@@ -45,6 +45,8 @@ pref("security.warn_submit_insecure", false);
 pref("security.warn_submit_insecure.show_once", false);
 pref("security.warn_viewing_mixed", true);
 pref("security.warn_viewing_mixed.show_once", false);
+pref("security.warn_entering_weak", true);
+pref("security.warn_entering_weak.show_once", false);
 
 // fonts
 pref("font.size.unit", "pt");
