@@ -194,7 +194,7 @@ status_icon_popup_menu_cb (GtkStatusIcon *icon,
 	gtk_widget_show_all (menu);
 
 	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-			NULL /* FIXME! see bug #334573 */, NULL,
+			gtk_status_icon_position_menu, icon,
 			button, time);
 
 	return TRUE;
