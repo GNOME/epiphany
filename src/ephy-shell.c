@@ -21,6 +21,12 @@
 
 #include "config.h"
 
+#include <string.h>
+#include <glib/gi18n.h>
+#include <gtk/gtknotebook.h>
+#include <dirent.h>
+#include <unistd.h>
+
 #include "ephy-shell.h"
 #include "ephy-type-builtins.h"
 #include "ephy-embed-shell.h"
@@ -44,15 +50,8 @@
 #include "egg-toolbars-model.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-toolbar.h"
-#include "print-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
-
-#include <string.h>
-#include <glib/gi18n.h>
-#include <gtk/gtknotebook.h>
-#include <dirent.h>
-#include <unistd.h>
 
 #ifdef ENABLE_NETWORK_MANAGER
 #include "ephy-net-monitor.h"
@@ -75,7 +74,6 @@ struct _EphyShellPrivate
 	GtkWidget *history_window;
 	GObject *pdm_dialog;
 	GObject *prefs_dialog;
-	GObject *print_setup_dialog;
 	GList *del_on_exit;
 
 	guint embed_single_connected : 1;
@@ -352,13 +350,6 @@ ephy_shell_dispose (GObject *object)
 		LOG ("Unref prefs dialog");
 		g_object_unref (priv->prefs_dialog);
 		priv->prefs_dialog = NULL;
-	}
-
-	if (priv->print_setup_dialog != NULL)
-	{
-		LOG ("Unref print setup dialog");
-		g_object_unref (priv->print_setup_dialog);
-		priv->print_setup_dialog = NULL;
 	}
 
 	if (priv->bookmarks != NULL)
@@ -853,24 +844,6 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 	}
 
 	return shell->priv->prefs_dialog;
-}
-
-GObject *
-ephy_shell_get_print_setup_dialog (EphyShell *shell)
-{
-	if (shell->priv->print_setup_dialog == NULL)
-	{
-		GObject **dialog;
-
-		shell->priv->print_setup_dialog = G_OBJECT (ephy_print_setup_dialog_new ());
-
-		dialog = &shell->priv->print_setup_dialog;
-
-		g_object_add_weak_pointer (shell->priv->print_setup_dialog,
-					   (gpointer *) dialog);
-	}
-
-	return shell->priv->print_setup_dialog;
 }
 
 void

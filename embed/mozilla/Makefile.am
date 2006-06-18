@@ -33,6 +33,10 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyUtils.h			\
 	EventContext.cpp                \
 	EventContext.h                  \
+	GeckoPrintService.cpp		\
+	GeckoPrintService.h		\
+	GeckoPrintSession.cpp		\
+	GeckoPrintSession.has		\
 	GlobalHistory.cpp               \
 	GlobalHistory.h                 \
 	MozDownload.cpp			\
@@ -41,8 +45,6 @@ libephymozillaembed_la_SOURCES = 	\
 	MozillaPrivate.h		\
 	MozRegisterComponents.cpp       \
 	MozRegisterComponents.h         \
-	PrintingPromptService.cpp	\
-	PrintingPromptService.h		\
 	mozilla-download.cpp		\
 	mozilla-download.h		\
 	mozilla-embed.cpp	        \

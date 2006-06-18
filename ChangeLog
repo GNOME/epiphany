@@ -1,5 +1,40 @@
 2006-06-18  Christian Persch  <chpe@cvs.gnome.org>
 
+	* configure.ac:
+	* data/default-prefs-common.js:
+	* embed/Makefile.am:
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_dispose),
+	(ephy_embed_shell_set_page_setup),
+	(ephy_embed_shell_get_page_setup),
+	(ephy_embed_shell_set_print_settings),
+	(ephy_embed_shell_get_print_settings):
+	* embed/ephy-embed-shell.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/EphyUtils.cpp:
+	* embed/mozilla/EphyUtils.h:
+	* embed/mozilla/Makefile.am:
+	A embed/mozilla/GeckoPrintService.cpp:
+	A embed/mozilla/GeckoPrintService.h:
+	A embed/mozilla/GeckoPrintSession.cpp:
+	A embed/mozilla/GeckoPrintSession.h:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	R embed/mozilla/PrintingPromptService.cpp:
+	R embed/mozilla/PrintingPromptService.h:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	R embed/print-dialog.c:
+	R embed/print-dialog.h:
+	* src/ephy-shell.c: (ephy_shell_dispose),
+	(ephy_shell_get_prefs_dialog):
+	* src/ephy-shell.h:
+	* src/epiphany.defs:
+	* src/window-commands.c: (page_setup_done_cb),
+	(window_cmd_file_print_setup):
+
+	Drop libgnomeprint[ui] and use gtk printing.
+
+2006-06-18  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/downloader-view.c: (status_icon_popup_menu_cb):
 	
 	Fix context menu positioning.

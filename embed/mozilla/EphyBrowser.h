@@ -31,7 +31,6 @@
 #include <nsIDOMEventListener.h>
 #include <nsIDOMEventTarget.h>
 #include <nsIDOMWindow.h>
-#include <nsIPrintSettings.h>
 #include <nsIRequest.h>
 #include <nsISHistory.h>
 #include <nsIWebBrowserFocus.h>

@@ -21,8 +21,10 @@
 #ifndef EPHY_EMBED_SHELL_H
 #define EPHY_EMBED_SHELL_H
 
-#include <glib-object.h>
 #include <glib.h>
+#include <glib-object.h>
+#include <gtk/gtkpagesetup.h>
+#include <gtk/gtkprintsettings.h>
 
 G_BEGIN_DECLS
 
@@ -76,6 +78,16 @@ GObject		  *ephy_embed_shell_get_embed_single	(EphyEmbedShell *shell);
 GObject        	  *ephy_embed_shell_get_adblock_manager	(EphyEmbedShell *shell);
 
 void		   ephy_embed_shell_prepare_close	(EphyEmbedShell *shell);
+
+void		   ephy_embed_shell_set_page_setup	(EphyEmbedShell *shell,
+							 GtkPageSetup *page_setup);
+		
+GtkPageSetup	  *ephy_embed_shell_get_page_setup	(EphyEmbedShell *shell);
+
+void		   ephy_embed_shell_set_print_settings	(EphyEmbedShell *shell,
+							 GtkPrintSettings *settings);
+		
+GtkPrintSettings  *ephy_embed_shell_get_print_settings	(EphyEmbedShell *shell);
 
 G_END_DECLS
 

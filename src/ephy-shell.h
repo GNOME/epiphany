@@ -117,8 +117,6 @@ GObject        *ephy_shell_get_pdm_dialog		(EphyShell *shell);
 
 GObject        *ephy_shell_get_prefs_dialog		(EphyShell *shell);
 
-GObject	       *ephy_shell_get_print_setup_dialog	(EphyShell *shell);
-
 /* private API */
 void	       _ephy_shell_create_instance		(void);
 

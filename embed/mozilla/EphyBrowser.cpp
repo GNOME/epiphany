@@ -67,6 +67,8 @@
 #include <nsIHistoryEntry.h>
 #include <nsIInterfaceRequestor.h>
 #include <nsIInterfaceRequestorUtils.h>
+#include <nsIPrintSettings.h>
+#include <nsIPrintSettingsService.h>
 #include <nsIScriptSecurityManager.h>
 #include <nsIServiceManager.h>
 #include <nsISHEntry.h>
@@ -98,14 +100,16 @@
 
 #include "ephy-debug.h"
 #include "ephy-embed.h"
+#include "ephy-embed-shell.h"
 #include "ephy-string.h"
 #include "ephy-zoom.h"
 #include "mozilla-embed-event.h"
 #include "mozilla-embed.h"
-#include "print-dialog.h"
 
+#include "AutoJSContextStack.h"
 #include "EphyUtils.h"
 #include "EventContext.h"
+#include "GeckoPrintService.h"
 
 #include "EphyBrowser.h"
 
@@ -673,7 +677,20 @@ nsresult EphyBrowser::Print ()
 	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
 	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
 
-	return  print->Print (nsnull, nsnull);
+	nsCOMPtr<nsIPrintSettingsService> printSettingsService
+		(do_GetService("@mozilla.org/gfx/printsettings-service;1"));
+	NS_ENSURE_STATE (printSettingsService);
+
+	nsCOMPtr<nsIPrintSettings> settings;
+	printSettingsService->GetNewPrintSettings (getter_AddRefs (settings));
+	NS_ENSURE_STATE (settings);
+
+	nsresult rv;
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	return  print->Print (settings, nsnull);
 }
 
 nsresult EphyBrowser::SetPrintPreviewMode (PRBool previewMode)
@@ -682,21 +699,30 @@ nsresult EphyBrowser::SetPrintPreviewMode (PRBool previewMode)
 
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
-	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
+	nsCOMPtr<nsIWebBrowserPrint> print (do_GetInterface (mWebBrowser));
+	NS_ENSURE_STATE (print);
 
 	if (previewMode)
 	{
-		EmbedPrintInfo *info;
+		nsCOMPtr<nsIPrintSettingsService> printSettingsService
+			(do_GetService("@mozilla.org/gfx/printsettings-service;1"));
+		NS_ENSURE_STATE (printSettingsService);
 
 		nsCOMPtr<nsIPrintSettings> settings;
-		print->GetGlobalPrintSettings (getter_AddRefs(settings));
+		printSettingsService->GetNewPrintSettings (getter_AddRefs (settings));
+		NS_ENSURE_STATE (settings);
 
-		info = ephy_print_get_print_info ();
-		EphyUtils::CollatePrintSettings (info, settings, TRUE);
-		ephy_print_info_free (info);
+		EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+		rv = GeckoPrintService::TranslateSettings (ephy_embed_shell_get_print_settings (shell),
+							   ephy_embed_shell_get_page_setup (shell),
+							   nsCString(),
+							   PR_FALSE,
+							   settings);
 
-		rv = print->PrintPreview (nsnull, mDOMWindow, nsnull);
+		if (NS_SUCCEEDED (rv))
+		{
+			rv = print->PrintPreview (settings, mDOMWindow, nsnull);
+		}
 	}
 	else
 	{
@@ -705,7 +731,7 @@ nsresult EphyBrowser::SetPrintPreviewMode (PRBool previewMode)
 		rv = print->GetDoingPrintPreview(&isPreview);
 		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-		if (isPreview == PR_TRUE)
+		if (isPreview)
 		{
 			rv = print->ExitPrintPreview();
 		}

@@ -35,9 +35,7 @@ class nsAString;
 class nsIDOMWindow;
 class nsIFile;
 class nsIIOService;
-class nsIPrintSettings;
 class nsIURI;
-struct _EmbedPrintInfo;
 
 namespace EphyUtils
 {
@@ -59,10 +57,13 @@ namespace EphyUtils
 	GtkWidget      *FindEmbed		(nsIDOMWindow *aDOMWindow);
 
 	GtkWidget      *FindGtkParent		(nsIDOMWindow *aDOMWindow);
+	
+	char *		ConvertUTF16toUTF8	(const PRUnichar*, PRInt32);
+}
 
-	nsresult        CollatePrintSettings	(_EmbedPrintInfo *info,
-						 nsIPrintSettings *settings,
-						 gboolean preview);
+namespace EphyJSUtils
+{
+	PRBool IsCalledFromScript ();
 }
 
 #endif

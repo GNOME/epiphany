@@ -13,8 +13,7 @@ NOINST_H_FILES = \
 	ephy-embed-dialog.h		\
 	ephy-embed-find.h		\
 	ephy-encodings.h		\
-	ephy-favicon-cache.h		\
-	print-dialog.h
+	ephy-favicon-cache.h
 
 INST_H_FILES = \
 	ephy-adblock-manager.h		\
@@ -53,7 +52,6 @@ libephyembed_la_SOURCES = \
 	ephy-history.c			\
 	ephy-password-manager.c		\
 	ephy-permission-manager.c	\
-	print-dialog.c			\
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
 

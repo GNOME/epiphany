@@ -75,7 +75,7 @@ if test "x$enable_maintainer_mode" = "xyes"; then
 fi
 
 GLIB_REQUIRED=2.10.1
-GTK_REQUIRED=2.9.2
+GTK_REQUIRED=2.9.3
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
 LIBGLADE_REQUIRED=2.3.1
@@ -95,7 +95,6 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  libxslt >= $LIBXSLT_REQUIRED
 		  libgnome-2.0 >= $LIBGNOME_REQUIRED
 		  libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED
-		  libgnomeprint-2.2 libgnomeprintui-2.2
 		  libglade-2.0 >= $LIBGLADE_REQUIRED \
 		  gnome-vfs-2.0 >= $LIBGNOMEVFS_REQUIRED
 		  gnome-vfs-module-2.0

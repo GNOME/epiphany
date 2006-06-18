@@ -46,6 +46,8 @@ struct _EphyEmbedShellPrivate
 	EphyEmbedSingle *embed_single;
 	EphyEncodings *encodings;
 	EphyAdBlockManager *adblock_manager;
+	GtkPageSetup *page_setup;
+	GtkPrintSettings *print_settings;
 	guint single_initialised : 1;
 };
 
@@ -121,6 +123,18 @@ ephy_embed_shell_dispose (GObject *object)
 		LOG ("Unref encodings");
 		g_object_unref (priv->encodings);
 		priv->encodings = NULL;
+	}
+
+	if (priv->page_setup != NULL)
+	{
+		g_object_unref (priv->page_setup);
+		priv->page_setup = NULL;
+	}
+
+	if (priv->print_settings != NULL)
+	{
+		g_object_unref (priv->print_settings);
+		priv->print_settings = NULL;
 	}
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
@@ -359,3 +373,84 @@ ephy_embed_shell_get_adblock_manager (EphyEmbedShell *shell)
 	return G_OBJECT (shell->priv->adblock_manager);
 }
 
+void
+ephy_embed_shell_set_page_setup	(EphyEmbedShell *shell,
+				 GtkPageSetup *page_setup)
+{
+	EphyEmbedShellPrivate *priv;
+
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+	priv = shell->priv;
+
+	if (page_setup != NULL)
+	{
+		g_object_ref (page_setup);
+	}
+
+	if (priv->page_setup != NULL)
+	{
+		g_object_unref (priv->page_setup);
+	}
+
+	/* FIXME: save settings to disk! */
+
+	priv->page_setup = page_setup;
+}
+		
+GtkPageSetup *
+ephy_embed_shell_get_page_setup	(EphyEmbedShell *shell)
+{
+	EphyEmbedShellPrivate *priv;
+
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+	priv = shell->priv;
+
+	if (priv->page_setup == NULL)
+	{
+		/* FIXME: load stored settings! */
+		priv->page_setup = gtk_page_setup_new ();
+	}
+
+	return priv->page_setup;
+}
+
+void
+ephy_embed_shell_set_print_settings (EphyEmbedShell *shell,
+				     GtkPrintSettings *settings)
+{
+	EphyEmbedShellPrivate *priv;
+
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+	priv = shell->priv;
+
+	if (settings != NULL)
+	{
+		g_object_ref (settings);
+	}
+
+	if (priv->print_settings != NULL)
+	{
+		g_object_unref (priv->print_settings);
+	}
+
+	/* FIXME: save settings to disk! */
+
+	priv->print_settings = settings;
+}
+		
+GtkPrintSettings *
+ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
+{
+	EphyEmbedShellPrivate *priv;
+
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+	priv = shell->priv;
+
+	if (priv->print_settings == NULL)
+	{
+		/* FIXME: load stored settings! */
+		priv->print_settings = gtk_print_settings_new ();
+	}
+
+	return priv->print_settings;
+}

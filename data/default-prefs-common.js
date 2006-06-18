@@ -102,8 +102,9 @@ pref("browser.xul.error_pages.enabled", true);
 // unset weird xulrunner default UA string
 pref("general.useragent.extra.simple", "");
 
-// disable pings
+// we don't want ping(uin)s
 pref("browser.send_pings", false);
+pref("browser.send_pings.require_same_host", true);
 
 // disable blink tags
 pref("browser.blink_allowed", false);
@@ -111,7 +112,18 @@ pref("browser.blink_allowed", false);
 // enable spatial navigation (only works if the extension is built with gecko)
 pref("snav.enabled", true);
 
+// don't leak UI language
+// pref("general.useragent.locale", "en")
+
 // spellcheck
 // pref("extensions.spellcheck.inline.max-misspellings", -1);
 // 0: disabled, 1: only textareas, 2: check textareas and single-line input fields
 pref("layout.spellcheckDefault", 1);
+
+// print settings
+pref("print.use_global_printsettings", false);
+pref("print.save_print_settings", false);
+pref("print.show_print_progress", true);
+pref("print.printer_list", "");
+pref("postscript.enabled", true);
+pref("postscript.cups.enabled", false);
