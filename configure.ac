@@ -549,7 +549,7 @@ if test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" != "yes";
 	AC_MSG_ERROR([Spell check support requested but $gecko_cv_gecko was not compiled with 'spellchecker' extension enabled.])
 fi
 
-if test "$enable_spell_checker" -a "$have_gecko_spell_checker" = "yes"; then
+if test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" = "yes"; then
 	# FIXME check which version we really need
 	ENCHANT_REQUIRED=1.0
 
