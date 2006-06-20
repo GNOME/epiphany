@@ -1,9 +1,9 @@
 [encoding: UTF-8]
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
-data/epiphany-lockdown.schemas.in
 data/bme.desktop.in.in
 data/epiphany.desktop.in.in
+data/epiphany-lockdown.schemas.in
 data/epiphany.schemas.in
 data/glade/certificate-dialogs.glade
 data/glade/epiphany.glade
@@ -18,6 +18,8 @@ embed/mozilla/EphyAboutModule.cpp
 embed/mozilla/EphyHeaderSniffer.cpp
 embed/mozilla/EphyPromptService.cpp
 embed/mozilla/FilePicker.cpp
+embed/mozilla/GeckoPrintService.cpp
+embed/mozilla/GeckoPrintSession.cpp
 embed/mozilla/GtkNSSClientAuthDialogs.cpp
 embed/mozilla/GtkNSSDialogs.cpp
 embed/mozilla/GtkNSSKeyPairDialogs.cpp
@@ -25,7 +27,6 @@ embed/mozilla/GtkNSSSecurityWarningDialogs.cpp
 embed/mozilla/MozDownload.cpp
 embed/mozilla/mozilla-embed-single.cpp
 embed/mozilla/mozilla-notifiers.cpp
-embed/print-dialog.c
 lib/eel-gconf-extensions.c
 lib/egg/egg-editable-toolbar.c
 lib/egg/egg-toolbar-editor.c
@@ -42,16 +43,16 @@ lib/widgets/ephy-location-entry.c
 lib/widgets/ephy-zoom-control.c
 plugins/desktop-file/plugin.cpp
 src/bookmarks/ephy-bookmark-action.c
+src/bookmarks/ephy-bookmark-factory-action.c
 src/bookmarks/ephy-bookmark-properties.c
+src/bookmarks/ephy-bookmarks.c
 src/bookmarks/ephy-bookmarks-editor.c
 src/bookmarks/ephy-bookmarks-import.c
 src/bookmarks/ephy-bookmarks-menu.c
-src/bookmarks/ephy-bookmarks.c
-src/bookmarks/ephy-topic-action.c
-src/bookmarks/ephy-bookmark-factory-action.c
 src/bookmarks/ephy-bookmarks-ui.c
 src/bookmarks/ephy-open-tabs-action.c
 src/bookmarks/ephy-related-action.c
+src/bookmarks/ephy-topic-action.c
 src/bookmarks/ephy-topic-factory-action.c
 src/bookmarks/ephy-topics-entry.c
 src/bookmarks/ephy-topics-palette.c
@@ -68,8 +69,8 @@ src/ephy-shell.c
 src/ephy-statusbar.c
 src/ephy-tab.c
 src/ephy-tabs-menu.c
-src/ephy-toolbar-editor.c
 src/ephy-toolbar.c
+src/ephy-toolbar-editor.c
 src/ephy-toolbars-model.c
 src/ephy-window.c
 src/pdm-dialog.c
