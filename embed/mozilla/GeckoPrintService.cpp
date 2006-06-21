@@ -134,7 +134,7 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
 			      ephy_embed_shell_get_page_setup (shell),
 			      sourceFile, PR_TRUE, aSettings);
     } else {
-      rv = NS_ERROR_ABORT;
+      rv = NS_ERROR_FAILURE;
     }
 
     return rv;
@@ -163,7 +163,8 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
 			       GTK_PRINT_CAPABILITY_COPIES   |
 			       GTK_PRINT_CAPABILITY_COLLATE  |
 			       GTK_PRINT_CAPABILITY_REVERSE  |
-			       GTK_PRINT_CAPABILITY_SCALE));
+			       GTK_PRINT_CAPABILITY_SCALE |
+			       GTK_PRINT_CAPABILITY_GENERATE_PS));
   gtk_print_unix_dialog_set_page_setup (print_dialog,
 					ephy_embed_shell_get_page_setup (shell));
   gtk_print_unix_dialog_set_settings (print_dialog,
@@ -198,7 +199,7 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
     if (!sourceFile.IsEmpty ()) {
       rv = TranslateSettings (settings, pageSetup, sourceFile, PR_TRUE, aSettings);
     } else {
-      rv = NS_ERROR_ABORT;
+      rv = NS_ERROR_FAILURE;
     }
   }
 
@@ -241,7 +242,7 @@ GeckoPrintService::ShowProgress (nsIDOMWindow *aParent,
   nsCOMPtr<nsIPrintProgress> progress (do_QueryInterface (session, &rv));
   NS_ENSURE_SUCCESS (rv, rv);
   
-  /* Out print session implements those interfaces */
+  /* Our print session implements those interfaces */
   rv = CallQueryInterface (session, _webProgressListener);
   rv |= CallQueryInterface (session, _printProgressParams);
   NS_ENSURE_SUCCESS (rv, rv);
@@ -263,6 +264,8 @@ NS_IMETHODIMP GeckoPrintService::ShowPageSetup (nsIDOMWindow *aParent,
 						nsIPrintSettings *aPrintSettings,
 						nsIObserver *aObserver)
 {
+  /* This function is never called from gecko code */
+#if 0
   /* Locked down? */
   if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING) ||
       eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP)) {
@@ -290,6 +293,8 @@ NS_IMETHODIMP GeckoPrintService::ShowPageSetup (nsIDOMWindow *aParent,
 
   /* FIXME do we need to notify aObserver somehow? */
   return NS_OK;
+#endif
+  return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* void showPrinterProperties (in nsIDOMWindow parent,
@@ -315,11 +320,13 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   NS_ENSURE_ARG (aGtkSettings);
   NS_ENSURE_ARG (aPageSetup);
 
+#if 0
   /* Locked down? */
   if (gtk_print_settings_get_print_to_file (aGtkSettings) &&
       eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK)) {
     return NS_ERROR_GFX_PRINTER_ACCESS_DENIED;
   }
+#endif
 
   /* Initialisation */
   aSettings->SetIsInitializedFromPrinter (PR_FALSE);

@@ -113,6 +113,7 @@ GeckoPrintSession::SetSettings (GtkPrintSettings *aSettings,
   mPageSetup = (GtkPageSetup *) g_object_ref (aPageSetup);
   mPrinter = (GtkPrinter *) g_object_ref (aPrinter);
 
+#if 0
   /* Compute the source file name */
   if (gtk_print_settings_get_print_to_file (mSettings)) {
     /* FIXME: support gnome-VFS uris here! */
@@ -124,7 +125,9 @@ GeckoPrintSession::SetSettings (GtkPrintSettings *aSettings,
 
     mSourceFile.Assign (fileName);
     g_free (fileName);
-  } else {
+  } else
+#endif
+  {
     char *base, *tmpName;
 
     /* FIXME: use pure glib here! */
@@ -250,7 +253,7 @@ GeckoPrintSession::Cancel ()
 				       GTK_RESPONSE_CANCEL, FALSE);
 
     SetProgress (0, 0);
-    SetProgressText (_("Cancelling print"));
+    SetProgressText (_("Cancelling print")); /* FIXME text! */
   }
 
   if (mJob) {
@@ -265,11 +268,13 @@ GeckoPrintSession::StartPrinting ()
 
   GError *error = NULL;
 
+#if 0
   /* FIXME: this could also be a print job to a file which was
    * printed to a temp file and now needs to be uploaded to its
    * final location with gnome-vfs.
    */
   if (gtk_print_settings_get_print_to_file (mSettings)) return;
+#endif
 
   NS_ENSURE_TRUE (mSettings && mPageSetup && mPrinter, );
 
@@ -278,6 +283,7 @@ GeckoPrintSession::StartPrinting ()
 			    mSettings,
 			    mPageSetup);
   if (!gtk_print_job_set_source_file (mJob, mSourceFile.get (), &error)) {
+    /* FIXME: error dialogue! */
     g_warning ("Couldn't set print job source: %s", error->message);
     g_error_free (error);
 
@@ -287,25 +293,15 @@ GeckoPrintSession::StartPrinting ()
     return;
   }
 
-  /* Keep us alive until the job is done! */
-  NS_ADDREF_THIS ();
-  if (!gtk_print_job_send (mJob,
-			   (GtkPrintJobCompleteFunc) JobCompletedCallback,
-			   this,
-			   (GDestroyNotify) ReleaseSession,
-			   &error)) {
-    g_warning ("Couldn't start print job: %s", error->message);
-    g_error_free (error);
-
-    g_object_unref (mJob);
-    mJob = NULL;
-  
-    NS_RELEASE_THIS ();
-    return;
-  };
-
   g_signal_connect (mJob, "status-changed",
 		    G_CALLBACK (JobStatusChangedCallback), this);
+
+  /* Keep us alive until the job is done! */
+  NS_ADDREF_THIS ();
+  gtk_print_job_send (mJob,
+		      (GtkPrintJobCompleteFunc) JobCompletedCallback,
+		      this,
+		      (GDestroyNotify) ReleaseSession);
 }
 
 void
@@ -315,8 +311,10 @@ GeckoPrintSession::JobStatusChanged ()
 	
   LOG ("print session %p status changed %d\n", this, gtk_print_job_get_status (mJob));
 
+  /* FIXME: are any other status codes relevant info for the user? */
   if (gtk_print_job_get_status (mJob) == GTK_PRINT_STATUS_SENDING_DATA) {
     gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (mProgressBar), 0.75);
+    /* FIXME text! */
     SetProgressText (_("Spooling..."));
   }
 }
@@ -355,7 +353,7 @@ GeckoPrintSession::JobDone ()
 void
 GeckoPrintSession::DestroyJob ()
 {
-  NS_ENSURE_TRUE (mJob, );
+  if (!mJob) return;
 
   g_signal_handlers_disconnect_by_func (mJob, (void*) JobStatusChangedCallback, this);
   g_object_unref (mJob);

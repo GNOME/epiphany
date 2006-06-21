@@ -85,7 +85,7 @@ class GeckoPrintSession : public nsIPrintSession,
     PRPackedBool mCancelled;
 
     void SetProgress (PRInt32, PRInt32);
-    void SetProgressText (const char *);    void LaunchJob ();
+    void SetProgressText (const char *);
     void LaunchJobOnIdle ();
     void DestroyJob ();
 };
