@@ -1,7 +1,6 @@
 /*
- *  GtkNSSDialogs.cpp
- *
  *  Copyright (C) 2003 Crispin Flowerday <gnome@flowerday.cx>
+ *  Copyright (C) 2006 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -67,6 +66,10 @@
 #include <nsIDOMWindow.h>
 #include <nsIInterfaceRequestor.h>
 #include <nsIInterfaceRequestorUtils.h>
+#include <nsIPKCS11ModuleDB.h>
+#include <nsIPKCS11Slot.h>
+#include <nsIPK11Token.h>
+#include <nsIPK11TokenDB.h>
 #include <nsIServiceManager.h>
 #include <nsISimpleEnumerator.h>
 #include <nsIX509CertDB.h>
@@ -81,6 +84,7 @@
 
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
+#include "ephy-password-dialog.h"
 
 #include "AutoJSContextStack.h"
 #include "EphyUtils.h"
@@ -103,9 +107,19 @@ GtkNSSDialogs::~GtkNSSDialogs ()
 {
 }
 
-NS_IMPL_THREADSAFE_ISUPPORTS2 (GtkNSSDialogs, 
+NS_IMPL_THREADSAFE_ISUPPORTS5 (GtkNSSDialogs, 
 			       nsICertificateDialogs,
-			       nsIBadCertListener)
+			       nsIBadCertListener,
+			       nsITokenPasswordDialogs,
+			       nsITokenDialogs,
+			       nsIDOMCryptoDialogs)
+
+/* There's also nsICertPickDialogs which is implemented in mozilla
+ * but has no callers. So we don't implement it.
+ * Same for nsIUserCertPicker which is only used in mailnews.
+ *
+ * We should implement nsIFormSigningDialog, however.
+ */
 
 /**
  *  Call the mozilla service to display a certificate
@@ -301,6 +315,74 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 }
 
 
+/* Helper functions */
+
+nsresult
+GtkNSSDialogs::GetTokenAndSlotFromName (const PRUnichar *aName,
+					nsIPK11Token **aToken,
+					nsIPKCS11Slot **aSlot)
+{
+	nsresult rv = NS_ERROR_FAILURE;
+	*aToken = nsnull;
+	*aSlot = nsnull;
+
+	nsCOMPtr<nsIPK11TokenDB> tokenDB = do_GetService("@mozilla.org/security/pk11tokendb;1");
+	nsCOMPtr<nsIPKCS11ModuleDB> pkcs11DB = do_GetService("@mozilla.org/security/pkcs11moduledb;1");
+	if (!tokenDB || !pkcs11DB) return rv;
+
+	rv = tokenDB->FindTokenByName (aName, aToken);
+	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && *aToken, rv);
+
+	pkcs11DB->FindSlotByName (aName, aSlot);
+
+	NS_ENSURE_TRUE (*aSlot, NS_ERROR_FAILURE);
+
+#ifdef GNOME_ENABLE_DEBUG
+	/* Dump some info about this token */
+	nsIPK11Token *token = *aToken;
+	PRUnichar *tName, *tLabel, *tManID, *tHWVersion, *tFWVersion, *tSN;
+	PRInt32 minPwdLen;
+	PRBool needsInit, isHW, needsLogin, isFriendly;
+
+	token->GetTokenName(&tName);
+	token->GetTokenLabel(&tLabel);
+	token->GetTokenManID(&tManID);
+	token->GetTokenHWVersion(&tHWVersion);
+	token->GetTokenFWVersion(&tFWVersion);
+	token->GetTokenSerialNumber(&tSN);
+	token->GetMinimumPasswordLength(&minPwdLen);
+	token->GetNeedsUserInit(&needsInit);
+	token->IsHardwareToken(&isHW);
+	token->NeedsLogin(&needsLogin);
+	token->IsFriendly(&isFriendly);
+
+	g_print ("Token '%s' has \nName: %s\nLabel: %s\nManID: %s\nHWversion: %s\nFWVersion: %s\nSN: %s\n"
+			"MinPwdLen: %d\nNeedsUserInit: %d\nIsHWToken: %d\nNeedsLogin: %d\nIsFriendly: %d\n\n",
+		NS_ConvertUTF16toUTF8(aName).get(),
+
+		NS_ConvertUTF16toUTF8(tName).get(),
+		NS_ConvertUTF16toUTF8(tLabel).get(),
+		NS_ConvertUTF16toUTF8(tManID).get(),
+		NS_ConvertUTF16toUTF8(tHWVersion).get(),
+		NS_ConvertUTF16toUTF8(tFWVersion).get(),
+		NS_ConvertUTF16toUTF8(tSN).get(),
+		minPwdLen,
+		needsInit,
+		isHW,
+		needsLogin,
+		isFriendly);
+
+	nsIPKCS11Slot *slot = *aSlot;
+	PRUnichar*slDesc;
+	slot->GetDesc(&slDesc);
+	g_print ("Slot description: %s\n", NS_ConvertUTF16toUTF8 (slDesc).get());
+#endif
+
+	return NS_OK;
+}
+  
+/* nsICertificateDialogs */
+
 NS_IMETHODIMP
 GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,
                                       const nsACString &targetURL,
@@ -312,9 +394,7 @@ GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,
 	nsString commonName;
 	cert->GetCommonName (commonName);
 
-	nsCString cCommonName;
-	NS_UTF16ToCString (commonName,
-			   NS_CSTRING_ENCODING_UTF8, cCommonName);
+	NS_ConvertUTF16toUTF8 cCommonName (commonName);
 
 	nsCString cTargetUrl (targetURL);
 
@@ -355,9 +435,7 @@ GtkNSSDialogs::ConfirmUnknownIssuer (nsIInterfaceRequestor *ctx,
 	nsString commonName;
 	cert->GetCommonName (commonName);
 
-	nsCString cCommonName;
-	NS_UTF16ToCString (commonName,
-			   NS_CSTRING_ENCODING_UTF8, cCommonName);
+	NS_ConvertUTF16toUTF8 cCommonName (commonName);
 
 	secondary = g_markup_printf_escaped
 		           (_("It was not possible to automatically trust “%s”. "
@@ -452,9 +530,7 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 	nsString commonName;
 	cert->GetCommonName (commonName);
 
-	nsCString cCommonName;
-	NS_UTF16ToCString (commonName,
-			   NS_CSTRING_ENCODING_UTF8, cCommonName);
+	NS_ConvertUTF16toUTF8 cCommonName (commonName);
 
 	LL_DIV (normalizedTime, timeToUse, PR_USEC_PER_SEC);
 	LL_L2UI (t, normalizedTime);
@@ -463,6 +539,7 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 	 * strftime(3) */
 	strftime (formattedDate, sizeof(formattedDate), _("%a %d %b %Y"), 
 		  localtime_r (&t, &tm));
+	/* FIXME! this isn't actually correct, LC_CTIME codeset could be different than locale codeset! */
 	fdate = g_locale_to_utf8 (formattedDate, -1, NULL, NULL, NULL);
 
 	secondary = g_markup_printf_escaped (text, cCommonName.get(), fdate);
@@ -483,59 +560,39 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 }
 
 /* void notifyCrlNextupdate (in nsIInterfaceRequestor socketInfo, 
-   in AUTF8String targetURL, in nsIX509Cert cert); */
+   			     in AUTF8String targetURL,
+ 			     in nsIX509Cert cert); */
 NS_IMETHODIMP 
 GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
-				    const nsACString & targetURL, nsIX509Cert *cert)
+				    const nsACString & targetURL,
+				    nsIX509Cert *cert)
 {
-	GtkWidget *dialog, *label;
-	char *msg, *primary, *secondary;
-
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
-	dialog = gtk_dialog_new_with_buttons ("",
-					      GTK_WINDOW (gparent),
-					      GTK_DIALOG_DESTROY_WITH_PARENT,
-					      GTK_STOCK_OK,
-					      GTK_RESPONSE_OK,
-					      (char *) NULL);
-
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
-
-	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_ERROR,
-			    &label, NULL);
+	nsCString cTargetUrl (targetURL);
 
 	nsString commonName;
 	cert->GetCommonName (commonName);
 
-	nsCString cCommonName;
-	NS_UTF16ToCString (commonName,
-			   NS_CSTRING_ENCODING_UTF8, cCommonName);
+	GtkWidget *dialog = gtk_message_dialog_new
+				(GTK_WINDOW (gparent),
+				 GTK_DIALOG_DESTROY_WITH_PARENT,
+				 GTK_MESSAGE_ERROR,
+				 GTK_BUTTONS_OK,
+				 _("Cannot establish connection to “%s”"),
+				 cTargetUrl.get ());
 
-	nsCString cTargetUrl (targetURL);
+	gtk_message_dialog_format_secondary_text
+			(GTK_MESSAGE_DIALOG (dialog),
+			 _("The certificate revocation list (CRL) from “%s” "
+			   "needs to be updated.\n\n"
+			   "Please ask your system administrator for assistance."),
+			 NS_ConvertUTF16toUTF8 (commonName).get ());
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
-	primary = g_markup_printf_escaped (_("Cannot establish connection to “%s”."),
-					   cTargetUrl.get());
-
-	secondary = g_markup_printf_escaped (_("The certificate revocation list (CRL) from “%s” "
-					       "needs to be updated."),
-					     cCommonName.get());
-	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n\n%s",
-			       primary, secondary,
-			       _("Please ask your system administrator for assistance."));
-	
-	gtk_label_set_markup (GTK_LABEL (label), msg);
-
-	g_free (primary);
-	g_free (secondary);
-	g_free (msg);
-
-	gtk_widget_show_all (dialog);
-
-	g_signal_connect (G_OBJECT (dialog),
-			  "response",
-			  (GCallback)gtk_widget_destroy, NULL);
+	g_signal_connect (dialog, "response",
+			  (GCallback) gtk_widget_destroy, NULL);
 
 	gtk_widget_show_all (dialog);
 	return NS_OK;
@@ -581,9 +638,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	nsString commonName;
 	cert->GetCommonName (commonName);
 
-	nsCString cCommonName;
-	NS_UTF16ToCString (commonName,
-			   NS_CSTRING_ENCODING_UTF8, cCommonName);
+	NS_ConvertUTF16toUTF8 cCommonName (commonName);
 
 	primary = g_markup_printf_escaped (_("Trust new Certificate Authority “%s” to identify web sites?"),
 					   cCommonName.get());
@@ -674,97 +729,13 @@ GtkNSSDialogs::NotifyCACertExists (nsIInterfaceRequestor *ctx)
 	return NS_OK;
 }
 
-struct SetPasswordCallback
-{
-	GtkWidget *entry1;
-	GtkWidget *entry2;
-	GtkWidget *widget;
-};
-
-
-static void
-set_password_entry_changed_cb (GtkEditable *editable, void * _data)
-{
-	SetPasswordCallback * data = (SetPasswordCallback*)_data;
-	gchar * text1 = gtk_editable_get_chars 
-		                    (GTK_EDITABLE(data->entry1), 0, -1);
-	gchar * text2 = gtk_editable_get_chars 
-		                    (GTK_EDITABLE(data->entry2), 0, -1);
-
-	if (strcmp (text1, text2) == 0)
-	{
-		gtk_widget_set_sensitive (data->widget, TRUE);
-	}
-	else
-	{
-		gtk_widget_set_sensitive (data->widget, FALSE);
-	}
-
-	g_free (text1);
-	g_free (text2);
-}
-
-
-/**
- *  Calculate the quality of a password. The algorithm used is taken
- *  directly from mozilla in:
- *     $MOZSRC/security/manager/pki/resources/content/password.js
- */
-static void
-password_quality_meter_cb (GtkEditable *editable, GtkWidget *progress)
-{
-	gchar * text = gtk_editable_get_chars (editable, 0, -1);
-
-	/* Get the length */
-	glong length = g_utf8_strlen (text, -1);
-
-	/* Count the number of number, symbols and uppercase chars */
-	gint uppercase = 0;
-	gint symbols = 0;
-	gint numbers = 0;
-	for( const gchar * p = text; *p; p = g_utf8_find_next_char (p, NULL) )
-	{
-		gunichar uc = g_utf8_get_char(p);
-		if (g_unichar_isdigit (uc))
-		{
-			numbers++;
-		}
-		else if (g_unichar_isupper (uc))
-		{
-			uppercase++;
-		}
-		else if (g_unichar_islower (uc))
-		{
-			/* Not counted */
-		}
-		else if (g_unichar_isgraph (uc))
-		{
-			symbols++;
-		}
-	}
-
-	if (length    > 5) length = 5;
-	if (numbers   > 3) numbers = 3;
-	if (symbols   > 3) symbols = 3;
-	if (uppercase > 3) uppercase = 3;
-	
-	gint strength = ((length*10)-20) + (numbers*10) + (symbols*15) + (uppercase*10);
-	if (strength < 0)   strength = 0;
-	if (strength > 100) strength = 100;
-
-	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress), (strength/100.0));
-
-	g_free (text);
-}
-
-
+/* FIXME: This interface sucks! There is way to know the name of the certificate! */
 NS_IMETHODIMP 
 GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx, 
 				    nsAString &_password,
 				    PRBool *_retval)
 {
-	GtkWidget *dialog, *table, *entry1, *entry2, *button, *label, *vbox;
-	GtkWidget *progress;
+	GtkWidget *dialog;
 	char *msg;
 
 	nsresult rv;
@@ -773,112 +744,38 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	if (NS_FAILED (rv)) return rv;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
-	dialog = gtk_dialog_new_with_buttons ("", gparent,
-					      GTK_DIALOG_DESTROY_WITH_PARENT,
-					      GTK_STOCK_CANCEL,
-					      GTK_RESPONSE_CANCEL,
-					      (char *) NULL);
+	dialog = ephy_password_dialog_new (gparent,
+					   _("Select Password"),
+					   EphyPasswordDialogFlags(EPHY_PASSWORD_DIALOG_FLAGS_SHOW_NEW_PASSWORD |
+								   EPHY_PASSWORD_DIALOG_FLAGS_SHOW_QUALITY_METER));
+	gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 
-	if (gparent)
-	{
-		gtk_window_group_add_window (ephy_gui_ensure_window_group (gparent),
-					     GTK_WINDOW (dialog));
-	}
+	/* FIXME: set accept button text to (_("_Back Up Certificate") ?
+	 * That's not actually correct, since this function is also called from other places!
+	 */
 
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
-
-	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_QUESTION,
-			    &label, &vbox);
-
-	/* Translators: this is the action of the certificate being exported to a backup file */
-	button = gtk_button_new_with_mnemonic (_("_Back Up Certificate"));
-	gtk_widget_show (button);
-	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, GTK_RESPONSE_OK);
-	GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-
-	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
-			       _("Select password."),
-			       _("Select a password to protect this certificate."));
-	gtk_label_set_markup (GTK_LABEL (label), msg);
+	msg = g_markup_printf_escaped (_("Select a password to protect this certificate"));
+	gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), msg);
 	g_free (msg);
 
-	table = gtk_table_new (3, 3, FALSE);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-	gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
-
-	label = gtk_label_new (NULL);
-	entry1 = gtk_entry_new ();
-	entry2 = gtk_entry_new ();
-	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), _("_Password:"));
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry1);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_entry_set_visibility (GTK_ENTRY (entry1), FALSE);
-	g_signal_connect_swapped (entry1, "activate",
-				  (GCallback)gtk_widget_grab_focus,
-				  entry2);
-
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, 
-			  GTK_FILL, GTK_FILL, 0, 0 );
-	gtk_table_attach (GTK_TABLE (table), entry1, 1, 2, 0, 1,
-			  GTK_FILL, GTK_FILL, 0, 0 );
-
-	label = gtk_label_new (NULL);
-	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), _("Con_firm password:"));
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry2);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_entry_set_visibility (GTK_ENTRY (entry2), FALSE);
-	gtk_entry_set_activates_default (GTK_ENTRY (entry2), TRUE);
-
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, 
-			  GTK_FILL, GTK_FILL, 0, 0 );
-	gtk_table_attach (GTK_TABLE (table), entry2, 1, 2, 1, 2,
-			  GTK_FILL, GTK_FILL, 0, 0 );
-
-	/* TODO: We need a better password quality meter */
-	label = gtk_label_new (_("Password quality:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	progress = gtk_progress_bar_new ();
-	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress), 0.0);
-
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, 
-			  GTK_FILL, GTK_FILL, 0, 0 );
-	gtk_table_attach (GTK_TABLE (table), progress, 1, 2, 2, 3,
-			  GTK_FILL, GTK_FILL, 0, 0 );
-
-	SetPasswordCallback callback_data = { entry1, entry2, button };
-	g_signal_connect (entry1, "changed",
-			  (GCallback)set_password_entry_changed_cb,
-			  &callback_data);
-
-	g_signal_connect (entry1, "changed",
-			  (GCallback)password_quality_meter_cb,
-			  progress);
-
-	g_signal_connect (entry2, "changed",
-			  (GCallback)set_password_entry_changed_cb,
-			  &callback_data);
-
-
-	gtk_widget_show_all (dialog);
-	int ret = gtk_dialog_run (GTK_DIALOG (dialog));
-
-	if (ret != GTK_RESPONSE_OK)
+	int response = gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_hide (dialog);
+	
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		*_retval = PR_FALSE;
-	}
-	else
-	{
-		gchar *text = gtk_editable_get_chars (GTK_EDITABLE (entry1), 0, -1);
-		NS_CStringToUTF16 (nsCString (text),
+		const char *text = ephy_password_dialog_get_new_password (EPHY_PASSWORD_DIALOG (dialog));
+		g_return_val_if_fail (text != NULL, NS_ERROR_FAILURE);
+		NS_CStringToUTF16 (nsDependentCString (text),
 			           NS_CSTRING_ENCODING_UTF8, _password);
-		g_free (text);
-		*_retval = PR_TRUE;
 	}
+
+	*_retval = response == GTK_RESPONSE_ACCEPT;
+
 	gtk_widget_destroy (dialog);
+
 	return NS_OK;
 }
 
@@ -887,8 +784,7 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 				     nsAString &_password,
 				     PRBool *_retval)
 {
-	GtkWidget *dialog, *hbox, *label, *entry, *vbox;
-	char *msg;
+	g_print ("GtkNSSDialogs::GetPKCS12FilePassword\n");
 
 	nsresult rv;
 	AutoJSContextStack stack;
@@ -896,61 +792,33 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	if (NS_FAILED (rv)) return rv;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
-	dialog = gtk_dialog_new_with_buttons ("", gparent,
-					      GTK_DIALOG_DESTROY_WITH_PARENT,
-					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					      _("I_mport Certificate"), GTK_RESPONSE_OK,
-					      (char *) NULL);
+	GtkWidget *dialog = ephy_password_dialog_new
+				(gparent,
+				 "",
+				 EphyPasswordDialogFlags (EPHY_PASSWORD_DIALOG_FLAGS_SHOW_PASSWORD));
+	EphyPasswordDialog *password_dialog = EPHY_PASSWORD_DIALOG (dialog);
+	/* FIXME: set accept button text to _("I_mport Certificate") ? */
 
-	if (gparent)
-	{
-		gtk_window_group_add_window (ephy_gui_ensure_window_group (gparent),
-					     GTK_WINDOW (dialog));
-	}
+	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
-
-	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_QUESTION,
-			    &label, &vbox);
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-
-	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
-			       _("Password required."),
-			       _("Enter the password for this certificate."));
-	gtk_label_set_markup (GTK_LABEL (label), msg);
+	/* FIXME: mozilla sucks, no way to get the name of the certificate / cert file! */
+	char *msg = g_markup_printf_escaped (_("Enter the password for this certificate"));
+	gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), msg);
 	g_free (msg);
+			
+	int response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-	hbox = gtk_hbox_new (FALSE, 6);
-	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-	
-	label = gtk_label_new (NULL);
-	entry = gtk_entry_new ();
-
-	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), _("_Password:"));
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-	gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
-	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-
-	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
-
-	gtk_widget_show_all (dialog);
-	int ret = gtk_dialog_run (GTK_DIALOG (dialog));
-
-	if (ret != GTK_RESPONSE_OK)
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		*_retval = PR_FALSE;
+		const char *pwd = ephy_password_dialog_get_password (password_dialog);
+		NS_CStringToUTF16 (nsDependentCString (pwd),
+				   NS_CSTRING_ENCODING_UTF8, _password);
 	}
-	else
-	{
-		gchar * text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
-		NS_CStringToUTF16 (nsCString (text),
-			           NS_CSTRING_ENCODING_UTF8, _password);
-		g_free (text);
-		*_retval = PR_TRUE;
-	}
+
+	*_retval = response == GTK_RESPONSE_ACCEPT;
+
 	gtk_widget_destroy (dialog);
 
 	return NS_OK;
@@ -1036,17 +904,11 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 	if (NS_FAILED(rv)) return rv;
 
 	int row = 0;
-	nsCString cOrg;
-	NS_UTF16ToCString (org, NS_CSTRING_ENCODING_UTF8, cOrg);
-	set_table_row (table, row, _("Organization:"), cOrg.get ());
+	set_table_row (table, row, _("Organization:"), NS_ConvertUTF16toUTF8 (org).get ());
 
-	nsCString cOrgUnit;
-	NS_UTF16ToCString (orgUnit, NS_CSTRING_ENCODING_UTF8, cOrgUnit);
-	set_table_row (table, row, _("Unit:"), cOrgUnit.get ());
+	set_table_row (table, row, _("Unit:"), NS_ConvertUTF16toUTF8 (orgUnit).get ());
 
-	nsCString cNextUpdate;
-	NS_UTF16ToCString (nextUpdate, NS_CSTRING_ENCODING_UTF8, cNextUpdate);
-	set_table_row (table, row, _("Next Update:"), cNextUpdate.get ());
+	set_table_row (table, row, _("Next Update:"), NS_ConvertUTF16toUTF8 (nextUpdate).get ());
 
 	gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
 
@@ -1079,10 +941,8 @@ set_label_cert_attribute (GladeXML* gxml, const char* label_id, nsAString &value
 	}
 	else
 	{
-		nsCString cValue;
-		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
 		gtk_label_set_use_markup (GTK_LABEL (label), FALSE);
-		gtk_label_set_text (GTK_LABEL (label), cValue.get());
+		gtk_label_set_text (GTK_LABEL (label), NS_ConvertUTF16toUTF8 (value).get());
 	}
 }
 
@@ -1116,8 +976,7 @@ fill_cert_chain_tree (GtkTreeView *treeview, nsIArray *certChain)
 		rv = nsCert->GetCommonName (value);
 		if (NS_FAILED(rv)) return FALSE;
 
-		nsCString cValue;
-		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
+		NS_ConvertUTF16toUTF8 cValue (value);
 
 		nsIX509Cert *nsCertP = nsCert;
 		if (value.Length())
@@ -1161,14 +1020,11 @@ add_asn1_object_to_tree(GtkTreeModel *model, nsIASN1Object *object, GtkTreeIter 
 	nsString dispNameU;
 	object->GetDisplayName(dispNameU);
 
-	nsCString cDispNameU;
-	NS_UTF16ToCString (dispNameU, NS_CSTRING_ENCODING_UTF8, cDispNameU);
-
 	GtkTreeIter iter;
 	gtk_tree_store_append (GTK_TREE_STORE (model), &iter, parent);
 
 	gtk_tree_store_set (GTK_TREE_STORE(model), &iter,
-			    0, cDispNameU.get(),
+			    0, NS_ConvertUTF16toUTF8 (dispNameU).get(),
 			    1, object,
 			    -1);
 
@@ -1243,10 +1099,7 @@ field_tree_view_selection_changed_cb (GtkTreeSelection *selection,
 		nsString dispValU;
 		object->GetDisplayValue(dispValU);
 
-		nsCString cDispValU;
-		NS_UTF16ToCString (dispValU, NS_CSTRING_ENCODING_UTF8, cDispValU);
-
-		gtk_text_buffer_set_text (text_buffer, cDispValU.get(), -1);
+		gtk_text_buffer_set_text (text_buffer, NS_ConvertUTF16toUTF8 (dispValU).get(), -1);
 	}
 	else
 	{
@@ -1427,11 +1280,7 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 		GtkWidget *indent;
 		for (PRUint32 i = 0 ; i < count ; i++)
 		{
-			nsCString msg;
-			NS_UTF16ToCString (nsString(usage[i]),
-					   NS_CSTRING_ENCODING_UTF8, msg);
-
-			GtkWidget *label = gtk_label_new(msg.get());
+			GtkWidget *label = gtk_label_new (NS_ConvertUTF16toUTF8 (usage[i]).get());
 			gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 			gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 			nsMemory::Free (usage[i]);
@@ -1443,7 +1292,6 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	
 		gtk_box_pack_start (GTK_BOX (widget), indent, FALSE, FALSE, 0);
 	}
-
 
 	cert->GetCommonName (value);
 	set_label_cert_attribute (gxml, "label_cn", value);
@@ -1513,5 +1361,183 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	}
 
 	gtk_widget_destroy (dialog);
+	return NS_OK;
+}
+
+/* nsITokenPasswordDialogs */
+
+/* NOTE: This interface totally sucks, see https://bugzilla.mozilla.org/show_bug.cgi?id=306993 */
+
+/* void setPassword (in nsIInterfaceRequestor ctx, in wstring tokenName, out boolean canceled); */
+NS_IMETHODIMP
+GtkNSSDialogs::SetPassword(nsIInterfaceRequestor *aCtx,
+			   const PRUnichar *aTokenName,
+			   PRBool *aCancelled)
+{
+	NS_ENSURE_ARG_POINTER(aCancelled);
+
+	nsresult rv;
+	nsCOMPtr<nsIPK11Token> token;
+	nsCOMPtr<nsIPKCS11Slot> slot;
+	rv = GetTokenAndSlotFromName (aTokenName, getter_AddRefs (token),
+				      getter_AddRefs (slot));
+	NS_ENSURE_SUCCESS (rv, rv);
+	NS_ENSURE_TRUE (token && slot, NS_ERROR_FAILURE);
+
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return rv;
+
+	PRUint32 status = nsIPKCS11Slot::SLOT_UNINITIALIZED;
+	slot->GetStatus (&status);
+
+	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (aCtx);
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
+
+	EphyPasswordDialogFlags flags =
+		EphyPasswordDialogFlags (EPHY_PASSWORD_DIALOG_FLAGS_SHOW_NEW_PASSWORD |
+					 EPHY_PASSWORD_DIALOG_FLAGS_SHOW_QUALITY_METER);
+	if (status != nsIPKCS11Slot::SLOT_UNINITIALIZED)
+		flags = EphyPasswordDialogFlags (flags | EPHY_PASSWORD_DIALOG_FLAGS_SHOW_PASSWORD);
+
+	GtkWidget *dialog = ephy_password_dialog_new
+				(gparent,
+				 _("Change Token Password"),
+				 flags);
+	EphyPasswordDialog *password_dialog = EPHY_PASSWORD_DIALOG (dialog);
+
+	char *message = g_markup_printf_escaped (_("Change the password for the “%s” token"),
+						 NS_ConvertUTF16toUTF8 (aTokenName).get ());
+	gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog),
+				       message);
+	g_free (message);
+
+	int response;
+	nsString oldPassword;
+	PRBool pwdOk, needsLogin;
+	do {
+		response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+		if (status != nsIPKCS11Slot::SLOT_UNINITIALIZED)
+		{
+			const char *pwd = ephy_password_dialog_get_password (password_dialog);
+			oldPassword = NS_ConvertUTF8toUTF16 (pwd);
+		}
+	} while (response == GTK_RESPONSE_OK &&
+		 status != nsIPKCS11Slot::SLOT_UNINITIALIZED &&
+		 NS_SUCCEEDED (token->NeedsLogin (&needsLogin)) && needsLogin &&
+		 NS_SUCCEEDED (token->CheckPassword (oldPassword.get (), &pwdOk) &&
+		 !pwdOk));
+
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		const char *pwd = ephy_password_dialog_get_new_password (password_dialog);
+			
+		NS_ConvertUTF8toUTF16 newPassword (pwd);
+
+		if (status == nsIPKCS11Slot::SLOT_UNINITIALIZED)
+		{
+			rv = token->InitPassword (newPassword.get ());
+		}
+		else
+		{
+			rv = token->ChangePassword (oldPassword.get (),
+						    newPassword.get ());
+		}
+	}
+	else
+	{
+		rv = NS_OK;
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+
+	*aCancelled = response != GTK_RESPONSE_ACCEPT;
+
+	return rv;
+}
+
+/* void getPassword (in nsIInterfaceRequestor ctx, in wstring tokenName, out wstring password, out boolean canceled); */
+NS_IMETHODIMP
+GtkNSSDialogs::GetPassword(nsIInterfaceRequestor *aCtx,
+			   const PRUnichar *aTokenName,
+			   PRUnichar **aPassword,
+			   PRBool *aCancelled)
+{
+	NS_ENSURE_ARG_POINTER(aCancelled);
+
+	nsresult rv;
+	nsCOMPtr<nsIPK11Token> token;
+	nsCOMPtr<nsIPKCS11Slot> slot;
+	rv = GetTokenAndSlotFromName (aTokenName, getter_AddRefs (token),
+				      getter_AddRefs (slot));
+	NS_ENSURE_SUCCESS (rv, rv);
+	NS_ENSURE_TRUE (token && slot, NS_ERROR_FAILURE);
+
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return rv;
+
+	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (aCtx);
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
+
+	EphyPasswordDialogFlags flags =
+		EphyPasswordDialogFlags (EPHY_PASSWORD_DIALOG_FLAGS_SHOW_PASSWORD);
+
+	GtkWidget *dialog = ephy_password_dialog_new
+				(gparent,
+				 _("Get Token Password"), /* FIXME */
+				 flags);
+	EphyPasswordDialog *password_dialog = EPHY_PASSWORD_DIALOG (dialog);
+
+	char *message = g_markup_printf_escaped (_("Please enter the password for the “%s” token"),
+						 NS_ConvertUTF16toUTF8 (aTokenName).get ());
+	gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog),
+				       message);
+	g_free (message);
+
+	int response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		const char *pwd = ephy_password_dialog_get_password (password_dialog);
+		*aPassword = NS_StringCloneData (NS_ConvertUTF8toUTF16 (pwd));
+	}
+	
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+
+	*aCancelled = response != GTK_RESPONSE_ACCEPT;
+
+	return NS_OK;
+}
+
+/* nsITokenDialogs */
+
+/* void ChooseToken (in nsIInterfaceRequestor ctx, [array, size_is (count)] in wstring tokenNameList, in unsigned long count, out wstring tokenName, out boolean canceled); */
+NS_IMETHODIMP
+GtkNSSDialogs::ChooseToken (nsIInterfaceRequestor *ctx,
+			    const PRUnichar **tokenNameList,
+			    PRUint32 count,
+			    PRUnichar **tokenName,
+			    PRBool *canceled)
+{
+	/* FIXME: implement me! The only caller is from nsKeygenHandler */
+	return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+/* nsIDOMCryptoDialogs */
+
+/* Note: this interface sucks! See https://bugzilla.mozilla.org/show_bug.cgi?id=341914 */
+		
+/* boolean ConfirmKeyEscrow (in nsIX509Cert escrowAuthority); */
+NS_IMETHODIMP
+GtkNSSDialogs::ConfirmKeyEscrow (nsIX509Cert *aEscrowAuthority,
+				 PRBool *_retval)
+{
+	/* FIXME: show a dialogue to warn the user! */
+
+	/* Escrow is evil, don't allow it. */
+	*_retval = PR_FALSE;
+
 	return NS_OK;
 }

@@ -197,14 +197,9 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
 	gtk_widget_show (label);
 	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-	
-
-	nsCString utf8_cn;
-	NS_UTF16ToCString (nsString (cn),
-			   NS_CSTRING_ENCODING_UTF8, utf8_cn);
 
 	msg = g_markup_printf_escaped (_("Choose a certificate to present as identification to “%s”."),
-				       utf8_cn.get());
+				       NS_ConvertUTF16toUTF8 (cn).get());
 	markup_text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
 				       _("Select a certificate to identify yourself."),
 				       msg);
@@ -216,18 +211,10 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 	for (i = 0; i < count; i++)
 	{
-		nsCString certnick;
-		nsCString certdetail;
-
-		NS_UTF16ToCString (nsString (certNickList[i]),
-				   NS_CSTRING_ENCODING_UTF8, certnick);
-		NS_UTF16ToCString (nsString (certDetailsList[i]),
-				   NS_CSTRING_ENCODING_UTF8, certdetail);
-
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
-				    0, certnick.get(),
-				    1, certdetail.get(),
+				    0, NS_ConvertUTF16toUTF8 (certNickList[i]).get(),
+				    1, NS_ConvertUTF16toUTF8 (certDetailsList[i]).get(),
 				    -1);
 	}
 

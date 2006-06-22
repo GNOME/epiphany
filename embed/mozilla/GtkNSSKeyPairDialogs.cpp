@@ -23,16 +23,6 @@
 /*
  * This file provides Gtk implementations of the mozilla Generating Key Pair
  * dialogs.
- *
- * This implementation takes some liberties with the mozilla API. Although the
- * API requires a nsIDomWindowInternal, it only actually calls the Close()
- * function on that class. Therefore we provide a dummy class that only 
- * implements that function (it just sets a flag). 
- *
- * Periodically we check to see whether the dialog should have been closed. If
- * it should be closed, then the key generation has finished, so close the dialog
- * (using gtk_dialog_response), and return.
- *
  */
 
 #include "mozilla-config.h"
@@ -108,6 +98,8 @@ begin_busy (GtkWidget *widget)
 	if (!GTK_WIDGET_REALIZED (widget)) gtk_widget_realize (GTK_WIDGET(widget));
 
 	gdk_window_set_cursor (GTK_WIDGET (widget)->window, cursor);
+
+	/* Eek! FIXME: AutoJSContextStack! */
 	while (gtk_events_pending ()) gtk_main_iteration ();
 }
 
@@ -139,8 +131,8 @@ generating_timeout_cb (KeyPairInfo *info)
 }
 
 
-/* void displayGeneratingKeypairInfo (in nsIInterfaceRequestor ctx, in nsIKeygenTh
-read runnable); */
+/* void displayGeneratingKeypairInfo (in nsIInterfaceRequestor ctx,
+ 				      in nsIKeygenThread runnable); */
 NS_IMETHODIMP
 GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 						    nsIKeygenThread *runnable)

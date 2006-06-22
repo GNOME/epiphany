@@ -19,6 +19,7 @@ NOINST_H_FILES = \
 	ephy-node-filter.h			\
 	ephy-node-common.h			\
 	ephy-object-helpers.h			\
+	ephy-password-dialog.h			\
 	ephy-prefs.h				\
 	ephy-shlib-loader.h			\
 	ephy-signal-accumulator.h		\
@@ -29,6 +30,7 @@ NOINST_H_FILES = \
 TYPES_H_FILES = \
 	ephy-adblock.h				\
 	ephy-node.h				\
+	ephy-password-dialog.h			\
 	ephy-state.h
 
 INST_H_FILES = \
@@ -57,6 +59,7 @@ libephymisc_la_SOURCES = \
 	ephy-node-common.h			\
 	ephy-node-db.c				\
 	ephy-object-helpers.c			\
+	ephy-password-dialog.c			\
 	ephy-prefs.h				\
 	ephy-shlib-loader.c			\
 	ephy-signal-accumulator.c		\

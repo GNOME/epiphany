@@ -1,5 +1,19 @@
 2006-06-22  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/mozilla/GtkNSSDialogs.h:
+	* embed/mozilla/GtkNSSKeyPairDialogs.cpp:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* lib/Makefile.am:
+	A lib/ephy-password-dialog.c:
+	A lib/ephy-password-dialog.h:
+
+	Implement nsITokenPasswordDialogs. Misc cleanups and mozilla string
+	simplification now that we depend on gecko 1.8.
+
+2006-06-22  Christian Persch  <chpe@cvs.gnome.org>
+
 	* m4/gecko.m4:
 
 	Fix 'unknown gecko' error output.
