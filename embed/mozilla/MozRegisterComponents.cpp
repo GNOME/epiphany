@@ -333,6 +333,7 @@ mozilla_register_components (void)
 	rv = RegisterCategories();
 	ret = NS_SUCCEEDED (rv); 
 
+#ifdef HAVE_GECKO_1_9
 	/* Unregister xpinstall content handler */
 	nsCID *cidPtr = nsnull;
 	rv = cr->ContractIDToCID (XPINSTALL_CONTRACTID, &cidPtr);
@@ -352,6 +353,7 @@ mozilla_register_components (void)
 	{
 		g_warning ("Failed to unregister xpinstall content handler!\n");
 	}
+#endif
 
 	return ret;
 }

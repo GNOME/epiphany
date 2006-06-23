@@ -1,3 +1,10 @@
+2006-06-23  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* embed/mozilla/MozRegisterComponents.cpp: (mozilla_register_components):
+
+	Fix a warning from gecko "Bad contract id registed with the script namespace manager".
+	Only unregister xpinstall factory with gecko >= 1.9.
+
 2006-06-22  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
