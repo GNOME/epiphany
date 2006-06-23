@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-20 15:49+0200\n"
-"PO-Revision-Date: 2006-06-20 15:54+0200\n"
+"POT-Creation-Date: 2006-06-23 11:18+0200\n"
+"PO-Revision-Date: 2006-06-23 13:00+0200\n"
 "Last-Translator: Jakub Friedl <jfriedl@suse.cz>\n"
 "Language-Team:  <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -533,7 +533,7 @@ msgid "MD5 Fingerprint:"
 msgstr "Otisk MD5:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1041
+#: ../embed/mozilla/GtkNSSDialogs.cpp:907
 msgid "Organization:"
 msgstr "Organizace:"
 
@@ -1614,8 +1614,6 @@ msgstr "Jméno _uživatele:"
 
 #: ../embed/mozilla/EphyPromptService.cpp:798
 #: ../embed/mozilla/EphyPromptService.cpp:825
-#: ../embed/mozilla/GtkNSSDialogs.cpp:816
-#: ../embed/mozilla/GtkNSSDialogs.cpp:931
 msgid "_Password:"
 msgstr "_Heslo:"
 
@@ -1648,24 +1646,25 @@ msgstr "Soubory XUL"
 msgid "Print this page?"
 msgstr "Vytisknout tuto stránku?"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:225
+#: ../embed/mozilla/GeckoPrintSession.cpp:228
 #, c-format
 msgid "Page %d of %d"
 msgstr "Strana %d z %d"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:253
+#: ../embed/mozilla/GeckoPrintSession.cpp:256
 msgid "Cancelling print"
 msgstr "Tisk se ruší"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:320
+#. FIXME text!
+#: ../embed/mozilla/GeckoPrintSession.cpp:318
 msgid "Spooling..."
 msgstr "Načítá se..."
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:334
+#: ../embed/mozilla/GeckoPrintSession.cpp:332
 msgid "Print error"
 msgstr "Chyba tisku"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:593
+#: ../embed/mozilla/GeckoPrintSession.cpp:591
 #, c-format
 msgid "Printing “%s”"
 msgstr "Tiskne se „%s“"
@@ -1674,30 +1673,30 @@ msgstr "Tiskne se „%s“"
 msgid "_Select Certificate"
 msgstr "_Vybrat certifikát"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:206
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:201
 #, c-format
 msgid "Choose a certificate to present as identification to “%s”."
 msgstr "Vyberte certifikát, který předložit „%s” jako identifikaci."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:209
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:204
 msgid "Select a certificate to identify yourself."
 msgstr "Vyberte certifikát pro vaši identifikaci."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:246
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:233
 msgid "Certificate _Details"
 msgstr "_Detaily o certifikátu"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:246
-#: ../embed/mozilla/GtkNSSDialogs.cpp:563
+#: ../embed/mozilla/GtkNSSDialogs.cpp:260
+#: ../embed/mozilla/GtkNSSDialogs.cpp:620
 msgid "_View Certificate"
 msgstr "_Zobrazit certifikát"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:254
+#: ../embed/mozilla/GtkNSSDialogs.cpp:268
 msgid "_Accept"
 msgstr "_Přijmout"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:321
+#: ../embed/mozilla/GtkNSSDialogs.cpp:401
 #, c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
@@ -1707,18 +1706,18 @@ msgstr ""
 "Server „%s” vrátil informace o zabezpečení pro „%s”. Je možné, že někdo "
 "narušuje vaši komunikaci, aby získal důvěrné informace."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:327
+#: ../embed/mozilla/GtkNSSDialogs.cpp:407
 #, c-format
 msgid "You should only accept the security information if you trust “%s” and “%s”."
 msgstr ""
 "Informace o zabezpečení byste měli přijmout, jen pokud důvěřujete „%s” a „%"
 "s”."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:332
+#: ../embed/mozilla/GtkNSSDialogs.cpp:412
 msgid "Accept incorrect security information?"
 msgstr "Přijmout nesprávné informace o zabezpečení?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:363
+#: ../embed/mozilla/GtkNSSDialogs.cpp:441
 #, c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
@@ -1727,7 +1726,7 @@ msgstr ""
 "Nebylo možné automaticky věřit „%s”. Je možné, že někdo narušuje vaši "
 "komunikaci, aby získal důvěrné informace."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:369
+#: ../embed/mozilla/GtkNSSDialogs.cpp:447
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
@@ -1736,34 +1735,34 @@ msgstr ""
 "K serveru byste se měli připojit, jen pokud jste si jisti, že jste připojeni "
 "k „%s”."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:374
+#: ../embed/mozilla/GtkNSSDialogs.cpp:452
 msgid "Connect to untrusted site?"
 msgstr "Připojit se k nedůvěryhodnému serveru?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:378
+#: ../embed/mozilla/GtkNSSDialogs.cpp:456
 msgid "_Trust this security information from now on"
 msgstr "_Od teď důvěřovat těmto informacím o zabezpečení"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:379
+#: ../embed/mozilla/GtkNSSDialogs.cpp:457
 msgid "Co_nnect"
 msgstr "_Připojit"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:438
+#: ../embed/mozilla/GtkNSSDialogs.cpp:516
 msgid "Accept expired security information?"
 msgstr "Přijmout informace o zabezpečení po vypršení platnosti?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:440
+#: ../embed/mozilla/GtkNSSDialogs.cpp:518
 #, c-format
 msgid "The security information for “%s” expired on %s."
 msgstr "Informace o zabezpečení pro „%s” vypršely dne %s."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:446
+#: ../embed/mozilla/GtkNSSDialogs.cpp:524
 msgid "Accept not yet valid security information?"
 msgstr "Přijmout dosud neplatné informace o zabezpečení?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:448
+#: ../embed/mozilla/GtkNSSDialogs.cpp:526
 #, c-format
 msgid "The security information for “%s” isn't valid until %s."
 msgstr "Informace o zabezpečení pro „%s” nejsou platné do %s."
@@ -1771,42 +1770,46 @@ msgstr "Informace o zabezpečení pro „%s” nejsou platné do %s."
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:464
+#: ../embed/mozilla/GtkNSSDialogs.cpp:540
 msgid "%a %d %b %Y"
 msgstr "%a %d. %b %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:472
+#: ../embed/mozilla/GtkNSSDialogs.cpp:549
 msgid "You should ensure that your computer's time is correct."
 msgstr "Měli byste se přesvědčit, že čas ve vašem počítači je správný."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:518
+#: ../embed/mozilla/GtkNSSDialogs.cpp:583
 #, c-format
-msgid "Cannot establish connection to “%s”."
-msgstr "Nemohu se připojit k „%s”."
+msgid "Cannot establish connection to “%s”"
+msgstr ""
+"Nemohu se připojit k „%s“"
+"."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:521
+#: ../embed/mozilla/GtkNSSDialogs.cpp:588
 #, c-format
-msgid "The certificate revocation list (CRL) from “%s” needs to be updated."
-msgstr "Je potřeba aktualizovat seznam odvolání certifikátů (CRL) z „%s”."
+msgid ""
+"The certificate revocation list (CRL) from “%s” needs to be updated.\n"
+"\n"
+"Please ask your system administrator for assistance."
+msgstr ""
+"Je potřeba aktualizovat seznam odvolaných certifikátů (CRL) z „%s“.\n"
+"\n"
+"Poproste laskavě o pomoc svého administrátora."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:526
-msgid "Please ask your system administrator for assistance."
-msgstr "Požádejte prosím o pomoc svého správce systému."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:561
+#: ../embed/mozilla/GtkNSSDialogs.cpp:618
 msgid "Trust new Certificate Authority?"
 msgstr "Důvěřovat nové certifikační autoritě?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:566
+#: ../embed/mozilla/GtkNSSDialogs.cpp:623
 msgid "_Trust CA"
 msgstr "_Důvěřovat CA"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:588
+#: ../embed/mozilla/GtkNSSDialogs.cpp:643
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr "Důvěřovat nové certifikační autoritě „%s” pro identifikaci WWW serverů?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:593
+#: ../embed/mozilla/GtkNSSDialogs.cpp:648
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1814,109 +1817,109 @@ msgstr ""
 "Před důvěřováním certifikační autoritě (CA) byste měli ověřit, že certifikát "
 "je autentický."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:664
+#: ../embed/mozilla/GtkNSSDialogs.cpp:719
 msgid "Certificate already exists."
 msgstr "Certifikát již existuje."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:665
+#: ../embed/mozilla/GtkNSSDialogs.cpp:720
 msgid "The certificate has already been imported."
 msgstr "Certifikát již byl importován."
 
-#. Translators: this is the action of the certificate being exported to a backup file
-#: ../embed/mozilla/GtkNSSDialogs.cpp:796
-msgid "_Back Up Certificate"
-msgstr "_Zazálohovat certifikát"
+#: ../embed/mozilla/GtkNSSDialogs.cpp:750
+msgid "Select Password"
+msgstr "Zvolte heslo"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:803
-msgid "Select password."
-msgstr "Zvolte heslo."
+#. FIXME: set accept button text to (_("_Back Up Certificate") ?
+#. * That's not actually correct, since this function is also called from other places!
+#.
+#: ../embed/mozilla/GtkNSSDialogs.cpp:760
+msgid "Select a password to protect this certificate"
+msgstr "Zvolte heslo pro ochranu tohoto certifikátu"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:804
-msgid "Select a password to protect this certificate."
-msgstr "Zvolte heslo pro ochranu tohoto certifikátu."
+#. FIXME: mozilla sucks, no way to get the name of the certificate / cert file!
+#: ../embed/mozilla/GtkNSSDialogs.cpp:807
+msgid "Enter the password for this certificate"
+msgstr "Zadejte heslo pro tento certifikát"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:830
-msgid "Con_firm password:"
-msgstr "_Potvrďte heslo:"
-
-#. TODO: We need a better password quality meter
-#: ../embed/mozilla/GtkNSSDialogs.cpp:842
-msgid "Password quality:"
-msgstr "Kvalita hesla:"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:904
-msgid "I_mport Certificate"
-msgstr "_Importovat certifikát"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:920
-msgid "Password required."
-msgstr "Je vyžadováno heslo."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:921
-msgid "Enter the password for this certificate."
-msgstr "Zadejte heslo pro tento certifikát."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1010
+#: ../embed/mozilla/GtkNSSDialogs.cpp:878
 msgid "Certificate Revocation List Imported"
 msgstr "Seznam odvolání certifikátů importován"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1020
+#: ../embed/mozilla/GtkNSSDialogs.cpp:888
 msgid "Certificate Revocation List (CRL) successfully imported"
 msgstr "Seznam odvolání certifikátů (CRL) byl úspěšně importován"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1045
+#: ../embed/mozilla/GtkNSSDialogs.cpp:909
 msgid "Unit:"
 msgstr "Součást:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1049
+#: ../embed/mozilla/GtkNSSDialogs.cpp:911
 msgid "Next Update:"
 msgstr "Příští aktualizace:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1076
+#: ../embed/mozilla/GtkNSSDialogs.cpp:938
 msgid "Not part of certificate"
 msgstr "Není součást certifikátu"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1370
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1223
 msgid "Certificate Properties"
 msgstr "Vlastnosti certifikátu"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1392
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1245
 msgid "This certificate has been verified for the following uses:"
 msgstr "Tento certifikát byl ověřen pro následující použití:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1395
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1248
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Nemohu ověřit certifikát, protože byl odvolán."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1398
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1251
 msgid "Could not verify this certificate because it has expired."
 msgstr "Nemohu ověřit certifikát, protože mu vypršela platnost."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1401
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1254
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Nemohu ověřit certifikát, protože se mu nevěří."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1404
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1257
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr "Nemohu ověřit certifikát, protože vydavateli se nevěří."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1407
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1260
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Nemohu ověřit certifikát, protože vydavatel není znám."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1410
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1263
 msgid "Could not verify this certificate because the CA certificate is invalid."
 msgstr "Nemohu ověřit certifikát, protože certifikát CA není platný."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1415
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1268
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Nemohu ověřit certifikát z neznámého důvodu."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:185
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1405
+msgid "Change Token Password"
+msgstr "Změnit heslo tokenu"
+
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1409
+#, c-format
+msgid "Change the password for the “%s” token"
+msgstr "Změňte heslo pro token„%s“"
+
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1489
+msgid "Get Token Password"
+msgstr "Získat heslo tokenu"
+
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1493
+#, c-format
+msgid "Please enter the password for the “%s” token"
+msgstr "Prosím zadejte heslo pro token „%s“"
+
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:177
 msgid "Generating Private Key."
 msgstr "Generuji soukromý klíč."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:186
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:178
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
