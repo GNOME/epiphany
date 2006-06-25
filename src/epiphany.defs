@@ -85,6 +85,13 @@
   (gtype-id "EPHY_TYPE_FAVICON_CACHE")
 )
 
+(define-object FindToolbar
+  (in-module "Ephy")
+  (parent "GtkToolbar")
+  (c-name "EphyFindToolbar")
+  (gtype-id "EPHY_TYPE_FIND_TOOLBAR")
+)
+
 (define-object History
   (in-module "Ephy")
   (parent "GObject")
@@ -1229,6 +1236,72 @@
 (define-method clear
   (of-object "EphyFaviconCache")
   (c-name "ephy_favicon_cache_clear")
+  (return-type "none")
+)
+
+
+;; From ephy-find-toolbar.h
+
+(define-function ephy_find_toolbar_get_type
+  (c-name "ephy_find_toolbar_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_find_toolbar_new
+  (c-name "ephy_find_toolbar_new")
+  (is-constructor-of "EphyFindToolbar")
+  (return-type "EphyFindToolbar*")
+  (parameters
+    '("EphyWindow*" "window")
+  )
+)
+
+(define-method get_text
+  (of-object "EphyFindToolbar")
+  (c-name "ephy_find_toolbar_get_text")
+  (return-type "const-char*")
+)
+
+(define-method set_embed
+  (of-object "EphyFindToolbar")
+  (c-name "ephy_find_toolbar_set_embed")
+  (return-type "none")
+  (parameters
+    '("EphyEmbed*" "embed")
+  )
+)
+
+(define-method find_next
+  (of-object "EphyFindToolbar")
+  (c-name "ephy_find_toolbar_find_next")
+  (return-type "none")
+)
+
+(define-method find_previous
+  (of-object "EphyFindToolbar")
+  (c-name "ephy_find_toolbar_find_previous")
+  (return-type "none")
+)
+
+(define-method open
+  (of-object "EphyFindToolbar")
+  (c-name "ephy_find_toolbar_open")
+  (return-type "none")
+  (parameters
+    '("gboolean" "links_only")
+    '("gboolean" "clear_search")
+  )
+)
+
+(define-method close
+  (of-object "EphyFindToolbar")
+  (c-name "ephy_find_toolbar_close")
+  (return-type "none")
+)
+
+(define-method request_close
+  (of-object "EphyFindToolbar")
+  (c-name "ephy_find_toolbar_request_close")
   (return-type "none")
 )
 

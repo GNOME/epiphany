@@ -38,6 +38,7 @@ headers
 #include "ephy-embed-type-builtins.h"
 #include "ephy-extension.h"
 #include "ephy-extensions-manager.h"
+#include "ephy-find-toolbar.h"
 #include "ephy-history.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-node-db.h"
@@ -193,6 +194,9 @@ ignore
   ephy_shell_error_quark
   ephy_shell_startup
   ephy_shell_get_dbus_service
+  ephy_find_toolbar_new
+  ephy_find_toolbar_close
+  ephy_find_toolbar_set_embed
 %%
 override ephy_tab_get_size noargs
 static PyObject *

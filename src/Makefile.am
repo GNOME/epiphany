@@ -353,6 +353,7 @@ BINDING_HEADERS_SRCDIR_IN = \
 	src/bookmarks/ephy-bookmarks.h			\
 	src/ephy-extension.h				\
 	src/ephy-extensions-manager.h			\
+	src/ephy-find-toolbar.h				\
 	src/ephy-link-action.h				\
 	src/ephy-link.h					\
 	src/ephy-location-action.h			\
@@ -429,7 +430,6 @@ BINDING_HEADERS_SRCDIR_IGNORE_IN = \
 	src/ephy-dbus.h					\
 	src/ephy-encoding-dialog.h			\
 	src/ephy-encoding-menu.h			\
-	src/ephy-find-toolbar.h				\
 	src/ephy-fullscreen-popup.h			\
 	src/ephy-go-action.h				\
 	src/ephy-history-window.h			\
