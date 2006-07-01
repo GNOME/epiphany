@@ -135,8 +135,8 @@ ephy_bookmark_action_sync_smart_url (GtkAction *gaction,
 		EphyBookmarkAction *action = EPHY_BOOKMARK_ACTION (gaction);
 		EphyBookmarkActionPrivate *priv = action->priv;
 		gboolean is_smart_url = priv->smart_url;
-		gboolean has_icon = (gboolean) ephy_node_get_property_string
-		  (priv->node, EPHY_NODE_BMK_PROP_ICON);		
+		gboolean has_icon = ephy_node_get_property_string
+		  (priv->node, EPHY_NODE_BMK_PROP_ICON) != NULL;
 		GtkWidget *entry, *icon;
 		guint width;
 
