@@ -273,6 +273,7 @@ static const char languages[][7] =
 "fr-vu",
 "fr-wf",
 "fr-yt",
+"fur",
 "fy",
 "fy-de",
 "fy-nl",
