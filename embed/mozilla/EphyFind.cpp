@@ -74,6 +74,7 @@ EphyFind::EphyFind ()
 : mCurrentEmbed(nsnull)
 #ifdef HAVE_TYPEAHEADFIND
 , mAttention(PR_FALSE)
+, mHasFocus(PR_FALSE)
 #endif
 {
   LOG ("EphyFind ctor [%p]", this);
@@ -109,7 +110,11 @@ EphyFind::SetEmbed (EphyEmbed *aEmbed)
     NS_ENSURE_SUCCESS (rv, rv);
 
     rv = mFinder->Init (docShell);
+#ifdef HAVE_GECKO_1_9
+//    mFinder->SetSelectionModeAndRepaint (nsISelectionController::SELECTION_ON);
+#else
     mFinder->SetFocusLinks (PR_TRUE);
+#endif
   } else {
     rv = mFinder->SetDocShell (docShell);
   }
@@ -164,6 +169,18 @@ EphyFind::SetSelectionAttention (PRBool aAttention)
 
   mAttention = aAttention;
 
+  PRInt16 display;
+  if (aAttention) {
+    display = nsISelectionController::SELECTION_ATTENTION;
+  } else {
+    display = nsISelectionController::SELECTION_ON;
+  }
+
+#ifdef HAVE_GECKO_1_9
+  if (mFinder) {
+    mFinder->SetSelectionModeAndRepaint (display);
+  }
+#else
   nsresult rv;
   nsCOMPtr<nsIDocShell> shell (do_GetInterface (mWebBrowser, &rv));
   /* It's okay for this to fail, if the tab is closing, or if
@@ -176,13 +193,6 @@ EphyFind::SetSelectionAttention (PRBool aAttention)
 				     nsIDocShell::ENUMERATE_FORWARDS,
 				     getter_AddRefs (enumerator));
   NS_ENSURE_SUCCESS (rv, );
-
-  PRInt16 display;
-  if (aAttention) {
-    display = nsISelectionController::SELECTION_ATTENTION;
-  } else {
-    display = nsISelectionController::SELECTION_ON;
-  }
 
   PRBool hasMore = PR_FALSE;
   while (NS_SUCCEEDED (enumerator->HasMoreElements (&hasMore)) && hasMore) {
@@ -216,7 +226,11 @@ EphyFind::Find (const char *aSearchString,
 
   nsresult rv;
   PRUint16 found = nsITypeAheadFind::FIND_NOTFOUND;
+#ifdef HAVE_GECKO_1_9
+  rv = mFinder->Find (uSearchString, aLinksOnly, mHasFocus, &found);
+#else
   rv = mFinder->Find (uSearchString, aLinksOnly, &found);
+#endif
 
   return (EphyEmbedFindResult) found;
 #else
@@ -243,9 +257,17 @@ EphyFind::FindAgain (PRBool aForward)
   nsresult rv;
   PRUint16 found = nsITypeAheadFind::FIND_NOTFOUND;
   if (aForward) {
+#ifdef HAVE_GECKO_1_9
+    rv = mFinder->FindNext (mHasFocus, &found);
+#else
     rv = mFinder->FindNext (&found);
+#endif
   } else {
+#ifdef HAVE_GECKO_1_9
+    rv = mFinder->FindPrevious (mHasFocus, &found);
+#else
     rv = mFinder->FindPrevious (&found);
+#endif
   }
 
   return (EphyEmbedFindResult) found;

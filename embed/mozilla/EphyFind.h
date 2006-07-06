@@ -53,7 +53,8 @@ class EphyFind
 
 #ifdef HAVE_TYPEAHEADFIND
     nsCOMPtr<nsITypeAheadFind> mFinder;
-    PRBool mAttention;
+    PRPackedBool mAttention;
+    PRPackedBool mHasFocus;
 #else
     nsCOMPtr<nsIWebBrowserFind> mFinder;
 #endif
