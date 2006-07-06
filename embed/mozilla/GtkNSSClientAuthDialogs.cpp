@@ -26,6 +26,7 @@
 
 #include "EphyUtils.h"
 #include "AutoJSContextStack.h"
+#include "AutoWindowModalState.h"
 
 #include <nsIDOMWindow.h>
 #include <nsIServiceManager.h>
@@ -151,8 +152,10 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return rv;
 
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
+
+	AutoWindowModalState modalState (parent);
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),

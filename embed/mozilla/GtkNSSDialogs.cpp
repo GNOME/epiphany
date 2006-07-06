@@ -32,6 +32,7 @@
 
 #include "EphyUtils.h"
 #include "AutoJSContextStack.h"
+#include "AutoWindowModalState.h"
 
 #include <nsCOMPtr.h>
 #include <nsMemory.h>
@@ -212,6 +213,9 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	GtkWidget *dialog, *label, *checkbox, *vbox, *button;
 	int res;
 
+	g_return_val_if_fail (markup_text, GTK_RESPONSE_CANCEL);
+	g_return_val_if_fail (!checkbox_text || checkbox_value, GTK_RESPONSE_CANCEL);
+
 	nsresult rv;
 	AutoJSContextStack stack;
 	rv = stack.Init ();
@@ -220,12 +224,11 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	/* NOTE: Due to a mozilla bug [https://bugzilla.mozilla.org/show_bug.cgi?id=306288],
 	 * we will always end up without a parent!
 	 */
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
 
-        g_return_val_if_fail (markup_text, GTK_RESPONSE_CANCEL);
-        g_return_val_if_fail (!checkbox_text || checkbox_value, GTK_RESPONSE_CANCEL);
-	
+	AutoWindowModalState modalState (parent);
+
 	dialog = gtk_dialog_new_with_buttons ("", gparent,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      (char *) NULL);
@@ -554,8 +557,10 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return rv;
 
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
+
+	AutoWindowModalState modalState (parent);
 
 	dialog = gtk_dialog_new_with_buttons (_("Trust new Certificate Authority?"), gparent,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -771,8 +776,10 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return rv;
 
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
+
+	AutoWindowModalState modalState (parent);
 
 	dialog = gtk_dialog_new_with_buttons ("", gparent,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -894,8 +901,10 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return rv;
 
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
+
+	AutoWindowModalState modalState (parent);
 
 	dialog = gtk_dialog_new_with_buttons ("", gparent,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1354,8 +1363,11 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	dialog = glade_xml_get_widget (gxml, "viewcert_dialog");
 	g_return_val_if_fail (dialog != NULL, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
+
+	AutoWindowModalState modalState (parent);
+
 	if (gparent)
 	{
 		gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(gparent));

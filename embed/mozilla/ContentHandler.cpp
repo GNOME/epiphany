@@ -27,6 +27,7 @@
 
 #include "ContentHandler.h"
 #include "AutoJSContextStack.h"
+#include "AutoWindowModalState.h"
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
@@ -172,8 +173,10 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return rv;
 
-	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (aWindowContext);
+	nsCOMPtr<nsIDOMWindow> parentDOMWindow (do_GetInterface (aWindowContext));
 	GtkWidget *parentWindow = GTK_WIDGET (EphyUtils::FindGtkParent (parentDOMWindow));
+
+	AutoWindowModalState modalState (parentDOMWindow);
 
 	dialog = ephy_file_chooser_new (_("Save"), parentWindow,
 					GTK_FILE_CHOOSER_ACTION_SAVE,

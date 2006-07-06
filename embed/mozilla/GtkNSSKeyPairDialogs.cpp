@@ -41,6 +41,7 @@
 
 #include "EphyUtils.h"
 #include "AutoJSContextStack.h"
+#include "AutoWindowModalState.h"
 
 #include <nsIServiceManager.h>
 #include <nsIInterfaceRequestor.h>
@@ -205,6 +206,8 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
+
+	AutoWindowModalState modalState (parent);
 
 	dialog = gtk_dialog_new_with_buttons ("", gparent,
 					      GTK_DIALOG_DESTROY_WITH_PARENT, (char *) NULL);

@@ -48,6 +48,7 @@
 #include "GtkNSSSecurityWarningDialogs.h"
 #include "EphyUtils.h"
 #include "AutoJSContextStack.h"
+#include "AutoWindowModalState.h"
 
 #include <nsCOMPtr.h>
 #include <nsIPrefBranch.h>
@@ -225,20 +226,17 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 		return;
 	}
 
+	/* On 1.8.0, domWin will be always nsnull, because of 
+	 * https://bugzilla.mozilla.org/show_bug.cgi?id=277587
+	 */
+	nsCOMPtr<nsIDOMWindow> domWin (do_GetInterface (aContext));
+	GtkWidget *parent = EphyUtils::FindGtkParent (domWin);
+
 	AutoJSContextStack stack;
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return;
 
-	/* Didn't you know it, mozilla SUCKS!
-	 * the "aContext" interface requestor is made from a nsIDOMWindow,
-	 * but can only give out a nsIPrompt, from where there's no way to get
-	 * the nsIDOMWindow back! Therefore we cannot display this dialogue with
-	 * a parent, and HAVE TO make it modal.
-	 * https://bugzilla.mozilla.org/show_bug.cgi?id=277587
-	 */
-	/* domWin will be always nsnull, until the mozilla bug is fixed */
-	nsCOMPtr<nsIDOMWindow> domWin (do_GetInterface (aContext));
-	GtkWidget *parent = EphyUtils::FindGtkParent (domWin);
+	AutoWindowModalState modalState (domWin);
 
 	GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
 						    GTK_DIALOG_MODAL, aType,

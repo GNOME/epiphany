@@ -28,6 +28,8 @@
 #include <nsEmbedString.h>
 #define MOZILLA_INTERNAL_API 1
 
+class nsIDOMWindow;
+
 #include "ephy-file-chooser.h"
 
 #define G_FILEPICKER_CID			     \
@@ -58,6 +60,7 @@ private:
 	EphyFileChooser *mDialog;
 	PRInt16 mMode;
 	nsEmbedString mDefaultString;
+	nsCOMPtr<nsIDOMWindow> mParent;
 };
 
 #endif
