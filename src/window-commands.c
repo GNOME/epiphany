@@ -83,7 +83,7 @@ window_cmd_file_print_setup (GtkAction *action,
 		(GTK_WINDOW (window),
 		 ephy_embed_shell_get_page_setup (shell),
 		 ephy_embed_shell_get_print_settings (shell),
-		 page_setup_done_cb,
+		 (GtkPageSetupDoneFunc) page_setup_done_cb,
 		 shell);
 }
 
