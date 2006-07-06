@@ -22,8 +22,7 @@
 #define AUTO_WINDOWMODALSTATE_H
 
 #include <nsCOMPtr.h>
-
-class nsPIDomWindow;
+#include <nsPIDOMWindow.h>
 
 class AutoWindowModalState
 {
@@ -33,7 +32,7 @@ class AutoWindowModalState
 	
   private:
 
-  nsCOMPtr<nsPIDomWindow> mWindow;
+  nsCOMPtr<nsPIDOMWindow> mWindow;
 };
 
 #endif
