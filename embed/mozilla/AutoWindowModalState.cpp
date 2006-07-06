@@ -21,8 +21,6 @@
 #include <mozilla-config.h>
 #include "config.h"
 
-#include <nsPIDOMWindow.h>
-
 #include "AutoWindowModalState.h"
 
 AutoWindowModalState::AutoWindowModalState (nsIDOMWindow *aWindow)
