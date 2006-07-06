@@ -53,7 +53,8 @@ class EphyFind
     nsCOMPtr<nsIWebBrowser> mWebBrowser;
 
     nsCOMPtr<nsITypeAheadFind> mFinder;
-    PRBool mAttention;
+    PRPackedBool mAttention;
+    PRPackedBool mHasFocus;
 };
 
 #endif /* !TYPEAHEADFIND_H */
