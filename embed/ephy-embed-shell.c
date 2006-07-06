@@ -379,7 +379,7 @@ ephy_embed_shell_set_page_setup	(EphyEmbedShell *shell,
 {
 	EphyEmbedShellPrivate *priv;
 
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+	g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
 	priv = shell->priv;
 
 	if (page_setup != NULL)
@@ -420,7 +420,7 @@ ephy_embed_shell_set_print_settings (EphyEmbedShell *shell,
 {
 	EphyEmbedShellPrivate *priv;
 
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+	g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
 	priv = shell->priv;
 
 	if (settings != NULL)

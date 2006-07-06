@@ -396,8 +396,7 @@ MozDownload::OnProgressChange64 (nsIWebProgress *aWebProgress,
 	PRInt64 now = PR_Now ();
 
 	if ((now - mLastUpdate < mInterval) &&
-	    (aMaxTotalProgress != -1) &&
-	    (aCurTotalProgress < aMaxTotalProgress))
+	    (aMaxTotalProgress == -1 || aCurTotalProgress < aMaxTotalProgress))
 		return NS_OK;
 
 	mLastUpdate = now;

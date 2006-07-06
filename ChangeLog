@@ -1,3 +1,15 @@
+2006-07-06  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* embed/mozilla/MozDownload.cpp: (OnProgressChange64):
+
+	Don't hammer the cpu when downloading file with an unknown size.
+	Fix bug 346671.
+
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_set_page_setup),
+	(ephy_embed_shell_set_print_settings):
+
+	Fix compiler warnings.
+	
 2006-07-06  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/window-commands.c:
