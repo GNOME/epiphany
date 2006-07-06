@@ -44,6 +44,7 @@
 #include "ephy-prefs.h"
 
 #include "AutoJSContextStack.h"
+#include "AutoWindowModalState.h"
 #include "EphyUtils.h"
 
 #include "FilePicker.h"
@@ -76,6 +77,8 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 #endif
 {
 	LOG ("GFilePicker::Init");
+
+	mParent = do_QueryInterface (parent);
 
 	GtkWidget *gtkparent = EphyUtils::FindGtkParent (parent);
 #if defined(MOZ_NSIFILEPICKER_NSASTRING_)
@@ -430,6 +433,9 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 	AutoJSContextStack stack;
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return rv;
+
+	AutoWindowModalState (mParent);
+	mParent = nsnull;
 
 	LOG ("GFilePicker::Show");
 

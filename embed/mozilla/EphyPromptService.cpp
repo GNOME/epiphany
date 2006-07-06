@@ -37,6 +37,7 @@
 #include "ephy-debug.h"
 
 #include "AutoJSContextStack.h"
+#include "AutoWindowModalState.h"
 #include "EphyUtils.h"
 
 #include "EphyPromptService.h"
@@ -79,6 +80,7 @@ public:
 	char* ConvertAndEscapeButtonText (const PRUnichar *, PRInt32 = -1);
 
 private:
+	nsCOMPtr<nsIDOMWindow> mWindow;
 	GtkDialog *mDialog;
 	GtkWidget *mVBox;
 	GtkWidget *mCheck;
@@ -98,7 +100,8 @@ Prompter::Prompter (const char *aStock,
 		    nsIDOMWindow *aParent,
 		    const PRUnichar *aTitle,
 		    const PRUnichar *aText)
-	: mDialog(nsnull)
+	: mWindow (aParent)
+	, mDialog(nsnull)
 	, mVBox(nsnull)
 	, mCheck(nsnull)
 	, mSizeGroup(nsnull)
@@ -470,6 +473,8 @@ Prompter::Run (PRBool *aSuccess)
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return rv;
 
+	AutoWindowModalState modalState (mWindow);
+
 	if (mDelay)
 	{
 		guint timeout = g_timeout_add (TIMEOUT,
@@ -515,6 +520,9 @@ DeletePrompter (gpointer aPromptPtr,
 void
 Prompter::Show ()
 {
+	/* We don't need it anymore */
+	mWindow = nsnull;
+
 	gtk_window_set_modal (GTK_WINDOW (mDialog), FALSE);
 
 	g_signal_connect (mDialog, "response",

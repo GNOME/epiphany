@@ -87,6 +87,7 @@
 #include "ephy-password-dialog.h"
 
 #include "AutoJSContextStack.h"
+#include "AutoWindowModalState.h"
 #include "EphyUtils.h"
 
 #include "GtkNSSDialogs.h"
@@ -227,6 +228,9 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	GtkWidget *dialog, *label, *checkbox, *vbox, *button;
 	int res;
 
+	g_return_val_if_fail (markup_text, GTK_RESPONSE_CANCEL);
+	g_return_val_if_fail (!checkbox_text || checkbox_value, GTK_RESPONSE_CANCEL);
+
 	nsresult rv;
 	AutoJSContextStack stack;
 	rv = stack.Init ();
@@ -235,12 +239,11 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	/* NOTE: Due to a mozilla bug [https://bugzilla.mozilla.org/show_bug.cgi?id=306288],
 	 * we will always end up without a parent!
 	 */
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
 
-        g_return_val_if_fail (markup_text, GTK_RESPONSE_CANCEL);
-        g_return_val_if_fail (!checkbox_text || checkbox_value, GTK_RESPONSE_CANCEL);
-	
+	AutoWindowModalState modalState (parent);
+
 	dialog = gtk_dialog_new_with_buttons ("", gparent,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      (char *) NULL);
@@ -612,8 +615,10 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return rv;
 
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
+
+	AutoWindowModalState modalState (parent);
 
 	dialog = gtk_dialog_new_with_buttons (_("Trust new Certificate Authority?"), gparent,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -743,8 +748,10 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return rv;
 
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
 	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
+
+	AutoWindowModalState modalState (parent);
 
 	dialog = ephy_password_dialog_new (gparent,
 					   _("Select Password"),
@@ -791,8 +798,10 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return rv;
 
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
 	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
+
+	AutoWindowModalState modalState (parent);
 
 	GtkWidget *dialog = ephy_password_dialog_new
 				(gparent,
@@ -1208,8 +1217,11 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	dialog = glade_xml_get_widget (gxml, "viewcert_dialog");
 	g_return_val_if_fail (dialog != NULL, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
 	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
+
+	AutoWindowModalState modalState (parent);
+
 	if (gparent)
 	{
 		gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(gparent));
@@ -1391,8 +1403,10 @@ GtkNSSDialogs::SetPassword(nsIInterfaceRequestor *aCtx,
 	PRUint32 status = nsIPKCS11Slot::SLOT_UNINITIALIZED;
 	slot->GetStatus (&status);
 
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (aCtx);
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (aCtx));
 	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
+
+	AutoWindowModalState modalState (parent);
 
 	EphyPasswordDialogFlags flags =
 		EphyPasswordDialogFlags (EPHY_PASSWORD_DIALOG_FLAGS_SHOW_NEW_PASSWORD |
@@ -1478,8 +1492,10 @@ GtkNSSDialogs::GetPassword(nsIInterfaceRequestor *aCtx,
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return rv;
 
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (aCtx);
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (aCtx));
 	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
+
+	AutoWindowModalState modalState (parent);
 
 	EphyPasswordDialogFlags flags =
 		EphyPasswordDialogFlags (EPHY_PASSWORD_DIALOG_FLAGS_SHOW_PASSWORD);

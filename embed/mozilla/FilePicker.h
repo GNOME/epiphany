@@ -24,6 +24,8 @@
 
 #include <nsIFilePicker.h>
 
+class nsIDOMWindow;
+
 #include "ephy-file-chooser.h"
 
 #define G_FILEPICKER_CID			     \
@@ -54,6 +56,7 @@ private:
 	EphyFileChooser *mDialog;
 	PRInt16 mMode;
 	nsString mDefaultString;
+	nsCOMPtr<nsIDOMWindow> mParent;
 };
 
 #endif

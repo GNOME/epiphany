@@ -57,10 +57,10 @@
 #include "ephy-prefs.h"
 #include "ephy-stock-icons.h"
 
+#include "AutoJSContextStack.h"
+#include "AutoWindowModalState.h"
 #include "EphyUtils.h"
 #include "MozDownload.h"
-
-#include "AutoJSContextStack.h"
 
 #include "ContentHandler.h"
 
@@ -139,8 +139,10 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return rv;
 
-	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (aWindowContext);
+	nsCOMPtr<nsIDOMWindow> parentDOMWindow (do_GetInterface (aWindowContext));
 	GtkWidget *parentWindow = GTK_WIDGET (EphyUtils::FindGtkParent (parentDOMWindow));
+
+	AutoWindowModalState modalState (parentDOMWindow);
 
 	dialog = ephy_file_chooser_new (_("Save"), parentWindow,
 					GTK_FILE_CHOOSER_ACTION_SAVE,
