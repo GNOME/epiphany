@@ -1,5 +1,13 @@
 2006-07-10  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/widgets/ephy-node-view.c:
+	(ephy_node_view_selection_changed_cb), (ephy_node_view_remove):
+
+	Work around bug #346662 by not changing selection while removing the
+	nodes. Fixes crash with gtk 2.10.
+
+2006-07-10  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.c: (settings_change_notify),
 	(ephy_window_key_press_event):
 
