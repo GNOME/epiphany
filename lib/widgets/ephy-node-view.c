@@ -79,6 +79,8 @@ struct _EphyNodeViewPrivate
 	gboolean have_drag_data;
 	GtkSelectionData *drag_data;
 	guint scroll_id;
+
+	guint changing_selection : 1;
 };
 
 enum
@@ -503,8 +505,12 @@ static void
 ephy_node_view_selection_changed_cb (GtkTreeSelection *selection,
 			             EphyNodeView *view)
 {
+	EphyNodeViewPrivate *priv = view->priv;
 	GList *list;
 	EphyNode *node = NULL;
+
+	/* Work around bug #346662 */
+	if (priv->changing_selection) return;
 
 	list = ephy_node_view_get_selection (view);
 	if (list)
@@ -1368,11 +1374,13 @@ ephy_node_view_get_selection (EphyNodeView *view)
 void
 ephy_node_view_remove (EphyNodeView *view)
 {
+	EphyNodeViewPrivate *priv = view->priv;
 	GList *list, *l;
 	EphyNode *node;
 	GtkTreeIter iter, iter2;
 	GtkTreePath *path;
 	GtkTreeRowReference *row_ref = NULL;
+	GtkTreeSelection *selection;
 
 	/* Before removing we try to get a reference to the next node in the view. If that is
 	 * not available we try with the previous one, and if that is absent too,
@@ -1406,12 +1414,19 @@ ephy_node_view_remove (EphyNodeView *view)
 	}
 	gtk_tree_path_free (path);
 
+	/* Work around bug #346662 */
+	priv->changing_selection = TRUE;
 	for (l = list; l != NULL; l = l->next)
 	{
 		ephy_node_unref (l->data);
 	}
+	priv->changing_selection = FALSE;
 
 	g_list_free (list);
+
+	/* Fake a selection changed signal */
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
+	g_signal_emit_by_name (selection, "changed");
 
 	/* Select the "next" node */
 
