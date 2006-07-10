@@ -135,12 +135,13 @@ action_activated_cb (GtkEntryCompletion *completion,
 
 		url = ephy_bookmarks_resolve_address
 			(action->priv->bookmarks, smart_url, content);
-		g_return_if_fail (url != NULL);
-
-		ephy_link_open (EPHY_LINK (action), url, NULL, 0);
-	
-		g_free (url);
 		g_free (content);
+		if (url == NULL) return;
+
+ 		ephy_link_open (EPHY_LINK (action), url, NULL,
+			        ephy_link_flags_from_current_event ());
+
+		g_free (url);
 	}
 }
 

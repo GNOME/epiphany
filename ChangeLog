@@ -1,3 +1,15 @@
+2006-07-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/widgets/ephy-location-entry.c: (entry_key_press_cb),
+	(entry_key_press_after_cb), (entry_activate_after_cb),
+	(match_selected_cb), (action_activated_after_cb),
+	(ephy_location_entry_construct_contents),
+	(ephy_location_entry_set_completion):
+	* src/ephy-location-action.c: (action_activated_cb):
+
+	Fix middle-click and ctrl-enter in the location entry autocompletion
+	drop-down. Bug #345934, based on a patch by johannes@sipsolutions.net.
+
 2006-07-06  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* embed/mozilla/MozDownload.cpp: (OnProgressChange64):
