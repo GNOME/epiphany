@@ -38,7 +38,7 @@ libephymozillaembed_la_SOURCES = 	\
 	GeckoPrintService.cpp		\
 	GeckoPrintService.h		\
 	GeckoPrintSession.cpp		\
-	GeckoPrintSession.has		\
+	GeckoPrintSession.h		\
 	GlobalHistory.cpp               \
 	GlobalHistory.h                 \
 	MozDownload.cpp			\
