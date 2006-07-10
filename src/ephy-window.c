@@ -515,10 +515,23 @@ settings_change_notify (GtkSettings *settings,
 		      NULL);
 
 	g_return_if_fail (menubar_accel_accel != NULL);
-			      
-	gtk_accelerator_parse (menubar_accel_accel,
-			       &priv->menubar_accel_keyval,
-			       &priv->menubar_accel_modifier);
+
+	if (menubar_accel_accel != NULL && menubar_accel_accel[0] != '\0')
+	{
+		gtk_accelerator_parse (menubar_accel_accel,
+				       &priv->menubar_accel_keyval,
+				       &priv->menubar_accel_modifier);
+		if (priv->menubar_accel_keyval == 0)
+		{
+			g_warning ("Failed to parse menu bar accelerator '%s'\n",
+				   menubar_accel_accel);
+		}
+	}
+	else
+	{
+		priv->menubar_accel_keyval = 0;
+		priv->menubar_accel_modifier = 0;
+	}
 
 	priv->key_theme_is_emacs =
 		key_theme_name &&
@@ -823,8 +836,12 @@ ephy_window_key_press_event (GtkWidget *widget,
 					ephy_toolbar_get_action_group (priv->toolbar) :
 					priv->action_group,
 				extra_keybindings[i].action);
-			gtk_action_activate (action);
-			return TRUE;
+			if (gtk_action_is_sensitive (action))
+			{
+				gtk_action_activate (action);
+				return TRUE;
+			}
+			break;
 		}
 	}
 
@@ -835,7 +852,8 @@ ephy_window_key_press_event (GtkWidget *widget,
 	}
 
 	/* Show and activate the menubar, if it isn't visible */
-	if (event->keyval == priv->menubar_accel_keyval &&
+	if (priv->menubar_accel_keyval != 0 &&
+	    event->keyval == priv->menubar_accel_keyval &&
             modifier == priv->menubar_accel_modifier)
 	{
 		menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");

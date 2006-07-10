@@ -1,5 +1,13 @@
 2006-07-10  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-window.c: (settings_change_notify),
+	(ephy_window_key_press_event):
+
+	Fix for empty menubar accel setting.
+	Don't activate insensitive actions, bug #347022.
+
+2006-07-10  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-location-entry.c: (entry_key_press_cb),
 	(entry_key_press_after_cb), (entry_activate_after_cb),
 	(match_selected_cb), (action_activated_after_cb),
