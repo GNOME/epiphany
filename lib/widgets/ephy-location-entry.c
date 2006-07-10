@@ -32,6 +32,7 @@
 #include "egg-editable-toolbar.h"
 #include "ephy-stock-icons.h"
 #include "ephy-debug.h"
+#include "ephy-gui.h"
 
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
@@ -81,6 +82,7 @@ struct _EphyLocationEntryPrivate
 	guint original_address : 1;
 	guint secure : 1;
 	guint apply_colours : 1;
+	guint needs_reset : 1;
 };
 
 static const struct
@@ -381,6 +383,24 @@ entry_key_press_cb (GtkEntry *entry,
 {
 	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 
+	if (event->keyval == GDK_Escape && state == 0)
+	{
+		ephy_location_entry_reset (lentry);
+		/* don't return TRUE since we want to cancel the autocompletion popup too */
+	}
+
+	return FALSE;
+}
+
+static gboolean
+entry_key_press_after_cb (GtkEntry *entry,
+			  GdkEventKey *event,
+			  EphyLocationEntry *lentry)
+{
+	EphyLocationEntryPrivate *priv = lentry->priv;
+
+	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
+
 	if ((event->keyval == GDK_Return ||
 	     event->keyval == GDK_KP_Enter ||
 	     event->keyval == GDK_ISO_Enter) &&
@@ -389,18 +409,26 @@ entry_key_press_cb (GtkEntry *entry,
 	{
 		gtk_im_context_reset (entry->im_context);
 
+		priv->needs_reset = TRUE;
 		g_signal_emit_by_name (entry, "activate");
 
 		return TRUE;
 	}
 
-	if (event->keyval == GDK_Escape && state == 0)
+	return FALSE;
+}
+
+static void
+entry_activate_after_cb (GtkEntry *entry,
+			 EphyLocationEntry *lentry)
+{
+	EphyLocationEntryPrivate *priv = lentry->priv;
+
+	if (priv->needs_reset)
 	{
 		ephy_location_entry_reset (lentry);
-		/* don't return TRUE since we want to cancel the autocompletion popup too */
+		priv->needs_reset = FALSE;
 	}
-
-	return FALSE;
 }
 
 static gboolean
@@ -493,10 +521,16 @@ match_selected_cb (GtkEntryCompletion *completion,
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
 	char *item = NULL;
+	guint state;
 
 	gtk_tree_model_get (model, iter,
 			    priv->action_col, &item, -1);
 	if (item == NULL) return FALSE;
+
+	ephy_gui_get_current_event (NULL, &state, NULL);
+
+	priv->needs_reset = (state == GDK_CONTROL_MASK ||
+			     state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK));
 
 	ephy_location_entry_set_location (entry, item, NULL);
 	g_signal_emit_by_name (priv->icon_entry->entry, "activate");
@@ -504,6 +538,22 @@ match_selected_cb (GtkEntryCompletion *completion,
 	g_free (item);
 
 	return TRUE;
+}
+
+static void
+action_activated_after_cb (GtkEntryCompletion *completion,
+			   gint index,
+			   EphyLocationEntry *lentry)
+{
+	guint state, button;
+
+	ephy_gui_get_current_event (NULL, &state, &button);
+	if ((state == GDK_CONTROL_MASK ||
+	     state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) ||
+	    button == 2)
+	{
+		ephy_location_entry_reset (lentry);
+	}
 }
 
 static gboolean
@@ -851,6 +901,10 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 			  G_CALLBACK (entry_populate_popup_cb), entry);
 	g_signal_connect (priv->icon_entry->entry, "key-press-event",
 			  G_CALLBACK (entry_key_press_cb), entry);
+	g_signal_connect_after (priv->icon_entry->entry, "key-press-event",
+				G_CALLBACK (entry_key_press_after_cb), entry);
+	g_signal_connect_after (priv->icon_entry->entry, "activate",
+				G_CALLBACK (entry_activate_after_cb), entry);
 	g_signal_connect (priv->icon_entry->entry, "button-press-event",
 			  G_CALLBACK (entry_button_press_cb), entry);
 	g_signal_connect (priv->icon_entry->entry, "changed",
@@ -934,8 +988,10 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 	gtk_entry_completion_set_model (completion, sort_model);
 	g_object_unref (sort_model);
 	gtk_entry_completion_set_match_func (completion, completion_func, le, NULL);
-	g_signal_connect (completion, "match_selected",
+	g_signal_connect (completion, "match-selected",
 			  G_CALLBACK (match_selected_cb), le);
+	g_signal_connect_after (completion, "action-activated",
+				G_CALLBACK (action_activated_after_cb), le);
 
 	cell = gtk_cell_renderer_text_new ();
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
