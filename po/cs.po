@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-23 11:18+0200\n"
-"PO-Revision-Date: 2006-06-23 13:00+0200\n"
+"POT-Creation-Date: 2006-07-11 13:49+0200\n"
+"PO-Revision-Date: 2006-07-11 13:59+0200\n"
 "Last-Translator: Jakub Friedl <jfriedl@suse.cz>\n"
 "Language-Team:  <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -533,7 +533,7 @@ msgid "MD5 Fingerprint:"
 msgstr "Otisk MD5:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
-#: ../embed/mozilla/GtkNSSDialogs.cpp:907
+#: ../embed/mozilla/GtkNSSDialogs.cpp:916
 msgid "Organization:"
 msgstr "Organizace:"
 
@@ -639,7 +639,7 @@ msgstr "Vyberte _jazyk:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:13
-#: ../lib/widgets/ephy-location-entry.c:586 ../src/ephy-history-window.c:261
+#: ../lib/widgets/ephy-location-entry.c:636 ../src/ephy-history-window.c:261
 msgid "Cl_ear"
 msgstr "_Vymazat"
 
@@ -821,7 +821,7 @@ msgstr ""
 "%s z %s"
 
 #: ../embed/downloader-view.c:436 ../embed/downloader-view.c:441
-#: ../src/ephy-window.c:1464
+#: ../src/ephy-window.c:1482
 msgid "Unknown"
 msgstr "Neznámý"
 
@@ -1257,24 +1257,24 @@ msgstr "Ostatní"
 msgid "Local files"
 msgstr "Místní soubory"
 
-#: ../embed/mozilla/ContentHandler.cpp:145
+#: ../embed/mozilla/ContentHandler.cpp:147
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:406
 msgid "Save"
 msgstr "Uložit"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:258
+#: ../embed/mozilla/ContentHandler.cpp:260
 msgid "File Type:|Unknown"
 msgstr "Neznámý"
 
-#: ../embed/mozilla/ContentHandler.cpp:274
+#: ../embed/mozilla/ContentHandler.cpp:276
 msgid "Download this potentially unsafe file?"
 msgstr "Stáhnout tento potenciálně nebezpečný soubor?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:280
+#: ../embed/mozilla/ContentHandler.cpp:282
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1287,14 +1287,14 @@ msgstr ""
 "Není bezpečné otevřít „%s”, protože by potenciálně mohl poškodit vaše "
 "dokumenty nebo narušit vaše soukromí. Místo toho jej můžete stáhnout."
 
-#: ../embed/mozilla/ContentHandler.cpp:290
+#: ../embed/mozilla/ContentHandler.cpp:292
 msgid "Open this file?"
 msgstr "Otevřít tento soubor?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:297
+#: ../embed/mozilla/ContentHandler.cpp:299
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1305,13 +1305,13 @@ msgstr ""
 "\n"
 "„%s” můžete otevřít pomocí „%s” nebo jej uložit."
 
-#: ../embed/mozilla/ContentHandler.cpp:305
+#: ../embed/mozilla/ContentHandler.cpp:307
 msgid "Download this file?"
 msgstr "Stáhnout tento soubor?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:311
+#: ../embed/mozilla/ContentHandler.cpp:313
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1322,7 +1322,7 @@ msgstr ""
 "\n"
 "Nemáte žádnou aplikaci schopnou otevřít „%s”. Můžete jej místo toho stáhnout."
 
-#: ../embed/mozilla/ContentHandler.cpp:316
+#: ../embed/mozilla/ContentHandler.cpp:318
 msgid "_Save As..."
 msgstr "Uložit _jako..."
 
@@ -1600,45 +1600,47 @@ msgstr "v Internet Archive"
 msgid "Untitled"
 msgstr "Nepojmenovaný"
 
-#: ../embed/mozilla/EphyPromptService.cpp:179
+#: ../embed/mozilla/EphyPromptService.cpp:182
 msgid "_Abort Script"
 msgstr "_Přerušit skript"
 
-#: ../embed/mozilla/EphyPromptService.cpp:247
+#: ../embed/mozilla/EphyPromptService.cpp:250
 msgid "Don't Save"
 msgstr "Neukládat"
 
-#: ../embed/mozilla/EphyPromptService.cpp:797
+#: ../embed/mozilla/EphyPromptService.cpp:805
+#: ../lib/ephy-password-dialog.c:396
 msgid "_Username:"
 msgstr "Jméno _uživatele:"
 
-#: ../embed/mozilla/EphyPromptService.cpp:798
-#: ../embed/mozilla/EphyPromptService.cpp:825
+#: ../embed/mozilla/EphyPromptService.cpp:806
+#: ../embed/mozilla/EphyPromptService.cpp:833
+#: ../lib/ephy-password-dialog.c:424 ../lib/ephy-password-dialog.c:440
 msgid "_Password:"
 msgstr "_Heslo:"
 
-#: ../embed/mozilla/FilePicker.cpp:148 ../embed/mozilla/FilePicker.cpp:446
+#: ../embed/mozilla/FilePicker.cpp:151 ../embed/mozilla/FilePicker.cpp:452
 #: ../lib/ephy-file-chooser.c:371 ../src/bookmarks/ephy-bookmarks-editor.c:786
 msgid "All files"
 msgstr "Všechny soubory"
 
-#: ../embed/mozilla/FilePicker.cpp:153 ../lib/ephy-file-chooser.c:355
+#: ../embed/mozilla/FilePicker.cpp:156 ../lib/ephy-file-chooser.c:355
 msgid "Web pages"
 msgstr "WWW stránky"
 
-#: ../embed/mozilla/FilePicker.cpp:161
+#: ../embed/mozilla/FilePicker.cpp:164
 msgid "Text files"
 msgstr "Textové soubory"
 
-#: ../embed/mozilla/FilePicker.cpp:166 ../lib/ephy-file-chooser.c:363
+#: ../embed/mozilla/FilePicker.cpp:169 ../lib/ephy-file-chooser.c:363
 msgid "Images"
 msgstr "Obrázky"
 
-#: ../embed/mozilla/FilePicker.cpp:174
+#: ../embed/mozilla/FilePicker.cpp:177
 msgid "XML files"
 msgstr "Soubory XML"
 
-#: ../embed/mozilla/FilePicker.cpp:179
+#: ../embed/mozilla/FilePicker.cpp:182
 msgid "XUL files"
 msgstr "Soubory XUL"
 
@@ -1669,34 +1671,34 @@ msgstr "Chyba tisku"
 msgid "Printing “%s”"
 msgstr "Tiskne se „%s“"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:160
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:163
 msgid "_Select Certificate"
 msgstr "_Vybrat certifikát"
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:201
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:204
 #, c-format
 msgid "Choose a certificate to present as identification to “%s”."
 msgstr "Vyberte certifikát, který předložit „%s” jako identifikaci."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:204
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:207
 msgid "Select a certificate to identify yourself."
 msgstr "Vyberte certifikát pro vaši identifikaci."
 
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:233
+#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:236
 msgid "Certificate _Details"
 msgstr "_Detaily o certifikátu"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:260
-#: ../embed/mozilla/GtkNSSDialogs.cpp:620
+#: ../embed/mozilla/GtkNSSDialogs.cpp:263
+#: ../embed/mozilla/GtkNSSDialogs.cpp:625
 msgid "_View Certificate"
 msgstr "_Zobrazit certifikát"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:268
+#: ../embed/mozilla/GtkNSSDialogs.cpp:271
 msgid "_Accept"
 msgstr "_Přijmout"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:401
+#: ../embed/mozilla/GtkNSSDialogs.cpp:404
 #, c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
@@ -1706,18 +1708,18 @@ msgstr ""
 "Server „%s” vrátil informace o zabezpečení pro „%s”. Je možné, že někdo "
 "narušuje vaši komunikaci, aby získal důvěrné informace."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:407
+#: ../embed/mozilla/GtkNSSDialogs.cpp:410
 #, c-format
 msgid "You should only accept the security information if you trust “%s” and “%s”."
 msgstr ""
 "Informace o zabezpečení byste měli přijmout, jen pokud důvěřujete „%s” a „%"
 "s”."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:412
+#: ../embed/mozilla/GtkNSSDialogs.cpp:415
 msgid "Accept incorrect security information?"
 msgstr "Přijmout nesprávné informace o zabezpečení?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:441
+#: ../embed/mozilla/GtkNSSDialogs.cpp:444
 #, c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
@@ -1726,7 +1728,7 @@ msgstr ""
 "Nebylo možné automaticky věřit „%s”. Je možné, že někdo narušuje vaši "
 "komunikaci, aby získal důvěrné informace."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:447
+#: ../embed/mozilla/GtkNSSDialogs.cpp:450
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
@@ -1735,34 +1737,34 @@ msgstr ""
 "K serveru byste se měli připojit, jen pokud jste si jisti, že jste připojeni "
 "k „%s”."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:452
+#: ../embed/mozilla/GtkNSSDialogs.cpp:455
 msgid "Connect to untrusted site?"
 msgstr "Připojit se k nedůvěryhodnému serveru?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:456
+#: ../embed/mozilla/GtkNSSDialogs.cpp:459
 msgid "_Trust this security information from now on"
 msgstr "_Od teď důvěřovat těmto informacím o zabezpečení"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:457
+#: ../embed/mozilla/GtkNSSDialogs.cpp:460
 msgid "Co_nnect"
 msgstr "_Připojit"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:516
+#: ../embed/mozilla/GtkNSSDialogs.cpp:519
 msgid "Accept expired security information?"
 msgstr "Přijmout informace o zabezpečení po vypršení platnosti?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:518
+#: ../embed/mozilla/GtkNSSDialogs.cpp:521
 #, c-format
 msgid "The security information for “%s” expired on %s."
 msgstr "Informace o zabezpečení pro „%s” vypršely dne %s."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:524
+#: ../embed/mozilla/GtkNSSDialogs.cpp:527
 msgid "Accept not yet valid security information?"
 msgstr "Přijmout dosud neplatné informace o zabezpečení?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:526
+#: ../embed/mozilla/GtkNSSDialogs.cpp:529
 #, c-format
 msgid "The security information for “%s” isn't valid until %s."
 msgstr "Informace o zabezpečení pro „%s” nejsou platné do %s."
@@ -1770,22 +1772,20 @@ msgstr "Informace o zabezpečení pro „%s” nejsou platné do %s."
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:540
+#: ../embed/mozilla/GtkNSSDialogs.cpp:543
 msgid "%a %d %b %Y"
 msgstr "%a %d. %b %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:549
+#: ../embed/mozilla/GtkNSSDialogs.cpp:552
 msgid "You should ensure that your computer's time is correct."
 msgstr "Měli byste se přesvědčit, že čas ve vašem počítači je správný."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:583
+#: ../embed/mozilla/GtkNSSDialogs.cpp:586
 #, c-format
 msgid "Cannot establish connection to “%s”"
-msgstr ""
-"Nemohu se připojit k „%s“"
-"."
+msgstr "Nemohu se připojit k „%s“."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:588
+#: ../embed/mozilla/GtkNSSDialogs.cpp:591
 #, c-format
 msgid ""
 "The certificate revocation list (CRL) from “%s” needs to be updated.\n"
@@ -1796,20 +1796,20 @@ msgstr ""
 "\n"
 "Poproste laskavě o pomoc svého administrátora."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:618
+#: ../embed/mozilla/GtkNSSDialogs.cpp:623
 msgid "Trust new Certificate Authority?"
 msgstr "Důvěřovat nové certifikační autoritě?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:623
+#: ../embed/mozilla/GtkNSSDialogs.cpp:628
 msgid "_Trust CA"
 msgstr "_Důvěřovat CA"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:643
+#: ../embed/mozilla/GtkNSSDialogs.cpp:648
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr "Důvěřovat nové certifikační autoritě „%s” pro identifikaci WWW serverů?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:648
+#: ../embed/mozilla/GtkNSSDialogs.cpp:653
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1817,109 +1817,109 @@ msgstr ""
 "Před důvěřováním certifikační autoritě (CA) byste měli ověřit, že certifikát "
 "je autentický."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:719
+#: ../embed/mozilla/GtkNSSDialogs.cpp:724
 msgid "Certificate already exists."
 msgstr "Certifikát již existuje."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:720
+#: ../embed/mozilla/GtkNSSDialogs.cpp:725
 msgid "The certificate has already been imported."
 msgstr "Certifikát již byl importován."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:750
+#: ../embed/mozilla/GtkNSSDialogs.cpp:757
 msgid "Select Password"
 msgstr "Zvolte heslo"
 
 #. FIXME: set accept button text to (_("_Back Up Certificate") ?
 #. * That's not actually correct, since this function is also called from other places!
 #.
-#: ../embed/mozilla/GtkNSSDialogs.cpp:760
+#: ../embed/mozilla/GtkNSSDialogs.cpp:767
 msgid "Select a password to protect this certificate"
 msgstr "Zvolte heslo pro ochranu tohoto certifikátu"
 
 #. FIXME: mozilla sucks, no way to get the name of the certificate / cert file!
-#: ../embed/mozilla/GtkNSSDialogs.cpp:807
+#: ../embed/mozilla/GtkNSSDialogs.cpp:816
 msgid "Enter the password for this certificate"
 msgstr "Zadejte heslo pro tento certifikát"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:878
+#: ../embed/mozilla/GtkNSSDialogs.cpp:887
 msgid "Certificate Revocation List Imported"
 msgstr "Seznam odvolání certifikátů importován"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:888
+#: ../embed/mozilla/GtkNSSDialogs.cpp:897
 msgid "Certificate Revocation List (CRL) successfully imported"
 msgstr "Seznam odvolání certifikátů (CRL) byl úspěšně importován"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:909
+#: ../embed/mozilla/GtkNSSDialogs.cpp:918
 msgid "Unit:"
 msgstr "Součást:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:911
+#: ../embed/mozilla/GtkNSSDialogs.cpp:920
 msgid "Next Update:"
 msgstr "Příští aktualizace:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:938
+#: ../embed/mozilla/GtkNSSDialogs.cpp:947
 msgid "Not part of certificate"
 msgstr "Není součást certifikátu"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1223
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1235
 msgid "Certificate Properties"
 msgstr "Vlastnosti certifikátu"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1245
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1257
 msgid "This certificate has been verified for the following uses:"
 msgstr "Tento certifikát byl ověřen pro následující použití:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1248
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1260
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Nemohu ověřit certifikát, protože byl odvolán."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1251
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1263
 msgid "Could not verify this certificate because it has expired."
 msgstr "Nemohu ověřit certifikát, protože mu vypršela platnost."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1254
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1266
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Nemohu ověřit certifikát, protože se mu nevěří."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1257
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1269
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr "Nemohu ověřit certifikát, protože vydavateli se nevěří."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1260
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1272
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Nemohu ověřit certifikát, protože vydavatel není znám."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1263
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1275
 msgid "Could not verify this certificate because the CA certificate is invalid."
 msgstr "Nemohu ověřit certifikát, protože certifikát CA není platný."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1268
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1280
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Nemohu ověřit certifikát z neznámého důvodu."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1405
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1419
 msgid "Change Token Password"
 msgstr "Změnit heslo tokenu"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1409
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1423
 #, c-format
 msgid "Change the password for the “%s” token"
 msgstr "Změňte heslo pro token„%s“"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1489
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1505
 msgid "Get Token Password"
 msgstr "Získat heslo tokenu"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1493
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1509
 #, c-format
 msgid "Please enter the password for the “%s” token"
 msgstr "Prosím zadejte heslo pro token „%s“"
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:177
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:180
 msgid "Generating Private Key."
 msgstr "Generuji soukromý klíč."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:178
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:181
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
@@ -1927,30 +1927,30 @@ msgstr ""
 "Počkejte prosím, než bude vygenerován nový soukromý klíč. Může to trvat "
 "několik minut."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "Security Notice"
 msgstr "Upozornění na zabezpečení"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
 msgid "This page is loaded over a secure connection"
 msgstr "Tato stránka byla načtena zabezpečeným připojením"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
 msgid "The padlock icon in the statusbar indicates whether a page is secure."
 msgstr "Ikona zámku na stavové liště ukazuje, jestli je stránka zabezpečena."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:110
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:138
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:157
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:177
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
 msgid "Security Warning"
 msgstr "Varování o zabezpečení"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid "This page is loaded over a low security connection"
 msgstr "Tato stránka byla načtena mírně zabezpečeným připojením"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -1958,11 +1958,11 @@ msgstr ""
 "Všechny informace, které vidíte nebo zadáte na této stránce, může snadno "
 "zachytit třetí strana."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "Některé části této stránky byly načteny nezabezpečeným připojením"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1970,12 +1970,12 @@ msgstr ""
 "Některé informace, které vidíte nebo zadáte na této stránce, budou odeslány "
 "nezabezpečeným připojením a může snadno zachytit třetí strana."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid "Send this information over an insecure connection?"
 msgstr "Poslat tyto informace nezabezpečeným připojením?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -1983,12 +1983,12 @@ msgstr ""
 "Informace, které jste zadali, budou odeslány nezabezpečeným připojením, a "
 "může je snadno zachytit třetí strana."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "_Send"
 msgstr "_Odeslat"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -1998,7 +1998,7 @@ msgstr ""
 "jste zadali, budou odeslány nezabezpečeným připojením, a může je snadno "
 "zachytit třetí strana."
 
-#: ../embed/mozilla/MozDownload.cpp:601
+#: ../embed/mozilla/MozDownload.cpp:600
 msgid "Files"
 msgstr "Soubory"
 
@@ -2273,6 +2273,34 @@ msgstr "Západní jazyky"
 msgid "select fonts for|Other Scripts"
 msgstr "Jiné abecedy"
 
+#: ../lib/ephy-password-dialog.c:410
+msgid "_Domain:"
+msgstr "_Doména:"
+
+#: ../lib/ephy-password-dialog.c:439
+msgid "_New password:"
+msgstr "_Nové heslo:"
+
+#: ../lib/ephy-password-dialog.c:449
+msgid "Con_firm password:"
+msgstr "Po_tvrďte heslo:"
+
+#: ../lib/ephy-password-dialog.c:465
+msgid "Password quality:"
+msgstr "Kvalita hesla:"
+
+#: ../lib/ephy-password-dialog.c:481
+msgid "Do not remember this password"
+msgstr "Nepamatovat toto heslo"
+
+#: ../lib/ephy-password-dialog.c:485
+msgid "_Remember password for this session"
+msgstr "_Pamatovat heslo pro toto sezení"
+
+#: ../lib/ephy-password-dialog.c:489
+msgid "Save password in _keyring"
+msgstr "Uložit heslo do svazku _klíčů"
+
 #: ../lib/ephy-stock-icons.c:56
 msgid "Popup Windows"
 msgstr "Vyskakovací okna"
@@ -2283,7 +2311,7 @@ msgstr "Historie"
 
 #: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1761
-#: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1290
+#: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1308
 msgid "Bookmarks"
 msgstr "Záložky"
 
@@ -2331,7 +2359,7 @@ msgstr "300 %"
 msgid "400%"
 msgstr "400 %"
 
-#: ../lib/widgets/ephy-location-entry.c:824
+#: ../lib/widgets/ephy-location-entry.c:874
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Odkaz na tuto stránku vytvoříte přetažením této ikony"
 
@@ -3737,70 +3765,70 @@ msgstr "_Spustit animaci"
 msgid "St_op Animation"
 msgstr "Za_stavit animaci"
 
-#: ../src/ephy-window.c:704
+#: ../src/ephy-window.c:717
 msgid "There are unsubmitted changes to form elements"
 msgstr "V prvcích formuláře jsou neodeslané změny"
 
-#: ../src/ephy-window.c:708
+#: ../src/ephy-window.c:721
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Pokud přesto dokument zavřete, ztratíte tyto informace."
 
-#: ../src/ephy-window.c:712
+#: ../src/ephy-window.c:725
 msgid "Close _Document"
 msgstr "_Zavřít dokument"
 
-#: ../src/ephy-window.c:1280 ../src/window-commands.c:295
+#: ../src/ephy-window.c:1298 ../src/window-commands.c:295
 msgid "Open"
 msgstr "Otevřít"
 
-#: ../src/ephy-window.c:1282 ../src/window-commands.c:321
+#: ../src/ephy-window.c:1300 ../src/window-commands.c:321
 msgid "Save As"
 msgstr "Uložit jako"
 
-#: ../src/ephy-window.c:1284
+#: ../src/ephy-window.c:1302
 msgid "Print"
 msgstr "Tisk"
 
-#: ../src/ephy-window.c:1286
+#: ../src/ephy-window.c:1304
 msgid "Bookmark"
 msgstr "Záložka"
 
-#: ../src/ephy-window.c:1288
+#: ../src/ephy-window.c:1306
 msgid "Find"
 msgstr "Hledat"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1301
+#: ../src/ephy-window.c:1319
 msgid "Larger"
 msgstr "Větší"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1304
+#: ../src/ephy-window.c:1322
 msgid "Smaller"
 msgstr "Menší"
 
-#: ../src/ephy-window.c:1467
+#: ../src/ephy-window.c:1485
 msgid "Insecure"
 msgstr "Nezabezpečeno"
 
-#: ../src/ephy-window.c:1472
+#: ../src/ephy-window.c:1490
 msgid "Broken"
 msgstr "Poškozeno"
 
-#: ../src/ephy-window.c:1484
+#: ../src/ephy-window.c:1502
 msgid "Low"
 msgstr "Nízká"
 
-#: ../src/ephy-window.c:1491
+#: ../src/ephy-window.c:1509
 msgid "High"
 msgstr "Vysoká"
 
-#: ../src/ephy-window.c:1501
+#: ../src/ephy-window.c:1519
 #, c-format
 msgid "Security level: %s"
 msgstr "Úroveň zabezpečení: %s"
 
-#: ../src/ephy-window.c:1541
+#: ../src/ephy-window.c:1559
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
@@ -3808,47 +3836,47 @@ msgstr[0] "%d skryté vyskakovací okno"
 msgstr[1] "%d skrytá vyskakovací okna"
 msgstr[2] "%d skrytých vyskakovacích oken"
 
-#: ../src/ephy-window.c:1836
+#: ../src/ephy-window.c:1854
 #, c-format
 msgid "Open image “%s”"
 msgstr "Otevřít obrázek „%s”"
 
-#: ../src/ephy-window.c:1841
+#: ../src/ephy-window.c:1859
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Použít jako pozadí pracovní plochy „%s”"
 
-#: ../src/ephy-window.c:1846
+#: ../src/ephy-window.c:1864
 #, c-format
 msgid "Save image “%s”"
 msgstr "Uložit obrázek „%s”"
 
-#: ../src/ephy-window.c:1851
+#: ../src/ephy-window.c:1869
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopírovat adresu obrázku „%s”"
 
-#: ../src/ephy-window.c:1864
+#: ../src/ephy-window.c:1882
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Odeslat e-mail na adresu „%s”"
 
-#: ../src/ephy-window.c:1870
+#: ../src/ephy-window.c:1888
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Zkopírovat e-mailovou adresu „%s”"
 
-#: ../src/ephy-window.c:1882
+#: ../src/ephy-window.c:1900
 #, c-format
 msgid "Save link “%s”"
 msgstr "Uložit odkaz „%s”"
 
-#: ../src/ephy-window.c:1888
+#: ../src/ephy-window.c:1906
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Přidat odkaz „%s” k záložkám"
 
-#: ../src/ephy-window.c:1894
+#: ../src/ephy-window.c:1912
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopírovat adresu odkazu „%s”"
