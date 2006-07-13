@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany 2.15.3.90\n"
+"Project-Id-Version: epiphany 2.15.4.90\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2006-07-09 02:33+0900\n"
-"PO-Revision-Date: 2006-07-09 02:47+0900\n"
+"POT-Creation-Date: 2006-07-14 03:02+0900\n"
+"PO-Revision-Date: 2006-07-14 03:05+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr "책갈피를 찾아보고 정리합니다"
 
 #: ../data/bme.desktop.in.in.h:2
 msgid "Epiphany Web Bookmarks"
-msgstr "에피퍼니 웹 책갈피"
+msgstr "에피파니 웹 책갈피"
 
 #: ../data/bme.desktop.in.in.h:3
 msgid "Web Bookmarks"
@@ -33,7 +33,7 @@ msgstr "웹을 돌아 다닙니다"
 
 #: ../data/epiphany.desktop.in.in.h:2
 msgid "Epiphany Web Browser"
-msgstr "에피퍼니 웹 브라우저"
+msgstr "에피파니 웹 브라우저"
 
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:519
@@ -92,7 +92,7 @@ msgstr "사용자가 도구 모음을 편집하지 못하게 합니다."
 
 #: ../data/epiphany-lockdown.schemas.in.h:11
 msgid "Disable the user's ability to type in a URL to Epiphany."
-msgstr "사용자가 Epiphany에 URL을 직접 입력하지 못하게 합니다."
+msgstr "사용자가 에피파니에 URL을 직접 입력하지 못하게 합니다."
 
 #: ../data/epiphany-lockdown.schemas.in.h:12
 msgid "Disable toolbar editing"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: ../data/epiphany-lockdown.schemas.in.h:15
 msgid "Epiphany cannot quit"
-msgstr "Epiphany 끝내지 못하기"
+msgstr "에피파니 끝내지 못하기"
 
 #: ../data/epiphany-lockdown.schemas.in.h:16
 msgid "Hide menubar by default"
@@ -131,11 +131,11 @@ msgstr "전체 화면 모드로 잠그기"
 
 #: ../data/epiphany-lockdown.schemas.in.h:19
 msgid "Locks Epiphany in fullscreen mode."
-msgstr "Epiphany를 전체 화면 모드로 잠궈 놓습니다."
+msgstr "에피파니를 전체 화면 모드로 잠궈 놓습니다."
 
 #: ../data/epiphany-lockdown.schemas.in.h:20
 msgid "User is not allowed to close Epiphany"
-msgstr "사용자가 Epiphany를 닫지 못하게 합니다"
+msgstr "사용자가 에피파니를 닫지 못하게 합니다"
 
 #: ../data/epiphany.schemas.in.h:1
 msgid "Active extensions"
@@ -631,7 +631,7 @@ msgstr "언어를 고르십시오(_A):"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:13
-#: ../lib/widgets/ephy-location-entry.c:586 ../src/ephy-history-window.c:261
+#: ../lib/widgets/ephy-location-entry.c:636 ../src/ephy-history-window.c:261
 msgid "Cl_ear"
 msgstr "비우기(_E)"
 
@@ -813,7 +813,7 @@ msgstr ""
 "전송 %s, 전체 크기 %s"
 
 #: ../embed/downloader-view.c:436 ../embed/downloader-view.c:441
-#: ../src/ephy-window.c:1464
+#: ../src/ephy-window.c:1482
 msgid "Unknown"
 msgstr "알 수 없음"
 
@@ -850,7 +850,7 @@ msgstr "남은 시간"
 
 #: ../embed/ephy-embed-shell.c:260
 msgid "Epiphany can't be used now. Mozilla initialization failed."
-msgstr "Epiphany를 지금 쓸 수 없습니다. 모질라 초기화 하는데 실패하였습니다."
+msgstr "에피파니를 지금 쓸 수 없습니다. 모질라 초기화 하는데 실패하였습니다."
 
 #: ../embed/ephy-encodings.c:60
 msgid "Arabic (_IBM-864)"
@@ -2300,7 +2300,7 @@ msgstr "기록"
 
 #: ../lib/ephy-stock-icons.c:58 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1761
-#: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1290
+#: ../src/bookmarks/ephy-topic-action.c:404 ../src/ephy-window.c:1308
 msgid "Bookmarks"
 msgstr "책갈피"
 
@@ -2348,7 +2348,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:824
+#: ../lib/widgets/ephy-location-entry.c:874
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "이 페이지의 바로가기를 만드려면 이 아이콘을 끌어 놓으십시오"
 
@@ -2375,11 +2375,12 @@ msgstr "이 파일에서 웹 주소를 찾을 수 없습니다."
 #. Translators: "Desktop File" refers to .desktop files containing a link
 #: ../plugins/desktop-file/plugin.cpp:442
 msgid "Epiphany Desktop File Plugin"
-msgstr "Epiphany 바탕화면 파일 플러그인"
+msgstr "에피파니 바탕화면 파일 플러그인"
 
 #: ../plugins/desktop-file/plugin.cpp:446
 msgid "This plugin handles “.desktop” and “.url” files containing web links."
-msgstr "이 플러그인은 웹 바로가기가 들어 있는 “.desktop” 및 “.url” 파일을 처리합니다."
+msgstr ""
+"이 플러그인은 웹 바로가기가 들어 있는 “.desktop” 및 “.url” 파일을 처리합니다."
 
 #: ../src/bookmarks/ephy-bookmark-action.c:263
 #, c-format
@@ -2524,11 +2525,11 @@ msgstr "로컬 사이트"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:99
 msgid "Epiphany (RDF)"
-msgstr "Epiphany (RDF)"
+msgstr "에피파니 (RDF)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:100
 msgid "Mozilla (HTML)"
-msgstr "Mozilla (HTML)"
+msgstr "모질라 (HTML)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:152
 msgid "Remove from this topic"
@@ -2816,7 +2817,7 @@ msgstr "Galeon/Konqueror 책갈피"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:782
 msgid "Epiphany bookmarks"
-msgstr "Epiphany 책갈피"
+msgstr "에피파니 책갈피"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:905
 msgid "Export Bookmarks"
@@ -3038,7 +3039,7 @@ msgstr "사이트"
 
 #: ../src/ephy-main.c:78
 msgid "Open a new tab in an existing browser window"
-msgstr "현재의 Epiphany창에서 새 탭을 엽니다"
+msgstr "현재의 에피파니 창에서 새 탭을 엽니다"
 
 #: ../src/ephy-main.c:80
 msgid "Open a new browser window"
@@ -3141,9 +3142,7 @@ msgstr "이전의 브라우저 창과 탭을 복구하시겠습니까?"
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
-msgstr ""
-"Epiphany가 마지막으로 작동할 때 비정상적으로 끝난 것 같습니다. 열려 있었던 창"
-"과 탭을 복구할 수 있습니다."
+msgstr "에피파니가 마지막으로 작동할 때 비정상적으로 끝난 것 같습니다. 열려 있었던 창과 탭을 복구할 수 있습니다."
 
 #: ../src/ephy-session.c:615
 msgid "_Don't Recover"
@@ -3155,7 +3154,7 @@ msgstr "복구하기(_R)"
 
 #: ../src/ephy-session.c:619
 msgid "Crash Recovery"
-msgstr "파괴 복구"
+msgstr "비정상 종료 복구"
 
 #: ../src/ephy-shell.c:199
 msgid "Sidebar extension required"
@@ -3743,116 +3742,116 @@ msgstr "움직임 시작(_A)"
 msgid "St_op Animation"
 msgstr "움직임 멈춤(_O)"
 
-#: ../src/ephy-window.c:704
+#: ../src/ephy-window.c:717
 msgid "There are unsubmitted changes to form elements"
 msgstr "바뀐 내용중에 제출하지 않은 폼이 있습니다."
 
-#: ../src/ephy-window.c:708
+#: ../src/ephy-window.c:721
 msgid "If you close the document anyway, you will lose that information."
 msgstr "지금 문서를 닫으면, 그 정보를 잃어버릴 것입니다."
 
-#: ../src/ephy-window.c:712
+#: ../src/ephy-window.c:725
 msgid "Close _Document"
 msgstr "문서 닫기(_D)"
 
-#: ../src/ephy-window.c:1280 ../src/window-commands.c:295
+#: ../src/ephy-window.c:1298 ../src/window-commands.c:295
 msgid "Open"
 msgstr "열기"
 
-#: ../src/ephy-window.c:1282 ../src/window-commands.c:321
+#: ../src/ephy-window.c:1300 ../src/window-commands.c:321
 msgid "Save As"
 msgstr "다른 이름으로 저장"
 
-#: ../src/ephy-window.c:1284
+#: ../src/ephy-window.c:1302
 msgid "Print"
 msgstr "인쇄"
 
-#: ../src/ephy-window.c:1286
+#: ../src/ephy-window.c:1304
 msgid "Bookmark"
 msgstr "책갈피"
 
-#: ../src/ephy-window.c:1288
+#: ../src/ephy-window.c:1306
 msgid "Find"
 msgstr "찾기"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1301
+#: ../src/ephy-window.c:1319
 msgid "Larger"
 msgstr "크게"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1304
+#: ../src/ephy-window.c:1322
 msgid "Smaller"
 msgstr "작게"
 
-#: ../src/ephy-window.c:1467
+#: ../src/ephy-window.c:1485
 msgid "Insecure"
 msgstr "안전하지 않음"
 
-#: ../src/ephy-window.c:1472
+#: ../src/ephy-window.c:1490
 msgid "Broken"
 msgstr "깨짐"
 
-#: ../src/ephy-window.c:1484
+#: ../src/ephy-window.c:1502
 msgid "Low"
 msgstr "낮음"
 
-#: ../src/ephy-window.c:1491
+#: ../src/ephy-window.c:1509
 msgid "High"
 msgstr "높음"
 
-#: ../src/ephy-window.c:1501
+#: ../src/ephy-window.c:1519
 #, c-format
 msgid "Security level: %s"
 msgstr "보안 수준: %s"
 
-#: ../src/ephy-window.c:1541
+#: ../src/ephy-window.c:1559
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "감춘 팝업 창 %d개"
 
-#: ../src/ephy-window.c:1836
+#: ../src/ephy-window.c:1854
 #, c-format
 msgid "Open image “%s”"
 msgstr "“%s” 그림을 엽니다"
 
-#: ../src/ephy-window.c:1841
+#: ../src/ephy-window.c:1859
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "“%s” 바탕화면 그림으로 씁니다"
 
-#: ../src/ephy-window.c:1846
+#: ../src/ephy-window.c:1864
 #, c-format
 msgid "Save image “%s”"
 msgstr "“%s” 그림을 저장합니다"
 
-#: ../src/ephy-window.c:1851
+#: ../src/ephy-window.c:1869
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "“%s” 그림 주소를 복사합니다"
 
-#: ../src/ephy-window.c:1864
+#: ../src/ephy-window.c:1882
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "“%s” 주소로 전자메일을 보냅니다"
 
-#: ../src/ephy-window.c:1870
+#: ../src/ephy-window.c:1888
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "“%s” 전자메일 주소를 복사합니다"
 
-#: ../src/ephy-window.c:1882
+#: ../src/ephy-window.c:1900
 #, c-format
 msgid "Save link “%s”"
 msgstr "“%s” 바로가기를 저장합니다"
 
-#: ../src/ephy-window.c:1888
+#: ../src/ephy-window.c:1906
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "“%s” 바로가기를 책갈피에 넣습니다"
 
-#: ../src/ephy-window.c:1894
+#: ../src/ephy-window.c:1912
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "바로가기 주소 “%s”를 복사합니다"
