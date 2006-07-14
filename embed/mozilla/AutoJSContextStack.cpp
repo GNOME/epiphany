@@ -24,7 +24,6 @@
 #include "AutoJSContextStack.h"
 
 #include <nsIServiceManager.h>
-#include <nsIServiceManagerUtils.h>
 
 AutoJSContextStack::~AutoJSContextStack()
 {
