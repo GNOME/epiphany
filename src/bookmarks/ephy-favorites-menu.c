@@ -301,11 +301,24 @@ static void
 ephy_favorites_menu_finalize (GObject *o)
 {
 	EphyFavoritesMenu *menu = EPHY_FAVORITES_MENU (o);
+	EphyNode *fav;
 
-	if (menu->priv->action_group != NULL)
+	fav = ephy_bookmarks_get_favorites (menu->priv->bookmarks);
+	ephy_node_signal_disconnect_object (fav,
+				 	    EPHY_NODE_CHILD_REMOVED,
+				 	    (EphyNodeCallback) fav_removed_cb,
+				 	    G_OBJECT (menu));
+	ephy_node_signal_disconnect_object (fav,
+					    EPHY_NODE_CHILD_ADDED,
+					    (EphyNodeCallback) fav_added_cb,
+					    G_OBJECT (menu));
+
+	if (menu->priv->update_tag != 0)
 	{
-		g_object_unref (menu->priv->action_group);
+		g_source_remove (menu->priv->update_tag);
 	}
+
+	ephy_favorites_menu_clean (menu);
 
 	G_OBJECT_CLASS (parent_class)->finalize (o);
 }
