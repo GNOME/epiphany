@@ -170,6 +170,8 @@ Prompter::Prompter (const char *aStock,
 	g_free (text);
 
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	/* Guard against overlong nonbreakable text (exploit) */
+	gtk_label_set_line_wrap_mode (GTK_LABEL (label), PANGO_WRAP_WORD_CHAR);
 	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
 
