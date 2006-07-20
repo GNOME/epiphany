@@ -1,3 +1,12 @@
+2006-07-20  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/widgets/ephy-location-entry.c: (entry_key_press_cb),
+	(entry_activate_after_cb), (action_activated_after_cb),
+	(ephy_location_entry_reset_internal), (ephy_location_entry_reset):
+
+	When resetting the entry also emit user-changed, to restore the original
+	URI in the tab's property. Bug #345934.
+
 2006-07-18  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/EphyPromptService.cpp:
