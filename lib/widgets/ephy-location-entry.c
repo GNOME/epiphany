@@ -110,6 +110,7 @@ static const GdkColor fallback_bg_colour = { 0, 0xf7f7, 0xf7f7, 0xbebe }; /* yel
 
 static void ephy_location_entry_class_init (EphyLocationEntryClass *klass);
 static void ephy_location_entry_init (EphyLocationEntry *le);
+static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *, gboolean);
 
 static GObjectClass *parent_class = NULL;
 
@@ -381,7 +382,7 @@ entry_key_press_cb (GtkEntry *entry,
 
 	if (event->keyval == GDK_Escape && state == 0)
 	{
-		ephy_location_entry_reset (lentry);
+		ephy_location_entry_reset_internal (lentry, TRUE);
 		/* don't return TRUE since we want to cancel the autocompletion popup too */
 	}
 
@@ -422,7 +423,7 @@ entry_activate_after_cb (GtkEntry *entry,
 
 	if (priv->needs_reset)
 	{
-		ephy_location_entry_reset (lentry);
+		ephy_location_entry_reset_internal (lentry, TRUE);
 		priv->needs_reset = FALSE;
 	}
 }
@@ -548,7 +549,7 @@ action_activated_after_cb (GtkEntryCompletion *completion,
 	     state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) ||
 	    button == 2)
 	{
-		ephy_location_entry_reset (lentry);
+		ephy_location_entry_reset_internal (lentry, TRUE);
 	}
 }
 
@@ -1079,8 +1080,9 @@ ephy_location_entry_get_location (EphyLocationEntry *entry)
 	return gtk_entry_get_text (GTK_ENTRY (priv->icon_entry->entry));
 }
 
-gboolean
-ephy_location_entry_reset (EphyLocationEntry *entry)
+static gboolean
+ephy_location_entry_reset_internal (EphyLocationEntry *entry,
+				    gboolean notify)
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
 	const char *text, *old_text;
@@ -1097,7 +1099,18 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
 	ephy_location_entry_set_location (entry, text, NULL);
 	g_free (url);
 
+	if (notify)
+	{
+		g_signal_emit (entry, signals[USER_CHANGED], 0);
+	}
+
 	return retval;
+}
+
+gboolean
+ephy_location_entry_reset (EphyLocationEntry *entry)
+{
+	return ephy_location_entry_reset_internal (entry, FALSE);
 }
 
 void
