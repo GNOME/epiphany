@@ -138,6 +138,7 @@ enum
 	ALLOW_JAVA_PROP,
 	ALLOW_JS_PROP,
 	ACCEPT_COOKIES_PROP,
+	REMEMBER_PASSWORDS_PROP,
 	DISK_CACHE_PROP,
 	CLEAR_CACHE_BUTTON_PROP,
 
@@ -182,6 +183,7 @@ EphyDialogProperty properties [] =
 	{ "enable_java_checkbutton",		CONF_SECURITY_JAVA_ENABLED,	  PT_AUTOAPPLY, 0 },
 	{ "enable_javascript_checkbutton",	CONF_SECURITY_JAVASCRIPT_ENABLED, PT_AUTOAPPLY, 0 },
 	{ "cookies_radiobutton",		CONF_SECURITY_COOKIES_ACCEPT,	  PT_AUTOAPPLY, G_TYPE_STRING },
+	{ "remember_passwords_checkbutton",	CONF_PRIVACY_REMEMBER_PASSWORDS,  PT_AUTOAPPLY, 0 },
 	{ "disk_cache_spin",			CONF_NETWORK_CACHE_SIZE,	  PT_AUTOAPPLY, 0 },
 	{ "clear_cache_button",			NULL,				  PT_NORMAL,	0 },
 

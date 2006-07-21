@@ -470,6 +470,9 @@ static const PrefData notifier_entries[] =
 	{ CONF_SECURITY_COOKIES_ACCEPT,
 	  "network.cookie.cookieBehavior",
 	  transform_cookies_accept_mode },
+	{ CONF_PRIVACY_REMEMBER_PASSWORDS,
+	  "signon.rememberSignons",
+	  mozilla_notifier_transform_bool }
 };
 
 gboolean

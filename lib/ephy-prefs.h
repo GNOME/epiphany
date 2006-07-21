@@ -68,6 +68,9 @@ G_BEGIN_DECLS
 #define CONF_DESKTOP_BG_PICTURE		"/desktop/gnome/background/picture_filename"
 #define CONF_DESKTOP_BG_TYPE		"/desktop/gnome/background/picture_options"
 
+/* Privacy */
+#define CONF_PRIVACY_REMEMBER_PASSWORDS "/apps/epiphany/general/remember_passwords"
+
 G_END_DECLS
 
 #endif
