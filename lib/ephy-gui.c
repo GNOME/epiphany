@@ -38,6 +38,7 @@
 #include <gtk/gtkmain.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktoolbar.h>
+#include <gtk/gtktogglebutton.h>
 
 #include <unistd.h>
 
@@ -493,4 +494,46 @@ ephy_gui_message_dialog_get_content_box (GtkWidget *dialog)
 	g_list_free (children);
 
 	return container;
+}
+
+/* Until bug #345349 is fixed */
+void
+ephy_gui_message_dialog_set_wrap_mode (GtkMessageDialog *dialog,
+				       PangoWrapMode wrap_mode)
+{
+	GtkContainer *container;
+	GList *children, *l;
+
+	container = GTK_CONTAINER (dialog->label->parent);
+	g_return_if_fail (GTK_IS_CONTAINER (container));
+
+	children = gtk_container_get_children (container);
+	for (l = children; l != NULL; l = l->next)
+	{
+		GtkWidget *child = l->data;
+
+		if (GTK_IS_LABEL (child))
+		{
+			g_print ("Setting wrap mode on label %p\n", child);
+			gtk_label_set_line_wrap_mode (GTK_LABEL (child),
+						      wrap_mode);
+		}
+	}
+}
+
+static void
+checkbutton_toggled_cb (GtkToggleButton *button,
+			const char *pref)
+{
+	eel_gconf_set_boolean (pref, gtk_toggle_button_get_active (button));
+}
+
+void
+ephy_gui_connect_checkbutton_to_gconf (GtkWidget *widget,
+				       const char *pref)
+{
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
+				      eel_gconf_get_boolean (pref));
+	g_signal_connect (widget, "toggled",
+			  G_CALLBACK (checkbutton_toggled_cb), (gpointer) pref);
 }

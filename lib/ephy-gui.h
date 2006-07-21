@@ -21,12 +21,13 @@
 #ifndef EPHY_GUI_H
 #define EPHY_GUI_H
 
-#include <gtk/gtkmenu.h>
-#include <gtk/gtktreeview.h>
-#include <gtk/gtktreeviewcolumn.h>
-#include <gtk/gtkwindow.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdkkeysyms.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gtk/gtkmenu.h>
+#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtktreeviewcolumn.h>
+#include <gtk/gtktreeview.h>
+#include <gtk/gtkwindow.h>
 
 G_BEGIN_DECLS
 
@@ -77,6 +78,12 @@ void		ephy_gui_window_update_user_time	 (GtkWidget *window,
 							  guint32 user_time);
 
 GtkWidget      *ephy_gui_message_dialog_get_content_box	 (GtkWidget *dialog);
+
+void		ephy_gui_message_dialog_set_wrap_mode	 (GtkMessageDialog *dialog,
+							  PangoWrapMode wrap_mode);
+
+void		ephy_gui_connect_checkbutton_to_gconf	 (GtkWidget *widget,
+							  const char *pref);
 
 G_END_DECLS
 

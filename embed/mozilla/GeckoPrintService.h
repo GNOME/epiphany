@@ -47,6 +47,7 @@ public:
 	static nsresult TranslateSettings (GtkPrintSettings*, GtkPageSetup *, const nsACString&, PRBool, nsIPrintSettings*);
 
 private:
+	nsresult PrintUnattended (nsIDOMWindow *, nsIPrintSettings *);
 };
 
 #endif /* GECKO_PRINT_SERVICE_H */

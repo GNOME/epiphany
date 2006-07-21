@@ -23,11 +23,14 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <gtk/gtkwindow.h>
+#include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkdialog.h>
-#include <gtk/gtkprintunixdialog.h>
+#include <gtk/gtklabel.h>
 #include <gtk/gtkmessagedialog.h>
+#include <gtk/gtkprintunixdialog.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkwindow.h>
+#include <glade/glade-xml.h>
 
 #include <nsStringAPI.h>
 
@@ -39,13 +42,25 @@
 #include "ephy-debug.h"
 #include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
+#include "ephy-gui.h"
 #include "ephy-prefs.h"
 
 #include "AutoJSContextStack.h"
+#include "AutoWindowModalState.h"
 #include "EphyUtils.h"
 #include "GeckoPrintSession.h"
 
 #include "GeckoPrintService.h"
+
+/* Some printing keys */
+
+#define CONF_PRINT_BG_COLORS		"/apps/epiphany/dialogs/print_background_colors"
+#define CONF_PRINT_BG_IMAGES		"/apps/epiphany/dialogs/print_background_images"
+#define CONF_PRINT_COLOR                "/apps/epiphany/dialogs/print_color"
+#define CONF_PRINT_DATE                 "/apps/epiphany/dialogs/print_date"
+#define CONF_PRINT_PAGE_NUMBERS         "/apps/epiphany/dialogs/print_page_numbers"
+#define CONF_PRINT_PAGE_TITLE           "/apps/epiphany/dialogs/print_page_title"
+#define CONF_PRINT_PAGE_URL             "/apps/epiphany/dialogs/print_page_url"
 
 #define LITERAL(s) NS_REINTERPRET_CAST(const nsAString::char_type*, NS_L(s))
 
@@ -53,6 +68,8 @@
 #define NS_ERROR_GFX_PRINTER_BASE (1) /* adjustable :-) */
 #define NS_ERROR_GFX_PRINTER_ACCESS_DENIED \
   NS_ERROR_GENERATE_FAILURE(NS_ERROR_MODULE_GFX,NS_ERROR_GFX_PRINTER_BASE+5)
+#define NS_ERROR_GFX_PRINTER_NAME_NOT_FOUND         \
+  NS_ERROR_GENERATE_FAILURE(NS_ERROR_MODULE_GFX,NS_ERROR_GFX_PRINTER_BASE+4)
 
 NS_IMPL_ISUPPORTS1 (GeckoPrintService,
 		    nsIPrintingPromptService)
@@ -85,59 +102,9 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
   GeckoPrintSession *session = GeckoPrintSession::FromSettings (aSettings);
   NS_ENSURE_TRUE (session, NS_ERROR_INVALID_POINTER);
 
-  GtkWidget *parent = EphyUtils::FindGtkParent (aParent);
-  NS_ENSURE_TRUE(parent, NS_ERROR_INVALID_POINTER);
-
-  PRBool isCalledFromScript = EphyJSUtils::IsCalledFromScript ();
-
-  nsresult rv;
-  AutoJSContextStack stack;
-  rv = stack.Init ();
-  if (NS_FAILED (rv)) {
-    return rv;
-  }
-
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-
   /* Print settings changes disallowed, just translate the settings */
   if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP)) {
-    /* FIXME: we need to call session->SetSettings first, and for that we need a
-     * way to get the default printer object!
-     */
-    g_warning ("Printing with locked print setup doesn't work!");
-    return NS_ERROR_FAILURE;
-
-    /* If called from a script, give the user a way to cancel the print! */
-    if (isCalledFromScript) {
-      GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
-		    				  GtkDialogFlags (0),
-						  GTK_MESSAGE_QUESTION,
-						  GTK_BUTTONS_CANCEL,
-						  "%s", _("Print this page?"));
-      gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
-      gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_PRINT,
-			     GTK_RESPONSE_ACCEPT);
-      gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-
-      int response = gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_widget_destroy (dialog);
-
-      if (response != GTK_RESPONSE_ACCEPT) {
-        return NS_ERROR_ABORT;
-      }
-    }
-
-    nsCString sourceFile;
-    session->GetSourceFile (sourceFile);
-    if (!sourceFile.IsEmpty ()) {
-      rv = TranslateSettings (ephy_embed_shell_get_print_settings (shell),
-			      ephy_embed_shell_get_page_setup (shell),
-			      sourceFile, PR_TRUE, aSettings);
-    } else {
-      rv = NS_ERROR_FAILURE;
-    }
-
-    return rv;
+    return PrintUnattended (aParent, aSettings);
   }
 
   /* Not locked down, show the dialogue */
@@ -152,6 +119,35 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
   NS_ENSURE_SUCCESS (rv, rv);
 #endif
 
+  GtkWidget *parent = EphyUtils::FindGtkParent (aParent);
+  NS_ENSURE_TRUE(parent, NS_ERROR_INVALID_POINTER);
+
+  nsresult rv;
+  AutoJSContextStack stack;
+  rv = stack.Init ();
+  if (NS_FAILED (rv)) {
+    return rv;
+  }
+
+  AutoWindowModalState modalState (aParent);
+
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
+  GladeXML *xml = glade_xml_new (ephy_file ("print.glade"),
+				 "print_dialog_custom_tab", NULL);
+  if (!xml) {
+    return NS_ERROR_FAILURE;
+  }
+
+  /* Build the custom tab */
+  GtkWidget *custom_tab = glade_xml_get_widget (xml, "custom_tab_container");
+  ephy_gui_connect_checkbutton_to_gconf (glade_xml_get_widget (xml, "print_bg_colors_checkbutton"), CONF_PRINT_BG_COLORS);
+  ephy_gui_connect_checkbutton_to_gconf (glade_xml_get_widget (xml, "print_bg_images_checkbutton"), CONF_PRINT_BG_IMAGES);
+  ephy_gui_connect_checkbutton_to_gconf (glade_xml_get_widget (xml, "print_date_checkbutton"), CONF_PRINT_DATE);
+  ephy_gui_connect_checkbutton_to_gconf (glade_xml_get_widget (xml, "print_page_numbers_checkbutton"), CONF_PRINT_PAGE_NUMBERS);
+  ephy_gui_connect_checkbutton_to_gconf (glade_xml_get_widget (xml, "print_page_title_checkbutton"), CONF_PRINT_PAGE_TITLE);
+  ephy_gui_connect_checkbutton_to_gconf (glade_xml_get_widget (xml, "print_page_url_checkbutton"), CONF_PRINT_PAGE_URL);
+	
   /* FIXME: this sucks! find some way to do all of this async! */
   GtkWidget *dialog = gtk_print_unix_dialog_new (NULL /* FIXME title */,
 		  				 GTK_WINDOW (parent));
@@ -169,6 +165,13 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
 					ephy_embed_shell_get_page_setup (shell));
   gtk_print_unix_dialog_set_settings (print_dialog,
 				      ephy_embed_shell_get_print_settings (shell));
+
+  /* Remove custom tab from its dummy window and put it in the print dialogue */
+  g_object_ref_sink (custom_tab);
+  gtk_container_remove (GTK_CONTAINER (custom_tab->parent), custom_tab);
+  gtk_print_unix_dialog_add_custom_tab (print_dialog, custom_tab,
+					gtk_label_new (_("Options"))); /* FIXME better name! */
+  g_object_unref (custom_tab);
 
   gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
@@ -281,6 +284,8 @@ NS_IMETHODIMP GeckoPrintService::ShowPageSetup (nsIDOMWindow *aParent,
     return rv;
   }
 
+  AutoWindowModalState modalState (aParent);
+
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GtkPageSetup *new_setup =
     gtk_print_run_page_setup_dialog (GTK_WINDOW (parent),
@@ -308,6 +313,156 @@ GeckoPrintService::ShowPrinterProperties (nsIDOMWindow *aParent,
   return NS_ERROR_NOT_IMPLEMENTED;
 }
 
+/* Private methods */
+
+#if 0
+typedef struct
+{
+  GMainLoop *mainLoop;
+  GtkPrinter *mPrinter;
+  guint timeout;
+  int response;
+  guint cancelled : 1;
+} FindPrinterData;
+
+static void
+FreeFindPrinterData (FindPrinterData *data)
+{
+  if (data->printer) {
+    g_object_unref (data->printer);
+  }
+}
+
+static void
+DialogResponseCallback (GtkWidget *aDialog,
+		        int aResponse,
+			FindPrinterData *data)
+{
+  data->response = aResponse;
+  g_main_loop_quit (data->mainloop);
+}
+
+static void
+TimeoutCallback (FindPrinterData *data)
+{
+  data->cancelled = TRUE;
+  g_main_loop_quit (data->mainLoop);
+  data->mainLoop = NULL;
+  return FALSE;
+}
+
+static gboolean
+PrinterEnumerateCallback (GtkPrinter *aPrinter,
+			  FindPrinterData *data)
+{
+  if (data->cancelled)
+    return TRUE;
+
+  if ((data->printerName &&
+       strcmp (data->printerName, gtk_printer_get_name (aPrinter)) == 0) ||
+      (!data->printerName &&
+       gtk_printer_is_default (aPrinter))) {
+    data->printer = g_object_ref (aPrinter);
+    return TRUE;
+  }
+
+  return FALSE;
+}
+#endif
+
+nsresult
+GeckoPrintService::PrintUnattended (nsIDOMWindow *aParent,
+				    nsIPrintSettings *aPrintSettings)
+{
+  return NS_ERROR_NOT_IMPLEMENTED;
+#if 0
+  GtkWidget *parent = EphyUtils::FindGtkParent (aParent);
+  NS_ENSURE_TRUE(parent, NS_ERROR_INVALID_POINTER);
+
+  PRBool isCalledFromScript = EphyJSUtils::IsCalledFromScript ();
+
+  nsresult rv;
+  AutoJSContextStack stack;
+  rv = stack.Init ();
+  if (NS_FAILED (rv)) {
+    return rv;
+  }
+
+  AutoWindowModalState modalState (aParent);
+
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  GtkPrintSettings *settings = ephy_embed_shell_get_print_settings (shell);
+  NS_ENSURE_TRUE (settings, NS_ERROR_FAILURE);
+
+  const char *printer = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_PRINTER);
+#if 0
+  if (!printer || !printer[0]) {
+    return NS_ERROR_GFX_PRINTER_NAME_NOT_FOUND;
+  }
+#endif
+  /* We need to find the printer, so we need to run a mainloop.
+   * If called from a script, give the user a way to cancel the print;
+   * otherwise we'll just show a generic progress message.
+   */
+  GtkWidget *dialog;
+  if (isCalledFromScript) {
+    dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
+				     GtkDialogFlags (0),
+				     GTK_MESSAGE_QUESTION,
+				     GTK_BUTTONS_CANCEL,
+				     "%s", _("Print this page?"));
+    gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_PRINT,
+			   GTK_RESPONSE_ACCEPT);
+  } else {
+    dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
+				     GtkDialogFlags (0),
+				     GTK_MESSAGE_QUESTION,
+				     GTK_BUTTONS_CANCEL,
+				     "%s", _("Preparing to print"));
+  }
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+  gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+
+  FindPrinterData *data = g_new0 (PrinterData, 1);
+  data->dialog = dialog;
+
+  g_signal_connect (dialog, "response",
+		    G_CALLBACK (DialogResponseCallback), data);
+
+  /* Don't run forever */
+  data->timeoutId = g_timeout_add (PRINTER_ENUMERATE_TIMEOUT,
+				   (GSourceFunc) EnumerateTimoutCallback,
+				   data);
+  /* Enumerate printers until we find our printer */
+  gtk_enumerate_printers ((GtkPrinterFunc) PrinterEnumerateCallback,
+			  data,
+			  (GDestroyNotify) EnumerateDestroyCallback, FALSE);
+
+  /* Now run the mainloop */
+  int response = gtk_dialog_run (GTK_DIALOG (dialog));
+  Printer
+  gtk_widget_destroy (dialog);
+
+  if (response != GTK_RESPONSE_ACCEPT) {
+    return NS_ERROR_ABORT;
+  }
+
+    nsCString sourceFile;
+    session->GetSourceFile (sourceFile);
+    if (!sourceFile.IsEmpty ()) {
+      rv = TranslateSettings (settings,
+			      ephy_embed_shell_get_page_setup (shell),
+			      sourceFile, PR_TRUE, aSettings);
+    } else {
+      rv = NS_ERROR_FAILURE;
+    }
+
+    return rv;
+  }
+#endif /* if 0 */
+}
+
 /* Static methods */
 
 /* static */ nsresult
@@ -329,8 +484,8 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
 #endif
 
   /* Initialisation */
-  aSettings->SetIsInitializedFromPrinter (PR_FALSE);
-  aSettings->SetIsInitializedFromPrefs (PR_FALSE);
+  aSettings->SetIsInitializedFromPrinter (PR_FALSE); /* FIXME: PR_TRUE? */
+  aSettings->SetIsInitializedFromPrefs (PR_FALSE); /* FIXME: PR_TRUE? */
   aSettings->SetPrintSilent (PR_FALSE);
   aSettings->SetShowPrintProgress (PR_TRUE);
   aSettings->SetNumCopies (1);
@@ -473,15 +628,12 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   aSettings->SetMarginLeft (gtk_page_setup_get_left_margin (aPageSetup, GTK_UNIT_INCH));
   aSettings->SetMarginRight (gtk_page_setup_get_right_margin (aPageSetup, GTK_UNIT_INCH));
 
-#if 0
-  // FIXME !
-  aSettings->SetHeaderStrLeft(const PRUnichar * aHeaderStrLeft);
-  aSettings->SetHeaderStrCenter(const PRUnichar * aHeaderStrCenter);
-  aSettings->SetHeaderStrRight(const PRUnichar * aHeaderStrRight);
-  aSettings->SetFooterStrLeft(const PRUnichar * aFooterStrLeft);
-  aSettings->SetFooterStrCenter(const PRUnichar * aFooterStrCenter);
-  aSettings->SetFooterStrRight(const PRUnichar * aFooterStrRight);
-#endif
+  aSettings->SetHeaderStrLeft (eel_gconf_get_boolean (CONF_PRINT_PAGE_TITLE) ? LITERAL ("&T") : LITERAL (""));
+  aSettings->SetHeaderStrCenter (LITERAL (""));
+  aSettings->SetHeaderStrRight (eel_gconf_get_boolean (CONF_PRINT_PAGE_URL) ? LITERAL ("&U") : LITERAL (""));
+  aSettings->SetFooterStrLeft (eel_gconf_get_boolean (CONF_PRINT_PAGE_NUMBERS) ? LITERAL ("&PT") : LITERAL (""));
+  aSettings->SetFooterStrCenter (LITERAL (""));
+  aSettings->SetFooterStrRight (eel_gconf_get_boolean (CONF_PRINT_DATE) ? LITERAL ("&D") : LITERAL (""));
 
   /* FIXME I think this is the right default, but this prevents the user
    * from cancelling the print immediately, see the stupid comment in nsPrintEngine:
@@ -495,8 +647,8 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   aSettings->SetScaling (gtk_print_settings_get_scale (aGtkSettings) / 100.0);
   aSettings->SetShrinkToFit (PR_FALSE); /* FIXME setting */
     
-  aSettings->SetPrintBGColors (PR_FALSE); /* FIXME setting */
-  aSettings->SetPrintBGImages (PR_FALSE); /* FIXME setting */
+  aSettings->SetPrintBGColors (eel_gconf_get_boolean (CONF_PRINT_BG_COLORS) != FALSE);
+  aSettings->SetPrintBGImages (eel_gconf_get_boolean (CONF_PRINT_BG_IMAGES) != FALSE);
 
   /* aSettings->SetPlexName (LITERAL ("default")); */
   /* aSettings->SetColorspace (LITERAL ("default")); */
