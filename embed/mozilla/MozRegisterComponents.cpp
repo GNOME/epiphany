@@ -73,6 +73,7 @@
 #include "GtkNSSDialogs.h"
 #include "GtkNSSKeyPairDialogs.h"
 #include "GtkNSSSecurityWarningDialogs.h"
+#include "GeckoFormSigningDialog.h"
 #endif
 
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyAboutModule)
@@ -98,6 +99,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSClientAuthDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSKeyPairDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSSecurityWarningDialogs)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GeckoFormSigningDialog)
 #endif
 
 #define XPINSTALL_CONTRACTID NS_CONTENT_HANDLER_CONTRACTID_PREFIX "application/x-xpinstall"
@@ -194,7 +196,13 @@ static const nsModuleComponentInfo sAppComps[] = {
 		NS_SECURITYWARNINGDIALOGS_CONTRACTID,
 		GtkNSSSecurityWarningDialogsConstructor
 	},
-#endif
+	{
+		GECKO_FORMSIGNINGDIALOGS_CLASSNAME,
+		GECKO_FORMSIGNINGDIALOGS_CID,
+		NS_FORMSIGNINGDIALOG_CONTRACTID,
+		GeckoFormSigningDialogConstructor
+	},
+#endif /* HAVE_MOZILLA_PSM */
 	{
 		NS_IHELPERAPPLAUNCHERDLG_CLASSNAME,
 		G_CONTENTHANDLER_CID,

@@ -1,8 +1,9 @@
 gladedir = $(pkgdatadir)/glade
 glade_DATA = \
-	certificate-dialogs.glade \
-	epiphany.glade  	\
-	prefs-dialog.glade	\
+	certificate-dialogs.glade	\
+	epiphany.glade			\
+	form-signing-dialog.glade	\
+	prefs-dialog.glade		\
 	print.glade
 
 if ENABLE_CERTIFICATE_MANAGER
