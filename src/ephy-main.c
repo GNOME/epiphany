@@ -679,7 +679,6 @@ main (int argc,
 	}
 
 	eel_gconf_monitor_add ("/apps/epiphany/general");
-	gnome_vfs_init ();
 	ephy_stock_icons_init ();
 
 	/* Extensions may want these, so don't initialize in window-cmds */
