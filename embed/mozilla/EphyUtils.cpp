@@ -21,21 +21,28 @@
 #include "mozilla-config.h"
 #include "config.h"
 
+#include <nsStringAPI.h>
+
 #include <gtkmozembed.h>
 #include <nsCOMPtr.h>
 #include <nsIDOMWindow.h>
 #include <nsIEmbeddingSiteWindow.h>
 #include <nsIFile.h>
 #include <nsIIOService.h>
-#include <nsIPrintSettings.h>
 #include <nsIServiceManager.h>
 #include <nsIURI.h>
 #include <nsIWebBrowserChrome.h>
 #include <nsIWindowWatcher.h>
-#include <nsServiceManagerUtils.h>
-#include <nsStringAPI.h>
-#include <nsXPCOM.h>
 #include <nsIXPConnect.h>
+#include <nsServiceManagerUtils.h>
+#include <nsXPCOM.h>
+
+#ifdef HAVE_GECKO_1_9
+#include <nsPIDOMWindow.h>
+#include <nsDOMJSUtils.h> /* for GetScriptContextFromJSContext */
+#include <nsIScriptContext.h>
+#include <nsIScriptGlobalObject.h>
+#endif
 
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
@@ -131,7 +138,7 @@ GtkWidget *
 EphyUtils::FindGtkParent (nsIDOMWindow *aDOMWindow)
 {
 	GtkWidget *embed = FindEmbed (aDOMWindow);
-	NS_ENSURE_TRUE (embed, nsnull);
+	if (!embed) return nsnull;
 
 	GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (embed));
 	if (!GTK_WIDGET_TOPLEVEL (toplevel)) return nsnull;
@@ -173,4 +180,39 @@ EphyJSUtils::IsCalledFromScript ()
 	NS_ENSURE_SUCCESS(rv, PR_FALSE);
 
 	return nsnull != ncc;
+}
+
+/* NOTE: Only call this when we're SURE that we're called directly from JS! */
+nsIDOMWindow *
+EphyJSUtils::GetDOMWindowFromCallContext ()
+{
+  /* TODO: We can do this on 1.8 too, but we'd need to use headers which include private string API
+   * so we'll have to move this to MozillaPrivate
+   */
+#ifdef HAVE_GECKO_1_9
+  nsresult rv;
+  nsCOMPtr<nsIXPConnect> xpc (do_GetService(nsIXPConnect::GetCID(), &rv));
+  NS_ENSURE_SUCCESS (rv, nsnull);
+		
+  nsCOMPtr<nsIXPCNativeCallContext> ncc;
+  rv = xpc->GetCurrentNativeCallContext (getter_AddRefs (ncc));
+  NS_ENSURE_SUCCESS (rv, nsnull);
+
+  JSContext *cx = nsnull;
+  rv = ncc->GetJSContext(&cx);
+  NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && cx, nsnull);
+
+  nsIScriptContext* scriptContext = GetScriptContextFromJSContext (cx);
+  if (!scriptContext) return nsnull;
+
+  nsIScriptGlobalObject *globalObject = scriptContext->GetGlobalObject();
+  if (!globalObject) return nsnull;
+
+  nsCOMPtr<nsPIDOMWindow> piWindow (do_QueryInterface (globalObject));
+  if (!piWindow) return nsnull;
+
+  return piWindow->GetOuterWindow ();
+#else
+  return nsnull;
+#endif
 }

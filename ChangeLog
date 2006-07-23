@@ -1,3 +1,20 @@
+2006-07-22  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/mozilla/GtkNSSDialogs.h:
+	* embed/mozilla/MozRegisterComponents.cpp:
+
+	Implement nsIDOMCryptoDialogs, nsITokenDialogs and
+	nsITokenPasswordDialogs. Bug #312869.
+
+	* embed/mozilla/EphyUtils.cpp:
+	* embed/mozilla/EphyUtils.h:
+
+	Add a helper function to get the DOM window off the native
+	call context, to work around unavailable parent window
+	in nsIDOMCryptoDialogs
+	( https://bugzilla.mozilla.org/show_bug.cgi?id=341914).
+
 2006-07-23  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-main.c: (main):

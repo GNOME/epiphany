@@ -64,6 +64,8 @@ namespace EphyUtils
 namespace EphyJSUtils
 {
 	PRBool IsCalledFromScript ();
+
+	/* not addref'd! */ nsIDOMWindow* GetDOMWindowFromCallContext ();
 }
 
 #endif

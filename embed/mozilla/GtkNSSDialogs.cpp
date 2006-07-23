@@ -53,6 +53,7 @@
 #include <gtk/gtktreestore.h>
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkvbox.h>
+#include <gtk/gtkcombobox.h>
 #include <gconf/gconf-client.h>
 #include <glade/glade-xml.h>
 
@@ -118,8 +119,6 @@ NS_IMPL_THREADSAFE_ISUPPORTS5 (GtkNSSDialogs,
 /* There's also nsICertPickDialogs which is implemented in mozilla
  * but has no callers. So we don't implement it.
  * Same for nsIUserCertPicker which is only used in mailnews.
- *
- * We should implement nsIFormSigningDialog, however.
  */
 
 /**
@@ -1420,8 +1419,15 @@ GtkNSSDialogs::SetPassword(nsIInterfaceRequestor *aCtx,
 				 flags);
 	EphyPasswordDialog *password_dialog = EPHY_PASSWORD_DIALOG (dialog);
 
-	char *message = g_markup_printf_escaped (_("Change the password for the “%s” token"),
-						 NS_ConvertUTF16toUTF8 (aTokenName).get ());
+	char *message;
+	if (status == nsIPKCS11Slot::SLOT_UNINITIALIZED) {
+		message = g_markup_printf_escaped (_("Choose a password for the “%s” token"),
+						   NS_ConvertUTF16toUTF8 (aTokenName).get ());
+	} else {
+		message = g_markup_printf_escaped (_("Change the password for the “%s” token"),
+						   NS_ConvertUTF16toUTF8 (aTokenName).get ());
+	}
+
 	gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog),
 				       message);
 	g_free (message);
@@ -1529,31 +1535,155 @@ GtkNSSDialogs::GetPassword(nsIInterfaceRequestor *aCtx,
 
 /* nsITokenDialogs */
 
-/* void ChooseToken (in nsIInterfaceRequestor ctx, [array, size_is (count)] in wstring tokenNameList, in unsigned long count, out wstring tokenName, out boolean canceled); */
+static void
+SelectionChangedCallback (GtkComboBox *combo,
+			  GtkDialog *dialog)
+{
+  int active = gtk_combo_box_get_active (combo);
+  gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_ACCEPT, active >= 0);
+}
+
+/* void ChooseToken (in nsIInterfaceRequestor ctx,
+		     [array, size_is (count)] in wstring tokenNameList,
+		     in unsigned long count,
+		     out wstring tokenName,
+		     out boolean canceled); */
 NS_IMETHODIMP
-GtkNSSDialogs::ChooseToken (nsIInterfaceRequestor *ctx,
+GtkNSSDialogs::ChooseToken (nsIInterfaceRequestor *aContext,
 			    const PRUnichar **tokenNameList,
 			    PRUint32 count,
-			    PRUnichar **tokenName,
-			    PRBool *canceled)
+			    PRUnichar **_tokenName,
+			    PRBool *_cancelled)
 {
-	/* FIXME: implement me! The only caller is from nsKeygenHandler */
-	return NS_ERROR_NOT_IMPLEMENTED;
+  NS_ENSURE_ARG (tokenNameList);
+  NS_ENSURE_ARG (count);
+
+  nsresult rv;
+  AutoJSContextStack stack;
+  rv = stack.Init ();
+  if (NS_FAILED (rv)) return rv;
+
+  /* Didn't you know it? MOZILLA SUCKS! ChooseToken is always called with |aContext| == NULL! See
+   * http://bonsai.mozilla.org/cvsblame.cgi?file=mozilla/security/manager/ssl/src/nsKeygenHandler.cpp&rev=1.39&mark=346#346
+   * Need to investigate if we it's always called directly from code called from JS, in which case we
+   * can use EphyJSUtils::GetDOMWindowFromCallContext.
+   */
+  nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (aContext));
+  GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
+
+  AutoWindowModalState modalState (parent);
+
+  GtkWidget *dialog = gtk_message_dialog_new
+		  (GTK_WINDOW (gparent),
+		   GTK_DIALOG_DESTROY_WITH_PARENT,
+		   GTK_MESSAGE_OTHER,
+		   GTK_BUTTONS_CANCEL,
+		   _("Please select a token:"));
+
+  gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
+  GtkWidget *combo = gtk_combo_box_new_text ();
+  for (PRUint32 i = 0; i < count; ++i) {
+    gtk_combo_box_append_text (GTK_COMBO_BOX (combo),
+			       NS_ConvertUTF16toUTF8 (tokenNameList[i]).get ());
+  }
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), -1);
+  g_signal_connect (combo, "changed",
+		    G_CALLBACK (SelectionChangedCallback), dialog);
+
+  /* FIXME: View Cert button? */
+
+  GtkWidget *vbox = GTK_MESSAGE_DIALOG (dialog)->label->parent;
+  gtk_box_pack_start (GTK_BOX (vbox), combo, FALSE, FALSE, 0);
+
+  gtk_dialog_add_button (GTK_DIALOG (dialog),
+			 _("_Select"),
+			 GTK_RESPONSE_ACCEPT);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_REJECT);
+
+  int response = gtk_dialog_run (GTK_DIALOG (dialog));
+  int selected = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
+
+  gtk_widget_destroy (dialog);
+	
+  *_cancelled = response != GTK_RESPONSE_ACCEPT;
+
+  if (response == GTK_RESPONSE_ACCEPT) {
+    NS_ENSURE_TRUE (selected >= 0 && selected < (int) count, NS_ERROR_FAILURE);
+    *_tokenName = NS_StringCloneData (nsDependentString (tokenNameList[selected]));
+  }
+
+  return NS_OK;
 }
 
 /* nsIDOMCryptoDialogs */
 
 /* Note: this interface sucks! See https://bugzilla.mozilla.org/show_bug.cgi?id=341914 */
-		
+
 /* boolean ConfirmKeyEscrow (in nsIX509Cert escrowAuthority); */
 NS_IMETHODIMP
 GtkNSSDialogs::ConfirmKeyEscrow (nsIX509Cert *aEscrowAuthority,
 				 PRBool *_retval)
 {
-	/* FIXME: show a dialogue to warn the user! */
+  NS_ENSURE_ARG (aEscrowAuthority);
 
-	/* Escrow is evil, don't allow it. */
-	*_retval = PR_FALSE;
+  nsresult rv;
+  AutoJSContextStack stack;
+  rv = stack.Init ();
+  if (NS_FAILED (rv)) return rv;
 
-	return NS_OK;
+#if 0
+  nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (aCtx));
+#endif
+  nsCOMPtr<nsIDOMWindow> parent (EphyJSUtils::GetDOMWindowFromCallContext ());
+  GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
+
+  AutoWindowModalState modalState (parent);
+
+  /* FIXME: is that guaranteed to be non-empty? */
+  nsString commonName;
+  aEscrowAuthority->GetCommonName (commonName);
+
+  GtkWidget *dialog = gtk_message_dialog_new
+			(GTK_WINDOW (gparent),
+			 GTK_DIALOG_DESTROY_WITH_PARENT,
+			 GTK_MESSAGE_WARNING /* QUESTION really but it's also a strong warnings... */,
+			 GTK_BUTTONS_NONE,
+			 _("Escrow the secret key?"));
+
+  /* FIXME: If I understand the documentation of generateCRMFRequest
+   * correctly, key escrow is never used for signing keys (if it were,
+   * we'd have to warn that the cert authority can forge your signature
+   * too).
+   */
+  gtk_message_dialog_format_secondary_text
+    (GTK_MESSAGE_DIALOG (dialog),
+     _("The certificate authority “%s” requests that you give it a copy "
+       "of the newly generated secret key.\n\n"
+       "This will enable the certificate authority read any "
+       "communications encrypted with this key "
+       "without your knowledge or consent.\n\n"
+       "It is strongly recommended not to allow it."),
+     NS_ConvertUTF16toUTF8 (commonName).get ());
+
+  gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
+  GtkWidget *button = gtk_dialog_add_button (GTK_DIALOG (dialog),
+					     _("_Reject"),
+					     GTK_RESPONSE_REJECT);
+  gtk_dialog_add_button (GTK_DIALOG (dialog),
+			 _("_Allow"),
+			 GTK_RESPONSE_ACCEPT);
+  /* FIXME: View Cert button? */
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_REJECT);
+  gtk_widget_grab_focus (button);
+
+  int response = gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+	
+  *_retval = response == GTK_RESPONSE_ACCEPT;
+
+  return NS_OK;
 }
