@@ -917,9 +917,10 @@ cmd_bookmarks_export (GtkAction *action,
 		(GTK_FILE_CHOOSER (dialog), _("Bookmarks"));
 
 	/* Make a format selection combo & label */
-	label = gtk_label_new (_("File format:"));
+	label = gtk_label_new_with_mnemonic (_("File f_ormat:"));
 
 	combo = gtk_combo_box_new_text ();
+	gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
 
 	for (format = 0; format < G_N_ELEMENTS (export_formats); ++format)
 	{
@@ -933,8 +934,8 @@ cmd_bookmarks_export (GtkAction *action,
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
 	hbox = gtk_hbox_new (FALSE, 12);
-	gtk_box_pack_end (GTK_BOX (hbox), combo, TRUE, TRUE, 0);
-	gtk_box_pack_end (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), combo, FALSE, FALSE, 0);
 	gtk_widget_show_all (hbox);
 	
 	gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), hbox);
