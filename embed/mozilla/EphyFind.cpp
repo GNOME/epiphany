@@ -208,7 +208,8 @@ EphyFind::SetSelectionAttention (PRBool aAttention)
 
     controller->SetDisplaySelection (display);
   }
-#endif
+#endif /* HAVE_GECKO_1_9 */
+#endif /* HAVE_TYPEAHEADFIND */
 }
 
 EphyEmbedFindResult
