@@ -121,6 +121,7 @@ action_activated_cb (GtkEntryCompletion *completion,
 	char *content;
 
 	entry = gtk_entry_completion_get_entry (completion);
+	gtk_im_context_reset (GTK_ENTRY (entry)->im_context);
 	content = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
 	if (content)
 	{

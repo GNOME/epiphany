@@ -530,6 +530,7 @@ match_selected_cb (GtkEntryCompletion *completion,
 			     state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK));
 
 	ephy_location_entry_set_location (entry, item, NULL);
+	gtk_im_context_reset (GTK_ENTRY (entry->priv->icon_entry->entry)->im_context);
 	g_signal_emit_by_name (priv->icon_entry->entry, "activate");
 
 	g_free (item);
