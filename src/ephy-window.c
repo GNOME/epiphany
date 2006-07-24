@@ -223,6 +223,9 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "ViewPageSource", STOCK_VIEW_SOURCE, N_("_Page Source"), "<control>U",
 	  N_("View the source code of the page"),
 	  G_CALLBACK (window_cmd_view_page_source) },
+        { "ViewPageSecurityInfo", NULL, N_("Page _Security Information..."), NULL,
+          N_("Display security information for the web page"),
+          G_CALLBACK (window_cmd_view_page_security_info) },
 
 	/* Bookmarks menu */
 
@@ -656,20 +659,26 @@ sync_chromes_visibility (EphyWindow *window)
 static void
 ephy_window_fullscreen (EphyWindow *window)
 {
+	EphyWindowPrivate *priv = window->priv;
 	GtkWidget *popup;
 	EphyTab *tab;
+	GtkAction *action;
 	gboolean lockdown_fs;
 
-	window->priv->fullscreen_mode = TRUE;
+	priv->fullscreen_mode = TRUE;
 
 	lockdown_fs = eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
 
 	popup = ephy_fullscreen_popup_new (window);
 	ephy_fullscreen_popup_set_show_leave
 		(EPHY_FULLSCREEN_POPUP (popup), !lockdown_fs);
-	window->priv->fullscreen_popup = popup;
+	priv->fullscreen_popup = popup;
 	g_signal_connect_swapped (popup, "exit-clicked",
 				  G_CALLBACK (exit_fullscreen_clicked_cb), window);
+
+	action = gtk_action_group_get_action (priv->action_group, "ViewPageSecurityInfo");
+	g_signal_connect_swapped (popup, "lock-clicked",
+				  G_CALLBACK (gtk_action_activate), action);
 
 	/* sync status */
 	tab = ephy_window_get_active_tab (window);
@@ -677,11 +686,11 @@ ephy_window_fullscreen (EphyWindow *window)
 	sync_tab_security (tab, NULL, window);
 
 	egg_editable_toolbar_set_model
-		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
+		(EGG_EDITABLE_TOOLBAR (priv->toolbar),
 		 EGG_TOOLBARS_MODEL (
 		 	ephy_shell_get_toolbars_model (ephy_shell, TRUE)));
 
-	ephy_toolbar_set_show_leave_fullscreen (window->priv->toolbar,
+	ephy_toolbar_set_show_leave_fullscreen (priv->toolbar,
 						!lockdown_fs);
 	
 	sync_chromes_visibility (window);
@@ -1460,8 +1469,11 @@ sync_tab_navigation (EphyTab *tab,
 }
 
 static void
-sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_security (EphyTab *tab,
+		   GParamSpec *pspec,
+		   EphyWindow *window)
 {
+	EphyWindowPrivate *priv = window->priv;
 	EphyEmbed *embed;
 	EphyEmbedSecurityLevel level;
 	char *description = NULL;
@@ -1469,8 +1481,9 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	char *tooltip;
 	const char *stock_id = STOCK_LOCK_INSECURE;
 	gboolean show_lock = FALSE, is_secure = FALSE;
+	GtkAction *action;
 
-	if (window->priv->closing) return;
+	if (priv->closing) return;
 
 	embed = ephy_tab_get_embed (tab);
 
@@ -1526,18 +1539,21 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 		g_free (tmp);
 	}
 
-	ephy_statusbar_set_security_state (EPHY_STATUSBAR (window->priv->statusbar),
+	ephy_statusbar_set_security_state (EPHY_STATUSBAR (priv->statusbar),
 					   stock_id, tooltip);
 
-	ephy_toolbar_set_security_state (window->priv->toolbar, is_secure,
+	ephy_toolbar_set_security_state (priv->toolbar, is_secure,
 					 show_lock, stock_id, tooltip);
 
-	if (window->priv->fullscreen_popup != NULL)
+	if (priv->fullscreen_popup != NULL)
 	{
 		ephy_fullscreen_popup_set_security_state
-			(EPHY_FULLSCREEN_POPUP (window->priv->fullscreen_popup),
+			(EPHY_FULLSCREEN_POPUP (priv->fullscreen_popup),
 			 show_lock, stock_id, tooltip);
 	}
+
+	action = gtk_action_group_get_action (priv->action_group, "ViewPageSecurityInfo");
+	gtk_action_set_sensitive (action, is_secure);
 
 	g_free (tooltip);
 }
@@ -3168,6 +3184,13 @@ ephy_window_constructor (GType type,
 
 	action = gtk_action_group_get_action (priv->popups_action_group, "OpenLinkInNewTab");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, priv->is_popup);
+
+	/* Connect lock clicks */
+	action = gtk_action_group_get_action (priv->action_group, "ViewPageSecurityInfo");
+	g_signal_connect_swapped (priv->statusbar, "lock-clicked",
+				  G_CALLBACK (gtk_action_activate), action);
+	g_signal_connect_swapped (priv->toolbar, "lock-clicked",
+				  G_CALLBACK (gtk_action_activate), action);
 
 	/* ensure the UI is updated */
 	gtk_ui_manager_ensure_update (priv->manager);

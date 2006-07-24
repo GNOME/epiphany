@@ -1,3 +1,23 @@
+2006-07-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/ui/epiphany-ui.xml:
+	* src/ephy-statusbar.c: (ephy_statusbar_class_init),
+	(padlock_button_press_cb), (create_statusbar_security_icon):
+	* src/ephy-statusbar.h:
+	* src/ephy-window.c: (ephy_window_constructor):
+	* src/window-commands.c: (window_cmd_view_page_security_info),
+	(window_cmd_help_about):
+	* src/window-commands.h:
+
+	Add page security info dialogue from Certificates extension.
+
+2006-07-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/widgets/ephy-location-entry.c: (match_selected_cb):
+
+	Reset IM context before activation. Bug #348478, patch by
+	Nguyễn Thái Ngọc Duy.
+
 2006-07-23  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* embed/mozilla/Makefile.am:

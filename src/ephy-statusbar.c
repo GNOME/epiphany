@@ -38,8 +38,6 @@ static void ephy_statusbar_class_init	(EphyStatusbarClass *klass);
 static void ephy_statusbar_init		(EphyStatusbar *t);
 static void ephy_statusbar_finalize	(GObject *object);
 
-static GObjectClass *parent_class = NULL;
-
 #define EPHY_STATUSBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_STATUSBAR, EphyStatusbarPrivate))
 
 struct _EphyStatusbarPrivate
@@ -53,6 +51,15 @@ struct _EphyStatusbarPrivate
 	GtkWidget *popups_manager_icon;
 	GtkWidget *popups_manager_evbox;
 };
+
+enum
+{
+	LOCK_CLICKED,
+	LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+static GObjectClass *parent_class;
 
 GType
 ephy_statusbar_get_type (void)
@@ -91,6 +98,17 @@ ephy_statusbar_class_init (EphyStatusbarClass *klass)
 
 	object_class->finalize = ephy_statusbar_finalize;
 
+	signals[LOCK_CLICKED] =
+		g_signal_new
+			("lock-clicked",
+			 EPHY_TYPE_STATUSBAR,
+			 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+			 G_STRUCT_OFFSET (EphyStatusbarClass, lock_clicked),
+			 NULL, NULL,
+			 g_cclosure_marshal_VOID__VOID,
+			 G_TYPE_NONE,
+			 0);
+
 	g_type_class_add_private (object_class, sizeof (EphyStatusbarPrivate));
 }
 
@@ -126,6 +144,23 @@ create_caret_indicator (EphyStatusbar *statusbar)
 			    FALSE, FALSE, 0);
 }
 
+static gboolean
+padlock_button_press_cb (GtkWidget *ebox,
+                         GdkEventButton *event,
+			 EphyStatusbar *statusbar)
+{
+        if (event->type == GDK_BUTTON_PRESS &&
+	    event->button == 1 /* left */ &&
+	    (event->state & gtk_accelerator_get_default_mod_mask ()) == 0)
+        {
+		g_signal_emit (statusbar, signals[LOCK_CLICKED], 0);
+
+                return TRUE;
+        }
+
+        return FALSE;
+}
+
 static void
 create_statusbar_security_icon (EphyStatusbar *s)
 {
@@ -137,6 +172,10 @@ create_statusbar_security_icon (EphyStatusbar *s)
 	s->priv->security_evbox = gtk_event_box_new ();
 	gtk_event_box_set_visible_window (GTK_EVENT_BOX (s->priv->security_evbox),
 					  FALSE);
+	gtk_widget_add_events (s->priv->security_evbox, GDK_BUTTON_PRESS_MASK);
+	g_signal_connect (s->priv->security_evbox, "button-press-event",
+			  G_CALLBACK (padlock_button_press_cb), s);
+
 	gtk_container_add (GTK_CONTAINER (s->security_frame),
 			   GTK_WIDGET (s->priv->security_evbox));
 	gtk_container_add (GTK_CONTAINER (s->priv->security_evbox),

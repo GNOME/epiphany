@@ -118,6 +118,9 @@ void window_cmd_view_zoom_normal(GtkAction *action,
 void window_cmd_view_page_source(GtkAction *action,
 				 EphyWindow *window);
 
+void window_cmd_view_page_security_info (GtkAction *action,
+					 EphyWindow *window);
+
 void window_cmd_go_history	(GtkAction *action,
 				 EphyWindow *window);
 

@@ -637,6 +637,18 @@ window_cmd_view_page_source (GtkAction *action,
 }
 
 void
+window_cmd_view_page_security_info (GtkAction *action,
+				    EphyWindow *window)
+{
+	EphyEmbed *embed;
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (EPHY_IS_EMBED (embed));
+
+	ephy_embed_show_page_certificate (embed);
+}
+
+void
 window_cmd_go_history (GtkAction *action,
 		       EphyWindow *window)
 {
@@ -720,8 +732,6 @@ window_cmd_help_about (GtkAction *action,
 		       GtkWidget *window)
 {
 	const char * const authors[] = {
-		"Marco Pesenti Gritti",
-		"Adam Hooper",
 		"Xan Lopez",
 		"Christian Persch",
 		"Jean-François Rameau",
@@ -735,7 +745,9 @@ window_cmd_help_about (GtkAction *action,
 		"Raphaël Slinckx",
 		"",
 		_("Past developers:"),
+		"Marco Pesenti Gritti",
 		"David Bordoley",
+		"Adam Hooper",
 		NULL,
 	};
 	const char * const documenters[] = {
