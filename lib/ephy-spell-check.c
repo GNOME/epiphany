@@ -54,15 +54,23 @@ static void
 ephy_spell_check_init (EphySpellCheck *speller)
 {
 	EphySpellCheckPrivate *priv;
+	const gchar * const *locale;
 
 	priv = speller->priv = EPHY_SPELL_CHECK_GET_PRIVATE (speller);
 
 	priv->broker = enchant_broker_init ();
 
-	/* FIXME */
-	priv->dict = enchant_broker_request_dict (priv->broker, "en");
-	if(priv->dict == NULL)
-		g_warning(enchant_broker_get_error (priv->broker));
+	/* We don't want to check against C so we get a useful message 
+           in case of no available dictionary */
+	for (locale = g_get_language_names (); 
+	     *locale != NULL && g_ascii_strcasecmp (*locale, "C") != 0;
+	     ++locale)
+	{
+		priv->dict = enchant_broker_request_dict (priv->broker, *locale);
+		if (priv->dict != NULL) break;
+	}
+	if (priv->dict == NULL)
+		g_warning (enchant_broker_get_error (priv->broker));
 }
 
 static void
