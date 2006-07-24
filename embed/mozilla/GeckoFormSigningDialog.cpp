@@ -122,7 +122,8 @@ GeckoFormSigningDialog::ConfirmSignText (nsIInterfaceRequestor *ctx,
   }
 
   gtk_combo_box_set_active (combo, 0);
-  gtk_table_attach_defaults (table, GTK_WIDGET (combo), 1, 2, 0, 1);
+  gtk_table_attach (table, GTK_WIDGET (combo), 1, 2, 0, 1,
+		    GtkAttachOptions (0), GtkAttachOptions (0), 0, 0);
   gtk_widget_show (GTK_WIDGET (combo));
 
   /* FIXME: Add "View Certificate" button */

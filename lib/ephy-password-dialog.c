@@ -76,6 +76,7 @@ struct _EphyPasswordDialogPrivate
 #endif
 	EphyPasswordDialogFlags flags;
 	guint checks : 5;
+	guint track_capslock : 1;
 };
 
 enum
@@ -239,6 +240,7 @@ entry_activate_cb (GtkWidget *entry,
 		if (entry == priv->entry[i]) break;
 	g_assert (i < N_ENTRIES);
 
+	++i;
 	for ( ; i < N_ENTRIES; ++i)
 		if (priv->entry[i] != NULL &&
 		    GTK_WIDGET_IS_SENSITIVE (priv->entry[i])) break;
@@ -454,6 +456,16 @@ ephy_password_dialog_constructor (GType type,
 		priv->checks |= CHECK_PWD_MATCH;
 	}
 
+	if (priv->flags & (EPHY_PASSWORD_DIALOG_FLAGS_SHOW_PASSWORD |
+			   EPHY_PASSWORD_DIALOG_FLAGS_SHOW_NEW_PASSWORD))
+	{
+		priv->track_capslock = TRUE;
+//		gtk_table_attach (table, widget,
+//				  1, 2, row, row + 1,
+//				  GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
+
+	}
+
 	/* Password quality meter */
 	/* TODO: We need a better password quality meter */
 	if (priv->flags & EPHY_PASSWORD_DIALOG_FLAGS_SHOW_NEW_PASSWORD &&
@@ -488,6 +500,8 @@ ephy_password_dialog_constructor (GType type,
 
 		priv->remember_button[2] = gtk_radio_button_new_with_mnemonic (group, _("Save password in _keyring"));
 		gtk_box_pack_start (GTK_BOX (rbox), priv->remember_button[2], FALSE, FALSE, 0);
+
+		gtk_widget_set_no_show_all (rbox, !gnome_keyring_is_available ());
 	}
 
 	gtk_dialog_add_button (dialog, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -704,4 +718,11 @@ ephy_password_dialog_get_new_password (EphyPasswordDialog *dialog)
 	g_return_val_if_fail (priv->flags & EPHY_PASSWORD_DIALOG_FLAGS_SHOW_NEW_PASSWORD, NULL);
 
 	return gtk_entry_get_text (GTK_ENTRY (priv->entry[NEW_PASSWORD_ENTRY]));
+}
+
+void
+ephy_password_dialog_fill (EphyPasswordDialog *dialog,
+			   GList *attributes_list)
+{
+	
 }
