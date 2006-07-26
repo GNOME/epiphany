@@ -40,6 +40,7 @@ ephy_stock_icons_init (void)
 	static const char *icon_theme_items[] =
 	{
 		STOCK_NEW_TAB,
+		STOCK_NEW_WINDOW,
 		STOCK_VIEW_SOURCE,
 		STOCK_SEND_MAIL,
 		STOCK_ADD_BOOKMARK,

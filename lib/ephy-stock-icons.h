@@ -29,14 +29,15 @@ G_BEGIN_DECLS
 #define EPHY_STOCK_ENTRY	   "epiphany-entry"
 #define EPHY_STOCK_DOWNLOAD	   "epiphany-download"
 
-#define STOCK_NEW_TAB		   "stock_new-tab"
+#define STOCK_NEW_TAB              "tab-new"
+#define STOCK_NEW_WINDOW           "window-new"
 #define STOCK_VIEW_SOURCE	   "stock_view-html-source"
-#define STOCK_SEND_MAIL		   "stock_mail-send"
-#define STOCK_ADD_BOOKMARK	   "stock_add-bookmark"
-#define STOCK_BOOKMARK		   "stock_bookmark"
-#define STOCK_PRINT_SETUP	   "stock_print-setup"
-#define STOCK_LOCK_INSECURE	   "stock_lock-open"
-#define STOCK_LOCK_SECURE	   "stock_lock"
+#define STOCK_SEND_MAIL            "mail-forward"
+#define STOCK_ADD_BOOKMARK         "bookmark-new"
+#define STOCK_BOOKMARK             "stock_bookmark"
+#define STOCK_PRINT_SETUP          "stock_print-setup" /*document-page-setup*/
+#define STOCK_LOCK_INSECURE        "stock_lock-open"
+#define STOCK_LOCK_SECURE          "stock_lock"
 #define STOCK_LOCK_BROKEN	   "stock_lock-broken"
 #define STOCK_DRAG_MODE	   	   "stock_drag-mode"
 

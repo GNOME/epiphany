@@ -126,7 +126,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* File menu */
 
-	{ "FileNewWindow", GTK_STOCK_NEW, N_("_New Window"), "<control>N",
+	{ "FileNewWindow", STOCK_NEW_WINDOW, N_("_New Window"), "<control>N",
 	  N_("Open a new window"),
 	  G_CALLBACK (window_cmd_file_new_window) },
 	{ "FileNewTab", STOCK_NEW_TAB, N_("New _Tab"), "<control>T",
