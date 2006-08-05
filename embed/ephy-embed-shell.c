@@ -417,7 +417,7 @@ ephy_embed_shell_get_page_setup	(EphyEmbedShell *shell)
 		char *path;
 
 		path = g_build_filename (ephy_dot_dir (), PAGE_SETUP_FILENAME, NULL);
-		priv->page_setup = ephy_print_utils_page_setup_new_from_file (path, &error);
+		priv->page_setup = ephy_print_utils_page_setup_new_from_file (path, NULL);
 		g_free (path);
 
 		if (priv->page_setup == NULL)
@@ -469,7 +469,7 @@ ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
 		char *path;
 
 		path = g_build_filename (ephy_dot_dir (), PRINT_SETTINGS_FILENAME, NULL);
-		priv->print_settings = ephy_print_utils_settings_new_from_file (path, &error);
+		priv->print_settings = ephy_print_utils_settings_new_from_file (path, NULL);
 		g_free (path);
 
 		if (priv->print_settings == NULL)
