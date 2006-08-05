@@ -182,3 +182,107 @@ ephy_string_collate_key_for_domain (const char *str,
 
 	return g_string_free (result, FALSE);
 }
+
+guint
+ephy_string_flags_from_string (GType type,
+			       const char *flags_string)
+{
+	GFlagsClass *flags_class;
+	const GFlagsValue *value;
+	gchar **flags;
+	guint retval = 0, i;
+
+	g_return_val_if_fail (flags_string != NULL, 0);
+
+	flags = g_strsplit (flags_string, "|", -1);
+	if (!flags) return 0;
+
+	flags_class = g_type_class_ref (type);
+
+	for (i = 0; flags[i] != NULL; ++i)
+	{
+		value = g_flags_get_value_by_nick (flags_class, flags[i]);
+		if (value != NULL)
+		{
+			retval |= value->value;
+		}
+	}
+
+	g_type_class_unref (flags_class);
+
+	return retval;
+}
+
+char *
+ephy_string_flags_to_string (GType type,
+			     guint flags_value)
+{
+	GFlagsClass *flags_class;
+	GString *string;
+	gboolean first = TRUE;
+	guint i;
+
+	string = g_string_sized_new (128);
+
+	flags_class = g_type_class_ref (type);
+
+	for (i = 0; i < flags_class->n_values; ++i)
+	{
+		if (flags_value & flags_class->values[i].value)
+		{
+			if (!first)
+			{
+				g_string_append_c (string, '|');
+			}
+			first = FALSE;
+			g_string_append (string, flags_class->values[i].value_nick);
+		}
+	}
+
+	g_type_class_unref (flags_class);
+
+	return g_string_free (string, FALSE);
+}
+
+guint
+ephy_string_enum_from_string (GType type,
+			      const char *enum_string)
+{
+	GEnumClass *enum_class;
+	const GEnumValue *value;
+	guint retval = 0;
+
+	g_return_val_if_fail (enum_string != NULL, 0);
+
+	enum_class = g_type_class_ref (type);
+	value = g_enum_get_value_by_nick (enum_class, enum_string);
+	if (value != NULL)
+	{
+		retval = value->value;
+	}
+
+	g_type_class_unref (enum_class);
+
+	return retval;
+}
+
+char *
+ephy_string_enum_to_string (GType type,
+			    guint enum_value)
+{
+	GEnumClass *enum_class;
+	GEnumValue *value;
+	char *retval = NULL;
+
+	enum_class = g_type_class_ref (type);
+
+	value = g_enum_get_value (enum_class, enum_value);
+	if (value)
+	{
+		retval = g_strdup (value->value_nick);
+	}
+
+	g_type_class_unref (enum_class);
+
+	return retval;
+}

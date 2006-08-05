@@ -32,9 +32,13 @@
 #include "ephy-encodings.h"
 #include "ephy-debug.h"
 #include "ephy-adblock-manager.h"
+#include "ephy-print-utils.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtkmessagedialog.h>
+
+#define PAGE_SETUP_FILENAME	"page-setup.ini"
+#define PRINT_SETTINGS_FILENAME	"print-settings.ini"
 
 #define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
 
@@ -378,6 +382,7 @@ ephy_embed_shell_set_page_setup	(EphyEmbedShell *shell,
 				 GtkPageSetup *page_setup)
 {
 	EphyEmbedShellPrivate *priv;
+	char *path;
 
 	g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
 	priv = shell->priv;
@@ -392,9 +397,11 @@ ephy_embed_shell_set_page_setup	(EphyEmbedShell *shell,
 		g_object_unref (priv->page_setup);
 	}
 
-	/* FIXME: save settings to disk! */
+	priv->page_setup = page_setup ? page_setup : gtk_page_setup_new ();
 
-	priv->page_setup = page_setup;
+	path = g_build_filename (ephy_dot_dir (), PAGE_SETUP_FILENAME, NULL);
+	ephy_print_utils_page_setup_to_file (page_setup, path, NULL);
+	g_free (path);
 }
 		
 GtkPageSetup *
@@ -407,8 +414,16 @@ ephy_embed_shell_get_page_setup	(EphyEmbedShell *shell)
 
 	if (priv->page_setup == NULL)
 	{
-		/* FIXME: load stored settings! */
-		priv->page_setup = gtk_page_setup_new ();
+		char *path;
+
+		path = g_build_filename (ephy_dot_dir (), PAGE_SETUP_FILENAME, NULL);
+		priv->page_setup = ephy_print_utils_page_setup_new_from_file (path, &error);
+		g_free (path);
+
+		if (priv->page_setup == NULL)
+		{
+			priv->page_setup = gtk_page_setup_new ();
+		}
 	}
 
 	return priv->page_setup;
@@ -419,6 +434,7 @@ ephy_embed_shell_set_print_settings (EphyEmbedShell *shell,
 				     GtkPrintSettings *settings)
 {
 	EphyEmbedShellPrivate *priv;
+	char *path;
 
 	g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
 	priv = shell->priv;
@@ -433,9 +449,11 @@ ephy_embed_shell_set_print_settings (EphyEmbedShell *shell,
 		g_object_unref (priv->print_settings);
 	}
 
-	/* FIXME: save settings to disk! */
+	priv->print_settings = settings ? settings : gtk_print_settings_new ();
 
-	priv->print_settings = settings;
+	path = g_build_filename (ephy_dot_dir (), PRINT_SETTINGS_FILENAME, NULL);
+	ephy_print_utils_settings_to_file (settings, path, NULL);
+	g_free (path);
 }
 		
 GtkPrintSettings *
@@ -448,8 +466,16 @@ ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
 
 	if (priv->print_settings == NULL)
 	{
-		/* FIXME: load stored settings! */
-		priv->print_settings = gtk_print_settings_new ();
+		char *path;
+
+		path = g_build_filename (ephy_dot_dir (), PRINT_SETTINGS_FILENAME, NULL);
+		priv->print_settings = ephy_print_utils_settings_new_from_file (path, &error);
+		g_free (path);
+
+		if (priv->print_settings == NULL)
+		{
+			priv->print_settings = gtk_print_settings_new ();
+		}
 	}
 
 	return priv->print_settings;

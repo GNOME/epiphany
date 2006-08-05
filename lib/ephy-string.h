@@ -22,6 +22,7 @@
 #define EPHY_STRING_H
 
 #include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
@@ -35,6 +36,18 @@ char	 *ephy_string_shorten	(char *str,
 
 char	 *ephy_string_collate_key_for_domain	(const char *host,
 						 gssize len);
+
+guint	  ephy_string_flags_from_string	(GType type,
+					 const char *flags_string);
+
+char     *ephy_string_flags_to_string	(GType type,
+					 guint flags_value);
+
+guint	  ephy_string_enum_from_string	(GType type,
+					 const char *enum_string);
+
+char     *ephy_string_enum_to_string	(GType type,
+					 guint enum_value);
 
 G_END_DECLS
 
