@@ -280,7 +280,7 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 
 	/* View Menu */
 
-	{ "ViewToolbar", NULL, N_("_Hide Toolbars"), "<shift><control>T",
+	{ "ViewToolbar", NULL, N_("_Hide Toolbars"), NULL,
 	  N_("Show or hide toolbar"),
 	  G_CALLBACK (ephy_window_view_toolbar_cb), FALSE },
 	{ "ViewStatusbar", NULL, N_("St_atusbar"), NULL,
