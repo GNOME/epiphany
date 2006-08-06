@@ -1,8 +1,91 @@
+================
+Epiphany 2.15.91
+================
+
+Changes:
+
+	* Spell check support using the gecko 'spellchecker' extension.
+	  No corrections context menu or language switching yet. The default
+	  dictionary is based on applicable locale names.
+
+	* Add page security info dialogue from Certificates extension.
+
+	* Drop libgnomeprint[ui] and use gtk printing. Add our options in
+          a custom tab in the print dialogue. Print settings and page setup
+	  persist now.
+
+	* Add methods to EphyNode to set typed properties. This change improves the
+	  Python API so it should be easy now to play with bookmarks.
+	  Add https and ftp local bookmarks. Based on a patch by Celso Pinto,
+	  bug #330679.
+
+Bug fixes:
+
+	* Misc fixes: #337913, #312869, #345934, #346662, #339548, #347022,
+	  #344848, #343592.
+
+	* Add a way to turn off password remembering. Bug #332374.
+
+	* Don't crash when adding zeroconf bookmarks while bookmarks are locked
+	  down. Bug #341379.
+
+	* Fix middle-click and ctrl-enter in the location entry autocompletion
+	  drop-down. Bug #345934, based on a patch by johannes@sipsolutions.net.
+
+	* Make the crash recovery dialog appear on the taskbar.
+	  Fixes bug #345010.
+	
+	* copy history over when opening link in new tab/win using
+	  context menu. Fixes bug #340742, patch by René Stadler.
+
+	* Don't crash on error from zeroconf bookmarks. Fixes bug #343922.
+
+	* Don't set cookies from favicon downloads. Bug #337835.
+	
+	* Allow cookie list to be sorted.  (fixes #337845)
+
+	* Fix crash when moving zoom widget on toolbar (#338682)
+
+	* Display the find bar for "Find Next" and "Find Previous"
+	  if it wasn't visible already. Entry focus is handlded
+	  with care so that use cases like incremental search work
+	  as expected. Fixes bug #333020.
+
+	* Remove Shift+Ctrl+T accelerator, it was pressed accidentally
+	  too often and people would lose their toolbars. Bug #328783.
+
+Documentation:
+
+        * Manpage update from Victor Osadci.
+
+Contributors to this release:
+Johannes Berg, Nguyễn Thái Ngọc Duy, Luca Ferretti,
+Victor Osadci, Christian Persch, Frederic Peters ,
+Celso Pinto, Jean-François Rameau, René Stadler.
+
+Documentation translations:
+Daniel Nylander (sv), Vitaly Kormilov (ru).
+
+Translations:
+Ales Nyakhaychyk (be), Gil Forcada (ca), Jakub Friedl (cs), Hendrik Richter (de),
+Mindu Dorji (dz), Kostas Papadimas (el), Francisco Javier F. Serrador (es),
+Benoît Dejean (fr), Satoru SATOH (ja), Changwoo Ryu (ko), Reinout van Schouwen (nl),
+Daniel Nylander (sv), Liu Songhe (zh_CN).
+
+
+===============
+Epiphany 2.15.4
+===============
+
+No news available.
+
+
 ===============
 Epiphany 2.15.3
 ===============
 
 No news available.
+
 
 ===============
 Epiphany 2.15.2
