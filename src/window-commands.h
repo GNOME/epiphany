@@ -94,6 +94,9 @@ void window_cmd_edit_copy	(GtkAction *action,
 void window_cmd_edit_paste	(GtkAction *action,
 				 EphyWindow *window);
 
+void window_cmd_edit_delete	(GtkAction *action,
+				 EphyWindow *window);
+
 void window_cmd_edit_select_all (GtkAction *action,
 				 EphyWindow *window);
 

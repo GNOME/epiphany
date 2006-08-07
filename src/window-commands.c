@@ -464,6 +464,28 @@ window_cmd_edit_paste (GtkAction *action,
 }
 
 void
+window_cmd_edit_delete (GtkAction *action,
+			EphyWindow *window)
+{
+	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+
+	if (GTK_IS_EDITABLE (widget))
+	{
+		gtk_editable_delete_text (GTK_EDITABLE (widget), 0, -1);
+	}
+	else
+	{
+		EphyEmbed *embed;
+
+		embed = ephy_window_get_active_embed (window);
+		g_return_if_fail (embed != NULL);
+
+		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
+						 "cmd_delete");
+	}
+}
+
+void
 window_cmd_edit_select_all (GtkAction *action,
 			    EphyWindow *window)
 {
