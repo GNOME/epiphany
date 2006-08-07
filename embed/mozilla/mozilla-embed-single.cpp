@@ -85,7 +85,6 @@
 #include "ephy-permission-manager.h"
 #include "mozilla-embed.h"
 #include "mozilla-notifiers.h"
-#include "MozillaPrivate.h"
 #include "mozilla-x509-cert.h"
 
 #include "EphyBrowser.h"
