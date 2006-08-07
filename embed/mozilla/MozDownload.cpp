@@ -79,6 +79,9 @@
 
 #include "MozDownload.h"
 
+/* Minimum time between progress updates */
+#define PROGRESS_RATE 500000 /* microsec */
+
 const char* const persistContractID = "@mozilla.org/embedding/browser/nsWebBrowserPersist;1";
 
 MozDownload::MozDownload() :
@@ -143,7 +146,7 @@ MozDownload::Init (nsIURI *aSource,
 	mTotalProgress = 0;
 	mCurrentProgress = 0;
 	mPercentComplete = 0;
-	mInterval = 200000; /* microsec */
+	mInterval = PROGRESS_RATE;
 	mLastUpdate = mStartTime;
 	mMIMEInfo = aMIMEInfo;
 
