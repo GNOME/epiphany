@@ -369,6 +369,25 @@ static const struct
 	{ GDK_KP_Add,		GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
 	{ GDK_KP_Subtract,	GDK_CONTROL_MASK,	"ViewZoomOut",		FALSE },
 	{ GDK_equal,		GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
+	/* These keys are a bit strange: when pressed with no modifiers, they emit
+	 * KP_PageUp/Down Control; when pressed with Control+Shift they are KP_9/3,
+	 * when NumLock is on they are KP_9/3 and with NumLock and Control+Shift
+	 * They're KP_PageUp/Down again!
+	 */
+	{ GDK_KP_Left,		GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
+	{ GDK_KP_4,		GDK_MOD1_MASK /*Alt*/,	"NavigationBack",	TRUE },
+	{ GDK_KP_Right,		GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
+	{ GDK_KP_6,		GDK_MOD1_MASK /*Alt*/,	"NavigationForward",	TRUE },
+	{ GDK_KP_Up,		GDK_MOD1_MASK /*Alt*/,	"NavigationUp",		TRUE },
+	{ GDK_KP_8,		GDK_MOD1_MASK /*Alt*/,	"NavigationUp",		TRUE },
+	{ GDK_KP_Page_Up,	GDK_CONTROL_MASK,	"TabsPrevious",		FALSE },
+	{ GDK_KP_9,		GDK_CONTROL_MASK,	"TabsPrevious",		FALSE },
+	{ GDK_KP_Page_Down,	GDK_CONTROL_MASK,	"TabsNext",		FALSE },
+	{ GDK_KP_3,		GDK_CONTROL_MASK,	"TabsNext",		FALSE },
+	{ GDK_KP_Page_Up,	GDK_SHIFT_MASK | GDK_CONTROL_MASK,	"TabsMoveLeft",		FALSE },
+	{ GDK_KP_9,		GDK_SHIFT_MASK | GDK_CONTROL_MASK,	"TabsMoveLeft",		FALSE },
+	{ GDK_KP_Page_Down,	GDK_SHIFT_MASK | GDK_CONTROL_MASK,	"TabsMoveRight",	FALSE },
+	{ GDK_KP_3,		GDK_SHIFT_MASK | GDK_CONTROL_MASK,	"TabsMoveRight",	FALSE },
 #ifdef HAVE_X11_XF86KEYSYM_H
 	{ XF86XK_Back,		0,			"NavigationBack",	TRUE  },
 	{ XF86XK_Favorites,	0,			"GoBookmarks",		FALSE },
