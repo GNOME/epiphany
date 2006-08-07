@@ -45,8 +45,6 @@ libephymozillaembed_la_SOURCES = 	\
 	GlobalHistory.h                 \
 	MozDownload.cpp			\
 	MozDownload.h			\
-	MozillaPrivate.cpp		\
-	MozillaPrivate.h		\
 	MozRegisterComponents.cpp       \
 	MozRegisterComponents.h         \
 	mozilla-download.cpp		\
