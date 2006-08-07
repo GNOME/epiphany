@@ -189,8 +189,8 @@ ephy_location_entry_style_set (GtkWidget *widget,
 
 	settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
 	g_object_get (settings, "gtk-theme-name", &theme, NULL);
-	is_a11y_theme = strncmp (theme, "HighContrast", strlen ("HighContrast")) == 0 ||
-			strncmp (theme, "LowContrast", strlen ("LowContrast")) == 0;
+	is_a11y_theme = strstr (theme, "HighContrast") != NULL ||
+			strstr (theme, "LowContrast") != NULL;
 	g_free (theme);
 
 	gtk_widget_style_get (widget,
