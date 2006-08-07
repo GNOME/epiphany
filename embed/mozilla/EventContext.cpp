@@ -44,6 +44,7 @@
 #include <nsIDOMHTMLAreaElement.h>
 #include <nsIDOMHTMLBodyElement.h>
 #include <nsIDOMHTMLButtonElement.h>
+#include <nsIDOMHTMLEmbedElement.h>
 #include <nsIDOMHTMLImageElement.h>
 #include <nsIDOMHTMLInputElement.h>
 #include <nsIDOMHTMLIsIndexElement.h>
@@ -1060,10 +1061,14 @@ EventContext::CheckKeyPress (nsIDOMKeyEvent *aEvent)
 	nsCOMPtr<nsIDOMHTMLTextAreaElement> textArea;
 	nsCOMPtr<nsIDOMHTMLSelectElement> selectElement;
 	nsCOMPtr<nsIDOMHTMLIsIndexElement> indexElement;
+	nsCOMPtr<nsIDOMHTMLObjectElement> objectElement;
+	nsCOMPtr<nsIDOMHTMLEmbedElement> embedElement;
 
 	if ((textArea = do_QueryInterface (target)) ||
 	    (selectElement = do_QueryInterface (target)) ||
-	    (indexElement = do_QueryInterface (target))) return retval;
+	    (indexElement = do_QueryInterface (target)) ||
+	    (objectElement = do_QueryInterface (target)) ||
+	    (embedElement = do_QueryInterface (target))) return retval;
 
 	/* check for design mode */
 	nsCOMPtr<nsIDOMNode> node (do_QueryInterface (target, &rv));
