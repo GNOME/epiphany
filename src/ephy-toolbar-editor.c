@@ -134,22 +134,22 @@ combo_changed_cb (GtkComboBox *combo,
 
 static void
 ephy_toolbar_editor_response (GtkDialog *dialog,
-			      gint response_id)
+			      gint response)
 {
 	EphyToolbarEditorPrivate *priv = EPHY_TOOLBAR_EDITOR (dialog)->priv;
 
-	switch (response_id)
+	if (response == RESPONSE_ADD_TOOLBAR)
 	{
-		case GTK_RESPONSE_CLOSE:
-			gtk_widget_destroy (GTK_WIDGET (dialog));
-			break;
-		case RESPONSE_ADD_TOOLBAR:
-			egg_toolbars_model_add_toolbar (priv->model, -1, "UserCreated");
-			break;
-		case GTK_RESPONSE_HELP:
-			ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "to-edit-toolbars");
-			break;
+		egg_toolbars_model_add_toolbar (priv->model, -1, "UserCreated");
+		return;
 	}
+	else if (response == GTK_RESPONSE_HELP)
+	{
+		ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "to-edit-toolbars");
+		return;
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
