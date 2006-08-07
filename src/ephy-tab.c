@@ -1905,7 +1905,7 @@ open_link_in_new (EphyTab *tab,
 	return FALSE;
 }
 
-static void
+static gboolean
 save_property_url (EphyEmbed *embed,
 		   EphyEmbedEvent *event,
 		   const char *property,
@@ -1918,6 +1918,8 @@ save_property_url (EphyEmbed *embed,
 	value = ephy_embed_event_get_property (event, property);
 	location = g_value_get_string (value);
 
+	if (!address_has_web_scheme (location)) return FALSE;
+
 	persist = EPHY_EMBED_PERSIST
 		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
 
@@ -1929,6 +1931,8 @@ save_property_url (EphyEmbed *embed,
 	ephy_embed_persist_save (persist);
 
 	g_object_unref (G_OBJECT(persist));
+
+	return TRUE;
 }
 
 static void
@@ -2007,14 +2011,14 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	/* shift+click saves the link target */
 	else if (is_link && is_left_click && with_shift)
 	{
-		save_property_url (embed, event, "link", CONF_STATE_SAVE_DIR);
+		handled = save_property_url (embed, event, "link", CONF_STATE_SAVE_DIR);
 	}
 	/* shift+click saves the non-link image
 	 * Note: pressing enter to submit a form synthesizes a mouse click event
 	 */
 	else if (is_image && is_left_click && with_shift && !is_input)
 	{
-		save_property_url (embed, event, "image", CONF_STATE_SAVE_IMAGE_DIR);
+		handled = save_property_url (embed, event, "image", CONF_STATE_SAVE_IMAGE_DIR);
 	}
 	/* middle click opens the selection url */
 	else if (is_middle_clickable && is_middle_click && middle_click_opens)
