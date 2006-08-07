@@ -292,7 +292,6 @@ static const char languages[][7] =
 "he",
 "hsb",
 "hi",
-"hi-fj",
 "hi-in",
 "ho",
 "hr",
