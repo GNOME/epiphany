@@ -20,6 +20,8 @@ pref("browser.related.enabled", false);
 // Work around for mozilla focus bugs
 pref("mozilla.widget.raise-on-setfocus", false);
 
+// ftp
+pref("advanced.mailftp", false);
 // disable sucky XUL ftp view, have nice ns4-like html page instead
 pref("network.dir.generate_html", true);
 
@@ -112,8 +114,8 @@ pref("browser.blink_allowed", false);
 // enable spatial navigation (only works if the extension is built with gecko)
 pref("snav.enabled", true);
 
-// don't leak UI language
-// pref("general.useragent.locale", "en")
+// don't leak UI language, and don't default to "en-US"
+pref("general.useragent.locale", "en")
 
 // spellcheck
 // pref("extensions.spellcheck.inline.max-misspellings", -1);
