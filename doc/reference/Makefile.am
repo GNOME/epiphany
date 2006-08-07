@@ -152,6 +152,8 @@ GTKDOC_CFLAGS = -I$(top_srcdir)/src \
 		-I$(top_srcdir)/src/bookmarks \
 		-I$(top_srcdir)/lib/egg \
 		-I$(top_builddir)/lib/egg \
+		-I$(MOZILLA_INCLUDE_ROOT) \
+		-I$(MOZILLA_INCLUDE_ROOT)/gtkembedmoz \
 		$(DEPENDENCIES_CFLAGS) \
 		$(GECKO_CFLAGS) \
 		$(DBUS_CFLAGS) \
@@ -167,6 +169,7 @@ GTKDOC_LIBS = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(GECKO_LIBS)	\
+	$(GECKO_EXTRA_LIBS) \
 	$(DEPENDENCIES_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
