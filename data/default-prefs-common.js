@@ -123,6 +123,7 @@ pref("general.useragent.locale", "en")
 pref("layout.spellcheckDefault", 1);
 
 // print settings
+pref("print.print_printer", "PostScript/default");
 pref("print.use_global_printsettings", false);
 pref("print.save_print_settings", false);
 pref("print.show_print_progress", true);
