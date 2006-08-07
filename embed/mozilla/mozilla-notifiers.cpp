@@ -553,12 +553,18 @@ notify_cb (GConfClient *client,
 	GValue value = { 0, };
 
 	g_return_if_fail (gcentry != NULL);
-	g_return_if_fail (data != NULL);
+	g_assert (data != NULL);
 
 	if (data->func (gcentry, &value, data->user_data))
 	{
 		mozilla_pref_set (data->mozilla_pref, &value);
 		g_value_unset (&value);
+	}
+	else
+	{
+		/* Reset the pref */
+		NS_ENSURE_TRUE (gPrefBranch, );
+		gPrefBranch->ClearUserPref (data->mozilla_pref);
 	}
 }
 
@@ -1088,19 +1094,9 @@ mozilla_notifiers_init (void)
 	eel_gconf_monitor_add ("/system/proxy");
 	eel_gconf_monitor_add ("/system/http_proxy");
 
-	/* Cache the pref branch */
-	nsresult rv;
-	nsCOMPtr<nsIPrefService> prefService
-		(do_GetService (NS_PREFSERVICE_CONTRACTID, &rv));
-	if (NS_FAILED (rv))
-	{
-		g_warning ("Failed to get the pref service!\n");
-		return FALSE;
-	}
-
 	/* the pref service conveniently implements the root pref branch */
 	gPrefBranch = nsnull;
-	rv = CallQueryInterface (prefService, &gPrefBranch);
+	nsresult rv = CallGetService (NS_PREFSERVICE_CONTRACTID, &gPrefBranch);
 	if (NS_FAILED (rv) || !gPrefBranch)
 	{
 		g_warning ("Failed to get the pref service!\n");
