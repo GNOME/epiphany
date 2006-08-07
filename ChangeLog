@@ -1,6 +1,13 @@
 2006-08-07  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-window.c:
+	
+	Don't allow closing the window if quit is locked down.
+	Patch by Diego Escalante Urrelo, bug #320091.
+
+2006-08-07  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-window.c:
 	* src/ephy-history-window.c:
 	
 	Avoid accels on thin characters. Patch by 

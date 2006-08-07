@@ -911,6 +911,10 @@ ephy_window_delete_event (GtkWidget *widget,
 	GList *tabs, *l;
 	gboolean modified = FALSE;
 
+	/* We ignore the delete_event if the disable_quit lockdown has been set
+	 */
+	if (eel_gconf_get_boolean("/apps/epiphany/lockdown/disable_quit")) return TRUE;
+
 	/* Workaround a crash when closing a window while in print preview mode. See
 	 * mozilla bug #241809. /
 	 * Go back to normal mode instead of closing, see bug #326136.
