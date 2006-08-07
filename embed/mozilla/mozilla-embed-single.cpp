@@ -95,6 +95,8 @@
 
 #include "mozilla-embed-single.h"
 
+#include "AutoJSContextStack.h"
+
 #define MOZILLA_PROFILE_DIR  "/mozilla"
 #define MOZILLA_PROFILE_NAME "epiphany"
 #define MOZILLA_PROFILE_FILE "prefs.js"
@@ -583,6 +585,11 @@ static gboolean
 impl_init (EphyEmbedSingle *esingle)
 {
 	MozillaEmbedSingle *single = MOZILLA_EMBED_SINGLE (esingle);
+
+#ifdef MOZ_ENABLE_XPRINT
+	/* XPrint? No, thanks! */
+	g_unsetenv ("XPSERVERLIST");
+#endif
 
 #ifdef HAVE_GECKO_1_9
 	NS_LogInit ();
@@ -1090,8 +1097,12 @@ impl_open_window (EphyEmbedSingle *single,
 		  const char *name,
 		  const char *features)
 {
-	nsCOMPtr<nsIDOMWindow> domWindow;
+	nsresult rv;
+	AutoJSContextStack stack;
+	rv = stack.Init ();
+	if (NS_FAILED (rv)) return NULL;
 
+	nsCOMPtr<nsIDOMWindow> domWindow;
 	if (parent)
 	{
 		EphyBrowser *browser;
