@@ -223,7 +223,7 @@ static const GtkRadioActionEntry ephy_history_radio_entries [] =
 	  N_("Show only the title column"), VIEW_TITLE },
 	{ "ViewAddress", NULL, N_("_Address"), NULL,
 	  N_("Show only the address column"), VIEW_ADDRESS },
-	{ "ViewTitleAddress", NULL, N_("T_itle and Address"), NULL,
+	{ "ViewTitleAddress", NULL, N_("Title a_nd Address"), NULL,
 	  N_("Show both the title and address columns"),
 	  VIEW_TITLE_AND_ADDRESS } 
 };

@@ -190,7 +190,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	  N_("View and remove cookies and passwords"),
 	  G_CALLBACK (window_cmd_edit_personal_data) },
 #ifdef ENABLE_CERTIFICATE_MANAGER
-	{ "EditCertificates", NULL, N_("Cert_ificates"), NULL,
+	{ "EditCertificates", NULL, N_("Certificate_s"), NULL,
 	  N_("Manage Certificates"),
 	  G_CALLBACK (window_cmd_edit_certificates) },
 #endif
@@ -244,7 +244,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "GoLocation", NULL, N_("_Location..."), "<control>L",
 	  N_("Go to a specified location"),
 	  G_CALLBACK (window_cmd_go_location) },
-	{ "GoHistory", EPHY_STOCK_HISTORY, N_("H_istory"), "<control>H",
+	{ "GoHistory", EPHY_STOCK_HISTORY, N_("Hi_story"), "<control>H",
 	  N_("Open the history window"),
 	  G_CALLBACK (window_cmd_go_history) },
 
