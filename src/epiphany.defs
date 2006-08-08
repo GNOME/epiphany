@@ -3050,6 +3050,11 @@
   )
 )
 
+(define-method get_focused_pages
+  (of-object "EphyNotebook")
+  (c-name "ephy_notebook_get_focused_pages")
+  (return-type "GList*")
+)
 
 
 ;; From ../../src/ephy-session.h

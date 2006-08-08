@@ -71,6 +71,8 @@ void		ephy_notebook_set_show_tabs	(EphyNotebook *nb,
 void		ephy_notebook_set_dnd_enabled	(EphyNotebook *nb,
 						 gboolean enabled);
 
+GList *         ephy_notebook_get_focused_pages (EphyNotebook *nb);
+
 G_END_DECLS
 
 #endif /* EPHY_NOTEBOOK_H */

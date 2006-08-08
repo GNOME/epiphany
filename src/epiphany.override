@@ -460,3 +460,17 @@ _wrap_ephy_session_get_windows (PyGObject *self)
 
     return py_list;
 }
+%%
+override ephy_notebook_get_focused_pages noargs
+static PyObject *
+_wrap_ephy_notebook_get_focused_pages (PyGObject *self)
+{    
+    GList *list;
+    PyObject *py_list;
+
+    list = ephy_notebook_get_focused_pages (EPHY_NOTEBOOK (self->obj));
+
+    py_list = _helper_wrap_gobject_glist (list);
+
+    return py_list;
+}
