@@ -246,7 +246,7 @@ GECKO_CHECK_HEADERS([pipnss],[nsIX509Cert.h],[have_psm=yes],[have_psm=no])
 
 AC_MSG_CHECKING([whether to include PSM support])
 AC_ARG_ENABLE([psm],
-	AS_HELP_STRING([psm],[Disable PSM support (default: enabled)]),
+	AS_HELP_STRING([--disable-psm],[Disable PSM support (default: enabled)]),
 	[],[enable_psm=yes])
 AC_MSG_RESULT([$enable_psm])
 
