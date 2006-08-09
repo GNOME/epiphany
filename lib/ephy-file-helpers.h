@@ -80,6 +80,7 @@ void	    ephy_file_delete_on_exit	 (const char *path);
 EphyMimePermission ephy_file_check_mime	 (const char *mime_type);
 
 gboolean    ephy_file_launch_desktop_file (const char *filename,
+					   const char *parameter,
 					   guint32 user_time);
 
 gboolean    ephy_file_launch_application (GnomeVFSMimeApplication *application,

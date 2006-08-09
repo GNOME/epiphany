@@ -260,19 +260,11 @@ background_download_completed (EphyEmbedPersist *persist)
 	user_time = ephy_embed_persist_get_user_time (persist);
 
 	bg = ephy_embed_persist_get_dest (persist);
-	eel_gconf_set_string (CONF_DESKTOP_BG_PICTURE, bg);
-
-	type = eel_gconf_get_string (CONF_DESKTOP_BG_TYPE);
-	if (type == NULL || strcmp (type, "none") == 0)
-	{
-		eel_gconf_set_string (CONF_DESKTOP_BG_TYPE, "wallpaper");
-	}
-	g_free (type);
 
 	g_object_unref (persist);
 
 	/* open the "Background Properties" capplet */
-	ephy_file_launch_desktop_file ("background.desktop", user_time);
+	ephy_file_launch_desktop_file ("background.desktop", bg, user_time);
 }
 
 void

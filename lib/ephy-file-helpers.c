@@ -925,6 +925,7 @@ launch_desktop_item (const char *desktop_file,
 
 gboolean
 ephy_file_launch_desktop_file (const char *filename,
+			       const char *parameter,
 			       guint32 user_time)
 {
 	GError *error = NULL;
@@ -947,7 +948,7 @@ ephy_file_launch_desktop_file (const char *filename,
 
 	if (path != NULL)
 	{
-		ret = launch_desktop_item (path, NULL, user_time, &error);
+		ret = launch_desktop_item (path, parameter, user_time, &error);
 
 		if (ret == -1 || error != NULL)
 		{

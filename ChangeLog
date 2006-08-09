@@ -1,3 +1,15 @@
+2006-08-09  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* src/popup-commands.c: (background_download_completed):
+	* lib/ephy-file-helpers.h: (ephy_file_launch_desktop_file):
+	* lib/ephy-file-helpers.c: (ephy_file_launch_desktop_file):
+	
+	ephy_file_launch_desktop_file accepts now a parameter. Fix #343321.
+
+	* src/ephy-window.c:
+	
+	Remove CONF_DESKTOP_BG_PICTURE #define. No need.
+		
 2006-08-08  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.ac:

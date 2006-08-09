@@ -413,7 +413,6 @@ static const struct
 };
 
 #define CONF_LOCKDOWN_HIDE_MENUBAR "/apps/epiphany/lockdown/hide_menubar"
-#define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
 
 #define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"
 
