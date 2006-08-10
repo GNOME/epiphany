@@ -115,7 +115,7 @@ pref("browser.blink_allowed", false);
 pref("snav.enabled", true);
 
 // don't leak UI language, and don't default to "en-US"
-pref("general.useragent.locale", "en")
+pref("general.useragent.locale", "en");
 
 // spellcheck
 // pref("extensions.spellcheck.inline.max-misspellings", -1);
