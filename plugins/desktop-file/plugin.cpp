@@ -447,7 +447,7 @@ plugin_get_value (NPP instance,
 		break;
 
 	case NPPVpluginNeedsXEmbed:
-		*((PRBool *) value) = PR_FALSE;
+		*((NPBool *) value) = PR_FALSE;
 		break;
 
 	default:
