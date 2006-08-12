@@ -44,6 +44,7 @@
 #include <nsIFile.h>
 #include <nsIIOService.h>
 #include <nsILocalFile.h>
+#include <nsIPassword.h>
 #include <nsIPasswordManager.h>
 #include <nsIPermission.h>
 #include <nsIPermissionManager.h>
@@ -58,10 +59,6 @@
 #ifdef HAVE_MOZILLA_PSM
 #include <nsIX509Cert.h>
 #include <nsIX509CertDB.h>
-#endif
-
-#ifdef HAVE_NSIPASSWORD_H
-#include <nsIPassword.h>
 #endif
 
 #ifdef ALLOW_PRIVATE_API
@@ -879,9 +876,7 @@ impl_list_passwords (EphyPasswordManager *manager)
 {
 	GList *passwords = NULL;
 
-#ifdef HAVE_NSIPASSWORD_H
 	nsresult rv;
-
 	nsCOMPtr<nsIPasswordManager> passwordManager =
 			do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
 	if (!passwordManager) return NULL;
@@ -933,7 +928,6 @@ impl_list_passwords (EphyPasswordManager *manager)
 
 		passwords = g_list_prepend (passwords, p);
 	}
-#endif
 
 	return passwords;
 }
