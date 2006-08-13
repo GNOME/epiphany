@@ -96,7 +96,7 @@ ephy_print_utils_settings_new_from_key_file (GKeyFile *key_file,
 			      PRINT_SETTINGS_GROUP,
 			      &n_keys,
 			      error);
-  if (error)
+  if (*error != NULL)
     return NULL;
    
   settings = gtk_print_settings_new ();
@@ -257,7 +257,7 @@ ephy_print_utils_page_setup_new_from_key_file (GKeyFile *key_file,
   GtkPageSetup *page_setup = NULL;
   GtkPaperSize *paper_size;
   gdouble width, height, top, bottom, left, right;
-  char *name, *ppd_name, *display_name, *orientation;
+  char *name = NULL, *ppd_name = NULL, *display_name = NULL, *orientation = NULL;
   gboolean retval = TRUE;
 
   g_return_val_if_fail (key_file != NULL, NULL);
