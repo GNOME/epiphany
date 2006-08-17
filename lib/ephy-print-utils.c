@@ -89,15 +89,19 @@ ephy_print_utils_settings_new_from_key_file (GKeyFile *key_file,
   GtkPrintSettings *settings;
   gchar **keys;
   gsize n_keys, i;
+  GError *err = NULL;
 
   g_return_val_if_fail (key_file != NULL, NULL);
 
   keys = g_key_file_get_keys (key_file,
 			      PRINT_SETTINGS_GROUP,
 			      &n_keys,
-			      error);
-  if (*error != NULL)
-    return NULL;
+			      &err);
+  if (err != NULL)
+    {
+      g_propagate_error (error, err);
+      return NULL;
+    }
    
   settings = gtk_print_settings_new ();
 
@@ -118,7 +122,7 @@ ephy_print_utils_settings_new_from_key_file (GKeyFile *key_file,
 
   g_strfreev (keys);
 
-  return NULL;
+  return settings;
 }
 
 /**
@@ -142,20 +146,24 @@ ephy_print_utils_settings_to_file (GtkPrintSettings     *settings,
   gboolean retval;
   char *data = NULL;
   gsize len;
+  GError *err = NULL;
 
   g_return_val_if_fail (GTK_IS_PRINT_SETTINGS (settings), FALSE);
   g_return_val_if_fail (file_name != NULL, FALSE);
 
   keyfile = g_key_file_new ();
-  retval = ephy_print_utils_settings_to_key_file (settings, keyfile, error);
+  retval = ephy_print_utils_settings_to_key_file (settings, keyfile, &err);
   if (!retval) goto out;
 
-  data = g_key_file_to_data (keyfile, &len, error);
+  data = g_key_file_to_data (keyfile, &len, &err);
   if (!data) goto out;
 
-  retval = g_file_set_contents (file_name, data, len, error);
+  retval = g_file_set_contents (file_name, data, len, &err);
 
 out:
+  if (err != NULL)
+    g_propagate_error (error, err);
+
   g_key_file_free (keyfile);
   g_free (data);
 
@@ -196,13 +204,6 @@ ephy_print_utils_settings_to_key_file (GtkPrintSettings  *settings,
 
   return TRUE;
 }
-
-
-
-
-
-
-
 
 /**
  * ephy_print_utils_page_setup_new_from_file:
@@ -259,6 +260,7 @@ ephy_print_utils_page_setup_new_from_key_file (GKeyFile *key_file,
   gdouble width, height, top, bottom, left, right;
   char *name = NULL, *ppd_name = NULL, *display_name = NULL, *orientation = NULL;
   gboolean retval = TRUE;
+  GError *err = NULL;
 
   g_return_val_if_fail (key_file != NULL, NULL);
 
@@ -270,8 +272,9 @@ ephy_print_utils_page_setup_new_from_key_file (GKeyFile *key_file,
   }
 
 #define GET_DOUBLE(kf, group, name, v) \
-v = g_key_file_get_double (kf, group, name, error); \
-if (*error != NULL) {\
+v = g_key_file_get_double (kf, group, name, &err); \
+if (err != NULL) {\
+  g_propagate_error (error, err);\
   retval = FALSE;\
   goto out;\
 }
@@ -291,19 +294,23 @@ if (*error != NULL) {\
 				    "PPDName", NULL);
   display_name = g_key_file_get_string (key_file, PAPER_SIZE_GROUP,
 					"DisplayName", NULL);
+  orientation = g_key_file_get_string (key_file, PAGE_SETUP_GROUP,
+				       "Orientation", NULL);
+
+  if ((ppd_name == NULL && name == NULL) || orientation == NULL)
+    {
+      g_set_error (error, ERROR_QUARK, 0, "Not a valid epiphany page setup file");
+      retval = FALSE;
+      goto out;
+    }
 
   if (ppd_name != NULL) {
     paper_size = gtk_paper_size_new_from_ppd (ppd_name, display_name,
 					      width, height);
-  } else if (name != NULL) {
+  } else {
     paper_size = gtk_paper_size_new_custom (name, display_name,
 					    width, height, GTK_UNIT_MM);
-  } else {
-    g_set_error (error, ERROR_QUARK, 0, "Not a valid epiphany page setup file");
-    retval = FALSE;
-    goto out;
   }
-
   g_assert (paper_size != NULL);
 
   page_setup = gtk_page_setup_new ();
@@ -315,19 +322,16 @@ if (*error != NULL) {\
   gtk_page_setup_set_left_margin (page_setup, left, GTK_UNIT_MM);
   gtk_page_setup_set_right_margin (page_setup, right, GTK_UNIT_MM);
 
-  orientation = g_key_file_get_string (key_file, PAGE_SETUP_GROUP,
-				       "Orientation", NULL);
-  if (orientation != NULL) {
-    gtk_page_setup_set_orientation (page_setup,
-				    ephy_string_enum_from_string (GTK_TYPE_PAGE_ORIENTATION,
-						    		  orientation));
-    g_free (orientation);
-  }
-
+  gtk_page_setup_set_orientation (page_setup,
+				  ephy_string_enum_from_string (GTK_TYPE_PAGE_ORIENTATION,
+						    		orientation));
 out:
+  if (!retval) g_warning ("page_setup_new_from_keyfile failed"); //XXX
+
+  g_free (ppd_name);
   g_free (name);
   g_free (display_name);
-  g_free (ppd_name);
+  g_free (orientation);
 
   return page_setup;
 }
