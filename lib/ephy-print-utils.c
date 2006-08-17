@@ -326,8 +326,6 @@ if (err != NULL) {\
 				  ephy_string_enum_from_string (GTK_TYPE_PAGE_ORIENTATION,
 						    		orientation));
 out:
-  if (!retval) g_warning ("page_setup_new_from_keyfile failed"); //XXX
-
   g_free (ppd_name);
   g_free (name);
   g_free (display_name);
