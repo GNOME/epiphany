@@ -206,19 +206,15 @@ EphyFind::FindAgain (PRBool aForward)
 
   nsresult rv;
   PRUint16 found = nsITypeAheadFind::FIND_NOTFOUND;
+#ifdef HAVE_GECKO_1_9
+  rv = mFinder->FindAgain (aForward, mHasFocus, &found);
+#else
   if (aForward) {
-#ifdef HAVE_GECKO_1_9
-    rv = mFinder->FindNext (mHasFocus, &found);
-#else
     rv = mFinder->FindNext (&found);
-#endif
   } else {
-#ifdef HAVE_GECKO_1_9
-    rv = mFinder->FindPrevious (mHasFocus, &found);
-#else
     rv = mFinder->FindPrevious (&found);
-#endif
   }
+#endif
 
   return (EphyEmbedFindResult) found;
 }
