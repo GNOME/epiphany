@@ -536,7 +536,7 @@ EphyAboutModule::CreateRecoverPage(nsIURI *aRecoverURI,
 	char *secondary = g_strdup_printf
 		(_("The page “%s” in this tab was not fully loaded yet when "
 		   "the web browser crashed; it could have caused the crash."),
-		 url.get());
+		 rawurl.get());
 
 	nsCOMPtr<nsIChannel> channel;
 	rv = WritePage (aRecoverURI, uri, uri, rawurl, title.get(),

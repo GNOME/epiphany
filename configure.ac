@@ -15,7 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 
-AC_INIT([GNOME Web Browser],[2.15.91.90],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[2.15.92],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
@@ -74,14 +74,14 @@ if test "x$enable_maintainer_mode" = "xyes"; then
 	MOZILLA_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth $MOZILLA_WARN_CXXFLAGS"
 fi
 
-GLIB_REQUIRED=2.10.1
-GTK_REQUIRED=2.9.3
+GLIB_REQUIRED=2.12.0
+GTK_REQUIRED=2.10.0
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
 LIBGLADE_REQUIRED=2.3.1
 LIBGNOMEVFS_REQUIRED=2.9.2
-LIBGNOME_REQUIRED=2.10.0
-LIBGNOMEUI_REQUIRED=2.6.0
+LIBGNOME_REQUIRED=2.14.0
+LIBGNOMEUI_REQUIRED=2.14.0
 GNOME_DESKTOP_REQUIRED=2.9.91
 LIBSTARTUP_NOTIFICATION_REQUIRED=0.5
 DBUS_GLIB_REQUIRED=0.35
