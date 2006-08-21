@@ -172,6 +172,7 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
   gtk_print_unix_dialog_add_custom_tab (print_dialog, custom_tab,
 					gtk_label_new (_("Options"))); /* FIXME better name! */
   g_object_unref (custom_tab);
+  g_object_unref (xml);
 
   gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
