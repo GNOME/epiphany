@@ -15,7 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 
-AC_INIT([GNOME Web Browser],[2.15.99],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[2.16.0],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
@@ -25,11 +25,11 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
-EPIPHANY_MAJOR=2.15
-EPIPHANY_API_VERSION=2.15
+EPIPHANY_MAJOR=2.16
+EPIPHANY_API_VERSION=2.16
 
 # This should stay at the major version of the latest stable releases
-EPIPHANY_UA_VERSION=2.14
+EPIPHANY_UA_VERSION=2.16
 
 AC_SUBST([EPIPHANY_MAJOR])
 AC_SUBST([EPIPHANY_API_VERSION])
