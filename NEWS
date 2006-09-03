@@ -1,3 +1,15 @@
+===============
+Epiphany 2.16.0
+===============
+
+Contributors:
+
+
+Documentation translations:
+
+Translations:
+
+
 ================
 Epiphany 2.15.92
 ================
@@ -140,6 +152,107 @@ Epiphany 2.15.1
 ===============
 
 No news available.
+
+
+===============
+Epiphany 2.14.3
+===============
+
+Contributors to this release:
+Johannes Berg, Wouter Bolsterlee, Nguyễn Thái Ngọc Duy,
+Frederic Peters, Christian Persch, Jean-François Rameau.
+
+Documentation translations:
+Francisco Javier F. Serrador (es), Daniel Nylander (sv).
+
+Translation updates:
+Hendrik Richter (de), Christophe Merlet (RedFox) (fr),
+Raivis Dejus (lv), Shyam Krishna Bal (ne).
+
+
+=================
+Epiphany 2.14.2.1
+=================
+
+Changes
+
+	* Fix launching the background capplet
+
+===============
+Epiphany 2.14.2
+===============
+
+Translation updates:
+Hendrik Richter (de), Benoît Dejean (fr).
+
+
+=================
+Epiphany 2.14.1.1
+=================
+
+Changes:
+	* Add Esperanto (eo) to available languages in prefs
+	* Add -p as short option format for --private-instance
+	* Fix mnemonic activation of download path button [#339139]
+	* Fix accelerator assignment in Tabs menu [#339548]
+	* Monitor also directories, not just files [#332049]
+	* Fix crash with lockdown and zeroconf bookmarks [#341379]
+	* Fix build with gecko 1.8 branch
+	* Make status icon transparent [Patch from #150726]
+	* Documentation and man page updates
+
+Contributors to this release:
+
+Wouter Bolsterlee, Christian Persch, ZeBob
+
+Documentation:
+Victor Osadci
+
+Translations:
+Rostislav "zbrox" Raykov (bg), Progga (bn), Oublieuse (br), Lukas Novotny (cs),
+Mindu Dorji (dz), Francisco Javier F. Serrador (es), Ivar Smolin (et),
+Iñaki Larrañaga Murgoitio (eu), Benoît Dejean (fr),
+Ignacio Casal Quinteiro (gl), Ankit Patel (gu), Mohammad DAMT (id),
+Satoru SATOH (ja), ? (mg), Kjartan Maraas (nb), Reinout van Schouwen (nl),
+Åsmund Skjæveland (nn), Kjartan Maraas (no), 
+Licio Fernando Nascimento da Fonseca (pt_BR), Duarte Loreto (pt),
+Daniel Nylander (sv), Theppitak Karoonboonyanan (th), Baris Cicek (tr),
+Maxim Dziumanenko (uk), and Clytie Siddall (vi).
+
+
+===============
+Epiphany 2.14.1
+===============
+
+Changes:
+	* Hooks have been added for the new epiphany-extensions
+	documentation, written by Baptiste Mille-mathias 
+
+Bug fixes:
+	* Enable pango for some indic languages, which depend on it for correct
+	rendering. Bug #335799.
+	* Improve the current code (less complex) and add a timeouted call
+	to NetworkManager when requesting network status. Bug #330479.
+	* Disable export when locked down. Bug #337028.
+	* Make sure we don't show "100%" on downloads unless they're really
+	completed.
+	* Don't crash when we cannot connect to the system dbus. Bug #336557.
+	* Mozilla backend now supports adblock. Fix #335919.
+	* Add support for local directory monitoring (in addition to local file
+	monitoring). Bug #332049.
+	* Add support for IE link files. Bug #330735.
+	
+Contributors to this release:
+Wouter Bolsterlee, Jean-François Rameau, Christian Persch.
+
+Documentation updates:
+Victor Osadci.
+
+Updated translations:
+Jérémy Le Floc'h (br), Lukas Novotny (cs), Mindu Dorji (dz), Ivar Smolin (et),
+Ilkka Tuohela (fi), Ignacio Casal Quinteiro (gl), Mohammad DAMT (id),
+Francesco Marletta (it), alina (ka), Theppitak Karoonboonyanan (th).
+
 
 ===============
 Epiphany 2.14.0
@@ -674,6 +787,174 @@ New and updated translations:
 	* Christian Rose (sv)
 	* Liu Songhe (zh_CN)
 	* Woodman Tuen (zh_TW)
+
+
+==============
+Epiphany 1.8.5
+==============
+
+Changes
+
+	* Backport prompt service and directory provider
+	  from 1.9.x, to fix bugs in gtkmozembed's prompt
+	  service, and to fix the password manager not
+	  working and preventing form submissions!
+
+================
+Epiphany 1.8.4.1
+================
+
+Changes
+
+	* Fix compilation with firefox 1.5 backend [#330040]
+
+Updated translations:
+
+	* Miloslav Trmac (cs)
+	* Priit Laes (et)
+	* Christophe Merlet (RedFox) (fr)
+	* Rajesh Ranjan (hi)
+	* Åsmund Skjæveland (nn)
+	* Nickolay V. Shmyrev (ru)
+	* Woodman Tuen (zh_HK)
+	* Woodman Tuen (zh_TW)
+
+
+==============
+Epiphany 1.8.4
+==============
+
+Changes
+
+	* Fix crash on find bar closing with autoclosing windows
+	* Don't launch epiphany as external app handler [#324828]
+	* Don't ship generated ORBit files in the tarball [#319440]
+	* Fix warning when Ctrl-F while the find toolbar is already shown
+	* Exit ppv mode when clicking the window close button [#326136]
+	* Don't require a HTML document to activate typeaheadfind [#326813]
+	* Truncate URI and title strings [#329160]
+	* Push a null JS context on the stack when we run a recursive
+	  mainloop; fixes the epiphany equivalend of camino bug
+	  https://bugzilla.mozilla.org/show_bug.cgi?id=179307
+	* Add prefs to activate password manager on xulrunner
+
+Contributors to this release: Frederic Crozat.
+
+Updated translations:
+
+	* Progga (bn)
+	* Miloslav Trmac (cs)
+	* Hendrik Richter (de)
+	* Iñaki Larrañaga Murgoitio (eu)
+	* Ignacio Casal Quinteiro (gl)
+	* Francesco Marletta (it)
+	* Young-Ho Cha (ko)
+	* Erdal Ronahi (ku)
+	* Данило Шеган (sr, sr@Latn)
+	* Christian Rose (sv)
+	* Erçin EKER (tr)
+	* Clytie Siddall (vi)
+
+
+==============
+Epiphany 1.8.3
+==============
+
+Changes
+
+	* Work around crash caused by https://bugzilla.mozilla.org/show_bug.cgi?id=312241 .
+	* Use gtk stock icons for fullscreen
+	* Add more mime types to the list of known types
+	* Use the history window as parent for the new-bookmark dialogue [#320329]
+	* Scroll the view so the selected cert is visible [#320758]
+	* Allow compilation against xulrunner
+	* Don't put the prefs/pdm dialogue over all windows
+	* Vastly improve PDM dialogue opening time
+	* Delay reloads when we get many change notifications in a short time [#319993]
+	* Fix HTML forms and scrollbars in lockdown mode [#316498]
+
+Contributors to this release:
+Robert O'Callahan.
+
+Updated translations:
+
+	* Ivar Smolin (et)
+	* Clytie Siddall (vi)
+	* Liu Songhe (zh_CN)
+
+==============
+Epiphany 1.8.2
+==============
+
+Changes
+
+	* Fix crash on shutdown when only the bookmarks editor
+	* Fix a mem leak
+	* Don't grow the left pane of the bookmarks editor with each opening
+
+
+==============
+Epiphany 1.8.1
+==============
+
+Changes
+
+        * Make Mozilla paper sizes work with gnome-print [#163255].
+        * Require pygtk 2.8. Fixes [#314557].
+        * Manually emit the "profile-change-net-teardown" notification; works
+          around mozilla bug https://bugzilla.mozilla.org/show_bug.cgi?id=292699
+        * Don't focus the checkbox initially. Fixes [#163371].
+        * If the search term is empty for a smart bookmark use the normal URL
+          instead of the smart url with the %s replaced by ""
+        * Don't use "cat >" as output command, it fails inpredicably.
+          If not using gecko 1.9, translate the paper name to the one 
+          mozilla expects (https://bugzilla.mozilla.org/show_bug.cgi?id=307404).
+        * Use the tab label's outer hbox for the size calculation instead of
+          the label itself. Fixes size oscillations with the Tab States
+          extension.
+        * Back out the fix for [#158486] by re-enabling keyword: searches. 
+          Fixes [#314974].
+        * Don't spin unmapped spinners. Slightly decrease the frequency.
+          Might help with [#315232].    
+        * Use nsIDOMWindowInternal::Close to close tabs. Delay tabs destruction
+          to an idle handler, to avoid crashes when tabs are closed from signal
+          handlers (blur, mousedown, keydown etc).      
+          Fixes [#172878], [#172879], [#172882], [#303254], [#313425].
+        * Schedule a GC in finalize of EphyTab and EphyWindow, to work around 
+          [#317242].
+
+Contributors to this release: Christian Persch, Jean-François Rameau, 
+Reinout van Schouwen and Raphaël Slinckx.
+
+New and updated translations:
+
+	* Progga (bn)
+	* Hendrik Richter (de)
+	* Ivar Smolin (et)
+	* Iñaki Larrañaga Murgoitio (eu)
+	* Ignacio Casal Quinteiro (gl)
+	* Francesco Marletta (it)
+	* Young-Ho Cha (ko)
+	* Erdal Ronahi (ku)
+	* Данило Шеган (sr, sr@Latn)
+	* Christian Rose (sv)
+	* Erçin EKER (tr)
+	* Clytie Siddall (vi)
+
+
+==============
+Epiphany 1.8.0
+==============
+
+Updated translations:
+
+	* Miloslav Trmac (cs)
+	* Hendrik Richter (de)
+	* Roozbeh Pournader (fa)
+	* Young-Ho Cha (ko)
+	* Žygimantas Beručka (lt)
+	* Nickolay V. Shmyrev (ru)
+	* Erçin EKER (tr)
 
 
 ==============
