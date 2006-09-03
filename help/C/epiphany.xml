@@ -460,41 +460,7 @@
 		  </para>
 		  <variablelist>
 			<varlistentry>
-			  <term>Margins</term>
-			  <listitem>
-				<para>
-				  The distance from the edge of the page to the content.
-				</para>
-			  </listitem>
-			</varlistentry>
-			<varlistentry>
-			  <term>Colors</term>
-			  <listitem>
-				<para>
-				  Print in gray-scale or color.
-				</para>
-			  </listitem>
-			</varlistentry>
-			<varlistentry>
-			  <term>Footers</term>
-			  <listitem>
-				<para>
-				  Choose whether to display page numbers and the current date
-				  at the bottom of every page.
-				</para>
-			  </listitem>
-			</varlistentry>
-			<varlistentry>
-			  <term>Headers</term>
-			  <listitem>
-				<para>
-				  Choose whether to display the web page title and address
-				  at the top of every page.
-				</para>
-			  </listitem>
-			</varlistentry>
-			<varlistentry>
-			  <term>Size</term>
+			  <term>Paper Size</term>
 			  <listitem>
 				<para>
 				  The paper size.
@@ -527,14 +493,14 @@
 			To print a page, choose <menuchoice> <guimenu>File</guimenu>
 			<guimenuitem>Print...</guimenuitem> </menuchoice>. Select the 
 			name of the printer in the <guilabel>Printer</guilabel> 
-			list or enter a name in the <guilabel>Location</guilabel> field 
+			list or select  <guilabel>Print to File</guilabel>  
 			to print to a file.
 		  </para>
 		  <para>
-			In the <guilabel>Page Range</guilabel> section, choose <guilabel>
-			All Pages</guilabel> to print the entire web page, <guilabel>Selection
-			</guilabel> to print the currently selected part of the web page only or
-			<guilabel>Pages</guilabel> to print the range of pages that you specify.
+			In the <guilabel>Print Pages</guilabel> section, choose <guilabel>
+			All</guilabel> to print the entire web page, <guilabel>Current
+			</guilabel> to print the currently selected page only or
+			<guilabel>Range</guilabel> to print the range of pages that you specify.
 		  </para>
 		</sect2>
 	<sect2 id="to-find-text-in-page">
@@ -1210,6 +1176,17 @@ GNOME -> GNOME developers home page</programlisting>
 			 </listitem>
 		   </varlistentry>
 		 </variablelist>
+		  <para>
+			<note>
+			  <title>Opening all the bookmarks in a topic</title>
+			  <para>
+				If a topic has been added to the toolbar, all the bookmarks in that topic 
+				can be opened in new tabs by choosing <guilabel>Open in New Tabs</guilabel> 
+				from the menu item of the topic. The new tabs will open at the right of 
+				the current tab. All already opened tabs will be preserved.
+			  </para>
+			</note>
+		  </para>
 		</sect2>
 	<sect2 id="to-remove-bookmark-or-topic-from-toolbar">
 		  <title>To Remove a Bookmark or Topic From the Toolbar</title>
@@ -1682,6 +1659,15 @@ GNOME -> GNOME developers home page</programlisting>
 	  <note>
 		<para>
 		  Once all downloads have finished, or been cancelled, the download manager will close.
+		</para>
+	  </note>
+	  <note>
+		<para>
+		  <keycombo>
+			  <keycap>Shift</keycap>
+			  <mousebutton>Click</mousebutton>
+			</keycombo> 
+			on a link, image or page will cause it to be downloaded to your default downloads folder.
 		</para>
 	  </note>
   </sect1>
@@ -2281,22 +2267,6 @@ GNOME -> GNOME developers home page</programlisting>
 			<entry colname="colspec1" valign="top">
 			  <para>
 				Show the history manager.
-			  </para>
-			</entry>
-		  </row>
-		  <row>
-			<entry colname="colspec0" valign="top">
-			  <para>
-			  <keycombo>
-				  <keycap>Shift</keycap>
-				  <keycap>Ctrl</keycap>
-				  <keycap>T</keycap>
-				</keycombo>
-			  </para>
-			</entry>
-			<entry colname="colspec1" valign="top">
-			  <para>
-				Toggle the display of the toolbar.
 			  </para>
 			</entry>
 		  </row>
