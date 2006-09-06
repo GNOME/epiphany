@@ -45,7 +45,7 @@ ephy_bookmark_factory_action_get_type (void)
 
 	if (!type)
 	{
-		static const GTypeInfo type_info =
+		const GTypeInfo type_info =
 		{
 			sizeof (EphyBookmarkFactoryActionClass),
 			(GBaseInitFunc) NULL,

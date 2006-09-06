@@ -66,7 +66,7 @@ ephy_zoom_action_get_type (void)
 
         if (G_UNLIKELY (type == 0))
         {
-                static const GTypeInfo our_info =
+                const GTypeInfo our_info =
 			{
 				sizeof (EphyZoomActionClass),
 				NULL, /* base_init */

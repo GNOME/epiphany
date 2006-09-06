@@ -148,20 +148,20 @@ EphySingle::EmitPermissionNotification (const char *name,
 nsresult
 EphySingle::ExamineCookies (nsISupports *aSubject)
 {
-	nsCOMPtr<nsIPropertyBag2> props = do_QueryInterface(aSubject);
-	NS_ENSURE_TRUE (props, NS_ERROR_FAILURE);
-
 	PRBool isBlockingCookiesChannel = PR_FALSE;
-	props->GetPropertyAsBool(
-			NS_LITERAL_STRING("epiphany-blocking-cookies"), 
-			&isBlockingCookiesChannel);
-	if (isBlockingCookiesChannel)
-	{
-		nsCOMPtr<nsIHttpChannel> channel = do_QueryInterface(aSubject);
-		NS_ENSURE_TRUE (channel, NS_ERROR_FAILURE);
 
-		channel->SetRequestHeader(NS_LITERAL_CSTRING("Cookie"),
-					  EmptyCString(), PR_FALSE);
+	nsCOMPtr<nsIPropertyBag2> props (do_QueryInterface(aSubject));
+	if (props &&
+	    NS_SUCCEEDED (props->GetPropertyAsBool(
+			  NS_LITERAL_STRING("epiphany-blocking-cookies"), 
+			  &isBlockingCookiesChannel)) &&
+	    isBlockingCookiesChannel)
+	{
+		nsCOMPtr<nsIHttpChannel> httpChannel (do_QueryInterface(aSubject));
+
+		if (httpChannel)
+			httpChannel->SetRequestHeader(NS_LITERAL_CSTRING("Cookie"),
+						      EmptyCString(), PR_FALSE);
 	}
 
 	return NS_OK;

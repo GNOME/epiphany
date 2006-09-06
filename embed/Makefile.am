@@ -110,7 +110,7 @@ stamp-ephy-embed-type-builtins.c: $(INST_H_FILES)
 		--fhead "#include \"ephy-embed-type-builtins.h\"\n\n" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
 		--fprod "\n#include \"@filename@\"" \
-		--vhead "static const G@Type@Value _@enum_name@_values[] = {" \
+		--vhead "const G@Type@Value _@enum_name@_values[] = {" \
 		--vprod "  { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
 		--vtail "  { 0, NULL, NULL }\n};\n\n" \
 		--vtail "GType\n@enum_name@_get_type (void)\n{\n" \

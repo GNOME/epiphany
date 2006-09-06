@@ -30,7 +30,7 @@ ephy_x509_cert_get_type (void)
 
 	if (ephy_x509_cert_type == 0)
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyX509CertIface),
 			NULL,

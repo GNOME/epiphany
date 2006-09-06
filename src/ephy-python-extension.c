@@ -342,7 +342,7 @@ ephy_python_extension_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyPythonExtensionClass),
 			NULL, /* base_init */
@@ -354,7 +354,7 @@ ephy_python_extension_get_type (void)
 			0, /* n_preallocs */
 			(GInstanceInitFunc) ephy_python_extension_init
 		};
-		static const GInterfaceInfo extension_info =
+		const GInterfaceInfo extension_info =
 		{
 			(GInterfaceInitFunc) ephy_python_extension_iface_init,
 			NULL,

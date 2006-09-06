@@ -134,7 +134,7 @@ mozilla_embed_get_type (void)
 
         if (G_UNLIKELY (type == 0))
         {
-                static const GTypeInfo our_info =
+                const GTypeInfo our_info =
                 {
                         sizeof (MozillaEmbedClass),
                         NULL, /* base_init */
@@ -147,14 +147,14 @@ mozilla_embed_get_type (void)
                         (GInstanceInitFunc) mozilla_embed_init
                 };
 
-		static const GInterfaceInfo embed_info =
+		const GInterfaceInfo embed_info =
 		{
 			(GInterfaceInitFunc) ephy_embed_iface_init,
         		NULL,
         		NULL
      		};
 
-		static const GInterfaceInfo ephy_command_manager_info =
+		const GInterfaceInfo ephy_command_manager_info =
 		{
 			(GInterfaceInitFunc) ephy_command_manager_iface_init,
         		NULL,

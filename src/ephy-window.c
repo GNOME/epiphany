@@ -491,7 +491,7 @@ ephy_window_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyWindowClass),
 			NULL, /* base_init */
@@ -503,7 +503,7 @@ ephy_window_get_type (void)
 			0, /* n_preallocs */
 			(GInstanceInitFunc) ephy_window_init
 		};
-		static const GInterfaceInfo link_info = 
+		const GInterfaceInfo link_info = 
 		{
 			(GInterfaceInitFunc) ephy_window_link_iface_init,
 			NULL,

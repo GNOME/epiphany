@@ -56,7 +56,7 @@ mozilla_x509_cert_get_type (void)
 
 	if (mozilla_x509_cert_type == 0)
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (MozillaX509CertClass),
 			NULL, /* base_init */
@@ -69,7 +69,7 @@ mozilla_x509_cert_get_type (void)
 			(GInstanceInitFunc) mozilla_x509_cert_init
 		};
 
-		static const GInterfaceInfo x509_cert_info =
+		const GInterfaceInfo x509_cert_info =
 		{
 			(GInterfaceInitFunc) ephy_x509_cert_init,      /* interface_init */
 			NULL,                                          /* interface_finalize */

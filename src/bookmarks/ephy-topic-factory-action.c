@@ -46,7 +46,7 @@ ephy_topic_factory_action_get_type (void)
 
 	if (!type)
 	{
-		static const GTypeInfo type_info =
+		const GTypeInfo type_info =
 		{
 			sizeof (EphyTopicFactoryActionClass),
 			(GBaseInitFunc) NULL,

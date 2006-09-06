@@ -139,7 +139,7 @@ ephy_extensions_manager_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyExtensionsManagerClass),
 			NULL, /* base_init */
@@ -152,7 +152,7 @@ ephy_extensions_manager_get_type (void)
 			(GInstanceInitFunc) ephy_extensions_manager_init
 		};
 
-		static const GInterfaceInfo extension_info =
+		const GInterfaceInfo extension_info =
 		{
 			(GInterfaceInitFunc) ephy_extensions_manager_iface_init,
 			NULL,

@@ -120,7 +120,7 @@ ephy_python_loader_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyPythonLoaderClass),
 			NULL, /* base_init */
@@ -132,7 +132,7 @@ ephy_python_loader_get_type (void)
 			0, /* n_preallocs */
 			(GInstanceInitFunc) ephy_python_loader_init
 		};
-		static const GInterfaceInfo loader_info =
+		const GInterfaceInfo loader_info =
 		{
 			(GInterfaceInitFunc) ephy_python_loader_iface_init,
 			NULL,

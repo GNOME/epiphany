@@ -455,7 +455,7 @@ ephy_dbus_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyDbusClass),
 			NULL, /* base_init */

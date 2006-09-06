@@ -316,7 +316,7 @@ ephy_lockdown_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyLockdownClass),
 			NULL, /* base_init */
@@ -328,7 +328,7 @@ ephy_lockdown_get_type (void)
 			0, /* n_preallocs */
 			(GInstanceInitFunc) ephy_lockdown_init
 		};
-		static const GInterfaceInfo extension_info =
+		const GInterfaceInfo extension_info =
 		{
 			(GInterfaceInitFunc) ephy_lockdown_iface_init,
 			NULL,

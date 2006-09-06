@@ -34,7 +34,7 @@ ephy_embed_single_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyEmbedSingleIface),
 			ephy_embed_single_iface_init,

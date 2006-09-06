@@ -30,7 +30,7 @@ ephy_certificate_manager_get_type (void)
 
 	if (ephy_certificate_manager_type == 0)
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyCertificateManagerIface),
 			NULL,

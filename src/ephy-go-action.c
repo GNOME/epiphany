@@ -39,7 +39,7 @@ ephy_go_action_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo type_info =
+		const GTypeInfo type_info =
 		{
 			sizeof (EphyGoActionClass),
 			(GBaseInitFunc) NULL,

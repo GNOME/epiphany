@@ -77,7 +77,7 @@ ephy_embed_shell_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyEmbedShellClass),
 			NULL, /* base_init */
