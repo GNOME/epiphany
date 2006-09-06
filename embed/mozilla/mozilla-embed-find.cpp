@@ -164,7 +164,7 @@ mozilla_embed_find_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (MozillaEmbedFindClass),
 			NULL, /* base_init */
@@ -177,7 +177,7 @@ mozilla_embed_find_get_type (void)
 			(GInstanceInitFunc) mozilla_embed_find_init
 		};
 
-		static const GInterfaceInfo find_info =
+		const GInterfaceInfo find_info =
 		{
 			(GInterfaceInitFunc) ephy_find_iface_init,
 			NULL,

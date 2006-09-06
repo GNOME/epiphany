@@ -61,7 +61,7 @@ ephy_tree_model_sort_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyTreeModelSortClass),
 			NULL, /* base init */
@@ -73,7 +73,7 @@ ephy_tree_model_sort_get_type (void)
 			0, /* n_preallocs */
 			(GInstanceInitFunc) ephy_tree_model_sort_init
 		};
-		static const GInterfaceInfo multi_drag_source_info =
+		const GInterfaceInfo multi_drag_source_info =
 		{
 			(GInterfaceInitFunc) ephy_tree_model_sort_multi_drag_source_init,
 			NULL,

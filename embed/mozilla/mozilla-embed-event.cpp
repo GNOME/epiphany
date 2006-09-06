@@ -52,7 +52,7 @@ mozilla_embed_event_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (MozillaEmbedEventClass),
 			NULL, /* base_init */
@@ -65,7 +65,7 @@ mozilla_embed_event_get_type (void)
 			(GInstanceInitFunc) mozilla_embed_event_init
 		};
 
-		static const GInterfaceInfo embed_event_info =
+		const GInterfaceInfo embed_event_info =
 		{
 			(GInterfaceInitFunc) ephy_embed_event_iface_init,
         		NULL,

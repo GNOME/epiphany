@@ -109,7 +109,7 @@ ephy_notebook_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 			{
 				sizeof (EphyNotebookClass),
 				NULL, /* base_init */
@@ -122,7 +122,7 @@ ephy_notebook_get_type (void)
 				(GInstanceInitFunc) ephy_notebook_init
 			};
 
-		static const GInterfaceInfo link_info =
+		const GInterfaceInfo link_info =
 		{
 			NULL,
 			NULL,

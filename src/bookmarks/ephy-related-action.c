@@ -128,7 +128,7 @@ ephy_related_action_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyRelatedActionClass),
 			NULL, /* base_init */
@@ -140,7 +140,7 @@ ephy_related_action_get_type (void)
 			0,   /* n_preallocs */
 			NULL /* instance_init */
 		};
-		static const GInterfaceInfo link_info = 
+		const GInterfaceInfo link_info = 
 		{
 			(GInterfaceInitFunc) iface_init,
 			NULL,

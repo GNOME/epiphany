@@ -56,7 +56,7 @@ ephy_home_action_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo type_info =
+		const GTypeInfo type_info =
 		{
 			sizeof (EphyHomeActionClass),
 			(GBaseInitFunc) NULL,

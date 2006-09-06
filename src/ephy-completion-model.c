@@ -53,7 +53,7 @@ ephy_completion_model_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyCompletionModelClass),
 			NULL,
@@ -66,7 +66,7 @@ ephy_completion_model_get_type (void)
 			(GInstanceInitFunc) ephy_completion_model_init
 		};
 
-		static const GInterfaceInfo tree_model_info =
+		const GInterfaceInfo tree_model_info =
 		{
 			(GInterfaceInitFunc) ephy_completion_model_tree_model_init,
 			NULL,

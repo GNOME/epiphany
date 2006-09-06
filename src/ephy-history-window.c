@@ -560,7 +560,7 @@ ephy_history_window_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyHistoryWindowClass),
 			NULL,

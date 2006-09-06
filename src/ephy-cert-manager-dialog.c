@@ -488,7 +488,7 @@ certs_manager_dialog_get_type (void)
 
 	if (certs_manager_dialog_type == 0)
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (CertsManagerDialogClass),
 			NULL, /* base_init */

@@ -56,7 +56,7 @@ ephy_shlib_loader_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyShlibLoaderClass),
 			NULL, /* base_init */
@@ -69,7 +69,7 @@ ephy_shlib_loader_get_type (void)
 			(GInstanceInitFunc) ephy_shlib_loader_init
 		};
 
-		static const GInterfaceInfo loader_info =
+		const GInterfaceInfo loader_info =
 		{
 			(GInterfaceInitFunc) ephy_shlib_loader_iface_init,
 			NULL,

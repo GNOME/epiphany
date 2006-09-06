@@ -69,7 +69,7 @@ ephy_tree_model_node_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphyTreeModelNodeClass),
 			NULL,
@@ -82,7 +82,7 @@ ephy_tree_model_node_get_type (void)
 			(GInstanceInitFunc) ephy_tree_model_node_init
 		};
 
-		static const GInterfaceInfo tree_model_info =
+		const GInterfaceInfo tree_model_info =
 		{
 			(GInterfaceInitFunc) ephy_tree_model_node_tree_model_init,
 			NULL,

@@ -104,7 +104,7 @@ ephy_session_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphySessionClass),
 			NULL, /* base_init */
@@ -117,7 +117,7 @@ ephy_session_get_type (void)
 			(GInstanceInitFunc) ephy_session_init
 		};
 
-		static const GInterfaceInfo extension_info =
+		const GInterfaceInfo extension_info =
 		{
 			(GInterfaceInitFunc) ephy_session_iface_init,
 			NULL,

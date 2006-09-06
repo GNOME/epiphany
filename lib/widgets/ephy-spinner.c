@@ -104,7 +104,7 @@ ephy_spinner_cache_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphySpinnerCacheClass),
 			NULL,
@@ -534,7 +534,7 @@ ephy_spinner_get_type (void)
 
 	if (G_UNLIKELY (type == 0))
 	{
-		static const GTypeInfo our_info =
+		const GTypeInfo our_info =
 		{
 			sizeof (EphySpinnerClass),
 			NULL, /* base_init */

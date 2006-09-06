@@ -143,7 +143,7 @@ mozilla_embed_single_get_type (void)
 
         if (G_UNLIKELY (type == 0))
         {
-                static const GTypeInfo our_info =
+                const GTypeInfo our_info =
                 {
                         sizeof (MozillaEmbedSingleClass),
                         NULL, /* base_init */
@@ -156,28 +156,28 @@ mozilla_embed_single_get_type (void)
                         (GInstanceInitFunc) mozilla_embed_single_init
                 };
 
-		static const GInterfaceInfo embed_single_info =
+		const GInterfaceInfo embed_single_info =
 		{
 			(GInterfaceInitFunc) ephy_embed_single_iface_init,
 			NULL,
 			NULL
 		};
 
-		static const GInterfaceInfo cookie_manager_info =
+		const GInterfaceInfo cookie_manager_info =
 		{
 			(GInterfaceInitFunc) ephy_cookie_manager_iface_init,
 			NULL,
 			NULL
 		};
 
-		static const GInterfaceInfo password_manager_info =
+		const GInterfaceInfo password_manager_info =
 		{
 			(GInterfaceInitFunc) ephy_password_manager_iface_init,
 			NULL,
 			NULL
 		};
 
-		static const GInterfaceInfo permission_manager_info =
+		const GInterfaceInfo permission_manager_info =
 		{
 			(GInterfaceInitFunc) ephy_permission_manager_iface_init,
 			NULL,
@@ -185,7 +185,7 @@ mozilla_embed_single_get_type (void)
 		};
 
 #ifdef ENABLE_CERTIFICATE_MANAGER
-		static const GInterfaceInfo certificate_manager_info =
+		const GInterfaceInfo certificate_manager_info =
 		{
 			(GInterfaceInitFunc) ephy_certificate_manager_iface_init,
 			NULL,
