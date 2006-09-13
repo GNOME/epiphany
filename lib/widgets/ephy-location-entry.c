@@ -832,6 +832,33 @@ favicon_drag_data_get_cb (GtkWidget *widget,
 }
 
 static gboolean
+icon_button_press_event_cb (GtkWidget *ebox,
+			    GdkEventButton *event,
+			    EphyLocationEntry *entry)
+{
+	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
+
+	if (event->type == GDK_BUTTON_PRESS && 
+	    event->button == 1 && 
+	    state == 0 /* left */)
+	{
+		GtkWidget *toplevel;
+		EphyLocationEntryPrivate *priv = entry->priv;
+		
+		toplevel = gtk_widget_get_toplevel (GTK_WIDGET (entry));
+        	gtk_window_set_focus (GTK_WINDOW(toplevel),
+                              	      priv->icon_entry->entry);
+
+		gtk_editable_select_region (GTK_EDITABLE (priv->icon_entry->entry), 
+					    0, -1);
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static gboolean
 lock_button_press_event_cb (GtkWidget *ebox,
 			    GdkEventButton *event,
 			    EphyLocationEntry *entry)
@@ -871,6 +898,8 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 	gtk_drag_source_set (priv->icon_ebox, GDK_BUTTON1_MASK,
 			     url_drag_types, G_N_ELEMENTS (url_drag_types),
 			     GDK_ACTION_ASK | GDK_ACTION_COPY | GDK_ACTION_LINK);
+	g_signal_connect (priv->icon_ebox, "button-press-event",
+			  G_CALLBACK (icon_button_press_event_cb), entry);
 
 	gtk_tooltips_set_tip (priv->tips, priv->icon_ebox,
 			      _("Drag and drop this icon to create a link to this page"), NULL);
