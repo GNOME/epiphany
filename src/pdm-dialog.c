@@ -1,7 +1,7 @@
 /*
- *  Copyright (C) 2002 Jorn Baayen
- *  Copyright (C) 2003 Marco Pesenti Gritti
- *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright © 2002 Jorn Baayen
+ *  Copyright © 2003 Marco Pesenti Gritti
+ *  Copyright © 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti <mpeseng@tin.it>
+ *  Copyright © 2003 Marco Pesenti Gritti <mpeseng@tin.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

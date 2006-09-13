@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2005 Peter Harvey
- *  Copyright (C) 2006 Christian Persch
+ *  Copyright © 2005 Peter Harvey
+ *  Copyright © 2006 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

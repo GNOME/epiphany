@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2003  David Bordoley
- *  Copyright (C) 2003-2004 Christian Persch
+ *  Copyright © 2003  David Bordoley
+ *  Copyright © 2003-2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

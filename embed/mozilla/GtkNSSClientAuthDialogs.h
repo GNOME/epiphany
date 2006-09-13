@@ -1,7 +1,7 @@
 /*
  * GtkNSSClientAuthDialogs.h
  *
- * Copyright (C) 2003 Crispin Flowerday <gnome@flowerday.cx>
+ * Copyright © 2003 Crispin Flowerday <gnome@flowerday.cx>
  * Available under the terms of the GNU General Public License version 2.
  *
  * $Id$

@@ -1,11 +1,11 @@
 /*
- *  Copyright (C) 2005 Jorn Baayen <jbaayen@gnome.org>
- *  Copyright (C) 2005 Christian Persch
+ *  Copyright © 2005 Jorn Baayen <jbaayen@gnome.org>
+ *  Copyright © 2005 Christian Persch
  *
  *  Based on the work of:
  *
- *  Copyright (C) 2004 Bastien Nocera <hadess@hadess.net>
- *  Copyright (C) 2002 David A. Schleef <ds@schleef.org>
+ *  Copyright © 2004 Bastien Nocera <hadess@hadess.net>
+ *  Copyright © 2002 David A. Schleef <ds@schleef.org>
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public

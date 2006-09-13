@@ -2,7 +2,7 @@
 
 /* eel-gconf-extensions.h - Stuff to make GConf easier to use.
 
-   Copyright (C) 2000, 2001 Eazel, Inc.
+   Copyright © 2000, 2001 Eazel, Inc.
 
    The Gnome Library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public License as

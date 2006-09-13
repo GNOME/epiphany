@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2001 Philip Langdale
+ *  Copyright © 2001 Philip Langdale
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

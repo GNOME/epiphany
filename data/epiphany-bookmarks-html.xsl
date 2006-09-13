@@ -6,7 +6,7 @@
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   exclude-result-prefixes="dc purl rdf">
 <!--
-Copyright (C) 2004 Stefan Rotsch
+Copyright © 2004 Stefan Rotsch
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

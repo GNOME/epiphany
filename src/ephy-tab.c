@@ -1,8 +1,8 @@
 /*
- *  Copyright (C) 2000-2003 Marco Pesenti Gritti
- *  Copyright (C) 2003, 2004, 2005 Christian Persch
- *  Copyright (C) 2004 Crispin Flowerday
- *  Copyright (C) 2004 Adam Hooper
+ *  Copyright © 2000-2003 Marco Pesenti Gritti
+ *  Copyright © 2003, 2004, 2005 Christian Persch
+ *  Copyright © 2004 Crispin Flowerday
+ *  Copyright © 2004 Adam Hooper
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

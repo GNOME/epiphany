@@ -1,5 +1,5 @@
 ## epiphany.m4 - Macros for building epiphany extensions. -*-Shell-script-*-
-## Copyright (C) Crispin Flowerday <crispin@gnome.org>
+## Copyright © Crispin Flowerday <crispin@gnome.org>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by

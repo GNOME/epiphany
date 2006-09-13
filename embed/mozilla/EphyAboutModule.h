@@ -1,7 +1,7 @@
 /*
- *  Copyright (C) 2001 Matt Aubury, Philip Langdale
- *  Copyright (C) 2004 Crispin Flowerday
- *  Copyright (C) 2005 Christian Persch
+ *  Copyright © 2001 Matt Aubury, Philip Langdale
+ *  Copyright © 2004 Crispin Flowerday
+ *  Copyright © 2005 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
