@@ -108,13 +108,13 @@ ephy_link_flags_from_current_event (void)
 
 	ephy_gui_get_current_event (&type, &state, &button);
 
-	if (button == 2 && type == GDK_BUTTON_PRESS)
+	if (button == 2 && (type == GDK_BUTTON_PRESS || type == GDK_BUTTON_RELEASE))
 	{
 		if (state == GDK_SHIFT_MASK)
 		{
 			flags = EPHY_LINK_NEW_WINDOW;
 		}
-		else
+		else if (state == 0)
 		{
 			flags = EPHY_LINK_NEW_TAB;
 		}
