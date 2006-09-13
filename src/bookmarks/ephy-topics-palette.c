@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2002-2004 Marco Pesenti Gritti <mpeseng@tin.it>
- *  Copyright (C) 2005 Peter Harvey <pah06@uow.edu.au>
+ *  Copyright © 2002-2004 Marco Pesenti Gritti <mpeseng@tin.it>
+ *  Copyright © 2005 Peter Harvey <pah06@uow.edu.au>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

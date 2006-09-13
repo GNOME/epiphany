@@ -1,8 +1,8 @@
 /*
- *  Copyright (C) 2004, 2005 Jean-François Rameau
- *  Copyright (C) 2004, 2005 Adam Hooper
- *  Copyright (C) 2004, 2005 Crispin Flowerday
- *  Copyright (C) 2004, 2005 Christian Persch
+ *  Copyright © 2004, 2005 Jean-François Rameau
+ *  Copyright © 2004, 2005 Adam Hooper
+ *  Copyright © 2004, 2005 Crispin Flowerday
+ *  Copyright © 2004, 2005 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

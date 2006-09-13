@@ -1,9 +1,9 @@
 /* 
  * Nautilus
  *
- * Copyright (C) 2000 Eazel, Inc.
- * Copyright (C) 2002-2004 Marco Pesenti Gritti
- * Copyright (C) 2004 Christian Persch
+ * Copyright © 2000 Eazel, Inc.
+ * Copyright © 2002-2004 Marco Pesenti Gritti
+ * Copyright © 2004 Christian Persch
  *
  * Nautilus is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

@@ -1,7 +1,7 @@
 /*
- *  Copyright (C) 2001 Matthew Mueller
- *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
- *  Copyright (C) 2003 Marco Pesenti Gritti <mpeseng@tin.it>
+ *  Copyright © 2001 Matthew Mueller
+ *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
+ *  Copyright © 2003 Marco Pesenti Gritti <mpeseng@tin.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

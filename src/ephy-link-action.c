@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2004 Christian Persch
- *  Copyright (C) 2005 Philip Langdale
+ *  Copyright © 2004 Christian Persch
+ *  Copyright © 2005 Philip Langdale
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

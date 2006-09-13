@@ -2,7 +2,7 @@
 /*
  * Nautilus
  *
- * Copyright (C) 2000 Eazel, Inc.
+ * Copyright © 2000 Eazel, Inc.
  *
  * Nautilus is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

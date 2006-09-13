@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2002 Olivier Martin <omartin@ifrance.com>
- *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
+ *  Copyright © 2002 Olivier Martin <omartin@ifrance.com>
+ *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

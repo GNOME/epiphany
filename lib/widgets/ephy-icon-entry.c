@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2003, 2004, 2005  Christian Persch
+ *  Copyright © 2003, 2004, 2005  Christian Persch
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
  *
  *  Adapted and modified from gtk+ code:
  *
- *  Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *  Copyright © 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *  Modified by the GTK+ Team and others 1997-2005.  See the AUTHORS
  *  file in the gtk+ distribution for a list of people on the GTK+ Team.
  *  See the ChangeLog in the gtk+ distribution files for a list of changes.

@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2004, 2005 Jean-François Rameau
- *  Copyright (C) 2006 Christian Persch
+ *  Copyright © 2004, 2005 Jean-François Rameau
+ *  Copyright © 2006 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

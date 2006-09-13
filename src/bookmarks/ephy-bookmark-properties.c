@@ -1,7 +1,7 @@
 /*
- *  Copyright (C) 2002 Marco Pesenti Gritti <mpeseng@tin.it>
- *  Copyright (C) 2005, 2006 Peter A. Harvey
- *  Copyright (C) 2006 Christian Persch
+ *  Copyright © 2002 Marco Pesenti Gritti <mpeseng@tin.it>
+ *  Copyright © 2005, 2006 Peter A. Harvey
+ *  Copyright © 2006 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

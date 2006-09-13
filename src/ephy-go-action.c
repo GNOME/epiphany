@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti
- *  Copyright (C) 2003 David Bordoley
+ *  Copyright © 2003 Marco Pesenti Gritti
+ *  Copyright © 2003 David Bordoley
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
