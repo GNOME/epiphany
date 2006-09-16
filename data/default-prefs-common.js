@@ -133,3 +133,6 @@ pref("postscript.cups.enabled", false);
 
 // sites stealthly storing unlimited amount of data? no thanks
 pref("dom.storage.enabled", false);
+
+// warn about about:config
+pref("general.warnOnAboutConfig", true);
