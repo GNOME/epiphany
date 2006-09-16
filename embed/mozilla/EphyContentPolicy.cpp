@@ -25,12 +25,15 @@
 #include <nsStringAPI.h>
 
 #include <nsCOMPtr.h>
+#include <nsICategoryManager.h>
 #include <nsIDOMAbstractView.h>
 #include <nsIDOMDocument.h>
 #include <nsIDOMDocumentView.h>
 #include <nsIDOMNode.h>
 #include <nsIDOMWindow.h>
 #include <nsIURI.h>
+#include <nsServiceManagerUtils.h>
+#include <nsXPCOMCID.h>
 
 #include "eel-gconf-extensions.h"
 #include "ephy-adblock-manager.h"
@@ -196,4 +199,45 @@ EphyContentPolicy::ShouldProcess(PRUint32 aContentType,
 {
 	*aDecision = nsIContentPolicy::ACCEPT;
 	return NS_OK;
+}
+
+
+/* static */ NS_METHOD
+EphyContentPolicy::Register (nsIComponentManager* aComponentManager,
+			     nsIFile* aPath,
+			     const char* aRegistryLocation,
+			     const char* aComponentType,
+			     const nsModuleComponentInfo* aInfo)
+{
+  nsresult rv;
+  nsCOMPtr<nsICategoryManager> catMan (do_GetService(NS_CATEGORYMANAGER_CONTRACTID, &rv));
+  NS_ENSURE_SUCCESS (rv, rv);
+
+  rv = catMan->AddCategoryEntry ("content-policy",
+				 EPHY_CONTENT_POLICY_CONTRACTID,
+				 EPHY_CONTENT_POLICY_CONTRACTID,
+				 PR_FALSE /* don't persist */,
+				 PR_TRUE /* replace */,
+				 nsnull);
+  NS_ENSURE_SUCCESS (rv, rv);
+
+  return rv;
+}
+
+/* static */ NS_METHOD
+EphyContentPolicy::Unregister (nsIComponentManager* aComponentManager,
+			       nsIFile* aPath,
+			       const char* aRegistryLocation,
+			       const nsModuleComponentInfo* aInfo)
+{
+  nsresult rv;
+  nsCOMPtr<nsICategoryManager> catMan (do_GetService(NS_CATEGORYMANAGER_CONTRACTID, &rv));
+  NS_ENSURE_SUCCESS (rv, rv);
+
+  rv = catMan->DeleteCategoryEntry ("content-policy",
+				    EPHY_CONTENT_POLICY_CONTRACTID,
+				    PR_FALSE /* don't persist */);
+  NS_ENSURE_SUCCESS (rv, rv);
+
+  return rv;
 }

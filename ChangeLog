@@ -1,5 +1,17 @@
 2006-09-16  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EphyContentPolicy.cpp:
+	* embed/mozilla/EphyContentPolicy.h:
+	* embed/mozilla/EphySidebar.cpp:
+	* embed/mozilla/EphySidebar.h:
+	* embed/mozilla/MozRegisterComponents.cpp:
+
+	Remove ill-conceived attempt at uninstalling the XPInstall handler,
+	and move category registration to the classes that are being
+	registered.
+
+2006-09-16  Christian Persch  <chpe@cvs.gnome.org>
+
 	* data/default-prefs-common.js:
 
 	Activate about:config warning.

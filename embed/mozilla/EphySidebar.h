@@ -24,6 +24,10 @@
 
 #include <nsISidebar.h>
 
+class nsIComponentManager;
+class nsIFile;
+struct nsModuleComponentInfo;
+
 #define EPHY_SIDEBAR_CLASSNAME \
  "Epiphany's Sidebar Implementation"
 
@@ -38,12 +42,24 @@
 class EphySidebar : public nsISidebar
 {
   public:
-	NS_DECL_ISUPPORTS
-	NS_DECL_NSISIDEBAR
+    NS_DECL_ISUPPORTS
+    NS_DECL_NSISIDEBAR
 
-	EphySidebar();
-	virtual ~EphySidebar();
+    EphySidebar();
+
+    static NS_METHOD Register (nsIComponentManager* aComponentManager,
+			       nsIFile* aPath,
+			       const char* aRegistryLocation,
+			       const char* aComponentType,
+			       const nsModuleComponentInfo* aInfo);
+
+    static NS_METHOD Unregister (nsIComponentManager* aComponentManager,
+				 nsIFile* aPath,
+				 const char* aRegistryLocation,
+				 const nsModuleComponentInfo* aInfo);
+
   private:
+    ~EphySidebar();
 };
 
 #endif /* ! EPHY_SIDEBAR_H */

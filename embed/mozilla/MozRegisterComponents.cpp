@@ -1,7 +1,7 @@
 /*
  *  Copyright © 2001,2002,2003 Philip Langdale
  *  Copyright © 2003 Marco Pesenti Gritti
- *  Copyright © 2004, 2005 Christian Persch
+ *  Copyright © 2004, 2005, 2006 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -107,44 +107,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GeckoFormSigningDialog)
 /* class information */ 
 NS_DECL_CLASSINFO(EphySidebar)
 
-static nsresult
-RegisterCategories (void)
-{
-	nsresult rv;
-	nsCOMPtr<nsICategoryManager> catMan =
-		do_GetService(NS_CATEGORYMANAGER_CONTRACTID, &rv);
-	NS_ENSURE_SUCCESS (rv, rv);
-
-	rv = catMan->AddCategoryEntry ("content-policy",
-				       EPHY_CONTENT_POLICY_CONTRACTID,
-				       EPHY_CONTENT_POLICY_CONTRACTID,
-				       PR_FALSE /* don't persist */,
-				       PR_TRUE /* replace */,
-				       nsnull);
-
-	rv |= catMan->AddCategoryEntry (JAVASCRIPT_GLOBAL_PROPERTY_CATEGORY,
-					"sidebar",
-					NS_SIDEBAR_CONTRACTID,
-					PR_FALSE /* don't persist */,
-					PR_TRUE /* replace */,
-					nsnull);
-
-#ifdef HAVE_GECKO_1_9
-	/* Unregister the XPI install trigger too
-	 * Only do it on gecko 1.9 though, because it breaks in 1.8
-	 * (because of https://bugzilla.mozilla.org/show_bug.cgi?id=329450)
-	 */
-	rv |= catMan->DeleteCategoryEntry (JAVASCRIPT_GLOBAL_CONSTRUCTOR_CATEGORY,
-					   "InstallVersion",
-					   PR_FALSE /* don't persist */);
-	rv |= catMan->DeleteCategoryEntry (JAVASCRIPT_GLOBAL_PROPERTY_CATEGORY,
-					   "InstallTrigger",
-					   PR_FALSE /* don't persist */);
-	NS_ENSURE_SUCCESS (rv, rv);
-#endif
-
-	return rv;
-}
+/* FIXME: uninstall XPI handler */
 
 static const nsModuleComponentInfo sAppComps[] = {
 	{
@@ -250,14 +213,16 @@ static const nsModuleComponentInfo sAppComps[] = {
 		EPHY_CONTENT_POLICY_CID,
 		EPHY_CONTENT_POLICY_CONTRACTID,
 		EphyContentPolicyConstructor,
+		EphyContentPolicy::Register,
+		EphyContentPolicy::Unregister
 	},
 	{
 		EPHY_SIDEBAR_CLASSNAME,
 		EPHY_SIDEBAR_CID,
 		NS_SIDEBAR_CONTRACTID,
 		EphySidebarConstructor,
-		nsnull /* no register func */,
-		nsnull /* no unregister func */,
+		EphySidebar::Register,
+		EphySidebar::Unregister,
 		nsnull /* no factory destructor */,
 		NS_CI_INTERFACE_GETTER_NAME(EphySidebar),
 		nsnull /* no language helper */,
@@ -355,31 +320,6 @@ mozilla_register_components (void)
 			}
 		}
 	}
-
-	rv = RegisterCategories();
-	ret = NS_SUCCEEDED (rv); 
-
-#ifdef HAVE_GECKO_1_9
-	/* Unregister xpinstall content handler */
-	nsCID *cidPtr = nsnull;
-	rv = cr->ContractIDToCID (XPINSTALL_CONTRACTID, &cidPtr);
-	if (NS_SUCCEEDED (rv) && cidPtr)
-	{
-		nsCOMPtr<nsIFactory> factory;
-		rv = cm->GetClassObject (*cidPtr, NS_GET_IID (nsIFactory),
-					 getter_AddRefs (factory));
-		if (NS_SUCCEEDED (rv))
-		{
-			rv = cr->UnregisterFactory (*cidPtr, factory);
-		}
-
-		nsMemory::Free (cidPtr);
-	}
-	if (NS_FAILED (rv))
-	{
-		g_warning ("Failed to unregister xpinstall content handler!\n");
-	}
-#endif
 
 	return ret;
 }

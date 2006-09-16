@@ -24,7 +24,11 @@
 
 #include <nsStringAPI.h>
 
+#include <nsICategoryManager.h>
+#include <nsIScriptNameSpaceManager.h>
 #include <nsMemory.h>
+#include <nsServiceManagerUtils.h>
+#include <nsXPCOMCID.h>
 
 #ifdef HAVE_GECKO_1_9
 #include <nsIClassInfoImpl.h>
@@ -58,6 +62,7 @@ EphySidebar::AddPanel (const PRUnichar *aTitle,
 	nsCString title;
 	EphyEmbedSingle *single;
 
+	/* FIXME: length-limit string */
 	NS_UTF16ToCString (nsDependentString(aTitle),
 			   NS_CSTRING_ENCODING_UTF8, title);
 
@@ -96,6 +101,7 @@ EphySidebar::AddSearchEngine (const char *aEngineURL,
 	nsCString title;
 	EphyEmbedSingle *single;
 
+	/* FIXME: length-limit string */
 	NS_UTF16ToCString (nsDependentString(aSuggestedTitle),
 			   NS_CSTRING_ENCODING_UTF8, title);
 
@@ -120,3 +126,43 @@ EphySidebar::AddMicrosummaryGenerator (const char *generatorURL)
 }
 
 #endif /* HAVE_GECKO_1_9 */
+
+/* static */ NS_METHOD
+EphySidebar::Register (nsIComponentManager* aComponentManager,
+		       nsIFile* aPath,
+		       const char* aRegistryLocation,
+		       const char* aComponentType,
+		       const nsModuleComponentInfo* aInfo)
+{
+  nsresult rv;
+  nsCOMPtr<nsICategoryManager> catMan (do_GetService(NS_CATEGORYMANAGER_CONTRACTID, &rv));
+  NS_ENSURE_SUCCESS (rv, rv);
+
+  rv = catMan->AddCategoryEntry (JAVASCRIPT_GLOBAL_PROPERTY_CATEGORY,
+				 "sidebar",
+				 NS_SIDEBAR_CONTRACTID,
+				 PR_FALSE /* don't persist */,
+				 PR_TRUE /* replace */,
+				 nsnull);
+  NS_ENSURE_SUCCESS (rv, rv);
+
+  return rv;
+}
+
+/* static */ NS_METHOD
+EphySidebar::Unregister (nsIComponentManager* aComponentManager,
+			 nsIFile* aPath,
+			 const char* aRegistryLocation,
+			 const nsModuleComponentInfo* aInfo)
+{
+  nsresult rv;
+  nsCOMPtr<nsICategoryManager> catMan (do_GetService(NS_CATEGORYMANAGER_CONTRACTID, &rv));
+  NS_ENSURE_SUCCESS (rv, rv);
+
+  rv = catMan->DeleteCategoryEntry (JAVASCRIPT_GLOBAL_PROPERTY_CATEGORY,
+				    "sidebar",
+				    PR_FALSE /* don't persist */);
+  NS_ENSURE_SUCCESS (rv, rv);
+
+  return rv;
+}

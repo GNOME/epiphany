@@ -24,10 +24,15 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gtk/gtkwidget.h>
 
 #include <nsIContentPolicy.h>
 
 #include "ephy-embed.h"
+
+class nsIComponentManager;
+class nsIFile;
+struct nsModuleComponentInfo;
 
 #define EPHY_CONTENT_POLICY_CONTRACTID	"@gnome.org/projects/epiphany/epiphany-content-policy;1"
 #define EPHY_CONTENT_POLICY_CLASSNAME	"Epiphany Content Policy Class"
@@ -42,17 +47,30 @@
 
 class EphyContentPolicy : public nsIContentPolicy
 {
-public:
-	NS_DECL_ISUPPORTS
-	NS_DECL_NSICONTENTPOLICY
+  public:
+    NS_DECL_ISUPPORTS
+    NS_DECL_NSICONTENTPOLICY
 	
-	EphyContentPolicy();
-	virtual ~EphyContentPolicy();
-private:
-	static GtkWidget *GetEmbedFromContext (nsISupports *aContext);
+    EphyContentPolicy();
 
-	gboolean mLocked;
-	GSList *mSafeProtocols;
+    static NS_METHOD Register (nsIComponentManager* aComponentManager,
+			       nsIFile* aPath,
+			       const char* aRegistryLocation,
+			       const char* aComponentType,
+			       const nsModuleComponentInfo* aInfo);
+
+    static NS_METHOD Unregister (nsIComponentManager* aComponentManager,
+				 nsIFile* aPath,
+				 const char* aRegistryLocation,
+				 const nsModuleComponentInfo* aInfo);
+
+  private:
+    ~EphyContentPolicy();
+
+    static GtkWidget *GetEmbedFromContext (nsISupports *aContext);
+
+    gboolean mLocked;
+    GSList *mSafeProtocols;
 };
 
 #endif
