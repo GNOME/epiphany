@@ -126,12 +126,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* File menu */
 
-	{ "FileNewWindow", STOCK_NEW_WINDOW, N_("_New Window"), "<control>N",
-	  N_("Open a new window"),
-	  G_CALLBACK (window_cmd_file_new_window) },
-	{ "FileNewTab", STOCK_NEW_TAB, N_("New _Tab"), "<control>T",
-	  N_("Open a new tab"),
-	  G_CALLBACK (window_cmd_file_new_tab) },
 	{ "FileOpen", GTK_STOCK_OPEN, N_("_Open..."), "<control>O",
 	  N_("Open a file"),
 	  G_CALLBACK (window_cmd_file_open) },
@@ -3070,6 +3064,7 @@ ephy_window_constructor (GType type,
 	EggToolbarsModel *model;
 	GtkSettings *settings;
 	GtkAction *action;
+	GtkActionGroup *toolbar_action_group;
 	GError *error = NULL;
 	guint settings_connection;
 
@@ -3204,7 +3199,8 @@ ephy_window_constructor (GType type,
 			  G_CALLBACK (sync_network_status), window);
 
 	/* Popup part */
-	action = gtk_action_group_get_action (priv->action_group, "FileNewTab");
+	toolbar_action_group = ephy_toolbar_get_action_group (priv->toolbar);
+	action = gtk_action_group_get_action (toolbar_action_group, "FileNewTab");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, priv->is_popup);
 
 	action = gtk_action_group_get_action (priv->popups_action_group, "OpenLinkInNewTab");

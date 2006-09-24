@@ -43,12 +43,6 @@ void window_cmd_view_reload	(GtkAction *action,
 void window_cmd_new		(GtkAction *action,
 				 EphyWindow *window);
 
-void window_cmd_file_new_window	(GtkAction *action,
-				 EphyWindow *window);
-
-void window_cmd_file_new_tab	(GtkAction *action,
-				 EphyWindow *window);
-
 void window_cmd_file_bookmark_page(GtkAction *action,
 				  EphyWindow *window);
 

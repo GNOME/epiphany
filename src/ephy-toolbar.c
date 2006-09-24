@@ -359,6 +359,29 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 				  G_CALLBACK (ephy_link_open), toolbar);
 	gtk_action_group_add_action_with_accel (priv->action_group, action, "<alt>Home");
 	g_object_unref (action);
+
+	action = g_object_new (EPHY_TYPE_HOME_ACTION,
+			       "name", "FileNewTab",
+			       "label", _("New _Tab"),
+			       "stock_id", STOCK_NEW_TAB,
+			       "tooltip", _("Open a new tab"),
+			       NULL);
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), toolbar);
+	gtk_action_group_add_action_with_accel (priv->action_group, action, "<control>T");
+	g_object_unref (action);
+
+	action = g_object_new (EPHY_TYPE_HOME_ACTION,
+			       "name", "FileNewWindow",
+			       "label", _("_New Window"),
+			       "stock_id", STOCK_NEW_WINDOW,
+			       "tooltip", _("Open a new window"),
+			       NULL);
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), toolbar);
+	gtk_action_group_add_action_with_accel (priv->action_group, action, "<control>N");
+	g_object_unref (action);
+
 }
 
 /* public functions */

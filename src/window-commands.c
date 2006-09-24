@@ -203,35 +203,6 @@ window_cmd_view_reload (GtkAction *action,
 }
 
 void
-window_cmd_file_new_window (GtkAction *action,
-		            EphyWindow *window)
-{
-	EphyTab *tab;
-
-	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab != NULL);
-
-	ephy_shell_new_tab (ephy_shell, window, tab, NULL,
-			    EPHY_NEW_TAB_NEW_PAGE |
-			    EPHY_NEW_TAB_IN_NEW_WINDOW);
-}
-
-void
-window_cmd_file_new_tab (GtkAction *action,
-		         EphyWindow *window)
-{
-	EphyTab *tab;
-
-	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab != NULL);
-
-	ephy_shell_new_tab (ephy_shell, window, tab, NULL,
-			    EPHY_NEW_TAB_NEW_PAGE |
-			    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-			    EPHY_NEW_TAB_JUMP);
-}
-
-void
 window_cmd_go_bookmarks (GtkAction *action,
 			 EphyWindow *window)
 {

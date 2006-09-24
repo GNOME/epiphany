@@ -197,7 +197,7 @@ update_window (EphyWindow *window,
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 
 	fullscreen = eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
-	action = gtk_action_group_get_action (action_group, "FileNewWindow");
+	action = gtk_action_group_get_action (toolbar_action_group, "FileNewWindow");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, fullscreen);
 	action = gtk_action_group_get_action (action_group, "ViewFullscreen");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, fullscreen);
