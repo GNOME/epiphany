@@ -935,6 +935,9 @@ nsresult EventContext::CheckLinkScheme (const nsAString &link)
 	    g_ascii_strcasecmp (scheme.get(), "https") == 0 ||
 	    g_ascii_strcasecmp (scheme.get(), "ftp") == 0 ||
 	    g_ascii_strcasecmp (scheme.get(), "file") == 0 ||
+	    g_ascii_strcasecmp (scheme.get(), "smb") == 0 ||
+	    g_ascii_strcasecmp (scheme.get(), "sftp") == 0 ||
+	    g_ascii_strcasecmp (scheme.get(), "ssh") == 0 ||
 	    g_ascii_strcasecmp (scheme.get(), "data") == 0 ||
 	    g_ascii_strcasecmp (scheme.get(), "resource") == 0 ||
 	    g_ascii_strcasecmp (scheme.get(), "about") == 0 ||
