@@ -1,5 +1,18 @@
 2006-09-29  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_images_ref),
+	(ephy_spinner_images_unref), (ephy_spinner_cache_data_unload),
+	(ephy_spinner_images_load), (ephy_spinner_cache_get_images),
+	(ephy_spinner_load_images), (ephy_spinner_unload_images),
+	(ephy_spinner_init), (ephy_spinner_expose),
+	(bump_spinner_frame_cb), (ephy_spinner_start),
+	(ephy_spinner_remove_update_callback), (ephy_spinner_stop),
+	(ephy_spinner_size_request):
+
+	Simplify code and save some memory.
+
+2006-09-29  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/EventContext.cpp:
 
 	Add smb: to recognised web schemes. Bug #352733.

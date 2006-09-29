@@ -76,11 +76,13 @@ struct _EphySpinnerCachePrivate
 
 typedef struct
 {
+	guint ref_count;
 	GtkIconSize size;
 	int width;
 	int height;
 	GdkPixbuf *quiescent_pixbuf;
-	GList *images;
+	GdkPixbuf **animation_pixbufs;
+	guint n_animation_pixbufs;
 } EphySpinnerImages;
 
 #define LAST_ICON_SIZE			GTK_ICON_SIZE_DIALOG + 1
@@ -128,34 +130,38 @@ ephy_spinner_cache_get_type (void)
 	return type;
 }
 
-static void
-ephy_spinner_images_free (EphySpinnerImages *images)
+static EphySpinnerImages *
+ephy_spinner_images_ref (EphySpinnerImages *images)
 {
-	if (images != NULL)
+	g_return_val_if_fail (images != NULL, NULL);
+
+	images->ref_count++;
+
+	return images;
+}
+
+static void
+ephy_spinner_images_unref (EphySpinnerImages *images)
+{
+	g_return_if_fail (images != NULL);
+
+	images->ref_count--;
+	if (images->ref_count == 0)
 	{
-		g_list_foreach (images->images, (GFunc) g_object_unref, NULL);
-		g_list_free (images->images);
+		guint i;
+
+		LOG ("Freeing spinner images %p for size %d", images, images->size);
+
+		for (i = 0; i < images->n_animation_pixbufs; ++i)
+		{
+			g_object_unref (images->animation_pixbufs[i]);
+		}
+		g_free (images->animation_pixbufs);
 
 		g_object_unref (images->quiescent_pixbuf);
 
 		g_free (images);
 	}
-}
-
-static EphySpinnerImages *
-ephy_spinner_images_copy (EphySpinnerImages *images)
-{
-	EphySpinnerImages *copy = g_new (EphySpinnerImages, 1);
-
-	copy->size = images->size;
-	copy->width = images->width;
-	copy->height = images->height;
-
-	copy->quiescent_pixbuf = g_object_ref (images->quiescent_pixbuf);
-	copy->images = g_list_copy (images->images);
-	g_list_foreach (copy->images, (GFunc) g_object_ref, NULL);
-
-	return copy;
 }
 
 static void
@@ -173,7 +179,7 @@ ephy_spinner_cache_data_unload (EphySpinnerCacheData *data)
 		images = data->images[size];
 		if (images != NULL && images != EPHY_SPINNER_IMAGES_INVALID)
 		{
-			ephy_spinner_images_free (images);
+			ephy_spinner_images_unref (images);
 		}
 
 		data->images[size] = NULL;
@@ -235,9 +241,9 @@ ephy_spinner_images_load (GdkScreen *screen,
 	GdkPixbuf *rest_pixbuf = NULL;
 	GdkPixbuf *icon_pixbuf, *pixbuf;
 	GtkIconInfo *icon_info = NULL;
-	int grid_width, grid_height, x, y, requested_size, size, h, w, isw, ish;
+	int grid_width, grid_height, x, y, requested_size, size, h, w, isw, ish, n;
 	const char *icon;
-	GList *list = NULL, *l;
+	GSList *list = NULL, *l;
 
 	LOG ("EphySpinnerCacheData loading for screen %p at size %d", screen, icon_size);
 
@@ -302,6 +308,7 @@ ephy_spinner_images_load (GdkScreen *screen,
 	grid_width = gdk_pixbuf_get_width (icon_pixbuf);
 	grid_height = gdk_pixbuf_get_height (icon_pixbuf);
 
+	n = 0;
 	for (y = 0; y < grid_height; y += size)
 	{
 		for (x = 0; x < grid_width ; x += size)
@@ -310,7 +317,8 @@ ephy_spinner_images_load (GdkScreen *screen,
 
 			if (pixbuf)
 			{
-				list = g_list_prepend (list, pixbuf);
+				list = g_slist_prepend (list, pixbuf);
+				++n;
 			}
 			else
 			{
@@ -319,10 +327,10 @@ ephy_spinner_images_load (GdkScreen *screen,
 		}
 	}
 
-	list = g_list_reverse (list);
 	g_object_unref (icon_pixbuf);
 
 	if (list == NULL) goto loser;
+	g_assert (n > 0);
 
 	if (size > requested_size)
 	{
@@ -331,14 +339,25 @@ ephy_spinner_images_load (GdkScreen *screen,
 			l->data = scale_to_size (l->data, isw, ish);
 		}
 	}
-	
+
 	/* Now we've successfully got all the data */
 	images = g_new (EphySpinnerImages, 1);
+	images->ref_count = 1;
 
 	images->size = icon_size;
 	images->width = images->height = requested_size;
-	images->images = list;
 	images->quiescent_pixbuf = rest_pixbuf;
+
+	images->n_animation_pixbufs = n;
+	images->animation_pixbufs = g_new (GdkPixbuf *, n);
+
+	for (l = list; l != NULL; l = l->next)
+	{
+		images->animation_pixbufs[--n] = l->data;
+	}
+	g_assert (n == 0);
+
+	g_slist_free (list);
 
 	STOP_PROFILER ("loading spinner animation")
 
@@ -353,7 +372,7 @@ loser:
 	{
 		g_object_unref (rest_pixbuf);
 	}
-	g_list_foreach (list, (GFunc) g_object_unref, NULL);
+	g_slist_foreach (list, (GFunc) g_object_unref, NULL);
 
 	STOP_PROFILER ("loading spinner animation")
 
@@ -431,7 +450,7 @@ ephy_spinner_cache_get_images (EphySpinnerCache *cache,
 	if (images != NULL)
 	{
 		/* Return cached data */
-		return ephy_spinner_images_copy (images);
+		return ephy_spinner_images_ref (images);
 	}
 
 	images = ephy_spinner_images_load (screen, data->icon_theme, icon_size);
@@ -446,7 +465,7 @@ ephy_spinner_cache_get_images (EphySpinnerCache *cache,
 
 	data->images[icon_size] = images;
 
-	return ephy_spinner_images_copy (images);
+	return ephy_spinner_images_ref (images);
 }
 
 static void
@@ -520,10 +539,11 @@ struct _EphySpinnerDetails
 	EphySpinnerCache *cache;
 	GtkIconSize size;
 	EphySpinnerImages *images;
-	GList *current_image;
+	guint current_image;
 	guint timeout;
 	guint timer_task;
 	guint spinning : 1;
+	guint need_load : 1;
 };
 
 static void ephy_spinner_class_init (EphySpinnerClass *class);
@@ -564,7 +584,7 @@ ephy_spinner_load_images (EphySpinner *spinner)
 {
 	EphySpinnerDetails *details = spinner->details;
 
-	if (details->images == NULL)
+	if (details->need_load)
 	{
 		START_PROFILER ("ephy_spinner_load_images")
 
@@ -574,12 +594,10 @@ ephy_spinner_load_images (EphySpinner *spinner)
 				 gtk_widget_get_screen (GTK_WIDGET (spinner)),
 				 details->size);
 
-		if (details->images != NULL)
-		{
-			details->current_image = details->images->images;
-		}
-
 		STOP_PROFILER ("ephy_spinner_load_images")
+
+		details->current_image = 0;
+		details->need_load = FALSE;
 	}
 
 	return details->images != NULL;
@@ -588,9 +606,16 @@ ephy_spinner_load_images (EphySpinner *spinner)
 static void
 ephy_spinner_unload_images (EphySpinner *spinner)
 {
-	ephy_spinner_images_free (spinner->details->images);
-	spinner->details->images = NULL;
-	spinner->details->current_image = NULL;
+	EphySpinnerDetails *details = spinner->details;
+
+	if (details->images != NULL)
+	{
+		ephy_spinner_images_unref (details->images);
+		details->images = NULL;
+	}
+
+	details->current_image = 0;
+	details->need_load = TRUE;
 }
 
 static void
@@ -604,13 +629,7 @@ icon_theme_changed_cb (GtkIconTheme *icon_theme,
 static void
 ephy_spinner_init (EphySpinner *spinner)
 {
-	EphySpinnerDetails *details = spinner->details;
-	GtkWidget *widget = GTK_WIDGET (spinner);
-
-	gtk_widget_set_events (widget,
-			       gtk_widget_get_events (widget)
-			       | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK
-			       | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
+	EphySpinnerDetails *details;
 
 	details = spinner->details = EPHY_SPINNER_GET_PRIVATE (spinner);
 
@@ -618,29 +637,7 @@ ephy_spinner_init (EphySpinner *spinner)
 	details->size = GTK_ICON_SIZE_DIALOG;
 	details->spinning = FALSE;
 	details->timeout = SPINNER_TIMEOUT;
-}
-
-static GdkPixbuf *
-select_spinner_image (EphySpinner *spinner)
-{
-	EphySpinnerDetails *details = spinner->details;
-	EphySpinnerImages *images = details->images;
-
-	g_return_val_if_fail (images != NULL, NULL);
-
-	if (spinner->details->timer_task == 0)
-	{
-		if (images->quiescent_pixbuf != NULL)
-		{
-			return g_object_ref (details->images->quiescent_pixbuf);
-		}
-
-		return NULL;
-	}
-
-	g_return_val_if_fail (details->current_image != NULL, NULL);
-
-	return g_object_ref (details->current_image->data);
+	details->need_load = TRUE;
 }
 
 static int
@@ -648,6 +645,8 @@ ephy_spinner_expose (GtkWidget *widget,
 		     GdkEventExpose *event)
 {
 	EphySpinner *spinner = EPHY_SPINNER (widget);
+	EphySpinnerDetails *details = spinner->details;
+	EphySpinnerImages *images;
 	GdkPixbuf *pixbuf;
 	GdkGC *gc;
 	int x_offset, y_offset, width, height;
@@ -655,15 +654,34 @@ ephy_spinner_expose (GtkWidget *widget,
 
 	if (!GTK_WIDGET_DRAWABLE (spinner))
 	{
-		return TRUE;
+		return FALSE;
 	}
 
-	if (!ephy_spinner_load_images (spinner))
+	if (details->need_load &&
+	    !ephy_spinner_load_images (spinner))
 	{
-		return TRUE;
+		return FALSE;
 	}
 
-	pixbuf = select_spinner_image (spinner);
+	images = details->images;
+	if (images == NULL)
+	{
+		return FALSE;
+	}
+
+	if (details->spinning &&
+	    images->n_animation_pixbufs > 0)
+	{
+		g_assert (details->current_image >= 0 &&
+			  details->current_image < images->n_animation_pixbufs);
+
+		pixbuf = images->animation_pixbufs[details->current_image];
+	}
+	else
+	{
+		pixbuf = images->quiescent_pixbuf;
+	}
+
 	if (pixbuf == NULL)
 	{
 		return FALSE;
@@ -683,7 +701,6 @@ ephy_spinner_expose (GtkWidget *widget,
 
 	if (!gdk_rectangle_intersect (&event->area, &pix_area, &dest))
 	{
-		g_object_unref (pixbuf);
 		return FALSE;
 	}
 
@@ -696,8 +713,6 @@ ephy_spinner_expose (GtkWidget *widget,
 			 GDK_RGB_DITHER_MAX, 0, 0);
 	g_object_unref (gc);
 
-	g_object_unref (pixbuf);
-
 	return FALSE;
 }
 
@@ -707,27 +722,17 @@ bump_spinner_frame_cb (EphySpinner *spinner)
 	EphySpinnerDetails *details = spinner->details;
 	GList *frame;
 
-	if (!GTK_WIDGET_DRAWABLE (spinner)) return TRUE;
-
 	/* This can happen when we've unloaded the images on a theme
 	 * change, but haven't been in the queued size request yet.
 	 * Just skip this update.
 	 */
 	if (details->images == NULL) return TRUE;
 
-	frame = details->current_image;
-	g_assert (frame != NULL);
-
-	if (frame->next != NULL)
+	details->current_image++;
+	if (details->current_image >= details->images->n_animation_pixbufs)
 	{
-		frame = frame->next;
+		details->current_image = 0;
 	}
-	else
-	{
-		frame = g_list_first (frame);
-	}
-
-	details->current_image = frame;
 
 	gtk_widget_queue_draw (GTK_WIDGET (spinner));
 
@@ -752,11 +757,7 @@ ephy_spinner_start (EphySpinner *spinner)
 	    details->timer_task == 0 &&
 	    ephy_spinner_load_images (spinner))
 	{
-		if (details->images != NULL)
-		{
-			/* reset to first frame */
-			details->current_image = details->images->images;
-		}
+		details->current_image = 0;
 
 		details->timer_task =
 			g_timeout_add (details->timeout,
@@ -768,10 +769,12 @@ ephy_spinner_start (EphySpinner *spinner)
 static void
 ephy_spinner_remove_update_callback (EphySpinner *spinner)
 {
-	if (spinner->details->timer_task != 0)
+	EphySpinnerDetails *details = spinner->details;
+
+	if (details->timer_task != 0)
 	{
-		g_source_remove (spinner->details->timer_task);
-		spinner->details->timer_task = 0;
+		g_source_remove (details->timer_task);
+		details->timer_task = 0;
 	}
 }
 
@@ -788,7 +791,7 @@ ephy_spinner_stop (EphySpinner *spinner)
 
 	details->spinning = FALSE;
 
-	if (spinner->details->timer_task != 0)
+	if (details->timer_task != 0)
 	{
 		ephy_spinner_remove_update_callback (spinner);
 
@@ -858,22 +861,26 @@ ephy_spinner_size_request (GtkWidget *widget,
 			   GtkRequisition *requisition)
 {
 	EphySpinner *spinner = EPHY_SPINNER (widget);
+	EphySpinnerDetails *details = spinner->details;
 
-	if (!ephy_spinner_load_images (spinner))
+	if ((details->need_load &&
+	     !ephy_spinner_load_images (spinner)) ||
+            details->images == NULL)
 	{
 		requisition->width = requisition->height = 0;
 		gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (widget),
-						   spinner->details->size,
+						   details->size,
 						   &requisition->width,
 					           &requisition->height);
 		return;
 	}
 
-	requisition->width = spinner->details->images->width;
-	requisition->height = spinner->details->images->height;
+	requisition->width = details->images->width;
+	requisition->height = details->images->height;
 
+	/* FIXME fix this hack */
 	/* allocate some extra margin so we don't butt up against toolbar edges */
-	if (spinner->details->size != GTK_ICON_SIZE_MENU)
+	if (details->size != GTK_ICON_SIZE_MENU)
 	{
 		requisition->width += 2;
 		requisition->height += 2;
