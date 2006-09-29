@@ -22,7 +22,7 @@
 #include <gtk/gtk.h>
 
 #define COMPILING_TESTSPINNER
-#define LOG(msg, args...) G_STMT_START { } G_STMT_END
+#define LOG(msg, args...) g_print(msg, ## args); g_print ("\n")
 #define START_PROFILER(name)
 #define STOP_PROFILER(name)
 
