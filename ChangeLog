@@ -1,3 +1,26 @@
+2006-09-29  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_images_free),
+	(ephy_spinner_cache_data_unload), (scale_to_size),
+	(ephy_spinner_images_load), (ephy_spinner_cache_data_new),
+	(ephy_spinner_cache_data_free), (ephy_spinner_cache_get_images),
+	(ephy_spinner_cache_finalize), (ephy_spinner_cache_class_init),
+	(ephy_spinner_cache_ref), (ephy_spinner_init),
+	(ephy_spinner_set_size), (ephy_spinner_size_request):
+	* lib/widgets/testspinner.c:
+
+	Fix spinner with new g-i-t. Fixes bug #330415.
+	Fix a crash when failing to load some icon data, Gedit bug #357456.
+
+2006-09-23  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/GtkNSSClientAuthDialogs.h:
+	* embed/mozilla/GtkNSSKeyPairDialogs.h:
+
+	These header files were GPL v2-only while the implementation .cpp
+	files already were v2+. Thanks to crispin for agreeing to licence the
+	.h under v2+ too.
+
 2006-09-16  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/epiphany.schemas.in:
