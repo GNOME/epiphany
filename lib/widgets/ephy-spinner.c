@@ -241,7 +241,7 @@ ephy_spinner_images_load (GdkScreen *screen,
 	GdkPixbuf *rest_pixbuf = NULL;
 	GdkPixbuf *icon_pixbuf, *pixbuf;
 	GtkIconInfo *icon_info = NULL;
-	int grid_width, grid_height, x, y, requested_size, size, h, w, isw, ish, n;
+	int grid_width, grid_height, x, y, requested_size, size, isw, ish, n;
 	const char *icon;
 	GSList *list = NULL, *l;
 
@@ -418,10 +418,6 @@ ephy_spinner_cache_get_images (EphySpinnerCache *cache,
 	EphySpinnerCachePrivate *priv = cache->priv;
 	EphySpinnerCacheData *data;
 	EphySpinnerImages *images;
-	GtkSettings *settings;
-	GdkPixbuf *pixbuf, *scaled_pixbuf;
-	GList *element, *l;
-	int h, w;
 
 	LOG ("Getting animation images for screen %p at size %d", screen, icon_size);
 
@@ -720,7 +716,6 @@ static gboolean
 bump_spinner_frame_cb (EphySpinner *spinner)
 {
 	EphySpinnerDetails *details = spinner->details;
-	GList *frame;
 
 	/* This can happen when we've unloaded the images on a theme
 	 * change, but haven't been in the queued size request yet.
