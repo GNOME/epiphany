@@ -114,7 +114,7 @@ ephy_link_flags_from_current_event (void)
 		{
 			flags = EPHY_LINK_NEW_WINDOW;
 		}
-		else
+		else if (state == 0)
 		{
 			flags = EPHY_LINK_NEW_TAB;
 		}

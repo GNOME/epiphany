@@ -100,7 +100,7 @@ typedef struct
 static void ephy_spinner_cache_class_init (EphySpinnerCacheClass *klass);
 static void ephy_spinner_cache_init	  (EphySpinnerCache *cache);
 
-static GObjectClass *ephy_spinner_cache_parent_class = NULL;
+static GObjectClass *ephy_spinner_cache_parent_class;
 
 static GType
 ephy_spinner_cache_get_type (void)
@@ -177,12 +177,12 @@ ephy_spinner_cache_data_unload (EphySpinnerCacheData *data)
 	for (size = GTK_ICON_SIZE_INVALID; size < LAST_ICON_SIZE; ++size)
 	{
 		images = data->images[size];
+		data->images[size] = NULL;
+
 		if (images != NULL && images != EPHY_SPINNER_IMAGES_INVALID)
 		{
 			ephy_spinner_images_unref (images);
 		}
-
-		data->images[size] = NULL;
 	}
 }
 

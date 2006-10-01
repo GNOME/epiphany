@@ -49,7 +49,7 @@ static void add_spinner (GtkTable *table,
 			 guint interval,
 			 gboolean start)
 {
-	GtkWidget *label, *frame, *spinner, *button, *spinbutton;
+	GtkWidget *label, *frame, *button, *spinner;
 	char *text;
 
 	text = g_strdup_printf ("%s size:", sizename);
@@ -117,7 +117,6 @@ int main(int argc, char **argv)
 {
 	GtkWidget *window, *vbox, *widget;
 	GtkTable *table;
-	GtkTooltips *tips;
 	int row = 0;
 
 	gtk_init (&argc, &argv);
