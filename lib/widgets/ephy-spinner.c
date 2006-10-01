@@ -235,7 +235,7 @@ ephy_spinner_images_load (GdkScreen *screen,
 	GdkPixbuf *rest_pixbuf = NULL;
 	GdkPixbuf *icon_pixbuf, *pixbuf;
 	GtkIconInfo *icon_info = NULL;
-	int grid_width, grid_height, x, y, requested_size, size, h, w, isw, ish;
+	int grid_width, grid_height, x, y, requested_size, size, isw, ish;
 	const char *icon;
 	GList *list = NULL, *l;
 
@@ -399,10 +399,6 @@ ephy_spinner_cache_get_images (EphySpinnerCache *cache,
 	EphySpinnerCachePrivate *priv = cache->priv;
 	EphySpinnerCacheData *data;
 	EphySpinnerImages *images;
-	GtkSettings *settings;
-	GdkPixbuf *pixbuf, *scaled_pixbuf;
-	GList *element, *l;
-	int h, w;
 
 	LOG ("Getting animation images for screen %p at size %d", screen, icon_size);
 
@@ -604,13 +600,7 @@ icon_theme_changed_cb (GtkIconTheme *icon_theme,
 static void
 ephy_spinner_init (EphySpinner *spinner)
 {
-	EphySpinnerDetails *details = spinner->details;
-	GtkWidget *widget = GTK_WIDGET (spinner);
-
-	gtk_widget_set_events (widget,
-			       gtk_widget_get_events (widget)
-			       | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK
-			       | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
+	EphySpinnerDetails *details;
 
 	details = spinner->details = EPHY_SPINNER_GET_PRIVATE (spinner);
 
