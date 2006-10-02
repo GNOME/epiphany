@@ -67,6 +67,7 @@
 #include "ephy-node-common.h"
 #include "ephy-node-view.h"
 #include "ephy-bookmarks-ui.h"
+#include "ephy-gui.h"
 
 static const GtkTargetEntry page_drag_types [] =
 {
@@ -257,6 +258,9 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 		(GTK_MESSAGE_DIALOG (dialog),
 		 _("Clearing the browsing history will cause all"
 		   " history links to be permanently deleted."));
+
+	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (editor)),
+				     GTK_WINDOW (dialog));
 	
 	button = gtk_button_new_with_label (_("Cl_ear"));
 	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
@@ -1179,6 +1183,8 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
 	int url_col_id, title_col_id, details_value;
+
+	ephy_gui_ensure_window_group (GTK_WINDOW (editor));
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("History"));
 	gtk_window_set_icon_name (GTK_WINDOW (editor), EPHY_STOCK_HISTORY);
