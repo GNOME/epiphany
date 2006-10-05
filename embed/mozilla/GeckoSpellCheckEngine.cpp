@@ -34,6 +34,10 @@
 
 #include "GeckoSpellCheckEngine.h"
 
+#ifndef HAVE_GECKO_1_9
+#define ToNewUnicode NS_StringCloneData
+#endif
+
 GeckoSpellCheckEngine::GeckoSpellCheckEngine ()
 {
   LOG ("GeckoSpellCheckEngine ctor [%p]", (void*) this);
