@@ -27,12 +27,7 @@ AutoWindowModalState::AutoWindowModalState (nsIDOMWindow *aWindow)
 {
 #ifdef HAVE_GECKO_1_8_1
   if (aWindow) {
-    nsresult rv;
-    nsCOMPtr<nsIDOMWindow> topWin;
-    rv = aWindow->GetTop (getter_AddRefs (topWin));
-    if (NS_SUCCEEDED (rv)) {
-      mWindow = do_QueryInterface (topWin);
-    }
+    mWindow = do_QueryInterface (aWindow);
     NS_ASSERTION (mWindow, "Should have a window here!");
   }
 
