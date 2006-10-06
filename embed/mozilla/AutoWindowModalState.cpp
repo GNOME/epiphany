@@ -25,19 +25,42 @@
 
 AutoWindowModalState::AutoWindowModalState (nsIDOMWindow *aWindow)
 {
-#ifdef HAVE_GECKO_1_9
-  mWindow = do_QueryInterface (aWindow);
-  if (mWindow) {
-    mWindow->EnterModalState ();
+#ifdef HAVE_GECKO_1_8_1
+  if (aWindow) {
+    nsresult rv;
+    nsCOMPtr<nsIDOMWindow> topWin;
+    rv = aWindow->GetTop (getter_AddRefs (topWin));
+    if (NS_SUCCEEDED (rv)) {
+      mWindow = do_QueryInterface (topWin);
+    }
+    NS_ASSERTION (mWindow, "Should have a window here!");
   }
-#endif
+
+  if (mWindow) {
+#ifdef HAVE_GECKO_1_9
+    mWindow->EnterModalState ();
+#else
+    nsCOMPtr<nsPIDOMWindow_MOZILLA_1_8_BRANCH> window (do_QueryInterface (mWindow));
+    NS_ENSURE_TRUE (window, );
+
+    window->EnterModalState ();
+#endif /* HAVE_GECKO_1_9 */
+  }
+#endif /* HAVE_GECKO_1_8_1 */
 }
 
 AutoWindowModalState::~AutoWindowModalState()
 {
-#ifdef HAVE_GECKO_1_9
+#ifdef HAVE_GECKO_1_8_1
   if (mWindow) {
+#ifdef HAVE_GECKO_1_9
     mWindow->LeaveModalState ();
+#else
+    nsCOMPtr<nsPIDOMWindow_MOZILLA_1_8_BRANCH> window (do_QueryInterface (mWindow));
+    NS_ENSURE_TRUE (window, );
+
+    window->LeaveModalState ();
+#endif /* HAVE_GECKO_1_9 */
   }
-#endif
+#endif /* HAVE_GECKO_1_8_1 */
 }
