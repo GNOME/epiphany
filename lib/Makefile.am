@@ -137,7 +137,7 @@ stamp-ephy-lib-type-builtins.c: $(TYPES_H_FILES)
 		--vhead "GType\n@enum_name@_get_type (void)\n{\n" \
 		--vhead "  static GType type = 0;\n\n" \
 		--vhead "  if (G_UNLIKELY (type == 0))\n  {\n" \
-		--vhead "    const G@Type@Value _@enum_name@_values[] = {" \
+		--vhead "    static const G@Type@Value _@enum_name@_values[] = {" \
 		--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
 		--vtail "      { 0, NULL, NULL }\n    };\n\n" \
 		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n  }\n\n" \
