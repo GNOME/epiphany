@@ -69,13 +69,13 @@ stamp-ephy-bookmarks-type-builtins.c: $(INST_H_FILES) $(NOINST_H_FILES)
 		--fhead "#include \"ephy-bookmarks-type-builtins.h\"\n\n" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
 		--fprod "\n#include \"@filename@\"" \
-		--vhead "const G@Type@Value _@enum_name@_values[] = {" \
-		--vprod "  { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
-		--vtail "  { 0, NULL, NULL }\n};\n\n" \
-		--vtail "GType\n@enum_name@_get_type (void)\n{\n" \
-		--vtail "  static GType type = 0;\n\n" \
-		--vtail "  if (G_UNLIKELY (type == 0))\n" \
-		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
+		--vhead "GType\n@enum_name@_get_type (void)\n{\n" \
+		--vhead "  static GType type = 0;\n\n" \
+		--vhead "  if (G_UNLIKELY (type == 0))\n  {\n" \
+		--vhead "    const G@Type@Value _@enum_name@_values[] = {" \
+		--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+		--vtail "      { 0, NULL, NULL }\n    };\n\n" \
+		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n  }\n\n" \
 		--vtail "  return type;\n}\n\n" \
 		$(^F) ) > xgen-$(@F) \
 	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
