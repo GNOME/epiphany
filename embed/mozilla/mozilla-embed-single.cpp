@@ -956,6 +956,34 @@ impl_remove_password (EphyPasswordManager *manager,
 }
 
 static void
+impl_add_password (EphyPasswordManager *manager,
+                  EphyPasswordInfo *info)
+{
+        nsCOMPtr<nsIPasswordManager> pm =
+                        do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
+       if (!pm) return;
+
+       nsCOMPtr<nsIIDNService> idnService
+               (do_GetService ("@mozilla.org/network/idn-service;1"));
+       NS_ENSURE_TRUE (idnService, );
+
+       nsresult rv;
+       nsCString host;
+       rv = idnService->ConvertUTF8toACE (nsCString(info->host), host);
+       NS_ENSURE_SUCCESS (rv, );
+
+       nsString username;
+       NS_CStringToUTF16 (nsCString(info->username),
+                          NS_CSTRING_ENCODING_UTF8, username);
+
+       nsString password;
+       NS_CStringToUTF16 (nsCString(info->password),
+                          NS_CSTRING_ENCODING_UTF8, password);
+
+       pm->AddUser(host, username, password);
+}
+
+static void
 impl_permission_manager_add (EphyPermissionManager *manager,
 			     const char *host,
 			     const char *type,
@@ -1305,7 +1333,7 @@ ephy_cookie_manager_iface_init (EphyCookieManagerIface *iface)
 static void
 ephy_password_manager_iface_init (EphyPasswordManagerIface *iface)
 {
-	iface->add = NULL; /* not implemented yet */
+	iface->add = impl_add_password;
 	iface->remove = impl_remove_password;
 	iface->list = impl_list_passwords;
 }
