@@ -357,6 +357,23 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 				gnome_vfs_mime_application_free (helperApp);
 				g_strfreev (str);
 			}
+			else if (g_str_has_prefix (cDesc.get(), "gnome-browse-to-file:"))
+			{
+				/* Format gnome-browse-to-file:<usertime> */
+				char **str = g_strsplit (cDesc.get(), ":", -1);
+				g_return_val_if_fail (g_strv_length (str) == 2, NS_ERROR_FAILURE);
+
+				char *end;
+				guint32 user_time = strtoul (str[1], &end, 0);
+
+				nsCString aDest;
+				rv = mDestination->GetSpec (aDest);
+				NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+				ephy_file_browse_to (aDest.get (), user_time);
+
+				g_strfreev (str);
+			}
 		}
 	}
         
@@ -518,6 +535,15 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 
 	EphyEmbedPersistFlags ephy_flags;
 	ephy_flags = ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (embedPersist));
+
+	if (!ephy_embed_persist_get_dest (EPHY_EMBED_PERSIST (embedPersist)))
+	{
+		nsCString cPath;
+		inDestFile->GetNativePath (cPath);
+
+		ephy_embed_persist_set_dest (EPHY_EMBED_PERSIST (embedPersist),
+				cPath.get());
+	}
 
 	PRBool isHTML = (contentType &&
 			(strcmp (contentType, "text/html") == 0 ||

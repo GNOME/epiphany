@@ -91,6 +91,9 @@ gboolean    ephy_file_launch_handler	 (const char *mime_type,
 					  const char *address,
 					  guint32 user_time);
 
+gboolean    ephy_file_browse_to		 (const char *parameter,
+					  guint32 user_time);
+
 EphyFileMonitor *ephy_file_monitor_add	 (const char *uri,
 					  GnomeVFSMonitorType monitor_type,
 					  guint delay,

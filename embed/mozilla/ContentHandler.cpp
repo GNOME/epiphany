@@ -406,6 +406,8 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
 	NS_ENSURE_TRUE (mimeInfo, NS_ERROR_FAILURE);
 
+	char *info = NULL;
+
 	if (mAction == CONTENT_ACTION_OPEN)
 	{
 		g_return_val_if_fail (mHelperApp, NS_ERROR_FAILURE);
@@ -416,9 +418,15 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 		/* The current time is fine here as the user has just clicked
 		 * a button (it is used as the time for the application opening)
 		 */
-		char *info;
 		info = g_strdup_printf ("gnome-default:%d:%s", gtk_get_current_event_time(), id);
+	}
+	else if (mAction == CONTENT_ACTION_DOWNLOAD)
+	{
+		info = g_strdup_printf ("gnome-browse-to-file:%d", gtk_get_current_event_time());
+	}
 
+	if (info != NULL)
+	{
 		nsString desc;
 		NS_CStringToUTF16 (nsCString (info),
 			           NS_CSTRING_ENCODING_UTF8, desc);

@@ -1,5 +1,16 @@
 2006-10-15  Wouter Bolsterlee  <wbolster@gnome.org>
 
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/MozDownload.cpp:
+	* lib/ephy-file-helpers.c: (ephy_file_browse_to):
+	* lib/ephy-file-helpers.h:
+	* src/popup-commands.c: (save_property_url_completed_cb),
+	(save_property_url):
+	Automatically open a Nautilus window after downloading
+	has finished. Fixes bug #138876, patch by Ed Catmur.
+
+2006-10-15  Wouter Bolsterlee  <wbolster@gnome.org>
+
 	* src/bookmarks/ephy-bookmarks-editor.c:
 	(ephy_bookmarks_editor_construct):
 	Use full width for bookmarks search bar.

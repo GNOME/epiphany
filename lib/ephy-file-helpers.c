@@ -1017,6 +1017,27 @@ ephy_file_launch_handler (const char *mime_type,
 	return ret;
 }
 
+gboolean
+ephy_file_browse_to (const char *parameter,
+		     guint32 user_time)
+{
+	GnomeVFSURI *uri, *parent_uri;
+	gboolean ret;
+
+	uri = gnome_vfs_uri_new (parameter);
+	parent_uri = gnome_vfs_uri_get_parent (uri);
+
+	/* TODO find a way to make nautilus scroll to the actual file */
+	ret = ephy_file_launch_handler ("x-directory/normal", 
+					gnome_vfs_uri_get_path (parent_uri), 
+					user_time);
+	
+	gnome_vfs_uri_unref (uri);
+	gnome_vfs_uri_unref (parent_uri);
+
+	return ret;
+}
+
 struct _EphyFileMonitor
 {
 	GnomeVFSMonitorHandle *handle;

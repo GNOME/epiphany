@@ -168,6 +168,24 @@ popup_cmd_copy_link_address (GtkAction *action,
 }
 
 static void
+save_property_url_completed_cb (EphyEmbedPersist *persist)
+{
+	if (!(ephy_embed_persist_get_flags (persist) & 
+				EPHY_EMBED_PERSIST_ASK_DESTINATION))
+	{
+		const char *dest;
+		guint32 user_time;
+
+		user_time = ephy_embed_persist_get_user_time (persist);
+		dest = ephy_embed_persist_get_dest (persist);
+		g_return_if_fail (dest != NULL);
+
+		eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
+		ephy_file_browse_to (dest, user_time);
+	}
+}
+
+static void
 save_property_url (GtkAction *action,
 		   const char *title,
 		   EphyWindow *window,
@@ -200,6 +218,9 @@ save_property_url (GtkAction *action,
 	ephy_embed_persist_set_persist_key
 		(persist, CONF_STATE_SAVE_DIR);
 	ephy_embed_persist_set_source (persist, location);
+
+	g_signal_connect (persist, "completed",
+			  G_CALLBACK (save_property_url_completed_cb), NULL);
 
 	ephy_embed_persist_save (persist);
 
