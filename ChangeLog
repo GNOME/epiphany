@@ -1,3 +1,9 @@
+2006-10-15  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmarks.c: (update_has_smart_address):
+
+	Fix unprotected call to ephy_node_remove_child. Bug #362063.
+
 2006-10-08  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/Makefile.am:
