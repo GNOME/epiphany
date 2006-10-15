@@ -1871,7 +1871,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	gtk_paned_pack2 (GTK_PANED (hpaned), vbox, TRUE, TRUE);
 	gtk_widget_show (vbox);
 
-	gtk_box_pack_start (GTK_BOX (vbox),
+	gtk_box_pack_start (GTK_BOX (editor->priv->main_vbox),
 			    build_search_box (editor),
 			    FALSE, FALSE, 0);
 	add_focus_monitor (editor, editor->priv->search_entry);
