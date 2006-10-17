@@ -1,5 +1,18 @@
 2006-10-17  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/widgets/Makefile.am:
+	A lib/widgets/ephy-spinner-tool-item.c:
+	A lib/widgets/ephy-spinner-tool-item.h:
+	* lib/widgets/testspinner.c: (change_toolbar_style_cb),
+	(change_toolbar_icon_size_cb), (spin_toolbar_spinner_cb), (main):
+	* src/ephy-toolbar.c: (ephy_toolbar_update_spinner),
+	(ephy_toolbar_constructor):
+
+	Add EphySpinnerToolItem which encapsulates a spinner and automatically
+	adapts its size to toolbar style changes, and use it in EphyToolbar.
+
+2006-10-17  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-spinner.c: (ephy_spinner_images_load),
 	(ephy_spinner_cache_get_images), (ephy_spinner_get_type),
 	(ephy_spinner_init), (ephy_spinner_new):

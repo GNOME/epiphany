@@ -31,7 +31,7 @@
 #include "ephy-navigation-action.h"
 #include "ephy-topic-action.h"
 #include "ephy-zoom-action.h"
-#include "ephy-spinner.h"
+#include "ephy-spinner-tool-item.h"
 #include "ephy-dnd.h"
 #include "ephy-shell.h"
 #include "ephy-stock-icons.h"
@@ -71,8 +71,7 @@ struct _EphyToolbarPrivate
 	GtkActionGroup *action_group;
 	GtkAction *actions[LAST_ACTION];
 	GtkWidget *fixed_toolbar;
-	GtkWidget *spinner;
-	GtkToolItem *spinner_item;
+	EphySpinnerToolItem *spinner;
 	GtkToolItem *sep_item;
 	GtkToolItem *exit_button;
 	gulong set_focus_handler;
@@ -135,35 +134,7 @@ ephy_toolbar_update_spinner (EphyToolbar *toolbar)
 {
 	EphyToolbarPrivate *priv = toolbar->priv;
 
-	if (priv->spinning)
-	{
-		ephy_spinner_start (EPHY_SPINNER (priv->spinner));
-	}
-	else
-	{
-		ephy_spinner_stop (EPHY_SPINNER (priv->spinner));
-	}
-}
-
-static void
-fixed_toolbar_reconfigured_cb (GtkToolItem *item,
-			       EphySpinner *spinner)
-{
-	GtkToolbarStyle style;
-	GtkIconSize size;
-
-	style = gtk_tool_item_get_toolbar_style (item);
-
-	if (style == GTK_TOOLBAR_BOTH)
-	{
-		size = GTK_ICON_SIZE_INVALID;
-	}
-	else
-	{
-		size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-	}
-
-	ephy_spinner_set_size (spinner, size);
+	ephy_spinner_tool_item_set_spinning (priv->spinner, priv->spinning);
 }
 
 static void 
@@ -589,15 +560,9 @@ ephy_toolbar_constructor (GType type,
 	gtoolbar = GTK_TOOLBAR (priv->fixed_toolbar);
 	gtk_toolbar_set_show_arrow (gtoolbar, FALSE);
 
-	priv->spinner = ephy_spinner_new ();
-	gtk_widget_show (priv->spinner);
-
-	priv->spinner_item = gtk_tool_item_new ();
-	g_signal_connect (priv->spinner_item, "toolbar-reconfigured",
-			  G_CALLBACK (fixed_toolbar_reconfigured_cb), priv->spinner);
-	gtk_container_add (GTK_CONTAINER (priv->spinner_item), priv->spinner);
-	gtk_toolbar_insert (gtoolbar, priv->spinner_item, -1);
-	gtk_widget_show (GTK_WIDGET (priv->spinner_item));
+	priv->spinner = ephy_spinner_tool_item_new ();
+	gtk_toolbar_insert (gtoolbar, GTK_TOOL_ITEM (priv->spinner), -1);
+	gtk_widget_show (GTK_WIDGET (priv->spinner));
 
 	priv->sep_item = gtk_separator_tool_item_new ();
 	gtk_toolbar_insert (gtoolbar, priv->sep_item, -1);
