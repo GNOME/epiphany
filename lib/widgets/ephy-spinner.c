@@ -1,9 +1,7 @@
 /* 
- * Nautilus
- *
  * Copyright © 2000 Eazel, Inc.
  * Copyright © 2002-2004 Marco Pesenti Gritti
- * Copyright © 2004 Christian Persch
+ * Copyright © 2004, 2006 Christian Persch
  *
  * Nautilus is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,8 +21,6 @@
  *
  * Ephy port by Marco Pesenti Gritti <marco@it.gnome.org>
  * 
- * This is the spinner (for busy feedback) for the location bar
- *
  * $Id$
  */
 
@@ -270,6 +266,7 @@ ephy_spinner_images_load (GdkScreen *screen,
 
 	rest_pixbuf = gdk_pixbuf_new_from_file (icon, NULL);
 	gtk_icon_info_free (icon_info);
+	icon_info = NULL;
 
 	if (rest_pixbuf == NULL)
 	{
@@ -298,6 +295,7 @@ ephy_spinner_images_load (GdkScreen *screen,
 
 	icon_pixbuf = gdk_pixbuf_new_from_file (icon, NULL);
 	gtk_icon_info_free (icon_info);
+	icon_info = NULL;
 
 	if (icon_pixbuf == NULL)
 	{
@@ -433,6 +431,7 @@ ephy_spinner_cache_get_images (EphySpinnerCache *cache,
 	if (data == NULL)
 	{
 		data = ephy_spinner_cache_data_new (screen);
+		/* FIXME: think about what happens when the screen's display is closed later on */
 		g_hash_table_insert (priv->hash, screen, data);
 	}
 
@@ -545,7 +544,7 @@ struct _EphySpinnerDetails
 static void ephy_spinner_class_init (EphySpinnerClass *class);
 static void ephy_spinner_init	    (EphySpinner *spinner);
 
-static GObjectClass *parent_class = NULL;
+static GObjectClass *parent_class;
 
 GType
 ephy_spinner_get_type (void)
@@ -567,7 +566,7 @@ ephy_spinner_get_type (void)
 			(GInstanceInitFunc) ephy_spinner_init
 		};
 
-		type = g_type_register_static (GTK_TYPE_EVENT_BOX,
+		type = g_type_register_static (GTK_TYPE_WIDGET,
 					       "EphySpinner",
 					       &our_info, 0);
 	}
@@ -628,6 +627,8 @@ ephy_spinner_init (EphySpinner *spinner)
 	EphySpinnerDetails *details;
 
 	details = spinner->details = EPHY_SPINNER_GET_PRIVATE (spinner);
+
+	GTK_WIDGET_SET_FLAGS (GTK_WIDGET (spinner), GTK_NO_WINDOW);
 
 	details->cache = ephy_spinner_cache_ref ();
 	details->size = GTK_ICON_SIZE_DIALOG;
@@ -1000,7 +1001,5 @@ ephy_spinner_class_init (EphySpinnerClass *class)
 GtkWidget *
 ephy_spinner_new (void)
 {
-	return GTK_WIDGET (g_object_new (EPHY_TYPE_SPINNER,
-					 "visible-window", FALSE,
-					 NULL));
+	return GTK_WIDGET (g_object_new (EPHY_TYPE_SPINNER, NULL));
 }

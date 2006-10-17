@@ -1,8 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
 /*
- * Nautilus
- *
  * Copyright © 2000 Eazel, Inc.
+ * Copyright © 2004, 2006 Christian Persch
  *
  * Nautilus is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,15 +19,13 @@
  *
  * Author: Andy Hertzfeld <andy@eazel.com>
  *
- * This is the header file for the throbber on the location bar
- *
  * $Id$
  */
 
 #ifndef EPHY_SPINNER_H
 #define EPHY_SPINNER_H
 
-#include <gtk/gtkeventbox.h>
+#include <gtk/gtkwidget.h>
 #include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
@@ -41,12 +38,12 @@ G_BEGIN_DECLS
 #define EPHY_SPINNER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SPINNER, EphySpinnerClass))
 
 typedef struct _EphySpinner		EphySpinner;
-typedef struct _EphySpinnerClass		EphySpinnerClass;
+typedef struct _EphySpinnerClass	EphySpinnerClass;
 typedef struct _EphySpinnerDetails	EphySpinnerDetails;
 
 struct _EphySpinner
 {
-	GtkEventBox parent;
+	GtkWidget parent;
 
 	/*< private >*/
 	EphySpinnerDetails *details;
@@ -54,7 +51,7 @@ struct _EphySpinner
 
 struct _EphySpinnerClass
 {
-	GtkEventBoxClass parent_class;
+	GtkWidgetClass parent_class;
 };
 
 GType		ephy_spinner_get_type	(void);
