@@ -275,7 +275,6 @@ static void
 background_download_completed (EphyEmbedPersist *persist)
 {
 	const char *bg;
-	char *type;
 	guint32 user_time;
 
 	user_time = ephy_embed_persist_get_user_time (persist);
