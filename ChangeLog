@@ -1,5 +1,11 @@
 2006-10-18  Wouter Bolsterlee  <wbolster@gnome.org>
 
+	* src/ephy-dbus.c: (ephy_dbus_shutdown):
+	Don't try to close shared dbus connections. This avoids
+	dbus warnings on quit. Fixes bug #358007.
+
+2006-10-18  Wouter Bolsterlee  <wbolster@gnome.org>
+
 	* src/popup-commands.c: (background_download_completed):
 	Remove unused type variable.
 

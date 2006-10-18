@@ -301,16 +301,6 @@ ephy_dbus_connect_to_session_bus (EphyDbus *ephy_dbus,
 	return TRUE;
 }
 
-static void
-ephy_dbus_disconnect_bus (DBusGConnection *bus)
-{
-	if (bus != NULL) {
-		dbus_connection_close
-			(dbus_g_connection_get_connection (bus));
-		dbus_g_connection_unref (bus);
-	}
-}
-
 /* Public methods */
 
 static void
@@ -337,7 +327,7 @@ ephy_dbus_shutdown (EphyDbus *dbus)
 		dbus_connection_remove_filter
 			(dbus_g_connection_get_connection (priv->session_bus),
 			 session_filter_func, dbus);
-		ephy_dbus_disconnect_bus (priv->session_bus);
+		dbus_g_connection_unref (priv->session_bus);
 		priv->session_bus = NULL;
 	}
 
@@ -346,7 +336,7 @@ ephy_dbus_shutdown (EphyDbus *dbus)
 		dbus_connection_remove_filter
 			(dbus_g_connection_get_connection (priv->system_bus),
 			 system_filter_func, dbus);
-		ephy_dbus_disconnect_bus (priv->system_bus);
+		dbus_g_connection_unref (priv->system_bus);
 		priv->system_bus = NULL;
 	}
 }
