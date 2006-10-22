@@ -63,6 +63,12 @@ typedef enum
 	EPHY_EMBED_CHROME_BOOKMARKSBAR	= 1 << 3
 } EphyEmbedChrome;
 
+typedef enum
+{
+	EPHY_EMBED_LOAD_FLAGS_NONE			= 1 << 0,
+	EPHY_EMBED_LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP 	= 1 << 1,
+} EphyEmbedLoadFlags;
+
 #define EPHY_EMBED_CHROME_ALL (EPHY_EMBED_CHROME_MENUBAR |	\
 			       EPHY_EMBED_CHROME_TOOLBAR |	\
 			       EPHY_EMBED_CHROME_STATUSBAR |	\
@@ -157,6 +163,10 @@ struct _EphyEmbedIface
 	/* Methods  */
 	void		   (* load_url)			(EphyEmbed *embed,
 							 const char *url);
+	void		   (* load)			(EphyEmbed *embed,
+							 const char *url,
+							 EphyEmbedLoadFlags flags,
+							 EphyEmbed *referring_embed);
 	void		   (* stop_load)		(EphyEmbed *embed);
 	void		   (* reload)			(EphyEmbed *embed,
 							 gboolean force);
@@ -232,6 +242,10 @@ GType		  ephy_embed_get_type			(void);
 /* Base */
 void		  ephy_embed_load_url			(EphyEmbed *embed,
 							 const char *url);
+void		  ephy_embed_load			(EphyEmbed *embed,
+							 const char *url,
+							 EphyEmbedLoadFlags flags,
+							 EphyEmbed *referring_embed);
 
 void		  ephy_embed_stop_load			(EphyEmbed *embed);
 

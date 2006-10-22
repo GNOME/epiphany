@@ -1524,3 +1524,55 @@ EphyBrowser::Close ()
 
 	return domWin->Close();
 }
+
+nsresult
+EphyBrowser::GetPIDOMWindow(nsPIDOMWindow **aPIWin)
+{
+  *aPIWin = nsnull;
+
+  // get the private DOM window
+  nsCOMPtr<nsPIDOMWindow> domWindowPrivate = do_QueryInterface(mDOMWindow);
+
+  // and the root window for that DOM window
+  *aPIWin = domWindowPrivate->GetPrivateRoot();
+
+  if (*aPIWin) 
+  {
+    NS_ADDREF(*aPIWin);
+    return NS_OK;
+  }
+
+  return NS_ERROR_FAILURE;
+
+}
+
+nsresult
+EphyBrowser::LoadURI(const char *aURI,
+		     PRUint32 aLoadFlags,
+		     nsIURI *aReferrer)
+{
+	nsString uURI;
+	nsresult rv = NS_OK;
+
+ 	NS_CStringToUTF16 (nsCString (aURI), NS_CSTRING_ENCODING_UTF8, uURI);
+
+	if (uURI.Length() == 0) return NS_OK;
+ 
+	nsCOMPtr<nsIWebNavigation> contentNav = do_QueryInterface (mWebBrowser);
+	NS_ENSURE_TRUE (contentNav, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsPIDOMWindow> piWin;
+	rv = GetPIDOMWindow(getter_AddRefs(piWin));
+  	NS_ENSURE_SUCCESS (rv, rv);
+
+	nsAutoPopupStatePusher popupStatePusher(piWin, openAllowed);
+
+	rv = contentNav->LoadURI(uURI.get(),   // URI string
+			 	 aLoadFlags,   // Load flags
+			 	 aReferrer,    // Referring URI
+			 	 nsnull,       // Post data
+			 	 nsnull);      // extra headers
+
+	return rv;
+}
+

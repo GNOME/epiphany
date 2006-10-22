@@ -530,8 +530,24 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	}
 	else if (flags & EPHY_NEW_TAB_OPEN_PAGE)
 	{
+		EphyEmbedLoadFlags load_flags = 0;
+
 		g_assert (url != NULL);
-		ephy_embed_load_url (embed, url);
+
+		if (flags & EPHY_NEW_TAB_ALLOW_FIXUP)
+		{
+			load_flags = EPHY_EMBED_LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
+		}
+		else
+		{
+			load_flags = EPHY_EMBED_LOAD_FLAGS_NONE;
+		}
+		/* FIXME */
+		/* We need to audit every caller to see if this 
+		   won't make us send referer for undesirable loads.
+	           Passing NULL referrer atm  */
+		ephy_embed_load (embed, url, load_flags, NULL);
+
 		is_empty = url_is_empty (url);
 	}
 

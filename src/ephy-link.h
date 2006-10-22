@@ -41,7 +41,8 @@ typedef enum
 {
 	EPHY_LINK_NEW_WINDOW	= 1 << 0,
 	EPHY_LINK_NEW_TAB	= 1 << 1,
-	EPHY_LINK_JUMP_TO	= 1 << 2
+	EPHY_LINK_JUMP_TO	= 1 << 2,
+	EPHY_LINK_ALLOW_FIXUP	= 1 << 3
 } EphyLinkFlags;
 
 struct _EphyLinkIface
