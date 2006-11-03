@@ -182,8 +182,6 @@ ephy_spell_check_check_word (EphySpellCheck *speller,
 
 	g_return_val_if_fail (word != NULL, -1);
 
-	g_print ("ephy_spell_check_check_word: '%s'\n", word);
-
 	if (priv->dict == NULL)
 		return FALSE;
 
