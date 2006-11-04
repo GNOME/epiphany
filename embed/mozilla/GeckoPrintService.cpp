@@ -534,8 +534,9 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
         if (numRanges > 0) {
           /* FIXME: We can only support one range, ignore more ranges or raise error? */
           aSettings->SetPrintRange (nsIPrintSettings::kRangeSpecifiedPageRange);
-          aSettings->SetStartPageRange (pageRanges[0].start);
-	  aSettings->SetEndPageRange (pageRanges[1].end);
+	  /* Gecko page numbers start at 1, while gtk page numbers start at 0 */
+          aSettings->SetStartPageRange (pageRanges[0].start + 1);
+	  aSettings->SetEndPageRange (pageRanges[0].end + 1);
 
 	  g_free (pageRanges);
         }
