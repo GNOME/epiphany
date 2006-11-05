@@ -341,7 +341,6 @@ impl_load (EphyEmbed *embed,
 	if (preview_embed != NULL)
 	{
 		EphyBrowser *pbrowser;
-		nsresult rv;
 
 		pbrowser = MOZILLA_EMBED(preview_embed)->priv->browser;
 		if (pbrowser != NULL)
@@ -349,12 +348,13 @@ impl_load (EphyEmbed *embed,
 			pbrowser->GetDocumentURI (getter_AddRefs (uri));
 		}
 	}
-
+#ifdef HAVE_GECKO_1_8_1
 	if (flags & EPHY_EMBED_LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP)
 	{
 		browser->LoadURI (url, nsIWebNavigation::LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP, uri);	
 	}
 	else
+#endif /* HAVE_GECKO_1_8_1 */
 	{
 		browser->LoadURI (url, nsIWebNavigation::LOAD_FLAGS_NONE, uri);	
 	}
