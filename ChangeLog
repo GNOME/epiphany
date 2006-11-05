@@ -1,3 +1,20 @@
+2006-11-05  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* embed/ephy-embed.h:
+	* embed/ephy-embed.c:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-link.h:
+	* src/ephy-location-action.c: (action_activated_cb):
+	* src/ephy-shell.c: (ephy_shell_new_tab_full):
+	* src/ephy-shell.h:
+	* src/ephy-window.c: (ephy_window_open_link):
+
+	Get keyword search back by passing ALLOW_THIRD_PARTY_FIXUP flag to gecko.
+	Add a new load method to EphyEmbed to custom load behaviour and pass (optional) referrer.
+	Fix bug #350053.
+
 2006-11-04  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/GeckoPrintService.cpp:

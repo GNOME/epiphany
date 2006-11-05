@@ -36,6 +36,7 @@
 #include <nsIWebBrowserFocus.h>
 #include <nsIWebBrowser.h>
 #include <nsIWebNavigation.h>
+#include <nsPIDOMWindow.h>
 
 #ifdef ALLOW_PRIVATE_API
 #include <nsIContentViewer.h>
@@ -172,6 +173,7 @@ public:
 	nsresult GetDocumentURI (nsIURI **aURI);
 	nsresult GetTargetDocumentURI (nsIURI **aURI);
 	nsresult GetDOMWindow (nsIDOMWindow **window);
+	nsresult GetPIDOMWindow(nsPIDOMWindow **aPIWin);
 
 	nsresult GetHasModifiedForms (PRBool *modified);
 
@@ -182,6 +184,10 @@ public:
 	                       PRBool copy_forward, PRBool copy_current);
 
 	nsresult Close ();
+
+	nsresult LoadURI(const char *aURI, 
+			 PRUint32 aLoadFlags = nsIWebNavigation::LOAD_FLAGS_NONE, 
+			 nsIURI *aURI = nsnull);
 
         EphyEmbedDocumentType GetDocumentType ();
 

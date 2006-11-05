@@ -62,6 +62,10 @@ typedef enum
 	EPHY_NEW_TAB_JUMP		= 1 << 9,
 	EPHY_NEW_TAB_IN_NEW_WINDOW	= 1 << 10,
 	EPHY_NEW_TAB_IN_EXISTING_WINDOW	= 1 << 11,
+
+	/* The way to load */
+	EPHY_NEW_TAB_ALLOW_FIXUP	= 1 << 12,
+	
 } EphyNewTabFlags;
 
 struct _EphyShell

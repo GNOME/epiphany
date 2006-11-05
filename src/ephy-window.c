@@ -2976,7 +2976,9 @@ ephy_window_open_link (EphyLink *link,
 		tab = ephy_window_get_active_tab (window);
 	}
 
-	if (flags != 0)
+	if (flags  & (EPHY_LINK_JUMP_TO | 
+		      EPHY_LINK_NEW_TAB | 
+		      EPHY_LINK_NEW_WINDOW))
 	{
 		EphyNewTabFlags ntflags = EPHY_NEW_TAB_OPEN_PAGE;
 
@@ -2993,6 +2995,10 @@ ephy_window_open_link (EphyLink *link,
 		{
 			ntflags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
 		}
+		if (flags & EPHY_LINK_ALLOW_FIXUP)
+		{
+			ntflags |= EPHY_NEW_TAB_ALLOW_FIXUP;
+		}
 
 		new_tab = ephy_shell_new_tab
 				(ephy_shell,
@@ -3005,7 +3011,17 @@ ephy_window_open_link (EphyLink *link,
 		
 		embed = ephy_tab_get_embed (tab);
 
-		ephy_embed_load_url (embed, address);
+		if (flags & EPHY_LINK_ALLOW_FIXUP)
+		{
+			ephy_embed_load (embed, 
+					 address, 
+					 EPHY_EMBED_LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP,
+					 NULL);
+		}
+		else
+		{
+			ephy_embed_load_url (embed, address);
+		}
 
 		if (address == NULL || address[0] == '\0' || strcmp (address, "about:blank") == 0)
 		{

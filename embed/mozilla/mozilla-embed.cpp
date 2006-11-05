@@ -324,6 +324,42 @@ impl_load_url (EphyEmbed *embed,
         gtk_moz_embed_load_url (GTK_MOZ_EMBED(embed), url);
 }
 
+static char * impl_get_location (EphyEmbed *embed, gboolean toplevel);
+
+static void
+impl_load (EphyEmbed *embed, 
+           const char *url,
+	   EphyEmbedLoadFlags flags,
+	   EphyEmbed *preview_embed)
+{
+	EphyBrowser *browser;
+
+	browser = MOZILLA_EMBED(embed)->priv->browser;
+	g_return_if_fail (browser != NULL);
+
+	nsCOMPtr<nsIURI> uri;
+	if (preview_embed != NULL)
+	{
+		EphyBrowser *pbrowser;
+		nsresult rv;
+
+		pbrowser = MOZILLA_EMBED(preview_embed)->priv->browser;
+		if (pbrowser != NULL)
+		{
+			pbrowser->GetDocumentURI (getter_AddRefs (uri));
+		}
+	}
+
+	if (flags & EPHY_EMBED_LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP)
+	{
+		browser->LoadURI (url, nsIWebNavigation::LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP, uri);	
+	}
+	else
+	{
+		browser->LoadURI (url, nsIWebNavigation::LOAD_FLAGS_NONE, uri);	
+	}
+}
+
 static void
 impl_stop_load (EphyEmbed *embed)
 {
@@ -1114,6 +1150,7 @@ static void
 ephy_embed_iface_init (EphyEmbedIface *iface)
 {
 	iface->load_url = impl_load_url; 
+	iface->load = impl_load; 
 	iface->stop_load = impl_stop_load;
 	iface->can_go_back = impl_can_go_back;
 	iface->can_go_forward =impl_can_go_forward;
