@@ -121,6 +121,7 @@ pref("general.useragent.locale", "en");
 // pref("extensions.spellcheck.inline.max-misspellings", -1);
 // 0: disabled, 1: only textareas, 2: check textareas and single-line input fields
 pref("layout.spellcheckDefault", 1);
+pref("spellchecker.dictionary", "");
 
 // print settings
 pref("print.print_printer", "PostScript/default");
