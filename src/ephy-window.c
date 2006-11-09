@@ -362,7 +362,12 @@ static const struct
 	{ GDK_s,		GDK_CONTROL_MASK,	"FileSaveAs",		FALSE },
 	{ GDK_R,		GDK_CONTROL_MASK |
 				GDK_SHIFT_MASK,		"ViewReload",		FALSE },
+	/* Support all the MSIE tricks as well ;) */
 	{ GDK_F5,		0,			"ViewReload",		FALSE },
+	{ GDK_F5,		GDK_CONTROL_MASK,	"ViewReload",		FALSE },
+	{ GDK_F5,		GDK_SHIFT_MASK,		"ViewReload",		FALSE },
+	{ GDK_F5,		GDK_CONTROL_MASK |
+				GDK_SHIFT_MASK,		"ViewReload",		FALSE },
 	{ GDK_KP_Add,		GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
 	{ GDK_KP_Subtract,	GDK_CONTROL_MASK,	"ViewZoomOut",		FALSE },
 	{ GDK_equal,		GDK_CONTROL_MASK,	"ViewZoomIn",		FALSE },
