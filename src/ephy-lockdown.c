@@ -188,6 +188,8 @@ update_window (EphyWindow *window,
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 	action = gtk_action_group_get_action (popups_action_group, "SaveImageAs");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
+	action = gtk_action_group_get_action (popups_action_group, "OpenImage");
+	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 	writable = eel_gconf_key_is_writable (CONF_DESKTOP_BG_PICTURE);
 	action = gtk_action_group_get_action (popups_action_group, "SetImageAsBackground");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled || !writable);

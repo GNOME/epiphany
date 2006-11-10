@@ -1,5 +1,12 @@
 2006-11-10  Wouter Bolsterlee  <wbolster@cvs.gnome.org>
 
+	* src/ephy-lockdown.c: (update_window):
+	Also disable the "Open Image" context menu action if the
+	desktop wide "disable save to disk" lockdown key is
+	enabled. Reported on IRC by Gerald E Butler.
+
+2006-11-10  Wouter Bolsterlee  <wbolster@cvs.gnome.org>
+
 	* src/ephy-window.c:
 	Add some more F5 shortcuts to handle all the MSIE
 	"refresh page" bindings. Fixes bug #372906.
