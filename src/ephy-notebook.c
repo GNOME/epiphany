@@ -645,7 +645,6 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 			       GTK_RELIEF_NONE);
 	/* don't allow focus on the close button */
 	gtk_button_set_focus_on_click (GTK_BUTTON (close_button), FALSE);
-	gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
 
 	rcstyle = gtk_rc_style_new ();
 	rcstyle->xthickness = rcstyle->ythickness = 0;
