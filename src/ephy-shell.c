@@ -508,6 +508,15 @@ ephy_shell_new_tab_full (EphyShell *shell,
 
 	ephy_window_add_tab (window, tab, position, jump_to);
 
+	if (previous_embed != NULL)
+	{
+		ephy_embed_shistory_copy (previous_embed,
+					  embed,
+					  TRUE,   /* back history */
+					  TRUE,   /* forward history */
+					  FALSE); /* current index */
+	}
+
 	ephy_gui_window_update_user_time (GTK_WIDGET (window), user_time);
 
 	if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0)
@@ -571,15 +580,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
 			gtk_widget_grab_focus (GTK_WIDGET (embed));
                 }
         }
-
-	if (previous_embed != NULL)
-	{
-		ephy_embed_shistory_copy (previous_embed,
-					  embed,
-					  TRUE,   /* back history */
-					  FALSE,  /* forward history */
-					  FALSE); /* current index */
-	}
 
 	return tab;
 }
