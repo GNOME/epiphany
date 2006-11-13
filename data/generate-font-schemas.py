@@ -54,13 +54,13 @@ def append_schema(doc, schemalistNode, key, datatype, default, description, sche
 def append_schemas(docNode, schemalistNode, group):
 	base = "/apps/epiphany/web/"
 	append_schema(doc, schemalistNode, base + "fixed_font_size_" + group,
-		      "int", "10", "Monospace font size",
+		      "int", "12", "Monospace font size",
 		      "Monospaced font size for \"" + group + "\"")
 	append_schema(doc, schemalistNode, base + "font_monospace_" + group,
 		      "string", "monospace", "Monospace font",
 		      "Monospaced font for \"" + group + "\"")
 	append_schema(doc, schemalistNode, base + "variable_font_size_" + group,
-		      "int", "10", "Proportional font size",
+		      "int", "12", "Proportional font size",
 		      "Variable width font size for \"" + group + "\"")
 	append_schema(doc, schemalistNode, base + "font_variable_" + group,
 		      "string", "sans-serif", "Proportional font",
