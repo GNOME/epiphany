@@ -1,3 +1,9 @@
+2006-11-17  Benjamin Berg  <benjamin@sipsolutions.net>
+
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_start):
+	Lower the priority of the spinner animation so that the animation
+	does not stop page loading. Fixes bug #374623.
+
 2006-11-10  Wouter Bolsterlee  <wbolster@cvs.gnome.org>
 
 	* src/ephy-lockdown.c: (update_window):
