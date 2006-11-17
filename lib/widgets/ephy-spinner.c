@@ -756,9 +756,11 @@ ephy_spinner_start (EphySpinner *spinner)
 		details->current_image = 0;
 
 		details->timer_task =
-			g_timeout_add (details->timeout,
-				       (GSourceFunc) bump_spinner_frame_cb,
-				       spinner);
+			g_timeout_add_full (G_PRIORITY_LOW,
+			                    details->timeout,
+				            (GSourceFunc) bump_spinner_frame_cb,
+				            spinner,
+				            NULL);
 	}
 }
 
