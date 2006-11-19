@@ -431,6 +431,7 @@ popup_cmd_open_image (GtkAction *action,
 	address = g_value_get_string (value);
 
 	scheme = gnome_vfs_get_uri_scheme (address);
+	if (scheme == NULL) return;
 
 	if (strcmp (scheme, "file") == 0)
 	{
