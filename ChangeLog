@@ -1,3 +1,11 @@
+2006-11-19  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* src/ephy-navigation-action.c: (activate_by_history_index):
+	* src/ephy-shell.c: (ephy_shell_new_tab_full):
+
+	Remove a double call to history copy when middle-clicking on back/forward buttons.
+	Fix bug #362882.
+
 2006-11-17  Benjamin Berg  <benjamin@sipsolutions.net>
 
 	* lib/widgets/ephy-spinner.c: (ephy_spinner_start):

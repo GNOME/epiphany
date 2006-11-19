@@ -158,7 +158,6 @@ activate_by_history_index (EphyNavigationAction *action,
 		dest = ephy_tab_get_embed (newTab);
 		g_return_if_fail (dest != NULL);
 
-		ephy_embed_shistory_copy (embed, dest, TRUE, TRUE, FALSE);
 		embed = dest;
 	}
 	ephy_embed_shistory_go_nth (embed, index);
