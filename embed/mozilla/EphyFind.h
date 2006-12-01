@@ -44,7 +44,8 @@ class EphyFind
     void SetSelectionAttention (PRBool aAttention);
     EphyEmbedFindResult Find (const char *aSearchString,
 			      PRBool aLinksOnly);
-    EphyEmbedFindResult FindAgain (PRBool aForward);
+    EphyEmbedFindResult FindAgain (PRBool aForward,
+				   PRBool aLinksOnly);
     PRBool ActivateLink (GdkModifierType aMask);
 
   private:

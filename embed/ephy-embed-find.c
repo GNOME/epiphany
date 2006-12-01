@@ -67,15 +67,17 @@ ephy_embed_find_find (EphyEmbedFind *find,
  * ephy_embed_find_find_again:
  * @embed: an #EphyEmbedFind
  * @forward %TRUE to search forwards in the document
+ * @links_only: whether to only search the text in links
  *
  * Return value: whether a match was found
  **/
 EphyEmbedFindResult
 ephy_embed_find_find_again (EphyEmbedFind *find,
-			    gboolean forward)
+			    gboolean forward,
+			    gboolean links_only)
 {
 	EphyEmbedFindIface *iface = EPHY_EMBED_FIND_GET_IFACE (find);
-	return iface->find_again (find, forward);
+	return iface->find_again (find, forward, links_only);
 }
 
 void

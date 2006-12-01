@@ -61,7 +61,8 @@ struct _EphyEmbedFindIface
 						 const char *search_string,
 						 gboolean links_only);
 	EphyEmbedFindResult (* find_again)	(EphyEmbedFind *find,
-						 gboolean forward);
+						 gboolean forward,
+						 gboolean links_only);
 	void	 (* set_selection)	(EphyEmbedFind *find,
 					 gboolean attention);
 	gboolean (* activate_link)	(EphyEmbedFind *find,
@@ -82,7 +83,8 @@ EphyEmbedFindResult	ephy_embed_find_find		(EphyEmbedFind *find,
 							 gboolean links_only);
 
 EphyEmbedFindResult	ephy_embed_find_find_again	(EphyEmbedFind *find,
-							 gboolean forward);
+							 gboolean forward,
+							 gboolean links_only);
 
 void	 ephy_embed_find_set_selection		(EphyEmbedFind *find,
 						 gboolean attention);

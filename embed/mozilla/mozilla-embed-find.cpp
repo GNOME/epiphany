@@ -73,12 +73,13 @@ impl_find (EphyEmbedFind *efind,
 
 static EphyEmbedFindResult
 impl_find_again (EphyEmbedFind *efind,
-		   gboolean forward)
+		 gboolean forward,
+		 gboolean links_only)
 {
 	MozillaEmbedFind *find = MOZILLA_EMBED_FIND (efind);
 	MozillaEmbedFindPrivate *priv = find->priv;
 
-	return priv->find->FindAgain (forward);
+	return priv->find->FindAgain (forward, links_only);
 }
 
 static void

@@ -198,7 +198,8 @@ EphyFind::Find (const char *aSearchString,
 }
 
 EphyEmbedFindResult
-EphyFind::FindAgain (PRBool aForward)
+EphyFind::FindAgain (PRBool aForward,
+		     PRBool aLinksOnly)
 {
   if (!mFinder) return EPHY_EMBED_FIND_NOTFOUND;
 
@@ -207,7 +208,7 @@ EphyFind::FindAgain (PRBool aForward)
   nsresult rv;
   PRUint16 found = nsITypeAheadFind::FIND_NOTFOUND;
 #ifdef HAVE_GECKO_1_9
-  rv = mFinder->FindAgain (!aForward, mHasFocus, &found);
+  rv = mFinder->FindAgain (!aForward, aLinksOnly, mHasFocus, &found);
 #else
   if (aForward) {
     rv = mFinder->FindNext (&found);
