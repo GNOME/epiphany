@@ -45,8 +45,6 @@ struct _EphyStatusbar
 
 	/*< public >*/
 	GtkTooltips *tooltips;
-	GtkWidget *security_frame;
-	GtkWidget *popups_manager_frame;
 
 	/*< private >*/
         EphyStatusbarPrivate *priv;

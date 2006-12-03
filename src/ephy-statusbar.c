@@ -28,11 +28,13 @@
 #include <string.h>
 #include <glib/gi18n.h>
 #include <gtk/gtklabel.h>	
+#include <gtk/gtkvbox.h>
 #include <gtk/gtkprogressbar.h>
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkvseparator.h>
 
 static void ephy_statusbar_class_init	(EphyStatusbarClass *klass);
 static void ephy_statusbar_init		(EphyStatusbar *t);
@@ -42,6 +44,7 @@ static void ephy_statusbar_finalize	(GObject *object);
 
 struct _EphyStatusbarPrivate
 {
+	GtkWidget *hbox;
 	GtkWidget *icon_container;
 
 	GtkWidget *caret_indicator;
@@ -90,13 +93,34 @@ ephy_statusbar_get_type (void)
 }
 
 static void
+ephy_statusbar_size_allocate (GtkWidget *widget,
+			      GtkAllocation *allocation)
+{
+	GtkStatusbar *gstatusbar = GTK_STATUSBAR (widget);
+	EphyStatusbar *statusbar = EPHY_STATUSBAR (widget);
+	EphyStatusbarPrivate *priv = statusbar->priv;
+	GtkWidget *label;
+
+	/* HACK HACK HACK ! */
+	label = gstatusbar->label;
+	gstatusbar->label = priv->hbox;
+
+	GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
+
+	gstatusbar->label = label;
+}
+
+static void
 ephy_statusbar_class_init (EphyStatusbarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_statusbar_finalize;
+
+	widget_class->size_allocate = ephy_statusbar_size_allocate;
 
 	signals[LOCK_CLICKED] =
 		g_signal_new
@@ -118,12 +142,8 @@ create_caret_indicator (EphyStatusbar *statusbar)
 	EphyStatusbarPrivate *priv = statusbar->priv;
 	GtkWidget *label, *ebox;
 
-	priv->caret_indicator = gtk_frame_new (NULL);
-	gtk_frame_set_shadow_type (GTK_FRAME (priv->caret_indicator),
-				   GTK_SHADOW_IN);
-	ebox = gtk_event_box_new ();
+	priv->caret_indicator = ebox = gtk_event_box_new ();
 	gtk_event_box_set_visible_window (GTK_EVENT_BOX (ebox), FALSE);
-	gtk_container_add (GTK_CONTAINER (priv->caret_indicator), ebox);
 	gtk_widget_show (ebox);
 
 	/* Translators: this is displayed in the statusbar; choose a short word
@@ -140,8 +160,7 @@ create_caret_indicator (EphyStatusbar *statusbar)
 			      _("In keyboard selection mode, press F7 to exit"),
 			      NULL);
 
-	gtk_box_pack_start (GTK_BOX (priv->icon_container), priv->caret_indicator,
-			    FALSE, FALSE, 0);
+	ephy_statusbar_add_widget (statusbar, priv->caret_indicator);
 }
 
 static gboolean
@@ -162,120 +181,97 @@ padlock_button_press_cb (GtkWidget *ebox,
 }
 
 static void
-create_statusbar_security_icon (EphyStatusbar *s)
+create_icon_frame (EphyStatusbar *statusbar,
+		   const char *stock_id,
+		   GCallback button_press_cb,
+		   GtkWidget **_evbox,
+		   GtkWidget **_icon)
 {
-	s->security_frame = gtk_frame_new (NULL);
-	gtk_frame_set_shadow_type (GTK_FRAME (s->security_frame),
-				   GTK_SHADOW_IN);
+	GtkWidget *evbox, *icon;
 
-	s->priv->security_icon = gtk_image_new ();
-	s->priv->security_evbox = gtk_event_box_new ();
-	gtk_event_box_set_visible_window (GTK_EVENT_BOX (s->priv->security_evbox),
-					  FALSE);
-	gtk_widget_add_events (s->priv->security_evbox, GDK_BUTTON_PRESS_MASK);
-	g_signal_connect (s->priv->security_evbox, "button-press-event",
-			  G_CALLBACK (padlock_button_press_cb), s);
+	evbox = gtk_event_box_new ();
+	gtk_event_box_set_visible_window  (GTK_EVENT_BOX (evbox), FALSE);
+	if (button_press_cb)
+	{
+		gtk_widget_add_events (evbox, GDK_BUTTON_PRESS_MASK);
+		g_signal_connect (evbox, "button-press-event",
+				  G_CALLBACK (padlock_button_press_cb), statusbar);
+	}
 
-	gtk_container_add (GTK_CONTAINER (s->security_frame),
-			   GTK_WIDGET (s->priv->security_evbox));
-	gtk_container_add (GTK_CONTAINER (s->priv->security_evbox),
-			   GTK_WIDGET (s->priv->security_icon));
+	icon = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_MENU);
+	gtk_container_add (GTK_CONTAINER (evbox), icon);
+	gtk_widget_show (icon);
 
-	ephy_statusbar_set_security_state (s, NULL, NULL);
+	ephy_statusbar_add_widget (statusbar, evbox);
 
-	gtk_widget_show_all (s->security_frame);
-
-	gtk_box_pack_start (GTK_BOX (s->priv->icon_container),
-			    GTK_WIDGET (s->security_frame),
-			    FALSE, TRUE, 0);
-}
-
-static void
-create_statusbar_popups_manager_icon (EphyStatusbar *s)
-{
-	s->popups_manager_frame = gtk_frame_new (NULL);
-	gtk_frame_set_shadow_type (GTK_FRAME (s->popups_manager_frame),
-				   GTK_SHADOW_IN);
-
-	s->priv->popups_manager_icon = gtk_image_new_from_stock
-		(EPHY_STOCK_POPUPS, GTK_ICON_SIZE_MENU);
-
-	s->priv->popups_manager_evbox = gtk_event_box_new ();
-
-	gtk_event_box_set_visible_window
-		(GTK_EVENT_BOX (s->priv->popups_manager_evbox), FALSE);
-
-	gtk_container_add (GTK_CONTAINER (s->popups_manager_frame),
-			   GTK_WIDGET (s->priv->popups_manager_evbox));
-	gtk_container_add (GTK_CONTAINER (s->priv->popups_manager_evbox),
-			   GTK_WIDGET (s->priv->popups_manager_icon));
-
-	gtk_widget_show (s->priv->popups_manager_evbox);
-	gtk_widget_show (s->priv->popups_manager_icon);
-
-	/* note lack of gtk_widget_show (s->popups_manager_frame); */
-
-	gtk_box_pack_start (GTK_BOX (s->priv->icon_container),
-			    GTK_WIDGET (s->popups_manager_frame),
-			    FALSE, TRUE, 0);
+	*_evbox = evbox;
+	*_icon = icon;
 }
 
 static void
 create_statusbar_progress (EphyStatusbar *s)
 {
+	EphyStatusbarPrivate *priv = s->priv;
+	GtkWidget *vbox;
+
+	vbox = gtk_vbox_new (TRUE, 0);
+	gtk_box_pack_end (GTK_BOX (priv->hbox), vbox, FALSE, TRUE, 0);
+
 	s->priv->progressbar = gtk_progress_bar_new ();
-	gtk_widget_show_all (s->priv->progressbar);
-
-	gtk_box_pack_end (GTK_BOX (s),
+	gtk_box_pack_start(GTK_BOX (vbox),
 			  GTK_WIDGET (s->priv->progressbar),
-			  FALSE, TRUE, 0);
-}
+		 	  FALSE, FALSE, 0);
 
-static void
-sync_shadow_type (EphyStatusbar *statusbar,
-		  GtkStyle *previous_style,
-		  gpointer dummy)
-{
-	GtkShadowType shadow;
-	GList *children, *l;
-
-	gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow-type",
-			      &shadow, NULL);
-
-	children = gtk_container_get_children
-		(GTK_CONTAINER (statusbar->priv->icon_container));
-	for (l = children; l != NULL; l = l->next)
-	{
-		if (GTK_IS_FRAME (l->data))
-		{
-			gtk_frame_set_shadow_type (GTK_FRAME (l->data), shadow);
-		}
-	}
-	g_list_free (children);
+	gtk_widget_set_size_request (s->priv->progressbar, -1, 10);
+	gtk_widget_show_all (vbox);
 }
 
 static void
 ephy_statusbar_init (EphyStatusbar *t)
 {
-	t->priv = EPHY_STATUSBAR_GET_PRIVATE (t);
+	GtkStatusbar *gstatusbar = GTK_STATUSBAR (t);
+	EphyStatusbarPrivate *priv;
+
+	priv = t->priv = EPHY_STATUSBAR_GET_PRIVATE (t);
+
+	gtk_statusbar_set_has_resize_grip (gstatusbar, TRUE);
 
 	t->tooltips = gtk_tooltips_new ();
 	g_object_ref_sink (t->tooltips);
 
-	t->priv->icon_container = gtk_hbox_new (FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (t), t->priv->icon_container, FALSE, FALSE, 0);
-	gtk_box_reorder_child (GTK_BOX (t), t->priv->icon_container, 0);
-	gtk_widget_show (t->priv->icon_container);
+	priv->hbox = gtk_hbox_new (FALSE, 4);
 
-	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (t), TRUE);
+	priv->icon_container = gtk_hbox_new (FALSE, 4);
+	gtk_box_pack_start (GTK_BOX (priv->hbox), priv->icon_container,
+			    FALSE, FALSE, 0);
+	gtk_widget_show (priv->icon_container);
 
-	create_statusbar_progress (t);
-	create_statusbar_security_icon (t);
-	create_statusbar_popups_manager_icon (t);
+	/* Put the label in the hbox, and substitute the hbox into the frame */
+	g_object_ref (gstatusbar->label);
+	gtk_container_remove (GTK_CONTAINER (gstatusbar->frame), gstatusbar->label);
+	gtk_box_pack_start (GTK_BOX (priv->hbox), gstatusbar->label, TRUE, TRUE, 0);
+	g_object_unref (gstatusbar->label);
+	gtk_container_add (GTK_CONTAINER (gstatusbar->frame), priv->hbox);
+	gtk_widget_show (priv->hbox);
+
+	/* Create security icon */
+	create_icon_frame (t,
+			   NULL,
+			   G_CALLBACK (padlock_button_press_cb),
+			   &priv->security_evbox,
+			   &priv->security_icon);
+	gtk_widget_show (priv->security_evbox);
+
+	/* Create popup-blocked icon */
+	create_icon_frame (t,
+			   EPHY_STOCK_POPUPS,
+			   NULL,
+			   &priv->popups_manager_evbox,
+			   &priv->popups_manager_icon);
+	/* don't show priv->popups_manager_evbox yet */
+
 	create_caret_indicator (t);
-
-	sync_shadow_type (t, NULL, NULL);
-	g_signal_connect (t, "style-set", G_CALLBACK (sync_shadow_type), NULL);
+	create_statusbar_progress (t);
 }
 
 static void
@@ -352,17 +348,19 @@ ephy_statusbar_set_popups_state (EphyStatusbar *statusbar,
 				 gboolean hidden,
 				 const char *tooltip)
 {
+	EphyStatusbarPrivate *priv = statusbar->priv;
+
 	if (hidden)
 	{
-		gtk_widget_hide (statusbar->popups_manager_frame);
+		gtk_widget_hide (priv->popups_manager_evbox);
 	}
 	else
 	{
 		gtk_tooltips_set_tip (statusbar->tooltips,
-				      statusbar->priv->popups_manager_evbox,
+				      priv->popups_manager_evbox,
 				      tooltip, NULL);
 
-		gtk_widget_show (statusbar->popups_manager_frame);
+		gtk_widget_show (priv->popups_manager_evbox);
 	}
 }
 
@@ -390,6 +388,21 @@ ephy_statusbar_set_progress (EphyStatusbar *statusbar,
 	}
 }
 
+static void
+sync_visibility (GtkWidget *widget,
+		 GParamSpec *pspec,
+		 GtkWidget *separator)
+{
+	if (GTK_WIDGET_VISIBLE (widget))
+	{
+		gtk_widget_show (separator);
+	}
+	else
+	{
+		gtk_widget_hide (separator);
+	}
+}
+
 /**
  * ephy_statusbar_add_widget:
  * @statusbar: an #EphyStatusbar
@@ -403,20 +416,24 @@ void
 ephy_statusbar_add_widget (EphyStatusbar *statusbar,
 			   GtkWidget *widget)
 {
+	EphyStatusbarPrivate *priv;
+	GtkWidget *vsep;
+
 	g_return_if_fail (EPHY_IS_STATUSBAR (statusbar));
 	g_return_if_fail (GTK_IS_WIDGET (widget));
 
-	gtk_box_pack_start (GTK_BOX (statusbar->priv->icon_container),
+	priv = statusbar->priv;
+
+	gtk_box_pack_start (GTK_BOX (priv->icon_container),
 			    widget, FALSE, FALSE, 0);
 
-	if (GTK_IS_FRAME (widget))
-	{
-		GtkShadowType shadow;
-
-		gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow-type",
-				      &shadow, NULL);
-		gtk_frame_set_shadow_type (GTK_FRAME (widget), shadow);
-	}
+	vsep = gtk_vseparator_new ();
+	gtk_box_pack_start (GTK_BOX (priv->icon_container),
+			    vsep, FALSE, FALSE, 0);
+	sync_visibility (widget, NULL, vsep);
+	g_object_set_data (G_OBJECT (widget), "EphyStatusbar::separator", vsep);
+	g_signal_connect (widget, "notify::visible",
+			  G_CALLBACK (sync_visibility), vsep);
 }
 
 /**
@@ -431,11 +448,22 @@ void
 ephy_statusbar_remove_widget (EphyStatusbar *statusbar,
 			      GtkWidget *widget)
 {
+	EphyStatusbarPrivate *priv;
+	GtkWidget *vsep;
+
 	g_return_if_fail (EPHY_IS_STATUSBAR (statusbar));
 	g_return_if_fail (GTK_IS_WIDGET (widget));
 
-	gtk_container_remove (GTK_CONTAINER (statusbar->priv->icon_container),
-			      widget);
+	priv = statusbar->priv;
+
+	vsep = g_object_steal_data (G_OBJECT (widget), "EphyStatusbar::separator");
+	g_return_if_fail (vsep != NULL);
+
+	g_signal_handlers_disconnect_by_func
+		(widget, G_CALLBACK (sync_visibility), vsep);
+
+	gtk_container_remove (GTK_CONTAINER (priv->icon_container), vsep);
+	gtk_container_remove (GTK_CONTAINER (priv->icon_container), widget);
 }
 
 
@@ -464,5 +492,5 @@ ephy_statusbar_get_security_frame (EphyStatusbar *statusbar)
 {
 	g_return_val_if_fail (EPHY_IS_STATUSBAR (statusbar), NULL);
 
-	return statusbar->security_frame;
+	return statusbar->priv->security_evbox;
 }
