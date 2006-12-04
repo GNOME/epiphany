@@ -82,7 +82,7 @@ typedef struct
 
 #define LAST_ICON_SIZE			GTK_ICON_SIZE_DIALOG + 1
 #define SPINNER_ICON_NAME		"process-working"
-#define SPINNER_FALLBAC_ICON_NAME	"gnome-spinner"
+#define SPINNER_FALLBACK_ICON_NAME	"gnome-spinner"
 #define EPHY_SPINNER_IMAGES_INVALID	((EphySpinnerImages *) 0x1)
 
 typedef struct
@@ -256,7 +256,7 @@ ephy_spinner_images_load (GdkScreen *screen,
 	
 		/* If the icon naming spec compliant name wasn't found, try the old name */
 		icon_info = gtk_icon_theme_lookup_icon (icon_theme,
-							SPINNER_FALLBAC_ICON_NAME,
+							SPINNER_FALLBACK_ICON_NAME,
 							requested_size, 0);
 		if (icon_info == NULL)
 		{
