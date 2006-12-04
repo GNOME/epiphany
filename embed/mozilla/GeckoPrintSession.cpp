@@ -130,7 +130,7 @@ GeckoPrintSession::SetSettings (GtkPrintSettings *aSettings,
   {
     char *base, *tmpName;
 
-    /* FIXME: use pure glib here! */
+    /* FIXME: use pure glib here (g_mkstemp)! */
     base = g_build_filename (ephy_file_tmp_dir (), "print-XXXXXX", (const char *) NULL);
     tmpName = ephy_file_tmp_filename (base, "ps");
     g_free (base);

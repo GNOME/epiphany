@@ -92,6 +92,7 @@ ephy_statusbar_get_type (void)
 	return type;
 }
 
+/* FIXME: remove this hack once gtk bug #372452 is fixed! */
 static void
 ephy_statusbar_size_allocate (GtkWidget *widget,
 			      GtkAllocation *allocation)

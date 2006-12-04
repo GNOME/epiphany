@@ -256,7 +256,7 @@ ephy_print_utils_page_setup_new_from_key_file (GKeyFile *key_file,
 					       GError  **error)
 {
   GtkPageSetup *page_setup = NULL;
-  GtkPaperSize *paper_size;
+  GtkPaperSize *paper_size = NULL;
   gdouble width, height, top, bottom, left, right;
   char *name = NULL, *ppd_name = NULL, *display_name = NULL, *orientation = NULL;
   gboolean retval = TRUE;

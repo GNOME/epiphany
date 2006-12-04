@@ -148,7 +148,7 @@ higgy_indent_widget (GtkWidget *widget)
 
 	hbox = gtk_hbox_new (FALSE, 6);
 
-	label = gtk_label_new ("");
+	label = gtk_label_new (NULL);
 	gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, TRUE, 6);
 	gtk_widget_show (label);
 

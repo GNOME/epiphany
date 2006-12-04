@@ -1,3 +1,32 @@
+2006-12-04  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.ac:
+
+	Version 2.17.3.
+
+	* embed/mozilla/GtkNSSDialogs.cpp:
+
+	Use NULL for gtk_label_new instead of "".
+
+	* lib/ephy-print-utils.c:
+	(ephy_print_utils_page_setup_new_from_key_file):
+
+	Fix possible invalid free.
+
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_images_unref),
+	(ephy_spinner_images_load), (ephy_spinner_load_images),
+	(ephy_spinner_expose), (bump_spinner_frame_cb),
+	(ephy_spinner_start), (ephy_spinner_stop):
+
+	Fix compliance with icon theme spec by skipping the first frame in the
+	animation when in spinning mode. Bug #382207.
+	Try the "process-working" icon first and fall back to "gnome-spinner"
+	when it's not available.
+
+	* m4/gecko.m4:
+
+	Updated.
+
 2006-12-04  Luca Ferretti  <elle.uca@libero.it>
 
 	* configure.in:
