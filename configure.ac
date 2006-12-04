@@ -638,6 +638,17 @@ data/chrome/Makefile
 data/chrome/brand.dtd
 data/chrome/brand.properties
 data/glade/Makefile
+data/icons/Makefile
+data/icons/16x16/Makefile
+data/icons/16x16/actions/Makefile
+data/icons/22x22/Makefile
+data/icons/22x22/actions/Makefile
+data/icons/24x24/Makefile
+data/icons/24x24/actions/Makefile
+data/icons/32x32/Makefile
+data/icons/32x32/actions/Makefile
+data/icons/scalable/Makefile
+data/icons/scalable/actions/Makefile
 data/art/Makefile
 data/ui/Makefile
 doc/Makefile
