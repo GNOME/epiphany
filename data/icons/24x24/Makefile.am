@@ -1,5 +1,6 @@
 SUBDIRS = \
-	actions
+	actions  \
+	status
 
 MAINTAINERCLEANFILES =  \
 	Makefile.in
