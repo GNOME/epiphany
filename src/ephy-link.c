@@ -114,7 +114,7 @@ ephy_link_flags_from_current_event (void)
 		{
 			flags = EPHY_LINK_NEW_WINDOW;
 		}
-		else if (state == 0)
+		else if (state == 0 || state == GDK_CONTROL_MASK)
 		{
 			flags = EPHY_LINK_NEW_TAB;
 		}
