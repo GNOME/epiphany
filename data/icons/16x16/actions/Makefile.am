@@ -5,7 +5,7 @@ context = actions
 iconsdir = $(themedir)/$(size)/$(context)
 
 icons_DATA = \
-	epiphany-download.png
+	download.png
 
 
 EXTRA_DIST =                            \
