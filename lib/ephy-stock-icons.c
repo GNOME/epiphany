@@ -65,14 +65,8 @@ ephy_stock_icons_init (void)
 
 	for (i = 0; i < (int) G_N_ELEMENTS (items); i++)
 	{
-		char *fn;
-
 		icon_source = gtk_icon_source_new ();
-
-		fn = g_strconcat (items[i].stock_id, ".png", NULL);
 		gtk_icon_source_set_icon_name (icon_source, items[i].stock_id);
-		gtk_icon_source_set_filename (icon_source, ephy_file (fn));
-		g_free (fn);
 
 		icon_set = gtk_icon_set_new ();
 		gtk_icon_set_add_source (icon_set, icon_source);

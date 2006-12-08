@@ -1,3 +1,50 @@
+2006-12-08  Luca Ferretti <elle.uca@libero.it>
+
+	* data/art/Makefile.am:
+	* data/art/epiphany-bookmarks.png:
+	* data/art/epiphany-download.png:
+	* data/art/epiphany-entry.png:
+	* data/art/epiphany-history.png:
+	* data/art/epiphany-popup-hidden.png:
+	* data/art/epiphany-popup-hidden.svg:
+
+	Remove old stock icons
+	
+	* data/icons/16x16/actions/download.png:
+	* data/icons/16x16/actions/epiphany-download.png:
+	* data/icons/22x22/actions/download.png:
+	* data/icons/22x22/actions/epiphany-download.png:
+	* data/icons/24x24/actions/Makefile.am:
+	* data/icons/24x24/actions/download.png:
+	* data/icons/24x24/actions/epiphany-download.png:
+	* data/icons/24x24/actions/location-entry.png:
+	* data/icons/24x24/actions/web-bookmarks.png:
+	* data/icons/24x24/actions/web-history.png:
+	* data/icons/32x32/actions/download.png:
+	* data/icons/32x32/actions/epiphany-download.png:
+	* data/icons/scalable/actions/download.svg:
+	* data/icons/scalable/actions/epiphany-download.svg:
+
+	Move old stock icons here and rename "epiphany-download"
+	to "download"
+
+	* lib/ephy-stock-icons.c: (ephy_stock_icons_init):
+
+	Use gtk_icon_source_set_icon_name for EPHY_STOCK*
+	
+	* lib/ephy-stock-icons.h:
+
+	Update named icons to installed icons.
+	
+	* src/ephy-main.c: (main):
+
+	Call gtk_icon_theme_append_search_path to add custom Ephy
+	directory for themed icons.
+
+	This should complete the icon theme support to Epiphany.
+	Of course there is still some work to do, as well as
+	provide fresh icons at all sizes and define the names.
+
 2006-12-08  Luca Ferretti  <elle.uca@libero.it>
 
 	* data/icons/.cvsignore:

@@ -23,11 +23,11 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_STOCK_POPUPS	   "epiphany-popup-hidden"
-#define EPHY_STOCK_HISTORY         "epiphany-history"
-#define EPHY_STOCK_BOOKMARKS       "epiphany-bookmarks"
-#define EPHY_STOCK_ENTRY	   "epiphany-entry"
-#define EPHY_STOCK_DOWNLOAD	   "epiphany-download"
+#define EPHY_STOCK_POPUPS	   "popup-hidden"
+#define EPHY_STOCK_HISTORY         "web-history"
+#define EPHY_STOCK_BOOKMARKS       "web-bookmarks"
+#define EPHY_STOCK_ENTRY	   "location-entry"
+#define EPHY_STOCK_DOWNLOAD	   "download"
 
 #define STOCK_NEW_TAB              "tab-new"
 #define STOCK_NEW_WINDOW           "window-new"

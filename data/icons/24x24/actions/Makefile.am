@@ -4,14 +4,16 @@ context = actions
 
 iconsdir = $(themedir)/$(size)/$(context)
 
-icons_DATA = \
-	epiphany-download.png
+icons_DATA =			\
+	download.png		\
+	web-bookmarks.png	\
+	web-history.png		\
+	location-entry.png
 
-
-EXTRA_DIST =                            \
+EXTRA_DIST =			\
 	$(icons_DATA)
 
-MAINTAINERCLEANFILES =                  \
+MAINTAINERCLEANFILES =		\
 	Makefile.in
 
 install-data-local: install-iconsDATA

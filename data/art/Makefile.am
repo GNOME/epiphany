@@ -1,9 +1,4 @@
-art_DATA = \
-	epiphany-entry.png \
-	epiphany-download.png \
-	epiphany-history.png	\
-	epiphany-popup-hidden.png \
-	epiphany-bookmarks.png
+art_DATA = 
 
 appicon_DATA = epiphany-bookmarks.png
 appicondir = $(datadir)/icons/hicolor/48x48/apps
