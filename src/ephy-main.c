@@ -520,12 +520,6 @@ main (int argc,
 				      GNOME_PARAM_APP_DATADIR, DATADIR,
 				      NULL);
 
-	/* GtkIconTheme will then look in Ephy custom hicolor dir
-	 * for icons as well as the standard search paths
-	 */
-	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-					   DATADIR "/epiphany/icons");
-
 	/* libgnome keeps a reference to the global program, so drop
 	 * our reference here, to simplify cleanup on the many exit paths.
 	 */

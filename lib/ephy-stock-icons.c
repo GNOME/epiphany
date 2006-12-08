@@ -93,4 +93,11 @@ ephy_stock_icons_init (void)
 
 	gtk_icon_factory_add_default (factory);
 	g_object_unref (factory);
+
+	/* GtkIconTheme will then look in Ephy custom hicolor dir
+	 * for icons as well as the standard search paths
+	 */
+	/* FIXME: multi-head! */
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+					   SHARE_DIR G_DIR_SEPARATOR_S "icons");
 }
