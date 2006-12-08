@@ -599,10 +599,9 @@ impl_init (EphyEmbedSingle *esingle)
 
 #ifdef HAVE_GECKO_1_9
 	gtk_moz_embed_set_path (MOZILLA_HOME);
-#else
+#endif
 	/* Set mozilla binary path */
 	gtk_moz_embed_set_comp_path (MOZILLA_HOME);
-#endif
 
 	nsCOMPtr<nsIDirectoryServiceProvider> dp = new EphyDirectoryProvider ();
 	if (!dp) return FALSE;
