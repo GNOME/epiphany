@@ -24,7 +24,7 @@
 G_BEGIN_DECLS
 
 #define EPHY_STOCK_POPUPS	   "popup-hidden"
-#define EPHY_STOCK_HISTORY         "web-history"
+#define EPHY_STOCK_HISTORY         "history-view"
 #define EPHY_STOCK_BOOKMARKS       "web-bookmarks"
 #define EPHY_STOCK_ENTRY	   "location-entry"
 #define EPHY_STOCK_DOWNLOAD	   "download"

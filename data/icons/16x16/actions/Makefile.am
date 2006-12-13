@@ -4,7 +4,8 @@ context = actions
 
 iconsdir = $(themedir)/$(size)/$(context)
 icons_DATA = \
-	download.png
+	download.png		\
+	history-view.png
 
 EXTRA_DIST = \
 	$(icons_DATA)
