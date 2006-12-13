@@ -3,6 +3,7 @@ size = 24x24
 context = actions
 
 iconsdir = $(themedir)/$(size)/$(context)
+
 icons_DATA = \
 	download.png		\
 	history-view.png	\
@@ -10,4 +11,5 @@ icons_DATA = \
 	location-entry.png
 
 EXTRA_DIST = \
-	$(icons_DATA)
+	$(icons_DATA)	\
+	$(noinst_DATA)
