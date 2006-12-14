@@ -12,7 +12,7 @@ icons_DATA = \
 noinst_DATA = \
 	download.xcf		\
 	bookmark-view.xcf	\
-	history-view.svg	\
+	history-view.svg
 
 EXTRA_DIST = \
 	$(icons_DATA)	\
