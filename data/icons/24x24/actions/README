@@ -1,0 +1,13 @@
+From Tango website (http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines)
+
+
+   Historically Gnome uses 24×24 size (which is 1/4 of 48×48);
+   just adding a 1 pixel empty space on all sides can make
+   Tango icons useful on the Gnome desktop in the transition
+   phase. One can easily do this with imagemagick:
+
+   convert -bordercolor Transparent -border 1x1 tango_size.png gnome_size.png
+
+
+So sources for "small" size should be drawn at 22x22 pixel and converted
+to 24x24 adding a transparent border.

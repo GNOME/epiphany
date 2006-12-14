@@ -8,7 +8,7 @@ icons_DATA = \
 	download.png
 
 noinst_DATA = \
-	epiphany-download.svg
+	download.svg
 
 EXTRA_DIST = \
 	$(icons_DATA)	\

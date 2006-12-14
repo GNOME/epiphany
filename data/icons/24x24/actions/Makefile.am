@@ -6,8 +6,8 @@ iconsdir = $(themedir)/$(size)/$(context)
 
 icons_DATA = \
 	download.png		\
+	bookmark-view.png	\
 	history-view.png	\
-	web-bookmarks.png	\
 	location-entry.png
 
 EXTRA_DIST = \
