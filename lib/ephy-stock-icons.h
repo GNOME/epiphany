@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 #define STOCK_NEW_TAB              "tab-new"
 #define STOCK_NEW_WINDOW           "window-new"
-#define STOCK_VIEW_SOURCE	   "stock_view-html-source"
+#define STOCK_VIEW_SOURCE	   "text-html"
 #define STOCK_SEND_MAIL            "mail-forward"
 #define STOCK_ADD_BOOKMARK         "bookmark-new"
 #define STOCK_BOOKMARK             "stock_bookmark"

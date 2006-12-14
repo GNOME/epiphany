@@ -217,7 +217,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "ViewEncoding", NULL, N_("Text _Encoding"), NULL,
 	  N_("Change the text encoding"),
 	  NULL },
-	{ "ViewPageSource", STOCK_VIEW_SOURCE, N_("_Page Source"), "<control>U",
+	{ "ViewPageSource", NULL, N_("_Page Source"), "<control>U",
 	  N_("View the source code of the page"),
 	  G_CALLBACK (window_cmd_view_page_source) },
         { "ViewPageSecurityInfo", NULL, N_("Page _Security Information..."), NULL,
