@@ -5,10 +5,14 @@ context = actions
 iconsdir = $(themedir)/$(size)/$(context)
 
 icons_DATA = \
-	download.png
+	download.png		\
+	bookmark-view.png	\
+	history-view.png
 
 noinst_DATA = \
-	download.svg
+	download.svg		\
+	bookmark-view.svg	\
+	history-view.svg
 
 EXTRA_DIST = \
 	$(icons_DATA)	\
