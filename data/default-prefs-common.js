@@ -72,6 +72,11 @@ pref("network.protocol-handler.warn-external.nntp", false);
 pref("network.protocol-handler.warn-external.snews", false);
 pref("network.protocol-handler.warn-external.webcal", false);
 
+// don't warn
+pref("network.protocol-handler.warn-external.rtsp", false);
+pref("network.protocol-handler.warn-external.mms", false);
+pref("network.protocol-handler.warn-external.mmsh", false);
+
 // disable xpinstall
 pref("xpinstall.enabled", false);
 
