@@ -47,6 +47,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-gui.h"
+#include "ephy-stock-icons.h"
 
 #include "AutoJSContextStack.h"
 #include "AutoWindowModalState.h"
@@ -160,7 +161,7 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 					     GTK_WINDOW (dialog));
 	}
 
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);

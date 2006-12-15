@@ -43,7 +43,7 @@ enum
 	LAST_SIGNAL
 };
 
-static guint signals[LAST_SIGNAL];
+/* static guint signals[LAST_SIGNAL]; */
 static GObjectClass *parent_class;
 
 /* Helper functions */

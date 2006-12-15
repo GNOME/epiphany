@@ -27,6 +27,7 @@
 #include "ephy-state.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
+#include "ephy-stock-icons.h"
 
 #include <gtk/gtkstock.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -116,7 +117,7 @@ ephy_file_chooser_constructor (GType type,
 		(GTK_FILE_CHOOSER (object), downloads_dir, NULL);
 	g_free (downloads_dir);
 
-	gtk_window_set_icon_name (GTK_WINDOW (object), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (object), EPHY_STOCK_EPHY);
 
 	return object;
 }

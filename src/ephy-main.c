@@ -611,7 +611,7 @@ main (int argc,
 	g_set_application_name (_("Web Browser"));
 
 	/* Set default window icon */
-	gtk_window_set_default_icon_name ("web-browser");
+	gtk_window_set_default_icon_name (EPHY_STOCK_EPHY);
 
 	startup_error_quark = g_quark_from_static_string ("epiphany-startup-error");
 

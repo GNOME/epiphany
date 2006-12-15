@@ -54,7 +54,7 @@ ephy_spinner_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
 
 	if (style == GTK_TOOLBAR_BOTH)
 	{
-		spinner_size = GTK_ICON_SIZE_INVALID;
+		spinner_size = GTK_ICON_SIZE_DIALOG;
 	}
 	else
 	{

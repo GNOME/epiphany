@@ -560,7 +560,7 @@ ephy_toolbar_constructor (GType type,
 	gtoolbar = GTK_TOOLBAR (priv->fixed_toolbar);
 	gtk_toolbar_set_show_arrow (gtoolbar, FALSE);
 
-	priv->spinner = ephy_spinner_tool_item_new ();
+	priv->spinner = EPHY_SPINNER_TOOL_ITEM (ephy_spinner_tool_item_new ());
 	gtk_toolbar_insert (gtoolbar, GTK_TOOL_ITEM (priv->spinner), -1);
 	gtk_widget_show (GTK_WIDGET (priv->spinner));
 

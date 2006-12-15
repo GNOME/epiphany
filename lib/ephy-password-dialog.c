@@ -35,6 +35,7 @@
 #include "ephy-gui.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-state.h"
+#include "ephy-stock-icons.h"
 
 #include "ephy-password-dialog.h"
 
@@ -375,7 +376,7 @@ ephy_password_dialog_constructor (GType type,
 	gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* Message has 24, we want 12 = 2 + 2 * 5 */
 
 	//	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
-	gtk_window_set_icon_name (window, "web-browser");
+	gtk_window_set_icon_name (window, EPHY_STOCK_EPHY);
 
 	gtk_image_set_from_icon_name (GTK_IMAGE (message_dialog->image),
 				      GTK_STOCK_DIALOG_AUTHENTICATION,

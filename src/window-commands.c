@@ -46,6 +46,7 @@
 #include "ephy-location-entry.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-link.h"
+#include "ephy-stock-icons.h"
 #include "pdm-dialog.h"
 
 #include <string.h>
@@ -801,7 +802,7 @@ window_cmd_help_about (GtkAction *action,
 				 * line seperated by newlines (\n).
 				 */
 			       "translator-credits", _("translator-credits"),
-			       "logo-icon-name", "web-browser",
+			       "logo-icon-name", EPHY_STOCK_EPHY,
 			       "website", "http://www.gnome.org/projects/epiphany",
 			       "website-label", _("GNOME Web Browser Website"),
 			       "license", licence,

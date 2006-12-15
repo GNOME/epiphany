@@ -44,6 +44,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-prefs.h"
+#include "ephy-stock-icons.h"
 
 #include "AutoJSContextStack.h"
 #include "AutoWindowModalState.h"
@@ -174,7 +175,7 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
   g_object_unref (custom_tab);
   g_object_unref (xml);
 
-  gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+  gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
   int response = gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_hide (dialog);
@@ -422,7 +423,7 @@ GeckoPrintService::PrintUnattended (nsIDOMWindow *aParent,
 				     "%s", _("Preparing to print"));
   }
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-  gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+  gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
   FindPrinterData *data = g_new0 (PrinterData, 1);

@@ -34,6 +34,7 @@
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
+#include "ephy-stock-icons.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtkmain.h>
@@ -282,7 +283,7 @@ confirm_shutdown_cb (GnomeClient *client,
 			       _("_Abort Downloads"), GTK_RESPONSE_ACCEPT);
 
 	gtk_window_set_title (GTK_WINDOW (dialog), "");
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 	gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_REJECT);
 
@@ -617,7 +618,7 @@ session_command_autoresume (EphySession *session,
 			       _("_Recover"), GTK_RESPONSE_ACCEPT);
 
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Crash Recovery"));
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 	gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
 	gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), FALSE);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);

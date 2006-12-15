@@ -51,6 +51,8 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkvbox.h>
 
+#include "ephy-stock-icons.h"
+
 #include <nsCOMPtr.h>
 #include <nsIDOMWindow.h>
 #include <nsIInterfaceRequestor.h>
@@ -264,7 +266,7 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), aDefaultResponse);
 
 	gtk_window_set_title (GTK_WINDOW (dialog), aTitle);
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	int response = gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);

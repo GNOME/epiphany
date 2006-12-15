@@ -1,3 +1,39 @@
+2006-12-15  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/GeckoPrintService.cpp:
+	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/mozilla/GtkNSSKeyPairDialogs.cpp:
+	* embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:
+	* lib/ephy-file-chooser.c: (ephy_file_chooser_constructor):
+	* lib/ephy-gui.c: (ephy_gui_check_location_writable):
+	* lib/ephy-module.c:
+	* lib/ephy-password-dialog.c: (ephy_password_dialog_constructor):
+	* lib/ephy-spell-check.c:
+	* lib/ephy-stock-icons.h:
+	* lib/widgets/.cvsignore:
+	* lib/widgets/ephy-spinner-tool-item.c:
+	(ephy_spinner_tool_item_toolbar_reconfigured):
+	* lib/widgets/testspinner.c:
+	* plugins/desktop-file/plugin.cpp:
+	* src/bookmarks/ephy-bookmarks.c: (redirect_cb):
+	* src/ephy-history-window.c: (confirmation_dialog_construct):
+	* src/ephy-main.c: (main):
+	* src/ephy-session.c: (confirm_shutdown_cb),
+	(session_command_autoresume):
+	* src/ephy-shell.c: (ephy_shell_add_sidebar_cb):
+	* src/ephy-toolbar-editor.c: (ephy_toolbar_editor_constructor):
+	* src/ephy-window.c: (construct_confirm_close_dialog):
+	* src/pdm-dialog.c: (pdm_dialog_init):
+	* src/window-commands.c: (window_cmd_help_about):
+
+	Use a define for the default window icon. Bug #385872.
+
+        * lib/ephy-module.c:
+
+	The symbol can be NULL even though the symbol lookup succeeded.
+
 2006-12-14  Chhristian Persch  <chpe@cvs.gnome.org>
 
 	* data/default-prefs-common.js:

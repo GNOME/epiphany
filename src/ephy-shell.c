@@ -52,6 +52,7 @@
 #include "ephy-toolbar.h"
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
+#include "ephy-stock-icons.h"
 
 #ifdef ENABLE_NETWORK_MANAGER
 #include "ephy-net-monitor.h"
@@ -199,7 +200,7 @@ ephy_shell_add_sidebar_cb (EphyEmbedSingle *embed_single,
 					 _("Sidebar extension required"));
 
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Sidebar Extension Required"));
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 		  _("The link you clicked needs the sidebar extension to be "

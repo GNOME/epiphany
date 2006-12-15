@@ -86,6 +86,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-password-dialog.h"
+#include "ephy-stock-icons.h"
 
 #include "AutoJSContextStack.h"
 #include "AutoWindowModalState.h"
@@ -253,7 +254,7 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	}
 
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	higgy_setup_dialog (GTK_DIALOG (dialog), 
 			    GTK_STOCK_DIALOG_WARNING, &label, &vbox);
@@ -591,7 +592,7 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 			   "needs to be updated.\n\n"
 			   "Please ask your system administrator for assistance."),
 			 NS_ConvertUTF16toUTF8 (commonName).get ());
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	g_signal_connect (dialog, "response",
 			  (GCallback) gtk_widget_destroy, NULL);
@@ -633,7 +634,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 					     GTK_WINDOW (dialog));
 	}
 
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_WARNING,
 			    &label, NULL);
@@ -714,7 +715,7 @@ GtkNSSDialogs::NotifyCACertExists (nsIInterfaceRequestor *ctx)
 					     GTK_WINDOW (dialog));
 	}
 
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_ERROR,
 			    &label, NULL);
@@ -882,7 +883,7 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 					      GTK_STOCK_OK, GTK_RESPONSE_OK,
 					      (char *) NULL);
 
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Certificate Revocation List Imported"));
 
 	/* Needed because gparent == NULL always because of mozilla sucks */
@@ -1229,7 +1230,7 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 		gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 	}
 
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Certificate Properties"));
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
@@ -1580,7 +1581,7 @@ GtkNSSDialogs::ChooseToken (nsIInterfaceRequestor *aContext,
 		   GTK_BUTTONS_CANCEL,
 		   _("Please select a token:"));
 
-  gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+  gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
   GtkWidget *combo = gtk_combo_box_new_text ();
   for (PRUint32 i = 0; i < count; ++i) {
@@ -1667,7 +1668,7 @@ GtkNSSDialogs::ConfirmKeyEscrow (nsIX509Cert *aEscrowAuthority,
        "It is strongly recommended not to allow it."),
      NS_ConvertUTF16toUTF8 (commonName).get ());
 
-  gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+  gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
   GtkWidget *button = gtk_dialog_add_button (GTK_DIALOG (dialog),
 					     _("_Reject"),

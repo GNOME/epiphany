@@ -32,6 +32,7 @@
 #include "egg-editable-toolbar.h"
 #include "egg-toolbar-editor.h"
 #include "eel-gconf-extensions.h"
+#include "ephy-stock-icons.h"
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
@@ -199,7 +200,7 @@ ephy_toolbar_editor_constructor (GType type,
 	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 2);
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Toolbar Editor"));
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (priv->window));
 	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (priv->window)),

@@ -34,6 +34,8 @@
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkmessagedialog.h>
 
+#include "ephy-stock-icons.h"
+
 #include <npupp.h>
 #include <nsCOMPtr.h>
 #include <nsIDOMWindow.h>
@@ -206,7 +208,7 @@ show_error_dialog (NPP instance,
 
 	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 						  secondary_text);
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 

@@ -327,7 +327,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
 			       action_label, mAction);
 
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
  
 	int defaultResponse = mAction == CONTENT_ACTION_NONE
 				? (int) GTK_RESPONSE_CANCEL

@@ -756,7 +756,7 @@ construct_confirm_close_dialog (EphyWindow *window)
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
 	/* FIXME gtk_window_set_title (GTK_WINDOW (dialog), _("Close Document?")); */
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	gtk_window_group_add_window (GTK_WINDOW (window)->group, GTK_WINDOW (dialog));
 
