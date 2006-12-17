@@ -75,6 +75,7 @@ struct _EphyLocationEntryPrivate
 	guint action_col;
 	guint keywords_col;
 	guint relevance_col;
+	guint extra_col;
 
 	guint hash;
 
@@ -997,17 +998,19 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 				    guint text_col,
 				    guint action_col,
 				    guint keywords_col,
-				    guint relevance_col)
+				    guint relevance_col,
+				    guint extra_col)
 {
 	EphyLocationEntryPrivate *priv = le->priv;
 	GtkTreeModel *sort_model;
 	GtkEntryCompletion *completion;
-	GtkCellRenderer *cell;
+	GtkCellRenderer *cell, *extracell;
 
 	le->priv->text_col = text_col;
 	le->priv->action_col = action_col;
 	le->priv->keywords_col = keywords_col;
 	le->priv->relevance_col = relevance_col;
+	le->priv->extra_col = extra_col;
 
 	sort_model = gtk_tree_model_sort_new_with_model (model);
 	g_object_unref (model);
@@ -1025,10 +1028,28 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 				G_CALLBACK (action_activated_after_cb), le);
 
 	cell = gtk_cell_renderer_text_new ();
+	g_object_set (cell, 
+			"ellipsize", PANGO_ELLIPSIZE_END,
+			"ellipsize-set", TRUE,
+			NULL);
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
 				    cell, TRUE);
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
 				       cell, "text", text_col);
+
+	extracell = gtk_cell_renderer_text_new ();
+	g_object_set (extracell, 
+			"ellipsize", PANGO_ELLIPSIZE_END,
+			"ellipsize-set", TRUE,
+			"foreground", "Gray",
+			"foreground-set", TRUE,
+			"alignment", PANGO_ALIGN_RIGHT,
+			NULL);
+
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
+				    extracell, TRUE);
+	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
+				       extracell, "text", extra_col);
 
 	gtk_entry_set_completion (GTK_ENTRY (priv->icon_entry->entry), completion);
 	g_object_unref (completion);

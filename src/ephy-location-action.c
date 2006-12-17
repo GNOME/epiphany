@@ -368,7 +368,8 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 						    EPHY_COMPLETION_TEXT_COL,
 						    EPHY_COMPLETION_ACTION_COL,
 						    EPHY_COMPLETION_KEYWORDS_COL,
-						    EPHY_COMPLETION_RELEVANCE_COL);
+						    EPHY_COMPLETION_RELEVANCE_COL,
+						    EPHY_COMPLETION_EXTRA_COL);
 
 		add_completion_actions (action, proxy);
 

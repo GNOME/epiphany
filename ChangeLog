@@ -1,6 +1,20 @@
 2006-12-17  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_set_completion):
+	* lib/widgets/ephy-location-entry.h:
+	* src/ephy-completion-model.c:
+	(ephy_completion_model_get_column_type),
+	(ephy_completion_model_get_value):
+	* src/ephy-completion-model.h:
+	* src/ephy-location-action.c: (connect_proxy):
+
+	List title and URL in location entry drop-down. Bug #169550,
+	patch by Diego Escalante Urrelo.
+
+2006-12-17  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/widgets/ephy-location-entry.c:
 	(ephy_location_entry_style_set):
 
 	Fix secure location bar colouring with dark themes. Bug #347343,

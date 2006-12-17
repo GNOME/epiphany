@@ -71,7 +71,8 @@ void		ephy_location_entry_set_completion	(EphyLocationEntry *le,
 							 guint text_col,
 							 guint action_col,
 							 guint keywords_col,
-							 guint relevance_col);
+							 guint relevance_col,
+							 guint extra_col);
 
 void		ephy_location_entry_set_location	(EphyLocationEntry *le,
 							 const char *address,
