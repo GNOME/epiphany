@@ -107,6 +107,7 @@ static const GtkTargetEntry url_drag_types [] =
 };
 
 static const GdkColor fallback_bg_colour = { 0, 0xf7f7, 0xf7f7, 0xbebe }; /* yellow-ish */
+static const GdkColor fallback_fg_colour = { 0, 0, 0, 0 }; /* black */
 
 static void ephy_location_entry_class_init (EphyLocationEntryClass *klass);
 static void ephy_location_entry_init (EphyLocationEntry *le);
@@ -208,8 +209,7 @@ ephy_location_entry_style_set (GtkWidget *widget,
 	}
 	else
 	{
-		/* FIXME: fall back to black text maybe? */
-		priv->secure_fg_colour = widget->style->text[GTK_STATE_NORMAL];
+		priv->secure_fg_colour = fallback_fg_colour;
 	}
 
 	if (bg_colour != NULL)
