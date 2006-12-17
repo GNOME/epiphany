@@ -114,7 +114,7 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_srcdir)/src/bookmarks   \
 	-DEXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/extensions"\" 	\
 	-DLOADER_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/loaders"\"		\
-	-DDATADIR=\""$(datadir)"\" 	\
+	-DDATADIR=\""$(pkgdatadir)"\" 	\
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
 	$(AM_CPPFLAGS)
 

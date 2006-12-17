@@ -29,6 +29,9 @@ schema_DATA = $(schema_in_files:.schemas.in=.schemas) $(extra_schema_files)
 aboutdir = $(pkgdatadir)
 about_DATA = epiphany.xhtml
 
+aboutdialogdir = $(pkgdatadir)
+aboutdialog_DATA = about.ini
+
 mimepermissiondir = $(pkgdatadir)
 mimepermission_DATA = mime-types-permissions.xml
 
@@ -63,6 +66,7 @@ if GCONF_SCHEMAS_INSTALL
 endif
 
 EXTRA_DIST = \
+	$(aboutdialog_DATA)		\
 	$(service_in_files)		\
 	$(schema_in_files)		\
 	$(extra_schema_files)		\

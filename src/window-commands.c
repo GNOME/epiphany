@@ -721,40 +721,12 @@ window_cmd_help_contents (GtkAction *action,
 	ephy_gui_help (GTK_WINDOW (window), "epiphany", NULL);
 }
 
+#define ABOUT_GROUP "About"
+
 void
 window_cmd_help_about (GtkAction *action,
 		       GtkWidget *window)
 {
-	const char * const authors[] = {
-		"Xan Lopez",
-		"Christian Persch",
-		"Jean-François Rameau",
-		"",
-		_("Contact us at:"),
-		"<epiphany-list@gnome.org>",
-		"",
-		_("Contributors:"),
-		"Crispin Flowerday",
-		"Peter Harvey",
-		"Raphaël Slinckx",
-		"",
-		_("Past developers:"),
-		"Marco Pesenti Gritti",
-		"David Bordoley",
-		"Adam Hooper",
-		NULL,
-	};
-	const char * const documenters[] = {
-		"Piers Cornwell", 
-		"Victor Osadci",
-		"Patanjali Somayaji",
-		"David Bordoley",
-		"",
-		_("Contact us at:"),
-		_("<epiphany-list@gnome.org> or <gnome-doc-list@gnome.org>"),
-		NULL
-	};
-
 	const char *licence_part[] = {
 		N_("The GNOME Web Browser is free software; you can redistribute it and/or modify "
 		   "it under the terms of the GNU General Public License as published by "
@@ -772,6 +744,81 @@ window_cmd_help_about (GtkAction *action,
 	EphyEmbedShell *shell;
 	EphyEmbedSingle *single;
 	char *licence, *comments;
+	GKeyFile *key_file;
+	GError *error = NULL;
+	char **list, **authors, **contributors, **past_authors, **artists, **documenters;
+	gsize n_authors, n_contributors, n_past_authors, n_artists, n_documenters, i, j;
+
+	key_file = g_key_file_new ();
+	if (!g_key_file_load_from_file (key_file, DATADIR G_DIR_SEPARATOR_S "about.ini",
+				        0, &error))
+	{
+		g_warning ("Couldn't load about data: %s\n", error->message);
+		g_error_free (error);
+		return;
+	}
+
+	list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Authors",
+					   &n_authors, NULL);
+	contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors",
+						   &n_contributors, NULL);
+	past_authors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "PastAuthors",
+						   &n_past_authors, NULL);
+
+#define APPEND(_to,_from) \
+	_to[i++] = g_strdup (_from);
+
+#define APPEND_STRV_AND_FREE(_to,_from) \
+	if (_from)\
+	{\
+		for (j = 0; _from[j] != NULL; ++j)\
+		{\
+			_to[i++] = _from[j];\
+		}\
+		g_free (_from);\
+	}
+
+	authors = g_new (char *, (list ? n_authors : 0) +
+			 	 (contributors ? n_contributors : 0) +
+				 (past_authors ? n_past_authors : 0) + 7 + 1);
+	i = 0;
+	APPEND_STRV_AND_FREE (authors, list);
+	APPEND (authors, "");
+	APPEND (authors, _("Contact us at:"));
+	APPEND (authors, "<epiphany-list@gnome.org>");
+	APPEND (authors, "");
+	APPEND (authors, _("Contributors:"));
+	APPEND_STRV_AND_FREE (authors, contributors);
+	APPEND (authors, "");
+	APPEND (authors, _("Past developers:"));
+	APPEND_STRV_AND_FREE (authors, past_authors);
+	authors[i++] = NULL;
+
+	list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Artists", &n_artists, NULL);
+
+	artists = g_new (char *, (list ? n_artists : 0) + 4 + 1);
+	i = 0;
+	APPEND_STRV_AND_FREE (artists, list);
+	APPEND (artists, "");
+	APPEND (artists, _("Contact us at:"));
+	APPEND (artists, "<gnome-art-list@gnome.org>");
+	APPEND (artists, "<gnome-themes-list@gnome.org>");
+	artists[i++] = NULL;
+	
+	list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Documenters", &n_documenters, NULL);
+
+	documenters = g_new (char *, (list ? n_documenters : 0) + 3 + 1);
+	i = 0;
+	APPEND_STRV_AND_FREE (documenters, list);
+	APPEND (documenters, "");
+	APPEND (documenters, _("Contact us at:"));
+	APPEND (documenters, "<gnome-doc-list@gnome.org>");
+	documenters[i++] = NULL;
+	
+#undef APPEND
+#undef APPEND_STRV_AND_FREE
+
+	g_key_file_free (key_file);
 
 	shell = ephy_embed_shell_get_default ();
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (shell));
@@ -790,6 +837,7 @@ window_cmd_help_about (GtkAction *action,
 			       "version", VERSION,
 			       "copyright", "Copyright © 2002-2004 Marco Pesenti Gritti\n"
 					    "Copyright © 2003-2006 The GNOME Web Browser Developers",
+			       "artists", artists,
 			       "authors", authors,
 			       "comments", comments,
 			       "documenters", documenters,
@@ -811,6 +859,9 @@ window_cmd_help_about (GtkAction *action,
 
 	g_free (comments);
 	g_free (licence);
+	g_strfreev (artists);
+	g_strfreev (authors);
+	g_strfreev (documenters);
 }
 
 void
