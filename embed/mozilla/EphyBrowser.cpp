@@ -221,6 +221,39 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 		/* ok, we accept this as a valid favicon for this site */
 		g_signal_emit_by_name (mOwner->mEmbed, "ge_favicon", spec.get());
 	}
+	else if (g_ascii_strcasecmp (rel.get (), "search") == 0)
+	{
+		linkElement->GetAttribute (NS_LITERAL_STRING ("type"), value);
+
+		nsCString cTypeVal;
+		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cTypeVal);
+
+		if (g_ascii_strcasecmp (cTypeVal.get (),
+		    "application/opensearchdescription+xml") == 0)
+		{
+			rv = linkElement->GetAttribute (NS_LITERAL_STRING ("href"), value);
+			if (NS_FAILED (rv) || !value.Length()) return NS_ERROR_FAILURE;
+
+			nsCString cLink;
+			NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cLink);
+
+			nsCOMPtr<nsIURI> docUri;
+			rv = GetDocURI (linkElement, getter_AddRefs (docUri));
+			NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && docUri, NS_ERROR_FAILURE);
+
+			nsCString resolvedLink;
+			rv = docUri->Resolve (cLink, resolvedLink);
+			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+			linkElement->GetAttribute (NS_LITERAL_STRING ("title"), value);
+
+			nsCString cTitle;
+			NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cTitle);
+
+			g_signal_emit_by_name (mOwner->mEmbed, "ge_search_link",
+					       cTypeVal.get(), cTitle.get(), resolvedLink.get());
+		}
+	}
 	else if (g_ascii_strcasecmp (rel.get (), "alternate") == 0)
 	{
 		linkElement->GetAttribute (NS_LITERAL_STRING ("type"), value);

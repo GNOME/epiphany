@@ -127,6 +127,10 @@ struct _EphyEmbedIface
 					 const char *type,
 					 const char *title,
 					 const char *address);
+	void	 (* search_link)	(EphyEmbed *embed,
+					 const char *type,
+					 const char *title,
+					 const char *address);
 	void	 (* location)		(EphyEmbed *embed,
 					 const char *location);
 	void	 (* net_state)		(EphyEmbed *embed,
