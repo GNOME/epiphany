@@ -296,6 +296,13 @@ button_deactivate_cb (GtkMenuShell *ms,
 {
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
 	gtk_button_released (GTK_BUTTON (button));
+
+	/*
+		Currently, GObject leaks connection IDs created with
+		g_signal_connect_object ()
+		See glib bug #118536
+	*/
+	g_signal_handlers_disconnect_by_func(ms, button_deactivate_cb, button);
 }
 
 static void
