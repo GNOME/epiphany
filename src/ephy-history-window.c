@@ -475,6 +475,8 @@ cmd_delete (GtkAction *action,
 		{
 			ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->sites_view));
 		}
+		
+		g_list_free (selected);
 	}
 }
 
