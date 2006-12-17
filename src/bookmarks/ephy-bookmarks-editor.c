@@ -901,6 +901,7 @@ cmd_bookmarks_export (GtkAction *action,
 {
 	GtkWidget *dialog, *hbox, *label, *combo;
 	int format;
+	char *filename;
 
 	dialog = GTK_WIDGET (ephy_file_chooser_new (_("Export Bookmarks"),
 		GTK_WIDGET (editor),
@@ -912,9 +913,11 @@ cmd_bookmarks_export (GtkAction *action,
 
 	gtk_file_chooser_set_current_folder
 		(GTK_FILE_CHOOSER (dialog), g_get_home_dir ());
-
+	
+	filename = g_strdup_printf ("%s.%s", _("Bookmarks"), export_formats[0].extension);
 	gtk_file_chooser_set_current_name
-		(GTK_FILE_CHOOSER (dialog), _("Bookmarks"));
+		(GTK_FILE_CHOOSER (dialog), filename);
+	g_free(filename);
 
 	/* Make a format selection combo & label */
 	label = gtk_label_new_with_mnemonic (_("File f_ormat:"));
