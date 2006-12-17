@@ -54,6 +54,9 @@
 
 #define INSANE_NUMBER_OF_URLS 20
 
+/* Tooltip related */
+#define TOOLTIP_MAX_LENGTH 256
+
 /* Until https://bugzilla.mozilla.org/show_bug.cgi?id=296002 is fixed */
 #define KEEP_TAB_IN_SAME_TOPLEVEL
 
@@ -491,6 +494,9 @@ ephy_notebook_init (EphyNotebook *notebook)
 	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (notebook), FALSE);
 
 	notebook->priv->title_tips = gtk_tooltips_new ();
+	gtk_tooltips_force_window (notebook->priv->title_tips);
+	gtk_label_set_max_width_chars (GTK_LABEL (notebook->priv->title_tips->tip_label), TOOLTIP_MAX_LENGTH);
+	gtk_label_set_ellipsize (GTK_LABEL (notebook->priv->title_tips->tip_label), PANGO_ELLIPSIZE_END);
 	g_object_ref_sink (notebook->priv->title_tips);
 
 	notebook->priv->show_tabs = TRUE;
@@ -574,7 +580,7 @@ static void
 sync_label (EphyTab *tab, GParamSpec *pspec, GtkWidget *proxy)
 {
 	GtkWidget *label, *ebox;
-	GtkTooltips *tips;	
+	GtkTooltips *tips;
 	const char *title;
 
 	ebox = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "label-ebox"));
