@@ -36,6 +36,8 @@ G_DEFINE_TYPE (EphyAdBlockManager, ephy_adblock_manager, G_TYPE_OBJECT);
 #define EPHY_ADBLOCK_MANAGER_GET_PRIVATE(object) \
 	(G_TYPE_INSTANCE_GET_PRIVATE ((object), \
          EPHY_TYPE_ADBLOCK_MANAGER, EphyAdBlockManagerPrivate))
+
+
 /**
  * ephy_adblock_manager_set_blocker:
  * @shell: a #EphyAdBlockManager
@@ -94,6 +96,16 @@ static void
 ephy_adblock_manager_class_init (EphyAdBlockManagerClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	g_signal_new ("rules_changed",
+		      G_OBJECT_CLASS_TYPE (object_class),
+		      G_SIGNAL_RUN_FIRST,
+		      G_STRUCT_OFFSET (EphyAdBlockManagerClass, rules_changed),
+		      NULL, NULL,
+		      g_cclosure_marshal_VOID__VOID,
+		      G_TYPE_NONE,
+		      0,
+		      0);
 
 	g_type_class_add_private (object_class, sizeof (EphyAdBlockManagerPrivate));
 }

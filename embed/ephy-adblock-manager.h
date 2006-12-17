@@ -48,6 +48,9 @@ struct _EphyAdBlockManager {
 
 struct _EphyAdBlockManagerClass {
         GObjectClass parent_class;
+
+	/* Signals */
+	void	(* rules_changed)      (EphyAdBlockManager *manager);
 };
 
 GType 			ephy_adblock_manager_get_type (void);
