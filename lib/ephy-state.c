@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2001 Matthew Mueller
  *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
@@ -192,6 +193,28 @@ ephy_state_window_set_position (GtkWidget *window, EphyNode *node)
 	}
 }
 
+static void
+ephy_state_save_unmaximized_size (EphyNode *node, int width, int height)
+{
+	ephy_node_set_property_int (node, EPHY_NODE_STATE_PROP_WIDTH,
+				    width);
+	ephy_node_set_property_int (node, EPHY_NODE_STATE_PROP_HEIGHT,
+				    height);
+	ephy_node_set_property_boolean (node, EPHY_NODE_STATE_PROP_SIZE,
+					TRUE);
+}
+
+static void
+ephy_state_save_position (EphyNode *node, int x, int y)
+{
+	ephy_node_set_property_int (node, EPHY_NODE_STATE_PROP_POSITION_X,
+				    x);
+	ephy_node_set_property_int (node, EPHY_NODE_STATE_PROP_POSITION_Y,
+				    y);
+	ephy_node_set_property_boolean (node, EPHY_NODE_STATE_PROP_POSITION,
+					TRUE);
+}
+
 
 static void
 ephy_state_window_save_size (GtkWidget *window, EphyNode *node)
@@ -199,7 +222,6 @@ ephy_state_window_save_size (GtkWidget *window, EphyNode *node)
 	int width, height;
 	gboolean maximize;
 	GdkWindowState state;
-	GValue value = { 0, };
 
 	state = gdk_window_get_state (GTK_WIDGET (window)->window);
 	maximize = ((state & GDK_WINDOW_STATE_MAXIMIZED) > 0);
@@ -209,30 +231,12 @@ ephy_state_window_save_size (GtkWidget *window, EphyNode *node)
 
 	if (!maximize)
 	{
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, width);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_WIDTH,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, height);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_HEIGHT,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_BOOLEAN);
-		g_value_set_boolean (&value, TRUE);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_SIZE,
-				        &value);
-		g_value_unset (&value);
+		ephy_state_save_unmaximized_size (node, width, height);
 	}
-
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, maximize);
-	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_MAXIMIZE,
-			        &value);
-	g_value_unset (&value);
+	
+	ephy_node_set_property_boolean (node,
+					EPHY_NODE_STATE_PROP_MAXIMIZE,
+					maximize);
 }
 
 static void
@@ -241,7 +245,6 @@ ephy_state_window_save_position (GtkWidget *window, EphyNode *node)
 	int x,y;
 	gboolean maximize;
 	GdkWindowState state;
-	GValue value = { 0, };
 
 	state = gdk_window_get_state (GTK_WIDGET (window)->window);
 	maximize = ((state & GDK_WINDOW_STATE_MAXIMIZED) > 0);
@@ -250,24 +253,7 @@ ephy_state_window_save_position (GtkWidget *window, EphyNode *node)
 	if (!maximize)
 	{
 		gtk_window_get_position (GTK_WINDOW (window), &x, &y);
-
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, x);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_X,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, y);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_Y,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_BOOLEAN);
-		g_value_set_boolean (&value, TRUE);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION,
-				        &value);
-		g_value_unset (&value);
+		ephy_state_save_position (node, x, y);
 	}
 }
 
@@ -327,43 +313,28 @@ create_window_node (const char *name,
 		    EphyStateWindowFlags flags)
 {
 	EphyNode *node;
-	GValue value = { 0, };
 
 	node = ephy_node_new (states_db);
 	ephy_node_add_child (states, node);
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, name);
-	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_NAME,
-			        &value);
-	g_value_unset (&value);
-
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, maximize);
-	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_MAXIMIZE,
-			        &value);
-	g_value_unset (&value);
+	ephy_node_set_property_string (node, EPHY_NODE_STATE_PROP_NAME,
+				       name);
+	ephy_node_set_property_boolean (node, EPHY_NODE_STATE_PROP_MAXIMIZE,
+					maximize);
 
 	if (flags & EPHY_STATE_WINDOW_SAVE_SIZE)
 	{
-		g_value_init (&value, G_TYPE_BOOLEAN);
-		g_value_set_boolean (&value, TRUE);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_SIZE,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, default_width);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_WIDTH,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, default_height);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_HEIGHT,
-				        &value);
-		g_value_unset (&value);
+		ephy_state_save_unmaximized_size (node,
+						 default_width,
+						 default_height);
 	}
+
+        if (flags & EPHY_STATE_WINDOW_SAVE_POSITION)
+        {
+		/* Constants for now, these should be default_width
+		   and default_height. */
+		ephy_state_save_position (node, 0, 0);
+        }
 
 	return node;
 }
@@ -404,16 +375,10 @@ paned_sync_position_cb (GtkWidget *paned,
 			EphyNode *node)
 {
 	int width;
-	GValue value = { 0, };
 
 	width = gtk_paned_get_position (GTK_PANED (paned));
-	
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, width);
-	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_WIDTH,
-			        &value);
-	g_value_unset (&value);
-
+	ephy_node_set_property_int (node, EPHY_NODE_STATE_PROP_WIDTH,
+				    width);
 	return FALSE;
 }
 
@@ -430,22 +395,15 @@ ephy_state_add_paned (GtkWidget *paned,
 	node = find_by_name (name);
 	if (node == NULL)
 	{
-		GValue value = { 0, };
-
 		node = ephy_node_new (states_db);
 		ephy_node_add_child (states, node);
 
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, name);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_NAME,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, default_width);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_WIDTH,
-				        &value);
-		g_value_unset (&value);
+		ephy_node_set_property_string (node,
+					       EPHY_NODE_STATE_PROP_NAME,
+					       name);
+		ephy_node_set_property_int (node,
+					    EPHY_NODE_STATE_PROP_WIDTH,
+					    default_width);
 	}
 
 	width = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_WIDTH);
@@ -460,12 +418,12 @@ sync_expander_cb (GtkExpander *expander,
 		  GParamSpec *pspec,
 		  EphyNode *node)
 {
-	GValue value = { 0, };
+	gboolean is_expanded;
 
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, gtk_expander_get_expanded (expander));
-	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_ACTIVE, &value);
-	g_value_unset (&value);
+	is_expanded = gtk_expander_get_expanded (expander);
+	ephy_node_set_property_boolean (node,
+					EPHY_NODE_STATE_PROP_ACTIVE,
+					is_expanded);
 }
 
 static void
@@ -473,12 +431,12 @@ sync_toggle_cb (GtkToggleButton *toggle,
 		GParamSpec *pspec,
 		EphyNode *node)
 {
-	GValue value = { 0, };
+	gboolean is_active;
 
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, gtk_toggle_button_get_active (toggle));
-	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_ACTIVE, &value);
-	g_value_unset (&value);
+	is_active = gtk_toggle_button_get_active (toggle);
+	ephy_node_set_property_boolean (node,
+					EPHY_NODE_STATE_PROP_ACTIVE,
+					is_active);
 }
 
 void 
@@ -494,22 +452,15 @@ ephy_state_add_expander (GtkWidget *widget,
 	node = find_by_name (name);
 	if (node == NULL)
 	{
-		GValue value = { 0, };
-
 		node = ephy_node_new (states_db);
 		ephy_node_add_child (states, node);
 
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, name);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_NAME,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_BOOLEAN);
-		g_value_set_boolean (&value, default_state);
-		ephy_node_set_property
-			(node, EPHY_NODE_STATE_PROP_ACTIVE, &value);
-		g_value_unset (&value);
+		ephy_node_set_property_string (node,
+					       EPHY_NODE_STATE_PROP_NAME,
+					       name);
+		ephy_node_set_property_boolean (node,
+						EPHY_NODE_STATE_PROP_ACTIVE,
+						default_state);
 	}
 
 	active = ephy_node_get_property_boolean

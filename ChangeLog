@@ -1,3 +1,19 @@
+2006-12-17  Björn Lindqvist  <bjourne@gmail.com>
+
+	* embed/ephy-encodings.c
+	* embed/ephy-favicon-cache.c
+	* embed/ephy-history.c
+	* embed/mozilla/GlobalHistory.cpp
+	* lib/ephy-state.c
+	* lib/widgets/ephy-node-view.c
+	* src/ephy-tab.c
+	* src/bookmarks/ephy-bookmarks.c
+
+	Refactor lots of code by using the function
+	ephy_node_set_property_XXX() instead of
+	ephy_node_set_property(). Also, add emacs mode headers to touched
+	files. Bug #381546.
+ 	
 2006-12-15  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/ContentHandler.cpp:

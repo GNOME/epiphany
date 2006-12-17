@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /* 
  *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
  *
@@ -959,7 +960,6 @@ cell_renderer_edited (GtkCellRendererText *cell,
                       const char *new_text,
                       EphyNodeView *view)
 {
-	GValue value = { 0, };
 	GtkTreePath *path;
 	GtkTreeIter iter, iter2;
 	EphyNode *node;
@@ -978,12 +978,8 @@ cell_renderer_edited (GtkCellRendererText *cell,
 		(GTK_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
 	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, new_text);
-	ephy_node_set_property (node,
-			        view->priv->editable_property,
-			        &value);
-	g_value_unset (&value);
+	ephy_node_set_property_string (node, view->priv->editable_property,
+				       new_text);
 
 	gtk_tree_path_free (path);
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2005 Christian Persch
@@ -1616,7 +1617,6 @@ ephy_tab_zoom_changed_cb (EphyEmbed *embed, float zoom, EphyTab *tab)
 	{
 		EphyHistory *history;
 		EphyNode *host;
-		GValue value = { 0, };
 		history = EPHY_HISTORY
 			(ephy_embed_shell_get_global_history (embed_shell));
 		host = ephy_history_get_host (history, address);
@@ -1626,12 +1626,9 @@ ephy_tab_zoom_changed_cb (EphyEmbed *embed, float zoom, EphyTab *tab)
 			float zoom;
 
 			zoom = ephy_embed_get_zoom (embed);
-
-			g_value_init (&value, G_TYPE_FLOAT);
-			g_value_set_float (&value, zoom);
-			ephy_node_set_property
-				(host, EPHY_NODE_HOST_PROP_ZOOM, &value);
-			g_value_unset (&value);
+                        ephy_node_set_property_float (host,
+                                                      EPHY_NODE_HOST_PROP_ZOOM,
+                                                      zoom);
 		}
 	}
 
@@ -2257,10 +2254,11 @@ ephy_tab_get_navigation_flags (EphyTab *tab)
  * ephy_tab_get_status_message:
  * @tab: an #EphyTab
  *
- * Returns the message displayed in @tab's #EphyWindow's #EphyStatusbar. If the
- * user is hovering the mouse over a hyperlink, this function will return the
- * same value as ephy_tab_get_link_message(). Otherwise, it will return a
- * network status message, or NULL.
+ * Returns the message displayed in @tab's #EphyWindow's
+ * #EphyStatusbar. If the user is hovering the mouse over a hyperlink,
+ * this function will return the same value as
+ * ephy_tab_get_link_message(). Otherwise, it will return a network
+ * status message, or NULL.
  *
  * The message returned has a limited lifetime, and so should be copied with
  * g_strdup() if it must be stored.

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2001, 2004 Philip Langdale
  *  Copyright © 2004 Christian Persch
@@ -196,13 +197,9 @@ MozGlobalHistory::SetURIGeckoFlags(nsIURI *aURI,
 	EphyNode *page = ephy_history_get_page (mGlobalHistory, spec.get());
 	if (page != NULL)
 	{
-		GValue value = { 0, };
-
-		g_value_init (&value, G_TYPE_LONG);
-		g_value_set_long (&value, (long) (gulong) aFlags);
-		ephy_node_set_property (page, EPHY_NODE_PAGE_PROP_GECKO_FLAGS, &value);
-		g_value_unset (&value);
-
+		ephy_node_set_property_long (page,
+					     EPHY_NODE_PAGE_PROP_GECKO_FLAGS,
+					     aFlags);
 		return NS_OK;
 	}
 

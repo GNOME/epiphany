@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2002, 2003 Marco Pesenti Gritti
  *
@@ -427,13 +428,9 @@ update_host_on_child_remove (EphyNode *node)
 
 	if (host_last_visit != new_host_last_visit)
 	{
-		GValue value = { 0, };
-
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, new_host_last_visit);
-		ephy_node_set_property (node, EPHY_NODE_PAGE_PROP_LAST_VISIT,
-				        &value);
-		g_value_unset (&value);
+		ephy_node_set_property_int (node,
+					    EPHY_NODE_PAGE_PROP_LAST_VISIT,
+					    new_host_last_visit);
 	}
 }
 
@@ -533,8 +530,8 @@ disable_history_notifier (GConfClient *client,
 static void
 ephy_history_init (EphyHistory *eb)
 {
-	GValue value = { 0, };
 	EphyNodeDb *db;
+	const char *all = _("All");
 
         eb->priv = EPHY_HISTORY_GET_PRIVATE (eb);
 	eb->priv->update_hosts_idle = 0;
@@ -554,21 +551,18 @@ ephy_history_init (EphyHistory *eb)
 
 	/* Pages */
 	eb->priv->pages = ephy_node_new_with_id (db, PAGES_NODE_ID);
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, _("All"));
-	ephy_node_set_property (eb->priv->pages,
-			        EPHY_NODE_PAGE_PROP_LOCATION,
-			        &value);
-	ephy_node_set_property (eb->priv->pages,
-			        EPHY_NODE_PAGE_PROP_TITLE,
-			        &value);
-	g_value_unset (&value);
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, EPHY_NODE_ALL_PRIORITY);
-	ephy_node_set_property (eb->priv->pages,
-			        EPHY_NODE_PAGE_PROP_PRIORITY,
-			        &value);
-	g_value_unset (&value);
+
+	ephy_node_set_property_string (eb->priv->pages,
+				       EPHY_NODE_PAGE_PROP_LOCATION,
+				       all);
+	ephy_node_set_property_string (eb->priv->pages,
+				       EPHY_NODE_PAGE_PROP_TITLE,
+				       all);
+
+	ephy_node_set_property_int (eb->priv->pages,
+				    EPHY_NODE_PAGE_PROP_PRIORITY,
+				    EPHY_NODE_ALL_PRIORITY);
+	
 	ephy_node_signal_connect_object (eb->priv->pages,
 					 EPHY_NODE_CHILD_ADDED,
 				         (EphyNodeCallback) pages_added_cb,
@@ -664,7 +658,6 @@ ephy_history_host_visited (EphyHistory *eh,
 			   EphyNode *host,
 			   GTime now)
 {
-	GValue value = { 0, };
 	int visits;
 
 	LOG ("Host visited");
@@ -674,17 +667,9 @@ ephy_history_host_visited (EphyHistory *eh,
 	if (visits < 0) visits = 0;
 	visits++;
 
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, visits);
-	ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_VISITS,
-			        &value);
-	g_value_unset (&value);
-
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, now);
-	ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_LAST_VISIT,
-			        &value);
-	g_value_unset (&value);
+	ephy_node_set_property_int (host, EPHY_NODE_PAGE_PROP_VISITS, visits);
+	ephy_node_set_property_int (host, EPHY_NODE_PAGE_PROP_LAST_VISIT,
+				    now);
 }
 
 static EphyNode *
@@ -694,7 +679,6 @@ internal_get_host (EphyHistory *eh, const char *url, gboolean create)
 	EphyNode *host = NULL;
 	const char *host_name = NULL;
 	GList *host_locations = NULL, *l;
-	GValue value = { 0, };
 	const char *scheme = NULL;
 	GTime now;
 
@@ -771,25 +755,15 @@ internal_get_host (EphyHistory *eh, const char *url, gboolean create)
 						 EPHY_NODE_DESTROY,
 						 (EphyNodeCallback) remove_pages_from_host_cb,
 						 G_OBJECT (eh));
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, host_name);
-		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_TITLE,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, (char *)host_locations->data);
-		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_LOCATION,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, now);
-		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_FIRST_VISIT,
-				        &value);
-		g_value_unset (&value);
-
+		ephy_node_set_property_string (host,
+					       EPHY_NODE_PAGE_PROP_TITLE,
+					       host_name);
+		ephy_node_set_property_string (host,
+					       EPHY_NODE_PAGE_PROP_LOCATION,
+					       (char *)host_locations->data);
+		ephy_node_set_property_int (host,
+					    EPHY_NODE_PAGE_PROP_FIRST_VISIT,
+					    now);
 		ephy_node_add_child (eh->priv->hosts, host);
 	}
 
@@ -829,7 +803,6 @@ ephy_history_add_host (EphyHistory *eh, EphyNode *page)
 static void
 ephy_history_visited (EphyHistory *eh, EphyNode *node)
 {
-	GValue value = { 0, };
 	GTime now;
 	int visits;
 	const char *url;
@@ -847,22 +820,14 @@ ephy_history_visited (EphyHistory *eh, EphyNode *node)
 	if (visits < 0) visits = 0;
 	visits++;
 
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, visits);
-	ephy_node_set_property (node, EPHY_NODE_PAGE_PROP_VISITS,
-			        &value);
-	g_value_unset (&value);
-
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, now);
-	ephy_node_set_property (node, EPHY_NODE_PAGE_PROP_LAST_VISIT,
-			        &value);
+	ephy_node_set_property_int (node, EPHY_NODE_PAGE_PROP_VISITS, visits);
+	ephy_node_set_property_int (node, EPHY_NODE_PAGE_PROP_LAST_VISIT,
+				    now);
 	if (visits == 1)
 	{
-		ephy_node_set_property
-			(node, EPHY_NODE_PAGE_PROP_FIRST_VISIT, &value);
+		ephy_node_set_property_int
+			(node, EPHY_NODE_PAGE_PROP_FIRST_VISIT, now);
 	}
-	g_value_unset (&value);
 
 	host_id = ephy_node_get_property_int (node, EPHY_NODE_PAGE_PROP_HOST_ID);
 	if (host_id >= 0)
@@ -914,7 +879,6 @@ impl_add_page (EphyHistory *eb,
 	       gboolean toplevel)
 {
 	EphyNode *bm, *node, *host;
-	GValue value = { 0, };
 	gulong flags = 0;
 
 	if (eb->priv->enabled == FALSE)
@@ -931,31 +895,20 @@ impl_add_page (EphyHistory *eb,
 
 	bm = ephy_node_new (eb->priv->db);
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, url);
-	ephy_node_set_property (bm, EPHY_NODE_PAGE_PROP_LOCATION,
-			        &value);
-	ephy_node_set_property (bm, EPHY_NODE_PAGE_PROP_TITLE,
-			        &value);
-	g_value_unset (&value);
+	ephy_node_set_property_string (bm, EPHY_NODE_PAGE_PROP_LOCATION, url);
+	ephy_node_set_property_string (bm, EPHY_NODE_PAGE_PROP_TITLE, url);
 
 	if (redirect) flags |= REDIRECT_FLAG;
 	if (toplevel) flags |= TOPLEVEL_FLAG;
 
 	/* EphyNode SUCKS! */
-	g_value_init (&value, G_TYPE_LONG);
-	g_value_set_long (&value, (long) flags);
-	ephy_node_set_property (bm, EPHY_NODE_PAGE_PROP_EXTRA_FLAGS,
-			        &value);
-	g_value_unset (&value);
+	ephy_node_set_property_long (bm, EPHY_NODE_PAGE_PROP_EXTRA_FLAGS,
+				     flags);
 
 	host = ephy_history_add_host (eb, bm);
 
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, ephy_node_get_id (host));
-	ephy_node_set_property (bm, EPHY_NODE_PAGE_PROP_HOST_ID,
-			        &value);
-	g_value_unset (&value);
+	ephy_node_set_property_int (bm, EPHY_NODE_PAGE_PROP_HOST_ID,
+				    ephy_node_get_id (host));
 
 	ephy_history_visited (eb, bm);
 
@@ -989,7 +942,6 @@ ephy_history_set_page_title (EphyHistory *gh,
 			     const char *title)
 {
 	EphyNode *node;
-	GValue value = { 0, };
 
 	LOG ("Set page title");
 
@@ -998,11 +950,8 @@ ephy_history_set_page_title (EphyHistory *gh,
 	node = ephy_history_get_page (gh, url);
 	if (node == NULL) return;
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, title);
-	ephy_node_set_property
-		(node, EPHY_NODE_PAGE_PROP_TITLE, &value);
-	g_value_unset (&value);
+	ephy_node_set_property_string (node, EPHY_NODE_PAGE_PROP_TITLE,
+				       title);
 }
 
 const char*
@@ -1037,13 +986,8 @@ ephy_history_set_icon (EphyHistory *gh,
 	host = g_hash_table_lookup (gh->priv->hosts_hash, url);
 	if (host)
 	{
-		GValue value = { 0, };
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, icon);
-		ephy_node_set_property
-			(host, EPHY_NODE_PAGE_PROP_ICON, &value);
-		g_value_unset (&value);
+		ephy_node_set_property_string (host, EPHY_NODE_PAGE_PROP_ICON,
+					       icon);
 	}
 }
 

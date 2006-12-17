@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2003 Marco Pesenti Gritti
  *  Copyright © 2003 Christian Persch
@@ -291,10 +292,8 @@ add_encoding (EphyEncodings *encodings,
 
 	node = ephy_node_new (encodings->priv->db);
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, title);
-	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_TITLE, &value);
-	g_value_unset (&value);
+	ephy_node_set_property_string (node, EPHY_NODE_ENCODING_PROP_TITLE,
+				       title);
 
 	elided = elide_underscores (title);
 	normalised = g_utf8_normalize (elided, -1, G_NORMALIZE_DEFAULT);
@@ -311,20 +310,16 @@ add_encoding (EphyEncodings *encodings,
 	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_TITLE_ELIDED, &value);
 	g_value_unset (&value);
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, code);
-	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_ENCODING, &value);
-	g_value_unset (&value);
+	ephy_node_set_property_string (node, EPHY_NODE_ENCODING_PROP_ENCODING,
+				       code);
 
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, groups);
-	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_LANGUAGE_GROUPS, &value);
-	g_value_unset (&value);
-
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, is_autodetector);
-	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_IS_AUTODETECTOR, &value);
-	g_value_unset (&value);
+	ephy_node_set_property_int (node,
+				    EPHY_NODE_ENCODING_PROP_LANGUAGE_GROUPS,
+				    groups);
+				    
+	ephy_node_set_property_boolean (node,
+					EPHY_NODE_ENCODING_PROP_IS_AUTODETECTOR,
+					is_autodetector);
 
 	/* now insert the node in our structure */
 	ephy_node_add_child (encodings->priv->root, node);

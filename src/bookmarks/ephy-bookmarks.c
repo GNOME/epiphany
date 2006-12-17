@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2002-2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004 Christian Persch
@@ -440,7 +441,7 @@ update_bookmark_response_cb (GtkWidget *dialog,
 	{
 		to_uri = (char *) g_object_steal_data (G_OBJECT (dialog),
 						       UPDATE_URI_DATA_KEY);
-
+		
 		g_value_init (&value, G_TYPE_STRING);
 		g_value_take_string (&value, to_uri);
 		ephy_node_set_property (bookmark, EPHY_NODE_BMK_PROP_LOCATION,
@@ -537,7 +538,6 @@ ephy_setup_history_notifiers (EphyBookmarks *eb)
 static void
 update_bookmark_keywords (EphyBookmarks *eb, EphyNode *bookmark)
 {
-	GValue value = { 0, };
 	GPtrArray *children;
 	int i;
 	GString *list;
@@ -577,11 +577,8 @@ update_bookmark_keywords (EphyBookmarks *eb, EphyNode *bookmark)
 	normalized_keywords = g_utf8_normalize (list->str, -1, G_NORMALIZE_ALL);
 	case_normalized_keywords = g_utf8_casefold (normalized_keywords, -1);
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, case_normalized_keywords);
-	ephy_node_set_property (bookmark, EPHY_NODE_BMK_PROP_KEYWORDS,
-				&value);
-	g_value_unset (&value);
+	ephy_node_set_property_string (bookmark, EPHY_NODE_BMK_PROP_KEYWORDS,
+				       case_normalized_keywords);
 
 	g_string_free (list, TRUE);
 	g_free (normalized_keywords);
@@ -955,15 +952,13 @@ browse_cb (GnomeVFSDNSSDBrowseHandle *handle,
 		g_value_unset (&value);
 
 		/* FIXME: limit length! */
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, service->name);
-		ephy_node_set_property (node, EPHY_NODE_BMK_PROP_TITLE, &value);
-		g_value_unset (&value);
+		ephy_node_set_property_string (node,
+					       EPHY_NODE_BMK_PROP_TITLE,
+					       service->name);
 
-		g_value_init (&value, G_TYPE_BOOLEAN);
-		g_value_set_boolean (&value, TRUE);
-		ephy_node_set_property (node, EPHY_NODE_BMK_PROP_IMMUTABLE, &value);
-		g_value_unset (&value);
+		ephy_node_set_property_boolean (node,
+						EPHY_NODE_BMK_PROP_IMMUTABLE,
+						TRUE);
 
 		ephy_node_db_set_immutable (priv->db, was_immutable);
 	}
@@ -1051,8 +1046,35 @@ ephy_local_bookmarks_stop (EphyBookmarks *bookmarks)
 static void
 ephy_bookmarks_init (EphyBookmarks *eb)
 {
-	GValue value = { 0, };
 	EphyNodeDb *db;
+
+	/* Translators: The text before the "|" is context to help you
+	 * decide on the correct translation. You MUST OMIT it in the
+	 * translated string. */
+	/* Translators: this topic contains all bookmarks */
+	const char *bk_all = Q_("bookmarks|All");
+
+	/* Translators: The text before the "|" is context to help you
+	 * decide on the correct translation. You MUST OMIT it in the
+	 * translated string. */
+	/* Translators: this topic contains the most used bookmarks */
+	const char *bk_most_visited = Q_("bookmarks|Most Visited");
+
+	/* Translators: The text before the "|" is context to help you
+	 * decide on the correct translation. You MUST OMIT it in the
+	 * translated string. */
+	/* Translators: this topic contains the not categorized
+	   bookmarks */
+	const char *bk_not_categorized = Q_("bookmarks|Not Categorized");
+	
+#ifdef ENABLE_ZEROCONF	
+	/* Translators: The text before the "|" is context to help you
+	 * decide on the correct translation. You MUST OMIT it in the
+	 * translated string. */
+	/* Translators: this is an automatic topic containing local
+	 * websites bookmarks autodiscovered with zeroconf. */
+	const char *bk_local_sites = Q_("bookmarks|Local Sites");
+#endif
 
 	eb->priv = EPHY_BOOKMARKS_GET_PRIVATE (eb);
 
@@ -1068,15 +1090,10 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 
 	/* Bookmarks */
 	eb->priv->bookmarks = ephy_node_new_with_id (db, BOOKMARKS_NODE_ID);
-	g_value_init (&value, G_TYPE_STRING);
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	/* Translators: this topic contains all bookmarks */
-	g_value_set_string (&value, Q_("bookmarks|All"));
-	ephy_node_set_property (eb->priv->bookmarks,
-				EPHY_NODE_KEYWORD_PROP_NAME,
-				&value);
-	g_value_unset (&value);
+	
+	ephy_node_set_property_string (eb->priv->bookmarks,
+				       EPHY_NODE_KEYWORD_PROP_NAME,
+				       bk_all);
 	ephy_node_signal_connect_object (eb->priv->bookmarks,
 					 EPHY_NODE_CHILD_REMOVED,
 					 (EphyNodeCallback) bookmarks_removed_cb,
@@ -1088,12 +1105,10 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 
 	/* Keywords */
 	eb->priv->keywords = ephy_node_new_with_id (db, KEYWORDS_NODE_ID);
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, EPHY_NODE_ALL_PRIORITY);
-	ephy_node_set_property (eb->priv->bookmarks,
-				EPHY_NODE_KEYWORD_PROP_PRIORITY,
-				&value);
-	g_value_unset (&value);
+	ephy_node_set_property_int (eb->priv->bookmarks,
+				    EPHY_NODE_KEYWORD_PROP_PRIORITY,
+				    EPHY_NODE_ALL_PRIORITY);
+	
 	ephy_node_signal_connect_object (eb->priv->keywords,
 					 EPHY_NODE_CHILD_REMOVED,
 					 (EphyNodeCallback) topics_removed_cb,
@@ -1104,40 +1119,29 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 
 	/* Favorites */
 	eb->priv->favorites = ephy_node_new_with_id (db, FAVORITES_NODE_ID);
-	g_value_init (&value, G_TYPE_STRING);
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	/* Translators: this topic contains the most used bookmarks */
-	g_value_set_string (&value, Q_("bookmarks|Most Visited"));
-	ephy_node_set_property (eb->priv->favorites,
-				EPHY_NODE_KEYWORD_PROP_NAME,
-				&value);
-	g_value_unset (&value);
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, EPHY_NODE_SPECIAL_PRIORITY);
-	ephy_node_set_property (eb->priv->favorites,
-				EPHY_NODE_KEYWORD_PROP_PRIORITY,
-				&value);
-	g_value_unset (&value);
+	
+	
+	ephy_node_set_property_string (eb->priv->favorites,
+				       EPHY_NODE_KEYWORD_PROP_NAME,
+				       bk_most_visited);
+	
+	ephy_node_set_property_int (eb->priv->favorites,
+				    EPHY_NODE_KEYWORD_PROP_PRIORITY,
+				    EPHY_NODE_SPECIAL_PRIORITY);
 	ephy_node_add_child (eb->priv->keywords, eb->priv->favorites);
 
 	/* Not categorized */
 	eb->priv->notcategorized = ephy_node_new_with_id (db, BMKS_NOTCATEGORIZED_NODE_ID);
-	g_value_init (&value, G_TYPE_STRING);
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	/* Translators: this topic contains the not categorized bookmarks */
-	g_value_set_string (&value, Q_("bookmarks|Not Categorized"));
-	ephy_node_set_property (eb->priv->notcategorized,
-				EPHY_NODE_KEYWORD_PROP_NAME,
-				&value);
-	g_value_unset (&value);
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, EPHY_NODE_SPECIAL_PRIORITY);
-	ephy_node_set_property (eb->priv->notcategorized,
-				EPHY_NODE_KEYWORD_PROP_PRIORITY,
-				&value);
-	g_value_unset (&value);
+	
+	
+	ephy_node_set_property_string (eb->priv->notcategorized,
+				       EPHY_NODE_KEYWORD_PROP_NAME,
+				       bk_not_categorized);
+
+	ephy_node_set_property_int (eb->priv->notcategorized,
+				    EPHY_NODE_KEYWORD_PROP_PRIORITY,
+				    EPHY_NODE_SPECIAL_PRIORITY);
+	
 	ephy_node_add_child (eb->priv->keywords, eb->priv->notcategorized);
 
 #ifdef ENABLE_ZEROCONF
@@ -1147,22 +1151,14 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	/* don't allow drags to this topic */
 	ephy_node_set_is_drag_dest (eb->priv->local, FALSE);
 
-	g_value_init (&value, G_TYPE_STRING);
-	/* Translators: The text before the "|" is context to help you decide on
-	 * the correct translation. You MUST OMIT it in the translated string. */
-	/* Translators: this is an automatic topic containing local websites bookmarks
-	 * autodiscovered with zeroconf. */
-	g_value_set_string (&value, Q_("bookmarks|Local Sites"));
-	ephy_node_set_property (eb->priv->local,
-			        EPHY_NODE_KEYWORD_PROP_NAME,
-			        &value);
-	g_value_unset (&value);
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, EPHY_NODE_SPECIAL_PRIORITY);
-	ephy_node_set_property (eb->priv->local,
-				EPHY_NODE_KEYWORD_PROP_PRIORITY,
-				&value);
-	g_value_unset (&value);
+	
+	ephy_node_set_property_string (eb->priv->local,
+				       EPHY_NODE_KEYWORD_PROP_NAME,
+				       bk_local_sites);
+	ephy_node_set_property_int (eb->priv->local,
+				    EPHY_NODE_KEYWORD_PROP_PRIORITY,
+				    EPHY_NODE_SPECIAL_PRIORITY);
+	
 	ephy_node_add_child (eb->priv->keywords, eb->priv->local);
 	ephy_local_bookmarks_init (eb);
 #endif /* ENABLE_ZEROCONF */
@@ -1302,26 +1298,19 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 {
 	EphyHistory *history;
 	EphyNode *bm;
-	GValue value = { 0, };
 
 	bm = ephy_node_new (eb->priv->db);
 
 	if (bm == NULL) return NULL;
 	
 	if (url == NULL) return NULL;
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, url);
-	ephy_node_set_property (bm, EPHY_NODE_BMK_PROP_LOCATION, &value);
-	g_value_unset (&value);
-
+	ephy_node_set_property_string (bm, EPHY_NODE_BMK_PROP_LOCATION, url);
+	
 	if (title == NULL || title[0] == '\0')
 	{
 		title = _("Untitled");
-	}	
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, title);
-	ephy_node_set_property (bm, EPHY_NODE_BMK_PROP_TITLE, &value);
-	g_value_unset (&value);
+	}
+	ephy_node_set_property_string (bm, EPHY_NODE_BMK_PROP_TITLE, title);
 
 	history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
 	if (history != NULL)
@@ -1329,11 +1318,8 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 		const char *icon = ephy_history_get_icon (history, url);
 		if (icon != NULL)
 		{
-			g_value_init (&value, G_TYPE_STRING);
-			g_value_set_string (&value, icon);
-			ephy_node_set_property (bm, EPHY_NODE_BMK_PROP_ICON,
-						&value);
-			g_value_unset (&value);
+			ephy_node_set_property_string
+				(bm, EPHY_NODE_BMK_PROP_ICON, icon);
 		}
 	}
 
@@ -1353,13 +1339,8 @@ ephy_bookmarks_set_address (EphyBookmarks *eb,
 			    EphyNode *bookmark,
 			    const char *address)
 {
-	GValue value = { 0, };
-
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, address);
-	ephy_node_set_property (bookmark, EPHY_NODE_BMK_PROP_LOCATION,
-				&value);
-	g_value_unset (&value);
+	ephy_node_set_property_string (bookmark, EPHY_NODE_BMK_PROP_LOCATION,
+				       address);
 
 	update_has_smart_address (eb, bookmark, address);
 }
@@ -1479,18 +1460,13 @@ ephy_bookmarks_set_icon	(EphyBookmarks *eb,
 			 const char *icon)
 {
 	EphyNode *node;
-	GValue value = { 0, };
 
 	g_return_if_fail (icon != NULL);
 
 	node = ephy_bookmarks_find_bookmark (eb, url);
 	if (node == NULL) return;
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, icon);
-	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_ICON,
-				&value);
-	g_value_unset (&value);
+	ephy_node_set_property_string (node, EPHY_NODE_BMK_PROP_ICON, icon);
 }
 
 
@@ -1500,18 +1476,14 @@ ephy_bookmarks_set_usericon (EphyBookmarks *eb,
 			     const char *icon)
 {
 	EphyNode *node;
-	GValue value = { 0, };
 
 	g_return_if_fail (icon != NULL);
 
 	node = ephy_bookmarks_find_bookmark (eb, url);
 	if (node == NULL) return;
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, icon);
-	ephy_node_set_property (node, EPHY_NODE_BMK_PROP_USERICON,
-				&value);
-	g_value_unset (&value);
+	ephy_node_set_property_string (node, EPHY_NODE_BMK_PROP_USERICON,
+				       icon);
 }
 
 
@@ -1652,24 +1624,16 @@ ephy_bookmarks_add_keyword (EphyBookmarks *eb,
 			    const char *name)
 {
 	EphyNode *key;
-	GValue value = { 0, };
 
 	key = ephy_node_new (eb->priv->db);
 
 	if (key == NULL) return NULL;
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, name);
-	ephy_node_set_property (key, EPHY_NODE_KEYWORD_PROP_NAME,
-				&value);
-	g_value_unset (&value);
-
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, EPHY_NODE_NORMAL_PRIORITY);
-	ephy_node_set_property (key, EPHY_NODE_KEYWORD_PROP_PRIORITY,
-				&value);
-	g_value_unset (&value);
-
+	ephy_node_set_property_string (key, EPHY_NODE_KEYWORD_PROP_NAME,
+				       name);
+	ephy_node_set_property_int (key, EPHY_NODE_KEYWORD_PROP_PRIORITY,
+				    EPHY_NODE_NORMAL_PRIORITY);
+	
 	ephy_node_add_child (eb->priv->keywords, key);
 
 	return key;

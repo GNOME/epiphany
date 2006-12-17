@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
  *  Copyright © 2003-2004 Marco Pesenti Gritti
@@ -590,11 +591,11 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 	time_t now;
 	PixbufCacheEntry *entry;
 	EphyNode *icon;
-	GValue value = { 0, };
 	char *pix_file;
 	GdkPixbuf *pixbuf = NULL;
 	guint checklevel = NEEDS_MASK;
 	int width, height;
+	int favicon_checked;
 
 	if (url == NULL) return NULL;
 
@@ -629,23 +630,15 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		filename = gnome_thumbnail_md5 (url);
 
 		icon = ephy_node_new (cache->priv->db);
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, url);
-		ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_URL,
-					&value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, filename);
-		ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_FILENAME,
-					&value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, (int) NEEDS_MASK & ~NEEDS_RENAME);
-		ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_CHECKED,
-					&value);
-		g_value_unset (&value);
+		ephy_node_set_property_string (icon,
+					       EPHY_NODE_FAVICON_PROP_URL,
+					       url);
+		ephy_node_set_property_string (icon,
+					       EPHY_NODE_FAVICON_PROP_FILENAME,
+					       filename);
+		ephy_node_set_property_int (icon,
+					    EPHY_NODE_FAVICON_PROP_CHECKED,
+					    (int) NEEDS_MASK & ~NEEDS_RENAME);
 
 		/* This will also add an entry to the icons hash */
 		ephy_node_add_child (priv->icons, icon);
@@ -663,11 +656,8 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 	icon = entry->node;
 
 	/* update timestamp */
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, now);
-	ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_LAST_USED,
-				&value);
-	g_value_unset (&value);
+	ephy_node_set_property_int (icon, EPHY_NODE_FAVICON_PROP_LAST_USED,
+				    now);
 
 	priv->dirty = TRUE;
 
@@ -690,17 +680,18 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 	}
 
 	/* Check for supported icon types */
-	if (ephy_node_get_property (icon, EPHY_NODE_FAVICON_PROP_CHECKED, &value) &&
-	    G_VALUE_HOLDS (&value, G_TYPE_INT))
+	favicon_checked = ephy_node_get_property_int
+		(icon, EPHY_NODE_FAVICON_PROP_CHECKED);
+	if (favicon_checked != -1)
 	{
-		checklevel = (guint) g_value_get_int (&value);
-		g_value_unset (&value);
+		checklevel = (guint) favicon_checked;
 	}
 
 	/* First, update the filename */
 	if (checklevel & NEEDS_RENAME)
 	{
 		char *new_pix_file, *urlhash;
+		GValue value = { 0, };
 
 		urlhash = gnome_thumbnail_md5 (url);
 		new_pix_file = g_build_filename (cache->priv->directory, urlhash, NULL);
@@ -717,10 +708,9 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		pix_file = new_pix_file;
 
 		checklevel &= ~NEEDS_RENAME;
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, (int) checklevel);
-		ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_CHECKED, &value);
-		g_value_unset (&value);
+		ephy_node_set_property_int (icon,
+					    EPHY_NODE_FAVICON_PROP_CHECKED,
+					    (int) checklevel);
 	}
 
 	/* Now check the type. We renamed the file above, so gnome-vfs does NOT
@@ -790,16 +780,13 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 			/* gnome_vfs_unlink (pix_file); */
 		}
 
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, (int) checklevel);
-		ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_CHECKED, &value);
-		g_value_unset (&value);
+		ephy_node_set_property_int (icon,
+					    EPHY_NODE_FAVICON_PROP_CHECKED,
+					    (int) checklevel);
 
 		/* epiphany 1.6 compat */
-		g_value_init (&value, G_TYPE_BOOLEAN);
-		g_value_set_boolean (&value, valid);
-		ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_CHECKOLD, &value);
-		g_value_unset (&value);
+		ephy_node_set_property_boolean
+			(icon, EPHY_NODE_FAVICON_PROP_CHECKOLD, valid);
 	}
 
 	/* if it still needs the check, mime type couldn't be checked. Deny! */
