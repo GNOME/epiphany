@@ -42,23 +42,19 @@ $Id$
     <dl>
 
     <!-- Items with Topics assigned will be processed first -->
-    <xsl:for-each select="purl:item[count(. | key('topics', dc:subject)[1]) = 1]">
-        <xsl:sort select="dc:subject" />
+    <xsl:for-each select="purl:item/dc:subject[count(.. | key('topics', .)[1]) = 1]">
+        <xsl:sort select="." />
 
-        <!-- Test if a topic is assigned -->
-        <xsl:if test="dc:subject">
+        <dt><h3><xsl:value-of select="." /></h3><dl>
+        <xsl:for-each select="key('topics', .)">
+            <xsl:sort select="purl:title" />
+            <dt><a href="{./purl:link}"><xsl:value-of select="./purl:title" /></a></dt>
+        </xsl:for-each>
 
-            <dt><h3><xsl:value-of select="dc:subject" /></h3><dl>
-            <xsl:for-each select="key('topics', dc:subject)">
-                <xsl:sort select="purl:title" />
-                <dt><a href="{./purl:link}"><xsl:value-of select="./purl:title" /></a></dt>
-            </xsl:for-each>
-
-            <!-- Force a linebreak; otherwise thinks will break for Topics with only 1 item -->
-            <xsl:text>
-            </xsl:text>
-            </dl></dt>
-        </xsl:if>
+        <!-- Force a linebreak; otherwise thinks will break for Topics with only 1 item -->
+        <xsl:text>
+        </xsl:text>
+        </dl></dt>
     </xsl:for-each>
 
     <!-- Now Bookmarks without topics will be added at the bottom of the output file -->
