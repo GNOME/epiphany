@@ -176,6 +176,7 @@ AC_SUBST([MOZILLA_INCLUDE_ROOT])
 AC_SUBST([MOZILLA_HOME])
 AC_SUBST([MOZILLA_PREFIX])
 AC_SUBST([MOZILLA_EXTRA_LIBS])
+AC_SUBST([MOZILLA_GLUE_LIBS])
 
 if test "$gecko_cv_gecko_version_int" -lt "1008000"; then
 	AC_MSG_ERROR([Gecko version $gecko_cv_gecko_version is not supported!])
