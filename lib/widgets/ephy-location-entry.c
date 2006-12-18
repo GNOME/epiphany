@@ -40,6 +40,7 @@
 #include <gtk/gtkentry.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkcelllayout.h>
 #include <gtk/gtktreemodelsort.h>
 #include <gtk/gtkstock.h>
@@ -76,6 +77,7 @@ struct _EphyLocationEntryPrivate
 	guint keywords_col;
 	guint relevance_col;
 	guint extra_col;
+	guint favicon_col;
 
 	guint hash;
 
@@ -999,18 +1001,20 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 				    guint action_col,
 				    guint keywords_col,
 				    guint relevance_col,
-				    guint extra_col)
+				    guint extra_col,
+				    guint favicon_col)
 {
 	EphyLocationEntryPrivate *priv = le->priv;
 	GtkTreeModel *sort_model;
 	GtkEntryCompletion *completion;
-	GtkCellRenderer *cell, *extracell;
+	GtkCellRenderer *cell, *extracell, *iconcell;
 
 	le->priv->text_col = text_col;
 	le->priv->action_col = action_col;
 	le->priv->keywords_col = keywords_col;
 	le->priv->relevance_col = relevance_col;
 	le->priv->extra_col = extra_col;
+	le->priv->favicon_col = favicon_col;
 
 	sort_model = gtk_tree_model_sort_new_with_model (model);
 	g_object_unref (model);
@@ -1026,6 +1030,13 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 			  G_CALLBACK (match_selected_cb), le);
 	g_signal_connect_after (completion, "action-activated",
 				G_CALLBACK (action_activated_after_cb), le);
+
+	iconcell = gtk_cell_renderer_pixbuf_new ();
+
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
+				    iconcell, FALSE);
+	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
+				       iconcell, "pixbuf", favicon_col);
 
 	cell = gtk_cell_renderer_text_new ();
 	g_object_set (cell, 

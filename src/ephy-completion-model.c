@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "ephy-completion-model.h"
+#include "ephy-favicon-cache.h"
 #include "ephy-node.h"
 #include "ephy-shell.h"
 #include "ephy-history.h"
@@ -274,6 +275,9 @@ ephy_completion_model_get_column_type (GtkTreeModel *tree_model,
 		case EPHY_COMPLETION_EXTRA_COL:
 			type =  G_TYPE_STRING;
 			break;
+		case EPHY_COMPLETION_FAVICON_COL:
+			type = GDK_TYPE_PIXBUF;
+			break;
 		case EPHY_COMPLETION_RELEVANCE_COL:
 			type = G_TYPE_INT;
 			break;
@@ -346,6 +350,37 @@ init_keywords_col (GValue *value, EphyNode *node, int group)
 	}
 	
 	g_value_set_string (value, text);
+}
+static void
+init_favicon_col (GValue *value, EphyNode *node, int group)
+{
+	EphyFaviconCache *cache;
+	const char *icon_location;
+	GdkPixbuf *pixbuf = NULL;
+
+	cache = EPHY_FAVICON_CACHE
+		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));
+
+	switch (group)
+	{
+		case BOOKMARKS_GROUP:
+			icon_location = ephy_node_get_property_string
+				(node, EPHY_NODE_BMK_PROP_ICON);
+			break;
+		case HISTORY_GROUP:
+			icon_location = ephy_node_get_property_string
+				(node, EPHY_NODE_PAGE_PROP_ICON);
+			break;
+		default:
+			icon_location = NULL;
+	}
+	
+	if (icon_location)
+	{
+		pixbuf = ephy_favicon_cache_get (cache, icon_location);
+	}
+
+	g_value_take_object (value, pixbuf);
 }
 
 static gboolean
@@ -443,6 +478,10 @@ ephy_completion_model_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			init_text_col (value, node, group);
 			break;
+		case EPHY_COMPLETION_FAVICON_COL:
+			g_value_init (value, GDK_TYPE_PIXBUF);
+			init_favicon_col (value, node, group);
+ 			break;
 		case EPHY_COMPLETION_ACTION_COL:
 			g_value_init (value, G_TYPE_STRING);
 			init_action_col (value, node, group);
