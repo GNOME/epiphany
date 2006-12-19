@@ -52,7 +52,6 @@ static void egg_editable_toolbar_init		(EggEditableToolbar *etoolbar);
 
 #define MIN_TOOLBAR_HEIGHT 20
 #define EGG_ITEM_NAME      "egg-item-name"
-#define STOCK_DRAG_MODE    "stock_drag-mode"
 
 static const GtkTargetEntry dest_drag_types[] = {
   {EGG_TOOLBAR_ITEM_TYPE, GTK_TARGET_SAME_APP, 0},
@@ -1362,7 +1361,7 @@ egg_editable_toolbar_set_ui_manager (EggEditableToolbar *etoolbar,
 				     GtkUIManager       *manager)
 {
   static const GtkActionEntry actions[] = {
-    { "MoveToolItem", STOCK_DRAG_MODE, N_("_Move on Toolbar"), NULL,
+    { "MoveToolItem", NULL, N_("_Move on Toolbar"), NULL,
       N_("Move the selected item on the toolbar"), G_CALLBACK (move_item_cb) },
     { "RemoveToolItem", GTK_STOCK_REMOVE, N_("_Remove from Toolbar"), NULL,
       N_("Remove the selected item from the toolbar"), G_CALLBACK (remove_item_cb) },

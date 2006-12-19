@@ -41,7 +41,6 @@ ephy_stock_icons_init (void)
 	{
 		STOCK_NEW_TAB,
 		STOCK_NEW_WINDOW,
-		STOCK_VIEW_SOURCE,
 		STOCK_SEND_MAIL,
 		STOCK_ADD_BOOKMARK,
 		STOCK_BOOKMARK,
@@ -49,7 +48,6 @@ ephy_stock_icons_init (void)
 		STOCK_LOCK_INSECURE,
 		STOCK_LOCK_SECURE,
 		STOCK_LOCK_BROKEN,
-		STOCK_DRAG_MODE,
 	};
 
 	static const GtkStockItem items[] =

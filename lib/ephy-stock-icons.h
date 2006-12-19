@@ -33,7 +33,6 @@ G_BEGIN_DECLS
 
 #define STOCK_NEW_TAB              "tab-new"
 #define STOCK_NEW_WINDOW           "window-new"
-#define STOCK_VIEW_SOURCE	   "text-html"
 #define STOCK_SEND_MAIL            "mail-forward"
 #define STOCK_ADD_BOOKMARK         "bookmark-new"
 #define STOCK_BOOKMARK             "stock_bookmark"
@@ -41,7 +40,6 @@ G_BEGIN_DECLS
 #define STOCK_LOCK_INSECURE        "stock_lock-open"
 #define STOCK_LOCK_SECURE          "stock_lock"
 #define STOCK_LOCK_BROKEN	   "stock_lock-broken"
-#define STOCK_DRAG_MODE	   	   "stock_drag-mode"
 
 void ephy_stock_icons_init (void);
 
