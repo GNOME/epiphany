@@ -7,7 +7,8 @@ iconsdir = $(themedir)/$(size)/$(context)
 icons_DATA = \
 	download.png		\
 	bookmark-view.png	\
-	history-view.png
+	history-view.png	\
+	location-entry.png
 
 noinst_DATA = \
 	download.xcf		\
