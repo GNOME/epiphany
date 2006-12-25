@@ -35,6 +35,7 @@
 #include <gtk/gtkframe.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkvseparator.h>
+#include <gtk/gtkversion.h>
 
 static void ephy_statusbar_class_init	(EphyStatusbarClass *klass);
 static void ephy_statusbar_init		(EphyStatusbar *t);
@@ -92,7 +93,7 @@ ephy_statusbar_get_type (void)
 	return type;
 }
 
-/* FIXME: remove this hack once gtk bug #372452 is fixed! */
+#if !GTK_CHECK_VERSION (2, 11, 0)
 static void
 ephy_statusbar_size_allocate (GtkWidget *widget,
 			      GtkAllocation *allocation)
@@ -110,18 +111,23 @@ ephy_statusbar_size_allocate (GtkWidget *widget,
 
 	gstatusbar->label = label;
 }
+#endif /* GTK 2.11.0 */
 
 static void
 ephy_statusbar_class_init (EphyStatusbarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+#if !GTK_CHECK_VERSION (2, 11, 0)
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+#endif
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_statusbar_finalize;
 
+#if !GTK_CHECK_VERSION (2, 11, 0)
 	widget_class->size_allocate = ephy_statusbar_size_allocate;
+#endif
 
 	signals[LOCK_CLICKED] =
 		g_signal_new
