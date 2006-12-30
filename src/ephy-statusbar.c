@@ -32,7 +32,6 @@
 #include <gtk/gtkprogressbar.h>
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkimage.h>
-#include <gtk/gtkframe.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkvseparator.h>
 #include <gtk/gtkversion.h>
