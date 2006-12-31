@@ -427,6 +427,10 @@ main (int argc,
 	textdomain (GETTEXT_PACKAGE);
 #endif
 
+	/* Threads have to be initialised before calling ANY glib function */
+	g_thread_init (NULL);
+	dbus_g_thread_init ();
+
 	/* check libxml2 API version epiphany was compiled with against the
 	 * version we're running with.
 	 */
