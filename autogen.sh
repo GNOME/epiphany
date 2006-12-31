@@ -13,7 +13,7 @@ PKG_NAME="epiphany"
 }
 
 which gnome-autogen.sh || {
-    echo "You need to install gnome-common from GNOME CVS and make"
+    echo "You need to install gnome-common from GNOME SVN and make"
     echo "sure the gnome-autogen.sh script is in your \$PATH."
     exit 1
 }
