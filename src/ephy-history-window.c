@@ -67,6 +67,7 @@
 #include "ephy-node-common.h"
 #include "ephy-node-view.h"
 #include "ephy-bookmarks-ui.h"
+#include "ephy-prefs.h"
 #include "ephy-gui.h"
 
 static const GtkTargetEntry page_drag_types [] =
@@ -668,6 +669,7 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 	gboolean cut, copy, paste, select_all;
 	gboolean pages_focus, pages_selection, single_page_selected;
 	gboolean delete, bookmark_page;
+	gboolean bookmarks_locked;
 	int num_pages_selected;
 	GtkActionGroup *action_group;
 	GtkAction *action;
@@ -722,7 +724,8 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 	open_in_window = (pages_focus && pages_selection);
 	open_in_tab = (pages_focus && pages_selection);
         delete = (pages_focus && pages_selection);
-	bookmark_page = (pages_focus && single_page_selected);
+	bookmarks_locked = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING);
+	bookmark_page = (pages_focus && single_page_selected) && !bookmarks_locked;
 
 	action_group = editor->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "OpenInWindow");
@@ -744,6 +747,7 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 	gtk_action_set_sensitive (action, delete);
 	action = gtk_action_group_get_action (action_group, "BookmarkLink");
 	gtk_action_set_sensitive (action, bookmark_page);
+
 }
 
 static void

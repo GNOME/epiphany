@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include "eel-gconf-extensions.h"
 #include "ephy-bookmarks.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-bookmarks-menu.h"
@@ -43,11 +44,13 @@
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-stock-icons.h"
+#include "ephy-prefs.h"
 #include "egg-editable-toolbar.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
 #include <gtk/gtkmain.h>
+
 
 #define BM_WINDOW_DATA_KEY "bookmarks-window-data"
 
@@ -429,6 +432,9 @@ ephy_bookmarks_ui_add_bookmark (GtkWindow *parent,
 				const char *location, 
 				const char *title)
 {
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return;
+	
 	EphyBookmarks *bookmarks;
 	EphyNode *bookmark;
 	GtkWidget *dialog;

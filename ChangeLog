@@ -1,3 +1,20 @@
+2007-01-02  Diego Escalante Urrelo <diegoe@svn.gnome.org>
+
+	* src/ephy-history-window.c: (ephy_history_window_update_menu):
+	
+	Disables "Add Bookmark" in the File menu when bookmarks are locked
+	down.
+
+	* src/bookmarks/ephy-bookmark-properties.c: (ephy_bookmark_properties_constructor):
+
+	Makes the topics pane insensitive and the rest of entries
+	non-editables (but sensitive so we can select the text) 
+	when bookmarks are locked down.
+
+	* src/bookmarks/ephy-bookmarks-ui.c: (ephy_bookmarks_ui_add_bookmark):
+
+	Don't allow the add bookmark ui to appear if it's locked down.
+
 2006-12-31  Christian Persch  <chpe@svn.gnome.org>
 
 	* src/ephy-main.c: (main):

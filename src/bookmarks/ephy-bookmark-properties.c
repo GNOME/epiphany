@@ -34,6 +34,10 @@
 #include "ephy-state.h"
 #include "ephy-gui.h"
 #include "ephy-dnd.h"
+#include "ephy-prefs.h"
+
+#include "eel-gconf-extensions.h"
+
 
 #include <glib/gi18n.h>
 #include <gtk/gtkcheckbutton.h>
@@ -497,6 +501,7 @@ ephy_bookmark_properties_constructor (GType type,
 	GtkWidget *widget, *table, *label, *entry, *container;
 	GtkWindow *window;
 	GtkDialog *dialog;
+	gboolean lockdown;
 	const char *tmp;
 	char *text;
 
@@ -526,6 +531,8 @@ ephy_bookmark_properties_constructor (GType type,
 				       EPHY_STATE_WINDOW_SAVE_POSITION |
 				       EPHY_STATE_WINDOW_SAVE_SIZE);
 	}
+	/* Lockdown */
+	lockdown = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING);
 
 	update_window_title (properties);
 
@@ -541,6 +548,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_widget_show (table);
 
 	entry = gtk_entry_new ();
+	gtk_entry_set_editable (GTK_ENTRY (entry), !lockdown);
 	tmp = ephy_node_get_property_string (properties->priv->bookmark,
 					     EPHY_NODE_BMK_PROP_TITLE);
 	gtk_entry_set_text (GTK_ENTRY (entry), tmp);
@@ -557,6 +565,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1, GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
 	entry = gtk_entry_new ();
+	gtk_entry_set_editable (GTK_ENTRY (entry), !lockdown);
 	tmp = ephy_node_get_property_string (properties->priv->bookmark,
 					     EPHY_NODE_BMK_PROP_LOCATION);
 	gtk_entry_set_text (GTK_ENTRY (entry), tmp);
@@ -572,6 +581,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2, GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
 	entry = ephy_topics_entry_new (priv->bookmarks, priv->bookmark);
+	gtk_entry_set_editable (GTK_ENTRY (entry), !lockdown);
 	priv->entry = entry;
 	gtk_widget_show (entry);
 	label = gtk_label_new_with_mnemonic(_("T_opics:"));
@@ -591,6 +601,7 @@ ephy_bookmark_properties_constructor (GType type,
 				  NULL);
 	gtk_container_add (GTK_CONTAINER (container), widget);
 	gtk_widget_show (widget);
+	gtk_widget_set_sensitive (container, !lockdown);
 	gtk_widget_show (container);
 	g_signal_connect (container, "map", G_CALLBACK (list_mapped_cb), properties);
 	g_signal_connect (container, "unmap", G_CALLBACK (list_unmapped_cb), properties);
