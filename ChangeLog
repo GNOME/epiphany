@@ -1,5 +1,15 @@
 2007-01-03  Diego Escalante Urrelo <diegoe@svn.gnome.org>
 
+	* embed/ephy-favicon-cache.c: (icon_is_obsolete),
+	(remove_obsolete_icons):
+	* embed/ephy-history.c: (page_is_obsolete),
+	(remove_obsolete_pages):
+	
+	Avoid use of localtime by computing expiry in seconds instead of days.
+	Patch by Chris Wilson.
+
+2007-01-03  Diego Escalante Urrelo <diegoe@svn.gnome.org>
+
 	* data/glade/prefs-dialog.glade:
 
 	Corrects the expand of the Privacy tab in the Preferences window.

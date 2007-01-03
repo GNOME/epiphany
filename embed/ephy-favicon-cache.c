@@ -45,6 +45,7 @@
 #define EPHY_FAVICON_CACHE_XML_VERSION (const xmlChar *)"1.1"
 
 #define EPHY_FAVICON_CACHE_OBSOLETE_DAYS 30
+#define SECS_PER_DAY (60*60*24)
 
 /* how often to save the cache, in milliseconds */
 #define CACHE_SAVE_INTERVAL	10 * 60 * 1000 /* ms */
@@ -88,7 +89,7 @@ typedef struct
 	guint load_failed : 1;
 } PixbufCacheEntry;
 
-typedef gboolean (* FilterFunc) (EphyNode*, GDate *);
+typedef gboolean (* FilterFunc) (EphyNode*, time_t);
 
 enum
 {
@@ -187,23 +188,13 @@ pixbuf_cache_entry_free (PixbufCacheEntry *entry)
 }
 
 static gboolean
-icon_is_obsolete (EphyNode *node, GDate *now)
+icon_is_obsolete (EphyNode *node, time_t now)
 {
 	int last_visit;
-	GDate date;
 
 	last_visit = ephy_node_get_property_int
 		(node, EPHY_NODE_FAVICON_PROP_LAST_USED);
-
-	g_date_clear (&date, 1);
-#if GLIB_CHECK_VERSION (2,9,0)
-        g_date_set_time_t (&date, last_visit);
-#else
-	g_date_set_time (&date, last_visit);
-#endif
-
-	return (g_date_days_between (&date, now) >=
-		EPHY_FAVICON_CACHE_OBSOLETE_DAYS);
+	return now - last_visit >= EPHY_FAVICON_CACHE_OBSOLETE_DAYS*SECS_PER_DAY;
 }
 
 static void
@@ -237,14 +228,9 @@ remove_obsolete_icons (EphyFaviconCache *cache,
 	EphyFaviconCachePrivate *priv = cache->priv;
 	GPtrArray *children;
 	int i;
-	GDate current_date;
+	time_t now;
 
-	g_date_clear (&current_date, 1);
-#if GLIB_CHECK_VERSION (2,9,0)
-        g_date_set_time_t (&current_date, time (NULL));
-#else
-	g_date_set_time (&current_date, time (NULL));
-#endif
+	now = time (NULL);
 
 	children = ephy_node_get_children (priv->icons);
 	for (i = (int) children->len - 1; i >= 0; i--)
@@ -253,7 +239,7 @@ remove_obsolete_icons (EphyFaviconCache *cache,
 
 		kid = g_ptr_array_index (children, i);
 
-		if (!filter || filter (kid, &current_date))
+		if (!filter || filter (kid, now))
 		{
 			const char *filename;
 			char *path;

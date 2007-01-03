@@ -43,6 +43,9 @@
 /* if you change this remember to change also the user interface description */
 #define HISTORY_PAGE_OBSOLETE_DAYS 10
 
+/* the number of seconds in a day */
+#define SECS_PER_DAY (60*60*24)
+
 #define EPHY_HISTORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_HISTORY, EphyHistoryPrivate))
 
 struct _EphyHistoryPrivate
@@ -238,23 +241,13 @@ ephy_history_class_init (EphyHistoryClass *klass)
 }
 
 static gboolean
-page_is_obsolete (EphyNode *node, GDate *now)
+page_is_obsolete (EphyNode *node, time_t now)
 {
 	int last_visit;
-	GDate date;
 
 	last_visit = ephy_node_get_property_int
 		(node, EPHY_NODE_PAGE_PROP_LAST_VISIT);
-
-        g_date_clear (&date, 1);
-#if GLIB_CHECK_VERSION (2,9,0)
-        g_date_set_time_t (&date, last_visit);
-#else
-        g_date_set_time (&date, last_visit);
-#endif
-
-	return (g_date_days_between (&date, now) >=
-		HISTORY_PAGE_OBSOLETE_DAYS);
+	return now - last_visit >= HISTORY_PAGE_OBSOLETE_DAYS*SECS_PER_DAY;
 }
 
 static void
@@ -262,16 +255,9 @@ remove_obsolete_pages (EphyHistory *eb)
 {
 	GPtrArray *children;
 	int i;
-	GTime now;
-	GDate current_date;
+	time_t now;
 
 	now = time (NULL);
-        g_date_clear (&current_date, 1);
-#if GLIB_CHECK_VERSION (2,9,0)
-        g_date_set_time_t (&current_date, time (NULL));
-#else
-        g_date_set_time (&current_date, time (NULL));
-#endif
 
 	children = ephy_node_get_children (eb->priv->pages);
 	for (i = (int) children->len - 1; i >= 0; i--)
@@ -280,7 +266,7 @@ remove_obsolete_pages (EphyHistory *eb)
 
 		kid = g_ptr_array_index (children, i);
 
-		if (page_is_obsolete (kid, &current_date))
+		if (page_is_obsolete (kid, now))
 		{
 			ephy_node_unref (kid);
 		}
