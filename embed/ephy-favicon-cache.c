@@ -36,6 +36,7 @@
 #include "ephy-node-common.h"
 #include "ephy-node.h"
 #include "ephy-debug.h"
+#include "ephy-glib-compat.h"
 
 #include <glib/gstdio.h>
 #include <libgnomeui/libgnomeui.h>
@@ -47,11 +48,11 @@
 
 #define EPHY_FAVICON_CACHE_OBSOLETE_DAYS 30
 
-/* how often to save the cache, in milliseconds */
-#define CACHE_SAVE_INTERVAL	10 * 60 * 1000 /* ms */
+/* how often to save the cache, in seconds */
+#define CACHE_SAVE_INTERVAL	(10 * 60) /* seconds */
 
-/* how often to delete old pixbufs from the cache, in milliseconds */
-#define CACHE_CLEANUP_INTERVAL	5 * 60 * 1000 /* ms */
+/* how often to delete old pixbufs from the cache, in seconds */
+#define CACHE_CLEANUP_INTERVAL	(5 * 60) /* seconds */
 
 /* how long to keep pixbufs in cache, in seconds. This should be longer than CACHE_CLEANUP_INTERVAL */
 #define PIXBUF_CACHE_KEEP_TIME	10 * 60 /* s */
@@ -395,10 +396,10 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 	g_signal_connect_object (embed_shell, "prepare-close",
 				 G_CALLBACK (prepare_close_cb), cache, 0);
 
-	priv->autosave_timeout = g_timeout_add (CACHE_SAVE_INTERVAL,
+	priv->autosave_timeout = g_timeout_add_seconds (CACHE_SAVE_INTERVAL,
 						(GSourceFunc) periodic_save_cb,
 						cache);
-	priv->cleanup_timeout = g_timeout_add (CACHE_CLEANUP_INTERVAL,
+	priv->cleanup_timeout = g_timeout_add_seconds (CACHE_CLEANUP_INTERVAL,
 					       (GSourceFunc) periodic_cleanup_cb,
 					       cache);
 }

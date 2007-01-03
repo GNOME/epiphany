@@ -35,6 +35,7 @@
 #include "ephy-gui.h"
 #include "ephy-debug.h"
 #include "ephy-stock-icons.h"
+#include "ephy-glib-compat.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtkmain.h>
@@ -293,7 +294,7 @@ confirm_shutdown_cb (GnomeClient *client,
 	data->key = key;
 
 	/* This isn't very exact, but it's good enough here */
-	data->timeout_id = g_timeout_add (1000,
+	data->timeout_id = g_timeout_add_seconds (1,
 					  (GSourceFunc) confirm_shutdown_dialog_tick_cb,
 					  data);
 	data->ticks = 60;

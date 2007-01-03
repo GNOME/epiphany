@@ -38,6 +38,7 @@
 #include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-stock-icons.h"
+#include "ephy-glib-compat.h"
 
 #include "eel-gconf-extensions.h"
 
@@ -50,7 +51,7 @@
 
 #define EPHY_BOOKMARKS_XML_ROOT    "ephy_bookmarks"
 #define EPHY_BOOKMARKS_XML_VERSION "1.03"
-#define BOOKMARKS_SAVE_DELAY (3 * 1000) /* ms */
+#define BOOKMARKS_SAVE_DELAY 3 /* seconds */
 #define MAX_FAVORITES_NUM 10
 #define UPDATE_URI_DATA_KEY "updated-uri"
 #define SD_RESOLVE_TIMEOUT 0 /* ms; 0 means no timeout */
@@ -289,7 +290,7 @@ ephy_bookmarks_save_delayed (EphyBookmarks *bookmarks, int delay)
 		if (delay > 0)
 		{
 			bookmarks->priv->save_timeout_id =
-				g_timeout_add (BOOKMARKS_SAVE_DELAY,
+				g_timeout_add_seconds (BOOKMARKS_SAVE_DELAY,
 					       (GSourceFunc) save_bookmarks_delayed,
 					       bookmarks);
 		}

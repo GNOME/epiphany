@@ -35,6 +35,8 @@
 #include "ephy-object-helpers.h"
 #include "ephy-debug.h"
 
+#include "ephy-glib-compat.h"
+
 #include <libxml/tree.h>
 #include <libxml/xmlreader.h>
 #include <libxml/globals.h>
@@ -62,7 +64,7 @@
 #define EE_GROUP		"Epiphany Extension"
 #define DOT_INI			".ephy-extension"
 #define RELOAD_DELAY		333 /* ms */
-#define RELOAD_SYNC_DELAY	1000 /* ms */
+#define RELOAD_SYNC_DELAY	1 /* seconds */
 
 #define ENABLE_LEGACY_FORMAT
 
@@ -940,7 +942,7 @@ reload_cb (gpointer *data)
 		g_source_remove (priv->sync_timeout_id);
 	}
 
-	priv->sync_timeout_id = g_timeout_add (RELOAD_SYNC_DELAY,
+	priv->sync_timeout_id = g_timeout_add_seconds (RELOAD_SYNC_DELAY,
 					       (GSourceFunc) reload_sync_cb,
 					       manager);
 	return FALSE;

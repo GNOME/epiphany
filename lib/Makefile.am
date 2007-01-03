@@ -13,6 +13,7 @@ NOINST_H_FILES = \
 	ephy-dnd.h				\
 	ephy-file-chooser.h			\
 	ephy-file-helpers.h			\
+	ephy-glib-compat.h			\
 	ephy-gui.h				\
 	ephy-langs.h				\
 	ephy-module.h				\

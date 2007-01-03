@@ -27,6 +27,7 @@
 #include "ephy-debug.h"
 #include "ephy-activation.h"
 #include "ephy-dbus-server-bindings.h"
+#include "ephy-glib-compat.h"
 
 #include <string.h>
 #include <dbus/dbus-glib-bindings.h>
@@ -46,7 +47,7 @@
 #define DBUS_EPHY_PATH		"/org/gnome/Epiphany"
 #define DBUS_EPHY_INTERFACE	"org.gnome.Epiphany"
 
-#define RECONNECT_DELAY	3000
+#define RECONNECT_DELAY	3 /* seconds */
 
 #define EPHY_DBUS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_DBUS, EphyDbusPrivate))
 
@@ -149,7 +150,7 @@ session_filter_func (DBusConnection *connection,
 
 		/* try to reconnect later ... */
 		priv->session_reconnect_timeout_id =
-			g_timeout_add (RECONNECT_DELAY,
+			g_timeout_add_seconds (RECONNECT_DELAY,
 				       (GSourceFunc) ephy_dbus_connect_to_session_bus_cb,
 				       ephy_dbus);
 
@@ -182,7 +183,7 @@ system_filter_func (DBusConnection *connection,
 
 		/* try to reconnect later ... */
 		priv->system_reconnect_timeout_id =
-			g_timeout_add (RECONNECT_DELAY,
+			g_timeout_add_seconds (RECONNECT_DELAY,
 				       (GSourceFunc) ephy_dbus_connect_to_system_bus_cb,
 				       ephy_dbus);
 

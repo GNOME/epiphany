@@ -1,3 +1,18 @@
+2007-01-03  Diego Escalante Urrelo  <diegoe@svn.gnome.org>
+
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_init):
+	* embed/ephy-history.c: (ephy_history_init):
+	* lib/Makefile.am:
+	* lib/ephy-glib-compat.h:
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_save_delayed):
+	* src/ephy-dbus.c: (session_filter_func), (system_filter_func):
+	* src/ephy-extensions-manager.c: (reload_cb):
+	* src/ephy-session.c: (confirm_shutdown_cb):
+
+	Utilize GLib's new g_timeout_add_seconds to reduce context switches
+	and improve CPU/power efficiency. Patch by Chris Wilson.
+
+
 2007-01-03  Diego Escalante Urrelo <diegoe@svn.gnome.org>
 
 	* data/glade/prefs-dialog.glade:

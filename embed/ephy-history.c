@@ -29,6 +29,7 @@
 #include "ephy-node-common.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
+#include "ephy-glib-compat.h"
 
 #include <time.h>
 #include <string.h>
@@ -38,8 +39,8 @@
 #define EPHY_HISTORY_XML_ROOT	 (const xmlChar *)"ephy_history"
 #define EPHY_HISTORY_XML_VERSION (const xmlChar *)"1.0"
 
-/* how often to save the history, in milliseconds */
-#define HISTORY_SAVE_INTERVAL (5 * 60 * 1000)
+/* how often to save the history, in seconds */
+#define HISTORY_SAVE_INTERVAL (5 * 60)
 
 /* if you change this remember to change also the user interface description */
 #define HISTORY_PAGE_OBSOLETE_DAYS 10
@@ -606,7 +607,7 @@ ephy_history_init (EphyHistory *eb)
 
 	/* setup the periodic history saving callback */
 	eb->priv->autosave_timeout =
-		g_timeout_add (HISTORY_SAVE_INTERVAL,
+		g_timeout_add_seconds (HISTORY_SAVE_INTERVAL,
 		       (GSourceFunc)periodic_save_cb,
 		       eb);
 
