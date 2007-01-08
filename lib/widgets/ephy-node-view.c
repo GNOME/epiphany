@@ -160,16 +160,21 @@ static EphyNode *
 get_node_from_path (EphyNodeView *view, GtkTreePath *path)
 {
 	EphyNode *node;
-	GtkTreeIter iter, iter2;
+	GtkTreeIter iter, iter2, iter3;
 
 	if (path == NULL) return NULL;
 
 	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
 	gtk_tree_model_sort_convert_iter_to_child_iter
 		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
+
+	if (iter2.stamp == 0) {
+		return NULL;
+	}
 	gtk_tree_model_filter_convert_iter_to_child_iter
-		(GTK_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
-	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
+		(GTK_TREE_MODEL_FILTER (view->priv->filtermodel), &iter3, &iter2);
+
+	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter3);
 
 	return node;
 }
@@ -1373,7 +1378,7 @@ ephy_node_view_remove (EphyNodeView *view)
 	EphyNodeViewPrivate *priv = view->priv;
 	GList *list, *l;
 	EphyNode *node;
-	GtkTreeIter iter, iter2;
+	GtkTreeIter iter, iter2, iter3;
 	GtkTreePath *path;
 	GtkTreeRowReference *row_ref = NULL;
 	GtkTreeSelection *selection;
@@ -1388,9 +1393,9 @@ ephy_node_view_remove (EphyNodeView *view)
 
 	node = g_list_first (list)->data;
 	ephy_tree_model_node_iter_from_node (EPHY_TREE_MODEL_NODE (view->priv->nodemodel),
-					     node, &iter);
+					     node, &iter3);
 	gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (view->priv->filtermodel),
-							  &iter2, &iter);
+							  &iter2, &iter3);
 	gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT (view->priv->sortmodel),
 							&iter, &iter2);
 	iter2 = iter;

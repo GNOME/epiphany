@@ -1366,7 +1366,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		EphyNode *node = selected->data;
 		char name[EPHY_BOOKMARK_ACTION_NAME_BUFFER_SIZE];
 
-		g_return_if_fail (node != NULL);
+		if (node == NULL) return;
 
 		mutable = !ephy_node_get_property_boolean (node, EPHY_NODE_BMK_PROP_IMMUTABLE);
 		

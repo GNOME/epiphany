@@ -9,6 +9,16 @@
 
 2007-01-08  Diego Escalante Urrelo <diegoe@svn.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	* lib/widgets/ephy-node-view.c:
+
+	Workaround/semi-fix for bug #351814. The real cause of the problem is
+	the user_data that is never set on a GtkTreeIter, so the Ephy
+	implementation of the tree makes it to have a stamp of 0 being that
+	way an invalid iter. Patch by Diego Escalante Urrelo.
+
+2007-01-08  Diego Escalante Urrelo <diegoe@svn.gnome.org>
+
 	* data/glade/form-signing-dialog.glade:
 	* data/glade/prefs-dialog.glade:
 
