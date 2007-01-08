@@ -1,3 +1,12 @@
+2007-01-08  Diego Escalante Urrelo <diegoe@svn.gnome.org>
+
+	* data/glade/form-signing-dialog.glade:
+	* data/glade/prefs-dialog.glade:
+
+	Removed the hardcoded invisible char, note that this might readd
+	itself to the file if someone edits it. It has been suggested that we
+	move over to glade-3. Patch by Vitali Ischenko. Bug #393910.
+
 2007-01-03  Diego Escalante Urrelo <diegoe@svn.gnome.org>
 
 	* embed/ephy-favicon-cache.c: (icon_is_obsolete),
