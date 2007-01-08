@@ -1,5 +1,14 @@
 2007-01-08  Diego Escalante Urrelo <diegoe@svn.gnome.org>
 
+	* embed/mozilla/EphyAboutModule.cpp:
+
+	Fixes the escaping in the error message "The page %s was not fully 
+	loaded yet when the browser crashed..." by changing the
+	g_strdup_printf into a g_markup_printf_escaped. Bug #374627. Patch by
+	Diego Escalante Urrelo.
+
+2007-01-08  Diego Escalante Urrelo <diegoe@svn.gnome.org>
+
 	* src/popup-commands.c: (background_download_completed)
 
 	Check the result of ephy_file_launch_desktop_file () so if it fails we
