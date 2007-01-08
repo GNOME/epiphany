@@ -264,7 +264,13 @@ background_download_completed (EphyEmbedPersist *persist)
 	g_object_unref (persist);
 
 	/* open the "Background Properties" capplet */
-	ephy_file_launch_desktop_file ("background.desktop", bg, user_time);
+	if (!ephy_file_launch_desktop_file ("background.desktop", bg, user_time))
+	{
+		/* If the above try didn't work, then we try the Fedora name.
+		 * This is a fix for #387206, but is actually a workaround for
+		 * bugzilla.redhat.com #201867 */
+		ephy_file_launch_desktop_file ("gnome-background.desktop", bg, user_time)
+	}
 }
 
 void

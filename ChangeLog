@@ -1,5 +1,14 @@
 2007-01-08  Diego Escalante Urrelo <diegoe@svn.gnome.org>
 
+	* src/popup-commands.c: (background_download_completed)
+
+	Check the result of ephy_file_launch_desktop_file () so if it fails we
+	try an alternative naming of the background capplet: gnome-background.
+	This is seen in fedora. Bug #387206, which is actually caused by
+	bugzilla.redhat.com #201867.
+
+2007-01-08  Diego Escalante Urrelo <diegoe@svn.gnome.org>
+
 	* data/glade/form-signing-dialog.glade:
 	* data/glade/prefs-dialog.glade:
 
