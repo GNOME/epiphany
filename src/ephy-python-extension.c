@@ -27,6 +27,7 @@
 #include "ephy-python-extension.h"
 #include "ephy-python.h"
 
+#define NO_IMPORT_PYGOBJECT
 #include <pygobject.h>
 
 #include "ephy-extension.h"
