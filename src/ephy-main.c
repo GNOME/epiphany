@@ -91,7 +91,7 @@ static const GOptionEntry option_entries[] =
 	{ "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
 	  N_("Profile directory to use in the private instance"), N_("DIR") },
 	{ G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &arguments,
-	  "", N_("URL ...")},
+	  "", N_("URL …")},
 	{ NULL }
 };
 

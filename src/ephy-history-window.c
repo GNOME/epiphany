@@ -178,7 +178,7 @@ static const GtkActionEntry ephy_history_ui_entries [] = {
 	{ "Delete", GTK_STOCK_DELETE, N_("_Delete"), NULL,
 	  N_("Delete the selected history link"),
 	  G_CALLBACK (cmd_delete) },
-	{ "BookmarkLink", STOCK_ADD_BOOKMARK, N_("Add _Bookmark..."), "<control>D",
+	{ "BookmarkLink", STOCK_ADD_BOOKMARK, N_("Add _Bookmark…"), "<control>D",
 	  N_("Bookmark the selected history link"),
 	  G_CALLBACK (cmd_bookmark_link) },
 	{ "Close", GTK_STOCK_CLOSE, N_("_Close"), "<control>W",

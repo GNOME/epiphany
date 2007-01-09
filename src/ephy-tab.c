@@ -629,7 +629,7 @@ ephy_tab_get_popups_allowed (EphyTab *tab)
 	g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
 
 	location = ephy_embed_get_location (embed, TRUE);
-	if (location == NULL) return FALSE; /* FALSE, TRUE... same thing */
+	if (location == NULL) return FALSE; /* FALSE, TRUE… same thing */
 
 	response = ephy_permission_manager_test_permission
 		(permission_manager, location, EPT_POPUP);
@@ -937,11 +937,11 @@ ephy_tab_set_loading_title (EphyTab *tab,
 	if (title != NULL && title[0] != '\0')
 	{
 		/* translators: %s here is the address of the web page */
-		priv->loading_title = g_strdup_printf (_("Loading “%s”..."), title);
+		priv->loading_title = g_strdup_printf (_("Loading “%s”…"), title);
 	}
 	else
 	{
-		priv->loading_title = g_strdup (_("Loading..."));
+		priv->loading_title = g_strdup (_("Loading…"));
 	}
 
 	g_free (freeme);
@@ -1692,15 +1692,15 @@ update_net_state_message (EphyTab *tab, const char *uri, EphyEmbedNetState flags
 	{
 		if (flags & EPHY_EMBED_STATE_REDIRECTING)
 		{
-			msg = _("Redirecting to “%s”...");
+			msg = _("Redirecting to “%s”…");
 		}
 		else if (flags & EPHY_EMBED_STATE_TRANSFERRING)
 		{
-			msg = _("Transferring data from “%s”...");
+			msg = _("Transferring data from “%s”…");
 		}
 		else if (flags & EPHY_EMBED_STATE_NEGOTIATING)
 		{
-			msg = _("Waiting for authorization from “%s”...");
+			msg = _("Waiting for authorization from “%s”…");
 		}
 	}
 
@@ -1708,7 +1708,7 @@ update_net_state_message (EphyTab *tab, const char *uri, EphyEmbedNetState flags
 	{
 		if (flags & EPHY_EMBED_STATE_START)
 		{
-			msg = _("Loading “%s”...");
+			msg = _("Loading “%s”…");
 		}
 	}
 

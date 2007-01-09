@@ -348,7 +348,7 @@ ephy_encoding_menu_automatic_cb (GtkAction *action, EphyEncodingMenu *menu)
 
 static const GtkActionEntry menu_entries [] =
 {
-	{ "ViewEncodingOther", NULL, N_("_Other..."), NULL,
+	{ "ViewEncodingOther", NULL, N_("_Other…"), NULL,
 	  N_("Other encodings"),
 	  G_CALLBACK (ephy_encoding_menu_view_dialog_cb) }
 };

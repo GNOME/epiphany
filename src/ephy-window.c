@@ -126,22 +126,22 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* File menu */
 
-	{ "FileOpen", GTK_STOCK_OPEN, N_("_Open..."), "<control>O",
+	{ "FileOpen", GTK_STOCK_OPEN, N_("_Open…"), "<control>O",
 	  N_("Open a file"),
 	  G_CALLBACK (window_cmd_file_open) },
-	{ "FileSaveAs", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>S",
+	{ "FileSaveAs", GTK_STOCK_SAVE_AS, N_("Save _As…"), "<shift><control>S",
 	  N_("Save the current page"),
 	  G_CALLBACK (window_cmd_file_save_as) },
-	{ "FilePrintSetup", STOCK_PRINT_SETUP, N_("Print Set_up..."), NULL,
+	{ "FilePrintSetup", STOCK_PRINT_SETUP, N_("Print Set_up…"), NULL,
 	  N_("Setup the page settings for printing"),
 	  G_CALLBACK (window_cmd_file_print_setup) },
 	{ "FilePrintPreview", GTK_STOCK_PRINT_PREVIEW, N_("Print Pre_view"),"<control><shift>P",
 	  N_("Print preview"),
 	  G_CALLBACK (window_cmd_file_print_preview) },
-	{ "FilePrint", GTK_STOCK_PRINT, N_("_Print..."), "<control>P",
+	{ "FilePrint", GTK_STOCK_PRINT, N_("_Print…"), "<control>P",
 	  N_("Print the current page"),
 	  G_CALLBACK (window_cmd_file_print) },
-	{ "FileSendTo", STOCK_SEND_MAIL, N_("S_end Link by Email..."), NULL,
+	{ "FileSendTo", STOCK_SEND_MAIL, N_("S_end Link by Email…"), NULL,
 	  N_("Send a link of the current page"),
 	  G_CALLBACK (window_cmd_file_send_to) },
 	{ "FileCloseTab", GTK_STOCK_CLOSE, N_("_Close"), "<control>W",
@@ -171,7 +171,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "EditSelectAll", NULL, N_("Select _All"), "<control>A",
 	  N_("Select the entire page"),
 	  G_CALLBACK (window_cmd_edit_select_all) },
-	{ "EditFind", GTK_STOCK_FIND, N_("_Find..."), "<control>F",
+	{ "EditFind", GTK_STOCK_FIND, N_("_Find…"), "<control>F",
 	  N_("Find a word or phrase in the page"),
 	  G_CALLBACK (window_cmd_edit_find) },
 	{ "EditFindNext", NULL, N_("Find Ne_xt"), "<control>G",
@@ -194,7 +194,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* View menu */
 
-	{ "ViewToolbarEditor", NULL, N_("_Customize Toolbars..."), NULL,
+	{ "ViewToolbarEditor", NULL, N_("_Customize Toolbars…"), NULL,
 	  N_("Customize toolbars"),
 	  G_CALLBACK (window_cmd_edit_toolbar) },
 	{ "ViewStop", GTK_STOCK_STOP, N_("_Stop"), "Escape",
@@ -220,13 +220,13 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "ViewPageSource", NULL, N_("_Page Source"), "<control>U",
 	  N_("View the source code of the page"),
 	  G_CALLBACK (window_cmd_view_page_source) },
-        { "ViewPageSecurityInfo", NULL, N_("Page _Security Information..."), NULL,
+        { "ViewPageSecurityInfo", NULL, N_("Page _Security Information…"), NULL,
           N_("Display security information for the web page"),
           G_CALLBACK (window_cmd_view_page_security_info) },
 
 	/* Bookmarks menu */
 
-	{ "FileBookmarkPage", STOCK_ADD_BOOKMARK, N_("_Add Bookmark..."), "<control>D",
+	{ "FileBookmarkPage", STOCK_ADD_BOOKMARK, N_("_Add Bookmark…"), "<control>D",
 	  N_("Add a bookmark for the current page"),
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
 	{ "GoBookmarks", EPHY_STOCK_BOOKMARKS, N_("_Edit Bookmarks"), "<control>B",
@@ -235,7 +235,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* Go menu */
 
-	{ "GoLocation", NULL, N_("_Location..."), "<control>L",
+	{ "GoLocation", NULL, N_("_Location…"), "<control>L",
 	  N_("Go to a specified location"),
 	  G_CALLBACK (window_cmd_go_location) },
 	{ "GoHistory", EPHY_STOCK_HISTORY, N_("Hi_story"), "<control>H",
@@ -297,7 +297,7 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 static const GtkActionEntry ephy_popups_entries [] = {
 	/* Document */
 
-	{ "ContextBookmarkPage", STOCK_ADD_BOOKMARK, N_("Add Boo_kmark..."), "<control>D",
+	{ "ContextBookmarkPage", STOCK_ADD_BOOKMARK, N_("Add Boo_kmark…"), "<control>D",
 	  N_("Add a bookmark for the current page"),
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
 
@@ -320,10 +320,10 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	  G_CALLBACK (popup_cmd_link_in_new_tab) },
 	{ "DownloadLink", EPHY_STOCK_DOWNLOAD, N_("_Download Link"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_download_link) },
-	{ "DownloadLinkAs", GTK_STOCK_SAVE_AS, N_("_Save Link As..."), NULL,
+	{ "DownloadLinkAs", GTK_STOCK_SAVE_AS, N_("_Save Link As…"), NULL,
 	  N_("Save link with a different name"),
 	  G_CALLBACK (popup_cmd_download_link_as) },
-	{ "BookmarkLink", STOCK_ADD_BOOKMARK, N_("_Bookmark Link..."),
+	{ "BookmarkLink", STOCK_ADD_BOOKMARK, N_("_Bookmark Link…"),
 	  NULL, NULL, G_CALLBACK (popup_cmd_bookmark_link) },
 	{ "CopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
@@ -331,7 +331,7 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	/* Email links */
 
 	/* This is on the context menu on a mailto: link and opens the mail program */
-	{ "SendEmail", GTK_STOCK_OPEN, N_("_Send Email..."),
+	{ "SendEmail", GTK_STOCK_OPEN, N_("_Send Email…"),
 	  NULL, NULL, G_CALLBACK (popup_cmd_open_link) },
 	{ "CopyEmailAddress", NULL, N_("_Copy Email Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
@@ -340,7 +340,7 @@ static const GtkActionEntry ephy_popups_entries [] = {
 
 	{ "OpenImage", GTK_STOCK_OPEN, N_("Open _Image"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_open_image) },
-	{ "SaveImageAs", GTK_STOCK_SAVE_AS, N_("_Save Image As..."), NULL,
+	{ "SaveImageAs", GTK_STOCK_SAVE_AS, N_("_Save Image As…"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_save_image_as) },
 	{ "SetImageAsBackground", NULL, N_("_Use Image As Background"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_set_image_as_background) },
