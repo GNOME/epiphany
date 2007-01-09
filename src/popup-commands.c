@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
  *
@@ -367,22 +368,31 @@ popup_cmd_open_frame (GtkAction *action,
 	g_free (location);
 }
 
+/* Opens an image URI using its associated handler. Or, if that
+ * doesn't work, fallback to open the URI in a new browser window.
+ */
 static void
-image_open_uri (const char *address,
-		gboolean delete,
+image_open_uri (const char *remote_address,
+                const char *local_address,
 		guint32 user_time)
 {
 	gboolean success;
 
-	success = ephy_file_launch_handler (NULL, address, user_time);
+	success = ephy_file_launch_handler (NULL, local_address, user_time);
 
-	if (delete && success)
+	if (!success)
 	{
-		ephy_file_delete_on_exit (address);
+		ephy_shell_new_tab (ephy_shell, NULL, NULL, remote_address,
+				    EPHY_NEW_TAB_OPEN_PAGE |
+				    EPHY_NEW_TAB_IN_NEW_WINDOW);
 	}
-	else if (delete)
+
+	if (strcmp (remote_address, local_address) != 0)
 	{
-		gnome_vfs_unlink (address);
+		if (success)
+			ephy_file_delete_on_exit (local_address);
+		else
+			gnome_vfs_unlink (local_address);
 	}
 }
 
@@ -390,13 +400,15 @@ static void
 save_source_completed_cb (EphyEmbedPersist *persist)
 {
 	const char *dest;
+	const char *source;
 	guint32 user_time;
 
 	user_time = ephy_embed_persist_get_user_time (persist);
 	dest = ephy_embed_persist_get_dest (persist);
+	source = ephy_embed_persist_get_source (persist);
 	g_return_if_fail (dest != NULL);
 
-	image_open_uri (dest, TRUE, user_time);
+	image_open_uri (source, dest, user_time);
 }
 
 static void
@@ -461,7 +473,7 @@ popup_cmd_open_image (GtkAction *action,
 
 	if (strcmp (scheme, "file") == 0)
 	{
-		image_open_uri (address, FALSE,
+		image_open_uri (address, address,
 				gtk_get_current_event_time ());
 	}
 	else

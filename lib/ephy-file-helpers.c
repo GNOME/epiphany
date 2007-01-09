@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2002 Jorn Baayen
  *  Copyright © 2003, 2004 Marco Pesenti Gritti
@@ -1007,10 +1008,7 @@ ephy_file_launch_handler (const char *mime_type,
 		gnome_vfs_mime_application_free (app);
 	}
 	else
-	{
-		/* FIXME: warn user? */
-		g_warning ("No handler for found or file type is unsafe!\n");
-	}
+		ret = FALSE;
 
 	g_free (canonical);
 
