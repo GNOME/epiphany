@@ -143,3 +143,6 @@ pref("dom.storage.enabled", false);
 
 // warn about about:config
 pref("general.warnOnAboutConfig", true);
+
+// enable negotiate extension
+pref("network.negotiate-auth.trusted-uris", "https://");
