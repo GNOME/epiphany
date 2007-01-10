@@ -432,12 +432,11 @@ ephy_bookmarks_ui_add_bookmark (GtkWindow *parent,
 				const char *location, 
 				const char *title)
 {
-
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return;
-	
 	EphyBookmarks *bookmarks;
 	EphyNode *bookmark;
 	GtkWidget *dialog;
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return;
 	
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
 	bookmark = ephy_bookmarks_add (bookmarks, title, location);
