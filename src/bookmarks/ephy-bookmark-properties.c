@@ -514,7 +514,7 @@ ephy_bookmark_properties_constructor (GType type,
 	properties = EPHY_BOOKMARK_PROPERTIES (object);
 	priv = properties->priv;
 
-	gtk_window_set_icon_name (window, STOCK_BOOKMARK);
+	gtk_window_set_icon_name (window, EPHY_STOCK_BOOKMARK);
 	gtk_window_set_type_hint (window, GDK_WINDOW_TYPE_HINT_NORMAL);
 
 	g_signal_connect (properties, "response",

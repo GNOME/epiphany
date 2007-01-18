@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 #define EPHY_STOCK_POPUPS	   "popup-hidden"
 #define EPHY_STOCK_HISTORY         "history-view"
+#define EPHY_STOCK_BOOKMARK        "bookmark-web"
 #define EPHY_STOCK_BOOKMARKS       "bookmark-view"
 #define EPHY_STOCK_ENTRY	   "location-entry"
 #define EPHY_STOCK_DOWNLOAD	   "download"
@@ -35,7 +36,6 @@ G_BEGIN_DECLS
 #define STOCK_NEW_WINDOW           "window-new"
 #define STOCK_SEND_MAIL            "mail-forward"
 #define STOCK_ADD_BOOKMARK         "bookmark-new"
-#define STOCK_BOOKMARK             "stock_bookmark"
 #define STOCK_PRINT_SETUP          "stock_print-setup" /*document-page-setup*/
 #define STOCK_LOCK_INSECURE        "stock_lock-open"
 #define STOCK_LOCK_SECURE          "stock_lock"
