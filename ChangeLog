@@ -1,3 +1,11 @@
+2007-01-17  Diego Escalante Urrelo <diegoe@svn.gnome.org>
+
+	* src/popup-commands.c:
+	
+	Avoid opening a nautilus window when downloads are finished if the
+	downloaded file was saved to the desktop. Considers the
+	desktop_is_homedir option of Nautilus. Bug #383698.
+
 2007-01-10  Diego Escalante Urrelo <diegoe@svn.gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-ui.c:
