@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-01-05 13:40+0100\n"
-"PO-Revision-Date: 2007-01-05 13:41+0100\n"
+"POT-Creation-Date: 2007-01-22 14:51+0100\n"
+"PO-Revision-Date: 2007-01-22 14:52+0100\n"
 "Last-Translator: Jakub Friedl <jfriedl@suse.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -263,8 +263,8 @@ msgid ""
 "How to print pages containing frames. Allowed values are \"normal\", "
 "\"separately\" and \"selected\"."
 msgstr ""
-"jak tisknout stránky obsahující rámy. Možné hodnoty "
-"jsou \"normal\", \"separately\" a \"selected\"."
+"jak tisknout stránky obsahující rámy. Možné hodnoty jsou \"normal\", "
+"\"separately\" a \"selected\"."
 
 #: ../data/epiphany.schemas.in.h:21
 msgid "ISO-8859-1"
@@ -587,7 +587,7 @@ msgid "Cookies"
 msgstr "Koláčky"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:107
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:108
 msgid "Downloads"
 msgstr "Stahování"
 
@@ -635,7 +635,7 @@ msgid "_Password:"
 msgstr "_Heslo:"
 
 #: ../data/glade/form-signing-dialog.glade.h:5
-msgid "_View Certificate..."
+msgid "_View Certificate…"
 msgstr "_Zobrazit certifikát..."
 
 #: ../data/glade/prefs-dialog.glade.h:1
@@ -772,7 +772,7 @@ msgid "_Always accept"
 msgstr "_Vždy přijímat"
 
 #: ../data/glade/prefs-dialog.glade.h:34
-msgid "_Detailed Font Settings..."
+msgid "_Detailed Font Settings…"
 msgstr "_Podrobná nastavení písem..."
 
 #: ../data/glade/prefs-dialog.glade.h:35
@@ -784,8 +784,8 @@ msgid "_Download folder:"
 msgstr "Složka pro _stahování:"
 
 #: ../data/glade/prefs-dialog.glade.h:37
-msgid "_Edit Stylesheet..."
-msgstr "_Upravit stylesheet..."
+msgid "_Edit Stylesheet…"
+msgstr "_Upravit stylopis..."
 
 #: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Fixed width:"
@@ -1468,11 +1468,11 @@ msgid "Likely causes of the problem are"
 msgstr "Pravděpodobné příčiny problému jsou"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:276
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "<ul><li>the service %s isn't started.</li>Try to start it using the Services "
-"Configuration Tool in Desktop > System Settings > Server Settings > "
-"Services, or</ul><ul><li>the port number %d is wrong.</li></ul>"
+"Configuration Tool in System > Administration > Services, or</ul><ul><li>the "
+"port number %d is wrong.</li></ul>"
 msgstr ""
 "<ul><li>služba %s není spuštěna.</li>Zkuste ji spustit pomocí Nástroje pro "
 "nastavení služeb v Prostředí > Systémová nastavení > Nastavení serveru > "
@@ -2195,17 +2195,17 @@ msgstr "Oddělovač"
 msgid "All supported types"
 msgstr "Všechny podporované typy"
 
-#: ../lib/ephy-file-helpers.c:301
+#: ../lib/ephy-file-helpers.c:302
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Nemohu vytvořit dočasný adresář v „%s”."
 
-#: ../lib/ephy-file-helpers.c:377
+#: ../lib/ephy-file-helpers.c:378
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Soubor „%s” existuje. Přesuňte jej prosím jinam."
 
-#: ../lib/ephy-file-helpers.c:388
+#: ../lib/ephy-file-helpers.c:389
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Nemohu vytvořit adresář „%s”."
@@ -2427,13 +2427,17 @@ msgstr "_Pamatovat heslo pro toto sezení"
 msgid "Save password in _keyring"
 msgstr "Uložit heslo do svazku _klíčů"
 
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:54
 msgid "Popup Windows"
 msgstr "Vyskakovací okna"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1195
+#: ../lib/ephy-stock-icons.c:55 ../src/ephy-history-window.c:1195
 msgid "History"
 msgstr "Historie"
+
+#: ../lib/ephy-stock-icons.c:56 ../src/ephy-window.c:1337
+msgid "Bookmark"
+msgstr "Záložka"
 
 #: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
@@ -2742,7 +2746,7 @@ msgid "Open the selected bookmark in a new tab"
 msgstr "Otevřít vybranou záložku v nové kartě"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:197
-msgid "_Rename..."
+msgid "_Rename…"
 msgstr "_Přejmenovat..."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:198
@@ -2769,7 +2773,7 @@ msgid "View or modify the properties of the selected bookmark"
 msgstr "Zobrazit nebo upravit vlastnosti vybrané záložky"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:205
-msgid "_Import Bookmarks..."
+msgid "_Import Bookmarks…"
 msgstr "_Importovat záložky..."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:206
@@ -2777,7 +2781,7 @@ msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Importovat záložky z jiného prohlížeče nebo souboru záložek"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:208
-msgid "_Export Bookmarks..."
+msgid "_Export Bookmarks…"
 msgstr "_Exportovat záložky..."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:209
@@ -3051,8 +3055,8 @@ msgid "Encodings"
 msgstr "Kódování"
 
 #: ../src/ephy-encoding-menu.c:351
-msgid "_Other..."
-msgstr "_Jiné..."
+msgid "_Other…"
+msgstr "_Ostatní..."
 
 #: ../src/ephy-encoding-menu.c:352
 msgid "Other encodings"
@@ -3116,7 +3120,7 @@ msgid "Delete the selected history link"
 msgstr "Odstranit vybraný odkaz historie"
 
 #: ../src/ephy-history-window.c:181
-msgid "Add _Bookmark..."
+msgid "Add _Bookmark…"
 msgstr "Přidat _záložku..."
 
 #: ../src/ephy-history-window.c:182
@@ -3236,7 +3240,7 @@ msgid "DIR"
 msgstr "ADRESÁŘ"
 
 #: ../src/ephy-main.c:94
-msgid "URL ..."
+msgid "URL …"
 msgstr "URL ..."
 
 #: ../src/ephy-main.c:396
@@ -3346,27 +3350,27 @@ msgstr "Prázdná stránka"
 
 #. translators: %s here is the address of the web page
 #: ../src/ephy-tab.c:940 ../src/ephy-tab.c:1711
-#, c-format
-msgid "Loading “%s”..."
+#, fuzzy, c-format
+msgid "Loading “%s”…"
 msgstr "Načítám „%s”..."
 
 #: ../src/ephy-tab.c:944
-msgid "Loading..."
+msgid "Loading…"
 msgstr "Načítám..."
 
 #: ../src/ephy-tab.c:1695
-#, c-format
-msgid "Redirecting to “%s”..."
+#, fuzzy, c-format
+msgid "Redirecting to “%s”…"
 msgstr "Přesměrovávám na „%s”..."
 
 #: ../src/ephy-tab.c:1699
-#, c-format
-msgid "Transferring data from “%s”..."
+#, fuzzy, c-format
+msgid "Transferring data from “%s”…"
 msgstr "Přenáším data z „%s”..."
 
 #: ../src/ephy-tab.c:1703
-#, c-format
-msgid "Waiting for authorization from “%s”..."
+#, fuzzy, c-format
+msgid "Waiting for authorization from “%s”…"
 msgstr "Čekám na autorizaci z „%s”..."
 
 #: ../src/ephy-tabs-menu.c:149
@@ -3499,23 +3503,26 @@ msgstr "_Lišty nástrojů"
 
 #. File menu
 #: ../src/ephy-window.c:129
-msgid "_Open..."
-msgstr "_Otevřít..."
+#, fuzzy
+msgid "_Open…"
+msgstr "Otevřít"
 
 #: ../src/ephy-window.c:130
 msgid "Open a file"
 msgstr "Otevřít soubor"
 
 #: ../src/ephy-window.c:132
-msgid "Save _As..."
-msgstr "Uložit _jako..."
+#, fuzzy
+msgid "Save _As…"
+msgstr "Uložit jako"
 
 #: ../src/ephy-window.c:133
 msgid "Save the current page"
 msgstr "Uložit aktuální stránku"
 
 #: ../src/ephy-window.c:135
-msgid "Print Set_up..."
+#, fuzzy
+msgid "Print Set_up…"
 msgstr "N_astavení tisku..."
 
 #: ../src/ephy-window.c:136
@@ -3531,15 +3538,17 @@ msgid "Print preview"
 msgstr "Náhled před tiskem"
 
 #: ../src/ephy-window.c:141
-msgid "_Print..."
-msgstr "Vy_tisknout..."
+#, fuzzy
+msgid "_Print…"
+msgstr "Tisk"
 
 #: ../src/ephy-window.c:142
 msgid "Print the current page"
 msgstr "Vytisknout aktuální stránku"
 
 #: ../src/ephy-window.c:144
-msgid "S_end Link by Email..."
+#, fuzzy
+msgid "S_end Link by Email…"
 msgstr "Ode_slat odkaz e-mailem..."
 
 #: ../src/ephy-window.c:145
@@ -3580,8 +3589,9 @@ msgid "Select the entire page"
 msgstr "Vybrat celou stránku"
 
 #: ../src/ephy-window.c:174
-msgid "_Find..."
-msgstr "_Hledat..."
+#, fuzzy
+msgid "_Find…"
+msgstr "Hledat"
 
 #: ../src/ephy-window.c:175
 msgid "Find a word or phrase in the page"
@@ -3629,7 +3639,8 @@ msgstr "Nastavit prohlížeč WWW"
 
 #. View menu
 #: ../src/ephy-window.c:197
-msgid "_Customize Toolbars..."
+#, fuzzy
+msgid "_Customize Toolbars…"
 msgstr "_Upravit lišty nástrojů..."
 
 #: ../src/ephy-window.c:198
@@ -3693,7 +3704,8 @@ msgid "View the source code of the page"
 msgstr "Zobrazit zdrojový kód stránky"
 
 #: ../src/ephy-window.c:223
-msgid "Page _Security Information..."
+#, fuzzy
+msgid "Page _Security Information…"
 msgstr "Informace o _zabezpečení stránky"
 
 #: ../src/ephy-window.c:224
@@ -3702,7 +3714,8 @@ msgstr "Zobrazit informace o zabezpečení webové stránky"
 
 #. Bookmarks menu
 #: ../src/ephy-window.c:229
-msgid "_Add Bookmark..."
+#, fuzzy
+msgid "_Add Bookmark…"
 msgstr "_Přidat záložku..."
 
 #: ../src/ephy-window.c:230 ../src/ephy-window.c:301
@@ -3719,7 +3732,8 @@ msgstr "Otevřít okno záložek"
 
 #. Go menu
 #: ../src/ephy-window.c:238
-msgid "_Location..."
+#, fuzzy
+msgid "_Location…"
 msgstr "_Umístění..."
 
 #: ../src/ephy-window.c:239
@@ -3819,7 +3833,8 @@ msgstr "Kurzor výběru"
 
 #. Document
 #: ../src/ephy-window.c:300
-msgid "Add Boo_kmark..."
+#, fuzzy
+msgid "Add Boo_kmark…"
 msgstr "_Přidat záložku..."
 
 #. Framed document
@@ -3861,15 +3876,17 @@ msgid "_Download Link"
 msgstr "_Stáhnout odkaz"
 
 #: ../src/ephy-window.c:323
-msgid "_Save Link As..."
-msgstr "_Uložit odkaz jako..."
+#, fuzzy
+msgid "_Save Link As…"
+msgstr "Uložit odkaz jako"
 
 #: ../src/ephy-window.c:324
 msgid "Save link with a different name"
 msgstr "Uložit odkaz s jiným názvem"
 
 #: ../src/ephy-window.c:326
-msgid "_Bookmark Link..."
+#, fuzzy
+msgid "_Bookmark Link…"
 msgstr "Přidat odkaz k _záložkám..."
 
 #: ../src/ephy-window.c:328
@@ -3879,7 +3896,8 @@ msgstr "_Kopírovat adresu odkazu"
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
 #: ../src/ephy-window.c:334
-msgid "_Send Email..."
+#, fuzzy
+msgid "_Send Email…"
 msgstr "Ode_slat e-mail..."
 
 #: ../src/ephy-window.c:336
@@ -3892,8 +3910,9 @@ msgid "Open _Image"
 msgstr "Otevřít _obrázek"
 
 #: ../src/ephy-window.c:343
-msgid "_Save Image As..."
-msgstr "_Uložit obrázek jako..."
+#, fuzzy
+msgid "_Save Image As…"
+msgstr "Uložit obrázek jako"
 
 #: ../src/ephy-window.c:345
 msgid "_Use Image As Background"
@@ -3934,10 +3953,6 @@ msgstr "Uložit jako"
 #: ../src/ephy-window.c:1335
 msgid "Print"
 msgstr "Tisk"
-
-#: ../src/ephy-window.c:1337
-msgid "Bookmark"
-msgstr "Záložka"
 
 #: ../src/ephy-window.c:1339
 msgid "Find"
@@ -4079,15 +4094,15 @@ msgstr "Jméno uživatele"
 msgid "User Password"
 msgstr "Heslo uživatele"
 
-#: ../src/popup-commands.c:253
+#: ../src/popup-commands.c:272
 msgid "Download Link"
 msgstr "Stáhnout odkaz"
 
-#: ../src/popup-commands.c:261
+#: ../src/popup-commands.c:280
 msgid "Save Link As"
 msgstr "Uložit odkaz jako"
 
-#: ../src/popup-commands.c:268
+#: ../src/popup-commands.c:287
 msgid "Save Image As"
 msgstr "Uložit obrázek jako"
 
