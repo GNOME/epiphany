@@ -23,6 +23,7 @@
 
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkprintsettings.h>
+#include <gtk/gtkprinter.h>
 
 #include <nsIPrintingPromptService.h>
 
@@ -44,7 +45,7 @@ public:
 	GeckoPrintService();
 	virtual ~GeckoPrintService();
 
-	static nsresult TranslateSettings (GtkPrintSettings*, GtkPageSetup *, const nsACString&, PRBool, nsIPrintSettings*);
+	static nsresult TranslateSettings (GtkPrintSettings*, GtkPageSetup *, GtkPrinter *, const nsACString&, PRBool, nsIPrintSettings*);
 
 private:
 	nsresult PrintUnattended (nsIDOMWindow *, nsIPrintSettings *);

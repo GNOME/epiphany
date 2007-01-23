@@ -748,6 +748,7 @@ nsresult EphyBrowser::SetPrintPreviewMode (PRBool previewMode)
 		EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 		rv = GeckoPrintService::TranslateSettings (ephy_embed_shell_get_print_settings (shell),
 							   ephy_embed_shell_get_page_setup (shell),
+							   NULL,
 							   nsCString(),
 							   PR_FALSE,
 							   settings);

@@ -105,7 +105,7 @@ GeckoPrintSession::SetSettings (GtkPrintSettings *aSettings,
   NS_ASSERTION (!mSettings && !mPageSetup && !mPrinter, "Already have settings!");
 
   NS_ENSURE_ARG (aSettings);
-  mSettings = aSettings; /* this one is adopted */
+  mSettings = (GtkPrintSettings *) g_object_ref (aSettings);
 
   NS_ENSURE_ARG (aPageSetup);
   NS_ENSURE_ARG (aPrinter);
