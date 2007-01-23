@@ -153,14 +153,18 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
 		  				 GTK_WINDOW (parent));
   GtkPrintUnixDialog *print_dialog = GTK_PRINT_UNIX_DIALOG (dialog);
 
-  gtk_print_unix_dialog_set_manual_capabilities
-	(print_dialog,
+  GtkPrintCapabilities capabilities =
 	 GtkPrintCapabilities (GTK_PRINT_CAPABILITY_PAGE_SET |
 			       GTK_PRINT_CAPABILITY_COPIES   |
 			       GTK_PRINT_CAPABILITY_COLLATE  |
 			       GTK_PRINT_CAPABILITY_REVERSE  |
 			       GTK_PRINT_CAPABILITY_SCALE |
-			       GTK_PRINT_CAPABILITY_GENERATE_PS));
+			       GTK_PRINT_CAPABILITY_GENERATE_PS);
+#if 0 //def HAVE_GECKO_1_9
+  capabilities = GtkPrintCapabilities (capabilities | GTK_PRINT_CAPABILITY_GENERATE_PDF);
+#endif
+  gtk_print_unix_dialog_set_manual_capabilities	(print_dialog, capabilities);
+
   gtk_print_unix_dialog_set_page_setup (print_dialog,
 					ephy_embed_shell_get_page_setup (shell));
   gtk_print_unix_dialog_set_settings (print_dialog,
@@ -187,13 +191,22 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
     return NS_ERROR_ABORT;
   }
 
-  GtkPageSetup *pageSetup = gtk_print_unix_dialog_get_page_setup (print_dialog);
+  GtkPageSetup *pageSetup = gtk_print_unix_dialog_get_page_setup (print_dialog); /* no reference owned */
   ephy_embed_shell_set_page_setup (shell, pageSetup);
 
   GtkPrintSettings *settings = gtk_print_unix_dialog_get_settings (print_dialog);
   ephy_embed_shell_set_print_settings (shell, settings);
 
-  /* This adopts the refcount of |settings| */
+  /* We copy the setup and settings so we can modify them to unset
+   * options handled by gecko.
+   */
+  GtkPageSetup *pageSetupCopy = gtk_page_setup_copy (pageSetup);
+  pageSetup = pageSetupCopy;
+
+  GtkPrintSettings *settingsCopy = gtk_print_settings_copy (settings);
+  g_object_unref (settings);
+  settings = settingsCopy;
+
   rv = session->SetSettings (settings, pageSetup, printer);
 
   /* Now translate the settings to nsIPrintSettings */
@@ -201,13 +214,16 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
     nsCString sourceFile;
     session->GetSourceFile (sourceFile);
     if (!sourceFile.IsEmpty ()) {
-      rv = TranslateSettings (settings, pageSetup, sourceFile, PR_TRUE, aSettings);
+      rv = TranslateSettings (settings, pageSetup, printer, sourceFile, PR_TRUE, aSettings);
     } else {
       rv = NS_ERROR_FAILURE;
     }
   }
 
   gtk_widget_destroy (dialog);
+
+  g_object_unref (settings);
+  g_object_unref (pageSetup);
 
   return rv;
 }
@@ -469,6 +485,7 @@ GeckoPrintService::PrintUnattended (nsIDOMWindow *aParent,
 /* static */ nsresult
 GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
 				      GtkPageSetup *aPageSetup,
+				      GtkPrinter *aPrinter,
 				      const nsACString &aSourceFile,
 				      PRBool aIsForPrinting,
 				      nsIPrintSettings *aSettings)
@@ -518,6 +535,26 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   aSettings->SetPrintPageDelay (50);
 
   if (aIsForPrinting) {
+#if 0 //def HAVE_GECKO_1_9
+    NS_ENSURE_TRUE (aPrinter, NS_ERROR_FAILURE);
+
+    const char *format = gtk_print_settings_get (aGtkSettings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT);
+    if (!format)
+      format = "ps";
+
+    if (strcmp (format, "pdf") == 0 &&
+	gtk_printer_accepts_pdf (aPrinter)) {
+      aSettings->SetOutputFormat (nsIPrintSettings::kOutputFormatPDF);
+    } else if (strcmp (format, "ps") == 0 &&
+	       gtk_printer_accepts_ps (aPrinter)) {
+      aSettings->SetOutputFormat (nsIPrintSettings::kOutputFormatPS);
+    } else {
+      g_warning ("Output format '%s' specified, but printer '%s' does not support it!",
+		 format, gtk_printer_get_name (aPrinter));
+      return NS_ERROR_FAILURE;
+    }
+#endif
+	  
     GtkPageSet pageSet = gtk_print_settings_get_page_set (aGtkSettings);
     aSettings->SetPrintOptions (nsIPrintSettings::kPrintEvenPages,
 			        pageSet != GTK_PAGE_SET_ODD);
@@ -539,8 +576,9 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
 	  aSettings->SetEndPageRange (pageRanges[0].end + 1);
 
 	  g_free (pageRanges);
+          break;
         }
-        break;
+	/* Fall-through to PAGES_ALL */
       }
       case GTK_PRINT_PAGES_CURRENT:
         /* not supported, fall through */
@@ -572,8 +610,6 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   aSettings->SetPaperSizeUnit(nsIPrintSettings::kPaperSizeMillimeters);
   aSettings->SetPaperSize (nsIPrintSettings::kPaperSizeDefined);
 
-  // FIXME for some reason this is always NULL ??
-  //  GtkPaperSize *paperSize = gtk_print_settings_get_paper_size (aGtkSettings); 
   GtkPaperSize *paperSize = gtk_page_setup_get_paper_size (aPageSetup);
   if (!paperSize) {
     return NS_ERROR_FAILURE;
@@ -622,8 +658,6 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
 }
 #endif /* !HAVE_GECKO_1_9 */
 
-  // gtk_paper_size_free (paperSize);
-
   /* Sucky mozilla wants margins in inch! */
   aSettings->SetMarginTop (gtk_page_setup_get_top_margin (aPageSetup, GTK_UNIT_INCH));
   aSettings->SetMarginBottom (gtk_page_setup_get_bottom_margin (aPageSetup, GTK_UNIT_INCH));
@@ -656,6 +690,19 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   /* aSettings->SetColorspace (LITERAL ("default")); */
   /* aSettings->SetResolutionName (LITERAL ("default")); */
   /* aSettings->SetDownloadFonts (PR_TRUE); */
+
+  /* Unset those setting that we can handle, so they don't get applied
+   * again for the print job.
+   */
+  gtk_print_settings_set_print_pages (aGtkSettings, GTK_PRINT_PAGES_ALL);
+  gtk_print_settings_set_page_ranges (aGtkSettings, NULL, 0);
+  gtk_print_settings_set_page_set (aGtkSettings, GTK_PAGE_SET_ALL);
+  gtk_print_settings_set_reverse (aGtkSettings, FALSE);
+  gtk_print_settings_set_scale (aGtkSettings, 1.0);
+  /* gtk_print_settings_set_collate (aGtkSettings, FALSE); not yet */
+  /* FIXME: Unset the orientation for the print job? */
+  /* gtk_print_settings_set_orientation (aGtkSettings, GTK_PAGE_ORIENTATION_PORTRAIT); */
+  /* FIXME: unset output format -> "ps" ? */
 
   return NS_OK;
 }
