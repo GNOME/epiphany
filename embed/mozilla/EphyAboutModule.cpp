@@ -358,10 +358,11 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 				(_("“%s” Redirected Too Many Times"),
 				 host.get());
 		/* Translators: %s is the hostname, like "www.example.com" */
-		*aPrimary = g_markup_printf_escaped
-				(_("“%s” redirected too many times."),
+		*aPrimary = _("This page cannot load because of a problem with the Web site.");
+
+		*aSecondary = g_markup_printf_escaped
+				(_("The server “%s” is redirecting in a way that will never complete."),
 				 host.get());
-		*aSecondary = _("The redirection has been stopped for security reasons.");
 		*aLinkIntro = _("There may be an old version of the page you wanted:");
 	}
 	else if (strcmp (aError, "unknownSocketType") == 0)
