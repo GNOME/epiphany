@@ -276,7 +276,7 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 							_("<ul>"
 							   "<li>the service ""%s"" isn't started.</li>"
 							   "Try to start it using the Services Configuration Tool in "
-							   "System > Administration > Services, or</ul>"
+							   "System > Control Center, or</ul>"
 							   "<ul><li>the port number %d is wrong.</li>"
 							   "</ul>"),
 							serv->s_name, port);
