@@ -93,6 +93,18 @@ GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
 	/* FIXME: handle aForced / aReason argument in some way? */
 
 	mContext = aContext;
+
+	/* Check for a potential veto */
+	nsCOMPtr<nsIDOMWindow> window (do_GetInterface (aContext));
+	GtkWidget *embed = EphyUtils::FindEmbed (window);
+	if (EPHY_IS_EMBED (embed))
+	{
+		if (g_object_get_data (G_OBJECT (embed), "content-handler-deny"))
+		{
+			return NS_OK;
+		}
+	}
+
 	mLauncher = aLauncher;
 	rv = Init ();
 	NS_ENSURE_SUCCESS (rv, rv);
