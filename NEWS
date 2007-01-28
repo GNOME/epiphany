@@ -2,6 +2,45 @@
 Epiphany 2.16.2
 ===============
 
+Changes:
+	* Added flv mime type
+	* Added text/google-video-pointer and variant.
+	* Added text/csv as a safe type (note that the alias 
+	  text/x-comma-separate-values is also present).
+
+Bugfixes:
+	* Workaround for the crash while deleting bookmarks.
+	  Bug #351814.
+	* Add "si" to locales always using pango.
+	  Bug #361538.
+	* Fix secure location bar colouring with dark themes.
+	  Bug #347343.
+	* Fix bookmarks export to HTML.
+	  Bug #345925.
+	* Corrects the expand of the Privacy tab in the Preferences window.
+	* Removed the hardcoded invisible char from glade files.
+	  Bug #393910.
+	* Fallback for setting image as background not working in Fedora. 
+	  Bug ##387206. See redhat #201867.
+	* Fixes the escaping of page not fully loaded error message. 
+	  Bug #374627.
+	* Fixes a problem at link time on Darwin.
+	  Bug #387233.
+	* Avoid crashing when calling epiphany.Shell() from Python.
+	  Bug #351705.
+	* Make sure we don't write characters < 0x20 (except 0x9, 0xa, 0xd) to XML.
+	  Bug #392782.
+
+
+Contributors to this release:
+Diego Escalante Urrelo, Vitali Ischenko, Baptiste Mille-Mathias, Stefan Stuhr, Christian Persch, Gaëtan Podevijn, Chris Wilson.
+
+Translation updates:
+
+===============
+Epiphany 2.16.2
+===============
+
 Contributors to this release:
 Benjamin Berg, Wouter Bolsterlee, Christian Persch,
 Jean-François Rameau
