@@ -1,3 +1,9 @@
+2007-01-28  Christian Persch  <chpe@svn.gnome.org>
+
+	* data/Makefile.am:
+
+	Fix schemas install command.
+
 2007-01-27  Priit Laes  <plaes@svn.gnome.org>
 
 	* embed/mozilla/EphyAboutModule.cpp:
@@ -11,6 +17,18 @@
 
 	Changed the "redirected too many times" error page to be more
 	friendly. Bug #395990.
+
+2007-01-23  Christian Persch  <chpe@svn.gnome.org>
+
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/GeckoPrintService.cpp:
+	* embed/mozilla/GeckoPrintService.h:
+	* embed/mozilla/GeckoPrintSession.cpp:
+
+	Clear some print settings in the settings we hand to the print job, so
+	they don't get applied twice. Bug #394818.
+
+	Prepare for printing to PDF (#if 0'd until the gecko bug is fixed).
 
 2007-01-23  Christian Persch  <chpe@svn.gnome.org>
 
