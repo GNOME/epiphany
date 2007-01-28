@@ -240,11 +240,9 @@ sync_active_tab (EphyWindow *window,
 	GtkAction *action;
 
 	tab = ephy_window_get_active_tab (window);
+	if (tab == NULL) return;
 
 	LOG ("active tab is tab %p", tab);
- 
-	g_return_if_fail (tab != NULL);
-	if (tab == NULL) return;
 
 	action = g_object_get_data (G_OBJECT (tab), DATA_KEY);
 	/* happens initially, since the ::active-tab comes before
