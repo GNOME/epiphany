@@ -146,3 +146,14 @@ pref("general.warnOnAboutConfig", true);
 
 // enable negotiate extension
 pref("network.negotiate-auth.trusted-uris", "https://");
+
+// JS annoyances
+pref("dom.disable_window_flip", true);
+
+// Whether delete and backspace should immediately delete characters not
+// visually adjacent to the caret, or adjust the visual position of the caret
+// on the first keypress and delete the character on a second keypress
+// (added in bug https://bugzilla.mozilla.org/show_bug.cgi?id=328834)
+// set to true for parity with gtk entries
+pref("bidi.edit.delete_immediately", true);
+
