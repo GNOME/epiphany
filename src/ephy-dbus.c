@@ -244,7 +244,7 @@ ephy_dbus_connect_to_session_bus (EphyDbus *ephy_dbus,
 	priv->session_bus = dbus_g_bus_get (DBUS_BUS_SESSION, error);
 	if (priv->session_bus == NULL)
 	{
-		g_warning("Unable to connect to session bus: %s", error ? (*error)->message : "");
+		g_warning("Unable to connect to session bus: %s", error && *error ? (*error)->message : "");
 		return FALSE;
 	}
 
