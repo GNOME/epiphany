@@ -3123,6 +3123,7 @@
 
 ;; From ../../src/ephy-shell.h
 
+
 (define-function ephy_new_tab_flags_get_type
   (c-name "ephy_new_tab_flags_get_type")
   (return-type "GType")
@@ -3138,11 +3139,11 @@
   (return-type "EphyShell*")
 )
 
-(define-function ephy_shell_new
-  (c-name "ephy_shell_new")
-  (is-constructor-of "EphyShell")
-  (return-type "EphyShell*")
-)
+;(define-function ephy_shell_new
+;  (c-name "ephy_shell_new")
+;  (is-constructor-of "EphyShell")
+;  (return-type "EphyShell*")
+;)
 
 (define-method new_tab
   (of-object "EphyShell")
@@ -3237,11 +3238,11 @@
   (return-type "GType")
 )
 
-(define-function ephy_statusbar_new
-  (c-name "ephy_statusbar_new")
-  (is-constructor-of "EphyStatusbar")
-  (return-type "GtkWidget*")
-)
+;(define-function ephy_statusbar_new
+;  (c-name "ephy_statusbar_new")
+;  (is-constructor-of "EphyStatusbar")
+;  (return-type "GtkWidget*")
+;)
 
 (define-method get_tooltips
   (of-object "EphyStatusbar")
@@ -3311,11 +3312,11 @@
   (return-type "GType")
 )
 
-(define-function ephy_tab_new
-  (c-name "ephy_tab_new")
-  (is-constructor-of "EphyTab")
-  (return-type "EphyTab*")
-)
+;(define-function ephy_tab_new
+;  (c-name "ephy_tab_new")
+;  (is-constructor-of "EphyTab")
+;  (return-type "EphyTab*")
+;)
 
 (define-method get_embed
   (of-object "EphyTab")
