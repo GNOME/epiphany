@@ -35,6 +35,33 @@
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
+static inline xmlChar *
+sanitise_string (const xmlChar *string)
+{
+	xmlChar *copy, *p;
+
+	if (!string)
+		return xmlStrdup ((const xmlChar *) "");
+
+	/* http://www.w3.org/TR/REC-xml/#sec-well-formed :
+	   Character Range
+	   [2]     Char       ::=          #x9 | #xA | #xD | [#x20-#xD7FF] |
+	   [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+	   any Unicode character, excluding the surrogate blocks, FFFE, and FFFF.
+	*/
+
+	copy = xmlStrdup (string);
+	for (p = copy; *p; p++)
+	{
+		xmlChar c = *p;
+		if (G_UNLIKELY (c < 0x20 && c != 0xd && c != 0xa && c != 0x9)) {
+			*p = 0x20;
+		}
+	}
+
+	return copy;
+}
+
 static int
 write_topics_list (EphyNode *topics,
 		   EphyNode *bmk,
@@ -67,16 +94,20 @@ write_topics_list (EphyNode *topics,
 	{
 		EphyNode *node = l->data;
 		const char *name;
+		xmlChar *safeName;
 
 		name = ephy_node_get_property_string
 			(node, EPHY_NODE_KEYWORD_PROP_NAME);
+		safeName = sanitise_string ((const xmlChar *) name);
 
 		ret = xmlTextWriterWriteElementNS
 			(writer, 
 			 (xmlChar *) "dc",
 			 (xmlChar *) "subject",
 			 NULL,
-			 (xmlChar *) name);
+			 safeName);
+		xmlFree (safeName);
+
 		if (ret < 0) break;
 	}
 
@@ -94,6 +125,7 @@ write_rdf (EphyBookmarks *bookmarks,
 	GPtrArray *children;
 	char *file_uri;
 	int i, ret;
+	xmlChar *safeString;
 #ifdef ENABLE_ZEROCONF
 	EphyNode *local;
 #endif
@@ -135,15 +167,18 @@ write_rdf (EphyBookmarks *bookmarks,
 	ret = xmlTextWriterStartElement (writer, (xmlChar *) "channel");
 	if (ret < 0) goto out;
 
-	/* FIXME is this UTF-8 ? */
+	/* FIXME: sanitise file_uri? */
 	file_uri = gnome_vfs_get_uri_from_local_path (filename);
+	safeString = sanitise_string ((const xmlChar *) file_uri);
+	g_free (file_uri);
+
 	ret = xmlTextWriterWriteAttributeNS
 		(writer,
 		 (xmlChar *) "rdf",
 		 (xmlChar *) "about",
 		 NULL,
-		 (xmlChar *) file_uri);
-	g_free (file_uri);
+		 safeString);
+	xmlFree (safeString);
 	if (ret < 0) goto out;
 
 	ret = xmlTextWriterWriteElement 
@@ -182,6 +217,7 @@ write_rdf (EphyBookmarks *bookmarks,
 		const char *url;
 		char *link = NULL;
 		gboolean smart_url;
+		xmlChar *safeLink;
 
 		kid = g_ptr_array_index (children, i);
 
@@ -189,13 +225,6 @@ write_rdf (EphyBookmarks *bookmarks,
 		/* Don't export the local bookmarks */
 		if (ephy_node_has_child (local, kid)) continue;
 #endif
-
-		ret = xmlTextWriterStartElementNS
-			(writer,
-			 (xmlChar *) "rdf",
-			 (xmlChar *) "li",
-			 NULL);
-		if (ret < 0) break;
 
 		smart_url = ephy_node_has_child (smart_bmks, kid);
 		url = ephy_node_get_property_string
@@ -217,13 +246,23 @@ write_rdf (EphyBookmarks *bookmarks,
 			}
 		}
 
+		safeLink = sanitise_string (link ? (const xmlChar *) link : (const xmlChar *) url);
+		g_free (link);
+
+		ret = xmlTextWriterStartElementNS
+			(writer,
+			 (xmlChar *) "rdf",
+			 (xmlChar *) "li",
+			 NULL);
+		if (ret < 0) break;
+
 		ret = xmlTextWriterWriteAttributeNS
 			(writer,
 			 (xmlChar *) "rdf",
 			 (xmlChar *) "resource",
 			 NULL,
-			 (xmlChar *) (link ? link : url));
-		g_free (link);
+			 safeLink);
+		xmlFree (safeLink);
 		if (ret < 0) break;
 
 		ret = xmlTextWriterEndElement (writer); /* rdf:li */
@@ -247,6 +286,7 @@ write_rdf (EphyBookmarks *bookmarks,
 		const char *url, *title;
 		char *link = NULL;
 		gboolean smart_url;
+		xmlChar *safeLink, *safeTitle;
 
 		kid = g_ptr_array_index (children, i);
 
@@ -286,34 +326,48 @@ write_rdf (EphyBookmarks *bookmarks,
 		ret = xmlTextWriterStartElement (writer, (xmlChar *) "item");
 		if (ret < 0) break;
 
+		safeLink = sanitise_string ((const xmlChar *) link);
+		g_free (link);
+
 		ret = xmlTextWriterWriteAttributeNS
 			(writer,
 			 (xmlChar *) "rdf",
 			 (xmlChar *) "about",
 			 NULL,
-			 (xmlChar *) link);
-		if (ret < 0) break;
+			 safeLink);
+		if (ret < 0)
+		{
+			xmlFree (safeLink);
+			break;
+		}
 
+		safeTitle = sanitise_string ((const xmlChar *) title);
 		ret = xmlTextWriterWriteElement
 			(writer,
 			 (xmlChar *) "title",
-			 (xmlChar *) title);
+			 safeTitle);
+		xmlFree (safeTitle);
 		if (ret < 0) break;
 
 		ret = xmlTextWriterWriteElement
 			(writer,
 			 (xmlChar *) "link",
-			 (xmlChar *) link);
+			 safeLink);
+		xmlFree (safeLink);
 		if (ret < 0) break;
 
 		if (smart_url)
 		{
+			xmlChar *safeSmartLink;
+
+			safeSmartLink = sanitise_string ((const xmlChar *) url);
 			ret = xmlTextWriterWriteElementNS
 				(writer,
 				 (xmlChar *) "ephy",
 				 (xmlChar *) "smartlink",
 				 NULL,
-				 (xmlChar *) url);
+				 safeSmartLink);
+			xmlFree (safeSmartLink);
 			if (ret < 0) break;
 		}
 
@@ -321,8 +375,6 @@ write_rdf (EphyBookmarks *bookmarks,
 		if (ret < 0) break;
 
 		ret = xmlTextWriterEndElement (writer); /* item */
-
-		g_free (link);
 	}
 	if (ret < 0) goto out;
 
