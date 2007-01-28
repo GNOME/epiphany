@@ -806,6 +806,38 @@ write_parent (guint id,
 	if (data->ret < 0) return;
 }
 
+static inline int
+safe_write_string (xmlTextWriterPtr writer,
+		   const xmlChar *string)
+{
+	int ret;
+	xmlChar *copy, *p;
+
+	if (!string)
+		return 0;
+
+	/* http://www.w3.org/TR/REC-xml/#sec-well-formed :
+	   Character Range
+	   [2]     Char       ::=          #x9 | #xA | #xD | [#x20-#xD7FF] |
+	   [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+	   any Unicode character, excluding the surrogate blocks, FFFE, and FFFF.
+	*/
+
+	copy = xmlStrdup (string);
+	for (p = copy; *p; p++)
+	{
+		xmlChar c = *p;
+		if (G_UNLIKELY (c < 0x20 && c != 0xd && c != 0xa && c != 0x9)) {
+			*p = 0x20;
+		}
+	}
+
+	ret = xmlTextWriterWriteString (writer, copy);
+	xmlFree (copy);
+
+	return ret;
+}
+
 int
 ephy_node_write_to_xml(EphyNode *node,
 		       xmlTextWriterPtr writer)
@@ -851,7 +883,7 @@ ephy_node_write_to_xml(EphyNode *node,
 		switch (G_VALUE_TYPE (value))
 		{
 		case G_TYPE_STRING:
-			ret = xmlTextWriterWriteString
+			ret = safe_write_string
 				(writer, (const xmlChar *)g_value_get_string (value));
 			break;
 		case G_TYPE_BOOLEAN:

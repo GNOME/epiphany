@@ -1,5 +1,14 @@
 2007-01-28  Christian Persch  <chpe@svn.gnome.org>
 
+	* lib/ephy-node.c: (safe_write_string), (ephy_node_write_to_xml):
+	* src/bookmarks/ephy-bookmarks-export.c: (sanitise_string),
+	(write_topics_list), (write_rdf):
+
+	Make sure we don't write characters < 0x20 (except 0x9, 0xa, 0xd) to
+	XML. Bug #392782.
+
+2007-01-28  Christian Persch  <chpe@svn.gnome.org>
+
 	* src/epiphany.defs:
 	* src/epiphany.override:
 
