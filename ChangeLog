@@ -1,3 +1,15 @@
+2007-01-28  Christian Persch  <chpe@svn.gnome.org>
+
+	* lib/ephy-node.c: (destroy_signal_data), (node_parent_free),
+	(ephy_node_destroy), (ephy_node_new_with_id), (real_set_property),
+	(ephy_node_set_property), (ephy_node_set_property_string),
+	(ephy_node_set_property_boolean), (ephy_node_set_property_long),
+	(ephy_node_set_property_int), (ephy_node_set_property_double),
+	(ephy_node_set_property_float), (real_add_child),
+	(ephy_node_new_from_xml), (ephy_node_signal_connect_object):
+
+	Convert EphyNode to use GSlice.
+
 2007-01-28  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* embed/mozilla/ContentHandler.cpp: (GContentHandler::Show):

@@ -274,7 +274,13 @@ destroy_signal_data (EphyNodeSignalData *signal_data)
 				     signal_data);
 	}
         
-        g_free (signal_data);
+        g_slice_free (EphyNodeSignalData, signal_data);
+}
+
+static void
+node_parent_free (EphyNodeParent *parent)
+{
+	g_slice_free (EphyNodeParent, parent);
 }
 
 static void
@@ -314,12 +320,12 @@ ephy_node_destroy (EphyNode *node)
 
 		if (val != NULL) {
 			g_value_unset (val);
-			g_free (val);
+			g_slice_free (GValue, val);
 		}
 	}
 	g_ptr_array_free (node->properties, TRUE);
 
-	g_free (node);
+	g_slice_free (EphyNode, node);
 }
 
 EphyNode *
@@ -345,7 +351,7 @@ ephy_node_new_with_id (EphyNodeDb *db, guint reserved_id)
 
 	if (ephy_node_db_is_immutable (db)) return NULL;
 
-	node = g_new0 (EphyNode, 1);
+	node = g_slice_new0 (EphyNode);
 
 	node->ref_count = 1;
 
@@ -358,7 +364,7 @@ ephy_node_new_with_id (EphyNodeDb *db, guint reserved_id)
 	node->children = g_ptr_array_new ();
 
 	node->parents = g_hash_table_new_full
-          (int_hash, int_equal, NULL, g_free);
+          (int_hash, int_equal, NULL, (GDestroyNotify) node_parent_free);
 
 	node->signals = g_hash_table_new_full
           (int_hash, int_equal, NULL,
@@ -438,7 +444,7 @@ real_set_property (EphyNode *node,
 	old = g_ptr_array_index (node->properties, property_id);
 	if (old != NULL) {
 		g_value_unset (old);
-		g_free (old);
+		g_slice_free (GValue, old);
 	}
 
 	g_ptr_array_index (node->properties, property_id) = value;
@@ -475,7 +481,7 @@ ephy_node_set_property (EphyNode *node,
 
 	if (ephy_node_db_is_immutable (node->db)) return;
 
-	new = g_new0 (GValue, 1);
+	new = g_slice_new0 (GValue);
 	g_value_init (new, G_VALUE_TYPE (value));
 	g_value_copy (value, new);
 
@@ -518,7 +524,7 @@ ephy_node_set_property_string (EphyNode *node,
 
 	if (ephy_node_db_is_immutable (node->db)) return;
 
-	new = g_new0 (GValue, 1);
+	new = g_slice_new0 (GValue);
 	g_value_init (new, G_TYPE_STRING);
 	g_value_set_string (new, value);
 
@@ -559,7 +565,7 @@ ephy_node_set_property_boolean (EphyNode *node,
 
 	if (ephy_node_db_is_immutable (node->db)) return;
 
-	new = g_new0 (GValue, 1);
+	new = g_slice_new0 (GValue);
 	g_value_init (new, G_TYPE_BOOLEAN);
 	g_value_set_boolean (new, value);
 
@@ -600,7 +606,7 @@ ephy_node_set_property_long (EphyNode *node,
 
 	if (ephy_node_db_is_immutable (node->db)) return;
 
-	new = g_new0 (GValue, 1);
+	new = g_slice_new0 (GValue);
 	g_value_init (new, G_TYPE_LONG);
 	g_value_set_long (new, value);
 
@@ -641,7 +647,7 @@ ephy_node_set_property_int (EphyNode *node,
 
 	if (ephy_node_db_is_immutable (node->db)) return;
 
-	new = g_new0 (GValue, 1);
+	new = g_slice_new0 (GValue);
 	g_value_init (new, G_TYPE_INT);
 	g_value_set_int (new, value);
 
@@ -682,7 +688,7 @@ ephy_node_set_property_double (EphyNode *node,
 
 	if (ephy_node_db_is_immutable (node->db)) return;
 
-	new = g_new0 (GValue, 1);
+	new = g_slice_new0 (GValue);
 	g_value_init (new, G_TYPE_DOUBLE);
 	g_value_set_double (new, value);
 
@@ -723,7 +729,7 @@ ephy_node_set_property_float (EphyNode *node,
 
 	if (ephy_node_db_is_immutable (node->db)) return;
 
-	new = g_new0 (GValue, 1);
+	new = g_slice_new0 (GValue);
 	g_value_init (new, G_TYPE_FLOAT);
 	g_value_set_float (new, value);
 
@@ -949,7 +955,7 @@ real_add_child (EphyNode *node,
 
 	g_ptr_array_add (node->children, child);
 
-	node_info = g_new0 (EphyNodeParent, 1);
+	node_info = g_slice_new0 (EphyNodeParent);
 	node_info->node  = node;
 	node_info->index = node->children->len - 1;
 
@@ -1009,7 +1015,7 @@ ephy_node_new_from_xml (EphyNodeDb *db, xmlNodePtr xml_node)
 			xmlType = xmlGetProp (xml_child, (const xmlChar *)"value_type");
 			xmlValue = xmlNodeGetContent (xml_child);
 
-			value = g_new0 (GValue, 1);
+			value = g_slice_new0 (GValue);
 
 			if (xmlStrEqual (xmlType, (const xmlChar *) "gchararray"))
 			{
@@ -1326,7 +1332,7 @@ ephy_node_signal_connect_object (EphyNode *node,
 	/* FIXME: */
 	g_return_val_if_fail (node->emissions == 0, -1);
 
-	signal_data = g_new0 (EphyNodeSignalData, 1);
+	signal_data = g_slice_new0 (EphyNodeSignalData);
 	signal_data->node = node;
 	signal_data->id = node->signal_id;
 	signal_data->callback = callback;
