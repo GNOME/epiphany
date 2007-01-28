@@ -199,6 +199,38 @@ ignore
   ephy_find_toolbar_close
   ephy_find_toolbar_set_embed
 %%
+override-slot EphyShell.tp_init
+
+static int
+_wrap_ephy_shell_tp_init(PyGObject *self, PyObject *args, PyObject *kwargs)
+{
+    static char *kwlist[] = { NULL };
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, ":epiphany.Shell.__init__", kwlist)) {
+        return -1;
+    }
+
+    self->obj = (GObject *) g_object_ref (ephy_shell_get_default());
+    pygobject_register_wrapper((PyObject *)self);
+    return 0;
+}
+%%
+override-slot EphyEmbedShell.tp_init
+
+static int
+_wrap_ephy_embed_shell_tp_init(PyGObject *self, PyObject *args, PyObject *kwargs)
+{
+    static char *kwlist[] = { NULL };
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, ":epiphany.EmbedShell.__init__", kwlist)) {
+        return -1;
+    }
+
+    self->obj = (GObject *) g_object_ref (ephy_embed_shell_get_default());
+    pygobject_register_wrapper((PyObject *)self);
+    return 0;
+}
+%%
 override ephy_tab_get_size noargs
 static PyObject *
 _wrap_ephy_tab_get_size(PyGObject *self)
