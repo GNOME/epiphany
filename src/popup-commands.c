@@ -254,7 +254,6 @@ static void
 background_download_completed (EphyEmbedPersist *persist)
 {
 	const char *bg;
-	char *type;
 	guint32 user_time;
 
 	user_time = ephy_embed_persist_get_user_time (persist);
@@ -269,7 +268,7 @@ background_download_completed (EphyEmbedPersist *persist)
 		/* If the above try didn't work, then we try the Fedora name.
 		 * This is a fix for #387206, but is actually a workaround for
 		 * bugzilla.redhat.com #201867 */
-		ephy_file_launch_desktop_file ("gnome-background.desktop", bg, user_time)
+		ephy_file_launch_desktop_file ("gnome-background.desktop", bg, user_time);
 	}
 }
 
