@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-01-30 00:07+0100\n"
-"PO-Revision-Date: 2007-01-30 00:07+0100\n"
+"POT-Creation-Date: 2007-02-06 23:43+0100\n"
+"PO-Revision-Date: 2007-02-06 23:26+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -176,7 +176,7 @@ msgstr "Hantera automatiskt frånkopplad status med NetworkManager"
 
 #: ../data/epiphany.schemas.in.h:8
 msgid "Browse with caret"
-msgstr "Bläddra med markör"
+msgstr "Navigera med markör"
 
 #: ../data/epiphany.schemas.in.h:9
 msgid "Cookie accept"
@@ -402,17 +402,18 @@ msgid ""
 "\"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) "
 "and \"universal_charset_detector\" (autodetect most encodings)."
 msgstr ""
-"Autodetekteraren för kodning. Giltiga poster är \"\" (autodetektorer av), "
-"\"cjk_parallel_state_machine\" (detektera automatiskt östasiatiska "
-"kodningar), \"ja_parallel_state_machine\" (detektera automatiskt japanska "
-"kodningar), \"ko_parallel_state_machine\" (detektera automatiskt koreanska "
-"kodningar), \"ruprob\" (detektera automatiskt ryska kodningar), \"ukprob"
-"\" (detektera automatiskt ukrainska kodningar), \"zh_parallel_state_machine"
-"\" (detektera automatiskt kinesiska kodningar), \"zhcn_parallel_state_machine"
-"\" (detektera automatiskt kodningar för förenklad kinesiska), "
-"\"zhtw_parallel_state_machine\" (detektera automatiskt kodningar för "
+"Autodetekteraren för teckenkodning. Giltiga poster är \"\" (autodetektorer "
+"av), \"cjk_parallel_state_machine\" (detektera automatiskt östasiatiska "
+"teckenkodningar), \"ja_parallel_state_machine\" (detektera automatiskt "
+"japanska teckenkodningar), \"ko_parallel_state_machine\" (detektera "
+"automatiskt koreanska teckenkodningar), \"ruprob\" (detektera automatiskt "
+"ryska teckenkodningar), \"ukprob\" (detektera automatiskt ukrainska "
+"teckenkodningar), \"zh_parallel_state_machine\" (detektera automatiskt "
+"kinesiska teckenkodningar), \"zhcn_parallel_state_machine\" (detektera "
+"automatiskt teckenkodningar för förenklad kinesiska), "
+"\"zhtw_parallel_state_machine\" (detektera automatiskt teckenkodningar för "
 "traditionell kinesiska) och \"universal_charset_detector\" (detektera "
-"automatiskt alla kodningar)."
+"automatiskt alla teckenkodningar)."
 
 #: ../data/epiphany.schemas.in.h:44
 msgid "The page information shown in the history view"
@@ -540,7 +541,7 @@ msgstr "Certifikat_hierarki"
 
 #: ../data/glade/certificate-dialogs.glade.h:7
 msgid "Common Name:"
-msgstr "Gemensamt namn:"
+msgstr "Tilltalsnamn:"
 
 #: ../data/glade/certificate-dialogs.glade.h:8
 msgid "Details"
@@ -548,7 +549,7 @@ msgstr "Detaljer"
 
 #: ../data/glade/certificate-dialogs.glade.h:9
 msgid "Expires On:"
-msgstr "Utgår den:"
+msgstr "Går ut:"
 
 #: ../data/glade/certificate-dialogs.glade.h:10
 msgid "Field _Value"
@@ -561,7 +562,7 @@ msgstr "Allmänt"
 
 #: ../data/glade/certificate-dialogs.glade.h:12
 msgid "Issued On:"
-msgstr "Utfärdat den:"
+msgstr "Utfärdat:"
 
 #: ../data/glade/certificate-dialogs.glade.h:13
 msgid "MD5 Fingerprint:"
@@ -658,7 +659,7 @@ msgstr "<b>Hämtningar</b>"
 
 #: ../data/glade/prefs-dialog.glade.h:3
 msgid "<b>Encodings</b>"
-msgstr "<b>Kodningar</b>"
+msgstr "<b>Teckenkodningar</b>"
 
 #: ../data/glade/prefs-dialog.glade.h:4
 msgid "<b>Home page</b>"
@@ -739,7 +740,7 @@ msgstr "Språk"
 
 #: ../data/glade/prefs-dialog.glade.h:23
 msgid "Let web pages specify their own _fonts"
-msgstr "Låt webbsidor ange sin egna _typsnitt"
+msgstr "Låt webbsidor ange sina egna _typsnitt"
 
 #: ../data/glade/prefs-dialog.glade.h:24
 msgid "Let web pages specify their own c_olors"
@@ -1907,7 +1908,7 @@ msgstr ""
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:623
 msgid "Trust new Certificate Authority?"
-msgstr "Lita på ny certifikatmyndighet (CA)?"
+msgstr "Lita på ny certifikatutfärdare (CA)?"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:628
 msgid "_Trust CA"
@@ -1917,14 +1918,14 @@ msgstr "_Lita på CA"
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr ""
-"Lita på ny certifikatutgivare (CA) \"%s\" för identifiering av webbplatser?"
+"Lita på ny certifikatutfärdare (CA) \"%s\" för identifiering av webbplatser?"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:653
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
 msgstr ""
-"Innan du litar på en certifikatmyndighet (CA) bör du kontrollera att "
+"Innan du litar på en certifikatutfärdare (CA) bör du kontrollera att "
 "certifikatet är äkta."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:724
@@ -2005,7 +2006,7 @@ msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "Kunde inte verifiera detta certifikat eftersom certifikatet för "
-"certifikatmyndigheten (CA) är okänd."
+"certifikatutfärdaren (CA) är okänt."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1280
 msgid "Could not verify this certificate for unknown reasons."
@@ -2060,7 +2061,7 @@ msgstr ""
 "Certifikatutfärdaren \"%s\" begär att du ger den en kopia av den nyligen "
 "genererade hemliga nyckeln.\n"
 "\n"
-"Detta gör att certifikatutgivaren kan läsa all kommunikation som krypterats "
+"Detta gör att certifikatutfärdaren kan läsa all kommunikation som krypterats "
 "med denna nyckeln utan din kännedom eller medgivande.\n"
 "\n"
 "Det rekommenderas starkt att inte tillåta detta."
@@ -3090,7 +3091,7 @@ msgstr "Skapa ämnet \"%s\""
 
 #: ../src/ephy-encoding-dialog.c:340
 msgid "Encodings"
-msgstr "Kodningar"
+msgstr "Teckenkodningar"
 
 #: ../src/ephy-encoding-menu.c:351
 msgid "_Other…"
@@ -3098,7 +3099,7 @@ msgstr "_Andra..."
 
 #: ../src/ephy-encoding-menu.c:352
 msgid "Other encodings"
-msgstr "Andra kodningar"
+msgstr "Andra teckenkodningar"
 
 #: ../src/ephy-encoding-menu.c:358
 msgid "_Automatic"
