@@ -99,6 +99,7 @@ pref("browser.enable_automatic_image_resizing", false);
 pref("signon.rememberSignons", true);
 pref("signon.expireMasterPassword", false);
 pref("signon.SignonFileName", "signons.txt");
+pref("signon.SignonFileName2", "signons2.txt");
 pref("signon.autofillForms", true);
 
 // use system colours
