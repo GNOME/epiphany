@@ -1,3 +1,10 @@
+2007-02-08  Jean-François Rameau  <jframeau@cvs.gnome.org>
+
+	* embed/mozilla/EphyAboutModule.cpp:
+	(GetErrorMessage),(CreateErrorPage):
+
+	Fix a g_free on static string. Also fix a leak.
+
 2007-02-08  Christian Persch  <chpe@svn.gnome.org>
 
 	* embed/mozilla/MozDownload.cpp:

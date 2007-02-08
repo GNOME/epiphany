@@ -214,8 +214,8 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		/* Translators: %s is the name of a protocol, like "http" etc. */
 		*aPrimary = g_strdup_printf (_("“%s” protocol is not supported."), scheme.get());
 		/* FIXME: get the list of supported protocols from necko */
-		*aSecondary = _("Supported protocols are “http”, “https”, “ftp”, “file”, “smb” "
-				"and “sftp”.");
+		*aSecondary = g_strdup (_("Supported protocols are “http”, “https”, “ftp”, “file”, “smb” "
+				          "and “sftp”."));
 	}
 	else if (strcmp (aError, "fileNotFound") == 0)
 	{
@@ -226,7 +226,7 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		*aTitle = g_markup_printf_escaped (_("File “%s” not Found"), path.get());
 		/* Translators: %s is the path and filename, for example "/home/user/test.html" */
 		*aPrimary = g_markup_printf_escaped (_("File “%s” not found."), path.get());
-		*aSecondary = _("Check the location of the file and try again.");
+		*aSecondary = g_strdup (_("Check the location of the file and try again."));
 	}
 	else if (strcmp (aError, "dnsNotFound") == 0)
 	{
@@ -239,8 +239,8 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped (_("“%s” could not be found."),
 						     host.get());
-		*aSecondary = _("Check that you are connected to the internet, and "
-				"that the address is correct.");
+		*aSecondary = g_strdup (_("Check that you are connected to the internet, and "
+					  "that the address is correct."));
 		*aLinkIntro = _("If this page used to exist, you may find an archived version:");
 	}
 	else if (strcmp (aError, "connectionFailure") == 0)
@@ -263,7 +263,7 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 			PRInt32 port;
 			aURI->GetPort (&port);
 
-			*aSecondary = _("Likely causes of the problem are");
+			*aSecondary = g_strdup (_("Likely causes of the problem are"));
 
 			/* Try to get the service name attached to that port */
 			if (port != -1)
@@ -301,8 +301,8 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		}
 		else
 		{
-			*aSecondary = _("The server may be busy or you may have a "
-					"network connection problem. Try again later.");
+			*aSecondary = g_strdup (_("The server may be busy or you may have a "
+					          "network connection problem. Try again later."));
 			*aLinkIntro = _("There may be an old version of the page you wanted:");
 		}
 	}
@@ -319,8 +319,8 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” interrupted the connection."),
 				 host.get());
-		*aSecondary = _("The server may be busy or you may have a "
-				"network connection problem. Try again later.");
+		*aSecondary = g_strdup (_("The server may be busy or you may have a "
+				          "network connection problem. Try again later."));
 		*aLinkIntro = _("There may be an old version of the page you wanted:");
 	}
 	else if (strcmp (aError, "netTimeout") == 0)
@@ -336,8 +336,8 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” is not responding."),
 				 host.get());
-		*aSecondary = _("The connection was lost because the "
-				"server took too long to respond.");
+		*aSecondary = g_strdup (_("The connection was lost because the "
+				          "server took too long to respond."));
 		*aTertiary = _("The server may be busy or you may have a network "
 			        "connection problem. Try again later.");
 		*aLinkIntro = _("There may be an old version of the page you wanted:");
@@ -358,7 +358,7 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 				(_("“%s” Redirected Too Many Times"),
 				 host.get());
 		/* Translators: %s is the hostname, like "www.example.com" */
-		*aPrimary = _("This page cannot load because of a problem with the Web site.");
+		*aPrimary = g_strdup (_("This page cannot load because of a problem with the Web site."));
 
 		*aSecondary = g_markup_printf_escaped
 				(_("The server “%s” is redirecting in a way that will never complete."),
@@ -378,8 +378,8 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” requires an encrypted connection."),
 				 host.get());
-		*aSecondary = _("The document could not be loaded because "
-				"encryption support is not installed.");
+		*aSecondary = g_strdup (_("The document could not be loaded because "
+				          "encryption support is not installed."));
 	}
 	else if (strcmp (aError, "netReset") == 0)
 	{
@@ -394,8 +394,8 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		*aPrimary = g_markup_printf_escaped
 				(_("“%s” dropped the connection."),
 				 host.get());
-		*aSecondary = _("The server dropped the connection "
-				 "before any data could be read.");
+		*aSecondary = g_strdup (_("The server dropped the connection "
+				          "before any data could be read."));
 		*aTertiary = _("The server may be busy or you may have a "
 			       "network connection problem. Try again later.");
 		*aLinkIntro = _("There may be an old version of the page you wanted:");
@@ -407,7 +407,7 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 
 		*aTitle = g_strdup (_("Cannot Load Document Whilst Working Offline"));
 		*aPrimary = g_strdup (_("Cannot load document whilst working offline."));
-		*aSecondary = _("To view this document, disable “Work Offline” and try again.");
+		*aSecondary = g_strdup (_("To view this document, disable “Work Offline” and try again."));
 	}
 	else if (strcmp (aError, "deniedPortAccess") == 0)
 	{
@@ -436,17 +436,17 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 	{
 		*aTitle = g_strdup (_("Could not Connect to Proxy Server"));
 		*aPrimary = g_strdup (_("Could not connect to proxy server."));
-		*aSecondary = _("Check your proxy server settings. "
-				"If the connection still fails, there may be "
-				"a problem with your proxy server or your "
-				"network connection.");
+		*aSecondary = g_strdup (_("Check your proxy server settings. "
+				          "If the connection still fails, there may be "
+				          "a problem with your proxy server or your "
+				          "network connection."));
 	}
 	/* This was introduced in gecko 1.9 */
 	else if (strcmp (aError, "contentEncodingError") == 0)
 	{
 		*aTitle = g_strdup (_("Could not Display Content"));
 		*aPrimary = g_strdup (_("Could not display content."));
-		*aSecondary = _("The page uses an unsupported or invalid form of compression.");
+		*aSecondary = g_strdup (_("The page uses an unsupported or invalid form of compression."));
 	}
 	else
 	{
@@ -507,6 +507,7 @@ EphyAboutModule::CreateErrorPage(nsIURI *aErrorURI,
 
 	g_free (title);
 	g_free (primary);
+	g_free (secondary);
 
 	channel.swap (*_retval);
 
