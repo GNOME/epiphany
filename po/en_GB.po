@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-01-09 07:00+0000\n"
-"PO-Revision-Date: 2007-01-09 07:01-0000\n"
+"POT-Creation-Date: 2007-02-09 11:37+0000\n"
+"PO-Revision-Date: 2007-02-09 11:37-0000\n"
 "Last-Translator: David Lodge <dave@cirt.net>\n"
 "Language-Team: English/GB <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1203,24 +1203,24 @@ msgstr "Others"
 msgid "Local files"
 msgstr "Local files"
 
-#: ../embed/mozilla/ContentHandler.cpp:147
+#: ../embed/mozilla/ContentHandler.cpp:159
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:406
 msgid "Save"
 msgstr "Save"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:260
+#: ../embed/mozilla/ContentHandler.cpp:272
 msgid "File Type:|Unknown"
 msgstr "Unknown"
 
-#: ../embed/mozilla/ContentHandler.cpp:276
+#: ../embed/mozilla/ContentHandler.cpp:288
 msgid "Download this potentially unsafe file?"
 msgstr "Download this potentially unsafe file?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:282
+#: ../embed/mozilla/ContentHandler.cpp:294
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1231,14 +1231,14 @@ msgstr ""
 "\n"
 "It is unsafe to open “%s” as it could potentially damage your documents or invade your privacy. You can download it instead."
 
-#: ../embed/mozilla/ContentHandler.cpp:292
+#: ../embed/mozilla/ContentHandler.cpp:304
 msgid "Open this file?"
 msgstr "Open this file?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:299
+#: ../embed/mozilla/ContentHandler.cpp:311
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1249,13 +1249,13 @@ msgstr ""
 "\n"
 "You can open “%s” using “%s” or save it."
 
-#: ../embed/mozilla/ContentHandler.cpp:307
+#: ../embed/mozilla/ContentHandler.cpp:319
 msgid "Download this file?"
 msgstr "Download this file?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:313
+#: ../embed/mozilla/ContentHandler.cpp:325
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1266,7 +1266,7 @@ msgstr ""
 "\n"
 "You have no application able to open “%s”. You can download it instead."
 
-#: ../embed/mozilla/ContentHandler.cpp:318
+#: ../embed/mozilla/ContentHandler.cpp:330
 msgid "_Save As..."
 msgstr "_Save As..."
 
@@ -1339,8 +1339,8 @@ msgstr "Likely causes of the problem are"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:276
 #, c-format
-msgid "<ul><li>the service %s isn't started.</li>Try to start it using the Services Configuration Tool in System > Administration > Services, or</ul><ul><li>the port number %d is wrong.</li></ul>"
-msgstr "<ul><li>the service %s isn't started.</li>Try to start it using the Services Configuration Tool in System > Administration > Services, or</ul><ul><li>the port number %d is wrong.</li></ul>"
+msgid "<ul><li>the service %s isn't started.</li>Try to start it using the Services Configuration Tool in System > Control Center, or</ul><ul><li>the port number %d is wrong.</li></ul>"
+msgstr "<ul><li>the service %s isn't started.</li>Try to start it using the Services Configuration Tool in System > Control Center, or</ul><ul><li>the port number %d is wrong.</li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:287
 #, c-format
@@ -1354,17 +1354,17 @@ msgstr "<ul><li>some service isn't started, or</li><li>you got the port number w
 #: ../embed/mozilla/EphyAboutModule.cpp:304
 #: ../embed/mozilla/EphyAboutModule.cpp:322
 #: ../embed/mozilla/EphyAboutModule.cpp:341
-#: ../embed/mozilla/EphyAboutModule.cpp:398
-#: ../embed/mozilla/EphyAboutModule.cpp:429
+#: ../embed/mozilla/EphyAboutModule.cpp:399
+#: ../embed/mozilla/EphyAboutModule.cpp:430
 msgid "The server may be busy or you may have a network connection problem. Try again later."
 msgstr "The server may be busy or you may have a network connection problem. Try again later."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:306
 #: ../embed/mozilla/EphyAboutModule.cpp:324
 #: ../embed/mozilla/EphyAboutModule.cpp:343
-#: ../embed/mozilla/EphyAboutModule.cpp:365
-#: ../embed/mozilla/EphyAboutModule.cpp:400
-#: ../embed/mozilla/EphyAboutModule.cpp:431
+#: ../embed/mozilla/EphyAboutModule.cpp:366
+#: ../embed/mozilla/EphyAboutModule.cpp:401
+#: ../embed/mozilla/EphyAboutModule.cpp:432
 msgid "There may be an old version of the page you wanted:"
 msgstr "There may be an old version of the page you wanted:"
 
@@ -1409,104 +1409,105 @@ msgstr "The address you entered is not valid."
 msgid "“%s” Redirected Too Many Times"
 msgstr "“%s” Redirected Too Many Times"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:362
-#, c-format
-msgid "“%s” redirected too many times."
-msgstr "“%s” redirected too many times."
+#. Translators: %s is the hostname, like "www.example.com"
+#: ../embed/mozilla/EphyAboutModule.cpp:361
+msgid "This page cannot load because of a problem with the Web site."
+msgstr "This page cannot load because of a problem with the Web site."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:364
-msgid "The redirection has been stopped for security reasons."
-msgstr "The redirection has been stopped for security reasons."
+#, c-format
+msgid "The server “%s” is redirecting in a way that will never complete."
+msgstr "The server “%s” is redirecting in a way that will never complete."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:374
+#: ../embed/mozilla/EphyAboutModule.cpp:375
 #, c-format
 msgid "“%s” Requires an Encrypted Connection"
 msgstr "“%s” Requires an Encrypted Connection"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:378
+#: ../embed/mozilla/EphyAboutModule.cpp:379
 #, c-format
 msgid "“%s” requires an encrypted connection."
 msgstr "“%s” requires an encrypted connection."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:380
+#: ../embed/mozilla/EphyAboutModule.cpp:381
 msgid "The document could not be loaded because encryption support is not installed."
 msgstr "The document could not be loaded because encryption support is not installed."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:390
+#: ../embed/mozilla/EphyAboutModule.cpp:391
 #, c-format
 msgid "“%s” Dropped the Connection"
 msgstr "“%s” Dropped the Connection"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:394
+#: ../embed/mozilla/EphyAboutModule.cpp:395
 #, c-format
 msgid "“%s” dropped the connection."
 msgstr "“%s” dropped the connection."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:396
-#: ../embed/mozilla/EphyAboutModule.cpp:427
+#: ../embed/mozilla/EphyAboutModule.cpp:397
+#: ../embed/mozilla/EphyAboutModule.cpp:428
 msgid "The server dropped the connection before any data could be read."
 msgstr "The server dropped the connection before any data could be read."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:407
+#: ../embed/mozilla/EphyAboutModule.cpp:408
 msgid "Cannot Load Document Whilst Working Offline"
 msgstr "Cannot Load Document Whilst Working Offline"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:408
+#: ../embed/mozilla/EphyAboutModule.cpp:409
 msgid "Cannot load document whilst working offline."
 msgstr "Cannot load document whilst working offline."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:409
+#: ../embed/mozilla/EphyAboutModule.cpp:410
 msgid "To view this document, disable “Work Offline” and try again."
 msgstr "To view this document, disable “Work Offline” and try again."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:421
+#: ../embed/mozilla/EphyAboutModule.cpp:422
 #, c-format
 msgid "“%s” Denied Access to Port “%d”"
 msgstr "“%s” Denied Access to Port “%d”"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:425
+#: ../embed/mozilla/EphyAboutModule.cpp:426
 #, c-format
 msgid "“%s” denied access to port “%d”."
 msgstr "“%s” denied access to port “%d”."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:436
+#: ../embed/mozilla/EphyAboutModule.cpp:437
 msgid "Could not Connect to Proxy Server"
 msgstr "Could not Connect to Proxy Server"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:437
+#: ../embed/mozilla/EphyAboutModule.cpp:438
 msgid "Could not connect to proxy server."
 msgstr "Could not connect to proxy server."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:438
+#: ../embed/mozilla/EphyAboutModule.cpp:439
 msgid "Check your proxy server settings. If the connection still fails, there may be a problem with your proxy server or your network connection."
 msgstr "Check your proxy server settings. If the connection still fails, there may be a problem with your proxy server or your network connection."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:446
+#: ../embed/mozilla/EphyAboutModule.cpp:447
 msgid "Could not Display Content"
 msgstr "Could not Display Content"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:447
+#: ../embed/mozilla/EphyAboutModule.cpp:448
 msgid "Could not display content."
 msgstr "Could not display content."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:448
+#: ../embed/mozilla/EphyAboutModule.cpp:449
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr "The page uses an unsupported or invalid form of compression."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:537
+#: ../embed/mozilla/EphyAboutModule.cpp:539
 #, c-format
 msgid "The page “%s” in this tab was not fully loaded yet when the web browser crashed; it could have caused the crash."
 msgstr "The page “%s” in this tab was not fully loaded yet when the web browser crashed; it could have caused the crash."
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:664
+#: ../embed/mozilla/EphyAboutModule.cpp:666
 msgid "You may find an old version:|in the Google Cache"
 msgstr "in the Google Cache"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:672
+#: ../embed/mozilla/EphyAboutModule.cpp:674
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "in the Internet Archive"
 
@@ -1568,15 +1569,15 @@ msgstr "The web site “%s” requests that you sign the following text:"
 msgid "_Sign text"
 msgstr "_Sign text"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:174
+#: ../embed/mozilla/GeckoPrintService.cpp:178
 msgid "Options"
 msgstr "Options"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:415
+#: ../embed/mozilla/GeckoPrintService.cpp:431
 msgid "Print this page?"
 msgstr "Print this page?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:423
+#: ../embed/mozilla/GeckoPrintService.cpp:439
 msgid "Preparing to print"
 msgstr "Preparing to print"
 
@@ -1929,7 +1930,7 @@ msgstr "_Send"
 msgid "Although this page was loaded over a secure connection, the information you have entered will be sent over an insecure connection, and could easily be intercepted by a third party."
 msgstr "Although this page was loaded over a secure connection, the information you have entered will be sent over an insecure connection, and could easily be intercepted by a third party."
 
-#: ../embed/mozilla/MozDownload.cpp:629
+#: ../embed/mozilla/MozDownload.cpp:643
 msgid "Files"
 msgstr "Files"
 
@@ -2230,14 +2231,19 @@ msgstr "_Remember password for this session"
 msgid "Save password in _keyring"
 msgstr "Save password in _keyring"
 
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:54
 msgid "Popup Windows"
 msgstr "Popup Windows"
 
-#: ../lib/ephy-stock-icons.c:56
+#: ../lib/ephy-stock-icons.c:55
 #: ../src/ephy-history-window.c:1195
 msgid "History"
 msgstr "History"
+
+#: ../lib/ephy-stock-icons.c:56
+#: ../src/ephy-window.c:1337
+msgid "Bookmark"
+msgstr "Bookmark"
 
 #: ../lib/ephy-stock-icons.c:57
 #: ../src/bookmarks/ephy-bookmarks-editor.c:917
@@ -3744,10 +3750,6 @@ msgstr "Save As"
 msgid "Print"
 msgstr "Print"
 
-#: ../src/ephy-window.c:1337
-msgid "Bookmark"
-msgstr "Bookmark"
-
 #: ../src/ephy-window.c:1339
 msgid "Find"
 msgstr "Find"
@@ -3887,15 +3889,15 @@ msgstr "User Name"
 msgid "User Password"
 msgstr "User Password"
 
-#: ../src/popup-commands.c:254
+#: ../src/popup-commands.c:272
 msgid "Download Link"
 msgstr "Download Link"
 
-#: ../src/popup-commands.c:262
+#: ../src/popup-commands.c:280
 msgid "Save Link As"
 msgstr "Save Link As"
 
-#: ../src/popup-commands.c:269
+#: ../src/popup-commands.c:287
 msgid "Save Image As"
 msgstr "Save Image As"
 
@@ -4032,6 +4034,10 @@ msgstr ""
 msgid "GNOME Web Browser Website"
 msgstr "GNOME Web Browser Website"
 
+#~ msgid "“%s” redirected too many times."
+#~ msgstr "“%s” redirected too many times."
+#~ msgid "The redirection has been stopped for security reasons."
+#~ msgstr "The redirection has been stopped for security reasons."
 #~ msgid "_View Certificate..."
 #~ msgstr "_View Certificate..."
 #~ msgid "_Import Bookmarks..."
