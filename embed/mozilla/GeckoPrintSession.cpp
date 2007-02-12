@@ -490,7 +490,7 @@ GeckoPrintSession::OpenProgressDialog (nsIDOMWindowInternal *aParent,
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
   gtk_box_set_spacing (GTK_BOX (dialog->vbox), 14); /* 2 * 5 + 14 = 24 */
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 5);
 
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);

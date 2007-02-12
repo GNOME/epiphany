@@ -377,6 +377,7 @@ NS_METHOD GContentHandler::MIMEInitiateAction (void)
 	{
 		const char *id = gnome_vfs_mime_application_get_desktop_id (mHelperApp);
 
+		/* FIXME! menu editing can make this check fail!!!! */
 		if (id && strcmp (id, "epiphany.desktop") == 0)
 		{
 			mHelperApp = nsnull;
