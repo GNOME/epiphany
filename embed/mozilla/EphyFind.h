@@ -55,7 +55,6 @@ class EphyFind
 
     nsCOMPtr<nsITypeAheadFind> mFinder;
     PRPackedBool mAttention;
-    PRPackedBool mHasFocus;
 };
 
 #endif /* !TYPEAHEADFIND_H */

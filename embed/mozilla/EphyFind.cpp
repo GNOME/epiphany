@@ -66,7 +66,6 @@ static const PRUnichar kKeyPress[] = { 'k', 'e', 'y', 'p', 'r', 'e', 's', 's', '
 EphyFind::EphyFind ()
 : mCurrentEmbed(nsnull)
 , mAttention(PR_FALSE)
-, mHasFocus(PR_FALSE) /* FIXME!! */
 {
   LOG ("EphyFind ctor [%p]", this);
 }
@@ -188,11 +187,7 @@ EphyFind::Find (const char *aSearchString,
 
   nsresult rv;
   PRUint16 found = nsITypeAheadFind::FIND_NOTFOUND;
-#ifdef HAVE_GECKO_1_9
-  rv = mFinder->Find (uSearchString, aLinksOnly, mHasFocus, &found);
-#else
   rv = mFinder->Find (uSearchString, aLinksOnly, &found);
-#endif
 
   return (EphyEmbedFindResult) found;
 }
@@ -208,7 +203,7 @@ EphyFind::FindAgain (PRBool aForward,
   nsresult rv;
   PRUint16 found = nsITypeAheadFind::FIND_NOTFOUND;
 #ifdef HAVE_GECKO_1_9
-  rv = mFinder->FindAgain (!aForward, aLinksOnly, mHasFocus, &found);
+  rv = mFinder->FindAgain (!aForward, aLinksOnly, &found);
 #else
   if (aForward) {
     rv = mFinder->FindNext (&found);
