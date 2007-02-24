@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.hu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-01-09 03:25+0000\n"
-"PO-Revision-Date: 2007-01-17 01:07+0100\n"
+"POT-Creation-Date: 2007-01-27 16:11+0000\n"
+"PO-Revision-Date: 2007-02-24 10:28+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: ../data/epiphany-lockdown.schemas.in.h:6
 msgid "Disable arbitrary URLs"
-msgstr "Tetszőleges URL-ek kikapcsolása"
+msgstr "Tetszőleges URL címek kikapcsolása"
 
 #: ../data/epiphany-lockdown.schemas.in.h:7
 msgid "Disable bookmark editing"
@@ -96,7 +96,7 @@ msgstr "A felhasználók ne szerkeszthessék eszköztáraikat."
 
 #: ../data/epiphany-lockdown.schemas.in.h:11
 msgid "Disable the user's ability to type in a URL to Epiphany."
-msgstr "A felhasználók ne írhassanak be URL-t az Epiphanyba."
+msgstr "A felhasználók ne írhassanak be URL címet az Epiphanyba."
 
 #: ../data/epiphany-lockdown.schemas.in.h:12
 msgid "Disable toolbar editing"
@@ -1476,9 +1476,11 @@ msgstr "A probléma valószínű okai:"
 #, c-format
 msgid ""
 "<ul><li>the service %s isn't started.</li>Try to start it using the Services "
-"Configuration Tool in System > Administration > Services, or</ul><ul><li>the "
-"port number %d is wrong.</li></ul>"
-msgstr "<ul><li>a(z) %s szolgáltatás nincs elindítva.</li> Próbálja meg elindítani a Szolgáltatások beállítóeszközt a Rendszer > Adminisztráció > Szolgáltatások alatt, vagy </ul><ul><li> a(z) %d portszám hibás.</li></ul>"
+"Configuration Tool in System > Control Center, or</ul><ul><li>the port "
+"number %d is wrong.</li></ul>"
+msgstr ""
+"<ul><li>a(z) %s szolgáltatás nincs elindítva.</li> Próbálja meg elindítani a "
+"Szolgáltatások beállítóeszközt a Rendszer > GNOME Vezérlőpult alatt, vagy </ul><ul><li> a(z) %d portszám hibás.</li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:287
 #, c-format
@@ -1500,8 +1502,8 @@ msgstr ""
 #: ../embed/mozilla/EphyAboutModule.cpp:304
 #: ../embed/mozilla/EphyAboutModule.cpp:322
 #: ../embed/mozilla/EphyAboutModule.cpp:341
-#: ../embed/mozilla/EphyAboutModule.cpp:398
-#: ../embed/mozilla/EphyAboutModule.cpp:429
+#: ../embed/mozilla/EphyAboutModule.cpp:399
+#: ../embed/mozilla/EphyAboutModule.cpp:430
 msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
@@ -1512,9 +1514,9 @@ msgstr ""
 #: ../embed/mozilla/EphyAboutModule.cpp:306
 #: ../embed/mozilla/EphyAboutModule.cpp:324
 #: ../embed/mozilla/EphyAboutModule.cpp:343
-#: ../embed/mozilla/EphyAboutModule.cpp:365
-#: ../embed/mozilla/EphyAboutModule.cpp:400
-#: ../embed/mozilla/EphyAboutModule.cpp:431
+#: ../embed/mozilla/EphyAboutModule.cpp:366
+#: ../embed/mozilla/EphyAboutModule.cpp:401
+#: ../embed/mozilla/EphyAboutModule.cpp:432
 msgid "There may be an old version of the page you wanted:"
 msgstr "A kért oldal egy régebbi verziója elérhető lehet innen:"
 
@@ -1559,77 +1561,78 @@ msgstr "A megadott cím érvénytelen."
 msgid "“%s” Redirected Too Many Times"
 msgstr "\"%s\" túl sok átirányítást hajtott végre"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:362
-#, c-format
-msgid "“%s” redirected too many times."
-msgstr "\"%s\" túl sok átirányítást hajtott végre."
+#. Translators: %s is the hostname, like "www.example.com"
+#: ../embed/mozilla/EphyAboutModule.cpp:361
+msgid "This page cannot load because of a problem with the Web site."
+msgstr "Ez az oldal nem tölthető be, a weboldallal kapcsolatos probléma miatt."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:364
-msgid "The redirection has been stopped for security reasons."
-msgstr "Az átirányítás biztonsági okból le lett állítva."
+#, c-format
+msgid "The server “%s” is redirecting in a way that will never complete."
+msgstr "A(z) \"%s\" kiszolgáló soha be nem fejeződő módon végez átirányítást.olyan "
 
-#: ../embed/mozilla/EphyAboutModule.cpp:374
+#: ../embed/mozilla/EphyAboutModule.cpp:375
 #, c-format
 msgid "“%s” Requires an Encrypted Connection"
 msgstr "\"%s\" titkosított kapcsolatot igényel"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:378
+#: ../embed/mozilla/EphyAboutModule.cpp:379
 #, c-format
 msgid "“%s” requires an encrypted connection."
 msgstr "\"%s\" titkosított kapcsolatot igényel."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:380
+#: ../embed/mozilla/EphyAboutModule.cpp:381
 msgid "The document could not be loaded because encryption support is not installed."
 msgstr "A dokumentum nem tölthető be, mert a titkosítás támogatása nincs telepítve."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:390
+#: ../embed/mozilla/EphyAboutModule.cpp:391
 #, c-format
 msgid "“%s” Dropped the Connection"
 msgstr "\"%s\" eldobta a kapcsolatot"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:394
+#: ../embed/mozilla/EphyAboutModule.cpp:395
 #, c-format
 msgid "“%s” dropped the connection."
 msgstr "\"%s\" eldobta a kapcsolatot."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:396
-#: ../embed/mozilla/EphyAboutModule.cpp:427
+#: ../embed/mozilla/EphyAboutModule.cpp:397
+#: ../embed/mozilla/EphyAboutModule.cpp:428
 msgid "The server dropped the connection before any data could be read."
 msgstr "A kiszolgáló eldobta a kapcsolatot mielőtt adatokat lehetett volna olvasni."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:407
+#: ../embed/mozilla/EphyAboutModule.cpp:408
 msgid "Cannot Load Document Whilst Working Offline"
 msgstr "A dokumentum nem tölthető be kapcsolat nélküli módban"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:408
+#: ../embed/mozilla/EphyAboutModule.cpp:409
 msgid "Cannot load document whilst working offline."
 msgstr "A dokumentum nem tölthető be kapcsolat nélküli módban."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:409
+#: ../embed/mozilla/EphyAboutModule.cpp:410
 msgid "To view this document, disable “Work Offline” and try again."
 msgstr ""
 "Ezen dokumentum megjelenítéséhez kapcsolja ki a Kapcsolat nélküli munkát és "
 "próbálja újra."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:421
+#: ../embed/mozilla/EphyAboutModule.cpp:422
 #, c-format
 msgid "“%s” Denied Access to Port “%d”"
 msgstr "\"%s\" megtagadta a hozzáférést a(z) \"%d\". porthoz"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:425
+#: ../embed/mozilla/EphyAboutModule.cpp:426
 #, c-format
 msgid "“%s” denied access to port “%d”."
 msgstr "\"%s\" megtagadta a hozzáférést a(z) \"%d\". porthoz."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:436
+#: ../embed/mozilla/EphyAboutModule.cpp:437
 msgid "Could not Connect to Proxy Server"
 msgstr "Nem sikerült kapcsolódni a proxy-kiszolgálóhoz"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:437
+#: ../embed/mozilla/EphyAboutModule.cpp:438
 msgid "Could not connect to proxy server."
 msgstr "Nem sikerült kapcsolódni a proxy-kiszolgálóhoz."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:438
+#: ../embed/mozilla/EphyAboutModule.cpp:439
 msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
@@ -1637,19 +1640,19 @@ msgstr ""
 "Ellenőrizze a proxy-kiszolgáló beállításait. Ha a kapcsolat továbbra sem jön "
 "létre, probléma lehet a proxy-kiszolgálóval vagy a hálózati kapcsolatával."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:446
+#: ../embed/mozilla/EphyAboutModule.cpp:447
 msgid "Could not Display Content"
 msgstr "A tartalom nem jeleníthető meg"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:447
+#: ../embed/mozilla/EphyAboutModule.cpp:448
 msgid "Could not display content."
 msgstr "A tartalom nem jeleníthető meg."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:448
+#: ../embed/mozilla/EphyAboutModule.cpp:449
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr "Ez az oldal nem támogatott vagy érvénytelen tömörítési módot használ."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:537
+#: ../embed/mozilla/EphyAboutModule.cpp:538
 #, c-format
 msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
@@ -1660,13 +1663,13 @@ msgstr ""
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:664
+#: ../embed/mozilla/EphyAboutModule.cpp:665
 msgid "You may find an old version:|in the Google Cache"
 msgstr "a Google gyorsítótárban"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:672
+#: ../embed/mozilla/EphyAboutModule.cpp:673
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "az internet archívumában"
 
@@ -1723,15 +1726,15 @@ msgstr "A(z) \"%s\" weboldal megköveteli a következő szöveg aláírását:"
 msgid "_Sign text"
 msgstr "Szö_veg aláírása"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:174
+#: ../embed/mozilla/GeckoPrintService.cpp:178
 msgid "Options"
 msgstr "Beállítások"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:415
+#: ../embed/mozilla/GeckoPrintService.cpp:431
 msgid "Print this page?"
 msgstr "Kinyomtatja a jelenlegi oldalt?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:423
+#: ../embed/mozilla/GeckoPrintService.cpp:439
 msgid "Preparing to print"
 msgstr "Nyomtatás előkészítése"
 
@@ -1747,7 +1750,7 @@ msgstr "Nyomtatás megszakítása"
 #. FIXME text!
 #: ../embed/mozilla/GeckoPrintSession.cpp:318
 msgid "Spooling..."
-msgstr "Sorbaállítás..."
+msgstr "Sorba állítás..."
 
 #: ../embed/mozilla/GeckoPrintSession.cpp:332
 msgid "Print error"
@@ -2440,13 +2443,17 @@ msgstr "Jelszó meg_jegyzése erre a munkamenetre"
 msgid "Save password in _keyring"
 msgstr "Jelszó mentése a _kulcstartóra"
 
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:54
 msgid "Popup Windows"
 msgstr "Felugró ablakok"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-history-window.c:1195
+#: ../lib/ephy-stock-icons.c:55 ../src/ephy-history-window.c:1195
 msgid "History"
 msgstr "Előzmények"
+
+#: ../lib/ephy-stock-icons.c:56 ../src/ephy-window.c:1337
+msgid "Bookmark"
+msgstr "Könyvjelző"
 
 #: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
@@ -3953,10 +3960,6 @@ msgstr "Mentés másként"
 msgid "Print"
 msgstr "Nyomtatás"
 
-#: ../src/ephy-window.c:1337
-msgid "Bookmark"
-msgstr "Könyvjelző"
-
 #: ../src/ephy-window.c:1339
 msgid "Find"
 msgstr "Keresés"
@@ -4096,15 +4099,15 @@ msgstr "Felhasználónév"
 msgid "User Password"
 msgstr "Felhasználói jelszó"
 
-#: ../src/popup-commands.c:254
+#: ../src/popup-commands.c:272
 msgid "Download Link"
 msgstr "Hivatkozott elem letöltése"
 
-#: ../src/popup-commands.c:262
+#: ../src/popup-commands.c:280
 msgid "Save Link As"
 msgstr "Hivatkozás mentése másként"
 
-#: ../src/popup-commands.c:269
+#: ../src/popup-commands.c:287
 msgid "Save Image As"
 msgstr "Kép mentése másként"
 
