@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-01-02 03:29+0000\n"
-"PO-Revision-Date: 2007-01-09 14:10+0100\n"
+"POT-Creation-Date: 2007-01-27 16:11+0000\n"
+"PO-Revision-Date: 2007-02-28 23:33+0100\n"
 "Last-Translator: Matic Žgur <mr.zgur@gmail.com>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1430,8 +1430,8 @@ msgstr "Verjetni vzroki problema so"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:276
 #, c-format
-msgid "<ul><li>the service %s isn't started.</li>Try to start it using the Services Configuration Tool in System > Administration > Services, or</ul><ul><li>the port number %d is wrong.</li></ul>"
-msgstr "<ul><li>storitev %s ni zagnana.</li>Poskusite jo zagnati z uporabo Orodja za nastavljanje storitev v Sistem > Administracija > Storitve ali pa </ul><ul><li>je številka vrat %d napačna.</li></ul>"
+msgid "<ul><li>the service %s isn't started.</li>Try to start it using the Services Configuration Tool in System > Control Center, or</ul><ul><li>the port number %d is wrong.</li></ul>"
+msgstr "<ul><li>storitev %s ni zagnana.</li>Poskusite jo zagnati z uporabo Orodja za nastavljanje storitev v Sistem > Nadzorno središče ali</ul><ul><li>pa je številka vrat %d napačna.</li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:287
 #, c-format
@@ -1445,17 +1445,17 @@ msgstr "<ul><li>neka storitev ni zagnana ali par</li><li>imate napačno številk
 #: ../embed/mozilla/EphyAboutModule.cpp:304
 #: ../embed/mozilla/EphyAboutModule.cpp:322
 #: ../embed/mozilla/EphyAboutModule.cpp:341
-#: ../embed/mozilla/EphyAboutModule.cpp:398
-#: ../embed/mozilla/EphyAboutModule.cpp:429
+#: ../embed/mozilla/EphyAboutModule.cpp:399
+#: ../embed/mozilla/EphyAboutModule.cpp:430
 msgid "The server may be busy or you may have a network connection problem. Try again later."
 msgstr "Lahko je strežnik zaseden ali pa imate probleme z mrežno povezavo. Poskusite ponovno kasneje."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:306
 #: ../embed/mozilla/EphyAboutModule.cpp:324
 #: ../embed/mozilla/EphyAboutModule.cpp:343
-#: ../embed/mozilla/EphyAboutModule.cpp:365
-#: ../embed/mozilla/EphyAboutModule.cpp:400
-#: ../embed/mozilla/EphyAboutModule.cpp:431
+#: ../embed/mozilla/EphyAboutModule.cpp:366
+#: ../embed/mozilla/EphyAboutModule.cpp:401
+#: ../embed/mozilla/EphyAboutModule.cpp:432
 msgid "There may be an old version of the page you wanted:"
 msgstr "Obstaja lahko starejša različica strani, ki ste jo želeli:"
 
@@ -1501,104 +1501,105 @@ msgstr "Naslov, ki ste ga vnesli, ni veljaven."
 msgid "“%s” Redirected Too Many Times"
 msgstr "\"%s\" je prevečkrat preusmerila"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:362
-#, c-format
-msgid "“%s” redirected too many times."
-msgstr "\"%s\" je prevečkrat preusmerila"
+#. Translators: %s is the hostname, like "www.example.com"
+#: ../embed/mozilla/EphyAboutModule.cpp:361
+msgid "This page cannot load because of a problem with the Web site."
+msgstr "Strani ni mogoče naložiti zaradi problema s spletnim mestom."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:364
-msgid "The redirection has been stopped for security reasons."
-msgstr "Preusmeritev je bila zaustavljena iz varnostnih razlogov."
+#, c-format
+msgid "The server “%s” is redirecting in a way that will never complete."
+msgstr "Strežnik \"%s\" preusmerja na način, ki se ne bo nikoli zaključil."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:374
+#: ../embed/mozilla/EphyAboutModule.cpp:375
 #, c-format
 msgid "“%s” Requires an Encrypted Connection"
 msgstr "\"%s\" zahteva kodirano povezavo"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:378
+#: ../embed/mozilla/EphyAboutModule.cpp:379
 #, c-format
 msgid "“%s” requires an encrypted connection."
 msgstr "\"%s\" zahteva kodirano povezavo."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:380
+#: ../embed/mozilla/EphyAboutModule.cpp:381
 msgid "The document could not be loaded because encryption support is not installed."
 msgstr "Ni mogoče naložiti dokumenta, ker podpora za kodiranje ni nameščena."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:390
+#: ../embed/mozilla/EphyAboutModule.cpp:391
 #, c-format
 msgid "“%s” Dropped the Connection"
 msgstr "Izgubljena povezava z \"%s\""
 
-#: ../embed/mozilla/EphyAboutModule.cpp:394
+#: ../embed/mozilla/EphyAboutModule.cpp:395
 #, c-format
 msgid "“%s” dropped the connection."
 msgstr "Izgubljena povezava z \"%s\"."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:396
-#: ../embed/mozilla/EphyAboutModule.cpp:427
+#: ../embed/mozilla/EphyAboutModule.cpp:397
+#: ../embed/mozilla/EphyAboutModule.cpp:428
 msgid "The server dropped the connection before any data could be read."
 msgstr "Povezava s strežnikom je bila izgubljena, preden je bilo možno prebrati kakršnekoli podatke."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:407
+#: ../embed/mozilla/EphyAboutModule.cpp:408
 msgid "Cannot Load Document Whilst Working Offline"
 msgstr "Med delom brez povezave ni mogoče naložiti dokumenta"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:408
+#: ../embed/mozilla/EphyAboutModule.cpp:409
 msgid "Cannot load document whilst working offline."
 msgstr "Med delom brez povezave ni mogoče naložiti dokumenta."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:409
+#: ../embed/mozilla/EphyAboutModule.cpp:410
 msgid "To view this document, disable “Work Offline” and try again."
 msgstr "Za ogled tega dokumenta, onemogočite \"Delo brez povezave\" in poskusite znova."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:421
+#: ../embed/mozilla/EphyAboutModule.cpp:422
 #, c-format
 msgid "“%s” Denied Access to Port “%d”"
 msgstr "\"%s\" je zavrnil dostop do vrat \"%d\""
 
-#: ../embed/mozilla/EphyAboutModule.cpp:425
+#: ../embed/mozilla/EphyAboutModule.cpp:426
 #, c-format
 msgid "“%s” denied access to port “%d”."
 msgstr "\"%s\" je zavrnil dostop do vrat \"%d\"."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:436
+#: ../embed/mozilla/EphyAboutModule.cpp:437
 msgid "Could not Connect to Proxy Server"
 msgstr "Povezava s posredniškim (proxy) strežnikom ni mogoča"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:437
+#: ../embed/mozilla/EphyAboutModule.cpp:438
 msgid "Could not connect to proxy server."
 msgstr "Povezava s posredniškim (proxy) strežnikom ni mogoča."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:438
+#: ../embed/mozilla/EphyAboutModule.cpp:439
 msgid "Check your proxy server settings. If the connection still fails, there may be a problem with your proxy server or your network connection."
 msgstr "Preverite nastavitve posredniškega (proxy) strežnika. Če povezava še vedno ne uspe, je lahko problem s posredniškim strežnikom ali mrežno povezavo."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:446
+#: ../embed/mozilla/EphyAboutModule.cpp:447
 msgid "Could not Display Content"
 msgstr "Ni mogoče prikazati vsebine"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:447
+#: ../embed/mozilla/EphyAboutModule.cpp:448
 msgid "Could not display content."
 msgstr "Ni mogoče prikazati vsebine."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:448
+#: ../embed/mozilla/EphyAboutModule.cpp:449
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr "Stran uporablja nepodprto ali neveljavno vrsto kompresije."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:537
+#: ../embed/mozilla/EphyAboutModule.cpp:538
 #, c-format
 msgid "The page “%s” in this tab was not fully loaded yet when the web browser crashed; it could have caused the crash."
 msgstr "Stran \"%s\" v tem zavihku še ni bila popolnoma naložena, ko se je brskalnik sesul. Lahko da je povzročila sesutje."
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:664
+#: ../embed/mozilla/EphyAboutModule.cpp:665
 msgid "You may find an old version:|in the Google Cache"
 msgstr "v Googlovem predpomnilniku"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:672
+#: ../embed/mozilla/EphyAboutModule.cpp:673
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "v Internetnem arhivu"
 
@@ -1664,16 +1665,16 @@ msgstr "Spletna stran \"%s\" zahteva, da podpišete sledeče besedilo:"
 msgid "_Sign text"
 msgstr "_Podpiši besedilo"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:174
+#: ../embed/mozilla/GeckoPrintService.cpp:178
 msgid "Options"
 msgstr "Možnosti"
 
 # G:1 K:0 O:0
-#: ../embed/mozilla/GeckoPrintService.cpp:415
+#: ../embed/mozilla/GeckoPrintService.cpp:431
 msgid "Print this page?"
 msgstr "Ali želite natisniti to stran?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:423
+#: ../embed/mozilla/GeckoPrintService.cpp:439
 msgid "Preparing to print"
 msgstr "Pripravljanje na tiskanje"
 
@@ -2341,14 +2342,20 @@ msgstr "_Zapomni si geslo za to sejo"
 msgid "Save password in _keyring"
 msgstr "Shrani geslo v _zbirko ključev"
 
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:54
 msgid "Popup Windows"
 msgstr "Pojavna okna"
 
-#: ../lib/ephy-stock-icons.c:56
+#: ../lib/ephy-stock-icons.c:55
 #: ../src/ephy-history-window.c:1195
 msgid "History"
 msgstr "Zgodovina"
+
+# G:1 K:0 O:0
+#: ../lib/ephy-stock-icons.c:56
+#: ../src/ephy-window.c:1337
+msgid "Bookmark"
+msgstr "Zaznamek"
 
 # G:1 K:0 O:0
 #: ../lib/ephy-stock-icons.c:57
@@ -4024,11 +4031,6 @@ msgstr "Shrani kot"
 msgid "Print"
 msgstr "Natisni"
 
-# G:1 K:0 O:0
-#: ../src/ephy-window.c:1337
-msgid "Bookmark"
-msgstr "Zaznamek"
-
 #: ../src/ephy-window.c:1339
 msgid "Find"
 msgstr "Poišči"
@@ -4189,17 +4191,17 @@ msgid "User Password"
 msgstr "Uporabnikovo geslo"
 
 # G:6 K:0 O:0
-#: ../src/popup-commands.c:254
+#: ../src/popup-commands.c:272
 msgid "Download Link"
 msgstr "Prenesi povezavo"
 
 # G:10 K:0 O:0
-#: ../src/popup-commands.c:262
+#: ../src/popup-commands.c:280
 msgid "Save Link As"
 msgstr "Shrani povezavo _kot"
 
 # G:2 K:0 O:0
-#: ../src/popup-commands.c:269
+#: ../src/popup-commands.c:287
 msgid "Save Image As"
 msgstr "Shrani sliko kot"
 
@@ -4343,4 +4345,9 @@ msgstr ""
 #: ../src/window-commands.c:855
 msgid "GNOME Web Browser Website"
 msgstr "Spletna stran spletnega brskalnika za GNOME"
+
+#~ msgid "“%s” redirected too many times."
+#~ msgstr "\"%s\" je prevečkrat preusmerila"
+#~ msgid "The redirection has been stopped for security reasons."
+#~ msgstr "Preusmeritev je bila zaustavljena iz varnostnih razlogov."
 
