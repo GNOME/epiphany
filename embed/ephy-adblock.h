@@ -23,6 +23,7 @@
 #ifndef EPHY_ADBLOCK_H
 #define EPHY_ADBLOCK_H
 
+#include "ephy-embed.h"
 #include <glib-object.h>
 
 G_BEGIN_DECLS
@@ -64,9 +65,10 @@ struct _EphyAdBlockIface
 	GTypeInterface base_iface;
 
 	gboolean	(* should_load)	(EphyAdBlock *adblock,
+					 EphyEmbed *embed,
 				         const char *url,
 				         AdUriCheckType check_type);
-	
+
 	void		(* edit_rule)	(EphyAdBlock *adblock,
 				         const char *url,
 				         gboolean allowed);
@@ -75,6 +77,7 @@ struct _EphyAdBlockIface
 GType		ephy_adblock_get_type		(void);
 
 gboolean	ephy_adblock_should_load 	(EphyAdBlock *adblock,
+						 EphyEmbed *embed,
 				    	 	 const char *url,
 				    	 	 AdUriCheckType check_type);
 

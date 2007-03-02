@@ -48,13 +48,15 @@ ephy_adblock_get_type (void)
 
 gboolean
 ephy_adblock_should_load (EphyAdBlock *adblock,
+			  EphyEmbed *embed,
 			  const char *url,
 			  AdUriCheckType check_type)
 {
 	EphyAdBlockIface *iface = EPHY_ADBLOCK_GET_IFACE (adblock);
+	
 	if (iface->should_load)
 	{
-		return iface->should_load (adblock, url, check_type);
+		return iface->should_load (adblock, embed, url, check_type);
 	}
 
 	return TRUE;

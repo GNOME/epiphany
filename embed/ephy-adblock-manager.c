@@ -66,12 +66,14 @@ ephy_adblock_manager_set_blocker (EphyAdBlockManager *self,
  **/
 gboolean
 ephy_adblock_manager_should_load (EphyAdBlockManager *self,
+				  EphyEmbed *embed,
 	    	 	    	  const char *url,
 	    	 	    	  AdUriCheckType check_type)
 {
 	if (self->priv->blocker != NULL)
 	{
 		return ephy_adblock_should_load (self->priv->blocker,	
+						 embed,
 						 url,
 						 check_type);
 	}

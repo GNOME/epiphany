@@ -30,13 +30,11 @@ NOINST_H_FILES = \
 	ephy-zoom.h
 
 TYPES_H_FILES = \
-	ephy-adblock.h				\
 	ephy-node.h				\
 	ephy-password-dialog.h			\
 	ephy-state.h
 
 INST_H_FILES = \
-	ephy-adblock.h				\
 	ephy-dialog.h				\
 	ephy-loader.h				\
 	ephy-node.h				\
@@ -45,7 +43,6 @@ INST_H_FILES = \
 
 libephymisc_la_SOURCES = \
 	eel-gconf-extensions.c			\
-	ephy-adblock.c				\
 	ephy-debug.c				\
 	ephy-dialog.c				\
 	ephy-dnd.c				\

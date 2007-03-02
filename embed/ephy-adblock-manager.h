@@ -24,6 +24,7 @@
 #define EPHY_ADBLOCK_MANAGER_H
 
 #include <glib-object.h>
+#include "ephy-embed.h"
 #include "ephy-adblock.h"
 
 G_BEGIN_DECLS
@@ -56,6 +57,7 @@ struct _EphyAdBlockManagerClass {
 GType 			ephy_adblock_manager_get_type (void);
 
 gboolean		ephy_adblock_manager_should_load (EphyAdBlockManager *self,
+				    	 	    	  EphyEmbed *embed,
 				    	 	    	  const char *url,
 				    	 	    	  AdUriCheckType check_type);
 

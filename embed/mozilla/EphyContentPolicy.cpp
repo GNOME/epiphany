@@ -151,22 +151,23 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 		PR_TRUE  /* TYPE_REFRESH */
 	};
 
-	if (kBlockType[aContentType < G_N_ELEMENTS (kBlockType) ? aContentType : 0] &&
-	    !ephy_adblock_manager_should_load (adblock_manager, 
-					       contentSpec.get (), 
-					       AdUriCheckType (aContentType)))
+	if (kBlockType[aContentType < G_N_ELEMENTS (kBlockType) ? aContentType : 0])
 	{
-		*aDecision = nsIContentPolicy::REJECT_REQUEST;
+		GtkWidget *embed = GetEmbedFromContext (aContext);
 
-		GtkWidget *embed = GetEmbedFromContext (aContext); 
-
-		if (embed) 
+		if (embed &&
+		    !ephy_adblock_manager_should_load (adblock_manager,
+						       EPHY_EMBED (embed),
+						       contentSpec.get (),
+						       AdUriCheckType (aContentType)))
 		{
+			*aDecision = nsIContentPolicy::REJECT_REQUEST;
+
 			g_signal_emit_by_name (embed,
 					       "content-blocked", 
 					       contentSpec.get ());
+			return NS_OK;
 		}
-		return NS_OK;
 	}
 
 	PRBool isHttp = PR_FALSE;

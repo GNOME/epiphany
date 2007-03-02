@@ -16,6 +16,7 @@ NOINST_H_FILES = \
 	ephy-favicon-cache.h
 
 INST_H_FILES = \
+	ephy-adblock.h			\
 	ephy-adblock-manager.h		\
 	ephy-command-manager.h		\
 	ephy-cookie-manager.h		\
@@ -35,6 +36,7 @@ BUILT_SOURCES = \
 	ephy-embed-type-builtins.h
 
 libephyembed_la_SOURCES = \
+	ephy-adblock.c			\
 	ephy-adblock-manager.c		\
 	downloader-view.c		\
 	ephy-command-manager.c		\

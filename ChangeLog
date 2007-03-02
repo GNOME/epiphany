@@ -1,3 +1,18 @@
+2007-03-03  Benjamin Berg  <benjamin@sipsolutions.net>
+
+	* embed/Makefile.am:
+	* embed/ephy-adblock-manager.c: (ephy_adblock_manager_should_load):
+	* embed/ephy-adblock-manager.h:
+	* embed/ephy-adblock.c: (ephy_adblock_should_load):
+	* embed/ephy-adblock.h:
+	* embed/mozilla/EphyContentPolicy.cpp:
+	* lib/Makefile.am:
+	* lib/ephy-adblock.c:
+	* lib/ephy-adblock.h:
+
+	Move ephy-adblock.* to embed. Change the API to pass EphyEmbed to
+	should_load. This is needed to fix bug #348331.
+
 2007-03-02  Christian Persch  <chpe@svn.gnome.org>
 
 	* data/mime-types-permissions.xml:
