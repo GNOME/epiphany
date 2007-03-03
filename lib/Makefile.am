@@ -125,7 +125,7 @@ stamp-ephy-marshal.h: ephy-marshal.list
 	$(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header > ephy-marshal.h \
 	&& echo timestamp > $(@F)
 
-ephy-lib-type-builtins.c: stamp-ephy-lib-type-builtins.c
+ephy-lib-type-builtins.c: stamp-ephy-lib-type-builtins.c Makefile
 	@true
 stamp-ephy-lib-type-builtins.c: $(TYPES_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
@@ -145,7 +145,7 @@ stamp-ephy-lib-type-builtins.c: $(TYPES_H_FILES)
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
 
-ephy-lib-type-builtins.h: stamp-ephy-lib-type-builtins.h
+ephy-lib-type-builtins.h: stamp-ephy-lib-type-builtins.h Makefile
 	@true
 stamp-ephy-lib-type-builtins.h: $(TYPES_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \

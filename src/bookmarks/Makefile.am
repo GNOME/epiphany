@@ -62,7 +62,7 @@ stamp_files = \
 	stamp-ephy-bookmarks-type-builtins.c	\
 	stamp-ephy-bookmarks-type-builtins.h
 
-ephy-bookmarks-type-builtins.c: stamp-ephy-bookmarks-type-builtins.c
+ephy-bookmarks-type-builtins.c: stamp-ephy-bookmarks-type-builtins.c Makefile
 	@true
 stamp-ephy-bookmarks-type-builtins.c: $(INST_H_FILES) $(NOINST_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
@@ -82,7 +82,7 @@ stamp-ephy-bookmarks-type-builtins.c: $(INST_H_FILES) $(NOINST_H_FILES)
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
 
-ephy-bookmarks-type-builtins.h: stamp-ephy-bookmarks-type-builtins.h
+ephy-bookmarks-type-builtins.h: stamp-ephy-bookmarks-type-builtins.h Makefile
 	@true
 stamp-ephy-bookmarks-type-builtins.h: $(INST_H_FILES) $(NOINST_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \

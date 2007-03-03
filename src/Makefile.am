@@ -261,7 +261,7 @@ stamp_files = \
 	stamp-ephy-dbus-server-bindings.h	\
 	stamp-ephy-dbus-client-bindings.h
 
-ephy-type-builtins.c: stamp-ephy-type-builtins.c
+ephy-type-builtins.c: stamp-ephy-type-builtins.c Makefile
 	@true
 stamp-ephy-type-builtins.c: $(INST_H_FILES) $(NOINST_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
@@ -281,7 +281,7 @@ stamp-ephy-type-builtins.c: $(INST_H_FILES) $(NOINST_H_FILES)
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
 
-ephy-type-builtins.h: stamp-ephy-type-builtins.h
+ephy-type-builtins.h: stamp-ephy-type-builtins.h Makefile
 	@true
 stamp-ephy-type-builtins.h: $(INST_H_FILES) $(NOINST_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \

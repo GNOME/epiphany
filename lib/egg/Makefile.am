@@ -57,7 +57,7 @@ stamp-eggmarshalers.c: eggmarshalers.list
 	$(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --header --body > eggmarshalers.c \
 	&& echo timestamp > $(@F)
 
-eggtypebuiltins.c: stamp-eggtypebuiltins.c
+eggtypebuiltins.c: stamp-eggtypebuiltins.c Makefile
 	@true
 stamp-eggtypebuiltins.c: $(EGGHEADERS)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
@@ -77,7 +77,7 @@ stamp-eggtypebuiltins.c: $(EGGHEADERS)
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
 
-eggtypebuiltins.h: stamp-eggtypebuiltins.h
+eggtypebuiltins.h: stamp-eggtypebuiltins.h Makefile
 	@true
 stamp-eggtypebuiltins.h: $(EGGHEADERS)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
