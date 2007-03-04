@@ -111,6 +111,8 @@ ephy_net_monitor_check_network (EphyNetMonitor *monitor)
 	DBusMessage *message;
 	DBusPendingCall* reply;
 
+	if (priv->bus == NULL) return;
+
 	LOG ("EphyNetMonitor checking network");
 
 	/* ask to Network Manager if there is at least one active device */
@@ -248,13 +250,16 @@ ephy_net_monitor_startup (EphyNetMonitor *monitor)
 
 	ephy_net_monitor_attach_to_dbus (monitor);
 
-	/* DBUS may disconnect us at any time. So listen carefully to it */
-	g_signal_connect (dbus, "connected",  
-			  G_CALLBACK (connect_to_system_bus_cb), monitor);
-	g_signal_connect (dbus, "disconnected",  
-			  G_CALLBACK (disconnect_from_system_bus_cb), monitor);
+	if (monitor->priv->bus != NULL)
+       	{
+		/* DBUS may disconnect us at any time. So listen carefully to it */
+		g_signal_connect (dbus, "connected",  
+				  G_CALLBACK (connect_to_system_bus_cb), monitor);
+		g_signal_connect (dbus, "disconnected",  
+				  G_CALLBACK (disconnect_from_system_bus_cb), monitor);
 
-	ephy_net_monitor_check_network (monitor);
+		ephy_net_monitor_check_network (monitor);
+	}
 }
 
 static void
