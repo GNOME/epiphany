@@ -312,8 +312,10 @@ static void
 update_capslock_warning (GtkWidget *widget,
 			 gboolean show)
 {
-	//EphyPasswordDialog *dialog = EPHY_PASSWORD_DIALOG (dialog);
-	//EphyPasswordDialogPrivate *priv = dialog->priv;
+/*
+	EphyPasswordDialog *dialog = EPHY_PASSWORD_DIALOG (dialog);
+	EphyPasswordDialogPrivate *priv = dialog->priv;
+*/
 
 	g_print ("CapsLock is now %s\n", show?"on": "off");
 }
@@ -375,7 +377,7 @@ ephy_password_dialog_constructor (GType type,
 	gtk_window_set_resizable (window, FALSE);
 	gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* Message has 24, we want 12 = 2 + 2 * 5 */
 
-	//	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+	/*	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE); */
 	gtk_window_set_icon_name (window, EPHY_STOCK_EPHY);
 
 	gtk_image_set_from_icon_name (GTK_IMAGE (message_dialog->image),
@@ -384,7 +386,7 @@ ephy_password_dialog_constructor (GType type,
 
 	vbox = message_dialog->label->parent;
 
-	// fixme resize later
+	/* fixme resize later */
 	table = GTK_TABLE (gtk_table_new (6, 2, FALSE));
 	gtk_table_set_row_spacings (table, 6);
 	gtk_table_set_col_spacings (table, 12);
@@ -461,9 +463,11 @@ ephy_password_dialog_constructor (GType type,
 			   EPHY_PASSWORD_DIALOG_FLAGS_SHOW_NEW_PASSWORD))
 	{
 		priv->track_capslock = TRUE;
-//		gtk_table_attach (table, widget,
-//				  1, 2, row, row + 1,
-//				  GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
+/*
+		gtk_table_attach (table, widget,
+				  1, 2, row, row + 1,
+				  GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
+*/
 
 	}
 
@@ -518,8 +522,10 @@ ephy_password_dialog_constructor (GType type,
 static void
 ephy_password_dialog_finalize (GObject *object)
 {
-//	EphyPasswordDialog *dialog = EPHY_PASSWORD_DIALOG (object);
-//	EphyPasswordDialogPrivate *priv = dialog->priv;
+/*
+	EphyPasswordDialog *dialog = EPHY_PASSWORD_DIALOG (object);
+	EphyPasswordDialogPrivate *priv = dialog->priv;
+*/
 
 	G_OBJECT_CLASS (ephy_password_dialog_parent_class)->finalize (object);
 }
@@ -565,17 +571,20 @@ static void
 ephy_password_dialog_class_init (EphyPasswordDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-//	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-//	GtkDialogClass *dialog_class = GTK_DIALOG_CLASS (klass);
+/*
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+	GtkDialogClass *dialog_class = GTK_DIALOG_CLASS (klass);
+*/
 
 	object_class->constructor = ephy_password_dialog_constructor;
 	object_class->finalize = ephy_password_dialog_finalize;
 	object_class->get_property = ephy_password_dialog_get_property;
 	object_class->set_property = ephy_password_dialog_set_property;
 
-//	widget_class->key_press_event = ephy_password_dialog_key_press;
-
-//	dialog_class->response = ephy_password_dialog_response;
+/*
+	widget_class->key_press_event = ephy_password_dialog_key_press;
+	dialog_class->response = ephy_password_dialog_response;
+*/
 
 	g_type_class_add_private (object_class, sizeof (EphyPasswordDialogPrivate));
 

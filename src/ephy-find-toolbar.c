@@ -361,7 +361,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 
 	item = gtk_tool_item_new ();
 	gtk_container_add (GTK_CONTAINER (item), alignment);
-	//gtk_tool_item_set_expand (item, TRUE);
+	/* gtk_tool_item_set_expand (item, TRUE); */
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 	gtk_widget_show_all (GTK_WIDGET (item));
 

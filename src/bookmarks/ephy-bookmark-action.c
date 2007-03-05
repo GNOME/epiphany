@@ -533,18 +533,18 @@ ephy_bookmark_action_updated (EphyBookmarkAction *action)
 	
 	g_object_freeze_notify (G_OBJECT (action));
 
-	// Set smart_url
+	/* Set smart_url */
 	action->priv->smart_url = ephy_node_has_child (smart, node);
 	g_object_notify (G_OBJECT (action), "smarturl");
 	
-	// Set title
+	/* Set title */
 	title = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_static_string (&value, title);
 	g_object_set_property (G_OBJECT (action), "label", &value);
 	g_value_unset (&value);
 	
-	// Notify all other properties
+	/* Notify all other properties */
 	g_object_notify (G_OBJECT (action), "location");
 	g_object_notify (G_OBJECT (action), "tooltip");
 	g_object_notify (G_OBJECT (action), "icon");

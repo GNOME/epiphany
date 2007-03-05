@@ -297,7 +297,7 @@ certs_manager_dialog_remove_button_clicked_cb (GtkButton *button,
 		cert = EPHY_X509_CERT (g_value_dup_object (&val));
 		g_value_unset (&val);
 
-		// TODO check return value and notify if an error ocurred
+		/* TODO check return value and notify if an error ocurred */
 		ephy_certificate_manager_remove_certificate (priv->certs_manager,
 							     cert);
 		g_object_unref (cert);
@@ -455,8 +455,10 @@ certs_manager_dialog_init (CertsManagerDialog *dialog)
 static void
 certs_manager_dialog_finalize (GObject *object)
 {
-	//CertsManagerDialog *dialog = EPHY_CERTS_MANAGER_DIALOG (object);
-	//CertsManagerDialogPrivate *priv = dialog->priv;
+/*
+	CertsManagerDialog *dialog = EPHY_CERTS_MANAGER_DIALOG (object);
+	CertsManagerDialogPrivate *priv = dialog->priv;
+*/
 	EphyEmbedShell *shell;
 
 	/* TODO free certs in the treeviews */
