@@ -59,8 +59,8 @@ stamp-eggmarshalers.c: eggmarshalers.list
 
 eggtypebuiltins.c: stamp-eggtypebuiltins.c Makefile
 	@true
-stamp-eggtypebuiltins.c: $(EGGHEADERS)
-	( cd $(srcdir) && $(GLIB_MKENUMS) \
+stamp-eggtypebuiltins.c: Makefile $(EGGHEADERS)
+	$(GLIB_MKENUMS) \
 		--fhead "#include \"eggtypebuiltins.h\"\n\n" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
 		--fprod "\n#include \"@filename@\"" \
@@ -72,15 +72,15 @@ stamp-eggtypebuiltins.c: $(EGGHEADERS)
 		--vtail "      { 0, NULL, NULL }\n    };\n\n" \
 		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n  }\n\n" \
 		--vtail "  return type;\n}\n\n" \
-		$(^F) ) > xgen-$(@F) \
+		$(filter-out $<,$^) > xgen-$(@F) \
 	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
 
 eggtypebuiltins.h: stamp-eggtypebuiltins.h Makefile
 	@true
-stamp-eggtypebuiltins.h: $(EGGHEADERS)
-	( cd $(srcdir) && $(GLIB_MKENUMS) \
+stamp-eggtypebuiltins.h: Makefile $(EGGHEADERS)
+	$(GLIB_MKENUMS) \
 		--fhead "#ifndef __EGGTYPEBUILTINS_H__\n" \
 		--fhead "#define __EGGTYPEBUILTINS_H__ 1\n\n" \
 		--fhead "#include <glib-object.h>\n\n" \
@@ -90,7 +90,7 @@ stamp-eggtypebuiltins.h: $(EGGHEADERS)
 		--fprod "\n/* --- @filename@ --- */" \
 		--eprod "#define EGG_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
 		--eprod "GType @enum_name@_get_type (void);\n" \
-		$(^F) ) > xgen-$(@F) \
+		$(filter-out $<,$^) > xgen-$(@F) \
 	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
