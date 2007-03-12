@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-03-06 01:24+0100\n"
+"POT-Creation-Date: 2007-03-12 16:59+0100\n"
 "PO-Revision-Date: 2007-03-06 00:23+0100\n"
 "Last-Translator: Горан Ракић <grakic@devbase.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -2000,42 +2000,51 @@ msgstr ""
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Не могу да одобрим овај сертификат из непознатих разлога."
 
+#
+# note(goran): 
+# "Token" refers to something that you use to authenticate with. That can
+# be either a physical device (smart-card) or just some data (certificate).
+#
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1419
 msgid "Change Token Password"
-msgstr "Промени лозинку за сертификат/парицу"
+msgstr "Промени лозинку за систем провере"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1425
 #, c-format
 msgid "Choose a password for the “%s” token"
-msgstr "Одабери лозинку за сертификат/парицу „%s“"
+msgstr "Одабери лозинку за систем провере „%s“"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1428
 #, c-format
 msgid "Change the password for the “%s” token"
-msgstr "Унесите лозинку за сертификат/парицу „%s“"
+msgstr "Унесите лозинку за систем провере „%s“"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1512
 msgid "Get Token Password"
-msgstr "Прибаци лозинку сертификата/парице"
+msgstr "Прибави лозинку за систем провере"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1516
+#. Translators: A "token" is something that enables the user to authenticate himself or
+#. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
+#. * a data file (e.g. a cryptographic certificate).
+#.
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1520
 #, c-format
 msgid "Please enter the password for the “%s” token"
-msgstr "Унесите лозинку за сертификат/парицу „%s“"
+msgstr "Унесите лозинку за систем провере „%s“"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1582
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1586
 msgid "Please select a token:"
-msgstr "Одабери сертификат:"
+msgstr "Одабери систем провере:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1601
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1605
 msgid "_Select"
 msgstr "_Одабери"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1654
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1658
 msgid "Escrow the secret key?"
 msgstr "Прати тајни кључ?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1663
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1667
 #, c-format
 msgid ""
 "The certificate authority “%s” requests that you give it a copy of the newly "
@@ -2054,11 +2063,11 @@ msgstr ""
 "\n"
 "Најискерније препоручујемо да то не дозволиш."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1674
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1678
 msgid "_Reject"
 msgstr "_Одбиј"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1677
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1681
 msgid "_Allow"
 msgstr "_Прихвати"
 
