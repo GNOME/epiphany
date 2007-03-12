@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-03-06 01:24+0100\n"
+"POT-Creation-Date: 2007-03-12 17:02+0100\n"
 "PO-Revision-Date: 2007-03-06 00:23+0100\n"
 "Last-Translator: Горан Ракић <grakic@devbase.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -1728,6 +1728,49 @@ msgstr "XML датотеке"
 msgid "XUL files"
 msgstr "XUL датотеке"
 
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:93
+#, c-format
+msgid "Accept cookie from %s?"
+msgstr ""
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:100
+msgid "Accept Cookie?"
+msgstr ""
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:105
+msgid "The site wants to modify an existing cookie."
+msgstr ""
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:109
+msgid "The site wants to set a cookie."
+msgstr ""
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:113
+msgid "The site wants to set a second cookie."
+msgstr ""
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:117
+#, fuzzy, c-format
+msgid "You already have %d cookie from this site."
+msgid_plural "You already have %d cookies from this site."
+msgstr[0] "Већ постоји обележивач са насловом „%s“ за ову страницу."
+msgstr[1] "Већ постоји обележивач са насловом „%s“ за ову страницу."
+msgstr[2] "Већ постоји обележивач са насловом „%s“ за ову страницу."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:131
+msgid "Apply this _decision to all cookies from this site"
+msgstr ""
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:139
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1678
+msgid "_Reject"
+msgstr "_Одбиј"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:141
+#: ../embed/mozilla/GtkNSSDialogs.cpp:271
+msgid "_Accept"
+msgstr "При_хвати"
+
 #: ../embed/mozilla/GeckoFormSigningDialog.cpp:108
 #, c-format
 msgid "The web site “%s” requests that you sign the following text:"
@@ -1794,10 +1837,6 @@ msgstr "_Детаљи сертификата"
 #: ../embed/mozilla/GtkNSSDialogs.cpp:625
 msgid "_View Certificate"
 msgstr "_Погледај сертификат"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:271
-msgid "_Accept"
-msgstr "При_хвати"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:404
 #, c-format
@@ -2000,42 +2039,51 @@ msgstr ""
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Не могу да одобрим овај сертификат из непознатих разлога."
 
+#
+# note(goran): 
+# "Token" refers to something that you use to authenticate with. That can
+# be either a physical device (smart-card) or just some data (certificate).
+#
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1419
 msgid "Change Token Password"
-msgstr "Промени лозинку за сертификат/парицу"
+msgstr "Промени лозинку за систем провере"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1425
 #, c-format
 msgid "Choose a password for the “%s” token"
-msgstr "Одабери лозинку за сертификат/парицу „%s“"
+msgstr "Одабери лозинку за систем провере „%s“"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1428
 #, c-format
 msgid "Change the password for the “%s” token"
-msgstr "Унесите лозинку за сертификат/парицу „%s“"
+msgstr "Унесите лозинку за систем провере „%s“"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1512
 msgid "Get Token Password"
-msgstr "Прибаци лозинку сертификата/парице"
+msgstr "Прибави лозинку за систем провере"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1516
+#. Translators: A "token" is something that enables the user to authenticate himself or
+#. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
+#. * a data file (e.g. a cryptographic certificate).
+#.
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1520
 #, c-format
 msgid "Please enter the password for the “%s” token"
-msgstr "Унесите лозинку за сертификат/парицу „%s“"
+msgstr "Унесите лозинку за систем провере „%s“"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1582
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1586
 msgid "Please select a token:"
-msgstr "Одабери сертификат:"
+msgstr "Одабери систем провере:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1601
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1605
 msgid "_Select"
 msgstr "_Одабери"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1654
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1658
 msgid "Escrow the secret key?"
 msgstr "Прати тајни кључ?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1663
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1667
 #, c-format
 msgid ""
 "The certificate authority “%s” requests that you give it a copy of the newly "
@@ -2054,11 +2102,7 @@ msgstr ""
 "\n"
 "Најискерније препоручујемо да то не дозволиш."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1674
-msgid "_Reject"
-msgstr "_Одбиј"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1677
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1681
 msgid "_Allow"
 msgstr "_Прихвати"
 
@@ -3274,7 +3318,7 @@ msgstr "Адреса …"
 
 #: ../src/ephy-main.c:396
 msgid "Could not start GNOME Web Browser"
-msgstr "Не могу да покренем Гномов Интернет прегледник"
+msgstr "Не могу да покренем Гномов прегледник Интернета"
 
 #: ../src/ephy-main.c:399
 #, c-format
@@ -4211,7 +4255,7 @@ msgid ""
 "the Free Software Foundation; either version 2 of the License, or (at your "
 "option) any later version."
 msgstr ""
-"Гномов Интернет прегледник је слободан софтвер; Дозвољено је његово ширење"
+"Гномов прегледник интернета је слободан софтвер; Дозвољено је његово ширење"
 "(растурање), вршење(уношење) измена под условима Гну-ове Опште Јавне Лиценце "
 "(ОЈЛ), верзије 2 или било које накнадне верзије а коју је објавила Задужбина "
 "Слободног Софтвера."
@@ -4223,9 +4267,9 @@ msgid ""
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 msgstr ""
-"Гномов Интернет прегледник се расподељује у намери да ће бити користан,без "
-"икаквог јамства; укључујућу без ограничења, јамство да је без \n"
-"недостатака, спреман за тржиште или сврсисходан. За више детаља прочитајте \n"
+"Гномов прегледник интернета се расподељује у намери да ће бити користан,без "
+"икаквог јамства; укључујућу без ограничења, јамство да је без "
+"недостатака, спреман за тржиште или сврсисходан. За више детаља прочитајте "
 "Општу Јавну Лиценцу."
 
 #: ../src/window-commands.c:739
@@ -4234,9 +4278,9 @@ msgid ""
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr ""
-"Требало је да сте добили један примерак Опште Јавне Лиценце\n"
-"заједно са овим програмом; ако то није случај, пишите на адресу:Free\n"
-"Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,\n"
+"Требало је да сте добили један примерак Опште Јавне Лиценце"
+"заједно са Гномовим прегледником интернета; ако то није случај, пишите на адресу:Free"
+"Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,"
 "MA 02110-1302, USA"
 
 #: ../src/window-commands.c:787 ../src/window-commands.c:803
@@ -4450,10 +4494,6 @@ msgstr "Веб страна Гномовог прегледника Интерн
 #, fuzzy
 #~ msgid "Bookmark exists"
 #~ msgstr "Обележивачи"
-
-#, fuzzy
-#~ msgid "You already have a bookmark titled “%s” for this page."
-#~ msgstr "Већ постоји обележивач са насловом „%s“ за ову страницу."
 
 #, fuzzy
 #~ msgid "_Create New"
