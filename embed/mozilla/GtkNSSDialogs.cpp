@@ -1513,6 +1513,10 @@ GtkNSSDialogs::GetPassword(nsIInterfaceRequestor *aCtx,
 				 flags);
 	EphyPasswordDialog *password_dialog = EPHY_PASSWORD_DIALOG (dialog);
 
+	/* Translators: A "token" is something that enables the user to authenticate himself or
+         * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
+         * a data file (e.g. a cryptographic certificate).
+         */
 	char *message = g_markup_printf_escaped (_("Please enter the password for the “%s” token"),
 						 NS_ConvertUTF16toUTF8 (aTokenName).get ());
 	gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog),
