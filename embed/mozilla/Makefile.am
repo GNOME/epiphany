@@ -35,6 +35,8 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyUtils.h			\
 	EventContext.cpp                \
 	EventContext.h                  \
+	GeckoCookiePromptService.cpp	\
+	GeckoCookiePromptService.h	\
 	GeckoFormSigningDialog.cpp	\
 	GeckoFormSigningDialog.h	\
 	GeckoPrintService.cpp		\
