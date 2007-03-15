@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-02-09 11:37+0000\n"
-"PO-Revision-Date: 2007-02-09 11:37-0000\n"
+"POT-Creation-Date: 2007-03-15 07:00+0000\n"
+"PO-Revision-Date: 2007-03-15 07:00-0000\n"
 "Last-Translator: David Lodge <dave@cirt.net>\n"
 "Language-Team: English/GB <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -500,8 +500,8 @@ msgstr "_Certificate:"
 #: ../data/glade/form-signing-dialog.glade.h:4
 #: ../embed/mozilla/EphyPromptService.cpp:808
 #: ../embed/mozilla/EphyPromptService.cpp:835
-#: ../lib/ephy-password-dialog.c:427
-#: ../lib/ephy-password-dialog.c:443
+#: ../lib/ephy-password-dialog.c:429
+#: ../lib/ephy-password-dialog.c:445
 msgid "_Password:"
 msgstr "_Password:"
 
@@ -1527,7 +1527,7 @@ msgid "Don't Save"
 msgstr "Don't Save"
 
 #: ../embed/mozilla/EphyPromptService.cpp:807
-#: ../lib/ephy-password-dialog.c:399
+#: ../lib/ephy-password-dialog.c:401
 msgid "_Username:"
 msgstr "_Username:"
 
@@ -1559,6 +1559,48 @@ msgstr "XML files"
 #: ../embed/mozilla/FilePicker.cpp:182
 msgid "XUL files"
 msgstr "XUL files"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:93
+#, c-format
+msgid "Accept cookie from %s?"
+msgstr "Accept cookie from %s?"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:100
+msgid "Accept Cookie?"
+msgstr "Accept Cookie?"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:105
+msgid "The site wants to modify an existing cookie."
+msgstr "The site wants to modify an existing cookie."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:109
+msgid "The site wants to set a cookie."
+msgstr "The site wants to set a cookie."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:113
+msgid "The site wants to set a second cookie."
+msgstr "The site wants to set a second cookie."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:117
+#, c-format
+msgid "You already have %d cookie from this site."
+msgid_plural "You already have %d cookies from this site."
+msgstr[0] "You already have %d cookie from this site."
+msgstr[1] "You already have %d cookies from this site."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:131
+msgid "Apply this _decision to all cookies from this site"
+msgstr "Apply this _decision to all cookies from this site"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:139
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1678
+msgid "_Reject"
+msgstr "_Reject"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:141
+#: ../embed/mozilla/GtkNSSDialogs.cpp:271
+msgid "_Accept"
+msgstr "_Accept"
 
 #: ../embed/mozilla/GeckoFormSigningDialog.cpp:108
 #, c-format
@@ -1626,10 +1668,6 @@ msgstr "Certificate _Details"
 #: ../embed/mozilla/GtkNSSDialogs.cpp:625
 msgid "_View Certificate"
 msgstr "_View Certificate"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:271
-msgid "_Accept"
-msgstr "_Accept"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:404
 #, c-format
@@ -1829,24 +1867,28 @@ msgstr "Change the password for the “%s” token"
 msgid "Get Token Password"
 msgstr "Get Token Password"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1516
+#. Translators: A "token" is something that enables the user to authenticate himself or
+#. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
+#. * a data file (e.g. a cryptographic certificate).
+#.
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1520
 #, c-format
 msgid "Please enter the password for the “%s” token"
 msgstr "Please enter the password for the “%s” token"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1582
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1586
 msgid "Please select a token:"
 msgstr "Please select a token:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1601
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1605
 msgid "_Select"
 msgstr "_Select"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1654
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1658
 msgid "Escrow the secret key?"
 msgstr "Escrow the secret key?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1663
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1667
 #, c-format
 msgid ""
 "The certificate authority “%s” requests that you give it a copy of the newly generated secret key.\n"
@@ -1861,11 +1903,7 @@ msgstr ""
 "\n"
 "It is strongly recommended not to allow it."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1674
-msgid "_Reject"
-msgstr "_Reject"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1677
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1681
 msgid "_Allow"
 msgstr "_Allow"
 
@@ -2203,31 +2241,31 @@ msgstr "Western"
 msgid "select fonts for|Other Scripts"
 msgstr "Other Scripts"
 
-#: ../lib/ephy-password-dialog.c:413
+#: ../lib/ephy-password-dialog.c:415
 msgid "_Domain:"
 msgstr "_Domain:"
 
-#: ../lib/ephy-password-dialog.c:442
+#: ../lib/ephy-password-dialog.c:444
 msgid "_New password:"
 msgstr "_New password:"
 
-#: ../lib/ephy-password-dialog.c:452
+#: ../lib/ephy-password-dialog.c:454
 msgid "Con_firm password:"
 msgstr "Con_firm password:"
 
-#: ../lib/ephy-password-dialog.c:478
+#: ../lib/ephy-password-dialog.c:482
 msgid "Password quality:"
 msgstr "Password quality:"
 
-#: ../lib/ephy-password-dialog.c:494
+#: ../lib/ephy-password-dialog.c:498
 msgid "Do not remember this password"
 msgstr "Do not remember this password"
 
-#: ../lib/ephy-password-dialog.c:498
+#: ../lib/ephy-password-dialog.c:502
 msgid "_Remember password for this session"
 msgstr "_Remember password for this session"
 
-#: ../lib/ephy-password-dialog.c:502
+#: ../lib/ephy-password-dialog.c:506
 msgid "Save password in _keyring"
 msgstr "Save password in _keyring"
 
@@ -4126,8 +4164,6 @@ msgstr "GNOME Web Browser Website"
 #~ msgstr "Subtopics"
 #~ msgid "Bookmark exists"
 #~ msgstr "Bookmark exists"
-#~ msgid "You already have a bookmark titled “%s” for this page."
-#~ msgstr "You already have a bookmark titled “%s” for this page."
 #~ msgid "_Create New"
 #~ msgstr "_Create New"
 #~ msgid "_View Properties"
