@@ -312,24 +312,79 @@ mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *moz_single,
 	}
 }
 
+static GList *
+mozilla_init_plugin_add_unique_path (GList *list,
+				     const char *path)
+{
+	GList *l;
+	char *canon;
+
+	if (path == NULL)
+		return list;
+
+	canon = gnome_vfs_make_path_name_canonical (path);
+	for (l = list; l != NULL; l = l->next) {
+		if (g_str_equal (list->data, canon) != FALSE) {
+			/* The path is already in the list */
+			g_free (canon);
+			return list;
+		}
+	}
+	return g_list_prepend (list, canon);
+}
+
+static GList *
+mozilla_init_plugin_add_unique_paths (GList *list,
+				      const char *path)
+{
+	char **paths;
+	guint i;
+
+	if (path == NULL)
+		return list;
+
+	paths = g_strsplit (path, ":", -1);
+	if (paths == NULL)
+		return list;
+	for (i = 0; paths[i] != NULL; i++) {
+		list = mozilla_init_plugin_add_unique_path (list, paths[i]);
+	}
+	g_strfreev (paths);
+	return list;
+}
+
 static void
 mozilla_init_plugin_path ()
 {
-	const char *user_path;
-	char *new_path;
+	GList *list, *l;
+	GString *path;
 
-	user_path = g_getenv ("MOZ_PLUGIN_PATH");
-	new_path = g_strconcat (user_path ? user_path : "",
-				user_path ? ":" : "",
-				MOZILLA_PREFIX "/lib/mozilla/plugins"
-				":" MOZILLA_HOME "/plugins",
+	list = NULL;
+	list = mozilla_init_plugin_add_unique_paths (list,
+						     g_getenv ("MOZ_PLUGIN_PATH"));
+	list = mozilla_init_plugin_add_unique_path (list,
+						    MOZILLA_PREFIX "/lib/mozilla/plugins");
+	list = mozilla_init_plugin_add_unique_path (list,
+						    MOZILLA_HOME "/plugins");
+	list = mozilla_init_plugin_add_unique_path (list,
+						    MOZILLA_NATIVE_PLUGINSDIR);
 #ifdef HAVE_PRIVATE_PLUGINS
-				":" PLUGINDIR,
+	list = mozilla_init_plugin_add_unique_path (list, PLUGINDIR);
 #endif
-				(char *) NULL);
 
-	g_setenv ("MOZ_PLUGIN_PATH", new_path, TRUE);
-	g_free (new_path);
+	list = g_list_reverse (list);
+	path = g_string_new ((const char *) list->data);
+	g_free (list->data);
+	l = list->next;
+	for (; l != NULL; l = l->next) {
+		path = g_string_append_c (path, ':');
+		path = g_string_append (path, (const char *) l->data);
+		g_free (l->data);
+	}
+	g_list_free (list);
+
+	g_setenv ("MOZ_PLUGIN_PATH", path->str, TRUE);
+	g_string_free (path, TRUE);
 }
 
 static void
