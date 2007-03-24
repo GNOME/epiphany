@@ -1,7 +1,7 @@
 /*
  *  Copyright © 2002 Jorn Baayen
  *  Copyright © 2003, 2004 Marco Pesenti Gritti
- *  Copyright © 2004 Christian Persch
+ *  Copyright © 2004, 2007 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -220,15 +220,21 @@ create_statusbar_progress (EphyStatusbar *s)
 	EphyStatusbarPrivate *priv = s->priv;
 	GtkWidget *vbox;
 
-	vbox = gtk_vbox_new (TRUE, 0);
-	gtk_box_pack_end (GTK_BOX (priv->hbox), vbox, FALSE, TRUE, 0);
+	vbox = gtk_vbox_new (FALSE, 0);
+	gtk_box_pack_end (GTK_BOX (priv->hbox), vbox, FALSE, FALSE, 0);
 
-	s->priv->progressbar = gtk_progress_bar_new ();
-	gtk_box_pack_start(GTK_BOX (vbox),
-			  GTK_WIDGET (s->priv->progressbar),
-		 	  FALSE, FALSE, 0);
+	priv->progressbar = gtk_progress_bar_new ();
+	gtk_box_pack_start (GTK_BOX (vbox),
+			    GTK_WIDGET (priv->progressbar),
+		 	    TRUE, TRUE, 1);
 
-	gtk_widget_set_size_request (s->priv->progressbar, -1, 10);
+        /* We need to set the vertical size request to a small value here,
+         * because the progressbar's default size request is taller than the whole
+         * statusbar. Packing it with expand&fill in the vbox above will nevertheless
+         * make it use the greatest available height.
+         */
+	gtk_widget_set_size_request (priv->progressbar, -1, 10);
+
 	gtk_widget_show_all (vbox);
 }
 
