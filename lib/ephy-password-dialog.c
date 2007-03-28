@@ -487,6 +487,7 @@ ephy_password_dialog_constructor (GType type,
 	/* Removed unused table rows */
 	gtk_table_resize (table, row, 2);
 
+#if 0
 	if (priv->flags & EPHY_PASSWORD_DIALOG_FLAGS_SHOW_REMEMBER)
 	{
 		GSList *group = NULL;
@@ -508,6 +509,7 @@ ephy_password_dialog_constructor (GType type,
 
 		gtk_widget_set_no_show_all (rbox, !gnome_keyring_is_available ());
 	}
+#endif
 
 	gtk_dialog_add_button (dialog, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 	gtk_dialog_add_button (dialog, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
