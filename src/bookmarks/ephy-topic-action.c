@@ -139,6 +139,7 @@ create_tool_item (GtkAction *action)
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (item), button);
 	g_object_set_data (G_OBJECT (item), "button", button);
+	g_object_set_data (G_OBJECT (button), "gtk-action", action);
 
 	arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
 	gtk_widget_show (arrow);
@@ -294,8 +295,13 @@ static void
 button_deactivate_cb (GtkMenuShell *ms,
 		      GtkWidget *button)
 {
+	GtkWidget *window = gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW);
+
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
 	gtk_button_released (GTK_BUTTON (button));
+
+	g_object_set_data (G_OBJECT (window),
+			   "active-topic-action-button", NULL);
 
 	/*
 		Currently, GObject leaks connection IDs created with
@@ -312,6 +318,13 @@ button_toggled_cb (GtkWidget *button,
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
 	{
 		GtkWidget *popup;
+		GtkWidget *window;
+
+		window = gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW);
+
+		g_object_set_data (G_OBJECT (window),
+				   "active-topic-action-button",
+				   button);
 
 		popup = get_popup (action);
 
@@ -357,6 +370,35 @@ button_press_cb (GtkWidget *button,
 	return FALSE;
 }
 
+static gboolean
+button_enter_cb (GtkWidget *button,
+		 GdkEventCrossing *event,
+		 EphyTopicAction *action)
+{
+	GtkWidget *window;
+	GtkWidget *active_button;
+
+	window = gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW);
+	active_button = g_object_get_data (G_OBJECT (window),
+					   "active-topic-action-button");
+
+	if (active_button &&
+	    active_button != button &&
+	    GTK_IS_TOGGLE_BUTTON (active_button) &&
+	    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (active_button)))
+	{
+		EphyTopicAction *active_action;
+		active_action = g_object_get_data (G_OBJECT (active_button),
+						   "gtk-action");
+
+		erase_popup (active_action);
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (active_button), FALSE);
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+	}
+
+	return FALSE;
+}
+
 static void
 connect_proxy (GtkAction *action,
 	       GtkWidget *proxy)
@@ -379,6 +421,8 @@ connect_proxy (GtkAction *action,
 				  G_CALLBACK (button_press_cb), action);
 		g_signal_connect (button, "button-release-event",
 				  G_CALLBACK (button_release_cb), action);
+		g_signal_connect (button, "enter-notify-event",
+				  G_CALLBACK (button_enter_cb), action);
 		/* FIXME: what about keyboard (toggled by Space) ? */
 
 		g_signal_connect (button, "drag-data-received",
