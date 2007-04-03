@@ -14,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-02-26 14:15+0100\n"
-"PO-Revision-Date: 2007-02-26 14:46+0100\n"
-"Last-Translator: Jakub Friedl <jfriedl@suse.cz>\n"
+"POT-Creation-Date: 2007-04-03 20:46+0200\n"
+"PO-Revision-Date: 2007-04-03 21:08+0200\n"
+"Last-Translator: \n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -630,7 +630,7 @@ msgstr "_Certifikát:"
 #: ../data/glade/form-signing-dialog.glade.h:4
 #: ../embed/mozilla/EphyPromptService.cpp:808
 #: ../embed/mozilla/EphyPromptService.cpp:835
-#: ../lib/ephy-password-dialog.c:427 ../lib/ephy-password-dialog.c:443
+#: ../lib/ephy-password-dialog.c:429 ../lib/ephy-password-dialog.c:445
 msgid "_Password:"
 msgstr "_Heslo:"
 
@@ -1475,8 +1475,8 @@ msgid ""
 "number %d is wrong.</li></ul>"
 msgstr ""
 "<ul><li>služba %s není spuštěna.</li>Zkuste ji spustit pomocí Nástroje pro "
-"nastavení služeb v Systém > Ovládací centrum, nebo</"
-"ul><ul><li>číslo portu %d je nesprávné.</li></ul>"
+"nastavení služeb v Systém > Ovládací centrum, nebo</ul><ul><li>číslo portu %"
+"d je nesprávné.</li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:287
 #, c-format
@@ -1682,7 +1682,7 @@ msgid "Don't Save"
 msgstr "Neukládat"
 
 #: ../embed/mozilla/EphyPromptService.cpp:807
-#: ../lib/ephy-password-dialog.c:399
+#: ../lib/ephy-password-dialog.c:401
 msgid "_Username:"
 msgstr "Jméno _uživatele:"
 
@@ -1710,6 +1710,49 @@ msgstr "Soubory XML"
 #: ../embed/mozilla/FilePicker.cpp:182
 msgid "XUL files"
 msgstr "Soubory XUL"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:93
+#, c-format
+msgid "Accept cookie from %s?"
+msgstr "Přijmout cookie z %s?"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:100
+msgid "Accept Cookie?"
+msgstr "Přijmout cookie?"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:105
+msgid "The site wants to modify an existing cookie."
+msgstr "Stránka chce změnit existující cookie."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:109
+msgid "The site wants to set a cookie."
+msgstr "Stránka chce nastavit cookie."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:113
+msgid "The site wants to set a second cookie."
+msgstr "Stránka chce nastavit druhý cookie."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:117
+#, c-format
+msgid "You already have %d cookie from this site."
+msgid_plural "You already have %d cookies from this site."
+msgstr[0] "Již máte %d cookie z těchto stránek."
+msgstr[1] "Již máte %d cookie z těchto stránek."
+msgstr[2] "Již máte %d cookie z těchto stránek."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:131
+msgid "Apply this _decision to all cookies from this site"
+msgstr "Aplikovat toto _rozhodnutí na všechny cookie s tohoto webu"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:139
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1678
+msgid "_Reject"
+msgstr "_Odmítnout"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:141
+#: ../embed/mozilla/GtkNSSDialogs.cpp:271
+msgid "_Accept"
+msgstr "_Přijmout"
 
 #: ../embed/mozilla/GeckoFormSigningDialog.cpp:108
 #, c-format
@@ -1777,10 +1820,6 @@ msgstr "_Detaily o certifikátu"
 #: ../embed/mozilla/GtkNSSDialogs.cpp:625
 msgid "_View Certificate"
 msgstr "_Zobrazit certifikát"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:271
-msgid "_Accept"
-msgstr "_Přijmout"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:404
 #, c-format
@@ -1999,24 +2038,28 @@ msgstr "Změňte heslo pro token„%s“"
 msgid "Get Token Password"
 msgstr "Získat heslo tokenu"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1516
+#. Translators: A "token" is something that enables the user to authenticate himself or
+#. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
+#. * a data file (e.g. a cryptographic certificate).
+#.
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1520
 #, c-format
 msgid "Please enter the password for the “%s” token"
 msgstr "Prosím zadejte heslo pro token „%s“"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1582
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1586
 msgid "Please select a token:"
 msgstr "Prosím vyberte token:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1601
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1605
 msgid "_Select"
 msgstr "_Vybrat"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1654
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1658
 msgid "Escrow the secret key?"
 msgstr "Uložit tajný klíč u třetí strany?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1663
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1667
 #, c-format
 msgid ""
 "The certificate authority “%s” requests that you give it a copy of the newly "
@@ -2034,11 +2077,7 @@ msgstr ""
 "\n"
 "Důrazně vám doporučujeme to nepovolit."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1674
-msgid "_Reject"
-msgstr "_Odmítnout"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1677
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1681
 msgid "_Allow"
 msgstr "_Povolit"
 
@@ -2400,31 +2439,31 @@ msgstr "Západní jazyky"
 msgid "select fonts for|Other Scripts"
 msgstr "Jiné abecedy"
 
-#: ../lib/ephy-password-dialog.c:413
+#: ../lib/ephy-password-dialog.c:415
 msgid "_Domain:"
 msgstr "_Doména:"
 
-#: ../lib/ephy-password-dialog.c:442
+#: ../lib/ephy-password-dialog.c:444
 msgid "_New password:"
 msgstr "_Nové heslo:"
 
-#: ../lib/ephy-password-dialog.c:452
+#: ../lib/ephy-password-dialog.c:454
 msgid "Con_firm password:"
 msgstr "Po_tvrďte heslo:"
 
-#: ../lib/ephy-password-dialog.c:478
+#: ../lib/ephy-password-dialog.c:482
 msgid "Password quality:"
 msgstr "Kvalita hesla:"
 
-#: ../lib/ephy-password-dialog.c:494
+#: ../lib/ephy-password-dialog.c:499
 msgid "Do not remember this password"
 msgstr "Nepamatovat toto heslo"
 
-#: ../lib/ephy-password-dialog.c:498
+#: ../lib/ephy-password-dialog.c:503
 msgid "_Remember password for this session"
 msgstr "_Pamatovat heslo pro toto sezení"
 
-#: ../lib/ephy-password-dialog.c:502
+#: ../lib/ephy-password-dialog.c:507
 msgid "Save password in _keyring"
 msgstr "Uložit heslo do svazku _klíčů"
 
@@ -2442,7 +2481,7 @@ msgstr "Záložka"
 
 #: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
-#: ../src/bookmarks/ephy-topic-action.c:411 ../src/ephy-window.c:1341
+#: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1341
 msgid "Bookmarks"
 msgstr "Záložky"
 
