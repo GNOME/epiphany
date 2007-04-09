@@ -45,7 +45,7 @@ public:
 	GeckoPrintService();
 	virtual ~GeckoPrintService();
 
-	static nsresult TranslateSettings (GtkPrintSettings*, GtkPageSetup *, GtkPrinter *, const nsACString&, PRBool, nsIPrintSettings*);
+	static nsresult TranslateSettings (GtkPrintSettings*, GtkPageSetup *, GtkPrinter *, const nsACString&, PRInt16, PRBool, nsIPrintSettings*);
 
 private:
 	nsresult PrintUnattended (nsIDOMWindow *, nsIPrintSettings *);
