@@ -750,6 +750,7 @@ nsresult EphyBrowser::SetPrintPreviewMode (PRBool previewMode)
 							   ephy_embed_shell_get_page_setup (shell),
 							   NULL,
 							   nsCString(),
+                                                           nsIPrintSettings::kFramesAsIs,
 							   PR_FALSE,
 							   settings);
 

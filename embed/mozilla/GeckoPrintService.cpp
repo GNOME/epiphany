@@ -110,20 +110,20 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
 
   /* Not locked down, show the dialogue */
 
+  nsresult rv;
 #if 0
   PRBool haveSelection = PR_FALSE;
   rv = aSettings->GetPrintOptions(nsIPrintSettings::kEnableSelectionRB, &haveSelection);
   NS_ENSURE_SUCCESS (rv, rv);
+#endif
 
-  PRInt16 frameUI = 0;
+  PRInt16 frameUI = nsIPrintSettings::kFrameEnableAll;
   rv = aSettings->GetHowToEnableFrameUI (&frameUI);
   NS_ENSURE_SUCCESS (rv, rv);
-#endif
 
   GtkWidget *parent = EphyUtils::FindGtkParent (aParent);
   NS_ENSURE_TRUE(parent, NS_ERROR_INVALID_POINTER);
 
-  nsresult rv;
   AutoJSContextStack stack;
   rv = stack.Init ();
   if (NS_FAILED (rv)) {
@@ -148,7 +148,26 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
   ephy_gui_connect_checkbutton_to_gconf (glade_xml_get_widget (xml, "print_page_numbers_checkbutton"), CONF_PRINT_PAGE_NUMBERS);
   ephy_gui_connect_checkbutton_to_gconf (glade_xml_get_widget (xml, "print_page_title_checkbutton"), CONF_PRINT_PAGE_TITLE);
   ephy_gui_connect_checkbutton_to_gconf (glade_xml_get_widget (xml, "print_page_url_checkbutton"), CONF_PRINT_PAGE_URL);
-	
+
+  GtkWidget *frame_box = glade_xml_get_widget (xml, "frame_box");
+  GtkWidget *print_frames_normal = glade_xml_get_widget (xml, "print_frames_normal");
+  GtkWidget *print_frames_selected = glade_xml_get_widget (xml, "print_frames_selected");
+  GtkWidget *print_frames_separately = glade_xml_get_widget (xml, "print_frames_separately");
+
+  /* FIXME: store/load from pref */
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (print_frames_normal), TRUE);
+
+  if (frameUI == nsIPrintSettings::kFrameEnableAll) {
+    /* Allow all frame options */
+    gtk_widget_set_sensitive (frame_box, TRUE);
+  } else if (frameUI == nsIPrintSettings::kFrameEnableAsIsAndEach) {
+    /* Allow all except "selected frame" */
+    gtk_widget_set_sensitive (frame_box, TRUE);
+    gtk_widget_set_sensitive (print_frames_selected, FALSE);
+    /* Preselect this one, since the default above only prints _one page_ ! */
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (print_frames_separately), TRUE);
+  }
+
   /* FIXME: this sucks! find some way to do all of this async! */
   GtkWidget *dialog = gtk_print_unix_dialog_new (NULL /* FIXME title */,
 		  				 GTK_WINDOW (parent));
@@ -192,6 +211,17 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
     return NS_ERROR_ABORT;
   }
 
+  PRInt16 printFrames = nsIPrintSettings::kNoFrames;
+  if (frameUI != nsIPrintSettings::kFrameEnableNone) {
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (print_frames_normal))) {
+      printFrames = nsIPrintSettings::kFramesAsIs;
+    } else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (print_frames_selected))) {
+      printFrames = nsIPrintSettings::kSelectedFrame;
+    } if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (print_frames_separately))) {
+      printFrames = nsIPrintSettings::kEachFrameSep;
+    }
+  }
+
   GtkPageSetup *pageSetup = gtk_print_unix_dialog_get_page_setup (print_dialog); /* no reference owned */
   ephy_embed_shell_set_page_setup (shell, pageSetup);
 
@@ -215,7 +245,7 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
     nsCString sourceFile;
     session->GetSourceFile (sourceFile);
     if (!sourceFile.IsEmpty ()) {
-      rv = TranslateSettings (settings, pageSetup, printer, sourceFile, PR_TRUE, aSettings);
+      rv = TranslateSettings (settings, pageSetup, printer, sourceFile, printFrames, PR_TRUE, aSettings);
     } else {
       rv = NS_ERROR_FAILURE;
     }
@@ -488,6 +518,7 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
 				      GtkPageSetup *aPageSetup,
 				      GtkPrinter *aPrinter,
 				      const nsACString &aSourceFile,
+                                      PRInt16 aPrintFrames,
 				      PRBool aIsForPrinting,
 				      nsIPrintSettings *aSettings)
 {
@@ -672,13 +703,7 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   aSettings->SetFooterStrCenter (LITERAL (""));
   aSettings->SetFooterStrRight (eel_gconf_get_boolean (CONF_PRINT_DATE) ? LITERAL ("&D") : LITERAL (""));
 
-  /* FIXME I think this is the right default, but this prevents the user
-   * from cancelling the print immediately, see the stupid comment in nsPrintEngine:
-   *  "DO NOT allow the print job to be cancelled if it is Print FrameAsIs
-   *   because it is only printing one page."
-   * We work around this by just not sending the job to the printer then.
-   */
-  aSettings->SetPrintFrameType(nsIPrintSettings::kFramesAsIs); /* FIXME setting */
+  aSettings->SetPrintFrameType (aPrintFrames);
   aSettings->SetPrintFrameTypeUsage (nsIPrintSettings::kUseSettingWhenPossible);
 
   aSettings->SetScaling (gtk_print_settings_get_scale (aGtkSettings) / 100.0);
