@@ -15,7 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
-AC_INIT([GNOME Web Browser],[2.18.0.90],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[2.18.1],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
@@ -36,8 +36,6 @@ AC_SUBST([EPIPHANY_API_VERSION])
 AC_SUBST([EPIPHANY_UA_VERSION])
 
 AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip])
-
-AM_MAINTAINER_MODE
 
 AC_ENABLE_SHARED([yes])
 AC_ENABLE_STATIC([no])
