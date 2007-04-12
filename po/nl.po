@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-02-12 02:11+0100\n"
-"PO-Revision-Date: 2007-02-12 02:14+0100\n"
+"POT-Creation-Date: 2007-04-12 23:52+0200\n"
+"PO-Revision-Date: 2007-04-13 00:30+0100\n"
 "Last-Translator: Reinout van Schouwen <reinouts@gnome.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -720,7 +720,7 @@ msgstr "_Certificaat:"
 #: ../data/glade/form-signing-dialog.glade.h:4
 #: ../embed/mozilla/EphyPromptService.cpp:808
 #: ../embed/mozilla/EphyPromptService.cpp:835
-#: ../lib/ephy-password-dialog.c:427 ../lib/ephy-password-dialog.c:443
+#: ../lib/ephy-password-dialog.c:429 ../lib/ephy-password-dialog.c:445
 msgid "_Password:"
 msgstr "_Wachtwoord:"
 
@@ -1728,8 +1728,8 @@ msgid ""
 "number %d is wrong.</li></ul>"
 msgstr ""
 "<ul><li>de %s-dienst is niet gestart.</li>Probeer hem te starten met het "
-"dienstenconfiguratiegereedschap onder Werkplek (of Systeem) > Configuratiecentrum, "
-"of</ul><ul><li>het poortnummer %d is onjuist.</li></ul>"
+"dienstenconfiguratiegereedschap onder Werkplek (of Systeem) > "
+"Configuratiecentrum, of</ul><ul><li>het poortnummer %d is onjuist.</li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:287
 #, c-format
@@ -1815,7 +1815,8 @@ msgstr "‘%s’ heeft te vaak doorverwezen"
 #. Translators: %s is the hostname, like "www.example.com"
 #: ../embed/mozilla/EphyAboutModule.cpp:361
 msgid "This page cannot load because of a problem with the Web site."
-msgstr "Deze pagina kan niet worden geladen vanwege een probleem met de website."
+msgstr ""
+"Deze pagina kan niet worden geladen vanwege een probleem met de website."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:364
 #, c-format
@@ -1957,7 +1958,7 @@ msgid "Don't Save"
 msgstr "Niet opslaan"
 
 #: ../embed/mozilla/EphyPromptService.cpp:807
-#: ../lib/ephy-password-dialog.c:399
+#: ../lib/ephy-password-dialog.c:401
 msgid "_Username:"
 msgstr "_Gebruikersnaam:"
 
@@ -1990,6 +1991,47 @@ msgstr "XML-bestanden"
 msgid "XUL files"
 msgstr "XUL-bestanden"
 
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:93
+#, c-format
+msgid "Accept cookie from %s?"
+msgstr "Cookie van ‘%s’ accepteren?"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:100
+msgid "Accept Cookie?"
+msgstr "Cookie accepteren?"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:105
+msgid "The site wants to modify an existing cookie."
+msgstr "De webpagina wil een bestaand cookie wijzigen."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:109
+msgid "The site wants to set a cookie."
+msgstr "De webpagina wil een cookie instellen."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:113
+msgid "The site wants to set a second cookie."
+msgstr "De webpagina wil een tweede cookie instellen."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:117
+msgid "You already have %d cookie from this site."
+msgid_plural "You already have %d cookies from this site."
+msgstr[0] "U heeft al een cookie van deze pagina."
+msgstr[1] "U heeft al %d cookies van deze pagina."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:131
+msgid "Apply this _decision to all cookies from this site"
+msgstr "De_ze beslissing toepassen op alle cookies van deze site"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:139
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1678
+msgid "_Reject"
+msgstr "Af_wijzen"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:141
+#: ../embed/mozilla/GtkNSSDialogs.cpp:271
+msgid "_Accept"
+msgstr "_Accepteren"
+
 #: ../embed/mozilla/GeckoFormSigningDialog.cpp:108
 #, c-format
 msgid "The web site “%s” requests that you sign the following text:"
@@ -2000,16 +2042,16 @@ msgstr "De webpagina ‘%s’ verzoekt u de volgende tekst te ondertekenen:"
 msgid "_Sign text"
 msgstr "_Tekst ondertekenen"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:178
+#: ../embed/mozilla/GeckoPrintService.cpp:197
 msgid "Options"
 msgstr "Opties"
 
 # src/menubar.c:73
-#: ../embed/mozilla/GeckoPrintService.cpp:431
+#: ../embed/mozilla/GeckoPrintService.cpp:461
 msgid "Print this page?"
 msgstr "Deze pagina afdrukken?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:439
+#: ../embed/mozilla/GeckoPrintService.cpp:469
 msgid "Preparing to print"
 msgstr "Klaarmaken voor afdrukken"
 
@@ -2061,10 +2103,6 @@ msgstr "Certificaat-_details"
 #: ../embed/mozilla/GtkNSSDialogs.cpp:625
 msgid "_View Certificate"
 msgstr "_Certificaat weergeven"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:271
-msgid "_Accept"
-msgstr "_Accepteren"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:404
 #, c-format
@@ -2299,25 +2337,29 @@ msgstr "Het wachtwoord voor codegenerator ‘%s’ veranderen."
 msgid "Get Token Password"
 msgstr "Wachtwoord codegenerator verkrijgen"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1516
+#. Translators: A "token" is something that enables the user to authenticate himself or
+#. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
+#. * a data file (e.g. a cryptographic certificate).
+#.
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1520
 #, c-format
 msgid "Please enter the password for the “%s” token"
 msgstr "Geef het wachtwoord voor codegenerator ‘%s’."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1582
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1586
 msgid "Please select a token:"
 msgstr "Selecteer een codegenerator:"
 
 # ui/preferences.glade.h:7
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1601
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1605
 msgid "_Select"
 msgstr "_Selecteer"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1654
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1658
 msgid "Escrow the secret key?"
 msgstr "De geheime sleutel in bewaring geven?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1663
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1667
 #, c-format
 msgid ""
 "The certificate authority “%s” requests that you give it a copy of the newly "
@@ -2337,12 +2379,8 @@ msgstr ""
 "\n"
 "Het is ernstig af te raden om dit toe te staan."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1674
-msgid "_Reject"
-msgstr "Af_wijzen"
-
 # src/mozilla/mozilla.cpp:994
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1677
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1681
 msgid "_Allow"
 msgstr "_Toestaan"
 
@@ -2725,35 +2763,35 @@ msgid "select fonts for|Other Scripts"
 msgstr "Overige schriften"
 
 # ui/preferences.glade.h:207
-#: ../lib/ephy-password-dialog.c:413
+#: ../lib/ephy-password-dialog.c:415
 msgid "_Domain:"
 msgstr "_Domein:"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
-#: ../lib/ephy-password-dialog.c:442
+#: ../lib/ephy-password-dialog.c:444
 msgid "_New password:"
 msgstr "_Nieuw wachtwoord:"
 
-#: ../lib/ephy-password-dialog.c:452
+#: ../lib/ephy-password-dialog.c:454
 msgid "Con_firm password:"
 msgstr "Wachtwoord (_nogmaals):"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
-#: ../lib/ephy-password-dialog.c:478
+#: ../lib/ephy-password-dialog.c:482
 msgid "Password quality:"
 msgstr "Wachtwoordkwaliteit:"
 
-#: ../lib/ephy-password-dialog.c:494
+#: ../lib/ephy-password-dialog.c:499
 msgid "Do not remember this password"
 msgstr "Dit wachtwoord niet onthouden"
 
-#: ../lib/ephy-password-dialog.c:498
+#: ../lib/ephy-password-dialog.c:503
 msgid "_Remember password for this session"
 msgstr "Wachtwoord _onthouden voor deze sessie."
 
-#: ../lib/ephy-password-dialog.c:502
+#: ../lib/ephy-password-dialog.c:507
 msgid "Save password in _keyring"
 msgstr "Wachtwoord in _sleutelbos opslaan"
 
@@ -2778,7 +2816,7 @@ msgstr "Bladwijzer"
 # src/menubar.c:571
 #: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
-#: ../src/bookmarks/ephy-topic-action.c:411 ../src/ephy-window.c:1341
+#: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1341
 msgid "Bookmarks"
 msgstr "Bladwijzers"
 
@@ -4881,8 +4919,8 @@ msgid ""
 msgstr ""
 "U zou een kopie ontvangen moeten hebben van de GNU General Public License "
 "bij de GNOME webbrowser; indien dit niet het geval is, schrijf dan een brief "
-"naar de Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, "
-"MA 02110-1301, USA"
+"naar de Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, "
+"Boston, MA 02110-1301, USA"
 
 #: ../src/window-commands.c:787 ../src/window-commands.c:803
 #: ../src/window-commands.c:814
@@ -5153,9 +5191,6 @@ msgstr "Webstek van de GNOME-webbrowser"
 # src/menubar.c:571
 #~ msgid "Bookmark exists"
 #~ msgstr "Bladwijzer bestaat al"
-
-#~ msgid "You already have a bookmark titled “%s” for this page."
-#~ msgstr "U heeft al een bladwijzer met de titel ‘%s’ voor deze pagina."
 
 #~ msgid "_Create New"
 #~ msgstr "Nieu_we maken"
