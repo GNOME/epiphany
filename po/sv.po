@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-02-06 23:43+0100\n"
-"PO-Revision-Date: 2007-02-06 23:26+0100\n"
+"POT-Creation-Date: 2007-04-16 17:20+0200\n"
+"PO-Revision-Date: 2007-04-16 08:45+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -641,7 +641,7 @@ msgstr "_Certifikat:"
 #: ../data/glade/form-signing-dialog.glade.h:4
 #: ../embed/mozilla/EphyPromptService.cpp:808
 #: ../embed/mozilla/EphyPromptService.cpp:835
-#: ../lib/ephy-password-dialog.c:427 ../lib/ephy-password-dialog.c:443
+#: ../lib/ephy-password-dialog.c:429 ../lib/ephy-password-dialog.c:445
 msgid "_Password:"
 msgstr "_Lösenord:"
 
@@ -1669,7 +1669,7 @@ msgid "The page uses an unsupported or invalid form of compression."
 msgstr ""
 "Sidan använder en form av komprimering som inte stöds eller som är ogiltig."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:538
+#: ../embed/mozilla/EphyAboutModule.cpp:539
 #, c-format
 msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
@@ -1680,13 +1680,13 @@ msgstr ""
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:665
+#: ../embed/mozilla/EphyAboutModule.cpp:666
 msgid "You may find an old version:|in the Google Cache"
 msgstr "i Googles cache"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:673
+#: ../embed/mozilla/EphyAboutModule.cpp:674
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "i Internet Archive"
 
@@ -1705,7 +1705,7 @@ msgid "Don't Save"
 msgstr "Spara inte"
 
 #: ../embed/mozilla/EphyPromptService.cpp:807
-#: ../lib/ephy-password-dialog.c:399
+#: ../lib/ephy-password-dialog.c:401
 msgid "_Username:"
 msgstr "_Användarnamn:"
 
@@ -1734,6 +1734,48 @@ msgstr "XML-filer"
 msgid "XUL files"
 msgstr "XUL-filer"
 
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:93
+#, c-format
+msgid "Accept cookie from %s?"
+msgstr "Acceptera kaka från %s?"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:100
+msgid "Accept Cookie?"
+msgstr "Acceptera kaka?"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:105
+msgid "The site wants to modify an existing cookie."
+msgstr "Webbplatsen vill ändra en befintlig kaka."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:109
+msgid "The site wants to set a cookie."
+msgstr "Webbplatsen vill sätta en kaka."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:113
+msgid "The site wants to set a second cookie."
+msgstr "Webbplatsen vill sätta en andra kaka."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:117
+#, c-format
+msgid "You already have %d cookie from this site."
+msgid_plural "You already have %d cookies from this site."
+msgstr[0] "Du har redan %d kaka från den här webbplatsen."
+msgstr[1] "Du har redan %d kakor från den här webbplatsen."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:131
+msgid "Apply this _decision to all cookies from this site"
+msgstr "Verkställ _beslutet för alla kakor från den här webbplatsen"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:139
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1678
+msgid "_Reject"
+msgstr "_Vägra"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:141
+#: ../embed/mozilla/GtkNSSDialogs.cpp:271
+msgid "_Accept"
+msgstr "_Acceptera"
+
 #: ../embed/mozilla/GeckoFormSigningDialog.cpp:108
 #, c-format
 msgid "The web site “%s” requests that you sign the following text:"
@@ -1743,15 +1785,15 @@ msgstr "Webbsidan \"%s\" begär att du signerar följande text:"
 msgid "_Sign text"
 msgstr "_Signera text"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:178
+#: ../embed/mozilla/GeckoPrintService.cpp:197
 msgid "Options"
 msgstr "Alternativ"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:431
+#: ../embed/mozilla/GeckoPrintService.cpp:461
 msgid "Print this page?"
 msgstr "Skriv ut denna sida?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:439
+#: ../embed/mozilla/GeckoPrintService.cpp:469
 msgid "Preparing to print"
 msgstr "Förbereder utskrift"
 
@@ -1800,10 +1842,6 @@ msgstr "Certifikat_detaljer"
 #: ../embed/mozilla/GtkNSSDialogs.cpp:625
 msgid "_View Certificate"
 msgstr "_Visa certifikat"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:271
-msgid "_Accept"
-msgstr "_Acceptera"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:404
 #, c-format
@@ -2030,24 +2068,28 @@ msgstr "Ändra lösenordet för \"%s\""
 msgid "Get Token Password"
 msgstr "Hämta tokenlösenord"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1516
+#. Translators: A "token" is something that enables the user to authenticate himself or
+#. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
+#. * a data file (e.g. a cryptographic certificate).
+#.
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1520
 #, c-format
 msgid "Please enter the password for the “%s” token"
 msgstr "Ange lösenordet för \"%s\""
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1582
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1586
 msgid "Please select a token:"
 msgstr "Välj ett token:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1601
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1605
 msgid "_Select"
 msgstr "_Välj"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1654
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1658
 msgid "Escrow the secret key?"
 msgstr "Deponera den hemliga nyckeln?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1663
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1667
 #, c-format
 msgid ""
 "The certificate authority “%s” requests that you give it a copy of the newly "
@@ -2066,13 +2108,9 @@ msgstr ""
 "\n"
 "Det rekommenderas starkt att inte tillåta detta."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1674
-msgid "_Reject"
-msgstr "_Vägra"
-
 # Detta används i historiken och bland bokmärkena i betydelserna
 # "alla webbplatser", "alla bokmärken".
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1677
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1681
 msgid "_Allow"
 msgstr "_Tillåt"
 
@@ -2159,7 +2197,7 @@ msgstr ""
 "som du har angivit att skickas över en osäker anslutning, och kan enkelt "
 "avlyssnas av en tredje part."
 
-#: ../embed/mozilla/MozDownload.cpp:629
+#: ../embed/mozilla/MozDownload.cpp:643
 msgid "Files"
 msgstr "Filer"
 
@@ -2437,31 +2475,31 @@ msgstr "västerländska"
 msgid "select fonts for|Other Scripts"
 msgstr "andra skript"
 
-#: ../lib/ephy-password-dialog.c:413
+#: ../lib/ephy-password-dialog.c:415
 msgid "_Domain:"
 msgstr "_Domän:"
 
-#: ../lib/ephy-password-dialog.c:442
+#: ../lib/ephy-password-dialog.c:444
 msgid "_New password:"
 msgstr "_Nytt lösenord:"
 
-#: ../lib/ephy-password-dialog.c:452
+#: ../lib/ephy-password-dialog.c:454
 msgid "Con_firm password:"
 msgstr "_Bekräfta lösenord:"
 
-#: ../lib/ephy-password-dialog.c:478
+#: ../lib/ephy-password-dialog.c:482
 msgid "Password quality:"
 msgstr "Lösenordskvalitet:"
 
-#: ../lib/ephy-password-dialog.c:494
+#: ../lib/ephy-password-dialog.c:499
 msgid "Do not remember this password"
 msgstr "Kom inte ihåg detta lösenord"
 
-#: ../lib/ephy-password-dialog.c:498
+#: ../lib/ephy-password-dialog.c:503
 msgid "_Remember password for this session"
 msgstr "_Kom ihåg lösenordet för denna session"
 
-#: ../lib/ephy-password-dialog.c:502
+#: ../lib/ephy-password-dialog.c:507
 msgid "Save password in _keyring"
 msgstr "Spara lösenord i _nyckelring"
 
@@ -2479,7 +2517,7 @@ msgstr "Bokmärke"
 
 #: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
-#: ../src/bookmarks/ephy-topic-action.c:411 ../src/ephy-window.c:1341
+#: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1341
 msgid "Bookmarks"
 msgstr "Bokmärken"
 
@@ -4240,8 +4278,8 @@ msgid ""
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr ""
 "Du bör ha fått en kopia av GNU General Public License tillsammans med GNOME-"
-"webbläsaren. Om inte, skriv till Free Software Foundation, Inc., "
-"51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA"
+"webbläsaren. Om inte, skriv till Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-1301  USA"
 
 #: ../src/window-commands.c:787 ../src/window-commands.c:803
 #: ../src/window-commands.c:814
@@ -4481,9 +4519,6 @@ msgstr "Webbplatsen för GNOME-webbläsaren"
 
 #~ msgid "Show the selected bookmark or topic in the bookmarks bar"
 #~ msgstr "Visa det markerade bokmärket eller ämnet i bokmärkesraden"
-
-#~ msgid "You already have a bookmark titled \"%s\" for this page."
-#~ msgstr "Du har redan ett bokmärke med titeln \"%s\" för denna sida."
 
 #~ msgid "_View Properties"
 #~ msgstr "_Visa egenskaper"
