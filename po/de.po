@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: Epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-02-21 12:46+0100\n"
-"PO-Revision-Date: 2007-02-21 12:47+0100\n"
+"POT-Creation-Date: 2007-04-17 17:34+0200\n"
+"PO-Revision-Date: 2007-04-17 17:34+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -651,7 +651,7 @@ msgstr "_Zertifikate:"
 #: ../data/glade/form-signing-dialog.glade.h:4
 #: ../embed/mozilla/EphyPromptService.cpp:808
 #: ../embed/mozilla/EphyPromptService.cpp:835
-#: ../lib/ephy-password-dialog.c:427 ../lib/ephy-password-dialog.c:443
+#: ../lib/ephy-password-dialog.c:429 ../lib/ephy-password-dialog.c:445
 msgid "_Password:"
 msgstr "_Passwort:"
 
@@ -1416,8 +1416,8 @@ msgid ""
 msgstr ""
 "Dateityp: »%s«\n"
 "\n"
-"Keine installierte ist in er Lage, »%s« zu öffnen. Sie können die Datei "
-"stattdessen speichern."
+"Keine installierte Anwendung ist in der Lage, »%s« zu öffnen. Sie können die "
+"Datei stattdessen speichern."
 
 #: ../embed/mozilla/ContentHandler.cpp:330
 msgid "_Save As..."
@@ -1507,8 +1507,8 @@ msgid ""
 "number %d is wrong.</li></ul>"
 msgstr ""
 "<ul><li>der Dienst »%s« wurde nicht gestartet.</li>Versuchen Sie ihn über "
-"»Dienste«-Werkzeug unter System -> Kontrollzentrum zu starten, oder</ul><ul>"
-"<li>der Port %d ist fehlerhaft.</li></ul>"
+"»Dienste«-Werkzeug unter System -> Kontrollzentrum zu starten, oder</"
+"ul><ul><li>der Port %d ist fehlerhaft.</li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:287
 #, c-format
@@ -1728,7 +1728,7 @@ msgid "Don't Save"
 msgstr "Nicht speichern"
 
 #: ../embed/mozilla/EphyPromptService.cpp:807
-#: ../lib/ephy-password-dialog.c:399
+#: ../lib/ephy-password-dialog.c:401
 msgid "_Username:"
 msgstr "_Benutzer:"
 
@@ -1766,15 +1766,15 @@ msgstr "Die Seite »%s« fordert Sie auf, den folgenden Text signieren:"
 msgid "_Sign text"
 msgstr "Text _signieren"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:178
+#: ../embed/mozilla/GeckoPrintService.cpp:197
 msgid "Options"
 msgstr "Optionen"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:431
+#: ../embed/mozilla/GeckoPrintService.cpp:461
 msgid "Print this page?"
 msgstr "Soll diese Seite ausgedruckt werden?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:439
+#: ../embed/mozilla/GeckoPrintService.cpp:469
 msgid "Preparing to print"
 msgstr "Drucken wird vorbereitet"
 
@@ -2063,24 +2063,28 @@ msgstr "Das Passwort des Tokens »%s« ändern."
 msgid "Get Token Password"
 msgstr "Token-Passwort"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1516
+#. Translators: A "token" is something that enables the user to authenticate himself or
+#. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
+#. * a data file (e.g. a cryptographic certificate).
+#.
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1520
 #, c-format
 msgid "Please enter the password for the “%s” token"
 msgstr "Bitte geben Sie das Passwort für das Token »%s« ein."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1582
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1586
 msgid "Please select a token:"
 msgstr "Bitte wählen Sie ein Token:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1601
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1605
 msgid "_Select"
 msgstr "_Auswählen"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1654
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1658
 msgid "Escrow the secret key?"
 msgstr "Geheimen Schlüssel bei Dritten hinterlegen?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1663
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1667
 #, c-format
 msgid ""
 "The certificate authority “%s” requests that you give it a copy of the newly "
@@ -2099,11 +2103,11 @@ msgstr ""
 "\n"
 "Es wird dringenst empfohlen, dies nicht zu erlauben."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1674
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1678
 msgid "_Reject"
 msgstr "_Ablehnen"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1677
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1681
 msgid "_Allow"
 msgstr "_Erlauben"
 
@@ -2473,31 +2477,31 @@ msgstr "Westlich"
 msgid "select fonts for|Other Scripts"
 msgstr "Weitere Schriften"
 
-#: ../lib/ephy-password-dialog.c:413
+#: ../lib/ephy-password-dialog.c:415
 msgid "_Domain:"
 msgstr "_Domäne:"
 
-#: ../lib/ephy-password-dialog.c:442
+#: ../lib/ephy-password-dialog.c:444
 msgid "_New password:"
 msgstr "_Neues Passwort:"
 
-#: ../lib/ephy-password-dialog.c:452
+#: ../lib/ephy-password-dialog.c:454
 msgid "Con_firm password:"
 msgstr "Passwort _bestätigen:"
 
-#: ../lib/ephy-password-dialog.c:478
+#: ../lib/ephy-password-dialog.c:482
 msgid "Password quality:"
 msgstr "Passwortqualität:"
 
-#: ../lib/ephy-password-dialog.c:494
+#: ../lib/ephy-password-dialog.c:499
 msgid "Do not remember this password"
 msgstr "Nicht an dieses Passwort erinnern"
 
-#: ../lib/ephy-password-dialog.c:498
+#: ../lib/ephy-password-dialog.c:503
 msgid "_Remember password for this session"
 msgstr "In dieser Sitzung an Passwort _erinnern"
 
-#: ../lib/ephy-password-dialog.c:502
+#: ../lib/ephy-password-dialog.c:507
 msgid "Save password in _keyring"
 msgstr "Passwort in _Schlüsselbund speichern"
 
@@ -4285,7 +4289,8 @@ msgid ""
 msgstr ""
 "Sie sollten ein Exemplar der GNU General Public License zusammen mit dem "
 "Webbrowser erhalten haben. Falls nicht, schreiben Sie an die Free Software "
-"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, "
+"USA."
 
 #: ../src/window-commands.c:787 ../src/window-commands.c:803
 #: ../src/window-commands.c:814
