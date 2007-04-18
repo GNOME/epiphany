@@ -21,8 +21,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 2.15.99\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-02-05 20:01+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=epiphany\n"
+"POT-Creation-Date: 2007-04-18 21:40+0200\n"
 "PO-Revision-Date: 2007-02-05 20:03+0100\n"
 "Last-Translator: Stéphane Raimbault <stephane.raimbault@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -667,7 +668,7 @@ msgstr "_Certificat :"
 #: ../data/glade/form-signing-dialog.glade.h:4
 #: ../embed/mozilla/EphyPromptService.cpp:808
 #: ../embed/mozilla/EphyPromptService.cpp:835
-#: ../lib/ephy-password-dialog.c:427 ../lib/ephy-password-dialog.c:443
+#: ../lib/ephy-password-dialog.c:429 ../lib/ephy-password-dialog.c:445
 msgid "_Password:"
 msgstr "_Mot de passe :"
 
@@ -1699,7 +1700,7 @@ msgstr "Impossible d'afficher le contenu."
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr "Cette page utilise une forme de compression non supportée ou invalide."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:538
+#: ../embed/mozilla/EphyAboutModule.cpp:539
 #, c-format
 msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
@@ -1710,13 +1711,13 @@ msgstr ""
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:665
+#: ../embed/mozilla/EphyAboutModule.cpp:666
 msgid "You may find an old version:|in the Google Cache"
 msgstr "dans le cache de Google"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:673
+#: ../embed/mozilla/EphyAboutModule.cpp:674
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "dans Internet Archives"
 
@@ -1735,7 +1736,7 @@ msgid "Don't Save"
 msgstr "Ne pas enregistrer"
 
 #: ../embed/mozilla/EphyPromptService.cpp:807
-#: ../lib/ephy-password-dialog.c:399
+#: ../lib/ephy-password-dialog.c:401
 msgid "_Username:"
 msgstr "Nom d'_utilisateur :"
 
@@ -1773,15 +1774,15 @@ msgstr "Le site Web « %s » vous demande de signer le texte suivant :"
 msgid "_Sign text"
 msgstr "_Signer le texte"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:178
+#: ../embed/mozilla/GeckoPrintService.cpp:197
 msgid "Options"
 msgstr "Options"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:431
+#: ../embed/mozilla/GeckoPrintService.cpp:461
 msgid "Print this page?"
 msgstr "Imprimer cette page ?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:439
+#: ../embed/mozilla/GeckoPrintService.cpp:469
 msgid "Preparing to print"
 msgstr "Préparation de l'impression"
 
@@ -2063,24 +2064,28 @@ msgstr "Saisissez le mot de passe pour le jeton « %s »"
 msgid "Get Token Password"
 msgstr "Obtenir le mot de passe du jeton"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1516
+#. Translators: A "token" is something that enables the user to authenticate himself or
+#. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
+#. * a data file (e.g. a cryptographic certificate).
+#.
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1520
 #, c-format
 msgid "Please enter the password for the “%s” token"
 msgstr "Veuillez saisir le mot de passe pour le jeton « %s »"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1582
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1586
 msgid "Please select a token:"
 msgstr "Veuillez sélectionner un jeton :"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1601
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1605
 msgid "_Select"
 msgstr "_Sélectionner"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1654
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1658
 msgid "Escrow the secret key?"
 msgstr "Déposer la clé secrète ?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1663
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1667
 #, c-format
 msgid ""
 "The certificate authority “%s” requests that you give it a copy of the newly "
@@ -2100,11 +2105,11 @@ msgstr ""
 "\n"
 "Il est vivement recommandé de ne pas accepter."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1674
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1678
 msgid "_Reject"
 msgstr "_Rejeter"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1677
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1681
 msgid "_Allow"
 msgstr "_Autoriser"
 
@@ -2193,7 +2198,7 @@ msgstr ""
 "informations que vous avez saisies seront envoyées via une connexion non "
 "sécurisée. Elles pourront donc être facilement interceptées par un tiers."
 
-#: ../embed/mozilla/MozDownload.cpp:629
+#: ../embed/mozilla/MozDownload.cpp:643
 msgid "Files"
 msgstr "Fichiers"
 
@@ -2470,31 +2475,31 @@ msgstr "Occidental"
 msgid "select fonts for|Other Scripts"
 msgstr "Autre scripts"
 
-#: ../lib/ephy-password-dialog.c:413
+#: ../lib/ephy-password-dialog.c:415
 msgid "_Domain:"
 msgstr "_Domaine :"
 
-#: ../lib/ephy-password-dialog.c:442
+#: ../lib/ephy-password-dialog.c:444
 msgid "_New password:"
 msgstr "_Nouveau mot de passe :"
 
-#: ../lib/ephy-password-dialog.c:452
+#: ../lib/ephy-password-dialog.c:454
 msgid "Con_firm password:"
 msgstr "_Confirmez le mot de passe :"
 
-#: ../lib/ephy-password-dialog.c:478
+#: ../lib/ephy-password-dialog.c:482
 msgid "Password quality:"
 msgstr "Qualité du mot de passe :"
 
-#: ../lib/ephy-password-dialog.c:494
+#: ../lib/ephy-password-dialog.c:499
 msgid "Do not remember this password"
 msgstr "Ne pas se souvenir de se mot de passe"
 
-#: ../lib/ephy-password-dialog.c:498
+#: ../lib/ephy-password-dialog.c:503
 msgid "_Remember password for this session"
 msgstr "_Se souvenir du mot de passe pour cette session"
 
-#: ../lib/ephy-password-dialog.c:502
+#: ../lib/ephy-password-dialog.c:507
 msgid "Save password in _keyring"
 msgstr "Enregistrer le mot de passe dans le _trousseau de clés"
 
@@ -3193,7 +3198,7 @@ msgstr "Supprime le lien d'historique sélectionné"
 
 #: ../src/ephy-history-window.c:181
 msgid "Add _Bookmark…"
-msgstr "A_jouter un signet..."
+msgstr "_Ajouter un signet..."
 
 #  Vérifier le contexte
 #: ../src/ephy-history-window.c:182
