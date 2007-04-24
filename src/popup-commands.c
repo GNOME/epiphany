@@ -175,32 +175,16 @@ save_property_url_completed_cb (EphyEmbedPersist *persist)
 				EPHY_EMBED_PERSIST_ASK_DESTINATION))
 	{
 		const char *dest;
-		char *desktop_dir; 
 		guint32 user_time;
-		GnomeVFSURI *parent, *uri, *desktop;
 
 		user_time = ephy_embed_persist_get_user_time (persist);
 		dest = ephy_embed_persist_get_dest (persist);
+
 		g_return_if_fail (dest != NULL);
 
-		desktop_dir = ephy_file_desktop_dir ();
+		/* If save location is the desktop, nautilus will not open */
+		ephy_file_browse_to (dest, user_time);
 
-		/* Where are we going to save */
-		uri = gnome_vfs_uri_new (dest); 
-		desktop = gnome_vfs_uri_new (desktop_dir);
-
-		g_return_if_fail (uri != NULL);
-
-		parent = gnome_vfs_uri_get_parent (uri);
-
-		/* If save location is the desktop, don't open it */
-		if (!gnome_vfs_uri_equal (desktop, parent))
-			ephy_file_browse_to (dest, user_time);
-
-		g_free (desktop_dir);
-		gnome_vfs_uri_unref (uri);
-		gnome_vfs_uri_unref (parent);
-		gnome_vfs_uri_unref (desktop);
 	}
 }
 
