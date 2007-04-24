@@ -115,8 +115,10 @@ unset_embed (EphyEmbedDialog *dialog)
 {
 	if (dialog->priv->embed != NULL)
 	{
+		EphyEmbed **embedptr;
+		embedptr = &dialog->priv->embed;
 		g_object_remove_weak_pointer (G_OBJECT (dialog->priv->embed),
-					      (gpointer *)&dialog->priv->embed);
+					      (gpointer *) embedptr);
 	}
 }
 
@@ -185,10 +187,14 @@ void
 ephy_embed_dialog_set_embed (EphyEmbedDialog *dialog,
 			     EphyEmbed *embed)
 {
+	EphyEmbed **embedptr;
+
 	unset_embed (dialog);
 	dialog->priv->embed = embed;
+
+	embedptr = &dialog->priv->embed;
 	g_object_add_weak_pointer (G_OBJECT (dialog->priv->embed),
-				   (gpointer *)&dialog->priv->embed);
+				   (gpointer *) embedptr);
 	g_object_notify (G_OBJECT (dialog), "embed");
 }
 
