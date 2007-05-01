@@ -370,7 +370,8 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 						    EPHY_COMPLETION_KEYWORDS_COL,
 						    EPHY_COMPLETION_RELEVANCE_COL,
 						    EPHY_COMPLETION_EXTRA_COL,
-						    EPHY_COMPLETION_FAVICON_COL);
+						    EPHY_COMPLETION_FAVICON_COL,
+						    EPHY_COMPLETION_URL_COL);
 
 		add_completion_actions (action, proxy);
 

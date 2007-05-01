@@ -53,6 +53,7 @@
 #include <gtk/gtkseparatormenuitem.h>
 #include <gtk/gtkalignment.h>
 #include <gtk/gtkclipboard.h>
+#include <gtk/gtkversion.h>
 
 #include <string.h>
 
@@ -78,6 +79,7 @@ struct _EphyLocationEntryPrivate
 	guint relevance_col;
 	guint extra_col;
 	guint favicon_col;
+	guint url_col;
 
 	guint hash;
 
@@ -994,6 +996,29 @@ sort_func (GtkTreeModel *model,
 	return valueb - valuea;
 }
 
+#if GTK_CHECK_VERSION (2, 11, 0)
+static gboolean
+cursor_on_match_cb  (GtkEntryCompletion *completion,
+		     GtkTreeModel *model,
+		     GtkTreeIter *iter,
+		     EphyLocationEntry *le)
+{
+	char *item = NULL;
+	GtkWidget *entry;
+
+	gtk_tree_model_get (model, iter,
+			    le->priv->url_col,
+			    &item, -1);
+	
+	entry = gtk_entry_completion_get_entry (completion);
+	gtk_entry_set_text (GTK_ENTRY (entry), item);
+
+	g_free (item);
+
+	return TRUE;
+}
+#endif /* GTK+ 2.11.0 */
+
 void
 ephy_location_entry_set_completion (EphyLocationEntry *le,
 				    GtkTreeModel *model,
@@ -1002,7 +1027,8 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 				    guint keywords_col,
 				    guint relevance_col,
 				    guint extra_col,
-				    guint favicon_col)
+				    guint favicon_col,
+				    guint url_col)
 {
 	EphyLocationEntryPrivate *priv = le->priv;
 	GtkTreeModel *sort_model;
@@ -1015,6 +1041,7 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 	le->priv->relevance_col = relevance_col;
 	le->priv->extra_col = extra_col;
 	le->priv->favicon_col = favicon_col;
+	le->priv->url_col = url_col;
 
 	sort_model = gtk_tree_model_sort_new_with_model (model);
 	g_object_unref (model);
@@ -1061,6 +1088,12 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 				    extracell, TRUE);
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
 				       extracell, "text", extra_col);
+
+#if GTK_CHECK_VERSION (2, 11, 0)
+	g_object_set (completion, "inline-selection", TRUE, NULL);
+	g_signal_connect (completion, "cursor-on-match",
+			  G_CALLBACK (cursor_on_match_cb), le);
+#endif
 
 	gtk_entry_set_completion (GTK_ENTRY (priv->icon_entry->entry), completion);
 	g_object_unref (completion);

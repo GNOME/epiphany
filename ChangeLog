@@ -1,3 +1,17 @@
+2007-05-01  Xan Lopez  <xan@gnome.org>
+
+	* lib/widgets/ephy-location-entry.c:
+	* lib/widgets/ephy-location-entry.h:
+	* src/ephy-completion-model.c:
+	* src/ephy-completion-model.h:
+	* src/ephy-location-action.c:
+
+	Copy the items on the completion list as the user moves through
+	them. The original input can be restored pressing Esc. The tentative
+	completion can be made definitive pressing Left or Right.
+
+	Fixes #409291, #102528
+	
 2007-04-24  Diego Escalante Urrelo  <diegoe@gnome.org>
 
 	* src/popup-commands.c:
