@@ -257,6 +257,14 @@ entry_key_press_event_cb (GtkEntry *entry,
 	{
 		handled = ephy_embed_find_activate_link (get_find (toolbar), event->state);
 	}
+	else if ((event->state & mask) == GDK_SHIFT_MASK &&
+		 (event->keyval == GDK_Return ||
+		  event->keyval == GDK_KP_Enter ||
+		  event->keyval == GDK_ISO_Enter))
+	{
+		handled = TRUE;
+		g_signal_emit (toolbar, signals[PREVIOUS], 0);
+	}
 
 	return handled;
 }
