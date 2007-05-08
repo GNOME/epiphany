@@ -368,6 +368,13 @@ event_box_realize_cb (GtkWidget *widget, GtkImage *icon)
       gtk_drag_source_set_icon_pixbuf (widget, pixbuf);
       g_object_unref (pixbuf);
     }
+  else if (type == GTK_IMAGE_ICON_NAME)
+    {
+      const gchar *icon_name;
+
+      gtk_image_get_icon_name (icon, &icon_name, NULL);
+      gtk_drag_source_set_icon_name (widget, icon_name);
+    }
   else if (type == GTK_IMAGE_PIXBUF)
     {
       GdkPixbuf *pixbuf = gtk_image_get_pixbuf (icon);
@@ -454,8 +461,15 @@ editor_create_item_from_name (EggToolbarEditor *editor,
       g_value_init (&value, G_TYPE_STRING);
       g_object_get_property (G_OBJECT (action), "stock_id", &value);
       stock_id = g_value_get_string (&value);
-      icon = gtk_image_new_from_stock (stock_id ? stock_id : GTK_STOCK_DND,
-                                       GTK_ICON_SIZE_LARGE_TOOLBAR);
+
+      /* This is a workaround to catch named icons. */
+      if (stock_id && gtk_icon_theme_has_icon (gtk_icon_theme_get_default(), stock_id))
+        icon = gtk_image_new_from_icon_name (stock_id,
+	                                     GTK_ICON_SIZE_LARGE_TOOLBAR);
+      else
+        icon = gtk_image_new_from_stock (stock_id ? stock_id : GTK_STOCK_DND,
+                                         GTK_ICON_SIZE_LARGE_TOOLBAR);
+
       g_value_unset (&value);
       
       g_value_init (&value, G_TYPE_STRING);
