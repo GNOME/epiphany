@@ -1,5 +1,5 @@
 # Copyright © 2000-2004 Marco Pesenti Gritti
-# Copyright © 2003, 2004, 2005, 2006 Christian Persch
+# Copyright © 2003, 2004, 2005, 2006, 2007 Christian Persch
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -15,7 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
-AC_INIT([GNOME Web Browser],[2.19.0],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[2.19.2],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
