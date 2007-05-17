@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: epiphany.th\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-01-29 20:37+0700\n"
-"PO-Revision-Date: 2007-01-29 20:41+0700\n"
+"POT-Creation-Date: 2007-05-17 20:46+0700\n"
+"PO-Revision-Date: 2007-05-17 20:52+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: data/bme.desktop.in.in.h:1
 msgid "Browse and organize your bookmarks"
@@ -568,7 +568,7 @@ msgid "Cookies"
 msgstr "คุกกี้"
 
 #. The name of the default downloads folder
-#: data/glade/epiphany.glade.h:4 lib/ephy-file-helpers.c:108
+#: data/glade/epiphany.glade.h:4 lib/ephy-file-helpers.c:258
 msgid "Downloads"
 msgstr "ดาวน์โหลด"
 
@@ -611,7 +611,7 @@ msgstr "ใ_บรับรอง:"
 #: data/glade/form-signing-dialog.glade.h:4
 #: embed/mozilla/EphyPromptService.cpp:808
 #: embed/mozilla/EphyPromptService.cpp:835
-#: lib/ephy-password-dialog.c:427 lib/ephy-password-dialog.c:443
+#: lib/ephy-password-dialog.c:429 lib/ephy-password-dialog.c:445
 msgid "_Password:"
 msgstr "_รหัสผ่าน:"
 
@@ -676,7 +676,7 @@ msgstr "เลือก_ภาษา:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: data/glade/prefs-dialog.glade.h:14
-#: lib/widgets/ephy-location-entry.c:641 src/ephy-history-window.c:266
+#: lib/widgets/ephy-location-entry.c:643 src/ephy-history-window.c:266
 msgid "Cl_ear"
 msgstr "_ล้าง"
 
@@ -1623,7 +1623,7 @@ msgstr "ไม่สามารถแสดงเนื้อหาเว็บ
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr "หน้าเว็บนี้ใช้รูปแบบการบีบอัดที่ไม่ถูกต้องหรือไม่สนับสนุน"
 
-#: embed/mozilla/EphyAboutModule.cpp:538
+#: embed/mozilla/EphyAboutModule.cpp:539
 #, c-format
 msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
@@ -1634,13 +1634,13 @@ msgstr ""
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: embed/mozilla/EphyAboutModule.cpp:665
+#: embed/mozilla/EphyAboutModule.cpp:666
 msgid "You may find an old version:|in the Google Cache"
 msgstr "ในแคชของ Google"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: embed/mozilla/EphyAboutModule.cpp:673
+#: embed/mozilla/EphyAboutModule.cpp:674
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "ในกรุอินเทอร์เน็ต"
 
@@ -1659,7 +1659,7 @@ msgid "Don't Save"
 msgstr "ไ_ม่บันทึก"
 
 #: embed/mozilla/EphyPromptService.cpp:807
-#: lib/ephy-password-dialog.c:399
+#: lib/ephy-password-dialog.c:401
 msgid "_Username:"
 msgstr "_ชื่อผู้ใช้:"
 
@@ -1688,6 +1688,47 @@ msgstr "แฟ้ม XML"
 msgid "XUL files"
 msgstr "แฟ้ม XUL"
 
+#: embed/mozilla/GeckoCookiePromptService.cpp:93
+#, c-format
+msgid "Accept cookie from %s?"
+msgstr "ยอมรับคุกกี้จาก %s หรือไม่?"
+
+#: embed/mozilla/GeckoCookiePromptService.cpp:100
+msgid "Accept Cookie?"
+msgstr "ยอมรับคุกกี้หรือไม่?"
+
+#: embed/mozilla/GeckoCookiePromptService.cpp:105
+msgid "The site wants to modify an existing cookie."
+msgstr "เว็บไซต์ต้องการแก้ไขคุกกี้เดิมที่มีอยู่"
+
+#: embed/mozilla/GeckoCookiePromptService.cpp:109
+msgid "The site wants to set a cookie."
+msgstr "เว็บไซต์ต้องการกำหนดคุกกี้"
+
+#: embed/mozilla/GeckoCookiePromptService.cpp:113
+msgid "The site wants to set a second cookie."
+msgstr "เว็บไซต์ต้องการกำหนดคุกกี้ชิ้นที่สอง"
+
+#: embed/mozilla/GeckoCookiePromptService.cpp:117
+#, c-format
+msgid "You already have %d cookie from this site."
+msgid_plural "You already have %d cookies from this site."
+msgstr[0] "คุณมีคุกกี้ %d ชิ้นสำหรับเว็บไซต์อยู่แล้ว"
+
+#: embed/mozilla/GeckoCookiePromptService.cpp:131
+msgid "Apply this _decision to all cookies from this site"
+msgstr "เ_ลือกคำตอบนี้สำหรับคุกกี้ทุกชิ้นจากเว็บไซต์นี้"
+
+#: embed/mozilla/GeckoCookiePromptService.cpp:139
+#: embed/mozilla/GtkNSSDialogs.cpp:1678
+msgid "_Reject"
+msgstr "_ปฏิเสธ"
+
+#: embed/mozilla/GeckoCookiePromptService.cpp:141
+#: embed/mozilla/GtkNSSDialogs.cpp:271
+msgid "_Accept"
+msgstr "_ยอมรับ"
+
 #: embed/mozilla/GeckoFormSigningDialog.cpp:108
 #, c-format
 msgid "The web site “%s” requests that you sign the following text:"
@@ -1697,15 +1738,15 @@ msgstr "เว็บไซต์ “%s” ร้องขอให้คุณ�
 msgid "_Sign text"
 msgstr "เซ็_นกำกับข้อความ"
 
-#: embed/mozilla/GeckoPrintService.cpp:178
+#: embed/mozilla/GeckoPrintService.cpp:197
 msgid "Options"
 msgstr "ตัวเลือก"
 
-#: embed/mozilla/GeckoPrintService.cpp:431
+#: embed/mozilla/GeckoPrintService.cpp:461
 msgid "Print this page?"
 msgstr "พิมพ์หน้านี้หรือไม่?"
 
-#: embed/mozilla/GeckoPrintService.cpp:439
+#: embed/mozilla/GeckoPrintService.cpp:469
 msgid "Preparing to print"
 msgstr "กำลังเตรียมพิมพ์"
 
@@ -1754,10 +1795,6 @@ msgstr "_รายละเอียดใบรับรอง"
 #: embed/mozilla/GtkNSSDialogs.cpp:625
 msgid "_View Certificate"
 msgstr "_ดูใบรับรอง"
-
-#: embed/mozilla/GtkNSSDialogs.cpp:271
-msgid "_Accept"
-msgstr "_ยอมรับ"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:404
 #, c-format
@@ -1972,24 +2009,28 @@ msgstr "เปลี่ยนรหัสผ่านสำหรับโทเ
 msgid "Get Token Password"
 msgstr "อ่านรหัสผ่านของโทเค็น"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1516
+#. Translators: A "token" is something that enables the user to authenticate himself or
+#. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
+#. * a data file (e.g. a cryptographic certificate).
+#.
+#: embed/mozilla/GtkNSSDialogs.cpp:1520
 #, c-format
 msgid "Please enter the password for the “%s” token"
 msgstr "กรุณาป้อนรหัสผ่านสำหรับโทเค็น “%s”"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1582
+#: embed/mozilla/GtkNSSDialogs.cpp:1586
 msgid "Please select a token:"
 msgstr "กรุณาเลือกโทเค็น:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1601
+#: embed/mozilla/GtkNSSDialogs.cpp:1605
 msgid "_Select"
 msgstr "เ_ลือก"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1654
+#: embed/mozilla/GtkNSSDialogs.cpp:1658
 msgid "Escrow the secret key?"
 msgstr "จะฝากกุญแจลับหรือไม่?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1663
+#: embed/mozilla/GtkNSSDialogs.cpp:1667
 #, c-format
 msgid ""
 "The certificate authority “%s” requests that you give it a copy of the newly "
@@ -2007,11 +2048,7 @@ msgstr ""
 "\n"
 "ขอแนะนำอย่างยิ่งว่าอย่าอนุญาต"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1674
-msgid "_Reject"
-msgstr "_ปฏิเสธ"
-
-#: embed/mozilla/GtkNSSDialogs.cpp:1677
+#: embed/mozilla/GtkNSSDialogs.cpp:1681
 msgid "_Allow"
 msgstr "_อนุญาต"
 
@@ -2091,7 +2128,7 @@ msgstr ""
 "ถึงแม้หน้านี้จะถูกโหลดผ่านการเชื่อมต่อนิรภัย แต่ข้อมูลที่คุณป้อนจะถูกส่งผ่านการเชื่อมต่อที่ไม่นิรภัย "
 "และสามารถถูกบุคคลที่สามดักได้อย่างง่ายดาย"
 
-#: embed/mozilla/MozDownload.cpp:629
+#: embed/mozilla/MozDownload.cpp:643
 msgid "Files"
 msgstr "แฟ้ม"
 
@@ -2154,7 +2191,7 @@ msgstr "_ลบแถบเครื่องมือ"
 msgid "Remove the selected toolbar"
 msgstr "ลบแถบเครื่องมือที่เลือก"
 
-#: lib/egg/egg-toolbar-editor.c:439
+#: lib/egg/egg-toolbar-editor.c:446
 msgid "Separator"
 msgstr "เส้นแบ่ง"
 
@@ -2162,17 +2199,17 @@ msgstr "เส้นแบ่ง"
 msgid "All supported types"
 msgstr "ทุกชนิดที่สนับสนุน"
 
-#: lib/ephy-file-helpers.c:302
+#: lib/ephy-file-helpers.c:452
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "ไม่สามารถสร้างไดเรกทอรีชั่วคราวใน “%s”"
 
-#: lib/ephy-file-helpers.c:378
+#: lib/ephy-file-helpers.c:528
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "มีแฟ้ม “%s” อยู่แล้ว กรุณาย้ายตำแหน่ง"
 
-#: lib/ephy-file-helpers.c:389
+#: lib/ephy-file-helpers.c:539
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "ไม่สามารถสร้างไดเรกทอรี “%s”"
@@ -2366,31 +2403,31 @@ msgstr "ตะวันตก"
 msgid "select fonts for|Other Scripts"
 msgstr "ภาษาอื่น"
 
-#: lib/ephy-password-dialog.c:413
+#: lib/ephy-password-dialog.c:415
 msgid "_Domain:"
 msgstr "โ_ดเมน:"
 
-#: lib/ephy-password-dialog.c:442
+#: lib/ephy-password-dialog.c:444
 msgid "_New password:"
 msgstr "_ตั้งรหัสผ่าน:"
 
-#: lib/ephy-password-dialog.c:452
+#: lib/ephy-password-dialog.c:454
 msgid "Con_firm password:"
 msgstr "_ยืนยันรหัสผ่าน:"
 
-#: lib/ephy-password-dialog.c:478
+#: lib/ephy-password-dialog.c:482
 msgid "Password quality:"
 msgstr "คุณภาพรหัสผ่าน:"
 
-#: lib/ephy-password-dialog.c:494
+#: lib/ephy-password-dialog.c:499
 msgid "Do not remember this password"
 msgstr "ไม่ต้องจำรหัสผ่านนี้"
 
-#: lib/ephy-password-dialog.c:498
+#: lib/ephy-password-dialog.c:503
 msgid "_Remember password for this session"
 msgstr "_จำรหัสผ่านสำหรับใช้ในวาระนี้"
 
-#: lib/ephy-password-dialog.c:502
+#: lib/ephy-password-dialog.c:507
 msgid "Save password in _keyring"
 msgstr "เก็บรหัสผ่านเข้าใน_พวงกุญแจ"
 
@@ -2408,7 +2445,7 @@ msgstr "ที่คั่นหน้า"
 
 #: lib/ephy-stock-icons.c:57 src/bookmarks/ephy-bookmarks-editor.c:917
 #: src/bookmarks/ephy-bookmarks-editor.c:1765
-#: src/bookmarks/ephy-topic-action.c:411 src/ephy-window.c:1341
+#: src/bookmarks/ephy-topic-action.c:455 src/ephy-window.c:1341
 msgid "Bookmarks"
 msgstr "ที่คั่นหน้า"
 
@@ -2456,7 +2493,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: lib/widgets/ephy-location-entry.c:908
+#: lib/widgets/ephy-location-entry.c:910
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "ลากไอคอนนี้ไปปล่อยเพื่อสร้างลิงก์มายังหน้านี้"
 
@@ -3039,19 +3076,19 @@ msgstr "หาลิงก์:"
 msgid "Find:"
 msgstr "หา:"
 
-#: src/ephy-find-toolbar.c:370
+#: src/ephy-find-toolbar.c:378
 msgid "Find Previous"
 msgstr "หาก่อนหน้า"
 
-#: src/ephy-find-toolbar.c:373
+#: src/ephy-find-toolbar.c:381
 msgid "Find previous occurrence of the search string"
 msgstr "หาข้อความเดิมถอยหลัง"
 
-#: src/ephy-find-toolbar.c:380
+#: src/ephy-find-toolbar.c:388
 msgid "Find Next"
 msgstr "หาต่อ"
 
-#: src/ephy-find-toolbar.c:383
+#: src/ephy-find-toolbar.c:391
 msgid "Find next occurrence of the search string"
 msgstr "หาข้อความเดิมต่อไป"
 
@@ -4032,15 +4069,15 @@ msgstr "ชื่อผู้ใช้"
 msgid "User Password"
 msgstr "รหัสผ่าน"
 
-#: src/popup-commands.c:272
+#: src/popup-commands.c:256
 msgid "Download Link"
 msgstr "ดาวน์โหลดลิงก์"
 
-#: src/popup-commands.c:280
+#: src/popup-commands.c:264
 msgid "Save Link As"
 msgstr "บันทึกลิงก์เป็น"
 
-#: src/popup-commands.c:287
+#: src/popup-commands.c:271
 msgid "Save Image As"
 msgstr "บันทึกภาพเป็น"
 
@@ -4378,9 +4415,6 @@ msgstr "เว็บไซต์ของเว็บเบราว์เซอ
 
 #~ msgid "Bookmark exists"
 #~ msgstr "ที่คั่นหน้ามีอยู่แล้ว"
-
-#~ msgid "You already have a bookmark titled “%s” for this page."
-#~ msgstr "คุณมีที่คั่นหน้าชื่อ “%s” สำหรับหน้านี้อยู่แล้ว"
 
 #~ msgid "_Create New"
 #~ msgstr "_สร้างใหม่"
