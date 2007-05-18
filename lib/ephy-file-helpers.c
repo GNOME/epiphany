@@ -1019,19 +1019,33 @@ gboolean
 ephy_file_browse_to (const char *parameter,
 		     guint32 user_time)
 {
-	GnomeVFSURI *uri, *parent_uri;
+	GnomeVFSURI *uri, *parent_uri, *desktop;
+	char *desktop_dir;
 	gboolean ret;
 
 	uri = gnome_vfs_uri_new (parameter);
 	parent_uri = gnome_vfs_uri_get_parent (uri);
 
-	/* TODO find a way to make nautilus scroll to the actual file */
-	ret = ephy_file_launch_handler ("x-directory/normal", 
-					gnome_vfs_uri_get_path (parent_uri), 
-					user_time);
+	desktop_dir = ephy_file_desktop_dir ();
+	desktop = gnome_vfs_uri_new (desktop_dir);
 	
+	/* Don't do anything if destination is the desktop */
+	if (gnome_vfs_uri_equal (desktop, parent_uri))
+	{
+		ret = FALSE;
+	}
+	else
+	{
+		/* TODO find a way to make nautilus scroll to the actual file */
+		ret = ephy_file_launch_handler ("x-directory/normal", 
+						gnome_vfs_uri_get_path (parent_uri), 
+						user_time);
+	}
+	
+	g_free (desktop_dir);
 	gnome_vfs_uri_unref (uri);
 	gnome_vfs_uri_unref (parent_uri);
+	gnome_vfs_uri_unref (desktop);
 
 	return ret;
 }
