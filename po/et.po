@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: Epiphany Web Browser HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-01-27 16:11+0000\n"
-"PO-Revision-Date: 2007-02-01 23:18+0200\n"
+"POT-Creation-Date: 2007-03-13 03:30+0000\n"
+"PO-Revision-Date: 2007-04-26 19:04+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -54,7 +54,7 @@ msgid ""
 "disable_unsafe_protocols is enabled."
 msgstr ""
 "Loend protokollidest mida lisaks vaikimisi protokollidele loetakse "
-"turvaliseks juhul kui ebaturvaliste protokollide säte "
+"turvaliseks juhul, kui ebaturvaliste protokollide säte "
 "(disable_unsafe_protocols) on lubatud."
 
 #: ../data/epiphany-lockdown.schemas.in.h:2
@@ -166,7 +166,7 @@ msgstr ""
 
 #: ../data/epiphany.schemas.in.h:5
 msgid "Always show the tab bar"
-msgstr "Alati näita sakkide riba"
+msgstr "Sakiriba näitamine alati"
 
 #: ../data/epiphany.schemas.in.h:6
 msgid "Automatic downloads"
@@ -263,14 +263,14 @@ msgstr ""
 
 #: ../data/epiphany.schemas.in.h:19
 msgid "How to print frames"
-msgstr "Kuidas raame printida"
+msgstr "Kuidas paneele printida"
 
 #: ../data/epiphany.schemas.in.h:20
 msgid ""
 "How to print pages containing frames. Allowed values are \"normal\", "
 "\"separately\" and \"selected\"."
 msgstr ""
-"Kuidas raamidega lehti näidatakse. Võimalikud väärtused on \"normal"
+"Kuidas paneelidega lehti näidatakse. Võimalikud väärtused on \"normal"
 "\" (tavaline), \"separately\" (eraldi) ja \"selected\" (valik)."
 
 #: ../data/epiphany.schemas.in.h:21
@@ -293,16 +293,16 @@ msgstr "Aktiivsete laienduste loend."
 msgid ""
 "Middle click to open the web page pointed to by the currently selected text"
 msgstr ""
-"Keskmise hiirenupuga klõpsamine avab veebilehe, millele viitab hetkel "
-"valitud tekst"
+"Valitud teksti poolt viidatud veebilehe avamine keskmise hiirenupu "
+"klõpsamisel"
 
 #: ../data/epiphany.schemas.in.h:26
 msgid ""
 "Middle clicking on the main view pane will open the web page pointed to by "
 "the currently selected text."
 msgstr ""
-"Vaatepaanil keskmise hiirenupuga klõpsamine avab veebilehe, millele viitab "
-"hetkel valitud tekst."
+"Vaatepaanil keskmise hiirenupuga klõpsamise korral avatakse valitud teksti "
+"poolt viidatav veebileht."
 
 #: ../data/epiphany.schemas.in.h:27
 msgid "Minimum font size"
@@ -318,11 +318,11 @@ msgstr "Paroolide meeldejätmine"
 
 #: ../data/epiphany.schemas.in.h:30
 msgid "Show bookmarks bar by default"
-msgstr "Vaikimisi näita uutes terminalides _menüüriba"
+msgstr "Järjehoidjariba vaikimisi näitamine"
 
 #: ../data/epiphany.schemas.in.h:31
 msgid "Show statusbar by default"
-msgstr "Vaikimisi näita olekuriba"
+msgstr "Olekuriba vaikimisi näitamine"
 
 #: ../data/epiphany.schemas.in.h:32
 msgid ""
@@ -335,11 +335,11 @@ msgstr ""
 
 #: ../data/epiphany.schemas.in.h:33
 msgid "Show the tab bar also when there is only one tab open."
-msgstr "Sakiriba näitamine ka juhul kui lahti on ainult üks sakk."
+msgstr "Sakiriba näitamine ka ainult ühe avatud kaardi korral."
 
 #: ../data/epiphany.schemas.in.h:34
 msgid "Show toolbars by default"
-msgstr "Vaikimisi näita tööriistaribasid"
+msgstr "Tööriistaribade vaikimisi näitamine"
 
 #: ../data/epiphany.schemas.in.h:35
 msgid "Size of disk cache"
@@ -432,8 +432,8 @@ msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
 msgstr ""
-"Allalaadimiste kataloogi nimi või \"Allalaadimised\" kui kasutatakse "
-"allalaadimiste vaikimisi kausta või \"Desktop\" kui allalaadimised toimuvad "
+"Allalaadimiste kataloogi nimi või \"Allalaadimised\" allalaadimiste "
+"vaikimisi kausta jaoks või \"Desktop\", kui allalaadimised toimuvad "
 "töölauale."
 
 #: ../data/epiphany.schemas.in.h:47
@@ -640,7 +640,7 @@ msgstr "Sert_ifikaat:"
 #: ../data/glade/form-signing-dialog.glade.h:4
 #: ../embed/mozilla/EphyPromptService.cpp:808
 #: ../embed/mozilla/EphyPromptService.cpp:835
-#: ../lib/ephy-password-dialog.c:427 ../lib/ephy-password-dialog.c:443
+#: ../lib/ephy-password-dialog.c:429 ../lib/ephy-password-dialog.c:445
 msgid "_Password:"
 msgstr "_Parool:"
 
@@ -839,7 +839,7 @@ msgstr "Nii nagu _ekraanil näidatakse"
 
 #: ../data/glade/print.glade.h:6
 msgid "O_nly the selected frame"
-msgstr "Ai_nult valitud raam"
+msgstr "Ai_nult valitud paneel"
 
 #: ../data/glade/print.glade.h:7
 msgid "P_age title"
@@ -863,7 +863,7 @@ msgstr "_Kuupäev"
 
 #: ../data/glade/print.glade.h:12
 msgid "_Each frame separately"
-msgstr "_Iga raam eraldi"
+msgstr "_Iga paneel eraldi"
 
 #: ../data/glade/print.glade.h:13
 msgid "_Page address"
@@ -1338,24 +1338,24 @@ msgstr "Teised"
 msgid "Local files"
 msgstr "Kohalikud failid"
 
-#: ../embed/mozilla/ContentHandler.cpp:147
+#: ../embed/mozilla/ContentHandler.cpp:159
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:406
 msgid "Save"
 msgstr "Salvesta"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:260
+#: ../embed/mozilla/ContentHandler.cpp:272
 msgid "File Type:|Unknown"
 msgstr "Tundmatu"
 
-#: ../embed/mozilla/ContentHandler.cpp:276
+#: ../embed/mozilla/ContentHandler.cpp:288
 msgid "Download this potentially unsafe file?"
 msgstr "Kas laadida see potentsiaalselt ohtlik faili alla?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:282
+#: ../embed/mozilla/ContentHandler.cpp:294
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1369,14 +1369,14 @@ msgstr ""
 "dokumentidele või riivata sinu turvalisust. Parem oleks see fail alla "
 "laadida."
 
-#: ../embed/mozilla/ContentHandler.cpp:292
+#: ../embed/mozilla/ContentHandler.cpp:304
 msgid "Open this file?"
 msgstr "Kas avada see fail?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:299
+#: ../embed/mozilla/ContentHandler.cpp:311
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1387,13 +1387,13 @@ msgstr ""
 "\n"
 "Sa saad „%s”-i avamiseks kasutada „%s”-i või selle salvestada."
 
-#: ../embed/mozilla/ContentHandler.cpp:307
+#: ../embed/mozilla/ContentHandler.cpp:319
 msgid "Download this file?"
 msgstr "Kas laadida see fail alla?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:313
+#: ../embed/mozilla/ContentHandler.cpp:325
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1405,7 +1405,7 @@ msgstr ""
 "Ühtegi rakendust „%s”-i avamiseks ei ole. Sa saad selle asemel selle alla "
 "laadida."
 
-#: ../embed/mozilla/ContentHandler.cpp:318
+#: ../embed/mozilla/ContentHandler.cpp:330
 msgid "_Save As..."
 msgstr "Salvesta _kui..."
 
@@ -1465,7 +1465,7 @@ msgstr "Kontrolli kas oled ühendatud internetti ja kas aadress on korrektne."
 #: ../embed/mozilla/EphyAboutModule.cpp:244
 msgid "If this page used to exist, you may find an archived version:"
 msgstr ""
-"Juhul kui see leht oli varem olemas, siis arhiveeritud versiooni võid leida:"
+"Kui see leht oli varem olemas, siis arhiveeritud versiooni võib leida:"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:253
 #, c-format
@@ -1662,7 +1662,7 @@ msgstr "Sisu pole võimalik kuvada."
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr "Leht kasutab toetamata või vigast pakkimise meetodit."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:538
+#: ../embed/mozilla/EphyAboutModule.cpp:539
 #, c-format
 msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
@@ -1673,13 +1673,13 @@ msgstr ""
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:665
+#: ../embed/mozilla/EphyAboutModule.cpp:666
 msgid "You may find an old version:|in the Google Cache"
 msgstr "Google puhvrist"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:673
+#: ../embed/mozilla/EphyAboutModule.cpp:674
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "Interneti arhiivist"
 
@@ -1698,7 +1698,7 @@ msgid "Don't Save"
 msgstr "Ära salvesta"
 
 #: ../embed/mozilla/EphyPromptService.cpp:807
-#: ../lib/ephy-password-dialog.c:399
+#: ../lib/ephy-password-dialog.c:401
 msgid "_Username:"
 msgstr "_Kasutajanimi:"
 
@@ -1726,6 +1726,48 @@ msgstr "XML failid"
 #: ../embed/mozilla/FilePicker.cpp:182
 msgid "XUL files"
 msgstr "XUL failid"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:93
+#, c-format
+msgid "Accept cookie from %s?"
+msgstr "Kas võtta vastu küpsis saidist %s?"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:100
+msgid "Accept Cookie?"
+msgstr "Võtta küpsis vastu?"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:105
+msgid "The site wants to modify an existing cookie."
+msgstr "Sait proovib muuta olemasolevat küpsist."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:109
+msgid "The site wants to set a cookie."
+msgstr "Sait proovib määrata küpsist."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:113
+msgid "The site wants to set a second cookie."
+msgstr "Sait proovib määrata teist küpsist."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:117
+#, c-format
+msgid "You already have %d cookie from this site."
+msgid_plural "You already have %d cookies from this site."
+msgstr[0] "Sul on selle saidi poolt juba %d küpsis seatud."
+msgstr[1] "Sul on selle saidi poolt juba %d küpsist seatud."
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:131
+msgid "Apply this _decision to all cookies from this site"
+msgstr "Seda _otsust rakendatakse kõigi sellelt saidilt pärit küpsiste suhtes"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:139
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1678
+msgid "_Reject"
+msgstr "_Hülga"
+
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:141
+#: ../embed/mozilla/GtkNSSDialogs.cpp:271
+msgid "_Accept"
+msgstr "_Nõustu"
 
 #: ../embed/mozilla/GeckoFormSigningDialog.cpp:108
 #, c-format
@@ -1793,10 +1835,6 @@ msgstr "Sertifikaadi ü_ksikasjad"
 #: ../embed/mozilla/GtkNSSDialogs.cpp:625
 msgid "_View Certificate"
 msgstr "_Ava sertifikaat"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:271
-msgid "_Accept"
-msgstr "_Nõustu"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:404
 #, c-format
@@ -2022,24 +2060,28 @@ msgstr "\"%s\" sõne parool muutmine"
 msgid "Get Token Password"
 msgstr "Sõne parooli hankimine"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1516
+#. Translators: A "token" is something that enables the user to authenticate himself or
+#. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
+#. * a data file (e.g. a cryptographic certificate).
+#.
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1520
 #, c-format
 msgid "Please enter the password for the “%s” token"
 msgstr "Palun sisesta „%s“ sõne jaoks parool"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1582
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1586
 msgid "Please select a token:"
 msgstr "Palun vali sõne:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1601
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1605
 msgid "_Select"
 msgstr "_Vali"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1654
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1658
 msgid "Escrow the secret key?"
 msgstr "Hoiustada see salajane võti?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1663
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1667
 #, c-format
 msgid ""
 "The certificate authority “%s” requests that you give it a copy of the newly "
@@ -2058,11 +2100,7 @@ msgstr ""
 "\n"
 "On vägagi soovitav seda mitte lubada."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1674
-msgid "_Reject"
-msgstr "_Hülga"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1677
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1681
 msgid "_Allow"
 msgstr "_Luba"
 
@@ -2149,7 +2187,7 @@ msgstr ""
 "saadetakse üle ebaturvalise ühenduse ja on seega kergesti kättesaadavad "
 "kolmandale osapoolele."
 
-#: ../embed/mozilla/MozDownload.cpp:629
+#: ../embed/mozilla/MozDownload.cpp:643
 msgid "Files"
 msgstr "Failid"
 
@@ -2425,31 +2463,31 @@ msgstr "Lääne"
 msgid "select fonts for|Other Scripts"
 msgstr "Muud kirjaviisid"
 
-#: ../lib/ephy-password-dialog.c:413
+#: ../lib/ephy-password-dialog.c:415
 msgid "_Domain:"
 msgstr "_Domeen:"
 
-#: ../lib/ephy-password-dialog.c:442
+#: ../lib/ephy-password-dialog.c:444
 msgid "_New password:"
 msgstr "_Uus parool:"
 
-#: ../lib/ephy-password-dialog.c:452
+#: ../lib/ephy-password-dialog.c:454
 msgid "Con_firm password:"
 msgstr "Parooli _kontroll:"
 
-#: ../lib/ephy-password-dialog.c:478
+#: ../lib/ephy-password-dialog.c:482
 msgid "Password quality:"
 msgstr "Parooli kvaliteet:"
 
-#: ../lib/ephy-password-dialog.c:494
+#: ../lib/ephy-password-dialog.c:498
 msgid "Do not remember this password"
 msgstr "Ära salvesta seda parooli"
 
-#: ../lib/ephy-password-dialog.c:498
+#: ../lib/ephy-password-dialog.c:502
 msgid "_Remember password for this session"
 msgstr "Jäta _parool selle seansi jaoks meelde"
 
-#: ../lib/ephy-password-dialog.c:502
+#: ../lib/ephy-password-dialog.c:506
 msgid "Save password in _keyring"
 msgstr "Sal_vesta parool võtmerõngas"
 
@@ -2761,12 +2799,12 @@ msgstr "Avab valitud järjehoidja uues aknas"
 #: ../src/ephy-history-window.c:711
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
-msgstr[0] "A_va uues sakis"
-msgstr[1] "A_va uutes sakkides"
+msgstr[0] "A_va uuel kaardil"
+msgstr[1] "A_va uutel kaartidel"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:195
 msgid "Open the selected bookmark in a new tab"
-msgstr "Valitud järjehoidja avamine uues sakis"
+msgstr "Valitud järjehoidja avamine uuel kaardil"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:197
 msgid "_Rename…"
@@ -2931,8 +2969,8 @@ msgid ""
 "unless they also belong to other topics. The bookmarks will not be deleted."
 msgstr ""
 "Selle teema kustutamisel jäävad selle teema alla kuuluvad järjehoidjad "
-"kategoriseerimata, välja arvatud juhul kui nad lisaks kuuluvad veel "
-"teistesse teemadesse. Järjehoidjad endaid ei kustutata."
+"kategoriseerimata, välja arvatud juhul, kui nad lisaks kuuluvad veel "
+"teistesse teemadesse. Järjehoidjad ei kustutata."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:423
 msgid "_Delete Topic"
@@ -3047,7 +3085,7 @@ msgstr "Selle järjehoidja omaduste näitamine"
 
 #: ../src/bookmarks/ephy-bookmarks-ui.c:313
 msgid "Open this bookmark in a new tab"
-msgstr "Selle järjehoidja avamine uues sakis"
+msgstr "Selle järjehoidja avamine uuel kaardil"
 
 #: ../src/bookmarks/ephy-bookmarks-ui.c:325
 msgid "Open this bookmark in a new window"
@@ -3056,11 +3094,11 @@ msgstr "Valitud järjehoidja avamine uues aknas"
 #. FIXME !!!!
 #: ../src/bookmarks/ephy-open-tabs-action.c:77
 msgid "Open in New _Tabs"
-msgstr "A_va uues sakis"
+msgstr "A_va uuel kaardil"
 
 #: ../src/bookmarks/ephy-open-tabs-action.c:78
 msgid "Open the bookmarks in this topic in new tabs"
-msgstr "Selle teema järjehoidjate avamine uutes sakkides"
+msgstr "Selle teema järjehoidjate avamine uutel kaartidel"
 
 #: ../src/bookmarks/ephy-related-action.c:176
 msgid "Related"
@@ -3138,7 +3176,7 @@ msgstr "Valitud ajalooviida avamine uues aknas"
 
 #: ../src/ephy-history-window.c:176
 msgid "Open the selected history link in a new tab"
-msgstr "Valitud ajalooviida avamine uues sakis"
+msgstr "Valitud ajalooviida avamine uuel kaardil"
 
 #: ../src/ephy-history-window.c:179
 msgid "Delete the selected history link"
@@ -3223,7 +3261,7 @@ msgstr "Saidid"
 
 #: ../src/ephy-main.c:78
 msgid "Open a new tab in an existing browser window"
-msgstr "Uue saki avamine sirvija olemasolevas aknas"
+msgstr "Uue kaardi avamine sirvija olemasolevas aknas"
 
 #: ../src/ephy-main.c:80
 msgid "Open a new browser window"
@@ -3292,7 +3330,7 @@ msgstr "GNOME Veebisirvija valikud"
 
 #: ../src/ephy-notebook.c:673
 msgid "Close tab"
-msgstr "Sulge sakk"
+msgstr "Sulge kaart"
 
 #: ../src/ephy-session.c:158
 #, c-format
@@ -3327,7 +3365,7 @@ msgstr "_Katkesta allalaadimised"
 
 #: ../src/ephy-session.c:609
 msgid "Recover previous browser windows and tabs?"
-msgstr "Taastada eelmise sirvija aknad ja sakid?"
+msgstr "Taastada eelmise sirvija aknad ja kaardid?"
 
 #: ../src/ephy-session.c:613
 msgid ""
@@ -3335,7 +3373,7 @@ msgid ""
 "can recover the opened windows and tabs."
 msgstr ""
 "Epiphany paistab olevat viimase töötamise lõpetanud ootamatult. Sul on "
-"võimalik avatud aknaid ja sakke taastada."
+"võimalik avatud aknaid ja kaarte taastada."
 
 #: ../src/ephy-session.c:617
 msgid "_Don't Recover"
@@ -3406,7 +3444,7 @@ msgstr "Volituste ootamine „%s”-lt…"
 
 #: ../src/ephy-tabs-menu.c:149
 msgid "Switch to this tab"
-msgstr "Selle saki aktiveerimine"
+msgstr "Selle kaardi aktiveerimine"
 
 #: ../src/ephy-toolbar.c:222
 msgid "_Back"
@@ -3479,11 +3517,11 @@ msgstr "Liikumine alguslehele"
 
 #: ../src/ephy-toolbar.c:336
 msgid "New _Tab"
-msgstr "Uus s_akk"
+msgstr "Uus kaar_t"
 
 #: ../src/ephy-toolbar.c:338
 msgid "Open a new tab"
-msgstr "Uue saki avamine"
+msgstr "Uue kaardi avamine"
 
 #: ../src/ephy-toolbar.c:347
 msgid "_New Window"
@@ -3526,7 +3564,7 @@ msgstr "_Tööriistad"
 
 #: ../src/ephy-window.c:121
 msgid "_Tabs"
-msgstr "_Sakid"
+msgstr "_Kaardid"
 
 #: ../src/ephy-window.c:123
 msgid "_Toolbars"
@@ -3583,7 +3621,7 @@ msgstr "Käesoleva lehe aadressi saatmine"
 
 #: ../src/ephy-window.c:148
 msgid "Close this tab"
-msgstr "Selle saki sulgemine"
+msgstr "Selle kaardi sulgemine"
 
 #. Edit menu
 #: ../src/ephy-window.c:153
@@ -3772,35 +3810,35 @@ msgstr "Varasemalt vaadatud lehtede loendiakna avamine"
 #. Tabs menu
 #: ../src/ephy-window.c:247
 msgid "_Previous Tab"
-msgstr "_Eelmine sakk"
+msgstr "_Eelmine kaart"
 
 #: ../src/ephy-window.c:248
 msgid "Activate previous tab"
-msgstr "Eelmise saki aktiveerimine"
+msgstr "Eelmise kaardi aktiveerimine"
 
 #: ../src/ephy-window.c:250
 msgid "_Next Tab"
-msgstr "_Järgmine sakk"
+msgstr "_Järgmine kaart"
 
 #: ../src/ephy-window.c:251
 msgid "Activate next tab"
-msgstr "Järgmine saki aktiveerimine"
+msgstr "Järgmine kaardi aktiveerimine"
 
 #: ../src/ephy-window.c:253
 msgid "Move Tab _Left"
-msgstr "Liiguta sakk _vasakule"
+msgstr "Liiguta kaart _vasakule"
 
 #: ../src/ephy-window.c:254
 msgid "Move current tab to left"
-msgstr "Käesoleva saki liigutamine vasakule"
+msgstr "Käesoleva kaardi liigutamine vasakule"
 
 #: ../src/ephy-window.c:256
 msgid "Move Tab _Right"
-msgstr "Liiguta sakk _paremale"
+msgstr "Liiguta kaart _paremale"
 
 #: ../src/ephy-window.c:257
 msgid "Move current tab to right"
-msgstr "Käesoleva saki liigutamine paremale"
+msgstr "Käesoleva kaardi liigutamine paremale"
 
 #: ../src/ephy-window.c:263
 msgid "Display web browser help"
@@ -3860,11 +3898,11 @@ msgstr "Lisa _järjehoidja…"
 #. Framed document
 #: ../src/ephy-window.c:306
 msgid "Show Only _This Frame"
-msgstr "Näita ainult seda _raami"
+msgstr "Näita ainult seda _paneeli"
 
 #: ../src/ephy-window.c:307
 msgid "Show only this frame in this window"
-msgstr "Näita ainult seda raami selles aknas"
+msgstr "Näita ainult seda paneeli selles aknas"
 
 #. Links
 #: ../src/ephy-window.c:312
@@ -3885,11 +3923,11 @@ msgstr "Viida avamine uues aknas"
 
 #: ../src/ephy-window.c:318
 msgid "Open Link in New _Tab"
-msgstr "Ava _viit uues sakis"
+msgstr "Ava _viit uuel kaardil"
 
 #: ../src/ephy-window.c:319
 msgid "Open link in a new tab"
-msgstr "Viida avamine uues sakis"
+msgstr "Viida avamine uuel kaardil"
 
 #: ../src/ephy-window.c:321
 msgid "_Download Link"
@@ -3953,7 +3991,7 @@ msgstr "Vormiväljadel on postitamata andmeid"
 #: ../src/ephy-window.c:750
 msgid "If you close the document anyway, you will lose that information."
 msgstr ""
-"Igatahes kui sa dokumendi sulged, siis lähevad sul seal olevad andmed kaotsi."
+"Kui sa dokumendi siiski sulged, siis lähevad seal olevad andmed kaotsi."
 
 #: ../src/ephy-window.c:754
 msgid "Close _Document"
@@ -4231,8 +4269,8 @@ msgid ""
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr ""
 "Te peaks olema saanud GNU Üldise Avaliku Litsentsi koopia koos selle "
-"programmiga, kui ei, siis võtke ühendust Free Software Foundation'iga, "
-"51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA"
+"programmiga, kui ei, siis võtke ühendust Free Software Foundation'iga, 51 "
+"Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA"
 
 #: ../src/window-commands.c:787 ../src/window-commands.c:803
 #: ../src/window-commands.c:814
@@ -4273,9 +4311,3 @@ msgstr ""
 #: ../src/window-commands.c:855
 msgid "GNOME Web Browser Website"
 msgstr "GNOME Veebisirvija sait"
-
-#~ msgid "“%s” redirected too many times."
-#~ msgstr "„%s“ suunati ümber liiga palju kordi."
-
-#~ msgid "The redirection has been stopped for security reasons."
-#~ msgstr "Turvakaalutlustel ümbersuunamine lõpetati."
