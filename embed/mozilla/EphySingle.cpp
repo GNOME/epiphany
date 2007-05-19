@@ -348,6 +348,12 @@ mozilla_cookie_to_ephy_cookie (nsICookie *cookie)
 		info->real_expires = expiry;
 	}
 
+#ifdef HAVE_GECKO_1_9
+        PRBool isHttpOnly = PR_FALSE;
+        cookie2->GetHttpOnly (&isHttpOnly);
+        info->is_http_only = isHttpOnly != PR_FALSE;
+#endif
+
 	return info;
 }
 

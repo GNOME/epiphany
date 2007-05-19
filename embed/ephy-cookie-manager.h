@@ -50,6 +50,7 @@ typedef struct
 	glong real_expires;
         guint is_secure : 1;
         guint is_session : 1;
+        guint is_http_only : 1;
 } EphyCookie;
 
 struct _EphyCookieManagerIface
