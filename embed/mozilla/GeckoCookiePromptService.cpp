@@ -113,10 +113,9 @@ GeckoCookiePromptService::CookieDialog (nsIDOMWindow *aParent,
        _("The site wants to set a second cookie."));
   } else {
     char *num_text = g_strdup_printf
-                      (dngettext (GETTEXT_PACKAGE,
-                                  "You already have %d cookie from this site.",
-                                  "You already have %d cookies from this site.",
-                                  aCookiesFromHost),
+                      (ngettext ("You already have %d cookie from this site.",
+                                 "You already have %d cookies from this site.",
+                                 aCookiesFromHost),
                        aCookiesFromHost);
 
     gtk_message_dialog_format_secondary_text
