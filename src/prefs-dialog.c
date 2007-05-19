@@ -102,8 +102,7 @@ static const char * const size_prefs [] =
 	CONF_RENDERING_FONT_MIN_SIZE
 };
 
-const
-int default_size [] =
+static const int default_size [] =
 {
 	10,
 	11,
@@ -371,7 +370,7 @@ prefs_dialog_show_help (EphyDialog *dialog)
 	GtkWidget *window, *notebook;
 	int id;
 
-	static char * const help_preferences[] = {
+	static const char help_preferences[][28] = {
 		"general-preferences",
 		"fonts-and-style-preferences",
 		"privacy-preferences",
