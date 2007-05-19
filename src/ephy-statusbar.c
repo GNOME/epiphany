@@ -110,7 +110,7 @@ ephy_statusbar_size_allocate (GtkWidget *widget,
 
 	gstatusbar->label = label;
 }
-#endif /* GTK 2.11.0 */
+#endif /* !GTK 2.11.0 */
 
 static void
 ephy_statusbar_class_init (EphyStatusbarClass *klass)
