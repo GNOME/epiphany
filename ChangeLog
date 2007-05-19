@@ -1,5 +1,14 @@
 2007-05-19  Christian Persch  <chpe@gnome.org>
 
+	* embed/ephy-embed-prefs.h:
+	* embed/mozilla/mozilla-notifiers.cpp:
+
+	Add pref for smooth scroll, bug #162489.
+	Use GSlice to allocate the prefs notifier data.
+	Check the pref type.
+
+2007-05-19  Christian Persch  <chpe@gnome.org>
+
 	* embed/mozilla/GeckoCookiePromptService.cpp:
 
 	Just use ngettext here, no need for dngettext.

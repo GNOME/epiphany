@@ -72,7 +72,8 @@ free_pref_data (PrefData *data)
 {
 	g_free (data->gconf_key);
 	g_free (data->mozilla_pref);
-	g_free (data);
+
+	g_slice_free (PrefData, data);
 }
 
 static gboolean
@@ -414,6 +415,9 @@ static const PrefData notifier_entries[] =
 	{ CONF_SECURITY_ALLOW_POPUPS,
 	  "dom.disable_open_during_load",
 	  mozilla_notifier_transform_bool_invert },
+	{ CONF_DISPLAY_SMOOTHSCROLL,
+	  "general.smoothScroll",
+	  mozilla_notifier_transform_bool },
 	{ CONF_IMAGE_ANIMATION_MODE,
 	  "image.animation_mode",
 	  transform_image_animation_mode },
@@ -485,10 +489,23 @@ mozilla_pref_set (const char *pref,
 	g_return_val_if_fail (value != NULL, FALSE);
 
 	nsresult rv;
+        PRInt32 prefType;
+        rv = gPrefBranch->GetPrefType (pref, &prefType);
+        if (NS_FAILED (rv))
+        {
+                /* probably just an unset pref */
+                prefType = nsIPrefBranch::PREF_INVALID;
+                rv = NS_OK;
+        }
+
 	switch (G_VALUE_TYPE (value))
 	{
 		case G_TYPE_INT:
 		{
+                        if (prefType != nsIPrefBranch::PREF_INT &&
+                            prefType != nsIPrefBranch::PREF_INVALID)
+                          break;
+
 			PRInt32 old_value = 0;
 			PRInt32 new_value = g_value_get_int (value);
 			rv = gPrefBranch->GetIntPref (pref, &old_value);
@@ -500,6 +517,10 @@ mozilla_pref_set (const char *pref,
 		}
 		case G_TYPE_BOOLEAN:
 		{
+                        if (prefType != nsIPrefBranch::PREF_BOOL &&
+                            prefType != nsIPrefBranch::PREF_INVALID)
+                          break;
+
 			PRBool old_value = PR_FALSE;
 			PRBool new_value = g_value_get_boolean (value);
 			rv = gPrefBranch->GetBoolPref (pref, &old_value);
@@ -511,6 +532,10 @@ mozilla_pref_set (const char *pref,
 		}
 		case G_TYPE_STRING:
 		{
+                        if (prefType != nsIPrefBranch::PREF_STRING &&
+                            prefType != nsIPrefBranch::PREF_INVALID)
+                          break;
+
 			const char *new_value = g_value_get_string (value);
 			if (new_value == NULL)
 			{
@@ -586,8 +611,7 @@ mozilla_notifier_add (const char *gconf_key,
 	client = eel_gconf_client_get_global ();
 	g_return_val_if_fail (client != NULL, 0);
 
-	/* FIXME: use slice allocator */
-	data = g_new (PrefData, 1);
+	data = g_slice_new (PrefData);
 	data->gconf_key = g_strdup (gconf_key);
 	data->mozilla_pref = g_strdup (mozilla_pref);
 	data->func = func;
@@ -1085,6 +1109,95 @@ mozilla_font_notifiers_shutdown (void)
 	g_free (minimum_font_size_data);	
 }
 
+#if 0
+static void
+notify_generic_cb (GConfClient *client,
+		   guint cnxn_id,
+		   GConfEntry *gcentry,
+		   gpointer data)
+{
+	GConfValue *gcvalue;
+	const char *key, *pref;
+	static const gsize len = strlen ("/apps/epiphany/web/gecko_prefs/");
+	GValue value = { 0, };
+
+	key = gconf_entry_get_key (gcentry);
+	if (!key || strlen (key) <= len) return;
+
+	pref = key + len;
+	
+	gcvalue = gconf_entry_get_value (gcentry);
+	if (!gcvalue) return;
+
+	switch (gcvalue->type)
+	{
+		case GCONF_VALUE_STRING:
+			g_value_init (&value, G_TYPE_STRING);
+			g_value_set_static_string (&value, gconf_value_get_string (gcvalue));
+			break;
+		case GCONF_VALUE_INT:
+			g_value_init (&value, G_TYPE_INT);
+			g_value_set_int (&value, gconf_value_get_int (gcvalue));
+			break;
+		case GCONF_VALUE_BOOL:
+			g_value_init (&value, G_TYPE_BOOLEAN);
+			g_value_set_boolean (&value, gconf_value_get_bool (gcvalue));
+			break;
+		/* case GCONF_VALUE_INVALID: */
+		/* case GCONF_VALUE_FLOAT: */
+		/* case GCONF_VALUE_SCHEMA: */
+		/* case GCONF_VALUE_LIST: */
+		/* case GCONF_VALUE_PAIR: */
+		default:
+			g_warning ("Unsupported value type for key '%s'\n", key);
+			return;
+	}
+
+	g_assert (G_IS_VALUE (&value));
+	mozilla_pref_set (pref, &value);
+	g_value_unset (&value);
+}
+
+static void
+mozilla_generic_notifier_init (void)
+{
+	GConfClient *client;
+	GError *error = NULL;
+	guint cnxn_id;
+	PrefData *data;
+	GSList *list, *l;
+
+	client = eel_gconf_client_get_global ();
+
+	cnxn_id = gconf_client_notify_add (client, "/apps/epiphany/web/gecko_prefs",
+					   (GConfClientNotifyFunc) notify_generic_cb,
+					   NULL, NULL, &error);
+	if (eel_gconf_handle_error (&error))
+	{
+		if (cnxn_id != EEL_GCONF_UNDEFINED_CONNECTION)
+		{
+			gconf_client_notify_remove (client, cnxn_id);
+		}
+
+		return;
+	}
+
+	data = g_slice_new0 (PrefData);
+	data->cnxn_id = cnxn_id;
+	notifiers = g_list_prepend (notifiers, data);
+
+	list = gconf_client_all_entries (client, "/apps/epiphany/web/gecko_prefs", NULL);
+	for (l = list; l != NULL; l = l->next)
+	{
+		GConfEntry *gcentry = (GConfEntry *) l->data;
+
+		notify_generic_cb (client, cnxn_id, gcentry, NULL);
+		gconf_entry_unref (gcentry);
+	}
+	g_slist_free (list);
+}
+#endif
+
 extern "C" gboolean
 mozilla_notifiers_init (void)
 {
@@ -1102,6 +1215,11 @@ mozilla_notifiers_init (void)
 		g_warning ("Failed to get the pref service!\n");
 		return FALSE;
 	}
+
+#if 0
+	/* First init the generic notifier, so our regular prefs override prefs set there */
+	mozilla_generic_notifier_init ();
+#endif
 
 	for (i = 0; i < G_N_ELEMENTS (notifier_entries); i++)
 	{
