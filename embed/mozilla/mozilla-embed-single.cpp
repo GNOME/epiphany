@@ -44,8 +44,6 @@
 #include <nsIFile.h>
 #include <nsIIOService.h>
 #include <nsILocalFile.h>
-#include <nsIPassword.h>
-#include <nsIPasswordManager.h>
 #include <nsIPermission.h>
 #include <nsIPermissionManager.h>
 #include <nsIPrefService.h>
@@ -68,6 +66,11 @@
 #include <nsIIDNService.h>
 #include <nsNetCID.h>
 #endif /* ALLOW_PRIVATE_API */
+
+#ifndef HAVE_GECKO_1_9
+#include <nsIPassword.h>
+#include <nsIPasswordManager.h>
+#endif /* !HAVE_GECKO_1_9 */
 
 #include "ephy-file-helpers.h"
 #include "eel-gconf-extensions.h"
@@ -930,6 +933,7 @@ impl_list_passwords (EphyPasswordManager *manager)
 {
 	GList *passwords = NULL;
 
+#ifndef HAVE_GECKO_1_9
 	nsresult rv;
 	nsCOMPtr<nsIPasswordManager> passwordManager =
 			do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
@@ -982,6 +986,7 @@ impl_list_passwords (EphyPasswordManager *manager)
 
 		passwords = g_list_prepend (passwords, p);
 	}
+#endif /* !HAVE_GECKO_1_9 */
 
 	return passwords;
 }
@@ -990,6 +995,7 @@ static void
 impl_remove_password (EphyPasswordManager *manager,
 		      EphyPasswordInfo *info)
 {
+#ifndef HAVE_GECKO_1_9
         nsCOMPtr<nsIPasswordManager> pm =
                         do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
 	if (!pm) return;
@@ -1007,13 +1013,15 @@ impl_remove_password (EphyPasswordManager *manager,
 	NS_CStringToUTF16 (nsCString(info->username),
 			   NS_CSTRING_ENCODING_UTF8, userName);
 	pm->RemoveUser (host, userName);
+#endif /* !HAVE_GECKO_1_9 */
 }
 
 static void
 impl_add_password (EphyPasswordManager *manager,
                   EphyPasswordInfo *info)
 {
-        nsCOMPtr<nsIPasswordManager> pm =
+#ifndef HAVE_GECKO_1_9
+       nsCOMPtr<nsIPasswordManager> pm =
                         do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
        if (!pm) return;
 
@@ -1035,6 +1043,7 @@ impl_add_password (EphyPasswordManager *manager,
                           NS_CSTRING_ENCODING_UTF8, password);
 
        pm->AddUser(host, username, password);
+#endif /* !HAVE_GECKO_1_9 */
 }
 
 static void
