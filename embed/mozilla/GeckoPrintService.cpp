@@ -1,5 +1,5 @@
 /*
- *  Copyright © 2006 Christian Persch
+ *  Copyright © 2006, 2007 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -30,6 +30,7 @@
 #include <gtk/gtkprintunixdialog.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkwindow.h>
+#include <gtk/gtkversion.h>
 #include <glade/glade-xml.h>
 
 #include <nsStringAPI.h>
@@ -522,6 +523,7 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
 				      PRBool aIsForPrinting,
 				      nsIPrintSettings *aSettings)
 {
+  NS_ENSURE_ARG (aPrinter);
   NS_ENSURE_ARG (aGtkSettings);
   NS_ENSURE_ARG (aPageSetup);
 
@@ -533,12 +535,21 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   }
 #endif
 
+#if GTK_CHECK_VERSION (2, 11, 0)
+  GtkPrintCapabilities capabilities = gtk_printer_get_capabilities (aPrinter);
+#else
+  GtkPrintCapabilities capabilities = GtkPrintCapabilities (GTK_PRINT_CAPABILITY_PAGE_SET |
+                                                            GTK_PRINT_CAPABILITY_COPIES |
+                                                            GTK_PRINT_CAPABILITY_COLLATE |
+                                                            GTK_PRINT_CAPABILITY_REVERSE |
+                                                            GTK_PRINT_CAPABILITY_SCALE);
+#endif
+
   /* Initialisation */
   aSettings->SetIsInitializedFromPrinter (PR_FALSE); /* FIXME: PR_TRUE? */
   aSettings->SetIsInitializedFromPrefs (PR_FALSE); /* FIXME: PR_TRUE? */
   aSettings->SetPrintSilent (PR_FALSE);
   aSettings->SetShowPrintProgress (PR_TRUE);
-  aSettings->SetNumCopies (1);
 
   /* We always print PS to a file and then hand that off to gtk-print */
   aSettings->SetPrinterName (LITERAL ("PostScript/default"));
@@ -587,13 +598,30 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
     }
 #endif
 	  
+    int n_copies = gtk_print_settings_get_n_copies (aGtkSettings);
+    if (n_copies <= 0)
+      return NS_ERROR_FAILURE;
+    if (capabilities & GTK_PRINT_CAPABILITY_COPIES) {
+      aSettings->SetNumCopies (1);
+    } else {
+      /* We have to copy them ourself */
+      aSettings->SetNumCopies (n_copies);
+      gtk_print_settings_set_n_copies (aGtkSettings, 1);
+    }
+
+    gboolean reverse = gtk_print_settings_get_reverse (aGtkSettings);
+    if (capabilities & GTK_PRINT_CAPABILITY_REVERSE) {
+      aSettings->SetPrintReversed (PR_FALSE);
+    } else {
+      aSettings->SetPrintReversed (reverse);
+      gtk_print_settings_set_reverse (aGtkSettings, FALSE);
+    }
+
     GtkPageSet pageSet = gtk_print_settings_get_page_set (aGtkSettings);
     aSettings->SetPrintOptions (nsIPrintSettings::kPrintEvenPages,
 			        pageSet != GTK_PAGE_SET_ODD);
     aSettings->SetPrintOptions (nsIPrintSettings::kPrintEvenPages,
 			        pageSet != GTK_PAGE_SET_EVEN);
-
-    aSettings->SetPrintReversed (gtk_print_settings_get_reverse (aGtkSettings));
 
     GtkPrintPages printPages = gtk_print_settings_get_print_pages (aGtkSettings);
     switch (printPages) {
@@ -625,6 +653,11 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
     aSettings->SetPrintReversed (PR_FALSE);
     aSettings->SetPrintRange (nsIPrintSettings::kRangeAllPages);
   }
+
+  /* And clear those in the settings, so the printer doesn't try to apply them too */
+  gtk_print_settings_set_print_pages (aGtkSettings, GTK_PRINT_PAGES_ALL);
+  gtk_print_settings_set_page_ranges (aGtkSettings, NULL, 0);
+  gtk_print_settings_set_page_set (aGtkSettings, GTK_PAGE_SET_ALL);
 
   switch (gtk_print_settings_get_orientation (aGtkSettings)) {
     case GTK_PAGE_ORIENTATION_PORTRAIT:
@@ -706,7 +739,10 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   aSettings->SetPrintFrameType (aPrintFrames);
   aSettings->SetPrintFrameTypeUsage (nsIPrintSettings::kUseSettingWhenPossible);
 
+  /* FIXME: only if GTK_PRINT_CAPABILITY_SCALE is not set? */
   aSettings->SetScaling (gtk_print_settings_get_scale (aGtkSettings) / 100.0);
+  gtk_print_settings_set_scale (aGtkSettings, 1.0);
+
   aSettings->SetShrinkToFit (PR_FALSE); /* FIXME setting */
     
   aSettings->SetPrintBGColors (eel_gconf_get_boolean (CONF_PRINT_BG_COLORS) != FALSE);
@@ -720,11 +756,6 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   /* Unset those setting that we can handle, so they don't get applied
    * again for the print job.
    */
-  gtk_print_settings_set_print_pages (aGtkSettings, GTK_PRINT_PAGES_ALL);
-  gtk_print_settings_set_page_ranges (aGtkSettings, NULL, 0);
-  gtk_print_settings_set_page_set (aGtkSettings, GTK_PAGE_SET_ALL);
-  gtk_print_settings_set_reverse (aGtkSettings, FALSE);
-  gtk_print_settings_set_scale (aGtkSettings, 1.0);
   /* gtk_print_settings_set_collate (aGtkSettings, FALSE); not yet */
   /* FIXME: Unset the orientation for the print job? */
   /* gtk_print_settings_set_orientation (aGtkSettings, GTK_PAGE_ORIENTATION_PORTRAIT); */
