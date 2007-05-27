@@ -37,7 +37,7 @@ ephy_stock_icons_init (void)
 	GtkIconSource *icon_source;
 	int i;
 
-	static const char *icon_theme_items[] =
+	const char *icon_theme_items[] =
 	{
 		STOCK_NEW_TAB,
 		STOCK_NEW_WINDOW,
