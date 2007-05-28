@@ -1,41 +1,91 @@
 ===============
+Epiphany 2.18.2
+===============
+
+Summary of changes since 2.17.4:
+
+	* Avoid opening nautilus if downloads are done to Desktop. This re-fixes
+	  bug #383698.
+
+	* Quicktime and a number of other mime types are now recognized as safe
+
+	* Middle clicking the Go button should open the location bar address
+	  content in a new tab. Bug #362591.
+
+	* Fix printing of frames.
+
+	* Don't crash when we cannot access the system bus. Bug #404514.
+
+	* Changed the "redirected too many times" error page to be more
+	  friendly. Bug #395990.
+
+	* Clear some print settings in the settings we hand to the print job, so
+	  they don't get applied twice. Bug #394818.
+
+	* Puts OpenInWindow over OpenInTab in the Bookmarks Editor so we meet
+	  the HIG. Fixes bug #340775.
+
+	* Opens images in a new browser window if EOG is not found. Bug #167595.
+
+	* Corrects the expand of the Privacy tab in the Preferences window.
+
+	* Don't allow the add bookmark ui to appear if it's locked down, more lockdown improvements
+
+Contributors to this release:
+
+Bastien Nocera, John Millikin, Jan de Groot, Benjamin Berg, Jean-François Rameau,
+Jens Granseuer, Björn Lindqvist, Vitali Ischenko, Chris Wilson, Diego Escalante Urrelo,
+Luca Ferretti, Christian Persch
+
+Translation updates:
+Priit Laes, I Felix, Christophe Merlet, Luca Ferretti, Leonardo Ferreira Fontenelle,
+Stéphane Raimbault, Hendrik Richter, Takeshi AIHANA, Peter Bach, Ignacio Casal Quinteiro,
+Pema Geyleg, Inaki Larranaga Murgoitio, Jovan Naumovski, Baris Cicek, Goran Rakić,
+Nikos Charonitakis, Gintautas Miliauskas, Artur Flinta, Ankit Patel, Changwoo Ryu,
+Matic Zgur, Abel Cheung, Jakub Friedl, Josep Puigdemont i Casamajó, Gabor Kelemen,
+Nguyễn Thái Ngọc Duy, Kjartan Maraas, Maxim Dziumanenko, Roberto Majadas, Reinout van Schouwen,
+Alexander Shopov, Nickolay V. Shmyrev, Duarte Loreto, David Lodge, Djihed Afifi,
+Daniel Nylander, Ilkka Tuohela, Theppitak Karoonboonyanan, Evandro Fernandes Giovanini,
+Žygimantas Beručka, Yair Hershkovitz, Clytie Siddall, David Planella
+
+===============
 Epiphany 2.17.4
 ===============
 
 Changes:
-       * Show favicons in location entry drop-down. Bug #112748, patch by Diego
-       Escalante Urrelo.
+	   * Show favicons in location entry drop-down. Bug #112748, patch by Diego
+	   Escalante Urrelo.
 
-       * Adblock manager has get a much wanted UI
+	   * Adblock manager has get a much wanted UI
 
-       * Fix secure location bar colouring with dark themes. Bug #347343,
-       patch by Diego Escalante Urrelo.
+	   * Fix secure location bar colouring with dark themes. Bug #347343,
+	   patch by Diego Escalante Urrelo.
 
-       * List title and URL in location entry drop-down. Bug #169550,
-       patch by Diego Escalante Urrelo.
+	   * List title and URL in location entry drop-down. Bug #169550,
+	   patch by Diego Escalante Urrelo.
 
-       * Epiphany has (almost) completed the themed icons support
+	   * Epiphany has (almost) completed the themed icons support
 	porting thanks to hard work of Luca Ferreti, Andreas Nilsson and
 	others :). New icons are present for almost everything, go check them
 	out!
 
-       * Fix bookmarks export to HTML. Bug #345925, patch by Stefan Stuhr.
+	   * Fix bookmarks export to HTML. Bug #345925, patch by Stefan Stuhr.
 
-       * Thanks to Chris Wilson, bookmarks and history use a smarter way to
+	   * Thanks to Chris Wilson, bookmarks and history use a smarter way to
 	determine time related information. Bug #391845, #391852
 
-       * Allow to drag plaintext to tabbar. Bug #339339, patch by
-       Michael Hofmann.
+	   * Allow to drag plaintext to tabbar. Bug #339339, patch by
+	   Michael Hofmann.
 
-       * Some bookmarks lockdown fixes (bug #165536) and lots of minor UI
+	   * Some bookmarks lockdown fixes (bug #165536) and lots of minor UI
 	fixes are also present in this version.
 
-       * Other bugs fixed in this release: #389560, #382207, #334463, #347343,
+	   * Other bugs fixed in this release: #389560, #382207, #334463, #347343,
 	#324052, #320514, #166662, #381546, #373549, #363837, #358986, #353854,
 	#340560, #390287, #391521, #377039, #372283, #350575
 
 Contributors to this release:
-Wouter Bolsterlee, Eric Butler, Diego Escalante Urrelo, Luca Ferreti, 
+Wouter Bolsterlee, Eric Butler, Diego Escalante Urrelo, Luca Ferreti,
 Michael Hofmann, Björn Lindqvist, John Millikin, Andreas Nilsson, Paul,
 Christian Persch, Stefan Stuhr, Chris Wilson
 
@@ -46,17 +96,17 @@ Khaled Hosny (ar), Gil Forcada (ca), Jakub Friedl (cs), Gintautas Miliauskas (lt
 ===============
 Epiphany 2.17.3
 ===============
- 
+
 Changes:
-     * Add some more F5 shortcuts to handle all the MSIE
-       "refresh page" bindings. Fixes bug #372906.
-       * Change default font sizes to match other popular
-       browsers. Fixes bug #346026.
-       * Lower the priority of the spinner animation so that the animation
-       does not stop page loading. Fixes bug #374623.
-       * Add "si" to locales always using pango. Patch by Harshula
-       harshula at gmail dot com, Fixes bug #361538.
-       * Make progressbar smaller. Fixes bug #368759.
+	 * Add some more F5 shortcuts to handle all the MSIE
+	   "refresh page" bindings. Fixes bug #372906.
+	   * Change default font sizes to match other popular
+	   browsers. Fixes bug #346026.
+	   * Lower the priority of the spinner animation so that the animation
+	   does not stop page loading. Fixes bug #374623.
+	   * Add "si" to locales always using pango. Patch by Harshula
+	   harshula at gmail dot com, Fixes bug #361538.
+	   * Make progressbar smaller. Fixes bug #368759.
 
 Misc. bug fixes: #372760, #362882, #381099, #382207
 
@@ -65,9 +115,9 @@ provide Epiphany icons as themed icons. See
 http://wayofthemonkey.com/index.php?date=2006-11-15&month=11&year=2006
 for more information
 
-Contributors to this release: 
-Benjamin Berg, Wouter Bolsterlee, Gerald E. Butler, 
-Diego Escalante Urrelo, Luca Ferretti, Ryan Lortie, 
+Contributors to this release:
+Benjamin Berg, Wouter Bolsterlee, Gerald E. Butler,
+Diego Escalante Urrelo, Luca Ferretti, Ryan Lortie,
 Baptiste Mille-Mathias, Christian Persch.
 
 Translation updates:
@@ -80,16 +130,16 @@ Epiphany 2.17.2
 
 Changes:
 	* Clicking favicon in the location bar selects URL. Fix bug
-          #349557.
+		  #349557.
 	* Default to printing background images.
 	* Add middle-click on New Tab/Window button to open URL on
-          clipboard. Fix bug 149715.
+		  clipboard. Fix bug 149715.
 	* Automatically open a Nautilus window after downloading has
-          finished. Fixes bug #138876. Try this and tell us what you
-          think!
+		  finished. Fixes bug #138876. Try this and tell us what you
+		  think!
 	* Fix printing of page ranges.
 	* Misc bug fixes: bug #347750, bug #330415, bug #357456, Bug #352733,
-	  bug #361606, Bug #362063, bug #349349, bug #358007, bug #350053. 
+	  bug #361606, Bug #362063, bug #349349, bug #358007, bug #350053.
 
 Contributors to this release: John Millikin, Diego Escalante Urrelo,
 Jean-François Rameau, Wouter Bolsterlee, Ed Catmur, Christian Persch.
@@ -129,7 +179,7 @@ Jovan Naumovski (mk), Ani Peter (ml), Badral (mn), Rahul Bhalerao (mr),
 Kjartan Maraas (nb), Shyam Krishna Bal (ne), Reinout van Schouwen (nl),
 Åsmund Skjæveland (nn), Subhransu Behera (or), Artur Flinta (pl),
 Licio Fernando Nascimento da Fonseca (pt_BR), Duarte Loreto (pt),
-Nickolay V. Shmyrev (ru), Matic Žgur (sl), Laurent Dhima (sq), 
+Nickolay V. Shmyrev (ru), Matic Žgur (sl), Laurent Dhima (sq),
 Daniel Nylander (sv), Theppitak Karoonboonyanan (th), Baris Cicek (tr),
 Maxim Dziumanenko (uk), Clytie Siddall (vi), Funda Wang (zh_CN),
 Woodman Tuen (zh_HK, zh_TW)
@@ -173,7 +223,7 @@ Changes:
 	* Add page security info dialogue from Certificates extension.
 
 	* Drop libgnomeprint[ui] and use gtk printing. Add our options in
-          a custom tab in the print dialogue. Print settings and page setup
+		  a custom tab in the print dialogue. Print settings and page setup
 	  persist now.
 
 	* Add methods to EphyNode to set typed properties. This change improves the
@@ -196,14 +246,14 @@ Bug fixes:
 
 	* Make the crash recovery dialog appear on the taskbar.
 	  Fixes bug #345010.
-	
+
 	* copy history over when opening link in new tab/win using
 	  context menu. Fixes bug #340742, patch by René Stadler.
 
 	* Don't crash on error from zeroconf bookmarks. Fixes bug #343922.
 
 	* Don't set cookies from favicon downloads. Bug #337835.
-	
+
 	* Allow cookie list to be sorted.  (fixes #337845)
 
 	* Fix crash when moving zoom widget on toolbar (#338682)
@@ -218,7 +268,7 @@ Bug fixes:
 
 Documentation:
 
-        * Manpage update from Victor Osadci.
+		* Manpage update from Victor Osadci.
 
 Contributors to this release:
 Johannes Berg, Nguyễn Thái Ngọc Duy, Luca Ferretti,
@@ -344,7 +394,7 @@ Mindu Dorji (dz), Francisco Javier F. Serrador (es), Ivar Smolin (et),
 Iñaki Larrañaga Murgoitio (eu), Benoît Dejean (fr),
 Ignacio Casal Quinteiro (gl), Ankit Patel (gu), Mohammad DAMT (id),
 Satoru SATOH (ja), ? (mg), Kjartan Maraas (nb), Reinout van Schouwen (nl),
-Åsmund Skjæveland (nn), Kjartan Maraas (no), 
+Åsmund Skjæveland (nn), Kjartan Maraas (no),
 Licio Fernando Nascimento da Fonseca (pt_BR), Duarte Loreto (pt),
 Daniel Nylander (sv), Theppitak Karoonboonyanan (th), Baris Cicek (tr),
 Maxim Dziumanenko (uk), and Clytie Siddall (vi).
@@ -356,7 +406,7 @@ Epiphany 2.14.1
 
 Changes:
 	* Hooks have been added for the new epiphany-extensions
-	documentation, written by Baptiste Mille-mathias 
+	documentation, written by Baptiste Mille-mathias
 
 Bug fixes:
 	* Enable pango for some indic languages, which depend on it for correct
@@ -371,7 +421,7 @@ Bug fixes:
 	* Add support for local directory monitoring (in addition to local file
 	monitoring). Bug #332049.
 	* Add support for IE link files. Bug #330735.
-	
+
 Contributors to this release:
 Wouter Bolsterlee, Jean-François Rameau, Christian Persch.
 
@@ -393,7 +443,7 @@ Contributors to the Epiphany 2.14.0 release:
 Jorn Baayen, Emmanuele Bassi, Robert O'Callahan, Piers Cornwell,
 Crispin Flowerday, Gustavo Gama, Peter Harvey, Philip Langdale,
 Robert Marcano, Bastien Nocera, Guilherme de S. Pastore,
-Brian Pepple, Christian Persch, Jean-François Rameau, 
+Brian Pepple, Christian Persch, Jean-François Rameau,
 Sergey Al. Safonov, Reinout van Schouwen, Raphael Slinckx,
 thetroublemaker, and Matthew P. Thomas.
 
@@ -439,14 +489,14 @@ Changes:
 	* Incorporate UI review recommendations for View > Toolbars menu
 	* Various improvements for XULRunner back-end
 Bug fixes:
-	* Use the same machanism for Ctrl-W as clicking the tab's close 
+	* Use the same machanism for Ctrl-W as clicking the tab's close
 	  button. Fixes bug #319530.
-        * Fix crash on switching to/from fullscreen mode. Bug #331462.
-        * Set the tooltip for bookmarks on the toolbar, using a 
-          'title\nlocation' format. Bug #332113.
+		* Fix crash on switching to/from fullscreen mode. Bug #331462.
+		* Set the tooltip for bookmarks on the toolbar, using a
+		  'title\nlocation' format. Bug #332113.
 	* Misc fixes: #329118, #327764, #148940.
 
-Contributors to this release: 
+Contributors to this release:
 Peter Harvey, Christian Persch, Sergey Al. Safonov.
 
 Updated translations:
@@ -487,20 +537,20 @@ Changes:
 	* Show the backend in the about box.
 	* Disable blink tags
 	* Reversed some regressions: Add tooltips to toolitems again,
-          Restore the 'Show on Toolbar' functionality.
-        * Topic chooser: Add enter-to-auto-complete when there is just one
-          possible match. Will close dialog if no current key. Will do nothing
-          otherwise.
+		  Restore the 'Show on Toolbar' functionality.
+		* Topic chooser: Add enter-to-auto-complete when there is just one
+		  possible match. Will close dialog if no current key. Will do nothing
+		  otherwise.
 
 Bug fixes:
-	* Warn the user on logout when there are unfinished downloads. 
+	* Warn the user on logout when there are unfinished downloads.
 	  Bug #128048.
 	* Fix removing zeroconf bookmarks when the service disappears,
 	  and updating them when they reappear. Bugs #329637, #330883.
 	* Block popup with NULL url (javascript:window.open() for instance)
 	  but don't show them when unblocking. Bug #155009.
 	* Fix opening of local files. Bug #330104.
-	* Push a null JS context on the stack when we run a recursive mainloop. 
+	* Push a null JS context on the stack when we run a recursive mainloop.
 	  Fixes the epiphany equivalent of camino bug
 	  https://bugzilla.mozilla.org/show_bug.cgi?id=179307.
 	* Fix some memory leaks.
@@ -538,24 +588,24 @@ Epiphany 1.9.6
 ==============
 
 Changes:
-        * libnm-glib be-gone! Use NetworkManager directly via DBUS, by 
+		* libnm-glib be-gone! Use NetworkManager directly via DBUS, by
 	  importing the excellent net-monitor extension directly into
 	  Epiphany. Code by Jean-François Rameau.
-	* Revamped Bookmark Properties/Add Bookmark/New Topic dialogues.  
+	* Revamped Bookmark Properties/Add Bookmark/New Topic dialogues.
 
 Bug fixes:
 	* Misc fixes: bug #328747, #328064, #328351, #327381, #125723,
 	  #320686, #327845, #326807.
 	* Open smart bookmark url in new tabs when using Ctrl+Enter (part of
 	  bug #310814)
-	* Disable pango rendering by default, unless MOZ_ENABLE_PANGO env 
+	* Disable pango rendering by default, unless MOZ_ENABLE_PANGO env
 	  var is set. Bug #328844.
 	* Don't use favicon as window icon. Bug 131010.
 	* Fix URL opening with two concurrently starting instances.
 	* Fix a couple of memory leaks
 	* Add license to about dialogue. Patch by Brian Pepple, bug #327998.
 	* Add caret mode indicator UI. Bug #145581.
-	* When adding a column that can be sorted on, re-create the sort 
+	* When adding a column that can be sorted on, re-create the sort
 	  model, so that it sets up the sort method correctly. Fixes #320686.
 
 Contributors to this release: Christian Persch, Peter Harvey, Brian Pepple,
@@ -605,8 +655,8 @@ Epiphany 1.9.5
 Changes:
 	* Add NetworkManager magic for connection status autodetection. (disabled by default)
 	* Add more methods to EphyAdblock interface and EphyAdblockManager
-        * Override mozilla prompts by our own.
-       	* Enable zeroconf by default now that gnome-vfs dns-sd can use avahi
+		* Override mozilla prompts by our own.
+		* Enable zeroconf by default now that gnome-vfs dns-sd can use avahi
 	* Override the page that is shown for the about: url so that it doesn't say "Deer Park"
 	* Go back to using the gtk stock close icon, to get correct themeing in a11y themes.
 	* Fix compilation with DBUS 0.6
@@ -619,7 +669,7 @@ Bug fixes:
 	* Exit print preview mode when clicking the window close button. Bug #326136.
 	* Make ESC cancel the content handler dialogue. Bug #325811.
 	* Fix next/prev button sensitivity when find wrapped around.
-	* Don't include generated files in the tarball. Bug #319440. 
+	* Don't include generated files in the tarball. Bug #319440.
 	* Bonobo is dead; long live the Bonobos! Patch by Gustavo Gama, bug #322463.
 	* Dragging and dropping onto a topic on the toolbar works. Bug #320494.
 	* Gave user more control over favicon visibility. Bug #320860.
@@ -628,40 +678,40 @@ Bug fixes:
 Contributors to this release: Christian Persch, Jean-François Rameau, Crispin Flowerday, thetroublemaker,
 Gustavo Gama, Matthew Thomas, Peter Harvey
 
-Updated translations: 
+Updated translations:
 
-        * Miloslav Trmac (cs)
-        * Hendrik Richter (de)
-        * Adam Weinberger (en_CA)
-        * Francisco Javier F. Serrador (es)
-        * Ilkka Tuohela (fi)
-        * Christophe Merlet (RedFox) (fr)
-        * Ignacio Casal Quinteiro (gl)
-        * Ankit Patel (gu)
-        * Gabor Kelemen (hu)
-        * Mohammad DAMT (id)
-        * Žygimantas Beručka (lt)
-        * Kjartan Maraas (nb)
-        * Kjartan Maraas (no)
-        * Theppitak Karoonboonyanan (th)
-        * Clytie Siddall (vi)
+		* Miloslav Trmac (cs)
+		* Hendrik Richter (de)
+		* Adam Weinberger (en_CA)
+		* Francisco Javier F. Serrador (es)
+		* Ilkka Tuohela (fi)
+		* Christophe Merlet (RedFox) (fr)
+		* Ignacio Casal Quinteiro (gl)
+		* Ankit Patel (gu)
+		* Gabor Kelemen (hu)
+		* Mohammad DAMT (id)
+		* Žygimantas Beručka (lt)
+		* Kjartan Maraas (nb)
+		* Kjartan Maraas (no)
+		* Theppitak Karoonboonyanan (th)
+		* Clytie Siddall (vi)
 
 ==============
 Epiphany 1.9.4
 ==============
 
 Changes:
-        * When in automatic mode, update the treeview to reflect the currently selected encoding. Fixes bug #127757
-        * Add include subdirs for broken distros. Bug #321841. Add plugins.symbols to EXTRA_DIST.
-        * Improve "gecko not found" message. Bug #319253.
-        * Put a marker in the environment to detect when we launch ourself as a helper app. Fixes bug #324828.
-        * Zoom on Ctrl-=, Ctrl-KP+, Ctrl-KP- too. Bug #105183.
-        * Always center dialog on screen. Bug #324896.
-        * Show warning on mixed content in the tooltip. Bug #321508.
-        * Add some code so ad blocking should be more easy. 
-        * Use a gtk stock cursor (GDK_HAND2) instead of already removed image. Fixes bug #324265.
-        * Fix a compile warning.
-        * Install the fonts schemas file too.
+		* When in automatic mode, update the treeview to reflect the currently selected encoding. Fixes bug #127757
+		* Add include subdirs for broken distros. Bug #321841. Add plugins.symbols to EXTRA_DIST.
+		* Improve "gecko not found" message. Bug #319253.
+		* Put a marker in the environment to detect when we launch ourself as a helper app. Fixes bug #324828.
+		* Zoom on Ctrl-=, Ctrl-KP+, Ctrl-KP- too. Bug #105183.
+		* Always center dialog on screen. Bug #324896.
+		* Show warning on mixed content in the tooltip. Bug #321508.
+		* Add some code so ad blocking should be more easy.
+		* Use a gtk stock cursor (GDK_HAND2) instead of already removed image. Fixes bug #324265.
+		* Fix a compile warning.
+		* Install the fonts schemas file too.
 
 Contributors to this release:
 Christian Neumair, Christian Persch, Claudio Saavedra,
@@ -670,23 +720,23 @@ Crispin Flowerday and Jean-François Rameau.
 Updated translations:
 
 	* Rostislav \"zbrox\" Raykov (bg)
-        * Adam Weinberger (en_CA)
-        * Francisco Javier F. Serrador (es)
-        * Ilkka Tuohela (fi)
-        * Christophe Merlet (RedFox) (fr)
-        * Ignacio Casal Quinteiro (gl)
-        * Ankit Patel (gu)
-        * Gabor Kelemen (hu)
-        * Takeshi AIHANA (ja)
-        * Žygimantas Beručka (lt)
-        * Reinout van Schouwen (nl)
-        * "" (nn)
-        * Afonso Celso Medina (pt_BR)
-        * Marcel Telka (sk)
-        * Clytie Siddall (vi)
-        * Liu Songhe (zh_CN)
-        * Chao-Hsiung Liao (zh_HK)
-        * Chao-Hsiung Liao (zh_TW)
+		* Adam Weinberger (en_CA)
+		* Francisco Javier F. Serrador (es)
+		* Ilkka Tuohela (fi)
+		* Christophe Merlet (RedFox) (fr)
+		* Ignacio Casal Quinteiro (gl)
+		* Ankit Patel (gu)
+		* Gabor Kelemen (hu)
+		* Takeshi AIHANA (ja)
+		* Žygimantas Beručka (lt)
+		* Reinout van Schouwen (nl)
+		* "" (nn)
+		* Afonso Celso Medina (pt_BR)
+		* Marcel Telka (sk)
+		* Clytie Siddall (vi)
+		* Liu Songhe (zh_CN)
+		* Chao-Hsiung Liao (zh_HK)
+		* Chao-Hsiung Liao (zh_TW)
 
 ================
 Epiphany 1.9.3.1
@@ -708,47 +758,47 @@ Epiphany 1.9.3
 ==============
 
 Changes:
-	* Add certificate manager. Patch by Robert Marcano and Crispin 
+	* Add certificate manager. Patch by Robert Marcano and Crispin
 	  Flowerday. Fixes bug #119090.
 	* Fix crash when adding a cookie while the dialogue is open.
 	* Also check for GDK_ISO_Enter.
 	* Close the find toolbar when loading a new page.
-	* Forward up/down/page up/page down from the findbar entry to the 
+	* Forward up/down/page up/page down from the findbar entry to the
 	  embed.
-	* Fix a compile warning, and don't bother requesting a close if the 
+	* Fix a compile warning, and don't bother requesting a close if the
 	  find bar is already closed
 	* Updated comment to refer to the schema autogeneration tool.
-	* Remove the paper selector from the print setup dialogue, we have 
+	* Remove the paper selector from the print setup dialogue, we have
 	  one in the print dialogue already.
 	* Fix spacings to be HIG compliant. Set window roles.
 	* Add image/x-png type to list of safe mime types.
 	* Use --with-gecko in the distcheck configure args.
 	* While in find mode, set the selection colour to "attention".
-	* Refactor find toolbar closing not to crash with auto-closing 
+	* Refactor find toolbar closing not to crash with auto-closing
 	  popups. Unset the selection colour on close.
-	* Open the PDM dialogue on the cookies page scrolled to show the 
-	  cookies of the currently loaded page, if there are any. Sort 
-	  cookies by domain. Allow treeview typeaheadfind search to find 
+	* Open the PDM dialogue on the cookies page scrolled to show the
+	  cookies of the currently loaded page, if there are any. Sort
+	  cookies by domain. Allow treeview typeaheadfind search to find
 	  by substring not prefix.
-	* Add chrome: and resource: to the safe list; otherwise forms 
+	* Add chrome: and resource: to the safe list; otherwise forms
 	  and scrollbars break. Fixes bug #316498.
 	* Delay reloads when we get many change notifications in a short
 	  time. Fixes bug #319993.
 	* Add F5 as accelerator for reload.
 	* Set the model's sort column only after filling it. Vastly reduces
 	  delay when opening the PDM dialogue when you have many cookies.
-	* Prettify Certificate Revocation List import dialogue. Fixes 
+	* Prettify Certificate Revocation List import dialogue. Fixes
 	  bug #321590.
-	* Don't put the prefs/pdm dialogue over all windows. Make the 
+	* Don't put the prefs/pdm dialogue over all windows. Make the
 	  add-language dialogue modal to the prefs dialogue.
 	* Mark message for translation. Patch by Guilherme de S. Pastore,
 	  fixes bug #319988.
-	* Transition over to the Galeon mechanism for handling extra 
+	* Transition over to the Galeon mechanism for handling extra
 	  keybindings. This maps the keybindings to actions so that no extra
-	  actions are required. The only subtlety is that some of the 
+	  actions are required. The only subtlety is that some of the
 	  actions come from the toolbar, so access to its action group is
 	  required.
-	
+
 Contributors to this release: Crispin Flowerday, Philip Langdale,
 Robert Marcano, Christian Persch, Guilherme de S. Pastore and
 Reinout van Schouwen.
@@ -804,8 +854,8 @@ Changes:
 	* Fix middle button activate of actions [#319529]
 
 Contributors to this release:
-Emmanuele Bassi, Piers Cornwell, Peter Harvey, 
-Philip Langdale, Bastien Nocera, Robert O'Callahan, 
+Emmanuele Bassi, Piers Cornwell, Peter Harvey,
+Philip Langdale, Bastien Nocera, Robert O'Callahan,
 Christian Persch, Jean François Rameau, Raphael Slinckx.
 
 Updated translations:
@@ -893,8 +943,8 @@ Bug fixes:
 	* Depend on pygtk 2.8 [#314557]
 	* Check for execinfo.h [#314776]
 
-Contributors to this release: 
-Jorn Baayen, Crispin Flowerday, Peter Harvey, Philip Langdale, 
+Contributors to this release:
+Jorn Baayen, Crispin Flowerday, Peter Harvey, Philip Langdale,
 Christian Persch, Jean François Rameau and Raphael Slinckx.
 
 New and updated translations:
@@ -1029,31 +1079,31 @@ Epiphany 1.8.1
 
 Changes
 
-        * Make Mozilla paper sizes work with gnome-print [#163255].
-        * Require pygtk 2.8. Fixes [#314557].
-        * Manually emit the "profile-change-net-teardown" notification; works
-          around mozilla bug https://bugzilla.mozilla.org/show_bug.cgi?id=292699
-        * Don't focus the checkbox initially. Fixes [#163371].
-        * If the search term is empty for a smart bookmark use the normal URL
-          instead of the smart url with the %s replaced by ""
-        * Don't use "cat >" as output command, it fails inpredicably.
-          If not using gecko 1.9, translate the paper name to the one 
-          mozilla expects (https://bugzilla.mozilla.org/show_bug.cgi?id=307404).
-        * Use the tab label's outer hbox for the size calculation instead of
-          the label itself. Fixes size oscillations with the Tab States
-          extension.
-        * Back out the fix for [#158486] by re-enabling keyword: searches. 
-          Fixes [#314974].
-        * Don't spin unmapped spinners. Slightly decrease the frequency.
-          Might help with [#315232].    
-        * Use nsIDOMWindowInternal::Close to close tabs. Delay tabs destruction
-          to an idle handler, to avoid crashes when tabs are closed from signal
-          handlers (blur, mousedown, keydown etc).      
-          Fixes [#172878], [#172879], [#172882], [#303254], [#313425].
-        * Schedule a GC in finalize of EphyTab and EphyWindow, to work around 
-          [#317242].
+		* Make Mozilla paper sizes work with gnome-print [#163255].
+		* Require pygtk 2.8. Fixes [#314557].
+		* Manually emit the "profile-change-net-teardown" notification; works
+		  around mozilla bug https://bugzilla.mozilla.org/show_bug.cgi?id=292699
+		* Don't focus the checkbox initially. Fixes [#163371].
+		* If the search term is empty for a smart bookmark use the normal URL
+		  instead of the smart url with the %s replaced by ""
+		* Don't use "cat >" as output command, it fails inpredicably.
+		  If not using gecko 1.9, translate the paper name to the one
+		  mozilla expects (https://bugzilla.mozilla.org/show_bug.cgi?id=307404).
+		* Use the tab label's outer hbox for the size calculation instead of
+		  the label itself. Fixes size oscillations with the Tab States
+		  extension.
+		* Back out the fix for [#158486] by re-enabling keyword: searches.
+		  Fixes [#314974].
+		* Don't spin unmapped spinners. Slightly decrease the frequency.
+		  Might help with [#315232].
+		* Use nsIDOMWindowInternal::Close to close tabs. Delay tabs destruction
+		  to an idle handler, to avoid crashes when tabs are closed from signal
+		  handlers (blur, mousedown, keydown etc).
+		  Fixes [#172878], [#172879], [#172882], [#303254], [#313425].
+		* Schedule a GC in finalize of EphyTab and EphyWindow, to work around
+		  [#317242].
 
-Contributors to this release: Christian Persch, Jean-François Rameau, 
+Contributors to this release: Christian Persch, Jean-François Rameau,
 Reinout van Schouwen and Raphaël Slinckx.
 
 New and updated translations:
@@ -1306,7 +1356,7 @@ Bug fixes
 	* Miscellaneous fixes: #307675, #306110, #307831, #307818, #151037.
 
 Contributors to this release: Piers Cornwell, Crispin Flowerday, Adam Hooper,
-Bastien Nocera, Jean-François Rameau, Reinout van Schouwen, Raphaël Slinckx, 
+Bastien Nocera, Jean-François Rameau, Reinout van Schouwen, Raphaël Slinckx,
 and Matthew P. Thomas.
 
 Updated translations by Vladimir Petkov (bg), Miloslav Trmac (cs),
@@ -1391,7 +1441,7 @@ Changes
 	* Allow View Source for XML documents [#305788]
 	* Fix getting the trust setting from New CA dialogue
 	* Work around mozilla bug https://bugzilla.mozilla.org/show_bug.cgi?id=296002 by
- 	   disallowing tabs moves to a different window [#303922]
+	   disallowing tabs moves to a different window [#303922]
 	* Fix more signed/unsigned problems with gcc 4 [#306169]
 	* Fix context menu on image maps [#152482]
 	* Fix crash on exit with only downloader open [#151037]
@@ -1702,7 +1752,7 @@ Contributors to this release:
 Piers Cornwell, Crispin Flowerday, Adam Hooper, Jean-François Rameau
 
 and the translators: Vladimir Petkov (bg), Miloslav Trmac (cs), [unknown] (el),
-Adam Weinberger (en_CA), Francisco Javier F. Serrador (es), Takeshi AIHANA (ja), 
+Adam Weinberger (en_CA), Francisco Javier F. Serrador (es), Takeshi AIHANA (ja),
 Žygimantas Beručka (lt), Kjartan Maraas (nb), Reinout van Schouwen (nl),
 Leonid Kanter (ru), Marcel Telka (sk), Laurent Dhima (sq)
 
@@ -2052,7 +2102,7 @@ Changes
 	* Correct language code for Afrikaans
 	* Adapt to changed mozilla APIs
 	* Wrap the label in the Confirm Overwrite dialogue [#161771]
-	
+
 Translation updates
 
 	* Ercin Eker (tr)
@@ -2572,17 +2622,17 @@ Interface improvements
 	  (Christian)
 	* Remove extraneous separators in context menus (Christian) [#115897]
 	* Use right capitalisation for fonts lang label in prefs (Piers)
-	* Make buttons the same size in Industrial theme and make text 
+	* Make buttons the same size in Industrial theme and make text
 	  selectable in history confirm-clear dialogue (Piers)
 	* Make prefs, pdm and print setup dialogues transient to their parent
 	  and destroy with parent (Christian) [#139124]
 	* Make warning message selectable in content handler dialogue (Piers)
-	* Sort the actions in the location entry autocompletion dropdown 
+	* Sort the actions in the location entry autocompletion dropdown
 	  (Christian) [#139575]
 	* Add Ctrl+S as an alternate accel for "Save As" (Piers) [#139415]
-	* Add "Downloads" folder shortcut to our file chooser dialogues 
+	* Add "Downloads" folder shortcut to our file chooser dialogues
 	  (Christian)
-	* HIGified confirm-overwrite dialogue (Patanjali Somayaji, Piers) 
+	* HIGified confirm-overwrite dialogue (Patanjali Somayaji, Piers)
 	  [#133152]
 	* Make Escape cancel overwrite dialog (Piers)
 	* Add some filters to the file chooser dialogues (Christian) [#139418]
@@ -2640,7 +2690,7 @@ Bug fixes
 	* Fixes to API documentation build (Adam, Christian)
 	* Make the "Go" button actually work (Christian)
 	* Fix arg type of dom_* signals to match the closure (Christian)
-	* Use stock icon for "Open" on content handler dialogue 
+	* Use stock icon for "Open" on content handler dialogue
 	  (Christian) [#135765]
 	* Use stock icon for "Download" on content handler dialogue (Christian)
 	* Fix proxy tool item disconnection on location entry (Christian)
@@ -2742,7 +2792,7 @@ Epiphany 1.2.10
 
 Changes
 
-	* Fix proxy PAC loading (Christian) 
+	* Fix proxy PAC loading (Christian)
 	* When showing a modal alert put up by a web page, switch the window
 	  to that tab (Christian)
 	* Check favicon urls with script sec manager and content policy
@@ -2799,7 +2849,7 @@ Epiphany 1.2.7
 Code changes
 
 	* Adapt to mozilla API changes (Christian)
-	* Use nsIDOMWindow2 to get the root event target on 
+	* Use nsIDOMWindow2 to get the root event target on
 	  mozilla >= 1.7rc3 (Christian)
 
 Bug fixes
@@ -3168,9 +3218,9 @@ Interface improvements
 	  that don't have a fixed requisition (Biggest Flake Ever)
 	* Set a default height/width for the encoding dialog (Dave)
 	* Don't show Find, Add Language, and Encodings dialogue in
-          window list.
+		  window list.
 	* Now that GtkComboBox supports mnemonic activation,
-          set the focus target of the combos labels (Christian)
+		  set the focus target of the combos labels (Christian)
 	* Make resume dialog warning message selectable
 	  per HIG (Piers Cornwell)
 	* Make columns resizable (Marco Pesenti Gritti)
@@ -3184,7 +3234,7 @@ Bugfixes
 	  (Julio M. Merino Vidal)
 	* Fixup completion matching and priority calculation (Marco)
 	* Put the serial numbers in duplicated filenames just before
-          the last dot so we won't confuse apps like file-roller. (Xan)
+		  the last dot so we won't confuse apps like file-roller. (Xan)
 	* In downloader when open is explicitly requested from
 	  the dialog use a temporary file (Marco)
 	* Sync with mozilla 1.7a api (Christian)
@@ -3194,7 +3244,7 @@ Bugfixes
 	* Unify fallback downloads dir to get the
 	  home directory (Christian)
 	* Don't set entries insensitive, only set the non-editable when the
-          gconf key isn't writable. (Christian)
+		  gconf key isn't writable. (Christian)
 	* Changed .pc file version to 1.2 (Christian)
 	* Make statusbar api public for plugins (Christian)
 	* Fix several problems in the safe/unsafe downloads logic (Marco)
@@ -3302,7 +3352,7 @@ Code changes
 	* Allow to open glade files not inside epiphany dirs (Adam Hooper)
 	* Make Cancel safe against non active downloads (Xan)
 	* Allow passing the translation domain to ephy_dialog_construct,
-          to make extension's dialogues translatable. (Christian)
+		  to make extension's dialogues translatable. (Christian)
 
 Interface improvements
 
@@ -3319,7 +3369,7 @@ Bugfixes
 
 	* Fix crash closing windows/tabs (Christian)
 	* Actually save the file in downloads dir and then
-          open it (Marco)
+		  open it (Marco)
 	* Create an epiphany temp dir in /tmp so that we can have
 	  the right permissions on it (Christopher James Lahey)
 	* Work around a bug in mozilla where  0xa0 (NBSP) are
@@ -3365,7 +3415,7 @@ New features
 	  and warn user if there are unsubmitted changes (Christian)
 	* More lockdown features (Christopher J. Lahey, Christian)
 	* Caret browsing (enabled/disabled with F7) (Christian)
-	* Add back "Download Link As..." to the context menu (Xan)	
+	* Add back "Download Link As..." to the context menu (Xan)
 
 Interface improvements
 
@@ -3399,7 +3449,7 @@ Translations
 	* GNOME PL Team (pl)
 	* Joao Emanuel (pt_BR)
 	* Michael Everson (ga)
- 	* Miloslav Trmač (cs)
+	* Miloslav Trmač (cs)
 	* Progga (bn)
 	* Robert Sedak (hr)
 	* Roozbeh Pournader (fa)
@@ -3426,25 +3476,25 @@ Code changes
 New features
 
 	* Lockdown: set buttons insensitive when their
-          pref key is not writable. (Christian)
+		  pref key is not writable. (Christian)
 	* Allow to move languages up and down in language editor (Christian)
 
 Interface improvements
 
 	* Make ctrl-click equivalent of middle click on links. Make shift-click
-          save the link. (Christian)
+		  save the link. (Christian)
 	* Sort the list of fonts alphabetically (Christian)
 	* Make toolbar editing drag icons use the same icon size as the
-          actual toolbar icons (Jorn Baayen)
+		  actual toolbar icons (Jorn Baayen)
 	* In history show only site title by default (Marco)
 	* Make print dialogue spacing HIG-compliant (Christian)
 	* Use stock icon for print setup (Christian)
 	* Better way of mapping hierarchy to topics when importing
-          bookmarks from mozilla (Christian)
+		  bookmarks from mozilla (Christian)
 	* In-line the language editor in the prefs dialog (Christian)
 	* Use favicons in the back/forward menus (Christian)
 	* Set the download folder selection label to "Home" if download folder
-          is home folder (Christian Neumair)
+		  is home folder (Christian Neumair)
 
 Bugfixes
 
@@ -3453,20 +3503,20 @@ Bugfixes
 	  cvs on systems with 1.6 installed (Marco)
 	* Restore tabs menu shortcut keys ALT-1 .. ALT-0 (Christian)
 	* Don't try to save the submit button image instead of submitting
-          the form
+		  the form
 	* Destroy file chooser with its parent window; fixes crashes (Christian)
 	* Fix coordinates of under widgets popup in RTL mode (Christian)
 	* Do not try to pickup already set MOZILLA_FIVE_HOME,
-          hopefully fix crashes oepning links from thunderbird (Marco)
+		  hopefully fix crashes oepning links from thunderbird (Marco)
 	* Re-implement Pause/Resume in downloader (Xan)
 	* Correctly cancel the download instead of just
-          cancelling the request. (Marco)
+		  cancelling the request. (Marco)
 
 Documentation
 
 	* Updated printing docs (Piers Cornwell)
 	* GDK_Meta_L is a keycode, not a modifier code.
-          Map meta to GDK_MOD2_MASK. (Christian)
+		  Map meta to GDK_MOD2_MASK. (Christian)
 
 Translations
 
@@ -3549,7 +3599,7 @@ Code changes
 	* Re-enable deprecation when in maintainer mode (Marco)
 	* Port GtkNSSClientAuthDialogs to new GtkComboBox (Christian)
 	* Remove some unused includes (Marco, Christian)
-	
+
 New features
 
 	* Persist zoom setting per host (Christian)
@@ -3660,7 +3710,7 @@ Documentation
 	* Some docs fixes (Dave)
 	* Beginnings of API documentation (Marco, Christian)
 	* Document preferences and downloader (Piers Cornwell)
-	* Document security and certificates section (Piers Cornwell)	
+	* Document security and certificates section (Piers Cornwell)
 
 Translations
 	* Christian Neumair (de)
@@ -3691,12 +3741,12 @@ Code changes
 	* Rewrote xbel bookmarks importer using xmlreader api (Christian)
 	* Use new dynamic api to create dynamic menus (Marco, Christian)
 	* Load default mozilla prefs from a javascript file,
-          this is way is possible to override defaults in about:config (Marco)
+		  this is way is possible to override defaults in about:config (Marco)
 	* Use gtk invisible event boxes (Christian)
 	* Remove deprecated g_value_set_object_take_ownership() (Christian)
 	* Use new gnome vfs show_url api (Christian)
 	* Refactor node db loading functions into a common one in
-          ephy-node-db. Switch to using xmlReader api. (Christian)
+		  ephy-node-db. Switch to using xmlReader api. (Christian)
 	* Use gconf_client_notify to initialize prefs (Christian)
 	* Refactor initialization/automation code to ensure we dont
 	  use dying shell (Marco)
@@ -3710,16 +3760,16 @@ Code changes
 	* Port history and bookmarks combos to new api (Marco)
 
 New features
-	
+
 	* Added migration from galeon settings (Christopher James Lahey)
 	* Add an --import-bookmarks command line option, and really implement
-          the --add-bookmark one. (Christian)
+		  the --add-bookmark one. (Christian)
 	* Ability to choose visible columns in bookmarks and history (Marco)
 	* History time filter (Marco)
 	* Import bookmarks from Firebird (Christian)
 	* Ability to import bookmarks from a custom file (Marco)
 	* Allow dragging of tabs to a window even when the tabs bar is not
-          shown. (Christian)
+		  shown. (Christian)
 
 Interface improvements
 
@@ -3818,7 +3868,7 @@ Bugfixes:
 
 	* Fix a compiler warning introduced in 1.0.6 (Christian)
 	* Monitor /system/http_proxy too (Christian)
-	* Fix recovery from corrupted session, bookmarks and 
+	* Fix recovery from corrupted session, bookmarks and
 	  history files (Christian)
 	* Fix some mem leaks (JF Rameau)
 	* Don't remember last action from location entry,
@@ -3964,7 +4014,7 @@ Bugfixes
 	* Specify UTF-8 encoding for the keyword: url (Christian)
 	* Check for NULL return of gtk_get_current_event (Christian)
 	* Fix session saving crash when run in --server mode (Christian)
-	* Stop download when cancelling the unknown mime type dialogue 
+	* Stop download when cancelling the unknown mime type dialogue
 	  (Christian)
 	* Follow tabs pref on double click in the history window (Marco)
 	* Fix compile warning on Solaris (Marco)
@@ -4116,9 +4166,9 @@ Bugfixes
 
 	* Fix several memory leaks (Christian Persch)
 	* Use link text as bookmark title when no title
-          is specified (Marco)
+		  is specified (Marco)
 	* Disable clipboard context menu. No way to make
-          it work correctly for 1.0 (Marco)
+		  it work correctly for 1.0 (Marco)
 	* Fix blank homepage loading (Christian Persch)
 	* Fix tab positioning logic (Christian Persch)
 	* Gconf notifiers from mozilla prefs now respect the schemas,
@@ -4156,7 +4206,7 @@ Code changes
 
 	* Improve toolbar editor api for costum items (Marco)
 	* Rework find implementation to integrate better
-          with type ahead and to simplify the code (Marco)
+		  with type ahead and to simplify the code (Marco)
 	* Usual memory leaks fixes (Christian Persch)
 	* Add some comments for translators (Christian Persch, Marco)
 	* Use string valid also externally for drag and drop
@@ -4260,7 +4310,7 @@ Interface improvements
 	* Show the document context menu on ctrl+f10 (Marco)
 	* Fast search for bookmarks and history.
 	  Pressing a key will make ephy select the first entry begining with
-          that character (Xan Lopez)
+		  that character (Xan Lopez)
 	* Shorten session history menu items (Christian Persch)
 	* Delete key remove personal data manager entries (Xan Lopez)
 	* Higgy titles for all file pickers (Marco)
@@ -4329,7 +4379,7 @@ Code changes
 	* Add a context menu signal on the embed to handle both keys and
 	  mouse (Marco)
 	* Do not override the UA but set vendor prefs so
-          that mozilla can build it correctly (Marco)
+		  that mozilla can build it correctly (Marco)
 	* Remove BonoboWindow/Control popup separation, as the first
 	  is no more needed (Marco)
 	* Translatable string for the locale-dependent http-accept-language
@@ -4361,10 +4411,10 @@ Interface improvements
 	* Add ellipse to Find menu item (Piers Cornwell)
 	* Give up on page cloning until we find a good way to do it (Marco)
 	* If there's no background image, disable the Save Background As
-          menu entry. (Christian Persch)
+		  menu entry. (Christian Persch)
 	* Do not allow to open properties of multiple cookies (Marco)
 	* Ever put cursor at the end of the text when selecting autocompletion
-        items. (Marco)
+		items. (Marco)
 	* Use page url as title when there is no page title. (Marco)
 
 Bugfixes
@@ -4375,7 +4425,7 @@ Bugfixes
 	  warnings with gcc 3.3. (Jeremy Katz)
 	* size_t fixes for 64 bit platforms (Jeremy Katz)
 	* Use va_copy for the valist instead of
-          directly accessing it (Jeremy Katz)
+		  directly accessing it (Jeremy Katz)
 	* Dont crash when adding a bookmark without topics. (Marco)
 	* Dont crash when closing add bookmark menu quickly (Marco)
 	* Fix crashes when adding bookmarks with more than one
@@ -4384,7 +4434,7 @@ Bugfixes
 	* Use our own parser to import mozilla bookmarks so that it actually
 	  works. (Marco)
 	* Respect the bookmarks bar visibility user choice also
-          for popups. (Marco)
+		  for popups. (Marco)
 	* Update find dialog when user select another tab or load a new url
 	  (Christian Persch)
 	* Use g_snprintf to not break gcc 2.95
@@ -4393,7 +4443,7 @@ Bugfixes
 	* Fix downloader progress overflow (Marco)
 	* Fix add bookmark from link (Marco)
 	* Make sure tabs are hidden when going in print preview mode. (Marco)
-        * Make print dialog transient. (Marco)
+		* Make print dialog transient. (Marco)
 	* Select the old find text when opening find dialog (Marco)
 
 Updated translations
@@ -4415,9 +4465,9 @@ Epiphany 0.7
 Code changes
 
 	* Extend node api to allow to branch different databases, deobjectify
-        nodes for better perfomance, smarter id factory. (Marco)
+		nodes for better perfomance, smarter id factory. (Marco)
 	* Use stock icons instead of the files directly to set window
-          border icons. (Dave Bordoley)
+		  border icons. (Dave Bordoley)
 	* Cleanup zoom code (Christian Persch)
 	* Cleanup tab opening logic (Marco)
 	* Rewrite large parts of the encodings/languages code (Christian Persch)
@@ -4435,7 +4485,7 @@ New features
 Interface improvements
 
 	* Remove fine grain color settings. Always use the system theme
-          colors (Dave Bordoley)
+		  colors (Dave Bordoley)
 	* Remove the on new page pref, try to make it behave in a way
 	  that fit all cases. (Dave Bordoley)
 	* Made (hopefully) all dialogs HIG compliant (Christian Neumair)
@@ -4443,12 +4493,12 @@ Interface improvements
 	* Make double click select the whole address in toolbar entry (Marco)
 	* Cleanup downloader ui and remove keep open option (Christian Neumair)
 	* Tweak mozilla default settings. Don't fetch sidebar whats related stuff.
-          Line Wrap View->Source. CTRL-Mousewheel scrolls by one page.
-          Enable Image Auto-Resizing. (Dave Bordoley)
+		  Line Wrap View->Source. CTRL-Mousewheel scrolls by one page.
+		  Enable Image Auto-Resizing. (Dave Bordoley)
 	* Activate the menu on button press down (Dave Bordoley)
 	* Several interface fixes in print dialog (Piers Cornwell)
 	* Add accellerators on the encoding menus (Piers Cornwell)
-	
+
 Bugfixes
 	* Mark download time format strings for translation (Christian Neumair)
 	* Make xml saving low disk safe (Marco)
@@ -4547,7 +4597,7 @@ Updated translations
 	* es (Francisco Javier Fernandez)
 	* ja (Takayuki KUSANO)
 	* ms (Hasbullah Bin Pit)
-	* pt_BR (Evandro Fernandes Giovanini)	
+	* pt_BR (Evandro Fernandes Giovanini)
 
 ==============
 Epiphany 0.6.0
@@ -4596,7 +4646,7 @@ Interface improvements
 	  (Dave Bordoley)
 	* New default toolbar layout (Dave Bordoley)
 	* In the history and bookmarks view pack the icon in the same
-	  column of the title (Marco)	
+	  column of the title (Marco)
 	* Respect View menu toggles also in fullscreen (Lee Willis)
 
 Bugfixes
@@ -4656,11 +4706,11 @@ New features
 	* Ability to drag bookmarks, smart bookmarks and topics
 	  to the toolbar (Marco)
 	* Optional Go button (Dave Bordoley)
-	* Help support (Patanjali Somayaji) 
+	* Help support (Patanjali Somayaji)
 
 Interface improvements
 
-	* Site icons in topics menus (Johan Dahlin)	
+	* Site icons in topics menus (Johan Dahlin)
 	* Site icons on tabs (Christian Persch)
 	* Set icons for History, Find, Bookmarks, Preferences dialogs
 	  (Dave Bordoley)
@@ -4675,7 +4725,7 @@ Interface improvements
 	  this should be part of gnome icon theme at some point. (Marco)
 	* Remove bookmarks with delete key (Xan Lopez)
 	* Alphabetical sort of topics and bookmarks in the editor (Xan Lopez)
-	* Remove tab autocompletion to avoid accessibility issues (Marco)	
+	* Remove tab autocompletion to avoid accessibility issues (Marco)
 	* Focus the location entry when opening a new window and do not
 	  put the url in it, so the user can more easily insert
 	  the location he wants to load.
@@ -4689,7 +4739,7 @@ Interface improvements
 	  (Dave Bordoley)
 	* Add "Go to" button to the history (Xan Lopez)
 	* Have just one Close menu item and make it behave like
-          other gnome apps, closing document by document (Marco)
+		  other gnome apps, closing document by document (Marco)
 	* More clear buttons labels on resume dialog (Lee Willis)
 	* Make the bookmarks editor remember the last selected keyword
 	  (James Willcox)
@@ -4737,4 +4787,4 @@ Translations
 	* sv (Christian Rose)
 	* tr (Fatih Demir)
 	* zh_TW (Abel Cheung)
-  
+
