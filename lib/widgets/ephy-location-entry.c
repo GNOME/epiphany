@@ -98,10 +98,14 @@ static const struct
 web_prefixes [] =
 {
 	{ "http://www.", 11 },
+	{ "http://ftp.", 11 },
 	{ "http://", 7 },
 	{ "https://www.", 12 },
 	{ "https://", 8 },
-	{ "www.", 4 }
+	{ "ftp://", 6},
+	{ "ftp://ftp.", 10},
+	{ "www.", 4 },
+	{ "ftp.", 4}
 };
 
 static const GtkTargetEntry url_drag_types [] =
