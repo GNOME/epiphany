@@ -440,7 +440,6 @@ void
 ephy_embed_load_url (EphyEmbed *embed,
 		     const char *url)
 {
-	/* Remove that crap patch please */
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	iface->load_url (embed, url);
 }
