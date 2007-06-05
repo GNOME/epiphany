@@ -168,7 +168,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "EditDelete", GTK_STOCK_DELETE, NULL, NULL,
 	  N_("Delete text"),
 	  G_CALLBACK (window_cmd_edit_delete) },
-	{ "EditSelectAll", NULL, N_("Select _All"), "<control>A",
+	{ "EditSelectAll", GTK_STOCK_SELECT_ALL, N_("Select _All"), "<control>A",
 	  N_("Select the entire page"),
 	  G_CALLBACK (window_cmd_edit_select_all) },
 	{ "EditFind", GTK_STOCK_FIND, N_("_Find…"), "<control>F",
