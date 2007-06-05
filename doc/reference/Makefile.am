@@ -1,9 +1,3 @@
-## Process this file with automake to produce Makefile.in
-AUTOMAKE_OPTIONS = 1.9
-
-INCLUDES = $(MOZILLA_COMPONENT_CFLAGS) \
-	   -include $(MOZILLA_INCLUDE_ROOT)/mozilla-config.h
-
 # The name of the module
 DOC_MODULE=epiphany
 
@@ -169,8 +163,8 @@ GTKDOC_LIBS = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(GECKO_LIBS)	\
-	$(GECKO_EXTRA_LIBS) \
-	$(DEPENDENCIES_LIBS) \
+	$(MOZILLA_EXTRA_LIBS) \
+	$(MOZILLA_GLUE_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
 
