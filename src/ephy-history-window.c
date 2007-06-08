@@ -195,7 +195,7 @@ static const GtkActionEntry ephy_history_ui_entries [] = {
 	{ "Delete", GTK_STOCK_DELETE, N_("_Delete"), "<control>T",
 	  N_("Delete the selected history link"),
 	  G_CALLBACK (cmd_delete) },
-	{ "SelectAll", NULL, N_("Select _All"), "<control>A",
+	{ "SelectAll", GTK_STOCK_SELECT_ALL, N_("Select _All"), "<control>A",
 	  N_("Select all history links or text"),
 	  G_CALLBACK (cmd_select_all) },
 	{ "Clear", GTK_STOCK_CLEAR, N_("Clear _History"), NULL,
