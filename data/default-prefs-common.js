@@ -127,7 +127,7 @@ pref("general.useragent.locale", "en");
 // spellcheck
 // pref("extensions.spellcheck.inline.max-misspellings", -1);
 // 0: disabled, 1: only textareas, 2: check textareas and single-line input fields
-pref("layout.spellcheckDefault", 1);
+pref("layout.spellcheckDefault", 0);
 pref("spellchecker.dictionary", "");
 
 // print settings
@@ -138,6 +138,8 @@ pref("print.show_print_progress", true);
 pref("print.printer_list", "");
 pref("postscript.enabled", true);
 pref("postscript.cups.enabled", false);
+// deactivate PAPI too (will be added in https://bugzilla.mozilla.org/show_bug.cgi?id=317450)
+pref("postscript.papi.enabled", false);
 
 // sites stealthly storing unlimited amount of data? no thanks
 pref("dom.storage.enabled", false);
