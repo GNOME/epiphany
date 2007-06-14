@@ -98,13 +98,17 @@ GeckoPrintSession::GetSourceFile (nsACString &aSource)
 }
 
 nsresult
-GeckoPrintSession::SetSettings (GtkPrintSettings *aSettings,
+GeckoPrintSession::SetSettings (nsIPrintSettings *aPrintSettings,
+                                GtkPrintSettings *aSettings,
 				GtkPageSetup *aPageSetup,
 				GtkPrinter *aPrinter)
 {
-  NS_ASSERTION (!mSettings && !mPageSetup && !mPrinter, "Already have settings!");
+  NS_ASSERTION (!mPrintSettings && !mSettings && !mPageSetup && !mPrinter, "Already have settings!");
 
+  NS_ENSURE_ARG (aPrintSettings);
   NS_ENSURE_ARG (aSettings);
+
+  mPrintSettings = aPrintSettings;
   mSettings = (GtkPrintSettings *) g_object_ref (aSettings);
 
   NS_ENSURE_ARG (aPageSetup);
@@ -562,10 +566,15 @@ GeckoPrintSession::GetProcessCanceledByUser (PRBool *aProcessCanceledByUser)
   *aProcessCanceledByUser = mCancelled;
   return NS_OK;
 }
+
 NS_IMETHODIMP
 GeckoPrintSession::SetProcessCanceledByUser (PRBool aProcessCanceledByUser)
 {
   mCancelled = aProcessCanceledByUser;
+  if (mPrintSettings) {
+    mPrintSettings->SetIsCancelled (aProcessCanceledByUser);
+  }
+
   return NS_OK;
 }
 

@@ -58,7 +58,7 @@ class GeckoPrintSession : public nsIPrintSession,
     NS_DECL_NSIPRINTPROGRESS
     NS_DECL_NSIPRINTPROGRESSPARAMS
 
-    nsresult SetSettings (GtkPrintSettings*, GtkPageSetup*, GtkPrinter*);
+    nsresult SetSettings (nsIPrintSettings *, GtkPrintSettings*, GtkPageSetup*, GtkPrinter*);
     void GetSourceFile (nsACString&);
 
     static GeckoPrintSession *FromSettings (nsIPrintSettings *);
@@ -70,6 +70,7 @@ class GeckoPrintSession : public nsIPrintSession,
     void JobError (const char *);
 
   private:
+    nsCOMPtr<nsIPrintSettings> mPrintSettings;
     GtkPrintSettings *mSettings;
     GtkPageSetup *mPageSetup;
     GtkPrinter *mPrinter;
