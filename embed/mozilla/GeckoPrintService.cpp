@@ -238,7 +238,7 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
   g_object_unref (settings);
   settings = settingsCopy;
 
-  rv = session->SetSettings (settings, pageSetup, printer);
+  rv = session->SetSettings (aSettings, settings, pageSetup, printer);
 
   /* Now translate the settings to nsIPrintSettings */
   if (NS_SUCCEEDED (rv)) {
