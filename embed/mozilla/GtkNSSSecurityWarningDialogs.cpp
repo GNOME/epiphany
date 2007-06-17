@@ -94,7 +94,10 @@ GtkNSSSecurityWarningDialogs::ConfirmEnteringSecure (nsIInterfaceRequestor *aCon
 		  GTK_RESPONSE_OK,
 		  _("Security Notice"),
 		  _("This page is loaded over a secure connection"),
-		  _("The padlock icon in the statusbar indicates whether a page is secure."),
+		  _("For secure pages, the address entry has a distinct "
+		    "color and a locked padlock icon is displayed.\n\n"
+		    "The padlock icon in the statusbar also indicates "
+		    "whether a page is secure."),
 		  nsnull, _retval);
 
 	*_retval = PR_TRUE;
