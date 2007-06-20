@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: Epiphany Web Browser HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-05-19 20:49+0100\n"
-"PO-Revision-Date: 2007-05-24 08:07+0300\n"
+"POT-Creation-Date: 2007-06-18 03:32+0100\n"
+"PO-Revision-Date: 2007-06-20 12:37+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -709,7 +709,7 @@ msgstr "Vali _keel:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:14
-#: ../lib/widgets/ephy-location-entry.c:643 ../src/ephy-history-window.c:266
+#: ../lib/widgets/ephy-location-entry.c:647 ../src/ephy-history-window.c:266
 msgid "Cl_ear"
 msgstr "Pu_hasta"
 
@@ -1781,37 +1781,37 @@ msgstr "Veebisait „%s“ soovib, et Sa allkirjastaks järgneva teksti:"
 msgid "_Sign text"
 msgstr "_Allkirjasta tekst"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:197
+#: ../embed/mozilla/GeckoPrintService.cpp:198
 msgid "Options"
 msgstr "Valikud"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:461
+#: ../embed/mozilla/GeckoPrintService.cpp:462
 msgid "Print this page?"
 msgstr "Trüki see leht?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:469
+#: ../embed/mozilla/GeckoPrintService.cpp:470
 msgid "Preparing to print"
 msgstr "Trükkimise ettevalmistamine"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:228
+#: ../embed/mozilla/GeckoPrintSession.cpp:232
 #, c-format
 msgid "Page %d of %d"
 msgstr "Leht %d %d-st"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:256
+#: ../embed/mozilla/GeckoPrintSession.cpp:260
 msgid "Cancelling print"
 msgstr "Trükkimise tühistamine"
 
 #. FIXME text!
-#: ../embed/mozilla/GeckoPrintSession.cpp:318
+#: ../embed/mozilla/GeckoPrintSession.cpp:322
 msgid "Spooling..."
 msgstr "Spuulimine..."
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:332
+#: ../embed/mozilla/GeckoPrintSession.cpp:336
 msgid "Print error"
 msgstr "Trükkimise viga"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:591
+#: ../embed/mozilla/GeckoPrintSession.cpp:600
 #, c-format
 msgid "Printing “%s”"
 msgstr "„%s“ printimine"
@@ -2128,21 +2128,30 @@ msgid "This page is loaded over a secure connection"
 msgstr "See leht on laaditud üle turvalise ühenduse"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:97
-msgid "The padlock icon in the statusbar indicates whether a page is secure."
-msgstr "Olekureal olev tabalukuikoon näitab, kas leht on turvaline."
+msgid ""
+"For secure pages, the address entry has a distinct color and a locked "
+"padlock icon is displayed.\n"
+"\n"
+"The padlock icon in the statusbar also indicates whether a page is secure."
+msgstr ""
+"Turvaliste lehtede korral värvitakse aadressikirje silmatorkavat värvi ja "
+"seal kuvatakse lukustatud tabaluku kujulist ikooni.\n"
+"\n"
+"Olekuribal asuv tabalukukujuline ikoon näitab ka, kas leht on turvaline või "
+"mitte."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:116
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:144
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
 msgid "Security Warning"
 msgstr "Turvahoiatus"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:114
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:117
 msgid "This page is loaded over a low security connection"
 msgstr "See leht on laaditud üle madala turvalisusega ühenduse"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:115
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:118
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -2150,11 +2159,11 @@ msgstr ""
 "Ei saa välistada, et sellele lehel olevaid andmeid on kolmanda osapoole "
 "poolt võimalik hõlpsasti vahelt haarata."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:142
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:145
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "Mõned selle lehe osad on laaditud üle ebaturvalise ühenduse"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:143
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:146
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -2162,12 +2171,12 @@ msgstr ""
 "Ei saa välistada, et osa sellele lehel olevaid andmeid on kolmanda osapoole "
 "poolt võimalik hõlpsasti vahelt haarata."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:161
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:181
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:164
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "Send this information over an insecure connection?"
 msgstr "Kas saata need andmed üle ebaturvalise ühenduse?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:165
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -2175,12 +2184,12 @@ msgstr ""
 "Sisestatud andmed saadetakse üle ebaturvalise ühenduse ja on seega kergesti "
 "kättesaadavad kolmandale osapoolele."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:165
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:186
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:168
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:189
 msgid "_Send"
 msgstr "_Saada"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:182
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:185
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2204,7 +2213,7 @@ msgstr "Failid"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:262
+#: ../embed/mozilla/mozilla-embed-single.cpp:265
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
@@ -2556,7 +2565,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:910
+#: ../lib/widgets/ephy-location-entry.c:914
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Sellele lehele viida loomiseks lohista seda ikooni"
 
@@ -2817,83 +2826,83 @@ msgstr "_Muuda nime…"
 msgid "Rename the selected bookmark or topic"
 msgstr "Valitud järjehoidja või teema nime muutmine"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:199
-#: ../src/ephy-history-window.c:178
-msgid "_Delete"
-msgstr "_Kustuta"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
-msgid "Delete the selected bookmark or topic"
-msgstr "Valitud järjehoidja või teema kustutamine"
-
 #. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/bookmarks/ephy-bookmarks-editor.c:199
 #: ../src/bookmarks/ephy-bookmarks-ui.c:300
 msgid "_Properties"
 msgstr "_Omadused"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:203
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Valitud järjehoidja omaduste vaatamine või muutmine"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/bookmarks/ephy-bookmarks-editor.c:202
 msgid "_Import Bookmarks…"
 msgstr "_Impordi järjehoidjad…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:206
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr ""
 "Järjehoidjate importimine mõnest teisest sirvijast või järjehoidjate failist"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:205
 msgid "_Export Bookmarks…"
 msgstr "_Ekspordi järjehoidjad…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
 msgid "Export bookmarks to a file"
 msgstr "Järjehoidjate eksportimine faili"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:184 ../src/ephy-window.c:147
+#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/ephy-history-window.c:181 ../src/ephy-window.c:147
 msgid "_Close"
 msgstr "_Sulge"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/bookmarks/ephy-bookmarks-editor.c:209
 msgid "Close the bookmarks window"
 msgstr "Järjehoidjate akna sulgemine"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:216
-#: ../src/ephy-history-window.c:189 ../src/ephy-window.c:159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/ephy-history-window.c:186 ../src/ephy-window.c:159
 msgid "Cu_t"
 msgstr "_Lõika"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:160
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
+#: ../src/ephy-history-window.c:187 ../src/ephy-window.c:160
 msgid "Cut the selection"
 msgstr "Lõika valik"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:219
+#: ../src/bookmarks/ephy-bookmarks-editor.c:216
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1394
-#: ../src/ephy-history-window.c:192 ../src/ephy-history-window.c:721
+#: ../src/ephy-history-window.c:189 ../src/ephy-history-window.c:721
 #: ../src/ephy-window.c:162
 msgid "_Copy"
 msgstr "_Kopeeri"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:220
-#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:163
+#: ../src/bookmarks/ephy-bookmarks-editor.c:217
+#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:163
 msgid "Copy the selection"
 msgstr "Kopeeri valik"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:222
-#: ../src/ephy-history-window.c:195 ../src/ephy-window.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:219
+#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:165
 msgid "_Paste"
 msgstr "_Aseta"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:223
-#: ../src/ephy-history-window.c:196
+#: ../src/bookmarks/ephy-bookmarks-editor.c:220
+#: ../src/ephy-history-window.c:193
 msgid "Paste the clipboard"
 msgstr "Kleebib lõikepuhvri sisu"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:222
+#: ../src/ephy-history-window.c:195
+msgid "_Delete"
+msgstr "_Kustuta"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:223
+msgid "Delete the selected bookmark or topic"
+msgstr "Valitud järjehoidja või teema kustutamine"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:225
 #: ../src/ephy-history-window.c:198 ../src/ephy-window.c:171
@@ -3181,21 +3190,21 @@ msgstr "Valitud ajalooviida avamine uues aknas"
 msgid "Open the selected history link in a new tab"
 msgstr "Valitud ajalooviida avamine uuel kaardil"
 
-#: ../src/ephy-history-window.c:179
-msgid "Delete the selected history link"
-msgstr "Valitud viida kustutamine"
-
-#: ../src/ephy-history-window.c:181
+#: ../src/ephy-history-window.c:178
 msgid "Add _Bookmark…"
 msgstr "_Lisa järjehoidja…"
 
-#: ../src/ephy-history-window.c:182
+#: ../src/ephy-history-window.c:179
 msgid "Bookmark the selected history link"
 msgstr "Lisa valitud viit järjehoidjatesse"
 
-#: ../src/ephy-history-window.c:185
+#: ../src/ephy-history-window.c:182
 msgid "Close the history window"
 msgstr "Sulge külastatud lehtede aken"
+
+#: ../src/ephy-history-window.c:196
+msgid "Delete the selected history link"
+msgstr "Valitud viida kustutamine"
 
 #: ../src/ephy-history-window.c:199
 msgid "Select all history links or text"
