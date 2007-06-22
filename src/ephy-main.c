@@ -504,6 +504,9 @@ main (int argc,
 					   N_("GNOME Web Browser"),
 					   N_("GNOME Web Browser options"),
 					   NULL, NULL);
+
+	g_option_group_set_translation_domain (option_group, GETTEXT_PACKAGE);
+
 	g_option_group_add_entries (option_group, option_entries);
 
 	g_option_context_set_main_group (option_context, option_group);
