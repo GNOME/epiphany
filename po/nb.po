@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: epiphany 1.9.x\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-06-04 14:34+0200\n"
-"PO-Revision-Date: 2007-06-04 14:34+0200\n"
+"POT-Creation-Date: 2007-06-23 10:51+0200\n"
+"PO-Revision-Date: 2007-06-23 10:52+0200\n"
 "Last-Translator: Espen Stefansen <espenas@gmail.com>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -40,8 +40,8 @@ msgid "Epiphany Web Browser"
 msgstr "Epiphany nettleser"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:523
-#: ../src/ephy-main.c:615
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:526
+#: ../src/ephy-main.c:618
 msgid "Web Browser"
 msgstr "Nettleser"
 
@@ -1784,25 +1784,25 @@ msgstr "Skriv ut denne siden?"
 msgid "Preparing to print"
 msgstr "Forbereder utskrift"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:228
+#: ../embed/mozilla/GeckoPrintSession.cpp:232
 #, c-format
 msgid "Page %d of %d"
 msgstr "Side %d av %d"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:256
+#: ../embed/mozilla/GeckoPrintSession.cpp:260
 msgid "Cancelling print"
 msgstr "Avbryter utskrift"
 
 #. FIXME text!
-#: ../embed/mozilla/GeckoPrintSession.cpp:318
+#: ../embed/mozilla/GeckoPrintSession.cpp:322
 msgid "Spooling..."
 msgstr "Legger i kø..."
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:332
+#: ../embed/mozilla/GeckoPrintSession.cpp:336
 msgid "Print error"
 msgstr "Feil ved utskrift"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:591
+#: ../embed/mozilla/GeckoPrintSession.cpp:600
 #, c-format
 msgid "Printing “%s”"
 msgstr "Skriver ut «%s»"
@@ -2116,21 +2116,28 @@ msgid "This page is loaded over a secure connection"
 msgstr "Denne siden lastes over en sikker forbindelse"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:97
-msgid "The padlock icon in the statusbar indicates whether a page is secure."
-msgstr "Hengelåsikonet i statuslinjen indikerer om en side er sikker."
+msgid ""
+"For secure pages, the address entry has a distinct color and a locked "
+"padlock icon is displayed.\n"
+"\n"
+"The padlock icon in the statusbar also indicates whether a page is secure."
+msgstr ""
+"Adressefeltet for sikre sider har en bestemt farge og en låst hengelås vises.\n"
+"\n"
+"Hengelåsikonet i statuslinjen indikerer også om en side er sikker."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:116
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:144
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
 msgid "Security Warning"
 msgstr "Sikkerhetsadvarsel"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:114
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:117
 msgid "This page is loaded over a low security connection"
 msgstr "Denne siden er lastet over en forbindelse med lav sikkerhet"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:115
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:118
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -2138,11 +2145,11 @@ msgstr ""
 "All informasjon du ser eller oppgir på denne siden kan enkelt fanges opp av "
 "en tredjepart."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:142
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:145
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "Noen deler av denne siden er lastet over en usikker forbindelse"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:143
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:146
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -2150,12 +2157,12 @@ msgstr ""
 "Noe av informasjonen du ser eller oppgir vil bli sendt over en usikker "
 "forbindelse, og vil kunne fanges opp av tredjepart."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:161
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:181
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:164
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "Send this information over an insecure connection?"
 msgstr "Send denne informasjonen over en usikker forbindelse?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:165
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -2163,12 +2170,12 @@ msgstr ""
 "Informasjonen du har oppgitt vil bli sendt over en usikker forbindelse, og "
 "vil enkelt kunne fanges opp av tredjepart."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:165
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:186
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:168
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:189
 msgid "_Send"
 msgstr "_Send"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:182
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:185
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2808,83 +2815,83 @@ msgstr "End_re navn..."
 msgid "Rename the selected bookmark or topic"
 msgstr "Endre navn på valgt bokmerke eller emne"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:199
-#: ../src/ephy-history-window.c:178
-msgid "_Delete"
-msgstr "_Slett"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
-msgid "Delete the selected bookmark or topic"
-msgstr "Slett valgt bokmerke eller emne"
-
 # (ugh)
 #. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/bookmarks/ephy-bookmarks-editor.c:199
 #: ../src/bookmarks/ephy-bookmarks-ui.c:300
 msgid "_Properties"
 msgstr "Egenska_per"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:203
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Vis eller endre egenskaper for valgt bokmerke"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/bookmarks/ephy-bookmarks-editor.c:202
 msgid "_Import Bookmarks…"
 msgstr "_Importer bokmerker..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:206
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Importer bokmerker fra en annen nettleser eller en bokmerkefil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:205
 msgid "_Export Bookmarks…"
 msgstr "_Eksporter bokmerker..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
 msgid "Export bookmarks to a file"
 msgstr "Eksporter bokmerker til en fil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:184 ../src/ephy-window.c:147
+#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/ephy-history-window.c:181 ../src/ephy-window.c:147
 msgid "_Close"
 msgstr "L_ukk"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/bookmarks/ephy-bookmarks-editor.c:209
 msgid "Close the bookmarks window"
 msgstr "Lukk bokmerkevinduet"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:216
-#: ../src/ephy-history-window.c:189 ../src/ephy-window.c:159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/ephy-history-window.c:186 ../src/ephy-window.c:159
 msgid "Cu_t"
 msgstr "Klipp u_t"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:160
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
+#: ../src/ephy-history-window.c:187 ../src/ephy-window.c:160
 msgid "Cut the selection"
 msgstr "Klipp ut utvalget"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:219
+#: ../src/bookmarks/ephy-bookmarks-editor.c:216
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1394
-#: ../src/ephy-history-window.c:192 ../src/ephy-history-window.c:721
+#: ../src/ephy-history-window.c:189 ../src/ephy-history-window.c:721
 #: ../src/ephy-window.c:162
 msgid "_Copy"
 msgstr "_Kopier"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:220
-#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:163
+#: ../src/bookmarks/ephy-bookmarks-editor.c:217
+#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:163
 msgid "Copy the selection"
 msgstr "Kopier utvalget"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:222
-#: ../src/ephy-history-window.c:195 ../src/ephy-window.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:219
+#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:165
 msgid "_Paste"
 msgstr "Li_m inn"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:223
-#: ../src/ephy-history-window.c:196
+#: ../src/bookmarks/ephy-bookmarks-editor.c:220
+#: ../src/ephy-history-window.c:193
 msgid "Paste the clipboard"
 msgstr "Lim inn utklippstavlen"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:222
+#: ../src/ephy-history-window.c:195
+msgid "_Delete"
+msgstr "_Slett"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:223
+msgid "Delete the selected bookmark or topic"
+msgstr "Slett valgt bokmerke eller emne"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:225
 #: ../src/ephy-history-window.c:198 ../src/ephy-window.c:171
@@ -3172,21 +3179,21 @@ msgstr "Åpne valgt oppføring i historikken i et nytt vindu"
 msgid "Open the selected history link in a new tab"
 msgstr "Åpne valgt oppføring i historikken i en ny fane"
 
-#: ../src/ephy-history-window.c:179
-msgid "Delete the selected history link"
-msgstr "Slett valgt oppføring fra historikken"
-
-#: ../src/ephy-history-window.c:181
+#: ../src/ephy-history-window.c:178
 msgid "Add _Bookmark…"
 msgstr "Legg til _bokmerke..."
 
-#: ../src/ephy-history-window.c:182
+#: ../src/ephy-history-window.c:179
 msgid "Bookmark the selected history link"
 msgstr "Lag bokmerke av valgt oppføring fra historikken"
 
-#: ../src/ephy-history-window.c:185
+#: ../src/ephy-history-window.c:182
 msgid "Close the history window"
 msgstr "Lukk historikkvinduet"
+
+#: ../src/ephy-history-window.c:196
+msgid "Delete the selected history link"
+msgstr "Slett valgt oppføring fra historikken"
 
 #: ../src/ephy-history-window.c:199
 msgid "Select all history links or text"
