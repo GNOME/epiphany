@@ -434,8 +434,7 @@ editor_create_item_from_name (EggToolbarEditor *editor,
 {
   GtkWidget *item;
   const char *item_name;
-  const char *stock_id;
-  const char *short_label;
+  char *short_label;
   const char *collate_key;
   
   if (strcmp (name, "_separator") == 0)
@@ -444,54 +443,42 @@ editor_create_item_from_name (EggToolbarEditor *editor,
       
       icon = _egg_editable_toolbar_new_separator_image ();
       short_label = _("Separator");
-      item_name = strdup (name);
+      item_name = g_strdup (name);
       collate_key = g_utf8_collate_key (short_label, -1);
       item = editor_create_item (editor, GTK_IMAGE (icon), 
                                  short_label, drag_action);
     }
   else
     {
-      GValue value = { 0, };
       GtkAction *action;
       GtkWidget *icon;
-      gboolean is_named = FALSE;
+      char *stock_id, *icon_name = NULL;
       
       action = find_action (editor, name);
       g_return_val_if_fail (action != NULL, NULL);
 
-      g_value_init (&value, G_TYPE_STRING);
-      g_object_get_property (G_OBJECT (action), "icon-name", &value);
-      stock_id = g_value_get_string (&value);
-
-      if (!stock_id) {
-        /* Gtk{Radio,Toggle}Actions only set either of the properties */
-      	g_value_reset (&value);
-      	g_object_get_property (G_OBJECT (action), "stock-id", &value);
-	stock_id = g_value_get_string (&value);
-	is_named = FALSE;
-      } else {
-      	is_named = TRUE;
-      }
+      g_object_get (action,
+                    "icon-name", &icon_name,
+                    "stock-id", &stock_id,
+		    "short-label", &short_label,
+		    NULL);
 
       /* This is a workaround to catch named icons. */
-      if (is_named)
-        icon = gtk_image_new_from_icon_name (stock_id,
+      if (icon_name)
+        icon = gtk_image_new_from_icon_name (icon_name,
 	                                     GTK_ICON_SIZE_LARGE_TOOLBAR);
       else
         icon = gtk_image_new_from_stock (stock_id ? stock_id : GTK_STOCK_DND,
                                          GTK_ICON_SIZE_LARGE_TOOLBAR);
 
-      g_value_unset (&value);
-      
-      g_value_init (&value, G_TYPE_STRING);
-      g_object_get_property (G_OBJECT (action), "short_label", &value);
-      short_label = g_value_get_string (&value);
-
-      item_name = strdup (name);
+      item_name = g_strdup (name);
       collate_key = g_utf8_collate_key (short_label, -1);
       item = editor_create_item (editor, GTK_IMAGE (icon),
                                  short_label, drag_action);
-      g_value_unset (&value);
+
+      g_free (short_label);
+      g_free (stock_id);
+      g_free (icon_name);
     }
   
   g_object_set_data_full (G_OBJECT (item), "egg-collate-key",
