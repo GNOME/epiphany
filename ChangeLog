@@ -1,3 +1,11 @@
+2007-06-24  Felix Riemann  <friemann@svn.gnome.org>
+
+	* lib/egg/egg-toolbar-editor.c: (editor_create_item_from_name):
+	Add a workaround to take into account that Gtk{Radio,Toggle}Actions
+	only set either the stock-id or the icon-name property depending on
+	the image type. This makes it possible to display the icon of such
+	actions in the toolbar editor. (bug #450590)
+
 2007-06-22  Gabor Kelemen  <kelemeng@gnome.hu>
 
 	* src/ephy-main.c: Use g_option_group_set_translation_domain to
