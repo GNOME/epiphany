@@ -362,6 +362,7 @@ event_box_realize_cb (GtkWidget *widget, GtkImage *icon)
     {
       gchar *stock_id;
       GdkPixbuf *pixbuf;
+
       gtk_image_get_stock (icon, &stock_id, NULL);
       pixbuf = gtk_widget_render_icon (widget, stock_id,
 	                               GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
@@ -371,9 +372,32 @@ event_box_realize_cb (GtkWidget *widget, GtkImage *icon)
   else if (type == GTK_IMAGE_ICON_NAME)
     {
       const gchar *icon_name;
+      GdkScreen *screen;
+      GtkIconTheme *icon_theme;
+      GtkSettings *settings;
+      gint width, height;
+      GdkPixbuf *pixbuf;
 
       gtk_image_get_icon_name (icon, &icon_name, NULL);
-      gtk_drag_source_set_icon_name (widget, icon_name);
+      screen = gtk_widget_get_screen (widget);
+      icon_theme = gtk_icon_theme_get_for_screen (screen);
+      settings = gtk_settings_get_for_screen (screen);
+
+      if (!gtk_icon_size_lookup_for_settings (settings,
+                                              GTK_ICON_SIZE_LARGE_TOOLBAR,
+					      &width, &height))
+        {
+	  width = height = 24;
+	}
+
+      pixbuf = gtk_icon_theme_load_icon (icon_theme, icon_name,
+                                         MIN (width, height), 0, NULL);
+      if (G_UNLIKELY (!pixbuf))
+        return;
+
+      gtk_drag_source_set_icon_pixbuf (widget, pixbuf);
+      g_object_unref (pixbuf);
+
     }
   else if (type == GTK_IMAGE_PIXBUF)
     {
