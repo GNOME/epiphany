@@ -25,6 +25,7 @@ G_BEGIN_DECLS
 
 #define EPHY_STOCK_EPHY		   "web-browser"
 
+/* Custom Epiphany named icons */
 #define EPHY_STOCK_POPUPS	   "popup-hidden"
 #define EPHY_STOCK_HISTORY         "history-view"
 #define EPHY_STOCK_BOOKMARK        "bookmark-web"
@@ -32,11 +33,14 @@ G_BEGIN_DECLS
 #define EPHY_STOCK_ENTRY	   "location-entry"
 #define EPHY_STOCK_DOWNLOAD	   "download"
 
+/* Named icons defined in fd.o Icon Naming Spec */
 #define STOCK_NEW_TAB              "tab-new"
 #define STOCK_NEW_WINDOW           "window-new"
 #define STOCK_SEND_MAIL            "mail-forward"
 #define STOCK_ADD_BOOKMARK         "bookmark-new"
-#define STOCK_PRINT_SETUP          "stock_print-setup" /*document-page-setup*/
+#define STOCK_PRINT_SETUP          "document-page-setup"
+
+/* Deprecated named icons from g-i-t */
 #define STOCK_LOCK_INSECURE        "stock_lock-open"
 #define STOCK_LOCK_SECURE          "stock_lock"
 #define STOCK_LOCK_BROKEN	   "stock_lock-broken"
