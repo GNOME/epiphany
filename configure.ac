@@ -190,10 +190,28 @@ xulrunner) min_version=1.8 ;;
 *) AC_MSG_ERROR([Unsupported gecko "$gecko_cv_gecko"]) ;;
 esac
 
+AM_CONDITIONAL([HAVE_XULRUNNER],[test "$gecko_cv_gecko" = "xulrunner"])
+
 # Added $gecko_cv_gecko-js for debian xulrunner brokenness
 PKG_CHECK_MODULES([GECKO],[${gecko_cv_gecko}-xpcom >= $min_version ${gecko_cv_gecko}-js $gecko_cv_extra_pkg_dependencies])
 AC_SUBST([GECKO_CFLAGS])
 AC_SUBST([GECKO_LIBS])
+
+# *****************
+# Weasel UA version
+# *****************
+
+# FIXMEchpe: find a way to always automatically use the latest weasel minor version!
+
+if test "$gecko_cv_gecko_version_int" -ge "1009000"; then
+  WEASEL_UA_VERSION="3.0"
+elif test "$gecko_cv_gecko_version_int" -ge "1008001"; then
+  WEASEL_UA_VERSION="2.0.0.4"
+else
+  WEASEL_UA_VERSION="1.5.0.12"
+fi
+
+AC_SUBST([WEASEL_UA_VERSION])
 
 # **********************************
 # now tests for mozilla API variance
@@ -659,6 +677,7 @@ data/icons/scalable/actions/Makefile
 data/icons/scalable/status/Makefile
 data/art/Makefile
 data/ui/Makefile
+data/weasel-ua-pref.js
 doc/Makefile
 doc/reference/Makefile
 lib/Makefile

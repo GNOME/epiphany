@@ -1,0 +1,6 @@
+// Add "Firefox/@WEASEL_UA_VERSION@" to the UA. This fixes
+// [https://bugzilla.mozilla.org/show_bug.cgi?id=334967]
+// Same as Camino [https://bugzilla.mozilla.org/show_bug.cgi?id=384721] and
+// IceApe [https://bugzilla.mozilla.org/show_bug.cgi?id=386113] do.
+// Also see discussion on [https://bugzilla.mozilla.org/show_bug.cgi?id=385999].
+pref("general.useragent.extra.firefox", "Firefox/@WEASEL_UA_VERSION@");
