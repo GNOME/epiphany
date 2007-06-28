@@ -11,6 +11,11 @@ default_prefs_in_FILES = \
 default_prefs_files = \
 	default-prefs-common.js
 
+
+if HAVE_XULRUNNER
+default_prefs_files += weasel-ua-pref.js
+endif
+
 default-prefs.js: $(default_prefs_files)
 	cat $^ > $@
 
