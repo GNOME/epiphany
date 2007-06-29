@@ -1,6 +1,6 @@
 # Swedish messages for Epiphany.
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-# Daniel Nylander <po@danielnylander.se>, 2006.
+# Copyright (C) 2000-2007 Free Software Foundation, Inc.
+# Daniel Nylander <po@danielnylander.se>, 2006, 2007.
 # Dennis Persson <dennis@linux.nu>, 2000.
 # Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004, 2005.
 #
@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-05-19 20:49+0100\n"
-"PO-Revision-Date: 2007-05-27 10:11+0100\n"
+"POT-Creation-Date: 2007-06-18 03:32+0100\n"
+"PO-Revision-Date: 2007-06-29 14:51+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -568,7 +568,7 @@ msgstr "Välj ett s_pråk:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:14
-#: ../lib/widgets/ephy-location-entry.c:643
+#: ../lib/widgets/ephy-location-entry.c:647
 #: ../src/ephy-history-window.c:266
 msgid "Cl_ear"
 msgstr "T_öm"
@@ -1615,37 +1615,37 @@ msgstr "Webbsidan \"%s\" begär att du signerar följande text:"
 msgid "_Sign text"
 msgstr "_Signera text"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:197
+#: ../embed/mozilla/GeckoPrintService.cpp:198
 msgid "Options"
 msgstr "Alternativ"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:461
+#: ../embed/mozilla/GeckoPrintService.cpp:462
 msgid "Print this page?"
 msgstr "Skriv ut denna sida?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:469
+#: ../embed/mozilla/GeckoPrintService.cpp:470
 msgid "Preparing to print"
 msgstr "Förbereder utskrift"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:228
+#: ../embed/mozilla/GeckoPrintSession.cpp:232
 #, c-format
 msgid "Page %d of %d"
 msgstr "Sida %d av %d"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:256
+#: ../embed/mozilla/GeckoPrintSession.cpp:260
 msgid "Cancelling print"
 msgstr "Avbryter utskrift"
 
 #. FIXME text!
-#: ../embed/mozilla/GeckoPrintSession.cpp:318
+#: ../embed/mozilla/GeckoPrintSession.cpp:322
 msgid "Spooling..."
 msgstr "Köar..."
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:332
+#: ../embed/mozilla/GeckoPrintSession.cpp:336
 msgid "Print error"
 msgstr "Utskriftsfel"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:591
+#: ../embed/mozilla/GeckoPrintSession.cpp:600
 #, c-format
 msgid "Printing “%s”"
 msgstr "Skriver ut \"%s\""
@@ -1931,47 +1931,53 @@ msgid "This page is loaded over a secure connection"
 msgstr "Denna sida läses in över en säker anslutning"
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:97
-msgid "The padlock icon in the statusbar indicates whether a page is secure."
-msgstr "Hänglåsikonen i statusraden indikerar huruvida en sida är säker."
+msgid ""
+"For secure pages, the address entry has a distinct color and a locked padlock icon is displayed.\n"
+"\n"
+"The padlock icon in the statusbar also indicates whether a page is secure."
+msgstr ""
+"För säkra sidor kommer adressfältet att ha en tydligt märkbar färg och en låst hänglåsikon visas.\n"
+"\n"
+"Hänglåsikonen i statusraden kommer även att indikera huruvida en sida är säker."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:116
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:144
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
 msgid "Security Warning"
 msgstr "Säkerhetsvarning"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:114
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:117
 msgid "This page is loaded over a low security connection"
 msgstr "Denna sida läses in över en anslutning med låg säkerhet"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:115
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:118
 msgid "Any information you see or enter on this page could easily be intercepted by a third party."
 msgstr "All information som du ser eller anger på denna sida kan enkelt avlyssnas av en tredje part."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:142
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:145
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "Vissa delar av denna sida läses in över en osäker anslutning"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:143
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:146
 msgid "Some information you see or enter will be sent over an insecure connection, and could easily be intercepted by a third party."
 msgstr "En del information som du ser eller anger kommer att skickas över en osäker anslutning och kan enkelt avlyssnas av en tredje part."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:161
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:181
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:164
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "Send this information over an insecure connection?"
 msgstr "Skicka denna information över en osäker anslutning?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:165
 msgid "The information you have entered will be sent over an insecure connection, and could easily be intercepted by a third party."
 msgstr "Den information som du har angivit kommer att skickas över en osäker anslutning och kan enkelt avlyssnas av en tredje part."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:165
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:186
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:168
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:189
 msgid "_Send"
 msgstr "_Skicka"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:182
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:185
 msgid "Although this page was loaded over a secure connection, the information you have entered will be sent over an insecure connection, and could easily be intercepted by a third party."
 msgstr "Även om denna sida lästes in över en säker anslutning kommer den information som du har angivit att skickas över en osäker anslutning, och kan enkelt avlyssnas av en tredje part."
 
@@ -1989,7 +1995,7 @@ msgstr "Filer"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:262
+#: ../embed/mozilla/mozilla-embed-single.cpp:265
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.se/search?ie=UTF-8&oe=UTF-8&q="
 
@@ -2344,7 +2350,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:910
+#: ../lib/widgets/ephy-location-entry.c:914
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Drag och släpp denna ikon för att skapa en länk till denna sida"
 
@@ -2608,88 +2614,88 @@ msgstr "_Byt namn..."
 msgid "Rename the selected bookmark or topic"
 msgstr "Byt namn på det markerade bokmärket eller ämnet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:199
-#: ../src/ephy-history-window.c:178
-msgid "_Delete"
-msgstr "_Ta bort"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
-msgid "Delete the selected bookmark or topic"
-msgstr "Ta bort det markerade bokmärket eller ämnet"
-
 #. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/bookmarks/ephy-bookmarks-editor.c:199
 #: ../src/bookmarks/ephy-bookmarks-ui.c:300
 msgid "_Properties"
 msgstr "_Egenskaper"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:203
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Visa eller ändra egenskaperna för det markerade bokmärket"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/bookmarks/ephy-bookmarks-editor.c:202
 msgid "_Import Bookmarks…"
 msgstr "_Importera bokmärken..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:206
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Importera bokmärken från en annan webbläsare eller en bokmärkesfil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:205
 msgid "_Export Bookmarks…"
 msgstr "_Exportera bokmärken..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
 msgid "Export bookmarks to a file"
 msgstr "Exportera bokmärken till en fil"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:184
+#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/ephy-history-window.c:181
 #: ../src/ephy-window.c:147
 msgid "_Close"
 msgstr "S_täng"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/bookmarks/ephy-bookmarks-editor.c:209
 msgid "Close the bookmarks window"
 msgstr "Stäng bokmärkesfönstret"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:216
-#: ../src/ephy-history-window.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/ephy-history-window.c:186
 #: ../src/ephy-window.c:159
 msgid "Cu_t"
 msgstr "Klipp _ut"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/ephy-history-window.c:190
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
+#: ../src/ephy-history-window.c:187
 #: ../src/ephy-window.c:160
 msgid "Cut the selection"
 msgstr "Klipp ut markeringen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:219
+#: ../src/bookmarks/ephy-bookmarks-editor.c:216
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1394
-#: ../src/ephy-history-window.c:192
+#: ../src/ephy-history-window.c:189
 #: ../src/ephy-history-window.c:721
 #: ../src/ephy-window.c:162
 msgid "_Copy"
 msgstr "_Kopiera"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:220
-#: ../src/ephy-history-window.c:193
+#: ../src/bookmarks/ephy-bookmarks-editor.c:217
+#: ../src/ephy-history-window.c:190
 #: ../src/ephy-window.c:163
 msgid "Copy the selection"
 msgstr "Kopiera markeringen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:222
-#: ../src/ephy-history-window.c:195
+#: ../src/bookmarks/ephy-bookmarks-editor.c:219
+#: ../src/ephy-history-window.c:192
 #: ../src/ephy-window.c:165
 msgid "_Paste"
 msgstr "Klistra _in"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:223
-#: ../src/ephy-history-window.c:196
+#: ../src/bookmarks/ephy-bookmarks-editor.c:220
+#: ../src/ephy-history-window.c:193
 msgid "Paste the clipboard"
 msgstr "Klistra in från urklipp"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:222
+#: ../src/ephy-history-window.c:195
+msgid "_Delete"
+msgstr "_Ta bort"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:223
+msgid "Delete the selected bookmark or topic"
+msgstr "Ta bort det markerade bokmärket eller ämnet"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:225
 #: ../src/ephy-history-window.c:198
@@ -2974,21 +2980,21 @@ msgstr "Öppna den markerade historiklänken i ett nytt fönster"
 msgid "Open the selected history link in a new tab"
 msgstr "Öppna den markerade historiklänken i en ny flik"
 
-#: ../src/ephy-history-window.c:179
-msgid "Delete the selected history link"
-msgstr "Ta bort den markerade historiklänken"
-
-#: ../src/ephy-history-window.c:181
+#: ../src/ephy-history-window.c:178
 msgid "Add _Bookmark…"
 msgstr "Lägg till _bokmärke..."
 
-#: ../src/ephy-history-window.c:182
+#: ../src/ephy-history-window.c:179
 msgid "Bookmark the selected history link"
 msgstr "Lägg till bokmärke för den markerade historiklänken"
 
-#: ../src/ephy-history-window.c:185
+#: ../src/ephy-history-window.c:182
 msgid "Close the history window"
 msgstr "Stäng detta historikfönster"
+
+#: ../src/ephy-history-window.c:196
+msgid "Delete the selected history link"
+msgstr "Ta bort den markerade historiklänken"
 
 #: ../src/ephy-history-window.c:199
 msgid "Select all history links or text"
@@ -4085,6 +4091,9 @@ msgstr ""
 msgid "GNOME Web Browser Website"
 msgstr "Webbplatsen för GNOME-webbläsaren"
 
+#~ msgid ""
+#~ "The padlock icon in the statusbar indicates whether a page is secure."
+#~ msgstr "Hänglåsikonen i statusraden indikerar huruvida en sida är säker."
 #~ msgid "“%s” redirected too many times."
 #~ msgstr "\"%s\" dirigerade om för många gånger."
 #~ msgid "The redirection has been stopped for security reasons."
