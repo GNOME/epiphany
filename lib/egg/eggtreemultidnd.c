@@ -1,5 +1,5 @@
 /* eggtreemultidnd.c
- * Copyright © 2001  Red Hat, Inc.
+ * Copyright (C) 2001  Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -13,11 +13,9 @@
  *
  * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
  */
-
-#include <config.h>
 
 #include <string.h>
 #include <gtk/gtktreeselection.h>
@@ -61,7 +59,7 @@ egg_tree_multi_drag_source_get_type (void)
 
   if (!our_type)
     {
-      const GTypeInfo our_info =
+      static const GTypeInfo our_info =
       {
         sizeof (EggTreeMultiDragSourceIface), /* class_size */
 	NULL,		/* base_init */
