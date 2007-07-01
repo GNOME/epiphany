@@ -206,7 +206,7 @@ static const GtkActionEntry ephy_history_ui_entries [] = {
 	{ "HelpContents", GTK_STOCK_HELP, N_("_Contents"), "F1",
 	  N_("Display history help"),
 	  G_CALLBACK (cmd_help_contents) },
-	{ "HelpAbout", GNOME_STOCK_ABOUT, N_("_About"), NULL,
+	{ "HelpAbout", GTK_STOCK_ABOUT, N_("_About"), NULL,
 	  N_("Display credits for the web browser creators"),
 	  G_CALLBACK (window_cmd_help_about) },
 };
