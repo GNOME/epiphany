@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: epiphany 1.10\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-02-25 19:39+0100\n"
-"PO-Revision-Date: 2007-02-25 19:40+0100\n"
+"POT-Creation-Date: 2007-07-02 23:37+0200\n"
+"PO-Revision-Date: 2007-07-02 23:39+0200\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -565,7 +565,7 @@ msgstr "Emès el:"
 
 #: ../data/glade/certificate-dialogs.glade.h:13
 msgid "MD5 Fingerprint:"
-msgstr "Empremta SHA1:"
+msgstr "Empremta MD5:"
 
 #: ../data/glade/certificate-dialogs.glade.h:14
 #: ../embed/mozilla/GtkNSSDialogs.cpp:916
@@ -582,7 +582,7 @@ msgstr "Empremta SHA1:"
 
 #: ../data/glade/certificate-dialogs.glade.h:17
 msgid "Serial Number:"
-msgstr "Nombre de sèrie:"
+msgstr "Número de sèrie:"
 
 #: ../data/glade/epiphany.glade.h:1
 msgid "<b>_Automatic</b>"
@@ -640,7 +640,7 @@ msgstr "_Certificat:"
 #: ../data/glade/form-signing-dialog.glade.h:4
 #: ../embed/mozilla/EphyPromptService.cpp:808
 #: ../embed/mozilla/EphyPromptService.cpp:835
-#: ../lib/ephy-password-dialog.c:427 ../lib/ephy-password-dialog.c:443
+#: ../lib/ephy-password-dialog.c:429 ../lib/ephy-password-dialog.c:445
 msgid "_Password:"
 msgstr "_Contrasenyes:"
 
@@ -796,7 +796,7 @@ msgstr "Carpeta per _descarregar:"
 
 #: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Edit Stylesheet…"
-msgstr "_Edita el full..."
+msgstr "_Edita el full…"
 
 #: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Fixed width:"
@@ -1706,7 +1706,7 @@ msgid "Don't Save"
 msgstr "No desis"
 
 #: ../embed/mozilla/EphyPromptService.cpp:807
-#: ../lib/ephy-password-dialog.c:399
+#: ../lib/ephy-password-dialog.c:401
 msgid "_Username:"
 msgstr "Nom d'_usuari:"
 
@@ -1744,37 +1744,37 @@ msgstr "El lloc web «%s» demana que signeu el següent text:"
 msgid "_Sign text"
 msgstr "_Signa el text"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:178
+#: ../embed/mozilla/GeckoPrintService.cpp:197
 msgid "Options"
 msgstr "Opcions"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:431
+#: ../embed/mozilla/GeckoPrintService.cpp:461
 msgid "Print this page?"
 msgstr "Voleu imprimir aquesta pàgina?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:439
+#: ../embed/mozilla/GeckoPrintService.cpp:469
 msgid "Preparing to print"
 msgstr "S'està preparant per a imprimir"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:228
+#: ../embed/mozilla/GeckoPrintSession.cpp:232
 #, c-format
 msgid "Page %d of %d"
 msgstr "Pàgina %d de %d"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:256
+#: ../embed/mozilla/GeckoPrintSession.cpp:260
 msgid "Cancelling print"
 msgstr "S'està cancel·lant la impressió"
 
 #. FIXME text!
-#: ../embed/mozilla/GeckoPrintSession.cpp:318
+#: ../embed/mozilla/GeckoPrintSession.cpp:322
 msgid "Spooling..."
 msgstr "S'està enviant..."
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:332
+#: ../embed/mozilla/GeckoPrintSession.cpp:336
 msgid "Print error"
 msgstr "S'ha produït un error en la impressió"
 
-#: ../embed/mozilla/GeckoPrintSession.cpp:591
+#: ../embed/mozilla/GeckoPrintSession.cpp:600
 #, c-format
 msgid "Printing “%s”"
 msgstr "S'està imprimint «%s»"
@@ -2034,25 +2034,29 @@ msgstr "Canvieu la contrasenya per la marca «%s»"
 msgid "Get Token Password"
 msgstr "Obteniu la contrasenya de la marca"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1516
+#. Translators: A "token" is something that enables the user to authenticate himself or
+#. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
+#. * a data file (e.g. a cryptographic certificate).
+#.
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1520
 #, c-format
 msgid "Please enter the password for the “%s” token"
 msgstr "Introduïu la contrasenya per la marca «%s»"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1582
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1586
 msgid "Please select a token:"
 msgstr "Seleccioneu una marca:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1601
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1605
 msgid "_Select"
 msgstr "_Seleccioneu"
 
 # FIXME
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1654
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1658
 msgid "Escrow the secret key?"
 msgstr "Voleu oferir en custòdia la clau privada?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1663
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1667
 #, c-format
 msgid ""
 "The certificate authority “%s” requests that you give it a copy of the newly "
@@ -2071,11 +2075,11 @@ msgstr ""
 "\n"
 "Es recomana fermament no permetre-ho."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1674
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1678
 msgid "_Reject"
 msgstr "_Rebutja"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1677
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1681
 msgid "_Allow"
 msgstr "_Permet"
 
@@ -2441,31 +2445,31 @@ msgstr "Occidental"
 msgid "select fonts for|Other Scripts"
 msgstr "Altres alfabets"
 
-#: ../lib/ephy-password-dialog.c:413
+#: ../lib/ephy-password-dialog.c:415
 msgid "_Domain:"
 msgstr "_Domini:"
 
-#: ../lib/ephy-password-dialog.c:442
+#: ../lib/ephy-password-dialog.c:444
 msgid "_New password:"
 msgstr "Contrasenya _nova:"
 
-#: ../lib/ephy-password-dialog.c:452
+#: ../lib/ephy-password-dialog.c:454
 msgid "Con_firm password:"
 msgstr "Con_firmeu la contrasenya:"
 
-#: ../lib/ephy-password-dialog.c:478
+#: ../lib/ephy-password-dialog.c:482
 msgid "Password quality:"
 msgstr "Qualitat de la contrasenya:"
 
-#: ../lib/ephy-password-dialog.c:494
+#: ../lib/ephy-password-dialog.c:499
 msgid "Do not remember this password"
 msgstr "No recordis aquesta contrasenya"
 
-#: ../lib/ephy-password-dialog.c:498
+#: ../lib/ephy-password-dialog.c:503
 msgid "_Remember password for this session"
 msgstr "_Recorda la contrasenya durant aquesta sessió"
 
-#: ../lib/ephy-password-dialog.c:502
+#: ../lib/ephy-password-dialog.c:507
 msgid "Save password in _keyring"
 msgstr "Desa la contrasenya a l'anell de _claus"
 
@@ -4127,15 +4131,15 @@ msgstr "Nom d'usuari"
 msgid "User Password"
 msgstr "Contrasenya de l'usuari"
 
-#: ../src/popup-commands.c:272
+#: ../src/popup-commands.c:256
 msgid "Download Link"
 msgstr "Descarrega l'enllaç"
 
-#: ../src/popup-commands.c:280
+#: ../src/popup-commands.c:264
 msgid "Save Link As"
 msgstr "Anomena i desa l'enllaç"
 
-#: ../src/popup-commands.c:287
+#: ../src/popup-commands.c:271
 msgid "Save Image As"
 msgstr "Anomena i desa la imatge"
 
@@ -4249,8 +4253,8 @@ msgid ""
 msgstr ""
 "Hauríeu d'haver rebut una còpia de la Llicència Pública General GNU untament "
 "amb el navegador del GNOME; en cas contrari, escriviu a la Free "
-"SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 "
-"USA"
+"SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-"
+"1301 USA"
 
 #: ../src/window-commands.c:787 ../src/window-commands.c:803
 #: ../src/window-commands.c:814
