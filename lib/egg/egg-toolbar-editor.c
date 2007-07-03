@@ -44,8 +44,7 @@ static const GtkTargetEntry source_drag_types[] = {
   {EGG_TOOLBAR_ITEM_TYPE, GTK_TARGET_SAME_APP, 0},
 };
 
-static void egg_toolbar_editor_class_init	(EggToolbarEditorClass *klass);
-static void egg_toolbar_editor_init		(EggToolbarEditor *t);
+
 static void egg_toolbar_editor_finalize         (GObject *object);
 static void update_editor_sheet                 (EggToolbarEditor *editor);
 
@@ -55,8 +54,6 @@ enum
   PROP_UI_MANAGER,
   PROP_TOOLBARS_MODEL
 };
-
-static GObjectClass *parent_class = NULL;
 
 #define EGG_TOOLBAR_EDITOR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EGG_TYPE_TOOLBAR_EDITOR, EggToolbarEditorPrivate))
 
@@ -71,32 +68,7 @@ struct EggToolbarEditorPrivate
   GList     *factory_list;
 };
 
-GType
-egg_toolbar_editor_get_type (void)
-{
-  static GType type = 0;
-
-  if (G_UNLIKELY (type == 0))
-    {
-      static const GTypeInfo our_info = {
-	sizeof (EggToolbarEditorClass),
-	NULL,			/* base_init */
-	NULL,			/* base_finalize */
-	(GClassInitFunc) egg_toolbar_editor_class_init,
-	NULL,
-	NULL,			/* class_data */
-	sizeof (EggToolbarEditor),
-	0,			/* n_preallocs */
-	(GInstanceInitFunc) egg_toolbar_editor_init
-      };
-
-      type = g_type_register_static (GTK_TYPE_VBOX,
-				     "EggToolbarEditor",
-				     &our_info, 0);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE (EggToolbarEditor, egg_toolbar_editor, GTK_TYPE_VBOX);
 
 static gint
 compare_items (gconstpointer a,
@@ -224,8 +196,6 @@ egg_toolbar_editor_class_init (EggToolbarEditorClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->finalize = egg_toolbar_editor_finalize;
   object_class->set_property = egg_toolbar_editor_set_property;
   object_class->get_property = egg_toolbar_editor_get_property;
@@ -268,7 +238,7 @@ egg_toolbar_editor_finalize (GObject *object)
   g_list_free (editor->priv->actions_list);
   g_list_free (editor->priv->factory_list);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (egg_toolbar_editor_parent_class)->finalize (object);
 }
 
 GtkWidget *

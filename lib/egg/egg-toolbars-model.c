@@ -30,8 +30,6 @@
 #include <libxml/tree.h>
 #include <gdk/gdkproperty.h>
 
-static void egg_toolbars_model_class_init (EggToolbarsModelClass *klass);
-static void egg_toolbars_model_init       (EggToolbarsModel      *model);
 static void egg_toolbars_model_finalize   (GObject               *object);
 
 enum
@@ -57,8 +55,6 @@ typedef struct
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-static GObjectClass *parent_class = NULL;
-
 #define EGG_TOOLBARS_MODEL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EGG_TYPE_TOOLBARS_MODEL, EggToolbarsModelPrivate))
 
 struct EggToolbarsModelPrivate
@@ -68,36 +64,7 @@ struct EggToolbarsModelPrivate
   GHashTable *flags;
 };
 
-GType
-egg_toolbars_model_get_type (void)
-{
-  static GType type = 0;
-
-  if (G_UNLIKELY (type == 0))
-    {
-      static const GTypeInfo our_info = {
-	sizeof (EggToolbarsModelClass),
-	NULL,			/* base_init */
-	NULL,			/* base_finalize */
-	(GClassInitFunc) egg_toolbars_model_class_init,
-	NULL,
-	NULL,			/* class_data */
-	sizeof (EggToolbarsModel),
-	0,			/* n_preallocs */
-	(GInstanceInitFunc) egg_toolbars_model_init
-      };
-      volatile GType flags_type; /* work around gcc's optimiser */
-
-      /* make sure the flags type is known */
-      flags_type = EGG_TYPE_TB_MODEL_FLAGS;
-
-      type = g_type_register_static (G_TYPE_OBJECT,
-				     "EggToolbarsModel",
-				     &our_info, 0);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE (EggToolbarsModel, egg_toolbars_model, G_TYPE_OBJECT)
 
 static xmlDocPtr
 egg_toolbars_model_to_xml (EggToolbarsModel *model)
@@ -708,8 +675,10 @@ static void
 egg_toolbars_model_class_init (EggToolbarsModelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  volatile GType flags_type; /* work around gcc's optimiser */
 
-  parent_class = g_type_class_peek_parent (klass);
+  /* make sure the flags type is known */
+  flags_type = EGG_TYPE_TB_MODEL_FLAGS;
 
   object_class->finalize = egg_toolbars_model_finalize;
 
@@ -776,7 +745,7 @@ egg_toolbars_model_finalize (GObject *object)
   g_node_destroy (model->priv->toolbars);
   g_hash_table_destroy (model->priv->flags);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (egg_toolbars_model_parent_class)->finalize (object);
 }
 
 EggToolbarsModel *

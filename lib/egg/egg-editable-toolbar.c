@@ -48,8 +48,6 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
-static void egg_editable_toolbar_class_init	(EggEditableToolbarClass *klass);
-static void egg_editable_toolbar_init		(EggEditableToolbar *etoolbar);
 static GdkPixbuf * new_separator_pixbuf         (void);
 
 #define MIN_TOOLBAR_HEIGHT 20
@@ -78,8 +76,6 @@ enum
 
 static guint egg_editable_toolbar_signals[LAST_SIGNAL] = { 0 };
 
-static GObjectClass *parent_class = NULL;
-
 #define EGG_EDITABLE_TOOLBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EGG_TYPE_EDITABLE_TOOLBAR, EggEditableToolbarPrivate))
 
 struct _EggEditableToolbarPrivate
@@ -104,32 +100,7 @@ struct _EggEditableToolbarPrivate
   GtkToolItem *dnd_toolitem;
 };
 
-GType
-egg_editable_toolbar_get_type (void)
-{
-  static GType type = 0;
-
-  if (G_UNLIKELY (type == 0))
-    {
-      static const GTypeInfo our_info = {
-	sizeof (EggEditableToolbarClass),
-	NULL,			/* base_init */
-	NULL,			/* base_finalize */
-	(GClassInitFunc) egg_editable_toolbar_class_init,
-	NULL,
-	NULL,			/* class_data */
-	sizeof (EggEditableToolbar),
-	0,			/* n_preallocs */
-	(GInstanceInitFunc) egg_editable_toolbar_init
-      };
-
-      type = g_type_register_static (GTK_TYPE_VBOX,
-				     "EggEditableToolbar",
-				     &our_info, 0);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE (EggEditableToolbar, egg_editable_toolbar, GTK_TYPE_VBOX);
 
 static int
 get_dock_position (EggEditableToolbar *etoolbar,
@@ -1412,7 +1383,7 @@ egg_editable_toolbar_dispose (GObject *object)
       priv->model = NULL;
     }
 
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (egg_editable_toolbar_parent_class)->dispose (object);
 }
 
 static void
@@ -1583,8 +1554,6 @@ static void
 egg_editable_toolbar_class_init (EggEditableToolbarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class->dispose = egg_editable_toolbar_dispose;
   object_class->set_property = egg_editable_toolbar_set_property;
