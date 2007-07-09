@@ -1,5 +1,5 @@
 themedir = $(pkgdatadir)/icons/hicolor
-size = 16x16
+size = 48x48
 context = status
 
 iconsdir = $(themedir)/$(size)/$(context)
@@ -8,12 +8,8 @@ icons_DATA = \
 	lock-broken.png		\
         lock-insecure.png	\
 	lock-secure.png		\
-	lock-secure-checked.png	\
-	popup-hidden.png
-
-noinst_DATA = \
-	popup-hidden.xcf
+	lock-secure-checked.png
 
 EXTRA_DIST = \
-	$(icons_DATA)	\
-	$(noinst_DATA)
+	$(icons_DATA)
+

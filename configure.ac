@@ -674,6 +674,8 @@ data/icons/24x24/status/Makefile
 data/icons/32x32/Makefile
 data/icons/32x32/actions/Makefile
 data/icons/32x32/status/Makefile
+data/icons/48x48/Makefile
+data/icons/48x48/status/Makefile
 data/icons/scalable/Makefile
 data/icons/scalable/actions/Makefile
 data/icons/scalable/status/Makefile

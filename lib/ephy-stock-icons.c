@@ -44,9 +44,6 @@ ephy_stock_icons_init (void)
 		STOCK_SEND_MAIL,
 		STOCK_ADD_BOOKMARK,
 		STOCK_PRINT_SETUP,
-		STOCK_LOCK_INSECURE,
-		STOCK_LOCK_SECURE,
-		STOCK_LOCK_BROKEN,
 	};
 
 	static const GtkStockItem items[] =
@@ -56,7 +53,10 @@ ephy_stock_icons_init (void)
 		{ EPHY_STOCK_BOOKMARK,  N_("Bookmark"),         0, 0, NULL },
 		{ EPHY_STOCK_BOOKMARKS, N_("Bookmarks"),	0, 0, NULL },
 		{ EPHY_STOCK_ENTRY,	N_("Address Entry"),	0, 0, NULL },
-		{ EPHY_STOCK_DOWNLOAD,	N_("_Download"),	0, 0, NULL }
+		{ EPHY_STOCK_DOWNLOAD,	N_("_Download"),	0, 0, NULL },
+		{ STOCK_LOCK_INSECURE },
+		{ STOCK_LOCK_SECURE },
+		{ STOCK_LOCK_BROKEN }
 	};
 
 	factory = gtk_icon_factory_new ();
