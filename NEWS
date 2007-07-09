@@ -1,5 +1,37 @@
 ===============
-Epiphany 2.19.4
+Epiphany 2.19.5
+===============
+
+For those who are wondering: Epiphany 2.19.3 and 2.19.4 were never released. 
+
+Changes:
+	* Copy the lock icons from g-i-t 2.16 into epiphany, since the new ones
+          in g-i-t are broken (see bug #348350 comment 93 ff).
+	* Sync with latest libegg toolbareditor
+	* use "document-page-setup" named icon for STOCK_PRINT_SETUP (now 
+          available on gnome-icon-theme trunk)
+
+Bug fixes:
+
+	* #452769: Use GTK_STOCK_ABOUT icon instead of GNOME_STOCK_ABOUT
+	* #450590: Add a workaround to take into account that Gtk{Radio,Toggle}Actions
+                   only set either the stock-id or the icon-name property depending on
+                   the image type. This makes it possible to display the icon of such
+                   actions in the toolbar editor.
+	* #450146: Use g_option_group_set_translation_domain to
+                   translate commandline options.
+
+Contributors to this release:
+Jaap Haitsma, Luca Ferretti, Felix Riemann, Gabor Kelemen, Diego Escalante Urrelo, Jared Moore, 
+Christian Persch
+
+Translations: 
+Theppitak Karoonboonyanan, I. Felix, Ankit Patel, Ilkka Tuohela, Josep Puigdemont i Casamajó, 
+Artur Flinta, Nguyễn Thái Ngọc Duy, Takeshi AIHANA, Pema Geyleg, Daniel Nylander, 
+Clytie Siddall, Kjartan Maraas, Priit Laes, Jorge Gonzalez
+
+===============
+Epiphany 2.19.4  
 ===============
 
 These bugs were fixed since last release (2.19.2):
@@ -14,7 +46,7 @@ These bugs were fixed since last release (2.19.2):
 	* #336739 Right click on textarea should provide “Select all”
 	* #422114 URL-completion of ftp-URL only works when specifying ftp:// protocol identifier
 	* #437798 Show password in PDM should be plural
-	* #441419 go" button's behaviour: act on button-release-event
+	* #441419 Go button's behaviour: act on button-release-event
 	* #444500 Epiphany misses some SelectAll icons
 
 Summary of changes from 2.17.4 - 2.18.2:
