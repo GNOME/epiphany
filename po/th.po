@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: epiphany.th\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-05-23 09:13+0700\n"
-"PO-Revision-Date: 2007-05-23 09:16+0700\n"
+"POT-Creation-Date: 2007-07-09 20:46+0700\n"
+"PO-Revision-Date: 2007-07-09 20:58+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
-"Language-Team: Thai <L10n@opentle.org>\n"
+"Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -39,8 +39,8 @@ msgid "Epiphany Web Browser"
 msgstr "เว็บเบราว์เซอร์ Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: data/epiphany.desktop.in.in.h:3 src/ephy-main.c:523
-#: src/ephy-main.c:615
+#: data/epiphany.desktop.in.in.h:3 src/ephy-main.c:526
+#: src/ephy-main.c:618
 msgid "Web Browser"
 msgstr "เว็บเบราว์เซอร์"
 
@@ -680,7 +680,7 @@ msgstr "เลือก_ภาษา:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: data/glade/prefs-dialog.glade.h:14
-#: lib/widgets/ephy-location-entry.c:643 src/ephy-history-window.c:266
+#: lib/widgets/ephy-location-entry.c:647 src/ephy-history-window.c:266
 msgid "Cl_ear"
 msgstr "_ล้าง"
 
@@ -1431,7 +1431,7 @@ msgstr "หา “%s” ไม่พบ"
 msgid ""
 "Check that you are connected to the internet, and that the address is "
 "correct."
-msgstr "กรุณาตรวจสอบว่าคุณได้เชื่อมต่ออินเทอร์เน็ตอยู่ และที่อยู่ที่ป้อนถูกต้องแล้ว"
+msgstr "กรุณาตรวจสอบว่าคุณได้เชื่อมต่ออินเทอร์เน็ตอยู่ และป้อนที่อยู่ถูกต้องแล้ว"
 
 #: embed/mozilla/EphyAboutModule.cpp:244
 msgid "If this page used to exist, you may find an archived version:"
@@ -1742,37 +1742,37 @@ msgstr "เว็บไซต์ “%s” ร้องขอให้คุณ�
 msgid "_Sign text"
 msgstr "เซ็_นกำกับข้อความ"
 
-#: embed/mozilla/GeckoPrintService.cpp:197
+#: embed/mozilla/GeckoPrintService.cpp:198
 msgid "Options"
 msgstr "ตัวเลือก"
 
-#: embed/mozilla/GeckoPrintService.cpp:461
+#: embed/mozilla/GeckoPrintService.cpp:462
 msgid "Print this page?"
 msgstr "พิมพ์หน้านี้หรือไม่?"
 
-#: embed/mozilla/GeckoPrintService.cpp:469
+#: embed/mozilla/GeckoPrintService.cpp:470
 msgid "Preparing to print"
 msgstr "กำลังเตรียมพิมพ์"
 
-#: embed/mozilla/GeckoPrintSession.cpp:228
+#: embed/mozilla/GeckoPrintSession.cpp:232
 #, c-format
 msgid "Page %d of %d"
 msgstr "หน้า %d จาก %d"
 
-#: embed/mozilla/GeckoPrintSession.cpp:256
+#: embed/mozilla/GeckoPrintSession.cpp:260
 msgid "Cancelling print"
 msgstr "กำลังยกเลิกการพิมพ์"
 
 #. FIXME text!
-#: embed/mozilla/GeckoPrintSession.cpp:318
+#: embed/mozilla/GeckoPrintSession.cpp:322
 msgid "Spooling..."
 msgstr "กำลังส่งข้อมูลเข้าคิวพิมพ์..."
 
-#: embed/mozilla/GeckoPrintSession.cpp:332
+#: embed/mozilla/GeckoPrintSession.cpp:336
 msgid "Print error"
 msgstr "ข้อผิดพลาดของการพิมพ์"
 
-#: embed/mozilla/GeckoPrintSession.cpp:591
+#: embed/mozilla/GeckoPrintSession.cpp:600
 #, c-format
 msgid "Printing “%s”"
 msgstr "กำลังพิมพ์ “%s”"
@@ -2075,31 +2075,38 @@ msgid "This page is loaded over a secure connection"
 msgstr "หน้านี้ถูกโหลดผ่านการเชื่อมต่อนิรภัย"
 
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:97
-msgid "The padlock icon in the statusbar indicates whether a page is secure."
-msgstr "ไอคอนรูปแม่กุญแจในแถบสถานะจะบ่งชี้ว่าหน้านี้อยู่ในสถานะนิรภัยหรือไม่"
+msgid ""
+"For secure pages, the address entry has a distinct color and a locked "
+"padlock icon is displayed.\n"
+"\n"
+"The padlock icon in the statusbar also indicates whether a page is secure."
+msgstr ""
+"สำหรับหน้าเว็บนิรภัย ช่องป้อนที่อยู่เว็บจะแสดงด้วยสีพิเศษ และแสดงไอคอนแม่กุญแจล็อค\n"
+"\n"
+"ไอคอนแม่กุญแจที่แถบสถานะ ก็จะบอกว่าหน้าเว็บนั้นเป็นเว็บนิรภัยหรือไม่เช่นกัน"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:116
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:144
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
 msgid "Security Warning"
 msgstr "คำเตือนเกี่ยวกับการรักษาความปลอดภัย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:114
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:117
 msgid "This page is loaded over a low security connection"
 msgstr "หน้านี้ถูกโหลดผ่านการเชื่อมต่อที่มีความนิรภัยต่ำ"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:115
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:118
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
 msgstr "ข้อมูลใดๆ ที่คุณเห็นหรือป้อนในหน้านี้ สามารถถูกบุคคลที่สามดักได้อย่างง่ายดาย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:142
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:145
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "บางส่วนของหน้านี้ถูกโหลดผ่านการเชื่อมต่อที่ไม่นิรภัย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:143
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:146
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -2107,23 +2114,23 @@ msgstr ""
 "ข้อมูลบางส่วนที่คุณเห็นหรือป้อนจะถูกส่งผ่านการเชื่อมต่อที่ไม่นิรภัย "
 "และสามารถถูกบุคคลที่สามดักได้อย่างง่ายดาย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:161
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:181
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:164
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
 msgid "Send this information over an insecure connection?"
 msgstr "จะส่งข้อมูลเหล่านี้ผ่านการเชื่อมต่อที่ไม่นิรภัยหรือไม่?"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:165
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr "ข้อมูลที่คุณป้อนจะถูกส่งผ่านการเชื่อมต่อที่ไม่นิรภัย และสามารถถูกบุคคลที่สามดักได้อย่างง่ายดาย"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:165
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:186
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:168
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:189
 msgid "_Send"
 msgstr "_ส่ง"
 
-#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:182
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:185
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2146,7 +2153,7 @@ msgstr "แฟ้ม"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: embed/mozilla/mozilla-embed-single.cpp:262
+#: embed/mozilla/mozilla-embed-single.cpp:265
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
@@ -2166,36 +2173,36 @@ msgstr ""
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: lib/egg/egg-editable-toolbar.c:904
+#: lib/egg/egg-editable-toolbar.c:934
 #, c-format
 msgid "Show “_%s”"
 msgstr "แสดงแถบ “_%s”"
 
-#: lib/egg/egg-editable-toolbar.c:1364
+#: lib/egg/egg-editable-toolbar.c:1394
 msgid "_Move on Toolbar"
 msgstr "_ย้ายที่ในแถบเครื่องมือ"
 
-#: lib/egg/egg-editable-toolbar.c:1365
+#: lib/egg/egg-editable-toolbar.c:1395
 msgid "Move the selected item on the toolbar"
 msgstr "ย้ายรายการที่เลือกในแถบเครื่องมือ"
 
-#: lib/egg/egg-editable-toolbar.c:1366
+#: lib/egg/egg-editable-toolbar.c:1396
 msgid "_Remove from Toolbar"
 msgstr "_ลบออกจากแถบเครื่องมือ"
 
-#: lib/egg/egg-editable-toolbar.c:1367
+#: lib/egg/egg-editable-toolbar.c:1397
 msgid "Remove the selected item from the toolbar"
 msgstr "ลบรายการที่เลือกออกจากแถบเครื่องมือ"
 
-#: lib/egg/egg-editable-toolbar.c:1368
+#: lib/egg/egg-editable-toolbar.c:1398
 msgid "_Delete Toolbar"
 msgstr "_ลบแถบเครื่องมือ"
 
-#: lib/egg/egg-editable-toolbar.c:1369
+#: lib/egg/egg-editable-toolbar.c:1399
 msgid "Remove the selected toolbar"
 msgstr "ลบแถบเครื่องมือที่เลือก"
 
-#: lib/egg/egg-toolbar-editor.c:446
+#: lib/egg/egg-toolbar-editor.c:439
 msgid "Separator"
 msgstr "เส้นแบ่ง"
 
@@ -2497,7 +2504,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: lib/widgets/ephy-location-entry.c:910
+#: lib/widgets/ephy-location-entry.c:914
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "ลากไอคอนนี้ไปปล่อยเพื่อสร้างลิงก์มายังหน้านี้"
 
@@ -2753,82 +2760,82 @@ msgstr "เ_ปลี่ยนชื่อ…"
 msgid "Rename the selected bookmark or topic"
 msgstr "เปลี่ยนชื่อที่คั่นหน้า"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:199
-#: src/ephy-history-window.c:178
-msgid "_Delete"
-msgstr "_ลบ"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:200
-msgid "Delete the selected bookmark or topic"
-msgstr "ลบที่คั่นหน้า"
-
 #. Add popup menu actions that are specific to the bookmark widgets
-#: src/bookmarks/ephy-bookmarks-editor.c:202
+#: src/bookmarks/ephy-bookmarks-editor.c:199
 #: src/bookmarks/ephy-bookmarks-ui.c:300
 msgid "_Properties"
 msgstr "คุณ_สมบัติ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:203
+#: src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "View or modify the properties of the selected bookmark"
 msgstr "ดูหรือแก้ไขคุณสมบัติของที่คั่นหน้า"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:205
+#: src/bookmarks/ephy-bookmarks-editor.c:202
 msgid "_Import Bookmarks…"
 msgstr "นำเ_ข้าที่คั่นหน้า…"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:206
+#: src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "นำเข้าที่คั่นหน้าจากเบราว์เซอร์อื่นหรือจากแฟ้มที่คั่นหน้า"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:208
+#: src/bookmarks/ephy-bookmarks-editor.c:205
 msgid "_Export Bookmarks…"
 msgstr "ส่ง_ออกที่คั่นหน้า…"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:209
+#: src/bookmarks/ephy-bookmarks-editor.c:206
 msgid "Export bookmarks to a file"
 msgstr "ส่งออกที่คั่นหน้าไปยังแฟ้ม"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:211
-#: src/ephy-history-window.c:184 src/ephy-window.c:147
+#: src/bookmarks/ephy-bookmarks-editor.c:208
+#: src/ephy-history-window.c:181 src/ephy-window.c:147
 msgid "_Close"
 msgstr "ปิ_ด"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:212
+#: src/bookmarks/ephy-bookmarks-editor.c:209
 msgid "Close the bookmarks window"
 msgstr "ปิดหน้าต่างที่คั่นหน้า"
 
 #. Edit Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:216
-#: src/ephy-history-window.c:189 src/ephy-window.c:159
+#: src/bookmarks/ephy-bookmarks-editor.c:213
+#: src/ephy-history-window.c:186 src/ephy-window.c:159
 msgid "Cu_t"
 msgstr "_ตัด"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:217
-#: src/ephy-history-window.c:190 src/ephy-window.c:160
+#: src/bookmarks/ephy-bookmarks-editor.c:214
+#: src/ephy-history-window.c:187 src/ephy-window.c:160
 msgid "Cut the selection"
 msgstr "ตัดส่วนที่เลือก"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:219
+#: src/bookmarks/ephy-bookmarks-editor.c:216
 #: src/bookmarks/ephy-bookmarks-editor.c:1394
-#: src/ephy-history-window.c:192 src/ephy-history-window.c:721
+#: src/ephy-history-window.c:189 src/ephy-history-window.c:721
 #: src/ephy-window.c:162
 msgid "_Copy"
 msgstr "_คัดลอก"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:220
-#: src/ephy-history-window.c:193 src/ephy-window.c:163
+#: src/bookmarks/ephy-bookmarks-editor.c:217
+#: src/ephy-history-window.c:190 src/ephy-window.c:163
 msgid "Copy the selection"
 msgstr "คัดลอกส่วนที่เลือก"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:222
-#: src/ephy-history-window.c:195 src/ephy-window.c:165
+#: src/bookmarks/ephy-bookmarks-editor.c:219
+#: src/ephy-history-window.c:192 src/ephy-window.c:165
 msgid "_Paste"
 msgstr "_แปะ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:223
-#: src/ephy-history-window.c:196
+#: src/bookmarks/ephy-bookmarks-editor.c:220
+#: src/ephy-history-window.c:193
 msgid "Paste the clipboard"
 msgstr "แปะจากคลิปบอร์ด"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:222
+#: src/ephy-history-window.c:195
+msgid "_Delete"
+msgstr "_ลบ"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:223
+msgid "Delete the selected bookmark or topic"
+msgstr "ลบที่คั่นหน้า"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:225
 #: src/ephy-history-window.c:198 src/ephy-window.c:171
@@ -3113,21 +3120,21 @@ msgstr "เปิดลิงก์ประวัติที่เลือก
 msgid "Open the selected history link in a new tab"
 msgstr "เปิดลิงก์ประวัติในหน้าต่างใหม่"
 
-#: src/ephy-history-window.c:179
-msgid "Delete the selected history link"
-msgstr "ลบประวัติที่เลือก"
-
-#: src/ephy-history-window.c:181
+#: src/ephy-history-window.c:178
 msgid "Add _Bookmark…"
 msgstr "เพิ่ม_ที่คั่นหน้า…"
 
-#: src/ephy-history-window.c:182
+#: src/ephy-history-window.c:179
 msgid "Bookmark the selected history link"
 msgstr "เก็บลิงก์ประวัติลงที่คั่นหน้า"
 
-#: src/ephy-history-window.c:185
+#: src/ephy-history-window.c:182
 msgid "Close the history window"
 msgstr "ปิดหน้าต่างประวัติ"
+
+#: src/ephy-history-window.c:196
+msgid "Delete the selected history link"
+msgstr "ลบประวัติที่เลือก"
 
 #: src/ephy-history-window.c:199
 msgid "Select all history links or text"
@@ -4238,6 +4245,10 @@ msgstr ""
 #: src/window-commands.c:855
 msgid "GNOME Web Browser Website"
 msgstr "เว็บไซต์ของเว็บเบราว์เซอร์ของ GNOME"
+
+#~ msgid ""
+#~ "The padlock icon in the statusbar indicates whether a page is secure."
+#~ msgstr "ไอคอนรูปแม่กุญแจในแถบสถานะจะบ่งชี้ว่าหน้านี้อยู่ในสถานะนิรภัยหรือไม่"
 
 #~ msgid "“%s” redirected too many times."
 #~ msgstr "“%s” เปลี่ยนเส้นทางบ่อยเกินไป"
