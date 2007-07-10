@@ -53,7 +53,6 @@
 #include <gtk/gtkseparatormenuitem.h>
 #include <gtk/gtkalignment.h>
 #include <gtk/gtkclipboard.h>
-#include <gtk/gtkversion.h>
 
 #include <string.h>
 
@@ -976,7 +975,6 @@ sort_func (GtkTreeModel *model,
 	return valueb - valuea;
 }
 
-#if GTK_CHECK_VERSION (2, 11, 0)
 static gboolean
 cursor_on_match_cb  (GtkEntryCompletion *completion,
 		     GtkTreeModel *model,
@@ -997,7 +995,6 @@ cursor_on_match_cb  (GtkEntryCompletion *completion,
 
 	return TRUE;
 }
-#endif /* GTK+ 2.11.0 */
 
 void
 ephy_location_entry_set_completion (EphyLocationEntry *le,
@@ -1069,11 +1066,9 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
 				       extracell, "text", extra_col);
 
-#if GTK_CHECK_VERSION (2, 11, 0)
 	g_object_set (completion, "inline-selection", TRUE, NULL);
 	g_signal_connect (completion, "cursor-on-match",
 			  G_CALLBACK (cursor_on_match_cb), le);
-#endif
 
 	gtk_entry_set_completion (GTK_ENTRY (priv->icon_entry->entry), completion);
 	g_object_unref (completion);
