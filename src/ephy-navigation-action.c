@@ -364,42 +364,29 @@ menu_activated_cb (GtkMenuToolButton *button,
 	gtk_menu_tool_button_set_menu (button, menu);
 }
 
-static gboolean
-set_tooltip_cb (GtkMenuToolButton *proxy,
-		GtkTooltips *tooltips,
-		const char *tip,
-		const char *tip_private,
-		EphyNavigationAction *action)
-{
-	gtk_menu_tool_button_set_arrow_tooltip (proxy, tooltips,
-						action->priv->arrow_tooltip,
-						NULL);
-
-	/* don't stop emission */
-	return FALSE;
-}
-
 static void
-connect_proxy (GtkAction *action, GtkWidget *proxy)
+connect_proxy (GtkAction *gaction,
+	       GtkWidget *proxy)
 {
 	LOG ("Connect navigation action proxy");
 
 	if (GTK_IS_MENU_TOOL_BUTTON (proxy))
 	{
+		EphyNavigationAction *action = EPHY_NAVIGATION_ACTION (gaction);
+		EphyNavigationActionPrivate *priv = action->priv;
+		GtkMenuToolButton *button = GTK_MENU_TOOL_BUTTON (proxy);
 		GtkWidget *menu;
 
 		/* set dummy menu so the arrow gets sensitive */
 		menu = gtk_menu_new ();
-		gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (proxy), menu);
+		gtk_menu_tool_button_set_menu (button, menu);
+		gtk_menu_tool_button_set_arrow_tooltip_text (button, priv->arrow_tooltip);
 
 		g_signal_connect (proxy, "show-menu",
-				  G_CALLBACK (menu_activated_cb), action);
-
-		g_signal_connect (proxy, "set-tooltip",
-				  G_CALLBACK (set_tooltip_cb), action);
+				  G_CALLBACK (menu_activated_cb), gaction);
 	}
 
-	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
+	GTK_ACTION_CLASS (parent_class)->connect_proxy (gaction, proxy);
 }
 
 static void
@@ -522,26 +509,20 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 
 	g_object_class_install_property (object_class,
 					 PROP_ARROW_TOOLTIP,
-					 g_param_spec_string ("arrow-tooltip",
-							      "Arrow Tooltip",
-							      "Arrow Tooltip",
+					 g_param_spec_string ("arrow-tooltip", NULL, NULL,
 							      NULL,
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_DIRECTION,
-					 g_param_spec_int ("direction",
-							   "Direction",
-							   "Direction",
+					 g_param_spec_int ("direction", NULL, NULL,
 							   0,
 							   G_MAXINT,
 							   0,
 							   G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 	g_object_class_install_property (object_class,
 					 PROP_WINDOW,
-					 g_param_spec_object ("window",
-							      "Window",
-							      "The navigation window",
+					 g_param_spec_object ("window", NULL, NULL,
 							      G_TYPE_OBJECT,
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
