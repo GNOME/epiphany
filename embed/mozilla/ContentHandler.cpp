@@ -262,7 +262,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 
 	action_label =  (mAction == CONTENT_ACTION_OPEN) ||
 			(mAction == CONTENT_ACTION_OPEN_TMP) ?
-			GTK_STOCK_OPEN : EPHY_STOCK_DOWNLOAD;
+			GTK_STOCK_OPEN : STOCK_DOWNLOAD;
 
 	mime_description = gnome_vfs_mime_get_description (mMimeType.get());
 	if (mime_description == NULL)

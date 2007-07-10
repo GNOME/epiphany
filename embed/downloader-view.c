@@ -205,7 +205,7 @@ show_status_icon (DownloaderView *dv)
 {
 	DownloaderViewPrivate *priv = dv->priv;
 
-	priv->status_icon = gtk_status_icon_new_from_stock (EPHY_STOCK_DOWNLOAD);
+	priv->status_icon = gtk_status_icon_new_from_stock (STOCK_DOWNLOAD);
 
 	g_signal_connect_swapped (priv->status_icon, "activate",
 				  G_CALLBACK (show_downloader_cb), dv);
@@ -705,7 +705,7 @@ downloader_view_build_ui (DownloaderView *dv)
 
 	priv->model = GTK_TREE_MODEL (liststore);
 
-	gtk_window_set_icon_name (GTK_WINDOW (priv->window), EPHY_STOCK_DOWNLOAD);
+	gtk_window_set_icon_name (GTK_WINDOW (priv->window), STOCK_DOWNLOAD);
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
 	g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), dv);

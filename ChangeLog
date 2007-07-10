@@ -1,3 +1,18 @@
+2007-07-10  Luca Ferretti  <elle.uca@libero.it>
+
+	* embed/downloader-view.c: (show_status_icon),
+	(downloader_view_build_ui):
+	* embed/mozilla/ContentHandler.cpp:
+	* lib/ephy-stock-icons.c: (ephy_stock_icons_init):
+	* lib/ephy-stock-icons.h:
+	* src/ephy-window.c:
+
+	Kill EPHY_STOCK_DOWNLOAD and add STOCK_DOWNLOAD, using
+	"emblem-download" named icon. Partially fix 450904. 
+
+	Note: you need latest svn version of gnome-icon-theme
+	to have the download icon @ 16x16 pixels
+
 2007-07-09  Christian Persch  <chpe@gnome.org>
 
 	=== Release 2.19.5 ===

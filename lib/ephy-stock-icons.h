@@ -31,7 +31,6 @@ G_BEGIN_DECLS
 #define EPHY_STOCK_BOOKMARK        "bookmark-web"
 #define EPHY_STOCK_BOOKMARKS       "bookmark-view"
 #define EPHY_STOCK_ENTRY	   "location-entry"
-#define EPHY_STOCK_DOWNLOAD	   "download"
 #define STOCK_LOCK_INSECURE        "lock-insecure"
 #define STOCK_LOCK_SECURE          "lock-secure"
 #define STOCK_LOCK_BROKEN	   "lock-broken"
@@ -42,6 +41,7 @@ G_BEGIN_DECLS
 #define STOCK_SEND_MAIL            "mail-forward"
 #define STOCK_ADD_BOOKMARK         "bookmark-new"
 #define STOCK_PRINT_SETUP          "document-page-setup"
+#define STOCK_DOWNLOAD             "emblem-downloads"
 
 void ephy_stock_icons_init (void);
 
