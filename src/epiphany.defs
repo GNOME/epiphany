@@ -185,9 +185,6 @@
   (parent "GtkStatusbar")
   (c-name "EphyStatusbar")
   (gtype-id "EPHY_TYPE_STATUSBAR")
-  (fields
-    '("GtkTooltips*" "tooltips")
-  )
 )
 
 (define-object Tab
@@ -3243,12 +3240,6 @@
 ;  (is-constructor-of "EphyStatusbar")
 ;  (return-type "GtkWidget*")
 ;)
-
-(define-method get_tooltips
-  (of-object "EphyStatusbar")
-  (c-name "ephy_statusbar_get_tooltips")
-  (return-type "GtkTooltips*")
-)
 
 (define-method get_security_frame
   (of-object "EphyStatusbar")

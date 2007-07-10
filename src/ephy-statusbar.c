@@ -34,11 +34,9 @@
 #include <gtk/gtkimage.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkvseparator.h>
-#include <gtk/gtkversion.h>
 
 static void ephy_statusbar_class_init	(EphyStatusbarClass *klass);
 static void ephy_statusbar_init		(EphyStatusbar *t);
-static void ephy_statusbar_finalize	(GObject *object);
 
 #define EPHY_STATUSBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_STATUSBAR, EphyStatusbarPrivate))
 
@@ -92,41 +90,12 @@ ephy_statusbar_get_type (void)
 	return type;
 }
 
-#if !GTK_CHECK_VERSION (2, 11, 0)
-static void
-ephy_statusbar_size_allocate (GtkWidget *widget,
-			      GtkAllocation *allocation)
-{
-	GtkStatusbar *gstatusbar = GTK_STATUSBAR (widget);
-	EphyStatusbar *statusbar = EPHY_STATUSBAR (widget);
-	EphyStatusbarPrivate *priv = statusbar->priv;
-	GtkWidget *label;
-
-	/* HACK HACK HACK ! */
-	label = gstatusbar->label;
-	gstatusbar->label = priv->hbox;
-
-	GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
-
-	gstatusbar->label = label;
-}
-#endif /* !GTK 2.11.0 */
-
 static void
 ephy_statusbar_class_init (EphyStatusbarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-#if !GTK_CHECK_VERSION (2, 11, 0)
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-#endif
 
 	parent_class = g_type_class_peek_parent (klass);
-
-	object_class->finalize = ephy_statusbar_finalize;
-
-#if !GTK_CHECK_VERSION (2, 11, 0)
-	widget_class->size_allocate = ephy_statusbar_size_allocate;
-#endif
 
 	signals[LOCK_CLICKED] =
 		g_signal_new
@@ -146,25 +115,16 @@ static void
 create_caret_indicator (EphyStatusbar *statusbar)
 {
 	EphyStatusbarPrivate *priv = statusbar->priv;
-	GtkWidget *label, *ebox;
+	GtkWidget *label;
 
-	priv->caret_indicator = ebox = gtk_event_box_new ();
-	gtk_event_box_set_visible_window (GTK_EVENT_BOX (ebox), FALSE);
-	gtk_widget_show (ebox);
-
-	/* Translators: this is displayed in the statusbar; choose a short word
-	 * or even an abbreviation.
-	 */
-	label = gtk_label_new (_("Caret"));
-	gtk_container_add (GTK_CONTAINER (ebox), label);
+	priv->caret_indicator = label = gtk_label_new (_("Caret"));
 	gtk_widget_show (label);
 
-	gtk_tooltips_set_tip (statusbar->tooltips, ebox,
-			      /* Translators: this is the tooltip on the "Caret" icon
-			       * in the statusbar.
-			       */
-			      _("In keyboard selection mode, press F7 to exit"),
-			      NULL);
+	gtk_widget_set_tooltip_text (label,
+				     /* Translators: this is the tooltip on the "Caret" icon
+				      * in the statusbar.
+				      */
+				     _("In keyboard selection mode, press F7 to exit"));
 
 	ephy_statusbar_add_widget (statusbar, priv->caret_indicator);
 }
@@ -248,9 +208,6 @@ ephy_statusbar_init (EphyStatusbar *t)
 
 	gtk_statusbar_set_has_resize_grip (gstatusbar, TRUE);
 
-	t->tooltips = gtk_tooltips_new ();
-	g_object_ref_sink (t->tooltips);
-
 	priv->hbox = gtk_hbox_new (FALSE, 4);
 
 	priv->icon_container = gtk_hbox_new (FALSE, 4);
@@ -284,16 +241,6 @@ ephy_statusbar_init (EphyStatusbar *t)
 
 	create_caret_indicator (t);
 	create_statusbar_progress (t);
-}
-
-static void
-ephy_statusbar_finalize (GObject *object)
-{
-	EphyStatusbar *t = EPHY_STATUSBAR (object);
-
-	g_object_unref (t->tooltips);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /**
@@ -340,11 +287,12 @@ ephy_statusbar_set_security_state (EphyStatusbar *statusbar,
 				   const char *stock_id,
 				   const char *tooltip)
 {
-	gtk_image_set_from_stock (GTK_IMAGE (statusbar->priv->security_icon),
+	EphyStatusbarPrivate *priv = statusbar->priv;
+
+	gtk_image_set_from_stock (GTK_IMAGE (priv->security_icon),
 				  stock_id, GTK_ICON_SIZE_MENU);
 
-	gtk_tooltips_set_tip (statusbar->tooltips, statusbar->priv->security_evbox,
-			      tooltip, NULL);
+	gtk_widget_set_tooltip_text (priv->security_icon, tooltip);
 }
 
 /**
@@ -368,9 +316,7 @@ ephy_statusbar_set_popups_state (EphyStatusbar *statusbar,
 	}
 	else
 	{
-		gtk_tooltips_set_tip (statusbar->tooltips,
-				      priv->popups_manager_evbox,
-				      tooltip, NULL);
+		gtk_widget_set_tooltip_text (priv->popups_manager_icon, tooltip);
 
 		gtk_widget_show (priv->popups_manager_evbox);
 	}
@@ -476,21 +422,6 @@ ephy_statusbar_remove_widget (EphyStatusbar *statusbar,
 
 	gtk_container_remove (GTK_CONTAINER (priv->icon_container), vsep);
 	gtk_container_remove (GTK_CONTAINER (priv->icon_container), widget);
-}
-
-
-/**
- * ephy_statusbar_get_tooltips:
- * @statusbar: an #EphyStatusbar
- *
- * Return value: the statusbar's #GtkTooltips object
- */
-GtkTooltips *
-ephy_statusbar_get_tooltips (EphyStatusbar *statusbar)
-{
-	g_return_val_if_fail (EPHY_IS_STATUSBAR (statusbar), NULL);
-
-	return statusbar->tooltips;
 }
 
 /**
