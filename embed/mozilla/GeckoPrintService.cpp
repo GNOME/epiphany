@@ -30,7 +30,6 @@
 #include <gtk/gtkprintunixdialog.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkwindow.h>
-#include <gtk/gtkversion.h>
 #include <glade/glade-xml.h>
 
 #include <nsStringAPI.h>
@@ -535,15 +534,7 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   }
 #endif
 
-#if GTK_CHECK_VERSION (2, 11, 0)
   GtkPrintCapabilities capabilities = gtk_printer_get_capabilities (aPrinter);
-#else
-  GtkPrintCapabilities capabilities = GtkPrintCapabilities (GTK_PRINT_CAPABILITY_PAGE_SET |
-                                                            GTK_PRINT_CAPABILITY_COPIES |
-                                                            GTK_PRINT_CAPABILITY_COLLATE |
-                                                            GTK_PRINT_CAPABILITY_REVERSE |
-                                                            GTK_PRINT_CAPABILITY_SCALE);
-#endif
 
   /* Initialisation */
   aSettings->SetIsInitializedFromPrinter (PR_FALSE); /* FIXME: PR_TRUE? */
