@@ -417,48 +417,45 @@ toolbar_reconfigured_cb (GtkToolItem *toolitem,
 
 
 static gboolean
-set_tooltip_cb (GtkToolItem *toolitem,
-		GtkTooltips *tooltips,
-		gchar *tip_text,
-		gchar *tip_private,
-		GtkAction *action)
+query_tooltip_cb (GtkWidget *proxy,
+		  gint x,
+    		  gint y,
+		  gboolean keyboard_mode,
+		  GtkTooltip *tooltip,
+		  GtkAction *action)
 {
 	EphyBookmarks *bookmarks;
 	EphyNode *node;
-	GtkWidget *button;
-	
 	const char *title, *location;
-	char *tooltip;
+	char *text = NULL;
 	
 	node = ephy_bookmark_action_get_bookmark (EPHY_BOOKMARK_ACTION (action));
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
 	title = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
 	location = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
-	tooltip = NULL;
 	
 	if (strstr (location, "%s") != NULL)
 	{
 		GnomeVFSURI *uri = gnome_vfs_uri_new (location);
 		if (uri != NULL)
 		{
-			tooltip = g_strconcat
-			  (title, "\n", gnome_vfs_uri_get_scheme (uri),
-			   "://", gnome_vfs_uri_get_host_name (uri), NULL);
+			text = g_markup_printf_escaped ("%s\n%s://%s",
+							title,
+			 				gnome_vfs_uri_get_scheme (uri),
+							gnome_vfs_uri_get_host_name (uri));
 			gnome_vfs_uri_unref (uri);
 		}
 	}
-	if (tooltip == NULL)
+	if (text == NULL)
 	{
-		tooltip = g_strconcat (title, "\n", location, NULL);
+		text = g_markup_printf_escaped ("%s\n%s", title, location);
 	}
-	
-	button = g_object_get_data (G_OBJECT (toolitem), "button");
-	gtk_tooltips_set_tip (tooltips, button, tooltip, NULL);
-	g_free (tooltip);
+
+	gtk_tooltip_set_markup (tooltip, text);
+	g_free (text);
 	
 	return TRUE;
 }
-
 
 static void
 connect_proxy (GtkAction *action,
@@ -486,8 +483,11 @@ connect_proxy (GtkAction *action,
 		
 		g_signal_connect (proxy, "toolbar-reconfigured",
 				  G_CALLBACK (toolbar_reconfigured_cb), action);
-		g_signal_connect (proxy, "set-tooltip", 
-				  G_CALLBACK (set_tooltip_cb), action);
+
+		/* FIXME: maybe make the tooltip cover only the button, not also the entry (if there is one?) */
+		g_object_set (proxy, "has-tooltip", TRUE, NULL);
+		g_signal_connect (proxy, "query-tooltip",
+				  G_CALLBACK (query_tooltip_cb), action);
 
 		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
 		g_signal_connect (button, "clicked", G_CALLBACK (activate_cb), action);
@@ -546,10 +546,14 @@ ephy_bookmark_action_updated (EphyBookmarkAction *action)
 	
 	/* Notify all other properties */
 	g_object_notify (G_OBJECT (action), "location");
-	g_object_notify (G_OBJECT (action), "tooltip");
 	g_object_notify (G_OBJECT (action), "icon");
 	
-	g_object_thaw_notify (G_OBJECT (action));        
+	g_object_thaw_notify (G_OBJECT (action));
+
+	/* We could force a tooltip re-query with gtk_tooltip_trigger_tooltip_query
+	 * here, but it's not really worth it. Just show the updated tip next time
+	 * the tip is queried.
+	 */
 }
 
 EphyNode *
@@ -678,40 +682,30 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 
 	g_object_class_install_property (object_class,
 					 PROP_BOOKMARK,
-					 g_param_spec_pointer ("bookmark",
-							       "bookmark",
-							       "bookmark",
+					 g_param_spec_pointer ("bookmark", NULL, NULL,
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							       G_PARAM_CONSTRUCT_ONLY));
 
 	/* overwrite GtkActionClass::tooltip, so we can use the url as tooltip */
 	g_object_class_install_property (object_class,
 					 PROP_TOOLTIP,
-					 g_param_spec_string  ("tooltip",
-							       "tooltip",
-							       "tooltip",
+					 g_param_spec_string  ("tooltip", NULL, NULL,
 							       NULL,
 							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 	
 	g_object_class_install_property (object_class,
 					 PROP_LOCATION,
-					 g_param_spec_string  ("location",
-							       "location",
-							       "location",
+					 g_param_spec_string  ("location", NULL, NULL,
 							       NULL,
 							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 	g_object_class_install_property (object_class,
 					 PROP_SMART_URL,
-					 g_param_spec_boolean  ("smarturl",
-								"smarturl",
-								"smarturl",
+					 g_param_spec_boolean  ("smarturl", NULL, NULL,
 								FALSE,
 								G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 	g_object_class_install_property (object_class,
 					 PROP_ICON,
-					 g_param_spec_string  ("icon",
-							       "icon",
-							       "icon",
+					 g_param_spec_string  ("icon", NULL, NULL,
 							       NULL,
 							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
