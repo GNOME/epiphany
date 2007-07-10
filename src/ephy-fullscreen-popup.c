@@ -29,7 +29,6 @@
 #include <gtk/gtkstock.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkeventbox.h>
-#include <gtk/gtktooltips.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkbox.h>
 #include <gtk/gtkhbox.h>
@@ -43,7 +42,6 @@
 struct _EphyFullscreenPopupPrivate
 {
 	EphyWindow *window;
-	GtkTooltips *tooltips;
 	GtkWidget *frame;
 	EphySpinner *spinner;
 	GtkWidget *lock;
@@ -198,9 +196,9 @@ ephy_fullscreen_popup_set_security_state (EphyFullscreenPopup *popup,
 {
 	EphyFullscreenPopupPrivate *priv = popup->priv;
 
-	priv->show_lock = show_lock;
+	priv->show_lock = show_lock != FALSE;
 	gtk_image_set_from_stock (GTK_IMAGE (priv->lock), stock, GTK_ICON_SIZE_BUTTON);
-	gtk_tooltips_set_tip (priv->tooltips, priv->lock_ebox, tooltip, NULL);
+	gtk_widget_set_tooltip_text (priv->lock, tooltip);
 
 	ephy_fullscreen_popup_update_visibility (popup);
 }
@@ -237,9 +235,6 @@ ephy_fullscreen_popup_constructor (GType type,
 	priv = popup->priv;
 
 	gtk_window_set_resizable (window, FALSE);
-
-	priv->tooltips = gtk_tooltips_new ();
-	g_object_ref_sink (priv->tooltips);
 
 	hbox = gtk_hbox_new (FALSE, 2);
 	gtk_container_add (GTK_CONTAINER (window), hbox);
@@ -300,8 +295,6 @@ ephy_fullscreen_popup_finalize (GObject *object)
 
 	g_signal_handlers_disconnect_matched (priv->window, G_SIGNAL_MATCH_DATA,
 					      0, 0, NULL, NULL, popup);
-
-	g_object_unref (priv->tooltips);
 
 	parent_class->finalize (object);
 }
