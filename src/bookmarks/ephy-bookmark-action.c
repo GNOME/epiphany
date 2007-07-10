@@ -485,7 +485,7 @@ connect_proxy (GtkAction *action,
 				  G_CALLBACK (toolbar_reconfigured_cb), action);
 
 		/* FIXME: maybe make the tooltip cover only the button, not also the entry (if there is one?) */
-		g_object_set (proxy, "has-tooltip", TRUE, NULL);
+		gtk_widget_set_has_tooltip (proxy, TRUE);
 		g_signal_connect (proxy, "query-tooltip",
 				  G_CALLBACK (query_tooltip_cb), action);
 
