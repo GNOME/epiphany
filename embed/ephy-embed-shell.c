@@ -18,29 +18,37 @@
  *  $Id$
  */
 
-#include "config.h"
+#include <config.h>
 
-#include "ephy-embed-shell.h"
-#include "ephy-embed-single.h"
-#include "ephy-embed-factory.h"
-#include "ephy-marshal.h"
-#include "ephy-file-helpers.h"
-#include "ephy-history.h"
-#include "ephy-favicon-cache.h"
-#include "mozilla-embed-single.h"
-#include "downloader-view.h"
-#include "ephy-encodings.h"
-#include "ephy-debug.h"
-#include "ephy-adblock-manager.h"
-#include "ephy-print-utils.h"
+#include <glib.h>
+#include <glib/gstdio.h>
 
 #include <glib/gi18n.h>
 #include <gtk/gtkmessagedialog.h>
 
-#define PAGE_SETUP_FILENAME	"page-setup.ini"
+#include "downloader-view.h"
+#include "ephy-adblock-manager.h"
+#include "ephy-debug.h"
+#include "ephy-embed-factory.h"
+#include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
+#include "ephy-encodings.h"
+#include "ephy-favicon-cache.h"
+#include "ephy-file-helpers.h"
+#include "ephy-history.h"
+#include "ephy-marshal.h"
+#include "mozilla-embed-single.h"
+
+#include "ephy-print-utils.h"
+
+#define PAGE_SETUP_FILENAME	"page-setup-gtk.ini"
 #define PRINT_SETTINGS_FILENAME	"print-settings.ini"
 
+#define LEGACY_PAGE_SETUP_FILENAME	"page-setup.ini"
+
 #define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
+
+#define ENABLE_MIGRATION
 
 struct _EphyEmbedShellPrivate
 {
@@ -391,16 +399,20 @@ ephy_embed_shell_set_page_setup	(EphyEmbedShell *shell,
 	{
 		g_object_ref (page_setup);
 	}
+	else
+	{
+		page_setup = gtk_page_setup_new ();
+	}
 
 	if (priv->page_setup != NULL)
 	{
 		g_object_unref (priv->page_setup);
 	}
 
-	priv->page_setup = page_setup ? page_setup : gtk_page_setup_new ();
+	priv->page_setup = page_setup;
 
 	path = g_build_filename (ephy_dot_dir (), PAGE_SETUP_FILENAME, NULL);
-	ephy_print_utils_page_setup_to_file (page_setup, path, NULL);
+	gtk_page_setup_to_file (page_setup, path, NULL);
 	g_free (path);
 }
 		
@@ -414,12 +426,37 @@ ephy_embed_shell_get_page_setup	(EphyEmbedShell *shell)
 
 	if (priv->page_setup == NULL)
 	{
+		GError *error = NULL;
 		char *path;
 
 		path = g_build_filename (ephy_dot_dir (), PAGE_SETUP_FILENAME, NULL);
-		priv->page_setup = ephy_print_utils_page_setup_new_from_file (path, NULL);
+		priv->page_setup = gtk_page_setup_new_from_file (path, &error);
 		g_free (path);
 
+#ifdef ENABLE_MIGRATION
+		/* If the file doesn't exist, try to fall back to the old format */
+		if (error != NULL &&
+		    error->domain == G_FILE_ERROR &&
+		    error->code == G_FILE_ERROR_NOENT)
+		{
+			path = g_build_filename (ephy_dot_dir (), LEGACY_PAGE_SETUP_FILENAME, NULL);
+			priv->page_setup = ephy_print_utils_page_setup_new_from_file (path, NULL);
+			if (priv->page_setup != NULL)
+			{
+				/* Delete the old file, so we don't migrate again */
+				g_unlink (path);
+			}
+			g_free (path);
+		} else if (error != NULL)
+			g_warning ("error: %s\n", error->message);
+#endif /* ENABLE_MIGRATION */
+
+		if (error)
+		{
+			g_error_free (error);
+		}
+
+		/* If that still didn't work, create a new, empty one */
 		if (priv->page_setup == NULL)
 		{
 			priv->page_setup = gtk_page_setup_new ();
@@ -452,7 +489,7 @@ ephy_embed_shell_set_print_settings (EphyEmbedShell *shell,
 	priv->print_settings = settings ? settings : gtk_print_settings_new ();
 
 	path = g_build_filename (ephy_dot_dir (), PRINT_SETTINGS_FILENAME, NULL);
-	ephy_print_utils_settings_to_file (settings, path, NULL);
+	gtk_print_settings_to_file (settings, path, NULL);
 	g_free (path);
 }
 		
@@ -466,11 +503,16 @@ ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
 
 	if (priv->print_settings == NULL)
 	{
+		GError *error = NULL;
 		char *path;
 
 		path = g_build_filename (ephy_dot_dir (), PRINT_SETTINGS_FILENAME, NULL);
-		priv->print_settings = ephy_print_utils_settings_new_from_file (path, NULL);
+		priv->print_settings = gtk_print_settings_new_from_file (path, &error);
 		g_free (path);
+
+		/* Note: the gtk print settings file format is the same as our legacy one,
+		 * so no need to migrate here.
+		 */
 
 		if (priv->print_settings == NULL)
 		{
