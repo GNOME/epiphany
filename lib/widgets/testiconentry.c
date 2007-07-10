@@ -28,7 +28,6 @@
 int main(int argc, char **argv)
 {
 	GtkWidget *window, *vbox, *entry, *image;
-	GtkTooltips *tips;
 
 	gtk_init (&argc, &argv);
 

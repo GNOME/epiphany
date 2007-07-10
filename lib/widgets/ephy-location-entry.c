@@ -61,7 +61,6 @@
 
 struct _EphyLocationEntryPrivate
 {
-	GtkTooltips *tips;
 	EphyIconEntry *icon_entry;
 	GtkWidget *icon_ebox;
 	GtkWidget *icon;
@@ -166,21 +165,6 @@ ephy_location_entry_get_type (void)
 	return type;
 }
 
-static gboolean
-ephy_location_entry_set_tooltip (GtkToolItem *tool_item,
-				 GtkTooltips *tooltips,
-				 const char *tip_text,
-				 const char *tip_private)
-{
-	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (tool_item);
-	EphyLocationEntryPrivate *priv = entry->priv;
-
-	gtk_tooltips_set_tip (tooltips, priv->icon_entry->entry,
-			      tip_text, tip_private);
-
-	return TRUE;
-}
-
 static void
 ephy_location_entry_style_set (GtkWidget *widget,
 			       GtkStyle *previous_style)
@@ -246,8 +230,6 @@ ephy_location_entry_finalize (GObject *object)
 		g_object_unref (priv->favicon);
 	}
 
-	g_object_unref (priv->tips);
-
 	parent_class->finalize (object);
 }
 
@@ -256,15 +238,12 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-	GtkToolItemClass *tool_item_class = GTK_TOOL_ITEM_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_location_entry_finalize;
 
 	widget_class->style_set = ephy_location_entry_style_set;
-
-	tool_item_class->set_tooltip = ephy_location_entry_set_tooltip;
 
 	signals[USER_CHANGED] = g_signal_new (
 		"user_changed", G_OBJECT_CLASS_TYPE (klass),
@@ -910,8 +889,8 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 	g_signal_connect (priv->icon_ebox, "button-press-event",
 			  G_CALLBACK (icon_button_press_event_cb), entry);
 
-	gtk_tooltips_set_tip (priv->tips, priv->icon_ebox,
-			      _("Drag and drop this icon to create a link to this page"), NULL);
+	gtk_widget_set_tooltip_text (priv->icon_ebox,
+			             _("Drag and drop this icon to create a link to this page"));
 
 	priv->icon = gtk_image_new ();
 	gtk_container_add (GTK_CONTAINER (priv->icon_ebox), priv->icon);
@@ -968,9 +947,6 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	le->priv = p;
 
 	p->user_changed = TRUE;
-
-	p->tips = gtk_tooltips_new ();
-	g_object_ref_sink (p->tips);
 
 	ephy_location_entry_construct_contents (le);
 
@@ -1304,5 +1280,5 @@ ephy_location_entry_set_lock_tooltip (EphyLocationEntry *entry,
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
 
-	gtk_tooltips_set_tip (priv->tips, priv->lock_ebox, tooltip, NULL);
+	gtk_widget_set_tooltip_text (priv->lock_ebox, tooltip);
 }
