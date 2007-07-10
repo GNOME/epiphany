@@ -27,20 +27,6 @@
 
 G_BEGIN_DECLS
 
-GtkPrintSettings *ephy_print_utils_settings_new_from_file	(const gchar       *file_name,
-							 	 GError           **error);
-
-GtkPrintSettings *ephy_print_utils_settings_new_from_key_file	(GKeyFile          *key_file,
-								 GError           **error);
-
-gboolean	  ephy_print_utils_settings_to_file		(GtkPrintSettings  *settings,
-								 const char        *file_name,
-								 GError           **error);
-
-gboolean	  ephy_print_utils_settings_to_key_file		(GtkPrintSettings  *settings,
-								 GKeyFile          *key_file,
-								 GError           **error);
-
 GtkPageSetup	 *ephy_print_utils_page_setup_new_from_file	(const gchar       *file_name,
 							 	 GError           **error);
 

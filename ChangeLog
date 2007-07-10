@@ -1,5 +1,17 @@
 2007-07-10  Christian Persch  <chpe@gnome.org>
 
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_set_page_setup),
+	(ephy_embed_shell_get_page_setup),
+	(ephy_embed_shell_set_print_settings),
+	(ephy_embed_shell_get_print_settings):
+	* lib/ephy-print-utils.c:
+	* lib/ephy-print-utils.h:
+
+	Use the new gtk functions to persist and load the print settings and
+	page setup. Migrate our old settings, if present.
+
+2007-07-10  Christian Persch  <chpe@gnome.org>
+
 	* src/ephy-notebook.c: (sync_label):
 
 	Remove NULL-check here.
