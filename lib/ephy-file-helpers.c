@@ -98,161 +98,16 @@ ephy_file_tmp_dir (void)
 	return tmp_dir;
 }
 
-/* Copied from xdg-user-dir-lookup.c */
-
-static char *
-xdg_user_dir_lookup (const char *type)
-{
-  FILE *file;
-  char *home_dir, *config_home, *config_file;
-  char buffer[512];
-  char *user_dir;
-  char *p, *d;
-  int len;
-  int relative;
-  
-  home_dir = getenv ("HOME");
-
-  if (home_dir == NULL)
-    return strdup ("/tmp");
-
-  config_home = getenv ("XDG_CONFIG_HOME");
-  if (config_home == NULL || config_home[0] == 0)
-    {
-      config_file = malloc (strlen (home_dir) + strlen ("/.config/user-dirs.dirs") + 1);
-      strcpy (config_file, home_dir);
-      strcat (config_file, "/.config/user-dirs.dirs");
-    }
-  else
-    {
-      config_file = malloc (strlen (config_home) + strlen ("/user-dirs.dirs") + 1);
-      strcpy (config_file, config_home);
-      strcat (config_file, "/user-dirs.dirs");
-    }
-
-  file = fopen (config_file, "r");
-  free (config_file);
-  if (file == NULL)
-    goto error;
-
-  user_dir = NULL;
-  while (fgets (buffer, sizeof (buffer), file))
-    {
-      /* Remove newline at end */
-      len = strlen (buffer);
-      if (len > 0 && buffer[len-1] == '\n')
-	buffer[len-1] = 0;
-      
-      p = buffer;
-      while (*p == ' ' || *p == '\t')
-	p++;
-      
-      if (strncmp (p, "XDG_", 4) != 0)
-	continue;
-      p += 4;
-      if (strncmp (p, type, strlen (type)) != 0)
-	continue;
-      p += strlen (type);
-      if (strncmp (p, "_DIR", 4) != 0)
-	continue;
-      p += 4;
-
-      while (*p == ' ' || *p == '\t')
-	p++;
-
-      if (*p != '=')
-	continue;
-      p++;
-      
-      while (*p == ' ' || *p == '\t')
-	p++;
-
-      if (*p != '"')
-	continue;
-      p++;
-      
-      relative = 0;
-      if (strncmp (p, "$HOME/", 6) == 0)
-	{
-	  p += 6;
-	  relative = 1;
-	}
-      else if (*p != '/')
-	continue;
-      
-      if (relative)
-	{
-	  user_dir = malloc (strlen (home_dir) + 1 + strlen (p) + 1);
-	  strcpy (user_dir, home_dir);
-	  strcat (user_dir, "/");
-	}
-      else
-	{
-	  user_dir = malloc (strlen (p) + 1);
-	  *user_dir = 0;
-	}
-      
-      d = user_dir + strlen (user_dir);
-      while (*p && *p != '"')
-	{
-	  if ((*p == '\\') && (*(p+1) != 0))
-	    p++;
-	  *d++ = *p++;
-	}
-      *d = 0;
-    }  
-  fclose (file);
-
-  if (user_dir)
-    return user_dir;
-
- error:
-  /* Special case desktop for historical compatibility */
-  if (strcmp (type, "DESKTOP") == 0)
-    {
-      user_dir = malloc (strlen (home_dir) + strlen ("/Desktop") + 1);
-      strcpy (user_dir, home_dir);
-      strcat (user_dir, "/Desktop");
-      return user_dir;
-    }
-  else
-    return strdup (home_dir);
-}
-
-static char *
-ephy_file_downloads_dir_from_xdg (void)
-{
-	const char *home_dir;
-	char *downloads_dir;
-
-	/* We use getenv to exactly match the default output
-	 * from xdg_user_dir_lookup, otherwise we might have a
-	 * mismatch in the string comparison below */
-	home_dir = getenv ("HOME");
-	downloads_dir = xdg_user_dir_lookup ("DOWNLOAD");
-
-	/* No home directory, it will use /tmp then */
-	if (home_dir == NULL)
-		return downloads_dir;
-	/* If the dir lookup fellback on the home dir,
-	 * we don't want it, we have our own fall back code */
-	if (strcmp (downloads_dir, home_dir) == 0) {
-		g_free (downloads_dir);
-		return NULL;
-	}
-
-	return downloads_dir;
-}
-
 char *
 ephy_file_downloads_dir (void)
 {
 	const char *translated_folder;
+	const char *xdg_download_dir;
 	char *desktop_dir, *converted, *downloads_dir;
 
-	downloads_dir = ephy_file_downloads_dir_from_xdg ();
-	if (downloads_dir != NULL)
-		return downloads_dir;
+	xdg_download_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD);
+	if (xdg_download_dir != NULL)
+		return g_strdup (xdg_download_dir);
 
 	/* The name of the default downloads folder */
 	translated_folder = _("Downloads");
@@ -314,22 +169,14 @@ ephy_file_get_downloads_dir (void)
 char *
 ephy_file_desktop_dir (void)
 {
+	const char *xdg_desktop_dir;
 	char *downloads_dir;
-	gboolean desktop_is_home;
 
-	desktop_is_home = eel_gconf_get_boolean (CONF_DESKTOP_IS_HOME_DIR);
+	xdg_desktop_dir = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
+	if (xdg_desktop_dir != NULL)
+		return g_strdup (xdg_desktop_dir);
 
-	if (desktop_is_home)
-	{
-		downloads_dir = g_strdup (g_get_home_dir ()); 
-	}
-	else
-	{
-		downloads_dir = g_build_filename
-			(g_get_home_dir (), "Desktop", NULL);
-	}
-
-	return downloads_dir;
+	return g_build_filename	(g_get_home_dir (), "Desktop", NULL);
 }
 
 char *

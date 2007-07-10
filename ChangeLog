@@ -1,3 +1,15 @@
+2007-07-11  Christian Persch  <chpe@gnome.org>
+
+	* configure.ac:
+
+	Update glib req to 2.13.4 so we can use g_get_user_special_dir.
+
+	* lib/ephy-file-helpers.c: (ephy_file_downloads_dir),
+	(ephy_file_desktop_dir): 
+
+	Use g_get_user_special_dir to get the Desktop and Downloads directory
+	location.
+
 2007-07-10  Christian Persch  <chpe@gnome.org>
 
 	* src/bookmarks/ephy-bookmark-action.c: (connect_proxy):
