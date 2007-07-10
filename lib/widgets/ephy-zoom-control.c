@@ -27,7 +27,6 @@
 
 #include <gtk/gtk.h>
 #include <gtk/gtkcombobox.h>
-#include <gtk/gtktooltips.h>
 #include <glib/gi18n.h>
 
 #define EPHY_ZOOM_CONTROL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_CONTROL, EphyZoomControlPrivate))
@@ -197,58 +196,6 @@ ephy_zoom_control_get_property (GObject *object,
 }
 
 static void
-set_combo_tooltip (GtkWidget *widget, 
-		   GtkTooltipsData *data)
-{
-	if (GTK_IS_BUTTON (widget))
-	{
-		gtk_tooltips_set_tip (data->tooltips, widget,
-				      data->tip_text, data->tip_private);
-	}
-}
-
-static void
-combo_realized (GtkWidget *combo,
-		GtkWidget *control)
-{
-	GtkTooltipsData *data;
-
-	data = gtk_tooltips_data_get (control);
-	g_return_if_fail (data != NULL);
-
-	gtk_container_forall (GTK_CONTAINER (combo),
-			      (GtkCallback) set_combo_tooltip, data);
-}
-
-static gboolean
-ephy_zoom_control_set_tooltip (GtkToolItem *tool_item,
-			       GtkTooltips *tooltips,
-			       const char *tip_text,
-			       const char *tip_private)
-{
-	EphyZoomControl *control = EPHY_ZOOM_CONTROL (tool_item);
-	GtkWidget *widget = GTK_WIDGET (tool_item);
-
-	/* hack to make tooltips work also on Ctrl-F1 */
-	gtk_tooltips_set_tip (tooltips, widget, tip_text, tip_private);
-
-	g_signal_handlers_disconnect_by_func
-		(control->priv->combo, G_CALLBACK (combo_realized), widget);
-
-	if (GTK_WIDGET_REALIZED (tool_item))
-	{
-		combo_realized (GTK_WIDGET (control->priv->combo), widget);
-	}
-	else
-	{
-		g_signal_connect_after (control->priv->combo, "realize",
-					G_CALLBACK (combo_realized), widget);
-	}
-
-	return TRUE;
-}
-
-static void
 ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 {
 	GObjectClass *object_class;
@@ -263,20 +210,16 @@ ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 	object_class->get_property = ephy_zoom_control_get_property;
 	object_class->finalize = ephy_zoom_control_finalize;
 
-	tool_item_class->set_tooltip = ephy_zoom_control_set_tooltip;
-
 	g_object_class_install_property (object_class,
 					 PROP_ZOOM,
-					 g_param_spec_float ("zoom",
-							     "Zoom",
-							     "Zoom level to display in the item.",
+					 g_param_spec_float ("zoom", NULL, NULL,
 							     ZOOM_MINIMAL,
 							     ZOOM_MAXIMAL,
 							     1.0,
 							     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	signals[ZOOM_TO_LEVEL_SIGNAL] =
-		g_signal_new ("zoom_to_level",
+		g_signal_new ("zoom-to-level",
 			      G_TYPE_FROM_CLASS (klass),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (EphyZoomControlClass,

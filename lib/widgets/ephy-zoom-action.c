@@ -226,16 +226,14 @@ ephy_zoom_action_class_init (EphyZoomActionClass *class)
 
 	g_object_class_install_property (object_class,
 					 PROP_ZOOM,
-					 g_param_spec_float ("zoom",
-							     "Zoom",
-							     "Zoom",
+					 g_param_spec_float ("zoom", NULL, NULL,
 							     ZOOM_MINIMAL,
 							     ZOOM_MAXIMAL,
 							     1.0,
 							     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	signals[ZOOM_TO_LEVEL_SIGNAL] =
-		g_signal_new ("zoom_to_level",
+		g_signal_new ("zoom-to-level",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (EphyZoomActionClass, zoom_to_level),
