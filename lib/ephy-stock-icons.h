@@ -23,7 +23,7 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_STOCK_EPHY		   "web-browser"
+#define EPHY_STOCK_EPHY		   "epiphany"
 
 /* Custom Epiphany named icons */
 #define EPHY_STOCK_POPUPS	   "popup-hidden"
