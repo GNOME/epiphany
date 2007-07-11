@@ -633,19 +633,24 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 		nsCString cPath;
 		inDestFile->GetNativePath (cPath);
 
-		GString *path = g_string_new (cPath.get());
-		char *dot_pos = strchr (path->str, '.');
+		char *basename = g_path_get_basename (cPath.get());
+		char *dirname = g_path_get_dirname (cPath.get());
+		char *dot_pos = strchr (basename, '.');
 		if (dot_pos)
 		{
-			g_string_truncate (path, dot_pos - path->str);
+			*dot_pos = 0;
 		}
-		g_string_append (path, " ");
-		g_string_append (path, _("Files"));
+		/* translators: this is the directory name to store auxilary files when saving html files */
+		char *new_basename = g_strdup_printf (_("%s Files"), basename);
+		char *new_path = g_build_filename (dirname, new_basename, NULL);
+		g_free (new_basename);
+		g_free (basename);
+		g_free (dirname);
       
 		filesFolder = do_CreateInstance ("@mozilla.org/file/local;1");
-		filesFolder->InitWithNativePath (nsCString(path->str));
+		filesFolder->InitWithNativePath (nsCString(new_path));
 
-		g_string_free (path, TRUE);
+		g_free (new_path);
 
 		rv = webPersist->SaveDocument (domDocument, inDestFile, filesFolder,
 					       contentType, encodingFlags, 80);
