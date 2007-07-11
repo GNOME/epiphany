@@ -136,10 +136,10 @@ pref("print.use_global_printsettings", false);
 pref("print.save_print_settings", false);
 pref("print.show_print_progress", true);
 pref("print.printer_list", "");
-pref("postscript.enabled", true);
-pref("postscript.cups.enabled", false);
+pref("print.postscript.enabled", true);
+pref("print.postscript.cups.enabled", false);
 // deactivate PAPI too (will be added in https://bugzilla.mozilla.org/show_bug.cgi?id=317450)
-pref("postscript.papi.enabled", false);
+pref("print.postscript.papi.enabled", false);
 
 // sites stealthly storing unlimited amount of data? no thanks
 pref("dom.storage.enabled", false);
