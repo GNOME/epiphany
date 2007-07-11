@@ -4,9 +4,11 @@ context = apps
 
 iconsdir = $(themedir)/$(size)/$(context)
 
-icons_DATA = 
+icons_DATA = \
+	epiphany.png
 
-noinst_DATA =
+noinst_DATA = \
+	epiphany.svg
 
 EXTRA_DIST =		\
 	$(icons_DATA)	\
