@@ -136,8 +136,8 @@ pref("print.use_global_printsettings", false);
 pref("print.save_print_settings", false);
 pref("print.show_print_progress", true);
 pref("print.printer_list", "");
-pref("postscript.enabled", true);
-pref("postscript.cups.enabled", false);
+pref("print.postscript.enabled", true);
+pref("print.postscript.cups.enabled", false);
 
 // sites stealthly storing unlimited amount of data? no thanks
 pref("dom.storage.enabled", false);
