@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-06-18 03:32+0100\n"
-"PO-Revision-Date: 2007-07-08 15:59+0530\n"
+"POT-Creation-Date: 2007-07-12 03:29+0100\n"
+"PO-Revision-Date: 2007-07-12 14:32+0530\n"
 "Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
 "Language-Team: TAMIL <ubuntu-l10n-tam@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
@@ -49,8 +49,8 @@ msgstr "எபிபனி(Epiphany)  இணைய உலாவி"
 
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.in.h:3
-#: ../src/ephy-main.c:523
-#: ../src/ephy-main.c:615
+#: ../src/ephy-main.c:526
+#: ../src/ephy-main.c:618
 msgid "Web Browser"
 msgstr "இணைய உலாவி"
 
@@ -470,7 +470,7 @@ msgstr "குக்கிகள்"
 
 #. The name of the default downloads folder
 #: ../data/glade/epiphany.glade.h:4
-#: ../lib/ephy-file-helpers.c:258
+#: ../lib/ephy-file-helpers.c:113
 msgid "Downloads"
 msgstr "பதிவிறக்கங்கள்"
 
@@ -576,7 +576,7 @@ msgstr "_ழ ஒரு மொழியைத் தேர்வு செய்�
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:14
-#: ../lib/widgets/ephy-location-entry.c:647
+#: ../lib/widgets/ephy-location-entry.c:625
 #: ../src/ephy-history-window.c:266
 msgid "Cl_ear"
 msgstr "_ட துடைத்தல்"
@@ -814,7 +814,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "மீதமுள்ளவை"
 
-#: ../embed/ephy-embed-shell.c:264
+#: ../embed/ephy-embed-shell.c:272
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "எபிஃபனியை தற்போது பயன்படுத்த முடியாது. மொசில்லா துவக்கம் தோல்வியுற்றது "
 
@@ -1621,15 +1621,15 @@ msgstr "இணைய தளம் “%s” உங்களை கீழ் க�
 msgid "_Sign text"
 msgstr "_க உரையில் கையெழுத்திடுக"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:198
+#: ../embed/mozilla/GeckoPrintService.cpp:197
 msgid "Options"
 msgstr "தேர்வுகள்"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:462
+#: ../embed/mozilla/GeckoPrintService.cpp:461
 msgid "Print this page?"
 msgstr "இந்தப்பக்கத்தை அச்சிடவா?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:470
+#: ../embed/mozilla/GeckoPrintService.cpp:469
 msgid "Preparing to print"
 msgstr "அச்சிட தயார் செய்கிறது"
 
@@ -1984,9 +1984,11 @@ msgstr "_அனுப்பு"
 msgid "Although this page was loaded over a secure connection, the information you have entered will be sent over an insecure connection, and could easily be intercepted by a third party."
 msgstr "இந்த பக்கத்தில் நீங்கள் பார்க்கும்/ உள்ளிடும் தகவல்கள் அனைத்தும் பாதுகாப்பு உடையது ஆனாலும் தகவல்கள் அனைத்தும் பாதுகாப்பு குறைவான இணைப்பில் அனுப்பப்படும் எனவே பிறறால் சுலபமாக குறுக்கிட்டுப் பெற இயலும்."
 
-#: ../embed/mozilla/MozDownload.cpp:643
-msgid "Files"
-msgstr "கோப்புகள்"
+#. translators: this is the directory name to store auxilary files when saving html files
+#: ../embed/mozilla/MozDownload.cpp:644
+#, c-format
+msgid "%s Files"
+msgstr "%s கோப்புகள்"
 
 #. We do this before reading the user pref file so that the user
 #. * still can overwrite this pref.
@@ -2018,36 +2020,36 @@ msgstr ""
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:904
+#: ../lib/egg/egg-editable-toolbar.c:934
 #, c-format
 msgid "Show “_%s”"
 msgstr " “_%s”ஐ காட்டு"
 
-#: ../lib/egg/egg-editable-toolbar.c:1364
+#: ../lib/egg/egg-editable-toolbar.c:1394
 msgid "_Move on Toolbar"
 msgstr "_ந கருவிப்பட்டைக்கு நகர்த்துக"
 
-#: ../lib/egg/egg-editable-toolbar.c:1365
+#: ../lib/egg/egg-editable-toolbar.c:1395
 msgid "Move the selected item on the toolbar"
 msgstr "தேர்வு செய்யப்பட்ட உருப்படியை கருவிப்பட்டைக்கு நகர்த்து"
 
-#: ../lib/egg/egg-editable-toolbar.c:1366
+#: ../lib/egg/egg-editable-toolbar.c:1396
 msgid "_Remove from Toolbar"
 msgstr "_ஈ கருவிப்பட்டையிலிருந்து நீக்குக"
 
-#: ../lib/egg/egg-editable-toolbar.c:1367
+#: ../lib/egg/egg-editable-toolbar.c:1397
 msgid "Remove the selected item from the toolbar"
 msgstr "தேர்ந்தெடுக்கப்பட்ட உருப்படியை கருவிப்பட்டையிலிருந்து நீக்குக"
 
-#: ../lib/egg/egg-editable-toolbar.c:1368
+#: ../lib/egg/egg-editable-toolbar.c:1398
 msgid "_Delete Toolbar"
 msgstr "கருவிப்பட்டையை _அழி"
 
-#: ../lib/egg/egg-editable-toolbar.c:1369
+#: ../lib/egg/egg-editable-toolbar.c:1399
 msgid "Remove the selected toolbar"
 msgstr "தேர்ந்தெடுக்கப்பட்ட கருவிப்பட்டையை நீக்கு"
 
-#: ../lib/egg/egg-toolbar-editor.c:446
+#: ../lib/egg/egg-toolbar-editor.c:439
 msgid "Separator"
 msgstr "தடுப்பு"
 
@@ -2055,17 +2057,17 @@ msgstr "தடுப்பு"
 msgid "All supported types"
 msgstr "ஆதரவுள்ள எல்லா வகைகளும்"
 
-#: ../lib/ephy-file-helpers.c:452
+#: ../lib/ephy-file-helpers.c:299
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "“%s”.இல் தற்காலிக அடைவு உருவாக்க முடியவில்லை."
 
-#: ../lib/ephy-file-helpers.c:528
+#: ../lib/ephy-file-helpers.c:375
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "கோப்பு  “%s” ஏற்கனவே உள்ளது. அதை வழியிலிருந்து நீக்கவும்."
 
-#: ../lib/ephy-file-helpers.c:539
+#: ../lib/ephy-file-helpers.c:386
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "அடைவு “%s” ஐ உருவாக்க முடியவில்லை."
@@ -2285,21 +2287,21 @@ msgstr "இந்த அமர்வுக்கான கடவுச்செ�
 msgid "Save password in _keyring"
 msgstr "கடவுச்சொல்லை விசைக்கொத்தில் சேமி"
 
-#: ../lib/ephy-stock-icons.c:54
+#: ../lib/ephy-stock-icons.c:51
 msgid "Popup Windows"
 msgstr "துள்ளு சாளரங்கள்"
 
-#: ../lib/ephy-stock-icons.c:55
+#: ../lib/ephy-stock-icons.c:52
 #: ../src/ephy-history-window.c:1195
 msgid "History"
 msgstr "வரலாறு"
 
-#: ../lib/ephy-stock-icons.c:56
+#: ../lib/ephy-stock-icons.c:53
 #: ../src/ephy-window.c:1337
 msgid "Bookmark"
 msgstr "புத்தகக்குறி"
 
-#: ../lib/ephy-stock-icons.c:57
+#: ../lib/ephy-stock-icons.c:54
 #: ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
 #: ../src/bookmarks/ephy-topic-action.c:455
@@ -2307,12 +2309,12 @@ msgstr "புத்தகக்குறி"
 msgid "Bookmarks"
 msgstr "புத்தகக்குறிகள்"
 
-#: ../lib/ephy-stock-icons.c:58
+#: ../lib/ephy-stock-icons.c:55
 #: ../src/ephy-toolbar.c:283
 msgid "Address Entry"
 msgstr "முகவரி உள்ளீடுகள்"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:56
 msgid "_Download"
 msgstr "_பதிவிறக்கம்"
 
@@ -2352,7 +2354,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:914
+#: ../lib/widgets/ephy-location-entry.c:892
 msgid "Drag and drop this icon to create a link to this page"
 msgstr " இந்த பக்கத்திற்கு இணைப்பு ஏற்படுத்த இந்த சின்னத்தை இழுத்து விடவும் "
 
@@ -2962,7 +2964,7 @@ msgid "Find next occurrence of the search string"
 msgstr "சொல் அல்லது சொற்றொடரின் அடுத்த நிகழ்வை தேடவும்"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:276
+#: ../src/ephy-fullscreen-popup.c:271
 #: ../src/ephy-toolbar.c:571
 msgid "Leave Fullscreen"
 msgstr "முழுத்திரையை விட்டு விலகவும்"
@@ -3129,7 +3131,7 @@ msgstr "க்னோம் வலை உலாவி"
 msgid "GNOME Web Browser options"
 msgstr "க்னோம் வலை உலாவி தேர்வுகள்"
 
-#: ../src/ephy-notebook.c:673
+#: ../src/ephy-notebook.c:659
 msgid "Close tab"
 msgstr "கீற்றை மூடு"
 
@@ -3188,17 +3190,14 @@ msgstr "பக்கப் பட்டி விரிவு தேவை"
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "நீங்கள் சொடுக்கிய இணைப்புக்கு பக்கப் பட்டி விரிவு தேவை."
 
-#. Translators: this is displayed in the statusbar; choose a short word
-#. * or even an abbreviation.
-#.
-#: ../src/ephy-statusbar.c:158
+#: ../src/ephy-statusbar.c:120
 msgid "Caret"
 msgstr "காரட்"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:166
+#: ../src/ephy-statusbar.c:127
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "விசைப்பலகை தேர்வு பாணியில்  F7 விசையை அழுத்தினால் வெளியேறலாம்"
 
