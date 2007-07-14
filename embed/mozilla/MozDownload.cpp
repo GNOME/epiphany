@@ -323,6 +323,10 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 		}
 		else if (NS_SUCCEEDED (aStatus))
 		{
+			/* see http://bugzilla.gnome.org/show_bug.cgi?id=456945 */
+#ifdef HAVE_GECKO_1_9
+			return NS_OK;
+#else
 			GnomeVFSMimeApplication *helperApp;
 			nsCString mimeType;
 			rv = mMIMEInfo->GetMIMEType (mimeType);
@@ -374,6 +378,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 
 				g_strfreev (str);
 			}
+#endif /* HAVE_GECKO_1_9 */
 		}
 	}
         

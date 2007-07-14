@@ -438,6 +438,8 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 		info = g_strdup_printf ("gnome-browse-to-file:%d", gtk_get_current_event_time());
 	}
 
+	/* See http://bugzilla.gnome.org/show_bug.cgi?id=456945 */
+#ifndef HAVE_GECKO_1_9
 	if (info != NULL)
 	{
 		nsString desc;
@@ -454,6 +456,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	{
 		mimeInfo->SetApplicationDescription (nsString ());
 	}
+#endif /* HAVE_GECKO_1_9 */
 
 	if (mAction == CONTENT_ACTION_OPEN)
 	{
