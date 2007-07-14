@@ -641,6 +641,9 @@ impl_init (EphyEmbedSingle *esingle)
 {
 	MozillaEmbedSingle *single = MOZILLA_EMBED_SINGLE (esingle);
 
+	g_setenv ("MOZILLA_POSTSCRIPT_ENABLED", "1", TRUE);
+	g_unsetenv ("MOZILLA_POSTSCRIPT_PRINTER_LIST");
+
 #ifdef MOZ_ENABLE_XPRINT
 	/* XPrint? No, thanks! */
 	g_unsetenv ("XPSERVERLIST");
