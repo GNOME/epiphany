@@ -5,10 +5,10 @@ context = apps
 iconsdir = $(themedir)/$(size)/$(context)
 
 icons_DATA = \
-	epiphany.png
+	gnome-web-browser.png
 
 noinst_DATA = \
-	epiphany.svg
+	gnome-web-browser.svg
 
 EXTRA_DIST =		\
 	$(icons_DATA)	\
