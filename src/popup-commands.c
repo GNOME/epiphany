@@ -272,7 +272,7 @@ popup_cmd_save_image_as (GtkAction *action,
 			   window, TRUE, "image");
 }
 
-#define GNOME_BACKGROUND_PREFERENCES "gnome-background-properties"
+#define GNOME_APPEARANCE_PROPERTIES  "gnome-appearance-properties.desktop"
 
 static void
 background_download_completed (EphyEmbedPersist *persist)
@@ -284,16 +284,21 @@ background_download_completed (EphyEmbedPersist *persist)
 
 	bg = ephy_embed_persist_get_dest (persist);
 
-	g_object_unref (persist);
-
-	/* open the "Background Properties" capplet */
-	if (!ephy_file_launch_desktop_file ("background.desktop", bg, user_time))
+	/* open the Appearance Properties capplet on the Background tab */
+	/* FIXME! */
+	if (!ephy_file_launch_desktop_file (GNOME_APPEARANCE_PROPERTIES, bg, user_time))
 	{
-		/* If the above try didn't work, then we try the Fedora name.
-		 * This is a fix for #387206, but is actually a workaround for
-		 * bugzilla.redhat.com #201867 */
-		ephy_file_launch_desktop_file ("gnome-background.desktop", bg, user_time);
+		/* Fallback for <= 2.18 desktop: try to open the "Background Properties" capplet */
+		if (!ephy_file_launch_desktop_file ("background.desktop", bg, user_time))
+		{
+			/* If the above try didn't work, then we try the Fedora name.
+			 * This is a fix for #387206, but is actually a workaround for
+			 * bugzilla.redhat.com #201867 */
+			ephy_file_launch_desktop_file ("gnome-background.desktop", bg, user_time);
+		}
 	}
+
+	g_object_unref (persist);
 }
 
 void
