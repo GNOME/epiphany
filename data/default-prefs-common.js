@@ -110,6 +110,9 @@ pref("browser.xul.error_pages.enabled", true);
 
 // unset weird xulrunner default UA string
 pref("general.useragent.extra.simple", "");
+pref("general.useragent.vendor", "");
+pref("general.useragent.vendorComment", "");
+pref("general.useragent.vendorSub", "");
 
 // we don't want ping(uin)s
 pref("browser.send_pings", false);
