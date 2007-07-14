@@ -5,7 +5,7 @@ context = apps
 iconsdir = $(themedir)/$(size)/$(context)
 
 icons_DATA = \
-	epiphany.png
+	gnome-web-browser.png
 
 noinst_DATA =
 
