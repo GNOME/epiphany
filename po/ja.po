@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: epiphany trunk\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-07-02 00:02+0900\n"
-"PO-Revision-Date: 2007-07-02 00:01+0900\n"
+"POT-Creation-Date: 2007-07-14 16:16+0900\n"
+"PO-Revision-Date: 2007-07-14 16:12+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -599,7 +599,7 @@ msgid "Cookies"
 msgstr "クッキー"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:258
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:113
 msgid "Downloads"
 msgstr "ダウンロード"
 
@@ -707,7 +707,7 @@ msgstr "言語の選択(_A):"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:14
-#: ../lib/widgets/ephy-location-entry.c:647 ../src/ephy-history-window.c:266
+#: ../lib/widgets/ephy-location-entry.c:625 ../src/ephy-history-window.c:266
 msgid "Cl_ear"
 msgstr "クリア(_E)"
 
@@ -941,7 +941,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "残り"
 
-#: ../embed/ephy-embed-shell.c:264
+#: ../embed/ephy-embed-shell.c:272
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr ""
 "現在のところ Epiphany は利用できません。Mozilla の初期化に失敗しました。"
@@ -1786,15 +1786,15 @@ msgstr "ウェブサイト \"%s\" が次の文章に署名するよう要求し�
 msgid "_Sign text"
 msgstr "文章に署名する(_S)"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:198
+#: ../embed/mozilla/GeckoPrintService.cpp:197
 msgid "Options"
 msgstr "オプション"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:462
+#: ../embed/mozilla/GeckoPrintService.cpp:461
 msgid "Print this page?"
 msgstr "このページを印刷しますか？"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:470
+#: ../embed/mozilla/GeckoPrintService.cpp:469
 msgid "Preparing to print"
 msgstr "印刷する準備をしています"
 
@@ -2199,9 +2199,11 @@ msgstr ""
 "このページはセキュアな接続を介して読み込まれていますが、入力した情報はセキュ"
 "アではない接続を介して送信され、第三者から簡単に傍受される恐れがあります。"
 
-#: ../embed/mozilla/MozDownload.cpp:643
-msgid "Files"
-msgstr "ファイル"
+#. translators: this is the directory name to store auxilary files when saving html files
+#: ../embed/mozilla/MozDownload.cpp:644
+#, c-format
+msgid "%s Files"
+msgstr "%s のファイル"
 
 #. We do this before reading the user pref file so that the user
 #. * still can overwrite this pref.
@@ -2233,36 +2235,36 @@ msgstr ""
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:963
+#: ../lib/egg/egg-editable-toolbar.c:934
 #, c-format
 msgid "Show “_%s”"
 msgstr "\"%s\" を表示する"
 
-#: ../lib/egg/egg-editable-toolbar.c:1423
+#: ../lib/egg/egg-editable-toolbar.c:1394
 msgid "_Move on Toolbar"
 msgstr "ツールバー上で移動(_M)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1424
+#: ../lib/egg/egg-editable-toolbar.c:1395
 msgid "Move the selected item on the toolbar"
 msgstr "選択したアイテムをツールバー上で移動します"
 
-#: ../lib/egg/egg-editable-toolbar.c:1425
+#: ../lib/egg/egg-editable-toolbar.c:1396
 msgid "_Remove from Toolbar"
 msgstr "ツールバーから削除(_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1426
+#: ../lib/egg/egg-editable-toolbar.c:1397
 msgid "Remove the selected item from the toolbar"
 msgstr "選択したアイテムをツールバーから削除します"
 
-#: ../lib/egg/egg-editable-toolbar.c:1427
+#: ../lib/egg/egg-editable-toolbar.c:1398
 msgid "_Delete Toolbar"
 msgstr "ツールバーの削除(_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1428
+#: ../lib/egg/egg-editable-toolbar.c:1399
 msgid "Remove the selected toolbar"
 msgstr "選択したツールバーを削除します"
 
-#: ../lib/egg/egg-toolbar-editor.c:469
+#: ../lib/egg/egg-toolbar-editor.c:439
 msgid "Separator"
 msgstr "区切り"
 
@@ -2270,17 +2272,17 @@ msgstr "区切り"
 msgid "All supported types"
 msgstr "サポートしている全種類"
 
-#: ../lib/ephy-file-helpers.c:452
+#: ../lib/ephy-file-helpers.c:299
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "\"%s\" に作業用フォルダを生成できませんでした。"
 
-#: ../lib/ephy-file-helpers.c:528
+#: ../lib/ephy-file-helpers.c:375
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "ファイル \"%s\" は存在します。別の場所に移動して下さい。"
 
-#: ../lib/ephy-file-helpers.c:539
+#: ../lib/ephy-file-helpers.c:386
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "フォルダ \"%s\" の生成に失敗しました。"
@@ -2503,29 +2505,29 @@ msgstr "このセッションのパスワードを記憶する(_R)"
 msgid "Save password in _keyring"
 msgstr "パスワードをキーリングに保存する(_K)"
 
-#: ../lib/ephy-stock-icons.c:54
+#: ../lib/ephy-stock-icons.c:51
 msgid "Popup Windows"
 msgstr "ウィンドウのポップアップ"
 
-#: ../lib/ephy-stock-icons.c:55 ../src/ephy-history-window.c:1195
+#: ../lib/ephy-stock-icons.c:52 ../src/ephy-history-window.c:1195
 msgid "History"
 msgstr "履歴"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-window.c:1337
+#: ../lib/ephy-stock-icons.c:53 ../src/ephy-window.c:1337
 msgid "Bookmark"
 msgstr "ブックマーク"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:917
+#: ../lib/ephy-stock-icons.c:54 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
 #: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1341
 msgid "Bookmarks"
 msgstr "ブックマーク"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:283
+#: ../lib/ephy-stock-icons.c:55 ../src/ephy-toolbar.c:283
 msgid "Address Entry"
 msgstr "アドレス・エントリ"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:56
 msgid "_Download"
 msgstr "ダウンロード(_D)"
 
@@ -2565,7 +2567,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:914
+#: ../lib/widgets/ephy-location-entry.c:892
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "このアイコンをドラッグ＆ドロップすると、このページのリンクを生成します"
 
@@ -3175,7 +3177,7 @@ msgid "Find next occurrence of the search string"
 msgstr "前方に出現する文字列を検索します"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:276 ../src/ephy-toolbar.c:571
+#: ../src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:571
 msgid "Leave Fullscreen"
 msgstr "フルスクリーン表示の解除"
 
@@ -3339,7 +3341,7 @@ msgstr "GNOME ウェブ・ブラウザ"
 msgid "GNOME Web Browser options"
 msgstr "GNOME ウェブ・ブラウザのオプション"
 
-#: ../src/ephy-notebook.c:673
+#: ../src/ephy-notebook.c:659
 msgid "Close tab"
 msgstr "タブを閉じます"
 
@@ -3408,17 +3410,14 @@ msgstr ""
 "クリックしたリンクを開くには、サイドバー拡張がインストールされている必要があ"
 "ります。"
 
-#. Translators: this is displayed in the statusbar; choose a short word
-#. * or even an abbreviation.
-#.
-#: ../src/ephy-statusbar.c:158
+#: ../src/ephy-statusbar.c:120
 msgid "Caret"
 msgstr "[キャレット]"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:166
+#: ../src/ephy-statusbar.c:127
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "[F7] キーを押下してキャレット選択モードを切り替えます"
 
