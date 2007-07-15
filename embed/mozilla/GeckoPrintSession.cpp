@@ -161,7 +161,7 @@ GeckoPrintSession::FromSettings (nsIPrintSettings *aSettings)
 
   /* this is ok since the caller holds a ref to the settings which hold a ref to the session */
   nsIPrintSession *sessionPtr = session.get();
-  return NS_STATIC_CAST (GeckoPrintSession*, sessionPtr);
+  return static_cast<GeckoPrintSession*>(sessionPtr);
 }
 
 /* static functions */

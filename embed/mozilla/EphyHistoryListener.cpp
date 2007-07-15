@@ -63,7 +63,7 @@ EphyHistoryListener::Init (EphyHistory *aHistory)
 	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && webProgress, rv);
 		
 	rv = webProgress->AddProgressListener
-			(NS_STATIC_CAST(nsIWebProgressListener*,this),
+			(static_cast<nsIWebProgressListener*>(this),
 			 nsIWebProgress::NOTIFY_STATE_REQUEST);
 
 	return rv;

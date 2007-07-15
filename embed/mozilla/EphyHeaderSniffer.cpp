@@ -233,7 +233,7 @@ EphyHeaderSniffer::GetInterface(const nsIID & uuid, void * *result)
 			EphyBadCertRejector *badCertRejector = new EphyBadCertRejector ();
 			if (!badCertRejector) return NS_ERROR_OUT_OF_MEMORY;
 
-			*result = NS_STATIC_CAST(nsIBadCertListener*, badCertRejector);
+			*result = static_cast<nsIBadCertListener*>(badCertRejector);
 			NS_ADDREF (badCertRejector);
 
 			return NS_OK;

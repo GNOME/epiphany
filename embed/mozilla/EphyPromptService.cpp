@@ -514,7 +514,7 @@ static void
 DeletePrompter (gpointer aPromptPtr,
 	        GObject *aZombie)
 {
-	Prompter *prompt = NS_STATIC_CAST (Prompter*, aPromptPtr);
+	Prompter *prompt = static_cast<Prompter*>(aPromptPtr);
 
 	delete prompt;
 }
@@ -531,7 +531,7 @@ Prompter::Show ()
 			  G_CALLBACK (gtk_widget_destroy), NULL);
 	g_object_weak_ref (G_OBJECT (mDialog),
 			   (GWeakNotify) DeletePrompter,
-			   NS_STATIC_CAST (gpointer, this));
+			   static_cast<gpointer>(this));
 
 	gtk_widget_show (GTK_WIDGET (mDialog));
 }

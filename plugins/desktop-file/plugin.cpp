@@ -198,7 +198,7 @@ show_error_dialog (NPP instance,
 
 	nsCOMPtr<nsIDOMWindow> domWin;
 	mozilla_functions.getvalue (instance, NPNVDOMWindow,
-				    NS_STATIC_CAST (nsIDOMWindow **, getter_AddRefs (domWin)));
+				    static_cast<nsIDOMWindow **>(getter_AddRefs (domWin)));
 	parent = EphyUtils::FindGtkParent (domWin);
 
 	dialog = gtk_message_dialog_new (GTK_WINDOW (parent),

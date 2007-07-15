@@ -45,7 +45,7 @@
 
 #include "GeckoFormSigningDialog.h"
 
-#define LITERAL(s) NS_REINTERPRET_CAST(const nsAString::char_type*, NS_L(s))
+#define LITERAL(s) reinterpret_cast<const nsAString::char_type*>(NS_L(s))
 
 NS_IMPL_ISUPPORTS1 (GeckoFormSigningDialog,
 		    nsIFormSigningDialog)

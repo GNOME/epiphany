@@ -483,7 +483,7 @@ EphyContextMenuListener::ContextMenu (nsIDOMEvent* aDOMEvent)
 	NS_ENSURE_TRUE (mouseEvent, NS_ERROR_FAILURE);
 
 	MozillaEmbedEvent *info;
-	info = mozilla_embed_event_new (NS_STATIC_CAST (gpointer, aDOMEvent));
+	info = mozilla_embed_event_new (static_cast<gpointer>(aDOMEvent));
 
 	nsresult rv;
 	EventContext context;

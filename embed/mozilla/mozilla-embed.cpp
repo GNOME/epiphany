@@ -975,7 +975,7 @@ mozilla_embed_emit_mouse_signal (MozillaEmbed *embed,
 	nsCOMPtr<nsIDOMEvent> dev = do_QueryInterface (ev);
 	NS_ENSURE_TRUE (dev, FALSE);
 
-	info = mozilla_embed_event_new (NS_STATIC_CAST (gpointer, dev));
+	info = mozilla_embed_event_new (static_cast<gpointer>(dev));
 
 	event_context.Init (mpriv->browser);
         rv = event_context.GetMouseEventInfo (ev, MOZILLA_EMBED_EVENT (info));

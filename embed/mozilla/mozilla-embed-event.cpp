@@ -159,7 +159,7 @@ impl_has_property (EphyEmbedEvent *event,
 static gpointer
 impl_get_dom_event (EphyEmbedEvent *event)
 {
-	return NS_STATIC_CAST (gpointer, ((MozillaEmbedEvent *) event)->priv->dom_event);
+	return static_cast<gpointer>(((MozillaEmbedEvent *) event)->priv->dom_event);
 }
 
 static void
