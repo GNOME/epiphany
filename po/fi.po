@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-07-03 17:52+0300\n"
+"POT-Creation-Date: 2007-07-12 12:16+0300\n"
 "PO-Revision-Date: 2007-02-03 16:55+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists."
@@ -595,7 +595,7 @@ msgid "Cookies"
 msgstr "Evästeet"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:258
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:113
 msgid "Downloads"
 msgstr "Tallennukset"
 
@@ -703,7 +703,7 @@ msgstr "Valitse k_ieli:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:14
-#: ../lib/widgets/ephy-location-entry.c:647 ../src/ephy-history-window.c:266
+#: ../lib/widgets/ephy-location-entry.c:625 ../src/ephy-history-window.c:266
 msgid "Cl_ear"
 msgstr "T_yhjennä"
 
@@ -937,7 +937,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Jäljellä"
 
-#: ../embed/ephy-embed-shell.c:264
+#: ../embed/ephy-embed-shell.c:272
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphanya ei voi käyttää nyt: Mozillan alustus ei onnistunut."
 
@@ -1778,15 +1778,15 @@ msgstr "Sivusto \"%s\" pyytää allekirjoittamaan seuraavan tekstin:"
 msgid "_Sign text"
 msgstr "_Allekirjoita teksti"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:198
+#: ../embed/mozilla/GeckoPrintService.cpp:197
 msgid "Options"
 msgstr "Valinnat"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:462
+#: ../embed/mozilla/GeckoPrintService.cpp:461
 msgid "Print this page?"
 msgstr "Tulostetaanko tämä sivu?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:470
+#: ../embed/mozilla/GeckoPrintService.cpp:469
 msgid "Preparing to print"
 msgstr "Valmistellaan tulostusta"
 
@@ -2132,8 +2132,8 @@ msgid ""
 "\n"
 "The padlock icon in the statusbar also indicates whether a page is secure."
 msgstr ""
-"Salattuja sivuja luettaessa osoitekenttä on eri värinen ja lukittu "
-"lukon kuva näytetään.\n"
+"Salattuja sivuja luettaessa osoitekenttä on eri värinen ja lukittu lukon "
+"kuva näytetään.\n"
 "\n"
 "Näet myös lukon kuvasta tilarivillä, onko sivusto salattu."
 
@@ -2230,36 +2230,36 @@ msgstr ""
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:963
+#: ../lib/egg/egg-editable-toolbar.c:934
 #, c-format
 msgid "Show “_%s”"
 msgstr "Näytä \"_%s\""
 
-#: ../lib/egg/egg-editable-toolbar.c:1423
+#: ../lib/egg/egg-editable-toolbar.c:1394
 msgid "_Move on Toolbar"
 msgstr "_Siirrä työkalupalkissa"
 
-#: ../lib/egg/egg-editable-toolbar.c:1424
+#: ../lib/egg/egg-editable-toolbar.c:1395
 msgid "Move the selected item on the toolbar"
 msgstr "Siirrä valittu kohta työkalupalkkiin"
 
-#: ../lib/egg/egg-editable-toolbar.c:1425
+#: ../lib/egg/egg-editable-toolbar.c:1396
 msgid "_Remove from Toolbar"
 msgstr "_Poista työkalupalkista"
 
-#: ../lib/egg/egg-editable-toolbar.c:1426
+#: ../lib/egg/egg-editable-toolbar.c:1397
 msgid "Remove the selected item from the toolbar"
 msgstr "Poista valittu kohta työkalupalkista"
 
-#: ../lib/egg/egg-editable-toolbar.c:1427
+#: ../lib/egg/egg-editable-toolbar.c:1398
 msgid "_Delete Toolbar"
 msgstr "_Poista työkalupalkki"
 
-#: ../lib/egg/egg-editable-toolbar.c:1428
+#: ../lib/egg/egg-editable-toolbar.c:1399
 msgid "Remove the selected toolbar"
 msgstr "Poista valittu työkalupalkki"
 
-#: ../lib/egg/egg-toolbar-editor.c:469
+#: ../lib/egg/egg-toolbar-editor.c:439
 msgid "Separator"
 msgstr "Erotin"
 
@@ -2267,17 +2267,17 @@ msgstr "Erotin"
 msgid "All supported types"
 msgstr "Kaikki tuetut tyypit"
 
-#: ../lib/ephy-file-helpers.c:452
+#: ../lib/ephy-file-helpers.c:299
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Väliaikaiskansiota hakemistoon \"%s\" ei voi luoda."
 
-#: ../lib/ephy-file-helpers.c:528
+#: ../lib/ephy-file-helpers.c:375
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Tiedosto \"%s\" on jo olemassa, siirrä se pois tieltä."
 
-#: ../lib/ephy-file-helpers.c:539
+#: ../lib/ephy-file-helpers.c:386
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Kansiota \"%s\" ei voi luoda."
@@ -2501,29 +2501,29 @@ msgstr "Muista salasana tämän istunnon ajan"
 msgid "Save password in _keyring"
 msgstr "Tallenna salasana _avainrenkaaseen"
 
-#: ../lib/ephy-stock-icons.c:54
+#: ../lib/ephy-stock-icons.c:51
 msgid "Popup Windows"
 msgstr "Ponnahdusikkunat"
 
-#: ../lib/ephy-stock-icons.c:55 ../src/ephy-history-window.c:1195
+#: ../lib/ephy-stock-icons.c:52 ../src/ephy-history-window.c:1195
 msgid "History"
 msgstr "Sivuhistoria"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-window.c:1337
+#: ../lib/ephy-stock-icons.c:53 ../src/ephy-window.c:1337
 msgid "Bookmark"
 msgstr "Kirjanmerkki"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:917
+#: ../lib/ephy-stock-icons.c:54 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
 #: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1341
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:283
+#: ../lib/ephy-stock-icons.c:55 ../src/ephy-toolbar.c:283
 msgid "Address Entry"
 msgstr "Osoitekenttä"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:56
 msgid "_Download"
 msgstr "_Tallenna"
 
@@ -2563,7 +2563,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:914
+#: ../lib/widgets/ephy-location-entry.c:892
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Vedä ja pudota tämä kuvake tehdäksesi tähän sivuun osoittavan linkin"
 
@@ -3172,7 +3172,7 @@ msgid "Find next occurrence of the search string"
 msgstr "Etsi haettavan merkkijonon seuraava esiintymä"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:276 ../src/ephy-toolbar.c:571
+#: ../src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:571
 msgid "Leave Fullscreen"
 msgstr "Poistu kokoruututilasta"
 
@@ -3338,7 +3338,7 @@ msgstr "Gnomen webselain"
 msgid "GNOME Web Browser options"
 msgstr "Gnomen webselain"
 
-#: ../src/ephy-notebook.c:673
+#: ../src/ephy-notebook.c:659
 msgid "Close tab"
 msgstr "Sulje välilehti"
 
@@ -3405,17 +3405,14 @@ msgstr "Sivupalkkilaajennos vaaditaan"
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Napsauttamasi linkki vaatii, että sivupalkkilaajennos on asennettu."
 
-#. Translators: this is displayed in the statusbar; choose a short word
-#. * or even an abbreviation.
-#.
-#: ../src/ephy-statusbar.c:158
+#: ../src/ephy-statusbar.c:120
 msgid "Caret"
 msgstr "Kohdistin"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:166
+#: ../src/ephy-statusbar.c:127
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "Poistu näppäimistövalintatilasta painamalla F7"
 
