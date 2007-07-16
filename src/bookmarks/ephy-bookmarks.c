@@ -1074,7 +1074,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	 * translated string. */
 	/* Translators: this is an automatic topic containing local
 	 * websites bookmarks autodiscovered with zeroconf. */
-	const char *bk_local_sites = Q_("bookmarks|Local Sites");
+	const char *bk_local_sites = Q_("bookmarks|Nearby Sites");
 #endif
 
 	eb->priv = EPHY_BOOKMARKS_GET_PRIVATE (eb);
@@ -1668,6 +1668,7 @@ ephy_bookmarks_get_topic_uri (EphyBookmarks *eb,
 #ifdef ENABLE_ZEROCONF
 	else if (ephy_bookmarks_get_local (eb) == node)
 	{
+		/* Note: do not change to "Nearby" because of existing custom toolbars */
 		uri = g_strdup ("topic://Special/Local");
 	}
 #endif

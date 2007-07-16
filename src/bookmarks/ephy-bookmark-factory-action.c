@@ -320,7 +320,7 @@ ephy_bookmark_factory_action_new (const char *name)
 {
 	return GTK_ACTION (g_object_new (EPHY_TYPE_BOOKMARK_FACTORY_ACTION,
 					 "name", name,
-					 "label", _("Quick Bookmark"),
+					 "label", _("Bookmark"),
 					 "stock-id", GTK_STOCK_ADD,
 					 NULL));
 }

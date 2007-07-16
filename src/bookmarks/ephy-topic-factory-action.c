@@ -319,7 +319,7 @@ ephy_topic_factory_action_new (const char *name)
 {
 	return GTK_ACTION (g_object_new (EPHY_TYPE_TOPIC_FACTORY_ACTION,
 					 "name", name,
-					 "label", _("Quick Topic"),
+					 "label", _("Topic"),
 					 "stock-id", GTK_STOCK_ADD,
 					 NULL));
 }

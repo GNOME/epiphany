@@ -1,3 +1,19 @@
+2007-07-16  Wouter Bolsterlee  <wbolster@svn.gnome.org>
+
+	* src/bookmarks/ephy-bookmark-factory-action.c:
+	(ephy_bookmark_factory_action_new):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init),
+	(ephy_bookmarks_get_topic_uri):
+	* src/bookmarks/ephy-topic-factory-action.c:
+	(ephy_topic_factory_action_new):
+
+	String changes based on user feedback:
+	- "Local sites" -> "Nearby sites" (because it is a
+	better description)
+	- Drop the "Quick" prefix from Topic/Bookmark items in
+	toolbar editor, because it has no function besides
+	confusing users.
+
 2007-07-16  Christian Persch  <chpe@gnome.org>
 
 	* configure.ac:
@@ -37,7 +53,7 @@
 	* data/epiphany.desktop.in.in:
 	* data/icons/16x16/apps/Makefile.am:
 	* data/icons/22x22/apps/Makefile.am:
-        * data/icons/24x24/apps/Makefile.am:
+	* data/icons/24x24/apps/Makefile.am:
 	* data/icons/32x32/apps/Makefile.am:
 	* data/icons/scalable/apps/Makefile.am:
 	* lib/ephy-stock-icons.h:
@@ -131,7 +147,7 @@
 
 	* embed/mozilla/GeckoPrintService.cpp:
 
-        Remove gtk version check since we now depend on 2.11.
+	Remove gtk version check since we now depend on 2.11.
 
 2007-07-10  Christian Persch  <chpe@gnome.org>
 
@@ -154,7 +170,7 @@
 	* lib/widgets/ephy-zoom-action.c: (ephy_zoom_action_class_init):
 	* lib/widgets/ephy-zoom-control.c: (ephy_zoom_control_class_init):
 
-        Port to new tooltips API.
+	Port to new tooltips API.
 
 2007-07-10  Christian Persch  <chpe@gnome.org>
 
@@ -284,11 +300,11 @@
 
 2007-07-03  Jaap Haitsma  <jaap@haitsma.org>
 
-        * lib/egg/update-toolbareditor-from-libegg: removed
-        * lib/egg/update-toolbareditor-from-libegg.sh: added
+	* lib/egg/update-toolbareditor-from-libegg: removed
+	* lib/egg/update-toolbareditor-from-libegg.sh: added
 	Rename to update-toolbareditor-from-libegg.sh
 	Also updated the script such it updates itself
-        * lib/egg/egg*:
+	* lib/egg/egg*:
 	Sync with latest libegg toolbareditor
 
 2007-07-01  Jaap Haitsma  <jaap@haitsma.org>
@@ -301,7 +317,7 @@
 	
 	Changelog entry from the previous commit. I accidently changed the
 	wrong Changelog file
-        * lib/egg/update-toolbareditor-from-libegg: script that syncs local
+	* lib/egg/update-toolbareditor-from-libegg: script that syncs local
 	toolbar editor copy with the one in libegg SVN
 	* lib/egg/egg*: sync with toolbar editor in libegg. Sync obtained by 
 	running update-toolbareditor-from-libegg
@@ -314,10 +330,10 @@
 	* data/Makefile.am:
 	A data/weasel-ua-pref.js.in:
 
-        Make UA ff-compatible. This fixes
-        https://bugzilla.mozilla.org/show_bug.cgi?id=334967 . See also
-        Camino bug https://bugzilla.mozilla.org/show_bug.cgi?id=384721 and
-        https://bugzilla.mozilla.org/show_bug.cgi?id=385999 for discussion.
+	Make UA ff-compatible. This fixes
+	https://bugzilla.mozilla.org/show_bug.cgi?id=334967 . See also
+	Camino bug https://bugzilla.mozilla.org/show_bug.cgi?id=384721 and
+	https://bugzilla.mozilla.org/show_bug.cgi?id=385999 for discussion.
 
 2007-06-26  Luca Ferretti  <elle.uca@libero.it>
 
