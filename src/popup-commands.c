@@ -285,7 +285,6 @@ background_download_completed (EphyEmbedPersist *persist)
 	bg = ephy_embed_persist_get_dest (persist);
 
 	/* open the Appearance Properties capplet on the Background tab */
-	/* FIXME! */
 	if (!ephy_file_launch_desktop_file (GNOME_APPEARANCE_PROPERTIES, bg, user_time))
 	{
 		/* Fallback for <= 2.18 desktop: try to open the "Background Properties" capplet */
