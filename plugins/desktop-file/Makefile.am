@@ -12,7 +12,7 @@ gecko_include_subdirs = \
 libdesktopfileplugin_la_CPPFLAGS = \
 	-DG_LOG_DOMAIN=\"ephy-desktop-file-plugin\" \
 	-I$(top_srcdir)/lib \
-	$(addprefix -I$(MOZILLA_INCLUDE_ROOT)/,$(gecko_include_subdirs)) \
+	$(addprefix -I$(GECKO_INCLUDE_ROOT)/,$(gecko_include_subdirs)) \
 	$(AM_CPPFLAGS)
 
 libdesktopfileplugin_la_CXXFLAGS = \
@@ -25,7 +25,7 @@ libdesktopfileplugin_la_LIBADD = \
 libdesktopfileplugin_la_LDFLAGS = \
 	-module -avoid-version \
 	-export-symbols $(srcdir)/plugin.symbols \
-	-R$(MOZILLA_HOME) \
+	-R$(GECKO_HOME) \
 	$(AM_LDFLAGS)
 
 EXTRA_DIST = \

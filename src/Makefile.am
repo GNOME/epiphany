@@ -203,7 +203,7 @@ epiphany_CFLAGS = \
 	$(DBUS_CFLAGS)		\
 	$(AM_CFLAGS)
 
-epiphany_LDFLAGS = -R$(MOZILLA_HOME) -dlopen self
+epiphany_LDFLAGS = -R$(GECKO_HOME) -dlopen self
 
 epiphany_LDADD = \
 	libephymain.la \
@@ -215,8 +215,8 @@ epiphany_LDADD = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(GECKO_LIBS) \
-	$(MOZILLA_EXTRA_LIBS) \
-	$(MOZILLA_GLUE_LIBS) \
+	$(GECKO_EXTRA_LIBS) \
+	$(GECKO_GLUE_LIBS) \
 	$(DEPENDENCIES_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)

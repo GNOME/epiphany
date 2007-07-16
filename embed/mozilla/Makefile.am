@@ -139,11 +139,11 @@ libephymozillaembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib	    		\
 	-I$(top_srcdir)/embed	    		\
 	-I$(top_srcdir)		    		\
-	$(addprefix -I$(MOZILLA_INCLUDE_ROOT)/,$(mozilla_include_subdirs))	\
+	$(addprefix -I$(GECKO_INCLUDE_ROOT)/,$(mozilla_include_subdirs))	\
 	-DSHARE_DIR=\"$(pkgdatadir)\"   	\
 	-DPLUGINDIR=\"$(libdir)/epiphany/$(EPIPHANY_MAJOR)/plugins\"		\
-	-DMOZILLA_HOME=\"$(MOZILLA_HOME)\"	\
-	-DMOZILLA_PREFIX=\"$(MOZILLA_PREFIX)\"	\
+	-DMOZILLA_HOME=\"$(GECKO_HOME)\"	\
+	-DMOZILLA_PREFIX=\"$(GECKO_PREFIX)\"	\
 	-DMOZILLA_NATIVE_PLUGINSDIR=\"$(libdir)/mozilla/plugins\"		\
 	-DUA_VERSION=\"$(EPIPHANY_UA_VERSION)\"	\
 	-DALLOW_PRIVATE_API			\

@@ -146,8 +146,8 @@ GTKDOC_CFLAGS = -I$(top_srcdir)/src \
 		-I$(top_srcdir)/src/bookmarks \
 		-I$(top_srcdir)/lib/egg \
 		-I$(top_builddir)/lib/egg \
-		-I$(MOZILLA_INCLUDE_ROOT) \
-		-I$(MOZILLA_INCLUDE_ROOT)/gtkembedmoz \
+		-I$(GECKO_INCLUDE_ROOT) \
+		-I$(GECKO_INCLUDE_ROOT)/gtkembedmoz \
 		$(DEPENDENCIES_CFLAGS) \
 		$(GECKO_CFLAGS) \
 		$(DBUS_CFLAGS) \
@@ -163,8 +163,8 @@ GTKDOC_LIBS = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(GECKO_LIBS)	\
-	$(MOZILLA_EXTRA_LIBS) \
-	$(MOZILLA_GLUE_LIBS) \
+	$(GECKO_EXTRA_LIBS) \
+	$(GECKO_GLUE_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
 
@@ -230,7 +230,7 @@ scan-build.stamp: $(HFILE_GLOB)
 	@echo '*** Scanning header files ***'
 	@-chmod -R u+w $(srcdir)
 	if grep -l '^..*$$' $(srcdir)/$(DOC_MODULE).types > /dev/null ; then \
-	    LD_LIBRARY_PATH=$(MOZILLA_HOME):$$LD_LIBRARY_PATH CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" CFLAGS="$(GTKDOC_CFLAGS)" LDFLAGS="$(GTKDOC_LIBS)" gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE) --output-dir=$(srcdir) ; \
+	    LD_LIBRARY_PATH=$(GECKO_HOME):$$LD_LIBRARY_PATH CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" CFLAGS="$(GTKDOC_CFLAGS)" LDFLAGS="$(GTKDOC_LIBS)" gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE) --output-dir=$(srcdir) ; \
 	else \
 	    cd $(srcdir) ; \
 	    for i in $(SCANOBJ_FILES) ; do \

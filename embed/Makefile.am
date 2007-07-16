@@ -79,7 +79,7 @@ libephyembed_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libephyembed_la_CFLAGS = \
-	-I$(MOZILLA_INCLUDE_ROOT)/gtkembedmoz	\
+	-I$(GECKO_INCLUDE_ROOT)/gtkembedmoz	\
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
 	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CFLAGS)
@@ -90,7 +90,7 @@ libephyembedfactory_la_SOURCES =	\
 
 libephyembedfactory_la_CPPFLAGS = \
 	-I$(top_srcdir)/embed/mozilla		\
-	-I$(MOZILLA_INCLUDE_ROOT)/gtkembedmoz	\
+	-I$(GECKO_INCLUDE_ROOT)/gtkembedmoz	\
 	$(AM_CPPFLAGS)
 
 libephyembedfactory_la_CFLAGS = \
