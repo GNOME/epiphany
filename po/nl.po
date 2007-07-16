@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-06-17 15:01+0200\n"
+"POT-Creation-Date: 2007-07-16 18:46+0200\n"
 "PO-Revision-Date: 2007-06-17 15:03+0100\n"
 "Last-Translator: Reinout van Schouwen <reinouts@gnome.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -47,8 +47,8 @@ msgstr "Epiphany webbrowser"
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:523
-#: ../src/ephy-main.c:615
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:526
+#: ../src/ephy-main.c:618
 msgid "Web Browser"
 msgstr "Webbrowser"
 
@@ -669,7 +669,7 @@ msgstr "Cookies"
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:258
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:113
 msgid "Downloads"
 msgstr "Downloads"
 
@@ -805,7 +805,7 @@ msgstr "Kies een t_aal:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:14
-#: ../lib/widgets/ephy-location-entry.c:647 ../src/ephy-history-window.c:266
+#: ../lib/widgets/ephy-location-entry.c:625 ../src/ephy-history-window.c:266
 msgid "Cl_ear"
 msgstr "_Wissen"
 
@@ -1084,7 +1084,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Te gaan"
 
-#: ../embed/ephy-embed-shell.c:264
+#: ../embed/ephy-embed-shell.c:272
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr ""
 "Epiphany kan nu niet gebruikt worden. Initialisatie van Mozilla mislukt."
@@ -2047,16 +2047,16 @@ msgstr "De webpagina ‘%s’ verzoekt u de volgende tekst te ondertekenen:"
 msgid "_Sign text"
 msgstr "_Tekst ondertekenen"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:198
+#: ../embed/mozilla/GeckoPrintService.cpp:197
 msgid "Options"
 msgstr "Opties"
 
 # src/menubar.c:73
-#: ../embed/mozilla/GeckoPrintService.cpp:462
+#: ../embed/mozilla/GeckoPrintService.cpp:461
 msgid "Print this page?"
 msgstr "Deze pagina afdrukken?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:470
+#: ../embed/mozilla/GeckoPrintService.cpp:469
 msgid "Preparing to print"
 msgstr "Klaarmaken voor afdrukken"
 
@@ -2487,9 +2487,11 @@ msgstr ""
 # src/bookmarks_editor.c:941
 # src/bookmarks_editor.c:1148
 # src/menubar.c:565
-#: ../embed/mozilla/MozDownload.cpp:643
-msgid "Files"
-msgstr "Bestanden"
+#. translators: this is the directory name to store auxilary files when saving html files
+#: ../embed/mozilla/MozDownload.cpp:649
+#, c-format
+msgid "%s Files"
+msgstr "%s (bestanden)"
 
 #. We do this before reading the user pref file so that the user
 #. * still can overwrite this pref.
@@ -2523,39 +2525,39 @@ msgstr ""
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:904
+#: ../lib/egg/egg-editable-toolbar.c:934
 #, c-format
 msgid "Show “_%s”"
 msgstr "‘_%s’ tonen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1364
+#: ../lib/egg/egg-editable-toolbar.c:1394
 msgid "_Move on Toolbar"
 msgstr "Ver_plaatsen op werkbalk"
 
-#: ../lib/egg/egg-editable-toolbar.c:1365
+#: ../lib/egg/egg-editable-toolbar.c:1395
 msgid "Move the selected item on the toolbar"
 msgstr "Geselecteerd item op de werkbalk verplaatsen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1366
+#: ../lib/egg/egg-editable-toolbar.c:1396
 msgid "_Remove from Toolbar"
 msgstr "Ver_wijderen van werkbalk"
 
-#: ../lib/egg/egg-editable-toolbar.c:1367
+#: ../lib/egg/egg-editable-toolbar.c:1397
 msgid "Remove the selected item from the toolbar"
 msgstr "Geselecteerd item van de werkbalk verwijderen"
 
 # src/menubar.c:150
-#: ../lib/egg/egg-editable-toolbar.c:1368
+#: ../lib/egg/egg-editable-toolbar.c:1398
 msgid "_Delete Toolbar"
 msgstr "_Werkbalk verwijderen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1369
+#: ../lib/egg/egg-editable-toolbar.c:1399
 msgid "Remove the selected toolbar"
 msgstr "Geselecteerde werkbalk verwijderen"
 
-#: ../lib/egg/egg-toolbar-editor.c:446
+#: ../lib/egg/egg-toolbar-editor.c:439
 msgid "Separator"
 msgstr "Scheidingsteken"
 
@@ -2563,17 +2565,17 @@ msgstr "Scheidingsteken"
 msgid "All supported types"
 msgstr "Alle ondersteunde types"
 
-#: ../lib/ephy-file-helpers.c:452
+#: ../lib/ephy-file-helpers.c:299
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Kan geen tijdelijke map aanmaken in ‘%s’."
 
-#: ../lib/ephy-file-helpers.c:528
+#: ../lib/ephy-file-helpers.c:375
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Het bestand ‘%s’ bestaat. Haal het alstublieft uit de weg."
 
-#: ../lib/ephy-file-helpers.c:539
+#: ../lib/ephy-file-helpers.c:386
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Aanmaken van de map ‘%s’ is mislukt."
@@ -2809,7 +2811,7 @@ msgid "Save password in _keyring"
 msgstr "Wachtwoord in _sleutelbos opslaan"
 
 # src/menubar.c:416
-#: ../lib/ephy-stock-icons.c:54
+#: ../lib/ephy-stock-icons.c:51
 msgid "Popup Windows"
 msgstr "Opduikvensters"
 
@@ -2817,23 +2819,23 @@ msgstr "Opduikvensters"
 # src/toolbar.c:273
 # ui/epiphany.glade.h:78
 # ui/preferences.glade.h:88
-#: ../lib/ephy-stock-icons.c:55 ../src/ephy-history-window.c:1195
+#: ../lib/ephy-stock-icons.c:52 ../src/ephy-history-window.c:1195
 msgid "History"
 msgstr "Geschiedenis"
 
 # src/menubar.c:571
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-window.c:1337
+#: ../lib/ephy-stock-icons.c:53 ../src/ephy-window.c:1337
 msgid "Bookmark"
 msgstr "Bladwijzer"
 
 # src/menubar.c:571
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:917
+#: ../lib/ephy-stock-icons.c:54 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
 #: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1341
 msgid "Bookmarks"
 msgstr "Bladwijzers"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:283
+#: ../lib/ephy-stock-icons.c:55 ../src/ephy-toolbar.c:283
 msgid "Address Entry"
 msgstr "Adresingang"
 
@@ -2841,7 +2843,7 @@ msgstr "Adresingang"
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:56
 msgid "_Download"
 msgstr "_Download"
 
@@ -2881,7 +2883,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:914
+#: ../lib/widgets/ephy-location-entry.c:892
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Sleep dit pictogram om een verwijzing naar deze pagina te maken"
 
@@ -3612,7 +3614,7 @@ msgstr "Zoeken naar volgende positie waar de zoekreeks voorkomt"
 
 # src/menubar.c:165
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:276 ../src/ephy-toolbar.c:571
+#: ../src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:571
 msgid "Leave Fullscreen"
 msgstr "Volledig scherm verlaten"
 
@@ -3812,7 +3814,7 @@ msgstr "Opties voor GNOME-webbrowser"
 
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
-#: ../src/ephy-notebook.c:673
+#: ../src/ephy-notebook.c:659
 msgid "Close tab"
 msgstr "Tabblad sluiten"
 
@@ -3892,17 +3894,14 @@ msgstr ""
 
 # src/menubar.c:468
 # ui/preferences.glade.h:262
-#. Translators: this is displayed in the statusbar; choose a short word
-#. * or even an abbreviation.
-#.
-#: ../src/ephy-statusbar.c:158
+#: ../src/ephy-statusbar.c:120
 msgid "Caret"
 msgstr "Cursor"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:166
+#: ../src/ephy-statusbar.c:127
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "In toetsenbordselectiestand drukt u op F7 om deze te verlaten"
 
