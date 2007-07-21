@@ -42,6 +42,7 @@ ephy_stock_icons_init (void)
 		STOCK_NEW_TAB,
 		STOCK_NEW_WINDOW,
 		STOCK_SEND_MAIL,
+		STOCK_NEW_MAIL,
 		STOCK_ADD_BOOKMARK,
 		STOCK_PRINT_SETUP,
 	};

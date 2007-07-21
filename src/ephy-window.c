@@ -309,7 +309,7 @@ static const GtkActionEntry ephy_popups_entries [] = {
 
 	/* Links */
 
-	{ "OpenLink", GTK_STOCK_OPEN, N_("_Open Link"), NULL,
+	{ "OpenLink", GTK_STOCK_JUMP_TO, N_("_Open Link"), NULL,
 	  N_("Open link in this window"),
 	  G_CALLBACK (popup_cmd_open_link) },
 	{ "OpenLinkInNewWindow", NULL, N_("Open Link in New _Window"), NULL,
@@ -318,7 +318,7 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	{ "OpenLinkInNewTab", NULL, N_("Open Link in New _Tab"), NULL,
 	  N_("Open link in a new tab"),
 	  G_CALLBACK (popup_cmd_link_in_new_tab) },
-	{ "DownloadLink", STOCK_DOWNLOAD, N_("_Download Link"), NULL,
+	{ "DownloadLink", NULL, N_("_Download Link"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_download_link) },
 	{ "DownloadLinkAs", GTK_STOCK_SAVE_AS, N_("_Save Link As…"), NULL,
 	  N_("Save link with a different name"),
@@ -331,16 +331,16 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	/* Email links */
 
 	/* This is on the context menu on a mailto: link and opens the mail program */
-	{ "SendEmail", GTK_STOCK_OPEN, N_("_Send Email…"),
+	{ "SendEmail", STOCK_NEW_MAIL, N_("_Send Email…"),
 	  NULL, NULL, G_CALLBACK (popup_cmd_open_link) },
 	{ "CopyEmailAddress", NULL, N_("_Copy Email Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
 
 	/* Images */
 
-	{ "OpenImage", GTK_STOCK_OPEN, N_("Open _Image"), NULL,
+	{ "OpenImage", NULL, N_("Open _Image"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_open_image) },
-	{ "SaveImageAs", GTK_STOCK_SAVE_AS, N_("_Save Image As…"), NULL,
+	{ "SaveImageAs", NULL, N_("_Save Image As…"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_save_image_as) },
 	{ "SetImageAsBackground", NULL, N_("_Use Image As Background"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_set_image_as_background) },
