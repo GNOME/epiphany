@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.hu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-06-18 03:32+0100\n"
-"PO-Revision-Date: 2007-07-11 00:28+0200\n"
+"POT-Creation-Date: 2007-07-17 03:31+0100\n"
+"PO-Revision-Date: 2007-07-21 18:21+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
@@ -40,8 +40,8 @@ msgid "Epiphany Web Browser"
 msgstr "Epiphany webböngésző"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:523
-#: ../src/ephy-main.c:615
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:526
+#: ../src/ephy-main.c:618
 msgid "Web Browser"
 msgstr "Webböngésző"
 
@@ -593,7 +593,7 @@ msgid "Cookies"
 msgstr "Sütik"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:258
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:113
 msgid "Downloads"
 msgstr "Letöltések"
 
@@ -701,7 +701,7 @@ msgstr "Válasszon egy _nyelvet:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:14
-#: ../lib/widgets/ephy-location-entry.c:647 ../src/ephy-history-window.c:266
+#: ../lib/widgets/ephy-location-entry.c:625 ../src/ephy-history-window.c:266
 msgid "Cl_ear"
 msgstr "_Törlés"
 
@@ -771,7 +771,7 @@ msgstr "Egyé_ni stíluslap használata"
 
 #: ../data/glade/prefs-dialog.glade.h:32
 msgid "_Address:"
-msgstr "_Cím:"
+msgstr "W_ebcím:"
 
 #: ../data/glade/prefs-dialog.glade.h:33
 msgid "_Always accept"
@@ -935,7 +935,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Hátralévő"
 
-#: ../embed/ephy-embed-shell.c:264
+#: ../embed/ephy-embed-shell.c:272
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Az Epiphany most nem használható. A Mozilla inicializálása nem sikerült."
 
@@ -1773,15 +1773,15 @@ msgstr "A(z) \"%s\" weboldal megköveteli a következő szöveg aláírását:"
 msgid "_Sign text"
 msgstr "Szö_veg aláírása"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:198
+#: ../embed/mozilla/GeckoPrintService.cpp:197
 msgid "Options"
 msgstr "Beállítások"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:462
+#: ../embed/mozilla/GeckoPrintService.cpp:461
 msgid "Print this page?"
 msgstr "Kinyomtatja a jelenlegi oldalt?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:470
+#: ../embed/mozilla/GeckoPrintService.cpp:469
 msgid "Preparing to print"
 msgstr "Nyomtatás előkészítése"
 
@@ -2123,9 +2123,11 @@ msgid ""
 "\n"
 "The padlock icon in the statusbar also indicates whether a page is secure."
 msgstr ""
-"Biztonságos oldalak esetén a címsor színe megváltozik és megjelenik egy lezárt lakat ikon.\n"
+"Biztonságos oldalak esetén a címsor színe megváltozik és megjelenik egy "
+"lezárt lakat ikon.\n"
 "\n"
-"Az állapotsoron látható lakat ikon szintén jelzi, hogy az oldal biztonságos-e."
+"Az állapotsoron látható lakat ikon szintén jelzi, hogy az oldal biztonságos-"
+"e."
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:116
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:144
@@ -2190,9 +2192,11 @@ msgstr ""
 "Ön által megadott információk egy nem biztonságos kapcsolaton keresztül lesz "
 "elküldve és könnyedén eltéríthetőek harmadik személy által."
 
-#: ../embed/mozilla/MozDownload.cpp:643
-msgid "Files"
-msgstr "Fájlok"
+#. translators: this is the directory name to store auxilary files when saving html files
+#: ../embed/mozilla/MozDownload.cpp:649
+#, c-format
+msgid "%s Files"
+msgstr "%s fájljai"
 
 #. We do this before reading the user pref file so that the user
 #. * still can overwrite this pref.
@@ -2224,36 +2228,36 @@ msgstr ""
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:904
+#: ../lib/egg/egg-editable-toolbar.c:934
 #, c-format
 msgid "Show “_%s”"
-msgstr "_\"%s\" megjelenítése"
+msgstr "\"_%s\" megjelenítése"
 
-#: ../lib/egg/egg-editable-toolbar.c:1364
+#: ../lib/egg/egg-editable-toolbar.c:1394
 msgid "_Move on Toolbar"
 msgstr "Át_helyezés az eszköztáron"
 
-#: ../lib/egg/egg-editable-toolbar.c:1365
+#: ../lib/egg/egg-editable-toolbar.c:1395
 msgid "Move the selected item on the toolbar"
 msgstr "A kijelölt elem áthelyezése az eszköztáron"
 
-#: ../lib/egg/egg-editable-toolbar.c:1366
+#: ../lib/egg/egg-editable-toolbar.c:1396
 msgid "_Remove from Toolbar"
 msgstr "_Eltávolítás az eszköztárról"
 
-#: ../lib/egg/egg-editable-toolbar.c:1367
+#: ../lib/egg/egg-editable-toolbar.c:1397
 msgid "Remove the selected item from the toolbar"
 msgstr "A kijelölt elem eltávolítása az eszköztárról"
 
-#: ../lib/egg/egg-editable-toolbar.c:1368
+#: ../lib/egg/egg-editable-toolbar.c:1398
 msgid "_Delete Toolbar"
 msgstr "_Eszköztár törlése"
 
-#: ../lib/egg/egg-editable-toolbar.c:1369
+#: ../lib/egg/egg-editable-toolbar.c:1399
 msgid "Remove the selected toolbar"
 msgstr "A kijelölt eszköztár eltávolítása"
 
-#: ../lib/egg/egg-toolbar-editor.c:446
+#: ../lib/egg/egg-toolbar-editor.c:439
 msgid "Separator"
 msgstr "Elválasztó"
 
@@ -2261,17 +2265,17 @@ msgstr "Elválasztó"
 msgid "All supported types"
 msgstr "Minden támogatott típus"
 
-#: ../lib/ephy-file-helpers.c:452
+#: ../lib/ephy-file-helpers.c:299
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Az ideiglenes könyvtár létrehozása meghiúsult itt: \"%s\"."
 
-#: ../lib/ephy-file-helpers.c:528
+#: ../lib/ephy-file-helpers.c:375
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "A(z) \"%s\" fájl létezik, tüntesse el az útból."
 
-#: ../lib/ephy-file-helpers.c:539
+#: ../lib/ephy-file-helpers.c:386
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "A(z) \"%s\" könyvtár létrehozása meghiúsult."
@@ -2493,29 +2497,31 @@ msgstr "Jelszó meg_jegyzése erre a munkamenetre"
 msgid "Save password in _keyring"
 msgstr "Jelszó mentése a _kulcstartóra"
 
-#: ../lib/ephy-stock-icons.c:54
+#: ../lib/ephy-stock-icons.c:51
 msgid "Popup Windows"
 msgstr "Felugró ablakok"
 
-#: ../lib/ephy-stock-icons.c:55 ../src/ephy-history-window.c:1195
+#: ../lib/ephy-stock-icons.c:52 ../src/ephy-history-window.c:1195
 msgid "History"
 msgstr "Előzmények"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-window.c:1337
+#: ../lib/ephy-stock-icons.c:53
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
+#: ../src/ephy-window.c:1337
 msgid "Bookmark"
 msgstr "Könyvjelző"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:917
+#: ../lib/ephy-stock-icons.c:54 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
 #: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1341
 msgid "Bookmarks"
 msgstr "Könyvjelzők"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:283
+#: ../lib/ephy-stock-icons.c:55 ../src/ephy-toolbar.c:283
 msgid "Address Entry"
 msgstr "Címbeviteli mező"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:56
 msgid "_Download"
 msgstr "_Letöltés"
 
@@ -2555,7 +2561,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:914
+#: ../lib/widgets/ephy-location-entry.c:892
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Húzza és ejtse ezt az ikont egy erre az oldalra mutató link létrehozásához"
 
@@ -2594,10 +2600,6 @@ msgstr ""
 #, c-format
 msgid "%s:"
 msgstr "%s:"
-
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
-msgid "Quick Bookmark"
-msgstr "Gyors könyvjelző"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
@@ -2735,8 +2737,8 @@ msgstr "Nem kategorizált"
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
 #: ../src/bookmarks/ephy-bookmarks.c:1077
-msgid "bookmarks|Local Sites"
-msgstr "Helyi oldalak"
+msgid "bookmarks|Nearby Sites"
+msgstr "Közeli oldalak"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:99
 msgid "Epiphany (RDF)"
@@ -3079,7 +3081,7 @@ msgstr "Cím"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1905
 #: ../src/ephy-history-window.c:1326
 msgid "Address"
-msgstr "Cím"
+msgstr "Webcím"
 
 #: ../src/bookmarks/ephy-bookmarks-ui.c:301
 msgid "Show properties for this bookmark"
@@ -3107,8 +3109,8 @@ msgid "Related"
 msgstr "Kapcsolódó"
 
 #: ../src/bookmarks/ephy-topic-factory-action.c:322
-msgid "Quick Topic"
-msgstr "Gyors témakör"
+msgid "Topic"
+msgstr "Témakör"
 
 #: ../src/bookmarks/ephy-topics-entry.c:359
 #, c-format
@@ -3164,7 +3166,7 @@ msgid "Find next occurrence of the search string"
 msgstr "A szó vagy kifejezés következő előfordulása az oldalon"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:276 ../src/ephy-toolbar.c:571
+#: ../src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:571
 msgid "Leave Fullscreen"
 msgstr "Teljes képernyő elhagyása"
 
@@ -3214,7 +3216,7 @@ msgstr "Súgó az előzményekhez"
 
 #: ../src/ephy-history-window.c:226
 msgid "_Address"
-msgstr "_Cím"
+msgstr "W_ebcím"
 
 #: ../src/ephy-history-window.c:227
 msgid "Show only the address column"
@@ -3330,7 +3332,7 @@ msgstr "GNOME webböngésző"
 msgid "GNOME Web Browser options"
 msgstr "A GNOME webböngésző opciói"
 
-#: ../src/ephy-notebook.c:673
+#: ../src/ephy-notebook.c:659
 msgid "Close tab"
 msgstr "Lap bezárása"
 
@@ -3401,17 +3403,14 @@ msgstr "Az oldalsáv kiterjesztés szükséges"
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "A link, amire kattintott, igényli az oldalsáv kiterjesztés telepítését."
 
-#. Translators: this is displayed in the statusbar; choose a short word
-#. * or even an abbreviation.
-#.
-#: ../src/ephy-statusbar.c:158
+#: ../src/ephy-statusbar.c:120
 msgid "Caret"
 msgstr "Kurzor"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:166
+#: ../src/ephy-statusbar.c:127
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "A billentyűzet kiválasztási módból az F7 megnyomásával léphet ki"
 
