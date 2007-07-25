@@ -1723,8 +1723,11 @@ update_net_state_message (EphyTab *tab, const char *uri, EphyEmbedNetState flags
 	else if (msg != NULL)
 	{
 		g_free (tab->priv->status_message);
+		g_free (tab->priv->loading_title);
 		tab->priv->status_message = g_strdup_printf (msg, host);
+		tab->priv->loading_title = g_strdup_printf (msg, host);
 		g_object_notify (G_OBJECT (tab), "message");
+		g_object_notify (G_OBJECT (tab), "title");
 	}
 
 out:

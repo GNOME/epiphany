@@ -1,5 +1,13 @@
 2007-07-25  Diego Escalante Urrelo  <diegoe@gnome.org>
 
+	* src/ephy-tab.c:
+
+	Update tab title when the statusbar text is updated, so we don't have
+	out of sync messages (like "Loading <page-you-were-before>"). Fixes
+	bug #318947.
+
+2007-07-25  Diego Escalante Urrelo  <diegoe@gnome.org>
+
 	* src/ephy-notebook.c:
 
 	Checks that if we are dragging an element of type
