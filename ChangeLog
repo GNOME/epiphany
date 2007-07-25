@@ -1,5 +1,13 @@
 2007-07-25  Diego Escalante Urrelo  <diegoe@gnome.org>
 
+	* src/ephy-notebook.c:
+
+	Checks that if we are dragging an element of type
+	EPHY_DND_URI_LIST_TYPE we don't reuse an already existing tab to open
+	the first element of the list. Fixes bug #313636.
+
+2007-07-25  Diego Escalante Urrelo  <diegoe@gnome.org>
+
 	* src/prefs-dialog.c:
 	* data/glade/prefs-dialog.glade:
 
