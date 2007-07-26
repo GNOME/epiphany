@@ -427,7 +427,7 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 				 port > 0 ? port : 80, host.get());
 		*aSecondary = g_strdup (_("This address uses a network port which is "
 					  "normally used for purposes other than Web browsing."));
-		*aTertiary = _("Epiphany has cancelled the request for your protection.");
+		*aTertiary = _("The request has been cancelled for your protection.");
 	}
 	else if (strcmp (aError, "proxyResolveFailure") == 0 ||
 		 strcmp (aError, "proxyConnectFailure") == 0)
