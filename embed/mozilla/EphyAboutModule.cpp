@@ -419,17 +419,15 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 
 		/* Translators: %s is the hostname, like "www.example.com" */
 		*aTitle = g_markup_printf_escaped
-				(_("“%s” Denied Access to Port “%d”"),
-				 host.get(), port > 0 ? port : 80);
+				(_("Access Denied to Port “%d” of “%s”"),
+				 port > 0 ? port : 80, host.get());
 		/* Translators: %s is the hostname, like "www.example.com" */
 		*aPrimary = g_markup_printf_escaped
-				(_("“%s” denied access to port “%d”."),
-				 host.get(), port > 0 ? port : 80);
-		*aSecondary = g_strdup (_("The server dropped the connection "
-					  "before any data could be read."));
-		*aTertiary = _("The server may be busy or you may have a "
-			       "network connection problem. Try again later.");
-		*aLinkIntro = _("There may be an old version of the page you wanted:");
+				(_("Access denied to port “%d” of “%s”."),
+				 port > 0 ? port : 80, host.get());
+		*aSecondary = g_strdup (_("This address uses a network port which is "
+					  "normally used for purposes other than Web browsing."));
+		*aTertiary = _("Epiphany has cancelled the request for your protection.");
 	}
 	else if (strcmp (aError, "proxyResolveFailure") == 0 ||
 		 strcmp (aError, "proxyConnectFailure") == 0)
