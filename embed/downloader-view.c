@@ -173,7 +173,14 @@ downloader_view_class_init (DownloaderViewClass *klass)
 static void
 show_downloader_cb (DownloaderView *dv)
 {
-	gtk_window_present (GTK_WINDOW (dv->priv->window));
+	if (!gtk_window_has_toplevel_focus (GTK_WINDOW (dv->priv->window)))
+	{
+		gtk_window_present (GTK_WINDOW (dv->priv->window));
+	}
+	else
+	{
+		gtk_widget_hide (dv->priv->window);
+	}
 }
 
 static gboolean
