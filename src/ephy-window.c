@@ -653,6 +653,7 @@ sync_chromes_visibility (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
 	GtkWidget *menubar;
+	GtkAction *action;
 	gboolean show_statusbar, show_menubar, show_toolbar, show_tabsbar;
 
 	if (priv->closing) return;
@@ -670,9 +671,17 @@ sync_chromes_visibility (EphyWindow *window)
 
 	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (priv->notebook), show_tabsbar);
 
+	action = gtk_action_group_get_action (priv->action_group, "ViewToolbarEditor");
+
 	if (priv->fullscreen_popup != NULL)
 	{
 		g_object_set (priv->fullscreen_popup, "visible", !show_toolbar, NULL);
+
+		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
+	}
+	else
+	{
+		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, !show_toolbar);
 	}
 }
 
@@ -2842,9 +2851,6 @@ ephy_window_state_event (GtkWidget *widget,
 		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), fullscreen);
 		g_signal_handlers_unblock_by_func
 			(action, G_CALLBACK (window_cmd_view_fullscreen), window);
-
-		action = gtk_action_group_get_action (action_group, "ViewToolbarEditor");
-		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, fullscreen);
 	}
 
 	return FALSE;
