@@ -24,8 +24,6 @@
 
 #include "ephy-embed-type-builtins.h"
 #include "ephy-marshal.h"
-#include "mozilla-embed-single.h"
-#include "mozilla-embed.h"
 
 static void ephy_embed_base_init (gpointer g_class);
 

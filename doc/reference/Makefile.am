@@ -80,6 +80,9 @@ IGNORE_HFILES = \
 	mozilla-notifiers.h \
 	MozillaPrivate.h \
 	MozRegisterComponents.h \
+	webkit-embed.h \
+	webkit-embed-persist.h \
+	webkit-embed-single.h \
 	PrintingPromptService.h \
 	egg-editable-toolbar.h \
 	eggintl.h \
@@ -142,14 +145,10 @@ GTKDOC_CFLAGS = -I$(top_srcdir)/src \
 		-I$(top_srcdir)/lib/widgets \
 		-I$(top_srcdir)/embed \
 		-I$(top_builddir)/embed \
-		-I$(top_srcdir)/embed/mozilla \
 		-I$(top_srcdir)/src/bookmarks \
 		-I$(top_srcdir)/lib/egg \
 		-I$(top_builddir)/lib/egg \
-		-I$(GECKO_INCLUDE_ROOT) \
-		-I$(GECKO_INCLUDE_ROOT)/gtkembedmoz \
 		$(DEPENDENCIES_CFLAGS) \
-		$(GECKO_CFLAGS) \
 		$(DBUS_CFLAGS) \
 		$(INCINTL)
 
@@ -157,7 +156,6 @@ GTKDOC_LIBS = \
 	$(top_builddir)/src/libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
 	$(top_builddir)/embed/libephyembedfactory.la \
-	$(top_builddir)/embed/mozilla/libephymozillaembed.la \
 	$(top_builddir)/embed/libephyembed.la \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
@@ -167,6 +165,22 @@ GTKDOC_LIBS = \
 	$(GECKO_GLUE_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
+
+if WITH_GECKO_ENGINE
+	GTKDOC_LIBS += $(top_builddir)/embed/mozilla/libephymozillaembed.la
+
+	GTKDOC_CFLAGS += -I$(top_srcdir)/embed/mozilla \
+			 -I$(GECKO_INCLUDE_ROOT) \
+		         -I$(GECKO_INCLUDE_ROOT)/gtkembedmoz \
+			 $(GECKO_CFLAGS)
+endif
+
+if WITH_WEBKIT_ENGINE
+	GTKDOC_LIBS += $(top_builddir)/embed/webkit/libephywebkitembed.la
+
+	GTKDOC_CFLAGS += -I$(top_srcdir)/embed/webkit \
+			 $(WEBKIT_CFLAGS)
+endif
 
 if ENABLE_PYTHON
 GTKDOC_LIBS += \

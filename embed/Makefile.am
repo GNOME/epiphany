@@ -1,4 +1,5 @@
-SUBDIRS = mozilla
+SUBDIRS = $(with_engine)
+DIST_SUBDIRS = mozilla webkit
 
 noinst_LTLIBRARIES = libephyembed.la libephyembedfactory.la
 
@@ -72,14 +73,12 @@ nodist_libephyembed_la_SOURCES = \
 
 libephyembed_la_CPPFLAGS = \
 	-I$(top_builddir)/lib       	\
-	-I$(top_srcdir)/embed/mozilla   \
 	-I$(top_srcdir)/lib       	\
 	-I$(top_srcdir)/lib/egg       	\
 	-I$(top_srcdir)/lib/widgets     \
 	$(AM_CPPFLAGS)
 
 libephyembed_la_CFLAGS = \
-	-I$(GECKO_INCLUDE_ROOT)/gtkembedmoz	\
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
 	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CFLAGS)
@@ -89,9 +88,12 @@ libephyembedfactory_la_SOURCES =	\
 	ephy-embed-factory.h
 
 libephyembedfactory_la_CPPFLAGS = \
-	-I$(top_srcdir)/embed/mozilla		\
-	-I$(GECKO_INCLUDE_ROOT)/gtkembedmoz	\
+	-I$(top_srcdir)/embed/$(with_engine)		\
 	$(AM_CPPFLAGS)
+
+if WITH_GECKO_ENGINE
+libephyembedfactory_la_CPPFLAGS += -I$(GECKO_INCLUDE_ROOT)/gtkembedmoz
+endif
 
 libephyembedfactory_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	\

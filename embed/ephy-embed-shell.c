@@ -37,7 +37,6 @@
 #include "ephy-file-helpers.h"
 #include "ephy-history.h"
 #include "ephy-marshal.h"
-#include "mozilla-embed-single.h"
 
 #include "ephy-print-utils.h"
 

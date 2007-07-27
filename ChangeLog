@@ -1,3 +1,31 @@
+2007-07-27  Xan Lopez  <xan@gnome.org>
+
+	* Makefile.am:
+	* configure.ac:
+	* doc/reference/Makefile.am:
+	* embed/Makefile.am:
+	* embed/ephy-embed-factory.c: (ephy_embed_factory_new_object):
+	* embed/ephy-embed-persist.c:
+	* embed/ephy-embed-shell.c:
+	* embed/ephy-embed.c:
+	* embed/webkit/Makefile.am:
+	* embed/webkit/webkit-embed-find.cpp:
+	* embed/webkit/webkit-embed-find.h:
+	* embed/webkit/webkit-embed-persist.cpp:
+	* embed/webkit/webkit-embed-persist.h:
+	* embed/webkit/webkit-embed-single.cpp:
+	* embed/webkit/webkit-embed-single.h:
+	* embed/webkit/webkit-embed.cpp:
+	* embed/webkit/webkit-embed.h:
+	* src/Makefile.am:
+
+	Add support for the WebKit engine, compile with
+	--with-engine=webkit to activate.
+	
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Move to the G_DEFINE_TYPE_WITH_CODE macro.
+
 2007-07-26  Diego Escalante Urrelo  <diegoe@gnome.org>
 
 	* src/ephy-window.c:

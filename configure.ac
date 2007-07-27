@@ -164,11 +164,30 @@ if test "x$enable_maintainer_mode" = "xyes"; then
 	AC_LANG_POP([C])
 fi
 
+# ************
+# Engine check
+# ************
+
+AC_MSG_CHECKING(for which engine to use)
+
+AC_ARG_WITH([engine],
+	AS_HELP_STRING([--with-engine@<:@=mozilla|webkit@:>@],
+		[Which engine to build against @<:@mozilla@:>@]),
+	[], [with_engine="mozilla"])
+
+AC_MSG_RESULT($with_engine)
+AC_SUBST([with_engine])
+
 # *******
 # Mozilla
 # *******
 
-GECKO_INIT([GECKO])
+GECKO_INIT([GECKO], [gecko_found=yes],[gecko_found=no])
+
+AM_CONDITIONAL([WITH_GECKO_ENGINE], [test "$with_engine" = "mozilla"])
+if test "$with_engine" = "mozilla" ; then
+
+AC_DEFINE([WITH_GECKO_ENGINE],[1],[Define if you wish to enable mozilla engine])
 
 AC_SUBST([GECKO])
 AC_SUBST([GECKO_FLAVOUR])
@@ -191,8 +210,6 @@ xulrunner) min_version=1.8 ;;
 *firefox) min_version=1.5 ;;
 *) AC_MSG_ERROR([Unsupported gecko "$gecko_cv_gecko"]) ;;
 esac
-
-AM_CONDITIONAL([HAVE_XULRUNNER],[test "$gecko_cv_gecko" = "xulrunner"])
 
 # Added $gecko_cv_gecko-js for debian xulrunner brokenness
 PKG_CHECK_MODULES([GECKO],[${gecko_cv_gecko}-xpcom >= $min_version ${gecko_cv_gecko}-js $gecko_cv_extra_pkg_dependencies])
@@ -280,8 +297,6 @@ if test "$enable_psm" = "yes" -a "$have_psm" = "yes"; then
 	AC_DEFINE([HAVE_MOZILLA_PSM],[1],[Define if you have the mozilla NSS headers installed]) 
 fi
 
-AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "$enable_psm" = "yes" -a "$have_psm" = "yes"])
-
 # Check whether to enable our filepicker component
 
 AC_MSG_CHECKING([whether to enable native gtk+ filepicker])
@@ -290,7 +305,6 @@ AC_ARG_ENABLE([filepicker],
 	[],[enable_filepicker=no])
 AC_MSG_RESULT([$enable_filepicker])
 
-AM_CONDITIONAL([ENABLE_FILEPICKER],[test "$enable_filepicker" = "yes"])
 if test "$enable_filepicker" = "yes"; then
 	AC_DEFINE([ENABLE_FILEPICKER],[1],[Define to enable the native filepicker])
 fi
@@ -328,6 +342,24 @@ REQUIRED_EXTENSIONS="cookie,permissions"
 
 GECKO_CHECK_CONTRACTIDS([$REQUIRED_CONTRACTS],
 	[],[AC_MSG_ERROR([$gecko_cv_gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
+
+fi # with_engine = gecko
+
+AM_CONDITIONAL([HAVE_XULRUNNER],[test "$gecko_cv_gecko" = "xulrunner"])
+AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "$enable_psm" = "yes" -a "$have_psm" = "yes"])
+AM_CONDITIONAL([ENABLE_FILEPICKER],[test "$enable_filepicker" = "yes"])
+
+# *******************************
+# webkit renderer
+# *******************************
+
+AM_CONDITIONAL([WITH_WEBKIT_ENGINE], test "$with_engine" = "webkit")
+if test "$with_engine" = "webkit" ; then
+   AC_DEFINE([WITH_WEBKIT_ENGINE],[1],[Define if you wish to enable webkit engine])
+   PKG_CHECK_MODULES([WEBKIT], WebKitGdk)
+   AC_SUBST([WEBKIT_CFLAGS])
+   AC_SUBST([WEBKIT_LIBS])
+fi # with_engine = webkit
 
 # ***************
 # Multimedia keys
@@ -378,7 +410,7 @@ if test "x$have_python" != "xno"; then
 	AC_SUBST([PYTHON_CFLAGS])
 	AC_SUBST([PYTHON_EXTRA_LIBS])
 
-	dnl FIXME: do we really need this test?
+	# FIXME: do we really need this test?
 	AC_MSG_CHECKING([whether we can build a shared library depending on libpython])
 	rm -rf testpython
 	mkdir testpython
@@ -432,7 +464,7 @@ if test "x$have_python" != "xno"; then
 	AC_SUBST([PYGTK_CODEGEN])
 	AC_SUBST([PYGTK_H2DEF])
 
-	dnl Check for -fno-strict-aliasing
+	# Check for -fno-strict-aliasing
 	FLAGS="-fno-strict-aliasing"
 	save_CFLAGS="$CFLAGS"
 	CFLAGS="$CFLAGS $FLAGS"
@@ -470,13 +502,13 @@ AC_SUBST([EPIPHANY_FEATURES])
 # Gecko 1.9 can handle .desktop files from file: URLs itself, but we
 # also support windows .lnk files, so always enable this plugin
 
+if test "$with_engine" = "mozilla" ; then
+
 AC_MSG_CHECKING([whether to build the deskop file plugin])
 AC_ARG_ENABLE([desktop-file-plugin],
 	AS_HELP_STRING([--disable-desktop-file-plugin],[Disable the desktop file plugin (default: enabled)]),
 	[],[enable_desktop_file_plugin=yes])
 AC_MSG_RESULT([$enable_desktop_file_plugin])
-
-AM_CONDITIONAL([ENABLE_DESKTOP_FILE_PLUGIN],[test "x$enable_desktop_file_plugin" = "xyes"])
 
 if test "x$enable_desktop_file_plugin" = "xyes"; then
 	PKG_CHECK_MODULES([DESKTOP_FILE_PLUGIN_DEP],[${gecko_cv_gecko}-xpcom ${gecko_cv_gecko}-plugin gtk+-2.0 >= 2.6.0])
@@ -487,6 +519,10 @@ fi
 if test "x$enable_desktop_file_plugin" = "xyes"; then
 	AC_DEFINE([HAVE_PRIVATE_PLUGINS],[1],[Define if any private plugins are enabled])
 fi
+
+fi # with_engine = mozilla
+
+AM_CONDITIONAL([ENABLE_DESKTOP_FILE_PLUGIN],[test "x$enable_desktop_file_plugin" = "xyes"])
 
 # *******************
 # Additional features
@@ -552,6 +588,8 @@ AM_CONDITIONAL([ENABLE_NETWORK_MANAGER],[test "$enable_network_manager" = "yes"]
 # Enchant spell checking
 # Does not appear to work on gecko 1.8.0, so only offer for >= 1.8.1
 
+if test "$with_engine" = "mozilla" ; then
+
 if test "$gecko_cv_gecko_version_int" -ge "1008001"; then
 
 # Default to 'disabled' until it's fully functional
@@ -579,6 +617,8 @@ if test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" = "yes"; 
 
 	AC_DEFINE([ENABLE_SPELLCHECKER],[1],[Define to enable the spell checker])
 fi
+
+fi # with_engine = mozilla
 
 AM_CONDITIONAL([ENABLE_SPELLCHECKER],[test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" = "yes"])
 
@@ -694,6 +734,7 @@ lib/egg/Makefile
 lib/widgets/Makefile
 embed/Makefile
 embed/mozilla/Makefile
+embed/webkit/Makefile
 src/Makefile
 src/bookmarks/Makefile
 help/Makefile
@@ -717,6 +758,7 @@ Epiphany was configured with the following options:
 	Prefix                     : $prefix
 	Extra debugging support    : $enable_debug
 
+        Engine                     : $with_engine
 	Gecko backend              : $gecko_cv_gecko version $gecko_cv_gecko_version
 	PSM support                : $enable_psm
 	Zeroconf bookmarks support : $enable_zeroconf

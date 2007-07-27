@@ -30,4 +30,4 @@ DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-gtk-doc		\
 	--disable-schemas-install	\
 	--disable-scrollkeeper		\
-	--with-gecko=$(MOZILLA)
+	--with-gecko=$(GECKO)

@@ -22,7 +22,6 @@
 #include "config.h"
 
 #include "ephy-embed-persist.h"
-#include "mozilla-embed-persist.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-debug.h"
 

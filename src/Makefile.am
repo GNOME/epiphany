@@ -153,14 +153,14 @@ libpyphany_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/widgets	\
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/embed		\
-	-I$(top_srcdir)/embed/mozilla	\
+	-I$(top_srcdir)/embed/$(with_engine)	\
 	-I$(top_srcdir)/src		\
 	-I$(top_srcdir)/src/bookmarks	\
 	-I$(top_builddir)/lib		\
 	-I$(top_builddir)/lib/widgets	\
 	-I$(top_builddir)/lib/egg	\
 	-I$(top_builddir)/embed		\
-	-I$(top_builddir)/embed/mozilla	\
+	-I$(top_builddir)/embed/$(with_engine)	\
 	-I$(top_builddir)/src		\
 	-I$(top_builddir)/src/bookmarks	\
 	$(PYTHON_INCLUDES)		\
@@ -203,20 +203,44 @@ epiphany_CFLAGS = \
 	$(DBUS_CFLAGS)		\
 	$(AM_CFLAGS)
 
-epiphany_LDFLAGS = -R$(GECKO_HOME) -dlopen self
+epiphany_LDFLAGS = -dlopen self
 
 epiphany_LDADD = \
 	libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
-	$(top_builddir)/embed/libephyembedfactory.la \
-	$(top_builddir)/embed/mozilla/libephymozillaembed.la \
+	$(top_builddir)/embed/libephyembedfactory.la
+
+if WITH_GECKO_ENGINE
+epiphany_LDADD += \
+	$(top_builddir)/embed/mozilla/libephymozillaembed.la
+endif
+
+if WITH_WEBKIT_ENGINE
+epiphany_LDADD += \
+	$(top_builddir)/embed/webkit/libephywebkitembed.la
+endif
+
+epiphany_LDADD += \
 	$(top_builddir)/embed/libephyembed.la \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
-	$(top_builddir)/lib/egg/libegg.la \
+	$(top_builddir)/lib/egg/libegg.la
+
+if WITH_GECKO_ENGINE
+epiphany_LDFLAGS += -R$(GECKO_HOME)
+
+epiphany_LDADD += \
 	$(GECKO_LIBS) \
 	$(GECKO_EXTRA_LIBS) \
-	$(GECKO_GLUE_LIBS) \
+	$(GECKO_GLUE_LIBS)
+endif
+
+if WITH_WEBKIT_ENGINE
+epiphany_LDADD += \
+	$(WEBKIT_LIBS)
+endif
+
+epiphany_LDADD += \
 	$(DEPENDENCIES_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
