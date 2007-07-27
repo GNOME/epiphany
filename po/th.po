@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: epiphany.th\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-07-26 14:48+0700\n"
-"PO-Revision-Date: 2007-07-26 15:16+0700\n"
+"POT-Creation-Date: 2007-07-27 08:11+0700\n"
+"PO-Revision-Date: 2007-07-27 08:22+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -848,30 +848,30 @@ msgid "_Page address"
 msgstr "_ที่อยู่เอกสาร"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: embed/downloader-view.c:190
+#: embed/downloader-view.c:197
 msgid "_Show Downloads"
 msgstr "แ_สดงหน้าต่างดาวน์โหลด"
 
-#: embed/downloader-view.c:323
+#: embed/downloader-view.c:330
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: embed/downloader-view.c:327
+#: embed/downloader-view.c:334
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: embed/downloader-view.c:379
+#: embed/downloader-view.c:386
 msgid "_Pause"
 msgstr "_พัก"
 
-#: embed/downloader-view.c:379
+#: embed/downloader-view.c:386
 msgid "_Resume"
 msgstr "ดาวน์โหลด_ต่อ"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: embed/downloader-view.c:426
+#: embed/downloader-view.c:433
 #, c-format
 msgid ""
 "%s\n"
@@ -880,12 +880,12 @@ msgstr ""
 "%s\n"
 "%s จาก %s"
 
-#: embed/downloader-view.c:436 embed/downloader-view.c:441
+#: embed/downloader-view.c:443 embed/downloader-view.c:448
 #: src/ephy-window.c:1519
 msgid "Unknown"
 msgstr "ไม่ทราบ"
 
-#: embed/downloader-view.c:475
+#: embed/downloader-view.c:482
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -893,25 +893,25 @@ msgstr[0] "มีรายการดาวน์โหลด %d รายก�
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: embed/downloader-view.c:589 embed/downloader-view.c:602
+#: embed/downloader-view.c:596 embed/downloader-view.c:609
 msgid "download status|Unknown"
 msgstr "ไม่ทราบ"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: embed/downloader-view.c:594
+#: embed/downloader-view.c:601
 msgid "download status|Failed"
 msgstr "ไม่สำเร็จ"
 
-#: embed/downloader-view.c:661 src/bookmarks/ephy-bookmarks-editor.c:1007
+#: embed/downloader-view.c:668 src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "แฟ้ม"
 
-#: embed/downloader-view.c:684
+#: embed/downloader-view.c:691
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:695
+#: embed/downloader-view.c:702
 msgid "Remaining"
 msgstr "เหลืออีก"
 
@@ -1480,7 +1480,6 @@ msgstr ""
 
 #: embed/mozilla/EphyAboutModule.cpp:304 embed/mozilla/EphyAboutModule.cpp:322
 #: embed/mozilla/EphyAboutModule.cpp:341 embed/mozilla/EphyAboutModule.cpp:399
-#: embed/mozilla/EphyAboutModule.cpp:430
 msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
@@ -1489,7 +1488,7 @@ msgstr ""
 
 #: embed/mozilla/EphyAboutModule.cpp:306 embed/mozilla/EphyAboutModule.cpp:324
 #: embed/mozilla/EphyAboutModule.cpp:343 embed/mozilla/EphyAboutModule.cpp:366
-#: embed/mozilla/EphyAboutModule.cpp:401 embed/mozilla/EphyAboutModule.cpp:432
+#: embed/mozilla/EphyAboutModule.cpp:401
 msgid "There may be an old version of the page you wanted:"
 msgstr "อาจมีเอกสารรุ่นเก่าของหน้าที่คุณต้องการ:"
 
@@ -1569,7 +1568,7 @@ msgstr "“%s” ตัดการเชื่อมต่อ"
 msgid "“%s” dropped the connection."
 msgstr "“%s” ตัดการเชื่อมต่อ"
 
-#: embed/mozilla/EphyAboutModule.cpp:397 embed/mozilla/EphyAboutModule.cpp:428
+#: embed/mozilla/EphyAboutModule.cpp:397
 msgid "The server dropped the connection before any data could be read."
 msgstr "เซิร์ฟเวอร์ตัดการเชื่อมต่อก่อนที่จะได้อ่านข้อมูลใดๆ"
 
@@ -1587,23 +1586,33 @@ msgstr "ถ้าจะดูเอกสารนี้ คุณต้อง�
 
 #: embed/mozilla/EphyAboutModule.cpp:422
 #, c-format
-msgid "“%s” Denied Access to Port “%d”"
-msgstr "“%s” ปฏิเสธการเชื่อมต่อที่พอร์ต “%d”"
+msgid "Access Denied to Port “%d” of “%s”"
+msgstr "การเชื่อมต่อไปยังพอร์ต “%d” ของ “%s” ถูกปฏิเสธ"
 
 #: embed/mozilla/EphyAboutModule.cpp:426
 #, c-format
-msgid "“%s” denied access to port “%d”."
-msgstr "“%s” ปฏิเสธการเชื่อมต่อที่พอร์ต “%d”"
+msgid "Access denied to port “%d” of “%s”."
+msgstr "การเชื่อมต่อไปยังพอร์ต “%d” ของ “%s” ถูกปฏิเสธ"
 
-#: embed/mozilla/EphyAboutModule.cpp:437
+#: embed/mozilla/EphyAboutModule.cpp:428
+msgid ""
+"This address uses a network port which is normally used for purposes other "
+"than Web browsing."
+msgstr "ที่อยู่นี้ใช้พอร์ตเครือข่ายที่โดยปกติใช้สำหรับจุดประสงค์อื่นที่ไม่ใช่การท่องเว็บ"
+
+#: embed/mozilla/EphyAboutModule.cpp:430
+msgid "The request has been cancelled for your protection."
+msgstr "ยกเลิกการเชื่อมต่อ เพื่อป้องกันปัญหาเรื่องระบบรักษาความปลอดภัย"
+
+#: embed/mozilla/EphyAboutModule.cpp:435
 msgid "Could not Connect to Proxy Server"
 msgstr "ไม่สามารถเชื่อมต่อไปยังเซิร์ฟเวอร์พร็อกซีได้"
 
-#: embed/mozilla/EphyAboutModule.cpp:438
+#: embed/mozilla/EphyAboutModule.cpp:436
 msgid "Could not connect to proxy server."
 msgstr "ไม่สามารถเชื่อมต่อไปยังเซิร์ฟเวอร์พร็อกซีได้"
 
-#: embed/mozilla/EphyAboutModule.cpp:439
+#: embed/mozilla/EphyAboutModule.cpp:437
 msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
@@ -1611,19 +1620,19 @@ msgstr ""
 "กรุณาตรวจสอบการตั้งค่าพร็อกซีของคุณ ถ้ายังติดต่อไม่ได้อีก ก็อาจแสดงว่ามีปัญหาที่เซิร์ฟเวอร์พร็อกซี "
 "หรือไม่ก็ที่การเชื่อมต่อเครือข่ายของคุณ"
 
-#: embed/mozilla/EphyAboutModule.cpp:447
+#: embed/mozilla/EphyAboutModule.cpp:445
 msgid "Could not Display Content"
 msgstr "ไม่สามารถแสดงเนื้อหาเว็บ"
 
-#: embed/mozilla/EphyAboutModule.cpp:448
+#: embed/mozilla/EphyAboutModule.cpp:446
 msgid "Could not display content."
 msgstr "ไม่สามารถแสดงเนื้อหาเว็บ"
 
-#: embed/mozilla/EphyAboutModule.cpp:449
+#: embed/mozilla/EphyAboutModule.cpp:447
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr "หน้าเว็บนี้ใช้รูปแบบการบีบอัดที่ไม่ถูกต้องหรือไม่สนับสนุน"
 
-#: embed/mozilla/EphyAboutModule.cpp:539
+#: embed/mozilla/EphyAboutModule.cpp:537
 #, c-format
 msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
@@ -1634,13 +1643,13 @@ msgstr ""
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: embed/mozilla/EphyAboutModule.cpp:666
+#: embed/mozilla/EphyAboutModule.cpp:664
 msgid "You may find an old version:|in the Google Cache"
 msgstr "ในแคชของ Google"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: embed/mozilla/EphyAboutModule.cpp:674
+#: embed/mozilla/EphyAboutModule.cpp:672
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "ในกรุอินเทอร์เน็ต"
 
@@ -4239,9 +4248,6 @@ msgstr "เว็บไซต์ของเว็บเบราว์เซอ
 
 #~ msgid "“%s” redirected too many times."
 #~ msgstr "“%s” เปลี่ยนเส้นทางบ่อยเกินไป"
-
-#~ msgid "The redirection has been stopped for security reasons."
-#~ msgstr "หยุดการเปลี่ยนเส้นทาง เพื่อเหตุผลเรื่องระบบรักษาความปลอดภัย"
 
 #~ msgid "_View Certificate..."
 #~ msgstr "_ดูใบรับรอง..."
