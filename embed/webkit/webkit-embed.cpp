@@ -199,17 +199,20 @@ impl_load (EphyEmbed *embed,
 static void
 impl_stop_load (EphyEmbed *embed)
 {
+  webkit_gtk_page_stop_loading (WEBKIT_EMBED (embed)->priv->page);
 }
 
 static gboolean
 impl_can_go_back (EphyEmbed *embed)
 {
+  //  return webkit_gtk_page_can_go_backward (WEBKIT_EMBED (embed)->priv->page);
   return FALSE;
 }
 
 static gboolean
 impl_can_go_forward (EphyEmbed *embed)
 {
+  //  return webkit_gtk_page_can_go_forward (WEBKIT_EMBED (embed)->priv->page);
   return FALSE;
 }
 
