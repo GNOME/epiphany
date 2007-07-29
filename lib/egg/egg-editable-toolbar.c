@@ -1364,6 +1364,9 @@ egg_editable_toolbar_dispose (GObject *object)
       priv->visibility_paths = NULL;
     }
 
+  g_free (priv->popup_path);
+  priv->popup_path = NULL;
+
   if (priv->manager != NULL)
     {
       if (priv->visibility_id)
