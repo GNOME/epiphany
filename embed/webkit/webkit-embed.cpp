@@ -90,6 +90,7 @@ static gboolean
 impl_manager_can_do_command (EphyCommandManager *manager,
 			     const char *command) 
 {
+  return FALSE;
 }
 
 static void
@@ -225,17 +226,13 @@ impl_get_go_up_list (EphyEmbed *embed)
 static void
 impl_go_back (EphyEmbed *embed)
 {
-  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
-
-  webkit_gtk_page_go_backward (wembed->priv->page);
+  webkit_gtk_page_go_backward (WEBKIT_EMBED (embed)->priv->page);
 }
 		
 static void
 impl_go_forward (EphyEmbed *embed)
 {
-  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
-
-  webkit_gtk_page_go_forward (wembed->priv->page);
+  webkit_gtk_page_go_forward (WEBKIT_EMBED (embed)->priv->page);
 }
 
 static void
@@ -400,6 +397,7 @@ impl_has_automatic_encoding (EphyEmbed *embed)
 static gboolean
 impl_has_modified_forms (EphyEmbed *embed)
 {
+  return FALSE;
 }
 
 static void

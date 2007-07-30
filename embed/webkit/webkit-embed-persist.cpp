@@ -71,6 +71,7 @@ impl_save (EphyEmbedPersist *persist)
 static char *
 impl_to_string (EphyEmbedPersist *persist)
 {
+  return NULL;
 }
 
 static void
