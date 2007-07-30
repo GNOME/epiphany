@@ -152,10 +152,32 @@ GTKDOC_CFLAGS = -I$(top_srcdir)/src \
 		$(DBUS_CFLAGS) \
 		$(INCINTL)
 
+if WITH_GECKO_ENGINE
+GTKDOC_CFLAGS += -I$(top_srcdir)/embed/mozilla \
+		 -I$(GECKO_INCLUDE_ROOT) \
+	         -I$(GECKO_INCLUDE_ROOT)/gtkembedmoz \
+		 $(GECKO_CFLAGS)
+endif
+
+if WITH_WEBKIT_ENGINE
+GTKDOC_CFLAGS += -I$(top_srcdir)/embed/webkit \
+		 $(WEBKIT_CFLAGS)
+endif
+
 GTKDOC_LIBS = \
 	$(top_builddir)/src/libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
-	$(top_builddir)/embed/libephyembedfactory.la \
+	$(top_builddir)/embed/libephyembedfactory.la
+
+if WITH_GECKO_ENGINE
+GTKDOC_LIBS += $(top_builddir)/embed/mozilla/libephymozillaembed.la
+endif
+
+if WITH_WEBKIT_ENGINE
+GTKDOC_LIBS += $(top_builddir)/embed/webkit/libephywebkitembed.la
+endif
+
+GTKDOC_LIBS += \
 	$(top_builddir)/embed/libephyembed.la \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
@@ -165,22 +187,6 @@ GTKDOC_LIBS = \
 	$(GECKO_GLUE_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
-
-if WITH_GECKO_ENGINE
-GTKDOC_LIBS += $(top_builddir)/embed/mozilla/libephymozillaembed.la
-
-GTKDOC_CFLAGS += -I$(top_srcdir)/embed/mozilla \
-		 -I$(GECKO_INCLUDE_ROOT) \
-	         -I$(GECKO_INCLUDE_ROOT)/gtkembedmoz \
-		 $(GECKO_CFLAGS)
-endif
-
-if WITH_WEBKIT_ENGINE
-GTKDOC_LIBS += $(top_builddir)/embed/webkit/libephywebkitembed.la
-
-GTKDOC_CFLAGS += -I$(top_srcdir)/embed/webkit \
-		 $(WEBKIT_CFLAGS)
-endif
 
 if ENABLE_PYTHON
 GTKDOC_LIBS += \
