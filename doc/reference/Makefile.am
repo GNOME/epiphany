@@ -167,19 +167,19 @@ GTKDOC_LIBS = \
 	$(LIBINTL)
 
 if WITH_GECKO_ENGINE
-	GTKDOC_LIBS += $(top_builddir)/embed/mozilla/libephymozillaembed.la
+GTKDOC_LIBS += $(top_builddir)/embed/mozilla/libephymozillaembed.la
 
-	GTKDOC_CFLAGS += -I$(top_srcdir)/embed/mozilla \
-			 -I$(GECKO_INCLUDE_ROOT) \
-		         -I$(GECKO_INCLUDE_ROOT)/gtkembedmoz \
-			 $(GECKO_CFLAGS)
+GTKDOC_CFLAGS += -I$(top_srcdir)/embed/mozilla \
+		 -I$(GECKO_INCLUDE_ROOT) \
+	         -I$(GECKO_INCLUDE_ROOT)/gtkembedmoz \
+		 $(GECKO_CFLAGS)
 endif
 
 if WITH_WEBKIT_ENGINE
-	GTKDOC_LIBS += $(top_builddir)/embed/webkit/libephywebkitembed.la
+GTKDOC_LIBS += $(top_builddir)/embed/webkit/libephywebkitembed.la
 
-	GTKDOC_CFLAGS += -I$(top_srcdir)/embed/webkit \
-			 $(WEBKIT_CFLAGS)
+GTKDOC_CFLAGS += -I$(top_srcdir)/embed/webkit \
+		 $(WEBKIT_CFLAGS)
 endif
 
 if ENABLE_PYTHON
