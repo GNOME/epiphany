@@ -56,7 +56,10 @@ static void ephy_permission_manager_iface_init	(EphyPermissionManagerIface *ifac
 static void ephy_certificate_manager_iface_init	(EphyCertificateManagerIface *iface);
 #endif
 
+/* Some compilers (like gcc 2.95) don't support preprocessor directives inside macros,
+   so we have to duplicate the whole thing */
 
+#ifdef ENABLE_CERTIFICATE_MANAGER
 G_DEFINE_TYPE_WITH_CODE (WebKitEmbedSingle, webkit_embed_single, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_SINGLE,
                                                 ephy_embed_single_iface_init)
@@ -64,12 +67,21 @@ G_DEFINE_TYPE_WITH_CODE (WebKitEmbedSingle, webkit_embed_single, G_TYPE_OBJECT,
                                                 ephy_cookie_manager_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_PASSWORD_MANAGER,
                                                 ephy_password_manager_iface_init)
-#ifdef ENABLE_CERTIFICATE_MANAGER
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_CERTIFICATE_MANAGER,
                                                 ephy_certificate_manager_iface_init)
-#endif
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
                                                 ephy_permission_manager_iface_init))
+#else
+G_DEFINE_TYPE_WITH_CODE (WebKitEmbedSingle, webkit_embed_single, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_SINGLE,
+                                                ephy_embed_single_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_COOKIE_MANAGER,
+                                                ephy_cookie_manager_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PASSWORD_MANAGER,
+                                                ephy_password_manager_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
+                                                ephy_permission_manager_iface_init))
+#endif
 
 
 static void
