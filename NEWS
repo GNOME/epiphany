@@ -1,4 +1,51 @@
 ===============
+Epiphany 2.19.6
+===============
+
+The most important change in this release is obviously that an experimental 
+WebKit back-end was added by Xan Lopez. Read all about it here:
+http://blogs.gnome.org/xan/2007/07/17/epiphany-webkit/
+
+Furthermore, we have been joined by Cosimo Cecchi who contributed a lot of
+small but not less important gnome-love bugfixes! 
+
+Changes: 
+	* Add support for the WebKit engine, compile with --with-engine=webkit
+          to activate
+	* #162489: Added a checkbox for smooth scrolling. 
+	* String changes based on user feedback:
+	  - "Local sites" -> "Nearby sites" (because it is a
+	  better description)
+	  - Drop the "Quick" prefix from Topic/Bookmark items in
+	  toolbar editor, because it has no function besides
+	  confusing users.
+	* We now use g_get_user_special_dir to get the Desktop and Downloads
+	  directory location
+	* Use the new gtk functions to persist and load the print settings and
+	  page setup. Migrate our old settings, if present.
+	* All tooltips are now creatd using the new GTK tooltips API.
+
+Bug fixes:
+	* #459552: Improve the restricted ports message 
+	* #448610: Make the status icon clickable so it shows/hides 
+	  the download window, works across workspaces
+	* #318947: Update tab title when the statusbar text is updated, 
+	  so we don't have out of sync messages 
+	  (like "Loading <page-you-were-before>")
+	* Misc: #461689, #433173, #313636, #410223, #385872, #452707, #347637,
+	  #450904
+
+Contributors to this release:
+Diego Escalante Urrelo, René Stadler, Xan Lopez, Carlos Garcia Campos, 
+Reinout van Schouwen, Cosimo Cecchi, Kraai, Wouter Bolsterlee,
+Christian Persch, Nguyễn Thái Ngọc Duy, Luca Ferretti
+
+Translations: 
+Priit Laes, Reinout van Schouwen, Inaki Larranaga Murgoitio, Jorge Gonzalez, 
+Daniel Nylander, Theppitak Karoonboonyanan, Gabor Kelemen, Wouter Bolsterlee, 
+Ilkka Tuohela, Takeshi AIHANA, Žygimantas Beručka, I. Felix
+
+===============
 Epiphany 2.19.5
 ===============
 
