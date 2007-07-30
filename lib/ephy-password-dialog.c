@@ -732,9 +732,3 @@ ephy_password_dialog_get_new_password (EphyPasswordDialog *dialog)
 	return gtk_entry_get_text (GTK_ENTRY (priv->entry[NEW_PASSWORD_ENTRY]));
 }
 
-void
-ephy_password_dialog_fill (EphyPasswordDialog *dialog,
-			   GList *attributes_list)
-{
-	
-}
