@@ -1,3 +1,14 @@
+2007-07-30  Diego Escalante Urrelo  <diegoe@gnome.org>
+
+	* embed/webkit/webkit-embed.cpp:
+
+	can_go methods now work, WebKit was missing the implementations for
+	those functions, it's fixed now so we can use can_go methods.
+	Note that they are useless without the ge_location signal being
+	emitted (dummy code included, commented).
+
+	Part of Bug #461652.
+
 2007-07-30  Xan Lopez  <xan@gnome.org>
 
 	* embed/webkit/webkit-embed-persist.cpp:

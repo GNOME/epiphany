@@ -41,6 +41,10 @@ static void	webkit_embed_finalize		(GObject *object);
 static void	ephy_embed_iface_init		(EphyEmbedIface *iface);
 
 #if 0
+static void    load_started_cb                 (WebKitGtkPage *page,
+                                               WebKitGtkFrame *frame,
+                                               WebKitEmbed *wembed);
+
 static void webkit_embed_location_changed_cb	(GtkMozEmbed *embed,
 						 WebKitEmbed *membed);
 static void webkit_embed_net_state_all_cb	(GtkMozEmbed *embed,
@@ -153,6 +157,8 @@ webkit_embed_init (WebKitEmbed *embed)
   gtk_widget_show (GTK_WIDGET (page));
 
 #if 0
+  g_signal_connect (G_OBJECT (page), "load-started",
+		  G_CALLBACK (load_started_cb), embed);
   g_signal_connect (G_OBJECT (page), "title-changed",
                     G_CALLBACK (title_changed_cb), page);
   g_signal_connect (G_OBJECT (page), "load-progress-changed",
@@ -171,6 +177,17 @@ webkit_embed_finalize (GObject *object)
 {
   G_OBJECT_CLASS (webkit_embed_parent_class)->finalize (object);
 }
+
+#if 0
+static void
+load_started_cb (WebKitGtkPage *page,
+                 WebKitGtkFrame *frame,
+                 WebKitEmbed *wembed)
+{
+  g_debug("load-started, emitting ge_location with www.google.com as location");
+  g_signal_emit_by_name (wembed, "ge_location", "www.google.com");
+}
+#endif
 
 static void
 impl_load_url (EphyEmbed *embed,
@@ -206,14 +223,18 @@ impl_stop_load (EphyEmbed *embed)
 static gboolean
 impl_can_go_back (EphyEmbed *embed)
 {
-  //  return webkit_gtk_page_can_go_backward (WEBKIT_EMBED (embed)->priv->page);
-  return FALSE;
+  return webkit_gtk_page_can_go_backward (WEBKIT_EMBED (embed)->priv->page);
 }
 
 static gboolean
 impl_can_go_forward (EphyEmbed *embed)
 {
-  //  return webkit_gtk_page_can_go_forward (WEBKIT_EMBED (embed)->priv->page);
+  return webkit_gtk_page_can_go_forward (WEBKIT_EMBED (embed)->priv->page);
+}
+
+static gboolean
+impl_can_go_up (EphyEmbed *embed)
+{
   return FALSE;
 }
 
@@ -408,7 +429,7 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->stop_load = impl_stop_load;
   iface->can_go_back = impl_can_go_back;
   iface->can_go_forward = impl_can_go_forward;
-  //  iface->can_go_up = impl_can_go_up;
+  iface->can_go_up = impl_can_go_up;
   iface->get_go_up_list = impl_get_go_up_list;
   iface->go_back = impl_go_back;
   iface->go_forward = impl_go_forward;
