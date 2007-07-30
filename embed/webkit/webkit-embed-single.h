@@ -27,25 +27,25 @@
 G_BEGIN_DECLS
 
 #define WEBKIT_TYPE_EMBED_SINGLE		(webkit_embed_single_get_type ())
-#define WEBKIT_EMBED_SINGLE(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), WEBKIT_TYPE_EMBED_SINGLE, WebkitEmbedSingle))
-#define WEBKIT_EMBED_SINGLE_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), WEBKIT_TYPE_EMBED_SINGLE, WebkitEmbedSingleClass))
+#define WEBKIT_EMBED_SINGLE(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), WEBKIT_TYPE_EMBED_SINGLE, WebKitEmbedSingle))
+#define WEBKIT_EMBED_SINGLE_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), WEBKIT_TYPE_EMBED_SINGLE, WebKitEmbedSingleClass))
 #define WEBKIT_IS_EMBED_SINGLE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), WEBKIT_TYPE_EMBED_SINGLE))
 #define WEBKIT_IS_EMBED_SINGLE_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), WEBKIT_TYPE_EMBED_SINGLE))
-#define WEBKIT_EMBED_SINGLE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), WEBKIT_TYPE_EMBED_SINGLE, WebkitEmbedSingleClass))
+#define WEBKIT_EMBED_SINGLE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), WEBKIT_TYPE_EMBED_SINGLE, WebKitEmbedSingleClass))
 
-typedef struct WebkitEmbedSingle		WebkitEmbedSingle;
-typedef struct WebkitEmbedSingleClass		WebkitEmbedSingleClass;
-typedef struct WebkitEmbedSinglePrivate	WebkitEmbedSinglePrivate;
+typedef struct WebKitEmbedSingle		WebKitEmbedSingle;
+typedef struct WebKitEmbedSingleClass		WebKitEmbedSingleClass;
+typedef struct WebKitEmbedSinglePrivate	WebKitEmbedSinglePrivate;
 
-struct WebkitEmbedSingle
+struct WebKitEmbedSingle
 {
 	GObject parent;
 
 	/*< private >*/
-	WebkitEmbedSinglePrivate *priv;
+	WebKitEmbedSinglePrivate *priv;
 };
 
-struct WebkitEmbedSingleClass
+struct WebKitEmbedSingleClass
 {
 	GObjectClass parent_class;
 };

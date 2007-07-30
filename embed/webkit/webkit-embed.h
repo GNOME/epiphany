@@ -29,25 +29,25 @@
 G_BEGIN_DECLS
 
 #define WEBKIT_TYPE_EMBED		(webkit_embed_get_type ())
-#define WEBKIT_EMBED(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), WEBKIT_TYPE_EMBED, WebkitEmbed))
-#define WEBKIT_EMBED_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), WEBKIT_TYPE_EMBED, WebkitEmbedClass))
+#define WEBKIT_EMBED(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), WEBKIT_TYPE_EMBED, WebKitEmbed))
+#define WEBKIT_EMBED_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), WEBKIT_TYPE_EMBED, WebKitEmbedClass))
 #define WEBKIT_IS_EMBED(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), WEBKIT_TYPE_EMBED))
 #define WEBKIT_IS_EMBED_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), WEBKIT_TYPE_EMBED))
-#define WEBKIT_EMBED_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), WEBKIT_TYPE_EMBED, WebkitEmbedClass))
+#define WEBKIT_EMBED_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), WEBKIT_TYPE_EMBED, WebKitEmbedClass))
 
-typedef struct WebkitEmbedClass	WebkitEmbedClass;
-typedef struct WebkitEmbed		WebkitEmbed;
-typedef struct WebkitEmbedPrivate	WebkitEmbedPrivate;
+typedef struct WebKitEmbedClass	WebKitEmbedClass;
+typedef struct WebKitEmbed		WebKitEmbed;
+typedef struct WebKitEmbedPrivate	WebKitEmbedPrivate;
 
-struct WebkitEmbed
+struct WebKitEmbed
 {
         GtkScrolledWindow parent;
 
 	/*< private >*/
-        WebkitEmbedPrivate *priv;
+        WebKitEmbedPrivate *priv;
 };
 
-struct WebkitEmbedClass
+struct WebKitEmbedClass
 {
         GtkScrolledWindowClass parent_class;
 };

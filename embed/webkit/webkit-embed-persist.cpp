@@ -21,18 +21,18 @@
 #include "webkit-embed-persist.h"
 
 static void
-webkit_embed_persist_class_init (WebkitEmbedPersistClass *klass);
+webkit_embed_persist_class_init (WebKitEmbedPersistClass *klass);
 static void
-webkit_embed_persist_init (WebkitEmbedPersist *ges);
+webkit_embed_persist_init (WebKitEmbedPersist *ges);
 static void
 webkit_embed_persist_finalize (GObject *object);
 
-#define WEBKIT_EMBED_PERSIST_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED_PERSIST, WebkitEmbedPersistPrivate))
+#define WEBKIT_EMBED_PERSIST_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED_PERSIST, WebKitEmbedPersistPrivate))
 
-G_DEFINE_TYPE (WebkitEmbedPersist, webkit_embed_persist, EPHY_TYPE_EMBED_PERSIST)
+G_DEFINE_TYPE (WebKitEmbedPersist, webkit_embed_persist, EPHY_TYPE_EMBED_PERSIST)
 
 static void
-webkit_embed_persist_init (WebkitEmbedPersist *persist)
+webkit_embed_persist_init (WebKitEmbedPersist *persist)
 {
 }
 
@@ -43,14 +43,14 @@ webkit_embed_persist_finalize (GObject *object)
 }
 
 void
-webkit_embed_persist_completed (WebkitEmbedPersist *persist)
+webkit_embed_persist_completed (WebKitEmbedPersist *persist)
 {
   g_signal_emit_by_name (persist, "completed");
   g_object_unref (persist);
 }
 
 void
-webkit_embed_persist_cancelled (WebkitEmbedPersist *persist)
+webkit_embed_persist_cancelled (WebKitEmbedPersist *persist)
 {
   g_signal_emit_by_name (persist, "cancelled");
   g_object_unref (persist);
@@ -74,7 +74,7 @@ impl_to_string (EphyEmbedPersist *persist)
 }
 
 static void
-webkit_embed_persist_class_init (WebkitEmbedPersistClass *klass)
+webkit_embed_persist_class_init (WebKitEmbedPersistClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   EphyEmbedPersistClass *persist_class = EPHY_EMBED_PERSIST_CLASS (klass);
@@ -85,5 +85,5 @@ webkit_embed_persist_class_init (WebkitEmbedPersistClass *klass)
   persist_class->cancel = impl_cancel;
   persist_class->to_string = impl_to_string;
 
-  //  g_type_class_add_private (object_class, sizeof(WebkitEmbedPersistPrivate));
+  //  g_type_class_add_private (object_class, sizeof(WebKitEmbedPersistPrivate));
 }

@@ -27,25 +27,25 @@
 G_BEGIN_DECLS
 
 #define WEBKIT_TYPE_EMBED_FIND		(webkit_embed_find_get_type ())
-#define WEBKIT_EMBED_FIND(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), WEBKIT_TYPE_EMBED_FIND, WebkitEmbedFind))
-#define WEBKIT_EMBED_FIND_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), WEBKIT_TYPE_EMBED_FIND, WebkitEmbedFindClass))
+#define WEBKIT_EMBED_FIND(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), WEBKIT_TYPE_EMBED_FIND, WebKitEmbedFind))
+#define WEBKIT_EMBED_FIND_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), WEBKIT_TYPE_EMBED_FIND, WebKitEmbedFindClass))
 #define WEBKIT_IS_EMBED_FIND(o)	(G_TYPE_CHECK_INSTANCE_TYPE ((o), WEBKIT_TYPE_EMBED_FIND))
 #define WEBKIT_IS_EMBED_FIND_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), WEBKIT_TYPE_EMBED_FIND))
-#define WEBKIT_EMBED_FIND_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), WEBKIT_TYPE_EMBED_FIND, WebkitEmbedFindClass))
+#define WEBKIT_EMBED_FIND_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), WEBKIT_TYPE_EMBED_FIND, WebKitEmbedFindClass))
 
-typedef struct _WebkitEmbedFindClass	WebkitEmbedFindClass;
-typedef struct _WebkitEmbedFind	WebkitEmbedFind;
-typedef struct _WebkitEmbedFindPrivate	WebkitEmbedFindPrivate;
+typedef struct _WebKitEmbedFindClass	WebKitEmbedFindClass;
+typedef struct _WebKitEmbedFind	WebKitEmbedFind;
+typedef struct _WebKitEmbedFindPrivate	WebKitEmbedFindPrivate;
 
-struct _WebkitEmbedFind
+struct _WebKitEmbedFind
 {
 	GObject parent_instance;
 
 	/*< private >*/
-        WebkitEmbedFindPrivate *priv;
+        WebKitEmbedFindPrivate *priv;
 };
 
-struct _WebkitEmbedFindClass
+struct _WebKitEmbedFindClass
 {
 	GObjectClass parent_class;
 };

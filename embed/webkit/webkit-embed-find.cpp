@@ -27,9 +27,9 @@
 
 #include "webkit-embed-find.h"
 
-#define WEBKIT_EMBED_FIND_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED_FIND, WebkitEmbedFindPrivate))
+#define WEBKIT_EMBED_FIND_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED_FIND, WebKitEmbedFindPrivate))
 
-struct _WebkitEmbedFindPrivate
+struct _WebKitEmbedFindPrivate
 {
 
 };
@@ -88,18 +88,18 @@ ephy_find_iface_init (EphyEmbedFindIface *iface)
 }
 
 static void
-webkit_embed_find_init (WebkitEmbedFind *find)
+webkit_embed_find_init (WebKitEmbedFind *find)
 {
 }
 
 static void
-webkit_embed_find_class_init (WebkitEmbedFindClass *klass)
+webkit_embed_find_class_init (WebKitEmbedFindClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	g_type_class_add_private (object_class, sizeof (WebkitEmbedFindPrivate));
+	g_type_class_add_private (object_class, sizeof (WebKitEmbedFindPrivate));
 }
 
-G_DEFINE_TYPE_WITH_CODE (WebkitEmbedFind, webkit_embed_find, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (WebKitEmbedFind, webkit_embed_find, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_FIND,
                                                 ephy_find_iface_init))

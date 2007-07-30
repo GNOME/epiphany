@@ -34,37 +34,37 @@
 #include "webkit-embed.h"
 #include "ephy-embed.h"
 
-static void	webkit_embed_class_init	(WebkitEmbedClass *klass);
-static void	webkit_embed_init		(WebkitEmbed *gs);
+static void	webkit_embed_class_init	(WebKitEmbedClass *klass);
+static void	webkit_embed_init		(WebKitEmbed *gs);
 static void	webkit_embed_destroy		(GtkObject *object);
 static void	webkit_embed_finalize		(GObject *object);
 static void	ephy_embed_iface_init		(EphyEmbedIface *iface);
 
 #if 0
 static void webkit_embed_location_changed_cb	(GtkMozEmbed *embed,
-						 WebkitEmbed *membed);
+						 WebKitEmbed *membed);
 static void webkit_embed_net_state_all_cb	(GtkMozEmbed *embed,
 						 const char *aURI,
 						 gint state,
 						 guint status,
-						 WebkitEmbed *membed);
+						 WebKitEmbed *membed);
 static gboolean webkit_embed_dom_mouse_click_cb(GtkMozEmbed *embed,
                                                 gpointer dom_event,
-                                                WebkitEmbed *membed);
+                                                WebKitEmbed *membed);
 static gboolean webkit_embed_dom_mouse_down_cb	(GtkMozEmbed *embed,
 
 						 
-						 WebkitEmbed *membed);
+						 WebKitEmbed *membed);
 static gboolean webkit_embed_dom_key_press_cb	(GtkMozEmbed *embed,
 						 gpointer dom_event, 
-						 WebkitEmbed *membed);
+						 WebKitEmbed *membed);
 static void webkit_embed_new_window_cb		(GtkMozEmbed *embed, 
 						 GtkMozEmbed **newEmbed,
 						 guint chrome_mask,
-						 WebkitEmbed *membed);
+						 WebKitEmbed *membed);
 #endif
 
-#define WEBKIT_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED, WebkitEmbedPrivate))
+#define WEBKIT_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED, WebKitEmbedPrivate))
 
 typedef enum
   {
@@ -72,12 +72,12 @@ typedef enum
     WEBKIT_EMBED_LOAD_REDIRECTING,
     WEBKIT_EMBED_LOAD_LOADING,
     WEBKIT_EMBED_LOAD_STOPPED
-  } WebkitEmbedLoadState;
+  } WebKitEmbedLoadState;
 
-struct WebkitEmbedPrivate
+struct WebKitEmbedPrivate
 {
   WebKitGtkPage *page;
-  WebkitEmbedLoadState load_state;
+  WebKitEmbedLoadState load_state;
 };
 
 static void
@@ -99,7 +99,7 @@ ephy_command_manager_iface_init (EphyCommandManagerIface *iface)
   iface->can_do_command = impl_manager_can_do_command;
 }
 
-G_DEFINE_TYPE_WITH_CODE (WebkitEmbed, webkit_embed, GTK_TYPE_SCROLLED_WINDOW,
+G_DEFINE_TYPE_WITH_CODE (WebKitEmbed, webkit_embed, GTK_TYPE_SCROLLED_WINDOW,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED,
                                                 ephy_embed_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_COMMAND_MANAGER,
@@ -116,7 +116,7 @@ impl_close (EphyEmbed *embed)
 }
 
 static void
-webkit_embed_class_init (WebkitEmbedClass *klass)
+webkit_embed_class_init (WebKitEmbedClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkObjectClass *gtk_object_class = GTK_OBJECT_CLASS (klass); 
@@ -130,11 +130,11 @@ webkit_embed_class_init (WebkitEmbedClass *klass)
 
   widget_class->grab_focus = webkit_embed_grab_focus;
 
-  g_type_class_add_private (object_class, sizeof(WebkitEmbedPrivate));
+  g_type_class_add_private (object_class, sizeof(WebKitEmbedPrivate));
 }
 
 static void
-webkit_embed_init (WebkitEmbed *embed)
+webkit_embed_init (WebKitEmbed *embed)
 {
   WebKitGtkPage *page;
 
@@ -175,7 +175,7 @@ static void
 impl_load_url (EphyEmbed *embed,
                const char *url)
 {
-  WebkitEmbed *wembed = WEBKIT_EMBED (embed);
+  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
 
   g_debug ("a url %s", url);
   
@@ -190,7 +190,7 @@ impl_load (EphyEmbed *embed,
 	   EphyEmbedLoadFlags flags,
 	   EphyEmbed *preview_embed)
 {
-  WebkitEmbed *wembed = WEBKIT_EMBED (embed);
+  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
 
   g_debug ("url %s", url);
   webkit_gtk_page_open (wembed->priv->page, url);
@@ -225,7 +225,7 @@ impl_get_go_up_list (EphyEmbed *embed)
 static void
 impl_go_back (EphyEmbed *embed)
 {
-  WebkitEmbed *wembed = WEBKIT_EMBED (embed);
+  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
 
   webkit_gtk_page_go_backward (wembed->priv->page);
 }
@@ -233,7 +233,7 @@ impl_go_back (EphyEmbed *embed)
 static void
 impl_go_forward (EphyEmbed *embed)
 {
-  WebkitEmbed *wembed = WEBKIT_EMBED (embed);
+  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
 
   webkit_gtk_page_go_forward (wembed->priv->page);
 }

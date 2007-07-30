@@ -32,9 +32,9 @@
 #include "ephy-certificate-manager.h"
 #endif
 
-#define WEBKIT_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED_SINGLE, WebkitEmbedSinglePrivate))
+#define WEBKIT_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED_SINGLE, WebKitEmbedSinglePrivate))
 
-struct WebkitEmbedSinglePrivate
+struct WebKitEmbedSinglePrivate
 {
 	guint online : 1;
 };
@@ -45,8 +45,8 @@ enum
   PROP_NETWORK_STATUS
 };
 
-static void webkit_embed_single_class_init	(WebkitEmbedSingleClass *klass);
-static void webkit_embed_single_init		(WebkitEmbedSingle *ges);
+static void webkit_embed_single_class_init	(WebKitEmbedSingleClass *klass);
+static void webkit_embed_single_init		(WebKitEmbedSingle *ges);
 static void ephy_embed_single_iface_init	(EphyEmbedSingleIface *iface);
 static void ephy_cookie_manager_iface_init	(EphyCookieManagerIface *iface);
 static void ephy_password_manager_iface_init	(EphyPasswordManagerIface *iface);
@@ -57,7 +57,7 @@ static void ephy_certificate_manager_iface_init	(EphyCertificateManagerIface *if
 #endif
 
 
-G_DEFINE_TYPE_WITH_CODE (WebkitEmbedSingle, webkit_embed_single, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (WebKitEmbedSingle, webkit_embed_single, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_SINGLE,
                                                 ephy_embed_single_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_COOKIE_MANAGER,
@@ -73,7 +73,7 @@ G_DEFINE_TYPE_WITH_CODE (WebkitEmbedSingle, webkit_embed_single, G_TYPE_OBJECT,
 
 
 static void
-webkit_embed_single_init (WebkitEmbedSingle *mes)
+webkit_embed_single_init (WebKitEmbedSingle *mes)
 {
  	mes->priv = WEBKIT_EMBED_SINGLE_GET_PRIVATE (mes);
 }
@@ -274,7 +274,7 @@ webkit_embed_single_set_property (GObject *object,
 	}
 }
 static void
-webkit_embed_single_class_init (WebkitEmbedSingleClass *klass)
+webkit_embed_single_class_init (WebKitEmbedSingleClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
@@ -287,7 +287,7 @@ webkit_embed_single_class_init (WebkitEmbedSingleClass *klass)
 
 	g_object_class_override_property (object_class, PROP_NETWORK_STATUS, "network-status");
 
-	g_type_class_add_private (object_class, sizeof (WebkitEmbedSinglePrivate));
+	g_type_class_add_private (object_class, sizeof (WebKitEmbedSinglePrivate));
 }
 
 static void
