@@ -170,7 +170,6 @@ char *
 ephy_file_desktop_dir (void)
 {
 	const char *xdg_desktop_dir;
-	char *downloads_dir;
 
 	xdg_desktop_dir = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
 	if (xdg_desktop_dir != NULL)
