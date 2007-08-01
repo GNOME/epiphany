@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.gu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-06-18 03:32+0100\n"
-"PO-Revision-Date: 2007-07-06 16:32+0530\n"
+"POT-Creation-Date: 2007-07-26 22:00+0100\n"
+"PO-Revision-Date: 2007-08-01 16:28+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
 "Language-Team: Gujarati <fedora-trans-gu@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -14,6 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -67,8 +68,8 @@ msgid "Epiphany Web Browser"
 msgstr "એપીફની વૅબ બ્રાઉઝર"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:523
-#: ../src/ephy-main.c:615
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:526
+#: ../src/ephy-main.c:618
 msgid "Web Browser"
 msgstr "વેબ બ્રાઉઝર"
 
@@ -606,7 +607,7 @@ msgid "Cookies"
 msgstr "કુકીઓ"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:258
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:113
 msgid "Downloads"
 msgstr "ડાઉનલોડ"
 
@@ -714,7 +715,7 @@ msgstr "ભાષા પસંદ કરો:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:14
-#: ../lib/widgets/ephy-location-entry.c:647 ../src/ephy-history-window.c:266
+#: ../lib/widgets/ephy-location-entry.c:625 ../src/ephy-history-window.c:266
 msgid "Cl_ear"
 msgstr "સાફ કરો (_e)"
 
@@ -742,7 +743,7 @@ msgstr "ફોન્ટ & શૈલી"
 msgid "For l_anguage:"
 msgstr "ભાષા માટે (_a):"
 
-#: ../data/glade/prefs-dialog.glade.h:22 ../src/prefs-dialog.c:1308
+#: ../data/glade/prefs-dialog.glade.h:22 ../src/prefs-dialog.c:1310
 msgid "Language"
 msgstr "ભાષા"
 
@@ -783,46 +784,50 @@ msgid "Use custom _stylesheet"
 msgstr "વૈવિધ્યપૂર્ણ સ્ટાઈલશીટ વાપરો (_s)"
 
 #: ../data/glade/prefs-dialog.glade.h:32
+msgid "Use s_mooth scrolling"
+msgstr "લીસું સરકાવવાનું સક્રિય કરો (_m)"
+
+#: ../data/glade/prefs-dialog.glade.h:33
 msgid "_Address:"
 msgstr "સરનામું (_A):"
 
-#: ../data/glade/prefs-dialog.glade.h:33
+#: ../data/glade/prefs-dialog.glade.h:34
 msgid "_Always accept"
 msgstr "હંમેશા સ્વીકારો (_A)"
 
-#: ../data/glade/prefs-dialog.glade.h:34
+#: ../data/glade/prefs-dialog.glade.h:35
 msgid "_Detailed Font Settings…"
 msgstr "વિગતવાર ફોન્ટ સુયોજનો (_D)…"
 
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/glade/prefs-dialog.glade.h:36
 msgid "_Disk space:"
 msgstr "ડિસ્કમાં જગ્યા (_D):"
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Download folder:"
 msgstr "ફોલ્ડર ડાઉનલોડ કરો (_D):"
 
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Edit Stylesheet…"
 msgstr "સ્ટાઈલશીટમાં ફેરફાર કરો (_E)…"
 
-#: ../data/glade/prefs-dialog.glade.h:38
+#: ../data/glade/prefs-dialog.glade.h:39
 msgid "_Fixed width:"
 msgstr "ચોક્કસ પહોળાઈ (_F):"
 
-#: ../data/glade/prefs-dialog.glade.h:39
+#: ../data/glade/prefs-dialog.glade.h:40
 msgid "_Minimum size:"
 msgstr "ન્યૂનતમ માપ (_M):"
 
-#: ../data/glade/prefs-dialog.glade.h:40
+#: ../data/glade/prefs-dialog.glade.h:41
 msgid "_Never accept"
 msgstr "હંમેશા અસ્વીકારો (_N)"
 
-#: ../data/glade/prefs-dialog.glade.h:41
+#: ../data/glade/prefs-dialog.glade.h:42
 msgid "_Remember passwords"
 msgstr "પાસવર્ડો યાદ રાખો (_R)"
 
-#: ../data/glade/prefs-dialog.glade.h:42
+#: ../data/glade/prefs-dialog.glade.h:43
 msgid "_Variable width:"
 msgstr "ચલની પહોળાઈ (_V):"
 
@@ -879,30 +884,30 @@ msgid "_Page address"
 msgstr "પાના સરનામુ (_d)"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:190
+#: ../embed/downloader-view.c:197
 msgid "_Show Downloads"
 msgstr "ડાઉનલોડ બતાવો (_S)"
 
-#: ../embed/downloader-view.c:323
+#: ../embed/downloader-view.c:330
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:327
+#: ../embed/downloader-view.c:334
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:379
+#: ../embed/downloader-view.c:386
 msgid "_Pause"
 msgstr "વિરામ (_P)"
 
-#: ../embed/downloader-view.c:379
+#: ../embed/downloader-view.c:386
 msgid "_Resume"
 msgstr "પુનઃ આરંભ (_R)"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:426
+#: ../embed/downloader-view.c:433
 #, c-format
 msgid ""
 "%s\n"
@@ -911,12 +916,12 @@ msgstr ""
 "%s\n"
 "%s જેટલા %s ના"
 
-#: ../embed/downloader-view.c:436 ../embed/downloader-view.c:441
+#: ../embed/downloader-view.c:443 ../embed/downloader-view.c:448
 #: ../src/ephy-window.c:1519
 msgid "Unknown"
 msgstr "અજાણીતું"
 
-#: ../embed/downloader-view.c:475
+#: ../embed/downloader-view.c:482
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -925,31 +930,31 @@ msgstr[1] "%d ડાઉનલોડ"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:589 ../embed/downloader-view.c:602
+#: ../embed/downloader-view.c:596 ../embed/downloader-view.c:609
 msgid "download status|Unknown"
 msgstr "અજ્ઞાત"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:594
+#: ../embed/downloader-view.c:601
 msgid "download status|Failed"
 msgstr "નિષ્ફળ"
 
-#: ../embed/downloader-view.c:661
+#: ../embed/downloader-view.c:668
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "ફાઇલ"
 
 # libgnomeprint/gnome-print-paper.c:51
-#: ../embed/downloader-view.c:684
+#: ../embed/downloader-view.c:691
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:695
+#: ../embed/downloader-view.c:702
 msgid "Remaining"
 msgstr "બાકી રહેલું"
 
-#: ../embed/ephy-embed-shell.c:264
+#: ../embed/ephy-embed-shell.c:272
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "એપીફની હમણાં વાપરી શકાશે નહિં. મોઝિલ્લા પ્રારંભમાં નિષ્ફળ."
 
@@ -1514,7 +1519,6 @@ msgstr "<ul><li>અમુક સેવા શરૂ થઈ નથી, અથવ�
 #: ../embed/mozilla/EphyAboutModule.cpp:322
 #: ../embed/mozilla/EphyAboutModule.cpp:341
 #: ../embed/mozilla/EphyAboutModule.cpp:399
-#: ../embed/mozilla/EphyAboutModule.cpp:430
 msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
@@ -1525,7 +1529,6 @@ msgstr "સર્વર વ્યસ્ત હોઈ શકે અથવા ત�
 #: ../embed/mozilla/EphyAboutModule.cpp:343
 #: ../embed/mozilla/EphyAboutModule.cpp:366
 #: ../embed/mozilla/EphyAboutModule.cpp:401
-#: ../embed/mozilla/EphyAboutModule.cpp:432
 msgid "There may be an old version of the page you wanted:"
 msgstr "તમને જરૂરી હોય તે પાનાંની ત્યાં જૂની આવૃત્તિ હોઈ શકે:"
 
@@ -1605,7 +1608,6 @@ msgid "“%s” dropped the connection."
 msgstr "“%s” એ જોડાણ છોડી મૂક્યું."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:397
-#: ../embed/mozilla/EphyAboutModule.cpp:428
 msgid "The server dropped the connection before any data could be read."
 msgstr "સર્વરે કોઈપણ માહિતી વાંચી શકાય તે પહેલાં જોડાણ છોડી મૂક્યું."
 
@@ -1623,23 +1625,33 @@ msgstr "આ દસ્તાવેજ જોવા માટે, “ઓફલા�
 
 #: ../embed/mozilla/EphyAboutModule.cpp:422
 #, c-format
-msgid "“%s” Denied Access to Port “%d”"
-msgstr "“%s” એ પોર્ટ “%d” ના વપરાશની મનાઈ ફરમાવી"
+msgid "Access Denied to Port “%d” of “%s”"
+msgstr "“%2$s” ના પોર્ટ “%1$d” ના વપરાશની મનાઈ ફરમાવી"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:426
 #, c-format
-msgid "“%s” denied access to port “%d”."
-msgstr "“%s” એ પોર્ટ “%d” ના વપરાશની મનાઈ ફરમાવી."
+msgid "Access denied to port “%d” of “%s”."
+msgstr "“%2$s” ના પોર્ટ “%1$d” ના વપરાશની મનાઈ ફરમાવી."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:437
+#: ../embed/mozilla/EphyAboutModule.cpp:428
+msgid ""
+"This address uses a network port which is normally used for purposes other "
+"than Web browsing."
+msgstr "આ સરનામું નેટવર્ક પોર્ટ વાપરે છે કે જે સામાન્ય રીતે વેબ બ્રાઉઝીંગ સિવાયના હેતુઓ માટે વપરાય છે."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:430
+msgid "The request has been cancelled for your protection."
+msgstr "તમારી સુરક્ષા માટેની અરજી રદ કરવામાં આવી છે."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:435
 msgid "Could not Connect to Proxy Server"
 msgstr "પ્રોક્સી સર્વર સાથે જોડાઈ શક્યા નહિં"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:438
+#: ../embed/mozilla/EphyAboutModule.cpp:436
 msgid "Could not connect to proxy server."
 msgstr "પ્રોક્સી સર્વર સાથે જોડાઈ શક્યા નહિં."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:439
+#: ../embed/mozilla/EphyAboutModule.cpp:437
 msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
@@ -1647,19 +1659,19 @@ msgstr ""
 "તમારા પ્રોક્સી સર્વર સુયોજનો ચકાસો. જો જોડાણો હજુ પણ નિષ્ફળ જાય, તો ત્યાં તમારા "
 "પ્રોક્સી સર્વર અથવા તમારા નેટવર્ક સાથે જોડાણ સમસ્યાઓ હોઈ શકે."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:447
+#: ../embed/mozilla/EphyAboutModule.cpp:445
 msgid "Could not Display Content"
 msgstr "સમાવિષ્ટ પ્રદર્શિત કરી શક્યા નહિં"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:448
+#: ../embed/mozilla/EphyAboutModule.cpp:446
 msgid "Could not display content."
 msgstr "સમાવિષ્ટ પ્રદર્શિત કરી શક્યા નહિં."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:449
+#: ../embed/mozilla/EphyAboutModule.cpp:447
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr "પાનું સંકોચનનો બિનઆધારભૂત અથવાય અયોગ્ય સ્વરૂપ વાપરે છે."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:539
+#: ../embed/mozilla/EphyAboutModule.cpp:537
 #, c-format
 msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
@@ -1670,13 +1682,13 @@ msgstr ""
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:666
+#: ../embed/mozilla/EphyAboutModule.cpp:664
 msgid "You may find an old version:|in the Google Cache"
 msgstr "ગુગલ કેશમાં"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:674
+#: ../embed/mozilla/EphyAboutModule.cpp:672
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "ઈન્ટરનેટ પેટીમાં"
 
@@ -1775,15 +1787,15 @@ msgstr "વેબ સાઈટ “%s” અરજી કરે છે કે ત
 msgid "_Sign text"
 msgstr "લખાણ સહી કરો (_S)"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:198
+#: ../embed/mozilla/GeckoPrintService.cpp:197
 msgid "Options"
 msgstr "વિકલ્પો"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:462
+#: ../embed/mozilla/GeckoPrintService.cpp:461
 msgid "Print this page?"
 msgstr "શું આ પાનું છાપવું છે?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:470
+#: ../embed/mozilla/GeckoPrintService.cpp:469
 msgid "Preparing to print"
 msgstr "છાપવા માટે તૈયારી કરી રહ્યા છીએ"
 
@@ -2118,9 +2130,11 @@ msgid ""
 "\n"
 "The padlock icon in the statusbar also indicates whether a page is secure."
 msgstr ""
-"સુરક્ષિત પાનાંઓ માટે, સરનામા પ્રવેશને અલગ રંગ હોય છે અને તાળું મરાયેલ પેડલોક ચિહ્ન દર્શાવવામાં આવે છે.\n"
+"સુરક્ષિત પાનાંઓ માટે, સરનામા પ્રવેશને અલગ રંગ હોય છે અને તાળું મરાયેલ પેડલોક ચિહ્ન "
+"દર્શાવવામાં આવે છે.\n"
 "\n"
-"પરિસ્થિતિદર્શક પટ્ટીમાંનું પેડલોક ચિહ્ન શું પાનું સુરક્ષિત છે તે પણ સૂચવે છે.The padlock icon in the statusbar also indicates whether a page is secure."
+"પરિસ્થિતિદર્શક પટ્ટીમાંનું પેડલોક ચિહ્ન શું પાનું સુરક્ષિત છે તે પણ સૂચવે છે.The padlock icon "
+"in the statusbar also indicates whether a page is secure."
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:116
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:144
@@ -2180,9 +2194,11 @@ msgstr ""
 "આ પાનું સુરક્ષિત જોડાણ હેઠળ લાવવામાં આવ્યું હતું છતાં, તમે દાખલ કરેલી જાણકારી અસુરક્ષિજ "
 "જોડાણ ઉપર મોકલાશે, અને ત્રીજી વ્યક્તિ દ્વારા સહેલાઈથી જોઈ શકાઈ હશે."
 
-#: ../embed/mozilla/MozDownload.cpp:643
-msgid "Files"
-msgstr "ફાઇલો"
+#. translators: this is the directory name to store auxilary files when saving html files
+#: ../embed/mozilla/MozDownload.cpp:649
+#, c-format
+msgid "%s Files"
+msgstr "%s ફાઇલો"
 
 #. We do this before reading the user pref file so that the user
 #. * still can overwrite this pref.
@@ -2214,36 +2230,36 @@ msgstr ""
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:904
+#: ../lib/egg/egg-editable-toolbar.c:934
 #, c-format
 msgid "Show “_%s”"
 msgstr "“_%s” બતાવો"
 
-#: ../lib/egg/egg-editable-toolbar.c:1364
+#: ../lib/egg/egg-editable-toolbar.c:1394
 msgid "_Move on Toolbar"
 msgstr "સાધનપટ્ટીમાં ખસેડો (_M)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1365
+#: ../lib/egg/egg-editable-toolbar.c:1395
 msgid "Move the selected item on the toolbar"
 msgstr "પસંદ કરેલ વસ્તુને સાધનપટ્ટી પર ખસેડો"
 
-#: ../lib/egg/egg-editable-toolbar.c:1366
+#: ../lib/egg/egg-editable-toolbar.c:1396
 msgid "_Remove from Toolbar"
 msgstr "સાધનપટ્ટીમાંથી કાઢી નાખો (_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1367
+#: ../lib/egg/egg-editable-toolbar.c:1397
 msgid "Remove the selected item from the toolbar"
 msgstr "પસંદ કરેલ વસ્તુને સાધનપટ્ટીમાંથી દૂર કરો"
 
-#: ../lib/egg/egg-editable-toolbar.c:1368
+#: ../lib/egg/egg-editable-toolbar.c:1398
 msgid "_Delete Toolbar"
 msgstr "સાધનદર્શકપટ્ટી કાઢી નાખો (_D)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1369
+#: ../lib/egg/egg-editable-toolbar.c:1399
 msgid "Remove the selected toolbar"
 msgstr "પસંદ કરેલ સાધનપટ્ટી દૂર કરો"
 
-#: ../lib/egg/egg-toolbar-editor.c:446
+#: ../lib/egg/egg-toolbar-editor.c:439
 msgid "Separator"
 msgstr "વિભાજક"
 
@@ -2251,17 +2267,17 @@ msgstr "વિભાજક"
 msgid "All supported types"
 msgstr "બધા આધારભૂત પ્રકારો"
 
-#: ../lib/ephy-file-helpers.c:452
+#: ../lib/ephy-file-helpers.c:299
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "“%s” માં કામચલાઉ ડિરેક્ટરી બનાવી શક્યા નહિં."
 
-#: ../lib/ephy-file-helpers.c:528
+#: ../lib/ephy-file-helpers.c:375
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "ફાઈલ “%s” હાજર છે. મહેરબાની કરીને તેને રસ્તાની બહાર ખસેડો."
 
-#: ../lib/ephy-file-helpers.c:539
+#: ../lib/ephy-file-helpers.c:386
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "ડિરેક્ટરી “%s” બનાવવામાં નિષ્ફળ."
@@ -2483,29 +2499,31 @@ msgstr "આ સત્ર માટે પાસવર્ડ યાદ રાખ�
 msgid "Save password in _keyring"
 msgstr "પાસવર્ડને કીરીંગમાં સંગ્રહો (_k)"
 
-#: ../lib/ephy-stock-icons.c:54
+#: ../lib/ephy-stock-icons.c:52
 msgid "Popup Windows"
 msgstr "પોપ-અપ વિન્ડો"
 
-#: ../lib/ephy-stock-icons.c:55 ../src/ephy-history-window.c:1195
+#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1195
 msgid "History"
 msgstr "ઇતિહાસ"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-window.c:1337
+#: ../lib/ephy-stock-icons.c:54
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
+#: ../src/ephy-window.c:1337
 msgid "Bookmark"
 msgstr "બુકમાર્ક"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:917
+#: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
 #: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1341
 msgid "Bookmarks"
 msgstr "બુકમાર્ક"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:283
+#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:283
 msgid "Address Entry"
 msgstr "સરનામાનો પ્રવેશ"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:57
 msgid "_Download"
 msgstr "ડાઉનલોડ (_D)"
 
@@ -2545,7 +2563,7 @@ msgstr "૩૦૦%"
 msgid "400%"
 msgstr "૪૦૦%"
 
-#: ../lib/widgets/ephy-location-entry.c:914
+#: ../lib/widgets/ephy-location-entry.c:892
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "આ પાનાંની કડી બનાવવા માટે આ ચિહ્ન ખેંચો અને મૂકો"
 
@@ -2582,10 +2600,6 @@ msgstr "પ્લગઈન વેબ કડીઓ સમાવતી “.desktop
 #, c-format
 msgid "%s:"
 msgstr "%s:"
-
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
-msgid "Quick Bookmark"
-msgstr "ઝડપી બુકમાર્ક"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
@@ -2723,8 +2737,8 @@ msgstr "બિનવર્ગીકૃત"
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
 #: ../src/bookmarks/ephy-bookmarks.c:1077
-msgid "bookmarks|Local Sites"
-msgstr "સ્થાનિક સાઈટો"
+msgid "bookmarks|Nearby Sites"
+msgstr "નજીકની સાઈટો"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:99
 msgid "Epiphany (RDF)"
@@ -3094,8 +3108,8 @@ msgid "Related"
 msgstr "સંબંધિત"
 
 #: ../src/bookmarks/ephy-topic-factory-action.c:322
-msgid "Quick Topic"
-msgstr "ઝડપી મુદ્દો"
+msgid "Topic"
+msgstr "મુદ્દો"
 
 #: ../src/bookmarks/ephy-topics-entry.c:359
 #, c-format
@@ -3151,7 +3165,7 @@ msgid "Find next occurrence of the search string"
 msgstr "શોધ શબ્દમાળાનો આગળનો વારો શોધો"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:276 ../src/ephy-toolbar.c:571
+#: ../src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:571
 msgid "Leave Fullscreen"
 msgstr "પૂર્ણ સ્ક્રીન છોડો"
 
@@ -3316,7 +3330,7 @@ msgstr "જીનોમ વેબ બ્રાઉઝર"
 msgid "GNOME Web Browser options"
 msgstr "જીનોમ વેબ બ્રાઉઝર વિકલ્પો"
 
-#: ../src/ephy-notebook.c:673
+#: ../src/ephy-notebook.c:659
 msgid "Close tab"
 msgstr "ટેબ બંધ કરો"
 
@@ -3383,21 +3397,18 @@ msgstr "બાજુપટ્ટી એક્સટેન્સન જરૂર�
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "તમે ક્લિક કરેલ કડીને બાજુપટ્ટી એક્સટેન્સન સ્થાપિત થયેલ હોય એની જરૂર છે."
 
-#. Translators: this is displayed in the statusbar; choose a short word
-#. * or even an abbreviation.
-#.
-#: ../src/ephy-statusbar.c:158
+#: ../src/ephy-statusbar.c:120
 msgid "Caret"
 msgstr "કેરેટ"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:166
+#: ../src/ephy-statusbar.c:127
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "કીબોર્ડ પદ્ધતિ સ્થિતિમાં, બહાર નીકળવા માટે F7 દબાવો"
 
-#: ../src/ephy-tab.c:493 ../src/ephy-tab.c:2345 ../src/ephy-tab.c:2380
+#: ../src/ephy-tab.c:493 ../src/ephy-tab.c:2348 ../src/ephy-tab.c:2383
 msgid "Blank page"
 msgstr "ખાલી પાનું"
 
@@ -4192,7 +4203,7 @@ msgstr "બંધ કરો"
 msgid "Close print preview"
 msgstr "છાપવા માટેનું પૂર્વદર્શન બંધ કરો"
 
-#: ../src/prefs-dialog.c:415
+#: ../src/prefs-dialog.c:417
 msgid "Default"
 msgstr "મૂળભૂત"
 
@@ -4204,7 +4215,7 @@ msgstr "મૂળભૂત"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:996 ../src/prefs-dialog.c:1004
+#: ../src/prefs-dialog.c:998 ../src/prefs-dialog.c:1006
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -4214,19 +4225,19 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:1015
+#: ../src/prefs-dialog.c:1017
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "વપરાશકર્તા વ્યાખ્યાયિત (%s)"
 
-#: ../src/prefs-dialog.c:1037
+#: ../src/prefs-dialog.c:1039
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "સિસ્ટમ ભાષા (%s)"
 msgstr[1] "સિસ્ટમની ભાષાઓ (%s)"
 
-#: ../src/prefs-dialog.c:1429
+#: ../src/prefs-dialog.c:1431
 msgid "Select a Directory"
 msgstr "ડિરેક્ટરી પસંદ કરો"
 
