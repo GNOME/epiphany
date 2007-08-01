@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.es\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-07-26 22:00+0100\n"
-"PO-Revision-Date: 2007-07-27 13:37+0200\n"
+"POT-Creation-Date: 2007-08-01 13:30+0100\n"
+"PO-Revision-Date: 2007-08-01 15:09+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -120,13 +120,11 @@ msgstr "Epiphany no puede salir"
 
 #: ../data/epiphany-lockdown.schemas.in.h:16
 msgid "Hide menubar by default"
-msgstr "Ocultar por omisión la barra de menú"
+msgstr "Ocultar la barra de menú de forma predeterminada"
 
 #: ../data/epiphany-lockdown.schemas.in.h:17
-msgid "Hide the menubar by default. The menubar can still be accessed using F10."
-msgstr ""
-"Oculta la barra de menú por omisión. Puede acceder a la barra de menú "
-"también usando F10."
+msgid "Hide the menubar by default."
+msgstr "Ocultar la barra de menú de forma predeterminada."
 
 #: ../data/epiphany-lockdown.schemas.in.h:18
 msgid "Lock in fullscreen mode"
@@ -312,11 +310,11 @@ msgstr "Recordar contraseñas"
 
 #: ../data/epiphany.schemas.in.h:31
 msgid "Show bookmarks bar by default"
-msgstr "Mostrar la barra de marcadores por omisión"
+msgstr "Mostrar la barra de marcadores de forma predeterminada"
 
 #: ../data/epiphany.schemas.in.h:32
 msgid "Show statusbar by default"
-msgstr "Mostrar por omisión la barra de estado"
+msgstr "Mostrar de forma predeterminada la barra de estado"
 
 #: ../data/epiphany.schemas.in.h:33
 msgid ""
@@ -332,7 +330,7 @@ msgstr "Mostrar la barra de solapas también cuando sólo hay una solapa abierta
 
 #: ../data/epiphany.schemas.in.h:35
 msgid "Show toolbars by default"
-msgstr "Mostrar barras de herramientas por omisión"
+msgstr "Mostrar barras de herramientas de forma predeterminada"
 
 #: ../data/epiphany.schemas.in.h:36
 msgid "Size of disk cache"
@@ -909,7 +907,7 @@ msgstr ""
 "%s de %s"
 
 #: ../embed/downloader-view.c:443 ../embed/downloader-view.c:448
-#: ../src/ephy-window.c:1519
+#: ../src/ephy-window.c:1528
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -945,7 +943,7 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Restantes"
 
-#: ../embed/ephy-embed-shell.c:272
+#: ../embed/ephy-embed-shell.c:271
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphany no puede usarse ahora. La inicialización de Mozilla falló."
 
@@ -2224,7 +2222,7 @@ msgstr "%s archivos"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:265
+#: ../embed/mozilla/mozilla-embed-single.cpp:203
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.es/search?ie=UTF-8&oe=UTF-8&q="
 
@@ -2249,27 +2247,27 @@ msgstr ""
 msgid "Show “_%s”"
 msgstr "Mostrar «_%s»"
 
-#: ../lib/egg/egg-editable-toolbar.c:1394
+#: ../lib/egg/egg-editable-toolbar.c:1397
 msgid "_Move on Toolbar"
 msgstr "_Mover en la barra de herramientas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1395
+#: ../lib/egg/egg-editable-toolbar.c:1398
 msgid "Move the selected item on the toolbar"
 msgstr "Mueve el elemento seleccionado en la barra de herramientas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1396
+#: ../lib/egg/egg-editable-toolbar.c:1399
 msgid "_Remove from Toolbar"
 msgstr "_Quitar de la barra de herramientas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1397
+#: ../lib/egg/egg-editable-toolbar.c:1400
 msgid "Remove the selected item from the toolbar"
 msgstr "Quita el elemento seleccionado de la barra de herramientas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1398
+#: ../lib/egg/egg-editable-toolbar.c:1401
 msgid "_Delete Toolbar"
 msgstr "_Borrar barra de herramientas"
 
-#: ../lib/egg/egg-editable-toolbar.c:1399
+#: ../lib/egg/egg-editable-toolbar.c:1402
 msgid "Remove the selected toolbar"
 msgstr "Quita la barra de herramientas seleccionada"
 
@@ -2281,17 +2279,17 @@ msgstr "Separador"
 msgid "All supported types"
 msgstr "Todos los tipos soportados"
 
-#: ../lib/ephy-file-helpers.c:299
+#: ../lib/ephy-file-helpers.c:298
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "No se pudo crear el directorio temporal en: «%s»."
 
-#: ../lib/ephy-file-helpers.c:375
+#: ../lib/ephy-file-helpers.c:374
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "el archivo «%s» ya existe. Muévalo fuera de la ruta."
 
-#: ../lib/ephy-file-helpers.c:386
+#: ../lib/ephy-file-helpers.c:385
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Falló al crear el directorio «%s»."
@@ -2523,13 +2521,13 @@ msgstr "Histórico"
 
 #: ../lib/ephy-stock-icons.c:54
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:323
-#: ../src/ephy-window.c:1337
+#: ../src/ephy-window.c:1346
 msgid "Bookmark"
 msgstr "Marcador"
 
 #: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
-#: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1341
+#: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1350
 msgid "Bookmarks"
 msgstr "Marcadores"
 
@@ -4000,113 +3998,113 @@ msgstr "_Iniciar animación"
 msgid "St_op Animation"
 msgstr "_Detener animación"
 
-#: ../src/ephy-window.c:746
+#: ../src/ephy-window.c:755
 msgid "There are unsubmitted changes to form elements"
 msgstr "Hay cambios no enviados en los elementos del formulario"
 
-#: ../src/ephy-window.c:750
+#: ../src/ephy-window.c:759
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Si cierra el documento, perderá esa información."
 
-#: ../src/ephy-window.c:754
+#: ../src/ephy-window.c:763
 msgid "Close _Document"
 msgstr "Cerrar _documento"
 
-#: ../src/ephy-window.c:1331 ../src/window-commands.c:267
+#: ../src/ephy-window.c:1340 ../src/window-commands.c:267
 msgid "Open"
 msgstr "Abrir"
 
-#: ../src/ephy-window.c:1333 ../src/window-commands.c:293
+#: ../src/ephy-window.c:1342 ../src/window-commands.c:293
 msgid "Save As"
 msgstr "Guardar como"
 
-#: ../src/ephy-window.c:1335
+#: ../src/ephy-window.c:1344
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../src/ephy-window.c:1339
+#: ../src/ephy-window.c:1348
 msgid "Find"
 msgstr "Buscar"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1352
+#: ../src/ephy-window.c:1361
 msgid "Larger"
 msgstr "Más grande"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1355
+#: ../src/ephy-window.c:1364
 msgid "Smaller"
 msgstr "Más pequeño"
 
-#: ../src/ephy-window.c:1522
+#: ../src/ephy-window.c:1531
 msgid "Insecure"
 msgstr "Inseguro"
 
-#: ../src/ephy-window.c:1527
+#: ../src/ephy-window.c:1536
 msgid "Broken"
 msgstr "Roto"
 
-#: ../src/ephy-window.c:1539
+#: ../src/ephy-window.c:1548
 msgid "Low"
 msgstr "Bajo"
 
-#: ../src/ephy-window.c:1546
+#: ../src/ephy-window.c:1555
 msgid "High"
 msgstr "Alto"
 
-#: ../src/ephy-window.c:1556
+#: ../src/ephy-window.c:1565
 #, c-format
 msgid "Security level: %s"
 msgstr "Nivel de seguridad %s"
 
-#: ../src/ephy-window.c:1599
+#: ../src/ephy-window.c:1608
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d ventana emergente oculta"
 msgstr[1] "%d ventanas emergentes ocultas"
 
-#: ../src/ephy-window.c:1894
+#: ../src/ephy-window.c:1903
 #, c-format
 msgid "Open image “%s”"
 msgstr "Abrir la imagen «%s»"
 
-#: ../src/ephy-window.c:1899
+#: ../src/ephy-window.c:1908
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Utilizar «%s» como tapiz del escritorio"
 
-#: ../src/ephy-window.c:1904
+#: ../src/ephy-window.c:1913
 #, c-format
 msgid "Save image “%s”"
 msgstr "Guardar imagen «%s»"
 
-#: ../src/ephy-window.c:1909
+#: ../src/ephy-window.c:1918
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Copiar dirección de la imagen «%s»"
 
-#: ../src/ephy-window.c:1922
+#: ../src/ephy-window.c:1931
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Enviar correo-e a la dirección «%s»"
 
-#: ../src/ephy-window.c:1928
+#: ../src/ephy-window.c:1937
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Copiar dirección de correo-e «%s»"
 
-#: ../src/ephy-window.c:1940
+#: ../src/ephy-window.c:1949
 #, c-format
 msgid "Save link “%s”"
 msgstr "Guardar enlace «%s»"
 
-#: ../src/ephy-window.c:1946
+#: ../src/ephy-window.c:1955
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Crear marcador con el enlace «%s»"
 
-#: ../src/ephy-window.c:1952
+#: ../src/ephy-window.c:1961
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Copiar dirección del enlace de «%s»"
@@ -4321,8 +4319,8 @@ msgstr ""
 #: ../src/window-commands.c:852
 msgid "translator-credits"
 msgstr ""
-"Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
-"Jorge González <jorgegonz@svn.gnome.org>, 2007"
+"Jorge González <jorgegonz@svn.gnome.org>, 2007\n"
+"Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
 #: ../src/window-commands.c:855
 msgid "GNOME Web Browser Website"
