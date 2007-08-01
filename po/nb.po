@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: epiphany 1.9.x\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-06-23 10:51+0200\n"
-"PO-Revision-Date: 2007-06-23 10:52+0200\n"
+"POT-Creation-Date: 2007-08-01 15:15+0200\n"
+"PO-Revision-Date: 2007-08-01 15:19+0200\n"
 "Last-Translator: Espen Stefansen <espenas@gmail.com>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -122,10 +122,8 @@ msgid "Hide menubar by default"
 msgstr "Skjul menylinje som forvalg"
 
 #: ../data/epiphany-lockdown.schemas.in.h:17
-msgid ""
-"Hide the menubar by default. The menubar can still be accessed using F10."
-msgstr ""
-"Skjul menylinjen som forvalg. Menylinjen kan aksesseres ved bruk av F10."
+msgid "Hide the menubar by default."
+msgstr "Skjul menylinjen som forvalg."
 
 #: ../data/epiphany-lockdown.schemas.in.h:18
 msgid "Lock in fullscreen mode"
@@ -587,7 +585,7 @@ msgid "Cookies"
 msgstr "Informasjonskapsler"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:258
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:113
 msgid "Downloads"
 msgstr "Nedlastinger"
 
@@ -695,7 +693,7 @@ msgstr "V_elg et språk:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:14
-#: ../lib/widgets/ephy-location-entry.c:647 ../src/ephy-history-window.c:266
+#: ../lib/widgets/ephy-location-entry.c:625 ../src/ephy-history-window.c:266
 msgid "Cl_ear"
 msgstr "Tø_m"
 
@@ -723,7 +721,7 @@ msgstr "Skrifter og stil"
 msgid "For l_anguage:"
 msgstr "For spr_åk:"
 
-#: ../data/glade/prefs-dialog.glade.h:22 ../src/prefs-dialog.c:1308
+#: ../data/glade/prefs-dialog.glade.h:22 ../src/prefs-dialog.c:1310
 msgid "Language"
 msgstr "Språk"
 
@@ -764,46 +762,50 @@ msgid "Use custom _stylesheet"
 msgstr "Bruk egendefinert _stilark"
 
 #: ../data/glade/prefs-dialog.glade.h:32
+msgid "Use s_mooth scrolling"
+msgstr "Aktiver _myk rulling"
+
+#: ../data/glade/prefs-dialog.glade.h:33
 msgid "_Address:"
 msgstr "_Adresse:"
 
-#: ../data/glade/prefs-dialog.glade.h:33
+#: ../data/glade/prefs-dialog.glade.h:34
 msgid "_Always accept"
 msgstr "_Alltid godta"
 
-#: ../data/glade/prefs-dialog.glade.h:34
+#: ../data/glade/prefs-dialog.glade.h:35
 msgid "_Detailed Font Settings…"
 msgstr "_Detaljerte innstillinger for skrifter..."
 
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/glade/prefs-dialog.glade.h:36
 msgid "_Disk space:"
 msgstr "_Diskplass:"
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Download folder:"
 msgstr "Ne_dlastingsmappe:"
 
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Edit Stylesheet…"
 msgstr "R_ediger stilark..."
 
-#: ../data/glade/prefs-dialog.glade.h:38
+#: ../data/glade/prefs-dialog.glade.h:39
 msgid "_Fixed width:"
 msgstr "_Fast bredde:"
 
-#: ../data/glade/prefs-dialog.glade.h:39
+#: ../data/glade/prefs-dialog.glade.h:40
 msgid "_Minimum size:"
 msgstr "_Minste størrelse:"
 
-#: ../data/glade/prefs-dialog.glade.h:40
+#: ../data/glade/prefs-dialog.glade.h:41
 msgid "_Never accept"
 msgstr "_Aldri godta"
 
-#: ../data/glade/prefs-dialog.glade.h:41
+#: ../data/glade/prefs-dialog.glade.h:42
 msgid "_Remember passwords"
 msgstr "Husk passo_rd"
 
-#: ../data/glade/prefs-dialog.glade.h:42
+#: ../data/glade/prefs-dialog.glade.h:43
 msgid "_Variable width:"
 msgstr "_Variabel bredde:"
 
@@ -860,30 +862,30 @@ msgid "_Page address"
 msgstr "Sidens a_dresse"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:190
+#: ../embed/downloader-view.c:197
 msgid "_Show Downloads"
 msgstr "Vi_s nedlasting"
 
-#: ../embed/downloader-view.c:323
+#: ../embed/downloader-view.c:330
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:327
+#: ../embed/downloader-view.c:334
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:379
+#: ../embed/downloader-view.c:386
 msgid "_Pause"
 msgstr "_Pause"
 
-#: ../embed/downloader-view.c:379
+#: ../embed/downloader-view.c:386
 msgid "_Resume"
 msgstr "_Gjenoppta"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:426
+#: ../embed/downloader-view.c:433
 #, c-format
 msgid ""
 "%s\n"
@@ -892,12 +894,12 @@ msgstr ""
 "%s\n"
 "%s av %s"
 
-#: ../embed/downloader-view.c:436 ../embed/downloader-view.c:441
-#: ../src/ephy-window.c:1519
+#: ../embed/downloader-view.c:443 ../embed/downloader-view.c:448
+#: ../src/ephy-window.c:1528
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: ../embed/downloader-view.c:475
+#: ../embed/downloader-view.c:482
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -906,30 +908,30 @@ msgstr[1] "%d nedlastinger"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:589 ../embed/downloader-view.c:602
+#: ../embed/downloader-view.c:596 ../embed/downloader-view.c:609
 msgid "download status|Unknown"
 msgstr "Ukjent"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:594
+#: ../embed/downloader-view.c:601
 msgid "download status|Failed"
 msgstr "Feilet"
 
-#: ../embed/downloader-view.c:661
+#: ../embed/downloader-view.c:668
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Fil"
 
-#: ../embed/downloader-view.c:684
+#: ../embed/downloader-view.c:691
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:695
+#: ../embed/downloader-view.c:702
 msgid "Remaining"
 msgstr "Gjenstår"
 
-#: ../embed/ephy-embed-shell.c:264
+#: ../embed/ephy-embed-shell.c:271
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphany kan ikke brukes nå. Initiering av Mozilla feilet."
 
@@ -1502,7 +1504,6 @@ msgstr ""
 #: ../embed/mozilla/EphyAboutModule.cpp:322
 #: ../embed/mozilla/EphyAboutModule.cpp:341
 #: ../embed/mozilla/EphyAboutModule.cpp:399
-#: ../embed/mozilla/EphyAboutModule.cpp:430
 msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
@@ -1515,7 +1516,6 @@ msgstr ""
 #: ../embed/mozilla/EphyAboutModule.cpp:343
 #: ../embed/mozilla/EphyAboutModule.cpp:366
 #: ../embed/mozilla/EphyAboutModule.cpp:401
-#: ../embed/mozilla/EphyAboutModule.cpp:432
 msgid "There may be an old version of the page you wanted:"
 msgstr "Det finnes kanskje en gammel versjon av siden:"
 
@@ -1599,7 +1599,6 @@ msgid "“%s” dropped the connection."
 msgstr "«%s» lukket tilkoblingen."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:397
-#: ../embed/mozilla/EphyAboutModule.cpp:428
 msgid "The server dropped the connection before any data could be read."
 msgstr "Tjeneren lukket tilkoblingen før data kunne bli lest."
 
@@ -1618,23 +1617,33 @@ msgstr ""
 
 #: ../embed/mozilla/EphyAboutModule.cpp:422
 #, c-format
-msgid "“%s” Denied Access to Port “%d”"
-msgstr "«%s» nektet tilgang på port «%d»"
+msgid "Access Denied to Port “%d” of “%s”"
+msgstr "Tilgang nektet på port «%d» på «%s»"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:426
 #, c-format
-msgid "“%s” denied access to port “%d”."
-msgstr "«%s» nektet tilgang på port «%d»."
+msgid "Access denied to port “%d” of “%s”."
+msgstr "Tilgang nektet på port «%d» på «%s»."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:437
+#: ../embed/mozilla/EphyAboutModule.cpp:428
+msgid ""
+"This address uses a network port which is normally used for purposes other "
+"than Web browsing."
+msgstr "Denne adressen bruker en nettverksport som normalt brukes for andre formål enn weblesing."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:430
+msgid "The request has been cancelled for your protection."
+msgstr "Forespørselen er avbrutt for å beskytte deg."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:435
 msgid "Could not Connect to Proxy Server"
 msgstr "Kunne ikke koble til mellomtjener"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:438
+#: ../embed/mozilla/EphyAboutModule.cpp:436
 msgid "Could not connect to proxy server."
 msgstr "Kunne ikke koble til mellomtjener."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:439
+#: ../embed/mozilla/EphyAboutModule.cpp:437
 msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
@@ -1642,21 +1651,21 @@ msgstr ""
 "Sjekk instillingene for mellomtjener. Hvis tilkoblingen fremdeles mislykkes "
 "kan det være et problem med mellomtjeneren eller nettverkstilkoblingen."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:447
+#: ../embed/mozilla/EphyAboutModule.cpp:445
 msgid "Could not Display Content"
 msgstr "Kunne ikke vise innhold i hjelp"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:448
+#: ../embed/mozilla/EphyAboutModule.cpp:446
 msgid "Could not display content."
 msgstr "Kunne ikke vise innhold."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:449
+#: ../embed/mozilla/EphyAboutModule.cpp:447
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr ""
 "Denne siden bruker en form for komprimering som ikke er støttet eller er "
 "ugyldig."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:539
+#: ../embed/mozilla/EphyAboutModule.cpp:537
 #, c-format
 msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
@@ -1667,13 +1676,13 @@ msgstr ""
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:666
+#: ../embed/mozilla/EphyAboutModule.cpp:664
 msgid "You may find an old version:|in the Google Cache"
 msgstr "i Google-bufferen"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:674
+#: ../embed/mozilla/EphyAboutModule.cpp:672
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "i internettarkivet"
 
@@ -1772,15 +1781,15 @@ msgstr "Nettstedet «%s» ber deg signere følgende tekst:"
 msgid "_Sign text"
 msgstr "_Signer tekst"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:198
+#: ../embed/mozilla/GeckoPrintService.cpp:197
 msgid "Options"
 msgstr "Alternativer"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:462
+#: ../embed/mozilla/GeckoPrintService.cpp:461
 msgid "Print this page?"
 msgstr "Skriv ut denne siden?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:470
+#: ../embed/mozilla/GeckoPrintService.cpp:469
 msgid "Preparing to print"
 msgstr "Forbereder utskrift"
 
@@ -2122,7 +2131,8 @@ msgid ""
 "\n"
 "The padlock icon in the statusbar also indicates whether a page is secure."
 msgstr ""
-"Adressefeltet for sikre sider har en bestemt farge og en låst hengelås vises.\n"
+"Adressefeltet for sikre sider har en bestemt farge og en låst hengelås "
+"vises.\n"
 "\n"
 "Hengelåsikonet i statuslinjen indikerer også om en side er sikker."
 
@@ -2185,9 +2195,11 @@ msgstr ""
 "du har oppgitt bli sendt over en usikker forbindelse, og vil lett kunne "
 "fanges opp av tredjepart."
 
-#: ../embed/mozilla/MozDownload.cpp:643
-msgid "Files"
-msgstr "Filer"
+#. translators: this is the directory name to store auxilary files when saving html files
+#: ../embed/mozilla/MozDownload.cpp:649
+#, c-format
+msgid "%s Files"
+msgstr "%s Filer"
 
 #. We do this before reading the user pref file so that the user
 #. * still can overwrite this pref.
@@ -2199,7 +2211,7 @@ msgstr "Filer"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:265
+#: ../embed/mozilla/mozilla-embed-single.cpp:203
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
@@ -2219,36 +2231,36 @@ msgstr ""
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:904
+#: ../lib/egg/egg-editable-toolbar.c:934
 #, c-format
 msgid "Show “_%s”"
 msgstr "Vis «_%s»"
 
-#: ../lib/egg/egg-editable-toolbar.c:1364
+#: ../lib/egg/egg-editable-toolbar.c:1397
 msgid "_Move on Toolbar"
 msgstr "_Flytt på verktøylinje"
 
-#: ../lib/egg/egg-editable-toolbar.c:1365
+#: ../lib/egg/egg-editable-toolbar.c:1398
 msgid "Move the selected item on the toolbar"
 msgstr "Flytt valgt oppføring på verktøylinjen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1366
+#: ../lib/egg/egg-editable-toolbar.c:1399
 msgid "_Remove from Toolbar"
 msgstr "Fje_rn verktøylinje"
 
-#: ../lib/egg/egg-editable-toolbar.c:1367
+#: ../lib/egg/egg-editable-toolbar.c:1400
 msgid "Remove the selected item from the toolbar"
 msgstr "Fjern valgt oppføring fra verktøylinjen"
 
-#: ../lib/egg/egg-editable-toolbar.c:1368
+#: ../lib/egg/egg-editable-toolbar.c:1401
 msgid "_Delete Toolbar"
 msgstr "_Fjern verktøylinje"
 
-#: ../lib/egg/egg-editable-toolbar.c:1369
+#: ../lib/egg/egg-editable-toolbar.c:1402
 msgid "Remove the selected toolbar"
 msgstr "Fjern valgt verktøylinje"
 
-#: ../lib/egg/egg-toolbar-editor.c:446
+#: ../lib/egg/egg-toolbar-editor.c:439
 msgid "Separator"
 msgstr "Skillelinje"
 
@@ -2256,17 +2268,17 @@ msgstr "Skillelinje"
 msgid "All supported types"
 msgstr "Alle støttede typer"
 
-#: ../lib/ephy-file-helpers.c:452
+#: ../lib/ephy-file-helpers.c:298
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Kunne ikke opprette midlertidig katalog i «%s»."
 
-#: ../lib/ephy-file-helpers.c:528
+#: ../lib/ephy-file-helpers.c:374
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Filen «%s» eksisterer. Vennligst flytt den."
 
-#: ../lib/ephy-file-helpers.c:539
+#: ../lib/ephy-file-helpers.c:385
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Kunne ikke opprette katalog «%s»."
@@ -2490,29 +2502,31 @@ msgstr "Husk passo_rdet for denne sesjonen"
 msgid "Save password in _keyring"
 msgstr "Lagre passord på nø_kkelring"
 
-#: ../lib/ephy-stock-icons.c:54
+#: ../lib/ephy-stock-icons.c:52
 msgid "Popup Windows"
 msgstr "Sprettoppvinduer"
 
-#: ../lib/ephy-stock-icons.c:55 ../src/ephy-history-window.c:1195
+#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1195
 msgid "History"
 msgstr "Historie"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-window.c:1337
+#: ../lib/ephy-stock-icons.c:54
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
+#: ../src/ephy-window.c:1346
 msgid "Bookmark"
 msgstr "Bokmerke"
 
-#: ../lib/ephy-stock-icons.c:57 ../src/bookmarks/ephy-bookmarks-editor.c:917
+#: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
-#: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1341
+#: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1350
 msgid "Bookmarks"
 msgstr "Bokmerker"
 
-#: ../lib/ephy-stock-icons.c:58 ../src/ephy-toolbar.c:283
+#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:283
 msgid "Address Entry"
 msgstr "Adressefelt"
 
-#: ../lib/ephy-stock-icons.c:59
+#: ../lib/ephy-stock-icons.c:57
 msgid "_Download"
 msgstr "Last ne_d"
 
@@ -2552,7 +2566,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:914
+#: ../lib/widgets/ephy-location-entry.c:892
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Dra-og-slipp dette ikonet for å opprette en lenke til denne siden"
 
@@ -2591,10 +2605,6 @@ msgstr ""
 #, c-format
 msgid "%s:"
 msgstr "%s:"
-
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
-msgid "Quick Bookmark"
-msgstr "Hurtigbokmerke"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
@@ -2733,8 +2743,8 @@ msgstr "Ikke kategorisert"
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
 #: ../src/bookmarks/ephy-bookmarks.c:1077
-msgid "bookmarks|Local Sites"
-msgstr "Lokale nettsteder"
+msgid "bookmarks|Nearby Sites"
+msgstr "Nettsteder i nærheten"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:99
 msgid "Epiphany (RDF)"
@@ -3106,8 +3116,8 @@ msgid "Related"
 msgstr "Relatert"
 
 #: ../src/bookmarks/ephy-topic-factory-action.c:322
-msgid "Quick Topic"
-msgstr "Hurtigemne"
+msgid "Topic"
+msgstr "Emne"
 
 #: ../src/bookmarks/ephy-topics-entry.c:359
 #, c-format
@@ -3163,7 +3173,7 @@ msgid "Find next occurrence of the search string"
 msgstr "Finn neste oppføring av søketeksten"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:276 ../src/ephy-toolbar.c:571
+#: ../src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:571
 msgid "Leave Fullscreen"
 msgstr "Forlat fullskjerm"
 
@@ -3327,7 +3337,7 @@ msgstr "GNOME Nettleser"
 msgid "GNOME Web Browser options"
 msgstr "Alternativer for GNOME Nettleser"
 
-#: ../src/ephy-notebook.c:673
+#: ../src/ephy-notebook.c:659
 msgid "Close tab"
 msgstr "Lukk fane"
 
@@ -3394,21 +3404,18 @@ msgstr "Sidelinjetillegg kreves"
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Lenken du klikket på krever at sidelinjetillegget er installert."
 
-#. Translators: this is displayed in the statusbar; choose a short word
-#. * or even an abbreviation.
-#.
-#: ../src/ephy-statusbar.c:158
+#: ../src/ephy-statusbar.c:120
 msgid "Caret"
 msgstr "Markør"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:166
+#: ../src/ephy-statusbar.c:127
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "I tastaturutvalgsmodus. Trykk F7 for å avslutte"
 
-#: ../src/ephy-tab.c:493 ../src/ephy-tab.c:2345 ../src/ephy-tab.c:2380
+#: ../src/ephy-tab.c:493 ../src/ephy-tab.c:2348 ../src/ephy-tab.c:2383
 msgid "Blank page"
 msgstr "Tom side"
 
@@ -3980,113 +3987,113 @@ msgstr "St_art animasjon"
 msgid "St_op Animation"
 msgstr "St_opp animasjon"
 
-#: ../src/ephy-window.c:746
+#: ../src/ephy-window.c:755
 msgid "There are unsubmitted changes to form elements"
 msgstr "Det finnes endringer i skjemaet som ikke er sendt"
 
-#: ../src/ephy-window.c:750
+#: ../src/ephy-window.c:759
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Hvis du lukker dokumentet likevel vil du miste denne informasjonen."
 
-#: ../src/ephy-window.c:754
+#: ../src/ephy-window.c:763
 msgid "Close _Document"
 msgstr "Lukk _dokument"
 
-#: ../src/ephy-window.c:1331 ../src/window-commands.c:267
+#: ../src/ephy-window.c:1340 ../src/window-commands.c:267
 msgid "Open"
 msgstr "Åpne"
 
-#: ../src/ephy-window.c:1333 ../src/window-commands.c:293
+#: ../src/ephy-window.c:1342 ../src/window-commands.c:293
 msgid "Save As"
 msgstr "Lagre som"
 
-#: ../src/ephy-window.c:1335
+#: ../src/ephy-window.c:1344
 msgid "Print"
 msgstr "Skriv ut"
 
-#: ../src/ephy-window.c:1339
+#: ../src/ephy-window.c:1348
 msgid "Find"
 msgstr "Finn"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1352
+#: ../src/ephy-window.c:1361
 msgid "Larger"
 msgstr "Større"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1355
+#: ../src/ephy-window.c:1364
 msgid "Smaller"
 msgstr "Mindre"
 
-#: ../src/ephy-window.c:1522
+#: ../src/ephy-window.c:1531
 msgid "Insecure"
 msgstr "Usikker"
 
-#: ../src/ephy-window.c:1527
+#: ../src/ephy-window.c:1536
 msgid "Broken"
 msgstr "Ødelagt"
 
-#: ../src/ephy-window.c:1539
+#: ../src/ephy-window.c:1548
 msgid "Low"
 msgstr "Lav"
 
-#: ../src/ephy-window.c:1546
+#: ../src/ephy-window.c:1555
 msgid "High"
 msgstr "Høy"
 
-#: ../src/ephy-window.c:1556
+#: ../src/ephy-window.c:1565
 #, c-format
 msgid "Security level: %s"
 msgstr "Sikkerhetsnivå: %s"
 
-#: ../src/ephy-window.c:1599
+#: ../src/ephy-window.c:1608
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d skjult sprettoppvindu"
 msgstr[1] "%d skjulte sprettoppvinduer"
 
-#: ../src/ephy-window.c:1894
+#: ../src/ephy-window.c:1903
 #, c-format
 msgid "Open image “%s”"
 msgstr "Åpne bilde «%s»"
 
-#: ../src/ephy-window.c:1899
+#: ../src/ephy-window.c:1908
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Bruk som bakgrunn på skrivebordet «%s»"
 
-#: ../src/ephy-window.c:1904
+#: ../src/ephy-window.c:1913
 #, c-format
 msgid "Save image “%s”"
 msgstr "Lagre bilde «%s»"
 
-#: ../src/ephy-window.c:1909
+#: ../src/ephy-window.c:1918
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopier adressen til bildet «%s»"
 
-#: ../src/ephy-window.c:1922
+#: ../src/ephy-window.c:1931
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Send e-post til adresse «%s»"
 
-#: ../src/ephy-window.c:1928
+#: ../src/ephy-window.c:1937
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopier e-postadresse «%s»"
 
-#: ../src/ephy-window.c:1940
+#: ../src/ephy-window.c:1949
 #, c-format
 msgid "Save link “%s”"
 msgstr "Lagre lenke «%s»"
 
-#: ../src/ephy-window.c:1946
+#: ../src/ephy-window.c:1955
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Lag bokmerke av lenke «%s»"
 
-#: ../src/ephy-window.c:1952
+#: ../src/ephy-window.c:1961
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopier lenkens adresse «%s»"
@@ -4196,7 +4203,7 @@ msgstr "Lukk"
 msgid "Close print preview"
 msgstr "Lukk forhåndsvisning av utskrift"
 
-#: ../src/prefs-dialog.c:415
+#: ../src/prefs-dialog.c:417
 msgid "Default"
 msgstr "Forvalgt"
 
@@ -4208,7 +4215,7 @@ msgstr "Forvalgt"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:996 ../src/prefs-dialog.c:1004
+#: ../src/prefs-dialog.c:998 ../src/prefs-dialog.c:1006
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -4218,19 +4225,19 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:1015
+#: ../src/prefs-dialog.c:1017
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "Brukerdefinert (%s)"
 
-#: ../src/prefs-dialog.c:1037
+#: ../src/prefs-dialog.c:1039
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Systemspråk [%s]"
 msgstr[1] "Systemspråk [%s]"
 
-#: ../src/prefs-dialog.c:1429
+#: ../src/prefs-dialog.c:1431
 msgid "Select a Directory"
 msgstr "Velg en katalog"
 
