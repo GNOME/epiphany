@@ -35,6 +35,10 @@ static void ephy_completion_model_tree_model_init (GtkTreeModelIface *iface);
 
 struct _EphyCompletionModelPrivate
 {
+	EphyHistory *history_service;
+	EphyBookmarks *bookmarks_service;
+	EphyFaviconCache *favicon_cache;
+
 	EphyNode *history;
 	EphyNode *bookmarks;
 	int stamp;
@@ -228,19 +232,24 @@ connect_signals (EphyCompletionModel *model, EphyNode *root)
 static void
 ephy_completion_model_init (EphyCompletionModel *model)
 {
-	EphyBookmarks *bookmarks;
-	EphyHistory *history;
-
 	model->priv = EPHY_COMPLETION_MODEL_GET_PRIVATE (model);
 	model->priv->stamp = g_random_int ();
 
-	history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
-	model->priv->history = ephy_history_get_pages (history);
+	model->priv->history_service = EPHY_HISTORY (
+					ephy_embed_shell_get_global_history (
+					embed_shell));
+	model->priv->history = ephy_history_get_pages (
+				model->priv->history_service);
 	connect_signals (model, model->priv->history);
 
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	model->priv->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks);
+	model->priv->bookmarks_service = ephy_shell_get_bookmarks (ephy_shell);
+	model->priv->bookmarks = ephy_bookmarks_get_bookmarks (
+				  model->priv->bookmarks_service);
 	connect_signals (model, model->priv->bookmarks);
+
+	model->priv->favicon_cache = EPHY_FAVICON_CACHE (
+					ephy_embed_shell_get_favicon_cache (
+					EPHY_EMBED_SHELL (ephy_shell)));
 }
 
 EphyCompletionModel *
@@ -353,14 +362,12 @@ init_keywords_col (GValue *value, EphyNode *node, int group)
 	g_value_set_string (value, text);
 }
 static void
-init_favicon_col (GValue *value, EphyNode *node, int group)
+init_favicon_col (EphyCompletionModel *model, GValue *value, 
+		  EphyNode *node, int group)
 {
-	EphyFaviconCache *cache;
 	const char *icon_location;
 	GdkPixbuf *pixbuf = NULL;
-
-	cache = EPHY_FAVICON_CACHE
-		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));
+	const char *url;
 
 	switch (group)
 	{
@@ -369,8 +376,10 @@ init_favicon_col (GValue *value, EphyNode *node, int group)
 				(node, EPHY_NODE_BMK_PROP_ICON);
 			break;
 		case HISTORY_GROUP:
-			icon_location = ephy_node_get_property_string
-				(node, EPHY_NODE_PAGE_PROP_ICON);
+			url = ephy_node_get_property_string
+				(node, EPHY_NODE_PAGE_PROP_LOCATION);
+			icon_location = ephy_history_get_icon (
+					model->priv->history_service, url);
 			break;
 		default:
 			icon_location = NULL;
@@ -378,7 +387,8 @@ init_favicon_col (GValue *value, EphyNode *node, int group)
 	
 	if (icon_location)
 	{
-		pixbuf = ephy_favicon_cache_get (cache, icon_location);
+		pixbuf = ephy_favicon_cache_get (
+				model->priv->favicon_cache, icon_location);
 	}
 
 	g_value_take_object (value, pixbuf);
@@ -504,7 +514,7 @@ ephy_completion_model_get_value (GtkTreeModel *tree_model,
 			break;
 		case EPHY_COMPLETION_FAVICON_COL:
 			g_value_init (value, GDK_TYPE_PIXBUF);
-			init_favicon_col (value, node, group);
+			init_favicon_col (model, value, node, group);
  			break;
 		case EPHY_COMPLETION_ACTION_COL:
 			g_value_init (value, G_TYPE_STRING);

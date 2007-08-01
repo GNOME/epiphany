@@ -966,11 +966,16 @@ ephy_history_set_icon (EphyHistory *gh,
 		       const char *url,
 		       const char *icon)
 {
-	EphyNode *host;
+	EphyNode *node, *host;
+	int host_id;
 
-	LOG ("Set host icon");
+	node = ephy_history_get_page (gh, url);
+	if (node == NULL) return;
+	
+	host_id = ephy_node_get_property_int (node, EPHY_NODE_PAGE_PROP_HOST_ID);
+	g_return_if_fail (host_id >= 0);
 
-	host = g_hash_table_lookup (gh->priv->hosts_hash, url);
+	host = ephy_node_db_get_node_from_id (gh->priv->db, host_id);
 	if (host)
 	{
 		ephy_node_set_property_string (host, EPHY_NODE_PAGE_PROP_ICON,
