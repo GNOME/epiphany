@@ -174,8 +174,6 @@ update_window (EphyWindow *window,
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 	action = gtk_action_group_get_action (action_group, "FileBookmarkPage");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (popups_action_group, "ContextBookmarkPage");
-	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 	action = gtk_action_group_get_action (popups_action_group, "BookmarkLink");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 
