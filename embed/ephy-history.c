@@ -125,22 +125,6 @@ ephy_history_get_type (void)
 }
 
 static void
-ephy_history_set_enabled (EphyHistory *history,
-			  gboolean enabled)
-{
-	LOG ("ephy_history_set_enabled %d", enabled);
-
-	history->priv->enabled = enabled;
-
-	ephy_node_db_set_immutable (history->priv->db, !enabled);
-
-	if (enabled == FALSE)
-	{
-		ephy_history_clear (history);
-	}
-}
-
-static void
 ephy_history_set_property (GObject *object,
 			   guint prop_id,
 			   const GValue *value,
@@ -169,7 +153,7 @@ ephy_history_get_property (GObject *object,
 		case PROP_ENABLED:
 			g_value_set_boolean (value, history->priv->enabled);
 			break;
-		}
+	}
 }
 
 static void
@@ -288,7 +272,7 @@ ephy_history_save (EphyHistory *eb)
 	int ret;
 
 	/* only save if there are changes */
-	if (eb->priv->dirty == FALSE)
+	if (eb->priv->dirty == FALSE && eb->priv->enabled)
 	{
 		return;
 	}
@@ -1031,3 +1015,39 @@ ephy_history_is_enabled (EphyHistory *history)
 
 	return history->priv->enabled;
 }
+
+void
+ephy_history_set_enabled (EphyHistory *history,
+			  gboolean enabled)
+{
+	int ret;
+
+	ret = 1;
+
+	LOG ("ephy_history_set_enabled %d", enabled);
+
+	/* Write history only when disabling it, not when reenabling it */
+	if (!enabled && history->priv->dirty)
+	{
+		ret = ephy_node_db_write_to_xml_safe
+			(history->priv->db, (const xmlChar *)history->priv->xml_file,
+			 EPHY_HISTORY_XML_ROOT,
+			 EPHY_HISTORY_XML_VERSION,
+			 NULL, /* comment */
+			 history->priv->hosts,
+			 (EphyNodeFilterFunc) save_filter, history->priv->pages,
+			 history->priv->pages, NULL, NULL,
+			 NULL);
+	}
+
+	if (ret >=0)
+	{
+		/* save was successful */
+		history->priv->dirty = FALSE;
+	}
+
+	history->priv->enabled = enabled;
+
+	ephy_node_db_set_immutable (history->priv->db, !enabled);
+}
+

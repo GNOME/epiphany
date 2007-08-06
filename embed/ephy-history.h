@@ -120,6 +120,9 @@ void            ephy_history_clear              (EphyHistory *gh);
 
 gboolean	ephy_history_is_enabled		(EphyHistory *history);
 
+void		ephy_history_set_enabled	(EphyHistory *history,
+						 gboolean enabled);
+
 G_END_DECLS
 
 #endif
