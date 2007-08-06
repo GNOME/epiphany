@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-07-12 12:16+0300\n"
+"POT-Creation-Date: 2007-08-06 16:41+0300\n"
 "PO-Revision-Date: 2007-02-03 16:55+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists."
@@ -124,11 +124,8 @@ msgid "Hide menubar by default"
 msgstr "Piilota valikkopalkki oletusarvoisesti"
 
 #: ../data/epiphany-lockdown.schemas.in.h:17
-msgid ""
-"Hide the menubar by default. The menubar can still be accessed using F10."
-msgstr ""
-"Piilota valikkopalkki oletusarvoisesti. Sitä voi silti käyttää painamalla "
-"F10."
+msgid "Hide the menubar by default."
+msgstr "Piilota valikkopalkki oletusarvoisesti."
 
 #: ../data/epiphany-lockdown.schemas.in.h:18
 msgid "Lock in fullscreen mode"
@@ -731,7 +728,7 @@ msgstr "Kirjasimet ja tyylit"
 msgid "For l_anguage:"
 msgstr "_Kieltä varten:"
 
-#: ../data/glade/prefs-dialog.glade.h:22 ../src/prefs-dialog.c:1308
+#: ../data/glade/prefs-dialog.glade.h:22 ../src/prefs-dialog.c:1310
 msgid "Language"
 msgstr "Kieli"
 
@@ -772,46 +769,50 @@ msgid "Use custom _stylesheet"
 msgstr "Käytä omaa _tyylipohjaa"
 
 #: ../data/glade/prefs-dialog.glade.h:32
+msgid "Use s_mooth scrolling"
+msgstr "Käytä _pehmennettyä vieritystä"
+
+#: ../data/glade/prefs-dialog.glade.h:33
 msgid "_Address:"
 msgstr "_Osoite:"
 
-#: ../data/glade/prefs-dialog.glade.h:33
+#: ../data/glade/prefs-dialog.glade.h:34
 msgid "_Always accept"
 msgstr "Hyväksy _aina"
 
-#: ../data/glade/prefs-dialog.glade.h:34
+#: ../data/glade/prefs-dialog.glade.h:35
 msgid "_Detailed Font Settings…"
 msgstr "_Yksityiskohtaiset kirjasinasetuset..."
 
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/glade/prefs-dialog.glade.h:36
 msgid "_Disk space:"
 msgstr "_Levytila:"
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Download folder:"
 msgstr "_Tallennuskansio:"
 
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Edit Stylesheet…"
 msgstr "_Muokkaa tyylipohjaa..."
 
-#: ../data/glade/prefs-dialog.glade.h:38
+#: ../data/glade/prefs-dialog.glade.h:39
 msgid "_Fixed width:"
 msgstr "_Vakioleveys"
 
-#: ../data/glade/prefs-dialog.glade.h:39
+#: ../data/glade/prefs-dialog.glade.h:40
 msgid "_Minimum size:"
 msgstr "_Pienin leveys:"
 
-#: ../data/glade/prefs-dialog.glade.h:40
+#: ../data/glade/prefs-dialog.glade.h:41
 msgid "_Never accept"
 msgstr "_Älä hyväksy koskaan"
 
-#: ../data/glade/prefs-dialog.glade.h:41
+#: ../data/glade/prefs-dialog.glade.h:42
 msgid "_Remember passwords"
 msgstr "_Muista salasanat"
 
-#: ../data/glade/prefs-dialog.glade.h:42
+#: ../data/glade/prefs-dialog.glade.h:43
 msgid "_Variable width:"
 msgstr "_Vaihteleva leveys:"
 
@@ -868,30 +869,30 @@ msgid "_Page address"
 msgstr "Sivun o_soite"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:190
+#: ../embed/downloader-view.c:197
 msgid "_Show Downloads"
 msgstr "_Näytä noudettavat"
 
-#: ../embed/downloader-view.c:323
+#: ../embed/downloader-view.c:330
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#: ../embed/downloader-view.c:327
+#: ../embed/downloader-view.c:334
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: ../embed/downloader-view.c:379
+#: ../embed/downloader-view.c:386
 msgid "_Pause"
 msgstr "_Keskeytä"
 
-#: ../embed/downloader-view.c:379
+#: ../embed/downloader-view.c:386
 msgid "_Resume"
 msgstr "_Jatka"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:426
+#: ../embed/downloader-view.c:433
 #, c-format
 msgid ""
 "%s\n"
@@ -900,12 +901,12 @@ msgstr ""
 "%s\n"
 "%s / %s"
 
-#: ../embed/downloader-view.c:436 ../embed/downloader-view.c:441
-#: ../src/ephy-window.c:1519
+#: ../embed/downloader-view.c:443 ../embed/downloader-view.c:448
+#: ../src/ephy-window.c:1523
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: ../embed/downloader-view.c:475
+#: ../embed/downloader-view.c:482
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -914,30 +915,30 @@ msgstr[1] "%d tallennusta"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:589 ../embed/downloader-view.c:602
+#: ../embed/downloader-view.c:596 ../embed/downloader-view.c:609
 msgid "download status|Unknown"
 msgstr "tuntematon"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:594
+#: ../embed/downloader-view.c:601
 msgid "download status|Failed"
 msgstr "epäonnistui"
 
-#: ../embed/downloader-view.c:661
+#: ../embed/downloader-view.c:668
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Tiedosto"
 
-#: ../embed/downloader-view.c:684
+#: ../embed/downloader-view.c:691
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:695
+#: ../embed/downloader-view.c:702
 msgid "Remaining"
 msgstr "Jäljellä"
 
-#: ../embed/ephy-embed-shell.c:272
+#: ../embed/ephy-embed-shell.c:271
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphanya ei voi käyttää nyt: Mozillan alustus ei onnistunut."
 
@@ -1324,15 +1325,15 @@ msgstr "ukrainalainen"
 msgid "Unknown (%s)"
 msgstr "Tuntematon (%s)"
 
-#: ../embed/ephy-history.c:521
+#: ../embed/ephy-history.c:505
 msgid "All"
 msgstr "Kaikki"
 
-#: ../embed/ephy-history.c:692
+#: ../embed/ephy-history.c:676
 msgid "Others"
 msgstr "Muut"
 
-#: ../embed/ephy-history.c:698
+#: ../embed/ephy-history.c:682
 msgid "Local files"
 msgstr "Paikalliset tiedostot"
 
@@ -1511,7 +1512,6 @@ msgstr ""
 #: ../embed/mozilla/EphyAboutModule.cpp:322
 #: ../embed/mozilla/EphyAboutModule.cpp:341
 #: ../embed/mozilla/EphyAboutModule.cpp:399
-#: ../embed/mozilla/EphyAboutModule.cpp:430
 msgid ""
 "The server may be busy or you may have a network connection problem. Try "
 "again later."
@@ -1524,7 +1524,6 @@ msgstr ""
 #: ../embed/mozilla/EphyAboutModule.cpp:343
 #: ../embed/mozilla/EphyAboutModule.cpp:366
 #: ../embed/mozilla/EphyAboutModule.cpp:401
-#: ../embed/mozilla/EphyAboutModule.cpp:432
 msgid "There may be an old version of the page you wanted:"
 msgstr "Haluamastasi sivusta voi olla vanhempi versio:"
 
@@ -1606,7 +1605,6 @@ msgid "“%s” dropped the connection."
 msgstr "\"%s\" katkaisi yhteyden."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:397
-#: ../embed/mozilla/EphyAboutModule.cpp:428
 msgid "The server dropped the connection before any data could be read."
 msgstr "Palvelin katkaisi yhteyden ennen kuin tietoa siirrettiin."
 
@@ -1626,23 +1624,35 @@ msgstr ""
 
 #: ../embed/mozilla/EphyAboutModule.cpp:422
 #, c-format
-msgid "“%s” Denied Access to Port “%d”"
-msgstr "\"%s\" esti yhteyden porttiin \"%d\""
+msgid "Access Denied to Port “%d” of “%s”"
+msgstr "Yhteys porttiin \"%d\" estettiin palvelimelle \"%s\""
 
 #: ../embed/mozilla/EphyAboutModule.cpp:426
 #, c-format
-msgid "“%s” denied access to port “%d”."
-msgstr "\"%s\" esti yhteyden porttiin \"%d\""
+msgid "Access denied to port “%d” of “%s”."
+msgstr "Yhteys porttiin \"%d\" estettiin palvelimelle \"%s\"."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:437
+#: ../embed/mozilla/EphyAboutModule.cpp:428
+msgid ""
+"This address uses a network port which is normally used for purposes other "
+"than Web browsing."
+msgstr ""
+"Osoite käyttää palvelimen porttia, jota käytetään tavallisesti muuhun "
+"käyttöön kuin www-sivuille."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:430
+msgid "The request has been cancelled for your protection."
+msgstr "Pyyntö peruttiin turvasyistä."
+
+#: ../embed/mozilla/EphyAboutModule.cpp:435
 msgid "Could not Connect to Proxy Server"
 msgstr "Välimuistipalvelimeen ei voitu ottaa yhteyttä"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:438
+#: ../embed/mozilla/EphyAboutModule.cpp:436
 msgid "Could not connect to proxy server."
 msgstr "Välimuistipalvelimeen ei voitu ottaa yhteyttä."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:439
+#: ../embed/mozilla/EphyAboutModule.cpp:437
 msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
@@ -1650,19 +1660,19 @@ msgstr ""
 "Tarkista välimuistipalvelimesi asetulset. Jos yhteys katkeaa vieläkin voi "
 "olla että välimuistiasetuksissa tai verkkoyhteydessä on jotain vikaa."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:447
+#: ../embed/mozilla/EphyAboutModule.cpp:445
 msgid "Could not Display Content"
 msgstr "Sisältöä ei voitu näyttää"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:448
+#: ../embed/mozilla/EphyAboutModule.cpp:446
 msgid "Could not display content."
 msgstr "Sisältöä ei voitu näyttää"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:449
+#: ../embed/mozilla/EphyAboutModule.cpp:447
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr "Sivu käyttää tukematonta tai virheellistä pakkausmenetelmää."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:539
+#: ../embed/mozilla/EphyAboutModule.cpp:537
 #, c-format
 msgid ""
 "The page “%s” in this tab was not fully loaded yet when the web browser "
@@ -1673,13 +1683,13 @@ msgstr ""
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:666
+#: ../embed/mozilla/EphyAboutModule.cpp:664
 msgid "You may find an old version:|in the Google Cache"
 msgstr "Googlen välimuistista"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:674
+#: ../embed/mozilla/EphyAboutModule.cpp:672
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "Internet Archivesta"
 
@@ -2196,9 +2206,11 @@ msgstr ""
 "kuitenkin palautetaan turvattoman yhteyden kautta. Kuka tahansa voi helposti "
 "nähdä ne."
 
-#: ../embed/mozilla/MozDownload.cpp:643
-msgid "Files"
-msgstr "Tiedostot"
+#. translators: this is the directory name to store auxilary files when saving html files
+#: ../embed/mozilla/MozDownload.cpp:649
+#, c-format
+msgid "%s Files"
+msgstr "%s-tiedostot"
 
 #. We do this before reading the user pref file so that the user
 #. * still can overwrite this pref.
@@ -2210,7 +2222,7 @@ msgstr "Tiedostot"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:265
+#: ../embed/mozilla/mozilla-embed-single.cpp:203
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.fi/search?ie=UTF-8&oe=UTF-8&q="
 
@@ -2235,27 +2247,27 @@ msgstr ""
 msgid "Show “_%s”"
 msgstr "Näytä \"_%s\""
 
-#: ../lib/egg/egg-editable-toolbar.c:1394
+#: ../lib/egg/egg-editable-toolbar.c:1397
 msgid "_Move on Toolbar"
 msgstr "_Siirrä työkalupalkissa"
 
-#: ../lib/egg/egg-editable-toolbar.c:1395
+#: ../lib/egg/egg-editable-toolbar.c:1398
 msgid "Move the selected item on the toolbar"
 msgstr "Siirrä valittu kohta työkalupalkkiin"
 
-#: ../lib/egg/egg-editable-toolbar.c:1396
+#: ../lib/egg/egg-editable-toolbar.c:1399
 msgid "_Remove from Toolbar"
 msgstr "_Poista työkalupalkista"
 
-#: ../lib/egg/egg-editable-toolbar.c:1397
+#: ../lib/egg/egg-editable-toolbar.c:1400
 msgid "Remove the selected item from the toolbar"
 msgstr "Poista valittu kohta työkalupalkista"
 
-#: ../lib/egg/egg-editable-toolbar.c:1398
+#: ../lib/egg/egg-editable-toolbar.c:1401
 msgid "_Delete Toolbar"
 msgstr "_Poista työkalupalkki"
 
-#: ../lib/egg/egg-editable-toolbar.c:1399
+#: ../lib/egg/egg-editable-toolbar.c:1402
 msgid "Remove the selected toolbar"
 msgstr "Poista valittu työkalupalkki"
 
@@ -2267,17 +2279,17 @@ msgstr "Erotin"
 msgid "All supported types"
 msgstr "Kaikki tuetut tyypit"
 
-#: ../lib/ephy-file-helpers.c:299
+#: ../lib/ephy-file-helpers.c:298
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Väliaikaiskansiota hakemistoon \"%s\" ei voi luoda."
 
-#: ../lib/ephy-file-helpers.c:375
+#: ../lib/ephy-file-helpers.c:374
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Tiedosto \"%s\" on jo olemassa, siirrä se pois tieltä."
 
-#: ../lib/ephy-file-helpers.c:386
+#: ../lib/ephy-file-helpers.c:385
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Kansiota \"%s\" ei voi luoda."
@@ -2501,29 +2513,31 @@ msgstr "Muista salasana tämän istunnon ajan"
 msgid "Save password in _keyring"
 msgstr "Tallenna salasana _avainrenkaaseen"
 
-#: ../lib/ephy-stock-icons.c:51
+#: ../lib/ephy-stock-icons.c:52
 msgid "Popup Windows"
 msgstr "Ponnahdusikkunat"
 
-#: ../lib/ephy-stock-icons.c:52 ../src/ephy-history-window.c:1195
+#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1195
 msgid "History"
 msgstr "Sivuhistoria"
 
-#: ../lib/ephy-stock-icons.c:53 ../src/ephy-window.c:1337
+#: ../lib/ephy-stock-icons.c:54
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
+#: ../src/ephy-window.c:1341
 msgid "Bookmark"
 msgstr "Kirjanmerkki"
 
-#: ../lib/ephy-stock-icons.c:54 ../src/bookmarks/ephy-bookmarks-editor.c:917
+#: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1765
-#: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1341
+#: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1345
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
 
-#: ../lib/ephy-stock-icons.c:55 ../src/ephy-toolbar.c:283
+#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:283
 msgid "Address Entry"
 msgstr "Osoitekenttä"
 
-#: ../lib/ephy-stock-icons.c:56
+#: ../lib/ephy-stock-icons.c:57
 msgid "_Download"
 msgstr "_Tallenna"
 
@@ -2602,10 +2616,6 @@ msgstr ""
 #, c-format
 msgid "%s:"
 msgstr "%s:"
-
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
-msgid "Quick Bookmark"
-msgstr "Nopea kirjanmerkki"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
@@ -2743,8 +2753,8 @@ msgstr "Luokittelemattomat"
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
 #: ../src/bookmarks/ephy-bookmarks.c:1077
-msgid "bookmarks|Local Sites"
-msgstr "Paikalliset sivustot"
+msgid "bookmarks|Nearby Sites"
+msgstr "Lähiympäristön sivustot"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:99
 msgid "Epiphany (RDF)"
@@ -3115,8 +3125,8 @@ msgid "Related"
 msgstr "Liittyy"
 
 #: ../src/bookmarks/ephy-topic-factory-action.c:322
-msgid "Quick Topic"
-msgstr "Nopea aihe"
+msgid "Topic"
+msgstr "Aihe"
 
 #: ../src/bookmarks/ephy-topics-entry.c:359
 #, c-format
@@ -3416,7 +3426,7 @@ msgstr "Kohdistin"
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "Poistu näppäimistövalintatilasta painamalla F7"
 
-#: ../src/ephy-tab.c:493 ../src/ephy-tab.c:2345 ../src/ephy-tab.c:2380
+#: ../src/ephy-tab.c:493 ../src/ephy-tab.c:2348 ../src/ephy-tab.c:2383
 msgid "Blank page"
 msgstr "Tyhjä sivu"
 
@@ -3781,7 +3791,7 @@ msgstr "Näytä sivuun liittyviä tietoturvatietoja"
 msgid "_Add Bookmark…"
 msgstr "_Lisää kirjanmerkki..."
 
-#: ../src/ephy-window.c:230 ../src/ephy-window.c:301
+#: ../src/ephy-window.c:230
 msgid "Add a bookmark for the current page"
 msgstr "Lisää nykyiseen sivuun viittava kirjanmerkki"
 
@@ -3893,207 +3903,202 @@ msgstr "Näytä tai piilota pyytämättömät tämän sivuston ponnahdusikkunat"
 msgid "Selection Caret"
 msgstr "Valinnan kohdistin"
 
-#. Document
-#: ../src/ephy-window.c:300
-msgid "Add Boo_kmark…"
-msgstr "Lisää _kirjanmerkki..."
-
 #. Framed document
-#: ../src/ephy-window.c:306
+#: ../src/ephy-window.c:301
 msgid "Show Only _This Frame"
 msgstr "Näytä vain tämä _kehys"
 
-#: ../src/ephy-window.c:307
+#: ../src/ephy-window.c:302
 msgid "Show only this frame in this window"
 msgstr "Näytä vain tämä kehys tässä ikkunassa"
 
 #. Links
-#: ../src/ephy-window.c:312
+#: ../src/ephy-window.c:307
 msgid "_Open Link"
 msgstr "_Avaa linkki"
 
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:308
 msgid "Open link in this window"
 msgstr "Avaa linkki tässä ikkunassa"
 
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:310
 msgid "Open Link in New _Window"
 msgstr "Avaa linkki _uudessa ikkunassa"
 
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:311
 msgid "Open link in a new window"
 msgstr "Avaa linkki uudessa ikkunassa"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:313
 msgid "Open Link in New _Tab"
 msgstr "Avaa linkki uudessa _välilehdessä"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:314
 msgid "Open link in a new tab"
 msgstr "Avaa linkki uudessa välilehdessä"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:316
 msgid "_Download Link"
 msgstr "_Tallenna linkki"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:318
 msgid "_Save Link As…"
 msgstr "Tallenna linkki _nimellä..."
 
-#: ../src/ephy-window.c:324
+#: ../src/ephy-window.c:319
 msgid "Save link with a different name"
 msgstr "Tallenna linkki eri nimisenä"
 
-#: ../src/ephy-window.c:326
+#: ../src/ephy-window.c:321
 msgid "_Bookmark Link…"
 msgstr "_Lisää linkki kirjanmerkkeihin..."
 
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:323
 msgid "_Copy Link Address"
 msgstr "_Kopioi linkin osoite"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:334
+#: ../src/ephy-window.c:329
 msgid "_Send Email…"
 msgstr "Lähetä _sähköposti..."
 
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:331
 msgid "_Copy Email Address"
 msgstr "_Kopioi sähköpostiosoite"
 
 #. Images
-#: ../src/ephy-window.c:341
+#: ../src/ephy-window.c:336
 msgid "Open _Image"
 msgstr "Avaa _kuva"
 
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:338
 msgid "_Save Image As…"
 msgstr "_Tallenna kuva nimellä..."
 
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:340
 msgid "_Use Image As Background"
 msgstr "_Käytä kuvaa taustana"
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:342
 msgid "Copy I_mage Address"
 msgstr "Kopioi kuvan _osoite"
 
-#: ../src/ephy-window.c:349
+#: ../src/ephy-window.c:344
 msgid "St_art Animation"
 msgstr "_Käynnistä animaatio"
 
-#: ../src/ephy-window.c:351
+#: ../src/ephy-window.c:346
 msgid "St_op Animation"
 msgstr "_Pysäytä animaatio"
 
-#: ../src/ephy-window.c:746
+#: ../src/ephy-window.c:750
 msgid "There are unsubmitted changes to form elements"
 msgstr "Lähettämättömän lomakkeen kenttiä on muutettu"
 
-#: ../src/ephy-window.c:750
+#: ../src/ephy-window.c:754
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Jos suljet asiakirjan tästä huolimatta, menetät nämä tiedot."
 
-#: ../src/ephy-window.c:754
+#: ../src/ephy-window.c:758
 msgid "Close _Document"
 msgstr "_Sulje asiakirja"
 
-#: ../src/ephy-window.c:1331 ../src/window-commands.c:267
+#: ../src/ephy-window.c:1335 ../src/window-commands.c:267
 msgid "Open"
 msgstr "Avaa"
 
-#: ../src/ephy-window.c:1333 ../src/window-commands.c:293
+#: ../src/ephy-window.c:1337 ../src/window-commands.c:293
 msgid "Save As"
 msgstr "Tallenna nimellä"
 
-#: ../src/ephy-window.c:1335
+#: ../src/ephy-window.c:1339
 msgid "Print"
 msgstr "Tulosta"
 
-#: ../src/ephy-window.c:1339
+#: ../src/ephy-window.c:1343
 msgid "Find"
 msgstr "Etsi"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1352
+#: ../src/ephy-window.c:1356
 msgid "Larger"
 msgstr "Suurempi"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1355
+#: ../src/ephy-window.c:1359
 msgid "Smaller"
 msgstr "Pienempi"
 
-#: ../src/ephy-window.c:1522
+#: ../src/ephy-window.c:1526
 msgid "Insecure"
 msgstr "Turvaton"
 
-#: ../src/ephy-window.c:1527
+#: ../src/ephy-window.c:1531
 msgid "Broken"
 msgstr "Rikki"
 
-#: ../src/ephy-window.c:1539
+#: ../src/ephy-window.c:1543
 msgid "Low"
 msgstr "Matala"
 
-#: ../src/ephy-window.c:1546
+#: ../src/ephy-window.c:1550
 msgid "High"
 msgstr "Korkea"
 
-#: ../src/ephy-window.c:1556
+#: ../src/ephy-window.c:1560
 #, c-format
 msgid "Security level: %s"
 msgstr "Turvallisuustaso: %s"
 
-#: ../src/ephy-window.c:1599
+#: ../src/ephy-window.c:1603
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d ponnahdusikkuna piilossa"
 msgstr[1] "%d ponnahdusikkunaa piilossa"
 
-#: ../src/ephy-window.c:1894
+#: ../src/ephy-window.c:1898
 #, c-format
 msgid "Open image “%s”"
 msgstr "Avaa kuva \"%s\""
 
-#: ../src/ephy-window.c:1899
+#: ../src/ephy-window.c:1903
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Käytä \"%s\" työpöydän taustana"
 
-#: ../src/ephy-window.c:1904
+#: ../src/ephy-window.c:1908
 #, c-format
 msgid "Save image “%s”"
 msgstr "Tallenna kuva \"%s\""
 
-#: ../src/ephy-window.c:1909
+#: ../src/ephy-window.c:1913
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopioi kuvan \"%s\" osoite"
 
-#: ../src/ephy-window.c:1922
+#: ../src/ephy-window.c:1926
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Lähetä sähköpostia osoitteeseen \"%s\""
 
-#: ../src/ephy-window.c:1928
+#: ../src/ephy-window.c:1932
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopioi sähköpostiosoite \"%s\""
 
-#: ../src/ephy-window.c:1940
+#: ../src/ephy-window.c:1944
 #, c-format
 msgid "Save link “%s”"
 msgstr "Tallenna linkki \"%s\""
 
-#: ../src/ephy-window.c:1946
+#: ../src/ephy-window.c:1950
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Lisää kirjanmerkki linkkiin \"%s\""
 
-#: ../src/ephy-window.c:1952
+#: ../src/ephy-window.c:1956
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopioi linkin osoite \"%s\""
@@ -4202,7 +4207,7 @@ msgstr "Sulje"
 msgid "Close print preview"
 msgstr "Sulje tulosteen esikatselu"
 
-#: ../src/prefs-dialog.c:415
+#: ../src/prefs-dialog.c:417
 msgid "Default"
 msgstr "Oletus"
 
@@ -4214,7 +4219,7 @@ msgstr "Oletus"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:996 ../src/prefs-dialog.c:1004
+#: ../src/prefs-dialog.c:998 ../src/prefs-dialog.c:1006
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -4224,19 +4229,19 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:1015
+#: ../src/prefs-dialog.c:1017
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "Käyttäjän määrittelemä (%s)"
 
-#: ../src/prefs-dialog.c:1037
+#: ../src/prefs-dialog.c:1039
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Järjestelmän kieli (%s)"
 msgstr[1] "Järjestelmän kielet (%s)"
 
-#: ../src/prefs-dialog.c:1429
+#: ../src/prefs-dialog.c:1431
 msgid "Select a Directory"
 msgstr "Valitse kansio"
 
@@ -4317,6 +4322,21 @@ msgid "GNOME Web Browser Website"
 msgstr "Gnomen wwwselaimen www-sivu"
 
 #~ msgid ""
+#~ "Hide the menubar by default. The menubar can still be accessed using F10."
+#~ msgstr ""
+#~ "Piilota valikkopalkki oletusarvoisesti. Sitä voi silti käyttää painamalla "
+#~ "F10."
+
+#~ msgid "Add Boo_kmark…"
+#~ msgstr "Lisää _kirjanmerkki..."
+
+#~ msgid "Quick Bookmark"
+#~ msgstr "Nopea kirjanmerkki"
+
+#~ msgid "Quick Topic"
+#~ msgstr "Nopea aihe"
+
+#~ msgid ""
 #~ "The padlock icon in the statusbar indicates whether a page is secure."
 #~ msgstr "Lukonkuva tilarivillä ilmaisee, onko sivu turvallinen."
 
@@ -4325,9 +4345,6 @@ msgstr "Gnomen wwwselaimen www-sivu"
 
 #~ msgid "“%s” redirected too many times."
 #~ msgstr "\"%s\" teki liian monta uudelleenohjausta."
-
-#~ msgid "The redirection has been stopped for security reasons."
-#~ msgstr "Uudelleenohjausten seuraaminen lopetettiin turvasyistä."
 
 #~ msgid "_Import Bookmarks..."
 #~ msgstr "_Tuo kirjanmerkit..."
