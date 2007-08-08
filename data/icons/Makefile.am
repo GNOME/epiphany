@@ -76,7 +76,7 @@ EXTRA_DIST = \
 
 ###############################################################################
 
-gtk_update_icon_cache = gtk-update-icon-cache -f -t $(datadir)/icons/hicolor
+gtk_update_icon_cache = gtk-update-icon-cache -f -t
 
 update-icon-cache:
 	@-if test -z "$(DESTDIR)"; then \
