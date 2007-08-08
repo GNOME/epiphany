@@ -2,6 +2,8 @@ NULL =
 
 themes = \
 	hicolor	\
+	HighContrastLargePrint \
+	HighContrastLargePrintInverse \
 	$(NULL)
 
 icons = \
@@ -46,6 +48,8 @@ icons = \
 	hicolor_status_48x48_lock-secure-checked.png \
 	hicolor_status_48x48_lock-secure.png \
 	hicolor_status_scalable_popup-hidden.svg \
+	HighContrastLargePrint_apps_48x48_gnome-web-browser.png \
+	HighContrastLargePrintInverse_apps_48x48_gnome-web-browser.png \
 	$(NULL)
 
 source_icons = \
