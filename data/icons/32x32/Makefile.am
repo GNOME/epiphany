@@ -1,4 +1,0 @@
-SUBDIRS = \
-	apps	\
-	actions	\
-	status

@@ -35,7 +35,7 @@ AC_SUBST([EPIPHANY_MAJOR])
 AC_SUBST([EPIPHANY_API_VERSION])
 AC_SUBST([EPIPHANY_UA_VERSION])
 
-AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip])
+AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip tar-ustar])
 
 AM_MAINTAINER_MODE
 
@@ -699,31 +699,6 @@ data/chrome/brand.dtd
 data/chrome/brand.properties
 data/glade/Makefile
 data/icons/Makefile
-data/icons/16x16/Makefile
-data/icons/16x16/apps/Makefile
-data/icons/16x16/actions/Makefile
-data/icons/16x16/places/Makefile
-data/icons/16x16/status/Makefile
-data/icons/22x22/Makefile
-data/icons/22x22/apps/Makefile
-data/icons/22x22/actions/Makefile
-data/icons/22x22/places/Makefile
-data/icons/22x22/status/Makefile
-data/icons/24x24/Makefile
-data/icons/24x24/apps/Makefile
-data/icons/24x24/actions/Makefile
-data/icons/24x24/places/Makefile
-data/icons/24x24/status/Makefile
-data/icons/32x32/Makefile
-data/icons/32x32/apps/Makefile
-data/icons/32x32/actions/Makefile
-data/icons/32x32/status/Makefile
-data/icons/48x48/Makefile
-data/icons/48x48/status/Makefile
-data/icons/scalable/Makefile
-data/icons/scalable/apps/Makefile
-data/icons/scalable/actions/Makefile
-data/icons/scalable/status/Makefile
 data/art/Makefile
 data/ui/Makefile
 data/weasel-ua-pref.js
