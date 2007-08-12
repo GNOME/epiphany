@@ -4,6 +4,7 @@ public_icons_themes = \
 	hicolor	\
 	HighContrastLargePrint \
 	HighContrastLargePrintInverse \
+	LowContrastLargePrint \
 	$(NULL)
 
 public_icons = \
@@ -14,6 +15,7 @@ public_icons = \
 	hicolor_apps_scalable_gnome-web-browser.svg \
 	HighContrastLargePrint_apps_48x48_gnome-web-browser.png \
 	HighContrastLargePrintInverse_apps_48x48_gnome-web-browser.png \
+	LowContrastLargePrint_apps_48x48_gnome-web-browser.png \
 	$(NULL)
 
 private_icons = \
