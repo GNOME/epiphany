@@ -15,7 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
-AC_INIT([GNOME Web Browser],[2.19.90],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[2.19.91],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
