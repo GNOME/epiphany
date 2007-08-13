@@ -31,3 +31,6 @@ DISTCHECK_CONFIGURE_FLAGS = \
 	--disable-schemas-install	\
 	--disable-scrollkeeper		\
 	--with-gecko=$(GECKO)
+
+# Ignore gtk theme cache files on distcheck
+distuninstallcheck_listfiles = find . -type f -print | grep -v 'icon-theme.cache'
