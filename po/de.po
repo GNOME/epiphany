@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: Epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-08-14 15:51+0200\n"
-"PO-Revision-Date: 2007-08-14 15:51+0200\n"
+"POT-Creation-Date: 2007-08-14 16:32+0200\n"
+"PO-Revision-Date: 2007-08-14 16:32+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -241,7 +241,7 @@ msgstr "JavaScript erlauben?"
 
 #: ../data/epiphany.schemas.in.h:16
 msgid "Enable smooth scrolling"
-msgstr ""
+msgstr "Sanftes Scrollen aktivieren"
 
 #: ../data/epiphany.schemas.in.h:17
 msgid "History pages time range"
@@ -630,9 +630,8 @@ msgid "Use the encoding specified by the document"
 msgstr "Die vom Dokument angegebene Zeichenkodierung verwenden"
 
 #: ../data/glade/epiphany.glade.h:9
-#, fuzzy
 msgid "_Show passwords"
-msgstr "Passwort an_zeigen"
+msgstr "Passwörter an_zeigen"
 
 #: ../data/glade/form-signing-dialog.glade.h:1
 msgid "Sign Text"
@@ -789,7 +788,7 @@ msgstr "Eigene Stilvorlage verwenden"
 
 #: ../data/glade/prefs-dialog.glade.h:32
 msgid "Use s_mooth scrolling"
-msgstr ""
+msgstr "_Sanftes Scrollen aktivieren"
 
 #: ../data/glade/prefs-dialog.glade.h:33
 msgid "_Address:"
@@ -1656,25 +1655,26 @@ msgstr ""
 "versuchen Sie es erneut."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Access Denied to Port “%d” of “%s”"
-msgstr "»%s« hat den Zugang zu Port »%d« verweigert"
+msgstr "»%2$s« hat den Zugang zu Port »%1$d« verweigert"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Access denied to port “%d” of “%s”."
-msgstr "»%s« hat den Zugang zu Port »%d« verweigert."
+msgstr "»%2$s« hat den Zugang zu Port »%1$d« verweigert."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:428
 msgid ""
 "This address uses a network port which is normally used for purposes other "
 "than Web browsing."
 msgstr ""
+"Diese Adresse verwendet einen Netzwerk-Port, der normalerweise für andere "
+"Zwecke als im Internet zu surfen verwendet wird."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:430
-#, fuzzy
 msgid "The request has been cancelled for your protection."
-msgstr "Aus Sicherheitsgründen wurde die Weiterleitung unterbunden"
+msgstr "Aus Sicherheitsgründen wurde die Anfrage unterbunden."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:435
 msgid "Could not Connect to Proxy Server"
@@ -1774,34 +1774,34 @@ msgstr "XUL-Dateien"
 #: ../embed/mozilla/GeckoCookiePromptService.cpp:93
 #, c-format
 msgid "Accept cookie from %s?"
-msgstr ""
+msgstr "Soll das Cookie von %s akzeptiert werden?"
 
 #: ../embed/mozilla/GeckoCookiePromptService.cpp:100
 msgid "Accept Cookie?"
-msgstr ""
+msgstr "Cookie akzeptieren?"
 
 #: ../embed/mozilla/GeckoCookiePromptService.cpp:105
 msgid "The site wants to modify an existing cookie."
-msgstr ""
+msgstr "Die Seite möchte einen existierenden Cookie verändern."
 
 #: ../embed/mozilla/GeckoCookiePromptService.cpp:109
 msgid "The site wants to set a cookie."
-msgstr ""
+msgstr "Die Seite möchte einen Cookie setzen."
 
 #: ../embed/mozilla/GeckoCookiePromptService.cpp:113
 msgid "The site wants to set a second cookie."
-msgstr ""
+msgstr "Die Seite möchte einen zweiten Cookie setzen."
 
 #: ../embed/mozilla/GeckoCookiePromptService.cpp:116
 #, c-format
 msgid "You already have %d cookie from this site."
 msgid_plural "You already have %d cookies from this site."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sie haben bereits %d Cookie von dieser Seite."
+msgstr[1] "Sie haben bereits %d Cookies von dieser Seite."
 
 #: ../embed/mozilla/GeckoCookiePromptService.cpp:130
 msgid "Apply this _decision to all cookies from this site"
-msgstr ""
+msgstr "Für _alle Cookies dieser Seite so verfahren"
 
 #: ../embed/mozilla/GeckoCookiePromptService.cpp:138
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1678
@@ -2186,6 +2186,11 @@ msgid ""
 "\n"
 "The padlock icon in the statusbar also indicates whether a page is secure."
 msgstr ""
+"Sichere Seiten zeichnen sich durch eine andere Farbe in der Adresszeile aus "
+"und zeigen ein geschlossenes Schlosssymbol an.\n"
+"\n"
+"Das Schlosssymbol in der Statusleiste zeigt ebenfalls an, ob eine Seite "
+"sicher ist."
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:116
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:144
@@ -2250,9 +2255,9 @@ msgstr ""
 
 #. translators: this is the directory name to store auxilary files when saving html files
 #: ../embed/mozilla/MozDownload.cpp:649
-#, fuzzy, c-format
+#, c-format
 msgid "%s Files"
-msgstr "Dateien"
+msgstr "%s-Dateien"
 
 #. We do this before reading the user pref file so that the user
 #. * still can overwrite this pref.
@@ -2800,9 +2805,8 @@ msgstr "Nicht kategorisiert"
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
 #: ../src/bookmarks/ephy-bookmarks.c:1077
-#, fuzzy
 msgid "bookmarks|Nearby Sites"
-msgstr "Lokale Seiten"
+msgstr "Nahe gelegene Seiten"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:99
 msgid "Epiphany (RDF)"
@@ -3174,9 +3178,8 @@ msgid "Related"
 msgstr "Verwandt"
 
 #: ../src/bookmarks/ephy-topic-factory-action.c:322
-#, fuzzy
 msgid "Topic"
-msgstr "Themen"
+msgstr "Thema"
 
 #: ../src/bookmarks/ephy-topics-entry.c:359
 #, c-format
