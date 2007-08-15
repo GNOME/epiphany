@@ -156,11 +156,13 @@ MozDownload::Init (nsIURI *aSource,
 	if (addToView)
 	{ 
 		DownloaderView *dview;
+        EphyDownload **cache_ptr;
 		dview = EPHY_DOWNLOADER_VIEW
 			(ephy_embed_shell_get_downloader_view (embed_shell));
 		mEphyDownload = mozilla_download_new (this);
+        cache_ptr = &mEphyDownload;
 		g_object_add_weak_pointer (G_OBJECT (mEphyDownload),
-					   (gpointer *) &mEphyDownload);
+					   (gpointer *) cache_ptr);
 		downloader_view_add_download (dview, mEphyDownload);
 		g_object_unref (mEphyDownload);
 	}

@@ -128,7 +128,8 @@ EphyUtils::FindEmbed (nsIDOMWindow *aDOMWindow)
 
 	nsresult rv;
 	GtkWidget *mozembed;
-	rv = window->GetSiteWindow ((void **)&mozembed);
+	GtkWidget **cache_ptr = &mozembed;
+	rv = window->GetSiteWindow ((void **) cache_ptr);
 	NS_ENSURE_SUCCESS (rv, nsnull);
 
 	return mozembed;

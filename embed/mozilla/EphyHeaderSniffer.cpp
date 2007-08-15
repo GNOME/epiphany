@@ -98,8 +98,9 @@ EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmb
 	watcher->GetNewAuthPrompter (nsnull, getter_AddRefs (mAuthPrompt));
 
 	mSingle = single;
+	EphyEmbedSingle **cache_ptr = &mSingle;
 	g_object_add_weak_pointer (G_OBJECT (mSingle),
-				   (gpointer *)&mSingle);
+				   (gpointer *) cache_ptr);
 }
 
 EphyHeaderSniffer::~EphyHeaderSniffer()
@@ -108,8 +109,9 @@ EphyHeaderSniffer::~EphyHeaderSniffer()
 
 	if (mSingle)
 	{
+		EphyEmbedSingle **cache_ptr = &mSingle;
 		g_object_remove_weak_pointer (G_OBJECT (mSingle),
-					      (gpointer *)&mSingle);
+					      (gpointer *) cache_ptr);
 	}
 }
 
