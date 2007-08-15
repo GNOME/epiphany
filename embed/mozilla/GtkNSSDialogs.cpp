@@ -263,7 +263,7 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	gtk_dialog_add_button (GTK_DIALOG (dialog), _("_View Certificate"),
 			       NSSDIALOG_RESPONSE_VIEW_CERT);
 
-	gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL,
+	button = gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL,
 			       GTK_RESPONSE_CANCEL);
 
 	if (affirmative_text == NULL)
@@ -271,10 +271,9 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 		affirmative_text = _("_Accept");
 	}
 
-	button = gtk_dialog_add_button (GTK_DIALOG (dialog), 
-					affirmative_text,
+	gtk_dialog_add_button (GTK_DIALOG (dialog), affirmative_text,
 					GTK_RESPONSE_ACCEPT);
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
         if (checkbox_text)
 	{
@@ -293,7 +292,7 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	gtk_widget_grab_focus (button);
 
 	gtk_label_set_markup (GTK_LABEL (label), markup_text);
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 	gtk_widget_show_all (dialog);
 
 	while (1)
@@ -638,7 +637,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_WARNING,
 			    &label, NULL);
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
 	nsString commonName;
 	cert->GetCommonName (commonName);
