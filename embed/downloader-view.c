@@ -467,8 +467,6 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	g_free (cur_progress);
 	g_free (file);
 	g_free (remaining);
-
-	update_buttons (dv);
 }
 
 static void
@@ -492,7 +490,13 @@ static void
 download_changed_cb (EphyDownload *download, DownloaderView *dv)
 {
 	update_download_row (dv, download);
-	update_status_icon (dv);
+}
+
+static gboolean
+update_buttons_timeout_cb (DownloaderView *dv)
+{
+	update_buttons (dv);
+	return FALSE;
 }
 
 void
@@ -563,6 +567,8 @@ downloader_view_add_download (DownloaderView *dv,
 	{
 		g_object_unref (pixbuf);
 	}
+	
+	g_timeout_add (100, (GSourceFunc) update_buttons_timeout_cb, dv);
 
 }
 
