@@ -312,10 +312,12 @@ static void
 set_drag_cursor (GtkWidget *widget)
 {
   GdkCursor *cursor;
+  GdkScreen *screen;
   
-  /* FIXME multihead */
-  cursor = gdk_cursor_new (GDK_HAND2);
-
+  screen = gtk_widget_get_screen (widget);
+  
+  cursor = gdk_cursor_new_for_display (gdk_screen_get_display (screen),
+				       GDK_HAND2);
   gdk_window_set_cursor (widget->window, cursor);
   gdk_cursor_unref (cursor);
 }

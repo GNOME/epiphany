@@ -434,9 +434,13 @@ configure_item_cursor (GtkToolItem *item,
       if (priv->edit_mode > 0)
         {
           GdkCursor *cursor;
+	  GdkScreen *screen;
           GdkPixbuf *pixbuf = NULL;
-          
-          cursor = gdk_cursor_new (GDK_HAND2);
+
+	  screen = gtk_widget_get_screen (GTK_WIDGET (etoolbar));
+	  
+          cursor = gdk_cursor_new_for_display (gdk_screen_get_display (screen),
+					       GDK_HAND2);
           gdk_window_set_cursor (widget->window, cursor);
           gdk_cursor_unref (cursor);
 
@@ -1763,10 +1767,13 @@ new_pixbuf_from_widget (GtkWidget *widget)
   GdkVisual *visual;
   gint icon_width;
   gint icon_height;
+  GdkScreen *screen;
 
   icon_width = DEFAULT_ICON_WIDTH;
 
-  if (!gtk_icon_size_lookup_for_settings (gtk_settings_get_default (), 
+  screen = gtk_widget_get_screen (widget);
+
+  if (!gtk_icon_size_lookup_for_settings (gtk_settings_get_for_screen (screen),
 					  GTK_ICON_SIZE_LARGE_TOOLBAR,
 					  NULL, 
 					  &icon_height))
