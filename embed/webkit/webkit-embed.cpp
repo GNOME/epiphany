@@ -290,6 +290,7 @@ static void
 impl_reload (EphyEmbed *embed, 
              gboolean force)
 {
+  webkit_gtk_page_reload (WEBKIT_EMBED (embed)->priv->page);  
 }
 
 static void
