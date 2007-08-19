@@ -990,6 +990,7 @@ cursor_on_match_cb  (GtkEntryCompletion *completion,
 	
 	entry = gtk_entry_completion_get_entry (completion);
 	gtk_entry_set_text (GTK_ENTRY (entry), item);
+        gtk_editable_set_position (GTK_EDITABLE (entry), -1);
 
 	g_free (item);
 
