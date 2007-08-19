@@ -53,9 +53,6 @@
 
 #define INSANE_NUMBER_OF_URLS 20
 
-/* Until https://bugzilla.mozilla.org/show_bug.cgi?id=296002 is fixed */
-#define KEEP_TAB_IN_SAME_TOPLEVEL
-
 #define EPHY_NOTEBOOK_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NOTEBOOK, EphyNotebookPrivate))
 
 struct _EphyNotebookPrivate
