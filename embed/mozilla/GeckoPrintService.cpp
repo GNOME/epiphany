@@ -180,7 +180,7 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
 			       GTK_PRINT_CAPABILITY_REVERSE  |
 			       GTK_PRINT_CAPABILITY_SCALE |
 			       GTK_PRINT_CAPABILITY_GENERATE_PS);
-#if 0 //def HAVE_GECKO_1_9
+#ifdef HAVE_GECKO_1_9
   capabilities = GtkPrintCapabilities (capabilities | GTK_PRINT_CAPABILITY_GENERATE_PDF);
 #endif
   gtk_print_unix_dialog_set_manual_capabilities	(print_dialog, capabilities);
@@ -569,7 +569,7 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   aSettings->SetPrintPageDelay (50);
 
   if (aIsForPrinting) {
-#if 0 //def HAVE_GECKO_1_9
+#ifdef HAVE_GECKO_1_9
     NS_ENSURE_TRUE (aPrinter, NS_ERROR_FAILURE);
 
     const char *format = gtk_print_settings_get (aGtkSettings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT);
