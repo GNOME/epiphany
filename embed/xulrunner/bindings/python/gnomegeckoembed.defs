@@ -1,0 +1,294 @@
+;; -*- scheme -*-
+; object definitions ...
+(define-object Embed
+  (in-module "Gecko")
+  (parent "GtkBin")
+  (c-name "GeckoEmbed")
+  (gtype-id "GECKO_TYPE_EMBED")
+)
+
+(define-object EmbedSingle
+  (in-module "Gecko")
+  (parent "GObject")
+  (c-name "GeckoEmbedSingle")
+  (gtype-id "GECKO_TYPE_EMBED_SINGLE")
+)
+
+;; Enumerations and flags ...
+
+(define-enum EmbedProgressFlags
+  (in-module "Gecko")
+  (c-name "GeckoEmbedProgressFlags")
+  (gtype-id "GECKO_TYPE_EMBED_PROGRESS_FLAGS")
+  (values
+    '("start" "GECKO_EMBED_FLAG_START")
+    '("redirecting" "GECKO_EMBED_FLAG_REDIRECTING")
+    '("transferring" "GECKO_EMBED_FLAG_TRANSFERRING")
+    '("negotiating" "GECKO_EMBED_FLAG_NEGOTIATING")
+    '("stop" "GECKO_EMBED_FLAG_STOP")
+    '("is-request" "GECKO_EMBED_FLAG_IS_REQUEST")
+    '("is-document" "GECKO_EMBED_FLAG_IS_DOCUMENT")
+    '("is-network" "GECKO_EMBED_FLAG_IS_NETWORK")
+    '("is-window" "GECKO_EMBED_FLAG_IS_WINDOW")
+    '("restoring" "GECKO_EMBED_FLAG_RESTORING")
+  )
+)
+
+(define-enum EmbedStatusEnum
+  (in-module "Gecko")
+  (c-name "GeckoEmbedStatusEnum")
+  (gtype-id "GECKO_TYPE_EMBED_STATUS_ENUM")
+  (values
+    '("dns" "GECKO_EMBED_STATUS_FAILED_DNS")
+    '("connect" "GECKO_EMBED_STATUS_FAILED_CONNECT")
+    '("timeout" "GECKO_EMBED_STATUS_FAILED_TIMEOUT")
+    '("usercanceled" "GECKO_EMBED_STATUS_FAILED_USERCANCELED")
+  )
+)
+
+(define-enum EmbedReloadFlags
+  (in-module "Gecko")
+  (c-name "GeckoEmbedReloadFlags")
+  (gtype-id "GECKO_TYPE_EMBED_RELOAD_FLAGS")
+  (values
+    '("normal" "GECKO_EMBED_FLAG_RELOADNORMAL")
+    '("bypasscache" "GECKO_EMBED_FLAG_RELOADBYPASSCACHE")
+    '("bypassproxy" "GECKO_EMBED_FLAG_RELOADBYPASSPROXY")
+    '("bypassproxyandcache" "GECKO_EMBED_FLAG_RELOADBYPASSPROXYANDCACHE")
+    '("charsetchange" "GECKO_EMBED_FLAG_RELOADCHARSETCHANGE")
+  )
+)
+
+(define-enum EmbedChromeFlags
+  (in-module "Gecko")
+  (c-name "GeckoEmbedChromeFlags")
+  (gtype-id "GECKO_TYPE_EMBED_CHROME_FLAGS")
+  (values
+    '("defaultchrome" "GECKO_EMBED_FLAG_DEFAULTCHROME")
+    '("windowborderson" "GECKO_EMBED_FLAG_WINDOWBORDERSON")
+    '("windowcloseon" "GECKO_EMBED_FLAG_WINDOWCLOSEON")
+    '("windowresizeon" "GECKO_EMBED_FLAG_WINDOWRESIZEON")
+    '("menubaron" "GECKO_EMBED_FLAG_MENUBARON")
+    '("toolbaron" "GECKO_EMBED_FLAG_TOOLBARON")
+    '("locationbaron" "GECKO_EMBED_FLAG_LOCATIONBARON")
+    '("statusbaron" "GECKO_EMBED_FLAG_STATUSBARON")
+    '("personaltoolbaron" "GECKO_EMBED_FLAG_PERSONALTOOLBARON")
+    '("scrollbarson" "GECKO_EMBED_FLAG_SCROLLBARSON")
+    '("titlebaron" "GECKO_EMBED_FLAG_TITLEBARON")
+    '("extrachromeon" "GECKO_EMBED_FLAG_EXTRACHROMEON")
+    '("allchrome" "GECKO_EMBED_FLAG_ALLCHROME")
+    '("windowraised" "GECKO_EMBED_FLAG_WINDOWRAISED")
+    '("windowlowered" "GECKO_EMBED_FLAG_WINDOWLOWERED")
+    '("centerscreen" "GECKO_EMBED_FLAG_CENTERSCREEN")
+    '("dependent" "GECKO_EMBED_FLAG_DEPENDENT")
+    '("modal" "GECKO_EMBED_FLAG_MODAL")
+    '("openasdialog" "GECKO_EMBED_FLAG_OPENASDIALOG")
+    '("openaschrome" "GECKO_EMBED_FLAG_OPENASCHROME")
+  )
+)
+
+
+;; From ../../src/gecko-embed-single.h
+
+(define-function gecko_embed_single_get_type
+  (c-name "gecko_embed_single_get_type")
+  (return-type "GType")
+)
+
+(define-function gecko_embed_single_get
+  (c-name "gecko_embed_single_get")
+  (return-type "GeckoEmbedSingle*")
+)
+
+(define-function gecko_embed_single_push_startup
+  (c-name "gecko_embed_single_push_startup")
+  (return-type "none")
+)
+
+(define-function gecko_embed_single_pop_startup
+  (c-name "gecko_embed_single_pop_startup")
+  (return-type "none")
+)
+
+(define-function gecko_embed_single_set_comp_path
+  (c-name "gecko_embed_single_set_comp_path")
+  (return-type "none")
+  (parameters
+    '("const-char*" "aPath")
+  )
+)
+
+(define-function gecko_embed_single_set_profile_path
+  (c-name "gecko_embed_single_set_profile_path")
+  (return-type "none")
+  (parameters
+    '("const-char*" "aDir")
+    '("const-char*" "aName")
+  )
+)
+
+
+
+;; From ../../src/gecko-embed-types.h
+
+(define-function gecko_embed_progress_flags_get_type
+  (c-name "gecko_embed_progress_flags_get_type")
+  (return-type "GType")
+)
+
+(define-function gecko_embed_status_enum_get_type
+  (c-name "gecko_embed_status_enum_get_type")
+  (return-type "GType")
+)
+
+(define-function gecko_embed_reload_flags_get_type
+  (c-name "gecko_embed_reload_flags_get_type")
+  (return-type "GType")
+)
+
+(define-function gecko_embed_chrome_flags_get_type
+  (c-name "gecko_embed_chrome_flags_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ../../src/gecko-embed.h
+
+(define-function gecko_embed_get_type
+  (c-name "gecko_embed_get_type")
+  (return-type "GType")
+)
+
+(define-function gecko_embed_new
+  (c-name "gecko_embed_new")
+  (is-constructor-of "GeckoEmbed")
+  (return-type "GtkWidget*")
+)
+
+(define-method load_url
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_load_url")
+  (return-type "none")
+  (parameters
+    '("const-char*" "url")
+  )
+)
+
+(define-method stop_load
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_stop_load")
+  (return-type "none")
+)
+
+(define-method can_go_back
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_can_go_back")
+  (return-type "gboolean")
+)
+
+(define-method can_go_forward
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_can_go_forward")
+  (return-type "gboolean")
+)
+
+(define-method go_back
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_go_back")
+  (return-type "none")
+)
+
+(define-method go_forward
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_go_forward")
+  (return-type "none")
+)
+
+(define-method render_data
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_render_data")
+  (return-type "none")
+  (parameters
+    '("const-char*" "data")
+    '("guint32" "len")
+    '("const-char*" "base_uri")
+    '("const-char*" "mime_type")
+  )
+)
+
+(define-method open_stream
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_open_stream")
+  (return-type "none")
+  (parameters
+    '("const-char*" "base_uri")
+    '("const-char*" "mime_type")
+  )
+)
+
+(define-method append_data
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_append_data")
+  (return-type "none")
+  (parameters
+    '("const-char*" "data")
+    '("guint32" "len")
+  )
+)
+
+(define-method close_stream
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_close_stream")
+  (return-type "none")
+)
+
+(define-method get_link_message
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_get_link_message")
+  (return-type "char*")
+)
+
+(define-method get_js_status
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_get_js_status")
+  (return-type "char*")
+)
+
+(define-method get_title
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_get_title")
+  (return-type "char*")
+)
+
+(define-method get_location
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_get_location")
+  (return-type "char*")
+)
+
+(define-method reload
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_reload")
+  (return-type "none")
+  (parameters
+    '("gint32" "flags")
+  )
+)
+
+(define-method set_chrome_mask
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_set_chrome_mask")
+  (return-type "none")
+  (parameters
+    '("guint32" "flags")
+  )
+)
+
+(define-method get_chrome_mask
+  (of-object "GeckoEmbed")
+  (c-name "gecko_embed_get_chrome_mask")
+  (return-type "guint32")
+)
+
+
