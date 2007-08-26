@@ -58,6 +58,7 @@
 #include <nsIIOService.h>
 #include <nsILocalFile.h>
 #include <nsIMIMEInfo.h>
+#include <nsIMIMEService.h>
 #include <nsIObserver.h>
 #include <nsIRequest.h>
 #include <nsIURI.h>
@@ -88,6 +89,7 @@ MozDownload::MozDownload() :
 	mTotalProgress(-1),
 	mCurrentProgress(0),
 	mMaxSize(-1),
+	mAddToRecent(PR_TRUE),
 	mStatus(NS_OK),
 	mEmbedPersist(nsnull),
 	mDownloadState(EPHY_DOWNLOAD_INITIALISING)
@@ -149,6 +151,7 @@ MozDownload::Init (nsIURI *aSource,
 	mInterval = PROGRESS_RATE;
 	mLastUpdate = mStartTime;
 	mMIMEInfo = aMIMEInfo;
+	mAddToRecent = addToView;
 
 	/* This will create a refcount cycle, which needs to be broken in ::OnStateChange */
 	mCancelable = aCancelable;
@@ -311,6 +314,22 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 
 		/* break refcount cycle */
 		mCancelable = nsnull;
+        
+		nsCString destSpec;
+		nsCString mimeType;
+
+		mDestination->GetSpec (destSpec);
+
+		if (NS_SUCCEEDED (aStatus) && mMIMEInfo)
+		{
+			rv = mMIMEInfo->GetMIMEType (mimeType);
+			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+		}
+
+		if (mAddToRecent)
+		{
+			ephy_file_add_recent_item (destSpec.get(), mimeType.get());
+		}
 
 		if (mEmbedPersist)
 		{
@@ -330,9 +349,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 			return NS_OK;
 #else
 			GnomeVFSMimeApplication *helperApp;
-			nsCString mimeType;
-			rv = mMIMEInfo->GetMIMEType (mimeType);
-			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+			NS_ENSURE_TRUE (mMIMEInfo, NS_ERROR_FAILURE);
 
 			nsString description;
 			mMIMEInfo->GetApplicationDescription (description);
@@ -358,7 +375,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 				rv = mDestination->GetSpec (aDest);
 				NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-				ephy_file_launch_application (helperApp, aDest.get (), user_time);
+				ephy_file_launch_application (helperApp, destSpec.get (), user_time);
 
 				gnome_vfs_mime_application_free (helperApp);
 				g_strfreev (str);
@@ -565,6 +582,15 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 		ephy_embed_persist_set_dest (EPHY_EMBED_PERSIST (embedPersist),
 				cPath.get());
 	}
+    
+	nsCOMPtr<nsIMIMEService> mimeService (do_GetService ("@mozilla.org/mime;1"));
+	nsCOMPtr<nsIMIMEInfo> mimeInfo;
+	if (mimeService)
+	{
+		mimeService->GetFromTypeAndExtension (nsCString(contentType),
+						      nsCString(),
+						      getter_AddRefs (mimeInfo));
+	}
 
 	PRBool isHTML = (contentType &&
 			(strcmp (contentType, "text/html") == 0 ||
@@ -590,7 +616,7 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 	/* dlListener attaches to its progress dialog here, which gains ownership */
 	/* FIXME is that still true? */
 	rv = downloader->InitForEmbed (inOriginalURI, destURI, fileDisplayName,
-				       nsnull, timeNow, nsnull, webPersist, embedPersist, aMaxSize);
+				       mimeInfo, timeNow, nsnull, webPersist, embedPersist, aMaxSize);
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	rv = webPersist->SetProgressListener (downloader);

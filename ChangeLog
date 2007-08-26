@@ -1,3 +1,15 @@
+2007-08-26  Diego Escalante Urrelo  <diegoe@gnome.org>
+
+	* lib/ephy-file-helpers.c:
+	* lib/ephy-file-helpers.h:
+	* embed/mozilla/MozDownload.h:
+	* embed/mozilla/MozDownload.cpp:
+
+	Add saved files to the GtkRecent list, gnome-panel is broken so don't
+	expect to see the effects of this working there, you can use it on the
+	GtkFileChooser dialog however. Fixes Bug #148401. Original patch by
+	Christian Persch, updated by Cosimo Cecchi.
+
 2007-08-25  Christian Persch  <chpe@gnome.org>
 
 	* data/mime-types-permissions.xml:

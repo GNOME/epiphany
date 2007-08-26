@@ -77,6 +77,9 @@ gboolean    ephy_file_switch_temp_file   (const char *filename,
 
 void	    ephy_file_delete_on_exit	 (const char *path);
 
+void	    ephy_file_add_recent_item	 (const char *uri,
+					  const char *mime_type);
+
 EphyMimePermission ephy_file_check_mime	 (const char *mime_type);
 
 gboolean    ephy_file_launch_desktop_file (const char *filename,
