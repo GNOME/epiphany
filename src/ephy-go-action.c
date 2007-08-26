@@ -78,13 +78,15 @@ create_tool_item (GtkAction *action)
 	return item;
 }
 
-static void
+static gboolean
 button_clicked_cb (GtkWidget *widget,
 		   GdkEventButton *event,
 		   gpointer user_data)
 {
 	if (event->button == 1 || event->button == 2)
 		gtk_action_activate (GTK_ACTION (user_data));
+	
+	return FALSE;
 }
 
 static void

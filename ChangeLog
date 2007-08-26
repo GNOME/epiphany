@@ -1,5 +1,13 @@
 2007-08-26  Diego Escalante Urrelo  <diegoe@gnome.org>
 
+	* src/ephy-go-action.c:
+
+	Fix the Go button signal handler so it doesn't stop the propagation of
+	the event due to a bad signal handler. Fixes bug #469845. Patch by
+	Cosimo Cecchi.
+
+2007-08-26  Diego Escalante Urrelo  <diegoe@gnome.org>
+
 	* lib/ephy-file-helpers.c:
 	* lib/ephy-file-helpers.h:
 	* embed/mozilla/MozDownload.h:
