@@ -138,6 +138,7 @@ protected:
 	PRInt64                 mTotalProgress;
 	PRInt64                 mCurrentProgress;
 	PRInt64			mMaxSize;
+	PRBool			mAddToRecent;
 
 	nsresult                mStatus;
 
