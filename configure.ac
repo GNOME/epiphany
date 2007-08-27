@@ -15,7 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
-AC_INIT([GNOME Web Browser],[2.19.91],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[2.21.0],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
@@ -29,7 +29,7 @@ EPIPHANY_MAJOR=2.19
 EPIPHANY_API_VERSION=2.19
 
 # This should stay at the major version of the latest stable releases
-EPIPHANY_UA_VERSION=2.18
+EPIPHANY_UA_VERSION=2.20
 
 AC_SUBST([EPIPHANY_MAJOR])
 AC_SUBST([EPIPHANY_API_VERSION])
