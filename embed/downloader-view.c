@@ -84,6 +84,7 @@ struct _DownloaderViewPrivate
 	GtkStatusIcon *status_icon;
 
 	guint idle_unref : 1;
+	guint source_id;
 };
 
 enum
@@ -288,6 +289,12 @@ downloader_view_finalize (GObject *object)
 	{
 		g_object_unref (priv->status_icon);
 		priv->status_icon = NULL;
+	}
+	
+	if (priv->source_id != 0)
+	{
+		g_source_remove (priv->source_id);
+		priv->source_id = 0;
 	}
 
 	g_hash_table_destroy (dv->priv->downloads_hash);
@@ -496,6 +503,8 @@ static gboolean
 update_buttons_timeout_cb (DownloaderView *dv)
 {
 	update_buttons (dv);
+	
+	dv->priv->source_id = 0;
 	return FALSE;
 }
 
@@ -568,8 +577,7 @@ downloader_view_add_download (DownloaderView *dv,
 		g_object_unref (pixbuf);
 	}
 	
-	g_timeout_add (100, (GSourceFunc) update_buttons_timeout_cb, dv);
-
+	dv->priv->source_id = g_timeout_add (100, (GSourceFunc) update_buttons_timeout_cb, dv);
 }
 
 static void
