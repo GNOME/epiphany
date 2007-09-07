@@ -1,3 +1,11 @@
+2007-09-08  Cosimo Cecchi  <cosimoc@svn.gnome.org>
+
+	* embed/downloader-view.c: (downloader_view_finalize),
+	(update_buttons_timeout_cb), (downloader_view_add_download):
+
+	Fix runtime warnings when downloading small files, due to bad handling
+	of g_timeout in DownloaderView. Fixes bug #473566.
+
 2007-08-28  Christian Persch  <chpe@gnome.org>
 
 	* data/mime-types-permissions.xml:
