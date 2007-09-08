@@ -55,6 +55,7 @@ struct _EphyFindToolbarPrivate
 	GtkToolItem *status_item;
 	GtkWidget *status_label;
 	gulong set_focus_handler;
+	guint source_id;
 	guint preedit_changed : 1;
 	guint prevent_activate : 1;
 	guint activated : 1;
@@ -101,12 +102,30 @@ get_find (EphyFindToolbar *toolbar)
 	return priv->find;
 }
 
+static gboolean
+set_status_notfound_cb (EphyFindToolbar *toolbar)
+{
+	EphyFindToolbarPrivate *priv;
+	PangoFontDescription *pango_desc = NULL;
+	
+	priv = toolbar->priv;
+	
+	pango_desc = pango_font_description_new ();
+	gtk_widget_modify_font (priv->status_label, pango_desc);
+	pango_font_description_free (pango_desc);
+	
+	priv->source_id = 0;
+	
+	return FALSE;
+}
+
 static void
 set_status (EphyFindToolbar *toolbar,
 	    EphyEmbedFindResult result)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	char *text = NULL;
+	PangoFontDescription *pango_desc = NULL;
 
 	switch (result)
 	{
@@ -114,7 +133,17 @@ set_status (EphyFindToolbar *toolbar,
 			text = NULL;
 			break;
 		case EPHY_EMBED_FIND_NOTFOUND:
-			text = _("Not found");
+			{
+				text = _("Not found");
+
+				pango_desc = pango_font_description_new ();
+				pango_font_description_set_weight (pango_desc, PANGO_WEIGHT_BOLD);
+				gtk_widget_modify_font (priv->status_label, pango_desc);
+				pango_font_description_free (pango_desc);
+				
+				gtk_widget_error_bell (GTK_WIDGET (priv->window));
+				priv->source_id = g_timeout_add (500, (GSourceFunc) set_status_notfound_cb, toolbar);
+			}
 			break;
 		case EPHY_EMBED_FIND_FOUNDWRAPPED:
 			text = _("Wrapped");
@@ -428,6 +457,12 @@ ephy_find_toolbar_dispose (GObject *object)
 	{
 		g_object_unref (priv->find);
 		priv->find = NULL;
+	}
+	
+	if (priv->source_id != 0)
+	{
+		g_source_remove (priv->source_id);
+		priv->source_id = 0;
 	}
 
 	parent_class->dispose (object);
