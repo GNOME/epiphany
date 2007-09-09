@@ -171,9 +171,9 @@ fi
 AC_MSG_CHECKING(for which engine to use)
 
 AC_ARG_WITH([engine],
-	AS_HELP_STRING([--with-engine@<:@=mozilla|webkit@:>@],
+	AS_HELP_STRING([--with-engine@<:@=mozilla|webkit|xulrunner@:>@],
 		[Which engine to build against @<:@mozilla@:>@]),
-	[], [with_engine="mozilla"])
+	[],[with_engine="mozilla"])
 
 AC_MSG_RESULT($with_engine)
 AC_SUBST([with_engine])
@@ -182,10 +182,9 @@ AC_SUBST([with_engine])
 # Mozilla
 # *******
 
-GECKO_INIT([GECKO], [gecko_found=yes],[gecko_found=no])
+if test "$with_engine" = "mozilla"; then
 
-AM_CONDITIONAL([WITH_GECKO_ENGINE], [test "$with_engine" = "mozilla"])
-if test "$with_engine" = "mozilla" ; then
+GECKO_INIT([GECKO])
 
 AC_DEFINE([WITH_GECKO_ENGINE],[1],[Define if you wish to enable mozilla engine])
 
@@ -343,23 +342,46 @@ REQUIRED_EXTENSIONS="cookie,permissions"
 GECKO_CHECK_CONTRACTIDS([$REQUIRED_CONTRACTS],
 	[],[AC_MSG_ERROR([$gecko_cv_gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
 
-fi # with_engine = gecko
+fi # with_engine = mozilla
 
+GECKO_DEFINES
+AM_CONDITIONAL([WITH_GECKO_ENGINE], [test "$with_engine" = "mozilla"])
 AM_CONDITIONAL([HAVE_XULRUNNER],[test "$gecko_cv_gecko" = "xulrunner"])
 AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "$enable_psm" = "yes" -a "$have_psm" = "yes"])
 AM_CONDITIONAL([ENABLE_FILEPICKER],[test "$enable_filepicker" = "yes"])
 
-# *******************************
-# webkit renderer
-# *******************************
+# *********
+# Xulrunner
+# *********
 
-AM_CONDITIONAL([WITH_WEBKIT_ENGINE], test "$with_engine" = "webkit")
+# This is the mozilla backend for xulrunner 1.9
+
+if test "$with_engine" = "xulrunner"; then
+
+LIBXUL_INIT
+
+WEASEL_UA_VERSION=3.0
+AC_SUBST([WEASEL_UA_VERSION])
+
+
+fi
+
+LIBXUL_DEFINES
+
+AM_CONDITIONAL([WITH_XULRUNNER_ENGINE],[test "$with_engine" = "xulrunner"])
+
+# ******
+# WebKit
+# ******
+
 if test "$with_engine" = "webkit" ; then
    AC_DEFINE([WITH_WEBKIT_ENGINE],[1],[Define if you wish to enable webkit engine])
    PKG_CHECK_MODULES([WEBKIT], WebKitGdk)
    AC_SUBST([WEBKIT_CFLAGS])
    AC_SUBST([WEBKIT_LIBS])
 fi # with_engine = webkit
+
+AM_CONDITIONAL([WITH_WEBKIT_ENGINE], test "$with_engine" = "webkit")
 
 # ***************
 # Multimedia keys
@@ -719,6 +741,31 @@ po/Makefile.in
 ],
 [],
 [EPIPHANY_API_VERSION=$EPIPHANY_API_VERSION])
+
+# new gecko embedding
+
+PKG_CHECK_MODULES([GTK],[gtk+-2.0 >= $GTK_REQUIRED])
+
+# compat cruft
+GGE_VERSION=0
+AC_SUBST([GGE_VERSION])
+
+GGE_API_VERSION=0
+AC_SUBST([GGE_API_VERSION])
+
+AC_CONFIG_FILES([
+embed/xulrunner/Makefile
+embed/xulrunner/src/Makefile
+embed/xulrunner/embed/Makefile
+embed/xulrunner/data/Makefile
+embed/xulrunner/bindings/Makefile
+embed/xulrunner/bindings/python/Makefile
+embed/xulrunner/tests/Makefile
+])
+
+AC_CONFIG_FILES([
+embed/xulrunner/data/gnome-gecko-embed-${GGE_API_VERSION}.pc:embed/xulrunner/data/gnome-gecko-embed.pc.in
+],[],[GGE_API_VERSION=$GGE_API_VERSION])
 
 AC_OUTPUT
 

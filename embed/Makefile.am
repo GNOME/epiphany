@@ -1,9 +1,12 @@
 SUBDIRS = $(with_engine)
-DIST_SUBDIRS = mozilla webkit
+
+DIST_SUBDIRS = xulrunner mozilla webkit
+
+NULL =
 
 noinst_LTLIBRARIES = libephyembed.la libephyembedfactory.la
 
-headerdir = $(prefix)/include/epiphany/@EPIPHANY_MAJOR@/epiphany
+headerdir = $(prefix)/include/epiphany/$(EPIPHANY_MAJOR)/epiphany
 header_DATA = \
 	ephy-embed-type-builtins.h	\
 	$(INST_H_FILES)
@@ -90,6 +93,13 @@ libephyembedfactory_la_SOURCES =	\
 libephyembedfactory_la_CPPFLAGS = \
 	-I$(top_srcdir)/embed/$(with_engine)		\
 	$(AM_CPPFLAGS)
+
+if WITH_XULRUNNER_ENGINE
+libephyembedfactory_la_CPPFLAGS += \
+	-I$(srcdir)xulrunner/embed	\
+	$(LIBXUL_INCLUDES)		\
+	$(NULL)
+endif
 
 if WITH_GECKO_ENGINE
 libephyembedfactory_la_CPPFLAGS += -I$(GECKO_INCLUDE_ROOT)/gtkembedmoz

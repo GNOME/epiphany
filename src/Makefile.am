@@ -10,7 +10,7 @@ bin_PROGRAMS = epiphany
 
 EXTRA_DIST =
 
-headerdir = $(prefix)/include/epiphany/@EPIPHANY_MAJOR@/epiphany
+headerdir = $(prefix)/include/epiphany/$(EPIPHANY_MAJOR)/epiphany
 header_DATA = \
 	ephy-type-builtins.h	\
 	$(INST_H_FILES)
@@ -210,6 +210,11 @@ epiphany_LDADD = \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
 	$(top_builddir)/embed/libephyembedfactory.la
 
+if WITH_XULRUNNER_ENGINE
+epiphany_LDADD += \
+	$(top_builddir)/embed/xulrunner/embed/libephymozillaembed.la
+endif
+
 if WITH_GECKO_ENGINE
 epiphany_LDADD += \
 	$(top_builddir)/embed/mozilla/libephymozillaembed.la
@@ -225,6 +230,11 @@ epiphany_LDADD += \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la
+
+if WITH_XULRUNNER_ENGINE
+epiphany_LDFLAGS += -R$(LIBXUL_LIBDIR)
+epiphany_LDADD += $(LIBXUL_LIBS)
+endif
 
 if WITH_GECKO_ENGINE
 epiphany_LDFLAGS += -R$(GECKO_HOME)

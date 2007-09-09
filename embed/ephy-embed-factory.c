@@ -21,7 +21,12 @@
 #include "config.h"
 
 #include "ephy-embed-factory.h"
-#if defined(WITH_GECKO_ENGINE)
+#if defined(WITH_XULRUNNER_ENGINE)
+#include "mozilla-embed.h"
+#include "mozilla-embed-find.h"
+#include "mozilla-embed-persist.h"
+#include "mozilla-embed-single.h"
+#elif defined(WITH_GECKO_ENGINE)
 #include "mozilla-embed.h"
 #include "mozilla-embed-find.h"
 #include "mozilla-embed-persist.h"
@@ -52,7 +57,9 @@ ephy_embed_factory_new_object (GType type)
 
 	if (type == EPHY_TYPE_EMBED)
 	{
-#if defined(WITH_GECKO_ENGINE)
+#if defined(WITH_XULRUNNER_ENGINE)
+		object = g_object_new (MOZILLA_TYPE_EMBED, NULL);
+#elif defined(WITH_GECKO_ENGINE)
 		object = g_object_new (MOZILLA_TYPE_EMBED, NULL);
 #elif defined(WITH_WEBKIT_ENGINE)
 	object = g_object_new (WEBKIT_TYPE_EMBED, NULL);
@@ -60,7 +67,9 @@ ephy_embed_factory_new_object (GType type)
 	}
 	else if (type == EPHY_TYPE_EMBED_PERSIST)
 	{
-#if defined(WITH_GECKO_ENGINE)
+#if defined(WITH_XULRUNNER_ENGINE)
+		object = g_object_new (MOZILLA_TYPE_EMBED_PERSIST, NULL);
+#elif defined(WITH_GECKO_ENGINE)
 		object = g_object_new (MOZILLA_TYPE_EMBED_PERSIST, NULL);
 #elif defined(WITH_WEBKIT_ENGINE)
 	object = g_object_new (WEBKIT_TYPE_EMBED_PERSIST, NULL);
@@ -68,7 +77,9 @@ ephy_embed_factory_new_object (GType type)
 	}
 	else if (type == EPHY_TYPE_EMBED_FIND)
 	{
-#if defined(WITH_GECKO_ENGINE)
+#if defined(WITH_XULRUNNER_ENGINE)
+		object = g_object_new (MOZILLA_TYPE_EMBED_FIND, NULL);
+#elif defined(WITH_GECKO_ENGINE)
 		object = g_object_new (MOZILLA_TYPE_EMBED_FIND, NULL);
 #elif defined(WITH_WEBKIT_ENGINE)
 		object = g_object_new (WEBKIT_TYPE_EMBED_FIND, NULL);
@@ -76,7 +87,9 @@ ephy_embed_factory_new_object (GType type)
 	}
 	else if (type == EPHY_TYPE_EMBED_SINGLE)
 	{
-#if defined(WITH_GECKO_ENGINE)
+#if defined(WITH_XULRUNNER_ENGINE)
+		object = g_object_new (MOZILLA_TYPE_EMBED_SINGLE, NULL);
+#elif defined(WITH_GECKO_ENGINE)
 		object = g_object_new (MOZILLA_TYPE_EMBED_SINGLE, NULL);
 #elif defined(WITH_WEBKIT_ENGINE)
 		object = g_object_new (WEBKIT_TYPE_EMBED_SINGLE, NULL);
