@@ -1,3 +1,16 @@
+2007-09-10  Cosimo Cecchi  <cosimoc@svn.gnome.org>
+
+        * lib/widgets/ephy-search-entry.c: (ephy_search_entry_get_type),
+        (ephy_search_entry_timeout_cb), (ephy_search_entry_changed_cb),
+        (ephy_search_entry_init), (ephy_search_entry_clear):
+        * lib/widgets/ephy-search-entry.h:
+        * src/bookmarks/ephy-bookmarks-editor.c: (search_entry_clear_cb),
+        (build_search_box):
+
+        Modifies the EphySearchEntry to inherit from EphyIconEntry instead of
+        GtkEntry, to have icons on it. Adds a cleaner icon in the search
+        entry of Bookmarks Editor. Fixes bug #463469.
+
 2007-09-09  Cosimo Cecchi  <cosimoc@svn.gnome.org>
 
         * lib/widgets/ephy-zoom-action.c: (connect_proxy):

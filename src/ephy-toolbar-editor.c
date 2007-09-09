@@ -48,7 +48,6 @@
 #include <string.h>
 
 #define DATA_KEY		"EphyToolbarEditor"
-#define CONTROL_CENTRE_DOMAIN	"control-center-2.0"
 
 #define EPHY_TOOLBAR_EDITOR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOOLBAR_EDITOR, EphyToolbarEditorPrivate))
 
@@ -82,10 +81,10 @@ toolbar_styles [] =
 	   * the correct translation. You MUST OMIT it in the translated string. */
 	  N_("toolbar style|Default"), 0, FALSE },
 	{ NULL /* separator row */, 0, FALSE },
-	{ "Text below icons", EGG_TB_MODEL_BOTH, TRUE },
-	{ "Text beside icons", EGG_TB_MODEL_BOTH_HORIZ, TRUE },
-	{ "Icons only", EGG_TB_MODEL_ICONS, TRUE },
-	{ "Text only", EGG_TB_MODEL_TEXT, TRUE }
+	{ N_("Text below icons"), EGG_TB_MODEL_BOTH, TRUE },
+	{ N_("Text beside icons"), EGG_TB_MODEL_BOTH_HORIZ, TRUE },
+	{ N_("Icons only"), EGG_TB_MODEL_ICONS, TRUE },
+	{ N_("Text only"), EGG_TB_MODEL_TEXT, TRUE }
 };
 
 enum
@@ -184,12 +183,6 @@ ephy_toolbar_editor_constructor (GType type,
 	object = parent_class->constructor (type, n_construct_properties,
 					    construct_params);
 
-#ifdef ENABLE_NLS
-	/* Initialize the control centre domain */
-	bindtextdomain (CONTROL_CENTRE_DOMAIN, GNOMELOCALEDIR);
-	bind_textdomain_codeset(CONTROL_CENTRE_DOMAIN, "UTF-8");
-#endif
-
 	dialog = GTK_WIDGET (object);
 	priv = EPHY_TOOLBAR_EDITOR (object)->priv;
 
@@ -229,11 +222,7 @@ ephy_toolbar_editor_constructor (GType type,
 		const char *text = toolbar_styles[i].text;
 		const char *tr_text = NULL;
 
-		if (toolbar_styles[i].cc_domain)
-		{
-			tr_text = dgettext (CONTROL_CENTRE_DOMAIN, text);
-		}
-		else if (text != NULL)
+		if (text != NULL)
 		{
 			tr_text= Q_(text);
 		}
