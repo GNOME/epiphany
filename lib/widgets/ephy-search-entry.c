@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include <gtk/gtklabel.h>
+#include <gtk/gtkentry.h>
 #include <glib/gi18n.h>
 #include <string.h>
 
@@ -68,7 +69,7 @@ ephy_search_entry_get_type (void)
 			(GInstanceInitFunc) ephy_search_entry_init
 		};
 
-		type = g_type_register_static (GTK_TYPE_ENTRY,
+		type = g_type_register_static (EPHY_TYPE_ICON_ENTRY,
 					       "EphySearchEntry",
 					       &our_info, 0);
 	}
@@ -101,7 +102,8 @@ static gboolean
 ephy_search_entry_timeout_cb (EphySearchEntry *entry)
 {
 	g_signal_emit (G_OBJECT (entry), ephy_search_entry_signals[SEARCH], 0,
-		       gtk_entry_get_text (GTK_ENTRY (entry)));
+				   gtk_entry_get_text (GTK_ENTRY (ephy_icon_entry_get_entry
+								  (EPHY_ICON_ENTRY (entry)))));
 	entry->priv->timeout = 0;
 
 	return FALSE;
@@ -112,7 +114,12 @@ ephy_search_entry_changed_cb (GtkEditable *editable,
 			      EphySearchEntry *entry)
 {
 	if (entry->priv->clearing == TRUE)
+	{
+		g_signal_emit (G_OBJECT (entry), ephy_search_entry_signals[SEARCH], 0,
+			       gtk_entry_get_text (GTK_ENTRY (ephy_icon_entry_get_entry
+							      (EPHY_ICON_ENTRY (entry)))));	
 		return;
+	}
 
 	if (entry->priv->timeout != 0)
 	{
@@ -139,11 +146,11 @@ ephy_search_entry_init (EphySearchEntry *entry)
 {
 	entry->priv = EPHY_SEARCH_ENTRY_GET_PRIVATE (entry);
 
-	g_signal_connect (G_OBJECT (entry),
+	g_signal_connect (ephy_icon_entry_get_entry (EPHY_ICON_ENTRY (entry)),
 			  "destroy",
 			  G_CALLBACK (ephy_search_entry_destroy_cb),
 			  entry);
-	g_signal_connect (G_OBJECT (entry),
+	g_signal_connect (ephy_icon_entry_get_entry (EPHY_ICON_ENTRY (entry)),
 			  "changed",
 			  G_CALLBACK (ephy_search_entry_changed_cb),
 			  entry);
@@ -171,7 +178,8 @@ ephy_search_entry_clear (EphySearchEntry *entry)
 
 	entry->priv->clearing = TRUE;
 
-	gtk_entry_set_text (GTK_ENTRY (entry), "");
+	gtk_entry_set_text (GTK_ENTRY (ephy_icon_entry_get_entry
+				       (EPHY_ICON_ENTRY (entry))), "");
 
 	entry->priv->clearing = FALSE;
 }

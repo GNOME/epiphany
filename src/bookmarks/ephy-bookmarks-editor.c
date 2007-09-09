@@ -1605,12 +1605,33 @@ search_entry_search_cb (GtkWidget *entry, const char *search_text, EphyBookmarks
 	ephy_node_filter_done_changing (editor->priv->bookmarks_filter);
 }
 
+static gboolean
+search_entry_clear_cb (GtkWidget *ebox,
+					   GdkEventButton *event,
+					   GtkWidget *entry)
+{
+	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
+	
+	if (event->type == GDK_BUTTON_RELEASE && 
+	    event->button == 1 && 
+	    state == 0 /* left */)
+	{
+		ephy_search_entry_clear (EPHY_SEARCH_ENTRY (entry));
+		
+		return TRUE;
+	}
+	
+	return FALSE;
+}
+
 static GtkWidget *
 build_search_box (EphyBookmarksEditor *editor)
 {
 	GtkWidget *box;
 	GtkWidget *label;
 	GtkWidget *entry;
+	GtkWidget *cleaner;
+	GtkWidget *ebox;
 	char *str;
 
 	box = gtk_hbox_new (FALSE, 6);
@@ -1619,12 +1640,29 @@ build_search_box (EphyBookmarksEditor *editor)
 
 	entry = ephy_search_entry_new ();
 	editor->priv->search_entry = entry;
-	gtk_widget_show (entry);
+	
+	cleaner = gtk_image_new_from_stock (GTK_STOCK_CLEAR,
+					    GTK_ICON_SIZE_MENU);
+	ebox = gtk_event_box_new ();
+	gtk_event_box_set_visible_window (GTK_EVENT_BOX (ebox), FALSE);
+	
+	gtk_widget_add_events (ebox, GDK_BUTTON_PRESS_MASK |
+			       GDK_BUTTON_RELEASE_MASK);
+	g_signal_connect (ebox , "button-release-event",
+			  G_CALLBACK (search_entry_clear_cb), 
+			  entry);
+	gtk_widget_set_tooltip_text (ebox,
+			             _("Clear"));
+	gtk_container_add (GTK_CONTAINER (ebox), cleaner);
+	ephy_icon_entry_pack_widget ((EPHY_ICON_ENTRY (entry)), ebox, FALSE);
+	
 	g_signal_connect (G_OBJECT (entry), "search",
 			  G_CALLBACK (search_entry_search_cb),
 			  editor);
 	add_entry_monitor (editor, entry);
 	add_focus_monitor (editor, entry);
+	
+	gtk_widget_show_all (entry);
 
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
