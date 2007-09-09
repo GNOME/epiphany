@@ -86,6 +86,10 @@ void		ephy_toolbar_set_navigation_actions	(EphyToolbar *toolbar,
 							 gboolean forward,
 							 gboolean up);
 
+void		ephy_toolbar_set_navigation_tooltips	(EphyToolbar *toolbar,
+							 const char *back_title,
+							 const char *forward_title);
+
 void		ephy_toolbar_set_security_state		(EphyToolbar *toolbar,
 							 gboolean is_secure,
 							 gboolean show_lock,

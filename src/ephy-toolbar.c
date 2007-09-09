@@ -457,6 +457,26 @@ ephy_toolbar_set_navigation_actions (EphyToolbar *toolbar,
 }
 
 void
+ephy_toolbar_set_navigation_tooltips (EphyToolbar *toolbar,
+				      const char *back_title,
+				      const char *forward_title)
+{
+	EphyToolbarPrivate *priv = toolbar->priv;
+	GValue value = { 0 };
+
+	g_value_init (&value, G_TYPE_STRING);
+
+	g_value_set_static_string (&value, back_title);
+	g_object_set_property (G_OBJECT (priv->actions[BACK_ACTION]),
+			       "tooltip", &value);
+
+	g_value_set_static_string (&value, forward_title);
+	g_object_set_property (G_OBJECT (priv->actions[FORWARD_ACTION]),
+			       "tooltip", &value);
+	g_value_unset (&value);
+}
+
+void
 ephy_toolbar_set_security_state (EphyToolbar *toolbar,
 				 gboolean is_secure,
 				 gboolean show_lock,

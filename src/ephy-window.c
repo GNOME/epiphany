@@ -1474,6 +1474,10 @@ sync_tab_navigation (EphyTab *tab,
 {
 	EphyTabNavigationFlags flags;
 	gboolean up = FALSE, back = FALSE, forward = FALSE;
+	EphyEmbed *embed;
+	char *back_url   = NULL, *forward_url   = NULL;
+	char *back_title = NULL, *forward_title = NULL;
+	gint position;
 
 	if (window->priv->closing) return;
 
@@ -1494,6 +1498,32 @@ sync_tab_navigation (EphyTab *tab,
 
 	ephy_toolbar_set_navigation_actions (window->priv->toolbar,
 					     back, forward, up);
+
+	embed = ephy_tab_get_embed (tab);
+	if (embed == NULL) return;
+
+	position = ephy_embed_shistory_get_pos (embed);
+
+	if (position > 0)
+	{
+		ephy_embed_shistory_get_nth (embed, -1, TRUE,
+					     &back_url, &back_title);
+	}
+
+	if (position < ephy_embed_shistory_n_items (embed) - 1)
+	{
+		ephy_embed_shistory_get_nth (embed,  1, TRUE,
+					     &forward_url, &forward_title);
+	}
+
+	ephy_toolbar_set_navigation_tooltips (window->priv->toolbar,
+					      back_title,
+					      forward_title);
+
+	g_free (back_title);
+	g_free (back_url);
+	g_free (forward_title);
+	g_free (forward_url);
 }
 
 static void
