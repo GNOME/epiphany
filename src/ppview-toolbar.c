@@ -28,6 +28,7 @@
 #include <gtk/gtkentry.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtktoolbar.h>
 #include <gtk/gtkuimanager.h>
 
 static void ppview_toolbar_class_init (PPViewToolbarClass *klass);
@@ -224,6 +225,10 @@ toolbar_update_sensitivity (PPViewToolbar *t)
 static void
 ppview_toolbar_set_window (PPViewToolbar *t, EphyWindow *window)
 {
+	GtkAction *action;
+	GtkWidget *widget;
+	GtkToolbarStyle style;
+
 	g_return_if_fail (t->priv->window == NULL);
 
 	t->priv->window = window;
@@ -237,6 +242,25 @@ ppview_toolbar_set_window (PPViewToolbar *t, EphyWindow *window)
 					    t->priv->action_group, 0);
 	t->priv->ui_id = gtk_ui_manager_add_ui_from_string
 		(t->priv->manager, ui_info, -1, NULL);
+
+	action = gtk_action_group_get_action (t->priv->action_group,
+					      "PPVClose");
+	g_object_set (action,
+		      "short-label",
+		      _("Close print preview"),
+		      "is-important",
+		      TRUE,
+		      NULL);
+
+	/* Force the display of the text only when needed */
+	widget = gtk_ui_manager_get_widget (t->priv->manager,
+					    "/PPViewToolbar");
+	style = gtk_toolbar_get_style (GTK_TOOLBAR (widget));
+	if (style == GTK_TOOLBAR_ICONS)
+	{
+		gtk_toolbar_set_style (GTK_TOOLBAR (widget),
+				       GTK_TOOLBAR_BOTH_HORIZ);
+	}
 
 	toolbar_update_sensitivity (t);
 }
