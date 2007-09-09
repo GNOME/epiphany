@@ -108,6 +108,10 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	if (EPHY_IS_ZOOM_CONTROL (proxy))
 	{
+		/* Ensure the sync is done when the item is added to
+		   the toolbar */
+		sync_zoom_cb (action, NULL, proxy);
+
 		g_signal_connect_object (action, "notify::zoom",
 					 G_CALLBACK (sync_zoom_cb), proxy, 0);
 	
