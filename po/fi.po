@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-08-29 07:38+0300\n"
+"POT-Creation-Date: 2007-09-10 06:40+0300\n"
 "PO-Revision-Date: 2007-02-03 16:55+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists."
@@ -869,30 +869,30 @@ msgid "_Page address"
 msgstr "Sivun o_soite"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:197
+#: ../embed/downloader-view.c:198
 msgid "_Show Downloads"
 msgstr "_Näytä noudettavat"
 
-#: ../embed/downloader-view.c:330
+#: ../embed/downloader-view.c:337
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#: ../embed/downloader-view.c:334
+#: ../embed/downloader-view.c:341
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: ../embed/downloader-view.c:386
+#: ../embed/downloader-view.c:393
 msgid "_Pause"
 msgstr "_Keskeytä"
 
-#: ../embed/downloader-view.c:386
+#: ../embed/downloader-view.c:393
 msgid "_Resume"
 msgstr "_Jatka"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:433
+#: ../embed/downloader-view.c:440
 #, c-format
 msgid ""
 "%s\n"
@@ -901,12 +901,12 @@ msgstr ""
 "%s\n"
 "%s / %s"
 
-#: ../embed/downloader-view.c:443 ../embed/downloader-view.c:448
-#: ../src/ephy-window.c:1523
+#: ../embed/downloader-view.c:450 ../embed/downloader-view.c:455
+#: ../src/ephy-window.c:1553
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: ../embed/downloader-view.c:480
+#: ../embed/downloader-view.c:487
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -915,26 +915,26 @@ msgstr[1] "%d tallennusta"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:602 ../embed/downloader-view.c:615
+#: ../embed/downloader-view.c:610 ../embed/downloader-view.c:623
 msgid "download status|Unknown"
 msgstr "tuntematon"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:607
+#: ../embed/downloader-view.c:615
 msgid "download status|Failed"
 msgstr "epäonnistui"
 
-#: ../embed/downloader-view.c:674
+#: ../embed/downloader-view.c:682
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Tiedosto"
 
-#: ../embed/downloader-view.c:697
+#: ../embed/downloader-view.c:705
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:708
+#: ../embed/downloader-view.c:716
 msgid "Remaining"
 msgstr "Jäljellä"
 
@@ -2530,7 +2530,7 @@ msgid "Bookmark"
 msgstr "Kirjanmerkki"
 
 #: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1765
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1803
 #: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1345
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
@@ -3082,21 +3082,25 @@ msgstr "Tuo kirjanmerkit:"
 msgid "_Copy Address"
 msgstr "_Kopioi osoite"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1631
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1655
+msgid "Clear"
+msgstr "Tyhjennä"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1669
 #: ../src/ephy-history-window.c:1035
 msgid "_Search:"
 msgstr "_Etsi:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1829
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1867
 msgid "Topics"
 msgstr "Aiheet"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1899
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1937
 #: ../src/ephy-history-window.c:1320
 msgid "Title"
 msgstr "Otsikko"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1905
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1943
 #: ../src/ephy-history-window.c:1326
 msgid "Address"
 msgstr "Osoite"
@@ -3151,40 +3155,40 @@ msgstr "Muut merkistöt"
 msgid "_Automatic"
 msgstr "_Automaattinen"
 
-#: ../src/ephy-find-toolbar.c:117
+#: ../src/ephy-find-toolbar.c:137
 msgid "Not found"
 msgstr "Ei löytynyt"
 
-#: ../src/ephy-find-toolbar.c:120
+#: ../src/ephy-find-toolbar.c:149
 msgid "Wrapped"
 msgstr "Jatkettiin alusta"
 
-#: ../src/ephy-find-toolbar.c:140
+#: ../src/ephy-find-toolbar.c:169
 msgid "Find links:"
 msgstr "Etsi linkkejä:"
 
-#: ../src/ephy-find-toolbar.c:140
+#: ../src/ephy-find-toolbar.c:169
 msgid "Find:"
 msgstr "Etsi:"
 
-#: ../src/ephy-find-toolbar.c:378
+#: ../src/ephy-find-toolbar.c:407
 msgid "Find Previous"
 msgstr "Etsi edellinen"
 
-#: ../src/ephy-find-toolbar.c:381
+#: ../src/ephy-find-toolbar.c:410
 msgid "Find previous occurrence of the search string"
 msgstr "Etsi haettavan merkkijonon edellinen esiintymä"
 
-#: ../src/ephy-find-toolbar.c:388
+#: ../src/ephy-find-toolbar.c:417
 msgid "Find Next"
 msgstr "Etsi seuraava"
 
-#: ../src/ephy-find-toolbar.c:391
+#: ../src/ephy-find-toolbar.c:420
 msgid "Find next occurrence of the search string"
 msgstr "Etsi haettavan merkkijonon seuraava esiintymä"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:571
+#: ../src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:591
 msgid "Leave Fullscreen"
 msgstr "Poistu kokoruututilasta"
 
@@ -3548,20 +3552,37 @@ msgstr "Avaa uusi ikkuna"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/ephy-toolbar-editor.c:83
+#: ../src/ephy-toolbar-editor.c:82
 msgid "toolbar style|Default"
 msgstr "Oletusarvo"
 
-#: ../src/ephy-toolbar-editor.c:202
+#. separator row
+#: ../src/ephy-toolbar-editor.c:84
+msgid "Text below icons"
+msgstr "Teksti kuvakkeiden alla"
+
+#: ../src/ephy-toolbar-editor.c:85
+msgid "Text beside icons"
+msgstr "Teksti kuvakkeiden vieressä"
+
+#: ../src/ephy-toolbar-editor.c:86
+msgid "Icons only"
+msgstr "Vain kuvakkeet"
+
+#: ../src/ephy-toolbar-editor.c:87
+msgid "Text only"
+msgstr "Vain teksti"
+
+#: ../src/ephy-toolbar-editor.c:195
 msgid "Toolbar Editor"
 msgstr "Työkalupalkkimuokkain"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:221
+#: ../src/ephy-toolbar-editor.c:214
 msgid "Toolbar _button labels:"
 msgstr "Työkalupalkin _painikkeiden nimiöt:"
 
-#: ../src/ephy-toolbar-editor.c:289
+#: ../src/ephy-toolbar-editor.c:278
 msgid "_Add a New Toolbar"
 msgstr "_Lisää uusi työkalupalkki"
 
@@ -4032,75 +4053,75 @@ msgstr "Suurempi"
 msgid "Smaller"
 msgstr "Pienempi"
 
-#: ../src/ephy-window.c:1526
+#: ../src/ephy-window.c:1556
 msgid "Insecure"
 msgstr "Turvaton"
 
-#: ../src/ephy-window.c:1531
+#: ../src/ephy-window.c:1561
 msgid "Broken"
 msgstr "Rikki"
 
-#: ../src/ephy-window.c:1543
+#: ../src/ephy-window.c:1573
 msgid "Low"
 msgstr "Matala"
 
-#: ../src/ephy-window.c:1550
+#: ../src/ephy-window.c:1580
 msgid "High"
 msgstr "Korkea"
 
-#: ../src/ephy-window.c:1560
+#: ../src/ephy-window.c:1590
 #, c-format
 msgid "Security level: %s"
 msgstr "Turvallisuustaso: %s"
 
-#: ../src/ephy-window.c:1603
+#: ../src/ephy-window.c:1633
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d ponnahdusikkuna piilossa"
 msgstr[1] "%d ponnahdusikkunaa piilossa"
 
-#: ../src/ephy-window.c:1898
+#: ../src/ephy-window.c:1928
 #, c-format
 msgid "Open image “%s”"
 msgstr "Avaa kuva \"%s\""
 
-#: ../src/ephy-window.c:1903
+#: ../src/ephy-window.c:1933
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Käytä \"%s\" työpöydän taustana"
 
-#: ../src/ephy-window.c:1908
+#: ../src/ephy-window.c:1938
 #, c-format
 msgid "Save image “%s”"
 msgstr "Tallenna kuva \"%s\""
 
-#: ../src/ephy-window.c:1913
+#: ../src/ephy-window.c:1943
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopioi kuvan \"%s\" osoite"
 
-#: ../src/ephy-window.c:1926
+#: ../src/ephy-window.c:1956
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Lähetä sähköpostia osoitteeseen \"%s\""
 
-#: ../src/ephy-window.c:1932
+#: ../src/ephy-window.c:1962
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopioi sähköpostiosoite \"%s\""
 
-#: ../src/ephy-window.c:1944
+#: ../src/ephy-window.c:1974
 #, c-format
 msgid "Save link “%s”"
 msgstr "Tallenna linkki \"%s\""
 
-#: ../src/ephy-window.c:1950
+#: ../src/ephy-window.c:1980
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Lisää kirjanmerkki linkkiin \"%s\""
 
-#: ../src/ephy-window.c:1956
+#: ../src/ephy-window.c:1986
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopioi linkin osoite \"%s\""
@@ -4169,43 +4190,43 @@ msgstr "Tallenna linkki _nimellä"
 msgid "Save Image As"
 msgstr "Tallenna kuva nimellä"
 
-#: ../src/ppview-toolbar.c:89
+#: ../src/ppview-toolbar.c:90
 msgid "First"
 msgstr "Ensimmäinen"
 
-#: ../src/ppview-toolbar.c:90
+#: ../src/ppview-toolbar.c:91
 msgid "Go to the first page"
 msgstr "Siirry ensimmäiselle sivulle"
 
-#: ../src/ppview-toolbar.c:93
+#: ../src/ppview-toolbar.c:94
 msgid "Last"
 msgstr "Viimeinen"
 
-#: ../src/ppview-toolbar.c:94
+#: ../src/ppview-toolbar.c:95
 msgid "Go to the last page"
 msgstr "Siirry viimeiselle sivulle"
 
-#: ../src/ppview-toolbar.c:97
+#: ../src/ppview-toolbar.c:98
 msgid "Previous"
 msgstr "Edellinen"
 
-#: ../src/ppview-toolbar.c:98
+#: ../src/ppview-toolbar.c:99
 msgid "Go to the previous page"
 msgstr "Siirry edelliselle sivulle"
 
-#: ../src/ppview-toolbar.c:101
+#: ../src/ppview-toolbar.c:102
 msgid "Next"
 msgstr "Seuraava"
 
-#: ../src/ppview-toolbar.c:102
+#: ../src/ppview-toolbar.c:103
 msgid "Go to next page"
 msgstr "Siirry seuraavalle sivulle"
 
-#: ../src/ppview-toolbar.c:105
+#: ../src/ppview-toolbar.c:106
 msgid "Close"
 msgstr "Sulje"
 
-#: ../src/ppview-toolbar.c:106
+#: ../src/ppview-toolbar.c:107 ../src/ppview-toolbar.c:250
 msgid "Close print preview"
 msgstr "Sulje tulosteen esikatselu"
 
