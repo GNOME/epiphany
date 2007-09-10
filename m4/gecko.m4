@@ -340,6 +340,10 @@ $1[]_GLUE_LIBS="$gecko_cv_glue_libs"
 
 AC_DEFUN([GECKO_DEFINES],
 [
+# Ensure we have an integer variable to compare with
+if test -z "$gecko_cv_gecko_version_int"; then
+	gecko_cv_gecko_version_int=0
+fi
 AM_CONDITIONAL([HAVE_MOZILLA_TOOLKIT],[test "$gecko_cv_have_gecko" = "yes" -a "$gecko_cv_gecko_flavour" = "toolkit"])
 AM_CONDITIONAL([HAVE_GECKO_DEBUG],[test "$gecko_cv_have_gecko" = "yes" -a "$gecko_cv_have_debug" = "yes"])
 AM_CONDITIONAL([HAVE_GECKO_1_7],[test "$gecko_cv_have_gecko" = "yes" -a "$gecko_cv_gecko_version_int" -ge "1007000"])
