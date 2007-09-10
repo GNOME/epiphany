@@ -47,11 +47,20 @@ AC_PROG_LIBTOOL
 
 AC_ISC_POSIX
 AC_PROG_CC
-AC_PROG_CXX
 AM_PROG_CC_STDC
 AC_HEADER_STDC
+
+AC_PROG_CXX
+
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
+
+# Check whether a C++ was found (AC_PROG_CXX sets $CXX to "g++" even when it
+# doesn't exist)
+
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],[],[AC_MSG_ERROR([No C++ compiler found])])
+AC_LANG_POP([C++])
 
 IT_PROG_INTLTOOL([0.35.0])
 
