@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.gnome-2-20\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-08-29 03:33+0100\n"
-"PO-Revision-Date: 2007-09-04 11:53+0200\n"
+"POT-Creation-Date: 2007-09-09 23:38+0100\n"
+"PO-Revision-Date: 2007-09-10 09:30+0200\n"
 "Last-Translator: Arangel Angov <arangel@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
@@ -872,30 +872,30 @@ msgid "_Page address"
 msgstr "_Адреса на страната"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:197
+#: ../embed/downloader-view.c:198
 msgid "_Show Downloads"
 msgstr "_Покажи преземања"
 
-#: ../embed/downloader-view.c:330
+#: ../embed/downloader-view.c:337
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:334
+#: ../embed/downloader-view.c:341
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:386
+#: ../embed/downloader-view.c:393
 msgid "_Pause"
 msgstr "_Пауза"
 
-#: ../embed/downloader-view.c:386
+#: ../embed/downloader-view.c:393
 msgid "_Resume"
 msgstr "_Продолжи"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:433
+#: ../embed/downloader-view.c:440
 #, c-format
 msgid ""
 "%s\n"
@@ -904,12 +904,12 @@ msgstr ""
 "%s\n"
 "%s од %s"
 
-#: ../embed/downloader-view.c:443 ../embed/downloader-view.c:448
+#: ../embed/downloader-view.c:450 ../embed/downloader-view.c:455
 #: ../src/ephy-window.c:1523
 msgid "Unknown"
 msgstr "Непознато"
 
-#: ../embed/downloader-view.c:480
+#: ../embed/downloader-view.c:487
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -919,26 +919,26 @@ msgstr[2] "%d преземања"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:602 ../embed/downloader-view.c:615
+#: ../embed/downloader-view.c:610 ../embed/downloader-view.c:623
 msgid "download status|Unknown"
 msgstr "Непознато"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:607
+#: ../embed/downloader-view.c:615
 msgid "download status|Failed"
 msgstr "Неуспешно"
 
-#: ../embed/downloader-view.c:674
+#: ../embed/downloader-view.c:682
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Датотека"
 
-#: ../embed/downloader-view.c:697
+#: ../embed/downloader-view.c:705
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:708
+#: ../embed/downloader-view.c:716
 msgid "Remaining"
 msgstr "Преостанато"
 
@@ -1637,8 +1637,8 @@ msgid ""
 "This address uses a network port which is normally used for purposes other "
 "than Web browsing."
 msgstr ""
-"Адресата користи мрежна порта која што нормално се користи за други "
-"цели наместо за сурфање."
+"Адресата користи мрежна порта која што нормално се користи за други цели "
+"наместо за сурфање."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:430
 msgid "The request has been cancelled for your protection."
@@ -2134,10 +2134,11 @@ msgid ""
 "\n"
 "The padlock icon in the statusbar also indicates whether a page is secure."
 msgstr ""
-"За безбедни страници, записот за адресата добива посебна боја и "
-"се прикажува икона со заклучено катанче.\n"
+"За безбедни страници, записот за адресата добива посебна боја и се прикажува "
+"икона со заклучено катанче.\n"
 "\n"
-"Иконата со катанче во статусната лента исто така индицира дека страницата е безбедна."
+"Иконата со катанче во статусната лента исто така индицира дека страницата е "
+"безбедна."
 
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:116
 #: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:144
@@ -3544,20 +3545,37 @@ msgstr "Отвори нов прозорец"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/ephy-toolbar-editor.c:83
+#: ../src/ephy-toolbar-editor.c:82
 msgid "toolbar style|Default"
 msgstr "Стандардно"
 
-#: ../src/ephy-toolbar-editor.c:202
+#. separator row
+#: ../src/ephy-toolbar-editor.c:84
+msgid "Text below icons"
+msgstr "Текст под иконите"
+
+#: ../src/ephy-toolbar-editor.c:85
+msgid "Text beside icons"
+msgstr "Текст покрај иконите"
+
+#: ../src/ephy-toolbar-editor.c:86
+msgid "Icons only"
+msgstr "Само икони"
+
+#: ../src/ephy-toolbar-editor.c:87
+msgid "Text only"
+msgstr "Само текст"
+
+#: ../src/ephy-toolbar-editor.c:195
 msgid "Toolbar Editor"
 msgstr "Уредувач на лента со алатки"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:221
+#: ../src/ephy-toolbar-editor.c:214
 msgid "Toolbar _button labels:"
 msgstr "Ознаки на _копчињата на лентата со алатки:"
 
-#: ../src/ephy-toolbar-editor.c:289
+#: ../src/ephy-toolbar-editor.c:278
 msgid "_Add a New Toolbar"
 msgstr "_Додај нова лента со алатки"
 
