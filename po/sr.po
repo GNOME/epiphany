@@ -9,17 +9,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany\n"
-"POT-Creation-Date: 2007-09-07 10:06+0200\n"
-"PO-Revision-Date: 2007-09-07 09:27+0200\n"
-"Last-Translator: Горан Ракић <grakic@devbase.net>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
+"POT-Creation-Date: 2007-09-11 19:16+0200\n"
+"PO-Revision-Date: 2007-09-11 19:16+0200\n"
+"Last-Translator: Данило Шеган <danilo@gnome.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: ../data/bme.desktop.in.in.h:1
 msgid "Browse and organize your bookmarks"
@@ -874,30 +872,30 @@ msgid "_Page address"
 msgstr "А_дреса стране"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:197
+#: ../embed/downloader-view.c:198
 msgid "_Show Downloads"
 msgstr "_Прикажи преузимања"
 
-#: ../embed/downloader-view.c:330
+#: ../embed/downloader-view.c:337
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#: ../embed/downloader-view.c:334
+#: ../embed/downloader-view.c:341
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: ../embed/downloader-view.c:386
+#: ../embed/downloader-view.c:393
 msgid "_Pause"
 msgstr "_Паузирај"
 
-#: ../embed/downloader-view.c:386
+#: ../embed/downloader-view.c:393
 msgid "_Resume"
 msgstr "Нас_тави"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:433
+#: ../embed/downloader-view.c:440
 #, c-format
 msgid ""
 "%s\n"
@@ -906,12 +904,12 @@ msgstr ""
 "%s\n"
 "%s од %s"
 
-#: ../embed/downloader-view.c:443 ../embed/downloader-view.c:448
+#: ../embed/downloader-view.c:450 ../embed/downloader-view.c:455
 #: ../src/ephy-window.c:1523
 msgid "Unknown"
 msgstr "Непознато"
 
-#: ../embed/downloader-view.c:480
+#: ../embed/downloader-view.c:487
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -921,26 +919,26 @@ msgstr[2] "%d преузимања"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:602 ../embed/downloader-view.c:615
+#: ../embed/downloader-view.c:610 ../embed/downloader-view.c:623
 msgid "download status|Unknown"
 msgstr "Непознато"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:607
+#: ../embed/downloader-view.c:615
 msgid "download status|Failed"
 msgstr "Неуспешно"
 
-#: ../embed/downloader-view.c:674
+#: ../embed/downloader-view.c:682
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Датотека"
 
-#: ../embed/downloader-view.c:697
+#: ../embed/downloader-view.c:705
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:708
+#: ../embed/downloader-view.c:716
 msgid "Remaining"
 msgstr "Преостало"
 
@@ -1987,11 +1985,13 @@ msgstr "Изаберите лозинку"
 #. * That's not actually correct, since this function is also called from other places!
 #.
 #: ../embed/mozilla/GtkNSSDialogs.cpp:766
+#, c-format
 msgid "Select a password to protect this certificate"
 msgstr "Изаберите лозинку ради заштите овог сертификата"
 
 #. FIXME: mozilla sucks, no way to get the name of the certificate / cert file!
 #: ../embed/mozilla/GtkNSSDialogs.cpp:815
+#, c-format
 msgid "Enter the password for this certificate"
 msgstr "Унесите лозинку за овај сертификат"
 
@@ -3561,20 +3561,37 @@ msgstr "Отвори нови прозор"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/ephy-toolbar-editor.c:83
+#: ../src/ephy-toolbar-editor.c:82
 msgid "toolbar style|Default"
 msgstr "Уобичајени"
 
-#: ../src/ephy-toolbar-editor.c:202
+#. separator row
+#: ../src/ephy-toolbar-editor.c:84
+msgid "Text below icons"
+msgstr "Текст испод икона"
+
+#: ../src/ephy-toolbar-editor.c:85
+msgid "Text beside icons"
+msgstr "Текст поред икона"
+
+#: ../src/ephy-toolbar-editor.c:86
+msgid "Icons only"
+msgstr "Само иконе"
+
+#: ../src/ephy-toolbar-editor.c:87
+msgid "Text only"
+msgstr "Само текст"
+
+#: ../src/ephy-toolbar-editor.c:195
 msgid "Toolbar Editor"
 msgstr "Уређивање алатки"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:221
+#: ../src/ephy-toolbar-editor.c:214
 msgid "Toolbar _button labels:"
 msgstr "Ознаке _дугмића алатки:"
 
-#: ../src/ephy-toolbar-editor.c:289
+#: ../src/ephy-toolbar-editor.c:278
 msgid "_Add a New Toolbar"
 msgstr "_Додај нову палету алатки"
 
@@ -4898,12 +4915,6 @@ msgstr "Веб страна Гномовог прегледника Интерн
 
 #~ msgid "Ephy"
 #~ msgstr "Спознаја"
-
-#~ msgid "toolbar style|Text below icons"
-#~ msgstr "Текст испод иконица"
-
-#~ msgid "toolbar style|Text beside icons"
-#~ msgstr "Текст поред иконица"
 
 #~ msgid "toolbar style|Icons only"
 #~ msgstr "Само иконице"
