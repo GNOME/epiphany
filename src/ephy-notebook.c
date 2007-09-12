@@ -647,10 +647,9 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	/* don't allow focus on the close button */
 	gtk_button_set_focus_on_click (GTK_BUTTON (close_button), FALSE);
 
-	rcstyle = gtk_rc_style_new ();
+	rcstyle = gtk_widget_get_modifier_style (close_button);
 	rcstyle->xthickness = rcstyle->ythickness = 0;
 	gtk_widget_modify_style (close_button, rcstyle);
-	gtk_rc_style_unref (rcstyle);
 
 	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
 	gtk_widget_set_tooltip_text (close_button, _("Close tab"));

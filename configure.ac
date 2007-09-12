@@ -25,8 +25,8 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
-EPIPHANY_MAJOR=2.19
-EPIPHANY_API_VERSION=2.19
+EPIPHANY_MAJOR=2.21
+EPIPHANY_API_VERSION=2.21
 
 # This should stay at the major version of the latest stable releases
 EPIPHANY_UA_VERSION=2.20
