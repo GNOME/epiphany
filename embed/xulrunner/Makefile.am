@@ -1,4 +1,4 @@
-SUBDIRS = src data bindings
+SUBDIRS = src embed data bindings
 # SUBDIRS += tests
 
 NULL =
