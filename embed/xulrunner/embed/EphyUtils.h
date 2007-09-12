@@ -21,11 +21,6 @@
 #ifndef EPHY_UTILS_H
 #define EPHY_UTILS_H
 
-// cannot include EphyUtils with internal strings!
-#ifdef MOZILLA_INTERNAL_API
-#error Cannot use EphyUtils with MOZILLA_INTERNAL_API
-#endif
-
 #include <nscore.h>
 
 #include <gtk/gtkwidget.h>
