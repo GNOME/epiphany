@@ -2,6 +2,8 @@ SUBDIRS = lib embed src plugins data po help doc
 
 ACLOCAL_AMFLAGS = -I m4
 
+NULL =
+
 EXTRA_DIST = 			\
 	autogen.sh		\
 	intltool-merge.in	\
@@ -14,13 +16,16 @@ EXTRA_DIST = 			\
 	ChangeLog-20030925	\
 	ChangeLog-20040912	\
 	ChangeLog-20050828	\
-	ChangeLog-20061106
+	ChangeLog-20061106	\
+	ChangeLog-20070912	\
+	$(NULL)
 
 DISTCLEANFILES = 		\
 	intltool-extract 	\
 	intltool-merge 		\
 	intltool-update		\
-	gnome-doc-utils.make
+	gnome-doc-utils.make	\
+	$(NULL)
 
 DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-python			\
@@ -34,3 +39,4 @@ DISTCHECK_CONFIGURE_FLAGS = \
 
 # Ignore gtk theme cache files on distcheck
 distuninstallcheck_listfiles = find . -type f -print | grep -v 'icon-theme.cache'
+
