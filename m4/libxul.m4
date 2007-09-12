@@ -31,7 +31,7 @@
 AC_DEFUN([LIBXUL_INIT],
 [AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
 
-PKG_CHECK_EXISTS([libxul],[libxul_cv_have_libxul=yes],[libxul_cv_have_libxul=no])
+PKG_CHECK_MODULES([LIBXUL],[libxul],[libxul_cv_have_libxul=yes],[libxul_cv_have_libxul=no])
 if test "$libxul_cv_have_libxul" != "yes"; then
   AC_MSG_ERROR([libxul not found])
 fi
@@ -141,6 +141,7 @@ AC_SUBST([LIBXUL_LIBDIR])
 AC_SUBST([LIBXUL_CXXCPPFLAGS])
 AC_SUBST([LIBXUL_CXXFLAGS])
 AC_SUBST([LIBXUL_LDFLAGS])
+AC_SUBST([LIBXUL_LIBS])
 
 ])
 

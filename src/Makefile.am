@@ -212,7 +212,7 @@ epiphany_LDADD = \
 
 if WITH_XULRUNNER_ENGINE
 epiphany_LDADD += \
-	$(top_builddir)/embed/xulrunner/embed/libephymozillaembed.la
+	$(top_builddir)/embed/xulrunner/embed/libephyxulrunnerembed.la
 endif
 
 if WITH_GECKO_ENGINE
