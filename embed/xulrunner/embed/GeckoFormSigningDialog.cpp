@@ -26,7 +26,7 @@
 #include <gtk/gtk.h>
 #include <glade/glade-xml.h>
 
-#include <nsStringAPI.h>
+#include <nsStringGlue.h>
 
 #include <nsCOMPtr.h>
 #include <nsIDOMWindow.h>

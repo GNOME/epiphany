@@ -26,7 +26,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include <nsStringAPI.h>
+#include <nsStringGlue.h>
 
 #include <nsCOMPtr.h>
 #include <nsIDOMWindow.h>

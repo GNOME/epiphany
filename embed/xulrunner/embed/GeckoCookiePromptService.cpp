@@ -30,7 +30,7 @@
 #include <gtk/gtkstock.h>
 #include <gtk/gtkwindow.h>
 
-#include <nsStringAPI.h>
+#include <nsStringGlue.h>
 
 #include "ephy-debug.h"
 #include "ephy-gui.h"

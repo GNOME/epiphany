@@ -52,7 +52,7 @@
 #include "nsIDOMMouseEvent.h"
 #include "nsIDOMUIEvent.h"
 
-#include <nsStringAPI.h>
+#include <nsStringGlue.h>
 #include <nsCOMPtr.h>
 
 #define XPCOM_GLUE

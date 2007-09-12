@@ -22,7 +22,7 @@
 #include <xpcom-config.h>
 #include "config.h"
 
-#include <nsStringAPI.h>
+#include <nsStringGlue.h>
 
 #include <nsICookie.h>
 #include <nsICookie2.h>

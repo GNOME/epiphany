@@ -23,7 +23,7 @@
 
 #include <glib.h>
 
-#include <nsStringAPI.h>
+#include <nsStringGlue.h>
 
 #include <nsComponentManagerUtils.h>
 #include <nsCOMPtr.h>

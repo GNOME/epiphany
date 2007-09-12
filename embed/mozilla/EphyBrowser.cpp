@@ -24,7 +24,7 @@
 
 #include <unistd.h>
 
-#include <nsStringAPI.h>
+#include <nsStringGlue.h>
 
 #include <gtkmozembed.h>
 #include <gtkmozembed_internal.h>

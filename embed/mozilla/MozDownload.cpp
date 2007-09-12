@@ -48,7 +48,7 @@
 
 #include <glib/gi18n.h>
 
-#include <nsStringAPI.h>
+#include <nsStringGlue.h>
 
 #include <nsComponentManagerUtils.h>
 #include <nsICancelable.h>

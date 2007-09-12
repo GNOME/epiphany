@@ -31,7 +31,7 @@
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
-#include <nsStringAPI.h>
+#include <nsStringGlue.h>
 
 #include <gtkmozembed.h>
 #include <gtkmozembed_internal.h>

@@ -45,7 +45,7 @@
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtkvbox.h>
 
-#include <nsStringAPI.h>
+#include <nsStringGlue.h>
 
 #include <nsIDOMWindow.h>
 #include <nsIInterfaceRequestor.h>

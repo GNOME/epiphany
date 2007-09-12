@@ -34,7 +34,7 @@
 #include <libgnomevfs/gnome-vfs-mime.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
-#include <nsStringAPI.h>
+#include <nsStringGlue.h>
 
 #include <nsCExternalHandlerService.h>
 #include <nsComponentManagerUtils.h>
