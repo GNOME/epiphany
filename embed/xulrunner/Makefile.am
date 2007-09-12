@@ -1,4 +1,5 @@
-SUBDIRS = src data bindings tests
+SUBDIRS = src data bindings
+# SUBDIRS += tests
 
 NULL =
 
