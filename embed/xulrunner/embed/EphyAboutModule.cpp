@@ -1,8 +1,8 @@
 /*
  *  Copyright © 2001 Matt Aubury, Philip Langdale
  *  Copyright © 2004 Crispin Flowerday
- *  Copyright © 2005 Christian Persch
  *  Copyright © 2005 Adam Hooper
+ *  Copyright © 2005, 2007 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,17 +29,15 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-// we need nsEscape which depends on internal strings :(((
-#define MOZILLA_INTERNAL_API 1
-#include <nsString.h>
+#include <nsStringGlue.h>
 
 #include <nsAutoPtr.h>
 #include <nsCOMPtr.h>
-#include <nsEscape.h>
 #include <nsIChannel.h>
 #include <nsIInputStreamChannel.h>
 #include <nsIInputStream.h>
 #include <nsIIOService.h>
+#include <nsINetUtil.h>
 #include <nsIOutputStream.h>
 #include <nsIScriptSecurityManager.h>
 #include <nsIStorageStream.h>
@@ -156,7 +154,10 @@ EphyAboutModule::ParseURL(const char *aURL,
 	char **params = g_strsplit (query, "&", -1);
 	if (!params) return NS_ERROR_FAILURE;
 	
-	for (PRUint32 i = 0; params[i] != NULL; ++i)
+	nsCOMPtr<nsINetUtil> netUtil (do_GetService (NS_NETUTIL_CONTRACTID));
+	if (!netUtil) return NS_ERROR_FAILURE;
+
+ 	for (PRUint32 i = 0; params[i] != NULL; ++i)
 	{
 		char *param = params[i];
 	
@@ -165,18 +166,18 @@ EphyAboutModule::ParseURL(const char *aURL,
 		switch (param[0])
 		{
 			case 'e':
-				aCode.Assign (nsUnescape (param + 2));
+				netUtil->UnescapeString (nsDependentCString (param + 2), 0, aCode);
 				break;
 			case 'u':
 				aRawOriginURL.Assign (param + 2);
-				aOriginURL.Assign (nsUnescape (param + 2));
+				netUtil->UnescapeString (nsDependentCString (param + 2), 0, aOriginURL);
 				break;
 			case 'c':
-				aOriginCharset.Assign (nsUnescape (param + 2));
+				netUtil->UnescapeString (nsDependentCString (param + 2), 0, aOriginCharset);
 				break;
 			/* The next one is not used in neterror but recover: */
 			case 't':
-				aTitle.Assign (nsUnescape (param + 2));
+				netUtil->UnescapeString (nsDependentCString (param + 2), 0, aTitle);
 				break;
 			case 'd':
 				/* we don't need mozilla's description parameter */
