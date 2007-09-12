@@ -439,7 +439,8 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	}
 
 	/* See http://bugzilla.gnome.org/show_bug.cgi?id=456945 */
-#ifndef HAVE_GECKO_1_9
+	// FIXME convert this properly to 1.9
+#ifdef HAVE_GECKO_1_9
 	if (info != NULL)
 	{
 		nsString desc;

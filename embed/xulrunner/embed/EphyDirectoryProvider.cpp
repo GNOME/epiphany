@@ -23,12 +23,7 @@
 
 #include <string.h>
 
-#ifndef HAVE_GECKO_1_9
-// for nsNetUtil.h
-#define MOZILLA_INTERNAL_API 1
-#endif
-
-#include <nsStringAPI.h>
+#include <nsStringGlue.h>
 
 #include <nsAppDirectoryServiceDefs.h>
 #include <nsCOMPtr.h>

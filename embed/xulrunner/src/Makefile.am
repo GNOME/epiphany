@@ -1,31 +1,5 @@
 NULL =
 
-required = \
-	.			\
-	accessibility		\
-	content			\
-	embedcomponents		\
-	docshell		\
-	dom			\
-	embed_base		\
-	gfx			\
-	intl			\
-	js			\
-	layout			\
-	necko			\
-	profdirserviceprovider	\
-	shistory		\
-	string			\
-	uriloader		\
-	webbrwsr		\
-	webshell		\
-	widget			\
-	windowwatcher		\
-	xpcom			\
-	xpconnect		\
-	xulapp			\
-	$(NULL)
-
 MARSHALERS = gecko-embed-marshal.h gecko-embed-marshal.cpp
 TYPES_SOURCES = gecko-embed-type-builtins.h gecko-embed-type-builtins.cpp
 
@@ -130,7 +104,8 @@ libgnomegeckoembed_0_0_la_SOURCES = \
 	$(NULL)
 
 libgnomegeckoembed_0_0_la_CPPFLAGS = \
-	$(addprefix -I$(GECKO_INCLUDE_ROOT)/,$(required)) \
+	$(LIBXUL_CXXCPPFLAGS)	\
+	$(LIBXUL_INCLUDES)	\
 	$(AM_CPPFLAGS)
 
 #	-DDEBUG				\
@@ -138,18 +113,15 @@ libgnomegeckoembed_0_0_la_CPPFLAGS = \
 #-DMOZILLA_STRICT_API
 
 libgnomegeckoembed_0_0_la_CXXFLAGS = \
-	$(GGE_DEPENDENCY_CFLAGS)	\
-	$(GECKO_CFLAGS)			\
+	$(LIBXUL_CXXFLAGS)	\
+	$(GTK_CFLAGS)		\
 	$(AM_CXXFLAGS)
-
-libgnomegeckoembed_0_0_la_LIBADD = \
-	$(GGE_DEPENDENCY_LIBS)	\
-	$(GECKO_LIBS)			\
-	$(GECKO_EXTRA_LIBS)		\
-	$(GECKO_GLUE_LIBS)
 
 libgnomegeckoembed_0_0_la_LDFLAGS = \
 	$(AM_LDFLAGS)
+
+libgnomegeckoembed_0_0_la_LIBADD = \
+	$(LIBXUL_LIBS)
 
 gnomegeckoembedincludedir = $(includedir)/gnome-gecko-embed-0.0
 gnomegeckoembedinclude_HEADERS =

@@ -25,14 +25,11 @@
 #include <nsStringAPI.h>
 
 #include <nsICategoryManager.h>
+#include <nsIClassInfoImpl.h>
 #include <nsIScriptNameSpaceManager.h>
 #include <nsMemory.h>
 #include <nsServiceManagerUtils.h>
 #include <nsXPCOMCID.h>
-
-#ifdef HAVE_GECKO_1_9
-#include <nsIClassInfoImpl.h>
-#endif
 
 #include "ephy-debug.h"
 #include "ephy-embed-shell.h"

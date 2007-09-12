@@ -65,7 +65,7 @@
 #include <nsNetCID.h>
 #endif /* ALLOW_PRIVATE_API */
 
-#ifndef HAVE_GECKO_1_9
+#if 0 // FIXME ndef HAVE_GECKO_1_9
 #include <nsIPassword.h>
 #include <nsIPasswordManager.h>
 #endif /* !HAVE_GECKO_1_9 */
@@ -838,16 +838,9 @@ static const char*
 impl_get_backend_name (EphyEmbedSingle *esingle)
 {
 	/* If you alter the return values here, remember to update
-	 * the docs in ephy-embed-single.c */
-#if defined (HAVE_GECKO_1_10)
-# error "Need to add version string for gecko 1.10"
-#elif defined(HAVE_GECKO_1_9)
+	 * the docs in ephy-embed-single.c
+	 */
 	return "gecko-1.9";
-#elif defined(HAVE_GECKO_1_8)
-	return "gecko-1.8";
-#else
-# error "Undefined/unsupported gecko version!"
-#endif
 }
 
 static GList *
@@ -954,7 +947,7 @@ impl_list_passwords (EphyPasswordManager *manager)
 {
 	GList *passwords = NULL;
 
-#ifndef HAVE_GECKO_1_9
+#if 0 // FIXME ndef HAVE_GECKO_1_9
 	nsresult rv;
 	nsCOMPtr<nsIPasswordManager> passwordManager =
 			do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
@@ -1016,7 +1009,7 @@ static void
 impl_remove_password (EphyPasswordManager *manager,
 		      EphyPasswordInfo *info)
 {
-#ifndef HAVE_GECKO_1_9
+#if 0 // FIXME ndef HAVE_GECKO_1_9
         nsCOMPtr<nsIPasswordManager> pm =
                         do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
 	if (!pm) return;

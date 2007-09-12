@@ -64,13 +64,13 @@ libephyxulrunnerembed_la_SOURCES = 	\
 	mozilla-notifiers.cpp		\
 	mozilla-notifiers.h
 
-if ENABLE_FILEPICKER
-libephyxulrunnerembed_la_SOURCES += 	\
-	FilePicker.cpp			\
-	FilePicker.h
-endif
+# if ENABLE_FILEPICKER
+# libephyxulrunnerembed_la_SOURCES += 	\
+# 	FilePicker.cpp			\
+# 	FilePicker.h
+# endif
 
-if HAVE_MOZILLA_PSM
+# if HAVE_MOZILLA_PSM
 libephyxulrunnerembed_la_SOURCES += 	\
 	GtkNSSClientAuthDialogs.cpp	\
 	GtkNSSClientAuthDialogs.h	\
@@ -80,67 +80,26 @@ libephyxulrunnerembed_la_SOURCES += 	\
 	GtkNSSKeyPairDialogs.h		\
 	GtkNSSSecurityWarningDialogs.cpp\
 	GtkNSSSecurityWarningDialogs.h
-endif
+# endif
 
-if ENABLE_CERTIFICATE_MANAGER
-libephyxulrunnerembed_la_SOURCES += \
-	mozilla-x509-cert.cpp		\
-	mozilla-x509-cert.h
-endif
+# if ENABLE_CERTIFICATE_MANAGER
+# libephyxulrunnerembed_la_SOURCES += \
+# 	mozilla-x509-cert.cpp		\
+# 	mozilla-x509-cert.h
+# endif
 
-if ENABLE_SPELLCHECKER
+# if ENABLE_SPELLCHECKER
 libephyxulrunnerembed_la_SOURCES += \
 	GeckoSpellCheckEngine.cpp	\
 	GeckoSpellCheckEngine.h
-endif
-
-mozilla_include_subdirs = \
-	.			\
-	caps			\
-	chardet			\
-	chrome			\
-	commandhandler		\
-	content			\
-	cookie			\
-	docshell		\
-	dom			\
-	exthandler		\
-	fastfind		\
-	helperAppDlg		\
-	find			\
-	gfx			\
-	gtkembedmoz		\
-	history			\
-	js			\
-	layout			\
-	locale			\
-	mimetype		\
-	necko			\
-	nkcache			\
-	passwordmgr		\
-	pipboot			\
-	pipnss			\
-	pref			\
-	shistory		\
-	sidebar			\
-	spellchecker		\
-	uriloader		\
-	uconv			\
-	wallet			\
-	webbrowserpersist	\
-	webbrwsr		\
-	widget			\
-	windowwatcher		\
-	xmlextras		\
-	xpcom			\
-	xpconnect
+# endif
 
 libephyxulrunnerembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib	    		\
 	-I$(top_srcdir)/embed	    		\
 	-I$(top_srcdir)		    		\
-	-I$(top_srcdir)/embed/gecko/src		\
-	-I$(top_builddir)/embed/gecko/src	\
+	-I$(top_srcdir)/embed/xulrunner/src	\
+	-I$(top_builddir)/embed/xulrunner/src	\
 	-DSHARE_DIR=\"$(pkgdatadir)\"   	\
 	-DPLUGINDIR=\"$(libdir)/epiphany/$(EPIPHANY_MAJOR)/plugins\"		\
 	-DMOZILLA_HOME=\"$(LIBXUL_LIBDIR)\"	\
@@ -148,10 +107,12 @@ libephyxulrunnerembed_la_CPPFLAGS = \
 	-DMOZILLA_NATIVE_PLUGINSDIR=\"$(libdir)/mozilla/plugins\"		\
 	-DUA_VERSION=\"$(EPIPHANY_UA_VERSION)\"	\
 	-DALLOW_PRIVATE_API			\
+	$(LIBXUL_CXXCPPFLAGS)			\
+	$(LIBXUL_INCLUDES)			\
 	$(AM_CPPFLAGS)
 
 libephyxulrunnerembed_la_CXXFLAGS = \
-	$(LIBXUL_CFLAGS)		\
+	$(LIBXUL_CXXFLAGS)	\
 	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CXXFLAGS)
 

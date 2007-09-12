@@ -343,7 +343,8 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 		else if (NS_SUCCEEDED (aStatus))
 		{
 			/* see http://bugzilla.gnome.org/show_bug.cgi?id=456945 */
-#ifdef HAVE_GECKO_1_9
+#if 1 //def HAVE_GECKO_1_9
+			// FIXMEchpe fix this!
 			return NS_OK;
 #else
 			GnomeVFSMimeApplication *helperApp;

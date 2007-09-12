@@ -8,22 +8,21 @@ pkgpyexecdir = $(pyexecdir)/gtk-2.0
 pkgpyexec_LTLIBRARIES = gnomegeckoembed.la
 
 gnomegeckoembed_la_CPPFLAGS = \
-	-I$(top_srcdir)		\
-	-I$(top_srcdir)/embed/gecko/src	\
-	-I$(top_builddir)/embed/gecko/src	\
+	-I$(top_srcdir)				\
+	-I$(top_srcdir)/embed/xulrunner/src	\
+	-I$(top_builddir)/embed/xulrunner/src	\
 	$(AM_CPPFLAGS)
 
 gnomegeckoembed_la_CFLAGS = \
-	$(GGE_DEPENDENCY_CFLAGS)	\
-	$(GECKO_CFLAGS)			\
+	$(GTK_CFLAGS)			\
 	$(NO_STRICT_ALIASING_CFLAGS)	\
 	$(PYGTK_CFLAGS)			\
 	$(PYTHON_CFLAGS)		\
 	$(AM_CFLAGS)
 
 gnomegeckoembed_la_LIBADD = \
-	$(top_builddir)/embed/gecko/src/libgnomegeckoembed-0.0.la	\
-	$(GECKO_LIBS)		\
+	$(top_builddir)/embed/xulrunner/src/libgnomegeckoembed-0.0.la	\
+	$(GTK_LIBS)		\
 	$(PYTHON_LIBS)		\
 	$(PYTHON_EXTRA_LIBS)	\
 	$(PYGTK_LIBS)

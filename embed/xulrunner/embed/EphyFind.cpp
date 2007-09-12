@@ -102,7 +102,7 @@ EphyFind::SetEmbed (EphyEmbed *aEmbed)
 #ifdef HAVE_GECKO_1_9
 //    mFinder->SetSelectionModeAndRepaint (nsISelectionController::SELECTION_ON);
 #else
-    mFinder->SetFocusLinks (PR_TRUE);
+//    mFinder->SetFocusLinks (PR_TRUE);
 #endif
   } else {
     rv = mFinder->SetDocShell (docShell);
@@ -202,15 +202,7 @@ EphyFind::FindAgain (PRBool aForward,
 
   nsresult rv;
   PRUint16 found = nsITypeAheadFind::FIND_NOTFOUND;
-#ifdef HAVE_GECKO_1_9
   rv = mFinder->FindAgain (!aForward, aLinksOnly, &found);
-#else
-  if (aForward) {
-    rv = mFinder->FindNext (&found);
-  } else {
-    rv = mFinder->FindPrevious (&found);
-  }
-#endif
 
   return (EphyEmbedFindResult) found;
 }

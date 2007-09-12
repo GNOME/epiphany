@@ -67,6 +67,7 @@
 #include <nsIDOMWindow.h>
 #include <nsIInterfaceRequestor.h>
 #include <nsIInterfaceRequestorUtils.h>
+#include <nsIMutableArray.h>
 #include <nsIPKCS11ModuleDB.h>
 #include <nsIPKCS11Slot.h>
 #include <nsIPK11Token.h>

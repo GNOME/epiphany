@@ -32,6 +32,7 @@
 #include <nsCURILoader.h>
 #include <nsDocShellCID.h>
 #include <nsICategoryManager.h>
+#include <nsIClassInfoImpl.h>
 #include <nsIComponentManager.h>
 #include <nsIComponentRegistrar.h>
 #include <nsIGenericFactory.h>
@@ -41,10 +42,6 @@
 #include <nsMemory.h>
 #include <nsNetCID.h>
 #include <nsServiceManagerUtils.h>
-
-#ifdef HAVE_GECKO_1_9
-#include <nsIClassInfoImpl.h>
-#endif
 
 #ifdef HAVE_MOZILLA_PSM
 #include <nsISecureBrowserUI.h>
