@@ -21,7 +21,7 @@
  *  $Id$
  */
 
-#include "mozilla-config.h"
+#include <xpcom-config.h>
 
 #include "config.h"
 

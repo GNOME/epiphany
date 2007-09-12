@@ -111,7 +111,7 @@ CPPFLAGS="$CPPFLAGS $LIBXUL_CXXCPPFLAGS $LIBXUL_INCLUDES"
 
 AC_MSG_CHECKING([[whether we have a libxul debug build]])
 AC_COMPILE_IFELSE(
-  [AC_LANG_SOURCE([[#include <mozilla-config.h>
+  [AC_LANG_SOURCE([[#include <xpcom-config.h>
 		    #if !defined(MOZ_REFLOW_PERF) || !defined(MOZ_REFLOW_PERF_DSP)
 		    #error No
 		    #endif]]
