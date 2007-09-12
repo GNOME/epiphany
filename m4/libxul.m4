@@ -38,9 +38,9 @@ fi
 
 libxul_cv_prefix="$($PKG_CONFIG --variable=prefix libxul)"
 libxul_cv_include_root="$($PKG_CONFIG --variable=includedir libxul)"
-libxul_libdir="$($PKG_CONFIG --variable=sdkdir libxul)"
+libxul_cv_libdir="$($PKG_CONFIG --variable=sdkdir libxul)"
 
-libxul_includes="$libxul_cv_include_root/stable $libxul_cv_include_root/unstable"
+libxul_cv_includes="-I${libxul_cv_include_root}/stable -I${libxul_cv_include_root}/unstable"
 
 AC_DEFINE([HAVE_LIBXUL],[1],[Define for libxul])
 
