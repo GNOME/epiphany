@@ -669,7 +669,6 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 			gboolean typing_ahead)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
-	gboolean clear_search = typing_ahead;
 
 	g_return_if_fail (priv->embed != NULL);
 
@@ -678,14 +677,7 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 
 	clear_status (toolbar);
 
-	if (clear_search)
-	{
-		gtk_entry_set_text (GTK_ENTRY (priv->entry), "");
-	}
-	else
-	{
-		gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
-	}
+	gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
 
 	gtk_widget_show (GTK_WIDGET (toolbar));
 	gtk_widget_grab_focus (GTK_WIDGET (toolbar));
