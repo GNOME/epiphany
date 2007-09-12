@@ -123,7 +123,8 @@ update_window (EphyWindow *window,
 	       EphyLockdown *lockdown)
 {
 	GtkUIManager *manager;
-	GtkActionGroup *action_group, *popups_action_group, *toolbar_action_group;
+	GtkActionGroup *action_group, *popups_action_group;
+	GtkActionGroup *toolbar_action_group, *special_toolbar_action_group;
 	GtkAction *action;
 	gboolean disabled, fullscreen, print_setup_disabled, writable;
 
@@ -132,8 +133,12 @@ update_window (EphyWindow *window,
 	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
 	action_group = find_action_group (manager, "WindowActions");
 	popups_action_group = find_action_group (manager, "PopupsActions");
-	toolbar_action_group = find_action_group (manager, "SpecialToolbarActions");
-	g_return_if_fail (action_group != NULL && popups_action_group != NULL && toolbar_action_group != NULL);
+	toolbar_action_group = find_action_group (manager, "ToolbarActions");
+	special_toolbar_action_group = find_action_group (manager, "SpecialToolbarActions");
+	g_return_if_fail (action_group != NULL
+			  && popups_action_group != NULL
+			  && toolbar_action_group != NULL
+			  && special_toolbar_action_group != NULL);
 
 	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING);
 	print_setup_disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) ||
@@ -156,17 +161,17 @@ update_window (EphyWindow *window,
 	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL);
 	action = gtk_action_group_get_action (action_group, "GoLocation");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (toolbar_action_group, "Location");
+	action = gtk_action_group_get_action (special_toolbar_action_group, "Location");
 	update_location_editable (window, action, !disabled);
-	action = gtk_action_group_get_action (toolbar_action_group, "NavigationUp");
+	action = gtk_action_group_get_action (special_toolbar_action_group, "NavigationUp");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 
 	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY);
 	action = gtk_action_group_get_action (action_group, "GoHistory");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (toolbar_action_group, "NavigationBack");
+	action = gtk_action_group_get_action (special_toolbar_action_group, "NavigationBack");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
-	action = gtk_action_group_get_action (toolbar_action_group, "NavigationForward");
+	action = gtk_action_group_get_action (special_toolbar_action_group, "NavigationForward");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 
 	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING);
@@ -195,9 +200,15 @@ update_window (EphyWindow *window,
 	disabled = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING);
 	action = gtk_action_group_get_action (action_group, "ViewToolbarEditor");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
+	action = gtk_action_group_get_action (toolbar_action_group, "MoveToolItem");
+	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
+	action = gtk_action_group_get_action (toolbar_action_group, "RemoveToolItem");
+	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
+	action = gtk_action_group_get_action (toolbar_action_group, "RemoveToolbar");
+	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, disabled);
 
 	fullscreen = eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
-	action = gtk_action_group_get_action (toolbar_action_group, "FileNewWindow");
+	action = gtk_action_group_get_action (special_toolbar_action_group, "FileNewWindow");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, fullscreen);
 	action = gtk_action_group_get_action (action_group, "ViewFullscreen");
 	ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, fullscreen);
