@@ -23,26 +23,22 @@
 
 #include <nsStringAPI.h>
 
-#include <gtkmozembed.h>
 #include <nsCOMPtr.h>
+#include <nsDOMJSUtils.h> /* for GetScriptContextFromJSContext */
 #include <nsIDOMWindow.h>
 #include <nsIEmbeddingSiteWindow.h>
 #include <nsIFile.h>
 #include <nsIIOService.h>
+#include <nsIScriptContext.h>
+#include <nsIScriptGlobalObject.h>
 #include <nsIServiceManager.h>
 #include <nsIURI.h>
 #include <nsIWebBrowserChrome.h>
 #include <nsIWindowWatcher.h>
 #include <nsIXPConnect.h>
+#include <nsPIDOMWindow.h>
 #include <nsServiceManagerUtils.h>
 #include <nsXPCOM.h>
-
-#ifdef HAVE_GECKO_1_9
-#include <nsPIDOMWindow.h>
-#include <nsDOMJSUtils.h> /* for GetScriptContextFromJSContext */
-#include <nsIScriptContext.h>
-#include <nsIScriptGlobalObject.h>
-#endif
 
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
@@ -186,10 +182,6 @@ EphyJSUtils::IsCalledFromScript ()
 nsIDOMWindow *
 EphyJSUtils::GetDOMWindowFromCallContext ()
 {
-  /* TODO: We can do this on 1.8 too, but we'd need to use headers which include private string API
-   * so we'll have to move this to MozillaPrivate
-   */
-#ifdef HAVE_GECKO_1_9
   nsresult rv;
   nsCOMPtr<nsIXPConnect> xpc (do_GetService(nsIXPConnect::GetCID(), &rv));
   NS_ENSURE_SUCCESS (rv, nsnull);
@@ -212,7 +204,4 @@ EphyJSUtils::GetDOMWindowFromCallContext ()
   if (!piWindow) return nsnull;
 
   return piWindow->GetOuterWindow ();
-#else
-  return nsnull;
-#endif
 }

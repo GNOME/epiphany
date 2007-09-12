@@ -1034,7 +1034,7 @@ static void
 impl_add_password (EphyPasswordManager *manager,
                   EphyPasswordInfo *info)
 {
-#ifndef HAVE_GECKO_1_9
+#if 0 // FIXME ndef HAVE_GECKO_1_9
        nsCOMPtr<nsIPasswordManager> pm =
                         do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
        if (!pm) return;

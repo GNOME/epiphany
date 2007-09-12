@@ -94,7 +94,6 @@ EphyAboutModule::NewChannel(nsIURI *aURI,
 	return NS_ERROR_ILLEGAL_VALUE;
 }
 
-#ifdef HAVE_GECKO_1_9
 /* unsigned long getURIFlags(in nsIURI aURI); */
 NS_IMETHODIMP
 EphyAboutModule::GetURIFlags (nsIURI *aURI,
@@ -103,7 +102,6 @@ EphyAboutModule::GetURIFlags (nsIURI *aURI,
 	*_result = 0;
 	return NS_OK;
 }
-#endif
 
 /* private functions */
 

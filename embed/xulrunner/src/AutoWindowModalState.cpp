@@ -25,19 +25,15 @@
 
 AutoWindowModalState::AutoWindowModalState (nsIDOMWindow *aWindow)
 {
-#ifdef HAVE_GECKO_1_9
   mWindow = do_QueryInterface (aWindow);
   if (mWindow) {
     mWindow->EnterModalState ();
   }
-#endif
 }
 
 AutoWindowModalState::~AutoWindowModalState()
 {
-#ifdef HAVE_GECKO_1_9
   if (mWindow) {
     mWindow->LeaveModalState ();
   }
-#endif
 }

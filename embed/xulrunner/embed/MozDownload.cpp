@@ -467,7 +467,6 @@ MozDownload::OnProgressChange64 (nsIWebProgress *aWebProgress,
 	return NS_OK;
 }
 
-#ifdef HAVE_GECKO_1_9
 /* boolean onRefreshAttempted (in nsIWebProgress aWebProgress, in nsIURI aRefreshURI, in long aDelay, in boolean aSameURI); */
 NS_IMETHODIMP
 MozDownload::OnRefreshAttempted(nsIWebProgress *aWebProgress,
@@ -479,7 +478,6 @@ MozDownload::OnRefreshAttempted(nsIWebProgress *aWebProgress,
         *allowRefresh = PR_TRUE;
         return NS_OK;
 }
-#endif
 
 NS_IMETHODIMP
 MozDownload::OnLocationChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest, nsIURI *location)

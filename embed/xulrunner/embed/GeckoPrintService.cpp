@@ -179,10 +179,8 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
 			       GTK_PRINT_CAPABILITY_COLLATE  |
 			       GTK_PRINT_CAPABILITY_REVERSE  |
 			       GTK_PRINT_CAPABILITY_SCALE |
-			       GTK_PRINT_CAPABILITY_GENERATE_PS);
-#if 0 //def HAVE_GECKO_1_9
-  capabilities = GtkPrintCapabilities (capabilities | GTK_PRINT_CAPABILITY_GENERATE_PDF);
-#endif
+			       GTK_PRINT_CAPABILITY_GENERATE_PS |
+                               GTK_PRINT_CAPABILITY_GENERATE_PDF);
   gtk_print_unix_dialog_set_manual_capabilities	(print_dialog, capabilities);
 
   gtk_print_unix_dialog_set_page_setup (print_dialog,
@@ -569,7 +567,6 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   aSettings->SetPrintPageDelay (50);
 
   if (aIsForPrinting) {
-#if 0 //def HAVE_GECKO_1_9
     NS_ENSURE_TRUE (aPrinter, NS_ERROR_FAILURE);
 
     const char *format = gtk_print_settings_get (aGtkSettings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT);
@@ -587,7 +584,6 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
 		 format, gtk_printer_get_name (aPrinter));
       return NS_ERROR_FAILURE;
     }
-#endif
 	  
     int n_copies = gtk_print_settings_get_n_copies (aGtkSettings);
     if (n_copies <= 0)
@@ -673,45 +669,7 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   aSettings->SetPaperSizeType (nsIPrintSettings::kPaperSizeDefined);
   aSettings->SetPaperWidth (gtk_paper_size_get_width (paperSize, GTK_UNIT_MM));
   aSettings->SetPaperHeight (gtk_paper_size_get_height (paperSize, GTK_UNIT_MM));
-
-#ifdef HAVE_GECKO_1_9
   aSettings->SetPaperName (NS_ConvertUTF8toUTF16 (gtk_paper_size_get_name (paperSize)).get ());
-#else
-{
-  /* Mozilla bug https://bugzilla.mozilla.org/show_bug.cgi?id=307404
-   * means that we cannot actually use any paper sizes except mozilla's
-   * builtin list, and we must refer to them *by name*!
-  */
-  static const struct {
-    const char gtkPaperName[13];
-    const char mozPaperName[10];
-  } paperTable [] = {
-    { GTK_PAPER_NAME_A5, "A5" },
-    { GTK_PAPER_NAME_A4, "A4" },
-    { GTK_PAPER_NAME_A3, "A3" },
-    { GTK_PAPER_NAME_LETTER, "Letter" },
-    { GTK_PAPER_NAME_LEGAL, "Legal" },
-    { GTK_PAPER_NAME_EXECUTIVE, "Executive" },
-  };
-
-  const char *paperName = gtk_paper_size_get_name (paperSize);
-	
-  PRUint32 i;
-  for (i = 0; i < G_N_ELEMENTS (paperTable); i++) {
-    if (g_ascii_strcasecmp (paperTable[i].gtkPaperName, paperName) == 0) {
-      paperName = paperTable[i].mozPaperName;
-      break;
-    }
-  }
-  if (i == G_N_ELEMENTS (paperTable)) {
-    /* Not in table, fall back to A4 */
-    g_warning ("Unknown paper name '%s', falling back to A4", gtk_paper_size_get_name (paperSize));
-    paperName = paperTable[1].mozPaperName;
-  }
-
-  aSettings->SetPaperName (NS_ConvertUTF8toUTF16 (paperName).get ());
-}
-#endif /* !HAVE_GECKO_1_9 */
 
   /* Sucky mozilla wants margins in inch! */
   aSettings->SetMarginTop (gtk_page_setup_get_top_margin (aPageSetup, GTK_UNIT_INCH));

@@ -21,7 +21,6 @@
 #include "mozilla-config.h"
 #include "config.h"
 
-//#include <bonobo.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -33,10 +32,6 @@
 #include "ephy-debug.h"
 
 #include "GeckoSpellCheckEngine.h"
-
-#ifndef HAVE_GECKO_1_9
-#define ToNewUnicode NS_StringCloneData
-#endif
 
 GeckoSpellCheckEngine::GeckoSpellCheckEngine ()
 {

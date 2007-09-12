@@ -47,11 +47,6 @@
 #include <nsIWebBrowser.h>
 #include <nsServiceManagerUtils.h>
 
-#ifndef HAVE_GECKO_1_9
-#include <nsIDocShellTreeItem.h>
-#include <nsISimpleEnumerator.h>
-#endif
-
 #include "gecko-embed-private.h"
 
 #include "ephy-debug.h"
@@ -99,10 +94,8 @@ EphyFind::SetEmbed (EphyEmbed *aEmbed)
     NS_ENSURE_SUCCESS (rv, rv);
 
     rv = mFinder->Init (docShell);
-#ifdef HAVE_GECKO_1_9
+#if 0 // FIXME def HAVE_GECKO_1_9
 //    mFinder->SetSelectionModeAndRepaint (nsISelectionController::SELECTION_ON);
-#else
-//    mFinder->SetFocusLinks (PR_TRUE);
 #endif
   } else {
     rv = mFinder->SetDocShell (docShell);
@@ -138,39 +131,9 @@ EphyFind::SetSelectionAttention (PRBool aAttention)
     display = nsISelectionController::SELECTION_ON;
   }
 
-#ifdef HAVE_GECKO_1_9
   if (mFinder) {
     mFinder->SetSelectionModeAndRepaint (display);
   }
-#else
-  nsresult rv;
-  nsCOMPtr<nsIDocShell> shell (do_GetInterface (mWebBrowser, &rv));
-  /* It's okay for this to fail, if the tab is closing, or if
-   * we weren't attached to any tab yet
-   */
-  if (NS_FAILED (rv) || !shell) return;
-
-  nsCOMPtr<nsISimpleEnumerator> enumerator;
-  rv = shell->GetDocShellEnumerator (nsIDocShellTreeItem::typeContent,
-				     nsIDocShell::ENUMERATE_FORWARDS,
-				     getter_AddRefs (enumerator));
-  NS_ENSURE_SUCCESS (rv, );
-
-  PRBool hasMore = PR_FALSE;
-  while (NS_SUCCEEDED (enumerator->HasMoreElements (&hasMore)) && hasMore) {
-    nsCOMPtr<nsISupports> element;
-    enumerator->GetNext (getter_AddRefs (element));
-    if (!element) continue;
-	 
-    nsCOMPtr<nsISelectionDisplay> sd (do_GetInterface (element));
-    if (!sd) continue;
-  
-    nsCOMPtr<nsISelectionController> controller (do_QueryInterface (sd));
-    if (!controller) continue;
-
-    controller->SetDisplaySelection (display);
-  }
-#endif /* HAVE_GECKO_1_9 */
 }
 
 EphyEmbedFindResult

@@ -25,37 +25,19 @@
 
 AutoWindowModalState::AutoWindowModalState (nsIDOMWindow *aWindow)
 {
-#ifdef HAVE_GECKO_1_8_1
   if (aWindow) {
     mWindow = do_QueryInterface (aWindow);
     NS_ASSERTION (mWindow, "Should have a window here!");
   }
 
   if (mWindow) {
-#ifdef HAVE_GECKO_1_9
     mWindow->EnterModalState ();
-#else
-    nsCOMPtr<nsPIDOMWindow_MOZILLA_1_8_BRANCH> window (do_QueryInterface (mWindow));
-    NS_ENSURE_TRUE (window, );
-
-    window->EnterModalState ();
-#endif /* HAVE_GECKO_1_9 */
   }
-#endif /* HAVE_GECKO_1_8_1 */
 }
 
 AutoWindowModalState::~AutoWindowModalState()
 {
-#ifdef HAVE_GECKO_1_8_1
   if (mWindow) {
-#ifdef HAVE_GECKO_1_9
     mWindow->LeaveModalState ();
-#else
-    nsCOMPtr<nsPIDOMWindow_MOZILLA_1_8_BRANCH> window (do_QueryInterface (mWindow));
-    NS_ENSURE_TRUE (window, );
-
-    window->LeaveModalState ();
-#endif /* HAVE_GECKO_1_9 */
   }
-#endif /* HAVE_GECKO_1_8_1 */
 }
