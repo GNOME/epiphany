@@ -1,5 +1,13 @@
 2007-09-12  Cosimo Cecchi  <cosimoc@svn.gnome.org>
 
+	* src/ephy-session.c: (write_active_tab), (write_ephy_window),
+	(ephy_session_load):
+
+	Make session recovery focus work properly and remember the active tab.
+	Fixes bug #317272.
+
+2007-09-12  Cosimo Cecchi  <cosimoc@svn.gnome.org>
+
 	* src/ephy-lockdown.c: (update_window):
 
 	Fix disable_toolbar_editing lockdown not respected for Remove and Move
