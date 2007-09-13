@@ -258,6 +258,7 @@ impl_get_embed_single (EphyEmbedShell *shell)
 	{
 		priv->embed_single = EPHY_EMBED_SINGLE
 			(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_SINGLE));
+		g_assert (priv->embed_single != NULL);
 
 		if (!ephy_embed_single_init (priv->embed_single))
 		{
