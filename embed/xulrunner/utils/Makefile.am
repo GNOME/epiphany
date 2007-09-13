@@ -9,9 +9,14 @@ libephyxulrunnerutils_la_SOURCES = \
 	AutoWindowModalState.h		\
 	EphyBadCertRejector.cpp		\
 	EphyBadCertRejector.h		\
+	EphyUtils.cpp			\
+	EphyUtils.h			\
+	GeckoUtils.cpp			\
+	GeckoUtils.h			\
 	$(NULL)
 
 libephyxulrunnerutils_la_CPPFLAGS = \
+	-I$(top_srcdir)/embed/xulrunner/src	\
 	$(LIBXUL_CXXCPPFLAGS)	\
 	$(LIBXUL_INCLUDES)	\
 	$(AM_CPPFLAGS)

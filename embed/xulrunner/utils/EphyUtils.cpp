@@ -40,10 +40,6 @@
 #include <nsServiceManagerUtils.h>
 #include <nsXPCOM.h>
 
-#include "ephy-embed-shell.h"
-#include "ephy-embed-single.h"
-#include "ephy-file-helpers.h"
-
 #include "EphyUtils.h"
 
 nsresult

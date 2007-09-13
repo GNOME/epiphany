@@ -93,8 +93,6 @@ libgnomegeckoembed_la_SOURCES = \
 	GeckoBrowser.h				\
 	GeckoSingle.cpp				\
 	GeckoSingle.h				\
-	GeckoUtils.cpp				\
-	GeckoUtils.h				\
 	$(NULL)
 
 libgnomegeckoembed_la_CPPFLAGS = \

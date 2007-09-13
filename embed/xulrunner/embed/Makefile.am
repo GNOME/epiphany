@@ -13,8 +13,6 @@ libephyxulrunnerembed_la_SOURCES = 	\
 	EphyHistoryListener.h		\
 	EphySingle.cpp			\
 	EphySingle.h			\
-	EphyUtils.cpp			\
-	EphyUtils.h			\
 	EventContext.cpp                \
 	EventContext.h                  \
 	mozilla-download.cpp		\
