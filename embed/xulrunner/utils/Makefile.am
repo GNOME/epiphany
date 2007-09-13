@@ -3,10 +3,12 @@ NULL =
 noinst_LTLIBRARIES = libephyxulrunnerutils.la
 
 libephyxulrunnerutils_la_SOURCES = \
-	AutoJSContextStack.cpp			\
-	AutoJSContextStack.h			\
-	AutoWindowModalState.cpp		\
-	AutoWindowModalState.h			\
+	AutoJSContextStack.cpp		\
+	AutoJSContextStack.h		\
+	AutoWindowModalState.cpp	\
+	AutoWindowModalState.h		\
+	EphyBadCertRejector.cpp		\
+	EphyBadCertRejector.h		\
 	$(NULL)
 
 libephyxulrunnerutils_la_CPPFLAGS = \

@@ -1,7 +1,7 @@
 /*
  *  Copyright © 2001,2002,2003 Philip Langdale
  *  Copyright © 2003 Marco Pesenti Gritti
- *  Copyright © 2004, 2005, 2006 Christian Persch
+ *  Copyright © 2004, 2005, 2006, 2007 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,6 +43,8 @@
 #include <nsNetCID.h>
 #include <nsServiceManagerUtils.h>
 
+#define HAVE_MOZILLA_PSM
+
 #ifdef HAVE_MOZILLA_PSM
 #include <nsISecureBrowserUI.h>
 #endif
@@ -50,11 +52,11 @@
 #include "ContentHandler.h"
 #include "EphyAboutModule.h"
 #include "EphyContentPolicy.h"
-#include "EphyPromptService.h"
 #include "EphySidebar.h"
 #include "GeckoCookiePromptService.h"
 #include "GeckoPrintService.h"
 #include "GeckoPrintSession.h"
+#include "GeckoPromptService.h"
 #include "GlobalHistory.h"
 #include "MozDownload.h"
 
@@ -76,12 +78,12 @@
 
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyAboutModule)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyContentPolicy)
-NS_GENERIC_FACTORY_CONSTRUCTOR(EphyPromptService)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphySidebar)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GContentHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GeckoCookiePromptService)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GeckoPrintService)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GeckoPrintSession)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GeckoPromptService)
 NS_GENERIC_FACTORY_CONSTRUCTOR(MozDownload)
 NS_GENERIC_FACTORY_CONSTRUCTOR(MozGlobalHistory)
 
@@ -247,19 +249,17 @@ static const nsModuleComponentInfo sAppComps[] = {
 		EphyAboutModuleConstructor
 	},
 	{
-		EPHY_PROMPT_SERVICE_CLASSNAME,
-		EPHY_PROMPT_SERVICE_IID,
+		GECKO_PROMPT_SERVICE_CLASSNAME,
+		GECKO_PROMPT_SERVICE_CID,
 		"@mozilla.org/embedcomp/prompt-service;1",
-		EphyPromptServiceConstructor
+		GeckoPromptServiceConstructor
 	},
-#ifdef HAVE_NSINONBLOCKINGALERTSERVICE_H
 	{
-		EPHY_PROMPT_SERVICE_CLASSNAME,
-		EPHY_PROMPT_SERVICE_IID,
+		GECKO_PROMPT_SERVICE_CLASSNAME,
+		GECKO_PROMPT_SERVICE_CID,
 		"@mozilla.org/embedcomp/nbalert-service;1",
-		EphyPromptServiceConstructor
+		GeckoPromptServiceConstructor
 	},
-#endif /* HAVE_NSINONBLOCKINGALERTSERVICE_H */
 #ifdef ENABLE_SPELLCHECKER
 	{
 		GECKO_SPELL_CHECK_ENGINE_CLASSNAME,
