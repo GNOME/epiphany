@@ -79,10 +79,6 @@ libgnomegeckoembed_la_SOURCES = \
 	gecko-init.h               	 	\
 	gecko-init-internal.h      	 	\
 	gecko-init-private.h       	 	\
-	AutoJSContextStack.cpp			\
-	AutoJSContextStack.h			\
-	AutoWindowModalState.cpp		\
-	AutoWindowModalState.h			\
 	EmbedContentListener.cpp		\
 	EmbedContentListener.h			\
 	EmbedEventListener.cpp			\
@@ -104,6 +100,7 @@ libgnomegeckoembed_la_SOURCES = \
 	$(NULL)
 
 libgnomegeckoembed_la_CPPFLAGS = \
+	-I$(top_srcdir)/embed/xulrunner/utils	\
 	$(LIBXUL_CXXCPPFLAGS)	\
 	$(LIBXUL_INCLUDES)	\
 	$(AM_CPPFLAGS)

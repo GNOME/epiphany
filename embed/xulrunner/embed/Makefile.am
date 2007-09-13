@@ -1,10 +1,6 @@
 noinst_LTLIBRARIES = libephyxulrunnerembed.la
 
 libephyxulrunnerembed_la_SOURCES = 	\
-	AutoJSContextStack.cpp		\
-	AutoJSContextStack.h		\
-	AutoWindowModalState.cpp	\
-	AutoWindowModalState.h		\
 	ContentHandler.cpp		\
 	ContentHandler.h		\
 	EphyAboutModule.cpp		\
@@ -99,6 +95,7 @@ libephyxulrunnerembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/embed	    		\
 	-I$(top_srcdir)		    		\
 	-I$(top_srcdir)/embed/xulrunner/src	\
+	-I$(top_srcdir)/embed/xulrunner/utils	\
 	-I$(top_builddir)/embed/xulrunner/src	\
 	-DSHARE_DIR=\"$(pkgdatadir)\"   	\
 	-DPLUGINDIR=\"$(libdir)/epiphany/$(EPIPHANY_MAJOR)/plugins\"		\
