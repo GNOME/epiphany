@@ -766,12 +766,14 @@ AC_SUBST([GGE_API_VERSION])
 
 AC_CONFIG_FILES([
 embed/xulrunner/Makefile
-embed/xulrunner/src/Makefile
-embed/xulrunner/embed/Makefile
-embed/xulrunner/data/Makefile
 embed/xulrunner/bindings/Makefile
 embed/xulrunner/bindings/python/Makefile
+embed/xulrunner/components/Makefile
+embed/xulrunner/data/Makefile
+embed/xulrunner/embed/Makefile
+embed/xulrunner/src/Makefile
 embed/xulrunner/tests/Makefile
+embed/xulrunner/utils/Makefile
 ])
 
 AC_CONFIG_FILES([
