@@ -57,7 +57,7 @@
 #include <gconf/gconf-client.h>
 #include <glade/glade-xml.h>
 
-#include <nsStringGlue.h>
+#include <nsStringAPI.h>
 
 #include <nsCOMPtr.h>
 #include <nsIArray.h>

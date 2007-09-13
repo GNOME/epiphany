@@ -23,7 +23,7 @@
 
 #include <glib.h>
 
-#include <nsStringGlue.h>
+#include <nsStringAPI.h>
 
 #include <gtkmozembed.h>
 #include <gtkmozembed_internal.h>

@@ -28,7 +28,7 @@
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkstock.h>
 
-#include <nsStringGlue.h>
+#include <nsStringAPI.h>
 
 #include <nsCOMPtr.h>
 #include <nsIDOMWindow.h>

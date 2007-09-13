@@ -25,7 +25,7 @@
 
 #include <gdk/gdkkeysyms.h>
 
-#include <nsStringGlue.h>
+#include <nsStringAPI.h>
 
 #include <nsComponentManagerUtils.h>
 #include <nsIDOM3Node.h>

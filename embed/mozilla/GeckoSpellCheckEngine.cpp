@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <nsStringGlue.h>
+#include <nsStringAPI.h>
 
 #include <mozIPersonalDictionary.h>
 #include <nsMemory.h>

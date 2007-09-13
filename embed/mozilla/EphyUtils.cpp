@@ -21,7 +21,7 @@
 #include <xpcom-config.h>
 #include "config.h"
 
-#include <nsStringGlue.h>
+#include <nsStringAPI.h>
 
 #include <gtkmozembed.h>
 #include <nsCOMPtr.h>

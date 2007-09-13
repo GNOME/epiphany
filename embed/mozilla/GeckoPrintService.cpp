@@ -32,7 +32,7 @@
 #include <gtk/gtkwindow.h>
 #include <glade/glade-xml.h>
 
-#include <nsStringGlue.h>
+#include <nsStringAPI.h>
 
 #include <nsCOMPtr.h>
 #include <nsIDOMWindow.h>

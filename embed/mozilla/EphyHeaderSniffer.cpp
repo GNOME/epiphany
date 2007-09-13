@@ -45,7 +45,7 @@
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
-#include <nsStringGlue.h>
+#include <nsStringAPI.h>
 
 #include <nsComponentManagerUtils.h>
 #include <nsIChannel.h>

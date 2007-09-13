@@ -25,7 +25,7 @@
 
 #include <glib/gmessages.h>
 
-#include <nsStringGlue.h>
+#include <nsStringAPI.h>
 
 #include <nsComponentManagerUtils.h>
 #include <nsCOMPtr.h>

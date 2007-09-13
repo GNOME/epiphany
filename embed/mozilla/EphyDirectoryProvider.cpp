@@ -28,7 +28,7 @@
 #define MOZILLA_INTERNAL_API 1
 #endif
 
-#include <nsStringGlue.h>
+#include <nsStringAPI.h>
 
 #include <nsAppDirectoryServiceDefs.h>
 #include <nsCOMPtr.h>
