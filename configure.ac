@@ -756,6 +756,11 @@ po/Makefile.in
 # new gecko embedding
 
 PKG_CHECK_MODULES([GTK],[gtk+-2.0 >= $GTK_REQUIRED])
+PKG_CHECK_MODULES([GTKPRINT],[gtk+-unix-print-2.0 >= $GTK_REQUIRED])
+PKG_CHECK_MODULES([GNOMEVFS],[gnome-vfs-2.0 >= $LIBGNOMEVFS_REQUIRED gnome-vfs-module-2.0])
+PKG_CHECK_MODULES([GCONF],[gconf-2.0])
+PKG_CHECK_MODULES([GLADE],[libglade-2.0 >= $LIBGLADE_REQUIRED])
+PKG_CHECK_MODULES([GNOME],[libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED])
 
 # compat cruft
 GGE_VERSION=0
