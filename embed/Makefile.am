@@ -96,8 +96,11 @@ libephyembedfactory_la_CPPFLAGS = \
 
 if WITH_XULRUNNER_ENGINE
 libephyembedfactory_la_CPPFLAGS += \
-	-I$(srcdir)xulrunner/embed	\
-	$(LIBXUL_INCLUDES)		\
+	-I$(srcdir)/xulrunner/src		\
+	-I$(srcdir)/xulrunner/embed		\
+	-I$(top_builddir)/embed/xulrunner/src	\
+	-I$(top_builddir)/embed/xulrunner/embed	\
+	$(LIBXUL_INCLUDES)			\
 	$(NULL)
 endif
 

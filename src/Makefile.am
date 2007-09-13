@@ -1,5 +1,7 @@
 SUBDIRS = bookmarks
 
+NULL =
+
 noinst_LTLIBRARIES = libephymain.la
 
 if ENABLE_PYTHON
@@ -50,7 +52,8 @@ INST_H_FILES = \
 	ephy-shell.h			\
 	ephy-statusbar.h		\
 	ephy-tab.h			\
-	ephy-window.h
+	ephy-window.h			\
+	$(NULL)
 
 libephymain_la_SOURCES = \
 	ephy-activation.c		\
@@ -90,7 +93,8 @@ libephymain_la_SOURCES = \
 	ppview-toolbar.c		\
 	window-commands.c		\
 	$(INST_H_FILES)			\
-	$(NOINST_H_FILES)
+	$(NOINST_H_FILES)		\
+	$(NULL)
 
 nodist_libephymain_la_SOURCES = \
 	$(TYPES_SOURCE)
@@ -212,6 +216,7 @@ epiphany_LDADD = \
 
 if WITH_XULRUNNER_ENGINE
 epiphany_LDADD += \
+	$(top_builddir)/embed/xulrunner/src/libgnomegeckoembed.la	\
 	$(top_builddir)/embed/xulrunner/embed/libephyxulrunnerembed.la
 endif
 
