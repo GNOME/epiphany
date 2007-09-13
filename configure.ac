@@ -369,6 +369,8 @@ if test "$with_engine" = "xulrunner"; then
 
 LIBXUL_INIT
 
+AC_DEFINE([WITH_XULRUNNER_ENGINE],[1],[Define if building the Xulrunner backend])
+
 WEASEL_UA_VERSION=3.0
 AC_SUBST([WEASEL_UA_VERSION])
 
