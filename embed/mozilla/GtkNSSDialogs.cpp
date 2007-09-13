@@ -25,7 +25,7 @@
  * or expired certificate.
  */
 
-#include <xpcom-config.h>
+#include "mozilla-config.h"
 #include "config.h"
 
 #include <time.h>

@@ -19,7 +19,7 @@
  *  $Id$
  */
 
-#include <xpcom-config.h>
+#include "mozilla-config.h"
 #include "config.h"
 
 #include <glib/ghash.h>

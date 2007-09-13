@@ -20,7 +20,7 @@
  *  $Id$
  */
 
-#include <xpcom-config.h>
+#include "mozilla-config.h"
 #include "config.h"
 
 #include <gdk/gdkkeysyms.h>
