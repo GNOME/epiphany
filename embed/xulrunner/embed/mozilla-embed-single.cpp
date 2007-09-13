@@ -143,94 +143,32 @@ static void mozilla_embed_single_init		(MozillaEmbedSingle *ges);
 static void ephy_certificate_manager_iface_init	(EphyCertificateManagerIface *iface);
 #endif
 
-static GObjectClass *parent_class = NULL;
-
-GType
-mozilla_embed_single_get_type (void)
-{
-       static GType type = 0;
-
-        if (G_UNLIKELY (type == 0))
-        {
-                const GTypeInfo our_info =
-                {
-                        sizeof (MozillaEmbedSingleClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) mozilla_embed_single_class_init,
-                        NULL, /* class_finalize */
-                        NULL, /* class_data */
-                        sizeof (MozillaEmbedSingle),
-                        0,    /* n_preallocs */
-                        (GInstanceInitFunc) mozilla_embed_single_init
-                };
-
-		const GInterfaceInfo embed_single_info =
-		{
-			(GInterfaceInitFunc) ephy_embed_single_iface_init,
-			NULL,
-			NULL
-		};
-
-		const GInterfaceInfo cookie_manager_info =
-		{
-			(GInterfaceInitFunc) ephy_cookie_manager_iface_init,
-			NULL,
-			NULL
-		};
-
-		const GInterfaceInfo password_manager_info =
-		{
-			(GInterfaceInitFunc) ephy_password_manager_iface_init,
-			NULL,
-			NULL
-		};
-
-		const GInterfaceInfo permission_manager_info =
-		{
-			(GInterfaceInitFunc) ephy_permission_manager_iface_init,
-			NULL,
-			NULL
-		};
+/* Some compilers (like gcc 2.95) don't support preprocessor directives inside macros,
+   so we have to duplicate the whole thing */
 
 #ifdef ENABLE_CERTIFICATE_MANAGER
-		const GInterfaceInfo certificate_manager_info =
-		{
-			(GInterfaceInitFunc) ephy_certificate_manager_iface_init,
-			NULL,
-			NULL
-		};
+G_DEFINE_TYPE_WITH_CODE (MozillaEmbedSingle, mozilla_embed_single, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_SINGLE,
+                                                ephy_embed_single_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_COOKIE_MANAGER,
+                                                ephy_cookie_manager_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PASSWORD_MANAGER,
+                                                ephy_password_manager_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_CERTIFICATE_MANAGER,
+                                                ephy_certificate_manager_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
+                                                ephy_permission_manager_iface_init))
+#else
+G_DEFINE_TYPE_WITH_CODE (MozillaEmbedSingle, mozilla_embed_single, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_SINGLE,
+                                                ephy_embed_single_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_COOKIE_MANAGER,
+                                                ephy_cookie_manager_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PASSWORD_MANAGER,
+                                                ephy_password_manager_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
+                                                ephy_permission_manager_iface_init))
 #endif
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "MozillaEmbedSingle",
-					       &our_info,
-					       (GTypeFlags)0);
-
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_EMBED_SINGLE,
-					     &embed_single_info);
-
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_COOKIE_MANAGER,
-					     &cookie_manager_info);
-
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_PASSWORD_MANAGER,
-					     &password_manager_info);
-
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_PERMISSION_MANAGER,
-					     &permission_manager_info);
-#ifdef ENABLE_CERTIFICATE_MANAGER
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_CERTIFICATE_MANAGER,
-					     &certificate_manager_info);
-#endif
-	}
-
-        return type;
-}
 
 static gboolean
 mozilla_set_default_prefs (MozillaEmbedSingle *mes)
@@ -757,7 +695,7 @@ mozilla_embed_single_dispose (GObject *object)
 		priv->mSingleObserver = nsnull;
 	}
 
-	parent_class->dispose (object);
+	G_OBJECT_CLASS (mozilla_embed_single_parent_class)->dispose (object);
 }
 
 static void
@@ -767,7 +705,7 @@ mozilla_embed_single_finalize (GObject *object)
 
 	/* Destroy EphyEmbedSingle before because some
 	 * services depend on xpcom */
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (mozilla_embed_single_parent_class)->finalize (object);
 
 	mozilla_notifiers_shutdown ();
 
@@ -1373,8 +1311,6 @@ static void
 mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
 	object_class->dispose = mozilla_embed_single_dispose;
 	object_class->finalize = mozilla_embed_single_finalize;
