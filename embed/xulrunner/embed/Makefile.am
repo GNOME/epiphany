@@ -62,4 +62,5 @@ libephyxulrunnerembed_la_CXXFLAGS = \
 	$(AM_CXXFLAGS)
 
 libephyxulrunnerembed_la_LIBADD = \
+	$(top_builddir)/embed/xulrunner/utils/libephyxulrunnerutils.la	\
 	$(top_builddir)/embed/xulrunner/src/libgnomegeckoembed.la

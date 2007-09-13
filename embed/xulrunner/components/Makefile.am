@@ -90,6 +90,7 @@ libephycomponents_la_LDFLAGS = \
 	$(AM_LDFLAGS)
 
 libephycomponents_la_LIBADD = \
+	$(top_builddir)/embed/xulrunner/utils/libephyxulrunnerutils.la	\
 	$(LIBXUL_LIBS)
 
 CLEANFILES =

@@ -216,8 +216,10 @@ epiphany_LDADD = \
 
 if WITH_XULRUNNER_ENGINE
 epiphany_LDADD += \
+	$(top_builddir)/embed/xulrunner/utils/libephyxulrunnerutils.la	\
 	$(top_builddir)/embed/xulrunner/src/libgnomegeckoembed.la	\
-	$(top_builddir)/embed/xulrunner/embed/libephyxulrunnerembed.la
+	$(top_builddir)/embed/xulrunner/embed/libephyxulrunnerembed.la	\
+	$(top_builddir)/embed/xulrunner/components/libephycomponents.la
 endif
 
 if WITH_GECKO_ENGINE
