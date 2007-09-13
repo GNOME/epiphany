@@ -31,14 +31,18 @@
 AC_DEFUN([LIBXUL_INIT],
 [AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
 
-PKG_CHECK_MODULES([LIBXUL],[libxul],[libxul_cv_have_libxul=yes],[libxul_cv_have_libxul=no])
+PKG_CHECK_EXISTS([libxul],[libxul_cv_have_libxul=yes],[libxul_cv_have_libxul=no])
 if test "$libxul_cv_have_libxul" != "yes"; then
   AC_MSG_ERROR([libxul not found])
 fi
 
 libxul_cv_prefix="$($PKG_CONFIG --variable=prefix libxul)"
 libxul_cv_include_root="$($PKG_CONFIG --variable=includedir libxul)"
-libxul_cv_libdir="$($PKG_CONFIG --variable=sdkdir libxul)"
+libxul_cv_sdkdir="$($PKG_CONFIG --variable=sdkdir libxul)"
+
+# FIXMEchpe: this isn't right. The pc file seems buggy, but until
+# I can figure this out, do it like this:
+libxul_cv_libdir="$(readlink $($PKG_CONFIG --variable=sdkdir libxul)/bin)"
 
 libxul_cv_includes="-I${libxul_cv_include_root}/stable -I${libxul_cv_include_root}/unstable"
 
@@ -49,16 +53,22 @@ LIBXUL_INCLUDE_ROOT="$libxul_cv_include_root"
 LIBXUL_INCLUDES="$libxul_cv_includes"
 LIBXUL_LIBDIR="$libxul_cv_libdir"
 
-# **************************************************************
-# This is really gcc-only
-# Do this test using CXX only since some versions of gcc
-# 2.95-2.97 have a signed wchar_t in c++ only and some versions
-# only have short-wchar support for c++.
-# **************************************************************
-
 LIBXUL_CXXCPPFLAGS=
 LIBXUL_CXXFLAGS=
 LIBXUL_LDFLAGS=
+
+# Can't use the value from the .pc file, since it seems buggy
+# Until I can figure it out, do this instead
+LIBXUL_LIBS="-L${libxul_cv_sdkdir}/lib -lxpcomglue_s -L${libxul_cv_sdkdir}/bin -lxul -lxpcom"
+
+# ***********************
+# Check for -fshort-wchar
+# ***********************
+
+# NOTE: This is really gcc-only
+# Do this test using CXX only since some versions of gcc
+# 2.95-2.97 have a signed wchar_t in c++ only and some versions
+# only have short-wchar support for c++.
 
 AC_LANG_PUSH([C++])
 
@@ -129,6 +139,127 @@ if test "$libxul_cv_have_debug" = "yes"; then
 
 	AC_DEFINE([HAVE_LIBXUL_DEBUG],[1],[Define if libxul is a debug build])
 fi
+
+# *************************************
+# Check for C++ symbol visibility stuff
+# *************************************
+
+# Check for .hidden assembler directive and visibility attribute.
+# Copied from mozilla's configure.in, which in turn was
+# borrowed from glibc's configure.in
+
+# Only do this for g++
+
+if test "$GXX" = "yes"; then
+  AC_CACHE_CHECK(for visibility(hidden) attribute,
+                 libxul_cv_visibility_hidden,
+                 [cat > conftest.c <<EOF
+                  int foo __attribute__ ((visibility ("hidden"))) = 1;
+EOF
+                  libxul_cv_visibility_hidden=no
+                  if ${CC-cc} -Werror -S conftest.c -o conftest.s >/dev/null 2>&1; then
+                    if egrep '\.(hidden|private_extern).*foo' conftest.s >/dev/null; then
+                      libxul_cv_visibility_hidden=yes
+                    fi
+                  fi
+                  rm -f conftest.[cs]
+                 ])
+  if test "$libxul_cv_visibility_hidden" = "yes"; then
+    AC_DEFINE([HAVE_VISIBILITY_HIDDEN_ATTRIBUTE],[1],[Define if the compiler supports the "hidden" visibility attribute])
+
+    AC_CACHE_CHECK(for visibility(default) attribute,
+                   libxul_cv_visibility_default,
+                   [cat > conftest.c <<EOF
+                    int foo __attribute__ ((visibility ("default"))) = 1;
+EOF
+                    libxul_cv_visibility_default=no
+                    if ${CC-cc} -fvisibility=hidden -Werror -S conftest.c -o conftest.s >/dev/null 2>&1; then
+                      if ! egrep '\.(hidden|private_extern).*foo' conftest.s >/dev/null; then
+                        libxul_cv_visibility_default=yes
+                      fi
+                    fi
+                    rm -f conftest.[cs]
+                   ])
+    if test "$libxul_cv_visibility_default" = "yes"; then
+      AC_DEFINE([HAVE_VISIBILITY_ATTRIBUTE],[1],[Define if the compiler supports the "default" visibility attribute])
+
+      AC_CACHE_CHECK(for visibility pragma support,
+                     libxul_cv_visibility_pragma,
+                     [cat > conftest.c <<EOF
+#pragma GCC visibility push(hidden)
+                      int foo_hidden = 1;
+#pragma GCC visibility push(default)
+                      int foo_default = 1;
+EOF
+                      libxul_cv_visibility_pragma=no
+                      if ${CC-cc} -Werror -S conftest.c -o conftest.s >/dev/null 2>&1; then
+                        if egrep '\.(hidden|private_extern).*foo_hidden' conftest.s >/dev/null; then
+                          if ! egrep '\.(hidden|private_extern).*foo_default' conftest.s > /dev/null; then
+                            libxul_cv_visibility_pragma=yes
+                          fi
+                        fi
+                      fi
+                      rm -f conftest.[cs]
+                    ])
+      if test "$libxul_cv_visibility_pragma" = "yes"; then
+        AC_CACHE_CHECK(For gcc visibility bug with class-level attributes (GCC bug 26905),
+                       libxul_cv_have_visibility_class_bug,
+                       [cat > conftest.c <<EOF
+#pragma GCC visibility push(hidden)
+struct __attribute__ ((visibility ("default"))) TestStruct {
+  static void Init();
+};
+__attribute__ ((visibility ("default"))) void TestFunc() {
+  TestStruct::Init();
+}
+EOF
+                       libxul_cv_have_visibility_class_bug=no
+                       if ! ${CXX-g++} ${CXXFLAGS} ${DSO_PIC_CFLAGS} ${DSO_LDOPTS} -S -o conftest.S conftest.c > /dev/null 2>&1 ; then
+                         libxul_cv_have_visibility_class_bug=yes
+                       else
+                         if test `egrep -c '@PLT|\\$stub' conftest.S` = 0; then
+                           libxul_cv_have_visibility_class_bug=yes
+                         fi
+                       fi
+                       rm -rf conftest.{c,S}
+                       ])
+
+        AC_CACHE_CHECK(For x86_64 gcc visibility bug with builtins (GCC bug 20297),
+                       libxul_cv_have_visibility_builtin_bug,
+                       [cat > conftest.c <<EOF
+#pragma GCC visibility push(hidden)
+#pragma GCC visibility push(default)
+#include <string.h>
+#pragma GCC visibility pop
+
+__attribute__ ((visibility ("default"))) void Func() {
+  char c[[100]];
+  memset(c, 0, sizeof(c));
+}
+EOF
+                       libxul_cv_have_visibility_builtin_bug=no
+                       if ! ${CC-cc} ${CFLAGS} ${DSO_PIC_CFLAGS} ${DSO_LDOPTS} -O2 -S -o conftest.S conftest.c > /dev/null 2>&1 ; then
+                         libxul_cv_have_visibility_builtin_bug=yes
+                       else
+                         if test `grep -c "@PLT" conftest.S` = 0; then
+                           libxul_cv_visibility_builtin_bug=yes
+                         fi
+                       fi
+                       rm -f conftest.{c,S}
+                       ])
+        if test "$libxul_cv_have_visibility_builtin_bug" = "no" -a \
+                "$libxul_cv_have_visibility_class_bug" = "no"; then
+          VISIBILITY_FLAGS='-I$(DIST)/include/system_wrappers -include $(topsrcdir)/config/gcc_hidden.h'
+          WRAP_SYSTEM_INCLUDES=1
+        else
+          VISIBILITY_FLAGS='-fvisibility=hidden'
+        fi # have visibility pragma bug
+      fi   # have visibility pragma
+    fi     # have visibility(default) attribute
+  fi       # have visibility(hidden) attribute
+
+  LIBXUL_CXXFLAGS="$LIBXUL_CXXFLAGS $VISIBILITY_FLAGS"
+fi         # g++
 
 # *********
 # Finish up
