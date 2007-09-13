@@ -58,9 +58,9 @@ stamp-gecko-embed-type-builtins.h: Makefile $(TYPES_H_FILES)
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
 
-lib_LTLIBRARIES = libgnomegeckoembed-0.0.la
+noinst_LTLIBRARIES = libgnomegeckoembed.la
 
-libgnomegeckoembed_0_0_la_SOURCES = \
+libgnomegeckoembed_la_SOURCES = \
 	$(MARSHALERS)				\
 	$(TYPES_SOURCES)			\
 	gecko-dom-event.cpp			\
@@ -103,7 +103,7 @@ libgnomegeckoembed_0_0_la_SOURCES = \
 	GeckoUtils.h				\
 	$(NULL)
 
-libgnomegeckoembed_0_0_la_CPPFLAGS = \
+libgnomegeckoembed_la_CPPFLAGS = \
 	$(LIBXUL_CXXCPPFLAGS)	\
 	$(LIBXUL_INCLUDES)	\
 	$(AM_CPPFLAGS)
@@ -112,15 +112,15 @@ libgnomegeckoembed_0_0_la_CPPFLAGS = \
 #	-DXPCOM_GLUE
 #-DMOZILLA_STRICT_API
 
-libgnomegeckoembed_0_0_la_CXXFLAGS = \
+libgnomegeckoembed_la_CXXFLAGS = \
 	$(LIBXUL_CXXFLAGS)	\
 	$(GTK_CFLAGS)		\
 	$(AM_CXXFLAGS)
 
-libgnomegeckoembed_0_0_la_LDFLAGS = \
+libgnomegeckoembed_la_LDFLAGS = \
 	$(AM_LDFLAGS)
 
-libgnomegeckoembed_0_0_la_LIBADD = \
+libgnomegeckoembed_la_LIBADD = \
 	$(LIBXUL_LIBS)
 
 gnomegeckoembedincludedir = $(includedir)/gnome-gecko-embed-0.0
