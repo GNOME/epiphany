@@ -91,8 +91,6 @@ libgnomegeckoembed_la_SOURCES = \
 	EmbedWindow.h				\
 	GeckoBrowser.cpp			\
 	GeckoBrowser.h				\
-	GeckoPromptService.cpp			\
-	GeckoPromptService.h			\
 	GeckoSingle.cpp				\
 	GeckoSingle.h				\
 	GeckoUtils.cpp				\

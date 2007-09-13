@@ -19,8 +19,6 @@ libephyxulrunnerembed_la_SOURCES = 	\
 	EphyFind.h			\
 	EphyHistoryListener.cpp		\
 	EphyHistoryListener.h		\
-	EphyPromptService.cpp		\
-	EphyPromptService.h		\
 	EphyRedirectChannel.cpp		\
 	EphyRedirectChannel.h		\
 	EphySidebar.cpp			\

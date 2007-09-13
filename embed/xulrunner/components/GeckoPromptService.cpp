@@ -13,7 +13,7 @@
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  $Id$
  */
@@ -32,15 +32,14 @@
 #include <nsIDOMWindow.h>
 #include <nsServiceManagerUtils.h>
 
-#include "ephy-embed-shell.h"
-#include "ephy-gui.h"
-#include "ephy-debug.h"
+#include "gecko-embed.h"
+#include "gecko-embed-single.h"
 
 #include "AutoJSContextStack.h"
 #include "AutoWindowModalState.h"
-#include "EphyUtils.h"
+#include "GeckoUtils.h"
 
-#include "EphyPromptService.h"
+#include "GeckoPromptService.h"
 
 #define TIMEOUT			1000 /* ms */
 #define TIMEOUT_DATA_KEY	"timeout"
@@ -116,7 +115,7 @@ Prompter::Prompter (const char *aStock,
 {
 	GtkWidget *parent, *hbox, *label, *image;
 
-	g_object_ref (ephy_embed_shell_get_default ());
+	g_object_ref (gecko_embed_shell_get_default ());
 
 	mEntries[0] = mEntries[1] = nsnull;
 
@@ -134,15 +133,15 @@ Prompter::Prompter (const char *aStock,
 
 	gtk_window_set_modal (GTK_WINDOW (mDialog), TRUE);
 
-	parent = EphyUtils::FindGtkParent (aParent);
+	parent = GeckoUtils::GetGtkWindowForDOMWindow (aParent);
 	if (GTK_IS_WINDOW (parent))
 	{
 		gtk_window_set_transient_for (GTK_WINDOW (mDialog),
 					      GTK_WINDOW (parent));
 
-		gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (parent)),
-					     GTK_WINDOW (mDialog));
-	}
+		gtk_window_group_add_window (gecko_gui_ensure_window_group (GTK_WINDOW (parent)),
+						     GTK_WINDOW (mDialog));
+		}
 
 	gtk_dialog_set_has_separator (mDialog, FALSE);
 	gtk_window_set_resizable (GTK_WINDOW (mDialog), FALSE);
@@ -200,7 +199,7 @@ Prompter::~Prompter ()
 	gtk_widget_destroy (GTK_WIDGET (mDialog));
 	g_object_unref (mDialog);
 
-	g_object_unref (ephy_embed_shell_get_default ());
+	g_object_unref (gecko_embed_shell_get_default ());
 }
 
 void
@@ -644,29 +643,27 @@ Prompter::ConvertAndEscapeButtonText(const PRUnichar *aText,
 
 /* FIXME: needs THREADSAFE? */
 #if HAVE_NSINONBLOCKINGALERTSERVICE_H
-NS_IMPL_ISUPPORTS2 (EphyPromptService,
+NS_IMPL_ISUPPORTS2 (GeckoPromptService,
 		    nsIPromptService,
 		    nsINonBlockingAlertService)
 #else
-NS_IMPL_ISUPPORTS1 (EphyPromptService,
+NS_IMPL_ISUPPORTS1 (GeckoPromptService,
 		    nsIPromptService)
 #endif
 
-EphyPromptService::EphyPromptService()
+GeckoPromptService::GeckoPromptService()
 {
-	LOG ("EphyPromptService ctor (%p)", this);
 }
 
-EphyPromptService::~EphyPromptService()
+GeckoPromptService::~GeckoPromptService()
 {
-	LOG ("EphyPromptService dtor (%p)", this);
 }
 
 /* nsIPromptService implementation */
 
 /* void alert (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText); */
 NS_IMETHODIMP
-EphyPromptService::Alert (nsIDOMWindow *aParent,
+GeckoPromptService::Alert (nsIDOMWindow *aParent,
 			  const PRUnichar *aDialogTitle,
 			  const PRUnichar *aText)
 {
@@ -679,7 +676,7 @@ EphyPromptService::Alert (nsIDOMWindow *aParent,
 
 /* void alertCheck (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, in wstring aCheckMsg, inout boolean aCheckState); */
 NS_IMETHODIMP
-EphyPromptService::AlertCheck (nsIDOMWindow *aParent,
+GeckoPromptService::AlertCheck (nsIDOMWindow *aParent,
 			       const PRUnichar *aDialogTitle,
 			       const PRUnichar *aText,
 			       const PRUnichar *aCheckMsg,
@@ -697,7 +694,7 @@ EphyPromptService::AlertCheck (nsIDOMWindow *aParent,
 
 /* boolean confirm (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText); */
 NS_IMETHODIMP
-EphyPromptService::Confirm (nsIDOMWindow *aParent,
+GeckoPromptService::Confirm (nsIDOMWindow *aParent,
 			    const PRUnichar *aDialogTitle,
 			    const PRUnichar *aText,
 			    PRBool *_retval)
@@ -714,7 +711,7 @@ EphyPromptService::Confirm (nsIDOMWindow *aParent,
 
 /* boolean confirmCheck (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, in wstring aCheckMsg, inout boolean aCheckState); */
 NS_IMETHODIMP
-EphyPromptService::ConfirmCheck (nsIDOMWindow *aParent,
+GeckoPromptService::ConfirmCheck (nsIDOMWindow *aParent,
 				 const PRUnichar *aDialogTitle,
 				 const PRUnichar *aText,
 				 const PRUnichar *aCheckMsg,
@@ -736,7 +733,7 @@ EphyPromptService::ConfirmCheck (nsIDOMWindow *aParent,
 
 /* PRInt32 confirmEx (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, in unsigned long aButtonFlags, in wstring aButton0Title, in wstring aButton1Title, in wstring aButton2Title, in wstring aCheckMsg, inout boolean aCheckState); */
 NS_IMETHODIMP
-EphyPromptService::ConfirmEx (nsIDOMWindow *aParent,
+GeckoPromptService::ConfirmEx (nsIDOMWindow *aParent,
 			      const PRUnichar *aDialogTitle,
 			      const PRUnichar *aText,
 			      PRUint32 aButtonFlags,
@@ -762,7 +759,7 @@ EphyPromptService::ConfirmEx (nsIDOMWindow *aParent,
 
 /* boolean prompt (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, inout wstring aValue, in wstring aCheckMsg, inout boolean aCheckState); */
 NS_IMETHODIMP
-EphyPromptService::Prompt (nsIDOMWindow *aParent,
+GeckoPromptService::Prompt (nsIDOMWindow *aParent,
 			   const PRUnichar *aDialogTitle,
 			   const PRUnichar *aText,
 			   PRUnichar **aValue,
@@ -788,7 +785,7 @@ EphyPromptService::Prompt (nsIDOMWindow *aParent,
 
 /* boolean promptUsernameAndPassword (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, inout wstring aUsername, inout wstring aPassword, in wstring aCheckMsg, inout boolean aCheckState); */
 NS_IMETHODIMP
-EphyPromptService::PromptUsernameAndPassword (nsIDOMWindow *aParent,
+GeckoPromptService::PromptUsernameAndPassword (nsIDOMWindow *aParent,
 					      const PRUnichar *aDialogTitle,
 					      const PRUnichar *aText,
 					      PRUnichar **aUsername,
@@ -818,7 +815,7 @@ EphyPromptService::PromptUsernameAndPassword (nsIDOMWindow *aParent,
 
 /* boolean promptPassword (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, inout wstring aPassword, in wstring aCheckMsg, inout boolean aCheckState); */
 NS_IMETHODIMP
-EphyPromptService::PromptPassword (nsIDOMWindow *aParent,
+GeckoPromptService::PromptPassword (nsIDOMWindow *aParent,
 				   const PRUnichar *aDialogTitle,
 				   const PRUnichar *aText,
 				   PRUnichar **aPassword,
@@ -846,7 +843,7 @@ EphyPromptService::PromptPassword (nsIDOMWindow *aParent,
 
 /* boolean select (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText, in PRUint32 aCount, [array, size_is (aCount)] in wstring aSelectList, out long aOutSelection); */
 NS_IMETHODIMP
-EphyPromptService::Select (nsIDOMWindow *aParent,
+GeckoPromptService::Select (nsIDOMWindow *aParent,
 			   const PRUnichar *aDialogTitle,
 			   const PRUnichar *aText,
 			   PRUint32 aCount,
@@ -872,7 +869,7 @@ EphyPromptService::Select (nsIDOMWindow *aParent,
 
 /* showNonBlockingAlert (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText); */
 NS_IMETHODIMP
-EphyPromptService::ShowNonBlockingAlert (nsIDOMWindow *aParent,
+GeckoPromptService::ShowNonBlockingAlert (nsIDOMWindow *aParent,
 					 const PRUnichar *aDialogTitle,
 					 const PRUnichar *aText)
 {
