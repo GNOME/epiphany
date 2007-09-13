@@ -85,7 +85,6 @@
 #include "EmbedContentListener.h"
 #include "EmbedEventListener.h"
 #include "EmbedWindowCreator.h"
-#include "GeckoPromptService.h"
 
 #ifdef MOZ_ACCESSIBILITY_ATK
 #include "nsIAccessibilityService.h"
@@ -100,29 +99,8 @@
 #include "gecko-init-private.h"
 #include "gecko-init-internal.h"
 
-NS_GENERIC_FACTORY_CONSTRUCTOR(GeckoPromptService)
-
-static const nsModuleComponentInfo defaultAppComps[] = {
-  {
-    GECKO_PROMPT_SERVICE_CLASSNAME,
-    GECKO_PROMPT_SERVICE_CID,
-    "@mozilla.org/embedcomp/prompt-service;1",
-    GeckoPromptServiceConstructor
-  },
-#ifdef HAVE_NSINONBLOCKINGALERTSERVICE_H
-  {
-    GECKO_PROMPT_SERVICE_CLASSNAME,
-    GECKO_PROMPT_SERVICE_CID,
-    "@mozilla.org/embedcomp/nbalert-service;1",
-    GeckoPromptServiceConstructor
-  },
-#endif /* HAVE_NSINONBLOCKINGALERTSERVICE_H */
-};
-
 GtkWidget   *sOffscreenWindow = 0;
 GtkWidget   *sOffscreenFixed  = 0;
-const nsModuleComponentInfo *sAppComps = defaultAppComps;
-int sNumAppComps = sizeof (defaultAppComps) / sizeof (nsModuleComponentInfo);
 nsILocalFile *sProfileDir  = nsnull;
 nsISupports  *sProfileLock = nsnull;
 nsIDirectoryServiceProvider* sAppFileLocProvider;
@@ -196,7 +174,8 @@ RegisterAppComponents(void)
   nsCOMPtr<nsIComponentManager> cm;
   rv = NS_GetComponentManager (getter_AddRefs (cm));
   NS_ENSURE_SUCCESS (rv, rv);
-  
+
+#if 0
   for (int i = 0; i < sNumAppComps; ++i) {
     nsCOMPtr<nsIGenericFactory> componentFactory;
     rv = NS_NewGenericFactory(getter_AddRefs(componentFactory),
@@ -217,6 +196,7 @@ RegisterAppComponents(void)
       NS_ASSERTION(NS_SUCCEEDED(rv), "Unable to self-register component");
     }
   }
+#endif
 
   return rv;
 }
