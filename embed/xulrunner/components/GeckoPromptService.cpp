@@ -35,6 +35,8 @@
 #include "gecko-embed.h"
 #include "gecko-embed-single.h"
 
+#include "ephy-embed-shell.h"
+
 #include "AutoJSContextStack.h"
 #include "AutoWindowModalState.h"
 #include "GeckoUtils.h"
@@ -115,7 +117,7 @@ Prompter::Prompter (const char *aStock,
 {
 	GtkWidget *parent, *hbox, *label, *image;
 
-	g_object_ref (gecko_embed_shell_get_default ());
+	g_object_ref (ephy_embed_shell_get_default ());
 
 	mEntries[0] = mEntries[1] = nsnull;
 
@@ -138,10 +140,7 @@ Prompter::Prompter (const char *aStock,
 	{
 		gtk_window_set_transient_for (GTK_WINDOW (mDialog),
 					      GTK_WINDOW (parent));
-
-		gtk_window_group_add_window (gecko_gui_ensure_window_group (GTK_WINDOW (parent)),
-						     GTK_WINDOW (mDialog));
-		}
+	}
 
 	gtk_dialog_set_has_separator (mDialog, FALSE);
 	gtk_window_set_resizable (GTK_WINDOW (mDialog), FALSE);
@@ -199,7 +198,7 @@ Prompter::~Prompter ()
 	gtk_widget_destroy (GTK_WIDGET (mDialog));
 	g_object_unref (mDialog);
 
-	g_object_unref (gecko_embed_shell_get_default ());
+	g_object_unref (ephy_embed_shell_get_default ());
 }
 
 void
