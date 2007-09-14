@@ -48,6 +48,7 @@ libephyxulrunnerembed_la_CPPFLAGS = \
 	-DMOZILLA_NATIVE_PLUGINSDIR=\"$(libdir)/mozilla/plugins\"		\
 	-DUA_VERSION=\"$(EPIPHANY_UA_VERSION)\"	\
 	-DALLOW_PRIVATE_API			\
+	-DLIBXUL_LIBDIR="\"$(LIBXUL_LIBDIR)\""	\
 	$(LIBXUL_CXXCPPFLAGS)			\
 	$(LIBXUL_INCLUDES)			\
 	$(AM_CPPFLAGS)

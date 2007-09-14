@@ -240,7 +240,7 @@ epiphany_LDADD += \
 
 if WITH_XULRUNNER_ENGINE
 epiphany_LDFLAGS += -R$(LIBXUL_LIBDIR)
-epiphany_LDADD += $(LIBXUL_LIBS)
+epiphany_LDADD += $(LIBXUL_LIBS) -lxpcomglue
 endif
 
 if WITH_GECKO_ENGINE

@@ -590,6 +590,9 @@ impl_init (EphyEmbedSingle *esingle)
 
 //	gecko_embed_set_comp_path (MOZILLA_HOME);
 
+	/* FIXMEchpe remove this hack! */
+	g_setenv ("GRE_HOME", LIBXUL_LIBDIR, TRUE);
+
         static const GREVersionRange greVersion = {
           "1.9a", PR_TRUE,
           "2", PR_TRUE
