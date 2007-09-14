@@ -9,6 +9,8 @@ libephycomponents_la_SOURCES = \
 	EphyAboutModule.h		\
 	EphyContentPolicy.cpp		\
 	EphyContentPolicy.h		\
+	EphyHistoryListener.cpp		\
+	EphyHistoryListener.h		\
 	EphyRedirectChannel.cpp		\
 	EphyRedirectChannel.h		\
 	EphySidebar.cpp			\

@@ -9,8 +9,6 @@ libephyxulrunnerembed_la_SOURCES = 	\
 	EphyBrowser.h	                \
 	EphyFind.cpp			\
 	EphyFind.h			\
-	EphyHistoryListener.cpp		\
-	EphyHistoryListener.h		\
 	EphySingle.cpp			\
 	EphySingle.h			\
 	EventContext.cpp                \
