@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.pl\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-09-02 14:25+0200\n"
-"PO-Revision-Date: 2007-08-12 21:37+0100\n"
+"POT-Creation-Date: 2007-09-15 16:54+0200\n"
+"PO-Revision-Date: 2007-09-14 16:51+0200\n"
 "Last-Translator: Tomasz Dominikowski <dominikowski@gmail.com>\n"
 "Language-Team: Polish <translators@gnomepl.org>\n"
 "MIME-Version: 1.0\n"
@@ -883,30 +883,30 @@ msgid "_Page address"
 msgstr "Adre_s strony"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:197
+#: ../embed/downloader-view.c:198
 msgid "_Show Downloads"
 msgstr "_Wyświetl okno pobierania"
 
-#: ../embed/downloader-view.c:330
+#: ../embed/downloader-view.c:337
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:334
+#: ../embed/downloader-view.c:341
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:386
+#: ../embed/downloader-view.c:393
 msgid "_Pause"
 msgstr "_Wstrzymaj"
 
-#: ../embed/downloader-view.c:386
+#: ../embed/downloader-view.c:393
 msgid "_Resume"
 msgstr "_Wznów"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:433
+#: ../embed/downloader-view.c:440
 #, c-format
 msgid ""
 "%s\n"
@@ -915,12 +915,12 @@ msgstr ""
 "%s\n"
 "%s z %s"
 
-#: ../embed/downloader-view.c:443 ../embed/downloader-view.c:448
-#: ../src/ephy-window.c:1523
+#: ../embed/downloader-view.c:450 ../embed/downloader-view.c:455
+#: ../src/ephy-window.c:1553
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: ../embed/downloader-view.c:480
+#: ../embed/downloader-view.c:487
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -930,30 +930,30 @@ msgstr[2] "%d pobrań"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:602 ../embed/downloader-view.c:615
+#: ../embed/downloader-view.c:610 ../embed/downloader-view.c:623
 msgid "download status|Unknown"
 msgstr "Nieznany"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:607
+#: ../embed/downloader-view.c:615
 msgid "download status|Failed"
 msgstr "Nie powiodło się"
 
-#: ../embed/downloader-view.c:674
+#: ../embed/downloader-view.c:682
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Plik"
 
-#: ../embed/downloader-view.c:697
+#: ../embed/downloader-view.c:705
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:708
+#: ../embed/downloader-view.c:716
 msgid "Remaining"
 msgstr "Pozostało"
 
-#: ../embed/ephy-embed-shell.c:271
+#: ../embed/ephy-embed-shell.c:272
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Nie można teraz użyć Epiphany. Nie powiodła się inicjalizacja Mozilli."
 
@@ -1714,7 +1714,7 @@ msgstr "w archiwum internetowym"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks.c:1312
-#: ../src/bookmarks/ephy-bookmarks-import.c:261 ../src/ephy-session.c:1315
+#: ../src/bookmarks/ephy-bookmarks-import.c:261 ../src/ephy-session.c:1336
 msgid "Untitled"
 msgstr "BezNazwy"
 
@@ -2540,7 +2540,7 @@ msgstr "Zachowanie hasła w bazie _kluczy"
 msgid "Popup Windows"
 msgstr "Wyskakujące okna"
 
-#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1195
+#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1231
 msgid "History"
 msgstr "Historia"
 
@@ -2551,7 +2551,7 @@ msgid "Bookmark"
 msgstr "Zakładka"
 
 #: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1765
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1803
 #: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1345
 msgid "Bookmarks"
 msgstr "Zakładki"
@@ -3107,22 +3107,28 @@ msgstr "Import zakładek z:"
 msgid "_Copy Address"
 msgstr "_Skopiuj adres"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1631
-#: ../src/ephy-history-window.c:1035
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1655
+#: ../src/ephy-history-window.c:1063
+#, fuzzy
+msgid "Clear"
+msgstr "_Wyczyść"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1669
+#: ../src/ephy-history-window.c:1071
 msgid "_Search:"
 msgstr "Z_najdź:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1829
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1867
 msgid "Topics"
 msgstr "Tematy"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1899
-#: ../src/ephy-history-window.c:1320
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1937
+#: ../src/ephy-history-window.c:1356
 msgid "Title"
 msgstr "Tytuł"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1905
-#: ../src/ephy-history-window.c:1326
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1943
+#: ../src/ephy-history-window.c:1362
 msgid "Address"
 msgstr "Adres"
 
@@ -3176,40 +3182,40 @@ msgstr "Inne kodowania"
 msgid "_Automatic"
 msgstr "_Automatyczne"
 
-#: ../src/ephy-find-toolbar.c:117
+#: ../src/ephy-find-toolbar.c:137
 msgid "Not found"
 msgstr "Nie znaleziono"
 
-#: ../src/ephy-find-toolbar.c:120
+#: ../src/ephy-find-toolbar.c:149
 msgid "Wrapped"
 msgstr "Zawinięte"
 
-#: ../src/ephy-find-toolbar.c:140
+#: ../src/ephy-find-toolbar.c:169
 msgid "Find links:"
 msgstr "Wyszukaj odnośniki:"
 
-#: ../src/ephy-find-toolbar.c:140
+#: ../src/ephy-find-toolbar.c:169
 msgid "Find:"
 msgstr "Wyszukaj:"
 
-#: ../src/ephy-find-toolbar.c:378
+#: ../src/ephy-find-toolbar.c:407
 msgid "Find Previous"
 msgstr "Znajdź poprzednie"
 
-#: ../src/ephy-find-toolbar.c:381
+#: ../src/ephy-find-toolbar.c:410
 msgid "Find previous occurrence of the search string"
 msgstr "Wyszukuje poprzednie wystąpienie słowa lub frazy"
 
-#: ../src/ephy-find-toolbar.c:388
+#: ../src/ephy-find-toolbar.c:417
 msgid "Find Next"
 msgstr "Znajdź następne"
 
-#: ../src/ephy-find-toolbar.c:391
+#: ../src/ephy-find-toolbar.c:420
 msgid "Find next occurrence of the search string"
 msgstr "Wyszukuje następne wystąpienie ciągu"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:571
+#: ../src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:591
 msgid "Leave Fullscreen"
 msgstr "Zmniejsz"
 
@@ -3285,17 +3291,17 @@ msgstr ""
 msgid "Clear History"
 msgstr "Czyści historię"
 
-#: ../src/ephy-history-window.c:1044
+#: ../src/ephy-history-window.c:1080
 msgid "Last 30 minutes"
 msgstr "Ostatnie 30 minut"
 
-#: ../src/ephy-history-window.c:1045
+#: ../src/ephy-history-window.c:1081
 msgid "Today"
 msgstr "Dzisiaj"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1046 ../src/ephy-history-window.c:1049
-#: ../src/ephy-history-window.c:1053
+#: ../src/ephy-history-window.c:1082 ../src/ephy-history-window.c:1085
+#: ../src/ephy-history-window.c:1089
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
@@ -3303,7 +3309,7 @@ msgstr[0] "Ostatni %d dzień"
 msgstr[1] "Ostatnie %d dni"
 msgstr[2] "Ostatnie %d dni"
 
-#: ../src/ephy-history-window.c:1257
+#: ../src/ephy-history-window.c:1293
 msgid "Sites"
 msgstr "Witryny"
 
@@ -3376,11 +3382,11 @@ msgstr "Przeglądarka internetowa GNOME"
 msgid "GNOME Web Browser options"
 msgstr "Opcje przeglądarki internetowej GNOME"
 
-#: ../src/ephy-notebook.c:656
+#: ../src/ephy-notebook.c:655
 msgid "Close tab"
 msgstr "Zamyka panel"
 
-#: ../src/ephy-session.c:158
+#: ../src/ephy-session.c:160
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
@@ -3388,11 +3394,11 @@ msgstr[0] "Pobranie zostanie przerwane i nastąpi wylogowanie za %d sekundę."
 msgstr[1] "Pobranie zostanie przerwane i nastąpi wylogowanie za %d sekundy."
 msgstr[2] "Pobranie zostanie przerwane i nastąpi wylogowanie za %d sekund."
 
-#: ../src/ephy-session.c:274
+#: ../src/ephy-session.c:276
 msgid "Abort pending downloads?"
 msgstr "Przerwać niezakończone pobrania?"
 
-#: ../src/ephy-session.c:278
+#: ../src/ephy-session.c:280
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
@@ -3400,19 +3406,19 @@ msgstr ""
 "Zostały jeszcze niezakończone pobrania. Jeżeli się wylogujesz, zostaną one "
 "przerwane i utracone."
 
-#: ../src/ephy-session.c:282
+#: ../src/ephy-session.c:284
 msgid "_Cancel Logout"
 msgstr "_Anuluj wylogowanie"
 
-#: ../src/ephy-session.c:284
+#: ../src/ephy-session.c:286
 msgid "_Abort Downloads"
 msgstr "_Przerwij pobrania"
 
-#: ../src/ephy-session.c:609
+#: ../src/ephy-session.c:611
 msgid "Recover previous browser windows and tabs?"
 msgstr "Przywrócić poprzednie okna i panele przeglądarki?"
 
-#: ../src/ephy-session.c:613
+#: ../src/ephy-session.c:615
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -3420,15 +3426,15 @@ msgstr ""
 "Podczas ostatniego uruchomienia Epiphany nieoczekiwanie zakończył pracę. "
 "Można przywrócić ostatnio otwarte okna i panele."
 
-#: ../src/ephy-session.c:617
+#: ../src/ephy-session.c:619
 msgid "_Don't Recover"
 msgstr "_Nie przywracaj"
 
-#: ../src/ephy-session.c:619
+#: ../src/ephy-session.c:621
 msgid "_Recover"
 msgstr "_Przywróć"
 
-#: ../src/ephy-session.c:621
+#: ../src/ephy-session.c:623
 msgid "Crash Recovery"
 msgstr "Odzyskiwanie po błędzie programu"
 
@@ -3577,20 +3583,37 @@ msgstr "Otwiera nowe okno"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/ephy-toolbar-editor.c:83
+#: ../src/ephy-toolbar-editor.c:82
 msgid "toolbar style|Default"
 msgstr "Domyślny"
 
-#: ../src/ephy-toolbar-editor.c:202
+#. separator row
+#: ../src/ephy-toolbar-editor.c:84
+msgid "Text below icons"
+msgstr "Tekst pod ikonami"
+
+#: ../src/ephy-toolbar-editor.c:85
+msgid "Text beside icons"
+msgstr "Tekst obok ikon"
+
+#: ../src/ephy-toolbar-editor.c:86
+msgid "Icons only"
+msgstr "Tylko ikony"
+
+#: ../src/ephy-toolbar-editor.c:87
+msgid "Text only"
+msgstr "Tylko tekst"
+
+#: ../src/ephy-toolbar-editor.c:195
 msgid "Toolbar Editor"
 msgstr "Edytor paska narzędziowego"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:221
+#: ../src/ephy-toolbar-editor.c:214
 msgid "Toolbar _button labels:"
 msgstr "_Etykiety przycisku paska narzędziowego:"
 
-#: ../src/ephy-toolbar-editor.c:289
+#: ../src/ephy-toolbar-editor.c:278
 msgid "_Add a New Toolbar"
 msgstr "Dodaj nowy pasek narzędzio_wy"
 
@@ -4062,28 +4085,28 @@ msgstr "Większy"
 msgid "Smaller"
 msgstr "Mniejszy"
 
-#: ../src/ephy-window.c:1526
+#: ../src/ephy-window.c:1556
 msgid "Insecure"
 msgstr "Niepewny"
 
-#: ../src/ephy-window.c:1531
+#: ../src/ephy-window.c:1561
 msgid "Broken"
 msgstr "Złamany"
 
-#: ../src/ephy-window.c:1543
+#: ../src/ephy-window.c:1573
 msgid "Low"
 msgstr "Niski"
 
-#: ../src/ephy-window.c:1550
+#: ../src/ephy-window.c:1580
 msgid "High"
 msgstr "Wysoki"
 
-#: ../src/ephy-window.c:1560
+#: ../src/ephy-window.c:1590
 #, c-format
 msgid "Security level: %s"
 msgstr "Poziom bezpieczeństwa: %s"
 
-#: ../src/ephy-window.c:1603
+#: ../src/ephy-window.c:1633
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
@@ -4091,47 +4114,47 @@ msgstr[0] "%d ukryte wyskakujące okno"
 msgstr[1] "%d ukryte wyskakujące okna"
 msgstr[2] "%d ukrytych wyskakujących okien"
 
-#: ../src/ephy-window.c:1898
+#: ../src/ephy-window.c:1928
 #, c-format
 msgid "Open image “%s”"
 msgstr "Otwórz obraz \"%s\""
 
-#: ../src/ephy-window.c:1903
+#: ../src/ephy-window.c:1933
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Wykorzystaj jako tło \"%s\""
 
-#: ../src/ephy-window.c:1908
+#: ../src/ephy-window.c:1938
 #, c-format
 msgid "Save image “%s”"
 msgstr "Zapisz obraz \"%s\""
 
-#: ../src/ephy-window.c:1913
+#: ../src/ephy-window.c:1943
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Skopiuj adres obrazu \"%s\""
 
-#: ../src/ephy-window.c:1926
+#: ../src/ephy-window.c:1956
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Wyślij e-mail na adres \"%s\""
 
-#: ../src/ephy-window.c:1932
+#: ../src/ephy-window.c:1962
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Skopiuj adres e-mail \"%s\""
 
-#: ../src/ephy-window.c:1944
+#: ../src/ephy-window.c:1974
 #, c-format
 msgid "Save link “%s”"
 msgstr "Zapisz odnośnik \"%s\""
 
-#: ../src/ephy-window.c:1950
+#: ../src/ephy-window.c:1980
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Dodaj do zakładek odnośnik \"%s\""
 
-#: ../src/ephy-window.c:1956
+#: ../src/ephy-window.c:1986
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Skopiuj adres odnośnika \"%s\""
@@ -4200,43 +4223,43 @@ msgstr "Zapis odnośnika jako"
 msgid "Save Image As"
 msgstr "Zapisz obraz jako..."
 
-#: ../src/ppview-toolbar.c:89
+#: ../src/ppview-toolbar.c:90
 msgid "First"
 msgstr "Pierwszy"
 
-#: ../src/ppview-toolbar.c:90
+#: ../src/ppview-toolbar.c:91
 msgid "Go to the first page"
 msgstr "Przechodzi do strony początkowej"
 
-#: ../src/ppview-toolbar.c:93
+#: ../src/ppview-toolbar.c:94
 msgid "Last"
 msgstr "Ostatni"
 
-#: ../src/ppview-toolbar.c:94
+#: ../src/ppview-toolbar.c:95
 msgid "Go to the last page"
 msgstr "Przechodzi do ostatniej strony"
 
-#: ../src/ppview-toolbar.c:97
+#: ../src/ppview-toolbar.c:98
 msgid "Previous"
 msgstr "Wstecz"
 
-#: ../src/ppview-toolbar.c:98
+#: ../src/ppview-toolbar.c:99
 msgid "Go to the previous page"
 msgstr "Przechodzi do poprzedniej strony"
 
-#: ../src/ppview-toolbar.c:101
+#: ../src/ppview-toolbar.c:102
 msgid "Next"
 msgstr "Naprzód"
 
-#: ../src/ppview-toolbar.c:102
+#: ../src/ppview-toolbar.c:103
 msgid "Go to next page"
 msgstr "Przechodzi do kolejnej strony"
 
-#: ../src/ppview-toolbar.c:105
+#: ../src/ppview-toolbar.c:106
 msgid "Close"
 msgstr "Zamknij"
 
-#: ../src/ppview-toolbar.c:106
+#: ../src/ppview-toolbar.c:107 ../src/ppview-toolbar.c:250
 msgid "Close print preview"
 msgstr "Zamyka podgląd wydruku"
 
