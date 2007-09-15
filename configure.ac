@@ -762,6 +762,13 @@ PKG_CHECK_MODULES([GCONF],[gconf-2.0])
 PKG_CHECK_MODULES([GLADE],[libglade-2.0 >= $LIBGLADE_REQUIRED])
 PKG_CHECK_MODULES([GNOME],[libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED])
 
+PKG_CHECK_MODULES([GVFS],[gio-standalone],[have_gvfs=yes],[have_gvfs=no])
+
+if test "$have_gvfs" = "yes"; then
+  AC_DEFINE([HAVE_GVFS],[1],[Define if GVFS is available])
+fi
+AM_CONDITIONAL([HAVE_GVFS],[test "$have_gvfs" = "yes"])
+
 # compat cruft
 GGE_VERSION=0
 AC_SUBST([GGE_VERSION])
