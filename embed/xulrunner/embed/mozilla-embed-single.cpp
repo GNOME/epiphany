@@ -65,10 +65,8 @@
 #include <nsNetCID.h>
 #endif /* ALLOW_PRIVATE_API */
 
-#if 0 // FIXME ndef HAVE_GECKO_1_9
-#include <nsIPassword.h>
-#include <nsIPasswordManager.h>
-#endif /* !HAVE_GECKO_1_9 */
+#include <nsILoginInfo.h>
+#include <nsILoginManager.h>
 
 #define XPCOM_GLUE
 #include <nsXPCOMGlue.h>
@@ -888,60 +886,62 @@ impl_list_passwords (EphyPasswordManager *manager)
 {
 	GList *passwords = NULL;
 
-#if 0 // FIXME ndef HAVE_GECKO_1_9
 	nsresult rv;
-	nsCOMPtr<nsIPasswordManager> passwordManager =
-			do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
-	if (!passwordManager) return NULL;
+	nsCOMPtr<nsILoginManager> loginManager (do_GetService (NS_LOGINMANAGER_CONTRACTID));
+	g_return_val_if_fail (loginManager, NULL);
+	if (!loginManager)
+		return NULL;
 
 	nsCOMPtr<nsIIDNService> idnService
 		(do_GetService ("@mozilla.org/network/idn-service;1"));
 	NS_ENSURE_TRUE (idnService, NULL);
 
-	nsCOMPtr<nsISimpleEnumerator> passwordEnumerator;
-	passwordManager->GetEnumerator (getter_AddRefs(passwordEnumerator));
-	NS_ENSURE_TRUE (passwordEnumerator, NULL);
+	/* What a broken, stupid API */
+	PRUint32 count = 0;
+	nsILoginInfo **logins = nsnull;
+	rv = loginManager->GetAllLogins (&count, &logins);
+	g_return_val_if_fail (NS_SUCCEEDED (rv), NULL);
+	if (NS_FAILED (rv))
+		return NULL;
 
-	PRBool enumResult;
-	for (passwordEnumerator->HasMoreElements(&enumResult) ;
-	     enumResult == PR_TRUE ;
-	     passwordEnumerator->HasMoreElements(&enumResult))
+	for (PRUint32 i = 0; i < count; ++i)
 	{
-		nsCOMPtr<nsIPassword> nsPassword;
-		passwordEnumerator->GetNext (getter_AddRefs(nsPassword));
-		if (!nsPassword) continue;
+		nsString hostName;
+		rv = logins[i]->GetHostname (hostName);
+		if (NS_FAILED (rv))
+			continue;
 
-		nsCString transfer;
-		rv = nsPassword->GetHost (transfer);
-		if (NS_FAILED (rv)) continue;
+		NS_ConvertUTF16toUTF8 cHostName (hostName);
 
 		nsCString host;
-		idnService->ConvertACEtoUTF8 (transfer, host);
+		idnService->ConvertACEtoUTF8 (cHostName, host);
 
-		nsString unicodeName;
-		rv = nsPassword->GetUser (unicodeName);
-		if (NS_FAILED (rv)) continue;
+		nsString userName;
+		rv = logins[i]->GetUsername (userName);
+		if (NS_FAILED (rv))
+			continue;
 
-		nsCString userName;
-		NS_UTF16ToCString (unicodeName,
-				   NS_CSTRING_ENCODING_UTF8, userName);
+		NS_ConvertUTF16toUTF8 cUserName (userName);
 
+#if 0
 		rv = nsPassword->GetPassword (unicodeName);
 		if (NS_FAILED (rv)) continue;
 
 		nsCString userPassword;
 		NS_UTF16ToCString (unicodeName,
 				   NS_CSTRING_ENCODING_UTF8, userPassword);
+#endif
 
 		EphyPasswordInfo *p = g_new0 (EphyPasswordInfo, 1);
 
-		p->host = g_strdup (host.get());
-		p->username = g_strdup (userName.get());
-		p->password = g_strdup (userPassword.get());
+		p->host = g_strdup (cHostName.get());
+		p->username = g_strdup (cUserName.get());
+		p->password = NULL; /* FIXME */
 
 		passwords = g_list_prepend (passwords, p);
 	}
-#endif /* !HAVE_GECKO_1_9 */
+
+	NS_FREE_XPCOM_ISUPPORTS_POINTER_ARRAY(count, logins);
 
 	return passwords;
 }
@@ -950,10 +950,19 @@ static void
 impl_remove_password (EphyPasswordManager *manager,
 		      EphyPasswordInfo *info)
 {
-#if 0 // FIXME ndef HAVE_GECKO_1_9
-        nsCOMPtr<nsIPasswordManager> pm =
-                        do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
-	if (!pm) return;
+#if 0
+	/* FIXMEchpe RemoveLogin only works if we have the original nsILoginInfo */
+
+	nsresult rv;
+	nsCOMPtr<nsILoginManager> loginManager =
+			do_GetService (NS_LOGINMANAGER_CONTRACTID);
+	g_return_val_if_fail (NS_SUCCEEDED (rv), NULL);
+	if (!loginManager)
+		return NULL;
+
+	nsCOMPtr<nsILoginInfo> login (do_CreateInstance (NS_LOGININFO_CONTRACTID));
+	if (!login)
+		return;
 
 	nsCOMPtr<nsIIDNService> idnService
 		(do_GetService ("@mozilla.org/network/idn-service;1"));
@@ -967,38 +976,17 @@ impl_remove_password (EphyPasswordManager *manager,
 	nsString userName;
 	NS_CStringToUTF16 (nsCString(info->username),
 			   NS_CSTRING_ENCODING_UTF8, userName);
-	pm->RemoveUser (host, userName);
-#endif /* !HAVE_GECKO_1_9 */
+	rv = loginManager->RemoveLogin (login);
+	if (NS_FAILED (rv))
+		return;
+#endif
 }
 
 static void
 impl_add_password (EphyPasswordManager *manager,
                   EphyPasswordInfo *info)
 {
-#if 0 // FIXME ndef HAVE_GECKO_1_9
-       nsCOMPtr<nsIPasswordManager> pm =
-                        do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
-       if (!pm) return;
-
-       nsCOMPtr<nsIIDNService> idnService
-               (do_GetService ("@mozilla.org/network/idn-service;1"));
-       NS_ENSURE_TRUE (idnService, );
-
-       nsresult rv;
-       nsCString host;
-       rv = idnService->ConvertUTF8toACE (nsCString(info->host), host);
-       NS_ENSURE_SUCCESS (rv, );
-
-       nsString username;
-       NS_CStringToUTF16 (nsCString(info->username),
-                          NS_CSTRING_ENCODING_UTF8, username);
-
-       nsString password;
-       NS_CStringToUTF16 (nsCString(info->password),
-                          NS_CSTRING_ENCODING_UTF8, password);
-
-       pm->AddUser(host, username, password);
-#endif /* !HAVE_GECKO_1_9 */
+	/* unused */
 }
 
 static void
