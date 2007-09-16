@@ -22,10 +22,8 @@
 #define GECKO_PROMPT_SERVICE_H
 
 #include <nsIPromptService.h>
-
-#if HAVE_NSINONBLOCKINGALERTSERVICE_H
+#include <nsIPromptService2.h>
 #include <nsINonBlockingAlertService.h>
-#endif
 
 #define GECKO_PROMPT_SERVICE_CID				\
 { /* cadc6035-7c53-4039-823b-004a289d5eb2 */			\
@@ -34,17 +32,14 @@
 
 #define GECKO_PROMPT_SERVICE_CLASSNAME	"Gecko Prompt Service"
 
-class GeckoPromptService : public nsIPromptService
-#if HAVE_NSINONBLOCKINGALERTSERVICE_H
-			 , public nsINonBlockingAlertService
-#endif
+class GeckoPromptService : public nsIPromptService2,
+                           public nsINonBlockingAlertService
 {
   public:
     NS_DECL_ISUPPORTS
     NS_DECL_NSIPROMPTSERVICE
-#if HAVE_NSINONBLOCKINGALERTSERVICE_H
+    NS_DECL_NSIPROMPTSERVICE2
     NS_DECL_NSINONBLOCKINGALERTSERVICE
-#endif
 
     GeckoPromptService();
     virtual ~GeckoPromptService();

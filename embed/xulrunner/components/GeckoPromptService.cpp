@@ -640,15 +640,9 @@ Prompter::ConvertAndEscapeButtonText(const PRUnichar *aText,
 	return escaped;
 }
 
-/* FIXME: needs THREADSAFE? */
-#if HAVE_NSINONBLOCKINGALERTSERVICE_H
 NS_IMPL_ISUPPORTS2 (GeckoPromptService,
 		    nsIPromptService,
 		    nsINonBlockingAlertService)
-#else
-NS_IMPL_ISUPPORTS1 (GeckoPromptService,
-		    nsIPromptService)
-#endif
 
 GeckoPromptService::GeckoPromptService()
 {
@@ -864,7 +858,38 @@ GeckoPromptService::Select (nsIDOMWindow *aParent,
 	return NS_OK;
 }
 
-#if HAVE_NSINONBLOCKINGALERTSERVICE_H
+/* nsIPromptService2 */
+
+/* boolean promptAuth (in nsIDOMWindow aParent, in nsIChannel aChannel, in PRUint32 level, in nsIAuthInformation authInfo, in wstring checkboxLabel, inout boolean checkValue); */
+NS_IMETHODIMP
+GeckoPromptService::PromptAuth (nsIDOMWindow *aParent,
+                                nsIChannel *aChannel,
+                                PRUint32 level,
+                                nsIAuthInformation *authInfo,
+                                const PRUnichar *checkboxLabel,
+                                PRBool *checkValue,
+                                PRBool *_retval)
+{
+  return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+/* nsICancelable asyncPromptAuth (in nsIDOMWindow aParent, in nsIChannel aChannel, in nsIAuthPromptCallback aCallback, in nsISupports aContext, in PRUint32 level, in nsIAuthInformation authInfo, in wstring checkboxLabel, inout boolean checkValue); */
+NS_IMETHODIMP
+GeckoPromptService::AsyncPromptAuth (nsIDOMWindow *aParent,
+                                     nsIChannel *aChannel,
+                                     nsIAuthPromptCallback *aCallback,
+                                     nsISupports *aContext,
+                                     PRUint32 level,
+                                     nsIAuthInformation *authInfo,
+                                     const PRUnichar *checkboxLabel,
+                                     PRBool *checkValue,
+                                     nsICancelable **_retval)
+{
+  /* FIXME implement me */
+  return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+/* nsINonBlockingAlertService */
 
 /* showNonBlockingAlert (in nsIDOMWindow aParent, in wstring aDialogTitle, in wstring aText); */
 NS_IMETHODIMP
@@ -880,5 +905,3 @@ GeckoPromptService::ShowNonBlockingAlert (nsIDOMWindow *aParent,
 
 	return NS_OK;
 }
-
-#endif /* HAVE_NSINONBLOCKINGALERTSERVICE_H */
