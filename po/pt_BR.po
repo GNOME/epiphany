@@ -4,7 +4,7 @@
 # Juan Carlos Castro y Castro <jcastro@vialink.com.br>, 2000.
 # Evandro Fernandes Giovanini <evandrofg@ig.com.br>, 2003, 2004, 2006.
 # Afonso Celso Medina <medina@maua.br>, 2005.
-# Leonardo Ferreira Fontenelle <leo.fontnelle@gmail.com>, 2006.
+# Leonardo Ferreira Fontenelle <leo.fontnelle@gmail.com>, 2006, 2007.
 # Vladimir Melo <vladimirmelo@foresightlinux.org>, 2007.
 #
 msgid ""
@@ -12,9 +12,9 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-08-20 11:09+0100\n"
-"PO-Revision-Date: 2007-08-20 20:58-0300\n"
-"Last-Translator: Vladimir Melo <vladimirmelo@foresightlinux.org>\n"
+"POT-Creation-Date: 2007-09-16 00:00-0300\n"
+"PO-Revision-Date: 2007-09-16 00:00-0300\n"
+"Last-Translator: Leonardo Ferreira Fontenelle <leo.fontnelle@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -276,7 +276,7 @@ msgstr "ISO-8859-1"
 
 #: ../data/epiphany.schemas.in.h:23
 msgid "Image animation mode"
-msgstr "Mode de imagens animadas"
+msgstr "Modo de imagens animadas"
 
 #: ../data/epiphany.schemas.in.h:24
 msgid "Languages"
@@ -387,8 +387,8 @@ msgstr "A pasta de downloads"
 #: ../data/epiphany.schemas.in.h:43
 msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr ""
-"O autodetector de codificação. Ausência de texto indica que o autodetector "
-"está desligado"
+"O detector automático de codificação. Ausência de texto indica que o "
+"detector automático está desativado."
 
 #: ../data/epiphany.schemas.in.h:44
 msgid ""
@@ -402,16 +402,18 @@ msgid ""
 "\"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) "
 "and \"universal_charset_detector\" (autodetect most encodings)."
 msgstr ""
-"O autodetector de codificações. Valores possíveis são \"\" (desligado), "
-"\"cjk_parallel_state_machine\" (autodetectar codificações da ásia oriental), "
-"\"ja_parallel_state_machine\" (autodetectar codificações japonesas), "
-"\"ko_parallel_state_machine\" (autodetectar codificações coreanas), \"ruprob"
-"\" (autodetectar codificações russas), \"ukprob\" (autodetectar codificações "
-"ucranianas), \"zh_parallel_state_machine\" (autodetectar codificações "
-"chinesas), \"zhcn_parallel_state_machine\" (autodetectar codificações de "
-"chinês simplificado), \"zhtw_parallel_state_machine\" (autodetectar "
-"codificações de chinês tradicional) and \"universal_charset_detector"
-"\" (autodetectar a maioria das codificações)."
+"O detector automático de codificações. Valores possíveis são "
+"\"\" (desligado), \"cjk_parallel_state_machine\" (detectar automaticamente "
+"codificações da ásia oriental), \"ja_parallel_state_machine\" (detectar "
+"automaticamente codificações japonesas), \"ko_parallel_state_machine"
+"\" (detectar automaticamente codificações coreanas), \"ruprob\" (detectar "
+"automaticamente codificações russas), \"ukprob\" (detectar automaticamente "
+"codificações ucranianas), \"zh_parallel_state_machine\" (detectar "
+"automaticamente codificações chinesas), \"zhcn_parallel_state_machine"
+"\" (detectar automaticamente codificações de chinês simplificado), "
+"\"zhtw_parallel_state_machine\" (detectar automaticamente codificações de "
+"chinês tradicional) and \"universal_charset_detector\" (detectar "
+"automaticamente a maioria das codificações)."
 
 #: ../data/epiphany.schemas.in.h:45
 msgid "The page information shown in the history view"
@@ -423,7 +425,7 @@ msgid ""
 "\"address\", \"title\"."
 msgstr ""
 "As informações de página exibidas na visão de histórico. Valores válidos na "
-"lista são \"address\" e \"tittle\"."
+"lista são \"address\" e \"title\"."
 
 #: ../data/epiphany.schemas.in.h:47
 msgid ""
@@ -596,7 +598,7 @@ msgid "Cookies"
 msgstr "Cookies"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:113
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:114
 msgid "Downloads"
 msgstr "Downloads"
 
@@ -873,30 +875,30 @@ msgid "_Page address"
 msgstr "En_dereço da página"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:197
+#: ../embed/downloader-view.c:198
 msgid "_Show Downloads"
 msgstr "_Mostrar Downloads"
 
-#: ../embed/downloader-view.c:330
+#: ../embed/downloader-view.c:337
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:334
+#: ../embed/downloader-view.c:341
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:386
+#: ../embed/downloader-view.c:393
 msgid "_Pause"
 msgstr "_Pausar"
 
-#: ../embed/downloader-view.c:386
+#: ../embed/downloader-view.c:393
 msgid "_Resume"
 msgstr "_Continuar"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:433
+#: ../embed/downloader-view.c:440
 #, c-format
 msgid ""
 "%s\n"
@@ -905,12 +907,12 @@ msgstr ""
 "%s\n"
 "%s de %s"
 
-#: ../embed/downloader-view.c:443 ../embed/downloader-view.c:448
+#: ../embed/downloader-view.c:450 ../embed/downloader-view.c:455
 #: ../src/ephy-window.c:1523
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: ../embed/downloader-view.c:480
+#: ../embed/downloader-view.c:487
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -919,26 +921,26 @@ msgstr[1] "%d downloads"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:602 ../embed/downloader-view.c:615
+#: ../embed/downloader-view.c:610 ../embed/downloader-view.c:623
 msgid "download status|Unknown"
 msgstr "Desconhecido"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:607
+#: ../embed/downloader-view.c:615
 msgid "download status|Failed"
 msgstr "Falhou"
 
-#: ../embed/downloader-view.c:674
+#: ../embed/downloader-view.c:682
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Arquivo"
 
-#: ../embed/downloader-view.c:697
+#: ../embed/downloader-view.c:705
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:708
+#: ../embed/downloader-view.c:716
 msgid "Remaining"
 msgstr "Restantes"
 
@@ -1899,7 +1901,7 @@ msgstr ""
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:454
 msgid "Connect to untrusted site?"
-msgstr "Conectar ao site não-confiável?"
+msgstr "Conectar ao site não confiável?"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:458
 msgid "_Trust this security information from now on"
@@ -2220,7 +2222,7 @@ msgstr ""
 "poderia ser facilmente interceptada por terceiros."
 
 #. translators: this is the directory name to store auxilary files when saving html files
-#: ../embed/mozilla/MozDownload.cpp:651
+#: ../embed/mozilla/MozDownload.cpp:677
 #, c-format
 msgid "%s Files"
 msgstr "%s Arquivos"
@@ -2237,7 +2239,7 @@ msgstr "%s Arquivos"
 #.
 #: ../embed/mozilla/mozilla-embed-single.cpp:203
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
-msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
+msgstr "http://www.google.com.br/search?ie=UTF-8&oe=UTF-8&q="
 
 #: ../lib/eel-gconf-extensions.c:68
 #, c-format
@@ -2292,17 +2294,17 @@ msgstr "Separador"
 msgid "All supported types"
 msgstr "Todos os tipos com suporte"
 
-#: ../lib/ephy-file-helpers.c:298
+#: ../lib/ephy-file-helpers.c:299
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Não foi possível criar um diretório temporário em \"%s\"."
 
-#: ../lib/ephy-file-helpers.c:374
+#: ../lib/ephy-file-helpers.c:375
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "O arquivo \"%s\" já existe. Por favor, tire-o do caminho."
 
-#: ../lib/ephy-file-helpers.c:385
+#: ../lib/ephy-file-helpers.c:386
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Erro ao criar diretório \"%s\"."
@@ -2394,7 +2396,7 @@ msgstr "Japonês"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:64
 msgid "select fonts for|Korean"
-msgstr "Koreano"
+msgstr "Coreano"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -2412,7 +2414,7 @@ msgstr "Tamil"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:73
 msgid "select fonts for|Thai"
-msgstr "Thai"
+msgstr "Tai"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -2436,7 +2438,7 @@ msgstr "Turco"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:85
 msgid "select fonts for|Armenian"
-msgstr "Armeno"
+msgstr "Armênio"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -2460,7 +2462,7 @@ msgstr "Etiópio"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: ../lib/ephy-langs.c:97
 msgid "select fonts for|Georgian"
-msgstr "Georgeano"
+msgstr "Geórgio"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -2528,7 +2530,7 @@ msgstr "Salvar senha no _chaveiro"
 
 #: ../lib/ephy-stock-icons.c:52
 msgid "Popup Windows"
-msgstr "Janelas Instantânes"
+msgstr "Janelas Instantâneas"
 
 #: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1195
 msgid "History"
@@ -2859,7 +2861,7 @@ msgstr "Ver ou modificar propriedades do marcador selecionado"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:202
 msgid "_Import Bookmarks…"
-msgstr "_Importar Marcadoresi..."
+msgstr "_Importar Marcadores..."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Import bookmarks from another browser or a bookmarks file"
@@ -2918,7 +2920,7 @@ msgstr "Colar a área de transferência"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:222
 #: ../src/ephy-history-window.c:195
 msgid "_Delete"
-msgstr "Apa_gar"
+msgstr "E_xcluir"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:223
 msgid "Delete the selected bookmark or topic"
@@ -3337,7 +3339,7 @@ msgstr "DIR"
 
 #: ../src/ephy-main.c:94
 msgid "URL …"
-msgstr "URLi ..."
+msgstr "URL ..."
 
 #: ../src/ephy-main.c:396
 msgid "Could not start GNOME Web Browser"
@@ -3387,7 +3389,7 @@ msgstr ""
 
 #: ../src/ephy-session.c:282
 msgid "_Cancel Logout"
-msgstr "_Candelar Encerramento"
+msgstr "_Cancelar Encerramento"
 
 #: ../src/ephy-session.c:284
 msgid "_Abort Downloads"
@@ -3562,20 +3564,37 @@ msgstr "Abrir uma nova janela"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/ephy-toolbar-editor.c:83
+#: ../src/ephy-toolbar-editor.c:82
 msgid "toolbar style|Default"
 msgstr "Padrão"
 
-#: ../src/ephy-toolbar-editor.c:202
+#. separator row
+#: ../src/ephy-toolbar-editor.c:84
+msgid "Text below icons"
+msgstr "Texto abaixo dos ícones"
+
+#: ../src/ephy-toolbar-editor.c:85
+msgid "Text beside icons"
+msgstr "Texto ao lado dos ícones"
+
+#: ../src/ephy-toolbar-editor.c:86
+msgid "Icons only"
+msgstr "Apenas ícones"
+
+#: ../src/ephy-toolbar-editor.c:87
+msgid "Text only"
+msgstr "Apenas texto"
+
+#: ../src/ephy-toolbar-editor.c:195
 msgid "Toolbar Editor"
 msgstr "Editor da Barra de Ferramentas"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:221
+#: ../src/ephy-toolbar-editor.c:214
 msgid "Toolbar _button labels:"
 msgstr "Rótulos dos _botões da barra de ferramentas:"
 
-#: ../src/ephy-toolbar-editor.c:289
+#: ../src/ephy-toolbar-editor.c:278
 msgid "_Add a New Toolbar"
 msgstr "_Adicionar uma nova barra de ferramentas"
 
@@ -3630,7 +3649,7 @@ msgstr "Visuali_zar Impressão"
 
 #: ../src/ephy-window.c:139
 msgid "Print preview"
-msgstr "Previsualizar impressão"
+msgstr "Visualiza a impressão"
 
 #: ../src/ephy-window.c:141
 msgid "_Print…"
@@ -3646,7 +3665,7 @@ msgstr "E_nviar Link por E-mail..."
 
 #: ../src/ephy-window.c:145
 msgid "Send a link of the current page"
-msgstr "Enviar um link da página atual"
+msgstr "Envia um link da página atual"
 
 #: ../src/ephy-window.c:148
 msgid "Close this tab"
@@ -3695,7 +3714,7 @@ msgstr "Localizar Pró_xima"
 
 #: ../src/ephy-window.c:178
 msgid "Find next occurrence of the word or phrase"
-msgstr "Localizar a próxima ocorrência da palavra ou frase"
+msgstr "Localiza a próxima ocorrência da palavra ou frase"
 
 #: ../src/ephy-window.c:180
 msgid "Find Pre_vious"
@@ -3703,7 +3722,7 @@ msgstr "Localizar A_nterior"
 
 #: ../src/ephy-window.c:181
 msgid "Find previous occurrence of the word or phrase"
-msgstr "Localizar a ocorrência anterior da palavra ou frase"
+msgstr "Localiza a ocorrência anterior da palavra ou frase"
 
 #: ../src/ephy-window.c:183
 msgid "P_ersonal Data"
@@ -3711,7 +3730,7 @@ msgstr "Dados P_essoais"
 
 #: ../src/ephy-window.c:184
 msgid "View and remove cookies and passwords"
-msgstr "Ver e remover cookies e senhas"
+msgstr "Vê e remove cookies e senhas"
 
 #: ../src/ephy-window.c:187
 msgid "Certificate_s"
@@ -3727,7 +3746,7 @@ msgstr "_Preferências"
 
 #: ../src/ephy-window.c:192
 msgid "Configure the web browser"
-msgstr "Configurar o navegador web"
+msgstr "Configura o navegador web"
 
 #. View menu
 #: ../src/ephy-window.c:197
@@ -3760,7 +3779,7 @@ msgstr "Texto Mai_or"
 
 #: ../src/ephy-window.c:209
 msgid "Increase the text size"
-msgstr "Aumentar o tamanho do texto"
+msgstr "Aumenta o tamanho do texto"
 
 #: ../src/ephy-window.c:211
 msgid "S_maller Text"
@@ -3768,7 +3787,7 @@ msgstr "Texto Me_nor"
 
 #: ../src/ephy-window.c:212
 msgid "Decrease the text size"
-msgstr "Diminuir o tamanho do texto"
+msgstr "Diminui o tamanho do texto"
 
 #: ../src/ephy-window.c:214
 msgid "_Normal Size"
@@ -3776,7 +3795,7 @@ msgstr "_Tamanho Normal"
 
 #: ../src/ephy-window.c:215
 msgid "Use the normal text size"
-msgstr "Usar o tamanho normal de texto"
+msgstr "Usa o tamanho normal de texto"
 
 #: ../src/ephy-window.c:217
 msgid "Text _Encoding"
@@ -3784,7 +3803,7 @@ msgstr "Codificação de Te_xto"
 
 #: ../src/ephy-window.c:218
 msgid "Change the text encoding"
-msgstr "Mudar a codificação do texto"
+msgstr "Muda a codificação do texto"
 
 #: ../src/ephy-window.c:220
 msgid "_Page Source"
@@ -3792,7 +3811,7 @@ msgstr "Có_digo-Fonte da Página"
 
 #: ../src/ephy-window.c:221
 msgid "View the source code of the page"
-msgstr "Ver o código fonte da página"
+msgstr "Vê o código fonte da página"
 
 #: ../src/ephy-window.c:223
 msgid "Page _Security Information…"
@@ -3800,7 +3819,7 @@ msgstr "Informações de _Segurança da Página..."
 
 #: ../src/ephy-window.c:224
 msgid "Display security information for the web page"
-msgstr "Mostrar informações de segurança sobre esta página da web"
+msgstr "Mostra informações de segurança sobre esta página da web"
 
 #. Bookmarks menu
 #: ../src/ephy-window.c:229
@@ -3809,7 +3828,7 @@ msgstr "_Adicionar Marcador..."
 
 #: ../src/ephy-window.c:230
 msgid "Add a bookmark for the current page"
-msgstr "Adicionar um marcador para a página atual"
+msgstr "Adiciona um marcador para a página atual"
 
 #: ../src/ephy-window.c:232
 msgid "_Edit Bookmarks"
@@ -3817,7 +3836,7 @@ msgstr "Editar _Marcadores"
 
 #: ../src/ephy-window.c:233
 msgid "Open the bookmarks window"
-msgstr "Abrir a janela de marcadores"
+msgstr "Abre a janela de marcadores"
 
 #. Go menu
 #: ../src/ephy-window.c:238
@@ -3826,7 +3845,7 @@ msgstr "_Endereço..."
 
 #: ../src/ephy-window.c:239
 msgid "Go to a specified location"
-msgstr "Ir para um local especificado"
+msgstr "Vai para um local especificado"
 
 #: ../src/ephy-window.c:241
 msgid "Hi_story"
@@ -3834,7 +3853,7 @@ msgstr "_Histórico"
 
 #: ../src/ephy-window.c:242
 msgid "Open the history window"
-msgstr "Abrir a janela do histórico"
+msgstr "Abre a janela do histórico"
 
 #. Tabs menu
 #: ../src/ephy-window.c:247
@@ -3843,7 +3862,7 @@ msgstr "Aba A_nterior"
 
 #: ../src/ephy-window.c:248
 msgid "Activate previous tab"
-msgstr "Ativar aba anterior"
+msgstr "Ativa a aba anterior"
 
 #: ../src/ephy-window.c:250
 msgid "_Next Tab"
@@ -3851,7 +3870,7 @@ msgstr "Pró_xima Aba"
 
 #: ../src/ephy-window.c:251
 msgid "Activate next tab"
-msgstr "Ativar aba seguinte"
+msgstr "Ativa a aba seguinte"
 
 #: ../src/ephy-window.c:253
 msgid "Move Tab _Left"
@@ -3859,19 +3878,19 @@ msgstr "Mover aba à E_squerda"
 
 #: ../src/ephy-window.c:254
 msgid "Move current tab to left"
-msgstr "Mover a aba atual para esquerda"
+msgstr "Move a aba atual para esquerda"
 
 #: ../src/ephy-window.c:256
 msgid "Move Tab _Right"
-msgstr "Mover aba à _Direita"
+msgstr "Mover Aba à _Direita"
 
 #: ../src/ephy-window.c:257
 msgid "Move current tab to right"
-msgstr "Mover a aba atual para direita"
+msgstr "Move a aba atual para direita"
 
 #: ../src/ephy-window.c:263
 msgid "Display web browser help"
-msgstr "Exibir a ajuda do navegador web"
+msgstr "Exibe a ajuda do navegador web"
 
 #. File Menu
 #: ../src/ephy-window.c:274
@@ -3880,7 +3899,7 @@ msgstr "_Trabalhar Desconectado"
 
 #: ../src/ephy-window.c:275
 msgid "Switch to offline mode"
-msgstr "Trocar para o modo desconectado"
+msgstr "Alterna para o modo desconectado"
 
 #. View Menu
 #: ../src/ephy-window.c:280
@@ -3897,7 +3916,7 @@ msgstr "Barra de E_stado"
 
 #: ../src/ephy-window.c:284
 msgid "Show or hide statusbar"
-msgstr "Mostrar ou ocultar barra de status"
+msgstr "Mostra ou oculta a  barra de status"
 
 #: ../src/ephy-window.c:286
 msgid "_Fullscreen"
@@ -3905,7 +3924,7 @@ msgstr "Tela _Inteira"
 
 #: ../src/ephy-window.c:287
 msgid "Browse at full screen"
-msgstr "Navegar em tela cheia"
+msgstr "Navega em tela cheia"
 
 #: ../src/ephy-window.c:289
 msgid "Popup _Windows"
@@ -3913,7 +3932,8 @@ msgstr "_Janelas Instantâneas"
 
 #: ../src/ephy-window.c:290
 msgid "Show or hide unrequested popup windows from this site"
-msgstr "Mostra ou oculta janelas instantâneas não solicitadas deste site"
+msgstr ""
+"Mostra ou oculta janelas instantâneas (popup) não solicitadas deste site"
 
 #: ../src/ephy-window.c:292
 msgid "Selection Caret"
@@ -3926,7 +3946,7 @@ msgstr "Mostrar Apenas Es_te Quadro"
 
 #: ../src/ephy-window.c:302
 msgid "Show only this frame in this window"
-msgstr "Abrir este quadro somente nesta janela"
+msgstr "Abre somente este quadro nesta janela"
 
 #. Links
 #: ../src/ephy-window.c:307
@@ -3935,7 +3955,7 @@ msgstr "_Abrir Link"
 
 #: ../src/ephy-window.c:308
 msgid "Open link in this window"
-msgstr "Abrir link nessa janela"
+msgstr "Abre o link nessa janela"
 
 #: ../src/ephy-window.c:310
 msgid "Open Link in New _Window"
@@ -3943,7 +3963,7 @@ msgstr "Abrir Link em Nova _Janela"
 
 #: ../src/ephy-window.c:311
 msgid "Open link in a new window"
-msgstr "Abrir link em uma nova janela"
+msgstr "Abre o link em uma nova janela"
 
 #: ../src/ephy-window.c:313
 msgid "Open Link in New _Tab"
@@ -3951,7 +3971,7 @@ msgstr "Abrir Link em Nova A_ba"
 
 #: ../src/ephy-window.c:314
 msgid "Open link in a new tab"
-msgstr "Abrir link em uma nova aba"
+msgstr "Abre o link em uma nova aba"
 
 #: ../src/ephy-window.c:316
 msgid "_Download Link"
@@ -3963,7 +3983,7 @@ msgstr "Salvar Link _Como..."
 
 #: ../src/ephy-window.c:319
 msgid "Save link with a different name"
-msgstr "Salvar link com nome diferente"
+msgstr "Salva o link com nome diferente"
 
 #: ../src/ephy-window.c:321
 msgid "_Bookmark Link…"
@@ -4097,7 +4117,7 @@ msgstr "Copiar endereço da imagem \"%s\""
 #: ../src/ephy-window.c:1926
 #, c-format
 msgid "Send email to address “%s”"
-msgstr "Enviar email para o endereço \"%s\""
+msgstr "Enviar e-mail para o endereço \"%s\""
 
 #: ../src/ephy-window.c:1932
 #, c-format
@@ -4221,7 +4241,7 @@ msgstr "Fechar"
 
 #: ../src/ppview-toolbar.c:106
 msgid "Close print preview"
-msgstr "Fechar pré-visualização de impressão"
+msgstr "Fechar visualização de impressão"
 
 #: ../src/prefs-dialog.c:417
 msgid "Default"
@@ -4335,7 +4355,8 @@ msgstr ""
 "Gustavo Noronha Silva <kov@debian.org>\n"
 "Juan Carlos Castro y Castro <jcastro@vialink.com.br>\n"
 "Licio Fernando Nascimento da Fonseca <liciofernando@gmail.com>\n"
-"Leonardo Ferreira Fontenelle <leo.fontenelle@gmail.com>"
+"Leonardo Ferreira Fontenelle <leo.fontenelle@gmail.com>\n"
+"Vladimir Melo <vladimirmelo@foresightlinux.org>"
 
 #: ../src/window-commands.c:855
 msgid "GNOME Web Browser Website"
