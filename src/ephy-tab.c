@@ -1039,10 +1039,49 @@ ephy_tab_get_load_status (EphyTab *tab)
 static void
 ephy_tab_set_link_message (EphyTab *tab, char *message)
 {
+	char *status_message;
+	char **splitted_message;
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	g_free (tab->priv->link_message);
-	tab->priv->link_message = ephy_string_blank_chr (message);
+	status_message = ephy_string_blank_chr (message);
+	
+	if (status_message && g_str_has_prefix (status_message, "mailto:"))
+	{
+		int i = 1;
+		char *p;
+		GString *tmp;
+		
+		/* We first want to eliminate all the things after "?", like
+		 * cc, subject and alike.
+		 */
+		
+		p = strchr (status_message, '?');
+		if (p != NULL) *p = '\0';
+		
+		/* Then we also want to check if there is more than an email address
+		 * in the mailto: list.
+		 */
+		
+		splitted_message = g_strsplit_set (status_message, ";", -1);
+		tmp = g_string_new (g_strdup_printf (_("Send an email message to “%s”"),
+						     (splitted_message[0] + 7)));
+		
+		while (splitted_message [i] != NULL)
+		{
+			g_string_append_printf (tmp, ", “%s”", splitted_message[i]);
+			i++;
+		}
+		
+		tab->priv->link_message = g_string_free (tmp, FALSE);
+		
+		g_free (status_message);
+		g_strfreev (splitted_message);
+	}
+	else
+	{
+		tab->priv->link_message = status_message;
+	}
 
 	g_object_notify (G_OBJECT (tab), "message");
 }
