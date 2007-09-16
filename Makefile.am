@@ -50,3 +50,5 @@ ChangeLog:
 			xsltproc --stringparam strip-prefix "epiphany/trunk" \
 				 --stringparam include-rev "yes" $(top_srcdir)/svn2cl.xsl - > $@; \
 	fi
+
+.PHONY: ChangeLog
