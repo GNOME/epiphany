@@ -13,6 +13,7 @@ EXTRA_DIST = 			\
 	COPYING.README		\
 	HACKING			\
 	MAINTAINERS		\
+	ChangeLog		\
 	ChangeLog-20030925	\
 	ChangeLog-20040912	\
 	ChangeLog-20050828	\
@@ -40,3 +41,12 @@ DISTCHECK_CONFIGURE_FLAGS = \
 # Ignore gtk theme cache files on distcheck
 distuninstallcheck_listfiles = find . -type f -print | grep -v 'icon-theme.cache'
 
+# Build ChangeLog from SVN history (r7394 was the first ChangeLog-less checkin).
+# Only build this when in an svn checkout.
+
+ChangeLog:
+	@if test -f $(top_srcdir)/.svn/entries; then \
+		svn log -v --xml -r HEAD:7394 http://svn.gnome.org/svn/epiphany | \
+			xsltproc --stringparam strip-prefix "epiphany/trunk" \
+				 --stringparam include-rev "yes" $(top_srcdir)/svn2cl.xsl - > $@; \
+	fi
