@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: epiphany 1.10\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-09-01 19:25+0200\n"
+"POT-Creation-Date: 2007-09-16 19:07+0200\n"
 "PO-Revision-Date: 2007-08-05 16:09+0200\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -876,30 +876,30 @@ msgid "_Page address"
 msgstr "Adreça de la _pàgina"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:197
+#: ../embed/downloader-view.c:198
 msgid "_Show Downloads"
 msgstr "Mo_stra les baixades"
 
-#: ../embed/downloader-view.c:330
+#: ../embed/downloader-view.c:337
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:334
+#: ../embed/downloader-view.c:341
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:386
+#: ../embed/downloader-view.c:393
 msgid "_Pause"
 msgstr "Fes una _pausa"
 
-#: ../embed/downloader-view.c:386
+#: ../embed/downloader-view.c:393
 msgid "_Resume"
 msgstr "_Continua"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:433
+#: ../embed/downloader-view.c:440
 #, c-format
 msgid ""
 "%s\n"
@@ -908,12 +908,12 @@ msgstr ""
 "%s\n"
 "%s de %s"
 
-#: ../embed/downloader-view.c:443 ../embed/downloader-view.c:448
-#: ../src/ephy-window.c:1523
+#: ../embed/downloader-view.c:450 ../embed/downloader-view.c:455
+#: ../src/ephy-window.c:1553
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: ../embed/downloader-view.c:480
+#: ../embed/downloader-view.c:487
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -922,30 +922,30 @@ msgstr[1] "%d baixades"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:602 ../embed/downloader-view.c:615
+#: ../embed/downloader-view.c:610 ../embed/downloader-view.c:623
 msgid "download status|Unknown"
 msgstr "Desconegut"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:607
+#: ../embed/downloader-view.c:615
 msgid "download status|Failed"
 msgstr "Ha fallat"
 
-#: ../embed/downloader-view.c:674
+#: ../embed/downloader-view.c:682
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Fitxer"
 
-#: ../embed/downloader-view.c:697
+#: ../embed/downloader-view.c:705
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:708
+#: ../embed/downloader-view.c:716
 msgid "Remaining"
 msgstr "Restant"
 
-#: ../embed/ephy-embed-shell.c:271
+#: ../embed/ephy-embed-shell.c:272
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr ""
 "No es pot utilitzar l'Epiphany. Ha fallat la inicialització del Mozilla."
@@ -1511,8 +1511,8 @@ msgid ""
 "<ul><li>some service isn't started, or</li><li>you got the port number wrong."
 "</li></ul>"
 msgstr ""
-"<ul><li>no s'ha iniciat algun servei, o</li><li>el número de port és erroni.</"
-"li></ul>"
+"<ul><li>no s'ha iniciat algun servei, o</li><li>el número de port és erroni."
+"</li></ul>"
 
 #: ../embed/mozilla/EphyAboutModule.cpp:304
 #: ../embed/mozilla/EphyAboutModule.cpp:322
@@ -1707,7 +1707,7 @@ msgstr "a l'Internet Archive (l'arxiu d'Internet)"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks.c:1312
-#: ../src/bookmarks/ephy-bookmarks-import.c:261 ../src/ephy-session.c:1315
+#: ../src/bookmarks/ephy-bookmarks-import.c:261 ../src/ephy-session.c:1336
 msgid "Untitled"
 msgstr "Sense títol"
 
@@ -2533,7 +2533,7 @@ msgstr "Desa la contrasenya a l'anell de _claus"
 msgid "Popup Windows"
 msgstr "Finestres emergents"
 
-#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1195
+#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1231
 msgid "History"
 msgstr "Historial"
 
@@ -2544,7 +2544,7 @@ msgid "Bookmark"
 msgstr "Adreça d'interès"
 
 #: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1765
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1803
 #: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1345
 msgid "Bookmarks"
 msgstr "Adreces d'interès"
@@ -3102,22 +3102,27 @@ msgstr "Importa les adreces d'interès de:"
 msgid "_Copy Address"
 msgstr "_Copia l'adreça"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1631
-#: ../src/ephy-history-window.c:1035
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1655
+#: ../src/ephy-history-window.c:1063
+msgid "Clear"
+msgstr "Neteja"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1669
+#: ../src/ephy-history-window.c:1071
 msgid "_Search:"
 msgstr "_Cerca:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1829
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1867
 msgid "Topics"
 msgstr "Temes"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1899
-#: ../src/ephy-history-window.c:1320
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1937
+#: ../src/ephy-history-window.c:1356
 msgid "Title"
 msgstr "Títol"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1905
-#: ../src/ephy-history-window.c:1326
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1943
+#: ../src/ephy-history-window.c:1362
 msgid "Address"
 msgstr "Adreça"
 
@@ -3171,40 +3176,40 @@ msgstr "Altres codificacions"
 msgid "_Automatic"
 msgstr "_Automàtic"
 
-#: ../src/ephy-find-toolbar.c:117
+#: ../src/ephy-find-toolbar.c:137
 msgid "Not found"
 msgstr "No s'ha trobat"
 
-#: ../src/ephy-find-toolbar.c:120
+#: ../src/ephy-find-toolbar.c:149
 msgid "Wrapped"
 msgstr "S'ha tornat al principi"
 
-#: ../src/ephy-find-toolbar.c:140
+#: ../src/ephy-find-toolbar.c:169
 msgid "Find links:"
 msgstr "Cerca enllaços:"
 
-#: ../src/ephy-find-toolbar.c:140
+#: ../src/ephy-find-toolbar.c:169
 msgid "Find:"
 msgstr "Cerca:"
 
-#: ../src/ephy-find-toolbar.c:378
+#: ../src/ephy-find-toolbar.c:407
 msgid "Find Previous"
 msgstr "Cerca l'anterior"
 
-#: ../src/ephy-find-toolbar.c:381
+#: ../src/ephy-find-toolbar.c:410
 msgid "Find previous occurrence of the search string"
 msgstr "Troba l'anterior aparició de la cadena a cercar"
 
-#: ../src/ephy-find-toolbar.c:388
+#: ../src/ephy-find-toolbar.c:417
 msgid "Find Next"
 msgstr "Cerca la següent"
 
-#: ../src/ephy-find-toolbar.c:391
+#: ../src/ephy-find-toolbar.c:420
 msgid "Find next occurrence of the search string"
 msgstr "Troba la següent aparició de la cadena a cercar"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:571
+#: ../src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:591
 msgid "Leave Fullscreen"
 msgstr "Surt de la pantalla completa"
 
@@ -3280,24 +3285,24 @@ msgstr ""
 msgid "Clear History"
 msgstr "Neteja l'historial"
 
-#: ../src/ephy-history-window.c:1044
+#: ../src/ephy-history-window.c:1080
 msgid "Last 30 minutes"
 msgstr "Els darrers 30 minuts"
 
-#: ../src/ephy-history-window.c:1045
+#: ../src/ephy-history-window.c:1081
 msgid "Today"
 msgstr "Avui"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1046 ../src/ephy-history-window.c:1049
-#: ../src/ephy-history-window.c:1053
+#: ../src/ephy-history-window.c:1082 ../src/ephy-history-window.c:1085
+#: ../src/ephy-history-window.c:1089
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "Fa %d dia"
 msgstr[1] "Fa %d dies"
 
-#: ../src/ephy-history-window.c:1257
+#: ../src/ephy-history-window.c:1293
 msgid "Sites"
 msgstr "Llocs"
 
@@ -3370,41 +3375,41 @@ msgstr "Navegador web del GNOME"
 msgid "GNOME Web Browser options"
 msgstr "Opcions del navegador web del GNOME"
 
-#: ../src/ephy-notebook.c:656
+#: ../src/ephy-notebook.c:655
 msgid "Close tab"
 msgstr "Tanca la pestanya"
 
-#: ../src/ephy-session.c:158
+#: ../src/ephy-session.c:160
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "S'interrompran les baixades i se sortirà d'aquí a %d segon."
 msgstr[1] "S'interrompran les baixades i se sortirà d'aquí a %d segons."
 
-#: ../src/ephy-session.c:274
+#: ../src/ephy-session.c:276
 msgid "Abort pending downloads?"
 msgstr "Voleu interrompre les baixades pendents?"
 
-#: ../src/ephy-session.c:278
+#: ../src/ephy-session.c:280
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
 msgstr ""
 "Encara hi ha baixades pendents. Si sortiu, s'interrompran i es perdran."
 
-#: ../src/ephy-session.c:282
+#: ../src/ephy-session.c:284
 msgid "_Cancel Logout"
 msgstr "_Cancel·la la sortida"
 
-#: ../src/ephy-session.c:284
+#: ../src/ephy-session.c:286
 msgid "_Abort Downloads"
 msgstr "_Interromp les baixades"
 
-#: ../src/ephy-session.c:609
+#: ../src/ephy-session.c:611
 msgid "Recover previous browser windows and tabs?"
 msgstr "Voleu recuperar les finestres i pestanyes anteriors del navegador?"
 
-#: ../src/ephy-session.c:613
+#: ../src/ephy-session.c:615
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -3412,15 +3417,15 @@ msgstr ""
 "Sembla que l'Epiphany va sortir inesperadament l'últim cop que es va "
 "executar. Podeu recuperar les finestres i pestanyes obertes."
 
-#: ../src/ephy-session.c:617
+#: ../src/ephy-session.c:619
 msgid "_Don't Recover"
 msgstr "_No recuperis"
 
-#: ../src/ephy-session.c:619
+#: ../src/ephy-session.c:621
 msgid "_Recover"
 msgstr "_Recupera"
 
-#: ../src/ephy-session.c:621
+#: ../src/ephy-session.c:623
 msgid "Crash Recovery"
 msgstr "Recuperació d'una fallada"
 
@@ -3449,12 +3454,12 @@ msgstr "Caret"
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "En mode de selecció per teclat, premeu F7 per sortir"
 
-#: ../src/ephy-tab.c:493 ../src/ephy-tab.c:2348 ../src/ephy-tab.c:2383
+#: ../src/ephy-tab.c:493 ../src/ephy-tab.c:2387 ../src/ephy-tab.c:2422
 msgid "Blank page"
 msgstr "Pàgina en blanc"
 
 #. translators: %s here is the address of the web page
-#: ../src/ephy-tab.c:940 ../src/ephy-tab.c:1711
+#: ../src/ephy-tab.c:940 ../src/ephy-tab.c:1750
 #, c-format
 msgid "Loading “%s”…"
 msgstr "S'està carregant «%s»..."
@@ -3463,17 +3468,22 @@ msgstr "S'està carregant «%s»..."
 msgid "Loading…"
 msgstr "S'està carregant..."
 
-#: ../src/ephy-tab.c:1695
+#: ../src/ephy-tab.c:1067
+#, c-format
+msgid "Send an email message to “%s”"
+msgstr "Envia un correu electrònic a «%s»"
+
+#: ../src/ephy-tab.c:1734
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "S'està redirigint a «%s»..."
 
-#: ../src/ephy-tab.c:1699
+#: ../src/ephy-tab.c:1738
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "S'estan transferint dades de «%s»..."
 
-#: ../src/ephy-tab.c:1703
+#: ../src/ephy-tab.c:1742
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "S'està esperant l'autorització des de «%s»..."
@@ -3569,20 +3579,37 @@ msgstr "Obre una finestra nova"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/ephy-toolbar-editor.c:83
+#: ../src/ephy-toolbar-editor.c:82
 msgid "toolbar style|Default"
 msgstr "Per defecte"
 
-#: ../src/ephy-toolbar-editor.c:202
+#. separator row
+#: ../src/ephy-toolbar-editor.c:84
+msgid "Text below icons"
+msgstr "Text sota les icones"
+
+#: ../src/ephy-toolbar-editor.c:85
+msgid "Text beside icons"
+msgstr "Text al costat de les icones"
+
+#: ../src/ephy-toolbar-editor.c:86
+msgid "Icons only"
+msgstr "Només icones"
+
+#: ../src/ephy-toolbar-editor.c:87
+msgid "Text only"
+msgstr "Només text"
+
+#: ../src/ephy-toolbar-editor.c:195
 msgid "Toolbar Editor"
 msgstr "Editor de barres d'eines"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:221
+#: ../src/ephy-toolbar-editor.c:214
 msgid "Toolbar _button labels:"
 msgstr "Etiquetes dels _botons de la barra d'eines:"
 
-#: ../src/ephy-toolbar-editor.c:289
+#: ../src/ephy-toolbar-editor.c:278
 msgid "_Add a New Toolbar"
 msgstr "_Afegeix una barra d'eines nova"
 
@@ -4053,75 +4080,75 @@ msgstr "Més gran"
 msgid "Smaller"
 msgstr "Més petit"
 
-#: ../src/ephy-window.c:1526
+#: ../src/ephy-window.c:1556
 msgid "Insecure"
 msgstr "Insegur"
 
-#: ../src/ephy-window.c:1531
+#: ../src/ephy-window.c:1561
 msgid "Broken"
 msgstr "Interromput"
 
-#: ../src/ephy-window.c:1543
+#: ../src/ephy-window.c:1573
 msgid "Low"
 msgstr "Baix"
 
-#: ../src/ephy-window.c:1550
+#: ../src/ephy-window.c:1580
 msgid "High"
 msgstr "Alt"
 
-#: ../src/ephy-window.c:1560
+#: ../src/ephy-window.c:1590
 #, c-format
 msgid "Security level: %s"
 msgstr "Nivell de seguretat: %s"
 
-#: ../src/ephy-window.c:1603
+#: ../src/ephy-window.c:1633
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d finestra emergent amagada"
 msgstr[1] "%d finestres emergents amagades"
 
-#: ../src/ephy-window.c:1898
+#: ../src/ephy-window.c:1928
 #, c-format
 msgid "Open image “%s”"
 msgstr "Obre la imatge «%s»"
 
-#: ../src/ephy-window.c:1903
+#: ../src/ephy-window.c:1933
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Utilitza com a fons de l'escriptori «%s»"
 
-#: ../src/ephy-window.c:1908
+#: ../src/ephy-window.c:1938
 #, c-format
 msgid "Save image “%s”"
 msgstr "Desa la imatge «%s»"
 
-#: ../src/ephy-window.c:1913
+#: ../src/ephy-window.c:1943
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Copia l'adreça de la imatge «%s»"
 
-#: ../src/ephy-window.c:1926
+#: ../src/ephy-window.c:1956
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Envieu un correu a l'adreça «%s»"
 
-#: ../src/ephy-window.c:1932
+#: ../src/ephy-window.c:1962
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Copia l'adreça de correu electrònic «%s»"
 
-#: ../src/ephy-window.c:1944
+#: ../src/ephy-window.c:1974
 #, c-format
 msgid "Save link “%s”"
 msgstr "Desa l'enllaç «%s»"
 
-#: ../src/ephy-window.c:1950
+#: ../src/ephy-window.c:1980
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Afegeix l'enllaç «%s» a les adreces d'interès"
 
-#: ../src/ephy-window.c:1956
+#: ../src/ephy-window.c:1986
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Copia l'adreça de l'enllaç «%s»"
@@ -4190,43 +4217,43 @@ msgstr "Anomena i desa l'enllaç"
 msgid "Save Image As"
 msgstr "Anomena i desa la imatge"
 
-#: ../src/ppview-toolbar.c:89
+#: ../src/ppview-toolbar.c:90
 msgid "First"
 msgstr "Primer"
 
-#: ../src/ppview-toolbar.c:90
+#: ../src/ppview-toolbar.c:91
 msgid "Go to the first page"
 msgstr "Vés a la primera pàgina"
 
-#: ../src/ppview-toolbar.c:93
+#: ../src/ppview-toolbar.c:94
 msgid "Last"
 msgstr "Últim"
 
-#: ../src/ppview-toolbar.c:94
+#: ../src/ppview-toolbar.c:95
 msgid "Go to the last page"
 msgstr "Vés a l'última pàgina"
 
-#: ../src/ppview-toolbar.c:97
+#: ../src/ppview-toolbar.c:98
 msgid "Previous"
 msgstr "Anterior"
 
-#: ../src/ppview-toolbar.c:98
+#: ../src/ppview-toolbar.c:99
 msgid "Go to the previous page"
 msgstr "Vés a la pàgina anterior"
 
-#: ../src/ppview-toolbar.c:101
+#: ../src/ppview-toolbar.c:102
 msgid "Next"
 msgstr "Següent"
 
-#: ../src/ppview-toolbar.c:102
+#: ../src/ppview-toolbar.c:103
 msgid "Go to next page"
 msgstr "Vés a la pàgina següent"
 
-#: ../src/ppview-toolbar.c:105
+#: ../src/ppview-toolbar.c:106
 msgid "Close"
 msgstr "Tanca"
 
-#: ../src/ppview-toolbar.c:106
+#: ../src/ppview-toolbar.c:107 ../src/ppview-toolbar.c:250
 msgid "Close print preview"
 msgstr "Tanca la previsualització"
 
@@ -4809,12 +4836,6 @@ msgstr "Pàgina web del navegador web del GNOME"
 
 #~ msgid "Ephy"
 #~ msgstr "Ephy"
-
-#~ msgid "toolbar style|Text below icons"
-#~ msgstr "Text sota les icones"
-
-#~ msgid "toolbar style|Text beside icons"
-#~ msgstr "Text al costat de les icones"
 
 #~ msgid "toolbar style|Icons only"
 #~ msgstr "Només icones"
