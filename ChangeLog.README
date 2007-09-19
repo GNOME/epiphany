@@ -1,0 +1,28 @@
+Epiphany doesn't use ChangeLog anymore. Instead, we use SVN checkin comments
+to autogenerate a ChangeLog file at "make dist" time.
+
+When committing a patch to svn, you must use a checkin comment that fully
+describes the changes made. If the checkin is related to a bug, reference
+the bug number. Example:
+
+        When removing a toolbar, make its items available again in the toolbar
+        editor. (Bug #131182)
+
+Checkin comments MUST use the UTF-8 encoding.
+
+If you forget to check in some changes that belonged in the same commit (e.g.
+you accidentally omitted a file), you must copy the checkin comment from the
+previous, incomplete checkin, and additionally reference that commit's svn
+revision number.
+
+DO NOT use meaningless checkin comments such as "forgotten file" !
+
+If you make a major mistake in the checkin comment (e.g it is empty, or
+you've forgotten to cite the bug numbers), you must create a new checkin
+that touches all files the original checkin changed (just using whitespace
+changes preferably, or fix a random typo), and in the new checkin comment
+you must note that this new checkin fixes the original checkin, referencing
+it by its SVN revision number.
+
+Do NOT commit to this module without permission from a maintainer.
+See the MAINTAINERS file for who they are.

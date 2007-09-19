@@ -13,27 +13,7 @@ need to stick to in order to get your patch accepted:
  * bla_bla_cb: This is an example comment block
  */
 
-SVN Checkin rules:
-******************
+See ChangeLog.README for SVN checkin rules.
 
-When committing a patch to svn, you must use a checkin comment that fully
-describes the changes made. If the checkin is related to a bug, reference
-the bug number. Example:
-
-        When removing a toolbar, make its items available again in the toolbar
-        editor. (Bug #131182)
-
-Checkin comments MUST use the UTF-8 encoding.
-
-If you forget to check in some changes that belonged in the same commit (e.g. omitted
-a file), you must copy the checkin comment from the previous, incomplete checkin, and
-additionally reference that commit's svn revision number. DO NOT use meaningless checkin
-comments such as "forgotten file" !
-If you make a major mistake in the checkin comment (e.g empty, or you've forgotten to cite
-the bug numbers), you must create a new checkin that touches all files the original checkin
-changed (just using whitespace changes is ok), and in the new checkin comment must note that
-this new checkin fixes the original checkin, referencing it by its SVN revision number.
-
-Do NOT commit to this module without permission from a maintainer. See the MAINTAINERS file
-for who they are.
-
+Do NOT commit to this module without permission from a maintainer.
+See the MAINTAINERS file for who they are.
