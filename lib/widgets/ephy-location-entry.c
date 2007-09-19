@@ -69,6 +69,8 @@ struct _EphyLocationEntryPrivate
 	GdkColor secure_bg_colour;
 	GdkColor secure_fg_colour;
 
+	GtkCellRenderer *extracell;
+
 	char *before_completion;
 
 	guint text_col;
@@ -172,6 +174,7 @@ ephy_location_entry_style_set (GtkWidget *widget,
 	EphyLocationEntryPrivate *priv = entry->priv;
 	GtkSettings *settings;
 	GdkColor *bg_colour = NULL, *fg_colour = NULL;
+	GdkColor title_fg_colour;
 	char *theme;
 	gboolean is_a11y_theme;
 
@@ -179,6 +182,12 @@ ephy_location_entry_style_set (GtkWidget *widget,
 	{
 		GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
 	}
+
+	title_fg_colour = widget->style->text[GTK_STATE_INSENSITIVE];
+	g_object_set (entry->priv->extracell, 
+			"foreground-gdk", &title_fg_colour,
+			"foreground-set", TRUE,
+			NULL);
 
 	settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
 	g_object_get (settings, "gtk-theme-name", &theme, NULL);
@@ -247,7 +256,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 	signals[USER_CHANGED] = g_signal_new (
 		"user_changed", G_OBJECT_CLASS_TYPE (klass),
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (EphyLocationEntryClass, user_changed),
+		G_STRUCT_OFFSET (EphyLocationEntryClass, user_changed),
 		NULL, NULL,
 		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE,
@@ -267,7 +276,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 	signals[GET_LOCATION] = g_signal_new (
 		"get-location", G_OBJECT_CLASS_TYPE (klass),
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (EphyLocationEntryClass, get_location),
+		G_STRUCT_OFFSET (EphyLocationEntryClass, get_location),
 		ephy_signal_accumulator_string, NULL,
 		ephy_marshal_STRING__VOID,
 		G_TYPE_STRING,
@@ -277,26 +286,26 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 	signals[GET_TITLE] = g_signal_new (
 		"get-title", G_OBJECT_CLASS_TYPE (klass),
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (EphyLocationEntryClass, get_title),
+		G_STRUCT_OFFSET (EphyLocationEntryClass, get_title),
 		ephy_signal_accumulator_string, NULL,
 		ephy_marshal_STRING__VOID,
 		G_TYPE_STRING,
 		0,
 		G_TYPE_NONE);
 
-        gtk_widget_class_install_style_property (widget_class,
-                                                 g_param_spec_boxed ("secure-bg-color",
-                                                                     "Secure background colour",
-                                                                     "Background colour to use for secure sites",
-                                                                     GDK_TYPE_COLOR,
-                                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	gtk_widget_class_install_style_property (widget_class,
+						 g_param_spec_boxed ("secure-bg-color",
+								     "Secure background colour",
+								     "Background colour to use for secure sites",
+								     GDK_TYPE_COLOR,
+								     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-        gtk_widget_class_install_style_property (widget_class,
-                                                 g_param_spec_boxed ("secure-fg-color",
-                                                                     "Secure foreground Colour",
-                                                                     "Foreground colour to use for secure sites",
-                                                                     GDK_TYPE_COLOR,
-                                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	gtk_widget_class_install_style_property (widget_class,
+						 g_param_spec_boxed ("secure-fg-color",
+								     "Secure foreground Colour",
+								     "Foreground colour to use for secure sites",
+								     GDK_TYPE_COLOR,
+								     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphyLocationEntryPrivate));
 }
@@ -454,7 +463,7 @@ keyword_match (const char *list,
 
 static gboolean
 completion_func (GtkEntryCompletion *completion,
-                 const char *key,
+		 const char *key,
 		 GtkTreeIter *iter,
 		 gpointer data)
 {
@@ -833,8 +842,8 @@ icon_button_press_event_cb (GtkWidget *ebox,
 		EphyLocationEntryPrivate *priv = entry->priv;
 		
 		toplevel = gtk_widget_get_toplevel (GTK_WIDGET (entry));
-        	gtk_window_set_focus (GTK_WINDOW(toplevel),
-                              	      priv->icon_entry->entry);
+		gtk_window_set_focus (GTK_WINDOW(toplevel),
+			      	      priv->icon_entry->entry);
 
 		gtk_editable_select_region (GTK_EDITABLE (priv->icon_entry->entry), 
 					    0, -1);
@@ -889,7 +898,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 			  G_CALLBACK (icon_button_press_event_cb), entry);
 
 	gtk_widget_set_tooltip_text (priv->icon_ebox,
-			             _("Drag and drop this icon to create a link to this page"));
+				     _("Drag and drop this icon to create a link to this page"));
 
 	priv->icon = gtk_image_new ();
 	gtk_container_add (GTK_CONTAINER (priv->icon_ebox), priv->icon);
@@ -990,7 +999,7 @@ cursor_on_match_cb  (GtkEntryCompletion *completion,
 	
 	entry = gtk_entry_completion_get_entry (completion);
 	gtk_entry_set_text (GTK_ENTRY (entry), item);
-        gtk_editable_set_position (GTK_EDITABLE (entry), -1);
+	gtk_editable_set_position (GTK_EDITABLE (entry), -1);
 
 	g_free (item);
 
@@ -1011,7 +1020,7 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 	EphyLocationEntryPrivate *priv = le->priv;
 	GtkTreeModel *sort_model;
 	GtkEntryCompletion *completion;
-	GtkCellRenderer *cell, *extracell, *iconcell;
+	GtkCellRenderer *cell, *iconcell;
 
 	le->priv->text_col = text_col;
 	le->priv->action_col = action_col;
@@ -1053,19 +1062,17 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
 				       cell, "text", text_col);
 
-	extracell = gtk_cell_renderer_text_new ();
-	g_object_set (extracell, 
+	le->priv->extracell = gtk_cell_renderer_text_new ();
+	g_object_set (le->priv->extracell, 
 			"ellipsize", PANGO_ELLIPSIZE_END,
 			"ellipsize-set", TRUE,
-			"foreground", "Gray",
-			"foreground-set", TRUE,
 			"alignment", PANGO_ALIGN_RIGHT,
 			NULL);
 
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
-				    extracell, TRUE);
+				    le->priv->extracell, TRUE);
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
-				       extracell, "text", extra_col);
+				       le->priv->extracell, "text", extra_col);
 
 	g_object_set (completion, "inline-selection", TRUE, NULL);
 	g_signal_connect (completion, "cursor-on-match",
@@ -1088,7 +1095,7 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 
 	g_return_if_fail (address != NULL);
 
-        /* Setting a new text will clear the clipboard. This makes it impossible
+	/* Setting a new text will clear the clipboard. This makes it impossible
 	 * to copy&paste from the location entry of one tab into another tab, see
 	 * bug #155824. So we save the selection iff the clipboard was owned by
 	 * the location entry.
@@ -1197,8 +1204,8 @@ ephy_location_entry_activate (EphyLocationEntry *entry)
 
 	gtk_editable_select_region (GTK_EDITABLE(priv->icon_entry->entry),
 				    0, -1);
-        gtk_window_set_focus (GTK_WINDOW(toplevel),
-                              priv->icon_entry->entry);
+	gtk_window_set_focus (GTK_WINDOW(toplevel),
+			      priv->icon_entry->entry);
 }
 
 GtkWidget *
