@@ -15,7 +15,15 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
-AC_INIT([GNOME Web Browser],[2.21.0],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+m4_define([epiphany_version_major],[2])
+m4_define([epiphany_version_minor],[21])
+m4_define([epiphany_version_micro],[0])
+m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
+
+# This can be either "trunk" or "branches/gnome-x-y"
+m4_define([epiphany_branch],["trunk"])
+
+AC_INIT([GNOME Web Browser],[epiphany_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
@@ -25,14 +33,13 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
-EPIPHANY_MAJOR=2.21
 EPIPHANY_API_VERSION=2.21
 
 # This should stay at the major version of the latest stable releases
 EPIPHANY_UA_VERSION=2.20
 
-AC_SUBST([EPIPHANY_MAJOR])
-AC_SUBST([EPIPHANY_API_VERSION])
+AC_SUBST([EPIPHANY_MAJOR],[epiphany_version_major.epiphany_version_minor])
+AC_SUBST([EPIPHANY_API_VERSION],[epiphany_version_major.epiphany_version_minor])
 AC_SUBST([EPIPHANY_UA_VERSION])
 
 AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip tar-ustar])
@@ -716,6 +723,14 @@ AC_DEFINE_UNQUOTED([SHARE_UNINSTALLED_DIR], ["`pwd`/data"], [path to source data
 
 GNOME_DOC_INIT
 GTK_DOC_CHECK([1.0])
+
+# ****************************
+# SVN for ChangeLog generation
+# ****************************
+
+AC_SUBST([SVN_ROOT],[http://svn.gnome.org/svn])
+AC_SUBST([SVN_MODULE],[epiphany])
+AC_SUBST([SVN_BRANCH],[epiphany_branch])
 
 # ************
 # Output files
