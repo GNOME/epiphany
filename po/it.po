@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: epiphany 2.18\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-09-17 09:52+0200\n"
-"PO-Revision-Date: 2007-09-17 09:52+0200\n"
+"POT-Creation-Date: 2007-09-20 16:50+0200\n"
+"PO-Revision-Date: 2007-09-20 16:49+0200\n"
 "Last-Translator: Francesco Marletta <francesco.marletta@tiscali.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -717,9 +717,11 @@ msgstr "Scegliere una lingu_a:"
 msgid "Cl_ear"
 msgstr "Pu_lisci"
 
+# GNOME-2-20
+# da maschile a femminile, è codifica (o lingua)
 #: ../data/glade/prefs-dialog.glade.h:15
 msgid "De_fault:"
-msgstr "Pre_definito:"
+msgstr "Pre_definita:"
 
 #: ../data/glade/prefs-dialog.glade.h:16
 msgid "Enable Java_Script"
@@ -787,21 +789,28 @@ msgstr "Usare foglio di _stile personalizzato"
 msgid "Use s_mooth scrolling"
 msgstr "Usare scorrimento _morbido"
 
+# GNOME-2-20
+#
+# cambiato acceleratore per collisione con A_iuto
 #: ../data/glade/prefs-dialog.glade.h:33
 msgid "_Address:"
-msgstr "_Indirizzo:"
+msgstr "In_dirizzo:"
 
 #: ../data/glade/prefs-dialog.glade.h:34
 msgid "_Always accept"
 msgstr "Accettare _sempre"
 
+# GNOME-2-20
+# cambiato acceleratore per collisione
 #: ../data/glade/prefs-dialog.glade.h:35
 msgid "_Detailed Font Settings…"
-msgstr "Impostazioni _dettagliate sui caratteri…"
+msgstr "Im_postazioni dettagliate sui caratteri…"
 
+# GNOME-2-20
+# cambiato acceleratore per collisione
 #: ../data/glade/prefs-dialog.glade.h:36
 msgid "_Disk space:"
-msgstr "Spazio su _disco:"
+msgstr "S_pazio su disco:"
 
 #: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Download folder:"
@@ -815,17 +824,21 @@ msgstr "_Modifica foglio di stile…"
 msgid "_Fixed width:"
 msgstr "Larghezza _fissa:"
 
+# GNOME-2-20
+# cambiato acceleratore per collisione
 #: ../data/glade/prefs-dialog.glade.h:40
 msgid "_Minimum size:"
-msgstr "Dimensione m_inima:"
+msgstr "_Dimensione minima:"
 
 #: ../data/glade/prefs-dialog.glade.h:41
 msgid "_Never accept"
 msgstr "Non accettare _mai"
 
+# GNOME-2-20
+# all'infinito, è opzione di preferenza
 #: ../data/glade/prefs-dialog.glade.h:42
 msgid "_Remember passwords"
-msgstr "_Ricorda le password"
+msgstr "_Ricordare le password"
 
 #: ../data/glade/prefs-dialog.glade.h:43
 msgid "_Variable width:"
@@ -2140,9 +2153,9 @@ msgstr ""
 "L'autorità di certificazione “%s” richiede che venga fornita una copia della "
 "nuova chiave segreta generata.\n"
 "\n"
-"Questo permetterà all'autorità di certificazione di leggere "
-"qualsiasicomunicazione cifrata con questa chiave senza bisogno di informarvi "
-"o di consenso.\n"
+"Questo permetterà all'autorità di certificazione di leggere qualsiasi "
+"comunicazione cifrata con questa chiave senza bisogno di informarvi o di "
+"consenso.\n"
 "\n"
 "È fortemente raccomandato di non permetterlo."
 
@@ -2252,14 +2265,14 @@ msgstr ""
 msgid "%s Files"
 msgstr "File di %s"
 
-#  We do this before reading the user pref file so that the user
-#  * still can overwrite this pref.
-#  * We don't use the default-prefs.js file since that cannot be
-#  * localised (see bug #144909).
-#  translators: this is the URL that searches from the location
-#  * entry get directed to. The search terms will be _appended_ to it,
-#  * in url-escaped UTF-8; that means that if you're choosing google,
-#  * the 'q=' part needs to come last.
+# GNOME-2-20
+#
+# Questa era
+#    http://www.google.it/search?ie=UTF-8&oe=UTF-8&q=
+# aggiunto "hl=it" che compare quando si cerca da google.it
+# credo per selezionare le pagine con contenuto italiano
+#
+#
 #. We do this before reading the user pref file so that the user
 #. * still can overwrite this pref.
 #. * We don't use the default-prefs.js file since that cannot be
@@ -2272,7 +2285,7 @@ msgstr "File di %s"
 #.
 #: ../embed/mozilla/mozilla-embed-single.cpp:203
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
-msgstr "http://www.google.it/search?ie=UTF-8&oe=UTF-8&q="
+msgstr "http://www.google.it/search?hl=it&ie=UTF-8&oe=UTF-8&q="
 
 #: ../lib/eel-gconf-extensions.c:68
 #, c-format
@@ -2711,9 +2724,11 @@ msgstr "In_dirizzo:"
 msgid "T_opics:"
 msgstr "Arg_omenti:"
 
+# GNOME-2-20
+# cambiato acceleratore per collisione
 #: ../src/bookmarks/ephy-bookmark-properties.c:609
 msgid "Sho_w all topics"
-msgstr "Mo_stra tutti gli argomenti"
+msgstr "_Mostra tutti gli argomenti"
 
 #. Translators you should change these links to respect your locale.
 #. * For instance in .nl these should be
@@ -2723,10 +2738,17 @@ msgstr "Mo_stra tutti gli argomenti"
 msgid "Search the web"
 msgstr "Cerca nel web"
 
+# GNOME-2-20
+# usata stessa opzione dell'altro (avrà effetto solo
+# su "nuove" installazioni di Epiphany) essendo un
+# segnalibro.
+#
+# Ovviamente essendo un segnalibro "smart" il %s è necessario,
+# quindi sposto q= all'inizio.
 #: ../src/bookmarks/ephy-bookmarks.c:105
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.it/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgstr "http://www.google.it/search?q=%s&hl=it&ie=UTF-8&oe=UTF-8"
 
 #: ../src/bookmarks/ephy-bookmarks.c:110
 msgid "Entertainment"
@@ -2860,9 +2882,12 @@ msgstr "Crea un nuovo argomento"
 #: ../src/ephy-history-window.c:708
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
-msgstr[0] "Apre in una nuova _finestra"
-msgstr[1] "Apre in nuove _finestre"
+msgstr[0] "Apri in una nuova _finestra"
+msgstr[1] "Apri in nuove _finestre"
 
+# GNOME-2-20
+#
+# Apre --> Apri
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
 msgid "Open the selected bookmark in a new window"
 msgstr "Apre il segnalibro selezionato in una nuova finestra"
@@ -3015,9 +3040,12 @@ msgstr "_Titolo"
 msgid "Show only the title column"
 msgstr "Mostra solo la colonna del titolo"
 
+# GNOME-2-20
+# stesso acceleratore dell'altro "Titolo e indirizzo"
+# (stesso "posto", tanto vale usare stesso acceleratore)
 #: ../src/bookmarks/ephy-bookmarks-editor.c:255
 msgid "T_itle and Address"
-msgstr "Tito_lo e indirizzo"
+msgstr "Titolo _e indirizzo"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:256
 #: ../src/ephy-history-window.c:229
@@ -3275,9 +3303,12 @@ msgstr "Elimina dalla cronologia il collegamento selezionato"
 msgid "Select all history links or text"
 msgstr "Seleziona tutti i collegamenti o tutto il testo della cronologia"
 
+# GNOME-2-20
+# cambiato acceleratore per usare quello dello stock
+# Pulisci nelle GTK+
 #: ../src/ephy-history-window.c:201
 msgid "Clear _History"
-msgstr "Pulisci _cronologia"
+msgstr "Pu_lisci cronologia"
 
 #: ../src/ephy-history-window.c:202
 msgid "Clear your browsing history"
@@ -3295,9 +3326,11 @@ msgstr "_Indirizzo"
 msgid "Show only the address column"
 msgstr "Mostra solo la colonna dell'indirizzo"
 
+# GNOME-2-20
+# Indirizzo --> indirizzo
 #: ../src/ephy-history-window.c:228
 msgid "Title a_nd Address"
-msgstr "Titolo _e Indirizzo"
+msgstr "Titolo _e indirizzo"
 
 #: ../src/ephy-history-window.c:256
 msgid "Clear browsing history?"
@@ -3329,8 +3362,8 @@ msgstr "Oggi"
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
-msgstr[0] "L'ultimo giorno"
-msgstr[1] "Gli ultimi %d giorni"
+msgstr[0] "Ultimo giorno"
+msgstr[1] "Ultimi %d giorni"
 
 #: ../src/ephy-history-window.c:1257
 msgid "Sites"
@@ -3642,9 +3675,15 @@ msgstr "_Etichette dei pulsanti barra degli strumenti:"
 msgid "_Add a New Toolbar"
 msgstr "A_ggiungi nuova barra"
 
+# GNOME-2-20
+#
+# usato acceleratore suggerito in
+#   http://digilander.libero.it/elleuca/linee-guida/barra-dei-menu.xhtml
+# e già usato in Nautilus e Yelp
+#
 #: ../src/ephy-window.c:118
 msgid "_Bookmarks"
-msgstr "Segnali_bri"
+msgstr "S_egnalibri"
 
 #: ../src/ephy-window.c:119
 msgid "_Go"
@@ -3658,9 +3697,13 @@ msgstr "_Strumenti"
 msgid "_Tabs"
 msgstr "Sc_hede"
 
+# GNOME-2-20
+# cambiato acceleratore per
+#   * collisione
+#   * aderenza linee guida
 #: ../src/ephy-window.c:123
 msgid "_Toolbars"
-msgstr "Barre degli s_trumenti"
+msgstr "Barre degli _strumenti"
 
 #. File menu
 #: ../src/ephy-window.c:129
@@ -3679,9 +3722,15 @@ msgstr "Sa_lva come…"
 msgid "Save the current page"
 msgstr "Salva la pagina corrente"
 
+# GNOME-2-20
+#
+# traduzione infedele, ma
+#   * l'originale dovrebbe essere Page Setup per l'HIG (aprirò un bug)
+#   * la voce apre il dialogo "Imposta pagina" delle GTK+
+#   --Luca
 #: ../src/ephy-window.c:135
 msgid "Print Set_up…"
-msgstr "Configurazione _stampa…"
+msgstr "_Imposta pagina…"
 
 #: ../src/ephy-window.c:136
 msgid "Setup the page settings for printing"
@@ -3768,9 +3817,11 @@ msgstr "Trova pr_ecedente"
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Trova la precedente occorrenza della parola o frase"
 
+# GNOME-2-20
+# cambiato acceleratore per collisione
 #: ../src/ephy-window.c:183
 msgid "P_ersonal Data"
-msgstr "Dati p_ersonali"
+msgstr "_Dati personali"
 
 #: ../src/ephy-window.c:184
 msgid "View and remove cookies and passwords"
@@ -3865,10 +3916,15 @@ msgstr "Informazioni _sicurezza pagina…"
 msgid "Display security information for the web page"
 msgstr "Mostra le informazioni di sicurezza per la pagina web"
 
+# GNOME-2-20
+#
+# cambiato segnalibro per:
+#   * usare lo stesso di "Add" semplice nelle GTK+
+#   * linee guida (sez 7,9)
 #. Bookmarks menu
 #: ../src/ephy-window.c:229
 msgid "_Add Bookmark…"
-msgstr "_Aggiungi segnalibro…"
+msgstr "A_ggiungi segnalibro…"
 
 #: ../src/ephy-window.c:230
 msgid "Add a bookmark for the current page"
@@ -4139,7 +4195,7 @@ msgstr "Livello di sicurezza: %s"
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d finestra popup nascosta"
-msgstr[1] "%d finistre popup nascoste"
+msgstr[1] "%d finestre popup nascoste"
 
 #: ../src/ephy-window.c:1898
 #, c-format
@@ -4347,7 +4403,7 @@ msgid ""
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 msgstr ""
-"Il browser web di GNOMe è distribuito nella speranza che sia utile, ma SENZA "
+"Il browser web di GNOME è distribuito nella speranza che sia utile, ma SENZA "
 "ALCUNA GARANZIA, comprese anche la garanzia implicita di VENDIBILITÀ e di "
 "ADEGUATEZZA AD UN PARTICOLARE SCOPO. Vedere la Licenza Pubblica Generale GNU "
 "per maggiori dettagli."
