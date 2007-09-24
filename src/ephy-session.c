@@ -36,6 +36,7 @@
 #include "ephy-debug.h"
 #include "ephy-stock-icons.h"
 #include "ephy-glib-compat.h"
+#include "ephy-notebook.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtkmain.h>
@@ -44,6 +45,7 @@
 #include <gtk/gtkstock.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
+#include <gtk/gtknotebook.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
 
@@ -1089,6 +1091,20 @@ write_tab (xmlTextWriterPtr writer,
 }
 
 static int
+write_active_tab (xmlTextWriterPtr writer,
+		  GtkWidget *notebook)
+{
+	int ret;
+	int current;
+
+	current = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+    
+    	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "active-tab", "%d", current);
+	return ret;
+}
+    
+
+static int
 write_window_geometry (xmlTextWriterPtr writer,
 		       GtkWindow *window)
 {
@@ -1151,10 +1167,12 @@ write_ephy_window (xmlTextWriterPtr writer,
 		   EphyWindow *window)
 {
 	GList *tabs, *l;
+	GtkWidget *notebook;
 	const char *role;
 	int ret;
 
 	tabs = ephy_window_get_tabs (window);
+    	notebook = ephy_window_get_notebook (window);
 
 	/* Do not save an empty EphyWindow.
 	 * This only happens when the window was newly opened.
@@ -1165,6 +1183,9 @@ write_ephy_window (xmlTextWriterPtr writer,
 	if (ret < 0) return ret;
 
 	ret = write_window_geometry (writer, GTK_WINDOW (window));
+	if (ret < 0) return ret;
+
+    	ret = write_active_tab (writer, notebook);
 	if (ret < 0) return ret;
 
 	role = gtk_window_get_role (GTK_WINDOW (window));
@@ -1444,6 +1465,10 @@ ephy_session_load (EphySession *session,
 	{
 		if (xmlStrEqual (child->name, (const xmlChar *) "window"))
 		{
+		    	xmlChar *tmp;
+		    	gboolean success;
+		    	int active_tab;
+		    
 			window = ephy_window_new ();
 			widget = GTK_WIDGET (window);
 			restore_geometry (GTK_WINDOW (widget), child);
@@ -1454,8 +1479,17 @@ ephy_session_load (EphySession *session,
 			parse_embed (child->children, window, session);
 
 			/* Set focus to something sane */
-			gtk_widget_grab_focus (ephy_window_get_notebook (window));
+			tmp = xmlGetProp (child, (xmlChar *) "active-tab");
+			success = int_from_string ((char *) tmp, &active_tab);
+			xmlFree (tmp);
+		    	if (success)
+		    	{
+				GtkWidget *notebook;
+				notebook = ephy_window_get_notebook (window);
+				gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), active_tab);
+			}
 
+			gtk_widget_grab_focus (GTK_WIDGET (ephy_window_get_active_tab (window)));
 			gtk_widget_show (widget);
 		}
 		else if (xmlStrEqual (child->name, (const xmlChar *) "toolwindow"))
