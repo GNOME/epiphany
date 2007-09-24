@@ -15,7 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
-# LIBXUL_INIT([DO-CHECK],[ACTION-IF-FOUND],[ACTION-IF-NOT-FOUND])
+# LIBXUL_INIT([embedding],[ACTION-IF-FOUND],[ACTION-IF-NOT-FOUND])
 #
 # Checks for libxul, and aborts if it's not found
 #
@@ -31,23 +31,33 @@
 AC_DEFUN([LIBXUL_INIT],
 [AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
 
-PKG_CHECK_EXISTS([libxul],[libxul_cv_have_libxul=yes],[libxul_cv_have_libxul=no])
+if test -z "$1"; then
+  libxul_cv_libxul_pkg="libxul"
+elif test "$1" = "embedding"; then
+  libxul_cv_libxul_pkg="libxul-embedding"
+else
+  AC_MSG_ERROR([[Unsupported value passed to LIBXUL_INIT]])
+fi
+
+PKG_CHECK_EXISTS([$libxul_cv_libxul_pkg],[libxul_cv_have_libxul=yes],[libxul_cv_have_libxul=no])
 if test "$libxul_cv_have_libxul" != "yes"; then
   AC_MSG_ERROR([libxul not found])
 fi
 
-libxul_cv_prefix="$($PKG_CONFIG --variable=prefix libxul)"
-libxul_cv_include_root="$($PKG_CONFIG --variable=includedir libxul)"
-libxul_cv_sdkdir="$($PKG_CONFIG --variable=sdkdir libxul)"
+libxul_cv_version="$($PKG_CONFIG --modversion $libxul_cv_libxul_pkg)"
+libxul_cv_prefix="$($PKG_CONFIG --variable=prefix $libxul_cv_libxul_pkg)"
+libxul_cv_include_root="$($PKG_CONFIG --variable=includedir $libxul_cv_libxul_pkg)"
+libxul_cv_sdkdir="$($PKG_CONFIG --variable=sdkdir $libxul_cv_libxul_pkg)"
 
 # FIXMEchpe: this isn't right. The pc file seems buggy, but until
 # I can figure this out, do it like this:
-libxul_cv_libdir="$(readlink $($PKG_CONFIG --variable=sdkdir libxul)/bin)"
+libxul_cv_libdir="$(readlink $($PKG_CONFIG --variable=sdkdir $libxul_cv_libxul_pkg)/bin)"
 
 libxul_cv_includes="-I${libxul_cv_include_root}/stable -I${libxul_cv_include_root}/unstable"
 
 AC_DEFINE([HAVE_LIBXUL],[1],[Define for libxul])
 
+LIBXUL_VERSION="$libxul_cv_version"
 LIBXUL_PREFIX="$libxul_cv_prefix"
 LIBXUL_INCLUDE_ROOT="$libxul_cv_include_root"
 LIBXUL_INCLUDES="$libxul_cv_includes"
@@ -265,6 +275,7 @@ fi         # g++
 # Finish up
 # *********
 
+AC_SUBST([LIBXUL_VERSION])
 AC_SUBST([LIBXUL_PREFIX])
 AC_SUBST([LIBXUL_INCLUDE_ROOT])
 AC_SUBST([LIBXUL_INCLUDES])
