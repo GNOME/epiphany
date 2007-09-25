@@ -34,6 +34,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-gui.h"
+#include "ephy-stock-icons.h"
 
 #include "AutoJSContextStack.h"
 #include "AutoWindowModalState.h"
@@ -96,7 +97,7 @@ GeckoCookiePromptService::CookieDialog (nsIDOMWindow *aParent,
   GtkDialog *gdialog = GTK_DIALOG (dialog);
   GtkMessageDialog *message_dialog = GTK_MESSAGE_DIALOG (dialog);
 
-  gtk_window_set_icon_name (window, "web-browser");
+  gtk_window_set_icon_name (window, EPHY_STOCK_EPHY);
   gtk_window_set_title (window, _("Accept Cookie?"));
 
   if (aChangingCookie) {
