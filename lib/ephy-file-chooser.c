@@ -95,6 +95,29 @@ current_folder_changed_cb (GtkFileChooser *chooser, EphyFileChooser *dialog)
 }
 
 static void
+file_chooser_response_cb (GtkWidget *widget,
+			  gint response,
+			  EphyFileChooser *dialog)
+{
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		if (dialog->priv->persist_key != NULL)
+		{
+			char *dir, *filename;
+		    
+			filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+
+			dir = g_path_get_dirname (filename);
+
+			eel_gconf_set_path (dialog->priv->persist_key, dir);
+
+			g_free (dir);
+			g_free (filename);
+		}
+	}
+}
+
+static void
 ephy_file_chooser_init (EphyFileChooser *dialog)
 {
 	dialog->priv = EPHY_FILE_CHOOSER_GET_PRIVATE (dialog);
@@ -165,6 +188,9 @@ ephy_file_chooser_set_persist_key (EphyFileChooser *dialog, const char *key)
 
 	g_signal_connect (dialog, "current-folder-changed",
 			  G_CALLBACK (current_folder_changed_cb), dialog);
+    
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (file_chooser_response_cb), dialog);
 }
 
 const char *
