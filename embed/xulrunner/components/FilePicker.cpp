@@ -38,6 +38,9 @@
 #include <nsIServiceManager.h>
 #include <nsIURI.h>
 #include <nsNetCID.h>
+#include <nsComponentManagerUtils.h>
+#include <nsServiceManagerUtils.h>
+#include <nsXPCOMCID.h>
 
 #include "ephy-debug.h"
 #include "ephy-gui.h"
@@ -70,27 +73,20 @@ GFilePicker::~GFilePicker()
 }
 
 /* void init (in nsIDOMWindow parent, in AString title, in short mode); */
-#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 NS_IMETHODIMP GFilePicker::Init(nsIDOMWindow *parent, const nsAString& title, PRInt16 mode)
-#else
-NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *title, PRInt16 mode)
-#endif
 {
 	LOG ("GFilePicker::Init");
 
 	mParent = do_QueryInterface (parent);
 
 	GtkWidget *gtkparent = EphyUtils::FindGtkParent (parent);
-#if defined(MOZ_NSIFILEPICKER_NSASTRING_)
+
 	NS_ENSURE_TRUE (gtkparent, NS_ERROR_FAILURE);
-#endif
+
 
 	nsCString cTitle;
-#ifdef MOZ_NSIFILEPICKER_NSASTRING_
+
 	NS_UTF16ToCString (title, NS_CSTRING_ENCODING_UTF8, cTitle);
-#else
-	NS_UTF16ToCString (nsString(title), NS_CSTRING_ENCODING_UTF8, cTitle);
-#endif
 
 	mMode = mode;
 
@@ -187,28 +183,17 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 }
 
 /* void appendFilter (in AString title, in AString filter); */
-#ifdef MOZ_NSIFILEPICKER_NSASTRING_
+
 NS_IMETHODIMP GFilePicker::AppendFilter(const nsAString& title, const nsAString& filter)
-#else
-NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar *filter)
-#endif
 {
 	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
 	LOG ("GFilePicker::AppendFilter");
 
-#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	if (!filter.Length()) return NS_ERROR_FAILURE;
-#else
-	if (!filter) return NS_ERROR_FAILURE;
-#endif
 
 	nsCString pattern;
-#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	NS_UTF16ToCString (filter, NS_CSTRING_ENCODING_UTF8, pattern);
-#else
-	NS_UTF16ToCString (nsString(filter), NS_CSTRING_ENCODING_UTF8, pattern);
-#endif
 
 	char **patterns;
 	patterns = g_strsplit (pattern.get(), ";", -1);
@@ -223,11 +208,7 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar 
 	}
 
 	nsCString cTitle;
-#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	NS_UTF16ToCString (title, NS_CSTRING_ENCODING_UTF8, cTitle);
-#else
-	NS_UTF16ToCString (nsString(title), NS_CSTRING_ENCODING_UTF8, cTitle);
-#endif
 
 	gtk_file_filter_set_name (filth, cTitle.get());
 
@@ -239,30 +220,18 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar 
 }
 
 /* attribute AString defaultString; */
-#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 NS_IMETHODIMP GFilePicker::GetDefaultString(nsAString& aDefaultString)
-#else
-NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
-#endif
 {
 	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
 	LOG ("GFilePicker::GetDefaultString");
 
-#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	aDefaultString = mDefaultString;
-#else
-	*aDefaultString = NS_StringCloneData (mDefaultString);
-#endif
 
 	return NS_OK;
 }
 
-#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 NS_IMETHODIMP GFilePicker::SetDefaultString(const nsAString& aDefaultString)
-#else
-NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
-#endif
 {
 	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
@@ -287,22 +256,14 @@ NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
 }
 
 /* attribute AString defaultExtension; */
-#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 NS_IMETHODIMP GFilePicker::GetDefaultExtension(nsAString& aDefaultExtension)
-#else
-NS_IMETHODIMP GFilePicker::GetDefaultExtension(PRUnichar **aDefaultExtension)
-#endif
 {
 	LOG ("GFilePicker::GetDefaultExtension");
 
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#ifdef MOZ_NSIFILEPICKER_NSASTRING_
 NS_IMETHODIMP GFilePicker::SetDefaultExtension(const nsAString& aDefaultExtension)
-#else
-NS_IMETHODIMP GFilePicker::SetDefaultExtension(const PRUnichar *aDefaultExtension)
-#endif
 {
 	LOG ("GFilePicker::SetDefaultExtension");
 
@@ -434,7 +395,7 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 	rv = stack.Init ();
 	if (NS_FAILED (rv)) return rv;
 
-	AutoWindowModalState (mParent);
+	AutoWindowModalState modelState (mParent);
 	mParent = nsnull;
 
 	LOG ("GFilePicker::Show");
