@@ -128,10 +128,6 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 	aContentLocation->SchemeIs ("resource", &isResource);
 	if (isChrome || isResource) return NS_OK;
 
-	PRBool isHttps = PR_FALSE;
-	aContentLocation->SchemeIs ("https", &isHttps);
-	if (isHttps) return NS_OK;
-
 	/* is this url allowed ? */
 	nsCString contentSpec;
 	aContentLocation->GetSpec (contentSpec);
@@ -169,6 +165,10 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 			return NS_OK;
 		}
 	}
+
+	PRBool isHttps = PR_FALSE;
+	aContentLocation->SchemeIs ("https", &isHttps);
+	if (isHttps) return NS_OK;
 
 	PRBool isHttp = PR_FALSE;
 	aContentLocation->SchemeIs ("http", &isHttp);
