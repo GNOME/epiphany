@@ -56,6 +56,7 @@ struct _EphyFindToolbarPrivate
 	GtkWidget *status_label;
 	gulong set_focus_handler;
 	guint source_id;
+	guint find_again_source_id;
 	guint preedit_changed : 1;
 	guint prevent_activate : 1;
 	guint activated : 1;
@@ -465,6 +466,12 @@ ephy_find_toolbar_dispose (GObject *object)
 		priv->source_id = 0;
 	}
 
+	if (priv->find_again_source_id != 0)
+	{
+		g_source_remove (priv->find_again_source_id);
+		priv->find_again_source_id = 0;
+	}
+
 	parent_class->dispose (object);
 }
 
@@ -629,21 +636,61 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 	}
 }
 
+typedef struct
+{
+	EphyFindToolbar *toolbar;
+	gboolean next;
+} FindAgainCBStruct;
+
+static void
+find_again_data_destroy_cb (FindAgainCBStruct *data)
+{
+	g_slice_free (FindAgainCBStruct, data);
+}
+	
+
+static gboolean
+find_again_cb (FindAgainCBStruct *data)
+{
+	EphyEmbedFindResult result;
+	EphyFindToolbarPrivate *priv = data->toolbar->priv;
+
+	result = ephy_embed_find_find_again (get_find (data->toolbar), data->next,
+					     priv->links_only);
+	set_status (data->toolbar, result);
+    
+	priv->find_again_source_id = 0;
+    
+	return FALSE;
+}
+
 void
 ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
 {
 	GtkWidget *widget = GTK_WIDGET (toolbar);
 	EphyFindToolbarPrivate *priv = toolbar->priv;
-	EphyEmbedFindResult result;
-
-	result = ephy_embed_find_find_again (get_find (toolbar), TRUE,
-					     priv->links_only);
-	set_status (toolbar, result);
+	FindAgainCBStruct *data;
 
 	if (!GTK_WIDGET_VISIBLE (widget)) {
 		gtk_widget_show (widget);
 		gtk_widget_grab_focus (widget);
 	}
+
+	/* We need to do this here (and in find_previous) to give time to the embed
+	 * to sync with the size change due to the toolbar being shown, otherwise
+	 * the toolbar can obscure the result. See GNOME bug #415074.
+	 */
+    
+	if (priv->find_again_source_id != 0) return;
+
+    	data = g_slice_new0 (FindAgainCBStruct);
+	data->toolbar = toolbar;
+	data->next = TRUE;
+    
+	priv->find_again_source_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+						      (GSourceFunc) find_again_cb,
+						      data,
+						      (GDestroyNotify) find_again_data_destroy_cb);
 }
 
 void
@@ -651,16 +698,23 @@ ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 {
 	GtkWidget *widget = GTK_WIDGET (toolbar);
 	EphyFindToolbarPrivate *priv = toolbar->priv;
-	EphyEmbedFindResult result;
-
-	result = ephy_embed_find_find_again (get_find (toolbar), FALSE,
-					     priv->links_only);
-	set_status (toolbar, result);
+	FindAgainCBStruct *data;
 
 	if (!GTK_WIDGET_VISIBLE (widget)) {
 		gtk_widget_show (widget);
 		gtk_widget_grab_focus (widget);
 	}
+    
+	if (priv->find_again_source_id != 0) return;
+
+	data = g_slice_new0 (FindAgainCBStruct);
+	data->toolbar = toolbar;
+	data->next = FALSE;
+    
+	priv->find_again_source_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+						      (GSourceFunc) find_again_cb,
+						      data,
+						      (GDestroyNotify) find_again_data_destroy_cb);
 }
 
 void
