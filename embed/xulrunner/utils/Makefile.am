@@ -13,6 +13,8 @@ libephyxulrunnerutils_la_SOURCES = \
 	EphyUtils.h			\
 	GeckoUtils.cpp			\
 	GeckoUtils.h			\
+	ggeAutoModalDialog.cpp		\
+	ggeAutoModalDialog.h		\
 	ggeAutoSurvivalArea.cpp		\
 	ggeAutoSurvivalArea.h		\
 	$(NULL)

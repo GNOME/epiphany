@@ -37,24 +37,27 @@ struct JSContext; /* Just so we don't need to include a bunch of JS headers */
 #include <nsIDOMEvent.h>
 #include <nsIDOMEventTarget.h>
 #include <nsIJSContextStack.h>
+#include <nsIPrivateDOMEvent.h>
 #include <nsPIDOMWindow.h>
 #include <nsServiceManagerUtils.h>
 #include <nsThreadUtils.h>
+
+#include <gtk/gtkdialog.h>
 
 #include "ggeAutoModalDialog.h"
 
 ggeAutoModalDialog::ggeAutoModalDialog (nsIDOMWindow *aWindow,
                                         PRBool aNotifyDOM)
   : mWindow (aWindow),
-    mPWindow (do_QueryInterface (aWindow))
-    mStack (do_GetService ("@mozilla.org/js/xpc/ContextStack;1"))
+    mPWindow (do_QueryInterface (aWindow)),
+    mStack (do_GetService ("@mozilla.org/js/xpc/ContextStack;1")),
     mDefaultEnabled (PR_TRUE),
     mContextPushed (PR_FALSE),
     mModalStateSet (PR_FALSE)
 {
   /* First we check whether we should show the dialogue at all */
   if (aNotifyDOM) {
-    mDefaultEnabled = DispatchEvent ("DOMWillOpenModalDialog"));
+    mDefaultEnabled = DispatchEvent ("DOMWillOpenModalDialog");
     if (!mDefaultEnabled) {
       return;
     }
@@ -67,7 +70,7 @@ ggeAutoModalDialog::ggeAutoModalDialog (nsIDOMWindow *aWindow,
   if (mWindow) {
     NS_ASSERTION (mPWindow, "Should have a window here!");
 
-    mWindow->EnterModalState ();
+    mPWindow->EnterModalState ();
     mModalStateSet = PR_TRUE;
   }
 }
@@ -76,7 +79,7 @@ ggeAutoModalDialog::~ggeAutoModalDialog ()
 {
   if (mModalStateSet) {
     NS_ASSERTION (mPWindow, "Should have a window here!");
-    mWindow->LeaveModalState ();
+    mPWindow->LeaveModalState ();
   }
 
   if (mContextPushed) {
@@ -102,7 +105,7 @@ ggeAutoModalDialog::ResponseCallback (GtkWidget *aDialog,
   obj->mContinueModalLoop = PR_FALSE;
 }
 
-static gboolean PR_CALLBACK
+/* static */ gboolean PR_CALLBACK
 ggeAutoModalDialog::DeleteCallback (GtkWidget *aDialog,
                                     void *aEvent,
                                     void *aData)
@@ -111,8 +114,8 @@ ggeAutoModalDialog::DeleteCallback (GtkWidget *aDialog,
   return TRUE;
 }
 
-int
-ggeAutoModalDialog::Run (GtkDialog *aDialog)
+void
+ggeAutoModalDialog::Run (GtkWidget *aDialog)
 {
   NS_ASSERTION (ShouldShow(), "Calling ::Run on a prevented dialogue!");
 
@@ -125,18 +128,20 @@ ggeAutoModalDialog::Run (GtkDialog *aDialog)
   // being active the whole time a modal dialog is open.
   nsAutoPopupStatePusher popupStatePusher (mPWindow, openAbused);
   
-  mDialog = g_object_ref_sink (aDialog);
+  mDialog = aDialog;
+  g_object_ref_sink (mDialog);
   mResponse = GTK_RESPONSE_DELETE_EVENT;
 
   gulong responseHandler = g_signal_connect (mDialog, "response",
-                                             ResponseCallback,
+                                             G_CALLBACK (ResponseCallback),
                                              reinterpret_cast<void*>(this));
   gulong deleteHandler = g_signal_connect (mDialog, "delete-event",
-                                           DeleteCallback,
+                                           G_CALLBACK (DeleteCallback),
                                            reinterpret_cast<void*>(this));
 
-  
-  nsIThread *thread = NS_GetCurrentThread();
+
+  nsCOMPtr<nsIThread> thread (do_GetCurrentThread ());
+  NS_ASSERTION (thread, "No UI thread?");
   
   mContinueModalLoop = PR_TRUE;
   while (mContinueModalLoop) {
@@ -152,7 +157,7 @@ ggeAutoModalDialog::Run (GtkDialog *aDialog)
 }
 
 PRBool
-ggeAutoModalDialog::DispatchEvent (const char *aEvent)
+ggeAutoModalDialog::DispatchEvent (const char *aEventName)
 {
    if (!mWindow) {
     return PR_TRUE;
@@ -171,7 +176,7 @@ ggeAutoModalDialog::DispatchEvent (const char *aEvent)
 
     nsCOMPtr<nsIPrivateDOMEvent> privateEvent (do_QueryInterface (event));
     if (privateEvent) {
-      event->InitEvent(NS_ConvertASCIItoUTF16(aEventName), PR_TRUE, PR_TRUE);
+      event->InitEvent (NS_ConvertASCIItoUTF16 (aEventName), PR_TRUE, PR_TRUE);
 
       privateEvent->SetTrusted(PR_TRUE);
 
