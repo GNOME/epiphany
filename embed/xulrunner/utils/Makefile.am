@@ -13,6 +13,8 @@ libephyxulrunnerutils_la_SOURCES = \
 	EphyUtils.h			\
 	GeckoUtils.cpp			\
 	GeckoUtils.h			\
+	ggeAutoSurvivalArea.cpp		\
+	ggeAutoSurvivalArea.h		\
 	$(NULL)
 
 libephyxulrunnerutils_la_CPPFLAGS = \
