@@ -30,6 +30,7 @@
 #include "ephy-stock-icons.h"
 
 #include <gtk/gtkstock.h>
+#include <gtk/gtkimage.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
 
@@ -42,12 +43,17 @@ struct _EphyFileChooserPrivate
 
 static void ephy_file_chooser_class_init	(EphyFileChooserClass *klass);
 static void ephy_file_chooser_init		(EphyFileChooser *dialog);
+static void ephy_file_chooser_image_preview	(GtkFileChooser *file_chooser, 
+				 		 gpointer user_data);
 
 enum
 {
 	PROP_0,
 	PROP_PERSIST_KEY
 };
+
+#define PREVIEW_WIDTH 150
+#define PREVIEW_HEIGHT 150
 
 static GObjectClass *parent_class = NULL;
 
@@ -314,6 +320,34 @@ ephy_file_chooser_class_init (EphyFileChooserClass *klass)
 	g_type_class_add_private (object_class, sizeof (EphyFileChooserPrivate));
 }
 
+static void
+ephy_file_chooser_image_preview (GtkFileChooser *file_chooser, 
+				 gpointer user_data)
+{
+	char *filename;
+	GtkWidget *preview;
+	GdkPixbuf *pixbuf;
+	gboolean have_preview;
+	
+	pixbuf = NULL;
+	preview = GTK_WIDGET (user_data);
+	filename = gtk_file_chooser_get_preview_filename (file_chooser);
+	
+	if (filename)
+		pixbuf = gdk_pixbuf_new_from_file_at_size (filename, 
+					PREVIEW_WIDTH, PREVIEW_HEIGHT, NULL);
+	g_free (filename);
+	
+	have_preview = (pixbuf != NULL);
+	gtk_image_set_from_pixbuf (GTK_IMAGE (preview), pixbuf);
+	
+	if (pixbuf)
+		g_object_unref (pixbuf);
+		
+	gtk_file_chooser_set_preview_widget_active (file_chooser, have_preview);
+	
+}
+
 EphyFileChooser	*
 ephy_file_chooser_new (const char *title,
 		       GtkWidget *parent,
@@ -323,6 +357,7 @@ ephy_file_chooser_new (const char *title,
 {
 	EphyFileChooser *dialog;
 	GtkFileFilter *filter[EPHY_FILE_FILTER_LAST];
+	GtkWidget *preview;
 
 	g_return_val_if_fail (default_filter >= 0 && default_filter <= EPHY_FILE_FILTER_LAST, NULL);
 
@@ -363,6 +398,10 @@ ephy_file_chooser_new (const char *title,
 						 GTK_RESPONSE_ACCEPT);
 	}
 
+	preview = gtk_image_new ();
+	gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (dialog), preview);
+	g_signal_connect (dialog, "update-preview", G_CALLBACK (ephy_file_chooser_image_preview), preview);
+    
 	if (default_filter != EPHY_FILE_FILTER_NONE)
 	{
 		filter[EPHY_FILE_FILTER_ALL_SUPPORTED] =
