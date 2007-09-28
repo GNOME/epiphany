@@ -36,6 +36,7 @@
 #include <libgnomevfs/gnome-vfs-file-info.h>
 #include <libgnomevfs/gnome-vfs-ops.h>
 #include <libgnomevfs/gnome-vfs-directory.h>
+#include <libgnomevfs/gnome-vfs-xfer.h>
 #include <libxml/xmlreader.h>
 
 /* bug http://bugzilla.gnome.org/show_bug.cgi?id=156687 */
@@ -350,11 +351,8 @@ ephy_file_helpers_shutdown (void)
 	{
 		if (!keep_temp_directory)
 		{
-			/* recursively delete the contents */
+			/* recursively delete the contents and the directory */
 			ephy_file_delete_directory (tmp_dir);
-
-			/* delete the directory itself too */
-			rmdir (tmp_dir);
 		}
 
 		g_free (tmp_dir);
@@ -1218,8 +1216,34 @@ ephy_file_monitor_cancel (EphyFileMonitor *monitor)
 	g_free (monitor);
 }
 
+/**
+ * ephy_file_delete_directory:
+ * @path: the path to remove
+ *
+ * Remove @path and its contents. Like calling rm -rf @path.
+ *
+ **/
 void
 ephy_file_delete_directory (const char *path)
 {
 	/* FIXME not implemented yet */
+	GList *list;
+	GnomeVFSResult ret;
+	
+	list = g_list_append (NULL, gnome_vfs_uri_new (path));
+	
+	ret = gnome_vfs_xfer_delete_list (list, GNOME_VFS_XFER_ERROR_MODE_ABORT,
+					GNOME_VFS_XFER_EMPTY_DIRECTORIES,
+					NULL, NULL);
+	
+	gnome_vfs_uri_list_free (list);
+	
+	if (ret == GNOME_VFS_OK)
+	{
+		LOG ("Deleted the profile dir '%s'", path);
+	}
+	else
+	{
+		LOG ("Couldn't delete profile dir '%s'", path);
+	}
 }

@@ -675,7 +675,7 @@ main (int argc,
 
 	if (!ephy_file_helpers_init (profile_directory,
 				     private_instance,
-				     keep_temp_directory,
+				     keep_temp_directory || profile_directory,
 				     &error))
 	{
 		_ephy_dbus_release ();
