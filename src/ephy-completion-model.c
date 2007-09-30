@@ -499,7 +499,10 @@ ephy_completion_model_get_value (GtkTreeModel *tree_model,
 	{
 		case EPHY_COMPLETION_EXTRA_COL:
 			g_value_init (value, G_TYPE_STRING);
-			/* We set an additional text for the item title only for history, since we assume that people know the url of their bookmarks */
+			/* We set an additional text for the item title only for 
+			 * history, since we assume that people know the url of 
+			 * their bookmarks 
+			 */
 			if (group == HISTORY_GROUP)
 			{
 				const char *text;

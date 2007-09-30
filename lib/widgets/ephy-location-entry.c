@@ -122,6 +122,12 @@ static void ephy_location_entry_class_init (EphyLocationEntryClass *klass);
 static void ephy_location_entry_init (EphyLocationEntry *le);
 static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *, gboolean);
 
+static void extracell_data_func (GtkCellLayout *cell_layout,
+				GtkCellRenderer *cell,
+				GtkTreeModel *tree_model,
+				GtkTreeIter *iter,
+				gpointer data);
+
 static GObjectClass *parent_class = NULL;
 
 enum signalsEnum
@@ -1006,6 +1012,29 @@ cursor_on_match_cb  (GtkEntryCompletion *completion,
 	return TRUE;
 }
 
+static void
+extracell_data_func (GtkCellLayout *cell_layout,
+			GtkCellRenderer *cell,
+			GtkTreeModel *tree_model,
+			GtkTreeIter *iter,
+			gpointer data)
+{
+	char *cdata;
+	GValue visible = { 0, };
+	GValue text = { 0, };
+	
+	gtk_tree_model_get (tree_model, iter, GPOINTER_TO_UINT(data), &cdata, -1);
+
+	g_value_init (&text, G_TYPE_STRING);
+	g_value_init (&visible, G_TYPE_BOOLEAN);
+	
+	g_value_set_string (&text, cdata);
+	g_value_set_boolean (&visible, (cdata != NULL));
+
+	g_object_set_property (G_OBJECT (cell), "text", &text);
+	g_object_set_property (G_OBJECT (cell), "visible", &visible);
+}
+
 void
 ephy_location_entry_set_completion (EphyLocationEntry *le,
 				    GtkTreeModel *model,
@@ -1066,13 +1095,16 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 	g_object_set (le->priv->extracell, 
 			"ellipsize", PANGO_ELLIPSIZE_END,
 			"ellipsize-set", TRUE,
-			"alignment", PANGO_ALIGN_RIGHT,
+			"alignment", PANGO_ALIGN_LEFT,
 			NULL);
 
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
 				    le->priv->extracell, TRUE);
-	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
-				       le->priv->extracell, "text", extra_col);
+	
+	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
+					le->priv->extracell, extracell_data_func, 
+					GUINT_TO_POINTER (extra_col),
+					NULL);
 
 	g_object_set (completion, "inline-selection", TRUE, NULL);
 	g_signal_connect (completion, "cursor-on-match",
