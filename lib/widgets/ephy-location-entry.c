@@ -1028,11 +1028,14 @@ extracell_data_func (GtkCellLayout *cell_layout,
 	g_value_init (&text, G_TYPE_STRING);
 	g_value_init (&visible, G_TYPE_BOOLEAN);
 	
-	g_value_set_string (&text, cdata);
+	g_value_take_string (&text, cdata);
 	g_value_set_boolean (&visible, (cdata != NULL));
 
 	g_object_set_property (G_OBJECT (cell), "text", &text);
 	g_object_set_property (G_OBJECT (cell), "visible", &visible);
+	
+	g_value_unset (&text);
+	g_value_unset (&visible);
 }
 
 void
