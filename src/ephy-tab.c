@@ -320,6 +320,24 @@ ephy_tab_get_property (GObject *object,
 	}
 }
 
+
+static void
+ephy_tab_size_request (GtkWidget *widget,
+		       GtkRequisition *requisition)
+{
+	GtkWidget *child;
+
+	GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
+
+	child = GTK_BIN (widget)->child;
+	
+	if (child && GTK_WIDGET_VISIBLE (child))
+	{
+		GtkRequisition child_requisition;
+		gtk_widget_size_request (GTK_WIDGET (child), &child_requisition);
+	}
+}
+
 static void
 ephy_tab_size_allocate (GtkWidget *widget,
 			GtkAllocation *allocation)
@@ -387,6 +405,7 @@ ephy_tab_class_init (EphyTabClass *class)
 	object_class->set_property = ephy_tab_set_property;
 
 	widget_class->size_allocate = ephy_tab_size_allocate;
+	widget_class->size_request = ephy_tab_size_request;
 	widget_class->map = ephy_tab_map;
 	widget_class->grab_focus = ephy_tab_grab_focus;
 
