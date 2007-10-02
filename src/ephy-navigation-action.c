@@ -300,6 +300,7 @@ build_up_menu (EphyNavigationAction *action)
 {
 	EphyWindow *window = action->priv->window;
 	EphyEmbed *embed;
+	EphyHistory *history;
 	GtkMenuShell *menu;
 	GtkWidget *item;
 	GSList *list, *l;
@@ -310,15 +311,27 @@ build_up_menu (EphyNavigationAction *action)
 
 	menu = GTK_MENU_SHELL (gtk_menu_new ());
 
+    	history = EPHY_HISTORY
+		(ephy_embed_shell_get_global_history (embed_shell));
+
 	list = ephy_embed_get_go_up_list (embed);
 
 	for (l = list; l != NULL; l = l->next)
 	{
+		EphyNode *node;
+		const char *title = NULL;
+
 		url = l->data;
 
 		if (url == NULL) continue;
 
-		item = new_history_menu_item (url, url);
+		node = ephy_history_get_page (history, url);
+		if (node != NULL)
+		{
+			title = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_TITLE);
+		}
+
+		item = new_history_menu_item (title ? title : url, url);
 
 		g_object_set_data_full (G_OBJECT (item), URL_DATA_KEY, url,
 					(GDestroyNotify) g_free);
