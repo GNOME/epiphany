@@ -41,8 +41,8 @@ static void	webkit_embed_finalize		(GObject *object);
 static void	ephy_embed_iface_init		(EphyEmbedIface *iface);
 
 #if 0
-static void    load_started_cb                 (WebKitGtkPage *page,
-                                               WebKitGtkFrame *frame,
+static void    load_started_cb                 (WebKitPage *page,
+                                               WebKitFrame *frame,
                                                WebKitEmbed *wembed);
 
 static void webkit_embed_location_changed_cb	(GtkMozEmbed *embed,
@@ -80,7 +80,7 @@ typedef enum
 
 struct WebKitEmbedPrivate
 {
-  WebKitGtkPage *page;
+  WebKitPage *page;
   WebKitEmbedLoadState load_state;
 };
 
@@ -141,7 +141,7 @@ webkit_embed_class_init (WebKitEmbedClass *klass)
 static void
 webkit_embed_init (WebKitEmbed *embed)
 {
-  WebKitGtkPage *page;
+  WebKitPage *page;
 
   embed->priv = WEBKIT_EMBED_GET_PRIVATE (embed);
 
@@ -150,8 +150,8 @@ webkit_embed_init (WebKitEmbed *embed)
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (embed),
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  webkit_gtk_init ();
-  page = WEBKIT_GTK_PAGE (webkit_gtk_page_new ());
+  webkit_init ();
+  page = WEBKIT_PAGE (webkit_page_new ());
   embed->priv->page = page;
   gtk_container_add (GTK_CONTAINER (embed), GTK_WIDGET (page));
   gtk_widget_show (GTK_WIDGET (page));
@@ -180,8 +180,8 @@ webkit_embed_finalize (GObject *object)
 
 #if 0
 static void
-load_started_cb (WebKitGtkPage *page,
-                 WebKitGtkFrame *frame,
+load_started_cb (WebKitPage *page,
+                 WebKitFrame *frame,
                  WebKitEmbed *wembed)
 {
   g_debug("load-started, emitting ge_location with www.google.com as location");
@@ -197,7 +197,7 @@ impl_load_url (EphyEmbed *embed,
 
   g_debug ("a url %s", url);
   
-  webkit_gtk_page_open (wembed->priv->page, url);
+  webkit_page_open (wembed->priv->page, url);
 }
 
 static char * impl_get_location (EphyEmbed *embed, gboolean toplevel);
@@ -211,25 +211,25 @@ impl_load (EphyEmbed *embed,
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
 
   g_debug ("url %s", url);
-  webkit_gtk_page_open (wembed->priv->page, url);
+  webkit_page_open (wembed->priv->page, url);
 }
 
 static void
 impl_stop_load (EphyEmbed *embed)
 {
-  webkit_gtk_page_stop_loading (WEBKIT_EMBED (embed)->priv->page);
+  webkit_page_stop_loading (WEBKIT_EMBED (embed)->priv->page);
 }
 
 static gboolean
 impl_can_go_back (EphyEmbed *embed)
 {
-  return webkit_gtk_page_can_go_backward (WEBKIT_EMBED (embed)->priv->page);
+  return webkit_page_can_go_backward (WEBKIT_EMBED (embed)->priv->page);
 }
 
 static gboolean
 impl_can_go_forward (EphyEmbed *embed)
 {
-  return webkit_gtk_page_can_go_forward (WEBKIT_EMBED (embed)->priv->page);
+  return webkit_page_can_go_forward (WEBKIT_EMBED (embed)->priv->page);
 }
 
 static gboolean
@@ -247,13 +247,13 @@ impl_get_go_up_list (EphyEmbed *embed)
 static void
 impl_go_back (EphyEmbed *embed)
 {
-  webkit_gtk_page_go_backward (WEBKIT_EMBED (embed)->priv->page);
+  webkit_page_go_backward (WEBKIT_EMBED (embed)->priv->page);
 }
 		
 static void
 impl_go_forward (EphyEmbed *embed)
 {
-  webkit_gtk_page_go_forward (WEBKIT_EMBED (embed)->priv->page);
+  webkit_page_go_forward (WEBKIT_EMBED (embed)->priv->page);
 }
 
 static void
@@ -290,7 +290,7 @@ static void
 impl_reload (EphyEmbed *embed, 
              gboolean force)
 {
-  webkit_gtk_page_reload (WEBKIT_EMBED (embed)->priv->page);  
+  webkit_page_reload (WEBKIT_EMBED (embed)->priv->page);  
 }
 
 static void
