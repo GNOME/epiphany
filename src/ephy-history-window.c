@@ -112,6 +112,9 @@ static void cmd_select_all		  (GtkAction *action,
 					   EphyHistoryWindow *editor);
 static void cmd_help_contents		  (GtkAction *action,
 					   EphyHistoryWindow *editor);
+static void search_entry_search_cb 	  (GtkWidget *entry,
+					   char *search_text,
+					   EphyHistoryWindow *editor);
 
 #define EPHY_HISTORY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_HISTORY_WINDOW, EphyHistoryWindowPrivate))
 
@@ -918,7 +921,8 @@ add_by_word_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level
 {
 	const char *search_text;
 
-	search_text = gtk_entry_get_text (GTK_ENTRY (editor->priv->search_entry));
+	search_text = gtk_entry_get_text (GTK_ENTRY (ephy_icon_entry_get_entry
+						     (EPHY_ICON_ENTRY (editor->priv->search_entry))));
 	if (search_text == NULL) return;
 
 	ephy_node_filter_add_expression
@@ -980,7 +984,13 @@ site_node_selected_cb (EphyNodeView *view,
 	}
 	else
 	{
+		g_signal_handlers_block_by_func (EPHY_SEARCH_ENTRY (editor->priv->search_entry),
+						 G_CALLBACK (search_entry_search_cb),
+						 editor);
 		ephy_search_entry_clear (EPHY_SEARCH_ENTRY (editor->priv->search_entry));
+		g_signal_handlers_unblock_by_func (EPHY_SEARCH_ENTRY (editor->priv->search_entry),
+						   G_CALLBACK (search_entry_search_cb),
+						   editor);
 		setup_filters (editor, TRUE, FALSE);
 	}
 }
@@ -1014,15 +1024,15 @@ time_combo_changed_cb (GtkWidget *combo, EphyHistoryWindow *editor)
 
 static gboolean
 search_entry_clear_cb (GtkWidget *ebox,
-					   GdkEventButton *event,
-					   GtkWidget *entry)
+		       GdkEventButton *event,
+		       GtkWidget *entry)
 {
 	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 	
 	if (event->type == GDK_BUTTON_RELEASE && 
 	    event->button == 1 /* left */ && 
 	    state == 0)
-	{
+	{	
 		ephy_search_entry_clear (EPHY_SEARCH_ENTRY (entry));
 		
 		return TRUE;
@@ -1047,7 +1057,7 @@ build_search_box (EphyHistoryWindow *editor)
 	entry = ephy_search_entry_new ();
 	add_focus_monitor (editor, entry);
 	add_entry_monitor (editor, entry);
-	editor->priv->search_entry = ephy_icon_entry_get_entry (EPHY_ICON_ENTRY (entry));
+	editor->priv->search_entry = entry;
     
 	cleaner = gtk_image_new_from_stock (GTK_STOCK_CLEAR,
 					    GTK_ICON_SIZE_MENU);
