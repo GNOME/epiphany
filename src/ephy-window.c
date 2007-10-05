@@ -220,7 +220,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "ViewPageSource", NULL, N_("_Page Source"), "<control>U",
 	  N_("View the source code of the page"),
 	  G_CALLBACK (window_cmd_view_page_source) },
-        { "ViewPageSecurityInfo", NULL, N_("Page _Security Information…"), NULL,
+        { "ViewPageSecurityInfo", NULL, N_("Page _Security Information"), NULL,
           N_("Display security information for the web page"),
           G_CALLBACK (window_cmd_view_page_security_info) },
 
