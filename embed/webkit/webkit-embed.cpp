@@ -27,6 +27,7 @@
 #include "ephy-string.h"
 #include "ephy-embed-event.h"
 
+#include <webkitgtkframe.h>
 #include <webkitgtkpage.h>
 #include <webkitgtkglobal.h>
 #include <string.h>
@@ -39,34 +40,6 @@ static void	webkit_embed_init		(WebKitEmbed *gs);
 static void	webkit_embed_destroy		(GtkObject *object);
 static void	webkit_embed_finalize		(GObject *object);
 static void	ephy_embed_iface_init		(EphyEmbedIface *iface);
-
-#if 0
-static void    load_started_cb                 (WebKitPage *page,
-                                               WebKitFrame *frame,
-                                               WebKitEmbed *wembed);
-
-static void webkit_embed_location_changed_cb	(GtkMozEmbed *embed,
-						 WebKitEmbed *membed);
-static void webkit_embed_net_state_all_cb	(GtkMozEmbed *embed,
-						 const char *aURI,
-						 gint state,
-						 guint status,
-						 WebKitEmbed *membed);
-static gboolean webkit_embed_dom_mouse_click_cb(GtkMozEmbed *embed,
-                                                gpointer dom_event,
-                                                WebKitEmbed *membed);
-static gboolean webkit_embed_dom_mouse_down_cb	(GtkMozEmbed *embed,
-
-						 
-						 WebKitEmbed *membed);
-static gboolean webkit_embed_dom_key_press_cb	(GtkMozEmbed *embed,
-						 gpointer dom_event, 
-						 WebKitEmbed *membed);
-static void webkit_embed_new_window_cb		(GtkMozEmbed *embed, 
-						 GtkMozEmbed **newEmbed,
-						 guint chrome_mask,
-						 WebKitEmbed *membed);
-#endif
 
 #define WEBKIT_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED, WebKitEmbedPrivate))
 
@@ -82,6 +55,7 @@ struct WebKitEmbedPrivate
 {
   WebKitPage *page;
   WebKitEmbedLoadState load_state;
+  char *loading_uri;
 };
 
 static void
@@ -121,13 +95,97 @@ impl_close (EphyEmbed *embed)
 }
 
 static void
+webkit_embed_title_changed_cb (WebKitFrame *frame,
+			       gchar *title,
+			       gchar *location,
+			       EphyEmbed *embed)
+{
+  /* FIXME: We emit ge-location signal here, but it should really belong
+   * to a "location_changed" signal by WebKit, as we can change title
+   * without changing location or change location without changing title
+   */
+
+  g_signal_emit_by_name (embed, "ge-location", location, NULL);
+  g_signal_emit_by_name (embed, "title", title, NULL);
+}
+
+static void
+update_load_state (WebKitEmbed *embed, WebKitPage *page)
+{
+  EphyEmbedNetState estate = EPHY_EMBED_STATE_UNKNOWN;
+
+  if (embed->priv->load_state == WEBKIT_EMBED_LOAD_STARTED)
+      estate = (EphyEmbedNetState) (estate | 
+                                    EPHY_EMBED_STATE_START |
+                                    EPHY_EMBED_STATE_NEGOTIATING |
+                                    EPHY_EMBED_STATE_IS_REQUEST | 
+                                    EPHY_EMBED_STATE_IS_NETWORK);
+
+  if (embed->priv->load_state == WEBKIT_EMBED_LOAD_LOADING)
+      estate = (EphyEmbedNetState) (estate |
+                                    EPHY_EMBED_STATE_TRANSFERRING |
+                                    EPHY_EMBED_STATE_IS_REQUEST |
+                                    EPHY_EMBED_STATE_IS_NETWORK);
+
+  if (embed->priv->load_state == WEBKIT_EMBED_LOAD_STOPPED)
+      estate = (EphyEmbedNetState) (estate |
+                                    EPHY_EMBED_STATE_STOP |
+                                    EPHY_EMBED_STATE_IS_DOCUMENT |
+                                    EPHY_EMBED_STATE_IS_NETWORK);
+
+  g_signal_emit_by_name (EPHY_EMBED (embed), "ge_net_state",
+                         embed->priv->loading_uri, estate);
+}
+
+static void
+webkit_embed_load_started_cb (WebKitPage *page,
+			      WebKitFrame *frame,
+			      EphyEmbed *embed)
+{
+  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
+  wembed->priv->load_state = WEBKIT_EMBED_LOAD_STARTED;
+
+  update_load_state (wembed, page);
+}
+
+static void
+webkit_embed_load_progress_changed_cb (WebKitPage *page,
+				       int progress,
+				       EphyEmbed *embed)
+{
+  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
+
+  if (wembed->priv->load_state == WEBKIT_EMBED_LOAD_STARTED)
+    wembed->priv->load_state = WEBKIT_EMBED_LOAD_LOADING;
+
+  /* FIXME: EphyTab seems to have a strange way of calculating progress,
+   * and it's not compatible with the simple integer value WebKit emits.
+   * EphyTab IMHO should use "progress" signal from GtkMozEmbed. That way,
+   * we could use the same functions for WebKit too.
+   */
+
+  update_load_state (wembed, page);
+}
+
+static void
+webkit_embed_load_finished_cb (WebKitPage *page,
+			       WebKitFrame *frame,
+			       EphyEmbed *embed)
+{
+  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
+  wembed->priv->load_state = WEBKIT_EMBED_LOAD_STOPPED;
+
+  update_load_state (wembed, page);
+
+  g_signal_emit_by_name (embed, "net-stop", NULL);
+}
+
+static void
 webkit_embed_class_init (WebKitEmbedClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkObjectClass *gtk_object_class = GTK_OBJECT_CLASS (klass); 
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass); 
-
-  webkit_embed_parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
   object_class->finalize = webkit_embed_finalize;
 
@@ -144,6 +202,7 @@ webkit_embed_init (WebKitEmbed *embed)
   WebKitPage *page;
 
   embed->priv = WEBKIT_EMBED_GET_PRIVATE (embed);
+  embed->priv->loading_uri = NULL;
 
   gtk_scrolled_window_set_vadjustment (GTK_SCROLLED_WINDOW (embed), NULL);
   gtk_scrolled_window_set_hadjustment (GTK_SCROLLED_WINDOW (embed), NULL);
@@ -156,14 +215,14 @@ webkit_embed_init (WebKitEmbed *embed)
   gtk_container_add (GTK_CONTAINER (embed), GTK_WIDGET (page));
   gtk_widget_show (GTK_WIDGET (page));
 
-#if 0
   g_signal_connect (G_OBJECT (page), "load-started",
-		  G_CALLBACK (load_started_cb), embed);
+                    G_CALLBACK (webkit_embed_load_started_cb), embed);
+  g_signal_connect (G_OBJECT (page), "load_finished",
+                    G_CALLBACK (webkit_embed_load_finished_cb), embed);
   g_signal_connect (G_OBJECT (page), "title-changed",
-                    G_CALLBACK (title_changed_cb), page);
+                    G_CALLBACK (webkit_embed_title_changed_cb), embed);
   g_signal_connect (G_OBJECT (page), "load-progress-changed",
-                    G_CALLBACK (load_progress_changed), page);
-#endif
+                    G_CALLBACK (webkit_embed_load_progress_changed_cb), embed);
 }
 
 static void
@@ -175,19 +234,12 @@ webkit_embed_destroy (GtkObject *object)
 static void
 webkit_embed_finalize (GObject *object)
 {
+  WebKitEmbed *wembed = WEBKIT_EMBED (object);
+
+  g_free (wembed->priv->loading_uri);
+
   G_OBJECT_CLASS (webkit_embed_parent_class)->finalize (object);
 }
-
-#if 0
-static void
-load_started_cb (WebKitPage *page,
-                 WebKitFrame *frame,
-                 WebKitEmbed *wembed)
-{
-  g_debug("load-started, emitting ge_location with www.google.com as location");
-  g_signal_emit_by_name (wembed, "ge_location", "www.google.com");
-}
-#endif
 
 static void
 impl_load_url (EphyEmbed *embed,
@@ -195,12 +247,8 @@ impl_load_url (EphyEmbed *embed,
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
 
-  g_debug ("a url %s", url);
-  
   webkit_page_open (wembed->priv->page, url);
 }
-
-static char * impl_get_location (EphyEmbed *embed, gboolean toplevel);
 
 static void
 impl_load (EphyEmbed *embed, 
@@ -209,9 +257,27 @@ impl_load (EphyEmbed *embed,
 	   EphyEmbed *preview_embed)
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
+  char *effective_url = NULL;
 
-  g_debug ("url %s", url);
-  webkit_page_open (wembed->priv->page, url);
+  /* FIXME: WebKit has some strange bug for which there must be
+   * protocol prefix into the parsed URL, or it will not show images
+   * and lock badly.  I copied this function from WebKit's
+   * GdkLauncher.
+   */
+  if (strncmp ("http://", url, 7) != 0 &&
+      strncmp ("https://", url, 8) != 0 &&
+      strncmp ("file://", url, 7) != 0 &&
+      strncmp ("ftp://", url, 6) != 0)
+    effective_url = g_strconcat ("http://", url, NULL);
+  else
+    effective_url = g_strdup (url);
+
+  g_free (wembed->priv->loading_uri);
+  wembed->priv->loading_uri = g_strdup (effective_url);
+
+  webkit_page_open (wembed->priv->page, effective_url);
+
+  g_free (effective_url);
 }
 
 static void
@@ -264,7 +330,8 @@ impl_go_up (EphyEmbed *embed)
 static char *
 impl_get_title (EphyEmbed *embed)
 {
-  return NULL;
+  WebKitFrame *frame = webkit_page_get_main_frame (WEBKIT_EMBED (embed)->priv->page);
+  return g_strdup (webkit_frame_get_title (frame));
 }
 
 static char *
@@ -283,7 +350,8 @@ static char *
 impl_get_location (EphyEmbed *embed, 
                    gboolean toplevel)
 {
-  return NULL;
+  WebKitFrame *frame = webkit_page_get_main_frame (WEBKIT_EMBED (embed)->priv->page);
+  return g_strdup (webkit_frame_get_location (frame));
 }
 
 static void
