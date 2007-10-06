@@ -105,8 +105,7 @@ webkit_embed_title_changed_cb (WebKitFrame *frame,
    * without changing location or change location without changing title
    */
 
-  g_signal_emit_by_name (embed, "ge-location", location, NULL);
-  g_signal_emit_by_name (embed, "title", title, NULL);
+  g_signal_emit_by_name (embed, "ge-location", location);
 }
 
 static void
@@ -176,8 +175,6 @@ webkit_embed_load_finished_cb (WebKitPage *page,
   wembed->priv->load_state = WEBKIT_EMBED_LOAD_STOPPED;
 
   update_load_state (wembed, page);
-
-  g_signal_emit_by_name (embed, "net-stop", NULL);
 }
 
 static void
