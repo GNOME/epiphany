@@ -946,9 +946,17 @@ window_cmd_load_location (GtkAction *action,
 
 	if (location)
 	{
-		ephy_link_open (EPHY_LINK (window), location,
+		EphyBookmarks *bookmarks;
+		char *address;
+
+		bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
+
+		address = ephy_bookmarks_resolve_address (bookmarks, location, NULL);
+		g_return_if_fail (address != NULL);
+
+		ephy_link_open (EPHY_LINK (window), address,
 			        ephy_window_get_active_tab (window),
-				ephy_link_flags_from_current_event ());
+				ephy_link_flags_from_current_event () | EPHY_LINK_ALLOW_FIXUP);
 	}
 }
 
