@@ -42,6 +42,10 @@ AC_SUBST([EPIPHANY_MAJOR],[epiphany_version_major.epiphany_version_minor])
 AC_SUBST([EPIPHANY_API_VERSION],[epiphany_version_major.epiphany_version_minor])
 AC_SUBST([EPIPHANY_UA_VERSION])
 
+# Build ID
+BUILDID="$(TZ=UTC0 date +'%Y%m%d')"
+AC_SUBST([BUILDID])
+
 AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip tar-ustar])
 
 AM_MAINTAINER_MODE
@@ -801,6 +805,8 @@ embed/xulrunner/embed/Makefile
 embed/xulrunner/src/Makefile
 embed/xulrunner/tests/Makefile
 embed/xulrunner/utils/Makefile
+xulapp/Makefile
+xulapp/application.ini
 ])
 
 AC_CONFIG_FILES([

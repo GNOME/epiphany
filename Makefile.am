@@ -1,5 +1,9 @@
 SUBDIRS = lib embed src plugins data po help doc
 
+if WITH_XULRUNNER_ENGINE
+SUBDIRS += xulapp
+endif
+
 ACLOCAL_AMFLAGS = -I m4
 
 NULL =
