@@ -41,6 +41,12 @@ fi
 
 PKG_CHECK_EXISTS([$libxul_cv_libxul_pkg],[libxul_cv_have_libxul=yes],[libxul_cv_have_libxul=no])
 if test "$libxul_cv_have_libxul" != "yes"; then
+  # Debian/Ubuntu xulrunner-1.9-dev has versioned pc files, try again
+  libxul_cv_libxul_pkg="${libxul_cv_libxul_pkg}-1.9"
+  PKG_CHECK_EXISTS([$libxul_cv_libxul_pkg],[libxul_cv_have_libxul=yes],[libxul_cv_have_libxul=no])
+fi
+if test "$libxul_cv_have_libxul" != "yes"; then
+  # Still nothing? Error out
   AC_MSG_ERROR([libxul not found])
 fi
 
