@@ -85,7 +85,7 @@ EmbedContentListener::OnStartURIOpen(nsIURI     *aURI,
                  gecko_embed_signals[OPEN_URI], 0,
                  specString.get(), &retval);
 
-  *aAbortOpen = retval;
+  *aAbortOpen = retval != FALSE;
 
   return NS_OK;
 }
