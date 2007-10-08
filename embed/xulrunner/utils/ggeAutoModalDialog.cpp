@@ -51,13 +51,12 @@ ggeAutoModalDialog::ggeAutoModalDialog (nsIDOMWindow *aWindow,
   : mWindow (aWindow),
     mPWindow (do_QueryInterface (aWindow)),
     mStack (do_GetService ("@mozilla.org/js/xpc/ContextStack;1")),
-    mDefaultEnabled (PR_TRUE),
+    mDefaultEnabled (DispatchEvent ("DOMWillOpenModalDialog", aNotifyDOM)),
     mContextPushed (PR_FALSE),
     mModalStateSet (PR_FALSE)
 {
   /* First we check whether we should show the dialogue at all */
   if (aNotifyDOM) {
-    mDefaultEnabled = DispatchEvent ("DOMWillOpenModalDialog");
     if (!mDefaultEnabled) {
       return;
     }
@@ -139,13 +138,12 @@ ggeAutoModalDialog::Run (GtkWidget *aDialog)
                                            G_CALLBACK (DeleteCallback),
                                            reinterpret_cast<void*>(this));
 
-
   nsCOMPtr<nsIThread> thread (do_GetCurrentThread ());
   NS_ASSERTION (thread, "No UI thread?");
   
   mContinueModalLoop = PR_TRUE;
   while (mContinueModalLoop) {
-    if (!NS_ProcessNextEvent(thread))
+    if (!NS_ProcessNextEvent (thread))
       break;
   }
 
@@ -157,9 +155,10 @@ ggeAutoModalDialog::Run (GtkWidget *aDialog)
 }
 
 PRBool
-ggeAutoModalDialog::DispatchEvent (const char *aEventName)
+ggeAutoModalDialog::DispatchEvent (const char *aEventName,
+                                   PRBool aDoNotify)
 {
-   if (!mWindow) {
+  if (!mWindow || !aDoNotify) {
     return PR_TRUE;
   }
 
@@ -172,7 +171,7 @@ ggeAutoModalDialog::DispatchEvent (const char *aEventName)
   PRBool defaultActionEnabled = PR_TRUE;
 
   if (docevent) {
-    docevent->CreateEvent(NS_LITERAL_STRING ("Events"), getter_AddRefs (event));
+    docevent->CreateEvent (NS_LITERAL_STRING ("Events"), getter_AddRefs (event));
 
     nsCOMPtr<nsIPrivateDOMEvent> privateEvent (do_QueryInterface (event));
     if (privateEvent) {
@@ -180,9 +179,9 @@ ggeAutoModalDialog::DispatchEvent (const char *aEventName)
 
       privateEvent->SetTrusted(PR_TRUE);
 
-      nsCOMPtr<nsIDOMEventTarget> target(do_QueryInterface(mWindow));
+      nsCOMPtr<nsIDOMEventTarget> target (do_QueryInterface (mWindow));
 
-      target->DispatchEvent(event, &defaultActionEnabled);
+      target->DispatchEvent (event, &defaultActionEnabled);
     }
   }
 

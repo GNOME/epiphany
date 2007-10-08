@@ -50,7 +50,7 @@ class ggeAutoModalDialog
     // stack only please
     void *operator new (size_t) CPP_THROW_NEW;
 
-    PRBool DispatchEvent (const char *aEventName);
+    PRBool DispatchEvent (const char*, PRBool);
 
     static void PR_CALLBACK ResponseCallback (GtkWidget*, int, void*);
     static gboolean PR_CALLBACK DeleteCallback (GtkWidget*, void*, void*);
