@@ -650,7 +650,8 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   gtk_print_settings_set_page_ranges (aGtkSettings, NULL, 0);
   gtk_print_settings_set_page_set (aGtkSettings, GTK_PAGE_SET_ALL);
 
-  switch (gtk_print_settings_get_orientation (aGtkSettings)) {
+  /* We must use the page setup here instead of the print settings, see gtk bug #485685 */
+  switch (gtk_page_setup_get_orientation (aPageSetup)) {
     case GTK_PAGE_ORIENTATION_PORTRAIT:
     case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT: /* not supported */
       aSettings->SetOrientation (nsIPrintSettings::kPortraitOrientation);
