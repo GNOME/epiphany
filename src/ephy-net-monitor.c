@@ -151,19 +151,9 @@ filter_func (DBusConnection *connection,
 
 	if (dbus_message_is_signal (message,
 				    NM_DBUS_INTERFACE,
-				    "DeviceNoLongerActive"))
+				    "StateChange"))
 	{
-		LOG ("EphyNetMonitor catches DeviceNoLongerActive signal");
-
-		ephy_net_monitor_check_network (monitor);
-
-		return DBUS_HANDLER_RESULT_HANDLED;
-	}
-	if (dbus_message_is_signal (message,
-				    NM_DBUS_INTERFACE,
-				    "DeviceNowActive"))
-	{
-		LOG ("EphyNetMonitor catches DeviceNowActive signal");
+		LOG ("EphyNetMonitor catches StateChange signal");
 
 		ephy_net_monitor_check_network (monitor);
 
