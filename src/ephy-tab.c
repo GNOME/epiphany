@@ -103,7 +103,6 @@ struct _EphyTabPrivate
 	gint8 load_percent;
 	/* Flags */
 	guint is_blank : 1;
-	guint visibility : 1;
 	guint is_loading : 1;
 	guint is_setting_zoom : 1;
 	EphyEmbedSecurityLevel security_level;
@@ -138,7 +137,6 @@ enum
 	PROP_POPUPS_ALLOWED,
 	PROP_TITLE,
 	PROP_TYPED_ADDRESS,
-	PROP_VISIBLE,
 	PROP_ZOOM
 };
 
@@ -253,7 +251,6 @@ ephy_tab_set_property (GObject *object,
 		case PROP_SECURITY:
 		case PROP_HIDDEN_POPUP_COUNT:
 		case PROP_TITLE:
-		case PROP_VISIBLE:
 		case PROP_ZOOM:
 			/* read only */
 			break;
@@ -310,9 +307,6 @@ ephy_tab_get_property (GObject *object,
 			break;
 		case PROP_TYPED_ADDRESS:
 			g_value_set_string (value, ephy_tab_get_typed_address (tab));
-			break;
-		case PROP_VISIBLE:
-			g_value_set_boolean (value, priv->visibility);
 			break;
 		case PROP_ZOOM:
 			g_value_set_float (value, priv->zoom);
@@ -519,14 +513,6 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "The typed address",
 							      "",
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	g_object_class_install_property (object_class,
-					 PROP_VISIBLE,
-					 g_param_spec_boolean ("visibility",
-							       "Visibility",
-							       "The tab's visibility",
-							       TRUE,
-							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_ZOOM,
@@ -1237,22 +1223,6 @@ ephy_tab_set_size (EphyTab *tab,
 	}
 }
 
-/**
- * ephy_tab_get_visibility:
- * @tab: an #EphyTab
- *
- * FIXME: Nobody really knows what this does. Someone must investigate.
- *
- * Return value; %TRUE if @tab's "visibility" property is set
- **/
-gboolean
-ephy_tab_get_visibility (EphyTab *tab)
-{
-	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
-
-	return tab->priv->visibility;
-}
-
 static void
 ephy_tab_load_icon (EphyTab *tab)
 {
@@ -1916,27 +1886,6 @@ ephy_tab_popup_blocked_cb (EphyEmbed *embed,
 	popups_manager_add (tab, url, name, features);
 }
 
-static void
-ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
-			EphyTab *tab)
-{
-	LOG ("ephy_tab_visibility_cb tab %p visibility %d",
-	     tab, visibility);
-
-	if (visibility)
-	{
-		gtk_widget_show (GTK_WIDGET (tab));
-	}
-	else
-	{
-		gtk_widget_hide (GTK_WIDGET (tab));
-	}
-
-	tab->priv->visibility = visibility;
-
-	g_object_notify (G_OBJECT (tab), "visibility");
-}
-
 static gboolean
 open_link_in_new (EphyTab *tab,
 		  const char *link_address,
@@ -2207,9 +2156,6 @@ ephy_tab_init (EphyTab *tab)
 				 tab, 0);
 	g_signal_connect_object (embed, "ge_popup_blocked",
 				 G_CALLBACK (ephy_tab_popup_blocked_cb),
-				 tab, 0);
-	g_signal_connect_object (embed, "visibility",
-				 G_CALLBACK (ephy_tab_visibility_cb),
 				 tab, 0);
 	g_signal_connect_object (embed, "ge_dom_mouse_click",
 				 G_CALLBACK (ephy_tab_dom_mouse_click_cb),

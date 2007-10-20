@@ -117,8 +117,6 @@ const char             *ephy_tab_get_title		(EphyTab *tab);
 
 const char             *ephy_tab_get_title_composite	(EphyTab *tab);
 
-gboolean		ephy_tab_get_visibility		(EphyTab *tab);
-
 float			ephy_tab_get_zoom		(EphyTab *tab);
 
 /* private */

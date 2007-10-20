@@ -1721,34 +1721,6 @@ sync_tab_title (EphyTab *tab,
 }
 
 static void
-sync_tab_visibility (EphyTab *tab,
-		     GParamSpec *pspec,
-		     EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GList *l, *tabs;
-	gboolean visible = FALSE;
-
-	if (priv->closing) return;
-
-	tabs = ephy_window_get_tabs (window);
-	for (l = tabs; l != NULL; l = l->next)
-	{
-		EphyTab *tab = EPHY_TAB(l->data);
-		g_return_if_fail (EPHY_IS_TAB(tab));
-
-		if (ephy_tab_get_visibility (tab))
-		{
-			visible = TRUE;
-			break;
-		}
-	}
-	g_list_free (tabs);
-
-	g_object_set (window, "visible", visible, NULL);
-}
-
-static void
 sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	GtkActionGroup *action_group;
@@ -2504,8 +2476,6 @@ notebook_page_added_cb (EphyNotebook *notebook,
 
 	update_tabs_menu_sensitivity (window);
 
-	g_signal_connect_object (tab, "notify::visibility",
-				 G_CALLBACK (sync_tab_visibility), window, 0);
 	g_signal_connect_object (tab, "open-link",
 				 G_CALLBACK (ephy_link_open), window,
 				 G_CONNECT_SWAPPED);
@@ -2547,9 +2517,6 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
 	ephy_extension_detach_tab (manager, window, tab);
 
-	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
-					      G_CALLBACK (sync_tab_visibility),
-					      window);
 	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
 					      G_CALLBACK (ephy_link_open),
 					      window);	
