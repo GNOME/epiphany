@@ -423,8 +423,16 @@ ephy_embed_base_init (gpointer g_class)
 			      1,
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
+                g_object_interface_install_property (g_class,
+                                                     g_param_spec_enum ("security-level",
+                                                                        "Security Level",
+                                                                        "The embed's security level",
+                                                                        EPHY_TYPE_EMBED_SECURITY_LEVEL,
+                                                                        EPHY_EMBED_STATE_IS_UNKNOWN,
+                                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 		initialized = TRUE;
 	}
+
 }
 
 /**

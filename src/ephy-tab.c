@@ -105,8 +105,6 @@ struct _EphyTabPrivate
 	guint is_blank : 1;
 	guint is_loading : 1;
 	guint is_setting_zoom : 1;
-	EphyEmbedSecurityLevel security_level;
-	/* guint security_level : 3; ? */
 	EphyTabAddressExpire address_expire;
 	/* guint address_expire : 2; ? */
 
@@ -132,7 +130,6 @@ enum
 	PROP_LOAD_STATUS,
 	PROP_MESSAGE,
 	PROP_NAVIGATION,
-	PROP_SECURITY,
 	PROP_HIDDEN_POPUP_COUNT,
 	PROP_POPUPS_ALLOWED,
 	PROP_TITLE,
@@ -166,8 +163,6 @@ static void	ephy_tab_set_load_percent	(EphyTab *tab,
 						 int percent);
 static void	ephy_tab_update_navigation_flags(EphyTab *tab,
 						 EphyEmbed *embed);
-static void	ephy_tab_set_security_level	(EphyTab *tab,
-						 EphyEmbedSecurityLevel level);
 static void	ephy_tab_set_title		(EphyTab *tab,
 						 EphyEmbed *embed,
 						 char *new_title);
@@ -248,7 +243,6 @@ ephy_tab_set_property (GObject *object,
 		case PROP_LOAD_STATUS:
 		case PROP_MESSAGE:
 		case PROP_NAVIGATION:
-		case PROP_SECURITY:
 		case PROP_HIDDEN_POPUP_COUNT:
 		case PROP_TITLE:
 		case PROP_ZOOM:
@@ -291,9 +285,6 @@ ephy_tab_get_property (GObject *object,
 			break;
 		case PROP_NAVIGATION:
 			g_value_set_flags (value, priv->nav_flags);
-			break;
-		case PROP_SECURITY:
-			g_value_set_enum (value, priv->security_level);
 			break;
 		case PROP_HIDDEN_POPUP_COUNT:
 			g_value_set_int (value, popup_blocker_n_hidden (tab));
@@ -469,15 +460,6 @@ ephy_tab_class_init (EphyTabClass *class)
 							     "The tab's navigation flags",
 							     EPHY_TYPE_TAB_NAVIGATION_FLAGS,
 							     0,
-							     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	g_object_class_install_property (object_class,
-					 PROP_SECURITY,
-					 g_param_spec_enum ("security-level",
-							    "Security Level",
-							    "The tab's security level",
-							    EPHY_TYPE_EMBED_SECURITY_LEVEL,
-							    EPHY_EMBED_STATE_IS_UNKNOWN,
 							     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
@@ -2057,13 +2039,6 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 }
 
 static void
-ephy_tab_security_change_cb (EphyEmbed *embed, EphyEmbedSecurityLevel level,
-			       EphyTab *tab)
-{
-	ephy_tab_set_security_level (tab, level);
-}
-
-static void
 ephy_tab_init (EphyTab *tab)
 {
 	EphyTabPrivate *priv;
@@ -2110,7 +2085,6 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->height = -1;
 	tab->priv->load_percent = 0;
 	tab->priv->is_loading = FALSE;
-	tab->priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
 	tab->priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
 	tab->priv->zoom = 1.0;
 	priv->title = NULL;
@@ -2159,9 +2133,6 @@ ephy_tab_init (EphyTab *tab)
 				 tab, 0);
 	g_signal_connect_object (embed, "ge_dom_mouse_click",
 				 G_CALLBACK (ephy_tab_dom_mouse_click_cb),
-				 tab, 0);
-	g_signal_connect_object (embed, "ge_security_change",
-				 G_CALLBACK (ephy_tab_security_change_cb),
 				 tab, 0);
 	g_signal_connect_object (embed, "ge_favicon",
 				 G_CALLBACK (ephy_tab_favicon_cb),
@@ -2470,32 +2441,6 @@ ephy_tab_set_typed_address (EphyTab *tab,
 	}
 
 	g_object_notify (G_OBJECT (tab), "typed-address");
-}
-
-static void
-ephy_tab_set_security_level (EphyTab *tab, EphyEmbedSecurityLevel level)
-{
-	g_return_if_fail (EPHY_IS_TAB (tab));
-
-	tab->priv->security_level = level;
-
-	g_object_notify (G_OBJECT (tab), "security-level");
-}
-
-/**
- * ephy_tab_get_security_level:
- * @tab: an #EphyTab
- *
- * Returns the security level of the webpage loaded in @tab.
- *
- * Return value: @tab's loaded page's security level
- **/
-EphyEmbedSecurityLevel
-ephy_tab_get_security_level (EphyTab *tab)
-{
-	g_return_val_if_fail (EPHY_IS_TAB (tab), EPHY_EMBED_STATE_IS_UNKNOWN);
-
-	return tab->priv->security_level;
 }
 
 static void
