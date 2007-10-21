@@ -217,6 +217,17 @@
 
 ;; Enumerations and flags ...
 
+(define-flags EmbedNavigationFlags
+  (in-module "Ephy")
+  (c-name "EphyEmbedNavigationFlags")
+  (gtype-id "EPHY_TYPE_EMBED_NAVIGATION_FLAGS")
+  (values
+    '("up" "EPHY_EMBED_NAV_UP")
+    '("back" "EPHY_EMBED_NAV_BACK")
+    '("forward" "EPHY_EMBED_NAV_FORWARD")
+  )
+)
+
 (define-flags EmbedEventContext
   (in-module "Ephy")
   (c-name "EphyEmbedEventContext")
@@ -423,17 +434,6 @@
     '("jump" "EPHY_NEW_TAB_JUMP")
     '("in-new-window" "EPHY_NEW_TAB_IN_NEW_WINDOW")
     '("in-existing-window" "EPHY_NEW_TAB_IN_EXISTING_WINDOW")
-  )
-)
-
-(define-flags TabNavigationFlags
-  (in-module "Ephy")
-  (c-name "EphyTabNavigationFlags")
-  (gtype-id "EPHY_TYPE_TAB_NAVIGATION_FLAGS")
-  (values
-    '("up" "EPHY_TAB_NAV_UP")
-    '("back" "EPHY_TAB_NAV_BACK")
-    '("forward" "EPHY_TAB_NAV_FORWARD")
   )
 )
 
@@ -941,6 +941,11 @@
 
 
 ;; From ../embed/ephy-embed.h
+
+(define-function ephy_embed_navigation_flags_get_type
+  (c-name "ephy_embed_navigation_flags_get_type")
+  (return-type "GType")
+)
 
 (define-function ephy_embed_net_state_get_type
   (c-name "ephy_embed_net_state_get_type")
@@ -3372,12 +3377,6 @@
   )
 )
 
-(define-method get_navigation_flags
-  (of-object "EphyTab")
-  (c-name "ephy_tab_get_navigation_flags")
-  (return-type "EphyTabNavigationFlags")
-)
-
 (define-method get_size
   (of-object "EphyTab")
   (c-name "ephy_tab_get_size")
@@ -3530,11 +3529,6 @@
 
 (define-function ephy_new_tab_flags_get_type
   (c-name "ephy_new_tab_flags_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_tab_navigation_flags_get_type
-  (c-name "ephy_tab_navigation_flags_get_type")
   (return-type "GType")
 )
 

@@ -1468,39 +1468,35 @@ sync_tab_message (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
-sync_tab_navigation (EphyTab *tab,
+sync_tab_navigation (EphyEmbed *embed,
 		     GParamSpec *pspec,
 		     EphyWindow *window)
 {
-	EphyTabNavigationFlags flags;
+	EphyEmbedNavigationFlags flags;
 	gboolean up = FALSE, back = FALSE, forward = FALSE;
-	EphyEmbed *embed;
 	char *back_url   = NULL, *forward_url   = NULL;
 	char *back_title = NULL, *forward_title = NULL;
 	gint position;
 
 	if (window->priv->closing) return;
 
-	flags = ephy_tab_get_navigation_flags (tab);
+	flags = ephy_embed_get_navigation_flags (embed);
 
-	if (flags & EPHY_TAB_NAV_UP)
+	if (flags & EPHY_EMBED_NAV_UP)
 	{
 		up = TRUE;
 	}
-	if (flags & EPHY_TAB_NAV_BACK)
+	if (flags & EPHY_EMBED_NAV_BACK)
 	{
 		back = TRUE;
 	}
-	if (flags & EPHY_TAB_NAV_FORWARD)
+	if (flags & EPHY_EMBED_NAV_FORWARD)
 	{
 		forward = TRUE;
 	}
 
 	ephy_toolbar_set_navigation_actions (window->priv->toolbar,
 					     back, forward, up);
-
-	embed = ephy_tab_get_embed (tab);
-	if (embed == NULL) return;
 
 	position = ephy_embed_shistory_get_pos (embed);
 
@@ -2155,9 +2151,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 						      G_CALLBACK (sync_tab_message),
 						      window);
 		g_signal_handlers_disconnect_by_func (old_tab,
-						      G_CALLBACK (sync_tab_navigation),
-						      window);
-		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_popup_windows),
 						      window);
 		g_signal_handlers_disconnect_by_func (old_tab,
@@ -2184,6 +2177,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (sync_tab_load_status),
 						      window);
+		g_signal_handlers_disconnect_by_func (embed,
+						      G_CALLBACK (sync_tab_navigation),
+						      window);
 
 		g_signal_handlers_disconnect_by_func
 			(embed, G_CALLBACK (tab_context_menu_cb), window);
@@ -2203,11 +2199,11 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		sync_tab_zoom		(embed, NULL, window);
 		sync_tab_load_progress	(embed, NULL, window);
 		sync_tab_load_status	(embed, NULL, window);
+		sync_tab_navigation	(embed, NULL, window);
 
 		sync_tab_address	(new_tab, NULL, window);
 		sync_tab_icon		(new_tab, NULL, window);
 		sync_tab_message	(new_tab, NULL, window);
-		sync_tab_navigation	(new_tab, NULL, window);
 		sync_tab_popup_windows	(new_tab, NULL, window);
 		sync_tab_popups_allowed	(new_tab, NULL, window);
 		sync_tab_title		(new_tab, NULL, window);
@@ -2220,9 +2216,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 					 window, 0);
 		g_signal_connect_object (new_tab, "notify::message",
 					 G_CALLBACK (sync_tab_message),
-					 window, 0);
-		g_signal_connect_object (new_tab, "notify::navigation",
-					 G_CALLBACK (sync_tab_navigation),
 					 window, 0);
 		g_signal_connect_object (new_tab, "notify::hidden-popup-count",
 					 G_CALLBACK (sync_tab_popup_windows),
@@ -2245,6 +2238,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 					 window, 0);
 		g_signal_connect_object (embed, "notify::load-status",
 					 G_CALLBACK (sync_tab_load_status),
+					 window, 0);
+		g_signal_connect_object (embed, "notify::navigation",
+					 G_CALLBACK (sync_tab_navigation),
 					 window, 0);
 		g_signal_connect_object (embed, "ge-context-menu",
 					 G_CALLBACK (tab_context_menu_cb),

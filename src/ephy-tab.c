@@ -95,7 +95,6 @@ struct _EphyTabPrivate
 	int height;
 	GSList *hidden_popups;
 	GSList *shown_popups;
-	EphyTabNavigationFlags nav_flags;
 	guint idle_resize_handler;
 
 	/* Flags */
@@ -121,7 +120,6 @@ enum
 	PROP_ICON,
 	PROP_ICON_ADDRESS,
 	PROP_MESSAGE,
-	PROP_NAVIGATION,
 	PROP_HIDDEN_POPUP_COUNT,
 	PROP_POPUPS_ALLOWED,
 	PROP_TITLE,
@@ -148,8 +146,6 @@ static guint n_tabs = 0;
 /* internal functions, accessible only from this file */
 static void	ephy_tab_set_link_message	(EphyTab *tab,
 						 char *message);
-static void	ephy_tab_update_navigation_flags(EphyTab *tab,
-						 EphyEmbed *embed);
 static void	ephy_tab_set_title		(EphyTab *tab,
 						 EphyEmbed *embed,
 						 char *new_title);
@@ -224,7 +220,6 @@ ephy_tab_set_property (GObject *object,
 		case PROP_ADDRESS:
 		case PROP_ICON:
 		case PROP_MESSAGE:
-		case PROP_NAVIGATION:
 		case PROP_HIDDEN_POPUP_COUNT:
 		case PROP_TITLE:
 			/* read only */
@@ -254,9 +249,6 @@ ephy_tab_get_property (GObject *object,
 			break;
 		case PROP_MESSAGE:
 			g_value_set_string (value, ephy_tab_get_status_message (tab));
-			break;
-		case PROP_NAVIGATION:
-			g_value_set_flags (value, priv->nav_flags);
 			break;
 		case PROP_HIDDEN_POPUP_COUNT:
 			g_value_set_int (value, popup_blocker_n_hidden (tab));
@@ -394,15 +386,6 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "The tab's statusbar message",
 							      NULL,
 							      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	g_object_class_install_property (object_class,
-					 PROP_NAVIGATION,
-					 g_param_spec_flags ("navigation",
-							     "Navigation flags",
-							     "The tab's navigation flags",
-							     EPHY_TYPE_TAB_NAVIGATION_FLAGS,
-							     0,
-							     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_HIDDEN_POPUP_COUNT,
@@ -1443,7 +1426,7 @@ ephy_tab_address_cb (EphyEmbed *embed,
 
 	ephy_tab_set_link_message (tab, NULL);
 	ephy_tab_set_icon_address (tab, NULL);
-	ephy_tab_update_navigation_flags (tab, embed);
+	ephy_embed_update_navigation_flags (embed);
 
 	g_object_notify (object, "title");
 
@@ -1623,7 +1606,7 @@ ephy_tab_net_state_cb (EphyEmbed *embed,
 
 			ephy_embed_set_load_percent (embed, 0);
 			ephy_embed_set_load_status (embed, TRUE);
-			ephy_tab_update_navigation_flags (tab, embed);
+			ephy_embed_update_navigation_flags (embed);
 
 			ensure_page_info (tab, embed, uri);
 
@@ -1639,7 +1622,7 @@ ephy_tab_net_state_cb (EphyEmbed *embed,
 
 			ephy_embed_set_load_percent (ephy_tab_get_embed (tab), 100);
 			ephy_embed_set_load_status (embed, FALSE);
-			ephy_tab_update_navigation_flags (tab, embed);
+			ephy_embed_update_navigation_flags (embed);
 
 			g_free (priv->loading_title);
 			priv->loading_title = NULL;
@@ -1948,50 +1931,6 @@ ephy_tab_init (EphyTab *tab)
 	g_signal_connect_object (G_OBJECT (cache), "changed",
 				 G_CALLBACK (ephy_tab_icon_cache_changed_cb),
 				 tab,  0);
-}
-
-static void
-ephy_tab_update_navigation_flags (EphyTab *tab, EphyEmbed *embed)
-{
-	EphyTabNavigationFlags flags = 0;
-
-	if (ephy_embed_can_go_up (embed))
-	{
-		flags |= EPHY_TAB_NAV_UP;
-	}
-
-	if (ephy_embed_can_go_back (embed))
-	{
-		flags |= EPHY_TAB_NAV_BACK;
-	}
-
-	if (ephy_embed_can_go_forward (embed))
-	{
-		flags |= EPHY_TAB_NAV_FORWARD;
-	}
-
-	if (flags != tab->priv->nav_flags)
-	{
-		tab->priv->nav_flags = flags;
-
-		g_object_notify (G_OBJECT (tab), "navigation");
-	}
-}
-
-/**
- * ephy_tab_get_navigation_flags:
- * @tab: an #EphyTab
- *
- * Returns @tab's navigation flags.
- *
- * Return value: @tab's navigation flags
- **/
-EphyTabNavigationFlags
-ephy_tab_get_navigation_flags (EphyTab *tab)
-{
-	g_return_val_if_fail (EPHY_IS_TAB (tab), 0);
-
-	return tab->priv->nav_flags;
 }
 
 /**

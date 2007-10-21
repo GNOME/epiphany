@@ -101,6 +101,13 @@ typedef enum
 	EPHY_EMBED_DOCUMENT_OTHER
 } EphyEmbedDocumentType;
 
+typedef enum
+{
+	EPHY_EMBED_NAV_UP	= 1 << 0,
+	EPHY_EMBED_NAV_BACK	= 1 << 1,
+	EPHY_EMBED_NAV_FORWARD	= 1 << 2
+} EphyEmbedNavigationFlags;
+
 struct _EphyEmbedIface
 {
 	GTypeInterface base_iface;
@@ -233,6 +240,8 @@ struct _EphyEmbedIface
 	void		   (* set_load_percent)		(EphyEmbed *embed, int percent);
 	gboolean	   (* get_load_status)		(EphyEmbed *embed);
 	void		   (* set_load_status)		(EphyEmbed *embed, gboolean percent);
+	void		   (* update_navigation_flags)	(EphyEmbed *embed);
+	EphyEmbedNavigationFlags (* get_navigation_flags) (EphyEmbed *embed);
 };
 
 GType		  ephy_embed_net_state_get_type		(void);
@@ -333,8 +342,13 @@ int		 ephy_embed_get_load_percent		(EphyEmbed *embed);
 void		 ephy_embed_set_load_percent		(EphyEmbed *embed, int percent); /* FIXME: remove me */
 
 /* Load status */
-gboolean         ephy_embed_get_load_status             (EphyEmbed *embed);
-void             ephy_embed_set_load_status             (EphyEmbed *embed, gboolean status); /* FIXME: remove me */
+gboolean	 ephy_embed_get_load_status		(EphyEmbed *embed);
+void		 ephy_embed_set_load_status		(EphyEmbed *embed, gboolean status); /* FIXME: remove me */
+
+/* Navigation flags */
+
+void		 ephy_embed_update_navigation_flags	(EphyEmbed *embed); /* FIXME: remove me */
+EphyEmbedNavigationFlags ephy_embed_get_navigation_flags (EphyEmbed *embed);
 
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);

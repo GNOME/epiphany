@@ -42,13 +42,6 @@ typedef struct _EphyTabPrivate	EphyTabPrivate;
 
 typedef enum
 {
-	EPHY_TAB_NAV_UP		= 1 << 0,
-	EPHY_TAB_NAV_BACK	= 1 << 1,
-	EPHY_TAB_NAV_FORWARD	= 1 << 2
-} EphyTabNavigationFlags;
-
-typedef enum
-{
 	EPHY_TAB_ADDRESS_EXPIRE_NOW,
 	EPHY_TAB_ADDRESS_EXPIRE_NEXT,
 	EPHY_TAB_ADDRESS_EXPIRE_CURRENT
@@ -96,8 +89,6 @@ const char	       *ephy_tab_get_typed_address	(EphyTab *tab);
 void			ephy_tab_set_typed_address	(EphyTab *tab,
 							 const char *address,
 							 EphyTabAddressExpire expire);
-
-EphyTabNavigationFlags	ephy_tab_get_navigation_flags	(EphyTab *tab);
 
 EphyEmbedSecurityLevel	ephy_tab_get_security_level	(EphyTab *tab);
 

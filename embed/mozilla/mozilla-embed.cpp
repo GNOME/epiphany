@@ -104,6 +104,7 @@ struct MozillaEmbedPrivate
 	EphyEmbedSecurityLevel security_level;
 	/* guint security_level : 3; ? */
 	EphyEmbedDocumentType document_type;
+	EphyEmbedNavigationFlags nav_flags;
 	float zoom;
 
 	/* Flags */
@@ -121,6 +122,7 @@ enum
 	PROP_DOCUMENT_TYPE,
 	PROP_LOAD_PROGRESS,
 	PROP_LOAD_STATUS,
+	PROP_NAVIGATION,
 	PROP_SECURITY,
 	PROP_ZOOM
 };
@@ -241,6 +243,9 @@ mozilla_embed_get_property (GObject *object,
 	case PROP_LOAD_STATUS:
 		g_value_set_boolean (value, priv->is_loading);
 		break;
+	case PROP_NAVIGATION:
+		g_value_set_flags (value, priv->nav_flags);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -259,6 +264,7 @@ mozilla_embed_set_property (GObject *object,
 	case PROP_DOCUMENT_TYPE:
 	case PROP_LOAD_PROGRESS:
 	case PROP_LOAD_STATUS:
+	case PROP_NAVIGATION:
 	case PROP_SECURITY:
 	case PROP_ZOOM:
 		/* read only */
@@ -293,6 +299,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 	g_object_class_override_property (object_class, PROP_ZOOM, "zoom");
 	g_object_class_override_property (object_class, PROP_LOAD_PROGRESS, "load-progress");
 	g_object_class_override_property (object_class, PROP_LOAD_STATUS, "load-status");
+	g_object_class_override_property (object_class, PROP_NAVIGATION, "navigation");
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
@@ -961,6 +968,42 @@ impl_set_load_status (EphyEmbed *embed, gboolean status)
 }
 
 static void
+impl_update_navigation_flags (EphyEmbed *embed)
+{
+	MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+	guint flags = 0;
+
+	if (ephy_embed_can_go_up (embed))
+	{
+		flags |= EPHY_EMBED_NAV_UP;
+	}
+
+	if (ephy_embed_can_go_back (embed))
+	{
+		flags |= EPHY_EMBED_NAV_BACK;
+	}
+
+	if (ephy_embed_can_go_forward (embed))
+	{
+		flags |= EPHY_EMBED_NAV_FORWARD;
+	}
+
+	if (priv->nav_flags != (EphyEmbedNavigationFlags)flags)
+	{
+		priv->nav_flags = (EphyEmbedNavigationFlags)flags;
+
+		g_object_notify (G_OBJECT (embed), "navigation");
+	}
+}
+
+static EphyEmbedNavigationFlags
+impl_get_navigation_flags (EphyEmbed *embed)
+{
+	MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+	return priv->nav_flags;
+}
+
+static void
 mozilla_embed_location_changed_cb (GtkMozEmbed *embed, 
 				   MozillaEmbed *membed)
 {
@@ -1421,6 +1464,8 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->set_load_percent = impl_set_load_percent;
 	iface->get_load_status = impl_get_load_status;
 	iface->set_load_status = impl_set_load_status;
+	iface->update_navigation_flags = impl_update_navigation_flags;
+	iface->get_navigation_flags = impl_get_navigation_flags;
 }
 
 static void

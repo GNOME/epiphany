@@ -460,8 +460,13 @@ ephy_embed_base_init (gpointer g_class)
                                                                            "The embed's load status",
                                                                            FALSE,
                                                                            G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-
+                g_object_interface_install_property (g_class,
+                                                     g_param_spec_flags ("navigation",
+                                                                         "Navigation flags",
+                                                                         "The embed's navigation flags",
+                                                                         EPHY_TYPE_EMBED_NAVIGATION_FLAGS,
+                                                                         0,
+                                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 		initialized = TRUE;
 	}
@@ -1125,4 +1130,25 @@ ephy_embed_set_load_status (EphyEmbed *embed, gboolean status)
 	return iface->set_load_status (embed, status);
 }
 
+/**
+ * ephy_embed_get_navigation_flags:
+ * @embed: an #EphyEmbed
+ *
+ * Returns @embed's navigation flags.
+ *
+ * Return value: @embed's navigation flags
+ **/
+EphyEmbedNavigationFlags
+ephy_embed_get_navigation_flags (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_navigation_flags (embed);
+}
+
+void
+ephy_embed_update_navigation_flags (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->update_navigation_flags (embed);
+}
 
