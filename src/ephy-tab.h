@@ -75,8 +75,6 @@ EphyEmbed              *ephy_tab_get_embed		(EphyTab *tab);
 
 EphyTab		       *ephy_tab_for_embed		(EphyEmbed *embed);
 
-EphyEmbedDocumentType	ephy_tab_get_document_type	(EphyTab *tab);
-
 GdkPixbuf	       *ephy_tab_get_icon		(EphyTab *tab);
 
 const char	       *ephy_tab_get_icon_address	(EphyTab *tab);

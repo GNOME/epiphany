@@ -66,7 +66,7 @@ typedef enum
 typedef enum
 {
 	EPHY_EMBED_LOAD_FLAGS_NONE			= 1 << 0,
-	EPHY_EMBED_LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP 	= 1 << 1,
+	EPHY_EMBED_LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP	= 1 << 1,
 } EphyEmbedLoadFlags;
 
 #define EPHY_EMBED_CHROME_ALL (EPHY_EMBED_CHROME_MENUBAR |	\
@@ -107,12 +107,12 @@ struct _EphyEmbedIface
 
 	/* Signals that we inherit from gtkmozembed
 	 *
-	 * void (* net_stop)     (GtkMozEmbed *embed);
-	 * void (* title)        (EphyEmbed *embed);
-	 * void (* visibility)   (EphyEmbed *embed,
+	 * void (* net_stop)	 (GtkMozEmbed *embed);
+	 * void (* title)	 (EphyEmbed *embed);
+	 * void (* visibility)	 (EphyEmbed *embed,
 	 *			  gboolean visibility);
 	 * void (* destroy_brsr) (EphyEmbed *embed);
-	 * void (* size_to)      (EphyEmbed *embed,
+	 * void (* size_to)	 (EphyEmbed *embed,
 	 *			  int width,
 	 *			  int height);
 	 * gint (* open_uri)	 (EphyEmbed *embed,
@@ -140,7 +140,7 @@ struct _EphyEmbedIface
 					 EphyEmbedEvent *event);
 	gboolean (* dom_mouse_down)	(EphyEmbed *embed,
 					 EphyEmbedEvent *event);
-	void     (* dom_content_loaded)	(EphyEmbed *embed,
+	void	 (* dom_content_loaded)	(EphyEmbed *embed,
 					 gpointer event);
 	void	 (* popup_blocked)	(EphyEmbed *embed,
 					 const char *address,
@@ -202,8 +202,8 @@ struct _EphyEmbedIface
 							 gboolean copy_forward,
 							 gboolean copy_current);
 	void		   (* get_security_level)	(EphyEmbed *embed,
-						  	 EphyEmbedSecurityLevel *level,
-						  	 char **description);
+							 EphyEmbedSecurityLevel *level,
+							 char **description);
 	void		   (* show_page_certificate)	(EphyEmbed *embed);
 	void		   (* set_zoom)			(EphyEmbed *embed,
 							 float zoom);
@@ -211,7 +211,7 @@ struct _EphyEmbedIface
 	void		   (* scroll_lines)		(EphyEmbed *embed,
 							 int num_lines);
 	void		   (* scroll_pages)		(EphyEmbed *embed,
-	 						 int num_pages);
+							 int num_pages);
 	void		   (* scroll_pixels)		(EphyEmbed *embed,
 							 int dx,
 							 int dy);
@@ -228,14 +228,15 @@ struct _EphyEmbedIface
 							 int page);
 	gboolean	   (* has_modified_forms)	(EphyEmbed *embed);
 	void		   (* close)			(EphyEmbed *embed);
+	EphyEmbedDocumentType	(* get_document_type)	(EphyEmbed *embed);
 
 };
 
-GType 		  ephy_embed_net_state_get_type		(void);
+GType		  ephy_embed_net_state_get_type		(void);
 
 GType		  ephy_embed_chrome_get_type		(void);
 
-GType 		  ephy_embed_ppv_navigation_get_type	(void);
+GType		  ephy_embed_ppv_navigation_get_type	(void);
 
 GType		  ephy_embed_security_level_get_type	(void);
 
@@ -256,7 +257,7 @@ void		  ephy_embed_stop_load			(EphyEmbed *embed);
 void		  ephy_embed_reload			(EphyEmbed *embed,
 							 gboolean force);
 
-char 		 *ephy_embed_get_title			(EphyEmbed *embed);
+char		 *ephy_embed_get_title			(EphyEmbed *embed);
 
 char		 *ephy_embed_get_location		(EphyEmbed *embed,
 							 gboolean toplevel);
@@ -272,7 +273,7 @@ gboolean	  ephy_embed_can_go_forward		(EphyEmbed *embed);
 
 gboolean	  ephy_embed_can_go_up			(EphyEmbed *embed);
 
-GSList 		 *ephy_embed_get_go_up_list		(EphyEmbed *embed);
+GSList		 *ephy_embed_get_go_up_list		(EphyEmbed *embed);
 
 void		  ephy_embed_go_back			(EphyEmbed *embed);
 
@@ -301,7 +302,7 @@ void		  ephy_embed_shistory_copy		(EphyEmbed *source,
 
 void		  ephy_embed_get_security_level		(EphyEmbed *embed,
 							 EphyEmbedSecurityLevel *level,
-						 	 char **description);
+							 char **description);
 
 void		  ephy_embed_show_page_certificate	(EphyEmbed *embed);
 
@@ -321,6 +322,9 @@ void		  ephy_embed_page_scroll		(EphyEmbed *embed,
 void		  ephy_embed_scroll_pixels		(EphyEmbed *embed,
 							 int dx,
 							 int dy);
+/* Document type */
+
+EphyEmbedDocumentType	ephy_embed_get_document_type	(EphyEmbed *embed);
 
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);

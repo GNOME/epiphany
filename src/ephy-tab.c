@@ -97,7 +97,6 @@ struct _EphyTabPrivate
 	GSList *hidden_popups;
 	GSList *shown_popups;
 	EphyTabNavigationFlags nav_flags;
-	EphyEmbedDocumentType document_type;
 	guint idle_resize_handler;
 
 	gint8 load_percent;
@@ -123,7 +122,6 @@ enum
 {
 	PROP_0,
 	PROP_ADDRESS,
-	PROP_DOCUMENT_TYPE,
 	PROP_ICON,
 	PROP_ICON_ADDRESS,
 	PROP_LOAD_PROGRESS,
@@ -237,7 +235,6 @@ ephy_tab_set_property (GObject *object,
 			ephy_tab_set_icon_address (tab, g_value_get_string (value));
 			break;
 		case PROP_ADDRESS:
-		case PROP_DOCUMENT_TYPE:
 		case PROP_ICON:
 		case PROP_LOAD_PROGRESS:
 		case PROP_LOAD_STATUS:
@@ -264,9 +261,6 @@ ephy_tab_get_property (GObject *object,
 	{
 		case PROP_ADDRESS:
 			g_value_set_string (value, priv->address);
-			break;
-		case PROP_DOCUMENT_TYPE:
-			g_value_set_enum (value, priv->document_type);
 			break;
 		case PROP_ICON:
 			g_value_set_object (value, priv->icon);
@@ -401,15 +395,6 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "The tab's address",
 							      "",
 							      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	g_object_class_install_property (object_class,
-					 PROP_DOCUMENT_TYPE,
-					 g_param_spec_enum ("document-type",
-							    "Document Type",
-							    "The tab's documen type",
-							    EPHY_TYPE_EMBED_DOCUMENT_TYPE,
-							    EPHY_EMBED_DOCUMENT_HTML,
-							    G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_ICON,
@@ -987,22 +972,6 @@ ephy_tab_set_load_status (EphyTab *tab, gboolean status)
 	tab->priv->is_loading = status;
 
 	g_object_notify (G_OBJECT (tab), "load-status");
-}
-
-/**
- * ephy_tab_get_document_type:
- * @tab: an #EphyTab
- *
- * Returns the type of the document loaded in @tab.
- *
- * Return value: the #EphyEmbedDocumentType
- **/
-EphyEmbedDocumentType
-ephy_tab_get_document_type (EphyTab *tab)
-{
-	g_return_val_if_fail (EPHY_IS_TAB (tab), EPHY_EMBED_DOCUMENT_OTHER);
-
-	return tab->priv->document_type;
 }
 
 /**
@@ -1596,19 +1565,6 @@ ephy_tab_content_change_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 }
 
 static void
-ephy_tab_document_type_cb (EphyEmbed *embed,
-			   EphyEmbedDocumentType type,
-			   EphyTab *tab)
-{
-	if (tab->priv->document_type != type)
-	{
-		tab->priv->document_type = type;
-
-		g_object_notify (G_OBJECT (tab), "document-type");
-	}
-}
-
-static void
 ephy_tab_zoom_changed_cb (EphyEmbed *embed, float zoom, EphyTab *tab)
 {
 	char *address;
@@ -2085,7 +2041,6 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->height = -1;
 	tab->priv->load_percent = 0;
 	tab->priv->is_loading = FALSE;
-	tab->priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
 	tab->priv->zoom = 1.0;
 	priv->title = NULL;
 	priv->is_blank = TRUE;
@@ -2106,9 +2061,6 @@ ephy_tab_init (EphyTab *tab)
 
 	g_signal_connect_object (embed, "link_message",
 				 G_CALLBACK (ephy_tab_link_message_cb),
-				 tab, 0);
-	g_signal_connect_object (embed, "ge_document_type",
-				 G_CALLBACK (ephy_tab_document_type_cb),
 				 tab, 0);
 	g_signal_connect_object (embed, "open_uri",
 				 G_CALLBACK (ephy_tab_open_uri_cb),

@@ -76,6 +76,10 @@ static void mozilla_embed_security_change_cb	(GtkMozEmbed *embed,
 						 gpointer request,
 						 PRUint32 state,
 						 MozillaEmbed *membed);
+static void mozilla_embed_document_type_cb	(EphyEmbed *embed,
+						 EphyEmbedDocumentType type,
+						 MozillaEmbed *membed);
+
 static EphyEmbedSecurityLevel mozilla_embed_security_level (PRUint32 state);
 
 #define MOZILLA_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED, MozillaEmbedPrivate))
@@ -95,6 +99,7 @@ struct MozillaEmbedPrivate
 
 	EphyEmbedSecurityLevel security_level;
 	/* guint security_level : 3; ? */
+	EphyEmbedDocumentType document_type;
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
@@ -102,6 +107,7 @@ struct MozillaEmbedPrivate
 enum
 {
 	PROP_0,
+	PROP_DOCUMENT_TYPE,
 	PROP_SECURITY
 };
 
@@ -135,10 +141,10 @@ ephy_command_manager_iface_init (EphyCommandManagerIface *iface)
 }
 
 G_DEFINE_TYPE_WITH_CODE (MozillaEmbed, mozilla_embed, GTK_TYPE_MOZ_EMBED,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED,
-                                                ephy_embed_iface_init)
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_COMMAND_MANAGER,
-                                                ephy_command_manager_iface_init))
+			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED,
+						ephy_embed_iface_init)
+			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_COMMAND_MANAGER,
+						ephy_command_manager_iface_init))
 	
 static void
 mozilla_embed_grab_focus (GtkWidget *widget)
@@ -192,7 +198,7 @@ mozilla_embed_constructor (GType type, guint n_construct_properties,
 	ephy_embed_shell_get_embed_single (embed_shell);
 
 	return G_OBJECT_CLASS (mozilla_embed_parent_class)->constructor (type, n_construct_properties,
-                                                                         construct_params);
+									 construct_params);
 }
 
 static void
@@ -206,6 +212,9 @@ mozilla_embed_get_property (GObject *object,
 	
 	switch (prop_id)
 	{
+	case PROP_DOCUMENT_TYPE:
+		g_value_set_enum (value, priv->document_type);
+		break;
 	case PROP_SECURITY:
 		g_value_set_enum (value, priv->security_level);
 		break;
@@ -224,6 +233,7 @@ mozilla_embed_set_property (GObject *object,
 {
 	switch (prop_id)
 	{
+	case PROP_DOCUMENT_TYPE:
 	case PROP_SECURITY:
 		/* read only */
 		break;
@@ -252,6 +262,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 	widget_class->grab_focus = mozilla_embed_grab_focus;
 	widget_class->realize = mozilla_embed_realize;
 
+	g_object_class_override_property (object_class, PROP_DOCUMENT_TYPE, "document-type");
 	g_object_class_override_property (object_class, PROP_SECURITY, "security-level");
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
@@ -284,7 +295,11 @@ mozilla_embed_init (MozillaEmbed *embed)
 	g_signal_connect_object (embed, "security_change",
 				 G_CALLBACK (mozilla_embed_security_change_cb),
 				 embed, (GConnectFlags) 0);
+	g_signal_connect_object (embed, "ge_document_type",
+				 G_CALLBACK (mozilla_embed_document_type_cb),
+				 embed, (GConnectFlags) 0);
 
+	embed->priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
 	embed->priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
 }
 
@@ -856,6 +871,14 @@ impl_has_modified_forms (EphyEmbed *embed)
 	return NS_SUCCEEDED (rv) ? modified : FALSE;
 }
 
+static EphyEmbedDocumentType
+impl_get_document_type (EphyEmbed *embed)
+{
+	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
+
+	return mpriv->document_type;
+}
+
 static void
 mozilla_embed_location_changed_cb (GtkMozEmbed *embed, 
 				   MozillaEmbed *membed)
@@ -1135,6 +1158,19 @@ mozilla_embed_security_change_cb (GtkMozEmbed *embed,
 	mozilla_embed_set_security_level (membed, mozilla_embed_security_level (state));
 }
 
+static void
+mozilla_embed_document_type_cb (EphyEmbed *embed,
+				EphyEmbedDocumentType type,
+				MozillaEmbed *membed)
+{
+	if (membed->priv->document_type != type)
+	{
+		membed->priv->document_type = type;
+
+		g_object_notify (G_OBJECT (membed), "document-type");
+	}
+}
+
 static EphyEmbedSecurityLevel
 mozilla_embed_security_level (PRUint32 state)
 {
@@ -1206,6 +1242,7 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->print_preview_n_pages = impl_print_preview_n_pages;
 	iface->print_preview_navigate = impl_print_preview_navigate;
 	iface->has_modified_forms = impl_has_modified_forms;
+	iface->get_document_type = impl_get_document_type;
 }
 
 static void

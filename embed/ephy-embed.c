@@ -430,6 +430,14 @@ ephy_embed_base_init (gpointer g_class)
                                                                         EPHY_TYPE_EMBED_SECURITY_LEVEL,
                                                                         EPHY_EMBED_STATE_IS_UNKNOWN,
                                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                g_object_interface_install_property (g_class,
+                                                     g_param_spec_enum ("document-type",
+                                                                        "Document Type",
+                                                                        "The embed's documen type",
+                                                                        EPHY_TYPE_EMBED_DOCUMENT_TYPE,
+                                                                        EPHY_EMBED_DOCUMENT_HTML,
+                                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
 		initialized = TRUE;
 	}
 
@@ -1022,4 +1030,19 @@ ephy_embed_has_modified_forms (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	return iface->has_modified_forms (embed);
+}
+
+/**
+ * ephy_embed_get_document_type:
+ * @embed: an #EphyEmbed
+ *
+ * Returns the type of document loaded in the @embed
+ *
+ * Return value: the #EphyEmbedDocumentType
+ **/
+EphyEmbedDocumentType
+ephy_embed_get_document_type (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_document_type (embed);
 }
