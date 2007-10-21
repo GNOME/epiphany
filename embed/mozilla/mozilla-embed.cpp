@@ -282,7 +282,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 	g_object_class_override_property (object_class, PROP_DOCUMENT_TYPE, "document-type");
 	g_object_class_override_property (object_class, PROP_SECURITY, "security-level");
 	g_object_class_override_property (object_class, PROP_ZOOM, "zoom");
-	g_object_class_override_property (object_class, PROP_ZOOM, "load-progress");
+	g_object_class_override_property (object_class, PROP_LOAD_PROGRESS, "load-progress");
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
