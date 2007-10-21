@@ -2244,8 +2244,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 					 G_CALLBACK (sync_tab_zoom),
 					 window, 0);
 
-		embed = ephy_tab_get_embed (new_tab);
-
 		g_signal_connect_object (embed, "notify::security-level",
 					 G_CALLBACK (sync_tab_security),
 					 window, 0);

@@ -101,11 +101,9 @@ struct MozillaEmbedPrivate
 
 enum
 {
-        PROP_0,
-        PROP_SECURITY
+	PROP_0,
+	PROP_SECURITY
 };
-
-static GObjectClass *parent_class = NULL;
 
 static void
 impl_manager_do_command (EphyCommandManager *manager,
@@ -124,7 +122,7 @@ impl_manager_can_do_command (EphyCommandManager *manager,
 	nsresult rv;
 	PRBool enabled;
 
-        rv = mpriv->browser->GetCommandState (command, &enabled);
+	rv = mpriv->browser->GetCommandState (command, &enabled);
 
 	return NS_SUCCEEDED (rv) ? enabled : FALSE;
 }
@@ -135,56 +133,13 @@ ephy_command_manager_iface_init (EphyCommandManagerIface *iface)
 	iface->do_command = impl_manager_do_command;
 	iface->can_do_command = impl_manager_can_do_command;
 }
+
+G_DEFINE_TYPE_WITH_CODE (MozillaEmbed, mozilla_embed, GTK_TYPE_MOZ_EMBED,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED,
+                                                ephy_embed_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_COMMAND_MANAGER,
+                                                ephy_command_manager_iface_init))
 	
-GType 
-mozilla_embed_get_type (void)
-{
-        static GType type = 0;
-
-        if (G_UNLIKELY (type == 0))
-        {
-                const GTypeInfo our_info =
-                {
-                        sizeof (MozillaEmbedClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) mozilla_embed_class_init,
-                        NULL,
-                        NULL, /* class_data */
-                        sizeof (MozillaEmbed),
-                        0, /* n_preallocs */
-                        (GInstanceInitFunc) mozilla_embed_init
-                };
-
-		const GInterfaceInfo embed_info =
-		{
-			(GInterfaceInitFunc) ephy_embed_iface_init,
-        		NULL,
-        		NULL
-     		};
-
-		const GInterfaceInfo ephy_command_manager_info =
-		{
-			(GInterfaceInitFunc) ephy_command_manager_iface_init,
-        		NULL,
-        		NULL
-     		 };
-	
-                type = g_type_register_static (GTK_TYPE_MOZ_EMBED,
-					       "MozillaEmbed",
-					       &our_info, 
-					       (GTypeFlags)0);
-		g_type_add_interface_static (type,
-                                   	     EPHY_TYPE_EMBED,
-                                   	     &embed_info);
-		g_type_add_interface_static (type,
-                                   	     EPHY_TYPE_COMMAND_MANAGER,
-                                   	     &ephy_command_manager_info);
-        }
-
-        return type;
-}
-
 static void
 mozilla_embed_grab_focus (GtkWidget *widget)
 {
@@ -215,7 +170,7 @@ mozilla_embed_realize (GtkWidget *widget)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (widget)->priv;
 
-	GTK_WIDGET_CLASS (parent_class)->realize (widget);
+	GTK_WIDGET_CLASS (mozilla_embed_parent_class)->realize (widget);
 
 	/* Initialise our helper class */
 	nsresult rv;
@@ -236,8 +191,8 @@ mozilla_embed_constructor (GType type, guint n_construct_properties,
 	/* we depend on single because of mozilla initialization */
 	ephy_embed_shell_get_embed_single (embed_shell);
 
-	return parent_class->constructor (type, n_construct_properties,
-					  construct_params);
+	return G_OBJECT_CLASS (mozilla_embed_parent_class)->constructor (type, n_construct_properties,
+                                                                         construct_params);
 }
 
 static void
@@ -248,56 +203,56 @@ mozilla_embed_get_property (GObject *object,
 {
 	MozillaEmbed *embed = MOZILLA_EMBED (object);
 	MozillaEmbedPrivate *priv = embed->priv;
-        
-        switch (prop_id)
-        {
-        case PROP_SECURITY:
-                g_value_set_enum (value, priv->security_level);
-                break;
-        default:
-                G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-                break;
-        }
+	
+	switch (prop_id)
+	{
+	case PROP_SECURITY:
+		g_value_set_enum (value, priv->security_level);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
 
 }
 
 static void
 mozilla_embed_set_property (GObject *object,
-                            guint prop_id,
-                            const GValue *value,
-                            GParamSpec *pspec)
+			    guint prop_id,
+			    const GValue *value,
+			    GParamSpec *pspec)
 {
-        switch (prop_id)
-        {
-        case PROP_SECURITY:
-                /* read only */
-                break;
-        default:
-                G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-                break;
-        }
+	switch (prop_id)
+	{
+	case PROP_SECURITY:
+		/* read only */
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
 }
 
 static void
 mozilla_embed_class_init (MozillaEmbedClass *klass)
 {
-        GObjectClass *object_class = G_OBJECT_CLASS (klass);
-     	GtkObjectClass *gtk_object_class = GTK_OBJECT_CLASS (klass); 
-     	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass); 
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkObjectClass *gtk_object_class = GTK_OBJECT_CLASS (klass); 
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass); 
 
-	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
+	mozilla_embed_parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
 	object_class->constructor = mozilla_embed_constructor;
 	object_class->finalize = mozilla_embed_finalize;
-        object_class->get_property = mozilla_embed_get_property;
-        object_class->set_property = mozilla_embed_set_property;
+	object_class->get_property = mozilla_embed_get_property;
+	object_class->set_property = mozilla_embed_set_property;
 
 	gtk_object_class->destroy = mozilla_embed_destroy;
 
 	widget_class->grab_focus = mozilla_embed_grab_focus;
 	widget_class->realize = mozilla_embed_realize;
 
-        g_object_class_override_property (object_class, PROP_SECURITY, "security-level");
+	g_object_class_override_property (object_class, PROP_SECURITY, "security-level");
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
@@ -305,7 +260,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 static void
 mozilla_embed_init (MozillaEmbed *embed)
 {
-        embed->priv = MOZILLA_EMBED_GET_PRIVATE (embed);
+	embed->priv = MOZILLA_EMBED_GET_PRIVATE (embed);
 	embed->priv->browser = new EphyBrowser ();
 
 	g_signal_connect_object (embed, "location",
@@ -330,7 +285,7 @@ mozilla_embed_init (MozillaEmbed *embed)
 				 G_CALLBACK (mozilla_embed_security_change_cb),
 				 embed, (GConnectFlags) 0);
 
-        embed->priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
+	embed->priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
 }
 
 gpointer
@@ -351,7 +306,7 @@ mozilla_embed_destroy (GtkObject *object)
 		embed->priv->browser->Destroy();
 	}
 	
-	GTK_OBJECT_CLASS (parent_class)->destroy (object);
+	GTK_OBJECT_CLASS (mozilla_embed_parent_class)->destroy (object);
 }
 
 static void
@@ -361,27 +316,27 @@ mozilla_embed_finalize (GObject *object)
 
 	if (embed->priv->browser)
 	{
-        	delete embed->priv->browser;
-	       	embed->priv->browser = nsnull;
+		delete embed->priv->browser;
+		embed->priv->browser = nsnull;
 	}
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (mozilla_embed_parent_class)->finalize (object);
 
 	g_object_unref (embed_shell);
 }
 
 static void
 impl_load_url (EphyEmbed *embed, 
-               const char *url)
+	       const char *url)
 {
-        gtk_moz_embed_load_url (GTK_MOZ_EMBED(embed), url);
+	gtk_moz_embed_load_url (GTK_MOZ_EMBED(embed), url);
 }
 
 static char * impl_get_location (EphyEmbed *embed, gboolean toplevel);
 
 static void
 impl_load (EphyEmbed *embed, 
-           const char *url,
+	   const char *url,
 	   EphyEmbedLoadFlags flags,
 	   EphyEmbed *preview_embed)
 {
@@ -437,14 +392,14 @@ mozilla_embed_get_uri_parent (MozillaEmbed *membed,
 			      const char *aUri,
 			      nsCString &aParent)
 {
-        nsresult rv;
+	nsresult rv;
 	nsCString encoding;
 	rv = membed->priv->browser->GetEncoding (encoding);
 	if (NS_FAILED (rv)) return FALSE;
 
-        nsCOMPtr<nsIURI> uri;
-        rv = EphyUtils::NewURI (getter_AddRefs(uri), nsCString(aUri), encoding.get());
-        if (NS_FAILED(rv) || !uri) return FALSE;
+	nsCOMPtr<nsIURI> uri;
+	rv = EphyUtils::NewURI (getter_AddRefs(uri), nsCString(aUri), encoding.get());
+	if (NS_FAILED(rv) || !uri) return FALSE;
 
 	/* Don't support going 'up' with chrome url's, mozilla handily
 	 * fixes them up for us, so it doesn't work properly, see
@@ -569,7 +524,7 @@ impl_get_js_status (EphyEmbed *embed)
 
 static char *
 impl_get_location (EphyEmbed *embed, 
-                   gboolean toplevel)
+		   gboolean toplevel)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	nsresult rv;
@@ -604,7 +559,7 @@ impl_get_location (EphyEmbed *embed,
 
 static void
 impl_reload (EphyEmbed *embed, 
-             gboolean force)
+	     gboolean force)
 {
 	guint32 mflags = GTK_MOZ_EMBED_FLAG_RELOADNORMAL;
 
@@ -618,7 +573,7 @@ impl_reload (EphyEmbed *embed,
 
 static void
 impl_set_zoom (EphyEmbed *embed, 
-               float zoom) 
+	       float zoom) 
 {
 	EphyBrowser *browser;
 	nsresult rv;
@@ -695,13 +650,13 @@ impl_shistory_n_items (EphyEmbed *embed)
 
 static void
 impl_shistory_get_nth (EphyEmbed *embed, 
-                       int nth,
-                       gboolean is_relative,
-                       char **aUrl,
-                       char **aTitle)
+		       int nth,
+		       gboolean is_relative,
+		       char **aUrl,
+		       char **aTitle)
 {
 	nsresult rv;
-        nsCString url;
+	nsCString url;
 	PRUnichar *title;
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
@@ -710,9 +665,9 @@ impl_shistory_get_nth (EphyEmbed *embed,
 		nth += ephy_embed_shistory_get_pos (embed);
 	}
 	
-        rv = mpriv->browser->GetSHUrlAtIndex(nth, url);
+	rv = mpriv->browser->GetSHUrlAtIndex(nth, url);
 
-        *aUrl = (NS_SUCCEEDED (rv) && url.Length()) ? g_strdup(url.get()) : NULL;
+	*aUrl = (NS_SUCCEEDED (rv) && url.Length()) ? g_strdup(url.get()) : NULL;
 
 	rv = mpriv->browser->GetSHTitleAtIndex(nth, &title);
 
@@ -744,7 +699,7 @@ impl_shistory_get_pos (EphyEmbed *embed)
 
 static void
 impl_shistory_go_nth (EphyEmbed *embed, 
-                      int nth)
+		      int nth)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
@@ -767,8 +722,8 @@ impl_shistory_copy (EphyEmbed *source,
 
 static void
 impl_get_security_level (EphyEmbed *embed,
-                         EphyEmbedSecurityLevel *level,
-                         char **description)
+			 EphyEmbedSecurityLevel *level,
+			 char **description)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
 
@@ -947,7 +902,7 @@ update_load_state (MozillaEmbed *membed, gint state)
 		}
 	}
 	else if (state & GTK_MOZ_EMBED_FLAG_START &&
-	         state & GTK_MOZ_EMBED_FLAG_IS_REQUEST)
+		 state & GTK_MOZ_EMBED_FLAG_IS_REQUEST)
 	{
 		if (priv->load_state == MOZILLA_EMBED_LOAD_REDIRECTING)
 		{
@@ -964,7 +919,7 @@ update_load_state (MozillaEmbed *membed, gint state)
 		}
 	}
 	else if (state & GTK_MOZ_EMBED_FLAG_REDIRECTING &&
-	         priv->load_state == MOZILLA_EMBED_LOAD_STARTED)
+		 priv->load_state == MOZILLA_EMBED_LOAD_STARTED)
 	{
 		priv->load_state = MOZILLA_EMBED_LOAD_REDIRECTING;
 	}
@@ -972,7 +927,7 @@ update_load_state (MozillaEmbed *membed, gint state)
 
 static void
 mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
-                                gint state, guint status, 
+				gint state, guint status, 
 				MozillaEmbed *membed)
 {
 	EphyEmbedNetState estate = EPHY_EMBED_STATE_UNKNOWN;
@@ -1031,7 +986,7 @@ mozilla_embed_emit_mouse_signal (MozillaEmbed *embed,
 	info = mozilla_embed_event_new (static_cast<gpointer>(dev));
 
 	event_context.Init (mpriv->browser);
-        rv = event_context.GetMouseEventInfo (ev, MOZILLA_EMBED_EVENT (info));
+	rv = event_context.GetMouseEventInfo (ev, MOZILLA_EMBED_EVENT (info));
 	if (NS_FAILED (rv))
 	{
 		g_object_unref (info);
@@ -1163,12 +1118,12 @@ mozilla_embed_set_security_level (MozillaEmbed *embed, EphyEmbedSecurityLevel le
 {
 	MozillaEmbedPrivate *priv = embed->priv;
 
-        if (priv->security_level != level)
-        {
-                priv->security_level = level;
+	if (priv->security_level != level)
+	{
+		priv->security_level = level;
 
-                g_object_notify (G_OBJECT (embed), "security-level");
-        }
+		g_object_notify (G_OBJECT (embed), "security-level");
+	}
 }
 
 static void
@@ -1177,7 +1132,7 @@ mozilla_embed_security_change_cb (GtkMozEmbed *embed,
 				  PRUint32 state,
 				  MozillaEmbed *membed)
 {
-        mozilla_embed_set_security_level (membed, mozilla_embed_security_level (state));
+	mozilla_embed_set_security_level (membed, mozilla_embed_security_level (state));
 }
 
 static EphyEmbedSecurityLevel
@@ -1186,29 +1141,29 @@ mozilla_embed_security_level (PRUint32 state)
 	EphyEmbedSecurityLevel level;
 
 	switch (state)
-        {
-        case nsIWebProgressListener::STATE_IS_INSECURE:
-                level = EPHY_EMBED_STATE_IS_INSECURE;
-                break;
-        case nsIWebProgressListener::STATE_IS_BROKEN:
-                level = EPHY_EMBED_STATE_IS_BROKEN;
-                break;
-        case nsIWebProgressListener::STATE_IS_SECURE|
-             nsIWebProgressListener::STATE_SECURE_HIGH:
-                level = EPHY_EMBED_STATE_IS_SECURE_HIGH;
-                break;
-        case nsIWebProgressListener::STATE_IS_SECURE|
-             nsIWebProgressListener::STATE_SECURE_MED:
-                level = EPHY_EMBED_STATE_IS_SECURE_MED;
-                break;
-        case nsIWebProgressListener::STATE_IS_SECURE|
-             nsIWebProgressListener::STATE_SECURE_LOW:
-                level = EPHY_EMBED_STATE_IS_SECURE_LOW;
-                break;
-        default:
-                level = EPHY_EMBED_STATE_IS_UNKNOWN;
-                break;
-        }
+	{
+	case nsIWebProgressListener::STATE_IS_INSECURE:
+		level = EPHY_EMBED_STATE_IS_INSECURE;
+		break;
+	case nsIWebProgressListener::STATE_IS_BROKEN:
+		level = EPHY_EMBED_STATE_IS_BROKEN;
+		break;
+	case nsIWebProgressListener::STATE_IS_SECURE|
+	     nsIWebProgressListener::STATE_SECURE_HIGH:
+		level = EPHY_EMBED_STATE_IS_SECURE_HIGH;
+		break;
+	case nsIWebProgressListener::STATE_IS_SECURE|
+	     nsIWebProgressListener::STATE_SECURE_MED:
+		level = EPHY_EMBED_STATE_IS_SECURE_MED;
+		break;
+	case nsIWebProgressListener::STATE_IS_SECURE|
+	     nsIWebProgressListener::STATE_SECURE_LOW:
+		level = EPHY_EMBED_STATE_IS_SECURE_LOW;
+		break;
+	default:
+		level = EPHY_EMBED_STATE_IS_UNKNOWN;
+		break;
+	}
 	return level;
 }
 
@@ -1278,9 +1233,9 @@ xul_new_window_cb (GtkMozEmbed *embed,
 		   guint chrome_mask,
 		   gpointer dummy)
 {
-        g_assert (chrome_mask & GTK_MOZ_EMBED_FLAG_OPENASCHROME);
+	g_assert (chrome_mask & GTK_MOZ_EMBED_FLAG_OPENASCHROME);
 
-        *retval = _mozilla_embed_new_xul_dialog ();
+	*retval = _mozilla_embed_new_xul_dialog ();
 }
 
 static void
@@ -1303,7 +1258,7 @@ _mozilla_embed_new_xul_dialog (void)
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	g_object_set_data_full (G_OBJECT (window), "EmbedShellRef",
-			        embed_shell,
+				embed_shell,
 				(GDestroyNotify) g_object_unref);
 	g_signal_connect_object (embed_shell, "prepare_close",
 				 G_CALLBACK (gtk_widget_destroy), window,
