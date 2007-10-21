@@ -106,6 +106,7 @@ struct MozillaEmbedPrivate
 	EphyEmbedDocumentType document_type;
 	float zoom;
 	guint is_setting_zoom : 1;
+	gint8 load_percent;
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
@@ -114,6 +115,7 @@ enum
 {
 	PROP_0,
 	PROP_DOCUMENT_TYPE,
+	PROP_LOAD_PROGRESS,
 	PROP_SECURITY,
 	PROP_ZOOM
 };
@@ -228,6 +230,9 @@ mozilla_embed_get_property (GObject *object,
 	case PROP_ZOOM:
 		g_value_set_float (value, priv->zoom);
 		break;
+	case PROP_LOAD_PROGRESS:
+		g_value_set_int (value, priv->load_percent);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -244,6 +249,7 @@ mozilla_embed_set_property (GObject *object,
 	switch (prop_id)
 	{
 	case PROP_DOCUMENT_TYPE:
+	case PROP_LOAD_PROGRESS:
 	case PROP_SECURITY:
 	case PROP_ZOOM:
 		/* read only */
@@ -276,6 +282,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 	g_object_class_override_property (object_class, PROP_DOCUMENT_TYPE, "document-type");
 	g_object_class_override_property (object_class, PROP_SECURITY, "security-level");
 	g_object_class_override_property (object_class, PROP_ZOOM, "zoom");
+	g_object_class_override_property (object_class, PROP_ZOOM, "load-progress");
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
@@ -318,6 +325,7 @@ mozilla_embed_init (MozillaEmbed *embed)
 	embed->priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
 	embed->priv->zoom = 1.0;
 	embed->priv->is_setting_zoom = FALSE;
+	embed->priv->load_percent = 0;
 }
 
 gpointer
@@ -896,6 +904,27 @@ impl_get_document_type (EphyEmbed *embed)
 	return mpriv->document_type;
 }
 
+static int
+impl_get_load_percent (EphyEmbed *embed)
+{
+	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
+
+	return mpriv->load_percent;
+}
+
+static void
+impl_set_load_percent (EphyEmbed *embed, int percent)
+{
+       MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
+
+       if (percent != mpriv->load_percent)
+       {
+	       mpriv->load_percent = percent;
+
+	       g_object_notify (G_OBJECT (embed), "load-progress");
+       }
+}
+
 static void
 mozilla_embed_location_changed_cb (GtkMozEmbed *embed, 
 				   MozillaEmbed *membed)
@@ -1353,6 +1382,8 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->print_preview_navigate = impl_print_preview_navigate;
 	iface->has_modified_forms = impl_has_modified_forms;
 	iface->get_document_type = impl_get_document_type;
+	iface->get_load_percent = impl_get_load_percent;
+	iface->set_load_percent = impl_set_load_percent;
 }
 
 static void

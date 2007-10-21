@@ -98,7 +98,6 @@ struct _EphyTabPrivate
 	EphyTabNavigationFlags nav_flags;
 	guint idle_resize_handler;
 
-	gint8 load_percent;
 	/* Flags */
 	guint is_blank : 1;
 	guint is_loading : 1;
@@ -122,7 +121,6 @@ enum
 	PROP_ADDRESS,
 	PROP_ICON,
 	PROP_ICON_ADDRESS,
-	PROP_LOAD_PROGRESS,
 	PROP_LOAD_STATUS,
 	PROP_MESSAGE,
 	PROP_NAVIGATION,
@@ -154,8 +152,6 @@ static void	ephy_tab_set_load_status	(EphyTab *tab,
 						 gboolean status);
 static void	ephy_tab_set_link_message	(EphyTab *tab,
 						 char *message);
-static void	ephy_tab_set_load_percent	(EphyTab *tab,
-						 int percent);
 static void	ephy_tab_update_navigation_flags(EphyTab *tab,
 						 EphyEmbed *embed);
 static void	ephy_tab_set_title		(EphyTab *tab,
@@ -231,7 +227,6 @@ ephy_tab_set_property (GObject *object,
 			break;
 		case PROP_ADDRESS:
 		case PROP_ICON:
-		case PROP_LOAD_PROGRESS:
 		case PROP_LOAD_STATUS:
 		case PROP_MESSAGE:
 		case PROP_NAVIGATION:
@@ -261,9 +256,6 @@ ephy_tab_get_property (GObject *object,
 			break;
 		case PROP_ICON_ADDRESS:
 			g_value_set_string (value, priv->icon_address);
-			break;
-		case PROP_LOAD_PROGRESS:
-			g_value_set_int (value, priv->load_percent);
 			break;
 		case PROP_LOAD_STATUS:
 			g_value_set_boolean (value, priv->is_loading);
@@ -402,16 +394,6 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "The tab icon's address",
 							      NULL,
 							      (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)));
-
-	g_object_class_install_property (object_class,
-					 PROP_LOAD_PROGRESS,
-					 g_param_spec_int ("load-progress",
-							   "Load progress",
-							   "The tab's load progress in percent",
-							   0,
-							   100,
-							   0,
-							   G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_LOAD_STATUS,
@@ -1636,7 +1618,7 @@ build_progress_from_requests (EphyTab *tab, EphyEmbedNetState state)
 		load_percent = build_load_percent (tab->priv->cur_requests,
 						   tab->priv->total_requests);
 
-		ephy_tab_set_load_percent (tab, load_percent);
+		ephy_embed_set_load_percent (ephy_tab_get_embed (tab), load_percent);
 	}
 }
 
@@ -1679,7 +1661,7 @@ ephy_tab_net_state_cb (EphyEmbed *embed,
 			priv->total_requests = 0;
 			priv->cur_requests = 0;
 
-			ephy_tab_set_load_percent (tab, 0);
+			ephy_embed_set_load_percent (ephy_tab_get_embed (tab), 0);
 			ephy_tab_set_load_status (tab, TRUE);
 			ephy_tab_update_navigation_flags (tab, embed);
 
@@ -1695,7 +1677,7 @@ ephy_tab_net_state_cb (EphyEmbed *embed,
 
 			g_object_freeze_notify (object);
 
-			ephy_tab_set_load_percent (tab, 100);
+			ephy_embed_set_load_percent (ephy_tab_get_embed (tab), 100);
 			ephy_tab_set_load_status (tab, FALSE);
 			ephy_tab_update_navigation_flags (tab, embed);
 
@@ -1953,7 +1935,6 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->cur_requests = 0;
 	tab->priv->width = -1;
 	tab->priv->height = -1;
-	tab->priv->load_percent = 0;
 	tab->priv->is_loading = FALSE;
 	priv->title = NULL;
 	priv->is_blank = TRUE;
@@ -2008,42 +1989,6 @@ ephy_tab_init (EphyTab *tab)
 	g_signal_connect_object (G_OBJECT (cache), "changed",
 				 G_CALLBACK (ephy_tab_icon_cache_changed_cb),
 				 tab,  0);
-}
-
-/**
- * ephy_tab_set_load_percent:
- * @tab: an #EphyTab
- * @percent: a percentage, from 0 to 100.
- *
- * Sets the load percentage. This will be displayed in the progressbar.
- **/
-void
-ephy_tab_set_load_percent (EphyTab *tab, int percent)
-{
-	g_return_if_fail (EPHY_IS_TAB (tab));
-
-	if (percent != tab->priv->load_percent)
-	{
-		tab->priv->load_percent = percent;
-
-		g_object_notify (G_OBJECT (tab), "load-progress");
-	}
-}
-
-/**
- * ephy_tab_get_load_percent:
- * @tab: an #EphyTab
- *
- * Returns the page load percentage (displayed in the progressbar).
- *
- * Return value: a percentage from 0 to 100.
- **/
-int
-ephy_tab_get_load_percent (EphyTab *tab)
-{
-	g_return_val_if_fail (EPHY_IS_TAB (tab), 0);
-
-	return tab->priv->load_percent;
 }
 
 static void

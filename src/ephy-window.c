@@ -1441,12 +1441,12 @@ sync_tab_icon (EphyTab *tab,
 }
 
 static void
-sync_tab_load_progress (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_load_progress (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 {
 	if (window->priv->closing) return;
 
 	ephy_statusbar_set_progress (EPHY_STATUSBAR (window->priv->statusbar),
-				     ephy_tab_get_load_percent (tab));
+				     ephy_embed_get_load_percent (embed));
 }
 
 static void
@@ -2152,9 +2152,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 						      G_CALLBACK (sync_tab_icon),
 						      window);
 		g_signal_handlers_disconnect_by_func (old_tab,
-						      G_CALLBACK (sync_tab_load_progress),
-						      window);
-		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_load_status),
 						      window);
 		g_signal_handlers_disconnect_by_func (old_tab,
@@ -2184,7 +2181,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (sync_tab_zoom),
 						      window);
-
+		g_signal_handlers_disconnect_by_func (embed,
+						      G_CALLBACK (sync_tab_load_progress),
+						      window);
 
 		g_signal_handlers_disconnect_by_func
 			(embed, G_CALLBACK (tab_context_menu_cb), window);
@@ -2202,10 +2201,10 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		sync_tab_security	(embed, NULL, window);
 		sync_tab_document_type	(embed, NULL, window);
 		sync_tab_zoom		(embed, NULL, window);
+		sync_tab_load_progress	(embed, NULL, window);
 
 		sync_tab_address	(new_tab, NULL, window);
 		sync_tab_icon		(new_tab, NULL, window);
-		sync_tab_load_progress	(new_tab, NULL, window);
 		sync_tab_load_status	(new_tab, NULL, window);
 		sync_tab_message	(new_tab, NULL, window);
 		sync_tab_navigation	(new_tab, NULL, window);
@@ -2218,9 +2217,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 					 window, 0);
 		g_signal_connect_object (new_tab, "notify::icon",
 					 G_CALLBACK (sync_tab_icon),
-					 window, 0);
-		g_signal_connect_object (new_tab, "notify::load-progress",
-					 G_CALLBACK (sync_tab_load_progress),
 					 window, 0);
 		g_signal_connect_object (new_tab, "notify::load-status",
 					 G_CALLBACK (sync_tab_load_status),
@@ -2256,6 +2252,10 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_connect_object (embed, "size-to",
 					 G_CALLBACK (tab_size_to_cb),
 					 window, 0);
+		g_signal_connect_object (embed, "notify::load-progress",
+					 G_CALLBACK (sync_tab_load_progress),
+					 window, 0);
+
 
 		g_object_notify (G_OBJECT (window), "active-tab");
 	}

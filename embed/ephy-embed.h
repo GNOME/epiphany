@@ -229,7 +229,8 @@ struct _EphyEmbedIface
 	gboolean	   (* has_modified_forms)	(EphyEmbed *embed);
 	void		   (* close)			(EphyEmbed *embed);
 	EphyEmbedDocumentType	(* get_document_type)	(EphyEmbed *embed);
-
+	int		   (* get_load_percent)		(EphyEmbed *embed);
+	void		   (* set_load_percent)		(EphyEmbed *embed, int percent);
 };
 
 GType		  ephy_embed_net_state_get_type		(void);
@@ -325,6 +326,11 @@ void		  ephy_embed_scroll_pixels		(EphyEmbed *embed,
 /* Document type */
 
 EphyEmbedDocumentType	ephy_embed_get_document_type	(EphyEmbed *embed);
+
+/* Progress */
+
+int		 ephy_embed_get_load_percent		(EphyEmbed *embed);
+void		 ephy_embed_set_load_percent		(EphyEmbed *embed, int percent);
 
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);

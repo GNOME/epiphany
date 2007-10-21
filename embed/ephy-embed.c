@@ -447,6 +447,15 @@ ephy_embed_base_init (gpointer g_class)
                                                                          1.0,
                                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
+                g_object_interface_install_property (g_class,
+                                                     g_param_spec_int ("load-progress",
+                                                                       "Load progress",
+                                                                       "The embed's load progress in percent",
+                                                                       0,
+                                                                       100,
+                                                                       0,
+                                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
 		initialized = TRUE;
 	}
 
@@ -1054,4 +1063,33 @@ ephy_embed_get_document_type (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	return iface->get_document_type (embed);
+}
+
+/**
+ * ephy_embed_get_load_percent:
+ * @embed: an #EphyEmbed
+ *
+ * Returns the page load percentage (displayed in the progressbar).
+ *
+ * Return value: a percentage from 0 to 100.
+ **/
+int
+ephy_embed_get_load_percent (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_load_percent (embed);
+}
+
+/**
+ * ephy_embed_set_load_percent:
+ * @embed: an #EphyEmbed
+ * @percent: a percentage, from 0 to 100.
+ *
+ * Sets the load percentage.
+ **/
+void
+ephy_embed_set_load_percent (EphyEmbed *embed, int percent)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->set_load_percent (embed, percent);
 }
