@@ -93,7 +93,6 @@ struct _EphyTabPrivate
 	int total_requests;
 	int width;
 	int height;
-	float zoom;
 	GSList *hidden_popups;
 	GSList *shown_popups;
 	EphyTabNavigationFlags nav_flags;
@@ -103,7 +102,6 @@ struct _EphyTabPrivate
 	/* Flags */
 	guint is_blank : 1;
 	guint is_loading : 1;
-	guint is_setting_zoom : 1;
 	EphyTabAddressExpire address_expire;
 	/* guint address_expire : 2; ? */
 
@@ -131,8 +129,7 @@ enum
 	PROP_HIDDEN_POPUP_COUNT,
 	PROP_POPUPS_ALLOWED,
 	PROP_TITLE,
-	PROP_TYPED_ADDRESS,
-	PROP_ZOOM
+	PROP_TYPED_ADDRESS
 };
 
 typedef struct
@@ -164,8 +161,6 @@ static void	ephy_tab_update_navigation_flags(EphyTab *tab,
 static void	ephy_tab_set_title		(EphyTab *tab,
 						 EphyEmbed *embed,
 						 char *new_title);
-static void	ephy_tab_set_zoom		(EphyTab *tab,
-						 float zoom);
 static guint	popup_blocker_n_hidden		(EphyTab *tab);
 static gboolean	ephy_tab_get_popups_allowed	(EphyTab *tab);
 static void	ephy_tab_set_popups_allowed	(EphyTab *tab,
@@ -242,7 +237,6 @@ ephy_tab_set_property (GObject *object,
 		case PROP_NAVIGATION:
 		case PROP_HIDDEN_POPUP_COUNT:
 		case PROP_TITLE:
-		case PROP_ZOOM:
 			/* read only */
 			break;
 	}
@@ -292,9 +286,6 @@ ephy_tab_get_property (GObject *object,
 			break;
 		case PROP_TYPED_ADDRESS:
 			g_value_set_string (value, ephy_tab_get_typed_address (tab));
-			break;
-		case PROP_ZOOM:
-			g_value_set_float (value, priv->zoom);
 			break;
 	}
 }
@@ -480,16 +471,6 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "The typed address",
 							      "",
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	g_object_class_install_property (object_class,
-					 PROP_ZOOM,
-					 g_param_spec_float ("zoom",
-							     "Zoom",
-							     "The tab's zoom",
-							     ZOOM_MINIMAL,
-							     ZOOM_MAXIMAL,
-							     1.0,
-							     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphyTabPrivate));
 }
@@ -1530,75 +1511,8 @@ ephy_tab_address_cb (EphyEmbed *embed,
 static void
 ephy_tab_content_change_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 {
-	EphyTabPrivate *priv = tab->priv;
-
-	/* restore zoom level */
-	if (address_has_web_scheme (address))
-	{
-		EphyHistory *history;
-		EphyNode *host;
-		GValue value = { 0, };
-		float zoom = 1.0, current_zoom;
-
-		history = EPHY_HISTORY
-			(ephy_embed_shell_get_global_history (embed_shell));
-		host = ephy_history_get_host (history, address);
-
-		if (host != NULL && ephy_node_get_property
-				     (host, EPHY_NODE_HOST_PROP_ZOOM, &value))
-		{
-			zoom = g_value_get_float (&value);
-			g_value_unset (&value);
-		}
-
-		current_zoom = ephy_embed_get_zoom (embed);
-		if (zoom != current_zoom)
-		{
-			priv->is_setting_zoom = TRUE;
-			ephy_embed_set_zoom (embed, zoom);
-			priv->is_setting_zoom = FALSE;
-		}
-	}
-
 	popups_manager_reset (tab);
 	g_object_notify (G_OBJECT (tab), "popups-allowed");
-}
-
-static void
-ephy_tab_zoom_changed_cb (EphyEmbed *embed, float zoom, EphyTab *tab)
-{
-	char *address;
-
-	LOG ("ephy_tab_zoom_changed_cb tab %p zoom %f", tab, zoom);
-
-	ephy_tab_set_zoom (tab, zoom);
-
-	if (tab->priv->is_setting_zoom)
-	{
-		return;
-	}
-
-	address = ephy_embed_get_location (embed, TRUE);
-	if (address_has_web_scheme (address))
-	{
-		EphyHistory *history;
-		EphyNode *host;
-		history = EPHY_HISTORY
-			(ephy_embed_shell_get_global_history (embed_shell));
-		host = ephy_history_get_host (history, address);
-
-		if (host != NULL)
-		{
-			float zoom;
-
-			zoom = ephy_embed_get_zoom (embed);
-                        ephy_node_set_property_float (host,
-                                                      EPHY_NODE_HOST_PROP_ZOOM,
-                                                      zoom);
-		}
-	}
-
-	g_free (address);
 }
 
 static void
@@ -2041,7 +1955,6 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->height = -1;
 	tab->priv->load_percent = 0;
 	tab->priv->is_loading = FALSE;
-	tab->priv->zoom = 1.0;
 	priv->title = NULL;
 	priv->is_blank = TRUE;
 	priv->icon_address = NULL;
@@ -2070,9 +1983,6 @@ ephy_tab_init (EphyTab *tab)
 				 tab, 0);
 	g_signal_connect_object (embed, "title",
 				 G_CALLBACK (ephy_tab_title_cb),
-				 tab, 0);
-	g_signal_connect_object (embed, "ge_zoom_change",
-				 G_CALLBACK (ephy_tab_zoom_changed_cb),
 				 tab, 0);
 	g_signal_connect_object (embed, "ge_net_state",
 				 G_CALLBACK (ephy_tab_net_state_cb),
@@ -2393,33 +2303,6 @@ ephy_tab_set_typed_address (EphyTab *tab,
 	}
 
 	g_object_notify (G_OBJECT (tab), "typed-address");
-}
-
-static void
-ephy_tab_set_zoom (EphyTab *tab, float zoom)
-{
-	g_return_if_fail (EPHY_IS_TAB (tab));
-
-	tab->priv->zoom = zoom;
-
-	g_object_notify (G_OBJECT (tab), "zoom");
-}
-
-/**
- * ephy_tab_get_zoom:
- * @tab: an #EphyTab
- *
- * Returns the zoom level of the web page loaded in @tab. A return value of
- * 1.0 corresponds to 100% zoom (normal size).
- *
- * Return value: @tab's loaded page's zoom level
- **/
-float
-ephy_tab_get_zoom (EphyTab *tab)
-{
-	g_return_val_if_fail (EPHY_IS_TAB (tab), 1.0);
-
-	return tab->priv->zoom;
 }
 
 /* private */

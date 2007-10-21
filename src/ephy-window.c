@@ -103,7 +103,7 @@ static void sync_tab_load_status		(EphyTab *tab,
 static void sync_tab_security			(EphyEmbed  *embed,
 						 GParamSpec *pspec,
 						 EphyWindow *window);
-static void sync_tab_zoom			(EphyTab *tab,
+static void sync_tab_zoom			(EphyEmbed *embed,
 						 GParamSpec *pspec,
 						 EphyWindow *window);
 
@@ -1401,8 +1401,7 @@ sync_tab_document_type (EphyEmbed *embed,
 	if (priv->closing) return;
 
 	/* update zoom actions */
-	/* FIXME: need to move zoom to embed to uncomment this 
-	   sync_tab_zoom (tab, NULL, window);*/
+	sync_tab_zoom (embed, NULL, window);
 	
 	type = ephy_embed_get_document_type (embed);
 	can_find = (type != EPHY_EMBED_DOCUMENT_IMAGE);
@@ -1719,7 +1718,7 @@ sync_tab_title (EphyTab *tab,
 }
 
 static void
-sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_zoom (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
@@ -1729,8 +1728,8 @@ sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	if (window->priv->closing) return;
 
-	zoom = ephy_tab_get_zoom (tab);
-	type = ephy_embed_get_document_type (ephy_tab_get_embed (tab));
+	zoom = ephy_embed_get_zoom (embed);
+	type = ephy_embed_get_document_type (embed);
 	can_zoom = (type != EPHY_EMBED_DOCUMENT_IMAGE);
 
 	if (zoom >= ZOOM_MAXIMAL)
@@ -2173,9 +2172,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_title),
 						      window);
-		g_signal_handlers_disconnect_by_func (old_tab,
-						      G_CALLBACK (sync_tab_zoom),
-						      window);
 
 		embed = ephy_tab_get_embed (old_tab);
 
@@ -2185,6 +2181,10 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (sync_tab_document_type),
 						      window);
+		g_signal_handlers_disconnect_by_func (embed,
+						      G_CALLBACK (sync_tab_zoom),
+						      window);
+
 
 		g_signal_handlers_disconnect_by_func
 			(embed, G_CALLBACK (tab_context_menu_cb), window);
@@ -2201,6 +2201,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 
 		sync_tab_security	(embed, NULL, window);
 		sync_tab_document_type	(embed, NULL, window);
+		sync_tab_zoom		(embed, NULL, window);
 
 		sync_tab_address	(new_tab, NULL, window);
 		sync_tab_icon		(new_tab, NULL, window);
@@ -2211,7 +2212,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		sync_tab_popup_windows	(new_tab, NULL, window);
 		sync_tab_popups_allowed	(new_tab, NULL, window);
 		sync_tab_title		(new_tab, NULL, window);
-		sync_tab_zoom		(new_tab, NULL, window);
 
 		g_signal_connect_object (new_tab, "notify::address",
 					 G_CALLBACK (sync_tab_address),
@@ -2240,15 +2240,15 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_connect_object (new_tab, "notify::title",
 					 G_CALLBACK (sync_tab_title),
 					 window, 0);
-		g_signal_connect_object (new_tab, "notify::zoom",
-					 G_CALLBACK (sync_tab_zoom),
-					 window, 0);
 
 		g_signal_connect_object (embed, "notify::security-level",
 					 G_CALLBACK (sync_tab_security),
 					 window, 0);
 		g_signal_connect_object (embed, "notify::document-type",
 					 G_CALLBACK (sync_tab_document_type),
+					 window, 0);
+		g_signal_connect_object (embed, "notify::zoom",
+					 G_CALLBACK (sync_tab_zoom),
 					 window, 0);
 		g_signal_connect_object (embed, "ge-context-menu",
 					 G_CALLBACK (tab_context_menu_cb),

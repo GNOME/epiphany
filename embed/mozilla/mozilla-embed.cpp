@@ -41,6 +41,7 @@
 #include "ephy-debug.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
+#include "ephy-history.h"
 #include "ephy-string.h"
 #include "mozilla-embed-event.h"
 
@@ -79,6 +80,9 @@ static void mozilla_embed_security_change_cb	(GtkMozEmbed *embed,
 static void mozilla_embed_document_type_cb	(EphyEmbed *embed,
 						 EphyEmbedDocumentType type,
 						 MozillaEmbed *membed);
+static void mozilla_embed_zoom_change_cb	(EphyEmbed *embed,
+						 float zoom,
+						 MozillaEmbed *membed);
 
 static EphyEmbedSecurityLevel mozilla_embed_security_level (PRUint32 state);
 
@@ -100,6 +104,8 @@ struct MozillaEmbedPrivate
 	EphyEmbedSecurityLevel security_level;
 	/* guint security_level : 3; ? */
 	EphyEmbedDocumentType document_type;
+	float zoom;
+	guint is_setting_zoom : 1;
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
@@ -108,7 +114,8 @@ enum
 {
 	PROP_0,
 	PROP_DOCUMENT_TYPE,
-	PROP_SECURITY
+	PROP_SECURITY,
+	PROP_ZOOM
 };
 
 static void
@@ -218,6 +225,9 @@ mozilla_embed_get_property (GObject *object,
 	case PROP_SECURITY:
 		g_value_set_enum (value, priv->security_level);
 		break;
+	case PROP_ZOOM:
+		g_value_set_float (value, priv->zoom);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -235,6 +245,7 @@ mozilla_embed_set_property (GObject *object,
 	{
 	case PROP_DOCUMENT_TYPE:
 	case PROP_SECURITY:
+	case PROP_ZOOM:
 		/* read only */
 		break;
 	default:
@@ -264,6 +275,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 
 	g_object_class_override_property (object_class, PROP_DOCUMENT_TYPE, "document-type");
 	g_object_class_override_property (object_class, PROP_SECURITY, "security-level");
+	g_object_class_override_property (object_class, PROP_ZOOM, "zoom");
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
@@ -298,9 +310,14 @@ mozilla_embed_init (MozillaEmbed *embed)
 	g_signal_connect_object (embed, "ge_document_type",
 				 G_CALLBACK (mozilla_embed_document_type_cb),
 				 embed, (GConnectFlags) 0);
+	g_signal_connect_object (embed, "ge_zoom_change",
+				 G_CALLBACK (mozilla_embed_zoom_change_cb),
+				 embed, (GConnectFlags) 0);
 
 	embed->priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
 	embed->priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
+	embed->priv->zoom = 1.0;
+	embed->priv->is_setting_zoom = FALSE;
 }
 
 gpointer
@@ -890,6 +907,58 @@ mozilla_embed_location_changed_cb (GtkMozEmbed *embed,
 	g_free (location);
 }
 
+static gboolean
+address_has_web_scheme (const char *address)
+{
+	gboolean has_web_scheme;
+
+	if (address == NULL) return FALSE;
+
+	has_web_scheme = (g_str_has_prefix (address, "http:") ||
+			  g_str_has_prefix (address, "https:") ||
+			  g_str_has_prefix (address, "ftp:") ||
+			  g_str_has_prefix (address, "file:") ||
+			  g_str_has_prefix (address, "data:") ||
+			  g_str_has_prefix (address, "about:") ||
+			  g_str_has_prefix (address, "gopher:"));
+
+	return has_web_scheme;
+}
+
+static void
+mozilla_embed_restore_zoom_level (MozillaEmbed *membed, const char *address)
+{
+	MozillaEmbedPrivate *priv = membed->priv;
+
+	/* restore zoom level */
+	if (address_has_web_scheme (address))
+	{
+		EphyHistory *history;
+		EphyNode *host;
+		GValue value = { 0, };
+		float zoom = 1.0, current_zoom;
+
+		history = EPHY_HISTORY
+			(ephy_embed_shell_get_global_history (embed_shell));
+		host = ephy_history_get_host (history, address);
+
+		if (host != NULL && ephy_node_get_property
+				     (host, EPHY_NODE_HOST_PROP_ZOOM, &value))
+		{
+			zoom = g_value_get_float (&value);
+			g_value_unset (&value);
+		}
+
+		current_zoom = ephy_embed_get_zoom (EPHY_EMBED (membed));
+		if (zoom != current_zoom)
+		{
+			priv->is_setting_zoom = TRUE;
+			ephy_embed_set_zoom (EPHY_EMBED (membed), zoom);
+			priv->is_setting_zoom = FALSE;
+		}
+	}
+}
+
 static void
 update_load_state (MozillaEmbed *membed, gint state)
 {
@@ -910,6 +979,7 @@ update_load_state (MozillaEmbed *membed, gint state)
 		char *address;
 		address = gtk_moz_embed_get_location (GTK_MOZ_EMBED (membed));
 		g_signal_emit_by_name (membed, "ge-content-change", address);
+		mozilla_embed_restore_zoom_level (membed, address);
 		g_free (address);
 	}
 
@@ -938,6 +1008,7 @@ update_load_state (MozillaEmbed *membed, gint state)
 			char *address;
 			address = gtk_moz_embed_get_location (GTK_MOZ_EMBED (membed));
 			g_signal_emit_by_name (membed, "ge_content_change", address);
+			mozilla_embed_restore_zoom_level (membed, address);
 			g_free (address);
 		}
 	}
@@ -1168,6 +1239,45 @@ mozilla_embed_document_type_cb (EphyEmbed *embed,
 		membed->priv->document_type = type;
 
 		g_object_notify (G_OBJECT (membed), "document-type");
+	}
+}
+
+static void
+mozilla_embed_zoom_change_cb (EphyEmbed *embed,
+			      float zoom,
+			      MozillaEmbed *membed)
+{
+	char *address;
+
+	if (membed->priv->zoom != zoom)
+	{
+		if (membed->priv->is_setting_zoom)
+		  {
+		    return;
+		  }
+
+		address = ephy_embed_get_location (embed, TRUE);
+		if (address_has_web_scheme (address))
+		  {
+		    EphyHistory *history;
+		    EphyNode *host;
+		    history = EPHY_HISTORY
+		      (ephy_embed_shell_get_global_history (embed_shell));
+		    host = ephy_history_get_host (history, address);
+
+		    if (host != NULL)
+		      {
+			ephy_node_set_property_float (host,
+						      EPHY_NODE_HOST_PROP_ZOOM,
+						      zoom);
+		      }
+		  }
+
+		g_free (address);
+
+		membed->priv->zoom = zoom;
+
+		g_object_notify (G_OBJECT (membed), "zoom");
 	}
 }
 
