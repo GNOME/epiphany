@@ -100,7 +100,7 @@ static void ephy_window_view_popup_windows_cb	(GtkAction *action,
 static void sync_tab_load_status		(EphyTab *tab,
 						 GParamSpec *pspec,
 						 EphyWindow *window);
-static void sync_tab_security			(EphyTab *tab,
+static void sync_tab_security			(EphyEmbed  *embed,
 						 GParamSpec *pspec,
 						 EphyWindow *window);
 static void sync_tab_zoom			(EphyTab *tab,
@@ -707,7 +707,7 @@ ephy_window_fullscreen (EphyWindow *window)
 	/* sync status */
 	tab = ephy_window_get_active_tab (window);
 	sync_tab_load_status (tab, NULL, window);
-	sync_tab_security (tab, NULL, window);
+	sync_tab_security (ephy_tab_get_embed (tab), NULL, window);
 
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (priv->toolbar),
@@ -1527,12 +1527,11 @@ sync_tab_navigation (EphyTab *tab,
 }
 
 static void
-sync_tab_security (EphyTab *tab,
+sync_tab_security (EphyEmbed *embed,
 		   GParamSpec *pspec,
 		   EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
-	EphyEmbed *embed;
 	EphyEmbedSecurityLevel level;
 	char *description = NULL;
 	char *state = NULL;
@@ -1542,8 +1541,6 @@ sync_tab_security (EphyTab *tab,
 	GtkAction *action;
 
 	if (priv->closing) return;
-
-	embed = ephy_tab_get_embed (tab);
 
 	ephy_embed_get_security_level (embed, &level, &description);
 
@@ -2197,6 +2194,10 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 
 	if (new_tab != NULL)
 	{
+		embed = ephy_tab_get_embed (new_tab);
+
+		sync_tab_security	(embed, NULL, window);
+
 		sync_tab_address	(new_tab, NULL, window);
 		sync_tab_document_type	(new_tab, NULL, window);
 		sync_tab_icon		(new_tab, NULL, window);
@@ -2204,7 +2205,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		sync_tab_load_status	(new_tab, NULL, window);
 		sync_tab_message	(new_tab, NULL, window);
 		sync_tab_navigation	(new_tab, NULL, window);
-		sync_tab_security	(new_tab, NULL, window);
 		sync_tab_popup_windows	(new_tab, NULL, window);
 		sync_tab_popups_allowed	(new_tab, NULL, window);
 		sync_tab_title		(new_tab, NULL, window);
@@ -2231,9 +2231,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_connect_object (new_tab, "notify::navigation",
 					 G_CALLBACK (sync_tab_navigation),
 					 window, 0);
-		g_signal_connect_object (new_tab, "notify::security-level",
-					 G_CALLBACK (sync_tab_security),
-					 window, 0);
 		g_signal_connect_object (new_tab, "notify::hidden-popup-count",
 					 G_CALLBACK (sync_tab_popup_windows),
 					 window, 0);
@@ -2248,6 +2245,10 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 					 window, 0);
 
 		embed = ephy_tab_get_embed (new_tab);
+
+		g_signal_connect_object (embed, "notify::security-level",
+					 G_CALLBACK (sync_tab_security),
+					 window, 0);
 		g_signal_connect_object (embed, "ge-context-menu",
 					 G_CALLBACK (tab_context_menu_cb),
 					 window, G_CONNECT_AFTER);

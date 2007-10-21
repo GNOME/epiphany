@@ -92,9 +92,18 @@ struct MozillaEmbedPrivate
 {
 	EphyBrowser *browser;
 	MozillaEmbedLoadState load_state;
+
+	EphyEmbedSecurityLevel security_level;
+	/* guint security_level : 3; ? */
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
+
+enum
+{
+        PROP_0,
+        PROP_SECURITY
+};
 
 static GObjectClass *parent_class = NULL;
 
@@ -232,6 +241,44 @@ mozilla_embed_constructor (GType type, guint n_construct_properties,
 }
 
 static void
+mozilla_embed_get_property (GObject *object,
+			    guint prop_id,
+			    GValue *value,
+			    GParamSpec *pspec)
+{
+	MozillaEmbed *embed = MOZILLA_EMBED (object);
+	MozillaEmbedPrivate *priv = embed->priv;
+        
+        switch (prop_id)
+        {
+        case PROP_SECURITY:
+                g_value_set_enum (value, priv->security_level);
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+                break;
+        }
+
+}
+
+static void
+mozilla_embed_set_property (GObject *object,
+                            guint prop_id,
+                            const GValue *value,
+                            GParamSpec *pspec)
+{
+        switch (prop_id)
+        {
+        case PROP_SECURITY:
+                /* read only */
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+                break;
+        }
+}
+
+static void
 mozilla_embed_class_init (MozillaEmbedClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -242,11 +289,15 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 
 	object_class->constructor = mozilla_embed_constructor;
 	object_class->finalize = mozilla_embed_finalize;
+        object_class->get_property = mozilla_embed_get_property;
+        object_class->set_property = mozilla_embed_set_property;
 
 	gtk_object_class->destroy = mozilla_embed_destroy;
 
 	widget_class->grab_focus = mozilla_embed_grab_focus;
 	widget_class->realize = mozilla_embed_realize;
+
+        g_object_class_override_property (object_class, PROP_SECURITY, "security-level");
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
@@ -278,6 +329,8 @@ mozilla_embed_init (MozillaEmbed *embed)
 	g_signal_connect_object (embed, "security_change",
 				 G_CALLBACK (mozilla_embed_security_change_cb),
 				 embed, (GConnectFlags) 0);
+
+        embed->priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
 }
 
 gpointer
@@ -1106,13 +1159,25 @@ mozilla_embed_new_window_cb (GtkMozEmbed *embed,
 }
 
 static void
+mozilla_embed_set_security_level (MozillaEmbed *embed, EphyEmbedSecurityLevel level)
+{
+	MozillaEmbedPrivate *priv = embed->priv;
+
+        if (priv->security_level != level)
+        {
+                priv->security_level = level;
+
+                g_object_notify (G_OBJECT (embed), "security-level");
+        }
+}
+
+static void
 mozilla_embed_security_change_cb (GtkMozEmbed *embed, 
 				  gpointer requestptr,
 				  PRUint32 state,
 				  MozillaEmbed *membed)
 {
-	g_signal_emit_by_name (membed, "ge_security_change",
-			       mozilla_embed_security_level (state));
+        mozilla_embed_set_security_level (membed, mozilla_embed_security_level (state));
 }
 
 static EphyEmbedSecurityLevel
