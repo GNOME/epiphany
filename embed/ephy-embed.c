@@ -446,7 +446,6 @@ ephy_embed_base_init (gpointer g_class)
                                                                          ZOOM_MAXIMAL,
                                                                          1.0,
                                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
                 g_object_interface_install_property (g_class,
                                                      g_param_spec_int ("load-progress",
                                                                        "Load progress",
@@ -455,6 +454,14 @@ ephy_embed_base_init (gpointer g_class)
                                                                        100,
                                                                        0,
                                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                g_object_interface_install_property (g_class,
+                                                     g_param_spec_boolean ("load-status",
+                                                                           "Load status",
+                                                                           "The embed's load status",
+                                                                           FALSE,
+                                                                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+
 
 		initialized = TRUE;
 	}
@@ -1093,3 +1100,29 @@ ephy_embed_set_load_percent (EphyEmbed *embed, int percent)
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	return iface->set_load_percent (embed, percent);
 }
+
+/**
+ * ephy_embed_get_load_status:
+ * @embed: an #EphyEmbed
+ *
+ * Returns whether the web page in @embed has finished loading. A web page is
+ * only finished loading after all images, styles, and other dependencies have
+ * been downloaded and rendered.
+ *
+ * Return value: %TRUE if the page is still loading, %FALSE if complete
+ **/
+gboolean
+ephy_embed_get_load_status (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_load_status (embed);
+}
+
+void
+ephy_embed_set_load_status (EphyEmbed *embed, gboolean status)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->set_load_status (embed, status);
+}
+
+

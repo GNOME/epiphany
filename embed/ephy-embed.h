@@ -231,6 +231,8 @@ struct _EphyEmbedIface
 	EphyEmbedDocumentType	(* get_document_type)	(EphyEmbed *embed);
 	int		   (* get_load_percent)		(EphyEmbed *embed);
 	void		   (* set_load_percent)		(EphyEmbed *embed, int percent);
+	gboolean	   (* get_load_status)		(EphyEmbed *embed);
+	void		   (* set_load_status)		(EphyEmbed *embed, gboolean percent);
 };
 
 GType		  ephy_embed_net_state_get_type		(void);
@@ -324,13 +326,15 @@ void		  ephy_embed_scroll_pixels		(EphyEmbed *embed,
 							 int dx,
 							 int dy);
 /* Document type */
-
 EphyEmbedDocumentType	ephy_embed_get_document_type	(EphyEmbed *embed);
 
 /* Progress */
-
 int		 ephy_embed_get_load_percent		(EphyEmbed *embed);
-void		 ephy_embed_set_load_percent		(EphyEmbed *embed, int percent);
+void		 ephy_embed_set_load_percent		(EphyEmbed *embed, int percent); /* FIXME: remove me */
+
+/* Load status */
+gboolean         ephy_embed_get_load_status             (EphyEmbed *embed);
+void             ephy_embed_set_load_status             (EphyEmbed *embed, gboolean status); /* FIXME: remove me */
 
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);

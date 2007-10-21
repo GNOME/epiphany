@@ -1078,7 +1078,7 @@ write_tab (xmlTextWriterPtr writer,
 					   (const xmlChar *) title);
 	if (ret < 0) return ret;
 
-	if (ephy_tab_get_load_status (tab))
+	if (ephy_embed_get_load_status (ephy_tab_get_embed (tab)))
 	{
 		ret = xmlTextWriterWriteAttribute (writer,
 						   (const xmlChar *) "loading",

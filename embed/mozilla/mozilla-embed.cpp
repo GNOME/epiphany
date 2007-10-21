@@ -105,7 +105,11 @@ struct MozillaEmbedPrivate
 	/* guint security_level : 3; ? */
 	EphyEmbedDocumentType document_type;
 	float zoom;
+
+	/* Flags */
+	guint is_loading : 1;
 	guint is_setting_zoom : 1;
+
 	gint8 load_percent;
 };
 
@@ -116,6 +120,7 @@ enum
 	PROP_0,
 	PROP_DOCUMENT_TYPE,
 	PROP_LOAD_PROGRESS,
+	PROP_LOAD_STATUS,
 	PROP_SECURITY,
 	PROP_ZOOM
 };
@@ -233,6 +238,9 @@ mozilla_embed_get_property (GObject *object,
 	case PROP_LOAD_PROGRESS:
 		g_value_set_int (value, priv->load_percent);
 		break;
+	case PROP_LOAD_STATUS:
+		g_value_set_boolean (value, priv->is_loading);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -250,6 +258,7 @@ mozilla_embed_set_property (GObject *object,
 	{
 	case PROP_DOCUMENT_TYPE:
 	case PROP_LOAD_PROGRESS:
+	case PROP_LOAD_STATUS:
 	case PROP_SECURITY:
 	case PROP_ZOOM:
 		/* read only */
@@ -283,6 +292,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 	g_object_class_override_property (object_class, PROP_SECURITY, "security-level");
 	g_object_class_override_property (object_class, PROP_ZOOM, "zoom");
 	g_object_class_override_property (object_class, PROP_LOAD_PROGRESS, "load-progress");
+	g_object_class_override_property (object_class, PROP_LOAD_STATUS, "load-status");
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
@@ -326,6 +336,7 @@ mozilla_embed_init (MozillaEmbed *embed)
 	embed->priv->zoom = 1.0;
 	embed->priv->is_setting_zoom = FALSE;
 	embed->priv->load_percent = 0;
+	embed->priv->is_loading = FALSE;
 }
 
 gpointer
@@ -925,6 +936,30 @@ impl_set_load_percent (EphyEmbed *embed, int percent)
        }
 }
 
+static gboolean
+impl_get_load_status (EphyEmbed *embed)
+{
+	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
+
+	return mpriv->is_loading;
+}
+
+static void
+impl_set_load_status (EphyEmbed *embed, gboolean status)
+{
+       MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
+       guint is_loading;
+
+       is_loading = status != FALSE;
+
+       if (is_loading != mpriv->is_loading)
+       {
+	       mpriv->is_loading = is_loading;
+
+	       g_object_notify (G_OBJECT (embed), "load-status");
+       }
+}
+
 static void
 mozilla_embed_location_changed_cb (GtkMozEmbed *embed, 
 				   MozillaEmbed *membed)
@@ -1384,6 +1419,8 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->get_document_type = impl_get_document_type;
 	iface->get_load_percent = impl_get_load_percent;
 	iface->set_load_percent = impl_set_load_percent;
+	iface->get_load_status = impl_get_load_status;
+	iface->set_load_status = impl_set_load_status;
 }
 
 static void

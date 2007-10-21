@@ -100,7 +100,6 @@ struct _EphyTabPrivate
 
 	/* Flags */
 	guint is_blank : 1;
-	guint is_loading : 1;
 	EphyTabAddressExpire address_expire;
 	/* guint address_expire : 2; ? */
 
@@ -121,7 +120,6 @@ enum
 	PROP_ADDRESS,
 	PROP_ICON,
 	PROP_ICON_ADDRESS,
-	PROP_LOAD_STATUS,
 	PROP_MESSAGE,
 	PROP_NAVIGATION,
 	PROP_HIDDEN_POPUP_COUNT,
@@ -148,8 +146,6 @@ static GArray *tabs_id_array = NULL;
 static guint n_tabs = 0;
 
 /* internal functions, accessible only from this file */
-static void	ephy_tab_set_load_status	(EphyTab *tab,
-						 gboolean status);
 static void	ephy_tab_set_link_message	(EphyTab *tab,
 						 char *message);
 static void	ephy_tab_update_navigation_flags(EphyTab *tab,
@@ -227,7 +223,6 @@ ephy_tab_set_property (GObject *object,
 			break;
 		case PROP_ADDRESS:
 		case PROP_ICON:
-		case PROP_LOAD_STATUS:
 		case PROP_MESSAGE:
 		case PROP_NAVIGATION:
 		case PROP_HIDDEN_POPUP_COUNT:
@@ -256,9 +251,6 @@ ephy_tab_get_property (GObject *object,
 			break;
 		case PROP_ICON_ADDRESS:
 			g_value_set_string (value, priv->icon_address);
-			break;
-		case PROP_LOAD_STATUS:
-			g_value_set_boolean (value, priv->is_loading);
 			break;
 		case PROP_MESSAGE:
 			g_value_set_string (value, ephy_tab_get_status_message (tab));
@@ -394,14 +386,6 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "The tab icon's address",
 							      NULL,
 							      (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)));
-
-	g_object_class_install_property (object_class,
-					 PROP_LOAD_STATUS,
-					 g_param_spec_boolean ("load-status",
-							       "Load status",
-							       "The tab's load status",
-							       FALSE,
-							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_MESSAGE,
@@ -889,6 +873,7 @@ ephy_tab_set_address (EphyTab *tab,
 {
 	EphyTabPrivate *priv = tab->priv;
 	GObject *object = G_OBJECT (tab);
+	gboolean is_loading;
 
 	g_free (priv->address);
 	priv->address = address;
@@ -896,7 +881,9 @@ ephy_tab_set_address (EphyTab *tab,
 	priv->is_blank = address == NULL ||
 			 strcmp (address, "about:blank") == 0;
 
-	if (priv->is_loading &&
+	is_loading = ephy_embed_get_load_status (ephy_tab_get_embed (tab));
+
+	if (is_loading &&
 	    priv->address_expire == EPHY_TAB_ADDRESS_EXPIRE_NOW &&
 	    priv->typed_address != NULL)
 	{
@@ -923,36 +910,6 @@ EphyTab *
 ephy_tab_new (void)
 {
 	return EPHY_TAB (g_object_new (EPHY_TYPE_TAB, NULL));
-}
-
-static void
-ephy_tab_set_load_status (EphyTab *tab, gboolean status)
-{
-	g_return_if_fail (EPHY_IS_TAB (tab));
-
-	status = status != FALSE;
-
-	tab->priv->is_loading = status;
-
-	g_object_notify (G_OBJECT (tab), "load-status");
-}
-
-/**
- * ephy_tab_get_load_status:
- * @tab: an #EphyTab
- *
- * Returns whether the web page in @tab has finished loading. A web page is
- * only finished loading after all images, styles, and other dependencies have
- * been downloaded and rendered.
- *
- * Return value: %TRUE if the page is still loading, %FALSE if complete
- **/
-gboolean
-ephy_tab_get_load_status (EphyTab *tab)
-{
-	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
-
-	return tab->priv->is_loading;
 }
 
 static void
@@ -1237,6 +1194,7 @@ ephy_file_monitor_reload_cb (EphyTab *tab)
 {
 	EphyTabPrivate *priv = tab->priv;
 	EphyEmbed *embed;
+	gboolean is_loading;
 
 	if (priv->reload_delay_ticks > 0)
 	{
@@ -1246,7 +1204,9 @@ ephy_file_monitor_reload_cb (EphyTab *tab)
 		return TRUE;
 	}
 
-	if (priv->is_loading)
+	is_loading = ephy_embed_get_load_status (ephy_tab_get_embed (tab));
+
+	if (is_loading)
 	{
 		/* Wait a bit to reload if we're still loading! */
 		priv->reload_delay_ticks = RELOAD_DELAY_MAX_TICKS / 2;
@@ -1661,8 +1621,8 @@ ephy_tab_net_state_cb (EphyEmbed *embed,
 			priv->total_requests = 0;
 			priv->cur_requests = 0;
 
-			ephy_embed_set_load_percent (ephy_tab_get_embed (tab), 0);
-			ephy_tab_set_load_status (tab, TRUE);
+			ephy_embed_set_load_percent (embed, 0);
+			ephy_embed_set_load_status (embed, TRUE);
 			ephy_tab_update_navigation_flags (tab, embed);
 
 			ensure_page_info (tab, embed, uri);
@@ -1678,7 +1638,7 @@ ephy_tab_net_state_cb (EphyEmbed *embed,
 			g_object_freeze_notify (object);
 
 			ephy_embed_set_load_percent (ephy_tab_get_embed (tab), 100);
-			ephy_tab_set_load_status (tab, FALSE);
+			ephy_embed_set_load_status (embed, FALSE);
 			ephy_tab_update_navigation_flags (tab, embed);
 
 			g_free (priv->loading_title);
@@ -1935,7 +1895,6 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->cur_requests = 0;
 	tab->priv->width = -1;
 	tab->priv->height = -1;
-	tab->priv->is_loading = FALSE;
 	priv->title = NULL;
 	priv->is_blank = TRUE;
 	priv->icon_address = NULL;
@@ -2120,16 +2079,19 @@ ephy_tab_get_title_composite (EphyTab *tab)
 {
 	EphyTabPrivate *priv;
 	const char *title = "";
+	gboolean is_loading;
 
 	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
 	priv = tab->priv;
 
+	is_loading = ephy_embed_get_load_status (ephy_tab_get_embed (tab));
+
 	if (priv->is_blank)
 	{
 		title = _("Blank page");
 	}
-	else if (priv->is_loading &&
+	else if (is_loading &&
 		 priv->loading_title != NULL)
 	{
 		title = priv->loading_title;
@@ -2233,12 +2195,15 @@ ephy_tab_set_typed_address (EphyTab *tab,
 			    EphyTabAddressExpire expire)
 {
 	EphyTabPrivate *priv = tab->priv;
+	gboolean is_loading;
 
 	g_free (priv->typed_address);
 	priv->typed_address = g_strdup (address);
 
+	is_loading = ephy_embed_get_load_status (ephy_tab_get_embed (tab));
+
 	if (expire == EPHY_TAB_ADDRESS_EXPIRE_CURRENT &&
-	    !priv->is_loading)
+	    !is_loading)
 	{
 		priv->address_expire = EPHY_TAB_ADDRESS_EXPIRE_NOW;
 	}

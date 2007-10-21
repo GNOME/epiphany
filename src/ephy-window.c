@@ -97,7 +97,7 @@ static void ephy_window_view_toolbar_cb         (GtkAction *action,
 						 EphyWindow *window);
 static void ephy_window_view_popup_windows_cb	(GtkAction *action,
 						 EphyWindow *window);
-static void sync_tab_load_status		(EphyTab *tab,
+static void sync_tab_load_status		(EphyEmbed  *embed,
 						 GParamSpec *pspec,
 						 EphyWindow *window);
 static void sync_tab_security			(EphyEmbed  *embed,
@@ -706,7 +706,7 @@ ephy_window_fullscreen (EphyWindow *window)
 
 	/* sync status */
 	tab = ephy_window_get_active_tab (window);
-	sync_tab_load_status (tab, NULL, window);
+	sync_tab_load_status (ephy_tab_get_embed (tab), NULL, window);
 	sync_tab_security (ephy_tab_get_embed (tab), NULL, window);
 
 	egg_editable_toolbar_set_model
@@ -1672,7 +1672,7 @@ sync_tab_popups_allowed (EphyTab *tab,
 }
 
 static void
-sync_tab_load_status (EphyTab *tab,
+sync_tab_load_status (EphyEmbed  *embed,
 		      GParamSpec *pspec,
 		      EphyWindow *window)
 {
@@ -1683,7 +1683,7 @@ sync_tab_load_status (EphyTab *tab,
 
 	if (window->priv->closing) return;
 
-	loading = ephy_tab_get_load_status (tab);
+	loading = ephy_embed_get_load_status (embed);
 
 	action = gtk_action_group_get_action (action_group, "ViewStop");
 	gtk_action_set_sensitive (action, loading);
@@ -2152,9 +2152,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 						      G_CALLBACK (sync_tab_icon),
 						      window);
 		g_signal_handlers_disconnect_by_func (old_tab,
-						      G_CALLBACK (sync_tab_load_status),
-						      window);
-		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_message),
 						      window);
 		g_signal_handlers_disconnect_by_func (old_tab,
@@ -2184,6 +2181,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (sync_tab_load_progress),
 						      window);
+		g_signal_handlers_disconnect_by_func (embed,
+						      G_CALLBACK (sync_tab_load_status),
+						      window);
 
 		g_signal_handlers_disconnect_by_func
 			(embed, G_CALLBACK (tab_context_menu_cb), window);
@@ -2202,10 +2202,10 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		sync_tab_document_type	(embed, NULL, window);
 		sync_tab_zoom		(embed, NULL, window);
 		sync_tab_load_progress	(embed, NULL, window);
+		sync_tab_load_status	(embed, NULL, window);
 
 		sync_tab_address	(new_tab, NULL, window);
 		sync_tab_icon		(new_tab, NULL, window);
-		sync_tab_load_status	(new_tab, NULL, window);
 		sync_tab_message	(new_tab, NULL, window);
 		sync_tab_navigation	(new_tab, NULL, window);
 		sync_tab_popup_windows	(new_tab, NULL, window);
@@ -2217,9 +2217,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 					 window, 0);
 		g_signal_connect_object (new_tab, "notify::icon",
 					 G_CALLBACK (sync_tab_icon),
-					 window, 0);
-		g_signal_connect_object (new_tab, "notify::load-status",
-					 G_CALLBACK (sync_tab_load_status),
 					 window, 0);
 		g_signal_connect_object (new_tab, "notify::message",
 					 G_CALLBACK (sync_tab_message),
@@ -2245,6 +2242,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 					 window, 0);
 		g_signal_connect_object (embed, "notify::zoom",
 					 G_CALLBACK (sync_tab_zoom),
+					 window, 0);
+		g_signal_connect_object (embed, "notify::load-status",
+					 G_CALLBACK (sync_tab_load_status),
 					 window, 0);
 		g_signal_connect_object (embed, "ge-context-menu",
 					 G_CALLBACK (tab_context_menu_cb),

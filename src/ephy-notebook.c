@@ -528,7 +528,7 @@ ephy_notebook_finalize (GObject *object)
 }
 
 static void
-sync_load_status (EphyTab *tab, GParamSpec *pspec, GtkWidget *proxy)
+sync_load_status (EphyEmbed *embed, GParamSpec *pspec, GtkWidget *proxy)
 {
 	GtkWidget *spinner, *icon;
 
@@ -536,7 +536,7 @@ sync_load_status (EphyTab *tab, GParamSpec *pspec, GtkWidget *proxy)
 	icon = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "icon"));
 	g_return_if_fail (spinner != NULL && icon != NULL);
 
-	if (ephy_tab_get_load_status (tab))
+	if (ephy_embed_get_load_status (embed))
 	{
 		gtk_widget_hide (icon);
 		gtk_widget_show (spinner);
@@ -682,13 +682,13 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	/* Hook the label up to the tab properties */
 	sync_icon (tab, NULL, GTK_IMAGE (icon));
 	sync_label (tab, NULL, label);
-	sync_load_status (tab, NULL, hbox);
+	sync_load_status (ephy_tab_get_embed (tab), NULL, hbox);
 
 	g_signal_connect_object (tab, "notify::icon",
 				 G_CALLBACK (sync_icon), icon, 0);
 	g_signal_connect_object (tab, "notify::title",
 				 G_CALLBACK (sync_label), label, 0);
-	g_signal_connect_object (tab, "notify::load-status",
+	g_signal_connect_object (ephy_tab_get_embed (tab), "notify::load-status",
 				 G_CALLBACK (sync_load_status), hbox, 0);
 
 	return hbox;
@@ -839,7 +839,7 @@ ephy_notebook_remove (GtkContainer *container,
 	g_signal_handlers_disconnect_by_func
 		(tab_widget, G_CALLBACK (sync_label), tab_label_label);
 	g_signal_handlers_disconnect_by_func
-		(tab_widget, G_CALLBACK (sync_load_status), tab_label);
+          (ephy_tab_get_embed (EPHY_TAB (tab_widget)), G_CALLBACK (sync_load_status), tab_label);
 
 	GTK_CONTAINER_CLASS (parent_class)->remove (container, tab_widget);
 
