@@ -56,6 +56,29 @@ struct WebKitEmbedPrivate
   WebKitPage *page;
   WebKitEmbedLoadState load_state;
   char *loading_uri;
+  
+  EphyEmbedSecurityLevel security_level;
+  /* guint security_level : 3; ? */
+  EphyEmbedDocumentType document_type;
+  EphyEmbedNavigationFlags nav_flags;
+  float zoom;
+  
+  /* Flags */
+  guint is_loading : 1;
+  guint is_setting_zoom : 1;
+
+  gint8 load_percent;
+};
+
+enum 
+{
+  PROP_0,
+  PROP_DOCUMENT_TYPE,
+  PROP_LOAD_PROGRESS,
+  PROP_LOAD_STATUS,
+  PROP_NAVIGATION,
+  PROP_SECURITY,
+  PROP_ZOOM
 };
 
 static void
@@ -148,6 +171,19 @@ webkit_embed_load_started_cb (WebKitPage *page,
 }
 
 static void
+webkit_embed_set_load_percent (WebKitEmbed *embed,
+                               int progress)
+{
+  WebKitEmbedPrivate *wpriv = embed->priv;
+  if (progress != wpriv->load_percent)
+  {
+    wpriv->load_percent = progress;
+
+    g_object_notify (G_OBJECT (embed), "load-progress");
+  }
+}
+
+static void
 webkit_embed_load_progress_changed_cb (WebKitPage *page,
 				       int progress,
 				       EphyEmbed *embed)
@@ -157,11 +193,7 @@ webkit_embed_load_progress_changed_cb (WebKitPage *page,
   if (wembed->priv->load_state == WEBKIT_EMBED_LOAD_STARTED)
     wembed->priv->load_state = WEBKIT_EMBED_LOAD_LOADING;
 
-  /* FIXME: EphyTab seems to have a strange way of calculating progress,
-   * and it's not compatible with the simple integer value WebKit emits.
-   * EphyTab IMHO should use "progress" signal from GtkMozEmbed. That way,
-   * we could use the same functions for WebKit too.
-   */
+  webkit_embed_set_load_percent (wembed, progress);
 
   update_load_state (wembed, page);
 }
@@ -178,6 +210,63 @@ webkit_embed_load_finished_cb (WebKitPage *page,
 }
 
 static void
+webkit_embed_get_property (GObject *object,
+                           guint prop_id,
+                           GValue *value,
+                           GParamSpec *pspec)
+{
+  WebKitEmbed *embed = WEBKIT_EMBED (object);
+  WebKitEmbedPrivate *priv = embed->priv;
+
+  switch (prop_id)
+  {
+    case PROP_DOCUMENT_TYPE:
+      g_value_set_enum (value, priv->document_type);
+      break;
+    case PROP_SECURITY:
+      g_value_set_enum (value, priv->security_level);
+      break;
+    case PROP_ZOOM:
+      g_value_set_float (value, priv->zoom);
+      break;
+    case PROP_LOAD_PROGRESS:
+      g_value_set_int (value, priv->load_percent);
+      break;
+    case PROP_LOAD_STATUS:
+      g_value_set_boolean (value, priv->is_loading);
+      break;
+    case PROP_NAVIGATION:
+      g_value_set_flags (value, priv->nav_flags);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
+}
+
+static void
+webkit_embed_set_property (GObject *object,
+                           guint prop_id,
+                           const GValue *value,
+                           GParamSpec *pspec)
+{
+  switch (prop_id)
+  {
+    case PROP_DOCUMENT_TYPE:
+    case PROP_LOAD_PROGRESS:
+    case PROP_LOAD_STATUS:
+    case PROP_NAVIGATION:
+    case PROP_SECURITY:
+    case PROP_ZOOM:
+      /* read only */
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
+}
+
+static void
 webkit_embed_class_init (WebKitEmbedClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -185,10 +274,20 @@ webkit_embed_class_init (WebKitEmbedClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass); 
 
   object_class->finalize = webkit_embed_finalize;
+  
+  object_class->get_property = webkit_embed_get_property;
+  object_class->set_property = webkit_embed_set_property;
 
   gtk_object_class->destroy = webkit_embed_destroy;
 
   widget_class->grab_focus = webkit_embed_grab_focus;
+  
+  g_object_class_override_property (object_class, PROP_LOAD_PROGRESS, "load-progress");
+  g_object_class_override_property (object_class, PROP_LOAD_STATUS, "load-status");
+  g_object_class_override_property (object_class, PROP_DOCUMENT_TYPE, "document-type");
+  g_object_class_override_property (object_class, PROP_SECURITY, "security-level");
+  g_object_class_override_property (object_class, PROP_ZOOM, "zoom");
+  g_object_class_override_property (object_class, PROP_NAVIGATION, "navigation");
 
   g_type_class_add_private (object_class, sizeof(WebKitEmbedPrivate));
 }
@@ -220,6 +319,13 @@ webkit_embed_init (WebKitEmbed *embed)
                     G_CALLBACK (webkit_embed_title_changed_cb), embed);
   g_signal_connect (G_OBJECT (page), "load-progress-changed",
                     G_CALLBACK (webkit_embed_load_progress_changed_cb), embed);
+  
+  embed->priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
+  embed->priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
+  embed->priv->zoom = 1.0;
+  embed->priv->is_setting_zoom = FALSE;
+  embed->priv->load_percent = 0;
+  embed->priv->is_loading = FALSE;
 }
 
 static void
@@ -367,7 +473,9 @@ impl_set_zoom (EphyEmbed *embed,
 static float
 impl_get_zoom (EphyEmbed *embed)
 {
-  return 0.0;
+  WebKitEmbedPrivate *wpriv = WEBKIT_EMBED (embed)->priv;
+  
+  return wpriv->zoom;
 }
 
 static void
@@ -487,6 +595,88 @@ impl_has_modified_forms (EphyEmbed *embed)
   return FALSE;
 }
 
+static int
+impl_get_load_percent (EphyEmbed *embed)
+{
+  WebKitEmbedPrivate *wpriv = WEBKIT_EMBED(embed)->priv;
+
+  return wpriv->load_percent;
+}
+
+static void
+impl_set_load_percent (EphyEmbed *embed, int percent)
+{
+  webkit_embed_set_load_percent (WEBKIT_EMBED (embed), percent);
+}
+
+static gboolean
+impl_get_load_status (EphyEmbed *embed)
+{
+  WebKitEmbedPrivate *wpriv = WEBKIT_EMBED (embed)->priv;
+
+  return wpriv->is_loading;
+}
+
+static void
+impl_set_load_status (EphyEmbed *embed, gboolean status)
+{
+  WebKitEmbedPrivate *wpriv = WEBKIT_EMBED (embed)->priv;
+  guint is_loading;
+
+  is_loading = status != FALSE;
+
+  if (is_loading != wpriv->is_loading)
+  {
+    wpriv->is_loading = is_loading;
+
+    g_object_notify (G_OBJECT (embed), "load-status");
+  }
+}
+
+static EphyEmbedDocumentType
+impl_get_document_type (EphyEmbed *embed)
+{
+  WebKitEmbedPrivate *wpriv = WEBKIT_EMBED (embed)->priv;
+
+  return wpriv->document_type;
+}
+
+static EphyEmbedNavigationFlags
+impl_get_navigation_flags (EphyEmbed *embed)
+{
+  WebKitEmbedPrivate *wpriv = WEBKIT_EMBED (embed)->priv;
+  return wpriv->nav_flags;
+}
+
+static void
+impl_update_navigation_flags (EphyEmbed *embed)
+{
+  WebKitEmbedPrivate *priv = WEBKIT_EMBED (embed)->priv;
+  guint flags = 0;
+
+  if (ephy_embed_can_go_up (embed))
+  {
+    flags |= EPHY_EMBED_NAV_UP;
+  }
+
+  if (ephy_embed_can_go_back (embed))
+  {
+    flags |= EPHY_EMBED_NAV_BACK;
+  }
+
+  if (ephy_embed_can_go_forward (embed))
+  {
+    flags |= EPHY_EMBED_NAV_FORWARD;
+  }
+
+  if (priv->nav_flags != (EphyEmbedNavigationFlags)flags)
+  {
+    priv->nav_flags = (EphyEmbedNavigationFlags)flags;
+
+    g_object_notify (G_OBJECT (embed), "navigation");
+  }
+}
+
 static void
 ephy_embed_iface_init (EphyEmbedIface *iface)
 {
@@ -526,4 +716,11 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->print_preview_n_pages = impl_print_preview_n_pages;
   iface->print_preview_navigate = impl_print_preview_navigate;
   iface->has_modified_forms = impl_has_modified_forms;
+  iface->get_load_percent = impl_get_load_percent;
+  iface->set_load_percent = impl_set_load_percent;
+  iface->get_load_status = impl_get_load_status;
+  iface->set_load_status = impl_set_load_status;
+  iface->get_document_type = impl_get_document_type;
+  iface->get_navigation_flags = impl_get_navigation_flags;
+  iface->update_navigation_flags = impl_update_navigation_flags;
 }
