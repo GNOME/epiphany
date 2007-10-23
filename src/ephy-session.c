@@ -1466,8 +1466,6 @@ ephy_session_load (EphySession *session,
 		if (xmlStrEqual (child->name, (const xmlChar *) "window"))
 		{
 		    	xmlChar *tmp;
-		    	gboolean success;
-		    	int active_tab;
 		    
 			window = ephy_window_new ();
 			widget = GTK_WIDGET (window);
@@ -1480,13 +1478,19 @@ ephy_session_load (EphySession *session,
 
 			/* Set focus to something sane */
 			tmp = xmlGetProp (child, (xmlChar *) "active-tab");
-			success = int_from_string ((char *) tmp, &active_tab);
-			xmlFree (tmp);
-		    	if (success)
-		    	{
-				GtkWidget *notebook;
-				notebook = ephy_window_get_notebook (window);
-				gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), active_tab);
+			if (tmp != NULL)
+			{
+				gboolean success;
+				int active_tab;
+
+				success = int_from_string ((char *) tmp, &active_tab);
+				xmlFree (tmp);
+				if (success)
+				{
+					GtkWidget *notebook;
+					notebook = ephy_window_get_notebook (window);
+					gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), active_tab);
+				}
 			}
 
 			gtk_widget_grab_focus (GTK_WIDGET (ephy_window_get_active_tab (window)));
