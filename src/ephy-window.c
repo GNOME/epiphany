@@ -31,6 +31,7 @@
 #include "window-commands.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
+#include "ephy-embed-utils.h"
 #include "ephy-shell.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
@@ -1373,7 +1374,7 @@ setup_ui_manager (EphyWindow *window)
 }
 
 static void
-sync_tab_address (EphyTab *tab,
+sync_tab_address (EphyEmbed *embed,
 	          GParamSpec *pspec,
 		  EphyWindow *window)
 {
@@ -1382,8 +1383,8 @@ sync_tab_address (EphyTab *tab,
 	if (priv->closing) return;
 
 	ephy_toolbar_set_location (priv->toolbar,
-				   ephy_tab_get_address (tab),
-				   ephy_tab_get_typed_address (tab));
+				   ephy_embed_get_address (embed),
+				   ephy_embed_get_typed_address (embed));
 	ephy_find_toolbar_request_close (priv->find_toolbar);
 }
 
@@ -1426,7 +1427,7 @@ sync_tab_document_type (EphyEmbed *embed,
 }
 
 static void
-sync_tab_icon (EphyTab *tab,
+sync_tab_icon (EphyEmbed *embed,
 	       GParamSpec *pspec,
 	       EphyWindow *window)
 {
@@ -1435,7 +1436,7 @@ sync_tab_icon (EphyTab *tab,
 
 	if (priv->closing) return;
 
-	icon = ephy_tab_get_icon (tab);
+	icon = ephy_embed_get_icon (embed);
 
 	ephy_toolbar_set_favicon (priv->toolbar, icon);
 }
@@ -1450,14 +1451,14 @@ sync_tab_load_progress (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
-sync_tab_message (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_message (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 {
 	GtkStatusbar *s = GTK_STATUSBAR (window->priv->statusbar);
 	const char *message;
 
 	if (window->priv->closing) return;
 
-	message = ephy_tab_get_status_message (tab);
+	message = ephy_embed_get_status_message (embed);
 
 	gtk_statusbar_pop (s, window->priv->tab_message_cid);
 
@@ -1701,7 +1702,7 @@ sync_tab_load_status (EphyEmbed  *embed,
 }
 
 static void
-sync_tab_title (EphyTab *tab,
+sync_tab_title (EphyEmbed *embed,
 		GParamSpec *pspec,
 		EphyWindow *window)
 {
@@ -1710,7 +1711,7 @@ sync_tab_title (EphyTab *tab,
 	if (priv->closing) return;
 
 	gtk_window_set_title (GTK_WINDOW(window),
-			      ephy_embed_get_title_composite (ephy_tab_get_embed (tab)));
+			      ephy_embed_utils_get_title_composite (embed));
 }
 
 static void
@@ -2142,22 +2143,10 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 	if (old_tab != NULL)
 	{
 		g_signal_handlers_disconnect_by_func (old_tab,
-						      G_CALLBACK (sync_tab_address),
-						      window);
-		g_signal_handlers_disconnect_by_func (old_tab,
-						      G_CALLBACK (sync_tab_icon),
-						      window);
-		g_signal_handlers_disconnect_by_func (old_tab,
-						      G_CALLBACK (sync_tab_message),
-						      window);
-		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_popup_windows),
 						      window);
 		g_signal_handlers_disconnect_by_func (old_tab,
 						      G_CALLBACK (sync_tab_popups_allowed),
-						      window);
-		g_signal_handlers_disconnect_by_func (old_tab,
-						      G_CALLBACK (sync_tab_title),
 						      window);
 
 		embed = ephy_tab_get_embed (old_tab);
@@ -2180,6 +2169,18 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (sync_tab_navigation),
 						      window);
+		g_signal_handlers_disconnect_by_func (embed,
+						      G_CALLBACK (sync_tab_title),
+						      window);
+		g_signal_handlers_disconnect_by_func (embed,
+						      G_CALLBACK (sync_tab_address),
+						      window);
+		g_signal_handlers_disconnect_by_func (embed,
+						      G_CALLBACK (sync_tab_icon),
+						      window);
+		g_signal_handlers_disconnect_by_func (embed,
+						      G_CALLBACK (sync_tab_message),
+						      window);
 
 		g_signal_handlers_disconnect_by_func
 			(embed, G_CALLBACK (tab_context_menu_cb), window);
@@ -2200,33 +2201,33 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		sync_tab_load_progress	(embed, NULL, window);
 		sync_tab_load_status	(embed, NULL, window);
 		sync_tab_navigation	(embed, NULL, window);
+		sync_tab_title		(embed, NULL, window);
+		sync_tab_address	(embed, NULL, window);
+		sync_tab_icon		(embed, NULL, window);
+		sync_tab_message	(embed, NULL, window);
 
-		sync_tab_address	(new_tab, NULL, window);
-		sync_tab_icon		(new_tab, NULL, window);
-		sync_tab_message	(new_tab, NULL, window);
 		sync_tab_popup_windows	(new_tab, NULL, window);
 		sync_tab_popups_allowed	(new_tab, NULL, window);
-		sync_tab_title		(new_tab, NULL, window);
 
-		g_signal_connect_object (new_tab, "notify::address",
-					 G_CALLBACK (sync_tab_address),
-					 window, 0);
-		g_signal_connect_object (new_tab, "notify::icon",
-					 G_CALLBACK (sync_tab_icon),
-					 window, 0);
-		g_signal_connect_object (new_tab, "notify::message",
-					 G_CALLBACK (sync_tab_message),
-					 window, 0);
 		g_signal_connect_object (new_tab, "notify::hidden-popup-count",
 					 G_CALLBACK (sync_tab_popup_windows),
 					 window, 0);
 		g_signal_connect_object (new_tab, "notify::popups-allowed",
 					 G_CALLBACK (sync_tab_popups_allowed),
 					 window, 0);
+
 		g_signal_connect_object (new_tab, "notify::title",
 					 G_CALLBACK (sync_tab_title),
 					 window, 0);
-
+		g_signal_connect_object (embed, "notify::address",
+					 G_CALLBACK (sync_tab_address),
+					 window, 0);
+		g_signal_connect_object (embed, "notify::icon",
+					 G_CALLBACK (sync_tab_icon),
+					 window, 0);
+		g_signal_connect_object (embed, "notify::message",
+					 G_CALLBACK (sync_tab_message),
+					 window, 0);
 		g_signal_connect_object (embed, "notify::security-level",
 					 G_CALLBACK (sync_tab_security),
 					 window, 0);
@@ -2306,7 +2307,7 @@ embed_modal_alert_cb (EphyEmbed *embed,
 	gtk_window_present (GTK_WINDOW (window));
 
 	/* make sure the location entry shows the real URL of the tab's page */
-	address = ephy_tab_get_address (tab);
+	address = ephy_embed_get_address (embed);
 	ephy_toolbar_set_location (priv->toolbar, address, NULL);
 
 	/* don't suppress alert */

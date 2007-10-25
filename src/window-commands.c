@@ -127,7 +127,7 @@ window_cmd_file_send_to	(GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	location = gnome_vfs_escape_string (ephy_tab_get_address (tab));
+	location = gnome_vfs_escape_string (ephy_embed_get_address (embed));
 	title = gnome_vfs_escape_string (ephy_embed_get_title (embed));
 
 	url = g_strconcat ("mailto:",
@@ -229,8 +229,8 @@ window_cmd_file_bookmark_page (GtkAction *action,
 	g_return_if_fail (embed != NULL);
 
 	ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window),
-					ephy_tab_get_address (tab),
-					ephy_tab_get_title (tab));
+					ephy_embed_get_address (embed),
+					ephy_embed_get_title (embed));
 }
 
 static void
@@ -617,7 +617,7 @@ window_cmd_view_page_source (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	address = ephy_tab_get_address (tab);
+	address = ephy_embed_get_address (embed);
 	user_time = gtk_get_current_event_time ();
 
 	if (g_str_has_prefix (address, "file://"))
@@ -666,7 +666,7 @@ window_cmd_edit_personal_data (GtkAction *action,
 	tab = ephy_window_get_active_tab (window);
 	if (tab == NULL) return;
 
-	uri = gnome_vfs_uri_new (ephy_tab_get_address (tab));
+	uri = gnome_vfs_uri_new (ephy_embed_get_address (ephy_tab_get_embed (tab)));
 
 	host = uri != NULL ? gnome_vfs_uri_get_host_name (uri) : NULL;
 

@@ -1510,7 +1510,7 @@ prefs_homepage_current_button_clicked_cb (GtkWidget *button,
 	tab = ephy_window_get_active_tab (window);
 	g_return_if_fail (tab != NULL);
 
-	set_homepage_entry (dialog, ephy_tab_get_address (tab));
+	set_homepage_entry (dialog, ephy_embed_get_address (ephy_tab_get_embed (tab)));
 }
 
 static void

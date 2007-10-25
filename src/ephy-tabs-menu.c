@@ -26,6 +26,7 @@
 #include "ephy-marshal.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
+#include "ephy-embed-utils.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtklabel.h>
@@ -123,7 +124,7 @@ sync_tab_title (EphyTab *tab,
 {
 	const char *title;
 
-	title = ephy_embed_get_title_composite (ephy_tab_get_embed (tab));
+	title = ephy_embed_utils_get_title_composite (ephy_tab_get_embed (tab));
 
 	g_object_set (action, "label", title, NULL);
 }

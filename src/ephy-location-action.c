@@ -288,7 +288,7 @@ get_location_cb (EphyLocationEntry *entry,
 	tab = ephy_window_get_active_tab (priv->window);
 	g_return_val_if_fail (tab != NULL, NULL);
 
-	return g_strdup (ephy_tab_get_address (tab));
+	return g_strdup (ephy_embed_get_address (ephy_tab_get_embed (tab)));
 }
 
 static char *

@@ -1024,7 +1024,7 @@
 (define-method get_link_message
   (of-object "EphyEmbed")
   (c-name "ephy_embed_get_link_message")
-  (return-type "char*")
+  (return-type "const char*")
 )
 
 (define-method get_js_status
@@ -3333,55 +3333,6 @@
   )
 )
 
-(define-method get_icon
-  (of-object "EphyTab")
-  (c-name "ephy_tab_get_icon")
-  (return-type "GdkPixbuf*")
-)
-
-(define-method get_icon_address
-  (of-object "EphyTab")
-  (c-name "ephy_tab_get_icon_address")
-  (return-type "const-char*")
-)
-
-(define-method set_icon_address
-  (of-object "EphyTab")
-  (c-name "ephy_tab_set_icon_address")
-  (return-type "none")
-  (parameters
-    '("const-char*" "address")
-  )
-)
-
-(define-method get_link_message
-  (of-object "EphyTab")
-  (c-name "ephy_tab_get_link_message")
-  (return-type "const-char*")
-)
-
-(define-method get_address
-  (of-object "EphyTab")
-  (c-name "ephy_tab_get_address")
-  (return-type "const-char*")
-)
-
-(define-method get_typed_address
-  (of-object "EphyTab")
-  (c-name "ephy_tab_get_typed_address")
-  (return-type "const-char*")
-)
-
-(define-method set_typed_address
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_set_typed_address")
-  (return-type "none")
-  (parameters
-    '("const-char*" "address")
-    '("EphyEmbedAddressExpire" "expire")
-  )
-)
-
 (define-method get_size
   (of-object "EphyTab")
   (c-name "ephy_tab_get_size")
@@ -3400,18 +3351,6 @@
     '("int" "width")
     '("int" "height")
   )
-)
-
-(define-method get_status_message
-  (of-object "EphyTab")
-  (c-name "ephy_tab_get_status_message")
-  (return-type "const-char*")
-)
-
-(define-method get_title_composite
-  (of-object "EphyTab")
-  (c-name "ephy_tab_get_title_composite")
-  (return-type "const-char*")
 )
 
 ;; From ../../src/ephy-toolbar.h

@@ -555,7 +555,7 @@ sync_icon (EphyTab *tab,
 	   GParamSpec *pspec,
 	   GtkImage *icon)
 {
-	gtk_image_set_from_pixbuf (icon, ephy_tab_get_icon (tab));
+        gtk_image_set_from_pixbuf (icon, ephy_embed_get_icon (ephy_tab_get_embed (tab)));
 }
 
 static void
@@ -563,7 +563,7 @@ sync_label (EphyTab *tab, GParamSpec *pspec, GtkWidget *label)
 {
 	const char *title;
 
-	title = ephy_tab_get_title (ephy_tab_get_embed (tab));
+	title = ephy_embed_get_title (ephy_tab_get_embed (tab));
 
 	gtk_label_set_text (GTK_LABEL (label), title);
 

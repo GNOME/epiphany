@@ -1068,7 +1068,7 @@ write_tab (xmlTextWriterPtr writer,
 	ret = xmlTextWriterStartElement (writer, (xmlChar *) "embed");
 	if (ret < 0) return ret;
 
-	address = ephy_tab_get_address (tab);
+	address = ephy_embed_get_address (ephy_tab_get_embed (tab));
 	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "url",
 					   (const xmlChar *) address);
 	if (ret < 0) return ret;
