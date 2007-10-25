@@ -199,7 +199,7 @@ struct _EphyEmbedIface
 	const char *       (* get_title)		(EphyEmbed *embed);
 	char *		   (* get_location)		(EphyEmbed *embed,
 							 gboolean toplevel);
-	char *		   (* get_link_message)		(EphyEmbed *embed);
+	const char *	   (* get_link_message)		(EphyEmbed *embed);
 	char *		   (* get_js_status)		(EphyEmbed *embed);
 	int		   (* shistory_n_items)		(EphyEmbed *embed);
 	void		   (* shistory_get_nth)		(EphyEmbed *embed,
@@ -251,6 +251,7 @@ struct _EphyEmbedIface
 							 const char *address,
 							 EphyEmbedAddressExpire expire);
 	const char *	   (* get_address)		(EphyEmbed *embed);
+        const char *       (* get_status_message)       (EphyEmbed *embed);
 };
 
 GType		  ephy_embed_net_state_get_type		(void);
@@ -283,7 +284,7 @@ const char	 *ephy_embed_get_title			(EphyEmbed *embed);
 char		 *ephy_embed_get_location		(EphyEmbed *embed,
 							 gboolean toplevel);
 
-char		 *ephy_embed_get_link_message		(EphyEmbed *embed);
+const char	 *ephy_embed_get_link_message		(EphyEmbed *embed);
 
 char		 *ephy_embed_get_js_status		(EphyEmbed *embed);
 
@@ -363,6 +364,9 @@ void		 ephy_embed_set_typed_address		(EphyEmbed *embed,
 							 EphyEmbedAddressExpire expire);
 /* Address */
 const char *	 ephy_embed_get_address			(EphyEmbed *embed);
+
+/* Status messages */
+const char *       ephy_embed_get_status_message        (EphyEmbed *embed);
 
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);

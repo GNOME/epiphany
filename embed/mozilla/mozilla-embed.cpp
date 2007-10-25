@@ -89,8 +89,13 @@ static void mozilla_embed_zoom_change_cb	(EphyEmbed *embed,
 						 MozillaEmbed *membed);
 static void mozilla_embed_title_change_cb       (EphyEmbed *embed,
                                                  MozillaEmbed *membed);
+static void mozilla_embed_link_message_cb       (EphyEmbed *embed,
+                                                 MozillaEmbed *membed);
 static void mozilla_embed_set_title             (MozillaEmbed *embed,
                                                  char *title);
+static void mozilla_embed_set_loading_title     (MozillaEmbed *embed,
+                                                 const char *title,
+                                                 gboolean is_address);
 static void impl_set_typed_address		(EphyEmbed *embed,
 						 const char *address,
 						 EphyEmbedAddressExpire expire);
@@ -108,6 +113,8 @@ typedef enum
 } MozillaEmbedLoadState;
 
 #define MAX_TITLE_LENGTH	512 /* characters */
+#define RELOAD_DELAY		250 /* ms */
+#define RELOAD_DELAY_MAX_TICKS	40  /* RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s */
 
 struct MozillaEmbedPrivate
 {
@@ -135,6 +142,12 @@ struct MozillaEmbedPrivate
 	int cur_requests;
 	int total_requests;
 	char *status_message;
+	char *link_message;
+
+	/* File watch */
+	GnomeVFSMonitorHandle *monitor;
+	guint reload_scheduled_id;
+	guint reload_delay_ticks;	
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
@@ -144,10 +157,12 @@ enum
 	PROP_0,
 	PROP_ADDRESS,
 	PROP_DOCUMENT_TYPE,
+        PROP_LINK_MESSAGE,
 	PROP_LOAD_PROGRESS,
 	PROP_LOAD_STATUS,
 	PROP_NAVIGATION,
 	PROP_SECURITY,
+	PROP_STATUS_MESSAGE,
         PROP_TITLE,
 	PROP_TYPED_ADDRESS,
 	PROP_ZOOM
@@ -266,6 +281,9 @@ mozilla_embed_get_property (GObject *object,
 	case PROP_ZOOM:
 		g_value_set_float (value, priv->zoom);
 		break;
+        case PROP_LINK_MESSAGE:
+                g_value_set_string (value, priv->link_message);
+                break;
 	case PROP_LOAD_PROGRESS:
 		g_value_set_int (value, priv->load_percent);
 		break;
@@ -275,6 +293,9 @@ mozilla_embed_get_property (GObject *object,
 	case PROP_NAVIGATION:
 		g_value_set_flags (value, priv->nav_flags);
 		break;
+        case PROP_STATUS_MESSAGE:
+                g_value_set_string (value, priv->status_message);
+                break;
         case PROP_TITLE:
                 g_value_set_string (value, priv->title);
                 break;
@@ -304,8 +325,10 @@ mozilla_embed_set_property (GObject *object,
 	case PROP_DOCUMENT_TYPE:
 	case PROP_LOAD_PROGRESS:
 	case PROP_LOAD_STATUS:
+        case PROP_LINK_MESSAGE:
 	case PROP_NAVIGATION:
 	case PROP_SECURITY:
+        case PROP_STATUS_MESSAGE:
 	case PROP_ZOOM:
 		/* read only */
 		break;
@@ -343,6 +366,8 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 	g_object_class_override_property (object_class, PROP_ADDRESS, "address");
 	g_object_class_override_property (object_class, PROP_TYPED_ADDRESS, "typed-address");
 	g_object_class_override_property (object_class, PROP_TITLE, "title");
+	g_object_class_override_property (object_class, PROP_STATUS_MESSAGE, "message");
+	g_object_class_override_property (object_class, PROP_LINK_MESSAGE, "link-message");
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
@@ -384,6 +409,9 @@ mozilla_embed_init (MozillaEmbed *embed)
         g_signal_connect_object (embed, "title",
                                  G_CALLBACK (mozilla_embed_title_change_cb),
                                  embed, (GConnectFlags) 0);
+	g_signal_connect_object (embed, "link_message",
+				 G_CALLBACK (mozilla_embed_link_message_cb),
+				 embed, (GConnectFlags)0);
 
 	priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
 	priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
@@ -437,6 +465,8 @@ mozilla_embed_finalize (GObject *object)
 	g_free (embed->priv->typed_address);
 	g_free (embed->priv->title);
 	g_free (embed->priv->loading_title);
+	g_free (embed->priv->status_message);
+	g_free (embed->priv->link_message);
 
 	G_OBJECT_CLASS (mozilla_embed_parent_class)->finalize (object);
 
@@ -626,12 +656,6 @@ static const char *
 impl_get_title (EphyEmbed *embed)
 {
         return MOZILLA_EMBED (embed)->priv->title;
-}
-
-static char *
-impl_get_link_message (EphyEmbed *embed)
-{
-	return gtk_moz_embed_get_link_message (GTK_MOZ_EMBED (embed));
 }
 
 static char *
@@ -1101,6 +1125,33 @@ impl_get_address (EphyEmbed *embed)
 	return priv->address ? priv->address : "about:blank";
 }
 
+static const char*
+impl_get_status_message (EphyEmbed *embed)
+{
+        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+
+	if (priv->link_message && priv->link_message[0] != '\0')
+	{
+		return priv->link_message;
+	}
+	else if (priv->status_message)
+	{
+		return priv->status_message;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+static const char*
+impl_get_link_message (EphyEmbed *embed)
+{
+        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+
+        return priv->link_message;
+}
+
 static void
 mozilla_embed_set_address (MozillaEmbed *embed, char *address)
 {
@@ -1127,14 +1178,272 @@ mozilla_embed_set_address (MozillaEmbed *embed, char *address)
 }
 
 static void
+mozilla_embed_file_monitor_cancel (MozillaEmbed *embed)
+{
+	MozillaEmbedPrivate *priv = embed->priv;
+
+	if (priv->monitor != NULL)
+	{
+		LOG ("Cancelling file monitor");
+
+		gnome_vfs_monitor_cancel (priv->monitor);
+		priv->monitor = NULL;
+	}
+
+	if (priv->reload_scheduled_id != 0)
+	{
+		LOG ("Cancelling scheduled reload");
+
+		g_source_remove (priv->reload_scheduled_id);
+		priv->reload_scheduled_id = 0;
+	}
+
+	priv->reload_delay_ticks = 0;
+}
+
+static gboolean
+ephy_file_monitor_reload_cb (MozillaEmbed *embed)
+{
+	MozillaEmbedPrivate *priv = embed->priv;
+
+	if (priv->reload_delay_ticks > 0)
+	{
+		priv->reload_delay_ticks--;
+
+		/* Run again */
+		return TRUE;
+	}
+
+	if (priv->is_loading)
+	{
+		/* Wait a bit to reload if we're still loading! */
+		priv->reload_delay_ticks = RELOAD_DELAY_MAX_TICKS / 2;
+
+		/* Run again */
+		return TRUE;
+	}
+
+	priv->reload_scheduled_id = 0;
+
+	LOG ("Reloading file '%s'", impl_get_address (embed));
+
+	impl_reload (EPHY_EMBED (embed), TRUE);
+
+	/* don't run again */
+	return FALSE;
+}
+
+static void
+mozilla_embed_file_monitor_cb (GnomeVFSMonitorHandle *handle,
+                               const gchar *monitor_uri,
+                               const gchar *info_uri,
+                               GnomeVFSMonitorEventType event_type,
+                               MozillaEmbed *embed)
+{
+	gboolean uri_is_directory;
+	gboolean should_reload;
+	char* local_path;
+	MozillaEmbedPrivate *priv = embed->priv;
+
+	LOG ("File '%s' has changed, scheduling reload", monitor_uri);
+
+	local_path = gnome_vfs_get_local_path_from_uri(monitor_uri);
+	uri_is_directory = g_file_test(local_path, G_FILE_TEST_IS_DIR);
+	g_free(local_path);
+
+	switch (event_type)
+	{
+		/* These events will always trigger a reload: */
+		case GNOME_VFS_MONITOR_EVENT_CHANGED:
+		case GNOME_VFS_MONITOR_EVENT_CREATED:
+			should_reload = TRUE;
+			break;
+
+		/* These events will only trigger a reload for directories: */
+		case GNOME_VFS_MONITOR_EVENT_DELETED:
+		case GNOME_VFS_MONITOR_EVENT_METADATA_CHANGED:
+			should_reload = uri_is_directory;
+			break;
+
+		/* These events don't trigger a reload: */
+		case GNOME_VFS_MONITOR_EVENT_STARTEXECUTING:
+		case GNOME_VFS_MONITOR_EVENT_STOPEXECUTING:
+		default:
+			should_reload = FALSE;
+			break;
+	}
+
+	if (should_reload) {
+		/* We make a lot of assumptions here, but basically we know
+		 * that we just have to reload, by construction.
+		 * Delay the reload a little bit so we don't endlessly
+		 * reload while a file is written.
+		 */
+		if (priv->reload_delay_ticks == 0)
+		{
+			priv->reload_delay_ticks = 1;
+		}
+		else
+		{
+			/* Exponential backoff */
+			priv->reload_delay_ticks = MIN (priv->reload_delay_ticks * 2,
+					RELOAD_DELAY_MAX_TICKS);
+		}
+
+		if (priv->reload_scheduled_id == 0)
+		{
+			priv->reload_scheduled_id =
+				g_timeout_add (RELOAD_DELAY,
+						(GSourceFunc) ephy_file_monitor_reload_cb, embed);
+		}
+	}
+}
+
+static void
+mozilla_embed_update_file_monitor (MozillaEmbed *embed,
+                                   const gchar *address)
+{
+	MozillaEmbedPrivate *priv = embed->priv;
+	GnomeVFSMonitorHandle *handle = NULL;
+	gboolean local;
+	char* local_path;
+	GnomeVFSMonitorType monitor_type;
+
+	if (priv->monitor != NULL &&
+	    priv->address != NULL && address != NULL &&
+	    strcmp (priv->address, address) == 0)
+	
+	{
+		/* same address, no change needed */
+		return;
+	}
+
+	mozilla_embed_file_monitor_cancel (embed);
+
+	local = g_str_has_prefix (address, "file://");
+	if (local == FALSE) return;
+	
+	local_path = gnome_vfs_get_local_path_from_uri(address);
+	monitor_type = g_file_test(local_path, G_FILE_TEST_IS_DIR)
+		? GNOME_VFS_MONITOR_DIRECTORY
+		: GNOME_VFS_MONITOR_FILE;
+	g_free(local_path);
+
+	if (gnome_vfs_monitor_add (&handle, address,
+				   monitor_type,
+				   (GnomeVFSMonitorCallback) mozilla_embed_file_monitor_cb,
+				   embed) == GNOME_VFS_OK)
+	{
+		LOG ("Installed monitor for file '%s'", address);
+
+		priv->monitor = handle;
+	}
+}
+
+static void
+mozilla_embed_set_link_message (MozillaEmbed *embed,
+                                char *link_message)
+{
+	char *status_message;
+	char **splitted_message;
+        MozillaEmbedPrivate *priv = embed->priv;
+
+	g_free (priv->link_message);
+	status_message = ephy_string_blank_chr (link_message);
+	
+	if (status_message && g_str_has_prefix (status_message, "mailto:"))
+	{
+		int i = 1;
+		char *p;
+		GString *tmp;
+		
+		/* We first want to eliminate all the things after "?", like
+		 * cc, subject and alike.
+		 */
+		
+		p = strchr (status_message, '?');
+		if (p != NULL) *p = '\0';
+		
+		/* Then we also want to check if there is more than an email address
+		 * in the mailto: list.
+		 */
+		
+		splitted_message = g_strsplit_set (status_message, ";", -1);
+		tmp = g_string_new (g_strdup_printf (_("Send an email message to “%s”"),
+						     (splitted_message[0] + 7)));
+		
+		while (splitted_message [i] != NULL)
+		{
+			g_string_append_printf (tmp, ", “%s”", splitted_message[i]);
+			i++;
+		}
+		
+		priv->link_message = g_string_free (tmp, FALSE);
+		
+		g_free (status_message);
+		g_strfreev (splitted_message);
+	}
+	else
+	{
+		priv->link_message = status_message;
+	}
+
+	g_object_notify (G_OBJECT (embed), "status-message");
+	g_object_notify (G_OBJECT (embed), "link-message");
+}
+
+static void
 mozilla_embed_location_changed_cb (GtkMozEmbed *embed, 
 				   MozillaEmbed *membed)
 {
 	char *location;
+        GObject *object = G_OBJECT (embed);
 
 	location = gtk_moz_embed_get_location (embed);
 	g_signal_emit_by_name (membed, "ge_location", location);
 	g_free (location);
+
+	g_object_freeze_notify (object);
+
+	/* do this up here so we still have the old address around */
+	mozilla_embed_update_file_monitor (membed, location);
+
+	/* Do not expose about:blank to the user, an empty address
+	   bar will do better */
+	if (location == NULL || location[0] == '\0' ||
+	    strcmp (location, "about:blank") == 0)
+	{
+		mozilla_embed_set_address (membed, NULL);
+		mozilla_embed_set_title (membed, NULL);
+	}
+	else
+	{
+		char *embed_address;
+
+		/* we do this to get rid of an eventual password in the URL */
+		embed_address = impl_get_location (EPHY_EMBED (embed), TRUE);
+		mozilla_embed_set_address (membed, embed_address);
+		mozilla_embed_set_loading_title (membed, embed_address, TRUE);
+	}
+
+	mozilla_embed_set_link_message (membed, NULL);
+#if 0
+	mozilla_embed_set_icon_address (embed, NULL);
+#endif
+	mozilla_embed_update_navigation_flags (membed);
+
+	g_object_notify (object, "title");
+
+	g_object_thaw_notify (object);
+}
+
+static void
+mozilla_embed_link_message_cb       (EphyEmbed *embed,
+                                     MozillaEmbed *membed)
+{
+  char *link_message = gtk_moz_embed_get_link_message (GTK_MOZ_EMBED (membed));
+  mozilla_embed_set_link_message (membed, link_message);
+  g_free (link_message);
 }
 
 static gboolean
@@ -1872,6 +2181,7 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->get_typed_address = impl_get_typed_address;
 	iface->set_typed_address = impl_set_typed_address;
 	iface->get_address = impl_get_address;
+        iface->get_status_message = impl_get_status_message;
 }
 
 static void

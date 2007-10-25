@@ -73,15 +73,11 @@
 #define EPHY_TAB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TAB, EphyTabPrivate))
 
 #define MAX_HIDDEN_POPUPS	5
-#define RELOAD_DELAY		250 /* ms */
-#define RELOAD_DELAY_MAX_TICKS	40  /* RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s */
 
 struct _EphyTabPrivate
 {
 	guint id;
 
-	char *status_message;
-	char *link_message;
 	char *icon_address;
 	GdkPixbuf *icon;
 	int width;
@@ -89,11 +85,6 @@ struct _EphyTabPrivate
 	GSList *hidden_popups;
 	GSList *shown_popups;
 	guint idle_resize_handler;
-
-	/* File watch */
-	GnomeVFSMonitorHandle *monitor;
-	guint reload_scheduled_id;
-	guint reload_delay_ticks;	
 };
 
 static void ephy_tab_class_init		(EphyTabClass *klass);
@@ -106,7 +97,6 @@ enum
 	PROP_0,
 	PROP_ICON,
 	PROP_ICON_ADDRESS,
-	PROP_MESSAGE,
 	PROP_HIDDEN_POPUP_COUNT,
 	PROP_POPUPS_ALLOWED,
 };
@@ -129,8 +119,6 @@ static GArray *tabs_id_array = NULL;
 static guint n_tabs = 0;
 
 /* internal functions, accessible only from this file */
-static void	ephy_tab_set_link_message	(EphyTab *tab,
-						 char *message);
 static guint	popup_blocker_n_hidden		(EphyTab *tab);
 static gboolean	ephy_tab_get_popups_allowed	(EphyTab *tab);
 static void	ephy_tab_set_popups_allowed	(EphyTab *tab,
@@ -196,7 +184,6 @@ ephy_tab_set_property (GObject *object,
 			ephy_tab_set_icon_address (tab, g_value_get_string (value));
 			break;
 		case PROP_ICON:
-		case PROP_MESSAGE:
 		case PROP_HIDDEN_POPUP_COUNT:
 			/* read only */
 			break;
@@ -219,9 +206,6 @@ ephy_tab_get_property (GObject *object,
 			break;
 		case PROP_ICON_ADDRESS:
 			g_value_set_string (value, priv->icon_address);
-			break;
-		case PROP_MESSAGE:
-			g_value_set_string (value, ephy_tab_get_status_message (tab));
 			break;
 		case PROP_HIDDEN_POPUP_COUNT:
 			g_value_set_int (value, popup_blocker_n_hidden (tab));
@@ -337,14 +321,6 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "The tab icon's address",
 							      NULL,
 							      (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)));
-
-	g_object_class_install_property (object_class,
-					 PROP_MESSAGE,
-					 g_param_spec_string ("message",
-							      "Message",
-							      "The tab's statusbar message",
-							      NULL,
-							      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_HIDDEN_POPUP_COUNT,
@@ -686,8 +662,6 @@ ephy_tab_finalize (GObject *object)
 	}
 
 	g_free (priv->icon_address);
-	g_free (priv->link_message);
-	g_free (priv->status_message);
 	popups_manager_reset (tab);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -750,79 +724,6 @@ EphyTab *
 ephy_tab_new (void)
 {
 	return EPHY_TAB (g_object_new (EPHY_TYPE_TAB, NULL));
-}
-
-static void
-ephy_tab_set_link_message (EphyTab *tab, char *message)
-{
-	char *status_message;
-	char **splitted_message;
-	g_return_if_fail (EPHY_IS_TAB (tab));
-
-	g_free (tab->priv->link_message);
-	status_message = ephy_string_blank_chr (message);
-	
-	if (status_message && g_str_has_prefix (status_message, "mailto:"))
-	{
-		int i = 1;
-		char *p;
-		GString *tmp;
-		
-		/* We first want to eliminate all the things after "?", like
-		 * cc, subject and alike.
-		 */
-		
-		p = strchr (status_message, '?');
-		if (p != NULL) *p = '\0';
-		
-		/* Then we also want to check if there is more than an email address
-		 * in the mailto: list.
-		 */
-		
-		splitted_message = g_strsplit_set (status_message, ";", -1);
-		tmp = g_string_new (g_strdup_printf (_("Send an email message to “%s”"),
-						     (splitted_message[0] + 7)));
-		
-		while (splitted_message [i] != NULL)
-		{
-			g_string_append_printf (tmp, ", “%s”", splitted_message[i]);
-			i++;
-		}
-		
-		tab->priv->link_message = g_string_free (tmp, FALSE);
-		
-		g_free (status_message);
-		g_strfreev (splitted_message);
-	}
-	else
-	{
-		tab->priv->link_message = status_message;
-	}
-
-	g_object_notify (G_OBJECT (tab), "message");
-}
-
-/**
- * ephy_tab_get_link_message:
- * @tab: an #EphyTab
- *
- * Returns the message displayed in @tab's #EphyWindow's #EphyStatusbar when
- * the user hovers the mouse over a hyperlink.
- *
- * The message returned has a limited lifetime, and so should be copied with
- * g_strdup() if it must be stored.
- *
- * Listen to the "link_message" signal on the @tab's #EphyEmbed to be notified
- * when the link message changes.
- *
- * Return value: The current link statusbar message
- **/
-const char *
-ephy_tab_get_link_message (EphyTab *tab)
-{
-	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
-
-	return tab->priv->link_message;
 }
 
 /**
@@ -1005,176 +906,6 @@ ephy_tab_set_icon_address (EphyTab *tab,
 	g_object_notify (object, "icon-address");
 }
 
-static void
-ephy_tab_file_monitor_cancel (EphyTab *tab)
-{
-	EphyTabPrivate *priv = tab->priv;
-
-	if (priv->monitor != NULL)
-	{
-		LOG ("Cancelling file monitor");
-
-		gnome_vfs_monitor_cancel (priv->monitor);
-		priv->monitor = NULL;
-	}
-
-	if (priv->reload_scheduled_id != 0)
-	{
-		LOG ("Cancelling scheduled reload");
-
-		g_source_remove (priv->reload_scheduled_id);
-		priv->reload_scheduled_id = 0;
-	}
-
-	priv->reload_delay_ticks = 0;
-}
-
-static gboolean
-ephy_file_monitor_reload_cb (EphyTab *tab)
-{
-	EphyTabPrivate *priv = tab->priv;
-	EphyEmbed *embed;
-	gboolean is_loading;
-
-	if (priv->reload_delay_ticks > 0)
-	{
-		priv->reload_delay_ticks--;
-
-		/* Run again */
-		return TRUE;
-	}
-
-	is_loading = ephy_embed_get_load_status (ephy_tab_get_embed (tab));
-
-	if (is_loading)
-	{
-		/* Wait a bit to reload if we're still loading! */
-		priv->reload_delay_ticks = RELOAD_DELAY_MAX_TICKS / 2;
-
-		/* Run again */
-		return TRUE;
-	}
-
-	priv->reload_scheduled_id = 0;
-
-	embed = ephy_tab_get_embed (tab);
-	if (embed == NULL) return FALSE;
-
-	LOG ("Reloading file '%s'", ephy_embed_get_address (embed));
-
-	ephy_embed_reload (embed, TRUE);
-
-	/* don't run again */
-	return FALSE;
-}
-
-static void
-ephy_tab_file_monitor_cb (GnomeVFSMonitorHandle *handle,
-			  const gchar *monitor_uri,
-			  const gchar *info_uri,
-			  GnomeVFSMonitorEventType event_type,
-			  EphyTab *tab)
-{
-	gboolean uri_is_directory;
-	gboolean should_reload;
-	char* local_path;
-	EphyTabPrivate *priv = tab->priv;
-
-	LOG ("File '%s' has changed, scheduling reload", monitor_uri);
-
-	local_path = gnome_vfs_get_local_path_from_uri(monitor_uri);
-	uri_is_directory = g_file_test(local_path, G_FILE_TEST_IS_DIR);
-	g_free(local_path);
-
-	switch (event_type)
-	{
-		/* These events will always trigger a reload: */
-		case GNOME_VFS_MONITOR_EVENT_CHANGED:
-		case GNOME_VFS_MONITOR_EVENT_CREATED:
-			should_reload = TRUE;
-			break;
-
-		/* These events will only trigger a reload for directories: */
-		case GNOME_VFS_MONITOR_EVENT_DELETED:
-		case GNOME_VFS_MONITOR_EVENT_METADATA_CHANGED:
-			should_reload = uri_is_directory;
-			break;
-
-		/* These events don't trigger a reload: */
-		case GNOME_VFS_MONITOR_EVENT_STARTEXECUTING:
-		case GNOME_VFS_MONITOR_EVENT_STOPEXECUTING:
-		default:
-			should_reload = FALSE;
-			break;
-	}
-
-	if (should_reload) {
-		/* We make a lot of assumptions here, but basically we know
-		 * that we just have to reload, by construction.
-		 * Delay the reload a little bit so we don't endlessly
-		 * reload while a file is written.
-		 */
-		if (priv->reload_delay_ticks == 0)
-		{
-			priv->reload_delay_ticks = 1;
-		}
-		else
-		{
-			/* Exponential backoff */
-			priv->reload_delay_ticks = MIN (priv->reload_delay_ticks * 2,
-					RELOAD_DELAY_MAX_TICKS);
-		}
-
-		if (priv->reload_scheduled_id == 0)
-		{
-			priv->reload_scheduled_id =
-				g_timeout_add (RELOAD_DELAY,
-						(GSourceFunc) ephy_file_monitor_reload_cb, tab);
-		}
-	}
-}
-
-static void
-ephy_tab_update_file_monitor (EphyTab *tab,
-			      const gchar *address)
-{
-	EphyTabPrivate *priv = tab->priv;
-	GnomeVFSMonitorHandle *handle = NULL;
-	gboolean local;
-	char* local_path;
-	GnomeVFSMonitorType monitor_type;
-
-	if (priv->monitor != NULL &&
-	    priv->address != NULL && address != NULL &&
-	    strcmp (priv->address, address) == 0)
-	
-	{
-		/* same address, no change needed */
-		return;
-	}
-
-	ephy_tab_file_monitor_cancel (tab);
-
-	local = g_str_has_prefix (address, "file://");
-	if (local == FALSE) return;
-	
-	local_path = gnome_vfs_get_local_path_from_uri(address);
-	monitor_type = g_file_test(local_path, G_FILE_TEST_IS_DIR)
-		? GNOME_VFS_MONITOR_DIRECTORY
-		: GNOME_VFS_MONITOR_FILE;
-	g_free(local_path);
-
-	if (gnome_vfs_monitor_add (&handle, address,
-				   monitor_type,
-				   (GnomeVFSMonitorCallback) ephy_tab_file_monitor_cb,
-				   tab) == GNOME_VFS_OK)
-	{
-		LOG ("Installed monitor for file '%s'", address);
-
-		priv->monitor = handle;
-	}
-}
-
 /**
  * ephy_tab_get_icon:
  * @tab: an #EphyTab
@@ -1222,13 +953,6 @@ ephy_tab_favicon_cb (EphyEmbed *embed,
 	ephy_tab_set_icon_address (tab, address);
 }
 
-static void
-ephy_tab_link_message_cb (EphyEmbed *embed,
-			  EphyTab *tab)
-{
-	ephy_tab_set_link_message (tab, ephy_embed_get_link_message (embed));
-}
-
 static gboolean
 ephy_tab_open_uri_cb (EphyEmbed *embed,
 		      const char *uri,
@@ -1248,49 +972,6 @@ ephy_tab_open_uri_cb (EphyEmbed *embed,
 	/* allow load to proceed */
 	return FALSE;
 }
-
-#if 0
-static void
-ephy_tab_address_cb (EphyEmbed *embed,
-		     const char *address,
-		     EphyTab *tab)
-{
-	GObject *object = G_OBJECT (tab);
-
-	LOG ("ephy_tab_address_cb tab %p address %s", tab, address);
-
-	g_object_freeze_notify (object);
-
-	/* do this up here so we still have the old address around */
-	ephy_tab_update_file_monitor (tab, address);
-
-	/* Do not expose about:blank to the user, an empty address
-	   bar will do better */
-	if (address == NULL || address[0] == '\0' ||
-	    strcmp (address, "about:blank") == 0)
-	{
-		ephy_tab_set_address (tab, NULL);
-		ephy_tab_set_title (tab, embed, NULL);
-	}
-	else
-	{
-		char *embed_address;
-
-		/* we do this to get rid of an eventual password in the URL */
-		embed_address = ephy_embed_get_location (embed, TRUE);
-		ephy_tab_set_address (tab, embed_address);
-		ephy_tab_set_loading_title (tab, embed_address, TRUE);
-	}
-
-	ephy_tab_set_link_message (tab, NULL);
-	ephy_tab_set_icon_address (tab, NULL);
-	ephy_embed_update_navigation_flags (embed);
-
-	g_object_notify (object, "title");
-
-	g_object_thaw_notify (object);
-}
-#endif
 
 static void
 ephy_tab_content_change_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
@@ -1539,7 +1220,6 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->height = -1;
 	priv->icon_address = NULL;
 	priv->icon = NULL;
-	priv->reload_delay_ticks = 0;
 
 	embed = ephy_embed_factory_new_object (EPHY_TYPE_EMBED);
 	g_assert (embed != NULL);
@@ -1547,14 +1227,8 @@ ephy_tab_init (EphyTab *tab)
 	gtk_container_add (GTK_CONTAINER (tab), GTK_WIDGET (embed));
 	gtk_widget_show (GTK_WIDGET (embed));
 
-	g_signal_connect_object (embed, "link_message",
-				 G_CALLBACK (ephy_tab_link_message_cb),
-				 tab, 0);
 	g_signal_connect_object (embed, "open_uri",
 				 G_CALLBACK (ephy_tab_open_uri_cb),
-				 tab, 0);
-	g_signal_connect_object (embed, "ge_location",
-				 G_CALLBACK (ephy_tab_address_cb),
 				 tab, 0);
 	g_signal_connect_object (embed, "ge_new_window",
 				 G_CALLBACK (ephy_tab_new_window_cb),
@@ -1577,42 +1251,6 @@ ephy_tab_init (EphyTab *tab)
 	g_signal_connect_object (G_OBJECT (cache), "changed",
 				 G_CALLBACK (ephy_tab_icon_cache_changed_cb),
 				 tab,  0);
-}
-
-/**
- * ephy_tab_get_status_message:
- * @tab: an #EphyTab
- *
- * Returns the message displayed in @tab's #EphyWindow's
- * #EphyStatusbar. If the user is hovering the mouse over a hyperlink,
- * this function will return the same value as
- * ephy_tab_get_link_message(). Otherwise, it will return a network
- * status message, or NULL.
- *
- * The message returned has a limited lifetime, and so should be copied with
- * g_strdup() if it must be stored.
- *
- * Listen to "notify::message" to be notified when the message property changes.
- *
- * Return value: The current statusbar message
- **/
-const char *
-ephy_tab_get_status_message (EphyTab *tab)
-{
-	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
-
-	if (tab->priv->link_message && tab->priv->link_message[0] != '\0')
-	{
-		return tab->priv->link_message;
-	}
-	else if (tab->priv->status_message)
-	{
-		return tab->priv->status_message;
-	}
-	else
-	{
-		return NULL;
-	}
 }
 
 /**

@@ -485,7 +485,18 @@ ephy_embed_base_init (gpointer g_class)
 									  "The embed's title",
 									  _("Blank page"),
 									  G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
+                g_object_interface_install_property (g_class,
+                                                     g_param_spec_string ("status message",
+                                                                          "Status Message",
+                                                                          "The embed's statusbar message",
+                                                                          NULL,
+                                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                g_object_interface_install_property (g_class,
+                                                     g_param_spec_string ("link-message",
+                                                                          "Link Message",
+                                                                          "The embed's link message",
+                                                                          NULL,
+                                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 		initialized = TRUE;
 	}
 
@@ -685,7 +696,7 @@ ephy_embed_get_location (EphyEmbed *embed,
  *
  * Return value: the URL of the link over which the mouse is hovering
  **/
-char *
+const char *
 ephy_embed_get_link_message (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
@@ -1194,5 +1205,27 @@ ephy_embed_get_address (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	return iface->get_address (embed);
+}
+
+/**
+ * ephy_embed_get_status_message:
+ * @embed: an #EphyEmbed
+ *
+ * Returns the message displayed in @embed's #EphyWindow's
+ * #EphyStatusbar. If the user is hovering the mouse over a hyperlink,
+ * this function will return the same value as
+ * ephy_embed_get_link_message(). Otherwise, it will return a network
+ * status message, or NULL.
+ *
+ * The message returned has a limited lifetime, and so should be copied with
+ * g_strdup() if it must be stored.
+ *
+ * Return value: The current statusbar message
+ **/
+const char *
+ephy_embed_get_status_message (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_status_message (embed);
 }
 
