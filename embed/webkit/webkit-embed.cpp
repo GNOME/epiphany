@@ -430,11 +430,11 @@ impl_go_up (EphyEmbed *embed)
 {
 }
 
-static char *
+static const char *
 impl_get_title (EphyEmbed *embed)
 {
   WebKitFrame *frame = webkit_page_get_main_frame (WEBKIT_EMBED (embed)->priv->page);
-  return g_strdup (webkit_frame_get_title (frame));
+  return webkit_frame_get_title (frame);
 }
 
 static char *
