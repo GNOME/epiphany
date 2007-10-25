@@ -614,8 +614,6 @@ ephy_tab_dispose (GObject *object)
 		priv->idle_resize_handler = 0;
 	}
 
-	ephy_tab_file_monitor_cancel (tab);
-
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 

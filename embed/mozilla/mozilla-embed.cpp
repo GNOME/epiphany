@@ -56,6 +56,7 @@ static void	mozilla_embed_class_init	(MozillaEmbedClass *klass);
 static void	mozilla_embed_init		(MozillaEmbed *gs);
 static void	mozilla_embed_destroy		(GtkObject *object);
 static void	mozilla_embed_finalize		(GObject *object);
+static void     mozilla_embed_dispose           (GObject *object);
 static void	ephy_embed_iface_init		(EphyEmbedIface *iface);
 
 static void mozilla_embed_location_changed_cb	(GtkMozEmbed *embed,
@@ -108,6 +109,7 @@ static void mozilla_embed_favicon_cb            (EphyEmbed *embed,
 static gboolean mozilla_embed_open_uri_cb       (EphyEmbed *embed,
                                                  const char *uri,
                                                  MozillaEmbed *membed);
+static void mozilla_embed_file_monitor_cancel   (MozillaEmbed *embed);
 static void impl_set_typed_address		(EphyEmbed *embed,
 						 const char *address,
 						 EphyEmbedAddressExpire expire);
@@ -375,6 +377,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 
 	object_class->constructor = mozilla_embed_constructor;
 	object_class->finalize = mozilla_embed_finalize;
+        object_class->dispose = mozilla_embed_dispose;
 	object_class->get_property = mozilla_embed_get_property;
 	object_class->set_property = mozilla_embed_set_property;
 
@@ -489,6 +492,14 @@ mozilla_embed_destroy (GtkObject *object)
 	}
 	
 	GTK_OBJECT_CLASS (mozilla_embed_parent_class)->destroy (object);
+}
+
+static void
+mozilla_embed_dispose (GObject *object)
+{
+        mozilla_embed_file_monitor_cancel (MOZILLA_EMBED (object));
+
+	G_OBJECT_CLASS (mozilla_embed_parent_class)->dispose (object);
 }
 
 static void
