@@ -252,6 +252,8 @@ struct _EphyEmbedIface
 							 EphyEmbedAddressExpire expire);
 	const char *	   (* get_address)		(EphyEmbed *embed);
         const char *       (* get_status_message)       (EphyEmbed *embed);
+        GdkPixbuf *        (* get_icon)                 (EphyEmbed *embed);
+        const char *       (* get_icon_address)         (EphyEmbed *embed);
 };
 
 GType		  ephy_embed_net_state_get_type		(void);
@@ -367,6 +369,11 @@ const char *	 ephy_embed_get_address			(EphyEmbed *embed);
 
 /* Status messages */
 const char *       ephy_embed_get_status_message        (EphyEmbed *embed);
+
+/* Icon and Icon Address */
+
+GdkPixbuf *        ephy_embed_get_icon                  (EphyEmbed *embed);
+const char *       ephy_embed_get_icon_address          (EphyEmbed *embed);
 
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);

@@ -78,8 +78,6 @@ struct _EphyTabPrivate
 {
 	guint id;
 
-	char *icon_address;
-	GdkPixbuf *icon;
 	int width;
 	int height;
 	GSList *hidden_popups;
@@ -180,10 +178,6 @@ ephy_tab_set_property (GObject *object,
 		case PROP_POPUPS_ALLOWED:
 			ephy_tab_set_popups_allowed (tab, g_value_get_boolean (value));
 			break;
-		case PROP_ICON_ADDRESS:
-			ephy_tab_set_icon_address (tab, g_value_get_string (value));
-			break;
-		case PROP_ICON:
 		case PROP_HIDDEN_POPUP_COUNT:
 			/* read only */
 			break;
@@ -197,16 +191,9 @@ ephy_tab_get_property (GObject *object,
 		       GParamSpec *pspec)
 {
 	EphyTab *tab = EPHY_TAB (object);
-	EphyTabPrivate *priv = tab->priv;
 
 	switch (prop_id)
 	{
-		case PROP_ICON:
-			g_value_set_object (value, priv->icon);
-			break;
-		case PROP_ICON_ADDRESS:
-			g_value_set_string (value, priv->icon_address);
-			break;
 		case PROP_HIDDEN_POPUP_COUNT:
 			g_value_set_int (value, popup_blocker_n_hidden (tab));
 			break;
@@ -305,22 +292,6 @@ ephy_tab_class_init (EphyTabClass *class)
 	widget_class->size_request = ephy_tab_size_request;
 	widget_class->map = ephy_tab_map;
 	widget_class->grab_focus = ephy_tab_grab_focus;
-
-	g_object_class_install_property (object_class,
-					 PROP_ICON,
-					 g_param_spec_object ("icon",
-							      "Icon",
-							      "The tab icon's",
-							      GDK_TYPE_PIXBUF,
-							      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	g_object_class_install_property (object_class,
-					 PROP_ICON_ADDRESS,
-					 g_param_spec_string ("icon-address",
-							      "Icon address",
-							      "The tab icon's address",
-							      NULL,
-							      (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)));
 
 	g_object_class_install_property (object_class,
 					 PROP_HIDDEN_POPUP_COUNT,
@@ -655,13 +626,6 @@ ephy_tab_finalize (GObject *object)
 	EphyTabPrivate *priv = tab->priv;
 	guint id = priv->id;
 
-	if (priv->icon != NULL)
-	{
-		g_object_unref (priv->icon);
-		priv->icon = NULL;
-	}
-
-	g_free (priv->icon_address);
 	popups_manager_reset (tab);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -835,123 +799,7 @@ ephy_tab_set_size (EphyTab *tab,
 	}
 }
 
-static void
-ephy_tab_load_icon (EphyTab *tab)
-{
-	EphyTabPrivate *priv = tab->priv;
-	EphyEmbedShell *shell;
-	EphyFaviconCache *cache;
-
-	if (priv->icon_address == NULL || priv->icon != NULL) return;
-
-	shell = ephy_embed_shell_get_default ();
-	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (shell));
-
-	/* ephy_favicon_cache_get returns a reference already */
-	priv->icon = ephy_favicon_cache_get (cache, priv->icon_address);
-
-	g_object_notify (G_OBJECT (tab), "icon");
-}
-
-static void
-ephy_tab_icon_cache_changed_cb (EphyFaviconCache *cache,
-				const char *address,
-				EphyTab *tab)
-{
-	EphyTabPrivate *priv = tab->priv;
-
-	g_return_if_fail (address != NULL);
-
-	/* is this for us? */
-	if (priv->icon_address != NULL &&
-	    strcmp (priv->icon_address, address) == 0)
-	{
-		ephy_tab_load_icon (tab);
-	}
-}
-
-void
-ephy_tab_set_icon_address (EphyTab *tab,
-			   const char *address)
-{
-	GObject *object = G_OBJECT (tab);
-	EphyTabPrivate *priv = tab->priv;
-	EphyBookmarks *eb;
-	EphyHistory *history;
-
-	g_free (priv->icon_address);
-	priv->icon_address = g_strdup (address);
-
-	if (priv->icon != NULL)
-	{
-		g_object_unref (priv->icon);
-		priv->icon = NULL;
-
-		g_object_notify (object, "icon");
-	}
-
-	if (priv->icon_address)
-	{
-		eb = ephy_shell_get_bookmarks (ephy_shell);
-		history = EPHY_HISTORY
-			(ephy_embed_shell_get_global_history (embed_shell));
-		ephy_bookmarks_set_icon (eb, priv->address,
-				         priv->icon_address);
-		ephy_history_set_icon (history, priv->address,
-				       priv->icon_address);
-
-		ephy_tab_load_icon (tab);
-	}
-
-	g_object_notify (object, "icon-address");
-}
-
-/**
- * ephy_tab_get_icon:
- * @tab: an #EphyTab
- *
- * Returns the tab's site icon as a #GdkPixbuf,
- * or %NULL if it is not available.
- *
- * Return value: a the tab's site icon
- **/
-GdkPixbuf *
-ephy_tab_get_icon (EphyTab *tab)
-{
-	EphyTabPrivate *priv;
-
-	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
-
-	priv = tab->priv;
-
-	return priv->icon;
-}
-
-/**
- * ephy_tab_get_icon_address:
- * @tab: an #EphyTab
- *
- * Returns a URL which points to @tab's site icon.
- *
- * Return value: the URL of @tab's site icon
- **/
-const char *
-ephy_tab_get_icon_address (EphyTab *tab)
-{
-	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
-
-	return tab->priv->icon_address;
-}
-
 /* Private callbacks for embed signals */
-
-static void
-ephy_tab_favicon_cb (EphyEmbed *embed,
-		     const char *address,
-		     EphyTab *tab)
-{
-	ephy_tab_set_icon_address (tab, address);
-}
 
 static gboolean
 ephy_tab_open_uri_cb (EphyEmbed *embed,
@@ -1180,7 +1028,6 @@ ephy_tab_init (EphyTab *tab)
 {
 	EphyTabPrivate *priv;
 	GObject *embed;
-	EphyFaviconCache *cache;
 	guint id;
 
 	LOG ("EphyTab initialising %p", tab);
@@ -1218,8 +1065,6 @@ ephy_tab_init (EphyTab *tab)
 
 	tab->priv->width = -1;
 	tab->priv->height = -1;
-	priv->icon_address = NULL;
-	priv->icon = NULL;
 
 	embed = ephy_embed_factory_new_object (EPHY_TYPE_EMBED);
 	g_assert (embed != NULL);
@@ -1239,18 +1084,9 @@ ephy_tab_init (EphyTab *tab)
 	g_signal_connect_object (embed, "ge_dom_mouse_click",
 				 G_CALLBACK (ephy_tab_dom_mouse_click_cb),
 				 tab, 0);
-	g_signal_connect_object (embed, "ge_favicon",
-				 G_CALLBACK (ephy_tab_favicon_cb),
-				 tab, 0);
 	g_signal_connect_object (embed, "ge_content_change",
 				 G_CALLBACK (ephy_tab_content_change_cb),
 				 tab, 0);
-
-	cache = EPHY_FAVICON_CACHE
-		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));
-	g_signal_connect_object (G_OBJECT (cache), "changed",
-				 G_CALLBACK (ephy_tab_icon_cache_changed_cb),
-				 tab,  0);
 }
 
 /**

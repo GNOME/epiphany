@@ -497,6 +497,19 @@ ephy_embed_base_init (gpointer g_class)
                                                                           "The embed's link message",
                                                                           NULL,
                                                                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                g_object_interface_install_property (g_class,
+                                                     g_param_spec_object ("icon",
+                                                                          "Icon",
+                                                                          "The embed icon's",
+                                                                          GDK_TYPE_PIXBUF,
+                                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+                g_object_interface_install_property (g_class,
+                                                     g_param_spec_string ("icon-address",
+                                                                          "Icon address",
+                                                                          "The embed icon's address",
+                                                                          NULL,
+                                                                          (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)));
 		initialized = TRUE;
 	}
 
@@ -1227,5 +1240,36 @@ ephy_embed_get_status_message (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	return iface->get_status_message (embed);
+}
+
+/**
+ * ephy_embed_get_icon:
+ * @embed: an #EphyEmbed
+ *
+ * Returns the embed's site icon as a #GdkPixbuf,
+ * or %NULL if it is not available.
+ *
+ * Return value: a the embed's site icon
+ **/
+GdkPixbuf *
+ephy_embed_get_icon (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_icon (embed);
+}
+
+/**
+ * ephy_embed_get_icon_address:
+ * @embed: an #EphyEmbed
+ *
+ * Returns a URL which points to @embed's site icon.
+ *
+ * Return value: the URL of @embed's site icon
+ **/
+const char *
+ephy_embed_get_icon_address (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_icon_address (embed);
 }
 

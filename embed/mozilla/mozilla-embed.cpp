@@ -45,6 +45,7 @@
 #include "ephy-debug.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
+#include "ephy-favicon-cache.h"
 #include "ephy-history.h"
 #include "ephy-string.h"
 #include "mozilla-embed-event.h"
@@ -96,6 +97,14 @@ static void mozilla_embed_set_title             (MozillaEmbed *embed,
 static void mozilla_embed_set_loading_title     (MozillaEmbed *embed,
                                                  const char *title,
                                                  gboolean is_address);
+static void mozilla_embed_icon_cache_changed_cb (EphyFaviconCache *cache,
+                                                 const char *address,
+                                                 MozillaEmbed *embed);
+static void mozilla_embed_set_icon_address      (MozillaEmbed *embed,
+                                                 const char *address);
+static void mozilla_embed_favicon_cb            (EphyEmbed *embed,
+                                                 const char *address,
+                                                 MozillaEmbed *membed);
 static void impl_set_typed_address		(EphyEmbed *embed,
 						 const char *address,
 						 EphyEmbedAddressExpire expire);
@@ -143,6 +152,8 @@ struct MozillaEmbedPrivate
 	int total_requests;
 	char *status_message;
 	char *link_message;
+	char *icon_address;
+	GdkPixbuf *icon;
 
 	/* File watch */
 	GnomeVFSMonitorHandle *monitor;
@@ -157,6 +168,8 @@ enum
 	PROP_0,
 	PROP_ADDRESS,
 	PROP_DOCUMENT_TYPE,
+        PROP_ICON,
+        PROP_ICON_ADDRESS,
         PROP_LINK_MESSAGE,
 	PROP_LOAD_PROGRESS,
 	PROP_LOAD_STATUS,
@@ -275,12 +288,12 @@ mozilla_embed_get_property (GObject *object,
 	case PROP_DOCUMENT_TYPE:
 		g_value_set_enum (value, priv->document_type);
 		break;
-	case PROP_SECURITY:
-		g_value_set_enum (value, priv->security_level);
-		break;
-	case PROP_ZOOM:
-		g_value_set_float (value, priv->zoom);
-		break;
+        case PROP_ICON:
+               g_value_set_object (value, priv->icon);
+               break;
+        case PROP_ICON_ADDRESS:
+               g_value_set_string (value, priv->icon_address);
+               break;
         case PROP_LINK_MESSAGE:
                 g_value_set_string (value, priv->link_message);
                 break;
@@ -293,6 +306,9 @@ mozilla_embed_get_property (GObject *object,
 	case PROP_NAVIGATION:
 		g_value_set_flags (value, priv->nav_flags);
 		break;
+	case PROP_SECURITY:
+		g_value_set_enum (value, priv->security_level);
+		break;
         case PROP_STATUS_MESSAGE:
                 g_value_set_string (value, priv->status_message);
                 break;
@@ -301,6 +317,9 @@ mozilla_embed_get_property (GObject *object,
                 break;
 	case PROP_TYPED_ADDRESS:
 		g_value_set_string (value, priv->typed_address);
+		break;
+	case PROP_ZOOM:
+		g_value_set_float (value, priv->zoom);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -317,12 +336,16 @@ mozilla_embed_set_property (GObject *object,
 {
 	switch (prop_id)
 	{
+        case PROP_ICON_ADDRESS:
+                mozilla_embed_set_icon_address (MOZILLA_EMBED (object), g_value_get_string (value));
+                break;
 	case PROP_TYPED_ADDRESS:
 		impl_set_typed_address (EPHY_EMBED (object), g_value_get_string (value),
 					EPHY_EMBED_ADDRESS_EXPIRE_NOW);
 		break;
         case PROP_ADDRESS:
 	case PROP_DOCUMENT_TYPE:
+        case PROP_ICON:
 	case PROP_LOAD_PROGRESS:
 	case PROP_LOAD_STATUS:
         case PROP_LINK_MESSAGE:
@@ -375,6 +398,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 static void
 mozilla_embed_init (MozillaEmbed *embed)
 {
+	EphyFaviconCache *cache;
 	MozillaEmbedPrivate *priv = embed->priv;
 	priv = MOZILLA_EMBED_GET_PRIVATE (embed);
 	priv->browser = new EphyBrowser ();
@@ -412,6 +436,15 @@ mozilla_embed_init (MozillaEmbed *embed)
 	g_signal_connect_object (embed, "link_message",
 				 G_CALLBACK (mozilla_embed_link_message_cb),
 				 embed, (GConnectFlags)0);
+	g_signal_connect_object (embed, "ge_favicon",
+				 G_CALLBACK (mozilla_embed_favicon_cb),
+				 embed, (GConnectFlags)0);
+
+	cache = EPHY_FAVICON_CACHE
+		(ephy_embed_shell_get_favicon_cache (embed_shell));
+	g_signal_connect_object (G_OBJECT (cache), "changed",
+				 G_CALLBACK (mozilla_embed_icon_cache_changed_cb),
+				 embed,  (GConnectFlags)0);
 
 	priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
 	priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
@@ -427,6 +460,8 @@ mozilla_embed_init (MozillaEmbed *embed)
 	priv->is_blank = TRUE;
 	priv->total_requests = 0;
 	priv->cur_requests = 0;
+	priv->icon_address = NULL;
+	priv->icon = NULL;
 }
 
 gpointer
@@ -460,6 +495,14 @@ mozilla_embed_finalize (GObject *object)
 		delete embed->priv->browser;
 		embed->priv->browser = nsnull;
 	}
+
+	if (embed->priv->icon != NULL)
+	{
+		g_object_unref (embed->priv->icon);
+		embed->priv->icon = NULL;
+	}
+
+	g_free (embed->priv->icon_address);
 
 	g_free (embed->priv->address);
 	g_free (embed->priv->typed_address);
@@ -1427,9 +1470,7 @@ mozilla_embed_location_changed_cb (GtkMozEmbed *embed,
 	}
 
 	mozilla_embed_set_link_message (membed, NULL);
-#if 0
-	mozilla_embed_set_icon_address (embed, NULL);
-#endif
+	mozilla_embed_set_icon_address (membed, NULL);
 	mozilla_embed_update_navigation_flags (membed);
 
 	g_object_notify (object, "title");
@@ -1441,9 +1482,89 @@ static void
 mozilla_embed_link_message_cb       (EphyEmbed *embed,
                                      MozillaEmbed *membed)
 {
-  char *link_message = gtk_moz_embed_get_link_message (GTK_MOZ_EMBED (membed));
-  mozilla_embed_set_link_message (membed, link_message);
-  g_free (link_message);
+        char *link_message = gtk_moz_embed_get_link_message (GTK_MOZ_EMBED (membed));
+        mozilla_embed_set_link_message (membed, link_message);
+        g_free (link_message);
+}
+
+static void
+mozilla_embed_load_icon (MozillaEmbed *embed)
+{
+	MozillaEmbedPrivate *priv = embed->priv;
+	EphyEmbedShell *shell;
+	EphyFaviconCache *cache;
+
+	if (priv->icon_address == NULL || priv->icon != NULL) return;
+
+	shell = ephy_embed_shell_get_default ();
+	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (shell));
+
+	/* ephy_favicon_cache_get returns a reference already */
+	priv->icon = ephy_favicon_cache_get (cache, priv->icon_address);
+
+	g_object_notify (G_OBJECT (embed), "icon");
+}
+
+static void
+mozilla_embed_icon_cache_changed_cb (EphyFaviconCache *cache,
+                                     const char *address,
+                                     MozillaEmbed *embed)
+{
+	MozillaEmbedPrivate *priv = embed->priv;
+
+	g_return_if_fail (address != NULL);
+
+	/* is this for us? */
+	if (priv->icon_address != NULL &&
+	    strcmp (priv->icon_address, address) == 0)
+	{
+		mozilla_embed_load_icon (embed);
+	}
+}
+
+static void
+mozilla_embed_set_icon_address (MozillaEmbed *embed,
+                                const char *address)
+{
+	GObject *object = G_OBJECT (embed);
+	MozillaEmbedPrivate *priv = embed->priv;
+        /*	EphyBookmarks *eb;*/
+	EphyHistory *history;
+
+	g_free (priv->icon_address);
+	priv->icon_address = g_strdup (address);
+
+	if (priv->icon != NULL)
+	{
+		g_object_unref (priv->icon);
+		priv->icon = NULL;
+
+		g_object_notify (object, "icon");
+	}
+
+	if (priv->icon_address)
+	{
+		history = EPHY_HISTORY
+			(ephy_embed_shell_get_global_history (embed_shell));
+		ephy_history_set_icon (history, priv->address,
+				       priv->icon_address);
+                /* FIXME: we need to put this somewhere inside src?/
+		eb = ephy_shell_get_bookmarks (ephy_shell);
+		ephy_bookmarks_set_icon (eb, priv->address,
+                priv->icon_address);*/
+
+		mozilla_embed_load_icon (embed);
+	}
+
+	g_object_notify (object, "icon-address");
+}
+
+static void
+mozilla_embed_favicon_cb (EphyEmbed *embed,
+                          const char *address,
+                          MozillaEmbed *membed)
+{
+  	mozilla_embed_set_icon_address (membed, address);
 }
 
 static gboolean
