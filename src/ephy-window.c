@@ -2225,7 +2225,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_connect_object (embed, "notify::icon",
 					 G_CALLBACK (sync_tab_icon),
 					 window, 0);
-		g_signal_connect_object (embed, "notify::message",
+		g_signal_connect_object (embed, "notify::status-message",
 					 G_CALLBACK (sync_tab_message),
 					 window, 0);
 		g_signal_connect_object (embed, "notify::security-level",

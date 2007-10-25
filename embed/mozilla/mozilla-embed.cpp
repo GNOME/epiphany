@@ -395,8 +395,10 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 	g_object_class_override_property (object_class, PROP_ADDRESS, "address");
 	g_object_class_override_property (object_class, PROP_TYPED_ADDRESS, "typed-address");
 	g_object_class_override_property (object_class, PROP_TITLE, "title");
-	g_object_class_override_property (object_class, PROP_STATUS_MESSAGE, "message");
+	g_object_class_override_property (object_class, PROP_STATUS_MESSAGE, "status-message");
 	g_object_class_override_property (object_class, PROP_LINK_MESSAGE, "link-message");
+	g_object_class_override_property (object_class, PROP_ICON, "icon");
+	g_object_class_override_property (object_class, PROP_ICON_ADDRESS, "icon-address");
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
@@ -405,8 +407,9 @@ static void
 mozilla_embed_init (MozillaEmbed *embed)
 {
 	EphyFaviconCache *cache;
-	MozillaEmbedPrivate *priv = embed->priv;
-	priv = MOZILLA_EMBED_GET_PRIVATE (embed);
+	MozillaEmbedPrivate *priv;
+	embed->priv = MOZILLA_EMBED_GET_PRIVATE (embed);
+        priv = embed->priv;
 	priv->browser = new EphyBrowser ();
 
 	g_signal_connect_object (embed, "location",
@@ -1226,6 +1229,22 @@ impl_get_loading_title (EphyEmbed *embed)
         MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
 
         return priv->loading_title;
+}
+
+static const char*
+impl_get_icon_address (EphyEmbed *embed)
+{
+        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+
+        return priv->icon_address;
+}
+
+static GdkPixbuf*
+impl_get_icon (EphyEmbed *embed)
+{
+        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+
+        return priv->icon;
 }
 
 static void
@@ -2358,6 +2377,8 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
         iface->get_status_message = impl_get_status_message;
         iface->get_is_blank = impl_get_is_blank;
         iface->get_loading_title = impl_get_loading_title;
+        iface->get_icon = impl_get_icon;
+        iface->get_icon_address = impl_get_icon_address;
 }
 
 static void

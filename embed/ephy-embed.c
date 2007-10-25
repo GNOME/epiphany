@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 #include "ephy-embed.h"
 #include "ephy-zoom.h"
 
@@ -486,7 +488,7 @@ ephy_embed_base_init (gpointer g_class)
 									  _("Blank page"),
 									  G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
                 g_object_interface_install_property (g_class,
-                                                     g_param_spec_string ("status message",
+                                                     g_param_spec_string ("status-message",
                                                                           "Status Message",
                                                                           "The embed's statusbar message",
                                                                           NULL,
