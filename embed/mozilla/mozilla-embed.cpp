@@ -33,6 +33,10 @@
 #include <nsIWebProgressListener.h>
 #include <nsMemory.h>
 
+#include <glib/gi18n.h>
+#include <libgnomevfs/gnome-vfs.h>
+#include <libgnomevfs/gnome-vfs-uri.h>
+
 #include "EphyBrowser.h"
 #include "EphyUtils.h"
 #include "EventContext.h"
@@ -83,6 +87,10 @@ static void mozilla_embed_document_type_cb	(EphyEmbed *embed,
 static void mozilla_embed_zoom_change_cb	(EphyEmbed *embed,
 						 float zoom,
 						 MozillaEmbed *membed);
+static void mozilla_embed_title_change_cb       (EphyEmbed *embed,
+                                                 MozillaEmbed *membed);
+static void mozilla_embed_set_title             (MozillaEmbed *embed,
+                                                 char *title);
 static void impl_set_typed_address		(EphyEmbed *embed,
 						 const char *address,
 						 EphyEmbedAddressExpire expire);
@@ -99,6 +107,8 @@ typedef enum
 	MOZILLA_EMBED_LOAD_STOPPED
 } MozillaEmbedLoadState;
 
+#define MAX_TITLE_LENGTH	512 /* characters */
+
 struct MozillaEmbedPrivate
 {
 	EphyBrowser *browser;
@@ -113,12 +123,18 @@ struct MozillaEmbedPrivate
 	float zoom;
 
 	/* Flags */
+	guint is_blank : 1;
 	guint is_loading : 1;
 	guint is_setting_zoom : 1;
 
 	gint8 load_percent;
 	char *address;
 	char *typed_address;
+	char *title;
+	char *loading_title;
+	int cur_requests;
+	int total_requests;
+	char *status_message;
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
@@ -132,6 +148,7 @@ enum
 	PROP_LOAD_STATUS,
 	PROP_NAVIGATION,
 	PROP_SECURITY,
+        PROP_TITLE,
 	PROP_TYPED_ADDRESS,
 	PROP_ZOOM
 };
@@ -258,6 +275,9 @@ mozilla_embed_get_property (GObject *object,
 	case PROP_NAVIGATION:
 		g_value_set_flags (value, priv->nav_flags);
 		break;
+        case PROP_TITLE:
+                g_value_set_string (value, priv->title);
+                break;
 	case PROP_TYPED_ADDRESS:
 		g_value_set_string (value, priv->typed_address);
 		break;
@@ -320,6 +340,9 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 	g_object_class_override_property (object_class, PROP_LOAD_PROGRESS, "load-progress");
 	g_object_class_override_property (object_class, PROP_LOAD_STATUS, "load-status");
 	g_object_class_override_property (object_class, PROP_NAVIGATION, "navigation");
+	g_object_class_override_property (object_class, PROP_ADDRESS, "address");
+	g_object_class_override_property (object_class, PROP_TYPED_ADDRESS, "typed-address");
+	g_object_class_override_property (object_class, PROP_TITLE, "title");
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
@@ -358,6 +381,9 @@ mozilla_embed_init (MozillaEmbed *embed)
 	g_signal_connect_object (embed, "ge_zoom_change",
 				 G_CALLBACK (mozilla_embed_zoom_change_cb),
 				 embed, (GConnectFlags) 0);
+        g_signal_connect_object (embed, "title",
+                                 G_CALLBACK (mozilla_embed_title_change_cb),
+                                 embed, (GConnectFlags) 0);
 
 	priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
 	priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
@@ -366,7 +392,13 @@ mozilla_embed_init (MozillaEmbed *embed)
 	priv->load_percent = 0;
 	priv->is_loading = FALSE;
 	priv->typed_address = NULL;
+        priv->address = NULL;
 	priv->address_expire = EPHY_EMBED_ADDRESS_EXPIRE_NOW;
+	priv->title = NULL;
+        priv->loading_title = NULL;
+	priv->is_blank = TRUE;
+	priv->total_requests = 0;
+	priv->cur_requests = 0;
 }
 
 gpointer
@@ -403,6 +435,8 @@ mozilla_embed_finalize (GObject *object)
 
 	g_free (embed->priv->address);
 	g_free (embed->priv->typed_address);
+	g_free (embed->priv->title);
+	g_free (embed->priv->loading_title);
 
 	G_OBJECT_CLASS (mozilla_embed_parent_class)->finalize (object);
 
@@ -957,9 +991,9 @@ impl_get_load_percent (EphyEmbed *embed)
 }
 
 static void
-impl_set_load_percent (EphyEmbed *embed, int percent)
+mozilla_embed_set_load_percent (MozillaEmbed *embed, int percent)
 {
-       MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
+       MozillaEmbedPrivate *mpriv = embed->priv;
 
        if (percent != mpriv->load_percent)
        {
@@ -978,9 +1012,9 @@ impl_get_load_status (EphyEmbed *embed)
 }
 
 static void
-impl_set_load_status (EphyEmbed *embed, gboolean status)
+mozilla_embed_set_load_status (MozillaEmbed *embed, gboolean status)
 {
-       MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
+       MozillaEmbedPrivate *mpriv = embed->priv;
        guint is_loading;
 
        is_loading = status != FALSE;
@@ -994,22 +1028,23 @@ impl_set_load_status (EphyEmbed *embed, gboolean status)
 }
 
 static void
-impl_update_navigation_flags (EphyEmbed *embed)
+mozilla_embed_update_navigation_flags (MozillaEmbed *membed)
 {
-	MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+	MozillaEmbedPrivate *priv = membed->priv;
+        EphyEmbed *embed = EPHY_EMBED (membed);
 	guint flags = 0;
 
-	if (ephy_embed_can_go_up (embed))
+	if (impl_can_go_up (embed))
 	{
 		flags |= EPHY_EMBED_NAV_UP;
 	}
 
-	if (ephy_embed_can_go_back (embed))
+        if (impl_can_go_back (embed))
 	{
 		flags |= EPHY_EMBED_NAV_BACK;
 	}
 
-	if (ephy_embed_can_go_forward (embed))
+	if (impl_can_go_forward (embed))
 	{
 		flags |= EPHY_EMBED_NAV_FORWARD;
 	}
@@ -1067,18 +1102,16 @@ impl_get_address (EphyEmbed *embed)
 }
 
 static void
-impl_set_address (EphyEmbed *embed, char *address)
+mozilla_embed_set_address (MozillaEmbed *embed, char *address)
 {
-        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+        MozillaEmbedPrivate *priv = embed->priv;
 	GObject *object = G_OBJECT (embed);
 	
 	g_free (priv->address);
 	priv->address = address;
 
-#if 0
 	priv->is_blank = address == NULL ||
 			 strcmp (address, "about:blank") == 0;
-#endif
 
 	if (priv->is_loading &&
 	    priv->address_expire == EPHY_EMBED_ADDRESS_EXPIRE_NOW &&
@@ -1217,6 +1250,187 @@ update_load_state (MozillaEmbed *membed, gint state)
 }
 
 static void
+update_net_state_message (MozillaEmbed *embed, const char *uri, EphyEmbedNetState flags)
+{
+	GnomeVFSURI *vfs_uri = NULL;
+	const char *msg = NULL;
+	const char *host = NULL;
+
+	if (uri != NULL)
+	{
+		vfs_uri = gnome_vfs_uri_new (uri);
+	}
+
+	if (vfs_uri != NULL)
+	{
+		host = gnome_vfs_uri_get_host_name (vfs_uri);
+	}
+
+	if (host == NULL || host[0] == '\0') goto out;
+
+	/* IS_REQUEST and IS_NETWORK can be both set */
+	if (flags & EPHY_EMBED_STATE_IS_REQUEST)
+	{
+		if (flags & EPHY_EMBED_STATE_REDIRECTING)
+		{
+			msg = _("Redirecting to “%s”…");
+		}
+		else if (flags & EPHY_EMBED_STATE_TRANSFERRING)
+		{
+			msg = _("Transferring data from “%s”…");
+		}
+		else if (flags & EPHY_EMBED_STATE_NEGOTIATING)
+		{
+			msg = _("Waiting for authorization from “%s”…");
+		}
+	}
+
+	if (flags & EPHY_EMBED_STATE_IS_NETWORK)
+	{
+		if (flags & EPHY_EMBED_STATE_START)
+		{
+			msg = _("Loading “%s”…");
+		}
+	}
+
+	if ((flags & EPHY_EMBED_STATE_IS_NETWORK) &&
+	    (flags & EPHY_EMBED_STATE_STOP))
+	{
+		g_free (embed->priv->status_message);
+		embed->priv->status_message = NULL;
+		g_object_notify (G_OBJECT (embed), "message");
+
+	}
+	else if (msg != NULL)
+	{
+		g_free (embed->priv->status_message);
+		g_free (embed->priv->loading_title);
+		embed->priv->status_message = g_strdup_printf (msg, host);
+		embed->priv->loading_title = g_strdup_printf (msg, host);
+		g_object_notify (G_OBJECT (embed), "message");
+		g_object_notify (G_OBJECT (embed), "title");
+	}
+
+out:
+	if (vfs_uri != NULL)
+	{
+		gnome_vfs_uri_unref (vfs_uri);
+	}
+}
+
+static int
+build_load_percent (int requests_done, int requests_total)
+{
+	int percent= 0;
+
+	if (requests_total > 0)
+	{
+		percent = (requests_done * 100) / requests_total;
+
+		/* Mozilla sometimes report more done requests than
+		   total requests. Their progress widget clamp the value */
+		percent = CLAMP (percent, 0, 100);
+	}
+
+	return percent;
+}
+
+static void
+build_progress_from_requests (MozillaEmbed *embed, EphyEmbedNetState state)
+{
+	int load_percent;
+
+	if (state & EPHY_EMBED_STATE_IS_REQUEST)
+        {
+                if (state & EPHY_EMBED_STATE_START)
+                {
+			embed->priv->total_requests ++;
+		}
+		else if (state & EPHY_EMBED_STATE_STOP)
+		{
+			embed->priv->cur_requests ++;
+		}
+
+		load_percent = build_load_percent (embed->priv->cur_requests,
+						   embed->priv->total_requests);
+
+		mozilla_embed_set_load_percent (embed, load_percent);
+	}
+}
+
+static void
+ensure_page_info (MozillaEmbed *embed, const char *address)
+{
+	MozillaEmbedPrivate *priv = embed->priv;
+
+	if ((priv->address == NULL || priv->address[0] == '\0') &&
+	    priv->address_expire == EPHY_EMBED_ADDRESS_EXPIRE_NOW)
+        {
+                mozilla_embed_set_address (embed, g_strdup (address));
+	}
+
+	/* FIXME huh?? */
+	if (priv->title == NULL || priv->title[0] == '\0')
+	{
+		mozilla_embed_set_title (embed, NULL);
+	}
+}
+
+static void
+update_embed_from_net_state (MozillaEmbed *embed,
+                             const char *uri,
+                             EphyEmbedNetState state)
+{
+	MozillaEmbedPrivate *priv = embed->priv;
+
+	update_net_state_message (embed, uri, state);
+
+	if (state & EPHY_EMBED_STATE_IS_NETWORK)
+	{
+		if (state & EPHY_EMBED_STATE_START)
+		{
+			GObject *object = G_OBJECT (embed);
+
+			g_object_freeze_notify (object);
+
+			priv->total_requests = 0;
+			priv->cur_requests = 0;
+
+			mozilla_embed_set_load_percent (embed, 0);
+			mozilla_embed_set_load_status (embed, TRUE);
+
+			ensure_page_info (embed, uri);
+
+			g_object_notify (object, "title");
+
+			g_object_thaw_notify (object);
+		}
+		else if (state & EPHY_EMBED_STATE_STOP)
+		{
+			GObject *object = G_OBJECT (embed);
+
+			g_object_freeze_notify (object);
+
+			mozilla_embed_set_load_percent (embed, 100);
+			mozilla_embed_set_load_status (embed, FALSE);
+
+			g_free (priv->loading_title);
+			priv->loading_title = NULL;
+
+			priv->address_expire = EPHY_EMBED_ADDRESS_EXPIRE_NOW;
+
+			g_object_notify (object, "title");
+
+			g_object_thaw_notify (object);
+		}
+
+                mozilla_embed_update_navigation_flags (embed);
+	}
+
+	build_progress_from_requests (embed, state);
+}
+
+static void
 mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 				gint state, guint status, 
 				MozillaEmbed *membed)
@@ -1252,6 +1466,7 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 	}
 
 	update_load_state (membed, state);
+        update_embed_from_net_state (membed, aURI, (EphyEmbedNetState)state);
 	
 	g_signal_emit_by_name (membed, "ge_net_state", aURI, /* FIXME: (gulong) */ estate);
 }
@@ -1478,6 +1693,107 @@ mozilla_embed_zoom_change_cb (EphyEmbed *embed,
 	}
 }
 
+static char *
+get_title_from_address (const char *address)
+{
+	GnomeVFSURI *uri;
+	char *title;
+
+	if (address == NULL) return NULL;
+		
+	uri = gnome_vfs_uri_new (address);
+	if (uri == NULL) return g_strdup (address);
+		
+	title = gnome_vfs_uri_to_string (uri,
+                                         (GnomeVFSURIHideOptions)
+                                         (GNOME_VFS_URI_HIDE_USER_NAME |
+                                         GNOME_VFS_URI_HIDE_PASSWORD |
+                                         GNOME_VFS_URI_HIDE_HOST_PORT |
+                                         GNOME_VFS_URI_HIDE_TOPLEVEL_METHOD |
+                                          GNOME_VFS_URI_HIDE_FRAGMENT_IDENTIFIER));
+	gnome_vfs_uri_unref (uri);
+
+	return title;
+}
+
+static void
+mozilla_embed_set_loading_title (MozillaEmbed *embed,
+                                 const char *title,
+                                 gboolean is_address)
+{
+        MozillaEmbedPrivate *priv = embed->priv;
+	char *freeme = NULL;
+
+	g_free (priv->loading_title);
+	priv->loading_title = NULL;
+
+	if (is_address)
+	{
+		title = freeme = get_title_from_address (title);	
+	}
+
+	if (title != NULL && title[0] != '\0')
+	{
+		/* translators: %s here is the address of the web page */
+		priv->loading_title = g_strdup_printf (_("Loading “%s”…"), title);
+	}
+	else
+	{
+		priv->loading_title = g_strdup (_("Loading…"));
+	}
+
+	g_free (freeme);
+}
+
+static void
+mozilla_embed_set_title (MozillaEmbed *embed,
+                         char *title)
+{
+        MozillaEmbedPrivate *priv = embed->priv;
+
+	if (!priv->is_blank && (title == NULL || g_strstrip (title)[0] == '\0'))
+	{
+
+		g_free (title);
+		title = get_title_from_address (priv->address);
+
+		/* Fallback */
+		if (title == NULL || title[0] == '\0')
+		{
+			g_free (title);
+			title = NULL;
+			priv->is_blank = TRUE;
+		}
+	}
+	else if (priv->is_blank && title != NULL)
+	{
+		g_free (title);
+		title = NULL;
+	}
+
+	g_free (priv->title);
+	priv->title = ephy_string_shorten (title, MAX_TITLE_LENGTH);
+
+	g_object_notify (G_OBJECT (embed), "title");
+}
+
+static void
+mozilla_embed_title_change_cb       (EphyEmbed *embed,
+                                     MozillaEmbed *membed)
+{
+	GObject *object = G_OBJECT (embed);
+        char *title;
+
+        title = gtk_moz_embed_get_title (GTK_MOZ_EMBED (embed));
+
+	g_object_freeze_notify (object);
+
+	mozilla_embed_set_title (membed, title);
+	mozilla_embed_set_loading_title (membed, title, FALSE);
+
+	g_object_thaw_notify (object);
+}
+
 static EphyEmbedSecurityLevel
 mozilla_embed_security_level (PRUint32 state)
 {
@@ -1551,15 +1867,11 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->has_modified_forms = impl_has_modified_forms;
 	iface->get_document_type = impl_get_document_type;
 	iface->get_load_percent = impl_get_load_percent;
-	iface->set_load_percent = impl_set_load_percent;
 	iface->get_load_status = impl_get_load_status;
-	iface->set_load_status = impl_set_load_status;
-	iface->update_navigation_flags = impl_update_navigation_flags;
 	iface->get_navigation_flags = impl_get_navigation_flags;
 	iface->get_typed_address = impl_get_typed_address;
 	iface->set_typed_address = impl_set_typed_address;
 	iface->get_address = impl_get_address;
-	iface->set_address = impl_set_address;
 }
 
 static void

@@ -244,17 +244,13 @@ struct _EphyEmbedIface
 	void		   (* close)			(EphyEmbed *embed);
 	EphyEmbedDocumentType	(* get_document_type)	(EphyEmbed *embed);
 	int		   (* get_load_percent)		(EphyEmbed *embed);
-	void		   (* set_load_percent)		(EphyEmbed *embed, int percent);
 	gboolean	   (* get_load_status)		(EphyEmbed *embed);
-	void		   (* set_load_status)		(EphyEmbed *embed, gboolean percent);
-	void		   (* update_navigation_flags)	(EphyEmbed *embed);
 	EphyEmbedNavigationFlags (* get_navigation_flags) (EphyEmbed *embed);
 	const char *	   (* get_typed_address)	(EphyEmbed *embed);
 	void		   (* set_typed_address)	(EphyEmbed *embed,
 							 const char *address,
 							 EphyEmbedAddressExpire expire);
-        const char *       (* get_address)              (EphyEmbed *embed);
-        void               (* set_address)              (EphyEmbed *embed, char *address);
+	const char *	   (* get_address)		(EphyEmbed *embed);
 };
 
 GType		  ephy_embed_net_state_get_type		(void);
@@ -352,15 +348,12 @@ EphyEmbedDocumentType	ephy_embed_get_document_type	(EphyEmbed *embed);
 
 /* Progress */
 int		 ephy_embed_get_load_percent		(EphyEmbed *embed);
-void		 ephy_embed_set_load_percent		(EphyEmbed *embed, int percent); /* FIXME: remove me */
 
 /* Load status */
 gboolean	 ephy_embed_get_load_status		(EphyEmbed *embed);
-void		 ephy_embed_set_load_status		(EphyEmbed *embed, gboolean status); /* FIXME: remove me */
 
 /* Navigation flags */
 
-void		 ephy_embed_update_navigation_flags	(EphyEmbed *embed); /* FIXME: remove me */
 EphyEmbedNavigationFlags ephy_embed_get_navigation_flags (EphyEmbed *embed);
 
 /* Typed address */
@@ -369,8 +362,7 @@ void		 ephy_embed_set_typed_address		(EphyEmbed *embed,
 							 const char *address,
 							 EphyEmbedAddressExpire expire);
 /* Address */
-const char *     ephy_embed_get_address                 (EphyEmbed *embed);
-void             ephy_embed_set_address                 (EphyEmbed *embed, char *address); /* FIXME: remove me */
+const char *	 ephy_embed_get_address			(EphyEmbed *embed);
 
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);

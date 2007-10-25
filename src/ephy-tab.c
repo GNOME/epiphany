@@ -75,7 +75,6 @@
 #define MAX_HIDDEN_POPUPS	5
 #define RELOAD_DELAY		250 /* ms */
 #define RELOAD_DELAY_MAX_TICKS	40  /* RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s */
-#define MAX_TITLE_LENGTH	512 /* characters */
 
 struct _EphyTabPrivate
 {
@@ -83,20 +82,13 @@ struct _EphyTabPrivate
 
 	char *status_message;
 	char *link_message;
-	char *title;
-	char *loading_title;
 	char *icon_address;
 	GdkPixbuf *icon;
-	int cur_requests;
-	int total_requests;
 	int width;
 	int height;
 	GSList *hidden_popups;
 	GSList *shown_popups;
 	guint idle_resize_handler;
-
-	/* Flags */
-	guint is_blank : 1;
 
 	/* File watch */
 	GnomeVFSMonitorHandle *monitor;
@@ -117,7 +109,6 @@ enum
 	PROP_MESSAGE,
 	PROP_HIDDEN_POPUP_COUNT,
 	PROP_POPUPS_ALLOWED,
-	PROP_TITLE
 };
 
 typedef struct
@@ -140,9 +131,6 @@ static guint n_tabs = 0;
 /* internal functions, accessible only from this file */
 static void	ephy_tab_set_link_message	(EphyTab *tab,
 						 char *message);
-static void	ephy_tab_set_title		(EphyTab *tab,
-						 EphyEmbed *embed,
-						 char *new_title);
 static guint	popup_blocker_n_hidden		(EphyTab *tab);
 static gboolean	ephy_tab_get_popups_allowed	(EphyTab *tab);
 static void	ephy_tab_set_popups_allowed	(EphyTab *tab,
@@ -210,7 +198,6 @@ ephy_tab_set_property (GObject *object,
 		case PROP_ICON:
 		case PROP_MESSAGE:
 		case PROP_HIDDEN_POPUP_COUNT:
-		case PROP_TITLE:
 			/* read only */
 			break;
 	}
@@ -242,9 +229,6 @@ ephy_tab_get_property (GObject *object,
 		case PROP_POPUPS_ALLOWED:
 			g_value_set_boolean
 				(value, ephy_tab_get_popups_allowed (tab));
-			break;
-		case PROP_TITLE:
-			g_value_set_string (value, priv->title);
 			break;
 	}
 }
@@ -379,14 +363,6 @@ ephy_tab_class_init (EphyTabClass *class)
 							       "Whether popup windows are to be displayed",
 							       FALSE,
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	g_object_class_install_property (object_class,
-					 PROP_TITLE,
-					 g_param_spec_string ("title",
-							      "Title",
-							      "The tab's title",
-							      _("Blank page"),
-							      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphyTabPrivate));
 }
@@ -709,8 +685,6 @@ ephy_tab_finalize (GObject *object)
 		priv->icon = NULL;
 	}
 
-	g_free (priv->title);
-	g_free (priv->loading_title);
 	g_free (priv->icon_address);
 	g_free (priv->link_message);
 	g_free (priv->status_message);
@@ -760,58 +734,6 @@ let_me_resize_hack (EphyTab *tab)
 
 	priv->idle_resize_handler = 0;	
 	return FALSE;
-}
-
-
-static char *
-get_title_from_address (const char *address)
-{
-	GnomeVFSURI *uri;
-	char *title;
-
-	if (address == NULL) return NULL;
-		
-	uri = gnome_vfs_uri_new (address);
-	if (uri == NULL) return g_strdup (address);
-		
-	title = gnome_vfs_uri_to_string (uri,
-			GNOME_VFS_URI_HIDE_USER_NAME |
-			GNOME_VFS_URI_HIDE_PASSWORD |
-			GNOME_VFS_URI_HIDE_HOST_PORT |
-			GNOME_VFS_URI_HIDE_TOPLEVEL_METHOD |
-			GNOME_VFS_URI_HIDE_FRAGMENT_IDENTIFIER);
-	gnome_vfs_uri_unref (uri);
-
-	return title;
-}
-
-static void
-ephy_tab_set_loading_title (EphyTab *tab,
-			    const char *title,
-			    gboolean is_address)
-{
-	EphyTabPrivate *priv = tab->priv;
-	char *freeme = NULL;
-
-	g_free (priv->loading_title);
-	priv->loading_title = NULL;
-
-	if (is_address)
-	{
-		title = freeme = get_title_from_address (title);	
-	}
-
-	if (title != NULL && title[0] != '\0')
-	{
-		/* translators: %s here is the address of the web page */
-		priv->loading_title = g_strdup_printf (_("Loading “%s”…"), title);
-	}
-	else
-	{
-		priv->loading_title = g_strdup (_("Loading…"));
-	}
-
-	g_free (freeme);
 }
 
 /* Public functions */
@@ -1319,14 +1241,15 @@ ephy_tab_open_uri_cb (EphyEmbed *embed,
 	 */
 	if (priv->is_blank)
 	{
-		ephy_tab_set_address (tab, g_strdup (uri));
-		ephy_tab_set_loading_title (tab, uri, TRUE);
+		ephy_embed_set_address (embed, g_strdup (uri));
+		ephy_embed_set_loading_title (embed, uri, TRUE);
 	}
 
 	/* allow load to proceed */
 	return FALSE;
 }
 
+#if 0
 static void
 ephy_tab_address_cb (EphyEmbed *embed,
 		     const char *address,
@@ -1367,210 +1290,13 @@ ephy_tab_address_cb (EphyEmbed *embed,
 
 	g_object_thaw_notify (object);
 }
+#endif
 
 static void
 ephy_tab_content_change_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 {
 	popups_manager_reset (tab);
 	g_object_notify (G_OBJECT (tab), "popups-allowed");
-}
-
-static void
-ephy_tab_title_cb (EphyEmbed *embed,
-		   EphyTab *tab)
-{
-	EphyTabPrivate *priv = tab->priv;
-	GObject *object = G_OBJECT (tab);
-
-	g_object_freeze_notify (object);
-
-	ephy_tab_set_title (tab, embed, ephy_embed_get_title (embed));
-
-	ephy_tab_set_loading_title (tab, priv->title, FALSE);
-
-	g_object_thaw_notify (object);
-}
-
-static int
-build_load_percent (int requests_done, int requests_total)
-{
-	int percent= 0;
-
-	if (requests_total > 0)
-	{
-		percent = (requests_done * 100) / requests_total;
-
-		/* Mozilla sometimes report more done requests than
-		   total requests. Their progress widget clamp the value */
-		percent = CLAMP (percent, 0, 100);
-	}
-
-	return percent;
-}
-
-static void
-update_net_state_message (EphyTab *tab, const char *uri, EphyEmbedNetState flags)
-{
-	GnomeVFSURI *vfs_uri = NULL;
-	const char *msg = NULL;
-	const char *host = NULL;
-
-	if (uri != NULL)
-	{
-		vfs_uri = gnome_vfs_uri_new (uri);
-	}
-
-	if (vfs_uri != NULL)
-	{
-		host = gnome_vfs_uri_get_host_name (vfs_uri);
-	}
-
-	if (host == NULL || host[0] == '\0') goto out;
-
-	/* IS_REQUEST and IS_NETWORK can be both set */
-	if (flags & EPHY_EMBED_STATE_IS_REQUEST)
-	{
-		if (flags & EPHY_EMBED_STATE_REDIRECTING)
-		{
-			msg = _("Redirecting to “%s”…");
-		}
-		else if (flags & EPHY_EMBED_STATE_TRANSFERRING)
-		{
-			msg = _("Transferring data from “%s”…");
-		}
-		else if (flags & EPHY_EMBED_STATE_NEGOTIATING)
-		{
-			msg = _("Waiting for authorization from “%s”…");
-		}
-	}
-
-	if (flags & EPHY_EMBED_STATE_IS_NETWORK)
-	{
-		if (flags & EPHY_EMBED_STATE_START)
-		{
-			msg = _("Loading “%s”…");
-		}
-	}
-
-	if ((flags & EPHY_EMBED_STATE_IS_NETWORK) &&
-	    (flags & EPHY_EMBED_STATE_STOP))
-	{
-		g_free (tab->priv->status_message);
-		tab->priv->status_message = NULL;
-		g_object_notify (G_OBJECT (tab), "message");
-
-	}
-	else if (msg != NULL)
-	{
-		g_free (tab->priv->status_message);
-		g_free (tab->priv->loading_title);
-		tab->priv->status_message = g_strdup_printf (msg, host);
-		tab->priv->loading_title = g_strdup_printf (msg, host);
-		g_object_notify (G_OBJECT (tab), "message");
-		g_object_notify (G_OBJECT (tab), "title");
-	}
-
-out:
-	if (vfs_uri != NULL)
-	{
-		gnome_vfs_uri_unref (vfs_uri);
-	}
-}
-
-static void
-build_progress_from_requests (EphyTab *tab, EphyEmbedNetState state)
-{
-	int load_percent;
-
-	if (state & EPHY_EMBED_STATE_IS_REQUEST)
-        {
-                if (state & EPHY_EMBED_STATE_START)
-                {
-			tab->priv->total_requests ++;
-		}
-		else if (state & EPHY_EMBED_STATE_STOP)
-		{
-			tab->priv->cur_requests ++;
-		}
-
-		load_percent = build_load_percent (tab->priv->cur_requests,
-						   tab->priv->total_requests);
-
-		ephy_embed_set_load_percent (ephy_tab_get_embed (tab), load_percent);
-	}
-}
-
-static void
-ensure_page_info (EphyTab *tab, EphyEmbed *embed, const char *address)
-{
-	EphyTabPrivate *priv = tab->priv;
-
-	if ((priv->address == NULL || priv->address[0] == '\0') &&
-	    priv->address_expire == EPHY_TAB_ADDRESS_EXPIRE_NOW)
-        {
-		ephy_tab_set_address (tab, g_strdup (address));
-	}
-
-	/* FIXME huh?? */
-	if (tab->priv->title == NULL || tab->priv->title[0] == '\0')
-	{
-		ephy_tab_set_title (tab, embed, NULL);
-	}
-}
-
-static void
-ephy_tab_net_state_cb (EphyEmbed *embed,
-		       const char *uri,
-		       EphyEmbedNetState state,
-		       EphyTab *tab)
-{
-	EphyTabPrivate *priv = tab->priv;
-
-	update_net_state_message (tab, uri, state);
-
-	if (state & EPHY_EMBED_STATE_IS_NETWORK)
-	{
-		if (state & EPHY_EMBED_STATE_START)
-		{
-			GObject *object = G_OBJECT (tab);
-
-			g_object_freeze_notify (object);
-
-			priv->total_requests = 0;
-			priv->cur_requests = 0;
-
-			ephy_embed_set_load_percent (embed, 0);
-			ephy_embed_set_load_status (embed, TRUE);
-			ephy_embed_update_navigation_flags (embed);
-
-			ensure_page_info (tab, embed, uri);
-
-			g_object_notify (object, "title");
-
-			g_object_thaw_notify (object);
-		}
-		else if (state & EPHY_EMBED_STATE_STOP)
-		{
-			GObject *object = G_OBJECT (tab);
-
-			g_object_freeze_notify (object);
-
-			ephy_embed_set_load_percent (ephy_tab_get_embed (tab), 100);
-			ephy_embed_set_load_status (embed, FALSE);
-			ephy_embed_update_navigation_flags (embed);
-
-			g_free (priv->loading_title);
-			priv->loading_title = NULL;
-
-			priv->address_expire = EPHY_TAB_ADDRESS_EXPIRE_NOW;
-
-			g_object_notify (object, "title");
-
-			g_object_thaw_notify (object);
-		}
-	}
-
-	build_progress_from_requests (tab, state);
 }
 
 static void
@@ -1809,17 +1535,10 @@ ephy_tab_init (EphyTab *tab)
 		g_array_index (tabs_id_array, gpointer, id) = tab;
 	}
 
-	tab->priv->total_requests = 0;
-	tab->priv->cur_requests = 0;
 	tab->priv->width = -1;
 	tab->priv->height = -1;
-	priv->title = NULL;
-	priv->is_blank = TRUE;
 	priv->icon_address = NULL;
 	priv->icon = NULL;
-	priv->address = NULL;
-	priv->title = NULL;
-	priv->loading_title = NULL;
 	priv->reload_delay_ticks = 0;
 
 	embed = ephy_embed_factory_new_object (EPHY_TYPE_EMBED);
@@ -1836,12 +1555,6 @@ ephy_tab_init (EphyTab *tab)
 				 tab, 0);
 	g_signal_connect_object (embed, "ge_location",
 				 G_CALLBACK (ephy_tab_address_cb),
-				 tab, 0);
-	g_signal_connect_object (embed, "title",
-				 G_CALLBACK (ephy_tab_title_cb),
-				 tab, 0);
-	g_signal_connect_object (embed, "ge_net_state",
-				 G_CALLBACK (ephy_tab_net_state_cb),
 				 tab, 0);
 	g_signal_connect_object (embed, "ge_new_window",
 				 G_CALLBACK (ephy_tab_new_window_cb),
@@ -1902,39 +1615,6 @@ ephy_tab_get_status_message (EphyTab *tab)
 	}
 }
 
-static void
-ephy_tab_set_title (EphyTab *tab,
-		    EphyEmbed *embed,
-		    char *title)
-{
-	EphyTabPrivate *priv = tab->priv;
-
-	if (!priv->is_blank && (title == NULL || g_strstrip (title)[0] == '\0'))
-	{
-
-		g_free (title);
-		title = get_title_from_address (priv->address);
-
-		/* Fallback */
-		if (title == NULL || title[0] == '\0')
-		{
-			g_free (title);
-			title = NULL;
-			priv->is_blank = TRUE;
-		}
-	}
-	else if (priv->is_blank && title != NULL)
-	{
-		g_free (title);
-		title = NULL;
-	}
-
-	g_free (priv->title);
-	priv->title = ephy_string_shorten (title, MAX_TITLE_LENGTH);
-
-	g_object_notify (G_OBJECT (tab), "title");
-}
-
 /**
  * ephy_tab_get_title_composite:
  * @tab: an #EphyTab
@@ -1967,36 +1647,6 @@ ephy_tab_get_title_composite (EphyTab *tab)
 		 priv->loading_title != NULL)
 	{
 		title = priv->loading_title;
-	}
-	else
-	{
-		title = priv->title;
-	}
-
-	return title != NULL ? title : "";
-}
-
-/**
- * ephy_tab_get_title:
- * @tab: an #EphyTab
- *
- * Returns the title of the web page loaded in @tab.
- *
- * Return value: @tab's loaded web page's title. Will never be %NULL.
- **/
-const char *
-ephy_tab_get_title (EphyTab *tab)
-{
-	EphyTabPrivate *priv;
-	const char *title = "";
-
-	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
-
-	priv = tab->priv;
-
-	if (priv->is_blank)
-	{
-		title = _("Blank page");
 	}
 	else
 	{

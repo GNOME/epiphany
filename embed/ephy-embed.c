@@ -424,61 +424,68 @@ ephy_embed_base_init (gpointer g_class)
 			      1,
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_enum ("security-level",
-                                                                        "Security Level",
-                                                                        "The embed's security level",
-                                                                        EPHY_TYPE_EMBED_SECURITY_LEVEL,
-                                                                        EPHY_EMBED_STATE_IS_UNKNOWN,
-                                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_enum ("document-type",
-                                                                        "Document Type",
-                                                                        "The embed's documen type",
-                                                                        EPHY_TYPE_EMBED_DOCUMENT_TYPE,
-                                                                        EPHY_EMBED_DOCUMENT_HTML,
-                                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_float ("zoom",
-                                                                         "Zoom",
-                                                                         "The embed's zoom",
-                                                                         ZOOM_MINIMAL,
-                                                                         ZOOM_MAXIMAL,
-                                                                         1.0,
-                                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_int ("load-progress",
-                                                                       "Load progress",
-                                                                       "The embed's load progress in percent",
-                                                                       0,
-                                                                       100,
-                                                                       0,
-                                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_boolean ("load-status",
-                                                                           "Load status",
-                                                                           "The embed's load status",
-                                                                           FALSE,
-                                                                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_flags ("navigation",
-                                                                         "Navigation flags",
-                                                                         "The embed's navigation flags",
-                                                                         EPHY_TYPE_EMBED_NAVIGATION_FLAGS,
-                                                                         0,
-                                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_string ("address",
-                                                                          "Address",
-                                                                          "The embed's address",
-                                                                          "",
-                                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_string ("typed-address",
-                                                                          "Typed Address",
-                                                                          "The typed address",
-                                                                          "",
-                                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+		g_object_interface_install_property (g_class,
+						     g_param_spec_enum ("security-level",
+									"Security Level",
+									"The embed's security level",
+									EPHY_TYPE_EMBED_SECURITY_LEVEL,
+									EPHY_EMBED_STATE_IS_UNKNOWN,
+									G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+		g_object_interface_install_property (g_class,
+						     g_param_spec_enum ("document-type",
+									"Document Type",
+									"The embed's documen type",
+									EPHY_TYPE_EMBED_DOCUMENT_TYPE,
+									EPHY_EMBED_DOCUMENT_HTML,
+									G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+		g_object_interface_install_property (g_class,
+						     g_param_spec_float ("zoom",
+									 "Zoom",
+									 "The embed's zoom",
+									 ZOOM_MINIMAL,
+									 ZOOM_MAXIMAL,
+									 1.0,
+									 G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+		g_object_interface_install_property (g_class,
+						     g_param_spec_int ("load-progress",
+								       "Load progress",
+								       "The embed's load progress in percent",
+								       0,
+								       100,
+								       0,
+								       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+		g_object_interface_install_property (g_class,
+						     g_param_spec_boolean ("load-status",
+									   "Load status",
+									   "The embed's load status",
+									   FALSE,
+									   G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+		g_object_interface_install_property (g_class,
+						     g_param_spec_flags ("navigation",
+									 "Navigation flags",
+									 "The embed's navigation flags",
+									 EPHY_TYPE_EMBED_NAVIGATION_FLAGS,
+									 0,
+									 G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+		g_object_interface_install_property (g_class,
+						     g_param_spec_string ("address",
+									  "Address",
+									  "The embed's address",
+									  "",
+									  G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+		g_object_interface_install_property (g_class,
+						     g_param_spec_string ("typed-address",
+									  "Typed Address",
+									  "The typed address",
+									  "",
+									  G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+		g_object_interface_install_property (g_class,
+						     g_param_spec_string ("title",
+									  "Title",
+									  "The embed's title",
+									  _("Blank page"),
+									  G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
 		initialized = TRUE;
 	}
 
@@ -694,7 +701,7 @@ ephy_embed_get_link_message (EphyEmbed *embed)
  * Note that Epiphany does not display JavaScript statusbar messages.
  *
  * Return value: a message from JavaScript meant to be displayed in the
- *               statusbar
+ *		 statusbar
  **/
 char *
 ephy_embed_get_js_status (EphyEmbed *embed)
@@ -1104,20 +1111,6 @@ ephy_embed_get_load_percent (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_set_load_percent:
- * @embed: an #EphyEmbed
- * @percent: a percentage, from 0 to 100.
- *
- * Sets the load percentage.
- **/
-void
-ephy_embed_set_load_percent (EphyEmbed *embed, int percent)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->set_load_percent (embed, percent);
-}
-
-/**
  * ephy_embed_get_load_status:
  * @embed: an #EphyEmbed
  *
@@ -1134,13 +1127,6 @@ ephy_embed_get_load_status (EphyEmbed *embed)
 	return iface->get_load_status (embed);
 }
 
-void
-ephy_embed_set_load_status (EphyEmbed *embed, gboolean status)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->set_load_status (embed, status);
-}
-
 /**
  * ephy_embed_get_navigation_flags:
  * @embed: an #EphyEmbed
@@ -1154,13 +1140,6 @@ ephy_embed_get_navigation_flags (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	return iface->get_navigation_flags (embed);
-}
-
-void
-ephy_embed_update_navigation_flags (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->update_navigation_flags (embed);
 }
 
 /**
@@ -1195,8 +1174,8 @@ ephy_embed_get_typed_address (EphyEmbed *embed)
  **/
 void
 ephy_embed_set_typed_address (EphyEmbed *embed,
-                              const char *address,
-                              EphyEmbedAddressExpire expire)
+			      const char *address,
+			      EphyEmbedAddressExpire expire)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	return iface->set_typed_address (embed, address, expire);
@@ -1215,13 +1194,5 @@ ephy_embed_get_address (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	return iface->get_address (embed);
-}
-
-void
-ephy_embed_set_address (EphyEmbed *embed,
-                        char *address)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->set_address (embed, address);
 }
 
