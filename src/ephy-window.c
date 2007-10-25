@@ -1710,7 +1710,7 @@ sync_tab_title (EphyTab *tab,
 	if (priv->closing) return;
 
 	gtk_window_set_title (GTK_WINDOW(window),
-			      ephy_tab_get_title_composite (tab));
+			      ephy_embed_get_title_composite (ephy_tab_get_embed (tab)));
 }
 
 static void

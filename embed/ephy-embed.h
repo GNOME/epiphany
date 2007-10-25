@@ -196,7 +196,7 @@ struct _EphyEmbedIface
 	void		   (* go_forward)		(EphyEmbed *embed);
 	void		   (* go_up)			(EphyEmbed *embed);
 
-	char *		   (* get_title)		(EphyEmbed *embed);
+	const char *       (* get_title)		(EphyEmbed *embed);
 	char *		   (* get_location)		(EphyEmbed *embed,
 							 gboolean toplevel);
 	char *		   (* get_link_message)		(EphyEmbed *embed);
@@ -278,7 +278,7 @@ void		  ephy_embed_stop_load			(EphyEmbed *embed);
 void		  ephy_embed_reload			(EphyEmbed *embed,
 							 gboolean force);
 
-char		 *ephy_embed_get_title			(EphyEmbed *embed);
+const char	 *ephy_embed_get_title			(EphyEmbed *embed);
 
 char		 *ephy_embed_get_location		(EphyEmbed *embed,
 							 gboolean toplevel);

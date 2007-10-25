@@ -1009,7 +1009,7 @@
 (define-method get_title
   (of-object "EphyEmbed")
   (c-name "ephy_embed_get_title")
-  (return-type "char*")
+  (return-type "const char*")
 )
 
 (define-method get_location
@@ -3405,12 +3405,6 @@
 (define-method get_status_message
   (of-object "EphyTab")
   (c-name "ephy_tab_get_status_message")
-  (return-type "const-char*")
-)
-
-(define-method get_title
-  (of-object "EphyTab")
-  (c-name "ephy_tab_get_title")
   (return-type "const-char*")
 )
 

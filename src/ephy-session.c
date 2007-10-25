@@ -1073,7 +1073,7 @@ write_tab (xmlTextWriterPtr writer,
 					   (const xmlChar *) address);
 	if (ret < 0) return ret;
 
-	title = ephy_tab_get_title (tab);
+	title = ephy_embed_get_title (ephy_tab_get_embed (tab));
 	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "title",
 					   (const xmlChar *) title);
 	if (ret < 0) return ret;

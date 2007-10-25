@@ -622,10 +622,10 @@ impl_go_up (EphyEmbed *embed)
 	ephy_embed_load_url (embed, parent_uri.get ());
 }
 
-static char *
+static const char *
 impl_get_title (EphyEmbed *embed)
 {
-	return gtk_moz_embed_get_title (GTK_MOZ_EMBED (embed));
+        return MOZILLA_EMBED (embed)->priv->title;
 }
 
 static char *

@@ -563,7 +563,7 @@ sync_label (EphyTab *tab, GParamSpec *pspec, GtkWidget *label)
 {
 	const char *title;
 
-	title = ephy_tab_get_title (tab);
+	title = ephy_tab_get_title (ephy_tab_get_embed (tab));
 
 	gtk_label_set_text (GTK_LABEL (label), title);
 

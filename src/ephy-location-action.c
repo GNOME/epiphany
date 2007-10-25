@@ -299,7 +299,7 @@ get_title_cb (EphyLocationEntry *entry,
 
 	tab = ephy_window_get_active_tab (action->priv->window);
 
-	return g_strdup (ephy_tab_get_title (tab));
+	return g_strdup (ephy_embed_get_title (ephy_tab_get_embed (tab)));
 }
 
 static void

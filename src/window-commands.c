@@ -128,7 +128,7 @@ window_cmd_file_send_to	(GtkAction *action,
 	g_return_if_fail (embed != NULL);
 
 	location = gnome_vfs_escape_string (ephy_tab_get_address (tab));
-	title = gnome_vfs_escape_string (ephy_tab_get_title (tab));
+	title = gnome_vfs_escape_string (ephy_embed_get_title (embed));
 
 	url = g_strconcat ("mailto:",
                            "?Subject=", title,

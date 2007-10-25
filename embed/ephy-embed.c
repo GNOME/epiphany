@@ -647,7 +647,7 @@ ephy_embed_go_up (EphyEmbed *embed)
  *
  * Return value: the title of the web page displayed in @embed
  **/
-char *
+const char *
 ephy_embed_get_title (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);

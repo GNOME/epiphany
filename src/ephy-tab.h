@@ -85,8 +85,6 @@ void			ephy_tab_set_size		(EphyTab *tab,
 
 const char             *ephy_tab_get_status_message	(EphyTab *tab);
 
-const char             *ephy_tab_get_title		(EphyTab *tab);
-
 const char             *ephy_tab_get_title_composite	(EphyTab *tab);
 
 /* private */
