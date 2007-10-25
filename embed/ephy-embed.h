@@ -254,6 +254,8 @@ struct _EphyEmbedIface
         const char *       (* get_status_message)       (EphyEmbed *embed);
         GdkPixbuf *        (* get_icon)                 (EphyEmbed *embed);
         const char *       (* get_icon_address)         (EphyEmbed *embed);
+        gboolean           (* get_is_blank)             (EphyEmbed *embed);
+        const char *       (* get_loading_title)        (EphyEmbed *embed);
 };
 
 GType		  ephy_embed_net_state_get_type		(void);
@@ -285,7 +287,6 @@ const char	 *ephy_embed_get_title			(EphyEmbed *embed);
 
 char		 *ephy_embed_get_location		(EphyEmbed *embed,
 							 gboolean toplevel);
-
 const char	 *ephy_embed_get_link_message		(EphyEmbed *embed);
 
 char		 *ephy_embed_get_js_status		(EphyEmbed *embed);
@@ -374,6 +375,11 @@ const char *       ephy_embed_get_status_message        (EphyEmbed *embed);
 
 GdkPixbuf *        ephy_embed_get_icon                  (EphyEmbed *embed);
 const char *       ephy_embed_get_icon_address          (EphyEmbed *embed);
+
+/* Is blank */
+gboolean          ephy_embed_get_is_blank               (EphyEmbed *embed);
+
+const char *     ephy_embed_get_loading_title           (EphyEmbed *embed);
 
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);

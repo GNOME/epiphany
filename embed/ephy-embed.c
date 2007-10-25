@@ -1273,3 +1273,24 @@ ephy_embed_get_icon_address (EphyEmbed *embed)
 	return iface->get_icon_address (embed);
 }
 
+/**
+ * ephy_embed_get_is_blank:
+ * @embed: an #EphyEmbed
+ *
+ * Returns whether the  @embed's address is "blank".
+ *
+ * Return value: %TRUE if the @embed's address is "blank"
+ **/
+gboolean
+ephy_embed_get_is_blank (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_is_blank (embed);
+}
+
+const char *
+ephy_embed_get_loading_title (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_loading_title (embed);
+}

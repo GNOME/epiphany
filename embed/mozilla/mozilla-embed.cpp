@@ -105,6 +105,9 @@ static void mozilla_embed_set_icon_address      (MozillaEmbed *embed,
 static void mozilla_embed_favicon_cb            (EphyEmbed *embed,
                                                  const char *address,
                                                  MozillaEmbed *membed);
+static gboolean mozilla_embed_open_uri_cb       (EphyEmbed *embed,
+                                                 const char *uri,
+                                                 MozillaEmbed *membed);
 static void impl_set_typed_address		(EphyEmbed *embed,
 						 const char *address,
 						 EphyEmbedAddressExpire expire);
@@ -439,6 +442,9 @@ mozilla_embed_init (MozillaEmbed *embed)
 	g_signal_connect_object (embed, "ge_favicon",
 				 G_CALLBACK (mozilla_embed_favicon_cb),
 				 embed, (GConnectFlags)0);
+	g_signal_connect_object (embed, "open_uri",
+				 G_CALLBACK (mozilla_embed_open_uri_cb),
+				 embed,(GConnectFlags) 0);
 
 	cache = EPHY_FAVICON_CACHE
 		(ephy_embed_shell_get_favicon_cache (embed_shell));
@@ -1193,6 +1199,22 @@ impl_get_link_message (EphyEmbed *embed)
         MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
 
         return priv->link_message;
+}
+
+static gboolean
+impl_get_is_blank (EphyEmbed *embed)
+{
+        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+
+        return priv->is_blank;
+}
+
+static const char*
+impl_get_loading_title (EphyEmbed *embed)
+{
+        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+
+        return priv->loading_title;
 }
 
 static void
@@ -2224,6 +2246,26 @@ mozilla_embed_title_change_cb       (EphyEmbed *embed,
 	g_object_thaw_notify (object);
 }
 
+static gboolean
+mozilla_embed_open_uri_cb (EphyEmbed *embed,
+                           const char *uri,
+                           MozillaEmbed *membed)
+{
+	MozillaEmbedPrivate *priv = membed->priv;
+
+	/* Set the address here if we have a blank page.
+	 * See bug #147840.
+	 */
+	if (priv->is_blank)
+	{
+		mozilla_embed_set_address (membed, g_strdup (uri));
+		mozilla_embed_set_loading_title (membed, uri, TRUE);
+	}
+
+	/* allow load to proceed */
+	return FALSE;
+}
+
 static EphyEmbedSecurityLevel
 mozilla_embed_security_level (PRUint32 state)
 {
@@ -2303,6 +2345,8 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->set_typed_address = impl_set_typed_address;
 	iface->get_address = impl_get_address;
         iface->get_status_message = impl_get_status_message;
+        iface->get_is_blank = impl_get_is_blank;
+        iface->get_loading_title = impl_get_loading_title;
 }
 
 static void

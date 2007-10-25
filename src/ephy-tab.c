@@ -801,26 +801,6 @@ ephy_tab_set_size (EphyTab *tab,
 
 /* Private callbacks for embed signals */
 
-static gboolean
-ephy_tab_open_uri_cb (EphyEmbed *embed,
-		      const char *uri,
-		      EphyTab *tab)
-{
-	EphyTabPrivate *priv = tab->priv;
-
-	/* Set the address here if we have a blank page.
-	 * See bug #147840.
-	 */
-	if (priv->is_blank)
-	{
-		ephy_embed_set_address (embed, g_strdup (uri));
-		ephy_embed_set_loading_title (embed, uri, TRUE);
-	}
-
-	/* allow load to proceed */
-	return FALSE;
-}
-
 static void
 ephy_tab_content_change_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 {
@@ -1072,9 +1052,6 @@ ephy_tab_init (EphyTab *tab)
 	gtk_container_add (GTK_CONTAINER (tab), GTK_WIDGET (embed));
 	gtk_widget_show (GTK_WIDGET (embed));
 
-	g_signal_connect_object (embed, "open_uri",
-				 G_CALLBACK (ephy_tab_open_uri_cb),
-				 tab, 0);
 	g_signal_connect_object (embed, "ge_new_window",
 				 G_CALLBACK (ephy_tab_new_window_cb),
 				 tab, 0);
@@ -1087,47 +1064,6 @@ ephy_tab_init (EphyTab *tab)
 	g_signal_connect_object (embed, "ge_content_change",
 				 G_CALLBACK (ephy_tab_content_change_cb),
 				 tab, 0);
-}
-
-/**
- * ephy_tab_get_title_composite:
- * @tab: an #EphyTab
- *
- * Returns the title of the web page loaded in @tab.
- * 
- * This differs from #ephy_tab_get_title in that this function
- * will return a special title while the page is still loading.
- *
- * Return value: @tab's web page's title. Will never be %NULL.
- **/
-const char *
-ephy_tab_get_title_composite (EphyTab *tab)
-{
-	EphyTabPrivate *priv;
-	const char *title = "";
-	gboolean is_loading;
-
-	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
-
-	priv = tab->priv;
-
-	is_loading = ephy_embed_get_load_status (ephy_tab_get_embed (tab));
-
-	if (priv->is_blank)
-	{
-		title = _("Blank page");
-	}
-	else if (is_loading &&
-		 priv->loading_title != NULL)
-	{
-		title = priv->loading_title;
-	}
-	else
-	{
-		title = priv->title;
-	}
-
-	return title != NULL ? title : "";
 }
 
 /* private */
