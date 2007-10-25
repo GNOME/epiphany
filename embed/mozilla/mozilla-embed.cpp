@@ -83,6 +83,9 @@ static void mozilla_embed_document_type_cb	(EphyEmbed *embed,
 static void mozilla_embed_zoom_change_cb	(EphyEmbed *embed,
 						 float zoom,
 						 MozillaEmbed *membed);
+static void impl_set_typed_address		(EphyEmbed *embed,
+						 const char *address,
+						 EphyEmbedAddressExpire expire);
 
 static EphyEmbedSecurityLevel mozilla_embed_security_level (PRUint32 state);
 
@@ -101,6 +104,8 @@ struct MozillaEmbedPrivate
 	EphyBrowser *browser;
 	MozillaEmbedLoadState load_state;
 
+	EphyEmbedAddressExpire address_expire;
+	/* guint address_expire : 2; ? */
 	EphyEmbedSecurityLevel security_level;
 	/* guint security_level : 3; ? */
 	EphyEmbedDocumentType document_type;
@@ -112,6 +117,8 @@ struct MozillaEmbedPrivate
 	guint is_setting_zoom : 1;
 
 	gint8 load_percent;
+	char *address;
+	char *typed_address;
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
@@ -119,11 +126,13 @@ struct MozillaEmbedPrivate
 enum
 {
 	PROP_0,
+	PROP_ADDRESS,
 	PROP_DOCUMENT_TYPE,
 	PROP_LOAD_PROGRESS,
 	PROP_LOAD_STATUS,
 	PROP_NAVIGATION,
 	PROP_SECURITY,
+	PROP_TYPED_ADDRESS,
 	PROP_ZOOM
 };
 
@@ -228,6 +237,9 @@ mozilla_embed_get_property (GObject *object,
 	
 	switch (prop_id)
 	{
+        case PROP_ADDRESS:
+                g_value_set_string (value, priv->address);
+                break;
 	case PROP_DOCUMENT_TYPE:
 		g_value_set_enum (value, priv->document_type);
 		break;
@@ -246,6 +258,9 @@ mozilla_embed_get_property (GObject *object,
 	case PROP_NAVIGATION:
 		g_value_set_flags (value, priv->nav_flags);
 		break;
+	case PROP_TYPED_ADDRESS:
+		g_value_set_string (value, priv->typed_address);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -261,6 +276,11 @@ mozilla_embed_set_property (GObject *object,
 {
 	switch (prop_id)
 	{
+	case PROP_TYPED_ADDRESS:
+		impl_set_typed_address (EPHY_EMBED (object), g_value_get_string (value),
+					EPHY_EMBED_ADDRESS_EXPIRE_NOW);
+		break;
+        case PROP_ADDRESS:
 	case PROP_DOCUMENT_TYPE:
 	case PROP_LOAD_PROGRESS:
 	case PROP_LOAD_STATUS:
@@ -307,8 +327,9 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 static void
 mozilla_embed_init (MozillaEmbed *embed)
 {
-	embed->priv = MOZILLA_EMBED_GET_PRIVATE (embed);
-	embed->priv->browser = new EphyBrowser ();
+	MozillaEmbedPrivate *priv = embed->priv;
+	priv = MOZILLA_EMBED_GET_PRIVATE (embed);
+	priv->browser = new EphyBrowser ();
 
 	g_signal_connect_object (embed, "location",
 				 G_CALLBACK (mozilla_embed_location_changed_cb),
@@ -338,12 +359,14 @@ mozilla_embed_init (MozillaEmbed *embed)
 				 G_CALLBACK (mozilla_embed_zoom_change_cb),
 				 embed, (GConnectFlags) 0);
 
-	embed->priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
-	embed->priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
-	embed->priv->zoom = 1.0;
-	embed->priv->is_setting_zoom = FALSE;
-	embed->priv->load_percent = 0;
-	embed->priv->is_loading = FALSE;
+	priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
+	priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
+	priv->zoom = 1.0;
+	priv->is_setting_zoom = FALSE;
+	priv->load_percent = 0;
+	priv->is_loading = FALSE;
+	priv->typed_address = NULL;
+	priv->address_expire = EPHY_EMBED_ADDRESS_EXPIRE_NOW;
 }
 
 gpointer
@@ -377,6 +400,9 @@ mozilla_embed_finalize (GObject *object)
 		delete embed->priv->browser;
 		embed->priv->browser = nsnull;
 	}
+
+	g_free (embed->priv->address);
+	g_free (embed->priv->typed_address);
 
 	G_OBJECT_CLASS (mozilla_embed_parent_class)->finalize (object);
 
@@ -1003,6 +1029,70 @@ impl_get_navigation_flags (EphyEmbed *embed)
 	return priv->nav_flags;
 }
 
+static const char*
+impl_get_typed_address (EphyEmbed *embed)
+{
+	return MOZILLA_EMBED (embed)->priv->typed_address;
+}
+
+static void
+impl_set_typed_address (EphyEmbed *embed,
+			const char *address,
+			EphyEmbedAddressExpire expire)
+{
+       MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+ 
+       g_free (priv->typed_address);
+       priv->typed_address = g_strdup (address);
+
+       if (expire == EPHY_EMBED_ADDRESS_EXPIRE_CURRENT &&
+	   !priv->is_loading)
+       {
+	       priv->address_expire = EPHY_EMBED_ADDRESS_EXPIRE_NOW;
+       }
+       else
+       {
+	       priv->address_expire = expire;
+       }
+
+       g_object_notify (G_OBJECT (embed), "typed-address");
+}
+
+static const char*
+impl_get_address (EphyEmbed *embed)
+{
+        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+  
+	return priv->address ? priv->address : "about:blank";
+}
+
+static void
+impl_set_address (EphyEmbed *embed, char *address)
+{
+        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+	GObject *object = G_OBJECT (embed);
+	
+	g_free (priv->address);
+	priv->address = address;
+
+#if 0
+	priv->is_blank = address == NULL ||
+			 strcmp (address, "about:blank") == 0;
+#endif
+
+	if (priv->is_loading &&
+	    priv->address_expire == EPHY_EMBED_ADDRESS_EXPIRE_NOW &&
+	    priv->typed_address != NULL)
+	{
+		g_free (priv->typed_address);
+		priv->typed_address = NULL;
+
+		g_object_notify (object, "typed-address");
+	}
+
+	g_object_notify (object, "address");
+}
+
 static void
 mozilla_embed_location_changed_cb (GtkMozEmbed *embed, 
 				   MozillaEmbed *membed)
@@ -1466,6 +1556,10 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->set_load_status = impl_set_load_status;
 	iface->update_navigation_flags = impl_update_navigation_flags;
 	iface->get_navigation_flags = impl_get_navigation_flags;
+	iface->get_typed_address = impl_get_typed_address;
+	iface->set_typed_address = impl_set_typed_address;
+	iface->get_address = impl_get_address;
+	iface->set_address = impl_set_address;
 }
 
 static void

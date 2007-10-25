@@ -437,14 +437,14 @@
   )
 )
 
-(define-enum TabAddressExpire
+(define-enum EmbedAddressExpire
   (in-module "Ephy")
-  (c-name "EphyTabAddressExpire")
-  (gtype-id "EPHY_TYPE_TAB_ADDRESS_EXPIRE")
+  (c-name "EphyEmbedAddressExpire")
+  (gtype-id "EPHY_TYPE_EMBED_ADDRESS_EXPIRE")
   (values
-    '("now" "EPHY_TAB_ADDRESS_EXPIRE_NOW")
-    '("next" "EPHY_TAB_ADDRESS_EXPIRE_NEXT")
-    '("current" "EPHY_TAB_ADDRESS_EXPIRE_CURRENT")
+    '("now" "EPHY_EMBED_ADDRESS_EXPIRE_NOW")
+    '("next" "EPHY_EMBED_ADDRESS_EXPIRE_NEXT")
+    '("current" "EPHY_EMBED_ADDRESS_EXPIRE_CURRENT")
   )
 )
 
@@ -944,6 +944,11 @@
 
 (define-function ephy_embed_navigation_flags_get_type
   (c-name "ephy_embed_navigation_flags_get_type")
+  (return-type "GType")
+)
+
+(define-function ephy_embed_address_expire_get_type
+  (c-name "ephy_embed_address_expire_get_type")
   (return-type "GType")
 )
 
@@ -3368,12 +3373,12 @@
 )
 
 (define-method set_typed_address
-  (of-object "EphyTab")
-  (c-name "ephy_tab_set_typed_address")
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_set_typed_address")
   (return-type "none")
   (parameters
     '("const-char*" "address")
-    '("EphyTabAddressExpire" "expire")
+    '("EphyEmbedAddressExpire" "expire")
   )
 )
 
@@ -3529,11 +3534,6 @@
 
 (define-function ephy_new_tab_flags_get_type
   (c-name "ephy_new_tab_flags_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_tab_address_expire_get_type
-  (c-name "ephy_tab_address_expire_get_type")
   (return-type "GType")
 )
 

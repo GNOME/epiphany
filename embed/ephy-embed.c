@@ -467,7 +467,18 @@ ephy_embed_base_init (gpointer g_class)
                                                                          EPHY_TYPE_EMBED_NAVIGATION_FLAGS,
                                                                          0,
                                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
+                g_object_interface_install_property (g_class,
+                                                     g_param_spec_string ("address",
+                                                                          "Address",
+                                                                          "The embed's address",
+                                                                          "",
+                                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                g_object_interface_install_property (g_class,
+                                                     g_param_spec_string ("typed-address",
+                                                                          "Typed Address",
+                                                                          "The typed address",
+                                                                          "",
+                                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 		initialized = TRUE;
 	}
 
@@ -1150,5 +1161,67 @@ ephy_embed_update_navigation_flags (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	return iface->update_navigation_flags (embed);
+}
+
+/**
+ * ephy_embed_get_typed_address:
+ * @embed: an #EphyEmbed
+ *
+ * Returns the text that @embed's #EphyWindow will display in its location toolbar
+ * entry when @embed is selected.
+ *
+ * This is not guaranteed to be the same as @embed's location,
+ * available through ephy_embed_get_location(). As the user types a new address
+ * into the location entry, ephy_embed_get_location()'s returned string will
+ * change.
+ *
+ * Return value: @embed's #EphyWindow's location entry when @embed is selected
+ **/
+const char *
+ephy_embed_get_typed_address (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_typed_address (embed);
+}
+
+/**
+ * ephy_embed_set_typed_address:
+ * @embed: an #EphyEmbed
+ * @address: the new typed address, or %NULL to clear it
+ * @expire: when to expire this address_expire
+ * 
+ * Sets the text that @embed's #EphyWindow will display in its location toolbar
+ * entry when @embed is selected.
+ **/
+void
+ephy_embed_set_typed_address (EphyEmbed *embed,
+                              const char *address,
+                              EphyEmbedAddressExpire expire)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->set_typed_address (embed, address, expire);
+}
+
+/**
+ * ephy_embed_get_address:
+ * @embed: an #EphyEmbed
+ *
+ * Returns the address of the currently loaded page.
+ *
+ * Return value: @embed's address. Will never be %NULL.
+ **/
+const char *
+ephy_embed_get_address (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_address (embed);
+}
+
+void
+ephy_embed_set_address (EphyEmbed *embed,
+                        char *address)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->set_address (embed, address);
 }
 

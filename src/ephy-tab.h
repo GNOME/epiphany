@@ -40,13 +40,6 @@ typedef struct _EphyTabClass	EphyTabClass;
 typedef struct _EphyTab		EphyTab;
 typedef struct _EphyTabPrivate	EphyTabPrivate;
 
-typedef enum
-{
-	EPHY_TAB_ADDRESS_EXPIRE_NOW,
-	EPHY_TAB_ADDRESS_EXPIRE_NEXT,
-	EPHY_TAB_ADDRESS_EXPIRE_CURRENT
-} EphyTabAddressExpire;
-
 struct _EphyTab
 {
 	GtkBin parent;
@@ -80,17 +73,7 @@ gboolean		ephy_tab_get_load_status	(EphyTab *tab);
 const char             *ephy_tab_get_link_message	(EphyTab *tab);
 
 
-int			ephy_tab_get_load_percent	(EphyTab *tab);
-
 const char             *ephy_tab_get_address		(EphyTab *tab);
-
-const char	       *ephy_tab_get_typed_address	(EphyTab *tab);
-
-void			ephy_tab_set_typed_address	(EphyTab *tab,
-							 const char *address,
-							 EphyTabAddressExpire expire);
-
-EphyEmbedSecurityLevel	ephy_tab_get_security_level	(EphyTab *tab);
 
 void			ephy_tab_get_size		(EphyTab *tab,
 							 int *width,
@@ -105,8 +88,6 @@ const char             *ephy_tab_get_status_message	(EphyTab *tab);
 const char             *ephy_tab_get_title		(EphyTab *tab);
 
 const char             *ephy_tab_get_title_composite	(EphyTab *tab);
-
-float			ephy_tab_get_zoom		(EphyTab *tab);
 
 /* private */
 guint		       _ephy_tab_get_id			(EphyTab *tab);

@@ -83,8 +83,6 @@ struct _EphyTabPrivate
 
 	char *status_message;
 	char *link_message;
-	char *address;
-	char *typed_address;
 	char *title;
 	char *loading_title;
 	char *icon_address;
@@ -99,8 +97,6 @@ struct _EphyTabPrivate
 
 	/* Flags */
 	guint is_blank : 1;
-	EphyTabAddressExpire address_expire;
-	/* guint address_expire : 2; ? */
 
 	/* File watch */
 	GnomeVFSMonitorHandle *monitor;
@@ -116,14 +112,12 @@ static void ephy_tab_finalize		(GObject *object);
 enum
 {
 	PROP_0,
-	PROP_ADDRESS,
 	PROP_ICON,
 	PROP_ICON_ADDRESS,
 	PROP_MESSAGE,
 	PROP_HIDDEN_POPUP_COUNT,
 	PROP_POPUPS_ALLOWED,
-	PROP_TITLE,
-	PROP_TYPED_ADDRESS
+	PROP_TITLE
 };
 
 typedef struct
@@ -207,17 +201,12 @@ ephy_tab_set_property (GObject *object,
 	switch (prop_id)
 
 	{
-		case PROP_TYPED_ADDRESS:
-			ephy_tab_set_typed_address (tab, g_value_get_string (value),
-						    EPHY_TAB_ADDRESS_EXPIRE_NOW);
-			break;
 		case PROP_POPUPS_ALLOWED:
 			ephy_tab_set_popups_allowed (tab, g_value_get_boolean (value));
 			break;
 		case PROP_ICON_ADDRESS:
 			ephy_tab_set_icon_address (tab, g_value_get_string (value));
 			break;
-		case PROP_ADDRESS:
 		case PROP_ICON:
 		case PROP_MESSAGE:
 		case PROP_HIDDEN_POPUP_COUNT:
@@ -238,9 +227,6 @@ ephy_tab_get_property (GObject *object,
 
 	switch (prop_id)
 	{
-		case PROP_ADDRESS:
-			g_value_set_string (value, priv->address);
-			break;
 		case PROP_ICON:
 			g_value_set_object (value, priv->icon);
 			break;
@@ -259,9 +245,6 @@ ephy_tab_get_property (GObject *object,
 			break;
 		case PROP_TITLE:
 			g_value_set_string (value, priv->title);
-			break;
-		case PROP_TYPED_ADDRESS:
-			g_value_set_string (value, ephy_tab_get_typed_address (tab));
 			break;
 	}
 }
@@ -356,14 +339,6 @@ ephy_tab_class_init (EphyTabClass *class)
 	widget_class->grab_focus = ephy_tab_grab_focus;
 
 	g_object_class_install_property (object_class,
-					 PROP_ADDRESS,
-					 g_param_spec_string ("address",
-							      "Address",
-							      "The tab's address",
-							      "",
-							      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	g_object_class_install_property (object_class,
 					 PROP_ICON,
 					 g_param_spec_object ("icon",
 							      "Icon",
@@ -412,14 +387,6 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "The tab's title",
 							      _("Blank page"),
 							      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	g_object_class_install_property (object_class,
-					 PROP_TYPED_ADDRESS,
-					 g_param_spec_string ("typed-address",
-							      "Typed Address",
-							      "The typed address",
-							      "",
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof (EphyTabPrivate));
 }
@@ -744,8 +711,6 @@ ephy_tab_finalize (GObject *object)
 
 	g_free (priv->title);
 	g_free (priv->loading_title);
-	g_free (priv->address);
-	g_free (priv->typed_address);
 	g_free (priv->icon_address);
 	g_free (priv->link_message);
 	g_free (priv->status_message);
@@ -847,36 +812,6 @@ ephy_tab_set_loading_title (EphyTab *tab,
 	}
 
 	g_free (freeme);
-}
-
-/* consumes |address| */
-static void
-ephy_tab_set_address (EphyTab *tab,
-		      char *address)
-{
-	EphyTabPrivate *priv = tab->priv;
-	GObject *object = G_OBJECT (tab);
-	gboolean is_loading;
-
-	g_free (priv->address);
-	priv->address = address;
-
-	priv->is_blank = address == NULL ||
-			 strcmp (address, "about:blank") == 0;
-
-	is_loading = ephy_embed_get_load_status (ephy_tab_get_embed (tab));
-
-	if (is_loading &&
-	    priv->address_expire == EPHY_TAB_ADDRESS_EXPIRE_NOW &&
-	    priv->typed_address != NULL)
-	{
-		g_free (priv->typed_address);
-		priv->typed_address = NULL;
-
-		g_object_notify (object, "typed-address");
-	}
-
-	g_object_notify (object, "address");
 }
 
 /* Public functions */
@@ -1198,12 +1133,12 @@ ephy_file_monitor_reload_cb (EphyTab *tab)
 		return TRUE;
 	}
 
-	LOG ("Reloading file '%s'", priv->address);
-
 	priv->reload_scheduled_id = 0;
 
 	embed = ephy_tab_get_embed (tab);
 	if (embed == NULL) return FALSE;
+
+	LOG ("Reloading file '%s'", ephy_embed_get_address (embed));
 
 	ephy_embed_reload (embed, TRUE);
 
@@ -1883,10 +1818,8 @@ ephy_tab_init (EphyTab *tab)
 	priv->icon_address = NULL;
 	priv->icon = NULL;
 	priv->address = NULL;
-	priv->typed_address = NULL;
 	priv->title = NULL;
 	priv->loading_title = NULL;
-	priv->address_expire = EPHY_TAB_ADDRESS_EXPIRE_NOW;
 	priv->reload_delay_ticks = 0;
 
 	embed = ephy_embed_factory_new_object (EPHY_TYPE_EMBED);
@@ -2071,87 +2004,6 @@ ephy_tab_get_title (EphyTab *tab)
 	}
 
 	return title != NULL ? title : "";
-}
-
-/**
- * ephy_tab_get_address:
- * @tab: an #EphyTab
- *
- * Returns the address of the currently loaded page.
- *
- * Return value: @tab's address. Will never be %NULL.
- **/
-const char *
-ephy_tab_get_address (EphyTab *tab)
-{
-	EphyTabPrivate *priv;
-
-	g_return_val_if_fail (EPHY_IS_TAB (tab), "");
-
-	priv = tab->priv;
-
-	return priv->address ? priv->address : "about:blank";
-}
-
-/**
- * ephy_tab_get_typed_address:
- * @tab: an #EphyTab
- *
- * Returns the text that @tab's #EphyWindow will display in its location toolbar
- * entry when @tab is selected.
- *
- * This is not guaranteed to be the same as @tab's #EphyEmbed's location,
- * available through ephy_embed_get_location(). As the user types a new address
- * into the location entry, ephy_tab_get_location()'s returned string will
- * change.
- *
- * Return value: @tab's #EphyWindow's location entry when @tab is selected
- **/
-const char *
-ephy_tab_get_typed_address (EphyTab *tab)
-{
-	EphyTabPrivate *priv;
-
-	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
-
-	priv = tab->priv;
-
-	return priv->typed_address;
-}
-
-/**
- * ephy_tab_set_typed_address:
- * @tab: an #EphyTab
- * @address: the new typed address, or %NULL to clear it
- * @expire: when to expire this address_expire
- * 
- * Sets the text that @tab's #EphyWindow will display in its location toolbar
- * entry when @tab is selected.
- **/
-void
-ephy_tab_set_typed_address (EphyTab *tab,
-			    const char *address,
-			    EphyTabAddressExpire expire)
-{
-	EphyTabPrivate *priv = tab->priv;
-	gboolean is_loading;
-
-	g_free (priv->typed_address);
-	priv->typed_address = g_strdup (address);
-
-	is_loading = ephy_embed_get_load_status (ephy_tab_get_embed (tab));
-
-	if (expire == EPHY_TAB_ADDRESS_EXPIRE_CURRENT &&
-	    !is_loading)
-	{
-		priv->address_expire = EPHY_TAB_ADDRESS_EXPIRE_NOW;
-	}
-	else
-	{
-		priv->address_expire = expire;
-	}
-
-	g_object_notify (G_OBJECT (tab), "typed-address");
 }
 
 /* private */

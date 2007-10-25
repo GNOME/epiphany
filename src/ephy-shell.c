@@ -533,8 +533,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
 	    flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
-		ephy_tab_set_typed_address (tab, "",
-					    EPHY_TAB_ADDRESS_EXPIRE_NEXT);
+		ephy_embed_set_typed_address (embed, "",
+                                              EPHY_EMBED_ADDRESS_EXPIRE_NEXT);
 		ephy_toolbar_activate_location (toolbar);
 		is_empty = load_homepage (embed);
 	}

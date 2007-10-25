@@ -108,6 +108,13 @@ typedef enum
 	EPHY_EMBED_NAV_FORWARD	= 1 << 2
 } EphyEmbedNavigationFlags;
 
+typedef enum
+{
+	EPHY_EMBED_ADDRESS_EXPIRE_NOW,
+	EPHY_EMBED_ADDRESS_EXPIRE_NEXT,
+	EPHY_EMBED_ADDRESS_EXPIRE_CURRENT
+} EphyEmbedAddressExpire;
+
 struct _EphyEmbedIface
 {
 	GTypeInterface base_iface;
@@ -242,6 +249,12 @@ struct _EphyEmbedIface
 	void		   (* set_load_status)		(EphyEmbed *embed, gboolean percent);
 	void		   (* update_navigation_flags)	(EphyEmbed *embed);
 	EphyEmbedNavigationFlags (* get_navigation_flags) (EphyEmbed *embed);
+	const char *	   (* get_typed_address)	(EphyEmbed *embed);
+	void		   (* set_typed_address)	(EphyEmbed *embed,
+							 const char *address,
+							 EphyEmbedAddressExpire expire);
+        const char *       (* get_address)              (EphyEmbed *embed);
+        void               (* set_address)              (EphyEmbed *embed, char *address);
 };
 
 GType		  ephy_embed_net_state_get_type		(void);
@@ -349,6 +362,15 @@ void		 ephy_embed_set_load_status		(EphyEmbed *embed, gboolean status); /* FIXME
 
 void		 ephy_embed_update_navigation_flags	(EphyEmbed *embed); /* FIXME: remove me */
 EphyEmbedNavigationFlags ephy_embed_get_navigation_flags (EphyEmbed *embed);
+
+/* Typed address */
+const char	 *ephy_embed_get_typed_address		(EphyEmbed *embed);
+void		 ephy_embed_set_typed_address		(EphyEmbed *embed,
+							 const char *address,
+							 EphyEmbedAddressExpire expire);
+/* Address */
+const char *     ephy_embed_get_address                 (EphyEmbed *embed);
+void             ephy_embed_set_address                 (EphyEmbed *embed, char *address); /* FIXME: remove me */
 
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);
