@@ -196,7 +196,7 @@ struct _EphyEmbedIface
 	void		   (* go_forward)		(EphyEmbed *embed);
 	void		   (* go_up)			(EphyEmbed *embed);
 
-	const char *       (* get_title)		(EphyEmbed *embed);
+	const char *	   (* get_title)		(EphyEmbed *embed);
 	char *		   (* get_location)		(EphyEmbed *embed,
 							 gboolean toplevel);
 	const char *	   (* get_link_message)		(EphyEmbed *embed);
@@ -251,11 +251,11 @@ struct _EphyEmbedIface
 							 const char *address,
 							 EphyEmbedAddressExpire expire);
 	const char *	   (* get_address)		(EphyEmbed *embed);
-        const char *       (* get_status_message)       (EphyEmbed *embed);
-        GdkPixbuf *        (* get_icon)                 (EphyEmbed *embed);
-        const char *       (* get_icon_address)         (EphyEmbed *embed);
-        gboolean           (* get_is_blank)             (EphyEmbed *embed);
-        const char *       (* get_loading_title)        (EphyEmbed *embed);
+	const char *	   (* get_status_message)	(EphyEmbed *embed);
+	GdkPixbuf *	   (* get_icon)			(EphyEmbed *embed);
+	const char *	   (* get_icon_address)		(EphyEmbed *embed);
+	gboolean	   (* get_is_blank)		(EphyEmbed *embed);
+	const char *	   (* get_loading_title)	(EphyEmbed *embed);
 };
 
 GType		  ephy_embed_net_state_get_type		(void);
@@ -369,17 +369,17 @@ void		 ephy_embed_set_typed_address		(EphyEmbed *embed,
 const char *	 ephy_embed_get_address			(EphyEmbed *embed);
 
 /* Status messages */
-const char *       ephy_embed_get_status_message        (EphyEmbed *embed);
+const char *	   ephy_embed_get_status_message	(EphyEmbed *embed);
 
 /* Icon and Icon Address */
 
-GdkPixbuf *        ephy_embed_get_icon                  (EphyEmbed *embed);
-const char *       ephy_embed_get_icon_address          (EphyEmbed *embed);
+GdkPixbuf *	   ephy_embed_get_icon			(EphyEmbed *embed);
+const char *	   ephy_embed_get_icon_address		(EphyEmbed *embed);
 
 /* Is blank */
-gboolean          ephy_embed_get_is_blank               (EphyEmbed *embed);
+gboolean	  ephy_embed_get_is_blank		(EphyEmbed *embed);
 
-const char *     ephy_embed_get_loading_title           (EphyEmbed *embed);
+const char *	 ephy_embed_get_loading_title		(EphyEmbed *embed);
 
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);

@@ -57,7 +57,7 @@ static void	mozilla_embed_class_init	(MozillaEmbedClass *klass);
 static void	mozilla_embed_init		(MozillaEmbed *gs);
 static void	mozilla_embed_destroy		(GtkObject *object);
 static void	mozilla_embed_finalize		(GObject *object);
-static void     mozilla_embed_dispose           (GObject *object);
+static void	mozilla_embed_dispose		(GObject *object);
 static void	ephy_embed_iface_init		(EphyEmbedIface *iface);
 
 static void mozilla_embed_location_changed_cb	(GtkMozEmbed *embed,
@@ -90,27 +90,27 @@ static void mozilla_embed_document_type_cb	(EphyEmbed *embed,
 static void mozilla_embed_zoom_change_cb	(EphyEmbed *embed,
 						 float zoom,
 						 MozillaEmbed *membed);
-static void mozilla_embed_title_change_cb       (EphyEmbed *embed,
-                                                 MozillaEmbed *membed);
-static void mozilla_embed_link_message_cb       (EphyEmbed *embed,
-                                                 MozillaEmbed *membed);
-static void mozilla_embed_set_title             (MozillaEmbed *embed,
-                                                 char *title);
-static void mozilla_embed_set_loading_title     (MozillaEmbed *embed,
-                                                 const char *title,
-                                                 gboolean is_address);
+static void mozilla_embed_title_change_cb	(EphyEmbed *embed,
+						 MozillaEmbed *membed);
+static void mozilla_embed_link_message_cb	(EphyEmbed *embed,
+						 MozillaEmbed *membed);
+static void mozilla_embed_set_title		(MozillaEmbed *embed,
+						 char *title);
+static void mozilla_embed_set_loading_title	(MozillaEmbed *embed,
+						 const char *title,
+						 gboolean is_address);
 static void mozilla_embed_icon_cache_changed_cb (EphyFaviconCache *cache,
-                                                 const char *address,
-                                                 MozillaEmbed *embed);
-static void mozilla_embed_set_icon_address      (MozillaEmbed *embed,
-                                                 const char *address);
-static void mozilla_embed_favicon_cb            (EphyEmbed *embed,
-                                                 const char *address,
-                                                 MozillaEmbed *membed);
-static gboolean mozilla_embed_open_uri_cb       (EphyEmbed *embed,
-                                                 const char *uri,
-                                                 MozillaEmbed *membed);
-static void mozilla_embed_file_monitor_cancel   (MozillaEmbed *embed);
+						 const char *address,
+						 MozillaEmbed *embed);
+static void mozilla_embed_set_icon_address	(MozillaEmbed *embed,
+						 const char *address);
+static void mozilla_embed_favicon_cb		(EphyEmbed *embed,
+						 const char *address,
+						 MozillaEmbed *membed);
+static gboolean mozilla_embed_open_uri_cb	(EphyEmbed *embed,
+						 const char *uri,
+						 MozillaEmbed *membed);
+static void mozilla_embed_file_monitor_cancel	(MozillaEmbed *embed);
 static void impl_set_typed_address		(EphyEmbed *embed,
 						 const char *address,
 						 EphyEmbedAddressExpire expire);
@@ -174,15 +174,15 @@ enum
 	PROP_0,
 	PROP_ADDRESS,
 	PROP_DOCUMENT_TYPE,
-        PROP_ICON,
-        PROP_ICON_ADDRESS,
-        PROP_LINK_MESSAGE,
+	PROP_ICON,
+	PROP_ICON_ADDRESS,
+	PROP_LINK_MESSAGE,
 	PROP_LOAD_PROGRESS,
 	PROP_LOAD_STATUS,
 	PROP_NAVIGATION,
 	PROP_SECURITY,
 	PROP_STATUS_MESSAGE,
-        PROP_TITLE,
+	PROP_TITLE,
 	PROP_TYPED_ADDRESS,
 	PROP_ZOOM
 };
@@ -288,21 +288,21 @@ mozilla_embed_get_property (GObject *object,
 	
 	switch (prop_id)
 	{
-        case PROP_ADDRESS:
-                g_value_set_string (value, priv->address);
-                break;
+	case PROP_ADDRESS:
+		g_value_set_string (value, priv->address);
+		break;
 	case PROP_DOCUMENT_TYPE:
 		g_value_set_enum (value, priv->document_type);
 		break;
-        case PROP_ICON:
-               g_value_set_object (value, priv->icon);
-               break;
-        case PROP_ICON_ADDRESS:
-               g_value_set_string (value, priv->icon_address);
-               break;
-        case PROP_LINK_MESSAGE:
-                g_value_set_string (value, priv->link_message);
-                break;
+	case PROP_ICON:
+	       g_value_set_object (value, priv->icon);
+	       break;
+	case PROP_ICON_ADDRESS:
+	       g_value_set_string (value, priv->icon_address);
+	       break;
+	case PROP_LINK_MESSAGE:
+		g_value_set_string (value, priv->link_message);
+		break;
 	case PROP_LOAD_PROGRESS:
 		g_value_set_int (value, priv->load_percent);
 		break;
@@ -315,12 +315,12 @@ mozilla_embed_get_property (GObject *object,
 	case PROP_SECURITY:
 		g_value_set_enum (value, priv->security_level);
 		break;
-        case PROP_STATUS_MESSAGE:
-                g_value_set_string (value, priv->status_message);
-                break;
-        case PROP_TITLE:
-                g_value_set_string (value, priv->title);
-                break;
+	case PROP_STATUS_MESSAGE:
+		g_value_set_string (value, priv->status_message);
+		break;
+	case PROP_TITLE:
+		g_value_set_string (value, priv->title);
+		break;
 	case PROP_TYPED_ADDRESS:
 		g_value_set_string (value, priv->typed_address);
 		break;
@@ -342,22 +342,22 @@ mozilla_embed_set_property (GObject *object,
 {
 	switch (prop_id)
 	{
-        case PROP_ICON_ADDRESS:
-                mozilla_embed_set_icon_address (MOZILLA_EMBED (object), g_value_get_string (value));
-                break;
+	case PROP_ICON_ADDRESS:
+		mozilla_embed_set_icon_address (MOZILLA_EMBED (object), g_value_get_string (value));
+		break;
 	case PROP_TYPED_ADDRESS:
 		impl_set_typed_address (EPHY_EMBED (object), g_value_get_string (value),
 					EPHY_EMBED_ADDRESS_EXPIRE_NOW);
 		break;
-        case PROP_ADDRESS:
+	case PROP_ADDRESS:
 	case PROP_DOCUMENT_TYPE:
-        case PROP_ICON:
+	case PROP_ICON:
 	case PROP_LOAD_PROGRESS:
 	case PROP_LOAD_STATUS:
-        case PROP_LINK_MESSAGE:
+	case PROP_LINK_MESSAGE:
 	case PROP_NAVIGATION:
 	case PROP_SECURITY:
-        case PROP_STATUS_MESSAGE:
+	case PROP_STATUS_MESSAGE:
 	case PROP_ZOOM:
 		/* read only */
 		break;
@@ -378,7 +378,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 
 	object_class->constructor = mozilla_embed_constructor;
 	object_class->finalize = mozilla_embed_finalize;
-        object_class->dispose = mozilla_embed_dispose;
+	object_class->dispose = mozilla_embed_dispose;
 	object_class->get_property = mozilla_embed_get_property;
 	object_class->set_property = mozilla_embed_set_property;
 
@@ -410,7 +410,7 @@ mozilla_embed_init (MozillaEmbed *embed)
 	EphyFaviconCache *cache;
 	MozillaEmbedPrivate *priv;
 	embed->priv = MOZILLA_EMBED_GET_PRIVATE (embed);
-        priv = embed->priv;
+	priv = embed->priv;
 	priv->browser = new EphyBrowser ();
 
 	g_signal_connect_object (embed, "location",
@@ -440,9 +440,9 @@ mozilla_embed_init (MozillaEmbed *embed)
 	g_signal_connect_object (embed, "ge_zoom_change",
 				 G_CALLBACK (mozilla_embed_zoom_change_cb),
 				 embed, (GConnectFlags) 0);
-        g_signal_connect_object (embed, "title",
-                                 G_CALLBACK (mozilla_embed_title_change_cb),
-                                 embed, (GConnectFlags) 0);
+	g_signal_connect_object (embed, "title",
+				 G_CALLBACK (mozilla_embed_title_change_cb),
+				 embed, (GConnectFlags) 0);
 	g_signal_connect_object (embed, "link_message",
 				 G_CALLBACK (mozilla_embed_link_message_cb),
 				 embed, (GConnectFlags)0);
@@ -457,7 +457,7 @@ mozilla_embed_init (MozillaEmbed *embed)
 		(ephy_embed_shell_get_favicon_cache (embed_shell));
 	g_signal_connect_object (G_OBJECT (cache), "changed",
 				 G_CALLBACK (mozilla_embed_icon_cache_changed_cb),
-				 embed,  (GConnectFlags)0);
+				 embed,	 (GConnectFlags)0);
 
 	priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
 	priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
@@ -466,17 +466,17 @@ mozilla_embed_init (MozillaEmbed *embed)
 	priv->load_percent = 0;
 	priv->is_loading = FALSE;
 	priv->typed_address = NULL;
-        priv->address = NULL;
+	priv->address = NULL;
 	priv->address_expire = EPHY_EMBED_ADDRESS_EXPIRE_NOW;
 	priv->title = NULL;
-        priv->loading_title = NULL;
+	priv->loading_title = NULL;
 	priv->is_blank = TRUE;
 	priv->total_requests = 0;
 	priv->cur_requests = 0;
 	priv->icon_address = NULL;
 	priv->icon = NULL;
-        priv->status_message = NULL;
-        priv->link_message = NULL;
+	priv->status_message = NULL;
+	priv->link_message = NULL;
 }
 
 gpointer
@@ -503,7 +503,7 @@ mozilla_embed_destroy (GtkObject *object)
 static void
 mozilla_embed_dispose (GObject *object)
 {
-        mozilla_embed_file_monitor_cancel (MOZILLA_EMBED (object));
+	mozilla_embed_file_monitor_cancel (MOZILLA_EMBED (object));
 
 	G_OBJECT_CLASS (mozilla_embed_parent_class)->dispose (object);
 }
@@ -720,7 +720,7 @@ impl_go_up (EphyEmbed *embed)
 static const char *
 impl_get_title (EphyEmbed *embed)
 {
-        return MOZILLA_EMBED (embed)->priv->title;
+	return MOZILLA_EMBED (embed)->priv->title;
 }
 
 static char *
@@ -1120,7 +1120,7 @@ static void
 mozilla_embed_update_navigation_flags (MozillaEmbed *membed)
 {
 	MozillaEmbedPrivate *priv = membed->priv;
-        EphyEmbed *embed = EPHY_EMBED (membed);
+	EphyEmbed *embed = EPHY_EMBED (membed);
 	guint flags = 0;
 
 	if (impl_can_go_up (embed))
@@ -1128,7 +1128,7 @@ mozilla_embed_update_navigation_flags (MozillaEmbed *membed)
 		flags |= EPHY_EMBED_NAV_UP;
 	}
 
-        if (impl_can_go_back (embed))
+	if (impl_can_go_back (embed))
 	{
 		flags |= EPHY_EMBED_NAV_BACK;
 	}
@@ -1185,7 +1185,7 @@ impl_set_typed_address (EphyEmbed *embed,
 static const char*
 impl_get_address (EphyEmbed *embed)
 {
-        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+	MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
   
 	return priv->address ? priv->address : "about:blank";
 }
@@ -1193,7 +1193,7 @@ impl_get_address (EphyEmbed *embed)
 static const char*
 impl_get_status_message (EphyEmbed *embed)
 {
-        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+	MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
 
 	if (priv->link_message && priv->link_message[0] != '\0')
 	{
@@ -1212,47 +1212,47 @@ impl_get_status_message (EphyEmbed *embed)
 static const char*
 impl_get_link_message (EphyEmbed *embed)
 {
-        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+	MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
 
-        return priv->link_message;
+	return priv->link_message;
 }
 
 static gboolean
 impl_get_is_blank (EphyEmbed *embed)
 {
-        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+	MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
 
-        return priv->is_blank;
+	return priv->is_blank;
 }
 
 static const char*
 impl_get_loading_title (EphyEmbed *embed)
 {
-        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+	MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
 
-        return priv->loading_title;
+	return priv->loading_title;
 }
 
 static const char*
 impl_get_icon_address (EphyEmbed *embed)
 {
-        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+	MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
 
-        return priv->icon_address;
+	return priv->icon_address;
 }
 
 static GdkPixbuf*
 impl_get_icon (EphyEmbed *embed)
 {
-        MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
+	MozillaEmbedPrivate *priv = MOZILLA_EMBED (embed)->priv;
 
-        return priv->icon;
+	return priv->icon;
 }
 
 static void
 mozilla_embed_set_address (MozillaEmbed *embed, char *address)
 {
-        MozillaEmbedPrivate *priv = embed->priv;
+	MozillaEmbedPrivate *priv = embed->priv;
 	GObject *object = G_OBJECT (embed);
 	
 	g_free (priv->address);
@@ -1332,10 +1332,10 @@ ephy_file_monitor_reload_cb (MozillaEmbed *embed)
 
 static void
 mozilla_embed_file_monitor_cb (GnomeVFSMonitorHandle *handle,
-                               const gchar *monitor_uri,
-                               const gchar *info_uri,
-                               GnomeVFSMonitorEventType event_type,
-                               MozillaEmbed *embed)
+			       const gchar *monitor_uri,
+			       const gchar *info_uri,
+			       GnomeVFSMonitorEventType event_type,
+			       MozillaEmbed *embed)
 {
 	gboolean uri_is_directory;
 	gboolean should_reload;
@@ -1398,7 +1398,7 @@ mozilla_embed_file_monitor_cb (GnomeVFSMonitorHandle *handle,
 
 static void
 mozilla_embed_update_file_monitor (MozillaEmbed *embed,
-                                   const gchar *address)
+				   const gchar *address)
 {
 	MozillaEmbedPrivate *priv = embed->priv;
 	GnomeVFSMonitorHandle *handle = NULL;
@@ -1439,7 +1439,7 @@ mozilla_embed_update_file_monitor (MozillaEmbed *embed,
 
 static void
 mozilla_embed_set_link_message (MozillaEmbed *embed,
-                                char *link_message)
+				char *link_message)
 {
 	MozillaEmbedPrivate *priv = embed->priv;
 	
@@ -1456,7 +1456,7 @@ mozilla_embed_location_changed_cb (GtkMozEmbed *embed,
 				   MozillaEmbed *membed)
 {
 	char *location;
-        GObject *object = G_OBJECT (embed);
+	GObject *object = G_OBJECT (embed);
 
 	location = gtk_moz_embed_get_location (embed);
 	g_signal_emit_by_name (membed, "ge_location", location);
@@ -1496,12 +1496,12 @@ mozilla_embed_location_changed_cb (GtkMozEmbed *embed,
 }
 
 static void
-mozilla_embed_link_message_cb       (EphyEmbed *embed,
-                                     MozillaEmbed *membed)
+mozilla_embed_link_message_cb	    (EphyEmbed *embed,
+				     MozillaEmbed *membed)
 {
-        char *link_message = gtk_moz_embed_get_link_message (GTK_MOZ_EMBED (membed));
-        mozilla_embed_set_link_message (membed, link_message);
-        g_free (link_message);
+	char *link_message = gtk_moz_embed_get_link_message (GTK_MOZ_EMBED (membed));
+	mozilla_embed_set_link_message (membed, link_message);
+	g_free (link_message);
 }
 
 static void
@@ -1525,8 +1525,8 @@ mozilla_embed_load_icon (MozillaEmbed *embed)
 
 static void
 mozilla_embed_icon_cache_changed_cb (EphyFaviconCache *cache,
-                                     const char *address,
-                                     MozillaEmbed *embed)
+				     const char *address,
+				     MozillaEmbed *embed)
 {
 	MozillaEmbedPrivate *priv = embed->priv;
 
@@ -1542,11 +1542,11 @@ mozilla_embed_icon_cache_changed_cb (EphyFaviconCache *cache,
 
 static void
 mozilla_embed_set_icon_address (MozillaEmbed *embed,
-                                const char *address)
+				const char *address)
 {
 	GObject *object = G_OBJECT (embed);
 	MozillaEmbedPrivate *priv = embed->priv;
-        /*	EphyBookmarks *eb;*/
+	/*	EphyBookmarks *eb;*/
 	EphyHistory *history;
 
 	g_free (priv->icon_address);
@@ -1562,7 +1562,7 @@ mozilla_embed_set_icon_address (MozillaEmbed *embed,
 
 	if (priv->icon_address)
 	{
-                /* FIXME: we need to put this somewhere inside src?/
+		/* FIXME: we need to put this somewhere inside src?/
 		history = EPHY_HISTORY
 			(ephy_embed_shell_get_global_history (embed_shell));
 		ephy_history_set_icon (history, priv->address,
@@ -1570,7 +1570,7 @@ mozilla_embed_set_icon_address (MozillaEmbed *embed,
 
 		eb = ephy_shell_get_bookmarks (ephy_shell);
 		ephy_bookmarks_set_icon (eb, priv->address,
-                priv->icon_address);*/
+		priv->icon_address);*/
 
 		mozilla_embed_load_icon (embed);
 	}
@@ -1580,10 +1580,10 @@ mozilla_embed_set_icon_address (MozillaEmbed *embed,
 
 static void
 mozilla_embed_favicon_cb (EphyEmbed *embed,
-                          const char *address,
-                          MozillaEmbed *membed)
+			  const char *address,
+			  MozillaEmbed *membed)
 {
-  	mozilla_embed_set_icon_address (membed, address);
+	mozilla_embed_set_icon_address (membed, address);
 }
 
 static gboolean
@@ -1790,9 +1790,9 @@ build_progress_from_requests (MozillaEmbed *embed, EphyEmbedNetState state)
 	int load_percent;
 
 	if (state & EPHY_EMBED_STATE_IS_REQUEST)
-        {
-                if (state & EPHY_EMBED_STATE_START)
-                {
+	{
+		if (state & EPHY_EMBED_STATE_START)
+		{
 			embed->priv->total_requests ++;
 		}
 		else if (state & EPHY_EMBED_STATE_STOP)
@@ -1814,8 +1814,8 @@ ensure_page_info (MozillaEmbed *embed, const char *address)
 
 	if ((priv->address == NULL || priv->address[0] == '\0') &&
 	    priv->address_expire == EPHY_EMBED_ADDRESS_EXPIRE_NOW)
-        {
-                mozilla_embed_set_address (embed, g_strdup (address));
+	{
+		mozilla_embed_set_address (embed, g_strdup (address));
 	}
 
 	/* FIXME huh?? */
@@ -1827,8 +1827,8 @@ ensure_page_info (MozillaEmbed *embed, const char *address)
 
 static void
 update_embed_from_net_state (MozillaEmbed *embed,
-                             const char *uri,
-                             EphyEmbedNetState state)
+			     const char *uri,
+			     EphyEmbedNetState state)
 {
 	MozillaEmbedPrivate *priv = embed->priv;
 
@@ -1873,7 +1873,7 @@ update_embed_from_net_state (MozillaEmbed *embed,
 			g_object_thaw_notify (object);
 		}
 
-                mozilla_embed_update_navigation_flags (embed);
+		mozilla_embed_update_navigation_flags (embed);
 	}
 
 	build_progress_from_requests (embed, state);
@@ -1915,7 +1915,7 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 	}
 
 	update_load_state (membed, state);
-        update_embed_from_net_state (membed, aURI, (EphyEmbedNetState)estate);
+	update_embed_from_net_state (membed, aURI, (EphyEmbedNetState)estate);
 	
 	g_signal_emit_by_name (membed, "ge_net_state", aURI, /* FIXME: (gulong) */ estate);
 }
@@ -2154,12 +2154,12 @@ get_title_from_address (const char *address)
 	if (uri == NULL) return g_strdup (address);
 		
 	title = gnome_vfs_uri_to_string (uri,
-                                         (GnomeVFSURIHideOptions)
-                                         (GNOME_VFS_URI_HIDE_USER_NAME |
-                                          GNOME_VFS_URI_HIDE_PASSWORD |
-                                          GNOME_VFS_URI_HIDE_HOST_PORT |
-                                          GNOME_VFS_URI_HIDE_TOPLEVEL_METHOD |
-                                          GNOME_VFS_URI_HIDE_FRAGMENT_IDENTIFIER));
+					 (GnomeVFSURIHideOptions)
+					 (GNOME_VFS_URI_HIDE_USER_NAME |
+					  GNOME_VFS_URI_HIDE_PASSWORD |
+					  GNOME_VFS_URI_HIDE_HOST_PORT |
+					  GNOME_VFS_URI_HIDE_TOPLEVEL_METHOD |
+					  GNOME_VFS_URI_HIDE_FRAGMENT_IDENTIFIER));
 	gnome_vfs_uri_unref (uri);
 
 	return title;
@@ -2167,10 +2167,10 @@ get_title_from_address (const char *address)
 
 static void
 mozilla_embed_set_loading_title (MozillaEmbed *embed,
-                                 const char *title,
-                                 gboolean is_address)
+				 const char *title,
+				 gboolean is_address)
 {
-        MozillaEmbedPrivate *priv = embed->priv;
+	MozillaEmbedPrivate *priv = embed->priv;
 	char *freeme = NULL;
 
 	g_free (priv->loading_title);
@@ -2196,9 +2196,9 @@ mozilla_embed_set_loading_title (MozillaEmbed *embed,
 
 static void
 mozilla_embed_set_title (MozillaEmbed *embed,
-                         char *title)
+			 char *title)
 {
-        MozillaEmbedPrivate *priv = embed->priv;
+	MozillaEmbedPrivate *priv = embed->priv;
 
 	if (!priv->is_blank && (title == NULL || g_strstrip (title)[0] == '\0'))
 	{
@@ -2227,13 +2227,13 @@ mozilla_embed_set_title (MozillaEmbed *embed,
 }
 
 static void
-mozilla_embed_title_change_cb       (EphyEmbed *embed,
-                                     MozillaEmbed *membed)
+mozilla_embed_title_change_cb	    (EphyEmbed *embed,
+				     MozillaEmbed *membed)
 {
 	GObject *object = G_OBJECT (embed);
-        char *title;
+	char *title;
 
-        title = gtk_moz_embed_get_title (GTK_MOZ_EMBED (embed));
+	title = gtk_moz_embed_get_title (GTK_MOZ_EMBED (embed));
 
 	g_object_freeze_notify (object);
 
@@ -2245,8 +2245,8 @@ mozilla_embed_title_change_cb       (EphyEmbed *embed,
 
 static gboolean
 mozilla_embed_open_uri_cb (EphyEmbed *embed,
-                           const char *uri,
-                           MozillaEmbed *membed)
+			   const char *uri,
+			   MozillaEmbed *membed)
 {
 	MozillaEmbedPrivate *priv = membed->priv;
 
@@ -2341,11 +2341,11 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->get_typed_address = impl_get_typed_address;
 	iface->set_typed_address = impl_set_typed_address;
 	iface->get_address = impl_get_address;
-        iface->get_status_message = impl_get_status_message;
-        iface->get_is_blank = impl_get_is_blank;
-        iface->get_loading_title = impl_get_loading_title;
-        iface->get_icon = impl_get_icon;
-        iface->get_icon_address = impl_get_icon_address;
+	iface->get_status_message = impl_get_status_message;
+	iface->get_is_blank = impl_get_is_blank;
+	iface->get_loading_title = impl_get_loading_title;
+	iface->get_icon = impl_get_icon;
+	iface->get_icon_address = impl_get_icon_address;
 }
 
 static void

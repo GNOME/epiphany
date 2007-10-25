@@ -487,31 +487,31 @@ ephy_embed_base_init (gpointer g_class)
 									  "The embed's title",
 									  _("Blank page"),
 									  G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_string ("status-message",
-                                                                          "Status Message",
-                                                                          "The embed's statusbar message",
-                                                                          NULL,
-                                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_string ("link-message",
-                                                                          "Link Message",
-                                                                          "The embed's link message",
-                                                                          NULL,
-                                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_object ("icon",
-                                                                          "Icon",
-                                                                          "The embed icon's",
-                                                                          GDK_TYPE_PIXBUF,
-                                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+		g_object_interface_install_property (g_class,
+						     g_param_spec_string ("status-message",
+									  "Status Message",
+									  "The embed's statusbar message",
+									  NULL,
+									  G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+		g_object_interface_install_property (g_class,
+						     g_param_spec_string ("link-message",
+									  "Link Message",
+									  "The embed's link message",
+									  NULL,
+									  G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+		g_object_interface_install_property (g_class,
+						     g_param_spec_object ("icon",
+									  "Icon",
+									  "The embed icon's",
+									  GDK_TYPE_PIXBUF,
+									  G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_string ("icon-address",
-                                                                          "Icon address",
-                                                                          "The embed icon's address",
-                                                                          NULL,
-                                                                          (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)));
+		g_object_interface_install_property (g_class,
+						     g_param_spec_string ("icon-address",
+									  "Icon address",
+									  "The embed icon's address",
+									  NULL,
+									  (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)));
 		initialized = TRUE;
 	}
 
@@ -1279,7 +1279,7 @@ ephy_embed_get_icon_address (EphyEmbed *embed)
  * ephy_embed_get_is_blank:
  * @embed: an #EphyEmbed
  *
- * Returns whether the  @embed's address is "blank".
+ * Returns whether the	@embed's address is "blank".
  *
  * Return value: %TRUE if the @embed's address is "blank"
  **/
