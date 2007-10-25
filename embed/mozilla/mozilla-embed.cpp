@@ -45,6 +45,7 @@
 #include "ephy-debug.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
+#include "ephy-embed-utils.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
 #include "ephy-string.h"
@@ -474,6 +475,8 @@ mozilla_embed_init (MozillaEmbed *embed)
 	priv->cur_requests = 0;
 	priv->icon_address = NULL;
 	priv->icon = NULL;
+        priv->status_message = NULL;
+        priv->link_message = NULL;
 }
 
 gpointer
@@ -523,7 +526,6 @@ mozilla_embed_finalize (GObject *object)
 	}
 
 	g_free (embed->priv->icon_address);
-
 	g_free (embed->priv->address);
 	g_free (embed->priv->typed_address);
 	g_free (embed->priv->title);
@@ -1439,49 +1441,11 @@ static void
 mozilla_embed_set_link_message (MozillaEmbed *embed,
                                 char *link_message)
 {
-	char *status_message;
-	char **splitted_message;
-        MozillaEmbedPrivate *priv = embed->priv;
-
-	g_free (priv->link_message);
-	status_message = ephy_string_blank_chr (link_message);
+	MozillaEmbedPrivate *priv = embed->priv;
 	
-	if (status_message && g_str_has_prefix (status_message, "mailto:"))
-	{
-		int i = 1;
-		char *p;
-		GString *tmp;
-		
-		/* We first want to eliminate all the things after "?", like
-		 * cc, subject and alike.
-		 */
-		
-		p = strchr (status_message, '?');
-		if (p != NULL) *p = '\0';
-		
-		/* Then we also want to check if there is more than an email address
-		 * in the mailto: list.
-		 */
-		
-		splitted_message = g_strsplit_set (status_message, ";", -1);
-		tmp = g_string_new (g_strdup_printf (_("Send an email message to “%s”"),
-						     (splitted_message[0] + 7)));
-		
-		while (splitted_message [i] != NULL)
-		{
-			g_string_append_printf (tmp, ", “%s”", splitted_message[i]);
-			i++;
-		}
-		
-		priv->link_message = g_string_free (tmp, FALSE);
-		
-		g_free (status_message);
-		g_strfreev (splitted_message);
-	}
-	else
-	{
-		priv->link_message = status_message;
-	}
+	g_free (priv->link_message);
+	
+	priv->link_message = ephy_embed_utils_link_message_parse (link_message);
 
 	g_object_notify (G_OBJECT (embed), "status-message");
 	g_object_notify (G_OBJECT (embed), "link-message");
@@ -1496,7 +1460,6 @@ mozilla_embed_location_changed_cb (GtkMozEmbed *embed,
 
 	location = gtk_moz_embed_get_location (embed);
 	g_signal_emit_by_name (membed, "ge_location", location);
-	g_free (location);
 
 	g_object_freeze_notify (object);
 
@@ -1520,6 +1483,8 @@ mozilla_embed_location_changed_cb (GtkMozEmbed *embed,
 		mozilla_embed_set_address (membed, embed_address);
 		mozilla_embed_set_loading_title (membed, embed_address, TRUE);
 	}
+
+	g_free (location);
 
 	mozilla_embed_set_link_message (membed, NULL);
 	mozilla_embed_set_icon_address (membed, NULL);
@@ -1547,7 +1512,7 @@ mozilla_embed_load_icon (MozillaEmbed *embed)
 	EphyFaviconCache *cache;
 
 	if (priv->icon_address == NULL || priv->icon != NULL) return;
-
+#if 0
 	shell = ephy_embed_shell_get_default ();
 	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (shell));
 
@@ -1555,6 +1520,7 @@ mozilla_embed_load_icon (MozillaEmbed *embed)
 	priv->icon = ephy_favicon_cache_get (cache, priv->icon_address);
 
 	g_object_notify (G_OBJECT (embed), "icon");
+#endif
 }
 
 static void
@@ -1596,11 +1562,12 @@ mozilla_embed_set_icon_address (MozillaEmbed *embed,
 
 	if (priv->icon_address)
 	{
+                /* FIXME: we need to put this somewhere inside src?/
 		history = EPHY_HISTORY
 			(ephy_embed_shell_get_global_history (embed_shell));
 		ephy_history_set_icon (history, priv->address,
 				       priv->icon_address);
-                /* FIXME: we need to put this somewhere inside src?/
+
 		eb = ephy_shell_get_bookmarks (ephy_shell);
 		ephy_bookmarks_set_icon (eb, priv->address,
                 priv->icon_address);*/
@@ -1780,7 +1747,7 @@ update_net_state_message (MozillaEmbed *embed, const char *uri, EphyEmbedNetStat
 	{
 		g_free (embed->priv->status_message);
 		embed->priv->status_message = NULL;
-		g_object_notify (G_OBJECT (embed), "message");
+		g_object_notify (G_OBJECT (embed), "status-message");
 
 	}
 	else if (msg != NULL)
@@ -1789,7 +1756,7 @@ update_net_state_message (MozillaEmbed *embed, const char *uri, EphyEmbedNetStat
 		g_free (embed->priv->loading_title);
 		embed->priv->status_message = g_strdup_printf (msg, host);
 		embed->priv->loading_title = g_strdup_printf (msg, host);
-		g_object_notify (G_OBJECT (embed), "message");
+		g_object_notify (G_OBJECT (embed), "status-message");
 		g_object_notify (G_OBJECT (embed), "title");
 	}
 
@@ -1948,7 +1915,7 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 	}
 
 	update_load_state (membed, state);
-        update_embed_from_net_state (membed, aURI, (EphyEmbedNetState)state);
+        update_embed_from_net_state (membed, aURI, (EphyEmbedNetState)estate);
 	
 	g_signal_emit_by_name (membed, "ge_net_state", aURI, /* FIXME: (gulong) */ estate);
 }
@@ -2189,9 +2156,9 @@ get_title_from_address (const char *address)
 	title = gnome_vfs_uri_to_string (uri,
                                          (GnomeVFSURIHideOptions)
                                          (GNOME_VFS_URI_HIDE_USER_NAME |
-                                         GNOME_VFS_URI_HIDE_PASSWORD |
-                                         GNOME_VFS_URI_HIDE_HOST_PORT |
-                                         GNOME_VFS_URI_HIDE_TOPLEVEL_METHOD |
+                                          GNOME_VFS_URI_HIDE_PASSWORD |
+                                          GNOME_VFS_URI_HIDE_HOST_PORT |
+                                          GNOME_VFS_URI_HIDE_TOPLEVEL_METHOD |
                                           GNOME_VFS_URI_HIDE_FRAGMENT_IDENTIFIER));
 	gnome_vfs_uri_unref (uri);
 

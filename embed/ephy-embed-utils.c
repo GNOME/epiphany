@@ -36,7 +36,7 @@ ephy_embed_utils_link_message_parse (char *message)
 	char *status_message;
 	char **splitted_message;
 
-	status_message = ephy_string_blank_chr (message);
+	status_message = ephy_string_blank_chr (g_strdup (message));
 	
 	if (status_message && g_str_has_prefix (status_message, "mailto:"))
 	{

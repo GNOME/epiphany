@@ -2216,7 +2216,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 					 G_CALLBACK (sync_tab_popups_allowed),
 					 window, 0);
 
-		g_signal_connect_object (new_tab, "notify::title",
+		g_signal_connect_object (embed, "notify::title",
 					 G_CALLBACK (sync_tab_title),
 					 window, 0);
 		g_signal_connect_object (embed, "notify::address",
