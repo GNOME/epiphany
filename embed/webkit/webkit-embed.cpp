@@ -717,10 +717,7 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->print_preview_navigate = impl_print_preview_navigate;
   iface->has_modified_forms = impl_has_modified_forms;
   iface->get_load_percent = impl_get_load_percent;
-  iface->set_load_percent = impl_set_load_percent;
   iface->get_load_status = impl_get_load_status;
-  iface->set_load_status = impl_set_load_status;
   iface->get_document_type = impl_get_document_type;
   iface->get_navigation_flags = impl_get_navigation_flags;
-  iface->update_navigation_flags = impl_update_navigation_flags;
 }
