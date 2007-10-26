@@ -437,7 +437,7 @@ impl_get_title (EphyEmbed *embed)
   return webkit_frame_get_title (frame);
 }
 
-static char *
+static const char *
 impl_get_link_message (EphyEmbed *embed)
 {
   return NULL;
