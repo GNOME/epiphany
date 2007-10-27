@@ -1668,7 +1668,7 @@ ephy_file_monitor_reload_cb (MozillaEmbed *embed)
 
 	priv->reload_scheduled_id = 0;
 
-	LOG ("Reloading file '%s'", impl_get_address (embed));
+	//LOG ("Reloading file '%s'", impl_get_address (embed));
 
 	impl_reload (EPHY_EMBED (embed), TRUE);
 
