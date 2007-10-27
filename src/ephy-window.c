@@ -1611,14 +1611,14 @@ sync_tab_security (EphyEmbed *embed,
 }
 
 static void
-sync_tab_popup_windows (EphyTab *tab,
+sync_tab_popup_windows (EphyEmbed *embed,
 			GParamSpec *pspec,
 			EphyWindow *window)
 {
 	guint num_popups = 0;
 	char *tooltip = NULL;
 
-	g_object_get (G_OBJECT (tab),
+	g_object_get (G_OBJECT (embed),
 		      "hidden-popup-count", &num_popups,
 		      NULL);
 
@@ -1639,21 +1639,21 @@ sync_tab_popup_windows (EphyTab *tab,
 }
 
 static void
-sync_tab_popups_allowed (EphyTab *tab,
+sync_tab_popups_allowed (EphyEmbed *embed,
 			 GParamSpec *pspec,
 			 EphyWindow *window)
 {
 	GtkAction *action;
 	gboolean allow;
 
-	g_return_if_fail (EPHY_IS_TAB (tab));
+	g_return_if_fail (EPHY_IS_EMBED (embed));
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
 	action = gtk_action_group_get_action (window->priv->action_group,
 					      "ViewPopupWindows");
 	g_return_if_fail (GTK_IS_ACTION (action));
 
-	g_object_get (G_OBJECT (tab), "popups-allowed", &allow, NULL);
+	g_object_get (G_OBJECT (embed), "popups-allowed", &allow, NULL);
 
 	g_signal_handlers_block_by_func
 		(G_OBJECT (action),
@@ -2142,15 +2142,14 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 
 	if (old_tab != NULL)
 	{
-		g_signal_handlers_disconnect_by_func (old_tab,
-						      G_CALLBACK (sync_tab_popup_windows),
-						      window);
-		g_signal_handlers_disconnect_by_func (old_tab,
-						      G_CALLBACK (sync_tab_popups_allowed),
-						      window);
-
 		embed = ephy_tab_get_embed (old_tab);
 
+		g_signal_handlers_disconnect_by_func (embed,
+						      G_CALLBACK (sync_tab_popup_windows),
+						      window);
+		g_signal_handlers_disconnect_by_func (embed,
+						      G_CALLBACK (sync_tab_popups_allowed),
+						      window);
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (sync_tab_security),
 						      window);
@@ -2205,17 +2204,15 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		sync_tab_address	(embed, NULL, window);
 		sync_tab_icon		(embed, NULL, window);
 		sync_tab_message	(embed, NULL, window);
+		sync_tab_popup_windows	(embed, NULL, window);
+		sync_tab_popups_allowed	(embed, NULL, window);
 
-		sync_tab_popup_windows	(new_tab, NULL, window);
-		sync_tab_popups_allowed	(new_tab, NULL, window);
-
-		g_signal_connect_object (new_tab, "notify::hidden-popup-count",
+		g_signal_connect_object (embed, "notify::hidden-popup-count",
 					 G_CALLBACK (sync_tab_popup_windows),
 					 window, 0);
-		g_signal_connect_object (new_tab, "notify::popups-allowed",
+		g_signal_connect_object (embed, "notify::popups-allowed",
 					 G_CALLBACK (sync_tab_popups_allowed),
 					 window, 0);
-
 		g_signal_connect_object (embed, "notify::title",
 					 G_CALLBACK (sync_tab_title),
 					 window, 0);

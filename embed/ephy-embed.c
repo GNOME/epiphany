@@ -512,6 +512,21 @@ ephy_embed_base_init (gpointer g_class)
 									  "The embed icon's address",
 									  NULL,
 									  (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)));
+                g_object_interface_install_property (g_class,
+                                                     g_param_spec_int ("hidden-popup-count",
+                                                                       "Number of Blocked Popups",
+                                                                       "The embed's number of blocked popup windows",
+                                                                       0,
+                                                                       G_MAXINT,
+                                                                       0,
+                                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+                g_object_interface_install_property (g_class,
+                                                     g_param_spec_boolean ("popups-allowed",
+                                                                           "Popups Allowed",
+                                                                           "Whether popup windows are to be displayed",
+                                                                           FALSE,
+                                                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 		initialized = TRUE;
 	}
 
