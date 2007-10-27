@@ -53,8 +53,6 @@ GType		ephy_tabs_menu_get_type		(void);
 
 EphyTabsMenu   *ephy_tabs_menu_new		(EphyWindow *window);
 
-void		ephy_tabs_menu_update		(EphyTabsMenu *menu);
-
 G_END_DECLS
 
 #endif

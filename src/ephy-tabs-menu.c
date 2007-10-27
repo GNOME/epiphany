@@ -65,34 +65,9 @@ enum
 
 static void	ephy_tabs_menu_class_init	(EphyTabsMenuClass *klass);
 static void	ephy_tabs_menu_init	  	(EphyTabsMenu *menu);
+static void	ephy_tabs_menu_update		(EphyTabsMenu *menu);
 
-GType
-ephy_tabs_menu_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyTabsMenuClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_tabs_menu_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyTab),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_tabs_menu_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyTabsMenu",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyTabsMenu, ephy_tabs_menu, G_TYPE_OBJECT)
 
 static void
 tab_action_activate_cb (GtkToggleAction *action,
@@ -405,7 +380,7 @@ tab_set_action_accelerator (GtkActionGroup *action_group,
 	}
 }
 
-void
+static void
 ephy_tabs_menu_update (EphyTabsMenu *menu)
 {
 	EphyTabsMenuPrivate *p = menu->priv;
