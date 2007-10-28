@@ -44,17 +44,17 @@ popup_cmd_link_in_new_window (GtkAction *action,
 		              EphyWindow *window)
 {
 	EphyEmbedEvent *event;
-	EphyTab *tab;
+	EphyEmbed *embed;
 	const GValue *value;
 
-	tab = ephy_window_get_active_tab (window);
+	embed = ephy_window_get_active_tab (window);
 
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
 	value = ephy_embed_event_get_property (event, "link");
 
-	ephy_shell_new_tab (ephy_shell, NULL, tab,
+	ephy_shell_new_tab (ephy_shell, NULL, embed,
 			    g_value_get_string (value),
 			    EPHY_NEW_TAB_OPEN_PAGE |
 			    EPHY_NEW_TAB_IN_NEW_WINDOW);
@@ -65,17 +65,17 @@ popup_cmd_link_in_new_tab (GtkAction *action,
 		           EphyWindow *window)
 {
 	EphyEmbedEvent *event;
-	EphyTab *tab;
+	EphyEmbed *embed;
 	const GValue *value;
 
-	tab = ephy_window_get_active_tab (window);
+	embed = ephy_window_get_active_tab (window);
 
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
 	value = ephy_embed_event_get_property (event, "link");
 
-	ephy_shell_new_tab (ephy_shell, window, tab,
+	ephy_shell_new_tab (ephy_shell, window, embed,
 			    g_value_get_string (value),
 			    EPHY_NEW_TAB_OPEN_PAGE |
 			    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
@@ -204,7 +204,7 @@ save_property_url (GtkAction *action,
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
-	embed = ephy_window_get_active_embed (window);
+	embed = ephy_window_get_active_tab (window);
 	g_return_if_fail (embed != NULL);
 
 	value = ephy_embed_event_get_property (event, property);
@@ -239,7 +239,7 @@ popup_cmd_open_link (GtkAction *action,
 	const GValue *value;
 	EphyEmbed *embed;
 
-	embed = ephy_window_get_active_embed (window);
+	embed = ephy_window_get_active_tab (window);
 	g_return_if_fail (embed != NULL);
 
 	event = ephy_window_get_context_event (window);
@@ -314,7 +314,7 @@ popup_cmd_set_image_as_background (GtkAction *action,
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
-	embed = ephy_window_get_active_embed (window);
+	embed = ephy_window_get_active_tab (window);
 	g_return_if_fail (embed != NULL);
 
 	value = ephy_embed_event_get_property (event, "image");
@@ -364,7 +364,7 @@ popup_cmd_open_frame (GtkAction *action,
 	char *location;
 	EphyEmbed *embed;
 
-	embed = ephy_window_get_active_embed (window);
+	embed = ephy_window_get_active_tab (window);
 	g_return_if_fail (embed != NULL);
 
 	location = ephy_embed_get_location (embed, FALSE);
@@ -468,7 +468,7 @@ popup_cmd_open_image (GtkAction *action,
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
-	embed = ephy_window_get_active_embed (window);
+	embed = ephy_window_get_active_tab (window);
 	g_return_if_fail (embed != NULL);
 
 	value = ephy_embed_event_get_property (event, "image");
