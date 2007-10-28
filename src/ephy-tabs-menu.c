@@ -157,39 +157,39 @@ tab_action_activate_cb (GtkToggleAction *action,
 			EphyTabsMenu *menu)
 {
 	EphyTabsMenuPrivate *priv = menu->priv;
-	EphyTab *tab;
+	EphyEmbed *embed;
 
 	if (gtk_toggle_action_get_active (action) == FALSE)
 	{
 		return;
 	}
 
-	tab = g_object_get_data (G_OBJECT (action), DATA_KEY);
-	g_return_if_fail (tab != NULL);
+	embed = g_object_get_data (G_OBJECT (action), DATA_KEY);
+	g_return_if_fail (embed != NULL);
 
-	LOG ("tab_action_activate_cb tab=%p", tab);
+	LOG ("tab_action_activate_cb embed=%p", embed);
 
-	if (ephy_window_get_active_tab (priv->window) != tab)
+	if (ephy_window_get_active_tab (priv->window) != embed)
 	{
-		ephy_window_jump_to_tab (priv->window, tab);
+		ephy_window_jump_to_tab (priv->window, embed);
 	}
 }
 
 static void
-sync_tab_title (EphyTab *tab,
+sync_tab_title (EphyEmbed *embed,
 		GParamSpec *pspec,
 		GtkAction *action)
 {
 	const char *title;
 
-	title = ephy_embed_utils_get_title_composite (ephy_tab_get_embed (tab));
+	title = ephy_embed_utils_get_title_composite (embed);
 
 	g_object_set (action, "label", title, NULL);
 }
 
 static void
 notebook_page_added_cb (EphyNotebook *notebook,
-			EphyTab *tab,
+			EphyEmbed *embed,
 			guint position,
 			EphyTabsMenu *menu)
 {
@@ -198,7 +198,7 @@ notebook_page_added_cb (EphyNotebook *notebook,
 	char verb[ACTION_VERB_FORMAT_LENGTH];
 	GSList *group;
 
-	LOG ("tab_added_cb tab=%p", tab);
+	LOG ("tab_added_cb embed=%p", embed);
 
 	g_snprintf (verb, sizeof (verb), ACTION_VERB_FORMAT, allocate_tab_id ());
   
@@ -207,9 +207,9 @@ notebook_page_added_cb (EphyNotebook *notebook,
 			       "tooltip", _("Switch to this tab"),
 			       NULL);
 
-	sync_tab_title (tab, NULL, action);
+	sync_tab_title (embed, NULL, action);
 	/* make sure the action is alive when handling the signal, see bug #169833 */
-	g_signal_connect_object (tab, "notify::title",
+	g_signal_connect_object (embed, "notify::title",
 				 G_CALLBACK (sync_tab_title), action, 0);
 
 	gtk_action_group_add_action_with_accel (priv->action_group, action, NULL);
@@ -218,13 +218,13 @@ notebook_page_added_cb (EphyNotebook *notebook,
 	gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
 
 	/* set this here too, since tab-added comes after notify::active-tab */
-	if (ephy_window_get_active_tab (priv->window) == tab)
+	if (ephy_window_get_active_tab (priv->window) == embed)
 	{
 		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
 	}
 
-	g_object_set_data (G_OBJECT (tab), DATA_KEY, action);
-	g_object_set_data (G_OBJECT (action), DATA_KEY, tab);
+	g_object_set_data (G_OBJECT (embed), DATA_KEY, action);
+	g_object_set_data (G_OBJECT (action), DATA_KEY, embed);
 
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (tab_action_activate_cb), menu);
@@ -236,27 +236,27 @@ notebook_page_added_cb (EphyNotebook *notebook,
 
 static void
 notebook_page_removed_cb (EphyNotebook *notebook,
-			  EphyTab *tab,
+			  EphyEmbed *embed,
 			  guint position,
 			  EphyTabsMenu *menu)
 {
 	EphyTabsMenuPrivate *priv = menu->priv;
 	GtkAction *action;
 													     
-	LOG ("tab_removed_cb tab=%p", tab);
+	LOG ("tab_removed_cb embed=%p", embed);
 
-	action = g_object_get_data (G_OBJECT (tab), DATA_KEY);
+	action = g_object_get_data (G_OBJECT (embed), DATA_KEY);
 	g_return_if_fail (action != NULL);
 
         free_tab_id (action);
 
 	g_signal_handlers_disconnect_by_func
-		(tab, G_CALLBACK (sync_tab_title), action);
+		(embed, G_CALLBACK (sync_tab_title), action);
 
 	g_signal_handlers_disconnect_by_func
 		(action, G_CALLBACK (tab_action_activate_cb), menu);
 
-	g_object_set_data (G_OBJECT (tab), DATA_KEY, NULL);
+	g_object_set_data (G_OBJECT (embed), DATA_KEY, NULL);
  	gtk_action_group_remove_action (priv->action_group, action);
 
 	ephy_tabs_menu_update (menu);
@@ -264,7 +264,7 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 
 static void
 notebook_page_reordered_cb (EphyNotebook *notebook,
-			    EphyTab *tab,
+			    EphyEmbed *embed,
 			    guint position,
 			    EphyTabsMenu *menu)
 {
@@ -296,15 +296,15 @@ sync_active_tab (EphyWindow *window,
 		 GParamSpec *pspec,
 		 EphyTabsMenu *menu)
 {
-	EphyTab *tab;
+	EphyEmbed *embed;
 	GtkAction *action;
 
-	tab = ephy_window_get_active_tab (window);
-	if (tab == NULL) return;
+	embed = ephy_window_get_active_tab (window);
+	if (embed == NULL) return;
 
-	LOG ("active tab is tab %p", tab);
+	LOG ("active tab is embed %p", embed);
 
-	action = g_object_get_data (G_OBJECT (tab), DATA_KEY);
+	action = g_object_get_data (G_OBJECT (embed), DATA_KEY);
 	/* happens initially, since the ::active-tab comes before
 	* the ::tab-added signal
 	*/
