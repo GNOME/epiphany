@@ -32,7 +32,6 @@
 
 #include "ephy-extension.h"
 #include "ephy-window.h"
-#include "ephy-tab.h"
 #include "ephy-file-helpers.h"
 #include "ephy-debug.h"
 
@@ -189,10 +188,10 @@ static void
 call_python_func (EphyExtension *extension,
 		  const char *func_name,
 		  EphyWindow *window,
-		  EphyTab *tab) /* HACK: tab may be NULL */
+		  EphyEmbed *embed) /* HACK: tab may be NULL */
 {
 	PyObject *pDict, *pFunc;
-	PyObject *pArgs, *pValue, *pTab = NULL, *pWindow;
+	PyObject *pArgs, *pValue, *pEmbed = NULL, *pWindow;
 	EphyPythonExtension *py_ext;
 	
 	py_ext = EPHY_PYTHON_EXTENSION (extension);
@@ -209,15 +208,15 @@ call_python_func (EphyExtension *extension,
 
 	if (pFunc && PyCallable_Check (pFunc))
 	{
-		pArgs = PyTuple_New (tab == NULL ? 1 : 2);
+		pArgs = PyTuple_New (embed == NULL ? 1 : 2);
 
 		pWindow = pygobject_new (G_OBJECT (window));
 		PyTuple_SetItem (pArgs, 0, pWindow);
 
-		if (tab != NULL)
+		if (embed != NULL)
 		{
-			pTab = pygobject_new (G_OBJECT (tab));
-			PyTuple_SetItem (pArgs, 1, pTab);
+			pEmbed = pygobject_new (G_OBJECT (embed));
+			PyTuple_SetItem (pArgs, 1, pEmbed);
 		}
 
 		pValue = PyObject_CallObject (pFunc, pArgs);
@@ -244,17 +243,17 @@ call_python_func (EphyExtension *extension,
 static void
 impl_attach_tab (EphyExtension *extension,
 		 EphyWindow *window,
-		 EphyTab *tab)
+		 EphyEmbed *embed)
 {
-	call_python_func (extension, "attach_tab", window, tab);
+	call_python_func (extension, "attach_tab", window, embed);
 }
 
 static void
 impl_detach_tab (EphyExtension *extension,
 		 EphyWindow *window,
-		 EphyTab *tab)
+		 EphyEmbed *embed)
 {
-	call_python_func (extension, "detach_tab", window, tab);
+	call_python_func (extension, "detach_tab", window, embed);
 
 	ephy_python_schedule_gc ();
 }
