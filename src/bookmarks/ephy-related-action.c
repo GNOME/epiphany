@@ -54,10 +54,10 @@ node_destroyed (EphyNode *node,
 	ephy_topic_action_set_topic (action, favorites);
 }
 
-static EphyTab *
+static EphyEmbed *
 open_link (EphyLink *link,
 	   const char *address,
-	   EphyTab *tab,
+	   EphyEmbed *embed,
 	   EphyLinkFlags flags)
 {
 	EphyBookmarks *eb;
