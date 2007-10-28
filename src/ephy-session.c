@@ -25,7 +25,6 @@
 #include "ephy-session.h"
 
 #include "ephy-window.h"
-#include "ephy-tab.h"
 #include "ephy-shell.h"
 #include "ephy-history-window.h"
 #include "ephy-bookmarks-editor.h"
@@ -436,24 +435,24 @@ net_stop_cb (EphyEmbed *embed,
 
 static void
 notebook_page_added_cb (GtkWidget *notebook,
-			EphyTab *tab,
+			EphyEmbed *embed,
 			guint position,
 			EphySession *session)
 {
-	g_signal_connect (ephy_tab_get_embed (tab), "net-stop",
+	g_signal_connect (embed, "net-stop",
 			  G_CALLBACK (net_stop_cb), session);
 }
 
 static void
 notebook_page_removed_cb (GtkWidget *notebook,
-			  EphyTab *tab,
+			  EphyEmbed *embed,
 			  guint position,
 			  EphySession *session)
 {
 	ephy_session_save (session, SESSION_CRASHED);
 
 	g_signal_handlers_disconnect_by_func
-		(ephy_tab_get_embed (tab), G_CALLBACK (net_stop_cb), session);
+		(embed, G_CALLBACK (net_stop_cb), session);
 }
 
 static void
@@ -659,7 +658,7 @@ session_command_open_uris (EphySession *session,
 {
 	EphyShell *shell;
 	EphyWindow *window;
-	EphyTab *tab;
+	EphyEmbed *embed;
 	EphyNewTabFlags flags = 0;
 	guint i;
 
@@ -694,15 +693,15 @@ session_command_open_uris (EphySession *session,
 			page_flags = EPHY_NEW_TAB_OPEN_PAGE;
 		}
 
-		tab = ephy_shell_new_tab_full (shell, window,
-					       NULL /* parent tab */,
-					       url,
-					       flags | page_flags,
-					       EPHY_EMBED_CHROME_ALL,
-					       FALSE /* is popup? */,
-					       user_time);
+		embed = ephy_shell_new_tab_full (shell, window,
+					         NULL /* parent tab */,
+					         url,
+					         flags | page_flags,
+					         EPHY_EMBED_CHROME_ALL,
+					         FALSE /* is popup? */,
+					         user_time);
 
-		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab)));
+		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed)));
 	}
 
 	g_object_unref (shell);
@@ -1060,7 +1059,7 @@ ephy_session_close (EphySession *session)
 
 static int
 write_tab (xmlTextWriterPtr writer,
-	   EphyTab *tab)
+	   EphyEmbed *embed)
 {
 	const char *address, *title;
 	int ret;
@@ -1068,17 +1067,17 @@ write_tab (xmlTextWriterPtr writer,
 	ret = xmlTextWriterStartElement (writer, (xmlChar *) "embed");
 	if (ret < 0) return ret;
 
-	address = ephy_embed_get_address (ephy_tab_get_embed (tab));
+	address = ephy_embed_get_address (embed);
 	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "url",
 					   (const xmlChar *) address);
 	if (ret < 0) return ret;
 
-	title = ephy_embed_get_title (ephy_tab_get_embed (tab));
+	title = ephy_embed_get_title (embed);
 	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "title",
 					   (const xmlChar *) title);
 	if (ret < 0) return ret;
 
-	if (ephy_embed_get_load_status (ephy_tab_get_embed (tab)))
+	if (ephy_embed_get_load_status (embed))
 	{
 		ret = xmlTextWriterWriteAttribute (writer,
 						   (const xmlChar *) "loading",
@@ -1199,8 +1198,8 @@ write_ephy_window (xmlTextWriterPtr writer,
 
 	for (l = tabs; l != NULL; l = l->next)
 	{
-		EphyTab *tab = EPHY_TAB(l->data);
-		ret = write_tab (writer, tab);
+		EphyEmbed *embed = EPHY_EMBED (l->data);
+		ret = write_tab (writer, embed);
 		if (ret < 0) break;
 	}
 	g_list_free (tabs);
