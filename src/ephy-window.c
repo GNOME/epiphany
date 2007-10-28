@@ -530,8 +530,8 @@ ephy_tab_get_size (EphyEmbed *embed,
                    int *width,
                    int *height)
 {
-        *width = 100;
-        *height = 100;
+        *width = -1;
+        *height = -1;
 }
 
 static void
