@@ -23,10 +23,10 @@
 #ifndef EPHY_NOTEBOOK_H
 #define EPHY_NOTEBOOK_H
 
-#include "ephy-tab.h"
-
 #include <glib.h>
 #include <gtk/gtknotebook.h>
+
+#include "ephy-embed.h"
 
 G_BEGIN_DECLS
 
@@ -55,13 +55,13 @@ struct _EphyNotebookClass
 
 	/* Signals */
 	void	 (* tab_close_req)  (EphyNotebook *notebook,
-				     EphyTab *tab);
+				     EphyEmbed *embed);
 };
 
 GType		ephy_notebook_get_type		(void);
 
 int		ephy_notebook_add_tab		(EphyNotebook *nb,
-						 EphyTab *tab,
+						 EphyEmbed *embed,
 						 int position,
 						 gboolean jump_to);
 	

@@ -212,21 +212,17 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 			      g_cclosure_marshal_VOID__OBJECT,
 			      G_TYPE_NONE,
 			      1,
-			      EPHY_TYPE_TAB);
+			      EPHY_TYPE_EMBED);
 
 	g_object_class_install_property (object_class,
 					 PROP_DND_ENABLED,
-					 g_param_spec_boolean ("dnd-enabled",
-							       "DND enabled",
-							       "Whether the notebook allows tab reordering by DND",
+					 g_param_spec_boolean ("dnd-enabled", NULL, NULL,
 							       TRUE,
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
 					 PROP_SHOW_TABS,
-					 g_param_spec_boolean ("show-tabs",
-							       "Show tabs",
-							       "Whether the notebook shows the tabs bar",
+					 g_param_spec_boolean ("show-tabs", NULL, NULL,
 							       TRUE,
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
@@ -391,7 +387,7 @@ ephy_notebook_switch_page_cb (GtkNotebook *notebook,
 static void
 notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 				gint x, gint y, GtkSelectionData *selection_data,
-				guint info, guint time, EphyTab *tab)
+				guint info, guint time, EphyEmbed *embed)
 {
 	EphyWindow *window;
 	GtkWidget *notebook;
@@ -413,8 +409,8 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 		split = g_strsplit ((const gchar *)selection_data->data, "\n", 2);
 		if (split != NULL && split[0] != NULL && split[0][0] != '\0')
 		{
-			ephy_link_open (EPHY_LINK (notebook), split[0], tab,
-					tab ? 0 : EPHY_LINK_NEW_TAB);
+			ephy_link_open (EPHY_LINK (notebook), split[0], embed,
+					embed ? 0 : EPHY_LINK_NEW_TAB);
 		}
 		g_strfreev (split);
 	}
@@ -428,8 +424,8 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 
 		for (i = 0; uris[i] != NULL && i < INSANE_NUMBER_OF_URLS; i++)
 		{
-			tab = ephy_link_open (EPHY_LINK (notebook), uris[i], tab, 
-					(tab && i == 0) ? 0 : EPHY_LINK_NEW_TAB);
+			embed = ephy_link_open (EPHY_LINK (notebook), uris[i], embed,
+					(embed && i == 0) ? 0 : EPHY_LINK_NEW_TAB);
 		}
 
 		g_strfreev (uris);
@@ -440,8 +436,8 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 	       
 		text = (char *) gtk_selection_data_get_text (selection_data);
 		if (text != NULL) {
-			ephy_link_open (EPHY_LINK (notebook), text, tab,
-					tab ? 0 : EPHY_LINK_NEW_TAB);
+			ephy_link_open (EPHY_LINK (notebook), text, embed,
+					embed ? 0 : EPHY_LINK_NEW_TAB);
 			g_free (text);
 		}
 	}
@@ -551,19 +547,19 @@ sync_load_status (EphyEmbed *embed, GParamSpec *pspec, GtkWidget *proxy)
 }
 
 static void
-sync_icon (EphyTab *tab,
+sync_icon (EphyEmbed *embed,
 	   GParamSpec *pspec,
 	   GtkImage *icon)
 {
-        gtk_image_set_from_pixbuf (icon, ephy_embed_get_icon (ephy_tab_get_embed (tab)));
+        gtk_image_set_from_pixbuf (icon, ephy_embed_get_icon (embed));
 }
 
 static void
-sync_label (EphyTab *tab, GParamSpec *pspec, GtkWidget *label)
+sync_label (EphyEmbed *embed, GParamSpec *pspec, GtkWidget *label)
 {
 	const char *title;
 
-	title = ephy_embed_get_title (ephy_tab_get_embed (tab));
+	title = ephy_embed_get_title (embed);
 
 	gtk_label_set_text (GTK_LABEL (label), title);
 
@@ -611,7 +607,7 @@ tab_label_style_set_cb (GtkWidget *hbox,
 }
 
 static GtkWidget *
-build_tab_label (EphyNotebook *nb, EphyTab *tab)
+build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 {
 	GtkWidget *hbox, *label, *close_button, *image, *spinner, *icon;
 	GtkRcStyle *rcstyle;
@@ -654,7 +650,7 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
 	gtk_widget_set_tooltip_text (close_button, _("Close tab"));
 	g_signal_connect (close_button, "clicked",
-			  G_CALLBACK (close_button_clicked_cb), tab);
+			  G_CALLBACK (close_button_clicked_cb), embed);
 
 	gtk_container_add (GTK_CONTAINER (close_button), image);
 	gtk_widget_show (image);
@@ -668,7 +664,7 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 
 	/* Set up drag-and-drop target */
 	g_signal_connect (hbox, "drag-data-received",
-			  G_CALLBACK (notebook_drag_data_received_cb), tab);
+			  G_CALLBACK (notebook_drag_data_received_cb), embed);
 	gtk_drag_dest_set (hbox, GTK_DEST_DEFAULT_ALL,
 			   url_drag_types, G_N_ELEMENTS (url_drag_types),
 			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
@@ -680,15 +676,15 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	g_object_set_data (G_OBJECT (hbox), "close-button", close_button);
 
 	/* Hook the label up to the tab properties */
-	sync_icon (tab, NULL, GTK_IMAGE (icon));
-	sync_label (tab, NULL, label);
-	sync_load_status (ephy_tab_get_embed (tab), NULL, hbox);
+	sync_icon (embed, NULL, GTK_IMAGE (icon));
+	sync_label (embed, NULL, label);
+	sync_load_status (embed, NULL, hbox);
 
-	g_signal_connect_object (tab, "notify::icon",
+	g_signal_connect_object (embed, "notify::icon",
 				 G_CALLBACK (sync_icon), icon, 0);
-	g_signal_connect_object (tab, "notify::title",
+	g_signal_connect_object (embed, "notify::title",
 				 G_CALLBACK (sync_label), label, 0);
-	g_signal_connect_object (ephy_tab_get_embed (tab), "notify::load-status",
+	g_signal_connect_object (embed, "notify::load-status",
 				 G_CALLBACK (sync_load_status), hbox, 0);
 
 	return hbox;
@@ -729,9 +725,9 @@ ephy_notebook_insert_page (GtkNotebook *gnotebook,
 		g_object_unref (tab_label);
 	}
 
-	g_assert (EPHY_IS_TAB (tab_widget));
+	g_assert (EPHY_IS_EMBED (tab_widget));
 
-	tab_label = build_tab_label (notebook, EPHY_TAB (tab_widget));
+	tab_label = build_tab_label (notebook, EPHY_EMBED (tab_widget));
 
 	update_tabs_visibility (notebook, TRUE);
 
@@ -748,7 +744,7 @@ ephy_notebook_insert_page (GtkNotebook *gnotebook,
 
 int
 ephy_notebook_add_tab (EphyNotebook *notebook,
-		       EphyTab *tab,
+		       EphyEmbed *embed,
 		       int position,
 		       gboolean jump_to)
 {
@@ -757,18 +753,19 @@ ephy_notebook_add_tab (EphyNotebook *notebook,
 	g_return_val_if_fail (EPHY_IS_NOTEBOOK (notebook), -1);
 
 	position = gtk_notebook_insert_page (GTK_NOTEBOOK (notebook),
-					     GTK_WIDGET (tab),
+					     GTK_WIDGET (embed),
 					     NULL,
 					     position);
 
 	/* FIXME gtk bug! */
+        /* FIXME: this should be fixed in gtk 2.12; check & remove this! */
 	/* The signal handler may have reordered the tabs */
-	position = gtk_notebook_page_num (gnotebook, GTK_WIDGET (tab));
+	position = gtk_notebook_page_num (gnotebook, GTK_WIDGET (embed));
 
 	if (jump_to)
 	{
 		gtk_notebook_set_current_page (gnotebook, position);
-		g_object_set_data (G_OBJECT (tab), "jump_to",
+		g_object_set_data (G_OBJECT (embed), "jump_to",
 				   GINT_TO_POINTER (jump_to));
 
 	}
@@ -816,7 +813,7 @@ ephy_notebook_remove (GtkContainer *container,
 	GtkWidget *tab_label, *tab_label_label, *tab_label_icon;
 	int position, curr;
 
-	g_assert (EPHY_IS_TAB (tab_widget));
+	g_assert (EPHY_IS_EMBED (tab_widget));
 
 	/* Remove the page from the focused pages list */
 	priv->focused_pages =  g_list_remove (priv->focused_pages, tab_widget);
@@ -839,7 +836,7 @@ ephy_notebook_remove (GtkContainer *container,
 	g_signal_handlers_disconnect_by_func
 		(tab_widget, G_CALLBACK (sync_label), tab_label_label);
 	g_signal_handlers_disconnect_by_func
-          (ephy_tab_get_embed (EPHY_TAB (tab_widget)), G_CALLBACK (sync_load_status), tab_label);
+          (tab_widget, G_CALLBACK (sync_load_status), tab_label);
 
 	GTK_CONTAINER_CLASS (parent_class)->remove (container, tab_widget);
 
