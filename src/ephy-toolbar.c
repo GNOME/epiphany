@@ -168,20 +168,20 @@ sync_user_input_cb (EphyLocationAction *action,
 		    EphyToolbar *toolbar)
 {
 	EphyToolbarPrivate *priv = toolbar->priv;
-	EphyTab *tab;
+	EphyEmbed *embed;
 	const char *address;
 
 	LOG ("sync_user_input_cb");
 
 	if (priv->updating_address) return;
 
-	tab = ephy_window_get_active_tab (priv->window);
-	g_return_if_fail (EPHY_IS_TAB (tab));
+	embed = ephy_window_get_active_tab (priv->window);
+        g_assert (EPHY_IS_EMBED (embed));
 
 	address = ephy_location_action_get_address (action);
 
 	priv->updating_address = TRUE;
-	ephy_embed_set_typed_address (ephy_tab_get_embed (tab), address,
+	ephy_embed_set_typed_address (embed, address,
                                       EPHY_EMBED_ADDRESS_EXPIRE_CURRENT);
 	priv->updating_address = FALSE;
 }
