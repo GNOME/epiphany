@@ -43,7 +43,7 @@ activate_cb (GtkAction *action,
 	EphyLink *link;
 	EphyNode *node;
 	GPtrArray *children;
-	EphyTab *tab = 0;
+	EphyEmbed *embed = NULL;
 	const char *url;
 	guint i;
 
@@ -56,8 +56,8 @@ activate_cb (GtkAction *action,
 		node = g_ptr_array_index (children, i);
 
 		url = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
-		tab = ephy_link_open (link, url, tab,
-				      EPHY_LINK_NEW_TAB | ephy_link_flags_from_current_event ());
+		embed = ephy_link_open (link, url, embed,
+				        EPHY_LINK_NEW_TAB | ephy_link_flags_from_current_event ());
 	}
 }
 
