@@ -156,6 +156,11 @@ webkit_embed_title_changed_cb (WebKitFrame *frame,
                                gchar *location,
                                EphyEmbed *embed)
 {
+  WebKitEmbedPrivate *priv = WEBKIT_EMBED (embed)->priv;
+  g_free (priv->title);
+  priv->title = g_strdup (title);
+  g_object_notify (G_OBJECT (embed), "title");
+
   /* FIXME: We emit ge-location signal here, but it should really belong
    * to a "location_changed" signal by WebKit, as we can change title
    * without changing location or change location without changing title
