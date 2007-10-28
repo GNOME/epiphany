@@ -212,7 +212,7 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 			      g_cclosure_marshal_VOID__OBJECT,
 			      G_TYPE_NONE,
 			      1,
-			      EPHY_TYPE_EMBED);
+			      GTK_TYPE_WIDGET /* Can't use an interface type here */);
 
 	g_object_class_install_property (object_class,
 					 PROP_DND_ENABLED,
