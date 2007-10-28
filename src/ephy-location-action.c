@@ -283,23 +283,22 @@ get_location_cb (EphyLocationEntry *entry,
 		EphyLocationAction *action)
 {
 	EphyLocationActionPrivate *priv = action->priv;
-	EphyTab *tab;
+	EphyEmbed *embed;
 	
-	tab = ephy_window_get_active_tab (priv->window);
-	g_return_val_if_fail (tab != NULL, NULL);
+	embed = ephy_window_get_active_tab (priv->window);
 
-	return g_strdup (ephy_embed_get_address (ephy_tab_get_embed (tab)));
+	return g_strdup (ephy_embed_get_address (embed));
 }
 
 static char *
 get_title_cb (EphyLocationEntry *entry,
 	      EphyLocationAction *action)
 {
-	EphyTab *tab;
+	EphyEmbed *embed;
 
-	tab = ephy_window_get_active_tab (action->priv->window);
+	embed = ephy_window_get_active_tab (action->priv->window);
 
-	return g_strdup (ephy_embed_get_title (ephy_tab_get_embed (tab)));
+	return g_strdup (ephy_embed_get_title (embed));
 }
 
 static void
