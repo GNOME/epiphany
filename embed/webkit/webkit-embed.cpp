@@ -37,11 +37,11 @@
 #include "webkit-embed.h"
 #include "ephy-embed.h"
 
-static void	webkit_embed_class_init	(WebKitEmbedClass *klass);
-static void	webkit_embed_init		(WebKitEmbed *gs);
-static void	webkit_embed_destroy		(GtkObject *object);
-static void	webkit_embed_finalize		(GObject *object);
-static void	ephy_embed_iface_init		(EphyEmbedIface *iface);
+static void     webkit_embed_class_init (WebKitEmbedClass *klass);
+static void     webkit_embed_init               (WebKitEmbed *gs);
+static void     webkit_embed_destroy            (GtkObject *object);
+static void     webkit_embed_finalize           (GObject *object);
+static void     ephy_embed_iface_init           (EphyEmbedIface *iface);
 
 static void impl_set_typed_address (EphyEmbed *embed,
                                     const char *address,
@@ -91,7 +91,7 @@ struct WebKitEmbedPrivate
   /* File watch */
   GnomeVFSMonitorHandle *monitor;
   guint reload_scheduled_id;
-  guint reload_delay_ticks;	
+  guint reload_delay_ticks;     
 };
 
 enum 
@@ -99,12 +99,14 @@ enum
   PROP_0,
   PROP_ADDRESS,
   PROP_DOCUMENT_TYPE,
+  PROP_HIDDEN_POPUP_COUNT,
   PROP_ICON,
   PROP_ICON_ADDRESS,
   PROP_LINK_MESSAGE,
   PROP_LOAD_PROGRESS,
   PROP_LOAD_STATUS,
   PROP_NAVIGATION,
+  PROP_POPUPS_ALLOWED,
   PROP_SECURITY,
   PROP_STATUS_MESSAGE,
   PROP_TITLE,
@@ -114,13 +116,13 @@ enum
 
 static void
 impl_manager_do_command (EphyCommandManager *manager,
-			 const char *command) 
+                         const char *command) 
 {
 }
 
 static gboolean
 impl_manager_can_do_command (EphyCommandManager *manager,
-			     const char *command) 
+                             const char *command) 
 {
   return FALSE;
 }
@@ -150,9 +152,9 @@ impl_close (EphyEmbed *embed)
 
 static void
 webkit_embed_title_changed_cb (WebKitFrame *frame,
-			       gchar *title,
-			       gchar *location,
-			       EphyEmbed *embed)
+                               gchar *title,
+                               gchar *location,
+                               EphyEmbed *embed)
 {
   /* FIXME: We emit ge-location signal here, but it should really belong
    * to a "location_changed" signal by WebKit, as we can change title
@@ -192,8 +194,8 @@ update_load_state (WebKitEmbed *embed, WebKitPage *page)
 
 static void
 webkit_embed_load_started_cb (WebKitPage *page,
-			      WebKitFrame *frame,
-			      EphyEmbed *embed)
+                              WebKitFrame *frame,
+                              EphyEmbed *embed)
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
   wembed->priv->load_state = WEBKIT_EMBED_LOAD_STARTED;
@@ -216,8 +218,8 @@ webkit_embed_set_load_percent (WebKitEmbed *embed,
 
 static void
 webkit_embed_load_progress_changed_cb (WebKitPage *page,
-				       int progress,
-				       EphyEmbed *embed)
+                                       int progress,
+                                       EphyEmbed *embed)
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
 
@@ -231,8 +233,8 @@ webkit_embed_load_progress_changed_cb (WebKitPage *page,
 
 static void
 webkit_embed_load_finished_cb (WebKitPage *page,
-			       WebKitFrame *frame,
-			       EphyEmbed *embed)
+                               WebKitFrame *frame,
+                               EphyEmbed *embed)
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
   wembed->priv->load_state = WEBKIT_EMBED_LOAD_STOPPED;
@@ -257,6 +259,9 @@ webkit_embed_get_property (GObject *object,
     case PROP_DOCUMENT_TYPE:
       g_value_set_enum (value, priv->document_type);
       break;
+    case PROP_HIDDEN_POPUP_COUNT:
+      g_value_set_int (value, 0);
+      break;
     case PROP_ICON:
       g_value_set_object (value, priv->icon);
       break;
@@ -274,6 +279,9 @@ webkit_embed_get_property (GObject *object,
       break;
     case PROP_NAVIGATION:
       g_value_set_flags (value, priv->nav_flags);
+      break;
+    case PROP_POPUPS_ALLOWED:
+      g_value_set_boolean (value, FALSE);
       break;
     case PROP_SECURITY:
       g_value_set_enum (value, priv->security_level);
@@ -313,8 +321,11 @@ webkit_embed_set_property (GObject *object,
       impl_set_typed_address (EPHY_EMBED (object), g_value_get_string (value),
                               EPHY_EMBED_ADDRESS_EXPIRE_NOW);
       break;
+    case PROP_POPUPS_ALLOWED:
+      break;
     case PROP_ADDRESS:
     case PROP_DOCUMENT_TYPE:
+    case PROP_HIDDEN_POPUP_COUNT:
     case PROP_ICON:
     case PROP_LOAD_PROGRESS:
     case PROP_LOAD_STATUS:
@@ -360,6 +371,8 @@ webkit_embed_class_init (WebKitEmbedClass *klass)
   g_object_class_override_property (object_class, PROP_LINK_MESSAGE, "link-message");
   g_object_class_override_property (object_class, PROP_ICON, "icon");
   g_object_class_override_property (object_class, PROP_ICON_ADDRESS, "icon-address");
+  g_object_class_override_property (object_class, PROP_POPUPS_ALLOWED, "popups-allowed");
+  g_object_class_override_property (object_class, PROP_HIDDEN_POPUP_COUNT, "hidden-popup-count");
 
   g_type_class_add_private (object_class, sizeof(WebKitEmbedPrivate));
 }
@@ -435,8 +448,8 @@ impl_load_url (EphyEmbed *embed,
 static void
 impl_load (EphyEmbed *embed, 
            const char *url,
-	   EphyEmbedLoadFlags flags,
-	   EphyEmbed *preview_embed)
+           EphyEmbedLoadFlags flags,
+           EphyEmbed *preview_embed)
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
   char *effective_url = NULL;
@@ -497,7 +510,7 @@ impl_go_back (EphyEmbed *embed)
 {
   webkit_page_go_backward (WEBKIT_EMBED (embed)->priv->page);
 }
-		
+                
 static void
 impl_go_forward (EphyEmbed *embed)
 {
@@ -512,8 +525,7 @@ impl_go_up (EphyEmbed *embed)
 static const char *
 impl_get_title (EphyEmbed *embed)
 {
-  WebKitFrame *frame = webkit_page_get_main_frame (WEBKIT_EMBED (embed)->priv->page);
-  return webkit_frame_get_title (frame);
+  return WEBKIT_EMBED (embed)->priv->title;
 }
 
 static char *
@@ -553,20 +565,20 @@ impl_get_zoom (EphyEmbed *embed)
 
 static void
 impl_scroll_lines (EphyEmbed *embed,
-		   int num_lines)
+                   int num_lines)
 {
 }
 
 static void
 impl_scroll_pages (EphyEmbed *embed,
-		   int num_pages)
+                   int num_pages)
 {
 }
 
 static void
 impl_scroll_pixels (EphyEmbed *embed,
-		    int dx,
-		    int dy)
+                    int dx,
+                    int dy)
 {
 }
 
@@ -601,10 +613,10 @@ impl_shistory_go_nth (EphyEmbed *embed,
 
 static void
 impl_shistory_copy (EphyEmbed *source,
-		    EphyEmbed *dest,
-		    gboolean copy_back,
-		    gboolean copy_forward,
-		    gboolean copy_current)
+                    EphyEmbed *dest,
+                    gboolean copy_back,
+                    gboolean copy_forward,
+                    gboolean copy_current)
 {
 }
 
@@ -620,7 +632,7 @@ static void
 impl_show_page_certificate (EphyEmbed *embed)
 {
 }
-	
+        
 static void
 impl_print (EphyEmbed *embed)
 {
@@ -639,14 +651,14 @@ impl_print_preview_n_pages (EphyEmbed *embed)
 
 static void
 impl_print_preview_navigate (EphyEmbed *embed,
-			     EphyEmbedPrintPreviewNavType type,
-			     int page)
+                             EphyEmbedPrintPreviewNavType type,
+                             int page)
 {
 }
 
 static void
 impl_set_encoding (EphyEmbed *embed,
-		   const char *encoding)
+                   const char *encoding)
 {
 }
 
@@ -758,8 +770,8 @@ impl_get_typed_address (EphyEmbed *embed)
 
 static void
 impl_set_typed_address (EphyEmbed *embed,
-			const char *address,
-			EphyEmbedAddressExpire expire)
+                        const char *address,
+                        EphyEmbedAddressExpire expire)
 {
   WebKitEmbedPrivate *priv = WEBKIT_EMBED (embed)->priv;
  
