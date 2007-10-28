@@ -48,12 +48,12 @@ ephy_link_base_init (gpointer g_class)
 			 EPHY_TYPE_LINK,
 			 G_SIGNAL_RUN_LAST,
 			 G_STRUCT_OFFSET (EphyLinkIface, open_link),
-			 ephy_signal_accumulator_object, ephy_tab_get_type,
+			 ephy_signal_accumulator_object, ephy_embed_get_type,
 			 ephy_marshal_OBJECT__STRING_OBJECT_FLAGS,
-			 EPHY_TYPE_TAB,
+			 EPHY_TYPE_EMBED,
 			 3,
 			 G_TYPE_STRING,
-			 EPHY_TYPE_TAB,
+			 EPHY_TYPE_EMBED,
 			 EPHY_TYPE_LINK_FLAGS);
 
 		initialised = TRUE;
@@ -82,21 +82,21 @@ ephy_link_get_type (void)
 	return type;
 }
 
-EphyTab	*
+EphyEmbed *
 ephy_link_open (EphyLink *link,
 		const char *address,
-		EphyTab *tab,
+		EphyEmbed *embed,
 		EphyLinkFlags flags)
 {
-	EphyTab *new_tab = NULL;
+	EphyEmbed *new_embed = NULL;
 
-	LOG ("ephy_link_open address \"%s\" parent-tab %p flags %u", address, tab, flags);
+	LOG ("ephy_link_open address \"%s\" parent-embed %p flags %u", address, embed, flags);
 
 	g_signal_emit (link, signals[OPEN_LINK], 0,
-		       address, tab, flags,
-		       &new_tab);
+		       address, embed, flags,
+		       &new_embed);
 
-	return new_tab;
+	return new_embed;
 }
 
 EphyLinkFlags

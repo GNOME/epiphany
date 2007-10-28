@@ -22,7 +22,8 @@
 #define EPHY_LINK_H
 
 #include <glib-object.h>
-#include "ephy-tab.h"
+
+#include "ephy-embed.h"
 #include "ephy-window.h"
 
 G_BEGIN_DECLS
@@ -50,19 +51,19 @@ struct _EphyLinkIface
 	GTypeInterface base_iface;
 
 	/* Signals */
-	EphyTab * (* open_link)	(EphyLink *link,
-				 const char *address,
-				 EphyTab *tab,
-				 EphyLinkFlags flags);
+	EphyEmbed * (* open_link) (EphyLink *link,
+				   const char *address,
+				   EphyEmbed *embed,
+				   EphyLinkFlags flags);
 };
 
 GType	 ephy_link_flags_get_type	(void);
 
 GType	 ephy_link_get_type		(void);
 
-EphyTab	*ephy_link_open			(EphyLink *link,
+EphyEmbed *ephy_link_open		(EphyLink *link,
 					 const char *address,
-					 EphyTab *tab,
+					 EphyEmbed *embed,
 					 EphyLinkFlags flags);
 
 EphyLinkFlags ephy_link_flags_from_current_event (void);
