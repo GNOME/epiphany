@@ -2863,7 +2863,7 @@ ephy_window_class_init (EphyWindowClass *klass)
 	g_object_class_install_property (object_class,
 					 PROP_ACTIVE_TAB,
 					 g_param_spec_object ("active-tab", NULL, NULL,
-							      EPHY_TYPE_EMBED,
+							      GTK_TYPE_WIDGET /* Can't use an interface type here */,
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
