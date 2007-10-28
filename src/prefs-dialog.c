@@ -1499,7 +1499,7 @@ prefs_homepage_current_button_clicked_cb (GtkWidget *button,
 {
 	EphySession *session;
 	EphyWindow *window;
-	EphyTab *tab;
+	EphyEmbed *embed;
 
 	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell_get_default ()));
 	window = ephy_session_get_active_window (session);
@@ -1507,10 +1507,10 @@ prefs_homepage_current_button_clicked_cb (GtkWidget *button,
 	/* can't do anything in this case */
 	if (window == NULL) return;
 
-	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab != NULL);
+	embed = ephy_window_get_active_tab (window);
+	g_return_if_fail (embed != NULL);
 
-	set_homepage_entry (dialog, ephy_embed_get_address (ephy_tab_get_embed (tab)));
+	set_homepage_entry (dialog, ephy_embed_get_address (embed));
 }
 
 static void
@@ -1519,6 +1519,7 @@ prefs_homepage_blank_button_clicked_cb (GtkWidget *button,
 {
 	set_homepage_entry (dialog, NULL);
 }
+
 static void
 prefs_dialog_init (PrefsDialog *pd)
 {
