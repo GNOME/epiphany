@@ -88,7 +88,6 @@ update_location_editable (EphyWindow *window,
 			  GtkAction *action,
 			  gboolean editable)
 {
-	EphyTab *tab;
 	EphyEmbed *embed;
 	GtkWidget *toolbar;
 	char *address;
@@ -99,16 +98,13 @@ update_location_editable (EphyWindow *window,
 	if (editable == FALSE)
 	{
 		toolbar = ephy_window_get_toolbar (window);
-		tab = ephy_window_get_active_tab (window);
+		embed = ephy_window_get_active_tab (window);
 		/* embed is NULL on startup */
-		if (tab != NULL)
+		if (embed != NULL)
 		{
-			embed = ephy_tab_get_embed (tab);
-			g_return_if_fail (embed != NULL);
-
 			address = ephy_embed_get_location (embed, TRUE);
 			ephy_toolbar_set_location (EPHY_TOOLBAR (toolbar), address, NULL);
-			ephy_embed_set_typed_address (ephy_tab_get_embed (tab), NULL,
+			ephy_embed_set_typed_address (embed, NULL,
                                                       EPHY_EMBED_ADDRESS_EXPIRE_CURRENT);
 			g_free (address);
 		}
