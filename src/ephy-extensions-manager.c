@@ -680,7 +680,7 @@ attach_window (EphyWindow *window,
 	for (l = tabs; l; l = l->next)
 	{
 		ephy_extension_attach_tab (extension, window,
-					   EPHY_TAB (l->data));
+					   EPHY_EMBED (l->data));
 	}
 	g_list_free (tabs);
 }
@@ -743,7 +743,7 @@ detach_window (EphyWindow *window,
 	for (l = tabs; l; l = l->next)
 	{
 		ephy_extension_detach_tab (extension, window,
-					   EPHY_TAB (l->data));
+					   EPHY_EMBED (l->data));
 	}
 	g_list_free (tabs);
 
@@ -1235,7 +1235,7 @@ impl_detach_window (EphyExtension *extension,
 	for (l = tabs; l; l = l->next)
 	{
 		ephy_extension_detach_tab (extension, window,
-					   EPHY_TAB (l->data));
+					   EPHY_EMBED (l->data));
 	}
 	g_list_free (tabs);
 
@@ -1249,40 +1249,40 @@ impl_detach_window (EphyExtension *extension,
 static void
 impl_attach_tab (EphyExtension *extension,
 		 EphyWindow *window,
-		 EphyTab *tab)
+		 EphyEmbed *embed)
 {
 	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (extension);
 	GList *l;
 
-	LOG ("Attach window %p tab %p", window, tab);
+	LOG ("Attach window %p embed %p", window, embed);
 
 	for (l = manager->priv->extensions; l; l = l->next)
 	{
 		ephy_extension_attach_tab (EPHY_EXTENSION (l->data),
-					   window, tab);
+					   window, embed);
 	}
 }
 
 static void
 impl_detach_tab (EphyExtension *extension,
 		 EphyWindow *window,
-		 EphyTab *tab)
+		 EphyEmbed *embed)
 {
 	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (extension);
 	GList *l;
 
-	LOG ("Detach window %p tab %p", window, tab);
+	LOG ("Detach window %p embed %p", window, embed);
 
 	g_object_ref (window);
-	g_object_ref (tab);
+	g_object_ref (embed);
 
 	for (l = manager->priv->extensions; l; l = l->next)
 	{
 		ephy_extension_detach_tab (EPHY_EXTENSION (l->data),
-					   window, tab);
+					   window, embed);
 	}
 
-	g_object_unref (tab);
+	g_object_unref (embed);
 	g_object_unref (window);
 }
 
