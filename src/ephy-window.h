@@ -92,7 +92,7 @@ void		  ephy_window_set_zoom		  (EphyWindow *window,
 
 void		  ephy_window_activate_location	  (EphyWindow *window);
 
-EphyEmbed	 *ephy_window_get_active_embed	  (EphyWindow *window);
+EphyEmbed	 *ephy_window_get_active_tab	  (EphyWindow *window);
 
 GList		 *ephy_window_get_tabs		  (EphyWindow *window);
 
