@@ -25,7 +25,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-bookmarks.h"
 #include "ephy-window.h"
-#include "ephy-tab.h"
+#include "ephy-embed.h"
 
 #include <glib-object.h>
 #include <glib.h>
@@ -87,15 +87,15 @@ GType		ephy_shell_get_type			(void);
 
 EphyShell      *ephy_shell_get_default			(void);
 
-EphyTab	       *ephy_shell_new_tab			(EphyShell *shell,
+EphyEmbed      *ephy_shell_new_tab			(EphyShell *shell,
 							 EphyWindow *parent_window,
-							 EphyTab *previous_tab,
+							 EphyEmbed *previous_embed,
 							 const char *url,
 							 EphyNewTabFlags flags);
 
-EphyTab	       *ephy_shell_new_tab_full			(EphyShell *shell,
+EphyEmbed      *ephy_shell_new_tab_full			(EphyShell *shell,
 							 EphyWindow *parent_window,
-							 EphyTab *previous_tab,
+							 EphyEmbed *previous_embed,
 							 const char *url,
 							 EphyNewTabFlags flags,
 							 EphyEmbedChrome chrome,

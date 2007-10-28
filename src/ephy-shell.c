@@ -53,6 +53,7 @@
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
 #include "ephy-stock-icons.h"
+#include "ephy-embed-factory.h"
 
 #ifdef ENABLE_NETWORK_MANAGER
 #include "ephy-net-monitor.h"
@@ -141,7 +142,6 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
 			  EphyShell *shell)
 {
 	GtkWidget *parent = NULL;
-	EphyTab *new_tab;
 	gboolean is_popup;
 	EphyNewTabFlags flags = EPHY_NEW_TAB_DONT_SHOW_WINDOW |
 				EPHY_NEW_TAB_APPEND_LAST |
@@ -169,12 +169,10 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
 	 */
 	is_popup = (chromemask & EPHY_EMBED_CHROME_MENUBAR) == 0;
 
-	new_tab = ephy_shell_new_tab_full
+	return ephy_shell_new_tab_full
 		(shell,
 		 EPHY_IS_WINDOW (parent) ? EPHY_WINDOW (parent) : NULL,
 		 NULL, NULL, flags, chromemask, is_popup, 0);
-
-	return ephy_tab_get_embed (new_tab);
 }
 
 
@@ -437,7 +435,7 @@ load_homepage (EphyEmbed *embed)
  * ephy_shell_new_tab_full:
  * @shell: a #EphyShell
  * @parent_window: the target #EphyWindow or %NULL
- * @previous_tab: the referrer tab or %NULL
+ * @previous_embed: the referrer embed, or %NULL
  * @url: an url to load or %NULL
  * @chrome: a #EphyEmbedChrome mask to use if creating a new window
  * @is_popup: whether the new window is a popup
@@ -446,12 +444,12 @@ load_homepage (EphyEmbed *embed)
  * Create a new tab and the parent window when necessary.
  * Use this function to open urls in new window/tabs.
  *
- * ReturnValue: the created #EphyTab
+ * ReturnValue: the created #EphyEmbed
  **/
-EphyTab *
+EphyEmbed *
 ephy_shell_new_tab_full (EphyShell *shell,
 			 EphyWindow *parent_window,
-			 EphyTab *previous_tab,
+			 EphyEmbed *previous_tab,
 			 const char *url,
 			 EphyNewTabFlags flags,
 			 EphyEmbedChrome chrome,
@@ -459,7 +457,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
 			 guint32 user_time)
 {
 	EphyWindow *window;
-	EphyTab *tab;
 	EphyEmbed *embed;
 	gboolean in_new_window = TRUE;
 	gboolean jump_to;
@@ -477,8 +474,8 @@ ephy_shell_new_tab_full (EphyShell *shell,
 
 	jump_to = (flags & EPHY_NEW_TAB_JUMP) != 0;
 
-	LOG ("Opening new tab parent-window %p parent-tab %p in-new-window:%s jump-to:%s",
-	     parent_window, previous_tab, in_new_window ? "t" : "f", jump_to ? "t" : "f");
+	LOG ("Opening new tab parent-window %p parent-embed %p in-new-window:%s jump-to:%s",
+	     parent_window, previous_embed, in_new_window ? "t" : "f", jump_to ? "t" : "f");
 
 	if (!in_new_window && parent_window != NULL)
 	{
@@ -491,23 +488,19 @@ ephy_shell_new_tab_full (EphyShell *shell,
 
 	toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
 
-	if (previous_tab != NULL)
-	{
-		previous_embed = ephy_tab_get_embed (previous_tab);
-	}
-
 	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_tab != NULL)
 	{
 		nb = ephy_window_get_notebook (window);
+                /* FIXME this assumes the tab is the direct notebook child */
 		position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
-						  GTK_WIDGET (previous_tab)) + 1;
+						  GTK_WIDGET (previous_embed)) + 1;
 	}
 
-	tab = ephy_tab_new ();
-	gtk_widget_show (GTK_WIDGET (tab));
-	embed = ephy_tab_get_embed (tab);
+	embed = EPHY_EMBED (ephy_embed_factory_new_object (EPHY_TYPE_EMBED));
+	g_assert (embed != NULL);
+	gtk_widget_show (GTK_WIDGET (embed));
 
-	ephy_window_add_tab (window, tab, position, jump_to);
+	ephy_window_add_tab (window, embed, position, jump_to);
 
 	if (previous_embed != NULL)
 	{
@@ -582,30 +575,30 @@ ephy_shell_new_tab_full (EphyShell *shell,
                 }
         }
 
-	return tab;
+	return embed;
 }
 
 /**
  * ephy_shell_new_tab:
  * @shell: a #EphyShell
  * @parent_window: the target #EphyWindow or %NULL
- * @previous_tab: the referrer tab or %NULL
+ * @previous_embed: the referrer embed, or %NULL
  * @url: an url to load or %NULL
  *
  * Create a new tab and the parent window when necessary.
  * Use this function to open urls in new window/tabs.
  *
- * ReturnValue: the created #EphyTab
+ * ReturnValue: the created #EphyEmbed
  **/
-EphyTab *
+EphyEmbed *
 ephy_shell_new_tab (EphyShell *shell,
 		    EphyWindow *parent_window,
-		    EphyTab *previous_tab,
+		    EphyEmbed *previous_embed,
 		    const char *url,
 		    EphyNewTabFlags flags)
 {
 	return ephy_shell_new_tab_full (shell, parent_window,
-					previous_tab, url, flags,
+					previous_embed, url, flags,
 					EPHY_EMBED_CHROME_ALL, FALSE, 0);
 }
 
