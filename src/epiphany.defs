@@ -187,13 +187,6 @@
   (gtype-id "EPHY_TYPE_STATUSBAR")
 )
 
-(define-object Tab
-  (in-module "Ephy")
-  (parent "GtkBin")
-  (c-name "EphyTab")
-  (gtype-id "EPHY_TYPE_TAB")
-)
-
 (define-object Toolbar
   (in-module "Ephy")
   (parent "EggEditableToolbar")
@@ -2884,7 +2877,7 @@
   (return-type "none")
   (parameters
     '("EphyWindow*" "window")
-    '("EphyTab*" "tab")
+    '("EphyEmbed*" "tab")
   )
 )
 
@@ -2894,7 +2887,7 @@
   (return-type "none")
   (parameters
     '("EphyWindow*" "window")
-    '("EphyTab*" "tab")
+    '("EphyEmbed*" "tab")
   )
 )
 
@@ -2986,10 +2979,10 @@
 (define-method open
   (of-object "EphyLink")
   (c-name "ephy_link_open")
-  (return-type "EphyTab*")
+  (return-type "EphyEmbed*")
   (parameters
     '("const-char*" "address")
-    '("EphyTab*" "tab")
+    '("EphyEmbed*" "tab")
     '("EphyLinkFlags" "flags")
   )
 )
@@ -3033,7 +3026,7 @@
   (c-name "ephy_notebook_add_tab")
   (return-type "none")
   (parameters
-    '("EphyTab*" "tab")
+    '("EphyEmbed*" "tab")
     '("int" "position")
     '("gboolean" "jump_to")
   )
@@ -3155,10 +3148,10 @@
 (define-method new_tab
   (of-object "EphyShell")
   (c-name "ephy_shell_new_tab")
-  (return-type "EphyTab*")
+  (return-type "EphyEmbed*")
   (parameters
     '("EphyWindow*" "parent_window")
-    '("EphyTab*" "previous_tab")
+    '("EphyEmbed*" "previous_tab")
     '("const-char*" "url")
     '("EphyNewTabFlags" "flags")
   )
@@ -3167,10 +3160,10 @@
 (define-method new_tab_full
   (of-object "EphyShell")
   (c-name "ephy_shell_new_tab_full")
-  (return-type "EphyTab*")
+  (return-type "EphyEmbed*")
   (parameters
     '("EphyWindow*" "parent_window")
-    '("EphyTab*" "previous_tab")
+    '("EphyEmbed*" "previous_tab")
     '("const-char*" "url")
     '("EphyNewTabFlags" "flags")
     '("EphyEmbedChrome" "chrome")
@@ -3305,53 +3298,6 @@
 )
 
 
-
-;; From ../../src/ephy-tab.h
-
-(define-function ephy_tab_get_type
-  (c-name "ephy_tab_get_type")
-  (return-type "GType")
-)
-
-;(define-function ephy_tab_new
-;  (c-name "ephy_tab_new")
-;  (is-constructor-of "EphyTab")
-;  (return-type "EphyTab*")
-;)
-
-(define-method get_embed
-  (of-object "EphyTab")
-  (c-name "ephy_tab_get_embed")
-  (return-type "EphyEmbed*")
-)
-
-(define-function ephy_tab_for_embed
-  (c-name "ephy_tab_for_embed")
-  (return-type "EphyTab*")
-  (parameters
-    '("EphyEmbed*" "embed")
-  )
-)
-
-(define-method get_size
-  (of-object "EphyTab")
-  (c-name "ephy_tab_get_size")
-  (return-type "none")
-  (parameters
-    '("int*" "width")
-    '("int*" "height")
-  )
-)
-
-(define-method set_size
-  (of-object "EphyTab")
-  (c-name "ephy_tab_set_size")
-  (return-type "none")
-  (parameters
-    '("int" "width")
-    '("int" "height")
-  )
-)
 
 ;; From ../../src/ephy-toolbar.h
 
@@ -3543,7 +3489,7 @@
   (c-name "ephy_window_add_tab")
   (return-type "none")
   (parameters
-    '("EphyTab*" "tab")
+    '("EphyEmbed*" "tab")
     '("gint" "position")
     '("gboolean" "jump_to")
   )
@@ -3554,7 +3500,7 @@
   (c-name "ephy_window_remove_tab")
   (return-type "none")
   (parameters
-    '("EphyTab*" "tab")
+    '("EphyEmbed*" "tab")
   )
 )
 
@@ -3563,7 +3509,7 @@
   (c-name "ephy_window_jump_to_tab")
   (return-type "none")
   (parameters
-    '("EphyTab*" "tab")
+    '("EphyEmbed*" "tab")
   )
 )
 
@@ -3594,12 +3540,6 @@
 (define-method get_active_tab
   (of-object "EphyWindow")
   (c-name "ephy_window_get_active_tab")
-  (return-type "EphyTab*")
-)
-
-(define-method get_active_embed
-  (of-object "EphyWindow")
-  (c-name "ephy_window_get_active_embed")
   (return-type "EphyEmbed*")
 )
 

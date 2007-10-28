@@ -51,7 +51,6 @@ headers
 #include "ephy-shell.h"
 #include "ephy-state.h"
 #include "ephy-statusbar.h"
-#include "ephy-tab.h"
 #include "ephy-type-builtins.h"
 #include "ephy-window.h"
 #include "ephy-link.h"
@@ -188,7 +187,6 @@ ignore-glob
 %%
 ignore
   ephy_embed_event_get_dom_event
-  ephy_tab_for_embed
   ephy_shell_error_quark
   ephy_shell_startup
   ephy_shell_get_dbus_service
@@ -226,17 +224,6 @@ _wrap_ephy_embed_shell_tp_init(PyGObject *self, PyObject *args, PyObject *kwargs
     self->obj = (GObject *) g_object_ref (ephy_embed_shell_get_default());
     pygobject_register_wrapper((PyObject *)self);
     return 0;
-}
-%%
-override ephy_tab_get_size noargs
-static PyObject *
-_wrap_ephy_tab_get_size(PyGObject *self)
-{
-    gint width;
-    gint height;
-
-    ephy_tab_get_size(EPHY_TAB(self->obj), &width, &height);
-    return Py_BuildValue("(ii)", width, height);
 }
 %%
 override ephy_embed_event_get_coords noargs
