@@ -192,7 +192,7 @@ sync_active_tab (EphyWindow *window, GParamSpec *pspec, EphyEncodingDialog *dial
 {
 	EphyEmbed *embed;
 
-	embed = ephy_window_get_active_embed (dialog->priv->window);
+	embed = ephy_window_get_active_tab (dialog->priv->window);
 
 	g_object_set (G_OBJECT (dialog), "embed", embed, NULL);
 }

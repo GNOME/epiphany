@@ -29,7 +29,6 @@
 #include "ephy-embed-type-builtins.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
-#include "ephy-embed-factory.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-debug.h"
 #include "ephy-string.h"
