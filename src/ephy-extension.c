@@ -70,23 +70,23 @@ ephy_extension_detach_window (EphyExtension *extension,
 void
 ephy_extension_attach_tab (EphyExtension *extension,
 			   EphyWindow *window,
-			   EphyTab *tab)
+			   EphyEmbed *embed)
 {
 	EphyExtensionIface *iface = EPHY_EXTENSION_GET_IFACE (extension);
 	if (iface->attach_tab)
 	{
-		iface->attach_tab (extension, window, tab);
+		iface->attach_tab (extension, window, embed);
 	}
 }
 
 void
 ephy_extension_detach_tab (EphyExtension *extension,
 			   EphyWindow *window,
-			   EphyTab *tab)
+			   EphyEmbed *embed)
 {
 	EphyExtensionIface *iface = EPHY_EXTENSION_GET_IFACE (extension);
 	if (iface->detach_tab)
 	{
-		iface->detach_tab (extension, window, tab);
+		iface->detach_tab (extension, window, embed);
 	}
 }
