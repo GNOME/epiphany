@@ -51,7 +51,6 @@ INST_H_FILES = \
 	ephy-session.h			\
 	ephy-shell.h			\
 	ephy-statusbar.h		\
-	ephy-tab.h			\
 	ephy-window.h			\
 	$(NULL)
 
@@ -80,8 +79,6 @@ libephymain_la_SOURCES = \
 	ephy-session.c			\
 	ephy-shell.c			\
 	ephy-statusbar.c		\
-	ephy-tab.c			\
-	ephy-tab.h			\
 	ephy-tabs-menu.c		\
 	ephy-toolbars-model.c		\
 	ephy-toolbar.c			\
