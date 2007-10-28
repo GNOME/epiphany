@@ -68,9 +68,6 @@ void			ephy_tab_set_size		(EphyTab *tab,
 							 int width,
 							 int height);
 
-/* private */
-guint		       _ephy_tab_get_id			(EphyTab *tab);
-
 G_END_DECLS
 
 #endif

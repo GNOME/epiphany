@@ -41,8 +41,11 @@
 #include <libxml/entities.h>
 
 #define LABEL_WIDTH_CHARS 32
-#define ACTION_VERB_FORMAT		"JmpTab%x"
+#define ACTION_VERB_FORMAT_PREFIX       "JmpTab"
+#define ACTION_VERB_FORMAT_PREFIX_LEN   (6) /* strlen (ACTION_VERB_FORMAT_PREFIX) */
+#define ACTION_VERB_FORMAT		ACTION_VERB_FORMAT_PREFIX "%x"
 #define ACTION_VERB_FORMAT_LENGTH	strlen (ACTION_VERB_FORMAT) + 14 + 1
+#define ACTION_VERB_FORMAT_BASE         (16) /* %x is hex */
 #define ACCEL_PATH_FORMAT		"<Actions>/TabsActions/%s"
 #define ACCEL_PATH_FORMAT_LENGTH	strlen (ACCEL_PATH_FORMAT) -2 + ACTION_VERB_FORMAT_LENGTH
 #define DATA_KEY			"EphyTabsMenu::Action"
@@ -67,7 +70,87 @@ static void	ephy_tabs_menu_class_init	(EphyTabsMenuClass *klass);
 static void	ephy_tabs_menu_init	  	(EphyTabsMenu *menu);
 static void	ephy_tabs_menu_update		(EphyTabsMenu *menu);
 
+/* FIXME: this can be severely optimised */
+static GByteArray *tabs_id_array = NULL;
+static guint n_tabs = 0;
+
 G_DEFINE_TYPE (EphyTabsMenu, ephy_tabs_menu, G_TYPE_OBJECT)
+
+/* We need to assign unique IDs to tabs, otherwise accels get confused in the
+ * tabs menu (bug #339548). We could use a serial #, but the ID is used in the
+ * action name which is stored in a GQuark and so we should allocate them
+ * efficiently.
+ */
+static guint
+allocate_tab_id (void)
+{
+        int bit;
+        guint b, len;
+        guint8 *data;
+        guint8 byte, mask;
+
+        if (n_tabs++ == 0)
+        {
+                g_assert (tabs_id_array == NULL);
+                tabs_id_array = g_byte_array_sized_new (16);
+        }
+
+        /* Find a free ID */
+        len = tabs_id_array->len;
+        data = tabs_id_array->data;
+        for (b = 0; b < len; ++b)
+        {
+                if (data[b] != 0xff)
+                        break;
+        }
+
+        /* Need to append a new byte */
+        if (b == len)
+        {
+                guint8 bytes[] = { 0 };
+                g_byte_array_append (tabs_id_array, bytes, G_N_ELEMENTS (bytes));
+                g_assert (tabs_id_array->len > b);
+        }
+
+        data = tabs_id_array->data + b;
+        byte = 0xff ^ *data;
+        /* Now find the first free bit */
+        bit = g_bit_nth_lsf (byte, -1);
+        mask = 1 << bit;
+        g_assert (bit >= 0 && bit <= 7);
+        g_assert ((*data & mask) == 0);
+        /* And mark it as allocated */
+        *data |= mask;
+
+        return b * 8 + bit;
+}
+
+static void
+free_tab_id (GtkAction *action)
+{
+        const char *name;
+        guint id;
+        guint8 *data;
+        guint b, bit;
+
+        name = gtk_action_get_name (action);
+        id = g_ascii_strtoull (name + ACTION_VERB_FORMAT_PREFIX_LEN, NULL,
+                               ACTION_VERB_FORMAT_BASE);
+        g_assert (id >= 0 && id < tabs_id_array->len * 8);
+
+        b = id >> 3;
+        bit = id & 0x7;
+        data = tabs_id_array->data + b;
+        *data &= ~(1 << bit);
+
+        g_assert (n_tabs > 0);
+        if (--n_tabs == 0)
+        {
+                g_assert (tabs_id_array != NULL);
+                g_byte_array_free (tabs_id_array, TRUE);
+                tabs_id_array = NULL;
+        }
+}
 
 static void
 tab_action_activate_cb (GtkToggleAction *action,
@@ -117,8 +200,7 @@ notebook_page_added_cb (EphyNotebook *notebook,
 
 	LOG ("tab_added_cb tab=%p", tab);
 
-	g_snprintf (verb, sizeof (verb), ACTION_VERB_FORMAT,
-		    _ephy_tab_get_id (tab));
+	g_snprintf (verb, sizeof (verb), ACTION_VERB_FORMAT, allocate_tab_id ());
   
 	action = g_object_new (GTK_TYPE_RADIO_ACTION,
 			       "name", verb,
@@ -165,6 +247,8 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 
 	action = g_object_get_data (G_OBJECT (tab), DATA_KEY);
 	g_return_if_fail (action != NULL);
+
+        free_tab_id (action);
 
 	g_signal_handlers_disconnect_by_func
 		(tab, G_CALLBACK (sync_tab_title), action);
@@ -301,11 +385,9 @@ ephy_tabs_menu_class_init (EphyTabsMenuClass *klass)
 
 	g_object_class_install_property (object_class,
 					 PROP_WINDOW,
-					 g_param_spec_object ("window",
-							      "Window",
-							      "Parent window",
+					 g_param_spec_object ("window", NULL, NULL,
 							      EPHY_TYPE_WINDOW,
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
+							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							      G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (EphyTabsMenuPrivate));

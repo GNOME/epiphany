@@ -74,8 +74,6 @@
 
 struct _EphyTabPrivate
 {
-	guint id;
-
 	int width;
 	int height;
 	guint idle_resize_handler;
@@ -92,14 +90,6 @@ enum
 };
 
 static GObjectClass *parent_class;
-
-/* We need to assign unique IDs to tabs, otherwise accels get confused in the
- * tabs menu (bug #339548). We could use a serial #, but the ID is used in the
- * action name which is stored in a GQuark and so we should use them sparingly.
- */
-
-static GArray *tabs_id_array = NULL;
-static guint n_tabs = 0;
 
 /* Class functions */
 
@@ -250,8 +240,6 @@ static void
 ephy_tab_finalize (GObject *object)
 {
 	EphyTab *tab = EPHY_TAB (object);
-	EphyTabPrivate *priv = tab->priv;
-	guint id = priv->id;
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 
@@ -260,14 +248,6 @@ ephy_tab_finalize (GObject *object)
 #endif
 
 	LOG ("EphyTab finalized %p", tab);
-
-	/* Remove the ID */
-	g_array_index (tabs_id_array, gpointer, id) = NULL;
-	if (--n_tabs == 0)
-	{
-		g_array_free (tabs_id_array, TRUE);
-		tabs_id_array = NULL;
-	}
 }
 
 static gboolean
@@ -601,40 +581,10 @@ ephy_tab_init (EphyTab *tab)
 {
 	EphyTabPrivate *priv;
 	GObject *embed;
-	guint id;
 
 	LOG ("EphyTab initialising %p", tab);
 
 	priv = tab->priv = EPHY_TAB_GET_PRIVATE (tab);
-
-	/* Make tab ID */
-	++n_tabs;
-
-	if (tabs_id_array == NULL)
-	{
-		tabs_id_array = g_array_sized_new (FALSE /* zero-terminate */,
-					       TRUE /* clear */,
-					       sizeof (gpointer),
-					       64 /* initial size */);
-	}
-
-	for (id = 0; id < tabs_id_array->len; ++id)
-	{
-		if (g_array_index (tabs_id_array, gpointer, id) == NULL) break;
-	}
-
-	priv->id = id;
-
-	/* Grow array if necessary */
-	if (id >= tabs_id_array->len)
-	{
-		g_array_append_val (tabs_id_array, tab);
-		g_assert (g_array_index (tabs_id_array, gpointer, id) == tab);
-	}
-	else
-	{
-		g_array_index (tabs_id_array, gpointer, id) = tab;
-	}
 
 	tab->priv->width = -1;
 	tab->priv->height = -1;
@@ -648,13 +598,4 @@ ephy_tab_init (EphyTab *tab)
 	g_signal_connect_object (embed, "ge_dom_mouse_click",
 				 G_CALLBACK (ephy_tab_dom_mouse_click_cb),
 				 tab, 0);
-}
-
-/* private */
-guint
-_ephy_tab_get_id (EphyTab *tab)
-{
-	g_return_val_if_fail (EPHY_IS_TAB (tab), (guint) -1);
-
-	return tab->priv->id;
 }
