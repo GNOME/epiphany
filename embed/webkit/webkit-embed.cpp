@@ -62,7 +62,7 @@ struct WebKitEmbedPrivate
   WebKitPage *page;
   WebKitEmbedLoadState load_state;
   char *loading_uri;
-  
+
   EphyEmbedAddressExpire address_expire;
   /* guint address_expire : 2; ? */
   EphyEmbedSecurityLevel security_level;
@@ -91,10 +91,10 @@ struct WebKitEmbedPrivate
   /* File watch */
   GnomeVFSMonitorHandle *monitor;
   guint reload_scheduled_id;
-  guint reload_delay_ticks;     
+  guint reload_delay_ticks;
 };
 
-enum 
+enum
 {
   PROP_0,
   PROP_ADDRESS,
@@ -116,13 +116,13 @@ enum
 
 static void
 impl_manager_do_command (EphyCommandManager *manager,
-                         const char *command) 
+                         const char *command)
 {
 }
 
 static gboolean
 impl_manager_can_do_command (EphyCommandManager *manager,
-                             const char *command) 
+                             const char *command)
 {
   return FALSE;
 }
@@ -139,14 +139,14 @@ G_DEFINE_TYPE_WITH_CODE (WebKitEmbed, webkit_embed, GTK_TYPE_SCROLLED_WINDOW,
                                                 ephy_embed_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_COMMAND_MANAGER,
                                                 ephy_command_manager_iface_init))
-                         
+
 static void
 webkit_embed_grab_focus (GtkWidget *widget)
 {
 }
 
 static void
-impl_close (EphyEmbed *embed) 
+impl_close (EphyEmbed *embed)
 {
 }
 
@@ -175,10 +175,10 @@ update_load_state (WebKitEmbed *embed, WebKitPage *page)
   EphyEmbedNetState estate = EPHY_EMBED_STATE_UNKNOWN;
 
   if (embed->priv->load_state == WEBKIT_EMBED_LOAD_STARTED)
-      estate = (EphyEmbedNetState) (estate | 
+      estate = (EphyEmbedNetState) (estate |
                                     EPHY_EMBED_STATE_START |
                                     EPHY_EMBED_STATE_NEGOTIATING |
-                                    EPHY_EMBED_STATE_IS_REQUEST | 
+                                    EPHY_EMBED_STATE_IS_REQUEST |
                                     EPHY_EMBED_STATE_IS_NETWORK);
 
   if (embed->priv->load_state == WEBKIT_EMBED_LOAD_LOADING)
@@ -351,18 +351,18 @@ static void
 webkit_embed_class_init (WebKitEmbedClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkObjectClass *gtk_object_class = GTK_OBJECT_CLASS (klass); 
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass); 
+  GtkObjectClass *gtk_object_class = GTK_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = webkit_embed_finalize;
-  
+
   object_class->get_property = webkit_embed_get_property;
   object_class->set_property = webkit_embed_set_property;
 
   gtk_object_class->destroy = webkit_embed_destroy;
 
   widget_class->grab_focus = webkit_embed_grab_focus;
-  
+
   g_object_class_override_property (object_class, PROP_LOAD_PROGRESS, "load-progress");
   g_object_class_override_property (object_class, PROP_LOAD_STATUS, "load-status");
   g_object_class_override_property (object_class, PROP_DOCUMENT_TYPE, "document-type");
@@ -409,7 +409,7 @@ webkit_embed_init (WebKitEmbed *embed)
                     G_CALLBACK (webkit_embed_title_changed_cb), embed);
   g_signal_connect (G_OBJECT (page), "load-progress-changed",
                     G_CALLBACK (webkit_embed_load_progress_changed_cb), embed);
-  
+
   embed->priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
   embed->priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
   embed->priv->zoom = 1.0;
@@ -451,7 +451,7 @@ impl_load_url (EphyEmbed *embed,
 }
 
 static void
-impl_load (EphyEmbed *embed, 
+impl_load (EphyEmbed *embed,
            const char *url,
            EphyEmbedLoadFlags flags,
            EphyEmbed *preview_embed)
@@ -515,7 +515,7 @@ impl_go_back (EphyEmbed *embed)
 {
   webkit_page_go_backward (WEBKIT_EMBED (embed)->priv->page);
 }
-                
+
 static void
 impl_go_forward (EphyEmbed *embed)
 {
@@ -540,7 +540,7 @@ impl_get_js_status (EphyEmbed *embed)
 }
 
 static char *
-impl_get_location (EphyEmbed *embed, 
+impl_get_location (EphyEmbed *embed,
                    gboolean toplevel)
 {
   WebKitFrame *frame = webkit_page_get_main_frame (WEBKIT_EMBED (embed)->priv->page);
@@ -548,15 +548,15 @@ impl_get_location (EphyEmbed *embed,
 }
 
 static void
-impl_reload (EphyEmbed *embed, 
+impl_reload (EphyEmbed *embed,
              gboolean force)
 {
-  webkit_page_reload (WEBKIT_EMBED (embed)->priv->page);  
+  webkit_page_reload (WEBKIT_EMBED (embed)->priv->page);
 }
 
 static void
-impl_set_zoom (EphyEmbed *embed, 
-               float zoom) 
+impl_set_zoom (EphyEmbed *embed,
+               float zoom)
 {
 }
 
@@ -564,7 +564,7 @@ static float
 impl_get_zoom (EphyEmbed *embed)
 {
   WebKitEmbedPrivate *wpriv = WEBKIT_EMBED (embed)->priv;
-  
+
   return wpriv->zoom;
 }
 
@@ -594,7 +594,7 @@ impl_shistory_n_items (EphyEmbed *embed)
 }
 
 static void
-impl_shistory_get_nth (EphyEmbed *embed, 
+impl_shistory_get_nth (EphyEmbed *embed,
                        int nth,
                        gboolean is_relative,
                        char **aUrl,
@@ -611,7 +611,7 @@ impl_shistory_get_pos (EphyEmbed *embed)
 }
 
 static void
-impl_shistory_go_nth (EphyEmbed *embed, 
+impl_shistory_go_nth (EphyEmbed *embed,
                       int nth)
 {
 }
@@ -637,7 +637,7 @@ static void
 impl_show_page_certificate (EphyEmbed *embed)
 {
 }
-        
+
 static void
 impl_print (EphyEmbed *embed)
 {
@@ -779,7 +779,7 @@ impl_set_typed_address (EphyEmbed *embed,
                         EphyEmbedAddressExpire expire)
 {
   WebKitEmbedPrivate *priv = WEBKIT_EMBED (embed)->priv;
- 
+
   g_free (priv->typed_address);
   priv->typed_address = g_strdup (address);
 
@@ -800,7 +800,7 @@ static const char*
 impl_get_address (EphyEmbed *embed)
 {
   WebKitEmbedPrivate *priv = WEBKIT_EMBED (embed)->priv;
-  
+
   return priv->address ? priv->address : "about:blank";
 }
 
@@ -866,8 +866,8 @@ impl_get_icon (EphyEmbed *embed)
 static void
 ephy_embed_iface_init (EphyEmbedIface *iface)
 {
-  iface->load_url = impl_load_url; 
-  iface->load = impl_load; 
+  iface->load_url = impl_load_url;
+  iface->load = impl_load;
   iface->stop_load = impl_stop_load;
   iface->can_go_back = impl_can_go_back;
   iface->can_go_forward = impl_can_go_forward;
