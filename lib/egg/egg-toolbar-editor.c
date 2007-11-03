@@ -55,6 +55,14 @@ enum
   PROP_TOOLBARS_MODEL
 };
 
+enum
+{
+  SIGNAL_HANDLER_ITEM_ADDED,
+  SIGNAL_HANDLER_ITEM_REMOVED,
+  SIGNAL_HANDLER_TOOLBAR_REMOVED,
+  SIGNAL_HANDLER_LIST_SIZE  /* Array size */
+};
+
 #define EGG_TOOLBAR_EDITOR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EGG_TYPE_TOOLBAR_EDITOR, EggToolbarEditorPrivate))
 
 struct EggToolbarEditorPrivate
@@ -66,6 +74,9 @@ struct EggToolbarEditorPrivate
   GtkWidget *scrolled_window;
   GList     *actions_list;
   GList     *factory_list;
+
+  /* These handlers need to be sanely disconnected when switching models */
+  gulong     sig_handlers[SIGNAL_HANDLER_LIST_SIZE];
 };
 
 G_DEFINE_TYPE (EggToolbarEditor, egg_toolbar_editor, GTK_TYPE_VBOX);
@@ -136,21 +147,59 @@ toolbar_removed_cb (EggToolbarsModel   *model,
 }
 
 static void
+egg_toolbar_editor_disconnect_model (EggToolbarEditor *t)
+{
+  EggToolbarEditorPrivate *priv = t->priv;
+  EggToolbarsModel *model = priv->model;
+  gulong handler;
+  int i;
+
+  for (i = 0; i < SIGNAL_HANDLER_LIST_SIZE; i++)
+    {
+      handler = priv->sig_handlers[i];
+
+      if (handler != 0)
+        {
+	  if (g_signal_handler_is_connected (model, handler))
+	    {
+	      g_signal_handler_disconnect (model, handler);
+	    }
+
+	  priv->sig_handlers[i] = 0;
+        }
+    }
+}
+
+void
 egg_toolbar_editor_set_model (EggToolbarEditor *t,
 			      EggToolbarsModel *model)
 {
   g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (t));
+  g_return_if_fail (model != NULL);
 
-  t->priv->model = g_object_ref (model);
-  
+  EggToolbarEditorPrivate *priv = t->priv;
+
+  if (priv->model)
+    {
+      if (G_UNLIKELY (priv->model == model)) return;
+
+      egg_toolbar_editor_disconnect_model (t);
+      g_object_unref (priv->model); 
+    }
+
+  priv->model = g_object_ref (model);
+
   update_editor_sheet (t);
-
-  g_signal_connect_object (model, "item_added",
-			   G_CALLBACK (item_added_or_removed_cb), t, 0);
-  g_signal_connect_object (model, "item_removed",
-			   G_CALLBACK (item_added_or_removed_cb), t, 0);
-  g_signal_connect_object (model, "toolbar_removed",
-			   G_CALLBACK (toolbar_removed_cb), t, 0);
+  
+  priv->sig_handlers[SIGNAL_HANDLER_ITEM_ADDED] = 
+    g_signal_connect_object (model, "item_added",
+			     G_CALLBACK (item_added_or_removed_cb), t, 0);
+  priv->sig_handlers[SIGNAL_HANDLER_ITEM_REMOVED] =
+    g_signal_connect_object (model, "item_removed",
+			     G_CALLBACK (item_added_or_removed_cb), t, 0);
+  priv->sig_handlers[SIGNAL_HANDLER_TOOLBAR_REMOVED] =
+    g_signal_connect_object (model, "toolbar_removed",
+			     G_CALLBACK (toolbar_removed_cb), t, 0);
 }
 
 static void
@@ -215,7 +264,7 @@ egg_toolbar_editor_class_init (EggToolbarEditorClass *klass)
 						       "Toolbars Model",
 						       EGG_TYPE_TOOLBARS_MODEL,
 						       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-						       G_PARAM_CONSTRUCT_ONLY));
+						       G_PARAM_CONSTRUCT));
 
   g_type_class_add_private (object_class, sizeof (EggToolbarEditorPrivate));
 }
@@ -232,6 +281,7 @@ egg_toolbar_editor_finalize (GObject *object)
 
   if (editor->priv->model)
     {
+      egg_toolbar_editor_disconnect_model (editor);
       g_object_unref (editor->priv->model);
     }
 
