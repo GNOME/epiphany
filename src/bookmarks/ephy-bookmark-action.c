@@ -434,23 +434,29 @@ query_tooltip_cb (GtkWidget *proxy,
 	title = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
 	location = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
 	
-	if (strstr (location, "%s") != NULL)
+	if (g_str_has_prefix (location, "javascript:"))
 	{
-		GnomeVFSURI *uri = gnome_vfs_uri_new (location);
-		if (uri != NULL)
+		text = g_strdup (_("Javascript scriptlet"));
+	}
+	else
+	{
+		if (strstr (location, "%s") != NULL)
 		{
-			text = g_markup_printf_escaped ("%s\n%s://%s",
-							title,
-			 				gnome_vfs_uri_get_scheme (uri),
-							gnome_vfs_uri_get_host_name (uri));
-			gnome_vfs_uri_unref (uri);
+			GnomeVFSURI *uri = gnome_vfs_uri_new (location);
+			if (uri != NULL)
+			{
+				text = g_markup_printf_escaped ("%s\n%s://%s",
+								title,
+								gnome_vfs_uri_get_scheme (uri),
+								gnome_vfs_uri_get_host_name (uri));
+				gnome_vfs_uri_unref (uri);
+			}
+		}
+		if (text == NULL)
+		{
+			text = g_markup_printf_escaped ("%s\n%s", title, location);
 		}
 	}
-	if (text == NULL)
-	{
-		text = g_markup_printf_escaped ("%s\n%s", title, location);
-	}
-
 	gtk_tooltip_set_markup (tooltip, text);
 	g_free (text);
 	
