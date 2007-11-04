@@ -958,6 +958,45 @@ impl_remove_password (EphyPasswordManager *manager,
 }
 
 static void
+impl_remove_all_passwords (EphyPasswordManager *manager)
+{
+#ifndef HAVE_GECKO_1_9
+	nsresult rv;
+	nsCOMPtr<nsIPasswordManager> passwordManager =
+			do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
+	if (!passwordManager) return;
+
+	nsCOMPtr<nsIIDNService> idnService
+		(do_GetService ("@mozilla.org/network/idn-service;1"));
+	NS_ENSURE_TRUE (idnService, );
+
+	nsCOMPtr<nsISimpleEnumerator> passwordEnumerator;
+	passwordManager->GetEnumerator (getter_AddRefs(passwordEnumerator));
+	NS_ENSURE_TRUE (passwordEnumerator, );
+
+	PRBool enumResult;
+	for (passwordEnumerator->HasMoreElements(&enumResult) ;
+	     enumResult == PR_TRUE ;
+	     passwordEnumerator->HasMoreElements(&enumResult))
+	{
+		nsCOMPtr<nsIPassword> nsPassword;
+		passwordEnumerator->GetNext (getter_AddRefs(nsPassword));
+		if (!nsPassword) continue;
+
+		nsCString host;
+		rv = nsPassword->GetHost (host);
+		if (NS_FAILED (rv)) continue;
+
+		nsString userName;
+		rv = nsPassword->GetUser (userName);
+		if (NS_FAILED (rv)) continue;
+
+		passwordManager->RemoveUser (host, userName);
+	}
+#endif /* !HAVE_GECKO_1_9 */
+}
+
+static void
 impl_add_password (EphyPasswordManager *manager,
                   EphyPasswordInfo *info)
 {
@@ -1337,6 +1376,7 @@ ephy_password_manager_iface_init (EphyPasswordManagerIface *iface)
 {
 	iface->add = impl_add_password;
 	iface->remove = impl_remove_password;
+	iface->remove_all = impl_remove_all_passwords;
 	iface->list = impl_list_passwords;
 }
 

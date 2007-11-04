@@ -983,6 +983,25 @@ impl_remove_password (EphyPasswordManager *manager,
 }
 
 static void
+impl_remove_all_passwords (EphyPasswordManager *manager)
+{
+	nsresult rv;
+	nsCOMPtr<nsILoginManager> loginManager =
+			do_GetService (NS_LOGINMANAGER_CONTRACTID);
+	g_return_val_if_fail (NS_SUCCEEDED (rv), NULL);
+	if (!loginManager)
+		return NULL;
+
+	nsCOMPtr<nsIIDNService> idnService
+		(do_GetService ("@mozilla.org/network/idn-service;1"));
+	NS_ENSURE_TRUE (idnService, );
+
+    	rv = loginManager->RemoveAllLogins ();
+	if (NS_FAILED (rv))
+		return;
+}	
+
+static void
 impl_add_password (EphyPasswordManager *manager,
                   EphyPasswordInfo *info)
 {

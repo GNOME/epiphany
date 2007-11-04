@@ -58,6 +58,7 @@ struct _EphyPasswordManagerIface
 				 EphyPasswordInfo *info);
 	void	(* remove)	(EphyPasswordManager *manager,
 				 EphyPasswordInfo *info);
+	void	(* remove_all)	(EphyPasswordManager *manager);
 	GList *	(* list)	(EphyPasswordManager *manager);
 };
 
@@ -82,6 +83,8 @@ void		ephy_password_manager_add_password	(EphyPasswordManager *manager,
 
 void		ephy_password_manager_remove_password	(EphyPasswordManager *manager,
 							 EphyPasswordInfo *info);
+
+void		ephy_password_manager_remove_all_passwords (EphyPasswordManager *manager);
 
 GList *		ephy_password_manager_list_passwords	(EphyPasswordManager *manager);
 

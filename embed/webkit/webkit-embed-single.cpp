@@ -169,6 +169,11 @@ impl_remove_password (EphyPasswordManager *manager,
 }
 
 static void
+impl_remove_all_passwords (EphyPasswordManager *manager)
+{
+}
+
+static void
 impl_add_password (EphyPasswordManager *manager,
                   EphyPasswordInfo *info)
 {
@@ -328,6 +333,7 @@ ephy_password_manager_iface_init (EphyPasswordManagerIface *iface)
 {
 	iface->add = impl_add_password;
 	iface->remove = impl_remove_password;
+	iface->remove = impl_remove_all_passwords;
 	iface->list = impl_list_passwords;
 }
 

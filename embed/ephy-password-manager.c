@@ -187,6 +187,19 @@ ephy_password_manager_remove_password (EphyPasswordManager *manager,
 }
 
 /**
+ * ephy_password_manager_remove_all_passwords:
+ * @manager: the #EphyPasswordManager
+ *
+ * Removes all the password entries from the password database.
+ **/
+void
+ephy_password_manager_remove_all_passwords (EphyPasswordManager *manager)
+{
+	EphyPasswordManagerIface *iface = EPHY_PASSWORD_MANAGER_GET_IFACE (manager);
+	iface->remove_all (manager);
+}
+
+/**
  * ephy_password_manager_list_passwords:
  * @manager: the #EphyPasswordManager
  * 
