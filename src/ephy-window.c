@@ -2136,24 +2136,6 @@ tab_size_to_cb (EphyEmbed *embed,
 }
 
 static gboolean
-address_has_web_scheme (const char *address)
-{
-	gboolean has_web_scheme;
-
-	if (address == NULL) return FALSE;
-
-	has_web_scheme = (g_str_has_prefix (address, "http:") ||
-			  g_str_has_prefix (address, "https:") ||
-			  g_str_has_prefix (address, "ftp:") ||
-			  g_str_has_prefix (address, "file:") ||
-			  g_str_has_prefix (address, "data:") ||
-			  g_str_has_prefix (address, "about:") ||
-			  g_str_has_prefix (address, "gopher:"));
-
-	return has_web_scheme;
-}
-
-static gboolean
 open_link_in_new (EphyWindow *window,
 		  const char *link_address,
 		  guint state,
@@ -2161,7 +2143,7 @@ open_link_in_new (EphyWindow *window,
 {
 	EphyEmbed *dest;
 
-	if (!address_has_web_scheme (link_address)) return FALSE;
+	if (!ephy_embed_utils_address_has_web_scheme (link_address)) return FALSE;
 
 	dest = ephy_link_open (EPHY_LINK (window), link_address, embed,
 			       state & GDK_SHIFT_MASK ? EPHY_LINK_NEW_WINDOW
@@ -2193,7 +2175,7 @@ save_property_url (EphyEmbed *embed,
 	value = ephy_embed_event_get_property (event, property);
 	location = g_value_get_string (value);
 
-	if (!address_has_web_scheme (location)) return FALSE;
+	if (!ephy_embed_utils_address_has_web_scheme (location)) return FALSE;
 
 	persist = EPHY_EMBED_PERSIST
 		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));

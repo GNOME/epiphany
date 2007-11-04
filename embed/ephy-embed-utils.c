@@ -119,3 +119,20 @@ ephy_embed_utils_get_title_composite (EphyEmbed *embed)
 	return title != NULL ? title : "";
 }
 
+gboolean
+ephy_embed_utils_address_has_web_scheme (const char *address)
+{
+	gboolean has_web_scheme;
+
+	if (address == NULL) return FALSE;
+
+	has_web_scheme = (g_str_has_prefix (address, "http:") ||
+			  g_str_has_prefix (address, "https:") ||
+			  g_str_has_prefix (address, "ftp:") ||
+			  g_str_has_prefix (address, "file:") ||
+			  g_str_has_prefix (address, "data:") ||
+			  g_str_has_prefix (address, "about:") ||
+			  g_str_has_prefix (address, "gopher:"));
+
+	return has_web_scheme;
+}

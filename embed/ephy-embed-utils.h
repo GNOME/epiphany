@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 
 char 	   * ephy_embed_utils_link_message_parse  (char *message);
 const char * ephy_embed_utils_get_title_composite (EphyEmbed *embed);
+gboolean     ephy_embed_utils_address_has_web_scheme (const char *address);
 
 G_END_DECLS
 
