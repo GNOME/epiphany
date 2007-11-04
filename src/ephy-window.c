@@ -54,6 +54,8 @@
 #include "ephy-fullscreen-popup.h"
 #include "ephy-action-helper.h"
 #include "ephy-find-toolbar.h"
+#include "ephy-embed-persist.h"
+#include "ephy-embed-factory.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -2133,6 +2135,204 @@ tab_size_to_cb (EphyEmbed *embed,
 	}
 }
 
+static gboolean
+address_has_web_scheme (const char *address)
+{
+	gboolean has_web_scheme;
+
+	if (address == NULL) return FALSE;
+
+	has_web_scheme = (g_str_has_prefix (address, "http:") ||
+			  g_str_has_prefix (address, "https:") ||
+			  g_str_has_prefix (address, "ftp:") ||
+			  g_str_has_prefix (address, "file:") ||
+			  g_str_has_prefix (address, "data:") ||
+			  g_str_has_prefix (address, "about:") ||
+			  g_str_has_prefix (address, "gopher:"));
+
+	return has_web_scheme;
+}
+
+static gboolean
+open_link_in_new (EphyWindow *window,
+		  const char *link_address,
+		  guint state,
+		  EphyEmbed *embed)
+{
+	EphyEmbed *dest;
+
+	if (!address_has_web_scheme (link_address)) return FALSE;
+
+	dest = ephy_link_open (EPHY_LINK (window), link_address, embed,
+			       state & GDK_SHIFT_MASK ? EPHY_LINK_NEW_WINDOW
+						      : EPHY_LINK_NEW_TAB);
+
+	if (dest)
+	{
+		ephy_embed_shistory_copy (embed,
+					  dest,
+					  TRUE,   /* back history */
+					  FALSE,  /* forward history */
+					  FALSE); /* current index */
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static gboolean
+save_property_url (EphyEmbed *embed,
+		   EphyEmbedEvent *event,
+		   const char *property,
+		   const char *key)
+{
+	const char *location;
+	const GValue *value;
+	EphyEmbedPersist *persist;
+
+	value = ephy_embed_event_get_property (event, property);
+	location = g_value_get_string (value);
+
+	if (!address_has_web_scheme (location)) return FALSE;
+
+	persist = EPHY_EMBED_PERSIST
+		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
+
+	ephy_embed_persist_set_embed (persist, embed);
+	ephy_embed_persist_set_flags (persist, 0);
+	ephy_embed_persist_set_persist_key (persist, key);
+	ephy_embed_persist_set_source (persist, location);
+
+	ephy_embed_persist_save (persist);
+
+	g_object_unref (G_OBJECT(persist));
+
+	return TRUE;
+}
+
+typedef struct
+{
+	EphyWindow *window;
+	EphyEmbed *embed;
+} ClipboardTextCBData;
+
+static void
+clipboard_text_received_cb (GtkClipboard *clipboard,
+			    const char *text,
+			    ClipboardTextCBData *data)
+{
+	if (data->embed != NULL && text != NULL)
+	{
+		ephy_link_open (EPHY_LINK (data->window), text, data->embed, 0);
+	}
+
+	if (data->embed != NULL)
+	{
+		EphyEmbed **embed_ptr = &(data->embed);
+		g_object_remove_weak_pointer (G_OBJECT (data->embed), (gpointer *) embed_ptr);
+	}
+
+	g_slice_free (ClipboardTextCBData, data);
+}
+
+static gboolean
+ephy_window_dom_mouse_click_cb (EphyEmbed *embed,
+				EphyEmbedEvent *event,
+				EphyWindow *window)
+{
+	EphyEmbedEventContext context;
+	guint button, modifier;
+	gboolean handled = TRUE;
+	gboolean with_control, with_shift, with_shift_control;
+	gboolean is_left_click, is_middle_click;
+	gboolean is_link, is_image, is_middle_clickable;
+	gboolean middle_click_opens;
+	gboolean is_input;
+
+	g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), FALSE);
+
+	button = ephy_embed_event_get_button (event);
+	context = ephy_embed_event_get_context (event);
+	modifier = ephy_embed_event_get_modifier (event);
+
+	LOG ("ephy_window_dom_mouse_click_cb: button %d, context %x, modifier %x",
+	     button, context, modifier);
+
+	with_control = (modifier & GDK_CONTROL_MASK) == GDK_CONTROL_MASK;
+	with_shift = (modifier & GDK_SHIFT_MASK) == GDK_SHIFT_MASK;
+	with_shift_control = (modifier & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
+					== (GDK_SHIFT_MASK | GDK_CONTROL_MASK);
+	is_left_click = (button == 1);
+	is_middle_click = (button == 2);
+
+	middle_click_opens =
+		eel_gconf_get_boolean (CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL) &&
+		!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL);
+
+	is_link = (context & EPHY_EMBED_CONTEXT_LINK) != 0;
+	is_image = (context & EPHY_EMBED_CONTEXT_IMAGE) != 0;
+	is_middle_clickable = !((context & EPHY_EMBED_CONTEXT_LINK)
+				|| (context & EPHY_EMBED_CONTEXT_INPUT)
+				|| (context & EPHY_EMBED_CONTEXT_EMAIL_LINK));
+	is_input = (context & EPHY_EMBED_CONTEXT_INPUT) != 0;
+
+	/* ctrl+click or middle click opens the link in new tab */
+	if (is_link &&
+	    ((is_left_click && (with_control || with_shift_control)) ||
+	     is_middle_click))
+	{
+		const GValue *value;
+		const char *link_address;
+
+		value = ephy_embed_event_get_property (event, "link");
+		link_address = g_value_get_string (value);
+		handled = open_link_in_new (window, link_address, modifier, embed);
+	}
+	/* shift+click saves the link target */
+	else if (is_link && is_left_click && with_shift)
+	{
+		handled = save_property_url (embed, event, "link", CONF_STATE_SAVE_DIR);
+	}
+	/* shift+click saves the non-link image
+	 * Note: pressing enter to submit a form synthesizes a mouse click event
+	 */
+	else if (is_image && is_left_click && with_shift && !is_input)
+	{
+		handled = save_property_url (embed, event, "image", CONF_STATE_SAVE_IMAGE_DIR);
+	}
+	/* middle click opens the selection url */
+	else if (is_middle_clickable && is_middle_click && middle_click_opens)
+	{
+		/* See bug #133633 for why we do it this way */
+
+		/* We need to make sure we know if the embed is destroyed between
+		 * requesting the clipboard contents, and receiving them.
+		 */
+		ClipboardTextCBData *cb_data;
+		EphyEmbed **embed_ptr;
+		
+		cb_data = g_slice_new0 (ClipboardTextCBData);
+		cb_data->embed = embed;
+		cb_data->window = window;
+		embed_ptr = &cb_data->embed;
+		
+		g_object_add_weak_pointer (G_OBJECT (embed), (gpointer *) embed_ptr);
+
+		gtk_clipboard_request_text
+			(gtk_widget_get_clipboard (GTK_WIDGET (embed),
+						   GDK_SELECTION_PRIMARY),
+			 (GtkClipboardTextReceivedFunc) clipboard_text_received_cb,
+			 cb_data);
+	}
+	/* we didn't handle the event */
+	else
+	{
+		handled = FALSE;
+	}
+
+	return handled;
+}
+
 static void
 ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 {
@@ -2191,6 +2391,8 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 			(embed, G_CALLBACK (tab_context_menu_cb), window);
 		g_signal_handlers_disconnect_by_func
 			(embed, G_CALLBACK (tab_size_to_cb), window);
+		g_signal_handlers_disconnect_by_func
+			(embed, G_CALLBACK (ephy_window_dom_mouse_click_cb), window);
 
 	}
 
@@ -2254,6 +2456,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 					 window, 0);
 		g_signal_connect_object (embed, "notify::load-progress",
 					 G_CALLBACK (sync_tab_load_progress),
+					 window, 0);
+		g_signal_connect_object (embed, "ge_dom_mouse_click",
+					 G_CALLBACK (ephy_window_dom_mouse_click_cb),
 					 window, 0);
 
 		g_object_notify (G_OBJECT (window), "active-tab");
