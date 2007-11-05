@@ -20,6 +20,9 @@
 
 #include "config.h"
 #include "ephy-embed.h"
+#include "ephy-embed-type-builtins.h"
+#include "ephy-zoom.h"
+
 #include "ephy-base-embed.h"
 
 struct _EphyBaseEmbedPrivate
@@ -31,6 +34,26 @@ struct _EphyBaseEmbedPrivate
   char *typed_address;
   char *title;
   char *loading_title;
+};
+
+enum
+{
+  PROP_0,
+  PROP_ADDRESS,
+  PROP_DOCUMENT_TYPE,
+  PROP_HIDDEN_POPUP_COUNT,
+  PROP_ICON,
+  PROP_ICON_ADDRESS,
+  PROP_LINK_MESSAGE,
+  PROP_LOAD_PROGRESS,
+  PROP_LOAD_STATUS,
+  PROP_NAVIGATION,
+  PROP_POPUPS_ALLOWED,
+  PROP_SECURITY,
+  PROP_STATUS_MESSAGE,
+  PROP_TITLE,
+  PROP_TYPED_ADDRESS,
+  PROP_ZOOM
 };
 
 static void ephy_base_embed_dispose (GObject *object);
@@ -63,7 +86,6 @@ ephy_base_embed_size_allocate (GtkWidget *widget,
                                GtkAllocation *allocation)
 {
   GtkWidget *child;
-  GtkAllocation invalid = { -1, -1, 1, 1 };
 
   widget->allocation = *allocation;
 
@@ -74,6 +96,22 @@ ephy_base_embed_size_allocate (GtkWidget *widget,
 }
 
 static void
+ephy_base_embed_get_property (GObject *object,
+                              guint prop_id,
+                              GValue *value,
+                              GParamSpec *pspec)
+{
+}
+
+static void
+ephy_base_embed_set_property (GObject *object,
+                              guint prop_id,
+                              const GValue *value,
+                              GParamSpec *pspec)
+{
+}
+
+static void
 ephy_base_embed_class_init (EphyBaseEmbedClass *klass)
 {
   GObjectClass *gobject_class = (GObjectClass *)klass;
@@ -81,9 +119,129 @@ ephy_base_embed_class_init (EphyBaseEmbedClass *klass)
 
   gobject_class->dispose = ephy_base_embed_dispose;
   gobject_class->finalize = ephy_base_embed_finalize;
+  gobject_class->get_property = ephy_base_embed_get_property;
+  gobject_class->set_property = ephy_base_embed_set_property;
 
   widget_class->size_request = ephy_base_embed_size_request;
   widget_class->size_allocate = ephy_base_embed_size_allocate;
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_SECURITY,
+                                   g_param_spec_enum ("security-level",
+                                                      "Security Level",
+                                                      "The embed's security level",
+                                                      EPHY_TYPE_EMBED_SECURITY_LEVEL,
+                                                      EPHY_EMBED_STATE_IS_UNKNOWN,
+                                                      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (gobject_class,
+                                   PROP_DOCUMENT_TYPE,
+                                   g_param_spec_enum ("document-type",
+                                                      "Document Type",
+                                                      "The embed's documen type",
+                                                      EPHY_TYPE_EMBED_DOCUMENT_TYPE,
+                                                      EPHY_EMBED_DOCUMENT_HTML,
+                                                      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (gobject_class,
+                                   PROP_ZOOM,
+                                   g_param_spec_float ("zoom",
+                                                       "Zoom",
+                                                       "The embed's zoom",
+                                                       ZOOM_MINIMAL,
+                                                       ZOOM_MAXIMAL,
+                                                       1.0,
+                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (gobject_class,
+                                   PROP_LOAD_PROGRESS,
+                                   g_param_spec_int ("load-progress",
+                                                     "Load progress",
+                                                     "The embed's load progress in percent",
+                                                     0,
+                                                     100,
+                                                     0,
+                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (gobject_class,
+                                   PROP_LOAD_STATUS,
+                                   g_param_spec_boolean ("load-status",
+                                                         "Load status",
+                                                         "The embed's load status",
+                                                         FALSE,
+                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (gobject_class,
+                                   PROP_NAVIGATION,
+                                   g_param_spec_flags ("navigation",
+                                                       "Navigation flags",
+                                                       "The embed's navigation flags",
+                                                       EPHY_TYPE_EMBED_NAVIGATION_FLAGS,
+                                                       0,
+                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (gobject_class,
+                                   PROP_ADDRESS,
+                                   g_param_spec_string ("address",
+                                                        "Address",
+                                                        "The embed's address",
+                                                        "",
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (gobject_class,
+                                   PROP_TYPED_ADDRESS,
+                                   g_param_spec_string ("typed-address",
+                                                        "Typed Address",
+                                                        "The typed address",
+                                                        "",
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (gobject_class,
+                                   PROP_TITLE,
+                                   g_param_spec_string ("title",
+                                                        "Title",
+                                                        "The embed's title",
+                                                        _("Blank page"),
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (gobject_class,
+                                   PROP_STATUS_MESSAGE,
+                                   g_param_spec_string ("status-message",
+                                                        "Status Message",
+                                                        "The embed's statusbar message",
+                                                        NULL,
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (gobject_class,
+                                   PROP_LINK_MESSAGE,
+                                   g_param_spec_string ("link-message",
+                                                        "Link Message",
+                                                        "The embed's link message",
+                                                        NULL,
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (gobject_class,
+                                   PROP_ICON,
+                                   g_param_spec_object ("icon",
+                                                        "Icon",
+                                                        "The embed icon's",
+                                                        GDK_TYPE_PIXBUF,
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_ICON_ADDRESS,
+                                   g_param_spec_string ("icon-address",
+                                                        "Icon address",
+                                                        "The embed icon's address",
+                                                        NULL,
+                                                        (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)));
+  g_object_class_install_property (gobject_class,
+                                   PROP_HIDDEN_POPUP_COUNT,
+                                   g_param_spec_int ("hidden-popup-count",
+                                                     "Number of Blocked Popups",
+                                                     "The embed's number of blocked popup windows",
+                                                     0,
+                                                     G_MAXINT,
+                                                     0,
+                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_POPUPS_ALLOWED,
+                                   g_param_spec_boolean ("popups-allowed",
+                                                         "Popups Allowed",
+                                                         "Whether popup windows are to be displayed",
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
   g_type_class_add_private (gobject_class, sizeof (EphyBaseEmbedPrivate));
 }
 

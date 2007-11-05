@@ -23,7 +23,6 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include "ephy-embed.h"
-#include "ephy-zoom.h"
 
 #include "ephy-embed-type-builtins.h"
 #include "ephy-marshal.h"
@@ -426,107 +425,6 @@ ephy_embed_base_init (gpointer g_class)
 			      1,
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
-		g_object_interface_install_property (g_class,
-						     g_param_spec_enum ("security-level",
-									"Security Level",
-									"The embed's security level",
-									EPHY_TYPE_EMBED_SECURITY_LEVEL,
-									EPHY_EMBED_STATE_IS_UNKNOWN,
-									G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-		g_object_interface_install_property (g_class,
-						     g_param_spec_enum ("document-type",
-									"Document Type",
-									"The embed's documen type",
-									EPHY_TYPE_EMBED_DOCUMENT_TYPE,
-									EPHY_EMBED_DOCUMENT_HTML,
-									G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-		g_object_interface_install_property (g_class,
-						     g_param_spec_float ("zoom",
-									 "Zoom",
-									 "The embed's zoom",
-									 ZOOM_MINIMAL,
-									 ZOOM_MAXIMAL,
-									 1.0,
-									 G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-		g_object_interface_install_property (g_class,
-						     g_param_spec_int ("load-progress",
-								       "Load progress",
-								       "The embed's load progress in percent",
-								       0,
-								       100,
-								       0,
-								       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-		g_object_interface_install_property (g_class,
-						     g_param_spec_boolean ("load-status",
-									   "Load status",
-									   "The embed's load status",
-									   FALSE,
-									   G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-		g_object_interface_install_property (g_class,
-						     g_param_spec_flags ("navigation",
-									 "Navigation flags",
-									 "The embed's navigation flags",
-									 EPHY_TYPE_EMBED_NAVIGATION_FLAGS,
-									 0,
-									 G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-		g_object_interface_install_property (g_class,
-						     g_param_spec_string ("address",
-									  "Address",
-									  "The embed's address",
-									  "",
-									  G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-		g_object_interface_install_property (g_class,
-						     g_param_spec_string ("typed-address",
-									  "Typed Address",
-									  "The typed address",
-									  "",
-									  G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-		g_object_interface_install_property (g_class,
-						     g_param_spec_string ("title",
-									  "Title",
-									  "The embed's title",
-									  _("Blank page"),
-									  G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-		g_object_interface_install_property (g_class,
-						     g_param_spec_string ("status-message",
-									  "Status Message",
-									  "The embed's statusbar message",
-									  NULL,
-									  G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-		g_object_interface_install_property (g_class,
-						     g_param_spec_string ("link-message",
-									  "Link Message",
-									  "The embed's link message",
-									  NULL,
-									  G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-		g_object_interface_install_property (g_class,
-						     g_param_spec_object ("icon",
-									  "Icon",
-									  "The embed icon's",
-									  GDK_TYPE_PIXBUF,
-									  G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-		g_object_interface_install_property (g_class,
-						     g_param_spec_string ("icon-address",
-									  "Icon address",
-									  "The embed icon's address",
-									  NULL,
-									  (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)));
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_int ("hidden-popup-count",
-                                                                       "Number of Blocked Popups",
-                                                                       "The embed's number of blocked popup windows",
-                                                                       0,
-                                                                       G_MAXINT,
-                                                                       0,
-                                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-                g_object_interface_install_property (g_class,
-                                                     g_param_spec_boolean ("popups-allowed",
-                                                                           "Popups Allowed",
-                                                                           "Whether popup windows are to be displayed",
-                                                                           FALSE,
-                                                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 		initialized = TRUE;
 	}
 
