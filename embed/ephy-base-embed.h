@@ -51,6 +51,8 @@ void  ephy_base_embed_restore_zoom_level (EphyBaseEmbed *membed,
 void  ephy_base_embed_update_from_net_state (EphyBaseEmbed *embed,
                                              const char *uri,
                                              EphyEmbedNetState state);
+void  ephy_base_embed_set_load_percent (EphyBaseEmbed *embed, int percent);
+
 G_END_DECLS
 
 #endif /* __EPHY_BASE_EMBED_H__ */

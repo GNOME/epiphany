@@ -894,7 +894,7 @@ build_load_percent (int requests_done, int requests_total)
   return percent;
 }
 
-static void
+void
 ephy_base_embed_set_load_percent (EphyBaseEmbed *embed, int percent)
 {
   EphyBaseEmbedPrivate *priv = embed->priv;
