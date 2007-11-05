@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  *  Copyright © 2000-2004 Marco Pesenti Gritti
  *  Copyright © 2003-2007 Christian Persch
@@ -43,8 +43,7 @@
 #define RELOAD_DELAY            250 /* ms */
 #define RELOAD_DELAY_MAX_TICKS  40  /* RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s */
 
-struct _EphyBaseEmbedPrivate
-{
+struct _EphyBaseEmbedPrivate {
   EphyEmbedAddressExpire address_expire;
   /* guint address_expire : 2; ? */
   EphyEmbedSecurityLevel security_level;
@@ -80,33 +79,31 @@ struct _EphyBaseEmbedPrivate
 };
 
 #if 0
-typedef struct
-{
+typedef struct {
   char *url;
   char *name;
   char *features;
 } PopupInfo;
 #endif
 
-enum
-  {
-    PROP_0,
-    PROP_ADDRESS,
-    PROP_DOCUMENT_TYPE,
-    PROP_HIDDEN_POPUP_COUNT,
-    PROP_ICON,
-    PROP_ICON_ADDRESS,
-    PROP_LINK_MESSAGE,
-    PROP_LOAD_PROGRESS,
-    PROP_LOAD_STATUS,
-    PROP_NAVIGATION,
-    PROP_POPUPS_ALLOWED,
-    PROP_SECURITY,
-    PROP_STATUS_MESSAGE,
-    PROP_TITLE,
-    PROP_TYPED_ADDRESS,
-    PROP_ZOOM
-  };
+enum {
+  PROP_0,
+  PROP_ADDRESS,
+  PROP_DOCUMENT_TYPE,
+  PROP_HIDDEN_POPUP_COUNT,
+  PROP_ICON,
+  PROP_ICON_ADDRESS,
+  PROP_LINK_MESSAGE,
+  PROP_LOAD_PROGRESS,
+  PROP_LOAD_STATUS,
+  PROP_NAVIGATION,
+  PROP_POPUPS_ALLOWED,
+  PROP_SECURITY,
+  PROP_STATUS_MESSAGE,
+  PROP_TITLE,
+  PROP_TYPED_ADDRESS,
+  PROP_ZOOM
+};
 
 #define EPHY_BASE_EMBED_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BASE_EMBED, EphyBaseEmbedPrivate))
 
@@ -129,11 +126,10 @@ ephy_base_embed_size_request (GtkWidget *widget,
 
   child = GTK_BIN (widget)->child;
 
-  if (child && GTK_WIDGET_VISIBLE (child))
-    {
-      GtkRequisition child_requisition;
-      gtk_widget_size_request (GTK_WIDGET (child), &child_requisition);
-    }
+  if (child && GTK_WIDGET_VISIBLE (child)) {
+    GtkRequisition child_requisition;
+    gtk_widget_size_request (GTK_WIDGET (child), &child_requisition);
+  }
 }
 
 static void
@@ -161,25 +157,22 @@ impl_set_typed_address (EphyEmbed *embed,
   priv->typed_address = g_strdup (address);
 
   if (expire == EPHY_EMBED_ADDRESS_EXPIRE_CURRENT &&
-      !priv->is_loading)
-    {
-      priv->address_expire = EPHY_EMBED_ADDRESS_EXPIRE_NOW;
-    }
-  else
-    {
-      priv->address_expire = expire;
-    }
+      !priv->is_loading) {
+    priv->address_expire = EPHY_EMBED_ADDRESS_EXPIRE_NOW;
+  } else {
+    priv->address_expire = expire;
+  }
 
   g_object_notify (G_OBJECT (embed), "typed-address");
 }
 
-static const char*
+static const char *
 impl_get_typed_address (EphyEmbed *embed)
 {
   return EPHY_BASE_EMBED (embed)->priv->typed_address;
 }
 
-static const char*
+static const char *
 impl_get_loading_title (EphyEmbed *embed)
 {
   EphyBaseEmbedPrivate *priv = EPHY_BASE_EMBED (embed)->priv;
@@ -195,13 +188,13 @@ impl_get_is_blank (EphyEmbed *embed)
   return priv->is_blank;
 }
 
-static const char*
+static const char *
 impl_get_icon_address (EphyEmbed *embed)
 {
   return EPHY_BASE_EMBED (embed)->priv->icon_address;
 }
 
-static GdkPixbuf*
+static GdkPixbuf *
 impl_get_icon (EphyEmbed *embed)
 {
   return EPHY_BASE_EMBED (embed)->priv->icon;
@@ -237,33 +230,28 @@ impl_get_navigation_flags (EphyEmbed *embed)
   return EPHY_BASE_EMBED (embed)->priv->nav_flags;
 }
 
-static const char*
+static const char *
 impl_get_address (EphyEmbed *embed)
 {
   EphyBaseEmbedPrivate *priv = EPHY_BASE_EMBED (embed)->priv;
   return priv->address ? priv->address : "about:blank";
 }
 
-static const char*
+static const char *
 impl_get_status_message (EphyEmbed *embed)
 {
   EphyBaseEmbedPrivate *priv = EPHY_BASE_EMBED (embed)->priv;
 
-  if (priv->link_message && priv->link_message[0] != '\0')
-    {
-      return priv->link_message;
-    }
-  else if (priv->status_message)
-    {
-      return priv->status_message;
-    }
-  else
-    {
-      return NULL;
-    }
+  if (priv->link_message && priv->link_message[0] != '\0') {
+    return priv->link_message;
+  } else if (priv->status_message) {
+    return priv->status_message;
+  } else {
+    return NULL;
+  }
 }
 
-static const char*
+static const char *
 impl_get_link_message (EphyEmbed *embed)
 {
   return EPHY_BASE_EMBED (embed)->priv->link_message;
@@ -275,8 +263,7 @@ ephy_base_embed_set_property (GObject *object,
                               const GValue *value,
                               GParamSpec *pspec)
 {
-  switch (prop_id)
-    {
+  switch (prop_id) {
     case PROP_ICON_ADDRESS:
       ephy_base_embed_set_icon_address (EPHY_BASE_EMBED (object), g_value_get_string (value));
       break;
@@ -303,7 +290,7 @@ ephy_base_embed_set_property (GObject *object,
       break;
     default:
       break;
-    }
+  }
 }
 
 static void
@@ -314,8 +301,7 @@ ephy_base_embed_get_property (GObject *object,
 {
   EphyBaseEmbedPrivate *priv = EPHY_BASE_EMBED (object)->priv;
 
-  switch (prop_id)
-    {
+  switch (prop_id) {
     case PROP_ADDRESS:
       g_value_set_string (value, priv->address);
       break;
@@ -365,7 +351,7 @@ ephy_base_embed_get_property (GObject *object,
       break;
     default:
       break;
-    }
+  }
 }
 
 static void
@@ -450,7 +436,7 @@ ephy_base_embed_class_init (EphyBaseEmbedClass *klass)
                                    g_param_spec_string ("title",
                                                         "Title",
                                                         "The embed's title",
-                                                        _("Blank page"),
+                                                        _ ("Blank page"),
                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   g_object_class_install_property (gobject_class,
                                    PROP_STATUS_MESSAGE,
@@ -515,10 +501,9 @@ icon_cache_changed_cb (EphyFaviconCache *cache,
 
   /* is this for us? */
   if (icon_address != NULL &&
-      strcmp (icon_address, address) == 0)
-    {
-      ephy_base_embed_load_icon (EPHY_BASE_EMBED (embed));
-    }
+      strcmp (icon_address, address) == 0) {
+    ephy_base_embed_load_icon (EPHY_BASE_EMBED (embed));
+  }
 }
 
 static void
@@ -526,12 +511,11 @@ ge_document_type_cb (EphyEmbed *embed,
                      EphyEmbedDocumentType type,
                      EphyBaseEmbed *bembed)
 {
-  if (bembed->priv->document_type != type)
-    {
-      bembed->priv->document_type = type;
+  if (bembed->priv->document_type != type) {
+    bembed->priv->document_type = type;
 
-      g_object_notify (G_OBJECT (embed), "document-type");
-    }
+    g_object_notify (G_OBJECT (embed), "document-type");
+  }
 }
 
 static gboolean
@@ -559,36 +543,32 @@ ge_zoom_change_cb (EphyEmbed *embed,
 {
   char *address;
 
-  if (bembed->priv->zoom != zoom)
-    {
-      if (bembed->priv->is_setting_zoom)
-        {
-          return;
-        }
-
-      address = ephy_embed_get_location (embed, TRUE);
-      if (address_has_web_scheme (address))
-        {
-          EphyHistory *history;
-          EphyNode *host;
-          history = EPHY_HISTORY
-            (ephy_embed_shell_get_global_history (embed_shell));
-          host = ephy_history_get_host (history, address);
-
-          if (host != NULL)
-            {
-              ephy_node_set_property_float (host,
-                                            EPHY_NODE_HOST_PROP_ZOOM,
-                                            zoom);
-            }
-        }
-
-      g_free (address);
-
-      bembed->priv->zoom = zoom;
-
-      g_object_notify (G_OBJECT (embed), "zoom");
+  if (bembed->priv->zoom != zoom) {
+    if (bembed->priv->is_setting_zoom) {
+      return;
     }
+
+    address = ephy_embed_get_location (embed, TRUE);
+    if (address_has_web_scheme (address)) {
+      EphyHistory *history;
+      EphyNode *host;
+      history = EPHY_HISTORY
+                (ephy_embed_shell_get_global_history (embed_shell));
+      host = ephy_history_get_host (history, address);
+
+      if (host != NULL) {
+        ephy_node_set_property_float (host,
+                                      EPHY_NODE_HOST_PROP_ZOOM,
+                                      zoom);
+      }
+    }
+
+    g_free (address);
+
+    bembed->priv->zoom = zoom;
+
+    g_object_notify (G_OBJECT (embed), "zoom");
+  }
 }
 
 static void
@@ -609,18 +589,18 @@ ephy_base_embed_init (EphyBaseEmbed *self)
 
   g_signal_connect_object (self, "ge_document_type",
                            G_CALLBACK (ge_document_type_cb),
-                           self, (GConnectFlags) 0);
+                           self, (GConnectFlags)0);
 
   g_signal_connect_object (self, "ge_zoom_change",
                            G_CALLBACK (ge_zoom_change_cb),
-                           self, (GConnectFlags) 0);
+                           self, (GConnectFlags)0);
 
   g_signal_connect_object (self, "ge_favicon",
                            G_CALLBACK (ge_favicon_cb),
                            self, (GConnectFlags)0);
 
   cache = EPHY_FAVICON_CACHE
-    (ephy_embed_shell_get_favicon_cache (embed_shell));
+          (ephy_embed_shell_get_favicon_cache (embed_shell));
   g_signal_connect_object (G_OBJECT (cache), "changed",
                            G_CALLBACK (icon_cache_changed_cb),
                            self, (GConnectFlags)0);
@@ -645,11 +625,10 @@ ephy_base_embed_finalize (GObject *object)
 {
   EphyBaseEmbedPrivate *priv = EPHY_BASE_EMBED (object)->priv;
 
-  if (priv->icon != NULL)
-    {
-      g_object_unref (priv->icon);
-      priv->icon = NULL;
-    }
+  if (priv->icon != NULL) {
+    g_object_unref (priv->icon);
+    priv->icon = NULL;
+  }
 
 #if 0
   popups_manager_reset (embed);
@@ -695,17 +674,16 @@ ephy_base_embed_set_address (EphyBaseEmbed *embed, char *address)
   priv->address = address;
 
   priv->is_blank = address == NULL ||
-    strcmp (address, "about:blank") == 0;
+                   strcmp (address, "about:blank") == 0;
 
   if (priv->is_loading &&
       priv->address_expire == EPHY_EMBED_ADDRESS_EXPIRE_NOW &&
-      priv->typed_address != NULL)
-    {
-      g_free (priv->typed_address);
-      priv->typed_address = NULL;
+      priv->typed_address != NULL) {
+    g_free (priv->typed_address);
+    priv->typed_address = NULL;
 
-      g_object_notify (object, "typed-address");
-    }
+    g_object_notify (object, "typed-address");
+  }
 
   g_object_notify (object, "address");
 }
@@ -739,24 +717,20 @@ ephy_base_embed_set_title (EphyBaseEmbed *embed,
 {
   EphyBaseEmbedPrivate *priv = embed->priv;
 
-  if (!priv->is_blank && (title == NULL || g_strstrip (title)[0] == '\0'))
-    {
-      g_free (title);
-      title = get_title_from_address (priv->address);
+  if (!priv->is_blank && (title == NULL || g_strstrip (title)[0] == '\0')) {
+    g_free (title);
+    title = get_title_from_address (priv->address);
 
-      /* Fallback */
-      if (title == NULL || title[0] == '\0')
-        {
-          g_free (title);
-          title = NULL;
-          priv->is_blank = TRUE;
-        }
-    }
-  else if (priv->is_blank && title != NULL)
-    {
+    /* Fallback */
+    if (title == NULL || title[0] == '\0') {
       g_free (title);
       title = NULL;
+      priv->is_blank = TRUE;
     }
+  } else if (priv->is_blank && title != NULL) {
+    g_free (title);
+    title = NULL;
+  }
 
   g_free (priv->title);
   priv->title = ephy_string_shorten (title, MAX_TITLE_LENGTH);
@@ -770,16 +744,14 @@ ensure_page_info (EphyBaseEmbed *embed, const char *address)
   EphyBaseEmbedPrivate *priv = embed->priv;
 
   if ((priv->address == NULL || priv->address[0] == '\0') &&
-      priv->address_expire == EPHY_EMBED_ADDRESS_EXPIRE_NOW)
-    {
-      ephy_base_embed_set_address (embed, g_strdup (address));
-    }
+      priv->address_expire == EPHY_EMBED_ADDRESS_EXPIRE_NOW) {
+    ephy_base_embed_set_address (embed, g_strdup (address));
+  }
 
   /* FIXME huh?? */
-  if (priv->title == NULL || priv->title[0] == '\0')
-    {
-      ephy_base_embed_set_title (embed, NULL);
-    }
+  if (priv->title == NULL || priv->title[0] == '\0') {
+    ephy_base_embed_set_title (embed, NULL);
+  }
 }
 static void
 update_net_state_message (EphyBaseEmbed *embed, const char *uri, EphyEmbedNetState flags)
@@ -788,66 +760,52 @@ update_net_state_message (EphyBaseEmbed *embed, const char *uri, EphyEmbedNetSta
   const char *msg = NULL;
   const char *host = NULL;
 
-  if (uri != NULL)
-    {
-      vfs_uri = gnome_vfs_uri_new (uri);
-    }
+  if (uri != NULL) {
+    vfs_uri = gnome_vfs_uri_new (uri);
+  }
 
-  if (vfs_uri != NULL)
-    {
-      host = gnome_vfs_uri_get_host_name (vfs_uri);
-    }
+  if (vfs_uri != NULL) {
+    host = gnome_vfs_uri_get_host_name (vfs_uri);
+  }
 
   if (host == NULL || host[0] == '\0') goto out;
 
   /* IS_REQUEST and IS_NETWORK can be both set */
-  if (flags & EPHY_EMBED_STATE_IS_REQUEST)
-    {
-      if (flags & EPHY_EMBED_STATE_REDIRECTING)
-        {
-          msg = _("Redirecting to “%s”…");
-        }
-      else if (flags & EPHY_EMBED_STATE_TRANSFERRING)
-        {
-          msg = _("Transferring data from “%s”…");
-        }
-      else if (flags & EPHY_EMBED_STATE_NEGOTIATING)
-        {
-          msg = _("Waiting for authorization from “%s”…");
-        }
+  if (flags & EPHY_EMBED_STATE_IS_REQUEST) {
+    if (flags & EPHY_EMBED_STATE_REDIRECTING) {
+      msg = _ ("Redirecting to “%s”…");
+    } else if (flags & EPHY_EMBED_STATE_TRANSFERRING) {
+      msg = _ ("Transferring data from “%s”…");
+    } else if (flags & EPHY_EMBED_STATE_NEGOTIATING) {
+      msg = _ ("Waiting for authorization from “%s”…");
     }
+  }
 
-  if (flags & EPHY_EMBED_STATE_IS_NETWORK)
-    {
-      if (flags & EPHY_EMBED_STATE_START)
-        {
-          msg = _("Loading “%s”…");
-        }
+  if (flags & EPHY_EMBED_STATE_IS_NETWORK) {
+    if (flags & EPHY_EMBED_STATE_START) {
+      msg = _ ("Loading “%s”…");
     }
+  }
 
   if ((flags & EPHY_EMBED_STATE_IS_NETWORK) &&
-      (flags & EPHY_EMBED_STATE_STOP))
-    {
-      g_free (embed->priv->status_message);
-      embed->priv->status_message = NULL;
-      g_object_notify (G_OBJECT (embed), "status-message");
+      (flags & EPHY_EMBED_STATE_STOP)) {
+    g_free (embed->priv->status_message);
+    embed->priv->status_message = NULL;
+    g_object_notify (G_OBJECT (embed), "status-message");
 
-    }
-  else if (msg != NULL)
-    {
-      g_free (embed->priv->status_message);
-      g_free (embed->priv->loading_title);
-      embed->priv->status_message = g_strdup_printf (msg, host);
-      embed->priv->loading_title = g_strdup_printf (msg, host);
-      g_object_notify (G_OBJECT (embed), "status-message");
-      g_object_notify (G_OBJECT (embed), "title");
-    }
+  } else if (msg != NULL) {
+    g_free (embed->priv->status_message);
+    g_free (embed->priv->loading_title);
+    embed->priv->status_message = g_strdup_printf (msg, host);
+    embed->priv->loading_title = g_strdup_printf (msg, host);
+    g_object_notify (G_OBJECT (embed), "status-message");
+    g_object_notify (G_OBJECT (embed), "title");
+  }
 
  out:
-  if (vfs_uri != NULL)
-    {
-      gnome_vfs_uri_unref (vfs_uri);
-    }
+  if (vfs_uri != NULL) {
+    gnome_vfs_uri_unref (vfs_uri);
+  }
 }
 
 static void
@@ -857,39 +815,34 @@ update_navigation_flags (EphyBaseEmbed *membed)
   EphyEmbed *embed = EPHY_EMBED (membed);
   guint flags = 0;
 
-  if (ephy_embed_can_go_up (embed))
-    {
-      flags |= EPHY_EMBED_NAV_UP;
-    }
+  if (ephy_embed_can_go_up (embed)) {
+    flags |= EPHY_EMBED_NAV_UP;
+  }
 
-  if (ephy_embed_can_go_back (embed))
-    {
-      flags |= EPHY_EMBED_NAV_BACK;
-    }
+  if (ephy_embed_can_go_back (embed)) {
+    flags |= EPHY_EMBED_NAV_BACK;
+  }
 
-  if (ephy_embed_can_go_forward (embed))
-    {
-      flags |= EPHY_EMBED_NAV_FORWARD;
-    }
+  if (ephy_embed_can_go_forward (embed)) {
+    flags |= EPHY_EMBED_NAV_FORWARD;
+  }
 
-  if (priv->nav_flags != (EphyEmbedNavigationFlags)flags)
-    {
-      priv->nav_flags = (EphyEmbedNavigationFlags)flags;
+  if (priv->nav_flags != (EphyEmbedNavigationFlags)flags) {
+    priv->nav_flags = (EphyEmbedNavigationFlags)flags;
 
-      g_object_notify (G_OBJECT (embed), "navigation");
-    }
+    g_object_notify (G_OBJECT (embed), "navigation");
+  }
 }
 
 static int
 build_load_percent (int requests_done, int requests_total)
 {
-  int percent= 0;
+  int percent = 0;
 
-  if (requests_total > 0)
-    {
-      percent = (requests_done * 100) / requests_total;
-      percent = CLAMP (percent, 0, 100);
-    }
+  if (requests_total > 0) {
+    percent = (requests_done * 100) / requests_total;
+    percent = CLAMP (percent, 0, 100);
+  }
 
   return percent;
 }
@@ -899,12 +852,11 @@ ephy_base_embed_set_load_percent (EphyBaseEmbed *embed, int percent)
 {
   EphyBaseEmbedPrivate *priv = embed->priv;
 
-  if (percent != priv->load_percent)
-    {
-      priv->load_percent = percent;
+  if (percent != priv->load_percent) {
+    priv->load_percent = percent;
 
-      g_object_notify (G_OBJECT (embed), "load-progress");
-    }
+    g_object_notify (G_OBJECT (embed), "load-progress");
+  }
 }
 
 static void
@@ -912,22 +864,18 @@ build_progress_from_requests (EphyBaseEmbed *embed, EphyEmbedNetState state)
 {
   int load_percent;
 
-  if (state & EPHY_EMBED_STATE_IS_REQUEST)
-    {
-      if (state & EPHY_EMBED_STATE_START)
-        {
-          embed->priv->total_requests ++;
-        }
-      else if (state & EPHY_EMBED_STATE_STOP)
-        {
-          embed->priv->cur_requests ++;
-        }
-
-      load_percent = build_load_percent (embed->priv->cur_requests,
-                                         embed->priv->total_requests);
-
-      ephy_base_embed_set_load_percent (embed, load_percent);
+  if (state & EPHY_EMBED_STATE_IS_REQUEST) {
+    if (state & EPHY_EMBED_STATE_START) {
+      embed->priv->total_requests++;
+    } else if (state & EPHY_EMBED_STATE_STOP) {
+      embed->priv->cur_requests++;
     }
+
+    load_percent = build_load_percent (embed->priv->cur_requests,
+                                       embed->priv->total_requests);
+
+    ephy_base_embed_set_load_percent (embed, load_percent);
+  }
 }
 
 static void
@@ -938,12 +886,11 @@ ephy_base_embed_set_load_status (EphyBaseEmbed *embed, gboolean status)
 
   is_loading = status != FALSE;
 
-  if (is_loading != priv->is_loading)
-    {
-      priv->is_loading = is_loading;
+  if (is_loading != priv->is_loading) {
+    priv->is_loading = is_loading;
 
-      g_object_notify (G_OBJECT (embed), "load-status");
-    }
+    g_object_notify (G_OBJECT (embed), "load-status");
+  }
 }
 
 void
@@ -955,47 +902,43 @@ ephy_base_embed_update_from_net_state (EphyBaseEmbed *embed,
 
   update_net_state_message (embed, uri, state);
 
-  if (state & EPHY_EMBED_STATE_IS_NETWORK)
-    {
-      if (state & EPHY_EMBED_STATE_START)
-        {
-          GObject *object = G_OBJECT (embed);
+  if (state & EPHY_EMBED_STATE_IS_NETWORK) {
+    if (state & EPHY_EMBED_STATE_START) {
+      GObject *object = G_OBJECT (embed);
 
-          g_object_freeze_notify (object);
+      g_object_freeze_notify (object);
 
-          priv->total_requests = 0;
-          priv->cur_requests = 0;
+      priv->total_requests = 0;
+      priv->cur_requests = 0;
 
-          ephy_base_embed_set_load_percent (embed, 0);
-          ephy_base_embed_set_load_status (embed, TRUE);
+      ephy_base_embed_set_load_percent (embed, 0);
+      ephy_base_embed_set_load_status (embed, TRUE);
 
-          ensure_page_info (embed, uri);
+      ensure_page_info (embed, uri);
 
-          g_object_notify (object, "title");
+      g_object_notify (object, "title");
 
-          g_object_thaw_notify (object);
-        }
-      else if (state & EPHY_EMBED_STATE_STOP)
-        {
-          GObject *object = G_OBJECT (embed);
+      g_object_thaw_notify (object);
+    } else if (state & EPHY_EMBED_STATE_STOP) {
+      GObject *object = G_OBJECT (embed);
 
-          g_object_freeze_notify (object);
+      g_object_freeze_notify (object);
 
-          ephy_base_embed_set_load_percent (embed, 100);
-          ephy_base_embed_set_load_status (embed, FALSE);
+      ephy_base_embed_set_load_percent (embed, 100);
+      ephy_base_embed_set_load_status (embed, FALSE);
 
-          g_free (priv->loading_title);
-          priv->loading_title = NULL;
+      g_free (priv->loading_title);
+      priv->loading_title = NULL;
 
-          priv->address_expire = EPHY_EMBED_ADDRESS_EXPIRE_NOW;
+      priv->address_expire = EPHY_EMBED_ADDRESS_EXPIRE_NOW;
 
-          g_object_notify (object, "title");
+      g_object_notify (object, "title");
 
-          g_object_thaw_notify (object);
-        }
-
-      update_navigation_flags (embed);
+      g_object_thaw_notify (object);
     }
+
+    update_navigation_flags (embed);
+  }
 
   build_progress_from_requests (embed, state);
 }
@@ -1011,20 +954,16 @@ ephy_base_embed_set_loading_title (EphyBaseEmbed *embed,
   g_free (priv->loading_title);
   priv->loading_title = NULL;
 
-  if (is_address)
-    {
-      title = freeme = get_title_from_address (title);
-    }
+  if (is_address) {
+    title = freeme = get_title_from_address (title);
+  }
 
-  if (title != NULL && title[0] != '\0')
-    {
-      /* translators: %s here is the address of the web page */
-      priv->loading_title = g_strdup_printf (_("Loading “%s”…"), title);
-    }
-  else
-    {
-      priv->loading_title = g_strdup (_("Loading…"));
-    }
+  if (title != NULL && title[0] != '\0') {
+    /* translators: %s here is the address of the web page */
+    priv->loading_title = g_strdup_printf (_ ("Loading “%s”…"), title);
+  } else {
+    priv->loading_title = g_strdup (_ ("Loading…"));
+  }
 
   g_free (freeme);
 }
@@ -1034,21 +973,19 @@ ephy_base_embed_file_monitor_cancel (EphyBaseEmbed *embed)
 {
   EphyBaseEmbedPrivate *priv = embed->priv;
 
-  if (priv->monitor != NULL)
-    {
-      LOG ("Cancelling file monitor");
+  if (priv->monitor != NULL) {
+    LOG ("Cancelling file monitor");
 
-      gnome_vfs_monitor_cancel (priv->monitor);
-      priv->monitor = NULL;
-    }
+    gnome_vfs_monitor_cancel (priv->monitor);
+    priv->monitor = NULL;
+  }
 
-  if (priv->reload_scheduled_id != 0)
-    {
-      LOG ("Cancelling scheduled reload");
+  if (priv->reload_scheduled_id != 0) {
+    LOG ("Cancelling scheduled reload");
 
-      g_source_remove (priv->reload_scheduled_id);
-      priv->reload_scheduled_id = 0;
-    }
+    g_source_remove (priv->reload_scheduled_id);
+    priv->reload_scheduled_id = 0;
+  }
 
   priv->reload_delay_ticks = 0;
 }
@@ -1058,22 +995,20 @@ ephy_base_embed_file_monitor_reload_cb (EphyBaseEmbed *embed)
 {
   EphyBaseEmbedPrivate *priv = embed->priv;
 
-  if (priv->reload_delay_ticks > 0)
-    {
-      priv->reload_delay_ticks--;
+  if (priv->reload_delay_ticks > 0) {
+    priv->reload_delay_ticks--;
 
-      /* Run again */
-      return TRUE;
-    }
+    /* Run again */
+    return TRUE;
+  }
 
-  if (priv->is_loading)
-    {
-      /* Wait a bit to reload if we're still loading! */
-      priv->reload_delay_ticks = RELOAD_DELAY_MAX_TICKS / 2;
+  if (priv->is_loading) {
+    /* Wait a bit to reload if we're still loading! */
+    priv->reload_delay_ticks = RELOAD_DELAY_MAX_TICKS / 2;
 
-      /* Run again */
-      return TRUE;
-    }
+    /* Run again */
+    return TRUE;
+  }
 
   priv->reload_scheduled_id = 0;
 
@@ -1094,18 +1029,17 @@ ephy_base_embed_file_monitor_cb (GnomeVFSMonitorHandle *handle,
 {
   gboolean uri_is_directory;
   gboolean should_reload;
-  char* local_path;
+  char *local_path;
   EphyBaseEmbedPrivate *priv = embed->priv;
 
   LOG ("File '%s' has changed, scheduling reload", monitor_uri);
 
-  local_path = gnome_vfs_get_local_path_from_uri(monitor_uri);
-  uri_is_directory = g_file_test(local_path, G_FILE_TEST_IS_DIR);
-  g_free(local_path);
+  local_path = gnome_vfs_get_local_path_from_uri (monitor_uri);
+  uri_is_directory = g_file_test (local_path, G_FILE_TEST_IS_DIR);
+  g_free (local_path);
 
-  switch (event_type)
-    {
-      /* These events will always trigger a reload: */
+  switch (event_type) {
+    /* These events will always trigger a reload: */
     case GNOME_VFS_MONITOR_EVENT_CHANGED:
     case GNOME_VFS_MONITOR_EVENT_CREATED:
       should_reload = TRUE;
@@ -1123,7 +1057,7 @@ ephy_base_embed_file_monitor_cb (GnomeVFSMonitorHandle *handle,
     default:
       should_reload = FALSE;
       break;
-    }
+  }
 
   if (should_reload) {
     /* We make a lot of assumptions here, but basically we know
@@ -1131,23 +1065,19 @@ ephy_base_embed_file_monitor_cb (GnomeVFSMonitorHandle *handle,
      * Delay the reload a little bit so we don't endlessly
      * reload while a file is written.
      */
-    if (priv->reload_delay_ticks == 0)
-      {
-        priv->reload_delay_ticks = 1;
-      }
-    else
-      {
-        /* Exponential backoff */
-        priv->reload_delay_ticks = MIN (priv->reload_delay_ticks * 2,
-                                        RELOAD_DELAY_MAX_TICKS);
-      }
+    if (priv->reload_delay_ticks == 0) {
+      priv->reload_delay_ticks = 1;
+    } else {
+      /* Exponential backoff */
+      priv->reload_delay_ticks = MIN (priv->reload_delay_ticks * 2,
+                                      RELOAD_DELAY_MAX_TICKS);
+    }
 
-    if (priv->reload_scheduled_id == 0)
-      {
-        priv->reload_scheduled_id =
-          g_timeout_add (RELOAD_DELAY,
-                         (GSourceFunc) ephy_base_embed_file_monitor_reload_cb, embed);
-      }
+    if (priv->reload_scheduled_id == 0) {
+      priv->reload_scheduled_id =
+        g_timeout_add (RELOAD_DELAY,
+                       (GSourceFunc)ephy_base_embed_file_monitor_reload_cb, embed);
+    }
   }
 }
 
@@ -1158,38 +1088,35 @@ ephy_base_embed_update_file_monitor (EphyBaseEmbed *embed,
   EphyBaseEmbedPrivate *priv = embed->priv;
   GnomeVFSMonitorHandle *handle = NULL;
   gboolean local;
-  char* local_path;
+  char *local_path;
   GnomeVFSMonitorType monitor_type;
 
   if (priv->monitor != NULL &&
       priv->address != NULL && address != NULL &&
-      strcmp (priv->address, address) == 0)
-
-    {
-      /* same address, no change needed */
-      return;
-    }
+      strcmp (priv->address, address) == 0) {
+    /* same address, no change needed */
+    return;
+  }
 
   ephy_base_embed_file_monitor_cancel (embed);
 
   local = g_str_has_prefix (address, "file://");
   if (local == FALSE) return;
 
-  local_path = gnome_vfs_get_local_path_from_uri(address);
-  monitor_type = g_file_test(local_path, G_FILE_TEST_IS_DIR)
-    ? GNOME_VFS_MONITOR_DIRECTORY
-    : GNOME_VFS_MONITOR_FILE;
-  g_free(local_path);
+  local_path = gnome_vfs_get_local_path_from_uri (address);
+  monitor_type = g_file_test (local_path, G_FILE_TEST_IS_DIR)
+                 ? GNOME_VFS_MONITOR_DIRECTORY
+                 : GNOME_VFS_MONITOR_FILE;
+  g_free (local_path);
 
   if (gnome_vfs_monitor_add (&handle, address,
                              monitor_type,
-                             (GnomeVFSMonitorCallback) ephy_base_embed_file_monitor_cb,
-                             embed) == GNOME_VFS_OK)
-    {
-      LOG ("Installed monitor for file '%s'", address);
+                             (GnomeVFSMonitorCallback)ephy_base_embed_file_monitor_cb,
+                             embed) == GNOME_VFS_OK) {
+    LOG ("Installed monitor for file '%s'", address);
 
-      priv->monitor = handle;
-    }
+    priv->monitor = handle;
+  }
 }
 
 void
@@ -1206,20 +1133,17 @@ ephy_base_embed_location_changed (EphyBaseEmbed *embed,
   /* Do not expose about:blank to the user, an empty address
      bar will do better */
   if (location == NULL || location[0] == '\0' ||
-      strcmp (location, "about:blank") == 0)
-    {
-      ephy_base_embed_set_address (embed, NULL);
-      ephy_base_embed_set_title (embed, NULL);
-    }
-  else
-    {
-      char *embed_address;
+      strcmp (location, "about:blank") == 0) {
+    ephy_base_embed_set_address (embed, NULL);
+    ephy_base_embed_set_title (embed, NULL);
+  } else {
+    char *embed_address;
 
-      /* we do this to get rid of an eventual password in the URL */
-      embed_address = ephy_embed_get_location (EPHY_EMBED (embed), TRUE);
-      ephy_base_embed_set_address (embed, embed_address);
-      ephy_base_embed_set_loading_title (embed, embed_address, TRUE);
-    }
+    /* we do this to get rid of an eventual password in the URL */
+    embed_address = ephy_embed_get_location (EPHY_EMBED (embed), TRUE);
+    ephy_base_embed_set_address (embed, embed_address);
+    ephy_base_embed_set_loading_title (embed, embed_address, TRUE);
+  }
 
   ephy_base_embed_set_link_message (embed, NULL);
   ephy_base_embed_set_icon_address (embed, NULL);
@@ -1274,28 +1198,26 @@ ephy_base_embed_set_icon_address (EphyBaseEmbed *embed,
   g_free (priv->icon_address);
   priv->icon_address = g_strdup (address);
 
-  if (priv->icon != NULL)
-    {
-      g_object_unref (priv->icon);
-      priv->icon = NULL;
+  if (priv->icon != NULL) {
+    g_object_unref (priv->icon);
+    priv->icon = NULL;
 
-      g_object_notify (object, "icon");
-    }
+    g_object_notify (object, "icon");
+  }
 
-  if (priv->icon_address)
-    {
-      /* FIXME: we need to put this somewhere inside src?/
-         history = EPHY_HISTORY
-         (ephy_embed_shell_get_global_history (embed_shell));
-         ephy_history_set_icon (history, priv->address,
-         priv->icon_address);
+  if (priv->icon_address) {
+    /* FIXME: we need to put this somewhere inside src?/
+       history = EPHY_HISTORY
+       (ephy_embed_shell_get_global_history (embed_shell));
+       ephy_history_set_icon (history, priv->address,
+       priv->icon_address);
 
-         eb = ephy_shell_get_bookmarks (ephy_shell);
-         ephy_bookmarks_set_icon (eb, priv->address,
-         priv->icon_address);*/
+       eb = ephy_shell_get_bookmarks (ephy_shell);
+       ephy_bookmarks_set_icon (eb, priv->address,
+       priv->icon_address);*/
 
-      ephy_base_embed_load_icon (embed);
-    }
+    ephy_base_embed_load_icon (embed);
+  }
 
   g_object_notify (object, "icon-address");
 }
@@ -1306,12 +1228,11 @@ ephy_base_embed_set_security_level (EphyBaseEmbed *embed,
 {
   EphyBaseEmbedPrivate *priv = embed->priv;
 
-  if (priv->security_level != level)
-    {
-      priv->security_level = level;
+  if (priv->security_level != level) {
+    priv->security_level = level;
 
-      g_object_notify (G_OBJECT (embed), "security-level");
-    }
+    g_object_notify (G_OBJECT (embed), "security-level");
+  }
 }
 
 void
@@ -1321,32 +1242,29 @@ ephy_base_embed_restore_zoom_level (EphyBaseEmbed *membed,
   EphyBaseEmbedPrivate *priv = membed->priv;
 
   /* restore zoom level */
-  if (address_has_web_scheme (address))
-    {
-      EphyHistory *history;
-      EphyNode *host;
-      GValue value = { 0, };
-      float zoom = 1.0, current_zoom;
+  if (address_has_web_scheme (address)) {
+    EphyHistory *history;
+    EphyNode *host;
+    GValue value = { 0, };
+    float zoom = 1.0, current_zoom;
 
-      history = EPHY_HISTORY
-        (ephy_embed_shell_get_global_history (embed_shell));
-      host = ephy_history_get_host (history, address);
+    history = EPHY_HISTORY
+              (ephy_embed_shell_get_global_history (embed_shell));
+    host = ephy_history_get_host (history, address);
 
-      if (host != NULL && ephy_node_get_property
-          (host, EPHY_NODE_HOST_PROP_ZOOM, &value))
-        {
-          zoom = g_value_get_float (&value);
-          g_value_unset (&value);
-        }
-
-      current_zoom = ephy_embed_get_zoom (EPHY_EMBED (membed));
-      if (zoom != current_zoom)
-        {
-          priv->is_setting_zoom = TRUE;
-          ephy_embed_set_zoom (EPHY_EMBED (membed), zoom);
-          priv->is_setting_zoom = FALSE;
-        }
+    if (host != NULL && ephy_node_get_property
+        (host, EPHY_NODE_HOST_PROP_ZOOM, &value)) {
+      zoom = g_value_get_float (&value);
+      g_value_unset (&value);
     }
+
+    current_zoom = ephy_embed_get_zoom (EPHY_EMBED (membed));
+    if (zoom != current_zoom) {
+      priv->is_setting_zoom = TRUE;
+      ephy_embed_set_zoom (EPHY_EMBED (membed), zoom);
+      priv->is_setting_zoom = FALSE;
+    }
+  }
 }
 
 /* Popup stuff if zeroed for now */
@@ -1413,25 +1331,21 @@ popups_manager_add (MozillaEmbed *embed,
 
   priv->hidden_popups = g_slist_prepend (priv->hidden_popups, popup);
 
-  if (popup_blocker_n_hidden (embed) > MAX_HIDDEN_POPUPS) /* bug #160863 */
-    {
-      /* Remove the oldest popup */
-      GSList *l = embed->priv->hidden_popups;
+  if (popup_blocker_n_hidden (embed) > MAX_HIDDEN_POPUPS) {/* bug #160863 */
+    /* Remove the oldest popup */
+    GSList *l = embed->priv->hidden_popups;
 
-      while (l->next->next != NULL)
-        {
-          l = l->next;
-        }
-
-      popup = (PopupInfo *) l->next->data;
-      popups_manager_free_info (popup);
-
-      l->next = NULL;
+    while (l->next->next != NULL) {
+      l = l->next;
     }
-  else
-    {
-      g_object_notify (G_OBJECT (embed), "hidden-popup-count");
-    }
+
+    popup = (PopupInfo *)l->next->data;
+    popups_manager_free_info (popup);
+
+    l->next = NULL;
+  } else {
+    g_object_notify (G_OBJECT (embed), "hidden-popup-count");
+  }
 }
 
 static gboolean
@@ -1449,7 +1363,7 @@ disconnect_popup (EphyWindow *window,
                   MozillaEmbed *embed)
 {
   g_signal_handlers_disconnect_by_func
-    (window, G_CALLBACK (popups_manager_remove_window), embed);
+  (window, G_CALLBACK (popups_manager_remove_window), embed);
 }
 
 static void
@@ -1459,7 +1373,7 @@ popups_manager_add_window (MozillaEmbed *embed,
   LOG ("popups_manager_add_window: embed %p, window %p", embed, window);
 
   embed->priv->shown_popups = g_slist_prepend
-    (embed->priv->shown_popups, window);
+                              (embed->priv->shown_popups, window);
 
   g_signal_connect_swapped (window, "destroy",
                             G_CALLBACK (popups_manager_remove_window),
@@ -1476,18 +1390,17 @@ mozilla_embed_get_popups_allowed (MozillaEmbed *embed)
   gboolean allow;
 
   permission_manager = EPHY_PERMISSION_MANAGER
-    (ephy_embed_shell_get_embed_single (embed_shell));
+                       (ephy_embed_shell_get_embed_single (embed_shell));
   g_return_val_if_fail (EPHY_IS_PERMISSION_MANAGER (permission_manager),
                         FALSE);
 
   location = ephy_embed_get_location (embed, TRUE);
-  if (location == NULL) return FALSE; /* FALSE, TRUE… same thing */
+  if (location == NULL) return FALSE;/* FALSE, TRUE… same thing */
 
   response = ephy_permission_manager_test_permission
-    (permission_manager, location, EPT_POPUP);
+             (permission_manager, location, EPT_POPUP);
 
-  switch (response)
-    {
+  switch (response) {
     case EPHY_PERMISSION_ALLOWED:
       allow = TRUE;
       break;
@@ -1497,9 +1410,9 @@ mozilla_embed_get_popups_allowed (MozillaEmbed *embed)
     case EPHY_PERMISSION_DEFAULT:
     default:
       allow = eel_gconf_get_boolean
-        (CONF_SECURITY_ALLOW_POPUPS);
+              (CONF_SECURITY_ALLOW_POPUPS);
       break;
-    }
+  }
 
   g_free (location);
 
@@ -1516,16 +1429,15 @@ popups_manager_show (PopupInfo *popup,
   EphyEmbedSingle *single;
 
   /* Only show popup with non NULL url */
-  if (popup->url != NULL)
-    {
-      embed = ephy_embed_get_embed (embed);
+  if (popup->url != NULL) {
+    embed = ephy_embed_get_embed (embed);
 
-      single = EPHY_EMBED_SINGLE
-        (ephy_embed_shell_get_embed_single (embed_shell));
+    single = EPHY_EMBED_SINGLE
+             (ephy_embed_shell_get_embed_single (embed_shell));
 
-      ephy_embed_single_open_window (single, embed, popup->url,
-                                     popup->name, popup->features);
-    }
+    ephy_embed_single_open_window (single, embed, popup->url,
+                                   popup->name, popup->features);
+  }
   popups_manager_free_info (popup);
 }
 
@@ -1535,7 +1447,7 @@ popups_manager_show_all (MozillaEmbed *embed)
   LOG ("popup_blocker_show_all: embed %p", embed);
 
   g_slist_foreach (embed->priv->hidden_popups,
-                   (GFunc) popups_manager_show, embed);
+                   (GFunc)popups_manager_show, embed);
   g_slist_free (embed->priv->hidden_popups);
   embed->priv->hidden_popups = NULL;
 
@@ -1557,11 +1469,11 @@ popups_manager_new_window_info (EphyWindow *window)
   g_return_val_if_fail (embed != NULL, g_strdup (""));
 
   features = g_strdup_printf
-    ("width=%d,height=%d,menubar=%d,status=%d,toolbar=%d",
-     embed->priv->width, embed->priv->height,
-     (chrome & EPHY_EMBED_CHROME_MENUBAR) > 0,
-     (chrome & EPHY_EMBED_CHROME_STATUSBAR) > 0,
-     (chrome & EPHY_EMBED_CHROME_TOOLBAR) > 0);
+             ("width=%d,height=%d,menubar=%d,status=%d,toolbar=%d",
+              embed->priv->width, embed->priv->height,
+              (chrome & EPHY_EMBED_CHROME_MENUBAR) > 0,
+              (chrome & EPHY_EMBED_CHROME_STATUSBAR) > 0,
+              (chrome & EPHY_EMBED_CHROME_TOOLBAR) > 0);
 
   return features;
 }
@@ -1596,7 +1508,7 @@ popups_manager_hide_all (MozillaEmbed *embed)
   LOG ("popup_blocker_hide_all: embed %p", embed);
 
   g_slist_foreach (embed->priv->shown_popups,
-                   (GFunc) popups_manager_hide, embed);
+                   (GFunc)popups_manager_hide, embed);
   g_slist_free (embed->priv->shown_popups);
   embed->priv->shown_popups = NULL;
 }
@@ -1616,22 +1528,19 @@ mozilla_embed_set_popups_allowed (MozillaEmbed *embed,
   g_return_if_fail (location != NULL);
 
   manager = EPHY_PERMISSION_MANAGER
-    (ephy_embed_shell_get_embed_single (embed_shell));
+            (ephy_embed_shell_get_embed_single (embed_shell));
   g_return_if_fail (EPHY_IS_PERMISSION_MANAGER (manager));
 
   permission = allowed ? EPHY_PERMISSION_ALLOWED
-    : EPHY_PERMISSION_DENIED;
+               : EPHY_PERMISSION_DENIED;
 
   ephy_permission_manager_add_permission (manager, location, EPT_POPUP, permission);
 
-  if (allowed)
-    {
-      popups_manager_show_all (embed);
-    }
-  else
-    {
-      popups_manager_hide_all (embed);
-    }
+  if (allowed) {
+    popups_manager_show_all (embed);
+  } else {
+    popups_manager_hide_all (embed);
+  }
 
   g_free (location);
 }
@@ -1646,12 +1555,12 @@ static void
 popups_manager_reset (MozillaEmbed *embed)
 {
   g_slist_foreach (embed->priv->hidden_popups,
-                   (GFunc) popups_manager_free_info, NULL);
+                   (GFunc)popups_manager_free_info, NULL);
   g_slist_free (embed->priv->hidden_popups);
   embed->priv->hidden_popups = NULL;
 
   g_slist_foreach (embed->priv->shown_popups,
-                   (GFunc) disconnect_popup, embed);
+                   (GFunc)disconnect_popup, embed);
   g_slist_free (embed->priv->shown_popups);
   embed->priv->shown_popups = NULL;
 
