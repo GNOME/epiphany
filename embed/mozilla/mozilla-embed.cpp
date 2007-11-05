@@ -201,6 +201,28 @@ mozilla_embed_constructor (GType type, guint n_construct_properties,
 }
 
 static void
+mozilla_embed_size_allocate (GtkWidget *widget,
+			     GtkAllocation *allocation)
+{
+	GtkWidget *child;
+	GtkAllocation invalid = { -1, -1, 1, 1 };
+
+	widget->allocation = *allocation;
+
+	child = GTK_BIN (widget)->child;
+	g_return_if_fail (child != NULL);
+
+	/* only resize if we're mapped (bug #128191),
+	 * or if this is the initial size-allocate (bug #156854).
+	 */
+	if (GTK_WIDGET_MAPPED (child) ||
+	    memcmp (&child->allocation, &invalid, sizeof (GtkAllocation)) == 0)
+	{
+		gtk_widget_size_allocate (child, allocation);
+	}
+}
+
+static void
 mozilla_embed_class_init (MozillaEmbedClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -214,6 +236,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 
 	widget_class->grab_focus = mozilla_embed_grab_focus;
 	widget_class->realize = mozilla_embed_realize;
+	widget_class->size_allocate = mozilla_embed_size_allocate;
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
