@@ -566,13 +566,13 @@ EphyBrowser::~EphyBrowser ()
 	LOG ("EphyBrowser dtor (%p)", this);
 }
 
-nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
+nsresult EphyBrowser::Init (EphyEmbed *embed)
 {
 	if (mInitialized) return NS_OK;
 
-	mEmbed = GTK_WIDGET (mozembed);
+	mEmbed = GTK_WIDGET (embed);
 
-	gtk_moz_embed_get_nsIWebBrowser (mozembed,
+	gtk_moz_embed_get_nsIWebBrowser (GTK_MOZ_EMBED (gtk_bin_get_child (GTK_BIN (embed))),
 					 getter_AddRefs(mWebBrowser));
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 

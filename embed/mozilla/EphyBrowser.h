@@ -136,7 +136,7 @@ public:
 	EphyBrowser();
 	~EphyBrowser();
 
-	nsresult Init (GtkMozEmbed *mozembed);
+	nsresult Init (EphyEmbed *embed);
 	nsresult Destroy (void);
 
 	nsresult DoCommand (const char *command);
