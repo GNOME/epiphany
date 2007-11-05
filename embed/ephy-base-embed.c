@@ -518,24 +518,6 @@ ge_document_type_cb (EphyEmbed *embed,
   }
 }
 
-static gboolean
-address_has_web_scheme (const char *address)
-{
-  gboolean has_web_scheme;
-
-  if (address == NULL) return FALSE;
-
-  has_web_scheme = (g_str_has_prefix (address, "http:") ||
-                    g_str_has_prefix (address, "https:") ||
-                    g_str_has_prefix (address, "ftp:") ||
-                    g_str_has_prefix (address, "file:") ||
-                    g_str_has_prefix (address, "data:") ||
-                    g_str_has_prefix (address, "about:") ||
-                    g_str_has_prefix (address, "gopher:"));
-
-  return has_web_scheme;
-}
-
 static void
 ge_zoom_change_cb (EphyEmbed *embed,
                    float zoom,
@@ -549,7 +531,7 @@ ge_zoom_change_cb (EphyEmbed *embed,
     }
 
     address = ephy_embed_get_location (embed, TRUE);
-    if (address_has_web_scheme (address)) {
+    if (ephy_embed_utils_address_has_web_scheme (address)) {
       EphyHistory *history;
       EphyNode *host;
       history = EPHY_HISTORY
@@ -1242,7 +1224,7 @@ ephy_base_embed_restore_zoom_level (EphyBaseEmbed *membed,
   EphyBaseEmbedPrivate *priv = membed->priv;
 
   /* restore zoom level */
-  if (address_has_web_scheme (address)) {
+  if (ephy_embed_utils_address_has_web_scheme (address)) {
     EphyHistory *history;
     EphyNode *host;
     GValue value = { 0, };
