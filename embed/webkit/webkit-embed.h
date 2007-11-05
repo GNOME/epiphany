@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  *  Copyright © 2007 Xan Lopez
  *
@@ -15,7 +16,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- *  $Id$
  */
 
 #ifndef WEBKIT_EMBED_H
@@ -28,31 +28,29 @@
 
 G_BEGIN_DECLS
 
-#define WEBKIT_TYPE_EMBED		(webkit_embed_get_type ())
-#define WEBKIT_EMBED(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), WEBKIT_TYPE_EMBED, WebKitEmbed))
-#define WEBKIT_EMBED_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), WEBKIT_TYPE_EMBED, WebKitEmbedClass))
-#define WEBKIT_IS_EMBED(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), WEBKIT_TYPE_EMBED))
-#define WEBKIT_IS_EMBED_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), WEBKIT_TYPE_EMBED))
-#define WEBKIT_EMBED_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), WEBKIT_TYPE_EMBED, WebKitEmbedClass))
+#define WEBKIT_TYPE_EMBED               (webkit_embed_get_type ())
+#define WEBKIT_EMBED(o)                 (G_TYPE_CHECK_INSTANCE_CAST ((o), WEBKIT_TYPE_EMBED, WebKitEmbed))
+#define WEBKIT_EMBED_CLASS(k)           (G_TYPE_CHECK_CLASS_CAST ((k), WEBKIT_TYPE_EMBED, WebKitEmbedClass))
+#define WEBKIT_IS_EMBED(o)              (G_TYPE_CHECK_INSTANCE_TYPE ((o), WEBKIT_TYPE_EMBED))
+#define WEBKIT_IS_EMBED_CLASS(k)        (G_TYPE_CHECK_CLASS_TYPE ((k), WEBKIT_TYPE_EMBED))
+#define WEBKIT_EMBED_GET_CLASS(o)       (G_TYPE_INSTANCE_GET_CLASS ((o), WEBKIT_TYPE_EMBED, WebKitEmbedClass))
 
-typedef struct WebKitEmbedClass	WebKitEmbedClass;
-typedef struct WebKitEmbed		WebKitEmbed;
-typedef struct WebKitEmbedPrivate	WebKitEmbedPrivate;
+typedef struct WebKitEmbedClass WebKitEmbedClass;
+typedef struct WebKitEmbed WebKitEmbed;
+typedef struct WebKitEmbedPrivate WebKitEmbedPrivate;
 
-struct WebKitEmbed
-{
-        GtkScrolledWindow parent;
+struct WebKitEmbed {
+  GtkScrolledWindow parent;
 
-	/*< private >*/
-        WebKitEmbedPrivate *priv;
+  /*< private >*/
+  WebKitEmbedPrivate *priv;
 };
 
-struct WebKitEmbedClass
-{
-        GtkScrolledWindowClass parent_class;
+struct WebKitEmbedClass {
+  GtkScrolledWindowClass parent_class;
 };
 
-GType	         webkit_embed_get_type         (void);
+GType            webkit_embed_get_type (void);
 
 G_END_DECLS
 

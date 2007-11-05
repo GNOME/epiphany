@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*  Copyright © 2007 Xan Lopez <xan@gnome.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -34,26 +35,24 @@
 
 #define WEBKIT_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED_SINGLE, WebKitEmbedSinglePrivate))
 
-struct WebKitEmbedSinglePrivate
-{
-	guint online : 1;
+struct WebKitEmbedSinglePrivate {
+  guint online : 1;
 };
 
-enum
-{
+enum {
   PROP_0,
   PROP_NETWORK_STATUS
 };
 
-static void webkit_embed_single_class_init	(WebKitEmbedSingleClass *klass);
-static void webkit_embed_single_init		(WebKitEmbedSingle *ges);
-static void ephy_embed_single_iface_init	(EphyEmbedSingleIface *iface);
-static void ephy_cookie_manager_iface_init	(EphyCookieManagerIface *iface);
-static void ephy_password_manager_iface_init	(EphyPasswordManagerIface *iface);
-static void ephy_permission_manager_iface_init	(EphyPermissionManagerIface *iface);
+static void webkit_embed_single_class_init (WebKitEmbedSingleClass *klass);
+static void webkit_embed_single_init (WebKitEmbedSingle *ges);
+static void ephy_embed_single_iface_init (EphyEmbedSingleIface *iface);
+static void ephy_cookie_manager_iface_init (EphyCookieManagerIface *iface);
+static void ephy_password_manager_iface_init (EphyPasswordManagerIface *iface);
+static void ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface);
 
 #ifdef ENABLE_CERTIFICATE_MANAGER
-static void ephy_certificate_manager_iface_init	(EphyCertificateManagerIface *iface);
+static void ephy_certificate_manager_iface_init (EphyCertificateManagerIface *iface);
 #endif
 
 /* Some compilers (like gcc 2.95) don't support preprocessor directives inside macros,
@@ -87,7 +86,7 @@ G_DEFINE_TYPE_WITH_CODE (WebKitEmbedSingle, webkit_embed_single, G_TYPE_OBJECT,
 static void
 webkit_embed_single_init (WebKitEmbedSingle *mes)
 {
- 	mes->priv = WEBKIT_EMBED_SINGLE_GET_PRIVATE (mes);
+  mes->priv = WEBKIT_EMBED_SINGLE_GET_PRIVATE (mes);
 }
 
 static void
@@ -114,7 +113,7 @@ impl_clear_auth_cache (EphyEmbedSingle *shell)
 
 static void
 impl_set_network_status (EphyEmbedSingle *single,
-			 gboolean online)
+                         gboolean online)
 {
 }
 
@@ -124,17 +123,17 @@ impl_get_network_status (EphyEmbedSingle *esingle)
   return FALSE;
 }
 
-static const char*
+static const char *
 impl_get_backend_name (EphyEmbedSingle *esingle)
 {
   /* If you alter the return values here, remember to update
    * the docs in ephy-embed-single.c */
-  return "webkit"; 
+  return "webkit";
 }
 
 static GList *
 impl_get_font_list (EphyEmbedSingle *shell,
-		    const char *langGroup)
+                    const char *langGroup)
 {
   return NULL;
 }
@@ -147,7 +146,7 @@ impl_list_cookies (EphyCookieManager *manager)
 
 static void
 impl_remove_cookie (EphyCookieManager *manager,
-		    const EphyCookie *cookie)
+                    const EphyCookie *cookie)
 {
 }
 
@@ -155,7 +154,7 @@ static void
 impl_clear_cookies (EphyCookieManager *manager)
 {
 }
-	
+
 static GList *
 impl_list_passwords (EphyPasswordManager *manager)
 {
@@ -164,7 +163,7 @@ impl_list_passwords (EphyPasswordManager *manager)
 
 static void
 impl_remove_password (EphyPasswordManager *manager,
-		      EphyPasswordInfo *info)
+                      EphyPasswordInfo *info)
 {
 }
 
@@ -175,22 +174,22 @@ impl_remove_all_passwords (EphyPasswordManager *manager)
 
 static void
 impl_add_password (EphyPasswordManager *manager,
-                  EphyPasswordInfo *info)
+                   EphyPasswordInfo *info)
 {
 }
 
 static void
 impl_permission_manager_add (EphyPermissionManager *manager,
-			     const char *host,
-			     const char *type,
-			     EphyPermission permission)
+                             const char *host,
+                             const char *type,
+                             EphyPermission permission)
 {
 }
 
 static void
 impl_permission_manager_remove (EphyPermissionManager *manager,
-				const char *host,
-				const char *type)
+                                const char *host,
+                                const char *type)
 {
 }
 
@@ -201,8 +200,8 @@ impl_permission_manager_clear (EphyPermissionManager *manager)
 
 EphyPermission
 impl_permission_manager_test (EphyPermissionManager *manager,
-			      const char *host,
-			      const char *type)
+                              const char *host,
+                              const char *type)
 {
   g_return_val_if_fail (type != NULL && type[0] != '\0', EPHY_PERMISSION_DEFAULT);
 
@@ -217,18 +216,18 @@ impl_init (EphyEmbedSingle *esingle)
 
 GList *
 impl_permission_manager_list (EphyPermissionManager *manager,
-			      const char *type)
+                              const char *type)
 {
   GList *list = NULL;
   return list;
 }
 
-static GtkWidget * 
+static GtkWidget *
 impl_open_window (EphyEmbedSingle *single,
-		  EphyEmbed *parent,
-		  const char *address,
-		  const char *name,
-		  const char *features)
+                  EphyEmbed *parent,
+                  const char *address,
+                  const char *name,
+                  const char *features)
 {
   return NULL;
 }
@@ -237,22 +236,22 @@ impl_open_window (EphyEmbedSingle *single,
 
 static gboolean
 impl_remove_certificate (EphyCertificateManager *manager,
-			 EphyX509Cert *cert)
+                         EphyX509Cert *cert)
 {
   return TRUE;
 }
 
-#define NICK_DELIMITER PRUnichar('\001')
+#define NICK_DELIMITER PRUnichar ('\001')
 static GList *
 impl_get_certificates (EphyCertificateManager *manager,
-		       EphyX509CertType type)
+                       EphyX509CertType type)
 {
   return NULL;
 }
 
 static gboolean
 impl_import (EphyCertificateManager *manager,
-	     const gchar *file)
+             const gchar *file)
 {
   return TRUE;
 }
@@ -261,90 +260,88 @@ impl_import (EphyCertificateManager *manager,
 
 static void
 webkit_embed_single_get_property (GObject *object,
-				   guint prop_id,
-				   GValue *value,
-				   GParamSpec *pspec)
+                                  guint prop_id,
+                                  GValue *value,
+                                  GParamSpec *pspec)
 {
-	EphyEmbedSingle *single = EPHY_EMBED_SINGLE (object);
+  EphyEmbedSingle *single = EPHY_EMBED_SINGLE (object);
 
-	switch (prop_id)
-	{
-		case PROP_NETWORK_STATUS:
-			g_value_set_boolean (value, ephy_embed_single_get_network_status (single));
-			break;
-	}
+  switch (prop_id) {
+    case PROP_NETWORK_STATUS:
+      g_value_set_boolean (value, ephy_embed_single_get_network_status (single));
+      break;
+  }
 }
 
 static void
 webkit_embed_single_set_property (GObject *object,
-				   guint prop_id,
-				   const GValue *value,
-				   GParamSpec *pspec)
+                                  guint prop_id,
+                                  const GValue *value,
+                                  GParamSpec *pspec)
 {
-	EphyEmbedSingle *single = EPHY_EMBED_SINGLE (object);
+  EphyEmbedSingle *single = EPHY_EMBED_SINGLE (object);
 
-	switch (prop_id)
-	{
-		case PROP_NETWORK_STATUS:
-			ephy_embed_single_set_network_status (single, g_value_get_boolean (value));
-			break;
-	}
+  switch (prop_id) {
+    case PROP_NETWORK_STATUS:
+      ephy_embed_single_set_network_status (single, g_value_get_boolean (value));
+      break;
+  }
 }
 static void
 webkit_embed_single_class_init (WebKitEmbedSingleClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	webkit_embed_single_parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
+  webkit_embed_single_parent_class = (GObjectClass *)g_type_class_peek_parent (klass);
 
-	object_class->dispose = webkit_embed_single_dispose;
-	object_class->finalize = webkit_embed_single_finalize;
-	object_class->get_property = webkit_embed_single_get_property;
-	object_class->set_property = webkit_embed_single_set_property;
+  object_class->dispose = webkit_embed_single_dispose;
+  object_class->finalize = webkit_embed_single_finalize;
+  object_class->get_property = webkit_embed_single_get_property;
+  object_class->set_property = webkit_embed_single_set_property;
 
-	g_object_class_override_property (object_class, PROP_NETWORK_STATUS, "network-status");
+  g_object_class_override_property (object_class, PROP_NETWORK_STATUS, "network-status");
 
-	g_type_class_add_private (object_class, sizeof (WebKitEmbedSinglePrivate));
+  g_type_class_add_private (object_class, sizeof (WebKitEmbedSinglePrivate));
 }
 
 static void
 ephy_embed_single_iface_init (EphyEmbedSingleIface *iface)
 {
-	iface->init = impl_init;
-	iface->clear_cache = impl_clear_cache;
-	iface->clear_auth_cache = impl_clear_auth_cache;
-	iface->set_network_status = impl_set_network_status;
-	iface->get_network_status = impl_get_network_status;
-	iface->get_font_list = impl_get_font_list;
-	iface->open_window = impl_open_window;
-	iface->get_backend_name = impl_get_backend_name;
+  iface->init = impl_init;
+  iface->clear_cache = impl_clear_cache;
+  iface->clear_auth_cache = impl_clear_auth_cache;
+  iface->set_network_status = impl_set_network_status;
+  iface->get_network_status = impl_get_network_status;
+  iface->get_font_list = impl_get_font_list;
+  iface->open_window = impl_open_window;
+  iface->get_backend_name = impl_get_backend_name;
 }
 
 static void
 ephy_cookie_manager_iface_init (EphyCookieManagerIface *iface)
 {
-	iface->list = impl_list_cookies;
-	iface->remove = impl_remove_cookie;
-	iface->clear = impl_clear_cookies;
+  iface->list = impl_list_cookies;
+  iface->remove = impl_remove_cookie;
+  iface->clear = impl_clear_cookies;
 }
 
 static void
 ephy_password_manager_iface_init (EphyPasswordManagerIface *iface)
 {
-	iface->add = impl_add_password;
-	iface->remove = impl_remove_password;
-	iface->remove = impl_remove_all_passwords;
-	iface->list = impl_list_passwords;
+  iface->add = impl_add_password;
+  iface->remove = impl_remove_password;
+  iface->remove_all = impl_remove_all_passwords;
+  iface->list = impl_list_passwords;
 }
 
 static void
 ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface)
 {
-	iface->add = impl_permission_manager_add;
-	iface->remove = impl_permission_manager_remove;
-	iface->clear = impl_permission_manager_clear;
-	iface->test = impl_permission_manager_test;
-	iface->list = impl_permission_manager_list;
+  iface->add = impl_permission_manager_add;
+  iface->remove = impl_permission_manager_remove;
+  iface->clear = impl_permission_manager_clear;
+  iface->test = impl_permission_manager_test;
+  iface->list = impl_permission_manager_list;
 }
 
 #ifdef ENABLE_CERTIFICATE_MANAGER
@@ -352,9 +349,9 @@ ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface)
 static void
 ephy_certificate_manager_iface_init (EphyCertificateManagerIface *iface)
 {
-	iface->get_certificates = impl_get_certificates;
-	iface->remove_certificate = impl_remove_certificate;
-	iface->import = impl_import;
+  iface->get_certificates = impl_get_certificates;
+  iface->remove_certificate = impl_remove_certificate;
+  iface->import = impl_import;
 }
 
 #endif /* ENABLE_CERTIFICATE_MANAGER */

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
  *  Copyright © 2003 Christian Persch
@@ -16,7 +17,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- *  $Id$
  */
 
 #ifndef WEBKIT_EMBED_SINGLE_H
@@ -26,31 +26,29 @@
 
 G_BEGIN_DECLS
 
-#define WEBKIT_TYPE_EMBED_SINGLE		(webkit_embed_single_get_type ())
-#define WEBKIT_EMBED_SINGLE(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), WEBKIT_TYPE_EMBED_SINGLE, WebKitEmbedSingle))
-#define WEBKIT_EMBED_SINGLE_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), WEBKIT_TYPE_EMBED_SINGLE, WebKitEmbedSingleClass))
-#define WEBKIT_IS_EMBED_SINGLE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), WEBKIT_TYPE_EMBED_SINGLE))
-#define WEBKIT_IS_EMBED_SINGLE_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), WEBKIT_TYPE_EMBED_SINGLE))
-#define WEBKIT_EMBED_SINGLE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), WEBKIT_TYPE_EMBED_SINGLE, WebKitEmbedSingleClass))
+#define WEBKIT_TYPE_EMBED_SINGLE                (webkit_embed_single_get_type ())
+#define WEBKIT_EMBED_SINGLE(o)                  (G_TYPE_CHECK_INSTANCE_CAST ((o), WEBKIT_TYPE_EMBED_SINGLE, WebKitEmbedSingle))
+#define WEBKIT_EMBED_SINGLE_CLASS(k)            (G_TYPE_CHECK_CLASS_CAST ((k), WEBKIT_TYPE_EMBED_SINGLE, WebKitEmbedSingleClass))
+#define WEBKIT_IS_EMBED_SINGLE(o)               (G_TYPE_CHECK_INSTANCE_TYPE ((o), WEBKIT_TYPE_EMBED_SINGLE))
+#define WEBKIT_IS_EMBED_SINGLE_CLASS(k)         (G_TYPE_CHECK_CLASS_TYPE ((k), WEBKIT_TYPE_EMBED_SINGLE))
+#define WEBKIT_EMBED_SINGLE_GET_CLASS(o)        (G_TYPE_INSTANCE_GET_CLASS ((o), WEBKIT_TYPE_EMBED_SINGLE, WebKitEmbedSingleClass))
 
-typedef struct WebKitEmbedSingle		WebKitEmbedSingle;
-typedef struct WebKitEmbedSingleClass		WebKitEmbedSingleClass;
-typedef struct WebKitEmbedSinglePrivate	WebKitEmbedSinglePrivate;
+typedef struct WebKitEmbedSingle WebKitEmbedSingle;
+typedef struct WebKitEmbedSingleClass WebKitEmbedSingleClass;
+typedef struct WebKitEmbedSinglePrivate WebKitEmbedSinglePrivate;
 
-struct WebKitEmbedSingle
-{
-	GObject parent;
+struct WebKitEmbedSingle {
+  GObject parent;
 
-	/*< private >*/
-	WebKitEmbedSinglePrivate *priv;
+  /*< private >*/
+  WebKitEmbedSinglePrivate *priv;
 };
 
-struct WebKitEmbedSingleClass
-{
-	GObjectClass parent_class;
+struct WebKitEmbedSingleClass {
+  GObjectClass parent_class;
 };
 
-GType	webkit_embed_single_get_type	(void);
+GType   webkit_embed_single_get_type (void);
 
 G_END_DECLS
 
