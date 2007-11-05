@@ -52,11 +52,12 @@ struct _EphyBaseEmbed {
 
 GType ephy_base_embed_get_type (void) G_GNUC_CONST;
 void  ephy_base_embed_set_title (EphyBaseEmbed *embed,
-                                 char *title);
+                                 const char *title);
 void  ephy_base_embed_set_loading_title (EphyBaseEmbed *embed,
                                          const char *title,
                                          gboolean is_address);
-void  ephy_base_embed_set_address (EphyBaseEmbed *embed, char *address);
+void  ephy_base_embed_set_address (EphyBaseEmbed *embed,
+                                   const char *address);
 void  ephy_base_embed_location_changed (EphyBaseEmbed *embed,
                                         char *location);
 void  ephy_base_embed_load_icon (EphyBaseEmbed *embed);

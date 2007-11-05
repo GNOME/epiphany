@@ -104,7 +104,7 @@ webkit_embed_title_changed_cb (WebKitFrame *frame,
                                EphyEmbed *embed)
 {
   ephy_base_embed_set_title (EPHY_BASE_EMBED (embed),
-                             g_strdup (title));
+                             title);
   ephy_base_embed_location_changed (EPHY_BASE_EMBED (embed),
                                     location);
 }

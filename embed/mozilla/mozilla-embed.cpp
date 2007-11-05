@@ -1152,6 +1152,8 @@ mozilla_embed_title_change_cb	    (GtkMozEmbed *embed,
 	ephy_base_embed_set_loading_title (EPHY_BASE_EMBED (membed),
 					   title, FALSE);
 
+	g_free (title);
+
 	g_object_thaw_notify (object);
 }
 
@@ -1168,7 +1170,7 @@ mozilla_embed_open_uri_cb (GtkMozEmbed *embed,
 		EphyBaseEmbed *bembed = EPHY_BASE_EMBED (membed);
 
 
-		ephy_base_embed_set_address (bembed, g_strdup (uri));
+		ephy_base_embed_set_address (bembed, uri);
 		ephy_base_embed_set_loading_title (bembed, uri, TRUE);
 	}
 

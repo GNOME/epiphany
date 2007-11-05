@@ -647,13 +647,14 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 }
 
 void
-ephy_base_embed_set_address (EphyBaseEmbed *embed, char *address)
+ephy_base_embed_set_address (EphyBaseEmbed *embed,
+                             const char *address)
 {
   EphyBaseEmbedPrivate *priv = embed->priv;
   GObject *object = G_OBJECT (embed);
 
   g_free (priv->address);
-  priv->address = address;
+  priv->address = g_strdup (address);
 
   priv->is_blank = address == NULL ||
                    strcmp (address, "about:blank") == 0;
@@ -695,9 +696,10 @@ get_title_from_address (const char *address)
 
 void
 ephy_base_embed_set_title (EphyBaseEmbed *embed,
-                           char *title)
+                           const char *embed_title)
 {
   EphyBaseEmbedPrivate *priv = embed->priv;
+  char *title = g_strdup (embed_title);
 
   if (!priv->is_blank && (title == NULL || g_strstrip (title)[0] == '\0')) {
     g_free (title);
@@ -727,7 +729,7 @@ ensure_page_info (EphyBaseEmbed *embed, const char *address)
 
   if ((priv->address == NULL || priv->address[0] == '\0') &&
       priv->address_expire == EPHY_EMBED_ADDRESS_EXPIRE_NOW) {
-    ephy_base_embed_set_address (embed, g_strdup (address));
+    ephy_base_embed_set_address (embed, address);
   }
 
   /* FIXME huh?? */
@@ -1125,6 +1127,7 @@ ephy_base_embed_location_changed (EphyBaseEmbed *embed,
     embed_address = ephy_embed_get_location (EPHY_EMBED (embed), TRUE);
     ephy_base_embed_set_address (embed, embed_address);
     ephy_base_embed_set_loading_title (embed, embed_address, TRUE);
+    g_free (embed_address);
   }
 
   ephy_base_embed_set_link_message (embed, NULL);
