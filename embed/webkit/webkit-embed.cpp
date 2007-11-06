@@ -177,6 +177,15 @@ webkit_embed_load_finished_cb (WebKitPage *page,
 }
 
 static void
+webkit_embed_hovering_over_link_cb (WebKitPage *page,
+                                    char *title,
+                                    char *location,
+                                    EphyEmbed *embed)
+{
+  ephy_base_embed_set_link_message (EPHY_BASE_EMBED (embed), location);
+}
+
+static void
 webkit_embed_class_init (WebKitEmbedClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -222,6 +231,8 @@ webkit_embed_init (WebKitEmbed *embed)
                     G_CALLBACK (webkit_embed_title_changed_cb), embed);
   g_signal_connect (G_OBJECT (page), "load-progress-changed",
                     G_CALLBACK (webkit_embed_load_progress_changed_cb), embed);
+  g_signal_connect (G_OBJECT (page), "hovering-over-link",
+                    G_CALLBACK (webkit_embed_hovering_over_link_cb), embed);
 }
 
 static void
