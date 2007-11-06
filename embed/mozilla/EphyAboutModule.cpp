@@ -534,9 +534,10 @@ EphyAboutModule::CreateRecoverPage(nsIURI *aRecoverURI,
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	char *secondary = g_markup_printf_escaped
-		(_("The page “%s” in this tab was not fully loaded yet when "
-		   "the web browser crashed; it could have caused the crash."),
-		 url.get());
+		(_("This page was loading when Epiphany closed unexpectedly."
+		   "This might happen again if you reload the page. If it does, please report"
+		   "the problem to the %s developers."),
+		   LSB_DISTRIBUTOR);
 
 	nsCOMPtr<nsIChannel> channel;
 	rv = WritePage (aRecoverURI, uri, uri, rawurl, title.get(),

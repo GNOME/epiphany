@@ -789,6 +789,24 @@ if test "$have_gvfs" = "yes"; then
 fi
 AM_CONDITIONAL([HAVE_GVFS],[test "$have_gvfs" = "yes"])
 
+# Distributor name
+
+AC_ARG_WITH(distributor-name,
+[  --with-distributor-name=name      Distributor name.],LSB_DISTRIBUTOR="$withval",)
+
+if test "x$LSB_DISTRIBUTOR" = "x"; then
+	AC_CHECK_PROGS([LSB_RELEASE], [lsb_release],)
+	if test -n "$LSB_RELEASE"; then
+		# Fallback on lsb_release if available
+		LSB_DISTRIBUTOR=$($LSB_RELEASE -i -s)
+	else
+		# Fallback on the product name
+		LSB_DISTRIBUTOR="Epiphany"
+	fi
+fi
+
+AC_DEFINE_UNQUOTED(LSB_DISTRIBUTOR, "$LSB_DISTRIBUTOR", [Distributor name.])
+
 # compat cruft
 GGE_VERSION=0
 AC_SUBST([GGE_VERSION])
