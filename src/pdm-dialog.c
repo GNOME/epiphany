@@ -32,6 +32,7 @@
 #include "ephy-string.h"
 #include "ephy-stock-icons.h"
 #include "ephy-debug.h"
+#include "ephy-time-helpers.h"
 
 #include <gtk/gtklabel.h>
 #include <gtk/gtkbox.h>
@@ -46,7 +47,6 @@
 #include <gtk/gtktogglebutton.h>
 #include <glib/gi18n.h>
 
-#include <time.h>
 #include <string.h>
 
 typedef struct PdmActionInfo PdmActionInfo;
@@ -456,10 +456,7 @@ show_cookies_properties (PdmDialog *dialog,
 	else
 	{
 		struct tm t;
-		char s[128];
-		const char *fmt_hack = "%c";
-		strftime (s, sizeof(s), fmt_hack, localtime_r (&info->expires, &t));
-		str = g_locale_to_utf8 (s, -1, NULL, NULL, NULL);
+		str = eel_strdup_strftime ("%c", localtime_r (&info->expires, &t));
 	}
 	label = gtk_label_new (str);
 	g_free (str);
