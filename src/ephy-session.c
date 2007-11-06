@@ -1367,6 +1367,8 @@ int_from_string (const char *string,
 	long int val;
 	gboolean success = FALSE;
 
+	if (string == NULL) return FALSE;
+
 	errno = 0;
 	val = strtol (string, &tail, 0);
 
