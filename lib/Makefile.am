@@ -27,6 +27,7 @@ NOINST_H_FILES = \
 	ephy-signal-accumulator.h		\
 	ephy-string.h				\
 	ephy-stock-icons.h			\
+	ephy-time-helpers.h			\
 	ephy-zoom.h
 
 TYPES_H_FILES = \
@@ -66,6 +67,7 @@ libephymisc_la_SOURCES = \
 	ephy-state.c				\
 	ephy-string.c				\
 	ephy-stock-icons.c			\
+	ephy-time-helpers.c			\
 	ephy-zoom.c				\
 	$(INST_H_FILES)				\
 	$(NOINST_H_FILES)
