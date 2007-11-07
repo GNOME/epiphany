@@ -268,11 +268,11 @@ epiphany_LDADD += \
 
 pydefsdir = $(datadir)/pygtk/2.0/defs
 pydefs_DATA = epiphany.defs
+endif
 
 EXTRA_DIST += \
-	epiphany.override	\
-	$(pydefs_DATA)
-endif
+	epiphany.defs		\
+	epiphany.override
 
 if ENABLE_NETWORK_MANAGER
 epiphany_LDADD += \
@@ -536,11 +536,3 @@ check-python-binding:
 #check-local: check-python-binding
 
 endif
-
-dist-check-python-binding:
-if !ENABLE_PYTHON
-	@echo "Python bindings must be enabled in order to make dist!"
-	@false
-endif
-
-dist-hook: dist-check-python-binding
