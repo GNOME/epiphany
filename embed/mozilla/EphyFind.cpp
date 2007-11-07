@@ -87,7 +87,7 @@ EphyFind::SetEmbed (EphyEmbed *aEmbed)
   mWebBrowser = nsnull;
 
   rv = NS_ERROR_FAILURE;
-  gtk_moz_embed_get_nsIWebBrowser (GTK_MOZ_EMBED (aEmbed),
+  gtk_moz_embed_get_nsIWebBrowser (GTK_MOZ_EMBED (gtk_bin_get_child (GTK_BIN (aEmbed))),
 				   getter_AddRefs (mWebBrowser));
   NS_ENSURE_TRUE (mWebBrowser, rv);
 
