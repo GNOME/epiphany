@@ -61,6 +61,7 @@ struct PdmActionInfo
 				 gpointer data);
 	void (* remove)		(PdmActionInfo *info,
 				 gpointer data);
+	void (* remove_all)	(PdmActionInfo *info);
 	void (* scroll_to)	(PdmActionInfo *info);
 
 	/* Data */
@@ -69,6 +70,7 @@ struct PdmActionInfo
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	int remove_id;
+	int remove_all_id;
 	int data_col;
 	char *scroll_to_host;
 	gboolean filled;
@@ -113,9 +115,11 @@ enum
 	PROP_NOTEBOOK,
 	PROP_COOKIES_TREEVIEW,
 	PROP_COOKIES_REMOVE,
+	PROP_COOKIES_REMOVE_ALL,
 	PROP_COOKIES_PROPERTIES,
 	PROP_PASSWORDS_TREEVIEW,
 	PROP_PASSWORDS_REMOVE,
+	PROP_PASSWORDS_REMOVE_ALL,
 	PROP_PASSWORDS_SHOW
 };
 
@@ -127,9 +131,11 @@ EphyDialogProperty properties [] =
 
 	{ "cookies_treeview",	   	NULL, PT_NORMAL, 0 },
 	{ "cookies_remove_button",     	NULL, PT_NORMAL, 0 },
+	{ "cookies_remove_all_button", 	NULL, PT_NORMAL, 0 },
 	{ "cookies_properties_button", 	NULL, PT_NORMAL, 0 },
 	{ "passwords_treeview",	       	NULL, PT_NORMAL, 0 },
 	{ "passwords_remove_button",   	NULL, PT_NORMAL, 0 },
+	{ "passwords_remove_all_button",NULL, PT_NORMAL, 0 },
 	{ "passwords_show_button",     	NULL, PT_NORMAL, 0 },
 
 	{ NULL }
@@ -138,6 +144,11 @@ EphyDialogProperty properties [] =
 static void pdm_dialog_class_init	(PdmDialogClass *klass);
 static void pdm_dialog_init		(PdmDialog *dialog);
 static void pdm_dialog_finalize		(GObject *object);
+
+static void pdm_dialog_remove_all_confirmation_cb	(GtkWidget *dialog,
+							 int response,
+							 PdmActionInfo *info);
+
 
 static GObjectClass *parent_class = NULL;
 
@@ -216,6 +227,37 @@ action_treeview_selection_changed_cb (GtkTreeSelection *selection,
 
 	widget = ephy_dialog_get_control (d, properties[action->remove_id].id);
 	gtk_widget_set_sensitive (widget, has_selection);
+
+}
+
+static void
+update_remove_all_sensitivity (PdmActionInfo *action)
+{
+	GtkWidget *widget;
+	EphyDialog *d = EPHY_DIALOG(action->dialog);
+	gint has_rows;
+
+	has_rows = gtk_tree_model_iter_n_children (action->model, NULL) > 0;
+
+	widget = ephy_dialog_get_control (d, properties[action->remove_all_id].id);
+	gtk_widget_set_sensitive (widget, has_rows);
+}
+
+static void
+action_treemodel_row_deleted_cb (GtkTreeModel *model,
+				 GtkTreePath *path,
+				 PdmActionInfo *action)
+{
+	update_remove_all_sensitivity (action);
+}
+
+static void
+action_treemodel_row_inserted_cb (GtkTreeModel *model,
+				  GtkTreePath *path,
+				  GtkTreeIter *iter,
+				  PdmActionInfo *action)
+{
+	update_remove_all_sensitivity (action);
 }
 
 static void
@@ -313,6 +355,13 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 	}
 }
 
+static void
+pdm_cmd_delete_all (PdmActionInfo *action)
+{
+	/* No selection to handle here, unconditional call */
+	action->remove_all (action);
+}
+
 static gboolean
 pdm_key_pressed_cb (GtkTreeView *treeview,
 		    GdkEventKey *event,
@@ -336,15 +385,69 @@ pdm_dialog_remove_button_clicked_cb (GtkWidget *button,
 }
 
 static void
+pdm_dialog_remove_all_button_clicked_cb (GtkWidget *button,
+					 PdmActionInfo *action)
+{
+	GtkWidget *dialog, *dialog_button, *image, *parent;
+	gchar *title, *message;
+
+	switch (action->remove_all_id)
+	{
+		case PROP_PASSWORDS_REMOVE_ALL:
+			title = _("Remove all passwords?");
+			message = _("Do you really want to remove all stored passwords?");
+			break;
+		case PROP_COOKIES_REMOVE_ALL:
+			title = _("Remove all cookies?");
+			message = _("Do you really want to remove all stored cookies?");
+			break;
+		default:
+			return;
+	}
+
+	parent = ephy_dialog_get_control (EPHY_DIALOG (action->dialog),
+					  properties[PROP_WINDOW].id);
+
+	dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
+					 GTK_DIALOG_DESTROY_WITH_PARENT,
+					 GTK_MESSAGE_WARNING,
+					 GTK_BUTTONS_CANCEL,
+					 "%s",
+					 message);
+
+	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
+	dialog_button = gtk_dialog_add_button (GTK_DIALOG (dialog), _("Remove _All"), GTK_RESPONSE_ACCEPT);
+	gtk_button_set_image (GTK_BUTTON (dialog_button), image);
+
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+
+	gtk_window_set_title (GTK_WINDOW (dialog), title);
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
+
+	g_signal_connect (GTK_WIDGET (dialog), "response",
+			  G_CALLBACK (pdm_dialog_remove_all_confirmation_cb),
+			  action);
+
+	gtk_window_present (GTK_WINDOW (dialog));
+}
+
+static void
 setup_action (PdmActionInfo *action)
 {
 	GtkWidget *widget;
 	GtkTreeSelection *selection;
+	GtkTreeModel *model;
 
 	widget = ephy_dialog_get_control (EPHY_DIALOG(action->dialog),
 					  properties[action->remove_id].id);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (pdm_dialog_remove_button_clicked_cb),
+			  action);
+
+	widget = ephy_dialog_get_control (EPHY_DIALOG(action->dialog),
+					  properties[action->remove_all_id].id);
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (pdm_dialog_remove_all_button_clicked_cb),
 			  action);
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(action->treeview));
@@ -357,6 +460,15 @@ setup_action (PdmActionInfo *action)
 			  G_CALLBACK (pdm_key_pressed_cb),
 			  action);
 
+	model = action->model;
+
+	g_signal_connect (model, "row-deleted",
+			  G_CALLBACK (action_treemodel_row_deleted_cb),
+			  action);
+
+	g_signal_connect (model, "row-inserted",
+			  G_CALLBACK (action_treemodel_row_inserted_cb),
+			  action);
 }
 
 /* "Cookies" tab */
@@ -914,6 +1026,32 @@ pdm_dialog_cookie_remove (PdmActionInfo *info,
 	ephy_cookie_manager_remove_cookie (manager, cookie);
 }
 
+
+static void
+pdm_dialog_remove_all_confirmation_cb (GtkWidget *dialog,
+				       gint response,
+				       PdmActionInfo *action)
+{
+	gtk_widget_destroy (dialog);
+
+	/* Don't do anything by default */
+	if (response != GTK_RESPONSE_ACCEPT)
+		return;
+
+	pdm_cmd_delete_all (action);
+}
+
+static void
+pdm_dialog_cookie_remove_all (PdmActionInfo *info)
+{
+	EphyCookieManager *manager;
+
+	manager = EPHY_COOKIE_MANAGER (ephy_embed_shell_get_embed_single
+				       (EPHY_EMBED_SHELL (ephy_shell)));
+
+	ephy_cookie_manager_clear (manager);
+}
+
 static void
 pdm_dialog_cookie_scroll_to (PdmActionInfo *info)
 {
@@ -1144,6 +1282,32 @@ pdm_dialog_password_remove (PdmActionInfo *info,
 		(manager, G_CALLBACK (passwords_changed_cb), info->dialog);
 }
 
+static void
+pdm_dialog_password_remove_all (PdmActionInfo *info)
+{
+	EphyPasswordManager *manager;
+
+	manager = EPHY_PASSWORD_MANAGER (ephy_embed_shell_get_embed_single
+					 (EPHY_EMBED_SHELL (ephy_shell)));
+
+	/* we don't remove the password from the liststore in the callback
+	 * like we do for cookies, since the callback doesn't carry that
+	 * information, and we'd have to reload the whole list, losing the
+	 * selection in the process.
+	 */
+	g_signal_handlers_block_by_func
+		(manager, G_CALLBACK (passwords_changed_cb), info->dialog);
+
+	/* Flush the list */
+	ephy_password_manager_remove_all_passwords (manager);
+
+	g_signal_handlers_unblock_by_func
+		(manager, G_CALLBACK (passwords_changed_cb), info->dialog);
+
+	/* And now refresh explicitly */
+	passwords_changed_cb (manager, info->dialog);
+}
+
 /* common routines */
 
 static void
@@ -1214,8 +1378,10 @@ pdm_dialog_init (PdmDialog *dialog)
 	 */
 	ephy_dialog_set_size_group (EPHY_DIALOG (dialog),
 				    properties[PROP_COOKIES_REMOVE].id,
+				    properties[PROP_COOKIES_REMOVE_ALL].id,
 				    properties[PROP_COOKIES_PROPERTIES].id,
 				    properties[PROP_PASSWORDS_REMOVE].id,
+				    properties[PROP_PASSWORDS_REMOVE_ALL].id,
 				    NULL);
 
 	cookies = g_new0 (PdmActionInfo, 1);
@@ -1224,9 +1390,11 @@ pdm_dialog_init (PdmDialog *dialog)
 	cookies->fill = pdm_dialog_fill_cookies_list;
 	cookies->add = pdm_dialog_cookie_add;
 	cookies->remove = pdm_dialog_cookie_remove;
+	cookies->remove_all = pdm_dialog_cookie_remove_all;
 	cookies->scroll_to = pdm_dialog_cookie_scroll_to;
 	cookies->dialog = dialog;
 	cookies->remove_id = PROP_COOKIES_REMOVE;
+	cookies->remove_all_id = PROP_COOKIES_REMOVE_ALL;
 	cookies->data_col = COL_COOKIES_DATA;
 	cookies->scroll_to_host = NULL;
 	cookies->filled = FALSE;
@@ -1238,8 +1406,10 @@ pdm_dialog_init (PdmDialog *dialog)
 	passwords->fill = pdm_dialog_fill_passwords_list;
 	passwords->add = pdm_dialog_password_add;
 	passwords->remove = pdm_dialog_password_remove;
+	passwords->remove_all = pdm_dialog_password_remove_all;
 	passwords->dialog = dialog;
 	passwords->remove_id = PROP_PASSWORDS_REMOVE;
+	passwords->remove_all_id = PROP_PASSWORDS_REMOVE_ALL;
 	passwords->data_col = COL_PASSWORDS_DATA;
 	passwords->scroll_to_host = NULL;
 	passwords->filled = FALSE;
