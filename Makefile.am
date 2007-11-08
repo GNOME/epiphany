@@ -55,4 +55,6 @@ ChangeLog:
 				 --stringparam include-rev "yes" $(top_srcdir)/svn2cl.xsl - > $@; \
 	fi
 
+dist: ChangeLog
+
 .PHONY: ChangeLog
