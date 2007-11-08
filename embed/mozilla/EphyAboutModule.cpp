@@ -535,7 +535,7 @@ EphyAboutModule::CreateRecoverPage(nsIURI *aRecoverURI,
 
 	char *secondary = g_markup_printf_escaped
 		(_("This page was loading when Epiphany closed unexpectedly."
-		   "This might happen again if you reload the page. If it does, please report"
+		   "This might happen again if you reload the page. If it does, please report "
 		   "the problem to the %s developers."),
 		   LSB_DISTRIBUTOR);
 
