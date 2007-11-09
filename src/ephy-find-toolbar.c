@@ -28,7 +28,9 @@
 
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #include <gtk/gtkarrow.h>
+#include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkentry.h>
@@ -54,6 +56,7 @@ struct _EphyFindToolbarPrivate
 	GtkToolItem *sep;
 	GtkToolItem *status_item;
 	GtkWidget *status_label;
+	GtkWidget *case_sensitive;
 	gulong set_focus_handler;
 	guint source_id;
 	guint find_again_source_id;
@@ -222,18 +225,11 @@ entry_changed_cb (GtkEntry *entry,
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	const char *text;
-	char *lowercase;
 	EphyEmbedFindResult result;
 	gboolean case_sensitive;
 
 	text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
-
-	/* Search case-sensitively iff the string includes 
-	 * non-lowercase character.
-	 */
-	lowercase = g_utf8_strdown (text, -1);
-	case_sensitive = g_utf8_collate (text, lowercase) != 0;
-	g_free (lowercase);
+	case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
 
 	ephy_embed_find_set_properties (get_find (toolbar), text, case_sensitive);
 	result = ephy_embed_find_find (get_find (toolbar), text, priv->links_only);
@@ -316,6 +312,71 @@ entry_activate_cb (GtkWidget *entry,
 }
 
 static void
+case_sensitive_menu_toggled_cb (GtkWidget *check,
+				EphyFindToolbar *toolbar)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+	gboolean case_sensitive;
+
+	case_sensitive = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (check));
+
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->case_sensitive),
+				      case_sensitive);
+}
+
+static void
+case_sensitive_toggled_cb (GtkWidget *check,
+			   EphyFindToolbar *toolbar)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+	const char *text;
+	gboolean case_sensitive;
+	GtkWidget *proxy;
+
+	text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
+	case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
+
+	proxy = gtk_tool_item_get_proxy_menu_item (GTK_TOOL_ITEM (gtk_widget_get_parent (check)),
+						   "menu-proxy");
+
+	if (proxy != NULL)
+	{
+		g_signal_handlers_block_by_func
+			(proxy, G_CALLBACK (case_sensitive_menu_toggled_cb), toolbar);
+
+		gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (proxy),
+						case_sensitive);
+		g_signal_handlers_unblock_by_func
+			(proxy, G_CALLBACK (case_sensitive_menu_toggled_cb), toolbar);
+	}
+
+	ephy_embed_find_set_properties (get_find (toolbar), text, case_sensitive);
+}
+
+static gboolean
+toolitem_create_menu_proxy_cb (GtkToolItem *toolitem,
+			       EphyFindToolbar *toolbar)
+{
+	EphyFindToolbarPrivate *priv = toolbar->priv;
+	GtkWidget *checkbox_menu;
+	gboolean case_sensitive;
+
+	/* Create a menu item, and sync it */
+	checkbox_menu = gtk_check_menu_item_new_with_mnemonic (_("_Case sensitive"));
+	case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (checkbox_menu),
+					case_sensitive);
+
+	g_signal_connect (checkbox_menu, "toggled",
+			  G_CALLBACK (case_sensitive_menu_toggled_cb), toolbar);
+
+	gtk_tool_item_set_proxy_menu_item (toolitem, "menu-proxy",
+					   checkbox_menu);
+
+	return TRUE;
+}
+
+static void
 set_focus_cb (EphyWindow *window,
 	      GtkWidget *widget,
 	      EphyFindToolbar *toolbar)
@@ -376,6 +437,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	GtkToolbar *gtoolbar;
 	GtkToolItem *item;
 	GtkWidget *alignment, *arrow, *box;
+	GtkWidget *checkbox;
 
 	priv = toolbar->priv = EPHY_FIND_TOOLBAR_GET_PRIVATE (toolbar);
 	gtoolbar = GTK_TOOLBAR (toolbar);
@@ -423,6 +485,18 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->next, -1);
 	gtk_widget_show_all (GTK_WIDGET (priv->next));
 
+	/* Case sensitivity */
+	checkbox = gtk_check_button_new_with_mnemonic (_("_Case sensitive"));
+	priv->case_sensitive = checkbox;
+	item = gtk_tool_item_new ();
+	gtk_container_add (GTK_CONTAINER (item), checkbox);
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+	gtk_widget_show_all (GTK_WIDGET (item));
+
+	/* Populate the overflow menu */
+	g_signal_connect (item, "create-menu-proxy",
+			  G_CALLBACK (toolitem_create_menu_proxy_cb), toolbar);
+
 	priv->sep = gtk_separator_tool_item_new ();
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->sep, -1);
 	
@@ -446,6 +520,8 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 				  G_CALLBACK (find_next_cb), toolbar);
 	g_signal_connect_swapped (priv->prev, "clicked",
 				  G_CALLBACK (find_prev_cb), toolbar);
+	g_signal_connect (priv->case_sensitive, "toggled",
+			  G_CALLBACK (case_sensitive_toggled_cb), toolbar);
 }
 
 static void
