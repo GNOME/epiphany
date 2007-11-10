@@ -399,11 +399,11 @@ static void
 impl_shistory_get_nth (EphyEmbed *embed,
                        int nth,
                        gboolean is_relative,
-                       char **aUrl,
-                       char **aTitle)
+                       char **url,
+                       char **title)
 {
-  *aUrl = NULL;
-  *aTitle = NULL;
+  *url = NULL;
+  *title = NULL;
 }
 
 static int
