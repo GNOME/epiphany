@@ -1059,7 +1059,8 @@ mozilla_embed_dom_key_press_cb (GtkMozEmbed *embed,
 
 	g_return_val_if_fail (GDK_KEY_PRESS == event->type, FALSE);
 
-	g_signal_emit_by_name (embed, "ge-search-key-press", event, &retval);
+	g_signal_emit_by_name (EPHY_EMBED (membed),
+			       "ge-search-key-press", event, &retval);
 
 	gdk_event_free (event);
 
