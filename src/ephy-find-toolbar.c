@@ -469,9 +469,8 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	arrow = gtk_arrow_new (GTK_ARROW_LEFT, GTK_SHADOW_NONE);
 	priv->prev = gtk_tool_button_new (arrow, _("Find Previous"));
 	gtk_tool_item_set_is_important (priv->prev, TRUE);
-	gtk_tool_item_set_tooltip (priv->prev, gtoolbar->tooltips,
-				   _("Find previous occurrence of the search string"),
-				   NULL);
+	gtk_tool_item_set_tooltip_text (priv->prev,
+					_("Find previous occurrence of the search string"));
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->prev, -1);
 	gtk_widget_show_all (GTK_WIDGET (priv->prev));
 
@@ -479,9 +478,8 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	arrow = gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
 	priv->next = gtk_tool_button_new (arrow, _("Find Next"));
 	gtk_tool_item_set_is_important (priv->next, TRUE);
-	gtk_tool_item_set_tooltip (priv->next, gtoolbar->tooltips,
-				   _("Find next occurrence of the search string"),
-				   NULL);
+	gtk_tool_item_set_tooltip_text (priv->next,
+					_("Find next occurrence of the search string"));
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->next, -1);
 	gtk_widget_show_all (GTK_WIDGET (priv->next));
 

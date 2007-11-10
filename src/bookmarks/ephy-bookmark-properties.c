@@ -40,6 +40,7 @@
 
 
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkstock.h>
@@ -548,7 +549,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_widget_show (table);
 
 	entry = gtk_entry_new ();
-	gtk_entry_set_editable (GTK_ENTRY (entry), !lockdown);
+	gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
 	tmp = ephy_node_get_property_string (properties->priv->bookmark,
 					     EPHY_NODE_BMK_PROP_TITLE);
 	gtk_entry_set_text (GTK_ENTRY (entry), tmp);
@@ -565,7 +566,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1, GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
 	entry = gtk_entry_new ();
-	gtk_entry_set_editable (GTK_ENTRY (entry), !lockdown);
+	gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
 	tmp = ephy_node_get_property_string (properties->priv->bookmark,
 					     EPHY_NODE_BMK_PROP_LOCATION);
 	gtk_entry_set_text (GTK_ENTRY (entry), tmp);
@@ -581,7 +582,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2, GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
 	entry = ephy_topics_entry_new (priv->bookmarks, priv->bookmark);
-	gtk_entry_set_editable (GTK_ENTRY (entry), !lockdown);
+	gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
 	priv->entry = entry;
 	gtk_widget_show (entry);
 	label = gtk_label_new_with_mnemonic(_("T_opics:"));

@@ -273,7 +273,7 @@ menu_destroy_cb (GtkWidget *menuitem,
 {
 	/* Save the submenu from similar destruction,
 	 * because it doesn't rightly belong to this menuitem. */
-	gtk_menu_item_remove_submenu (GTK_MENU_ITEM (menuitem));
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), NULL);
 }
 
 static void
