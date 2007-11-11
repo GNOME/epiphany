@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.es\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-11-08 03:25+0000\n"
-"PO-Revision-Date: 2007-11-08 15:19+0100\n"
+"POT-Creation-Date: 2007-11-09 23:48+0000\n"
+"PO-Revision-Date: 2007-11-11 13:40+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -608,15 +608,19 @@ msgstr "Contraseñas"
 msgid "Personal Data"
 msgstr "Datos personales"
 
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.glade.h:7 ../src/pdm-dialog.c:419
+msgid "Remove _All"
+msgstr "Eliminar _todas"
+
+#: ../data/glade/epiphany.glade.h:8
 msgid "Text Encoding"
 msgstr "Codificación del texto"
 
-#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:359
+#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:359
 msgid "Use the encoding specified by the document"
 msgstr "Usar la codificación especificada por el documento"
 
-#: ../data/glade/epiphany.glade.h:9
+#: ../data/glade/epiphany.glade.h:10
 msgid "_Show passwords"
 msgstr "_Mostrar contraseñas"
 
@@ -1688,9 +1692,9 @@ msgid ""
 "again if you reload the page. If it does, please report the problem to the %"
 "s developers."
 msgstr ""
-"Esta página se estaba cargando cuando Epiphany se cerró inesperadamente. Esto puede suceder "
-"de nuevo si vuelve a cargar la página. De suceder, informe del problema a los desarrolladores de "
-"%s."
+"Esta página se estaba cargando cuando Epiphany se cerró inesperadamente. "
+"Esto puede suceder de nuevo si vuelve a cargar la página. De suceder, "
+"informe del problema a los desarrolladores de %s."
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -3163,35 +3167,41 @@ msgstr "Otras codificaciones"
 msgid "_Automatic"
 msgstr "_Automático"
 
-#: ../src/ephy-find-toolbar.c:138
+#: ../src/ephy-find-toolbar.c:141
 msgid "Not found"
 msgstr "No encontrada"
 
-#: ../src/ephy-find-toolbar.c:150
+#: ../src/ephy-find-toolbar.c:153
 msgid "Wrapped"
 msgstr "Desde el inicio"
 
-#: ../src/ephy-find-toolbar.c:170
+#: ../src/ephy-find-toolbar.c:173
 msgid "Find links:"
 msgstr "Buscar enlaces:"
 
-#: ../src/ephy-find-toolbar.c:170
+#: ../src/ephy-find-toolbar.c:173
 msgid "Find:"
 msgstr "Buscar:"
 
-#: ../src/ephy-find-toolbar.c:408
+#. Create a menu item, and sync it
+#. Case sensitivity
+#: ../src/ephy-find-toolbar.c:365 ../src/ephy-find-toolbar.c:489
+msgid "_Case sensitive"
+msgstr "Sensible a _capitalización"
+
+#: ../src/ephy-find-toolbar.c:470
 msgid "Find Previous"
 msgstr "Buscar anterior"
 
-#: ../src/ephy-find-toolbar.c:411
+#: ../src/ephy-find-toolbar.c:473
 msgid "Find previous occurrence of the search string"
 msgstr "Busca la aparición anterior de la cadena de búsqueda"
 
-#: ../src/ephy-find-toolbar.c:418
+#: ../src/ephy-find-toolbar.c:480
 msgid "Find Next"
 msgstr "Buscar siguiente"
 
-#: ../src/ephy-find-toolbar.c:421
+#: ../src/ephy-find-toolbar.c:483
 msgid "Find next occurrence of the search string"
 msgstr "Busca la siguiente aparición de la cadena de búsqueda"
 
@@ -4121,56 +4131,72 @@ msgstr "Crear marcador con el enlace «%s»"
 msgid "Copy link's address “%s”"
 msgstr "Copiar dirección del enlace de «%s»"
 
-#: ../src/pdm-dialog.c:379
+#: ../src/pdm-dialog.c:397
+msgid "Remove all passwords?"
+msgstr "¿Eliminar todas las contraseñas?"
+
+#: ../src/pdm-dialog.c:398
+msgid "Do you really want to remove all stored passwords?"
+msgstr "¿Realmente quiere eliminar todas las contraseñas almacenadas?"
+
+#: ../src/pdm-dialog.c:401
+msgid "Remove all cookies?"
+msgstr "¿Eliminar todas las cookies?"
+
+#: ../src/pdm-dialog.c:402
+msgid "Do you really want to remove all stored cookies?"
+msgstr "R¿Realmente quiere eliminar todas las cookies almacenadas?"
+
+#: ../src/pdm-dialog.c:491
 msgid "Cookie Properties"
 msgstr "Propiedades de cookies"
 
-#: ../src/pdm-dialog.c:396
+#: ../src/pdm-dialog.c:508
 msgid "Content:"
 msgstr "Contenido:"
 
-#: ../src/pdm-dialog.c:412
+#: ../src/pdm-dialog.c:524
 msgid "Path:"
 msgstr "Ruta:"
 
 # Esto es de gestión de cookies (serrador)
-#: ../src/pdm-dialog.c:428
+#: ../src/pdm-dialog.c:540
 msgid "Send for:"
 msgstr "Enviar para:"
 
-#: ../src/pdm-dialog.c:437
+#: ../src/pdm-dialog.c:549
 msgid "Encrypted connections only"
 msgstr "Sólo conexiones cifradas"
 
-#: ../src/pdm-dialog.c:437
+#: ../src/pdm-dialog.c:549
 msgid "Any type of connection"
 msgstr "Cualquier tipo de conexión"
 
-#: ../src/pdm-dialog.c:443
+#: ../src/pdm-dialog.c:555
 msgid "Expires:"
 msgstr "Caduca:"
 
-#: ../src/pdm-dialog.c:454
+#: ../src/pdm-dialog.c:566
 msgid "End of current session"
 msgstr "Fin de la sesión actual"
 
-#: ../src/pdm-dialog.c:587
+#: ../src/pdm-dialog.c:699
 msgid "Domain"
 msgstr "Dominio"
 
-#: ../src/pdm-dialog.c:599
+#: ../src/pdm-dialog.c:711
 msgid "Name"
 msgstr "Nombre"
 
-#: ../src/pdm-dialog.c:998
+#: ../src/pdm-dialog.c:1136
 msgid "Host"
 msgstr "Host"
 
-#: ../src/pdm-dialog.c:1010
+#: ../src/pdm-dialog.c:1148
 msgid "User Name"
 msgstr "Nombre de usuario"
 
-#: ../src/pdm-dialog.c:1022
+#: ../src/pdm-dialog.c:1160
 msgid "User Password"
 msgstr "Contraseña de usuario"
 
