@@ -88,11 +88,6 @@ G_DEFINE_TYPE_WITH_CODE (WebKitEmbed, webkit_embed, EPHY_TYPE_BASE_EMBED,
                                                 ephy_command_manager_iface_init))
 
 static void
-webkit_embed_grab_focus (GtkWidget *widget)
-{
-}
-
-static void
 impl_close (EphyEmbed *embed)
 {
   gtk_widget_destroy (GTK_WIDGET (embed));
@@ -193,8 +188,6 @@ webkit_embed_class_init (WebKitEmbedClass *klass)
   object_class->finalize = webkit_embed_finalize;
 
   gtk_object_class->destroy = webkit_embed_destroy;
-
-  widget_class->grab_focus = webkit_embed_grab_focus;
 
   g_type_class_add_private (object_class, sizeof(WebKitEmbedPrivate));
 }

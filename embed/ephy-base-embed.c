@@ -147,6 +147,17 @@ ephy_base_embed_size_allocate (GtkWidget *widget,
 }
 
 static void
+ephy_base_embed_grab_focus (GtkWidget *widget)
+{
+  GtkWidget *child;
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+
+  if (child)
+    gtk_widget_grab_focus (child);
+}
+
+static void
 impl_set_typed_address (EphyEmbed *embed,
                         const char *address,
                         EphyEmbedAddressExpire expire)
@@ -367,6 +378,7 @@ ephy_base_embed_class_init (EphyBaseEmbedClass *klass)
 
   widget_class->size_request = ephy_base_embed_size_request;
   widget_class->size_allocate = ephy_base_embed_size_allocate;
+  widget_class->grab_focus = ephy_base_embed_grab_focus;
 
   g_object_class_install_property (gobject_class,
                                    PROP_SECURITY,

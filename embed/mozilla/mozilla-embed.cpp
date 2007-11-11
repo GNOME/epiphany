@@ -145,23 +145,6 @@ G_DEFINE_TYPE_WITH_CODE (MozillaEmbed, mozilla_embed, EPHY_TYPE_BASE_EMBED,
 						ephy_command_manager_iface_init))
 	
 static void
-mozilla_embed_grab_focus (GtkWidget *widget)
-{
-	GtkWidget *child;
-
-	child = gtk_bin_get_child (GTK_BIN (widget));
-
-	if (child != NULL)
-	{
-		gtk_widget_grab_focus (child);
-	}
-	else
-	{
-		g_warning ("Need to realize the embed before grabbing focus!\n");
-	}
-}
-
-static void
 impl_close (EphyEmbed *embed) 
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
@@ -223,6 +206,19 @@ mozilla_embed_size_allocate (GtkWidget *widget,
 }
 
 static void
+mozilla_embed_grab_focus (GtkWidget *widget)
+{
+	GtkWidget *child;
+
+	child = gtk_bin_get_child (GTK_BIN (widget));
+
+	if (child && GTK_WIDGET_REALIZED (child))
+		gtk_widget_grab_focus (child);
+	else
+		g_warning ("Need to realize the embed before grabbing focus!\n");
+}
+
+static void
 mozilla_embed_class_init (MozillaEmbedClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -234,9 +230,9 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 
 	gtk_object_class->destroy = mozilla_embed_destroy;
 
-	widget_class->grab_focus = mozilla_embed_grab_focus;
 	widget_class->realize = mozilla_embed_realize;
 	widget_class->size_allocate = mozilla_embed_size_allocate;
+	widget_class->grab_focus = mozilla_embed_grab_focus;
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
