@@ -175,27 +175,6 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
- * EphyEmbed::ge-location:
- * @embed:
- * @address: the new URL @embed is visiting
- *
- * The ::ge_location signal is emitted when @embed begins to load a new web
- * page. For example, if the user clicks on a link or enters an address or if
- * the previous web page had JavaScript or a META REFRESH tag.
- *
- * The ::ge_location signal will be emitted even when @embed is simply
- * refreshing the same web page.
- **/
-		g_signal_new ("ge_location",
-			      EPHY_TYPE_EMBED,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyEmbedIface, location),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
-/**
  * EphyEmbed::ge-net-state:
  * @embed:
  * @uri: the URI @embed is loading

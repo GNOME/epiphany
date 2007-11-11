@@ -861,7 +861,6 @@ mozilla_embed_location_changed_cb (GtkMozEmbed *embed,
 	EphyBaseEmbed *bembed = EPHY_BASE_EMBED (membed);
 
 	location = gtk_moz_embed_get_location (embed);
-	g_signal_emit_by_name (membed, "ge_location", location);
 
 	ephy_base_embed_location_changed (bembed, location);
 
