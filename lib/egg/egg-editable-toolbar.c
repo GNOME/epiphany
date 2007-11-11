@@ -579,12 +579,14 @@ create_item_from_action (EggEditableToolbar *etoolbar,
 			 const char *name)
 {
   GtkToolItem *item;
+  gboolean visible;
 
   g_return_val_if_fail (name != NULL, NULL);
   
   if (strcmp (name, "_separator") == 0)
     {
       item = gtk_separator_tool_item_new ();
+      visible = TRUE;
     }
   else
     {
@@ -601,9 +603,11 @@ create_item_from_action (EggEditableToolbar *etoolbar,
      
       g_signal_connect_object (action, "notify::sensitive",
                                G_CALLBACK (action_sensitive_cb), item, 0);
+      visible = gtk_action_get_visible (action);
     }
 
-  gtk_widget_show (GTK_WIDGET (item));
+  if (visible)
+    gtk_widget_show (GTK_WIDGET (item));
 
   g_object_set_data_full (G_OBJECT (item), EGG_ITEM_NAME,
                           g_strdup (name), g_free);  
