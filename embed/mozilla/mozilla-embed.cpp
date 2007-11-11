@@ -974,8 +974,6 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 
 	update_load_state (membed, state);
 	ephy_base_embed_update_from_net_state (EPHY_BASE_EMBED (membed), aURI, (EphyEmbedNetState)estate);
-	
-	g_signal_emit_by_name (membed, "ge_net_state", aURI, /* FIXME: (gulong) */ estate);
 }
 
 static gboolean

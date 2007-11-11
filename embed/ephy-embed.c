@@ -175,26 +175,6 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
- * EphyEmbed::ge-net-state:
- * @embed:
- * @uri: the URI @embed is loading
- * @state: the #EmbedState of @embed
- *
- * The ::ge_net_state signal is emitted when @embed's network negotiation state
- * changes. For example, this will indicate when page loading is complete or
- * cancelled.
- **/
-		g_signal_new ("ge_net_state",
-			      EPHY_TYPE_EMBED,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyEmbedIface, net_state),
-			      NULL, NULL,
-			      ephy_marshal_VOID__STRING_FLAGS,
-			      G_TYPE_NONE,
-			      2,
-			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-			      EPHY_TYPE_EMBED_NET_STATE);
-/**
  * EphyEmbed::ge-dom-mouse-click:
  * @embed:
  * @event: the #EphyEmbedEvent which triggered this signal
@@ -227,24 +207,6 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_BOOLEAN,
 			      1,
 			      G_TYPE_OBJECT);
-/**
- * EphyEmbed::ge-security-change:
- * @embed:
- * @level: @embed's new #EphyEmbedSecurityLevel
- *
- * The ::ge_security_change signal is emitted when the security level of @embed
- * changes. For example, this will happen when the user browses from an
- * insecure website to an SSL-secured one.
- **/
-		g_signal_new ("ge_security_change",
-			      EPHY_TYPE_EMBED,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyEmbedIface, security_change),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__ENUM,
-			      G_TYPE_NONE,
-			      1,
-			      EPHY_TYPE_EMBED_SECURITY_LEVEL);
 /**
  * EphyEmbed::ge-zoom-change:
  * @embed:

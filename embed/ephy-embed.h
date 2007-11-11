@@ -145,9 +145,6 @@ struct _EphyEmbedIface
 					 const char *type,
 					 const char *title,
 					 const char *address);
-	void	 (* net_state)		(EphyEmbed *embed,
-					 const char *uri,
-					 EphyEmbedNetState state);
 	gboolean (* dom_mouse_click)	(EphyEmbed *embed,
 					 EphyEmbedEvent *event);
 	gboolean (* dom_mouse_down)	(EphyEmbed *embed,
@@ -158,8 +155,6 @@ struct _EphyEmbedIface
 					 const char *address,
 					 const char *target,
 					 const char *features);
-	void	 (* security_change)	(EphyEmbed *embed,
-					 EphyEmbedSecurityLevel level);
 	void	 (* zoom_change)	(EphyEmbed *embed,
 					 float new_zoom);
 	void	 (* content_change)	(EphyEmbed *embed,

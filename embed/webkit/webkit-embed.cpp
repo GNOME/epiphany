@@ -137,9 +137,6 @@ update_load_state (WebKitEmbed *embed, WebKitPage *page)
   ephy_base_embed_update_from_net_state (EPHY_BASE_EMBED (embed),
                                          embed->priv->loading_uri,
                                          (EphyEmbedNetState)estate);
-
-  g_signal_emit_by_name (EPHY_EMBED (embed), "ge_net_state",
-                         embed->priv->loading_uri, estate);
 }
 
 static void
