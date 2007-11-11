@@ -925,7 +925,6 @@ update_load_state (MozillaEmbed *membed, gint state)
 
 			char *address;
 			address = gtk_moz_embed_get_location (moz_embed);
-			g_signal_emit_by_name (membed, "ge_content_change", address);
 			ephy_base_embed_restore_zoom_level (EPHY_BASE_EMBED (membed), address);
 			g_free (address);
 		}
