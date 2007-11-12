@@ -2568,13 +2568,6 @@ embed_close_request_cb (EphyEmbed *embed,
 	return TRUE;
 }
 
-static void
-embed_destroy_browser_cb (EphyEmbed *embed,
-			  EphyWindow *window)
-{
-	g_return_if_reached ();
-}
-
 static gboolean
 show_notebook_popup_menu (GtkNotebook *notebook,
 			  EphyWindow *window,
@@ -2664,9 +2657,6 @@ notebook_page_added_cb (EphyNotebook *notebook,
 	g_signal_connect_object (embed, "close-request",
 				 G_CALLBACK (embed_close_request_cb),
 				 window, 0);
-	g_signal_connect_object (embed, "destroy-browser",
-				 G_CALLBACK (embed_destroy_browser_cb),
-				 window, 0);
 	g_signal_connect_object (embed, "ge-modal-alert",
 				 G_CALLBACK (embed_modal_alert_cb), window, G_CONNECT_AFTER);
 
@@ -2711,8 +2701,6 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 		(embed, G_CALLBACK (embed_modal_alert_cb), window);
 	g_signal_handlers_disconnect_by_func
 		(embed, G_CALLBACK (embed_close_request_cb), window);
-	g_signal_handlers_disconnect_by_func
-		(embed, G_CALLBACK (embed_destroy_browser_cb), window);
 }
 
 static void
