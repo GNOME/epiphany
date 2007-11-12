@@ -144,6 +144,13 @@ pref("print.postscript.cups.enabled", false);
 // deactivate PAPI too (will be added in https://bugzilla.mozilla.org/show_bug.cgi?id=317450)
 pref("print.postscript.papi.enabled", false);
 
+// print margins used for the page header and footer, measured in hundredths of an inch
+// see http://bugzilla.gnome.org/show_bug.cgi?id=346110
+pref("print.printer_PostScript/default.print_edge_bottom", 15);
+pref("print.printer_PostScript/default.print_edge_left", 15);
+pref("print.printer_PostScript/default.print_edge_right", 15);
+pref("print.printer_PostScript/default.print_edge_top", 15);
+
 // sites stealthly storing unlimited amount of data? no thanks
 pref("dom.storage.enabled", false);
 
