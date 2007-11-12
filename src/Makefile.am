@@ -400,7 +400,6 @@ BINDING_HEADERS_SRCDIR_IN = \
 	src/ephy-session.h				\
 	src/ephy-shell.h				\
 	src/ephy-statusbar.h				\
-	src/ephy-tab.h					\
 	src/ephy-toolbar.h				\
 	src/ephy-window.h
 
