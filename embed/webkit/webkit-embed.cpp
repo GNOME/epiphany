@@ -263,10 +263,11 @@ impl_load (EphyEmbed *embed,
    * and lock badly.  I copied this function from WebKit's
    * GdkLauncher.
    */
-  if (strncmp ("http://", url, 7) != 0 &&
+  if (strncmp ("about:", url, 6)   != 0 &&
+      strncmp ("http://", url, 7)  != 0 &&
       strncmp ("https://", url, 8) != 0 &&
-      strncmp ("file://", url, 7) != 0 &&
-      strncmp ("ftp://", url, 6) != 0)
+      strncmp ("file://", url, 7)  != 0 &&
+      strncmp ("ftp://", url, 6)   != 0)
     effective_url = g_strconcat ("http://", url, NULL);
   else
     effective_url = g_strdup (url);
