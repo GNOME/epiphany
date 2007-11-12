@@ -427,10 +427,12 @@ session_delete (EphySession *session,
 }
 
 static void
-net_stop_cb (EphyEmbed *embed,
-	     EphySession *session)
+load_status_notify_cb (EphyEmbed *embed,
+		       GParamSpec *pspec,
+		       EphySession *session)
 {
-	ephy_session_save (session, SESSION_CRASHED);
+	if (ephy_embed_get_load_status (embed) == FALSE)
+		ephy_session_save (session, SESSION_CRASHED);
 }
 
 static void
@@ -439,8 +441,8 @@ notebook_page_added_cb (GtkWidget *notebook,
 			guint position,
 			EphySession *session)
 {
-	g_signal_connect (embed, "net-stop",
-			  G_CALLBACK (net_stop_cb), session);
+	g_signal_connect (embed, "notify::load-status",
+			  G_CALLBACK (load_status_notify_cb), session);
 }
 
 static void
@@ -452,7 +454,8 @@ notebook_page_removed_cb (GtkWidget *notebook,
 	ephy_session_save (session, SESSION_CRASHED);
 
 	g_signal_handlers_disconnect_by_func
-		(embed, G_CALLBACK (net_stop_cb), session);
+		(embed, G_CALLBACK (load_status_notify_cb),
+		 session);
 }
 
 static void
@@ -526,7 +529,7 @@ resume_dialog_response_cb (GtkWidget *dialog,
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		ephy_session_queue_command (session,
-				  	    EPHY_SESSION_CMD_LOAD_SESSION,
+					    EPHY_SESSION_CMD_LOAD_SESSION,
 					    SESSION_CRASHED, NULL,
 					    user_time, TRUE);
 	}
@@ -646,7 +649,7 @@ session_command_open_bookmarks_editor (EphySession *session,
 	GtkWidget *editor;
 
 	editor = ephy_shell_get_bookmarks_editor (ephy_shell_get_default ());
-        
+	
 	gtk_window_present_with_time (GTK_WINDOW (editor), user_time);
 }
 
@@ -694,12 +697,12 @@ session_command_open_uris (EphySession *session,
 		}
 
 		embed = ephy_shell_new_tab_full (shell, window,
-					         NULL /* parent tab */,
-					         url,
-					         flags | page_flags,
-					         EPHY_EMBED_CHROME_ALL,
-					         FALSE /* is popup? */,
-					         user_time);
+						 NULL /* parent tab */,
+						 url,
+						 flags | page_flags,
+						 EPHY_EMBED_CHROME_ALL,
+						 FALSE /* is popup? */,
+						 user_time);
 
 		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed)));
 	}
@@ -982,8 +985,8 @@ ephy_session_class_init (EphySessionClass *class)
 		(object_class,
 		 PROP_ACTIVE_WINDOW,
 		 g_param_spec_object ("active-window",
-		 		      "Active Window",
-		 		      "The active window",
+				      "Active Window",
+				      "The active window",
 				      EPHY_TYPE_WINDOW,
 				      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
@@ -1098,7 +1101,7 @@ write_active_tab (xmlTextWriterPtr writer,
 
 	current = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
     
-    	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "active-tab", "%d", current);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "active-tab", "%d", current);
 	return ret;
 }
     
@@ -1171,7 +1174,7 @@ write_ephy_window (xmlTextWriterPtr writer,
 	int ret;
 
 	tabs = ephy_window_get_tabs (window);
-    	notebook = ephy_window_get_notebook (window);
+	notebook = ephy_window_get_notebook (window);
 
 	/* Do not save an empty EphyWindow.
 	 * This only happens when the window was newly opened.
@@ -1184,7 +1187,7 @@ write_ephy_window (xmlTextWriterPtr writer,
 	ret = write_window_geometry (writer, GTK_WINDOW (window));
 	if (ret < 0) return ret;
 
-    	ret = write_active_tab (writer, notebook);
+	ret = write_active_tab (writer, notebook);
 	if (ret < 0) return ret;
 
 	role = gtk_window_get_role (GTK_WINDOW (window));
@@ -1213,11 +1216,15 @@ gboolean
 ephy_session_save (EphySession *session,
 		   const char *filename)
 {
-	EphySessionPrivate *priv = session->priv;
+	EphySessionPrivate *priv;
 	xmlTextWriterPtr writer;
 	GList *w;
 	char *save_to, *tmp_file;
 	int ret;
+
+	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
+
+	priv = session->priv;
 
 	if (priv->dont_save)
 	{
@@ -1248,7 +1255,7 @@ ephy_session_save (EphySession *session,
 	ret = xmlTextWriterSetIndent (writer, 1);
 	if (ret < 0) goto out;
 
-	ret = xmlTextWriterSetIndentString (writer, (const xmlChar *) "  ");
+	ret = xmlTextWriterSetIndentString (writer, (const xmlChar *) "	 ");
 	if (ret < 0) goto out;
 
 	START_PROFILER ("Saving session")
@@ -1436,7 +1443,7 @@ ephy_session_load (EphySession *session,
 {
 	EphySessionPrivate *priv = session->priv;
 	xmlDocPtr doc;
-        xmlNodePtr child;
+	xmlNodePtr child;
 	EphyWindow *window;
 	GtkWidget *widget = NULL;
 	char *save_to;
@@ -1466,7 +1473,7 @@ ephy_session_load (EphySession *session,
 	{
 		if (xmlStrEqual (child->name, (const xmlChar *) "window"))
 		{
-		    	xmlChar *tmp;
+			xmlChar *tmp;
 		    
 			window = ephy_window_new ();
 			widget = GTK_WIDGET (window);
