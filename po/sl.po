@@ -1,4 +1,3 @@
-# Copyright (C) 2003-2007 Free Software Foundation, Inc.
 # This file is distributed under the same license as the epiphany package.
 #
 # Andraz Tori <andraz.tori1@guest.arnes.si>, 2003.
@@ -9,8 +8,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
 "POT-Creation-Date: 2007-10-05 09:34+0100\n"
-"PO-Revision-Date: 2007-10-22 16:10+0100\n"
-"Last-Translator: Matej Urbančič <matej.urban@gmail.com>\n"
+"PO-Revision-Date: 2007-11-12 16:05+0100\n"
+"Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -297,11 +296,11 @@ msgstr "Mapa za prenose"
 
 #: ../data/epiphany.schemas.in.h:43
 msgid "The encoding autodetector. Empty string means autodetect is off"
-msgstr "Samodejno zaznavanje kodnih tabel. Prazen niz pomeni izključeno samodejno zaznavanje"
+msgstr "Samodejno zaznavanje kodnih razpredelnic. Prazen niz pomeni izključeno samodejno zaznavanje"
 
 #: ../data/epiphany.schemas.in.h:44
 msgid "The encoding autodetector. Valid entries are \"\" (autodetectors off), \"cjk_parallel_state_machine\" (autodetect east asian encodings), \"ja_parallel_state_machine\" (autodetect japanese encodings), \"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), \"zhcn_parallel_state_machine\" (autodetect simplified chinese encodings), \"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) and \"universal_charset_detector\" (autodetect most encodings)."
-msgstr "Samodejno zaznavanje kodnih tabel. Veljavni vnosi so \"\" (samodejno zaznavanje izklopljeno), \"cjk_parallel_state_machine\" (samodejno zaznaj vzhodno azijske kodne tabele), \"ja_parallel_state_machine\" (samodejno zaznaj japonske kodne tabele), \"ko_parallel_state_machine\" (samodejno zaznaj korejske kodne tabele), \"ruprob\" (samodejno zaznaj ruske kodne tabele), \"ukprob\" (samodejno zaznaj ukrajinske kodne tabele), \"zh_parallel_state_machine\" (samodejno zaznaj kitajske kodne tabele), \"zhcn_parallel_state_machine\" (samodejno zaznaj poenostavljene kitajske kodne tabele), \"zhtw_parallel_state_machine\" (samodejno zaznaj poenostavljene kitajske kodne tabele) in \"universal_charset_detector\" (samodejno zaznaj večino kodnih tabel)."
+msgstr "Samodejno zaznavanje kodnih razpredelnic. Veljavni vnosi so \"\" (samodejno zaznavanje izklopljeno), \"cjk_parallel_state_machine\" (samodejno zaznaj vzhodno azijske kodne razpredelnice), \"ja_parallel_state_machine\" (samodejno zaznaj japonske kodne razpredelnice), \"ko_parallel_state_machine\" (samodejno zaznaj korejske kodne razpredelnice), \"ruprob\" (samodejno zaznaj ruske kodne razpredelnice), \"ukprob\" (samodejno zaznaj ukrajinske kodne razpredelnice), \"zh_parallel_state_machine\" (samodejno zaznaj kitajske kodne razpredelnice), \"zhcn_parallel_state_machine\" (samodejno zaznaj poenostavljene kitajske kodne razpredelnice), \"zhtw_parallel_state_machine\" (samodejno zaznaj poenostavljene kitajske kodne razpredelnice) in \"universal_charset_detector\" (samodejno zaznaj večino kodnih razpredelnic)."
 
 #: ../data/epiphany.schemas.in.h:45
 msgid "The page information shown in the history view"
@@ -422,7 +421,7 @@ msgid "Field _Value"
 msgstr "_Vrednost polja"
 
 #: ../data/glade/certificate-dialogs.glade.h:11
-#: ../data/glade/prefs-dialog.glade.h:21
+#: ../data/glade/prefs-dialog.glade.h:23
 msgid "General"
 msgstr "Splošno"
 
@@ -478,16 +477,22 @@ msgstr "Gesla"
 msgid "Personal Data"
 msgstr "Osebni podatki"
 
+# G:9 K:0 O:0
 #: ../data/glade/epiphany.glade.h:7
+#: ../src/pdm-dialog.c:419
+msgid "Remove _All"
+msgstr "Odstrani _vse"
+
+#: ../data/glade/epiphany.glade.h:8
 msgid "Text Encoding"
 msgstr "Kodiranje besedila"
 
-#: ../data/glade/epiphany.glade.h:8
+#: ../data/glade/epiphany.glade.h:9
 #: ../src/ephy-encoding-menu.c:359
 msgid "Use the encoding specified by the document"
 msgstr "Uporabi kodiranje določeno z dokumentom"
 
-#: ../data/glade/epiphany.glade.h:9
+#: ../data/glade/epiphany.glade.h:10
 msgid "_Show passwords"
 msgstr "_Pokaži gesla"
 
@@ -526,7 +531,7 @@ msgstr "<b>Prenosi</b>"
 
 #: ../data/glade/prefs-dialog.glade.h:3
 msgid "<b>Encodings</b>"
-msgstr "<b>Kodne tabele</b>"
+msgstr "<b>Kodne razpredelnice</b>"
 
 #: ../data/glade/prefs-dialog.glade.h:4
 msgid "<b>Home page</b>"
@@ -548,23 +553,28 @@ msgstr "<b>Začasne datoteke</b>"
 msgid "<b>Web Content</b>"
 msgstr "<b>Spletna vsebina</b>"
 
-#: ../data/glade/prefs-dialog.glade.h:9
+#. Refers to "Only from sites you visit" option under Cookies.
+#: ../data/glade/prefs-dialog.glade.h:10
+msgid "<small>For example, not from advertisers on these sites</small>"
+msgstr ""
+
+#: ../data/glade/prefs-dialog.glade.h:11
 msgid "A_utomatically download and open files"
 msgstr "_Samodejno prenesi in odpri datoteke"
 
-#: ../data/glade/prefs-dialog.glade.h:10
+#: ../data/glade/prefs-dialog.glade.h:12
 msgid "Add Language"
 msgstr "Dodaj jezik"
 
-#: ../data/glade/prefs-dialog.glade.h:11
+#: ../data/glade/prefs-dialog.glade.h:13
 msgid "Allow popup _windows"
 msgstr "Dovoli _pojavna okna"
 
-#: ../data/glade/prefs-dialog.glade.h:12
+#: ../data/glade/prefs-dialog.glade.h:14
 msgid "Au_todetect:"
 msgstr "_Samodejna zaznava:"
 
-#: ../data/glade/prefs-dialog.glade.h:13
+#: ../data/glade/prefs-dialog.glade.h:15
 msgid "Choose a l_anguage:"
 msgstr "Izberite je_zik:"
 
@@ -572,123 +582,123 @@ msgstr "Izberite je_zik:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../data/glade/prefs-dialog.glade.h:14
+#: ../data/glade/prefs-dialog.glade.h:16
 #: ../lib/widgets/ephy-location-entry.c:640
-#: ../src/ephy-history-window.c:269
+#: ../src/ephy-history-window.c:271
 msgid "Cl_ear"
 msgstr "P_očisti"
 
-#: ../data/glade/prefs-dialog.glade.h:15
+#: ../data/glade/prefs-dialog.glade.h:17
 msgid "De_fault:"
 msgstr "P_rivzeto:"
 
-#: ../data/glade/prefs-dialog.glade.h:16
+#: ../data/glade/prefs-dialog.glade.h:18
 msgid "Enable Java_Script"
 msgstr "Omogoči Java_Script"
 
-#: ../data/glade/prefs-dialog.glade.h:17
+#: ../data/glade/prefs-dialog.glade.h:19
 msgid "Enable _Java"
 msgstr "Omogoči _Javo"
 
-#: ../data/glade/prefs-dialog.glade.h:18
+#: ../data/glade/prefs-dialog.glade.h:20
 msgid "Fonts"
 msgstr "Pisave"
 
-#: ../data/glade/prefs-dialog.glade.h:19
+#: ../data/glade/prefs-dialog.glade.h:21
 msgid "Fonts & Style"
 msgstr "Pisave in stil"
 
-#: ../data/glade/prefs-dialog.glade.h:20
+#: ../data/glade/prefs-dialog.glade.h:22
 msgid "For l_anguage:"
 msgstr "Za _jezik:"
 
-#: ../data/glade/prefs-dialog.glade.h:22
+#: ../data/glade/prefs-dialog.glade.h:24
 #: ../src/prefs-dialog.c:1310
 msgid "Language"
 msgstr "Jezik"
 
-#: ../data/glade/prefs-dialog.glade.h:23
+#: ../data/glade/prefs-dialog.glade.h:25
 msgid "Let web pages specify their own _fonts"
 msgstr "Dovoli spletnim stranem določiti njihovo lastno _pisavo"
 
-#: ../data/glade/prefs-dialog.glade.h:24
+#: ../data/glade/prefs-dialog.glade.h:26
 msgid "Let web pages specify their own c_olors"
 msgstr "Dovoli spletnim stranem določiti njihove lastne _barve"
 
-#: ../data/glade/prefs-dialog.glade.h:25
+#: ../data/glade/prefs-dialog.glade.h:27
 msgid "MB"
 msgstr "MB"
 
-#: ../data/glade/prefs-dialog.glade.h:26
+#: ../data/glade/prefs-dialog.glade.h:28
 msgid "Only _from sites you visit"
 msgstr "Samo s s_trani, ki jih obiščete"
 
-#: ../data/glade/prefs-dialog.glade.h:27
+#: ../data/glade/prefs-dialog.glade.h:29
 msgid "Preferences"
 msgstr "Nastavitve"
 
-#: ../data/glade/prefs-dialog.glade.h:28
+#: ../data/glade/prefs-dialog.glade.h:30
 msgid "Privacy"
 msgstr "Zasebnost"
 
-#: ../data/glade/prefs-dialog.glade.h:29
+#: ../data/glade/prefs-dialog.glade.h:31
 msgid "Set to Current _Page"
 msgstr "Nastavi na trenutno s_tran"
 
-#: ../data/glade/prefs-dialog.glade.h:30
+#: ../data/glade/prefs-dialog.glade.h:32
 msgid "Set to _Blank Page"
 msgstr "Nastavi na _prazno stran"
 
-#: ../data/glade/prefs-dialog.glade.h:31
+#: ../data/glade/prefs-dialog.glade.h:33
 msgid "Use custom _stylesheet"
 msgstr "Uporabi poljubno _slogovno predlogo"
 
-#: ../data/glade/prefs-dialog.glade.h:32
+#: ../data/glade/prefs-dialog.glade.h:34
 msgid "Use s_mooth scrolling"
 msgstr "Uporabi _gladko drsenje"
 
-#: ../data/glade/prefs-dialog.glade.h:33
+#: ../data/glade/prefs-dialog.glade.h:35
 msgid "_Address:"
 msgstr "_Naslov:"
 
-#: ../data/glade/prefs-dialog.glade.h:34
+#: ../data/glade/prefs-dialog.glade.h:36
 msgid "_Always accept"
 msgstr "_Vedno sprejmi"
 
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Detailed Font Settings…"
 msgstr "_Podrobne nastavitve pisave ..."
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Disk space:"
 msgstr "Prostor na _disku:"
 
 # G:0 K:1 O:0
-#: ../data/glade/prefs-dialog.glade.h:37
+#: ../data/glade/prefs-dialog.glade.h:39
 msgid "_Download folder:"
 msgstr "_Mapa za prenose:"
 
-#: ../data/glade/prefs-dialog.glade.h:38
+#: ../data/glade/prefs-dialog.glade.h:40
 msgid "_Edit Stylesheet…"
 msgstr "_Uredi slogovno predlogo ..."
 
-#: ../data/glade/prefs-dialog.glade.h:39
+#: ../data/glade/prefs-dialog.glade.h:41
 msgid "_Fixed width:"
 msgstr "_Fiksna širina:"
 
-#: ../data/glade/prefs-dialog.glade.h:40
+#: ../data/glade/prefs-dialog.glade.h:42
 msgid "_Minimum size:"
 msgstr "Najmanjša vel_ikost:"
 
-#: ../data/glade/prefs-dialog.glade.h:41
+#: ../data/glade/prefs-dialog.glade.h:43
 msgid "_Never accept"
 msgstr "_Nikoli ne sprejmi"
 
-#: ../data/glade/prefs-dialog.glade.h:42
+#: ../data/glade/prefs-dialog.glade.h:44
 msgid "_Remember passwords"
 msgstr "_Zapomni si gesla"
 
-#: ../data/glade/prefs-dialog.glade.h:43
+#: ../data/glade/prefs-dialog.glade.h:45
 msgid "_Variable width:"
 msgstr "_Spremenljiva širina:"
 
@@ -782,7 +792,7 @@ msgstr ""
 
 #: ../embed/downloader-view.c:450
 #: ../embed/downloader-view.c:455
-#: ../src/ephy-window.c:1553
+#: ../src/ephy-window.c:1562
 msgid "Unknown"
 msgstr "Neznan"
 
@@ -826,6 +836,15 @@ msgstr "Preostalo"
 #: ../embed/ephy-embed-shell.c:272
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphany trenutno ni mogoče uporabljati. Inicializacija Mozille ni uspela."
+
+#: ../embed/ephy-embed-utils.c:61
+#, c-format
+msgid "Send an email message to “%s”"
+msgstr "Pošlji elektronsko sporočilo za \"%s\""
+
+#: ../embed/ephy-embed-utils.c:107
+msgid "Blank page"
+msgstr "Prazna stran"
 
 # G:1 K:0 O:0
 #: ../embed/ephy-encodings.c:61
@@ -1598,27 +1617,28 @@ msgstr "Ni mogoče prikazati vsebine."
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr "Stran uporablja nepodprto ali neveljavno vrsto kompresije."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:537
+#. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
+#: ../embed/mozilla/EphyAboutModule.cpp:538
 #, c-format
-msgid "The page “%s” in this tab was not fully loaded yet when the web browser crashed; it could have caused the crash."
-msgstr "Stran \"%s\" v tem zavihku še ni bila popolnoma naložena, ko se je brskalnik sesul. Lahko da je povzročila sesutje."
+msgid "This page was loading when the web browser closed unexpectedly. This might happen again if you reload the page. If it does, please report the problem to the %s developers."
+msgstr ""
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:664
+#: ../embed/mozilla/EphyAboutModule.cpp:666
 msgid "You may find an old version:|in the Google Cache"
 msgstr "v Googlovem predpomnilniku"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:672
+#: ../embed/mozilla/EphyAboutModule.cpp:674
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "v Internetnem arhivu"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks.c:1312
 #: ../src/bookmarks/ephy-bookmarks-import.c:261
-#: ../src/ephy-session.c:1336
+#: ../src/ephy-session.c:1335
 msgid "Untitled"
 msgstr "Neimenovan"
 
@@ -2128,38 +2148,38 @@ msgstr ""
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:938
+#: ../lib/egg/egg-editable-toolbar.c:942
 #, c-format
 msgid "Show “_%s”"
 msgstr "Pokaži \"_%s\""
 
-#: ../lib/egg/egg-editable-toolbar.c:1401
+#: ../lib/egg/egg-editable-toolbar.c:1405
 msgid "_Move on Toolbar"
 msgstr "_Premakni na orodni vrstici"
 
-#: ../lib/egg/egg-editable-toolbar.c:1402
+#: ../lib/egg/egg-editable-toolbar.c:1406
 msgid "Move the selected item on the toolbar"
 msgstr "Premakne izbrani predmet na orodni vrstici"
 
-#: ../lib/egg/egg-editable-toolbar.c:1403
+#: ../lib/egg/egg-editable-toolbar.c:1407
 msgid "_Remove from Toolbar"
 msgstr "_Odstrani iz orodne vrstice"
 
 # G:0 K:1 O:3
-#: ../lib/egg/egg-editable-toolbar.c:1404
+#: ../lib/egg/egg-editable-toolbar.c:1408
 msgid "Remove the selected item from the toolbar"
 msgstr "Odstrani izbrani predmet iz orodne vrstice"
 
-#: ../lib/egg/egg-editable-toolbar.c:1405
+#: ../lib/egg/egg-editable-toolbar.c:1409
 msgid "_Delete Toolbar"
 msgstr "_Izbriši orodno vrstico"
 
 # G:0 K:1 O:3
-#: ../lib/egg/egg-editable-toolbar.c:1406
+#: ../lib/egg/egg-editable-toolbar.c:1410
 msgid "Remove the selected toolbar"
 msgstr "Odstrani izbrano orodno vrstico"
 
-#: ../lib/egg/egg-toolbar-editor.c:441
+#: ../lib/egg/egg-toolbar-editor.c:491
 msgid "Separator"
 msgstr "Ločnica"
 
@@ -2407,14 +2427,14 @@ msgid "Popup Windows"
 msgstr "Pojavna okna"
 
 #: ../lib/ephy-stock-icons.c:53
-#: ../src/ephy-history-window.c:1241
+#: ../src/ephy-history-window.c:1308
 msgid "History"
 msgstr "Zgodovina"
 
 # G:1 K:0 O:0
 #: ../lib/ephy-stock-icons.c:54
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:323
-#: ../src/ephy-window.c:1341
+#: ../src/ephy-window.c:1357
 msgid "Bookmark"
 msgstr "Zaznamek"
 
@@ -2423,7 +2443,7 @@ msgstr "Zaznamek"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1803
 #: ../src/bookmarks/ephy-topic-action.c:455
-#: ../src/ephy-window.c:1345
+#: ../src/ephy-window.c:1361
 msgid "Bookmarks"
 msgstr "Zaznamki"
 
@@ -2517,10 +2537,14 @@ msgstr "Ta vstavek dela z datotekami \".desktop\" in \".url\", ki vsebujejo sple
 msgid "%s:"
 msgstr "%s:"
 
+#: ../src/bookmarks/ephy-bookmark-action.c:439
+msgid "Javascript scriptlet"
+msgstr ""
+
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:96
-#: ../src/bookmarks/ephy-bookmark-properties.c:621
+#: ../src/bookmarks/ephy-bookmark-properties.c:97
+#: ../src/bookmarks/ephy-bookmark-properties.c:622
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -2529,7 +2553,7 @@ msgstr[1] "%d _podoben"
 msgstr[2] "%d _podobna"
 msgstr[3] "%d _podobni"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:269
+#: ../src/bookmarks/ephy-bookmark-properties.c:270
 #, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
@@ -2538,33 +2562,33 @@ msgstr[1] "_Združi z %d enakim zaznamkom"
 msgstr[2] "_Združi z %d enakimi zaznamki"
 msgstr[3] "_Združi z %d enakimi zaznamki"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:289
-#: ../src/bookmarks/ephy-bookmark-properties.c:311
+#: ../src/bookmarks/ephy-bookmark-properties.c:290
+#: ../src/bookmarks/ephy-bookmark-properties.c:312
 #, c-format
 msgid "Show “%s”"
 msgstr "Pokaži \"%s\""
 
 # G:6 K:0 O:0
-#: ../src/bookmarks/ephy-bookmark-properties.c:437
+#: ../src/bookmarks/ephy-bookmark-properties.c:438
 #, c-format
 msgid "“%s” Properties"
 msgstr "Lastnosti \"%s\""
 
 # G:2 K:0 O:0
-#: ../src/bookmarks/ephy-bookmark-properties.c:560
+#: ../src/bookmarks/ephy-bookmark-properties.c:561
 msgid "_Title:"
 msgstr "_Naziv:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:576
+#: ../src/bookmarks/ephy-bookmark-properties.c:577
 msgid "A_ddress:"
 msgstr "_Naslov:"
 
 # G:1 K:0 O:0
-#: ../src/bookmarks/ephy-bookmark-properties.c:587
+#: ../src/bookmarks/ephy-bookmark-properties.c:588
 msgid "T_opics:"
 msgstr "Te_me:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:609
+#: ../src/bookmarks/ephy-bookmark-properties.c:610
 msgid "Sho_w all topics"
 msgstr "Po_kaži vse teme"
 
@@ -2686,28 +2710,28 @@ msgstr "Odstrani iz te teme"
 # G:16 K:0 O:29
 #. Toplevel
 #: ../src/bookmarks/ephy-bookmarks-editor.c:181
-#: ../src/ephy-history-window.c:168
-#: ../src/ephy-window.c:115
+#: ../src/ephy-history-window.c:171
+#: ../src/ephy-window.c:118
 msgid "_File"
 msgstr "_Datoteka"
 
 # G:1 K:0 O:0
 #: ../src/bookmarks/ephy-bookmarks-editor.c:182
-#: ../src/ephy-history-window.c:169
-#: ../src/ephy-window.c:116
+#: ../src/ephy-history-window.c:172
+#: ../src/ephy-window.c:119
 msgid "_Edit"
 msgstr "_Uredi"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/ephy-history-window.c:170
-#: ../src/ephy-window.c:117
+#: ../src/ephy-history-window.c:173
+#: ../src/ephy-window.c:120
 msgid "_View"
 msgstr "Po_gled"
 
 # G:1 K:0 O:0
 #: ../src/bookmarks/ephy-bookmarks-editor.c:184
-#: ../src/ephy-history-window.c:171
-#: ../src/ephy-window.c:122
+#: ../src/ephy-history-window.c:174
+#: ../src/ephy-window.c:125
 msgid "_Help"
 msgstr "_Pomoč"
 
@@ -2727,8 +2751,8 @@ msgstr "Ustvari novo temo"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:191
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1381
 #: ../src/bookmarks/ephy-bookmarks-ui.c:324
-#: ../src/ephy-history-window.c:175
-#: ../src/ephy-history-window.c:711
+#: ../src/ephy-history-window.c:178
+#: ../src/ephy-history-window.c:738
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Odpri v novih _oknih"
@@ -2745,8 +2769,8 @@ msgstr "Odpri izbrani zaznamek v novem oknu"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:194
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1384
 #: ../src/bookmarks/ephy-bookmarks-ui.c:312
-#: ../src/ephy-history-window.c:178
-#: ../src/ephy-history-window.c:714
+#: ../src/ephy-history-window.c:181
+#: ../src/ephy-history-window.c:741
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Odpri v novih _zavihkih"
@@ -2797,8 +2821,8 @@ msgid "Export bookmarks to a file"
 msgstr "Izvozi zaznamke v datoteko"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:208
-#: ../src/ephy-history-window.c:184
-#: ../src/ephy-window.c:147
+#: ../src/ephy-history-window.c:187
+#: ../src/ephy-window.c:150
 msgid "_Close"
 msgstr "_Zapri"
 
@@ -2809,49 +2833,49 @@ msgstr "Zapri okno z zaznamki"
 
 #. Edit Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/ephy-history-window.c:189
-#: ../src/ephy-window.c:159
+#: ../src/ephy-history-window.c:192
+#: ../src/ephy-window.c:162
 msgid "Cu_t"
 msgstr "_Izreži"
 
 # G:6 K:1 O:0
 #: ../src/bookmarks/ephy-bookmarks-editor.c:214
-#: ../src/ephy-history-window.c:190
-#: ../src/ephy-window.c:160
+#: ../src/ephy-history-window.c:193
+#: ../src/ephy-window.c:163
 msgid "Cut the selection"
 msgstr "Izreži izbrano"
 
 # G:6 K:0 O:0
 #: ../src/bookmarks/ephy-bookmarks-editor.c:216
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1394
-#: ../src/ephy-history-window.c:192
-#: ../src/ephy-history-window.c:724
-#: ../src/ephy-window.c:162
+#: ../src/ephy-history-window.c:195
+#: ../src/ephy-history-window.c:751
+#: ../src/ephy-window.c:165
 msgid "_Copy"
 msgstr "_Kopiraj"
 
 # G:1 K:0 O:0
 #: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/ephy-history-window.c:193
-#: ../src/ephy-window.c:163
+#: ../src/ephy-history-window.c:196
+#: ../src/ephy-window.c:166
 msgid "Copy the selection"
 msgstr "Kopiraj izbrano"
 
 # G:6 K:0 O:0
 #: ../src/bookmarks/ephy-bookmarks-editor.c:219
-#: ../src/ephy-history-window.c:195
-#: ../src/ephy-window.c:165
+#: ../src/ephy-history-window.c:198
+#: ../src/ephy-window.c:168
 msgid "_Paste"
 msgstr "_Prilepi"
 
 # G:8 K:0 O:0
 #: ../src/bookmarks/ephy-bookmarks-editor.c:220
-#: ../src/ephy-history-window.c:196
+#: ../src/ephy-history-window.c:199
 msgid "Paste the clipboard"
 msgstr "Prilepi odložišče"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:222
-#: ../src/ephy-history-window.c:198
+#: ../src/ephy-history-window.c:201
 msgid "_Delete"
 msgstr "_Zbriši"
 
@@ -2862,8 +2886,8 @@ msgstr "Zbriši izbrani zaznamek ali temo"
 
 # G:9 K:0 O:0
 #: ../src/bookmarks/ephy-bookmarks-editor.c:225
-#: ../src/ephy-history-window.c:201
-#: ../src/ephy-window.c:171
+#: ../src/ephy-history-window.c:204
+#: ../src/ephy-window.c:174
 msgid "Select _All"
 msgstr "Izberi _vse"
 
@@ -2875,8 +2899,8 @@ msgstr "Izberi vse zaznamke ali besedilo"
 #. Help Menu
 #. Help menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:230
-#: ../src/ephy-history-window.c:209
-#: ../src/ephy-window.c:262
+#: ../src/ephy-history-window.c:212
+#: ../src/ephy-window.c:265
 msgid "_Contents"
 msgstr "_Vsebina"
 
@@ -2886,15 +2910,15 @@ msgid "Display bookmarks help"
 msgstr "Prikaži pomoč zaznamkov"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:233
-#: ../src/ephy-history-window.c:212
-#: ../src/ephy-window.c:265
+#: ../src/ephy-history-window.c:215
+#: ../src/ephy-window.c:268
 msgid "_About"
 msgstr "_O programu"
 
 # G:1 K:0 O:0
 #: ../src/bookmarks/ephy-bookmarks-editor.c:234
-#: ../src/ephy-history-window.c:213
-#: ../src/ephy-window.c:266
+#: ../src/ephy-history-window.c:216
+#: ../src/ephy-window.c:269
 msgid "Display credits for the web browser creators"
 msgstr "Kaži zasluge avtorjev brskalnika"
 
@@ -2909,13 +2933,12 @@ msgstr "Prikaži izbran zaznamek v orodni vrstici"
 
 #. View Menu
 #: ../src/bookmarks/ephy-bookmarks-editor.c:253
-#: ../src/ephy-history-window.c:227
+#: ../src/ephy-history-window.c:230
 msgid "_Title"
 msgstr "_Naziv"
 
 # G:1 K:0 O:0
 #: ../src/bookmarks/ephy-bookmarks-editor.c:254
-#: ../src/ephy-history-window.c:228
 msgid "Show only the title column"
 msgstr "Prikaži le stolpec z nazivi"
 
@@ -2924,7 +2947,6 @@ msgid "T_itle and Address"
 msgstr "Na_ziv in naslov"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:256
-#: ../src/ephy-history-window.c:232
 msgid "Show both the title and address columns"
 msgstr "Prikaži stolpca z nazivi in naslovi"
 
@@ -3030,17 +3052,17 @@ msgid "Import bookmarks from:"
 msgstr "Uvozi zaznamke iz:"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1390
-#: ../src/ephy-history-window.c:720
+#: ../src/ephy-history-window.c:747
 msgid "_Copy Address"
 msgstr "_Kopiraj naslov"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1655
-#: ../src/ephy-history-window.c:1073
+#: ../src/ephy-history-window.c:1100
 msgid "Clear"
 msgstr "Počisti"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1669
-#: ../src/ephy-history-window.c:1081
+#: ../src/ephy-history-window.c:1108
 msgid "_Search:"
 msgstr "I_skanje:"
 
@@ -3050,13 +3072,13 @@ msgid "Topics"
 msgstr "Teme"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1937
-#: ../src/ephy-history-window.c:1366
+#: ../src/ephy-history-window.c:1431
 msgid "Title"
 msgstr "Naziv"
 
 # G:0 K:1 O:0
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1943
-#: ../src/ephy-history-window.c:1372
+#: ../src/ephy-history-window.c:1437
 msgid "Address"
 msgstr "Naslov"
 
@@ -3117,37 +3139,44 @@ msgstr "Druga kodiranja"
 msgid "_Automatic"
 msgstr "_Samodejno"
 
-#: ../src/ephy-find-toolbar.c:138
+#: ../src/ephy-find-toolbar.c:141
 msgid "Not found"
 msgstr "Ni zadetkov"
 
-#: ../src/ephy-find-toolbar.c:150
+#: ../src/ephy-find-toolbar.c:153
 msgid "Wrapped"
 msgstr "Lomljeno"
 
-#: ../src/ephy-find-toolbar.c:170
+#: ../src/ephy-find-toolbar.c:173
 msgid "Find links:"
 msgstr "Najdi povezave:"
 
-#: ../src/ephy-find-toolbar.c:170
+#: ../src/ephy-find-toolbar.c:173
 msgid "Find:"
 msgstr "Najdi:"
 
-#: ../src/ephy-find-toolbar.c:408
+#. Create a menu item, and sync it
+#. Case sensitivity
+#: ../src/ephy-find-toolbar.c:365
+#: ../src/ephy-find-toolbar.c:487
+msgid "_Case sensitive"
+msgstr "_Upoštevaj velikost črk"
+
+#: ../src/ephy-find-toolbar.c:470
 msgid "Find Previous"
 msgstr "Najdi prejšnje"
 
 # G:1 K:0 O:0
-#: ../src/ephy-find-toolbar.c:411
+#: ../src/ephy-find-toolbar.c:473
 msgid "Find previous occurrence of the search string"
 msgstr "Poišči prejšnjo ponovitev iskanega niza"
 
-#: ../src/ephy-find-toolbar.c:418
+#: ../src/ephy-find-toolbar.c:479
 msgid "Find Next"
 msgstr "Najdi naslednje"
 
 # G:1 K:0 O:0
-#: ../src/ephy-find-toolbar.c:421
+#: ../src/ephy-find-toolbar.c:482
 msgid "Find next occurrence of the search string"
 msgstr "Poišči naslednjo ponovitev iskanega niza"
 
@@ -3163,85 +3192,94 @@ msgid "Go"
 msgstr "Pojdi"
 
 # G:4 K:2 O:0
-#: ../src/ephy-history-window.c:176
+#: ../src/ephy-history-window.c:179
 msgid "Open the selected history link in a new window"
 msgstr "Odpri izbrano povezavo iz zgodovine v novem oknu"
 
-#: ../src/ephy-history-window.c:179
+#: ../src/ephy-history-window.c:182
 msgid "Open the selected history link in a new tab"
 msgstr "Odpri izbrano povezavo iz zgodovine v novem zavihku"
 
-#: ../src/ephy-history-window.c:181
+#: ../src/ephy-history-window.c:184
 msgid "Add _Bookmark…"
 msgstr "_Dodaj zaznamek ..."
 
-#: ../src/ephy-history-window.c:182
+#: ../src/ephy-history-window.c:185
 msgid "Bookmark the selected history link"
 msgstr "Zaznamuj izbrano povezavo iz zgodovine"
 
-#: ../src/ephy-history-window.c:185
+#: ../src/ephy-history-window.c:188
 msgid "Close the history window"
 msgstr "Zapri okno zgodovine"
 
-#: ../src/ephy-history-window.c:199
+#: ../src/ephy-history-window.c:202
 msgid "Delete the selected history link"
 msgstr "Izbriši izbrano povezavo iz zgodovine"
 
-#: ../src/ephy-history-window.c:202
+#: ../src/ephy-history-window.c:205
 msgid "Select all history links or text"
 msgstr "Izberi vse povezave ali besedilo zgodovine"
 
-#: ../src/ephy-history-window.c:204
+#: ../src/ephy-history-window.c:207
 msgid "Clear _History"
 msgstr "Počisti _zgodovino"
 
 # G:0 K:1 O:0
-#: ../src/ephy-history-window.c:205
+#: ../src/ephy-history-window.c:208
 msgid "Clear your browsing history"
 msgstr "Zbriši zgodovino vašega brskanja"
 
-#: ../src/ephy-history-window.c:210
+#: ../src/ephy-history-window.c:213
 msgid "Display history help"
 msgstr "Prikaži pomoč zaznamkov"
 
-#: ../src/ephy-history-window.c:229
+# G:1 K:0 O:0
+#: ../src/ephy-history-window.c:231
+msgid "Show the title column"
+msgstr "Prikaži le stolpec z nazivi"
+
+#: ../src/ephy-history-window.c:232
 msgid "_Address"
 msgstr "_Naslov"
 
 # G:2 K:1 O:2
-#: ../src/ephy-history-window.c:230
-msgid "Show only the address column"
+#: ../src/ephy-history-window.c:233
+msgid "Show the address column"
 msgstr "Prikaži le stolpec z naslovi"
 
-#: ../src/ephy-history-window.c:231
-msgid "Title a_nd Address"
-msgstr "Na_ziv in naslov"
+#: ../src/ephy-history-window.c:234
+msgid "_Date and Time"
+msgstr "_Datum in čas"
+
+#: ../src/ephy-history-window.c:235
+msgid "Show the date and time column"
+msgstr "Prikaži stolpca z datumom in časom"
 
 # G:1 K:0 O:0
-#: ../src/ephy-history-window.c:259
+#: ../src/ephy-history-window.c:261
 msgid "Clear browsing history?"
 msgstr "Počisti zgodovino brskanja?"
 
-#: ../src/ephy-history-window.c:263
+#: ../src/ephy-history-window.c:265
 msgid "Clearing the browsing history will cause all history links to be permanently deleted."
 msgstr "Čiščenje zgodovine brskanja bo povzročilo, da bodo vsi zaznamki iz zgodovine trajno izbrisani."
 
-#: ../src/ephy-history-window.c:278
+#: ../src/ephy-history-window.c:280
 msgid "Clear History"
 msgstr "Počisti zgodovino"
 
-#: ../src/ephy-history-window.c:1090
+#: ../src/ephy-history-window.c:1117
 msgid "Last 30 minutes"
 msgstr "Zadnjih 30 minut"
 
-#: ../src/ephy-history-window.c:1091
+#: ../src/ephy-history-window.c:1118
 msgid "Today"
 msgstr "Danes"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1092
-#: ../src/ephy-history-window.c:1095
-#: ../src/ephy-history-window.c:1099
+#: ../src/ephy-history-window.c:1119
+#: ../src/ephy-history-window.c:1122
+#: ../src/ephy-history-window.c:1126
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
@@ -3251,9 +3289,13 @@ msgstr[2] "Zadnja %d dneva"
 msgstr[3] "Zadnje %d dni"
 
 # G:7 K:4 O:0
-#: ../src/ephy-history-window.c:1303
+#: ../src/ephy-history-window.c:1368
 msgid "Sites"
 msgstr "Mesta"
+
+#: ../src/ephy-history-window.c:1442
+msgid "Date"
+msgstr "Datum"
 
 # G:6 K:7 O:3
 #: ../src/ephy-main.c:78
@@ -3326,7 +3368,7 @@ msgstr ""
 "%s"
 
 #: ../src/ephy-main.c:504
-#: ../src/window-commands.c:836
+#: ../src/window-commands.c:824
 msgid "GNOME Web Browser"
 msgstr "Spletni brskalnik za GNOME"
 
@@ -3334,11 +3376,11 @@ msgstr "Spletni brskalnik za GNOME"
 msgid "GNOME Web Browser options"
 msgstr "Možnosti za spletni brskalnik za GNOME"
 
-#: ../src/ephy-notebook.c:655
+#: ../src/ephy-notebook.c:651
 msgid "Close tab"
 msgstr "Zapri zavihek"
 
-#: ../src/ephy-session.c:160
+#: ../src/ephy-session.c:159
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
@@ -3348,52 +3390,52 @@ msgstr[2] "Prenosi bodo prekinjeni in odjavljeni boste čez %d sekundi."
 msgstr[3] "Prenosi bodo prekinjeni in odjavljeni boste čez %d sekunde."
 
 # G:2 K:0 O:0
-#: ../src/ephy-session.c:276
+#: ../src/ephy-session.c:275
 msgid "Abort pending downloads?"
 msgstr "Ali želite prekiniti prenose, ki so še v teku?"
 
-#: ../src/ephy-session.c:280
+#: ../src/ephy-session.c:279
 msgid "There are still downloads pending. If you log out, they will be aborted and lost."
 msgstr "Prenosi so še vedno v teku. Če se odjavite, bodo prekinjeni in izgubljeni."
 
-#: ../src/ephy-session.c:284
+#: ../src/ephy-session.c:283
 msgid "_Cancel Logout"
 msgstr "_Prekliči odjavo"
 
 # G:6 K:0 O:0
-#: ../src/ephy-session.c:286
+#: ../src/ephy-session.c:285
 msgid "_Abort Downloads"
 msgstr "_Prekini prenose"
 
-#: ../src/ephy-session.c:611
+#: ../src/ephy-session.c:610
 msgid "Recover previous browser windows and tabs?"
 msgstr "Ali želite ponovno vzpostaviti prejšnja okna brskalnika in zavihke?"
 
-#: ../src/ephy-session.c:615
+#: ../src/ephy-session.c:614
 msgid "Epiphany appears to have exited unexpectedly the last time it was run. You can recover the opened windows and tabs."
 msgstr "Zgleda, da je program Epiphany nepričakovano končal, zadnjič ko je bil zagnan.  Ponovno lahko vzpostavite odprta okna in zavihke."
 
-#: ../src/ephy-session.c:619
+#: ../src/ephy-session.c:618
 msgid "_Don't Recover"
 msgstr "_Ne pobiraj se"
 
-#: ../src/ephy-session.c:621
+#: ../src/ephy-session.c:620
 msgid "_Recover"
 msgstr "_Poberi se"
 
-#: ../src/ephy-session.c:623
+#: ../src/ephy-session.c:622
 msgid "Crash Recovery"
 msgstr "Pobiranje po sesutju"
 
-#: ../src/ephy-shell.c:200
+#: ../src/ephy-shell.c:198
 msgid "Sidebar extension required"
 msgstr "Zahtevana je razširitev za stransko vrstico"
 
-#: ../src/ephy-shell.c:202
+#: ../src/ephy-shell.c:200
 msgid "Sidebar Extension Required"
 msgstr "Zahtevana razširitev za stransko vrstico"
 
-#: ../src/ephy-shell.c:206
+#: ../src/ephy-shell.c:204
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Povezava, ki ste jo kliknili, zahteva nameščeno razširitev za stransko vrstico."
 
@@ -3408,49 +3450,7 @@ msgstr "Kazalka"
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "Pritisnite F7 za izhod"
 
-#: ../src/ephy-tab.c:512
-#: ../src/ephy-tab.c:2406
-#: ../src/ephy-tab.c:2441
-msgid "Blank page"
-msgstr "Prazna stran"
-
-# G:1 K:0 O:0
-#. translators: %s here is the address of the web page
-#: ../src/ephy-tab.c:959
-#: ../src/ephy-tab.c:1769
-#, c-format
-msgid "Loading “%s”…"
-msgstr "Nalaganje \"%s\" ..."
-
-# G:1 K:0 O:0
-#: ../src/ephy-tab.c:963
-msgid "Loading…"
-msgstr "Nalaganje ..."
-
-#: ../src/ephy-tab.c:1086
-#, c-format
-msgid "Send an email message to “%s”"
-msgstr "Pošlji elektronsko sporočilo za \"%s\""
-
-# G:1 K:0 O:0
-#: ../src/ephy-tab.c:1753
-#, c-format
-msgid "Redirecting to “%s”…"
-msgstr "Preusmerjanje na \"%s\" ..."
-
-# G:1 K:0 O:0
-#: ../src/ephy-tab.c:1757
-#, c-format
-msgid "Transferring data from “%s”…"
-msgstr "Prenašanje podatkov iz \"%s\" ..."
-
-# G:1 K:0 O:0
-#: ../src/ephy-tab.c:1761
-#, c-format
-msgid "Waiting for authorization from “%s”…"
-msgstr "Čakanje na avtorizacijo od \"%s\" ..."
-
-#: ../src/ephy-tabs-menu.c:149
+#: ../src/ephy-tabs-menu.c:207
 msgid "Switch to this tab"
 msgstr "Preklopi na ta zavihek"
 
@@ -3590,563 +3590,563 @@ msgid "_Add a New Toolbar"
 msgstr "_Dodaj novo orodno vrstico"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:118
+#: ../src/ephy-window.c:121
 msgid "_Bookmarks"
 msgstr "_Zaznamki"
 
 # G:5 K:1 O:0
-#: ../src/ephy-window.c:119
+#: ../src/ephy-window.c:122
 msgid "_Go"
 msgstr "Po_jdi"
 
-#: ../src/ephy-window.c:120
+#: ../src/ephy-window.c:123
 msgid "T_ools"
 msgstr "Or_odja"
 
 # G:2 K:0 O:0
-#: ../src/ephy-window.c:121
+#: ../src/ephy-window.c:124
 msgid "_Tabs"
 msgstr "_Zavihki"
 
 # G:2 K:0 O:0
-#: ../src/ephy-window.c:123
+#: ../src/ephy-window.c:126
 msgid "_Toolbars"
 msgstr "_Orodne vrstice"
 
 #. File menu
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:132
 msgid "_Open…"
 msgstr "_Odpri ..."
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:130
+#: ../src/ephy-window.c:133
 msgid "Open a file"
 msgstr "Odpri datoteko"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:135
 msgid "Save _As…"
 msgstr "Shrani _kot ..."
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:136
 msgid "Save the current page"
 msgstr "Shrani trenutno stran"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:138
 msgid "Print Set_up…"
 msgstr "Nastavitev tiskanja ..."
 
-#: ../src/ephy-window.c:136
+#: ../src/ephy-window.c:139
 msgid "Setup the page settings for printing"
 msgstr "Nastavitve strani za tiskanje"
 
 # G:20 K:4 O:25
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:141
 msgid "Print Pre_view"
 msgstr "P_redogled tiskanja"
 
 # G:20 K:4 O:25
-#: ../src/ephy-window.c:139
+#: ../src/ephy-window.c:142
 msgid "Print preview"
 msgstr "Predogled tiskanja"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:144
 msgid "_Print…"
 msgstr "_Natisni ..."
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:145
 msgid "Print the current page"
 msgstr "Natisni trenutno stran"
 
-#: ../src/ephy-window.c:144
+#: ../src/ephy-window.c:147
 msgid "S_end Link by Email…"
 msgstr "P_ošlji povezavo po e-pošti ..."
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:148
 msgid "Send a link of the current page"
 msgstr "Pošlji povezavo trenutne strani"
 
-#: ../src/ephy-window.c:148
+#: ../src/ephy-window.c:151
 msgid "Close this tab"
 msgstr "Zapri zavihek"
 
 # G:5 K:1 O:2
 #. Edit menu
-#: ../src/ephy-window.c:153
+#: ../src/ephy-window.c:156
 msgid "_Undo"
 msgstr "_Razveljavi"
 
-#: ../src/ephy-window.c:154
+#: ../src/ephy-window.c:157
 msgid "Undo the last action"
 msgstr "Razveljavi zadnje dejanje"
 
-#: ../src/ephy-window.c:156
+#: ../src/ephy-window.c:159
 msgid "Re_do"
 msgstr "_Obnovi"
 
-#: ../src/ephy-window.c:157
+#: ../src/ephy-window.c:160
 msgid "Redo the last undone action"
 msgstr "Obnovi zadnjo razveljavljeno dejanje"
 
 # G:3 K:0 O:0
-#: ../src/ephy-window.c:166
+#: ../src/ephy-window.c:169
 msgid "Paste clipboard"
 msgstr "Prilepi odložišče"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:172
 msgid "Delete text"
 msgstr "Izbriši besedilo"
 
 # G:0 K:0 O:1
-#: ../src/ephy-window.c:172
+#: ../src/ephy-window.c:175
 msgid "Select the entire page"
 msgstr "Izberi celotno stran"
 
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:177
 msgid "_Find…"
 msgstr "_Najdi ..."
 
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:178
 msgid "Find a word or phrase in the page"
 msgstr "V strani poišči besedo ali frazo"
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:180
 msgid "Find Ne_xt"
 msgstr "Poišči _naslednjo"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:178
+#: ../src/ephy-window.c:181
 msgid "Find next occurrence of the word or phrase"
 msgstr "Poišči naslednjo ponovitev besede ali fraze"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:183
 msgid "Find Pre_vious"
 msgstr "Poišči _prejšnjo"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:184
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Poišči prejšnjo ponovitev besede ali fraze"
 
-#: ../src/ephy-window.c:183
+#: ../src/ephy-window.c:186
 msgid "P_ersonal Data"
 msgstr "Os_ebni podatki"
 
 # G:0 K:0 O:2
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:187
 msgid "View and remove cookies and passwords"
 msgstr "Preglej in odstrani piškotke in gesla"
 
 # G:32 K:56 O:19
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:190
 msgid "Certificate_s"
 msgstr "_Certifikati"
 
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:191
 msgid "Manage Certificates"
 msgstr "Upravljaj s certifikati"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:194
 msgid "P_references"
 msgstr "Nas_tavitve"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:192
+#: ../src/ephy-window.c:195
 msgid "Configure the web browser"
 msgstr "Nastavi brskalnik"
 
 # G:6 K:0 O:0
 #. View menu
-#: ../src/ephy-window.c:197
+#: ../src/ephy-window.c:200
 msgid "_Customize Toolbars…"
 msgstr "_Prikroji orodne vrstice ..."
 
 # G:6 K:0 O:0
-#: ../src/ephy-window.c:198
+#: ../src/ephy-window.c:201
 msgid "Customize toolbars"
 msgstr "Prikroji orodne vrstice"
 
-#: ../src/ephy-window.c:200
 #: ../src/ephy-window.c:203
+#: ../src/ephy-window.c:206
 msgid "_Stop"
 msgstr "U_stavi"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:204
 msgid "Stop current data transfer"
 msgstr "Ustavi trenutni prenos podatkov"
 
 # G:2 K:0 O:0
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:208
 msgid "_Reload"
 msgstr "_Znova naloži"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:209
 msgid "Display the latest content of the current page"
 msgstr "Prikaži zadnjo vsebino trenutne strani"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:211
 msgid "_Larger Text"
 msgstr "_Večje besedilo"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:212
 msgid "Increase the text size"
 msgstr "Povečaj velikost besedila"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:214
 msgid "S_maller Text"
 msgstr "_Manjše besedilo"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:215
 msgid "Decrease the text size"
 msgstr "Zmanjšaj velikost besedila"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:217
 msgid "_Normal Size"
 msgstr "_Običajna velikost"
 
 # G:3 K:0 O:0
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:218
 msgid "Use the normal text size"
 msgstr "Uporabi običajno velikost pisave"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:220
 msgid "Text _Encoding"
 msgstr "_Kodiranje besedila"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:221
 msgid "Change the text encoding"
 msgstr "Spremeni kodiranje besedila"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:223
 msgid "_Page Source"
 msgstr "_Izvorna koda strani"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:224
 msgid "View the source code of the page"
 msgstr "Poglej izvorno kodo strani"
 
-#: ../src/ephy-window.c:223
+#: ../src/ephy-window.c:226
 msgid "Page _Security Information"
 msgstr "_Varnostni podatki o strani"
 
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:227
 msgid "Display security information for the web page"
 msgstr "Prikaži varnostne podatke za to spletno mesto"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:229
+#: ../src/ephy-window.c:232
 msgid "_Add Bookmark…"
 msgstr "_Dodaj zaznamek ..."
 
 # G:4 K:1 O:0
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:233
 msgid "Add a bookmark for the current page"
 msgstr "Dodaj zaznamek za trenutno stran"
 
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:235
 msgid "_Edit Bookmarks"
 msgstr "_Uredi zaznamke"
 
 # G:1 K:1 O:0
-#: ../src/ephy-window.c:233
+#: ../src/ephy-window.c:236
 msgid "Open the bookmarks window"
 msgstr "Odpri okno zaznamkov"
 
 #. Go menu
-#: ../src/ephy-window.c:238
+#: ../src/ephy-window.c:241
 msgid "_Location…"
 msgstr "_Mesto ..."
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:239
+#: ../src/ephy-window.c:242
 msgid "Go to a specified location"
 msgstr "Pojdi na izbrano mesto"
 
-#: ../src/ephy-window.c:241
+#: ../src/ephy-window.c:244
 msgid "Hi_story"
 msgstr "_Zgodovina"
 
 # G:14 K:9 O:0
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:245
 msgid "Open the history window"
 msgstr "Odpri okno zgodovine"
 
 #. Tabs menu
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:250
 msgid "_Previous Tab"
 msgstr "_Prejšnji zavihek"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:248
+#: ../src/ephy-window.c:251
 msgid "Activate previous tab"
 msgstr "Aktiviraj prejšnji zavihek"
 
 # G:0 K:1 O:0
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:253
 msgid "_Next Tab"
 msgstr "_Naslednji zavihek"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:254
 msgid "Activate next tab"
 msgstr "Aktiviraj naslednji zavihek"
 
 # G:0 K:1 O:0
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:256
 msgid "Move Tab _Left"
 msgstr "Premakni zavihek _levo"
 
-#: ../src/ephy-window.c:254
+#: ../src/ephy-window.c:257
 msgid "Move current tab to left"
 msgstr "Premakni trenutni zavihek na levo"
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:259
 msgid "Move Tab _Right"
 msgstr "Premakni zavihek _desno"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:260
 msgid "Move current tab to right"
 msgstr "Premakni trenutni zavihek na desno"
 
 # G:0 K:1 O:0
-#: ../src/ephy-window.c:263
+#: ../src/ephy-window.c:266
 msgid "Display web browser help"
 msgstr "Prikaži pomoč brskalnika"
 
 #. File Menu
-#: ../src/ephy-window.c:274
+#: ../src/ephy-window.c:277
 msgid "_Work Offline"
 msgstr "_Delo brez povezave"
 
-#: ../src/ephy-window.c:275
+#: ../src/ephy-window.c:278
 msgid "Switch to offline mode"
 msgstr "Preklopi v način brez povezave"
 
 # G:2 K:0 O:0
 #. View Menu
-#: ../src/ephy-window.c:280
+#: ../src/ephy-window.c:283
 msgid "_Hide Toolbars"
 msgstr "_Skrij orodne vrstice"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:281
+#: ../src/ephy-window.c:284
 msgid "Show or hide toolbar"
 msgstr "Pokaži ali skrij orodno vrstico"
 
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:286
 msgid "St_atusbar"
 msgstr "_Vrstica stanja"
 
 # G:3 K:0 O:0
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:287
 msgid "Show or hide statusbar"
 msgstr "Pokaži ali skrij vrstico stanja"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:289
 msgid "_Fullscreen"
 msgstr "Čez ce_l zaslon"
 
 # G:2 K:0 O:0
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:290
 msgid "Browse at full screen"
 msgstr "Brskaj čez cel zaslon"
 
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:292
 msgid "Popup _Windows"
 msgstr "Po_javna okna"
 
-#: ../src/ephy-window.c:290
+#: ../src/ephy-window.c:293
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Prikaži ali skrij nezahtevana pojavna okna iz te strani"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:295
 msgid "Selection Caret"
 msgstr "Kazalka za izbor"
 
 #. Framed document
-#: ../src/ephy-window.c:301
+#: ../src/ephy-window.c:304
 msgid "Show Only _This Frame"
 msgstr "Prikaži samo _ta okvir"
 
-#: ../src/ephy-window.c:302
+#: ../src/ephy-window.c:305
 msgid "Show only this frame in this window"
 msgstr "V tem oknu prikaži samo ta okvir"
 
 # G:2 K:0 O:0
 #. Links
-#: ../src/ephy-window.c:307
+#: ../src/ephy-window.c:310
 msgid "_Open Link"
 msgstr "_Odpri povezavo"
 
 # G:1 K:2 O:0
-#: ../src/ephy-window.c:308
+#: ../src/ephy-window.c:311
 msgid "Open link in this window"
 msgstr "Odpre povezavo v tem oknu"
 
 # G:1 K:2 O:0
-#: ../src/ephy-window.c:310
+#: ../src/ephy-window.c:313
 msgid "Open Link in New _Window"
 msgstr "Odpri povezavo v _novem oknu"
 
 # G:1 K:2 O:0
-#: ../src/ephy-window.c:311
+#: ../src/ephy-window.c:314
 msgid "Open link in a new window"
 msgstr "Odpre povezavo v novem oknu"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:316
 msgid "Open Link in New _Tab"
 msgstr "Odpri povezavo v novem _zavihku"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:317
 msgid "Open link in a new tab"
 msgstr "Odpre povezavo v novem zavihku"
 
 # G:6 K:0 O:0
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:319
 msgid "_Download Link"
 msgstr "Pr_enesi povezavo"
 
 # G:10 K:0 O:0
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:321
 msgid "_Save Link As…"
 msgstr "Shrani povezavo _kot ..."
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:322
 msgid "Save link with a different name"
 msgstr "Shrani povezavo pod drugo ime"
 
 # G:3 K:0 O:0
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:324
 msgid "_Bookmark Link…"
 msgstr "_Zaznamuj povezavo ..."
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:326
 msgid "_Copy Link Address"
 msgstr "_Kopiraj naslov povezave"
 
 # G:1 K:0 O:0
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:329
+#: ../src/ephy-window.c:332
 msgid "_Send Email…"
 msgstr "P_ošlji e-pošto ..."
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:331
+#: ../src/ephy-window.c:334
 msgid "_Copy Email Address"
 msgstr "Kopiraj _e-poštni naslov"
 
 # G:1 K:0 O:0
 #. Images
-#: ../src/ephy-window.c:336
+#: ../src/ephy-window.c:339
 msgid "Open _Image"
 msgstr "Odpri sl_iko"
 
 # G:2 K:0 O:0
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:341
 msgid "_Save Image As…"
 msgstr "S_hrani sliko kot ..."
 
 # G:4 K:3 O:0
-#: ../src/ephy-window.c:340
+#: ../src/ephy-window.c:343
 msgid "_Use Image As Background"
 msgstr "_Uporabi sliko kot ozadje"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:342
+#: ../src/ephy-window.c:345
 msgid "Copy I_mage Address"
 msgstr "Kopiraj n_aslov slike"
 
-#: ../src/ephy-window.c:344
+#: ../src/ephy-window.c:347
 msgid "St_art Animation"
 msgstr "Z_ačni animacijo"
 
-#: ../src/ephy-window.c:346
+#: ../src/ephy-window.c:349
 msgid "St_op Animation"
 msgstr "U_stavi animacijo"
 
-#: ../src/ephy-window.c:750
+#: ../src/ephy-window.c:770
 msgid "There are unsubmitted changes to form elements"
 msgstr "Obstajajo neposlane spremembe v obrazcu"
 
-#: ../src/ephy-window.c:754
+#: ../src/ephy-window.c:774
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Če vseeno zaprete dokument, boste izgubili te podatke."
 
-#: ../src/ephy-window.c:758
+#: ../src/ephy-window.c:778
 msgid "Close _Document"
 msgstr "_Zapri dokument"
 
-#: ../src/ephy-window.c:1335
-#: ../src/window-commands.c:267
+#: ../src/ephy-window.c:1351
+#: ../src/window-commands.c:259
 msgid "Open"
 msgstr "Odpri"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:1337
-#: ../src/window-commands.c:293
+#: ../src/ephy-window.c:1353
+#: ../src/window-commands.c:285
 msgid "Save As"
 msgstr "Shrani kot"
 
-#: ../src/ephy-window.c:1339
+#: ../src/ephy-window.c:1355
 msgid "Print"
 msgstr "Natisni"
 
-#: ../src/ephy-window.c:1343
+#: ../src/ephy-window.c:1359
 msgid "Find"
 msgstr "Poišči"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1356
+#: ../src/ephy-window.c:1372
 msgid "Larger"
 msgstr "Večja"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1359
+#: ../src/ephy-window.c:1375
 msgid "Smaller"
 msgstr "Manjša"
 
 # G:2 K:2 O:5
-#: ../src/ephy-window.c:1556
+#: ../src/ephy-window.c:1565
 msgid "Insecure"
 msgstr "Nezavarovan"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:1561
+#: ../src/ephy-window.c:1570
 msgid "Broken"
 msgstr "Nedelujoč"
 
 # G:5 K:7 O:5
-#: ../src/ephy-window.c:1573
+#: ../src/ephy-window.c:1582
 msgid "Low"
 msgstr "Nizka"
 
 # G:2 K:2 O:1
-#: ../src/ephy-window.c:1580
+#: ../src/ephy-window.c:1589
 msgid "High"
 msgstr "Visoka"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:1590
+#: ../src/ephy-window.c:1599
 #, c-format
 msgid "Security level: %s"
 msgstr "Stopnja varnosti: %s"
 
-#: ../src/ephy-window.c:1633
+#: ../src/ephy-window.c:1642
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
@@ -4156,112 +4156,128 @@ msgstr[2] "%d skriti pojavni okni"
 msgstr[3] "%d skrita pojavna okna"
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:1928
+#: ../src/ephy-window.c:1909
 #, c-format
 msgid "Open image “%s”"
 msgstr "Odpri sliko \"%s\""
 
-#: ../src/ephy-window.c:1933
+#: ../src/ephy-window.c:1914
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Uporabi kot ozadje namizja \"%s\""
 
 # G:2 K:0 O:0
-#: ../src/ephy-window.c:1938
+#: ../src/ephy-window.c:1919
 #, c-format
 msgid "Save image “%s”"
 msgstr "Shrani sliko \"%s\""
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:1943
+#: ../src/ephy-window.c:1924
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopiraj naslov slike \"%s\""
 
-#: ../src/ephy-window.c:1956
+#: ../src/ephy-window.c:1937
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Pošlji e-pošto na naslov \"%s\""
 
 # G:1 K:0 O:0
-#: ../src/ephy-window.c:1962
+#: ../src/ephy-window.c:1943
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopiraj e-poštni naslov \"%s\""
 
-#: ../src/ephy-window.c:1974
+#: ../src/ephy-window.c:1955
 #, c-format
 msgid "Save link “%s”"
 msgstr "Shrani povezavo \"%s\""
 
-#: ../src/ephy-window.c:1980
+#: ../src/ephy-window.c:1961
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Zaznamuj povezavo \"%s\""
 
-#: ../src/ephy-window.c:1986
+#: ../src/ephy-window.c:1967
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopiraj naslov povezave \"%s\""
 
+#: ../src/pdm-dialog.c:397
+msgid "Remove all passwords?"
+msgstr "Odstrani vsa gesla?"
+
+#: ../src/pdm-dialog.c:398
+msgid "Do you really want to remove all stored passwords?"
+msgstr "Ali zares želite odstraniti vsa shranjena gesla?"
+
+#: ../src/pdm-dialog.c:401
+msgid "Remove all cookies?"
+msgstr "Odstranim vse piškotke?"
+
+#: ../src/pdm-dialog.c:402
+msgid "Do you really want to remove all stored cookies?"
+msgstr "Ali želite odstraniti vse shranjene piškotke?"
+
 # G:32 K:56 O:19
-#: ../src/pdm-dialog.c:379
+#: ../src/pdm-dialog.c:491
 msgid "Cookie Properties"
 msgstr "Lastnosti piškotka"
 
-#: ../src/pdm-dialog.c:396
+#: ../src/pdm-dialog.c:508
 msgid "Content:"
 msgstr "Vsebina:"
 
 # G:3 K:7 O:0
-#: ../src/pdm-dialog.c:412
+#: ../src/pdm-dialog.c:524
 msgid "Path:"
 msgstr "Pot:"
 
 # G:1 K:0 O:0
-#: ../src/pdm-dialog.c:428
+#: ../src/pdm-dialog.c:540
 msgid "Send for:"
 msgstr "Pošlji za:"
 
-#: ../src/pdm-dialog.c:437
+#: ../src/pdm-dialog.c:549
 msgid "Encrypted connections only"
 msgstr "Samo kodirane povezave"
 
-#: ../src/pdm-dialog.c:437
+#: ../src/pdm-dialog.c:549
 msgid "Any type of connection"
 msgstr "Katerakoli vrsta povezave"
 
 # G:1 K:0 O:0
-#: ../src/pdm-dialog.c:443
+#: ../src/pdm-dialog.c:555
 msgid "Expires:"
 msgstr "Preteče dne:"
 
 # G:12 K:1 O:7
-#: ../src/pdm-dialog.c:454
+#: ../src/pdm-dialog.c:566
 msgid "End of current session"
 msgstr "Konec trenutne seje"
 
 # G:0 K:4 O:0
-#: ../src/pdm-dialog.c:590
+#: ../src/pdm-dialog.c:699
 msgid "Domain"
 msgstr "Domena"
 
 # G:0 K:1 O:0
-#: ../src/pdm-dialog.c:602
+#: ../src/pdm-dialog.c:711
 msgid "Name"
 msgstr "Ime"
 
 # G:1 K:0 O:0
-#: ../src/pdm-dialog.c:1001
+#: ../src/pdm-dialog.c:1136
 msgid "Host"
 msgstr "Gostitelj"
 
 # G:3 K:4 O:1
-#: ../src/pdm-dialog.c:1013
+#: ../src/pdm-dialog.c:1148
 msgid "User Name"
 msgstr "Uporabniško ime"
 
-#: ../src/pdm-dialog.c:1025
+#: ../src/pdm-dialog.c:1160
 msgid "User Password"
 msgstr "Uporabnikovo geslo"
 
@@ -4368,33 +4384,33 @@ msgstr[3] "Sistemski jeziki (%s)"
 msgid "Select a Directory"
 msgstr "Izberite imenik"
 
-#: ../src/window-commands.c:731
+#: ../src/window-commands.c:719
 msgid "The GNOME Web Browser is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
 msgstr "Spletni brskalnik za GNOME je prosti program. Lahko ga razširjate in/ali spreminjate pod pogoji licence GNU General Public License kot jo je objavila organizacija Free Software Foundation; bodisi pod različico 2 ali (po vašem mnenju) katerokoli kasnejšo različico."
 
-#: ../src/window-commands.c:735
+#: ../src/window-commands.c:723
 msgid "The GNOME Web Browser is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
 msgstr "Spletni brskalnik za GNOME se razširja v upanju, da bo koristen, vendar BREZ ZAGOTOVILA KAKRŠNEGAKOLI JAMSTVA; tudi brez posrednega jamstva CENOVNE VREDNOSTI ali PRIMERNOSTI ZA DOLOČENO UPORABO. Za več podrobnosti si oglejte GNU General Public License."
 
-#: ../src/window-commands.c:739
+#: ../src/window-commands.c:727
 msgid "You should have received a copy of the GNU General Public License along with the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr "Skupaj s programom Spletni brskalnik za GNOME bi morali prejeti kopijo licence GNU General Public License. Če je niste, pišite na Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA"
 
-#: ../src/window-commands.c:787
-#: ../src/window-commands.c:803
-#: ../src/window-commands.c:814
+#: ../src/window-commands.c:775
+#: ../src/window-commands.c:791
+#: ../src/window-commands.c:802
 msgid "Contact us at:"
 msgstr "Kontaktirajte nas na:"
 
-#: ../src/window-commands.c:790
+#: ../src/window-commands.c:778
 msgid "Contributors:"
 msgstr "Avtorji prispevkov:"
 
-#: ../src/window-commands.c:793
+#: ../src/window-commands.c:781
 msgid "Past developers:"
 msgstr "Pretekli razvijalci:"
 
-#: ../src/window-commands.c:826
+#: ../src/window-commands.c:814
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4411,27 +4427,14 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:852
+#: ../src/window-commands.c:840
 msgid "translator-credits"
 msgstr ""
 "Matic Žgur <mr.zgur@gmail.com>\n"
 "Matjaž Horvat <m@owca.info>\n"
 "Tilen Travnik <tilen.travnik@guest.arnes.si>"
 
-#: ../src/window-commands.c:855
+#: ../src/window-commands.c:843
 msgid "GNOME Web Browser Website"
 msgstr "Spletna stran spletnega brskalnika za GNOME"
-
-#~ msgid ""
-#~ "Hide the menubar by default. The menubar can still be accessed using F10."
-#~ msgstr ""
-#~ "Privzeto skrije menijsko vrstico. Do menijske vrstice se še vedno lahko "
-#~ "dostopa s tipko F10."
-#~ msgid ""
-#~ "The padlock icon in the statusbar indicates whether a page is secure."
-#~ msgstr "Ikona s ključavnico v vrstici stanja pokaže, če je stran varna."
-#~ msgid "Quick Bookmark"
-#~ msgstr "Hitri zaznamek"
-#~ msgid "Quick Topic"
-#~ msgstr "Hitra tema"
 
