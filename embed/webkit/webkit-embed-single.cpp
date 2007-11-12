@@ -130,7 +130,7 @@ impl_get_backend_name (EphyEmbedSingle *esingle)
 {
   /* If you alter the return values here, remember to update
    * the docs in ephy-embed-single.c */
-  return "webkit";
+  return "WebKit";
 }
 
 static GList *

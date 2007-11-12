@@ -298,7 +298,7 @@ ephy_embed_single_open_window (EphyEmbedSingle *single,
  * for rendering pages.
  * 
  * Returns: the name of the backend. Valid returns are "gecko-1.7", 
- * "gecko-1.8" and "gecko-1.9"
+ * "gecko-1.8", "gecko-1.9" and "WebKit"
  */
 const char *
 ephy_embed_single_get_backend_name (EphyEmbedSingle *single)
