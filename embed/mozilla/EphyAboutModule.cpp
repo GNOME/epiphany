@@ -533,8 +533,9 @@ EphyAboutModule::CreateRecoverPage(nsIURI *aRecoverURI,
 	rv = NS_NewURI(getter_AddRefs (uri), url, charset.get());
 	NS_ENSURE_SUCCESS (rv, rv);
 
+	/* Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux */
 	char *secondary = g_markup_printf_escaped
-		(_("This page was loading when Epiphany closed unexpectedly."
+		(_("This page was loading when the web browser closed unexpectedly. "
 		   "This might happen again if you reload the page. If it does, please report "
 		   "the problem to the %s developers."),
 		   LSB_DISTRIBUTOR);
