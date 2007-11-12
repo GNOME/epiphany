@@ -31,7 +31,6 @@
 
 #include <webkitgtkframe.h>
 #include <webkitgtkpage.h>
-#include <webkitgtkglobal.h>
 #include <string.h>
 
 #include "webkit-embed.h"
@@ -205,7 +204,6 @@ webkit_embed_init (WebKitEmbed *embed)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-  webkit_init ();
   page = WEBKIT_PAGE (webkit_page_new ());
   embed->priv->page = page;
   gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (page));

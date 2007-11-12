@@ -23,6 +23,8 @@
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
+#include <webkitgtkglobal.h>
+
 #include "webkit-embed-single.h"
 #include "ephy-embed-single.h"
 #include "ephy-cookie-manager.h"
@@ -211,6 +213,8 @@ impl_permission_manager_test (EphyPermissionManager *manager,
 static gboolean
 impl_init (EphyEmbedSingle *esingle)
 {
+  webkit_init();
+  
   return TRUE;
 }
 
