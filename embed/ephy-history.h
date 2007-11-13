@@ -63,60 +63,63 @@ struct _EphyHistory
 
 struct _EphyHistoryClass
 {
-        GObjectClass parent_class;
+	GObjectClass parent_class;
 
 	/* Signals */
-	gboolean (* add_page)	(EphyHistory *history,
-				 const char *url,
-				 gboolean redirect,
-				 gboolean toplevel);
-	void	(* visited)	(EphyHistory *history,
-				 const char *url);
-	void	(* cleared)	(EphyHistory *history);
-
-	void	(* redirect)	(EphyHistory *history,
-				 const char *from_uri,
-				 const char *to_uri);
+	gboolean (* add_page)	 (EphyHistory *history,
+				  const char *url,
+				  gboolean redirect,
+				  gboolean toplevel);
+	void	(* visited)	 (EphyHistory *history,
+				  const char *url);
+	void	(* cleared)	 (EphyHistory *history);
+				 
+	void	(* redirect)	 (EphyHistory *history,
+				  const char *from_uri,
+				  const char *to_uri);
+	void	(* icon_updated) (EphyHistory *history,
+				  const char *address
+				  const char *icon);
 };
 
 GType		ephy_history_get_type		(void);
 
 EphyHistory    *ephy_history_new		(void);
 
-EphyNode       *ephy_history_get_hosts          (EphyHistory *gh);
+EphyNode       *ephy_history_get_hosts		(EphyHistory *gh);
 
 EphyNode       *ephy_history_get_host		(EphyHistory *gh,
 						 const char *url);
 
-EphyNode       *ephy_history_get_pages          (EphyHistory *gh);
+EphyNode       *ephy_history_get_pages		(EphyHistory *gh);
 
-EphyNode       *ephy_history_get_page           (EphyHistory *gh,
+EphyNode       *ephy_history_get_page		(EphyHistory *gh,
 						 const char *url);
 
-void            ephy_history_add_page           (EphyHistory *gh,
+void		ephy_history_add_page		(EphyHistory *gh,
 						 const char *url,
 						 gboolean redirect,
 						 gboolean toplevel);
 
-gboolean        ephy_history_is_page_visited    (EphyHistory *gh,
+gboolean	ephy_history_is_page_visited	(EphyHistory *gh,
 						 const char *url);
 
-int             ephy_history_get_page_visits    (EphyHistory *gh,
+int		ephy_history_get_page_visits	(EphyHistory *gh,
 						 const char *url);
 
-void            ephy_history_set_page_title     (EphyHistory *gh,
+void		ephy_history_set_page_title	(EphyHistory *gh,
 						 const char *url,
 						 const char *title);
 
 const char     *ephy_history_get_last_page	(EphyHistory *gh);
 
-void		ephy_history_set_icon           (EphyHistory *gh,
+void		ephy_history_set_icon		(EphyHistory *gh,
 						 const char *url,
 						 const char *icon);
 const char     *ephy_history_get_icon		(EphyHistory *gh,
 						 const char *url);
 
-void            ephy_history_clear              (EphyHistory *gh);
+void		ephy_history_clear		(EphyHistory *gh);
 
 gboolean	ephy_history_is_enabled		(EphyHistory *history);
 

@@ -517,6 +517,15 @@ redirect_cb (EphyHistory *history,
 }
 
 static void
+icon_updated_cb (EphyHistory *history,
+		 const char *address,
+		 const char *icon,
+		 EphyBookmarks *eb)
+{
+	ephy_bookmarks_set_icon (eb, address, icon);
+}
+
+static void
 ephy_setup_history_notifiers (EphyBookmarks *eb)
 {
 	EphyHistory *history;
@@ -534,6 +543,8 @@ ephy_setup_history_notifiers (EphyBookmarks *eb)
 			  G_CALLBACK (history_cleared_cb), eb);
 	g_signal_connect (history, "redirect",
 			  G_CALLBACK (redirect_cb), eb);
+	g_signal_connect (history, "icon-updated",
+			  G_CALLBACK (icon_updated_cb), eb);
 }
 
 static void

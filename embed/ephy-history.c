@@ -84,7 +84,8 @@ enum
 	VISITED,
 	CLEARED,
 	REDIRECT,
-        LAST_SIGNAL
+	ICON_UPDATED,
+	LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -222,6 +223,17 @@ ephy_history_class_init (EphyHistoryClass *klass)
                               2,
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+	signals[ICON_UPDATED] =
+		g_signal_new ("icon_updated",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (EphyHistoryClass, icon_updated),
+			      NULL, NULL,
+			      ephy_marshal_VOID__STRING_STRING,
+			      G_TYPE_NONE,
+			      2,
+			      G_TYPE_STRING, G_TYPE_STRING);
 
 	g_type_class_add_private (object_class, sizeof (EphyHistoryPrivate));
 }
@@ -965,6 +977,8 @@ ephy_history_set_icon (EphyHistory *gh,
 		ephy_node_set_property_string (host, EPHY_NODE_PAGE_PROP_ICON,
 					       icon);
 	}
+
+	g_signal_emit (gh, signals[ICON_UPDATED], 0, url, icon);
 }
 
 void
