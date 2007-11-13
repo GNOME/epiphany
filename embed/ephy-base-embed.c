@@ -1189,8 +1189,8 @@ ephy_base_embed_set_icon_address (EphyBaseEmbed *embed,
 {
   GObject *object = G_OBJECT (embed);
   EphyBaseEmbedPrivate *priv = embed->priv;
-  /*  EphyHistory *history;
-      EphyBookmarks *eb;*/
+  EphyHistory *history;
+  /*    EphyBookmarks *eb;*/
 
   g_free (priv->icon_address);
   priv->icon_address = g_strdup (address);
@@ -1203,12 +1203,9 @@ ephy_base_embed_set_icon_address (EphyBaseEmbed *embed,
   }
 
   if (priv->icon_address) {
-    /* FIXME: we need to put this somewhere inside src?/
-       history = EPHY_HISTORY
-       (ephy_embed_shell_get_global_history (embed_shell));
-       ephy_history_set_icon (history, priv->address,
-       priv->icon_address);
-
+    history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
+    ephy_history_set_icon (history, priv->address, priv->icon_address);
+       /*
        eb = ephy_shell_get_bookmarks (ephy_shell);
        ephy_bookmarks_set_icon (eb, priv->address,
        priv->icon_address);*/
