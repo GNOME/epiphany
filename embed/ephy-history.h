@@ -78,7 +78,7 @@ struct _EphyHistoryClass
 				  const char *from_uri,
 				  const char *to_uri);
 	void	(* icon_updated) (EphyHistory *history,
-				  const char *address
+				  const char *address,
 				  const char *icon);
 };
 
