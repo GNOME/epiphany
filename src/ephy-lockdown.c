@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2000, 2001, 2002, 2003, 2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2005 Christian Persch
@@ -21,6 +22,7 @@
 
 #include "config.h"
 
+#include "ephy-embed-container.h"
 #include "ephy-lockdown.h"
 #include "ephy-extension.h"
 #include "ephy-action-helper.h"
@@ -98,7 +100,7 @@ update_location_editable (EphyWindow *window,
 	if (editable == FALSE)
 	{
 		toolbar = ephy_window_get_toolbar (window);
-		embed = ephy_window_get_active_tab (window);
+		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		/* embed is NULL on startup */
 		if (embed != NULL)
 		{

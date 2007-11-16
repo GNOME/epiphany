@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2003  David Bordoley
  *  Copyright © 2003-2004 Christian Persch
@@ -26,6 +27,7 @@
 #include "ephy-marshal.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
+#include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
 
 #include <glib/gi18n.h>
@@ -169,9 +171,9 @@ tab_action_activate_cb (GtkToggleAction *action,
 
 	LOG ("tab_action_activate_cb embed=%p", embed);
 
-	if (ephy_window_get_active_tab (priv->window) != embed)
+	if (ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->window)) != embed)
 	{
-		ephy_window_jump_to_tab (priv->window, embed);
+                ephy_embed_container_jump_to_child (EPHY_EMBED_CONTAINER (priv->window), embed);
 	}
 }
 
@@ -218,7 +220,7 @@ notebook_page_added_cb (EphyNotebook *notebook,
 	gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
 
 	/* set this here too, since tab-added comes after notify::active-tab */
-	if (ephy_window_get_active_tab (priv->window) == embed)
+	if (ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->window)) == embed)
 	{
 		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
 	}
@@ -299,7 +301,7 @@ sync_active_tab (EphyWindow *window,
 	EphyEmbed *embed;
 	GtkAction *action;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	if (embed == NULL) return;
 
 	LOG ("active tab is embed %p", embed);
@@ -478,7 +480,7 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 
 	ephy_tabs_menu_clean (menu);
 
-	tabs = ephy_window_get_tabs (p->window);
+	tabs = ephy_embed_container_get_children (EPHY_EMBED_CONTAINER (p->window));
 
 	if (g_list_length (tabs) == 0) return;
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2002 Jorn Baayen
  *  Copyright © 2003, 2004 Marco Pesenti Gritti
@@ -24,6 +25,7 @@
 
 #include "ephy-session.h"
 
+#include "ephy-embed-container.h"
 #include "ephy-window.h"
 #include "ephy-shell.h"
 #include "ephy-history-window.h"
@@ -1173,7 +1175,7 @@ write_ephy_window (xmlTextWriterPtr writer,
 	const char *role;
 	int ret;
 
-	tabs = ephy_window_get_tabs (window);
+	tabs = ephy_embed_container_get_children (EPHY_EMBED_CONTAINER (window));
 	notebook = ephy_window_get_notebook (window);
 
 	/* Do not save an empty EphyWindow.
@@ -1501,7 +1503,8 @@ ephy_session_load (EphySession *session,
 				}
 			}
 
-			gtk_widget_grab_focus (GTK_WIDGET (ephy_window_get_active_tab (window)));
+			gtk_widget_grab_focus (GTK_WIDGET (ephy_embed_container_get_active_child
+                                                           (EPHY_EMBED_CONTAINER (window))));
 			gtk_widget_show (widget);
 		}
 		else if (xmlStrEqual (child->name, (const xmlChar *) "toolwindow"))
@@ -1613,18 +1616,19 @@ ephy_session_remove_window (EphySession *session,
 EphyWindow *
 ephy_session_get_active_window (EphySession *session)
 {
-	EphyWindow *window = NULL, *w;
+        EphyWindow *window = NULL;
+        EphyEmbedContainer *w;
 	GList *l;
 
 	g_return_val_if_fail (EPHY_IS_SESSION (session), NULL);
 
 	for (l = session->priv->windows; l != NULL; l = l->next)
 	{
-		w = EPHY_WINDOW (l->data);
+		w = EPHY_EMBED_CONTAINER (l->data);
 
-		if (ephy_window_get_is_popup (w) == FALSE)
+		if (ephy_embed_container_get_is_popup (w) == FALSE)
 		{
-			window = w;
+                        window = EPHY_WINDOW (w);
 			break;
 		}
 	}

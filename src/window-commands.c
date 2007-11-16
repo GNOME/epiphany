@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2000-2004 Marco Pesenti Gritti
  *
@@ -20,6 +21,7 @@
 
 #include "config.h"
 
+#include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-shell.h"
@@ -94,7 +96,8 @@ window_cmd_file_print_preview (GtkAction *action,
 {
 	EphyEmbed *embed;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child 
+          (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	ephy_embed_set_print_preview_mode (embed, TRUE);
@@ -107,7 +110,8 @@ window_cmd_file_print (GtkAction *action,
 {
 	EphyEmbed *embed;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child 
+          (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	ephy_embed_print (embed);
@@ -120,7 +124,8 @@ window_cmd_file_send_to	(GtkAction *action,
 	EphyEmbed *embed;
 	char *url, *location, *title;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child 
+          (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
 	location = gnome_vfs_escape_string (ephy_embed_get_address (embed));
@@ -177,7 +182,8 @@ window_cmd_view_stop (GtkAction *action,
 {
 	EphyEmbed *embed;
 	
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child 
+          (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
 	gtk_widget_grab_focus (GTK_WIDGET (embed));
@@ -191,7 +197,8 @@ window_cmd_view_reload (GtkAction *action,
 {
 	EphyEmbed *embed;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child 
+          (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
 	gtk_widget_grab_focus (GTK_WIDGET (embed));
@@ -217,7 +224,8 @@ window_cmd_file_bookmark_page (GtkAction *action,
 {
 	EphyEmbed *embed;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child 
+          (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
 	ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window),
@@ -275,7 +283,7 @@ window_cmd_file_save_as (GtkAction *action,
 	EphyEmbed *embed;
 	EphyEmbedPersist *persist;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
 	persist = EPHY_EMBED_PERSIST
@@ -322,7 +330,7 @@ window_cmd_file_close_window (GtkAction *action,
 		return;
 	}
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
 	g_signal_emit_by_name (notebook, "tab-close-request", embed);
@@ -375,7 +383,7 @@ window_cmd_edit_cut (GtkAction *action,
 	else
 	{
 		EphyEmbed *embed;
-		embed = ephy_window_get_active_tab (window);
+		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
 		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
@@ -397,7 +405,7 @@ window_cmd_edit_copy (GtkAction *action,
 	{
 		EphyEmbed *embed;
 
-		embed = ephy_window_get_active_tab (window);
+		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
 		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
@@ -419,7 +427,7 @@ window_cmd_edit_paste (GtkAction *action,
 	{
 		EphyEmbed *embed;
 
-		embed = ephy_window_get_active_tab (window);
+		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
 		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
@@ -441,7 +449,7 @@ window_cmd_edit_delete (GtkAction *action,
 	{
 		EphyEmbed *embed;
 
-		embed = ephy_window_get_active_tab (window);
+		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
 		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
@@ -463,7 +471,8 @@ window_cmd_edit_select_all (GtkAction *action,
 	{
 		EphyEmbed *embed;
 
-		embed = ephy_window_get_active_tab (window);
+		embed = ephy_embed_container_get_active_child 
+                  (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
 		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
@@ -602,7 +611,8 @@ window_cmd_view_page_source (GtkAction *action,
 	const char *address;
 	guint32 user_time;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child 
+          (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
 	address = ephy_embed_get_address (embed);
@@ -624,7 +634,8 @@ window_cmd_view_page_security_info (GtkAction *action,
 {
 	EphyEmbed *embed;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child 
+          (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	ephy_embed_show_page_certificate (embed);
@@ -651,7 +662,8 @@ window_cmd_edit_personal_data (GtkAction *action,
 	GnomeVFSURI *uri;
 	const char *host;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child 
+          (EPHY_EMBED_CONTAINER (window));
 	if (embed == NULL) return;
 
 	uri = gnome_vfs_uri_new (ephy_embed_get_address (embed));
@@ -943,7 +955,7 @@ window_cmd_load_location (GtkAction *action,
 		g_return_if_fail (address != NULL);
 
 		ephy_link_open (EPHY_LINK (window), address,
-			        ephy_window_get_active_tab (window),
+			        ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window)),
 				ephy_link_flags_from_current_event () | EPHY_LINK_ALLOW_FIXUP);
 	}
 }

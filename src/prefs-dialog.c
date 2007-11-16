@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 200-2003 Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2005 Christian Persch
@@ -24,6 +25,7 @@
 #include "prefs-dialog.h"
 #include "ephy-dialog.h"
 #include "ephy-prefs.h"
+#include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-session.h"
@@ -1507,7 +1509,8 @@ prefs_homepage_current_button_clicked_cb (GtkWidget *button,
 	/* can't do anything in this case */
 	if (window == NULL) return;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child 
+          (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
 	set_homepage_entry (dialog, ephy_embed_get_address (embed));

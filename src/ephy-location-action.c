@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2003, 2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004 Christian Persch
@@ -21,6 +22,7 @@
 
 #include "config.h"
 
+#include "ephy-embed-container.h"
 #include "ephy-location-action.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
@@ -285,7 +287,8 @@ get_location_cb (EphyLocationEntry *entry,
 	EphyLocationActionPrivate *priv = action->priv;
 	EphyEmbed *embed;
 	
-	embed = ephy_window_get_active_tab (priv->window);
+	embed = ephy_embed_container_get_active_child 
+          (EPHY_EMBED_CONTAINER (priv->window));
 
 	return g_strdup (ephy_embed_get_address (embed));
 }
@@ -296,7 +299,8 @@ get_title_cb (EphyLocationEntry *entry,
 {
 	EphyEmbed *embed;
 
-	embed = ephy_window_get_active_tab (action->priv->window);
+	embed = ephy_embed_container_get_active_child 
+          (EPHY_EMBED_CONTAINER (action->priv->window));
 
 	return g_strdup (ephy_embed_get_title (embed));
 }

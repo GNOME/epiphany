@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "ephy-embed-container.h"
 #include "ephy-toolbar.h"
 #include "ephy-link.h"
 #include "ephy-go-action.h"
@@ -175,7 +176,7 @@ sync_user_input_cb (EphyLocationAction *action,
 
 	if (priv->updating_address) return;
 
-	embed = ephy_window_get_active_tab (priv->window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->window));
         g_assert (EPHY_IS_EMBED (embed));
 
 	address = ephy_location_action_get_address (action);

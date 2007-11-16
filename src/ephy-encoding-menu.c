@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2002  Ricardo Fernández Pascual
  *  Copyright © 2003  Marco Pesenti Gritti
@@ -26,6 +27,7 @@
 #include "ephy-encoding-dialog.h"
 #include "ephy-encodings.h"
 #include "ephy-embed.h"
+#include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
@@ -159,7 +161,7 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	/* get most recently used encodings */
 	recent = ephy_encodings_get_recent (p->encodings);
 
-	embed = ephy_window_get_active_tab (p->window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (p->window));
 	encoding = ephy_embed_get_encoding (embed);
 	if (encoding == NULL) goto build_menu;
 
@@ -271,7 +273,7 @@ encoding_activate_cb (GtkAction *action, EphyEncodingMenu *menu)
 	name = gtk_action_get_name (GTK_ACTION (action));
 	encoding = name + strlen("Encoding");
 
-	embed = ephy_window_get_active_tab (menu->priv->window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (menu->priv->window));
 
 	ephy_embed_set_encoding (embed, encoding);
 
@@ -340,7 +342,8 @@ ephy_encoding_menu_automatic_cb (GtkAction *action, EphyEncodingMenu *menu)
 		return;
 	}
 
-	embed = ephy_window_get_active_tab (menu->priv->window);
+	embed = ephy_embed_container_get_active_child 
+          (EPHY_EMBED_CONTAINER (menu->priv->window));
 
 	/* setting "" will clear the forced encoding */
 	ephy_embed_set_encoding (embed, "");

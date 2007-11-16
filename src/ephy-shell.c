@@ -29,6 +29,7 @@
 
 #include "ephy-shell.h"
 #include "ephy-type-builtins.h"
+#include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "eel-gconf-extensions.h"
@@ -500,7 +501,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	g_assert (embed != NULL);
 	gtk_widget_show (GTK_WIDGET (embed));
 
-	ephy_window_add_tab (window, embed, position, jump_to);
+	ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, position, jump_to);
 
 	if (previous_embed != NULL)
 	{

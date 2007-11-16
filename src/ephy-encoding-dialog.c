@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2000, 2001, 2002, 2003 Marco Pesenti Gritti
  *  Copyright © 2003, 2004 Christian Persch
@@ -24,6 +25,7 @@
 #include "ephy-encoding-dialog.h"
 #include "ephy-encodings.h"
 #include "ephy-embed.h"
+#include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-shell.h"
@@ -192,7 +194,7 @@ sync_active_tab (EphyWindow *window, GParamSpec *pspec, EphyEncodingDialog *dial
 {
 	EphyEmbed *embed;
 
-	embed = ephy_window_get_active_tab (dialog->priv->window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (dialog->priv->window));
 
 	g_object_set (G_OBJECT (dialog), "embed", embed, NULL);
 }

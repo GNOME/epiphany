@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2003, 2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004 Christian Persch
@@ -26,6 +27,7 @@
 #include "ephy-window.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
+#include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-link.h"
 #include "ephy-gui.h"
@@ -143,7 +145,7 @@ activate_by_history_index (EphyNavigationAction *action,
 {
 	EphyEmbed *embed;
 
-	embed = ephy_window_get_active_tab (action->priv->window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (action->priv->window));
 	g_return_if_fail (embed != NULL);
 
 	if (ephy_gui_is_middle_click ())
@@ -203,7 +205,7 @@ activate_up_menu_item_cb (GtkWidget *menuitem,
 	EphyEmbed *embed;
 	char *url;
 
-	embed = ephy_window_get_active_tab (action->priv->window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (action->priv->window));
 	g_return_if_fail (embed != NULL);
 
 	url = g_object_get_data (G_OBJECT (menuitem), URL_DATA_KEY);
@@ -222,7 +224,7 @@ build_back_or_forward_menu (EphyNavigationAction *action)
 	int pos, count;
 	int start, end;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_val_if_fail (embed != NULL, NULL);
 
 	pos = ephy_embed_shistory_get_pos (embed);
@@ -298,7 +300,7 @@ build_up_menu (EphyNavigationAction *action)
 	GSList *list, *l;
 	char *url;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_val_if_fail (embed != NULL, NULL);
 
 	menu = GTK_MENU_SHELL (gtk_menu_new ());
@@ -402,7 +404,7 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 	EphyEmbed *embed;
 	int pos;
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
 	pos = ephy_embed_shistory_get_pos (embed);
