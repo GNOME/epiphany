@@ -520,7 +520,60 @@
   (return-type "none")
 )
 
+;; From ../../embed/ephy-embed-container.h
 
+(define-method add_child
+  (of-object "EphyEmbedContainer")
+  (c-name "ephy_embed_container_add_child")
+  (return-type "none")
+  (parameters
+    '("EphyEmbed*" "child")
+    '("gint" "position")
+    '("gboolean" "jump_to")
+  )
+)
+
+(define-method remove_child
+  (of-object "EphyEmbedContainer")
+  (c-name "ephy_embed_container_remove_child")
+  (return-type "none")
+  (parameters
+    '("EphyEmbed*" "child")
+  )
+)
+
+(define-method jump_to_child
+  (of-object "EphyEmbedContainer")
+  (c-name "ephy_embed_container_jump_to_child")
+  (return-type "none")
+  (parameters
+    '("EphyEmbed*" "child")
+  )
+)
+
+(define-method get_active_child
+  (of-object "EphyEmbedContainer")
+  (c-name "ephy_embed_container_get_active_child")
+  (return-type "EphyEmbed*")
+)
+
+(define-method get_childs
+  (of-object "EphyEmbedContainer")
+  (c-name "ephy_embed_container_get_childs")
+  (return-type "GList*")
+)
+
+(define-method get_is_popup
+  (of-object "EphyEmbedContainer")
+  (c-name "ephy_embed_container_get_is_popup")
+  (return-type "gboolean")
+)
+
+(define-method get_chrome
+  (of-object "EphyEmbedContainer")
+  (c-name "ephy_embed_container_get_chrome")
+  (return-type "EphyEmbedChrome")
+)
 
 ;; From ../../embed/ephy-embed-event.h
 
@@ -3484,35 +3537,6 @@
   (return-type "GtkWidget*")
 )
 
-(define-method add_tab
-  (of-object "EphyWindow")
-  (c-name "ephy_window_add_tab")
-  (return-type "none")
-  (parameters
-    '("EphyEmbed*" "tab")
-    '("gint" "position")
-    '("gboolean" "jump_to")
-  )
-)
-
-(define-method remove_tab
-  (of-object "EphyWindow")
-  (c-name "ephy_window_remove_tab")
-  (return-type "none")
-  (parameters
-    '("EphyEmbed*" "tab")
-  )
-)
-
-(define-method jump_to_tab
-  (of-object "EphyWindow")
-  (c-name "ephy_window_jump_to_tab")
-  (return-type "none")
-  (parameters
-    '("EphyEmbed*" "tab")
-  )
-)
-
 (define-method load_url
   (of-object "EphyWindow")
   (c-name "ephy_window_load_url")
@@ -3535,24 +3559,6 @@
   (of-object "EphyWindow")
   (c-name "ephy_window_activate_location")
   (return-type "none")
-)
-
-(define-method get_active_tab
-  (of-object "EphyWindow")
-  (c-name "ephy_window_get_active_tab")
-  (return-type "EphyEmbed*")
-)
-
-(define-method get_tabs
-  (of-object "EphyWindow")
-  (c-name "ephy_window_get_tabs")
-  (return-type "GList*")
-)
-
-(define-method get_is_popup
-  (of-object "EphyWindow")
-  (c-name "ephy_window_get_is_popup")
-  (return-type "gboolean")
 )
 
 (define-method get_is_print_preview
