@@ -485,12 +485,7 @@ ephy_window_add_child (EphyEmbedContainer *container,
 		       gint position,
 		       gboolean jump_to)
 {
-	EphyWindow *window;
-
-	g_return_val_if_fail (EPHY_IS_WINDOW (container), -1);
-	g_return_val_if_fail (EPHY_IS_EMBED (child), -1);
-
-	window = EPHY_WINDOW (container);
+	EphyWindow *window = EPHY_WINDOW (container);
 
 	g_return_val_if_fail (!window->priv->is_popup ||
 			      gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) < 1, -1);
@@ -505,9 +500,6 @@ ephy_window_set_active_child (EphyEmbedContainer *container,
 {
 	int page;
 	EphyWindow *window;
-
-	g_return_if_fail (EPHY_IS_WINDOW (container));
-	g_return_if_fail (EPHY_IS_EMBED (child));
 
 	window = EPHY_WINDOW (container);
 
@@ -571,9 +563,6 @@ ephy_window_remove_child (EphyEmbedContainer *container,
 	gboolean modified;
 	int position;
 
-	g_return_if_fail (EPHY_IS_WINDOW (container));
-	g_return_if_fail (EPHY_IS_EMBED (child));
-
 	window = EPHY_WINDOW (container);
 	priv = window->priv;
 
@@ -593,19 +582,13 @@ ephy_window_remove_child (EphyEmbedContainer *container,
 static EphyEmbed *
 ephy_window_get_active_child (EphyEmbedContainer *container)
 {
-	g_return_val_if_fail (EPHY_IS_WINDOW (container), NULL);
-
 	return EPHY_WINDOW (container)->priv->active_embed;
 }
 
 static GList *
 ephy_window_get_children (EphyEmbedContainer *container)
 {
-	EphyWindow *window;
-
-	g_return_val_if_fail (EPHY_IS_WINDOW (container), NULL);
-
-	window = EPHY_WINDOW (container);
+	EphyWindow *window = EPHY_WINDOW (container);
 
 	return gtk_container_get_children (GTK_CONTAINER (window->priv->notebook));
 }
@@ -613,16 +596,12 @@ ephy_window_get_children (EphyEmbedContainer *container)
 static gboolean
 ephy_window_get_is_popup (EphyEmbedContainer *container)
 {
-	g_return_val_if_fail (EPHY_IS_WINDOW (container), FALSE);
-
 	return EPHY_WINDOW (container)->priv->is_popup;
 }
 
 static EphyEmbedChrome
 ephy_window_get_chrome (EphyEmbedContainer *container)
 {
-	g_return_val_if_fail (EPHY_IS_WINDOW (container), FALSE);
-
 	return EPHY_WINDOW (container)->priv->chrome;
 }
 
