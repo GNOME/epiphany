@@ -43,6 +43,10 @@ ephy_embed_container_base_init (gpointer g_class)
                                                                FALSE,
                                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
                                                                G_PARAM_CONSTRUCT_ONLY));
+    g_object_interface_install_property (g_class,
+                                         g_param_spec_object ("active-child", NULL, NULL,
+                                                              GTK_TYPE_WIDGET /* Can't use an interface type here */,
+                                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   }
 }
 

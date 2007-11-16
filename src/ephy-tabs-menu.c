@@ -219,7 +219,7 @@ notebook_page_added_cb (EphyNotebook *notebook,
 	group = gtk_radio_action_get_group (GTK_RADIO_ACTION (priv->anchor_action));
 	gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
 
-	/* set this here too, since tab-added comes after notify::active-tab */
+	/* set this here too, since tab-added comes after notify::active-child */
 	if (ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->window)) == embed)
 	{
 		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
@@ -307,7 +307,7 @@ sync_active_tab (EphyWindow *window,
 	LOG ("active tab is embed %p", embed);
 
 	action = g_object_get_data (G_OBJECT (embed), DATA_KEY);
-	/* happens initially, since the ::active-tab comes before
+	/* happens initially, since the ::active-child comes before
 	* the ::tab-added signal
 	*/
 	/* FIXME that's not true with gtk+ 2.9 anymore */
@@ -339,7 +339,7 @@ ephy_tabs_menu_set_window (EphyTabsMenu *menu,
 	g_signal_connect (priv->action_group, "connect-proxy",
 			  G_CALLBACK (connect_proxy_cb), NULL);
 
-	g_signal_connect (window, "notify::active-tab",
+	g_signal_connect (window, "notify::active-child",
 			  G_CALLBACK (sync_active_tab), menu);
 
 	notebook = ephy_window_get_notebook (window);

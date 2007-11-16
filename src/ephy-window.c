@@ -463,7 +463,7 @@ struct _EphyWindowPrivate
 enum
 {
 	PROP_0,
-	PROP_ACTIVE_TAB,
+	PROP_ACTIVE_CHILD,
 	PROP_CHROME,
 	PROP_PPV_MODE,
 	PROP_SINGLE_TAB_MODE
@@ -2534,7 +2534,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 					 G_CALLBACK (ephy_window_dom_mouse_click_cb),
 					 window, 0);
 
-		g_object_notify (G_OBJECT (window), "active-tab");
+		g_object_notify (G_OBJECT (window), "active-child");
 	}
 }
 
@@ -2976,8 +2976,8 @@ ephy_window_set_property (GObject *object,
 
 	switch (prop_id)
 	{
-		case PROP_ACTIVE_TAB:
-			ephy_window_set_active_tab (window, g_value_get_object (value));
+		case PROP_ACTIVE_CHILD:
+			ephy_window_set_active_child (window, g_value_get_object (value));
 			break;
 		case PROP_CHROME:
 			ephy_window_set_chrome (window, g_value_get_flags (value));
@@ -3001,7 +3001,7 @@ ephy_window_get_property (GObject *object,
 
 	switch (prop_id)
 	{
-		case PROP_ACTIVE_TAB:
+		case PROP_ACTIVE_CHILD:
 			g_value_set_object (value, window->priv->active_embed);
 			break;
 		case PROP_CHROME:
@@ -3119,16 +3119,14 @@ ephy_window_class_init (EphyWindowClass *klass)
 	widget_class->delete_event = ephy_window_delete_event;
 
 	g_object_class_install_property (object_class,
-					 PROP_ACTIVE_TAB,
-					 g_param_spec_object ("active-tab", NULL, NULL,
-							      GTK_TYPE_WIDGET /* Can't use an interface type here */,
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	g_object_class_install_property (object_class,
 					 PROP_PPV_MODE,
 					 g_param_spec_boolean ("print-preview-mode", NULL, NULL,
 							       FALSE,
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+	g_object_class_override_property (object_class,
+					  PROP_ACTIVE_CHILD,
+					  "active-child");
 
 	g_object_class_override_property (object_class,
 					  PROP_SINGLE_TAB_MODE,

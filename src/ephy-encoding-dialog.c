@@ -217,7 +217,7 @@ sync_parent_window_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer d
 	dialog->priv->window = window;
 
 	sync_active_tab (window, NULL, dialog);
-	g_signal_connect (G_OBJECT (window), "notify::active-tab",
+	g_signal_connect (G_OBJECT (window), "notify::active-child",
 			  G_CALLBACK (sync_active_tab), dialog);
 }
 

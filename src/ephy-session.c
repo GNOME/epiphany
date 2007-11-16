@@ -1103,7 +1103,7 @@ write_active_tab (xmlTextWriterPtr writer,
 
 	current = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
     
-	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "active-tab", "%d", current);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "active-child", "%d", current);
 	return ret;
 }
     
@@ -1487,7 +1487,7 @@ ephy_session_load (EphySession *session,
 			parse_embed (child->children, window, session);
 
 			/* Set focus to something sane */
-			tmp = xmlGetProp (child, (xmlChar *) "active-tab");
+			tmp = xmlGetProp (child, (xmlChar *) "active-child");
 			if (tmp != NULL)
 			{
 				gboolean success;
