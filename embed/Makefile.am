@@ -26,6 +26,7 @@ INST_H_FILES = \
 	ephy-command-manager.h		\
 	ephy-cookie-manager.h		\
 	ephy-embed.h			\
+	ephy-embed-container.h          \
 	ephy-embed-event.h		\
 	ephy-embed-factory.h		\
 	ephy-embed-persist.h		\
@@ -50,6 +51,7 @@ libephyembed_la_SOURCES = \
 	ephy-cookie-manager.c		\
 	ephy-download.c			\
 	ephy-embed.c			\
+	ephy-embed-container.c          \
 	ephy-embed-dialog.c		\
 	ephy-embed-event.c		\
 	ephy-embed-find.c		\
