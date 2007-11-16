@@ -522,26 +522,6 @@
 
 ;; From ../../embed/ephy-embed-container.h
 
-(define-method add_child
-  (of-object "EphyEmbedContainer")
-  (c-name "ephy_embed_container_add_child")
-  (return-type "none")
-  (parameters
-    '("EphyEmbed*" "child")
-    '("gint" "position")
-    '("gboolean" "jump_to")
-  )
-)
-
-(define-method remove_child
-  (of-object "EphyEmbedContainer")
-  (c-name "ephy_embed_container_remove_child")
-  (return-type "none")
-  (parameters
-    '("EphyEmbed*" "child")
-  )
-)
-
 (define-method jump_to_child
   (of-object "EphyEmbedContainer")
   (c-name "ephy_embed_container_jump_to_child")
