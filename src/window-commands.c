@@ -101,7 +101,7 @@ window_cmd_file_print_preview (GtkAction *action,
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	ephy_embed_set_print_preview_mode (embed, TRUE);
-	ephy_window_set_print_preview (window, TRUE);
+	_ephy_window_set_print_preview (window, TRUE);
 }
 
 void

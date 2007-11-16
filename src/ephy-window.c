@@ -989,6 +989,42 @@ ephy_window_key_press_event (GtkWidget *widget,
 	return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
 }
 
+void
+_ephy_window_set_print_preview (EphyWindow *window,
+				gboolean enabled)
+{
+	EphyWindowPrivate *priv = window->priv;
+	GtkAccelGroup *accel_group;
+
+	accel_group = gtk_ui_manager_get_accel_group (window->priv->manager);
+
+	if (priv->ppv_mode == enabled) return;
+
+	priv->ppv_mode = enabled;
+
+	sync_chromes_visibility (window);
+
+	if (enabled)
+	{
+		g_return_if_fail (priv->ppview_toolbar == NULL);
+
+		ephy_find_toolbar_request_close (priv->find_toolbar);
+
+		priv->ppview_toolbar = ppview_toolbar_new (window);
+		gtk_window_remove_accel_group (GTK_WINDOW (window), accel_group);
+	}
+	else
+	{
+		g_return_if_fail (priv->ppview_toolbar != NULL);
+
+		g_object_unref (priv->ppview_toolbar);
+		priv->ppview_toolbar = NULL;
+		gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+	}
+
+	g_object_notify (G_OBJECT (window), "is-print-preview");
+}
+
 static gboolean
 ephy_window_delete_event (GtkWidget *widget,
 			  GdkEventAny *event)
@@ -1014,7 +1050,7 @@ ephy_window_delete_event (GtkWidget *widget,
 		embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
 		ephy_embed_set_print_preview_mode (embed, FALSE);
 
-		ephy_window_set_print_preview (window, FALSE);
+		_ephy_window_set_print_preview (window, FALSE);
 
 		return TRUE;
 	}
@@ -2953,17 +2989,20 @@ ephy_window_set_property (GObject *object,
 
 	switch (prop_id)
 	{
+		case PROP_PPV_MODE:
+			/* Read only */
+			break;
 		case PROP_ACTIVE_CHILD:
 			ephy_window_set_active_child (window, g_value_get_object (value));
 			break;
 		case PROP_CHROME:
 			ephy_window_set_chrome (window, g_value_get_flags (value));
 			break;
-		case PROP_PPV_MODE:
-			ephy_window_set_print_preview (window, g_value_get_boolean (value));
-			break;
 		case PROP_SINGLE_TAB_MODE:
 			ephy_window_set_is_popup (window, g_value_get_boolean (value));
+			break;
+	        default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec); 
 			break;
 	}
 }
@@ -2989,6 +3028,9 @@ ephy_window_get_property (GObject *object,
 			break;
 		case PROP_SINGLE_TAB_MODE:
 			g_value_set_boolean (value, window->priv->is_popup);
+			break;
+	        default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec); 
 			break;
 	}
 }
@@ -3095,12 +3137,6 @@ ephy_window_class_init (EphyWindowClass *klass)
 	widget_class->window_state_event = ephy_window_state_event;
 	widget_class->delete_event = ephy_window_delete_event;
 
-	g_object_class_install_property (object_class,
-					 PROP_PPV_MODE,
-					 g_param_spec_boolean ("print-preview-mode", NULL, NULL,
-							       FALSE,
-							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
 	g_object_class_override_property (object_class,
 					  PROP_ACTIVE_CHILD,
 					  "active-child");
@@ -3108,6 +3144,10 @@ ephy_window_class_init (EphyWindowClass *klass)
 	g_object_class_override_property (object_class,
 					  PROP_SINGLE_TAB_MODE,
 					  "is-popup");
+
+	g_object_class_override_property (object_class,
+					  PROP_PPV_MODE,
+					  "is-print-preview");
 
 	g_object_class_override_property (object_class,
 					  PROP_CHROME,
@@ -3493,49 +3533,6 @@ ephy_window_new_with_chrome (EphyEmbedChrome chrome,
 					  "chrome", chrome,
 					  "is-popup", is_popup,
 					  NULL));
-}
-
-/**
- * ephy_window_set_print_preview:
- * @window: an #EphyWindow
- * @enabled: %TRUE to enable print preview mode
- *
- * Sets whether the window is in print preview mode.
- **/
-void
-ephy_window_set_print_preview (EphyWindow *window,
-			       gboolean enabled)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkAccelGroup *accel_group;
-
-	accel_group = gtk_ui_manager_get_accel_group (window->priv->manager);
-
-	if (priv->ppv_mode == enabled) return;
-
-	priv->ppv_mode = enabled;
-
-	sync_chromes_visibility (window);
-
-	if (enabled)
-	{
-		g_return_if_fail (priv->ppview_toolbar == NULL);
-
-		ephy_find_toolbar_request_close (priv->find_toolbar);
-
-		priv->ppview_toolbar = ppview_toolbar_new (window);
-		gtk_window_remove_accel_group (GTK_WINDOW (window), accel_group);
-	}
-	else
-	{
-		g_return_if_fail (priv->ppview_toolbar != NULL);
-
-		g_object_unref (priv->ppview_toolbar);
-		priv->ppview_toolbar = NULL;
-		gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-	}
-
-	g_object_notify (G_OBJECT (window), "print-preview-mode");
 }
 
 /**

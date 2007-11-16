@@ -403,7 +403,7 @@ toolbar_cmd_ppv_close (GtkUIManager *merge,
           (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	ephy_window_set_print_preview (window, FALSE);
+	_ephy_window_set_print_preview (window, FALSE);
 
 	ephy_embed_set_print_preview_mode (embed, FALSE);
 }

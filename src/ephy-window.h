@@ -60,7 +60,7 @@ EphyWindow	 *ephy_window_new		  (void);
 EphyWindow	 *ephy_window_new_with_chrome	  (EphyEmbedChrome chrome,
 						   gboolean is_popup);
 
-void		  ephy_window_set_print_preview	  (EphyWindow *window,
+void		 _ephy_window_set_print_preview	  (EphyWindow *window,
 						   gboolean enabled);
 
 GObject		 *ephy_window_get_ui_manager	  (EphyWindow *window);
