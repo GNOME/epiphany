@@ -480,10 +480,10 @@ enum
 };
 
 static gint
-ephy_window_add_child (EphyEmbedContainer *container,
-		       EphyEmbed *child,
-		       gint position,
-		       gboolean jump_to)
+impl_add_child (EphyEmbedContainer *container,
+		EphyEmbed *child,
+		gint position,
+		gboolean jump_to)
 {
 	EphyWindow *window = EPHY_WINDOW (container);
 
@@ -495,8 +495,8 @@ ephy_window_add_child (EphyEmbedContainer *container,
 }
 
 static void
-ephy_window_set_active_child (EphyEmbedContainer *container,
-			      EphyEmbed *child)
+impl_set_active_child (EphyEmbedContainer *container,
+		       EphyEmbed *child)
 {
 	int page;
 	EphyWindow *window;
@@ -554,8 +554,8 @@ confirm_close_with_modified_forms (EphyWindow *window)
 }
 
 static void
-ephy_window_remove_child (EphyEmbedContainer *container,
-			  EphyEmbed *child)
+impl_remove_child (EphyEmbedContainer *container,
+		   EphyEmbed *child)
 {
 	EphyWindow *window;
 	EphyWindowPrivate *priv;
@@ -580,13 +580,13 @@ ephy_window_remove_child (EphyEmbedContainer *container,
 }
 
 static EphyEmbed *
-ephy_window_get_active_child (EphyEmbedContainer *container)
+impl_get_active_child (EphyEmbedContainer *container)
 {
 	return EPHY_WINDOW (container)->priv->active_embed;
 }
 
 static GList *
-ephy_window_get_children (EphyEmbedContainer *container)
+impl_get_children (EphyEmbedContainer *container)
 {
 	EphyWindow *window = EPHY_WINDOW (container);
 
@@ -594,13 +594,13 @@ ephy_window_get_children (EphyEmbedContainer *container)
 }
 
 static gboolean
-ephy_window_get_is_popup (EphyEmbedContainer *container)
+impl_get_is_popup (EphyEmbedContainer *container)
 {
 	return EPHY_WINDOW (container)->priv->is_popup;
 }
 
 static EphyEmbedChrome
-ephy_window_get_chrome (EphyEmbedContainer *container)
+impl_get_chrome (EphyEmbedContainer *container)
 {
 	return EPHY_WINDOW (container)->priv->chrome;
 }
@@ -608,13 +608,13 @@ ephy_window_get_chrome (EphyEmbedContainer *container)
 static void
 ephy_window_embed_container_iface_init (EphyEmbedContainerIface *iface)
 {
-	iface->add_child = ephy_window_add_child;
-	iface->set_active_child = ephy_window_set_active_child;
-	iface->remove_child = ephy_window_remove_child;
-	iface->get_active_child = ephy_window_get_active_child;
-	iface->get_children = ephy_window_get_children;
-	iface->get_is_popup = ephy_window_get_is_popup;
-	iface->get_chrome = ephy_window_get_chrome;
+	iface->add_child = impl_add_child;
+	iface->set_active_child = impl_set_active_child;
+	iface->remove_child = impl_remove_child;
+	iface->get_active_child = impl_get_active_child;
+	iface->get_children = impl_get_children;
+	iface->get_is_popup = impl_get_is_popup;
+	iface->get_chrome = impl_get_chrome;
 }
 
 static void
@@ -835,7 +835,7 @@ ephy_window_fullscreen (EphyWindow *window)
 				  G_CALLBACK (gtk_action_activate), action);
 
 	/* sync status */
-	embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
+	embed = window->priv->active_embed;
 	sync_tab_load_status (embed, NULL, window);
 	sync_tab_security (embed, NULL, window);
 
@@ -1047,7 +1047,7 @@ ephy_window_delete_event (GtkWidget *widget,
 	{
 		EphyEmbed *embed;
 
-		embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
+		embed = window->priv->active_embed;
 		ephy_embed_set_print_preview_mode (embed, FALSE);
 
 		_ephy_window_set_print_preview (window, FALSE);
@@ -1055,7 +1055,7 @@ ephy_window_delete_event (GtkWidget *widget,
 		return TRUE;
 	}
 
-	tabs = ephy_window_get_children (EPHY_EMBED_CONTAINER (window));
+	tabs = impl_get_children (EPHY_EMBED_CONTAINER (window));
 	for (l = tabs; l != NULL; l = l->next)
 	{
 		EphyEmbed *embed = (EphyEmbed *) l->data;
@@ -1074,8 +1074,8 @@ ephy_window_delete_event (GtkWidget *widget,
 	if (modified)
 	{
 		/* jump to the first tab with modified forms */
-		ephy_window_set_active_child (EPHY_EMBED_CONTAINER (window),
-						    modified_embed);
+		impl_set_active_child (EPHY_EMBED_CONTAINER (window),
+				       modified_embed);
 
 		if (confirm_close_with_modified_forms (window) == FALSE)
 		{
@@ -1144,7 +1144,7 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 	{
 		EphyEmbed *embed;
 
-		embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
+		embed = window->priv->active_embed;
 		g_return_if_fail (embed != NULL);
 
 		can_copy = ephy_command_manager_can_do_command
@@ -2206,7 +2206,7 @@ tab_size_to_cb (EphyEmbed *embed,
 	LOG ("tab_size_to_cb window %p embed %p width %d height %d", window, embed, width, height);
 
 	/* FIXME: allow sizing also for non-popup single-tab windows? */
-	if (embed != ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window)) ||
+	if (embed != priv->active_embed ||
 	    !priv->is_popup) return;
 
 	/* contrain size so that the window will be fully contained within the screen */
@@ -2592,7 +2592,7 @@ embed_modal_alert_cb (EphyEmbed *embed,
 	 * (since the alert is modal, the user won't be able to do anything
 	 * with his current window anyway :|)
 	 */
-	ephy_window_set_active_child (EPHY_EMBED_CONTAINER (window), embed);
+	impl_set_active_child (EPHY_EMBED_CONTAINER (window), embed);
 	gtk_window_present (GTK_WINDOW (window));
 
 	/* make sure the location entry shows the real URL of the tab's page */
@@ -2697,7 +2697,7 @@ show_notebook_popup_menu (GtkNotebook *notebook,
 	}
 	else
 	{
-		tab = GTK_WIDGET (ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window)));
+		tab = GTK_WIDGET (window->priv->active_embed);
 		tab_label = gtk_notebook_get_tab_label (notebook, tab);
 
 		gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
@@ -2993,7 +2993,8 @@ ephy_window_set_property (GObject *object,
 			/* Read only */
 			break;
 		case PROP_ACTIVE_CHILD:
-			ephy_window_set_active_child (window, g_value_get_object (value));
+			impl_set_active_child (EPHY_EMBED_CONTAINER (window),
+					       g_value_get_object (value));
 			break;
 		case PROP_CHROME:
 			ephy_window_set_chrome (window, g_value_get_flags (value));
@@ -3185,7 +3186,7 @@ allow_popups_notifier (GConfClient *client,
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
-	tabs = ephy_window_get_children (EPHY_EMBED_CONTAINER (window));
+	tabs = impl_get_children (EPHY_EMBED_CONTAINER (window));
 
 	for (; tabs; tabs = g_list_next (tabs))
 	{
@@ -3213,7 +3214,7 @@ ephy_window_open_link (EphyLink *link,
 
 	if (embed == NULL)
 	{
-		embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
+		embed = window->priv->active_embed;
 	}
 
 	if (flags  & (EPHY_LINK_JUMP_TO | 
@@ -3285,7 +3286,7 @@ find_toolbar_close_cb (EphyFindToolbar *toolbar,
 
 	ephy_find_toolbar_close (priv->find_toolbar);
 
-	embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
+	embed = priv->active_embed;
 	if (embed == NULL) return;
 
 	gtk_widget_grab_focus (GTK_WIDGET (embed));
@@ -3678,7 +3679,7 @@ ephy_window_show (GtkWidget *widget)
 		EphyEmbed *embed;
 		int width, height;
 
-		embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
+		embed = priv->active_embed;
 		g_return_if_fail (EPHY_IS_EMBED (embed));
 
 		ephy_tab_get_size (embed, &width, &height);
@@ -3736,7 +3737,7 @@ ephy_window_set_zoom (EphyWindow *window,
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
-	embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
+	embed = window->priv->active_embed;
 	g_return_if_fail (embed != NULL);
 
 	current_zoom = ephy_embed_get_zoom (embed);
@@ -3812,7 +3813,7 @@ ephy_window_view_popup_windows_cb (GtkAction *action,
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
-	embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
+	embed = window->priv->active_embed;
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)))
