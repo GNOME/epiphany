@@ -495,10 +495,8 @@ ephy_window_add_child (EphyEmbedContainer *container,
 	g_return_val_if_fail (!window->priv->is_popup ||
 			      gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) < 1, -1);
 
-	ephy_notebook_add_tab (EPHY_NOTEBOOK (window->priv->notebook),
-			       child, position, jump_to);
-
-	return position;
+	return ephy_notebook_add_tab (EPHY_NOTEBOOK (window->priv->notebook),
+				      child, position, jump_to);
 }
 
 static void
