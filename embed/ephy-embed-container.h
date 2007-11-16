@@ -27,15 +27,15 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_EMBED_CONTAINER		(ephy_embed_container_get_type ())
-#define EPHY_EMBED_CONTAINER(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_CONTAINER, EphyEmbedContainer))
-#define EPHY_EMBED_CONTAINER_IFACE(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_CONTAINER, EphyEmbedContainerIface))
-#define EPHY_IS_EMBED_CONTAINER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_CONTAINER))
-#define EPHY_IS_EMBED_CONTAINER_IFACE(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_CONTAINER))
-#define EPHY_EMBED_CONTAINER_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED_CONTAINER, EphyEmbedContainerIface))
+#define EPHY_TYPE_EMBED_CONTAINER               (ephy_embed_container_get_type ())
+#define EPHY_EMBED_CONTAINER(o)                 (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_CONTAINER, EphyEmbedContainer))
+#define EPHY_EMBED_CONTAINER_IFACE(k)           (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_CONTAINER, EphyEmbedContainerIface))
+#define EPHY_IS_EMBED_CONTAINER(o)              (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_CONTAINER))
+#define EPHY_IS_EMBED_CONTAINER_IFACE(k)        (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_CONTAINER))
+#define EPHY_EMBED_CONTAINER_GET_IFACE(inst)    (G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED_CONTAINER, EphyEmbedContainerIface))
 
-typedef struct _EphyEmbedContainer	EphyEmbedContainer;
-typedef struct _EphyEmbedContainerIface	EphyEmbedContainerIface;
+typedef struct _EphyEmbedContainer      EphyEmbedContainer;
+typedef struct _EphyEmbedContainerIface EphyEmbedContainerIface;
 
 struct _EphyEmbedContainerIface
 {
