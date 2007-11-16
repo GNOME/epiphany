@@ -522,9 +522,9 @@
 
 ;; From ../../embed/ephy-embed-container.h
 
-(define-method jump_to_child
+(define-method set_active_child
   (of-object "EphyEmbedContainer")
-  (c-name "ephy_embed_container_jump_to_child")
+  (c-name "ephy_embed_container_set_active_child")
   (return-type "none")
   (parameters
     '("EphyEmbed*" "child")

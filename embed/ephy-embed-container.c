@@ -87,18 +87,18 @@ ephy_embed_container_add_child (EphyEmbedContainer *container,
 }
 
 /**
- * ephy_embed_container_jump_to_child:
+ * ephy_embed_container_set_active_child:
  * @container: an #EphyEmbedContainer
  * @child: an #EphyEmbed inside @container
  *
- * Sets @child as  @container's active child.
+ * Sets @child as @container's active child.
  **/
 void
-ephy_embed_container_jump_to_child (EphyEmbedContainer *container,
-                                    EphyEmbed *child)
+ephy_embed_container_set_active_child (EphyEmbedContainer *container,
+                                       EphyEmbed *child)
 {
   EphyEmbedContainerIface *iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
-  iface->jump_to_child (container, child);
+  iface->set_active_child (container, child);
 }
 
 /**

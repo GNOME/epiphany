@@ -500,8 +500,8 @@ ephy_window_add_child (EphyEmbedContainer *container,
 }
 
 static void
-ephy_window_jump_to_child (EphyEmbedContainer *container,
-			   EphyEmbed *child)
+ephy_window_set_active_child (EphyEmbedContainer *container,
+			      EphyEmbed *child)
 {
 	int page;
 	EphyWindow *window;
@@ -630,7 +630,7 @@ static void
 ephy_window_embed_container_iface_init (EphyEmbedContainerIface *iface)
 {
 	iface->add_child = ephy_window_add_child;
-	iface->jump_to_child = ephy_window_jump_to_child;
+	iface->set_active_child = ephy_window_set_active_child;
 	iface->remove_child = ephy_window_remove_child;
 	iface->get_active_child = ephy_window_get_active_child;
 	iface->get_children = ephy_window_get_children;
@@ -1059,7 +1059,7 @@ ephy_window_delete_event (GtkWidget *widget,
 	if (modified)
 	{
 		/* jump to the first tab with modified forms */
-		ephy_window_jump_to_child (EPHY_EMBED_CONTAINER (window),
+		ephy_window_set_active_child (EPHY_EMBED_CONTAINER (window),
 						    modified_embed);
 
 		if (confirm_close_with_modified_forms (window) == FALSE)
@@ -2577,7 +2577,7 @@ embed_modal_alert_cb (EphyEmbed *embed,
 	 * (since the alert is modal, the user won't be able to do anything
 	 * with his current window anyway :|)
 	 */
-	ephy_window_jump_to_child (EPHY_EMBED_CONTAINER (window), embed);
+	ephy_window_set_active_child (EPHY_EMBED_CONTAINER (window), embed);
 	gtk_window_present (GTK_WINDOW (window));
 
 	/* make sure the location entry shows the real URL of the tab's page */

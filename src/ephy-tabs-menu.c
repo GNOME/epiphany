@@ -173,7 +173,7 @@ tab_action_activate_cb (GtkToggleAction *action,
 
 	if (ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (priv->window)) != embed)
 	{
-                ephy_embed_container_jump_to_child (EPHY_EMBED_CONTAINER (priv->window), embed);
+                ephy_embed_container_set_active_child (EPHY_EMBED_CONTAINER (priv->window), embed);
 	}
 }
 

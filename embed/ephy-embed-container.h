@@ -44,8 +44,8 @@ struct _EphyEmbedContainerIface
                       gint position,
                       gboolean jump_to);
 
-  void (* jump_to_child) (EphyEmbedContainer *container,
-                          EphyEmbed *child);
+  void (* set_active_child) (EphyEmbedContainer *container,
+                             EphyEmbed *child);
 
   void (* remove_child) (EphyEmbedContainer *container,
                          EphyEmbed *child);
@@ -66,8 +66,8 @@ void ephy_embed_container_add_child (EphyEmbedContainer *container,
                                      gint position,
                                      gboolean jump_to);
 
-void ephy_embed_container_jump_to_child (EphyEmbedContainer *container,
-                                         EphyEmbed *child);
+void ephy_embed_container_set_active_child (EphyEmbedContainer *container,
+                                            EphyEmbed *child);
 
 void ephy_embed_container_remove_child (EphyEmbedContainer *container,
                                         EphyEmbed *child);
