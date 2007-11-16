@@ -76,16 +76,18 @@ ephy_embed_container_get_type (void)
  * @container: an #EphyEmbedContainer
  * @child: an #EphyEmbed
  * @position: the position in @container's
- * @jump_to: %TRUE to switch to @container's new child after insertion
+ * @set_active: whether to set @embed as the active child of @container
+ * after insertion
  *
  * Inserts @child into @container.
+ *
  * Return value: @child's new position inside @container.
  **/
 gint
 ephy_embed_container_add_child (EphyEmbedContainer *container,
                                 EphyEmbed *child,
                                 gint position,
-                                gboolean jump_to)
+                                gboolean set_active)
 {
   EphyEmbedContainerIface *iface;
 
@@ -93,7 +95,7 @@ ephy_embed_container_add_child (EphyEmbedContainer *container,
   g_return_val_if_fail (EPHY_IS_EMBED (child), -1);
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
-  return iface->add_child (container, child, position, jump_to);
+  return iface->add_child (container, child, position, set_active);
 }
 
 /**
