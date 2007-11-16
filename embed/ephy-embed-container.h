@@ -39,7 +39,7 @@ typedef struct _EphyEmbedContainerIface EphyEmbedContainerIface;
 
 struct _EphyEmbedContainerIface
 {
-  void (* add_child) (EphyEmbedContainer *container,
+  gint (* add_child) (EphyEmbedContainer *container,
                       EphyEmbed *child,
                       gint position,
                       gboolean jump_to);
@@ -61,7 +61,7 @@ struct _EphyEmbedContainerIface
 
 GType ephy_embed_container_get_type (void);
 
-void ephy_embed_container_add_child (EphyEmbedContainer *container,
+gint ephy_embed_container_add_child (EphyEmbedContainer *container,
                                      EphyEmbed *child,
                                      gint position,
                                      gboolean jump_to);

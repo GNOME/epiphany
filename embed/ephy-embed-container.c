@@ -75,15 +75,16 @@ ephy_embed_container_get_type (void)
  * @jump_to: %TRUE to switch to @container's new child after insertion
  *
  * Inserts @child into @container.
+ * Return value: @child's new position inside @container.
  **/
-void
+gint
 ephy_embed_container_add_child (EphyEmbedContainer *container,
                                 EphyEmbed *child,
                                 gint position,
                                 gboolean jump_to)
 {
   EphyEmbedContainerIface *iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
-  iface->add_child (container, child, position, jump_to);
+  return iface->add_child (container, child, position, jump_to);
 }
 
 /**

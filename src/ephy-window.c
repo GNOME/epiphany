@@ -479,7 +479,7 @@ enum
 	SENS_FLAG_NAVIGATION	= 1 << 4
 };
 
-static void
+static gint
 ephy_window_add_child (EphyEmbedContainer *container,
 		       EphyEmbed *child,
 		       gint position,
@@ -497,6 +497,8 @@ ephy_window_add_child (EphyEmbedContainer *container,
 
 	ephy_notebook_add_tab (EPHY_NOTEBOOK (window->priv->notebook),
 			       child, position, jump_to);
+
+	return position;
 }
 
 static void
