@@ -1356,7 +1356,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 					"vscrollbar_policy", GTK_POLICY_AUTOMATIC,
 					"shadow_type", GTK_SHADOW_IN,
 					NULL);
-	gtk_paned_add1 (GTK_PANED (hpaned), scrolled_window);
+	gtk_paned_pack1 (GTK_PANED (hpaned), scrolled_window, TRUE, FALSE);
 	gtk_widget_show (scrolled_window);
 	editor->priv->sites_filter = ephy_node_filter_new ();
 	sites_view = ephy_node_view_new (node, editor->priv->sites_filter);
@@ -1405,7 +1405,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 			  editor);
 
 	vbox = gtk_vbox_new (FALSE, 0);
-	gtk_paned_add2 (GTK_PANED (hpaned), vbox);
+	gtk_paned_pack2 (GTK_PANED (hpaned), vbox, TRUE, FALSE);
 	gtk_widget_show (vbox);
 
 	gtk_box_pack_start (GTK_BOX (vbox),
