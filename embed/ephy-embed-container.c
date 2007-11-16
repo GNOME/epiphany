@@ -89,8 +89,8 @@ ephy_embed_container_add_child (EphyEmbedContainer *container,
 {
   EphyEmbedContainerIface *iface;
 
-	g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), -1);
-	g_return_val_if_fail (EPHY_IS_EMBED (child), -1);
+  g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), -1);
+  g_return_val_if_fail (EPHY_IS_EMBED (child), -1);
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
   return iface->add_child (container, child, position, jump_to);
@@ -109,8 +109,8 @@ ephy_embed_container_set_active_child (EphyEmbedContainer *container,
 {
   EphyEmbedContainerIface *iface;
 
-	g_return_if_fail (EPHY_IS_EMBED_CONTAINER (container));
-	g_return_if_fail (EPHY_IS_EMBED (child));
+  g_return_if_fail (EPHY_IS_EMBED_CONTAINER (container));
+  g_return_if_fail (EPHY_IS_EMBED (child));
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
 
@@ -130,8 +130,8 @@ ephy_embed_container_remove_child (EphyEmbedContainer *container,
 {
   EphyEmbedContainerIface *iface;
 
-	g_return_if_fail (EPHY_IS_EMBED_CONTAINER (container));
-	g_return_if_fail (EPHY_IS_EMBED (child));
+  g_return_if_fail (EPHY_IS_EMBED_CONTAINER (container));
+  g_return_if_fail (EPHY_IS_EMBED (child));
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
 
@@ -189,7 +189,7 @@ ephy_embed_container_get_is_popup (EphyEmbedContainer *container)
 {
   EphyEmbedContainerIface *iface;
 
-	g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), FALSE);
+  g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), FALSE);
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
   return iface->get_is_popup (container);
@@ -209,7 +209,7 @@ ephy_embed_container_get_chrome (EphyEmbedContainer *container)
 {
   EphyEmbedContainerIface *iface;
 
-	g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), 0);
+  g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), 0);
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
   return iface->get_chrome (container);
