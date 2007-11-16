@@ -73,17 +73,6 @@ GtkWidget        *ephy_window_get_find_toolbar    (EphyWindow *window);
 
 GtkWidget	 *ephy_window_get_statusbar	  (EphyWindow *window);
 
-void		  ephy_window_add_tab		  (EphyWindow *window,
-						   EphyEmbed *embed,
-						   gint position,
-						   gboolean jump_to);
-
-void		  ephy_window_remove_tab	  (EphyWindow *window,
-						   EphyEmbed *embed);
-
-void		  ephy_window_jump_to_tab	  (EphyWindow *window,
-						   EphyEmbed *embed);
-
 void		  ephy_window_load_url		  (EphyWindow *window,
 						   const char *url);
 
@@ -91,12 +80,6 @@ void		  ephy_window_set_zoom		  (EphyWindow *window,
 						   float zoom);
 
 void		  ephy_window_activate_location	  (EphyWindow *window);
-
-EphyEmbed	 *ephy_window_get_active_tab	  (EphyWindow *window);
-
-GList		 *ephy_window_get_tabs		  (EphyWindow *window);
-
-gboolean	  ephy_window_get_is_popup	  (EphyWindow *window);
 
 gboolean	  ephy_window_get_is_print_preview(EphyWindow *window);
 

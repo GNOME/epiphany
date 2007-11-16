@@ -29,6 +29,7 @@
 #include "ephy-state.h"
 #include "ppview-toolbar.h"
 #include "window-commands.h"
+#include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-utils.h"
@@ -79,7 +80,6 @@
 #endif
 
 static void ephy_window_class_init		(EphyWindowClass *klass);
-static void ephy_window_link_iface_init		(EphyLinkIface *iface);
 static void ephy_window_init			(EphyWindow *gs);
 static GObject *ephy_window_constructor		(GType type,
 						 guint n_construct_properties,
@@ -479,9 +479,177 @@ enum
 	SENS_FLAG_NAVIGATION	= 1 << 4
 };
 
+static void
+ephy_window_add_child (EphyEmbedContainer *container,
+		       EphyEmbed *child,
+		       gint position,
+		       gboolean jump_to)
+{
+	EphyWindow *window;
+
+	g_return_if_fail (EPHY_IS_WINDOW (container));
+	g_return_if_fail (EPHY_IS_EMBED (child));
+
+	window = EPHY_WINDOW (container);
+
+	g_return_if_fail (!window->priv->is_popup ||
+			  gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) < 1);
+
+	ephy_notebook_add_tab (EPHY_NOTEBOOK (window->priv->notebook),
+			       child, position, jump_to);
+}
+
+static void
+ephy_window_jump_to_child (EphyEmbedContainer *container,
+			   EphyEmbed *child)
+{
+	int page;
+	EphyWindow *window;
+
+	g_return_if_fail (EPHY_IS_WINDOW (container));
+	g_return_if_fail (EPHY_IS_EMBED (child));
+
+	window = EPHY_WINDOW (container);
+
+	page = gtk_notebook_page_num
+		(window->priv->notebook, GTK_WIDGET (child));
+	gtk_notebook_set_current_page
+		(window->priv->notebook, page);
+}
+
+static GtkWidget *
+construct_confirm_close_dialog (EphyWindow *window)
+{
+	GtkWidget *dialog;
+
+	dialog = gtk_message_dialog_new
+		(GTK_WINDOW (window),
+		 GTK_DIALOG_MODAL,
+		 GTK_MESSAGE_WARNING,
+		 GTK_BUTTONS_CANCEL,
+		 _("There are unsubmitted changes to form elements"));
+
+	gtk_message_dialog_format_secondary_text
+		(GTK_MESSAGE_DIALOG (dialog),
+		 _("If you close the document anyway, "
+		   "you will lose that information."));
+	
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       _("Close _Document"), GTK_RESPONSE_ACCEPT);
+
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+
+	/* FIXME gtk_window_set_title (GTK_WINDOW (dialog), _("Close Document?")); */
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
+
+	gtk_window_group_add_window (GTK_WINDOW (window)->group, GTK_WINDOW (dialog));
+
+	return dialog;
+}
+
+static gboolean
+confirm_close_with_modified_forms (EphyWindow *window)
+{
+	GtkWidget *dialog;
+	int response;
+
+	dialog = construct_confirm_close_dialog (window);
+	response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+	gtk_widget_destroy (dialog);
+
+	return response == GTK_RESPONSE_ACCEPT;
+}
+
+static void
+ephy_window_remove_child (EphyEmbedContainer *container,
+			  EphyEmbed *child)
+{
+	EphyWindow *window;
+	EphyWindowPrivate *priv;
+	GtkNotebook *notebook;
+	gboolean modified;
+	int position;
+
+	g_return_if_fail (EPHY_IS_WINDOW (container));
+	g_return_if_fail (EPHY_IS_EMBED (child));
+
+	window = EPHY_WINDOW (container);
+	priv = window->priv;
+
+	modified = ephy_embed_has_modified_forms (child);
+	if (ephy_embed_has_modified_forms (child)
+	    && confirm_close_with_modified_forms (window) == FALSE)
+	{
+		/* don't close the tab */
+		return;
+	}
+
+	notebook = GTK_NOTEBOOK (priv->notebook);
+	position = gtk_notebook_page_num (notebook, GTK_WIDGET (child));
+	gtk_notebook_remove_page (notebook, position);
+}
+
+static EphyEmbed *
+ephy_window_get_active_child (EphyEmbedContainer *container)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (container), NULL);
+
+	return EPHY_WINDOW (container)->priv->active_embed;
+}
+
+static GList *
+ephy_window_get_children (EphyEmbedContainer *container)
+{
+	EphyWindow *window;
+
+	g_return_val_if_fail (EPHY_IS_WINDOW (container), NULL);
+
+	window = EPHY_WINDOW (container);
+
+	return gtk_container_get_children (GTK_CONTAINER (window->priv->notebook));
+}
+
+static gboolean
+ephy_window_get_is_popup (EphyEmbedContainer *container)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (container), FALSE);
+
+	return EPHY_WINDOW (container)->priv->is_popup;
+}
+
+static EphyEmbedChrome
+ephy_window_get_chrome (EphyEmbedContainer *container)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (container), FALSE);
+
+	return EPHY_WINDOW (container)->priv->chrome;
+}
+
+static void
+ephy_window_embed_container_iface_init (EphyEmbedContainerIface *iface)
+{
+	iface->add_child = ephy_window_add_child;
+	iface->jump_to_child = ephy_window_jump_to_child;
+	iface->remove_child = ephy_window_remove_child;
+	iface->get_active_child = ephy_window_get_active_child;
+	iface->get_children = ephy_window_get_children;
+	iface->get_is_popup = ephy_window_get_is_popup;
+	iface->get_chrome = ephy_window_get_chrome;
+}
+
+static void
+ephy_window_link_iface_init (EphyLinkIface *iface)
+{
+	iface->open_link = ephy_window_open_link;
+}
+
 G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, GTK_TYPE_WINDOW,
 			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
-						ephy_window_link_iface_init))
+						ephy_window_link_iface_init)
+			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_CONTAINER,
+						ephy_window_embed_container_iface_init))
+
 /* FIXME: fix these! */
 static void
 ephy_tab_set_size (EphyEmbed *embed,
@@ -688,7 +856,7 @@ ephy_window_fullscreen (EphyWindow *window)
 				  G_CALLBACK (gtk_action_activate), action);
 
 	/* sync status */
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
 	sync_tab_load_status (embed, NULL, window);
 	sync_tab_security (embed, NULL, window);
 
@@ -718,50 +886,6 @@ ephy_window_unfullscreen (EphyWindow *window)
 		 	ephy_shell_get_toolbars_model (ephy_shell, FALSE)));
 
 	sync_chromes_visibility (window);
-}
-
-static GtkWidget *
-construct_confirm_close_dialog (EphyWindow *window)
-{
-	GtkWidget *dialog;
-
-	dialog = gtk_message_dialog_new
-		(GTK_WINDOW (window),
-		 GTK_DIALOG_MODAL,
-		 GTK_MESSAGE_WARNING,
-		 GTK_BUTTONS_CANCEL,
-		 _("There are unsubmitted changes to form elements"));
-
-	gtk_message_dialog_format_secondary_text
-		(GTK_MESSAGE_DIALOG (dialog),
-		 _("If you close the document anyway, "
-		   "you will lose that information."));
-	
-	gtk_dialog_add_button (GTK_DIALOG (dialog),
-			       _("Close _Document"), GTK_RESPONSE_ACCEPT);
-
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-
-	/* FIXME gtk_window_set_title (GTK_WINDOW (dialog), _("Close Document?")); */
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
-
-	gtk_window_group_add_window (GTK_WINDOW (window)->group, GTK_WINDOW (dialog));
-
-	return dialog;
-}
-
-static gboolean
-confirm_close_with_modified_forms (EphyWindow *window)
-{
-	GtkWidget *dialog;
-	int response;
-
-	dialog = construct_confirm_close_dialog (window);
-	response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-	gtk_widget_destroy (dialog);
-
-	return response == GTK_RESPONSE_ACCEPT;
 }
 
 static void
@@ -908,7 +1032,7 @@ ephy_window_delete_event (GtkWidget *widget,
 	{
 		EphyEmbed *embed;
 
-		embed = ephy_window_get_active_tab (window);
+		embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
 		ephy_embed_set_print_preview_mode (embed, FALSE);
 
 		ephy_window_set_print_preview (window, FALSE);
@@ -916,7 +1040,7 @@ ephy_window_delete_event (GtkWidget *widget,
 		return TRUE;
 	}
 
-	tabs = ephy_window_get_tabs (window);
+	tabs = ephy_window_get_children (EPHY_EMBED_CONTAINER (window));
 	for (l = tabs; l != NULL; l = l->next)
 	{
 		EphyEmbed *embed = (EphyEmbed *) l->data;
@@ -935,7 +1059,8 @@ ephy_window_delete_event (GtkWidget *widget,
 	if (modified)
 	{
 		/* jump to the first tab with modified forms */
-		ephy_window_jump_to_tab (window, modified_embed);
+		ephy_window_jump_to_child (EPHY_EMBED_CONTAINER (window),
+						    modified_embed);
 
 		if (confirm_close_with_modified_forms (window) == FALSE)
 		{
@@ -1004,7 +1129,7 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 	{
 		EphyEmbed *embed;
 
-		embed = ephy_window_get_active_tab (window);
+		embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (embed != NULL);
 
 		can_copy = ephy_command_manager_can_do_command
@@ -2066,7 +2191,8 @@ tab_size_to_cb (EphyEmbed *embed,
 	LOG ("tab_size_to_cb window %p embed %p width %d height %d", window, embed, width, height);
 
 	/* FIXME: allow sizing also for non-popup single-tab windows? */
-	if (embed != ephy_window_get_active_tab (window) || !priv->is_popup) return;
+	if (embed != ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window)) ||
+	    !priv->is_popup) return;
 
 	/* contrain size so that the window will be fully contained within the screen */
 	screen = gtk_widget_get_screen (widget);
@@ -2451,7 +2577,7 @@ embed_modal_alert_cb (EphyEmbed *embed,
 	 * (since the alert is modal, the user won't be able to do anything
 	 * with his current window anyway :|)
 	 */
-	ephy_window_jump_to_tab (window, embed);
+	ephy_window_jump_to_child (EPHY_EMBED_CONTAINER (window), embed);
 	gtk_window_present (GTK_WINDOW (window));
 
 	/* make sure the location entry shows the real URL of the tab's page */
@@ -2556,7 +2682,7 @@ show_notebook_popup_menu (GtkNotebook *notebook,
 	}
 	else
 	{
-		tab = GTK_WIDGET (ephy_window_get_active_tab (window));
+		tab = GTK_WIDGET (ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window)));
 		tab_label = gtk_notebook_get_tab_label (notebook, tab);
 
 		gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
@@ -2972,12 +3098,6 @@ ephy_window_state_event (GtkWidget *widget,
 }
 
 static void
-ephy_window_link_iface_init (EphyLinkIface *iface)
-{
-	iface->open_link = ephy_window_open_link;
-}
-
-static void
 ephy_window_class_init (EphyWindowClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -3003,25 +3123,18 @@ ephy_window_class_init (EphyWindowClass *klass)
 							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,
-					 PROP_CHROME,
-					 g_param_spec_flags ("chrome", NULL, NULL,
-							     EPHY_TYPE_EMBED_CHROME,
-							     EPHY_EMBED_CHROME_ALL,
-							     G_PARAM_CONSTRUCT_ONLY |
-							     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	g_object_class_install_property (object_class,
 					 PROP_PPV_MODE,
 					 g_param_spec_boolean ("print-preview-mode", NULL, NULL,
 							       FALSE,
 							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-	g_object_class_install_property (object_class,
-					 PROP_SINGLE_TAB_MODE,
-					 g_param_spec_boolean ("is-popup", NULL, NULL,
-							       FALSE,
-							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-							       G_PARAM_CONSTRUCT_ONLY));
+	g_object_class_override_property (object_class,
+					  PROP_SINGLE_TAB_MODE,
+					  "is-popup");
+
+	g_object_class_override_property (object_class,
+					  PROP_CHROME,
+					  "chrome");
 
 	g_type_class_add_private (object_class, sizeof (EphyWindowPrivate));
 }
@@ -3055,7 +3168,7 @@ allow_popups_notifier (GConfClient *client,
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
-	tabs = ephy_window_get_tabs (window);
+	tabs = ephy_window_get_children (EPHY_EMBED_CONTAINER (window));
 
 	for (; tabs; tabs = g_list_next (tabs))
 	{
@@ -3083,7 +3196,7 @@ ephy_window_open_link (EphyLink *link,
 
 	if (embed == NULL)
 	{
-		embed = ephy_window_get_active_tab (window);
+		embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
 	}
 
 	if (flags  & (EPHY_LINK_JUMP_TO | 
@@ -3155,7 +3268,7 @@ find_toolbar_close_cb (EphyFindToolbar *toolbar,
 
 	ephy_find_toolbar_close (priv->find_toolbar);
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
 	if (embed == NULL) return;
 
 	gtk_widget_grab_focus (GTK_WIDGET (embed));
@@ -3528,49 +3641,6 @@ ephy_window_get_statusbar (EphyWindow *window)
 	return GTK_WIDGET (window->priv->statusbar);
 }
 
-/**
- * ephy_window_add_tab:
- * @window: an #EphyWindow
- * @tab: an #EphyEmbed
- * @position: the position in @window's #GtkNotebook
- * @jump_to: %TRUE to switch to @tab's new notebook page after insertion
- *
- * Inserts @tab into @window.
- **/
-void
-ephy_window_add_tab (EphyWindow *window,
-		     EphyEmbed *embed,
-		     gint position,
-		     gboolean jump_to)
-{
-	g_return_if_fail (EPHY_IS_WINDOW (window));
-	g_return_if_fail (EPHY_IS_EMBED (embed));
-	g_return_if_fail (!window->priv->is_popup ||
-			  gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) < 1);
-
-	ephy_notebook_add_tab (EPHY_NOTEBOOK (window->priv->notebook),
-			       embed, position, jump_to);
-}
-
-/**
- * ephy_window_jump_to_tab:
- * @window: an #EphyWindow
- * @tab: an #EphyEmbed inside @window
- *
- * Switches @window's #GtkNotebook to open @tab as its current page.
- **/
-void
-ephy_window_jump_to_tab (EphyWindow *window,
-			 EphyEmbed *embed)
-{
-	int page;
-
-	page = gtk_notebook_page_num
-		(window->priv->notebook, GTK_WIDGET (embed));
-	gtk_notebook_set_current_page
-		(window->priv->notebook, page);
-}
-
 static EphyEmbed *
 real_get_active_tab (EphyWindow *window, int page_num)
 {
@@ -3585,38 +3655,6 @@ real_get_active_tab (EphyWindow *window, int page_num)
 	g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
 
 	return EPHY_EMBED (embed);
-}
-
-/**
- * ephy_window_remove_tab:
- * @window: an #EphyWindow
- * @tab: an #EphyEmbed
- *
- * Removes @tab from @window.
- **/
-void
-ephy_window_remove_tab (EphyWindow *window,
-			EphyEmbed *embed)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkNotebook *notebook;
-	gboolean modified;
-	int position;
-
-	g_return_if_fail (EPHY_IS_WINDOW (window));
-	g_return_if_fail (EPHY_IS_EMBED (embed));
-
-	modified = ephy_embed_has_modified_forms (embed);
-	if (ephy_embed_has_modified_forms (embed)
-	    && confirm_close_with_modified_forms (window) == FALSE)
-	{
-		/* don't close the tab */
-		return;
-	}
-
-	notebook = GTK_NOTEBOOK (priv->notebook);
-	position = gtk_notebook_page_num (notebook, GTK_WIDGET (embed));
-	gtk_notebook_remove_page (notebook, position);
 }
 
 /**
@@ -3666,7 +3704,7 @@ ephy_window_show (GtkWidget *widget)
 		EphyEmbed *embed;
 		int width, height;
 
-		embed = ephy_window_get_active_tab (EPHY_WINDOW (window));
+		embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
 		g_return_if_fail (EPHY_IS_EMBED (embed));
 
 		ephy_tab_get_size (embed, &width, &height);
@@ -3680,38 +3718,6 @@ ephy_window_show (GtkWidget *widget)
 	}
 
 	GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
-}
-
-/**
- * ephy_window_get_active_tab:
- * @window: an #EphyWindow
- *
- * Returns @window's active #EphyEmbed.
- *
- * Return value: @window's active tab
- **/
-EphyEmbed *
-ephy_window_get_active_tab (EphyWindow *window)
-{
-	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
-
-	return window->priv->active_embed;
-}
-
-/**
- * ephy_window_get_tabs:
- * @window: a #EphyWindow
- *
- * Returns the list of #EphyEmbed:s in the window.
- *
- * Return value: a newly-allocated list of #EphyEmbed:s
- */
-GList *
-ephy_window_get_tabs (EphyWindow *window)
-{
-	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
-
-	return gtk_container_get_children (GTK_CONTAINER (window->priv->notebook));
 }
 
 static void
@@ -3756,7 +3762,7 @@ ephy_window_set_zoom (EphyWindow *window,
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
 	current_zoom = ephy_embed_get_zoom (embed);
@@ -3832,7 +3838,7 @@ ephy_window_view_popup_windows_cb (GtkAction *action,
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
-	embed = ephy_window_get_active_tab (window);
+	embed = ephy_window_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)))
@@ -3845,22 +3851,6 @@ ephy_window_view_popup_windows_cb (GtkAction *action,
 	}
 
 	g_object_set (G_OBJECT (embed), "popups-allowed", allow, NULL);
-}
-
-/**
- * ephy_window_get_is_popup:
- * @window: an #EphyWindow
- *
- * Returns whether this window is a popup window.
- *
- * Return value: %TRUE if it is a popup window
- **/
-gboolean
-ephy_window_get_is_popup (EphyWindow *window)
-{
-	g_return_val_if_fail (EPHY_IS_WINDOW (window), FALSE);
-
-	return window->priv->is_popup;
 }
 
 /**
