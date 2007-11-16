@@ -487,13 +487,13 @@ ephy_window_add_child (EphyEmbedContainer *container,
 {
 	EphyWindow *window;
 
-	g_return_if_fail (EPHY_IS_WINDOW (container));
-	g_return_if_fail (EPHY_IS_EMBED (child));
+	g_return_val_if_fail (EPHY_IS_WINDOW (container), -1);
+	g_return_val_if_fail (EPHY_IS_EMBED (child), -1);
 
 	window = EPHY_WINDOW (container);
 
-	g_return_if_fail (!window->priv->is_popup ||
-			  gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) < 1);
+	g_return_val_if_fail (!window->priv->is_popup ||
+			      gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) < 1, -1);
 
 	ephy_notebook_add_tab (EPHY_NOTEBOOK (window->priv->notebook),
 			       child, position, jump_to);
