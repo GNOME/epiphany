@@ -479,46 +479,9 @@ enum
 	SENS_FLAG_NAVIGATION	= 1 << 4
 };
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_window_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyWindowClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_window_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyWindow),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_window_init
-		};
-		const GInterfaceInfo link_info = 
-		{
-			(GInterfaceInitFunc) ephy_window_link_iface_init,
-			NULL,
-			NULL
-		};
-
-		type = g_type_register_static (GTK_TYPE_WINDOW,
-					       "EphyWindow",
-					       &our_info, 0);
-
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_LINK,
-					     &link_info);
-	}
-
-	return type;
-}
-
+G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, GTK_TYPE_WINDOW,
+			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
+						ephy_window_link_iface_init))
 /* FIXME: fix these! */
 static void
 ephy_tab_set_size (EphyEmbed *embed,
@@ -897,7 +860,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 	/* Don't activate menubar in ppv mode, or in lockdown mode */
 	if (priv->ppv_mode || eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
 	{
-		return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
+		return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
 	}
 
 	/* Show and activate the menubar, if it isn't visible */
@@ -920,7 +883,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 		}
 	}
 
-	return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
+	return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
 }
 
 static gboolean
@@ -985,9 +948,9 @@ ephy_window_delete_event (GtkWidget *widget,
 	gtk_widget_hide (widget);
 
 	/* proceed with window close */
-	if (GTK_WIDGET_CLASS (parent_class)->delete_event)
+	if (GTK_WIDGET_CLASS (ephy_window_parent_class)->delete_event)
 	{
-		return GTK_WIDGET_CLASS (parent_class)->delete_event (widget, event);
+		return GTK_WIDGET_CLASS (ephy_window_parent_class)->delete_event (widget, event);
 	}
 
 	return FALSE;
@@ -2872,7 +2835,7 @@ ephy_window_dispose (GObject *object)
 
 	destroy_fullscreen_popup (window);
 
-	G_OBJECT_CLASS (parent_class)->dispose (object);
+	G_OBJECT_CLASS (ephy_window_parent_class)->dispose (object);
 }
 
 static void
@@ -2937,7 +2900,7 @@ ephy_window_focus_in_event (GtkWidget *widget,
 		gtk_widget_show (priv->fullscreen_popup);
 	}
 
-	return GTK_WIDGET_CLASS (parent_class)->focus_in_event (widget, event);
+	return GTK_WIDGET_CLASS (ephy_window_parent_class)->focus_in_event (widget, event);
 }
 
 static gboolean
@@ -2952,7 +2915,7 @@ ephy_window_focus_out_event (GtkWidget *widget,
 		gtk_widget_hide (priv->fullscreen_popup);
 	}
 
-	return GTK_WIDGET_CLASS (parent_class)->focus_out_event (widget, event);
+	return GTK_WIDGET_CLASS (ephy_window_parent_class)->focus_out_event (widget, event);
 }
 
 static gboolean
@@ -2963,7 +2926,7 @@ ephy_window_state_event (GtkWidget *widget,
 	EphyWindowPrivate *priv = window->priv;
 	gboolean (* window_state_event) (GtkWidget *, GdkEventWindowState *);
 
-	window_state_event = GTK_WIDGET_CLASS (parent_class)->window_state_event;
+	window_state_event = GTK_WIDGET_CLASS (ephy_window_parent_class)->window_state_event;
 	if (window_state_event)
 	{
 		window_state_event (widget, event);
@@ -3019,8 +2982,6 @@ ephy_window_class_init (EphyWindowClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->constructor = ephy_window_constructor;
 	object_class->dispose = ephy_window_dispose;
@@ -3235,8 +3196,8 @@ ephy_window_constructor (GType type,
 	GError *error = NULL;
 	guint settings_connection;
 
-	object = parent_class->constructor (type, n_construct_properties,
-					    construct_params);
+	object = G_OBJECT_CLASS (ephy_window_parent_class)->constructor
+		(type, n_construct_properties, construct_params);
 
 	window = EPHY_WINDOW (object);
 
@@ -3400,7 +3361,7 @@ ephy_window_finalize (GObject *object)
 
 	g_hash_table_destroy (priv->tabs_to_remove);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
 	LOG ("EphyWindow finalised %p", object);
 
@@ -3718,7 +3679,7 @@ ephy_window_show (GtkWidget *widget)
 		priv->has_size = TRUE;
 	}
 
-	GTK_WIDGET_CLASS (parent_class)->show (widget);
+	GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
 }
 
 /**
