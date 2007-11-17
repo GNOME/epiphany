@@ -27,18 +27,23 @@
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <string.h>
 
+#include "eel-gconf-extensions.h"
+#include "ephy-base-embed.h"
 #include "ephy-debug.h"
 #include "ephy-embed.h"
+#include "ephy-embed-container.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-embed-utils.h"
+#include "ephy-permission-manager.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
 #include "ephy-string.h"
 #include "ephy-zoom.h"
 
-#include "ephy-base-embed.h"
-
+#define MAX_HIDDEN_POPUPS       5
 #define MAX_TITLE_LENGTH        512 /* characters */
 #define RELOAD_DELAY            250 /* ms */
 #define RELOAD_DELAY_MAX_TICKS  40  /* RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s */
@@ -78,13 +83,11 @@ struct _EphyBaseEmbedPrivate {
   GSList *shown_popups;
 };
 
-#if 0
 typedef struct {
   char *url;
   char *name;
   char *features;
 } PopupInfo;
-#endif
 
 enum {
   PROP_0,
@@ -269,6 +272,177 @@ impl_get_link_message (EphyEmbed *embed)
 }
 
 static void
+popups_manager_free_info (PopupInfo *popup)
+{
+  g_free (popup->url);
+  g_free (popup->name);
+  g_free (popup->features);
+  g_slice_free (PopupInfo, popup);
+}
+
+static void
+popups_manager_show (PopupInfo *popup,
+                     EphyBaseEmbed *embed)
+{
+  EphyEmbedSingle *single;
+
+  /* Only show popup with non NULL url */
+  if (popup->url != NULL) {
+    single = EPHY_EMBED_SINGLE
+             (ephy_embed_shell_get_embed_single (embed_shell));
+
+    ephy_embed_single_open_window (single, EPHY_EMBED (embed), popup->url,
+                                   popup->name, popup->features);
+  }
+  popups_manager_free_info (popup);
+}
+
+static void
+popups_manager_show_all (EphyBaseEmbed *embed)
+{
+  LOG ("popup_blocker_show_all: embed %p", embed);
+
+  g_slist_foreach (embed->priv->hidden_popups,
+                   (GFunc)popups_manager_show, embed);
+  g_slist_free (embed->priv->hidden_popups);
+  embed->priv->hidden_popups = NULL;
+
+  g_object_notify (G_OBJECT (embed), "hidden-popup-count");
+}
+
+static char *
+popups_manager_new_window_info (EphyEmbedContainer *container)
+{
+  EphyEmbed *embed;
+  EphyEmbedChrome chrome;
+  gboolean is_popup;
+  char *features;
+
+  g_object_get (container, "chrome", &chrome, "is-popup", &is_popup, NULL);
+  g_return_val_if_fail (is_popup, g_strdup (""));
+
+  embed = ephy_embed_container_get_active_child (container);
+  g_return_val_if_fail (embed != NULL, g_strdup (""));
+
+  features = g_strdup_printf
+             ("width=%d,height=%d,menubar=%d,status=%d,toolbar=%d",
+              GTK_WIDGET (embed)->allocation.width,
+              GTK_WIDGET (embed)->allocation.height,
+              (chrome & EPHY_EMBED_CHROME_MENUBAR) > 0,
+              (chrome & EPHY_EMBED_CHROME_STATUSBAR) > 0,
+              (chrome & EPHY_EMBED_CHROME_TOOLBAR) > 0);
+
+  return features;
+}
+
+static guint
+popup_blocker_n_hidden (EphyBaseEmbed *embed)
+{
+  return g_slist_length (embed->priv->hidden_popups);
+}
+
+static void
+popups_manager_add (EphyBaseEmbed *embed,
+                    const char *url,
+                    const char *name,
+                    const char *features)
+{
+  EphyBaseEmbedPrivate *priv = embed->priv;
+  PopupInfo *popup;
+
+  LOG ("popups_manager_add: embed %p, url %s, features %s",
+       embed, url, features);
+
+  popup = g_slice_new (PopupInfo);
+
+  popup->url = g_strdup (url);
+  popup->name = g_strdup (name);
+  popup->features = g_strdup (features);
+
+  priv->hidden_popups = g_slist_prepend (priv->hidden_popups, popup);
+
+  if (popup_blocker_n_hidden (embed) > MAX_HIDDEN_POPUPS) {/* bug #160863 */
+    /* Remove the oldest popup */
+    GSList *l = embed->priv->hidden_popups;
+
+    while (l->next->next != NULL) {
+      l = l->next;
+    }
+
+    popup = (PopupInfo *)l->next->data;
+    popups_manager_free_info (popup);
+
+    l->next = NULL;
+  } else {
+    g_object_notify (G_OBJECT (embed), "hidden-popup-count");
+  }
+}
+
+static void
+popups_manager_hide (EphyEmbedContainer *container,
+                     EphyBaseEmbed *parent_embed)
+{
+  EphyEmbed *embed;
+  char *location;
+  char *features;
+
+  embed = ephy_embed_container_get_active_child (container);
+  g_return_if_fail (EPHY_IS_EMBED (embed));
+
+  location = ephy_embed_get_location (embed, TRUE);
+  if (location == NULL) return;
+
+  features = popups_manager_new_window_info (container);
+
+  popups_manager_add (parent_embed, location, "" /* FIXME? maybe _blank? */, features);
+
+  gtk_widget_destroy (GTK_WIDGET (container));
+
+  g_free (location);
+  g_free (features);
+}
+
+static void
+popups_manager_hide_all (EphyBaseEmbed *embed)
+{
+  LOG ("popup_blocker_hide_all: embed %p", embed);
+
+  g_slist_foreach (embed->priv->shown_popups,
+                   (GFunc)popups_manager_hide, embed);
+  g_slist_free (embed->priv->shown_popups);
+  embed->priv->shown_popups = NULL;
+}
+
+static void
+ephy_base_embed_set_popups_allowed (EphyBaseEmbed *embed,
+                                    gboolean allowed)
+{
+  char *location;
+  EphyPermissionManager *manager;
+  EphyPermission permission;
+
+  location = ephy_embed_get_location (EPHY_EMBED (embed), TRUE);
+  g_return_if_fail (location != NULL);
+
+  manager = EPHY_PERMISSION_MANAGER
+            (ephy_embed_shell_get_embed_single (embed_shell));
+  g_return_if_fail (EPHY_IS_PERMISSION_MANAGER (manager));
+
+  permission = allowed ? EPHY_PERMISSION_ALLOWED
+               : EPHY_PERMISSION_DENIED;
+
+  ephy_permission_manager_add_permission (manager, location, EPT_POPUP, permission);
+
+  if (allowed) {
+    popups_manager_show_all (embed);
+  } else {
+    popups_manager_hide_all (embed);
+  }
+
+  g_free (location);
+}
+
+static void
 ephy_base_embed_set_property (GObject *object,
                               guint prop_id,
                               const GValue *value,
@@ -283,7 +457,7 @@ ephy_base_embed_set_property (GObject *object,
                               EPHY_EMBED_ADDRESS_EXPIRE_NOW);
       break;
     case PROP_POPUPS_ALLOWED:
-      //ephy_base_embed_set_popups_allowed (MOZILLA_EMBED (object), g_value_get_boolean (value));
+      ephy_base_embed_set_popups_allowed (EPHY_BASE_EMBED (object), g_value_get_boolean (value));
       break;
     case PROP_ADDRESS:
     case PROP_TITLE:
@@ -304,6 +478,46 @@ ephy_base_embed_set_property (GObject *object,
   }
 }
 
+static gboolean
+ephy_base_embed_get_popups_allowed (EphyBaseEmbed *embed)
+{
+  EphyPermissionManager *permission_manager;
+  EphyPermission response;
+  char *location;
+  gboolean allow;
+
+  permission_manager = EPHY_PERMISSION_MANAGER
+                       (ephy_embed_shell_get_embed_single (embed_shell));
+  g_return_val_if_fail (EPHY_IS_PERMISSION_MANAGER (permission_manager),
+                        FALSE);
+
+  location = ephy_embed_get_location (EPHY_EMBED (embed), TRUE);
+  if (location == NULL) return FALSE;/* FALSE, TRUE… same thing */
+
+  response = ephy_permission_manager_test_permission
+             (permission_manager, location, EPT_POPUP);
+
+  switch (response) {
+    case EPHY_PERMISSION_ALLOWED:
+      allow = TRUE;
+      break;
+    case EPHY_PERMISSION_DENIED:
+      allow = FALSE;
+      break;
+    case EPHY_PERMISSION_DEFAULT:
+    default:
+      allow = eel_gconf_get_boolean
+              (CONF_SECURITY_ALLOW_POPUPS);
+      break;
+  }
+
+  g_free (location);
+
+  LOG ("ephy_base_embed_get_popups_allowed: embed %p, allowed: %d", embed, allow);
+
+  return allow;
+}
+
 static void
 ephy_base_embed_get_property (GObject *object,
                               guint prop_id,
@@ -320,8 +534,8 @@ ephy_base_embed_get_property (GObject *object,
       g_value_set_enum (value, priv->document_type);
       break;
     case PROP_HIDDEN_POPUP_COUNT:
-      g_value_set_int (value, 0);
-      //g_value_set_int (value, popup_blocker_n_hidden (embed));
+      g_value_set_int (value, popup_blocker_n_hidden
+                       (EPHY_BASE_EMBED (object)));
       break;
     case PROP_ICON:
       g_value_set_object (value, priv->icon);
@@ -342,8 +556,8 @@ ephy_base_embed_get_property (GObject *object,
       g_value_set_flags (value, priv->nav_flags);
       break;
     case PROP_POPUPS_ALLOWED:
-      g_value_set_boolean (value, FALSE);
-      //g_value_set_boolean (value, mozilla_embed_get_popups_allowed (embed));
+      g_value_set_boolean (value, ephy_base_embed_get_popups_allowed
+                           (EPHY_BASE_EMBED (object)));
       break;
     case PROP_SECURITY:
       g_value_set_enum (value, priv->security_level);
@@ -573,6 +787,80 @@ ge_favicon_cb (EphyEmbed *membed,
   ephy_base_embed_set_icon_address (bembed, address);
 }
 
+static gboolean
+popups_manager_remove_window (EphyBaseEmbed *embed,
+                              EphyEmbedContainer *container)
+{
+  embed->priv->shown_popups = g_slist_remove (embed->priv->shown_popups,
+                                              container);
+
+  return FALSE;
+}
+
+static void
+popups_manager_add_window (EphyBaseEmbed *embed,
+                           EphyEmbedContainer *container)
+{
+  LOG ("popups_manager_add_window: embed %p, container %p", embed, container);
+
+  embed->priv->shown_popups = g_slist_prepend
+                              (embed->priv->shown_popups, container);
+
+  g_signal_connect_swapped (container, "destroy",
+                            G_CALLBACK (popups_manager_remove_window),
+                            embed);
+}
+
+static void
+ge_new_window_cb (EphyEmbed *embed,
+                  EphyEmbed *new_embed,
+                  EphyBaseEmbed *bembed)
+{
+  EphyEmbedContainer *container;
+
+  g_return_if_fail (new_embed != NULL);
+
+  container = EPHY_EMBED_CONTAINER (gtk_widget_get_toplevel (GTK_WIDGET (new_embed)));
+  g_return_if_fail (container != NULL || !GTK_WIDGET_TOPLEVEL (container));
+
+  popups_manager_add_window (bembed, container);
+}
+
+static void
+disconnect_popup (EphyEmbedContainer *container,
+                  EphyBaseEmbed *embed)
+{
+  g_signal_handlers_disconnect_by_func
+  (container, G_CALLBACK (popups_manager_remove_window), embed);
+}
+
+void
+ephy_base_embed_popups_manager_reset (EphyBaseEmbed *embed)
+{
+  g_slist_foreach (embed->priv->hidden_popups,
+                   (GFunc)popups_manager_free_info, NULL);
+  g_slist_free (embed->priv->hidden_popups);
+  embed->priv->hidden_popups = NULL;
+
+  g_slist_foreach (embed->priv->shown_popups,
+                   (GFunc)disconnect_popup, embed);
+  g_slist_free (embed->priv->shown_popups);
+  embed->priv->shown_popups = NULL;
+
+  g_object_notify (G_OBJECT (embed), "hidden-popup-count");
+  g_object_notify (G_OBJECT (embed), "popups-allowed");
+}
+
+static void
+ge_popup_blocked_cb (EphyEmbed *embed,
+                     const char *url,
+                     const char *name,
+                     const char *features,
+                     EphyBaseEmbed *bembed)
+{
+  popups_manager_add (bembed, url, name, features);
+}
+
 static void
 ephy_base_embed_init (EphyBaseEmbed *self)
 {
@@ -591,6 +879,14 @@ ephy_base_embed_init (EphyBaseEmbed *self)
 
   g_signal_connect_object (self, "ge_favicon",
                            G_CALLBACK (ge_favicon_cb),
+                           self, (GConnectFlags)0);
+
+  g_signal_connect_object (self, "ge_new_window",
+                           G_CALLBACK (ge_new_window_cb),
+                           self, (GConnectFlags)0);
+
+  g_signal_connect_object (self, "ge_popup_blocked",
+                           G_CALLBACK (ge_popup_blocked_cb),
                            self, (GConnectFlags)0);
 
   cache = EPHY_FAVICON_CACHE
@@ -624,9 +920,7 @@ ephy_base_embed_finalize (GObject *object)
     priv->icon = NULL;
   }
 
-#if 0
-  popups_manager_reset (embed);
-#endif
+  ephy_base_embed_popups_manager_reset (EPHY_BASE_EMBED (object));
 
   g_free (priv->icon_address);
   g_free (priv->status_message);
@@ -1256,303 +1550,3 @@ ephy_base_embed_restore_zoom_level (EphyBaseEmbed *membed,
   }
 }
 
-/* Popup stuff if zeroed for now */
-
-#if 0
-static void
-ephy_tab_content_change_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
-{
-  popups_manager_reset (tab);
-  g_object_notify (G_OBJECT (tab), "popups-allowed");
-}
-
-static void
-ephy_tab_new_window_cb (EphyEmbed *embed,
-                        EphyEmbed *new_embed,
-                        EphyTab *tab)
-{
-  EphyWindow *window;
-
-  g_return_if_fail (new_embed != NULL);
-
-  window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (new_embed)));
-  g_return_if_fail (window != NULL);
-
-  popups_manager_add_window (tab, window);
-}
-
-static void
-ephy_tab_popup_blocked_cb (EphyEmbed *embed,
-                           const char *url,
-                           const char *name,
-                           const char *features,
-                           EphyTab *tab)
-{
-  popups_manager_add (tab, url, name, features);
-}
-
-static void
-popups_manager_free_info (PopupInfo *popup)
-{
-  g_free (popup->url);
-  g_free (popup->name);
-  g_free (popup->features);
-  g_free (popup);
-}
-
-static void
-popups_manager_add (MozillaEmbed *embed,
-                    const char *url,
-                    const char *name,
-                    const char *features)
-{
-  MozillaEmbedPrivate *priv = embed->priv;
-  PopupInfo *popup;
-
-  LOG ("popups_manager_add: embed %p, url %s, features %s",
-       embed, url, features);
-
-  popup = g_new0 (PopupInfo, 1);
-
-  popup->url = (url == NULL) ? NULL : g_strdup (url);
-  popup->name = g_strdup (name);
-  popup->features = g_strdup (features);
-
-  priv->hidden_popups = g_slist_prepend (priv->hidden_popups, popup);
-
-  if (popup_blocker_n_hidden (embed) > MAX_HIDDEN_POPUPS) {/* bug #160863 */
-    /* Remove the oldest popup */
-    GSList *l = embed->priv->hidden_popups;
-
-    while (l->next->next != NULL) {
-      l = l->next;
-    }
-
-    popup = (PopupInfo *)l->next->data;
-    popups_manager_free_info (popup);
-
-    l->next = NULL;
-  } else {
-    g_object_notify (G_OBJECT (embed), "hidden-popup-count");
-  }
-}
-
-static gboolean
-popups_manager_remove_window (MozillaEmbed *embed,
-                              EphyWindow *window)
-{
-  embed->priv->shown_popups = g_slist_remove (embed->priv->shown_popups,
-                                              window);
-
-  return FALSE;
-}
-
-static void
-disconnect_popup (EphyWindow *window,
-                  MozillaEmbed *embed)
-{
-  g_signal_handlers_disconnect_by_func
-  (window, G_CALLBACK (popups_manager_remove_window), embed);
-}
-
-static void
-popups_manager_add_window (MozillaEmbed *embed,
-                           EphyWindow *window)
-{
-  LOG ("popups_manager_add_window: embed %p, window %p", embed, window);
-
-  embed->priv->shown_popups = g_slist_prepend
-                              (embed->priv->shown_popups, window);
-
-  g_signal_connect_swapped (window, "destroy",
-                            G_CALLBACK (popups_manager_remove_window),
-                            embed);
-}
-
-static gboolean
-mozilla_embed_get_popups_allowed (MozillaEmbed *embed)
-{
-  EphyPermissionManager *permission_manager;
-  EphyPermission response;
-  EphyEmbed *embed;
-  char *location;
-  gboolean allow;
-
-  permission_manager = EPHY_PERMISSION_MANAGER
-                       (ephy_embed_shell_get_embed_single (embed_shell));
-  g_return_val_if_fail (EPHY_IS_PERMISSION_MANAGER (permission_manager),
-                        FALSE);
-
-  location = ephy_embed_get_location (embed, TRUE);
-  if (location == NULL) return FALSE;/* FALSE, TRUE… same thing */
-
-  response = ephy_permission_manager_test_permission
-             (permission_manager, location, EPT_POPUP);
-
-  switch (response) {
-    case EPHY_PERMISSION_ALLOWED:
-      allow = TRUE;
-      break;
-    case EPHY_PERMISSION_DENIED:
-      allow = FALSE;
-      break;
-    case EPHY_PERMISSION_DEFAULT:
-    default:
-      allow = eel_gconf_get_boolean
-              (CONF_SECURITY_ALLOW_POPUPS);
-      break;
-  }
-
-  g_free (location);
-
-  LOG ("mozilla_embed_get_popups_allowed: embed %p, allowed: %d", embed, allow);
-
-  return allow;
-}
-
-static void
-popups_manager_show (PopupInfo *popup,
-                     MozillaEmbed *embed)
-{
-  EphyEmbed *embed;
-  EphyEmbedSingle *single;
-
-  /* Only show popup with non NULL url */
-  if (popup->url != NULL) {
-    embed = ephy_embed_get_embed (embed);
-
-    single = EPHY_EMBED_SINGLE
-             (ephy_embed_shell_get_embed_single (embed_shell));
-
-    ephy_embed_single_open_window (single, embed, popup->url,
-                                   popup->name, popup->features);
-  }
-  popups_manager_free_info (popup);
-}
-
-static void
-popups_manager_show_all (MozillaEmbed *embed)
-{
-  LOG ("popup_blocker_show_all: embed %p", embed);
-
-  g_slist_foreach (embed->priv->hidden_popups,
-                   (GFunc)popups_manager_show, embed);
-  g_slist_free (embed->priv->hidden_popups);
-  embed->priv->hidden_popups = NULL;
-
-  g_object_notify (G_OBJECT (embed), "hidden-popup-count");
-}
-
-static char *
-popups_manager_new_window_info (EphyWindow *window)
-{
-  MozillaEmbed *embed;
-  EphyEmbedChrome chrome;
-  gboolean is_popup;
-  char *features;
-
-  g_object_get (window, "chrome", &chrome, "is-popup", &is_popup, NULL);
-  g_return_val_if_fail (is_popup, g_strdup (""));
-
-  embed = ephy_window_get_active_embed (window);
-  g_return_val_if_fail (embed != NULL, g_strdup (""));
-
-  features = g_strdup_printf
-             ("width=%d,height=%d,menubar=%d,status=%d,toolbar=%d",
-              embed->priv->width, embed->priv->height,
-              (chrome & EPHY_EMBED_CHROME_MENUBAR) > 0,
-              (chrome & EPHY_EMBED_CHROME_STATUSBAR) > 0,
-              (chrome & EPHY_EMBED_CHROME_TOOLBAR) > 0);
-
-  return features;
-}
-
-static void
-popups_manager_hide (EphyWindow *window,
-                     MozillaEmbed *parent_embed)
-{
-  EphyEmbed *embed;
-  char *location;
-  char *features;
-
-  embed = ephy_window_get_active_embed (window);
-  g_return_if_fail (EPHY_IS_EMBED (embed));
-
-  location = ephy_embed_get_location (embed, TRUE);
-  if (location == NULL) return;
-
-  features = popups_manager_new_window_info (window);
-
-  popups_manager_add (parent_embed, location, "" /* FIXME? maybe _blank? */, features);
-
-  gtk_widget_destroy (GTK_WIDGET (window));
-
-  g_free (location);
-  g_free (features);
-}
-
-static void
-popups_manager_hide_all (MozillaEmbed *embed)
-{
-  LOG ("popup_blocker_hide_all: embed %p", embed);
-
-  g_slist_foreach (embed->priv->shown_popups,
-                   (GFunc)popups_manager_hide, embed);
-  g_slist_free (embed->priv->shown_popups);
-  embed->priv->shown_popups = NULL;
-}
-
-static void
-mozilla_embed_set_popups_allowed (MozillaEmbed *embed,
-                                  gboolean allowed)
-{
-  char *location;
-  EphyEmbed *embed;
-  EphyPermissionManager *manager;
-  EphyPermission permission;
-
-  embed = ephy_embed_get_embed (embed);
-
-  location = ephy_embed_get_location (embed, TRUE);
-  g_return_if_fail (location != NULL);
-
-  manager = EPHY_PERMISSION_MANAGER
-            (ephy_embed_shell_get_embed_single (embed_shell));
-  g_return_if_fail (EPHY_IS_PERMISSION_MANAGER (manager));
-
-  permission = allowed ? EPHY_PERMISSION_ALLOWED
-               : EPHY_PERMISSION_DENIED;
-
-  ephy_permission_manager_add_permission (manager, location, EPT_POPUP, permission);
-
-  if (allowed) {
-    popups_manager_show_all (embed);
-  } else {
-    popups_manager_hide_all (embed);
-  }
-
-  g_free (location);
-}
-
-static guint
-popup_blocker_n_hidden (MozillaEmbed *embed)
-{
-  return g_slist_length (embed->priv->hidden_popups);
-}
-
-static void
-popups_manager_reset (MozillaEmbed *embed)
-{
-  g_slist_foreach (embed->priv->hidden_popups,
-                   (GFunc)popups_manager_free_info, NULL);
-  g_slist_free (embed->priv->hidden_popups);
-  embed->priv->hidden_popups = NULL;
-
-  g_slist_foreach (embed->priv->shown_popups,
-                   (GFunc)disconnect_popup, embed);
-  g_slist_free (embed->priv->shown_popups);
-  embed->priv->shown_popups = NULL;
-
-  g_object_notify (G_OBJECT (embed), "hidden-popup-count");
-}
-#endif

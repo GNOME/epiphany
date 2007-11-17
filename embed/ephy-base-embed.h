@@ -23,6 +23,8 @@
 #ifndef __EPHY_BASE_EMBED_H__
 #define __EPHY_BASE_EMBED_H__
 
+#include "ephy-embed.h"
+
 #include <gtk/gtk.h>
 
 
@@ -73,6 +75,7 @@ void  ephy_base_embed_update_from_net_state (EphyBaseEmbed *embed,
                                              const char *uri,
                                              EphyEmbedNetState state);
 void  ephy_base_embed_set_load_percent (EphyBaseEmbed *embed, int percent);
+void  ephy_base_embed_popups_manager_reset (EphyBaseEmbed *embed);
 
 G_END_DECLS
 

@@ -82,9 +82,6 @@ static void mozilla_embed_title_change_cb	(GtkMozEmbed *embed,
 						 MozillaEmbed *membed);
 static void mozilla_embed_link_message_cb	(GtkMozEmbed *embed,
 						 MozillaEmbed *membed);
-static void mozilla_embed_favicon_cb		(MozillaEmbed *membed,
-						 const char *address,
-						 GtkMozEmbed *embed);
 static gboolean mozilla_embed_open_uri_cb	(GtkMozEmbed *embed,
 						 const char *uri,
 						 MozillaEmbed *membed);
@@ -892,7 +889,7 @@ update_load_state (MozillaEmbed *membed, gint state)
 
 		char *address;
 		address = gtk_moz_embed_get_location (moz_embed);
-		g_signal_emit_by_name (membed, "ge-content-change", address);
+		ephy_base_embed_popups_manager_reset (EPHY_BASE_EMBED (membed));
 		ephy_base_embed_restore_zoom_level (EPHY_BASE_EMBED (membed), address);
 		g_free (address);
 	}
@@ -921,6 +918,7 @@ update_load_state (MozillaEmbed *membed, gint state)
 
 			char *address;
 			address = gtk_moz_embed_get_location (moz_embed);
+			ephy_base_embed_popups_manager_reset (EPHY_BASE_EMBED (membed));
 			ephy_base_embed_restore_zoom_level (EPHY_BASE_EMBED (membed), address);
 			g_free (address);
 		}
@@ -1117,7 +1115,7 @@ mozilla_embed_new_window_cb (GtkMozEmbed *embed,
 
 	g_signal_emit_by_name (membed, "ge-new-window", new_embed);
 
-	*newEmbed = GTK_MOZ_EMBED (new_embed);
+	*newEmbed = GTK_MOZ_EMBED (gtk_bin_get_child (GTK_BIN (new_embed)));
 }
 
 static void
