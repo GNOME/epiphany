@@ -629,14 +629,7 @@ G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, GTK_TYPE_WINDOW,
 			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_CONTAINER,
 						ephy_window_embed_container_iface_init))
 
-/* FIXME: fix these! */
-static void
-ephy_tab_set_size (EphyEmbed *embed,
-		   int width,
-		   int height)
-{
-}
-
+/* FIXME: fix this! */
 static void
 ephy_tab_get_size (EphyEmbed *embed,
                    int *width,
@@ -2179,67 +2172,6 @@ tab_context_menu_cb (EphyEmbed *embed,
 }
 
 static gboolean
-let_me_resize_hack (EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-
-	gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
-
-	priv->idle_resize_handler = 0;
-	return FALSE;
-}
-
-static void
-tab_size_to_cb (EphyEmbed *embed,
-		int width,
-		int height,
-		EphyWindow *window)
-{
-	EphyWindowPrivate *priv = window->priv;
-	GtkWidget *widget = GTK_WIDGET (window);
-	GtkWidget *embed_widget = GTK_WIDGET (embed);
-	GdkScreen *screen;
-	GdkRectangle rect;
-	int monitor;
-	int ww, wh, ew, eh, dw, dh;
-
-	LOG ("tab_size_to_cb window %p embed %p width %d height %d", window, embed, width, height);
-
-	/* FIXME: allow sizing also for non-popup single-tab windows? */
-	if (embed != priv->active_embed ||
-	    !priv->is_popup) return;
-
-	/* contrain size so that the window will be fully contained within the screen */
-	screen = gtk_widget_get_screen (widget);
-	monitor = gdk_screen_get_monitor_at_window (screen, widget->window);
-	gdk_screen_get_monitor_geometry (screen, monitor, &rect);
-	/* FIXME: get and subtract the panel size */
-
-	gtk_window_get_size (GTK_WINDOW (window), &ww, &wh);
-
-	ew = embed_widget->allocation.width;
-	eh = embed_widget->allocation.height;
-
-	/* This should approximate the chrome extent */
-	dw = ww - ew; dw = MAX (dw, 0); dw = MIN (dw, rect.width - 1);
-	dh = wh - eh; dh = MAX (dh, 0); dh = MIN (dh, rect.height - 1);
-
-	width = MIN (rect.width - dw, width);
-	height = MIN (rect.height - dh, height);
-
-	/* FIXME: move window if this will place it partially outside the screen rect? */
-
-	gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-	ephy_tab_set_size (embed, width, height);
-
-	if (priv->idle_resize_handler == 0)
-	{
-		priv->idle_resize_handler =
-			g_idle_add ((GSourceFunc) let_me_resize_hack, window);
-	}
-}
-
-static gboolean
 open_link_in_new (EphyWindow *window,
 		  const char *link_address,
 		  guint state,
@@ -2492,8 +2424,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		g_signal_handlers_disconnect_by_func
 			(embed, G_CALLBACK (tab_context_menu_cb), window);
 		g_signal_handlers_disconnect_by_func
-			(embed, G_CALLBACK (tab_size_to_cb), window);
-		g_signal_handlers_disconnect_by_func
 			(embed, G_CALLBACK (ephy_window_dom_mouse_click_cb), window);
 
 	}
@@ -2553,9 +2483,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		g_signal_connect_object (embed, "ge-context-menu",
 					 G_CALLBACK (tab_context_menu_cb),
 					 window, G_CONNECT_AFTER);
-		g_signal_connect_object (embed, "size-to",
-					 G_CALLBACK (tab_size_to_cb),
-					 window, 0);
 		g_signal_connect_object (embed, "notify::load-progress",
 					 G_CALLBACK (sync_tab_load_progress),
 					 window, 0);

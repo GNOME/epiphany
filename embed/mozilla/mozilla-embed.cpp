@@ -42,6 +42,7 @@
 #include "ephy-base-embed.h"
 #include "ephy-command-manager.h"
 #include "ephy-debug.h"
+#include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "mozilla-embed-event.h"
@@ -88,6 +89,11 @@ static void mozilla_embed_visibility_cb		(GtkMozEmbed *embed,
 static gboolean mozilla_embed_open_uri_cb	(GtkMozEmbed *embed,
 						 const char *uri,
 						 MozillaEmbed *membed);
+static void mozilla_embed_size_to_cb		(GtkMozEmbed *embed,
+						 int width,
+						 int height,
+						 MozillaEmbed *membed);
+
 static EphyEmbedSecurityLevel mozilla_embed_security_level (PRUint32 state);
 
 #define MOZILLA_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED, MozillaEmbedPrivate))
@@ -105,6 +111,8 @@ struct MozillaEmbedPrivate
 	EphyBrowser *browser;
 	GtkMozEmbed *moz_embed;
 	MozillaEmbedLoadState load_state;
+
+	guint idle_resize_handler;
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
@@ -219,6 +227,20 @@ mozilla_embed_grab_focus (GtkWidget *widget)
 }
 
 static void
+mozilla_embed_dispose (GObject *object)
+{
+	MozillaEmbedPrivate *priv = MOZILLA_EMBED (object)->priv;
+
+	if (priv->idle_resize_handler != 0)
+	{
+		g_source_remove (priv->idle_resize_handler);
+		priv->idle_resize_handler = 0;
+	}
+
+	G_OBJECT_CLASS (mozilla_embed_parent_class)->dispose (object);
+}
+
+static void
 mozilla_embed_class_init (MozillaEmbedClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -227,6 +249,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 
 	object_class->constructor = mozilla_embed_constructor;
 	object_class->finalize = mozilla_embed_finalize;
+	object_class->dispose = mozilla_embed_dispose;
 
 	gtk_object_class->destroy = mozilla_embed_destroy;
 
@@ -285,6 +308,9 @@ mozilla_embed_init (MozillaEmbed *membed)
 				 membed,(GConnectFlags) 0);
 	g_signal_connect_object (embed, "visibility",
 				 G_CALLBACK (mozilla_embed_visibility_cb),
+				 membed, (GConnectFlags) 0);
+	g_signal_connect_object (embed, "size_to",
+				 G_CALLBACK (mozilla_embed_size_to_cb),
 				 membed, (GConnectFlags) 0);
 }
 
@@ -1181,6 +1207,117 @@ mozilla_embed_visibility_cb (GtkMozEmbed *embed,
 			     MozillaEmbed *membed)
 {
   ephy_base_embed_set_visibility (EPHY_BASE_EMBED (membed), visibility);
+}
+
+static gboolean
+let_me_resize_hack (MozillaEmbed *embed)
+{
+	GtkWidget *window;
+	MozillaEmbedPrivate *priv = embed->priv;
+
+	window = gtk_widget_get_toplevel (GTK_WIDGET (embed));
+
+	if (window && GTK_WIDGET_TOPLEVEL (window))
+	  gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
+
+	priv->idle_resize_handler = 0;
+
+	return FALSE;
+}
+
+static void
+ephy_tab_set_size (MozillaEmbed *embed,
+		   int width,
+		   int height)
+{
+	MozillaEmbedPrivate *priv = embed->priv;
+	GtkWidget *widget = GTK_WIDGET (embed);
+	GtkAllocation allocation;
+
+	gtk_widget_set_size_request (widget, width, height);
+
+	/* HACK: When the web site changes both width and height,
+	 * we will first get a width change, then a height change,
+	 * without actually resizing the window in between (since
+	 * that happens only on idle).
+	 * If we don't set the allocation, GtkMozEmbed doesn't tell
+	 * mozilla the new width, so the height change sets the width
+	 * back to the old value!
+	 */
+	allocation.x = widget->allocation.x;
+	allocation.y = widget->allocation.y;
+	allocation.width = width;
+	allocation.height = height;
+	gtk_widget_size_allocate (widget, &allocation);
+
+	/* HACK: reset widget requisition after the container
+	 * has been resized. It appears to be the only way
+	 * to have the window sized according to embed
+	 * size correctly.
+	 */
+	if (priv->idle_resize_handler == 0)
+	{
+		priv->idle_resize_handler =
+			g_idle_add ((GSourceFunc) let_me_resize_hack, embed);
+	}
+}
+
+static void
+mozilla_embed_size_to_cb (GtkMozEmbed *embed,
+			  int width,
+			  int height,
+			  MozillaEmbed *membed)
+{
+	GtkWidget *widget;
+	EphyEmbedContainer *container;
+	MozillaEmbedPrivate *priv = MOZILLA_EMBED (membed)->priv;
+	GtkWidget *embed_widget = GTK_WIDGET (membed);
+	GdkScreen *screen;
+	GdkRectangle rect;
+	int monitor;
+	int ww, wh, ew, eh, dw, dh;
+
+	container = EPHY_EMBED_CONTAINER (gtk_widget_get_toplevel (GTK_WIDGET (embed)));
+	if (! container || !GTK_WIDGET_TOPLEVEL (container))
+	  return;
+
+	/* FIXME: allow sizing also for non-popup single-tab windows? */
+	if (EPHY_EMBED (membed) != ephy_embed_container_get_active_child (container) ||
+	    ! ephy_embed_container_get_is_popup (container))
+	  return;
+
+	widget = GTK_WIDGET (container);
+
+	LOG ("mozilla_embed_size_to_cb window %p embed %p width %d height %d", widget, embed, width, height);
+
+	/* contrain size so that the window will be fully contained within the screen */
+	screen = gtk_widget_get_screen (widget);
+	monitor = gdk_screen_get_monitor_at_window (screen, widget->window);
+	gdk_screen_get_monitor_geometry (screen, monitor, &rect);
+	/* FIXME: get and subtract the panel size */
+
+	gtk_window_get_size (GTK_WINDOW (widget), &ww, &wh);
+
+	ew = embed_widget->allocation.width;
+	eh = embed_widget->allocation.height;
+
+	/* This should approximate the chrome extent */
+	dw = ww - ew; dw = MAX (dw, 0); dw = MIN (dw, rect.width - 1);
+	dh = wh - eh; dh = MAX (dh, 0); dh = MIN (dh, rect.height - 1);
+
+	width = MIN (rect.width - dw, width);
+	height = MIN (rect.height - dh, height);
+
+	/* FIXME: move window if this will place it partially outside the screen rect? */
+
+	gtk_window_set_resizable (GTK_WINDOW (widget), FALSE);
+	ephy_tab_set_size (membed, width, height);
+
+	if (priv->idle_resize_handler == 0)
+	{
+		priv->idle_resize_handler =
+			g_idle_add ((GSourceFunc) let_me_resize_hack, membed);
+	}
 }
 
 static EphyEmbedSecurityLevel
