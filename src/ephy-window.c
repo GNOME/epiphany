@@ -2420,6 +2420,19 @@ ephy_window_dom_mouse_click_cb (EphyEmbed *embed,
 }
 
 static void
+ephy_window_visibility_cb (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
+{
+	gboolean visibility;
+
+	visibility = ephy_embed_get_visibility (embed);
+
+	if (visibility)
+		gtk_widget_show (GTK_WIDGET (window));
+	else
+		gtk_widget_hide (GTK_WIDGET (window));
+}
+
+static void
 ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 {
 	EphyEmbed *old_embed;
@@ -2471,6 +2484,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 						      window);
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (sync_tab_message),
+						      window);
+		g_signal_handlers_disconnect_by_func (embed,
+						      G_CALLBACK (ephy_window_visibility_cb),
 						      window);
 
 		g_signal_handlers_disconnect_by_func
@@ -2545,6 +2561,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 					 window, 0);
 		g_signal_connect_object (embed, "ge_dom_mouse_click",
 					 G_CALLBACK (ephy_window_dom_mouse_click_cb),
+					 window, 0);
+		g_signal_connect_object (embed, "notify::visibility",
+					 G_CALLBACK (ephy_window_visibility_cb),
 					 window, 0);
 
 		g_object_notify (G_OBJECT (window), "active-child");

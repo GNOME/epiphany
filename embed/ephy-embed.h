@@ -233,6 +233,7 @@ struct _EphyEmbedIface
 	const char *	   (* get_icon_address)		(EphyEmbed *embed);
 	gboolean	   (* get_is_blank)		(EphyEmbed *embed);
 	const char *	   (* get_loading_title)	(EphyEmbed *embed);
+	gboolean *	   (* get_visibility)		(EphyEmbed *embed);
 };
 
 GType		  ephy_embed_net_state_get_type		(void);
@@ -358,6 +359,7 @@ gboolean	  ephy_embed_get_is_blank		(EphyEmbed *embed);
 
 const char *	 ephy_embed_get_loading_title		(EphyEmbed *embed);
 
+gboolean	 ephy_embed_get_visibility		(EphyEmbed *embed);
 /* Encoding */
 char		 *ephy_embed_get_encoding		(EphyEmbed *embed);
 

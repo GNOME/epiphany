@@ -76,6 +76,8 @@ void  ephy_base_embed_update_from_net_state (EphyBaseEmbed *embed,
                                              EphyEmbedNetState state);
 void  ephy_base_embed_set_load_percent (EphyBaseEmbed *embed, int percent);
 void  ephy_base_embed_popups_manager_reset (EphyBaseEmbed *embed);
+void  ephy_base_embed_set_visibility (EphyBaseEmbed *embed,
+                                      gboolean visibility);
 
 G_END_DECLS
 

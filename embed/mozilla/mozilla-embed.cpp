@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2000-2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004 Christian Persch
@@ -16,7 +17,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- *  $Id$
  */
 
 #include "mozilla-config.h"
@@ -81,6 +81,9 @@ static void mozilla_embed_security_change_cb	(GtkMozEmbed *embed,
 static void mozilla_embed_title_change_cb	(GtkMozEmbed *embed,
 						 MozillaEmbed *membed);
 static void mozilla_embed_link_message_cb	(GtkMozEmbed *embed,
+						 MozillaEmbed *membed);
+static void mozilla_embed_visibility_cb		(GtkMozEmbed *embed,
+						 gboolean visibility,
 						 MozillaEmbed *membed);
 static gboolean mozilla_embed_open_uri_cb	(GtkMozEmbed *embed,
 						 const char *uri,
@@ -280,6 +283,9 @@ mozilla_embed_init (MozillaEmbed *membed)
 	g_signal_connect_object (embed, "open_uri",
 				 G_CALLBACK (mozilla_embed_open_uri_cb),
 				 membed,(GConnectFlags) 0);
+	g_signal_connect_object (embed, "visibility",
+				 G_CALLBACK (mozilla_embed_visibility_cb),
+				 membed, (GConnectFlags) 0);
 }
 
 gpointer
@@ -1167,6 +1173,14 @@ mozilla_embed_open_uri_cb (GtkMozEmbed *embed,
 
 	/* allow load to proceed */
 	return FALSE;
+}
+
+static void
+mozilla_embed_visibility_cb (GtkMozEmbed *embed,
+			     gboolean visibility,
+			     MozillaEmbed *membed)
+{
+  ephy_base_embed_set_visibility (EPHY_BASE_EMBED (membed), visibility);
 }
 
 static EphyEmbedSecurityLevel

@@ -61,6 +61,7 @@ struct _EphyBaseEmbedPrivate {
   guint is_blank : 1;
   guint is_loading : 1;
   guint is_setting_zoom : 1;
+  guint visibility : 1;
 
   gint8 load_percent;
   char *address;
@@ -104,6 +105,7 @@ enum {
   PROP_SECURITY,
   PROP_STATUS_MESSAGE,
   PROP_TITLE,
+  PROP_VISIBLE,
   PROP_TYPED_ADDRESS,
   PROP_ZOOM
 };
@@ -269,6 +271,12 @@ static const char *
 impl_get_link_message (EphyEmbed *embed)
 {
   return EPHY_BASE_EMBED (embed)->priv->link_message;
+}
+
+static gboolean
+impl_get_visibility (EphyEmbed *embed)
+{
+  return EPHY_BASE_EMBED (embed)->priv->visibility;
 }
 
 static void
@@ -470,6 +478,7 @@ ephy_base_embed_set_property (GObject *object,
     case PROP_NAVIGATION:
     case PROP_SECURITY:
     case PROP_STATUS_MESSAGE:
+    case PROP_VISIBLE:
     case PROP_ZOOM:
       /* read only */
       break;
@@ -570,6 +579,9 @@ ephy_base_embed_get_property (GObject *object,
       break;
     case PROP_TYPED_ADDRESS:
       g_value_set_string (value, priv->typed_address);
+      break;
+    case PROP_VISIBLE:
+      g_value_set_boolean (value, priv->visibility);
       break;
     case PROP_ZOOM:
       g_value_set_float (value, priv->zoom);
@@ -710,6 +722,14 @@ ephy_base_embed_class_init (EphyBaseEmbedClass *klass)
                                                          "Whether popup windows are to be displayed",
                                                          FALSE,
                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_VISIBLE,
+                                   g_param_spec_boolean ("visibility",
+                                                         "Visibility",
+                                                         "The embed's visibility",
+                                                         FALSE,
+                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_type_class_add_private (gobject_class, sizeof (EphyBaseEmbedPrivate));
 }
@@ -950,6 +970,7 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->get_navigation_flags = impl_get_navigation_flags;
   iface->get_link_message = impl_get_link_message;
   iface->get_status_message = impl_get_status_message;
+  iface->get_visibility = impl_get_visibility;
 }
 
 void
@@ -1550,3 +1571,15 @@ ephy_base_embed_restore_zoom_level (EphyBaseEmbed *membed,
   }
 }
 
+void
+ephy_base_embed_set_visibility (EphyBaseEmbed *embed,
+                                gboolean visibility)
+{
+  EphyBaseEmbedPrivate *priv = embed->priv;
+
+  if (priv->visibility != visibility) {
+    priv->visibility = visibility;
+
+    g_object_notify (G_OBJECT (embed), "visibility");
+  }
+}

@@ -1130,3 +1130,19 @@ ephy_embed_get_loading_title (EphyEmbed *embed)
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	return iface->get_loading_title (embed);
 }
+
+/**
+ * ephy_embed_get_visibility:
+ * @embed: an #EphyEmbed
+ *
+ * Returns whether the @embed's toplevel is visible or not. Used
+ * mostly for popup visibility management.
+ *
+ * Return value; %TRUE if @embed's "visibility" property is set
+ **/
+gboolean
+ephy_embed_get_visibility (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_visibility (embed);
+}
