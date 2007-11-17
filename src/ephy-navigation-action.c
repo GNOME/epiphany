@@ -402,20 +402,17 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 	EphyNavigationAction *action = EPHY_NAVIGATION_ACTION (gtk_action);
 	EphyWindow *window = action->priv->window;
 	EphyEmbed *embed;
-	int pos;
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
-	pos = ephy_embed_shistory_get_pos (embed);
-
 	if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_BACK)
 	{
-		activate_by_history_index (action, pos - 1);
+		ephy_embed_go_back (embed);
 	}
 	else if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_FORWARD)
 	{
-		activate_by_history_index (action, pos + 1);
+		ephy_embed_go_forward (embed);
 	}
 	else if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_UP)
 	{
