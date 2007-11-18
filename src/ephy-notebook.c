@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2002 Christophe Fergeau
  *  Copyright © 2003, 2004 Marco Pesenti Gritti
@@ -17,7 +18,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- *  $Id$
  */
 
 #include "config.h"
@@ -64,9 +64,9 @@ struct _EphyNotebookPrivate
 	guint dnd_enabled : 1;
 };
 
-static void ephy_notebook_init           (EphyNotebook *notebook);
-static void ephy_notebook_class_init     (EphyNotebookClass *klass);
-static void ephy_notebook_finalize       (GObject *object);
+static void ephy_notebook_init		 (EphyNotebook *notebook);
+static void ephy_notebook_class_init	 (EphyNotebookClass *klass);
+static void ephy_notebook_finalize	 (GObject *object);
 static int  ephy_notebook_insert_page	 (GtkNotebook *notebook,
 					  GtkWidget *child,
 					  GtkWidget *tab_label,
@@ -78,7 +78,7 @@ static void ephy_notebook_remove	 (GtkContainer *container,
 static const GtkTargetEntry url_drag_types [] = 
 {
 	{ EPHY_DND_URI_LIST_TYPE,   0, 0 },
-	{ EPHY_DND_URL_TYPE,        0, 1 }
+	{ EPHY_DND_URL_TYPE,	    0, 1 }
 };
 
 enum
@@ -95,45 +95,10 @@ enum
 };
 
 static guint signals[LAST_SIGNAL];
-static GObjectClass *parent_class;
 
-GType
-ephy_notebook_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-			{
-				sizeof (EphyNotebookClass),
-				NULL, /* base_init */
-				NULL, /* base_finalize */
-				(GClassInitFunc) ephy_notebook_class_init,
-				NULL,
-				NULL, /* class_data */
-				sizeof (EphyNotebook),
-				0, /* n_preallocs */
-				(GInstanceInitFunc) ephy_notebook_init
-			};
-
-		const GInterfaceInfo link_info =
-		{
-			NULL,
-			NULL,
-			NULL
-		};
-
-	type = g_type_register_static (GTK_TYPE_NOTEBOOK,
-				       "EphyNotebook",
-				       &our_info, 0);
-	g_type_add_interface_static (type,
-				     EPHY_TYPE_LINK,
-				     &link_info);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE_WITH_CODE (EphyNotebook, ephy_notebook, GTK_TYPE_NOTEBOOK,
+			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
+						NULL))
 
 void
 ephy_notebook_set_dnd_enabled (EphyNotebook *notebook,
@@ -192,8 +157,6 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 	GtkNotebookClass *notebook_class = GTK_NOTEBOOK_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_notebook_finalize;
 	object_class->get_property = ephy_notebook_get_property;
@@ -520,7 +483,7 @@ ephy_notebook_finalize (GObject *object)
 
 	g_list_free (priv->focused_pages);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_notebook_parent_class)->finalize (object);
 }
 
 static void
@@ -551,7 +514,7 @@ sync_icon (EphyEmbed *embed,
 	   GParamSpec *pspec,
 	   GtkImage *icon)
 {
-        gtk_image_set_from_pixbuf (icon, ephy_embed_get_icon (embed));
+	gtk_image_set_from_pixbuf (icon, ephy_embed_get_icon (embed));
 }
 
 static void
@@ -581,7 +544,7 @@ close_button_clicked_cb (GtkWidget *widget, GtkWidget *tab)
 static void
 tab_label_style_set_cb (GtkWidget *hbox,
 			GtkStyle *previous_style,
-		        gpointer user_data)
+			gpointer user_data)
 {
 	PangoFontMetrics *metrics;
 	PangoContext *context;
@@ -731,11 +694,11 @@ ephy_notebook_insert_page (GtkNotebook *gnotebook,
 
 	update_tabs_visibility (notebook, TRUE);
 
-	position = GTK_NOTEBOOK_CLASS (parent_class)->insert_page (gnotebook,
-								   tab_widget,
-								   tab_label,
-								   menu_label,
-								   position);
+	position = GTK_NOTEBOOK_CLASS (ephy_notebook_parent_class)->insert_page (gnotebook,
+										 tab_widget,
+										 tab_label,
+										 menu_label,
+										 position);
 
 	gtk_notebook_set_tab_reorderable (gnotebook, tab_widget, TRUE);
 
@@ -758,7 +721,7 @@ ephy_notebook_add_tab (EphyNotebook *notebook,
 					     position);
 
 	/* FIXME gtk bug! */
-        /* FIXME: this should be fixed in gtk 2.12; check & remove this! */
+	/* FIXME: this should be fixed in gtk 2.12; check & remove this! */
 	/* The signal handler may have reordered the tabs */
 	position = gtk_notebook_page_num (gnotebook, GTK_WIDGET (embed));
 
@@ -836,9 +799,9 @@ ephy_notebook_remove (GtkContainer *container,
 	g_signal_handlers_disconnect_by_func
 		(tab_widget, G_CALLBACK (sync_label), tab_label_label);
 	g_signal_handlers_disconnect_by_func
-          (tab_widget, G_CALLBACK (sync_load_status), tab_label);
+	  (tab_widget, G_CALLBACK (sync_load_status), tab_label);
 
-	GTK_CONTAINER_CLASS (parent_class)->remove (container, tab_widget);
+	GTK_CONTAINER_CLASS (ephy_notebook_parent_class)->remove (container, tab_widget);
 
 	update_tabs_visibility (notebook, FALSE);
 
