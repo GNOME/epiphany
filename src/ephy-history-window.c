@@ -1432,17 +1432,20 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 				                  G_TYPE_STRING, EPHY_NODE_PAGE_PROP_TITLE,
 				                  EPHY_NODE_VIEW_SORTABLE |
 					          EPHY_NODE_VIEW_SEARCHABLE, NULL, &col);
-	gtk_tree_view_column_set_max_width (col, 250);
+	gtk_tree_view_column_set_min_width (col, 300);
+	gtk_tree_view_column_set_resizable (col, TRUE);
 	editor->priv->title_col = col;
+	
 	url_col_id = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Address"),
 				                G_TYPE_STRING, EPHY_NODE_PAGE_PROP_LOCATION,
 				                EPHY_NODE_VIEW_SORTABLE, NULL, &col);
-	gtk_tree_view_column_set_max_width (col, 200);
+	gtk_tree_view_column_set_min_width (col, 300);
+	gtk_tree_view_column_set_resizable (col, TRUE);
 	editor->priv->address_col = col;
+
 	datetime_col_id = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Date"),
 						     G_TYPE_INT, EPHY_NODE_PAGE_PROP_LAST_VISIT,
 						     EPHY_NODE_VIEW_SORTABLE, NULL, &col);
-	gtk_tree_view_column_set_max_width (col, 200);
 	editor->priv->datetime_col = col;
 	parse_time_into_date (editor->priv->datetime_col, datetime_col_id);
 

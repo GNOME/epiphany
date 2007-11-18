@@ -1937,12 +1937,19 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 				  (EPHY_NODE_VIEW (bm_view), _("Title"),
 				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_TITLE,
 				   EPHY_NODE_VIEW_EDITABLE |
-				   EPHY_NODE_VIEW_SEARCHABLE,
+				   EPHY_NODE_VIEW_SEARCHABLE |
+				   EPHY_NODE_VIEW_SORTABLE,
 				   provide_favicon, &(editor->priv->title_col));
+	gtk_tree_view_column_set_min_width (editor->priv->title_col, 300);
+	gtk_tree_view_column_set_resizable (editor->priv->title_col, TRUE);
+
 	url_col_id = ephy_node_view_add_column
 				  (EPHY_NODE_VIEW (bm_view), _("Address"),
 				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_LOCATION,
-				   0, NULL, &(editor->priv->address_col));
+				   EPHY_NODE_VIEW_SORTABLE, NULL, &(editor->priv->address_col));
+	gtk_tree_view_column_set_min_width (editor->priv->address_col, 300);
+	gtk_tree_view_column_set_resizable (editor->priv->address_col, TRUE);
+
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (bm_view),
 					   bmk_drag_types,
 					   G_N_ELEMENTS (bmk_drag_types),

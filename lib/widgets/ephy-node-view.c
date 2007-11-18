@@ -811,6 +811,11 @@ ephy_node_view_button_press_cb (GtkWidget *treeview,
 	GtkTreeSelection *selection;
 	gboolean call_parent = TRUE, path_is_selected;
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+	
+	if (event->window != gtk_tree_view_get_bin_window (GTK_TREE_VIEW (treeview)))
+	{
+		return GTK_WIDGET_CLASS (parent_class)->button_press_event (treeview, event);
+	}
 
 	if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (treeview),
 					   event->x,
