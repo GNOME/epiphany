@@ -1431,14 +1431,16 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	title_col_id = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Title"),
 				                  G_TYPE_STRING, EPHY_NODE_PAGE_PROP_TITLE,
 				                  EPHY_NODE_VIEW_SORTABLE |
-					          EPHY_NODE_VIEW_SEARCHABLE, NULL, &col);
+					          EPHY_NODE_VIEW_SEARCHABLE |
+						  EPHY_NODE_VIEW_ELLIPSIZED, NULL, &col);
 	gtk_tree_view_column_set_min_width (col, 300);
 	gtk_tree_view_column_set_resizable (col, TRUE);
 	editor->priv->title_col = col;
 	
 	url_col_id = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Address"),
 				                G_TYPE_STRING, EPHY_NODE_PAGE_PROP_LOCATION,
-				                EPHY_NODE_VIEW_SORTABLE, NULL, &col);
+				                EPHY_NODE_VIEW_SORTABLE |
+						EPHY_NODE_VIEW_ELLIPSIZED, NULL, &col);
 	gtk_tree_view_column_set_min_width (col, 300);
 	gtk_tree_view_column_set_resizable (col, TRUE);
 	editor->priv->address_col = col;

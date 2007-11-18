@@ -1288,6 +1288,12 @@ ephy_node_view_add_column (EphyNodeView *view,
 		gtk_tree_view_set_search_column (GTK_TREE_VIEW (view), column);
 		gtk_tree_view_set_enable_search (GTK_TREE_VIEW (view), TRUE);
 	}
+	
+	if (flags & EPHY_NODE_VIEW_ELLIPSIZED)
+	{
+		g_object_set (renderer, "ellipsize-set", TRUE,
+			      "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+	}
 
 	if (ret != NULL)
 		*ret = gcolumn;
