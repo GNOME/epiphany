@@ -436,7 +436,7 @@ query_tooltip_cb (GtkWidget *proxy,
 	
 	if (g_str_has_prefix (location, "javascript:"))
 	{
-		text = g_strdup (_("Executes the script “%s”", title));
+		text = g_strdup_printf (_("Executes the script “%s”"), title);
 	}
 	else
 	{
