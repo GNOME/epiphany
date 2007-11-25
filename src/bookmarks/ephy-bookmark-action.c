@@ -445,16 +445,32 @@ query_tooltip_cb (GtkWidget *proxy,
 			GnomeVFSURI *uri = gnome_vfs_uri_new (location);
 			if (uri != NULL)
 			{
-				text = g_markup_printf_escaped ("%s\n%s://%s",
-								title,
-								gnome_vfs_uri_get_scheme (uri),
-								gnome_vfs_uri_get_host_name (uri));
+				if (title[0] == '\0')
+				{
+					text = g_markup_printf_escaped ("%s://%s",
+									gnome_vfs_uri_get_scheme (uri),
+									gnome_vfs_uri_get_host_name (uri));
+				}
+				else
+				{
+					text = g_markup_printf_escaped ("%s\n%s://%s",
+									title,
+									gnome_vfs_uri_get_scheme (uri),
+									gnome_vfs_uri_get_host_name (uri));
+				}
 				gnome_vfs_uri_unref (uri);
 			}
 		}
 		if (text == NULL)
 		{
-			text = g_markup_printf_escaped ("%s\n%s", title, location);
+			if (title[0] == '\0')
+			{
+				text = g_markup_printf_escaped ("%s", location);
+			}
+			else
+			{
+				text = g_markup_printf_escaped ("%s\n%s", title, location);
+			}
 		}
 	}
 	gtk_tooltip_set_markup (tooltip, text);
