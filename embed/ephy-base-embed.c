@@ -920,6 +920,7 @@ ephy_base_embed_init (EphyBaseEmbed *self)
   priv->zoom = 1.0;
   priv->address_expire = EPHY_EMBED_ADDRESS_EXPIRE_NOW;
   priv->is_blank = TRUE;
+  priv->title = g_strdup (_("Blank page"));
 }
 
 static void
