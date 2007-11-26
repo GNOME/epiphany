@@ -1,4 +1,42 @@
 ===============
+Epiphany 2.20.2
+===============
+
+Bug fixes since 2.20.0, including 2.20.1:
+    * Sets page header and footer margins to a reasonable value when printing.
+      Workaround for bug #346110.
+    * Adds a check for NULL pointer in ephy-session.c, fixing wrong behaviour when
+      restoring Epiphany in some cases. Fix for bug #488718.
+    * Updates to new NetworkManager API signals for status monitoring.
+    * Take the page orientation from the page setup, not from the print settings.
+      Bug #485670 (see also gtk+ bug #485685).
+    * Makes the Go button behaviour consistent with the "Enter" behaviour. Both
+      actions search for keywords or load the url. Fixes #484178.
+    * Use g_idle to call embed_find_find_again, to give the time to the embed to
+      sync with the size change due to toolbar being shown. Fixes bug #415074 and
+      part of bug #333661.
+    * EphyContentPolicy::ShouldLoad: use the same content policy for
+      http and https, allowing adblock to work on https. Fixes bug #471583.
+    * Make Epiphany properly remember the last saved location in the FileChooser.
+      Fix for bug #336251.
+    * Make session recovery focus work properly and remember the active tab.
+      Fixes bug #317272.
+    * Fix disable_toolbar_editing lockdown not respected for Remove and Move
+      actions on toolbar buttons. Fixes bug #475641.
+    * Change the hint of the bookmarking properties dialog to DIALOG, instead
+      of NORMAL. Make bookmarking work in fullscreen mode and does not put
+      bookmark properties windows in the taskbar. Fixes bug #478928.
+	
+
+Contributors to this release: 
+Cosimo Cecchi, Dale Parquette, Leonardo Boshell, Djihed Afifi, Matthias Clasen,
+Christian Persch, Diego Escalante Urrelo, Josselin Mouette, Cyril Brulebois
+
+Translations:
+Hendrik Richter, iharh, gforcada, Claude Paroz, frolix68, ituohela, Changwoo Ryu,
+Luca Ferretti, ifelix
+
+===============
 Epiphany 2.19.6
 ===============
 
