@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: epiphany gnome-2-20\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-09-16 22:25+0900\n"
-"PO-Revision-Date: 2007-09-16 22:25+0900\n"
+"POT-Creation-Date: 2007-11-29 00:32+0900\n"
+"PO-Revision-Date: 2007-11-29 00:32+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -1703,7 +1703,7 @@ msgstr "インターネット上のアーカイブを参照してみる"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:364
 #: ../src/bookmarks/ephy-bookmarks.c:1312
-#: ../src/bookmarks/ephy-bookmarks-import.c:261 ../src/ephy-session.c:1315
+#: ../src/bookmarks/ephy-bookmarks-import.c:261 ../src/ephy-session.c:1336
 msgid "Untitled"
 msgstr "名前なし"
 
@@ -1721,11 +1721,11 @@ msgid "_Username:"
 msgstr "ユーザ名(_U):"
 
 #: ../embed/mozilla/FilePicker.cpp:151 ../embed/mozilla/FilePicker.cpp:452
-#: ../lib/ephy-file-chooser.c:372 ../src/bookmarks/ephy-bookmarks-editor.c:786
+#: ../lib/ephy-file-chooser.c:398 ../src/bookmarks/ephy-bookmarks-editor.c:786
 msgid "All files"
 msgstr "全てのファイル"
 
-#: ../embed/mozilla/FilePicker.cpp:156 ../lib/ephy-file-chooser.c:356
+#: ../embed/mozilla/FilePicker.cpp:156 ../lib/ephy-file-chooser.c:382
 msgid "Web pages"
 msgstr "ウェブ・ページ (Epiphany)"
 
@@ -1733,7 +1733,7 @@ msgstr "ウェブ・ページ (Epiphany)"
 msgid "Text files"
 msgstr "通常のファイル"
 
-#: ../embed/mozilla/FilePicker.cpp:169 ../lib/ephy-file-chooser.c:364
+#: ../embed/mozilla/FilePicker.cpp:169 ../lib/ephy-file-chooser.c:390
 msgid "Images"
 msgstr "画像"
 
@@ -1745,44 +1745,44 @@ msgstr "XML ファイル"
 msgid "XUL files"
 msgstr "XUL ファイル"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:93
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:94
 #, c-format
 msgid "Accept cookie from %s?"
 msgstr "%s からのクッキーを受け入れますか？"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:100
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:101
 msgid "Accept Cookie?"
 msgstr "クッキーの許可"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:105
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:106
 msgid "The site wants to modify an existing cookie."
 msgstr "このサイトを表示するには既存のクッキーを変更しなければなりません。"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:109
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:110
 msgid "The site wants to set a cookie."
 msgstr "このサイトはクッキーを作成します。"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:113
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:114
 msgid "The site wants to set a second cookie."
 msgstr "このサイトは二番目のクッキーを作成します。"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:116
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:117
 #, c-format
 msgid "You already have %d cookie from this site."
 msgid_plural "You already have %d cookies from this site."
 msgstr[0] "このサイトに対して既に %d個のクッキーを所有しています。"
 msgstr[1] "このサイトに対して既に %d個のクッキーを所有しています。"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:130
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:131
 msgid "Apply this _decision to all cookies from this site"
 msgstr "この決定をそのサイトに対する全てのクッキーに適用する(_D)"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:138
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:139
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1677
 msgid "_Reject"
 msgstr "拒否する(_R)"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:140
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:141
 #: ../embed/mozilla/GtkNSSDialogs.cpp:271
 msgid "_Accept"
 msgstr "受け入れる(_A)"
@@ -2280,7 +2280,7 @@ msgstr "選択したツールバーを削除します"
 msgid "Separator"
 msgstr "区切り"
 
-#: ../lib/ephy-file-chooser.c:345
+#: ../lib/ephy-file-chooser.c:371
 msgid "All supported types"
 msgstr "サポートしている全種類"
 
@@ -2759,7 +2759,7 @@ msgstr "未分類のサイト"
 #. * websites bookmarks autodiscovered with zeroconf.
 #: ../src/bookmarks/ephy-bookmarks.c:1077
 msgid "bookmarks|Nearby Sites"
-msgstr "bookmarks|近くのサイト"
+msgstr "近くにあるサイト"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:99
 msgid "Epiphany (RDF)"
@@ -3154,35 +3154,35 @@ msgstr "別のエンコーディングを選択します"
 msgid "_Automatic"
 msgstr "自動(_A)"
 
-#: ../src/ephy-find-toolbar.c:117
+#: ../src/ephy-find-toolbar.c:118
 msgid "Not found"
 msgstr "見つかりません"
 
-#: ../src/ephy-find-toolbar.c:120
+#: ../src/ephy-find-toolbar.c:121
 msgid "Wrapped"
 msgstr "折り返しも検索する"
 
-#: ../src/ephy-find-toolbar.c:140
+#: ../src/ephy-find-toolbar.c:141
 msgid "Find links:"
 msgstr "リンクを検索:"
 
-#: ../src/ephy-find-toolbar.c:140
+#: ../src/ephy-find-toolbar.c:141
 msgid "Find:"
 msgstr "検索:"
 
-#: ../src/ephy-find-toolbar.c:378
+#: ../src/ephy-find-toolbar.c:379
 msgid "Find Previous"
 msgstr "前を検索"
 
-#: ../src/ephy-find-toolbar.c:381
+#: ../src/ephy-find-toolbar.c:382
 msgid "Find previous occurrence of the search string"
 msgstr "後方に出現する文字列を検索します"
 
-#: ../src/ephy-find-toolbar.c:388
+#: ../src/ephy-find-toolbar.c:389
 msgid "Find Next"
 msgstr "次を検索"
 
-#: ../src/ephy-find-toolbar.c:391
+#: ../src/ephy-find-toolbar.c:392
 msgid "Find next occurrence of the search string"
 msgstr "前方に出現する文字列を検索します"
 
@@ -3355,18 +3355,18 @@ msgstr "GNOME ウェブ・ブラウザのオプション"
 msgid "Close tab"
 msgstr "タブを閉じます"
 
-#: ../src/ephy-session.c:158
+#: ../src/ephy-session.c:160
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "ダウンロードを中止して %d秒後にログアウトします。"
 msgstr[1] "ダウンロードを中止して %d秒後にログアウトします。"
 
-#: ../src/ephy-session.c:274
+#: ../src/ephy-session.c:276
 msgid "Abort pending downloads?"
 msgstr "保留中のダウンロードを中止しますか？"
 
-#: ../src/ephy-session.c:278
+#: ../src/ephy-session.c:280
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
@@ -3374,19 +3374,19 @@ msgstr ""
 "まだ保留中のダウンロードがあります。ログアウトすると、それらのダウンロードが"
 "途中で中止されてしまい結果が残りません。"
 
-#: ../src/ephy-session.c:282
+#: ../src/ephy-session.c:284
 msgid "_Cancel Logout"
 msgstr "ログアウトをキャンセルする(_C)"
 
-#: ../src/ephy-session.c:284
+#: ../src/ephy-session.c:286
 msgid "_Abort Downloads"
 msgstr "中止する(_A)"
 
-#: ../src/ephy-session.c:609
+#: ../src/ephy-session.c:611
 msgid "Recover previous browser windows and tabs?"
 msgstr "前回のウィンドウとタブを復元しますか？"
 
-#: ../src/ephy-session.c:613
+#: ../src/ephy-session.c:615
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -3394,15 +3394,15 @@ msgstr ""
 "Epiphany が前回の実行中に突然クラッシュして強制終了したようです。その時の状態"
 "に復元することが可能です。"
 
-#: ../src/ephy-session.c:617
+#: ../src/ephy-session.c:619
 msgid "_Don't Recover"
 msgstr "復元しない(_D)"
 
-#: ../src/ephy-session.c:619
+#: ../src/ephy-session.c:621
 msgid "_Recover"
 msgstr "復元する(_R)"
 
-#: ../src/ephy-session.c:621
+#: ../src/ephy-session.c:623
 msgid "Crash Recovery"
 msgstr "Epiphany クラッシュ・リカバリ"
 
