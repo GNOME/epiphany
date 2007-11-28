@@ -39,6 +39,8 @@ typedef struct _EphyEmbedContainerIface EphyEmbedContainerIface;
 
 struct _EphyEmbedContainerIface
 {
+  GTypeInterface parent_iface;
+
   gint (* add_child) (EphyEmbedContainer *container,
                       EphyEmbed *child,
                       gint position,
