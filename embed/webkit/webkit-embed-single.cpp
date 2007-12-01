@@ -23,7 +23,7 @@
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
-#include <webkitgtkglobal.h>
+#include <webkitglobal.h>
 
 #include "webkit-embed-single.h"
 #include "ephy-embed-single.h"

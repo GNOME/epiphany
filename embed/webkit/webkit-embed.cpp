@@ -29,8 +29,8 @@
 
 #include <libgnomevfs/gnome-vfs.h>
 
-#include <webkitgtkframe.h>
-#include <webkitgtkpage.h>
+#include <webkitwebframe.h>
+#include <webkitwebview.h>
 #include <string.h>
 
 #include "webkit-embed.h"
@@ -55,7 +55,7 @@ typedef enum
 
 struct WebKitEmbedPrivate
 {
-  WebKitPage *page;
+  WebKitWebView *web_view;
   WebKitEmbedLoadState load_state;
   char *loading_uri;
 };
@@ -93,7 +93,7 @@ impl_close (EphyEmbed *embed)
 }
 
 static void
-webkit_embed_title_changed_cb (WebKitFrame *frame,
+webkit_embed_title_changed_cb (WebKitWebFrame *web_frame,
                                gchar *title,
                                gchar *location,
                                EphyEmbed *embed)
@@ -105,7 +105,7 @@ webkit_embed_title_changed_cb (WebKitFrame *frame,
 }
 
 static void
-update_load_state (WebKitEmbed *embed, WebKitPage *page)
+update_load_state (WebKitEmbed *embed, WebKitWebView *web_view)
 {
   EphyEmbedNetState estate = EPHY_EMBED_STATE_UNKNOWN;
 
@@ -134,18 +134,18 @@ update_load_state (WebKitEmbed *embed, WebKitPage *page)
 }
 
 static void
-webkit_embed_load_started_cb (WebKitPage *page,
-                              WebKitFrame *frame,
+webkit_embed_load_started_cb (WebKitWebView *web_view,
+                              WebKitWebFrame *web_frame,
                               EphyEmbed *embed)
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
   wembed->priv->load_state = WEBKIT_EMBED_LOAD_STARTED;
 
-  update_load_state (wembed, page);
+  update_load_state (wembed, web_view);
 }
 
 static void
-webkit_embed_load_progress_changed_cb (WebKitPage *page,
+webkit_embed_load_progress_changed_cb (WebKitWebView *web_view,
                                        int progress,
                                        EphyEmbed *embed)
 {
@@ -158,18 +158,18 @@ webkit_embed_load_progress_changed_cb (WebKitPage *page,
 }
 
 static void
-webkit_embed_load_finished_cb (WebKitPage *page,
-                               WebKitFrame *frame,
+webkit_embed_load_finished_cb (WebKitWebView *web_view,
+                               WebKitWebFrame *web_frame,
                                EphyEmbed *embed)
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
   wembed->priv->load_state = WEBKIT_EMBED_LOAD_STOPPED;
 
-  update_load_state (wembed, page);
+  update_load_state (wembed, web_view);
 }
 
 static void
-webkit_embed_hovering_over_link_cb (WebKitPage *page,
+webkit_embed_hovering_over_link_cb (WebKitWebView *web_view,
                                     char *title,
                                     char *location,
                                     EphyEmbed *embed)
@@ -193,7 +193,7 @@ webkit_embed_class_init (WebKitEmbedClass *klass)
 static void
 webkit_embed_init (WebKitEmbed *embed)
 {
-  WebKitPage *page;
+  WebKitWebView *web_view;
   GtkWidget *sw;
 
   embed->priv = WEBKIT_EMBED_GET_PRIVATE (embed);
@@ -203,23 +203,23 @@ webkit_embed_init (WebKitEmbed *embed)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-  page = WEBKIT_PAGE (webkit_page_new ());
-  embed->priv->page = page;
-  gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (page));
+  web_view = WEBKIT_WEB_VIEW (webkit_web_view_new ());
+  embed->priv->web_view = web_view;
+  gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (web_view));
   gtk_widget_show (sw);
-  gtk_widget_show (GTK_WIDGET (page));
+  gtk_widget_show (GTK_WIDGET (web_view));
 
   gtk_container_add (GTK_CONTAINER (embed), sw);
 
-  g_signal_connect (G_OBJECT (page), "load-started",
+  g_signal_connect (G_OBJECT (web_view), "load-started",
                     G_CALLBACK (webkit_embed_load_started_cb), embed);
-  g_signal_connect (G_OBJECT (page), "load_finished",
+  g_signal_connect (G_OBJECT (web_view), "load_finished",
                     G_CALLBACK (webkit_embed_load_finished_cb), embed);
-  g_signal_connect (G_OBJECT (page), "title-changed",
+  g_signal_connect (G_OBJECT (web_view), "title-changed",
                     G_CALLBACK (webkit_embed_title_changed_cb), embed);
-  g_signal_connect (G_OBJECT (page), "load-progress-changed",
+  g_signal_connect (G_OBJECT (web_view), "load-progress-changed",
                     G_CALLBACK (webkit_embed_load_progress_changed_cb), embed);
-  g_signal_connect (G_OBJECT (page), "hovering-over-link",
+  g_signal_connect (G_OBJECT (web_view), "hovering-over-link",
                     G_CALLBACK (webkit_embed_hovering_over_link_cb), embed);
 }
 
@@ -245,7 +245,7 @@ impl_load_url (EphyEmbed *embed,
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
 
-  webkit_page_open (wembed->priv->page, url);
+  webkit_web_view_open (wembed->priv->web_view, url);
 }
 
 static void
@@ -274,7 +274,7 @@ impl_load (EphyEmbed *embed,
   g_free (wembed->priv->loading_uri);
   wembed->priv->loading_uri = g_strdup (effective_url);
 
-  webkit_page_open (wembed->priv->page, effective_url);
+  webkit_web_view_open (wembed->priv->web_view, effective_url);
 
   g_free (effective_url);
 }
@@ -282,19 +282,19 @@ impl_load (EphyEmbed *embed,
 static void
 impl_stop_load (EphyEmbed *embed)
 {
-  webkit_page_stop_loading (WEBKIT_EMBED (embed)->priv->page);
+  webkit_web_view_stop_loading (WEBKIT_EMBED (embed)->priv->web_view);
 }
 
 static gboolean
 impl_can_go_back (EphyEmbed *embed)
 {
-  return webkit_page_can_go_backward (WEBKIT_EMBED (embed)->priv->page);
+  return webkit_web_view_can_go_backward (WEBKIT_EMBED (embed)->priv->web_view);
 }
 
 static gboolean
 impl_can_go_forward (EphyEmbed *embed)
 {
-  return webkit_page_can_go_forward (WEBKIT_EMBED (embed)->priv->page);
+  return webkit_web_view_can_go_forward (WEBKIT_EMBED (embed)->priv->web_view);
 }
 
 static gboolean
@@ -312,13 +312,13 @@ impl_get_go_up_list (EphyEmbed *embed)
 static void
 impl_go_back (EphyEmbed *embed)
 {
-  webkit_page_go_backward (WEBKIT_EMBED (embed)->priv->page);
+  webkit_web_view_go_backward (WEBKIT_EMBED (embed)->priv->web_view);
 }
 
 static void
 impl_go_forward (EphyEmbed *embed)
 {
-  webkit_page_go_forward (WEBKIT_EMBED (embed)->priv->page);
+  webkit_web_view_go_forward (WEBKIT_EMBED (embed)->priv->web_view);
 }
 
 static void
@@ -336,15 +336,15 @@ static char *
 impl_get_location (EphyEmbed *embed,
                    gboolean toplevel)
 {
-  WebKitFrame *frame = webkit_page_get_main_frame (WEBKIT_EMBED (embed)->priv->page);
-  return g_strdup (webkit_frame_get_location (frame));
+  WebKitWebFrame *web_frame = webkit_web_view_get_main_frame (WEBKIT_EMBED (embed)->priv->web_view);
+  return g_strdup (webkit_web_frame_get_location (web_frame));
 }
 
 static void
 impl_reload (EphyEmbed *embed,
              gboolean force)
 {
-  webkit_page_reload (WEBKIT_EMBED (embed)->priv->page);
+  webkit_web_view_reload (WEBKIT_EMBED (embed)->priv->web_view);
 }
 
 static float
