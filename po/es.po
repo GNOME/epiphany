@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.es\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-11-22 21:01+0000\n"
-"PO-Revision-Date: 2007-11-23 19:23+0100\n"
+"POT-Creation-Date: 2007-12-01 11:02+0000\n"
+"PO-Revision-Date: 2007-12-01 14:17+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -914,8 +914,9 @@ msgstr ""
 "%s\n"
 "%s de %s"
 
+#. impossible time or broken locale settings
 #: ../embed/downloader-view.c:450 ../embed/downloader-view.c:455
-#: ../src/ephy-window.c:1658
+#: ../lib/ephy-time-helpers.c:279 ../src/ephy-window.c:1658
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -951,6 +952,36 @@ msgstr "%"
 msgid "Remaining"
 msgstr "Restantes"
 
+#: ../embed/ephy-base-embed.c:677 ../embed/ephy-base-embed.c:923
+#: ../embed/ephy-embed-utils.c:107
+msgid "Blank page"
+msgstr "Página en blanco"
+
+#: ../embed/ephy-base-embed.c:1088
+#, c-format
+msgid "Redirecting to “%s”…"
+msgstr "Redireccionando a «%s»…"
+
+#: ../embed/ephy-base-embed.c:1090
+#, c-format
+msgid "Transferring data from “%s”…"
+msgstr "Transfiriendo datos desde «%s»…"
+
+#: ../embed/ephy-base-embed.c:1092
+#, c-format
+msgid "Waiting for authorization from “%s”…"
+msgstr "Esperando autorización de «%s»…"
+
+#. translators: %s here is the address of the web page
+#: ../embed/ephy-base-embed.c:1098 ../embed/ephy-base-embed.c:1275
+#, c-format
+msgid "Loading “%s”…"
+msgstr "Cargando «%s»…"
+
+#: ../embed/ephy-base-embed.c:1277
+msgid "Loading…"
+msgstr "Cargando…"
+
 #: ../embed/ephy-embed-shell.c:272
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphany no puede usarse ahora. La inicialización de Mozilla falló."
@@ -959,10 +990,6 @@ msgstr "Epiphany no puede usarse ahora. La inicialización de Mozilla falló."
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Enviar correo-e a la dirección «%s»"
-
-#: ../embed/ephy-embed-utils.c:107
-msgid "Blank page"
-msgstr "Página en blanco"
 
 #: ../embed/ephy-encodings.c:61
 msgid "Arabic (_IBM-864)"
@@ -2558,6 +2585,39 @@ msgstr "Entrada de dirección"
 #: ../lib/ephy-stock-icons.c:57
 msgid "_Download"
 msgstr "_Descargar"
+
+#. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
+#: ../lib/ephy-time-helpers.c:223
+msgid "Today %I:%M %p"
+msgstr "Hoy %H:%M"
+
+#. Translators: "friendly time" string for the previous day,
+#. * strftime format. e.g. "Yesterday 12:34 am"
+#.
+#: ../lib/ephy-time-helpers.c:236
+msgid "Yesterday %I:%M %p"
+msgstr "Ayer %H:%M"
+
+#. Translators: "friendly time" string for a day in the current week,
+#. * strftime format. e.g. "Wed 12:34 am"
+#.
+#: ../lib/ephy-time-helpers.c:252
+msgid "%a %I:%M %p"
+msgstr "%a %H:%M"
+
+#. Translators: "friendly time" string for a day in the current year,
+#. * strftime format. e.g. "Feb 12 12:34 am"
+#.
+#: ../lib/ephy-time-helpers.c:264
+msgid "%b %d %I:%M %p"
+msgstr "%d %b %H:%M"
+
+#. Translators: "friendly time" string for a day in a different year,
+#. * strftime format. e.g. "Feb 12 1997"
+#.
+#: ../lib/ephy-time-helpers.c:269
+msgid "%b %d %Y"
+msgstr "%d %b %Y"
 
 #: ../lib/ephy-zoom.h:41
 msgid "50%"
