@@ -564,7 +564,9 @@ if test "x$enable_desktop_file_plugin" = "xyes"; then
 	AC_DEFINE([HAVE_PRIVATE_PLUGINS],[1],[Define if any private plugins are enabled])
 fi
 
-fi # with_engine = mozilla
+else # with_engine = mozilla
+        enable_desktop_file_plugin=no
+fi   # with_engine != mozilla
 
 AM_CONDITIONAL([ENABLE_DESKTOP_FILE_PLUGIN],[test "x$enable_desktop_file_plugin" = "xyes"])
 
@@ -600,6 +602,8 @@ fi
 
 if test "$enable_certificate_manager" = "yes"; then
 	AC_DEFINE([ENABLE_CERTIFICATE_MANAGER],[1],[Define to enable the certificate manager build])
+else
+        enable_certificate_manager=no
 fi
 
 AM_CONDITIONAL([ENABLE_CERTIFICATE_MANAGER],[test "$enable_certificate_manager" = "yes"])
@@ -642,10 +646,9 @@ AC_ARG_ENABLE([spell-checker],
 	AS_HELP_STRING([--enable-spell-checker],[Whether to enable spell checking using enchant]),
 	[],[enable_spell_checker=no])
 AC_MSG_RESULT([$enable_spell_checker])
-
-else
-	enable_spell_checker=no
-fi # gecko >= 1.8.1
+else # gecko >= 1.8.1
+        enable_spell_checker=no
+fi   # gecko < 1.8.1
 
 if test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" != "yes"; then
 	AC_MSG_ERROR([Spell check support requested but $gecko_cv_gecko was not compiled with 'spellchecker' extension enabled.])
@@ -662,7 +665,10 @@ if test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" = "yes"; 
 	AC_DEFINE([ENABLE_SPELLCHECKER],[1],[Define to enable the spell checker])
 fi
 
-fi # with_engine = mozilla
+else # with_engine = mozilla
+        enable_spell_checker=no
+fi   # with_engine != mozilla
+
 
 AM_CONDITIONAL([ENABLE_SPELLCHECKER],[test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" = "yes"])
 
@@ -844,14 +850,18 @@ Epiphany was configured with the following options:
 	Prefix                     : $prefix
 	Extra debugging support    : $enable_debug
 
+ 	Zeroconf bookmarks support : $enable_zeroconf
+ 	NetworkManager support     : $enable_network_manager
+ 	Python support             : $enable_python
+ 	Desktop file plugin        : $enable_desktop_file_plugin
+ 	Spellchecker               : $enable_spell_checker (experimental)
+ 
         Engine                     : $with_engine
-	Gecko backend              : $gecko_cv_gecko version $gecko_cv_gecko_version
-	PSM support                : $enable_psm
-	Zeroconf bookmarks support : $enable_zeroconf
-	NetworkManager support     : $enable_network_manager
-	Certificate manager        : $enable_certificate_manager (experimental)
-	Python support             : $enable_python
-	Desktop file plugin        : $enable_desktop_file_plugin
-	Spellchecker               : $enable_spell_checker (experimental)
+ "
 
+if test "$with_engine" = "mozilla"; then
+echo "        Gecko backend              : $gecko_cv_gecko version $gecko_cv_gecko_version
+	PSM support                : $enable_psm
+	Certificate manager        : $enable_certificate_manager (experimental)
 "
+fi
