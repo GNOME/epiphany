@@ -87,7 +87,7 @@ MORE_WARN_FLAGS=
 DEPRECATION_FLAGS=
 GECKO_WARN_CXXFLAGS="-Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
 
-if test "x$enable_maintainer_mode" = "xyes"; then
+if test "$enable_maintainer_mode" = "yes"; then
 	AC_DEFINE([MAINTAINER_MODE],[1],[Define to enable 'maintainer-only' behaviour])
 	enable_debug=yes
 	DEPRECATION_FLAGS="-DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGCONF_DISABLE_DEPRECATED -DGNOME_VFS_DISABLE_DEPRECATED -DLIBGLADE_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
@@ -162,7 +162,7 @@ AC_CHECK_HEADERS([execinfo.h])
 
 # Check for -Wdeclaration-after-statement (since gcc 3.4)
 
-if test "x$enable_maintainer_mode" = "xyes"; then
+if test "$enable_maintainer_mode" = "yes"; then
 
 	AC_LANG_PUSH([C])
 	_FLAGS="-Wdeclaration-after-statement"
@@ -177,7 +177,7 @@ if test "x$enable_maintainer_mode" = "xyes"; then
 			[ac_cv_have_declaration_after_statement="no"],
 			[ac_cv_have_declaration_after_statement="maybe"])])
 	
-	if test "x$ac_cv_have_declaration_after_statement" = "xyes"; then
+	if test "$ac_cv_have_declaration_after_statement" = "yes"; then
 		MORE_WARN_FLAGS="$MORE_WARN_FLAGS $_FLAGS"
 	fi
 	CFLAGS="$_SAVE_CFLAGS"
@@ -426,7 +426,7 @@ AC_ARG_ENABLE([python],
 
 AC_MSG_RESULT([$enable_python])
 
-if test "x$have_python" != "xno"; then
+if test "$have_python" != "no"; then
 	AM_PATH_PYTHON([2.3],[],[no])
 
 	if test "x$PYTHON" = "x:"; then
@@ -434,11 +434,11 @@ if test "x$have_python" != "xno"; then
 	fi
 fi
 
-if test "x$have_python" != "xno"; then
+if test "$have_python" != "no"; then
 	AM_CHECK_PYTHON_HEADERS([],[have_python=no])
 fi
 
-if test "x$have_python" != "xno"; then
+if test "$have_python" != "no"; then
 	PY_PREFIX=`$PYTHON -c 'import sys ; print sys.prefix'`
 	PY_EXEC_PREFIX=`$PYTHON -c 'import sys ; print sys.exec_prefix'`
 	PYTHON_LIBS="-lpython$PYTHON_VERSION"
@@ -480,7 +480,7 @@ EOF
 	AC_MSG_RESULT([$result])
 fi
 
-if test "x$have_python" != "xno"; then
+if test "$have_python" != "no"; then
 	PYGTK_REQUIRED=2.7.1
 	GNOME_PYTHON_REQUIRED=2.6.0
 
@@ -491,7 +491,7 @@ if test "x$have_python" != "xno"; then
 	AC_SUBST([PYGTK_LIBS])
 fi
 
-if test "x$have_python" != "xno"; then
+if test "$have_python" != "no"; then
 	AC_MSG_CHECKING([for pygtk defs])
 	PYGTK_DEFSDIR=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
 	AC_MSG_RESULT([$PYGTK_DEFSDIR])
@@ -522,20 +522,20 @@ if test "x$have_python" != "xno"; then
 	AC_SUBST([NO_STRICT_ALIASING_CFLAGS])
 fi
 
-if test "x$have_python" != "xyes"; then
-	if test "x$enable_python" = "xyes"; then
+if test "$have_python" != "yes"; then
+	if test "$enable_python" = "yes"; then
 		AC_MSG_ERROR([Python not found])
-	elif test "x$enable_python" = "xautodetect"; then
+	elif test "$enable_python" = "autodetect"; then
 		enable_python=no
 		AC_MSG_WARN([Python not found, disabling python support])
 	fi
-elif test "x$enable_python" != "xno"; then
+elif test "$enable_python" != "no"; then
 	enable_python=yes
 	AC_DEFINE([ENABLE_PYTHON],[1],[Define to compile with python support])
 	EPIPHANY_FEATURES="$EPIPHANY_FEATURES python"
 fi
 
-AM_CONDITIONAL([ENABLE_PYTHON],[test "x$enable_python" = "xyes"])
+AM_CONDITIONAL([ENABLE_PYTHON],[test "$enable_python" = "yes"])
 
 AC_SUBST([EPIPHANY_FEATURES])
 
@@ -554,13 +554,13 @@ AC_ARG_ENABLE([desktop-file-plugin],
 	[],[enable_desktop_file_plugin=yes])
 AC_MSG_RESULT([$enable_desktop_file_plugin])
 
-if test "x$enable_desktop_file_plugin" = "xyes"; then
+if test "$enable_desktop_file_plugin" = "yes"; then
 	PKG_CHECK_MODULES([DESKTOP_FILE_PLUGIN_DEP],[${gecko_cv_gecko}-xpcom ${gecko_cv_gecko}-plugin gtk+-2.0 >= 2.6.0])
 	AC_SUBST([DESKTOP_FILE_PLUGIN_DEP_CFLAGS])
 	AC_SUBST([DESKTOP_FILE_PLUGIN_DEP_LIBS])
 fi
 
-if test "x$enable_desktop_file_plugin" = "xyes"; then
+if test "$enable_desktop_file_plugin" = "yes"; then
 	AC_DEFINE([HAVE_PRIVATE_PLUGINS],[1],[Define if any private plugins are enabled])
 fi
 
@@ -568,7 +568,7 @@ else # with_engine = mozilla
         enable_desktop_file_plugin=no
 fi   # with_engine != mozilla
 
-AM_CONDITIONAL([ENABLE_DESKTOP_FILE_PLUGIN],[test "x$enable_desktop_file_plugin" = "xyes"])
+AM_CONDITIONAL([ENABLE_DESKTOP_FILE_PLUGIN],[test "$enable_desktop_file_plugin" = "yes"])
 
 # *******************
 # Additional features
@@ -582,11 +582,11 @@ AC_ARG_ENABLE([zeroconf],
 	[], [enable_zeroconf=yes])
 AC_MSG_RESULT([$enable_zeroconf])
 
-if test "x$enable_zeroconf" = "xyes"; then
+if test "$enable_zeroconf" = "yes"; then
 	AC_DEFINE([ENABLE_ZEROCONF],[1],[Define to enable zeroconf bookmarks support])
 fi
 
-AM_CONDITIONAL([ENABLE_ZEROCONF],[test "x$enable_zeroconf" = "xyes"])
+AM_CONDITIONAL([ENABLE_ZEROCONF],[test "$enable_zeroconf" = "yes"])
 
 # Certificates manager
 
