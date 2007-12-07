@@ -1226,7 +1226,6 @@ ephy_file_monitor_cancel (EphyFileMonitor *monitor)
 void
 ephy_file_delete_directory (const char *path)
 {
-	/* FIXME not implemented yet */
 	GList *list;
 	GnomeVFSResult ret;
 	
