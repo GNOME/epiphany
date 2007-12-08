@@ -389,17 +389,21 @@ pdm_dialog_remove_all_button_clicked_cb (GtkWidget *button,
 					 PdmActionInfo *action)
 {
 	GtkWidget *dialog, *dialog_button, *image, *parent;
-	gchar *title, *message;
+	gchar *message, *secondary_text;
 
 	switch (action->remove_all_id)
 	{
 		case PROP_PASSWORDS_REMOVE_ALL:
-			title = _("Remove all passwords?");
-			message = _("Do you really want to remove all stored passwords?");
+			message = _("Delete all passwords?");
+			secondary_text = _("Removing all passwords means that the web "
+					   "browser will forget all username and password "
+					   "combinations that you asked it to remember in the past.");
 			break;
 		case PROP_COOKIES_REMOVE_ALL:
-			title = _("Remove all cookies?");
-			message = _("Do you really want to remove all stored cookies?");
+			message = _("Delete all cookies?");
+			secondary_text = _("Web sites that stored a cookie will no longer "
+					   "be able to track you. However, you may have "
+					   "to re-enter your username and password on several sites.");
 			break;
 		default:
 			return;
@@ -418,10 +422,12 @@ pdm_dialog_remove_all_button_clicked_cb (GtkWidget *button,
 	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
 	dialog_button = gtk_dialog_add_button (GTK_DIALOG (dialog), _("Remove _All"), GTK_RESPONSE_ACCEPT);
 	gtk_button_set_image (GTK_BUTTON (dialog_button), image);
+	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+						  "%s", secondary_text);
 
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
-	gtk_window_set_title (GTK_WINDOW (dialog), title);
+	gtk_window_set_title (GTK_WINDOW (dialog), "");
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
 	g_signal_connect (GTK_WIDGET (dialog), "response",
