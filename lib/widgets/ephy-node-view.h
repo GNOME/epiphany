@@ -70,6 +70,7 @@ typedef struct
 	void (*node_activated)      (EphyNodeView *view, EphyNode *node);
 	void (*node_selected)       (EphyNodeView *view, EphyNode *node);
 	void (*node_dropped)        (EphyNodeView *view, EphyNode *node, GList *uris);
+	void (*node_middle_clicked) (EphyNodeView *view, EphyNode *node);
 } EphyNodeViewClass;
 
 GType      ephy_node_view_get_type	      (void);

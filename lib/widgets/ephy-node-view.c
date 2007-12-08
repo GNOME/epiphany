@@ -90,6 +90,7 @@ enum
 	NODE_ACTIVATED,
 	NODE_SELECTED,
 	NODE_DROPPED,
+	NODE_MIDDLE_CLICKED,
 	LAST_SIGNAL
 };
 
@@ -573,6 +574,24 @@ path_toggled (GtkTreeModel *dummy_model, GtkTreePath *path,
 		       node, checked);
 }
 
+static EphyNode *
+process_middle_click (GtkTreePath *path,
+		      EphyNodeView *view)
+{
+	EphyNode *node;
+	GtkTreeIter iter, iter2;
+	
+	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
+	gtk_tree_model_sort_convert_iter_to_child_iter
+		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
+	gtk_tree_model_filter_convert_iter_to_child_iter
+		(GTK_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
+
+	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
+	
+	return node;
+}
+
 static gboolean
 ephy_node_view_key_press_cb (GtkTreeView *treeview,
 			     GdkEventKey *event,
@@ -852,6 +871,14 @@ ephy_node_view_button_press_cb (GtkWidget *treeview,
 			gboolean retval;
 
 			g_signal_emit_by_name (view, "popup_menu", &retval);
+		}
+		else if (event->button == 2)
+		{
+			EphyNode *clicked_node;
+			
+			clicked_node = process_middle_click (path, view);
+			g_signal_emit (G_OBJECT (view),
+				       ephy_node_view_signals[NODE_MIDDLE_CLICKED], 0, clicked_node);
 		}
 		else if (event->button == 1)
 		{
@@ -1723,6 +1750,16 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 			      G_TYPE_NONE,
 			      2,
 			      G_TYPE_POINTER,
+			      G_TYPE_POINTER);
+	ephy_node_view_signals[NODE_MIDDLE_CLICKED] =
+		g_signal_new ("node_middle_clicked",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyNodeViewClass, node_middle_clicked),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE,
+			      1,
 			      G_TYPE_POINTER);
 
 	g_type_class_add_private (object_class, sizeof (EphyNodeViewPrivate));
