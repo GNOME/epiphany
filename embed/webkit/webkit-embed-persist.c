@@ -66,6 +66,8 @@ static gboolean
 impl_save (EphyEmbedPersist *persist)
 {
   g_object_ref (persist);
+
+  return FALSE;
 }
 
 static char *

@@ -1,13 +1,13 @@
 noinst_LTLIBRARIES = libephywebkitembed.la
 
 libephywebkitembed_la_SOURCES = 	\
-	webkit-embed.cpp	        \
+	webkit-embed.c  	        \
 	webkit-embed.h			\
-	webkit-embed-find.cpp           \
+	webkit-embed-find.c             \
 	webkit-embed-find.h		\
-	webkit-embed-persist.cpp        \
+	webkit-embed-persist.c          \
 	webkit-embed-persist.h		\
-	webkit-embed-single.cpp	        \
+	webkit-embed-single.c	        \
 	webkit-embed-single.h
 
 libephywebkitembed_la_CPPFLAGS = \

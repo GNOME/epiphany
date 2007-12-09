@@ -200,7 +200,7 @@ impl_permission_manager_clear (EphyPermissionManager *manager)
 {
 }
 
-EphyPermission
+static EphyPermission
 impl_permission_manager_test (EphyPermissionManager *manager,
                               const char *host,
                               const char *type)
@@ -218,7 +218,7 @@ impl_init (EphyEmbedSingle *esingle)
   return TRUE;
 }
 
-GList *
+static GList *
 impl_permission_manager_list (EphyPermissionManager *manager,
                               const char *type)
 {
