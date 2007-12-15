@@ -29,8 +29,7 @@
 
 #include <libgnomevfs/gnome-vfs.h>
 
-#include <webkitwebframe.h>
-#include <webkitwebview.h>
+#include <webkit.h>
 #include <string.h>
 
 #include "webkit-embed.h"
