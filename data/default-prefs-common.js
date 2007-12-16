@@ -1,6 +1,7 @@
 // mouse wheel: disable mozilla's ctrl+wheel zooming, and enable our own
 // set numlines to -1 to reverse directions, see bug #306110
 pref("mousewheel.withcontrolkey.action", 0);
+// NOTE! on gecko 1.9 we must set this to 1, see https://bugzilla.mozilla.org/show_bug.cgi?id=141476
 pref("mousewheel.withcontrolkey.numlines", -1);
 pref("mousewheel.withcontrolkey.sysnumlines", false);
 
