@@ -40,7 +40,6 @@
 #include <gtk/gtkuimanager.h>
 #include <string.h>
 #include <stdlib.h>
-#include <libxml/entities.h>
 
 #define LABEL_WIDTH_CHARS 32
 #define ACTION_VERB_FORMAT_PREFIX       "JmpTab"
@@ -393,6 +392,9 @@ ephy_tabs_menu_class_init (EphyTabsMenuClass *klass)
 							      G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (EphyTabsMenuPrivate));
+
+	/* We don't want to save accels, so skip them */
+	gtk_accel_map_add_filter ("<Actions>/TabsActions/JmpTab*");
 }
 
 static void
