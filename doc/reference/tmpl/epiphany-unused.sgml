@@ -1,3 +1,31 @@
+<!-- ##### SECTION ./tmpl/ephy-tab.sgml:Long_Description ##### -->
+<para>
+Each #EphyWindow contains a #GtkNotebook which holds one or more #EphyTab:s.
+An #EphyTab is basically a container for an #EphyEmbed.
+</para>
+<para>
+To retrieve an #EphyTab's parent #EphyWindow, use gtk_widget_get_toplevel().
+</para>
+
+
+<!-- ##### SECTION ./tmpl/ephy-tab.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/ephy-tab.sgml:Short_Description ##### -->
+Represents an Epiphany tab
+
+
+<!-- ##### SECTION ./tmpl/ephy-tab.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/ephy-tab.sgml:Title ##### -->
+EphyTab
+
+
 <!-- ##### SECTION ./tmpl/epiphany-unused.sgml:Stability_Level ##### -->
 
 
@@ -151,6 +179,39 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @EPHY_COOKIE_P3P_STATE_FLAGGED: 
 @EPHY_COOKIE_P3P_STATE_REJECTED: 
 
+<!-- ##### SIGNAL EphyEmbed::ge-content-change ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-location ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-net-state ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-security-change ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL EphyEmbedPersist::cancelled ##### -->
 <para>
 
@@ -235,13 +296,133 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS: 
 @EPHY_SHELL_STARTUP_ADD_BOOKMARK: 
 
+<!-- ##### STRUCT EphyTab ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:address ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ARG EphyTab:blocked-popup-count ##### -->
 <para>
 
 </para>
 
 
+<!-- ##### ARG EphyTab:document-type ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:hidden-popup-count ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:icon ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:icon-address ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:load-progress ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:load-status ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:message ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:navigation ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:popups-allowed ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:security-level ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:title ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:typed-address ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:visibility ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ARG EphyTab:visible ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyTab:zoom ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyWindow:active-tab ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyWindow:chrome ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyWindow:is-popup ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyWindow:print-preview-mode ##### -->
 <para>
 
 </para>
@@ -478,7 +659,79 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @Returns: 
 @startup_id: 
 
+<!-- ##### FUNCTION ephy_tab_for_embed ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_embed ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_icon_address ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_link_message ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_load_percent ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_load_status ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
 <!-- ##### FUNCTION ephy_tab_get_location ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_security_level ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_status_message ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_get_title ##### -->
 <para>
 
 </para>
@@ -494,6 +747,31 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @tab: 
 @Returns: 
 
+<!-- ##### FUNCTION ephy_tab_get_zoom ##### -->
+<para>
+
+</para>
+
+@tab: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_tab_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### FUNCTION ephy_window_add_tab ##### -->
+<para>
+
+</para>
+
+@window: 
+@tab: 
+@position: 
+@jump_to: 
+
 <!-- ##### FUNCTION ephy_window_find ##### -->
 <para>
 
@@ -501,12 +779,60 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 
 @window: 
 
+<!-- ##### FUNCTION ephy_window_get_active_embed ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_window_get_active_tab ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_window_get_tabs ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_window_jump_to_tab ##### -->
+<para>
+
+</para>
+
+@window: 
+@tab: 
+
 <!-- ##### FUNCTION ephy_window_print ##### -->
 <para>
 
 </para>
 
 @window: 
+
+<!-- ##### FUNCTION ephy_window_remove_tab ##### -->
+<para>
+
+</para>
+
+@window: 
+@tab: 
+
+<!-- ##### FUNCTION ephy_window_set_print_preview ##### -->
+<para>
+
+</para>
+
+@window: 
+@enabled: 
 
 <!-- ##### FUNCTION mozilla_embed_event_new ##### -->
 <para>
