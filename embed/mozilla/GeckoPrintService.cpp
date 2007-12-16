@@ -750,7 +750,7 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
    */
   /* gtk_print_settings_set_collate (aGtkSettings, FALSE); not yet */
   /* FIXME: Unset the orientation for the print job? */
-  /* gtk_print_settings_set_orientation (aGtkSettings, GTK_PAGE_ORIENTATION_PORTRAIT); */
+  /* gtk_page_setup_set_orientation (aPageSetup, GTK_PAGE_ORIENTATION_PORTRAIT); */
   /* FIXME: unset output format -> "ps" ? */
 
   return NS_OK;
