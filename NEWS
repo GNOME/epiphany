@@ -19,6 +19,17 @@ cross-engine support. It can be roughly separated in two chunks:
    In Epiphany, this interface is implemented by EphyWindow.
 
 Bug fixes:
+    * Add saved files to the GtkRecent list. Fixes Bug #148401.
+    * Make cursor be at the end of the URL when selecting entries from the
+	  completion popup. Fixes bug #466344.
+    * Fix multihead problems in toolbar editor.
+    * Fix download-icon toolip updates. Fixes bug #343238.
+    * Default to Cancel on Cert dialogues. Fixes bug #163379.
+    * Remove "Add bookmark" and "Save as" from the document context menu.
+	  Part of bug #332968.
+    * Fix completion model to show icons for history items too,
+      history/bookmarks/favicon_cache service objects are now stored in the
+      completion priv. Fixes bug #459811.
     * Sets page header and footer margins to a reasonable value when printing.
       Workaround for bug #346110.
     * Adds a check for NULL pointer in ephy-session.c, fixing wrong behaviour when
@@ -28,9 +39,6 @@ Bug fixes:
       Bug #485670 (see also gtk+ bug #485685).
     * Makes the Go button behaviour consistent with the "Enter" behaviour. Both
       actions search for keywords or load the url. Fixes #484178.
-    * Use g_idle to call embed_find_find_again, to give the time to the embed to
-      sync with the size change due to toolbar being shown. Fixes bug #415074 and
-      part of bug #333661.
     * EphyContentPolicy::ShouldLoad: use the same content policy for
       http and https, allowing adblock to work on https. Fixes bug #471583.
     * Make Epiphany properly remember the last saved location in the FileChooser.
@@ -42,15 +50,82 @@ Bug fixes:
     * Change the hint of the bookmarking properties dialog to DIALOG, instead
       of NORMAL. Make bookmarking work in fullscreen mode and does not put
       bookmark properties windows in the taskbar. Fixes bug #478928.
+	* Find toolbar now remembers last pattern searched also when opened with
+      slash or apostrophe. Fixes bug #343337.
+	* Add a somewhat tricky fix for url titles not visible on the completion 
+      popup of the location entry when using a dark theme (like Darkilouche).
+      Fixes bug #446898.
+	* Private instances of Epiphany now remove the profile dir on exit.
+      Note that the profile dir won't be deleted if it's a custom path.
+      Fixes bug #329680.
+	* Make "Up" button dropdown menu show titles instead of URLs for already
+	  visited pages. Fix for bug #323764.
+	* Remove ellipsis from View -> Page Security Information, as it does not
+	  require further user interaction to complete. Fix for bug #483312.
+	* Hide Back/Forward buttons when disable_history lockdown key is enabled.
+	  Fixes bug #394795.
+	* Add explanation label to "Only from sites you visit" radio button.
+	  Fixes bug 493422.
 	
-
+Changes: 
+    * Add accessibility theme icons for our apps icon.
+	* Enable printing to PDF file on gecko 1.9, now that moz#367907 is
+	  fixed.
+	* Make 'Not found' on find toolbar temporarily bold and sounds the 
+	  bell signal when searching on a page and no results are
+	  found. Fixes bug #363004.
+	* Makes tooltips for Back and Forward buttons display the titles of
+      relative pages. Fixes bug #341400. 
+	* Add drag-and-drop of URLs onto "New Tab" and "New Window" buttons in
+      the toolbar. Fixes bug #382383.
+	* Add a broom icon in the search entry of the History window,
+	  like in Bookmarks Editor. Fixes bug #476179.
+	* Use friendly display for mailto: links; shows a nice text in status bar
+      when hovering a mailto: link. Fixes bug #339161.
+	* Fix the build of the custom GTK+ filepicker. Add a preview for the 
+	  FileChooser. The default size is 150x150. Fixes bug #440859.
+    * Make the location entry completion cells smarter, now bookmarks take the 
+	  full width of the popup. Also make titles of history entries align
+      to the left so it's easier to browse a lot of entries with similar 
+	  titles. Almost-fixes bug #419475.
+	* Change the "Powered by" name in the About dialog according to the used
+      backend. Fix for bug #478196.
+	* Display "Execute script <title>" string as tooltip for bookmark action
+	  instead of the whole javascript code when bookmarking a scriptlet.
+      Fix bug #492695.
+	* Update to latest EggToolbarEditor code.
+      This supports changing the editor's model during runtime and
+      tries to avoid some possibly leaking signal handlers. 
+	  Fixes bug #493149.
+	* Adds a column in the history window showing the date and the time of the
+      visit, substitutes radiobuttons with checkboxes in the View menu of the 
+	  window. Fix bug #380156.
+	* Enable a --with-distributor-name configure option, defaulting to Epiphany.
+      Use it on an error page to designate the distributors/developers to
+	  contact. Fixes bug #433796.
+	* Add a "Remove all" button to the Personal Data Manager for both the
+	  cookies and the passwords. Addresses bug #148314.
+	* Fix a bug in EphyNodeView which caused problems when setting columns
+	  as resizable; thanks to Kristian Rietveld for finding out the cause.
+	  Make history window columns resizable and bookmarks editor columns
+	  resizable and sortable. Fixes bug #132808.
+	
 Contributors to this release: 
 Cosimo Cecchi, Dale Parquette, Leonardo Boshell, Djihed Afifi, Matthias Clasen,
-Christian Persch, Diego Escalante Urrelo, Josselin Mouette, Cyril Brulebois
+Christian Persch, Diego Escalante Urrelo, Josselin Mouette, Cyril Brulebois,
+Imran Patel, Carlos Garcia Campos, Xan Lopez, Nicholas E. Manley, Alp Toker, 
+Michael Monreal, friemann, Ed Catmur, Reinout van Schouwen, 
+Jan Michael Alonzo
 
 Translations:
 Hendrik Richter, iharh, gforcada, Claude Paroz, frolix68, ituohela, Changwoo Ryu,
-Luca Ferretti, ifelix
+Luca Ferretti, ifelix, Priit Laes, jorgegonz, ankitp, Kjartan Maraas, dnylande, 
+Takeshi AIHANA, Leonardo Ferreira Fontenelle, snavin, Sunil Mohan Adapa, 
+Inaki Larranaga Murgoitio, ssato, stephaner, Adam Weinberger, Artur Flinta,
+raphaelh, ymarcheg, Gabor Kelemen, Duarte Loreto, zygis, fwang, Clytie Siddall,
+icq, Jan Arne Petersen, Maxim Dziumanenko, Jonh Wendell, Robert-André Mauchin,
+Cyril Brulebois, zyang, Youssef Chahibi, yairhr, mateju, iharh, Ivar Smolin,
+Alexander Shopov, Ignacio Casal Quinteiro, cwryu, Djihed Afifi, Vasiliy Faronov
 
 ===============
 Epiphany 2.19.6
