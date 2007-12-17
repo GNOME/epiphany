@@ -1433,7 +1433,7 @@ ephy_base_embed_update_file_monitor (EphyBaseEmbed *embed,
 
 void
 ephy_base_embed_location_changed (EphyBaseEmbed *embed,
-                                  char *location)
+                                  const char *location)
 {
   GObject *object = G_OBJECT (embed);
 
