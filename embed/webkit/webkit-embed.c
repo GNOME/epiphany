@@ -92,15 +92,13 @@ impl_close (EphyEmbed *embed)
 }
 
 static void
-webkit_embed_title_changed_cb (WebKitWebFrame *web_frame,
-                               gchar *title,
-                               gchar *location,
+webkit_embed_title_changed_cb (WebKitWebView *web_view,
+                               WebKitWebFrame *web_frame,
+                               const gchar *title,
                                EphyEmbed *embed)
 {
   ephy_base_embed_set_title (EPHY_BASE_EMBED (embed),
                              title);
-  ephy_base_embed_location_changed (EPHY_BASE_EMBED (embed),
-                                    location);
 }
 
 static void
@@ -130,6 +128,16 @@ update_load_state (WebKitEmbed *embed, WebKitWebView *web_view)
   ephy_base_embed_update_from_net_state (EPHY_BASE_EMBED (embed),
                                          embed->priv->loading_uri,
                                          (EphyEmbedNetState)estate);
+}
+
+static void
+webkit_embed_load_committed_cb (WebKitWebView *web_view,
+                                WebKitWebFrame *web_frame,
+                                EphyEmbed *embed)
+{
+  const gchar* uri = webkit_web_frame_get_uri(web_frame);
+  ephy_base_embed_location_changed (EPHY_BASE_EMBED (embed),
+                                    uri);
 }
 
 static void
@@ -210,6 +218,8 @@ webkit_embed_init (WebKitEmbed *embed)
 
   gtk_container_add (GTK_CONTAINER (embed), sw);
 
+  g_signal_connect (G_OBJECT (web_view), "load-committed",
+                    G_CALLBACK (webkit_embed_load_committed_cb), embed);
   g_signal_connect (G_OBJECT (web_view), "load-started",
                     G_CALLBACK (webkit_embed_load_started_cb), embed);
   g_signal_connect (G_OBJECT (web_view), "load_finished",
@@ -336,7 +346,7 @@ impl_get_location (EphyEmbed *embed,
                    gboolean toplevel)
 {
   WebKitWebFrame *web_frame = webkit_web_view_get_main_frame (WEBKIT_EMBED (embed)->priv->web_view);
-  return g_strdup (webkit_web_frame_get_location (web_frame));
+  return g_strdup (webkit_web_frame_get_uri (web_frame));
 }
 
 static void
