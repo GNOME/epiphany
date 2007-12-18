@@ -519,6 +519,17 @@ window_cmd_view_fullscreen (GtkAction *action,
 
 	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)))
 	{
+		GtkWidget *toolbar_editor;
+		toolbar_editor = GTK_WIDGET (g_object_get_data (G_OBJECT (window),
+								"EphyToolbarEditor"));
+		if (toolbar_editor != NULL)
+		{
+			/* We don't want the toolbar editor to show
+			 * while in fullscreen.
+			 */
+			gtk_dialog_response (GTK_DIALOG (toolbar_editor),
+					     GTK_RESPONSE_DELETE_EVENT);
+		}
 		gtk_window_fullscreen (GTK_WINDOW (window));
 	}
 	else
