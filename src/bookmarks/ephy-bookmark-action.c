@@ -130,8 +130,8 @@ entry_button_press_event_cb (GtkWidget *entry,
 		ctx->entry = entry;
 
 		/* We need to make sure we know if the action is destroyed between
-		* requesting the clipboard contents, and receiving them.
-	 	*/
+		 * requesting the clipboard contents, and receiving them.
+	 	 */
 
 		ctx->weak_ptr = G_OBJECT (action);
 		object = &(ctx->weak_ptr);
