@@ -80,6 +80,73 @@ enum
 
 static GObjectClass *parent_class;
 
+typedef struct
+{
+	GObject *weak_ptr;
+	GtkWidget *entry;
+	EphyLinkFlags flags;
+} ClipboardCtx;
+
+static void
+clipboard_text_received_cb (GtkClipboard *clipboard,
+			    const char *text,
+			    ClipboardCtx *ctx)
+{
+	if (ctx->weak_ptr != NULL && text != NULL)
+	{
+		/* This is to avoid middle-clicking on a non-empty smart bookmark
+		 * triggering another search.
+		 */
+		if (strcmp (text, gtk_entry_get_text (GTK_ENTRY (ctx->entry))) != 0)
+		{
+			gtk_entry_set_text (GTK_ENTRY (ctx->entry), text);
+			ephy_bookmark_action_activate (EPHY_BOOKMARK_ACTION (ctx->weak_ptr),
+						       ctx->entry, ctx->flags);
+		}
+	}
+
+	if (ctx->weak_ptr != NULL)
+	{
+		GObject **object = &(ctx->weak_ptr);
+		g_object_remove_weak_pointer (G_OBJECT (ctx->weak_ptr), 
+					      (gpointer *)object);
+	}
+
+	g_slice_free (ClipboardCtx, ctx);
+}
+
+static gboolean
+entry_button_press_event_cb (GtkWidget *entry,
+			     GdkEventButton *event,
+			     GtkAction *action)
+{
+	if (event->button == 2) /* middle click */
+	{
+		ClipboardCtx *ctx;
+		GObject **object;
+
+		ctx = g_slice_new (ClipboardCtx);
+		ctx->flags = EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO;
+		ctx->entry = entry;
+
+		/* We need to make sure we know if the action is destroyed between
+		* requesting the clipboard contents, and receiving them.
+	 	*/
+
+		ctx->weak_ptr = G_OBJECT (action);
+		object = &(ctx->weak_ptr);
+		g_object_add_weak_pointer (ctx->weak_ptr, (gpointer *)object);
+
+		gtk_clipboard_request_text
+			(gtk_widget_get_clipboard (entry, GDK_SELECTION_PRIMARY),
+			 (GtkClipboardTextReceivedFunc) clipboard_text_received_cb,
+			 ctx);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 static GtkWidget *
 create_tool_item (GtkAction *action)
 {
@@ -105,6 +172,8 @@ create_tool_item (GtkAction *action)
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), ENTRY_WIDTH_CHARS);
 	gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
 	g_object_set_data (G_OBJECT (item), "entry", entry);
+	g_signal_connect (entry, "button-press-event",
+			  G_CALLBACK (entry_button_press_event_cb), action);
 
 	hbox = gtk_hbox_new (FALSE, 3);
 	gtk_widget_show (hbox);
