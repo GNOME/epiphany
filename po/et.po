@@ -13,9 +13,9 @@ msgstr ""
 "Project-Id-Version: Epiphany Web Browser\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-12-01 11:02+0000\n"
-"PO-Revision-Date: 2007-12-03 11:20+0200\n"
-"Last-Translator: Priit Laes <amd@store20.com>\n"
+"POT-Creation-Date: 2007-12-08 01:20+0000\n"
+"PO-Revision-Date: 2007-12-16 23:34+0200\n"
+"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -423,10 +423,11 @@ msgstr "Ajaloovaates kuvatavad lehe andmed"
 #: ../data/epiphany.schemas.in.h:46
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
-"\"address\", \"title\"."
+"\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
 msgstr ""
-"Ajaloovaates kuvatava lehe andmed. Võimalikud väärtused on \"address"
-"\" (aadress) ja \"title\" (pealkiri)."
+"Ajaloovaates kuvatavad lehe andmed. Nimekirja kirjete võimalikud väärtused "
+"on \"ViewTitle\" (pealkiri), \"ViewAddress\" (aadress) ja \"ViewDateTime\" "
+"(kuupäev ja kellaaeg)."
 
 #: ../data/epiphany.schemas.in.h:47
 msgid ""
@@ -615,7 +616,7 @@ msgstr "Paroolid"
 msgid "Personal Data"
 msgstr "Isiklikud andmed"
 
-#: ../data/glade/epiphany.glade.h:7 ../src/pdm-dialog.c:419
+#: ../data/glade/epiphany.glade.h:7 ../src/pdm-dialog.c:423
 msgid "Remove _All"
 msgstr "Eemalda _kõik"
 
@@ -4213,70 +4214,76 @@ msgid "Copy link's address “%s”"
 msgstr "Viida aadressi „%s“ kopeerimine"
 
 #: ../src/pdm-dialog.c:397
-msgid "Remove all passwords?"
-msgstr "Kas eemaldada kõik paroolid?"
+msgid "Delete all passwords?"
+msgstr "Kas kustutada kõik paroolid?"
 
 #: ../src/pdm-dialog.c:398
-msgid "Do you really want to remove all stored passwords?"
-msgstr "Kas soovid eemaldada kõik salvestatud paroolid?"
+msgid ""
+"Removing all passwords means that the web browser will forget all username "
+"and password combinations that you asked it to remember in the past."
+msgstr ""
+"Kõikide paroolide eemaldamine tähendab, et veebisirvija unustab kõik "
+"eelnevalt meelde jäetud kasutajanimede ja paroolide kombinatsioonid."
 
-#: ../src/pdm-dialog.c:401
-msgid "Remove all cookies?"
-msgstr "Kas eemaldada kõik küpsised?"
+#: ../src/pdm-dialog.c:403
+msgid "Delete all cookies?"
+msgstr "Kas kustutada kõik küpsised?"
 
-#: ../src/pdm-dialog.c:402
-msgid "Do you really want to remove all stored cookies?"
-msgstr "Kas soovid eemaldada kõik salvestatud küpsised?"
+#: ../src/pdm-dialog.c:404
+msgid ""
+"Web sites that stored a cookie will no longer be able to track you. However, "
+"you may have to re-enter your username and password on several sites."
+msgstr ""
 
-#: ../src/pdm-dialog.c:491
+#: ../src/pdm-dialog.c:497
 msgid "Cookie Properties"
 msgstr "Küpsise omadused"
 
-#: ../src/pdm-dialog.c:508
+#: ../src/pdm-dialog.c:514
 msgid "Content:"
 msgstr "Sisu:"
 
-#: ../src/pdm-dialog.c:524
+#: ../src/pdm-dialog.c:530
 msgid "Path:"
 msgstr "Asukoht:"
 
-#: ../src/pdm-dialog.c:540
+#: ../src/pdm-dialog.c:546
 msgid "Send for:"
 msgstr "Saada:"
 
-#: ../src/pdm-dialog.c:549
+#: ../src/pdm-dialog.c:555
 msgid "Encrypted connections only"
 msgstr "Ainult krüptitud ühendustele"
 
-#: ../src/pdm-dialog.c:549
+#: ../src/pdm-dialog.c:555
 msgid "Any type of connection"
 msgstr "Kõikidele ühendusetüüpidele"
 
-#: ../src/pdm-dialog.c:555
+#: ../src/pdm-dialog.c:561
 msgid "Expires:"
 msgstr "Aegub:"
 
-#: ../src/pdm-dialog.c:566
+#: ../src/pdm-dialog.c:572
 msgid "End of current session"
 msgstr "Aktiivse seansi lõpp"
 
-#: ../src/pdm-dialog.c:699
+#: ../src/pdm-dialog.c:705
 msgid "Domain"
 msgstr "Domeen"
 
-#: ../src/pdm-dialog.c:711
+#: ../src/pdm-dialog.c:717
 msgid "Name"
 msgstr "Nimi"
 
-#: ../src/pdm-dialog.c:1136
+#: ../src/pdm-dialog.c:1142
 msgid "Host"
 msgstr "Server"
 
-#: ../src/pdm-dialog.c:1148
+#: ../src/pdm-dialog.c:1154
 msgid "User Name"
 msgstr "Kasutajanimi"
 
-#: ../src/pdm-dialog.c:1160
+#: ../src/pdm-dialog.c:1166
 msgid "User Password"
 msgstr "Kasutaja parool"
 
