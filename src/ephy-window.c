@@ -298,7 +298,12 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 };
 
 static const GtkActionEntry ephy_popups_entries [] = {
+        /* Document */
 
+	{ "ContextBookmarkPage", STOCK_ADD_BOOKMARK, N_("Add Boo_kmark…"), "<control>D",
+	  N_("Add a bookmark for the current page"),
+	  G_CALLBACK (window_cmd_file_bookmark_page) },
+	
 	/* Framed document */
 
 	{ "OpenFrame", NULL, N_("Show Only _This Frame"), NULL,
