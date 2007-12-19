@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: epiphany 1.9.x\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2007-12-15 12:15+0100\n"
-"PO-Revision-Date: 2007-12-15 12:19+0100\n"
+"POT-Creation-Date: 2007-12-19 14:55+0100\n"
+"PO-Revision-Date: 2007-12-19 14:55+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -412,7 +412,9 @@ msgstr "Sideinformasjon som vises i historikkvisning"
 msgid ""
 "The page information shown in the history view. Valid values in the list are "
 "\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
-msgstr "Sideinformasjon som vises i historikkvisning. Gyldige verdier i listen er «ViewTitle» og «ViewAddress» og «ViewDateTime»."
+msgstr ""
+"Sideinformasjon som vises i historikkvisning. Gyldige verdier i listen er "
+"«ViewTitle» og «ViewAddress» og «ViewDateTime»."
 
 #: ../data/epiphany.schemas.in.h:47
 msgid ""
@@ -903,7 +905,7 @@ msgstr ""
 
 #. impossible time or broken locale settings
 #: ../embed/downloader-view.c:450 ../embed/downloader-view.c:455
-#: ../lib/ephy-time-helpers.c:279 ../src/ephy-window.c:1658
+#: ../lib/ephy-time-helpers.c:279 ../src/ephy-window.c:1663
 msgid "Unknown"
 msgstr "Ukjent"
 
@@ -1717,7 +1719,10 @@ msgid ""
 "This page was loading when the web browser closed unexpectedly. This might "
 "happen again if you reload the page. If it does, please report the problem "
 "to the %s developers."
-msgstr "Denne siden holdt på å lastes når nettleseren uventet ble lukket. Dette kan skje igjen hvis du laster siden på nytt. Hvis det skjer kan du rapportere problemet til utviklerene av %s."
+msgstr ""
+"Denne siden holdt på å lastes når nettleseren uventet ble lukket. Dette kan "
+"skje igjen hvis du laster siden på nytt. Hvis det skjer kan du rapportere "
+"problemet til utviklerene av %s."
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -2559,13 +2564,13 @@ msgstr "Historie"
 
 #: ../lib/ephy-stock-icons.c:54
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:323
-#: ../src/ephy-window.c:1453
+#: ../src/ephy-window.c:1458
 msgid "Bookmark"
 msgstr "Bokmerke"
 
 #: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1803
-#: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1457
+#: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1462
 msgid "Bookmarks"
 msgstr "Bokmerker"
 
@@ -2681,12 +2686,12 @@ msgstr ""
 "Dette tillegget håndterer «.desktop» og «.url»-filer som inneholder lenker "
 "til nettsteder."
 
-#: ../src/bookmarks/ephy-bookmark-action.c:263
+#: ../src/bookmarks/ephy-bookmark-action.c:332
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:439
+#: ../src/bookmarks/ephy-bookmark-action.c:508
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "Kjører skriptet «%s» "
@@ -3435,7 +3440,7 @@ msgstr ""
 "Oppstart feilet på grunn av følgende feil:\n"
 "%s"
 
-#: ../src/ephy-main.c:504 ../src/window-commands.c:836
+#: ../src/ephy-main.c:504 ../src/window-commands.c:847
 msgid "GNOME Web Browser"
 msgstr "GNOME Nettleser"
 
@@ -3521,7 +3526,7 @@ msgstr "Markør"
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "I tastaturutvalgsmodus. Trykk F7 for å avslutte"
 
-#: ../src/ephy-tabs-menu.c:209
+#: ../src/ephy-tabs-menu.c:208
 msgid "Switch to this tab"
 msgstr "Lukk denne fanen"
 
@@ -3875,7 +3880,7 @@ msgstr "Vis sikkerhetsinformasjon for nettsiden"
 msgid "_Add Bookmark…"
 msgstr "_Legg til bokmerke..."
 
-#: ../src/ephy-window.c:233
+#: ../src/ephy-window.c:233 ../src/ephy-window.c:304
 msgid "Add a bookmark for the current page"
 msgstr "Legg til et bokmerke for denne siden"
 
@@ -3987,202 +3992,207 @@ msgstr "Vis eller skjul sprettoppvinduer fra dette nettstedet"
 msgid "Selection Caret"
 msgstr "Utvalgsmarkør"
 
+#. Document
+#: ../src/ephy-window.c:303
+msgid "Add Boo_kmark…"
+msgstr "Legg til bo_kmerke..."
+
 #. Framed document
-#: ../src/ephy-window.c:304
+#: ../src/ephy-window.c:309
 msgid "Show Only _This Frame"
 msgstr "Vis kun denne _rammen"
 
-#: ../src/ephy-window.c:305
+#: ../src/ephy-window.c:310
 msgid "Show only this frame in this window"
 msgstr "Vis kun denne rammen i dette vinduet"
 
 #. Links
-#: ../src/ephy-window.c:310
+#: ../src/ephy-window.c:315
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
-#: ../src/ephy-window.c:311
+#: ../src/ephy-window.c:316
 msgid "Open link in this window"
 msgstr "Åpne lenke i dette vinduet"
 
-#: ../src/ephy-window.c:313
+#: ../src/ephy-window.c:318
 msgid "Open Link in New _Window"
 msgstr "Åpne lenke i nytt _vindu"
 
-#: ../src/ephy-window.c:314
+#: ../src/ephy-window.c:319
 msgid "Open link in a new window"
 msgstr "Åpne lenke i et nytt vindu"
 
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:321
 msgid "Open Link in New _Tab"
 msgstr "Åpne lenke i ny _fane"
 
-#: ../src/ephy-window.c:317
+#: ../src/ephy-window.c:322
 msgid "Open link in a new tab"
 msgstr "Åpne lenke i en ny fane"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:324
 msgid "_Download Link"
 msgstr "Last ne_d lenke"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:326
 msgid "_Save Link As…"
 msgstr "_Lagre lenke som..."
 
-#: ../src/ephy-window.c:322
+#: ../src/ephy-window.c:327
 msgid "Save link with a different name"
 msgstr "Lagre lenken med nytt navn"
 
-#: ../src/ephy-window.c:324
+#: ../src/ephy-window.c:329
 msgid "_Bookmark Link…"
 msgstr "_Lag bokmerke av lenke..."
 
-#: ../src/ephy-window.c:326
+#: ../src/ephy-window.c:331
 msgid "_Copy Link Address"
 msgstr "_Kopier lenkens adresse"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:332
+#: ../src/ephy-window.c:337
 msgid "_Send Email…"
 msgstr "_Send e-post..."
 
-#: ../src/ephy-window.c:334
+#: ../src/ephy-window.c:339
 msgid "_Copy Email Address"
 msgstr "_Kopier e-postadresse"
 
 #. Images
-#: ../src/ephy-window.c:339
+#: ../src/ephy-window.c:344
 msgid "Open _Image"
 msgstr "Åpne b_ilde"
 
-#: ../src/ephy-window.c:341
+#: ../src/ephy-window.c:346
 msgid "_Save Image As…"
 msgstr "_Lagre bilde som..."
 
-#: ../src/ephy-window.c:343
+#: ../src/ephy-window.c:348
 msgid "_Use Image As Background"
 msgstr "Br_uk bilde som bakgrunn"
 
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:350
 msgid "Copy I_mage Address"
 msgstr "Ko_pier adressen til bildet"
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:352
 msgid "St_art Animation"
 msgstr "St_art animasjon"
 
-#: ../src/ephy-window.c:349
+#: ../src/ephy-window.c:354
 msgid "St_op Animation"
 msgstr "St_opp animasjon"
 
-#: ../src/ephy-window.c:522
+#: ../src/ephy-window.c:527
 msgid "There are unsubmitted changes to form elements"
 msgstr "Det finnes endringer i skjemaet som ikke er sendt"
 
-#: ../src/ephy-window.c:526
+#: ../src/ephy-window.c:531
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Hvis du lukker dokumentet likevel vil du miste denne informasjonen."
 
-#: ../src/ephy-window.c:530
+#: ../src/ephy-window.c:535
 msgid "Close _Document"
 msgstr "Lukk _dokument"
 
-#: ../src/ephy-window.c:1447 ../src/window-commands.c:267
+#: ../src/ephy-window.c:1452 ../src/window-commands.c:267
 msgid "Open"
 msgstr "Åpne"
 
-#: ../src/ephy-window.c:1449 ../src/window-commands.c:293
+#: ../src/ephy-window.c:1454 ../src/window-commands.c:293
 msgid "Save As"
 msgstr "Lagre som"
 
-#: ../src/ephy-window.c:1451
+#: ../src/ephy-window.c:1456
 msgid "Print"
 msgstr "Skriv ut"
 
-#: ../src/ephy-window.c:1455
+#: ../src/ephy-window.c:1460
 msgid "Find"
 msgstr "Finn"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1468
+#: ../src/ephy-window.c:1473
 msgid "Larger"
 msgstr "Større"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1471
+#: ../src/ephy-window.c:1476
 msgid "Smaller"
 msgstr "Mindre"
 
-#: ../src/ephy-window.c:1661
+#: ../src/ephy-window.c:1666
 msgid "Insecure"
 msgstr "Usikker"
 
-#: ../src/ephy-window.c:1666
+#: ../src/ephy-window.c:1671
 msgid "Broken"
 msgstr "Ødelagt"
 
-#: ../src/ephy-window.c:1678
+#: ../src/ephy-window.c:1683
 msgid "Low"
 msgstr "Lav"
 
-#: ../src/ephy-window.c:1685
+#: ../src/ephy-window.c:1690
 msgid "High"
 msgstr "Høy"
 
-#: ../src/ephy-window.c:1695
+#: ../src/ephy-window.c:1700
 #, c-format
 msgid "Security level: %s"
 msgstr "Sikkerhetsnivå: %s"
 
-#: ../src/ephy-window.c:1738
+#: ../src/ephy-window.c:1743
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d skjult sprettoppvindu"
 msgstr[1] "%d skjulte sprettoppvinduer"
 
-#: ../src/ephy-window.c:2005
+#: ../src/ephy-window.c:2010
 #, c-format
 msgid "Open image “%s”"
 msgstr "Åpne bilde «%s»"
 
-#: ../src/ephy-window.c:2010
+#: ../src/ephy-window.c:2015
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Bruk som bakgrunn på skrivebordet «%s»"
 
-#: ../src/ephy-window.c:2015
+#: ../src/ephy-window.c:2020
 #, c-format
 msgid "Save image “%s”"
 msgstr "Lagre bilde «%s»"
 
-#: ../src/ephy-window.c:2020
+#: ../src/ephy-window.c:2025
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopier adressen til bildet «%s»"
 
-#: ../src/ephy-window.c:2033
+#: ../src/ephy-window.c:2038
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Send e-post til adresse «%s»"
 
-#: ../src/ephy-window.c:2039
+#: ../src/ephy-window.c:2044
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopier e-postadresse «%s»"
 
-#: ../src/ephy-window.c:2051
+#: ../src/ephy-window.c:2056
 #, c-format
 msgid "Save link “%s”"
 msgstr "Lagre lenke «%s»"
 
-#: ../src/ephy-window.c:2057
+#: ../src/ephy-window.c:2062
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Lag bokmerke av lenke «%s»"
 
-#: ../src/ephy-window.c:2063
+#: ../src/ephy-window.c:2068
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopier lenkens adresse «%s»"
@@ -4195,7 +4205,9 @@ msgstr "Slett alle passord?"
 msgid ""
 "Removing all passwords means that the web browser will forget all username "
 "and password combinations that you asked it to remember in the past."
-msgstr "Dette betyr at nettleseren vil glemme alle brukernavn- og passordkombinasjoner du har bedt den om å huske tidligere."
+msgstr ""
+"Dette betyr at nettleseren vil glemme alle brukernavn- og "
+"passordkombinasjoner du har bedt den om å huske tidligere."
 
 #: ../src/pdm-dialog.c:403
 msgid "Delete all cookies?"
@@ -4205,7 +4217,10 @@ msgstr "Slett alle informasjonskapsler?"
 msgid ""
 "Web sites that stored a cookie will no longer be able to track you. However, "
 "you may have to re-enter your username and password on several sites."
-msgstr "Nettsteder som har lagret en informasjonskapsel vil ikke lenger kunne spore deg. Dette vil kunne medføre at du vil måtte oppgi brukernavn og passord på nytt enkelte steder."
+msgstr ""
+"Nettsteder som har lagret en informasjonskapsel vil ikke lenger kunne spore "
+"deg. Dette vil kunne medføre at du vil måtte oppgi brukernavn og passord på "
+"nytt enkelte steder."
 
 # (ugh)
 #: ../src/pdm-dialog.c:497
@@ -4350,7 +4365,7 @@ msgstr[1] "Systemspråk [%s]"
 msgid "Select a Directory"
 msgstr "Velg en katalog"
 
-#: ../src/window-commands.c:731
+#: ../src/window-commands.c:742
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4362,7 +4377,7 @@ msgstr ""
 "Free Software Foundation; enten versjon 2 av lisenen eller (hvis du ønsker) "
 "enhver senere versjon."
 
-#: ../src/window-commands.c:735
+#: ../src/window-commands.c:746
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4373,7 +4388,7 @@ msgstr ""
 "GARANTI, ikke engang implisitt garanti om at det er SALGBART eller PASSER ET "
 "BESTEMT FORMÅL. Se GNU General Public License for detaljer."
 
-#: ../src/window-commands.c:739
+#: ../src/window-commands.c:750
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4383,20 +4398,20 @@ msgstr ""
 "Nautilus. Hvis du ikke har det kan du skrive til Free Software Foundation, "
 "Inc. 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA"
 
-#: ../src/window-commands.c:787 ../src/window-commands.c:803
-#: ../src/window-commands.c:814
+#: ../src/window-commands.c:798 ../src/window-commands.c:814
+#: ../src/window-commands.c:825
 msgid "Contact us at:"
 msgstr "Kontakt oss her:"
 
-#: ../src/window-commands.c:790
+#: ../src/window-commands.c:801
 msgid "Contributors:"
 msgstr "Bidragsytere:"
 
-#: ../src/window-commands.c:793
+#: ../src/window-commands.c:804
 msgid "Past developers:"
 msgstr "Tidligere utviklere:"
 
-#: ../src/window-commands.c:826
+#: ../src/window-commands.c:837
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4413,10 +4428,10 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:852
+#: ../src/window-commands.c:863
 msgid "translator-credits"
 msgstr "Kjartan Maraas <kmaraas@gnome.org>"
 
-#: ../src/window-commands.c:855
+#: ../src/window-commands.c:866
 msgid "GNOME Web Browser Website"
 msgstr "Nettsted for GNOME Nettleser"
