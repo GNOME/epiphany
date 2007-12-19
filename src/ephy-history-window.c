@@ -693,6 +693,25 @@ ephy_history_window_node_activated_cb (GtkWidget *view,
 }
 
 static void
+ephy_history_window_node_middle_clicked_cb (GtkWidget *view,
+					    EphyNode *node,
+					    EphyHistoryWindow *editor)
+{
+	EphyWindow *window;
+	const char *location;
+
+	window = EPHY_WINDOW (get_target_window (editor));
+
+	location = ephy_node_get_property_string
+		(node, EPHY_NODE_PAGE_PROP_LOCATION);
+	g_return_if_fail (location != NULL);
+
+	ephy_shell_new_tab (ephy_shell, window, NULL, location,
+			    EPHY_NEW_TAB_OPEN_PAGE |
+			    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+}
+
+static void
 ephy_history_window_update_menu (EphyHistoryWindow *editor)
 {
 	gboolean open_in_window, open_in_tab;
@@ -1465,6 +1484,10 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	g_signal_connect (G_OBJECT (pages_view),
 			  "node_activated",
 			  G_CALLBACK (ephy_history_window_node_activated_cb),
+			  editor);
+	g_signal_connect (G_OBJECT (pages_view),
+			  "node-middle-clicked",
+			  G_CALLBACK (ephy_history_window_node_middle_clicked_cb),
 			  editor);
 	g_signal_connect (G_OBJECT (pages_view),
 			  "popup_menu",

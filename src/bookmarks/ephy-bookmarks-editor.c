@@ -1281,6 +1281,25 @@ ephy_bookmarks_editor_node_activated_cb (GtkWidget *view,
 }
 
 static void
+ephy_bookmarks_editor_node_middle_clicked_cb (GtkWidget *view,
+					      EphyNode *node,
+					      EphyBookmarksEditor *editor)
+{
+	EphyWindow *window;
+	const char *location;
+
+	window = EPHY_WINDOW (get_target_window (editor));
+
+	location = ephy_node_get_property_string
+		(node, EPHY_NODE_BMK_PROP_LOCATION);
+	g_return_if_fail (location != NULL);
+
+	ephy_shell_new_tab (ephy_shell, window, NULL, location,
+			    EPHY_NEW_TAB_OPEN_PAGE |
+			    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+}
+
+static void
 ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 {
 	gboolean open_in_window, open_in_tab,
@@ -1969,6 +1988,10 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	g_signal_connect (G_OBJECT (bm_view),
 			  "node_activated",
 			  G_CALLBACK (ephy_bookmarks_editor_node_activated_cb),
+			  editor);
+	g_signal_connect (G_OBJECT (bm_view),
+			  "node_middle_clicked",
+			  G_CALLBACK (ephy_bookmarks_editor_node_middle_clicked_cb),
 			  editor);
 	g_signal_connect (G_OBJECT (bm_view),
 			  "popup_menu",
