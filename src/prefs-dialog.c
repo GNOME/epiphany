@@ -41,6 +41,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-tree-model-node.h"
 #include "ephy-tree-model-sort.h"
+#include "pdm-dialog.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtklabel.h>
@@ -1470,17 +1471,13 @@ static void
 prefs_clear_cache_button_clicked_cb (GtkWidget *button,
 				     PrefsDialog *dialog)
 {
-	EphyEmbedShell *shell;
-	EphyEmbedSingle *single;
-	EphyFaviconCache *cache;
+	GtkWidget *parent;
 
-	shell = ephy_embed_shell_get_default ();
-
-	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (shell));
-	ephy_embed_single_clear_cache (single);
-
-	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (shell));
-	ephy_favicon_cache_clear (cache);
+	parent = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+					  properties[WINDOW_PROP].id);
+	pdm_dialog_show_clear_all_dialog (EPHY_DIALOG (dialog),
+					  parent,
+					  CLEAR_ALL_CACHE);
 }
 
 static void

@@ -33,6 +33,9 @@
 #include "ephy-stock-icons.h"
 #include "ephy-debug.h"
 #include "ephy-time-helpers.h"
+#include "ephy-embed-single.h"
+#include "ephy-favicon-cache.h"
+#include "ephy-history.h"
 
 #include <gtk/gtklabel.h>
 #include <gtk/gtkbox.h>
@@ -45,6 +48,10 @@
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtktogglebutton.h>
+#include <gtk/gtkvbox.h>
+#include <gtk/gtkcheckbutton.h>
+#include <gtk/gtkalignment.h>
+#include <gtk/gtkhseparator.h>
 #include <glib/gi18n.h>
 
 #include <string.h>
@@ -61,7 +68,6 @@ struct PdmActionInfo
 				 gpointer data);
 	void (* remove)		(PdmActionInfo *info,
 				 gpointer data);
-	void (* remove_all)	(PdmActionInfo *info);
 	void (* scroll_to)	(PdmActionInfo *info);
 
 	/* Data */
@@ -70,7 +76,6 @@ struct PdmActionInfo
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	int remove_id;
-	int remove_all_id;
 	int data_col;
 	char *scroll_to_host;
 	gboolean filled;
@@ -115,12 +120,15 @@ enum
 	PROP_NOTEBOOK,
 	PROP_COOKIES_TREEVIEW,
 	PROP_COOKIES_REMOVE,
-	PROP_COOKIES_REMOVE_ALL,
 	PROP_COOKIES_PROPERTIES,
 	PROP_PASSWORDS_TREEVIEW,
 	PROP_PASSWORDS_REMOVE,
-	PROP_PASSWORDS_REMOVE_ALL,
 	PROP_PASSWORDS_SHOW
+};
+
+enum
+{
+	PDM_DIALOG_RESPONSE_CLEAR = 1
 };
 
 static const
@@ -131,11 +139,9 @@ EphyDialogProperty properties [] =
 
 	{ "cookies_treeview",	   	NULL, PT_NORMAL, 0 },
 	{ "cookies_remove_button",     	NULL, PT_NORMAL, 0 },
-	{ "cookies_remove_all_button", 	NULL, PT_NORMAL, 0 },
 	{ "cookies_properties_button", 	NULL, PT_NORMAL, 0 },
 	{ "passwords_treeview",	       	NULL, PT_NORMAL, 0 },
 	{ "passwords_remove_button",   	NULL, PT_NORMAL, 0 },
-	{ "passwords_remove_all_button",NULL, PT_NORMAL, 0 },
 	{ "passwords_show_button",     	NULL, PT_NORMAL, 0 },
 
 	{ NULL }
@@ -145,9 +151,8 @@ static void pdm_dialog_class_init	(PdmDialogClass *klass);
 static void pdm_dialog_init		(PdmDialog *dialog);
 static void pdm_dialog_finalize		(GObject *object);
 
-static void pdm_dialog_remove_all_confirmation_cb	(GtkWidget *dialog,
-							 int response,
-							 PdmActionInfo *info);
+static void passwords_changed_cb 		(EphyPasswordManager *manager,
+						 PdmDialog *dialog);
 
 
 static GObjectClass *parent_class = NULL;
@@ -215,6 +220,247 @@ pdm_dialog_show_help (PdmDialog *pd)
 	ephy_gui_help (GTK_WINDOW (window), "epiphany", help_preferences[id]);
 }
 
+typedef struct
+{
+	EphyDialog *dialog;
+	GtkWidget *checkbutton_history;
+	GtkWidget *checkbutton_cookies;
+	GtkWidget *checkbutton_passwords;
+	GtkWidget *checkbutton_cache;
+	guint num_checked;
+} PdmClearAllDialogButtons;
+
+static void
+clear_all_dialog_release_cb (PdmClearAllDialogButtons *data)
+{
+	g_slice_free (PdmClearAllDialogButtons, data);
+}
+
+static void
+clear_all_dialog_response_cb (GtkDialog *dialog,
+			      int response,
+			      PdmClearAllDialogButtons *checkbuttons)
+{
+	if (response == GTK_RESPONSE_HELP)
+	{
+		/* Show help and return early */
+
+		ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "clearing-personal-data");
+		return;
+	}
+
+	if (response == GTK_RESPONSE_OK)
+	{
+		if (gtk_toggle_button_get_active 
+		    	(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_history)))
+		{
+			EphyEmbedShell *shell;
+			EphyHistory *history;
+
+			shell = ephy_embed_shell_get_default ();
+			history = EPHY_HISTORY (ephy_embed_shell_get_global_history (shell));
+			ephy_history_clear (history);
+		}
+		if (gtk_toggle_button_get_active
+		    	(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_cookies)))
+		{
+			EphyCookieManager *manager;
+
+			manager = EPHY_COOKIE_MANAGER (ephy_embed_shell_get_embed_single
+						       (EPHY_EMBED_SHELL (ephy_shell)));
+
+			ephy_cookie_manager_clear (manager);
+		}
+		if (gtk_toggle_button_get_active
+		    	(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_passwords)))
+		{
+			EphyPasswordManager *manager;
+
+			manager = EPHY_PASSWORD_MANAGER (ephy_embed_shell_get_embed_single
+							 (EPHY_EMBED_SHELL (ephy_shell)));
+
+			/* we don't remove the password from the liststore in the callback
+			 * like we do for cookies, since the callback doesn't carry that
+			 * information, and we'd have to reload the whole list, losing the
+			 * selection in the process.
+			 */
+
+			if (EPHY_IS_PDM_DIALOG (checkbuttons->dialog))
+			{
+				g_signal_handlers_block_by_func
+					(manager, G_CALLBACK (passwords_changed_cb), 
+					 EPHY_PDM_DIALOG (checkbuttons->dialog));
+			}
+
+			/* Flush the list */
+			ephy_password_manager_remove_all_passwords (manager);
+
+			if (EPHY_IS_PDM_DIALOG (checkbuttons->dialog))
+			{
+				g_signal_handlers_unblock_by_func
+					(manager, G_CALLBACK (passwords_changed_cb),
+					 EPHY_PDM_DIALOG (checkbuttons->dialog));
+
+				/* And now refresh explicitly */
+				passwords_changed_cb (manager, EPHY_PDM_DIALOG (checkbuttons->dialog));
+			}
+		}
+		if (gtk_toggle_button_get_active
+		    	(GTK_TOGGLE_BUTTON (checkbuttons->checkbutton_cache)))
+		{
+			EphyEmbedShell *shell;
+			EphyEmbedSingle *single;
+			EphyFaviconCache *cache;
+
+			shell = ephy_embed_shell_get_default ();
+
+			single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (shell));
+
+			ephy_embed_single_clear_cache (single);
+
+			cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache (shell));
+			ephy_favicon_cache_clear (cache);
+		}
+	}
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
+clear_all_dialog_checkbutton_toggled_cb (GtkToggleButton *toggle,
+					 PdmClearAllDialogButtons *data)
+{
+	GtkWidget *dialog;
+	dialog = gtk_widget_get_toplevel (GTK_WIDGET (toggle));
+	
+	if (gtk_toggle_button_get_active (toggle) == TRUE)
+	{
+		data->num_checked++;
+	}
+	else
+	{
+		data->num_checked--;
+	}
+	gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK,
+					   data->num_checked != 0);
+}
+void
+pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
+				  GtkWidget *parent,
+				  PdmClearAllDialogFlags flags)
+{
+	GtkWidget *dialog, *vbox;
+	GtkWidget *check, *label;
+	PdmClearAllDialogButtons *checkbuttons;
+
+	dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (parent),
+						     GTK_DIALOG_DESTROY_WITH_PARENT |
+						     GTK_DIALOG_MODAL,
+						     GTK_MESSAGE_QUESTION,
+						     GTK_BUTTONS_NONE,
+						     _("<b>Select the personal data "
+						       "you want to clear</b>"));
+	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+						  _("You are about to clear personal data "
+						    "that is stored about the web pages "
+						    "you have visited. Before proceeding, "
+						    "check the types of information that you "
+						    "want to remove:"));
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Clear All Personal Data"));
+	gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+				GTK_STOCK_HELP,
+				GTK_RESPONSE_HELP,
+				GTK_STOCK_CANCEL,
+				GTK_RESPONSE_CANCEL,
+				GTK_STOCK_CLEAR,
+				GTK_RESPONSE_OK,
+				NULL);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+					 GTK_RESPONSE_CANCEL);
+	gtk_label_set_selectable (GTK_LABEL (GTK_MESSAGE_DIALOG (dialog)->label),
+				  FALSE);
+
+	vbox = gtk_vbox_new (FALSE, 6);
+	gtk_box_pack_start (GTK_BOX (GTK_MESSAGE_DIALOG (dialog)->label->parent),
+			    vbox, FALSE, FALSE, 0);
+
+	checkbuttons = g_slice_new0 (PdmClearAllDialogButtons);
+	checkbuttons->dialog = edialog;
+	checkbuttons->num_checked = 0;
+
+	/* Cookies */
+	check = gtk_check_button_new_with_mnemonic (_("C_ookies"));
+	checkbuttons->checkbutton_cookies = check;
+	gtk_box_pack_start (GTK_BOX (vbox), check,
+			    FALSE, FALSE, 0);
+	g_signal_connect (check, "toggled",
+			  G_CALLBACK (clear_all_dialog_checkbutton_toggled_cb), checkbuttons);
+	if (flags & CLEAR_ALL_COOKIES)
+	{
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
+	}
+
+	/* Passwords */
+	check = gtk_check_button_new_with_mnemonic (_("Saved _passwords"));
+	checkbuttons->checkbutton_passwords = check;
+	gtk_box_pack_start (GTK_BOX (vbox), check,
+			    FALSE, FALSE, 0);
+	g_signal_connect (check, "toggled",
+			  G_CALLBACK (clear_all_dialog_checkbutton_toggled_cb), checkbuttons);
+	if (flags & CLEAR_ALL_PASSWORDS)
+	{
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
+	}
+
+	/* History */
+	check = gtk_check_button_new_with_mnemonic (_("_History"));
+	checkbuttons->checkbutton_history = check;
+	gtk_box_pack_start (GTK_BOX (vbox), check,
+			    FALSE, FALSE, 0);
+	g_signal_connect (check, "toggled",
+			  G_CALLBACK (clear_all_dialog_checkbutton_toggled_cb), checkbuttons);
+	if (flags & CLEAR_ALL_HISTORY)
+	{
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
+	}
+	
+	/* Cache */
+	check = gtk_check_button_new_with_mnemonic (_("_Temporary files"));
+	checkbuttons->checkbutton_cache = check;
+	gtk_box_pack_start (GTK_BOX (vbox), check,
+			    FALSE, FALSE, 0);
+	g_signal_connect (check, "toggled",
+			  G_CALLBACK (clear_all_dialog_checkbutton_toggled_cb), checkbuttons);
+	if (flags & CLEAR_ALL_CACHE)
+	{
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
+	}
+
+	/* Show vbox and all checkbuttons */
+	gtk_widget_show_all (vbox);
+
+	label = gtk_label_new (NULL);
+	gtk_label_set_markup (GTK_LABEL (label),
+			      _("<small><i><b>Note:</b> You cannot undo this action. "
+			        "The data you are choosing to clear "
+				"will be deleted forever.</i></small>"));
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+			    label, FALSE, FALSE, 0);
+	/* Need to do this or the label will wrap too early */
+	gtk_widget_set_size_request (label, 330, -1);
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label),
+				0, 0);
+	gtk_misc_set_padding (GTK_MISC (label),
+			      6, 0);
+	gtk_widget_show (label);
+
+	gtk_window_present (GTK_WINDOW (dialog));
+	g_signal_connect_data (dialog, "response",
+			       G_CALLBACK (clear_all_dialog_response_cb),
+			       checkbuttons, (GClosureNotify) clear_all_dialog_release_cb,
+			       (GConnectFlags) 0);
+}
+
 static void
 action_treeview_selection_changed_cb (GtkTreeSelection *selection,
 				      PdmActionInfo *action)
@@ -228,36 +474,6 @@ action_treeview_selection_changed_cb (GtkTreeSelection *selection,
 	widget = ephy_dialog_get_control (d, properties[action->remove_id].id);
 	gtk_widget_set_sensitive (widget, has_selection);
 
-}
-
-static void
-update_remove_all_sensitivity (PdmActionInfo *action)
-{
-	GtkWidget *widget;
-	EphyDialog *d = EPHY_DIALOG(action->dialog);
-	gint has_rows;
-
-	has_rows = gtk_tree_model_iter_n_children (action->model, NULL) > 0;
-
-	widget = ephy_dialog_get_control (d, properties[action->remove_all_id].id);
-	gtk_widget_set_sensitive (widget, has_rows);
-}
-
-static void
-action_treemodel_row_deleted_cb (GtkTreeModel *model,
-				 GtkTreePath *path,
-				 PdmActionInfo *action)
-{
-	update_remove_all_sensitivity (action);
-}
-
-static void
-action_treemodel_row_inserted_cb (GtkTreeModel *model,
-				  GtkTreePath *path,
-				  GtkTreeIter *iter,
-				  PdmActionInfo *action)
-{
-	update_remove_all_sensitivity (action);
 }
 
 static void
@@ -355,13 +571,6 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 	}
 }
 
-static void
-pdm_cmd_delete_all (PdmActionInfo *action)
-{
-	/* No selection to handle here, unconditional call */
-	action->remove_all (action);
-}
-
 static gboolean
 pdm_key_pressed_cb (GtkTreeView *treeview,
 		    GdkEventKey *event,
@@ -385,75 +594,15 @@ pdm_dialog_remove_button_clicked_cb (GtkWidget *button,
 }
 
 static void
-pdm_dialog_remove_all_button_clicked_cb (GtkWidget *button,
-					 PdmActionInfo *action)
-{
-	GtkWidget *dialog, *dialog_button, *image, *parent;
-	gchar *message, *secondary_text;
-
-	switch (action->remove_all_id)
-	{
-		case PROP_PASSWORDS_REMOVE_ALL:
-			message = _("Delete all passwords?");
-			secondary_text = _("Removing all passwords means that the web "
-					   "browser will forget all username and password "
-					   "combinations that you asked it to remember in the past.");
-			break;
-		case PROP_COOKIES_REMOVE_ALL:
-			message = _("Delete all cookies?");
-			secondary_text = _("Web sites that stored a cookie will no longer "
-					   "be able to track you. However, you may have "
-					   "to re-enter your username and password on several sites.");
-			break;
-		default:
-			return;
-	}
-
-	parent = ephy_dialog_get_control (EPHY_DIALOG (action->dialog),
-					  properties[PROP_WINDOW].id);
-
-	dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
-					 GTK_DIALOG_DESTROY_WITH_PARENT,
-					 GTK_MESSAGE_WARNING,
-					 GTK_BUTTONS_CANCEL,
-					 "%s",
-					 message);
-
-	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
-	dialog_button = gtk_dialog_add_button (GTK_DIALOG (dialog), _("Remove _All"), GTK_RESPONSE_ACCEPT);
-	gtk_button_set_image (GTK_BUTTON (dialog_button), image);
-	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-						  "%s", secondary_text);
-
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-
-	gtk_window_set_title (GTK_WINDOW (dialog), "");
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
-
-	g_signal_connect (GTK_WIDGET (dialog), "response",
-			  G_CALLBACK (pdm_dialog_remove_all_confirmation_cb),
-			  action);
-
-	gtk_window_present (GTK_WINDOW (dialog));
-}
-
-static void
 setup_action (PdmActionInfo *action)
 {
 	GtkWidget *widget;
 	GtkTreeSelection *selection;
-	GtkTreeModel *model;
 
 	widget = ephy_dialog_get_control (EPHY_DIALOG(action->dialog),
 					  properties[action->remove_id].id);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (pdm_dialog_remove_button_clicked_cb),
-			  action);
-
-	widget = ephy_dialog_get_control (EPHY_DIALOG(action->dialog),
-					  properties[action->remove_all_id].id);
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (pdm_dialog_remove_all_button_clicked_cb),
 			  action);
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(action->treeview));
@@ -464,16 +613,6 @@ setup_action (PdmActionInfo *action)
 	g_signal_connect (G_OBJECT (action->treeview),
 			  "key_press_event",
 			  G_CALLBACK (pdm_key_pressed_cb),
-			  action);
-
-	model = action->model;
-
-	g_signal_connect (model, "row-deleted",
-			  G_CALLBACK (action_treemodel_row_deleted_cb),
-			  action);
-
-	g_signal_connect (model, "row-inserted",
-			  G_CALLBACK (action_treemodel_row_inserted_cb),
 			  action);
 }
 
@@ -1032,32 +1171,6 @@ pdm_dialog_cookie_remove (PdmActionInfo *info,
 	ephy_cookie_manager_remove_cookie (manager, cookie);
 }
 
-
-static void
-pdm_dialog_remove_all_confirmation_cb (GtkWidget *dialog,
-				       gint response,
-				       PdmActionInfo *action)
-{
-	gtk_widget_destroy (dialog);
-
-	/* Don't do anything by default */
-	if (response != GTK_RESPONSE_ACCEPT)
-		return;
-
-	pdm_cmd_delete_all (action);
-}
-
-static void
-pdm_dialog_cookie_remove_all (PdmActionInfo *info)
-{
-	EphyCookieManager *manager;
-
-	manager = EPHY_COOKIE_MANAGER (ephy_embed_shell_get_embed_single
-				       (EPHY_EMBED_SHELL (ephy_shell)));
-
-	ephy_cookie_manager_clear (manager);
-}
-
 static void
 pdm_dialog_cookie_scroll_to (PdmActionInfo *info)
 {
@@ -1288,32 +1401,6 @@ pdm_dialog_password_remove (PdmActionInfo *info,
 		(manager, G_CALLBACK (passwords_changed_cb), info->dialog);
 }
 
-static void
-pdm_dialog_password_remove_all (PdmActionInfo *info)
-{
-	EphyPasswordManager *manager;
-
-	manager = EPHY_PASSWORD_MANAGER (ephy_embed_shell_get_embed_single
-					 (EPHY_EMBED_SHELL (ephy_shell)));
-
-	/* we don't remove the password from the liststore in the callback
-	 * like we do for cookies, since the callback doesn't carry that
-	 * information, and we'd have to reload the whole list, losing the
-	 * selection in the process.
-	 */
-	g_signal_handlers_block_by_func
-		(manager, G_CALLBACK (passwords_changed_cb), info->dialog);
-
-	/* Flush the list */
-	ephy_password_manager_remove_all_passwords (manager);
-
-	g_signal_handlers_unblock_by_func
-		(manager, G_CALLBACK (passwords_changed_cb), info->dialog);
-
-	/* And now refresh explicitly */
-	passwords_changed_cb (manager, info->dialog);
-}
-
 /* common routines */
 
 static void
@@ -1345,6 +1432,29 @@ pdm_dialog_response_cb (GtkDialog *widget,
 	if (response == GTK_RESPONSE_HELP)
 	{
 		pdm_dialog_show_help (dialog);
+		return;
+	}
+	if (response == PDM_DIALOG_RESPONSE_CLEAR)
+	{
+		int page;
+		GtkWidget *parent;
+		
+		parent = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+						  properties[PROP_WINDOW].id);
+
+		page = gtk_notebook_get_current_page (GTK_NOTEBOOK (dialog->priv->notebook));
+		if (page == 0)
+		{
+			/* Cookies */
+			pdm_dialog_show_clear_all_dialog (EPHY_DIALOG (dialog), 
+							  parent, CLEAR_ALL_COOKIES);
+		}
+		if (page == 1)
+		{
+			/* Passwords */
+			pdm_dialog_show_clear_all_dialog (EPHY_DIALOG (dialog),
+							  parent, CLEAR_ALL_PASSWORDS);			
+		}
 		return;
 	}
 
@@ -1384,10 +1494,8 @@ pdm_dialog_init (PdmDialog *dialog)
 	 */
 	ephy_dialog_set_size_group (EPHY_DIALOG (dialog),
 				    properties[PROP_COOKIES_REMOVE].id,
-				    properties[PROP_COOKIES_REMOVE_ALL].id,
 				    properties[PROP_COOKIES_PROPERTIES].id,
 				    properties[PROP_PASSWORDS_REMOVE].id,
-				    properties[PROP_PASSWORDS_REMOVE_ALL].id,
 				    NULL);
 
 	cookies = g_new0 (PdmActionInfo, 1);
@@ -1396,11 +1504,9 @@ pdm_dialog_init (PdmDialog *dialog)
 	cookies->fill = pdm_dialog_fill_cookies_list;
 	cookies->add = pdm_dialog_cookie_add;
 	cookies->remove = pdm_dialog_cookie_remove;
-	cookies->remove_all = pdm_dialog_cookie_remove_all;
 	cookies->scroll_to = pdm_dialog_cookie_scroll_to;
 	cookies->dialog = dialog;
 	cookies->remove_id = PROP_COOKIES_REMOVE;
-	cookies->remove_all_id = PROP_COOKIES_REMOVE_ALL;
 	cookies->data_col = COL_COOKIES_DATA;
 	cookies->scroll_to_host = NULL;
 	cookies->filled = FALSE;
@@ -1412,10 +1518,8 @@ pdm_dialog_init (PdmDialog *dialog)
 	passwords->fill = pdm_dialog_fill_passwords_list;
 	passwords->add = pdm_dialog_password_add;
 	passwords->remove = pdm_dialog_password_remove;
-	passwords->remove_all = pdm_dialog_password_remove_all;
 	passwords->dialog = dialog;
 	passwords->remove_id = PROP_PASSWORDS_REMOVE;
-	passwords->remove_all_id = PROP_PASSWORDS_REMOVE_ALL;
 	passwords->data_col = COL_PASSWORDS_DATA;
 	passwords->scroll_to_host = NULL;
 	passwords->filled = FALSE;

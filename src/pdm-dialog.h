@@ -38,6 +38,15 @@ typedef struct PdmDialog	PdmDialog;
 typedef struct PdmDialogClass	PdmDialogClass;
 typedef struct PdmDialogPrivate	PdmDialogPrivate;
 
+typedef enum
+{
+	CLEAR_ALL_NONE = 0,
+	CLEAR_ALL_CACHE = 1 << 0,
+	CLEAR_ALL_PASSWORDS = 1 << 1,
+	CLEAR_ALL_HISTORY = 1 << 2,
+	CLEAR_ALL_COOKIES = 1 << 4
+} PdmClearAllDialogFlags;
+
 struct PdmDialog
 {
         EphyDialog parent;
@@ -55,6 +64,10 @@ GType	pdm_dialog_get_type	(void);
 
 void	pdm_dialog_open		(PdmDialog *dialog,
 				 const char *host);
+
+void	pdm_dialog_show_clear_all_dialog (EphyDialog *dialog,
+					  GtkWidget *parent,
+					  PdmClearAllDialogFlags flags);
 
 G_END_DECLS
 
