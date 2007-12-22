@@ -27,6 +27,7 @@
 #include <gtkmozembed.h>
 
 #include "ephy-embed.h"
+#include "ephy-base-embed.h"
 
 G_BEGIN_DECLS
 
@@ -43,7 +44,7 @@ typedef struct MozillaEmbedPrivate	MozillaEmbedPrivate;
 
 struct MozillaEmbed
 {
-        GtkMozEmbed parent;
+        EphyBaseEmbed parent_instance;
 
 	/*< private >*/
         MozillaEmbedPrivate *priv;
@@ -51,7 +52,7 @@ struct MozillaEmbed
 
 struct MozillaEmbedClass
 {
-        GtkMozEmbedClass parent_class;
+        EphyBaseEmbedClass parent_class;
 };
 
 GType	         mozilla_embed_get_type         (void);

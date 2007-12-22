@@ -39,7 +39,6 @@
 #include "EphyUtils.h"
 #include "EventContext.h"
 
-#include "ephy-base-embed.h"
 #include "ephy-command-manager.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
