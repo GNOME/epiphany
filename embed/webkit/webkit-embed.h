@@ -25,6 +25,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 #include "ephy-embed.h"
+#include "ephy-base-embed.h"
 
 G_BEGIN_DECLS
 
@@ -40,14 +41,14 @@ typedef struct WebKitEmbed WebKitEmbed;
 typedef struct WebKitEmbedPrivate WebKitEmbedPrivate;
 
 struct WebKitEmbed {
-  GtkScrolledWindow parent;
+  EphyBaseEmbed parent_instance;
 
   /*< private >*/
   WebKitEmbedPrivate *priv;
 };
 
 struct WebKitEmbedClass {
-  GtkScrolledWindowClass parent_class;
+  EphyBaseEmbedClass parent_class;
 };
 
 GType            webkit_embed_get_type (void);
