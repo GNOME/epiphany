@@ -28,33 +28,33 @@ ephy_command_manager_base_init (gpointer g_class);
 GType
 ephy_command_manager_get_type (void)
 {
-	static GType type = 0;
+        static GType type = 0;
 
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyCommandManagerIface),
-			ephy_command_manager_base_init,
-			NULL,
-		};
+        if (G_UNLIKELY (type == 0))
+        {
+                const GTypeInfo our_info =
+                {
+                        sizeof (EphyCommandManagerIface),
+                        ephy_command_manager_base_init,
+                        NULL,
+                };
 
-		type = g_type_register_static (G_TYPE_INTERFACE,
-					       "EphyCommandManager",
-					       &our_info,
-					       (GTypeFlags)0);
-	}
+                type = g_type_register_static (G_TYPE_INTERFACE,
+                                               "EphyCommandManager",
+                                               &our_info,
+                                               (GTypeFlags)0);
+        }
 
-	return type;
+        return type;
 }
 
 static void
 ephy_command_manager_base_init (gpointer g_class)
 {
-	static gboolean initialized = FALSE;
+        static gboolean initialized = FALSE;
 
-	if (!initialized)
-	{
+        if (!initialized)
+        {
 /**
  * EphyCommandManager::command-changed:
  * @manager:
@@ -64,18 +64,18 @@ ephy_command_manager_base_init (gpointer g_class)
  * available to unavailable, or vice-versa. The new availability can be tested
  * with ephy_command_manager_can_do_command().
  **/
-		g_signal_new ("command_changed",
-			      EPHY_TYPE_COMMAND_MANAGER,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyCommandManagerIface, command_changed),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_STRING);
+                g_signal_new ("command_changed",
+                              EPHY_TYPE_COMMAND_MANAGER,
+                              G_SIGNAL_RUN_FIRST,
+                              G_STRUCT_OFFSET (EphyCommandManagerIface, command_changed),
+                              NULL, NULL,
+                              g_cclosure_marshal_VOID__STRING,
+                              G_TYPE_NONE,
+                              1,
+                              G_TYPE_STRING);
 
-		initialized = TRUE;
-	}
+                initialized = TRUE;
+        }
 }
 
 /**
@@ -87,10 +87,14 @@ ephy_command_manager_base_init (gpointer g_class)
  **/
 void
 ephy_command_manager_do_command (EphyCommandManager *manager,
-				 const char *command)
+                                 const char *command)
 {
-	EphyCommandManagerIface *iface = EPHY_COMMAND_MANAGER_GET_IFACE (manager);
-	iface->do_command (manager, command);
+        EphyCommandManagerIface *iface;
+
+        g_return_if_fail (command != NULL);
+
+        iface = EPHY_COMMAND_MANAGER_GET_IFACE (manager);
+        iface->do_command (manager, command);
 }
 
 /**
@@ -104,8 +108,13 @@ ephy_command_manager_do_command (EphyCommandManager *manager,
  **/
 gboolean
 ephy_command_manager_can_do_command (EphyCommandManager *manager,
-					const char *command)
+                                     const char *command)
 {
-	EphyCommandManagerIface *iface = EPHY_COMMAND_MANAGER_GET_IFACE (manager);
-	return iface->can_do_command (manager, command);
+        EphyCommandManagerIface *iface;
+
+        g_return_val_if_fail (command != NULL, FALSE);
+
+        iface = EPHY_COMMAND_MANAGER_GET_IFACE (manager);
+
+        return iface->can_do_command (manager, command);
 }

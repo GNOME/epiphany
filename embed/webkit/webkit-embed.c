@@ -63,12 +63,29 @@ static void
 impl_manager_do_command (EphyCommandManager *manager,
                          const char *command)
 {
+  WebKitWebView *web_view = WEBKIT_EMBED (manager)->priv->web_view;
+
+  if (! strcmp (command, "cmd_copy"))
+    return webkit_web_view_copy_clipboard (web_view);
+  else if (! strcmp (command, "cmd_cut"))
+    return webkit_web_view_cut_clipboard (web_view);
+  else if (! strcmp (command, "cmd_paste"))
+    return webkit_web_view_paste_clipboard (web_view);
 }
 
 static gboolean
 impl_manager_can_do_command (EphyCommandManager *manager,
                              const char *command)
 {
+  WebKitWebView *web_view = WEBKIT_EMBED (manager)->priv->web_view;
+
+  if (! strcmp (command, "cmd_copy"))
+    return webkit_web_view_can_copy_clipboard (web_view);
+  else if (! strcmp (command, "cmd_cut"))
+    return webkit_web_view_can_cut_clipboard (web_view);
+  else if (! strcmp (command, "cmd_paste"))
+    return webkit_web_view_can_paste_clipboard (web_view);
+
   return FALSE;
 }
 
