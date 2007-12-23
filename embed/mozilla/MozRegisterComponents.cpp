@@ -137,12 +137,14 @@ static const nsModuleComponentInfo sAppComps[] = {
 		NS_CLIENTAUTHDIALOGS_CONTRACTID,
 		GtkNSSClientAuthDialogsConstructor
 	},
+#ifndef HAVE_GECKO_1_9
 	{
 		GTK_NSSDIALOGS_CLASSNAME,
 		GTK_NSSDIALOGS_CID,
 		NS_BADCERTLISTENER_CONTRACTID,
 		GtkNSSDialogsConstructor
 	},
+#endif
 	{
 		GTK_NSSDIALOGS_CLASSNAME,
 		GTK_NSSDIALOGS_CID,
@@ -296,9 +298,15 @@ mozilla_register_components (void)
 	for (guint i = 0; i < G_N_ELEMENTS (sAppComps); i++)
 	{
 		nsCOMPtr<nsIGenericFactory> componentFactory;
-		rv = NS_NewGenericFactory(getter_AddRefs(componentFactory),
-					  &(sAppComps[i]));
-		if (NS_FAILED(rv) || !componentFactory)
+		componentFactory = do_CreateInstance(NS_GENERICFACTORY_CONTRACTID);
+		if(!componentFactory)
+		{
+			g_warning ("Failed to create a generic factory for %s\n", sAppComps[i].mDescription);
+			ret = FALSE;
+			continue;
+		}
+		rv = componentFactory->SetComponentInfo(&(sAppComps[i]));
+		if (NS_FAILED(rv))
 		{
 			g_warning ("Failed to make a factory for %s\n", sAppComps[i].mDescription);
 
