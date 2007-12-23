@@ -9,8 +9,6 @@ libephymozillaembed_la_SOURCES = 	\
 	ContentHandler.h		\
 	EphyAboutModule.cpp		\
 	EphyAboutModule.h		\
-	EphyBadCertRejector.cpp		\
-	EphyBadCertRejector.h		\
 	EphyContentPolicy.cpp		\
 	EphyContentPolicy.h		\
 	EphyDirectoryProvider.cpp       \
@@ -63,6 +61,13 @@ libephymozillaembed_la_SOURCES = 	\
 	mozilla-embed-single.h	        \
 	mozilla-notifiers.cpp		\
 	mozilla-notifiers.h
+
+if !HAVE_GECKO_1_9
+libephymozillaembed_la_SOURCES += 	\
+	EphyBadCertRejector.cpp		\
+	EphyBadCertRejector.h		\
+	$(NULL)
+endif
 
 if ENABLE_FILEPICKER
 libephymozillaembed_la_SOURCES += 	\
@@ -122,6 +127,7 @@ mozilla_include_subdirs = \
 	pipnss			\
 	pref			\
 	shistory		\
+	string			\
 	sidebar			\
 	spellchecker		\
 	uriloader		\
