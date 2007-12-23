@@ -39,7 +39,6 @@
 
 #ifdef HAVE_GECKO_1_9
 #include <nsPIDOMWindow.h>
-#include <nsDOMJSUtils.h> /* for GetScriptContextFromJSContext */
 #include <nsIScriptContext.h>
 #include <nsIScriptGlobalObject.h>
 #endif
@@ -187,10 +186,10 @@ EphyJSUtils::IsCalledFromScript ()
 nsIDOMWindow *
 EphyJSUtils::GetDOMWindowFromCallContext ()
 {
-  /* TODO: We can do this on 1.8 too, but we'd need to use headers which include private string API
+  /* TODO: We could do this on 1.8, but we'd need to use headers which include private string API
    * so we'll have to move this to MozillaPrivate
    */
-#ifdef HAVE_GECKO_1_9
+#if 0
   nsresult rv;
   nsCOMPtr<nsIXPConnect> xpc (do_GetService(nsIXPConnect::GetCID(), &rv));
   NS_ENSURE_SUCCESS (rv, nsnull);
