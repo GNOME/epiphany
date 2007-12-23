@@ -29,20 +29,24 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-// we need nsEscape which depends on internal strings :(((
+#ifdef HAVE_GECKO_1_9
+#include <nsStringGlue.h>
+#include <nsINetUtil.h>
+#else
 #define MOZILLA_INTERNAL_API 1
 #include <nsString.h>
+#include <nsEscape.h>
+#endif
 
 #include <nsAutoPtr.h>
 #include <nsCOMPtr.h>
-#include <nsEscape.h>
 #include <nsIChannel.h>
 #include <nsIInputStreamChannel.h>
 #include <nsIInputStream.h>
 #include <nsIIOService.h>
 #include <nsIOutputStream.h>
 #include <nsIScriptSecurityManager.h>
-#include <nsIStorageStream.h>
+#include <nsStorageStream.h>
 #include <nsIURI.h>
 #include <nsNetCID.h>
 #include <nsNetUtil.h>
@@ -148,6 +152,11 @@ EphyAboutModule::ParseURL(const char *aURL,
 			  nsACString &aOriginCharset,
 			  nsACString &aTitle)
 {
+#ifdef HAVE_GECKO_1_9
+        nsCOMPtr<nsINetUtil> netUtil (do_GetService (NS_NETUTIL_CONTRACTID));
+        NS_ENSURE_TRUE (netUtil, NS_ERROR_FAILURE);
+#endif
+
 	/* The page URL is of the form "about:neterror?e=<errorcode>&u=<URL>&c=<charset>&d=<description>" */
 	const char *query = strstr (aURL, "?");
 	if (!query) return NS_ERROR_FAILURE;
@@ -157,7 +166,7 @@ EphyAboutModule::ParseURL(const char *aURL,
 	
 	char **params = g_strsplit (query, "&", -1);
 	if (!params) return NS_ERROR_FAILURE;
-	
+
 	for (PRUint32 i = 0; params[i] != NULL; ++i)
 	{
 		char *param = params[i];
@@ -167,18 +176,34 @@ EphyAboutModule::ParseURL(const char *aURL,
 		switch (param[0])
 		{
 			case 'e':
+#ifdef HAVE_GECKO_1_9
+                                netUtil->UnescapeString (nsDependentCString (param + 2), 0, aCode);
+#else
 				aCode.Assign (nsUnescape (param + 2));
+#endif
 				break;
 			case 'u':
 				aRawOriginURL.Assign (param + 2);
+#ifdef HAVE_GECKO_1_9
+                                netUtil->UnescapeString (nsDependentCString (param + 2), 0, aOriginURL);
+#else
 				aOriginURL.Assign (nsUnescape (param + 2));
+#endif
 				break;
 			case 'c':
+#ifdef HAVE_GECKO_1_9
+                                netUtil->UnescapeString (nsDependentCString (param + 2), 0, aOriginCharset);
+#else
 				aOriginCharset.Assign (nsUnescape (param + 2));
+#endif
 				break;
 			/* The next one is not used in neterror but recover: */
 			case 't':
+#ifdef HAVE_GECKO_1_9
+                                netUtil->UnescapeString (nsDependentCString (param + 2), 0, aTitle);
+#else
 				aTitle.Assign (nsUnescape (param + 2));
+#endif
 				break;
 			case 'd':
 				/* we don't need mozilla's description parameter */
@@ -202,6 +227,8 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 				 char **aTertiary,
 				 char **aLinkIntro)
 {
+        nsresult rv = NS_OK;
+
 	*aStockIcon = GTK_STOCK_DIALOG_ERROR;
 
 	if (strcmp (aError, "protocolNotFound") == 0)
@@ -448,10 +475,10 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 	}
 	else
 	{
-		return NS_ERROR_ILLEGAL_VALUE;
+		rv = NS_ERROR_ILLEGAL_VALUE;
 	}
 
-	return NS_OK;
+	return rv;
 }
 
 nsresult
@@ -571,9 +598,11 @@ EphyAboutModule::WritePage(nsIURI *aOriginalURI,
 {
 	*_retval = nsnull;
 
+	nsCOMPtr<nsIStorageStream> storageStream (do_CreateInstance(NS_STORAGESTREAM_CONTRACTID));
+        NS_ENSURE_TRUE (storageStream, NS_ERROR_OUT_OF_MEMORY);
+
 	nsresult rv;
-	nsCOMPtr<nsIStorageStream> storageStream;
-	rv = NS_NewStorageStream (16384, (PRUint32) -1, getter_AddRefs (storageStream));
+	rv = storageStream->Init (16384, (PRUint32) -1, nsnull);
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	nsCOMPtr<nsIOutputStream> stream;
