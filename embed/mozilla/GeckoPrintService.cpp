@@ -665,7 +665,10 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   aSettings->SetPrintInColor (gtk_print_settings_get_use_color (aGtkSettings));
 
   aSettings->SetPaperSizeUnit(nsIPrintSettings::kPaperSizeMillimeters);
+
+#ifndef HAVE_GECKO_1_9
   aSettings->SetPaperSize (nsIPrintSettings::kPaperSizeDefined);
+#endif
 
   GtkPaperSize *paperSize = gtk_page_setup_get_paper_size (aPageSetup);
   if (!paperSize) {
