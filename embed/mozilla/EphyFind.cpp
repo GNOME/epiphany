@@ -100,7 +100,7 @@ EphyFind::SetEmbed (EphyEmbed *aEmbed)
 
     rv = mFinder->Init (docShell);
 #ifdef HAVE_GECKO_1_9
-//    mFinder->SetSelectionModeAndRepaint (nsISelectionController::SELECTION_ON);
+    mFinder->SetSelectionModeAndRepaint (nsISelectionController::SELECTION_ON);
 #else
     mFinder->SetFocusLinks (PR_TRUE);
 #endif
