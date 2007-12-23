@@ -73,7 +73,9 @@
 #include "ephy-gui.h"
 #include "ephy-prefs.h"
 
+#ifndef HAVE_GECKO_1_9
 #include "EphyBadCertRejector.h"
+#endif
 #include "MozDownload.h"
 
 #include "EphyHeaderSniffer.h"
@@ -223,6 +225,7 @@ EphyHeaderSniffer::OnSecurityChange (nsIWebProgress *aWebProgress, nsIRequest *a
 NS_IMETHODIMP
 EphyHeaderSniffer::GetInterface(const nsIID & uuid, void * *result)
 {
+#ifndef HAVE_GECKO_1_9
 	if (uuid.Equals (NS_GET_IID (nsIBadCertListener)) &&
 	    mEmbedPersist)
 	{
@@ -241,6 +244,7 @@ EphyHeaderSniffer::GetInterface(const nsIID & uuid, void * *result)
 			return NS_OK;
 		}
 	}
+#endif
 
 	return NS_ERROR_NO_INTERFACE;
 }

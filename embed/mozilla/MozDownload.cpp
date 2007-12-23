@@ -69,7 +69,10 @@
 #include <nsNetError.h>
 #include <nsServiceManagerUtils.h>
 
+#ifndef HAVE_GECKO_1_9
 #include "EphyBadCertRejector.h"
+#endif
+
 #include "EphyUtils.h"
 
 #include "eel-gconf-extensions.h"
@@ -505,6 +508,7 @@ MozDownload::OnSecurityChange (nsIWebProgress *aWebProgress, nsIRequest *aReques
 NS_IMETHODIMP
 MozDownload::GetInterface(const nsIID & uuid, void * *result)
 {
+#ifndef HAVE_GECKO_1_9
 	if (uuid.Equals (NS_GET_IID (nsIBadCertListener)) &&
 	    mEmbedPersist)
 	{
@@ -523,7 +527,7 @@ MozDownload::GetInterface(const nsIID & uuid, void * *result)
 			return NS_OK;
 		}
 	}
-
+#endif
 	return NS_ERROR_NO_INTERFACE;
 }
 
