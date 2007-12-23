@@ -110,12 +110,21 @@ GtkNSSDialogs::~GtkNSSDialogs ()
 {
 }
 
-NS_IMPL_THREADSAFE_ISUPPORTS5 (GtkNSSDialogs, 
-			       nsICertificateDialogs,
-			       nsIBadCertListener,
+#ifdef HAVE_GECKO_1_9
+NS_IMPL_THREADSAFE_ISUPPORTS5 (GtkNSSDialogs,
 			       nsITokenPasswordDialogs,
+			       nsIBadCertListener2,
+			       nsICertificateDialogs,
 			       nsITokenDialogs,
 			       nsIDOMCryptoDialogs)
+#else
+NS_IMPL_THREADSAFE_ISUPPORTS5 (GtkNSSDialogs, 
+			       nsITokenPasswordDialogs,
+			       nsIBadCertListener,
+			       nsICertificateDialogs,
+			       nsITokenDialogs,
+			       nsIDOMCryptoDialogs)
+#endif
 
 /* There's also nsICertPickDialogs which is implemented in mozilla
  * but has no callers. So we don't implement it.
@@ -383,7 +392,19 @@ GtkNSSDialogs::GetTokenAndSlotFromName (const PRUnichar *aName,
 	return NS_OK;
 }
   
-/* nsICertificateDialogs */
+#ifdef HAVE_GECKO_1_9
+NS_IMETHODIMP
+GtkNSSDialogs::NotifyCertProblem (nsIInterfaceRequestor *socketInfo,
+                                  nsISSLStatus *status,
+                                  const nsACString &targetSite,
+                                  PRBool *_retval)
+{
+#warning implement me!
+  *_retval = PR_FALSE;
+  return NS_OK;
+}
+
+#else /* !HAVE_GECKO_1_9 */
 
 NS_IMETHODIMP
 GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,
@@ -600,6 +621,8 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 	return NS_OK;
 }
 
+#endif /* HAVE_GECKO_1_9 */
+
 NS_IMETHODIMP 
 GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx, 
 				    nsIX509Cert *cert,
@@ -691,7 +714,6 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 
 	return NS_OK;
 }
-
 
 NS_IMETHODIMP 
 GtkNSSDialogs::NotifyCACertExists (nsIInterfaceRequestor *ctx)
