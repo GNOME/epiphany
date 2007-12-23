@@ -40,6 +40,11 @@
 #include <nsIToolkitChromeRegistry.h>
 #include <nsNetUtil.h>
 
+#ifdef HAVE_GECKO_1_9
+#include <nsIArray.h>
+#include <nsIMutableArray.h>
+#endif
+
 #include "EphyDirectoryProvider.h"
 
 NS_IMPL_ISUPPORTS2 (EphyDirectoryProvider,
@@ -88,15 +93,27 @@ EphyDirectoryProvider::GetFiles (const char *prop,
 				   getter_AddRefs (chromeDir));
 		NS_ENSURE_SUCCESS (rv, rv);
 
+#ifdef HAVE_GECKO_1_9
+		nsCOMPtr<nsIMutableArray> array (do_CreateInstance(NS_SUPPORTSARRAY_CONTRACTID));
+		if(!array)
+			return NS_ERROR_OUT_OF_MEMORY;
+		rv = array->AppendElement (manifestDir, PR_FALSE);
+		rv |= array->AppendElement (chromeDir, PR_FALSE);
+ 		NS_ENSURE_SUCCESS (rv, rv);
+
+		rv = array->Enumerate(_retval);
+#else
 		nsCOMPtr<nsISupportsArray> array;
 		rv = NS_NewISupportsArray (getter_AddRefs (array));
 		NS_ENSURE_SUCCESS (rv, rv);
 
 		rv = array->AppendElement (manifestDir);
 		rv |= array->AppendElement (chromeDir);
-		NS_ENSURE_SUCCESS (rv, rv);
+ 		NS_ENSURE_SUCCESS (rv, rv);
 
 		rv = NS_NewArrayEnumerator (_retval, array);
+#endif /* HAVE_GECKO_1_9 */
+
 		NS_ENSURE_SUCCESS (rv, rv);
 
 		rv = NS_SUCCESS_AGGREGATE_RESULT;
