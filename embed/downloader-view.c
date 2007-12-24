@@ -375,21 +375,22 @@ update_buttons (DownloaderView *dv)
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	GValue val = {0, };
-	EphyDownload *download;
 	EphyDownloadState state;
+	EphyDownload *download;
 	gboolean pause_enabled = FALSE;
 	gboolean abort_enabled = FALSE;
 	gboolean label_pause = TRUE;
+	GList *selected = NULL;
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(dv->priv->treeview));
+	selected = gtk_tree_selection_get_selected_rows (selection, &model);
 
-	if (gtk_tree_selection_get_selected (selection, &model, &iter))
+	if (g_list_length (selected) == 1)
 	{
-		gtk_tree_model_get_value (model, &iter, COL_DOWNLOAD_OBJECT, &val);
-		download = g_value_get_object (&val);
-		g_value_unset (&val);
-
+		if (gtk_tree_model_get_iter (model, &iter, selected->data) != TRUE)
+			return;
+		
+		gtk_tree_model_get (model, &iter, COL_DOWNLOAD_OBJECT, &download, -1);
 		state = ephy_download_get_state (download);
 
 		switch (state)
@@ -408,6 +409,14 @@ update_buttons (DownloaderView *dv)
 			break;
 		}
 	}
+	else
+	{
+		abort_enabled = TRUE;
+	}
+	
+	g_list_foreach (selected, (GFunc) gtk_tree_path_free, NULL);
+	g_list_free (selected);
+	
 	gtk_widget_set_sensitive (dv->priv->pause_button, pause_enabled);
 	gtk_widget_set_sensitive (dv->priv->abort_button, abort_enabled);
 	gtk_button_set_label (GTK_BUTTON (dv->priv->pause_button),
@@ -809,6 +818,7 @@ downloader_view_build_ui (DownloaderView *dv)
 	gtk_window_set_icon_name (GTK_WINDOW (priv->window), STOCK_DOWNLOAD);
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), dv);
 	
 	priv->notification = notify_notification_new (" ", " ", GTK_STOCK_INFO, NULL);
@@ -918,25 +928,41 @@ downloader_view_remove_download (DownloaderView *dv, EphyDownload *download)
 static void
 download_dialog_stop (DownloaderView *dv)
 {
-	GValue val = {0, };
 	GtkTreeSelection *selection;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
-	gpointer download;
+	GList *selected = NULL;
+	GList *downloads = NULL;
+	GList *l = NULL;
+	EphyDownload *download;
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(dv->priv->treeview));
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW(dv->priv->treeview));
 	
-	if (!gtk_tree_selection_get_selected (selection, &model, &iter)) return;
-
-	gtk_tree_model_get_value (model, &iter, COL_DOWNLOAD_OBJECT, &val);
+	selected = gtk_tree_selection_get_selected_rows (selection, &model);
 	
-	download = g_value_get_object (&val);
-	g_return_if_fail (download != NULL);
-
-	ephy_download_cancel ((EphyDownload*)download);
-	downloader_view_remove_download (dv, download);
-
-	g_value_unset (&val);
+	for (l = selected; l; l = l->next)
+	{
+		if (!gtk_tree_model_get_iter (model, &iter, l->data)) continue;
+		
+		gtk_tree_model_get (model, &iter, COL_DOWNLOAD_OBJECT, &download, -1);
+		downloads = g_list_append (downloads, download);
+	}
+	
+	/* We have to kill the downloads separately (not in the previous for) 
+	 * because otherwise selection would change.
+	 */
+	for (l = downloads; l; l = l->next)
+	{
+		if (!l->data) continue;
+		ephy_download_cancel ((EphyDownload*) l->data);
+		downloader_view_remove_download (dv, l->data);
+		g_object_unref (l->data);
+	}
+	
+	g_list_foreach (selected, (GFunc) gtk_tree_path_free, NULL);
+	g_list_free (selected);
+	g_list_free (downloads);
 }
 
 static void
