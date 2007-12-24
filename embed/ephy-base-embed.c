@@ -47,6 +47,7 @@
 #define MAX_TITLE_LENGTH        512 /* characters */
 #define RELOAD_DELAY            250 /* ms */
 #define RELOAD_DELAY_MAX_TICKS  40  /* RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s */
+#define EMPTY_PAGE		_("Blank page") /* Title for the empty page */
 
 struct _EphyBaseEmbedPrivate {
   EphyEmbedAddressExpire address_expire;
@@ -674,8 +675,8 @@ ephy_base_embed_class_init (EphyBaseEmbedClass *klass)
                                    g_param_spec_string ("title",
                                                         "Title",
                                                         "The embed's title",
-                                                        _ ("Blank page"),
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                        EMPTY_PAGE,
+							G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   g_object_class_install_property (gobject_class,
                                    PROP_STATUS_MESSAGE,
                                    g_param_spec_string ("status-message",
@@ -920,7 +921,7 @@ ephy_base_embed_init (EphyBaseEmbed *self)
   priv->zoom = 1.0;
   priv->address_expire = EPHY_EMBED_ADDRESS_EXPIRE_NOW;
   priv->is_blank = TRUE;
-  priv->title = g_strdup (_("Blank page"));
+  priv->title = g_strdup (EMPTY_PAGE);
 }
 
 static void
@@ -1036,12 +1037,12 @@ ephy_base_embed_set_title (EphyBaseEmbed *embed,
     /* Fallback */
     if (title == NULL || title[0] == '\0') {
       g_free (title);
-      title = NULL;
+      title = g_strdup (EMPTY_PAGE);
       priv->is_blank = TRUE;
     }
   } else if (priv->is_blank && title != NULL) {
     g_free (title);
-    title = NULL;
+    title = g_strdup (EMPTY_PAGE);
   }
 
   g_free (priv->title);
