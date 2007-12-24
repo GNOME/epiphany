@@ -1065,6 +1065,100 @@
   (return-type "char*")
 )
 
+(define-method get_go_up_list
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_go_up_list")
+  (return-type "GSList*")
+)
+
+(define-method get_security_level
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_security_level")
+  (return-type "none")
+  (parameters
+    '("EphyEmbedSecurityLevel*" "level")
+    '("char**" "description")
+  )
+)
+
+(define-method get_zoom
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_zoom")
+  (return-type "float")
+)
+
+(define-method get_document_type
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_document_type")
+  (return-type "EphyEmbedDocumentType")
+)
+
+(define-method get_load_percent
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_load_percent")
+  (return-type "int")
+)
+
+(define-method get_load_status
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_load_status")
+  (return-type "gboolean")
+)
+
+(define-method get_navigation_flags
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_navigation_flags")
+  (return-type "EphyEmbedNavigationFlags")
+)
+
+(define-method get_typed_address
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_typed_address")
+  (return-type "const-char*")
+)
+
+(define-method get_address
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_address")
+  (return-type "const-char*")
+)
+
+(define-method get_status_message
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_status_message")
+  (return-type "const-char*")
+)
+
+(define-method get_icon
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_icon")
+  (return-type "GdkPixbuf*")
+)
+
+(define-method get_icon_address
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_icon_address")
+  (return-type "const-char*")
+)
+
+(define-method get_is_blank
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_is_blank")
+  (return-type "gboolean")
+)
+
+(define-method get_loading_title
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_loading_title")
+  (return-type "char*")
+)
+
+(define-method get_encoding
+  (of-object "EphyEmbed")
+  (c-name "ephy_embed_get_encoding")
+  (return-type "char*")
+)
+
 (define-method can_go_back
   (of-object "EphyEmbed")
   (c-name "ephy_embed_can_go_back")
@@ -1083,11 +1177,6 @@
   (return-type "gboolean")
 )
 
-(define-method get_go_up_list
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_get_go_up_list")
-  (return-type "GSList*")
-)
 
 (define-method go_back
   (of-object "EphyEmbed")
@@ -1152,16 +1241,6 @@
   )
 )
 
-(define-method get_security_level
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_get_security_level")
-  (return-type "none")
-  (parameters
-    '("EphyEmbedSecurityLevel*" "level")
-    '("char**" "description")
-  )
-)
-
 (define-method show_page_certificate
   (of-object "EphyEmbed")
   (c-name "ephy_embed_show_page_certificate")
@@ -1175,18 +1254,6 @@
   (parameters
     '("float" "zoom")
   )
-)
-
-(define-method get_zoom
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_get_zoom")
-  (return-type "float")
-)
-
-(define-method get_encoding
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_get_encoding")
-  (return-type "char*")
 )
 
 (define-method has_automatic_encoding
