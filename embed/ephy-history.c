@@ -699,23 +699,34 @@ internal_get_host (EphyHistory *eh, const char *url, gboolean create)
 	{
 		char *location;
 		char *tmp;
+		
+		if (g_str_equal (scheme, "https"))
+		{
+			/* If scheme is https, we still fake http. */
+			location = g_strconcat ("http://", host_name, "/", NULL);
+			host_locations = g_list_append (host_locations, location);
+		}
 
+		/* We append the real address */
 		location = g_strconcat (scheme,
 					"://", host_name, "/", NULL);
 		host_locations = g_list_append (host_locations, location);
 
-		if (g_str_has_prefix (host_name, "www."))
+		/* and also a fake www-modified address if it's http or https. */
+		if (g_str_has_prefix (scheme, "http"))
 		{
-			tmp = g_strdup (g_utf8_offset_to_pointer (host_name, 4));
+			if (g_str_has_prefix (host_name, "www."))
+			{
+				tmp = g_strdup (host_name + 4);
+			}
+			else
+			{
+				tmp = g_strconcat ("www.", host_name, NULL);
+			}
+			location = g_strconcat ("http://", tmp, "/", NULL);
+			g_free (tmp);
+			host_locations = g_list_append (host_locations, location);
 		}
-		else
-		{
-			tmp = g_strconcat ("www.", host_name, NULL);
-		}
-		location = g_strconcat (gnome_vfs_uri_get_scheme (vfs_uri),
-					"://", tmp, "/", NULL);
-		g_free (tmp);
-		host_locations = g_list_append (host_locations, location);
 	}
 
 	g_return_val_if_fail (host_locations != NULL, NULL);
