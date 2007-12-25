@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "ephy-embed-container.h"
+#include "ephy-history.h"
 #include "ephy-location-action.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
@@ -37,6 +38,7 @@
 #include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkmain.h>
 
+#include <string.h>
 #define EPHY_LOCATION_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LOCATION_ACTION, EphyLocationActionPrivate))
 
 struct _EphyLocationActionPrivate
@@ -85,6 +87,106 @@ enum
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static GObjectClass *parent_class = NULL;
+
+static const struct
+{
+	const char *prefix;
+	int len;
+}
+web_prefixes [] =
+{
+	{ "http://www.", 11 },
+	{ "http://ftp.", 11 },
+	{ "http://", 7 },
+	{ "https://www.", 12 },
+	{ "https://", 8 },
+	{ "ftp://", 6},
+	{ "ftp://ftp.", 10},
+	{ "www.", 4 },
+	{ "ftp.", 4}
+};
+
+
+static gboolean
+keyword_match (const char *list,
+	       const char *keyword)
+{
+	const char *p;
+	gsize keyword_len;
+
+	p = list;
+	keyword_len = strlen (keyword);
+
+	while (*p)
+	{
+		int i;
+
+		for (i = 0; i < keyword_len; i++)
+		{
+			if (p[i] != keyword[i])
+			{
+				goto next_token;
+			}
+		}
+	  
+		return TRUE;
+	  
+		next_token:
+
+		while (*p && !g_ascii_ispunct(*p) && !g_ascii_isspace(*p)) p++;
+		while (*p && (g_ascii_ispunct(*p) || g_ascii_isspace(*p))) p++;
+	}
+
+	return FALSE;
+}
+
+static gboolean
+completion_func (GtkEntryCompletion *completion,
+		 const char *key,
+		 GtkTreeIter *iter,
+		 gpointer data)
+{
+	int i, len_key, len_prefix;
+	char *item = NULL;
+	char *keywords = NULL;
+	gboolean ret = FALSE;
+	GtkTreeModel *model;
+
+	model = gtk_entry_completion_get_model (completion);
+
+	gtk_tree_model_get (model, iter,
+			    EPHY_COMPLETION_TEXT_COL, &item,
+			    EPHY_COMPLETION_KEYWORDS_COL, &keywords,
+			    -1);
+
+	len_key = strlen (key);
+	if (!strncasecmp (key, item, len_key))
+	{
+		ret = TRUE;
+	}
+	else if (keyword_match (keywords, key))
+	{
+		ret = TRUE;
+	}
+	else
+	{
+		for (i = 0; i < G_N_ELEMENTS (web_prefixes); i++)
+		{
+			len_prefix = web_prefixes[i].len;
+			if (!strncmp (web_prefixes[i].prefix, item, len_prefix) &&
+			    !strncasecmp (key, item + len_prefix, len_key))
+			{
+				ret = TRUE;
+				break;
+			}
+		}
+	}
+
+	g_free (item);
+	g_free (keywords);
+
+	return ret;
+}
 
 GType
 ephy_location_action_get_type (void)
@@ -375,6 +477,9 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 						    EPHY_COMPLETION_EXTRA_COL,
 						    EPHY_COMPLETION_FAVICON_COL,
 						    EPHY_COMPLETION_URL_COL);
+
+		ephy_location_entry_set_completion_func (EPHY_LOCATION_ENTRY (proxy), 
+							completion_func);
 
 		add_completion_actions (action, proxy);
 

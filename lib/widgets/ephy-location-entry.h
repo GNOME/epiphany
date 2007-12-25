@@ -28,6 +28,7 @@
 #include <gtk/gtkwidget.h>
 #include <gtk/gtktoolitem.h>
 #include <gtk/gtktreemodel.h>
+#include <gtk/gtkentrycompletion.h>
 
 G_BEGIN_DECLS
 
@@ -80,6 +81,9 @@ void		ephy_location_entry_set_location	(EphyLocationEntry *le,
 							 const char *address,
 							 const char *typed_address);
 
+void		ephy_location_entry_set_completion_func (EphyLocationEntry *le, 
+							 GtkEntryCompletionMatchFunc completion_func);
+					
 const char     *ephy_location_entry_get_location	(EphyLocationEntry *le);
 
 gboolean	ephy_location_entry_reset		(EphyLocationEntry *entry);

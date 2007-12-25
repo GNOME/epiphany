@@ -38,6 +38,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtktoolbar.h>
 #include <gtk/gtkentry.h>
+#include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcellrendererpixbuf.h>
@@ -88,24 +89,6 @@ struct _EphyLocationEntryPrivate
 	guint secure : 1;
 	guint apply_colours : 1;
 	guint needs_reset : 1;
-};
-
-static const struct
-{
-	const char *prefix;
-	int len;
-}
-web_prefixes [] =
-{
-	{ "http://www.", 11 },
-	{ "http://ftp.", 11 },
-	{ "http://", 7 },
-	{ "https://www.", 12 },
-	{ "https://", 8 },
-	{ "ftp://", 6},
-	{ "ftp://ftp.", 10},
-	{ "www.", 4 },
-	{ "ftp.", 4}
 };
 
 static const GtkTargetEntry url_drag_types [] =
@@ -432,88 +415,6 @@ entry_activate_after_cb (GtkEntry *entry,
 		ephy_location_entry_reset_internal (lentry, TRUE);
 		priv->needs_reset = FALSE;
 	}
-}
-
-static gboolean
-keyword_match (const char *list,
-	       const char *keyword)
-{
-	const char *p;
-	gsize keyword_len;
-
-	p = list;
-	keyword_len = strlen (keyword);
-
-	while (*p)
-	{
-		int i;
-
-		for (i = 0; i < keyword_len; i++)
-		{
-			if (p[i] != keyword[i])
-			{
-				goto next_token;
-			}
-		}
-	  
-		return TRUE;
-	  
-		next_token:
-
-		while (*p && !g_ascii_ispunct(*p) && !g_ascii_isspace(*p)) p++;
-		while (*p && (g_ascii_ispunct(*p) || g_ascii_isspace(*p))) p++;
-	}
-
-	return FALSE;
-}
-
-static gboolean
-completion_func (GtkEntryCompletion *completion,
-		 const char *key,
-		 GtkTreeIter *iter,
-		 gpointer data)
-{
-	int i, len_key, len_prefix;
-	char *item = NULL;
-	char *keywords = NULL;
-	gboolean ret = FALSE;
-	EphyLocationEntry *le = EPHY_LOCATION_ENTRY (data);
-	GtkTreeModel *model;
-
-	model = gtk_entry_completion_get_model (completion);
-
-	gtk_tree_model_get (model, iter,
-			    le->priv->text_col, &item,
-			    le->priv->keywords_col, &keywords,
-			    -1);
-
-	len_key = strlen (key);
-	if (!strncasecmp (key, item, len_key))
-	{
-		ret = TRUE;
-	}
-	else if (keyword_match (keywords, key))
-	{
-		ret = TRUE;
-	}
-	else
-	{
-		for (i = 0; i < G_N_ELEMENTS (web_prefixes); i++)
-		{
-			len_prefix = web_prefixes[i].len;
-			if (!strncmp (web_prefixes[i].prefix, item, len_prefix) &&
-			    !strncasecmp (key, item + len_prefix, len_key))
-			{
-				ret = TRUE;
-				break;
-			}
-		}
-	}
-
-	g_free (item);
-	g_free (keywords);
-
-	return ret;
 }
 
 static gboolean
@@ -1039,6 +940,17 @@ extracell_data_func (GtkCellLayout *cell_layout,
 }
 
 void
+ephy_location_entry_set_completion_func (EphyLocationEntry *le, 
+					GtkEntryCompletionMatchFunc completion_func)
+{
+	EphyLocationEntryPrivate *priv = le->priv;
+	GtkEntryCompletion *completion;
+	
+	completion = gtk_entry_get_completion (GTK_ENTRY (priv->icon_entry->entry));
+	gtk_entry_completion_set_match_func (completion, completion_func, NULL, NULL);
+}
+
+void
 ephy_location_entry_set_completion (EphyLocationEntry *le,
 				    GtkTreeModel *model,
 				    guint text_col,
@@ -1071,7 +983,6 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 	completion = gtk_entry_completion_new ();
 	gtk_entry_completion_set_model (completion, sort_model);
 	g_object_unref (sort_model);
-	gtk_entry_completion_set_match_func (completion, completion_func, le, NULL);
 	g_signal_connect (completion, "match-selected",
 			  G_CALLBACK (match_selected_cb), le);
 	g_signal_connect_after (completion, "action-activated",
