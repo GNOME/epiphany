@@ -1,4 +1,4 @@
-# translation of help.HEAD.es(2).po to Español
+# translation of epiphany.help.HEAD.po to Español
 # translation of epiphany manual to Spanish
 #
 # Francisco Javier F. Serrador <serrador@tecknolabs.com>, 2005.
@@ -6,10 +6,10 @@
 # Jorge González <jorgegonz@svn.gnome.org>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: help.HEAD.es(2)\n"
+"Project-Id-Version: epiphany.help.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-21 09:00+0000\n"
-"PO-Revision-Date: 2007-12-23 14:01+0100\n"
+"POT-Creation-Date: 2007-12-24 13:02+0000\n"
+"PO-Revision-Date: 2007-12-25 23:52+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <<gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -46,7 +46,7 @@ msgstr ""
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: C/epiphany.xml:1366(None)
+#: C/epiphany.xml:1380(None)
 msgid ""
 "@@image: 'figures/ephy-history-window-screenshot.png'; "
 "md5=73080fe23ca131c71b3b313c52cff399"
@@ -428,9 +428,9 @@ msgstr "Componentes de la ventana del navegador"
 msgid "Component"
 msgstr "Componente"
 
-#: C/epiphany.xml:276(para) C/epiphany.xml:2152(para)
-#: C/epiphany.xml:2307(para) C/epiphany.xml:2476(para)
-#: C/epiphany.xml:2563(para) C/epiphany.xml:2675(para)
+#: C/epiphany.xml:276(para) C/epiphany.xml:2166(para)
+#: C/epiphany.xml:2321(para) C/epiphany.xml:2490(para)
+#: C/epiphany.xml:2577(para) C/epiphany.xml:2689(para)
 msgid "Description"
 msgstr "Descripción"
 
@@ -1747,10 +1747,36 @@ msgstr ""
 "herramientas</guimenuitem> en el menú contextual del marcador."
 
 #: C/epiphany.xml:1321(title)
+msgid "How do I resize a Smart Bookmark on the toolbar?"
+msgstr "¿Cómo se redimensiona un marcador inteligente en la barra de herramientas?"
+
+#: C/epiphany.xml:1322(para)
+msgid ""
+"To set the size of an entry field for a Smart Bookmark, right-click on the "
+"bookmark in the <guilabel>Edit Bookmarks</guilabel> dialog and select "
+"<guimenuitem>Properties</guimenuitem> from the context menu. In the "
+"<guilabel>Address</guilabel> field, add <userinput>%"
+"{width=<replaceable>NUMCHARS</replaceable>}</userinput> to the end of the "
+"address, replacing <replaceable>NUMCHARS</replaceable> with your desired "
+"width. For example, use <userinput>http://www.google.com/search?q=%s%"
+"{width=15}</userinput> to set the width of a Google search field to 15 "
+"characters."
+msgstr ""
+"Para establecer el tamaño de un campo de entrada para un marcador inteligente, pulse con el botón derecho del ratón sobre "
+"el marcador en el diálogo <guilabel>Editar marcadores</guilabel> y seleccione "
+"el campo <guimenuitem>Propiedades</guimenuitem> del menú contextual. En el "
+"campo <guilabel>Dirección</guilabel> añada <userinput>%"
+"{width=<replaceable>NÚMCARACTERES</replaceable>}</userinput> al final de la "
+"dirección, reemplazando <replaceable>NÚMCARACTERES</replaceable> con la "
+"anchura que desee. Por ejemplo, use <userinput>http://www.google.es/search?q=%s%"
+"{width=15}</userinput> para establecer la anchura de un campo de búsqueda con Google de 15 "
+"caracteres."
+
+#: C/epiphany.xml:1335(title)
 msgid "Smart Bookmarks Archive"
 msgstr "Archivador de marcadores inteligentes"
 
-#: C/epiphany.xml:1322(para)
+#: C/epiphany.xml:1336(para)
 msgid ""
 "An archive containing lots of Smart Bookmarks is available at the <ulink url="
 "\"http://galeon.sourceforge.net/bookmarks/\">Galeon</ulink> web site."
@@ -1759,15 +1785,15 @@ msgstr ""
 "sitio web de <ulink url=\"http://galeon.sourceforge.net/bookmarks/\">Galeon</"
 "ulink>."
 
-#: C/epiphany.xml:1333(title)
+#: C/epiphany.xml:1347(title)
 msgid "Managing Your History Links"
 msgstr "Gestión de sus enlaces históricos"
 
-#: C/epiphany.xml:1337(title)
+#: C/epiphany.xml:1351(title)
 msgid "Overview of the Epiphany History System"
 msgstr "Vista somera del sistema histórico de Epiphany"
 
-#: C/epiphany.xml:1338(para)
+#: C/epiphany.xml:1352(para)
 msgid ""
 "Epiphany collects history information about locations that are visited by "
 "you. This information is stored in a database and can then be accessed later."
@@ -1776,7 +1802,7 @@ msgstr ""
 "visita. Esta información se almacena en una base de datos que puede "
 "accederse más tarde."
 
-#: C/epiphany.xml:1343(para)
+#: C/epiphany.xml:1357(para)
 msgid ""
 "As you type in the location bar of the main window, <application>Epiphany</"
 "application> searches for matches in the title or address of the locations "
@@ -1789,7 +1815,7 @@ msgstr ""
 "datos del histórico y de marcadores. Las coincidencias se listan bajo la "
 "barra de direcciones."
 
-#: C/epiphany.xml:1350(para)
+#: C/epiphany.xml:1364(para)
 msgid ""
 "You can manage history by opening the history window. This window allows you "
 "to search the history, and delete locations you do not want to revisit later."
@@ -1798,21 +1824,21 @@ msgstr ""
 "le permite buscar en el histórico, y borrar direcciones que no quiere "
 "revisitar más tarde."
 
-#: C/epiphany.xml:1355(para)
+#: C/epiphany.xml:1369(para)
 msgid "<xref linkend=\"ephy-history-window-screenshot\"/> shows the history window."
 msgstr ""
 "La <xref linkend=\"ephy-history-window-screenshot\"/> muestra la ventana del "
 "histórico."
 
-#: C/epiphany.xml:1360(title)
+#: C/epiphany.xml:1374(title)
 msgid "History window"
 msgstr "Ventana del histórico"
 
-#: C/epiphany.xml:1373(title)
+#: C/epiphany.xml:1387(title)
 msgid "To Select History Links"
 msgstr "Para seleccionar los enlaces del histórico"
 
-#: C/epiphany.xml:1374(para)
+#: C/epiphany.xml:1388(para)
 msgid ""
 "Select <menuchoice><guimenu>Go</guimenu><guimenuitem>History</guimenuitem></"
 "menuchoice> to open the history window. You can search for history links, "
@@ -1824,21 +1850,21 @@ msgstr ""
 "enlaces en el histórico, abrir enlaces en una ventana nueva o en una solapa, "
 "o borrar el histórico de la base de datos."
 
-#: C/epiphany.xml:1385(title)
+#: C/epiphany.xml:1399(title)
 msgid "To Open a History Link in a New Window or Tab"
 msgstr "Para abrir un enlace del histórico en una ventana o solapa nueva"
 
-#: C/epiphany.xml:1388(term)
+#: C/epiphany.xml:1402(term)
 msgid "To open a history link in a new window perform the following steps:"
 msgstr ""
 "Para abrir un enlace del histórico en una ventana nueva realice los pasos "
 "siguientes:"
 
-#: C/epiphany.xml:1394(para) C/epiphany.xml:1417(para)
+#: C/epiphany.xml:1408(para) C/epiphany.xml:1431(para)
 msgid "Select the history link that you want to open."
 msgstr "Seleccione el enlace histórico que quiere abrir."
 
-#: C/epiphany.xml:1399(para)
+#: C/epiphany.xml:1413(para)
 msgid ""
 "Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Open in New Window</"
 "guimenuitem></menuchoice>. Alternatively, choose "
@@ -1850,13 +1876,13 @@ msgstr ""
 "<menuchoice><guimenuitem>Abrir en la ventana nueva</guimenuitem></"
 "menuchoice> desde el menú contextual del histórico de enlaces."
 
-#: C/epiphany.xml:1411(term)
+#: C/epiphany.xml:1425(term)
 msgid "To Open a history link in a new tab perform the following steps:"
 msgstr ""
 "Para abrir un enlace del histórico en una solapa nueva realice los pasos "
 "siguientes:"
 
-#: C/epiphany.xml:1422(para)
+#: C/epiphany.xml:1436(para)
 msgid ""
 "Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Open in New Tab</"
 "guimenuitem></menuchoice>. Alternatively, choose "
@@ -1868,19 +1894,19 @@ msgstr ""
 "<menuchoice><guimenuitem>Abrir en una solapa nueva</guimenuitem></"
 "menuchoice> desde el menú contextual del histórico de enlaces."
 
-#: C/epiphany.xml:1436(title)
+#: C/epiphany.xml:1450(title)
 msgid "To Delete a History Link"
 msgstr "Para borrar un enlace del histórico"
 
-#: C/epiphany.xml:1437(para)
+#: C/epiphany.xml:1451(para)
 msgid "To delete a history link perform the following steps:"
 msgstr "Para borrar un enlace histórico realice los pasos siguientes:"
 
-#: C/epiphany.xml:1442(para)
+#: C/epiphany.xml:1456(para)
 msgid "Select the history link that you want to delete."
 msgstr "Seleccione el enlace histórico que quiere borrar."
 
-#: C/epiphany.xml:1447(para)
+#: C/epiphany.xml:1461(para)
 msgid ""
 "Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Delete</guimenuitem></"
 "menuchoice>. Alternatively, choose <guimenuitem>Delete </guimenuitem> from "
@@ -1890,11 +1916,11 @@ msgstr ""
 "guimenuitem></menuchoice>. Alternativamente, elija <guimenuitem>Borrar</"
 "guimenuitem> desde el menú contextual del histórico de enlaces."
 
-#: C/epiphany.xml:1456(title)
+#: C/epiphany.xml:1470(title)
 msgid "To Search Your History Links"
 msgstr "Para buscar en sus enlaces históricos"
 
-#: C/epiphany.xml:1457(para)
+#: C/epiphany.xml:1471(para)
 msgid ""
 "You can type into the search entry in the history window. In case any "
 "matches are found in the history database, they are shown in a list below. "
@@ -1907,7 +1933,7 @@ msgstr ""
 "entonces abrirse en una ventana nueva, una solapa nueva o la dirección del "
 "enlace se puede copiar para pegarla en cualquier otra aplicación."
 
-#: C/epiphany.xml:1465(para)
+#: C/epiphany.xml:1479(para)
 msgid ""
 "Alternatively, anything you enter in the address entry of the "
 "<application>Epiphany</application> window is matched against the history "
@@ -1919,19 +1945,19 @@ msgstr ""
 "de datos del histórico, y se muestra en una lista desplegable junto con "
 "otras coincidencias de la base de datos de marcadores."
 
-#: C/epiphany.xml:1474(title)
+#: C/epiphany.xml:1488(title)
 msgid "To Copy the Address of a History Link"
 msgstr "Para copiar una dirección de un enlace histórico"
 
-#: C/epiphany.xml:1475(para)
+#: C/epiphany.xml:1489(para)
 msgid "To copy the address of a history link perform the following steps:"
 msgstr "Para copiar la dirección de un enlace histórico realice los pasos siguientes:"
 
-#: C/epiphany.xml:1481(para) C/epiphany.xml:1503(para)
+#: C/epiphany.xml:1495(para) C/epiphany.xml:1517(para)
 msgid "Select the history link."
 msgstr "Seleccione el enlace histórico."
 
-#: C/epiphany.xml:1486(para)
+#: C/epiphany.xml:1500(para)
 msgid ""
 "Choose <menuchoice><guimenu>Edit</guimenu><guimenuitem>Copy Address</"
 "guimenuitem></menuchoice>. Alternatively, choose <guimenuitem>Copy Address</"
@@ -1941,17 +1967,17 @@ msgstr ""
 "guimenuitem></menuchoice>. Alternativamente, elija <guimenuitem>Copiar "
 "dirección</guimenuitem> desde el menú contextual del histórico de enlaces."
 
-#: C/epiphany.xml:1496(title)
+#: C/epiphany.xml:1510(title)
 msgid "To Create a Bookmark from a History Link"
 msgstr "Para crear un marcador desde un enlace histórico"
 
-#: C/epiphany.xml:1497(para)
+#: C/epiphany.xml:1511(para)
 msgid "To create a bookmark from a history link perform the following steps:"
 msgstr ""
 "Para crear un marcador desde un enlace del histórico realice los siguientes "
 "pasos:"
 
-#: C/epiphany.xml:1508(para)
+#: C/epiphany.xml:1522(para)
 msgid ""
 "Choose <menuchoice><guimenu>File</guimenu><guimenuitem> Add Bookmark...</"
 "guimenuitem></menuchoice>. Alternatively, choose <guimenuitem>Add Bookmark..."
@@ -1962,7 +1988,7 @@ msgstr ""
 "<guimenuitem>Añadir marcador&hellip;</guimenuitem> del menú contextual del "
 "histórico de enlaces."
 
-#: C/epiphany.xml:1516(para)
+#: C/epiphany.xml:1530(para)
 msgid ""
 "For more information on bookmarks, see <xref linkend=\"overview-of-bookmarks"
 "\"/>."
@@ -1970,11 +1996,11 @@ msgstr ""
 "Para más información acerca de los marcadores, vea la <xref linkend="
 "\"overview-of-bookmarks\"/>."
 
-#: C/epiphany.xml:1525(title)
+#: C/epiphany.xml:1539(title)
 msgid "Managing Your Cookies and Passwords"
 msgstr "Gestión de cookies y contraseñas"
 
-#: C/epiphany.xml:1526(para)
+#: C/epiphany.xml:1540(para)
 msgid ""
 "<application>Epiphany</application> stores your cookies and passwords in the "
 "Personal Data Manager which can be accessed by choosing "
@@ -1986,11 +2012,11 @@ msgstr ""
 "<menuchoice><guimenu>Editar</guimenu><guisubmenu>Datos personales</"
 "guisubmenu></menuchoice>."
 
-#: C/epiphany.xml:1532(title)
+#: C/epiphany.xml:1546(title)
 msgid "Managing Cookies"
 msgstr "Gestión de cookies"
 
-#: C/epiphany.xml:1533(para)
+#: C/epiphany.xml:1547(para)
 msgid ""
 "Cookies allow web pages to store pieces of information which can then be "
 "accessed by the site when you next visit."
@@ -1998,7 +2024,7 @@ msgstr ""
 "Las cookies permiten a las páginas web almacenar fragmentos de información "
 "para poder acceder a ellos más adelante en la próxima visita."
 
-#: C/epiphany.xml:1537(para)
+#: C/epiphany.xml:1551(para)
 msgid ""
 "In Personal Data Manager, you can view the cookies stored on your computer "
 "and the details contained within them. You can also delete cookies."
@@ -2006,7 +2032,7 @@ msgstr ""
 "En el «Gestor de Datos Personales», puede ver las cookies almacenadas en su "
 "equipo y los detalles contenidos en ellas. Puede borrar también las cookies."
 
-#: C/epiphany.xml:1543(para)
+#: C/epiphany.xml:1557(para)
 msgid ""
 "To view the contents of a cookie, select its entry in the list and press "
 "<guibutton>Properties</guibutton>."
@@ -2014,7 +2040,7 @@ msgstr ""
 "Para ver el contenido de una cookie, seleccione su entrada en la lista y "
 "pulse <guibutton>Propiedades</guibutton>."
 
-#: C/epiphany.xml:1549(para)
+#: C/epiphany.xml:1563(para)
 msgid ""
 "To delete cookies, select all the cookies you want to delete, and press the "
 "<guibutton>Remove</guibutton> button."
@@ -2022,31 +2048,31 @@ msgstr ""
 "Para borrar cookies, seleccione todas las cookies que quiere borrar, y pulse "
 "el botón <guibutton>Quitar</guibutton>."
 
-#: C/epiphany.xml:1555(para)
+#: C/epiphany.xml:1569(para)
 msgid "The cookies properties window shows you the following details:"
 msgstr "Las propiedades de la ventana de cookies muestra los siguientes detalles:"
 
-#: C/epiphany.xml:1560(term)
+#: C/epiphany.xml:1574(term)
 msgid "Content"
 msgstr "Contenido"
 
-#: C/epiphany.xml:1562(para)
+#: C/epiphany.xml:1576(para)
 msgid "The content of the cookie."
 msgstr "El contenido de la cookie."
 
-#: C/epiphany.xml:1568(term)
+#: C/epiphany.xml:1582(term)
 msgid "Path"
 msgstr "Ruta"
 
-#: C/epiphany.xml:1570(para)
+#: C/epiphany.xml:1584(para)
 msgid "The path within the domain for which the cookie is valid."
 msgstr "La ruta dentro del dominio para el que la cookie es válida."
 
-#: C/epiphany.xml:1576(term)
+#: C/epiphany.xml:1590(term)
 msgid "Send for"
 msgstr "Enviar para"
 
-#: C/epiphany.xml:1578(para)
+#: C/epiphany.xml:1592(para)
 msgid ""
 "When <guilabel>Any type of connection</guilabel>, the cookie can be sent to "
 "any server. When <guilabel>Encrypted connections only</guilabel>, the cookie "
@@ -2056,19 +2082,19 @@ msgstr ""
 "puede enviar a cualquier servidor. Cuando sea <guilabel>Sólo conexiones "
 "encriptadas</guilabel>, la cookie sólo se enviará a servidores seguros."
 
-#: C/epiphany.xml:1587(term)
+#: C/epiphany.xml:1601(term)
 msgid "Expires"
 msgstr "Caducidad"
 
-#: C/epiphany.xml:1589(para)
+#: C/epiphany.xml:1603(para)
 msgid "The date and time at which the cookie is no longer valid."
 msgstr "La fecha y hora en la que la cookie ya no es válida por más tiempo."
 
-#: C/epiphany.xml:1597(title)
+#: C/epiphany.xml:1611(title)
 msgid "Managing Passwords"
 msgstr "Gestión de contraseñas"
 
-#: C/epiphany.xml:1598(para)
+#: C/epiphany.xml:1612(para)
 msgid ""
 "Many web sites require you to log in using a username and password to gain "
 "access to some or all of the site. <application>Epiphany</application> can "
@@ -2079,7 +2105,7 @@ msgstr ""
 "<application>Epiphany</application> puede recordar las contraseñas por "
 "usted, para que pueda iniciar sesión rápidamente en el futuro."
 
-#: C/epiphany.xml:1603(para)
+#: C/epiphany.xml:1617(para)
 msgid ""
 "In Personal Data Manager, you can view the sites for which passwords have "
 "been stored, and delete them."
@@ -2087,7 +2113,7 @@ msgstr ""
 "En el «Gestor de datos Personales», puede ver los sitios para los que se ha "
 "almacenado una contraseña, y borrarlos."
 
-#: C/epiphany.xml:1609(para)
+#: C/epiphany.xml:1623(para)
 msgid ""
 "To delete passwords, select all the entries you want to delete, and press "
 "the <guibutton>Remove</guibutton> button."
@@ -2095,7 +2121,7 @@ msgstr ""
 "Para borrar contraseñas, seleccione todas las entradas que quiera borrar, y "
 "pulse el botón <guibutton>Eliminar</guibutton>."
 
-#: C/epiphany.xml:1615(para)
+#: C/epiphany.xml:1629(para)
 msgid ""
 "The password content is normally hidden to protect your privacy. You can use "
 "the <guilabel>Show passwords</guilabel> toggle to reveal previously saved "
@@ -2105,19 +2131,19 @@ msgstr ""
 "privacidad. Puede usar el conmutador <guilabel>Mostrar contraseña</guilabel> "
 "para revelar las contraseñas guardadas anteriormente."
 
-#: C/epiphany.xml:1624(title)
+#: C/epiphany.xml:1638(title)
 msgid "Clearing your personal data"
 msgstr "Limpiar sus datos personales"
 
-#: C/epiphany.xml:1625(para)
+#: C/epiphany.xml:1639(para)
 msgid ""
 "<application>Epiphany</application> let you clear all your personal data it "
 "remembered in an easy way."
 msgstr ""
-"<application>Epiphany</application> le permite limpiar todos sus datos personales "
-"que están guardados de una forma fácil."
+"<application>Epiphany</application> le permite limpiar todos sus datos "
+"personales que están guardados de una forma fácil."
 
-#: C/epiphany.xml:1628(para)
+#: C/epiphany.xml:1642(para)
 msgid ""
 "The Clear All dialog, which can be accessed by clicking on the "
 "<guibutton>Clear All...</guibutton> on the bottom right corner of the "
@@ -2130,18 +2156,18 @@ msgid ""
 msgstr ""
 "El diálogo Limpiar todo, al que se puede acceder pulsando en el botón "
 "<guibutton>Limpiar todo...</guibutton> en la esquina inferior izquierda del "
-"Gestor de datos personales, le permite especificar los elementos de sus datos personales "
-"que quiere limpiar. Para obtener más detalles vea: <xref linkend=\"managing-cookies\"/>, "
-"<xref linkend=\"managing-passwords\"/> y <xref linkend=\"overview-of-history\"/>. "
-"Note que la operación no se puede deshacer y al pulsar "
-"<guibutton>Limpiar</guibutton> perderá todos los datos personales del tipo "
-"seleccionado."
+"Gestor de datos personales, le permite especificar los elementos de sus "
+"datos personales que quiere limpiar. Para obtener más detalles vea: <xref "
+"linkend=\"managing-cookies\"/>, <xref linkend=\"managing-passwords\"/> y "
+"<xref linkend=\"overview-of-history\"/>. Note que la operación no se puede "
+"deshacer y al pulsar <guibutton>Limpiar</guibutton> perderá todos los datos "
+"personales del tipo seleccionado."
 
-#: C/epiphany.xml:1642(title)
+#: C/epiphany.xml:1656(title)
 msgid "Using the Download Manager"
 msgstr "Uso del Gestor de descargas"
 
-#: C/epiphany.xml:1643(para)
+#: C/epiphany.xml:1657(para)
 msgid ""
 "When you are downloading files, the download manager provides you with "
 "details of the current downloads:"
@@ -2149,11 +2175,11 @@ msgstr ""
 "Cuando descargue archivos, el gestor de descargas le proporciona detalles "
 "acerca de sus descargas actuales:"
 
-#: C/epiphany.xml:1649(para)
+#: C/epiphany.xml:1663(para)
 msgid "The <guilabel>%</guilabel> column shows the progress of each download."
 msgstr "La columna <guilabel>%</guilabel> muestra el progreso de cada descarga."
 
-#: C/epiphany.xml:1654(para)
+#: C/epiphany.xml:1668(para)
 msgid ""
 "The <guilabel>Filename</guilabel> is the name of the downloading file. The "
 "folder which the file is downloaded to can be specified in <xref linkend="
@@ -2165,7 +2191,7 @@ msgstr ""
 "especificarse en la <xref linkend=\"general-preferences\"/>. Esta columna "
 "también muestra la cantidad de archivos descargados y su tamaño total."
 
-#: C/epiphany.xml:1661(para)
+#: C/epiphany.xml:1675(para)
 msgid ""
 "<guilabel>Remaining</guilabel> gives an estimation of the amount of time to "
 "completion. This is a best guess and, depending on the reliability of your "
@@ -2175,7 +2201,7 @@ msgstr ""
 "falta hasta terminar. Esto es una aproximación, dependiendo de la "
 "confiabilidad de su conexión, este valor puede variar en precisión."
 
-#: C/epiphany.xml:1668(para)
+#: C/epiphany.xml:1682(para)
 msgid ""
 "To cancel a download, select its entry in the download manager and press "
 "<guibutton> Stop</guibutton>."
@@ -2183,7 +2209,7 @@ msgstr ""
 "Para cancelar una descarga, seleccione su entrada en el gestor de descargas "
 "y pulse <guibutton>Detener</guibutton>."
 
-#: C/epiphany.xml:1672(para)
+#: C/epiphany.xml:1686(para)
 msgid ""
 "To pause a download, select its entry in the download manager and press "
 "<guibutton> Pause</guibutton>."
@@ -2191,7 +2217,7 @@ msgstr ""
 "Para pausar una descarga, seleccione su entrada en el gestor de descargas y "
 "pulse <guibutton>Pausar</guibutton>."
 
-#: C/epiphany.xml:1676(para)
+#: C/epiphany.xml:1690(para)
 msgid ""
 "To resume a download, select its entry in the download manager and press "
 "<guibutton> Resume</guibutton>."
@@ -2199,7 +2225,7 @@ msgstr ""
 "Para continuar una descarga, seleccione su entrada en el gestor de descargas "
 "y pulse <guibutton>Continuar</guibutton>."
 
-#: C/epiphany.xml:1681(para)
+#: C/epiphany.xml:1695(para)
 msgid ""
 "Once all downloads have finished, or been cancelled, the download manager "
 "will close."
@@ -2207,7 +2233,7 @@ msgstr ""
 "Una vez que todas las descargas hayan finalizado, o hayan sido canceladas, "
 "el gestor de descargas se cerrará."
 
-#: C/epiphany.xml:1686(para)
+#: C/epiphany.xml:1700(para)
 msgid ""
 "<keycombo><keycap>Shift</keycap><mousebutton>Click</mousebutton></keycombo> "
 "on a link, image or page will cause it to be downloaded to your default "
@@ -2217,11 +2243,11 @@ msgstr ""
 "keycombo> en un enlace, imagen o página hará que se descargue en su carpeta "
 "de descargas predeterminada."
 
-#: C/epiphany.xml:1698(title)
+#: C/epiphany.xml:1712(title)
 msgid "Certificates &amp; Online Security"
 msgstr "Certificados y seguridad en línea"
 
-#: C/epiphany.xml:1699(para)
+#: C/epiphany.xml:1713(para)
 msgid ""
 "When using sites which require you to login, or when using on-line shopping, "
 "it is important to know that the information you submit is secure. "
@@ -2233,11 +2259,11 @@ msgstr ""
 "segura. <application>Epiphany</application> ofrece varias características "
 "para ayudarle en esto."
 
-#: C/epiphany.xml:1705(title)
+#: C/epiphany.xml:1719(title)
 msgid "Identifying Secure Sites"
 msgstr "Identificación de sitios seguros"
 
-#: C/epiphany.xml:1706(para)
+#: C/epiphany.xml:1720(para)
 msgid ""
 "When viewing web pages, <application>Epiphany</application> displays a "
 "padlock icon in the statusbar which shows you whether the current site is "
@@ -2247,27 +2273,27 @@ msgstr ""
 "de un candado en la barra de estado que le muestra si la página actual es "
 "segura."
 
-#: C/epiphany.xml:1712(term)
+#: C/epiphany.xml:1726(term)
 msgid "An unlocked padlock"
 msgstr "Un candado abierto"
 
-#: C/epiphany.xml:1714(para)
+#: C/epiphany.xml:1728(para)
 msgid "Indicates that this site is insecure."
 msgstr "Indica que este sitio es inseguro."
 
-#: C/epiphany.xml:1720(term)
+#: C/epiphany.xml:1734(term)
 msgid "A locked padlock"
 msgstr "Un candado cerrado"
 
-#: C/epiphany.xml:1722(para)
+#: C/epiphany.xml:1736(para)
 msgid "Indicates that this site is secure."
 msgstr "Indica que este sitio es seguro."
 
-#: C/epiphany.xml:1728(term)
+#: C/epiphany.xml:1742(term)
 msgid "A broken padlock"
 msgstr "Un candado roto"
 
-#: C/epiphany.xml:1730(para)
+#: C/epiphany.xml:1744(para)
 msgid ""
 "Indicates that some parts of this page are secure, and others are not. You "
 "should consider the page as a whole to be insecure."
@@ -2275,7 +2301,7 @@ msgstr ""
 "Indica que algunas partes de esta página son seguras, y otras no lo son. "
 "Debería considerar toda la página como insegura."
 
-#: C/epiphany.xml:1737(para)
+#: C/epiphany.xml:1751(para)
 msgid ""
 "For secure sites, there is an additional locked padlock icon in the address "
 "entry, and the address entry has a different background color."
@@ -2284,11 +2310,11 @@ msgstr ""
 "barra de direcciones, y la entrada de direcciones tiene un color de fondo "
 "diferente."
 
-#: C/epiphany.xml:1743(title)
+#: C/epiphany.xml:1757(title)
 msgid "Using Certificate Viewer"
 msgstr "Uso del visor de certificados"
 
-#: C/epiphany.xml:1744(para)
+#: C/epiphany.xml:1758(para)
 msgid ""
 "The certificate viewer presents the details held within the certificate. The "
 "<guilabel>General</guilabel> tab provides the following details:"
@@ -2296,21 +2322,21 @@ msgstr ""
 "El visor de certificados presenta los detalles que tienen los certificados. "
 "La solapa <guilabel>General</guilabel> proporciona los siguientes detalles:"
 
-#: C/epiphany.xml:1750(term)
+#: C/epiphany.xml:1764(term)
 msgid "Common Name"
 msgstr "Nombre común"
 
-#: C/epiphany.xml:1752(para)
+#: C/epiphany.xml:1766(para)
 msgid ""
 "Shows either who issued the certificate, or the domain to which it was "
 "issued."
 msgstr "Muestra o quién emitió el certificado o el dominio para el cual se emitió."
 
-#: C/epiphany.xml:1759(term)
+#: C/epiphany.xml:1773(term)
 msgid "Organisation"
 msgstr "Organización"
 
-#: C/epiphany.xml:1761(para)
+#: C/epiphany.xml:1775(para)
 msgid ""
 "Shows the name of the issuing company, or the name of the company to which "
 "is was issued."
@@ -2318,43 +2344,43 @@ msgstr ""
 "Muestra el nombre de la compañía emisora, o el nombre de la compañía para la "
 "que fue emitido."
 
-#: C/epiphany.xml:1768(term)
+#: C/epiphany.xml:1782(term)
 msgid "Organisational Unit"
 msgstr "Unidad organizativa"
 
-#: C/epiphany.xml:1770(para)
+#: C/epiphany.xml:1784(para)
 msgid "Shows the division of the company which issued or received the certificate."
 msgstr "Muestra la división de la compañía que emitió o recibió el certificado."
 
-#: C/epiphany.xml:1776(term)
+#: C/epiphany.xml:1790(term)
 msgid "Serial Number"
 msgstr "Número de serie"
 
-#: C/epiphany.xml:1778(para)
+#: C/epiphany.xml:1792(para)
 msgid "A unique identifier for this certificate."
 msgstr "Un identificador único para este certificado."
 
-#: C/epiphany.xml:1784(term)
+#: C/epiphany.xml:1798(term)
 msgid "Issued On"
 msgstr "Emitido el"
 
-#: C/epiphany.xml:1786(para)
+#: C/epiphany.xml:1800(para)
 msgid "The date the certificate was issued."
 msgstr "La fecha en que el certificado fue emitido."
 
-#: C/epiphany.xml:1792(term)
+#: C/epiphany.xml:1806(term)
 msgid "Expires On"
 msgstr "Caduca el"
 
-#: C/epiphany.xml:1794(para)
+#: C/epiphany.xml:1808(para)
 msgid "The date the certificate expires."
 msgstr "La fecha en que el certificado caduca."
 
-#: C/epiphany.xml:1800(term)
+#: C/epiphany.xml:1814(term)
 msgid "SHA1 Fingerprint"
 msgstr "Huella SHA1"
 
-#: C/epiphany.xml:1802(para) C/epiphany.xml:1811(para)
+#: C/epiphany.xml:1816(para) C/epiphany.xml:1825(para)
 msgid ""
 "An identifying string for this certificate. You can check with the issuing "
 "company that this string matches the certificate on their records."
@@ -2363,19 +2389,19 @@ msgstr ""
 "compañía emisora que esta cadena coincide con el certificado en sus "
 "registros."
 
-#: C/epiphany.xml:1809(term)
+#: C/epiphany.xml:1823(term)
 msgid "MD5 Fingerprint"
 msgstr "Huella MD5"
 
-#: C/epiphany.xml:1818(para)
+#: C/epiphany.xml:1832(para)
 msgid "The <guilabel>Details</guilabel> tab shows the following information:"
 msgstr "La solapa <guilabel>Detalles</guilabel> muestra la siguiente información:"
 
-#: C/epiphany.xml:1823(term)
+#: C/epiphany.xml:1837(term)
 msgid "Certificate Hierarchy"
 msgstr "Jerarquía del certificado"
 
-#: C/epiphany.xml:1825(para)
+#: C/epiphany.xml:1839(para)
 msgid ""
 "Some certificates are signed by intermediate authorities who are in turn "
 "signed by an authority at a higher level. This list displays the complete "
@@ -2385,11 +2411,11 @@ msgstr ""
 "su vez firmadas por una autoridad de un nivel más alto. Esta lista muestra "
 "la cadena completa del certificado."
 
-#: C/epiphany.xml:1833(term)
+#: C/epiphany.xml:1847(term)
 msgid "Certificate Fields"
 msgstr "Campos del certificado"
 
-#: C/epiphany.xml:1835(para)
+#: C/epiphany.xml:1849(para)
 msgid ""
 "Displays the fields as they appear in the certificate for the selected "
 "certificate in the hierarchy."
@@ -2397,23 +2423,23 @@ msgstr ""
 "Muestra los campos tal como aparecen en el certificado para el certificado "
 "seleccionado en la jerarquía."
 
-#: C/epiphany.xml:1842(term)
+#: C/epiphany.xml:1856(term)
 msgid "Field Value"
 msgstr "Valor del campo"
 
-#: C/epiphany.xml:1844(para)
+#: C/epiphany.xml:1858(para)
 msgid "Displays the value for the selected certificate field."
 msgstr "Muestra el valor del campo del certificado seleccionado."
 
-#: C/epiphany.xml:1855(title)
+#: C/epiphany.xml:1869(title)
 msgid "Customizing <application>Epiphany</application>"
 msgstr "Personalización de <application>Epiphany</application>"
 
-#: C/epiphany.xml:1859(title)
+#: C/epiphany.xml:1873(title)
 msgid "Setting Your Preferences"
 msgstr "Establecer sus preferencias"
 
-#: C/epiphany.xml:1860(para)
+#: C/epiphany.xml:1874(para)
 msgid ""
 "You can customize <application>Epiphany</application> to suit your personal "
 "needs by using the Preferences dialog which can be accessed by selecting "
@@ -2425,11 +2451,11 @@ msgstr ""
 "acceder a través del menú <menuchoice><guimenu>Editar</"
 "guimenu><guimenuitem>Preferencias</guimenuitem></menuchoice>."
 
-#: C/epiphany.xml:1866(title)
+#: C/epiphany.xml:1880(title)
 msgid "General Preferences"
 msgstr "Preferencias generales"
 
-#: C/epiphany.xml:1871(para)
+#: C/epiphany.xml:1885(para)
 msgid ""
 "Choose the page displayed when the <guibutton>Home</guibutton> button on the "
 "toolbar is pressed, and also when <application>Epiphany</application> is "
@@ -2441,7 +2467,7 @@ msgstr ""
 "<application>Epiphany</application>, introduciendo una dirección en la "
 "sección <guilabel>Página inicial</guilabel>."
 
-#: C/epiphany.xml:1878(para)
+#: C/epiphany.xml:1892(para)
 msgid ""
 "Choose the folder for downloaded files by pressing the <guilabel> Download "
 "folder</guilabel> button and selecting a folder. If you select "
@@ -2453,11 +2479,11 @@ msgstr ""
 "selecciona <guilabel>Descargar automáticamente y abrir archivos</guilabel> "
 "no se le preguntará antes de que los archivos se descarguen o abran."
 
-#: C/epiphany.xml:1888(title)
+#: C/epiphany.xml:1902(title)
 msgid "Fonts and Style Preferences"
 msgstr "Preferencias de tipografías y estilo"
 
-#: C/epiphany.xml:1889(para)
+#: C/epiphany.xml:1903(para)
 msgid ""
 "This section allows you to configure the style of text and the colors used "
 "on web pages."
@@ -2465,7 +2491,7 @@ msgstr ""
 "Esta sección le permite configurar el estilo del texto y los colores usados "
 "en las páginas web."
 
-#: C/epiphany.xml:1893(para)
+#: C/epiphany.xml:1907(para)
 msgid ""
 "You can set a minimum size for web page fonts by using the <guilabel> "
 "Minimum size</guilabel> spin box. Fonts smaller than this value will be "
@@ -2475,7 +2501,7 @@ msgstr ""
 "usando el marcador incrementable <guilabel>Tamaño mínimo</guilabel>. Las "
 "tipografías más pequeñas que este valor serán aumentadas a este tamaño."
 
-#: C/epiphany.xml:1898(para)
+#: C/epiphany.xml:1912(para)
 msgid ""
 "You can also choose different font styles and sizes depending on the "
 "language that a page is written using the <guibutton>Detailed Font Settings</"
@@ -2498,7 +2524,7 @@ msgstr ""
 "Para establecer el tamaño de tipografía mínimo, use el marcador "
 "incrementable <guilabel>Tamaño mínimo</guilabel>."
 
-#: C/epiphany.xml:1910(para)
+#: C/epiphany.xml:1924(para)
 msgid ""
 "Web pages often specify their own font styles and sizes. You can make "
 "<application>Epiphany</application> only use the fonts that you have chosen "
@@ -2511,7 +2537,7 @@ msgstr ""
 "<guilabel>Permitir que las páginas web especifiquen su propia tipografía</"
 "guilabel>."
 
-#: C/epiphany.xml:1915(para)
+#: C/epiphany.xml:1929(para)
 msgid ""
 "Web pages may also specify their own colors for the background and fonts. "
 "You can make <application>Epiphany</application> always use the colors "
@@ -2524,7 +2550,7 @@ msgstr ""
 "deseleccionando la opción <guilabel>Permitir que las páginas web "
 "especifiquen sus propios colores</guilabel>."
 
-#: C/epiphany.xml:1921(para)
+#: C/epiphany.xml:1935(para)
 msgid ""
 "You can make <application>Epiphany</application> use styles defined in your "
 "own stylesheet by selecting the <guilabel>Use custom stylesheet</guilabel> "
@@ -2537,11 +2563,11 @@ msgstr ""
 "estilos</guibutton> abrirá su editor de texto predeterminado para que pueda "
 "editar la hoja de estilos."
 
-#: C/epiphany.xml:1929(title)
+#: C/epiphany.xml:1943(title)
 msgid "Privacy Preferences"
 msgstr "Preferencias de privacidad"
 
-#: C/epiphany.xml:1930(para)
+#: C/epiphany.xml:1944(para)
 msgid ""
 "<application>Epiphany</application> allows you to configure a number of "
 "features which allow you to restrict what web pages can do:"
@@ -2549,7 +2575,7 @@ msgstr ""
 "<application>Epiphany</application> le permite configurar varias "
 "características que permiten restringir lo que pueden hacer las páginas web."
 
-#: C/epiphany.xml:1936(para)
+#: C/epiphany.xml:1950(para)
 msgid ""
 "Select <guilabel>Allow popup windows</guilabel> if you want web pages to be "
 "able to launch content in new windows automatically."
@@ -2558,7 +2584,7 @@ msgstr ""
 "las páginas web sean capaces de lanzar contenido en ventanas nuevas "
 "automáticamente."
 
-#: C/epiphany.xml:1942(para)
+#: C/epiphany.xml:1956(para)
 msgid ""
 "Select <guilabel>Enable Java</guilabel> to allow pages to load Java applets "
 "- programs which run inside web pages."
@@ -2566,7 +2592,7 @@ msgstr ""
 "Seleccione <guilabel>Activar Java</guilabel> para permitir a las páginas "
 "cargar applets de Java - programas que se ejecutan dentro de las páginas web."
 
-#: C/epiphany.xml:1948(para)
+#: C/epiphany.xml:1962(para)
 msgid ""
 "Select <guilabel>Enable JavaScript</guilabel> to give web pages the "
 "capability to use the more advanced programming techniques of the JavaScript "
@@ -2576,7 +2602,7 @@ msgstr ""
 "web la capacidad de usar las técnicas de programación más avanzadas del "
 "lenguaje JavaScript."
 
-#: C/epiphany.xml:1956(para)
+#: C/epiphany.xml:1970(para)
 msgid ""
 "Disabling these features may cause some pages to display incorrectly or "
 "cause some loss of functionility. For Java to work, you need to install the "
@@ -2586,17 +2612,17 @@ msgstr ""
 "muestran incorrectamente o causar algún tipo de pérdida de funcionalidad. "
 "Para que funcione Java, necesita instalar el complemento de Java."
 
-#: C/epiphany.xml:1962(para)
+#: C/epiphany.xml:1976(para)
 msgid "You can also configure how cookies are handled:"
 msgstr "Puede configurar también cómo se manejan las cookies:"
 
-#: C/epiphany.xml:1967(para)
+#: C/epiphany.xml:1981(para)
 msgid "Select <guilabel>Always accept</guilabel> to allow any site to set cookies."
 msgstr ""
 "Seleccione <guilabel>Aceptar siempre</guilabel> para permitir que cualquier "
 "sitio web establezca cookies."
 
-#: C/epiphany.xml:1973(para)
+#: C/epiphany.xml:1987(para)
 msgid ""
 "Select <guilabel>Only from sites you visit</guilabel> to only allow cookies "
 "to be set for sites which you have navigated to."
@@ -2604,7 +2630,7 @@ msgstr ""
 "Seleccione <guilabel>Sólo desde los sitios que visite</guilabel> para "
 "permitir establecer cookies para los sitios por los que ha navegado."
 
-#: C/epiphany.xml:1979(para)
+#: C/epiphany.xml:1993(para)
 msgid ""
 "Select <guilabel>Never accept</guilabel> to prevent sites from setting "
 "cookies."
@@ -2612,7 +2638,7 @@ msgstr ""
 "Seleccione <guilabel>Nunca aceptar</guilabel> para evitar que cualquier sito "
 "web establezca cookies."
 
-#: C/epiphany.xml:1986(para)
+#: C/epiphany.xml:2000(para)
 msgid ""
 "Disabling or restricting cookies may disable access to parts of some sites "
 "or disable some of their features."
@@ -2620,7 +2646,7 @@ msgstr ""
 "Desactivar o restringir cookies puede desactivar el acceso a partes de "
 "algunos sitios o desactivar algunas de sus características."
 
-#: C/epiphany.xml:1991(para)
+#: C/epiphany.xml:2005(para)
 msgid ""
 "<application>Epiphany</application> stores some of the content of web pages "
 "in temporary files to allow faster loading of the content when you next view "
@@ -2640,11 +2666,11 @@ msgstr ""
 "Estos archivos temporales pueden eliminarse pulsando el botón "
 "<guibutton>Limpiar</guibutton>."
 
-#: C/epiphany.xml:2001(title)
+#: C/epiphany.xml:2015(title)
 msgid "Language Preferences"
 msgstr "Preferencias de idiomas"
 
-#: C/epiphany.xml:2002(para)
+#: C/epiphany.xml:2016(para)
 msgid ""
 "The encoding of a page specifies the set of characters that are used in it. "
 "The <guilabel>Encodings</guilabel> section configures how "
@@ -2658,7 +2684,7 @@ msgstr ""
 "desplegable <guilabel>Predeterminado</guilabel> permite establecer una "
 "codificación de resguardo en caso de que la página no especifique una."
 
-#: C/epiphany.xml:2008(para)
+#: C/epiphany.xml:2022(para)
 msgid ""
 "The <guilabel>Autodetect</guilabel> drop-down list allows you to select a "
 "group of encodings from which <application>Epiphany</application> will try "
@@ -2677,7 +2703,7 @@ msgstr ""
 "<application>Epiphany</application> pare de intentar adivinar una "
 "codificación, seleccione <guilabel>Desactivar</guilabel>."
 
-#: C/epiphany.xml:2016(para)
+#: C/epiphany.xml:2030(para)
 msgid ""
 "Some web sites have pages which are available in a number of different "
 "languages. You can set your prefered languages by adding entries from the "
@@ -2694,17 +2720,17 @@ msgstr ""
 "o usando los botones <guibutton>Subir</guibutton> y <guibutton>Bajar</"
 "guibutton>."
 
-#: C/epiphany.xml:2028(title)
+#: C/epiphany.xml:2042(title)
 msgid "To Show and Hide Browser Window Components"
 msgstr "Para mostrar y ocultar los componentes de la ventana del navegador"
 
-#: C/epiphany.xml:2029(para)
+#: C/epiphany.xml:2043(para)
 msgid "You can show and hide browser window components as follows:"
 msgstr ""
 "Puede mostrar y ocultar los componentes de la ventana del navegador como se "
 "indica a continuación:"
 
-#: C/epiphany.xml:2035(para)
+#: C/epiphany.xml:2049(para)
 msgid ""
 "To hide the toolbars, choose <menuchoice><guimenu>View</"
 "guimenu><guimenuitem>Toolbars </guimenuitem><guimenuitem>Hide Toolbars </"
@@ -2720,7 +2746,7 @@ msgstr ""
 "guimenuitem><guimenuitem>Ocultar barras de herramientas</guimenuitem></"
 "menuchoice> otra vez."
 
-#: C/epiphany.xml:2048(para)
+#: C/epiphany.xml:2062(para)
 msgid ""
 "To hide a particular toolbar, choose <menuchoice><guimenu>View</"
 "guimenu><guimenuitem>Toolbars </guimenuitem><guimenuitem>Show </"
@@ -2737,7 +2763,7 @@ msgstr ""
 "herramientas</guimenuitem><guimenuitem>Mostrar </guimenuitem></menuchoice>, "
 "seguida por el nombre de la barra de herramientas."
 
-#: C/epiphany.xml:2061(para)
+#: C/epiphany.xml:2075(para)
 msgid ""
 "To hide the statusbar, choose <menuchoice><guimenu> View</"
 "guimenu><guimenuitem>Statusbar</guimenuitem></menuchoice>. To display the "
@@ -2749,7 +2775,7 @@ msgstr ""
 "mostrar la barra de estado de nuevo, elija <menuchoice><guimenu>Ver</"
 "guimenu><guimenuitem> Barra de estado</guimenuitem></menuchoice> de nuevo."
 
-#: C/epiphany.xml:2071(para)
+#: C/epiphany.xml:2085(para)
 msgid ""
 "You can use fullscreen mode to make <application>Epiphany</application> hide "
 "most of the window components. For details, see <xref linkend=\"using-"
@@ -2759,15 +2785,15 @@ msgstr ""
 "application> oculte la mayoría de los componentes de la ventana. Para más "
 "detalles, vea la <xref linkend=\"using-fullscreen-mode\"/>."
 
-#: C/epiphany.xml:2078(title)
+#: C/epiphany.xml:2092(title)
 msgid "To Edit Your Toolbars"
 msgstr "Para editar sus barras de herramientas"
 
-#: C/epiphany.xml:2079(para)
+#: C/epiphany.xml:2093(para)
 msgid "You can customize the items which appear in your toolbars:"
 msgstr "Puede personalizar los elementos que aparecen en sus barras de herramientas:"
 
-#: C/epiphany.xml:2084(para)
+#: C/epiphany.xml:2098(para)
 msgid ""
 "To add or remove buttons from your toolbar, select "
 "<menuchoice><guimenu>View</guimenu><guimenuitem> Toolbars</"
@@ -2780,7 +2806,7 @@ msgstr ""
 "menuchoice>. Arrastre los iconos a y desde el editor para añadirlos o "
 "quitarlos de su barra de herramientas."
 
-#: C/epiphany.xml:2093(para)
+#: C/epiphany.xml:2107(para)
 msgid ""
 "To add a new toolbar, press <guibutton>Add Toolbar</guibutton> in the "
 "toolbar editor."
@@ -2788,7 +2814,7 @@ msgstr ""
 "Para añadir una barra nueva, pulse en <guibutton>Añadir barra de "
 "herramientas</guibutton> en el editor de barras de herramientas."
 
-#: C/epiphany.xml:2099(para)
+#: C/epiphany.xml:2113(para)
 msgid ""
 "To remove a toolbar, remove all items from it. The toolbar will then "
 "automatically be removed."
@@ -2796,7 +2822,7 @@ msgstr ""
 "Para quitar una barra de herramientas, quite todos los elementos de ella. La "
 "barra se eliminará automáticamente."
 
-#: C/epiphany.xml:2105(para)
+#: C/epiphany.xml:2119(para)
 msgid ""
 "Drag buttons, including bookmarks, to rearrange them either on the same "
 "toolbar or between different toolbars."
@@ -2804,11 +2830,11 @@ msgstr ""
 "Arrastre botones, incluyendo marcadores, para reordenarlos tanto en la misma "
 "barra de herramientas como entre barras de herramientas diferentes."
 
-#: C/epiphany.xml:2114(title)
+#: C/epiphany.xml:2128(title)
 msgid "Extending <application>Epiphany</application>"
 msgstr "Extender <application>Epiphany</application>"
 
-#: C/epiphany.xml:2115(para)
+#: C/epiphany.xml:2129(para)
 msgid ""
 "Additional features can be added to <application>Epiphany</application> by "
 "installing Extensions. Examples of Extensions include Mouse Gestures which "
@@ -2822,7 +2848,7 @@ msgstr ""
 "el «Visor y validador de errores», que puede comprobar las páginas web "
 "buscando errores de codificación."
 
-#: C/epiphany.xml:2121(para)
+#: C/epiphany.xml:2135(para)
 msgid ""
 "Please consult your system administrator to find out whether the extensions "
 "you require are installed, or see the <ulink url=\"http://www.gnome.org/"
@@ -2834,275 +2860,275 @@ msgstr ""
 "www.gnome.org/projects/epiphany/\" type=\"http\">página web de Epiphany</"
 "ulink> para instrucciones de instalación."
 
-#: C/epiphany.xml:2132(title)
+#: C/epiphany.xml:2146(title)
 msgid "Shortcuts"
 msgstr "Combinaciones de teclas"
 
-#: C/epiphany.xml:2136(title)
+#: C/epiphany.xml:2150(title)
 msgid "Keyboard Shortcuts"
 msgstr "Combinaciones de teclas"
 
-#: C/epiphany.xml:2140(title)
+#: C/epiphany.xml:2154(title)
 msgid "General Shortcuts"
 msgstr "Combinaciones de teclas generales"
 
-#: C/epiphany.xml:2147(para) C/epiphany.xml:2302(para)
-#: C/epiphany.xml:2471(para) C/epiphany.xml:2558(para)
-#: C/epiphany.xml:2670(para)
+#: C/epiphany.xml:2161(para) C/epiphany.xml:2316(para)
+#: C/epiphany.xml:2485(para) C/epiphany.xml:2572(para)
+#: C/epiphany.xml:2684(para)
 msgid "Shortcut"
 msgstr "Combinación de teclas"
 
-#: C/epiphany.xml:2163(keycap) C/epiphany.xml:2179(keycap)
-#: C/epiphany.xml:2194(keycap) C/epiphany.xml:2209(keycap)
-#: C/epiphany.xml:2248(keycap) C/epiphany.xml:2263(keycap)
-#: C/epiphany.xml:2278(keycap) C/epiphany.xml:2318(keycap)
-#: C/epiphany.xml:2333(keycap) C/epiphany.xml:2348(keycap)
-#: C/epiphany.xml:2487(keycap) C/epiphany.xml:2502(keycap)
-#: C/epiphany.xml:2518(keycap) C/epiphany.xml:2534(keycap)
-#: C/epiphany.xml:2586(keycap) C/epiphany.xml:2601(keycap)
-#: C/epiphany.xml:2616(keycap) C/epiphany.xml:2631(keycap)
+#: C/epiphany.xml:2177(keycap) C/epiphany.xml:2193(keycap)
+#: C/epiphany.xml:2208(keycap) C/epiphany.xml:2223(keycap)
+#: C/epiphany.xml:2262(keycap) C/epiphany.xml:2277(keycap)
+#: C/epiphany.xml:2292(keycap) C/epiphany.xml:2332(keycap)
+#: C/epiphany.xml:2347(keycap) C/epiphany.xml:2362(keycap)
+#: C/epiphany.xml:2501(keycap) C/epiphany.xml:2516(keycap)
+#: C/epiphany.xml:2532(keycap) C/epiphany.xml:2548(keycap)
+#: C/epiphany.xml:2600(keycap) C/epiphany.xml:2615(keycap)
+#: C/epiphany.xml:2630(keycap) C/epiphany.xml:2645(keycap)
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: C/epiphany.xml:2164(keycap)
+#: C/epiphany.xml:2178(keycap)
 msgid "O"
 msgstr "O"
 
-#: C/epiphany.xml:2169(para)
+#: C/epiphany.xml:2183(para)
 msgid "Open a file from a local folder."
 msgstr "Abre un archivo desde una carpeta local."
 
-#: C/epiphany.xml:2178(keycap) C/epiphany.xml:2447(keycap)
-#: C/epiphany.xml:2517(keycap) C/epiphany.xml:2533(keycap)
+#: C/epiphany.xml:2192(keycap) C/epiphany.xml:2461(keycap)
+#: C/epiphany.xml:2531(keycap) C/epiphany.xml:2547(keycap)
 msgid "Shift"
 msgstr "Mayús."
 
-#: C/epiphany.xml:2180(keycap)
+#: C/epiphany.xml:2194(keycap)
 msgid "S"
 msgstr "S"
 
-#: C/epiphany.xml:2185(para)
+#: C/epiphany.xml:2199(para)
 msgid "Save the current document to a local folder."
 msgstr "Guarda el documento actual a una carpeta local."
 
-#: C/epiphany.xml:2195(keycap)
+#: C/epiphany.xml:2209(keycap)
 msgid "P"
 msgstr "P"
 
-#: C/epiphany.xml:2200(para)
+#: C/epiphany.xml:2214(para)
 msgid "Print the current document."
 msgstr "Imprime el documento actual."
 
-#: C/epiphany.xml:2210(keycap)
+#: C/epiphany.xml:2224(keycap)
 msgid "W"
 msgstr "W"
 
-#: C/epiphany.xml:2215(para)
+#: C/epiphany.xml:2229(para)
 msgid "Close the current tab or window."
 msgstr "Cierra la ventana o solapa actual."
 
-#: C/epiphany.xml:2223(keycap)
+#: C/epiphany.xml:2237(keycap)
 msgid "F1"
 msgstr "F1"
 
-#: C/epiphany.xml:2227(para)
+#: C/epiphany.xml:2241(para)
 msgid "Show help."
 msgstr "Muestra la ayuda."
 
-#: C/epiphany.xml:2235(keycap)
+#: C/epiphany.xml:2249(keycap)
 msgid "F7"
 msgstr "F7"
 
-#: C/epiphany.xml:2239(para)
+#: C/epiphany.xml:2253(para)
 msgid "Toggle caret browsing mode."
 msgstr "Cambia al modo de navegación por cursor."
 
-#: C/epiphany.xml:2249(keycap)
+#: C/epiphany.xml:2263(keycap)
 msgid "D"
 msgstr "D"
 
-#: C/epiphany.xml:2254(para)
+#: C/epiphany.xml:2268(para)
 msgid "Bookmark the current page."
 msgstr "Añade un marcador con la página actual."
 
-#: C/epiphany.xml:2264(keycap)
+#: C/epiphany.xml:2278(keycap)
 msgid "B"
 msgstr "B"
 
-#: C/epiphany.xml:2269(para)
+#: C/epiphany.xml:2283(para)
 msgid "Show the bookmarks manager."
 msgstr "Muestra el gestor de marcadores."
 
-#: C/epiphany.xml:2279(keycap)
+#: C/epiphany.xml:2293(keycap)
 msgid "H"
 msgstr "H"
 
-#: C/epiphany.xml:2284(para)
+#: C/epiphany.xml:2298(para)
 msgid "Show the history manager."
 msgstr "Muestra el gestor del histórico."
 
-#: C/epiphany.xml:2295(title)
+#: C/epiphany.xml:2309(title)
 msgid "Navigation Shortcuts"
 msgstr "Combinaciones de teclas para navegación"
 
-#: C/epiphany.xml:2319(keycap)
+#: C/epiphany.xml:2333(keycap)
 msgid "N"
 msgstr "N"
 
-#: C/epiphany.xml:2324(para)
+#: C/epiphany.xml:2338(para)
 msgid "Open a new window."
 msgstr "Abre una ventana nueva."
 
-#: C/epiphany.xml:2334(keycap)
+#: C/epiphany.xml:2348(keycap)
 msgid "T"
 msgstr "T"
 
-#: C/epiphany.xml:2339(para)
+#: C/epiphany.xml:2353(para)
 msgid "Open a new tab."
 msgstr "Abre una solapa nueva."
 
-#: C/epiphany.xml:2349(keycap)
+#: C/epiphany.xml:2363(keycap)
 msgid "L"
 msgstr "L"
 
-#: C/epiphany.xml:2354(para)
+#: C/epiphany.xml:2368(para)
 msgid "Focus the address bar."
 msgstr "Enfoca la barra de direcciones."
 
-#: C/epiphany.xml:2363(keycap) C/epiphany.xml:2378(keycap)
-#: C/epiphany.xml:2393(keycap) C/epiphany.xml:2408(keycap)
+#: C/epiphany.xml:2377(keycap) C/epiphany.xml:2392(keycap)
+#: C/epiphany.xml:2407(keycap) C/epiphany.xml:2422(keycap)
 msgid "Alt"
 msgstr "Alt"
 
-#: C/epiphany.xml:2364(keycap)
+#: C/epiphany.xml:2378(keycap)
 msgid "Left"
 msgstr "Izquierda"
 
-#: C/epiphany.xml:2369(para)
+#: C/epiphany.xml:2383(para)
 msgid "Go back."
 msgstr "Atrás."
 
-#: C/epiphany.xml:2379(keycap)
+#: C/epiphany.xml:2393(keycap)
 msgid "Right"
 msgstr "Derecha"
 
-#: C/epiphany.xml:2384(para)
+#: C/epiphany.xml:2398(para)
 msgid "Go forward."
 msgstr "Adelante."
 
-#: C/epiphany.xml:2394(keycap)
+#: C/epiphany.xml:2408(keycap)
 msgid "Up"
 msgstr "Arriba"
 
-#: C/epiphany.xml:2399(para)
+#: C/epiphany.xml:2413(para)
 msgid "Go up a level."
 msgstr "Sube un nivel."
 
-#: C/epiphany.xml:2409(keycap)
+#: C/epiphany.xml:2423(keycap)
 msgid "Home"
 msgstr "Inicio"
 
-#: C/epiphany.xml:2414(para)
+#: C/epiphany.xml:2428(para)
 msgid "Go to your home page."
 msgstr "Va a la página inicial."
 
-#: C/epiphany.xml:2422(keycap)
+#: C/epiphany.xml:2436(keycap)
 msgid "Esc"
 msgstr "Esc"
 
-#: C/epiphany.xml:2426(para)
+#: C/epiphany.xml:2440(para)
 msgid "Stop page loading."
 msgstr "Detiene la carga de la página."
 
-#: C/epiphany.xml:2434(keycap) C/epiphany.xml:2448(keycap)
+#: C/epiphany.xml:2448(keycap) C/epiphany.xml:2462(keycap)
 msgid "F6"
 msgstr "F6"
 
-#: C/epiphany.xml:2438(para)
+#: C/epiphany.xml:2452(para)
 msgid "Switch to the next frame."
 msgstr "Cambia al marco siguiente."
 
-#: C/epiphany.xml:2453(para)
+#: C/epiphany.xml:2467(para)
 msgid "Switch to the previous frame."
 msgstr "Cambia al marco anterior."
 
-#: C/epiphany.xml:2464(title)
+#: C/epiphany.xml:2478(title)
 msgid "Tabbed Browsing Shortcuts"
 msgstr "Combinaciones de teclas para solapas"
 
-#: C/epiphany.xml:2488(keycap) C/epiphany.xml:2519(keycap)
+#: C/epiphany.xml:2502(keycap) C/epiphany.xml:2533(keycap)
 msgid "Page Up"
 msgstr "AvPág"
 
-#: C/epiphany.xml:2493(para)
+#: C/epiphany.xml:2507(para)
 msgid "Focus the next tab."
 msgstr "Enfoca la solapa siguiente."
 
-#: C/epiphany.xml:2503(keycap) C/epiphany.xml:2535(keycap)
+#: C/epiphany.xml:2517(keycap) C/epiphany.xml:2549(keycap)
 msgid "Page Down"
 msgstr "RePág"
 
-#: C/epiphany.xml:2508(para)
+#: C/epiphany.xml:2522(para)
 msgid "Focus the previous tab."
 msgstr "Enfoca la solapa anterior."
 
-#: C/epiphany.xml:2524(para)
+#: C/epiphany.xml:2538(para)
 msgid "Move the tab left."
 msgstr "Mueve la solapa a la izquierda."
 
-#: C/epiphany.xml:2540(para)
+#: C/epiphany.xml:2554(para)
 msgid "Move the tab right."
 msgstr "Mueve la solapa a la derecha."
 
-#: C/epiphany.xml:2551(title)
+#: C/epiphany.xml:2565(title)
 msgid "Page Viewing Shortcuts"
 msgstr "Combinaciones de teclas de visión de páginas"
 
-#: C/epiphany.xml:2573(keycap)
+#: C/epiphany.xml:2587(keycap)
 msgid "F11"
 msgstr "F11"
 
-#: C/epiphany.xml:2577(para)
+#: C/epiphany.xml:2591(para)
 msgid "Toggle fullscreen mode."
 msgstr "Cambia al modo a pantalla completa."
 
-#: C/epiphany.xml:2587(keycap)
+#: C/epiphany.xml:2601(keycap)
 msgid "+"
 msgstr "+"
 
-#: C/epiphany.xml:2592(para)
+#: C/epiphany.xml:2606(para)
 msgid "Zoom the text larger."
 msgstr "Amplía el texto."
 
-#: C/epiphany.xml:2602(keycap)
+#: C/epiphany.xml:2616(keycap)
 msgid "-"
 msgstr "&ndash;"
 
-#: C/epiphany.xml:2607(para)
+#: C/epiphany.xml:2621(para)
 msgid "Zoom the text smaller."
 msgstr "Reduce el texto."
 
-#: C/epiphany.xml:2617(keycap)
+#: C/epiphany.xml:2631(keycap)
 msgid "0"
 msgstr "0"
 
-#: C/epiphany.xml:2622(para)
+#: C/epiphany.xml:2636(para)
 msgid "Display the text at the normal size."
 msgstr "Muestra el texto a tamaño normal."
 
-#: C/epiphany.xml:2632(keycap)
+#: C/epiphany.xml:2646(keycap)
 msgid "U"
 msgstr "U"
 
-#: C/epiphany.xml:2637(para)
+#: C/epiphany.xml:2651(para)
 msgid "View the page source."
 msgstr "Muestra el código fuente de la página."
 
-#: C/epiphany.xml:2648(title)
+#: C/epiphany.xml:2662(title)
 msgid "Editing keyboard shortcuts"
 msgstr "Edición de las combinaciones de teclas"
 
-#: C/epiphany.xml:2649(para)
+#: C/epiphany.xml:2663(para)
 msgid ""
 "You can define new keyboard shortcuts for menu items. See the related "
 "section in the <ulink url=\"ghelp:user-guide#prefs-menustoolbars\" type="
@@ -3113,19 +3139,19 @@ msgstr ""
 "menustoolbars\" type=\"help\">Guía de usuario de GNOME</ulink> para una "
 "descripción detallada."
 
-#: C/epiphany.xml:2659(title) C/epiphany.xml:2663(title)
+#: C/epiphany.xml:2673(title) C/epiphany.xml:2677(title)
 msgid "Mouse Shortcuts"
 msgstr "Atajos del ratón"
 
-#: C/epiphany.xml:2684(para)
+#: C/epiphany.xml:2698(para)
 msgid "<mousebutton>Middle-click</mousebutton> (On a link)"
 msgstr "<mousebutton>Pulsación central</mousebutton> (En un enlace)"
 
-#: C/epiphany.xml:2689(para) C/epiphany.xml:2704(para)
+#: C/epiphany.xml:2703(para) C/epiphany.xml:2718(para)
 msgid "Open the link in a new tab."
 msgstr "Abre el enlace en una solapa nueva."
 
-#: C/epiphany.xml:2696(para)
+#: C/epiphany.xml:2710(para)
 msgid ""
 "<keycombo><keycap>Ctrl</keycap><mousebutton>Click</mousebutton></keycombo> "
 "(On a link)"
@@ -3133,7 +3159,7 @@ msgstr ""
 "<keycombo><keycap>Ctrl</keycap><mousebutton>pulsación</mousebutton></"
 "keycombo> (En un enlace)"
 
-#: C/epiphany.xml:2711(para)
+#: C/epiphany.xml:2725(para)
 msgid ""
 "<keycombo><keycap>Shift</keycap><mousebutton>Click</mousebutton></keycombo> "
 "(On a link)"
@@ -3141,15 +3167,15 @@ msgstr ""
 "<keycombo><keycap>Mayús</keycap><mousebutton>pulsación</mousebutton></"
 "keycombo> (En un enlace)"
 
-#: C/epiphany.xml:2719(para)
+#: C/epiphany.xml:2733(para)
 msgid "Download the link."
 msgstr "Descarga el enlace."
 
-#: C/epiphany.xml:2732(title)
+#: C/epiphany.xml:2746(title)
 msgid "About <application>Epiphany</application>"
 msgstr "Acerca de <application>Epiphany</application>"
 
-#: C/epiphany.xml:2734(para)
+#: C/epiphany.xml:2748(para)
 msgid ""
 "<application>Epiphany</application> was written by Marco Presenti Gritti "
 "(<email>marco@gnome.org</email>). To find more information about "
@@ -3162,7 +3188,7 @@ msgstr ""
 "\"http://www.gnome.org/projects/epiphany/\" type=\"http\">página Web de "
 "Epiphany</ulink>."
 
-#: C/epiphany.xml:2742(para)
+#: C/epiphany.xml:2756(para)
 msgid ""
 "This manual was written by David Bordoley (<email>bordoley@msu.edu</email>), "
 "Piers Cornwell (<email>piers@gnome.org</email>) and Patanjali Somayaji "
@@ -3172,7 +3198,7 @@ msgstr ""
 "email>), Piers Cornwell (<email>piers@gnome.org</email>) y Patanjali "
 "Somayaji (<email>patanjali@codito.com</email>)."
 
-#: C/epiphany.xml:2749(para)
+#: C/epiphany.xml:2763(para)
 msgid ""
 "This program is distributed under the terms of the GNU General Public "
 "license as published by the Free Software Foundation; either version 2 of "
