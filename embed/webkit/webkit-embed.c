@@ -71,6 +71,8 @@ impl_manager_do_command (EphyCommandManager *manager,
     return webkit_web_view_cut_clipboard (web_view);
   else if (! strcmp (command, "cmd_paste"))
     return webkit_web_view_paste_clipboard (web_view);
+  else if (! strcmp (command, "cmd_selectAll"))
+    return webkit_web_view_select_all (web_view);
 }
 
 static gboolean
