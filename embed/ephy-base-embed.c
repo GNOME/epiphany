@@ -1040,7 +1040,7 @@ ephy_base_embed_set_title (EphyBaseEmbed *embed,
       title = g_strdup (EMPTY_PAGE);
       priv->is_blank = TRUE;
     }
-  } else if (priv->is_blank && title != NULL) {
+  } else if (priv->is_blank) {
     g_free (title);
     title = g_strdup (EMPTY_PAGE);
   }
@@ -1448,7 +1448,7 @@ ephy_base_embed_location_changed (EphyBaseEmbed *embed,
   if (location == NULL || location[0] == '\0' ||
       strcmp (location, "about:blank") == 0) {
     ephy_base_embed_set_address (embed, NULL);
-    ephy_base_embed_set_title (embed, NULL);
+    ephy_base_embed_set_title (embed, EMPTY_PAGE);
   } else {
     char *embed_address;
 
