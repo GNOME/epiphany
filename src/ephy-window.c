@@ -1321,7 +1321,7 @@ connect_tool_item (GtkWidget *proxy, EphyWindow *window)
 
 	g_signal_connect (proxy, "drag_begin",
 			  G_CALLBACK (tool_item_drag_begin_cb), window);
-	 g_signal_connect (proxy, "enter-notify-event",
+	g_signal_connect (proxy, "enter-notify-event",
 			  G_CALLBACK (tool_item_enter_cb), window);
 	g_signal_connect (proxy, "leave-notify-event",
 			  G_CALLBACK (tool_item_leave_cb), window);
