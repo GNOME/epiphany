@@ -150,8 +150,8 @@ completion_func (GtkEntryCompletion *completion,
 {
 	int i, len_key, len_prefix;
 	char *item = NULL;
-	char *keywords = NULL;
 	char *url = NULL;
+	char *keywords = NULL;
 	gboolean ret = FALSE;
 	GtkTreeModel *model;
 	GtkTreeIter iter2;
@@ -163,8 +163,8 @@ completion_func (GtkEntryCompletion *completion,
 
 	gtk_tree_model_get (model, iter,
 			    EPHY_COMPLETION_TEXT_COL, &item,
-			    EPHY_COMPLETION_KEYWORDS_COL, &keywords,
 			    EPHY_COMPLETION_URL_COL, &url,
+			    EPHY_COMPLETION_KEYWORDS_COL, &keywords,
 			    -1);
 
 	len_key = strlen (key);
@@ -173,6 +173,10 @@ completion_func (GtkEntryCompletion *completion,
 		ret = TRUE;
 	}
 	else if (keyword_match (keywords, key))
+	{
+		ret = TRUE;
+	}
+	else if (!strncasecmp (key, url, len_key))
 	{
 		ret = TRUE;
 	}
@@ -187,6 +191,13 @@ completion_func (GtkEntryCompletion *completion,
 				ret = TRUE;
 				break;
 			}
+			else if (!strncmp (web_prefixes[i].prefix, url, len_prefix) &&
+			        !strncasecmp (key, url + len_prefix, len_key))
+			{
+				ret = TRUE;
+				break;
+			}
+
 		}
 	}
 	
@@ -206,8 +217,8 @@ completion_func (GtkEntryCompletion *completion,
 		ret = FALSE;
 
 	g_free (item);
-	g_free (keywords);
 	g_free (url);
+	g_free (keywords);
 
 	return ret;
 }
