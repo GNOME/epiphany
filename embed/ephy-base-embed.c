@@ -47,7 +47,7 @@
 #define MAX_TITLE_LENGTH        512 /* characters */
 #define RELOAD_DELAY            250 /* ms */
 #define RELOAD_DELAY_MAX_TICKS  40  /* RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s */
-#define EMPTY_PAGE		_("Blank page") /* Title for the empty page */
+#define EMPTY_PAGE              _("Blank page") /* Title for the empty page */
 
 struct _EphyBaseEmbedPrivate {
   EphyEmbedAddressExpire address_expire;
@@ -676,7 +676,7 @@ ephy_base_embed_class_init (EphyBaseEmbedClass *klass)
                                                         "Title",
                                                         "The embed's title",
                                                         EMPTY_PAGE,
-							G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   g_object_class_install_property (gobject_class,
                                    PROP_STATUS_MESSAGE,
                                    g_param_spec_string ("status-message",
