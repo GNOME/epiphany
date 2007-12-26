@@ -37,6 +37,8 @@
 #include <gtk/gtkimage.h>
 #include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkmain.h>
+#include <gtk/gtktreemodelsort.h>
+
 
 #include <string.h>
 #define EPHY_LOCATION_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LOCATION_ACTION, EphyLocationActionPrivate))
@@ -149,14 +151,20 @@ completion_func (GtkEntryCompletion *completion,
 	int i, len_key, len_prefix;
 	char *item = NULL;
 	char *keywords = NULL;
+	char *url = NULL;
 	gboolean ret = FALSE;
 	GtkTreeModel *model;
+	GtkTreeIter iter2;
+	
+	EphyNode *history;
+	EphyBookmarks *bookmarks;
 
 	model = gtk_entry_completion_get_model (completion);
 
 	gtk_tree_model_get (model, iter,
 			    EPHY_COMPLETION_TEXT_COL, &item,
 			    EPHY_COMPLETION_KEYWORDS_COL, &keywords,
+			    EPHY_COMPLETION_URL_COL, &url,
 			    -1);
 
 	len_key = strlen (key);
@@ -181,9 +189,25 @@ completion_func (GtkEntryCompletion *completion,
 			}
 		}
 	}
+	
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	history = ephy_history_get_pages (EPHY_HISTORY (
+			ephy_embed_shell_get_global_history (embed_shell)));
+	
+	gtk_tree_model_sort_convert_iter_to_child_iter 
+		(GTK_TREE_MODEL_SORT (model), &iter2, iter);
+
+	/* This checks if the item's URL exists as a bookmark, if that's true 
+	 * and we are seeing an history item, then we skip showing it.
+	 * The bookmark will be shown instead since we are not filtering it out.
+	 */
+	if (ephy_bookmarks_find_bookmark (bookmarks, url) != NULL &&
+	    (iter2.user_data2 == history))
+		ret = FALSE;
 
 	g_free (item);
 	g_free (keywords);
+	g_free (url);
 
 	return ret;
 }
