@@ -107,6 +107,14 @@ LIBSTARTUP_NOTIFICATION_REQUIRED=0.5
 LIBNOTIFY_REQUIRED=0.4
 DBUS_GLIB_REQUIRED=0.35
 
+PKG_CHECK_EXISTS([libnotify >= $LIBNOTIFY_REQUIRED],[have_libnotify=yes],[have_libnotify=no])
+
+LIBNOTIFY_PACKAGE=
+if test "$have_libnotify" = "yes"; then
+  LIBNOTIFY_PACKAGE="libnotify >= $LIBNOTIFY_REQUIRED"
+  AC_DEFINE([HAVE_LIBNOTIFY],[1],[Define if libnotify is available])
+fi
+
 PKG_CHECK_MODULES([DEPENDENCIES], [
 		  glib-2.0 >= $GLIB_REQUIRED
 		  gmodule-2.0
@@ -122,7 +130,7 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  gconf-2.0
 		  gnome-desktop-2.0 >= $GNOME_DESKTOP_REQUIRED
 		  libstartup-notification-1.0 >= $LIBSTARTUP_NOTIFICATION_REQUIRED
-		  libnotify >= $LIBNOTIFY_REQUIRED
+		  $LIBNOTIFY_PACKAGE
 		  ])
 AC_SUBST([DEPENDENCIES_CFLAGS])
 AC_SUBST([DEPENDENCIES_LIBS])
