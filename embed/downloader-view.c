@@ -50,7 +50,11 @@
 #include <gtk/gtkstatusicon.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <libgnomeui/gnome-icon-lookup.h>
+
+
+#ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
+#endif
 
 enum
 {
@@ -83,7 +87,10 @@ struct _DownloaderViewPrivate
 	GtkWidget *abort_button;
 
 	GtkStatusIcon *status_icon;
+
+#ifdef HAVE_LIBNOTIFY
 	NotifyNotification *notification;
+#endif
 
 	guint idle_unref : 1;
 	guint source_id;
@@ -132,8 +139,10 @@ download_dialog_delete_event_cb (GtkWidget *window,
 				 GdkEventAny *event,
 				 DownloaderView *dv);
 
+#ifdef HAVE_LIBNOTIFY
 static void
 show_notification_window (DownloaderView *dv);
+#endif
 
 static GObjectClass *parent_class = NULL;
 
@@ -175,8 +184,11 @@ downloader_view_class_init (DownloaderViewClass *klass)
 	object_class->finalize = downloader_view_finalize;
 
 	g_type_class_add_private (object_class, sizeof(DownloaderViewPrivate));
-	
+
+#ifdef HAVE_LIBNOTIFY
 	notify_init (PACKAGE);
+#endif
+
 }
 
 static void
@@ -224,8 +236,11 @@ show_status_icon (DownloaderView *dv)
 	DownloaderViewPrivate *priv = dv->priv;
 
 	priv->status_icon = gtk_status_icon_new_from_stock (STOCK_DOWNLOAD);
+
+#ifdef HAVE_LIBNOTIFY
 	notify_notification_attach_to_status_icon (priv->notification, priv->status_icon);
-	
+#endif
+
 	g_signal_connect_swapped (priv->status_icon, "activate",
 				  G_CALLBACK (show_downloader_cb), dv);
 	g_signal_connect (dv->priv->status_icon, "popup-menu",
@@ -316,11 +331,13 @@ downloader_view_finalize (GObject *object)
 	g_hash_table_destroy (dv->priv->downloads_hash);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
-	
+
+#ifdef HAVE_LIBNOTIFY	
 	if (notify_is_initted ())
 	{
 		notify_uninit ();
 	}
+#endif
 
 	if (idle_unref)
 	{
@@ -434,7 +451,10 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	char *remaining, *file, *cur_progress, *name;
 	struct tm;
 	int percent = 0;
+
+#ifdef HAVE_LIBNOTIFY
 	char *downloaded;
+#endif
 
 	row_ref = get_row_from_download (dv, download);
 	g_return_if_fail (row_ref != NULL);
@@ -454,6 +474,7 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	case EPHY_DOWNLOAD_COMPLETED:
 		downloader_view_remove_download (dv, download);
 		
+#ifdef HAVE_LIBNOTIFY
 		downloaded = g_strdup_printf (_("The file “%s” has been downloaded."), 
 						name);
 		notify_notification_update (dv->priv->notification,
@@ -464,6 +485,8 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 		show_notification_window (dv);
 		
 		g_free (downloaded);
+#endif
+
 		return;
 	case EPHY_DOWNLOAD_PAUSED:
 	case EPHY_DOWNLOAD_DOWNLOADING:
@@ -551,6 +574,7 @@ update_buttons_timeout_cb (DownloaderView *dv)
 	return FALSE;
 }
 
+#ifdef HAVE_LIBNOTIFY
 static gboolean
 queue_show_notification (DownloaderView *dv)
 {
@@ -571,6 +595,7 @@ show_notification_window (DownloaderView *dv)
 	else
 		dv->priv->notification_timeout = g_timeout_add_seconds (1, (GSourceFunc) queue_show_notification, dv);
 }
+#endif
 
 void
 downloader_view_add_download (DownloaderView *dv,
@@ -586,7 +611,10 @@ downloader_view_add_download (DownloaderView *dv,
 	char *mime, *icon_name;
 	int width = 16, height = 16;
 	GValue visible = {0, };
+
+#ifdef HAVE_LIBNOTIFY
 	char *downloading;
+#endif
 
 	g_object_ref (download);
 
@@ -620,6 +648,8 @@ downloader_view_add_download (DownloaderView *dv,
 	
 	if (eel_gconf_get_boolean (CONF_DOWNLOADS_HIDDEN) && !g_value_get_boolean (&visible))
 	{
+
+#ifdef HAVE_LIBNOTIFY
 		downloading = g_strdup_printf(_("The file “%s” has been added to the downloads queue."), 
 						ephy_download_get_name (download));
 		notify_notification_update (dv->priv->notification,
@@ -630,7 +660,8 @@ downloader_view_add_download (DownloaderView *dv,
 		show_notification_window (dv);
 
 		g_free (downloading);
-		
+#endif
+
 		ephy_dialog_hide (EPHY_DIALOG (dv));
 	}
 	else
@@ -821,9 +852,12 @@ downloader_view_build_ui (DownloaderView *dv)
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), dv);
 	
+#ifdef HAVE_LIBNOTIFY
 	priv->notification = notify_notification_new (" ", " ", GTK_STOCK_INFO, NULL);
 	notify_notification_set_timeout (priv->notification, NOTIFY_EXPIRES_DEFAULT);
 	notify_notification_set_urgency (priv->notification, NOTIFY_URGENCY_LOW);
+#endif
+
 }
 
 static void
