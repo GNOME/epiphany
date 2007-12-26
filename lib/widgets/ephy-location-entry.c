@@ -941,13 +941,14 @@ extracell_data_func (GtkCellLayout *cell_layout,
 
 void
 ephy_location_entry_set_completion_func (EphyLocationEntry *le, 
-					GtkEntryCompletionMatchFunc completion_func)
+					GtkEntryCompletionMatchFunc completion_func,
+					gpointer user_data)
 {
 	EphyLocationEntryPrivate *priv = le->priv;
 	GtkEntryCompletion *completion;
 	
 	completion = gtk_entry_get_completion (GTK_ENTRY (priv->icon_entry->entry));
-	gtk_entry_completion_set_match_func (completion, completion_func, NULL, NULL);
+	gtk_entry_completion_set_match_func (completion, completion_func, user_data, NULL);
 }
 
 void

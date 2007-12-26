@@ -82,7 +82,8 @@ void		ephy_location_entry_set_location	(EphyLocationEntry *le,
 							 const char *typed_address);
 
 void		ephy_location_entry_set_completion_func (EphyLocationEntry *le, 
-							 GtkEntryCompletionMatchFunc completion_func);
+							 GtkEntryCompletionMatchFunc completion_func,
+							 gpointer user_data);
 					
 const char     *ephy_location_entry_get_location	(EphyLocationEntry *le);
 

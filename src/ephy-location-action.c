@@ -51,6 +51,7 @@ struct _EphyLocationActionPrivate
 	char *typed_address;
 	EphyNode *smart_bmks;
 	EphyBookmarks *bookmarks;
+	EphyNode *history;
 	GdkPixbuf *icon;
 	char *lock_stock_id;
 	char *lock_tooltip;
@@ -155,9 +156,9 @@ completion_func (GtkEntryCompletion *completion,
 	gboolean ret = FALSE;
 	GtkTreeModel *model;
 	GtkTreeIter iter2;
+	EphyLocationActionPrivate *priv;
 	
-	EphyNode *history;
-	EphyBookmarks *bookmarks;
+	priv = EPHY_LOCATION_ACTION (data)->priv;
 
 	model = gtk_entry_completion_get_model (completion);
 
@@ -201,10 +202,6 @@ completion_func (GtkEntryCompletion *completion,
 		}
 	}
 	
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	history = ephy_history_get_pages (EPHY_HISTORY (
-			ephy_embed_shell_get_global_history (embed_shell)));
-	
 	gtk_tree_model_sort_convert_iter_to_child_iter 
 		(GTK_TREE_MODEL_SORT (model), &iter2, iter);
 
@@ -212,8 +209,8 @@ completion_func (GtkEntryCompletion *completion,
 	 * and we are seeing an history item, then we skip showing it.
 	 * The bookmark will be shown instead since we are not filtering it out.
 	 */
-	if (ephy_bookmarks_find_bookmark (bookmarks, url) != NULL &&
-	    (iter2.user_data2 == history))
+	if (ephy_bookmarks_find_bookmark (priv->bookmarks, url) != NULL &&
+	    (iter2.user_data2 == priv->history))
 		ret = FALSE;
 
 	g_free (item);
@@ -514,7 +511,8 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 						    EPHY_COMPLETION_URL_COL);
 
 		ephy_location_entry_set_completion_func (EPHY_LOCATION_ENTRY (proxy), 
-							completion_func);
+							completion_func, 
+							EPHY_LOCATION_ACTION (action));
 
 		add_completion_actions (action, proxy);
 
@@ -871,6 +869,9 @@ ephy_location_action_init (EphyLocationAction *action)
 		(action->priv->bookmarks);
 
 	init_actions_list (action);
+	
+	priv->history = ephy_history_get_pages (EPHY_HISTORY (
+			ephy_embed_shell_get_global_history (embed_shell)));
 
 	ephy_node_signal_connect_object (priv->smart_bmks,
 			                 EPHY_NODE_CHILD_ADDED,
