@@ -1138,11 +1138,88 @@ ephy_embed_get_loading_title (EphyEmbed *embed)
  * Returns whether the @embed's toplevel is visible or not. Used
  * mostly for popup visibility management.
  *
- * Return value; %TRUE if @embed's "visibility" property is set
+ * Return value: %TRUE if @embed's "visibility" property is set
  **/
 gboolean
 ephy_embed_get_visibility (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	return iface->get_visibility (embed);
+}
+
+/**
+ * ephy_embed_get_backward_history:
+ * @embed: an #EphyEmbed
+ *
+ * Returns a #GList of #EphyHistoryItem compromising the
+ * history items preceding the current location.
+ *
+ * Return value: a #GList with the preceding history items
+ **/
+GList*
+ephy_embed_get_backward_history (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_backward_history (embed);
+}
+
+/**
+ * ephy_embed_get_forward_history:
+ * @embed: an #EphyEmbed
+ *
+ * Returns a #GList of #EphyHistoryItem compromising the
+ * history items succeeding the current location.
+ *
+ * Return value: a #GList with the succeeding history items
+ **/
+GList*
+ephy_embed_get_forward_history (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_forward_history (embed);
+}
+
+/**
+ * ephy_embed_get_previous_history_item:
+ * @embed: an #EphyEmbed
+ *
+ * Returns the preceding #EphyHistoryItem in the history list.
+ *
+ * Return value: the preceding #EphyHistoryItem
+ **/
+EphyHistoryItem*
+ephy_embed_get_previous_history_item (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_previous_history_item (embed);
+}
+
+/**
+ * ephy_embed_get_next_history_item:
+ * @embed: an #EphyEmbed
+ *
+ * Returns the succeeding #EphyHistoryItem in the history list.
+ *
+ * Return value: the succeeding #EphyHistoryItem
+ **/
+EphyHistoryItem*
+ephy_embed_get_next_history_item (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->get_next_history_item (embed);
+}
+
+/**
+ * ephy_embed_go_to_history_item:
+ * @embed: an #EphyEmbed
+ * @history_item: an #EphyHistoryItem
+ *
+ * Opens the webpage specified by @history_item in @embed's history.
+ *
+ **/
+void
+ephy_embed_go_to_history_item (EphyEmbed *embed, EphyHistoryItem *history_item)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	iface->go_to_history_item (embed, history_item);
 }

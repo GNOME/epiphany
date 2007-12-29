@@ -22,6 +22,7 @@
 #define EPHY_EMBED_H
 
 #include "ephy-embed-event.h"
+#include "ephy-history-item.h"
 
 #include <glib-object.h>
 #include <glib.h>
@@ -135,7 +136,7 @@ struct _EphyEmbedIface
 					 EphyEmbedEvent *event);
 	gboolean (* dom_mouse_down)	(EphyEmbed *embed,
 					 EphyEmbedEvent *event);
-	void	 (* dom_content_loaded)	(EphyEmbed *embed,
+	void	 (* dom_content_loaded) (EphyEmbed *embed,
 					 gpointer event);
 	void	 (* popup_blocked)	(EphyEmbed *embed,
 					 const char *address,
@@ -146,7 +147,7 @@ struct _EphyEmbedIface
 	void	 (* content_blocked)	(EphyEmbed *embed,
 					 const char *uri);
 	gboolean (* modal_alert)	(EphyEmbed *embed);
-	void	 (* modal_alert_closed)	(EphyEmbed *embed);
+	void	 (* modal_alert_closed) (EphyEmbed *embed);
 	void	 (* document_type)	(EphyEmbed *embed,
 					 EphyEmbedDocumentType type);
 	void	 (* new_window)		(EphyEmbed *embed,
@@ -156,84 +157,89 @@ struct _EphyEmbedIface
 	gboolean (* close_request)	(EphyEmbed *embed);
 
 	/* Methods  */
-	void		   (* load_url)			(EphyEmbed *embed,
-							 const char *url);
-	void		   (* load)			(EphyEmbed *embed,
-							 const char *url,
-							 EphyEmbedLoadFlags flags,
-							 EphyEmbed *referring_embed);
-	void		   (* stop_load)		(EphyEmbed *embed);
-	void		   (* reload)			(EphyEmbed *embed,
-							 gboolean force);
-	gboolean	   (* can_go_back)		(EphyEmbed *embed);
-	gboolean	   (* can_go_forward)		(EphyEmbed *embed);
-	gboolean	   (* can_go_up)		(EphyEmbed *embed);
-	GSList *	   (* get_go_up_list)		(EphyEmbed *embed);
-	void		   (* go_back)			(EphyEmbed *embed);
-	void		   (* go_forward)		(EphyEmbed *embed);
-	void		   (* go_up)			(EphyEmbed *embed);
-
-	const char *	   (* get_title)		(EphyEmbed *embed);
-	char *		   (* get_location)		(EphyEmbed *embed,
-							 gboolean toplevel);
-	const char *	   (* get_link_message)		(EphyEmbed *embed);
-	char *		   (* get_js_status)		(EphyEmbed *embed);
-	int		   (* shistory_n_items)		(EphyEmbed *embed);
-	void		   (* shistory_get_nth)		(EphyEmbed *embed,
-							 int nth,
-							 gboolean is_relative,
-							 char **url,
-							 char **title);
-	int		   (* shistory_get_pos)		(EphyEmbed *embed);
-	void		   (* shistory_go_nth)		(EphyEmbed *embed,
-							 int nth);
-	void		   (* shistory_copy)		(EphyEmbed *source,
-							 EphyEmbed *dest,
-							 gboolean copy_back,
-							 gboolean copy_forward,
-							 gboolean copy_current);
-	void		   (* get_security_level)	(EphyEmbed *embed,
-							 EphyEmbedSecurityLevel *level,
-							 char **description);
-	void		   (* show_page_certificate)	(EphyEmbed *embed);
-	void		   (* set_zoom)			(EphyEmbed *embed,
-							 float zoom);
-	float		   (* get_zoom)			(EphyEmbed *embed);
-	void		   (* scroll_lines)		(EphyEmbed *embed,
-							 int num_lines);
-	void		   (* scroll_pages)		(EphyEmbed *embed,
-							 int num_pages);
-	void		   (* scroll_pixels)		(EphyEmbed *embed,
-							 int dx,
-							 int dy);
-	char *		   (* get_encoding)		(EphyEmbed *embed);
-	gboolean	   (* has_automatic_encoding)	(EphyEmbed *embed);
-	void		   (* set_encoding)		(EphyEmbed *embed,
-							 const char *encoding);
-	void		   (* print)			(EphyEmbed *embed);
-	void		   (* set_print_preview_mode)	(EphyEmbed *embed,
-							 gboolean mode);
-	int		   (* print_preview_n_pages)	(EphyEmbed *embed);
-	void		   (* print_preview_navigate)	(EphyEmbed *embed,
-							 EphyEmbedPrintPreviewNavType type,
-							 int page);
-	gboolean	   (* has_modified_forms)	(EphyEmbed *embed);
-	void		   (* close)			(EphyEmbed *embed);
-	EphyEmbedDocumentType	(* get_document_type)	(EphyEmbed *embed);
-	int		   (* get_load_percent)		(EphyEmbed *embed);
-	gboolean	   (* get_load_status)		(EphyEmbed *embed);
+	void		   (* load_url)			  (EphyEmbed *embed,
+							   const char *url);
+	void		   (* load)			  (EphyEmbed *embed,
+							   const char *url,
+							   EphyEmbedLoadFlags flags,
+							   EphyEmbed *referring_embed);
+	void		   (* stop_load)		  (EphyEmbed *embed);
+	void		   (* reload)			  (EphyEmbed *embed,
+							   gboolean force);
+	gboolean	   (* can_go_back)		  (EphyEmbed *embed);
+	gboolean	   (* can_go_forward)		  (EphyEmbed *embed);
+	gboolean	   (* can_go_up)		  (EphyEmbed *embed);
+	GSList *	   (* get_go_up_list)		  (EphyEmbed *embed);
+	void		   (* go_back)			  (EphyEmbed *embed);
+	void		   (* go_forward)		  (EphyEmbed *embed);
+	void		   (* go_up)			  (EphyEmbed *embed);
+	const char *	   (* get_title)		  (EphyEmbed *embed);
+	char *		   (* get_location)		  (EphyEmbed *embed,
+							   gboolean toplevel);
+	const char *	   (* get_link_message)		  (EphyEmbed *embed);
+	char *		   (* get_js_status)		  (EphyEmbed *embed);
+	int		   (* shistory_n_items)		  (EphyEmbed *embed);
+	void		   (* shistory_get_nth)		  (EphyEmbed *embed,
+							   int nth,
+							   gboolean is_relative,
+							   char **url,
+							   char **title);
+	int		   (* shistory_get_pos)		  (EphyEmbed *embed);
+	void		   (* shistory_go_nth)		  (EphyEmbed *embed,
+							   int nth);
+	void		   (* shistory_copy)		  (EphyEmbed *source,
+							   EphyEmbed *dest,
+							   gboolean copy_back,
+							   gboolean copy_forward,
+							   gboolean copy_current);
+	void		   (* get_security_level)	  (EphyEmbed *embed,
+							   EphyEmbedSecurityLevel *level,
+							   char **description);
+	void		   (* show_page_certificate)	  (EphyEmbed *embed);
+	void		   (* set_zoom)			  (EphyEmbed *embed,
+							   float zoom);
+	float		   (* get_zoom)			  (EphyEmbed *embed);
+	void		   (* scroll_lines)		  (EphyEmbed *embed,
+							   int num_lines);
+	void		   (* scroll_pages)		  (EphyEmbed *embed,
+							   int num_pages);
+	void		   (* scroll_pixels)		  (EphyEmbed *embed,
+							   int dx,
+							   int dy);
+	char *		   (* get_encoding)		  (EphyEmbed *embed);
+	gboolean	   (* has_automatic_encoding)	  (EphyEmbed *embed);
+	void		   (* set_encoding)		  (EphyEmbed *embed,
+							   const char *encoding);
+	void		   (* print)			  (EphyEmbed *embed);
+	void		   (* set_print_preview_mode)	  (EphyEmbed *embed,
+							   gboolean mode);
+	int		   (* print_preview_n_pages)	  (EphyEmbed *embed);
+	void		   (* print_preview_navigate)	  (EphyEmbed *embed,
+							   EphyEmbedPrintPreviewNavType type,
+							   int page);
+	gboolean	   (* has_modified_forms)	  (EphyEmbed *embed);
+	void		   (* close)			  (EphyEmbed *embed);
+	EphyEmbedDocumentType	(* get_document_type)	  (EphyEmbed *embed);
+	int		   (* get_load_percent)		  (EphyEmbed *embed);
+	gboolean	   (* get_load_status)		  (EphyEmbed *embed);
 	EphyEmbedNavigationFlags (* get_navigation_flags) (EphyEmbed *embed);
-	const char *	   (* get_typed_address)	(EphyEmbed *embed);
-	void		   (* set_typed_address)	(EphyEmbed *embed,
-							 const char *address,
-							 EphyEmbedAddressExpire expire);
-	const char *	   (* get_address)		(EphyEmbed *embed);
-	const char *	   (* get_status_message)	(EphyEmbed *embed);
-	GdkPixbuf *	   (* get_icon)			(EphyEmbed *embed);
-	const char *	   (* get_icon_address)		(EphyEmbed *embed);
-	gboolean	   (* get_is_blank)		(EphyEmbed *embed);
-	const char *	   (* get_loading_title)	(EphyEmbed *embed);
-	gboolean 	   (* get_visibility)		(EphyEmbed *embed);
+	const char *	   (* get_typed_address)	  (EphyEmbed *embed);
+	void		   (* set_typed_address)	  (EphyEmbed *embed,
+							   const char *address,
+							   EphyEmbedAddressExpire expire);
+	const char *	   (* get_address)		  (EphyEmbed *embed);
+	const char *	   (* get_status_message)	  (EphyEmbed *embed);
+	GdkPixbuf *	   (* get_icon)			  (EphyEmbed *embed);
+	const char *	   (* get_icon_address)		  (EphyEmbed *embed);
+	gboolean	   (* get_is_blank)		  (EphyEmbed *embed);
+	const char *	   (* get_loading_title)	  (EphyEmbed *embed);
+	gboolean	   (* get_visibility)		  (EphyEmbed *embed);
+	GList *		   (* get_backward_history)	  (EphyEmbed *embed);
+	GList *		   (* get_forward_history)	  (EphyEmbed *embed);
+	EphyHistoryItem *  (* get_next_history_item)	  (EphyEmbed *embed);
+	EphyHistoryItem *  (* get_previous_history_item)  (EphyEmbed *embed);
+	void		   (* go_to_history_item)	  (EphyEmbed *embed,
+							   EphyHistoryItem *history_item);
 };
 
 GType		  ephy_embed_net_state_get_type		(void);
@@ -384,6 +390,13 @@ void		  ephy_embed_print_preview_navigate	(EphyEmbed *embed,
 void		  ephy_embed_close			(EphyEmbed *embed);
 
 gboolean	  ephy_embed_has_modified_forms		(EphyEmbed *embed);
+
+/* History */
+GList		*ephy_embed_get_backward_history	(EphyEmbed *embed);
+GList		*ephy_embed_get_forward_history		(EphyEmbed *embed);
+EphyHistoryItem *ephy_embed_get_next_history_item	(EphyEmbed *embed);
+EphyHistoryItem *ephy_embed_get_previous_history_item	(EphyEmbed *embed);
+void		 ephy_embed_go_to_history_item		(EphyEmbed *embed, EphyHistoryItem *history_item);
 
 G_END_DECLS
 
