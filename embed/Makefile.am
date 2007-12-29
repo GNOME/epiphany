@@ -17,8 +17,7 @@ NOINST_H_FILES = \
 	ephy-embed-dialog.h		\
 	ephy-embed-find.h		\
 	ephy-encodings.h		\
-	ephy-favicon-cache.h            \
-	ephy-history-item.h
+	ephy-favicon-cache.h
 
 INST_H_FILES = \
 	ephy-adblock.h			\
@@ -36,6 +35,7 @@ INST_H_FILES = \
 	ephy-embed-shell.h		\
 	ephy-embed-utils.h              \
 	ephy-history.h			\
+	ephy-history-item.h             \
 	ephy-password-manager.h		\
 	ephy-permission-manager.h
 

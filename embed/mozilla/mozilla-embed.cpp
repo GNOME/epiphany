@@ -41,12 +41,12 @@
 
 #include "ephy-command-manager.h"
 #include "ephy-debug.h"
+#include "mozilla-embed.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "mozilla-embed-event.h"
-
-#include "mozilla-embed.h"
+#include "mozilla-history-item.h"
 
 static void	mozilla_embed_class_init	(MozillaEmbedClass *klass);
 static void	mozilla_embed_init		(MozillaEmbed *gs);
@@ -877,6 +877,106 @@ impl_has_modified_forms (EphyEmbed *embed)
 	return NS_SUCCEEDED (rv) ? modified : FALSE;
 }
 
+static EphyHistoryItem*
+mozilla_get_nth_history_item (MozillaEmbed *embed,
+			      gboolean is_relative,
+			      int absolute_nth)
+{
+	char *url = NULL, *title = NULL;
+	nsresult rv;
+	nsCString nsUrl;
+	PRUnichar *nsTitle;
+	int nth = absolute_nth;
+	MozillaEmbedPrivate *mpriv = embed->priv;
+
+	if (is_relative)
+	{
+		nth += impl_shistory_get_pos (EPHY_EMBED (embed));
+	}
+	
+	rv = mpriv->browser->GetSHUrlAtIndex(nth, nsUrl);
+
+	if (NS_SUCCEEDED (rv) && nsUrl.Length())
+		url = g_strdup(nsUrl.get());
+
+	rv = mpriv->browser->GetSHTitleAtIndex(nth, &nsTitle);
+
+	if (NS_SUCCEEDED (rv) && nsTitle)
+	{
+		nsCString cTitle;
+		NS_UTF16ToCString (nsString(nsTitle),
+				   NS_CSTRING_ENCODING_UTF8, cTitle);
+		title = g_strdup (cTitle.get());
+		nsMemory::Free (nsTitle);
+	}
+
+	return (EphyHistoryItem*)mozilla_history_item_new (url, title, absolute_nth);
+}
+
+static GList*
+mozilla_construct_history_list (MozillaEmbed *embed, int start, int end)
+{
+	GList *list = NULL;
+	EphyHistoryItem *item;
+
+	while (start != end)
+	{
+		item = mozilla_get_nth_history_item (embed, FALSE, start);
+		list = g_list_prepend (list, item);
+
+		if (start < end)
+			start++;
+		else
+			start--;
+	}
+
+	return g_list_reverse (list);
+}
+
+static GList*
+impl_get_backward_history (EphyEmbed *embed)
+{
+	MozillaEmbed *membed = MOZILLA_EMBED (embed);
+	int start = impl_shistory_get_pos (embed) + -1;
+
+	return mozilla_construct_history_list (membed, start, -1);
+}
+
+static GList*
+impl_get_forward_history (EphyEmbed *embed)
+{
+	MozillaEmbed *membed = MOZILLA_EMBED (embed);
+	int start = impl_shistory_get_pos (embed) + 1;
+	int end = impl_shistory_n_items (embed);
+
+	return mozilla_construct_history_list (membed, start, end);
+}
+
+static EphyHistoryItem*
+impl_get_next_history_item (EphyEmbed *embed)
+{
+	return mozilla_get_nth_history_item (MOZILLA_EMBED (embed),
+					     TRUE,
+					     +1);
+}
+
+static EphyHistoryItem*
+impl_get_previous_history_item (EphyEmbed *embed)
+{
+	return mozilla_get_nth_history_item (MOZILLA_EMBED (embed),
+					     TRUE,
+					     -1);
+}
+
+static void
+impl_go_to_history_item (EphyEmbed *embed, EphyHistoryItem *item)
+{
+	int index = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (item),
+							HISTORY_ITEM_INDEX_KEY));
+
+	MOZILLA_EMBED (embed)->priv->browser->GoToHistoryIndex (index);
+}
+
 static void
 mozilla_embed_location_changed_cb (GtkMozEmbed *embed, 
 				   MozillaEmbed *membed)
@@ -1388,6 +1488,11 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->print_preview_navigate = impl_print_preview_navigate;
 	iface->has_modified_forms = impl_has_modified_forms;
 	iface->get_security_level = impl_get_security_level;
+	iface->get_backward_history = impl_get_backward_history;
+	iface->get_forward_history = impl_get_forward_history;
+	iface->get_next_history_item = impl_get_next_history_item;
+	iface->get_previous_history_item = impl_get_previous_history_item;
+	iface->go_to_history_item = impl_go_to_history_item;
 }
 
 static void

@@ -59,6 +59,8 @@ libephymozillaembed_la_SOURCES = 	\
 	mozilla-embed-persist.h		\
 	mozilla-embed-single.cpp	\
 	mozilla-embed-single.h	        \
+	mozilla-history-item.cpp        \
+	mozilla-history-item.h          \
 	mozilla-notifiers.cpp		\
 	mozilla-notifiers.h
 
