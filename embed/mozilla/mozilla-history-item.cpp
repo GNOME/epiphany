@@ -62,8 +62,7 @@ mozilla_history_item_new (const char *url, const char *title, int index)
 
   item->url = g_strdup (url);
   item->title = g_strdup (title);
-
-  g_object_set_data (G_OBJECT (item), HISTORY_ITEM_INDEX_KEY, GINT_TO_POINTER (index));
+  item->nth = index;
 
   return item;
 }

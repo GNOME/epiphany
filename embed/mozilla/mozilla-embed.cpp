@@ -971,10 +971,9 @@ impl_get_previous_history_item (EphyEmbed *embed)
 static void
 impl_go_to_history_item (EphyEmbed *embed, EphyHistoryItem *item)
 {
-	int index = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (item),
-							HISTORY_ITEM_INDEX_KEY));
+	MozillaHistoryItem *mitem = MOZILLA_HISTORY_ITEM (item);
 
-	MOZILLA_EMBED (embed)->priv->browser->GoToHistoryIndex (index);
+	MOZILLA_EMBED (embed)->priv->browser->GoToHistoryIndex (mitem->nth);
 }
 
 static void

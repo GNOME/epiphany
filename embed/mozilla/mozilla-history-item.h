@@ -13,8 +13,6 @@ G_BEGIN_DECLS
 #define MOZILLA_IS_HISTORY_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), MOZILLA_TYPE_HISTORY_ITEM))
 #define MOZILLA_HISTORY_ITEM_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), MOZILLA_TYPE_HISTORY_ITEM, MozillaHistoryItemClass))
 
-#define HISTORY_ITEM_INDEX_KEY	"NTh"
-
 typedef struct _MozillaHistoryItem      MozillaHistoryItem;
 typedef struct _MozillaHistoryItemClass MozillaHistoryItemClass;
 
@@ -29,6 +27,7 @@ struct _MozillaHistoryItem
 
   char *url;
   char *title;
+  int nth;
 };
 
 GType               mozilla_history_item_get_type (void) G_GNUC_CONST;

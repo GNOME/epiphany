@@ -29,6 +29,7 @@
 #include "ephy-history.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
+#include "ephy-history-item.h"
 #include "ephy-link.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
@@ -43,8 +44,8 @@
 #include <gtk/gtktoolbar.h>
 #include <gtk/gtkstatusbar.h>
 
-#define NTH_DATA_KEY	"GoNTh"
-#define URL_DATA_KEY	"GoURL"
+#define HISTORY_ITEM_DATA_KEY	"HistoryItem"
+#define URL_DATA_KEY	        "GoURL"
 
 #define EPHY_NAVIGATION_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NAVIGATION_ACTION, EphyNavigationActionPrivate))
 
@@ -140,9 +141,10 @@ new_history_menu_item (const char *origtext,
 }
 
 static void
-activate_by_history_index (EphyNavigationAction *action,
-			   int index)
+activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
+				       EphyNavigationAction *action)
 {
+	EphyHistoryItem *item;
 	EphyEmbed *embed;
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (action->priv->window));
@@ -154,18 +156,11 @@ activate_by_history_index (EphyNavigationAction *action,
 				        EPHY_LINK_NEW_TAB);
 		g_return_if_fail (embed != NULL);
 	}
-	ephy_embed_shistory_go_nth (embed, index);
-}
 
-static void
-activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
-				       EphyNavigationAction *action)
-{
-	int go_nth;
+	item = (EphyHistoryItem*)g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
+	g_return_if_fail (item != NULL);
 
-	go_nth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menuitem), NTH_DATA_KEY));
-
-	activate_by_history_index(action, go_nth);
+	ephy_embed_go_to_history_item (embed, item);
 }
 
 static void
@@ -174,9 +169,18 @@ select_menu_item_cb (GtkWidget *menuitem,
 {
 	char *url;
 	GtkWidget *statusbar;
+	EphyHistoryItem *item;
 
-	url = g_object_get_data (G_OBJECT (menuitem), URL_DATA_KEY);
-	g_return_if_fail (url != NULL);
+	item = (EphyHistoryItem*)g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
+	if (item)
+	{
+		url = ephy_history_item_get_url (item);
+	}
+	else
+	{
+		url = g_object_get_data (G_OBJECT (menuitem), URL_DATA_KEY);
+		g_return_if_fail (url != NULL);
+	}
 
 	statusbar = ephy_window_get_statusbar (action->priv->window);
 
@@ -187,11 +191,7 @@ static void
 deselect_menu_item_cb (GtkWidget *menuitem,
 	               EphyNavigationAction *action)
 {
-	char *url;
 	GtkWidget *statusbar;
-
-	url = g_object_get_data (G_OBJECT (menuitem), URL_DATA_KEY);
-	g_return_if_fail (url != NULL);
 
 	statusbar = ephy_window_get_statusbar (action->priv->window);
 
@@ -221,44 +221,36 @@ build_back_or_forward_menu (EphyNavigationAction *action)
 	EphyWindow *window = action->priv->window;
 	GtkMenuShell *menu;
 	EphyEmbed *embed;
-	int pos, count;
-	int start, end;
+	GList *list, *l;
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_val_if_fail (embed != NULL, NULL);
 
-	pos = ephy_embed_shistory_get_pos (embed);
-	count = ephy_embed_shistory_n_items (embed);
-
-	if (count == 0) return NULL;
-
 	if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_BACK)
-	{
-		start = pos - 1;
-		end = -1;
-	}
+		list = ephy_embed_get_backward_history (embed);
 	else
-	{
-		start = pos + 1;
-		end = count;
-	}
+		list = ephy_embed_get_forward_history (embed);
 
 	menu = GTK_MENU_SHELL (gtk_menu_new ());
 
-	while (start != end)
+	l = list;
+
+	for (l = list; l != NULL; l = l->next)
 	{
 		GtkWidget *item;
-		char *title = NULL, *url = NULL;
+		EphyHistoryItem *hitem;
+		const char *title, *url;
 
-		ephy_embed_shistory_get_nth (embed, start, FALSE, &url, &title);
-
-		if (url == NULL) continue;
+		hitem = (EphyHistoryItem*)list->data;
+		url = ephy_history_item_get_url (hitem);
+		title = ephy_history_item_get_title (hitem);
 
 		item = new_history_menu_item (title ? title : url, url);
 
-		g_object_set_data (G_OBJECT (item), NTH_DATA_KEY,
-				   GINT_TO_POINTER (start));
-		g_object_set_data_full (G_OBJECT (item), URL_DATA_KEY, url, 
+		g_object_set_data_full (G_OBJECT (item), HISTORY_ITEM_DATA_KEY, hitem,
+					(GDestroyNotify) g_object_unref);
+
+		g_object_set_data_full (G_OBJECT (item), URL_DATA_KEY, g_strdup (url),
 					(GDestroyNotify) g_free);
 
 		g_signal_connect (item, "activate",
@@ -273,18 +265,9 @@ build_back_or_forward_menu (EphyNavigationAction *action)
 
 		gtk_menu_shell_append (menu, item);
 		gtk_widget_show_all (item);
-
-		g_free (title);
-
-		if (start < end)
-		{
-			start++;
-		}
-		else
-		{
-			start--;
-		}
 	}
+	
+	g_list_free (list);
 
 	return GTK_WIDGET (menu);
 }
