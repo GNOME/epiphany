@@ -4,6 +4,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include "mozilla-embed.h"
+
 G_BEGIN_DECLS
 
 #define MOZILLA_TYPE_HISTORY_ITEM (mozilla_history_item_get_type())
@@ -25,13 +27,12 @@ struct _MozillaHistoryItem
 {
   GObject parent_instance;
 
-  char *url;
-  char *title;
+  MozillaEmbed *embed;
   int nth;
 };
 
 GType               mozilla_history_item_get_type (void) G_GNUC_CONST;
-MozillaHistoryItem *mozilla_history_item_new      (const char *url, const char *title, int index) G_GNUC_MALLOC;
+MozillaHistoryItem *mozilla_history_item_new      (MozillaEmbed *embed, int index) G_GNUC_MALLOC;
 
 G_END_DECLS
 

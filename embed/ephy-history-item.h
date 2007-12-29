@@ -40,13 +40,13 @@ struct _EphyHistoryItemIface
 {
 	GTypeInterface base_iface;
 
-  const char * (* get_url)   (EphyHistoryItem *item);
-  const char * (* get_title) (EphyHistoryItem *item);
+  char * (* get_url)   (EphyHistoryItem *item);
+  char * (* get_title) (EphyHistoryItem *item);
 };
 
 GType       ephy_history_item_get_type  (void);
-const char* ephy_history_item_get_url   (EphyHistoryItem *item);
-const char* ephy_history_item_get_title (EphyHistoryItem *item);
+char*       ephy_history_item_get_url   (EphyHistoryItem *item);
+char*       ephy_history_item_get_title (EphyHistoryItem *item);
 
 G_END_DECLS
 

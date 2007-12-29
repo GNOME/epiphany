@@ -880,37 +880,14 @@ impl_has_modified_forms (EphyEmbed *embed)
 static EphyHistoryItem*
 mozilla_get_nth_history_item (MozillaEmbed *embed,
 			      gboolean is_relative,
-			      int absolute_nth)
+			      int nth)
 {
-	char *url = NULL, *title = NULL;
-	nsresult rv;
-	nsCString nsUrl;
-	PRUnichar *nsTitle;
-	int nth = absolute_nth;
-	MozillaEmbedPrivate *mpriv = embed->priv;
-
 	if (is_relative)
 	{
 		nth += impl_shistory_get_pos (EPHY_EMBED (embed));
 	}
 	
-	rv = mpriv->browser->GetSHUrlAtIndex(nth, nsUrl);
-
-	if (NS_SUCCEEDED (rv) && nsUrl.Length())
-		url = g_strdup(nsUrl.get());
-
-	rv = mpriv->browser->GetSHTitleAtIndex(nth, &nsTitle);
-
-	if (NS_SUCCEEDED (rv) && nsTitle)
-	{
-		nsCString cTitle;
-		NS_UTF16ToCString (nsString(nsTitle),
-				   NS_CSTRING_ENCODING_UTF8, cTitle);
-		title = g_strdup (cTitle.get());
-		nsMemory::Free (nsTitle);
-	}
-
-	return (EphyHistoryItem*)mozilla_history_item_new (url, title, absolute_nth);
+	return (EphyHistoryItem*)mozilla_history_item_new (embed, nth);
 }
 
 static GList*
@@ -1571,4 +1548,12 @@ _mozilla_embed_new_xul_dialog (void)
 				 window, (GConnectFlags) 0);
 
 	return GTK_MOZ_EMBED (embed);
+}
+
+EphyBrowser*
+_mozilla_embed_get_browser (MozillaEmbed *embed)
+{
+	g_return_val_if_fail (MOZILLA_IS_EMBED (embed), NULL);
+
+	return embed->priv->browser;
 }

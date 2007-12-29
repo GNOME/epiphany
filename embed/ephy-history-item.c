@@ -18,6 +18,8 @@
  *
  */
 
+#include "config.h"
+
 #include "ephy-history-item.h"
 
 GType
@@ -41,14 +43,14 @@ ephy_history_item_get_type (void)
 	return type;
 }
 
-const char*
+char*
 ephy_history_item_get_url (EphyHistoryItem *item)
 {
 	EphyHistoryItemIface *iface = EPHY_HISTORY_ITEM_GET_IFACE (item);
 	return iface->get_url (item);
 }
 
-const char*
+char*
 ephy_history_item_get_title (EphyHistoryItem *item)
 {
 	EphyHistoryItemIface *iface = EPHY_HISTORY_ITEM_GET_IFACE (item);

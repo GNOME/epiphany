@@ -29,6 +29,13 @@
 #include "ephy-embed.h"
 #include "ephy-base-embed.h"
 
+#ifdef __cplusplus
+#include "EphyBrowser.h"
+#else
+/* can't include C++ headers from outside embed/mozilla */
+typedef struct _EphyBrowser EphyBrowser;
+#endif
+
 G_BEGIN_DECLS
 
 #define MOZILLA_TYPE_EMBED		(mozilla_embed_get_type ())
@@ -64,6 +71,8 @@ gpointer        _mozilla_embed_get_ephy_browser (MozillaEmbed *embed);
 GtkMozEmbed    *_mozilla_embed_new_xul_dialog   (void);
 
 EphyEmbedChrome _mozilla_embed_translate_chrome	(GtkMozEmbedChromeFlags flags);
+
+EphyBrowser    *_mozilla_embed_get_browser (MozillaEmbed *embed);
 
 G_END_DECLS
 

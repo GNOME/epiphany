@@ -170,11 +170,13 @@ select_menu_item_cb (GtkWidget *menuitem,
 	char *url;
 	GtkWidget *statusbar;
 	EphyHistoryItem *item;
+	char *freeme = NULL;
 
 	item = (EphyHistoryItem*)g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
 	if (item)
 	{
 		url = ephy_history_item_get_url (item);
+		freeme = url;
 	}
 	else
 	{
@@ -185,6 +187,8 @@ select_menu_item_cb (GtkWidget *menuitem,
 	statusbar = ephy_window_get_statusbar (action->priv->window);
 
 	gtk_statusbar_push (GTK_STATUSBAR (statusbar), action->priv->statusbar_cid, url);
+
+	g_free (freeme);
 }
 
 static void
@@ -239,7 +243,7 @@ build_back_or_forward_menu (EphyNavigationAction *action)
 	{
 		GtkWidget *item;
 		EphyHistoryItem *hitem;
-		const char *title, *url;
+		char *title, *url;
 
 		hitem = (EphyHistoryItem*)list->data;
 		url = ephy_history_item_get_url (hitem);
@@ -247,11 +251,10 @@ build_back_or_forward_menu (EphyNavigationAction *action)
 
 		item = new_history_menu_item (title ? title : url, url);
 
+		g_free (title);
+
 		g_object_set_data_full (G_OBJECT (item), HISTORY_ITEM_DATA_KEY, hitem,
 					(GDestroyNotify) g_object_unref);
-
-		g_object_set_data_full (G_OBJECT (item), URL_DATA_KEY, g_strdup (url),
-					(GDestroyNotify) g_free);
 
 		g_signal_connect (item, "activate",
 				  G_CALLBACK (activate_back_or_forward_menu_item_cb),
