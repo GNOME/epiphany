@@ -270,60 +270,6 @@ _wrap_ephy_window_get_tabs(PyGObject *self)
     return py_list;
 }
 %%
-override ephy_embed_shistory_get_nth kwargs
-static PyObject*
-_wrap_ephy_embed_shistory_get_nth (PyGObject *self,
-                                   PyObject *args, PyObject *kwargs)
-{
-    static char *kwlist[] = {"nth", "is_relative", NULL}; 
-    int nth, is_relative;
-    char *url, *title;
-    PyObject *py_url, *py_title;
-    PyObject *py_list;
-
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs,    
-                                     "ii:EphyEmbed.shistory_get_nth", kwlist,
-                                     &nth, &is_relative)) {
-        return NULL;
-    }
-
-    ephy_embed_shistory_get_nth (EPHY_EMBED (self->obj), nth, is_relative,
-                                 &url, &title);
-
-    if (!url || !title) {
-        return Py_None;
-    }
-
-    if ((py_list = PyList_New(0)) == NULL) {
-        g_free (url);
-        g_free (title);
-        return NULL;
-    }
-
-    py_url   = PyString_FromString (url);
-    g_free (url);
-    if (!py_url) {
-        g_free (title);
-        Py_DECREF(py_list);
-        return NULL;
-    }
-
-    PyList_Append(py_list, py_url);
-    Py_DECREF(py_url);
-
-    py_title = PyString_FromString (title);
-    g_free (title);
-
-    if (!py_title) {
-        Py_DECREF(py_list);
-        return NULL;
-    }
-
-    PyList_Append(py_list, py_title);
-    Py_DECREF(py_title);
-    return py_list;
-}
-%%
 override ephy_embed_get_go_up_list noargs
 static PyObject*
 _wrap_ephy_embed_get_go_up_list (PyGObject *self)

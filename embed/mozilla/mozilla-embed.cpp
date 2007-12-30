@@ -669,43 +669,6 @@ impl_shistory_n_items (EphyEmbed *embed)
 	return NS_SUCCEEDED(rv) ? count : 0;
 }
 
-static void
-impl_shistory_get_nth (EphyEmbed *embed, 
-		       int nth,
-		       gboolean is_relative,
-		       char **aUrl,
-		       char **aTitle)
-{
-	nsresult rv;
-	nsCString url;
-	PRUnichar *title;
-	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-
-	if (is_relative)
-	{
-		nth += ephy_embed_shistory_get_pos (embed);
-	}
-	
-	rv = mpriv->browser->GetSHUrlAtIndex(nth, url);
-
-	*aUrl = (NS_SUCCEEDED (rv) && url.Length()) ? g_strdup(url.get()) : NULL;
-
-	rv = mpriv->browser->GetSHTitleAtIndex(nth, &title);
-
-	if (title)
-	{
-		nsCString cTitle;
-		NS_UTF16ToCString (nsString(title),
-				   NS_CSTRING_ENCODING_UTF8, cTitle);
-		*aTitle = g_strdup (cTitle.get());
-		nsMemory::Free (title);
-	}
-	else
-	{
-		*aTitle = NULL;
-	}
-}
-
 static int
 impl_shistory_get_pos (EphyEmbed *embed)
 {
@@ -716,15 +679,6 @@ impl_shistory_get_pos (EphyEmbed *embed)
 	rv = mpriv->browser->GetSHInfo (&count, &index);
 
 	return NS_SUCCEEDED(rv) ? index : 0;
-}
-
-static void
-impl_shistory_go_nth (EphyEmbed *embed, 
-		      int nth)
-{
-	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-
-	mpriv->browser->GoToHistoryIndex (nth);
 }
 
 static void
@@ -882,12 +836,19 @@ mozilla_get_nth_history_item (MozillaEmbed *embed,
 			      gboolean is_relative,
 			      int nth)
 {
+	EphyHistoryItem *item = NULL;
+
 	if (is_relative)
 	{
 		nth += impl_shistory_get_pos (EPHY_EMBED (embed));
 	}
 	
-	return (EphyHistoryItem*)mozilla_history_item_new (embed, nth);
+	if (nth >= 0 && nth <= impl_shistory_n_items (EPHY_EMBED (embed)))
+	{
+		item = (EphyHistoryItem*)mozilla_history_item_new (embed, nth);
+	}
+
+	return item;
 }
 
 static GList*
@@ -1448,10 +1409,6 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->scroll_lines = impl_scroll_lines;
 	iface->scroll_pages = impl_scroll_pages;
 	iface->scroll_pixels = impl_scroll_pixels;
-	iface->shistory_n_items = impl_shistory_n_items;
-	iface->shistory_get_nth = impl_shistory_get_nth;
-	iface->shistory_get_pos = impl_shistory_get_pos;
-	iface->shistory_go_nth = impl_shistory_go_nth;
 	iface->shistory_copy = impl_shistory_copy;
 	iface->show_page_certificate = impl_show_page_certificate;
 	iface->close = impl_close;

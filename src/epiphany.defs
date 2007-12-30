@@ -1196,39 +1196,6 @@
   (return-type "none")
 )
 
-(define-method shistory_n_items
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_shistory_n_items")
-  (return-type "int")
-)
-
-(define-method shistory_get_nth
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_shistory_get_nth")
-  (return-type "none")
-  (parameters
-    '("int" "nth")
-    '("gboolean" "is_relative")
-    '("char**" "url")
-    '("char**" "title")
-  )
-)
-
-(define-method shistory_get_pos
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_shistory_get_pos")
-  (return-type "int")
-)
-
-(define-method shistory_go_nth
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_shistory_go_nth")
-  (return-type "none")
-  (parameters
-    '("int" "nth")
-  )
-)
-
 (define-method shistory_copy
   (of-object "EphyEmbed")
   (c-name "ephy_embed_shistory_copy")

@@ -1590,10 +1590,9 @@ sync_tab_navigation (EphyEmbed *embed,
 		     EphyWindow *window)
 {
 	EphyEmbedNavigationFlags flags;
+	EphyHistoryItem *item;
 	gboolean up = FALSE, back = FALSE, forward = FALSE;
-	char *back_url   = NULL, *forward_url   = NULL;
 	char *back_title = NULL, *forward_title = NULL;
-	gint position;
 
 	if (window->priv->closing) return;
 
@@ -1615,18 +1614,21 @@ sync_tab_navigation (EphyEmbed *embed,
 	ephy_toolbar_set_navigation_actions (window->priv->toolbar,
 					     back, forward, up);
 
-	position = ephy_embed_shistory_get_pos (embed);
+	item = ephy_embed_get_previous_history_item (embed);
 
-	if (position > 0)
+	if (item)
 	{
-		ephy_embed_shistory_get_nth (embed, -1, TRUE,
-					     &back_url, &back_title);
+		back_title = ephy_history_item_get_title (item);
+		g_object_unref (item);
 	}
 
-	if (position < ephy_embed_shistory_n_items (embed) - 1)
+
+	item = ephy_embed_get_next_history_item (embed);
+
+	if (item)
 	{
-		ephy_embed_shistory_get_nth (embed,  1, TRUE,
-					     &forward_url, &forward_title);
+		forward_title = ephy_history_item_get_title (item);
+		g_object_unref (item);
 	}
 
 	ephy_toolbar_set_navigation_tooltips (window->priv->toolbar,
@@ -1634,9 +1636,7 @@ sync_tab_navigation (EphyEmbed *embed,
 					      forward_title);
 
 	g_free (back_title);
-	g_free (back_url);
 	g_free (forward_title);
-	g_free (forward_url);
 }
 
 static void

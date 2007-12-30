@@ -178,15 +178,6 @@ struct _EphyEmbedIface
 							   gboolean toplevel);
 	const char *	   (* get_link_message)		  (EphyEmbed *embed);
 	char *		   (* get_js_status)		  (EphyEmbed *embed);
-	int		   (* shistory_n_items)		  (EphyEmbed *embed);
-	void		   (* shistory_get_nth)		  (EphyEmbed *embed,
-							   int nth,
-							   gboolean is_relative,
-							   char **url,
-							   char **title);
-	int		   (* shistory_get_pos)		  (EphyEmbed *embed);
-	void		   (* shistory_go_nth)		  (EphyEmbed *embed,
-							   int nth);
 	void		   (* shistory_copy)		  (EphyEmbed *source,
 							   EphyEmbed *dest,
 							   gboolean copy_back,
@@ -289,19 +280,6 @@ void		  ephy_embed_go_back			(EphyEmbed *embed);
 void		  ephy_embed_go_forward			(EphyEmbed *embed);
 
 void		  ephy_embed_go_up			(EphyEmbed *embed);
-
-int		  ephy_embed_shistory_n_items		(EphyEmbed *embed);
-
-void		  ephy_embed_shistory_get_nth		(EphyEmbed *embed,
-							 int nth,
-							 gboolean is_relative,
-							 char **url,
-							 char **title);
-
-int		  ephy_embed_shistory_get_pos		(EphyEmbed *embed);
-
-void		  ephy_embed_shistory_go_nth		(EphyEmbed *embed,
-							 int nth);
 
 void		  ephy_embed_shistory_copy		(EphyEmbed *source,
 							 EphyEmbed *dest,
