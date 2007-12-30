@@ -406,35 +406,6 @@ impl_scroll_pixels (EphyEmbed *embed,
 {
 }
 
-static int
-impl_shistory_n_items (EphyEmbed *embed)
-{
-  return 0;
-}
-
-static void
-impl_shistory_get_nth (EphyEmbed *embed,
-                       int nth,
-                       gboolean is_relative,
-                       char **url,
-                       char **title)
-{
-  *url = NULL;
-  *title = NULL;
-}
-
-static int
-impl_shistory_get_pos (EphyEmbed *embed)
-{
-  return 0;
-}
-
-static void
-impl_shistory_go_nth (EphyEmbed *embed,
-                      int nth)
-{
-}
-
 static void
 impl_shistory_copy (EphyEmbed *source,
                     EphyEmbed *dest,
@@ -504,6 +475,35 @@ impl_has_modified_forms (EphyEmbed *embed)
   return FALSE;
 }
 
+static GList*
+impl_get_backward_history (EphyEmbed *embed)
+{
+  return NULL;
+}
+
+static GList*
+impl_get_forward_history    (EphyEmbed *embed)
+{
+  return NULL;
+}
+
+static EphyHistoryItem*
+impl_get_next_history_item  (EphyEmbed *embed)
+{
+  return NULL;
+}
+
+static EphyHistoryItem*
+impl_get_previous_history_item  (EphyEmbed *embed)
+{
+  return NULL;
+}
+
+static void
+impl_go_to_history_item   (EphyEmbed *embed, EphyHistoryItem *history_item)
+{
+}
+
 static void
 ephy_embed_iface_init (EphyEmbedIface *iface)
 {
@@ -525,10 +525,6 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->scroll_lines = impl_scroll_lines;
   iface->scroll_pages = impl_scroll_pages;
   iface->scroll_pixels = impl_scroll_pixels;
-  iface->shistory_n_items = impl_shistory_n_items;
-  iface->shistory_get_nth = impl_shistory_get_nth;
-  iface->shistory_get_pos = impl_shistory_get_pos;
-  iface->shistory_go_nth = impl_shistory_go_nth;
   iface->shistory_copy = impl_shistory_copy;
   iface->show_page_certificate = impl_show_page_certificate;
   iface->close = impl_close;
@@ -541,4 +537,9 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->print_preview_navigate = impl_print_preview_navigate;
   iface->has_modified_forms = impl_has_modified_forms;
   iface->get_security_level = impl_get_security_level;
+  iface->get_backward_history = impl_get_backward_history;
+  iface->get_forward_history = impl_get_forward_history;
+  iface->get_next_history_item = impl_get_next_history_item;
+  iface->get_previous_history_item = impl_get_previous_history_item;
+  iface->go_to_history_item = impl_go_to_history_item;
 }
