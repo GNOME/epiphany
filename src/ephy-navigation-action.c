@@ -245,7 +245,7 @@ build_back_or_forward_menu (EphyNavigationAction *action)
 		EphyHistoryItem *hitem;
 		char *title, *url;
 
-		hitem = (EphyHistoryItem*)list->data;
+		hitem = (EphyHistoryItem*)l->data;
 		url = ephy_history_item_get_url (hitem);
 		title = ephy_history_item_get_title (hitem);
 
