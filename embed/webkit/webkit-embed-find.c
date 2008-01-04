@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  *  Copyright © 2000-2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004 Christian Persch
@@ -16,7 +17,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- *  $Id$
  */
 
 #include "config.h"
@@ -36,42 +36,42 @@ struct _WebKitEmbedFindPrivate
 
 static void
 impl_set_embed (EphyEmbedFind *efind,
-		EphyEmbed *embed)
+                EphyEmbed *embed)
 {
 }
 
 static void
 impl_set_properties (EphyEmbedFind *efind,
-		     const char *find_string,
-		     gboolean case_sensitive)
+                     const char *find_string,
+                     gboolean case_sensitive)
 {
 }
 
 static EphyEmbedFindResult
 impl_find (EphyEmbedFind *efind,
-	     const char *find_string,
-	     gboolean links_only)
+           const char *find_string,
+           gboolean links_only)
 {
   return EPHY_EMBED_FIND_FOUND;
 }
 
 static EphyEmbedFindResult
 impl_find_again (EphyEmbedFind *efind,
-		 gboolean forward,
-		 gboolean links_only)
+                 gboolean forward,
+                 gboolean links_only)
 {
   return EPHY_EMBED_FIND_FOUND;
 }
 
 static void
 impl_set_selection (EphyEmbedFind *efind,
-		    gboolean attention)
+                    gboolean attention)
 {
 }
 
 static gboolean
 impl_activate_link (EphyEmbedFind *efind,
-		    GdkModifierType mask)
+                    GdkModifierType mask)
 {
   return FALSE;
 }
@@ -79,12 +79,12 @@ impl_activate_link (EphyEmbedFind *efind,
 static void
 ephy_find_iface_init (EphyEmbedFindIface *iface)
 {
-	iface->set_embed = impl_set_embed;
-	iface->set_properties = impl_set_properties;
-	iface->find = impl_find;
-	iface->find_again = impl_find_again;
-	iface->set_selection = impl_set_selection;
-	iface->activate_link = impl_activate_link;
+  iface->set_embed = impl_set_embed;
+  iface->set_properties = impl_set_properties;
+  iface->find = impl_find;
+  iface->find_again = impl_find_again;
+  iface->set_selection = impl_set_selection;
+  iface->activate_link = impl_activate_link;
 }
 
 static void
@@ -95,9 +95,11 @@ webkit_embed_find_init (WebKitEmbedFind *find)
 static void
 webkit_embed_find_class_init (WebKitEmbedFindClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+#if 0
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	g_type_class_add_private (object_class, sizeof (WebKitEmbedFindPrivate));
+  g_type_class_add_private (object_class, sizeof (WebKitEmbedFindPrivate));
+#endif
 }
 
 G_DEFINE_TYPE_WITH_CODE (WebKitEmbedFind, webkit_embed_find, G_TYPE_OBJECT,
