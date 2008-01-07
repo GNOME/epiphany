@@ -685,6 +685,8 @@ mozilla_embed_single_finalize (GObject *object)
 {
 	MozillaEmbedSingle *mes = MOZILLA_EMBED_SINGLE (object);
 
+	g_free (mes->priv->user_prefs);
+
 	/* Destroy EphyEmbedSingle before because some
 	 * services depend on xpcom */
 	G_OBJECT_CLASS (mozilla_embed_single_parent_class)->finalize (object);
@@ -696,8 +698,6 @@ mozilla_embed_single_finalize (GObject *object)
 #ifdef HAVE_GECKO_1_9
 	NS_LogTerm ();
 #endif
-
-	g_free (mes->priv->user_prefs);
 }
 
 static void
