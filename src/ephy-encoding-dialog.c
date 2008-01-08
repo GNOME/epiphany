@@ -164,9 +164,12 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 
 
 static void
-embed_net_stop_cb (EphyEmbed *embed, EphyEncodingDialog *dialog)
+embed_net_stop_cb (EphyEmbed *embed,
+		   GParamSpec *pspec,
+		   EphyEncodingDialog *dialog)
 {
-	sync_encoding_against_embed (dialog);
+	if (ephy_embed_get_load_status (embed) == FALSE)
+		sync_encoding_against_embed (dialog);
 }
 
 static void
@@ -182,7 +185,7 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 						      dialog);
 	}
 
-	g_signal_connect (G_OBJECT (embed), "net_stop",
+	g_signal_connect (G_OBJECT (embed), "notify::load-status",
 			  G_CALLBACK (embed_net_stop_cb), dialog);
 	dialog->priv->embed = embed;
 
