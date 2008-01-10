@@ -64,8 +64,12 @@ ephy_activation_load_uri_list (EphyDbus *ephy_dbus,
 			       guint startup_id,
 			       GError **error)
 {
+	char *new_options;
+	
+	new_options = g_strconcat (options, "external,", NULL);
 	return session_queue_command (EPHY_SESSION_CMD_OPEN_URIS,
-				      options, uris, startup_id, error);
+				      new_options, uris, startup_id, error);
+	g_free (new_options);
 }
 
 gboolean

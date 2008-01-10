@@ -369,7 +369,7 @@ queue_commands (guint32 user_time)
 		}
 		if (open_in_new_tab)
 		{
-			g_string_append (options, "new-tab,");
+			g_string_append (options, "new-tab,external,");
 		}
 
 		ephy_session_queue_command (session,

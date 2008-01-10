@@ -673,6 +673,10 @@ session_command_open_uris (EphySession *session,
 
 	window = ephy_session_get_active_window (session);
 
+	if (options != NULL && strstr (options, "external") != NULL)
+	{
+		flags |= EPHY_NEW_TAB_FROM_EXTERNAL;
+	}
 	if (options != NULL && strstr (options, "new-window") != NULL)
 	{
 		window = NULL;

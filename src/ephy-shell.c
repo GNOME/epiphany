@@ -450,7 +450,7 @@ load_homepage (EphyEmbed *embed)
 EphyEmbed *
 ephy_shell_new_tab_full (EphyShell *shell,
 			 EphyWindow *parent_window,
-			 EphyEmbed *previous_tab,
+			 EphyEmbed *previous_embed,
 			 const char *url,
 			 EphyNewTabFlags flags,
 			 EphyEmbedChrome chrome,
@@ -458,10 +458,10 @@ ephy_shell_new_tab_full (EphyShell *shell,
 			 guint32 user_time)
 {
 	EphyWindow *window;
-	EphyEmbed *embed;
+	EphyEmbed *embed = NULL;
 	gboolean in_new_window = TRUE;
 	gboolean jump_to;
-	EphyEmbed *previous_embed = NULL;
+	gboolean active_is_blank = FALSE;
 	GtkWidget *nb;
 	int position = -1;
 	gboolean is_empty = FALSE;
@@ -489,28 +489,43 @@ ephy_shell_new_tab_full (EphyShell *shell,
 
 	toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
 
-	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_tab != NULL)
+	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_embed != NULL)
 	{
 		nb = ephy_window_get_notebook (window);
                 /* FIXME this assumes the tab is the direct notebook child */
 		position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
 						  GTK_WIDGET (previous_embed)) + 1;
 	}
-
-	embed = EPHY_EMBED (ephy_embed_factory_new_object (EPHY_TYPE_EMBED));
-	g_assert (embed != NULL);
-	gtk_widget_show (GTK_WIDGET (embed));
-
-	ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, position, jump_to);
+	
+	if (flags & EPHY_NEW_TAB_FROM_EXTERNAL)
+	{
+		/* If the active embed is blank, use that to open the url and jump to it */
+		embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+		if (embed != NULL)
+		{
+			if (ephy_embed_get_is_blank (embed))
+			{
+				active_is_blank = TRUE;
+			}
+		}
+	}
+	if (active_is_blank == FALSE)
+	{
+		embed = EPHY_EMBED (ephy_embed_factory_new_object (EPHY_TYPE_EMBED));
+		g_assert (embed != NULL);
+		gtk_widget_show (GTK_WIDGET (embed));
+		
+		ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, position, jump_to);
+	}
 
 	if (previous_embed != NULL)
-	{
+	{	
 		ephy_embed_shistory_copy (previous_embed,
 					  embed,
 					  TRUE,   /* back history */
 					  TRUE,   /* forward history */
 					  FALSE); /* current index */
-	}
+	}		
 
 	ephy_gui_window_update_user_time (GTK_WIDGET (window), user_time);
 
