@@ -32,6 +32,7 @@
 #include "ephy-gui.h"
 #include "ephy-debug.h"
 #include "ephy-dnd.h"
+#include "ephy-string.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtkwidget.h>
@@ -46,7 +47,6 @@
 #include <gtk/gtkentry.h>
 #include <gtk/gtktoolitem.h>
 #include <gtk/gtkmain.h>
-#include <libgnomevfs/gnome-vfs-uri.h>
 
 #include <string.h>
 
@@ -367,16 +367,17 @@ ephy_bookmark_action_activate (EphyBookmarkAction *action,
 	/* The entered search term is empty, and we have a smart bookmark */
 	if ((text == NULL || text[0] == '\0') && strstr (location, "%s") != NULL)
 	{
-		GnomeVFSURI *uri = gnome_vfs_uri_new (location);
-		if (uri != NULL)
-		{
-			address = g_strconcat (
-					gnome_vfs_uri_get_scheme (uri),
-					"://",
-					gnome_vfs_uri_get_host_name (uri),
-					NULL);
-			gnome_vfs_uri_unref (uri);
-		}
+		char *scheme;
+		char *host_name;
+
+		scheme = g_uri_get_scheme (location);
+		host_name = ephy_string_get_host_name (location);
+		address = g_strconcat (scheme,
+				       "://",
+				       host_name,
+				       NULL);
+		g_free (scheme);
+		g_free (host_name);
 	}
 
 	if (address == NULL)
@@ -511,24 +512,28 @@ query_tooltip_cb (GtkWidget *proxy,
 	{
 		if (strstr (location, "%s") != NULL)
 		{
-			GnomeVFSURI *uri = gnome_vfs_uri_new (location);
-			if (uri != NULL)
+			char *scheme;
+			char *host_name;
+			
+			scheme = g_uri_get_scheme (location);
+			host_name = ephy_string_get_host_name (location);
+		
+			if (title[0] == '\0')
 			{
-				if (title[0] == '\0')
-				{
-					text = g_markup_printf_escaped ("%s://%s",
-									gnome_vfs_uri_get_scheme (uri),
-									gnome_vfs_uri_get_host_name (uri));
-				}
-				else
-				{
-					text = g_markup_printf_escaped ("%s\n%s://%s",
-									title,
-									gnome_vfs_uri_get_scheme (uri),
-									gnome_vfs_uri_get_host_name (uri));
-				}
-				gnome_vfs_uri_unref (uri);
+				text = g_markup_printf_escaped ("%s://%s",
+								scheme,
+								host_name);
 			}
+			else
+			{
+				text = g_markup_printf_escaped ("%s\n%s://%s",
+								title,
+								scheme,
+								host_name);
+			}
+			
+			g_free (scheme);
+			g_free (host_name);
 		}
 		if (text == NULL)
 		{

@@ -35,10 +35,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtkclipboard.h>
 #include <gtk/gtkmain.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
-#include <libgnomevfs/gnome-vfs-file-info.h>
-#include <libgnomevfs/gnome-vfs-ops.h>
-#include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
 void
 popup_cmd_link_in_new_window (GtkAction *action,
@@ -279,7 +275,8 @@ popup_cmd_save_image_as (GtkAction *action,
 #define GNOME_APPEARANCE_PROPERTIES  "gnome-appearance-properties.desktop"
 
 static void
-background_download_completed (EphyEmbedPersist *persist)
+background_download_completed (EphyEmbedPersist *persist,
+			       GtkWidget *window)
 {
 	const char *bg;
 	guint32 user_time;
@@ -289,15 +286,15 @@ background_download_completed (EphyEmbedPersist *persist)
 	bg = ephy_embed_persist_get_dest (persist);
 
 	/* open the Appearance Properties capplet on the Background tab */
-	if (!ephy_file_launch_desktop_file (GNOME_APPEARANCE_PROPERTIES, bg, user_time))
+	if (!ephy_file_launch_desktop_file (GNOME_APPEARANCE_PROPERTIES, bg, user_time, window))
 	{
 		/* Fallback for <= 2.18 desktop: try to open the "Background Properties" capplet */
-		if (!ephy_file_launch_desktop_file ("background.desktop", bg, user_time))
+		if (!ephy_file_launch_desktop_file ("background.desktop", bg, user_time, window))
 		{
 			/* If the above try didn't work, then we try the Fedora name.
 			 * This is a fix for #387206, but is actually a workaround for
 			 * bugzilla.redhat.com #201867 */
-			ephy_file_launch_desktop_file ("gnome-background.desktop", bg, user_time);
+			ephy_file_launch_desktop_file ("gnome-background.desktop", bg, user_time, window);
 		}
 	}
 
@@ -338,7 +335,7 @@ popup_cmd_set_image_as_background (GtkAction *action,
 
 	g_signal_connect (persist, "completed",
 			  G_CALLBACK (background_download_completed),
-			  NULL);
+			  window);
 
 	ephy_embed_persist_save (persist);
 
@@ -383,13 +380,13 @@ popup_cmd_open_frame (GtkAction *action,
  * doesn't work, fallback to open the URI in a new browser window.
  */
 static void
-image_open_uri (const char *remote_address,
-                const char *local_address,
+image_open_uri (GFile *file,
+                const char *remote_address,
 		guint32 user_time)
 {
 	gboolean success;
 
-	success = ephy_file_launch_handler (NULL, local_address, user_time);
+	success = ephy_file_launch_handler (NULL, file, user_time);
 
 	if (!success)
 	{
@@ -398,12 +395,12 @@ image_open_uri (const char *remote_address,
 				    EPHY_NEW_TAB_IN_NEW_WINDOW);
 	}
 
-	if (strcmp (remote_address, local_address) != 0)
+	if (strcmp (remote_address, g_file_get_uri (file)) != 0)
 	{
 		if (success)
-			ephy_file_delete_on_exit (local_address);
+			ephy_file_delete_on_exit (file);
 		else
-			gnome_vfs_unlink (local_address);
+			g_file_delete (file, NULL, NULL);
 	}
 }
 
@@ -413,13 +410,17 @@ save_source_completed_cb (EphyEmbedPersist *persist)
 	const char *dest;
 	const char *source;
 	guint32 user_time;
+	GFile *file;
 
 	user_time = ephy_embed_persist_get_user_time (persist);
 	dest = ephy_embed_persist_get_dest (persist);
 	source = ephy_embed_persist_get_source (persist);
 	g_return_if_fail (dest != NULL);
+	
+	file = g_file_new_for_path (dest);
 
-	image_open_uri (source, dest, user_time);
+	image_open_uri (file, source, user_time);
+	g_object_unref (file);
 }
 
 static void
@@ -480,13 +481,17 @@ popup_cmd_open_image (GtkAction *action,
 	value = ephy_embed_event_get_property (event, "image");
 	address = g_value_get_string (value);
 
-	scheme = gnome_vfs_get_uri_scheme (address);
+	scheme = g_uri_get_scheme (address);
 	if (scheme == NULL) return;
 
 	if (strcmp (scheme, "file") == 0)
 	{
-		image_open_uri (address, address,
+		GFile *file;
+		
+		file = g_file_new_for_uri (address);
+		image_open_uri (file, address,
 				gtk_get_current_event_time ());
+		g_object_unref (file);
 	}
 	else
 	{

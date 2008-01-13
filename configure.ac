@@ -94,7 +94,7 @@ if test "$enable_maintainer_mode" = "yes"; then
 	GECKO_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth $GECKO_WARN_CXXFLAGS"
 fi
 
-GLIB_REQUIRED=2.13.4
+GLIB_REQUIRED=2.15.1
 GTK_REQUIRED=2.11.6
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
@@ -118,6 +118,7 @@ fi
 PKG_CHECK_MODULES([DEPENDENCIES], [
 		  glib-2.0 >= $GLIB_REQUIRED
 		  gmodule-2.0
+		  gio-unix-2.0 >= $GLIB_REQUIRED
 		  gtk+-2.0 >= $GTK_REQUIRED
 		  gtk+-unix-print-2.0 >= $GTK_REQUIRED
 		  libxml-2.0 >= $LIBXML_REQUIRED
@@ -125,8 +126,6 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  libgnome-2.0 >= $LIBGNOME_REQUIRED
 		  libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED
 		  libglade-2.0 >= $LIBGLADE_REQUIRED \
-		  gnome-vfs-2.0 >= $LIBGNOMEVFS_REQUIRED
-		  gnome-vfs-module-2.0
 		  gconf-2.0
 		  gnome-desktop-2.0 >= $GNOME_DESKTOP_REQUIRED
 		  libstartup-notification-1.0 >= $LIBSTARTUP_NOTIFICATION_REQUIRED
@@ -593,6 +592,12 @@ AC_ARG_ENABLE([zeroconf],
 AC_MSG_RESULT([$enable_zeroconf])
 
 if test "$enable_zeroconf" = "yes"; then
+	AVAHI_REQUIRED=0.6.22
+
+	PKG_CHECK_MODULES(AVAHI, [avahi-gobject >= $AVAHI_REQUIRED])
+	AC_SUBST(AVAHI_CFLAGS)
+	AC_SUBST(AVAHI_LIBS)
+
 	AC_DEFINE([ENABLE_ZEROCONF],[1],[Define to enable zeroconf bookmarks support])
 fi
 
@@ -792,17 +797,9 @@ po/Makefile.in
 
 PKG_CHECK_MODULES([GTK],[gtk+-2.0 >= $GTK_REQUIRED])
 PKG_CHECK_MODULES([GTKPRINT],[gtk+-unix-print-2.0 >= $GTK_REQUIRED])
-PKG_CHECK_MODULES([GNOMEVFS],[gnome-vfs-2.0 >= $LIBGNOMEVFS_REQUIRED gnome-vfs-module-2.0])
 PKG_CHECK_MODULES([GCONF],[gconf-2.0])
 PKG_CHECK_MODULES([GLADE],[libglade-2.0 >= $LIBGLADE_REQUIRED])
 PKG_CHECK_MODULES([GNOME],[libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED])
-
-PKG_CHECK_MODULES([GVFS],[gio-standalone],[have_gvfs=yes],[have_gvfs=no])
-
-if test "$have_gvfs" = "yes"; then
-  AC_DEFINE([HAVE_GVFS],[1],[Define if GVFS is available])
-fi
-AM_CONDITIONAL([HAVE_GVFS],[test "$have_gvfs" = "yes"])
 
 # Distributor name
 

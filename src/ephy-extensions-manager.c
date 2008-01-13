@@ -49,11 +49,9 @@
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
 
-#include <libgnomevfs/gnome-vfs-ops.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
-
 #include <gconf/gconf-client.h>
 
+#include <gio/gio.h>
 #include <gmodule.h>
 #include <dirent.h>
 #include <string.h>
@@ -998,35 +996,35 @@ schedule_load_from_monitor (EphyExtensionsManager *manager,
 }
 
 static void
-dir_changed_cb (GnomeVFSMonitorHandle *handle,
-		const char *monitor_uri,
-		const char *info_uri,
-		GnomeVFSMonitorEventType event_type,
+dir_changed_cb (GFileMonitor *monitor,
+		GFile *child,
+		GFile *other_child,
+		GFileMonitorEvent event_type,
 		EphyExtensionsManager *manager)
 {
 	char *path;
+	
+	path = g_file_get_path (child);
 
 	/*
 	 * We only deal with XML and INI files:
 	 * Add them to the manager when created, remove them when deleted.
 	 */
-	if (format_from_path (info_uri) == FORMAT_UNKNOWN) return;
-
-	path = gnome_vfs_get_local_path_from_uri (info_uri);
+	if (format_from_path (path) == FORMAT_UNKNOWN) return;
 
 	switch (event_type)
 	{
-		case GNOME_VFS_MONITOR_EVENT_CREATED:
-		case GNOME_VFS_MONITOR_EVENT_CHANGED:
+		case G_FILE_MONITOR_EVENT_CREATED:
+		case G_FILE_MONITOR_EVENT_CHANGED:
 			schedule_load_from_monitor (manager, path);
 			break;
-		case GNOME_VFS_MONITOR_EVENT_DELETED:
+		case G_FILE_MONITOR_EVENT_DELETED:
 			ephy_extensions_manager_unload_file (manager, path);
 			break;
 		default:
 			break;
 	}
-
+	
 	g_free (path);
 }
 
@@ -1037,9 +1035,8 @@ ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
 	DIR *d;
 	struct dirent *e;
 	char *file_path;
-	char *file_uri;
-	GnomeVFSMonitorHandle *monitor;
-	GnomeVFSResult res;
+	GFile *directory;
+	GFileMonitor *monitor;
 
 	LOG ("Scanning directory '%s'", path);
 
@@ -1061,16 +1058,14 @@ ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
 	}
 	closedir (d);
 
-	file_uri = gnome_vfs_get_uri_from_local_path (path);
-	res = gnome_vfs_monitor_add (&monitor,
-				     path,
-				     GNOME_VFS_MONITOR_DIRECTORY,
-				     (GnomeVFSMonitorCallback) dir_changed_cb,
-				     manager);
-	g_free (file_uri);
+	directory = g_file_new_for_path (path);
+	monitor = g_file_monitor_directory (directory, 0, NULL);
 
-	if (res == GNOME_VFS_OK)
+	if (monitor != NULL)
 	{
+		g_signal_connect (monitor, "changed",
+				  G_CALLBACK (dir_changed_cb),
+				  manager);
 		manager->priv->dir_monitors = g_list_prepend
 			(manager->priv->dir_monitors, monitor);
 	}
@@ -1165,7 +1160,7 @@ ephy_extensions_manager_dispose (GObject *object)
 
 	if (priv->dir_monitors != NULL)
 	{
-		g_list_foreach (priv->dir_monitors, (GFunc) gnome_vfs_monitor_cancel, NULL);
+		g_list_foreach (priv->dir_monitors, (GFunc) g_file_monitor_cancel, NULL);
 		g_list_free (priv->dir_monitors);
 		priv->dir_monitors = NULL;
 	}

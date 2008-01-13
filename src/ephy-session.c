@@ -40,6 +40,7 @@
 #include "ephy-notebook.h"
 
 #include <glib/gi18n.h>
+#include <gio/gio.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtklabel.h>
@@ -51,9 +52,6 @@
 #include <gtk/gtkmessagedialog.h>
 
 #include <libgnomeui/gnome-client.h>
-
-#include <libgnomevfs/gnome-vfs-ops.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
 
 #include <libxml/tree.h>
 #include <libxml/xmlwriter.h>
@@ -391,10 +389,11 @@ die_cb (GnomeClient* client,
 
 /* Helper functions */
 
-static char *
-get_session_filename (const char *filename)
+static GFile *
+get_session_file (const char *filename)
 {
-	char *save_to;
+	GFile *file;
+	char *path;
 
 	if (filename == NULL)
 	{
@@ -403,29 +402,30 @@ get_session_filename (const char *filename)
 
 	if (strcmp (filename, SESSION_CRASHED) == 0)
 	{
-		save_to = g_build_filename (ephy_dot_dir (),
-					    "session_crashed.xml",
-					    NULL);
+		path = g_build_filename (ephy_dot_dir (),
+					 "session_crashed.xml",
+					 NULL);
 	}
 	else
 	{
-		save_to = g_strdup (filename);
+		path = g_strdup (filename);
 	}
 
-	return save_to;
+	file = g_file_new_for_path (path);
+	g_free (path);
+
+	return file;
 }
 
 static void
 session_delete (EphySession *session,
 		const char *filename)
 {
-	char *save_to;
+	GFile *file;
 
-	save_to = get_session_filename (filename);
+	file = get_session_file (filename);
 
-	gnome_vfs_unlink (save_to);
-
-	g_free (save_to);
+	g_file_delete (file, NULL, NULL);
 }
 
 static void
@@ -566,14 +566,17 @@ session_command_autoresume (EphySession *session,
 {
 	EphySessionPrivate *priv = session->priv;
 	GtkWidget *dialog;
-	char *saved_session;
+	GFile *saved_session_file;
+	char *saved_session_file_path;
 	gboolean crashed_session;
 
 	LOG ("ephy_session_autoresume");
 
-	saved_session = get_session_filename (SESSION_CRASHED);
-	crashed_session = g_file_test (saved_session, G_FILE_TEST_EXISTS);
-	g_free (saved_session);
+	saved_session_file = get_session_file (SESSION_CRASHED);
+	saved_session_file_path = g_file_get_path (saved_session_file);
+	crashed_session = g_file_test (saved_session_file_path, G_FILE_TEST_EXISTS);
+	
+	g_free (saved_session_file_path);
 
 	if (crashed_session == FALSE ||
 	    priv->windows != NULL ||
@@ -1225,7 +1228,8 @@ ephy_session_save (EphySession *session,
 	EphySessionPrivate *priv;
 	xmlTextWriterPtr writer;
 	GList *w;
-	char *save_to, *tmp_file;
+	GFile *save_to_file, *tmp_file;
+	char *tmp_file_path;
 	int ret;
 
 	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
@@ -1245,15 +1249,15 @@ ephy_session_save (EphySession *session,
 		return TRUE;
 	}
 
-	save_to = get_session_filename (filename);
-	tmp_file = g_strconcat (save_to, ".tmp", NULL);
+	save_to_file = get_session_file (filename);
+	tmp_file_path = g_strconcat (g_file_get_path (save_to_file), ".tmp", NULL);
+	tmp_file = g_file_new_for_path (tmp_file_path);
 
 	/* FIXME: do we want to turn on compression? */
-	writer = xmlNewTextWriterFilename (tmp_file, 0);
+	writer = xmlNewTextWriterFilename (tmp_file_path, 0);
 	if (writer == NULL)
 	{
-		g_free (save_to);
-		g_free (tmp_file);
+		g_free (tmp_file_path);
 
 		return FALSE;
 	}
@@ -1296,14 +1300,15 @@ out:
 
 	if (ret >= 0)
 	{
-		if (ephy_file_switch_temp_file (save_to, tmp_file) == FALSE)
+		if (ephy_file_switch_temp_file (save_to_file, tmp_file) == FALSE)
 		{
 			ret = -1;
 		}
 	}
 
-	g_free (save_to);
-	g_free (tmp_file);
+	g_free (tmp_file_path);
+	g_object_unref (save_to_file);
+	g_object_unref (tmp_file);
 
 	STOP_PROFILER ("Saving session")
 
@@ -1345,9 +1350,11 @@ parse_embed (xmlNodePtr child,
 				char *escaped_url, *escaped_title;
 
 				title = xmlGetProp (child, (const xmlChar *) "title");
-				escaped_title = gnome_vfs_escape_string (title ? (const char*) title : _("Untitled"));
+				escaped_title = g_uri_escape_string (title ? (const char*) title : _("Untitled"),
+								     NULL, TRUE);
 
-				escaped_url = gnome_vfs_escape_string ((const char *) url);
+				escaped_url = g_uri_escape_string ((const char *) url,
+								   NULL, TRUE);
 				freeme = recover_url =
 					g_strconcat ("about:recover?u=",
 						     escaped_url,
@@ -1452,14 +1459,16 @@ ephy_session_load (EphySession *session,
 	xmlNodePtr child;
 	EphyWindow *window;
 	GtkWidget *widget = NULL;
-	char *save_to;
+	GFile *save_to_file;
+	char *save_to_path;
 
 	LOG ("ephy_sesion_load %s", filename);
 
-	save_to = get_session_filename (filename);
+	save_to_file = get_session_file (filename);
+	save_to_path = g_file_get_path (save_to_file);
 
-	doc = xmlParseFile (save_to);
-	g_free (save_to);
+	doc = xmlParseFile (save_to_path);
+	g_free (save_to_path);
 
 	if (doc == NULL)
 	{

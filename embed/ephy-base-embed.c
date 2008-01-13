@@ -23,8 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <libgnomevfs/gnome-vfs.h>
-#include <libgnomevfs/gnome-vfs-uri.h>
+#include <gio/gio.h>
 #include <string.h>
 
 #include "eel-gconf-extensions.h"
@@ -77,7 +76,8 @@ struct _EphyBaseEmbedPrivate {
   GdkPixbuf *icon;
 
   /* File watch */
-  GnomeVFSMonitorHandle *monitor;
+  GFileMonitor *monitor;
+  gboolean monitor_directory;
   guint reload_scheduled_id;
   guint reload_delay_ticks;
 
@@ -922,6 +922,7 @@ ephy_base_embed_init (EphyBaseEmbed *self)
   priv->address_expire = EPHY_EMBED_ADDRESS_EXPIRE_NOW;
   priv->is_blank = TRUE;
   priv->title = g_strdup (EMPTY_PAGE);
+  priv->monitor_directory = FALSE;
 }
 
 static void
@@ -1000,27 +1001,13 @@ ephy_base_embed_set_address (EphyBaseEmbed *embed,
   g_object_notify (object, "address");
 }
 
-static char *
+static char*
 get_title_from_address (const char *address)
 {
-  GnomeVFSURI *uri;
-  char *title;
-
-  if (address == NULL) return NULL;
-
-  uri = gnome_vfs_uri_new (address);
-  if (uri == NULL) return g_strdup (address);
-
-  title = gnome_vfs_uri_to_string (uri,
-                                   (GnomeVFSURIHideOptions)
-                                   (GNOME_VFS_URI_HIDE_USER_NAME |
-                                    GNOME_VFS_URI_HIDE_PASSWORD |
-                                    GNOME_VFS_URI_HIDE_HOST_PORT |
-                                    GNOME_VFS_URI_HIDE_TOPLEVEL_METHOD |
-                                    GNOME_VFS_URI_HIDE_FRAGMENT_IDENTIFIER));
-  gnome_vfs_uri_unref (uri);
-
-  return title;
+  if (g_str_has_prefix (address, "file://")) 
+    return g_strdup (address + 7);
+  else
+    return ephy_string_get_host_name (address);
 }
 
 void
@@ -1069,19 +1056,13 @@ ensure_page_info (EphyBaseEmbed *embed, const char *address)
 static void
 update_net_state_message (EphyBaseEmbed *embed, const char *uri, EphyEmbedNetState flags)
 {
-  GnomeVFSURI *vfs_uri = NULL;
   const char *msg = NULL;
-  const char *host = NULL;
+  char *host = NULL;
 
-  if (uri != NULL) {
-    vfs_uri = gnome_vfs_uri_new (uri);
-  }
+  if (uri != NULL)
+    host = ephy_string_get_host_name (uri);
 
-  if (vfs_uri != NULL) {
-    host = gnome_vfs_uri_get_host_name (vfs_uri);
-  }
-
-  if (host == NULL || host[0] == '\0') goto out;
+  if (host == NULL) goto out;
 
   /* IS_REQUEST and IS_NETWORK can be both set */
   if (flags & EPHY_EMBED_STATE_IS_REQUEST) {
@@ -1116,9 +1097,7 @@ update_net_state_message (EphyBaseEmbed *embed, const char *uri, EphyEmbedNetSta
   }
 
  out:
-  if (vfs_uri != NULL) {
-    gnome_vfs_uri_unref (vfs_uri);
-  }
+    g_free (host);
 }
 
 static void
@@ -1288,8 +1267,8 @@ ephy_base_embed_file_monitor_cancel (EphyBaseEmbed *embed)
 
   if (priv->monitor != NULL) {
     LOG ("Cancelling file monitor");
-
-    gnome_vfs_monitor_cancel (priv->monitor);
+    
+    g_file_monitor_cancel (G_FILE_MONITOR (priv->monitor));
     priv->monitor = NULL;
   }
 
@@ -1334,39 +1313,32 @@ ephy_base_embed_file_monitor_reload_cb (EphyBaseEmbed *embed)
 }
 
 static void
-ephy_base_embed_file_monitor_cb (GnomeVFSMonitorHandle *handle,
-                                 const gchar *monitor_uri,
-                                 const gchar *info_uri,
-                                 GnomeVFSMonitorEventType event_type,
+ephy_base_embed_file_monitor_cb (GFileMonitor *monitor,
+                                 GFile *file,
+                                 GFile *other_file,
+                                 GFileMonitorEvent event_type,
                                  EphyBaseEmbed *embed)
 {
-  gboolean uri_is_directory;
   gboolean should_reload;
-  char *local_path;
   EphyBaseEmbedPrivate *priv = embed->priv;
-
-  LOG ("File '%s' has changed, scheduling reload", monitor_uri);
-
-  local_path = gnome_vfs_get_local_path_from_uri (monitor_uri);
-  uri_is_directory = g_file_test (local_path, G_FILE_TEST_IS_DIR);
-  g_free (local_path);
 
   switch (event_type) {
     /* These events will always trigger a reload: */
-    case GNOME_VFS_MONITOR_EVENT_CHANGED:
-    case GNOME_VFS_MONITOR_EVENT_CREATED:
+    case G_FILE_MONITOR_EVENT_CHANGED:
+    case G_FILE_MONITOR_EVENT_CREATED:
       should_reload = TRUE;
       break;
 
-      /* These events will only trigger a reload for directories: */
-    case GNOME_VFS_MONITOR_EVENT_DELETED:
-    case GNOME_VFS_MONITOR_EVENT_METADATA_CHANGED:
-      should_reload = uri_is_directory;
+    /* These events will only trigger a reload for directories: */
+    case G_FILE_MONITOR_EVENT_DELETED:
+    case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
+      should_reload = priv->monitor_directory;
       break;
 
-      /* These events don't trigger a reload: */
-    case GNOME_VFS_MONITOR_EVENT_STARTEXECUTING:
-    case GNOME_VFS_MONITOR_EVENT_STOPEXECUTING:
+    /* These events don't trigger a reload: */
+    case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
+    case G_FILE_MONITOR_EVENT_UNMOUNTED:
+    case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
     default:
       should_reload = FALSE;
       break;
@@ -1399,10 +1371,11 @@ ephy_base_embed_update_file_monitor (EphyBaseEmbed *embed,
                                      const gchar *address)
 {
   EphyBaseEmbedPrivate *priv = embed->priv;
-  GnomeVFSMonitorHandle *handle = NULL;
   gboolean local;
-  char *local_path;
-  GnomeVFSMonitorType monitor_type;
+  GFile *file;
+  GFileType file_type;
+  GFileInfo *file_info;
+  GFileMonitor *monitor = NULL;
 
   if (priv->monitor != NULL &&
       priv->address != NULL && address != NULL &&
@@ -1415,21 +1388,32 @@ ephy_base_embed_update_file_monitor (EphyBaseEmbed *embed,
 
   local = g_str_has_prefix (address, "file://");
   if (local == FALSE) return;
+  
+  file = g_file_new_for_uri (address);
+  file_info = g_file_query_info (file,
+                                 G_FILE_ATTRIBUTE_STANDARD_TYPE,
+                                 0, NULL, NULL);
+  file_type = g_file_info_get_file_type (file_info);
+  g_object_unref (file_info);
 
-  local_path = gnome_vfs_get_local_path_from_uri (address);
-  monitor_type = g_file_test (local_path, G_FILE_TEST_IS_DIR)
-                 ? GNOME_VFS_MONITOR_DIRECTORY
-                 : GNOME_VFS_MONITOR_FILE;
-  g_free (local_path);
-
-  if (gnome_vfs_monitor_add (&handle, address,
-                             monitor_type,
-                             (GnomeVFSMonitorCallback)ephy_base_embed_file_monitor_cb,
-                             embed) == GNOME_VFS_OK) {
-    LOG ("Installed monitor for file '%s'", address);
-
-    priv->monitor = handle;
+  if (file_type == G_FILE_TYPE_DIRECTORY) {
+    monitor = g_file_monitor_directory (file, 0, NULL);
+    g_signal_connect (monitor, "changed",
+                      G_CALLBACK (ephy_base_embed_file_monitor_cb),
+                      embed);
+    priv->monitor_directory = TRUE;
+    LOG ("Installed monitor for directory '%s'", address);
   }
+  else if (file_type == G_FILE_TYPE_REGULAR) {
+    monitor = g_file_monitor_file (file, 0, NULL);
+    g_signal_connect (monitor, "changed",
+                      G_CALLBACK (ephy_base_embed_file_monitor_cb),
+                      embed);
+    priv->monitor_directory = FALSE;
+    LOG ("Installed monitor for file '%s'", address);
+  }
+  priv->monitor = monitor;
+  g_object_unref (file);
 }
 
 void

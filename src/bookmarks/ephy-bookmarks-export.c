@@ -24,6 +24,7 @@
 #include "ephy-bookmarks-export.h"
 #include "ephy-node-common.h"
 #include "ephy-file-helpers.h"
+#include "ephy-string.h"
 #include "ephy-debug.h"
 
 #include <libxml/globals.h>
@@ -32,8 +33,6 @@
 #include <libxslt/xslt.h>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
-#include <libgnomevfs/gnome-vfs-uri.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
 
 static inline xmlChar *
 sanitise_string (const xmlChar *string)
@@ -118,7 +117,7 @@ write_topics_list (EphyNode *topics,
 
 static int
 write_rdf (EphyBookmarks *bookmarks,
-	   const char *filename,
+	   GFile *file,
 	   xmlTextWriterPtr writer)
 {
 	EphyNode *bmks, *topics, *smart_bmks;
@@ -168,7 +167,7 @@ write_rdf (EphyBookmarks *bookmarks,
 	if (ret < 0) goto out;
 
 	/* FIXME: sanitise file_uri? */
-	file_uri = gnome_vfs_get_uri_from_local_path (filename);
+	file_uri = g_file_get_uri (file);
 	safeString = sanitise_string ((const xmlChar *) file_uri);
 	g_free (file_uri);
 
@@ -229,21 +228,20 @@ write_rdf (EphyBookmarks *bookmarks,
 		smart_url = ephy_node_has_child (smart_bmks, kid);
 		url = ephy_node_get_property_string
 			(kid, EPHY_NODE_BMK_PROP_LOCATION);
-		if (smart_url)
+		if (smart_url && url)
 		{
-			GnomeVFSURI *uri;
+			char *scheme;
+			char *host_name;
+			
+			scheme = g_uri_get_scheme (url);
+			host_name = ephy_string_get_host_name (url);
+			link = g_strconcat (scheme,
+					    "://",
+					    host_name,
+					    NULL);
 
-			uri = gnome_vfs_uri_new (url);
-
-			if (uri)
-			{
-				link = g_strconcat (gnome_vfs_uri_get_scheme (uri),
-						    "://",
-						    gnome_vfs_uri_get_host_name (uri),
-						    NULL);
-
-				gnome_vfs_uri_unref (uri);
-			}
+			g_free (scheme);
+			g_free (host_name);
 		}
 
 		safeLink = sanitise_string (link ? (const xmlChar *) link : (const xmlChar *) url);
@@ -301,21 +299,20 @@ write_rdf (EphyBookmarks *bookmarks,
 		title = ephy_node_get_property_string
 			(kid, EPHY_NODE_BMK_PROP_TITLE);
 
-		if (smart_url)
+		if (smart_url && url)
 		{
-			GnomeVFSURI *uri;
+			char *scheme;
+			char *host_name;
 
-			uri = gnome_vfs_uri_new (url);
+			scheme = g_uri_get_scheme (url);
+			host_name = ephy_string_get_host_name (url);
 
-			if (uri)
-			{
-				link = g_strconcat (gnome_vfs_uri_get_scheme (uri),
-						    "://",
-						    gnome_vfs_uri_get_host_name (uri),
-						    NULL);
-
-				gnome_vfs_uri_unref (uri);
-			}
+			link = g_strconcat (scheme,
+					    "://",
+					    host_name,
+					    NULL);
+			g_free (scheme);
+			g_free (host_name);
 		}
 
 		if (link == NULL)
@@ -391,20 +388,23 @@ out:
 
 void
 ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
-			   const char *filename)
+			   const char *file_path)
 {
 	xmlTextWriterPtr writer;
-	char *tmp_file;
+	GFile *file, *tmp_file;
+	char *tmp_file_path;
 	int ret;
 
 	LOG ("Exporting as RDF to %s", filename);
 
 	START_PROFILER ("Exporting as RDF")
 
-	tmp_file = g_strconcat (filename, ".tmp", NULL);
+	tmp_file_path = g_strconcat (file_path, ".tmp", NULL);
+	file = g_file_new_for_path (file_path);
+	tmp_file = g_file_new_for_path (tmp_file_path);
 
 	/* FIXME: do we want to turn on compression here? */
-	writer = xmlNewTextWriterFilename (tmp_file, 0);
+	writer = xmlNewTextWriterFilename (tmp_file_path, 0);
 	if (writer == NULL)
 	{
 		g_free (tmp_file);
@@ -417,20 +417,22 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 	ret = xmlTextWriterSetIndentString (writer, (xmlChar *) "  ");
 	if (ret < 0) goto out;
 	
-	ret = write_rdf (bookmarks, filename, writer);
+	ret = write_rdf (bookmarks, file, writer);
 	if (ret < 0) goto out;
 
 	xmlFreeTextWriter (writer);
 out:
 	if (ret >= 0)
 	{
-		if (ephy_file_switch_temp_file (filename, tmp_file) == FALSE)
+		if (ephy_file_switch_temp_file (file, tmp_file) == FALSE)
 		{
 			ret = -1;
 		}
 	}
 
-	g_free (tmp_file);
+	g_object_unref (file);
+	g_object_unref (tmp_file);
+	g_free (tmp_file_path);
 
 	STOP_PROFILER ("Exporting as RDF")
 
@@ -439,31 +441,33 @@ out:
 
 void
 ephy_bookmarks_export_mozilla (EphyBookmarks *bookmarks,
-			   const char *filename)
+			       const char *filename)
 {
 	xsltStylesheetPtr cur = NULL;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc = NULL, res;
-	char *tmp_file, *template;
+	char *tmp_file_path, *template;
+	GFile *tmp_file;
 	int ret = -1;
 	
 	LOG ("Exporting as Mozilla to %s", filename);
 
 	template = g_build_filename (g_get_tmp_dir (),
 				     "export-bookmarks-XXXXXX", NULL);
-	tmp_file = ephy_file_tmp_filename (template, "rdf");
+	tmp_file_path = ephy_file_tmp_filename (template, "rdf");
 	g_free (template);
-	if (tmp_file == NULL) return;
+	if (tmp_file_path == NULL) return;
 
 	writer = xmlNewTextWriterDoc (&doc, 0);
 	if (writer == NULL || doc == NULL)
 	{
-		g_free (tmp_file);
+		g_free (tmp_file_path);
 		return;
 	}
 
-	START_PROFILER ("Exporting as Mozilla")
-
+	START_PROFILER ("Exporting as Mozilla");
+	
+	tmp_file = g_file_new_for_path (tmp_file_path);
 	ret = write_rdf (bookmarks, tmp_file, writer);
 	if (ret < 0) goto out;
 
@@ -492,7 +496,7 @@ ephy_bookmarks_export_mozilla (EphyBookmarks *bookmarks,
 out:
 	xmlFreeTextWriter (writer);
 	xmlFreeDoc (doc);
-	g_free (tmp_file);
+	g_free (tmp_file_path);
 
 	STOP_PROFILER ("Exporting as Mozilla")
 	

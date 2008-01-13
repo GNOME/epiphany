@@ -27,8 +27,6 @@
 #include "ephy-string.h"
 #include "ephy-embed-event.h"
 
-#include <libgnomevfs/gnome-vfs.h>
-
 #include <webkit.h>
 #include <string.h>
 

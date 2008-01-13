@@ -39,9 +39,8 @@
 #include "ephy-glib-compat.h"
 
 #include <glib/gstdio.h>
+#include <gio/gio.h>
 #include <libgnomeui/libgnomeui.h>
-#include <libgnomevfs/gnome-vfs-ops.h>
-#include <libgnomevfs/gnome-vfs-directory.h>
 
 #define EPHY_FAVICON_CACHE_XML_ROOT    (const xmlChar *)"ephy_favicons_cache"
 #define EPHY_FAVICON_CACHE_XML_VERSION (const xmlChar *)"1.1"
@@ -250,7 +249,10 @@ remove_obsolete_icons (EphyFaviconCache *cache,
 				(kid, EPHY_NODE_FAVICON_PROP_FILENAME);
 			path = g_build_filename (priv->directory,
 						 filename, NULL);
-			gnome_vfs_unlink (path);
+			if (g_unlink (path) < 0)
+			{
+				g_warning ("Unable to delete %s", path);
+			}
 
 			g_free (path);
 			ephy_node_unref (kid);
@@ -412,29 +414,28 @@ kill_download (const char *key,
 	return TRUE;
 }
 
-static gboolean
-delete_file (const char *rel_path,
-	     GnomeVFSFileInfo *info,
-	     gboolean rec_will_loop,
-	     EphyFaviconCache *cache,
-	     gboolean *recurse)
+static void
+delete_file (GFile *dir,
+	     GFileInfo *file_info)
 {
-	EphyFaviconCachePrivate *priv = cache->priv;
-	char *path;
-
-	*recurse = FALSE;
-
-	g_return_val_if_fail (info != NULL, TRUE);
-
-	if ((info->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_TYPE) == 0 ||
-	    info->type != GNOME_VFS_FILE_TYPE_REGULAR) return TRUE;
-
-	path = g_build_filename (priv->directory, rel_path, NULL);
-	gnome_vfs_unlink (path);
-	g_free (path);
-
-	/* continue with the visit */
-	return TRUE;
+	GFileType type;
+	
+	type = g_file_info_get_file_type (file_info);
+	
+	if (type == G_FILE_TYPE_REGULAR)
+	{
+		char *path;
+		
+		path = g_build_filename (g_file_get_path (dir), 
+					 g_file_info_get_name (file_info),
+					 NULL);
+		if (g_unlink (path) < 0)
+		{
+			g_warning ("Unable to delete %s", path);
+		}
+		
+		g_free (path);
+	}							      
 }
 
 static void
@@ -509,8 +510,11 @@ favicon_download_cancelled_cb (EphyEmbedPersist *persist,
 	g_hash_table_remove (cache->priv->downloads_hash, url);
 
 	/* remove a partially downloaded file */
-	dest = ephy_embed_persist_get_dest (persist);
-	gnome_vfs_unlink (dest);
+		dest = ephy_embed_persist_get_dest (persist);
+	if (g_unlink (dest) < 0)
+	{
+		g_warning ("Unable to delete %s", dest);
+	}
 
 	/* FIXME: re-schedule to try again after n days? */
 
@@ -700,29 +704,35 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 					    (int) checklevel);
 	}
 
-	/* Now check the type. We renamed the file above, so gnome-vfs does NOT
+	/* Now check the type. We renamed the file above, so glib does NOT
 	 * fall back to extension checking if the slow mime check fails for 
 	 * whatever reason
 	 */
 	if (checklevel & NEEDS_TYPE_CHECK)
 	{
-		GnomeVFSFileInfo *info;
-		gboolean valid = FALSE, is_ao = FALSE;;
-
+		GFile *file;
+		GFileInfo *file_info;
+		const char *mime_type;
+		gboolean valid = FALSE, is_ao = FALSE;
+		
+		file = g_file_new_for_path (pix_file);
+	
 		/* Sniff mime type and check if it's safe to open */
-		info = gnome_vfs_file_info_new ();
-		if (gnome_vfs_get_file_info (pix_file, info,
-					     GNOME_VFS_FILE_INFO_GET_MIME_TYPE |
-					     GNOME_VFS_FILE_INFO_FORCE_SLOW_MIME_TYPE) == GNOME_VFS_OK &&
-		    (info->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_MIME_TYPE) &&
-		    info->mime_type != NULL)
+		file_info = g_file_query_info (file,
+					       G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+					       0, NULL, NULL);
+		mime_type = g_file_info_get_content_type (file_info);
+		if (file_info == NULL)
 		{
-			valid = strcmp (info->mime_type, "image/x-ico") == 0 ||
-				strcmp (info->mime_type, "image/png") == 0 ||
-				strcmp (info->mime_type, "image/gif") == 0;
-			is_ao = strcmp (info->mime_type, "application/octet-stream") == 0;
+			return NULL;
 		}
-		gnome_vfs_file_info_unref (info);
+		valid = strcmp (mime_type, "image/x-ico") == 0 ||
+			strcmp (mime_type, "image/png") == 0 ||
+			strcmp (mime_type, "image/gif") == 0;
+		is_ao = strcmp (mime_type, "application/octet-stream") == 0;
+
+		g_object_unref (file_info);
+		g_object_unref (file);
 
 		/* As a special measure, we try to load an application/octet-stream file
 		 * as an ICO file, since we cannot detect a ICO file without .ico extension
@@ -835,6 +845,9 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 void
 ephy_favicon_cache_clear (EphyFaviconCache *cache)
 {
+	GFileEnumerator *file_enum;
+	GFile *dir;
+	GFileInfo *file_info = NULL;
 	EphyFaviconCachePrivate *priv = cache->priv;
 
 	g_return_if_fail (EPHY_IS_FAVICON_CACHE (cache));
@@ -843,10 +856,19 @@ ephy_favicon_cache_clear (EphyFaviconCache *cache)
 	ephy_favicon_cache_save (cache);
 
 	/* Now remove any remaining files from the cache directory */
-	gnome_vfs_directory_visit (priv->directory,
-				   GNOME_VFS_FILE_INFO_DEFAULT,
-				   GNOME_VFS_DIRECTORY_VISIT_SAMEFS |
-				   GNOME_VFS_DIRECTORY_VISIT_LOOPCHECK,
-				   (GnomeVFSDirectoryVisitFunc) delete_file,
-				   cache);
+	dir = g_file_new_for_path (priv->directory);
+	file_enum = g_file_enumerate_children (dir,
+					       G_FILE_ATTRIBUTE_STANDARD_TYPE ","
+					       G_FILE_ATTRIBUTE_STANDARD_NAME ","
+					       G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+					       0, NULL, NULL);
+	file_info = g_file_enumerator_next_file (file_enum, NULL, NULL);
+	while (file_info != NULL)
+	{
+		delete_file (dir, file_info);
+		file_info = g_file_enumerator_next_file (file_enum, NULL, NULL);
+		g_object_unref (file_info);
+	}
+	g_object_unref (dir);
+	g_file_enumerator_close (file_enum, NULL, NULL);
 }

@@ -22,7 +22,7 @@
 
 #include "ephy-download.h"
 
-#include <libgnomevfs/gnome-vfs-uri.h>
+#include <glib/gi18n.h>
 
 #define EPHY_DOWNLOAD_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_DOWNLOAD, EphyDownloadPrivate))
 
@@ -115,21 +115,18 @@ ephy_download_new (void)
 char *
 ephy_download_get_name (EphyDownload *download)
 {
-	GnomeVFSURI *uri;
 	char *target;
 	char *result;
 
 	target = ephy_download_get_target (download);
 
-	uri = gnome_vfs_uri_new (target);
-	if (uri)
+	if (target)
 	{
-		result = gnome_vfs_uri_extract_short_name (uri);
-		gnome_vfs_uri_unref (uri);
+		result = g_path_get_basename (target);
 	}
 	else
 	{
-		result = g_strdup ("Unknown");
+		result = g_strdup (_("Unknown"));
 	}
 
 	g_free (target);

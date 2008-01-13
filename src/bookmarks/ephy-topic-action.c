@@ -46,7 +46,6 @@
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkarrow.h>
 #include <gtk/gtkmain.h>
-#include <libgnomevfs/gnome-vfs-uri.h>
 #include <string.h>
 
 static const GtkTargetEntry dest_drag_types[] = {

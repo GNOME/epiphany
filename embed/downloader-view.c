@@ -48,7 +48,6 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkstatusicon.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
 #include <libgnomeui/gnome-icon-lookup.h>
 
 
@@ -465,7 +464,7 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	total = ephy_download_get_total_progress (download);
 	current = ephy_download_get_current_progress (download);
 
-	cur_progress = gnome_vfs_format_file_size_for_display (current);
+	cur_progress = g_format_size_for_display (current);
 
 	name = ephy_download_get_name (download);
 	
@@ -501,7 +500,7 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	{
 		char *total_progress;
 
-		total_progress = gnome_vfs_format_file_size_for_display (total);
+		total_progress = g_format_size_for_display (total);
 		/* translators: first %s is filename, "%s of %s" is current/total file size */
 		file = g_strdup_printf (_("%s\n%s of %s"), name,
 					cur_progress, total_progress);

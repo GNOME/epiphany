@@ -60,7 +60,7 @@
 
 #include <string.h>
 #include <glib/gi18n.h>
-#include <libgnomevfs/gnome-vfs-uri.h>
+#include <gio/gio.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
@@ -1977,15 +1977,9 @@ embed_popup_deactivate_cb (GtkWidget *popup,
 static char *
 get_name_from_address_value (const GValue *value)
 {
-	GnomeVFSURI *uri;
-	char *name = NULL;
+	char *name;
 
-	uri = gnome_vfs_uri_new (g_value_get_string (value));
-	if (uri)
-	{
-		name = gnome_vfs_uri_extract_short_name (uri);
-		gnome_vfs_uri_unref (uri);
-	}
+	name = g_path_get_basename (g_value_get_string (value));
 
 	return name != NULL ? name : g_strdup ("");
 }

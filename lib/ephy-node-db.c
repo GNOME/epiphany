@@ -482,30 +482,35 @@ ephy_node_db_write_to_xml_safe (EphyNodeDb *db,
 {
 	va_list argptr;
 	int ret = 0;
-	char *tmp_file;
+	GFile *tmp_file, *file;
+	char *tmp_file_path;
 
-	tmp_file = g_strconcat ((const gchar *)filename, ".tmp", NULL);
+	tmp_file_path = g_strconcat ((const gchar *) filename, ".tmp", NULL);
+	tmp_file = g_file_new_for_path (tmp_file_path);
+	file = g_file_new_for_path ((const char *) filename);
 
 	va_start (argptr, node);
  
 	ret = ephy_node_db_write_to_xml_valist
-		(db, (const xmlChar *)tmp_file, root, version, comment, node, argptr);
+		(db, (const xmlChar *)tmp_file_path, root, version, comment, node, argptr);
 
 	va_end (argptr);
 
 	if (ret < 0)
 	{
-		g_warning ("Failed to write XML data to %s", tmp_file);
+		g_warning ("Failed to write XML data to %s", tmp_file_path);
 		goto failed;
 	}
 
-	if (ephy_file_switch_temp_file ((const char *)filename, tmp_file) == FALSE)
+	if (ephy_file_switch_temp_file (file, tmp_file) == FALSE)
 	{
 		ret = -1;
 	}
 
 failed:
-	g_free (tmp_file);
+	g_free (tmp_file_path);
+	g_object_unref (file);
+	g_object_unref (tmp_file);
 
 	return ret;
 }

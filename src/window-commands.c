@@ -49,14 +49,13 @@
 #include "ephy-bookmarks-ui.h"
 #include "ephy-link.h"
 #include "ephy-stock-icons.h"
+#include "ephy-string.h"
+#include "eel-app-launch-context.h"
 #include "pdm-dialog.h"
 
 #include <string.h>
 #include <glib.h>
-#include <libgnomevfs/gnome-vfs-uri.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
-#include <libgnomeui/gnome-stock-icons.h>
-#include <libgnomevfs/gnome-vfs-mime-handlers.h>
+#include <gio/gio.h>
 #include <gtk/gtkaboutdialog.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkmain.h>
@@ -122,24 +121,38 @@ window_cmd_file_send_to	(GtkAction *action,
 			 EphyWindow *window)
 {
 	EphyEmbed *embed;
-	char *url, *location, *title;
+	char *handler, *command;
+	const char *location, *title;
+	GAppInfo *appinfo;
+	
+	if (eel_gconf_get_boolean ("/desktop/gnome/url-handlers/mailto/enabled") == FALSE)
+	{
+		/* FIXME: add some UI to inform the user? */
+		return;
+	}
 
 	embed = ephy_embed_container_get_active_child 
           (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
-	location = gnome_vfs_escape_string (ephy_embed_get_address (embed));
-	title = gnome_vfs_escape_string (ephy_embed_get_title (embed));
+	location = ephy_embed_get_address (embed);
+	title = ephy_embed_get_title (embed);
 
-	url = g_strconcat ("mailto:",
-                           "?Subject=", title,
-                           "&Body=", location, NULL);
+	/* FIXME: better use g_app_info_get_default_for_uri_scheme () when it is
+	 * implemented.
+	 */
+	handler = eel_gconf_get_string ("/desktop/gnome/url-handlers/mailto/command");
+	command = g_strconcat (handler, "mailto:",
+			       "?Subject=\"", title,
+			       "\"&Body=\"", location, "\"", NULL);
+	
+	appinfo = g_app_info_create_from_commandline (command, NULL, 0, NULL);
+	ephy_file_launch_application (appinfo, NULL,
+				      gtk_get_current_event_time (),
+				      GTK_WIDGET (window));
 
-	gnome_vfs_url_show (url);
-
-	g_free (title);
-	g_free (location);
-	g_free (url);
+	g_free (handler);
+	g_free (command);
 }
 
 static gboolean
@@ -564,14 +577,17 @@ save_source_completed_cb (EphyEmbedPersist *persist)
 {
 	const char *dest;
 	guint32 user_time;
+	GFile *file;
 
 	user_time = ephy_embed_persist_get_user_time (persist);
 	dest = ephy_embed_persist_get_dest (persist);
 	g_return_if_fail (dest != NULL);
 
-	ephy_file_delete_on_exit (dest);
+	file = g_file_new_for_path (dest);
+	ephy_file_delete_on_exit (file);
 
-	ephy_file_launch_handler ("text/plain", dest, user_time);
+	ephy_file_launch_handler ("text/plain", file, user_time);
+	g_object_unref (file);
 }
 
 static void
@@ -631,7 +647,12 @@ window_cmd_view_page_source (GtkAction *action,
 
 	if (g_str_has_prefix (address, "file://"))
 	{
-		ephy_file_launch_handler ("text/plain", address, user_time);
+		GFile *file;
+		
+		file = g_file_new_for_uri (address);
+		ephy_file_launch_handler ("text/plain", file, user_time);
+		
+		g_object_unref (file);
 	}
 	else
 	{
@@ -670,24 +691,21 @@ window_cmd_edit_personal_data (GtkAction *action,
 {
 	PdmDialog *dialog;
 	EphyEmbed *embed;
-	GnomeVFSURI *uri;
-	const char *host;
+	const char *address;
+	char *host;
 
 	embed = ephy_embed_container_get_active_child 
           (EPHY_EMBED_CONTAINER (window));
 	if (embed == NULL) return;
 
-	uri = gnome_vfs_uri_new (ephy_embed_get_address (embed));
-
-	host = uri != NULL ? gnome_vfs_uri_get_host_name (uri) : NULL;
+	address = ephy_embed_get_address (embed);
+	
+	host = address != NULL ? ephy_string_get_host_name (address) : NULL;
 
 	dialog = EPHY_PDM_DIALOG (ephy_shell_get_pdm_dialog (ephy_shell));
 	pdm_dialog_open (dialog, host);
 
-	if (uri != NULL)
-	{
-		gnome_vfs_uri_unref (uri);
-	}
+	g_free (host);
 }
 
 #ifdef ENABLE_CERTIFICATE_MANAGER

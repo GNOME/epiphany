@@ -29,7 +29,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
+#include <gio/gio.h>
 
 #include <nsStringGlue.h>
 
@@ -87,6 +87,7 @@
 #include "ephy-langs.h"
 #include "ephy-password-manager.h"
 #include "ephy-permission-manager.h"
+#include "ephy-string.h"
 #include "mozilla-embed.h"
 #include "mozilla-notifiers.h"
 #include "mozilla-x509-cert.h"
@@ -267,7 +268,8 @@ mozilla_init_plugin_add_unique_path (GList *list,
 	if (path == NULL)
 		return list;
 
-	canon = gnome_vfs_make_path_name_canonical (path);
+	canon = ephy_string_canonicalize_pathname (path);
+
 	for (l = list; l != NULL; l = l->next) {
 		if (g_str_equal (list->data, canon) != FALSE) {
 			/* The path is already in the list */
@@ -464,14 +466,15 @@ user_css_unregister (MozillaEmbedSingle *single)
 }
 
 static void
-user_css_file_monitor_func (EphyFileMonitor *,
-			    const char *,
-			    GnomeVFSMonitorEventType event_type,
-			    MozillaEmbedSingle *single)
+user_css_file_monitor_changed_cb (GFileMonitor *file_monitor,
+				  GFile *file,
+				  GFile *other_file,
+				  gint event_type,
+				  MozillaEmbedSingle *single)
 {
 	LOG ("Reregistering the user style sheet");
 
-	if (event_type == GNOME_VFS_MONITOR_EVENT_DELETED)
+	if (event_type == G_FILE_MONITOR_EVENT_DELETED)
 	{
 		user_css_unregister (single);
 	}
@@ -499,27 +502,28 @@ user_css_enabled_notify (GConfClient *client,
 
         if (enabled)
 	{
-		char *uri;
+		GFile *file;
 
 		user_css_register (single);
 
-		uri = gnome_vfs_get_uri_from_local_path (priv->user_css_file);
+		file = g_file_new_for_path (priv->user_css_file);
 
 		g_assert (priv->user_css_file_monitor == NULL);
 		priv->user_css_file_monitor =
-			ephy_file_monitor_add (uri,
-					       GNOME_VFS_MONITOR_FILE,
-					       USER_CSS_LOAD_DELAY,
-					       (EphyFileMonitorFunc) user_css_file_monitor_func,
-					       NULL,
-					       single);
-		g_free (uri);
+			g_file_monitor_file (file,
+					     G_FILE_MONITOR_NONE, NULL);
+		g_file_monitor_set_rate_limit (priv->user_css_file_monitor,
+					       USER_CSS_LOAD_DELAY);
+		g_signal_connect (priv->user_css_file_monitor, "changed",
+				  G_CALLBACK (user_css_file_monitor_changed_cb),
+				  single);
+		g_object_unref (file);
 	}
         else
 	{
 		if (priv->user_css_file_monitor != NULL)
 		{
-			ephy_file_monitor_cancel (priv->user_css_file_monitor);
+			g_file_monitor_cancel (priv->user_css_file_monitor);
 			priv->user_css_file_monitor = NULL;
 		}
 

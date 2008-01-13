@@ -64,8 +64,6 @@
 #include <gtk/gtkmain.h>
 #include <string.h>
 
-#include <libgnomevfs/gnome-vfs-utils.h>
-
 #define CONF_FONTS_FOR_LANGUAGE	"/apps/epiphany/dialogs/preferences_font_language"
 #define DOWNLOAD_BUTTON_WIDTH	8
 
@@ -649,18 +647,15 @@ static void
 css_edit_button_clicked_cb (GtkWidget *button,
 			    PrefsDialog *pd)
 {
-	char *css_file, *uri;
+	GFile *css_file;
 
-	css_file = g_build_filename (ephy_dot_dir (),
-				     USER_STYLESHEET_FILENAME,
-				     NULL);
-	uri = gnome_vfs_get_uri_from_local_path (css_file);
+	css_file = g_file_new_for_path (g_build_filename (ephy_dot_dir (),
+							  USER_STYLESHEET_FILENAME,
+							  NULL));
 
-	ephy_file_launch_handler ("text/plain", uri,
+	ephy_file_launch_handler ("text/plain", css_file,
 				  gtk_get_current_event_time ());
-
-	g_free (css_file);
-	g_free (uri);
+	g_object_unref (css_file);
 }
 
 static void

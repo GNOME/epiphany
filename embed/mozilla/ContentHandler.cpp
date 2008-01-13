@@ -25,14 +25,13 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <gio/gio.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkstock.h>
-#include <libgnomevfs/gnome-vfs-mime.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
 
 #include <nsStringAPI.h>
 
@@ -254,7 +253,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 {
 	GtkWidget *dialog, *button, *image;
 	const char *action_label;
-	const char *mime_description;
+	char *mime_description;
 	nsCString file_name;
 			
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (mContext);
@@ -264,12 +263,12 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			(mAction == CONTENT_ACTION_OPEN_TMP) ?
 			GTK_STOCK_OPEN : STOCK_DOWNLOAD;
 
-	mime_description = gnome_vfs_mime_get_description (mMimeType.get());
+	mime_description = g_content_type_get_description (mMimeType.get());
 	if (mime_description == NULL)
 	{
 		/* Translators: The text before the "|" is context to help you decide on
 		 * the correct translation. You MUST OMIT it in the translated string. */
-		mime_description = Q_("File Type:|Unknown");
+		mime_description = g_strdup (Q_("File Type:|Unknown"));
 	}
 
 	/* We have one tiny, minor issue, the filename can be empty (""),
@@ -309,7 +308,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			   Second %s is the file name,
 			   Third %s is the application used to open the file */
 			_("File Type: “%s”.\n\nYou can open “%s” using “%s” or save it."),
-			   mime_description, file_name.get(), mHelperApp->name);		 
+			   mime_description, file_name.get(), g_app_info_get_name (mHelperApp));		 
 	}
 	else
 	{
@@ -326,6 +325,8 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			   "You can download it instead."),
 			   mime_description, file_name.get());			 
 	}
+	
+	g_free (mime_description);
 	
 	button = gtk_button_new_with_label (_("_Save As..."));
 	image = gtk_image_new_from_stock (GTK_STOCK_SAVE_AS, GTK_ICON_SIZE_BUTTON);
@@ -367,7 +368,7 @@ NS_METHOD GContentHandler::MIMEInitiateAction (void)
 
 	auto_downloads = eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS);
 
-	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType.get());
+	mHelperApp = g_app_info_get_default_for_type (mMimeType.get(), TRUE);
 	mPermission = ephy_file_check_mime (mMimeType.get());
 
 	/* HACK! Check that this 'helper application' isn't Epiphany itself,
@@ -375,7 +376,7 @@ NS_METHOD GContentHandler::MIMEInitiateAction (void)
 	 */
 	if (mHelperApp)
 	{
-		const char *id = gnome_vfs_mime_application_get_desktop_id (mHelperApp);
+		const char *id = g_app_info_get_id (mHelperApp);
 
 		/* FIXME! menu editing can make this check fail!!!! */
 		if (id && strcmp (id, "epiphany.desktop") == 0)
@@ -426,7 +427,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 		g_return_val_if_fail (mHelperApp, NS_ERROR_FAILURE);
 
 		const char *id;
-		id = gnome_vfs_mime_application_get_desktop_id (mHelperApp);
+		id = g_app_info_get_id (mHelperApp);
 		
 		/* The current time is fine here as the user has just clicked
 		 * a button (it is used as the time for the application opening)

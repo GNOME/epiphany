@@ -30,11 +30,11 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-glib-compat.h"
+#include "ephy-string.h"
 
 #include <time.h>
 #include <string.h>
 #include <glib/gi18n.h>
-#include <libgnomevfs/gnome-vfs-uri.h>
 
 #define EPHY_HISTORY_XML_ROOT	 (const xmlChar *)"ephy_history"
 #define EPHY_HISTORY_XML_VERSION (const xmlChar *)"1.0"
@@ -658,11 +658,10 @@ ephy_history_host_visited (EphyHistory *eh,
 static EphyNode *
 internal_get_host (EphyHistory *eh, const char *url, gboolean create)
 {
-	GnomeVFSURI *vfs_uri = NULL;
 	EphyNode *host = NULL;
-	const char *host_name = NULL;
+	char *host_name = NULL;
 	GList *host_locations = NULL, *l;
-	const char *scheme = NULL;
+	char *scheme = NULL;
 	GTime now;
 
 	g_return_val_if_fail (url != NULL, NULL);
@@ -674,24 +673,22 @@ internal_get_host (EphyHistory *eh, const char *url, gboolean create)
 
 	now = time (NULL);
 
-	vfs_uri = gnome_vfs_uri_new (url);
-
-	if (vfs_uri)
+	if (url)
 	{
-		scheme = gnome_vfs_uri_get_scheme (vfs_uri);
-		host_name = gnome_vfs_uri_get_host_name (vfs_uri);
+		scheme = g_uri_get_scheme (url);
+		host_name = ephy_string_get_host_name (url);
 	}
 
 	/* Build an host name */
 	if (scheme == NULL || host_name == NULL)
 	{
-		host_name = _("Others");
+		host_name = g_strdup (_("Others"));
 		host_locations = g_list_append (host_locations,
 						g_strdup ("about:blank"));
 	}
 	else if (strcmp (scheme, "file") == 0)
 	{
-		host_name = _("Local files");
+		host_name = g_strdup (_("Local files"));
 		host_locations = g_list_append (host_locations,
 						g_strdup ("file:///"));
 	}
@@ -766,10 +763,8 @@ internal_get_host (EphyHistory *eh, const char *url, gboolean create)
 		ephy_history_host_visited (eh, host, now);
 	}
 
-	if (vfs_uri)
-	{
-		gnome_vfs_uri_unref (vfs_uri);
-	}
+	g_free (scheme);
+	g_free (host_name);
 
 	g_list_foreach (host_locations, (GFunc)g_free, NULL);
 	g_list_free (host_locations);

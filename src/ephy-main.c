@@ -47,8 +47,6 @@
 #include <libgnome/gnome-program.h>
 #include <libgnomeui/gnome-ui-init.h>
 
-#include <libgnomevfs/gnome-vfs-init.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
 #include <libgnomeui/gnome-app-helper.h>
 
 #include <errno.h>
@@ -203,11 +201,24 @@ handle_email (GtkAboutDialog *about,
 	      const char *link,
 	      gpointer data)
 {
-	char *address;
+	char *command, *handler;
+	GAppInfo *appinfo;
 
-	address = g_strdup_printf ("mailto:%s", link);
-	gnome_vfs_url_show (address);
-	g_free (address);
+	if (eel_gconf_get_boolean ("/desktop/gnome/url-handlers/mailto/enabled") == FALSE)
+	{
+		return;
+	}
+	/* FIXME: better use g_app_info_get_default_for_uri_scheme () when it is
+	 * implemented.
+	 */
+	handler = eel_gconf_get_string ("/desktop/gnome/url-handlers/mailto/command");
+	command = g_strconcat (handler, "mailto:", link, NULL);
+	appinfo = g_app_info_create_from_commandline (command, NULL, 0, NULL);
+	ephy_file_launch_application (appinfo, NULL,
+				      gtk_get_current_event_time (),
+				      GTK_WIDGET (about));
+	g_free (handler);
+	g_free (command);
 }
 
 static void
@@ -585,12 +596,15 @@ main (int argc,
 			{
 				g_free (arguments[i]);
 
-				/* If it's a file, use gnome_vfs_make_uri_from_shell_arg,
+				/* If it's a file, use g_file_new_for_commandline_arg,
 				 * so we get the right escaping.
 				 */
 				if (path != NULL)
 				{
-					arguments[i] = gnome_vfs_make_uri_from_shell_arg (uri);
+					GFile *file;
+					file = g_file_new_for_commandline_arg (uri);
+					arguments[i] = g_file_get_uri (file);
+					g_object_unref (file);
 					g_free (uri);
 				}
 				else
@@ -727,7 +741,6 @@ main (int argc,
 	gnome_accelerators_sync ();
 	ephy_state_save ();
 	ephy_file_helpers_shutdown ();
-	gnome_vfs_shutdown ();
 	xmlCleanupParser ();
 
 	_ephy_dbus_release ();

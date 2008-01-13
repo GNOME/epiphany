@@ -23,10 +23,10 @@
 #include "config.h"
 
 #include <glib.h>
+#include <gio/gio.h>
 #include <libxml/HTMLtree.h>
 #include <libxml/xmlreader.h>
 #include <string.h>
-#include <libgnomevfs/gnome-vfs-mime.h>
 
 #include <glib/gi18n.h>
 
@@ -71,14 +71,21 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 	const char *type;
 	char *basename;
 	gboolean success = FALSE;
+	GFile *file;
+	GFileInfo *file_info;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
 
 	g_return_val_if_fail (filename != NULL, FALSE);
+	
+	file = g_file_new_for_path (filename);
+	file_info = g_file_query_info (file,
+				       G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+				       0, NULL, NULL);
+	type = g_file_info_get_content_type (file_info);
+	g_object_unref (file_info);
 
-	type = gnome_vfs_get_file_mime_type (filename, NULL, FALSE);
-
-	LOG ("Importing bookmarks of type %s", type ? type : "(null)");
+	g_debug ("Importing bookmarks of type %s", type ? type : "(null)");
 
 	if (type != NULL && (strcmp (type, "application/rdf+xml") == 0 ||
 			     strcmp (type, "text/rdf") == 0))
@@ -92,6 +99,7 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 		success = ephy_bookmarks_import_xbel (bookmarks, filename);
 	}
 	else if ((type != NULL && strcmp (type, "application/x-mozilla-bookmarks") == 0) ||
+		 strcmp (type, "text/html") == 0 ||
 	         strstr (filename, MOZILLA_BOOKMARKS_DIR) != NULL ||
                  strstr (filename, FIREFOX_BOOKMARKS_DIR_0) != NULL ||
                  strstr (filename, FIREFOX_BOOKMARKS_DIR_1) != NULL ||
@@ -101,7 +109,7 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 	}
 	else if (type == NULL)
 	{
-		basename = g_path_get_basename (filename);
+		basename = g_file_get_basename (file);
 
 		if (g_str_has_suffix (basename, ".rdf"))
 		{
@@ -123,6 +131,8 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 
 		g_free (basename);
 	}
+
+	g_object_unref (file);
 
 	return success;
 }

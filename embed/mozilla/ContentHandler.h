@@ -22,7 +22,7 @@
 #ifndef CONTENT_HANDLER_H
 #define CONTENT_HANDLER_H
 
-#include <libgnomevfs/gnome-vfs-mime-handlers.h>
+#include <gio/gio.h>
 
 #include <nsCOMPtr.h>
 #include <nsIFile.h>
@@ -70,7 +70,7 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	nsCOMPtr<nsIHelperAppLauncher> mLauncher;
 	nsCOMPtr<nsISupports> mContext;
 
-	GnomeVFSMimeApplication *mHelperApp;
+	GAppInfo *mHelperApp;
 	EphyMimePermission mPermission;
 
 	nsCString mUrl;

@@ -28,10 +28,10 @@
 #include "ephy-gui.h"
 #include "ephy-debug.h"
 #include "ephy-stock-icons.h"
+#include "ephy-string.h"
 
 #include <gtk/gtkstock.h>
 #include <gtk/gtkimage.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
 
 #define EPHY_FILE_CHOOSER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FILE_CHOOSER, EphyFileChooserPrivate))
@@ -175,12 +175,14 @@ ephy_file_chooser_set_persist_key (EphyFileChooser *dialog, const char *key)
 	dir = eel_gconf_get_string (key);
 	if (dir != NULL)
 	{
+		/* FIXME: Maybe we will find a better way to do this when the
+		 * gio-filechooser will be in GTK+ */
 		converted = g_filename_from_utf8
 			(dir, -1, NULL, NULL, NULL);
 
 		if (converted != NULL)
 		{
-			expanded = gnome_vfs_expand_initial_tilde (converted);
+			expanded = ephy_string_expand_initial_tilde (converted);
 
 			gtk_file_chooser_set_current_folder
 				(GTK_FILE_CHOOSER (dialog), expanded);

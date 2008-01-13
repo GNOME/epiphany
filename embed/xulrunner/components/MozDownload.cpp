@@ -47,6 +47,8 @@
 #include <stdlib.h>
 
 #include <glib/gi18n.h>
+#include <gio/gdesktopappinfo.h>
+#include <gio/gio.h>
 
 #include <nsStringGlue.h>
 
@@ -347,7 +349,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 			// FIXMEchpe fix this!
 			return NS_OK;
 #else
-			GnomeVFSMimeApplication *helperApp;
+			GDesktopAppInfo *helperApp;
 			NS_ENSURE_TRUE (mMIMEInfo, NS_ERROR_FAILURE);
 
 			nsString description;
@@ -367,16 +369,22 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 				char *end;
 				guint32 user_time = strtoul (str[1], &end, 0);
 
-				helperApp = gnome_vfs_mime_application_new_from_desktop_id (str[2]);
+				helperApp = g_desktop_app_info_new (str[2]);
 				if (!helperApp) return NS_ERROR_FAILURE;
 
 				nsCString aDest;
 				rv = mDestination->GetSpec (aDest);
 				NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+                
+                GFile* file;
+                GList* list = NULL;
 
-				ephy_file_launch_application (helperApp, destSpec.get (), user_time);
+                file = g_file_new_for_uri (destSpec.get ());
+                list = g_list_append (list, file);
+				ephy_file_launch_application (G_APP_INFO (helperApp), list, user_time, NULL);
 
-				gnome_vfs_mime_application_free (helperApp);
+                g_list_free (list);
+                g_object_unref (file);
 				g_strfreev (str);
 			}
 			else if (g_str_has_prefix (cDesc.get(), "gnome-browse-to-file:"))

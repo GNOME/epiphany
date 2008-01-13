@@ -77,6 +77,7 @@ nodist_libephymisc_la_SOURCES = \
 
 libephymisc_la_CPPFLAGS = \
 	-I$(top_builddir)/lib			\
+	-I$(top_builddir)/lib/egg		\
 	-DSHARE_DIR=\"$(pkgdatadir)\" 		\
 	-DEXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/extensions"\" 	\
 	$(AM_CPPFLAGS)

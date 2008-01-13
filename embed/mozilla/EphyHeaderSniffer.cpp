@@ -43,7 +43,6 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
 
 #include <nsStringAPI.h>
 
@@ -382,8 +381,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	/* FIXME: do better here by using nsITextToSubURI service, like in
 	 * http://lxr.mozilla.org/seamonkey/source/xpfe/communicator/resources/content/contentAreaUtils.js#763
 	 */
-        char *filename;
-        filename = gnome_vfs_unescape_string (default_name, NULL);
+        char *filename = g_uri_unescape_string (default_name, NULL);
 
         if (!g_utf8_validate (filename, -1, NULL))
         {

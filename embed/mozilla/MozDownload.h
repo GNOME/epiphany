@@ -42,8 +42,6 @@
 #ifndef MozDownload_h__
 #define MozDownload_h__
 
-#include <libgnomevfs/gnome-vfs-mime-handlers.h>
-
 #include <nsCOMPtr.h>
 #include <nsIInterfaceRequestor.h>
 #include <nsITransfer.h>

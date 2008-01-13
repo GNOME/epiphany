@@ -70,7 +70,7 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	nsCOMPtr<nsIHelperAppLauncher> mLauncher;
 	nsCOMPtr<nsISupports> mContext;
 
-	GnomeVFSMimeApplication *mHelperApp;
+	GAppInfo *mHelperApp;
 	EphyMimePermission mPermission;
 
 	nsCString mUrl;

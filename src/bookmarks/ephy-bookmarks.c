@@ -44,17 +44,19 @@
 
 #include <string.h>
 #include <glib/gi18n.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
-#include <libgnomevfs/gnome-vfs-dns-sd.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkdialog.h>
+#include <avahi-common/error.h>
+#include <avahi-gobject/ga-service-browser.h>
+#include <avahi-gobject/ga-service-resolver.h>
+#include <avahi-gobject/ga-client.h>
+#include <avahi-gobject/ga-enums.h>
 
 #define EPHY_BOOKMARKS_XML_ROOT    "ephy_bookmarks"
 #define EPHY_BOOKMARKS_XML_VERSION "1.03"
 #define BOOKMARKS_SAVE_DELAY 3 /* seconds */
 #define MAX_FAVORITES_NUM 10
 #define UPDATE_URI_DATA_KEY "updated-uri"
-#define SD_RESOLVE_TIMEOUT 0 /* ms; 0 means no timeout */
 
 #define EPHY_BOOKMARKS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS, EphyBookmarksPrivate))
 
@@ -85,7 +87,8 @@ struct _EphyBookmarksPrivate
 #ifdef ENABLE_ZEROCONF
 	/* Local sites */
 	EphyNode *local;
-	GnomeVFSDNSSDBrowseHandle *browse_handles[G_N_ELEMENTS (zeroconf_protos)];
+	GaClient *ga_client;
+	GaServiceBrowser *browse_handles[G_N_ELEMENTS (zeroconf_protos)];
 	GHashTable *resolve_handles;
 #endif
 };
@@ -782,28 +785,95 @@ backup_file (const char *original_filename, const char *extension)
 
 #ifdef ENABLE_ZEROCONF
 
+/* C&P adapted from gnome-vfs-dns-sd.c */
+static GHashTable *
+decode_txt_record (AvahiStringList *input_text)
+{
+	GHashTable *hash;
+	int i;
+	int len;
+	char *key, *value, *end;
+	char *key_dup, *value_dup;
+	char *raw_txt;
+	size_t raw_txt_len;
+	
+	raw_txt_len = avahi_string_list_serialize (input_text, NULL, 0);
+	raw_txt = g_malloc (raw_txt_len);
+	raw_txt_len = avahi_string_list_serialize (input_text, raw_txt, raw_txt_len);
+
+	if (raw_txt == NULL)
+		return NULL;
+	
+	hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+
+	i = 0;
+	while (i < raw_txt_len) {
+		len = raw_txt[i++];
+		
+		if (i + len > raw_txt_len) {
+			break;
+		}
+		
+		if (len == 0) {
+			continue;
+		}
+		
+		key = &raw_txt[i];
+		end = &raw_txt[i + len];
+		i += len;
+
+		if (*key == '=') {
+			/* 6.4 - silently ignore keys starting with = */
+			continue;
+		}
+		
+		value = memchr (key, '=', len);
+		if (value) {
+			key_dup = g_strndup (key, value - key);
+			value++; /* Skip '=' */
+			value_dup = g_strndup (value, end - value);
+		} else {
+			key_dup = g_strndup (key, len);
+			value_dup = NULL;
+		}
+		if (!g_hash_table_lookup_extended (hash,
+						   key_dup,
+						   NULL, NULL)) {
+			g_hash_table_insert (hash,
+					     key_dup,
+					     value_dup);
+		} else {
+			g_free (key_dup);
+			g_free (value_dup);
+		}
+	}
+
+	return hash;
+}
+
+/* End of copied code */
+
 static char *
-get_id_for_service (const GnomeVFSDNSSDService *service)
+get_id_for_response (const char *type,
+		     const char *domain,
+		     const char *name)
 {
 	/* FIXME: limit length! */
 	return g_strdup_printf ("%s\1%s\1%s",
-				service->type,
-				service->domain,
-				service->name);
+				type,
+				domain,
+				name);
 }
 
 static EphyNode *
-get_node_for_service (EphyBookmarks *bookmarks,
-		      const GnomeVFSDNSSDService *service)
+get_node_for_id (EphyBookmarks *bookmarks,
+		 char *node_id)
 {
 	EphyBookmarksPrivate *priv = bookmarks->priv;
 	EphyNode *kid, *node = NULL;
 	GPtrArray *children;
-	char *search_id;
 	const char *id;
 	guint i;
-
-	search_id = get_id_for_service (service);
 
 	children = ephy_node_get_children (priv->local);
 	for (i = 0; i < children->len; i++)
@@ -813,14 +883,14 @@ get_node_for_service (EphyBookmarks *bookmarks,
 		id = ephy_node_get_property_string (kid,
 						    EPHY_NODE_BMK_PROP_SERVICE_ID);
 
-		if (g_str_equal (id, search_id))
+		if (g_str_equal (id, node_id))
 		{
 			node = kid;
 			break;
 		}
 	}
 
-	g_free (search_id);
+	g_free (node_id);
 
 	return node;
 }
@@ -833,21 +903,26 @@ typedef struct
 } ResolveData;
 
 static void
-resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
-	    GnomeVFSResult result,
-	    const GnomeVFSDNSSDService *service,
-	    const char *host,
-	    int port,
-	    /* const */ GHashTable *text,
-	    int text_raw_len,
-	    const char *text_raw,
-	    ResolveData *data)
+resolver_found_cb (GaServiceResolver *resolver,
+		   int interface,
+		   GaProtocol protocol,
+		   const char *name,
+		   const char *type,
+		   const char *domain,
+		   const char *host_name,
+		   const AvahiAddress *address,
+		   guint16 port,
+		   AvahiStringList *txt,
+		   glong flags,
+		   ResolveData *data)
 {
 	EphyBookmarks *bookmarks = data->bookmarks;
 	EphyBookmarksPrivate *priv = bookmarks->priv;
 	EphyNode *node = data->node;
 	GValue value = { 0, };
 	const char *path = NULL;
+	char host[128];
+	GHashTable *text_table;
 	char *url;
 	gboolean was_immutable;
 	guint i;
@@ -856,39 +931,38 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 	ephy_node_db_set_immutable (priv->db, FALSE);
 
 	g_hash_table_steal (priv->resolve_handles, node);
-
-	/* Error, don't add the service */
-	if (result != GNOME_VFS_OK)
-	{
-		ephy_node_unref (node);
-
-		ephy_node_db_set_immutable (priv->db, was_immutable);
-
-		return;
-	}
-
+	
 	/* Find the protocol */
 	for (i = 0; i < G_N_ELEMENTS (zeroconf_protos); ++i)
 	{
 		char proto[20];
 
 		g_snprintf (proto, sizeof (proto), "_%s._tcp", zeroconf_protos[i]);
-		if (strcmp (service->type, proto) == 0) break;
+		if (strcmp (type, proto) == 0) break;
 	}
 	if (i == G_N_ELEMENTS (zeroconf_protos)) return;
+	
+	text_table = decode_txt_record (txt);
 
-	if (text != NULL)
+	if (text_table != NULL)
 	{
-		path = g_hash_table_lookup (text, "path");
+		path = g_hash_table_lookup (text_table, "path");
 	}
 	if (path == NULL || path[0] == '\0')
 	{
 		path = "/";
 	}
+	
+	if (address == NULL)
+	{
+		g_warning ("Zeroconf failed to resolve host %s", name);
+		return;
+	}
+	avahi_address_snprint (host, sizeof (host), address);
 
 	LOG ("0conf RESOLVED type=%s domain=%s name=%s => proto=%s host=%s port=%d path=%s\n",
-	    service->type, service->domain, service->name,
-	    zeroconf_protos[i], host, port, path);
+	     type, domain, name,
+	     zeroconf_protos[i], host, port, path);
 
 	/* FIXME: limit length! */
 	url = g_strdup_printf ("%s://%s:%d%s", zeroconf_protos[i], host, port, path);
@@ -908,39 +982,84 @@ resolve_cb (GnomeVFSDNSSDResolveHandle *handle,
 }
 
 static void
-browse_cb (GnomeVFSDNSSDBrowseHandle *handle,
-	   GnomeVFSDNSSDServiceStatus status,
-	   const GnomeVFSDNSSDService *service,
-	   EphyBookmarks *bookmarks)
+resolver_failure_cb (GaServiceResolver *resolver,
+		     GError *error,
+		     ResolveData *data)
+{
+	EphyBookmarks *bookmarks = data->bookmarks;
+	EphyBookmarksPrivate *priv = bookmarks->priv;
+	EphyNode *node = data->node;
+	gboolean was_immutable;
+
+	was_immutable = ephy_node_db_is_immutable (priv->db);
+	ephy_node_db_set_immutable (priv->db, FALSE);
+
+	g_hash_table_steal (priv->resolve_handles, node);
+
+	/* Error, don't add the service */
+	ephy_node_unref (node);
+	ephy_node_db_set_immutable (priv->db, was_immutable);
+
+	return;
+}
+
+static void
+free_resolve_cb_data (gpointer data)
+{
+	g_slice_free (ResolveData, data);
+}
+
+static void
+browser_removed_service_cb (GaServiceBrowser *browser,
+			    int interface,
+			    GaProtocol protocol,
+			    const char *name,
+			    const char *type,
+			    const char *domain,
+			    glong flags,
+			    EphyBookmarks *bookmarks)
 {
 	EphyBookmarksPrivate *priv = bookmarks->priv;
-	GnomeVFSDNSSDResolveHandle *reshandle = NULL;
-	ResolveData *data;
+	EphyNode *node;
+	char *node_id;
+	
+	node_id = get_id_for_response (type, domain, name);
+	node = get_node_for_id (bookmarks, node_id);
+
+	if (node != NULL)
+	{
+		g_hash_table_remove (priv->resolve_handles, node);
+		ephy_node_unref (node);
+	}
+	
+	return;
+}
+
+static void
+browser_new_service_cb (GaServiceBrowser *browser,
+			int interface,
+			GaProtocol protocol,
+			const char *name,
+			const char *type,
+			const char *domain,
+			glong flags,
+			EphyBookmarks *bookmarks)
+{
+	EphyBookmarksPrivate *priv = bookmarks->priv;
 	EphyNode *node;
 	GValue value = { 0, };
 	gboolean new_node = FALSE;
-
-	if (service == NULL) return;
-
-	node = get_node_for_service (bookmarks, service);
-
-	if (status == GNOME_VFS_DNS_SD_SERVICE_REMOVED)
-	{
-		if (node != NULL)
-		{
-			g_hash_table_remove (priv->resolve_handles, node);
-			ephy_node_unref (node);
-		}
-
-		return;
-	}
-
-	/* status == GNOME_VFS_DNS_SD_SERVICE_ADDED */
-
+	GaServiceResolver *resolver = NULL;
+	ResolveData *data;
+	char *node_id;
+	
+	node_id = get_id_for_response (type, domain, name);
+	node = get_node_for_id (bookmarks, node_id);
+	
 	LOG ("0conf ADD: type=%s domain=%s name=%s\n",
-	      service->type, service->domain, service->name);
-
-	if (node != NULL &&
+	     type, domain, name);
+	
+		if (node != NULL &&
 	    g_hash_table_lookup (priv->resolve_handles, node) != NULL) return;
 
 	if (node == NULL)
@@ -959,14 +1078,14 @@ browse_cb (GnomeVFSDNSSDBrowseHandle *handle,
 		ephy_node_set_is_drag_source (node, FALSE);
 
 		g_value_init (&value, G_TYPE_STRING);
-		g_value_take_string (&value, get_id_for_service (service));
+		g_value_take_string (&value, get_id_for_response (type, domain, name));
 		ephy_node_set_property (node, EPHY_NODE_BMK_PROP_SERVICE_ID, &value);
 		g_value_unset (&value);
 
 		/* FIXME: limit length! */
 		ephy_node_set_property_string (node,
 					       EPHY_NODE_BMK_PROP_TITLE,
-					       service->name);
+					       name);
 
 		ephy_node_set_property_boolean (node,
 						EPHY_NODE_BMK_PROP_IMMUTABLE,
@@ -975,55 +1094,107 @@ browse_cb (GnomeVFSDNSSDBrowseHandle *handle,
 		ephy_node_db_set_immutable (priv->db, was_immutable);
 	}
 
-	data = g_new (ResolveData, 1);
+	data = g_slice_new0 (ResolveData);
 	data->bookmarks = bookmarks;
 	data->node = node;
 	data->new_node = new_node;
-
-	if (gnome_vfs_dns_sd_resolve (&reshandle,
-				      service->name, service->type, service->domain,
-				      SD_RESOLVE_TIMEOUT,
-				      (GnomeVFSDNSSDResolveCallback) resolve_cb,
-				      data,
-				      (GDestroyNotify) g_free) != GNOME_VFS_OK)
+	
+	resolver = ga_service_resolver_new (AVAHI_IF_UNSPEC,
+					    AVAHI_PROTO_UNSPEC,
+					    name, type, domain,
+					    AVAHI_PROTO_UNSPEC,
+					    GA_LOOKUP_USE_MULTICAST);
+	g_signal_connect_data (resolver, "found",
+			       G_CALLBACK (resolver_found_cb), data,
+			       (GClosureNotify) free_resolve_cb_data, 0);
+	g_signal_connect_data (resolver, "failure",
+			       G_CALLBACK (resolver_failure_cb), data,
+			       (GClosureNotify) free_resolve_cb_data, 0);
+	if (!ga_service_resolver_attach (resolver,
+					 priv->ga_client,
+					 NULL))
 	{
+		g_warning ("Unable to resolve Zeroconf service %s", name);
 		ephy_node_unref (node);
-		g_free (data);
-
+		free_resolve_cb_data (data);
 		return;
 	}
-
 	g_hash_table_insert (priv->resolve_handles,
-			     node, reshandle);
+			     node, resolver);
+}
+
+static void
+start_browsing (GaClient *ga_client,
+		EphyBookmarks *bookmarks)
+{
+	EphyBookmarksPrivate *priv = bookmarks->priv;
+	guint i;
+
+	for (i = 0; i < G_N_ELEMENTS (zeroconf_protos); ++i)
+	{
+		GaServiceBrowser *browser = NULL;
+		char proto[20];
+
+		g_snprintf (proto, sizeof (proto), "_%s._tcp", zeroconf_protos[i]);
+
+		browser = ga_service_browser_new (proto);
+		g_signal_connect (browser, "new-service",
+				  G_CALLBACK (browser_new_service_cb), bookmarks);
+		g_signal_connect (browser, "removed-service",
+				  G_CALLBACK (browser_removed_service_cb), bookmarks);
+		if (!ga_service_browser_attach (browser,
+						ga_client,
+						NULL))
+		{
+			g_warning ("Unable to start Zeroconf subsystem");
+			return;
+		}
+		
+		priv->browse_handles[i] = browser;
+	}
+}
+
+static void
+ga_client_state_changed_cb (GaClient *ga_client,
+			    GaClientState state,
+			    EphyBookmarks *bookmarks)
+{
+	if (state == GA_CLIENT_STATE_FAILURE)
+	{
+		if (avahi_client_errno (ga_client->avahi_client) == AVAHI_ERR_DISCONNECTED)
+		{
+			/* Destroy and reconnect */
+			avahi_client_free (ga_client->avahi_client);
+			ga_client->avahi_client = NULL;
+			if (!ga_client_start (ga_client, NULL))
+			{
+				g_warning ("Unable to start Zeroconf subsystem");
+			}
+		}
+	}
+	if (state == GA_CLIENT_STATE_S_RUNNING)
+	{
+		start_browsing (ga_client, bookmarks);
+	}
 }
 
 static void
 ephy_local_bookmarks_init (EphyBookmarks *bookmarks)
 {
 	EphyBookmarksPrivate *priv = bookmarks->priv;
-	guint i;
+	GaClient *ga_client;
 
-	priv->resolve_handles =
-		g_hash_table_new_full (g_direct_hash, g_direct_equal,
-				       NULL,
-				       (GDestroyNotify) gnome_vfs_dns_sd_cancel_resolve);
-
-	for (i = 0; i < G_N_ELEMENTS (zeroconf_protos); ++i)
+	ga_client = ga_client_new (GA_CLIENT_FLAG_NO_FAIL);
+	g_signal_connect (ga_client, "state-changed",
+			  G_CALLBACK (ga_client_state_changed_cb),
+			  bookmarks);
+	if (!ga_client_start (ga_client, NULL))
 	{
-		GnomeVFSDNSSDBrowseHandle *handle = NULL;
-		char proto[20];
-
-		g_snprintf (proto, sizeof (proto), "_%s._tcp", zeroconf_protos[i]);
-
-		if (gnome_vfs_dns_sd_browse (&handle,
-		    			     "local", proto,
-					     (GnomeVFSDNSSDBrowseCallback) browse_cb,
-					     bookmarks,
-					     NULL) == GNOME_VFS_OK)
-		{
-			priv->browse_handles[i] = handle;
-		}
+		g_warning ("Unable to start Zeroconf subsystem");
+		return;
 	}
+	priv->ga_client = ga_client;
+	priv->resolve_handles =	g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
 static void
@@ -1036,7 +1207,6 @@ ephy_local_bookmarks_stop (EphyBookmarks *bookmarks)
 	{
 		if (priv->browse_handles[i] != NULL)
 		{
-			gnome_vfs_dns_sd_stop_browse (priv->browse_handles[i]);
 			priv->browse_handles[i] = NULL;
 		}
 	}
@@ -1050,6 +1220,12 @@ ephy_local_bookmarks_stop (EphyBookmarks *bookmarks)
 	if (priv->local != NULL)
 	{
 		ephy_node_remove_child (priv->keywords, priv->local);
+	}
+	
+	if (priv->ga_client != NULL)
+	{
+		g_object_unref (priv->ga_client);
+		priv->ga_client = NULL;
 	}
 }
 
@@ -1569,7 +1745,7 @@ impl_resolve_address (EphyBookmarks *eb,
 			}
 			else
 			{
-				escaped_arg = gnome_vfs_escape_string (arg);
+				escaped_arg = g_uri_escape_string (arg, NULL, TRUE);
 				g_string_append (result, escaped_arg);
 				g_free (escaped_arg);
 				g_free (arg);
@@ -1579,7 +1755,7 @@ impl_resolve_address (EphyBookmarks *eb,
 		}
 		else
 		{
-			arg = gnome_vfs_escape_string (content);
+			arg = g_uri_escape_string (content, NULL, TRUE);
 			g_string_append (result, arg);
 			g_free (arg);
 		}

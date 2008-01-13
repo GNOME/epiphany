@@ -21,7 +21,6 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
 
 #include <webkit.h>
 
