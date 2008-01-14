@@ -165,6 +165,15 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 	container_class->remove = ephy_notebook_remove;
 
 	notebook_class->insert_page = ephy_notebook_insert_page;
+	
+	gtk_rc_parse_string ("style \"ephy-tab-close-button-style\"\n"
+			     "{\n"
+			       "GtkWidget::focus-padding = 0\n"
+			       "GtkWidget::focus-line-width = 0\n"
+			       "xthickness = 0\n"
+			       "ythickness = 0\n"
+			     "}\n"
+			     "widget \"*.ephy-tab-close-button\" style \"ephy-tab-close-button-style\"");
 
 	signals[TAB_CLOSE_REQUEST] =
 		g_signal_new ("tab-close-request",
@@ -573,7 +582,6 @@ static GtkWidget *
 build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 {
 	GtkWidget *hbox, *label, *close_button, *image, *spinner, *icon;
-	GtkRcStyle *rcstyle;
 
 	/* set hbox spacing and label padding (see below) so that there's an
 	 * equal amount of space around the label */
@@ -606,9 +614,7 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 	/* don't allow focus on the close button */
 	gtk_button_set_focus_on_click (GTK_BUTTON (close_button), FALSE);
 
-	rcstyle = gtk_widget_get_modifier_style (close_button);
-	rcstyle->xthickness = rcstyle->ythickness = 0;
-	gtk_widget_modify_style (close_button, rcstyle);
+	gtk_widget_set_name (close_button, "ephy-tab-close-button");
 
 	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
 	gtk_widget_set_tooltip_text (close_button, _("Close tab"));
