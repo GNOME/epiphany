@@ -1,6 +1,6 @@
 # Swedish messages for Epiphany.
-# Copyright (C) 2000-2007 Free Software Foundation, Inc.
-# Daniel Nylander <po@danielnylander.se>, 2006, 2007.
+# Copyright (C) 2000-2008 Free Software Foundation, Inc.
+# Daniel Nylander <po@danielnylander.se>, 2006, 2007, 2008.
 # Dennis Persson <dennis@linux.nu>, 2000.
 # Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004, 2005.
 #
@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-12-30 23:14+0100\n"
-"PO-Revision-Date: 2007-12-30 23:21+0100\n"
+"POT-Creation-Date: 2008-01-14 18:42+0100\n"
+"PO-Revision-Date: 2008-01-14 18:43+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -41,8 +41,8 @@ msgstr "Webbläsaren Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
 #: ../data/epiphany.desktop.in.in.h:3
-#: ../src/ephy-main.c:526
-#: ../src/ephy-main.c:618
+#: ../src/ephy-main.c:537
+#: ../src/ephy-main.c:632
 msgid "Web Browser"
 msgstr "Webbläsare"
 
@@ -470,7 +470,7 @@ msgstr "Kakor"
 
 #. The name of the default downloads folder
 #: ../data/glade/epiphany.glade.h:4
-#: ../lib/ephy-file-helpers.c:115
+#: ../lib/ephy-file-helpers.c:111
 msgid "Downloads"
 msgstr "Hämtningar"
 
@@ -611,7 +611,7 @@ msgid "For l_anguage:"
 msgstr "För s_pråket:"
 
 #: ../data/glade/prefs-dialog.glade.h:24
-#: ../src/prefs-dialog.c:1313
+#: ../src/prefs-dialog.c:1308
 msgid "Language"
 msgstr "Språk"
 
@@ -752,39 +752,39 @@ msgid "_Page address"
 msgstr "_Sidadress"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:220
+#: ../embed/downloader-view.c:219
 msgid "_Show Downloads"
 msgstr "_Visa hämtningar"
 
-#: ../embed/downloader-view.c:375
+#: ../embed/downloader-view.c:374
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u.%02u.%02u"
 
-#: ../embed/downloader-view.c:379
+#: ../embed/downloader-view.c:378
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:440
+#: ../embed/downloader-view.c:439
 msgid "_Pause"
 msgstr "_Paus"
 
-#: ../embed/downloader-view.c:440
+#: ../embed/downloader-view.c:439
 msgid "_Resume"
 msgstr "_Återuppta"
 
-#: ../embed/downloader-view.c:478
+#: ../embed/downloader-view.c:477
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Filen \"%s\" har hämtats."
 
-#: ../embed/downloader-view.c:481
+#: ../embed/downloader-view.c:480
 msgid "Download finished"
 msgstr "Hämtningen är färdig"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:506
+#: ../embed/downloader-view.c:505
 #, c-format
 msgid ""
 "%s\n"
@@ -794,86 +794,87 @@ msgstr ""
 "%s av %s"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:516
-#: ../embed/downloader-view.c:521
+#: ../embed/downloader-view.c:515
+#: ../embed/downloader-view.c:520
+#: ../embed/ephy-download.c:129
 #: ../lib/ephy-time-helpers.c:279
 #: ../src/ephy-window.c:1663
 msgid "Unknown"
 msgstr "Okänd"
 
-#: ../embed/downloader-view.c:553
+#: ../embed/downloader-view.c:552
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d hämtning"
 msgstr[1] "%d hämtningar"
 
-#: ../embed/downloader-view.c:653
+#: ../embed/downloader-view.c:652
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Filen \"%s\" har lagts till i hämtningskön."
 
-#: ../embed/downloader-view.c:656
+#: ../embed/downloader-view.c:655
 msgid "Download started"
 msgstr "Hämtningen har startats"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:730
-#: ../embed/downloader-view.c:743
+#: ../embed/downloader-view.c:729
+#: ../embed/downloader-view.c:742
 msgid "download status|Unknown"
 msgstr "Okänd"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:735
+#: ../embed/downloader-view.c:734
 msgid "download status|Failed"
 msgstr "Misslyckades"
 
-#: ../embed/downloader-view.c:802
+#: ../embed/downloader-view.c:801
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Fil"
 
-#: ../embed/downloader-view.c:825
+#: ../embed/downloader-view.c:824
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:836
+#: ../embed/downloader-view.c:835
 msgid "Remaining"
 msgstr "Återstår"
 
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-base-embed.c:50
+#: ../embed/ephy-base-embed.c:49
 #: ../embed/ephy-embed-utils.c:107
 msgid "Blank page"
 msgstr "Tom sida"
 
-#: ../embed/ephy-base-embed.c:1089
+#: ../embed/ephy-base-embed.c:1070
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Omdirigerar till \"%s\"..."
 
-#: ../embed/ephy-base-embed.c:1091
+#: ../embed/ephy-base-embed.c:1072
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Överför data från \"%s\"..."
 
-#: ../embed/ephy-base-embed.c:1093
+#: ../embed/ephy-base-embed.c:1074
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Väntar på auktorisering från \"%s\"..."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-base-embed.c:1099
-#: ../embed/ephy-base-embed.c:1276
+#: ../embed/ephy-base-embed.c:1080
+#: ../embed/ephy-base-embed.c:1255
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Läser in \"%s\"..."
 
-#: ../embed/ephy-base-embed.c:1278
+#: ../embed/ephy-base-embed.c:1257
 msgid "Loading…"
 msgstr "Läser in..."
 
@@ -1275,32 +1276,32 @@ msgstr "Okänd (%s)"
 msgid "All"
 msgstr "Alla"
 
-#: ../embed/ephy-history.c:688
+#: ../embed/ephy-history.c:685
 msgid "Others"
 msgstr "Andra"
 
-#: ../embed/ephy-history.c:694
+#: ../embed/ephy-history.c:691
 msgid "Local files"
 msgstr "Lokala filer"
 
-#: ../embed/mozilla/ContentHandler.cpp:159
-#: ../embed/mozilla/EphyHeaderSniffer.cpp:412
+#: ../embed/mozilla/ContentHandler.cpp:158
+#: ../embed/mozilla/EphyHeaderSniffer.cpp:410
 msgid "Save"
 msgstr "Spara"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:272
+#: ../embed/mozilla/ContentHandler.cpp:271
 msgid "File Type:|Unknown"
 msgstr "Okänd"
 
-#: ../embed/mozilla/ContentHandler.cpp:288
+#: ../embed/mozilla/ContentHandler.cpp:287
 msgid "Download this potentially unsafe file?"
 msgstr "Hämta denna möjligtvis osäkra fil?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:294
+#: ../embed/mozilla/ContentHandler.cpp:293
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1311,14 +1312,14 @@ msgstr ""
 "\n"
 "Det är osäkert att öppna \"%s\" eftersom den möjligtvis kan skada dina dokument eller göra intrång i din integritet. Du kan hämta ner den istället."
 
-#: ../embed/mozilla/ContentHandler.cpp:304
+#: ../embed/mozilla/ContentHandler.cpp:303
 msgid "Open this file?"
 msgstr "Öppna denna fil?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:311
+#: ../embed/mozilla/ContentHandler.cpp:310
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1329,13 +1330,13 @@ msgstr ""
 "\n"
 "Du kan öppna \"%s\" genom att använda \"%s\" eller spara den."
 
-#: ../embed/mozilla/ContentHandler.cpp:319
+#: ../embed/mozilla/ContentHandler.cpp:318
 msgid "Download this file?"
 msgstr "Hämta denna fil?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:325
+#: ../embed/mozilla/ContentHandler.cpp:324
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1346,7 +1347,7 @@ msgstr ""
 "\n"
 "Du har inget program som kan öppna \"%s\". Du kan hämta ner den istället."
 
-#: ../embed/mozilla/ContentHandler.cpp:330
+#: ../embed/mozilla/ContentHandler.cpp:331
 msgid "_Save As..."
 msgstr "Spara so_m..."
 
@@ -1597,10 +1598,10 @@ msgstr "i Googles cache"
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "i Internet Archive"
 
-#: ../embed/mozilla/EphyHeaderSniffer.cpp:368
-#: ../src/bookmarks/ephy-bookmarks.c:1323
-#: ../src/bookmarks/ephy-bookmarks-import.c:261
-#: ../src/ephy-session.c:1344
+#: ../embed/mozilla/EphyHeaderSniffer.cpp:367
+#: ../src/bookmarks/ephy-bookmarks.c:1499
+#: ../src/bookmarks/ephy-bookmarks-import.c:271
+#: ../src/ephy-session.c:1353
 msgid "Untitled"
 msgstr "Namnlös"
 
@@ -1619,13 +1620,13 @@ msgstr "_Användarnamn:"
 
 #: ../embed/mozilla/FilePicker.cpp:147
 #: ../embed/mozilla/FilePicker.cpp:413
-#: ../lib/ephy-file-chooser.c:437
+#: ../lib/ephy-file-chooser.c:439
 #: ../src/bookmarks/ephy-bookmarks-editor.c:786
 msgid "All files"
 msgstr "Alla filer"
 
 #: ../embed/mozilla/FilePicker.cpp:152
-#: ../lib/ephy-file-chooser.c:421
+#: ../lib/ephy-file-chooser.c:423
 msgid "Web pages"
 msgstr "Webbsidor"
 
@@ -1634,7 +1635,7 @@ msgid "Text files"
 msgstr "Textfiler"
 
 #: ../embed/mozilla/FilePicker.cpp:165
-#: ../lib/ephy-file-chooser.c:429
+#: ../lib/ephy-file-chooser.c:431
 msgid "Images"
 msgstr "Bilder"
 
@@ -2066,7 +2067,7 @@ msgid "Although this page was loaded over a secure connection, the information y
 msgstr "Även om denna sida lästes in över en säker anslutning kommer den information som du har angivit att skickas över en osäker anslutning, och kan enkelt avlyssnas av en tredje part."
 
 #. translators: this is the directory name to store auxilary files when saving html files
-#: ../embed/mozilla/MozDownload.cpp:681
+#: ../embed/mozilla/MozDownload.cpp:689
 #, c-format
 msgid "%s Files"
 msgstr "Filer för %s"
@@ -2093,6 +2094,18 @@ msgid ""
 msgstr ""
 "GConf-fel:\n"
 "  %s"
+
+#: ../lib/egg/eel-app-launch-context.c:403
+#, c-format
+msgid "Opening %s"
+msgstr "Öppnar %s"
+
+#: ../lib/egg/eel-app-launch-context.c:406
+#, c-format
+msgid "Opening %d Item"
+msgid_plural "Opening %d Items"
+msgstr[0] "Öppnar %d objekt"
+msgstr[1] "Öppnar %d objekt"
 
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
@@ -2134,21 +2147,21 @@ msgstr "Ta bort den markerade verktygsraden"
 msgid "Separator"
 msgstr "Avskiljare"
 
-#: ../lib/ephy-file-chooser.c:410
+#: ../lib/ephy-file-chooser.c:412
 msgid "All supported types"
 msgstr "Alla typer som stöds"
 
-#: ../lib/ephy-file-helpers.c:300
+#: ../lib/ephy-file-helpers.c:296
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Kunde inte skapa en temporär katalog i \"%s\"."
 
-#: ../lib/ephy-file-helpers.c:373
+#: ../lib/ephy-file-helpers.c:369
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Filen \"%s\" existerar. Vänligen flytta bort den."
 
-#: ../lib/ephy-file-helpers.c:384
+#: ../lib/ephy-file-helpers.c:380
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Misslyckades med att skapa katalogen %s."
@@ -2387,7 +2400,7 @@ msgstr "Bokmärke"
 #: ../lib/ephy-stock-icons.c:55
 #: ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1822
-#: ../src/bookmarks/ephy-topic-action.c:455
+#: ../src/bookmarks/ephy-topic-action.c:454
 #: ../src/ephy-window.c:1462
 msgid "Bookmarks"
 msgstr "Bokmärken"
@@ -2504,7 +2517,7 @@ msgstr "Denna insticksmodul hanterar \".desktop\"- och \".url\"-filer som inneh�
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:508
+#: ../src/bookmarks/ephy-bookmark-action.c:509
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "Kör skriptet \"%s\""
@@ -2557,60 +2570,60 @@ msgstr "Visa _alla ämnen"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: ../src/bookmarks/ephy-bookmarks.c:105
+#: ../src/bookmarks/ephy-bookmarks.c:108
 msgid "Search the web"
 msgstr "Sök på nätet"
 
-#: ../src/bookmarks/ephy-bookmarks.c:105
+#: ../src/bookmarks/ephy-bookmarks.c:108
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.se/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../src/bookmarks/ephy-bookmarks.c:110
+#: ../src/bookmarks/ephy-bookmarks.c:113
 msgid "Entertainment"
 msgstr "Nöje"
 
-#: ../src/bookmarks/ephy-bookmarks.c:111
+#: ../src/bookmarks/ephy-bookmarks.c:114
 msgid "News"
 msgstr "Nyheter"
 
-#: ../src/bookmarks/ephy-bookmarks.c:112
+#: ../src/bookmarks/ephy-bookmarks.c:115
 msgid "Shopping"
 msgstr "Köp och sälj"
 
-#: ../src/bookmarks/ephy-bookmarks.c:113
+#: ../src/bookmarks/ephy-bookmarks.c:116
 msgid "Sports"
 msgstr "Sport"
 
-#: ../src/bookmarks/ephy-bookmarks.c:114
+#: ../src/bookmarks/ephy-bookmarks.c:117
 msgid "Travel"
 msgstr "Resor"
 
-#: ../src/bookmarks/ephy-bookmarks.c:115
+#: ../src/bookmarks/ephy-bookmarks.c:118
 msgid "Work"
 msgstr "Arbete"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:487
+#: ../src/bookmarks/ephy-bookmarks.c:490
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Uppdatera bokmärket \"%s\"?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:492
+#: ../src/bookmarks/ephy-bookmarks.c:495
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "Sidan i bokmärket har flyttat till \"%s\"."
 
-#: ../src/bookmarks/ephy-bookmarks.c:496
+#: ../src/bookmarks/ephy-bookmarks.c:499
 msgid "_Don't Update"
 msgstr "Uppdatera _inte"
 
-#: ../src/bookmarks/ephy-bookmarks.c:498
+#: ../src/bookmarks/ephy-bookmarks.c:501
 msgid "_Update"
 msgstr "_Uppdatera"
 
-#: ../src/bookmarks/ephy-bookmarks.c:501
+#: ../src/bookmarks/ephy-bookmarks.c:504
 msgid "Update Bookmark?"
 msgstr "Uppdatera bokmärke?"
 
@@ -2618,7 +2631,7 @@ msgstr "Uppdatera bokmärke?"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1067
+#: ../src/bookmarks/ephy-bookmarks.c:1243
 msgid "bookmarks|All"
 msgstr "Alla"
 
@@ -2626,7 +2639,7 @@ msgstr "Alla"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1073
+#: ../src/bookmarks/ephy-bookmarks.c:1249
 msgid "bookmarks|Most Visited"
 msgstr "Mest besökta"
 
@@ -2636,7 +2649,7 @@ msgstr "Mest besökta"
 #. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1080
+#: ../src/bookmarks/ephy-bookmarks.c:1256
 msgid "bookmarks|Not Categorized"
 msgstr "Inte kategoriserade"
 
@@ -2645,7 +2658,7 @@ msgstr "Inte kategoriserade"
 #. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1088
+#: ../src/bookmarks/ephy-bookmarks.c:1264
 msgid "bookmarks|Nearby Sites"
 msgstr "Närliggande webbplatser"
 
@@ -3037,7 +3050,7 @@ msgstr "Ämne"
 msgid "Create topic “%s”"
 msgstr "Skapa ämnet \"%s\""
 
-#: ../src/ephy-encoding-dialog.c:342
+#: ../src/ephy-encoding-dialog.c:345
 msgid "Encodings"
 msgstr "Teckenkodningar"
 
@@ -3201,60 +3214,60 @@ msgstr "Webbplatser"
 msgid "Date"
 msgstr "Datum"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:76
 msgid "Open a new tab in an existing browser window"
 msgstr "Öppna en ny flik i ett befintligt webbläsarfönster"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:78
 msgid "Open a new browser window"
 msgstr "Öppna ett nytt webbläsarfönster"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:80
 msgid "Launch the bookmarks editor"
 msgstr "Starta bokmärkesredigeraren"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:82
 msgid "Import bookmarks from the given file"
 msgstr "Importera bokmärken från den angivna filen"
 
+#: ../src/ephy-main.c:82
 #: ../src/ephy-main.c:84
-#: ../src/ephy-main.c:86
 msgid "FILE"
 msgstr "FIL"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:84
 msgid "Load the given session file"
 msgstr "Läs in den angivna sessionsfilen"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:86
 msgid "Add a bookmark"
 msgstr "Lägg till ett bokmärke"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:86
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:88
 msgid "Start a private instance"
 msgstr "Starta en privat instans"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:90
 msgid "Profile directory to use in the private instance"
 msgstr "Profilkatalog att använda i den privata instansen"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:90
 msgid "DIR"
 msgstr "KAT"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:92
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:396
+#: ../src/ephy-main.c:407
 msgid "Could not start GNOME Web Browser"
 msgstr "Kunde inte starta GNOME-webbläsaren"
 
-#: ../src/ephy-main.c:399
+#: ../src/ephy-main.c:410
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -3263,12 +3276,12 @@ msgstr ""
 "Uppstart misslyckades på grund av följande fel:\n"
 "%s"
 
-#: ../src/ephy-main.c:504
-#: ../src/window-commands.c:847
+#: ../src/ephy-main.c:515
+#: ../src/window-commands.c:865
 msgid "GNOME Web Browser"
 msgstr "GNOME-webbläsaren"
 
-#: ../src/ephy-main.c:505
+#: ../src/ephy-main.c:516
 msgid "GNOME Web Browser options"
 msgstr "Alternativ för GNOME-webbläsaren"
 
@@ -3276,46 +3289,46 @@ msgstr "Alternativ för GNOME-webbläsaren"
 msgid "Close tab"
 msgstr "Stäng flik"
 
-#: ../src/ephy-session.c:161
+#: ../src/ephy-session.c:159
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "Hämtningar kommer att avbrytas och utloggning sker om %d sekund."
 msgstr[1] "Hämtningar kommer att avbrytas och utloggning sker om %d sekunder."
 
-#: ../src/ephy-session.c:277
+#: ../src/ephy-session.c:275
 msgid "Abort pending downloads?"
 msgstr "Avbryt alla återstående hämtningar?"
 
-#: ../src/ephy-session.c:281
+#: ../src/ephy-session.c:279
 msgid "There are still downloads pending. If you log out, they will be aborted and lost."
 msgstr "Det finns fortfarande utestående hämtningar. Om du loggar ut kommer de att avbrytas och förloras."
 
-#: ../src/ephy-session.c:285
+#: ../src/ephy-session.c:283
 msgid "_Cancel Logout"
 msgstr "Avbryt _utloggning"
 
-#: ../src/ephy-session.c:287
+#: ../src/ephy-session.c:285
 msgid "_Abort Downloads"
 msgstr "_Avbryt hämtningar"
 
-#: ../src/ephy-session.c:615
+#: ../src/ephy-session.c:618
 msgid "Recover previous browser windows and tabs?"
 msgstr "Återställ tidigare webbläsarfönster och webbläsarflikar?"
 
-#: ../src/ephy-session.c:619
+#: ../src/ephy-session.c:622
 msgid "Epiphany appears to have exited unexpectedly the last time it was run. You can recover the opened windows and tabs."
 msgstr "Epiphany verkar ha avslutats oväntat den senaste gången det kördes. Du kan återställa de öppnade fönstren och flikarna."
 
-#: ../src/ephy-session.c:623
+#: ../src/ephy-session.c:626
 msgid "_Don't Recover"
 msgstr "_Återställ inte"
 
-#: ../src/ephy-session.c:625
+#: ../src/ephy-session.c:628
 msgid "_Recover"
 msgstr "_Återställ"
 
-#: ../src/ephy-session.c:627
+#: ../src/ephy-session.c:630
 msgid "Crash Recovery"
 msgstr "Kraschåterställning"
 
@@ -3916,12 +3929,12 @@ msgid "Close _Document"
 msgstr "Stäng _dokument"
 
 #: ../src/ephy-window.c:1452
-#: ../src/window-commands.c:267
+#: ../src/window-commands.c:280
 msgid "Open"
 msgstr "Öppna"
 
 #: ../src/ephy-window.c:1454
-#: ../src/window-commands.c:293
+#: ../src/window-commands.c:306
 msgid "Save As"
 msgstr "Spara som"
 
@@ -3971,47 +3984,47 @@ msgid_plural "%d hidden popup windows"
 msgstr[0] "%d dolt popupfönster"
 msgstr[1] "%d dolda popupfönster"
 
-#: ../src/ephy-window.c:2010
+#: ../src/ephy-window.c:2004
 #, c-format
 msgid "Open image “%s”"
 msgstr "Öppna bilden \"%s\""
 
-#: ../src/ephy-window.c:2015
+#: ../src/ephy-window.c:2009
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Använd som skrivbordsbakgrund \"%s\""
 
-#: ../src/ephy-window.c:2020
+#: ../src/ephy-window.c:2014
 #, c-format
 msgid "Save image “%s”"
 msgstr "Spara bilden \"%s\""
 
-#: ../src/ephy-window.c:2025
+#: ../src/ephy-window.c:2019
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopiera bildadressen \"%s\""
 
-#: ../src/ephy-window.c:2038
+#: ../src/ephy-window.c:2032
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Skicka e-post till adressen \"%s\""
 
-#: ../src/ephy-window.c:2044
+#: ../src/ephy-window.c:2038
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopiera e-postadressen \"%s\""
 
-#: ../src/ephy-window.c:2056
+#: ../src/ephy-window.c:2050
 #, c-format
 msgid "Save link “%s”"
 msgstr "Spara länken \"%s\""
 
-#: ../src/ephy-window.c:2062
+#: ../src/ephy-window.c:2056
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Lägg till bokmärke för länken \"%s\""
 
-#: ../src/ephy-window.c:2068
+#: ../src/ephy-window.c:2062
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopiera länkens adress \"%s\""
@@ -4104,15 +4117,15 @@ msgstr "Användarnamn"
 msgid "User Password"
 msgstr "Användarlösenord"
 
-#: ../src/popup-commands.c:260
+#: ../src/popup-commands.c:256
 msgid "Download Link"
 msgstr "Hämta länk"
 
-#: ../src/popup-commands.c:268
+#: ../src/popup-commands.c:264
 msgid "Save Link As"
 msgstr "Spara länk som"
 
-#: ../src/popup-commands.c:275
+#: ../src/popup-commands.c:271
 msgid "Save Image As"
 msgstr "Spara bild som"
 
@@ -4157,7 +4170,7 @@ msgstr "Stäng"
 msgid "Close print preview"
 msgstr "Stäng förhandsgranskning"
 
-#: ../src/prefs-dialog.c:420
+#: ../src/prefs-dialog.c:418
 msgid "Default"
 msgstr "Standard"
 
@@ -4169,8 +4182,8 @@ msgstr "Standard"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:1001
-#: ../src/prefs-dialog.c:1009
+#: ../src/prefs-dialog.c:996
+#: ../src/prefs-dialog.c:1004
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -4180,49 +4193,49 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:1020
+#: ../src/prefs-dialog.c:1015
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "Användardefinierat (%s)"
 
-#: ../src/prefs-dialog.c:1042
+#: ../src/prefs-dialog.c:1037
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Systemspråk (%s)"
 msgstr[1] "Systemspråk (%s)"
 
-#: ../src/prefs-dialog.c:1434
+#: ../src/prefs-dialog.c:1429
 msgid "Select a Directory"
 msgstr "Välj en katalog"
 
-#: ../src/window-commands.c:742
+#: ../src/window-commands.c:760
 msgid "The GNOME Web Browser is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
 msgstr "GNOME-webbläsaren är fri programvara; du kan distribuera det och/eller modifiera det under villkoren i GNU General Public License, publicerad av Free Software Foundation, antingen version 2 eller (om du så vill) någon senare version."
 
-#: ../src/window-commands.c:746
+#: ../src/window-commands.c:764
 msgid "The GNOME Web Browser is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
 msgstr "GNOME-webbläsaren distribueras i hopp om att den ska vara användbart, men UTAN NÅGON SOM HELST GARANTI, även utan underförstådd garanti om SÄLJBARHET eller LÄMPLIGHET FÖR NÅGOT SPECIELLT ÄNDAMÅL. Se GNU General Public License för ytterligare information."
 
-#: ../src/window-commands.c:750
+#: ../src/window-commands.c:768
 msgid "You should have received a copy of the GNU General Public License along with the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr "Du bör ha fått en kopia av GNU General Public License tillsammans med GNOME-webbläsaren. Om inte, skriv till Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA"
 
-#: ../src/window-commands.c:798
-#: ../src/window-commands.c:814
-#: ../src/window-commands.c:825
+#: ../src/window-commands.c:816
+#: ../src/window-commands.c:832
+#: ../src/window-commands.c:843
 msgid "Contact us at:"
 msgstr "Kontakta oss på:"
 
-#: ../src/window-commands.c:801
+#: ../src/window-commands.c:819
 msgid "Contributors:"
 msgstr "Bidragsgivare:"
 
-#: ../src/window-commands.c:804
+#: ../src/window-commands.c:822
 msgid "Past developers:"
 msgstr "Tidigare utvecklare:"
 
-#: ../src/window-commands.c:837
+#: ../src/window-commands.c:855
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4239,7 +4252,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:863
+#: ../src/window-commands.c:881
 msgid "translator-credits"
 msgstr ""
 "Daniel Nylander\n"
@@ -4249,7 +4262,7 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "tp-sv@listor.tp-sv.se"
 
-#: ../src/window-commands.c:866
+#: ../src/window-commands.c:884
 msgid "GNOME Web Browser Website"
 msgstr "Webbplatsen för GNOME-webbläsaren"
 
