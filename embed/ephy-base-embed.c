@@ -1397,7 +1397,7 @@ ephy_base_embed_update_file_monitor (EphyBaseEmbed *embed,
   g_object_unref (file_info);
 
   if (file_type == G_FILE_TYPE_DIRECTORY) {
-    monitor = g_file_monitor_directory (file, 0, NULL);
+    monitor = g_file_monitor_directory (file, 0, NULL, NULL);
     g_signal_connect (monitor, "changed",
                       G_CALLBACK (ephy_base_embed_file_monitor_cb),
                       embed);
@@ -1405,7 +1405,7 @@ ephy_base_embed_update_file_monitor (EphyBaseEmbed *embed,
     LOG ("Installed monitor for directory '%s'", address);
   }
   else if (file_type == G_FILE_TYPE_REGULAR) {
-    monitor = g_file_monitor_file (file, 0, NULL);
+    monitor = g_file_monitor_file (file, 0, NULL, NULL);
     g_signal_connect (monitor, "changed",
                       G_CALLBACK (ephy_base_embed_file_monitor_cb),
                       embed);

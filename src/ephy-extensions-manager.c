@@ -1059,7 +1059,7 @@ ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
 	closedir (d);
 
 	directory = g_file_new_for_path (path);
-	monitor = g_file_monitor_directory (directory, 0, NULL);
+	monitor = g_file_monitor_directory (directory, 0, NULL, NULL);
 
 	if (monitor != NULL)
 	{

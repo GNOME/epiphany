@@ -511,7 +511,8 @@ user_css_enabled_notify (GConfClient *client,
 		g_assert (priv->user_css_file_monitor == NULL);
 		priv->user_css_file_monitor =
 			g_file_monitor_file (file,
-					     G_FILE_MONITOR_NONE, NULL);
+					     G_FILE_MONITOR_NONE,
+					     NULL, NULL);
 		g_file_monitor_set_rate_limit (priv->user_css_file_monitor,
 					       USER_CSS_LOAD_DELAY);
 		g_signal_connect (priv->user_css_file_monitor, "changed",
