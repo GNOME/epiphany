@@ -95,7 +95,7 @@ if test "$enable_maintainer_mode" = "yes"; then
 fi
 
 GLIB_REQUIRED=2.15.2
-GTK_REQUIRED=2.11.6
+GTK_REQUIRED=2.12.0
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
 LIBGLADE_REQUIRED=2.3.1
@@ -586,17 +586,28 @@ AM_CONDITIONAL([ENABLE_DESKTOP_FILE_PLUGIN],[test "$enable_desktop_file_plugin" 
 
 AC_MSG_CHECKING([whether to enable zeroconf bookmarks support])
 AC_ARG_ENABLE([zeroconf],
-	AS_HELP_STRING([--disable-zeroconf],[Whether to enable zeroconf bookmarks support (default: enabled)]),
-	[], [enable_zeroconf=yes])
+	AS_HELP_STRING([--disable-zeroconf],[Whether to enable zeroconf bookmarks support (default: autodetect)]),
+	[], [enable_zeroconf=auto])
 AC_MSG_RESULT([$enable_zeroconf])
 
-if test "$enable_zeroconf" = "yes"; then
+if test "$enable_zeroconf" != "no"; then
 	AVAHI_REQUIRED=0.6.22
 
-	PKG_CHECK_MODULES(AVAHI, [avahi-gobject >= $AVAHI_REQUIRED])
+	PKG_CHECK_MODULES(AVAHI, [avahi-gobject >= $AVAHI_REQUIRED],[have_avahi=yes],[have_avahi=no])
+
+        if test "$enable_zeroconf" = "yes" -a "$have_avahi" = "no"; then
+                AC_MSG_ERROR([zeroconf support was requested but avahi not found])
+        elif test "$have_avahi" = "yes"; then
+                enable_zeroconf=yes
+        else
+                enable_zeroconf=no
+        fi
+
 	AC_SUBST(AVAHI_CFLAGS)
 	AC_SUBST(AVAHI_LIBS)
+fi
 
+if test "$enable_zeroconf" = "yes"; then
 	AC_DEFINE([ENABLE_ZEROCONF],[1],[Define to enable zeroconf bookmarks support])
 fi
 
