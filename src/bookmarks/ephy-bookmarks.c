@@ -46,11 +46,14 @@
 #include <glib/gi18n.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkdialog.h>
+
+#ifdef ENABLE_ZEROCONF
 #include <avahi-common/error.h>
 #include <avahi-gobject/ga-service-browser.h>
 #include <avahi-gobject/ga-service-resolver.h>
 #include <avahi-gobject/ga-client.h>
 #include <avahi-gobject/ga-enums.h>
+#endif /* ENABLE_ZEROCONF */
 
 #define EPHY_BOOKMARKS_XML_ROOT    "ephy_bookmarks"
 #define EPHY_BOOKMARKS_XML_VERSION "1.03"
