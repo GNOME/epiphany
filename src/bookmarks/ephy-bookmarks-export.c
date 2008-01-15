@@ -395,7 +395,7 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 	char *tmp_file_path;
 	int ret;
 
-	LOG ("Exporting as RDF to %s", filename);
+	LOG ("Exporting as RDF to %s", file_path);
 
 	START_PROFILER ("Exporting as RDF")
 
