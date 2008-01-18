@@ -3,15 +3,16 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 #
 # Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2004.
-# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2004, 2005, 2006.
+# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2004, 2005, 2006, 2008.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: eu\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2007-12-31 15:48+0100\n"
-"PO-Revision-Date: 2007-12-31 15:48+0100\n"
-"Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@zundan.com>\n"
+"Project-Id-Version: epiphany.HEAD\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=epiphany\n"
+"POT-Creation-Date: 2008-01-18 18:07+0100\n"
+"PO-Revision-Date: 2008-01-18 18:09+0100\n"
+"Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,8 +41,8 @@ msgid "Epiphany Web Browser"
 msgstr "Epiphany web arakatzailea"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:526
-#: ../src/ephy-main.c:618
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:537
+#: ../src/ephy-main.c:632
 msgid "Web Browser"
 msgstr "Web arakatzailea"
 
@@ -153,7 +154,8 @@ msgid "Allow popups"
 msgstr "Onartu laster-leihoak"
 
 #: ../data/epiphany.schemas.in.h:4
-msgid "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
+msgid ""
+"Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Eman baimena guneei leiho berriak JavaScript-ekin irekitzeko (JavaScript "
 "gaituta badago)."
@@ -226,7 +228,8 @@ msgstr "Letra-tipo lehenetsia"
 
 #: ../data/epiphany.schemas.in.h:13
 msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
-msgstr "Letra-tipo lehenetsia. Balio posibleak \"serif\" eta \"sans-serif\" dira."
+msgstr ""
+"Letra-tipo lehenetsia. Balio posibleak \"serif\" eta \"sans-serif\" dira."
 
 #: ../data/epiphany.schemas.in.h:14
 msgid "Enable Java"
@@ -293,7 +296,8 @@ msgid "Lists the active extensions."
 msgstr "Zerrendatu luzapen aktiboak."
 
 #: ../data/epiphany.schemas.in.h:27
-msgid "Middle click to open the web page pointed to by the currently selected text"
+msgid ""
+"Middle click to open the web page pointed to by the currently selected text"
 msgstr ""
 "Saguaren erdiko botoiarekin klik egin unean hautatutako testuak "
 "seinalatutako web orria irekitzeko"
@@ -605,7 +609,7 @@ msgid "Cookies"
 msgstr "Cookie-ak"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:115
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:111
 msgid "Downloads"
 msgstr "Deskargak"
 
@@ -746,7 +750,7 @@ msgstr "Letra-tipoak eta estiloak"
 msgid "For l_anguage:"
 msgstr "_Hizkuntzarentzako:"
 
-#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1313
+#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1308
 msgid "Language"
 msgstr "Hizkuntza"
 
@@ -887,39 +891,39 @@ msgid "_Page address"
 msgstr "Orriaren h_elbidea"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:220
+#: ../embed/downloader-view.c:219
 msgid "_Show Downloads"
 msgstr "_Erakutsi deskargak"
 
-#: ../embed/downloader-view.c:375
+#: ../embed/downloader-view.c:374
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:379
+#: ../embed/downloader-view.c:378
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:440
+#: ../embed/downloader-view.c:439
 msgid "_Pause"
 msgstr "_Pausarazi"
 
-#: ../embed/downloader-view.c:440
+#: ../embed/downloader-view.c:439
 msgid "_Resume"
 msgstr "_Berrekin"
 
-#: ../embed/downloader-view.c:478
+#: ../embed/downloader-view.c:477
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "'%s' fitxategia deskargatu da."
 
-#: ../embed/downloader-view.c:481
+#: ../embed/downloader-view.c:480
 msgid "Download finished"
 msgstr "Deskarga amaituta"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:506
+#: ../embed/downloader-view.c:505
 #, c-format
 msgid ""
 "%s\n"
@@ -929,81 +933,82 @@ msgstr ""
 "%s / %s"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:516 ../embed/downloader-view.c:521
-#: ../lib/ephy-time-helpers.c:279 ../src/ephy-window.c:1663
+#: ../embed/downloader-view.c:515 ../embed/downloader-view.c:520
+#: ../embed/ephy-download.c:129 ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1663
 msgid "Unknown"
 msgstr "Ezezaguna"
 
-#: ../embed/downloader-view.c:553
+#: ../embed/downloader-view.c:552
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "Deskarga %d"
 msgstr[1] "%d deskarga"
 
-#: ../embed/downloader-view.c:653
+#: ../embed/downloader-view.c:652
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "'%s' fitxategia deskargen ilarari gehitu zaio."
 
-#: ../embed/downloader-view.c:656
+#: ../embed/downloader-view.c:655
 msgid "Download started"
 msgstr "Deskarga hasita"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:730 ../embed/downloader-view.c:743
+#: ../embed/downloader-view.c:729 ../embed/downloader-view.c:742
 msgid "download status|Unknown"
 msgstr "Ezezaguna"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:735
+#: ../embed/downloader-view.c:734
 msgid "download status|Failed"
 msgstr "Huts egin du"
 
-#: ../embed/downloader-view.c:802
+#: ../embed/downloader-view.c:801
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Fitxategia"
 
-#: ../embed/downloader-view.c:825
+#: ../embed/downloader-view.c:824
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:836
+#: ../embed/downloader-view.c:835
 msgid "Remaining"
 msgstr "Falta:"
 
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-base-embed.c:50 ../embed/ephy-embed-utils.c:107
+#: ../embed/ephy-base-embed.c:49 ../embed/ephy-embed-utils.c:107
 msgid "Blank page"
 msgstr "Orri hutsa"
 
-#: ../embed/ephy-base-embed.c:1089
+#: ../embed/ephy-base-embed.c:1070
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "'%s'(e)ra birbideratzen..."
 
-#: ../embed/ephy-base-embed.c:1091
+#: ../embed/ephy-base-embed.c:1072
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "'%s'(e)tik datuak transferitzen..."
 
-#: ../embed/ephy-base-embed.c:1093
+#: ../embed/ephy-base-embed.c:1074
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "'%s'(e)k baimena emateko zain..."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-base-embed.c:1099 ../embed/ephy-base-embed.c:1276
+#: ../embed/ephy-base-embed.c:1080 ../embed/ephy-base-embed.c:1255
 #, c-format
 msgid "Loading “%s”…"
 msgstr "'%s' kargatzen..."
 
-#: ../embed/ephy-base-embed.c:1278
+#: ../embed/ephy-base-embed.c:1257
 msgid "Loading…"
 msgstr "Kargatzen..."
 
@@ -1403,32 +1408,32 @@ msgstr "Ezezaguna (%s)"
 msgid "All"
 msgstr "Denak"
 
-#: ../embed/ephy-history.c:688
+#: ../embed/ephy-history.c:685
 msgid "Others"
 msgstr "Bestelakoak"
 
-#: ../embed/ephy-history.c:694
+#: ../embed/ephy-history.c:691
 msgid "Local files"
 msgstr "Fitxategi lokalak"
 
-#: ../embed/mozilla/ContentHandler.cpp:159
-#: ../embed/mozilla/EphyHeaderSniffer.cpp:412
+#: ../embed/mozilla/ContentHandler.cpp:158
+#: ../embed/mozilla/EphyHeaderSniffer.cpp:410
 msgid "Save"
 msgstr "Gorde"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:272
+#: ../embed/mozilla/ContentHandler.cpp:271
 msgid "File Type:|Unknown"
 msgstr "Ezezaguna"
 
-#: ../embed/mozilla/ContentHandler.cpp:288
+#: ../embed/mozilla/ContentHandler.cpp:287
 msgid "Download this potentially unsafe file?"
 msgstr "Deskargatu fitxategi ez-segurua?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:294
+#: ../embed/mozilla/ContentHandler.cpp:293
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1441,14 +1446,14 @@ msgstr ""
 "Ez da segurua '%s' irekitzea, zure dokumentuak honda ditzake edo "
 "pribatutasuna ken diezazuke. Ireki ordez hobe duzu deskargatzea (gordetzea)."
 
-#: ../embed/mozilla/ContentHandler.cpp:304
+#: ../embed/mozilla/ContentHandler.cpp:303
 msgid "Open this file?"
 msgstr "Fitxategia ireki?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:311
+#: ../embed/mozilla/ContentHandler.cpp:310
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1459,13 +1464,13 @@ msgstr ""
 "\n"
 "'%s' ireki dezakezu '%s' erabiliz, edo bestela gorde."
 
-#: ../embed/mozilla/ContentHandler.cpp:319
+#: ../embed/mozilla/ContentHandler.cpp:318
 msgid "Download this file?"
 msgstr "Deskargatu fitxategia?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:325
+#: ../embed/mozilla/ContentHandler.cpp:324
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1476,7 +1481,7 @@ msgstr ""
 "\n"
 "Ez duzu aplikaziorik '%s' irekitzeko. Ireki ordez deskarga dezakezu."
 
-#: ../embed/mozilla/ContentHandler.cpp:330
+#: ../embed/mozilla/ContentHandler.cpp:331
 msgid "_Save As..."
 msgstr "Gorde hone_la..."
 
@@ -1494,8 +1499,10 @@ msgstr "'%s' protokoloa ez dago onartuta."
 
 #. FIXME: get the list of supported protocols from necko
 #: ../embed/mozilla/EphyAboutModule.cpp:244
-msgid "Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
-msgstr "Onartutako protokoloak: “http”, “https”, “ftp”, “file”, “smb” eta “sftp”."
+msgid ""
+"Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
+msgstr ""
+"Onartutako protokoloak: “http”, “https”, “ftp”, “file”, “smb” eta “sftp”."
 
 #. Translators: %s is the path and filename, for example "/home/user/test.html"
 #: ../embed/mozilla/EphyAboutModule.cpp:253
@@ -1618,7 +1625,8 @@ msgstr "'%s'(e)k ez du erantzuten."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:366
 msgid "The connection was lost because the server took too long to respond."
-msgstr "Konexioa galdu da zerbitzariak denbora gehiegi igaro duelako erantzuteko."
+msgstr ""
+"Konexioa galdu da zerbitzariak denbora gehiegi igaro duelako erantzuteko."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:374
 msgid "Invalid Address"
@@ -1658,7 +1666,8 @@ msgid "“%s” requires an encrypted connection."
 msgstr "'%s'(e)k konexio-enkriptatua behar du."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:408
-msgid "The document could not be loaded because encryption support is not installed."
+msgid ""
+"The document could not be loaded because encryption support is not installed."
 msgstr ""
 "Dokumentua ezin izan da kargatu enkriptazio-euskarria ez dagoelako "
 "instalatuta."
@@ -1687,7 +1696,8 @@ msgstr "Ezin da dokumentua kargatu lineaz kanpo moduan."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:437
 msgid "To view this document, disable “Work Offline” and try again."
-msgstr "Dokumentua ikusteko desgaitu \"Egin lana konektatu gabe\" eta saiatu berriro."
+msgstr ""
+"Dokumentua ikusteko desgaitu \"Egin lana konektatu gabe\" eta saiatu berriro."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:449
 #, c-format
@@ -1737,7 +1747,8 @@ msgstr "Ezin izan da edukia erakutsi."
 
 #: ../embed/mozilla/EphyAboutModule.cpp:474
 msgid "The page uses an unsupported or invalid form of compression."
-msgstr "Orrialdeak onartzen ez den edo baliozkoa ez den konpresio-mota darabil."
+msgstr ""
+"Orrialdeak onartzen ez den edo baliozkoa ez den konpresio-mota darabil."
 
 #. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
 #: ../embed/mozilla/EphyAboutModule.cpp:565
@@ -1764,9 +1775,9 @@ msgstr "Google-ren cachean"
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "Interneteko artxiboetan"
 
-#: ../embed/mozilla/EphyHeaderSniffer.cpp:368
-#: ../src/bookmarks/ephy-bookmarks.c:1323
-#: ../src/bookmarks/ephy-bookmarks-import.c:261 ../src/ephy-session.c:1344
+#: ../embed/mozilla/EphyHeaderSniffer.cpp:367
+#: ../src/bookmarks/ephy-bookmarks.c:1502
+#: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1353
 msgid "Untitled"
 msgstr "Izengabea"
 
@@ -1784,11 +1795,11 @@ msgid "_Username:"
 msgstr "_Erabiltzaile-izena:"
 
 #: ../embed/mozilla/FilePicker.cpp:147 ../embed/mozilla/FilePicker.cpp:413
-#: ../lib/ephy-file-chooser.c:437 ../src/bookmarks/ephy-bookmarks-editor.c:786
+#: ../lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:786
 msgid "All files"
 msgstr "Fitxategi denak"
 
-#: ../embed/mozilla/FilePicker.cpp:152 ../lib/ephy-file-chooser.c:421
+#: ../embed/mozilla/FilePicker.cpp:152 ../lib/ephy-file-chooser.c:423
 msgid "Web pages"
 msgstr "Web orriak"
 
@@ -1796,7 +1807,7 @@ msgstr "Web orriak"
 msgid "Text files"
 msgstr "Testu-fitxategiak"
 
-#: ../embed/mozilla/FilePicker.cpp:165 ../lib/ephy-file-chooser.c:429
+#: ../embed/mozilla/FilePicker.cpp:165 ../lib/ephy-file-chooser.c:431
 msgid "Images"
 msgstr "Irudiak"
 
@@ -1929,7 +1940,8 @@ msgstr ""
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:430
 #, c-format
-msgid "You should only accept the security information if you trust “%s” and “%s”."
+msgid ""
+"You should only accept the security information if you trust “%s” and “%s”."
 msgstr ""
 "%s eta %s fidagarriak iruditzen bazaizkizu soilik onartu segurtasun-"
 "informazioa."
@@ -2100,14 +2112,16 @@ msgstr "Ezin izan da ziurtagiri hau egiaztatu, fidagarria ez delako."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1290
 msgid "Could not verify this certificate because the issuer is not trusted."
-msgstr "Ezin izan da ziurtagiri hau egiaztatu, jaulkitzailea ez delako fidagarria."
+msgstr ""
+"Ezin izan da ziurtagiri hau egiaztatu, jaulkitzailea ez delako fidagarria."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1293
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Ezin izan da ziurtagiri hau egiaztatu, jaulkitzailea ezezaguna delako."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:1296
-msgid "Could not verify this certificate because the CA certificate is invalid."
+msgid ""
+"Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "Ezin izan da ziurtagiri hau egiaztatu, Ziurtagiri-emailearen ziurtagiria ez "
 "delako baliozkoa"
@@ -2271,7 +2285,7 @@ msgstr ""
 "arazorik gabe lor dezake."
 
 #. translators: this is the directory name to store auxilary files when saving html files
-#: ../embed/mozilla/MozDownload.cpp:681
+#: ../embed/mozilla/MozDownload.cpp:689
 #, c-format
 msgid "%s Files"
 msgstr "%s fitxategiak"
@@ -2298,6 +2312,18 @@ msgid ""
 msgstr ""
 "GConf errorea:\n"
 "  %s"
+
+#: ../lib/egg/eel-app-launch-context.c:403
+#, c-format
+msgid "Opening %s"
+msgstr "%s irekitzen"
+
+#: ../lib/egg/eel-app-launch-context.c:406
+#, c-format
+msgid "Opening %d Item"
+msgid_plural "Opening %d Items"
+msgstr[0] "Elementu %d irekitzen"
+msgstr[1] "%d elementu irekitzen"
 
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
@@ -2339,21 +2365,21 @@ msgstr "Kendu hautatutako tresna-barra"
 msgid "Separator"
 msgstr "Bereizlea"
 
-#: ../lib/ephy-file-chooser.c:410
+#: ../lib/ephy-file-chooser.c:412
 msgid "All supported types"
 msgstr "Onartutako mota guztiak"
 
-#: ../lib/ephy-file-helpers.c:300
+#: ../lib/ephy-file-helpers.c:296
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Ezin izan da aldi bateko %s direktorioa sortu."
 
-#: ../lib/ephy-file-helpers.c:373
+#: ../lib/ephy-file-helpers.c:369
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "%s fitxategia badago lehendik ere. Kendu ezazu paretik."
 
-#: ../lib/ephy-file-helpers.c:384
+#: ../lib/ephy-file-helpers.c:380
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Huts egin du %s direktorioa sortzean."
@@ -2380,7 +2406,8 @@ msgstr "Ezin da lehendik dagoen '%s' fitxategia gainidatzi"
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
-msgstr "Izen bereko fitxategia badago lehendik ere eta ez duzu baimenik gainidazteko."
+msgstr ""
+"Izen bereko fitxategia badago lehendik ere eta ez duzu baimenik gainidazteko."
 
 #: ../lib/ephy-gui.c:337
 msgid "Cannot Overwrite File"
@@ -2591,7 +2618,7 @@ msgstr "Laster-marka"
 
 #: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1822
-#: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1462
+#: ../src/bookmarks/ephy-topic-action.c:454 ../src/ephy-window.c:1462
 msgid "Bookmarks"
 msgstr "Laster-markak"
 
@@ -2712,7 +2739,7 @@ msgstr ""
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:508
+#: ../src/bookmarks/ephy-bookmark-action.c:509
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "'%s' script-a exekutatzen du"
@@ -2765,60 +2792,60 @@ msgstr "Erakut_si gai guztiak"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: ../src/bookmarks/ephy-bookmarks.c:105
+#: ../src/bookmarks/ephy-bookmarks.c:111
 msgid "Search the web"
 msgstr "Bilatu web-ean"
 
-#: ../src/bookmarks/ephy-bookmarks.c:105
+#: ../src/bookmarks/ephy-bookmarks.c:111
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../src/bookmarks/ephy-bookmarks.c:110
+#: ../src/bookmarks/ephy-bookmarks.c:116
 msgid "Entertainment"
 msgstr "Denbora-pasa"
 
-#: ../src/bookmarks/ephy-bookmarks.c:111
+#: ../src/bookmarks/ephy-bookmarks.c:117
 msgid "News"
 msgstr "Berriak"
 
-#: ../src/bookmarks/ephy-bookmarks.c:112
+#: ../src/bookmarks/ephy-bookmarks.c:118
 msgid "Shopping"
 msgstr "Erosketak"
 
-#: ../src/bookmarks/ephy-bookmarks.c:113
+#: ../src/bookmarks/ephy-bookmarks.c:119
 msgid "Sports"
 msgstr "Kirolak"
 
-#: ../src/bookmarks/ephy-bookmarks.c:114
+#: ../src/bookmarks/ephy-bookmarks.c:120
 msgid "Travel"
 msgstr "Bidaiak"
 
-#: ../src/bookmarks/ephy-bookmarks.c:115
+#: ../src/bookmarks/ephy-bookmarks.c:121
 msgid "Work"
 msgstr "Lanekoak"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:487
+#: ../src/bookmarks/ephy-bookmarks.c:493
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Eguneratu '%s' laster-marka?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:492
+#: ../src/bookmarks/ephy-bookmarks.c:498
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "Markatutako orria '%s'(e)ra eraman da."
 
-#: ../src/bookmarks/ephy-bookmarks.c:496
+#: ../src/bookmarks/ephy-bookmarks.c:502
 msgid "_Don't Update"
 msgstr "E_z eguneratu"
 
-#: ../src/bookmarks/ephy-bookmarks.c:498
+#: ../src/bookmarks/ephy-bookmarks.c:504
 msgid "_Update"
 msgstr "_Eguneratu"
 
-#: ../src/bookmarks/ephy-bookmarks.c:501
+#: ../src/bookmarks/ephy-bookmarks.c:507
 msgid "Update Bookmark?"
 msgstr "Eguneratu laster-marka?"
 
@@ -2826,7 +2853,7 @@ msgstr "Eguneratu laster-marka?"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1067
+#: ../src/bookmarks/ephy-bookmarks.c:1246
 msgid "bookmarks|All"
 msgstr "Guztiak"
 
@@ -2834,7 +2861,7 @@ msgstr "Guztiak"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1073
+#: ../src/bookmarks/ephy-bookmarks.c:1252
 msgid "bookmarks|Most Visited"
 msgstr "Bisitatuenak"
 
@@ -2843,7 +2870,7 @@ msgstr "Bisitatuenak"
 #. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1080
+#: ../src/bookmarks/ephy-bookmarks.c:1259
 msgid "bookmarks|Not Categorized"
 msgstr "Kategoriarik gabeak"
 
@@ -2852,7 +2879,7 @@ msgstr "Kategoriarik gabeak"
 #. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1088
+#: ../src/bookmarks/ephy-bookmarks.c:1267
 msgid "bookmarks|Nearby Sites"
 msgstr "Gertuko guneak"
 
@@ -2951,7 +2978,8 @@ msgstr "_Inportatu laster-markak..."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Import bookmarks from another browser or a bookmarks file"
-msgstr "Beste arakatzaile edo laster-marken fitxategi bateko laster-markak inportatu"
+msgstr ""
+"Beste arakatzaile edo laster-marken fitxategi bateko laster-markak inportatu"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:205
 msgid "_Export Bookmarks…"
@@ -3236,7 +3264,7 @@ msgstr "Gaia"
 msgid "Create topic “%s”"
 msgstr "Sortu '%s' gaia"
 
-#: ../src/ephy-encoding-dialog.c:342
+#: ../src/ephy-encoding-dialog.c:345
 msgid "Encodings"
 msgstr "Kodeketak"
 
@@ -3400,59 +3428,59 @@ msgstr "Guneak"
 msgid "Date"
 msgstr "Data"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:76
 msgid "Open a new tab in an existing browser window"
 msgstr "Ireki fitxa berria existitzen den arakatze-leihoan"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:78
 msgid "Open a new browser window"
 msgstr "Ireki arakatzaile-leiho berrian"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:80
 msgid "Launch the bookmarks editor"
 msgstr "Abiarazi laster-marken editorea"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:82
 msgid "Import bookmarks from the given file"
 msgstr "Inportatu laster-markak emandako fitxategitik"
 
-#: ../src/ephy-main.c:84 ../src/ephy-main.c:86
+#: ../src/ephy-main.c:82 ../src/ephy-main.c:84
 msgid "FILE"
 msgstr "FITXATEGIA"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:84
 msgid "Load the given session file"
 msgstr "Kargatu emandako saioaren fitxategia"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:86
 msgid "Add a bookmark"
 msgstr "Gehitu laster-marka"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:86
 msgid "URL"
 msgstr "URLa"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:88
 msgid "Start a private instance"
 msgstr "Hasi instantzia pribatua"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:90
 msgid "Profile directory to use in the private instance"
 msgstr "Profilen direktorioa instantzia pribatuan erabiltzeko"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:90
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:92
 msgid "URL …"
 msgstr "URLa ..."
 
-#: ../src/ephy-main.c:396
+#: ../src/ephy-main.c:407
 msgid "Could not start GNOME Web Browser"
 msgstr "Ezin izan da GNOMEko web arakatzailea abiarazi"
 
-#: ../src/ephy-main.c:399
+#: ../src/ephy-main.c:410
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -3461,30 +3489,30 @@ msgstr ""
 "Abioak huts egin du honako errorearengatik:\n"
 "%s"
 
-#: ../src/ephy-main.c:504 ../src/window-commands.c:847
+#: ../src/ephy-main.c:515 ../src/window-commands.c:865
 msgid "GNOME Web Browser"
 msgstr "GNOMEko web arakatzailea"
 
-#: ../src/ephy-main.c:505
+#: ../src/ephy-main.c:516
 msgid "GNOME Web Browser options"
 msgstr "GNOMEko web arakatzailearek aukerak"
 
-#: ../src/ephy-notebook.c:614
+#: ../src/ephy-notebook.c:620
 msgid "Close tab"
 msgstr "Itxi fitxa"
 
-#: ../src/ephy-session.c:161
+#: ../src/ephy-session.c:159
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "Deskargak abortatu egingo dira eta saioa segundo %dean amaituko da."
 msgstr[1] "Deskargak abortatu egingo dira eta saioa %d segundotan amaituko da."
 
-#: ../src/ephy-session.c:277
+#: ../src/ephy-session.c:275
 msgid "Abort pending downloads?"
 msgstr "Deskargatzea falta direnak abortatu?"
 
-#: ../src/ephy-session.c:281
+#: ../src/ephy-session.c:279
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
@@ -3492,19 +3520,19 @@ msgstr ""
 "Deskarga batzuk burutu gabe daude. Saioa amaitzen baduzu abortatu eta egingo "
 "dira."
 
-#: ../src/ephy-session.c:285
+#: ../src/ephy-session.c:283
 msgid "_Cancel Logout"
 msgstr "_Ezetsi saioa amaitzea"
 
-#: ../src/ephy-session.c:287
+#: ../src/ephy-session.c:285
 msgid "_Abort Downloads"
 msgstr "_Abortatu deskargak"
 
-#: ../src/ephy-session.c:615
+#: ../src/ephy-session.c:618
 msgid "Recover previous browser windows and tabs?"
 msgstr "Berreskuratu aurreko leihoak eta fitxak?"
 
-#: ../src/ephy-session.c:619
+#: ../src/ephy-session.c:622
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -3512,15 +3540,15 @@ msgstr ""
 "Badirudi Epiphany azken aldiz erabili zenean ustegabean kraskatu zela. "
 "Irekita zeuden leihoak eta fitxak berreskura ditzakezu."
 
-#: ../src/ephy-session.c:623
+#: ../src/ephy-session.c:626
 msgid "_Don't Recover"
 msgstr "_Ez berreskuratu"
 
-#: ../src/ephy-session.c:625
+#: ../src/ephy-session.c:628
 msgid "_Recover"
 msgstr "_Berreskuratu"
 
-#: ../src/ephy-session.c:627
+#: ../src/ephy-session.c:630
 msgid "Crash Recovery"
 msgstr "Kraskatze ondorengo berreskuratzea"
 
@@ -4118,11 +4146,11 @@ msgstr "Hala ere dokumentua ixten baduzu, informazio hori galdu egingo da."
 msgid "Close _Document"
 msgstr "Itxi _dokumentua"
 
-#: ../src/ephy-window.c:1452 ../src/window-commands.c:267
+#: ../src/ephy-window.c:1452 ../src/window-commands.c:280
 msgid "Open"
 msgstr "Ireki"
 
-#: ../src/ephy-window.c:1454 ../src/window-commands.c:293
+#: ../src/ephy-window.c:1454 ../src/window-commands.c:306
 msgid "Save As"
 msgstr "Gorde honela"
 
@@ -4172,47 +4200,47 @@ msgid_plural "%d hidden popup windows"
 msgstr[0] "Laster-leiho %d ezkutatuta"
 msgstr[1] "%d laster-leiho ezkutatuta"
 
-#: ../src/ephy-window.c:2010
+#: ../src/ephy-window.c:2004
 #, c-format
 msgid "Open image “%s”"
 msgstr "Ireki '%s' irudia"
 
-#: ../src/ephy-window.c:2015
+#: ../src/ephy-window.c:2009
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Erabili '%s' mahaigaineko atzeko plano gisa"
 
-#: ../src/ephy-window.c:2020
+#: ../src/ephy-window.c:2014
 #, c-format
 msgid "Save image “%s”"
 msgstr "Gorde '%s' irudia"
 
-#: ../src/ephy-window.c:2025
+#: ../src/ephy-window.c:2019
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopiatu '%s' irudiaren helbidea"
 
-#: ../src/ephy-window.c:2038
+#: ../src/ephy-window.c:2032
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Bidali mezua '%s' helbidera"
 
-#: ../src/ephy-window.c:2044
+#: ../src/ephy-window.c:2038
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopiatu '%s' helbide elektronikoa"
 
-#: ../src/ephy-window.c:2056
+#: ../src/ephy-window.c:2050
 #, c-format
 msgid "Save link “%s”"
 msgstr "Gorde '%s' esteka"
 
-#: ../src/ephy-window.c:2062
+#: ../src/ephy-window.c:2056
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Gehitu '%s' estekaren laster-marka"
 
-#: ../src/ephy-window.c:2068
+#: ../src/ephy-window.c:2062
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopiatu '%s' estekaren helbidea"
@@ -4315,15 +4343,15 @@ msgstr "Erabiltzaile-izena"
 msgid "User Password"
 msgstr "Erabiltzailearen pasahitza"
 
-#: ../src/popup-commands.c:260
+#: ../src/popup-commands.c:256
 msgid "Download Link"
 msgstr "Deskargatu esteka"
 
-#: ../src/popup-commands.c:268
+#: ../src/popup-commands.c:264
 msgid "Save Link As"
 msgstr "Gorde esteka honela"
 
-#: ../src/popup-commands.c:275
+#: ../src/popup-commands.c:271
 msgid "Save Image As"
 msgstr "Gorde irudia honela"
 
@@ -4367,7 +4395,7 @@ msgstr "Itxi"
 msgid "Close print preview"
 msgstr "Itxi inprimatzeko aurrebista"
 
-#: ../src/prefs-dialog.c:420
+#: ../src/prefs-dialog.c:418
 msgid "Default"
 msgstr "Lehenetsia"
 
@@ -4379,7 +4407,7 @@ msgstr "Lehenetsia"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:1001 ../src/prefs-dialog.c:1009
+#: ../src/prefs-dialog.c:996 ../src/prefs-dialog.c:1004
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -4389,23 +4417,23 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:1020
+#: ../src/prefs-dialog.c:1015
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "Erabiltzaileak definitua (%s)"
 
-#: ../src/prefs-dialog.c:1042
+#: ../src/prefs-dialog.c:1037
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Sistemaren hizkuntza (%s)"
 msgstr[1] "Sistemaren hizkuntzak (%s)"
 
-#: ../src/prefs-dialog.c:1434
+#: ../src/prefs-dialog.c:1429
 msgid "Select a Directory"
 msgstr "Hautatu direktorioa"
 
-#: ../src/window-commands.c:742
+#: ../src/window-commands.c:760
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4417,7 +4445,7 @@ msgstr ""
 "bertsioan, edo (nahiago baduzu) beste berriago batean, jasotako baldintzak "
 "betez gero."
 
-#: ../src/window-commands.c:746
+#: ../src/window-commands.c:764
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4429,7 +4457,7 @@ msgstr ""
 "MERKATURATZEKO edo HELBURU PARTIKULARRETARAKO ERABILTZEKO. Argibide gehiago "
 "nahi izanez gero, ikus GNU Lizentzia Publiko Orokorra."
 
-#: ../src/window-commands.c:750
+#: ../src/window-commands.c:768
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4439,20 +4467,20 @@ msgstr ""
 "zenuen; hala ez bada, idatzi hona: Free SoftwareFoundation, Inc., 51 "
 "Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: ../src/window-commands.c:798 ../src/window-commands.c:814
-#: ../src/window-commands.c:825
+#: ../src/window-commands.c:816 ../src/window-commands.c:832
+#: ../src/window-commands.c:843
 msgid "Contact us at:"
 msgstr "Kontaktatu gurekin:"
 
-#: ../src/window-commands.c:801
+#: ../src/window-commands.c:819
 msgid "Contributors:"
 msgstr "Laguntzaileak:"
 
-#: ../src/window-commands.c:804
+#: ../src/window-commands.c:822
 msgid "Past developers:"
 msgstr "Iraganeko garatzaileak:"
 
-#: ../src/window-commands.c:837
+#: ../src/window-commands.c:855
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4469,13 +4497,12 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:863
+#: ../src/window-commands.c:881
 msgid "translator-credits"
 msgstr ""
 "Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>"
 
-#: ../src/window-commands.c:866
+#: ../src/window-commands.c:884
 msgid "GNOME Web Browser Website"
 msgstr "GNOMEko web arakatzailearen gunea"
-
