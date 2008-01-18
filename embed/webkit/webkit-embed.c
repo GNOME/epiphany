@@ -314,7 +314,7 @@ impl_stop_load (EphyEmbed *embed)
 static gboolean
 impl_can_go_back (EphyEmbed *embed)
 {
-  return webkit_web_view_can_go_backward (WEBKIT_EMBED (embed)->priv->web_view);
+  return webkit_web_view_can_go_back (WEBKIT_EMBED (embed)->priv->web_view);
 }
 
 static gboolean
@@ -338,7 +338,7 @@ impl_get_go_up_list (EphyEmbed *embed)
 static void
 impl_go_back (EphyEmbed *embed)
 {
-  webkit_web_view_go_backward (WEBKIT_EMBED (embed)->priv->web_view);
+  webkit_web_view_go_back (WEBKIT_EMBED (embed)->priv->web_view);
 }
 
 static void
