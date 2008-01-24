@@ -603,7 +603,7 @@ ephy_file_launch_application (GAppInfo *app,
 	GAppLaunchContext *context;
 	GdkDisplay *display;
 	GdkScreen *screen;
-	
+
 	context = G_APP_LAUNCH_CONTEXT (eel_app_launch_context_new ());
 	if (widget)
 	{
@@ -709,7 +709,7 @@ ephy_file_browse_to (const char *parameter,
 	char *desktop_dir;
 	gboolean ret;
 
-	file = g_file_new_for_path (parameter);
+	file = g_file_new_for_uri (parameter);
 	desktop_dir = ephy_file_desktop_dir ();
 	desktop = g_file_new_for_path (desktop_dir);
 	
