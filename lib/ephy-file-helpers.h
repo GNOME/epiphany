@@ -92,7 +92,7 @@ gboolean    ephy_file_launch_handler	 (const char *mime_type,
 					  GFile *file,
 					  guint32 user_time);
 
-gboolean    ephy_file_browse_to		 (const char *parameter,
+gboolean    ephy_file_browse_to		 (GFile *file,
 					  guint32 user_time);
 
 void	   ephy_file_delete_directory	 (const char *path);

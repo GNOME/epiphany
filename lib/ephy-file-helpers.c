@@ -702,14 +702,13 @@ ephy_file_launch_handler (const char *mime_type,
 }
 
 gboolean
-ephy_file_browse_to (const char *parameter,
+ephy_file_browse_to (GFile *file,
 		     guint32 user_time)
 {
-	GFile *file, *parent, *desktop;
+	GFile *parent, *desktop;
 	char *desktop_dir;
 	gboolean ret;
 
-	file = g_file_new_for_uri (parameter);
 	desktop_dir = ephy_file_desktop_dir ();
 	desktop = g_file_new_for_path (desktop_dir);
 	
@@ -728,7 +727,6 @@ ephy_file_browse_to (const char *parameter,
 	}
 	
 	g_free (desktop_dir);
-	g_object_unref (file);
 
 	return ret;
 }

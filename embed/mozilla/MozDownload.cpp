@@ -404,8 +404,11 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 				rv = mDestination->GetSpec (aDest);
 				NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-				ephy_file_browse_to (aDest.get (), user_time);
+				GFile *dest;
+				dest = g_file_new_for_uri (aDest.get ());
+				ephy_file_browse_to (dest, user_time);
 
+				g_object_unref (dest);
 				g_strfreev (str);
 			}
 #endif /* HAVE_GECKO_1_9 */

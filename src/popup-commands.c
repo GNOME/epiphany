@@ -174,6 +174,7 @@ save_property_url_completed_cb (EphyEmbedPersist *persist)
 				EPHY_EMBED_PERSIST_ASK_DESTINATION))
 	{
 		const char *dest;
+		GFile *dest_file;
 		guint32 user_time;
 
 		user_time = ephy_embed_persist_get_user_time (persist);
@@ -181,9 +182,13 @@ save_property_url_completed_cb (EphyEmbedPersist *persist)
 
 		g_return_if_fail (dest != NULL);
 
+		dest_file = g_file_new_for_path (dest);
+		
+		g_return_if_fail (dest_file != NULL);
 		/* If save location is the desktop, nautilus will not open */
-		ephy_file_browse_to (dest, user_time);
-
+		ephy_file_browse_to (dest_file, user_time);
+		
+		g_object_unref (dest_file);
 	}
 }
 
