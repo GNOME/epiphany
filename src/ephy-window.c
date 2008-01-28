@@ -135,7 +135,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "FileSaveAs", GTK_STOCK_SAVE_AS, N_("Save _As…"), "<shift><control>S",
 	  N_("Save the current page"),
 	  G_CALLBACK (window_cmd_file_save_as) },
-	{ "FilePrintSetup", STOCK_PRINT_SETUP, N_("Print Set_up…"), NULL,
+	{ "FilePrintSetup", STOCK_PRINT_SETUP, N_("Page Set_up"), NULL,
 	  N_("Setup the page settings for printing"),
 	  G_CALLBACK (window_cmd_file_print_setup) },
 	{ "FilePrintPreview", GTK_STOCK_PRINT_PREVIEW, N_("Print Pre_view"),"<control><shift>P",
