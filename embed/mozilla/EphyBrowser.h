@@ -187,7 +187,7 @@ public:
 
 	nsresult LoadURI(const char *aURI, 
 			 PRUint32 aLoadFlags = nsIWebNavigation::LOAD_FLAGS_NONE, 
-			 nsIURI *aURI = nsnull);
+			 nsIURI *aReferrer = nsnull);
 
         EphyEmbedDocumentType GetDocumentType ();
 

@@ -56,7 +56,7 @@ GType	                   mozilla_x509_cert_get_type         (void);
 
 MozillaX509Cert           *mozilla_x509_cert_new              (nsIX509Cert *aMozCert);
 
-nsresult                   mozilla_x509_cert_get_mozilla_cert (MozillaX509Cert *cert, nsIX509Cert **cert);
+nsresult                   mozilla_x509_cert_get_mozilla_cert (MozillaX509Cert *cert, nsIX509Cert **aCert);
 
 G_END_DECLS
 
