@@ -217,7 +217,10 @@ mozilla_embed_grab_focus (GtkWidget *widget)
 {
 	GtkWidget *child;
 
-	child = gtk_bin_get_child (GTK_BIN (widget));
+	/* What we want to focus here is the MozContainer inside the
+	 * GtkMozEmbed, because the GtkMozEmbed itself does not gain focus.
+	 */
+	child = gtk_bin_get_child (GTK_BIN (MOZILLA_EMBED (widget)->priv->moz_embed));
 
 	if (child && GTK_WIDGET_REALIZED (child))
 		gtk_widget_grab_focus (child);
