@@ -27,7 +27,7 @@
 #include "ephy-string.h"
 #include "ephy-embed-event.h"
 
-#include <webkit.h>
+#include <webkit/webkit.h>
 #include <string.h>
 
 #include "webkit-embed.h"

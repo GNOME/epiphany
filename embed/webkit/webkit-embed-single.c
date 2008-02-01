@@ -22,7 +22,7 @@
 
 #include <glib/gi18n.h>
 
-#include <webkit.h>
+#include <webkit/webkit.h>
 
 #include "webkit-embed-single.h"
 #include "ephy-embed-single.h"
