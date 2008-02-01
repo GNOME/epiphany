@@ -405,7 +405,7 @@ AM_CONDITIONAL([WITH_XULRUNNER_ENGINE],[test "$with_engine" = "xulrunner"])
 
 if test "$with_engine" = "webkit" ; then
    AC_DEFINE([WITH_WEBKIT_ENGINE],[1],[Define if you wish to enable webkit engine])
-   PKG_CHECK_MODULES([WEBKIT], WebKitGtk)
+   PKG_CHECK_MODULES([WEBKIT], [webkit-1.0])
    AC_SUBST([WEBKIT_CFLAGS])
    AC_SUBST([WEBKIT_LIBS])
 fi # with_engine = webkit
