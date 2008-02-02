@@ -400,6 +400,21 @@ entry_key_press_after_cb (GtkEntry *entry,
 
 		return TRUE;
 	}
+	
+	if ((event->keyval == GDK_Down || event->keyval == GDK_KP_Down)
+	    && state == 0)
+	{
+		/* If we are focusing the entry, with the cursor at the end of it
+		 * we emit the changed signal, so that the completion popup appears */
+		const char *string;
+		
+		string = gtk_entry_get_text (entry);
+		if (gtk_editable_get_position (GTK_EDITABLE (entry)) == strlen (string))
+		{
+			g_signal_emit_by_name (entry, "changed", 0);
+			return TRUE;
+		}
+	}
 
 	return FALSE;
 }
