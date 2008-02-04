@@ -395,32 +395,36 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 	if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_BACK)
 	{
 		EphyHistoryItem *back_item;
-		char *url;
-		
+
 		back_item = ephy_embed_get_previous_history_item (embed);
 		if (back_item == NULL) return;
 
-		url = ephy_history_item_get_url (back_item);
-		ephy_link_open (EPHY_LINK (action),
-				url,
-				NULL,
-				ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
-		g_free (url);
+		if (ephy_gui_is_middle_click ())
+		{
+			embed = ephy_link_open (EPHY_LINK (action),
+						"about:blank",
+						NULL,
+						EPHY_LINK_NEW_TAB);
+		}
+		ephy_embed_go_to_history_item (embed, back_item);
+		g_object_unref (back_item);
 	}
 	else if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_FORWARD)
 	{
 		EphyHistoryItem *forward_item;
-		char *url;
 		
 		forward_item = ephy_embed_get_next_history_item (embed);
 		if (forward_item == NULL) return;
 
-		url = ephy_history_item_get_url (forward_item);		
-		ephy_link_open (EPHY_LINK (action),
-				url,
-				NULL,
-				ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
-		g_free (url);
+		if (ephy_gui_is_middle_click ())
+		{
+			embed = ephy_link_open (EPHY_LINK (action),
+						"about:blank",
+						NULL,
+						EPHY_LINK_NEW_TAB);
+		}
+		ephy_embed_go_to_history_item (embed, forward_item);
+		g_object_unref (forward_item);
 	}
 	else if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_UP)
 	{
