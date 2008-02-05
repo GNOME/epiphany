@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  *  Copyright © 2007 Xan Lopez
+ *  Copyright © 2008 Jan Alonzo
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,8 +32,10 @@
 #include <string.h>
 
 #include "webkit-embed.h"
+#include "webkit-history-item.h"
 #include "ephy-embed.h"
 #include "ephy-base-embed.h"
+#include "ephy-history-item.h"
 
 static void     webkit_embed_class_init (WebKitEmbedClass *klass);
 static void     webkit_embed_init               (WebKitEmbed *gs);
@@ -42,13 +45,22 @@ static void     ephy_embed_iface_init           (EphyEmbedIface *iface);
 
 #define WEBKIT_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED, WebKitEmbedPrivate))
 
+#define WEBKIT_BACK_FORWARD_LIMIT 100
+
 typedef enum
-  {
+{
     WEBKIT_EMBED_LOAD_STARTED,
     WEBKIT_EMBED_LOAD_REDIRECTING,
     WEBKIT_EMBED_LOAD_LOADING,
     WEBKIT_EMBED_LOAD_STOPPED
-  } WebKitEmbedLoadState;
+} WebKitEmbedLoadState;
+
+
+typedef enum
+{
+  WEBKIT_HISTORY_BACKWARD,
+  WEBKIT_HISTORY_FORWARD
+} WebKitHistoryType;
 
 struct WebKitEmbedPrivate
 {
@@ -56,6 +68,50 @@ struct WebKitEmbedPrivate
   WebKitEmbedLoadState load_state;
   char *loading_uri;
 };
+
+static GList*
+webkit_construct_history_list (WebKitEmbed *embed, WebKitHistoryType hist_type) 
+{
+  WebKitWebBackForwardList *web_back_forward_list;
+  GList *webkit_items, *iter, *ephy_items = NULL;
+
+  g_return_val_if_fail (WEBKIT_IS_EMBED (embed), NULL);
+
+  web_back_forward_list = webkit_web_view_get_back_forward_list (embed->priv->web_view);
+
+  if (hist_type == WEBKIT_HISTORY_FORWARD)
+    webkit_items = webkit_web_back_forward_list_get_forward_list_with_limit (web_back_forward_list,
+                                                                             WEBKIT_BACK_FORWARD_LIMIT);
+  else
+    webkit_items = webkit_web_back_forward_list_get_back_list_with_limit (web_back_forward_list,
+                                                                          WEBKIT_BACK_FORWARD_LIMIT);
+  for (iter = webkit_items; iter != NULL; iter = iter->next) {
+    EphyHistoryItem *item = webkit_history_item_new (WEBKIT_WEB_HISTORY_ITEM (iter->data));
+    ephy_items = g_list_prepend (ephy_items, item);
+  }
+
+  g_list_free (webkit_items);
+
+  return ephy_items;
+}
+
+static EphyHistoryItem*
+webkit_construct_history_item (WebKitEmbed *embed, WebKitHistoryType hist_type)
+{
+  WebKitWebBackForwardList *web_back_forward_list;
+  WebKitWebHistoryItem *history_item;
+
+  g_return_val_if_fail (WEBKIT_IS_EMBED (embed), NULL);
+
+  web_back_forward_list = webkit_web_view_get_back_forward_list (embed->priv->web_view);
+
+  if (hist_type == WEBKIT_HISTORY_FORWARD)
+    history_item = webkit_web_back_forward_list_get_forward_item (web_back_forward_list);
+  else
+    history_item = webkit_web_back_forward_list_get_back_item (web_back_forward_list);
+
+  return webkit_history_item_new (history_item);
+}
 
 static void
 impl_manager_do_command (EphyCommandManager *manager,
@@ -476,30 +532,38 @@ impl_has_modified_forms (EphyEmbed *embed)
 static GList*
 impl_get_backward_history (EphyEmbed *embed)
 {
-  return NULL;
+  return webkit_construct_history_list (WEBKIT_EMBED (embed),
+                                        WEBKIT_HISTORY_BACKWARD);
 }
 
 static GList*
-impl_get_forward_history    (EphyEmbed *embed)
+impl_get_forward_history (EphyEmbed *embed)
 {
-  return NULL;
+  return webkit_construct_history_list (WEBKIT_EMBED (embed),
+                                        WEBKIT_HISTORY_FORWARD);
+
 }
 
 static EphyHistoryItem*
-impl_get_next_history_item  (EphyEmbed *embed)
+impl_get_next_history_item (EphyEmbed *embed)
 {
-  return NULL;
+  return webkit_construct_history_item (WEBKIT_EMBED (embed), WEBKIT_HISTORY_FORWARD);
 }
+
 
 static EphyHistoryItem*
 impl_get_previous_history_item  (EphyEmbed *embed)
 {
-  return NULL;
+  return webkit_construct_history_item (WEBKIT_EMBED (embed), WEBKIT_HISTORY_BACKWARD);
 }
 
 static void
-impl_go_to_history_item   (EphyEmbed *embed, EphyHistoryItem *history_item)
+impl_go_to_history_item (EphyEmbed *embed, EphyHistoryItem *history_item)
 {
+  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
+  WebKitWebHistoryItem *item = WEBKIT_HISTORY_ITEM (history_item)->data;
+  
+  webkit_web_view_go_to_back_forward_item (wembed->priv->web_view, item);
 }
 
 static void
