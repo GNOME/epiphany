@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: epiphany.th\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-02-02 16:29+0700\n"
-"PO-Revision-Date: 2008-02-02 17:02+0700\n"
+"POT-Creation-Date: 2008-02-09 12:44+0700\n"
+"PO-Revision-Date: 2008-02-09 12:45+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -39,7 +39,7 @@ msgid "Epiphany Web Browser"
 msgstr "เว็บเบราว์เซอร์ Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:537
+#: data/epiphany.desktop.in.in.h:3 src/ephy-main.c:537
 #: src/ephy-main.c:632
 msgid "Web Browser"
 msgstr "เว็บเบราว์เซอร์"
@@ -365,7 +365,7 @@ msgid ""
 msgstr ""
 "ภาษาที่เลือกแบบอักษรให้อยู่ในขณะนี้ ค่าที่ใช้ได้คือ \"ar\" (อารบิก), \"x-baltic"
 "\" (ภาษาบอลติก), \"x-central-euro\" (ภาษายุโรปตอนกลาง), \"x-cyrillic"
-"\" (ภาษาที่เขียนด้วยอักขระไซริลลิก), \"el\" (กรีก), \"he\" (ฮิบรู), \"ja\" (ญี่ปุ่น), \"ko"
+"\" (ภาษาที่เขียนด้วยอักขระซีริลลิก), \"el\" (กรีก), \"he\" (ฮิบรู), \"ja\" (ญี่ปุ่น), \"ko"
 "\" (เกาหลี), \"zh-CN\" (จีนประยุกต์), \"th\" (ไทย), \"zh-TW\" (จีนดั้งเดิม), \"tr"
 "\" (ตุรกี), \"x-unicode\" (ภาษาอื่นๆ), \"x-western\" (ภาษาที่เขียนด้วยอักขระละติน), "
 "\"x-tamil\" (ทมิฬ) และ \"x-devanagari\" (เทวนาครี)"
@@ -583,7 +583,7 @@ msgid "Cookies"
 msgstr "คุกกี้"
 
 #. The name of the default downloads folder
-#: data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:111
+#: data/glade/epiphany.glade.h:4 lib/ephy-file-helpers.c:111
 msgid "Downloads"
 msgstr "ดาวน์โหลด"
 
@@ -599,7 +599,7 @@ msgstr "ข้อมูลส่วนตัว"
 msgid "Text Encoding"
 msgstr "รหัสอักขระ"
 
-#: data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:362
+#: data/glade/epiphany.glade.h:8 src/ephy-encoding-menu.c:362
 msgid "Use the encoding specified by the document"
 msgstr "ใช้รหัสอักขระที่ระบุในเอกสาร"
 
@@ -626,7 +626,7 @@ msgstr "ใ_บรับรอง:"
 #: data/glade/form-signing-dialog.glade.h:4
 #: embed/mozilla/EphyPromptService.cpp:808
 #: embed/mozilla/EphyPromptService.cpp:835
-#: lib/ephy-password-dialog.c:429 ../lib/ephy-password-dialog.c:445
+#: lib/ephy-password-dialog.c:429 lib/ephy-password-dialog.c:445
 msgid "_Password:"
 msgstr "_รหัสผ่าน:"
 
@@ -696,7 +696,7 @@ msgstr "เลือก_ภาษา:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: data/glade/prefs-dialog.glade.h:16
-#: lib/widgets/ephy-location-entry.c:556 ../src/ephy-history-window.c:271
+#: lib/widgets/ephy-location-entry.c:556 src/ephy-history-window.c:271
 msgid "Cl_ear"
 msgstr "_ล้าง"
 
@@ -724,7 +724,7 @@ msgstr "แบบอักษรและรูปลักษณ์"
 msgid "For l_anguage:"
 msgstr "สำหรับ_ภาษา:"
 
-#: data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1308
+#: data/glade/prefs-dialog.glade.h:24 src/prefs-dialog.c:1308
 msgid "Language"
 msgstr "ภาษา"
 
@@ -907,8 +907,8 @@ msgstr ""
 "%s จาก %s"
 
 #. impossible time or broken locale settings
-#: embed/downloader-view.c:515 ../embed/downloader-view.c:520
-#: embed/ephy-download.c:129 ../lib/ephy-time-helpers.c:279
+#: embed/downloader-view.c:515 embed/downloader-view.c:520
+#: embed/ephy-download.c:129 lib/ephy-time-helpers.c:279
 #: src/ephy-window.c:1663
 msgid "Unknown"
 msgstr "ไม่ทราบ"
@@ -930,7 +930,7 @@ msgstr "เริ่มดาวน์โหลด"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: embed/downloader-view.c:729 ../embed/downloader-view.c:742
+#: embed/downloader-view.c:729 embed/downloader-view.c:742
 msgid "download status|Unknown"
 msgstr "ไม่ทราบ"
 
@@ -956,7 +956,7 @@ msgstr "เหลืออีก"
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: embed/ephy-base-embed.c:49 ../embed/ephy-embed-utils.c:107
+#: embed/ephy-base-embed.c:49 embed/ephy-embed-utils.c:107
 msgid "Blank page"
 msgstr "หน้าว่าง"
 
@@ -976,7 +976,7 @@ msgid "Waiting for authorization from “%s”…"
 msgstr "กำลังรอการอนุญาตจาก “%s”…"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-base-embed.c:1080 ../embed/ephy-base-embed.c:1255
+#: embed/ephy-base-embed.c:1080 embed/ephy-base-embed.c:1255
 #, c-format
 msgid "Loading “%s”…"
 msgstr "กำลังเรียก “%s”…"
@@ -1080,31 +1080,31 @@ msgstr "จีนดั้งเดิม (_EUC-TW)"
 
 #: embed/ephy-encodings.c:82
 msgid "Cyrillic (_IBM-855)"
-msgstr "ไซริลลิก (_IBM-855)"
+msgstr "ซีริลลิก (_IBM-855)"
 
 #: embed/ephy-encodings.c:83
 msgid "Cyrillic (I_SO-8859-5)"
-msgstr "ไซริลลิก (I_SO-8859-5)"
+msgstr "ซีริลลิก (I_SO-8859-5)"
 
 #: embed/ephy-encodings.c:84
 msgid "Cyrillic (IS_O-IR-111)"
-msgstr "ไซริลลิก (IS_O-IR-111)"
+msgstr "ซีริลลิก (IS_O-IR-111)"
 
 #: embed/ephy-encodings.c:85
 msgid "Cyrillic (_KOI8-R)"
-msgstr "ไซริลลิก (_KOI8-R)"
+msgstr "ซีริลลิก (_KOI8-R)"
 
 #: embed/ephy-encodings.c:86
 msgid "Cyrillic (_MacCyrillic)"
-msgstr "ไซริลลิก (_MacCyrillic)"
+msgstr "ซีริลลิก (_MacCyrillic)"
 
 #: embed/ephy-encodings.c:87
 msgid "Cyrillic (_Windows-1251)"
-msgstr "ไซริลลิก (_Windows-1251)"
+msgstr "ซีริลลิก (_Windows-1251)"
 
 #: embed/ephy-encodings.c:88
 msgid "Cyrillic/_Russian (IBM-866)"
-msgstr "ไซริลลิก/_รัสเซีย (IBM-866)"
+msgstr "ซีริลลิก/_รัสเซีย (IBM-866)"
 
 #: embed/ephy-encodings.c:89
 msgid "Greek (_ISO-8859-7)"
@@ -1244,11 +1244,11 @@ msgstr "ยูนิโค้ด (UTF-_8)"
 
 #: embed/ephy-encodings.c:123
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
-msgstr "ไซริลลิก/ยูเครน (_KOI8-U)"
+msgstr "ซีริลลิก/ยูเครน (_KOI8-U)"
 
 #: embed/ephy-encodings.c:124
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
-msgstr "ไซริลลิก/ยูเครน (Mac_Ukrainian)"
+msgstr "ซีริลลิก/ยูเครน (Mac_Ukrainian)"
 
 #: embed/ephy-encodings.c:125
 msgid "Vietnamese (_TCVN)"
@@ -1736,7 +1736,7 @@ msgstr "ในกรุอินเทอร์เน็ต"
 
 #: embed/mozilla/EphyHeaderSniffer.cpp:367
 #: src/bookmarks/ephy-bookmarks.c:1502
-#: src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1353
+#: src/bookmarks/ephy-bookmarks-import.c:271 src/ephy-session.c:1353
 msgid "Untitled"
 msgstr "ไม่มีชื่อ"
 
@@ -1753,12 +1753,12 @@ msgstr "ไ_ม่บันทึก"
 msgid "_Username:"
 msgstr "_ชื่อผู้ใช้:"
 
-#: embed/mozilla/FilePicker.cpp:147 ../embed/mozilla/FilePicker.cpp:413
-#: lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:786
+#: embed/mozilla/FilePicker.cpp:147 embed/mozilla/FilePicker.cpp:413
+#: lib/ephy-file-chooser.c:439 src/bookmarks/ephy-bookmarks-editor.c:786
 msgid "All files"
 msgstr "ทุกชนิด"
 
-#: embed/mozilla/FilePicker.cpp:152 ../lib/ephy-file-chooser.c:423
+#: embed/mozilla/FilePicker.cpp:152 lib/ephy-file-chooser.c:423
 msgid "Web pages"
 msgstr "หน้าเว็บ"
 
@@ -1766,7 +1766,7 @@ msgstr "หน้าเว็บ"
 msgid "Text files"
 msgstr "แฟ้มข้อความ"
 
-#: embed/mozilla/FilePicker.cpp:165 ../lib/ephy-file-chooser.c:431
+#: embed/mozilla/FilePicker.cpp:165 lib/ephy-file-chooser.c:431
 msgid "Images"
 msgstr "รูปภาพ"
 
@@ -2381,7 +2381,7 @@ msgstr "ยุโรปตอนกลาง"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:49
 msgid "select fonts for|Cyrillic"
-msgstr "ไซริลลิก"
+msgstr "ซีริลลิก"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -2547,7 +2547,7 @@ msgstr "เก็บรหัสผ่านเข้าใน_พวงกุ�
 msgid "Popup Windows"
 msgstr "หน้าต่างป็อบอัพ"
 
-#: lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1327
+#: lib/ephy-stock-icons.c:53 src/ephy-history-window.c:1327
 msgid "History"
 msgstr "ประวัติ"
 
@@ -2557,13 +2557,13 @@ msgstr "ประวัติ"
 msgid "Bookmark"
 msgstr "ที่คั่นหน้า"
 
-#: lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
+#: lib/ephy-stock-icons.c:55 src/bookmarks/ephy-bookmarks-editor.c:917
 #: src/bookmarks/ephy-bookmarks-editor.c:1822
-#: src/bookmarks/ephy-topic-action.c:454 ../src/ephy-window.c:1462
+#: src/bookmarks/ephy-topic-action.c:454 src/ephy-window.c:1462
 msgid "Bookmarks"
 msgstr "ที่คั่นหน้า"
 
-#: lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:284
+#: lib/ephy-stock-icons.c:56 src/ephy-toolbar.c:284
 msgid "Address Entry"
 msgstr "ที่อยู่"
 
@@ -2834,22 +2834,22 @@ msgstr "ลบออกจากหมวดนี้"
 
 #. Toplevel
 #: src/bookmarks/ephy-bookmarks-editor.c:181
-#: src/ephy-history-window.c:171 ../src/ephy-window.c:118
+#: src/ephy-history-window.c:171 src/ephy-window.c:118
 msgid "_File"
 msgstr "แ_ฟ้ม"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:182
-#: src/ephy-history-window.c:172 ../src/ephy-window.c:119
+#: src/ephy-history-window.c:172 src/ephy-window.c:119
 msgid "_Edit"
 msgstr "แ_ก้ไข"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:183
-#: src/ephy-history-window.c:173 ../src/ephy-window.c:120
+#: src/ephy-history-window.c:173 src/ephy-window.c:120
 msgid "_View"
 msgstr "_มุมมอง"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:184
-#: src/ephy-history-window.c:174 ../src/ephy-window.c:125
+#: src/ephy-history-window.c:174 src/ephy-window.c:125
 msgid "_Help"
 msgstr "_วิธีใช้"
 
@@ -2866,7 +2866,7 @@ msgstr "เพิ่มหมวดใหม่"
 #. File Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:191
 #: src/bookmarks/ephy-bookmarks-editor.c:1400
-#: src/bookmarks/ephy-bookmarks-ui.c:324 ../src/ephy-history-window.c:178
+#: src/bookmarks/ephy-bookmarks-ui.c:324 src/ephy-history-window.c:178
 #: src/ephy-history-window.c:757
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2879,7 +2879,7 @@ msgstr "เปิดที่คั่นหน้าในหน้าต่า
 #. FIXME ngettext
 #: src/bookmarks/ephy-bookmarks-editor.c:194
 #: src/bookmarks/ephy-bookmarks-editor.c:1403
-#: src/bookmarks/ephy-bookmarks-ui.c:312 ../src/ephy-history-window.c:181
+#: src/bookmarks/ephy-bookmarks-ui.c:312 src/ephy-history-window.c:181
 #: src/ephy-history-window.c:760
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
@@ -2924,7 +2924,7 @@ msgid "Export bookmarks to a file"
 msgstr "ส่งออกที่คั่นหน้าไปยังแฟ้ม"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:208
-#: src/ephy-history-window.c:187 ../src/ephy-window.c:150
+#: src/ephy-history-window.c:187 src/ephy-window.c:150
 msgid "_Close"
 msgstr "ปิ_ด"
 
@@ -2934,29 +2934,29 @@ msgstr "ปิดหน้าต่างที่คั่นหน้า"
 
 #. Edit Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:213
-#: src/ephy-history-window.c:192 ../src/ephy-window.c:162
+#: src/ephy-history-window.c:192 src/ephy-window.c:162
 msgid "Cu_t"
 msgstr "_ตัด"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:214
-#: src/ephy-history-window.c:193 ../src/ephy-window.c:163
+#: src/ephy-history-window.c:193 src/ephy-window.c:163
 msgid "Cut the selection"
 msgstr "ตัดส่วนที่เลือก"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:216
 #: src/bookmarks/ephy-bookmarks-editor.c:1413
-#: src/ephy-history-window.c:195 ../src/ephy-history-window.c:770
+#: src/ephy-history-window.c:195 src/ephy-history-window.c:770
 #: src/ephy-window.c:165
 msgid "_Copy"
 msgstr "_คัดลอก"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:217
-#: src/ephy-history-window.c:196 ../src/ephy-window.c:166
+#: src/ephy-history-window.c:196 src/ephy-window.c:166
 msgid "Copy the selection"
 msgstr "คัดลอกส่วนที่เลือก"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:219
-#: src/ephy-history-window.c:198 ../src/ephy-window.c:168
+#: src/ephy-history-window.c:198 src/ephy-window.c:168
 msgid "_Paste"
 msgstr "_แปะ"
 
@@ -2975,7 +2975,7 @@ msgid "Delete the selected bookmark or topic"
 msgstr "ลบที่คั่นหน้า"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:225
-#: src/ephy-history-window.c:204 ../src/ephy-window.c:174
+#: src/ephy-history-window.c:204 src/ephy-window.c:174
 msgid "Select _All"
 msgstr "เลือกทั้งห_มด"
 
@@ -2986,7 +2986,7 @@ msgstr "เลือกที่คั่นหน้าหรือข้อค
 #. Help Menu
 #. Help menu
 #: src/bookmarks/ephy-bookmarks-editor.c:230
-#: src/ephy-history-window.c:212 ../src/ephy-window.c:265
+#: src/ephy-history-window.c:212 src/ephy-window.c:265
 msgid "_Contents"
 msgstr "เนื้อ_หา"
 
@@ -2995,12 +2995,12 @@ msgid "Display bookmarks help"
 msgstr "แสดงวิธีใช้ที่คั่นหน้า"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:233
-#: src/ephy-history-window.c:215 ../src/ephy-window.c:268
+#: src/ephy-history-window.c:215 src/ephy-window.c:268
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:234
-#: src/ephy-history-window.c:216 ../src/ephy-window.c:269
+#: src/ephy-history-window.c:216 src/ephy-window.c:269
 msgid "Display credits for the web browser creators"
 msgstr "แสดงชื่อผู้จัดทำเบราว์เซอร์"
 
@@ -3229,7 +3229,7 @@ msgstr "หา:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: src/ephy-find-toolbar.c:365 ../src/ephy-find-toolbar.c:487
+#: src/ephy-find-toolbar.c:365 src/ephy-find-toolbar.c:487
 msgid "_Case sensitive"
 msgstr "ตัวพิมพ์ใหญ่เ_ล็กตรงกัน"
 
@@ -3250,11 +3250,11 @@ msgid "Find next occurrence of the search string"
 msgstr "หาข้อความเดิมต่อไป"
 
 #. exit button
-#: src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:592
+#: src/ephy-fullscreen-popup.c:271 src/ephy-toolbar.c:592
 msgid "Leave Fullscreen"
 msgstr "เลิกแสดงผลเต็มจอ"
 
-#: src/ephy-go-action.c:71 ../src/ephy-toolbar.c:314
+#: src/ephy-go-action.c:71 src/ephy-toolbar.c:314
 msgid "Go"
 msgstr "ไป"
 
@@ -3341,7 +3341,7 @@ msgid "Today"
 msgstr "วันนี้"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: src/ephy-history-window.c:1138 ../src/ephy-history-window.c:1141
+#: src/ephy-history-window.c:1138 src/ephy-history-window.c:1141
 #: src/ephy-history-window.c:1145
 #, c-format
 msgid "Last %d day"
@@ -3372,7 +3372,7 @@ msgstr "เรียกตัวแก้ไขที่คั่นหน้า
 msgid "Import bookmarks from the given file"
 msgstr "นำเข้าที่คั่นหน้าจากแฟ้ม"
 
-#: src/ephy-main.c:82 ../src/ephy-main.c:84
+#: src/ephy-main.c:82 src/ephy-main.c:84
 msgid "FILE"
 msgstr "FILE"
 
@@ -3417,7 +3417,7 @@ msgstr ""
 "ไม่สามารถเริ่มการทำงานได้ เนื่องจากข้อผิดพลาดต่อไปนี้:\n"
 "%s"
 
-#: src/ephy-main.c:515 ../src/window-commands.c:865
+#: src/ephy-main.c:515 src/window-commands.c:865
 msgid "GNOME Web Browser"
 msgstr "เว็บเบราว์เซอร์ของ GNOME"
 
@@ -3786,7 +3786,7 @@ msgstr "แ_ก้ไขแถบเครื่องมือ…"
 msgid "Customize toolbars"
 msgstr "แก้ไขแถบเครื่องมือ"
 
-#: src/ephy-window.c:203 ../src/ephy-window.c:206
+#: src/ephy-window.c:203 src/ephy-window.c:206
 msgid "_Stop"
 msgstr "_หยุด"
 
@@ -3855,7 +3855,7 @@ msgstr "แสดงข้อมูลระบบรักษาความป
 msgid "_Add Bookmark…"
 msgstr "เ_พิ่มที่คั่นหน้า…"
 
-#: src/ephy-window.c:233 ../src/ephy-window.c:304
+#: src/ephy-window.c:233 src/ephy-window.c:304
 msgid "Add a bookmark for the current page"
 msgstr "เพิ่มหน้านี้ในที่คั่นหน้า"
 
@@ -4073,11 +4073,11 @@ msgstr "ถ้าคุณปิดเอกสาร คุณจะเสี�
 msgid "Close _Document"
 msgstr "ปิ_ดเอกสาร"
 
-#: src/ephy-window.c:1452 ../src/window-commands.c:280
+#: src/ephy-window.c:1452 src/window-commands.c:280
 msgid "Open"
 msgstr "เปิด"
 
-#: src/ephy-window.c:1454 ../src/window-commands.c:306
+#: src/ephy-window.c:1454 src/window-commands.c:306
 msgid "Save As"
 msgstr "บันทึกเป็น"
 
@@ -4315,7 +4315,7 @@ msgstr "ไปหน้าถัดไป"
 msgid "Close"
 msgstr "ปิด"
 
-#: src/ppview-toolbar.c:109 ../src/ppview-toolbar.c:253
+#: src/ppview-toolbar.c:109 src/ppview-toolbar.c:253
 msgid "Close print preview"
 msgstr "ปิดหน้าต่างตัวอย่างก่อนพิมพ์"
 
@@ -4331,7 +4331,7 @@ msgstr "ค่าปริยาย"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: src/prefs-dialog.c:996 ../src/prefs-dialog.c:1004
+#: src/prefs-dialog.c:996 src/prefs-dialog.c:1004
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -4390,7 +4390,7 @@ msgstr ""
 "ถ้าคุณไม่ได้รับ กรุณาติดต่อไปที่ Free Software Foundation, Inc., \n"
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: src/window-commands.c:816 ../src/window-commands.c:832
+#: src/window-commands.c:816 src/window-commands.c:832
 #: src/window-commands.c:843
 msgid "Contact us at:"
 msgstr "ติดต่อเราได้ที่:"
