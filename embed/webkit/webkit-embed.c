@@ -38,10 +38,8 @@
 #include "ephy-history-item.h"
 
 static void     webkit_embed_class_init (WebKitEmbedClass *klass);
-static void     webkit_embed_init               (WebKitEmbed *gs);
-static void     webkit_embed_destroy            (GtkObject *object);
-static void     webkit_embed_finalize           (GObject *object);
-static void     ephy_embed_iface_init           (EphyEmbedIface *iface);
+static void     webkit_embed_init       (WebKitEmbed *gs);
+static void     ephy_embed_iface_init   (EphyEmbedIface *iface);
 
 #define WEBKIT_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED, WebKitEmbedPrivate))
 
@@ -85,9 +83,11 @@ webkit_construct_history_list (WebKitEmbed *embed, WebKitHistoryType hist_type)
   else
     webkit_items = webkit_web_back_forward_list_get_back_list_with_limit (web_back_forward_list,
                                                                           WEBKIT_BACK_FORWARD_LIMIT);
+
   for (iter = webkit_items; iter != NULL; iter = iter->next) {
     EphyHistoryItem *item = webkit_history_item_new (WEBKIT_WEB_HISTORY_ITEM (iter->data));
-    ephy_items = g_list_prepend (ephy_items, item);
+    if (item)
+      ephy_items = g_list_prepend (ephy_items, item);
   }
 
   g_list_free (webkit_items);
@@ -258,14 +258,21 @@ webkit_embed_hovering_over_link_cb (WebKitWebView *web_view,
 }
 
 static void
+webkit_embed_finalize (GObject *object)
+{
+  WebKitEmbed *wembed = WEBKIT_EMBED (object);
+
+  g_free (wembed->priv->loading_uri);
+
+  G_OBJECT_CLASS (webkit_embed_parent_class)->finalize (object);
+}
+
+static void
 webkit_embed_class_init (WebKitEmbedClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkObjectClass *gtk_object_class = GTK_OBJECT_CLASS (klass);
 
   object_class->finalize = webkit_embed_finalize;
-
-  gtk_object_class->destroy = webkit_embed_destroy;
 
   g_type_class_add_private (object_class, sizeof(WebKitEmbedPrivate));
 }
@@ -303,22 +310,6 @@ webkit_embed_init (WebKitEmbed *embed)
                     G_CALLBACK (webkit_embed_load_progress_changed_cb), embed);
   g_signal_connect (G_OBJECT (web_view), "hovering-over-link",
                     G_CALLBACK (webkit_embed_hovering_over_link_cb), embed);
-}
-
-static void
-webkit_embed_destroy (GtkObject *object)
-{
-  GTK_OBJECT_CLASS (webkit_embed_parent_class)->destroy (object);
-}
-
-static void
-webkit_embed_finalize (GObject *object)
-{
-  WebKitEmbed *wembed = WEBKIT_EMBED (object);
-
-  g_free (wembed->priv->loading_uri);
-
-  G_OBJECT_CLASS (webkit_embed_parent_class)->finalize (object);
 }
 
 static void
