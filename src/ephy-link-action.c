@@ -32,7 +32,9 @@
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenutoolbutton.h>
 
-static GObjectClass *parent_class;
+G_DEFINE_TYPE_WITH_CODE (EphyLinkAction, ephy_link_action, GTK_TYPE_ACTION,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
+                                                NULL))
 
 static gboolean
 proxy_button_press_event_cb (GtkButton *button,
@@ -126,7 +128,7 @@ ephy_link_action_connect_proxy (GtkAction *action, GtkWidget *proxy)
 				  action);
 	}
 
-	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
+	GTK_ACTION_CLASS (ephy_link_action_parent_class)->connect_proxy (action, proxy);
 }
 
 static void
@@ -147,7 +149,13 @@ ephy_link_action_disconnect_proxy (GtkAction *action, GtkWidget *proxy)
 						      action);
 	}
 
-	GTK_ACTION_CLASS (parent_class)->disconnect_proxy (action, proxy);
+	GTK_ACTION_CLASS (ephy_link_action_parent_class)->disconnect_proxy (action, proxy);
+}
+
+static void
+ephy_link_action_init (EphyLinkAction *action)
+{
+        /* Empty, needed for G_DEFINE_TYPE macro */
 }
 
 static void
@@ -155,85 +163,25 @@ ephy_link_action_class_init (EphyLinkActionClass *class)
 {
 	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 
-	parent_class = g_type_class_peek_parent (class);
-
 	action_class->connect_proxy = ephy_link_action_connect_proxy;
 	action_class->disconnect_proxy = ephy_link_action_disconnect_proxy;
 }
 
-GType
-ephy_link_action_get_type (void)
+static void
+ephy_link_action_group_class_init (EphyLinkActionGroupClass *klass)
 {
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyLinkActionClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_link_action_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyLinkAction),
-			0,   /* n_preallocs */
-			NULL /* instance_init */
-		};
-		const GInterfaceInfo link_info = 
-		{
-			NULL,
-			NULL,
-			NULL
-		};
-
-		type = g_type_register_static (GTK_TYPE_ACTION,
-					       "EphyLinkAction",
-					       &our_info, G_TYPE_FLAG_ABSTRACT);
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_LINK,
-					     &link_info);
-	}
-
-	return type;
+        /* Empty, needed for G_DEFINE_TYPE macro */
 }
 
-GType
-ephy_link_action_group_get_type (void)
+static void
+ephy_link_action_group_init (EphyLinkActionGroup *action_group)
 {
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyLinkActionGroupClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			NULL, /* class_init */
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyLinkActionGroup),
-			0,   /* n_preallocs */
-			NULL /* instance_init */
-		};
-		const GInterfaceInfo link_info = 
-		{
-			NULL,
-			NULL,
-			NULL
-		};
-
-		type = g_type_register_static (GTK_TYPE_ACTION_GROUP,
-					       "EphyLinkActionGroup",
-					       &our_info, 0);
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_LINK,
-					     &link_info);
-	}
-
-	return type;
+        /* Empty, needed for G_DEFINE_TYPE macro */
 }
+
+G_DEFINE_TYPE_WITH_CODE (EphyLinkActionGroup, ephy_link_action_group, GTK_TYPE_ACTION_GROUP,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
+                                                NULL))
 
 EphyLinkActionGroup *
 ephy_link_action_group_new (const char * name)

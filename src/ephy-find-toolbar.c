@@ -81,9 +81,7 @@ enum
 	LAST_SIGNAL
 };
 
-static guint signals[LAST_SIGNAL] = { 0 };
-
-static GObjectClass *parent_class = NULL;
+static guint signals[LAST_SIGNAL];
 
 /* private functions */
 
@@ -522,6 +520,8 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 			  G_CALLBACK (case_sensitive_toggled_cb), toolbar);
 }
 
+G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, GTK_TYPE_TOOLBAR)
+
 static void
 ephy_find_toolbar_dispose (GObject *object)
 {
@@ -546,7 +546,7 @@ ephy_find_toolbar_dispose (GObject *object)
 		priv->find_again_source_id = 0;
 	}
 
-	parent_class->dispose (object);
+	G_OBJECT_CLASS (ephy_find_toolbar_parent_class)->dispose (object);
 }
 
 static void
@@ -580,8 +580,6 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
         GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-        parent_class = g_type_class_peek_parent (klass);
 
 	object_class->dispose = ephy_find_toolbar_dispose;
 	object_class->get_property = ephy_find_toolbar_get_property;
@@ -633,34 +631,6 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 }
 
 /* public functions */
-
-GType
-ephy_find_toolbar_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyFindToolbarClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_find_toolbar_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyFindToolbar),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_find_toolbar_init
-		};
-	
-		type = g_type_register_static (GTK_TYPE_TOOLBAR,
-					       "EphyFindToolbar",
-					       &our_info, 0);
-	}
-
-	return type;
-}
 
 EphyFindToolbar *
 ephy_find_toolbar_new (EphyWindow *window)

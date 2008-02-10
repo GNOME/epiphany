@@ -77,7 +77,6 @@ enum
 static EphyDbus *ephy_dbus_instance;
 
 static guint signals[LAST_SIGNAL];
-static GObjectClass *parent_class;
 GQuark ephy_dbus_error_quark;
 
 /* Filter signals form session bus */
@@ -344,28 +343,7 @@ ephy_dbus_shutdown (EphyDbus *dbus)
 
 /* Class implementation */
 
-static void
-ephy_dbus_init (EphyDbus *dbus)
-{
-	dbus->priv = EPHY_DBUS_GET_PRIVATE (dbus);
-
-	LOG ("EphyDbus initialising");
-}
-
-static void
-ephy_dbus_finalize (GObject *object)
-{
-	EphyDbus *dbus = EPHY_DBUS (object);
-
-	/* Have to do this after the object's weak ref notifiers have
-	 * been called, see https://bugs.freedesktop.org/show_bug.cgi?id=5688
-	 */
-	ephy_dbus_shutdown (dbus);
-
-	LOG ("EphyDbus finalised");
-
-	parent_class->finalize (object);
-}
+G_DEFINE_TYPE (EphyDbus, ephy_dbus, G_TYPE_OBJECT)
 
 static void
 ephy_dbus_get_property (GObject *object,
@@ -395,11 +373,32 @@ ephy_dbus_set_property (GObject *object,
 }
 
 static void
+ephy_dbus_finalize (GObject *object)
+{
+	EphyDbus *dbus = EPHY_DBUS (object);
+
+	/* Have to do this after the object's weak ref notifiers have
+	 * been called, see https://bugs.freedesktop.org/show_bug.cgi?id=5688
+	 */
+	ephy_dbus_shutdown (dbus);
+
+	LOG ("EphyDbus finalised");
+
+	G_OBJECT_CLASS (ephy_dbus_parent_class)->finalize (object);
+}
+
+static void
+ephy_dbus_init (EphyDbus *dbus)
+{
+	dbus->priv = EPHY_DBUS_GET_PRIVATE (dbus);
+
+	LOG ("EphyDbus initialising");
+}
+
+static void
 ephy_dbus_class_init (EphyDbusClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->get_property = ephy_dbus_get_property;
 	object_class->set_property = ephy_dbus_set_property;
@@ -437,34 +436,6 @@ ephy_dbus_class_init (EphyDbusClass *klass)
 				       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof(EphyDbusPrivate));
-}
-
-GType
-ephy_dbus_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyDbusClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_dbus_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyDbus),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_dbus_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyDbus",
-					       &our_info, 0);
-	}
-
-	return type;
 }
 
 EphyDbus *

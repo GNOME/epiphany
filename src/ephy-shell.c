@@ -90,43 +90,13 @@ static void ephy_shell_dispose		(GObject *object);
 static void ephy_shell_finalize		(GObject *object);
 static GObject *impl_get_embed_single   (EphyEmbedShell *embed_shell);
 
-static GObjectClass *parent_class;
-
-GType
-ephy_shell_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyShellClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_shell_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyShell),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_shell_init
-		};
-
-		type = g_type_register_static (EPHY_TYPE_EMBED_SHELL,
-					       "EphyShell",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
 
 static void
 ephy_shell_class_init (EphyShellClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	EphyEmbedShellClass *embed_shell_class = EPHY_EMBED_SHELL_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->dispose = ephy_shell_dispose;
 	object_class->finalize = ephy_shell_finalize;
@@ -241,7 +211,7 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
 	EphyShellPrivate *priv = shell->priv;
 	GObject *embed_single;
 
-	embed_single = EPHY_EMBED_SHELL_CLASS (parent_class)->get_embed_single (embed_shell);
+	embed_single = EPHY_EMBED_SHELL_CLASS (ephy_shell_parent_class)->get_embed_single (embed_shell);
 
 	if (embed_single != NULL &&
 	    priv->embed_single_connected == FALSE)
@@ -370,13 +340,13 @@ ephy_shell_dispose (GObject *object)
 	}
 #endif /* ENABLE_NETWORK_MANAGER */
 
-	G_OBJECT_CLASS (parent_class)->dispose (object);
+	G_OBJECT_CLASS (ephy_shell_parent_class)->dispose (object);
 }
 
 static void
 ephy_shell_finalize (GObject *object)
 {
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_shell_parent_class)->finalize (object);
 
 	LOG ("Ephy shell finalised");
 }

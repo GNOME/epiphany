@@ -36,6 +36,8 @@
 
 #include <string.h>
 
+static void ephy_lockdown_iface_init (EphyExtensionIface *iface);
+
 /* Make sure these don't overlap with those in ephy-window.c and ephy-toolbar.c */
 enum
 {
@@ -62,8 +64,6 @@ struct _EphyLockdownPrivate
 	guint notifier_id[G_N_ELEMENTS (keys)];
 	GList *windows;
 };
-
-static GObjectClass *parent_class = NULL;
 
 static int
 find_name (GtkActionGroup *action_group,
@@ -255,6 +255,10 @@ ephy_lockdown_init (EphyLockdown *lockdown)
 	eel_gconf_monitor_add ("/desktop/gnome/lockdown");
 }
 
+G_DEFINE_TYPE_WITH_CODE (EphyLockdown, ephy_lockdown, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_EXTENSION,
+						ephy_lockdown_iface_init))
+
 static void
 ephy_lockdown_finalize (GObject *object)
 {
@@ -272,7 +276,7 @@ ephy_lockdown_finalize (GObject *object)
 		eel_gconf_notification_remove (priv->notifier_id[i]);
 	}
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_lockdown_parent_class)->finalize (object);
 }
 
 static void
@@ -313,46 +317,8 @@ ephy_lockdown_class_init (EphyLockdownClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
-
 	object_class->finalize = ephy_lockdown_finalize;
 
 	g_type_class_add_private (object_class, sizeof (EphyLockdownPrivate));
 }
 
-GType
-ephy_lockdown_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyLockdownClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_lockdown_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyLockdown),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_lockdown_init
-		};
-		const GInterfaceInfo extension_info =
-		{
-			(GInterfaceInitFunc) ephy_lockdown_iface_init,
-			NULL,
-			NULL
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyLockdown",
-					       &our_info, 0);
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_EXTENSION,
-					     &extension_info);
-	}
-
-	return type;
-}

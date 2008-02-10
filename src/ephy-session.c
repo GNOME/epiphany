@@ -98,46 +98,9 @@ enum
 	PROP_ACTIVE_WINDOW
 };
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_session_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphySessionClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_session_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphySession),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_session_init
-		};
-
-		const GInterfaceInfo extension_info =
-		{
-			(GInterfaceInitFunc) ephy_session_iface_init,
-			NULL,
-			NULL
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphySession",
-					       &our_info, 0);
-
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_EXTENSION,
-					     &extension_info);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE_WITH_CODE (EphySession, ephy_session, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_EXTENSION,
+						ephy_session_iface_init))
 
 /* Gnome session client */
 
@@ -926,7 +889,7 @@ ephy_session_dispose (GObject *object)
 	g_signal_handlers_disconnect_by_func
 		(client, G_CALLBACK (die_cb), session);
 
-	parent_class->dispose (object);
+	G_OBJECT_CLASS (ephy_session_parent_class)->dispose (object);
 }
 
 static void
@@ -940,7 +903,7 @@ ephy_session_finalize (GObject *object)
 	g_list_free (session->priv->windows);
 	g_list_free (session->priv->tool_windows);
 
-	parent_class->finalize (object);
+	G_OBJECT_CLASS (ephy_session_parent_class)->finalize (object);
 }
 
 static void
@@ -982,8 +945,6 @@ static void
 ephy_session_class_init (EphySessionClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
-
-	parent_class = g_type_class_peek_parent (class);
 
 	object_class->dispose = ephy_session_dispose;
 	object_class->finalize = ephy_session_finalize;

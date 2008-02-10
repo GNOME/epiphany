@@ -68,35 +68,7 @@ enum
 static void ephy_navigation_action_init       (EphyNavigationAction *action);
 static void ephy_navigation_action_class_init (EphyNavigationActionClass *class);
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_navigation_action_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo type_info =
-		{
-			sizeof (EphyNavigationActionClass),
-			(GBaseInitFunc) NULL,
-			(GBaseFinalizeFunc) NULL,
-			(GClassInitFunc) ephy_navigation_action_class_init,
-			(GClassFinalizeFunc) NULL,
-			NULL,
-			sizeof (EphyNavigationAction),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_navigation_action_init,
-		};
-
-		type = g_type_register_static (EPHY_TYPE_LINK_ACTION,
-					       "EphyNavigationAction",
-					       &type_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyNavigationAction, ephy_navigation_action, EPHY_TYPE_LINK_ACTION)
 
 #define MAX_LABEL_LENGTH 48
 
@@ -379,7 +351,7 @@ connect_proxy (GtkAction *gaction,
 				  G_CALLBACK (menu_activated_cb), gaction);
 	}
 
-	GTK_ACTION_CLASS (parent_class)->connect_proxy (gaction, proxy);
+	GTK_ACTION_CLASS (ephy_navigation_action_parent_class)->connect_proxy (gaction, proxy);
 }
 
 static void
@@ -440,7 +412,7 @@ ephy_navigation_action_finalize (GObject *object)
 
 	g_free (action->priv->arrow_tooltip);
 
-	parent_class->finalize (object);
+	G_OBJECT_CLASS (ephy_navigation_action_parent_class)->finalize (object);
 }
 
 static void
@@ -508,8 +480,6 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 	object_class->finalize = ephy_navigation_action_finalize;
 	object_class->set_property = ephy_navigation_action_set_property;
 	object_class->get_property = ephy_navigation_action_get_property;
-
-	parent_class = g_type_class_peek_parent (class);
 
 	action_class->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
 	action_class->connect_proxy = connect_proxy;

@@ -35,8 +35,6 @@ struct _EphyPythonLoaderPrivate
 	gpointer dummy;
 };
 
-static GObjectClass *parent_class = NULL;
-
 static GObject *
 impl_get_object (EphyLoader *eloader,
 		 GKeyFile *keyfile)
@@ -80,6 +78,9 @@ ephy_python_loader_iface_init (EphyLoaderIface *iface)
 	iface->release_object = impl_release_object;
 }
 
+G_DEFINE_TYPE_WITH_CODE (EphyPythonLoader, ephy_python_loader, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_LOADER, ephy_python_loader_iface_init))
+
 static void
 ephy_python_loader_init (EphyPythonLoader *loader)
 {
@@ -96,7 +97,7 @@ ephy_python_loader_finalize (GObject *object)
 {
 	LOG ("EphyPythonLoader finalising");
 
-	parent_class->finalize (object);
+	G_OBJECT_CLASS (ephy_python_loader_parent_class)->finalize (object);
 
 	ephy_python_shutdown ();
 }
@@ -106,44 +107,8 @@ ephy_python_loader_class_init (EphyPythonLoaderClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class->finalize = ephy_python_loader_finalize;
 
 	g_type_class_add_private (object_class, sizeof (EphyPythonLoaderPrivate));
 }
 
-GType
-ephy_python_loader_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyPythonLoaderClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_python_loader_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyPythonLoader),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_python_loader_init
-		};
-		const GInterfaceInfo loader_info =
-		{
-			(GInterfaceInitFunc) ephy_python_loader_iface_init,
-			NULL,
-			NULL
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT, "EphyPythonLoader",
-					       &our_info, 0);
-
-		g_type_add_interface_static (type, EPHY_TYPE_LOADER, &loader_info);
-	}
-
-	return type;
-}

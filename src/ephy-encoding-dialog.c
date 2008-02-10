@@ -78,35 +78,7 @@ struct _EphyEncodingDialogPrivate
 static void	ephy_encoding_dialog_class_init		(EphyEncodingDialogClass *klass);
 static void	ephy_encoding_dialog_init		(EphyEncodingDialog *ge);
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_encoding_dialog_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyEncodingDialogClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_encoding_dialog_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyEncodingDialog),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_encoding_dialog_init
-		};
-
-		type = g_type_register_static (EPHY_TYPE_EMBED_DIALOG,
-					       "EphyEncodingDialog",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyEncodingDialog, ephy_encoding_dialog, EPHY_TYPE_EMBED_DIALOG)
 
 static void
 sync_encoding_against_embed (EphyEncodingDialog *dialog)
@@ -408,15 +380,13 @@ ephy_encoding_dialog_finalize (GObject *object)
 
 	g_object_unref (dialog->priv->filter);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_encoding_dialog_parent_class)->finalize (object);
 }
 
 static void
 ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_encoding_dialog_finalize;
 

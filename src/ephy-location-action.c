@@ -87,9 +87,9 @@ enum
 	LOCK_CLICKED,
 	LAST_SIGNAL
 };
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL];
 
-static GObjectClass *parent_class = NULL;
+G_DEFINE_TYPE (EphyLocationAction, ephy_location_action, EPHY_TYPE_LINK_ACTION)
 
 static const struct
 {
@@ -218,34 +218,6 @@ completion_func (GtkEntryCompletion *completion,
 	g_free (keywords);
 
 	return ret;
-}
-
-GType
-ephy_location_action_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo type_info =
-		{
-			sizeof (EphyLocationActionClass),
-			(GBaseInitFunc) NULL,
-			(GBaseFinalizeFunc) NULL,
-			(GClassInitFunc) ephy_location_action_class_init,
-			(GClassFinalizeFunc) NULL,
-			NULL,
-			sizeof (EphyLocationAction),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_location_action_init,
-		};
-
-		type = g_type_register_static (EPHY_TYPE_LINK_ACTION,
-					       "EphyLocationAction",
-					       &type_info, 0);
-	}
-
-	return type;
 }
 
 static void
@@ -552,13 +524,13 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 					 G_CALLBACK (get_title_cb), action, 0);
 	}
 
-	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
+	GTK_ACTION_CLASS (ephy_location_action_parent_class)->connect_proxy (action, proxy);
 }
 
 static void
 disconnect_proxy (GtkAction *action, GtkWidget *proxy)
 {
-	GTK_ACTION_CLASS (parent_class)->disconnect_proxy (action, proxy);
+	GTK_ACTION_CLASS (ephy_location_action_parent_class)->disconnect_proxy (action, proxy);
 
 	if (EPHY_IS_LOCATION_ENTRY (proxy))
 	{
@@ -663,8 +635,6 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
-
-	parent_class = g_type_class_peek_parent (class);
 
 	object_class->finalize = ephy_location_action_finalize;
 	object_class->get_property = ephy_location_action_get_property;
@@ -904,7 +874,7 @@ ephy_location_action_finalize (GObject *object)
 	g_free (priv->lock_stock_id);
 	g_free (priv->lock_tooltip);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_location_action_parent_class)->finalize (object);
 }
 
 const char *

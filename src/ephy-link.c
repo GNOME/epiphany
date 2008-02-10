@@ -34,7 +34,7 @@ enum
 	LAST_SIGNAL
 };
 
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL];
 
 static void
 ephy_link_base_init (gpointer g_class)

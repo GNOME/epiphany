@@ -164,8 +164,6 @@ enum
 #define TIME_LAST_TWO_DAYS_STRING "last_two_days"
 #define TIME_LAST_THREE_DAYS_STRING "last_three_days"
 
-static GObjectClass *parent_class = NULL;
-
 static const GtkActionEntry ephy_history_ui_entries [] = {
 	/* Toplevel */
 	{ "File", NULL, N_("_File") },
@@ -590,33 +588,7 @@ cmd_view_columns (GtkAction *action,
 	g_slist_free (svalues);
 }
 
-GType
-ephy_history_window_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyHistoryWindowClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_history_window_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyHistoryWindow),
-			0,
-			(GInstanceInitFunc) ephy_history_window_init
-		};
-
-		type = g_type_register_static (GTK_TYPE_WINDOW,
-					       "EphyHistoryWindow",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyHistoryWindow, ephy_history_window, GTK_TYPE_WINDOW)
 
 static void
 ephy_history_window_show (GtkWidget *widget)
@@ -625,7 +597,7 @@ ephy_history_window_show (GtkWidget *widget)
 
 	gtk_widget_grab_focus (window->priv->search_entry);
 
-	GTK_WIDGET_CLASS (parent_class)->show (widget);
+	GTK_WIDGET_CLASS (ephy_history_window_parent_class)->show (widget);
 }
 
 static void
@@ -633,8 +605,6 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_history_window_finalize;
 
@@ -674,7 +644,7 @@ ephy_history_window_finalize (GObject *object)
                          (gpointer *)window);
 	}
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_history_window_parent_class)->finalize (object);
 }
 
 static void
@@ -1649,5 +1619,5 @@ ephy_history_window_dispose (GObject *object)
 		save_date_filter (editor);
 	}
 
-	G_OBJECT_CLASS (parent_class)->dispose (object);
+	G_OBJECT_CLASS (ephy_history_window_parent_class)->dispose (object);
 }

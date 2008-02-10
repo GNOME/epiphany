@@ -129,50 +129,13 @@ enum
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-static GObjectClass *parent_class = NULL;
-
 static void ephy_extensions_manager_class_init	(EphyExtensionsManagerClass *klass);
 static void ephy_extensions_manager_iface_init	(EphyExtensionIface *iface);
 static void ephy_extensions_manager_init	(EphyExtensionsManager *manager);
 
-GType
-ephy_extensions_manager_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyExtensionsManagerClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_extensions_manager_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyExtensionsManager),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_extensions_manager_init
-		};
-
-		const GInterfaceInfo extension_info =
-		{
-			(GInterfaceInitFunc) ephy_extensions_manager_iface_init,
-			NULL,
-			NULL
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyExtensionsManager",
-					       &our_info, 0);
-
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_EXTENSION,
-					     &extension_info);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE_WITH_CODE (EphyExtensionsManager, ephy_extensions_manager, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_EXTENSION,
+						ephy_extensions_manager_iface_init))
 
 /**
  * ephy_extensions_manager_load:
@@ -1193,7 +1156,7 @@ ephy_extensions_manager_dispose (GObject *object)
 		priv->windows = NULL;
 	}
 
-	parent_class->dispose (object);
+	G_OBJECT_CLASS (ephy_extensions_manager_parent_class)->dispose (object);
 }
 
 static void
@@ -1299,8 +1262,6 @@ static void
 ephy_extensions_manager_class_init (EphyExtensionsManagerClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
-
-	parent_class = (GObjectClass *) g_type_class_peek_parent (class);
 
 	object_class->dispose = ephy_extensions_manager_dispose;
 

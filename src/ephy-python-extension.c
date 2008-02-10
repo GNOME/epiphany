@@ -35,6 +35,8 @@
 #include "ephy-file-helpers.h"
 #include "ephy-debug.h"
 
+static void ephy_python_extension_iface_init (EphyExtensionIface *iface);
+
 #define EPHY_PYTHON_EXTENSION_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_PYTHON_EXTENSION, EphyPythonExtensionPrivate))
 
 struct _EphyPythonExtensionPrivate
@@ -48,8 +50,6 @@ enum
 	PROP_0,
 	PROP_FILENAME
 };
-
-static GObjectClass *parent_class = NULL;
 
 static int
 set_python_search_path (const char *filename)
@@ -102,86 +102,6 @@ ephy_python_extension_init (EphyPythonExtension *extension)
 	LOG ("EphyPythonExtension initialising");
 
 	extension->priv = EPHY_PYTHON_EXTENSION_GET_PRIVATE (extension);
-}
-
-static GObject *
-ephy_python_extension_constructor (GType type,
-				   guint n_construct_properties,
-				   GObjectConstructParam *construct_params)
-{
-	GObject *object;
-	EphyPythonExtension *ext;
-	char *module_name;	/* filename minus optional ".py" */
-				/* Note: could equally be a directory */
-	PyObject *pModules, *pModule, *pReload;
-			  
-	int num_temp_paths;
-
-	object = parent_class->constructor (type, n_construct_properties,
-					    construct_params);
-
-	ext = EPHY_PYTHON_EXTENSION (object);
-
-	module_name = g_path_get_basename (ext->priv->filename);
-
-	num_temp_paths = set_python_search_path (ext->priv->filename);
-
-	pModules = PySys_GetObject ("modules");
-	g_assert (pModules != NULL);
-
-	pModule = PyDict_GetItemString (pModules, module_name);
-
-	if (pModule == NULL)
-	{
-		pModule = PyImport_ImportModule (module_name);
-
-		if (pModule == NULL)
-		{
-			PyErr_Print ();
-			PyErr_Clear ();
-			g_warning ("Could not initialize Python module '%s'",
-				   module_name);
-		}
-	}
-	else
-	{
-		pReload = PyImport_ReloadModule (pModule);
-
-		if (pReload == NULL)
-		{
-			PyErr_Print ();
-			PyErr_Clear ();
-			g_warning ("Could not reload Python module '%s'\n"
-				   "Falling back to previous version",
-				   module_name);
-		}
-		else
-		{
-			Py_DECREF (pReload);
-		}
-	}
-
-	unset_python_search_path (num_temp_paths);
-
-	ext->priv->module = pModule;
-
-	g_free (module_name);
-
-	return object;
-}
-
-static void
-ephy_python_extension_finalize (GObject *object)
-{
-	EphyPythonExtension *extension =
-			EPHY_PYTHON_EXTENSION (object);
-
-	LOG ("EphyPythonExtension finalizing");
-
-	g_free (extension->priv->filename);
-	Py_XDECREF (extension->priv->module);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
@@ -283,6 +203,91 @@ ephy_python_extension_iface_init (EphyExtensionIface *iface)
 	iface->detach_window = impl_detach_window;
 }
 
+G_DEFINE_TYPE_WITH_CODE (EphyPythonExtension, ephy_python_extension, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_EXTENSION,
+                                                ephy_python_extension_iface_init))
+
+static GObject *
+ephy_python_extension_constructor (GType type,
+				   guint n_construct_properties,
+				   GObjectConstructParam *construct_params)
+{
+	GObject *object;
+	EphyPythonExtension *ext;
+	char *module_name;	/* filename minus optional ".py" */
+				/* Note: could equally be a directory */
+	PyObject *pModules, *pModule, *pReload;
+			  
+	int num_temp_paths;
+
+	object = G_OBJECT_CLASS (ephy_python_extension_parent_class)->constructor (type,
+                                                                                   n_construct_properties,
+                                                                                   construct_params);
+
+	ext = EPHY_PYTHON_EXTENSION (object);
+
+	module_name = g_path_get_basename (ext->priv->filename);
+
+	num_temp_paths = set_python_search_path (ext->priv->filename);
+
+	pModules = PySys_GetObject ("modules");
+	g_assert (pModules != NULL);
+
+	pModule = PyDict_GetItemString (pModules, module_name);
+
+	if (pModule == NULL)
+	{
+		pModule = PyImport_ImportModule (module_name);
+
+		if (pModule == NULL)
+		{
+			PyErr_Print ();
+			PyErr_Clear ();
+			g_warning ("Could not initialize Python module '%s'",
+				   module_name);
+		}
+	}
+	else
+	{
+		pReload = PyImport_ReloadModule (pModule);
+
+		if (pReload == NULL)
+		{
+			PyErr_Print ();
+			PyErr_Clear ();
+			g_warning ("Could not reload Python module '%s'\n"
+				   "Falling back to previous version",
+				   module_name);
+		}
+		else
+		{
+			Py_DECREF (pReload);
+		}
+	}
+
+	unset_python_search_path (num_temp_paths);
+
+	ext->priv->module = pModule;
+
+	g_free (module_name);
+
+	return object;
+}
+
+static void
+ephy_python_extension_finalize (GObject *object)
+{
+	EphyPythonExtension *extension =
+			EPHY_PYTHON_EXTENSION (object);
+
+	LOG ("EphyPythonExtension finalizing");
+
+	g_free (extension->priv->filename);
+	Py_XDECREF (extension->priv->module);
+
+	G_OBJECT_CLASS (ephy_python_extension_parent_class)->finalize (object);
+}
+
 static void
 ephy_python_extension_get_property (GObject *object,
 				    guint prop_id,
@@ -316,8 +321,6 @@ ephy_python_extension_class_init (EphyPythonExtensionClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class->finalize = ephy_python_extension_finalize;
 	object_class->constructor = ephy_python_extension_constructor;
 	object_class->get_property = ephy_python_extension_get_property;
@@ -335,37 +338,3 @@ ephy_python_extension_class_init (EphyPythonExtensionClass *klass)
 	g_type_class_add_private (object_class, sizeof (EphyPythonExtensionPrivate));
 }
 
-GType
-ephy_python_extension_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyPythonExtensionClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_python_extension_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyPythonExtension),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_python_extension_init
-		};
-		const GInterfaceInfo extension_info =
-		{
-			(GInterfaceInitFunc) ephy_python_extension_iface_init,
-			NULL,
-			NULL
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT, "EphyPythonExtension",
-					       &our_info, 0);
-
-		g_type_add_interface_static (type, EPHY_TYPE_EXTENSION, &extension_info);
-	}
-
-	return type;
-}

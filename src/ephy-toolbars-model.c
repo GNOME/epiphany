@@ -46,34 +46,7 @@ struct _EphyToolbarsModelPrivate
 static void ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass);
 static void ephy_toolbars_model_init       (EphyToolbarsModel *model);
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_toolbars_model_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info = {
-		sizeof (EphyToolbarsModelClass),
-		NULL,			/* base_init */
-		NULL,			/* base_finalize */
-		(GClassInitFunc) ephy_toolbars_model_class_init,
-		NULL,
-		NULL,			/* class_data */
-		sizeof (EphyToolbarsModel),
-		0,			/* n_preallocs */
-		(GInstanceInitFunc) ephy_toolbars_model_init
-	};
-
-	type = g_type_register_static (EGG_TYPE_TOOLBARS_MODEL,
-				       "EphyToolbarsModel",
-				       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyToolbarsModel, ephy_toolbars_model, EGG_TYPE_TOOLBARS_MODEL)
 
 static gboolean
 save_changes_idle (EphyToolbarsModel *model)
@@ -282,7 +255,7 @@ ephy_toolbars_model_dispose (GObject *object)
 
 	save_changes_idle (model);
 
-	G_OBJECT_CLASS (parent_class)->dispose (object);
+	G_OBJECT_CLASS (ephy_toolbars_model_parent_class)->dispose (object);
 }
 
 static void
@@ -303,15 +276,13 @@ ephy_toolbars_model_finalize (GObject *object)
 
 	g_free (priv->xml_file);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_toolbars_model_parent_class)->finalize (object);
 }
 
 static void
 ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->dispose = ephy_toolbars_model_dispose;
 	object_class->finalize = ephy_toolbars_model_finalize;

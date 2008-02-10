@@ -40,14 +40,14 @@ typedef struct
 	EphyLinkFlags flags;
 } ClipboardCtx;
 
+G_DEFINE_TYPE (EphyHomeAction, ephy_home_action, EPHY_TYPE_LINK_ACTION)
+
 static const GtkTargetEntry url_drag_types [] = 
 {
 	{ EPHY_DND_URI_LIST_TYPE,   0, 0 },
 	{ EPHY_DND_URL_TYPE,        0, 1 }
 };
 
-static GObjectClass *parent_class = NULL;
-	
 static void
 clipboard_text_received_cb (GtkClipboard *clipboard,
 			    const char *text,
@@ -236,7 +236,7 @@ connect_proxy (GtkAction *action,
 {      
 	gchar *action_name;
 	
-	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
+	GTK_ACTION_CLASS (ephy_home_action_parent_class)->connect_proxy (action, proxy);
 	
 	 g_object_get (action, "name", &action_name, NULL);
 
@@ -259,7 +259,7 @@ disconnect_proxy (GtkAction *action,
 	g_signal_handlers_disconnect_by_func
 		(proxy, G_CALLBACK (gtk_action_activate), action);
 
-	GTK_ACTION_CLASS (parent_class)->disconnect_proxy (action, proxy);
+	GTK_ACTION_CLASS (ephy_home_action_parent_class)->disconnect_proxy (action, proxy);
 }
 
 static void
@@ -267,37 +267,13 @@ ephy_home_action_class_init (EphyHomeActionClass *class)
 {
 	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 	
-	parent_class = g_type_class_peek_parent (class);
-
 	action_class->activate = ephy_home_action_activate;
 	action_class->connect_proxy = connect_proxy;
 	action_class->disconnect_proxy = disconnect_proxy;
 }
 
-GType
-ephy_home_action_get_type (void)
+static void
+ephy_home_action_init (EphyHomeAction *action)
 {
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo type_info =
-		{
-			sizeof (EphyHomeActionClass),
-			(GBaseInitFunc) NULL,
-			(GBaseFinalizeFunc) NULL,
-			(GClassInitFunc) ephy_home_action_class_init,
-			(GClassFinalizeFunc) NULL,
-			NULL,
-			sizeof (EphyHomeAction),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) NULL,
-		};
-
-		type = g_type_register_static (EPHY_TYPE_LINK_ACTION,
-					       "EphyHomeAction",
-					       &type_info, 0);
-	}
-
-	return type;
+        /* Empty, needed for G_DEFINE_TYPE macro */
 }

@@ -64,35 +64,7 @@ enum
 	PROP_WINDOW
 };
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_encoding_menu_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyEncodingMenuClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_encoding_menu_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyEncodingMenu),
-			0,
-			(GInstanceInitFunc) ephy_encoding_menu_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyEncodingMenu",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyEncodingMenu, ephy_encoding_menu, G_TYPE_OBJECT)
 
 static void
 ephy_encoding_menu_init (EphyEncodingMenu *menu)
@@ -459,15 +431,13 @@ ephy_encoding_menu_finalize (GObject *object)
 		g_object_unref (menu->priv->dialog);
 	}
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_encoding_menu_parent_class)->finalize (object);
 }
 
 static void
 ephy_encoding_menu_class_init (EphyEncodingMenuClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_encoding_menu_finalize;
 	object_class->set_property = ephy_encoding_menu_set_property;

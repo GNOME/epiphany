@@ -155,42 +155,12 @@ static void passwords_changed_cb 		(EphyPasswordManager *manager,
 						 PdmDialog *dialog);
 
 
-static GObjectClass *parent_class = NULL;
-
-GType 
-pdm_dialog_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (PdmDialogClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) pdm_dialog_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (PdmDialog),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) pdm_dialog_init
-		};
-
-		type = g_type_register_static (EPHY_TYPE_DIALOG,
-					       "PdmDialog",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (PdmDialog, pdm_dialog, EPHY_TYPE_DIALOG)
 
 static void
 pdm_dialog_class_init (PdmDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = pdm_dialog_finalize;
 
@@ -1553,7 +1523,7 @@ pdm_dialog_finalize (GObject *object)
 	g_free (dialog->priv->passwords);
 	g_free (dialog->priv->cookies);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (pdm_dialog_parent_class)->finalize (object);
 }
 
 void

@@ -56,7 +56,7 @@ enum
 	PROP_NETWORK_STATUS
 };
 
-static GObjectClass *parent_class;
+G_DEFINE_TYPE (EphyNetMonitor, ephy_net_monitor, G_TYPE_OBJECT)
 
 static void
 ephy_net_monitor_set_net_status (EphyNetMonitor *monitor,
@@ -331,7 +331,7 @@ ephy_net_monitor_dispose (GObject *object)
 		priv->notify_id = 0;
 	}
 
-	parent_class->dispose (object);
+	G_OBJECT_CLASS (ephy_net_monitor_parent_class)->dispose (object);
 }
 
 static void
@@ -355,8 +355,6 @@ ephy_net_monitor_class_init (EphyNetMonitorClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class->dispose = ephy_net_monitor_dispose;
 	object_class->get_property = ephy_net_monitor_get_property;
 
@@ -378,34 +376,6 @@ ephy_net_monitor_class_init (EphyNetMonitorClass *klass)
 }
 
 /* public API */
-
-GType
-ephy_net_monitor_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyShellClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_net_monitor_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyNetMonitor),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_net_monitor_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyNetMonitor",
-					       &our_info, 0);
-	}
-
-	return type;
-}
 
 EphyNetMonitor *
 ephy_net_monitor_new (void)

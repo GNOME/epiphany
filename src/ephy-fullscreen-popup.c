@@ -65,9 +65,9 @@ enum
 	LAST_SIGNAL
 };
 
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL];
 
-static GObjectClass *parent_class = NULL;
+G_DEFINE_TYPE (EphyFullscreenPopup, ephy_fullscreen_popup, GTK_TYPE_WINDOW)
 
 static void
 exit_button_clicked_cb (GtkWidget *button,
@@ -227,8 +227,9 @@ ephy_fullscreen_popup_constructor (GType type,
 	GtkWindow *window;
 	GtkWidget *hbox, *frame_hbox, *icon;
 
-	object = parent_class->constructor (type, n_construct_properties,
-					    construct_params);
+	object = G_OBJECT_CLASS (ephy_fullscreen_popup_parent_class)->constructor (type,
+                                                                                   n_construct_properties,
+                                                                                   construct_params);
 
 	window = GTK_WINDOW (object);
 	popup = EPHY_FULLSCREEN_POPUP (window);
@@ -296,7 +297,7 @@ ephy_fullscreen_popup_finalize (GObject *object)
 	g_signal_handlers_disconnect_matched (priv->window, G_SIGNAL_MATCH_DATA,
 					      0, 0, NULL, NULL, popup);
 
-	parent_class->finalize (object);
+	G_OBJECT_CLASS (ephy_fullscreen_popup_parent_class)->finalize (object);
 }
 
 static void
@@ -330,7 +331,7 @@ ephy_fullscreen_popup_show (GtkWidget *widget)
 {
 	EphyFullscreenPopup *popup = EPHY_FULLSCREEN_POPUP (widget);
 
-	GTK_WIDGET_CLASS (parent_class)->show (widget);
+	GTK_WIDGET_CLASS (ephy_fullscreen_popup_parent_class)->show (widget);
 
 	ephy_fullscreen_popup_update_spinner (popup);
 }
@@ -340,7 +341,7 @@ ephy_fullscreen_popup_hide (GtkWidget *widget)
 {
 	EphyFullscreenPopup *popup = EPHY_FULLSCREEN_POPUP (widget);
 
-	GTK_WIDGET_CLASS (parent_class)->hide (widget);
+	GTK_WIDGET_CLASS (ephy_fullscreen_popup_parent_class)->hide (widget);
 
 	ephy_fullscreen_popup_update_spinner (popup);
 }
@@ -351,7 +352,7 @@ ephy_fullscreen_popup_size_request (GtkWidget *widget,
 {
 	EphyFullscreenPopup *popup = EPHY_FULLSCREEN_POPUP (widget);
 
-	GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
+	GTK_WIDGET_CLASS (ephy_fullscreen_popup_parent_class)->size_request (widget, requisition);
 
 	if (GTK_WIDGET_REALIZED (widget))
 	{
@@ -364,7 +365,7 @@ ephy_fullscreen_popup_realize (GtkWidget *widget)
 {
 	EphyFullscreenPopup *popup = EPHY_FULLSCREEN_POPUP (widget);
 
-	GTK_WIDGET_CLASS (parent_class)->realize (widget);
+	GTK_WIDGET_CLASS (ephy_fullscreen_popup_parent_class)->realize (widget);
 
 	ephy_fullscreen_popup_update_position (popup);
 }
@@ -374,8 +375,6 @@ ephy_fullscreen_popup_class_init (EphyFullscreenPopupClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->constructor = ephy_fullscreen_popup_constructor;
 	object_class->finalize = ephy_fullscreen_popup_finalize;
@@ -418,34 +417,6 @@ ephy_fullscreen_popup_class_init (EphyFullscreenPopupClass *klass)
 							      G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (EphyFullscreenPopupPrivate));
-}
-
-GType
-ephy_fullscreen_popup_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyFullscreenPopupClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_fullscreen_popup_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyFullscreenPopup),
-			0,
-			(GInstanceInitFunc) ephy_fullscreen_popup_init
-		};
-
-		type = g_type_register_static (GTK_TYPE_WINDOW,
-					       "EphyFullscreenPopup",
-					       &our_info, 0);
-	}
-
-	return type;
 }
 
 GtkWidget *

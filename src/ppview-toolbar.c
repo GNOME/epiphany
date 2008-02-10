@@ -54,8 +54,6 @@ enum
 	PROP_WINDOW
 };
 
-static GObjectClass *parent_class = NULL;
-
 #define EPHY_PPVIEW_TOOLBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_PPVIEW_TOOLBAR, PPViewToolbarPrivate))
 
 struct PPViewToolbarPrivate
@@ -121,40 +119,12 @@ static const char ui_info[] =
 "</toolbar>"
 "</ui>\n";
 
-GType
-ppview_toolbar_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (PPViewToolbarClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ppview_toolbar_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (PPViewToolbar),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ppview_toolbar_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "PPViewToolbar",
-					       &our_info, 0);
-        }
-
-	return type;
-}
+G_DEFINE_TYPE (PPViewToolbar, ppview_toolbar, G_TYPE_OBJECT)
 
 static void
 ppview_toolbar_class_init (PPViewToolbarClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-        parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = ppview_toolbar_finalize;
 
@@ -286,7 +256,7 @@ ppview_toolbar_finalize (GObject *object)
 					    t->priv->action_group);
 	g_object_unref (t->priv->action_group);
 
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+        G_OBJECT_CLASS (ppview_toolbar_parent_class)->finalize (object);
 }
 
 PPViewToolbar *

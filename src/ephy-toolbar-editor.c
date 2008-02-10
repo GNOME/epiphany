@@ -93,7 +93,7 @@ enum
 	PROP_WINDOW
 };
 
-static GObjectClass *parent_class = NULL;
+G_DEFINE_TYPE (EphyToolbarEditor, ephy_toolbar_editor, GTK_TYPE_DIALOG)
 
 static gboolean
 row_is_separator (GtkTreeModel *model,
@@ -180,8 +180,9 @@ ephy_toolbar_editor_constructor (GType type,
 	char *pref;
 	int i;
 
-	object = parent_class->constructor (type, n_construct_properties,
-					    construct_params);
+	object = G_OBJECT_CLASS (ephy_toolbar_editor_parent_class)->constructor (type,
+                                                                                 n_construct_properties,
+                                                                                 construct_params);
 
 	dialog = GTK_WIDGET (object);
 	priv = EPHY_TOOLBAR_EDITOR (object)->priv;
@@ -305,7 +306,7 @@ ephy_toolbar_editor_finalize (GObject *object)
 
 	g_object_set_data (G_OBJECT (priv->window), DATA_KEY, NULL);
 
-	parent_class->finalize (object);
+	G_OBJECT_CLASS (ephy_toolbar_editor_parent_class)->finalize (object);
 }
 
 static void
@@ -340,8 +341,6 @@ ephy_toolbar_editor_class_init (EphyToolbarEditorClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkDialogClass *dialog_class = GTK_DIALOG_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class->constructor = ephy_toolbar_editor_constructor;
 	object_class->finalize = ephy_toolbar_editor_finalize;
 	object_class->get_property = ephy_toolbar_editor_get_property;
@@ -359,34 +358,6 @@ ephy_toolbar_editor_class_init (EphyToolbarEditorClass *klass)
 							      G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (EphyToolbarEditorPrivate));
-}
-
-GType
-ephy_toolbar_editor_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyToolbarEditorClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_toolbar_editor_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyToolbarEditor),
-			0,
-			(GInstanceInitFunc) ephy_toolbar_editor_init
-		};
-
-		type = g_type_register_static (GTK_TYPE_DIALOG,
-					       "EphyToolbarEditor",
-					       &our_info, 0);
-	}
-
-	return type;
 }
 
 GtkWidget *

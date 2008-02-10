@@ -50,53 +50,14 @@ enum
 	BOOKMARKS_GROUP
 };
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_completion_model_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyCompletionModelClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_completion_model_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyCompletionModel),
-			0,
-			(GInstanceInitFunc) ephy_completion_model_init
-		};
-
-		const GInterfaceInfo tree_model_info =
-		{
-			(GInterfaceInitFunc) ephy_completion_model_tree_model_init,
-			NULL,
-			NULL
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyCompletionModel",
-					       &our_info, 0);
-
-		g_type_add_interface_static (type,
-					     GTK_TYPE_TREE_MODEL,
-					     &tree_model_info);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE_WITH_CODE (EphyCompletionModel, ephy_completion_model, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
+						ephy_completion_model_tree_model_init))
 
 static void
 ephy_completion_model_class_init (EphyCompletionModelClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	g_type_class_add_private (object_class, sizeof (EphyCompletionModelPrivate));
 }

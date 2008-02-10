@@ -53,8 +53,6 @@ static void
 tree_view_selection_changed_cb (GtkTreeSelection *selection,
 				CertsManagerDialog *dialog);
 
-static GObjectClass *parent_class = NULL;
-
 #define EPHY_CERTIFICATE_MANAGER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_CERTS_MANAGER_DIALOG, CertsManagerDialogPrivate))
 
 struct _CertsManagerDialogPrivate
@@ -463,7 +461,7 @@ certs_manager_dialog_finalize (GObject *object)
 
 	/* TODO free certs in the treeviews */
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (certs_manager_dialog_parent_class)->finalize (object);
 
 	shell = ephy_embed_shell_get_default ();
 	g_object_unref (shell);
@@ -474,8 +472,6 @@ certs_manager_dialog_class_init (CertsManagerDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class->finalize = certs_manager_dialog_finalize;
 
 	g_type_class_add_private (object_class, sizeof (CertsManagerDialogPrivate));
@@ -483,34 +479,7 @@ certs_manager_dialog_class_init (CertsManagerDialogClass *klass)
 
 /* public functions */
 
-GType 
-certs_manager_dialog_get_type (void)
-{
-	static GType certs_manager_dialog_type = 0;
-
-	if (certs_manager_dialog_type == 0)
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (CertsManagerDialogClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) certs_manager_dialog_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (CertsManagerDialog),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) certs_manager_dialog_init
-		};
-
-		certs_manager_dialog_type = g_type_register_static (EPHY_TYPE_DIALOG,
-								    "CertsManagerDialog",
-								    &our_info, 0);
-	}
-
-	return certs_manager_dialog_type;
-
-}
+G_DEFINE_TYPE (CertsManagerDialog, certs_manager_dialog, EPHY_TYPE_DIALOG)
 
 EphyDialog *
 certs_manager_dialog_new (void)

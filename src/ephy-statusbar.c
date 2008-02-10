@@ -60,42 +60,13 @@ enum
 };
 
 static guint signals[LAST_SIGNAL];
-static GObjectClass *parent_class;
 
-GType
-ephy_statusbar_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyStatusbarClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_statusbar_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyStatusbar),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_statusbar_init
-		};
-
-		type = g_type_register_static (GTK_TYPE_STATUSBAR,
-					       "EphyStatusbar",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyStatusbar, ephy_statusbar, GTK_TYPE_STATUSBAR)
 
 static void
 ephy_statusbar_class_init (EphyStatusbarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	signals[LOCK_CLICKED] =
 		g_signal_new

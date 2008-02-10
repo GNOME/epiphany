@@ -105,9 +105,16 @@ enum
 	LAST_SIGNAL
 };
 
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL];
 
-static GObjectClass *parent_class = NULL;
+static void
+ephy_toolbar_iface_init (EphyLinkIface *iface)
+{
+}
+
+G_DEFINE_TYPE_WITH_CODE (EphyToolbar, ephy_toolbar, EGG_TYPE_EDITABLE_TOOLBAR,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
+                                                ephy_toolbar_iface_init))
 
 /* helper functions */
 
@@ -524,13 +531,13 @@ ephy_toolbar_set_zoom (EphyToolbar *toolbar,
 static void
 ephy_toolbar_realize (GtkWidget *widget)
 {
-	GTK_WIDGET_CLASS (parent_class)->realize (widget);
+	GTK_WIDGET_CLASS (ephy_toolbar_parent_class)->realize (widget);
 }
 
 static void
 ephy_toolbar_unrealize (GtkWidget *widget)
 {
-	GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
+	GTK_WIDGET_CLASS (ephy_toolbar_parent_class)->unrealize (widget);
 }
 
 static void
@@ -538,7 +545,7 @@ ephy_toolbar_show (GtkWidget *widget)
 {
 	EphyToolbar *toolbar = EPHY_TOOLBAR (widget);
 
-	GTK_WIDGET_CLASS (parent_class)->show (widget);
+	GTK_WIDGET_CLASS (ephy_toolbar_parent_class)->show (widget);
 
 	ephy_toolbar_update_spinner (toolbar);
 }
@@ -548,7 +555,7 @@ ephy_toolbar_hide (GtkWidget *widget)
 {
 	EphyToolbar *toolbar = EPHY_TOOLBAR (widget);
 
-	GTK_WIDGET_CLASS (parent_class)->hide (widget);
+	GTK_WIDGET_CLASS (ephy_toolbar_parent_class)->hide (widget);
 
 	ephy_toolbar_update_spinner (toolbar);
 }
@@ -571,8 +578,9 @@ ephy_toolbar_constructor (GType type,
 	EphyToolbarPrivate *priv;
 	GtkToolbar *gtoolbar;
 
-	object = parent_class->constructor (type, n_construct_properties,
-					    construct_params);
+	object = G_OBJECT_CLASS (ephy_toolbar_parent_class)->constructor (type,
+                                                                          n_construct_properties,
+                                                                          construct_params);
 
 	toolbar = EPHY_TOOLBAR (object);
 	priv = toolbar->priv;
@@ -614,7 +622,7 @@ ephy_toolbar_finalize (GObject *object)
 					     priv->set_focus_handler);
 	}
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_toolbar_parent_class)->finalize (object);
 }
 
 static void
@@ -648,8 +656,6 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->constructor = ephy_toolbar_constructor;
 	object_class->finalize = ephy_toolbar_finalize;
@@ -703,43 +709,6 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 							      G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof(EphyToolbarPrivate));
-}
-
-GType
-ephy_toolbar_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyToolbarClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_toolbar_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyToolbar),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_toolbar_init
-		};
-		const GInterfaceInfo link_info = 
-		{
-			NULL,
-			NULL,
-			NULL
-		};
-
-		type = g_type_register_static (EGG_TYPE_EDITABLE_TOOLBAR,
-					       "EphyToolbar",
-					       &our_info, 0);
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_LINK,
-					     &link_info);
-	}
-
-	return type;
 }
 
 EphyToolbar *
