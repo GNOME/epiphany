@@ -394,11 +394,6 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 
 	if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_BACK)
 	{
-		EphyHistoryItem *back_item;
-
-		back_item = ephy_embed_get_previous_history_item (embed);
-		if (back_item == NULL) return;
-
 		if (ephy_gui_is_middle_click ())
 		{
 			embed = ephy_link_open (EPHY_LINK (action),
@@ -406,16 +401,10 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 						NULL,
 						EPHY_LINK_NEW_TAB);
 		}
-		ephy_embed_go_to_history_item (embed, back_item);
-		g_object_unref (back_item);
+		ephy_embed_go_back (embed);
 	}
 	else if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_FORWARD)
 	{
-		EphyHistoryItem *forward_item;
-		
-		forward_item = ephy_embed_get_next_history_item (embed);
-		if (forward_item == NULL) return;
-
 		if (ephy_gui_is_middle_click ())
 		{
 			embed = ephy_link_open (EPHY_LINK (action),
@@ -423,8 +412,7 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 						NULL,
 						EPHY_LINK_NEW_TAB);
 		}
-		ephy_embed_go_to_history_item (embed, forward_item);
-		g_object_unref (forward_item);
+		ephy_embed_go_forward (embed);
 	}
 	else if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_UP)
 	{
