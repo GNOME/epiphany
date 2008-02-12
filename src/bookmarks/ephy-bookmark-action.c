@@ -78,14 +78,14 @@ enum
 	PROP_ICON
 };
 
-static GObjectClass *parent_class;
-
 typedef struct
 {
 	GObject *weak_ptr;
 	GtkWidget *entry;
 	EphyLinkFlags flags;
 } ClipboardCtx;
+
+G_DEFINE_TYPE (EphyBookmarkAction, ephy_bookmark_action, EPHY_TYPE_LINK_ACTION)
 
 static void
 clipboard_text_received_cb (GtkClipboard *clipboard,
@@ -154,7 +154,7 @@ create_tool_item (GtkAction *action)
 
 	LOG ("Creating tool item for action %p", action);
 
-	item = GTK_ACTION_CLASS (parent_class)->create_tool_item (action);
+	item = GTK_ACTION_CLASS (ephy_bookmark_action_parent_class)->create_tool_item (action);
 
 	hbox = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox);
@@ -561,7 +561,7 @@ connect_proxy (GtkAction *action,
 
 	LOG ("Connecting action %p to proxy %p", action, proxy);
 
-	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
+	GTK_ACTION_CLASS (ephy_bookmark_action_parent_class)->connect_proxy (action, proxy);
 
 	ephy_bookmark_action_sync_icon (action, NULL, proxy);
 	g_signal_connect_object (action, "notify::icon",
@@ -756,7 +756,7 @@ ephy_bookmark_action_dispose (GObject *object)
 		priv->cache_handler = 0;
 	}
 
-	parent_class->dispose (object);
+	G_OBJECT_CLASS (ephy_bookmark_action_parent_class)->dispose (object);
 }
 
 static void
@@ -764,8 +764,6 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
-
-	parent_class = g_type_class_peek_parent (class);
 
 	action_class->toolbar_item_type = GTK_TYPE_TOOL_ITEM;
 	action_class->create_tool_item = create_tool_item;
@@ -806,34 +804,6 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_type_class_add_private (object_class, sizeof(EphyBookmarkActionPrivate));
-}
-
-GType
-ephy_bookmark_action_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo type_info =
-		{
-			sizeof (EphyBookmarkActionClass),
-			(GBaseInitFunc) NULL,
-			(GBaseFinalizeFunc) NULL,
-			(GClassInitFunc) ephy_bookmark_action_class_init,
-			(GClassFinalizeFunc) NULL,
-			NULL,
-			sizeof (EphyBookmarkAction),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_bookmark_action_init,
-		};
-
-		type = g_type_register_static (EPHY_TYPE_LINK_ACTION,
-					       "EphyBookmarkAction",
-					       &type_info, 0);
-	}
-
-	return type;
 }
 
 GtkAction *

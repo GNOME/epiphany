@@ -31,39 +31,13 @@
 #include "ephy-stock-icons.h"
 #include "egg-editable-toolbar.h"
 
+static void ephy_bookmark_factory_action_init       (EphyBookmarkFactoryAction *action);
 static void ephy_bookmark_factory_action_class_init (EphyBookmarkFactoryActionClass *class);
 
 #define EPHY_BOOKMARK_FACTORY_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARK_FACTORY_ACTION, EphyBookmarkActionPrivate))
 #define EGG_TOOLBARS_MODEL_DATA "ephy-bookmark-factory-menu"
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_bookmark_factory_action_get_type (void)
-{
-	static GType type = 0;
-
-	if (!type)
-	{
-		const GTypeInfo type_info =
-		{
-			sizeof (EphyBookmarkFactoryActionClass),
-			(GBaseInitFunc) NULL,
-			(GBaseFinalizeFunc) NULL,
-			(GClassInitFunc) ephy_bookmark_factory_action_class_init,
-			(GClassFinalizeFunc) NULL,
-			NULL,
-			sizeof (EphyBookmarkFactoryAction),
-			0, /* n_preallocs */
-			NULL
-		};
-
-		type = g_type_register_static (GTK_TYPE_ACTION,
-					       "EphyBookmarkFactoryAction",
-					       &type_info, 0);
-	}
-	return type;
-}
+G_DEFINE_TYPE (EphyBookmarkFactoryAction, ephy_bookmark_factory_action, GTK_TYPE_ACTION)
 
 static void
 activate_item_cb (GtkWidget *menuitem, GtkWidget *placeholder)
@@ -289,7 +263,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	GtkWidget *widget;
 	
-	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+	GTK_ACTION_CLASS (ephy_bookmark_factory_action_parent_class)->connect_proxy (action, proxy);
 
 	g_return_if_fail (GTK_IS_TOOL_ITEM (proxy));
 	
@@ -304,11 +278,15 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 }
 
 static void
+ephy_bookmark_factory_action_init (EphyBookmarkFactoryAction *action)
+{
+        /* Empty, needed for G_DEFINE_TYPE macro */
+}
+
+static void
 ephy_bookmark_factory_action_class_init (EphyBookmarkFactoryActionClass *class)
 {
 	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
-
-	parent_class = g_type_class_peek_parent (class);
 
 	action_class->toolbar_item_type = GTK_TYPE_TOOL_ITEM;
 	action_class->connect_proxy = connect_proxy;

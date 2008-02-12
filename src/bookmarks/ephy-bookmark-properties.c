@@ -80,7 +80,7 @@ enum
 	PROP_CREATING
 };
 
-static GObjectClass *parent_class;
+G_DEFINE_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, GTK_TYPE_DIALOG)
 
 static gboolean
 update_warning (EphyBookmarkProperties *properties)
@@ -506,8 +506,9 @@ ephy_bookmark_properties_constructor (GType type,
 	const char *tmp;
 	char *text;
 
-	object = parent_class->constructor (type, n_construct_properties,
-					    construct_params);
+	object = G_OBJECT_CLASS (ephy_bookmark_properties_parent_class)->constructor (type,
+                                                                                      n_construct_properties,
+                                                                                      construct_params);
 
 	widget = GTK_WIDGET (object);
 	window = GTK_WINDOW (object);
@@ -731,8 +732,6 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class->constructor = ephy_bookmark_properties_constructor;
 	object_class->set_property = ephy_bookmark_properties_set_property;
 	object_class->get_property = ephy_bookmark_properties_get_property;
@@ -764,34 +763,6 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 }
 
 /* public API */
-
-GType
-ephy_bookmark_properties_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyBookmarkPropertiesClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_bookmark_properties_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyBookmarkProperties),
-			0,
-			(GInstanceInitFunc) ephy_bookmark_properties_init
-		};
-
-		type = g_type_register_static (GTK_TYPE_DIALOG,
-					       "EphyBookmarkProperties",
-					       &our_info, 0);
-	}
-
-	return type;
-}
 
 GtkWidget *
 ephy_bookmark_properties_new (EphyBookmarks *bookmarks,

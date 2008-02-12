@@ -174,8 +174,6 @@ enum
 	PROP_BOOKMARKS
 };
 
-static GObjectClass *parent_class = NULL;
-
 static const GtkActionEntry ephy_bookmark_popup_entries [] = {
 	/* Toplevel */
 	{ "File", NULL, N_("_File") },
@@ -256,6 +254,8 @@ static const GtkRadioActionEntry ephy_bookmark_radio_entries [] =
 	  N_("Show both the title and address columns"),
 	  VIEW_TITLE_AND_ADDRESS } 
 };
+
+G_DEFINE_TYPE (EphyBookmarksEditor, ephy_bookmarks_editor, GTK_TYPE_WINDOW)
 
 static void
 entry_selection_changed_cb (GtkWidget *widget, GParamSpec *pspec, EphyBookmarksEditor *editor)
@@ -1179,34 +1179,6 @@ cmd_view_columns (GtkAction *action,
 	g_slist_free (svalues);
 }
 
-GType
-ephy_bookmarks_editor_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyBookmarksEditorClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_bookmarks_editor_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyBookmarksEditor),
-			0,
-			(GInstanceInitFunc) ephy_bookmarks_editor_init
-		};
-
-		type = g_type_register_static (GTK_TYPE_WINDOW,
-					       "EphyBookmarksEditor",
-					       &our_info, 0);
-	}
-
-	return type;
-}
-
 static void
 ephy_bookmarks_editor_show (GtkWidget *widget)
 {
@@ -1214,7 +1186,7 @@ ephy_bookmarks_editor_show (GtkWidget *widget)
 
 	gtk_widget_grab_focus (editor->priv->search_entry);
 
-	GTK_WIDGET_CLASS (parent_class)->show (widget);
+	GTK_WIDGET_CLASS (ephy_bookmarks_editor_parent_class)->show (widget);
 }
 
 static void
@@ -1222,8 +1194,6 @@ ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_bookmarks_editor_finalize;
 	object_class->dispose  = ephy_bookmarks_editor_dispose;
@@ -1262,7 +1232,7 @@ ephy_bookmarks_editor_finalize (GObject *object)
 			 (gpointer *)window);
 	}
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_bookmarks_editor_parent_class)->finalize (object);
 }
 
 static void
@@ -1517,7 +1487,7 @@ ephy_bookmarks_editor_dispose (GObject *object)
 		if (selection == NULL || selection->data == NULL)
 		{
 			editor->priv->key_view = NULL;
-			G_OBJECT_CLASS (parent_class)->dispose (object);
+			G_OBJECT_CLASS (ephy_bookmarks_editor_parent_class)->dispose (object);
 			return;
 		}
 
@@ -1526,7 +1496,7 @@ ephy_bookmarks_editor_dispose (GObject *object)
 		editor->priv->key_view = NULL;
 	}
 
-	G_OBJECT_CLASS (parent_class)->dispose (object);
+	G_OBJECT_CLASS (ephy_bookmarks_editor_parent_class)->dispose (object);
 }
 
 static void

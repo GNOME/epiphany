@@ -32,7 +32,7 @@
 #include <string.h>
 
 static void ephy_topics_entry_class_init (EphyTopicsEntryClass *klass);
-static void ephy_topics_entry_init (EphyTopicsEntry *editor);
+static void ephy_topics_entry_init       (EphyTopicsEntry *editor);
 
 #define EPHY_TOPICS_ENTRY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOPICS_ENTRY, EphyTopicsEntryPrivate))
 
@@ -62,35 +62,7 @@ enum
 	COLUMNS
 };
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_topics_entry_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyTopicsEntryClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_topics_entry_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyTopicsEntry),
-			0,
-			(GInstanceInitFunc) ephy_topics_entry_init
-		};
-
-		type = g_type_register_static (GTK_TYPE_ENTRY,
-					       "EphyTopicsEntry",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyTopicsEntry, ephy_topics_entry, GTK_TYPE_ENTRY)
 
 static EphyNode *
 find_topic (EphyTopicsEntry *entry,
@@ -569,8 +541,9 @@ ephy_topics_entry_constructor (GType type,
 	EphyTopicsEntry *entry;
 	EphyTopicsEntryPrivate *priv;
 
-	object = parent_class->constructor (type, n_construct_properties,
-                                            construct_params);
+	object = G_OBJECT_CLASS (ephy_topics_entry_parent_class)->constructor (type,
+                                                                               n_construct_properties,
+                                                                               construct_params);
 	entry = EPHY_TOPICS_ENTRY (object);
 	priv = EPHY_TOPICS_ENTRY_GET_PRIVATE (object);
 
@@ -622,7 +595,7 @@ ephy_topics_entry_finalize (GObject *object)
 	g_free (entry->priv->create);
 	g_free (entry->priv->key);
 
-	parent_class->finalize (object);
+	G_OBJECT_CLASS (ephy_topics_entry_parent_class)->finalize (object);
 }
 
 GtkWidget *
@@ -646,8 +619,6 @@ static void
 ephy_topics_entry_class_init (EphyTopicsEntryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->set_property = ephy_topics_entry_set_property;
 	object_class->constructor = ephy_topics_entry_constructor;

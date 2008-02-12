@@ -121,42 +121,21 @@ iface_init (EphyLinkIface *iface)
 	iface->open_link = open_link;
 }
 
-GType
-ephy_related_action_get_type (void)
+static void
+ephy_related_action_class_init (EphyRelatedActionClass *klass)
 {
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyRelatedActionClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			NULL, /* class_init */
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyRelatedAction),
-			0,   /* n_preallocs */
-			NULL /* instance_init */
-		};
-		const GInterfaceInfo link_info = 
-		{
-			(GInterfaceInitFunc) iface_init,
-			NULL,
-			NULL
-		};
-
-		type = g_type_register_static (EPHY_TYPE_TOPIC_ACTION,
-					       "EphyRelatedAction",
-					       &our_info, 0);
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_LINK,
-					     &link_info);
-	}
-
-	return type;
+        /* Empty, needed for G_DEFINE_TYPE macro */
 }
+
+static void
+ephy_related_action_init (EphyRelatedAction *action)
+{
+        /* Empty, needed for G_DEFINE_TYPE macro */
+}
+
+G_DEFINE_TYPE_WITH_CODE (EphyRelatedAction, ephy_related_action, EPHY_TYPE_TOPIC_ACTION,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
+                                                iface_init))
 
 GtkAction *
 ephy_related_action_new (EphyLink *link,

@@ -72,7 +72,7 @@ enum
 	PROP_MANAGER
 };
 
-static GObjectClass *parent_class;
+G_DEFINE_TYPE (EphyTopicAction, ephy_topic_action, GTK_TYPE_ACTION)
 
 static void
 drag_data_received_cb (GtkWidget *widget,
@@ -130,7 +130,7 @@ create_tool_item (GtkAction *action)
 	GtkWidget *hbox;
 	GtkWidget *label;
 
-	item = GTK_ACTION_CLASS (parent_class)->create_tool_item (action);
+	item = GTK_ACTION_CLASS (ephy_topic_action_parent_class)->create_tool_item (action);
 
 	button = gtk_toggle_button_new ();
 	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
@@ -402,7 +402,7 @@ static void
 connect_proxy (GtkAction *action,
 	       GtkWidget *proxy)
 {
-	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
+	GTK_ACTION_CLASS (ephy_topic_action_parent_class)->connect_proxy (action, proxy);
     
 	ephy_topic_action_sync_label (action, NULL, proxy);
 	g_signal_connect_object (action, "notify::label",
@@ -561,13 +561,7 @@ ephy_topic_action_get_property (GObject *object,
 static void
 ephy_topic_action_init (EphyTopicAction *action)
 {
-	EphyTopicActionPrivate *priv;
-
-	priv = action->priv = EPHY_TOPIC_ACTION_GET_PRIVATE (action);
-	
-	priv->merge_id = 0;
-	priv->node = NULL;
-	priv->manager = NULL;
+	action->priv = EPHY_TOPIC_ACTION_GET_PRIVATE (action);
 }
 
 static void
@@ -575,8 +569,6 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
-
-	parent_class = g_type_class_peek_parent (class);
 
 	action_class->toolbar_item_type = GTK_TYPE_TOOL_ITEM;
 	action_class->create_tool_item = create_tool_item;
@@ -603,34 +595,6 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 							      G_PARAM_CONSTRUCT_ONLY));
 	
 	g_type_class_add_private (object_class, sizeof(EphyTopicActionPrivate));
-}
-
-GType
-ephy_topic_action_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo type_info =
-		{
-			sizeof (EphyTopicActionClass),
-			(GBaseInitFunc) NULL,
-			(GBaseFinalizeFunc) NULL,
-			(GClassInitFunc) ephy_topic_action_class_init,
-			(GClassFinalizeFunc) NULL,
-			NULL,
-			sizeof (EphyTopicAction),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_topic_action_init,
-		};
-
-		type = g_type_register_static (GTK_TYPE_ACTION,
-					       "EphyTopicAction",
-					       &type_info, 0);
-	}
-
-	return type;
 }
 
 GtkAction *
