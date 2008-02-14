@@ -32,6 +32,7 @@
 #include <string.h>
 
 #include "webkit-embed.h"
+#include "webkit-embed-prefs.h"
 #include "webkit-history-item.h"
 #include "ephy-embed.h"
 #include "ephy-base-embed.h"
@@ -268,10 +269,21 @@ webkit_embed_finalize (GObject *object)
 }
 
 static void
+webkit_embed_dispose (GObject *object)
+{
+  WebKitEmbed *wembed = WEBKIT_EMBED (object);
+
+  webkit_embed_prefs_remove_embed (wembed);
+
+  G_OBJECT_CLASS (webkit_embed_parent_class)->dispose (object);
+}
+
+static void
 webkit_embed_class_init (WebKitEmbedClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = webkit_embed_dispose;
   object_class->finalize = webkit_embed_finalize;
 
   g_type_class_add_private (object_class, sizeof(WebKitEmbedPrivate));
@@ -310,6 +322,8 @@ webkit_embed_init (WebKitEmbed *embed)
                     G_CALLBACK (webkit_embed_load_progress_changed_cb), embed);
   g_signal_connect (G_OBJECT (web_view), "hovering-over-link",
                     G_CALLBACK (webkit_embed_hovering_over_link_cb), embed);
+
+  webkit_embed_prefs_add_embed (embed);
 }
 
 static void

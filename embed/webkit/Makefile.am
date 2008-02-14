@@ -7,6 +7,8 @@ libephywebkitembed_la_SOURCES = 	\
 	webkit-embed-find.h		\
 	webkit-embed-persist.c          \
 	webkit-embed-persist.h		\
+	webkit-embed-prefs.c            \
+	webkit-embed-prefs.h            \
 	webkit-embed-single.c	        \
 	webkit-embed-single.h		\
 	webkit-history-item.c		\

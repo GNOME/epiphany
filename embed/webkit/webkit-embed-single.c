@@ -22,6 +22,7 @@
 #include <webkit/webkit.h>
 
 #include "webkit-embed-single.h"
+#include "webkit-embed-prefs.h"
 #include "ephy-embed-single.h"
 #include "ephy-cookie-manager.h"
 #include "ephy-password-manager.h"
@@ -96,6 +97,8 @@ webkit_embed_single_dispose (GObject *object)
 static void
 webkit_embed_single_finalize (GObject *object)
 {
+  webkit_embed_prefs_shutdown ();
+
   G_OBJECT_CLASS (webkit_embed_single_parent_class)->finalize (object);
 }
 
@@ -209,6 +212,8 @@ impl_permission_manager_test (EphyPermissionManager *manager,
 static gboolean
 impl_init (EphyEmbedSingle *esingle)
 {
+  webkit_embed_prefs_init ();
+
   return TRUE;
 }
 
