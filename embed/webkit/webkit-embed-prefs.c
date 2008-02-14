@@ -86,6 +86,10 @@ void
 webkit_embed_prefs_shutdown (void)
 {
   eel_gconf_notification_remove (min_font_size_cnxn_id);
+
+  g_object_unref (settings);
+
+  g_slist_free (embeds);
 }
 
 void
