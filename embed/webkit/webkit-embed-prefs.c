@@ -35,15 +35,6 @@ webkit_embed_prefs_apply (WebKitEmbed *embed, WebKitWebSettings *settings)
 }
 
 static void
-webkit_embed_prefs_apply_all (WebKitWebSettings *settings)
-{
-  GSList *p;
-
-  for (p = embeds; p != NULL; p = p->next)
-    webkit_embed_prefs_apply (WEBKIT_EMBED (p->data), settings);
-}
-
-static void
 notify_minimum_size_cb (GConfClient *client,
                         guint cnxn_id,
                         GConfEntry *entry,
@@ -62,8 +53,6 @@ notify_minimum_size_cb (GConfClient *client,
   }
 
   g_object_set (settings, "minimum-font-size", size, NULL);
-
-  webkit_embed_prefs_apply_all (settings);
 }
 
 static guint min_font_size_cnxn_id;
