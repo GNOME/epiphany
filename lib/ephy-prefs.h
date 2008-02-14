@@ -38,6 +38,7 @@ G_BEGIN_DECLS
 #define CONF_DESKTOP_IS_HOME_DIR		"/apps/nautilus/preferences/desktop_is_home_dir"
 #define CONF_NETWORK_MANAGED			"/apps/epiphany/general/managed_network"
 #define CONF_DOWNLOADS_HIDDEN			"/apps/epiphany/dialogs/downloads_hidden"
+#define CONF_WARN_ON_CLOSE_UNSUBMITTED_DATA     "/apps/epiphany/dialogs/warn_on_close_unsubmitted_data"
 
 /* i18n pref */
 #define CONF_GECKO_ENABLE_PANGO			"/apps/epiphany/web/enable_pango"

@@ -547,15 +547,20 @@ construct_confirm_close_dialog (EphyWindow *window)
 static gboolean
 confirm_close_with_modified_forms (EphyWindow *window)
 {
-	GtkWidget *dialog;
-	int response;
+	if (eel_gconf_get_boolean (CONF_WARN_ON_CLOSE_UNSUBMITTED_DATA))
+	{
+		GtkWidget *dialog;
+		int response;
 
-	dialog = construct_confirm_close_dialog (window);
-	response = gtk_dialog_run (GTK_DIALOG (dialog));
+		dialog = construct_confirm_close_dialog (window);
+		response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-	gtk_widget_destroy (dialog);
+		gtk_widget_destroy (dialog);
 
-	return response == GTK_RESPONSE_ACCEPT;
+		return response == GTK_RESPONSE_ACCEPT;
+	}
+	
+	return TRUE;
 }
 
 static void
