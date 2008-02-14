@@ -15,13 +15,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- *  $Id$
  */
 
 #include "config.h"
-
 #include <glib/gi18n.h>
-
 #include <webkit/webkit.h>
 
 #include "webkit-embed-single.h"
@@ -45,11 +42,11 @@ enum {
   PROP_NETWORK_STATUS
 };
 
-static void webkit_embed_single_class_init (WebKitEmbedSingleClass *klass);
-static void webkit_embed_single_init (WebKitEmbedSingle *ges);
-static void ephy_embed_single_iface_init (EphyEmbedSingleIface *iface);
-static void ephy_cookie_manager_iface_init (EphyCookieManagerIface *iface);
-static void ephy_password_manager_iface_init (EphyPasswordManagerIface *iface);
+static void webkit_embed_single_class_init     (WebKitEmbedSingleClass *klass);
+static void webkit_embed_single_init           (WebKitEmbedSingle *wes);
+static void ephy_embed_single_iface_init       (EphyEmbedSingleIface *iface);
+static void ephy_cookie_manager_iface_init     (EphyCookieManagerIface *iface);
+static void ephy_password_manager_iface_init   (EphyPasswordManagerIface *iface);
 static void ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface);
 
 #ifdef ENABLE_CERTIFICATE_MANAGER
@@ -85,9 +82,9 @@ G_DEFINE_TYPE_WITH_CODE (WebKitEmbedSingle, webkit_embed_single, G_TYPE_OBJECT,
 
 
 static void
-webkit_embed_single_init (WebKitEmbedSingle *mes)
+webkit_embed_single_init (WebKitEmbedSingle *wes)
 {
-  mes->priv = WEBKIT_EMBED_SINGLE_GET_PRIVATE (mes);
+  wes->priv = WEBKIT_EMBED_SINGLE_GET_PRIVATE (wes);
 }
 
 static void
@@ -271,6 +268,9 @@ webkit_embed_single_get_property (GObject *object,
     case PROP_NETWORK_STATUS:
       g_value_set_boolean (value, ephy_embed_single_get_network_status (single));
       break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
   }
 }
 
@@ -286,14 +286,15 @@ webkit_embed_single_set_property (GObject *object,
     case PROP_NETWORK_STATUS:
       ephy_embed_single_set_network_status (single, g_value_get_boolean (value));
       break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
   }
 }
 static void
 webkit_embed_single_class_init (WebKitEmbedSingleClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  webkit_embed_single_parent_class = (GObjectClass *)g_type_class_peek_parent (klass);
 
   object_class->dispose = webkit_embed_single_dispose;
   object_class->finalize = webkit_embed_single_finalize;
