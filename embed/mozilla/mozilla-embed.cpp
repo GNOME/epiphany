@@ -428,8 +428,18 @@ mozilla_embed_get_uri_parent (MozillaEmbed *membed,
 	nsCString encoding;
 	rv = membed->priv->browser->GetEncoding (encoding);
 	if (NS_FAILED (rv)) return FALSE;
-
+	
+	/* Check for HTML anchors */
 	nsCOMPtr<nsIURI> uri;
+	const char *anchor = strrchr (aUri, '#');
+	if (anchor)
+	{
+		aParent.Assign (aUri);
+		aParent.SetLength (anchor - aUri);
+
+		return TRUE;
+	}
+	
 	rv = EphyUtils::NewURI (getter_AddRefs(uri), nsCString(aUri), encoding.get());
 	if (NS_FAILED(rv) || !uri) return FALSE;
 
