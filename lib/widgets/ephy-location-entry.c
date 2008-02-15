@@ -73,6 +73,7 @@ struct _EphyLocationEntryPrivate
 	GtkCellRenderer *extracell;
 
 	char *before_completion;
+	char *saved_text;
 
 	guint text_col;
 	guint action_col;
@@ -85,6 +86,8 @@ struct _EphyLocationEntryPrivate
 	guint hash;
 
 	guint user_changed : 1;
+	guint can_redo : 1;
+	guint block_update : 1;
 	guint original_address : 1;
 	guint secure : 1;
 	guint apply_colours : 1;
@@ -221,6 +224,8 @@ ephy_location_entry_finalize (GObject *object)
 {
 	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
 	EphyLocationEntryPrivate *priv = entry->priv;
+	
+	g_free (priv->saved_text);
 
 	if (priv->favicon != NULL)
 	{
@@ -343,7 +348,13 @@ editable_changed_cb (GtkEditable *editable,
 
 	update_address_state (entry);
 
-	if (priv->user_changed == FALSE) return;
+	if (priv->block_update == TRUE) 
+		return;
+	else
+	{
+		priv->user_changed = TRUE;
+		priv->can_redo = FALSE;
+	}	
 
 	update_favicon (entry);
 
@@ -424,6 +435,8 @@ entry_activate_after_cb (GtkEntry *entry,
 			 EphyLocationEntry *lentry)
 {
 	EphyLocationEntryPrivate *priv = lentry->priv;
+	
+	priv->user_changed = FALSE;
 
 	if (priv->needs_reset)
 	{
@@ -528,9 +541,24 @@ entry_clear_activate_cb (GtkMenuItem *item,
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
 
-	priv->user_changed = FALSE;
+	priv->block_update = TRUE;
 	gtk_entry_set_text (GTK_ENTRY (priv->icon_entry->entry), "");
+	priv->block_update = FALSE;
 	priv->user_changed = TRUE;
+}
+
+static void
+entry_redo_activate_cb (GtkMenuItem *item,
+			EphyLocationEntry *entry)
+{
+	ephy_location_entry_undo_reset (entry);
+}
+
+static void
+entry_undo_activate_cb (GtkMenuItem *item,
+			EphyLocationEntry *entry)
+{
+	ephy_location_entry_reset_internal (entry, FALSE);
 }
 
 static void
@@ -540,7 +568,7 @@ entry_populate_popup_cb (GtkEntry *entry,
 {
 	EphyLocationEntryPrivate *priv = lentry->priv;
 	GtkWidget *image;
-	GtkWidget *menuitem;
+	GtkWidget *clear_menuitem, *undo_menuitem, *redo_menuitem, *separator;
 	GList *children, *item;
 	int pos = 0, sep = 0;
 	gboolean is_editable;
@@ -553,13 +581,13 @@ entry_populate_popup_cb (GtkEntry *entry,
 	 * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 	 * Select All, Input Methods and Insert Unicode control character.)
 	 */
-	menuitem = gtk_image_menu_item_new_with_mnemonic (_("Cl_ear"));
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM(menuitem), image);
-	g_signal_connect (menuitem , "activate",
+	clear_menuitem = gtk_image_menu_item_new_with_mnemonic (_("Cl_ear"));
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (clear_menuitem), image);
+	g_signal_connect (clear_menuitem , "activate",
 			  G_CALLBACK (entry_clear_activate_cb), lentry);
 	is_editable = gtk_editable_get_editable (GTK_EDITABLE (priv->icon_entry->entry));
-	gtk_widget_set_sensitive (menuitem, is_editable);
-	gtk_widget_show (menuitem);
+	gtk_widget_set_sensitive (clear_menuitem, is_editable);
+	gtk_widget_show (clear_menuitem);
 
 	/* search for the 2nd separator (the one after Select All) in the context
 	 * menu, and insert this menu item before it.
@@ -571,7 +599,25 @@ entry_populate_popup_cb (GtkEntry *entry,
 		if (GTK_IS_SEPARATOR_MENU_ITEM (item->data)) sep++;
 	}
 
-	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), menuitem, pos - 1);
+	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), clear_menuitem, pos - 1);
+	
+	undo_menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_UNDO, NULL);
+	gtk_widget_set_sensitive (undo_menuitem, priv->user_changed);
+	g_signal_connect (undo_menuitem, "activate",
+			  G_CALLBACK (entry_undo_activate_cb), lentry);
+	gtk_widget_show (undo_menuitem);
+	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), undo_menuitem, 0);
+	
+	redo_menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_REDO, NULL);
+	gtk_widget_set_sensitive (redo_menuitem, priv->can_redo);
+	g_signal_connect (redo_menuitem, "activate",
+			  G_CALLBACK (entry_redo_activate_cb), lentry);
+	gtk_widget_show (redo_menuitem);
+	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), redo_menuitem, 1);
+	
+	separator = gtk_separator_menu_item_new ();
+	gtk_widget_show (separator);
+	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), separator, 2);
 }
 
 static void
@@ -876,7 +922,9 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	p = EPHY_LOCATION_ENTRY_GET_PRIVATE (le);
 	le->priv = p;
 
-	p->user_changed = TRUE;
+	p->user_changed = FALSE;
+	p->block_update = FALSE;
+	p->saved_text = NULL;
 
 	ephy_location_entry_construct_contents (le);
 
@@ -1095,9 +1143,9 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 	/* First record the new hash, then update the entry text */
 	priv->hash = g_str_hash (address);
 
-	priv->user_changed = FALSE;
+	priv->block_update = TRUE;
 	gtk_entry_set_text (GTK_ENTRY (priv->icon_entry->entry), text);
-	priv->user_changed = TRUE;
+	priv->block_update = FALSE;
 
 	/* We need to call update_address_state() here, as the 'changed' signal
 	 * may not get called if the user has typed in the exact correct url */
@@ -1113,6 +1161,22 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 					selection, strlen (selection));
 		g_free (selection);
 	}
+}
+
+gboolean
+ephy_location_entry_get_can_undo (EphyLocationEntry *entry)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+	
+	return priv->user_changed;
+}
+
+gboolean
+ephy_location_entry_get_can_redo (EphyLocationEntry *entry)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+	
+	return priv->can_redo;
 }
 
 const char *
@@ -1137,6 +1201,10 @@ ephy_location_entry_reset_internal (EphyLocationEntry *entry,
 	old_text = gtk_entry_get_text (GTK_ENTRY (priv->icon_entry->entry));
 	old_text = old_text != NULL ? old_text : "";
 
+	g_free (priv->saved_text);
+	priv->saved_text = g_strdup (old_text);
+	priv->can_redo = TRUE;
+
 	retval = g_str_hash (text) != g_str_hash (old_text);
 
 	ephy_location_entry_set_location (entry, text, NULL);
@@ -1146,8 +1214,20 @@ ephy_location_entry_reset_internal (EphyLocationEntry *entry,
 	{
 		g_signal_emit (entry, signals[USER_CHANGED], 0);
 	}
+	
+	priv->user_changed = FALSE;
 
 	return retval;
+}
+
+void
+ephy_location_entry_undo_reset (EphyLocationEntry *entry)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+	
+	gtk_entry_set_text (GTK_ENTRY (priv->icon_entry->entry), priv->saved_text);
+	priv->can_redo = FALSE;
+	priv->user_changed = TRUE;
 }
 
 gboolean

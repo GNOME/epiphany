@@ -355,14 +355,24 @@ window_cmd_edit_undo (GtkAction *action,
 {
 	GtkWidget *widget;
 	GtkWidget *embed;
+	GtkWidget *location_entry;
 
 	widget = gtk_window_get_focus (GTK_WINDOW (window));
-	embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
-
-	if (embed)
+	location_entry = gtk_widget_get_ancestor (widget, EPHY_TYPE_LOCATION_ENTRY);
+	
+	if (location_entry)
 	{
-		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed), 
-						 "cmd_undo");
+		ephy_location_entry_reset (EPHY_LOCATION_ENTRY (location_entry));
+	}
+	else 
+	{
+		embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
+
+		if (embed)
+		{
+			ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed), 
+							 "cmd_undo");
+		}
 	}
 }
 
@@ -372,17 +382,25 @@ window_cmd_edit_redo (GtkAction *action,
 {
 	GtkWidget *widget;
 	GtkWidget *embed;
+	GtkWidget *location_entry;
 
 	widget = gtk_window_get_focus (GTK_WINDOW (window));
-	embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
-
-	if (embed)
+	location_entry = gtk_widget_get_ancestor (widget, EPHY_TYPE_LOCATION_ENTRY);
+	
+	if (location_entry)
 	{
-		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed), 
-						 "cmd_redo");
+		ephy_location_entry_undo_reset (EPHY_LOCATION_ENTRY (location_entry));
+	}
+	else
+	{
+		embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
+		if (embed)
+		{
+			ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed), 
+							 "cmd_redo");
+		}
 	}
 }
-
 void
 window_cmd_edit_cut (GtkAction *action,
 		     EphyWindow *window)

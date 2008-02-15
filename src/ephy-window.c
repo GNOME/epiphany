@@ -57,6 +57,7 @@
 #include "ephy-find-toolbar.h"
 #include "ephy-embed-persist.h"
 #include "ephy-embed-factory.h"
+#include "ephy-location-entry.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -1133,15 +1134,35 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 	if (GTK_IS_EDITABLE (widget))
 	{
 		gboolean has_selection;
-
+		GtkActionGroup *action_group;
+		GtkAction *location_action;
+		GSList *proxies;
+		GtkWidget *proxy;
+		
+		action_group = ephy_toolbar_get_action_group (window->priv->toolbar);
+		location_action = gtk_action_group_get_action (action_group,
+							       "Location");
+		proxies = gtk_action_get_proxies (location_action);
+		proxy = GTK_WIDGET (proxies->data);
+		
 		has_selection = gtk_editable_get_selection_bounds
 			(GTK_EDITABLE (widget), NULL, NULL);
 
 		can_copy = has_selection;
 		can_cut = has_selection;
 		can_paste = TRUE;
-		can_undo = FALSE;
-		can_redo = FALSE;
+		if (proxy != NULL &&
+		    EPHY_IS_LOCATION_ENTRY (proxy) &&
+		    widget == ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (proxy)))
+		{
+			can_undo = ephy_location_entry_get_can_undo (EPHY_LOCATION_ENTRY (proxy));
+			can_redo = ephy_location_entry_get_can_redo (EPHY_LOCATION_ENTRY (proxy));
+		}
+		else
+		{
+			can_undo = FALSE;
+			can_redo = FALSE;
+		}
 	}
 	else
 	{

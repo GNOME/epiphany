@@ -87,7 +87,13 @@ void		ephy_location_entry_set_completion_func (EphyLocationEntry *le,
 					
 const char     *ephy_location_entry_get_location	(EphyLocationEntry *le);
 
+gboolean	ephy_location_entry_get_can_undo	(EphyLocationEntry *le);
+
+gboolean	ephy_location_entry_get_can_redo	(EphyLocationEntry *entry);
+
 gboolean	ephy_location_entry_reset		(EphyLocationEntry *entry);
+
+void		ephy_location_entry_undo_reset		(EphyLocationEntry *entry);
 
 void		ephy_location_entry_activate		(EphyLocationEntry *le);
 
