@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-01-06 01:59+0200\n"
-"PO-Revision-Date: 2008-01-06 02:09+0200\n"
+"POT-Creation-Date: 2008-02-16 23:56+0200\n"
+"PO-Revision-Date: 2008-02-16 23:57+0200\n"
 "Last-Translator: Alaksandar Navicki <zolak@lacinka.org>\n"
 "Language-Team: i18n@mova.org <i18n@mova.org>\n"
 "MIME-Version: 1.0\n"
@@ -40,8 +40,8 @@ msgid "Epiphany Web Browser"
 msgstr "Web-hartač Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:526
-#: ../src/ephy-main.c:618
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:537
+#: ../src/ephy-main.c:632
 msgid "Web Browser"
 msgstr "Web-hartač"
 
@@ -429,8 +429,8 @@ msgid ""
 "\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
 msgstr ""
 "Infarmacyja pra staronku, pakazanaja ŭ historyi. Pravilnyja vartaści ŭ "
-"śpisie: \"ViewTitle\" (nazva), \"ViewAddress\" (adras) i \"ViewDateTime\" "
-"(data j čas)."
+"śpisie: \"ViewTitle\" (nazva), \"ViewAddress\" (adras) i \"ViewDateTime"
+"\" (data j čas)."
 
 #: ../data/epiphany.schemas.in.h:48
 msgid ""
@@ -606,7 +606,7 @@ msgid "Cookies"
 msgstr "Ciestki"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:115
+#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:111
 msgid "Downloads"
 msgstr "Zahruzki"
 
@@ -622,7 +622,7 @@ msgstr "Asabistyja źviestki"
 msgid "Text Encoding"
 msgstr "Kadavańnie tekstu"
 
-#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:362
+#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:334
 msgid "Use the encoding specified by the document"
 msgstr "Užyj kadavańnie, akreślenaje dakumentam"
 
@@ -719,7 +719,7 @@ msgstr "_Abiary movu:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:541 ../src/ephy-history-window.c:271
+#: ../lib/widgets/ephy-location-entry.c:584 ../src/ephy-history-window.c:269
 msgid "Cl_ear"
 msgstr "_Ačyść"
 
@@ -747,7 +747,7 @@ msgstr "Šryfty j styli"
 msgid "For l_anguage:"
 msgstr "Dl_a movy:"
 
-#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1313
+#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1278
 msgid "Language"
 msgstr "Mova"
 
@@ -888,39 +888,39 @@ msgid "_Page address"
 msgstr "Adras _staronki"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:220
+#: ../embed/downloader-view.c:219
 msgid "_Show Downloads"
 msgstr "_Pakažy vakno zahruzak"
 
-#: ../embed/downloader-view.c:375
+#: ../embed/downloader-view.c:374
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:379
+#: ../embed/downloader-view.c:378
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:440
+#: ../embed/downloader-view.c:439
 msgid "_Pause"
 msgstr "_Paŭza"
 
-#: ../embed/downloader-view.c:440
+#: ../embed/downloader-view.c:439
 msgid "_Resume"
 msgstr "_Uznavi"
 
-#: ../embed/downloader-view.c:478
+#: ../embed/downloader-view.c:477
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Fajł \"%s\" zahružany."
 
-#: ../embed/downloader-view.c:481
+#: ../embed/downloader-view.c:480
 msgid "Download finished"
 msgstr "Zahruzka skončyłasia"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:506
+#: ../embed/downloader-view.c:505
 #, c-format
 msgid ""
 "%s\n"
@@ -930,12 +930,13 @@ msgstr ""
 "%s z %s"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:516 ../embed/downloader-view.c:521
-#: ../lib/ephy-time-helpers.c:279 ../src/ephy-window.c:1663
+#: ../embed/downloader-view.c:515 ../embed/downloader-view.c:520
+#: ../embed/ephy-download.c:129 ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1689
 msgid "Unknown"
 msgstr "Nieviadomy"
 
-#: ../embed/downloader-view.c:553
+#: ../embed/downloader-view.c:552
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -943,69 +944,69 @@ msgstr[0] "%d zahruzka"
 msgstr[1] "%d zahruzki"
 msgstr[2] "%d zahruzak"
 
-#: ../embed/downloader-view.c:653
+#: ../embed/downloader-view.c:652
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Fajł \"%s\" byŭ dadadzieny ŭ čarhu na zahruzku."
 
-#: ../embed/downloader-view.c:656
+#: ../embed/downloader-view.c:655
 msgid "Download started"
 msgstr "Zahruzka pačałasia"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:730 ../embed/downloader-view.c:743
+#: ../embed/downloader-view.c:729 ../embed/downloader-view.c:742
 msgid "download status|Unknown"
 msgstr "Nieviadomy"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:735
+#: ../embed/downloader-view.c:734
 msgid "download status|Failed"
 msgstr "Nie ŭdałosia"
 
-#: ../embed/downloader-view.c:802
+#: ../embed/downloader-view.c:801
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Fajł"
 
-#: ../embed/downloader-view.c:825
+#: ../embed/downloader-view.c:824
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:836
+#: ../embed/downloader-view.c:835
 msgid "Remaining"
 msgstr "Zastałosia"
 
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-base-embed.c:50 ../embed/ephy-embed-utils.c:107
+#: ../embed/ephy-base-embed.c:49 ../embed/ephy-embed-utils.c:107
 msgid "Blank page"
 msgstr "Pustaja staronka"
 
-#: ../embed/ephy-base-embed.c:1089
+#: ../embed/ephy-base-embed.c:1070
 #, c-format
 msgid "Redirecting to “%s”…"
 msgstr "Pieranakiravańnie da \"%s\"..."
 
-#: ../embed/ephy-base-embed.c:1091
+#: ../embed/ephy-base-embed.c:1072
 #, c-format
 msgid "Transferring data from “%s”…"
 msgstr "Pierasył źviestak z \"%s\"..."
 
-#: ../embed/ephy-base-embed.c:1093
+#: ../embed/ephy-base-embed.c:1074
 #, c-format
 msgid "Waiting for authorization from “%s”…"
 msgstr "Čakańnie aŭtaryzacyi ad \"%s\"..."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-base-embed.c:1099 ../embed/ephy-base-embed.c:1276
+#: ../embed/ephy-base-embed.c:1080 ../embed/ephy-base-embed.c:1255
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Zahruzka \"%s\"..."
 
-#: ../embed/ephy-base-embed.c:1278
+#: ../embed/ephy-base-embed.c:1257
 msgid "Loading…"
 msgstr "Zahruzka..."
 
@@ -1405,32 +1406,32 @@ msgstr "Nieviadomaje (%s)"
 msgid "All"
 msgstr "Usio"
 
-#: ../embed/ephy-history.c:688
+#: ../embed/ephy-history.c:685
 msgid "Others"
 msgstr "Inšyja"
 
-#: ../embed/ephy-history.c:694
+#: ../embed/ephy-history.c:691
 msgid "Local files"
 msgstr "Lakalnyja fajły"
 
-#: ../embed/mozilla/ContentHandler.cpp:159
-#: ../embed/mozilla/EphyHeaderSniffer.cpp:412
+#: ../embed/mozilla/ContentHandler.cpp:158
+#: ../embed/mozilla/EphyHeaderSniffer.cpp:410
 msgid "Save"
 msgstr "Zapišy"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:272
+#: ../embed/mozilla/ContentHandler.cpp:271
 msgid "File Type:|Unknown"
 msgstr "Nieviadomy"
 
-#: ../embed/mozilla/ContentHandler.cpp:288
+#: ../embed/mozilla/ContentHandler.cpp:287
 msgid "Download this potentially unsafe file?"
 msgstr "Ci zahruzić hety patencyjna niebiaśpiečny fajł?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:294
+#: ../embed/mozilla/ContentHandler.cpp:293
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1443,14 +1444,14 @@ msgstr ""
 "Adčyniać \"%s\" niebiaśpiečna z uvahi na patencyjnuju niebiaśpieku paškodzić "
 "dakumenty albo parušyć tajemnaść. Zamiest hetaha ty možaš zahruzić jaho."
 
-#: ../embed/mozilla/ContentHandler.cpp:304
+#: ../embed/mozilla/ContentHandler.cpp:303
 msgid "Open this file?"
 msgstr "Adčynić hety fajł?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:311
+#: ../embed/mozilla/ContentHandler.cpp:310
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1461,13 +1462,13 @@ msgstr ""
 "\n"
 "Typ možaš adčynić \"%s\" pry dapamozie \"%s\" albo zapisać."
 
-#: ../embed/mozilla/ContentHandler.cpp:319
+#: ../embed/mozilla/ContentHandler.cpp:318
 msgid "Download this file?"
 msgstr "Zahruzić hety fajł?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:325
+#: ../embed/mozilla/ContentHandler.cpp:324
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1479,7 +1480,7 @@ msgstr ""
 "Niama aplikacyi, zdolnaj adčynić \"%s\". Zamiest hetaha ty možaš zahruzić "
 "jaho."
 
-#: ../embed/mozilla/ContentHandler.cpp:330
+#: ../embed/mozilla/ContentHandler.cpp:331
 msgid "_Save As..."
 msgstr "Z_apišy jak..."
 
@@ -1776,9 +1777,9 @@ msgstr "u bufery Google"
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "u internetnym archivie"
 
-#: ../embed/mozilla/EphyHeaderSniffer.cpp:368
-#: ../src/bookmarks/ephy-bookmarks.c:1323
-#: ../src/bookmarks/ephy-bookmarks-import.c:261 ../src/ephy-session.c:1344
+#: ../embed/mozilla/EphyHeaderSniffer.cpp:367
+#: ../src/bookmarks/ephy-bookmarks.c:1502
+#: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1314
 msgid "Untitled"
 msgstr "Bieznazoŭnaja"
 
@@ -1796,11 +1797,11 @@ msgid "_Username:"
 msgstr "Nazva _karystalnika:"
 
 #: ../embed/mozilla/FilePicker.cpp:147 ../embed/mozilla/FilePicker.cpp:413
-#: ../lib/ephy-file-chooser.c:437 ../src/bookmarks/ephy-bookmarks-editor.c:786
+#: ../lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:786
 msgid "All files"
 msgstr "Usie fajły"
 
-#: ../embed/mozilla/FilePicker.cpp:152 ../lib/ephy-file-chooser.c:421
+#: ../embed/mozilla/FilePicker.cpp:152 ../lib/ephy-file-chooser.c:423
 msgid "Web pages"
 msgstr "Web-staronki"
 
@@ -1808,7 +1809,7 @@ msgstr "Web-staronki"
 msgid "Text files"
 msgstr "Tekstavyja fajły"
 
-#: ../embed/mozilla/FilePicker.cpp:165 ../lib/ephy-file-chooser.c:429
+#: ../embed/mozilla/FilePicker.cpp:165 ../lib/ephy-file-chooser.c:431
 msgid "Images"
 msgstr "Vyjavy"
 
@@ -2067,13 +2068,11 @@ msgstr "Abiary parol"
 #. * That's not actually correct, since this function is also called from other places!
 #.
 #: ../embed/mozilla/GtkNSSDialogs.cpp:788
-#, c-format
 msgid "Select a password to protect this certificate"
 msgstr "Abiary parol dziela achovy sertyfikatu"
 
 #. FIXME: mozilla sucks, no way to get the name of the certificate / cert file!
 #: ../embed/mozilla/GtkNSSDialogs.cpp:837
-#, c-format
 msgid "Enter the password for this certificate"
 msgstr "Uviadzi parol dla sertyfikatu"
 
@@ -2289,7 +2288,7 @@ msgstr ""
 "lohkaściu pierachoplenaja."
 
 #. translators: this is the directory name to store auxilary files when saving html files
-#: ../embed/mozilla/MozDownload.cpp:681
+#: ../embed/mozilla/MozDownload.cpp:692
 #, c-format
 msgid "%s Files"
 msgstr "Fajły %s"
@@ -2316,6 +2315,19 @@ msgid ""
 msgstr ""
 "Pamyłka GConf:\n"
 "  %s"
+
+#: ../lib/egg/eel-app-launch-context.c:403
+#, c-format
+msgid "Opening %s"
+msgstr "Adčynieńnie %s"
+
+#: ../lib/egg/eel-app-launch-context.c:406
+#, c-format
+msgid "Opening %d Item"
+msgid_plural "Opening %d Items"
+msgstr[0] "Adčynieńnie %d elementu"
+msgstr[1] "Adčynieńnie %d elementaŭ"
+msgstr[2] "Adčynieńnie %d elementaŭ"
 
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
@@ -2357,21 +2369,21 @@ msgstr "Vydal abranuju panel pryładździa"
 msgid "Separator"
 msgstr "Separatar"
 
-#: ../lib/ephy-file-chooser.c:410
+#: ../lib/ephy-file-chooser.c:412
 msgid "All supported types"
 msgstr "Usie typy, jakija padtrymvajucca"
 
-#: ../lib/ephy-file-helpers.c:300
+#: ../lib/ephy-file-helpers.c:296
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Niemahčyma stvaryć časovy kataloh u \"%s\"."
 
-#: ../lib/ephy-file-helpers.c:373
+#: ../lib/ephy-file-helpers.c:369
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Fajł \"%s\" isnuje. Pieraniasi jaho ŭ inšaje miesca."
 
-#: ../lib/ephy-file-helpers.c:384
+#: ../lib/ephy-file-helpers.c:380
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Stvaryć kataloh \"%s\" nie ŭdałosia."
@@ -2598,23 +2610,23 @@ msgstr "Zachavaj parol u _klučnika"
 msgid "Popup Windows"
 msgstr "Vypłyŭnyja vokny"
 
-#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1327
+#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1297
 msgid "History"
 msgstr "Historyja"
 
 #: ../lib/ephy-stock-icons.c:54
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
-#: ../src/ephy-window.c:1458
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:301
+#: ../src/ephy-window.c:1484
 msgid "Bookmark"
 msgstr "Zakładka"
 
 #: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1822
-#: ../src/bookmarks/ephy-topic-action.c:455 ../src/ephy-window.c:1462
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1792
+#: ../src/bookmarks/ephy-topic-action.c:454 ../src/ephy-window.c:1488
 msgid "Bookmarks"
 msgstr "Zakładki"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:284
+#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:291
 msgid "Address Entry"
 msgstr "Uvod adrasu"
 
@@ -2691,7 +2703,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:808
+#: ../lib/widgets/ephy-location-entry.c:869
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Pieraciahni hetuju ikonu, kab stvaryć spasyłku da hetaj staronki"
 
@@ -2731,7 +2743,7 @@ msgstr ""
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:508
+#: ../src/bookmarks/ephy-bookmark-action.c:509
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "Vykonvaje skrypt \"%s\""
@@ -2739,7 +2751,7 @@ msgstr "Vykonvaje skrypt \"%s\""
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:97
-#: ../src/bookmarks/ephy-bookmark-properties.c:622
+#: ../src/bookmarks/ephy-bookmark-properties.c:623
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -2766,19 +2778,19 @@ msgstr "Pakažy \"%s\""
 msgid "“%s” Properties"
 msgstr "Ułaścivaści \"%s\""
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:561
+#: ../src/bookmarks/ephy-bookmark-properties.c:562
 msgid "_Title:"
 msgstr "_Zahałovak:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:577
+#: ../src/bookmarks/ephy-bookmark-properties.c:578
 msgid "A_ddress:"
 msgstr "_Adras:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:588
+#: ../src/bookmarks/ephy-bookmark-properties.c:589
 msgid "T_opics:"
 msgstr "T_emy:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:610
+#: ../src/bookmarks/ephy-bookmark-properties.c:611
 msgid "Sho_w all topics"
 msgstr "Pakažy ŭ_sie temy"
 
@@ -2786,60 +2798,60 @@ msgstr "Pakažy ŭ_sie temy"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: ../src/bookmarks/ephy-bookmarks.c:105
+#: ../src/bookmarks/ephy-bookmarks.c:111
 msgid "Search the web"
 msgstr "Šukaj u siecivie"
 
-#: ../src/bookmarks/ephy-bookmarks.c:105
+#: ../src/bookmarks/ephy-bookmarks.c:111
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../src/bookmarks/ephy-bookmarks.c:110
+#: ../src/bookmarks/ephy-bookmarks.c:116
 msgid "Entertainment"
 msgstr "Zabava"
 
-#: ../src/bookmarks/ephy-bookmarks.c:111
+#: ../src/bookmarks/ephy-bookmarks.c:117
 msgid "News"
 msgstr "Naviny"
 
-#: ../src/bookmarks/ephy-bookmarks.c:112
+#: ../src/bookmarks/ephy-bookmarks.c:118
 msgid "Shopping"
 msgstr "Pakupki"
 
-#: ../src/bookmarks/ephy-bookmarks.c:113
+#: ../src/bookmarks/ephy-bookmarks.c:119
 msgid "Sports"
 msgstr "Sport"
 
-#: ../src/bookmarks/ephy-bookmarks.c:114
+#: ../src/bookmarks/ephy-bookmarks.c:120
 msgid "Travel"
 msgstr "Padarožžy"
 
-#: ../src/bookmarks/ephy-bookmarks.c:115
+#: ../src/bookmarks/ephy-bookmarks.c:121
 msgid "Work"
 msgstr "Praca"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:487
+#: ../src/bookmarks/ephy-bookmarks.c:493
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Aktualizavać zakładku \"%s\"?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:492
+#: ../src/bookmarks/ephy-bookmarks.c:498
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "Staronka, da jakoj viadzie zakładka, była pieraniesienaja ŭ \"%s\"."
 
-#: ../src/bookmarks/ephy-bookmarks.c:496
+#: ../src/bookmarks/ephy-bookmarks.c:502
 msgid "_Don't Update"
 msgstr "_Nie aktualizuj"
 
-#: ../src/bookmarks/ephy-bookmarks.c:498
+#: ../src/bookmarks/ephy-bookmarks.c:504
 msgid "_Update"
 msgstr "A_ktualizuj"
 
-#: ../src/bookmarks/ephy-bookmarks.c:501
+#: ../src/bookmarks/ephy-bookmarks.c:507
 msgid "Update Bookmark?"
 msgstr "Aktualizavać zakładku?"
 
@@ -2847,7 +2859,7 @@ msgstr "Aktualizavać zakładku?"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1067
+#: ../src/bookmarks/ephy-bookmarks.c:1246
 msgid "bookmarks|All"
 msgstr "Usie"
 
@@ -2855,7 +2867,7 @@ msgstr "Usie"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1073
+#: ../src/bookmarks/ephy-bookmarks.c:1252
 msgid "bookmarks|Most Visited"
 msgstr "Najpapularniejšyja"
 
@@ -2864,7 +2876,7 @@ msgstr "Najpapularniejšyja"
 #. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1080
+#: ../src/bookmarks/ephy-bookmarks.c:1259
 msgid "bookmarks|Not Categorized"
 msgstr "Niekateharyzavanyja"
 
@@ -2873,7 +2885,7 @@ msgstr "Niekateharyzavanyja"
 #. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1088
+#: ../src/bookmarks/ephy-bookmarks.c:1267
 msgid "bookmarks|Nearby Sites"
 msgstr "Lakalnyja staronki"
 
@@ -2890,204 +2902,204 @@ msgid "Remove from this topic"
 msgstr "Vydal z hetaj temy"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
-#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:118
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
+#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:119
 msgid "_File"
 msgstr "_Fajł"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:119
+#: ../src/bookmarks/ephy-bookmarks-editor.c:180
+#: ../src/ephy-history-window.c:170 ../src/ephy-window.c:120
 msgid "_Edit"
 msgstr "_Redahuj"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/ephy-history-window.c:173 ../src/ephy-window.c:120
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:121
 msgid "_View"
 msgstr "_Vyhlad"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
-#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:125
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:126
 msgid "_Help"
 msgstr "Dapamo_ha"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186
 msgid "_New Topic"
 msgstr "_Novaja tema"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Create a new topic"
 msgstr "Stvary novuju temu"
 
 #. FIXME ngettext
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1400
-#: ../src/bookmarks/ephy-bookmarks-ui.c:324 ../src/ephy-history-window.c:178
-#: ../src/ephy-history-window.c:757
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1370
+#: ../src/bookmarks/ephy-bookmarks-ui.c:324 ../src/ephy-history-window.c:176
+#: ../src/ephy-history-window.c:727
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Adčyni ŭ novym aknie"
 msgstr[1] "Adčyni ŭ novych voknach"
 msgstr[2] "Adčyni ŭ novych voknach"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Open the selected bookmark in a new window"
 msgstr "Adčyni abranuju zakładku ŭ novym aknie"
 
 #. FIXME ngettext
-#: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1403
-#: ../src/bookmarks/ephy-bookmarks-ui.c:312 ../src/ephy-history-window.c:181
-#: ../src/ephy-history-window.c:760
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1373
+#: ../src/bookmarks/ephy-bookmarks-ui.c:312 ../src/ephy-history-window.c:179
+#: ../src/ephy-history-window.c:730
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Adčyni ŭ novaj kartcy"
 msgstr[1] "Adčyni ŭ novych kartkach"
 msgstr[2] "Adčyni ŭ novych kartkach"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Open the selected bookmark in a new tab"
 msgstr "Adčyni abranuju zakładku ŭ novaj kartcy"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:197
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195
 msgid "_Rename…"
 msgstr "Ź_miani nazvu..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "Rename the selected bookmark or topic"
 msgstr "Źmiani nazvu abranaj zakładki albo temy"
 
 #. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-editor.c:199
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
 #: ../src/bookmarks/ephy-bookmarks-ui.c:300
 msgid "_Properties"
 msgstr "_Ułaścivaści"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Pakažy albo źmiani ŭłaścivaści abranaj zakładki"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "_Import Bookmarks…"
 msgstr "_Impartuj zakładki..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:203
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Impartuj zakładki ź inšaha hartača albo fajłu zakładak"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "_Export Bookmarks…"
 msgstr "_Ekspartuj zakładki..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:206
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
 msgid "Export bookmarks to a file"
 msgstr "Ekspartuj zakładki ŭ fajł"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
-#: ../src/ephy-history-window.c:187 ../src/ephy-window.c:150
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
+#: ../src/ephy-history-window.c:185 ../src/ephy-window.c:151
 msgid "_Close"
 msgstr "_Začyni"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/bookmarks/ephy-bookmarks-editor.c:207
 msgid "Close the bookmarks window"
 msgstr "Začyni vakno zakładak"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:162
+#: ../src/bookmarks/ephy-bookmarks-editor.c:211
+#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:163
 msgid "Cu_t"
 msgstr "_Vytni"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:214
-#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:163
+#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:164
 msgid "Cut the selection"
 msgstr "Vytni zaznačanaje"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:216
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1413
-#: ../src/ephy-history-window.c:195 ../src/ephy-history-window.c:770
-#: ../src/ephy-window.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1383
+#: ../src/ephy-history-window.c:193 ../src/ephy-history-window.c:740
+#: ../src/ephy-window.c:166
 msgid "_Copy"
 msgstr "S_kapijuj"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:215
+#: ../src/ephy-history-window.c:194 ../src/ephy-window.c:167
 msgid "Copy the selection"
 msgstr "Skapijuj zaznačanaje"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:219
-#: ../src/ephy-history-window.c:198 ../src/ephy-window.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:217
+#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:169
 msgid "_Paste"
 msgstr "Uk_lej"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:220
-#: ../src/ephy-history-window.c:199
+#: ../src/bookmarks/ephy-bookmarks-editor.c:218
+#: ../src/ephy-history-window.c:197
 msgid "Paste the clipboard"
 msgstr "Uklej źmieściva abmiennaha buferu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:222
-#: ../src/ephy-history-window.c:201
+#: ../src/bookmarks/ephy-bookmarks-editor.c:220
+#: ../src/ephy-history-window.c:199
 msgid "_Delete"
 msgstr "_Vydal"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:223
+#: ../src/bookmarks/ephy-bookmarks-editor.c:221
 msgid "Delete the selected bookmark or topic"
 msgstr "Vydal abranuju zakładku albo temu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:225
-#: ../src/ephy-history-window.c:204 ../src/ephy-window.c:174
+#: ../src/bookmarks/ephy-bookmarks-editor.c:223
+#: ../src/ephy-history-window.c:202 ../src/ephy-window.c:175
 msgid "Select _All"
 msgstr "Z_aznač usio"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:226
+#: ../src/bookmarks/ephy-bookmarks-editor.c:224
 msgid "Select all bookmarks or text"
 msgstr "Zaznač usie zakładki albo tekst"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:230
-#: ../src/ephy-history-window.c:212 ../src/ephy-window.c:265
+#: ../src/bookmarks/ephy-bookmarks-editor.c:228
+#: ../src/ephy-history-window.c:210 ../src/ephy-window.c:266
 msgid "_Contents"
 msgstr "_Źmieściva"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:231
+#: ../src/bookmarks/ephy-bookmarks-editor.c:229
 msgid "Display bookmarks help"
 msgstr "Pakažy dapamohu na temu zakładak"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:233
-#: ../src/ephy-history-window.c:215 ../src/ephy-window.c:268
+#: ../src/bookmarks/ephy-bookmarks-editor.c:231
+#: ../src/ephy-history-window.c:213 ../src/ephy-window.c:269
 msgid "_About"
 msgstr "_Pra prahramu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:234
-#: ../src/ephy-history-window.c:216 ../src/ephy-window.c:269
+#: ../src/bookmarks/ephy-bookmarks-editor.c:232
+#: ../src/ephy-history-window.c:214 ../src/ephy-window.c:270
 msgid "Display credits for the web browser creators"
 msgstr "Pakažy padziaki stvaralnikam web-hartača"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:239
+#: ../src/bookmarks/ephy-bookmarks-editor.c:237
 msgid "_Show on Toolbar"
 msgstr "_Pakazvaj na paneli pryładździa"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:240
+#: ../src/bookmarks/ephy-bookmarks-editor.c:238
 msgid "Show the selected bookmark on a toolbar"
 msgstr "Pakazvaj abranuju zakładku na paneli pryładździa"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:253
-#: ../src/ephy-history-window.c:230
+#: ../src/bookmarks/ephy-bookmarks-editor.c:251
+#: ../src/ephy-history-window.c:228
 msgid "_Title"
 msgstr "_Zahałovak"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:254
+#: ../src/bookmarks/ephy-bookmarks-editor.c:252
 msgid "Show only the title column"
 msgstr "Pakazvaj tolki kalonku z zahałoŭkami"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:255
+#: ../src/bookmarks/ephy-bookmarks-editor.c:253
 msgid "T_itle and Address"
 msgstr "_Zahałovak i Adras"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:256
+#: ../src/bookmarks/ephy-bookmarks-editor.c:254
 msgid "Show both the title and address columns"
 msgstr "Pakazvaj kalonki z zahałoŭkami dy adrasami"
 
@@ -3196,32 +3208,32 @@ msgstr "I_mpartuj"
 msgid "Import bookmarks from:"
 msgstr "Impartuj zakładki z:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1409
-#: ../src/ephy-history-window.c:766
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1379
+#: ../src/ephy-history-window.c:736
 msgid "_Copy Address"
 msgstr "_Skapijuj adras"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1674
-#: ../src/ephy-history-window.c:1119
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1644
+#: ../src/ephy-history-window.c:1089
 msgid "Clear"
 msgstr "Ačyść"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1688
-#: ../src/ephy-history-window.c:1127
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1658
+#: ../src/ephy-history-window.c:1097
 msgid "_Search:"
 msgstr "Z_najdzi:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1886
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1856
 msgid "Topics"
 msgstr "Temy"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1956
-#: ../src/ephy-history-window.c:1450
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1926
+#: ../src/ephy-history-window.c:1420
 msgid "Title"
 msgstr "Zahałovak"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1967
-#: ../src/ephy-history-window.c:1459
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1937
+#: ../src/ephy-history-window.c:1429
 msgid "Address"
 msgstr "Adras"
 
@@ -3246,147 +3258,147 @@ msgstr "Adčyni ŭ novych _kartkach"
 msgid "Open the bookmarks in this topic in new tabs"
 msgstr "Adčyni zakładki na hetuju temu ŭ novych kartkach"
 
-#: ../src/bookmarks/ephy-related-action.c:176
+#: ../src/bookmarks/ephy-related-action.c:155
 msgid "Related"
 msgstr "Padobnaje"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:322
+#: ../src/bookmarks/ephy-topic-factory-action.c:300
 msgid "Topic"
 msgstr "Tema"
 
-#: ../src/bookmarks/ephy-topics-entry.c:359
+#: ../src/bookmarks/ephy-topics-entry.c:331
 #, c-format
 msgid "Create topic “%s”"
 msgstr "Stvary temu \"%s\""
 
-#: ../src/ephy-encoding-dialog.c:342
+#: ../src/ephy-encoding-dialog.c:317
 msgid "Encodings"
 msgstr "Kadavańni"
 
-#: ../src/ephy-encoding-menu.c:354
+#: ../src/ephy-encoding-menu.c:326
 msgid "_Other…"
 msgstr "I_nšaje..."
 
-#: ../src/ephy-encoding-menu.c:355
+#: ../src/ephy-encoding-menu.c:327
 msgid "Other encodings"
 msgstr "Inšyja kadavańni"
 
-#: ../src/ephy-encoding-menu.c:361
+#: ../src/ephy-encoding-menu.c:333
 msgid "_Automatic"
 msgstr "_Aŭtamatyčna"
 
-#: ../src/ephy-find-toolbar.c:141
+#: ../src/ephy-find-toolbar.c:139
 msgid "Not found"
 msgstr "Nia znojdziena"
 
-#: ../src/ephy-find-toolbar.c:153
+#: ../src/ephy-find-toolbar.c:151
 msgid "Wrapped"
 msgstr "Pieraniesiena"
 
-#: ../src/ephy-find-toolbar.c:173
+#: ../src/ephy-find-toolbar.c:171
 msgid "Find links:"
 msgstr "Znajdzi spasyłki:"
 
-#: ../src/ephy-find-toolbar.c:173
+#: ../src/ephy-find-toolbar.c:171
 msgid "Find:"
 msgstr "Znajdzi:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:365 ../src/ephy-find-toolbar.c:487
+#: ../src/ephy-find-toolbar.c:363 ../src/ephy-find-toolbar.c:485
 msgid "_Case sensitive"
 msgstr "_Z ulikam rehistru"
 
-#: ../src/ephy-find-toolbar.c:470
+#: ../src/ephy-find-toolbar.c:468
 msgid "Find Previous"
 msgstr "Znajdzi papiarednija"
 
-#: ../src/ephy-find-toolbar.c:473
+#: ../src/ephy-find-toolbar.c:471
 msgid "Find previous occurrence of the search string"
 msgstr "Znajdzi papiarednija miescy z hetym słovam albo frazaj"
 
-#: ../src/ephy-find-toolbar.c:479
+#: ../src/ephy-find-toolbar.c:477
 msgid "Find Next"
 msgstr "Znajdzi nastupnyja"
 
-#: ../src/ephy-find-toolbar.c:482
+#: ../src/ephy-find-toolbar.c:480
 msgid "Find next occurrence of the search string"
 msgstr "Znajdzi nastupnyja miescy z hetym słovam albo frazaj"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:271 ../src/ephy-toolbar.c:592
+#: ../src/ephy-fullscreen-popup.c:272 ../src/ephy-toolbar.c:600
 msgid "Leave Fullscreen"
 msgstr "Pakiń poŭny ekran"
 
-#: ../src/ephy-go-action.c:71 ../src/ephy-toolbar.c:314
+#: ../src/ephy-go-action.c:43 ../src/ephy-toolbar.c:321
 msgid "Go"
 msgstr "Pierajdzi"
 
-#: ../src/ephy-history-window.c:179
+#: ../src/ephy-history-window.c:177
 msgid "Open the selected history link in a new window"
 msgstr "Adčyni abranuju spasyłku historyi ŭ novym aknie"
 
-#: ../src/ephy-history-window.c:182
+#: ../src/ephy-history-window.c:180
 msgid "Open the selected history link in a new tab"
 msgstr "Adčyni abranuju spasyłku historyi ŭ novaj kartcy"
 
-#: ../src/ephy-history-window.c:184
+#: ../src/ephy-history-window.c:182
 msgid "Add _Bookmark…"
 msgstr "_Dadaj zakładku..."
 
-#: ../src/ephy-history-window.c:185
+#: ../src/ephy-history-window.c:183
 msgid "Bookmark the selected history link"
 msgstr "Dadaj vybranuju spasyłku historyi ŭ zakładki"
 
-#: ../src/ephy-history-window.c:188
+#: ../src/ephy-history-window.c:186
 msgid "Close the history window"
 msgstr "Začyni vakno historyi"
 
-#: ../src/ephy-history-window.c:202
+#: ../src/ephy-history-window.c:200
 msgid "Delete the selected history link"
 msgstr "Vydal vybranuju spasyłku historyi"
 
-#: ../src/ephy-history-window.c:205
+#: ../src/ephy-history-window.c:203
 msgid "Select all history links or text"
 msgstr "Zaznač usie spasyłki historyi albo ŭvieś tekst"
 
-#: ../src/ephy-history-window.c:207
+#: ../src/ephy-history-window.c:205
 msgid "Clear _History"
 msgstr "Vyčyść _historyju"
 
-#: ../src/ephy-history-window.c:208
+#: ../src/ephy-history-window.c:206
 msgid "Clear your browsing history"
 msgstr "Vyčyść historyju prahladu"
 
-#: ../src/ephy-history-window.c:213
+#: ../src/ephy-history-window.c:211
 msgid "Display history help"
 msgstr "Pakažy dapamohu na temu historyi"
 
-#: ../src/ephy-history-window.c:231
+#: ../src/ephy-history-window.c:229
 msgid "Show the title column"
 msgstr "Pakazvaj kalonku z zahałoŭkami"
 
-#: ../src/ephy-history-window.c:232
+#: ../src/ephy-history-window.c:230
 msgid "_Address"
 msgstr "_Adras"
 
-#: ../src/ephy-history-window.c:233
+#: ../src/ephy-history-window.c:231
 msgid "Show the address column"
 msgstr "Pakazvaj kalonu z adrasam"
 
-#: ../src/ephy-history-window.c:234
+#: ../src/ephy-history-window.c:232
 msgid "_Date and Time"
 msgstr "_Data j čas"
 
-#: ../src/ephy-history-window.c:235
+#: ../src/ephy-history-window.c:233
 msgid "Show the date and time column"
 msgstr "Pakazvaj kalonku z dataj dy časam"
 
-#: ../src/ephy-history-window.c:261
+#: ../src/ephy-history-window.c:259
 msgid "Clear browsing history?"
 msgstr "Ci chočaš ačyścić historyju prahladu?"
 
-#: ../src/ephy-history-window.c:265
+#: ../src/ephy-history-window.c:263
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -3394,21 +3406,21 @@ msgstr ""
 "Ačystka historyi prahladu pryviadzie da taho, što ŭsie spasyłki z historyi "
 "buduć vydalenyja."
 
-#: ../src/ephy-history-window.c:280
+#: ../src/ephy-history-window.c:278
 msgid "Clear History"
 msgstr "Vyčyść historyju"
 
-#: ../src/ephy-history-window.c:1136
+#: ../src/ephy-history-window.c:1106
 msgid "Last 30 minutes"
 msgstr "Apošnija 30 chvilin"
 
-#: ../src/ephy-history-window.c:1137
+#: ../src/ephy-history-window.c:1107
 msgid "Today"
 msgstr "Siońnia"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1138 ../src/ephy-history-window.c:1141
-#: ../src/ephy-history-window.c:1145
+#: ../src/ephy-history-window.c:1108 ../src/ephy-history-window.c:1111
+#: ../src/ephy-history-window.c:1115
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
@@ -3416,67 +3428,67 @@ msgstr[0] "Apošni %d dzień"
 msgstr[1] "Apošnija %d dni"
 msgstr[2] "Apošnija %d dzion"
 
-#: ../src/ephy-history-window.c:1387
+#: ../src/ephy-history-window.c:1357
 msgid "Sites"
 msgstr "Sajty"
 
-#: ../src/ephy-history-window.c:1467
+#: ../src/ephy-history-window.c:1437
 msgid "Date"
 msgstr "Data"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:76
 msgid "Open a new tab in an existing browser window"
 msgstr "Adčyni novuju kartku ŭ dziejnym aknie hartača"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:78
 msgid "Open a new browser window"
 msgstr "Adčyni novaje vakno hartača"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:80
 msgid "Launch the bookmarks editor"
 msgstr "Uklučy redaktar zakładak"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:82
 msgid "Import bookmarks from the given file"
 msgstr "Impartuj zakładki z padadzienaha fajłu"
 
-#: ../src/ephy-main.c:84 ../src/ephy-main.c:86
+#: ../src/ephy-main.c:82 ../src/ephy-main.c:84
 msgid "FILE"
 msgstr "FAJŁ"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:84
 msgid "Load the given session file"
 msgstr "Zahruzi padadzieny fajł sesii"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:86
 msgid "Add a bookmark"
 msgstr "Dadaj zakładku"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:86
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:88
 msgid "Start a private instance"
 msgstr "Uklučy pryvatnuju instancyju"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:90
 msgid "Profile directory to use in the private instance"
 msgstr "Kataloh profilu, užyvanaha ŭ pryvatnaj instancyi"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:90
 msgid "DIR"
 msgstr "KATALOH"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:92
 msgid "URL …"
 msgstr "URL ..."
 
-#: ../src/ephy-main.c:396
+#: ../src/ephy-main.c:407
 msgid "Could not start GNOME Web Browser"
 msgstr "Niemahčyma ŭruchomić web-hartač GNOME"
 
-#: ../src/ephy-main.c:399
+#: ../src/ephy-main.c:410
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -3485,19 +3497,19 @@ msgstr ""
 "Uruchamleńnie nie ŭdałosia z pryčyny pamyłki:\n"
 "%s"
 
-#: ../src/ephy-main.c:504 ../src/window-commands.c:847
+#: ../src/ephy-main.c:515 ../src/window-commands.c:883
 msgid "GNOME Web Browser"
 msgstr "Web-hartač GNOME"
 
-#: ../src/ephy-main.c:505
+#: ../src/ephy-main.c:516
 msgid "GNOME Web Browser options"
 msgstr "Opcyi web-hartača GNOME"
 
-#: ../src/ephy-notebook.c:614
+#: ../src/ephy-notebook.c:620
 msgid "Close tab"
 msgstr "Začyni kartku"
 
-#: ../src/ephy-session.c:161
+#: ../src/ephy-session.c:122
 #, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
@@ -3505,11 +3517,11 @@ msgstr[0] "Zahruzka budzie spynienaja, a praz %d sekundu adbudziecca vyjście."
 msgstr[1] "Zahruzka budzie spynienaja, a praz %d sekundy adbudziecca vyjście."
 msgstr[2] "Zahruzka budzie spynienaja, a praz %d sekundaŭ adbudziecca vyjście."
 
-#: ../src/ephy-session.c:277
+#: ../src/ephy-session.c:238
 msgid "Abort pending downloads?"
 msgstr "Spynić niezakončanyja zahruzki?"
 
-#: ../src/ephy-session.c:281
+#: ../src/ephy-session.c:242
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
@@ -3517,19 +3529,19 @@ msgstr ""
 "Zastalisia jašče niezakončanyja zahruzki. Kali ty vyjdzieš, jany buduć "
 "stračanyja."
 
-#: ../src/ephy-session.c:285
+#: ../src/ephy-session.c:246
 msgid "_Cancel Logout"
 msgstr "_Anuluj vyjście"
 
-#: ../src/ephy-session.c:287
+#: ../src/ephy-session.c:248
 msgid "_Abort Downloads"
 msgstr "_Spyni zahruzki"
 
-#: ../src/ephy-session.c:615
+#: ../src/ephy-session.c:581
 msgid "Recover previous browser windows and tabs?"
 msgstr "Viarnuć papiarednija vokny i kartki hartača?"
 
-#: ../src/ephy-session.c:619
+#: ../src/ephy-session.c:585
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -3537,38 +3549,38 @@ msgstr ""
 "Padčas apošniaha ŭklučeńnia Epiphany niečakana skončyŭ pracu. Možna viarnuć "
 "niadaŭna adčynianyja vokny j kartki."
 
-#: ../src/ephy-session.c:623
+#: ../src/ephy-session.c:589
 msgid "_Don't Recover"
 msgstr "_Nie viartaj"
 
-#: ../src/ephy-session.c:625
+#: ../src/ephy-session.c:591
 msgid "_Recover"
 msgstr "_Viarni"
 
-#: ../src/ephy-session.c:627
+#: ../src/ephy-session.c:593
 msgid "Crash Recovery"
 msgstr "Uznaŭleńnie paśla pamyłki prahramy"
 
-#: ../src/ephy-shell.c:199
+#: ../src/ephy-shell.c:169
 msgid "Sidebar extension required"
 msgstr "Vymahanaje pašyreńnnie Sidebar (Bakavaja panel)"
 
-#: ../src/ephy-shell.c:201
+#: ../src/ephy-shell.c:171
 msgid "Sidebar Extension Required"
 msgstr "Vymahanaje pašyreńnnie Sidebar (Bakavaja panel)"
 
-#: ../src/ephy-shell.c:205
+#: ../src/ephy-shell.c:175
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Kliknutaja spasyłka vymahaje pašyreńnia Sidebar (Bakavaja panel)."
 
-#: ../src/ephy-statusbar.c:120
+#: ../src/ephy-statusbar.c:91
 msgid "Caret"
 msgstr "Kursor"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:127
+#: ../src/ephy-statusbar.c:98
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "U režymie zaznačeńnia klavijatury, naciśni F7, kab vyjści"
 
@@ -3576,88 +3588,88 @@ msgstr "U režymie zaznačeńnia klavijatury, naciśni F7, kab vyjści"
 msgid "Switch to this tab"
 msgstr "Pieraklučy na hetuju kartku"
 
-#: ../src/ephy-toolbar.c:223
+#: ../src/ephy-toolbar.c:230
 msgid "_Back"
 msgstr "_Nazad"
 
-#: ../src/ephy-toolbar.c:225
+#: ../src/ephy-toolbar.c:232
 msgid "Go to the previous visited page"
 msgstr "Pierajdzi da niadaŭna naviedanaj staronki"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:229
+#: ../src/ephy-toolbar.c:236
 msgid "Back history"
 msgstr "Historyja viartańniaŭ"
 
-#: ../src/ephy-toolbar.c:243
+#: ../src/ephy-toolbar.c:250
 msgid "_Forward"
 msgstr "_Napierad"
 
-#: ../src/ephy-toolbar.c:245
+#: ../src/ephy-toolbar.c:252
 msgid "Go to the next visited page"
 msgstr "Pierajdzi da čarhovaj naviedanaj staronki"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:249
+#: ../src/ephy-toolbar.c:256
 msgid "Forward history"
 msgstr "Historyja pierachodaŭ napierad"
 
-#: ../src/ephy-toolbar.c:262
+#: ../src/ephy-toolbar.c:269
 msgid "_Up"
 msgstr "_Uvierch"
 
-#: ../src/ephy-toolbar.c:264
+#: ../src/ephy-toolbar.c:271
 msgid "Go up one level"
 msgstr "Pierajdzi ŭvierch na adzin uzrovień"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:268
+#: ../src/ephy-toolbar.c:275
 msgid "List of upper levels"
 msgstr "Śpis vyšejšych ŭzroŭniaŭ"
 
-#: ../src/ephy-toolbar.c:286
+#: ../src/ephy-toolbar.c:293
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "Uviadzi adras staronki, kab adčynić, albo šukany vyraz"
 
-#: ../src/ephy-toolbar.c:302
+#: ../src/ephy-toolbar.c:309
 msgid "Zoom"
 msgstr "Pavialič"
 
-#: ../src/ephy-toolbar.c:304
+#: ../src/ephy-toolbar.c:311
 msgid "Adjust the text size"
 msgstr "Dapasuj pamier tekstu"
 
-#: ../src/ephy-toolbar.c:316
+#: ../src/ephy-toolbar.c:323
 msgid "Go to the address entered in the address entry"
 msgstr "Pierajdzi da adrasu, upisanaha ŭ adrasnym poli"
 
-#: ../src/ephy-toolbar.c:325
+#: ../src/ephy-toolbar.c:332
 msgid "_Home"
 msgstr "_Pačatak"
 
-#: ../src/ephy-toolbar.c:327
+#: ../src/ephy-toolbar.c:334
 msgid "Go to the home page"
 msgstr "Pierajdzi na pačatkovuju staronku"
 
-#: ../src/ephy-toolbar.c:337
+#: ../src/ephy-toolbar.c:344
 msgid "New _Tab"
 msgstr "No_vaja kartka"
 
-#: ../src/ephy-toolbar.c:339
+#: ../src/ephy-toolbar.c:346
 msgid "Open a new tab"
 msgstr "Adčyni novuju kartku"
 
-#: ../src/ephy-toolbar.c:348
+#: ../src/ephy-toolbar.c:355
 msgid "_New Window"
 msgstr "_Novaje vakno"
 
-#: ../src/ephy-toolbar.c:350
+#: ../src/ephy-toolbar.c:357
 msgid "Open a new window"
 msgstr "Adčyni novaje vakno"
 
@@ -3684,513 +3696,513 @@ msgstr "Tolki ikony"
 msgid "Text only"
 msgstr "Tolki tekst"
 
-#: ../src/ephy-toolbar-editor.c:195
+#: ../src/ephy-toolbar-editor.c:196
 msgid "Toolbar Editor"
 msgstr "Redaktar paneli pryładździa"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:214
+#: ../src/ephy-toolbar-editor.c:215
 msgid "Toolbar _button labels:"
 msgstr "_Podpisy dla knopak paneli pryładździa:"
 
-#: ../src/ephy-toolbar-editor.c:278
+#: ../src/ephy-toolbar-editor.c:279
 msgid "_Add a New Toolbar"
 msgstr "D_adaj novuju panel pryładździa"
 
-#: ../src/ephy-window.c:121
+#: ../src/ephy-window.c:122
 msgid "_Bookmarks"
 msgstr "Zakład_ki"
 
-#: ../src/ephy-window.c:122
+#: ../src/ephy-window.c:123
 msgid "_Go"
 msgstr "P_ierajdzi"
 
-#: ../src/ephy-window.c:123
+#: ../src/ephy-window.c:124
 msgid "T_ools"
 msgstr "_Pryładździe"
 
-#: ../src/ephy-window.c:124
+#: ../src/ephy-window.c:125
 msgid "_Tabs"
 msgstr "Kar_tki"
 
-#: ../src/ephy-window.c:126
+#: ../src/ephy-window.c:127
 msgid "_Toolbars"
 msgstr "Paneli _pryładździa"
 
 #. File menu
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:133
 msgid "_Open…"
 msgstr "_Adčyni…"
 
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:134
 msgid "Open a file"
 msgstr "Adčyni fajł"
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:136
 msgid "Save _As…"
 msgstr "Z_apišy jak..."
 
-#: ../src/ephy-window.c:136
+#: ../src/ephy-window.c:137
 msgid "Save the current page"
 msgstr "Zapišy dziejnuju staronku"
 
-#: ../src/ephy-window.c:138
-msgid "Print Set_up…"
-msgstr "Nałady vy_druku..."
-
 #: ../src/ephy-window.c:139
+msgid "Page Set_up"
+msgstr "_Nałady staronki"
+
+#: ../src/ephy-window.c:140
 msgid "Setup the page settings for printing"
 msgstr "Madyfikuj nałady staronki, kab drukavać"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:142
 msgid "Print Pre_view"
 msgstr "Pieradahlad _vydruku"
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:143
 msgid "Print preview"
 msgstr "Pieradahlad vydruku"
 
-#: ../src/ephy-window.c:144
+#: ../src/ephy-window.c:145
 msgid "_Print…"
 msgstr "_Drukuj..."
 
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:146
 msgid "Print the current page"
 msgstr "Vydrukuj dziejnuju staronku"
 
-#: ../src/ephy-window.c:147
+#: ../src/ephy-window.c:148
 msgid "S_end Link by Email…"
 msgstr "Vyšli spasyłku pa email..."
 
-#: ../src/ephy-window.c:148
+#: ../src/ephy-window.c:149
 msgid "Send a link of the current page"
 msgstr "Vyšli spasyłku dziejnaj staronki"
 
-#: ../src/ephy-window.c:151
+#: ../src/ephy-window.c:152
 msgid "Close this tab"
 msgstr "Začyni hetuju kartku"
 
 #. Edit menu
-#: ../src/ephy-window.c:156
+#: ../src/ephy-window.c:157
 msgid "_Undo"
 msgstr "_Admiani"
 
-#: ../src/ephy-window.c:157
+#: ../src/ephy-window.c:158
 msgid "Undo the last action"
 msgstr "Admiani apošniuju aperacyju"
 
-#: ../src/ephy-window.c:159
+#: ../src/ephy-window.c:160
 msgid "Re_do"
 msgstr "Uznav_i"
 
-#: ../src/ephy-window.c:160
+#: ../src/ephy-window.c:161
 msgid "Redo the last undone action"
 msgstr "Uznavi apošniuju admienienuju aperacyju"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:170
 msgid "Paste clipboard"
 msgstr "Uklej źmieściva abmiennaha buferu"
 
-#: ../src/ephy-window.c:172
+#: ../src/ephy-window.c:173
 msgid "Delete text"
 msgstr "Vydal tekst"
 
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:176
 msgid "Select the entire page"
 msgstr "Zaznač cełuju staronku"
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:178
 msgid "_Find…"
 msgstr "_Znajdzi..."
 
-#: ../src/ephy-window.c:178
+#: ../src/ephy-window.c:179
 msgid "Find a word or phrase in the page"
 msgstr "Znajdzi słova albo frazu na staroncy"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:181
 msgid "Find Ne_xt"
 msgstr "Znajdzi _nastupnaje"
 
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:182
 msgid "Find next occurrence of the word or phrase"
 msgstr "Znajdzi nastupnaje pajaŭleńnie słova albo frazy"
 
-#: ../src/ephy-window.c:183
+#: ../src/ephy-window.c:184
 msgid "Find Pre_vious"
 msgstr "Znajdzi _papiaredniaje"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:185
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Znajdzi papiaredniaje pajaŭleńnie słova albo frazy"
 
-#: ../src/ephy-window.c:186
+#: ../src/ephy-window.c:187
 msgid "P_ersonal Data"
 msgstr "Asabistyja źvi_estki"
 
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:188
 msgid "View and remove cookies and passwords"
 msgstr "Prahladaj j vydalaj ciestki j paroli"
 
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:191
 msgid "Certificate_s"
 msgstr "Sertyf_ikaty"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:192
 msgid "Manage Certificates"
 msgstr "Kiruj sertyfikatami"
 
-#: ../src/ephy-window.c:194
+#: ../src/ephy-window.c:195
 msgid "P_references"
 msgstr "N_ałady"
 
-#: ../src/ephy-window.c:195
+#: ../src/ephy-window.c:196
 msgid "Configure the web browser"
 msgstr "Kanfihuruj web-hartač"
 
 #. View menu
-#: ../src/ephy-window.c:200
+#: ../src/ephy-window.c:201
 msgid "_Customize Toolbars…"
 msgstr "_Dastasuj paneli pryładździa..."
 
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:202
 msgid "Customize toolbars"
 msgstr "Dastasuj paneli pryładździa"
 
-#: ../src/ephy-window.c:203 ../src/ephy-window.c:206
+#: ../src/ephy-window.c:204 ../src/ephy-window.c:207
 msgid "_Stop"
 msgstr "_Spyni"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:205
 msgid "Stop current data transfer"
 msgstr "Spyni dziejnuju pieradaču źviestak"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:209
 msgid "_Reload"
 msgstr "_Pierahruzi"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:210
 msgid "Display the latest content of the current page"
 msgstr "Pakažy apošniaje źmieściva dziejnaj staronki"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:212
 msgid "_Larger Text"
 msgstr "_Bujniejšy tekst"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:213
 msgid "Increase the text size"
 msgstr "Pavialič pamier tekstu"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:215
 msgid "S_maller Text"
 msgstr "_Mienšy tekst"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:216
 msgid "Decrease the text size"
 msgstr "Źmienš pamier tekstu"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:218
 msgid "_Normal Size"
 msgstr "_Zvyčajny pamier"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:219
 msgid "Use the normal text size"
 msgstr "Užyvaj zvyčajny pamier tekstu"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:221
 msgid "Text _Encoding"
 msgstr "_Kadavańnie tekstu"
 
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:222
 msgid "Change the text encoding"
 msgstr "Źmiani kadavańnie tekstu"
 
-#: ../src/ephy-window.c:223
+#: ../src/ephy-window.c:224
 msgid "_Page Source"
 msgstr "_Kryničny kod staronki"
 
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:225
 msgid "View the source code of the page"
 msgstr "Pakažy kryničny kod staronki"
 
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:227
 msgid "Page _Security Information"
 msgstr "Infarmacyja _pra abaronienaść staronki"
 
-#: ../src/ephy-window.c:227
+#: ../src/ephy-window.c:228
 msgid "Display security information for the web page"
 msgstr "Pakažy infarmacyju pra abaronienaść staronki"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:233
 msgid "_Add Bookmark…"
 msgstr "_Dadaj zakładku..."
 
-#: ../src/ephy-window.c:233 ../src/ephy-window.c:304
+#: ../src/ephy-window.c:234 ../src/ephy-window.c:305
 msgid "Add a bookmark for the current page"
 msgstr "Dadaj zakładku dla dziejnaj staronki"
 
-#: ../src/ephy-window.c:235
+#: ../src/ephy-window.c:236
 msgid "_Edit Bookmarks"
 msgstr "_Madyfikuj zakładki"
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:237
 msgid "Open the bookmarks window"
 msgstr "Adčyni vakno zakładak"
 
 #. Go menu
-#: ../src/ephy-window.c:241
+#: ../src/ephy-window.c:242
 msgid "_Location…"
 msgstr "_Pałažeńnie..."
 
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:243
 msgid "Go to a specified location"
 msgstr "Pierajdzi da padadzienaha pałažeńnia"
 
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:245
 msgid "Hi_story"
 msgstr "_Historyja"
 
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:246
 msgid "Open the history window"
 msgstr "Adčyni vakno historyi"
 
 #. Tabs menu
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:251
 msgid "_Previous Tab"
 msgstr "_Papiaredniaja kartka"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:252
 msgid "Activate previous tab"
 msgstr "Aktyvuj papiaredniuju kartku"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:254
 msgid "_Next Tab"
 msgstr "_Nastupnaja kartka"
 
-#: ../src/ephy-window.c:254
+#: ../src/ephy-window.c:255
 msgid "Activate next tab"
 msgstr "Aktyvuj nastupnuju kartku"
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:257
 msgid "Move Tab _Left"
 msgstr "Pieraniasi kartku ŭ_leva"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:258
 msgid "Move current tab to left"
 msgstr "Pieraniasi dziejnuju kartku ŭleva"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:260
 msgid "Move Tab _Right"
 msgstr "Pieraniasi kartku ŭp_rava"
 
-#: ../src/ephy-window.c:260
+#: ../src/ephy-window.c:261
 msgid "Move current tab to right"
 msgstr "Pieraniasi dziejnuju kartku ŭprava"
 
-#: ../src/ephy-window.c:266
+#: ../src/ephy-window.c:267
 msgid "Display web browser help"
 msgstr "Pakažy dapamohu na temu web-hartača"
 
 #. File Menu
-#: ../src/ephy-window.c:277
+#: ../src/ephy-window.c:278
 msgid "_Work Offline"
 msgstr "P_racuj biez padłučeńnia"
 
-#: ../src/ephy-window.c:278
+#: ../src/ephy-window.c:279
 msgid "Switch to offline mode"
 msgstr "Pierajdzi ŭ režym pracy biez padłučeńnia"
 
 #. View Menu
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:284
 msgid "_Hide Toolbars"
 msgstr "_Schavaj paneli pryładździa"
 
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:285
 msgid "Show or hide toolbar"
 msgstr "Pakažy albo schavaj panel pryładździa"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:287
 msgid "St_atusbar"
 msgstr "Panel _stanu"
 
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:288
 msgid "Show or hide statusbar"
 msgstr "Pakažy albo schavaj panel stanu"
 
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:290
 msgid "_Fullscreen"
 msgstr "Poŭny _ekran"
 
-#: ../src/ephy-window.c:290
+#: ../src/ephy-window.c:291
 msgid "Browse at full screen"
 msgstr "Prahladaj u poŭnaekrannym režymie"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:293
 msgid "Popup _Windows"
 msgstr "_Vypłyŭnyja vokny"
 
-#: ../src/ephy-window.c:293
+#: ../src/ephy-window.c:294
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Pakažy albo schavaj niezapatrabavanyja vypłyŭnyja vokny z hetaha sajtu"
 
-#: ../src/ephy-window.c:295
+#: ../src/ephy-window.c:296
 msgid "Selection Caret"
 msgstr "Redaktarskaje paznačeńnie"
 
 #. Document
-#: ../src/ephy-window.c:303
+#: ../src/ephy-window.c:304
 msgid "Add Boo_kmark…"
 msgstr "_Dadaj zakładku..."
 
 #. Framed document
-#: ../src/ephy-window.c:309
+#: ../src/ephy-window.c:310
 msgid "Show Only _This Frame"
 msgstr "Pakažy _tolki hetuju ramku"
 
-#: ../src/ephy-window.c:310
+#: ../src/ephy-window.c:311
 msgid "Show only this frame in this window"
 msgstr "Pakazvaj tolki hetuju ramku ŭ aknie"
 
 #. Links
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:316
 msgid "_Open Link"
 msgstr "_Adčyni spasyłku"
 
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:317
 msgid "Open link in this window"
 msgstr "Adčyni spasyłku ŭ hetym aknie"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:319
 msgid "Open Link in New _Window"
 msgstr "Adčyni spasyłku ŭ _novym aknie"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:320
 msgid "Open link in a new window"
 msgstr "Adčyni spasyłku ŭ novym aknie"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:322
 msgid "Open Link in New _Tab"
 msgstr "Adčyni spasyłku na novaj _kartcy"
 
-#: ../src/ephy-window.c:322
+#: ../src/ephy-window.c:323
 msgid "Open link in a new tab"
 msgstr "Adčyni spasyłku ŭ novaj kartcy"
 
-#: ../src/ephy-window.c:324
+#: ../src/ephy-window.c:325
 msgid "_Download Link"
 msgstr "_Zahruzi spasyłku"
 
-#: ../src/ephy-window.c:326
+#: ../src/ephy-window.c:327
 msgid "_Save Link As…"
 msgstr "_Zapišy spasyłku jak..."
 
-#: ../src/ephy-window.c:327
+#: ../src/ephy-window.c:328
 msgid "Save link with a different name"
 msgstr "Zapišy spasyłku pad inšaj nazvaj"
 
-#: ../src/ephy-window.c:329
+#: ../src/ephy-window.c:330
 msgid "_Bookmark Link…"
 msgstr "Dadaj spasyłku ŭ za_kładki..."
 
-#: ../src/ephy-window.c:331
+#: ../src/ephy-window.c:332
 msgid "_Copy Link Address"
 msgstr "Skapijuj _adras spasyłki"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:337
+#: ../src/ephy-window.c:338
 msgid "_Send Email…"
 msgstr "Vyš_li na email..."
 
-#: ../src/ephy-window.c:339
+#: ../src/ephy-window.c:340
 msgid "_Copy Email Address"
 msgstr "_Skapijuj adras email"
 
 #. Images
-#: ../src/ephy-window.c:344
+#: ../src/ephy-window.c:345
 msgid "Open _Image"
 msgstr "Adčyn_i vyjavu"
 
-#: ../src/ephy-window.c:346
+#: ../src/ephy-window.c:347
 msgid "_Save Image As…"
 msgstr "_Zapišy vyjavu jak..."
 
-#: ../src/ephy-window.c:348
+#: ../src/ephy-window.c:349
 msgid "_Use Image As Background"
 msgstr "Vykarystaj vyjavu ŭ jakaści fonavaj"
 
-#: ../src/ephy-window.c:350
+#: ../src/ephy-window.c:351
 msgid "Copy I_mage Address"
 msgstr "Skapijuj a_dras vyjavy"
 
-#: ../src/ephy-window.c:352
+#: ../src/ephy-window.c:353
 msgid "St_art Animation"
 msgstr "_Uklučy animacyju"
 
-#: ../src/ephy-window.c:354
+#: ../src/ephy-window.c:355
 msgid "St_op Animation"
 msgstr "_Zatrymaj animacyju"
 
-#: ../src/ephy-window.c:527
+#: ../src/ephy-window.c:528
 msgid "There are unsubmitted changes to form elements"
 msgstr "Zastalisia niavysłanyja źmieny elementaŭ formy"
 
-#: ../src/ephy-window.c:531
+#: ../src/ephy-window.c:532
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Kali ty začyniš dakument, straciš hetuju infarmacyju."
 
-#: ../src/ephy-window.c:535
+#: ../src/ephy-window.c:536
 msgid "Close _Document"
 msgstr "Začyn_i dakument"
 
-#: ../src/ephy-window.c:1452 ../src/window-commands.c:267
+#: ../src/ephy-window.c:1478 ../src/window-commands.c:280
 msgid "Open"
 msgstr "Adčyni"
 
-#: ../src/ephy-window.c:1454 ../src/window-commands.c:293
+#: ../src/ephy-window.c:1480 ../src/window-commands.c:306
 msgid "Save As"
 msgstr "Zapišy jak"
 
-#: ../src/ephy-window.c:1456
+#: ../src/ephy-window.c:1482
 msgid "Print"
 msgstr "Vydrukuj"
 
-#: ../src/ephy-window.c:1460
+#: ../src/ephy-window.c:1486
 msgid "Find"
 msgstr "Znajdzi"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1473
+#: ../src/ephy-window.c:1499
 msgid "Larger"
 msgstr "Bujniejšy"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1476
+#: ../src/ephy-window.c:1502
 msgid "Smaller"
 msgstr "Mienšy"
 
-#: ../src/ephy-window.c:1666
+#: ../src/ephy-window.c:1692
 msgid "Insecure"
 msgstr "Nienadziejny"
 
-#: ../src/ephy-window.c:1671
+#: ../src/ephy-window.c:1697
 msgid "Broken"
 msgstr "Złamany"
 
-#: ../src/ephy-window.c:1683
+#: ../src/ephy-window.c:1709
 msgid "Low"
 msgstr "Nizki"
 
-#: ../src/ephy-window.c:1690
+#: ../src/ephy-window.c:1716
 msgid "High"
 msgstr "Vysoki"
 
-#: ../src/ephy-window.c:1700
+#: ../src/ephy-window.c:1726
 #, c-format
 msgid "Security level: %s"
 msgstr "Uzrovień biaśpieki: %s"
 
-#: ../src/ephy-window.c:1743
+#: ../src/ephy-window.c:1769
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
@@ -4198,56 +4210,56 @@ msgstr[0] "%d schavanaje vypłyŭnoje vakno"
 msgstr[1] "%d schavanyja vypłyŭnyja vokny"
 msgstr[2] "%d schavanych vypłyŭnych voknaŭ"
 
-#: ../src/ephy-window.c:2010
+#: ../src/ephy-window.c:2030
 #, c-format
 msgid "Open image “%s”"
 msgstr "Adčyni vyjavu \"%s\""
 
-#: ../src/ephy-window.c:2015
+#: ../src/ephy-window.c:2035
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Vykarystaj u jakaści fonavaj na stoł \"%s\""
 
-#: ../src/ephy-window.c:2020
+#: ../src/ephy-window.c:2040
 #, c-format
 msgid "Save image “%s”"
 msgstr "Zapišy vyjavu \"%s\""
 
-#: ../src/ephy-window.c:2025
+#: ../src/ephy-window.c:2045
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Skapijuj adras vyjavy \"%s\""
 
-#: ../src/ephy-window.c:2038
+#: ../src/ephy-window.c:2058
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Dašli email na adras \"%s\""
 
-#: ../src/ephy-window.c:2044
+#: ../src/ephy-window.c:2064
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Skаpijuj adras email \"%s\""
 
-#: ../src/ephy-window.c:2056
+#: ../src/ephy-window.c:2076
 #, c-format
 msgid "Save link “%s”"
 msgstr "Zapišy spasyłku \"%s\""
 
-#: ../src/ephy-window.c:2062
+#: ../src/ephy-window.c:2082
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Dadaj u zakładki spasyłku \"%s\""
 
-#: ../src/ephy-window.c:2068
+#: ../src/ephy-window.c:2088
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Skapijuj adraz spasyłki \"%s\""
 
-#: ../src/pdm-dialog.c:360
+#: ../src/pdm-dialog.c:330
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Abiary asabistyja źviestki, jakija chočaš ačyścić</b>"
 
-#: ../src/pdm-dialog.c:363
+#: ../src/pdm-dialog.c:333
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
@@ -4256,31 +4268,31 @@ msgstr ""
 "Ty ačyščaješ zachavanyja asabistyja źviestki ab naviedanych sieciŭnych "
 "staronkach. Pierad praciaham spraŭdź typy źviestak, jakija chočaš vydalić:"
 
-#: ../src/pdm-dialog.c:368
+#: ../src/pdm-dialog.c:338
 msgid "Clear All Personal Data"
 msgstr "Ačyść usie asabistyja źviestki"
 
 #. Cookies
-#: ../src/pdm-dialog.c:391
+#: ../src/pdm-dialog.c:361
 msgid "C_ookies"
 msgstr "_Ciestki"
 
 #. Passwords
-#: ../src/pdm-dialog.c:403
+#: ../src/pdm-dialog.c:373
 msgid "Saved _passwords"
 msgstr "_Zachavanyja paroli"
 
 #. History
-#: ../src/pdm-dialog.c:415
+#: ../src/pdm-dialog.c:385
 msgid "_History"
 msgstr "_Historyja"
 
 #. Cache
-#: ../src/pdm-dialog.c:427
+#: ../src/pdm-dialog.c:397
 msgid "_Temporary files"
 msgstr "_Časovyja fajły"
 
-#: ../src/pdm-dialog.c:443
+#: ../src/pdm-dialog.c:413
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
@@ -4288,111 +4300,111 @@ msgstr ""
 "<small><i><b>Uvaha:</b> Ty nia možaš admianić hetuju aperacyju. Źviestki, "
 "abranyja, kab ačyścić, buduć nazaŭždy vydalenyja.</i></small>"
 
-#: ../src/pdm-dialog.c:636
+#: ../src/pdm-dialog.c:606
 msgid "Cookie Properties"
 msgstr "Ułasćivaści ciestka"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:623
 msgid "Content:"
 msgstr "Źmieściva:"
 
-#: ../src/pdm-dialog.c:669
+#: ../src/pdm-dialog.c:639
 msgid "Path:"
 msgstr "Ściežka:"
 
-#: ../src/pdm-dialog.c:685
+#: ../src/pdm-dialog.c:655
 msgid "Send for:"
 msgstr "Vyšli da:"
 
-#: ../src/pdm-dialog.c:694
+#: ../src/pdm-dialog.c:664
 msgid "Encrypted connections only"
 msgstr "Tolki zašyfravanyja spałučeńni"
 
-#: ../src/pdm-dialog.c:694
+#: ../src/pdm-dialog.c:664
 msgid "Any type of connection"
 msgstr "Advolny typ spałučeńnia"
 
-#: ../src/pdm-dialog.c:700
+#: ../src/pdm-dialog.c:670
 msgid "Expires:"
 msgstr "Stračvaje važnaść:"
 
-#: ../src/pdm-dialog.c:711
+#: ../src/pdm-dialog.c:681
 msgid "End of current session"
 msgstr "Kaniec dziejnaj sesii"
 
-#: ../src/pdm-dialog.c:844
+#: ../src/pdm-dialog.c:814
 msgid "Domain"
 msgstr "Domen"
 
-#: ../src/pdm-dialog.c:856
+#: ../src/pdm-dialog.c:826
 msgid "Name"
 msgstr "Nazva"
 
-#: ../src/pdm-dialog.c:1255
+#: ../src/pdm-dialog.c:1225
 msgid "Host"
 msgstr "Kamputar"
 
-#: ../src/pdm-dialog.c:1267
+#: ../src/pdm-dialog.c:1237
 msgid "User Name"
 msgstr "Nazva karystalnika"
 
-#: ../src/pdm-dialog.c:1279
+#: ../src/pdm-dialog.c:1249
 msgid "User Password"
 msgstr "Parol karystalnika"
 
-#: ../src/popup-commands.c:260
+#: ../src/popup-commands.c:261
 msgid "Download Link"
 msgstr "Zahruzi spasyłku"
 
-#: ../src/popup-commands.c:268
+#: ../src/popup-commands.c:269
 msgid "Save Link As"
 msgstr "Zapišy spasyłku jak"
 
-#: ../src/popup-commands.c:275
+#: ../src/popup-commands.c:276
 msgid "Save Image As"
 msgstr "Zapišy vyjavu jak"
 
-#: ../src/ppview-toolbar.c:92
+#: ../src/ppview-toolbar.c:90
 msgid "First"
 msgstr "Pieršaja"
 
-#: ../src/ppview-toolbar.c:93
+#: ../src/ppview-toolbar.c:91
 msgid "Go to the first page"
 msgstr "Pierajdzi da pačatkovaj staronki"
 
-#: ../src/ppview-toolbar.c:96
+#: ../src/ppview-toolbar.c:94
 msgid "Last"
 msgstr "Apošniaja"
 
-#: ../src/ppview-toolbar.c:97
+#: ../src/ppview-toolbar.c:95
 msgid "Go to the last page"
 msgstr "Pierajdzi da apošniaj staronki"
 
-#: ../src/ppview-toolbar.c:100
+#: ../src/ppview-toolbar.c:98
 msgid "Previous"
 msgstr "Nazad"
 
-#: ../src/ppview-toolbar.c:101
+#: ../src/ppview-toolbar.c:99
 msgid "Go to the previous page"
 msgstr "Pierajdzi da papiaredniaj staronki"
 
-#: ../src/ppview-toolbar.c:104
+#: ../src/ppview-toolbar.c:102
 msgid "Next"
 msgstr "Napierad"
 
-#: ../src/ppview-toolbar.c:105
+#: ../src/ppview-toolbar.c:103
 msgid "Go to next page"
 msgstr "Pierajdzi da nastupnaj staronki"
 
-#: ../src/ppview-toolbar.c:108
+#: ../src/ppview-toolbar.c:106
 msgid "Close"
 msgstr "Začyni"
 
-#: ../src/ppview-toolbar.c:109 ../src/ppview-toolbar.c:253
+#: ../src/ppview-toolbar.c:107 ../src/ppview-toolbar.c:223
 msgid "Close print preview"
 msgstr "Začyni pieradahlad vydruku"
 
-#: ../src/prefs-dialog.c:420
+#: ../src/prefs-dialog.c:388
 msgid "Default"
 msgstr "Zmoŭčana"
 
@@ -4404,7 +4416,7 @@ msgstr "Zmoŭčana"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:1001 ../src/prefs-dialog.c:1009
+#: ../src/prefs-dialog.c:966 ../src/prefs-dialog.c:974
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -4414,12 +4426,12 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:1020
+#: ../src/prefs-dialog.c:985
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "Akreślenaja karystalnikam (%s)"
 
-#: ../src/prefs-dialog.c:1042
+#: ../src/prefs-dialog.c:1007
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -4427,11 +4439,11 @@ msgstr[0] "Mova ŭ systemie (%s)"
 msgstr[1] "Movy ŭ systemie (%s)"
 msgstr[2] "Movy ŭ systemie (%s)"
 
-#: ../src/prefs-dialog.c:1434
+#: ../src/prefs-dialog.c:1399
 msgid "Select a Directory"
 msgstr "Abiary kataloh"
 
-#: ../src/window-commands.c:742
+#: ../src/window-commands.c:778
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4443,7 +4455,7 @@ msgstr ""
 "apublikavanaj Free Software Foundation u versii 2 albo (u zaležnaści ad "
 "tvajho vybaru) adnoj z pazniejšych."
 
-#: ../src/window-commands.c:746
+#: ../src/window-commands.c:782
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4455,7 +4467,7 @@ msgstr ""
 "KANKRETNAHA VYKARYSTAŃNIA. Padrabiaznaści možna znajści ŭ GNU General Public "
 "License."
 
-#: ../src/window-commands.c:750
+#: ../src/window-commands.c:786
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4465,20 +4477,20 @@ msgstr ""
 "jaje niama, napišy na adras Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-1301  USA"
 
-#: ../src/window-commands.c:798 ../src/window-commands.c:814
-#: ../src/window-commands.c:825
+#: ../src/window-commands.c:834 ../src/window-commands.c:850
+#: ../src/window-commands.c:861
 msgid "Contact us at:"
 msgstr "Źviažysia z nami praz:"
 
-#: ../src/window-commands.c:801
+#: ../src/window-commands.c:837
 msgid "Contributors:"
 msgstr "Supracoŭnictva:"
 
-#: ../src/window-commands.c:804
+#: ../src/window-commands.c:840
 msgid "Past developers:"
 msgstr "Byłyja raspracoŭščyki:"
 
-#: ../src/window-commands.c:837
+#: ../src/window-commands.c:873
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4495,13 +4507,13 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:863
+#: ../src/window-commands.c:899
 msgid "translator-credits"
 msgstr ""
 "Aleś Navicki <zolak@lacinka.org>\n"
 "Ihar Hrachyshka <ihar.hrachyshka@gmail.com>"
 
-#: ../src/window-commands.c:866
+#: ../src/window-commands.c:902
 msgid "GNOME Web Browser Website"
 msgstr "Sajt web-hartača GNOME"
 
