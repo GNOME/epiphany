@@ -269,21 +269,10 @@ webkit_embed_finalize (GObject *object)
 }
 
 static void
-webkit_embed_dispose (GObject *object)
-{
-  WebKitEmbed *wembed = WEBKIT_EMBED (object);
-
-  webkit_embed_prefs_remove_embed (wembed);
-
-  G_OBJECT_CLASS (webkit_embed_parent_class)->dispose (object);
-}
-
-static void
 webkit_embed_class_init (WebKitEmbedClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = webkit_embed_dispose;
   object_class->finalize = webkit_embed_finalize;
 
   g_type_class_add_private (object_class, sizeof(WebKitEmbedPrivate));

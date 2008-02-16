@@ -24,7 +24,6 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-embed-prefs.h"
 
-static GSList *embeds = NULL;
 static WebKitWebSettings *settings = NULL;
 
 static void
@@ -77,20 +76,11 @@ webkit_embed_prefs_shutdown (void)
   eel_gconf_notification_remove (min_font_size_cnxn_id);
 
   g_object_unref (settings);
-
-  g_slist_free (embeds);
 }
 
 void
 webkit_embed_prefs_add_embed (WebKitEmbed *embed)
 {
-  embeds = g_slist_prepend (embeds, embed);
-
   webkit_embed_prefs_apply (embed, settings);
 }
 
-void
-webkit_embed_prefs_remove_embed (WebKitEmbed *embed)
-{
-  embeds = g_slist_remove (embeds, embed);
-}

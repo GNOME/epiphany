@@ -27,7 +27,6 @@ G_BEGIN_DECLS
 void webkit_embed_prefs_init         (void);
 void webkit_embed_prefs_shutdown     (void);
 void webkit_embed_prefs_add_embed    (WebKitEmbed *embed);
-void webkit_embed_prefs_remove_embed (WebKitEmbed *embed);
 
 G_END_DECLS
 
