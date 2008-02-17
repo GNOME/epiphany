@@ -32,7 +32,7 @@ webkit_history_item_new (WebKitWebHistoryItem *history_item)
   if (!history_item) return NULL;
 
   item = g_object_new (WEBKIT_TYPE_HISTORY_ITEM, NULL);
-  item->data = history_item;
+  item->data = g_object_ref (history_item);
 
   return EPHY_HISTORY_ITEM (item);
 }
