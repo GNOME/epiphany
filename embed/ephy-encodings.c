@@ -187,35 +187,7 @@ enum
 static void ephy_encodings_class_init	(EphyEncodingsClass *klass);
 static void ephy_encodings_init		(EphyEncodings *ma);
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_encodings_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyEncodingsClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_encodings_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyEncodings),
-			0,
-			(GInstanceInitFunc) ephy_encodings_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyEncodings",
-					        &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyEncodings, ephy_encodings, G_TYPE_OBJECT)
 
 static void
 ephy_encodings_finalize (GObject *object)
@@ -235,15 +207,13 @@ ephy_encodings_finalize (GObject *object)
 
 	LOG ("EphyEncodings finalised");
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_encodings_parent_class)->finalize (object);
 }
 
 static void
 ephy_encodings_class_init (EphyEncodingsClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_encodings_finalize;
 

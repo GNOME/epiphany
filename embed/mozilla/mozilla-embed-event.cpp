@@ -43,46 +43,9 @@ static void mozilla_embed_event_class_init	(MozillaEmbedEventClass *klass);
 static void mozilla_embed_event_init		(MozillaEmbedEvent *event);
 static void ephy_embed_event_iface_init		(EphyEmbedEventIface *iface);
 
-static GObjectClass *parent_class = NULL;
-
-GType
-mozilla_embed_event_get_type (void)
-{
-       static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (MozillaEmbedEventClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) mozilla_embed_event_class_init,
-			NULL, /* class_finalize */
-			NULL, /* class_data */
-			sizeof (MozillaEmbedEvent),
-			0,    /* n_preallocs */
-			(GInstanceInitFunc) mozilla_embed_event_init
-		};
-
-		const GInterfaceInfo embed_event_info =
-		{
-			(GInterfaceInitFunc) ephy_embed_event_iface_init,
-        		NULL,
-        		NULL
-     		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "MozillaEmbedEvent",
-					       &our_info, (GTypeFlags) 0);
-
-		g_type_add_interface_static (type,
-                                   	     EPHY_TYPE_EMBED_EVENT,
-                                   	     &embed_event_info);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE_WITH_CODE (MozillaEmbedEvent, mozilla_embed_event, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_EVENT,
+                                                ephy_embed_event_iface_init))
 
 MozillaEmbedEvent *
 mozilla_embed_event_new (gpointer dom_event)
@@ -193,7 +156,7 @@ mozilla_embed_event_finalize (GObject *object)
 
 	LOG ("MozillaEmbedEvent %p finalised", object);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (mozilla_embed_event_parent_class)->finalize (object);
 }
 
 static void
@@ -212,8 +175,6 @@ static void
 mozilla_embed_event_class_init (MozillaEmbedEventClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
 	object_class->finalize = mozilla_embed_event_finalize;
 

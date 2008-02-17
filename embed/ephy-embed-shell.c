@@ -68,42 +68,14 @@ enum
 	LAST_SIGNAL
 };
 
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL];
 
 static void ephy_embed_shell_class_init	(EphyEmbedShellClass *klass);
 static void ephy_embed_shell_init	(EphyEmbedShell *shell);
 
 EphyEmbedShell *embed_shell = NULL;
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_embed_shell_get_type (void)
-{
-       static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyEmbedShellClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_embed_shell_class_init,
-			NULL, /* class_finalize */
-			NULL, /* class_data */
-			sizeof (EphyEmbedShell),
-			0,    /* n_preallocs */
-			(GInstanceInitFunc) ephy_embed_shell_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyEmbedShell",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyEmbedShell, ephy_embed_shell, G_TYPE_OBJECT)
 
 static void
 ephy_embed_shell_dispose (GObject *object)
@@ -148,7 +120,7 @@ ephy_embed_shell_dispose (GObject *object)
 		priv->print_settings = NULL;
 	}
 
-	G_OBJECT_CLASS (parent_class)->dispose (object);
+	G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
 
 static void
@@ -175,7 +147,7 @@ ephy_embed_shell_finalize (GObject *object)
 		shell->priv->adblock_manager = NULL;
 	}
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_embed_shell_parent_class)->finalize (object);
 }
 
 /**
@@ -323,8 +295,6 @@ static void
 ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
 	object_class->dispose = ephy_embed_shell_dispose;
 	object_class->finalize = ephy_embed_shell_finalize;

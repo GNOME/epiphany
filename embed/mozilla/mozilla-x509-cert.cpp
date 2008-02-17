@@ -47,46 +47,9 @@ enum
 	PROP_MOZILLA_CERT
 };
 
-static GObjectClass *parent_class = NULL;
-
-GType 
-mozilla_x509_cert_get_type (void)
-{
-	static GType mozilla_x509_cert_type = 0;
-
-	if (mozilla_x509_cert_type == 0)
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (MozillaX509CertClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) mozilla_x509_cert_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (MozillaX509Cert),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) mozilla_x509_cert_init
-		};
-
-		const GInterfaceInfo x509_cert_info =
-		{
-			(GInterfaceInitFunc) ephy_x509_cert_init,      /* interface_init */
-			NULL,                                          /* interface_finalize */
-			NULL                                           /* interface_data */
-     		 };
-		
-		mozilla_x509_cert_type = g_type_register_static (G_TYPE_OBJECT,
-                                                                 "MozillaX509Cert",
-                                                                 &our_info, 
-                                                                 (GTypeFlags)0);
-		g_type_add_interface_static (mozilla_x509_cert_type,
-					     EPHY_TYPE_X509_CERT,
-					     &x509_cert_info);
-	}
-
-	return mozilla_x509_cert_type;
-}
+G_DEFINE_TYPE_WITH_CODE (MozillaX509Cert, mozilla_x509_cert, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_X509_CERT,
+                                                ephy_x509_cert_init))
 
 static void
 mozilla_x509_cert_set_mozilla_cert (MozillaX509Cert *cert,
@@ -219,7 +182,7 @@ mozilla_x509_cert_finalize (GObject *object)
 		g_free (cert->priv->title);
 	}
 	
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (mozilla_x509_cert_parent_class)->finalize (object);
 }
 
 static void
@@ -232,8 +195,6 @@ static void
 mozilla_x509_cert_class_init (MozillaX509CertClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
 
 	object_class->finalize = mozilla_x509_cert_finalize;
 	object_class->set_property = impl_set_property;
@@ -252,10 +213,7 @@ mozilla_x509_cert_class_init (MozillaX509CertClass *klass)
 MozillaX509Cert *
 mozilla_x509_cert_new (nsIX509Cert *moz_cert)
 {
-	MozillaX509Cert *cert;
-
-	cert = (MozillaX509Cert*)g_object_new (MOZILLA_TYPE_X509_CERT,
-					       "mozilla-cert", moz_cert,
-					       (char *) NULL);
-	return cert;
+	return g_object_new (MOZILLA_TYPE_X509_CERT,
+                             "mozilla-cert", moz_cert,
+                             NULL);
 }

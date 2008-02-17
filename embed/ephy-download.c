@@ -45,44 +45,14 @@ struct _EphyDownloadPrivate
 	gint64 remaining_time;
 };
 
-static GObjectClass *parent_class = NULL;
+static guint ephy_download_signals[LAST_SIGNAL];
 
-static guint ephy_download_signals[LAST_SIGNAL] = { 0 };
-
-GType
-ephy_download_get_type (void)
-{
-       static GType type = 0;
-
-        if (G_UNLIKELY (type == 0))
-        {
-                const GTypeInfo our_info =
-                {
-                        sizeof (EphyDownloadClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ephy_download_class_init,
-                        NULL, /* class_finalize */
-                        NULL, /* class_data */
-                        sizeof (EphyDownload),
-                        0,    /* n_preallocs */
-                        (GInstanceInitFunc) ephy_download_init
-                };
-
-                type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyDownload",
-					       &our_info, 0);
-        }
-
-        return type;
-}
+G_DEFINE_TYPE (EphyDownload, ephy_download, G_TYPE_OBJECT)
 
 static void
 ephy_download_class_init (EphyDownloadClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-        parent_class = g_type_class_peek_parent (klass);
 
 	ephy_download_signals[CHANGED] =
                 g_signal_new ("changed",

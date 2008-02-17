@@ -88,42 +88,14 @@ enum
 	LAST_SIGNAL
 };
 
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL];
 
 static void ephy_history_class_init	(EphyHistoryClass *klass);
 static void ephy_history_init		(EphyHistory *history);
 static void ephy_history_finalize	(GObject *object);
 static gboolean impl_add_page           (EphyHistory *, const char *, gboolean, gboolean);
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_history_get_type (void)
-{
-        static GType type = 0;
-
-        if (G_UNLIKELY (type == 0))
-        {
-                const GTypeInfo our_info =
-                {
-                        sizeof (EphyHistoryClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ephy_history_class_init,
-                        NULL,
-                        NULL, /* class_data */
-                        sizeof (EphyHistory),
-                        0, /* n_preallocs */
-                        (GInstanceInitFunc) ephy_history_init
-                };
-
-                type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyHistory",
-					       &our_info, 0);
-        }
-
-        return type;
-}
+G_DEFINE_TYPE (EphyHistory, ephy_history, G_TYPE_OBJECT)
 
 static void
 ephy_history_set_property (GObject *object,
@@ -161,8 +133,6 @@ static void
 ephy_history_class_init (EphyHistoryClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-        parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = ephy_history_finalize;
 	object_class->get_property = ephy_history_get_property;
@@ -627,7 +597,7 @@ ephy_history_finalize (GObject *object)
 
 	LOG ("Global history finalized");
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_history_parent_class)->finalize (object);
 }
 
 EphyHistory *

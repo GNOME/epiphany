@@ -30,14 +30,16 @@
 
 #include "mozilla-embed-find.h"
 
+static void mozilla_embed_find_class_init (MozillaEmbedFindClass *klass);
+static void mozilla_embed_find_init       (MozillaEmbedFind *self);
+static void ephy_find_iface_init          (EphyEmbedFindIface *iface);
+
 #define MOZILLA_EMBED_FIND_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED_FIND, MozillaEmbedFindPrivate))
 
 struct _MozillaEmbedFindPrivate
 {
 	EphyFind *find;
 };
-
-static GObjectClass *parent_class = NULL;
 
 static void
 impl_set_embed (EphyEmbedFind *efind,
@@ -48,6 +50,10 @@ impl_set_embed (EphyEmbedFind *efind,
 
 	priv->find->SetEmbed (embed);
 }
+
+G_DEFINE_TYPE_WITH_CODE (MozillaEmbedFind, mozilla_embed_find, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_FIND,
+                                                ephy_find_iface_init))
 
 static void
 impl_set_properties (EphyEmbedFind *efind,
@@ -129,8 +135,9 @@ mozilla_embed_find_constructor (GType type, guint n_construct_properties,
 	/* we depend on single because of mozilla initialization */
 	ephy_embed_shell_get_embed_single (embed_shell);
 
-	return parent_class->constructor (type, n_construct_properties,
-					  construct_params);
+	return G_OBJECT_CLASS (mozilla_embed_find_parent_class)->constructor (type,
+                                                                              n_construct_properties,
+                                                                              construct_params);
 }
 
 static void
@@ -140,7 +147,7 @@ mozilla_embed_find_finalize (GObject *object)
 
 	delete find->priv->find;
 
-	parent_class->finalize (object);
+	G_OBJECT_CLASS (mozilla_embed_find_parent_class)->finalize (object);
 
 	g_object_unref (embed_shell);
 }
@@ -150,49 +157,9 @@ mozilla_embed_find_class_init (MozillaEmbedFindClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
-
 	object_class->constructor = mozilla_embed_find_constructor;
 	object_class->finalize = mozilla_embed_find_finalize;
 
 	g_type_class_add_private (object_class, sizeof (MozillaEmbedFindPrivate));
 }
 
-GType 
-mozilla_embed_find_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (MozillaEmbedFindClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) mozilla_embed_find_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (MozillaEmbedFind),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) mozilla_embed_find_init
-		};
-
-		const GInterfaceInfo find_info =
-		{
-			(GInterfaceInitFunc) ephy_find_iface_init,
-			NULL,
-			NULL
-		};
-	
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "MozillaEmbedFind",
-					       &our_info, 
-					       (GTypeFlags)0);
-		g_type_add_interface_static (type,
-					     EPHY_TYPE_EMBED_FIND,
-					     &find_info);
-	}
-
-	return type;
-}

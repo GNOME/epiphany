@@ -71,35 +71,7 @@ struct MozillaEmbedPersistPrivate
 	nsCOMPtr<nsIWebBrowserPersist> mPersist;
 };
 
-static GObjectClass *parent_class = NULL;
-
-GType
-mozilla_embed_persist_get_type (void)
-{
-       static GType type = 0;
-
-        if (G_UNLIKELY (type == 0))
-        {
-                const GTypeInfo our_info =
-                {
-                        sizeof (MozillaEmbedPersistClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) mozilla_embed_persist_class_init,
-                        NULL, /* class_finalize */
-                        NULL, /* class_data */
-                        sizeof (MozillaEmbedPersist),
-                        0,    /* n_preallocs */
-                        (GInstanceInitFunc) mozilla_embed_persist_init
-                };
-
-                type = g_type_register_static (EPHY_TYPE_EMBED_PERSIST,
-					       "MozillaEmbedPersist",
-					       &our_info, (GTypeFlags) 0);
-        }
-
-        return type;
-}
+G_DEFINE_TYPE (MozillaEmbedPersist, mozilla_embed_persist, EPHY_TYPE_EMBED_PERSIST)
 
 static void
 mozilla_embed_persist_init (MozillaEmbedPersist *persist)
@@ -116,7 +88,7 @@ mozilla_embed_persist_finalize (GObject *object)
 
 	persist->priv->mPersist = nsnull;
 
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+        G_OBJECT_CLASS (mozilla_embed_persist_parent_class)->finalize (object);
 }
 
 void
@@ -393,8 +365,9 @@ mozilla_embed_persist_constructor (GType type, guint n_construct_properties,
 	/* this will ensure that mozilla is started up */
 	ephy_embed_shell_get_embed_single (embed_shell);
 
-	return parent_class->constructor (type, n_construct_properties,
-					  construct_params);
+	return G_OBJECT_CLASS (mozilla_embed_persist_parent_class)->constructor (type,
+                                                                                 n_construct_properties,
+                                                                                 construct_params);
 }
 
 static void
@@ -402,8 +375,6 @@ mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	EphyEmbedPersistClass *persist_class = EPHY_EMBED_PERSIST_CLASS (klass);
-	
-        parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 	
         object_class->finalize = mozilla_embed_persist_finalize;
 	object_class->constructor = mozilla_embed_persist_constructor;

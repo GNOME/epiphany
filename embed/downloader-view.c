@@ -143,42 +143,12 @@ static void
 show_notification_window (DownloaderView *dv);
 #endif
 
-static GObjectClass *parent_class = NULL;
-
-GType
-downloader_view_get_type (void)
-{
-       static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (DownloaderViewClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) downloader_view_class_init,
-			NULL, /* class_finalize */
-			NULL, /* class_data */
-			sizeof (DownloaderView),
-			0,    /* n_preallocs */
-			(GInstanceInitFunc) downloader_view_init
-		};
-
-		type = g_type_register_static (EPHY_TYPE_DIALOG,
-					       "DownloaderView",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (DownloaderView, downloader_view, EPHY_TYPE_DIALOG)
 
 static void
 downloader_view_class_init (DownloaderViewClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = downloader_view_finalize;
 
@@ -329,7 +299,7 @@ downloader_view_finalize (GObject *object)
 
 	g_hash_table_destroy (dv->priv->downloads_hash);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (downloader_view_parent_class)->finalize (object);
 
 #ifdef HAVE_LIBNOTIFY	
 	if (notify_is_initted ())

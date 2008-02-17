@@ -51,35 +51,7 @@ struct _MozillaDownloadPrivate
 
 #define MOZILLA_DOWNLOAD_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_DOWNLOAD, MozillaDownloadPrivate))
 
-static GObjectClass *parent_class = NULL;
-
-GType
-mozilla_download_get_type (void)
-{
-       static GType type = 0;
-
-        if (G_UNLIKELY (type == 0))
-        {
-                const GTypeInfo our_info =
-                {
-                        sizeof (MozillaDownloadClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) mozilla_download_class_init,
-                        NULL, /* class_finalize */
-                        NULL, /* class_data */
-                        sizeof (MozillaDownload),
-                        0,    /* n_preallocs */
-                        (GInstanceInitFunc) mozilla_download_init
-                };
-
-                type = g_type_register_static (EPHY_TYPE_DOWNLOAD,
-					       "MozillaDownload",
-					       &our_info, (GTypeFlags)0);
-        }
-
-        return type;
-}
+G_DEFINE_TYPE (MozillaDownload, mozilla_download, EPHY_TYPE_DOWNLOAD)
 
 static char *
 impl_get_target (EphyDownload *download)
@@ -221,7 +193,7 @@ mozilla_download_finalize (GObject *object)
 
 	LOG ("MozillaDownload %p finalised", object);
 
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+        G_OBJECT_CLASS (mozilla_download_parent_class)->finalize (object);
 }
 
 static void
@@ -266,8 +238,6 @@ mozilla_download_class_init (MozillaDownloadClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	EphyDownloadClass *download_class = EPHY_DOWNLOAD_CLASS (klass);
 	
-        parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
-
 	object_class->finalize = mozilla_download_finalize;
 	object_class->set_property = mozilla_download_set_property;
 	object_class->get_property = mozilla_download_get_property;

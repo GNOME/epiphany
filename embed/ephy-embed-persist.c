@@ -60,35 +60,7 @@ struct _EphyEmbedPersistPrivate
 static void	ephy_embed_persist_class_init	(EphyEmbedPersistClass *klass);
 static void	ephy_embed_persist_init		(EphyEmbedPersist *ges);
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_embed_persist_get_type (void)
-{
-       static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyEmbedPersistClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_embed_persist_class_init,
-			NULL, /* class_finalize */
-			NULL, /* class_data */
-			sizeof (EphyEmbedPersist),
-			0,    /* n_preallocs */
-			(GInstanceInitFunc) ephy_embed_persist_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyEmbedPersist",
-					       &our_info, G_TYPE_FLAG_ABSTRACT);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyEmbedPersist, ephy_embed_persist, G_TYPE_OBJECT)
 
 /**
  * ephy_embed_persist_set_dest:
@@ -522,15 +494,13 @@ ephy_embed_persist_finalize (GObject *object)
 
 	LOG ("EphyEmbedPersist finalised %p", object);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_embed_persist_parent_class)->finalize (object);
 }
 
 static void
 ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_embed_persist_finalize;
 	object_class->set_property = ephy_embed_persist_set_property;

@@ -52,42 +52,12 @@ struct _EphyEmbedDialogPrivate
 	EphyEmbed *embed;
 };
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_embed_dialog_get_type (void)
-{
-        static GType type = 0;
-
-        if (G_UNLIKELY (type == 0))
-        {
-                const GTypeInfo our_info =
-                {
-                        sizeof (EphyEmbedDialogClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ephy_embed_dialog_class_init,
-                        NULL,
-                        NULL, /* class_data */
-                        sizeof (EphyEmbedDialog),
-                        0, /* n_preallocs */
-                        (GInstanceInitFunc) ephy_embed_dialog_init
-                };
-
-                type = g_type_register_static (EPHY_TYPE_DIALOG,
-					       "EphyEmbedDialog",
-					       &our_info, 0);
-        }
-
-        return type;
-}
+G_DEFINE_TYPE (EphyEmbedDialog, ephy_embed_dialog, EPHY_TYPE_DIALOG)
 
 static void
 ephy_embed_dialog_class_init (EphyEmbedDialogClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-        parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = ephy_embed_dialog_finalize;
 	object_class->set_property = ephy_embed_dialog_set_property;
@@ -129,7 +99,7 @@ ephy_embed_dialog_finalize (GObject *object)
 
 	unset_embed (dialog);
 
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+        G_OBJECT_CLASS (ephy_embed_dialog_parent_class)->finalize (object);
 }
 
 static void
