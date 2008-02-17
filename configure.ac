@@ -42,6 +42,11 @@ AC_SUBST([EPIPHANY_MAJOR],[epiphany_version_major.epiphany_version_minor])
 AC_SUBST([EPIPHANY_API_VERSION],[epiphany_version_major.epiphany_version_minor])
 AC_SUBST([EPIPHANY_UA_VERSION])
 
+# for EPHY_CHECK_VERSION
+AC_SUBST([EPIPHANY_MAJOR_VERSION], [epiphany_version_major])
+AC_SUBST([EPIPHANY_MINOR_VERSION], [epiphany_version_minor])
+AC_SUBST([EPIPHANY_MICRO_VERSION], [epiphany_version_micro])
+
 # Build ID
 BUILDID="$(TZ=UTC0 date +'%Y%m%d')"
 AC_SUBST([BUILDID])
@@ -794,6 +799,7 @@ embed/mozilla/Makefile
 embed/webkit/Makefile
 src/Makefile
 src/bookmarks/Makefile
+src/ephy-version.h
 help/Makefile
 plugins/Makefile
 plugins/desktop-file/Makefile

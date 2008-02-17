@@ -52,6 +52,7 @@ INST_H_FILES = \
 	ephy-shell.h			\
 	ephy-statusbar.h		\
 	ephy-window.h			\
+	ephy-version.h                  \
 	$(NULL)
 
 libephymain_la_SOURCES = \
