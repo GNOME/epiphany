@@ -171,6 +171,9 @@ EphyUtils::ConvertUTF16toUTF8 (const PRUnichar *aText,
 PRBool
 EphyJSUtils::IsCalledFromScript ()
 {
+#if 1
+	return PR_FALSE;
+#else
 	nsresult rv;
 	nsCOMPtr<nsIXPConnect> xpc(do_GetService(nsIXPConnect::GetCID(), &rv));
 	NS_ENSURE_SUCCESS (rv, PR_FALSE);
@@ -180,6 +183,7 @@ EphyJSUtils::IsCalledFromScript ()
 	NS_ENSURE_SUCCESS(rv, PR_FALSE);
 
 	return nsnull != ncc;
+#endif
 }
 
 /* NOTE: Only call this when we're SURE that we're called directly from JS! */
