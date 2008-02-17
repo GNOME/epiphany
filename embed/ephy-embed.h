@@ -156,6 +156,9 @@ struct _EphyEmbedIface
 					 GdkEventKey *event);
 	gboolean (* close_request)	(EphyEmbed *embed);
 
+	void	 (* new_document_now)	(EphyEmbed *embed,
+					 const char *uri);
+
 	/* Methods  */
 	void		   (* load_url)			  (EphyEmbed *embed,
 							   const char *url);

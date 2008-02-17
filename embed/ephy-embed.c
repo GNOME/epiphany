@@ -345,6 +345,26 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+/**
+ * EphyEmbed::new-document-now:
+ * @embed:
+ * @uri: URI of the new content
+ *
+ * The ::new-document-now signal is emitted when a new page content
+ * is being loaded into the browser. It's a good place to do view
+ * related changes, for example to restore the zoom level of a page
+ * or to set an user style sheet.
+ **/
+	       g_signal_new ("new-document-now",
+			     EPHY_TYPE_EMBED,
+			     G_SIGNAL_RUN_FIRST,
+			     G_STRUCT_OFFSET (EphyEmbedIface, new_document_now),
+			     NULL, NULL,
+			     g_cclosure_marshal_VOID__STRING,
+			     G_TYPE_NONE,
+			     1,
+			     G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+
 
 		initialized = TRUE;
 	}

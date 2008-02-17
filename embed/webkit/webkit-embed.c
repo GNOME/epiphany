@@ -181,11 +181,15 @@ update_load_state (WebKitEmbed *embed, WebKitWebView *web_view)
   EphyEmbedNetState estate = EPHY_EMBED_STATE_UNKNOWN;
 
   if (embed->priv->load_state == WEBKIT_EMBED_LOAD_STARTED)
+    {
       estate = (EphyEmbedNetState) (estate |
                                     EPHY_EMBED_STATE_START |
                                     EPHY_EMBED_STATE_NEGOTIATING |
                                     EPHY_EMBED_STATE_IS_REQUEST |
                                     EPHY_EMBED_STATE_IS_NETWORK);
+
+      g_signal_emit_by_name (embed, "new-document-now", embed->priv->loading_uri);
+    }
 
   if (embed->priv->load_state == WEBKIT_EMBED_LOAD_LOADING)
       estate = (EphyEmbedNetState) (estate |
