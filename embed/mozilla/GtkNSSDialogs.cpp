@@ -111,9 +111,8 @@ GtkNSSDialogs::~GtkNSSDialogs ()
 }
 
 #ifdef HAVE_GECKO_1_9
-NS_IMPL_THREADSAFE_ISUPPORTS5 (GtkNSSDialogs,
+NS_IMPL_THREADSAFE_ISUPPORTS4 (GtkNSSDialogs,
 			       nsITokenPasswordDialogs,
-			       nsIBadCertListener2,
 			       nsICertificateDialogs,
 			       nsITokenDialogs,
 			       nsIDOMCryptoDialogs)
@@ -392,19 +391,7 @@ GtkNSSDialogs::GetTokenAndSlotFromName (const PRUnichar *aName,
 	return NS_OK;
 }
   
-#ifdef HAVE_GECKO_1_9
-NS_IMETHODIMP
-GtkNSSDialogs::NotifyCertProblem (nsIInterfaceRequestor *socketInfo,
-                                  nsISSLStatus *status,
-                                  const nsACString &targetSite,
-                                  PRBool *_retval)
-{
-#warning implement me!
-  *_retval = PR_FALSE;
-  return NS_OK;
-}
-
-#else /* !HAVE_GECKO_1_9 */
+#ifndef HAVE_GECKO_1_9
 
 NS_IMETHODIMP
 GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,

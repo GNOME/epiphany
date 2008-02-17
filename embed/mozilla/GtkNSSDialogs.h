@@ -42,9 +42,7 @@ class nsIPKCS11Slot;
 #define GTK_NSSDIALOGS_CLASSNAME  "Gtk NSS Dialogs"
 
 class GtkNSSDialogs : public nsICertificateDialogs,
-#ifdef HAVE_GECKO_1_9
-                      public nsIBadCertListener2,
-#else
+#ifndef HAVE_GECKO_1_9
                       public nsIBadCertListener,
 #endif
 		      public nsITokenPasswordDialogs,
@@ -54,9 +52,7 @@ class GtkNSSDialogs : public nsICertificateDialogs,
   public:
     NS_DECL_ISUPPORTS
     NS_DECL_NSICERTIFICATEDIALOGS
-#ifdef HAVE_GECKO_1_9
-    NS_DECL_NSIBADCERTLISTENER2
-#else
+#ifndef HAVE_GECKO_1_9
     NS_DECL_NSIBADCERTLISTENER
 #endif
     NS_DECL_NSITOKENPASSWORDDIALOGS
