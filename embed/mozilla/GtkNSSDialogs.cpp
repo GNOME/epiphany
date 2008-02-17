@@ -1643,6 +1643,16 @@ GtkNSSDialogs::ChooseToken (nsIInterfaceRequestor *aContext,
   return NS_OK;
 }
 
+#ifdef HAVE_GECKO_1_9
+/* void displayProtectedAuth (in nsIInterfaceRequestor ctx, in nsIProtectedAuthThread runnable); */
+NS_IMETHODIMP
+GtkNSSDialogs::DisplayProtectedAuth (nsIInterfaceRequestor *ctx,
+                                     nsIProtectedAuthThread *runnable)
+{
+  return NS_ERROR_NOT_IMPLEMENTED;
+}
+#endif /* HAVE_GECKO_1_9 */
+
 /* nsIDOMCryptoDialogs */
 
 /* Note: this interface sucks! See https://bugzilla.mozilla.org/show_bug.cgi?id=341914 */
