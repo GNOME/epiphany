@@ -156,7 +156,7 @@ pref("print.printer_PostScript/default.print_edge_top", 15);
 pref("dom.storage.enabled", false);
 
 // warn about about:config
-pref("general.warnOnAboutConfig", true);
+pref("general.warnOnAboutConfig", false);
 
 // enable negotiate extension
 pref("network.negotiate-auth.trusted-uris", "https://");
