@@ -182,6 +182,7 @@ GTKDOC_LIBS += \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
+        $(DEPENDENCIES_LIBS) \
 	$(GECKO_LIBS)	\
 	$(GECKO_EXTRA_LIBS) \
 	$(GECKO_GLUE_LIBS) \
