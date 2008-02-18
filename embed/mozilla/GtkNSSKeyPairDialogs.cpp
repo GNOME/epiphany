@@ -49,9 +49,7 @@
 #include "ephy-gui.h"
 #include "ephy-stock-icons.h"
 
-#include "AutoJSContextStack.h"
-#include "AutoWindowModalState.h"
-#include "EphyUtils.h"
+#include "AutoModalDialog.h"
 
 #include "GtkNSSKeyPairDialogs.h"
 
@@ -142,15 +140,12 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 	GtkWidget *dialog, *progress, *label, *vbox;
 	gint timeout_id;
 
-	nsresult rv;
-	AutoJSContextStack stack;
-	rv = stack.Init ();
-	if (NS_FAILED (rv)) return rv;
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
+        AutoModalDialog modalDialog (parent, PR_FALSE);
+        if (!modalDialog.ShouldShow ())
+                return NS_ERROR_ABORT;
 
-	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
-
-	AutoWindowModalState modalState (parent);
+        GtkWindow *gparent = modalDialog.GetParent ();
 
 	dialog = gtk_dialog_new_with_buttons ("", gparent,
 					      GTK_DIALOG_DESTROY_WITH_PARENT, (char *) NULL);
@@ -199,7 +194,7 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 
 	begin_busy (dialog);
 	runnable->StartKeyGeneration (helper);
-	int res = gtk_dialog_run (GTK_DIALOG (dialog));
+	int res = modalDialog.Run (GTK_DIALOG (dialog));
 	if (res != GTK_RESPONSE_OK && helper->close_called == FALSE)
 	{
 		/* Ignore the already_closed flag, our nsIDOMWindowInterna::Close

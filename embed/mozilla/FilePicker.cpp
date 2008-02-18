@@ -46,8 +46,7 @@
 #include "ephy-gui.h"
 #include "ephy-prefs.h"
 
-#include "AutoJSContextStack.h"
-#include "AutoWindowModalState.h"
+#include "AutoModalDialog.h"
 #include "EphyUtils.h"
 
 #include "FilePicker.h"
@@ -390,12 +389,12 @@ NS_IMETHODIMP GFilePicker::GetFiles(nsISimpleEnumerator * *aFiles)
 /* short show (); */
 NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 {
-	nsresult rv;
-	AutoJSContextStack stack;
-	rv = stack.Init ();
-	if (NS_FAILED (rv)) return rv;
-
-	AutoWindowModalState modelState (mParent);
+        AutoModalDialog modalDialog (mParent, PR_FALSE);
+        if (!modalDialog.ShouldShow ()) {
+          *_retval = nsIFilePicker::returnCancel;
+          return NS_OK;
+        }
+          
 	mParent = nsnull;
 
 	LOG ("GFilePicker::Show");
@@ -425,7 +424,7 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 
 	do
 	{
-		response = gtk_dialog_run (GTK_DIALOG (mDialog));
+		response = modalDialog.Run (GTK_DIALOG (mDialog));
 
 		g_free (filename);
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (mDialog));

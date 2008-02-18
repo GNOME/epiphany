@@ -39,8 +39,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
 
-#include "AutoJSContextStack.h"
-#include "AutoWindowModalState.h"
+#include "AutoModalDialog.h"
 #include "EphyUtils.h"
 
 #include "GeckoFormSigningDialog.h"
@@ -83,11 +82,6 @@ GeckoFormSigningDialog::ConfirmSignText (nsIInterfaceRequestor *ctx,
 {
   /* FIXME: limit |signText| to a sensitlbe length (maybe 100k)? */
 
-  nsresult rv;
-  AutoJSContextStack stack;
-  rv = stack.Init ();
-  if (NS_FAILED (rv)) return rv;
-
   nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
   if (!parent) {
     parent = EphyJSUtils::GetDOMWindowFromCallContext ();
@@ -95,7 +89,11 @@ GeckoFormSigningDialog::ConfirmSignText (nsIInterfaceRequestor *ctx,
   }
   GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
-  AutoWindowModalState modalState (parent);
+  AutoModalDialog modalDialog (parent, PR_TRUE);
+  if (!modalDialog.ShouldShow ()) {
+    *_cancelled = PR_TRUE;
+    return NS_OK;
+  }
 
   GladeXML *gxml = glade_xml_new (ephy_file ("form-signing-dialog.glade"),
 				  "form_signing_dialog", NULL);
@@ -143,7 +141,7 @@ GeckoFormSigningDialog::ConfirmSignText (nsIInterfaceRequestor *ctx,
 
   g_object_unref (gxml);
 
-  int response = gtk_dialog_run (GTK_DIALOG (dialog));
+  int response = modalDialog.Run (GTK_DIALOG (dialog));
 
   *_cancelled = response != GTK_RESPONSE_ACCEPT;
 

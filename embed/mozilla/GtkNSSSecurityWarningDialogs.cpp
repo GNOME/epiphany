@@ -62,9 +62,7 @@
 #include <nsIServiceManager.h>
 #include <nsServiceManagerUtils.h>
 
-#include "AutoJSContextStack.h"
-#include "AutoWindowModalState.h"
-#include "EphyUtils.h"
+#include "AutoModalDialog.h"
 
 #include "GtkNSSSecurityWarningDialogs.h"
 
@@ -236,28 +234,30 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 	 * https://bugzilla.mozilla.org/show_bug.cgi?id=277587
 	 */
 	nsCOMPtr<nsIDOMWindow> domWin (do_GetInterface (aContext));
-	GtkWidget *parent = EphyUtils::FindGtkParent (domWin);
 
-	AutoJSContextStack stack;
-	rv = stack.Init ();
-	if (NS_FAILED (rv)) return;
+        AutoModalDialog modalDialog (domWin, PR_FALSE);
+        if (!modalDialog.ShouldShow ())
+        {
+                *_retval = PR_FALSE;
+                return;
+        }
 
-	AutoWindowModalState modalState (domWin);
+	GtkWindow *parent = modalDialog.GetParent ();
 
-	GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
+	GtkWidget *dialog = gtk_message_dialog_new (parent,
 						    GTK_DIALOG_MODAL, aType,
-						    aButtons, aPrimary);
+						    aButtons, "%s", aPrimary);
 
-	if (parent && GTK_WINDOW (parent)->group)
+	if (parent && parent->group)
 	{
-		gtk_window_group_add_window (GTK_WINDOW (parent)->group,
+		gtk_window_group_add_window (parent->group,
 					     GTK_WINDOW (dialog));
 	}
 
 	if (aSecondary)
 	{
 		gtk_message_dialog_format_secondary_text
-			(GTK_MESSAGE_DIALOG (dialog), aSecondary);
+			(GTK_MESSAGE_DIALOG (dialog), "%s", aSecondary);
 	}
 
 	if (aButtonText)
@@ -271,7 +271,7 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 	gtk_window_set_title (GTK_WINDOW (dialog), aTitle);
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
-	int response = gtk_dialog_run (GTK_DIALOG (dialog));
+	int response = modalDialog.Run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 
 	*_retval = (response == GTK_RESPONSE_ACCEPT || response == GTK_RESPONSE_OK);

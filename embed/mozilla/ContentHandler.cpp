@@ -56,8 +56,7 @@
 #include "ephy-prefs.h"
 #include "ephy-stock-icons.h"
 
-#include "AutoJSContextStack.h"
-#include "AutoWindowModalState.h"
+#include "AutoModalDialog.h"
 #include "EphyUtils.h"
 #include "MozDownload.h"
 
@@ -144,18 +143,15 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	{
 		return BuildDownloadPath (defaultFile.get(), _retval);
 	}
-
-	nsresult rv;
-	AutoJSContextStack stack;
-	rv = stack.Init ();
-	if (NS_FAILED (rv)) return rv;
-
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow (do_GetInterface (aWindowContext));
-	GtkWidget *parentWindow = GTK_WIDGET (EphyUtils::FindGtkParent (parentDOMWindow));
 
-	AutoWindowModalState modalState (parentDOMWindow);
+        AutoModalDialog modalDialog (parentDOMWindow, PR_FALSE);
+        if (!modalDialog.ShouldShow ())
+          return NS_ERROR_FAILURE;
 
-	dialog = ephy_file_chooser_new (_("Save"), parentWindow,
+	GtkWindow *parentWindow = modalDialog.GetParent ();
+
+	dialog = ephy_file_chooser_new (_("Save"), GTK_WIDGET (parentWindow),
 					GTK_FILE_CHOOSER_ACTION_SAVE,
 					CONF_STATE_SAVE_DIR,
 					EPHY_FILE_FILTER_ALL);
@@ -175,7 +171,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	do
 	{
 		g_free (filename);
-		response = gtk_dialog_run (GTK_DIALOG (dialog));
+		response = modalDialog.Run (GTK_DIALOG (dialog));
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 	} while (response == GTK_RESPONSE_ACCEPT
 		 && !ephy_gui_check_location_writable (GTK_WIDGET (dialog), filename));

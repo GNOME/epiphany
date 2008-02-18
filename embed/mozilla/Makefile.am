@@ -3,6 +3,8 @@ noinst_LTLIBRARIES = libephymozillaembed.la
 libephymozillaembed_la_SOURCES = 	\
 	AutoJSContextStack.cpp		\
 	AutoJSContextStack.h		\
+	AutoModalDialog.cpp		\
+	AutoModalDialog.h		\
 	AutoWindowModalState.cpp	\
 	AutoWindowModalState.h		\
 	ContentHandler.cpp		\

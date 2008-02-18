@@ -36,8 +36,7 @@
 #include "ephy-gui.h"
 #include "ephy-stock-icons.h"
 
-#include "AutoJSContextStack.h"
-#include "AutoWindowModalState.h"
+#include "AutoModalDialog.h"
 #include "EphyUtils.h"
 
 #include "GeckoCookiePromptService.h"
@@ -72,22 +71,20 @@ GeckoCookiePromptService::CookieDialog (nsIDOMWindow *aParent,
   // TODO short-circuit and accept session cookies as per preference
   // TODO until mozilla starts supporting it natively?
 
-  GtkWidget *parent = EphyUtils::FindGtkParent (aParent);
-  NS_ENSURE_TRUE(parent, NS_ERROR_INVALID_POINTER);
-
-  nsresult rv;
-  AutoJSContextStack stack;
-  rv = stack.Init ();
-  if (NS_FAILED (rv)) {
-    return rv;
+  AutoModalDialog modalDialog (aParent, PR_FALSE);
+  if (!modalDialog.ShouldShow ()) {
+    *_retval = PR_FALSE;
+    *_checkValue = PR_FALSE;
+    return NS_OK;
   }
 
-  AutoWindowModalState modalState (aParent);
+  GtkWindow *parent = modalDialog.GetParent ();
+  NS_ENSURE_TRUE(parent, NS_ERROR_INVALID_POINTER);
 
   nsCString host(aHostname);
 
   GtkWidget *dialog = gtk_message_dialog_new
-                        (GTK_WINDOW (parent),
+                        (parent,
                          GTK_DIALOG_MODAL /* FIXME mozilla sucks! */,
                          GTK_MESSAGE_QUESTION,
                          GTK_BUTTONS_NONE,
@@ -141,7 +138,7 @@ GeckoCookiePromptService::CookieDialog (nsIDOMWindow *aParent,
                          _("_Accept"), GTK_RESPONSE_ACCEPT);
   gtk_dialog_set_default_response (gdialog, GTK_RESPONSE_ACCEPT);
 
-  int response = gtk_dialog_run (gdialog);
+  int response = modalDialog.Run (gdialog);
 
   if (response == GTK_RESPONSE_ACCEPT || response == GTK_RESPONSE_REJECT) {
     *_retval = (response == GTK_RESPONSE_ACCEPT);

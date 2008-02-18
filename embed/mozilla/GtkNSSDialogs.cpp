@@ -88,8 +88,8 @@
 #include "ephy-password-dialog.h"
 #include "ephy-stock-icons.h"
 
-#include "AutoJSContextStack.h"
-#include "AutoWindowModalState.h"
+#include "AutoModalDialog.h"
+
 #include "EphyUtils.h"
 
 #include "GtkNSSDialogs.h"
@@ -239,18 +239,16 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	g_return_val_if_fail (markup_text, GTK_RESPONSE_CANCEL);
 	g_return_val_if_fail (!checkbox_text || checkbox_value, GTK_RESPONSE_CANCEL);
 
-	nsresult rv;
-	AutoJSContextStack stack;
-	rv = stack.Init ();
-	if (NS_FAILED (rv)) return rv;
-
 	/* NOTE: Due to a mozilla bug [https://bugzilla.mozilla.org/show_bug.cgi?id=306288],
 	 * we will always end up without a parent!
 	 */
 	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
-	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
+	
+        AutoModalDialog modalDialog (parent, PR_FALSE);
+        if (!modalDialog.ShouldShow ())
+                return GTK_RESPONSE_CANCEL;
 
-	AutoWindowModalState modalState (parent);
+        GtkWindow *gparent = modalDialog.GetParent ();
 
 	dialog = gtk_dialog_new_with_buttons ("", gparent,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -305,7 +303,7 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 
 	while (1)
 	{
-		res = gtk_dialog_run (GTK_DIALOG (dialog));
+		res = modalDialog.Run (GTK_DIALOG (dialog));
 		if (res == NSSDIALOG_RESPONSE_VIEW_CERT)
 		{
                       view_certificate (ctx, cert);
@@ -619,15 +617,16 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	GtkWidget *dialog, *label;
 	char *msg, *primary;
 
-	nsresult rv;
-	AutoJSContextStack stack;
-	rv = stack.Init ();
-	if (NS_FAILED (rv)) return rv;
-
 	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
-	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
+        
+        AutoModalDialog modalDialog (parent, PR_FALSE);
+        if (!modalDialog.ShouldShow ())
+        {
+                *_retval = PR_FALSE;
+                return NS_OK;
+        }
 
-	AutoWindowModalState modalState (parent);
+	GtkWindow *gparent = modalDialog.GetParent ();
 
 	dialog = gtk_dialog_new_with_buttons (_("Trust new Certificate Authority?"), gparent,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -670,7 +669,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 
 	while (1)
 	{
-		ret = gtk_dialog_run (GTK_DIALOG (dialog));
+		ret = modalDialog.Run (GTK_DIALOG (dialog));
 		if (ret == NSSDIALOG_RESPONSE_VIEW_CERT)
 		{
 		      view_certificate (ctx, cert);
@@ -751,17 +750,18 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	GtkWidget *dialog;
 	char *msg;
 
-	nsresult rv;
-	AutoJSContextStack stack;
-	rv = stack.Init ();
-	if (NS_FAILED (rv)) return rv;
-
 	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
-	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
+        
+        AutoModalDialog modalDialog (parent, PR_FALSE);
+        if (!modalDialog.ShouldShow ())
+        {
+                *_retval = PR_FALSE;
+                return NS_OK;
+        }
 
-	AutoWindowModalState modalState (parent);
+	GtkWindow *gparent = modalDialog.GetParent ();
 
-	dialog = ephy_password_dialog_new (gparent,
+	dialog = ephy_password_dialog_new (GTK_WIDGET (gparent),
 					   _("Select Password"),
 					   EphyPasswordDialogFlags(EPHY_PASSWORD_DIALOG_FLAGS_SHOW_NEW_PASSWORD |
 								   EPHY_PASSWORD_DIALOG_FLAGS_SHOW_QUALITY_METER));
@@ -776,7 +776,7 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), msg);
 	g_free (msg);
 
-	int response = gtk_dialog_run (GTK_DIALOG (dialog));
+	int response = modalDialog.Run (GTK_DIALOG (dialog));
 	gtk_widget_hide (dialog);
 	
 	if (response == GTK_RESPONSE_ACCEPT)
@@ -801,18 +801,19 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 {
 	g_print ("GtkNSSDialogs::GetPKCS12FilePassword\n");
 
-	nsresult rv;
-	AutoJSContextStack stack;
-	rv = stack.Init ();
-	if (NS_FAILED (rv)) return rv;
-
 	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
-	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
+        
+        AutoModalDialog modalDialog (parent, PR_FALSE);
+        if (!modalDialog.ShouldShow ())
+        {
+                *_retval = PR_FALSE;
+                return NS_OK;
+        }
 
-	AutoWindowModalState modalState (parent);
+	GtkWindow *gparent = modalDialog.GetParent ();
 
 	GtkWidget *dialog = ephy_password_dialog_new
-				(gparent,
+				(GTK_WIDGET (gparent),
 				 "",
 				 EphyPasswordDialogFlags (EPHY_PASSWORD_DIALOG_FLAGS_SHOW_PASSWORD));
 	EphyPasswordDialog *password_dialog = EPHY_PASSWORD_DIALOG (dialog);
@@ -825,7 +826,7 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), msg);
 	g_free (msg);
 			
-	int response = gtk_dialog_run (GTK_DIALOG (dialog));
+	int response = modalDialog.Run (GTK_DIALOG (dialog));
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
@@ -1213,10 +1214,13 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	PRUnichar ** usage;
 	GtkSizeGroup * sizegroup;
 
-	nsresult rv;
-	AutoJSContextStack stack;
-	rv = stack.Init ();
-	if (NS_FAILED (rv)) return rv;
+	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
+        
+        AutoModalDialog modalDialog (parent, PR_FALSE);
+        if (!modalDialog.ShouldShow ())
+                return NS_OK;
+
+	GtkWindow *gparent = modalDialog.GetParent ();
 
 	gxml = glade_xml_new (ephy_file ("certificate-dialogs.glade"),
 			      "viewcert_dialog", NULL);
@@ -1224,11 +1228,6 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 
 	dialog = glade_xml_get_widget (gxml, "viewcert_dialog");
 	g_return_val_if_fail (dialog != NULL, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
-	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
-
-	AutoWindowModalState modalState (parent);
 
 	if (gparent)
 	{
@@ -1255,6 +1254,7 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	gtk_size_group_add_widget (sizegroup, widget);
 	g_object_unref (sizegroup);
 
+        nsresult rv;
 	rv = cert->GetUsagesArray (FALSE, &verifystate, &count, &usage);
 	if (NS_FAILED(rv)) return rv;
 
@@ -1371,7 +1371,7 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	int res;
 	while (1)
 	{
-		res = gtk_dialog_run (GTK_DIALOG (dialog));
+		res = modalDialog.Run (GTK_DIALOG (dialog));
 		if (res == GTK_RESPONSE_HELP)
 		{
 			ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "using-certificate-viewer");
@@ -1412,9 +1412,15 @@ GtkNSSDialogs::SetPassword(nsIInterfaceRequestor *aCtx,
 	slot->GetStatus (&status);
 
 	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (aCtx));
-	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
-	AutoWindowModalState modalState (parent);
+        AutoModalDialog modalDialog (parent, PR_FALSE);
+        if (!modalDialog.ShouldShow ())
+        {
+                *aCancelled = PR_TRUE;
+                return NS_OK;
+        }
+
+	GtkWindow *gparent = modalDialog.GetParent ();
 
 	EphyPasswordDialogFlags flags =
 		EphyPasswordDialogFlags (EPHY_PASSWORD_DIALOG_FLAGS_SHOW_NEW_PASSWORD |
@@ -1423,7 +1429,7 @@ GtkNSSDialogs::SetPassword(nsIInterfaceRequestor *aCtx,
 		flags = EphyPasswordDialogFlags (flags | EPHY_PASSWORD_DIALOG_FLAGS_SHOW_PASSWORD);
 
 	GtkWidget *dialog = ephy_password_dialog_new
-				(gparent,
+				(GTK_WIDGET (gparent),
 				 _("Change Token Password"),
 				 flags);
 	EphyPasswordDialog *password_dialog = EPHY_PASSWORD_DIALOG (dialog);
@@ -1445,7 +1451,7 @@ GtkNSSDialogs::SetPassword(nsIInterfaceRequestor *aCtx,
 	nsString oldPassword;
 	PRBool pwdOk, needsLogin;
 	do {
-		response = gtk_dialog_run (GTK_DIALOG (dialog));
+		response = modalDialog.Run (GTK_DIALOG (dialog));
 
 		if (status != nsIPKCS11Slot::SLOT_UNINITIALIZED)
 		{
@@ -1503,20 +1509,22 @@ GtkNSSDialogs::GetPassword(nsIInterfaceRequestor *aCtx,
 	NS_ENSURE_SUCCESS (rv, rv);
 	NS_ENSURE_TRUE (token && slot, NS_ERROR_FAILURE);
 
-	AutoJSContextStack stack;
-	rv = stack.Init ();
-	if (NS_FAILED (rv)) return rv;
-
 	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (aCtx));
-	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
-	AutoWindowModalState modalState (parent);
+        AutoModalDialog modalDialog (parent, PR_FALSE);
+        if (!modalDialog.ShouldShow ())
+        {
+                *aCancelled = PR_TRUE;
+                return NS_OK;
+        }
+
+	GtkWindow *gparent = modalDialog.GetParent ();
 
 	EphyPasswordDialogFlags flags =
 		EphyPasswordDialogFlags (EPHY_PASSWORD_DIALOG_FLAGS_SHOW_PASSWORD);
 
 	GtkWidget *dialog = ephy_password_dialog_new
-				(gparent,
+				(GTK_WIDGET (gparent),
 				 _("Get Token Password"), /* FIXME */
 				 flags);
 	EphyPasswordDialog *password_dialog = EPHY_PASSWORD_DIALOG (dialog);
@@ -1531,7 +1539,7 @@ GtkNSSDialogs::GetPassword(nsIInterfaceRequestor *aCtx,
 				       message);
 	g_free (message);
 
-	int response = gtk_dialog_run (GTK_DIALOG (dialog));
+	int response = modalDialog.Run (GTK_DIALOG (dialog));
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
@@ -1571,23 +1579,23 @@ GtkNSSDialogs::ChooseToken (nsIInterfaceRequestor *aContext,
   NS_ENSURE_ARG (tokenNameList);
   NS_ENSURE_ARG (count);
 
-  nsresult rv;
-  AutoJSContextStack stack;
-  rv = stack.Init ();
-  if (NS_FAILED (rv)) return rv;
-
   /* Didn't you know it? MOZILLA SUCKS! ChooseToken is always called with |aContext| == NULL! See
    * http://bonsai.mozilla.org/cvsblame.cgi?file=mozilla/security/manager/ssl/src/nsKeygenHandler.cpp&rev=1.39&mark=346#346
    * Need to investigate if we it's always called directly from code called from JS, in which case we
    * can use EphyJSUtils::GetDOMWindowFromCallContext.
    */
   nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (aContext));
-  GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
-  AutoWindowModalState modalState (parent);
+  AutoModalDialog modalDialog (parent, PR_FALSE);
+  if (!modalDialog.ShouldShow ()) {
+    *_cancelled = PR_TRUE;
+    return NS_OK;
+  }
+
+  GtkWindow *gparent = modalDialog.GetParent ();
 
   GtkWidget *dialog = gtk_message_dialog_new
-		  (GTK_WINDOW (gparent),
+		  (gparent,
 		   GTK_DIALOG_DESTROY_WITH_PARENT,
 		   GTK_MESSAGE_OTHER,
 		   GTK_BUTTONS_CANCEL,
@@ -1615,7 +1623,7 @@ GtkNSSDialogs::ChooseToken (nsIInterfaceRequestor *aContext,
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_REJECT);
 
-  int response = gtk_dialog_run (GTK_DIALOG (dialog));
+  int response = modalDialog.Run (GTK_DIALOG (dialog));
   int selected = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
 
   gtk_widget_destroy (dialog);
@@ -1660,16 +1668,21 @@ GtkNSSDialogs::ConfirmKeyEscrow (nsIX509Cert *aEscrowAuthority,
   nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (aCtx));
 #endif
   nsCOMPtr<nsIDOMWindow> parent (EphyJSUtils::GetDOMWindowFromCallContext ());
-  GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
-  AutoWindowModalState modalState (parent);
+  AutoModalDialog modalDialog (parent, PR_FALSE);
+  if (!modalDialog.ShouldShow ()) {
+    *_retval = PR_FALSE;
+    return NS_OK;
+  }
+
+  GtkWindow *gparent = modalDialog.GetParent ();
 
   /* FIXME: is that guaranteed to be non-empty? */
   nsString commonName;
   aEscrowAuthority->GetCommonName (commonName);
 
   GtkWidget *dialog = gtk_message_dialog_new
-			(GTK_WINDOW (gparent),
+			(gparent,
 			 GTK_DIALOG_DESTROY_WITH_PARENT,
 			 GTK_MESSAGE_WARNING /* QUESTION really but it's also a strong warnings... */,
 			 GTK_BUTTONS_NONE,
@@ -1703,7 +1716,7 @@ GtkNSSDialogs::ConfirmKeyEscrow (nsIX509Cert *aEscrowAuthority,
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_REJECT);
   gtk_widget_grab_focus (button);
 
-  int response = gtk_dialog_run (GTK_DIALOG (dialog));
+  int response = modalDialog.Run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
 	
   *_retval = response == GTK_RESPONSE_ACCEPT;

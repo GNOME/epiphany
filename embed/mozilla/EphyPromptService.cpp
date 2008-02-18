@@ -36,8 +36,7 @@
 #include "ephy-gui.h"
 #include "ephy-debug.h"
 
-#include "AutoJSContextStack.h"
-#include "AutoWindowModalState.h"
+#include "AutoModalDialog.h"
 #include "EphyUtils.h"
 
 #include "EphyPromptService.h"
@@ -470,12 +469,9 @@ Prompter::Run (PRBool *aSuccess)
 	}
 #endif
 
-	nsresult rv;
-	AutoJSContextStack stack;
-	rv = stack.Init ();
-	if (NS_FAILED (rv)) return rv;
-
-	AutoWindowModalState modalState (mWindow);
+        AutoModalDialog modalDialog (mWindow, PR_TRUE);
+        if (!modalDialog.ShouldShow ())
+                return GTK_RESPONSE_CANCEL;
 
 	if (mDelay)
 	{
@@ -491,7 +487,7 @@ Prompter::Run (PRBool *aSuccess)
 
 	GtkWidget *widget = GTK_WIDGET (mDialog);
 	gtk_widget_show (widget);
-	mResponse = gtk_dialog_run (mDialog);
+	mResponse = modalDialog.Run (mDialog);
 	gtk_widget_hide (widget);
 
 	g_object_set_data (G_OBJECT (mDialog), TIMEOUT_DATA_KEY, NULL);

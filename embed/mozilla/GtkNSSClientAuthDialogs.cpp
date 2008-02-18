@@ -57,8 +57,7 @@
 #include "ephy-state.h"
 #include "ephy-stock-icons.h"
 
-#include "AutoJSContextStack.h"
-#include "AutoWindowModalState.h"
+#include "AutoModalDialog.h"
 #include "EphyUtils.h"
 
 #include "GtkNSSClientAuthDialogs.h"
@@ -146,18 +145,19 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	char *msg, *markup_text;
 	PRUint32 i;
 
-	nsresult rv;
-	AutoJSContextStack stack;
-	rv = stack.Init ();
-	if (NS_FAILED (rv)) return rv;
-
 	nsCOMPtr<nsIDOMWindow> parent (do_GetInterface (ctx));
-	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
 
-	AutoWindowModalState modalState (parent);
+        AutoModalDialog modalDialog (parent, PR_FALSE);
+        if (!modalDialog.ShouldShow ())
+        {
+                *canceled = PR_TRUE;
+                return NS_OK;
+        }
+
+	GtkWindow *gparent = modalDialog.GetParent ();
 
 	dialog = gtk_dialog_new_with_buttons ("",
-					      GTK_WINDOW (gparent),
+					      gparent,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_CANCEL,
 					      GTK_RESPONSE_CANCEL,
@@ -268,7 +268,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
 	/* run the dialog */
-	int res = gtk_dialog_run (GTK_DIALOG (dialog));
+	int res = modalDialog.Run (GTK_DIALOG (dialog));
 	if (res == GTK_RESPONSE_OK)
 	{
 		*canceled = PR_FALSE;

@@ -46,8 +46,7 @@
 #include "ephy-prefs.h"
 #include "ephy-stock-icons.h"
 
-#include "AutoJSContextStack.h"
-#include "AutoWindowModalState.h"
+#include "AutoModalDialog.h"
 #include "EphyUtils.h"
 #include "GeckoPrintSession.h"
 
@@ -121,16 +120,12 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
   rv = aSettings->GetHowToEnableFrameUI (&frameUI);
   NS_ENSURE_SUCCESS (rv, rv);
 
-  GtkWidget *parent = EphyUtils::FindGtkParent (aParent);
+  AutoModalDialog modalDialog (aParent, PR_TRUE);
+  if (!modalDialog.ShouldShow ())
+    return NS_ERROR_ABORT;
+
+  GtkWindow *parent = modalDialog.GetParent ();
   NS_ENSURE_TRUE(parent, NS_ERROR_INVALID_POINTER);
-
-  AutoJSContextStack stack;
-  rv = stack.Init ();
-  if (NS_FAILED (rv)) {
-    return rv;
-  }
-
-  AutoWindowModalState modalState (aParent);
 
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
@@ -200,7 +195,7 @@ GeckoPrintService::ShowPrintDialog (nsIDOMWindow *aParent,
 
   gtk_window_set_icon_name (GTK_WINDOW (dialog), EPHY_STOCK_EPHY);
 
-  int response = gtk_dialog_run (GTK_DIALOG (dialog));
+  int response = modalDialog.Run (GTK_DIALOG (dialog));
   gtk_widget_hide (dialog);
 
   GtkPrinter *printer = gtk_print_unix_dialog_get_selected_printer (print_dialog);
