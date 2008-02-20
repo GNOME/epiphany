@@ -131,7 +131,7 @@ EphyUtils::FindEmbed (nsIDOMWindow *aDOMWindow)
 	rv = window->GetSiteWindow ((void **) cache_ptr);
 	NS_ENSURE_SUCCESS (rv, nsnull);
 
-	return mozembed;
+	return gtk_widget_get_parent (mozembed);
 }
 
 GtkWidget *
