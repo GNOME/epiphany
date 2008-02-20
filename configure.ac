@@ -272,40 +272,6 @@ AC_SUBST([WEASEL_UA_VERSION])
 
 GECKO_XPCOM_PROGRAM_CHECK
 
-# Make sure we DON'T have the typeaheadfind extension
-
-AC_MSG_CHECKING([whether typeaheadfind is broken])
-
-GECKO_RUN_IFELSE([],
-[GECKO_XPCOM_PROGRAM(
-[[#include <nsIComponentRegistrar.h>]],
-[[
-status = 99;
-nsCOMPtr<nsIComponentRegistrar> registrar;
-rv = NS_GetComponentRegistrar (getter_AddRefs (registrar));
-if (NS_FAILED (rv)) break;
-
-status = 98;
-nsCID *classID = nsnull;
-rv = registrar->ContractIDToCID ("@mozilla.org/typeaheadfind;1", &classID);
-if (NS_FAILED (rv) || !classID) break;
-
-nsCID badClassID = { 0x46590685, 0xbc00, 0x4aac,
-		     { 0xab, 0xed, 0x2c, 0x10, 0xa5, 0xb9, 0x45, 0xa4 } };
-
-status = classID->Equals (badClassID) ? 97 : EXIT_SUCCESS;
-]]
-)],
-[have_broken_typeaheadfind=no],
-[have_broken_typeaheadfind=yes],
-[have_broken_typeaheadfind=maybe])
-
-AC_MSG_RESULT([$have_broken_typeaheadfind])
-
-if test "$have_broken_typeaheadfind" = "yes"; then
-	AC_MSG_ERROR([You must not compile $gecko_cv_gecko with the "typeaheadfind" extension enabled!])
-fi
-
 # Check for PSM header(s) to infer PSM presence
 
 GECKO_CHECK_HEADERS([pipnss],[nsIX509Cert.h],[have_psm=yes],[have_psm=no])
