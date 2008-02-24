@@ -116,8 +116,6 @@ struct MozillaEmbedSinglePrivate
         guint user_css_enabled_notifier_id;
         GFileMonitor *user_css_file_monitor;
         guint user_css_enabled : 1;
-
-	guint online : 1;
 };
 
 enum
