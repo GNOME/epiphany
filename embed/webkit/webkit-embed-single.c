@@ -86,6 +86,8 @@ static void
 webkit_embed_single_init (WebKitEmbedSingle *wes)
 {
   wes->priv = WEBKIT_EMBED_SINGLE_GET_PRIVATE (wes);
+
+  wes->priv->online = TRUE;
 }
 
 static void
@@ -116,12 +118,17 @@ static void
 impl_set_network_status (EphyEmbedSingle *single,
                          gboolean online)
 {
+  WebKitEmbedSinglePrivate *priv = WEBKIT_EMBED_SINGLE (single)->priv;
+
+  if (online != priv->online) {
+    priv->online = online;
+  }
 }
 
 static gboolean
 impl_get_network_status (EphyEmbedSingle *esingle)
 {
-  return FALSE;
+  return WEBKIT_EMBED_SINGLE (esingle)->priv->online;
 }
 
 static const char *
