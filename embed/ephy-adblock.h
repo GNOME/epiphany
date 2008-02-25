@@ -54,7 +54,15 @@ typedef enum
 	AD_URI_CHECK_TYPE_SUBDOCUMENT = 7U, /* Indicates a document contained
 					       within another document (e.g.,
 					       IFRAMEs, FRAMES, and OBJECTs) */
-        AD_URI_CHECK_TYPE_REFRESH     = 8U  /* Indicates a timed refresh */
+        AD_URI_CHECK_TYPE_REFRESH     = 8U, /* Indicates a timed refresh */
+
+        AD_URI_CHECK_TYPE_XBEL              =  9U, /* Indicates an XBL binding request,
+                                                      triggered either by -moz-binding CSS
+                                                      property or Document.addBinding method */
+        AD_URI_CHECK_TYPE_PING              = 10U, /* Indicates a ping triggered by a click on
+                                                      <A PING="..."> element */
+        AD_URI_CHECK_TYPE_XMLHTTPREQUEST    = 11U, /* Indicates a XMLHttpRequest */
+        AD_URI_CHECK_TYPE_OBJECT_SUBREQUEST = 12U  /* Indicates a request by a plugin */
 } AdUriCheckType;
 
 typedef struct _EphyAdBlock		EphyAdBlock;
