@@ -486,7 +486,7 @@ popup_cmd_open_image (GtkAction *action,
 	value = ephy_embed_event_get_property (event, "image");
 	address = g_value_get_string (value);
 
-	scheme = g_uri_get_scheme (address);
+	scheme = g_uri_parse_scheme (address);
 	if (scheme == NULL) return;
 
 	if (strcmp (scheme, "file") == 0)

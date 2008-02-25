@@ -645,7 +645,7 @@ internal_get_host (EphyHistory *eh, const char *url, gboolean create)
 
 	if (url)
 	{
-		scheme = g_uri_get_scheme (url);
+		scheme = g_uri_parse_scheme (url);
 		host_name = ephy_string_get_host_name (url);
 	}
 

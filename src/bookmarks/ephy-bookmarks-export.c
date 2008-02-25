@@ -233,7 +233,7 @@ write_rdf (EphyBookmarks *bookmarks,
 			char *scheme;
 			char *host_name;
 			
-			scheme = g_uri_get_scheme (url);
+			scheme = g_uri_parse_scheme (url);
 			host_name = ephy_string_get_host_name (url);
 			link = g_strconcat (scheme,
 					    "://",
@@ -304,7 +304,7 @@ write_rdf (EphyBookmarks *bookmarks,
 			char *scheme;
 			char *host_name;
 
-			scheme = g_uri_get_scheme (url);
+			scheme = g_uri_parse_scheme (url);
 			host_name = ephy_string_get_host_name (url);
 
 			link = g_strconcat (scheme,

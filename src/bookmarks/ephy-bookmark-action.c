@@ -370,7 +370,7 @@ ephy_bookmark_action_activate (EphyBookmarkAction *action,
 		char *scheme;
 		char *host_name;
 
-		scheme = g_uri_get_scheme (location);
+		scheme = g_uri_parse_scheme (location);
 		host_name = ephy_string_get_host_name (location);
 		address = g_strconcat (scheme,
 				       "://",
@@ -515,7 +515,7 @@ query_tooltip_cb (GtkWidget *proxy,
 			char *scheme;
 			char *host_name;
 			
-			scheme = g_uri_get_scheme (location);
+			scheme = g_uri_parse_scheme (location);
 			host_name = ephy_string_get_host_name (location);
 		
 			if (title[0] == '\0')
