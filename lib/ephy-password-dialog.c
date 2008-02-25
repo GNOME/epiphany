@@ -43,9 +43,8 @@ enum
 {
 	CHECK_USER		= 1 << 0,
 	CHECK_DOMAIN		= 1 << 1,
-	CHECK_PWD		= 1 << 2,
-	CHECK_PWD_MATCH		= 1 << 3,
-	CHECK_PWD_QUALITY	= 1 << 4,
+	CHECK_PWD_MATCH		= 1 << 2,
+	CHECK_PWD_QUALITY	= 1 << 3,
 	CHECK_MASK		= 0x1f
 };
 
@@ -168,10 +167,6 @@ entry_changed_cb (GtkWidget *entry,
 	else if (entry == priv->entry[DOMAIN_ENTRY])
 	{
 		flag = CHECK_DOMAIN;
-	}
-	else if (entry == priv->entry[PASSWORD_ENTRY])
-	{
-		flag = CHECK_PWD;
 	}
 
 	text = gtk_entry_get_text (GTK_ENTRY (entry));
@@ -429,9 +424,7 @@ ephy_password_dialog_constructor (GType type,
 				   _("_Password:"),
 				   TRUE,
 				   TRUE,
-				   G_CALLBACK (entry_changed_cb));
-
-		priv->checks |= CHECK_PWD;
+				   NULL);
 	}
 
 	if (priv->flags & EPHY_PASSWORD_DIALOG_FLAGS_SHOW_NEW_PASSWORD)
@@ -455,8 +448,6 @@ ephy_password_dialog_constructor (GType type,
 				   TRUE,
 				   TRUE,
 				   G_CALLBACK (password_entry_changed_cb));
-
-		priv->checks |= CHECK_PWD_MATCH;
 	}
 
 	if (priv->flags & (EPHY_PASSWORD_DIALOG_FLAGS_SHOW_PASSWORD |
@@ -481,7 +472,8 @@ ephy_password_dialog_constructor (GType type,
 
 		add_row (table, row++, _("Password quality:"), priv->quality_meter);
 
-		priv->checks |= CHECK_PWD_QUALITY;
+                /* Update the quality meter now, so we allow empty new password if quality is 0. */
+                password_entry_changed_cb (priv->entry[NEW_PASSWORD_ENTRY], password_dialog);
 	}
 
 	/* Removed unused table rows */
