@@ -110,8 +110,6 @@ node_added_cb (EphyNode *parent,
 	gtk_action_group_add_action (action_group, action);
 	g_object_unref (action);
 
-	ephy_bookmark_action_updated ((EphyBookmarkAction *) action);
-
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), action_group);
 }
