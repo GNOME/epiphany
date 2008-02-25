@@ -36,7 +36,6 @@ DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-python			\
 	--enable-zeroconf		\
 	--enable-desktop-file-plugin	\
-	--enable-certificate-manager	\
 	--enable-gtk-doc		\
 	--disable-schemas-install	\
 	--disable-scrollkeeper		\
