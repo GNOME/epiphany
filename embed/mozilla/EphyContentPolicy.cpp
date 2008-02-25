@@ -135,7 +135,7 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 	EphyAdBlockManager *adblock_manager = 
 		EPHY_ADBLOCK_MANAGER (ephy_embed_shell_get_adblock_manager (embed_shell));
 
-	static PRBool kBlockType[nsIContentPolicy::TYPE_REFRESH + 1] = {
+	static PRBool kBlockType[] = {
 		PR_FALSE /* unused/unknown, don't block */,
 		PR_TRUE  /* TYPE_OTHER */,
 		PR_TRUE  /* TYPE_SCRIPT */,
@@ -144,7 +144,13 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 		PR_TRUE  /* TYPE_OBJECT */,
 		PR_FALSE /* TYPE_DOCUMENT */,
 		PR_TRUE  /* TYPE_SUBDOCUMENT */,
-		PR_TRUE  /* TYPE_REFRESH */
+		PR_TRUE  /* TYPE_REFRESH */,
+#ifdef HAVE_GECO_1_9
+		PR_FALSE /* TYPE_XBEL */,
+                PR_TRUE /* TYPE_PING */,
+                PR_FALSE /* TYPE_XMLHTTPREQUEST */,
+                PR_TRUE /* TYPE_OBJECT_SUBREQUEST */,
+#endif /* HAVE_GECKO_1_9 */
 	};
 
 	if (kBlockType[aContentType < G_N_ELEMENTS (kBlockType) ? aContentType : 0])
