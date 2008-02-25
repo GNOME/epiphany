@@ -103,15 +103,15 @@ node_added_cb (EphyNode *parent,
 
 	action = ephy_bookmark_action_new (child, name);
 
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), action_group);
+
 	g_snprintf (accel, sizeof (accel), "<Actions>/%s/%s",
 		    gtk_action_group_get_name (action_group),
 		    name);
 	gtk_action_set_accel_path (action, accel);
 	gtk_action_group_add_action (action_group, action);
 	g_object_unref (action);
-
-	g_signal_connect_swapped (action, "open-link",
-				  G_CALLBACK (ephy_link_open), action_group);
 }
 
 static void
