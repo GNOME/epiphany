@@ -174,10 +174,12 @@ void
 egg_toolbar_editor_set_model (EggToolbarEditor *t,
 			      EggToolbarsModel *model)
 {
+  EggToolbarEditorPrivate *priv;
+
   g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (t));
   g_return_if_fail (model != NULL);
 
-  EggToolbarEditorPrivate *priv = t->priv;
+  priv = t->priv;
 
   if (priv->model)
     {
