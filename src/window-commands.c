@@ -726,22 +726,13 @@ window_cmd_edit_personal_data (GtkAction *action,
 	g_free (host);
 }
 
-#ifdef ENABLE_CERTIFICATE_MANAGER
-
-#include "ephy-cert-manager-dialog.h"
-
+#if 0
 void
 window_cmd_edit_certificates (GtkAction *action,
 			      EphyWindow *window)
 {
-	EphyDialog *dialog;
-
-	dialog = certs_manager_dialog_new ();
-
-	ephy_dialog_show (dialog);
 }
-
-#endif /* ENABLE_CERTIFICATE_MANAGER */
+#endif
 
 void
 window_cmd_edit_prefs (GtkAction *action,

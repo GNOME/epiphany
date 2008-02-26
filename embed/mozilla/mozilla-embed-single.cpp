@@ -54,11 +54,6 @@
 #include <nsMemory.h>
 #include <nsServiceManagerUtils.h>
 
-#ifdef HAVE_MOZILLA_PSM
-#include <nsIX509Cert.h>
-#include <nsIX509CertDB.h>
-#endif
-
 #ifdef ALLOW_PRIVATE_API
 #include <nsICacheService.h>
 #include <nsIFontEnumerator.h>
@@ -74,7 +69,6 @@
 
 #include "ephy-file-helpers.h"
 #include "eel-gconf-extensions.h"
-#include "ephy-certificate-manager.h"
 #include "ephy-cookie-manager.h"
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
@@ -85,7 +79,6 @@
 #include "ephy-string.h"
 #include "mozilla-embed.h"
 #include "mozilla-notifiers.h"
-#include "mozilla-x509-cert.h"
 
 #include "EphyBrowser.h"
 #include "EphyDirectoryProvider.h"
@@ -131,26 +124,6 @@ static void ephy_password_manager_iface_init	(EphyPasswordManagerIface *iface);
 static void ephy_permission_manager_iface_init	(EphyPermissionManagerIface *iface);
 static void mozilla_embed_single_init		(MozillaEmbedSingle *ges);
 
-#ifdef ENABLE_CERTIFICATE_MANAGER
-static void ephy_certificate_manager_iface_init	(EphyCertificateManagerIface *iface);
-#endif
-
-/* Some compilers (like gcc 2.95) don't support preprocessor directives inside macros,
-   so we have to duplicate the whole thing */
-
-#ifdef ENABLE_CERTIFICATE_MANAGER
-G_DEFINE_TYPE_WITH_CODE (MozillaEmbedSingle, mozilla_embed_single, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_SINGLE,
-                                                ephy_embed_single_iface_init)
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_COOKIE_MANAGER,
-                                                ephy_cookie_manager_iface_init)
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PASSWORD_MANAGER,
-                                                ephy_password_manager_iface_init)
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_CERTIFICATE_MANAGER,
-                                                ephy_certificate_manager_iface_init)
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
-                                                ephy_permission_manager_iface_init))
-#else
 G_DEFINE_TYPE_WITH_CODE (MozillaEmbedSingle, mozilla_embed_single, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_SINGLE,
                                                 ephy_embed_single_iface_init)
@@ -160,7 +133,6 @@ G_DEFINE_TYPE_WITH_CODE (MozillaEmbedSingle, mozilla_embed_single, G_TYPE_OBJECT
                                                 ephy_password_manager_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
                                                 ephy_permission_manager_iface_init))
-#endif
 
 static gboolean
 mozilla_set_default_prefs (MozillaEmbedSingle *mes)
@@ -1188,124 +1160,6 @@ impl_open_window (EphyEmbedSingle *single,
 	return EphyUtils::FindEmbed (newWindow);
 }
 
-#ifdef ENABLE_CERTIFICATE_MANAGER
-
-static gboolean
-impl_remove_certificate (EphyCertificateManager *manager,
-			 EphyX509Cert *cert)
-{
-	nsresult rv;
-
-	nsCOMPtr<nsIX509CertDB> certDB;
-	certDB = do_GetService (NS_X509CERTDB_CONTRACTID);
-	if (!certDB) return FALSE;
-
-        nsCOMPtr<nsIX509Cert> mozCert;
-        rv = mozilla_x509_cert_get_mozilla_cert (MOZILLA_X509_CERT (cert),
-						 getter_AddRefs (mozCert));
-	if (NS_FAILED (rv)) return FALSE;
-
-	rv = certDB->DeleteCertificate (mozCert);
-	if (NS_FAILED (rv)) return FALSE;
-
-        return TRUE;
-}
-
-#define NICK_DELIMITER PRUnichar('\001')
-
-static GList *
-retrieveCerts (PRUint32 type)
-{
-	nsresult rv;
-
-	nsCOMPtr<nsIX509CertDB> certDB;
-	certDB = do_GetService (NS_X509CERTDB_CONTRACTID);
-	if (!certDB) return NULL;
-
-	PRUint32 count;
-	PRUnichar **certNameList = NULL;
-
-	rv = certDB->FindCertNicknames (NULL, type, &count, &certNameList);
-	if (NS_FAILED (rv)) return NULL;
-
-	LOG("Certificates found: %i", count);
-
-	GList *list = NULL;
-	for (PRUint32 i = 0; i < count; i++)
-	{
-		/* HACK HACK, this is EVIL, the string for each cert is:
-		     <DELIMITER>nicknameOrEmailAddress<DELIMITER>dbKey
-		   So we need to chop off the dbKey to look it up in the database.
-		   
-		   https://bugzilla.mozilla.org/show_bug.cgi?id=214742
-		*/
-		nsCString full_string;
-		NS_UTF16ToCString (nsString(certNameList[i]),
-				   NS_CSTRING_ENCODING_UTF8, full_string);
-
-		const char *key = full_string.get();
-		char *pos = strrchr (key, NICK_DELIMITER);
-		if (!pos) continue;
-
-		nsCOMPtr<nsIX509Cert> mozilla_cert;
-		rv = certDB->FindCertByDBKey (pos, NULL, getter_AddRefs (mozilla_cert));
-		if (NS_FAILED (rv)) continue;
-
-		MozillaX509Cert *cert = mozilla_x509_cert_new (mozilla_cert);
-		list = g_list_prepend (list, cert);
-	}
-
-	NS_FREE_XPCOM_ALLOCATED_POINTER_ARRAY (count, certNameList);
-	return list;
-}
-
-static GList *
-impl_get_certificates (EphyCertificateManager *manager,
-		       EphyX509CertType type)
-{
-	int moz_type = nsIX509Cert::USER_CERT;
-	switch (type)
-	{
-		case PERSONAL_CERTIFICATE:
-			moz_type = nsIX509Cert::USER_CERT;
-			break;
-		case SERVER_CERTIFICATE:
-			moz_type = nsIX509Cert::SERVER_CERT;
-			break;
-		case CA_CERTIFICATE:
-			moz_type = nsIX509Cert::CA_CERT;
-			break;
-	}
-	return retrieveCerts (moz_type);
-}
-
-static gboolean
-impl_import (EphyCertificateManager *manager,
-	     const gchar *file)
-{
-	nsresult rv;
-	nsCOMPtr<nsIX509CertDB> certDB;
-	certDB = do_GetService (NS_X509CERTDB_CONTRACTID);
-	if (!certDB) return FALSE;
-
-	nsCOMPtr<nsILocalFile> localFile;
-	localFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-
-	// TODO Is this correct ?
-	nsString path;
-	NS_CStringToUTF16 (nsCString(file),
-			   NS_CSTRING_ENCODING_UTF8, path);
-
-
-	localFile->InitWithPath (path);
-	rv = certDB->ImportPKCS12File(NULL, localFile);
-	if (NS_FAILED (rv)) return FALSE;
-
-	return TRUE;
-}
-
-#endif /* ENABLE_CERTIFICATE_MANAGER */
-
 static void
 mozilla_embed_single_get_property (GObject *object,
 				   guint prop_id,
@@ -1391,15 +1245,3 @@ ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface)
 	iface->test = impl_permission_manager_test;
 	iface->list = impl_permission_manager_list;
 }
-
-#ifdef ENABLE_CERTIFICATE_MANAGER
-
-static void
-ephy_certificate_manager_iface_init (EphyCertificateManagerIface *iface)
-{
-	iface->get_certificates = impl_get_certificates;
-	iface->remove_certificate = impl_remove_certificate;
-	iface->import = impl_import;
-}
-
-#endif /* ENABLE_CERTIFICATE_MANAGER */

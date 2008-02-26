@@ -91,12 +91,6 @@ libephymozillaembed_la_SOURCES += 	\
 	GtkNSSSecurityWarningDialogs.h
 endif
 
-if ENABLE_CERTIFICATE_MANAGER
-libephymozillaembed_la_SOURCES += \
-	mozilla-x509-cert.cpp		\
-	mozilla-x509-cert.h
-endif
-
 if ENABLE_SPELLCHECKER
 libephymozillaembed_la_SOURCES += \
 	GeckoSpellCheckEngine.cpp	\

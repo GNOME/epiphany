@@ -583,26 +583,6 @@ fi
 
 AM_CONDITIONAL([ENABLE_ZEROCONF],[test "$enable_zeroconf" = "yes"])
 
-# Certificates manager
-
-if test "$enable_psm" = "yes"; then
-
-AC_MSG_CHECKING([whether to build the certificates manager])
-AC_ARG_ENABLE([certificate-manager],
-	AS_HELP_STRING([--enable-certificate-manager],[Whether to enable the certificate manager (experimental; default:disabled)]),
-	[],[enable_certificate_manager=no])
-AC_MSG_RESULT([$enable_certificate_manager])
-
-fi
-
-if test "$enable_certificate_manager" = "yes"; then
-	AC_DEFINE([ENABLE_CERTIFICATE_MANAGER],[1],[Define to enable the certificate manager build])
-else
-        enable_certificate_manager=no
-fi
-
-AM_CONDITIONAL([ENABLE_CERTIFICATE_MANAGER],[test "$enable_certificate_manager" = "yes"])
-
 # NetworkManager
 
 AC_MSG_CHECKING([whether to enable NetworkManager support])
@@ -722,6 +702,27 @@ AM_GLIB_GNU_GETTEXT
 # uninstalled share dir to search data
 AC_DEFINE_UNQUOTED([SHARE_UNINSTALLED_DIR], ["`pwd`/data"], [path to source data dir])
 
+# ****************
+# Distributor name
+# ****************
+
+AC_ARG_WITH([distributor-name],
+  AS_HELP_STRING([--with-distributor-name=name],[Set the distributor name]),
+  [LSB_DISTRIBUTOR="$withval"])
+
+if test -z "$LSB_DISTRIBUTOR" = ""; then
+	AC_CHECK_PROGS([LSB_RELEASE], [lsb_release],)
+	if test -n "$LSB_RELEASE"; then
+		# Fallback on lsb_release if available
+		LSB_DISTRIBUTOR=$($LSB_RELEASE -i -s)
+	else
+		# Fallback on the product name
+		LSB_DISTRIBUTOR="Epiphany"
+	fi
+fi
+
+AC_DEFINE_UNQUOTED([LSB_DISTRIBUTOR],["$LSB_DISTRIBUTOR"],[Distributor name])
+
 # *****************
 # API Documentation
 # *****************
@@ -774,57 +775,6 @@ po/Makefile.in
 [],
 [EPIPHANY_API_VERSION=$EPIPHANY_API_VERSION])
 
-# new gecko embedding
-
-PKG_CHECK_MODULES([GTK],[gtk+-2.0 >= $GTK_REQUIRED])
-PKG_CHECK_MODULES([GTKPRINT],[gtk+-unix-print-2.0 >= $GTK_REQUIRED])
-PKG_CHECK_MODULES([GCONF],[gconf-2.0])
-PKG_CHECK_MODULES([GLADE],[libglade-2.0 >= $LIBGLADE_REQUIRED])
-PKG_CHECK_MODULES([GNOME],[libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED])
-
-# Distributor name
-
-AC_ARG_WITH(distributor-name,
-[  --with-distributor-name=name      Distributor name.],LSB_DISTRIBUTOR="$withval",)
-
-if test "x$LSB_DISTRIBUTOR" = "x"; then
-	AC_CHECK_PROGS([LSB_RELEASE], [lsb_release],)
-	if test -n "$LSB_RELEASE"; then
-		# Fallback on lsb_release if available
-		LSB_DISTRIBUTOR=$($LSB_RELEASE -i -s)
-	else
-		# Fallback on the product name
-		LSB_DISTRIBUTOR="Epiphany"
-	fi
-fi
-
-AC_DEFINE_UNQUOTED(LSB_DISTRIBUTOR, "$LSB_DISTRIBUTOR", [Distributor name.])
-
-# compat cruft
-GGE_VERSION=0
-AC_SUBST([GGE_VERSION])
-
-GGE_API_VERSION=0
-AC_SUBST([GGE_API_VERSION])
-
-AC_CONFIG_FILES([
-embed/xulrunner/Makefile
-embed/xulrunner/bindings/Makefile
-embed/xulrunner/bindings/python/Makefile
-embed/xulrunner/components/Makefile
-embed/xulrunner/data/Makefile
-embed/xulrunner/embed/Makefile
-embed/xulrunner/src/Makefile
-embed/xulrunner/tests/Makefile
-embed/xulrunner/utils/Makefile
-xulapp/Makefile
-xulapp/application.ini
-])
-
-AC_CONFIG_FILES([
-embed/xulrunner/data/gnome-gecko-embed-${GGE_API_VERSION}.pc:embed/xulrunner/data/gnome-gecko-embed.pc.in
-],[],[GGE_API_VERSION=$GGE_API_VERSION])
-
 AC_OUTPUT
 
 # *************************************
@@ -850,6 +800,5 @@ Epiphany was configured with the following options:
 if test "$with_engine" = "mozilla"; then
 echo "        Gecko backend              : $gecko_cv_gecko version $gecko_cv_gecko_version
 	PSM support                : $enable_psm
-	Certificate manager        : $enable_certificate_manager (experimental)
 "
 fi

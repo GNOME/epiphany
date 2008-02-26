@@ -69,16 +69,6 @@ libephyembed_la_SOURCES = \
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
 
-if ENABLE_CERTIFICATE_MANAGER
-INST_H_FILES += \
-	ephy-certificate-manager.h      \
-	ephy-x509-cert.h
-
-libephyembed_la_SOURCES += \
-	ephy-certificate-manager.c      \
-	ephy-x509-cert.c
-endif
-
 nodist_libephyembed_la_SOURCES = \
 	$(BUILT_SOURCES)
 

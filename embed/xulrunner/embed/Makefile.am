@@ -28,12 +28,6 @@ libephyxulrunnerembed_la_SOURCES = 	\
 	mozilla-notifiers.cpp		\
 	mozilla-notifiers.h
 
-# if ENABLE_CERTIFICATE_MANAGER
-# libephyxulrunnerembed_la_SOURCES += \
-# 	mozilla-x509-cert.cpp		\
-# 	mozilla-x509-cert.h
-# endif
-
 libephyxulrunnerembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib	    		\
 	-I$(top_srcdir)/embed	    		\

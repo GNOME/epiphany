@@ -97,14 +97,6 @@ libephymain_la_SOURCES = \
 nodist_libephymain_la_SOURCES = \
 	$(TYPES_SOURCE)
 
-if ENABLE_CERTIFICATE_MANAGER
-NOINST_H_FILES += \
-	ephy-cert-manager-dialog.h
-
-libephymain_la_SOURCES += \
-	ephy-cert-manager-dialog.c
-endif
-
 libephymain_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
 	-I$(top_builddir)/lib/egg	\

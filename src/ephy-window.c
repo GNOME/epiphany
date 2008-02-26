@@ -187,7 +187,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "EditPersonalData", NULL, N_("P_ersonal Data"), NULL,
 	  N_("View and remove cookies and passwords"),
 	  G_CALLBACK (window_cmd_edit_personal_data) },
-#ifdef ENABLE_CERTIFICATE_MANAGER
+#if 0
 	{ "EditCertificates", NULL, N_("Certificate_s"), NULL,
 	  N_("Manage Certificates"),
 	  G_CALLBACK (window_cmd_edit_certificates) },

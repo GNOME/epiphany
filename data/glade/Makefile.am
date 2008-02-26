@@ -6,9 +6,4 @@ glade_DATA = \
 	prefs-dialog.glade		\
 	print.glade
 
-if ENABLE_CERTIFICATE_MANAGER
-glade_DATA += \
-	certs-manager.glade
-endif
-
-EXTRA_DIST = $(glade_DATA) certs-manager.glade
+EXTRA_DIST = $(glade_DATA)
