@@ -24,7 +24,93 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-embed-prefs.h"
 
+typedef struct
+{
+  char *gconf_key;
+  char *webkit_pref;
+  GConfClientNotifyFunc func;
+  guint cnxn_id;
+} PrefData;
+
 static WebKitWebSettings *settings = NULL;
+static guint *connections = NULL;
+
+static void
+webkit_pref_callback_int (GConfClient *client,
+                          guint cnxn_id,
+                          GConfEntry *entry,
+                          gpointer data)
+{
+  GConfValue *gcvalue;
+  gint value = 0;
+  char *webkit_pref = data;
+
+  gcvalue = gconf_entry_get_value (entry);
+
+  /* happens on initial notify if the key doesn't exist */
+  if (gcvalue != NULL &&
+      gcvalue->type == GCONF_VALUE_INT) {
+      value = gconf_value_get_int (gcvalue);
+      value = MAX (value, 0);
+  }
+
+  g_object_set (settings, webkit_pref, value, NULL);
+}
+
+static void
+webkit_pref_callback_boolean (GConfClient *client,
+                              guint cnxn_id,
+                              GConfEntry *entry,
+                              gpointer data)
+{
+  GConfValue *gcvalue;
+  gboolean value = FALSE;
+  char *webkit_pref = data;
+
+  gcvalue = gconf_entry_get_value (entry);
+
+  /* happens on initial notify if the key doesn't exist */
+  if (gcvalue != NULL &&
+      gcvalue->type == GCONF_VALUE_BOOL) {
+      value = gconf_value_get_bool (gcvalue);
+  }
+
+  g_object_set (settings, webkit_pref, value, NULL);
+}
+
+static void
+webkit_pref_callback_string (GConfClient *client,
+                             guint cnxn_id,
+                             GConfEntry *entry,
+                             gpointer data)
+{
+  GConfValue *gcvalue;
+  const char *value = NULL;
+  char *webkit_pref = data;
+
+  gcvalue = gconf_entry_get_value (entry);
+
+  /* happens on initial notify if the key doesn't exist */
+  if (gcvalue != NULL &&
+      gcvalue->type == GCONF_VALUE_STRING) {
+      value = gconf_value_get_string (gcvalue);
+  }
+
+  g_object_set (settings, webkit_pref, value, NULL);
+}
+
+static const PrefData webkit_pref_entries[] =
+  {
+    { CONF_RENDERING_FONT_MIN_SIZE,
+      "minimum-font-size",
+      webkit_pref_callback_int },
+    { CONF_SECURITY_JAVASCRIPT_ENABLED,
+      "enable-scripts",
+      webkit_pref_callback_boolean },
+    { CONF_LANGUAGE_DEFAULT_ENCODING,
+      "default-encoding",
+      webkit_pref_callback_string }
+  };
 
 static void
 webkit_embed_prefs_apply (WebKitEmbed *embed, WebKitWebSettings *settings)
@@ -33,48 +119,35 @@ webkit_embed_prefs_apply (WebKitEmbed *embed, WebKitWebSettings *settings)
                                 settings);
 }
 
-static void
-notify_minimum_size_cb (GConfClient *client,
-                        guint cnxn_id,
-                        GConfEntry *entry,
-                        gpointer data)
-{
-  GConfValue *gcvalue;
-  gint size = 0;
-
-  gcvalue = gconf_entry_get_value (entry);
-
-  /* happens on initial notify if the key doesn't exist */
-  if (gcvalue != NULL &&
-      gcvalue->type == GCONF_VALUE_INT) {
-      size = gconf_value_get_int (gcvalue);
-      size = MAX (size, 0);
-  }
-
-  g_object_set (settings, "minimum-font-size", size, NULL);
-}
-
-static guint min_font_size_cnxn_id;
-
 void
 webkit_embed_prefs_init (void)
 {
+  int i;
+
   eel_gconf_monitor_add ("/apps/epiphany/web");
 
   settings = webkit_web_settings_new ();
 
-  min_font_size_cnxn_id = eel_gconf_notification_add (CONF_RENDERING_FONT_MIN_SIZE,
-                                                      (GConfClientNotifyFunc) notify_minimum_size_cb,
-                                                      NULL);
+  connections = g_malloc (sizeof (guint) * G_N_ELEMENTS (webkit_pref_entries));
 
-  eel_gconf_notify (CONF_RENDERING_FONT_MIN_SIZE);
+  for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
+    connections[i] = eel_gconf_notification_add (webkit_pref_entries[i].gconf_key,
+                                                 webkit_pref_entries[i].func,
+                                                 webkit_pref_entries[i].webkit_pref);
+
+    eel_gconf_notify (webkit_pref_entries[i].gconf_key);
+  }
 }
 
 void
 webkit_embed_prefs_shutdown (void)
 {
-  eel_gconf_notification_remove (min_font_size_cnxn_id);
+  int i;
 
+  for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++)
+    eel_gconf_notification_remove (connections[i]);
+
+  g_free (connections);
   g_object_unref (settings);
 }
 
