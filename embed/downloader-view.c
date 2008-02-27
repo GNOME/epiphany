@@ -550,6 +550,7 @@ queue_show_notification (DownloaderView *dv)
 	if (gtk_status_icon_is_embedded (dv->priv->status_icon))
 	{
 		notify_notification_show (dv->priv->notification, NULL);
+		dv->priv->notification_timeout = 0;
 		return FALSE;
 	}
 
@@ -562,7 +563,11 @@ show_notification_window (DownloaderView *dv)
 	if (gtk_status_icon_is_embedded (dv->priv->status_icon))
 		notify_notification_show (dv->priv->notification, NULL);
 	else
+	{
+		if (dv->priv->notification_timeout != 0)
+			g_source_remove (dv->priv->notification_timeout);
 		dv->priv->notification_timeout = g_timeout_add_seconds (1, (GSourceFunc) queue_show_notification, dv);
+	}
 }
 #endif
 
