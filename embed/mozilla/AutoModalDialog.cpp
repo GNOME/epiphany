@@ -55,6 +55,8 @@ AutoModalDialog::AutoModalDialog (nsIDOMWindow *aWindow,
     mModalState (aWindow),
 #ifdef HAVE_GECKO_1_9
     mDefaultEnabled (DispatchEvent ("DOMWillOpenModalDialog", aNotifyDOM)),
+#else
+    mDefaultEnabled (PR_TRUE),
 #endif
     mContextPushed (NS_SUCCEEDED (mStack.Init ()))
 {
