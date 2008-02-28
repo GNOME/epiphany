@@ -60,11 +60,11 @@ class AutoModalDialog
     PRBool DispatchEvent (const char*, PRBool);
 
     int mResponse;
-    PRPackedBool mContinueModalLoop;
+    PRBool mContinueModalLoop;
 #endif
 
-    PRPackedBool mDefaultEnabled;
-    PRPackedBool mContextPushed;
+    PRBool mDefaultEnabled;
+    PRBool mContextPushed;
 };
 
 #endif

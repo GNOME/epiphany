@@ -22,9 +22,7 @@
 #ifndef GTKNSSDIALOGS_H
 #define GTKNSSDIALOGS_H 1
 
-#ifdef HAVE_GECKO_1_9
-#include <nsIBadCertListener2.h>
-#else
+#ifndef HAVE_GECKO_1_9
 #include <nsIBadCertListener.h>
 #endif
 #include <nsICertificateDialogs.h>
