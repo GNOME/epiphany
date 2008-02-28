@@ -1372,6 +1372,8 @@ ephy_base_embed_update_file_monitor (EphyBaseEmbed *embed,
 {
   EphyBaseEmbedPrivate *priv = embed->priv;
   gboolean local;
+  gchar *anchor;
+  gchar *url;
   GFile *file;
   GFileType file_type;
   GFileInfo *file_info;
@@ -1388,11 +1390,25 @@ ephy_base_embed_update_file_monitor (EphyBaseEmbed *embed,
 
   local = g_str_has_prefix (address, "file://");
   if (local == FALSE) return;
-  
-  file = g_file_new_for_uri (address);
+
+  /* strip off anchors */
+  anchor = strchr (address, '#');
+  if (anchor != NULL) {
+    url = g_strndup (address, anchor - address);
+  } else {
+    url = g_strdup (address);
+  }
+
+  file = g_file_new_for_uri (url);
   file_info = g_file_query_info (file,
                                  G_FILE_ATTRIBUTE_STANDARD_TYPE,
                                  0, NULL, NULL);
+  if (file_info == NULL) {
+    g_object_unref (file);
+    g_free (url);
+    return;
+  }
+
   file_type = g_file_info_get_file_type (file_info);
   g_object_unref (file_info);
 
@@ -1402,7 +1418,7 @@ ephy_base_embed_update_file_monitor (EphyBaseEmbed *embed,
                       G_CALLBACK (ephy_base_embed_file_monitor_cb),
                       embed);
     priv->monitor_directory = TRUE;
-    LOG ("Installed monitor for directory '%s'", address);
+    LOG ("Installed monitor for directory '%s'", url);
   }
   else if (file_type == G_FILE_TYPE_REGULAR) {
     monitor = g_file_monitor_file (file, 0, NULL, NULL);
@@ -1410,10 +1426,11 @@ ephy_base_embed_update_file_monitor (EphyBaseEmbed *embed,
                       G_CALLBACK (ephy_base_embed_file_monitor_cb),
                       embed);
     priv->monitor_directory = FALSE;
-    LOG ("Installed monitor for file '%s'", address);
+    LOG ("Installed monitor for file '%s'", url);
   }
   priv->monitor = monitor;
   g_object_unref (file);
+  g_free (url);
 }
 
 void
