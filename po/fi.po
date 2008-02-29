@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the Epiphany package.
 # Pauli Virtanen <pauli.virtanen@hut.fi>, 2003-2005.
 # Ilkka Tuohela <hile@iki.fi>, 2005-2006.
+# Timo Jyrinki <timo.jyrinki@iki.fi>, 2008.
 #
 msgid ""
 msgstr ""
@@ -10,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
 "POT-Creation-Date: 2008-02-13 08:45+0300\n"
-"PO-Revision-Date: 2007-02-03 16:55+0300\n"
-"Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
+"PO-Revision-Date: 2008-02-29 17:07+0200\n"
+"Last-Translator: Timo Jyrinki <timo.jyrinki@iki.fi>\n"
 "Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists."
 "sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -50,13 +51,13 @@ msgid ""
 "A list of protocols to be considered safe in addition to the default, when "
 "disable_unsafe_protocols is enabled."
 msgstr ""
-"Luettelo turvallisiksi oletetuista protokollista oletusarvoisten lisäksi. "
-"Käytössä kun disable_unsafe_protocols (poista turvattomat protokollat "
-"käytöstä) on toiminnassa."
+"Luettelo turvallisiksi oletetuista yhteyskäytännöistä oletusarvoisten "
+"lisäksi. Käytössä kun disable_unsafe_protocols (poista turvattomat "
+"yhteyskäytännöt käytöstä) on toiminnassa."
 
 #: ../data/epiphany-lockdown.schemas.in.h:2
 msgid "Additional safe protocols"
-msgstr "Muut turvalliset protokollat"
+msgstr "Muut turvalliset yhteyskäytännöt"
 
 #: ../data/epiphany-lockdown.schemas.in.h:3
 msgid "Disable JavaScript chrome control"
@@ -105,15 +106,15 @@ msgstr "Poista työkalupalkkien muokkaus käytöstä"
 
 #: ../data/epiphany-lockdown.schemas.in.h:13
 msgid "Disable unsafe protocols"
-msgstr "Poista turvattomat protokollat käytöstä"
+msgstr "Poista turvattomat yhteyskäytännöt käytöstä"
 
 #: ../data/epiphany-lockdown.schemas.in.h:14
 msgid ""
 "Disables loading of content from unsafe protocols. Safe protocols are http "
 "and https."
 msgstr ""
-"Poista asiakirjojen hakeminen turvattomilla protokollilla. Turvalliset "
-"protokollat ovat http ja https."
+"Poista asiakirjojen hakeminen turvattomilla yhteyskäytännöillä. Turvalliset "
+"yhteyskäytännöt ovat http ja https."
 
 #: ../data/epiphany-lockdown.schemas.in.h:15
 msgid "Epiphany cannot quit"
@@ -1498,8 +1499,8 @@ msgstr "Protokolla \"%s\" ei ole tuettu."
 msgid ""
 "Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
 msgstr ""
-"Tuetut protokollat ovat \"http\", \"https\", \"ftp\", \"file\", \"smb\", ja "
-"\"sftp\"."
+"Tuetut yhteyskäytännöt ovat \"http\", \"https\", \"ftp\", \"file\", \"smb\""
+", ja \"sftp\"."
 
 #. Translators: %s is the path and filename, for example "/home/user/test.html"
 #: ../embed/mozilla/EphyAboutModule.cpp:253
@@ -2707,14 +2708,14 @@ msgstr "Vedä ja pudota tämä kuvake tehdäksesi tähän sivuun osoittavan link
 
 #: ../plugins/desktop-file/plugin.cpp:379
 msgid "Unsafe protocol."
-msgstr "Turvaton protokolla."
+msgstr "Turvaton yhteyskäytäntö."
 
 #: ../plugins/desktop-file/plugin.cpp:380
 msgid ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
 msgstr ""
-"Osoitetta ei ole ladattu, koska se viittaa turvattomaan protokollaan ja "
+"Osoitetta ei ole ladattu, koska se viittaa turvattomaan yhteyskäytäntöön ja "
 "siten aiheuttaa turvallisuusriskin tietokoneellesi."
 
 #: ../plugins/desktop-file/plugin.cpp:408
@@ -3431,7 +3432,7 @@ msgstr "Päiväys"
 
 #: ../src/ephy-main.c:76
 msgid "Open a new tab in an existing browser window"
-msgstr "Avaa uusi välilehti olemassaolevaan selainikkunaan"
+msgstr "Avaa uusi välilehti olemassa olevaan selainikkunaan"
 
 #: ../src/ephy-main.c:78
 msgid "Open a new browser window"
@@ -3479,7 +3480,7 @@ msgstr "URL ..."
 
 #: ../src/ephy-main.c:407
 msgid "Could not start GNOME Web Browser"
-msgstr "Gnomen webselainta ei voi käynnistää"
+msgstr "Gnomen WWW-selainta ei voi käynnistää"
 
 #: ../src/ephy-main.c:410
 #, c-format
@@ -3492,11 +3493,11 @@ msgstr ""
 
 #: ../src/ephy-main.c:515 ../src/window-commands.c:865
 msgid "GNOME Web Browser"
-msgstr "Gnomen webselain"
+msgstr "Gnomen WWW-selain"
 
 #: ../src/ephy-main.c:516
 msgid "GNOME Web Browser options"
-msgstr "Gnomen webselain"
+msgstr "Gnomen WWW-selaimen valinnat"
 
 #: ../src/ephy-notebook.c:620
 msgid "Close tab"
@@ -4501,6 +4502,7 @@ msgstr ""
 #: ../src/window-commands.c:881
 msgid "translator-credits"
 msgstr ""
+"Timo Jyrinki, 2008\n"
 "Ilkka Tuohela, 2005-2008\n"
 "Pauli Virtanen, 2003-2005\n"
 "\n"
@@ -4508,7 +4510,7 @@ msgstr ""
 
 #: ../src/window-commands.c:884
 msgid "GNOME Web Browser Website"
-msgstr "Gnomen www-selaimen www-sivut"
+msgstr "Gnomen WWW-selaimen WWW-sivut"
 
 #~ msgid ""
 #~ "The page “%s” in this tab was not fully loaded yet when the web browser "
