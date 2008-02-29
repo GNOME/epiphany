@@ -289,7 +289,6 @@ webkit_embed_init (WebKitEmbed *embed)
   GtkWidget *sw;
 
   embed->priv = WEBKIT_EMBED_GET_PRIVATE (embed);
-  embed->priv->loading_uri = NULL;
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
