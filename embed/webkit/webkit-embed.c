@@ -302,18 +302,14 @@ webkit_embed_init (WebKitEmbed *embed)
 
   gtk_container_add (GTK_CONTAINER (embed), sw);
 
-  g_signal_connect (G_OBJECT (web_view), "load-committed",
-                    G_CALLBACK (webkit_embed_load_committed_cb), embed);
-  g_signal_connect (G_OBJECT (web_view), "load-started",
-                    G_CALLBACK (webkit_embed_load_started_cb), embed);
-  g_signal_connect (G_OBJECT (web_view), "load_finished",
-                    G_CALLBACK (webkit_embed_load_finished_cb), embed);
-  g_signal_connect (G_OBJECT (web_view), "title-changed",
-                    G_CALLBACK (webkit_embed_title_changed_cb), embed);
-  g_signal_connect (G_OBJECT (web_view), "load-progress-changed",
-                    G_CALLBACK (webkit_embed_load_progress_changed_cb), embed);
-  g_signal_connect (G_OBJECT (web_view), "hovering-over-link",
-                    G_CALLBACK (webkit_embed_hovering_over_link_cb), embed);
+  g_object_connect (G_OBJECT (web_view),
+                    "signal::load-committed", G_CALLBACK (webkit_embed_load_committed_cb), embed,
+                    "signal::load-started", G_CALLBACK (webkit_embed_load_started_cb), embed,
+                    "signal::load_finished", G_CALLBACK (webkit_embed_load_finished_cb), embed,
+                    "signal::title-changed", G_CALLBACK (webkit_embed_title_changed_cb), embed,
+                    "signal::load-progress-changed", G_CALLBACK (webkit_embed_load_progress_changed_cb), embed,
+                    "signal::hovering-over-link", G_CALLBACK (webkit_embed_hovering_over_link_cb), embed,
+                    NULL);
 
   webkit_embed_prefs_add_embed (embed);
 }
