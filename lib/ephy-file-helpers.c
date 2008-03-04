@@ -713,7 +713,7 @@ ephy_file_browse_to (GFile *file,
 	desktop = g_file_new_for_path (desktop_dir);
 	
 	/* Don't do anything if destination is the desktop */
-	if (g_file_contains_file (desktop, file))
+	if (g_file_has_prefix (file, desktop))
 	{
 		ret = FALSE;
 	}
