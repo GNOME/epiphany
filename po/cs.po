@@ -14,9 +14,9 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-02-23 00:06+0100\n"
-"PO-Revision-Date: 2008-02-23 00:04+0100\n"
-"Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
+"POT-Creation-Date: 2008-03-04 23:48+0100\n"
+"PO-Revision-Date: 2008-03-04 16:08+0100\n"
+"Last-Translator: Lucas Lommer <llommer@svn.gnome.org>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -602,31 +602,35 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>Používat jiné _kódování:</b>"
 
 #: ../data/glade/epiphany.glade.h:3
+msgid "Clear _All..."
+msgstr "Vym_azat vše..."
+
+#: ../data/glade/epiphany.glade.h:4
 msgid "Cookies"
 msgstr "Koláčky"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:111
+#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:111
 msgid "Downloads"
 msgstr "Stahování"
 
-#: ../data/glade/epiphany.glade.h:5
+#: ../data/glade/epiphany.glade.h:6
 msgid "Passwords"
 msgstr "Hesla"
 
-#: ../data/glade/epiphany.glade.h:6
+#: ../data/glade/epiphany.glade.h:7
 msgid "Personal Data"
 msgstr "Osobní data"
 
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.glade.h:8
 msgid "Text Encoding"
 msgstr "Kódování textu"
 
-#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:334
+#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:334
 msgid "Use the encoding specified by the document"
 msgstr "Používat kódování určené dokumentem"
 
-#: ../data/glade/epiphany.glade.h:9
+#: ../data/glade/epiphany.glade.h:10
 msgid "_Show passwords"
 msgstr "_Zobrazit hesla"
 
@@ -649,7 +653,7 @@ msgstr "_Certifikát:"
 #: ../data/glade/form-signing-dialog.glade.h:4
 #: ../embed/mozilla/EphyPromptService.cpp:804
 #: ../embed/mozilla/EphyPromptService.cpp:831
-#: ../lib/ephy-password-dialog.c:429 ../lib/ephy-password-dialog.c:445
+#: ../lib/ephy-password-dialog.c:424 ../lib/ephy-password-dialog.c:438
 msgid "_Password:"
 msgstr "_Heslo:"
 
@@ -944,37 +948,37 @@ msgstr[0] "%d stahování"
 msgstr[1] "%d stahování"
 msgstr[2] "%d stahování"
 
-#: ../embed/downloader-view.c:622
+#: ../embed/downloader-view.c:627
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Soubor „%s“ byl přidán do seznamu věcí ke stažení."
 
-#: ../embed/downloader-view.c:625
+#: ../embed/downloader-view.c:630
 msgid "Download started"
 msgstr "Stahování začalo"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:699 ../embed/downloader-view.c:712
+#: ../embed/downloader-view.c:704 ../embed/downloader-view.c:717
 msgid "download status|Unknown"
 msgstr "Neznámý"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:704
+#: ../embed/downloader-view.c:709
 msgid "download status|Failed"
 msgstr "Selhalo"
 
-#: ../embed/downloader-view.c:771
+#: ../embed/downloader-view.c:776
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Soubor"
 
-#: ../embed/downloader-view.c:794
+#: ../embed/downloader-view.c:799
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:805
+#: ../embed/downloader-view.c:810
 msgid "Remaining"
 msgstr "Zbývá"
 
@@ -1785,7 +1789,7 @@ msgid "Don't Save"
 msgstr "Neukládat"
 
 #: ../embed/mozilla/EphyPromptService.cpp:803
-#: ../lib/ephy-password-dialog.c:401
+#: ../lib/ephy-password-dialog.c:396
 msgid "_Username:"
 msgstr "Jméno _uživatele:"
 
@@ -2293,7 +2297,7 @@ msgstr "%s soubory"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:203
+#: ../embed/mozilla/mozilla-embed-single.cpp:173
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&hl=cs&q="
 
@@ -2355,7 +2359,7 @@ msgstr "_Odstranit lištu nástrojů"
 msgid "Remove the selected toolbar"
 msgstr "Přejmenovat vybranou lištu nástrojů"
 
-#: ../lib/egg/egg-toolbar-editor.c:491
+#: ../lib/egg/egg-toolbar-editor.c:493
 msgid "Separator"
 msgstr "Oddělovač"
 
@@ -2567,31 +2571,31 @@ msgstr "Západní jazyky"
 msgid "select fonts for|Other Scripts"
 msgstr "Jiné abecedy"
 
-#: ../lib/ephy-password-dialog.c:415
+#: ../lib/ephy-password-dialog.c:410
 msgid "_Domain:"
 msgstr "_Doména:"
 
-#: ../lib/ephy-password-dialog.c:444
+#: ../lib/ephy-password-dialog.c:437
 msgid "_New password:"
 msgstr "_Nové heslo:"
 
-#: ../lib/ephy-password-dialog.c:454
+#: ../lib/ephy-password-dialog.c:447
 msgid "Con_firm password:"
 msgstr "Po_tvrďte heslo:"
 
-#: ../lib/ephy-password-dialog.c:482
+#: ../lib/ephy-password-dialog.c:473
 msgid "Password quality:"
 msgstr "Kvalita hesla:"
 
-#: ../lib/ephy-password-dialog.c:499
+#: ../lib/ephy-password-dialog.c:491
 msgid "Do not remember this password"
 msgstr "Nepamatovat toto heslo"
 
-#: ../lib/ephy-password-dialog.c:503
+#: ../lib/ephy-password-dialog.c:495
 msgid "_Remember password for this session"
 msgstr "_Pamatovat heslo pro toto sezení"
 
-#: ../lib/ephy-password-dialog.c:507
+#: ../lib/ephy-password-dialog.c:499
 msgid "Save password in _keyring"
 msgstr "Uložit heslo do svazku _klíčů"
 
@@ -3483,7 +3487,7 @@ msgstr ""
 "Spouštění selhalo kvůli následující chybě:\n"
 "%s"
 
-#: ../src/ephy-main.c:515 ../src/window-commands.c:883
+#: ../src/ephy-main.c:515 ../src/window-commands.c:874
 msgid "GNOME Web Browser"
 msgstr "Prohlížeč WWW pro GNOME"
 
@@ -4434,7 +4438,7 @@ msgstr[2] "Jazyků systému (%s)"
 msgid "Select a Directory"
 msgstr "Vyberte adresář"
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:769
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4446,7 +4450,7 @@ msgstr ""
 "Foundation; a to buď verze 2 této licence anebo (podle vlastního uvážení) "
 "kterékoliv pozdější verze."
 
-#: ../src/window-commands.c:782
+#: ../src/window-commands.c:773
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4458,7 +4462,7 @@ msgstr ""
 "VHODNOSTI PRO URČITÝ ÚČEL. Další podrobnosti hledejte v GNU General Public "
 "License."
 
-#: ../src/window-commands.c:786
+#: ../src/window-commands.c:777
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4468,20 +4472,20 @@ msgstr ""
 "programem; pokud se tak nestalo, napište o ni Free Software Foundation, "
 "Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA."
 
-#: ../src/window-commands.c:834 ../src/window-commands.c:850
-#: ../src/window-commands.c:861
+#: ../src/window-commands.c:825 ../src/window-commands.c:841
+#: ../src/window-commands.c:852
 msgid "Contact us at:"
 msgstr "Kontaktujte nás na:"
 
-#: ../src/window-commands.c:837
+#: ../src/window-commands.c:828
 msgid "Contributors:"
 msgstr "Přispěvatelé:"
 
-#: ../src/window-commands.c:840
+#: ../src/window-commands.c:831
 msgid "Past developers:"
 msgstr "Dřívější vývojáři:"
 
-#: ../src/window-commands.c:873
+#: ../src/window-commands.c:864
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4498,7 +4502,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:899
+#: ../src/window-commands.c:890
 msgid "translator-credits"
 msgstr ""
 "Miloslav Trmač <mitr@volny.cz>\n"
@@ -4508,6 +4512,6 @@ msgstr ""
 "Lucas Lommer <llommer@svn.gnome.org>\n"
 "Petr Kovář <pknbe@volny.cz>"
 
-#: ../src/window-commands.c:902
+#: ../src/window-commands.c:893
 msgid "GNOME Web Browser Website"
 msgstr "Stránky webového prohlížeče GNOME"
