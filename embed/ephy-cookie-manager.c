@@ -46,7 +46,7 @@ ephy_cookie_get_type (void)
 EphyCookie *
 ephy_cookie_new (void)
 {
-	return g_new0 (EphyCookie, 1);
+	return g_slice_new0 (EphyCookie);
 }
 
 /**
@@ -58,7 +58,7 @@ ephy_cookie_new (void)
 EphyCookie *
 ephy_cookie_copy (const EphyCookie *cookie)
 {
-	EphyCookie *copy = g_new0 (EphyCookie, 1);
+	EphyCookie *copy = g_slice_new0 (EphyCookie);
 
 	copy->name = g_strdup (cookie->name);
 	copy->value = g_strdup (cookie->value);
@@ -88,7 +88,7 @@ ephy_cookie_free (EphyCookie *cookie)
 		g_free (cookie->domain);
 		g_free (cookie->path);
 
-		g_free (cookie);
+		g_slice_free (EphyCookie, cookie);
 	}
 }
 
