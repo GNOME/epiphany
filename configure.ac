@@ -16,8 +16,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
 m4_define([epiphany_version_major],[2])
-m4_define([epiphany_version_minor],[21])
-m4_define([epiphany_version_micro],[92])
+m4_define([epiphany_version_minor],[23])
+m4_define([epiphany_version_micro],[0])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
 # This can be either "trunk" or "branches/gnome-x-y"
@@ -33,10 +33,10 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
-EPIPHANY_API_VERSION=2.21.2
+EPIPHANY_API_VERSION=2.23
 
 # This should stay at the major version of the latest stable releases
-EPIPHANY_UA_VERSION=2.20
+EPIPHANY_UA_VERSION=2.22
 
 AC_SUBST([EPIPHANY_MAJOR],[epiphany_version_major.epiphany_version_minor])
 AC_SUBST([EPIPHANY_API_VERSION],[epiphany_version_major.epiphany_version_minor])
