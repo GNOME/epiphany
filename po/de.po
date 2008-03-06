@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: Epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-02-12 19:04+0100\n"
-"PO-Revision-Date: 2008-02-12 19:05+0100\n"
+"POT-Creation-Date: 2008-03-06 17:55+0100\n"
+"PO-Revision-Date: 2008-03-06 17:56+0100\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -592,7 +592,7 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5-Fingerabdruck:"
 
 #: ../data/glade/certificate-dialogs.glade.h:14
-#: ../embed/mozilla/GtkNSSDialogs.cpp:937
+#: ../embed/mozilla/GtkNSSDialogs.cpp:925
 msgid "Organization:"
 msgstr "Organisation:"
 
@@ -617,31 +617,35 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>Eine a_ndere Zeichenkodierung verwenden:</b>"
 
 #: ../data/glade/epiphany.glade.h:3
+msgid "Clear _All..."
+msgstr "_Alle entfernen …"
+
+#: ../data/glade/epiphany.glade.h:4
 msgid "Cookies"
 msgstr "Cookies"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:111
+#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:111
 msgid "Downloads"
 msgstr "Downloads"
 
-#: ../data/glade/epiphany.glade.h:5
+#: ../data/glade/epiphany.glade.h:6
 msgid "Passwords"
 msgstr "Passwörter"
 
-#: ../data/glade/epiphany.glade.h:6
+#: ../data/glade/epiphany.glade.h:7
 msgid "Personal Data"
 msgstr "Persönliche Daten"
 
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.glade.h:8
 msgid "Text Encoding"
 msgstr "Zeichenkodierung"
 
-#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:334
+#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:334
 msgid "Use the encoding specified by the document"
 msgstr "Die vom Dokument angegebene Zeichenkodierung verwenden"
 
-#: ../data/glade/epiphany.glade.h:9
+#: ../data/glade/epiphany.glade.h:10
 msgid "_Show passwords"
 msgstr "Passwörter an_zeigen"
 
@@ -662,9 +666,9 @@ msgid "_Certificate:"
 msgstr "_Zertifikate:"
 
 #: ../data/glade/form-signing-dialog.glade.h:4
-#: ../embed/mozilla/EphyPromptService.cpp:808
-#: ../embed/mozilla/EphyPromptService.cpp:835
-#: ../lib/ephy-password-dialog.c:429 ../lib/ephy-password-dialog.c:445
+#: ../embed/mozilla/EphyPromptService.cpp:804
+#: ../embed/mozilla/EphyPromptService.cpp:831
+#: ../lib/ephy-password-dialog.c:424 ../lib/ephy-password-dialog.c:438
 msgid "_Password:"
 msgstr "_Passwort:"
 
@@ -734,7 +738,7 @@ msgstr "Wählen Sie eine _Sprache:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:556 ../src/ephy-history-window.c:269
+#: ../lib/widgets/ephy-location-entry.c:584 ../src/ephy-history-window.c:269
 msgid "Cl_ear"
 msgstr "_Leeren"
 
@@ -904,39 +908,39 @@ msgid "_Page address"
 msgstr "Seiten_adresse"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:219
+#: ../embed/downloader-view.c:189
 msgid "_Show Downloads"
 msgstr "Download-Manager an_zeigen"
 
-#: ../embed/downloader-view.c:374
+#: ../embed/downloader-view.c:344
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#: ../embed/downloader-view.c:378
+#: ../embed/downloader-view.c:348
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: ../embed/downloader-view.c:439
+#: ../embed/downloader-view.c:409
 msgid "_Pause"
 msgstr "_Unterbrechen"
 
-#: ../embed/downloader-view.c:439
+#: ../embed/downloader-view.c:409
 msgid "_Resume"
 msgstr "_Fortfahren"
 
-#: ../embed/downloader-view.c:477
+#: ../embed/downloader-view.c:447
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Datei »%s« wurde heruntergeladen."
 
-#: ../embed/downloader-view.c:480
+#: ../embed/downloader-view.c:450
 msgid "Download finished"
 msgstr "Herunterladen abgeschlossen"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:505
+#: ../embed/downloader-view.c:475
 #, c-format
 msgid ""
 "%s\n"
@@ -946,50 +950,50 @@ msgstr ""
 "%s von %s"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:515 ../embed/downloader-view.c:520
-#: ../embed/ephy-download.c:129 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1663
+#: ../embed/downloader-view.c:485 ../embed/downloader-view.c:490
+#: ../embed/ephy-download.c:99 ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1689
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: ../embed/downloader-view.c:552
+#: ../embed/downloader-view.c:522
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d Download"
 msgstr[1] "%d Downloads"
 
-#: ../embed/downloader-view.c:652
+#: ../embed/downloader-view.c:627
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Die Datei »%s« wurde zum Herunterladen markiert"
 
-#: ../embed/downloader-view.c:655
+#: ../embed/downloader-view.c:630
 msgid "Download started"
 msgstr "Download gestartet"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:729 ../embed/downloader-view.c:742
+#: ../embed/downloader-view.c:704 ../embed/downloader-view.c:717
 msgid "download status|Unknown"
 msgstr "Unbekannt"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:734
+#: ../embed/downloader-view.c:709
 msgid "download status|Failed"
 msgstr "Fehlgeschlagen"
 
-#: ../embed/downloader-view.c:801
+#: ../embed/downloader-view.c:776
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Datei"
 
-#: ../embed/downloader-view.c:824
+#: ../embed/downloader-view.c:799
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:835
+#: ../embed/downloader-view.c:810
 msgid "Remaining"
 msgstr "Verbleibend"
 
@@ -1025,7 +1029,7 @@ msgstr "»%s« wird geladen …"
 msgid "Loading…"
 msgstr "Laden …"
 
-#: ../embed/ephy-embed-shell.c:272
+#: ../embed/ephy-embed-shell.c:244
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr ""
 "Epiphany kann im Moment nicht verwendet werden, da die Initialisierung von "
@@ -1414,41 +1418,41 @@ msgstr "Ukrainisch"
 #. translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
-#: ../embed/ephy-encodings.c:359
+#: ../embed/ephy-encodings.c:329
 #, c-format
 msgid "Unknown (%s)"
 msgstr "Unbekannt (%s)"
 
-#: ../embed/ephy-history.c:517
+#: ../embed/ephy-history.c:487
 msgid "All"
 msgstr "Alle"
 
-#: ../embed/ephy-history.c:685
+#: ../embed/ephy-history.c:655
 msgid "Others"
 msgstr "Sonstige"
 
-#: ../embed/ephy-history.c:691
+#: ../embed/ephy-history.c:661
 msgid "Local files"
 msgstr "Lokale Dateien"
 
-#: ../embed/mozilla/ContentHandler.cpp:158
+#: ../embed/mozilla/ContentHandler.cpp:154
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:410
 msgid "Save"
 msgstr "Speichern"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:271
+#: ../embed/mozilla/ContentHandler.cpp:267
 msgid "File Type:|Unknown"
 msgstr "Unbekannt"
 
-#: ../embed/mozilla/ContentHandler.cpp:287
+#: ../embed/mozilla/ContentHandler.cpp:283
 msgid "Download this potentially unsafe file?"
 msgstr "Die möglicherweise unsichere Datei herunterladen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:293
+#: ../embed/mozilla/ContentHandler.cpp:289
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1462,14 +1466,14 @@ msgstr ""
 "beschädigen oder in Ihre Privatsphäre eindringen kann. Sie können die Datei "
 "stattdessen speichern."
 
-#: ../embed/mozilla/ContentHandler.cpp:303
+#: ../embed/mozilla/ContentHandler.cpp:299
 msgid "Open this file?"
 msgstr "Die Datei öffnen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:310
+#: ../embed/mozilla/ContentHandler.cpp:306
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1480,13 +1484,13 @@ msgstr ""
 "\n"
 "Sie können »%s« mit »%s« öffnen oder es abspeichern."
 
-#: ../embed/mozilla/ContentHandler.cpp:318
+#: ../embed/mozilla/ContentHandler.cpp:314
 msgid "Download this file?"
 msgstr "Die Datei herunterladen?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:324
+#: ../embed/mozilla/ContentHandler.cpp:320
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1498,7 +1502,7 @@ msgstr ""
 "Keine installierte Anwendung ist in der Lage, »%s« zu öffnen. Sie können die "
 "Datei stattdessen speichern."
 
-#: ../embed/mozilla/ContentHandler.cpp:331
+#: ../embed/mozilla/ContentHandler.cpp:327
 msgid "_Save As..."
 msgstr "_Speichern unter …"
 
@@ -1745,19 +1749,20 @@ msgstr ""
 "Diese Adresse verwendet einen Netzwerk-Port, der normalerweise für andere "
 "Zwecke als im Internet zu surfen verwendet wird."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:457
+#. Translators: this means that the request to load the URL has been cancelled
+#: ../embed/mozilla/EphyAboutModule.cpp:458
 msgid "The request has been cancelled for your protection."
 msgstr "Aus Sicherheitsgründen wurde die Anfrage unterbunden."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:462
+#: ../embed/mozilla/EphyAboutModule.cpp:463
 msgid "Could not Connect to Proxy Server"
 msgstr "Verbindung zum Proxy-Server konnte nicht hergestellt werden"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:463
+#: ../embed/mozilla/EphyAboutModule.cpp:464
 msgid "Could not connect to proxy server."
 msgstr "Verbindung zum Proxy-Server konnte nicht hergestellt werden."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:464
+#: ../embed/mozilla/EphyAboutModule.cpp:465
 msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
@@ -1766,21 +1771,21 @@ msgstr ""
 "weiterhin scheitert, existiert möglicherweise ein Problem mit Ihrem Proxy-"
 "Server oder Ihrer Netzwerkverbindung."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:472
+#: ../embed/mozilla/EphyAboutModule.cpp:473
 msgid "Could not Display Content"
 msgstr "Inhalt konnte nicht angezeigt werden"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:473
+#: ../embed/mozilla/EphyAboutModule.cpp:474
 msgid "Could not display content."
 msgstr "Der Inhalt konnte nicht angezeigt werden."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:474
+#: ../embed/mozilla/EphyAboutModule.cpp:475
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr ""
 "Die Seite verwendet eine nicht unterstützte oder ungültige Kompressionsart."
 
 #. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
-#: ../embed/mozilla/EphyAboutModule.cpp:565
+#: ../embed/mozilla/EphyAboutModule.cpp:566
 #, c-format
 msgid ""
 "This page was loading when the web browser closed unexpectedly. This might "
@@ -1793,13 +1798,13 @@ msgstr ""
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:695
+#: ../embed/mozilla/EphyAboutModule.cpp:696
 msgid "You may find an old version:|in the Google Cache"
 msgstr "im Google-Cache"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:703
+#: ../embed/mozilla/EphyAboutModule.cpp:704
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "im Internet-Archiv"
 
@@ -1809,104 +1814,104 @@ msgstr "im Internet-Archiv"
 msgid "Untitled"
 msgstr "Namenlos"
 
-#: ../embed/mozilla/EphyPromptService.cpp:184
+#: ../embed/mozilla/EphyPromptService.cpp:183
 msgid "_Abort Script"
 msgstr "Script-Ausführung _abbrechen"
 
-#: ../embed/mozilla/EphyPromptService.cpp:252
+#: ../embed/mozilla/EphyPromptService.cpp:251
 msgid "Don't Save"
 msgstr "Nicht speichern"
 
-#: ../embed/mozilla/EphyPromptService.cpp:807
-#: ../lib/ephy-password-dialog.c:401
+#: ../embed/mozilla/EphyPromptService.cpp:803
+#: ../lib/ephy-password-dialog.c:396
 msgid "_Username:"
 msgstr "_Benutzer:"
 
-#: ../embed/mozilla/FilePicker.cpp:147 ../embed/mozilla/FilePicker.cpp:413
+#: ../embed/mozilla/FilePicker.cpp:146 ../embed/mozilla/FilePicker.cpp:412
 #: ../lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:786
 msgid "All files"
 msgstr "Alle Dateien"
 
-#: ../embed/mozilla/FilePicker.cpp:152 ../lib/ephy-file-chooser.c:423
+#: ../embed/mozilla/FilePicker.cpp:151 ../lib/ephy-file-chooser.c:423
 msgid "Web pages"
 msgstr "Websites"
 
-#: ../embed/mozilla/FilePicker.cpp:160
+#: ../embed/mozilla/FilePicker.cpp:159
 msgid "Text files"
 msgstr "Textdateien"
 
-#: ../embed/mozilla/FilePicker.cpp:165 ../lib/ephy-file-chooser.c:431
+#: ../embed/mozilla/FilePicker.cpp:164 ../lib/ephy-file-chooser.c:431
 msgid "Images"
 msgstr "Bilder"
 
-#: ../embed/mozilla/FilePicker.cpp:173
+#: ../embed/mozilla/FilePicker.cpp:172
 msgid "XML files"
 msgstr "XML-Dateien"
 
-#: ../embed/mozilla/FilePicker.cpp:178
+#: ../embed/mozilla/FilePicker.cpp:177
 msgid "XUL files"
 msgstr "XUL-Dateien"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:94
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:91
 #, c-format
 msgid "Accept cookie from %s?"
 msgstr "Soll das Cookie von %s akzeptiert werden?"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:101
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:98
 msgid "Accept Cookie?"
 msgstr "Cookie akzeptieren?"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:106
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:103
 msgid "The site wants to modify an existing cookie."
 msgstr "Die Seite möchte einen existierenden Cookie verändern."
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:110
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:107
 msgid "The site wants to set a cookie."
 msgstr "Die Seite möchte einen Cookie setzen."
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:114
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:111
 msgid "The site wants to set a second cookie."
 msgstr "Die Seite möchte einen zweiten Cookie setzen."
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:117
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:114
 #, c-format
 msgid "You already have %d cookie from this site."
 msgid_plural "You already have %d cookies from this site."
 msgstr[0] "Sie haben bereits %d Cookie von dieser Seite."
 msgstr[1] "Sie haben bereits %d Cookies von dieser Seite."
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:131
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:128
 msgid "Apply this _decision to all cookies from this site"
 msgstr "Für _alle Cookies dieser Seite so verfahren"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:139
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1699
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:136
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1709
 msgid "_Reject"
 msgstr "A_blehnen"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:141
-#: ../embed/mozilla/GtkNSSDialogs.cpp:280
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:138
+#: ../embed/mozilla/GtkNSSDialogs.cpp:277
 msgid "_Accept"
 msgstr "A_kzeptieren"
 
-#: ../embed/mozilla/GeckoFormSigningDialog.cpp:108
+#: ../embed/mozilla/GeckoFormSigningDialog.cpp:106
 #, c-format
 msgid "The web site “%s” requests that you sign the following text:"
 msgstr "Die Seite »%s« fordert Sie auf, den folgenden Text signieren:"
 
-#: ../embed/mozilla/GeckoFormSigningDialog.cpp:137
+#: ../embed/mozilla/GeckoFormSigningDialog.cpp:135
 msgid "_Sign text"
 msgstr "Text _signieren"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:197
+#: ../embed/mozilla/GeckoPrintService.cpp:192
 msgid "Options"
 msgstr "Optionen"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:461
+#: ../embed/mozilla/GeckoPrintService.cpp:456
 msgid "Print this page?"
 msgstr "Soll diese Seite ausgedruckt werden?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:469
+#: ../embed/mozilla/GeckoPrintService.cpp:464
 msgid "Preparing to print"
 msgstr "Drucken wird vorbereitet"
 
@@ -1953,12 +1958,12 @@ msgid "Certificate _Details"
 msgstr "Zertifikat_details"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:272
-#: ../embed/mozilla/GtkNSSDialogs.cpp:647
+#: ../embed/mozilla/GtkNSSDialogs.cpp:269
+#: ../embed/mozilla/GtkNSSDialogs.cpp:633
 msgid "_View Certificate"
 msgstr "_Zertifikat anzeigen"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:424
+#: ../embed/mozilla/GtkNSSDialogs.cpp:409
 #, c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
@@ -1969,7 +1974,7 @@ msgstr ""
 "sich jemand in Ihre Verbindung eingeklinkt, um an Ihre vertraulichen Daten "
 "zu gelangen."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:430
+#: ../embed/mozilla/GtkNSSDialogs.cpp:415
 #, c-format
 msgid ""
 "You should only accept the security information if you trust “%s” and “%s”."
@@ -1977,11 +1982,11 @@ msgstr ""
 "Sie sollten die Sicherheitsinformationen ausschließlich akzeptieren, falls "
 "Sie »%s« und »%s« vertrauen."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:435
+#: ../embed/mozilla/GtkNSSDialogs.cpp:420
 msgid "Accept incorrect security information?"
 msgstr "Fehlerhafte Sicherheitsinformationen akzeptieren?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:464
+#: ../embed/mozilla/GtkNSSDialogs.cpp:449
 #, c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
@@ -1991,7 +1996,7 @@ msgstr ""
 "jemand in Ihre Verbindung eingeklinkt, um an Ihre vertraulichen Daten zu "
 "gelangen."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:470
+#: ../embed/mozilla/GtkNSSDialogs.cpp:455
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
@@ -2000,34 +2005,34 @@ msgstr ""
 "Sie sollten ausschließlich mit dieser Seite verbinden, falls Sie sicher "
 "sind, mit »%s« verbunden zu sein."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:475
+#: ../embed/mozilla/GtkNSSDialogs.cpp:460
 msgid "Connect to untrusted site?"
 msgstr "Mit nicht vertrauenswürdiger Seite verbinden?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:479
+#: ../embed/mozilla/GtkNSSDialogs.cpp:464
 msgid "_Trust this security information from now on"
 msgstr "Diesen Sicherheitsinformationen von nun an _vertrauen"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:480
+#: ../embed/mozilla/GtkNSSDialogs.cpp:465
 msgid "Co_nnect"
 msgstr "_Verbinden"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:539
+#: ../embed/mozilla/GtkNSSDialogs.cpp:524
 msgid "Accept expired security information?"
 msgstr "Abgelaufene Sicherheitsinformationen akzeptieren?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:541
+#: ../embed/mozilla/GtkNSSDialogs.cpp:526
 #, c-format
 msgid "The security information for “%s” expired on %s."
 msgstr "Die Sicherheitsinformationen für »%s« sind am %s ausgelaufen."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:547
+#: ../embed/mozilla/GtkNSSDialogs.cpp:532
 msgid "Accept not yet valid security information?"
 msgstr "Noch nicht gültige Sicherheitsinformationen akzeptieren?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:549
+#: ../embed/mozilla/GtkNSSDialogs.cpp:534
 #, c-format
 msgid "The security information for “%s” isn't valid until %s."
 msgstr "Die Sicherheitsinformationen für »%s« sind bis zum %s ungültig."
@@ -2035,20 +2040,20 @@ msgstr "Die Sicherheitsinformationen für »%s« sind bis zum %s ungültig."
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:563
+#: ../embed/mozilla/GtkNSSDialogs.cpp:548
 msgid "%a %d %b %Y"
 msgstr "%a, den %d. %B %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:572
+#: ../embed/mozilla/GtkNSSDialogs.cpp:557
 msgid "You should ensure that your computer's time is correct."
 msgstr "Sie sollten sicherstellen, dass Ihre Systemzeit korrekt ist."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:606
+#: ../embed/mozilla/GtkNSSDialogs.cpp:591
 #, c-format
 msgid "Cannot establish connection to “%s”"
 msgstr "Die Verbindung mit »%s« konnte nicht hergestellt werden."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:611
+#: ../embed/mozilla/GtkNSSDialogs.cpp:596
 #, c-format
 msgid ""
 "The certificate revocation list (CRL) from “%s” needs to be updated.\n"
@@ -2060,20 +2065,20 @@ msgstr ""
 "\n"
 "Bitten Sie Ihren Systemadministrator um Unterstützung."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:645
+#: ../embed/mozilla/GtkNSSDialogs.cpp:631
 msgid "Trust new Certificate Authority?"
 msgstr "Neuer Zertifizierungsstelle vertrauen?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:650
+#: ../embed/mozilla/GtkNSSDialogs.cpp:636
 msgid "_Trust CA"
 msgstr "CA _vertrauen"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:670
+#: ../embed/mozilla/GtkNSSDialogs.cpp:656
 #, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr "Neuer Zertifizierungsstelle »%s« vertrauen?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:675
+#: ../embed/mozilla/GtkNSSDialogs.cpp:661
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -2081,115 +2086,115 @@ msgstr ""
 "Vor dem Vertrauen einer Zertifikatverwaltungsstelle (CA) sollten Sie "
 "sicherstellen, dass das Zertifikat authentisch ist."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:745
+#: ../embed/mozilla/GtkNSSDialogs.cpp:731
 msgid "Certificate already exists."
 msgstr "Zertifikat existiert bereits."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:746
+#: ../embed/mozilla/GtkNSSDialogs.cpp:732
 msgid "The certificate has already been imported."
 msgstr "Das Zertifikat wurde bereits importiert."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:778
+#: ../embed/mozilla/GtkNSSDialogs.cpp:765
 msgid "Select Password"
 msgstr "Passwort wählen"
 
 #. FIXME: set accept button text to (_("_Back Up Certificate") ?
 #. * That's not actually correct, since this function is also called from other places!
 #.
-#: ../embed/mozilla/GtkNSSDialogs.cpp:788
+#: ../embed/mozilla/GtkNSSDialogs.cpp:775
 #, c-format
 msgid "Select a password to protect this certificate"
 msgstr "Wählen Sie ein Passwort, um dieses Zertifikat zu schützen."
 
 #. FIXME: mozilla sucks, no way to get the name of the certificate / cert file!
-#: ../embed/mozilla/GtkNSSDialogs.cpp:837
+#: ../embed/mozilla/GtkNSSDialogs.cpp:825
 #, c-format
 msgid "Enter the password for this certificate"
 msgstr "Geben Sie das Passwort für dieses Zertifikat ein."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:908
+#: ../embed/mozilla/GtkNSSDialogs.cpp:896
 msgid "Certificate Revocation List Imported"
 msgstr "Liste zurückgezogener Zertifikate (CRL) importiert"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:918
+#: ../embed/mozilla/GtkNSSDialogs.cpp:906
 msgid "Certificate Revocation List (CRL) successfully imported"
 msgstr "Liste zurückgezogener Zertifikate (CRL) erfolgreich importiert"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:939
+#: ../embed/mozilla/GtkNSSDialogs.cpp:927
 msgid "Unit:"
 msgstr "Einheit:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:941
+#: ../embed/mozilla/GtkNSSDialogs.cpp:929
 msgid "Next Update:"
 msgstr "Nächste Auffrischung:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:968
+#: ../embed/mozilla/GtkNSSDialogs.cpp:956
 msgid "Not part of certificate"
 msgstr "Kein Teil des Zertifikats"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1256
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1242
 msgid "Certificate Properties"
 msgstr "Zertifikateigenschaften"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1278
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1265
 msgid "This certificate has been verified for the following uses:"
 msgstr "Dieses Zertifikat wurde für folgende Verwendungszwecke verifiziert:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1281
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1268
 msgid "Could not verify this certificate because it has been revoked."
 msgstr ""
 "Dieses Zertifikat konnte nicht verifiziert werden, da es zurückgezogen wurde."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1284
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1271
 msgid "Could not verify this certificate because it has expired."
 msgstr ""
 "Dieses Zertifikat konnte nicht verifiziert werden, da es ausgelaufen ist."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1287
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1274
 msgid "Could not verify this certificate because it is not trusted."
 msgstr ""
 "Dieses Zertifikat konnte nicht verifiziert werden, da es nicht als "
 "vertrauenswürdig eingestuft wurde."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1290
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1277
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "Dieses Zertifikat konnte nicht verifiziert werden, da der Aussteller nicht "
 "als vertrauenswürdig eingestuft wurde."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1293
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1280
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr ""
 "Dieses Zertifikat konnte nicht verifiziert werden, da der Aussteller "
 "unbekannt ist."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1296
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1283
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "Dieses Zertifikat konnte nicht verifiziert werden, da das CA-Zertifikat "
 "ungültig ist."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1301
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1288
 msgid "Could not verify this certificate for unknown reasons."
 msgstr ""
 "Dieses Zertifikat konnte aus unbekannten Gründen nicht verifiziert werden."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1440
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1433
 msgid "Change Token Password"
 msgstr "Token-Passwort ändern"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1446
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1439
 #, c-format
 msgid "Choose a password for the “%s” token"
 msgstr "Wählen Sie ein Passwort für das Token »%s«."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1449
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1442
 #, c-format
 msgid "Change the password for the “%s” token"
 msgstr "Das Passwort des Tokens »%s« ändern."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1533
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1528
 msgid "Get Token Password"
 msgstr "Token-Passwort"
 
@@ -2197,24 +2202,24 @@ msgstr "Token-Passwort"
 #. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
 #. * a data file (e.g. a cryptographic certificate).
 #.
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1541
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1536
 #, c-format
 msgid "Please enter the password for the “%s” token"
 msgstr "Bitte geben Sie das Passwort für das Token »%s« ein."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1607
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1602
 msgid "Please select a token:"
 msgstr "Bitte wählen Sie ein Token:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1626
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1621
 msgid "_Select"
 msgstr "_Auswählen"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1679
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1689
 msgid "Escrow the secret key?"
 msgstr "Geheimen Schlüssel bei Dritten hinterlegen?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1688
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1698
 #, c-format
 msgid ""
 "The certificate authority “%s” requests that you give it a copy of the newly "
@@ -2233,15 +2238,15 @@ msgstr ""
 "\n"
 "Es wird dringenst empfohlen, dies nicht zu erlauben."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1702
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1712
 msgid "_Allow"
 msgstr "_Erlauben"
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:181
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:176
 msgid "Generating Private Key."
 msgstr "Privater Schlüssel wird generiert."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:182
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:177
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
@@ -2249,15 +2254,15 @@ msgstr ""
 "Bitte warten Sie, es wird ein neuer privater Schlüssel generiert. Dieser "
 "Vorgang kann einige Minuten in Anspruch nehmen."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "Security Notice"
 msgstr "Sicherheitshinweis"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:96
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
 msgid "This page is loaded over a secure connection"
 msgstr "Diese Seite wird über eine sichere Verbindung geladen"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:97
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
 msgid ""
 "For secure pages, the address entry has a distinct color and a locked "
 "padlock icon is displayed.\n"
@@ -2270,18 +2275,18 @@ msgstr ""
 "Das Schlosssymbol in der Statusleiste zeigt ebenfalls an, ob eine Seite "
 "sicher ist."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:116
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:144
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:114
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:142
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:161
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:181
 msgid "Security Warning"
 msgstr "Sicherheitswarnung"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:117
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:115
 msgid "This page is loaded over a low security connection"
 msgstr "Diese Seite wird über ein relativ unsichere Verbindung geladen"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:118
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:116
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -2289,12 +2294,12 @@ msgstr ""
 "Es ist möglich, dass alle Daten die Sie auf dieser Seite sehen oder eingeben "
 "von Dritten mitgelesen werden."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:145
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:143
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr ""
 "Einige Elemente dieser Seite werden über ein unsichere Verbindung geladen"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:146
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:144
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -2303,12 +2308,12 @@ msgstr ""
 "unsichere Verbindung übertragen und können daher von Dritten mitgelesen "
 "werden."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:164
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:182
 msgid "Send this information over an insecure connection?"
 msgstr "Sollen diese Daten über eine unsichere Verbindung gesendet werden?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:165
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -2316,12 +2321,12 @@ msgstr ""
 "Die von Ihnen eingegebenen Daten werden über eine unsichere Verbindung "
 "gesendet und können daher von Dritten mitgelesen werden."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:168
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:189
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:166
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:187
 msgid "_Send"
 msgstr "_Senden"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:185
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2347,7 +2352,7 @@ msgstr "%s-Dateien"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:203
+#: ../embed/mozilla/mozilla-embed-single.cpp:173
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.de/search?ie=UTF-8&oe=UTF-8&q="
 
@@ -2408,7 +2413,7 @@ msgstr "Werkzeugleiste _entfernen"
 msgid "Remove the selected toolbar"
 msgstr "Die gewählte Werkzeugleiste entfernen"
 
-#: ../lib/egg/egg-toolbar-editor.c:491
+#: ../lib/egg/egg-toolbar-editor.c:493
 msgid "Separator"
 msgstr "Trennlinie"
 
@@ -2625,31 +2630,31 @@ msgstr "Westlich"
 msgid "select fonts for|Other Scripts"
 msgstr "Weitere Schriften"
 
-#: ../lib/ephy-password-dialog.c:415
+#: ../lib/ephy-password-dialog.c:410
 msgid "_Domain:"
 msgstr "_Domäne:"
 
-#: ../lib/ephy-password-dialog.c:444
+#: ../lib/ephy-password-dialog.c:437
 msgid "_New password:"
 msgstr "_Neues Passwort:"
 
-#: ../lib/ephy-password-dialog.c:454
+#: ../lib/ephy-password-dialog.c:447
 msgid "Con_firm password:"
 msgstr "Passwort _bestätigen:"
 
-#: ../lib/ephy-password-dialog.c:482
+#: ../lib/ephy-password-dialog.c:473
 msgid "Password quality:"
 msgstr "Passwortqualität:"
 
-#: ../lib/ephy-password-dialog.c:499
+#: ../lib/ephy-password-dialog.c:491
 msgid "Do not remember this password"
 msgstr "Nicht an dieses Passwort erinnern"
 
-#: ../lib/ephy-password-dialog.c:503
+#: ../lib/ephy-password-dialog.c:495
 msgid "_Remember password for this session"
 msgstr "In dieser Sitzung an Passwort _erinnern"
 
-#: ../lib/ephy-password-dialog.c:507
+#: ../lib/ephy-password-dialog.c:499
 msgid "Save password in _keyring"
 msgstr "Passwort in _Schlüsselbund speichern"
 
@@ -2662,14 +2667,14 @@ msgid "History"
 msgstr "Chronik"
 
 #: ../lib/ephy-stock-icons.c:54
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:323
-#: ../src/ephy-window.c:1458
+#: ../src/bookmarks/ephy-bookmark-factory-action.c:301
+#: ../src/ephy-window.c:1484
 msgid "Bookmark"
 msgstr "Lesezeichen"
 
 #: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1822
-#: ../src/bookmarks/ephy-topic-action.c:454 ../src/ephy-window.c:1462
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1792
+#: ../src/bookmarks/ephy-topic-action.c:454 ../src/ephy-window.c:1488
 msgid "Bookmarks"
 msgstr "Lesezeichen"
 
@@ -2750,7 +2755,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:823
+#: ../lib/widgets/ephy-location-entry.c:869
 msgid "Drag and drop this icon to create a link to this page"
 msgstr ""
 "Ziehen Sie dieses Symbol und legen Sie es ab, um einen Link zu dieser Seite "
@@ -2799,7 +2804,7 @@ msgstr "Führt das Script »%s« aus"
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:97
-#: ../src/bookmarks/ephy-bookmark-properties.c:622
+#: ../src/bookmarks/ephy-bookmark-properties.c:623
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
@@ -2825,19 +2830,19 @@ msgstr "»%s« anzeigen …"
 msgid "“%s” Properties"
 msgstr "Eigenschaften von »%s«"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:561
+#: ../src/bookmarks/ephy-bookmark-properties.c:562
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:577
+#: ../src/bookmarks/ephy-bookmark-properties.c:578
 msgid "A_ddress:"
 msgstr "_Adresse:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:588
+#: ../src/bookmarks/ephy-bookmark-properties.c:589
 msgid "T_opics:"
 msgstr "T_hemen:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:610
+#: ../src/bookmarks/ephy-bookmark-properties.c:611
 msgid "Sho_w all topics"
 msgstr "A_lle Themen anzeigen"
 
@@ -2949,39 +2954,39 @@ msgid "Remove from this topic"
 msgstr "Aus diesem Thema entfernen"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:118
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
+#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:119
 msgid "_File"
 msgstr "_Datei"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
-#: ../src/ephy-history-window.c:170 ../src/ephy-window.c:119
+#: ../src/bookmarks/ephy-bookmarks-editor.c:180
+#: ../src/ephy-history-window.c:170 ../src/ephy-window.c:120
 msgid "_Edit"
 msgstr "_Bearbeiten"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:120
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:121
 msgid "_View"
 msgstr "_Ansicht"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:125
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
+#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:126
 msgid "_Help"
 msgstr "_Hilfe"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186
 msgid "_New Topic"
 msgstr "Thema _hinzufügen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Create a new topic"
 msgstr "Ein Thema hinzufügen"
 
 #. FIXME ngettext
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1400
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1370
 #: ../src/bookmarks/ephy-bookmarks-ui.c:324 ../src/ephy-history-window.c:176
 #: ../src/ephy-history-window.c:727
 msgid "Open in New _Window"
@@ -2989,13 +2994,13 @@ msgid_plural "Open in New _Windows"
 msgstr[0] "In neuem _Fenster öffnen"
 msgstr[1] "In neuen _Fenstern öffnen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Open the selected bookmark in a new window"
 msgstr "Das gewählte Lesezeichen in einem neuen Fenster öffnen"
 
 #. FIXME ngettext
-#: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1403
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1373
 #: ../src/bookmarks/ephy-bookmarks-ui.c:312 ../src/ephy-history-window.c:179
 #: ../src/ephy-history-window.c:730
 msgid "Open in New _Tab"
@@ -3003,149 +3008,149 @@ msgid_plural "Open in New _Tabs"
 msgstr[0] "In neuem _Reiter öffnen"
 msgstr[1] "In neuen _Reitern öffnen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Open the selected bookmark in a new tab"
 msgstr "Das gewählte Lesezeichen in einem neuen Reiter öffnen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:197
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195
 msgid "_Rename…"
 msgstr "_Umbenennen …"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "Rename the selected bookmark or topic"
 msgstr "Das gewählte Lesezeichen oder Thema umbenennen"
 
 #. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-editor.c:199
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
 #: ../src/bookmarks/ephy-bookmarks-ui.c:300
 msgid "_Properties"
 msgstr "Ei_genschaften"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Die Eigenschaften des gewählten Lesezeichens anzeigen / bearbeiten"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "_Import Bookmarks…"
 msgstr "Lesezeichen _importieren …"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:203
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr ""
 "Lesezeichen aus einem anderen Browser oder einer Lesezeichendatei importieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "_Export Bookmarks…"
 msgstr "Lesezeichen _exportieren …"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:206
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
 msgid "Export bookmarks to a file"
 msgstr "Lesezeichen in Datei exportieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
-#: ../src/ephy-history-window.c:185 ../src/ephy-window.c:150
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
+#: ../src/ephy-history-window.c:185 ../src/ephy-window.c:151
 msgid "_Close"
 msgstr "S_chließen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/bookmarks/ephy-bookmarks-editor.c:207
 msgid "Close the bookmarks window"
 msgstr "Das Lesezeichenfenster schließen"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:162
+#: ../src/bookmarks/ephy-bookmarks-editor.c:211
+#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:163
 msgid "Cu_t"
 msgstr "_Ausschneiden"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:214
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:163
+#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:164
 msgid "Cut the selection"
 msgstr "Den markierten Text ausschneiden"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:216
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1413
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1383
 #: ../src/ephy-history-window.c:193 ../src/ephy-history-window.c:740
-#: ../src/ephy-window.c:165
+#: ../src/ephy-window.c:166
 msgid "_Copy"
 msgstr "_Kopieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/ephy-history-window.c:194 ../src/ephy-window.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:215
+#: ../src/ephy-history-window.c:194 ../src/ephy-window.c:167
 msgid "Copy the selection"
 msgstr "Den markierten Text kopieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:219
-#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:217
+#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:169
 msgid "_Paste"
 msgstr "E_infügen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:220
+#: ../src/bookmarks/ephy-bookmarks-editor.c:218
 #: ../src/ephy-history-window.c:197
 msgid "Paste the clipboard"
 msgstr "Den Inhalt der Zwischenablage einfügen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:222
+#: ../src/bookmarks/ephy-bookmarks-editor.c:220
 #: ../src/ephy-history-window.c:199
 msgid "_Delete"
 msgstr "_Löschen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:223
+#: ../src/bookmarks/ephy-bookmarks-editor.c:221
 msgid "Delete the selected bookmark or topic"
 msgstr "Das gewählte Lesezeichen oder Thema löschen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:225
-#: ../src/ephy-history-window.c:202 ../src/ephy-window.c:174
+#: ../src/bookmarks/ephy-bookmarks-editor.c:223
+#: ../src/ephy-history-window.c:202 ../src/ephy-window.c:175
 msgid "Select _All"
 msgstr "_Alles markieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:226
+#: ../src/bookmarks/ephy-bookmarks-editor.c:224
 msgid "Select all bookmarks or text"
 msgstr "Alle Lesezeichen auswählen / den gesamten Text markieren"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:230
-#: ../src/ephy-history-window.c:210 ../src/ephy-window.c:265
+#: ../src/bookmarks/ephy-bookmarks-editor.c:228
+#: ../src/ephy-history-window.c:210 ../src/ephy-window.c:266
 msgid "_Contents"
 msgstr "I_nhalt"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:231
+#: ../src/bookmarks/ephy-bookmarks-editor.c:229
 msgid "Display bookmarks help"
 msgstr "Hilfe zu den Lesezeichen anzeigen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:233
-#: ../src/ephy-history-window.c:213 ../src/ephy-window.c:268
+#: ../src/bookmarks/ephy-bookmarks-editor.c:231
+#: ../src/ephy-history-window.c:213 ../src/ephy-window.c:269
 msgid "_About"
 msgstr "_Info"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:234
-#: ../src/ephy-history-window.c:214 ../src/ephy-window.c:269
+#: ../src/bookmarks/ephy-bookmarks-editor.c:232
+#: ../src/ephy-history-window.c:214 ../src/ephy-window.c:270
 msgid "Display credits for the web browser creators"
 msgstr "Die am Webbrowser Mitwirkenden anzeigen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:239
+#: ../src/bookmarks/ephy-bookmarks-editor.c:237
 msgid "_Show on Toolbar"
 msgstr "Auf _Werkzeugleiste zeigen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:240
+#: ../src/bookmarks/ephy-bookmarks-editor.c:238
 msgid "Show the selected bookmark on a toolbar"
 msgstr "Das gewählte Lesezeichen auf einer Werkzeugleiste anzeigen"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:253
+#: ../src/bookmarks/ephy-bookmarks-editor.c:251
 #: ../src/ephy-history-window.c:228
 msgid "_Title"
 msgstr "_Titel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:254
+#: ../src/bookmarks/ephy-bookmarks-editor.c:252
 msgid "Show only the title column"
 msgstr "Nur die Titelspalte anzeigen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:255
+#: ../src/bookmarks/ephy-bookmarks-editor.c:253
 msgid "T_itle and Address"
 msgstr "Titel _und Adresse"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:256
+#: ../src/bookmarks/ephy-bookmarks-editor.c:254
 msgid "Show both the title and address columns"
 msgstr "Sowohl die Titel- als auch die Adressspalte anzeigen"
 
@@ -3254,31 +3259,31 @@ msgstr "_Importieren"
 msgid "Import bookmarks from:"
 msgstr "Lesezeichen importieren von:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1409
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1379
 #: ../src/ephy-history-window.c:736
 msgid "_Copy Address"
 msgstr "Adresse _kopieren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1674
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1644
 #: ../src/ephy-history-window.c:1089
 msgid "Clear"
 msgstr "Leeren"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1688
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1658
 #: ../src/ephy-history-window.c:1097
 msgid "_Search:"
 msgstr "_Suche:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1886
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1856
 msgid "Topics"
 msgstr "Themen"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1956
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1926
 #: ../src/ephy-history-window.c:1420
 msgid "Title"
 msgstr "Titel"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1967
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1937
 #: ../src/ephy-history-window.c:1429
 msgid "Address"
 msgstr "Adresse"
@@ -3304,15 +3309,15 @@ msgstr "In neuen _Reitern öffnen"
 msgid "Open the bookmarks in this topic in new tabs"
 msgstr "Lesezeichen in diesem Thema in neuen Reitern öffnen"
 
-#: ../src/bookmarks/ephy-related-action.c:176
+#: ../src/bookmarks/ephy-related-action.c:155
 msgid "Related"
 msgstr "Verwandt"
 
-#: ../src/bookmarks/ephy-topic-factory-action.c:322
+#: ../src/bookmarks/ephy-topic-factory-action.c:300
 msgid "Topic"
 msgstr "Thema"
 
-#: ../src/bookmarks/ephy-topics-entry.c:359
+#: ../src/bookmarks/ephy-topics-entry.c:331
 #, c-format
 msgid "Create topic “%s”"
 msgstr "Thema »%s« erstellen"
@@ -3544,7 +3549,7 @@ msgstr ""
 "Der Webbrowser konnte nicht gestartet werden:\n"
 "%s"
 
-#: ../src/ephy-main.c:515 ../src/window-commands.c:865
+#: ../src/ephy-main.c:515 ../src/window-commands.c:874
 msgid "GNOME Web Browser"
 msgstr "Webbrowser"
 
@@ -3759,548 +3764,548 @@ msgstr "_Knopfbeschriftungen in Werkzeugleisten:"
 msgid "_Add a New Toolbar"
 msgstr "Werkzeugleiste _hinzufügen"
 
-#: ../src/ephy-window.c:121
+#: ../src/ephy-window.c:122
 msgid "_Bookmarks"
 msgstr "_Lesezeichen"
 
-#: ../src/ephy-window.c:122
+#: ../src/ephy-window.c:123
 msgid "_Go"
 msgstr "_Gehe zu"
 
-#: ../src/ephy-window.c:123
+#: ../src/ephy-window.c:124
 msgid "T_ools"
 msgstr "_Werkzeuge"
 
-#: ../src/ephy-window.c:124
+#: ../src/ephy-window.c:125
 msgid "_Tabs"
 msgstr "_Reiter"
 
-#: ../src/ephy-window.c:126
+#: ../src/ephy-window.c:127
 msgid "_Toolbars"
 msgstr "_Werkzeugleisten"
 
 #. File menu
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:133
 msgid "_Open…"
 msgstr "Ö_ffnen …"
 
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:134
 msgid "Open a file"
 msgstr "Eine Datei öffnen"
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:136
 msgid "Save _As…"
 msgstr "Speichern _unter …"
 
-#: ../src/ephy-window.c:136
+#: ../src/ephy-window.c:137
 msgid "Save the current page"
 msgstr "Die momentan geöffnete Seite speichern"
 
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:139
 msgid "Page Set_up"
 msgstr "Sei_teneinstellungen …"
 
-#: ../src/ephy-window.c:139
+#: ../src/ephy-window.c:140
 msgid "Setup the page settings for printing"
 msgstr "Die Seiteneinstellungen beim Drucken festlegen"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:142
 msgid "Print Pre_view"
 msgstr "Druck_vorschau"
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:143
 msgid "Print preview"
 msgstr "Druckvorschau"
 
-#: ../src/ephy-window.c:144
+#: ../src/ephy-window.c:145
 msgid "_Print…"
 msgstr "_Drucken …"
 
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:146
 msgid "Print the current page"
 msgstr "Die momentan geöffnete Seite drucken"
 
-#: ../src/ephy-window.c:147
+#: ../src/ephy-window.c:148
 msgid "S_end Link by Email…"
 msgstr "Link _verschicken an …"
 
-#: ../src/ephy-window.c:148
+#: ../src/ephy-window.c:149
 msgid "Send a link of the current page"
 msgstr "Einen Link auf die momentan geöffnete Seite verschicken"
 
-#: ../src/ephy-window.c:151
+#: ../src/ephy-window.c:152
 msgid "Close this tab"
 msgstr "Reiter schließen"
 
 #. Edit menu
-#: ../src/ephy-window.c:156
+#: ../src/ephy-window.c:157
 msgid "_Undo"
 msgstr "_Rückgängig"
 
-#: ../src/ephy-window.c:157
+#: ../src/ephy-window.c:158
 msgid "Undo the last action"
 msgstr "Die letzte Aktion rückgängig machen"
 
-#: ../src/ephy-window.c:159
+#: ../src/ephy-window.c:160
 msgid "Re_do"
 msgstr "_Wiederholen"
 
-#: ../src/ephy-window.c:160
+#: ../src/ephy-window.c:161
 msgid "Redo the last undone action"
 msgstr "Die zuletzt rückgängig gemachte Aktion wiederholen"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:170
 msgid "Paste clipboard"
 msgstr "Den Inhalt der Zwischenablage einfügen"
 
-#: ../src/ephy-window.c:172
+#: ../src/ephy-window.c:173
 msgid "Delete text"
 msgstr "Text löschen"
 
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:176
 msgid "Select the entire page"
 msgstr "Die gesamte Seite markieren"
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:178
 msgid "_Find…"
 msgstr "_Suchen …"
 
-#: ../src/ephy-window.c:178
+#: ../src/ephy-window.c:179
 msgid "Find a word or phrase in the page"
 msgstr "Ein Wort oder eine Zeichenkette in der Seite finden"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:181
 msgid "Find Ne_xt"
 msgstr "_Weitersuchen"
 
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:182
 msgid "Find next occurrence of the word or phrase"
 msgstr "Die nächste Stelle suchen, an der diese Zeichenkette vorkommt"
 
-#: ../src/ephy-window.c:183
+#: ../src/ephy-window.c:184
 msgid "Find Pre_vious"
 msgstr "_Rückwärts suchen"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:185
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Die vorherige Stelle suchen, an der diese Zeichenkette vorkommt"
 
-#: ../src/ephy-window.c:186
+#: ../src/ephy-window.c:187
 msgid "P_ersonal Data"
 msgstr "_Persönliche Daten"
 
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:188
 msgid "View and remove cookies and passwords"
 msgstr "Cookies und Passwörter betrachten/entfernen"
 
-#: ../src/ephy-window.c:190
+#: ../src/ephy-window.c:191
 msgid "Certificate_s"
 msgstr "_Zertifikate"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:192
 msgid "Manage Certificates"
 msgstr "Zertifikate anzeigen"
 
-#: ../src/ephy-window.c:194
+#: ../src/ephy-window.c:195
 msgid "P_references"
 msgstr "_Einstellungen"
 
-#: ../src/ephy-window.c:195
+#: ../src/ephy-window.c:196
 msgid "Configure the web browser"
 msgstr "Den Webbrowser konfigurieren"
 
 #. View menu
-#: ../src/ephy-window.c:200
+#: ../src/ephy-window.c:201
 msgid "_Customize Toolbars…"
 msgstr "Werkzeugleisten _anpassen …"
 
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:202
 msgid "Customize toolbars"
 msgstr "Werkzeugleisten anpassen"
 
-#: ../src/ephy-window.c:203 ../src/ephy-window.c:206
+#: ../src/ephy-window.c:204 ../src/ephy-window.c:207
 msgid "_Stop"
 msgstr "_Abbrechen"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:205
 msgid "Stop current data transfer"
 msgstr "Die gegenwärtige Datenübertragung abbrechen"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:209
 msgid "_Reload"
 msgstr "A_ktualisieren"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:210
 msgid "Display the latest content of the current page"
 msgstr "Den aktuellen Inhalt des Dokuments anzeigen"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:212
 msgid "_Larger Text"
 msgstr "Text ver_größern"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:213
 msgid "Increase the text size"
 msgstr "Die Textgröße erhöhen"
 
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:215
 msgid "S_maller Text"
 msgstr "Text ver_kleinern"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:216
 msgid "Decrease the text size"
 msgstr "Die Textgröße vermindern"
 
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:218
 msgid "_Normal Size"
 msgstr "_Normale Größe"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:219
 msgid "Use the normal text size"
 msgstr "Die normale Textgröße verwenden"
 
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:221
 msgid "Text _Encoding"
 msgstr "_Zeichenkodierung"
 
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:222
 msgid "Change the text encoding"
 msgstr "Die Zeichenkodierung festlegen"
 
-#: ../src/ephy-window.c:223
+#: ../src/ephy-window.c:224
 msgid "_Page Source"
 msgstr "_Quelltext der Seite"
 
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:225
 msgid "View the source code of the page"
 msgstr "Den Quelltext dieser Seite anzeigen"
 
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:227
 msgid "Page _Security Information"
 msgstr "_Sicherheitsinformationen"
 
-#: ../src/ephy-window.c:227
+#: ../src/ephy-window.c:228
 msgid "Display security information for the web page"
 msgstr "Sicherheitsinformationen dieser Webseite anzeigen"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:232
+#: ../src/ephy-window.c:233
 msgid "_Add Bookmark…"
 msgstr "Lesezeichen _hinzufügen …"
 
-#: ../src/ephy-window.c:233 ../src/ephy-window.c:304
+#: ../src/ephy-window.c:234 ../src/ephy-window.c:305
 msgid "Add a bookmark for the current page"
 msgstr "Ein Lesezeichen für die momentan geöffnete Seite hinzufügen"
 
-#: ../src/ephy-window.c:235
+#: ../src/ephy-window.c:236
 msgid "_Edit Bookmarks"
 msgstr "Lesezeichen _bearbeiten"
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:237
 msgid "Open the bookmarks window"
 msgstr "Das Lesezeichenfenster öffnen"
 
 #. Go menu
-#: ../src/ephy-window.c:241
+#: ../src/ephy-window.c:242
 msgid "_Location…"
 msgstr "_Ort …"
 
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:243
 msgid "Go to a specified location"
 msgstr "Zum angegebenen Ort gehen"
 
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:245
 msgid "Hi_story"
 msgstr "_Chronik"
 
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:246
 msgid "Open the history window"
 msgstr "Das Chronikfenster öffnen"
 
 #. Tabs menu
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:251
 msgid "_Previous Tab"
 msgstr "_Vorheriger Reiter"
 
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:252
 msgid "Activate previous tab"
 msgstr "Den vorherigen Reiter aktivieren"
 
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:254
 msgid "_Next Tab"
 msgstr "_Nächster Reiter"
 
-#: ../src/ephy-window.c:254
+#: ../src/ephy-window.c:255
 msgid "Activate next tab"
 msgstr "Den nächsten Reiter aktivieren"
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:257
 msgid "Move Tab _Left"
 msgstr "Reiter nach _links verschieben"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:258
 msgid "Move current tab to left"
 msgstr "Diesen Reiter nach links verschieben"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:260
 msgid "Move Tab _Right"
 msgstr "Reiter nach _rechts verschieben"
 
-#: ../src/ephy-window.c:260
+#: ../src/ephy-window.c:261
 msgid "Move current tab to right"
 msgstr "Diesen Reiter nach rechts verschieben"
 
-#: ../src/ephy-window.c:266
+#: ../src/ephy-window.c:267
 msgid "Display web browser help"
 msgstr "Hilfe zum Webbrowser Epiphany anzeigen"
 
 #. File Menu
-#: ../src/ephy-window.c:277
+#: ../src/ephy-window.c:278
 msgid "_Work Offline"
 msgstr "_Offline arbeiten"
 
-#: ../src/ephy-window.c:278
+#: ../src/ephy-window.c:279
 msgid "Switch to offline mode"
 msgstr "In den Offline-Modus wechseln"
 
 #. View Menu
-#: ../src/ephy-window.c:283
+#: ../src/ephy-window.c:284
 msgid "_Hide Toolbars"
 msgstr "Werkzeugleisten _verbergen"
 
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:285
 msgid "Show or hide toolbar"
 msgstr "Werkzeugleiste anzeigen/verbergen"
 
-#: ../src/ephy-window.c:286
+#: ../src/ephy-window.c:287
 msgid "St_atusbar"
 msgstr "S_tatusleiste"
 
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:288
 msgid "Show or hide statusbar"
 msgstr "Statusleiste anzeigen/verbergen"
 
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:290
 msgid "_Fullscreen"
 msgstr "_Vollbild"
 
-#: ../src/ephy-window.c:290
+#: ../src/ephy-window.c:291
 msgid "Browse at full screen"
 msgstr "Im Vollbildmodus surfen"
 
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:293
 msgid "Popup _Windows"
 msgstr "Popup-_Fenster"
 
-#: ../src/ephy-window.c:293
+#: ../src/ephy-window.c:294
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Unangeforderte Popup-Fenster von dieser Seite anzeigen/verbergen"
 
-#: ../src/ephy-window.c:295
+#: ../src/ephy-window.c:296
 msgid "Selection Caret"
 msgstr "Markierungscaret"
 
 #. Document
-#: ../src/ephy-window.c:303
+#: ../src/ephy-window.c:304
 msgid "Add Boo_kmark…"
 msgstr "Lesezeichen _hinzufügen …"
 
 #. Framed document
-#: ../src/ephy-window.c:309
+#: ../src/ephy-window.c:310
 msgid "Show Only _This Frame"
 msgstr "_Frame öffnen"
 
-#: ../src/ephy-window.c:310
+#: ../src/ephy-window.c:311
 msgid "Show only this frame in this window"
 msgstr "Frame in diesem Fenster öffnen"
 
 #. Links
-#: ../src/ephy-window.c:315
+#: ../src/ephy-window.c:316
 msgid "_Open Link"
 msgstr "Link ö_ffnen"
 
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:317
 msgid "Open link in this window"
 msgstr "Link in diesem Fenster öffnen"
 
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:319
 msgid "Open Link in New _Window"
 msgstr "Link in _neuem Fenster öffnen"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:320
 msgid "Open link in a new window"
 msgstr "Link in neuem Fenster öffnen"
 
-#: ../src/ephy-window.c:321
+#: ../src/ephy-window.c:322
 msgid "Open Link in New _Tab"
 msgstr "Link in neuem _Reiter öffnen"
 
-#: ../src/ephy-window.c:322
+#: ../src/ephy-window.c:323
 msgid "Open link in a new tab"
 msgstr "Link in neuem Reiter öffnen"
 
-#: ../src/ephy-window.c:324
+#: ../src/ephy-window.c:325
 msgid "_Download Link"
 msgstr "Link herunter_laden"
 
-#: ../src/ephy-window.c:326
+#: ../src/ephy-window.c:327
 msgid "_Save Link As…"
 msgstr "Link _speichern unter …"
 
-#: ../src/ephy-window.c:327
+#: ../src/ephy-window.c:328
 msgid "Save link with a different name"
 msgstr "Link unter einem anderen Namen speichern"
 
-#: ../src/ephy-window.c:329
+#: ../src/ephy-window.c:330
 msgid "_Bookmark Link…"
 msgstr "Link zu Lesezeichen _hinzufügen …"
 
-#: ../src/ephy-window.c:331
+#: ../src/ephy-window.c:332
 msgid "_Copy Link Address"
 msgstr "Link-Adresse _kopieren"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:337
+#: ../src/ephy-window.c:338
 msgid "_Send Email…"
 msgstr "_E-Mail senden …"
 
-#: ../src/ephy-window.c:339
+#: ../src/ephy-window.c:340
 msgid "_Copy Email Address"
 msgstr "E-Mail-Adresse _kopieren"
 
 #. Images
-#: ../src/ephy-window.c:344
+#: ../src/ephy-window.c:345
 msgid "Open _Image"
 msgstr "_Bild öffnen"
 
-#: ../src/ephy-window.c:346
+#: ../src/ephy-window.c:347
 msgid "_Save Image As…"
 msgstr "Bi_ld speichern unter"
 
-#: ../src/ephy-window.c:348
+#: ../src/ephy-window.c:349
 msgid "_Use Image As Background"
 msgstr "Bild als _Hintergrundbild verwenden"
 
-#: ../src/ephy-window.c:350
+#: ../src/ephy-window.c:351
 msgid "Copy I_mage Address"
 msgstr "Bil_dadresse kopieren"
 
-#: ../src/ephy-window.c:352
+#: ../src/ephy-window.c:353
 msgid "St_art Animation"
 msgstr "Animation st_arten"
 
-#: ../src/ephy-window.c:354
+#: ../src/ephy-window.c:355
 msgid "St_op Animation"
 msgstr "Animation st_oppen"
 
-#: ../src/ephy-window.c:527
+#: ../src/ephy-window.c:528
 msgid "There are unsubmitted changes to form elements"
 msgstr "Einige Änderungen an Formularelementen wurden nicht übertragen"
 
-#: ../src/ephy-window.c:531
+#: ../src/ephy-window.c:532
 msgid "If you close the document anyway, you will lose that information."
 msgstr ""
 "Falls Sie das Dokument dennoch schließen, gehen diese Informationen verloren."
 
-#: ../src/ephy-window.c:535
+#: ../src/ephy-window.c:536
 msgid "Close _Document"
 msgstr "_Dokument schließen"
 
-#: ../src/ephy-window.c:1452 ../src/window-commands.c:280
+#: ../src/ephy-window.c:1478 ../src/window-commands.c:280
 msgid "Open"
 msgstr "Öffnen"
 
-#: ../src/ephy-window.c:1454 ../src/window-commands.c:306
+#: ../src/ephy-window.c:1480 ../src/window-commands.c:306
 msgid "Save As"
 msgstr "Speichern unter"
 
-#: ../src/ephy-window.c:1456
+#: ../src/ephy-window.c:1482
 msgid "Print"
 msgstr "Drucken"
 
-#: ../src/ephy-window.c:1460
+#: ../src/ephy-window.c:1486
 msgid "Find"
 msgstr "Suchen"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1473
+#: ../src/ephy-window.c:1499
 msgid "Larger"
 msgstr "Größer"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1476
+#: ../src/ephy-window.c:1502
 msgid "Smaller"
 msgstr "Kleiner"
 
-#: ../src/ephy-window.c:1666
+#: ../src/ephy-window.c:1692
 msgid "Insecure"
 msgstr "Unsicher"
 
-#: ../src/ephy-window.c:1671
+#: ../src/ephy-window.c:1697
 msgid "Broken"
 msgstr "Defekt"
 
-#: ../src/ephy-window.c:1683
+#: ../src/ephy-window.c:1709
 msgid "Low"
 msgstr "Niedrig"
 
-#: ../src/ephy-window.c:1690
+#: ../src/ephy-window.c:1716
 msgid "High"
 msgstr "Hoch"
 
-#: ../src/ephy-window.c:1700
+#: ../src/ephy-window.c:1726
 #, c-format
 msgid "Security level: %s"
 msgstr "Sicherheitsstufe: %s"
 
-#: ../src/ephy-window.c:1743
+#: ../src/ephy-window.c:1769
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d verborgenes Popup-Fenster"
 msgstr[1] "%d verborgene Popup-Fenster"
 
-#: ../src/ephy-window.c:2004
+#: ../src/ephy-window.c:2030
 #, c-format
 msgid "Open image “%s”"
 msgstr "Bild »%s« öffnen"
 
-#: ../src/ephy-window.c:2009
+#: ../src/ephy-window.c:2035
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Bild »%s« als Hintergrundbild verwenden"
 
-#: ../src/ephy-window.c:2014
+#: ../src/ephy-window.c:2040
 #, c-format
 msgid "Save image “%s”"
 msgstr "Bild »%s« speichern unter …"
 
-#: ../src/ephy-window.c:2019
+#: ../src/ephy-window.c:2045
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Bildadresse »%s« kopieren"
 
-#: ../src/ephy-window.c:2032
+#: ../src/ephy-window.c:2058
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "E-Mail an »%s« senden"
 
-#: ../src/ephy-window.c:2038
+#: ../src/ephy-window.c:2064
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "E-Mail-Adresse »%s« kopieren"
 
-#: ../src/ephy-window.c:2050
+#: ../src/ephy-window.c:2076
 #, c-format
 msgid "Save link “%s”"
 msgstr "Link »%s« speichern unter …"
 
-#: ../src/ephy-window.c:2056
+#: ../src/ephy-window.c:2082
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Link »%s« zu Lesezeichen hinzufügen …"
 
-#: ../src/ephy-window.c:2062
+#: ../src/ephy-window.c:2088
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Link-Adresse »%s« kopieren"
@@ -4494,7 +4499,7 @@ msgstr[1] "Systemsprachen (%s)"
 msgid "Select a Directory"
 msgstr "Wählen Sie einen Ordner"
 
-#: ../src/window-commands.c:760
+#: ../src/window-commands.c:769
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4506,7 +4511,7 @@ msgstr ""
 "veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 2 "
 "der Lizenz oder (nach Ihrer Option) jeder späteren Version."
 
-#: ../src/window-commands.c:764
+#: ../src/window-commands.c:773
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4518,7 +4523,7 @@ msgstr ""
 "implizierte Garantie der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN "
 "BESTIMMTEN ZWECK.  Details finden Sie in der GNU General Public License."
 
-#: ../src/window-commands.c:768
+#: ../src/window-commands.c:777
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4529,20 +4534,20 @@ msgstr ""
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, "
 "USA."
 
-#: ../src/window-commands.c:816 ../src/window-commands.c:832
-#: ../src/window-commands.c:843
+#: ../src/window-commands.c:825 ../src/window-commands.c:841
+#: ../src/window-commands.c:852
 msgid "Contact us at:"
 msgstr "Sie erreichen uns unter:"
 
-#: ../src/window-commands.c:819
+#: ../src/window-commands.c:828
 msgid "Contributors:"
 msgstr "Mitwirkende"
 
-#: ../src/window-commands.c:822
+#: ../src/window-commands.c:831
 msgid "Past developers:"
 msgstr "Vorherige Entwickler"
 
-#: ../src/window-commands.c:855
+#: ../src/window-commands.c:864
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4559,13 +4564,13 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:881
+#: ../src/window-commands.c:890
 msgid "translator-credits"
 msgstr ""
 "Christian Neumair <chris@gnome-de.org>\n"
 "Hendrik Richter <hendrikr@gnome.org>"
 
-#: ../src/window-commands.c:884
+#: ../src/window-commands.c:893
 msgid "GNOME Web Browser Website"
 msgstr "Webbrowser"
 
