@@ -6,14 +6,14 @@
 #
 # Žygimantas Beručka <zygis@gnome.org>, 2004-2007.
 # Justina Klingaitė <justina.klingaite@gmail.com>, 2005.
-# Gintautas Miliauskas <gintas@akl.lt>, 2007.
+# Gintautas Miliauskas <gintas@akl.lt>, 2007, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-02-26 18:01+0200\n"
-"PO-Revision-Date: 2008-02-26 18:19+0200\n"
+"POT-Creation-Date: 2008-03-07 22:44+0200\n"
+"PO-Revision-Date: 2008-03-07 22:44+0200\n"
 "Last-Translator: Žygimantas Beručka <zygis@gnome.org>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
 "MIME-Version: 1.0\n"
@@ -21,6 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
 "100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: ../data/bme.desktop.in.in.h:1
 msgid "Browse and organize your bookmarks"
@@ -600,31 +601,35 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>Na_udoti kitą koduotę:</b>"
 
 #: ../data/glade/epiphany.glade.h:3
+msgid "Clear _All..."
+msgstr "Valyti _visus..."
+
+#: ../data/glade/epiphany.glade.h:4
 msgid "Cookies"
 msgstr "Slapukai"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:111
+#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:111
 msgid "Downloads"
 msgstr "Atsiuntimai"
 
-#: ../data/glade/epiphany.glade.h:5
+#: ../data/glade/epiphany.glade.h:6
 msgid "Passwords"
 msgstr "Slaptažodžiai"
 
-#: ../data/glade/epiphany.glade.h:6
+#: ../data/glade/epiphany.glade.h:7
 msgid "Personal Data"
 msgstr "Asmeniniai duomenys"
 
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.glade.h:8
 msgid "Text Encoding"
 msgstr "Teksto koduotė"
 
-#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:334
+#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:334
 msgid "Use the encoding specified by the document"
 msgstr "Naudoti dokumente nurodytą koduotę"
 
-#: ../data/glade/epiphany.glade.h:9
+#: ../data/glade/epiphany.glade.h:10
 msgid "_Show passwords"
 msgstr "_Rodyti slaptažodžius"
 
@@ -943,37 +948,37 @@ msgstr[0] "%d parsiuntimas"
 msgstr[1] "%d parsiuntimai"
 msgstr[2] "%d parsiuntimų"
 
-#: ../embed/downloader-view.c:622
+#: ../embed/downloader-view.c:627
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Failas „%s“ įtrauktas į atsiuntimų eilę."
 
-#: ../embed/downloader-view.c:625
+#: ../embed/downloader-view.c:630
 msgid "Download started"
 msgstr "Pradedama siųsti"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:699 ../embed/downloader-view.c:712
+#: ../embed/downloader-view.c:704 ../embed/downloader-view.c:717
 msgid "download status|Unknown"
 msgstr "Nežinoma"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:704
+#: ../embed/downloader-view.c:709
 msgid "download status|Failed"
 msgstr "Nepavyko"
 
-#: ../embed/downloader-view.c:771
+#: ../embed/downloader-view.c:776
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Failas"
 
-#: ../embed/downloader-view.c:794
+#: ../embed/downloader-view.c:799
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:805
+#: ../embed/downloader-view.c:810
 msgid "Remaining"
 msgstr "Liko"
 
@@ -2298,7 +2303,7 @@ msgstr "%s failai"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:201
+#: ../embed/mozilla/mozilla-embed-single.cpp:173
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
@@ -2360,7 +2365,7 @@ msgstr "_Pašalinti įrankių juostą"
 msgid "Remove the selected toolbar"
 msgstr "Pašalinti pasirinktą įrankinę"
 
-#: ../lib/egg/egg-toolbar-editor.c:491
+#: ../lib/egg/egg-toolbar-editor.c:493
 msgid "Separator"
 msgstr "Skirtukas"
 
@@ -3494,7 +3499,7 @@ msgstr ""
 "Nepavyko paleisti dėl šios klaidos:\n"
 "%s"
 
-#: ../src/ephy-main.c:515 ../src/window-commands.c:883
+#: ../src/ephy-main.c:515 ../src/window-commands.c:874
 msgid "GNOME Web Browser"
 msgstr "GNOME žiniatinklio naršyklė"
 
@@ -4442,7 +4447,7 @@ msgstr[2] "Sistemos kalbų (%s)"
 msgid "Select a Directory"
 msgstr "Pasirinkite aplanką"
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:769
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4454,7 +4459,7 @@ msgstr ""
 "sąlygomis, paskelbtomis Laisvosios Programinės Įrangos Fondo; 2-osios arba "
 "(jūsų pasirinkimu) bet kurios vėlesnės šios licencijos versijos sąlygomis."
 
-#: ../src/window-commands.c:782
+#: ../src/window-commands.c:773
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4466,7 +4471,7 @@ msgstr ""
 "TAM TIKRAM TIKSLUI garantijų. Išsamesnę informaciją rasite GNU Bendrojoje "
 "Viešojoje licencijoje."
 
-#: ../src/window-commands.c:786
+#: ../src/window-commands.c:777
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4476,20 +4481,20 @@ msgstr ""
 "žiniatinklio naršykle; jeigu negavote, rašykite Free Software Foundation, 51 "
 "Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:834 ../src/window-commands.c:850
-#: ../src/window-commands.c:861
+#: ../src/window-commands.c:825 ../src/window-commands.c:841
+#: ../src/window-commands.c:852
 msgid "Contact us at:"
 msgstr "Susisiekite su mumis:"
 
-#: ../src/window-commands.c:837
+#: ../src/window-commands.c:828
 msgid "Contributors:"
 msgstr "Prisidėjo:"
 
-#: ../src/window-commands.c:840
+#: ../src/window-commands.c:831
 msgid "Past developers:"
 msgstr "Ankstesnieji kūrėjai:"
 
-#: ../src/window-commands.c:873
+#: ../src/window-commands.c:864
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4506,12 +4511,12 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:899
+#: ../src/window-commands.c:890
 msgid "translator-credits"
 msgstr ""
 "Žygimantas Beručka <zygis@gnome.org>,\n"
 "Justina Klingaitė <justina.klingaite@gmail.com>"
 
-#: ../src/window-commands.c:902
+#: ../src/window-commands.c:893
 msgid "GNOME Web Browser Website"
 msgstr "GNOME žiniatinklio naršyklės svetainė"
