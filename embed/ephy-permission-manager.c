@@ -54,7 +54,7 @@ ephy_permission_info_new (const char *host,
 			  const char *type,
 			  EphyPermission permission)
 {
-	EphyPermissionInfo *info = g_new0 (EphyPermissionInfo, 1);
+	EphyPermissionInfo *info = g_slice_new0 (EphyPermissionInfo);
 
 	info->host = g_strdup (host);
 	info->qtype = g_quark_from_string (type);
@@ -72,7 +72,7 @@ ephy_permission_info_new (const char *host,
 EphyPermissionInfo *
 ephy_permission_info_copy (const EphyPermissionInfo *info)
 {
-	EphyPermissionInfo *copy = g_new0 (EphyPermissionInfo, 1);
+	EphyPermissionInfo *copy = g_slice_new0 (EphyPermissionInfo);
 
 	copy->host = g_strdup (info->host);
 	copy->qtype = info->qtype;
@@ -93,7 +93,7 @@ ephy_permission_info_free (EphyPermissionInfo *info)
 	if (info != NULL)
 	{
 		g_free (info->host);
-		g_free (info);
+		g_slice_free (EphyPermissionInfo, info);
 	}
 }
 

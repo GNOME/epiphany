@@ -155,7 +155,7 @@ pixbuf_cache_entry_free (PixbufCacheEntry *entry)
 		g_object_unref (entry->pixbuf);
 	}
 
-	g_free (entry);
+	g_slice_free (PixbufCacheEntry, entry);
 }
 
 static gboolean
@@ -173,7 +173,7 @@ icons_added_cb (EphyNode *node,
 		EphyNode *child,
 		EphyFaviconCache *eb)
 {
-	PixbufCacheEntry *entry = g_new0 (PixbufCacheEntry, 1);
+	PixbufCacheEntry *entry = g_slice_new0 (PixbufCacheEntry);
 
 	entry->node = child;
 

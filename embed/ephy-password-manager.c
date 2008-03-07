@@ -57,7 +57,7 @@ ephy_password_info_new (const char *host,
 			const char *username,
 			const char *password)
 {
-	EphyPasswordInfo *info = g_new0 (EphyPasswordInfo, 1);
+	EphyPasswordInfo *info = g_slice_new0 (EphyPasswordInfo);
 
 	info->host = g_strdup (host);
 	info->username = g_strdup (username);
@@ -75,7 +75,7 @@ ephy_password_info_new (const char *host,
 EphyPasswordInfo *
 ephy_password_info_copy (const EphyPasswordInfo *info)
 {
-	EphyPasswordInfo *copy = g_new0 (EphyPasswordInfo, 1);
+	EphyPasswordInfo *copy = g_slice_new0 (EphyPasswordInfo);
 
 	copy->host = g_strdup (info->host);
 	copy->username = g_strdup (info->username);
@@ -98,7 +98,7 @@ ephy_password_info_free (EphyPasswordInfo *info)
 		g_free (info->host);
 		g_free (info->username);
 		g_free (info->password);
-		g_free (info);
+		g_slice_free (EphyPasswordInfo, info);
 	}
 }
 
