@@ -1,4 +1,76 @@
 ================
+Epiphany 2.22.0 
+================
+
+"Minus 379"
+
+This 2.22 release of Epiphany brings a few architectural changes as well as 
+some user-visible ones. This release blesses us with a migration from gnome-vfs
+to GIO. Also, thanks to a refactoring of Epiphany's internals, cross 
+engine support has improved a lot. If you're feeling adventurous, feel free to 
+try Epiphany with the WebKit backend-- but be warned, several important 
+features, such as cookies, are still missing.
+
+Clearing privacy-sensitive data is now easier than ever. From a single dialog,
+you can clear your cookies, cache, history and saved passwords. Furthermore,
+the download manager will now show notification bubbles if the download window
+is hidden and a download completes. The address entry now filters 
+history and bookmark duplicates, an image preview has been added to the 
+filechooser, and finally, the history window can now display the date and time
+of the last visit.
+
+Thanks to all contributors, and we wish to mention that, as a 
+result of the hard labor of all translators, Epiphany has been localized in 
+more than 70 languages!
+
+The list below covers all development releases from 2.21.90 up to and
+including 2.22.0.
+
+Bug fixes
+
+    * Fix compilation error with gcc4.3. Bug #512027.
+    * HIG fixes for menu. Bug #483312
+    * Fix keyboard focus remaining in the location entry after entering the 
+      address. Bug #513345.
+    * Make middle clicking on Back/Forward toolbar buttons open again in a new
+      tab, as it was in 2.20. Bug #513029.
+    * Popup the completion dropdown menu when we're focusing the location bar
+      with the cursor at the end of entry and we press down. Bug #340572.
+    * Fix back button looping through history. Bug #513803.
+    * Fix prompt service for xulrunner 1.9 wrt. DOM notifications. Bug #504445.
+    * Accept empty password to unlock a token; and allow empty new password if 
+      the requested password quality allows it. Bug #515096.
+
+Changes
+
+    * WebKit: Implement back and forward history. Bug #506566.
+    * WebKit: Initial implementation of WebKit preferences.
+    * GConf option to disable messagebox about unsubmitted form data. 
+      Bug #516170.
+    * Add Undo/Redo commands to the location entry, both in the context menu
+      and linked to the main window commands. Bug #171179.
+    * Make Go Up recognize HTML anchors. Bug #335631.
+    * Adapt to GIO API change
+
+Contributors to this release: 
+Sebastien Bacher, Luca Ferretti, Cosimo Cecchi, Jan Alonzo, Xan Lopez, 
+Thomas Wendt, Jens Granseuer, Carlos Garcia Campos, Christian Persch
+
+Translations:
+Kjartan Maraas, Artur Flinta, Sankarshan Mukhopadhyay, Chao-Hsiung Liao,
+Wadim Dziedzic, Djihed Afifi, Kenneth Nielsen, Priit Laes, Daniel Nylander, 
+Hendrik Richter, Arangel Angov, Theppitak Karoonboonyanan, 
+Maxim Dziumanenko, Changwoo Ryu, Ankit Patel, Luca Ferretti, 
+Leonardo Ferreira Fontenelle, Petr Kovar, Inaki Larranaga Murgoitio,
+Ignacio Casal Quinteiro, Takeshi AIHANA, Wouter Bolsterlee, 
+Gabor Kelemen, Claude Paroz, Duarte Loreto, Gil Forcada, Nikos Charonitakis,
+Ihar Hrachyshka, Philip Withnall, Jorge Gonzalez, Åsmund Skjæveland,
+Amitakhya Phukan, Žygimantas Beručka, Yair Hershkovitz, Baris Cicek, 
+Nguyễn Thái Ngọc Duy, Pawan Chitrakar, Ilkka Tuohela, Reinout van Schouwen,
+Rahul Bhalerao, Yannig Marchegay
+
+
+================
 Epiphany 2.21.90
 ================
 
