@@ -24,36 +24,10 @@
 
 #include <nsStringAPI.h>
 
-#include <nsComponentManagerUtils.h>
-#include <nsIChannel.h>
-#include <nsIDOMDocument.h>
-#include <nsIDOMHTMLDocument.h>
-#include <nsIDownload.h>
-#include <nsIHttpChannel.h>
-#include <nsIInputStream.h>
-#include <nsILocalFile.h>
-#include <nsIMIMEHeaderParam.h>
-#include <nsIMIMEInfo.h>
-#include <nsIMIMEService.h>
-#include <nsIPrefService.h>
-#include <nsIPromptService.h>
-#include <nsIURI.h>
-#include <nsIURL.h>
-#include <nsIWebBrowserPersist.h>
-#include <nsIWindowWatcher.h>
-#include <nsServiceManagerUtils.h>
-#include <nsXPCOMCID.h>
+#include "EphyUtils.h"
 
-#include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
-#include "ephy-file-chooser.h"
-#include "ephy-gui.h"
-#include "ephy-prefs.h"
-
-#ifndef HAVE_GECKO_1_9
-#include "EphyBadCertRejector.h"
-#endif
-#include "MozDownload.h"
+#include "ephy-embed.h"
 
 #include "EphyLoginPrompter.h"
 
@@ -73,6 +47,11 @@ NS_IMPL_ISUPPORTS1 (EphyLoginPrompter,
 NS_IMETHODIMP EphyLoginPrompter::Init(nsIDOMWindow *aWindow)
 {
   mWindow = aWindow;
+
+  /* Ensure it's one of ours */
+  GtkWidget *embed = EphyUtils::FindGtkParent (aWindow);
+  NS_ENSURE_TRUE (embed, NS_ERROR_FAILURE);
+
   return NS_OK;
 }
 
@@ -93,5 +72,4 @@ NS_IMETHODIMP EphyLoginPrompter::PromptToChangePasswordWithUsernames(nsILoginInf
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
-
 
