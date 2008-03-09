@@ -77,7 +77,7 @@
 #include "GeckoFormSigningDialog.h"
 #endif
 
-#ifdef HAVE_GECKO_1_9
+#if 0 //def HAVE_GECKO_1_9
 #include "EphyLoginPrompter.h"
 #endif
 
@@ -108,7 +108,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSSecurityWarningDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GeckoFormSigningDialog)
 #endif
 
-#ifdef HAVE_GECKO_1_9
+#if 0 //def HAVE_GECKO_1_9
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyLoginPrompter)
 #endif
 
@@ -287,7 +287,7 @@ static const nsModuleComponentInfo sAppComps[] = {
                 EPHY_COOKIEPROMPTSERVICE_CONTRACTID,
                 GeckoCookiePromptServiceConstructor
         },
-#ifdef HAVE_GECKO_1_9
+#if 0 //def HAVE_GECKO_1_9
 	{
 		EPHY_LOGIN_PROMPTER_CLASSNAME,
 		EPHY_LOGIN_PROMPTER_CID,
