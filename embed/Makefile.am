@@ -1,6 +1,6 @@
 SUBDIRS = $(with_engine)
 
-DIST_SUBDIRS = xulrunner mozilla webkit
+DIST_SUBDIRS = mozilla webkit
 
 NULL =
 
