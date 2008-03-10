@@ -77,10 +77,6 @@
 #include "GeckoFormSigningDialog.h"
 #endif
 
-#if 0 //def HAVE_GECKO_1_9
-#include "EphyLoginPrompter.h"
-#endif
-
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyAboutModule)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyContentPolicy)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyPromptService)
@@ -106,10 +102,6 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSKeyPairDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSSecurityWarningDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GeckoFormSigningDialog)
-#endif
-
-#if 0 //def HAVE_GECKO_1_9
-NS_GENERIC_FACTORY_CONSTRUCTOR(EphyLoginPrompter)
 #endif
 
 #define XPINSTALL_CONTRACTID NS_CONTENT_HANDLER_CONTRACTID_PREFIX "application/x-xpinstall"
@@ -286,15 +278,7 @@ static const nsModuleComponentInfo sAppComps[] = {
                 EPHY_COOKIEPROMPTSERVICE_CID,
                 EPHY_COOKIEPROMPTSERVICE_CONTRACTID,
                 GeckoCookiePromptServiceConstructor
-        },
-#if 0 //def HAVE_GECKO_1_9
-	{
-		EPHY_LOGIN_PROMPTER_CLASSNAME,
-		EPHY_LOGIN_PROMPTER_CID,
-		NS_LOGINMANAGERPROMPTER_CONTRACTID,
-		EphyLoginPrompterConstructor
-	}
-#endif
+        }
 };
 
 gboolean
