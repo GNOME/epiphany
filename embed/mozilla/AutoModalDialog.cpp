@@ -35,6 +35,7 @@
 #include <nsIDOMDocument.h>
 #include <nsIDOMEvent.h>
 #include <nsIDOMEventTarget.h>
+#include <nsIJSContextStack.h>
 #include <nsIPrivateDOMEvent.h>
 #include <nsPIDOMWindow.h>
 #include <nsServiceManagerUtils.h>
