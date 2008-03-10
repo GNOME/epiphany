@@ -23,6 +23,7 @@
 
 #include "ephy-command-manager.h"
 #include "ephy-debug.h"
+#include "ephy-history.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
 #include "ephy-string.h"
@@ -66,6 +67,7 @@ struct WebKitEmbedPrivate
   WebKitWebView *web_view;
   WebKitEmbedLoadState load_state;
   char *loading_uri;
+  EphyHistory *history;
 };
 
 static GList*
@@ -226,6 +228,12 @@ webkit_embed_load_started_cb (WebKitWebView *web_view,
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
   wembed->priv->load_state = WEBKIT_EMBED_LOAD_STARTED;
 
+  if (wembed->priv->loading_uri)
+    ephy_history_add_page (wembed->priv->history,
+                           wembed->priv->loading_uri,
+                           FALSE,
+                           FALSE);
+                         
   update_load_state (wembed, web_view);
 }
 
@@ -312,6 +320,8 @@ webkit_embed_init (WebKitEmbed *embed)
                     NULL);
 
   webkit_embed_prefs_add_embed (embed);
+
+  embed->priv->history = EPHY_HISTORY (ephy_embed_shell_get_global_history (ephy_embed_shell_get_default ()));
 }
 
 static void
