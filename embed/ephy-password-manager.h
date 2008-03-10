@@ -44,6 +44,11 @@ typedef struct
 	char *host;
 	char *username;
 	char *password;
+
+	char *httpRealm;
+	char *formSubmitURL;
+	char *usernameField;
+	char *passwordField;
 } EphyPasswordInfo;
 
 struct _EphyPasswordManagerIface

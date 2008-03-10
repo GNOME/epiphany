@@ -1567,6 +1567,7 @@ EphyBrowser::GetPIDOMWindow(nsPIDOMWindow **aPIWin)
 
   // get the private DOM window
   nsCOMPtr<nsPIDOMWindow> domWindowPrivate = do_QueryInterface(mDOMWindow);
+  NS_ENSURE_TRUE (domWindowPrivate, NS_ERROR_UNEXPECTED);
 
   // and the root window for that DOM window
   *aPIWin = domWindowPrivate->GetPrivateRoot();

@@ -80,6 +80,10 @@ ephy_password_info_copy (const EphyPasswordInfo *info)
 	copy->host = g_strdup (info->host);
 	copy->username = g_strdup (info->username);
 	copy->password = g_strdup (info->password);
+	copy->httpRealm = g_strdup (info->httpRealm);
+	copy->passwordField = g_strdup (info->passwordField);
+	copy->usernameField = g_strdup (info->usernameField);
+	copy->formSubmitURL = g_strdup (info->formSubmitURL);
 
 	return copy;
 }

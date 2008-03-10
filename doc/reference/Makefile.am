@@ -207,10 +207,10 @@ DOC_OVERRIDES =
 
 if GTK_DOC_USE_LIBTOOL
 GTKDOC_CC = $(LIBTOOL) --mode=compile $(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS)
-GTKDOC_LD = $(LIBTOOL) --mode=link $(CC) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS)
+GTKDOC_LD = $(LIBTOOL) --mode=link $(CXX) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS)
 else
 GTKDOC_CC = $(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS)
-GTKDOC_LD = $(CC) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS)
+GTKDOC_LD = $(CXX) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS)
 endif
 
 # We set GPATH here; this gives us semantics for GNU make

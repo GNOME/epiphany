@@ -33,6 +33,11 @@
 
 #include <nsStringAPI.h>
 
+#ifdef XPCOM_GLUE
+#include <nsXPCOMGlue.h>
+#include <gtkmozembed_glue.cpp>
+#endif
+
 #include <gtkmozembed.h>
 #include <gtkmozembed_internal.h>
 #include <nsComponentManagerUtils.h>
@@ -62,8 +67,11 @@
 #include <nsNetCID.h>
 #endif /* ALLOW_PRIVATE_API */
 
-#ifndef HAVE_GECKO_1_9
-#include <nsIPassword.h>
+#ifdef HAVE_GECKO_1_9
+#include <nsILoginInfo.h>
+#include <nsILoginManager.h>
+#else
+init#include <nsIPassword.h>
 #include <nsIPasswordManager.h>
 #endif /* !HAVE_GECKO_1_9 */
 
@@ -324,6 +332,7 @@ mozilla_init_profile (void)
 	profile_path = g_build_filename (ephy_dot_dir (), 
 					 MOZILLA_PROFILE_DIR,
 					 (char *) NULL);
+        gtk_moz_embed_set_comp_path (profile_path);
         gtk_moz_embed_set_profile_path (profile_path, MOZILLA_PROFILE_NAME);
         g_free (profile_path);
 }
@@ -368,6 +377,19 @@ mozilla_init_observer (MozillaEmbedSingle *single)
 		g_warning ("Failed to initialise EphySingle!\n");
 		return;
 	}
+}
+
+static void
+mozilla_init_login_manager (MozillaEmbedSingle *single)
+{
+#ifdef HAVE_GECKO_1_9
+        nsCOMPtr<nsILoginManager> loginManager =
+                        do_GetService (NS_LOGINMANAGER_CONTRACTID);
+	if (!loginManager)
+		g_warning ("Failed to instantiate LoginManager");
+	else
+		g_debug ("LoginManager tapped");
+#endif /* HAVE_GECKO_1_9 */
 }
 
 static void
@@ -565,6 +587,57 @@ impl_init (EphyEmbedSingle *esingle)
 	NS_LogInit ();
 #endif
 
+	nsresult rv;
+#ifdef XPCOM_GLUE
+	static const GREVersionRange greVersion = {
+	  "1.9a", PR_TRUE,
+	  "2", PR_TRUE
+	};
+	char xpcomLocation[4096];
+	rv = GRE_GetGREPathWithProperties(&greVersion, 1, nsnull, 0, xpcomLocation, 4096);
+	if (NS_FAILED (rv))
+	{
+	  g_warning ("Could not find a suitable GRE!\n");
+	  return FALSE;
+	}
+
+	// Startup the XPCOM Glue that links us up with XPCOM.
+	rv = XPCOMGlueStartup(xpcomLocation);
+	if (NS_FAILED (rv))
+	{
+	  g_warning ("Could not startup XPCOM glue!\n");
+	  return FALSE;
+	}
+
+	rv = GTKEmbedGlueStartup();
+	if (NS_FAILED (rv))
+	{
+	  g_warning ("Could not startup embed glue!\n");
+	  return FALSE;
+	}
+
+	rv = GTKEmbedGlueStartupInternal();
+	if (NS_FAILED (rv))
+	{
+	  g_warning ("Could not startup internal glue!\n");
+	  return FALSE;
+	}
+
+	char *lastSlash = strrchr(xpcomLocation, '/');
+	if (lastSlash)
+	  *lastSlash = '\0';
+
+	gtk_moz_embed_set_path(xpcomLocation);
+#else
+#ifdef HAVE_GECKO_1_9
+        gtk_moz_embed_set_path (MOZILLA_HOME);
+#else
+        gtk_moz_embed_set_comp_path (MOZILLA_HOME);
+#endif
+#endif // XPCOM_GLUE
+	/* Fire up the beast */
+	gtk_moz_embed_push_startup ();
+
 	/* Pre initialization */
 	mozilla_init_plugin_path ();
 
@@ -581,8 +654,6 @@ impl_init (EphyEmbedSingle *esingle)
 
 	gtk_moz_embed_set_directory_service_provider (dp);
 
-	/* Fire up the beast */
-	gtk_moz_embed_push_startup ();
 	/* FIXME check that it succeeded! */
 
 	mozilla_register_components ();
@@ -600,7 +671,9 @@ impl_init (EphyEmbedSingle *esingle)
 
 	mozilla_init_observer (single);
 
-        mozilla_stylesheet_init (single);
+	mozilla_stylesheet_init (single);
+
+	mozilla_init_login_manager (single);
 
 	return TRUE;
 }
@@ -848,15 +921,94 @@ impl_list_passwords (EphyPasswordManager *manager)
 {
 	GList *passwords = NULL;
 
-#ifndef HAVE_GECKO_1_9
+	nsCOMPtr<nsIIDNService> idnService
+		(do_GetService ("@mozilla.org/network/idn-service;1"));
+	NS_ENSURE_TRUE (idnService, NULL);
+
+#ifdef HAVE_GECKO_1_9
+	nsILoginInfo **logins = nsnull;
+	PRUint32 count,i;
+	nsresult rv;
+
+	nsCOMPtr<nsILoginManager> loginManager =
+			do_GetService (NS_LOGINMANAGER_CONTRACTID);
+	NS_ENSURE_TRUE (loginManager, NULL);
+
+	loginManager -> GetAllLogins(&count, &logins);
+
+	for (i=0; i < count; i++) {
+		nsString transfer;
+		nsString unicodeName;
+		rv = logins[i]->GetHostname (transfer);
+		if (NS_FAILED (rv)) continue;
+
+		nsCString host;
+		idnService->ConvertACEtoUTF8 (NS_ConvertUTF16toUTF8(transfer), host);
+		if(transfer.IsVoid()) host.SetIsVoid(PR_TRUE);
+
+		rv = logins[i]->GetHttpRealm (unicodeName);
+		if (NS_FAILED (rv)) continue;
+		nsCString httpRealm;
+		NS_UTF16ToCString (unicodeName,
+				   NS_CSTRING_ENCODING_UTF8, httpRealm);
+		if(unicodeName.IsVoid()) httpRealm.SetIsVoid(PR_TRUE);
+
+		rv = logins[i]->GetUsername (unicodeName);
+		if (NS_FAILED (rv)) continue;
+		nsCString userName;
+		NS_UTF16ToCString (unicodeName,
+				   NS_CSTRING_ENCODING_UTF8, userName);
+		if(unicodeName.IsVoid()) userName.SetIsVoid(PR_TRUE);
+
+		rv = logins[i]->GetUsernameField (unicodeName);
+		if (NS_FAILED (rv)) continue;
+		nsCString usernameField;
+		NS_UTF16ToCString (unicodeName,
+				   NS_CSTRING_ENCODING_UTF8, usernameField);
+		if(unicodeName.IsVoid()) usernameField.SetIsVoid(PR_TRUE);
+
+		rv = logins[i]->GetPassword (unicodeName);
+		if (NS_FAILED (rv)) continue;
+		nsCString userPassword;
+		NS_UTF16ToCString (unicodeName,
+				   NS_CSTRING_ENCODING_UTF8, userPassword);
+		if(unicodeName.IsVoid()) userPassword.SetIsVoid(PR_TRUE);
+
+		rv = logins[i]->GetPasswordField (unicodeName);
+		if (NS_FAILED (rv)) continue;
+		nsCString passwordField;
+		NS_UTF16ToCString (unicodeName,
+				   NS_CSTRING_ENCODING_UTF8, passwordField);
+		if(unicodeName.IsVoid()) passwordField.SetIsVoid(PR_TRUE);
+
+		rv = logins[i]->GetFormSubmitURL (unicodeName);
+		if (NS_FAILED (rv)) continue;
+		nsCString formSubmitURL;
+		NS_UTF16ToCString (unicodeName,
+				   NS_CSTRING_ENCODING_UTF8, formSubmitURL);
+		if(unicodeName.IsVoid()) formSubmitURL.SetIsVoid(PR_TRUE);
+
+
+		EphyPasswordInfo *p = g_new0 (EphyPasswordInfo, 1);
+		p->host = !userName.IsVoid() ? g_strdup (host.get()) : nsnull;
+		p->username = !userName.IsVoid() ? g_strdup (userName.get()) : nsnull;
+		p->password = !userPassword.IsVoid() ? g_strdup (userPassword.get()) : nsnull;
+		p->httpRealm = !httpRealm.IsVoid() ? g_strdup(httpRealm.get()) : nsnull;
+		p->usernameField = !usernameField.IsVoid() ? g_strdup(usernameField.get()) : nsnull;
+		p->passwordField = !passwordField.IsVoid() ? g_strdup(passwordField.get()) : nsnull;
+		p->formSubmitURL = !formSubmitURL.IsVoid() ? g_strdup(formSubmitURL.get()) : nsnull;
+
+		passwords = g_list_prepend (passwords, p);
+	}
+
+	NS_FREE_XPCOM_ISUPPORTS_POINTER_ARRAY (count, logins);
+
+#else // HAVE_GECKO_1_9
+
 	nsresult rv;
 	nsCOMPtr<nsIPasswordManager> passwordManager =
 			do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
 	if (!passwordManager) return NULL;
-
-	nsCOMPtr<nsIIDNService> idnService
-		(do_GetService ("@mozilla.org/network/idn-service;1"));
-	NS_ENSURE_TRUE (idnService, NULL);
 
 	nsCOMPtr<nsISimpleEnumerator> passwordEnumerator;
 	passwordManager->GetEnumerator (getter_AddRefs(passwordEnumerator));
@@ -910,31 +1062,85 @@ static void
 impl_remove_password (EphyPasswordManager *manager,
 		      EphyPasswordInfo *info)
 {
-#ifndef HAVE_GECKO_1_9
-        nsCOMPtr<nsIPasswordManager> pm =
-                        do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
-	if (!pm) return;
+	nsresult rv;
+	nsString host;
+	nsString userName;
+	nsString userNameField;
+	nsString password;
+	nsString passwordField;
+	nsString httpRealm;
+	nsString formSubmitURL;
 
 	nsCOMPtr<nsIIDNService> idnService
 		(do_GetService ("@mozilla.org/network/idn-service;1"));
 	NS_ENSURE_TRUE (idnService, );
 
-	nsresult rv;
-	nsCString host;
-	rv = idnService->ConvertUTF8toACE (nsCString(info->host), host);
-	NS_ENSURE_SUCCESS (rv, );
+        if(info->formSubmitURL != nsnull)
+	        g_debug("form submit url: %s", info->formSubmitURL);
+	else
+       	 g_debug("form submit url is NULL");
 
-	nsString userName;
 	NS_CStringToUTF16 (nsCString(info->username),
 			   NS_CSTRING_ENCODING_UTF8, userName);
-	pm->RemoveUser (host, userName);
-#endif /* !HAVE_GECKO_1_9 */
+	NS_CStringToUTF16 (nsCString(info->usernameField),
+			   NS_CSTRING_ENCODING_UTF8, userNameField);
+	NS_CStringToUTF16 (nsCString(info->host),
+			   NS_CSTRING_ENCODING_UTF8, host);
+	NS_CStringToUTF16 (nsCString(info->httpRealm),
+			   NS_CSTRING_ENCODING_UTF8, httpRealm);
+	NS_CStringToUTF16 (nsCString(info->password),
+			   NS_CSTRING_ENCODING_UTF8, password);
+	NS_CStringToUTF16 (nsCString(info->passwordField),
+			   NS_CSTRING_ENCODING_UTF8, passwordField);
+	NS_CStringToUTF16 (nsCString(info->formSubmitURL),
+			   NS_CSTRING_ENCODING_UTF8, formSubmitURL);
+
+#ifdef HAVE_GECKO_1_9
+	if(!info->username) userName.SetIsVoid(PR_TRUE);
+	if(!info->usernameField) userNameField.SetIsVoid(PR_TRUE);
+	if(!info->host) host.SetIsVoid(PR_TRUE);
+	if(!info->httpRealm) httpRealm.SetIsVoid(PR_TRUE);
+	if(!info->password) password.SetIsVoid(PR_TRUE);
+	if(!info->passwordField) passwordField.SetIsVoid(PR_TRUE);
+	if(!info->formSubmitURL) formSubmitURL.SetIsVoid(PR_TRUE);
+
+	nsCOMPtr<nsILoginManager> loginManager =
+			do_GetService (NS_LOGINMANAGER_CONTRACTID);
+	NS_ENSURE_TRUE (loginManager, );
+
+	nsCOMPtr<nsILoginInfo> login
+		(do_CreateInstance(NS_LOGININFO_CONTRACTID));
+
+	login->SetUsername(userName);
+	login->SetUsernameField(userNameField);
+	login->SetHostname(host);
+	login->SetHttpRealm(httpRealm);
+	login->SetFormSubmitURL(formSubmitURL);
+	login->SetPassword(password);
+	login->SetPasswordField(passwordField);
+
+	rv = loginManager->RemoveLogin(login);
+
+#else /* !HAVE_GECKO_1_9 */
+        nsCOMPtr<nsIPasswordManager> pm =
+                        do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
+	if (!pm) return;
+
+	pm->RemoveUser (nsCString(info->host), userName);
+#endif /* HAVE_GECKO_1_9 */
 }
 
 static void
 impl_remove_all_passwords (EphyPasswordManager *manager)
 {
-#ifndef HAVE_GECKO_1_9
+#ifdef HAVE_GECKO_1_9
+	nsCOMPtr<nsILoginManager> loginManager =
+			do_GetService (NS_LOGINMANAGER_CONTRACTID);
+	NS_ENSURE_TRUE (loginManager, );
+
+	loginManager->RemoveAllLogins();
+
+#else /* HAVE_GECKO_1_9 */
 	nsresult rv;
 	nsCOMPtr<nsIPasswordManager> passwordManager =
 			do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
