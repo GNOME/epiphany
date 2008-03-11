@@ -245,9 +245,16 @@ esac
 
 # Added $gecko_cv_gecko-js for debian xulrunner brokenness
 if test $gecko_cv_gecko != "libxul-embedding" -a $gecko_cv_gecko != "libxul"; then
-	PKG_CHECK_MODULES([GECKO],[ ${gecko_cv_gecko}-xpcom >= $min_version ${gecko_cv_gecko}-js $gecko_cv_extra_pkg_dependencies])
+	# debian xulrunner lacks -xpcom -> -js depends
+	if pkg-config --exists ${gecko_cv_gecko}-js; then
+		gecko_cv_extra_pkg_dependencies="$gecko_cv_extra_pkg_dependencies ${gecko_cv_gecko}-js"
+	fi
+	GECKO_CFLAGS=`pkg-config --cflags ${gecko_cv_gecko}-xpcom '>=' $min_version ${gecko_cv_gecko}-js $gecko_cv_extra_pkg_dependencies`
+	GECKO_LIBS=`pkg-config --libs ${gecko_cv_gecko}-xpcom '>=' $min_version ${gecko_cv_gecko}-js $gecko_cv_extra_pkg_dependencies`
+
+#	PKG_CHECK_MODULES([GECKO],[ ${gecko_cv_gecko}-xpcom >= $min_version ${gecko_cv_gecko}-js $gecko_cv_extra_pkg_dependencies])
 else
-	GECKO_CFLAGS="$GECKO_CFLAGS -UDEBUG"
+	GECKO_CFLAGS="$GECKO_CFLAGS"
 	GECKO_LIBS="$GECKO_LIBS `pkg-config --libs ${gecko_cv_gecko}`"
 fi
 
