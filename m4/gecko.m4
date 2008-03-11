@@ -269,9 +269,6 @@ fi
 
 fi # if gecko_cv_have_gecko
 
-AM_CONDITIONAL([HAVE_GECKO_DEBUG],[test "$gecko_cv_have_debug" = "yes"])
-AM_CONDITIONAL([HAVE_GECKO_XPCOM_GLUE],[test "$gecko_cv_have_xpcom_glue" = "yes"])
-
 # ***********************
 # Check for gecko version
 # ***********************
@@ -397,6 +394,8 @@ AM_CONDITIONAL([HAVE_GECKO_1_8],[test "$gecko_cv_have_gecko" = "yes" -a "$gecko_
 AM_CONDITIONAL([HAVE_GECKO_1_8_1],[test "$gecko_cv_have_gecko" = "yes" -a "$gecko_cv_gecko_version_int" -ge "1008001"])
 AM_CONDITIONAL([HAVE_GECKO_1_9],[test "$gecko_cv_have_gecko" = "yes" -a "$gecko_cv_gecko_version_int" -ge "1009000"])
 AM_CONDITIONAL([HAVE_GECKO_HOME],[test "x$_GECKO_HOME" != "x"])
+AM_CONDITIONAL([HAVE_GECKO_DEBUG],[test "$gecko_cv_have_debug" = "yes"])
+AM_CONDITIONAL([HAVE_GECKO_XPCOM_GLUE],[test "$gecko_cv_have_xpcom_glue" = "yes"])
 ])
 
 # ***************************************************************************
