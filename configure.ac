@@ -98,7 +98,7 @@ if test "$enable_maintainer_mode" = "yes"; then
 	GECKO_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth $GECKO_WARN_CXXFLAGS"
 fi
 
-GLIB_REQUIRED=2.15.6
+GLIB_REQUIRED=2.16.0
 GTK_REQUIRED=2.12.0
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
