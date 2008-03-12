@@ -416,6 +416,14 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
 	NS_ENSURE_TRUE (mimeInfo, NS_ERROR_FAILURE);
 
+#ifdef HAVE_GECKO_1_9
+	nsHandlerInfoAction action;
+	if (mAction == CONTENT_ACTION_DOWNLOAD) {
+		action = EPHY_ACTION_BROWSE_TO_FILE;
+	} else {
+		action = nsIMIMEInfo::useSystemDefault;
+	}
+#else
 	char *info = NULL;
 
 	if (mAction == CONTENT_ACTION_OPEN)
@@ -435,8 +443,6 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 		info = g_strdup_printf ("gnome-browse-to-file:%d", gtk_get_current_event_time());
 	}
 
-	/* See http://bugzilla.gnome.org/show_bug.cgi?id=456945 */
-#ifndef HAVE_GECKO_1_9
 	if (info != NULL)
 	{
 		nsString desc;

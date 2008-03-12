@@ -349,12 +349,30 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 		}
 		else if (NS_SUCCEEDED (aStatus))
 		{
-			/* see http://bugzilla.gnome.org/show_bug.cgi?id=456945 */
+			NS_ENSURE_TRUE (mMIMEInfo, NS_ERROR_FAILURE);
 #ifdef HAVE_GECKO_1_9
+			nsHandlerInfoAction action;
+			mMIMEInfo->GetPreferredAction(&action);
+		
+			nsCOMPtr<nsIInterfaceRequestor> req (do_QueryInterface (mRequest));
+		
+			if (action == EPHY_ACTION_BROWSE_TO_FILE) {
+					nsCString destSpec;
+					rv = mDestination->GetSpec (destSpec);
+					NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+		
+					GFile *dest;
+					dest = g_file_new_for_uri (destSpec.get ());
+					ephy_file_browse_to (dest, 0 /* FIXME BUG BUG BUG */);
+				g_object_unref (dest);
+			} else {
+				rv = mMIMEInfo->LaunchWithURI (mDestination, req);
+				NS_ENSURE_SUCCESS(rv, rv);
+			}
+		
 			return NS_OK;
 #else
 			GDesktopAppInfo *helperApp;
-			NS_ENSURE_TRUE (mMIMEInfo, NS_ERROR_FAILURE);
 
 			nsString description;
 			mMIMEInfo->GetApplicationDescription (description);

@@ -627,9 +627,11 @@ impl_init (EphyEmbedSingle *esingle)
 	  *lastSlash = '\0';
 
 	gtk_moz_embed_set_path(xpcomLocation);
+	gtk_moz_embed_set_comp_path (MOZILLA_HOME);
 #else
 #ifdef HAVE_GECKO_1_9
         gtk_moz_embed_set_path (MOZILLA_HOME);
+
 #else
         gtk_moz_embed_set_comp_path (MOZILLA_HOME);
 #endif
@@ -639,12 +641,6 @@ impl_init (EphyEmbedSingle *esingle)
 
 	mozilla_init_profile ();
 
-#ifdef HAVE_GECKO_1_9
-	gtk_moz_embed_set_path (MOZILLA_HOME);
-#endif
-	/* Set mozilla binary path */
-	gtk_moz_embed_set_comp_path (MOZILLA_HOME);
-
 	nsCOMPtr<nsIDirectoryServiceProvider> dp = new EphyDirectoryProvider ();
 	if (!dp) return FALSE;
 
@@ -652,6 +648,7 @@ impl_init (EphyEmbedSingle *esingle)
 
 	/* Fire up the beast */
 	gtk_moz_embed_push_startup ();
+
 	/* FIXME check that it succeeded! */
 
 	mozilla_register_components ();

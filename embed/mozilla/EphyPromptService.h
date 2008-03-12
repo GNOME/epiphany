@@ -22,6 +22,7 @@
 #define EPHY_PROMPT_SERVICE_H
 
 #include <nsIPromptService.h>
+#include <nsIPromptService2.h>
 
 #if HAVE_NSINONBLOCKINGALERTSERVICE_H
 #include <nsINonBlockingAlertService.h>
@@ -34,7 +35,7 @@
 
 #define EPHY_PROMPT_SERVICE_CLASSNAME	"Epiphany Prompt Service"
 
-class EphyPromptService : public nsIPromptService
+class EphyPromptService : public nsIPromptService2
 #if HAVE_NSINONBLOCKINGALERTSERVICE_H
 			, public nsINonBlockingAlertService
 #endif
@@ -42,12 +43,23 @@ class EphyPromptService : public nsIPromptService
 public:
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIPROMPTSERVICE
+	NS_DECL_NSIPROMPTSERVICE2
 #if HAVE_NSINONBLOCKINGALERTSERVICE_H
 	NS_DECL_NSINONBLOCKINGALERTSERVICE
 #endif
 
 	EphyPromptService();
 	virtual ~EphyPromptService();
+
+ protected:
+	static nsresult PromptPasswordAdapter(nsIPromptService* aService,
+					      nsIDOMWindow* aParent,
+					      nsIChannel* aChannel,
+					      PRUint32 aLevel,
+					      nsIAuthInformation* aAuthInfo,
+					      const PRUnichar* aCheckLabel,
+					      PRBool* aCheckValue,
+					      PRBool* retval);
 };
 
 #endif /* EPHY_PROMPT_SERVICE_H */
