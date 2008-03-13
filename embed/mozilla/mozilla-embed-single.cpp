@@ -627,24 +627,27 @@ impl_init (EphyEmbedSingle *esingle)
 	  *lastSlash = '\0';
 
 	gtk_moz_embed_set_path(xpcomLocation);
-	gtk_moz_embed_set_comp_path (MOZILLA_HOME);
+	gtk_moz_embed_set_comp_path (SHARE_DIR);
 #else
 #ifdef HAVE_GECKO_1_9
         gtk_moz_embed_set_path (MOZILLA_HOME);
-
+	gtk_moz_embed_set_comp_path (SHARE_DIR);
 #else
         gtk_moz_embed_set_comp_path (MOZILLA_HOME);
 #endif
 #endif // XPCOM_GLUE
+
 	/* Pre initialization */
 	mozilla_init_plugin_path ();
 
 	mozilla_init_profile ();
 
+#ifndef HAVE_GECKO_1_9
 	nsCOMPtr<nsIDirectoryServiceProvider> dp = new EphyDirectoryProvider ();
 	if (!dp) return FALSE;
 
 	gtk_moz_embed_set_directory_service_provider (dp);
+#endif
 
 	/* Fire up the beast */
 	gtk_moz_embed_push_startup ();
