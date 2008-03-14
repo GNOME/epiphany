@@ -14,6 +14,10 @@ branding_DATA = $(branding_in_files:%.in=%)
 globalchromedir = $(manifestdir)/global
 globalchrome_DATA = about.xhtml
 
+if HAVE_GECKO_1_9
+globalchrome_DATA += netError.dtd
+endif
+
 EXTRA_DIST = \
 	$(manifest_in_files)	\
 	$(branding_in_files)	\
