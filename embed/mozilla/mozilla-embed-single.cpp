@@ -89,7 +89,6 @@
 #include "mozilla-notifiers.h"
 
 #include "EphyBrowser.h"
-#include "EphyDirectoryProvider.h"
 #include "EphySingle.h"
 #include "EphyUtils.h"
 #include "MozRegisterComponents.h"
@@ -106,6 +105,10 @@
 #define USER_CSS_LOAD_DELAY 500 /* ms */
 
 #define MOZILLA_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED_SINGLE, MozillaEmbedSinglePrivate))
+
+#ifndef HAVE_GECKO_1_9
+#include "EphyDirectoryProvider.h"
+#endif /* HAVE_GECKO_1_9 */;
 
 struct MozillaEmbedSinglePrivate
 {
