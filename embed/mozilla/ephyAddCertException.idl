@@ -1,0 +1,8 @@
+#include "nsISupports.idl"
+#include "nsIDOMWindow.idl"
+#include "nsIDOMDocument.idl"
+
+[uuid(cfdca027-c2c7-446a-8031-4d0041ab9f1e)]
+interface ephyAddCertException : nsISupports {
+  void showAddCertExceptionDialog (in nsIDOMDocument aDocument);
+};
