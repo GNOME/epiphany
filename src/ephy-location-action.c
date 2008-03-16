@@ -155,7 +155,6 @@ completion_func (GtkEntryCompletion *completion,
 	char *keywords = NULL;
 	gboolean ret = FALSE;
 	GtkTreeModel *model;
-	GtkTreeIter iter2;
 	EphyLocationActionPrivate *priv;
 	
 	priv = EPHY_LOCATION_ACTION (data)->priv;
@@ -202,17 +201,6 @@ completion_func (GtkEntryCompletion *completion,
 		}
 	}
 	
-	gtk_tree_model_sort_convert_iter_to_child_iter 
-		(GTK_TREE_MODEL_SORT (model), &iter2, iter);
-
-	/* This checks if the item's URL exists as a bookmark, if that's true 
-	 * and we are seeing an history item, then we skip showing it.
-	 * The bookmark will be shown instead since we are not filtering it out.
-	 */
-	if (ephy_bookmarks_find_bookmark (priv->bookmarks, url) != NULL &&
-	    (iter2.user_data2 == priv->history))
-		ret = FALSE;
-
 	g_free (item);
 	g_free (url);
 	g_free (keywords);
