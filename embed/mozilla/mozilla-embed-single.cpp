@@ -108,7 +108,7 @@
 
 #ifndef HAVE_GECKO_1_9
 #include "EphyDirectoryProvider.h"
-#endif /* HAVE_GECKO_1_9 */;
+#endif /* HAVE_GECKO_1_9 */
 
 struct MozillaEmbedSinglePrivate
 {

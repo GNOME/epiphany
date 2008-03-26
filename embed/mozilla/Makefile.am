@@ -165,3 +165,12 @@ libephymozillaembed_la_CXXFLAGS = \
 	$(GECKO_CFLAGS)		\
 	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CXXFLAGS)
+
+if HAVE_GECKO_1_9
+xptdir = $(pkgdatadir)/components
+xpt_DATA = epiphany.xpt
+
+noinst_DATA = \
+	ephyIAddCertExceptionParams.idl \
+	ephyIAddCertExceptionParams.h
+endif

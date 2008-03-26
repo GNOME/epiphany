@@ -22,6 +22,7 @@
 #include "mozilla-config.h"
 #include "config.h"
 
+#include <string.h>
 #include <unistd.h>
 
 #include <nsStringAPI.h>
@@ -64,6 +65,8 @@
 #include <nsIDOMViewCSS.h>
 #include <nsIDOMWindow2.h>
 #include <nsIDOMXMLDocument.h>
+#include <nsIDOMLocation.h>
+#include <nsIDOMNSLocation.h>
 #include <nsIHistoryEntry.h>
 #include <nsIInterfaceRequestor.h>
 #include <nsIInterfaceRequestorUtils.h>
@@ -111,7 +114,159 @@
 #include "EventContext.h"
 #include "GeckoPrintService.h"
 
+#ifdef HAVE_GECKO_1_9
+#include <ephyIAddCertExceptionParams.h>
+#include <nsAutoPtr.h>
+#include <nsComponentManagerUtils.h>
+#include <nsIArray.h>
+#include <nsIClassInfo.h>
+#include <nsIDialogParamBlock.h>
+#include <nsIMutableArray.h>
+#include <nsIProgrammingLanguage.h>
+#include <nsISupportsArray.h>
+#include <nsIWindowWatcher.h>
+#endif
+
 #include "EphyBrowser.h"
+
+
+#ifdef HAVE_GECKO_1_9
+
+class EphyAddCertExceptionParams : public ephyIAddCertExceptionParams,
+                                   public nsIDialogParamBlock,
+                                   public nsIClassInfo
+                                   
+{
+  public:
+    NS_DECL_ISUPPORTS
+    NS_DECL_EPHYIADDCERTEXCEPTIONPARAMS
+    NS_FORWARD_SAFE_NSIDIALOGPARAMBLOCK (mParamBlock)
+    NS_DECL_NSICLASSINFO
+
+    EphyAddCertExceptionParams (const nsAString& aLocation, PRBool aPrefetch = PR_TRUE)
+      : mParamBlock (do_CreateInstance (NS_DIALOGPARAMBLOCK_CONTRACTID)),
+        mLocation (aLocation),
+        mPrefetch (aPrefetch),
+        mExceptionAdded (PR_FALSE) { g_print ("%s\n", G_STRFUNC); }
+      
+  private:
+    ~EphyAddCertExceptionParams () { g_print ("%s\n", G_STRFUNC); }
+
+    nsCOMPtr<nsIDialogParamBlock> mParamBlock;
+    nsString mLocation;
+    PRBool mPrefetch;
+    PRBool mExceptionAdded;
+};
+
+NS_IMPL_ISUPPORTS3 (EphyAddCertExceptionParams, ephyIAddCertExceptionParams, nsIDialogParamBlock, nsIClassInfo)
+
+/* nsISupports getHelperForLanguage (in PRUint32 language); */
+NS_IMETHODIMP EphyAddCertExceptionParams::GetHelperForLanguage(PRUint32 language, nsISupports **_retval)
+{
+  g_print ("%s\n", G_STRFUNC);
+  *_retval = nsnull;
+  return NS_OK;
+}
+
+/* readonly attribute string contractID; */
+NS_IMETHODIMP EphyAddCertExceptionParams::GetContractID(char * *aContractID)
+{
+  g_print ("%s\n", G_STRFUNC);
+  *aContractID = nsnull;
+  return NS_OK;
+}
+
+/* readonly attribute string classDescription; */
+NS_IMETHODIMP EphyAddCertExceptionParams::GetClassDescription(char * *aClassDescription)
+{
+  g_print ("%s\n", G_STRFUNC);
+  *aClassDescription = nsnull;
+  return NS_OK;
+}
+
+/* readonly attribute nsCIDPtr classID; */
+NS_IMETHODIMP EphyAddCertExceptionParams::GetClassID(nsCID * *aClassID)
+{
+  g_print ("%s\n", G_STRFUNC);
+  return NS_ERROR_FAILURE;
+}
+
+/* readonly attribute PRUint32 implementationLanguage; */
+NS_IMETHODIMP EphyAddCertExceptionParams::GetImplementationLanguage(PRUint32 *aImplementationLanguage)
+{
+  g_print ("%s\n", G_STRFUNC);
+  *aImplementationLanguage = nsIProgrammingLanguage::CPLUSPLUS;
+  return NS_OK;
+}
+
+/* readonly attribute PRUint32 flags; */
+NS_IMETHODIMP EphyAddCertExceptionParams::GetFlags(PRUint32 *aFlags)
+{
+  g_print ("%s\n", G_STRFUNC);
+  *aFlags = 0;
+  return NS_OK;
+}
+
+/* [notxpcom] readonly attribute nsCID classIDNoAlloc; */
+NS_IMETHODIMP EphyAddCertExceptionParams::GetClassIDNoAlloc(nsCID *aClassIDNoAlloc)
+{
+  g_print ("%s\n", G_STRFUNC);
+  return NS_ERROR_FAILURE;
+}
+
+NS_IMETHODIMP EphyAddCertExceptionParams::GetInterfaces (PRUint32 *count, nsIID * **array)
+{
+  g_print ("%s\n", G_STRFUNC);
+  nsIID **iids = static_cast<nsIID**>(NS_Alloc (1 * sizeof (nsIID*)));
+  if (!iids)
+    return NS_ERROR_OUT_OF_MEMORY;
+
+  iids[0] = static_cast<nsIID*>(NS_Alloc (sizeof (nsIID)));
+  if (!iids[0])
+    return NS_ERROR_OUT_OF_MEMORY;
+  memcpy (iids[0], &NS_GET_IID (ephyIAddCertExceptionParams), sizeof (nsIID));
+
+  *count = 1;
+  *array = iids;
+
+  g_print ("DONE %s\n", G_STRFUNC);
+  return NS_OK;
+}
+
+/* readonly attribute boolean prefetchCert; */
+NS_IMETHODIMP EphyAddCertExceptionParams::GetPrefetchCert(PRBool *aPrefetchCert)
+{
+  g_print ("%s\n", G_STRFUNC);
+  *aPrefetchCert = mPrefetch;
+  return NS_OK;
+}
+
+/* readonly attribute AString location; */
+NS_IMETHODIMP EphyAddCertExceptionParams::GetLocation(nsAString & aLocation)
+{
+  g_print ("%s\n", G_STRFUNC);
+  g_print ("mLocation=%s\n", NS_ConvertUTF16toUTF8(mLocation).get());
+  aLocation.Assign (mLocation);
+  return NS_OK;
+}
+
+/* attribute boolean exceptionAdded; */
+NS_IMETHODIMP EphyAddCertExceptionParams::GetExceptionAdded(PRBool *aExceptionAdded)
+{
+  g_print ("%s\n", G_STRFUNC);
+  *aExceptionAdded = mExceptionAdded;
+  return NS_OK;
+}
+
+NS_IMETHODIMP EphyAddCertExceptionParams::SetExceptionAdded(PRBool aExceptionAdded)
+{
+  g_print ("%s\n", G_STRFUNC);
+  mExceptionAdded = aExceptionAdded;
+  return NS_OK;
+}
+
+#endif /* HAVE_GECKO_1_9 */
+
 
 NS_IMPL_ISUPPORTS1(EphyEventListener, nsIDOMEventListener)
 
@@ -474,6 +629,117 @@ EphyDOMScrollEventListener::HandleEvent (nsIDOMEvent * aEvent)
 	return NS_OK;
 }
 
+NS_IMETHODIMP
+EphyCommandEventListener::HandleEvent (nsIDOMEvent *aDOMEvent)
+{
+	/* make sure the event is trusted */
+	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
+	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
+	PRBool isTrusted = PR_FALSE;
+	nsEvent->GetIsTrusted (&isTrusted);
+	if (!isTrusted) return NS_OK;
+
+        nsresult rv;
+	nsCOMPtr<nsIDOMEventTarget> originalTarget;
+	rv = nsEvent->GetOriginalTarget (getter_AddRefs (originalTarget));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+        nsCOMPtr<nsIDOMNode> node (do_QueryInterface (originalTarget));
+        if (!node)
+                return NS_OK;
+        
+	nsCOMPtr<nsIDOMDocument> document;
+	rv = node->GetOwnerDocument (getter_AddRefs (document));
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	nsCOMPtr<nsIDOM3Document> doc3 (do_QueryInterface (document));
+	NS_ENSURE_TRUE (doc3, NS_ERROR_FAILURE);
+
+	nsString documentURI;
+	rv = doc3->GetDocumentURI (documentURI);
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	if (!g_str_has_prefix (NS_ConvertUTF16toUTF8 (documentURI).get(),
+                               "about:neterror?e=nssBadCert&"))
+		return NS_OK;
+
+	nsCOMPtr<nsIDOMElement> docElement (do_QueryInterface (document));
+
+	nsCOMPtr<nsIDOMElement> buttonElement;
+	rv = document->GetElementById (NS_LITERAL_STRING("exceptionDialogButton"),
+				       getter_AddRefs (buttonElement));
+	if (NS_FAILED (rv) || !buttonElement)
+		return NS_OK;
+
+        nsCOMPtr<nsIDOMNode> buttonNode (do_QueryInterface (buttonElement));
+        NS_ENSURE_TRUE (buttonNode, NS_OK);
+
+        g_print ("here1\n");
+	/* Event was for this button? */
+        if (!SameCOMIdentity (node, buttonNode))
+		return NS_OK;
+        g_print ("here2\n");
+
+        nsCOMPtr<nsIDOMDocumentView> docView (do_QueryInterface (document));
+        NS_ENSURE_TRUE (docView, NS_OK);
+
+        nsCOMPtr<nsIDOMAbstractView> view;
+        rv = docView->GetDefaultView (getter_AddRefs (view));
+        NS_ENSURE_SUCCESS (rv, NS_OK);
+
+        nsCOMPtr<nsIDOMWindow> window (do_QueryInterface (view));
+        NS_ENSURE_TRUE (window, NS_OK);
+        
+        nsCOMPtr<nsIDOMWindowInternal> windowInternal (do_QueryInterface (window));
+        NS_ENSURE_TRUE (windowInternal, NS_OK);
+        
+        nsCOMPtr<nsIDOMLocation> domLocation;
+        rv = windowInternal->GetLocation (getter_AddRefs (domLocation));
+        if (NS_FAILED (rv))
+            return NS_OK;
+
+        nsCOMPtr<nsIDOMNSLocation> domNSLocation (do_QueryInterface (domLocation));
+        NS_ENSURE_TRUE (domNSLocation, NS_OK);
+
+        nsString locationHref;
+        domLocation->GetHref (locationHref);
+
+        nsRefPtr<EphyAddCertExceptionParams> params (new EphyAddCertExceptionParams (locationHref, PR_TRUE));
+        if (!params)
+                return NS_ERROR_OUT_OF_MEMORY;
+
+        nsCOMPtr<nsIWindowWatcher> ww (do_GetService (NS_WINDOWWATCHER_CONTRACTID));
+        if (!ww)
+                return NS_ERROR_FAILURE;
+
+        {
+                AutoJSContextStack stack;
+                if (NS_FAILED (stack.Init ()))
+                    return NS_OK;
+
+                nsISupports *arguments = static_cast<nsISupports*>(static_cast<ephyIAddCertExceptionParams*>(params));
+                nsCOMPtr<nsIDOMWindow> dialog;
+                rv = ww->OpenWindow (window,
+                                    "chrome://pippki/content/exceptionDialog.xul",
+                                    "_blank",
+                                    "chrome,centerscreen,modal",
+                                    arguments,
+                                    getter_AddRefs (dialog));
+                g_print ("done openwindow %x\n", rv);
+                if (NS_FAILED (rv))
+                        return rv;
+        }
+
+        PRBool exceptionAdded;
+        params->GetExceptionAdded (&exceptionAdded);
+        g_print ("exceptionAdded %d\n", exceptionAdded);
+        if (exceptionAdded)
+                return domNSLocation->Reload ();
+
+
+        return NS_OK;
+}
+
 NS_IMPL_ISUPPORTS1(EphyContextMenuListener, nsIDOMContextMenuListener)
 
 NS_IMETHODIMP
@@ -555,6 +821,7 @@ EphyBrowser::EphyBrowser ()
 , mDOMScrollEventListener(nsnull)
 , mPopupBlockEventListener(nsnull)
 , mModalAlertListener(nsnull)
+, mCommandEventListener(nsnull)
 , mContextMenuListener(nsnull)
 , mInitialized(PR_FALSE)
 {
@@ -602,6 +869,9 @@ nsresult EphyBrowser::Init (EphyEmbed *embed)
 
 	mModalAlertListener = new EphyModalAlertEventListener (this);
 	if (!mModalAlertListener) return NS_ERROR_OUT_OF_MEMORY;
+
+	mCommandEventListener = new EphyCommandEventListener(this);
+	if (!mCommandEventListener) return NS_ERROR_OUT_OF_MEMORY;
 
 	mContextMenuListener = new EphyContextMenuListener(this);
 	if (!mContextMenuListener) return NS_ERROR_OUT_OF_MEMORY;
@@ -669,6 +939,8 @@ EphyBrowser::AttachListeners(void)
 				       mModalAlertListener, PR_TRUE, PR_FALSE);
 	rv |= target->AddEventListener(NS_LITERAL_STRING ("DOMModalDialogClosed"),
 				       mModalAlertListener, PR_TRUE, PR_FALSE);
+	rv |= target->AddEventListener(NS_LITERAL_STRING ("command"),
+				       mCommandEventListener, PR_FALSE, PR_FALSE);
 	rv |= target->AddEventListener(NS_LITERAL_STRING ("contextmenu"),
 				       mContextMenuListener, PR_TRUE /* capture */, PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, rv);
@@ -696,6 +968,8 @@ EphyBrowser::DetachListeners(void)
 						mModalAlertListener, PR_TRUE);
 	rv |= mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("DOMModalDialogClosed"),
 						mModalAlertListener, PR_TRUE);
+	rv |= mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("command"),
+						mCommandEventListener, PR_FALSE);
 	rv |= mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("contextmenu"),
 					        mContextMenuListener, PR_TRUE /* capture */);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);

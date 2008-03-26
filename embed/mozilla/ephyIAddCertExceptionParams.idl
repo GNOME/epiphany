@@ -1,0 +1,8 @@
+#include "nsISupports.idl"
+
+[scriptable,uuid(2bac2eb2-cd10-4e3f-802e-dade8096d6c5)]
+interface ephyIAddCertExceptionParams : nsISupports {
+  readonly attribute boolean prefetchCert;
+  readonly attribute AString location;
+  attribute boolean exceptionAdded;
+};

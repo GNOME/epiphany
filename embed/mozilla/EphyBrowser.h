@@ -107,6 +107,14 @@ public:
 	EphyDOMScrollEventListener(EphyBrowser *aOwner) : EphyEventListener(aOwner) { };
 };
 
+class EphyCommandEventListener : public EphyEventListener
+{
+public:
+	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
+
+	EphyCommandEventListener(EphyBrowser *aOwner) : EphyEventListener(aOwner) { };
+};
+
 class EphyContextMenuListener : public nsIDOMContextMenuListener
 {
 public:
@@ -131,6 +139,7 @@ friend class EphyMiscDOMEventsListener;
 friend class EphyDOMScrollEventListener;
 friend class EphyPopupBlockEventListener;
 friend class EphyModalAlertEventListener;
+friend class EphyCommandEventListener;
 friend class EphyContextMenuListener;
 public:
 	EphyBrowser();
@@ -204,6 +213,7 @@ private:
 	EphyDOMScrollEventListener *mDOMScrollEventListener;
 	EphyPopupBlockEventListener *mPopupBlockEventListener;
 	EphyModalAlertEventListener *mModalAlertListener;
+	EphyCommandEventListener *mCommandEventListener;
 	EphyContextMenuListener *mContextMenuListener;
 	PRBool mInitialized;
 #ifdef HAVE_MOZILLA_PSM
