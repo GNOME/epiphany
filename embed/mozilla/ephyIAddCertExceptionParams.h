@@ -25,7 +25,7 @@
 class NS_NO_VTABLE ephyIAddCertExceptionParams : public nsISupports {
  public: 
 
-  NS_DEFINE_STATIC_IID_ACCESSOR(EPHYIADDCERTEXCEPTIONPARAMS_IID)
+  NS_DECLARE_STATIC_IID_ACCESSOR(EPHYIADDCERTEXCEPTIONPARAMS_IID)
 
   /* readonly attribute boolean prefetchCert; */
   NS_IMETHOD GetPrefetchCert(PRBool *aPrefetchCert) = 0;
@@ -38,6 +38,8 @@ class NS_NO_VTABLE ephyIAddCertExceptionParams : public nsISupports {
   NS_IMETHOD SetExceptionAdded(PRBool aExceptionAdded) = 0;
 
 };
+
+  NS_DEFINE_STATIC_IID_ACCESSOR(ephyIAddCertExceptionParams, EPHYIADDCERTEXCEPTIONPARAMS_IID)
 
 /* Use this macro when declaring classes that implement this interface. */
 #define NS_DECL_EPHYIADDCERTEXCEPTIONPARAMS \
