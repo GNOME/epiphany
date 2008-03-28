@@ -373,11 +373,11 @@ GECKO_CHECK_HEADERS([spellchecker],[mozISpellCheckingEngine.h],
 # Check for some contractIDs that we need but are provided by extensions
 # which may or may not have been built.
 
-REQUIRED_CONTRACTS="@mozilla.org/permissionmanager;1 @mozilla.org/PopupWindowManager;1 @mozilla.org/cookie/permission;1 @mozilla.org/permissions/contentblocker;1"
-REQUIRED_EXTENSIONS="cookie,permissions"
-
-GECKO_CHECK_CONTRACTIDS([$REQUIRED_CONTRACTS],
-	[],[AC_MSG_ERROR([$gecko_cv_gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
+#REQUIRED_CONTRACTS="@mozilla.org/permissionmanager;1 @mozilla.org/PopupWindowManager;1 @mozilla.org/cookie/permission;1 @mozilla.org/permissions/contentblocker;1"
+#REQUIRED_EXTENSIONS="cookie,permissions"
+#
+#GECKO_CHECK_CONTRACTIDS([$REQUIRED_CONTRACTS],
+#	[],[AC_MSG_ERROR([$gecko_cv_gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
 
 fi # with_engine = mozilla
 
