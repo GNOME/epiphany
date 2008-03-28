@@ -357,8 +357,13 @@ NS_IMETHODIMP GFilePicker::GetFile(nsILocalFile **aFile)
 	return NS_OK;
 }
 
+#ifdef HAVE_GECKO_1_9
+/* readonly attribute nsIURI fileURL; */
+NS_IMETHODIMP GFilePicker::GetFileURL(nsIURI **aFileURL)
+#else
 /* readonly attribute nsIFileURL fileURL; */
 NS_IMETHODIMP GFilePicker::GetFileURL(nsIFileURL **aFileURL)
+#endif
 {
 	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
