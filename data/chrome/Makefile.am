@@ -1,5 +1,5 @@
 manifestdir = $(pkgdatadir)/chrome
-manifest_in_files = epiphany.manifest.in
+manifest_in_files = app-chrome.manifest.in
 manifest_DATA = $(manifest_in_files:.manifest.in=.manifest)
 
 %.manifest: %.manifest.in
