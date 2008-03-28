@@ -42,7 +42,6 @@
 #undef ENABLE_AUTHPROMPT2
 #ifdef ENABLE_AUTHPROMPT2
 #include <nsIStringBundle.h>
-#include "EphyPromptService.h"
 #include "nsIChannel.h"
 #include "nsIProxiedChannel.h"
 #include "nsIProxyInfo.h"
@@ -52,6 +51,8 @@
 #include "nsIIDNService.h"
 #include "nsIAuthInformation.h"
 #endif /* ENABLE_AUTHPROMPT2 */
+
+#include "EphyPromptService.h"
 
 #define TIMEOUT			1000 /* ms */
 #define TIMEOUT_DATA_KEY	"timeout"
