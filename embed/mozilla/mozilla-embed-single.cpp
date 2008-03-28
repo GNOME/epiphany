@@ -196,7 +196,7 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	pref->ClearUserPref ("general.useragent.vendorSub");
 
 	/* Don't open ftp uris with an external handler if one is setup */
-	pref->SetBoolPref ("network.protocol-handler.external.ftp", PR_FALSE);	
+	pref->SetBoolPref ("network.protocol-handler.external.ftp", PR_FALSE);
 
 	return TRUE;
 }
@@ -332,7 +332,6 @@ mozilla_init_profile (void)
 	profile_path = g_build_filename (ephy_dot_dir (), 
 					 MOZILLA_PROFILE_DIR,
 					 (char *) NULL);
-        gtk_moz_embed_set_comp_path (profile_path);
         gtk_moz_embed_set_profile_path (profile_path, MOZILLA_PROFILE_NAME);
         g_free (profile_path);
 }
@@ -635,9 +634,6 @@ impl_init (EphyEmbedSingle *esingle)
         gtk_moz_embed_set_comp_path (MOZILLA_HOME);
 #endif
 #endif // XPCOM_GLUE
-	/* Fire up the beast */
-	gtk_moz_embed_push_startup ();
-
 	/* Pre initialization */
 	mozilla_init_plugin_path ();
 
@@ -654,6 +650,8 @@ impl_init (EphyEmbedSingle *esingle)
 
 	gtk_moz_embed_set_directory_service_provider (dp);
 
+	/* Fire up the beast */
+	gtk_moz_embed_push_startup ();
 	/* FIXME check that it succeeded! */
 
 	mozilla_register_components ();
