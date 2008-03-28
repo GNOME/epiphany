@@ -71,7 +71,7 @@
 #include <nsILoginInfo.h>
 #include <nsILoginManager.h>
 #else
-init#include <nsIPassword.h>
+#include <nsIPassword.h>
 #include <nsIPasswordManager.h>
 #endif /* !HAVE_GECKO_1_9 */
 
