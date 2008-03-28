@@ -94,7 +94,7 @@ EphyDirectoryProvider::GetFiles (const char *prop,
 		NS_ENSURE_SUCCESS (rv, rv);
 
 #ifdef HAVE_GECKO_1_9
-		nsCOMPtr<nsIMutableArray> array (do_CreateInstance(NS_SUPPORTSARRAY_CONTRACTID));
+		nsCOMPtr<nsIMutableArray> array (do_CreateInstance(NS_ARRAY_CONTRACTID));
 		if(!array)
 			return NS_ERROR_OUT_OF_MEMORY;
 		rv = array->AppendElement (manifestDir, PR_FALSE);
