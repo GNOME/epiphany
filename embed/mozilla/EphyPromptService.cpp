@@ -31,7 +31,6 @@
 #include <nsCOMPtr.h>
 #include <nsIDOMWindow.h>
 #include <nsServiceManagerUtils.h>
-#include <nsIStringBundle.h>
 
 #include "ephy-embed-shell.h"
 #include "ephy-gui.h"
@@ -40,6 +39,9 @@
 #include "AutoModalDialog.h"
 #include "EphyUtils.h"
 
+#undef ENABLE_AUTHPROMPT2
+#ifdef ENABLE_AUTHPROMPT2
+#include <nsIStringBundle.h>
 #include "EphyPromptService.h"
 #include "nsIChannel.h"
 #include "nsIProxiedChannel.h"
@@ -49,6 +51,7 @@
 #include "nsNetUtil.h"
 #include "nsIIDNService.h"
 #include "nsIAuthInformation.h"
+#endif /* ENABLE_AUTHPROMPT2 */
 
 #define TIMEOUT			1000 /* ms */
 #define TIMEOUT_DATA_KEY	"timeout"
@@ -648,15 +651,18 @@ Prompter::ConvertAndEscapeButtonText(const PRUnichar *aText,
 }
 
 /* FIXME: needs THREADSAFE? */
-#if HAVE_NSINONBLOCKINGALERTSERVICE_H
-NS_IMPL_ISUPPORTS3 (EphyPromptService,
-		    nsIPromptService,
-		    nsIPromptService2,
-		    nsINonBlockingAlertService)
-#else
+#ifdef ENABLE_AUTHPROMPT2 /* gecko 1.9 only */
+NS_IMPL_THEADSAFE_ISUPPORTS3 (EphyPromptService,
+                              nsIPromptService,
+                              nsIPromptService2,
+                              nsINonBlockingAlertService)
+#elif defined(HAVE_NSINONBLOCKINGALERTSERVICE_H)
 NS_IMPL_ISUPPORTS2 (EphyPromptService,
 		    nsIPromptService,
-		    nsIPromptService2)
+		    nsINonBlockingAlertService)
+#else
+NS_IMPL_ISUPPORTS1 (EphyPromptService,
+		    nsIPromptService)
 #endif
 
 EphyPromptService::EphyPromptService()
@@ -894,6 +900,8 @@ EphyPromptService::ShowNonBlockingAlert (nsIDOMWindow *aParent,
 
 #endif /* HAVE_NSINONBLOCKINGALERTSERVICE_H */
 
+#ifdef ENABLE_AUTHPROMPT2
+
 static void
 NS_GetAuthHostPort(nsIChannel* aChannel, nsIAuthInformation* aAuthInfo,
                    PRBool machineProcessing, nsCString& host, PRInt32* port)
@@ -1104,3 +1112,5 @@ NS_METHOD EphyPromptService::AsyncPromptAuth(nsIDOMWindow *aParent,
 {
   return NS_ERROR_NOT_IMPLEMENTED;
 }
+
+#endif /* ENABLE_AUTHPROMPT2 */
