@@ -83,6 +83,8 @@ class nsIWebBrowserPersist;
 
 #define MOZ_DOWNLOAD_CLASSNAME "Ephy's Download Progress Dialog"
 
+#define EPHY_ACTION_BROWSE_TO_FILE (1024)
+
 nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceUri,
 				  nsILocalFile* inDestFile, const char *contentType,
 				  nsIURI* inOriginalURI, MozillaEmbedPersist *embedPersist,

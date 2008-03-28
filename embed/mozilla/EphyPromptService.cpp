@@ -31,6 +31,7 @@
 #include <nsCOMPtr.h>
 #include <nsIDOMWindow.h>
 #include <nsServiceManagerUtils.h>
+#include <nsIStringBundle.h>
 
 #include "ephy-embed-shell.h"
 #include "ephy-gui.h"
@@ -40,6 +41,14 @@
 #include "EphyUtils.h"
 
 #include "EphyPromptService.h"
+#include "nsIChannel.h"
+#include "nsIProxiedChannel.h"
+#include "nsIProxyInfo.h"
+#include "nsNetCID.h"
+#include "nsIURI.h"
+#include "nsNetUtil.h"
+#include "nsIIDNService.h"
+#include "nsIAuthInformation.h"
 
 #define TIMEOUT			1000 /* ms */
 #define TIMEOUT_DATA_KEY	"timeout"
@@ -640,12 +649,14 @@ Prompter::ConvertAndEscapeButtonText(const PRUnichar *aText,
 
 /* FIXME: needs THREADSAFE? */
 #if HAVE_NSINONBLOCKINGALERTSERVICE_H
-NS_IMPL_ISUPPORTS2 (EphyPromptService,
+NS_IMPL_ISUPPORTS3 (EphyPromptService,
 		    nsIPromptService,
+		    nsIPromptService2,
 		    nsINonBlockingAlertService)
 #else
-NS_IMPL_ISUPPORTS1 (EphyPromptService,
-		    nsIPromptService)
+NS_IMPL_ISUPPORTS2 (EphyPromptService,
+		    nsIPromptService,
+		    nsIPromptService2)
 #endif
 
 EphyPromptService::EphyPromptService()
@@ -882,3 +893,214 @@ EphyPromptService::ShowNonBlockingAlert (nsIDOMWindow *aParent,
 }
 
 #endif /* HAVE_NSINONBLOCKINGALERTSERVICE_H */
+
+static void
+NS_GetAuthHostPort(nsIChannel* aChannel, nsIAuthInformation* aAuthInfo,
+                   PRBool machineProcessing, nsCString& host, PRInt32* port)
+{
+  nsCOMPtr<nsIURI> uri;
+  nsresult rv = aChannel->GetURI(getter_AddRefs(uri));
+  if (NS_FAILED(rv))
+    return;
+
+  // Have to distinguish proxy auth and host auth here...
+  PRUint32 flags;
+  aAuthInfo->GetFlags(&flags);
+  if (flags & nsIAuthInformation::AUTH_PROXY) {
+    nsCOMPtr<nsIProxiedChannel> proxied(do_QueryInterface(aChannel));
+    NS_ASSERTION(proxied, "proxy auth needs nsIProxiedChannel");
+
+    nsCOMPtr<nsIProxyInfo> info;
+    proxied->GetProxyInfo(getter_AddRefs(info));
+    NS_ASSERTION(info, "proxy auth needs nsIProxyInfo");
+
+    nsCAutoString idnhost;
+    info->GetHost(idnhost);
+    info->GetPort(port);
+
+    if (machineProcessing) {
+      nsCOMPtr<nsIIDNService> idnService =
+        do_GetService(NS_IDNSERVICE_CONTRACTID);
+      if (idnService) {
+        idnService->ConvertUTF8toACE(idnhost, host);
+      } else {
+        // Not much we can do here...
+        host = idnhost;
+      }
+    } else {
+      host = idnhost;
+    }
+  } else {
+    if (machineProcessing) {
+      uri->GetAsciiHost(host);
+      *port = NS_GetRealPort(uri);
+    } else {
+      uri->GetHost(host);
+      uri->GetPort(port);
+    }
+  }
+}
+
+static nsresult
+MakeDialogText(nsIChannel* aChannel, nsIAuthInformation* aAuthInfo,
+               nsString& message)
+{
+  nsresult rv;
+  nsCOMPtr<nsIStringBundleService> bundleSvc =
+    do_GetService(NS_STRINGBUNDLE_CONTRACTID, &rv);
+  NS_ENSURE_SUCCESS(rv, rv);
+
+  nsCOMPtr<nsIStringBundle> bundle;
+  rv = bundleSvc->CreateBundle("chrome://global/locale/prompts.properties",
+                               getter_AddRefs(bundle));
+  NS_ENSURE_SUCCESS(rv, rv);
+
+  // figure out what message to display...
+  nsCAutoString host;
+  PRInt32 port;
+  NS_GetAuthHostPort(aChannel, aAuthInfo, PR_FALSE, host, &port);
+
+  nsAutoString displayHost;
+  CopyUTF8toUTF16(host, displayHost);
+
+  nsCOMPtr<nsIURI> uri;
+  aChannel->GetURI(getter_AddRefs(uri));
+
+  nsCAutoString scheme;
+  uri->GetScheme(scheme);
+
+  nsAutoString username;
+  aAuthInfo->GetUsername(username);
+
+  PRUint32 flags;
+  aAuthInfo->GetFlags(&flags);
+  PRBool proxyAuth = (flags & nsIAuthInformation::AUTH_PROXY) != 0;
+
+  nsAutoString realm;
+  aAuthInfo->GetRealm(realm);
+
+  // Append the port if it was specified
+  if (port != -1) {
+    displayHost.Append(PRUnichar(':'));
+    displayHost.AppendInt(port);
+  }
+
+  NS_NAMED_LITERAL_STRING(proxyText, "EnterUserPasswordForProxy");
+  NS_NAMED_LITERAL_STRING(originText, "EnterUserPasswordForRealm");
+  NS_NAMED_LITERAL_STRING(noRealmText, "EnterUserPasswordFor");
+  NS_NAMED_LITERAL_STRING(passwordText, "EnterPasswordFor");
+
+  const PRUnichar *text;
+  if (proxyAuth) {
+    text = proxyText.get();
+  } else {
+    text = originText.get();
+
+    // prepend "scheme://"
+    nsAutoString schemeU; 
+    CopyASCIItoUTF16(scheme, schemeU);
+    schemeU.AppendLiteral("://");
+    displayHost.Insert(schemeU, 0);
+  }
+
+  const PRUnichar *strings[] = { realm.get(), displayHost.get() };
+  PRUint32 count = NS_ARRAY_LENGTH(strings);
+
+  if (flags & nsIAuthInformation::ONLY_PASSWORD) {
+    text = passwordText.get();
+    strings[0] = username.get();
+  } else if (!proxyAuth && realm.IsEmpty()) {
+    text = noRealmText.get();
+    count--;
+    strings[0] = strings[1];
+  }
+
+  rv = bundle->FormatStringFromName(text, strings, count, getter_Copies(message));
+  return rv;
+}
+
+/* static */ nsresult
+EphyPromptService::PromptPasswordAdapter(nsIPromptService* aService,
+					 nsIDOMWindow* aParent,
+					 nsIChannel* aChannel,
+					 PRUint32 aLevel,
+					 nsIAuthInformation* aAuthInfo,
+					 const PRUnichar* aCheckLabel,
+					 PRBool* aCheckValue,
+					 PRBool* retval)
+{
+  // construct the message string
+  nsString message;
+  MakeDialogText(aChannel, aAuthInfo, message);
+
+  nsAutoString defaultUser, defaultDomain, defaultPass;
+  aAuthInfo->GetUsername(defaultUser);
+  aAuthInfo->GetDomain(defaultDomain);
+  aAuthInfo->GetPassword(defaultPass);
+
+  PRUint32 flags;
+  aAuthInfo->GetFlags(&flags);
+
+  if ((flags & nsIAuthInformation::NEED_DOMAIN) && !defaultDomain.IsEmpty()) {
+    defaultDomain.Append(PRUnichar('\\'));
+    defaultUser.Insert(defaultDomain, 0);
+  }
+
+  // NOTE: Allocation failure is not fatal here (just default to empty string
+  // if allocation fails)
+  PRUnichar *user = ToNewUnicode(defaultUser),
+    *pass = ToNewUnicode(defaultPass);
+  nsresult rv;
+  if (flags & nsIAuthInformation::ONLY_PASSWORD)
+    rv = aService->PromptPassword(aParent, nsnull, message.get(),
+                                  &pass, aCheckLabel,
+                                  aCheckValue, retval);
+  else
+    rv = aService->PromptUsernameAndPassword(aParent, nsnull, message.get(),
+                                             &user, &pass, aCheckLabel,
+                                             aCheckValue, retval);
+
+  nsString userStr(user);
+  nsString passStr(pass);
+  aAuthInfo->SetUsername(userStr);
+  aAuthInfo->SetPassword(passStr);
+
+  return rv;
+}
+
+/* boolean promptAuth (in nsIDOMWindow aParent, in nsIChannel aChannel, in PRUint32 level, in nsIAuthInformation authInfo, in wstring checkboxLabel, inout boolean checkValue); */
+NS_METHOD
+EphyPromptService::PromptAuth(nsIDOMWindow *aParent,
+			      nsIChannel *aChannel,
+			      PRUint32 level,
+			      nsIAuthInformation *authInfo,
+			      const PRUnichar *checkboxLabel,
+			      PRBool *checkValue,
+			      PRBool *_retval)
+{
+  NS_ENSURE_ARG_POINTER (_retval);
+  NS_ENSURE_ARG_POINTER (authInfo);
+
+  return EphyPromptService::PromptPasswordAdapter(this,
+						  aParent,
+						  aChannel,
+						  level,
+						  authInfo,
+						  checkboxLabel,
+						  checkValue,
+						  _retval);
+}
+
+/* nsICancelable asyncPromptAuth (in nsIDOMWindow aParent, in nsIChannel aChannel, in nsIAuthPromptCallback aCallback, in nsISupports aContext, in PRUint32 level, in nsIAuthInformation authInfo, in wstring checkboxLabel, inout boolean checkValue); */
+NS_METHOD EphyPromptService::AsyncPromptAuth(nsIDOMWindow *aParent,
+					     nsIChannel *aChannel,
+					     nsIAuthPromptCallback *aCallback,
+					     nsISupports *aContext,
+					     PRUint32 level,
+					     nsIAuthInformation *authInfo,
+					     const PRUnichar *checkboxLabel,
+					     PRBool *checkValue,
+					     nsICancelable **_retval)
+{
+  return NS_ERROR_NOT_IMPLEMENTED;
+}
