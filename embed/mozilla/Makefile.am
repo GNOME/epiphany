@@ -13,8 +13,6 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyAboutModule.h		\
 	EphyContentPolicy.cpp		\
 	EphyContentPolicy.h		\
-	EphyDirectoryProvider.cpp       \
-	EphyDirectoryProvider.h		\
 	EphyHeaderSniffer.cpp		\
 	EphyHeaderSniffer.h		\
 	EphyBrowser.cpp                 \
@@ -70,6 +68,8 @@ if !HAVE_GECKO_1_9
 libephymozillaembed_la_SOURCES += 	\
 	EphyBadCertRejector.cpp		\
 	EphyBadCertRejector.h		\
+	EphyDirectoryProvider.cpp       \
+	EphyDirectoryProvider.h		\
 	$(NULL)
 endif
 
