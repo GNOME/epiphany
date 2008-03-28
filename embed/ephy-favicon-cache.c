@@ -40,7 +40,6 @@
 
 #include <glib/gstdio.h>
 #include <gio/gio.h>
-#include <libgnomeui/libgnomeui.h>
 
 #define EPHY_FAVICON_CACHE_XML_ROOT    (const xmlChar *)"ephy_favicons_cache"
 #define EPHY_FAVICON_CACHE_XML_VERSION (const xmlChar *)"1.1"
@@ -588,7 +587,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 	{
 		char *filename;
 
-		filename = gnome_thumbnail_md5 (url);
+		filename = g_compute_checksum_for_string (G_CHECKSUM_MD5, url, -1);
 
 		icon = ephy_node_new (cache->priv->db);
 		ephy_node_set_property_string (icon,
@@ -654,7 +653,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		char *new_pix_file, *urlhash;
 		GValue value = { 0, };
 
-		urlhash = gnome_thumbnail_md5 (url);
+		urlhash = g_compute_checksum_for_string (G_CHECKSUM_MD5, url, -1);
 		new_pix_file = g_build_filename (cache->priv->directory, urlhash, NULL);
 
 		g_value_init (&value, G_TYPE_STRING);
