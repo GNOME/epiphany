@@ -25,8 +25,13 @@ libdesktopfileplugin_la_LIBADD = \
 libdesktopfileplugin_la_LDFLAGS = \
 	-module -avoid-version \
 	-export-symbols $(srcdir)/plugin.symbols \
-	-R$(GECKO_HOME) \
 	$(AM_LDFLAGS)
+
+if !HAVE_GECKO_XPCOM_GLUE
+	libdesktopfileplugin_la_LDFLAGS += \
+		-R$(GECKO_HOME) \
+		$(NULL)
+endif
 
 EXTRA_DIST = \
 	plugin.symbols

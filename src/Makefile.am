@@ -180,6 +180,16 @@ libpyphany_la_LIBADD = \
 	$(PYGTK_LIBS)
 endif
 
+
+# we do this to force c++ linkage if we are using the glue and 
+# are running gecko 1.9 because standalone glue embedders that use
+# gtk_moz_embed_* need to #include <gtkmozembed_glue.cpp>
+if HAVE_GECKO_1_9
+if HAVE_GECKO_XPCOM_GLUE
+nodist_EXTRA_epiphany_SOURCES = dummy.cpp
+endif
+endif
+
 epiphany_SOURCES = ephy-main.c
 
 epiphany_CPPFLAGS = \
@@ -194,6 +204,7 @@ epiphany_CPPFLAGS = \
 
 epiphany_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	\
+	$(GECKO_CFLAGS) \
 	$(DBUS_CFLAGS)		\
 	$(AM_CFLAGS)
 
@@ -214,6 +225,7 @@ endif
 
 if WITH_GECKO_ENGINE
 epiphany_LDADD += \
+	$(GECKO_LIBS) \
 	$(top_builddir)/embed/mozilla/libephymozillaembed.la
 endif
 
@@ -234,7 +246,9 @@ epiphany_LDADD += $(LIBXUL_LIBS) -lxpcomglue
 endif
 
 if WITH_GECKO_ENGINE
+if !HAVE_GECKO_XPCOM_GLUE
 epiphany_LDFLAGS += -R$(GECKO_HOME)
+endif
 
 epiphany_LDADD += \
 	$(GECKO_LIBS) \
@@ -248,6 +262,7 @@ epiphany_LDADD += \
 endif
 
 epiphany_LDADD += \
+	$(GECKO_LIBS) \
 	$(DEPENDENCIES_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)

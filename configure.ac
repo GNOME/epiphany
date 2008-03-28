@@ -238,12 +238,44 @@ fi
 
 case "$gecko_cv_gecko" in
 xulrunner) min_version=1.8 ;;
+libxul*) min_version=1.9 ;;
 *firefox) min_version=1.5 ;;
 *) AC_MSG_ERROR([Unsupported gecko "$gecko_cv_gecko"]) ;;
 esac
 
 # Added $gecko_cv_gecko-js for debian xulrunner brokenness
-PKG_CHECK_MODULES([GECKO],[${gecko_cv_gecko}-xpcom >= $min_version ${gecko_cv_gecko}-js $gecko_cv_extra_pkg_dependencies])
+if test $gecko_cv_gecko != "libxul-embedding" -a $gecko_cv_gecko != "libxul"; then
+	PKG_CHECK_MODULES([GECKO],[ ${gecko_cv_gecko}-xpcom >= $min_version ${gecko_cv_gecko}-js $gecko_cv_extra_pkg_dependencies])
+else
+	GECKO_CFLAGS="$GECKO_CFLAGS -UDEBUG"
+	GECKO_LIBS="$GECKO_LIBS `pkg-config --libs ${gecko_cv_gecko}`"
+fi
+
+AC_MSG_CHECKING(nspr in gecko)
+if test "$GECKO_NSPR" != yes; then
+	AC_MSG_RESULT(no)
+	AC_MSG_CHECKING(nspr in system)
+	gecko_nspr=
+	if $PKG_CONFIG --exists mozilla-nspr; then
+		gecko_nspr=mozilla-nspr
+	elif $PKG_CONFIG --exists ${gecko_cv_gecko}-nspr; then
+		gecko_nspr=${gecko_cv_gecko}-nspr
+	fi
+	if $PKG_CONFIG --exists nspr; then
+		gecko_nspr=nspr
+	fi
+	if test -z "$gecko_nspr"; then
+		AC_MSG_ERROR([no nspr available])
+	fi
+
+	GECKO_CFLAGS="$GECKO_CFLAGS `$PKG_CONFIG --cflags ${gecko_nspr}`"
+	GECKO_LIBS="$GECKO_LIBS `$PKG_CONFIG --libs ${gecko_nspr}`"
+	_GECKO_CFLAGS="$GECKO_CFLAGS"
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(yes)
+fi
+
 AC_SUBST([GECKO_CFLAGS])
 AC_SUBST([GECKO_LIBS])
 
@@ -533,7 +565,11 @@ AC_ARG_ENABLE([desktop-file-plugin],
 AC_MSG_RESULT([$enable_desktop_file_plugin])
 
 if test "$enable_desktop_file_plugin" = "yes"; then
-	PKG_CHECK_MODULES([DESKTOP_FILE_PLUGIN_DEP],[${gecko_cv_gecko}-xpcom ${gecko_cv_gecko}-plugin gtk+-2.0 >= 2.6.0])
+	if test "${gecko_cv_gecko}" = "libxul-embedding" -o "${gecko_cv_gecko}" = "libxul"; then
+		PKG_CHECK_MODULES([DESKTOP_FILE_PLUGIN_DEP],[${gecko_cv_gecko} mozilla-plugin gtk+-2.0 >= 2.6.0])
+	else
+		PKG_CHECK_MODULES([DESKTOP_FILE_PLUGIN_DEP],[${gecko_cv_gecko}-xpcom ${gecko_cv_gecko}-plugin gtk+-2.0 >= 2.6.0])
+	fi
 	AC_SUBST([DESKTOP_FILE_PLUGIN_DEP_CFLAGS])
 	AC_SUBST([DESKTOP_FILE_PLUGIN_DEP_LIBS])
 fi

@@ -32,6 +32,7 @@
 # VARIABLE: Which gecko was found (e.g. "xulrunnner", "seamonkey", ...)
 # VARIABLE_FLAVOUR: The flavour of the gecko that was found
 # VARIABLE_HOME:
+# VARIABLE_NSPR: set if nspr is provided by gecko flags
 # VARIABLE_PREFIX:
 # VARIABLE_INCLUDE_ROOT:
 # VARIABLE_VERSION: The version of the gecko that was found
@@ -51,7 +52,7 @@ AC_PROG_AWK
 AC_MSG_CHECKING([which gecko to use])
 
 AC_ARG_WITH([gecko],
-	AS_HELP_STRING([--with-gecko@<:@=mozilla|firefox|seamonkey|xulrunner@:>@],
+	AS_HELP_STRING([--with-gecko@<:@=mozilla|firefox|seamonkey|xulrunner|libxul-embedding|libxul@:>@],
 		       [Which gecko engine to use (autodetected by default)]))
 
 # Backward compat
@@ -60,10 +61,13 @@ AC_ARG_WITH([mozilla],[],[with_gecko=$withval],[])
 gecko_cv_gecko=$with_gecko
 
 # Autodetect gecko
-_geckos="xulrunner firefox mozilla-firefox seamonkey mozilla"
+_geckos="xulrunner firefox mozilla-firefox seamonkey mozilla libxul-embedding libxul"
 if test -z "$gecko_cv_gecko"; then
 	for lizard in $_geckos; do
 		if $PKG_CONFIG --exists $lizard-xpcom; then
+			gecko_cv_gecko=$lizard
+			break;
+		elif $PKG_CONFIG --exists $lizard-unstable; then
 			gecko_cv_gecko=$lizard
 			break;
 		fi
@@ -82,6 +86,14 @@ else
 	gecko_cv_have_gecko=yes
 fi
 
+AC_MSG_CHECKING([manual gecko home set])
+
+AC_ARG_WITH([gecko-home],
+	AS_HELP_STRING([--with-gecko-home@<:@=[path]@:>@],
+		       [Manually set MOZILLA_FIVE_HOME]))
+
+gecko_cv_gecko_home=$with_gecko_home
+
 # ****************
 # Define variables
 # ****************
@@ -93,13 +105,24 @@ mozilla) gecko_cv_gecko_flavour=mozilla ;;
 seamonkey) gecko_cv_gecko_flavour=mozilla ;;
 *firefox) gecko_cv_gecko_flavour=toolkit ;;
 xulrunner) gecko_cv_gecko_flavour=toolkit ;;
+libxul*) gecko_cv_gecko_flavour=toolkit ;;
 esac
 
-_GECKO_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir ${gecko_cv_gecko}-xpcom`"
-_GECKO_LIBDIR="`$PKG_CONFIG --variable=libdir ${gecko_cv_gecko}-xpcom`"
-_GECKO_HOME="`$PKG_CONFIG --variable=libdir ${gecko_cv_gecko}-xpcom`"
-_GECKO_PREFIX="`$PKG_CONFIG --variable=prefix ${gecko_cv_gecko}-xpcom`"
-
+if $PKG_CONFIG --exists  ${gecko_cv_gecko}-xpcom; then
+	_GECKO_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir ${gecko_cv_gecko}-xpcom`"
+	_GECKO_CFLAGS="-I$_GECKO_INCLUDE_ROOT"
+	_GECKO_LIBDIR="`$PKG_CONFIG --variable=libdir ${gecko_cv_gecko}-xpcom`"
+	_GECKO_HOME="`$PKG_CONFIG --variable=libdir ${gecko_cv_gecko}-xpcom`"
+	_GECKO_PREFIX="`$PKG_CONFIG --variable=prefix ${gecko_cv_gecko}-xpcom`"
+	_GECKO_NSPR=no # XXX asac: this is currently a blind guess and should be a AC test
+else
+	_GECKO_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir ${gecko_cv_gecko}`/unstable"
+	_GECKO_CFLAGS="`$PKG_CONFIG --cflags ${gecko_cv_gecko}` `$PKG_CONFIG --cflags ${gecko_cv_gecko}-unstable`"
+	_GECKO_LIBDIR="`$PKG_CONFIG --variable=sdkdir ${gecko_cv_gecko}`/bin"
+	_GECKO_HOME=$with_gecko_home
+	_GECKO_PREFIX="`$PKG_CONFIG --variable=prefix ${gecko_cv_gecko}`"
+	_GECKO_NSPR=no # XXX asac: this is currently a blind guess and should be a AC test
+fi
 fi # if gecko_cv_have_gecko
 
 if test "$gecko_cv_gecko_flavour" = "toolkit"; then
@@ -109,9 +132,11 @@ fi
 $1[]=$gecko_cv_gecko
 $1[]_FLAVOUR=$gecko_cv_gecko_flavour
 $1[]_INCLUDE_ROOT=$_GECKO_INCLUDE_ROOT
+$1[]_CFLAGS=$_GECKO_CFLAGS
 $1[]_LIBDIR=$_GECKO_LIBDIR
 $1[]_HOME=$_GECKO_HOME
 $1[]_PREFIX=$_GECKO_PREFIX
+$1[]_NSPR=$_GECKO_NSPR
 
 # **************************************************************
 # This is really gcc-only
@@ -182,7 +207,7 @@ if test "$gecko_cv_have_gecko" = "yes"; then
 AC_LANG_PUSH([C++])
 
 _SAVE_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS $_GECKO_EXTRA_CPPFLAGS -I$_GECKO_INCLUDE_ROOT"
+CPPFLAGS="$CPPFLAGS $_GECKO_EXTRA_CPPFLAGS $_GECKO_CFLAGS"
 
 AC_MSG_CHECKING([[whether we have a gtk 2 gecko build]])
 AC_RUN_IFELSE(
@@ -215,6 +240,18 @@ AC_COMPILE_IFELSE(
 	[gecko_cv_have_debug=no])
 AC_MSG_RESULT([$gecko_cv_have_debug])
 
+AC_MSG_CHECKING([[whether we have a xpcom glue]])
+AC_COMPILE_IFELSE(
+	[AC_LANG_SOURCE(
+		[[
+		  #ifndef XPCOM_GLUE
+		  #error "no xpcom glue found"
+		  #endif]]
+	)],
+	[gecko_cv_have_xpcom_glue=yes],
+	[gecko_cv_have_xpcom_glue=no])
+AC_MSG_RESULT([$gecko_cv_have_xpcom_glue])
+
 CPPFLAGS="$_SAVE_CPPFLAGS"
 
 AC_LANG_POP([C++])
@@ -226,8 +263,14 @@ if test "$gecko_cv_have_debug" = "yes"; then
 	AC_DEFINE([HAVE_GECKO_DEBUG],[1],[Define if gecko is a debug build])
 fi
 
+if test "$gecko_cv_have_xpcom_glue" = "yes"; then
+	AC_DEFINE([HAVE_GECKO_XPCOM_GLUE],[1],[Define if xpcom glue is used])
+fi
+
 fi # if gecko_cv_have_gecko
 
+AM_CONDITIONAL([HAVE_GECKO_DEBUG],[test "$gecko_cv_have_debug" = "yes"])
+AM_CONDITIONAL([HAVE_GECKO_XPCOM_GLUE],[test "$gecko_cv_have_xpcom_glue" = "yes"])
 
 # ***********************
 # Check for gecko version
@@ -238,7 +281,7 @@ if test "$gecko_cv_have_gecko" = "yes"; then
 AC_LANG_PUSH([C++])
 
 _SAVE_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS -I$_GECKO_INCLUDE_ROOT"
+CPPFLAGS="$CPPFLAGS $_GECKO_CFLAGS"
 
 AC_CACHE_CHECK([for gecko version],
 	[gecko_cv_gecko_version],
@@ -320,8 +363,11 @@ gecko_cv_glue_libs=
 gecko_cv_extra_pkg_dependencies=
 
 if test "$gecko_cv_gecko_version_int" -ge "1009000"; then
-	gecko_cv_extra_libs="-L$_GECKO_LIBDIR -lxul"
-	gecko_cv_glue_libs="-L$_GECKO_LIBDIR -lxpcomglue_s"
+	if ! test "$gecko_cv_have_xpcom_glue" = "yes"; then
+		gecko_cv_extra_libs="-L$_GECKO_LIBDIR -lxul"
+	else
+		gecko_cv_glue_libs="-L$_GECKO_LIBDIR -lxpcomglue"
+	fi
 else
 	gecko_cv_extra_pkg_dependencies="${gecko_cv_gecko}-gtkmozembed"
 fi
@@ -350,6 +396,7 @@ AM_CONDITIONAL([HAVE_GECKO_1_7],[test "$gecko_cv_have_gecko" = "yes" -a "$gecko_
 AM_CONDITIONAL([HAVE_GECKO_1_8],[test "$gecko_cv_have_gecko" = "yes" -a "$gecko_cv_gecko_version_int" -ge "1008000"])
 AM_CONDITIONAL([HAVE_GECKO_1_8_1],[test "$gecko_cv_have_gecko" = "yes" -a "$gecko_cv_gecko_version_int" -ge "1008001"])
 AM_CONDITIONAL([HAVE_GECKO_1_9],[test "$gecko_cv_have_gecko" = "yes" -a "$gecko_cv_gecko_version_int" -ge "1009000"])
+AM_CONDITIONAL([HAVE_GECKO_HOME],[test "x$_GECKO_HOME" != "x"])
 ])
 
 # ***************************************************************************
@@ -371,10 +418,20 @@ _SAVE_CPPFLAGS="$CPPFLAGS"
 _SAVE_CXXFLAGS="$CXXFLAGS"
 _SAVE_LDFLAGS="$LDFLAGS"
 _SAVE_LIBS="$LIBS"
-CPPFLAGS="$CPPFLAGS $_GECKO_EXTRA_CPPFLAGS -I$_GECKO_INCLUDE_ROOT $($PKG_CONFIG --cflags-only-I ${gecko_cv_gecko}-xpcom)"
-CXXFLAGS="$CXXFLAGS $_GECKO_EXTRA_CXXFLAGS $($PKG_CONFIG --cflags-only-other ${gecko_cv_gecko}-xpcom)"
-LDFLAGS="$LDFLAGS $_GECKO_EXTRA_LDFLAGS -Wl,--rpath=$_GECKO_HOME"
-LIBS="$LIBS $($PKG_CONFIG --libs ${gecko_cv_gecko}-xpcom)"
+if test "${gecko_cv_gecko}" = "libxul-embedding" -o "${gecko_cv_gecko}" = "libxul"; then
+	CPPFLAGS="$CPPFLAGS $_GECKO_EXTRA_CPPFLAGS $_GECKO_CFLAGS $($PKG_CONFIG --cflags-only-I ${gecko_cv_gecko}-unstable)"
+	CXXFLAGS="$CXXFLAGS $_GECKO_EXTRA_CXXFLAGS $_GECKO_CFLAGS $($PKG_CONFIG --cflags-only-other ${gecko_cv_gecko}-unstable)"
+	LIBS="$LIBS $($PKG_CONFIG --libs ${gecko_cv_gecko}) -ldl"
+else
+	CPPFLAGS="$CPPFLAGS $_GECKO_EXTRA_CPPFLAGS $_GECKO_CFLAGS $($PKG_CONFIG --cflags-only-I ${gecko_cv_gecko}-xpcom)"
+	CXXFLAGS="$CXXFLAGS $_GECKO_EXTRA_CXXFLAGS $_GECKO_CFLAGS $($PKG_CONFIG --cflags-only-other ${gecko_cv_gecko}-xpcom)"
+	LIBS="$LIBS $($PKG_CONFIG --libs ${gecko_cv_gecko}-xpcom)"
+fi
+if test -n "$_GECKO_HOME"; then
+	LDFLAGS="$LDFLAGS $_GECKO_EXTRA_LDFLAGS -Wl,--rpath=$_GECKO_HOME"
+else
+	LDFLAGS="$LDFLAGS $_GECKO_EXTRA_LDFLAGS"
+fi
 
 _GECKO_DISPATCH_INCLUDEDIRS="$2"
 
@@ -383,9 +440,11 @@ _GECKO_DISPATCH_INCLUDEDIRS="$2"
 # Mind you, it's useful to be able to test against uninstalled mozilla builds...
 _GECKO_DISPATCH_INCLUDEDIRS="$_GECKO_DISPATCH_INCLUDEDIRS dom necko pref"
 
-# Now add them to CPPFLAGS
+# Now add them to CPPFLAGS - asac: well ... not anymore since 1.9 -> test whether they exist before adding.
 for i in $_GECKO_DISPATCH_INCLUDEDIRS; do
-	CPPFLAGS="$CPPFLAGS -I$_GECKO_INCLUDE_ROOT/$i"
+	if test -d "$_GECKO_INCLUDE_ROOT/$i"; then
+		CPPFLAGS="$CPPFLAGS -I$_GECKO_INCLUDE_ROOT/$i"
+	fi
 done
 
 m4_indir([$1],m4_shiftn(2,$@))
@@ -438,11 +497,17 @@ AC_DEFUN([GECKO_XPCOM_PROGRAM],
 #include <mozilla-config.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+#ifdef XPCOM_GLUE
+#include <nsXPCOMGlue.h>
+#else
 #include <nsXPCOM.h>
+#endif // XPCOM_GLUE
+
 #include <nsCOMPtr.h>
 #include <nsILocalFile.h>
 #include <nsIServiceManager.h>
-#ifdef HAVE_GECKO_1_8
+#if defined(HAVE_GECKO_1_8) || defined(HAVE_GECKO_1_9)
 #include <nsStringAPI.h>
 #else
 #include <nsString.h>
@@ -450,16 +515,37 @@ AC_DEFUN([GECKO_XPCOM_PROGRAM],
 ]]
 [$1],
 [[
+
+nsresult rv;
+#ifdef XPCOM_GLUE
+    static const GREVersionRange greVersion = {
+    "1.8", PR_TRUE,
+    "1.9.*", PR_TRUE
+    };
+    char xpcomLocation[4096];
+    rv = GRE_GetGREPathWithProperties(&greVersion, 1, nsnull, 0, xpcomLocation, 4096);
+    if (NS_FAILED(rv)) {
+        exit(123);
+    }
+
+    // Startup the XPCOM Glue that links us up with XPCOM.
+    XPCOMGlueStartup(xpcomLocation);
+    if (NS_FAILED(rv)) {
+        exit(124);
+    }
+#endif // XPCOM_GLUE
+
 // redirect unwanted mozilla debug output to the bit bucket
 freopen ("/dev/null", "w", stdout);
 
-nsresult rv;
-nsCOMPtr<nsILocalFile> directory;
+nsCOMPtr<nsILocalFile> directory = nsnull;
+#ifndef XPCOM_GLUE
 rv = NS_NewNativeLocalFile (NS_LITERAL_CSTRING("$_GECKO_HOME"), PR_FALSE,
 			    getter_AddRefs (directory));
 if (NS_FAILED (rv) || !directory) {
 	exit (126);
 }
+#endif
 
 rv = NS_InitXPCOM2 (nsnull, directory, nsnull);
 if (NS_FAILED (rv)) {
@@ -607,21 +693,22 @@ fi
 AC_DEFUN([GECKO_XPIDL],
 [AC_REQUIRE([GECKO_INIT])dnl
 
-_GECKO_LIBDIR="`$PKG_CONFIG --variable=libdir ${gecko_cv_gecko}-xpcom`"
+if test ${gecko_cv_gecko} = "libxul-embedding" -o ${gecko_cv_gecko} = "libxul"; then
+	_GECKO_LIBDIR="`$PKG_CONFIG pkg-config --variable=sdkdir ${gecko_cv_gecko}`/bin"
+else
+	_GECKO_LIBDIR="`$PKG_CONFIG --variable=libdir ${gecko_cv_gecko}-xpcom`"
+fi
 
 AC_PATH_PROG([XPIDL],[xpidl],[no],[$_GECKO_LIBDIR:$PATH])
 
+if test ${gecko_cv_gecko} = "libxul-embedding" -o ${gecko_cv_gecko} = "libxul"; then
+XPIDL_IDLDIR="`$PKG_CONFIG --variable=idldir ${gecko_cv_gecko}`"
+else
 XPIDL_IDLDIR="`$PKG_CONFIG --variable=idldir ${gecko_cv_gecko}-xpcom`"
-
-# Older geckos don't have this variable, see
-# https://bugzilla.mozilla.org/show_bug.cgi?id=240473
-
 if test -z "$XPIDL_IDLDIR" -o ! -f "$XPIDL_IDLDIR/nsISupports.idl"; then
 	XPIDL_IDLDIR="`echo $_GECKO_LIBDIR | sed -e s!lib!share/idl!`"
 fi
-
 # Some distributions (Gentoo) have it in unusual places
-
 if test -z "$XPIDL_IDLDIR" -o ! -f "$XPIDL_IDLDIR/nsISupports.idl"; then
 	XPIDL_IDLDIR="$_GECKO_INCLUDE_ROOT/idl"
 fi

@@ -91,6 +91,7 @@ libephymozillaembed_la_SOURCES += 	\
 	GtkNSSSecurityWarningDialogs.h
 endif
 
+
 if ENABLE_SPELLCHECKER
 libephymozillaembed_la_SOURCES += \
 	GeckoSpellCheckEngine.cpp	\
@@ -152,6 +153,13 @@ libephymozillaembed_la_CPPFLAGS = \
 	-DUA_VERSION=\"$(EPIPHANY_UA_VERSION)\"	\
 	-DALLOW_PRIVATE_API			\
 	$(AM_CPPFLAGS)
+
+if HAVE_GECKO_1_9
+if HAVE_GECKO_XPCOM_GLUE
+libephymozillaembed_la_CPPFLAGS += \
+ 	-DXPCOM_GLUE_USE_NSPR
+endif
+endif
 
 libephymozillaembed_la_CXXFLAGS = \
 	$(GECKO_CFLAGS)		\

@@ -107,6 +107,7 @@ libephyembedfactory_la_CPPFLAGS += -I$(GECKO_INCLUDE_ROOT)/gtkembedmoz
 endif
 
 libephyembedfactory_la_CFLAGS = \
+	$(GECKO_CFLAGS) \
 	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CFLAGS)
 
