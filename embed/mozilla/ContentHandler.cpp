@@ -416,14 +416,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
 	NS_ENSURE_TRUE (mimeInfo, NS_ERROR_FAILURE);
 
-#ifdef HAVE_GECKO_1_9
-	nsHandlerInfoAction action;
-	if (mAction == CONTENT_ACTION_DOWNLOAD) {
-		action = EPHY_ACTION_BROWSE_TO_FILE;
-	} else {
-		action = nsIMIMEInfo::useSystemDefault;
-	}
-#else
+#ifndef HAVE_GECKO_1_9
 	char *info = NULL;
 
 	if (mAction == CONTENT_ACTION_OPEN)
@@ -477,6 +470,21 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	{
 		mLauncher->SaveToDisk (nsnull, PR_FALSE);
 	}
+
+#ifdef HAVE_GECKO_1_9
+        /* We have to do this work down here because the external helper app modifies the
+         * value after calling SaveToDisk.
+         */
+	nsHandlerInfoAction action;
+	if (mAction == CONTENT_ACTION_DOWNLOAD) {
+		action = EPHY_ACTION_BROWSE_TO_FILE;
+
+                /* This won't be able to transport the activation time so we cannot
+                * do startup notification, but it's the best that was available
+                */
+                mimeInfo->SetPreferredAction (action);
+        }
+#endif
 
 	return NS_OK;
 }
