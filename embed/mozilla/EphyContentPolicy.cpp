@@ -145,7 +145,7 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 		PR_FALSE /* TYPE_DOCUMENT */,
 		PR_TRUE  /* TYPE_SUBDOCUMENT */,
 		PR_TRUE  /* TYPE_REFRESH */,
-#ifdef HAVE_GECO_1_9
+#ifdef HAVE_GECKO_1_9
 		PR_FALSE /* TYPE_XBEL */,
                 PR_TRUE /* TYPE_PING */,
                 PR_FALSE /* TYPE_XMLHTTPREQUEST */,
