@@ -1076,8 +1076,8 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 			"alignment", PANGO_ALIGN_LEFT,
 			NULL);
 
-	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
-				    le->priv->extracell, TRUE);
+	gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (completion),
+				  le->priv->extracell, TRUE);
 	
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
 					le->priv->extracell, extracell_data_func, 
