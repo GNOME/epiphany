@@ -629,6 +629,8 @@ EphyDOMScrollEventListener::HandleEvent (nsIDOMEvent * aEvent)
 	return NS_OK;
 }
 
+#ifdef HAVE_GECKO_1_9
+
 NS_IMETHODIMP
 EphyCommandEventListener::HandleEvent (nsIDOMEvent *aDOMEvent)
 {
@@ -739,6 +741,8 @@ EphyCommandEventListener::HandleEvent (nsIDOMEvent *aDOMEvent)
 
         return NS_OK;
 }
+
+#endif /* HAVE_GECKO_1_9 */
 
 NS_IMPL_ISUPPORTS1(EphyContextMenuListener, nsIDOMContextMenuListener)
 

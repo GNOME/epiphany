@@ -107,6 +107,7 @@ public:
 	EphyDOMScrollEventListener(EphyBrowser *aOwner) : EphyEventListener(aOwner) { };
 };
 
+#ifdef HAVE_GECKO_1_9
 class EphyCommandEventListener : public EphyEventListener
 {
 public:
@@ -114,6 +115,9 @@ public:
 
 	EphyCommandEventListener(EphyBrowser *aOwner) : EphyEventListener(aOwner) { };
 };
+#else
+class EphyCommandEventListener;
+#endif /* HAVE_GECKO_1_9 */
 
 class EphyContextMenuListener : public nsIDOMContextMenuListener
 {
@@ -213,7 +217,9 @@ private:
 	EphyDOMScrollEventListener *mDOMScrollEventListener;
 	EphyPopupBlockEventListener *mPopupBlockEventListener;
 	EphyModalAlertEventListener *mModalAlertListener;
+#ifdef HAVE_GECKO_1_9
 	EphyCommandEventListener *mCommandEventListener;
+#endif
 	EphyContextMenuListener *mContextMenuListener;
 	PRBool mInitialized;
 #ifdef HAVE_MOZILLA_PSM
