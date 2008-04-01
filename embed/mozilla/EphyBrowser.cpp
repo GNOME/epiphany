@@ -825,7 +825,9 @@ EphyBrowser::EphyBrowser ()
 , mDOMScrollEventListener(nsnull)
 , mPopupBlockEventListener(nsnull)
 , mModalAlertListener(nsnull)
+#ifdef HAVE_GECKO_1_9
 , mCommandEventListener(nsnull)
+#endif
 , mContextMenuListener(nsnull)
 , mInitialized(PR_FALSE)
 {
@@ -874,8 +876,10 @@ nsresult EphyBrowser::Init (EphyEmbed *embed)
 	mModalAlertListener = new EphyModalAlertEventListener (this);
 	if (!mModalAlertListener) return NS_ERROR_OUT_OF_MEMORY;
 
+#ifdef HAVE_GECKO_1_9
 	mCommandEventListener = new EphyCommandEventListener(this);
 	if (!mCommandEventListener) return NS_ERROR_OUT_OF_MEMORY;
+#endif
 
 	mContextMenuListener = new EphyContextMenuListener(this);
 	if (!mContextMenuListener) return NS_ERROR_OUT_OF_MEMORY;
@@ -943,8 +947,10 @@ EphyBrowser::AttachListeners(void)
 				       mModalAlertListener, PR_TRUE, PR_FALSE);
 	rv |= target->AddEventListener(NS_LITERAL_STRING ("DOMModalDialogClosed"),
 				       mModalAlertListener, PR_TRUE, PR_FALSE);
+#ifdef HAVE_GECKO_1_9
 	rv |= target->AddEventListener(NS_LITERAL_STRING ("command"),
 				       mCommandEventListener, PR_FALSE, PR_FALSE);
+#endif
 	rv |= target->AddEventListener(NS_LITERAL_STRING ("contextmenu"),
 				       mContextMenuListener, PR_TRUE /* capture */, PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, rv);
@@ -972,8 +978,10 @@ EphyBrowser::DetachListeners(void)
 						mModalAlertListener, PR_TRUE);
 	rv |= mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("DOMModalDialogClosed"),
 						mModalAlertListener, PR_TRUE);
+#ifdef HAVE_GECKO_1_9
 	rv |= mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("command"),
 						mCommandEventListener, PR_FALSE);
+#endif
 	rv |= mEventTarget->RemoveEventListener(NS_LITERAL_STRING ("contextmenu"),
 					        mContextMenuListener, PR_TRUE /* capture */);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
