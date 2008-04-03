@@ -1,26 +1,10 @@
-SUBDIRS = art chrome glade icons ui
+
+SUBDIRS = art glade icons ui
 
 @INTLTOOL_SERVER_RULE@
 @INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_SCHEMAS_RULE@
 @INTLTOOL_XML_RULE@
-
-default_prefs_in_FILES = \
-	default-prefs-common.js
-
-default_prefs_files = \
-	default-prefs-common.js
-
-
-if HAVE_XULRUNNER
-default_prefs_files += weasel-ua-pref.js
-endif
-
-default-prefs.js: $(default_prefs_files)
-	cat $^ > $@
-
-default_prefsdir = $(pkgdatadir)
-default_prefs_DATA = default-prefs.js
 
 desktop_in_files = epiphany.desktop.in.in bme.desktop.in.in
 desktopdir = $(datadir)/applications
@@ -79,7 +63,6 @@ EXTRA_DIST = \
 	$(about_DATA)			\
 	$(mimepermission_DATA)		\
 	$(pkgconfig_DATA)		\
-	$(default_prefs_in_FILES)	\
 	$(xsl_DATA)			\
 	$(service_DATA)			\
 	$(m4data_DATA)			\
@@ -91,5 +74,4 @@ DISTCLEANFILES = \
 	$(service_DATA)		\
 	$(schema_in_files:.schemas.in=.schemas)	\
 	$(pkgconfig_DATA)	\
-	$(default_prefs_DATA)	\
 	$(desktop_DATA)

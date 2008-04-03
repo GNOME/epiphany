@@ -152,11 +152,11 @@
   (gtype-id "EPHY_TYPE_PASSWORD_MANAGER")
 )
 
-(define-interface PermissionManager
-  (in-module "Ephy")
-  (c-name "EphyPermissionManager")
-  (gtype-id "EPHY_TYPE_PERMISSION_MANAGER")
-)
+;; (define-interface PermissionManager
+;;   (in-module "Ephy")
+;;   (c-name "EphyPermissionManager")
+;;   (gtype-id "EPHY_TYPE_PERMISSION_MANAGER")
+;; )
 
 (define-object SearchEntry
   (in-module "Ephy")
@@ -329,16 +329,16 @@
   )
 )
 
-(define-enum Permission
-  (in-module "Ephy")
-  (c-name "EphyPermission")
-  (gtype-id "EPHY_TYPE_PERMISSION")
-  (values
-    '("allowed" "EPHY_PERMISSION_ALLOWED")
-    '("denied" "EPHY_PERMISSION_DENIED")
-    '("default" "EPHY_PERMISSION_DEFAULT")
-  )
-)
+;; (define-enum Permission
+;;   (in-module "Ephy")
+;;   (c-name "EphyPermission")
+;;   (gtype-id "EPHY_TYPE_PERMISSION")
+;;   (values
+;;     '("allowed" "EPHY_PERMISSION_ALLOWED")
+;;     '("denied" "EPHY_PERMISSION_DENIED")
+;;     '("default" "EPHY_PERMISSION_DEFAULT")
+;;   )
+;; )
 
 (define-flags TbModelFlags
   (in-module "Egg")
@@ -965,10 +965,10 @@
   (return-type "GType")
 )
 
-(define-function ephy_permission_get_type
-  (c-name "ephy_permission_get_type")
-  (return-type "GType")
-)
+;; (define-function ephy_permission_get_type
+;;   (c-name "ephy_permission_get_type")
+;;   (return-type "GType")
+;; )
 
 
 
@@ -1563,90 +1563,90 @@
 
 ;; From ../../embed/ephy-permission-manager.h
 
-(define-function ephy_permission_get_type
-  (c-name "ephy_permission_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_permission_info_get_type
-  (c-name "ephy_permission_info_get_type")
-  (return-type "GType")
-)
-
-(define-function ephy_permission_info_new
-  (c-name "ephy_permission_info_new")
-  (is-constructor-of "EphyPermissionInfo")
-  (return-type "EphyPermissionInfo*")
-  (parameters
-    '("const-char*" "host")
-    '("const-char*" "type")
-    '("EphyPermission" "permission")
-  )
-)
-
-(define-method copy
-  (of-object "EphyPermissionInfo")
-  (c-name "ephy_permission_info_copy")
-  (return-type "EphyPermissionInfo*")
-)
-
-(define-method free
-  (of-object "EphyPermissionInfo")
-  (c-name "ephy_permission_info_free")
-  (return-type "none")
-)
-
-(define-function ephy_permission_manager_get_type
-  (c-name "ephy_permission_manager_get_type")
-  (return-type "GType")
-)
-
-(define-method add_permission
-  (of-object "EphyPermissionManager")
-  (c-name "ephy_permission_manager_add_permission")
-  (return-type "none")
-  (parameters
-    '("const-char*" "host")
-    '("const-char*" "type")
-    '("EphyPermission" "permission")
-  )
-)
-
-(define-method remove_permission
-  (of-object "EphyPermissionManager")
-  (c-name "ephy_permission_manager_remove_permission")
-  (return-type "none")
-  (parameters
-    '("const-char*" "host")
-    '("const-char*" "type")
-  )
-)
-
-(define-method clear_permissions
-  (of-object "EphyPermissionManager")
-  (c-name "ephy_permission_manager_clear_permissions")
-  (return-type "none")
-)
-
-(define-method test_permission
-  (of-object "EphyPermissionManager")
-  (c-name "ephy_permission_manager_test_permission")
-  (return-type "EphyPermission")
-  (parameters
-    '("const-char*" "host")
-    '("const-char*" "type")
-  )
-)
-
-(define-method list_permissions
-  (of-object "EphyPermissionManager")
-  (c-name "ephy_permission_manager_list_permissions")
-  (return-type "GList*")
-  (parameters
-    '("const-char*" "type")
-  )
-)
-
+;; (define-function ephy_permission_get_type
+;;   (c-name "ephy_permission_get_type")
+;;   (return-type "GType")
+;; )
+;; 
+;; (define-function ephy_permission_info_get_type
+;;   (c-name "ephy_permission_info_get_type")
+;;   (return-type "GType")
+;; )
+;; 
+;; (define-function ephy_permission_info_new
+;;   (c-name "ephy_permission_info_new")
+;;   (is-constructor-of "EphyPermissionInfo")
+;;   (return-type "EphyPermissionInfo*")
+;;   (parameters
+;;     '("const-char*" "host")
+;;     '("const-char*" "type")
+;;     '("EphyPermission" "permission")
+;;   )
+;; )
+;; 
+;; (define-method copy
+;;   (of-object "EphyPermissionInfo")
+;;   (c-name "ephy_permission_info_copy")
+;;   (return-type "EphyPermissionInfo*")
+;; )
+;; 
+;; (define-method free
+;;   (of-object "EphyPermissionInfo")
+;;   (c-name "ephy_permission_info_free")
+;;   (return-type "none")
+;; )
+;; 
+;; (define-function ephy_permission_manager_get_type
+;;   (c-name "ephy_permission_manager_get_type")
+;;   (return-type "GType")
+;; )
+;; 
+;; (define-method add_permission
+;;   (of-object "EphyPermissionManager")
+;;   (c-name "ephy_permission_manager_add_permission")
+;;   (return-type "none")
+;;   (parameters
+;;     '("const-char*" "host")
+;;     '("const-char*" "type")
+;;     '("EphyPermission" "permission")
+;;   )
+;; )
+;; 
+;; (define-method remove_permission
+;;   (of-object "EphyPermissionManager")
+;;   (c-name "ephy_permission_manager_remove_permission")
+;;   (return-type "none")
+;;   (parameters
+;;     '("const-char*" "host")
+;;     '("const-char*" "type")
+;;   )
+;; )
+;; 
+;; (define-method clear_permissions
+;;   (of-object "EphyPermissionManager")
+;;   (c-name "ephy_permission_manager_clear_permissions")
+;;   (return-type "none")
+;; )
+;; 
+;; (define-method test_permission
+;;   (of-object "EphyPermissionManager")
+;;   (c-name "ephy_permission_manager_test_permission")
+;;   (return-type "EphyPermission")
+;;   (parameters
+;;     '("const-char*" "host")
+;;     '("const-char*" "type")
+;;   )
+;; )
+;; 
+;; (define-method list_permissions
+;;   (of-object "EphyPermissionManager")
+;;   (c-name "ephy_permission_manager_list_permissions")
+;;   (return-type "GList*")
+;;   (parameters
+;;     '("const-char*" "type")
+;;   )
+;; )
+;; 
 
 
 ;; From ../../lib/egg/egg-editable-toolbar.h
@@ -3622,13 +3622,13 @@
   (gtype-id "EPHY_TYPE_NODE")
 )
 
-(define-boxed PermissionInfo
-  (in-module "Ephy")
-  (c-name "EphyPermissionInfo")
-  (gtype-id  "EPHY_TYPE_PERMISSION_INFO")
-  (fields
-    '("char*" "host")
-    '("GQuark" "type")
-    '("EphyPermission" "permission")
-  )
-)
+;; (define-boxed PermissionInfo
+;;   (in-module "Ephy")
+;;   (c-name "EphyPermissionInfo")
+;;   (gtype-id  "EPHY_TYPE_PERMISSION_INFO")
+;;   (fields
+;;     '("char*" "host")
+;;     '("GQuark" "type")
+;;     '("EphyPermission" "permission")
+;;   )
+;; )

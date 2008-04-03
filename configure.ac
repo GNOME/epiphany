@@ -196,231 +196,13 @@ if test "$enable_maintainer_mode" = "yes"; then
 	AC_LANG_POP([C])
 fi
 
-# ************
-# Engine check
-# ************
-
-AC_MSG_CHECKING(for which engine to use)
-
-AC_ARG_WITH([engine],
-	AS_HELP_STRING([--with-engine@<:@=mozilla|webkit|xulrunner@:>@],
-		[Which engine to build against @<:@mozilla@:>@]),
-	[],[with_engine="mozilla"])
-
-AC_MSG_RESULT($with_engine)
-AC_SUBST([with_engine])
-
-# *******
-# Mozilla
-# *******
-
-if test "$with_engine" = "mozilla"; then
-
-GECKO_INIT([GECKO])
-
-AC_DEFINE([WITH_GECKO_ENGINE],[1],[Define if you wish to enable mozilla engine])
-
-AC_SUBST([GECKO])
-AC_SUBST([GECKO_FLAVOUR])
-AC_SUBST([GECKO_INCLUDE_ROOT])
-AC_SUBST([GECKO_HOME])
-AC_SUBST([GECKO_PREFIX])
-AC_SUBST([GECKO_EXTRA_LIBS])
-AC_SUBST([GECKO_GLUE_LIBS])
-
-if test "$gecko_cv_gecko_version_int" -lt "1008000"; then
-	AC_MSG_ERROR([Gecko version $gecko_cv_gecko_version is not supported!])
-fi
-
-if test "$gecko_cv_gecko_flavour" != "toolkit"; then
-	AC_MSG_ERROR(["$gecko_cv_gecko_flavour" flavoured geckos aren't tasty enough!])
-fi
-
-case "$gecko_cv_gecko" in
-xulrunner) min_version=1.8 ;;
-libxul*) min_version=1.9 ;;
-*firefox) min_version=1.5 ;;
-*) AC_MSG_ERROR([Unsupported gecko "$gecko_cv_gecko"]) ;;
-esac
-
-# Added $gecko_cv_gecko-js for debian xulrunner brokenness
-if test $gecko_cv_gecko != "libxul-embedding" -a $gecko_cv_gecko != "libxul"; then
-	# debian xulrunner lacks -xpcom -> -js depends
-	if pkg-config --exists ${gecko_cv_gecko}-js; then
-		gecko_cv_extra_pkg_dependencies="$gecko_cv_extra_pkg_dependencies ${gecko_cv_gecko}-js"
-	fi
-	GECKO_CFLAGS=`pkg-config --cflags ${gecko_cv_gecko}-xpcom '>=' $min_version ${gecko_cv_gecko}-js $gecko_cv_extra_pkg_dependencies`
-	GECKO_LIBS=`pkg-config --libs ${gecko_cv_gecko}-xpcom '>=' $min_version ${gecko_cv_gecko}-js $gecko_cv_extra_pkg_dependencies`
-
-#	PKG_CHECK_MODULES([GECKO],[ ${gecko_cv_gecko}-xpcom >= $min_version ${gecko_cv_gecko}-js $gecko_cv_extra_pkg_dependencies])
-else
-	GECKO_CFLAGS="$GECKO_CFLAGS"
-	GECKO_LIBS="$GECKO_LIBS `pkg-config --libs ${gecko_cv_gecko}`"
-fi
-
-AC_MSG_CHECKING(nspr in gecko)
-if test "$GECKO_NSPR" != yes; then
-	AC_MSG_RESULT(no)
-	AC_MSG_CHECKING(nspr in system)
-	gecko_nspr=
-	if $PKG_CONFIG --exists mozilla-nspr; then
-		gecko_nspr=mozilla-nspr
-	elif $PKG_CONFIG --exists ${gecko_cv_gecko}-nspr; then
-		gecko_nspr=${gecko_cv_gecko}-nspr
-	fi
-	if $PKG_CONFIG --exists nspr; then
-		gecko_nspr=nspr
-	fi
-	if test -z "$gecko_nspr"; then
-		AC_MSG_ERROR([no nspr available])
-	fi
-
-	GECKO_CFLAGS="$GECKO_CFLAGS `$PKG_CONFIG --cflags ${gecko_nspr}`"
-	GECKO_LIBS="$GECKO_LIBS `$PKG_CONFIG --libs ${gecko_nspr}`"
-	_GECKO_CFLAGS="$GECKO_CFLAGS"
-	AC_MSG_RESULT(yes)
-else
-	AC_MSG_RESULT(yes)
-fi
-
-AC_SUBST([GECKO_CFLAGS])
-AC_SUBST([GECKO_LIBS])
-
-# *****************
-# Weasel UA version
-# *****************
-
-# FIXMEchpe: find a way to always automatically use the latest weasel minor version!
-
-if test "$gecko_cv_gecko_version_int" -ge "1009000"; then
-  WEASEL_UA_VERSION="3.0"
-elif test "$gecko_cv_gecko_version_int" -ge "1008001"; then
-  WEASEL_UA_VERSION="2.0.0.4"
-else
-  WEASEL_UA_VERSION="1.5.0.12"
-fi
-
-AC_SUBST([WEASEL_UA_VERSION])
-
-# **********************************
-# now tests for mozilla API variance
-# **********************************
-
-# First build a test program to see whether compiling and running XPCOM
-# programs works at all, so we don't get false test failures below
-
-GECKO_XPCOM_PROGRAM_CHECK
-
-# Check for PSM header(s) to infer PSM presence
-
-GECKO_CHECK_HEADERS([pipnss],[nsIX509Cert.h],[have_psm=yes],[have_psm=no])
-
-# Make sure we don't accidentally build without PSM support
-
-AC_MSG_CHECKING([whether to include PSM support])
-AC_ARG_ENABLE([psm],
-	AS_HELP_STRING([--disable-psm],[Disable PSM support (default: enabled)]),
-	[],[enable_psm=yes])
-AC_MSG_RESULT([$enable_psm])
-
-if test "$enable_psm" = "yes" -a "$have_psm" = "no"; then
-	AC_MSG_ERROR([PSM headers not found; use --disable-psm to disable building with PSM support])
-elif test "$have_psm" = "no"; then
-	AC_MSG_WARN([PSM headers not found; PSM support disabled])
-fi
-
-if test "$enable_psm" = "yes" -a "$have_psm" = "yes"; then
-	AC_DEFINE([HAVE_MOZILLA_PSM],[1],[Define if you have the mozilla NSS headers installed]) 
-fi
-
-# Check whether to enable our filepicker component
-
-AC_MSG_CHECKING([whether to enable native gtk+ filepicker])
-AC_ARG_ENABLE([filepicker],
-	AS_HELP_STRING([--enable-filepicker],[Whether to enable the gtk+ native filepicker; not needed when the mozilla build itself has native gtk+ filepicker enabled (default:enabled)]),
-	[],[enable_filepicker=yes])
-AC_MSG_RESULT([$enable_filepicker])
-
-if test "$enable_filepicker" = "yes"; then
-	AC_DEFINE([ENABLE_FILEPICKER],[1],[Define to enable the native filepicker])
-fi
-
-# Check for nsINonBlockingAlertService
-# Added in 1.8.1 and 1.9
-
-GECKO_CHECK_HEADERS([windowwatcher],[nsINonBlockingAlertService.h])
-
-# Check for nsIGlobalHistory3
-# Added in 1.8.1 and 1.9
-
-GECKO_CHECK_HEADERS([docshell],[nsIGlobalHistory3.h])
-
-# Check for nsIIOService2.h
-# Added in 1.9
-
-GECKO_CHECK_HEADERS([necko],[nsIIOService2.h])
-
-# Check for nsIMutableArray.h
-# Split out into its own header in 1.9
-
-GECKO_CHECK_HEADERS([xpcom],[nsIMutableArray.h])
-
-# Check for spell check extension
-
-GECKO_CHECK_HEADERS([spellchecker],[mozISpellCheckingEngine.h],
-	[have_gecko_spell_checker=yes],[have_gecko_spell_checker=no])
-
-# Check for some contractIDs that we need but are provided by extensions
-# which may or may not have been built.
-
-#REQUIRED_CONTRACTS="@mozilla.org/permissionmanager;1 @mozilla.org/PopupWindowManager;1 @mozilla.org/cookie/permission;1 @mozilla.org/permissions/contentblocker;1"
-#REQUIRED_EXTENSIONS="cookie,permissions"
-#
-#GECKO_CHECK_CONTRACTIDS([$REQUIRED_CONTRACTS],
-#	[],[AC_MSG_ERROR([$gecko_cv_gecko needs to be compiled with at least --enable-extensions=default,$REQUIRED_EXTENSIONS])])
-
-fi # with_engine = mozilla
-
-GECKO_DEFINES
-AM_CONDITIONAL([WITH_GECKO_ENGINE], [test "$with_engine" = "mozilla"])
-AM_CONDITIONAL([HAVE_XULRUNNER],[test "$gecko_cv_gecko" = "xulrunner"])
-AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "$enable_psm" = "yes" -a "$have_psm" = "yes"])
-AM_CONDITIONAL([ENABLE_FILEPICKER],[test "$enable_filepicker" = "yes"])
-
-# *********
-# Xulrunner
-# *********
-
-# This is the mozilla backend for xulrunner 1.9
-
-if test "$with_engine" = "xulrunner"; then
-
-LIBXUL_INIT
-
-AC_DEFINE([WITH_XULRUNNER_ENGINE],[1],[Define if building the Xulrunner backend])
-
-WEASEL_UA_VERSION=3.0
-AC_SUBST([WEASEL_UA_VERSION])
-
-
-fi
-
-LIBXUL_DEFINES
-
-AM_CONDITIONAL([WITH_XULRUNNER_ENGINE],[test "$with_engine" = "xulrunner"])
-
 # ******
 # WebKit
 # ******
 
-if test "$with_engine" = "webkit" ; then
-   AC_DEFINE([WITH_WEBKIT_ENGINE],[1],[Define if you wish to enable webkit engine])
-   PKG_CHECK_MODULES([WEBKIT], [webkit-1.0])
-   AC_SUBST([WEBKIT_CFLAGS])
-   AC_SUBST([WEBKIT_LIBS])
-fi # with_engine = webkit
-
-AM_CONDITIONAL([WITH_WEBKIT_ENGINE], test "$with_engine" = "webkit")
+PKG_CHECK_MODULES([WEBKIT], [webkit-1.0])
+AC_SUBST([WEBKIT_CFLAGS])
+AC_SUBST([WEBKIT_LIBS])
 
 # ***************
 # Multimedia keys
@@ -563,33 +345,33 @@ AC_SUBST([EPIPHANY_FEATURES])
 # Gecko 1.9 can handle .desktop files from file: URLs itself, but we
 # also support windows .lnk files, so always enable this plugin
 
-if test "$with_engine" = "mozilla" ; then
-
-AC_MSG_CHECKING([whether to build the deskop file plugin])
-AC_ARG_ENABLE([desktop-file-plugin],
-	AS_HELP_STRING([--disable-desktop-file-plugin],[Disable the desktop file plugin (default: enabled)]),
-	[],[enable_desktop_file_plugin=yes])
-AC_MSG_RESULT([$enable_desktop_file_plugin])
-
-if test "$enable_desktop_file_plugin" = "yes"; then
-	if test "${gecko_cv_gecko}" = "libxul-embedding" -o "${gecko_cv_gecko}" = "libxul"; then
-		PKG_CHECK_MODULES([DESKTOP_FILE_PLUGIN_DEP],[${gecko_cv_gecko} mozilla-plugin gtk+-2.0 >= 2.6.0])
-	else
-		PKG_CHECK_MODULES([DESKTOP_FILE_PLUGIN_DEP],[${gecko_cv_gecko}-xpcom ${gecko_cv_gecko}-plugin gtk+-2.0 >= 2.6.0])
-	fi
-	AC_SUBST([DESKTOP_FILE_PLUGIN_DEP_CFLAGS])
-	AC_SUBST([DESKTOP_FILE_PLUGIN_DEP_LIBS])
-fi
-
-if test "$enable_desktop_file_plugin" = "yes"; then
-	AC_DEFINE([HAVE_PRIVATE_PLUGINS],[1],[Define if any private plugins are enabled])
-fi
-
-else # with_engine = mozilla
-        enable_desktop_file_plugin=no
-fi   # with_engine != mozilla
-
-AM_CONDITIONAL([ENABLE_DESKTOP_FILE_PLUGIN],[test "$enable_desktop_file_plugin" = "yes"])
+# if test "$with_engine" = "mozilla" ; then
+# 
+# AC_MSG_CHECKING([whether to build the deskop file plugin])
+# AC_ARG_ENABLE([desktop-file-plugin],
+# 	AS_HELP_STRING([--disable-desktop-file-plugin],[Disable the desktop file plugin (default: enabled)]),
+# 	[],[enable_desktop_file_plugin=yes])
+# AC_MSG_RESULT([$enable_desktop_file_plugin])
+# 
+# if test "$enable_desktop_file_plugin" = "yes"; then
+# 	if test "${gecko_cv_gecko}" = "libxul-embedding" -o "${gecko_cv_gecko}" = "libxul"; then
+# 		PKG_CHECK_MODULES([DESKTOP_FILE_PLUGIN_DEP],[${gecko_cv_gecko} mozilla-plugin gtk+-2.0 >= 2.6.0])
+# 	else
+# 		PKG_CHECK_MODULES([DESKTOP_FILE_PLUGIN_DEP],[${gecko_cv_gecko}-xpcom ${gecko_cv_gecko}-plugin gtk+-2.0 >= 2.6.0])
+# 	fi
+# 	AC_SUBST([DESKTOP_FILE_PLUGIN_DEP_CFLAGS])
+# 	AC_SUBST([DESKTOP_FILE_PLUGIN_DEP_LIBS])
+# fi
+# 
+# if test "$enable_desktop_file_plugin" = "yes"; then
+# 	AC_DEFINE([HAVE_PRIVATE_PLUGINS],[1],[Define if any private plugins are enabled])
+# fi
+# 
+# else # with_engine = mozilla
+#         enable_desktop_file_plugin=no
+# fi   # with_engine != mozilla
+# 
+# AM_CONDITIONAL([ENABLE_DESKTOP_FILE_PLUGIN],[test "$enable_desktop_file_plugin" = "yes"])
 
 # *******************
 # Additional features
@@ -651,45 +433,6 @@ fi
 
 AM_CONDITIONAL([ENABLE_NETWORK_MANAGER],[test "$enable_network_manager" = "yes"])
 
-# Enchant spell checking
-# Does not appear to work on gecko 1.8.0, so only offer for >= 1.8.1
-
-if test "$with_engine" = "mozilla" ; then
-
-if test "$gecko_cv_gecko_version_int" -ge "1008001"; then
-
-# Default to 'disabled' until it's fully functional
-AC_MSG_CHECKING([whether spell checking support is requested])
-AC_ARG_ENABLE([spell-checker],
-	AS_HELP_STRING([--enable-spell-checker],[Whether to enable spell checking using enchant]),
-	[],[enable_spell_checker=no])
-AC_MSG_RESULT([$enable_spell_checker])
-else # gecko >= 1.8.1
-        enable_spell_checker=no
-fi   # gecko < 1.8.1
-
-if test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" != "yes"; then
-	AC_MSG_ERROR([Spell check support requested but $gecko_cv_gecko was not compiled with 'spellchecker' extension enabled.])
-fi
-
-if test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" = "yes"; then
-	# FIXME check which version we really need
-	ENCHANT_REQUIRED=1.0
-
-	PKG_CHECK_MODULES([SPELLCHECKER],[enchant >= $ENCHANT_REQUIRED])
-	AC_SUBST([SPELLCHECKER_CFLAGS])
-	AC_SUBST([SPELLCHECKER_LIBS])
-
-	AC_DEFINE([ENABLE_SPELLCHECKER],[1],[Define to enable the spell checker])
-fi
-
-else # with_engine = mozilla
-        enable_spell_checker=no
-fi   # with_engine != mozilla
-
-
-AM_CONDITIONAL([ENABLE_SPELLCHECKER],[test "$enable_spell_checker" = "yes" -a "$have_gecko_spell_checker" = "yes"])
-
 # ************
 # Misc defines
 # ************
@@ -745,6 +488,8 @@ AM_GLIB_GNU_GETTEXT
 # uninstalled share dir to search data
 AC_DEFINE_UNQUOTED([SHARE_UNINSTALLED_DIR], ["`pwd`/data"], [path to source data dir])
 
+AM_CONDITIONAL([ENABLE_SPELLCHECKER],[false])
+
 # ****************
 # Distributor name
 # ****************
@@ -791,32 +536,28 @@ data/Makefile
 data/epiphany-${EPIPHANY_API_VERSION}.pc:data/epiphany.pc.in
 data/epiphany.desktop.in
 data/bme.desktop.in
-data/chrome/Makefile
-data/chrome/brand.dtd
-data/chrome/brand.properties
 data/glade/Makefile
 data/icons/Makefile
 data/art/Makefile
 data/ui/Makefile
-data/weasel-ua-pref.js
 doc/Makefile
 doc/reference/Makefile
 lib/Makefile
 lib/egg/Makefile
 lib/widgets/Makefile
 embed/Makefile
-embed/mozilla/Makefile
 embed/webkit/Makefile
 src/Makefile
 src/bookmarks/Makefile
 src/ephy-version.h
 help/Makefile
-plugins/Makefile
-plugins/desktop-file/Makefile
 po/Makefile.in
 ],
 [],
 [EPIPHANY_API_VERSION=$EPIPHANY_API_VERSION])
+
+# plugins/Makefile
+# plugins/desktop-file/Makefile
 
 AC_OUTPUT
 
@@ -834,14 +575,4 @@ Epiphany was configured with the following options:
  	Zeroconf bookmarks support : $enable_zeroconf
  	NetworkManager support     : $enable_network_manager
  	Python support             : $enable_python
- 	Desktop file plugin        : $enable_desktop_file_plugin
- 	Spellchecker               : $enable_spell_checker (experimental)
- 
-        Engine                     : $with_engine
- "
-
-if test "$with_engine" = "mozilla"; then
-echo "        Gecko backend              : $gecko_cv_gecko version $gecko_cv_gecko_version
-	PSM support                : $enable_psm
 "
-fi

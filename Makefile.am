@@ -1,8 +1,4 @@
-SUBDIRS = lib embed src plugins data po help doc
-
-#if WITH_XULRUNNER_ENGINE
-#SUBDIRS += xulapp
-#endif
+SUBDIRS = lib embed src data po help doc
 
 ACLOCAL_AMFLAGS = -I m4
 
@@ -38,8 +34,7 @@ DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-desktop-file-plugin	\
 	--enable-gtk-doc		\
 	--disable-schemas-install	\
-	--disable-scrollkeeper		\
-	--with-gecko=$(GECKO)
+	--disable-scrollkeeper
 
 # Ignore gtk theme cache files on distcheck
 distuninstallcheck_listfiles = find . -type f -print | grep -v 'icon-theme.cache'

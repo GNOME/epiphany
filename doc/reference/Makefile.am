@@ -148,44 +148,22 @@ GTKDOC_CFLAGS = -I$(top_srcdir)/src \
 		-I$(top_srcdir)/src/bookmarks \
 		-I$(top_srcdir)/lib/egg \
 		-I$(top_builddir)/lib/egg \
+		-I$(top_srcdir)/embed/webkit \
 		$(DEPENDENCIES_CFLAGS) \
+		$(WEBKIT_CFLAGS) \
 		$(DBUS_CFLAGS) \
 		$(INCINTL)
-
-if WITH_GECKO_ENGINE
-GTKDOC_CFLAGS += -I$(top_srcdir)/embed/mozilla \
-		 -I$(GECKO_INCLUDE_ROOT) \
-	         -I$(GECKO_INCLUDE_ROOT)/gtkembedmoz \
-		 $(GECKO_CFLAGS)
-endif
-
-if WITH_WEBKIT_ENGINE
-GTKDOC_CFLAGS += -I$(top_srcdir)/embed/webkit \
-		 $(WEBKIT_CFLAGS)
-endif
 
 GTKDOC_LIBS = \
 	$(top_builddir)/src/libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
-	$(top_builddir)/embed/libephyembedfactory.la
-
-if WITH_GECKO_ENGINE
-GTKDOC_LIBS += $(top_builddir)/embed/mozilla/libephymozillaembed.la
-endif
-
-if WITH_WEBKIT_ENGINE
-GTKDOC_LIBS += $(top_builddir)/embed/webkit/libephywebkitembed.la
-endif
-
-GTKDOC_LIBS += \
+	$(top_builddir)/embed/libephyembedfactory.la \
+	$(top_builddir)/embed/webkit/libephywebkitembed.la \
 	$(top_builddir)/embed/libephyembed.la \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
         $(DEPENDENCIES_LIBS) \
-	$(GECKO_LIBS)	\
-	$(GECKO_EXTRA_LIBS) \
-	$(GECKO_GLUE_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
 
@@ -251,7 +229,7 @@ scan-build.stamp: $(HFILE_GLOB)
 	@echo '*** Scanning header files ***'
 	@-chmod -R u+w $(srcdir)
 	if grep -l '^..*$$' $(srcdir)/$(DOC_MODULE).types > /dev/null ; then \
-	    LD_LIBRARY_PATH=$(GECKO_HOME):$$LD_LIBRARY_PATH CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" CFLAGS="$(GTKDOC_CFLAGS)" LDFLAGS="$(GTKDOC_LIBS)" gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE) --output-dir=$(srcdir) ; \
+	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" CFLAGS="$(GTKDOC_CFLAGS)" LDFLAGS="$(GTKDOC_LIBS)" gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE) --output-dir=$(srcdir) ; \
 	else \
 	    cd $(srcdir) ; \
 	    for i in $(SCANOBJ_FILES) ; do \

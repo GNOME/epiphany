@@ -181,15 +181,6 @@ libpyphany_la_LIBADD = \
 endif
 
 
-# we do this to force c++ linkage if we are using the glue and 
-# are running gecko 1.9 because standalone glue embedders that use
-# gtk_moz_embed_* need to #include <gtkmozembed_glue.cpp>
-if HAVE_GECKO_1_9
-if HAVE_GECKO_XPCOM_GLUE
-nodist_EXTRA_epiphany_SOURCES = dummy.cpp
-endif
-endif
-
 epiphany_SOURCES = ephy-main.c
 
 epiphany_CPPFLAGS = \
@@ -213,57 +204,14 @@ epiphany_LDFLAGS = -dlopen self
 epiphany_LDADD = \
 	libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
-	$(top_builddir)/embed/libephyembedfactory.la
-
-if WITH_XULRUNNER_ENGINE
-epiphany_LDADD += \
-	$(top_builddir)/embed/xulrunner/utils/libephyxulrunnerutils.la	\
-	$(top_builddir)/embed/xulrunner/src/libgnomegeckoembed.la	\
-	$(top_builddir)/embed/xulrunner/embed/libephyxulrunnerembed.la	\
-	$(top_builddir)/embed/xulrunner/components/libephycomponents.la
-endif
-
-if WITH_GECKO_ENGINE
-epiphany_LDADD += \
-	$(GECKO_LIBS) \
-	$(top_builddir)/embed/mozilla/libephymozillaembed.la
-endif
-
-if WITH_WEBKIT_ENGINE
-epiphany_LDADD += \
-	$(top_builddir)/embed/webkit/libephywebkitembed.la
-endif
-
-epiphany_LDADD += \
+	$(top_builddir)/embed/libephyembedfactory.la \
+	$(top_builddir)/embed/webkit/libephywebkitembed.la \
 	$(top_builddir)/embed/libephyembed.la \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
-	$(top_builddir)/lib/egg/libegg.la
-
-if WITH_XULRUNNER_ENGINE
-epiphany_LDFLAGS += -R$(LIBXUL_LIBDIR)
-epiphany_LDADD += $(LIBXUL_LIBS) -lxpcomglue
-endif
-
-if WITH_GECKO_ENGINE
-if !HAVE_GECKO_XPCOM_GLUE
-epiphany_LDFLAGS += -R$(GECKO_HOME)
-endif
-
-epiphany_LDADD += \
-	$(GECKO_LIBS) \
-	$(GECKO_EXTRA_LIBS) \
-	$(GECKO_GLUE_LIBS)
-endif
-
-if WITH_WEBKIT_ENGINE
-epiphany_LDADD += \
-	$(WEBKIT_LIBS)
-endif
-
-epiphany_LDADD += \
-	$(GECKO_LIBS) \
+	$(top_builddir)/lib/egg/libegg.la \
 	$(DEPENDENCIES_LIBS) \
+	$(WEBKIT_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
 

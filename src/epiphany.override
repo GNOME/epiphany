@@ -371,34 +371,34 @@ _wrap_ephy_cookie_manager_list_cookies(PyGObject *self)
     return _helper_wrap_boxed_glist (EPHY_TYPE_COOKIE, list);
 }
 %%
-override ephy_permission_manager_list_permissions kwargs
-static PyObject *
-_wrap_ephy_permission_manager_list_permissions (PyGObject *self,
-                                                PyObject *args, PyObject *kwargs)
-{
-    static char *kwlist[] = {"type", NULL};
-    char *type;
-    GList *list;
-
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, 
-                                     "s:EphyPermissionManager.list_permissions", kwlist, &type))
-        return NULL;
-       
-    list = ephy_permission_manager_list_permissions(EPHY_PERMISSION_MANAGER (self->obj), type);
-
-    return _helper_wrap_boxed_glist (EPHY_TYPE_PERMISSION_INFO, list);
-}
+//override ephy_permission_manager_list_permissions kwargs
+// static PyObject *
+// _wrap_ephy_permission_manager_list_permissions (PyGObject *self,
+//                                                 PyObject *args, PyObject *kwargs)
+// {
+//     static char *kwlist[] = {"type", NULL};
+//     char *type;
+//     GList *list;
+// 
+//     if (!PyArg_ParseTupleAndKeywords(args, kwargs,
+//                                      "s:EphyPermissionManager.list_permissions", kwlist, &type))
+//         return NULL;
+// 
+//     list = ephy_permission_manager_list_permissions(EPHY_PERMISSION_MANAGER (self->obj), type);
+// 
+//     return _helper_wrap_boxed_glist (EPHY_TYPE_PERMISSION_INFO, list);
+// }
 %%
-override-attr EphyPermissionInfo.type
-static PyObject*
-_wrap_ephy_permission_info__get_type (PyObject* self, void* closure)
-{
-    const char* type;
-    
-    type = g_quark_to_string (pyg_boxed_get(self, EphyPermissionInfo)->qtype);
-    
-    return PyString_FromString (type);
-}
+// override-attr EphyPermissionInfo.type
+// static PyObject*
+// _wrap_ephy_permission_info__get_type (PyObject* self, void* closure)
+// {
+//     const char* type;
+// 
+//     type = g_quark_to_string (pyg_boxed_get(self, EphyPermissionInfo)->qtype);
+// 
+//     return PyString_FromString (type);
+// }
 %%
 override ephy_node_get_children noargs
 static PyObject *
