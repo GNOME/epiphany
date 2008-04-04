@@ -39,8 +39,7 @@
 #include "AutoModalDialog.h"
 #include "EphyUtils.h"
 
-#undef ENABLE_AUTHPROMPT2
-#ifdef ENABLE_AUTHPROMPT2
+#ifdef HAVE_GECKO_1_9
 #include <nsIStringBundle.h>
 #include "nsIChannel.h"
 #include "nsIProxiedChannel.h"
@@ -50,7 +49,7 @@
 #include "nsNetUtil.h"
 #include "nsIIDNService.h"
 #include "nsIAuthInformation.h"
-#endif /* ENABLE_AUTHPROMPT2 */
+#endif /* HAVE_GECKO_1_9 */
 
 #include "EphyPromptService.h"
 
@@ -651,12 +650,11 @@ Prompter::ConvertAndEscapeButtonText(const PRUnichar *aText,
 	return escaped;
 }
 
-/* FIXME: needs THREADSAFE? */
-#ifdef ENABLE_AUTHPROMPT2 /* gecko 1.9 only */
-NS_IMPL_THEADSAFE_ISUPPORTS3 (EphyPromptService,
-                              nsIPromptService,
-                              nsIPromptService2,
-                              nsINonBlockingAlertService)
+#ifdef HAVE_GECKO_1_9
+NS_IMPL_THREADSAFE_ISUPPORTS3 (EphyPromptService,
+                               nsIPromptService,
+                               nsIPromptService2,
+                               nsINonBlockingAlertService)
 #elif defined(HAVE_NSINONBLOCKINGALERTSERVICE_H)
 NS_IMPL_ISUPPORTS2 (EphyPromptService,
 		    nsIPromptService,
@@ -901,7 +899,7 @@ EphyPromptService::ShowNonBlockingAlert (nsIDOMWindow *aParent,
 
 #endif /* HAVE_NSINONBLOCKINGALERTSERVICE_H */
 
-#ifdef ENABLE_AUTHPROMPT2
+#ifdef HAVE_GECKO_1_9
 
 static void
 NS_GetAuthHostPort(nsIChannel* aChannel, nsIAuthInformation* aAuthInfo,
@@ -1114,4 +1112,4 @@ NS_METHOD EphyPromptService::AsyncPromptAuth(nsIDOMWindow *aParent,
   return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#endif /* ENABLE_AUTHPROMPT2 */
+#endif /* HAVE_GECKO_1_9 */
