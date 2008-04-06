@@ -944,60 +944,72 @@ impl_list_passwords (EphyPasswordManager *manager)
 		if (NS_FAILED (rv)) continue;
 
 		nsCString host;
-		idnService->ConvertACEtoUTF8 (NS_ConvertUTF16toUTF8(transfer), host);
-		if(transfer.IsVoid()) host.SetIsVoid(PR_TRUE);
+		if (transfer.IsVoid())
+                  host.SetIsVoid(PR_TRUE);
+                else
+                  idnService->ConvertACEtoUTF8 (NS_ConvertUTF16toUTF8(transfer), host);
 
 		rv = logins[i]->GetHttpRealm (unicodeName);
 		if (NS_FAILED (rv)) continue;
 		nsCString httpRealm;
-		NS_UTF16ToCString (unicodeName,
-				   NS_CSTRING_ENCODING_UTF8, httpRealm);
-		if(unicodeName.IsVoid()) httpRealm.SetIsVoid(PR_TRUE);
+		if (unicodeName.IsVoid())
+                  httpRealm.SetIsVoid(PR_TRUE);
+                else
+                  NS_UTF16ToCString (unicodeName,
+                                    NS_CSTRING_ENCODING_UTF8, httpRealm);
 
 		rv = logins[i]->GetUsername (unicodeName);
 		if (NS_FAILED (rv)) continue;
 		nsCString userName;
-		NS_UTF16ToCString (unicodeName,
-				   NS_CSTRING_ENCODING_UTF8, userName);
-		if(unicodeName.IsVoid()) userName.SetIsVoid(PR_TRUE);
+		if (unicodeName.IsVoid())
+                  userName.SetIsVoid(PR_TRUE);
+                else
+                  NS_UTF16ToCString (unicodeName,
+                                    NS_CSTRING_ENCODING_UTF8, userName);
 
 		rv = logins[i]->GetUsernameField (unicodeName);
 		if (NS_FAILED (rv)) continue;
 		nsCString usernameField;
-		NS_UTF16ToCString (unicodeName,
-				   NS_CSTRING_ENCODING_UTF8, usernameField);
-		if(unicodeName.IsVoid()) usernameField.SetIsVoid(PR_TRUE);
+		if (unicodeName.IsVoid())
+                  usernameField.SetIsVoid(PR_TRUE);
+                else
+                  NS_UTF16ToCString (unicodeName,
+                                    NS_CSTRING_ENCODING_UTF8, usernameField);
 
 		rv = logins[i]->GetPassword (unicodeName);
 		if (NS_FAILED (rv)) continue;
 		nsCString userPassword;
-		NS_UTF16ToCString (unicodeName,
-				   NS_CSTRING_ENCODING_UTF8, userPassword);
-		if(unicodeName.IsVoid()) userPassword.SetIsVoid(PR_TRUE);
+		if (unicodeName.IsVoid())
+                  userPassword.SetIsVoid(PR_TRUE);
+                else
+                  NS_UTF16ToCString (unicodeName,
+                                    NS_CSTRING_ENCODING_UTF8, userPassword);
 
 		rv = logins[i]->GetPasswordField (unicodeName);
 		if (NS_FAILED (rv)) continue;
 		nsCString passwordField;
-		NS_UTF16ToCString (unicodeName,
-				   NS_CSTRING_ENCODING_UTF8, passwordField);
-		if(unicodeName.IsVoid()) passwordField.SetIsVoid(PR_TRUE);
+		if (unicodeName.IsVoid())
+                  passwordField.SetIsVoid(PR_TRUE);
+                else
+                  NS_UTF16ToCString (unicodeName,
+                                    NS_CSTRING_ENCODING_UTF8, passwordField);
 
 		rv = logins[i]->GetFormSubmitURL (unicodeName);
 		if (NS_FAILED (rv)) continue;
 		nsCString formSubmitURL;
-		NS_UTF16ToCString (unicodeName,
-				   NS_CSTRING_ENCODING_UTF8, formSubmitURL);
-		if(unicodeName.IsVoid()) formSubmitURL.SetIsVoid(PR_TRUE);
+		if (unicodeName.IsVoid())
+                  formSubmitURL.SetIsVoid(PR_TRUE);
+                else
+                  NS_UTF16ToCString (unicodeName,
+                                    NS_CSTRING_ENCODING_UTF8, formSubmitURL);
 
-
-		EphyPasswordInfo *p = g_new0 (EphyPasswordInfo, 1);
-		p->host = !userName.IsVoid() ? g_strdup (host.get()) : nsnull;
-		p->username = !userName.IsVoid() ? g_strdup (userName.get()) : nsnull;
-		p->password = !userPassword.IsVoid() ? g_strdup (userPassword.get()) : nsnull;
-		p->httpRealm = !httpRealm.IsVoid() ? g_strdup(httpRealm.get()) : nsnull;
-		p->usernameField = !usernameField.IsVoid() ? g_strdup(usernameField.get()) : nsnull;
-		p->passwordField = !passwordField.IsVoid() ? g_strdup(passwordField.get()) : nsnull;
-		p->formSubmitURL = !formSubmitURL.IsVoid() ? g_strdup(formSubmitURL.get()) : nsnull;
+		EphyPasswordInfo *p = ephy_password_info_new (host.IsVoid() ? NULL : host.get(),
+                                                              userName.IsVoid() ? NULL : userName.get(),
+                                                              userPassword.IsVoid() ? NULL : userPassword.get());
+		p->httpRealm = httpRealm.IsVoid() ? NULL : g_strdup(httpRealm.get());
+		p->usernameField = usernameField.IsVoid() ? NULL : g_strdup(usernameField.get());
+		p->passwordField = passwordField.IsVoid() ? NULL : g_strdup(passwordField.get());
+		p->formSubmitURL = formSubmitURL.IsVoid() ? NULL : g_strdup(formSubmitURL.get());
 
 		passwords = g_list_prepend (passwords, p);
 	}
