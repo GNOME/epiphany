@@ -102,6 +102,11 @@ ephy_password_info_free (EphyPasswordInfo *info)
 		g_free (info->host);
 		g_free (info->username);
 		g_free (info->password);
+                g_free (info->httpRealm);
+                g_free (info->passwordField);
+                g_free (info->usernameField);
+                g_free (info->formSubmitURL);
+
 		g_slice_free (EphyPasswordInfo, info);
 	}
 }
