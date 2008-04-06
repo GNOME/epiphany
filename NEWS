@@ -1,4 +1,47 @@
 ================
+Epiphany 2.22.1 
+================
+
+"Un poisson d’avril"
+
+In Epiphany 2.22.1, various improvements for gecko 1.9 as well as build fixes 
+for 1.8 have been made. Also there are some small performance improvements and
+a couple of crash bugfixes. 
+
+To clear up any possible confusion: WebKit is not the default back-end on the
+2.22 branch. If all goes well, it will be the default back-end for 2.24. 
+No joke! ;)
+
+Changes: 
+
+    * Revert the bookmark/history item no-dupes patch. It was slowing down ephy.
+    * Remove the unnecessary setting of the preferred action in the cases that 
+      action was going to be the default one anyway. Don't open twice, just let
+      gecko handle opening in the preferred application.
+    * Make the extra column pack-end so that when we hide it when it's empty,
+      the other column expands. This makes bookmarks take up all the space 
+      instead of being truncated at the half.
+
+Bug fixes:
+
+    * Use ephy_password_info_new to allocate EphyPasswordInfo, not g_new.
+      Fixes a crash in the PDM passwords tab.
+    * Fix multiple crashers in the zeroconf bookmarks. Bug #516008.
+    * Use g_slice for EphyCookie allocation. Bug #520560.
+    * Use g_slice for EphyPasswordInfo, EphyPermissionInfo, PixbufCacheEntry.
+      Bug #521017.
+
+Contributors to this release:
+Alexander Sack, Diego Escalante Urrelo, Christian Persch, Cosimo Cecchi
+
+Translations:
+iharh (Belarusian), frolix68 (Greek), Kostas Papadimas (Greek), mateju (Slovenian),
+Nguyễn Thái Ngọc Duy (Vietnamese), Philip Withnall (British English),
+Yavor Doganov (Belarusian), Alexander Shopov (Bulgarian), 
+Eskild Hustvedt (Norwegian Nynorsk),Yair Hershkovitz (Hebrew), Rajesh Ranjan 
+(Hindi).
+
+================
 Epiphany 2.22.0 
 ================
 
