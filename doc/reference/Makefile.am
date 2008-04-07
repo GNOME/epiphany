@@ -62,28 +62,9 @@ IGNORE_HFILES = \
 	ephy-history.h \
 	find-dialog.h \
 	print-dialog.h \
-	ContentHandler.h \
-	EphyAboutRedirector.h \
-	EphyBrowser.h \
-	EphyHeaderSniffer.h \
-	EventContext.h \
-	FilePicker.h \
-	GlobalHistory.h \
-	GtkNSSClientAuthDialogs.h \
-	GtkNSSDialogs.h \
-	GtkNSSKeyPairDialogs.h \
-	MozDownload.h \
-	mozilla-download.h \
-	mozilla-embed.h \
-	mozilla-embed-persist.h \
-	mozilla-embed-single.h \
-	mozilla-notifiers.h \
-	MozillaPrivate.h \
-	MozRegisterComponents.h \
 	webkit-embed.h \
 	webkit-embed-persist.h \
 	webkit-embed-single.h \
-	PrintingPromptService.h \
 	egg-editable-toolbar.h \
 	eggintl.h \
 	eggmarshalers.h \
@@ -104,7 +85,6 @@ IGNORE_HFILES = \
 	ephy-topic-action.h \
 	ephy-topics-selector.h \
 	ephy-automation.h \
-	EphyAutomation.h \
 	ephy-completion-model.h \
 	ephy-encoding-dialog.h \
 	ephy-encoding-menu.h \
