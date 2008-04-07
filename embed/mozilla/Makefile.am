@@ -166,11 +166,14 @@ libephymozillaembed_la_CXXFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CXXFLAGS)
 
+EXTRA_DIST =
+
 if HAVE_GECKO_1_9
 xptdir = $(pkgdatadir)/components
 xpt_DATA = epiphany.xpt
 
-noinst_DATA = \
+EXTRA_DIST += \
 	ephyIAddCertExceptionParams.idl \
-	ephyIAddCertExceptionParams.h
+	ephyIAddCertExceptionParams.h \
+	$(xpt_DATA)
 endif
