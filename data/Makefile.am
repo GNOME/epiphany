@@ -11,9 +11,8 @@ desktopdir = $(datadir)/applications
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 
 schemadir = $(GCONF_SCHEMA_FILE_DIR)
-extra_schema_files = epiphany-fonts.schemas epiphany-pango.schemas
 schema_in_files = epiphany.schemas.in epiphany-lockdown.schemas.in
-schema_DATA = $(schema_in_files:.schemas.in=.schemas) $(extra_schema_files)
+schema_DATA = $(schema_in_files:.schemas.in=.schemas)
 
 aboutdir = $(pkgdatadir)
 about_DATA = epiphany.xhtml
@@ -58,7 +57,6 @@ EXTRA_DIST = \
 	$(aboutdialog_DATA)		\
 	$(service_in_files)		\
 	$(schema_in_files)		\
-	$(extra_schema_files)		\
 	$(desktop_in_files)		\
 	$(about_DATA)			\
 	$(mimepermission_DATA)		\
@@ -67,8 +65,7 @@ EXTRA_DIST = \
 	$(service_DATA)			\
 	$(m4data_DATA)			\
 	epiphany-service.xml		\
-	check-mime.py			\
-	generate-font-schemas.py
+	check-mime.py
 
 DISTCLEANFILES = \
 	$(service_DATA)		\

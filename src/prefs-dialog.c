@@ -64,7 +64,6 @@
 #include <gtk/gtkmain.h>
 #include <string.h>
 
-#define CONF_FONTS_FOR_LANGUAGE	"/apps/epiphany/dialogs/preferences_font_language"
 #define DOWNLOAD_BUTTON_WIDTH	8
 
 static void prefs_dialog_class_init	(PrefsDialogClass *klass);
@@ -75,39 +74,6 @@ static void prefs_dialog_init		(PrefsDialog *pd);
 static const char * const cookies_accept_enum [] =
 {
 	"anywhere", "current site", "nowhere"
-};
-
-enum
-{
-	FONT_TYPE_VARIABLE,
-	FONT_TYPE_MONOSPACE
-};
-
-static const char * const fonts_types[] =
-{
-	"variable",
-	"monospace"
-};
-
-enum
-{
-	FONT_SIZE_FIXED,
-	FONT_SIZE_VAR,
-	FONT_SIZE_MIN
-};
-
-static const char * const size_prefs [] =
-{
-	CONF_RENDERING_FONT_FIXED_SIZE,
-	CONF_RENDERING_FONT_VAR_SIZE,
-	CONF_RENDERING_FONT_MIN_SIZE
-};
-
-static const int default_size [] =
-{
-	10,
-	11,
-	7
 };
 
 enum
@@ -126,7 +92,6 @@ enum
 	/* Fonts and Colors */
 	USE_FONTS_PROP,
 	MIN_SIZE_PROP,
-	FONT_PREFS_BUTTON_PROP,
 	USE_COLORS_PROP,
 	SMOOTHSCROLL_PROP,
 	CSS_CONTAINER_PROP,
@@ -172,7 +137,6 @@ EphyDialogProperty properties [] =
 	/* Fonts and Colors */
 	{ "use_fonts_checkbutton",	CONF_RENDERING_USE_OWN_FONTS,	PT_AUTOAPPLY | PT_INVERTED,	0 },
 	{ "min_size_spinbutton",	CONF_RENDERING_FONT_MIN_SIZE,	PT_AUTOAPPLY,	0 },
-	{ "font_prefs_button",		NULL,				PT_NORMAL,	0 },
 	{ "use_colors_checkbutton",	CONF_RENDERING_USE_OWN_COLORS,	PT_AUTOAPPLY | PT_INVERTED,	0 },
 	{ "smoothscroll_button",	CONF_DISPLAY_SMOOTHSCROLL,	PT_AUTOAPPLY,	0 },
 	{ "css_container",		NULL,				PT_NORMAL,	0 },
@@ -222,44 +186,6 @@ EphyDialogProperty add_lang_props [] =
 
 enum
 {
-	FONTS_WINDOW_PROP,
-	FONTS_LANGUAGE_PROP,
-	FONTS_VARIABLE_PROP,
-	FONTS_MONOSPACE_PROP,
-	FONTS_VARIABLE_SIZE_PROP,
-	FONTS_FIXED_SIZE_PROP,
-	FONTS_MIN_SIZE_PROP,
-};
-
-static const
-EphyDialogProperty fonts_properties [] =
-{
-	{ "fonts_dialog",		NULL,				PT_NORMAL, 0},
-	{ "fonts_language_combo",	CONF_FONTS_FOR_LANGUAGE,	PT_AUTOAPPLY,	G_TYPE_STRING },
-	{ "variable_combo",		NULL,				PT_AUTOAPPLY,	G_TYPE_STRING },
-	{ "monospace_combo",		NULL,				PT_AUTOAPPLY,	G_TYPE_STRING },
-	{ "variable_size_spinbutton",	NULL,				PT_AUTOAPPLY,	0 },
-	{ "fixed_size_spinbutton",	NULL,				PT_AUTOAPPLY,	0 },
-	{ "min_size_spinbutton",	NULL,				PT_AUTOAPPLY,	0 },
-
-	{ NULL }
-};
-
-enum
-{
-	COL_FONTS_LANG_NAME,
-	COL_FONTS_LANG_CODE
-};
-
-enum
-{
-	COL_FONT_NAME,
-	COL_FONT_DATA,
-	COL_FONT_IS_SEP
-};
-
-enum
-{
 	COL_LANG_NAME,
 	COL_LANG_CODE
 };
@@ -283,7 +209,6 @@ struct PrefsDialogPrivate
 {
 	GtkTreeView *lang_treeview;
 	GtkTreeModel *lang_model;
-	EphyDialog *fonts_dialog;
 	EphyDialog *add_lang_dialog;
 	GtkWidget *lang_add_button;
 	GtkWidget *lang_remove_button;
@@ -300,16 +225,6 @@ prefs_dialog_finalize (GObject *object)
 {
 	PrefsDialog *dialog = EPHY_PREFS_DIALOG (object);
 	PrefsDialogPrivate *priv = dialog->priv;
-
-	if (priv->fonts_dialog != NULL)
-	{
-		EphyDialog **fonts_dialog = &priv->fonts_dialog;
-
-		g_object_remove_weak_pointer
-			(G_OBJECT (priv->fonts_dialog),
-			(gpointer *) fonts_dialog);
-		g_object_unref (priv->fonts_dialog);
-	}
 
 	if (priv->add_lang_dialog != NULL)
 	{
@@ -361,118 +276,6 @@ prefs_dialog_show_help (EphyDialog *dialog)
 	ephy_gui_help (GTK_WINDOW (window), "epiphany", help_preferences[id]);
 }
 
-static void
-setup_font_combo (EphyDialog *dialog,
-		  const char *type,
-		  const char *code,
-		  int prop)
-{
-	GtkWidget *combo;
-	GtkListStore *store;
-	GtkTreeIter iter;
-	GList *fonts, *l;
-	char key[255];
-	EphyEmbedSingle *single;
-
-	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
-	fonts = ephy_embed_single_get_font_list (single, code);
-	fonts = g_list_sort (fonts, (GCompareFunc) strcmp);
-
-	g_snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT, type, code);
-
-	combo = ephy_dialog_get_control (dialog, fonts_properties[prop].id);
-	store = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
-
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set (store, &iter,
-			    COL_FONT_NAME, _("Default"),
-			    COL_FONT_DATA, NULL,
-			    COL_FONT_IS_SEP, FALSE,
-			    -1);
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set (store, &iter,
-			    COL_FONT_NAME, "",
-			    COL_FONT_DATA, "",
-			    COL_FONT_IS_SEP, TRUE,
-			    -1);
-
-	for (l = fonts; l != NULL; l = l->next)
-	{
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter,
-				    COL_FONT_NAME, (char *) l->data,
-				    COL_FONT_DATA, (char *) l->data,
-				    COL_FONT_IS_SEP, FALSE,
-				    -1);
-	}
-	g_list_foreach (fonts, (GFunc) g_free, NULL);
-	g_list_free (fonts);
-
-	ephy_dialog_set_pref (dialog, fonts_properties[prop].id, NULL);
-
-	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), GTK_TREE_MODEL (store));
-	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), -1);
-
-	ephy_dialog_set_pref (dialog, fonts_properties[prop].id, key);
-
-	g_object_unref (store);
-}
-
-static void
-fonts_language_changed_cb (EphyDialog *dialog,
-			   const GValue *value,
-			   gpointer data)
-{
-	const char *code;
-	char key[128];
-	int size;
-
-	code = g_value_get_string (value);
-
-	LOG ("fonts language combo changed, new code '%s'", code);
-
-	setup_font_combo (dialog, "variable", code, FONTS_VARIABLE_PROP);
-	setup_font_combo (dialog, "monospace", code, FONTS_MONOSPACE_PROP);
-
-	g_snprintf (key, sizeof (key), "%s_%s", size_prefs[FONT_SIZE_VAR], code);
-	size = eel_gconf_get_integer (key);
-	if (size <= 0)
-	{
-		eel_gconf_set_integer (key, default_size[FONT_SIZE_VAR]);
-	}
-	ephy_dialog_set_pref (dialog, fonts_properties[FONTS_VARIABLE_SIZE_PROP].id, key);
-
-	g_snprintf (key, sizeof (key), "%s_%s", size_prefs[FONT_SIZE_FIXED], code);
-	size = eel_gconf_get_integer (key);
-	if (size <= 0)
-	{
-		eel_gconf_set_integer (key, default_size[FONT_SIZE_FIXED]);
-	}
-	ephy_dialog_set_pref (dialog, fonts_properties[FONTS_FIXED_SIZE_PROP].id, key);
-
-	g_snprintf (key, sizeof (key), "%s_%s", size_prefs[FONT_SIZE_MIN], code);
-	size = eel_gconf_get_integer (key);
-	if (size <= 0)
-	{
-		eel_gconf_set_integer (key, default_size[FONT_SIZE_MIN]);
-	}
-	ephy_dialog_set_pref (dialog, fonts_properties[FONTS_MIN_SIZE_PROP].id, key);
-}
-
-static void
-font_prefs_dialog_response_cb (GtkWidget *widget,
-			       int response,
-			       EphyDialog *dialog)
-{
-	if (response == GTK_RESPONSE_HELP)
-	{
-		ephy_gui_help (GTK_WINDOW (widget), "epiphany", "fonts-and-style-preferences");
-		return;
-	}
-
-	g_object_unref (dialog);
-}
-
 static gboolean
 row_is_separator (GtkTreeModel *model,
                   GtkTreeIter *iter,
@@ -484,126 +287,6 @@ row_is_separator (GtkTreeModel *model,
 	gtk_tree_model_get (model, iter, column, &is_sep, -1);
 
 	return is_sep;
-}
-
-static EphyDialog *
-setup_fonts_dialog (PrefsDialog *pd)
-{
-	EphyDialog *dialog;
-	GtkWidget *window, *parent, *variable_combo, *monospace_combo;
-	GtkWidget *combo;
-	GtkCellRenderer *renderer;
-	GtkListStore *store;
-	GtkTreeModel *sortmodel;
-	GtkTreeIter iter;
-	guint n_fonts_languages, i;
-	const EphyFontsLanguageInfo *fonts_languages;
-
-	parent = ephy_dialog_get_control (EPHY_DIALOG (pd),
-					  properties[WINDOW_PROP].id);
-
-	dialog =  EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG,
-					     "parent-window", parent,
-					     NULL));
-
-	ephy_dialog_construct (dialog, fonts_properties,
-			       ephy_file ("prefs-dialog.glade"),
-			       "fonts_dialog", NULL);
-
-	ephy_dialog_get_controls
-		(dialog,
-		 fonts_properties[FONTS_WINDOW_PROP].id, &window,
-		 fonts_properties[FONTS_LANGUAGE_PROP].id, &combo,
-		 fonts_properties[FONTS_VARIABLE_PROP].id, &variable_combo,
-		 fonts_properties[FONTS_MONOSPACE_PROP].id, &monospace_combo,
-		 NULL);
-
-	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (parent)),
-				     GTK_WINDOW (window));
-	g_signal_connect (window, "response",
-			  G_CALLBACK (font_prefs_dialog_response_cb), dialog);
-
-	renderer = gtk_cell_renderer_text_new ();
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (variable_combo), renderer, TRUE);
-        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (variable_combo), renderer,
-                                        "text", COL_FONT_NAME,
-                                        NULL);
-	ephy_dialog_set_data_column (dialog, fonts_properties[FONTS_VARIABLE_PROP].id,
-				     COL_FONT_DATA);
-        renderer = gtk_cell_renderer_text_new ();
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (monospace_combo), renderer, TRUE);
-        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (monospace_combo), renderer,
-                                        "text", COL_FONT_NAME,
-                                        NULL);
-	ephy_dialog_set_data_column (dialog, fonts_properties[FONTS_MONOSPACE_PROP].id,
-				     COL_FONT_DATA);
-
-	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (variable_combo),
-					      (GtkTreeViewRowSeparatorFunc) row_is_separator,
-					      GINT_TO_POINTER (COL_FONT_IS_SEP), NULL);
-	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (monospace_combo),
-					      (GtkTreeViewRowSeparatorFunc) row_is_separator,
-					      GINT_TO_POINTER (COL_FONT_IS_SEP), NULL);
-
-	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
-
-	fonts_languages = ephy_font_languages ();
-	n_fonts_languages = ephy_font_n_languages ();
-	
-	for (i = 0; i < n_fonts_languages; i++)
-	{
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter,
-				    COL_FONTS_LANG_NAME, Q_(fonts_languages[i].title),
-				    COL_FONTS_LANG_CODE, fonts_languages[i].code,
-				    -1);
-	}
-
-	sortmodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sortmodel),
-					      COL_FONTS_LANG_NAME,
-					      GTK_SORT_ASCENDING);
-
-	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), sortmodel);
-
-        renderer = gtk_cell_renderer_text_new ();
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
-        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
-                                        "text", COL_FONTS_LANG_NAME,
-                                        NULL);
-
-	ephy_dialog_set_data_column (dialog, fonts_properties[FONTS_LANGUAGE_PROP].id, COL_FONTS_LANG_CODE);
-
-	g_signal_connect (dialog, "changed::fonts_language_combo",
-			  G_CALLBACK (fonts_language_changed_cb),
-			  NULL);
-
-	g_object_unref (store);
-	g_object_unref (sortmodel);
-
-	return dialog;
-}
-
-static void
-font_prefs_button_clicked_cb (GtkWidget *button,
-			      PrefsDialog *pd)
-{
-	PrefsDialogPrivate *priv = pd->priv;
-
-	if (priv->fonts_dialog == NULL)
-	{
-		EphyDialog **fonts_dialog;
-
-		priv->fonts_dialog = setup_fonts_dialog (pd);
-
-		fonts_dialog = &priv->fonts_dialog;
-
-		g_object_add_weak_pointer
-			(G_OBJECT (priv->fonts_dialog),
-			(gpointer *) fonts_dialog);
-	}
-
-	ephy_dialog_show (priv->fonts_dialog);
 }
 
 static void
@@ -1491,7 +1174,7 @@ prefs_dialog_init (PrefsDialog *pd)
 	EphyDialog *dialog = EPHY_DIALOG (pd);
 	EphyEncodings *encodings;
 	GtkWidget *window, *curr_button, *blank_button;
-	GtkWidget *clear_cache_button, *font_prefs_button;
+	GtkWidget *clear_cache_button;
 	GtkWidget *css_checkbox, *css_edit_box, *css_edit_button, *css_container;
 	gboolean sensitive;
 
@@ -1511,7 +1194,6 @@ prefs_dialog_init (PrefsDialog *pd)
 		 properties[WINDOW_PROP].id, &window,
 		 properties[HOMEPAGE_CURRENT_PROP].id, &curr_button,
 		 properties[HOMEPAGE_BLANK_PROP].id, &blank_button,
-		 properties[FONT_PREFS_BUTTON_PROP].id, &font_prefs_button,
 		 properties[CSS_CHECKBOX_PROP].id, &css_checkbox,
 		 properties[CSS_EDIT_BOX_PROP].id, &css_edit_box,
 		 properties[CSS_EDIT_BUTTON_PROP].id, &css_edit_button,
@@ -1533,9 +1215,6 @@ prefs_dialog_init (PrefsDialog *pd)
 	sensitive = eel_gconf_key_is_writable (CONF_GENERAL_HOMEPAGE);
 	gtk_widget_set_sensitive (curr_button, sensitive);
 	gtk_widget_set_sensitive (blank_button, sensitive);
-
-	g_signal_connect (font_prefs_button, "clicked",
-			  G_CALLBACK (font_prefs_button_clicked_cb), dialog);
 
 	css_checkbox_toggled (GTK_TOGGLE_BUTTON (css_checkbox), css_edit_box);
 	g_signal_connect (css_checkbox, "toggled",
