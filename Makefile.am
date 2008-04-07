@@ -34,7 +34,7 @@ DISTCLEANFILES = 		\
 
 DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-python			\
-	--enable-zeroconf		\
+	--disable-zeroconf		\
 	--enable-desktop-file-plugin	\
 	--enable-gtk-doc		\
 	--disable-schemas-install	\
