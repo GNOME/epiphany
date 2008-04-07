@@ -426,7 +426,6 @@ main (int argc,
 	GError *error = NULL;
 	guint32 user_time;
 	const char *env;
-	gboolean enable_pango;
 #ifndef GNOME_PARAM_GOPTION_CONTEXT
 	GPtrArray *fake_argv_array;
 #endif
@@ -705,22 +704,6 @@ main (int argc,
 	/* Extensions may want these, so don't initialize in window-cmds */
 	gtk_about_dialog_set_url_hook (handle_url, NULL, NULL);
 	gtk_about_dialog_set_email_hook (handle_email, NULL, NULL);
-
-	/* Work around bug #328844, and avoid the gecko+pango performance problem */
-	env = g_getenv ("MOZ_ENABLE_PANGO");
-	enable_pango = env != NULL &&
-		       env[0] != '\0' &&
-		       g_ascii_strtoull (env, NULL, 10) != 0;
-
-	if (eel_gconf_get_boolean (CONF_GECKO_ENABLE_PANGO))
-	{
-		g_print ("NOTE: Enabling gecko pango renderer; this may cause performance degradation.\n"
-			 "You can set " CONF_GECKO_ENABLE_PANGO " to \"false\" to disable it.\n");
-	}
-	else if (!enable_pango)
-	{
-		g_setenv ("MOZ_DISABLE_PANGO", "1", TRUE);
-	}
 
 	/* Work-around Flash Player crash */
 	g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
