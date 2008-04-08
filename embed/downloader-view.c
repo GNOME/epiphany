@@ -175,7 +175,7 @@ show_downloader_cb (DownloaderView *dv)
 	}
 }
 
-static gboolean
+static void
 status_icon_popup_menu_cb (GtkStatusIcon *icon,
 			   guint button,
 			   guint time,
@@ -195,8 +195,6 @@ status_icon_popup_menu_cb (GtkStatusIcon *icon,
 	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
 			gtk_status_icon_position_menu, icon,
 			button, time);
-
-	return TRUE;
 }
 
 static void
@@ -212,7 +210,7 @@ show_status_icon (DownloaderView *dv)
 
 	g_signal_connect_swapped (priv->status_icon, "activate",
 				  G_CALLBACK (show_downloader_cb), dv);
-	g_signal_connect (dv->priv->status_icon, "popup-menu",
+	g_signal_connect (priv->status_icon, "popup-menu",
 			  G_CALLBACK (status_icon_popup_menu_cb), dv);
 }
 
@@ -520,8 +518,8 @@ update_status_icon (DownloaderView *dv)
 	downloads = g_hash_table_size (dv->priv->downloads_hash);
 
 	downloadstring = g_strdup_printf (ngettext ("%d download", 
-					"%d downloads", downloads), 
-					downloads);
+                                                    "%d downloads", downloads), 
+                                          downloads);
 
 	gtk_status_icon_set_tooltip (dv->priv->status_icon,
 				     downloadstring);
@@ -618,7 +616,7 @@ downloader_view_add_download (DownloaderView *dv,
 
 	/* Show it already */
 	g_value_init (&visible, G_TYPE_BOOLEAN);
-	g_object_get_property (G_OBJECT(dv->priv->window), "visible", &visible);
+	g_object_get_property (G_OBJECT (dv->priv->window), "visible", &visible);
 	
 	if (eel_gconf_get_boolean (CONF_DOWNLOADS_HIDDEN) && !g_value_get_boolean (&visible))
 	{
