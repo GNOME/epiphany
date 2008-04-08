@@ -89,9 +89,7 @@ ephy_adblock_manager_init (EphyAdBlockManager *self)
 
 	LOG ("ephy_adblock_manager_init");
 
-	priv = EPHY_ADBLOCK_MANAGER_GET_PRIVATE(self);
-	priv->blocker = NULL;
-	self->priv = priv;
+	self->priv = EPHY_ADBLOCK_MANAGER_GET_PRIVATE(self);
 }
 
 static void
