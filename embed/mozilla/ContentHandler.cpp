@@ -85,6 +85,8 @@ GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
 		       nsISupports *aContext,
 		       PRUint32 aReason)
 {
+        nsRefPtr<GContentHandler> kungFuDeathGrip(this);
+
 	nsresult rv;
 	EphyEmbedSingle *single;
 	gboolean handled = FALSE;
