@@ -59,9 +59,9 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	virtual ~GContentHandler();
 
 	NS_METHOD MIMEDoAction ();
-	ContentAction mAction;
   private:
 
+        static void ResponseCallback (GtkWidget*, int, GContentHandler*);
 	NS_METHOD Init ();
 
 	NS_METHOD MIMEInitiateAction ();
@@ -76,6 +76,7 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	nsCString mUrl;
 	nsCString mMimeType;
 	PRUint32 mUserTime;
+	ContentAction mAction;
 };
 
 #endif /* CONTENT_HANDLER_H */

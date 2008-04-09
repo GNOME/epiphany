@@ -67,7 +67,10 @@
  * content handler.
  */
 GContentHandler::GContentHandler()
-: mUserTime(0)
+: mHelperApp(NULL),
+  mPermission(EPHY_MIME_PERMISSION_UNKNOWN),
+  mUserTime(0),
+  mAction(CONTENT_ACTION_NONE)
 {
 	LOG ("GContentHandler ctor (%p)", this);
 }
@@ -223,10 +226,10 @@ NS_METHOD GContentHandler::Init ()
 	return NS_OK;
 }
 
-static void
-response_cb (GtkWidget *dialog,
-	     int response,
-	     GContentHandler *self)
+/* static */ void
+GContentHandler::ResponseCallback (GtkWidget *dialog,
+                                   int response,
+                                   GContentHandler *self)
 {
 	gtk_widget_destroy (dialog);
 
@@ -348,7 +351,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 
 	NS_ADDREF_THIS();
 	g_signal_connect_data (dialog, "response",
-			       G_CALLBACK (response_cb), this,
+			       G_CALLBACK (ResponseCallback), this,
 			       (GClosureNotify) release_cb, (GConnectFlags) 0);
 
 	/* FIXME: should find a way to get the user time of the user action which
@@ -415,7 +418,7 @@ NS_METHOD GContentHandler::MIMEInitiateAction (void)
 NS_METHOD GContentHandler::MIMEDoAction (void)
 {
 	/* This is okay, since we either clicked on a button, or we get 0 */
-	mUserTime = gtk_get_current_event_time ();
+	mUserTime = (PRUint32) gtk_get_current_event_time ();
 
 	nsCOMPtr<nsIMIMEInfo> mimeInfo;
 	mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
