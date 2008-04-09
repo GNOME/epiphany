@@ -35,6 +35,7 @@
 
 #include <nsStringAPI.h>
 
+#include <nsAutoPtr.h>
 #include <nsCExternalHandlerService.h>
 #include <nsComponentManagerUtils.h>
 #include <nsIDOMWindow.h>
@@ -453,6 +454,8 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 		mimeInfo->SetApplicationDescription (nsString ());
 	}
 #endif /* HAVE_GECKO_1_9 */
+
+        nsRefPtr<GContentHandler> kungFuDeathGrip(this);
 
 	if (mAction == CONTENT_ACTION_OPEN)
 	{
