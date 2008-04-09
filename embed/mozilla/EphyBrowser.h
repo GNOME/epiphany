@@ -37,6 +37,7 @@
 #include <nsIWebBrowser.h>
 #include <nsIWebNavigation.h>
 #include <nsPIDOMWindow.h>
+#include <nsIURIFixup.h>
 
 #ifdef ALLOW_PRIVATE_API
 #include <nsIContentViewer.h>
@@ -225,6 +226,7 @@ private:
 #ifdef HAVE_MOZILLA_PSM
 	nsCOMPtr<nsISecureBrowserUI> mSecurityInfo;
 #endif
+        nsCOMPtr<nsIURIFixup> mFixup;
 
 	nsresult GetListener (void);
 	nsresult AttachListeners (void);

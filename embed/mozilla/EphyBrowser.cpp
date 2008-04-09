@@ -84,6 +84,7 @@
 #include <nsIWebPageDescriptor.h>
 #include <nsMemory.h>
 #include <nsServiceManagerUtils.h>
+#include <nsCDefaultURIFixup.h>
 
 #ifdef HAVE_MOZILLA_PSM
 #include <nsICertificateDialogs.h>
@@ -364,14 +365,13 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 					 &decision);
 		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 		if (decision != nsIContentPolicy::ACCEPT) return NS_OK;
-		
-		/* Hide password part */
-		nsCString user;
-		favUri->GetUsername (user);
-		favUri->SetUserPass (user);
+
+                nsCOMPtr<nsIURI> exposableURI;
+                rv = mOwner->mFixup->CreateExposableURI (favUri, getter_AddRefs (exposableURI));
+                NS_ENSURE_SUCCESS (rv, rv);
 
 		nsCString spec;
-		favUri->GetSpec (spec);
+		exposableURI->GetSpec (spec);
 
 		/* ok, we accept this as a valid favicon for this site */
 		g_signal_emit_by_name (mOwner->mEmbed, "ge_favicon", spec.get());
@@ -429,13 +429,12 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 			rv = GetDocURI (linkElement, getter_AddRefs (docUri));
 			NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && docUri, NS_ERROR_FAILURE);
 
-			/* Hide password part */
-			nsCString user;
-			docUri->GetUsername (user);
-			docUri->SetUserPass (user);
+                        nsCOMPtr<nsIURI> exposableURI;
+                        rv = mOwner->mFixup->CreateExposableURI (docUri, getter_AddRefs (exposableURI));
+                        NS_ENSURE_SUCCESS (rv, rv);
 
 			nsCString resolvedLink;
-			rv = docUri->Resolve (cLink, resolvedLink);
+			rv = exposableURI->Resolve (cLink, resolvedLink);
 			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 			linkElement->GetAttribute (NS_LITERAL_STRING ("title"), value);
@@ -901,6 +900,9 @@ nsresult EphyBrowser::Init (EphyEmbed *embed)
  	}
 	NS_ENSURE_SUCCESS (rv, rv);
 #endif /* HAVE_MOZILLA_PSM */
+
+        mFixup = do_GetService (NS_URIFIXUP_CONTRACTID);
+        NS_ENSURE_TRUE (mFixup, NS_ERROR_FAILURE);
 
 	mInitialized = PR_TRUE;
 
