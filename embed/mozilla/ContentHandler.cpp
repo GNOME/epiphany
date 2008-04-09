@@ -384,11 +384,13 @@ NS_METHOD GContentHandler::MIMEInitiateAction (void)
 		}
 	}
 
+#ifndef HAVE_GECKO_1_9
 	if (auto_downloads)
 	{
 		mAction = CONTENT_ACTION_OPEN;
 	}
 	else
+#endif /* !HAVE_GECKO_1_9 */
 	{
 		mAction = CONTENT_ACTION_OPEN_TMP;
 	}
