@@ -517,7 +517,6 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
 				      PRBool aIsForPrinting,
 				      nsIPrintSettings *aSettings)
 {
-  NS_ENSURE_ARG (aPrinter);
   NS_ENSURE_ARG (aGtkSettings);
   NS_ENSURE_ARG (aPageSetup);
 
@@ -529,7 +528,12 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
   }
 #endif
 
-  GtkPrintCapabilities capabilities = gtk_printer_get_capabilities (aPrinter);
+  GtkPrintCapabilities capabilities;
+  if (aIsForPrinting) {
+    NS_ENSURE_TRUE (aPrinter, NS_ERROR_FAILURE);
+
+    capabilities = gtk_printer_get_capabilities (aPrinter);
+  }
 
   /* Initialisation */
   aSettings->SetIsInitializedFromPrinter (PR_FALSE); /* FIXME: PR_TRUE? */
