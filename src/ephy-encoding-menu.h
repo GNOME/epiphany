@@ -20,6 +20,10 @@
  *  $Id$
  */
 
+#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
+#error "Only <epiphany/epiphany.h> can be included directly."
+#endif
+
 #ifndef EPHY_ENCODING_MENU_H
 #define EPHY_ENCODING_MENU_H
 
