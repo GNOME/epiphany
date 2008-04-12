@@ -22,6 +22,10 @@
  * $Id$
  */
 
+#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
+#error "Only <epiphany/epiphany.h> can be included directly."
+#endif
+
 #ifndef EPHY_SPINNER_H
 #define EPHY_SPINNER_H
 

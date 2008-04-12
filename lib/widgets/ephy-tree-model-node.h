@@ -73,4 +73,8 @@ void               ephy_tree_model_node_iter_from_node   (EphyTreeModelNode *mod
 
 G_END_DECLS
 
+#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
+#error "Only <epiphany/epiphany.h> can be included directly."
+#endif
+
 #endif /* EPHY_TREE_MODEL_NODE_H */

@@ -18,6 +18,8 @@
  *
  */
 
+#include <config.h>
+
 #include "webkit-embed-persist.h"
 
 static void     webkit_embed_persist_class_init (WebKitEmbedPersistClass *klass);

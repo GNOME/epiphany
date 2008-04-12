@@ -39,4 +39,8 @@
 #define CONF_RENDERING_FONT_MIN_SIZE_OLD "/apps/epiphany/web/font_min_size"
 #define CONF_RENDERING_FONT_TYPE_OLD "/apps/epiphany/web/default_font_type"
 
+#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
+#error "Only <epiphany/epiphany.h> can be included directly."
+#endif
+
 #define USER_STYLESHEET_FILENAME	"user-stylesheet.css"

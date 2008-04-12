@@ -18,6 +18,10 @@
  *  $Id: ephy-node-db.h 6588 2006-09-13 11:34:25Z chpe $
  */
 
+#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
+#error "Only <epiphany/epiphany.h> can be included directly."
+#endif
+
 #ifndef EPHY_GLIB_COMPAT_H
 #define EPHY_GLIB_COMPAT_H
 

@@ -133,4 +133,8 @@ void	   ephy_node_view_popup		      (EphyNodeView *view,
 
 G_END_DECLS
 
+#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
+#error "Only <epiphany/epiphany.h> can be included directly."
+#endif
+
 #endif /* EPHY_NODE_VIEW_H */

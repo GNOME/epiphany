@@ -62,6 +62,7 @@ eggtypebuiltins.c: stamp-eggtypebuiltins.c Makefile
 	@true
 stamp-eggtypebuiltins.c: Makefile $(EGGHEADERS)
 	$(GLIB_MKENUMS) \
+		--fhead "#include <config.h>\n\n" \
 		--fhead "#include \"eggtypebuiltins.h\"\n\n" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
 		--fprod "\n#include \"@filename@\"" \

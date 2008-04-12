@@ -119,7 +119,8 @@ extra_files =
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed
 # if $(DOC_MODULE).types is non-empty.
-GTKDOC_CFLAGS = -I$(top_srcdir)/src \
+GTKDOC_CFLAGS = -DEPIPHANY_COMPILATION \
+		-I$(top_srcdir)/src \
 		-I$(top_srcdir)/lib \
 		-I$(top_builddir)/lib \
 		-I$(top_srcdir)/lib/widgets \
@@ -144,6 +145,7 @@ GTKDOC_LIBS = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
         $(DEPENDENCIES_LIBS) \
+        $(WEBKIT_LIBS) \
 	$(DBUS_LIBS) \
 	$(LIBINTL)
 

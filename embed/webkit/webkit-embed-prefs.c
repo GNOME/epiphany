@@ -17,6 +17,8 @@
  *
  */
 
+#include <config.h>
+
 #include <glib.h>
 #include <webkit/webkit.h>
 

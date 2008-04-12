@@ -530,6 +530,8 @@ AC_SUBST([SVN_BRANCH],[epiphany_branch])
 # Output files
 # ************
 
+AC_DEFINE([EPIPHANY_COMPILATION],[1],[Compiling epiphany])
+
 AC_CONFIG_FILES([
 Makefile
 data/Makefile
@@ -549,7 +551,7 @@ embed/Makefile
 embed/webkit/Makefile
 src/Makefile
 src/bookmarks/Makefile
-src/ephy-version.h
+src/epiphany.h
 help/Makefile
 po/Makefile.in
 ],

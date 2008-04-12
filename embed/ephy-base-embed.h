@@ -81,4 +81,8 @@ void  ephy_base_embed_set_visibility (EphyBaseEmbed *embed,
 
 G_END_DECLS
 
+#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
+#error "Only <epiphany/epiphany.h> can be included directly."
+#endif
+
 #endif /* __EPHY_BASE_EMBED_H__ */
