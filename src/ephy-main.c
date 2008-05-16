@@ -425,7 +425,6 @@ main (int argc,
 	DBusGProxy *proxy;
 	GError *error = NULL;
 	guint32 user_time;
-	const char *env;
 #ifndef GNOME_PARAM_GOPTION_CONTEXT
 	GPtrArray *fake_argv_array;
 #endif
