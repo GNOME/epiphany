@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-02-26 18:01+0200\n"
-"PO-Revision-Date: 2008-02-26 18:19+0200\n"
+"POT-Creation-Date: 2008-05-17 15:58+0300\n"
+"PO-Revision-Date: 2008-05-17 16:00+0300\n"
 "Last-Translator: Žygimantas Beručka <zygis@gnome.org>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
 "MIME-Version: 1.0\n"
@@ -43,8 +43,8 @@ msgid "Epiphany Web Browser"
 msgstr "Žiniatinklio naršyklė Epiphany"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:537
-#: ../src/ephy-main.c:632
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:535
+#: ../src/ephy-main.c:630
 msgid "Web Browser"
 msgstr "Žiniatinklio naršyklė"
 
@@ -380,8 +380,8 @@ msgstr ""
 "Dabar pasirinktų šriftų kalba. Galimos vertės yra „ar“ (arabų), „x-"
 "baltic“ (baltų kalbos), „x-central-euro“ (centrinės europos kalbos), „x-"
 "cyrillic“ (kalbos, kuriose rašoma kirilica), „el“ (graikų), „he“ (hebrajų), "
-"„ja“ (japonų), „ko“ (korėjiečių), „zh-CN“ (supaprastinta kiniečių), "
-"„th“ (tajų), „zh-TW“ (tradicinė kiniečių), „tr“ (turkų), „x-unicode“ (kitos "
+"„ja“ (japonų), „ko“ (korėjiečių), „zh-CN“ (supaprastinta kinų), "
+"„th“ (tajų), „zh-TW“ (tradicinė kinų), „tr“ (turkų), „x-unicode“ (kitos "
 "kalbos), „x-western“ (kalbos, kuriose rašoma lotyniškais rašmenimis), „x-"
 "tamil“ (tamilų) ir „x-devanagari“ (devanagari)."
 
@@ -412,10 +412,10 @@ msgstr ""
 "japoniškas koduotes), „ko_parallel_state_machine“ (automatiškai parinkti "
 "korėjiečių koduotes), „ruprob“ (automatiškai parinkti rusiškas koduotes), "
 "„ukprob“ (automatiškai parinkti ukrainietiškas koduotes), "
-"„zh_parallel_state_machine“ (automatiškai parinkti kinietiškas koduotes), "
-"„zhcn_parallel_state_machine“ (automatiškai parinkti supaprastintos kiniečių "
-"koduotes), „zhtw_parallel_state_machine“ (automatiškai parinkti tradicinės "
-"kiniečių koduotes) ir „universal_charset_detector“ (automatiškai parinkti "
+"„zh_parallel_state_machine“ (automatiškai parinkti kinų koduotes), "
+"„zhcn_parallel_state_machine“ (automatiškai parinkti supaprastintas kinų "
+"koduotes), „zhtw_parallel_state_machine“ (automatiškai parinkti tradicines "
+"kinų koduotes) ir „universal_charset_detector“ (automatiškai parinkti "
 "daugumą koduočių)."
 
 #: ../data/epiphany.schemas.in.h:46
@@ -562,7 +562,7 @@ msgid "Field _Value"
 msgstr "Laukelio _reikšmė"
 
 #: ../data/glade/certificate-dialogs.glade.h:11
-#: ../data/glade/prefs-dialog.glade.h:23
+#: ../data/glade/prefs-dialog.glade.h:21
 msgid "General"
 msgstr "Pagrindinės"
 
@@ -575,7 +575,6 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5 antspaudas:"
 
 #: ../data/glade/certificate-dialogs.glade.h:14
-#: ../embed/mozilla/GtkNSSDialogs.cpp:925
 msgid "Organization:"
 msgstr "Organizacija:"
 
@@ -600,31 +599,35 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>Na_udoti kitą koduotę:</b>"
 
 #: ../data/glade/epiphany.glade.h:3
+msgid "Clear _All..."
+msgstr "Išvalyti _viską..."
+
+#: ../data/glade/epiphany.glade.h:4
 msgid "Cookies"
 msgstr "Slapukai"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:111
+#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:111
 msgid "Downloads"
 msgstr "Atsiuntimai"
 
-#: ../data/glade/epiphany.glade.h:5
+#: ../data/glade/epiphany.glade.h:6
 msgid "Passwords"
 msgstr "Slaptažodžiai"
 
-#: ../data/glade/epiphany.glade.h:6
+#: ../data/glade/epiphany.glade.h:7
 msgid "Personal Data"
 msgstr "Asmeniniai duomenys"
 
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.glade.h:8
 msgid "Text Encoding"
 msgstr "Teksto koduotė"
 
-#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:334
+#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:334
 msgid "Use the encoding specified by the document"
 msgstr "Naudoti dokumente nurodytą koduotę"
 
-#: ../data/glade/epiphany.glade.h:9
+#: ../data/glade/epiphany.glade.h:10
 msgid "_Show passwords"
 msgstr "_Rodyti slaptažodžius"
 
@@ -646,8 +649,6 @@ msgid "_Certificate:"
 msgstr "_Sertifikatas:"
 
 #: ../data/glade/form-signing-dialog.glade.h:4
-#: ../embed/mozilla/EphyPromptService.cpp:804
-#: ../embed/mozilla/EphyPromptService.cpp:831
 #: ../lib/ephy-password-dialog.c:424 ../lib/ephy-password-dialog.c:438
 msgid "_Password:"
 msgstr "_Slaptažodis:"
@@ -735,104 +736,84 @@ msgid "Enable _Java"
 msgstr "Įjungti _Java"
 
 #: ../data/glade/prefs-dialog.glade.h:20
-msgid "Fonts"
-msgstr "Šriftai"
-
-#: ../data/glade/prefs-dialog.glade.h:21
 msgid "Fonts & Style"
 msgstr "Šriftai ir stilius"
 
-#: ../data/glade/prefs-dialog.glade.h:22
-msgid "For l_anguage:"
-msgstr "K_albai:"
-
-#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1278
+#: ../data/glade/prefs-dialog.glade.h:22 ../src/prefs-dialog.c:961
 msgid "Language"
 msgstr "Kalba"
 
-#: ../data/glade/prefs-dialog.glade.h:25
+#: ../data/glade/prefs-dialog.glade.h:23
 msgid "Let web pages specify their own _fonts"
 msgstr "Leisti svetainėms nurodyti jų šri_ftus"
 
-#: ../data/glade/prefs-dialog.glade.h:26
+#: ../data/glade/prefs-dialog.glade.h:24
 msgid "Let web pages specify their own c_olors"
 msgstr "Leisti svetainėms nurodyti jų _spalvas"
 
-#: ../data/glade/prefs-dialog.glade.h:27
+#: ../data/glade/prefs-dialog.glade.h:25
 msgid "MB"
 msgstr "MB"
 
-#: ../data/glade/prefs-dialog.glade.h:28
+#: ../data/glade/prefs-dialog.glade.h:26
 msgid "Only _from sites you visit"
 msgstr "Tik iš lankomų _svetainių"
 
-#: ../data/glade/prefs-dialog.glade.h:29
+#: ../data/glade/prefs-dialog.glade.h:27
 msgid "Preferences"
 msgstr "Nustatymai"
 
-#: ../data/glade/prefs-dialog.glade.h:30
+#: ../data/glade/prefs-dialog.glade.h:28
 msgid "Privacy"
 msgstr "Privatumas"
 
-#: ../data/glade/prefs-dialog.glade.h:31
+#: ../data/glade/prefs-dialog.glade.h:29
 msgid "Set to Current _Page"
 msgstr "Nustatyti į dabartinį _puslapį"
 
-#: ../data/glade/prefs-dialog.glade.h:32
+#: ../data/glade/prefs-dialog.glade.h:30
 msgid "Set to _Blank Page"
 msgstr "Nustatyti į _tuščią puslapį"
 
-#: ../data/glade/prefs-dialog.glade.h:33
+#: ../data/glade/prefs-dialog.glade.h:31
 msgid "Use custom _stylesheet"
 msgstr "Naudoti kitą _stiliaus aprašą"
 
-#: ../data/glade/prefs-dialog.glade.h:34
+#: ../data/glade/prefs-dialog.glade.h:32
 msgid "Use s_mooth scrolling"
 msgstr "Įjungti t_olygų slinkimą"
 
-#: ../data/glade/prefs-dialog.glade.h:35
+#: ../data/glade/prefs-dialog.glade.h:33
 msgid "_Address:"
 msgstr "_Adresas:"
 
-#: ../data/glade/prefs-dialog.glade.h:36
+#: ../data/glade/prefs-dialog.glade.h:34
 msgid "_Always accept"
 msgstr "_Visada priimti"
 
-#: ../data/glade/prefs-dialog.glade.h:37
-msgid "_Detailed Font Settings…"
-msgstr "_Išsamesni šriftų nustatymai…"
-
-#: ../data/glade/prefs-dialog.glade.h:38
+#: ../data/glade/prefs-dialog.glade.h:35
 msgid "_Disk space:"
 msgstr "_Disko vieta:"
 
-#: ../data/glade/prefs-dialog.glade.h:39
+#: ../data/glade/prefs-dialog.glade.h:36
 msgid "_Download folder:"
 msgstr "_Atsiuntimo aplankas:"
 
-#: ../data/glade/prefs-dialog.glade.h:40
+#: ../data/glade/prefs-dialog.glade.h:37
 msgid "_Edit Stylesheet…"
 msgstr "_Redaguoti stiliaus aprašą…"
 
-#: ../data/glade/prefs-dialog.glade.h:41
-msgid "_Fixed width:"
-msgstr "_Nustatytas plotis:"
-
-#: ../data/glade/prefs-dialog.glade.h:42
+#: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Minimum size:"
 msgstr "_Minimalus dydis:"
 
-#: ../data/glade/prefs-dialog.glade.h:43
+#: ../data/glade/prefs-dialog.glade.h:39
 msgid "_Never accept"
 msgstr "_Niekada nepriimti"
 
-#: ../data/glade/prefs-dialog.glade.h:44
+#: ../data/glade/prefs-dialog.glade.h:40
 msgid "_Remember passwords"
 msgstr "A_tsiminti slaptažodžius"
-
-#: ../data/glade/prefs-dialog.glade.h:45
-msgid "_Variable width:"
-msgstr "_Kintantis plotis:"
 
 #: ../data/glade/print.glade.h:1
 msgid "<b>Background</b>"
@@ -891,35 +872,35 @@ msgstr "_Puslapio adresas"
 msgid "_Show Downloads"
 msgstr "_Rodyti siuntimus"
 
-#: ../embed/downloader-view.c:344
+#: ../embed/downloader-view.c:342
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:348
+#: ../embed/downloader-view.c:346
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:409
+#: ../embed/downloader-view.c:407
 msgid "_Pause"
 msgstr "_Pauzė"
 
-#: ../embed/downloader-view.c:409
+#: ../embed/downloader-view.c:407
 msgid "_Resume"
 msgstr "_Tęsti"
 
-#: ../embed/downloader-view.c:447
+#: ../embed/downloader-view.c:445
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Failas „%s“ atsiųstas."
 
-#: ../embed/downloader-view.c:450
+#: ../embed/downloader-view.c:448
 msgid "Download finished"
 msgstr "Atsiųsta"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:475
+#: ../embed/downloader-view.c:473
 #, c-format
 msgid ""
 "%s\n"
@@ -929,13 +910,13 @@ msgstr ""
 "%s iš %s"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:485 ../embed/downloader-view.c:490
+#: ../embed/downloader-view.c:483 ../embed/downloader-view.c:488
 #: ../embed/ephy-download.c:99 ../lib/ephy-time-helpers.c:279
 #: ../src/ephy-window.c:1689
 msgid "Unknown"
 msgstr "Nežinomas"
 
-#: ../embed/downloader-view.c:522
+#: ../embed/downloader-view.c:520
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -943,37 +924,37 @@ msgstr[0] "%d parsiuntimas"
 msgstr[1] "%d parsiuntimai"
 msgstr[2] "%d parsiuntimų"
 
-#: ../embed/downloader-view.c:622
+#: ../embed/downloader-view.c:625
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Failas „%s“ įtrauktas į atsiuntimų eilę."
 
-#: ../embed/downloader-view.c:625
+#: ../embed/downloader-view.c:628
 msgid "Download started"
 msgstr "Pradedama siųsti"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:699 ../embed/downloader-view.c:712
+#: ../embed/downloader-view.c:702 ../embed/downloader-view.c:715
 msgid "download status|Unknown"
 msgstr "Nežinoma"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:704
+#: ../embed/downloader-view.c:707
 msgid "download status|Failed"
 msgstr "Nepavyko"
 
-#: ../embed/downloader-view.c:771
+#: ../embed/downloader-view.c:774
 #: ../src/bookmarks/ephy-bookmarks-editor.c:1007
 msgid "File"
 msgstr "Failas"
 
-#: ../embed/downloader-view.c:794
+#: ../embed/downloader-view.c:797
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:805
+#: ../embed/downloader-view.c:808
 msgid "Remaining"
 msgstr "Liko"
 
@@ -1072,35 +1053,35 @@ msgstr "Centrinės Europos (_Windows-1250)"
 
 #: ../embed/ephy-encodings.c:74
 msgid "Chinese Simplified (_GB18030)"
-msgstr "Supaprastinta kiniečių (_GB18030)"
+msgstr "Supaprastinta kinų (_GB18030)"
 
 #: ../embed/ephy-encodings.c:75
 msgid "Chinese Simplified (G_B2312)"
-msgstr "Supaprastinta kiniečių (G_B2312)"
+msgstr "Supaprastinta kinų (G_B2312)"
 
 #: ../embed/ephy-encodings.c:76
 msgid "Chinese Simplified (GB_K)"
-msgstr "Supaprastinta kiniečių (GB_K)"
+msgstr "Supaprastinta kinų (GB_K)"
 
 #: ../embed/ephy-encodings.c:77
 msgid "Chinese Simplified (_HZ)"
-msgstr "Supaprastinta kiniečių (_HZ)"
+msgstr "Supaprastinta kinų (_HZ)"
 
 #: ../embed/ephy-encodings.c:78
 msgid "Chinese Simplified (_ISO-2022-CN)"
-msgstr "Supaprastinta kiniečių (_ISO-2022-CN)"
+msgstr "Supaprastinta kinų (_ISO-2022-CN)"
 
 #: ../embed/ephy-encodings.c:79
 msgid "Chinese Traditional (Big_5)"
-msgstr "Tradicinė kiniečių (Big_5)"
+msgstr "Tradicinė kinų (Big_5)"
 
 #: ../embed/ephy-encodings.c:80
 msgid "Chinese Traditional (Big5-HK_SCS)"
-msgstr "Tradicinė kiniečių (Big5-HK_SCS)"
+msgstr "Tradicinė kinų (Big5-HK_SCS)"
 
 #: ../embed/ephy-encodings.c:81
 msgid "Chinese Traditional (_EUC-TW)"
-msgstr "Tradicininė kiniečių (_EUC-TW)"
+msgstr "Tradicinė kinų (_EUC-TW)"
 
 #: ../embed/ephy-encodings.c:82
 msgid "Cyrillic (_IBM-855)"
@@ -1413,895 +1394,6 @@ msgstr "Kiti"
 msgid "Local files"
 msgstr "Vietiniai failai"
 
-#: ../embed/mozilla/ContentHandler.cpp:154
-#: ../embed/mozilla/EphyHeaderSniffer.cpp:410
-msgid "Save"
-msgstr "Išsaugoti"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:267
-msgid "File Type:|Unknown"
-msgstr "Nežinomas"
-
-#: ../embed/mozilla/ContentHandler.cpp:283
-msgid "Download this potentially unsafe file?"
-msgstr "Atsiųsti šį potencialiai nesaugų failą?"
-
-#. translators: First %s is the file type description,
-#. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:289
-#, c-format
-msgid ""
-"File Type: “%s”.\n"
-"\n"
-"It is unsafe to open “%s” as it could potentially damage your documents or "
-"invade your privacy. You can download it instead."
-msgstr ""
-"Failo tipas: „%s“.\n"
-"\n"
-"Atverti „%s“ yra nesaugu.  Gali būti sugadinti dokumentai ar pažeistas Jūsų "
-"privatumas. Vietoje to galite failą parsisiųsti."
-
-#: ../embed/mozilla/ContentHandler.cpp:299
-msgid "Open this file?"
-msgstr "Atverti šį failą?"
-
-#. translators: First %s is the file type description,
-#. Second %s is the file name,
-#. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:306
-#, c-format
-msgid ""
-"File Type: “%s”.\n"
-"\n"
-"You can open “%s” using “%s” or save it."
-msgstr ""
-"Failo tipas: „%s“.\n"
-"\n"
-"Galite atverti „%s“ su „%s“ arba ją išsaugoti."
-
-#: ../embed/mozilla/ContentHandler.cpp:314
-msgid "Download this file?"
-msgstr "Atsiųsti šį failą?"
-
-#. translators: First %s is the file type description,
-#. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:320
-#, c-format
-msgid ""
-"File Type: “%s”.\n"
-"\n"
-"You have no application able to open “%s”. You can download it instead."
-msgstr ""
-"Failo tipas: „%s“.\n"
-"\n"
-"Neturite programos galinčios atverti „%s“. Vietoje to, galite ją parsisiųsti."
-
-#: ../embed/mozilla/ContentHandler.cpp:327
-msgid "_Save As..."
-msgstr "Išsaugoti _kaip..."
-
-#. Translators: %s is the name of a protocol, like "http" etc.
-#: ../embed/mozilla/EphyAboutModule.cpp:240
-#, c-format
-msgid "“%s” Protocol is not Supported"
-msgstr "Protokolas „%s“ nepalaikomas."
-
-#. Translators: %s is the name of a protocol, like "http" etc.
-#: ../embed/mozilla/EphyAboutModule.cpp:242
-#, c-format
-msgid "“%s” protocol is not supported."
-msgstr "Protokolas „%s“ nepalaikomas."
-
-#. FIXME: get the list of supported protocols from necko
-#: ../embed/mozilla/EphyAboutModule.cpp:244
-msgid ""
-"Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
-msgstr "Palaikomi protokolai yra šie: „http“, „ftp“, „file“, „smb“ ir „sftp“."
-
-#. Translators: %s is the path and filename, for example "/home/user/test.html"
-#: ../embed/mozilla/EphyAboutModule.cpp:253
-#, c-format
-msgid "File “%s” not Found"
-msgstr "Failas „%s“ nerastas"
-
-#. Translators: %s is the path and filename, for example "/home/user/test.html"
-#: ../embed/mozilla/EphyAboutModule.cpp:255
-#, c-format
-msgid "File “%s” not found."
-msgstr "Failas „%s“ nerastas."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:256
-msgid "Check the location of the file and try again."
-msgstr "Patinkrikite failo vietą ir bandykite vėl."
-
-#. Translators: %s is the hostname, like "www.example.com"
-#: ../embed/mozilla/EphyAboutModule.cpp:264
-#, c-format
-msgid "“%s” Could not be Found"
-msgstr "„%s“ rasti nepavyko"
-
-#. Translators: %s is the hostname, like "www.example.com"
-#: ../embed/mozilla/EphyAboutModule.cpp:267
-#, c-format
-msgid "“%s” could not be found."
-msgstr "„%s“ rasti nepavyko."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:269
-msgid ""
-"Check that you are connected to the internet, and that the address is "
-"correct."
-msgstr ""
-"Patikrinkite ar esate prisijungę prie Interneto ir ar įvedėte adresą "
-"teisingai."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:271
-msgid "If this page used to exist, you may find an archived version:"
-msgstr "Jeigu šis puslapis seniau egzistavo, jo archyvą galite rasti:"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:280
-#, c-format
-msgid "“%s” Refused the Connection"
-msgstr "„%s“ atmetė prisijungimą"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:284
-#, c-format
-msgid "“%s” refused the connection."
-msgstr "„%s“ atmetė prisijungimą."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:293
-msgid "Likely causes of the problem are"
-msgstr "Tikėtinos problemos priežastys yra"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:303
-#, c-format
-msgid ""
-"<ul><li>the service %s isn't started.</li>Try to start it using the Services "
-"Configuration Tool in System > Control Center, or</ul><ul><li>the port "
-"number %d is wrong.</li></ul>"
-msgstr ""
-"<ul><li>paslauga %s nepaleista.</li>Pabandykite ją paleisti naudodami "
-"Paslaugų konfigūravimo įrankį, kurį rasite Sistema → Administravimas → "
-"Paslaugos, arba</ul><ul><li>prievado numeris %d yra neteisingas.</li></ul>"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:314
-#, c-format
-msgid ""
-"<ul><li>some service isn't started, or</li><li>the port number %d is wrong.</"
-"li></ul>"
-msgstr ""
-"<ul><li>kai kurios paslaugos nepaleistos, arba</li><li>prievado numeris %d "
-"yra netinkamas.</li></ul>"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:323
-msgid ""
-"<ul><li>some service isn't started, or</li><li>you got the port number wrong."
-"</li></ul>"
-msgstr ""
-"<ul><li>kai kurios paslaugos nepaleistos, arba</li><li>neteisingas prievado "
-"numeris.</li></ul>"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:331
-#: ../embed/mozilla/EphyAboutModule.cpp:349
-#: ../embed/mozilla/EphyAboutModule.cpp:368
-#: ../embed/mozilla/EphyAboutModule.cpp:426
-msgid ""
-"The server may be busy or you may have a network connection problem. Try "
-"again later."
-msgstr ""
-"Serveris gali būti užimtas arba galite turėti ryšio problemų. Bandykite "
-"vėliau dar kartą."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:333
-#: ../embed/mozilla/EphyAboutModule.cpp:351
-#: ../embed/mozilla/EphyAboutModule.cpp:370
-#: ../embed/mozilla/EphyAboutModule.cpp:393
-#: ../embed/mozilla/EphyAboutModule.cpp:428
-msgid "There may be an old version of the page you wanted:"
-msgstr "Sena ieškomo puslapio versija gali būti:"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:343
-#, c-format
-msgid "“%s” Interrupted the Connection"
-msgstr "„%s“ pertraukė prisijungimą"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:347
-#, c-format
-msgid "“%s” interrupted the connection."
-msgstr "„%s“ pertraukė prisijungimą."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:360
-#, c-format
-msgid "“%s” is not Responding"
-msgstr "„%s“ neatsako"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:364
-#, c-format
-msgid "“%s” is not responding."
-msgstr "„%s“ neatsako."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:366
-msgid "The connection was lost because the server took too long to respond."
-msgstr "Ryšys nutrūko, nes serveris per ilgai neatsakė."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:374
-msgid "Invalid Address"
-msgstr "Netinkamas adresas"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:375
-msgid "Invalid address."
-msgstr "Netinkamas adresas."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:376
-msgid "The address you entered is not valid."
-msgstr "Įvestas adresas yra netinkamas."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:385
-#, c-format
-msgid "“%s” Redirected Too Many Times"
-msgstr "„%s“ nukreipė per daug kartų"
-
-#. Translators: %s is the hostname, like "www.example.com"
-#: ../embed/mozilla/EphyAboutModule.cpp:388
-msgid "This page cannot load because of a problem with the Web site."
-msgstr "Šis puslapis negali būti įkrautas dėl problemų su svetaine."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:391
-#, c-format
-msgid "The server “%s” is redirecting in a way that will never complete."
-msgstr ""
-"Serveris „%s“ vykdo peradresavimą tokiu būdu, kuris niekad neužsibaigs."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:402
-#, c-format
-msgid "“%s” Requires an Encrypted Connection"
-msgstr "„%s“ reikalauja šifruoto ryšio"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:406
-#, c-format
-msgid "“%s” requires an encrypted connection."
-msgstr "„%s“ reikalauja šifruoto ryšio."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:408
-msgid ""
-"The document could not be loaded because encryption support is not installed."
-msgstr "Dokumento įkelti nepavyko, nes neįdiegtas šifravimo palaikymas. "
-
-#: ../embed/mozilla/EphyAboutModule.cpp:418
-#, c-format
-msgid "“%s” Dropped the Connection"
-msgstr "„%s“ nutraukė ryšį"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:422
-#, c-format
-msgid "“%s” dropped the connection."
-msgstr "„%s“ nutraukė ryšį."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:424
-msgid "The server dropped the connection before any data could be read."
-msgstr "Serveris nutraukė ryšį anksčiau nei galėjo būti perskaityti duomenys."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:435
-msgid "Cannot Load Document Whilst Working Offline"
-msgstr "Dirbant atsijungus dokumento įkelti negalima"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:436
-msgid "Cannot load document whilst working offline."
-msgstr "Dirbant atsijungus dokumento įkelti negalima."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:437
-msgid "To view this document, disable “Work Offline” and try again."
-msgstr ""
-"Norėdami peržiūrėti šį dokumentą, išjunkite parinktį „Dirbti atsijungus“ ir "
-"bandykite dar kartą."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:449
-#, c-format
-msgid "Access Denied to Port “%d” of “%s”"
-msgstr "Prieiga prie „%2$s“ prievado „%1$d“ uždrausta"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:453
-#, c-format
-msgid "Access denied to port “%d” of “%s”."
-msgstr "Prieiga prie „%2$s“ prievado „%1$d“ uždrausta."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:455
-msgid ""
-"This address uses a network port which is normally used for purposes other "
-"than Web browsing."
-msgstr ""
-"Šis adresas naudoja tinklo prievadą, kurio paskirtis paprastai yra ne "
-"žiniatinklio naršymas."
-
-#. Translators: this means that the request to load the URL has been cancelled
-#: ../embed/mozilla/EphyAboutModule.cpp:458
-msgid "The request has been cancelled for your protection."
-msgstr "Jūsų saugumui, užklausa buvo atšaukta."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:463
-msgid "Could not Connect to Proxy Server"
-msgstr "Nepavyko prisijungti prie tarpinio serverio"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:464
-msgid "Could not connect to proxy server."
-msgstr "Nepavyko prisijungti prie tarpinio serverio."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:465
-msgid ""
-"Check your proxy server settings. If the connection still fails, there may "
-"be a problem with your proxy server or your network connection."
-msgstr ""
-"Patikrinkite tarpinio serverio nustatymus. Jeigu ryšio vistiek nėra, gali "
-"būti problema su tarpiniu serveriu arba tinklo prisijungimu."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:473
-msgid "Could not Display Content"
-msgstr "Nepavyko parodyti turinio"
-
-#: ../embed/mozilla/EphyAboutModule.cpp:474
-msgid "Could not display content."
-msgstr "Nepavyko parodyti turinio."
-
-#: ../embed/mozilla/EphyAboutModule.cpp:475
-msgid "The page uses an unsupported or invalid form of compression."
-msgstr "Puslapyje yra naudojamas netinkamos formos suspaudimas."
-
-#. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
-#: ../embed/mozilla/EphyAboutModule.cpp:566
-#, c-format
-msgid ""
-"This page was loading when the web browser closed unexpectedly. This might "
-"happen again if you reload the page. If it does, please report the problem "
-"to the %s developers."
-msgstr ""
-"Žiniatinklio naršyklei lūžtant buvo įkeliamas šis tinklalapis. Iš naujo "
-"įkėlus šį tinklalapį tai gali pasikartoti. Jeigu taip atsitiks, praneškite "
-"apie šią problemą %s kūrėjams."
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:696
-msgid "You may find an old version:|in the Google Cache"
-msgstr "Google podėlyje"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:704
-msgid "You may find an old version:|in the Internet Archive"
-msgstr "Interneto archyve"
-
-#: ../embed/mozilla/EphyHeaderSniffer.cpp:367
-#: ../src/bookmarks/ephy-bookmarks.c:1502
-#: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1314
-msgid "Untitled"
-msgstr "Bevardis"
-
-#: ../embed/mozilla/EphyPromptService.cpp:183
-msgid "_Abort Script"
-msgstr "_Nutraukti scenarijų"
-
-#: ../embed/mozilla/EphyPromptService.cpp:251
-msgid "Don't Save"
-msgstr "Nesaugoti"
-
-#: ../embed/mozilla/EphyPromptService.cpp:803
-#: ../lib/ephy-password-dialog.c:396
-msgid "_Username:"
-msgstr "_Naudotojo vardas:"
-
-#: ../embed/mozilla/FilePicker.cpp:146 ../embed/mozilla/FilePicker.cpp:412
-#: ../lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:786
-msgid "All files"
-msgstr "Visi failai"
-
-#: ../embed/mozilla/FilePicker.cpp:151 ../lib/ephy-file-chooser.c:423
-msgid "Web pages"
-msgstr "Tinklalapiai"
-
-#: ../embed/mozilla/FilePicker.cpp:159
-msgid "Text files"
-msgstr "Tekstiniai failai"
-
-#: ../embed/mozilla/FilePicker.cpp:164 ../lib/ephy-file-chooser.c:431
-msgid "Images"
-msgstr "Paveikslėliai"
-
-#: ../embed/mozilla/FilePicker.cpp:172
-msgid "XML files"
-msgstr "XML failai"
-
-#: ../embed/mozilla/FilePicker.cpp:177
-msgid "XUL files"
-msgstr "XUL failai"
-
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:91
-#, c-format
-msgid "Accept cookie from %s?"
-msgstr "Priimti slapuką iš %s?"
-
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:98
-msgid "Accept Cookie?"
-msgstr "Priimti slapuką?"
-
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:103
-msgid "The site wants to modify an existing cookie."
-msgstr "Svetainė ketina modifikuoti jau esantį slapuką."
-
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:107
-msgid "The site wants to set a cookie."
-msgstr "Svetainė ketina sukurti slapuką."
-
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:111
-msgid "The site wants to set a second cookie."
-msgstr "Svetainė ketina sukurti antrą slapuką."
-
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:114
-#, c-format
-msgid "You already have %d cookie from this site."
-msgid_plural "You already have %d cookies from this site."
-msgstr[0] "Jau turite %d slapuką iš šios svetainės."
-msgstr[1] "Jau turite %d slapukus iš šios svetainės."
-msgstr[2] "Jau turite %d slapukų iš šios svetainės."
-
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:128
-msgid "Apply this _decision to all cookies from this site"
-msgstr "Pritaikyti šį _sprendimą visiems slapukams iš šio tinklalapio"
-
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:136
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1709
-msgid "_Reject"
-msgstr "_Atmesti"
-
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:138
-#: ../embed/mozilla/GtkNSSDialogs.cpp:277
-msgid "_Accept"
-msgstr "_Priimti"
-
-#: ../embed/mozilla/GeckoFormSigningDialog.cpp:106
-#, c-format
-msgid "The web site “%s” requests that you sign the following text:"
-msgstr "Svetainei „%s“ reikia, kad pasirašytumėte šį tekstą:"
-
-#: ../embed/mozilla/GeckoFormSigningDialog.cpp:135
-msgid "_Sign text"
-msgstr "_Pasirašyti tekstą"
-
-#: ../embed/mozilla/GeckoPrintService.cpp:192
-msgid "Options"
-msgstr "Parinktys"
-
-#: ../embed/mozilla/GeckoPrintService.cpp:456
-msgid "Print this page?"
-msgstr "Spausdinti šį puslapį?"
-
-#: ../embed/mozilla/GeckoPrintService.cpp:464
-msgid "Preparing to print"
-msgstr "Ruošiamasi spausdinti"
-
-#: ../embed/mozilla/GeckoPrintSession.cpp:232
-#, c-format
-msgid "Page %d of %d"
-msgstr "Puslapis %d iš %d"
-
-#: ../embed/mozilla/GeckoPrintSession.cpp:260
-msgid "Cancelling print"
-msgstr "Atšaukiamas spausdinimas"
-
-#. FIXME text!
-#: ../embed/mozilla/GeckoPrintSession.cpp:322
-msgid "Spooling..."
-msgstr "Siunčiama į kaupą..."
-
-#: ../embed/mozilla/GeckoPrintSession.cpp:336
-msgid "Print error"
-msgstr "Spausdinimo klaida"
-
-#: ../embed/mozilla/GeckoPrintSession.cpp:600
-#, c-format
-msgid "Printing “%s”"
-msgstr "Spausdinama „%s“"
-
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:164
-msgid "_Select Certificate"
-msgstr "Pasirinkti _sertifikatą"
-
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
-#, c-format
-msgid "Choose a certificate to present as identification to “%s”."
-msgstr "Pasirinkite sertifikatą pateikiamą kaip tapatybę svetainei „%s“."
-
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:208
-msgid "Select a certificate to identify yourself."
-msgstr "Savęs identifikavimui pasirinkite sertifikatą."
-
-#: ../embed/mozilla/GtkNSSClientAuthDialogs.cpp:237
-msgid "Certificate _Details"
-msgstr "Sertifikato _detalės"
-
-#. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:269
-#: ../embed/mozilla/GtkNSSDialogs.cpp:633
-msgid "_View Certificate"
-msgstr "Žiūrėti _sertifikatą"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:409
-#, c-format
-msgid ""
-"The site “%s” returned security information for “%s”. It is possible that "
-"someone is intercepting your communication to obtain your confidential "
-"information."
-msgstr ""
-"Svetainė „%s“ grąžino tinklapio „%s“ saugumo informaciją. Gali būti, kad "
-"kažkas periminėja susijungimą, norėdamas gauti konfidencialią informaciją."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:415
-#, c-format
-msgid ""
-"You should only accept the security information if you trust “%s” and “%s”."
-msgstr ""
-"Turėtumėte priimti saugumo informaciją tik jeigu pasitikite „%s“ ir „%s“."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:420
-msgid "Accept incorrect security information?"
-msgstr "Priimti neteisingą saugumo informaciją?"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:449
-#, c-format
-msgid ""
-"It was not possible to automatically trust “%s”. It is possible that someone "
-"is intercepting your communication to obtain your confidential information."
-msgstr ""
-"Nebuvo galima automatiškai pasitikėti „%s“. Gali būti, kad kažkas periminėja "
-"susijungimą, norėdami gauti konfidencialią informaciją."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:455
-#, c-format
-msgid ""
-"You should only connect to the site if you are certain you are connected to "
-"“%s”."
-msgstr ""
-"Turėtumėte prisijungti prie tinklapio tik tada, kai esate tikri, jog "
-"prisijungėte prie „%s“."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:460
-msgid "Connect to untrusted site?"
-msgstr "Prisijungti prie nepatikimo tinklapio?"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:464
-msgid "_Trust this security information from now on"
-msgstr "_Nuo dabar pasitikėti šia saugumo informacija"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:465
-msgid "Co_nnect"
-msgstr "Prisiju_ngti"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:524
-msgid "Accept expired security information?"
-msgstr "Priimti pasenusią saugumo informaciją?"
-
-#. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:526
-#, c-format
-msgid "The security information for “%s” expired on %s."
-msgstr "„%s“ saugumo informacija baigė galioti „%s“."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:532
-msgid "Accept not yet valid security information?"
-msgstr "Priimti dar negaliojančią saugumo informaciją?"
-
-#. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:534
-#, c-format
-msgid "The security information for “%s” isn't valid until %s."
-msgstr "„%s“ saugumo informacija negalios iki „%s“."
-
-#. To translators: this a time format that is used while displaying the
-#. * expiry or start date of an SSL certificate, for the format see
-#. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:548
-msgid "%a %d %b %Y"
-msgstr "%a, %Y %b %d"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:557
-msgid "You should ensure that your computer's time is correct."
-msgstr "Turėtumėte įsitikinti, jog kompiuterio laikas yra tikslus."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:591
-#, c-format
-msgid "Cannot establish connection to “%s”"
-msgstr "Nepavyko įtvirtinti ryšio su „%s“"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:596
-#, c-format
-msgid ""
-"The certificate revocation list (CRL) from “%s” needs to be updated.\n"
-"\n"
-"Please ask your system administrator for assistance."
-msgstr ""
-"Reikia atnaujinti sertifikatų atšaukimo sąrašą (CRL) iš „%s“.\n"
-"\n"
-"Paprašykite savo sistemos administratoriaus pagalbos."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:631
-msgid "Trust new Certificate Authority?"
-msgstr "Pasitikėti nauju sertifikato išdavėju?"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:636
-msgid "_Trust CA"
-msgstr "Pasi_tikėti SI"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:656
-#, c-format
-msgid "Trust new Certificate Authority “%s” to identify web sites?"
-msgstr "Pasitikėti nauju sertifikato išdavėju „%s“ atpažįstant tinklalapius?"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:661
-msgid ""
-"Before trusting a Certificate Authority (CA) you should verify the "
-"certificate is authentic."
-msgstr ""
-"Prieš pasitikint sertifikato išdavėju (SI) turėtumėte įsitikinti, kad "
-"sertifikatas yra autentiškas."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:731
-msgid "Certificate already exists."
-msgstr "Sertifikatas jau egzistuoja."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:732
-msgid "The certificate has already been imported."
-msgstr "Sertifikatas jau yra importuotas."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:765
-msgid "Select Password"
-msgstr "Pasirinkite slaptažodį"
-
-#. FIXME: set accept button text to (_("_Back Up Certificate") ?
-#. * That's not actually correct, since this function is also called from other places!
-#.
-#: ../embed/mozilla/GtkNSSDialogs.cpp:775
-#, c-format
-msgid "Select a password to protect this certificate"
-msgstr "Pasirinkite slaptažodį šio sertifikato apsaugai"
-
-#. FIXME: mozilla sucks, no way to get the name of the certificate / cert file!
-#: ../embed/mozilla/GtkNSSDialogs.cpp:825
-#, c-format
-msgid "Enter the password for this certificate"
-msgstr "Įveskite šiam sertifikatui slaptažodį"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:896
-msgid "Certificate Revocation List Imported"
-msgstr "Sertifikatų atšaukimo sąrašas importuotas"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:906
-msgid "Certificate Revocation List (CRL) successfully imported"
-msgstr "Sertifikatų atšaukimo sąrašas (CRL) sėkmingai importuotas"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:927
-msgid "Unit:"
-msgstr "Vienetas:"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:929
-msgid "Next Update:"
-msgstr "Kitas atnaujinimas:"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:956
-msgid "Not part of certificate"
-msgstr "Nėra sertifikato dalis"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1242
-msgid "Certificate Properties"
-msgstr "Sertifikato savybės"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1265
-msgid "This certificate has been verified for the following uses:"
-msgstr "Sertifikatas buvo patvirtintas šioms panaudojimo rūšims:"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1268
-msgid "Could not verify this certificate because it has been revoked."
-msgstr "Nepavyko patvirtinti šio sertifikato, nes jis buvo panaikintas."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1271
-msgid "Could not verify this certificate because it has expired."
-msgstr ""
-"Nepavyko patvirtinti šio sertifikato, nes pasibaigė jo galiojimo terminas."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1274
-msgid "Could not verify this certificate because it is not trusted."
-msgstr "Nepavyko patvirtinti šio sertifikato, nes jis nepatikimas."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1277
-msgid "Could not verify this certificate because the issuer is not trusted."
-msgstr "Nepavyko patvirtinti šio sertifikato, nes išdavėjas yra nepatikimas."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1280
-msgid "Could not verify this certificate because the issuer is unknown."
-msgstr "Nepavyko patvirtinti šio sertifikato, nes išdavėjas yra nežinomas."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1283
-msgid ""
-"Could not verify this certificate because the CA certificate is invalid."
-msgstr ""
-"Nepavyko patvirtinti šio sertifikato, nes SI sertifikatas yra netinkamas."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1288
-msgid "Could not verify this certificate for unknown reasons."
-msgstr "Nepavyko patvirtinti šio sertifikato dėl nežinomų priežasčių."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1433
-msgid "Change Token Password"
-msgstr "Pakeisti prieigos rakto slaptažodį"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1439
-#, c-format
-msgid "Choose a password for the “%s” token"
-msgstr "Pasirinkite prieigos rakto „%s“ slaptažodį"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1442
-#, c-format
-msgid "Change the password for the “%s” token"
-msgstr "Pakeisti prieigos rakto „%s“ slaptažodį"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1528
-msgid "Get Token Password"
-msgstr "Gauti prieigos rakto slaptažodį"
-
-#. Translators: A "token" is something that enables the user to authenticate himself or
-#. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
-#. * a data file (e.g. a cryptographic certificate).
-#.
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1536
-#, c-format
-msgid "Please enter the password for the “%s” token"
-msgstr "Įveskite prieigos rakto „%s“ slaptažodį"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1602
-msgid "Please select a token:"
-msgstr "Pasirinkite prieigos raktą:"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1621
-msgid "_Select"
-msgstr "_Pasirinkti"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1689
-msgid "Escrow the secret key?"
-msgstr "Perduoti slaptą raktą?"
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1698
-#, c-format
-msgid ""
-"The certificate authority “%s” requests that you give it a copy of the newly "
-"generated secret key.\n"
-"\n"
-"This will enable the certificate authority read any communications encrypted "
-"with this key without your knowledge or consent.\n"
-"\n"
-"It is strongly recommended not to allow it."
-msgstr ""
-"Sertifikato išdavėjas „%s“ prašo, kad pateiktumėte naujai sukurto slapto "
-"rakto kopiją.\n"
-"\n"
-"Tai leis sertifikato davėjui be Jūsų žinios ar leidimo perskaityti bet "
-"kokius ryšius, užšifruotus šiuo raktu.\n"
-"\n"
-"Primygtinai rekomenduojama to neleisti."
-
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1712
-msgid "_Allow"
-msgstr "_Leisti"
-
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:176
-msgid "Generating Private Key."
-msgstr "Generuojamas privatus raktas."
-
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:177
-msgid ""
-"Please wait while a new private key is generated. This process could take a "
-"few minutes."
-msgstr ""
-"Prašau palaukti kol bus sugeneruotas naujas privatus raktas. Šis procesas "
-"gali užtrukti keletą minučių."
-
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
-msgid "Security Notice"
-msgstr "Saugumo pranešimas"
-
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
-msgid "This page is loaded over a secure connection"
-msgstr "Šis puslapis yra įkeltas naudojant saugią jungtį"
-
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
-msgid ""
-"For secure pages, the address entry has a distinct color and a locked "
-"padlock icon is displayed.\n"
-"\n"
-"The padlock icon in the statusbar also indicates whether a page is secure."
-msgstr ""
-"Saugiems tinklalapiams adreso įvedimo laukas būna skirtingos spalvos ir "
-"rodoma užrakintos spynelės piktograma.\n"
-"\n"
-"Spynelės piktograma būsenos juostoje taip pat nurodo, ar puslapis yra saugus."
-
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:114
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:142
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:161
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:181
-msgid "Security Warning"
-msgstr "Saugumo įspėjimas"
-
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:115
-msgid "This page is loaded over a low security connection"
-msgstr "Šis puslapis yra įkeltas naudojant žemo saugumo lygio jungtį"
-
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:116
-msgid ""
-"Any information you see or enter on this page could easily be intercepted by "
-"a third party."
-msgstr ""
-"Visa Jūsų šiame puslapyje matoma ir įvedama informacija gali būti lengvai "
-"perimta trečiųjų asmenų."
-
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:143
-msgid "Some parts of this page are loaded over an insecure connection"
-msgstr "Kai kurios šio puslapio dalys yra įkeltos naudojant nesaugią jungtį"
-
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:144
-msgid ""
-"Some information you see or enter will be sent over an insecure connection, "
-"and could easily be intercepted by a third party."
-msgstr ""
-"Dalis matomos bei įvedamos informacijos bus siunčiama naudojantis nesaugia "
-"jungtimi ir galės būti laisvai perimta trečiųjų asmenų."
-
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:182
-msgid "Send this information over an insecure connection?"
-msgstr "Siųsti šią informaciją nesaugia jungtimi?"
-
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
-msgid ""
-"The information you have entered will be sent over an insecure connection, "
-"and could easily be intercepted by a third party."
-msgstr ""
-"Įvesta informacija bus siunčiama tinklu naudojantis nesaugia jungtimi, ir "
-"galės būti laisvai perimta trečiųjų asmenų."
-
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:166
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:187
-msgid "_Send"
-msgstr "_Siųsti"
-
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
-msgid ""
-"Although this page was loaded over a secure connection, the information you "
-"have entered will be sent over an insecure connection, and could easily be "
-"intercepted by a third party."
-msgstr ""
-"Nors šis puslapis buvo įkeltas naudojantis saugia jungtimi, įvesta "
-"informacija bus siunčiama naudojantis nesaugia jungtimi ir gali būti laisvai "
-"perimta trečiųjų asmenų."
-
-#. translators: this is the directory name to store auxilary files when saving html files
-#: ../embed/mozilla/MozDownload.cpp:692
-#, c-format
-msgid "%s Files"
-msgstr "%s failai"
-
-#. We do this before reading the user pref file so that the user
-#. * still can overwrite this pref.
-#. * We don't use the default-prefs.js file since that cannot be
-#. * localised (see bug #144909).
-#.
-#. translators: this is the URL that searches from the location
-#. * entry get directed to. The search terms will be _appended_ to it,
-#. * in url-escaped UTF-8; that means that if you're choosing google,
-#. * the 'q=' part needs to come last.
-#.
-#: ../embed/mozilla/mozilla-embed-single.cpp:201
-msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
-msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
-
 #: ../lib/eel-gconf-extensions.c:68
 #, c-format
 msgid ""
@@ -2360,13 +1452,25 @@ msgstr "_Pašalinti įrankių juostą"
 msgid "Remove the selected toolbar"
 msgstr "Pašalinti pasirinktą įrankinę"
 
-#: ../lib/egg/egg-toolbar-editor.c:491
+#: ../lib/egg/egg-toolbar-editor.c:493
 msgid "Separator"
 msgstr "Skirtukas"
 
 #: ../lib/ephy-file-chooser.c:412
 msgid "All supported types"
 msgstr "Visi palaikomi tipai"
+
+#: ../lib/ephy-file-chooser.c:423
+msgid "Web pages"
+msgstr "Tinklalapiai"
+
+#: ../lib/ephy-file-chooser.c:431
+msgid "Images"
+msgstr "Paveikslėliai"
+
+#: ../lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:786
+msgid "All files"
+msgstr "Visi failai"
 
 #: ../lib/ephy-file-helpers.c:296
 #, c-format
@@ -2573,6 +1677,10 @@ msgstr "Vakarietiški"
 msgid "select fonts for|Other Scripts"
 msgstr "Kitiems raštams"
 
+#: ../lib/ephy-password-dialog.c:396
+msgid "_Username:"
+msgstr "_Naudotojo vardas:"
+
 #: ../lib/ephy-password-dialog.c:410
 msgid "_Domain:"
 msgstr "_Domenas:"
@@ -2621,7 +1729,7 @@ msgstr "Žymelė"
 msgid "Bookmarks"
 msgstr "Žymelės"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:291
+#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:278
 msgid "Address Entry"
 msgstr "Adreso laukelis"
 
@@ -2662,39 +1770,39 @@ msgstr "%b %d %H:%M"
 msgid "%b %d %Y"
 msgstr "%Y %b %d"
 
-#: ../lib/ephy-zoom.h:41
+#: ../lib/ephy-zoom.h:45
 msgid "50%"
 msgstr "50%"
 
-#: ../lib/ephy-zoom.h:42
+#: ../lib/ephy-zoom.h:46
 msgid "75%"
 msgstr "75%"
 
-#: ../lib/ephy-zoom.h:43
+#: ../lib/ephy-zoom.h:47
 msgid "100%"
 msgstr "100%"
 
-#: ../lib/ephy-zoom.h:44
+#: ../lib/ephy-zoom.h:48
 msgid "125%"
 msgstr "125%"
 
-#: ../lib/ephy-zoom.h:45
+#: ../lib/ephy-zoom.h:49
 msgid "150%"
 msgstr "150%"
 
-#: ../lib/ephy-zoom.h:46
+#: ../lib/ephy-zoom.h:50
 msgid "175%"
 msgstr "175%"
 
-#: ../lib/ephy-zoom.h:47
+#: ../lib/ephy-zoom.h:51
 msgid "200%"
 msgstr "200%"
 
-#: ../lib/ephy-zoom.h:48
+#: ../lib/ephy-zoom.h:52
 msgid "300%"
 msgstr "300%"
 
-#: ../lib/ephy-zoom.h:49
+#: ../lib/ephy-zoom.h:53
 msgid "400%"
 msgstr "400%"
 
@@ -2829,26 +1937,26 @@ msgid "Work"
 msgstr "Darbas"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:493
+#: ../src/bookmarks/ephy-bookmarks.c:462
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "Atnaujinti žymelę „%s“?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:498
+#: ../src/bookmarks/ephy-bookmarks.c:467
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "Į žymeles įtrauktas puslapis buvo perkeltas į „%s“."
 
-#: ../src/bookmarks/ephy-bookmarks.c:502
+#: ../src/bookmarks/ephy-bookmarks.c:471
 msgid "_Don't Update"
 msgstr "_Neatnaujinti"
 
-#: ../src/bookmarks/ephy-bookmarks.c:504
+#: ../src/bookmarks/ephy-bookmarks.c:473
 msgid "_Update"
 msgstr "_Atnaujinti"
 
-#: ../src/bookmarks/ephy-bookmarks.c:507
+#: ../src/bookmarks/ephy-bookmarks.c:476
 msgid "Update Bookmark?"
 msgstr "Atnaujinti žymelę?"
 
@@ -2856,7 +1964,7 @@ msgstr "Atnaujinti žymelę?"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1246
+#: ../src/bookmarks/ephy-bookmarks.c:1218
 msgid "bookmarks|All"
 msgstr "Visos"
 
@@ -2864,7 +1972,7 @@ msgstr "Visos"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1252
+#: ../src/bookmarks/ephy-bookmarks.c:1224
 msgid "bookmarks|Most Visited"
 msgstr "Dažniausiai lankomos"
 
@@ -2873,7 +1981,7 @@ msgstr "Dažniausiai lankomos"
 #. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1259
+#: ../src/bookmarks/ephy-bookmarks.c:1231
 msgid "bookmarks|Not Categorized"
 msgstr "Nesuskirstytos"
 
@@ -2882,9 +1990,14 @@ msgstr "Nesuskirstytos"
 #. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1267
+#: ../src/bookmarks/ephy-bookmarks.c:1239
 msgid "bookmarks|Nearby Sites"
 msgstr "Artimos svetainės"
+
+#: ../src/bookmarks/ephy-bookmarks.c:1474
+#: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1314
+msgid "Untitled"
+msgstr "Bevardis"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:99
 msgid "Epiphany (RDF)"
@@ -3323,11 +2436,11 @@ msgid "Find next occurrence of the search string"
 msgstr "Rasti kitą žodžio arba frazės pasikartojimą"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:272 ../src/ephy-toolbar.c:600
+#: ../src/ephy-fullscreen-popup.c:272 ../src/ephy-toolbar.c:549
 msgid "Leave Fullscreen"
 msgstr "Išjungti viso ekrano veikseną"
 
-#: ../src/ephy-go-action.c:43 ../src/ephy-toolbar.c:321
+#: ../src/ephy-go-action.c:43 ../src/ephy-toolbar.c:308
 msgid "Go"
 msgstr "Eiti"
 
@@ -3494,11 +2607,11 @@ msgstr ""
 "Nepavyko paleisti dėl šios klaidos:\n"
 "%s"
 
-#: ../src/ephy-main.c:515 ../src/window-commands.c:883
+#: ../src/ephy-main.c:513 ../src/window-commands.c:874
 msgid "GNOME Web Browser"
 msgstr "GNOME žiniatinklio naršyklė"
 
-#: ../src/ephy-main.c:516
+#: ../src/ephy-main.c:514
 msgid "GNOME Web Browser options"
 msgstr "GNOME žiniatinklio naršyklės parinktys"
 
@@ -3585,89 +2698,89 @@ msgstr "Žymėjimo klaviatūra veiksena, norėdami išeiti paspauskite F7"
 msgid "Switch to this tab"
 msgstr "Persijungti į šią kortelę"
 
-#: ../src/ephy-toolbar.c:230
+#: ../src/ephy-toolbar.c:217
 msgid "_Back"
 msgstr "_Atgal"
 
-#: ../src/ephy-toolbar.c:232
+#: ../src/ephy-toolbar.c:219
 msgid "Go to the previous visited page"
 msgstr "Atverti anksčiau aplankytą puslapį"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:236
+#: ../src/ephy-toolbar.c:223
 msgid "Back history"
 msgstr "„Atgal“ retrospektyva"
 
-#: ../src/ephy-toolbar.c:250
+#: ../src/ephy-toolbar.c:237
 msgid "_Forward"
 msgstr "_Pirmyn"
 
-#: ../src/ephy-toolbar.c:252
+#: ../src/ephy-toolbar.c:239
 msgid "Go to the next visited page"
 msgstr "Atverti kitą aplankytą puslapį"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:256
+#: ../src/ephy-toolbar.c:243
 msgid "Forward history"
 msgstr "„Pirmyn“ retrospektyva"
 
-#: ../src/ephy-toolbar.c:269
+#: ../src/ephy-toolbar.c:256
 msgid "_Up"
 msgstr "_Viršun"
 
-#: ../src/ephy-toolbar.c:271
+#: ../src/ephy-toolbar.c:258
 msgid "Go up one level"
 msgstr "Eiti vienu lygiu aukštyn"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:275
+#: ../src/ephy-toolbar.c:262
 msgid "List of upper levels"
 msgstr "Aukštesnių lygių sąrašas"
 
-#: ../src/ephy-toolbar.c:293
+#: ../src/ephy-toolbar.c:280
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr ""
 "Įveskite pageidaujamą atverti adresą arba norimą internete surasti frazę"
 
-#: ../src/ephy-toolbar.c:309
+#: ../src/ephy-toolbar.c:296
 msgid "Zoom"
 msgstr "Mastelis"
 
-#: ../src/ephy-toolbar.c:311
+#: ../src/ephy-toolbar.c:298
 msgid "Adjust the text size"
 msgstr "Keisti teksto dydį"
 
-#: ../src/ephy-toolbar.c:323
+#: ../src/ephy-toolbar.c:310
 msgid "Go to the address entered in the address entry"
 msgstr "Atverti adreso laukelyje įvestą adresą"
 
-#: ../src/ephy-toolbar.c:332
+#: ../src/ephy-toolbar.c:319
 msgid "_Home"
 msgstr "P_radžia"
 
-#: ../src/ephy-toolbar.c:334
+#: ../src/ephy-toolbar.c:321
 msgid "Go to the home page"
 msgstr "Atverti pradinį puslapį"
 
-#: ../src/ephy-toolbar.c:344
+#: ../src/ephy-toolbar.c:331
 msgid "New _Tab"
 msgstr "Nauja kor_telė"
 
-#: ../src/ephy-toolbar.c:346
+#: ../src/ephy-toolbar.c:333
 msgid "Open a new tab"
 msgstr "Atverti naują kortelę"
 
-#: ../src/ephy-toolbar.c:355
+#: ../src/ephy-toolbar.c:342
 msgid "_New Window"
 msgstr "_Naujas langas"
 
-#: ../src/ephy-toolbar.c:357
+#: ../src/ephy-toolbar.c:344
 msgid "Open a new window"
 msgstr "Atverti naują langą"
 
@@ -4208,47 +3321,47 @@ msgstr[0] "%d paslėptas iššokantis langas"
 msgstr[1] "%d paslėpti iššokantys langai"
 msgstr[2] "%d paslėptų iššokančių langų"
 
-#: ../src/ephy-window.c:2030
+#: ../src/ephy-window.c:2028
 #, c-format
 msgid "Open image “%s”"
 msgstr "Atverti paveikslėlį „%s“"
 
-#: ../src/ephy-window.c:2035
+#: ../src/ephy-window.c:2033
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "Naudoti kaip darbastalio foną „%s“"
 
-#: ../src/ephy-window.c:2040
+#: ../src/ephy-window.c:2038
 #, c-format
 msgid "Save image “%s”"
 msgstr "Išsaugoti paveikslėlį „%s“"
 
-#: ../src/ephy-window.c:2045
+#: ../src/ephy-window.c:2043
 #, c-format
 msgid "Copy image address “%s”"
 msgstr "Kopijuoti paveikslėlio adresą „%s“"
 
-#: ../src/ephy-window.c:2058
+#: ../src/ephy-window.c:2056
 #, c-format
 msgid "Send email to address “%s”"
 msgstr "Išsiųsti el. laišką adresu „%s“"
 
-#: ../src/ephy-window.c:2064
+#: ../src/ephy-window.c:2062
 #, c-format
 msgid "Copy email address “%s”"
 msgstr "Kopijuoti el. pašto adresą „%s“"
 
-#: ../src/ephy-window.c:2076
+#: ../src/ephy-window.c:2074
 #, c-format
 msgid "Save link “%s”"
 msgstr "Išsaugoti nuorodą „%s“"
 
-#: ../src/ephy-window.c:2082
+#: ../src/ephy-window.c:2080
 #, c-format
 msgid "Bookmark link “%s”"
 msgstr "Įdėti nuorodą „%s“ į žymeles"
 
-#: ../src/ephy-window.c:2088
+#: ../src/ephy-window.c:2086
 #, c-format
 msgid "Copy link's address “%s”"
 msgstr "Kopijuoti nuorodos adresą „%s“"
@@ -4403,10 +3516,6 @@ msgstr "Užverti"
 msgid "Close print preview"
 msgstr "Užverti spaudinimo peržiūrą"
 
-#: ../src/prefs-dialog.c:388
-msgid "Default"
-msgstr "Numatytoji"
-
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. * Translators: the first %s is the language name, and the
@@ -4415,7 +3524,7 @@ msgstr "Numatytoji"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:966 ../src/prefs-dialog.c:974
+#: ../src/prefs-dialog.c:649 ../src/prefs-dialog.c:657
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -4425,12 +3534,12 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:985
+#: ../src/prefs-dialog.c:668
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "Nurodyta naudotojo (%s)"
 
-#: ../src/prefs-dialog.c:1007
+#: ../src/prefs-dialog.c:690
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -4438,11 +3547,11 @@ msgstr[0] "Sistemos kalba (%s)"
 msgstr[1] "Sistemos kalbos (%s)"
 msgstr[2] "Sistemos kalbų (%s)"
 
-#: ../src/prefs-dialog.c:1399
+#: ../src/prefs-dialog.c:1082
 msgid "Select a Directory"
 msgstr "Pasirinkite aplanką"
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:769
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4454,7 +3563,7 @@ msgstr ""
 "sąlygomis, paskelbtomis Laisvosios Programinės Įrangos Fondo; 2-osios arba "
 "(jūsų pasirinkimu) bet kurios vėlesnės šios licencijos versijos sąlygomis."
 
-#: ../src/window-commands.c:782
+#: ../src/window-commands.c:773
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4466,7 +3575,7 @@ msgstr ""
 "TAM TIKRAM TIKSLUI garantijų. Išsamesnę informaciją rasite GNU Bendrojoje "
 "Viešojoje licencijoje."
 
-#: ../src/window-commands.c:786
+#: ../src/window-commands.c:777
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4476,20 +3585,20 @@ msgstr ""
 "žiniatinklio naršykle; jeigu negavote, rašykite Free Software Foundation, 51 "
 "Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
-#: ../src/window-commands.c:834 ../src/window-commands.c:850
-#: ../src/window-commands.c:861
+#: ../src/window-commands.c:825 ../src/window-commands.c:841
+#: ../src/window-commands.c:852
 msgid "Contact us at:"
 msgstr "Susisiekite su mumis:"
 
-#: ../src/window-commands.c:837
+#: ../src/window-commands.c:828
 msgid "Contributors:"
 msgstr "Prisidėjo:"
 
-#: ../src/window-commands.c:840
+#: ../src/window-commands.c:831
 msgid "Past developers:"
 msgstr "Ankstesnieji kūrėjai:"
 
-#: ../src/window-commands.c:873
+#: ../src/window-commands.c:864
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4506,12 +3615,637 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:899
+#: ../src/window-commands.c:890
 msgid "translator-credits"
 msgstr ""
 "Žygimantas Beručka <zygis@gnome.org>,\n"
 "Justina Klingaitė <justina.klingaite@gmail.com>"
 
-#: ../src/window-commands.c:902
+#: ../src/window-commands.c:893
 msgid "GNOME Web Browser Website"
 msgstr "GNOME žiniatinklio naršyklės svetainė"
+
+#~ msgid "Fonts"
+#~ msgstr "Šriftai"
+
+#~ msgid "For l_anguage:"
+#~ msgstr "K_albai:"
+
+#~ msgid "_Detailed Font Settings…"
+#~ msgstr "_Išsamesni šriftų nustatymai…"
+
+#~ msgid "_Fixed width:"
+#~ msgstr "_Nustatytas plotis:"
+
+#~ msgid "_Variable width:"
+#~ msgstr "_Kintantis plotis:"
+
+#~ msgid "Save"
+#~ msgstr "Išsaugoti"
+
+#~ msgid "File Type:|Unknown"
+#~ msgstr "Nežinomas"
+
+#~ msgid "Download this potentially unsafe file?"
+#~ msgstr "Atsiųsti šį potencialiai nesaugų failą?"
+
+#~ msgid ""
+#~ "File Type: “%s”.\n"
+#~ "\n"
+#~ "It is unsafe to open “%s” as it could potentially damage your documents "
+#~ "or invade your privacy. You can download it instead."
+#~ msgstr ""
+#~ "Failo tipas: „%s“.\n"
+#~ "\n"
+#~ "Atverti „%s“ yra nesaugu.  Gali būti sugadinti dokumentai ar pažeistas "
+#~ "Jūsų privatumas. Vietoje to galite failą parsisiųsti."
+
+#~ msgid "Open this file?"
+#~ msgstr "Atverti šį failą?"
+
+#~ msgid ""
+#~ "File Type: “%s”.\n"
+#~ "\n"
+#~ "You can open “%s” using “%s” or save it."
+#~ msgstr ""
+#~ "Failo tipas: „%s“.\n"
+#~ "\n"
+#~ "Galite atverti „%s“ su „%s“ arba ją išsaugoti."
+
+#~ msgid "Download this file?"
+#~ msgstr "Atsiųsti šį failą?"
+
+#~ msgid ""
+#~ "File Type: “%s”.\n"
+#~ "\n"
+#~ "You have no application able to open “%s”. You can download it instead."
+#~ msgstr ""
+#~ "Failo tipas: „%s“.\n"
+#~ "\n"
+#~ "Neturite programos galinčios atverti „%s“. Vietoje to, galite ją "
+#~ "parsisiųsti."
+
+#~ msgid "_Save As..."
+#~ msgstr "Išsaugoti _kaip..."
+
+#~ msgid "“%s” Protocol is not Supported"
+#~ msgstr "Protokolas „%s“ nepalaikomas."
+
+#~ msgid "“%s” protocol is not supported."
+#~ msgstr "Protokolas „%s“ nepalaikomas."
+
+#~ msgid ""
+#~ "Supported protocols are “http”, “https”, “ftp”, “file”, “smb” and “sftp”."
+#~ msgstr ""
+#~ "Palaikomi protokolai yra šie: „http“, „ftp“, „file“, „smb“ ir „sftp“."
+
+#~ msgid "File “%s” not Found"
+#~ msgstr "Failas „%s“ nerastas"
+
+#~ msgid "File “%s” not found."
+#~ msgstr "Failas „%s“ nerastas."
+
+#~ msgid "Check the location of the file and try again."
+#~ msgstr "Patinkrikite failo vietą ir bandykite vėl."
+
+#~ msgid "“%s” Could not be Found"
+#~ msgstr "„%s“ rasti nepavyko"
+
+#~ msgid "“%s” could not be found."
+#~ msgstr "„%s“ rasti nepavyko."
+
+#~ msgid ""
+#~ "Check that you are connected to the internet, and that the address is "
+#~ "correct."
+#~ msgstr ""
+#~ "Patikrinkite ar esate prisijungę prie Interneto ir ar įvedėte adresą "
+#~ "teisingai."
+
+#~ msgid "If this page used to exist, you may find an archived version:"
+#~ msgstr "Jeigu šis puslapis seniau egzistavo, jo archyvą galite rasti:"
+
+#~ msgid "“%s” Refused the Connection"
+#~ msgstr "„%s“ atmetė prisijungimą"
+
+#~ msgid "“%s” refused the connection."
+#~ msgstr "„%s“ atmetė prisijungimą."
+
+#~ msgid "Likely causes of the problem are"
+#~ msgstr "Tikėtinos problemos priežastys yra"
+
+#~ msgid ""
+#~ "<ul><li>the service %s isn't started.</li>Try to start it using the "
+#~ "Services Configuration Tool in System > Control Center, or</"
+#~ "ul><ul><li>the port number %d is wrong.</li></ul>"
+#~ msgstr ""
+#~ "<ul><li>paslauga %s nepaleista.</li>Pabandykite ją paleisti naudodami "
+#~ "Paslaugų konfigūravimo įrankį, kurį rasite Sistema → Administravimas → "
+#~ "Paslaugos, arba</ul><ul><li>prievado numeris %d yra neteisingas.</li></ul>"
+
+#~ msgid ""
+#~ "<ul><li>some service isn't started, or</li><li>the port number %d is "
+#~ "wrong.</li></ul>"
+#~ msgstr ""
+#~ "<ul><li>kai kurios paslaugos nepaleistos, arba</li><li>prievado numeris %"
+#~ "d yra netinkamas.</li></ul>"
+
+#~ msgid ""
+#~ "<ul><li>some service isn't started, or</li><li>you got the port number "
+#~ "wrong.</li></ul>"
+#~ msgstr ""
+#~ "<ul><li>kai kurios paslaugos nepaleistos, arba</li><li>neteisingas "
+#~ "prievado numeris.</li></ul>"
+
+#~ msgid ""
+#~ "The server may be busy or you may have a network connection problem. Try "
+#~ "again later."
+#~ msgstr ""
+#~ "Serveris gali būti užimtas arba galite turėti ryšio problemų. Bandykite "
+#~ "vėliau dar kartą."
+
+#~ msgid "There may be an old version of the page you wanted:"
+#~ msgstr "Sena ieškomo puslapio versija gali būti:"
+
+#~ msgid "“%s” Interrupted the Connection"
+#~ msgstr "„%s“ pertraukė prisijungimą"
+
+#~ msgid "“%s” interrupted the connection."
+#~ msgstr "„%s“ pertraukė prisijungimą."
+
+#~ msgid "“%s” is not Responding"
+#~ msgstr "„%s“ neatsako"
+
+#~ msgid "“%s” is not responding."
+#~ msgstr "„%s“ neatsako."
+
+#~ msgid "The connection was lost because the server took too long to respond."
+#~ msgstr "Ryšys nutrūko, nes serveris per ilgai neatsakė."
+
+#~ msgid "Invalid Address"
+#~ msgstr "Netinkamas adresas"
+
+#~ msgid "Invalid address."
+#~ msgstr "Netinkamas adresas."
+
+#~ msgid "The address you entered is not valid."
+#~ msgstr "Įvestas adresas yra netinkamas."
+
+#~ msgid "“%s” Redirected Too Many Times"
+#~ msgstr "„%s“ nukreipė per daug kartų"
+
+#~ msgid "This page cannot load because of a problem with the Web site."
+#~ msgstr "Šis puslapis negali būti įkrautas dėl problemų su svetaine."
+
+#~ msgid "The server “%s” is redirecting in a way that will never complete."
+#~ msgstr ""
+#~ "Serveris „%s“ vykdo peradresavimą tokiu būdu, kuris niekad neužsibaigs."
+
+#~ msgid "“%s” Requires an Encrypted Connection"
+#~ msgstr "„%s“ reikalauja šifruoto ryšio"
+
+#~ msgid "“%s” requires an encrypted connection."
+#~ msgstr "„%s“ reikalauja šifruoto ryšio."
+
+#~ msgid ""
+#~ "The document could not be loaded because encryption support is not "
+#~ "installed."
+#~ msgstr "Dokumento įkelti nepavyko, nes neįdiegtas šifravimo palaikymas. "
+
+#~ msgid "“%s” Dropped the Connection"
+#~ msgstr "„%s“ nutraukė ryšį"
+
+#~ msgid "“%s” dropped the connection."
+#~ msgstr "„%s“ nutraukė ryšį."
+
+#~ msgid "The server dropped the connection before any data could be read."
+#~ msgstr ""
+#~ "Serveris nutraukė ryšį anksčiau nei galėjo būti perskaityti duomenys."
+
+#~ msgid "Cannot Load Document Whilst Working Offline"
+#~ msgstr "Dirbant atsijungus dokumento įkelti negalima"
+
+#~ msgid "Cannot load document whilst working offline."
+#~ msgstr "Dirbant atsijungus dokumento įkelti negalima."
+
+#~ msgid "To view this document, disable “Work Offline” and try again."
+#~ msgstr ""
+#~ "Norėdami peržiūrėti šį dokumentą, išjunkite parinktį „Dirbti atsijungus“ "
+#~ "ir bandykite dar kartą."
+
+#~ msgid "Access Denied to Port “%d” of “%s”"
+#~ msgstr "Prieiga prie „%2$s“ prievado „%1$d“ uždrausta"
+
+#~ msgid "Access denied to port “%d” of “%s”."
+#~ msgstr "Prieiga prie „%2$s“ prievado „%1$d“ uždrausta."
+
+#~ msgid ""
+#~ "This address uses a network port which is normally used for purposes "
+#~ "other than Web browsing."
+#~ msgstr ""
+#~ "Šis adresas naudoja tinklo prievadą, kurio paskirtis paprastai yra ne "
+#~ "žiniatinklio naršymas."
+
+#~ msgid "The request has been cancelled for your protection."
+#~ msgstr "Jūsų saugumui, užklausa buvo atšaukta."
+
+#~ msgid "Could not Connect to Proxy Server"
+#~ msgstr "Nepavyko prisijungti prie tarpinio serverio"
+
+#~ msgid "Could not connect to proxy server."
+#~ msgstr "Nepavyko prisijungti prie tarpinio serverio."
+
+#~ msgid ""
+#~ "Check your proxy server settings. If the connection still fails, there "
+#~ "may be a problem with your proxy server or your network connection."
+#~ msgstr ""
+#~ "Patikrinkite tarpinio serverio nustatymus. Jeigu ryšio vistiek nėra, gali "
+#~ "būti problema su tarpiniu serveriu arba tinklo prisijungimu."
+
+#~ msgid "Could not Display Content"
+#~ msgstr "Nepavyko parodyti turinio"
+
+#~ msgid "Could not display content."
+#~ msgstr "Nepavyko parodyti turinio."
+
+#~ msgid "The page uses an unsupported or invalid form of compression."
+#~ msgstr "Puslapyje yra naudojamas netinkamos formos suspaudimas."
+
+#~ msgid ""
+#~ "This page was loading when the web browser closed unexpectedly. This "
+#~ "might happen again if you reload the page. If it does, please report the "
+#~ "problem to the %s developers."
+#~ msgstr ""
+#~ "Žiniatinklio naršyklei lūžtant buvo įkeliamas šis tinklalapis. Iš naujo "
+#~ "įkėlus šį tinklalapį tai gali pasikartoti. Jeigu taip atsitiks, "
+#~ "praneškite apie šią problemą %s kūrėjams."
+
+#~ msgid "You may find an old version:|in the Google Cache"
+#~ msgstr "Google podėlyje"
+
+#~ msgid "You may find an old version:|in the Internet Archive"
+#~ msgstr "Interneto archyve"
+
+#~ msgid "_Abort Script"
+#~ msgstr "_Nutraukti scenarijų"
+
+#~ msgid "Don't Save"
+#~ msgstr "Nesaugoti"
+
+#~ msgid "Text files"
+#~ msgstr "Tekstiniai failai"
+
+#~ msgid "XML files"
+#~ msgstr "XML failai"
+
+#~ msgid "XUL files"
+#~ msgstr "XUL failai"
+
+#~ msgid "Accept cookie from %s?"
+#~ msgstr "Priimti slapuką iš %s?"
+
+#~ msgid "Accept Cookie?"
+#~ msgstr "Priimti slapuką?"
+
+#~ msgid "The site wants to modify an existing cookie."
+#~ msgstr "Svetainė ketina modifikuoti jau esantį slapuką."
+
+#~ msgid "The site wants to set a cookie."
+#~ msgstr "Svetainė ketina sukurti slapuką."
+
+#~ msgid "The site wants to set a second cookie."
+#~ msgstr "Svetainė ketina sukurti antrą slapuką."
+
+#~ msgid "You already have %d cookie from this site."
+#~ msgid_plural "You already have %d cookies from this site."
+#~ msgstr[0] "Jau turite %d slapuką iš šios svetainės."
+#~ msgstr[1] "Jau turite %d slapukus iš šios svetainės."
+#~ msgstr[2] "Jau turite %d slapukų iš šios svetainės."
+
+#~ msgid "Apply this _decision to all cookies from this site"
+#~ msgstr "Pritaikyti šį _sprendimą visiems slapukams iš šio tinklalapio"
+
+#~ msgid "_Reject"
+#~ msgstr "_Atmesti"
+
+#~ msgid "_Accept"
+#~ msgstr "_Priimti"
+
+#~ msgid "The web site “%s” requests that you sign the following text:"
+#~ msgstr "Svetainei „%s“ reikia, kad pasirašytumėte šį tekstą:"
+
+#~ msgid "_Sign text"
+#~ msgstr "_Pasirašyti tekstą"
+
+#~ msgid "Options"
+#~ msgstr "Parinktys"
+
+#~ msgid "Print this page?"
+#~ msgstr "Spausdinti šį puslapį?"
+
+#~ msgid "Preparing to print"
+#~ msgstr "Ruošiamasi spausdinti"
+
+#~ msgid "Page %d of %d"
+#~ msgstr "Puslapis %d iš %d"
+
+#~ msgid "Cancelling print"
+#~ msgstr "Atšaukiamas spausdinimas"
+
+#~ msgid "Spooling..."
+#~ msgstr "Siunčiama į kaupą..."
+
+#~ msgid "Print error"
+#~ msgstr "Spausdinimo klaida"
+
+#~ msgid "Printing “%s”"
+#~ msgstr "Spausdinama „%s“"
+
+#~ msgid "_Select Certificate"
+#~ msgstr "Pasirinkti _sertifikatą"
+
+#~ msgid "Choose a certificate to present as identification to “%s”."
+#~ msgstr "Pasirinkite sertifikatą pateikiamą kaip tapatybę svetainei „%s“."
+
+#~ msgid "Select a certificate to identify yourself."
+#~ msgstr "Savęs identifikavimui pasirinkite sertifikatą."
+
+#~ msgid "Certificate _Details"
+#~ msgstr "Sertifikato _detalės"
+
+#~ msgid "_View Certificate"
+#~ msgstr "Žiūrėti _sertifikatą"
+
+#~ msgid ""
+#~ "The site “%s” returned security information for “%s”. It is possible that "
+#~ "someone is intercepting your communication to obtain your confidential "
+#~ "information."
+#~ msgstr ""
+#~ "Svetainė „%s“ grąžino tinklapio „%s“ saugumo informaciją. Gali būti, kad "
+#~ "kažkas periminėja susijungimą, norėdamas gauti konfidencialią informaciją."
+
+#~ msgid ""
+#~ "You should only accept the security information if you trust “%s” and “%"
+#~ "s”."
+#~ msgstr ""
+#~ "Turėtumėte priimti saugumo informaciją tik jeigu pasitikite „%s“ ir „%s“."
+
+#~ msgid "Accept incorrect security information?"
+#~ msgstr "Priimti neteisingą saugumo informaciją?"
+
+#~ msgid ""
+#~ "It was not possible to automatically trust “%s”. It is possible that "
+#~ "someone is intercepting your communication to obtain your confidential "
+#~ "information."
+#~ msgstr ""
+#~ "Nebuvo galima automatiškai pasitikėti „%s“. Gali būti, kad kažkas "
+#~ "periminėja susijungimą, norėdami gauti konfidencialią informaciją."
+
+#~ msgid ""
+#~ "You should only connect to the site if you are certain you are connected "
+#~ "to “%s”."
+#~ msgstr ""
+#~ "Turėtumėte prisijungti prie tinklapio tik tada, kai esate tikri, jog "
+#~ "prisijungėte prie „%s“."
+
+#~ msgid "Connect to untrusted site?"
+#~ msgstr "Prisijungti prie nepatikimo tinklapio?"
+
+#~ msgid "_Trust this security information from now on"
+#~ msgstr "_Nuo dabar pasitikėti šia saugumo informacija"
+
+#~ msgid "Co_nnect"
+#~ msgstr "Prisiju_ngti"
+
+#~ msgid "Accept expired security information?"
+#~ msgstr "Priimti pasenusią saugumo informaciją?"
+
+#~ msgid "The security information for “%s” expired on %s."
+#~ msgstr "„%s“ saugumo informacija baigė galioti „%s“."
+
+#~ msgid "Accept not yet valid security information?"
+#~ msgstr "Priimti dar negaliojančią saugumo informaciją?"
+
+#~ msgid "The security information for “%s” isn't valid until %s."
+#~ msgstr "„%s“ saugumo informacija negalios iki „%s“."
+
+#~ msgid "%a %d %b %Y"
+#~ msgstr "%a, %Y %b %d"
+
+#~ msgid "You should ensure that your computer's time is correct."
+#~ msgstr "Turėtumėte įsitikinti, jog kompiuterio laikas yra tikslus."
+
+#~ msgid "Cannot establish connection to “%s”"
+#~ msgstr "Nepavyko įtvirtinti ryšio su „%s“"
+
+#~ msgid ""
+#~ "The certificate revocation list (CRL) from “%s” needs to be updated.\n"
+#~ "\n"
+#~ "Please ask your system administrator for assistance."
+#~ msgstr ""
+#~ "Reikia atnaujinti sertifikatų atšaukimo sąrašą (CRL) iš „%s“.\n"
+#~ "\n"
+#~ "Paprašykite savo sistemos administratoriaus pagalbos."
+
+#~ msgid "Trust new Certificate Authority?"
+#~ msgstr "Pasitikėti nauju sertifikato išdavėju?"
+
+#~ msgid "_Trust CA"
+#~ msgstr "Pasi_tikėti SI"
+
+#~ msgid "Trust new Certificate Authority “%s” to identify web sites?"
+#~ msgstr ""
+#~ "Pasitikėti nauju sertifikato išdavėju „%s“ atpažįstant tinklalapius?"
+
+#~ msgid ""
+#~ "Before trusting a Certificate Authority (CA) you should verify the "
+#~ "certificate is authentic."
+#~ msgstr ""
+#~ "Prieš pasitikint sertifikato išdavėju (SI) turėtumėte įsitikinti, kad "
+#~ "sertifikatas yra autentiškas."
+
+#~ msgid "Certificate already exists."
+#~ msgstr "Sertifikatas jau egzistuoja."
+
+#~ msgid "The certificate has already been imported."
+#~ msgstr "Sertifikatas jau yra importuotas."
+
+#~ msgid "Select Password"
+#~ msgstr "Pasirinkite slaptažodį"
+
+#~ msgid "Select a password to protect this certificate"
+#~ msgstr "Pasirinkite slaptažodį šio sertifikato apsaugai"
+
+#~ msgid "Enter the password for this certificate"
+#~ msgstr "Įveskite šiam sertifikatui slaptažodį"
+
+#~ msgid "Certificate Revocation List Imported"
+#~ msgstr "Sertifikatų atšaukimo sąrašas importuotas"
+
+#~ msgid "Certificate Revocation List (CRL) successfully imported"
+#~ msgstr "Sertifikatų atšaukimo sąrašas (CRL) sėkmingai importuotas"
+
+#~ msgid "Unit:"
+#~ msgstr "Vienetas:"
+
+#~ msgid "Next Update:"
+#~ msgstr "Kitas atnaujinimas:"
+
+#~ msgid "Not part of certificate"
+#~ msgstr "Nėra sertifikato dalis"
+
+#~ msgid "Certificate Properties"
+#~ msgstr "Sertifikato savybės"
+
+#~ msgid "This certificate has been verified for the following uses:"
+#~ msgstr "Sertifikatas buvo patvirtintas šioms panaudojimo rūšims:"
+
+#~ msgid "Could not verify this certificate because it has been revoked."
+#~ msgstr "Nepavyko patvirtinti šio sertifikato, nes jis buvo panaikintas."
+
+#~ msgid "Could not verify this certificate because it has expired."
+#~ msgstr ""
+#~ "Nepavyko patvirtinti šio sertifikato, nes pasibaigė jo galiojimo terminas."
+
+#~ msgid "Could not verify this certificate because it is not trusted."
+#~ msgstr "Nepavyko patvirtinti šio sertifikato, nes jis nepatikimas."
+
+#~ msgid "Could not verify this certificate because the issuer is not trusted."
+#~ msgstr ""
+#~ "Nepavyko patvirtinti šio sertifikato, nes išdavėjas yra nepatikimas."
+
+#~ msgid "Could not verify this certificate because the issuer is unknown."
+#~ msgstr "Nepavyko patvirtinti šio sertifikato, nes išdavėjas yra nežinomas."
+
+#~ msgid ""
+#~ "Could not verify this certificate because the CA certificate is invalid."
+#~ msgstr ""
+#~ "Nepavyko patvirtinti šio sertifikato, nes SI sertifikatas yra netinkamas."
+
+#~ msgid "Could not verify this certificate for unknown reasons."
+#~ msgstr "Nepavyko patvirtinti šio sertifikato dėl nežinomų priežasčių."
+
+#~ msgid "Change Token Password"
+#~ msgstr "Pakeisti prieigos rakto slaptažodį"
+
+#~ msgid "Choose a password for the “%s” token"
+#~ msgstr "Pasirinkite prieigos rakto „%s“ slaptažodį"
+
+#~ msgid "Change the password for the “%s” token"
+#~ msgstr "Pakeisti prieigos rakto „%s“ slaptažodį"
+
+#~ msgid "Get Token Password"
+#~ msgstr "Gauti prieigos rakto slaptažodį"
+
+#~ msgid "Please enter the password for the “%s” token"
+#~ msgstr "Įveskite prieigos rakto „%s“ slaptažodį"
+
+#~ msgid "Please select a token:"
+#~ msgstr "Pasirinkite prieigos raktą:"
+
+#~ msgid "_Select"
+#~ msgstr "_Pasirinkti"
+
+#~ msgid "Escrow the secret key?"
+#~ msgstr "Perduoti slaptą raktą?"
+
+#~ msgid ""
+#~ "The certificate authority “%s” requests that you give it a copy of the "
+#~ "newly generated secret key.\n"
+#~ "\n"
+#~ "This will enable the certificate authority read any communications "
+#~ "encrypted with this key without your knowledge or consent.\n"
+#~ "\n"
+#~ "It is strongly recommended not to allow it."
+#~ msgstr ""
+#~ "Sertifikato išdavėjas „%s“ prašo, kad pateiktumėte naujai sukurto slapto "
+#~ "rakto kopiją.\n"
+#~ "\n"
+#~ "Tai leis sertifikato davėjui be Jūsų žinios ar leidimo perskaityti bet "
+#~ "kokius ryšius, užšifruotus šiuo raktu.\n"
+#~ "\n"
+#~ "Primygtinai rekomenduojama to neleisti."
+
+#~ msgid "_Allow"
+#~ msgstr "_Leisti"
+
+#~ msgid "Generating Private Key."
+#~ msgstr "Generuojamas privatus raktas."
+
+#~ msgid ""
+#~ "Please wait while a new private key is generated. This process could take "
+#~ "a few minutes."
+#~ msgstr ""
+#~ "Prašau palaukti kol bus sugeneruotas naujas privatus raktas. Šis procesas "
+#~ "gali užtrukti keletą minučių."
+
+#~ msgid "Security Notice"
+#~ msgstr "Saugumo pranešimas"
+
+#~ msgid "This page is loaded over a secure connection"
+#~ msgstr "Šis puslapis yra įkeltas naudojant saugią jungtį"
+
+#~ msgid ""
+#~ "For secure pages, the address entry has a distinct color and a locked "
+#~ "padlock icon is displayed.\n"
+#~ "\n"
+#~ "The padlock icon in the statusbar also indicates whether a page is secure."
+#~ msgstr ""
+#~ "Saugiems tinklalapiams adreso įvedimo laukas būna skirtingos spalvos ir "
+#~ "rodoma užrakintos spynelės piktograma.\n"
+#~ "\n"
+#~ "Spynelės piktograma būsenos juostoje taip pat nurodo, ar puslapis yra "
+#~ "saugus."
+
+#~ msgid "Security Warning"
+#~ msgstr "Saugumo įspėjimas"
+
+#~ msgid "This page is loaded over a low security connection"
+#~ msgstr "Šis puslapis yra įkeltas naudojant žemo saugumo lygio jungtį"
+
+#~ msgid ""
+#~ "Any information you see or enter on this page could easily be intercepted "
+#~ "by a third party."
+#~ msgstr ""
+#~ "Visa Jūsų šiame puslapyje matoma ir įvedama informacija gali būti lengvai "
+#~ "perimta trečiųjų asmenų."
+
+#~ msgid "Some parts of this page are loaded over an insecure connection"
+#~ msgstr "Kai kurios šio puslapio dalys yra įkeltos naudojant nesaugią jungtį"
+
+#~ msgid ""
+#~ "Some information you see or enter will be sent over an insecure "
+#~ "connection, and could easily be intercepted by a third party."
+#~ msgstr ""
+#~ "Dalis matomos bei įvedamos informacijos bus siunčiama naudojantis "
+#~ "nesaugia jungtimi ir galės būti laisvai perimta trečiųjų asmenų."
+
+#~ msgid "Send this information over an insecure connection?"
+#~ msgstr "Siųsti šią informaciją nesaugia jungtimi?"
+
+#~ msgid ""
+#~ "The information you have entered will be sent over an insecure "
+#~ "connection, and could easily be intercepted by a third party."
+#~ msgstr ""
+#~ "Įvesta informacija bus siunčiama tinklu naudojantis nesaugia jungtimi, ir "
+#~ "galės būti laisvai perimta trečiųjų asmenų."
+
+#~ msgid "_Send"
+#~ msgstr "_Siųsti"
+
+#~ msgid ""
+#~ "Although this page was loaded over a secure connection, the information "
+#~ "you have entered will be sent over an insecure connection, and could "
+#~ "easily be intercepted by a third party."
+#~ msgstr ""
+#~ "Nors šis puslapis buvo įkeltas naudojantis saugia jungtimi, įvesta "
+#~ "informacija bus siunčiama naudojantis nesaugia jungtimi ir gali būti "
+#~ "laisvai perimta trečiųjų asmenų."
+
+#~ msgid "%s Files"
+#~ msgstr "%s failai"
+
+#~ msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
+#~ msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
+
+#~ msgid "Default"
+#~ msgstr "Numatytoji"
