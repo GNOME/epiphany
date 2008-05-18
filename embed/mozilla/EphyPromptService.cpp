@@ -177,7 +177,7 @@ Prompter::Prompter (const char *aStock,
 		text = ConvertAndTruncateString (aText, MAX_MESSAGE_LENGTH);
 	}
 
-	label = gtk_label_new (text);
+	label = gtk_label_new (text ? text : "");
 	g_free (text);
 
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
@@ -333,7 +333,7 @@ Prompter::AddCheckbox (const PRUnichar *aText,
 	if (!aState || !aText) return;
 
 	char *label = ConvertAndEscapeButtonText (aText, 2 * MAX_BUTTON_TEXT_LENGTH);
-	mCheck = gtk_check_button_new_with_mnemonic (label);
+	mCheck = gtk_check_button_new_with_mnemonic (label ? label : "");
 	g_free (label);
 
 	gtk_label_set_line_wrap (GTK_LABEL (GTK_BIN (mCheck)->child), TRUE);
@@ -609,7 +609,10 @@ Prompter::ConvertAndTruncateString (const PRUnichar *aText,
 	char *converted = g_utf16_to_utf8 ((gunichar2*) aText, aMaxLength,
 					    &n_read, &n_written, NULL);
 	/* FIXME loop from the end while !g_unichar_isspace (char)? */
+        if (!converted)
+                return NULL;
 
+        g_strdelimit (converted, "\001\002\003\004\005\006\007\010\011\012\013\014\015\016\017\020\021\022\023\024\025\026\027\030\031\032\033\034\035\036\037", ' ');
 	return converted;
 }
 
