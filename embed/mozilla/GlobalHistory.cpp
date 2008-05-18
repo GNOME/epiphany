@@ -31,11 +31,12 @@
 
 #include "GlobalHistory.h"
 
-
 #define MAX_TITLE_LENGTH	2048
 #define MAX_URL_LENGTH		16384
 
-#ifdef HAVE_NSIGLOBALHISTORY3_H
+#if defined(HAVE_GECKO_1_9)
+NS_IMPL_ISUPPORTS3 (MozGlobalHistory, nsIGlobalHistory2, nsIGlobalHistory3, nsIDownloadHistory)
+#elif defined (HAVE_NSIGLOBALHISTORY3_H)
 NS_IMPL_ISUPPORTS2 (MozGlobalHistory, nsIGlobalHistory2, nsIGlobalHistory3)
 #else
 NS_IMPL_ISUPPORTS1 (MozGlobalHistory, nsIGlobalHistory2)
@@ -223,3 +224,16 @@ MozGlobalHistory::AddDocumentRedirect(nsIChannel *aOldChannel,
 }
 
 #endif /* HAVE_NSIGLOBALHISTORY3_H */
+
+#ifdef HAVE_GECKO_1_9
+
+/* nsIDownloadHistory */
+
+/* void addDownload (in nsIURI aSource, [optional] in nsIURI aReferrer, [optional] in PRTime aStartTime); */
+NS_IMETHODIMP
+MozGlobalHistory::AddDownload (nsIURI *aSource, nsIURI *aReferrer, PRTime aStartTime)
+{
+    return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+#endif /* HAVE_GECKO_1_9 */

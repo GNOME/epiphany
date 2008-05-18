@@ -200,6 +200,14 @@ static const nsModuleComponentInfo sAppComps[] = {
 		NS_GLOBALHISTORY2_CONTRACTID,
 		MozGlobalHistoryConstructor
 	},
+#ifdef HAVE_GECKO_1_9
+        {
+		EPHY_GLOBALHISTORY_CLASSNAME,
+		EPHY_GLOBALHISTORY_CID,
+		NS_DOWNLOADHISTORY_CONTRACTID,
+		MozGlobalHistoryConstructor
+        },
+#endif
 	{
 		GECKO_PRINT_SERVICE_CLASSNAME,
 		GECKO_PRINT_SERVICE_IID,

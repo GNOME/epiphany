@@ -22,6 +22,9 @@
 #ifndef EPHY_GLOBAL_HISTORY_H
 #define EPHY_GLOBAL_HISTORY_H
 
+#ifdef HAVE_GECKO_1_9
+#include <nsIDownloadHistory.h>
+#endif
 #ifdef HAVE_NSIGLOBALHISTORY3_H
 #include <nsIGlobalHistory3.h>
 #else
@@ -49,6 +52,9 @@ class MozGlobalHistory: public nsIGlobalHistory3
 #else
 class MozGlobalHistory: public nsIGlobalHistory2
 #endif /* HAVE_NSIGLOBALHISTORY3_H */
+#ifdef HAVE_GECKO_1_9
+                       , public nsIDownloadHistory
+#endif
 {
 	public:
 		MozGlobalHistory ();
@@ -59,6 +65,9 @@ class MozGlobalHistory: public nsIGlobalHistory2
 #ifdef HAVE_NSIGLOBALHISTORY3_H
 		NS_DECL_NSIGLOBALHISTORY3
 #endif /* HAVE_NSIGLOBALHISTORY3_H */
+#ifdef HAVE_GECKO_1_9
+                NS_DECL_NSIDOWNLOADHISTORY
+#endif
 
 	private:
 		EphyHistory *mGlobalHistory;
