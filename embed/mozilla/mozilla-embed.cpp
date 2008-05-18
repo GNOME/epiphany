@@ -1374,8 +1374,14 @@ static EphyEmbedSecurityLevel
 mozilla_embed_security_level (PRUint32 state)
 {
 	EphyEmbedSecurityLevel level;
+        const PRUint32 mask = (nsIWebProgressListener::STATE_IS_SECURE |
+                               nsIWebProgressListener::STATE_IS_BROKEN |
+                               nsIWebProgressListener::STATE_IS_INSECURE |
+                               nsIWebProgressListener::STATE_SECURE_HIGH |
+                               nsIWebProgressListener::STATE_SECURE_MED |
+                               nsIWebProgressListener::STATE_SECURE_LOW);
 
-	switch (state)
+	switch (state & mask)
 	{
 	case nsIWebProgressListener::STATE_IS_INSECURE:
 		level = EPHY_EMBED_STATE_IS_INSECURE;
