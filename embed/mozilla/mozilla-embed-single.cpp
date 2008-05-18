@@ -594,7 +594,7 @@ impl_init (EphyEmbedSingle *esingle)
 	  "2", PR_TRUE
 	};
 	char xpcomLocation[4096];
-	rv = GRE_GetGREPathWithProperties(&greVersion, 1, nsnull, 0, xpcomLocation, 4096);
+	rv = GRE_GetGREPathWithProperties(&greVersion, 1, nsnull, 0, xpcomLocation, sizeof (xpcomLocation));
 	if (NS_FAILED (rv))
 	{
 	  g_warning ("Could not find a suitable GRE!\n");
