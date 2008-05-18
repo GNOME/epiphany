@@ -152,6 +152,9 @@ ephy_module_load (GTypeModule *gmodule)
 
 	if (module->type == 0)
 	{
+		g_warning ("Failed to register the GType(s)!");
+		g_module_close (module->library);
+
 		return FALSE;
 	}
 
