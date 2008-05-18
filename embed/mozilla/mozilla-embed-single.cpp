@@ -389,8 +389,6 @@ mozilla_init_login_manager (MozillaEmbedSingle *single)
                         do_GetService (NS_LOGINMANAGER_CONTRACTID);
 	if (!loginManager)
 		g_warning ("Failed to instantiate LoginManager");
-	else
-		g_debug ("LoginManager tapped");
 #endif /* HAVE_GECKO_1_9 */
 }
 
@@ -1088,35 +1086,72 @@ impl_remove_password (EphyPasswordManager *manager,
 		(do_GetService ("@mozilla.org/network/idn-service;1"));
 	NS_ENSURE_TRUE (idnService, );
 
-        if(info->formSubmitURL != nsnull)
-	        g_debug("form submit url: %s", info->formSubmitURL);
-	else
-       	 g_debug("form submit url is NULL");
+        if (info->username)
+          NS_CStringToUTF16 (nsCString(info->host),
+                            NS_CSTRING_ENCODING_UTF8, userName);
+#ifdef HAVE_GECKO_1_9
+        else
+          host.SetIsVoid (PR_TRUE);
+#endif
 
-	NS_CStringToUTF16 (nsCString(info->username),
-			   NS_CSTRING_ENCODING_UTF8, userName);
-	NS_CStringToUTF16 (nsCString(info->usernameField),
-			   NS_CSTRING_ENCODING_UTF8, userNameField);
-	NS_CStringToUTF16 (nsCString(info->host),
-			   NS_CSTRING_ENCODING_UTF8, host);
-	NS_CStringToUTF16 (nsCString(info->httpRealm),
-			   NS_CSTRING_ENCODING_UTF8, httpRealm);
-	NS_CStringToUTF16 (nsCString(info->password),
-			   NS_CSTRING_ENCODING_UTF8, password);
-	NS_CStringToUTF16 (nsCString(info->passwordField),
-			   NS_CSTRING_ENCODING_UTF8, passwordField);
-	NS_CStringToUTF16 (nsCString(info->formSubmitURL),
-			   NS_CSTRING_ENCODING_UTF8, formSubmitURL);
+        if (info->username)
+          NS_CStringToUTF16 (nsCString(info->username),
+                            NS_CSTRING_ENCODING_UTF8, userName);
+#ifdef HAVE_GECKO_1_9
+        else
+          userName.SetIsVoid (PR_TRUE);
+#endif
+
+        if (info->usernameField)
+          NS_CStringToUTF16 (nsCString(info->usernameField),
+                            NS_CSTRING_ENCODING_UTF8, userNameField);
+#ifdef HAVE_GECKO_1_9
+        else
+          userNameField.SetIsVoid (PR_TRUE);
+#endif
+
+        if (info->host)
+          NS_CStringToUTF16 (nsCString(info->host),
+                            NS_CSTRING_ENCODING_UTF8, host);
+#ifdef HAVE_GECKO_1_9
+        else
+          host.SetIsVoid (PR_TRUE);
+#endif
+
+        if (info->httpRealm)
+          NS_CStringToUTF16 (nsCString(info->httpRealm),
+                            NS_CSTRING_ENCODING_UTF8, httpRealm);
+#ifdef HAVE_GECKO_1_9
+        else
+          userName.SetIsVoid (PR_TRUE);
+#endif
+
+        if (info->password)
+          NS_CStringToUTF16 (nsCString(info->password),
+                            NS_CSTRING_ENCODING_UTF8, password);
+#ifdef HAVE_GECKO_1_9
+        else
+          password.SetIsVoid (PR_TRUE);
+#endif
+
+        if (info->passwordField)
+          NS_CStringToUTF16 (nsCString(info->passwordField),
+                            NS_CSTRING_ENCODING_UTF8, passwordField);
+#ifdef HAVE_GECKO_1_9
+        else
+          passwordField.SetIsVoid (PR_TRUE);
+#endif
+
+        if (info->formSubmitURL)
+          NS_CStringToUTF16 (nsCString(info->formSubmitURL),
+                            NS_CSTRING_ENCODING_UTF8, formSubmitURL);
+#ifdef HAVE_GECKO_1_9
+        else
+          formSubmitURL.SetIsVoid (PR_TRUE);
+#endif
+
 
 #ifdef HAVE_GECKO_1_9
-	if(!info->username) userName.SetIsVoid(PR_TRUE);
-	if(!info->usernameField) userNameField.SetIsVoid(PR_TRUE);
-	if(!info->host) host.SetIsVoid(PR_TRUE);
-	if(!info->httpRealm) httpRealm.SetIsVoid(PR_TRUE);
-	if(!info->password) password.SetIsVoid(PR_TRUE);
-	if(!info->passwordField) passwordField.SetIsVoid(PR_TRUE);
-	if(!info->formSubmitURL) formSubmitURL.SetIsVoid(PR_TRUE);
-
 	nsCOMPtr<nsILoginManager> loginManager =
 			do_GetService (NS_LOGINMANAGER_CONTRACTID);
 	NS_ENSURE_TRUE (loginManager, );
@@ -1139,7 +1174,7 @@ impl_remove_password (EphyPasswordManager *manager,
                         do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
 	if (!pm) return;
 
-	pm->RemoveUser (nsCString(info->host), userName);
+	pm->RemoveUser (host, userName);
 #endif /* HAVE_GECKO_1_9 */
 }
 
