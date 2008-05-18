@@ -44,6 +44,7 @@
 
 #ifdef HAVE_GECKO_1_9
 #include <nsIClassInfoImpl.h>
+#include <nsXULAppAPI.h>
 #endif
 
 #ifdef HAVE_MOZILLA_PSM
@@ -77,6 +78,10 @@
 #include "GeckoFormSigningDialog.h"
 #endif
 
+#ifdef HAVE_GECKO_1_9
+#include "EphyXULAppInfo.h"
+#endif
+
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyAboutModule)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyContentPolicy)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyPromptService)
@@ -104,7 +109,9 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSSecurityWarningDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GeckoFormSigningDialog)
 #endif
 
-#define XPINSTALL_CONTRACTID NS_CONTENT_HANDLER_CONTRACTID_PREFIX "application/x-xpinstall"
+#ifdef HAVE_GECKO_1_9
+NS_GENERIC_FACTORY_CONSTRUCTOR(EphyXULAppInfo)
+#endif
 
 /* class information */ 
 NS_DECL_CLASSINFO(EphySidebar)
@@ -112,6 +119,14 @@ NS_DECL_CLASSINFO(EphySidebar)
 /* FIXME: uninstall XPI handler */
 
 static const nsModuleComponentInfo sAppComps[] = {
+#ifdef HAVE_GECKO_1_9
+         {
+                EPHY_XUL_APP_INFO_CLASSNAME,
+                EPHY_XUL_APP_INFO_CID,
+                XULAPPINFO_SERVICE_CONTRACTID,
+                EphyXULAppInfoConstructor
+        },
+#endif
 	{
 		MOZ_DOWNLOAD_CLASSNAME,
 		MOZ_DOWNLOAD_CID,

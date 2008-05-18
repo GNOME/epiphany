@@ -20,15 +20,22 @@ m4_define([epiphany_version_minor],[22])
 m4_define([epiphany_version_micro],[1])
 m4_define([epiphany_version_extra],[.2])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro()epiphany_version_extra])
+m4_define([epiphany_build_id],[20080528]) # The date of the 2.22.2 release
 
 # This can be either "trunk" or "branches/gnome-x-y"
 m4_define([epiphany_branch],["branches/gnome-2-22"])
 
 AC_INIT([GNOME Web Browser],[epiphany_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
-GNOME_COMMON_INIT
-
 AC_PREREQ([2.59])
+
+AC_CANONICAL_HOST
+AC_DEFINE_UNQUOTED([EPHY_HOST],["$host"],[The host])
+AC_DEFINE_UNQUOTED([EPHY_HOST_CPU],["$host_cpu"],[The host CPU type])
+AC_DEFINE_UNQUOTED([EPHY_HOST_VENDOR],["$host_vendor"],[The host vendor])
+AC_DEFINE_UNQUOTED([EPHY_HOST_OS],["$host_os"],[The host OS])
+
+GNOME_COMMON_INIT
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
@@ -48,9 +55,7 @@ AC_SUBST([EPIPHANY_MAJOR_VERSION], [epiphany_version_major])
 AC_SUBST([EPIPHANY_MINOR_VERSION], [epiphany_version_minor])
 AC_SUBST([EPIPHANY_MICRO_VERSION], [epiphany_version_micro])
 
-# Build ID
-BUILDID="$(TZ=UTC0 date +'%Y%m%d')"
-AC_SUBST([BUILDID])
+AC_DEFINE([EPHY_BUILD_ID],["epiphany_build_id"],[The build date])
 
 AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip tar-ustar])
 

@@ -64,6 +64,13 @@ libephymozillaembed_la_SOURCES = 	\
 	mozilla-notifiers.cpp		\
 	mozilla-notifiers.h
 
+if HAVE_GECKO_1_9
+libephymozillaembed_la_SOURCES += \
+	EphyXULAppInfo.cpp		\
+	EphyXULAppInfo.h		\
+	$(NULL)
+endif
+
 if !HAVE_GECKO_1_9
 libephymozillaembed_la_SOURCES += 	\
 	EphyBadCertRejector.cpp		\
