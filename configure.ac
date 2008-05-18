@@ -761,7 +761,7 @@ AC_ARG_WITH([distributor-name],
   AS_HELP_STRING([--with-distributor-name=name],[Set the distributor name]),
   [LSB_DISTRIBUTOR="$withval"])
 
-if test -z "$LSB_DISTRIBUTOR" = ""; then
+if test -z "$LSB_DISTRIBUTOR"; then
 	AC_CHECK_PROGS([LSB_RELEASE], [lsb_release],)
 	if test -n "$LSB_RELEASE"; then
 		# Fallback on lsb_release if available
