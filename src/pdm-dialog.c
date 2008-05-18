@@ -803,6 +803,7 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 	info->model = GTK_TREE_MODEL (liststore);
 	g_object_unref (liststore);
 
+        cookies_treeview_selection_changed_cb (selection, dialog);
 	g_signal_connect (selection, "changed",
 			  G_CALLBACK(cookies_treeview_selection_changed_cb),
 			  dialog);
