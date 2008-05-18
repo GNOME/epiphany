@@ -298,7 +298,9 @@ AC_SUBST([GECKO_LIBS])
 
 # FIXMEchpe: find a way to always automatically use the latest weasel minor version!
 
-if test "$gecko_cv_gecko_version_int" -ge "1009000"; then
+if test "$gecko_cv_gecko" = "libxul" -o "$gecko_cv_gecko" = "libxul-embedding"; then
+  WEASEL_UA_VERSION="3.0"
+elif test "$gecko_cv_gecko_version_int" -ge "1009000"; then
   WEASEL_UA_VERSION="3.0"
 elif test "$gecko_cv_gecko_version_int" -ge "1008001"; then
   WEASEL_UA_VERSION="2.0.0.4"
@@ -389,7 +391,7 @@ fi # with_engine = mozilla
 
 GECKO_DEFINES
 AM_CONDITIONAL([WITH_GECKO_ENGINE], [test "$with_engine" = "mozilla"])
-AM_CONDITIONAL([HAVE_XULRUNNER],[test "$gecko_cv_gecko" = "xulrunner"])
+AM_CONDITIONAL([HAVE_XULRUNNER],[test "$gecko_cv_gecko" = "xulrunner" -o "$gecko_cv_gecko" = "libxul" -o "$gecko_cv_gecko" = "libxul-embedding"])
 AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "$enable_psm" = "yes" -a "$have_psm" = "yes"])
 AM_CONDITIONAL([ENABLE_FILEPICKER],[test "$enable_filepicker" = "yes"])
 
