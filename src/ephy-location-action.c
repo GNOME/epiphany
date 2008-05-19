@@ -58,6 +58,7 @@ struct _EphyLocationActionPrivate
 	guint editable : 1;
 	guint show_lock : 1;
 	guint secure : 1;
+	gboolean sync_address_is_blocked;
 };
 
 static void ephy_location_action_init       (EphyLocationAction *action);
@@ -243,11 +244,20 @@ action_activated_cb (GtkEntryCompletion *completion,
 
 static void
 entry_activate_cb (GtkEntry *entry,
-		   EphyLocationAction *action)
+		   EphyLocationAction *proxy)
 {
 	EphyBookmarks *bookmarks;
 	const char *content;
 	char *address;
+	GtkAction *action;
+	
+	action = gtk_widget_get_action (GTK_WIDGET (proxy));
+
+	if (EPHY_LOCATION_ACTION (action)->priv->sync_address_is_blocked)
+	{
+		EPHY_LOCATION_ACTION (action)->priv->sync_address_is_blocked = FALSE;
+		g_signal_handlers_unblock_by_func (action, G_CALLBACK (sync_address), proxy);
+	}	
 
 	content = gtk_entry_get_text (entry);
 	if (content == NULL || content[0] == '\0') return;
@@ -450,6 +460,40 @@ add_completion_actions (GtkAction *gaction,
 			  G_CALLBACK (action_activated_cb), action);
 }
 
+static gboolean
+focus_in_event_cb (GtkWidget *entry,
+		   GdkEventFocus *event,
+		   GtkWidget *proxy)
+{
+	GtkAction *action;
+	action = gtk_widget_get_action (proxy);
+
+	if (!EPHY_LOCATION_ACTION (action)->priv->sync_address_is_blocked)
+	{		
+		EPHY_LOCATION_ACTION (action)->priv->sync_address_is_blocked = TRUE;
+		g_signal_handlers_block_by_func (action, G_CALLBACK (sync_address), proxy);
+	}
+	
+	return FALSE;
+}
+
+static gboolean
+focus_out_event_cb (GtkWidget *entry,
+		    GdkEventFocus *event,
+		    GtkWidget *proxy)
+{
+	GtkAction *action;
+	action = gtk_widget_get_action (GTK_WIDGET (proxy));
+
+	if (EPHY_LOCATION_ACTION (action)->priv->sync_address_is_blocked)
+	{
+		EPHY_LOCATION_ACTION (action)->priv->sync_address_is_blocked = FALSE;
+		g_signal_handlers_unblock_by_func (action, G_CALLBACK (sync_address), proxy);
+	}
+	
+	return FALSE;
+}
+
 static void
 connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
@@ -501,7 +545,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		entry = ephy_location_entry_get_entry (lentry);
 		g_signal_connect_object (entry, "activate",
 					 G_CALLBACK (entry_activate_cb),
-					 action, 0);
+					 proxy, 0);
 		g_signal_connect_object (proxy, "user-changed",
 					 G_CALLBACK (user_changed_cb), action, 0);
 		g_signal_connect_object (proxy, "lock-clicked",
@@ -510,6 +554,10 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 					 G_CALLBACK (get_location_cb), action, 0);
 		g_signal_connect_object (proxy, "get-title",
 					 G_CALLBACK (get_title_cb), action, 0);
+		g_signal_connect_object (entry, "focus-in-event",
+					 G_CALLBACK (focus_in_event_cb), proxy, 0);
+		g_signal_connect_object (entry, "focus-out-event",
+					 G_CALLBACK (focus_out_event_cb), proxy, 0);
 	}
 
 	GTK_ACTION_CLASS (ephy_location_action_parent_class)->connect_proxy (action, proxy);
@@ -825,6 +873,7 @@ ephy_location_action_init (EphyLocationAction *action)
 	priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	priv->smart_bmks = ephy_bookmarks_get_smart_bookmarks
 		(action->priv->bookmarks);
+	priv->sync_address_is_blocked = FALSE;
 
 	init_actions_list (action);
 	
