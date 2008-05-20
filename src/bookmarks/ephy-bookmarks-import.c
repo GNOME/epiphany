@@ -83,7 +83,6 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 				       G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
 				       0, NULL, NULL);
 	type = g_file_info_get_content_type (file_info);
-	g_object_unref (file_info);
 
 	g_debug ("Importing bookmarks of type %s", type ? type : "(null)");
 
@@ -132,6 +131,7 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 		g_free (basename);
 	}
 
+	g_object_unref (file_info);
 	g_object_unref (file);
 
 	return success;
