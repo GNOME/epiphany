@@ -1073,38 +1073,33 @@ static void
 impl_remove_password (EphyPasswordManager *manager,
 		      EphyPasswordInfo *info)
 {
-#ifdef HAVE_GECKO_1_9
-	nsString host;
 	nsString userName;
+
+        if (info->username)
+          NS_CStringToUTF16 (nsCString(info->username),
+                            NS_CSTRING_ENCODING_UTF8, userName);
+#ifdef HAVE_GECKO_1_9
+        else
+          userName.SetIsVoid (PR_TRUE);
+
+	nsString host;
 	nsString userNameField;
 	nsString password;
 	nsString passwordField;
 	nsString httpRealm;
 	nsString formSubmitURL;
 
-        if (info->username)
+        if (info->host)
           NS_CStringToUTF16 (nsCString(info->host),
                             NS_CSTRING_ENCODING_UTF8, userName);
         else
           host.SetIsVoid (PR_TRUE);
-
-        if (info->username)
-          NS_CStringToUTF16 (nsCString(info->username),
-                            NS_CSTRING_ENCODING_UTF8, userName);
-        else
-          userName.SetIsVoid (PR_TRUE);
 
         if (info->usernameField)
           NS_CStringToUTF16 (nsCString(info->usernameField),
                             NS_CSTRING_ENCODING_UTF8, userNameField);
         else
           userNameField.SetIsVoid (PR_TRUE);
-
-        if (info->host)
-          NS_CStringToUTF16 (nsCString(info->host),
-                            NS_CSTRING_ENCODING_UTF8, host);
-        else
-          host.SetIsVoid (PR_TRUE);
 
         if (info->httpRealm)
           NS_CStringToUTF16 (nsCString(info->httpRealm),
@@ -1156,7 +1151,6 @@ impl_remove_password (EphyPasswordManager *manager,
 	if (!pm) return;
 
         nsCString host (info->host);
-        nsCString userName (info->username ? info->username : "");
 	pm->RemoveUser (host, userName);
 #endif /* HAVE_GECKO_1_9 */
 }
