@@ -555,6 +555,11 @@ main (int argc,
 		g_print ("--profile can only be used in combination with --private-instance\n");
 		exit (1);
 	}
+	if (profile_directory != NULL && !g_path_is_absolute (profile_directory))
+	{
+		g_printerr ("The profile directory must be specified with an absolute path.\n");
+		exit (1);
+	}
 
 	if (arguments != NULL &&
 	    eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL))
