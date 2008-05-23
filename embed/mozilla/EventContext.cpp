@@ -968,9 +968,10 @@ nsresult EventContext::SetStringProperty (const char *name, const char *value)
 	GValue *val = g_new0 (GValue, 1);
 
 	g_value_init (val, G_TYPE_STRING);
-	
-	g_value_set_string (val, value);
-			 
+
+	char *copy = g_strstrip (g_strdup (value));	
+	g_value_take_string (val, copy);
+
 	mozilla_embed_event_set_property (mEmbedEvent, name, val);
 
 	return NS_OK;
