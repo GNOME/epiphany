@@ -93,27 +93,22 @@ const char *
 ephy_embed_utils_get_title_composite (EphyEmbed *embed)
 {
 	const char *title = "";
-        const char *loading_title;
+	const char *loading_title;
 	gboolean is_loading, is_blank;
 
 	g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
 
 	is_loading = ephy_embed_get_load_status (embed);
-        is_blank = ephy_embed_get_is_blank (embed);
-        loading_title = ephy_embed_get_loading_title (embed);
+	is_blank = ephy_embed_get_is_blank (embed);
+	loading_title = ephy_embed_get_loading_title (embed);
+	title = ephy_embed_get_title (embed);
 
 	if (is_blank)
 	{
-		title = _("Blank page");
-	}
-	else if (is_loading &&
-		loading_title != NULL)
-	{
-		title = loading_title;
-	}
-	else
-	{
-                title = ephy_embed_get_title (embed);
+		if (is_loading)
+			title = loading_title;
+		else
+			title = _("Blank page");
 	}
 
 	return title != NULL ? title : "";
