@@ -524,30 +524,6 @@ gul_general_read_line_from_file (FILE *f)
 	return line;
 }
 
-static const gchar *
-gul_string_ascii_strcasestr (const gchar *a, const gchar *b)
-{
-	gchar *down_a;
-	gchar *down_b;
-	gchar *ptr;
-
-	/* copy and lower case the strings */
-	down_a = g_strdup (a);
-	down_b = g_strdup (b);
-	g_ascii_strdown (down_a, -1);
-	g_ascii_strdown (down_b, -1);
-
-	/* compare */
-	ptr = strstr (down_a, down_b);
-
-	/* free allocated strings */
-	g_free (down_a);
-	g_free (down_b);
-
-	/* return result of comparison */
-	return ptr == NULL ? NULL : (a + (ptr - down_a));
-}
-
 /**
  * Parses a line of a mozilla/netscape bookmark file. File must be open.
  */
@@ -556,44 +532,86 @@ static NSItemType
 ns_get_bookmark_item (FILE *f, GString *name, GString *url)
 {
 	char *line = NULL;
-	char *found;
+	GRegex *regex;
+	GMatchInfo *match_info;
+	int ret = NS_UNKNOWN;
+	char *match_url = NULL;
+	char *match_name = NULL;
 
 	line = gul_general_read_line_from_file (f);
+	
+	/*
+	 * Regex parsing of the html file:
+	 * 1. check if it's a bookmark, or a folder, or the end of a folder,
+	 * note that only ONE of this things is going to happen
+	 * 2. assign to the GStrings
+	 * 3. return the ret val to tell our caller what we found, by default 
+	 * we don't know (NS_UNKWOWN).
+	 */
+	
+	/* check if it's a bookmark */
+	regex = g_regex_new ("<a href=\"(?P<url>\\w.*)\".*>(?P<name>\\w.*)</a>", 
+				G_REGEX_CASELESS, G_REGEX_MATCH_NOTEMPTY, NULL);
+	g_regex_match (regex, line, 0, &match_info);
+	
+	if (g_match_info_matches (match_info))
+	{
+		match_url = g_match_info_fetch_named (match_info, "url");
+		match_name = g_match_info_fetch_named (match_info, "name");
+		ret = NS_SITE;
+		goto end;
+	}
+	g_match_info_free (match_info);
+	g_regex_unref (regex);
+	
+	/* check if it's a folder start */
+	regex = g_regex_new ("<h3.*>(?P<name>\\w.*)</h3>", 
+				G_REGEX_CASELESS, G_REGEX_MATCH_NOTEMPTY, NULL);
 
-	if ((found = (char *) gul_string_ascii_strcasestr (line, "<A HREF=")))
-	{  /* declare site? */
-		g_string_assign (url, found+9);  /* url=URL+ ADD_DATE ... */
-		g_string_truncate (url, strstr(url->str, "\"")-url->str);
-		found = (char *) strstr (found+9+url->len, "\">");
-		if (!found)
+	g_regex_match (regex, line, 0, &match_info);
+	if (g_match_info_matches (match_info))
+	{
+		match_name = g_match_info_fetch_named (match_info, "name");
+		ret = NS_FOLDER;
+		goto end;
+	}
+	g_match_info_free (match_info);
+	g_regex_unref (regex);
+	
+	/* check if it's a folder end */
+	regex = g_regex_new ("</dl>", 
+				G_REGEX_CASELESS, G_REGEX_MATCH_NOTEMPTY, NULL);
+
+	g_regex_match (regex, line, 0, &match_info);
+	if (g_match_info_matches (match_info))
+	{
+		ret = NS_FOLDER_END;
+		goto end;
+	}
+	
+	/* now let's use the collected stuff */
+	end:
+		/* Due to the goto we'll always have an unfreed @match_info and 
+		 * @regex. Note that this two free/unrefs correspond to the last 
+		 * if() block too.
+		 */
+        g_match_info_free (match_info);
+		g_regex_unref (regex);
+
+		if (match_name)
 		{
-			g_free (line);
-			return NS_UNKNOWN;
+			g_string_assign (name, match_name);
+			g_free (match_name);
 		}
-		g_string_assign (name, found+2);
-		g_string_truncate (name, gul_string_ascii_strcasestr (name->str,
-						       "</A>")-name->str);
-		g_free (line);
-		return NS_SITE;
-	}
-	else if ((found = (char *) gul_string_ascii_strcasestr (line, "<DT><H3")))
-	{ /* declare folder? */
-		found = (char *) strstr(found+7, ">");
-		if (!found) return NS_UNKNOWN;
-		g_string_assign (name, found+1);
-		g_string_truncate (name, gul_string_ascii_strcasestr (name->str,
-				   "</H3>") - name->str);
-		g_free (line);
-		return NS_FOLDER;
-	}
-	else if ((found = (char *) gul_string_ascii_strcasestr (line, "</DL>")))
-	{     /* end folder? */
-		g_free (line);
-		return NS_FOLDER_END;
-	}
 
-	g_free (line);
-	return NS_UNKNOWN;
+		if (match_url)
+		{
+			g_string_assign (url, match_url);
+			g_free (match_url);
+		}
+
+		g_free (line);
+		return ret;
 }
 
 /**
