@@ -334,6 +334,7 @@ ephy_tabs_menu_set_window (EphyTabsMenu *menu,
 					    "name", "TabsMenuAnchorAction",
 					    NULL);
 	gtk_action_group_add_action (priv->action_group, priv->anchor_action);
+	g_object_unref (priv->anchor_action);
 
 	g_signal_connect (priv->action_group, "connect-proxy",
 			  G_CALLBACK (connect_proxy_cb), NULL);
