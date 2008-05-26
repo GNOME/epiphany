@@ -370,7 +370,7 @@ NS_METHOD GContentHandler::MIMEInitiateAction (void)
 
 	auto_downloads = eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS);
 
-	mHelperApp = g_app_info_get_default_for_type (mMimeType.get(), TRUE);
+	mHelperApp = g_app_info_get_default_for_type (mMimeType.get(), FALSE);
 	mPermission = ephy_file_check_mime (mMimeType.get());
 
 	/* HACK! Check that this 'helper application' isn't Epiphany itself,
