@@ -435,13 +435,16 @@ impl_reload (EphyEmbed *embed,
 static float
 impl_get_zoom (EphyEmbed *embed)
 {
-  return 1.0;
+  float zoom = 1.0f;
+  g_object_get (WEBKIT_EMBED (embed)->priv->web_view, "zoom-level", &zoom, NULL);
+  return zoom;
 }
 
 static void
 impl_set_zoom (EphyEmbed *embed,
                float zoom)
 {
+  g_object_set (WEBKIT_EMBED (embed)->priv->web_view, "zoom-level", zoom, NULL);
 }
 
 static void
