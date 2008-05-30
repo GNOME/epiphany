@@ -491,6 +491,7 @@ impl_show_page_certificate (EphyEmbed *embed)
 static void
 impl_print (EphyEmbed *embed)
 {
+  webkit_web_view_execute_script (WEBKIT_EMBED (embed)->priv->web_view, "print();");
 }
 
 static void
