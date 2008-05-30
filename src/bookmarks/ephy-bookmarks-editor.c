@@ -1588,6 +1588,11 @@ search_entry_search_cb (GtkWidget *entry, const char *search_text, EphyBookmarks
 					 0);
 	ephy_node_filter_add_expression (editor->priv->bookmarks_filter,
 					 ephy_node_filter_expression_new (EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS,
+									  EPHY_NODE_BMK_PROP_LOCATION,
+									  search_text),
+					 0);
+	ephy_node_filter_add_expression (editor->priv->bookmarks_filter,
+					 ephy_node_filter_expression_new (EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS,
 									  EPHY_NODE_BMK_PROP_KEYWORDS,
 									  search_text),
 					 0);
