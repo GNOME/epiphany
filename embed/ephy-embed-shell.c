@@ -21,10 +21,9 @@
 #include <config.h>
 
 #include <glib.h>
-#include <glib/gstdio.h>
 
 #include <glib/gi18n.h>
-#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtk.h>
 
 #include "downloader-view.h"
 #include "ephy-adblock-manager.h"

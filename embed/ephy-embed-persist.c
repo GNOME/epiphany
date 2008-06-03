@@ -25,7 +25,7 @@
 #include "ephy-embed-type-builtins.h"
 #include "ephy-debug.h"
 
-#include <gtk/gtkmain.h>
+#include <gtk/gtk.h>
 
 enum
 {

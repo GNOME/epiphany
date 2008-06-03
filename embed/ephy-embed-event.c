@@ -23,8 +23,8 @@
 #include "ephy-embed-event.h"
 #include "ephy-embed-type-builtins.h"
 
-#include <glib/ghash.h>
-#include <gtk/gtktypeutils.h>
+#include <glib.h>
+#include <gtk/gtk.h>
 
 static void ephy_embed_event_base_init (gpointer g_class);
 
