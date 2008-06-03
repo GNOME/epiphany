@@ -29,8 +29,7 @@
 #include "ephy-link-action.h"
 #include "ephy-node.h"
 
-#include <gtk/gtkactiongroup.h>
-#include <gtk/gtkuimanager.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

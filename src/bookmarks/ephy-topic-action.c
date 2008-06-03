@@ -34,18 +34,7 @@
 #include "ephy-dnd.h"
 
 #include <glib/gi18n.h>
-#include <gtk/gtkwidget.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkimagemenuitem.h>
-#include <gtk/gtkseparatormenuitem.h>
-#include <gtk/gtktogglebutton.h>
-#include <gtk/gtkarrow.h>
-#include <gtk/gtkmain.h>
+#include <gtk/gtk.h>
 #include <string.h>
 
 static const GtkTargetEntry dest_drag_types[] = {

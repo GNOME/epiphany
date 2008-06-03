@@ -38,18 +38,8 @@
 
 #include "eel-gconf-extensions.h"
 
-
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkcheckbutton.h>
-#include <gtk/gtktogglebutton.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkmisc.h>
-#include <gtk/gtkscrolledwindow.h>
 
 #include <string.h>
 

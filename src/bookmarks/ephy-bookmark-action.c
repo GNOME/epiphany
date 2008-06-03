@@ -35,18 +35,7 @@
 #include "ephy-string.h"
 
 #include <glib/gi18n.h>
-#include <gtk/gtkwidget.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkimagemenuitem.h>
-#include <gtk/gtkseparatormenuitem.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtktoolitem.h>
-#include <gtk/gtkmain.h>
+#include <gtk/gtk.h>
 
 #include <string.h>
 

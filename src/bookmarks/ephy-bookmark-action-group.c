@@ -30,8 +30,7 @@
 #include "ephy-node-common.h"
 #include "ephy-debug.h"
 
-#include <gtk/gtkaction.h>
-#include <gtk/gtkactiongroup.h>
+#include <gtk/gtk.h>
 #include <string.h>
 
 static void

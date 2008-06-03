@@ -28,7 +28,7 @@
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
-#include <gtk/gtktreeselection.h>
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 static void ephy_topics_palette_class_init (EphyTopicsPaletteClass *klass);

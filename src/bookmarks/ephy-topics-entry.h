@@ -27,7 +27,7 @@
 
 #include "ephy-bookmarks.h"
 
-#include <gtk/gtkentry.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

@@ -27,7 +27,7 @@
 #define EPHY_BOOKMARKS_H
 
 #include <glib-object.h>
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 
 #include "ephy-node.h"
 

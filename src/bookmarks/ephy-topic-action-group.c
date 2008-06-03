@@ -28,8 +28,7 @@
 #include "ephy-bookmarks-ui.h"
 #include "ephy-debug.h"
 
-#include <gtk/gtkaction.h>
-#include <gtk/gtkactiongroup.h>
+#include <gtk/gtk.h>
 
 static void
 node_changed_cb (EphyNode *parent, 
