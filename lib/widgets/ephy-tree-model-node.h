@@ -21,7 +21,7 @@
 #ifndef __EPHY_TREE_MODEL_NODE_H
 #define __EPHY_TREE_MODEL_NODE_H
 
-#include <gtk/gtktreemodel.h>
+#include <gtk/gtk.h>
 
 #include "ephy-node.h"
 

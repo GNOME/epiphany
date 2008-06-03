@@ -21,14 +21,7 @@
 
 #include "config.h"
 
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtktreeviewcolumn.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkcellrendererpixbuf.h>
-#include <gtk/gtkcellrenderertoggle.h>
-#include <gtk/gtktreemodelfilter.h>
-#include <gtk/gtkwindow.h>
-#include <gtk/gtkmain.h>
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "ephy-node-view.h"

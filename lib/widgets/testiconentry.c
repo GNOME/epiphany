@@ -20,7 +20,6 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkstock.h>
 
 #include "ephy-icon-entry.h"
 #include "ephy-icon-entry.c"

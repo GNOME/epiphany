@@ -27,10 +27,7 @@
 
 #include <glib-object.h>
 #include <glib/gi18n.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkcheckmenuitem.h>
-#include <gtk/gtkradiomenuitem.h>
+#include <gtk/gtk.h>
 
 #define EPHY_ZOOM_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_ACTION, EphyZoomActionPrivate))
 

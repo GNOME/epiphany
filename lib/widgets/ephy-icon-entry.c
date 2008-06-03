@@ -31,9 +31,7 @@
 
 #include "ephy-icon-entry.h"
 
-#include <gtk/gtkentry.h>
-#include <gtk/gtkbox.h>
-#include <gtk/gtkhbox.h>
+#include <gtk/gtk.h>
 
 #define EPHY_ICON_ENTRY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ICON_ENTRY, EphyIconEntryPrivate))
 

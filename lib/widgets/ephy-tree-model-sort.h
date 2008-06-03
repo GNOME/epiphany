@@ -26,7 +26,7 @@
 
 #include <glib-object.h>
 
-#include <gtk/gtktreemodelsort.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
