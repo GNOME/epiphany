@@ -25,8 +25,7 @@
 #ifndef EPHY_LINK_ACTION_H
 #define EPHY_LINK_ACTION_H
 
-#include <gtk/gtkaction.h>
-#include <gtk/gtkactiongroup.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

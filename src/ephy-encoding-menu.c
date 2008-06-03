@@ -32,10 +32,7 @@
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 
-#include <gtk/gtkaction.h>
-#include <gtk/gtktoggleaction.h>
-#include <gtk/gtkradioaction.h>
-#include <gtk/gtkuimanager.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>
 

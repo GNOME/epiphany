@@ -33,8 +33,7 @@
 
 #include <string.h>
 #include <glib/gi18n.h>
-#include <gtk/gtkclipboard.h>
-#include <gtk/gtkmain.h>
+#include <gtk/gtk.h>
 
 void
 popup_cmd_link_in_new_window (GtkAction *action,

@@ -32,13 +32,7 @@
 #include "ephy-debug.h"
 
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkentrycompletion.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtktreemodelsort.h>
-
+#include <gtk/gtk.h>
 
 #include <string.h>
 #define EPHY_LOCATION_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LOCATION_ACTION, EphyLocationActionPrivate))

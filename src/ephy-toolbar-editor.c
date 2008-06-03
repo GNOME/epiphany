@@ -36,15 +36,7 @@
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkcelllayout.h>
-#include <gtk/gtkcombobox.h>
-#include <gtk/gtkuimanager.h>
-#include <gtk/gtkstock.h>
+#include <gtk/gtk.h>
 #include <string.h>
 
 #define DATA_KEY		"EphyToolbarEditor"

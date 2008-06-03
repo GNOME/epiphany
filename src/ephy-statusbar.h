@@ -27,7 +27,7 @@
 #ifndef EPHY_STATUSBAR_H
 #define EPHY_STATUSBAR_H
 
-#include <gtk/gtkstatusbar.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

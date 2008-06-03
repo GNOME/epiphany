@@ -28,7 +28,7 @@
 #define EPHY_NOTEBOOK_H
 
 #include <glib.h>
-#include <gtk/gtknotebook.h>
+#include <gtk/gtk.h>
 
 #include "ephy-embed.h"
 

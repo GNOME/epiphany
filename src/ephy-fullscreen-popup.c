@@ -26,15 +26,7 @@
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkeventbox.h>
-#include <gtk/gtkenums.h>
-#include <gtk/gtkbox.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkframe.h>
+#include <gtk/gtk.h>
 #include <string.h>
 
 #define EPHY_FULLSCREEN_POPUP_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FULLSCREEN_POPUP, EphyFullscreenPopupPrivate))

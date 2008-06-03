@@ -40,12 +40,7 @@
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkuimanager.h>
-#include <gtk/gtktoolitem.h>
-#include <gtk/gtktoolbutton.h>
-#include <gtk/gtkseparatortoolitem.h>
-#include <gtk/gtktoolbar.h>
+#include <gtk/gtk.h>
 #include <string.h>
 
 enum

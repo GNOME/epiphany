@@ -40,9 +40,7 @@
 #include <glib/gi18n.h>
 
 #include <gdk/gdkx.h>
-#include <gtk/gtkaboutdialog.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtk.h>
 
 #include <libgnome/gnome-program.h>
 #include <libgnomeui/gnome-ui-init.h>

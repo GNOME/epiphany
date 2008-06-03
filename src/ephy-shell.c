@@ -23,7 +23,7 @@
 
 #include <string.h>
 #include <glib/gi18n.h>
-#include <gtk/gtknotebook.h>
+#include <gtk/gtk.h>
 #include <dirent.h>
 #include <unistd.h>
 

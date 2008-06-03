@@ -26,7 +26,7 @@
 #ifndef EPHY_TOOLBAR_EDITOR_H
 #define EPHY_TOOLBAR_EDITOR_H
 
-#include <gtk/gtkdialog.h>
+#include <gtk/gtk.h>
 #include "ephy-window.h"
 
 G_BEGIN_DECLS

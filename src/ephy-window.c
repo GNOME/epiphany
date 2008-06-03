@@ -65,12 +65,6 @@
 #include <libgnomeui/gnome-stock-icons.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtkactiongroup.h>
-#include <gtk/gtktoggleaction.h>
-#include <gtk/gtkuimanager.h>
-#include <gtk/gtktoggleaction.h>
-#include <gtk/gtkdialog.h>
-#include <gtk/gtkmessagedialog.h>
 
 #ifdef HAVE_X11_XF86KEYSYM_H
 #include <X11/XF86keysym.h>

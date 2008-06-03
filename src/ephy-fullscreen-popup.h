@@ -26,7 +26,7 @@
 #ifndef EPHY_FULLSCREEN_POPUP_H
 #define EPHY_FULLSCREEN_POPUP_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 #include "ephy-window.h"
 
 G_BEGIN_DECLS

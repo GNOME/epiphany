@@ -26,7 +26,7 @@
 #ifndef EPHY_FIND_TOOLBAR_H
 #define EPHY_FIND_TOOLBAR_H
 
-#include <gtk/gtktoolbar.h>
+#include <gtk/gtk.h>
 
 #include "ephy-window.h"
 

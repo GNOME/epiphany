@@ -31,13 +31,7 @@
 #include "ephy-embed-utils.h"
 
 #include <glib/gi18n.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkaccelmap.h>
-#include <gtk/gtkaction.h>
-#include <gtk/gtktoggleaction.h>
-#include <gtk/gtkradioaction.h>
-#include <gtk/gtkuimanager.h>
+#include <gtk/gtk.h>
 #include <string.h>
 #include <stdlib.h>
 

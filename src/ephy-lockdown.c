@@ -31,8 +31,7 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 
-#include <gtk/gtkactiongroup.h>
-#include <gtk/gtkuimanager.h>
+#include <gtk/gtk.h>
 
 #include <string.h>
 

@@ -27,11 +27,7 @@
 
 #include <string.h>
 #include <glib/gi18n.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtktoolbar.h>
-#include <gtk/gtkuimanager.h>
+#include <gtk/gtk.h>
 
 static void ppview_toolbar_class_init (PPViewToolbarClass *klass);
 static void ppview_toolbar_init (PPViewToolbar *t);

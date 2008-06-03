@@ -18,7 +18,7 @@
  *  $Id$
  */
 
-#include <gtk/gtkaction.h>
+#include <gtk/gtk.h>
 
 #include "ephy-window.h"
 
