@@ -25,14 +25,6 @@
 
 #include <string.h>
 #include <libxml/tree.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkeventbox.h>
-#include <gtk/gtkdnd.h>
-#include <gtk/gtkscrolledwindow.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkhbox.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 

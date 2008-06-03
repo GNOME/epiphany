@@ -24,12 +24,7 @@
 
 #include "egg-toolbars-model.h"
 
-#include <gtk/gtkuimanager.h>
-#include <gtk/gtkselection.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtktoolitem.h>
-#include <gtk/gtktoolbar.h>
-#include <gtk/gtkmenu.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
