@@ -30,8 +30,7 @@
 #include "ephy-stock-icons.h"
 #include "ephy-string.h"
 
-#include <gtk/gtkstock.h>
-#include <gtk/gtkimage.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 #define EPHY_FILE_CHOOSER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FILE_CHOOSER, EphyFileChooserPrivate))

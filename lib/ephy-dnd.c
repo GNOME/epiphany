@@ -23,8 +23,7 @@
 #include "ephy-dnd.h"
 #include "ephy-node.h"
 
-#include <gtk/gtkselection.h>
-#include <gtk/gtktreeview.h>
+#include <gtk/gtk.h>
 #include <string.h>
 
 /* Encode a "_NETSCAPE_URL_" selection.

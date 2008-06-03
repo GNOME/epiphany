@@ -25,7 +25,7 @@
 #ifndef EPHY_PASSWORD_DIALOG_H
 #define EPHY_PASSWORD_DIALOG_H
 
-#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtk.h>
 #include <libgnomeui/gnome-password-dialog.h>
 
 G_BEGIN_DECLS

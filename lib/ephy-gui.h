@@ -27,11 +27,7 @@
 
 #include <gdk/gdkkeysyms.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmessagedialog.h>
-#include <gtk/gtktreeviewcolumn.h>
-#include <gtk/gtktreeview.h>
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
