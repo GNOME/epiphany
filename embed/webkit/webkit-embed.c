@@ -218,6 +218,11 @@ webkit_embed_load_committed_cb (WebKitWebView *web_view,
   const gchar* uri = webkit_web_frame_get_uri(web_frame);
   ephy_base_embed_location_changed (EPHY_BASE_EMBED (embed),
                                     uri);
+
+  ephy_history_add_page (WEBKIT_EMBED (embed)->priv->history,
+                         uri,
+                         FALSE,
+                         FALSE);
 }
 
 static void
@@ -228,12 +233,6 @@ webkit_embed_load_started_cb (WebKitWebView *web_view,
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
   wembed->priv->load_state = WEBKIT_EMBED_LOAD_STARTED;
 
-  if (wembed->priv->loading_uri)
-    ephy_history_add_page (wembed->priv->history,
-                           wembed->priv->loading_uri,
-                           FALSE,
-                           FALSE);
-                         
   update_load_state (wembed, web_view);
 }
 
