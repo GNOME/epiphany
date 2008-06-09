@@ -39,6 +39,7 @@
 #include "ephy-glib-compat.h"
 
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <gio/gio.h>
 
 #define EPHY_FAVICON_CACHE_XML_ROOT    (const xmlChar *)"ephy_favicons_cache"

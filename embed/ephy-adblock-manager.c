@@ -85,8 +85,6 @@ ephy_adblock_manager_should_load (EphyAdBlockManager *self,
 static void
 ephy_adblock_manager_init (EphyAdBlockManager *self)
 {
-	EphyAdBlockManagerPrivate *priv;
-
 	LOG ("ephy_adblock_manager_init");
 
 	self->priv = EPHY_ADBLOCK_MANAGER_GET_PRIVATE(self);

@@ -124,7 +124,7 @@ ephy_module_load (GTypeModule *gmodule)
 
 	if (module->library == NULL)
 	{
-		g_warning (g_module_error());
+		g_warning ("%s", g_module_error());
 
 		return FALSE;
 	}
@@ -133,7 +133,7 @@ ephy_module_load (GTypeModule *gmodule)
 	if (!g_module_symbol (module->library, "register_module",
 			      (void *) &register_func))
 	{
-		g_warning (g_module_error());
+		g_warning ("%s", g_module_error());
 		g_module_close (module->library);
 
 		return FALSE;
