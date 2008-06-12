@@ -254,6 +254,9 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	{ "TabsMoveRight", NULL, N_("Move Tab _Right"), "<shift><control>Page_Down",
 	  N_("Move current tab to right"),
 	  G_CALLBACK (window_cmd_tabs_move_right) },
+        { "TabsDetach", NULL, N_("_Detach Tab"), NULL,
+          N_("Detach current tab"),
+          G_CALLBACK (window_cmd_tabs_detach) },
 
 	/* Help menu */
 
@@ -456,6 +459,8 @@ struct _EphyWindowPrivate
 	guint ppv_mode : 1;
 	guint should_save_chrome : 1;
 	guint is_popup : 1;
+
+        guint present_on_insert : 1;
 
 	guint key_theme_is_emacs : 1;
 };
@@ -2539,6 +2544,9 @@ update_tabs_menu_sensitivity (EphyWindow *window)
 	gtk_action_set_sensitive (action, not_first);
 	action = gtk_action_group_get_action (action_group, "TabsMoveRight");
 	gtk_action_set_sensitive (action, not_last);
+
+	action = gtk_action_group_get_action (action_group, "TabsDetach");
+	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, n_pages <= 1);
 }
 
 static gboolean
@@ -2698,6 +2706,13 @@ notebook_popup_menu_cb (GtkNotebook *notebook,
 	return FALSE;
 }
 
+static gboolean
+present_on_idle_cb (GtkWindow *window)
+{
+      gtk_window_present (window);
+      return FALSE;
+}
+
 static void
 notebook_page_added_cb (EphyNotebook *notebook,
 			EphyEmbed *embed,
@@ -2730,6 +2745,12 @@ notebook_page_added_cb (EphyNotebook *notebook,
 	/* Let the extensions attach themselves to the tab */
 	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
 	ephy_extension_attach_tab (manager, window, embed);
+
+        if (priv->present_on_insert)
+        {
+                priv->present_on_insert = FALSE;
+                g_idle_add ((GSourceFunc) present_on_idle_cb, g_object_ref (window));
+        }
 }
 
 static void
@@ -2799,6 +2820,24 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
 	}
 }
 
+static GtkWidget *
+notebook_create_window_cb (GtkNotebook *notebook,
+			   GtkWidget *page,
+                           int x,
+                           int y,
+                           EphyWindow *window)
+{
+  EphyWindow *new_window;
+  EphyWindowPrivate *new_priv;
+
+  new_window = ephy_window_new ();
+  new_priv = new_window->priv;
+
+  new_priv->present_on_insert = TRUE;
+
+  return ephy_window_get_notebook (new_window);
+}
+
 static GtkNotebook *
 setup_notebook (EphyWindow *window)
 {
@@ -2809,6 +2848,9 @@ setup_notebook (EphyWindow *window)
 	g_signal_connect_after (notebook, "switch-page",
 				G_CALLBACK (notebook_switch_page_cb),
 				window);
+        g_signal_connect (notebook, "create-window",
+                          G_CALLBACK (notebook_create_window_cb),
+                          window);
 
 	g_signal_connect (notebook, "popup-menu",
 			  G_CALLBACK (notebook_popup_menu_cb), window);

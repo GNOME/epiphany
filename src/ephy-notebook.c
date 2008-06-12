@@ -45,6 +45,8 @@
 
 #define INSANE_NUMBER_OF_URLS 20
 
+#define EPHY_NOTEBOOK_TAB_GROUP_ID (GUINT_TO_POINTER (42))
+
 #define EPHY_NOTEBOOK_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NOTEBOOK, EphyNotebookPrivate))
 
 struct _EphyNotebookPrivate
@@ -69,8 +71,9 @@ static void ephy_notebook_remove	 (GtkContainer *container,
 
 static const GtkTargetEntry url_drag_types [] = 
 {
+        { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
 	{ EPHY_DND_URI_LIST_TYPE,   0, 0 },
-	{ EPHY_DND_URL_TYPE,	    0, 1 }
+	{ EPHY_DND_URL_TYPE,	    0, 1 },
 };
 
 enum
@@ -349,12 +352,20 @@ ephy_notebook_switch_page_cb (GtkNotebook *notebook,
 }
 
 static void
-notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
-				gint x, gint y, GtkSelectionData *selection_data,
-				guint info, guint time, EphyEmbed *embed)
+notebook_drag_data_received_cb (GtkWidget* widget,
+                                GdkDragContext *context,
+				int x,
+                                int y,
+                                GtkSelectionData *selection_data,
+				guint info,
+                                guint time,
+                                EphyEmbed *embed)
 {
 	EphyWindow *window;
 	GtkWidget *notebook;
+
+        if (selection_data->target == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
+                return;
 
 	g_signal_stop_emission_by_name (widget, "drag_data_received");
 
@@ -442,12 +453,15 @@ static void
 ephy_notebook_init (EphyNotebook *notebook)
 {
 	EphyNotebookPrivate *priv;
+        GtkWidget *widget = GTK_WIDGET (notebook);
+        GtkNotebook *gnotebook = GTK_NOTEBOOK (notebook);
 
 	priv = notebook->priv = EPHY_NOTEBOOK_GET_PRIVATE (notebook);
 
-	gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
-	gtk_notebook_set_show_border (GTK_NOTEBOOK (notebook), FALSE);
-	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (notebook), FALSE);
+	gtk_notebook_set_scrollable (gnotebook, TRUE);
+	gtk_notebook_set_show_border (gnotebook, FALSE);
+	gtk_notebook_set_show_tabs (gnotebook, FALSE);
+        gtk_notebook_set_group (gnotebook, EPHY_NOTEBOOK_TAB_GROUP_ID);
 
 	priv->show_tabs = TRUE;
 	priv->dnd_enabled = TRUE;
@@ -462,12 +476,10 @@ ephy_notebook_init (EphyNotebook *notebook)
 	g_signal_connect (notebook, "drag-data-received",
 			  G_CALLBACK (notebook_drag_data_received_cb),
 			  NULL);
-	gtk_drag_dest_set (GTK_WIDGET (notebook),
-			   GTK_DEST_DEFAULT_MOTION |
-			   GTK_DEST_DEFAULT_DROP,
+	gtk_drag_dest_set (widget, 0,
 			   url_drag_types, G_N_ELEMENTS (url_drag_types),
 			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
-	gtk_drag_dest_add_text_targets (GTK_WIDGET(notebook));
+	gtk_drag_dest_add_text_targets (widget);
 
 	priv->tabs_vis_notifier_id = eel_gconf_notification_add
 		(CONF_ALWAYS_SHOW_TABS_BAR,
@@ -699,6 +711,7 @@ ephy_notebook_insert_page (GtkNotebook *gnotebook,
 										 position);
 
 	gtk_notebook_set_tab_reorderable (gnotebook, tab_widget, TRUE);
+        gtk_notebook_set_tab_detachable (gnotebook, tab_widget, TRUE);
 
 	return position;
 }
