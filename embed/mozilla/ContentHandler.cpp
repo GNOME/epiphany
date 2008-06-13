@@ -135,6 +135,9 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 				    nsISupports *aWindowContext,
 				    const PRUnichar *aDefaultFile,
 				    const PRUnichar *aSuggestedFileExtension,
+#ifdef HAVE_GECKO_1_9
+				    PRBool aForcePrompt,
+#endif
 				    nsILocalFile **_retval)
 {
 	EphyFileChooser *dialog;
