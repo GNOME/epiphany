@@ -65,6 +65,7 @@ typedef enum
 struct WebKitEmbedPrivate
 {
   WebKitWebView *web_view;
+  GtkScrolledWindow *scrolled_window;
   WebKitEmbedLoadState load_state;
   char *loading_uri;
   EphyHistory *history;
@@ -298,6 +299,7 @@ webkit_embed_init (WebKitEmbed *embed)
   embed->priv = WEBKIT_EMBED_GET_PRIVATE (embed);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
+  embed->priv->scrolled_window = GTK_SCROLLED_WINDOW (sw);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
@@ -443,7 +445,10 @@ static void
 impl_set_zoom (EphyEmbed *embed,
                float zoom)
 {
+  g_return_if_fail (zoom > 0.0);
+
   g_object_set (WEBKIT_EMBED (embed)->priv->web_view, "zoom-level", zoom, NULL);
+  g_signal_emit_by_name (embed, "ge_zoom_change", zoom);
 }
 
 static void
@@ -463,6 +468,18 @@ impl_scroll_pixels (EphyEmbed *embed,
                     int dx,
                     int dy)
 {
+  GtkAdjustment *hadj;
+  GtkAdjustment *vadj;
+  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
+
+  hadj = gtk_scrolled_window_get_hadjustment (wembed->priv->scrolled_window);
+  vadj = gtk_scrolled_window_get_vadjustment (wembed->priv->scrolled_window);
+
+  hadj->value += dx;
+  vadj->value += dy;
+
+  gtk_adjustment_value_changed (hadj);
+  gtk_adjustment_value_changed (vadj);
 }
 
 static void
