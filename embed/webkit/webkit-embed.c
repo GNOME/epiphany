@@ -475,11 +475,8 @@ impl_scroll_pixels (EphyEmbed *embed,
   hadj = gtk_scrolled_window_get_hadjustment (wembed->priv->scrolled_window);
   vadj = gtk_scrolled_window_get_vadjustment (wembed->priv->scrolled_window);
 
-  hadj->value += dx;
-  vadj->value += dy;
-
-  gtk_adjustment_value_changed (hadj);
-  gtk_adjustment_value_changed (vadj);
+  gtk_adjustment_set_value (hadj, CLAMP (hadj->value + dx, hadj->lower, hadj->upper - hadj->page_size));
+  gtk_adjustment_set_value (vadj, CLAMP (vadj->value + dy, vadj->lower, vadj->upper - vadj->page_size));
 }
 
 static void
