@@ -995,8 +995,13 @@ MakeDialogText(nsIChannel* aChannel, nsIAuthInformation* aAuthInfo,
     displayHost.AppendInt(port);
   }
 
+#ifdef HAVE_GECKO_1_9
+  NS_NAMED_LITERAL_STRING(proxyText, "EnterLoginForProxy");
+  NS_NAMED_LITERAL_STRING(originText, "EnterLoginForRealm");
+#else
   NS_NAMED_LITERAL_STRING(proxyText, "EnterUserPasswordForProxy");
   NS_NAMED_LITERAL_STRING(originText, "EnterUserPasswordForRealm");
+#endif /* HAVE_GECKO_1_9 */
   NS_NAMED_LITERAL_STRING(noRealmText, "EnterUserPasswordFor");
   NS_NAMED_LITERAL_STRING(passwordText, "EnterPasswordFor");
 
