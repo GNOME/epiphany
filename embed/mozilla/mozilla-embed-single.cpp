@@ -1090,7 +1090,7 @@ impl_remove_password (EphyPasswordManager *manager,
 
         if (info->host)
           NS_CStringToUTF16 (nsCString(info->host),
-                            NS_CSTRING_ENCODING_UTF8, userName);
+                            NS_CSTRING_ENCODING_UTF8, host);
         else
           host.SetIsVoid (PR_TRUE);
 
@@ -1104,7 +1104,7 @@ impl_remove_password (EphyPasswordManager *manager,
           NS_CStringToUTF16 (nsCString(info->httpRealm),
                             NS_CSTRING_ENCODING_UTF8, httpRealm);
         else
-          userName.SetIsVoid (PR_TRUE);
+          httpRealm.SetIsVoid (PR_TRUE);
 
         if (info->password)
           NS_CStringToUTF16 (nsCString(info->password),
