@@ -38,8 +38,8 @@
 struct _EphyFindToolbarPrivate
 {
 	EphyWindow *window;
-        EphyEmbed  *embed;
-        WebKitWebView *web_view;
+	EphyEmbed  *embed;
+	WebKitWebView *web_view;
 	GtkWidget *entry;
 	GtkWidget *label;
 	GtkToolItem *next;
@@ -51,7 +51,7 @@ struct _EphyFindToolbarPrivate
 	gulong set_focus_handler;
 	guint source_id;
 	guint find_again_source_id;
-        char *find_string;
+	char *find_string;
 	guint preedit_changed : 1;
 	guint prevent_activate : 1;
 	guint activated : 1;
@@ -213,15 +213,15 @@ set_string_and_highlight (EphyFindToolbarPrivate *priv, const char *find_string)
 
   webkit_web_view_unmark_text_matches (web_view);
   webkit_web_view_mark_text_matches (web_view,
-                                     priv->find_string,
-                                     case_sensitive,
-                                     0);
+				     priv->find_string,
+				     case_sensitive,
+				     0);
   webkit_web_view_set_highlight_text_matches (web_view, TRUE);
 }
 
 static void
 impl_set_properties (EphyFindToolbar *toolbar,
-                     const char *find_string)
+		     const char *find_string)
 {
   EphyFindToolbarPrivate *priv = toolbar->priv;
   
@@ -230,17 +230,17 @@ impl_set_properties (EphyFindToolbar *toolbar,
 
 static EphyEmbedFindResult
 real_find (EphyFindToolbarPrivate *priv,
-           gboolean forward)
+	   gboolean forward)
 {
   WebKitWebView *web_view = priv->web_view;
 
   gboolean case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
 
   if (!webkit_web_view_search_text 
-         (web_view, priv->find_string, case_sensitive, TRUE, FALSE)) {
+	 (web_view, priv->find_string, case_sensitive, TRUE, FALSE)) {
     /* not found, try to wrap */
     if (!webkit_web_view_search_text 
-           (web_view, priv->find_string, case_sensitive, TRUE, TRUE)) {
+	   (web_view, priv->find_string, case_sensitive, TRUE, TRUE)) {
       /* there's no result */
       return EPHY_FIND_NOTFOUND;
     } else {
@@ -254,8 +254,8 @@ real_find (EphyFindToolbarPrivate *priv,
 
 static EphyEmbedFindResult
 impl_find (EphyFindToolbar *toolbar,
-           const char *find_string,
-           gboolean links_only)
+	   const char *find_string,
+	   gboolean links_only)
 {
   EphyFindToolbarPrivate *priv = toolbar->priv;
 
@@ -284,7 +284,7 @@ entry_changed_cb (GtkEntry *entry,
 
 static gboolean
 impl_activate_link (EphyFindToolbar *toolbar,
-                    GdkModifierType mask)
+		    GdkModifierType mask)
 {
   return FALSE;
 }
@@ -304,19 +304,19 @@ entry_key_press_event_cb (GtkEntry *entry,
 		switch (event->keyval)
 		{
 		case GDK_Up:
-                case GDK_KP_Up:
+		case GDK_KP_Up:
 			ephy_embed_scroll (priv->embed, -1);
 			break;
 		case GDK_Down:
-                case GDK_KP_Down:
+		case GDK_KP_Down:
 			ephy_embed_scroll (priv->embed, 1);
 			break;
 		case GDK_Page_Up:
-                case GDK_KP_Page_Up:
+		case GDK_KP_Page_Up:
 			ephy_embed_page_scroll (priv->embed, -1);
 			break;
 		case GDK_Page_Down:
-                case GDK_KP_Page_Down:
+		case GDK_KP_Page_Down:
 			ephy_embed_page_scroll (priv->embed, 1);
 			break;
 		case GDK_Escape:
@@ -636,10 +636,10 @@ static void
 ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-        GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	object_class->dispose = ephy_find_toolbar_dispose;
-        object_class->finalize = ephy_find_toolbar_finalize;
+	object_class->finalize = ephy_find_toolbar_finalize;
 	object_class->get_property = ephy_find_toolbar_get_property;
 	object_class->set_property = ephy_find_toolbar_set_property;
 
@@ -694,7 +694,7 @@ EphyFindToolbar *
 ephy_find_toolbar_new (EphyWindow *window)
 {
 	return EPHY_FIND_TOOLBAR (g_object_new (EPHY_TYPE_FIND_TOOLBAR,
-				  		"window", window,
+						"window", window,
 						NULL));
 }
 
@@ -711,7 +711,7 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 			     EphyEmbed *embed)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
-        WebKitWebView *web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED(embed);
+	WebKitWebView *web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED(embed);
 
 	if (priv->embed == embed) return;
 
@@ -726,11 +726,11 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 	{
 		clear_status (toolbar);
 
-                /* FIXME: this is never emitted */
+		/* FIXME: this is never emitted */
 		g_signal_connect_object (embed, "ge-search-key-press",
 					 G_CALLBACK (tab_search_key_press_cb),
 					 toolbar, 0);
-                priv->web_view = web_view;
+		priv->web_view = web_view;
 	}
 }
 
@@ -748,8 +748,8 @@ find_again_data_destroy_cb (FindAgainCBStruct *data)
 	
 static EphyEmbedFindResult
 impl_find_again (EphyFindToolbar *toolbar,
-                 gboolean forward,
-                 gboolean links_only)
+		 gboolean forward,
+		 gboolean links_only)
 {
   EphyFindToolbarPrivate *priv = toolbar->priv;
 
@@ -763,7 +763,7 @@ find_again_cb (FindAgainCBStruct *data)
 	EphyFindToolbarPrivate *priv = data->toolbar->priv;
 
 	result = impl_find_again (data->toolbar, data->next,
-                                  priv->links_only);
+				  priv->links_only);
 	set_status (data->toolbar, result);
     
 	priv->find_again_source_id = 0;
@@ -790,7 +790,7 @@ ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
     
 	if (priv->find_again_source_id != 0) return;
 
-    	data = g_slice_new0 (FindAgainCBStruct);
+	data = g_slice_new0 (FindAgainCBStruct);
 	data->toolbar = toolbar;
 	data->next = TRUE;
     
@@ -846,7 +846,7 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 
 static void
 impl_set_selection (EphyFindToolbar *toolbar,
-                    gboolean attention)
+		    gboolean attention)
 {
   WebKitWebView *web_view = toolbar->priv->web_view;
   
