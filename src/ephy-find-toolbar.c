@@ -119,15 +119,15 @@ set_status_notfound_cb (EphyFindToolbar *toolbar)
 {
 	EphyFindToolbarPrivate *priv;
 	PangoFontDescription *pango_desc = NULL;
-	
+
 	priv = toolbar->priv;
-	
+
 	pango_desc = pango_font_description_new ();
 	gtk_widget_modify_font (priv->status_label, pango_desc);
 	pango_font_description_free (pango_desc);
-	
+
 	priv->source_id = 0;
-	
+
 	return FALSE;
 }
 
@@ -152,7 +152,7 @@ set_status (EphyFindToolbar *toolbar,
 				pango_font_description_set_weight (pango_desc, PANGO_WEIGHT_BOLD);
 				gtk_widget_modify_font (priv->status_label, pango_desc);
 				pango_font_description_free (pango_desc);
-				
+
 				gtk_widget_error_bell (GTK_WIDGET (priv->window));
 				priv->source_id = g_timeout_add (500, (GSourceFunc) set_status_notfound_cb, toolbar);
 			}
@@ -255,7 +255,7 @@ ephy_find_toolbar_set_properties (EphyFindToolbar *toolbar,
                                   const char *find_string)
 {
   EphyFindToolbarPrivate *priv = toolbar->priv;
-  
+
   set_string_and_highlight (priv, find_string);
 }
 
@@ -267,10 +267,10 @@ real_find (EphyFindToolbarPrivate *priv,
 
   gboolean case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
 
-  if (!webkit_web_view_search_text 
+  if (!webkit_web_view_search_text
 	 (web_view, priv->find_string, case_sensitive, TRUE, FALSE)) {
     /* not found, try to wrap */
-    if (!webkit_web_view_search_text 
+    if (!webkit_web_view_search_text
 	   (web_view, priv->find_string, case_sensitive, TRUE, TRUE)) {
       /* there's no result */
       return EPHY_FIND_NOTFOUND;
@@ -580,7 +580,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 
 	priv->sep = gtk_separator_tool_item_new ();
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->sep, -1);
-	
+
 	priv->status_item = gtk_tool_item_new ();
 	gtk_tool_item_set_expand (priv->status_item, TRUE);
 	priv->status_label = gtk_label_new ("");
@@ -778,7 +778,7 @@ find_again_data_destroy_cb (FindAgainCBStruct *data)
 {
 	g_slice_free (FindAgainCBStruct, data);
 }
-	
+
 static EphyEmbedFindResult
 ephy_find_toolbar_find_again (EphyFindToolbar *toolbar,
                               gboolean forward,
@@ -798,9 +798,9 @@ find_again_cb (FindAgainCBStruct *data)
 	result = ephy_find_toolbar_find_again (data->toolbar, data->next,
 				  priv->links_only);
 	set_status (data->toolbar, result);
-    
+
 	priv->find_again_source_id = 0;
-    
+
 	return FALSE;
 }
 
@@ -820,13 +820,13 @@ ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
 	 * to sync with the size change due to the toolbar being shown, otherwise
 	 * the toolbar can obscure the result. See GNOME bug #415074.
 	 */
-    
+
 	if (priv->find_again_source_id != 0) return;
 
 	data = g_slice_new0 (FindAgainCBStruct);
 	data->toolbar = toolbar;
 	data->next = TRUE;
-    
+
 	priv->find_again_source_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
 						      (GSourceFunc) find_again_cb,
 						      data,
@@ -844,13 +844,13 @@ ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 		gtk_widget_show (widget);
 		gtk_widget_grab_focus (widget);
 	}
-    
+
 	if (priv->find_again_source_id != 0) return;
 
 	data = g_slice_new0 (FindAgainCBStruct);
 	data->toolbar = toolbar;
 	data->next = FALSE;
-    
+
 	priv->find_again_source_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
 						      (GSourceFunc) find_again_cb,
 						      data,
@@ -882,7 +882,7 @@ ephy_find_toolbar_set_selection (EphyFindToolbar *toolbar,
                                  gboolean attention)
 {
   WebKitWebView *web_view = toolbar->priv->web_view;
-  
+
   webkit_web_view_set_highlight_text_matches (web_view, attention);
 }
 
