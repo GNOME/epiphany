@@ -37,7 +37,6 @@
 struct _EphyFindToolbarPrivate
 {
 	EphyWindow *window;
-	EphyEmbed  *embed;
 	WebKitWebView *web_view;
 	GtkWidget *entry;
 	GtkWidget *label;
@@ -83,6 +82,38 @@ typedef enum
 static guint signals[LAST_SIGNAL];
 
 /* private functions */
+
+static void
+impl_scroll_lines (WebKitWebView *web_view,
+                   int num_lines)
+{
+        /* FIXME: implement! */
+}
+
+static void
+impl_scroll_pages (WebKitWebView *web_view,
+                   int num_pages)
+{
+        /* FIXME: implement! */
+}
+
+static void
+impl_scroll_pixels (WebKitWebView *web_view,
+                    int dx,
+                    int dy)
+{
+  GtkAdjustment *hadj;
+  GtkAdjustment *vadj;
+  GtkScrolledWindow *scrolled_window;
+
+  scrolled_window = GTK_SCROLLED_WINDOW (gtk_widget_get_parent (GTK_WIDGET (web_view)));
+
+  hadj = gtk_scrolled_window_get_hadjustment (scrolled_window);
+  vadj = gtk_scrolled_window_get_vadjustment (scrolled_window);
+
+  gtk_adjustment_set_value (hadj, CLAMP (hadj->value + dx, hadj->lower, hadj->upper - hadj->page_size));
+  gtk_adjustment_set_value (vadj, CLAMP (vadj->value + dy, vadj->lower, vadj->upper - vadj->page_size));
+}
 
 static gboolean
 set_status_notfound_cb (EphyFindToolbar *toolbar)
@@ -151,6 +182,7 @@ clear_status (EphyFindToolbar *toolbar)
 			    priv->links_only ? _("Find links:") : _("Find:"));
 }
 
+#if 0
 /* Code adapted from gtktreeview.c:gtk_tree_view_key_press() and
  * gtk_tree_view_real_start_interactive_seach()
  */
@@ -184,6 +216,7 @@ tab_search_key_press_cb (EphyEmbed *embed,
 
 	return FALSE;
 }
+#endif
 
 static void
 find_next_cb (EphyFindToolbar *toolbar)
@@ -304,19 +337,19 @@ entry_key_press_event_cb (GtkEntry *entry,
 		{
 		case GDK_Up:
 		case GDK_KP_Up:
-			ephy_embed_scroll (priv->embed, -1);
+			impl_scroll_lines (priv->web_view, -1);
 			break;
 		case GDK_Down:
 		case GDK_KP_Down:
-			ephy_embed_scroll (priv->embed, 1);
+			impl_scroll_lines (priv->web_view, 1);
 			break;
 		case GDK_Page_Up:
 		case GDK_KP_Page_Up:
-			ephy_embed_page_scroll (priv->embed, -1);
+			impl_scroll_pages (priv->web_view, -1);
 			break;
 		case GDK_Page_Down:
 		case GDK_KP_Page_Down:
-			ephy_embed_page_scroll (priv->embed, 1);
+			impl_scroll_pages (priv->web_view, 1);
 			break;
 		case GDK_Escape:
 			/* Hide the toolbar when ESC is pressed */
@@ -712,24 +745,26 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 	WebKitWebView *web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED(embed);
 
-	if (priv->embed == embed) return;
+	if (priv->web_view == web_view) return;
 
-	if (priv->embed != NULL)
+	if (priv->web_view != NULL)
 	{
+                /*
 		g_signal_handlers_disconnect_matched (embed, G_SIGNAL_MATCH_DATA,
 						      0, 0, NULL, NULL, toolbar);
+                */
 	}
 
-	priv->embed = embed;
-	if (embed != NULL)
+	priv->web_view = web_view;
+	if (web_view != NULL)
 	{
 		clear_status (toolbar);
 
-		/* FIXME: this is never emitted */
+		/* FIXME: this is never emitted
 		g_signal_connect_object (embed, "ge-search-key-press",
 					 G_CALLBACK (tab_search_key_press_cb),
 					 toolbar, 0);
-		priv->web_view = web_view;
+                */
 	}
 }
 
