@@ -71,7 +71,6 @@ enum
 	LAST_SIGNAL
 };
 
-/* Keep these the same as in nsITypeAheadFind */
 typedef enum
 {
 	EPHY_FIND_FOUND		= 0,
