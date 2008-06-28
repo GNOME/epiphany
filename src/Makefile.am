@@ -115,6 +115,7 @@ libephymain_la_CPPFLAGS = \
 libephymain_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	\
 	$(DBUS_CFLAGS)		\
+	$(WEBKIT_CFLAGS)	\
 	$(AM_CFLAGS)
 
 if ENABLE_NETWORK_MANAGER

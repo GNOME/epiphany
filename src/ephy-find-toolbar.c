@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 8; -*- */
 /*
  *  Copyright © 2004 Tommi Komulainen
  *  Copyright © 2004, 2005 Christian Persch
@@ -22,10 +23,10 @@
 #include "config.h"
 
 #include "ephy-find-toolbar.h"
-#include "ephy-embed-find.h"
 #include "ephy-embed-factory.h"
 #include "ephy-debug.h"
 
+#include <webkit/webkit.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -33,11 +34,13 @@
 
 #define EPHY_FIND_TOOLBAR_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object),EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbarPrivate))
 
+#define EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED(embed) (WEBKIT_WEB_VIEW (gtk_bin_get_child (GTK_BIN (gtk_bin_get_child (GTK_BIN (embed))))))
+
 struct _EphyFindToolbarPrivate
 {
-	EphyEmbedFind *find;
 	EphyWindow *window;
-	EphyEmbed *embed;
+        EphyEmbed  *embed;
+        WebKitWebView *web_view;
 	GtkWidget *entry;
 	GtkWidget *label;
 	GtkToolItem *next;
@@ -49,6 +52,7 @@ struct _EphyFindToolbarPrivate
 	gulong set_focus_handler;
 	guint source_id;
 	guint find_again_source_id;
+        char *find_string;
 	guint preedit_changed : 1;
 	guint prevent_activate : 1;
 	guint activated : 1;
@@ -70,28 +74,17 @@ enum
 	LAST_SIGNAL
 };
 
+/* Keep these the same as in nsITypeAheadFind */
+typedef enum
+{
+	EPHY_EMBED_FIND_FOUND		= 0,
+	EPHY_EMBED_FIND_NOTFOUND	= 1,
+	EPHY_EMBED_FIND_FOUNDWRAPPED	= 2
+} EphyEmbedFindResult;
+
 static guint signals[LAST_SIGNAL];
 
 /* private functions */
-
-static EphyEmbedFind *
-get_find (EphyFindToolbar *toolbar)
-{
-	EphyFindToolbarPrivate *priv = toolbar->priv;
-
-	if (priv->find == NULL)
-	{
-		LOG ("Creating the finder now");
-
-		priv->find = EPHY_EMBED_FIND (ephy_embed_factory_new_object (EPHY_TYPE_EMBED_FIND));
-
-		g_return_val_if_fail (priv->embed == NULL || GTK_WIDGET_REALIZED (GTK_WIDGET (priv->embed)), priv->find);
-
-		ephy_embed_find_set_embed (priv->find, priv->embed);
-	}
-
-	return priv->find;
-}
 
 static gboolean
 set_status_notfound_cb (EphyFindToolbar *toolbar)
@@ -207,6 +200,72 @@ find_prev_cb (EphyFindToolbar *toolbar)
 }
 
 static void
+set_string_and_highlight (EphyFindToolbarPrivate *priv, const char *find_string)
+{
+  WebKitWebView *web_view = priv->web_view;
+  gboolean case_sensitive;
+
+  if (g_strcmp0 (priv->find_string, find_string) != 0) {
+    g_free (priv->find_string);
+    priv->find_string = g_strdup (find_string);
+  }
+
+  case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
+
+  webkit_web_view_unmark_text_matches (web_view);
+  webkit_web_view_mark_text_matches (web_view,
+                                     priv->find_string,
+                                     case_sensitive,
+                                     0);
+  webkit_web_view_set_highlight_text_matches (web_view, TRUE);
+}
+
+static void
+impl_set_properties (EphyFindToolbar *toolbar,
+                     const char *find_string)
+{
+  EphyFindToolbarPrivate *priv = toolbar->priv;
+  
+  set_string_and_highlight (priv, find_string);
+}
+
+static EphyEmbedFindResult
+real_find (EphyFindToolbarPrivate *priv,
+           gboolean forward)
+{
+  WebKitWebView *web_view = priv->web_view;
+
+  gboolean case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
+
+  if (!webkit_web_view_search_text 
+         (web_view, priv->find_string, case_sensitive, TRUE, FALSE)) {
+    /* not found, try to wrap */
+    if (!webkit_web_view_search_text 
+           (web_view, priv->find_string, case_sensitive, TRUE, TRUE)) {
+      /* there's no result */
+      return EPHY_EMBED_FIND_NOTFOUND;
+    } else {
+      /* found wrapped */
+      return EPHY_EMBED_FIND_FOUNDWRAPPED;
+    }
+  }
+
+  return EPHY_EMBED_FIND_FOUND;
+}
+
+static EphyEmbedFindResult
+impl_find (EphyFindToolbar *toolbar,
+           const char *find_string,
+           gboolean links_only)
+{
+  EphyFindToolbarPrivate *priv = toolbar->priv;
+
+  set_string_and_highlight (priv, find_string);
+
+  return real_find (priv, TRUE);
+}
+
+static void
 entry_changed_cb (GtkEntry *entry,
 		  EphyFindToolbar *toolbar)
 {
@@ -218,10 +277,17 @@ entry_changed_cb (GtkEntry *entry,
 	text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
 	case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->case_sensitive));
 
-	ephy_embed_find_set_properties (get_find (toolbar), text, case_sensitive);
-	result = ephy_embed_find_find (get_find (toolbar), text, priv->links_only);
+	impl_set_properties (toolbar, text);
+	result = impl_find (toolbar, text, priv->links_only);
 
 	set_status (toolbar, result);
+}
+
+static gboolean
+impl_activate_link (EphyFindToolbar *toolbar,
+                    GdkModifierType mask)
+{
+  return FALSE;
 }
 
 static gboolean
@@ -268,7 +334,7 @@ entry_key_press_event_cb (GtkEntry *entry,
 		  event->keyval == GDK_KP_Enter ||
 		  event->keyval == GDK_ISO_Enter))
 	{
-		handled = ephy_embed_find_activate_link (get_find (toolbar), event->state);
+		handled = impl_activate_link (toolbar, event->state);
 	}
 	else if ((event->state & mask) == GDK_SHIFT_MASK &&
 		 (event->keyval == GDK_Return ||
@@ -290,7 +356,7 @@ entry_activate_cb (GtkWidget *entry,
 
 	if (priv->typing_ahead)
 	{
-		ephy_embed_find_activate_link (get_find (toolbar), 0);
+		impl_activate_link (toolbar, 0);
 	}
 	else
 	{
@@ -337,7 +403,7 @@ case_sensitive_toggled_cb (GtkWidget *check,
 			(proxy, G_CALLBACK (case_sensitive_menu_toggled_cb), toolbar);
 	}
 
-	ephy_embed_find_set_properties (get_find (toolbar), text, case_sensitive);
+	impl_set_properties (toolbar, text);
 }
 
 static gboolean
@@ -517,12 +583,6 @@ ephy_find_toolbar_dispose (GObject *object)
 	EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (object);
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
-	if (priv->find != NULL)
-	{
-		g_object_unref (priv->find);
-		priv->find = NULL;
-	}
-	
 	if (priv->source_id != 0)
 	{
 		g_source_remove (priv->source_id);
@@ -565,12 +625,22 @@ ephy_find_toolbar_set_property (GObject *object,
 }
 
 static void
+ephy_find_toolbar_finalize (GObject *o)
+{
+  EphyFindToolbarPrivate *priv = EPHY_FIND_TOOLBAR (o)->priv;
+
+  g_free (priv->find_string);
+  G_OBJECT_CLASS (ephy_find_toolbar_parent_class)->finalize (o);
+}
+
+static void
 ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
         GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	object_class->dispose = ephy_find_toolbar_dispose;
+        object_class->finalize = ephy_find_toolbar_finalize;
 	object_class->get_property = ephy_find_toolbar_get_property;
 	object_class->set_property = ephy_find_toolbar_set_property;
 
@@ -642,6 +712,7 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 			     EphyEmbed *embed)
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
+        WebKitWebView *web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED(embed);
 
 	if (priv->embed == embed) return;
 
@@ -659,13 +730,7 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 		g_signal_connect_object (embed, "ge-search-key-press",
 					 G_CALLBACK (tab_search_key_press_cb),
 					 toolbar, 0);
-
-		if (priv->find != NULL)
-		{
-			g_return_if_fail (GTK_WIDGET_REALIZED (GTK_WIDGET (priv->embed)));
-
-			ephy_embed_find_set_embed (priv->find, embed);
-		}
+                priv->web_view = web_view;
 	}
 }
 
@@ -681,6 +746,15 @@ find_again_data_destroy_cb (FindAgainCBStruct *data)
 	g_slice_free (FindAgainCBStruct, data);
 }
 	
+static EphyEmbedFindResult
+impl_find_again (EphyFindToolbar *toolbar,
+                 gboolean forward,
+                 gboolean links_only)
+{
+  EphyFindToolbarPrivate *priv = toolbar->priv;
+
+  return real_find (priv, forward);
+}
 
 static gboolean
 find_again_cb (FindAgainCBStruct *data)
@@ -688,8 +762,8 @@ find_again_cb (FindAgainCBStruct *data)
 	EphyEmbedFindResult result;
 	EphyFindToolbarPrivate *priv = data->toolbar->priv;
 
-	result = ephy_embed_find_find_again (get_find (data->toolbar), data->next,
-					     priv->links_only);
+	result = impl_find_again (data->toolbar, data->next,
+                                  priv->links_only);
 	set_status (data->toolbar, result);
     
 	priv->find_again_source_id = 0;
@@ -757,7 +831,7 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 {
 	EphyFindToolbarPrivate *priv = toolbar->priv;
 
-	g_return_if_fail (priv->embed != NULL);
+	g_return_if_fail (priv->web_view != NULL);
 
 	priv->typing_ahead = typing_ahead;
 	priv->links_only = links_only;
@@ -770,6 +844,15 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 	gtk_widget_grab_focus (GTK_WIDGET (toolbar));
 }
 
+static void
+impl_set_selection (EphyFindToolbar *toolbar,
+                    gboolean attention)
+{
+  WebKitWebView *web_view = toolbar->priv->web_view;
+  
+  webkit_web_view_set_highlight_text_matches (web_view, attention);
+}
+
 void
 ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 {
@@ -777,8 +860,8 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 
 	gtk_widget_hide (GTK_WIDGET (toolbar));
 
-	if (priv->embed == NULL || priv->find == NULL) return;
-	ephy_embed_find_set_selection (get_find (toolbar), FALSE);
+	if (priv->web_view == NULL) return;
+	impl_set_selection (toolbar, FALSE);
 }
 
 void
