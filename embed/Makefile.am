@@ -13,7 +13,6 @@ NOINST_H_FILES = \
 	downloader-view.h		\
 	ephy-download.h			\
 	ephy-embed-dialog.h		\
-	ephy-embed-find.h		\
 	ephy-encodings.h		\
 	ephy-favicon-cache.h
 
@@ -53,7 +52,6 @@ libephyembed_la_SOURCES = \
 	ephy-embed-container.c          \
 	ephy-embed-dialog.c		\
 	ephy-embed-event.c		\
-	ephy-embed-find.c		\
 	ephy-embed-persist.c		\
 	ephy-embed-single.c		\
 	ephy-embed-shell.c		\

@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include "ephy-find-toolbar.h"
-#include "ephy-embed-factory.h"
 #include "ephy-debug.h"
 
 #include <webkit/webkit.h>

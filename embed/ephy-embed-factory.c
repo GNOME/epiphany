@@ -22,11 +22,9 @@
 
 #include "ephy-embed-factory.h"
 #include "webkit-embed.h"
-#include "webkit-embed-find.h"
 #include "webkit-embed-persist.h"
 #include "webkit-embed-single.h"
 #include "ephy-embed.h"
-#include "ephy-embed-find.h"
 #include "ephy-embed-persist.h"
 #include "ephy-embed-single.h"
 
@@ -50,10 +48,6 @@ ephy_embed_factory_new_object (GType type)
 	else if (type == EPHY_TYPE_EMBED_PERSIST)
 	{
                 object = g_object_new (WEBKIT_TYPE_EMBED_PERSIST, NULL);
-	}
-	else if (type == EPHY_TYPE_EMBED_FIND)
-	{
-		object = g_object_new (WEBKIT_TYPE_EMBED_FIND, NULL);
 	}
 	else if (type == EPHY_TYPE_EMBED_SINGLE)
 	{

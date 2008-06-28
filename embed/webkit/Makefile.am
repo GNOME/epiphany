@@ -3,8 +3,6 @@ noinst_LTLIBRARIES = libephywebkitembed.la
 libephywebkitembed_la_SOURCES = 	\
 	webkit-embed.c  	        \
 	webkit-embed.h			\
-	webkit-embed-find.c             \
-	webkit-embed-find.h		\
 	webkit-embed-persist.c          \
 	webkit-embed-persist.h		\
 	webkit-embed-prefs.c            \
