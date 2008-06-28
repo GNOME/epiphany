@@ -76,9 +76,9 @@ enum
 /* Keep these the same as in nsITypeAheadFind */
 typedef enum
 {
-	EPHY_EMBED_FIND_FOUND		= 0,
-	EPHY_EMBED_FIND_NOTFOUND	= 1,
-	EPHY_EMBED_FIND_FOUNDWRAPPED	= 2
+	EPHY_FIND_FOUND		= 0,
+	EPHY_FIND_NOTFOUND	= 1,
+	EPHY_FIND_FOUNDWRAPPED	= 2
 } EphyEmbedFindResult;
 
 static guint signals[LAST_SIGNAL];
@@ -112,10 +112,10 @@ set_status (EphyFindToolbar *toolbar,
 
 	switch (result)
 	{
-		case EPHY_EMBED_FIND_FOUND:
+		case EPHY_FIND_FOUND:
 			text = NULL;
 			break;
-		case EPHY_EMBED_FIND_NOTFOUND:
+		case EPHY_FIND_NOTFOUND:
 			{
 				text = _("Not found");
 
@@ -128,7 +128,7 @@ set_status (EphyFindToolbar *toolbar,
 				priv->source_id = g_timeout_add (500, (GSourceFunc) set_status_notfound_cb, toolbar);
 			}
 			break;
-		case EPHY_EMBED_FIND_FOUNDWRAPPED:
+		case EPHY_FIND_FOUNDWRAPPED:
 			text = _("Wrapped");
 			break;
 	}
@@ -242,14 +242,14 @@ real_find (EphyFindToolbarPrivate *priv,
     if (!webkit_web_view_search_text 
            (web_view, priv->find_string, case_sensitive, TRUE, TRUE)) {
       /* there's no result */
-      return EPHY_EMBED_FIND_NOTFOUND;
+      return EPHY_FIND_NOTFOUND;
     } else {
       /* found wrapped */
-      return EPHY_EMBED_FIND_FOUNDWRAPPED;
+      return EPHY_FIND_FOUNDWRAPPED;
     }
   }
 
-  return EPHY_EMBED_FIND_FOUND;
+  return EPHY_FIND_FOUND;
 }
 
 static EphyEmbedFindResult
