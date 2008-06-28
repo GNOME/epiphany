@@ -726,6 +726,7 @@ ephy_find_toolbar_set_embed (EphyFindToolbar *toolbar,
 	{
 		clear_status (toolbar);
 
+                /* FIXME: this is never emitted */
 		g_signal_connect_object (embed, "ge-search-key-press",
 					 G_CALLBACK (tab_search_key_press_cb),
 					 toolbar, 0);
