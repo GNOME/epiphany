@@ -1308,6 +1308,7 @@ ephy_base_embed_file_monitor_reload_cb (EphyBaseEmbed *embed)
   LOG ("Reloading file '%s'", ephy_embed_get_address (EPHY_EMBED (embed)));
   /* FIXME: no way to bypass cache when reloading with WebKit right now.
    * Old code did it here.
+   * WebKit bug: https://bugs.webkit.org/show_bug.cgi?id=19815
    */
   webkit_web_view_reload (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 
