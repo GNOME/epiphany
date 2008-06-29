@@ -24,6 +24,7 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
+#include "ephy-embed-utils.h"
 #include "ephy-shell.h"
 #include "ephy-embed-factory.h"
 #include "ephy-embed-persist.h"
@@ -196,7 +197,7 @@ window_cmd_view_stop (GtkAction *action,
 
 	gtk_widget_grab_focus (GTK_WIDGET (embed));
 
-	ephy_embed_stop_load (embed);
+	webkit_web_view_stop_loading (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 }
 
 void

@@ -365,12 +365,6 @@ impl_load (EphyEmbed *embed,
   g_free (effective_url);
 }
 
-static void
-impl_stop_load (EphyEmbed *embed)
-{
-  webkit_web_view_stop_loading (WEBKIT_EMBED (embed)->priv->web_view);
-}
-
 static gboolean
 impl_can_go_back (EphyEmbed *embed)
 {
@@ -591,7 +585,6 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 {
   iface->load_url = impl_load_url; 
   iface->load = impl_load; 
-  iface->stop_load = impl_stop_load;
   iface->can_go_back = impl_can_go_back;
   iface->can_go_forward =impl_can_go_forward;
   iface->can_go_up = impl_can_go_up;

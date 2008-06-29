@@ -170,7 +170,6 @@ struct _EphyEmbedIface
 							   const char *url,
 							   EphyEmbedLoadFlags flags,
 							   EphyEmbed *referring_embed);
-	void		   (* stop_load)		  (EphyEmbed *embed);
 	void		   (* reload)			  (EphyEmbed *embed,
 							   gboolean force);
 	gboolean	   (* can_go_back)		  (EphyEmbed *embed);
@@ -259,8 +258,6 @@ void		  ephy_embed_load			(EphyEmbed *embed,
 							 const char *url,
 							 EphyEmbedLoadFlags flags,
 							 EphyEmbed *referring_embed);
-
-void		  ephy_embed_stop_load			(EphyEmbed *embed);
 
 void		  ephy_embed_reload			(EphyEmbed *embed,
 							 gboolean force);

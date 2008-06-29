@@ -406,19 +406,6 @@ ephy_embed_load (EphyEmbed *embed,
 }
 
 /**
- * ephy_embed_stop_load:
- * @embed: an #EphyEmbed
- *
- * If @embed is loading, stops it from continuing.
- **/
-void
-ephy_embed_stop_load (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->stop_load (embed);
-}
-
-/**
  * ephy_embed_can_go_back:
  * @embed: an #EphyEmbed
  *
