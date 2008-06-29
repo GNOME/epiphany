@@ -109,7 +109,7 @@ window_cmd_file_print (GtkAction *action,
           (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	ephy_embed_print (embed);
+	webkit_web_view_execute_script (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), "print();");
 }
 
 void

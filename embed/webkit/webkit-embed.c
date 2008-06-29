@@ -465,12 +465,6 @@ impl_show_page_certificate (EphyEmbed *embed)
 }
 
 static void
-impl_print (EphyEmbed *embed)
-{
-  webkit_web_view_execute_script (WEBKIT_EMBED (embed)->priv->web_view, "print();");
-}
-
-static void
 impl_set_print_preview_mode (EphyEmbed *embed, gboolean preview_mode)
 {
 }
@@ -570,7 +564,6 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->set_encoding = impl_set_encoding;
   iface->get_encoding = impl_get_encoding;
   iface->has_automatic_encoding = impl_has_automatic_encoding;
-  iface->print = impl_print;
   iface->set_print_preview_mode = impl_set_print_preview_mode;
   iface->print_preview_n_pages = impl_print_preview_n_pages;
   iface->print_preview_navigate = impl_print_preview_navigate;

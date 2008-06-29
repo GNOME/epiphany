@@ -201,7 +201,6 @@ struct _EphyEmbedIface
 	gboolean	   (* has_automatic_encoding)	  (EphyEmbed *embed);
 	void		   (* set_encoding)		  (EphyEmbed *embed,
 							   const char *encoding);
-	void		   (* print)			  (EphyEmbed *embed);
 	void		   (* set_print_preview_mode)	  (EphyEmbed *embed,
 							   gboolean mode);
 	int		   (* print_preview_n_pages)	  (EphyEmbed *embed);
@@ -340,8 +339,6 @@ void		  ephy_embed_set_encoding		(EphyEmbed *embed,
 							 const char *encoding);
 
 /* Print */
-void		  ephy_embed_print			(EphyEmbed *embed);
-
 void		  ephy_embed_set_print_preview_mode	(EphyEmbed *embed,
 							 gboolean preview_mode);
 

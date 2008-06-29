@@ -724,20 +724,6 @@ ephy_embed_has_automatic_encoding (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_print:
- * @embed: an #EphyEmbed
- *
- * Sends a document to the printer.
- *
- **/
-void
-ephy_embed_print (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->print (embed);
-}
-
-/**
  * ephy_embed_set_print_preview_mode:
  * @embed: an #EphyEmbed
  * @preview_mode: Whether the print preview mode is enabled.
