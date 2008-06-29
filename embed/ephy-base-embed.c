@@ -1112,7 +1112,7 @@ update_navigation_flags (EphyBaseEmbed *membed)
     flags |= EPHY_EMBED_NAV_UP;
   }
 
-  if (ephy_embed_can_go_back (embed)) {
+  if (webkit_web_view_can_go_back (web_view)) {
     flags |= EPHY_EMBED_NAV_BACK;
   }
 

@@ -406,19 +406,6 @@ ephy_embed_load (EphyEmbed *embed,
 }
 
 /**
- * ephy_embed_can_go_back:
- * @embed: an #EphyEmbed
- *
- * Return value: %TRUE if @embed can return to a previously-visited location
- **/
-gboolean
-ephy_embed_can_go_back (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->can_go_back (embed);
-}
-
-/**
  * ephy_embed_can_go_up:
  * @embed: an #EphyEmbed
  *
