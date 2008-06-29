@@ -1106,6 +1106,7 @@ update_navigation_flags (EphyBaseEmbed *membed)
   EphyBaseEmbedPrivate *priv = membed->priv;
   EphyEmbed *embed = EPHY_EMBED (membed);
   guint flags = 0;
+  WebKitWebView *web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
   if (ephy_embed_can_go_up (embed)) {
     flags |= EPHY_EMBED_NAV_UP;
@@ -1115,7 +1116,7 @@ update_navigation_flags (EphyBaseEmbed *membed)
     flags |= EPHY_EMBED_NAV_BACK;
   }
 
-  if (ephy_embed_can_go_forward (embed)) {
+  if (webkit_web_view_can_go_forward (web_view)) {
     flags |= EPHY_EMBED_NAV_FORWARD;
   }
 

@@ -171,7 +171,6 @@ struct _EphyEmbedIface
 							   EphyEmbedLoadFlags flags,
 							   EphyEmbed *referring_embed);
 	gboolean	   (* can_go_back)		  (EphyEmbed *embed);
-	gboolean	   (* can_go_forward)		  (EphyEmbed *embed);
 	gboolean	   (* can_go_up)		  (EphyEmbed *embed);
 	GSList *	   (* get_go_up_list)		  (EphyEmbed *embed);
 	void		   (* go_up)			  (EphyEmbed *embed);
@@ -265,8 +264,6 @@ char		 *ephy_embed_get_js_status		(EphyEmbed *embed);
 
 /* Navigation */
 gboolean	  ephy_embed_can_go_back		(EphyEmbed *embed);
-
-gboolean	  ephy_embed_can_go_forward		(EphyEmbed *embed);
 
 gboolean	  ephy_embed_can_go_up			(EphyEmbed *embed);
 

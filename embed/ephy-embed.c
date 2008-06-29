@@ -419,19 +419,6 @@ ephy_embed_can_go_back (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_can_go_forward:
- * @embed: an #EphyEmbed
- *
- * Return value: %TRUE if @embed has gone back, and can thus go forward again
- **/
-gboolean
-ephy_embed_can_go_forward (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->can_go_forward (embed);
-}
-
-/**
  * ephy_embed_can_go_up:
  * @embed: an #EphyEmbed
  *
