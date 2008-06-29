@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include "ephy-embed-utils.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-debug.h"
 
@@ -31,8 +32,6 @@
 #include <string.h>
 
 #define EPHY_FIND_TOOLBAR_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object),EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbarPrivate))
-
-#define EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED(embed) (WEBKIT_WEB_VIEW (gtk_bin_get_child (GTK_BIN (gtk_bin_get_child (GTK_BIN (embed))))))
 
 struct _EphyFindToolbarPrivate
 {
