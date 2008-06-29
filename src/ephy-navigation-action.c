@@ -29,6 +29,7 @@
 #include "ephy-history.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
+#include "ephy-embed-utils.h"
 #include "ephy-history-item.h"
 #include "ephy-link.h"
 #include "ephy-gui.h"
@@ -352,9 +353,12 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 	EphyNavigationAction *action = EPHY_NAVIGATION_ACTION (gtk_action);
 	EphyWindow *window = action->priv->window;
 	EphyEmbed *embed;
+	WebKitWebView *web_view;
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
+
+	web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
 	if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_BACK)
 	{
@@ -365,7 +369,7 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 						NULL,
 						EPHY_LINK_NEW_TAB);
 		}
-		ephy_embed_go_back (embed);
+		webkit_web_view_go_back (web_view);
 	}
 	else if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_FORWARD)
 	{

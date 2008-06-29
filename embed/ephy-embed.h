@@ -174,7 +174,6 @@ struct _EphyEmbedIface
 	gboolean	   (* can_go_forward)		  (EphyEmbed *embed);
 	gboolean	   (* can_go_up)		  (EphyEmbed *embed);
 	GSList *	   (* get_go_up_list)		  (EphyEmbed *embed);
-	void		   (* go_back)			  (EphyEmbed *embed);
 	void		   (* go_forward)		  (EphyEmbed *embed);
 	void		   (* go_up)			  (EphyEmbed *embed);
 	const char *	   (* get_title)		  (EphyEmbed *embed);
@@ -273,8 +272,6 @@ gboolean	  ephy_embed_can_go_forward		(EphyEmbed *embed);
 gboolean	  ephy_embed_can_go_up			(EphyEmbed *embed);
 
 GSList		 *ephy_embed_get_go_up_list		(EphyEmbed *embed);
-
-void		  ephy_embed_go_back			(EphyEmbed *embed);
 
 void		  ephy_embed_go_forward			(EphyEmbed *embed);
 

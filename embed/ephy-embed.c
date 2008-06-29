@@ -469,19 +469,6 @@ ephy_embed_get_go_up_list (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_go_back:
- * @embed: an #EphyEmbed
- *
- * Causes @embed to return to the previously-visited web page.
- **/
-void
-ephy_embed_go_back (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->go_back (embed);
-}
-
-/**
  * ephy_embed_go_forward:
  * @embed: an #EphyEmbed
  *
