@@ -578,24 +578,6 @@ ephy_embed_get_js_status (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_reload:
- * @embed: an #EphyEmbed
- * @force: %TRUE to bypass cache
- *
- * Reloads the web page being displayed in @embed.
- *
- * If @force is %TRUE, cache and proxy will be bypassed when
- * reloading the page.
- **/
-void
-ephy_embed_reload (EphyEmbed *embed,
-		   gboolean force)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->reload (embed, force);
-}
-
-/**
  * ephy_embed_set_zoom:
  * @embed: an #EphyEmbed
  * @zoom: the new zoom level

@@ -420,13 +420,6 @@ impl_get_location (EphyEmbed *embed,
   return g_strdup (webkit_web_frame_get_uri (web_frame));
 }
 
-static void
-impl_reload (EphyEmbed *embed,
-             gboolean force)
-{
-  webkit_web_view_reload (WEBKIT_EMBED (embed)->priv->web_view);
-}
-
 static float
 impl_get_zoom (EphyEmbed *embed)
 {
@@ -594,7 +587,6 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->go_up = impl_go_up;
   iface->get_location = impl_get_location;
   iface->get_js_status = impl_get_js_status;
-  iface->reload = impl_reload;
   iface->set_zoom = impl_set_zoom;
   iface->get_zoom = impl_get_zoom;
   iface->scroll_lines = impl_scroll_lines;

@@ -212,7 +212,11 @@ window_cmd_view_reload (GtkAction *action,
 
 	gtk_widget_grab_focus (GTK_WIDGET (embed));
 
-	ephy_embed_reload (embed, event_with_shift ());
+	/* FIXME: no way to bypass cache when reloading
+	 * with WebKit right now. Old code did:
+	 * ephy_embed_reload (embed, event_with_shift ());
+	 */
+	webkit_web_view_reload (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 }
 
 void

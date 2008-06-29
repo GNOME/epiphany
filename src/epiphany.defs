@@ -1023,15 +1023,6 @@
   )
 )
 
-(define-method reload
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_reload")
-  (return-type "none")
-  (parameters
-    '("gboolean" "force")
-  )
-)
-
 (define-method get_title
   (of-object "EphyEmbed")
   (c-name "ephy_embed_get_title")
