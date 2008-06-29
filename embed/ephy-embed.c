@@ -469,20 +469,6 @@ ephy_embed_get_go_up_list (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_go_forward:
- * @embed: an #EphyEmbed
- *
- * If @embed has returned to a previously-visited web page, proceed forward to
- * the next page.
- **/
-void
-ephy_embed_go_forward (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->go_forward (embed);
-}
-
-/**
  * ephy_embed_go_up:
  * @embed: an #EphyEmbed
  *

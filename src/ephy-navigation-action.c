@@ -380,7 +380,7 @@ ephy_navigation_action_activate (GtkAction *gtk_action)
 						NULL,
 						EPHY_LINK_NEW_TAB);
 		}
-		ephy_embed_go_forward (embed);
+		webkit_web_view_go_forward (web_view);
 	}
 	else if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_UP)
 	{
