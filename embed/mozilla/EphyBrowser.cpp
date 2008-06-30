@@ -366,6 +366,7 @@ EphyDOMLinkEventListener::HandleEvent (nsIDOMEvent* aDOMEvent)
 		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 		if (decision != nsIContentPolicy::ACCEPT) return NS_OK;
 
+		NS_ENSURE_TRUE (mOwner->mFixup, NS_OK);
                 nsCOMPtr<nsIURI> exposableURI;
                 rv = mOwner->mFixup->CreateExposableURI (favUri, getter_AddRefs (exposableURI));
                 NS_ENSURE_SUCCESS (rv, rv);
