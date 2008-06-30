@@ -112,10 +112,11 @@ file_chooser_response_cb (GtkWidget *widget,
 			char *dir, *filename;
 		    
 			filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+                        if (filename == NULL) return;
 
 			dir = g_path_get_dirname (filename);
-
-			eel_gconf_set_path (dialog->priv->persist_key, dir);
+                        if (dir != NULL)
+        			eel_gconf_set_path (dialog->priv->persist_key, dir);
 
 			g_free (dir);
 			g_free (filename);
