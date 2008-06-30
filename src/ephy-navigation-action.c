@@ -31,7 +31,6 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
-#include "ephy-history-item.h"
 #include "ephy-link.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"

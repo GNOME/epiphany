@@ -26,7 +26,6 @@
 #define EPHY_EMBED_H
 
 #include "ephy-embed-event.h"
-#include "ephy-history-item.h"
 
 #include <glib-object.h>
 #include <glib.h>

@@ -8,9 +8,7 @@ libephywebkitembed_la_SOURCES = 	\
 	webkit-embed-prefs.c            \
 	webkit-embed-prefs.h            \
 	webkit-embed-single.c	        \
-	webkit-embed-single.h		\
-	webkit-history-item.c		\
-	webkit-history-item.h
+	webkit-embed-single.h
 
 libephywebkitembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib	    		\

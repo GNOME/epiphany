@@ -34,10 +34,8 @@
 
 #include "webkit-embed.h"
 #include "webkit-embed-prefs.h"
-#include "webkit-history-item.h"
 #include "ephy-embed.h"
 #include "ephy-base-embed.h"
-#include "ephy-history-item.h"
 
 static void     webkit_embed_class_init (WebKitEmbedClass *klass);
 static void     webkit_embed_init       (WebKitEmbed *gs);
