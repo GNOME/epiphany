@@ -135,6 +135,7 @@ static void ephy_bookmarks_class_init	(EphyBookmarksClass *klass);
 static void ephy_bookmarks_init		(EphyBookmarks *tab);
 static void ephy_bookmarks_finalize	(GObject *object);
 static char *impl_resolve_address	(EphyBookmarks*, const char*, const char*);
+static void ephy_local_bookmarks_start_client (EphyBookmarks *bookmarks);
 
 G_DEFINE_TYPE_WITH_CODE (EphyBookmarks, ephy_bookmarks, G_TYPE_OBJECT,
 			 volatile GType flags_type; /* work around gcc's optimiser */
@@ -1133,14 +1134,12 @@ ga_client_state_changed_cb (GaClient *ga_client,
 	{
 		if (avahi_client_errno (ga_client->avahi_client) == AVAHI_ERR_DISCONNECTED)
 		{
-			/* FIXMEchpe: is this correct */
-			/* Destroy and reconnect */
-			avahi_client_free (ga_client->avahi_client);
-			ga_client->avahi_client = NULL;
-			if (!ga_client_start (ga_client, NULL))
-			{
-				g_warning ("Unable to start Zeroconf subsystem");
-			}
+                        EphyBookmarksPrivate *priv = bookmarks->priv;
+
+                        g_object_unref (priv->ga_client);
+                        priv->ga_client = NULL;
+
+                        ephy_local_bookmarks_start_client (bookmarks);
 		}
 	}
 	if (state == GA_CLIENT_STATE_S_RUNNING)
@@ -1150,7 +1149,7 @@ ga_client_state_changed_cb (GaClient *ga_client,
 }
 
 static void
-ephy_local_bookmarks_init (EphyBookmarks *bookmarks)
+ephy_local_bookmarks_start_client (EphyBookmarks *bookmarks)
 {
 	EphyBookmarksPrivate *priv = bookmarks->priv;
 	GaClient *ga_client;
@@ -1162,12 +1161,20 @@ ephy_local_bookmarks_init (EphyBookmarks *bookmarks)
 	if (!ga_client_start (ga_client, NULL))
 	{
 		g_warning ("Unable to start Zeroconf subsystem");
+                g_object_unref (ga_client);
 		return;
 	}
 	priv->ga_client = ga_client;
+}
+
+static void
+ephy_local_bookmarks_init (EphyBookmarks *bookmarks)
+{
+	EphyBookmarksPrivate *priv = bookmarks->priv;
 	priv->resolve_handles =	g_hash_table_new_full (g_str_hash, g_str_equal,
 						       g_free,
 						       (GDestroyNotify) resolve_data_free);
+        ephy_local_bookmarks_start_client (bookmarks);
 }
 
 static void
