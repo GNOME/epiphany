@@ -53,13 +53,6 @@ typedef enum
     WEBKIT_EMBED_LOAD_STOPPED
 } WebKitEmbedLoadState;
 
-
-typedef enum
-{
-  WEBKIT_HISTORY_BACKWARD,
-  WEBKIT_HISTORY_FORWARD
-} WebKitHistoryType;
-
 struct WebKitEmbedPrivate
 {
   WebKitWebView *web_view;
@@ -68,24 +61,6 @@ struct WebKitEmbedPrivate
   char *loading_uri;
   EphyHistory *history;
 };
-
-static EphyHistoryItem*
-webkit_construct_history_item (WebKitEmbed *embed, WebKitHistoryType hist_type)
-{
-  WebKitWebBackForwardList *web_back_forward_list;
-  WebKitWebHistoryItem *history_item;
-
-  g_return_val_if_fail (WEBKIT_IS_EMBED (embed), NULL);
-
-  web_back_forward_list = webkit_web_view_get_back_forward_list (embed->priv->web_view);
-
-  if (hist_type == WEBKIT_HISTORY_FORWARD)
-    history_item = webkit_web_back_forward_list_get_forward_item (web_back_forward_list);
-  else
-    history_item = webkit_web_back_forward_list_get_back_item (web_back_forward_list);
-
-  return webkit_history_item_new (history_item);
-}
 
 static void
 impl_manager_do_command (EphyCommandManager *manager,
@@ -476,19 +451,6 @@ impl_has_modified_forms (EphyEmbed *embed)
   return FALSE;
 }
 
-static EphyHistoryItem*
-impl_get_next_history_item (EphyEmbed *embed)
-{
-  return webkit_construct_history_item (WEBKIT_EMBED (embed), WEBKIT_HISTORY_FORWARD);
-}
-
-
-static EphyHistoryItem*
-impl_get_previous_history_item  (EphyEmbed *embed)
-{
-  return webkit_construct_history_item (WEBKIT_EMBED (embed), WEBKIT_HISTORY_BACKWARD);
-}
-
 static void
 impl_go_to_history_item (EphyEmbed *embed, EphyHistoryItem *history_item)
 {
@@ -524,7 +486,5 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->print_preview_navigate = impl_print_preview_navigate;
   iface->has_modified_forms = impl_has_modified_forms;
   iface->get_security_level = impl_get_security_level;
-  iface->get_next_history_item = impl_get_next_history_item;
-  iface->get_previous_history_item = impl_get_previous_history_item;
   iface->go_to_history_item = impl_go_to_history_item;
 }

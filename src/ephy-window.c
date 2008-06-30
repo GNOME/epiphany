@@ -65,6 +65,7 @@
 #include <libgnomeui/gnome-stock-icons.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include <webkit/webkit.h>
 
 #ifdef HAVE_X11_XF86KEYSYM_H
 #include <X11/XF86keysym.h>
@@ -1615,9 +1616,11 @@ sync_tab_navigation (EphyEmbed *embed,
 		     EphyWindow *window)
 {
 	EphyEmbedNavigationFlags flags;
-	EphyHistoryItem *item;
+	WebKitWebHistoryItem *item;
+	WebKitWebView *web_view;
+	WebKitWebBackForwardList *web_back_forward_list;
 	gboolean up = FALSE, back = FALSE, forward = FALSE;
-	char *back_title = NULL, *forward_title = NULL;
+	const char *back_title = NULL, *forward_title = NULL;
 
 	if (window->priv->closing) return;
 
@@ -1639,29 +1642,26 @@ sync_tab_navigation (EphyEmbed *embed,
 	ephy_toolbar_set_navigation_actions (window->priv->toolbar,
 					     back, forward, up);
 
-	item = ephy_embed_get_previous_history_item (embed);
+	web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	web_back_forward_list = webkit_web_view_get_back_forward_list (web_view);
+
+	item = webkit_web_back_forward_list_get_back_item (web_back_forward_list);
 
 	if (item)
 	{
-		back_title = ephy_history_item_get_title (item);
-		g_object_unref (item);
+		back_title = webkit_web_history_item_get_title (item);
 	}
 
-
-	item = ephy_embed_get_next_history_item (embed);
+	item = webkit_web_back_forward_list_get_forward_item (web_back_forward_list);
 
 	if (item)
 	{
-		forward_title = ephy_history_item_get_title (item);
-		g_object_unref (item);
+		forward_title = webkit_web_history_item_get_title (item);
 	}
 
 	ephy_toolbar_set_navigation_tooltips (window->priv->toolbar,
 					      back_title,
 					      forward_title);
-
-	g_free (back_title);
-	g_free (forward_title);
 }
 
 static void

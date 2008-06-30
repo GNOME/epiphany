@@ -995,36 +995,6 @@ ephy_embed_get_visibility (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_get_previous_history_item:
- * @embed: an #EphyEmbed
- *
- * Returns the preceding #EphyHistoryItem in the history list.
- *
- * Return value: the preceding #EphyHistoryItem
- **/
-EphyHistoryItem*
-ephy_embed_get_previous_history_item (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->get_previous_history_item (embed);
-}
-
-/**
- * ephy_embed_get_next_history_item:
- * @embed: an #EphyEmbed
- *
- * Returns the succeeding #EphyHistoryItem in the history list.
- *
- * Return value: the succeeding #EphyHistoryItem
- **/
-EphyHistoryItem*
-ephy_embed_get_next_history_item (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->get_next_history_item (embed);
-}
-
-/**
  * ephy_embed_go_to_history_item:
  * @embed: an #EphyEmbed
  * @history_item: an #EphyHistoryItem
