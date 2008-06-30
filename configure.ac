@@ -378,6 +378,10 @@ GECKO_CHECK_HEADERS([xpcom],[nsIMutableArray.h])
 GECKO_CHECK_HEADERS([spellchecker],[mozISpellCheckingEngine.h],
 	[have_gecko_spell_checker=yes],[have_gecko_spell_checker=no])
 
+# Check for nsIBadCertListener (gecko 1.8 or forwardported to 1.9 e.g. on debian)
+
+GECKO_CHECK_HEADERS([],[nsIBadCertListener.h],[have_nsibadcertlistener=yes],[have_nsibadcertlistener=no])
+
 # Check for some contractIDs that we need but are provided by extensions
 # which may or may not have been built.
 
@@ -394,6 +398,7 @@ AM_CONDITIONAL([WITH_GECKO_ENGINE], [test "$with_engine" = "mozilla"])
 AM_CONDITIONAL([HAVE_XULRUNNER],[test "$gecko_cv_gecko" = "xulrunner" -o "$gecko_cv_gecko" = "libxul" -o "$gecko_cv_gecko" = "libxul-embedding"])
 AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "$enable_psm" = "yes" -a "$have_psm" = "yes"])
 AM_CONDITIONAL([ENABLE_FILEPICKER],[test "$enable_filepicker" = "yes"])
+AM_CONDITIONAL([HAVE_NSIBADCERTLISTENER_H],[test "$have_nsibadcertlistener" = "yes"])
 
 # *********
 # Xulrunner

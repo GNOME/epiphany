@@ -110,7 +110,7 @@ GtkNSSDialogs::~GtkNSSDialogs ()
 {
 }
 
-#ifdef HAVE_GECKO_1_9
+#ifndef HAVE_NSIBADCERTLISTENER_H
 NS_IMPL_THREADSAFE_ISUPPORTS4 (GtkNSSDialogs,
 			       nsITokenPasswordDialogs,
 			       nsICertificateDialogs,
@@ -217,7 +217,7 @@ higgy_setup_dialog (GtkDialog *dialog, const gchar *stock_icon,
 	}
 }
 
-#ifndef HAVE_GECKO_1_9
+#ifdef HAVE_NSIBADCERTLISTENER_H
 /**
  *  Display a dialog box, showing 'View Certificate', 'Cancel',
  *  and 'Accept' buttons. Optionally a checkbox can be shown,
@@ -321,7 +321,7 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	gtk_widget_destroy (dialog);
         return res;
 }
-#endif /* HAVE_GECKO_1_9 */
+#endif /* HAVE_NSIBADCERTLISTENER_H */
 
 /* Helper functions */
 
@@ -389,7 +389,7 @@ GtkNSSDialogs::GetTokenAndSlotFromName (const PRUnichar *aName,
 	return NS_OK;
 }
   
-#ifndef HAVE_GECKO_1_9
+#ifdef HAVE_NSIBADCERTLISTENER_H
 
 NS_IMETHODIMP
 GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,
@@ -606,7 +606,7 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 	return NS_OK;
 }
 
-#endif /* HAVE_GECKO_1_9 */
+#endif /* HAVE_NSIBADCERTLISTENER_H */
 
 NS_IMETHODIMP 
 GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx, 

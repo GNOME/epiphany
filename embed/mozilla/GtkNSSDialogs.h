@@ -22,7 +22,7 @@
 #ifndef GTKNSSDIALOGS_H
 #define GTKNSSDIALOGS_H 1
 
-#ifndef HAVE_GECKO_1_9
+#ifdef HAVE_NSIBADCERTLISTENER_H
 #include <nsIBadCertListener.h>
 #endif
 #include <nsICertificateDialogs.h>
@@ -40,7 +40,7 @@ class nsIPKCS11Slot;
 #define GTK_NSSDIALOGS_CLASSNAME  "Gtk NSS Dialogs"
 
 class GtkNSSDialogs : public nsICertificateDialogs,
-#ifndef HAVE_GECKO_1_9
+#ifdef HAVE_NSIBADCERTLISTENER_H
                       public nsIBadCertListener,
 #endif
 		      public nsITokenPasswordDialogs,
@@ -50,7 +50,7 @@ class GtkNSSDialogs : public nsICertificateDialogs,
   public:
     NS_DECL_ISUPPORTS
     NS_DECL_NSICERTIFICATEDIALOGS
-#ifndef HAVE_GECKO_1_9
+#ifdef HAVE_NSIBADCERTLISTENER_H
     NS_DECL_NSIBADCERTLISTENER
 #endif
     NS_DECL_NSITOKENPASSWORDDIALOGS
