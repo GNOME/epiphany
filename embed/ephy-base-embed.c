@@ -59,7 +59,6 @@ struct _EphyBaseEmbedPrivate {
   /* Flags */
   guint is_blank : 1;
   guint is_loading : 1;
-  guint is_setting_zoom : 1;
   guint visibility : 1;
 
   gint8 load_percent;
@@ -1491,40 +1490,6 @@ ephy_base_embed_set_security_level (EphyBaseEmbed *embed,
     g_object_notify (G_OBJECT (embed), "security-level");
   }
 }
-
-#if 0
-void
-ephy_base_embed_restore_zoom_level (EphyBaseEmbed *membed,
-                                    const char *address)
-{
-  EphyBaseEmbedPrivate *priv = membed->priv;
-
-  /* restore zoom level */
-  if (ephy_embed_utils_address_has_web_scheme (address)) {
-    EphyHistory *history;
-    EphyNode *host;
-    GValue value = { 0, };
-    float zoom = 1.0, current_zoom;
-
-    history = EPHY_HISTORY
-              (ephy_embed_shell_get_global_history (embed_shell));
-    host = ephy_history_get_host (history, address);
-
-    if (host != NULL && ephy_node_get_property
-        (host, EPHY_NODE_HOST_PROP_ZOOM, &value)) {
-      zoom = g_value_get_float (&value);
-      g_value_unset (&value);
-    }
-
-    current_zoom = ephy_embed_get_zoom (EPHY_EMBED (membed));
-    if (zoom != current_zoom) {
-      priv->is_setting_zoom = TRUE;
-      ephy_embed_set_zoom (EPHY_EMBED (membed), zoom);
-      priv->is_setting_zoom = FALSE;
-    }
-  }
-}
-#endif
 
 void
 ephy_base_embed_set_visibility (EphyBaseEmbed *embed,

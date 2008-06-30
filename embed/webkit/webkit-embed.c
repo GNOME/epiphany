@@ -59,6 +59,7 @@ struct WebKitEmbedPrivate
   WebKitEmbedLoadState load_state;
   char *loading_uri;
   EphyHistory *history;
+  guint is_setting_zoom : 1;
 };
 
 static void
@@ -156,6 +157,43 @@ update_load_state (WebKitEmbed *embed, WebKitWebView *web_view)
 }
 
 static void
+restore_zoom_level (WebKitEmbed *embed,
+                    const char *address)
+{
+  WebKitEmbedPrivate *priv = embed->priv;
+
+  /* restore zoom level */
+  if (ephy_embed_utils_address_has_web_scheme (address)) {
+    EphyHistory *history;
+    EphyNode *host;
+    WebKitWebView *web_view;
+    GValue value = { 0, };
+    float zoom = 1.0, current_zoom;
+
+    history = EPHY_HISTORY
+              (ephy_embed_shell_get_global_history (embed_shell));
+    host = ephy_history_get_host (history, address);
+
+    if (host != NULL && ephy_node_get_property
+        (host, EPHY_NODE_HOST_PROP_ZOOM, &value)) {
+      zoom = g_value_get_float (&value);
+      g_value_unset (&value);
+    }
+
+    web_view = priv->web_view;
+
+    g_object_get (G_OBJECT (web_view), "zoom-level", &current_zoom,
+                  NULL);
+
+    if (zoom != current_zoom) {
+      priv->is_setting_zoom = TRUE;
+      g_object_set (G_OBJECT (web_view), "zoom-level", zoom, NULL);
+      priv->is_setting_zoom = FALSE;
+    }
+  }
+}
+
+static void
 webkit_embed_load_committed_cb (WebKitWebView *web_view,
                                 WebKitWebFrame *web_frame,
                                 EphyEmbed *embed)
@@ -164,6 +202,7 @@ webkit_embed_load_committed_cb (WebKitWebView *web_view,
   ephy_base_embed_location_changed (EPHY_BASE_EMBED (embed),
                                     uri);
 
+  restore_zoom_level (WEBKIT_EMBED (embed), uri);
   ephy_history_add_page (WEBKIT_EMBED (embed)->priv->history,
                          uri,
                          FALSE,
