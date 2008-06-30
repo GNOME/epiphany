@@ -1066,12 +1066,6 @@
   )
 )
 
-(define-method get_zoom
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_get_zoom")
-  (return-type "float")
-)
-
 (define-method get_document_type
   (of-object "EphyEmbed")
   (c-name "ephy_embed_get_document_type")
@@ -1172,15 +1166,6 @@
   (of-object "EphyEmbed")
   (c-name "ephy_embed_show_page_certificate")
   (return-type "none")
-)
-
-(define-method set_zoom
-  (of-object "EphyEmbed")
-  (c-name "ephy_embed_set_zoom")
-  (return-type "none")
-  (parameters
-    '("float" "zoom")
-  )
 )
 
 (define-method has_automatic_encoding

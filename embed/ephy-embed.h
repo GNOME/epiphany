@@ -184,9 +184,6 @@ struct _EphyEmbedIface
 							   EphyEmbedSecurityLevel *level,
 							   char **description);
 	void		   (* show_page_certificate)	  (EphyEmbed *embed);
-	void		   (* set_zoom)			  (EphyEmbed *embed,
-							   float zoom);
-	float		   (* get_zoom)			  (EphyEmbed *embed);
 	void		   (* scroll_lines)		  (EphyEmbed *embed,
 							   int num_lines);
 	void		   (* scroll_pages)		  (EphyEmbed *embed,
@@ -269,12 +266,6 @@ void		  ephy_embed_get_security_level		(EphyEmbed *embed,
 							 char **description);
 
 void		  ephy_embed_show_page_certificate	(EphyEmbed *embed);
-
-/* Zoom */
-void		  ephy_embed_set_zoom			(EphyEmbed *embed,
-							 float zoom);
-
-float		  ephy_embed_get_zoom			(EphyEmbed *embed);
 
 /* Scroll */
 void		  ephy_embed_scroll			(EphyEmbed *embed,

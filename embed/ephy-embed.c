@@ -504,41 +504,6 @@ ephy_embed_get_js_status (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_set_zoom:
- * @embed: an #EphyEmbed
- * @zoom: the new zoom level
- *
- * Sets the zoom level for a web page.
- *
- * Zoom is normally controlled by the Epiphany itself and remembered in
- * Epiphany's history data. Be very careful not to break this behavior if using
- * this function; better yet, don't use this function at all.
- **/
-void
-ephy_embed_set_zoom (EphyEmbed *embed,
-		     float zoom)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->set_zoom (embed, zoom);
-}
-
-/**
- * ephy_embed_get_zoom:
- * @embed: an #EphyEmbed
- *
- * Returns the zoom level of @embed. A zoom of 1.0 corresponds to 100% (normal
- * size).
- *
- * Return value: the zoom level of @embed
- **/
-float
-ephy_embed_get_zoom (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->get_zoom (embed);
-}
-
-/**
  * ephy_embed_scroll:
  * @embed: an #EphyEmbed
  * @num_lines: The number of lines to scroll by

@@ -3753,13 +3753,16 @@ ephy_window_set_zoom (EphyWindow *window,
 {
 	EphyEmbed *embed;
 	float current_zoom = 1.0;
+	WebKitWebView *web_view;
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
 	embed = window->priv->active_embed;
 	g_return_if_fail (embed != NULL);
 
-	current_zoom = ephy_embed_get_zoom (embed);
+	web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+	g_object_get (G_OBJECT (web_view), "zoom-level", &current_zoom, NULL);
 
 	if (zoom == ZOOM_IN)
 	{
@@ -3772,7 +3775,7 @@ ephy_window_set_zoom (EphyWindow *window,
 
 	if (zoom != current_zoom)
 	{
-		ephy_embed_set_zoom (embed, zoom);
+		g_object_set (G_OBJECT (web_view), "zoom-level", zoom, NULL);
 	}
 }
 
