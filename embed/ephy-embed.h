@@ -224,8 +224,6 @@ struct _EphyEmbedIface
 	gboolean	   (* get_is_blank)		  (EphyEmbed *embed);
 	const char *	   (* get_loading_title)	  (EphyEmbed *embed);
 	gboolean	   (* get_visibility)		  (EphyEmbed *embed);
-	void		   (* go_to_history_item)	  (EphyEmbed *embed,
-							   EphyHistoryItem *history_item);
 };
 
 GType		  ephy_embed_net_state_get_type		(void);
@@ -348,9 +346,6 @@ void		  ephy_embed_print_preview_navigate	(EphyEmbed *embed,
 void		  ephy_embed_close			(EphyEmbed *embed);
 
 gboolean	  ephy_embed_has_modified_forms		(EphyEmbed *embed);
-
-/* History */
-void		 ephy_embed_go_to_history_item		(EphyEmbed *embed, EphyHistoryItem *history_item);
 
 G_END_DECLS
 

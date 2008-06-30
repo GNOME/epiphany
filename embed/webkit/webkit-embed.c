@@ -452,15 +452,6 @@ impl_has_modified_forms (EphyEmbed *embed)
 }
 
 static void
-impl_go_to_history_item (EphyEmbed *embed, EphyHistoryItem *history_item)
-{
-  WebKitEmbed *wembed = WEBKIT_EMBED (embed);
-  WebKitWebHistoryItem *item = WEBKIT_HISTORY_ITEM (history_item)->data;
-  
-  webkit_web_view_go_to_back_forward_item (wembed->priv->web_view, item);
-}
-
-static void
 ephy_embed_iface_init (EphyEmbedIface *iface)
 {
   iface->load_url = impl_load_url; 
@@ -486,5 +477,4 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->print_preview_navigate = impl_print_preview_navigate;
   iface->has_modified_forms = impl_has_modified_forms;
   iface->get_security_level = impl_get_security_level;
-  iface->go_to_history_item = impl_go_to_history_item;
 }

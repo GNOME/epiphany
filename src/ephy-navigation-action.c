@@ -118,7 +118,7 @@ static void
 activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
 				       EphyNavigationAction *action)
 {
-	EphyHistoryItem *item;
+	WebKitWebHistoryItem *item;
 	EphyEmbed *embed;
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (action->priv->window));
@@ -131,10 +131,10 @@ activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
 		g_return_if_fail (embed != NULL);
 	}
 
-	item = (EphyHistoryItem*)g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
+	item = (WebKitWebHistoryItem*)g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
 	g_return_if_fail (item != NULL);
 
-	ephy_embed_go_to_history_item (embed, item);
+	webkit_web_view_go_to_back_forward_item (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), item);
 }
 
 static void

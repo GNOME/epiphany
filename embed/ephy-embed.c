@@ -993,18 +993,3 @@ ephy_embed_get_visibility (EphyEmbed *embed)
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	return iface->get_visibility (embed);
 }
-
-/**
- * ephy_embed_go_to_history_item:
- * @embed: an #EphyEmbed
- * @history_item: an #EphyHistoryItem
- *
- * Opens the webpage specified by @history_item in @embed's history.
- *
- **/
-void
-ephy_embed_go_to_history_item (EphyEmbed *embed, EphyHistoryItem *history_item)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->go_to_history_item (embed, history_item);
-}
