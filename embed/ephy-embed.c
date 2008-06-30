@@ -995,38 +995,6 @@ ephy_embed_get_visibility (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_get_backward_history:
- * @embed: an #EphyEmbed
- *
- * Returns a #GList of #EphyHistoryItem compromising the
- * history items preceding the current location.
- *
- * Return value: a #GList with the preceding history items
- **/
-GList*
-ephy_embed_get_backward_history (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->get_backward_history (embed);
-}
-
-/**
- * ephy_embed_get_forward_history:
- * @embed: an #EphyEmbed
- *
- * Returns a #GList of #EphyHistoryItem compromising the
- * history items succeeding the current location.
- *
- * Return value: a #GList with the succeeding history items
- **/
-GList*
-ephy_embed_get_forward_history (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->get_forward_history (embed);
-}
-
-/**
  * ephy_embed_get_previous_history_item:
  * @embed: an #EphyEmbed
  *

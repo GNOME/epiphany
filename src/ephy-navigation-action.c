@@ -2,6 +2,7 @@
 /*
  *  Copyright © 2003, 2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004 Christian Persch
+ *  Copyright © 2008 Jan Alonzo
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,11 +37,19 @@
 #include "ephy-debug.h"
 
 #include <gtk/gtk.h>
+#include <webkit/webkit.h>
 
-#define HISTORY_ITEM_DATA_KEY	"HistoryItem"
-#define URL_DATA_KEY	        "GoURL"
+#define HISTORY_ITEM_DATA_KEY	  "HistoryItem"
+#define URL_DATA_KEY	          "GoURL"
+#define WEBKIT_BACK_FORWARD_LIMIT 100
 
 #define EPHY_NAVIGATION_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NAVIGATION_ACTION, EphyNavigationActionPrivate))
+
+typedef enum
+{
+	WEBKIT_HISTORY_BACKWARD,
+	WEBKIT_HISTORY_FORWARD
+} WebKitHistoryType;
 
 struct _EphyNavigationActionPrivate
 {
@@ -132,16 +141,14 @@ static void
 select_menu_item_cb (GtkWidget *menuitem,
 	             EphyNavigationAction *action)
 {
-	char *url;
+	const char *url;
 	GtkWidget *statusbar;
-	EphyHistoryItem *item;
-	char *freeme = NULL;
+	WebKitWebHistoryItem *item;
 
-	item = (EphyHistoryItem*)g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
+	item = (WebKitWebHistoryItem*)g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
 	if (item)
 	{
-		url = ephy_history_item_get_url (item);
-		freeme = url;
+		url = webkit_web_history_item_get_uri (item);
 	}
 	else
 	{
@@ -152,8 +159,6 @@ select_menu_item_cb (GtkWidget *menuitem,
 	statusbar = ephy_window_get_statusbar (action->priv->window);
 
 	gtk_statusbar_push (GTK_STATUSBAR (statusbar), action->priv->statusbar_cid, url);
-
-	g_free (freeme);
 }
 
 static void
@@ -184,6 +189,24 @@ activate_up_menu_item_cb (GtkWidget *menuitem,
 			ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
 }
 
+static GList*
+webkit_construct_history_list (WebKitWebView *web_view, WebKitHistoryType hist_type) 
+{
+	WebKitWebBackForwardList *web_back_forward_list;
+	GList *webkit_items;
+
+	web_back_forward_list = webkit_web_view_get_back_forward_list (web_view);
+
+	if (hist_type == WEBKIT_HISTORY_FORWARD)
+		webkit_items = webkit_web_back_forward_list_get_forward_list_with_limit (web_back_forward_list,
+											 WEBKIT_BACK_FORWARD_LIMIT);
+	else
+		webkit_items = webkit_web_back_forward_list_get_back_list_with_limit (web_back_forward_list,
+										      WEBKIT_BACK_FORWARD_LIMIT);
+
+	return webkit_items;
+}
+
 static GtkWidget *
 build_back_or_forward_menu (EphyNavigationAction *action)
 {
@@ -191,14 +214,20 @@ build_back_or_forward_menu (EphyNavigationAction *action)
 	GtkMenuShell *menu;
 	EphyEmbed *embed;
 	GList *list, *l;
+	WebKitWebView *web_view;
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_val_if_fail (embed != NULL, NULL);
 
+	web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	g_return_val_if_fail (web_view != NULL, NULL);
+
 	if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_BACK)
-		list = ephy_embed_get_backward_history (embed);
+		list = webkit_construct_history_list (web_view,
+						      WEBKIT_HISTORY_BACKWARD);
 	else
-		list = ephy_embed_get_forward_history (embed);
+		list = webkit_construct_history_list (web_view,
+						      WEBKIT_HISTORY_FORWARD);
 
 	menu = GTK_MENU_SHELL (gtk_menu_new ());
 
@@ -207,16 +236,14 @@ build_back_or_forward_menu (EphyNavigationAction *action)
 	for (l = list; l != NULL; l = l->next)
 	{
 		GtkWidget *item;
-		EphyHistoryItem *hitem;
-		char *title, *url;
+		WebKitWebHistoryItem *hitem;
+		const char *title, *url;
 
-		hitem = (EphyHistoryItem*)l->data;
-		url = ephy_history_item_get_url (hitem);
-		title = ephy_history_item_get_title (hitem);
+		hitem = (WebKitWebHistoryItem*)l->data;
+		url = webkit_web_history_item_get_uri (hitem);
+		title = webkit_web_history_item_get_title (hitem);
 
 		item = new_history_menu_item (title ? title : url, url);
-
-		g_free (title);
 
 		g_object_set_data_full (G_OBJECT (item), HISTORY_ITEM_DATA_KEY, hitem,
 					(GDestroyNotify) g_object_unref);

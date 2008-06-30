@@ -224,8 +224,6 @@ struct _EphyEmbedIface
 	gboolean	   (* get_is_blank)		  (EphyEmbed *embed);
 	const char *	   (* get_loading_title)	  (EphyEmbed *embed);
 	gboolean	   (* get_visibility)		  (EphyEmbed *embed);
-	GList *		   (* get_backward_history)	  (EphyEmbed *embed);
-	GList *		   (* get_forward_history)	  (EphyEmbed *embed);
 	EphyHistoryItem *  (* get_next_history_item)	  (EphyEmbed *embed);
 	EphyHistoryItem *  (* get_previous_history_item)  (EphyEmbed *embed);
 	void		   (* go_to_history_item)	  (EphyEmbed *embed,
@@ -354,8 +352,6 @@ void		  ephy_embed_close			(EphyEmbed *embed);
 gboolean	  ephy_embed_has_modified_forms		(EphyEmbed *embed);
 
 /* History */
-GList		*ephy_embed_get_backward_history	(EphyEmbed *embed);
-GList		*ephy_embed_get_forward_history		(EphyEmbed *embed);
 EphyHistoryItem *ephy_embed_get_next_history_item	(EphyEmbed *embed);
 EphyHistoryItem *ephy_embed_get_previous_history_item	(EphyEmbed *embed);
 void		 ephy_embed_go_to_history_item		(EphyEmbed *embed, EphyHistoryItem *history_item);

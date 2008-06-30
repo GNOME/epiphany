@@ -45,8 +45,6 @@ static void     ephy_embed_iface_init   (EphyEmbedIface *iface);
 
 #define WEBKIT_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), WEBKIT_TYPE_EMBED, WebKitEmbedPrivate))
 
-#define WEBKIT_BACK_FORWARD_LIMIT 100
-
 typedef enum
 {
     WEBKIT_EMBED_LOAD_STARTED,
@@ -70,34 +68,6 @@ struct WebKitEmbedPrivate
   char *loading_uri;
   EphyHistory *history;
 };
-
-static GList*
-webkit_construct_history_list (WebKitEmbed *embed, WebKitHistoryType hist_type) 
-{
-  WebKitWebBackForwardList *web_back_forward_list;
-  GList *webkit_items, *iter, *ephy_items = NULL;
-
-  g_return_val_if_fail (WEBKIT_IS_EMBED (embed), NULL);
-
-  web_back_forward_list = webkit_web_view_get_back_forward_list (embed->priv->web_view);
-
-  if (hist_type == WEBKIT_HISTORY_FORWARD)
-    webkit_items = webkit_web_back_forward_list_get_forward_list_with_limit (web_back_forward_list,
-                                                                             WEBKIT_BACK_FORWARD_LIMIT);
-  else
-    webkit_items = webkit_web_back_forward_list_get_back_list_with_limit (web_back_forward_list,
-                                                                          WEBKIT_BACK_FORWARD_LIMIT);
-
-  for (iter = webkit_items; iter != NULL; iter = iter->next) {
-    EphyHistoryItem *item = webkit_history_item_new (WEBKIT_WEB_HISTORY_ITEM (iter->data));
-    if (item)
-      ephy_items = g_list_prepend (ephy_items, item);
-  }
-
-  g_list_free (webkit_items);
-
-  return ephy_items;
-}
 
 static EphyHistoryItem*
 webkit_construct_history_item (WebKitEmbed *embed, WebKitHistoryType hist_type)
@@ -506,21 +476,6 @@ impl_has_modified_forms (EphyEmbed *embed)
   return FALSE;
 }
 
-static GList*
-impl_get_backward_history (EphyEmbed *embed)
-{
-  return webkit_construct_history_list (WEBKIT_EMBED (embed),
-                                        WEBKIT_HISTORY_BACKWARD);
-}
-
-static GList*
-impl_get_forward_history (EphyEmbed *embed)
-{
-  return webkit_construct_history_list (WEBKIT_EMBED (embed),
-                                        WEBKIT_HISTORY_FORWARD);
-
-}
-
 static EphyHistoryItem*
 impl_get_next_history_item (EphyEmbed *embed)
 {
@@ -569,8 +524,6 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->print_preview_navigate = impl_print_preview_navigate;
   iface->has_modified_forms = impl_has_modified_forms;
   iface->get_security_level = impl_get_security_level;
-  iface->get_backward_history = impl_get_backward_history;
-  iface->get_forward_history = impl_get_forward_history;
   iface->get_next_history_item = impl_get_next_history_item;
   iface->get_previous_history_item = impl_get_previous_history_item;
   iface->go_to_history_item = impl_go_to_history_item;
