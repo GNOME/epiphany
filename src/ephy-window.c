@@ -102,7 +102,7 @@ static void sync_tab_load_status		(EphyEmbed  *embed,
 static void sync_tab_security			(EphyEmbed  *embed,
 						 GParamSpec *pspec,
 						 EphyWindow *window);
-static void sync_tab_zoom			(EphyEmbed *embed,
+static void sync_tab_zoom			(WebKitWebView *web_view,
 						 GParamSpec *pspec,
 						 EphyWindow *window);
 
@@ -1544,7 +1544,7 @@ sync_tab_document_type (EphyEmbed *embed,
 	if (priv->closing) return;
 
 	/* update zoom actions */
-	sync_tab_zoom (embed, NULL, window);
+	sync_tab_zoom (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), NULL, window);
 	
 	type = ephy_embed_get_document_type (embed);
 	can_find = (type != EPHY_EMBED_DOCUMENT_IMAGE);
@@ -1854,17 +1854,21 @@ sync_tab_title (EphyEmbed *embed,
 }
 
 static void
-sync_tab_zoom (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
+sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	EphyEmbedDocumentType type;
 	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE, can_zoom;
 	float zoom;
+	EphyEmbed *embed = window->priv->active_embed;
 
 	if (window->priv->closing) return;
 
-	zoom = ephy_embed_get_zoom (embed);
+	g_object_get (G_OBJECT (web_view),
+		      "zoom-level", &zoom,
+		      NULL);
+
 	type = ephy_embed_get_document_type (embed);
 	can_zoom = (type != EPHY_EMBED_DOCUMENT_IMAGE);
 
@@ -2401,7 +2405,14 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 
 	if (old_embed != NULL)
 	{
+		WebKitWebView *web_view;
+
 		embed = old_embed;
+		web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+		g_signal_handlers_disconnect_by_func (web_view,
+						      G_CALLBACK (sync_tab_zoom),
+						      window);
 
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (sync_tab_popup_windows),
@@ -2414,9 +2425,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 						      window);
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (sync_tab_document_type),
-						      window);
-		g_signal_handlers_disconnect_by_func (embed,
-						      G_CALLBACK (sync_tab_zoom),
 						      window);
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (sync_tab_load_progress),
@@ -2454,11 +2462,12 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 
 	if (new_embed != NULL)
 	{
+		WebKitWebView *web_view;
+
 		embed = new_embed;
 
 		sync_tab_security	(embed, NULL, window);
 		sync_tab_document_type	(embed, NULL, window);
-		sync_tab_zoom		(embed, NULL, window);
 		sync_tab_load_progress	(embed, NULL, window);
 		sync_tab_load_status	(embed, NULL, window);
 		sync_tab_navigation	(embed, NULL, window);
@@ -2468,6 +2477,14 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		sync_tab_message	(embed, NULL, window);
 		sync_tab_popup_windows	(embed, NULL, window);
 		sync_tab_popups_allowed	(embed, NULL, window);
+
+		web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+		sync_tab_zoom		(web_view, NULL, window);
+
+		g_signal_connect_object (web_view, "notify::zoom-level",
+					 G_CALLBACK (sync_tab_zoom),
+					 window, 0);
 
 		g_signal_connect_object (embed, "notify::hidden-popup-count",
 					 G_CALLBACK (sync_tab_popup_windows),
@@ -2492,9 +2509,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 					 window, 0);
 		g_signal_connect_object (embed, "notify::document-type",
 					 G_CALLBACK (sync_tab_document_type),
-					 window, 0);
-		g_signal_connect_object (embed, "notify::zoom",
-					 G_CALLBACK (sync_tab_zoom),
 					 window, 0);
 		g_signal_connect_object (embed, "notify::load-status",
 					 G_CALLBACK (sync_tab_load_status),

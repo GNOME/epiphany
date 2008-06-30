@@ -28,6 +28,7 @@
 #include "ephy-embed-single.h"
 #include "ephy-string.h"
 #include "ephy-embed-event.h"
+#include "ephy-embed-utils.h"
 
 #include <webkit/webkit.h>
 #include <string.h>
@@ -214,6 +215,46 @@ webkit_embed_hovering_over_link_cb (WebKitWebView *web_view,
 }
 
 static void
+webkit_web_view_zoom_change_cb (WebKitWebView *web_view,
+                                GParamSpec *pspec,
+                                EphyEmbed  *embed)
+{
+  char *address;
+  float zoom;
+
+  g_object_get (G_OBJECT (web_view),
+                "zoom-level", &zoom,
+                NULL);
+
+  /* TODO: need to move the is_setting_zoom flag
+   * somewhere else. It's set by restoring_zoom
+   * in base_embed, which is unused right now. Should
+   * be called  each time we load a page in a web_view
+   
+  if (bembed->priv->is_setting_zoom) {
+    return;
+  }
+  */
+
+  address = ephy_embed_get_location (embed, TRUE);
+  if (ephy_embed_utils_address_has_web_scheme (address)) {
+    EphyHistory *history;
+    EphyNode *host;
+    history = EPHY_HISTORY
+      (ephy_embed_shell_get_global_history (embed_shell));
+    host = ephy_history_get_host (history, address);
+
+    if (host != NULL) {
+      ephy_node_set_property_float (host,
+                                    EPHY_NODE_HOST_PROP_ZOOM,
+                                    zoom);
+    }
+  }
+
+  g_free (address);
+}
+
+static void
 webkit_embed_finalize (GObject *object)
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (object);
@@ -262,6 +303,9 @@ webkit_embed_init (WebKitEmbed *embed)
                     "signal::load-progress-changed", G_CALLBACK (webkit_embed_load_progress_changed_cb), embed,
                     "signal::hovering-over-link", G_CALLBACK (webkit_embed_hovering_over_link_cb), embed,
                     NULL);
+
+  g_signal_connect (G_OBJECT (web_view),
+                    "notify::zoom-level", G_CALLBACK (webkit_web_view_zoom_change_cb), embed);
 
   webkit_embed_prefs_add_embed (embed);
 
@@ -354,7 +398,6 @@ impl_set_zoom (EphyEmbed *embed,
   g_return_if_fail (zoom > 0.0);
 
   g_object_set (WEBKIT_EMBED (embed)->priv->web_view, "zoom-level", zoom, NULL);
-  g_signal_emit_by_name (embed, "ge_zoom_change", zoom);
 }
 
 static void

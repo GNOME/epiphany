@@ -55,7 +55,6 @@ struct _EphyBaseEmbedPrivate {
   /* guint security_level : 3; ? */
   EphyEmbedDocumentType document_type;
   EphyEmbedNavigationFlags nav_flags;
-  float zoom;
 
   /* Flags */
   guint is_blank : 1;
@@ -108,7 +107,6 @@ enum {
   PROP_TITLE,
   PROP_VISIBLE,
   PROP_TYPED_ADDRESS,
-  PROP_ZOOM
 };
 
 #define EPHY_BASE_EMBED_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BASE_EMBED, EphyBaseEmbedPrivate))
@@ -480,7 +478,6 @@ ephy_base_embed_set_property (GObject *object,
     case PROP_SECURITY:
     case PROP_STATUS_MESSAGE:
     case PROP_VISIBLE:
-    case PROP_ZOOM:
       /* read only */
       break;
     default:
@@ -584,9 +581,6 @@ ephy_base_embed_get_property (GObject *object,
     case PROP_VISIBLE:
       g_value_set_boolean (value, priv->visibility);
       break;
-    case PROP_ZOOM:
-      g_value_set_float (value, priv->zoom);
-      break;
     default:
       break;
   }
@@ -623,15 +617,7 @@ ephy_base_embed_class_init (EphyBaseEmbedClass *klass)
                                                       EPHY_TYPE_EMBED_DOCUMENT_TYPE,
                                                       EPHY_EMBED_DOCUMENT_HTML,
                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-  g_object_class_install_property (gobject_class,
-                                   PROP_ZOOM,
-                                   g_param_spec_float ("zoom",
-                                                       "Zoom",
-                                                       "The embed's zoom",
-                                                       ZOOM_MINIMAL,
-                                                       ZOOM_MAXIMAL,
-                                                       1.0,
-                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
   g_object_class_install_property (gobject_class,
                                    PROP_LOAD_PROGRESS,
                                    g_param_spec_int ("load-progress",
@@ -766,41 +752,6 @@ ge_document_type_cb (EphyEmbed *embed,
 }
 
 static void
-ge_zoom_change_cb (EphyEmbed *embed,
-                   float zoom,
-                   EphyBaseEmbed *bembed)
-{
-  char *address;
-
-  if (bembed->priv->zoom != zoom) {
-    if (bembed->priv->is_setting_zoom) {
-      return;
-    }
-
-    address = ephy_embed_get_location (embed, TRUE);
-    if (ephy_embed_utils_address_has_web_scheme (address)) {
-      EphyHistory *history;
-      EphyNode *host;
-      history = EPHY_HISTORY
-                (ephy_embed_shell_get_global_history (embed_shell));
-      host = ephy_history_get_host (history, address);
-
-      if (host != NULL) {
-        ephy_node_set_property_float (host,
-                                      EPHY_NODE_HOST_PROP_ZOOM,
-                                      zoom);
-      }
-    }
-
-    g_free (address);
-
-    bembed->priv->zoom = zoom;
-
-    g_object_notify (G_OBJECT (embed), "zoom");
-  }
-}
-
-static void
 ge_favicon_cb (EphyEmbed *membed,
                const char *address,
                EphyBaseEmbed *bembed)
@@ -894,10 +845,6 @@ ephy_base_embed_init (EphyBaseEmbed *self)
                            G_CALLBACK (ge_document_type_cb),
                            self, (GConnectFlags)0);
 
-  g_signal_connect_object (self, "ge_zoom_change",
-                           G_CALLBACK (ge_zoom_change_cb),
-                           self, (GConnectFlags)0);
-
   g_signal_connect_object (self, "ge_favicon",
                            G_CALLBACK (ge_favicon_cb),
                            self, (GConnectFlags)0);
@@ -918,7 +865,6 @@ ephy_base_embed_init (EphyBaseEmbed *self)
 
   priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
   priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
-  priv->zoom = 1.0;
   priv->address_expire = EPHY_EMBED_ADDRESS_EXPIRE_NOW;
   priv->is_blank = TRUE;
   priv->title = g_strdup (EMPTY_PAGE);
@@ -1546,6 +1492,7 @@ ephy_base_embed_set_security_level (EphyBaseEmbed *embed,
   }
 }
 
+#if 0
 void
 ephy_base_embed_restore_zoom_level (EphyBaseEmbed *membed,
                                     const char *address)
@@ -1577,6 +1524,7 @@ ephy_base_embed_restore_zoom_level (EphyBaseEmbed *membed,
     }
   }
 }
+#endif
 
 void
 ephy_base_embed_set_visibility (EphyBaseEmbed *embed,

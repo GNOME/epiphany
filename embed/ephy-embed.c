@@ -208,27 +208,6 @@ ephy_embed_base_init (gpointer g_class)
 			      1,
 			      G_TYPE_OBJECT);
 /**
- * EphyEmbed::ge-zoom-change:
- * @embed:
- * @zoom: @embed's new zoom level
- *
- * The ::ge_zoom_change signal is emitted when @embed's zoom changes. This can
- * be manual (the user modified the zoom level) or automatic (@embed's zoom is
- * automatically changed when browsing to a new site for which the user
- * previously specified a zoom level).
- *
- * A @zoom value of 1.0 indicates 100% (normal zoom).
- **/
-		g_signal_new ("ge_zoom_change",
-			      EPHY_TYPE_EMBED,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyEmbedIface, zoom_change),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__FLOAT,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_FLOAT);
-/**
  * EphyEmbed::ge-modal-alert:
  * @embed:
  *
