@@ -48,7 +48,9 @@ distuninstallcheck_listfiles = find . -type f -print | grep -v 'icon-theme.cache
 # Only build this when in an svn checkout.
 
 ChangeLog:
-	@if test -f $(top_srcdir)/.svn/entries; then \
+	@if test -f $(top_srcdir)/.git/HEAD; then \
+		git log --stat > $@; \
+	elif test -f $(top_srcdir)/.svn/entries; then \
 		svn log -v --xml -r HEAD:7394 $(SVN_ROOT)/$(SVN_MODULE)/$(SVN_BRANCH) | \
 			xsltproc --stringparam strip-prefix "$(SVN_MODULE)/$(SVN_BRANCH)" \
 				 --stringparam include-rev "yes" $(top_srcdir)/svn2cl.xsl - > $@; \
