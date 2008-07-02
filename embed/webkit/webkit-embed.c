@@ -108,12 +108,6 @@ G_DEFINE_TYPE_WITH_CODE (WebKitEmbed, webkit_embed, EPHY_TYPE_BASE_EMBED,
                                                 ephy_command_manager_iface_init))
 
 static void
-impl_close (EphyEmbed *embed)
-{
-  gtk_widget_destroy (GTK_WIDGET (embed));
-}
-
-static void
 webkit_embed_title_changed_cb (WebKitWebView *web_view,
                                WebKitWebFrame *web_frame,
                                const gchar *title,
@@ -523,7 +517,6 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
   iface->scroll_pixels = impl_scroll_pixels;
   iface->shistory_copy = impl_shistory_copy;
   iface->show_page_certificate = impl_show_page_certificate;
-  iface->close = impl_close;
   iface->set_encoding = impl_set_encoding;
   iface->get_encoding = impl_get_encoding;
   iface->has_automatic_encoding = impl_has_automatic_encoding;

@@ -2830,7 +2830,7 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
 	if (!ephy_embed_has_modified_forms (embed) ||
 	    confirm_close_with_modified_forms (window))
 	{
-		ephy_embed_close (embed);
+		gtk_widget_destroy (GTK_WIDGET (embed));
 	}
 }
 

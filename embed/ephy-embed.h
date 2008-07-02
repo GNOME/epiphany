@@ -202,7 +202,6 @@ struct _EphyEmbedIface
 							   EphyEmbedPrintPreviewNavType type,
 							   int page);
 	gboolean	   (* has_modified_forms)	  (EphyEmbed *embed);
-	void		   (* close)			  (EphyEmbed *embed);
 	EphyEmbedDocumentType	(* get_document_type)	  (EphyEmbed *embed);
 	int		   (* get_load_percent)		  (EphyEmbed *embed);
 	gboolean	   (* get_load_status)		  (EphyEmbed *embed);
@@ -331,8 +330,6 @@ void		  ephy_embed_print_preview_navigate	(EphyEmbed *embed,
 							 int page);
 
 /* Misc. utility */
-void		  ephy_embed_close			(EphyEmbed *embed);
-
 gboolean	  ephy_embed_has_modified_forms		(EphyEmbed *embed);
 
 G_END_DECLS

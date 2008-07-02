@@ -610,19 +610,6 @@ ephy_embed_show_page_certificate (EphyEmbed *embed)
 }
 
 /**
- * ephy_embed_close:
- * @embed: an #EphyEmbed
- *
- * Closes the @embed
- **/
-void
-ephy_embed_close (EphyEmbed *embed)
-{
-	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->close (embed);
-}
-
-/**
  * ephy_embed_set_encoding:
  * @embed: an #EphyEmbed
  * @encoding: the desired encoding
