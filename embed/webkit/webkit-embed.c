@@ -265,15 +265,9 @@ webkit_web_view_zoom_change_cb (WebKitWebView *web_view,
                 "zoom-level", &zoom,
                 NULL);
 
-  /* TODO: need to move the is_setting_zoom flag
-   * somewhere else. It's set by restoring_zoom
-   * in base_embed, which is unused right now. Should
-   * be called  each time we load a page in a web_view
-   
-  if (bembed->priv->is_setting_zoom) {
+  if (WEBKIT_EMBED (embed)->priv->is_setting_zoom) {
     return;
   }
-  */
 
   address = ephy_embed_get_location (embed, TRUE);
   if (ephy_embed_utils_address_has_web_scheme (address)) {
