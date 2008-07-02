@@ -735,7 +735,7 @@ GeckoPrintService::TranslateSettings (GtkPrintSettings *aGtkSettings,
 
   /* FIXME: only if GTK_PRINT_CAPABILITY_SCALE is not set? */
   aSettings->SetScaling (gtk_print_settings_get_scale (aGtkSettings) / 100.0);
-  gtk_print_settings_set_scale (aGtkSettings, 1.0);
+  gtk_print_settings_set_scale (aGtkSettings, 100.0);
 
   aSettings->SetShrinkToFit (PR_FALSE); /* FIXME setting */
     
