@@ -6,9 +6,6 @@ NULL =
 
 EXTRA_DIST = 			\
 	autogen.sh		\
-	intltool-merge.in	\
-	intltool-update.in	\
-	intltool-extract.in	\
 	gnome-doc-utils.make	\
 	COPYING.README		\
 	HACKING			\
@@ -22,9 +19,6 @@ EXTRA_DIST = 			\
 	$(NULL)
 
 DISTCLEANFILES = 		\
-	intltool-extract 	\
-	intltool-merge 		\
-	intltool-update		\
 	gnome-doc-utils.make	\
 	$(NULL)
 
