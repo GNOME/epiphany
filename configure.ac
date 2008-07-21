@@ -23,7 +23,7 @@ m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epip
 m4_define([epiphany_build_id],[20080528]) # The date of the 2.22.2 release
 
 # This can be either "trunk" or "branches/gnome-x-y"
-m4_define([epiphany_branch],["branches/gnome-2-22"])
+m4_define([epiphany_branch],["branches/gnome-2-24"])
 
 AC_INIT([GNOME Web Browser],[epiphany_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
