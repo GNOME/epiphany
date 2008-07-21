@@ -16,8 +16,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
 m4_define([epiphany_version_major],[2])
-m4_define([epiphany_version_minor],[22])
-m4_define([epiphany_version_micro],[3])
+m4_define([epiphany_version_minor],[23])
+m4_define([epiphany_version_micro],[5])
 m4_define([epiphany_version_extra],[])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro()epiphany_version_extra])
 m4_define([epiphany_build_id],[20080528]) # The date of the 2.22.2 release
