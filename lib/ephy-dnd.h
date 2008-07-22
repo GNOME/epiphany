@@ -22,8 +22,7 @@
 #define EPHY_DND_H
 
 #include <glib.h>
-#include <gtk/gtkwidget.h>
-#include <gtk/gtkdnd.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

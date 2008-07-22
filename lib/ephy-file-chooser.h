@@ -23,9 +23,7 @@
 
 #include <glib-object.h>
 
-#include <gtk/gtkwidget.h>
-#include <gtk/gtkfilefilter.h>
-#include <gtk/gtkfilechooserdialog.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

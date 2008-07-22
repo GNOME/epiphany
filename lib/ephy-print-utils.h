@@ -22,8 +22,7 @@
 #define EPHY_PRINT_UTILS_H
 
 #include <glib.h>
-#include <gtk/gtkprintsettings.h>
-#include <gtk/gtkpagesetup.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

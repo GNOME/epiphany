@@ -30,10 +30,7 @@
 #include "ephy-node-common.h"
 
 #include <string.h>
-#include <gtk/gtkwindow.h>
-#include <gtk/gtkpaned.h>
-#include <gtk/gtkexpander.h>
-#include <gtk/gtktogglebutton.h>
+#include <gtk/gtk.h>
 
 #define EPHY_STATES_XML_FILE	"states.xml"
 #define EPHY_STATES_XML_ROOT    (const xmlChar *)"ephy_states"

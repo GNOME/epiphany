@@ -43,7 +43,7 @@
 #include <libgnome/gnome-desktop-item.h>
 
 #include <gdk/gdk.h>
-#include <gtk/gtkrecentmanager.h>
+#include <gtk/gtk.h>
 
 #include <string.h>
 #include <stdlib.h>

@@ -23,7 +23,7 @@
 #include <string.h>
 
 #include <glib.h>
-#include <gtk/gtktypebuiltins.h>
+#include <gtk/gtk.h>
 
 #include "ephy-debug.h"
 #include "ephy-string.h"

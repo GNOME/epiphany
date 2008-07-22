@@ -28,18 +28,9 @@
 #include <ctype.h>
 #include <string.h>
 #include <glib/gi18n.h>
-#include <gdk/gdkx.h>
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 #include <libgnome/gnome-help.h>
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtkmessagedialog.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtktoolbar.h>
-#include <gtk/gtktogglebutton.h>
 
 #include <unistd.h>
 

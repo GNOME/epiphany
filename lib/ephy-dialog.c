@@ -29,15 +29,8 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <gtk/gtktogglebutton.h>
-#include <gtk/gtkradiobutton.h>
-#include <gtk/gtkcombobox.h>
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtkeditable.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtksizegroup.h>
-#include <gtk/gtkdialog.h>
-#include <glade/glade-xml.h>
+#include <gtk/gtk.h>
+#include <glade/glade.h>
 
 enum
 {

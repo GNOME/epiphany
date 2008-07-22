@@ -25,7 +25,7 @@
 
 #include <glib.h>
 #include <gio/gio.h>
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 
 extern GQuark ephy_file_helpers_error_quark;
 #define EPHY_FILE_HELPERS_ERROR_QUARK	(ephy_file_helpers_error_quark)

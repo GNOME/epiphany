@@ -23,7 +23,7 @@
 #ifndef EPHY_STATE_H
 #define EPHY_STATE_H
 
-#include "gtk/gtkwidget.h"
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

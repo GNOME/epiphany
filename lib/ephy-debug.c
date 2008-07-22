@@ -29,7 +29,7 @@
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <glib/gbacktrace.h>
+#include <glib.h>
 
 static const char *ephy_debug_break = NULL;
 
