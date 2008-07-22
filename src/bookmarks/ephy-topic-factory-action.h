@@ -25,8 +25,6 @@
 #include "ephy-window.h"
 
 #include <gtk/gtk.h>
-#include <gtk/gtkaction.h>
-#include <gtk/gtkactiongroup.h>
 
 #define EPHY_TYPE_TOPIC_FACTORY_ACTION            (ephy_topic_factory_action_get_type ())
 #define EPHY_TOPIC_FACTORY_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_TOPIC_FACTORY_ACTION, EphyTopicFactoryAction))

@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include <gtk/gtktoolitem.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 #include "ephy-bookmark-factory-action.h"

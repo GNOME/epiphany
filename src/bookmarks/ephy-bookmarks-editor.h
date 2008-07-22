@@ -21,7 +21,7 @@
 #ifndef EPHY_BOOKMARKS_EDITOR_H
 #define EPHY_BOOKMARKS_EDITOR_H
 
-#include <gtk/gtkdialog.h>
+#include <gtk/gtk.h>
 
 #include "ephy-node-view.h"
 #include "ephy-bookmarks.h"

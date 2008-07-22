@@ -22,7 +22,7 @@
 #include "config.h"
 #endif
 
-#include <gtk/gtktoolitem.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 #include "ephy-topic-factory-action.h"

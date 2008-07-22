@@ -25,8 +25,7 @@
 #include "ephy-link.h"
 #include "ephy-topic-action.h"
 
-#include <gtk/gtkactiongroup.h>
-#include <gtk/gtkuimanager.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

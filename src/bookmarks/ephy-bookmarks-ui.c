@@ -49,8 +49,7 @@
 
 #include <string.h>
 #include <glib/gi18n.h>
-#include <gtk/gtkmain.h>
-
+#include <gtk/gtk.h>
 
 #define BM_WINDOW_DATA_KEY "bookmarks-window-data"
 

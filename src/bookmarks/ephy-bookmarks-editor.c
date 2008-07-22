@@ -20,26 +20,7 @@
 
 #include "config.h"
 
-#include <gtk/gtktable.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkscrolledwindow.h>
-#include <gtk/gtkhpaned.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkactiongroup.h>
-#include <gtk/gtkcombobox.h>
-#include <gtk/gtkuimanager.h>
-#include <gtk/gtktoggleaction.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtktreemodelsort.h>
-#include <gtk/gtkcelllayout.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkradioaction.h>
-#include <gtk/gtkclipboard.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtktreemodelsort.h>
-#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <libgnomeui/gnome-stock-icons.h>

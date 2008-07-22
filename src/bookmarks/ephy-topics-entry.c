@@ -26,9 +26,7 @@
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkentrycompletion.h>
+#include <gtk/gtk.h>
 #include <string.h>
 
 static void ephy_topics_entry_class_init (EphyTopicsEntryClass *klass);

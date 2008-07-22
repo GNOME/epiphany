@@ -29,7 +29,7 @@
 #include "ephy-link.h"
 
 #include <glib/gi18n.h>
-#include <gtk/gtktoolitem.h>
+#include <gtk/gtk.h>
 
 #include <libgnomevfs/gnome-vfs-uri.h>
 

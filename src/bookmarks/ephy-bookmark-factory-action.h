@@ -25,8 +25,6 @@
 #include "ephy-window.h"
 
 #include <gtk/gtk.h>
-#include <gtk/gtkaction.h>
-#include <gtk/gtkactiongroup.h>
 
 #define EPHY_TYPE_BOOKMARK_FACTORY_ACTION            (ephy_bookmark_factory_action_get_type ())
 #define EPHY_BOOKMARK_FACTORY_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_BOOKMARK_FACTORY_ACTION, EphyBookmarkFactoryAction))

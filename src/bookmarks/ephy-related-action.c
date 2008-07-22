@@ -29,8 +29,6 @@
 #include "ephy-stock-icons.h"
 
 #include <gtk/gtk.h>
-#include <gtk/gtkaction.h>
-#include <gtk/gtkactiongroup.h>
 #include <glib/gi18n.h>
 
 static void

@@ -21,7 +21,7 @@
 #ifndef EPHY_OPEN_TABS_ACTION_H
 #define EPHY_OPEN_TABS_ACTION_H
 
-#include <gtk/gtkactiongroup.h>
+#include <gtk/gtk.h>
 
 #include "ephy-node.h"
 

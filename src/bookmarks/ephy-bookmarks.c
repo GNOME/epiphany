@@ -44,8 +44,7 @@
 
 #include <string.h>
 #include <glib/gi18n.h>
-#include <gtk/gtkmessagedialog.h>
-#include <gtk/gtkdialog.h>
+#include <gtk/gtk.h>
 
 #ifdef ENABLE_ZEROCONF
 #include <avahi-common/error.h>
