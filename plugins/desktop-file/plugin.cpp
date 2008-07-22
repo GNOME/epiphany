@@ -30,9 +30,7 @@
 
 #include <string.h>
 #include <glib.h>
-#include <gtk/gtkwidget.h>
-#include <gtk/gtkwindow.h>
-#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtk.h>
 
 #include "ephy-stock-icons.h"
 
