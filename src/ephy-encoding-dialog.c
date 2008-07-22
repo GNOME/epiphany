@@ -34,12 +34,7 @@
 #include "ephy-debug.h"
 #include "ephy-gui.h"
 
-#include <gtk/gtklabel.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtktreeview.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtktogglebutton.h>
-#include <gtk/gtkdialog.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>
 

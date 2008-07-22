@@ -27,13 +27,7 @@
 
 #include <string.h>
 #include <glib/gi18n.h>
-#include <gtk/gtklabel.h>	
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkprogressbar.h>
-#include <gtk/gtkeventbox.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkwidget.h>
-#include <gtk/gtkvseparator.h>
+#include <gtk/gtk.h>	
 
 static void ephy_statusbar_class_init	(EphyStatusbarClass *klass);
 static void ephy_statusbar_init		(EphyStatusbar *t);

@@ -21,27 +21,7 @@
 
 #include "config.h"
 
-#include <gtk/gtktable.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkradioaction.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtkalignment.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtkhpaned.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkclipboard.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkscrolledwindow.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkactiongroup.h>
-#include <gtk/gtktoggleaction.h>
-#include <gtk/gtkcombobox.h>
-#include <gtk/gtkuimanager.h>
-#include <gdk/gdkkeysyms.h>
-#include <gtk/gtkdialog.h>
-#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <string.h>

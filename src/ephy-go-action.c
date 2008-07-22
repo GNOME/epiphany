@@ -25,8 +25,7 @@
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
-#include <gtk/gtktoolitem.h>
-#include <gtk/gtkbutton.h>
+#include <gtk/gtk.h>
 
 static void ephy_go_action_class_init (EphyGoActionClass *class);
 

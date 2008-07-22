@@ -21,7 +21,7 @@
 #ifndef EPHY_HISTORY_WINDOW_H
 #define EPHY_HISTORY_WINDOW_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 #include "ephy-node-view.h"
 #include "ephy-history.h"

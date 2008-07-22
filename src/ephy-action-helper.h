@@ -21,7 +21,7 @@
 #ifndef EPHY_ACTION_HELPER_H
 #define EPHY_ACTION_HELPER_H
 
-#include <gtk/gtkaction.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

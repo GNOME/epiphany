@@ -44,24 +44,7 @@
 #include "pdm-dialog.h"
 
 #include <glib/gi18n.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkcelllayout.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtkframe.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkradiobutton.h>
-#include <gtk/gtktogglebutton.h>
-#include <gtk/gtkcombobox.h>
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtknotebook.h>
-#include <gtk/gtkfilechooserbutton.h>
-#include <gtk/gtkmain.h>
+#include <gtk/gtk.h>
 #include <string.h>
 
 #define CONF_FONTS_FOR_LANGUAGE	"/apps/epiphany/dialogs/preferences_font_language"

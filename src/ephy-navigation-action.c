@@ -34,15 +34,7 @@
 #include "ephy-gui.h"
 #include "ephy-debug.h"
 
-#include <gtk/gtklabel.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkimagemenuitem.h>
-#include <gtk/gtkmenushell.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenutoolbutton.h>
-#include <gtk/gtktoolbar.h>
-#include <gtk/gtkstatusbar.h>
+#include <gtk/gtk.h>
 
 #define HISTORY_ITEM_DATA_KEY	"HistoryItem"
 #define URL_DATA_KEY	        "GoURL"

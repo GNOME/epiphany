@@ -29,8 +29,7 @@
 
 #include <string.h>
 
-#include <gtk/gtkclipboard.h>
-#include <gtk/gtktoolitem.h>
+#include <gtk/gtk.h>
 
 #define INSANE_NUMBER_OF_URLS 20
 

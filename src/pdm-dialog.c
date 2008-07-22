@@ -37,21 +37,7 @@
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
 
-#include <gtk/gtklabel.h>
-#include <gtk/gtkbox.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtkdialog.h>
-#include <gtk/gtktreeview.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtknotebook.h>
-#include <gtk/gtktogglebutton.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkcheckbutton.h>
-#include <gtk/gtkalignment.h>
-#include <gtk/gtkhseparator.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 #include <string.h>

@@ -29,17 +29,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkarrow.h>
-#include <gtk/gtkcheckbutton.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkseparatortoolitem.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtktoolbutton.h>
-#include <gtk/gtkalignment.h>
-#include <gtk/gtkmain.h>
 #include <string.h>
 
 #define EPHY_FIND_TOOLBAR_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object),EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbarPrivate))

@@ -56,12 +56,7 @@
 #include <string.h>
 #include <glib.h>
 #include <gio/gio.h>
-#include <gtk/gtkaboutdialog.h>
-#include <gtk/gtkeditable.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtkicontheme.h>
-#include <gtk/gtktoggleaction.h>
-#include <gtk/gtkprintoperation.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 static void
