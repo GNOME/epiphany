@@ -26,15 +26,14 @@
 #include "eel-app-launch-context.h"
 
 #include <gio/gio.h>
-#include <glib/gurifuncs.h>
+#include <glib.h>
 #include <string.h>
 
 #ifdef HAVE_STARTUP_NOTIFICATION
 #define SN_API_NOT_YET_FROZEN
 #include <libsn/sn.h>
 #include <gdk/gdk.h>
-#include <gdk/gdkx.h>
-#include <gtk/gtkmain.h>
+#include <gtk/gtk.h>
 #endif
 
 G_DEFINE_TYPE (EelAppLaunchContext, eel_app_launch_context, G_TYPE_APP_LAUNCH_CONTEXT);
