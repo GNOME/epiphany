@@ -30,7 +30,7 @@
 #ifndef EPHY_ICON_ENTRY_H
 #define EPHY_ICON_ENTRY_H
 
-#include <gtk/gtkbin.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

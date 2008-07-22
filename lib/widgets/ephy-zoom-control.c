@@ -26,7 +26,6 @@
 #include "ephy-debug.h"
 
 #include <gtk/gtk.h>
-#include <gtk/gtkcombobox.h>
 #include <glib/gi18n.h>
 
 #define EPHY_ZOOM_CONTROL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_CONTROL, EphyZoomControlPrivate))

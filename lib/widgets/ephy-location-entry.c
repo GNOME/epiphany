@@ -36,24 +36,7 @@
 
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtktoolbar.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkentrycompletion.h>
-#include <gtk/gtkwindow.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkcellrendererpixbuf.h>
-#include <gtk/gtkcelllayout.h>
-#include <gtk/gtktreemodelsort.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkeventbox.h>
-#include <gtk/gtkbox.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkimagemenuitem.h>
-#include <gtk/gtkseparatormenuitem.h>
-#include <gtk/gtkalignment.h>
-#include <gtk/gtkclipboard.h>
+#include <gtk/gtk.h>
 
 #include <string.h>
 

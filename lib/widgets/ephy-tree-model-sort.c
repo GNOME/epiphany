@@ -20,8 +20,7 @@
 
 #include "config.h"
 
-#include <gtk/gtkmarshal.h>
-#include <gtk/gtktreednd.h>
+#include <gtk/gtk.h>
 #include <string.h>
 
 #include "ephy-node.h"

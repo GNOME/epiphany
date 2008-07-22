@@ -21,8 +21,7 @@
 #ifndef __EPHY_NODE_VIEW_H
 #define __EPHY_NODE_VIEW_H
 
-#include <gtk/gtktreeview.h>
-#include <gtk/gtkdnd.h>
+#include <gtk/gtk.h>
 
 #include "ephy-tree-model-node.h"
 #include "ephy-node-filter.h"

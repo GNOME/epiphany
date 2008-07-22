@@ -25,10 +25,7 @@
 
 #include "ephy-node.h"
 
-#include <gtk/gtkwidget.h>
-#include <gtk/gtktoolitem.h>
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtkentrycompletion.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
