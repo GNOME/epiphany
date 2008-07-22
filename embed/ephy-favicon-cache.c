@@ -38,7 +38,7 @@
 #include "ephy-debug.h"
 #include "ephy-glib-compat.h"
 
-#include <glib/gstdio.h>
+#include <glib.h>
 #include <gio/gio.h>
 
 #define EPHY_FAVICON_CACHE_XML_ROOT    (const xmlChar *)"ephy_favicons_cache"

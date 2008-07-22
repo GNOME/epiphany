@@ -32,22 +32,7 @@
 #include "eel-gconf-extensions.h"
 
 #include <glib/gi18n.h>
-#include <gtk/gtkversion.h>
-#include <gtk/gtktreeview.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkcellrendererpixbuf.h>
-#include <gtk/gtkcellrendererprogress.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtktreeviewcolumn.h>
-#include <gtk/gtkicontheme.h>
-#include <gtk/gtkiconfactory.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkmenushell.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtkstatusicon.h>
+#include <gtk/gtk.h>
 #include <libgnomeui/gnome-icon-lookup.h>
 
 

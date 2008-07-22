@@ -23,8 +23,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include <gtk/gtkpagesetup.h>
-#include <gtk/gtkprintsettings.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
