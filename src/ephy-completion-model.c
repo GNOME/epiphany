@@ -281,23 +281,12 @@ init_text_col (GValue *value, EphyNode *node, int group)
 }
 
 static void
-init_action_col (GValue *value, EphyNode *node, int group)
+init_action_col (GValue *value, EphyNode *node)
 {
 	const char *text;
 
-	switch (group)
-	{
-		case BOOKMARKS_GROUP:
-			text = ephy_node_get_property_string
-				(node, EPHY_NODE_BMK_PROP_LOCATION);
-			break;
-		case HISTORY_GROUP:
-			text = ephy_node_get_property_string
-				(node, EPHY_NODE_PAGE_PROP_LOCATION);
-			break;
-		default:
-			text = "";
-	}
+    text = ephy_node_get_property_string
+        (node, EPHY_NODE_BMK_PROP_LOCATION);
 	
 	g_value_set_string (value, text);
 }
@@ -405,24 +394,12 @@ init_relevance_col (GValue *value, EphyNode *node, int group)
 }
 
 static void
-init_url_col (GValue *value, EphyNode *node, int group)
+init_url_col (GValue *value, EphyNode *node)
 {
-        const char *url = NULL;
+    const char *url = NULL;
 
-	if (group == BOOKMARKS_GROUP)
-	{
-	        url = ephy_node_get_property_string
-		  (node, EPHY_NODE_BMK_PROP_LOCATION);
-	}
-	else if (group == HISTORY_GROUP)
-	{
-	        url = ephy_node_get_property_string
-		  (node, EPHY_NODE_PAGE_PROP_LOCATION);
-	}
-	else
-	{
-	        url = "";
-	}
+    url = ephy_node_get_property_string
+      (node, EPHY_NODE_PAGE_PROP_LOCATION);
 	
 	g_value_set_string (value, url);
 }
@@ -471,7 +448,7 @@ ephy_completion_model_get_value (GtkTreeModel *tree_model,
  			break;
 		case EPHY_COMPLETION_ACTION_COL:
 			g_value_init (value, G_TYPE_STRING);
-			init_action_col (value, node, group);
+			init_action_col (value, node);
 			break;
 		case EPHY_COMPLETION_KEYWORDS_COL:
 			g_value_init (value, G_TYPE_STRING);
@@ -481,10 +458,10 @@ ephy_completion_model_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_INT);
 			init_relevance_col (value, node, group);
 			break;
-                case EPHY_COMPLETION_URL_COL:
-                        g_value_init (value, G_TYPE_STRING);
-                        init_url_col (value, node, group);
-                        break;
+		case EPHY_COMPLETION_URL_COL:
+			g_value_init (value, G_TYPE_STRING);
+			init_url_col (value, node);
+			break;
 	}
 }
 
