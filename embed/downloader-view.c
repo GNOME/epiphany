@@ -35,6 +35,9 @@
 #include <gtk/gtk.h>
 #include <libgnomeui/gnome-icon-lookup.h>
 
+#ifdef HAVE_LIBCANBERRA_GTK
+#include <canberra-gtk.h>
+#endif
 
 #ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
@@ -439,6 +442,13 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 		show_notification_window (dv);
 		
 		g_free (downloaded);
+#endif
+#ifdef HAVE_LIBCANBERRA_GTK
+        ca_context_play (ca_gtk_context_get (), 0,
+                         CA_PROP_APPLICATION_NAME, _("GNOME Web Browser"),
+                         CA_PROP_EVENT_ID, "complete-download",
+                         CA_PROP_EVENT_DESCRIPTION, _("Download completed"),
+                         NULL);
 #endif
 
 		return;

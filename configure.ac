@@ -114,10 +114,17 @@ LIBGNOMEUI_REQUIRED=2.14.0
 GNOME_DESKTOP_REQUIRED=2.9.91
 LIBSTARTUP_NOTIFICATION_REQUIRED=0.5
 LIBNOTIFY_REQUIRED=0.4
+LIBCANBERRA_GTK_REQUIRED=0.3
 DBUS_GLIB_REQUIRED=0.35
 
 PKG_CHECK_EXISTS([libnotify >= $LIBNOTIFY_REQUIRED],[have_libnotify=yes],[have_libnotify=no])
+PKG_CHECK_EXISTS([libcanberra-gtk >= $LIBCANBERRA_GTK_REQUIRED],[have_libcanberra_gtk=yes],[have_libcanberra_gtk=no])
 
+LIBCANBERRA_GTK_PACKAGE=
+if test "$have_libcanberra_gtk" = "yes"; then
+  LIBCANBERRA_GTK_PACKAGE="libcanberra_gtk >= $LIBCANBERRA_GTK_REQUIRED"
+  AC_DEFINE([HAVE_LIBCANBERRA_GTK],[1],[Define if libcanberra-gtk is available])
+fi
 LIBNOTIFY_PACKAGE=
 if test "$have_libnotify" = "yes"; then
   LIBNOTIFY_PACKAGE="libnotify >= $LIBNOTIFY_REQUIRED"
@@ -137,6 +144,7 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  libglade-2.0 >= $LIBGLADE_REQUIRED \
 		  gconf-2.0
 		  gnome-desktop-2.0 >= $GNOME_DESKTOP_REQUIRED
+		  libcanberra-gtk >= $LIBCANBERRA_GTK_REQUIRED
 		  libstartup-notification-1.0 >= $LIBSTARTUP_NOTIFICATION_REQUIRED
 		  $LIBNOTIFY_PACKAGE
 		  ])
