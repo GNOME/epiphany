@@ -355,27 +355,16 @@ init_favicon_col (EphyCompletionModel *model, GValue *value,
 	g_value_take_object (value, pixbuf);
 }
 
+const GRegex *base_address_regex = NULL;
+
 static gboolean
 is_base_address (const char *address)
 {
-	int slashes = 0;
+    if (base_address_regex == NULL) {
+        base_address_regex = g_regex_new ("//.*/$", G_REGEX_OPTIMIZE, G_REGEX_MATCH_NOTEMPTY, NULL);
+    }
 
-	if (address == NULL) return FALSE;
-
-	while (*address != '\0')
-	{
-		if (*address == '/') slashes++;
-
-		address++;
-
-		/* Base uris has 3 slashes like http://www.gnome.org/ */
-		if (slashes == 3)
-		{
-			return (*address == '\0');
-		}
-	}
-
-	return FALSE;
+    return g_regex_match (base_address_regex, address, G_REGEX_MATCH_NOTEMPTY, NULL);
 }
 
 static void
