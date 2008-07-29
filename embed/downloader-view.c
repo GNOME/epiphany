@@ -167,9 +167,9 @@ static gboolean
 status_icon_popup_menu_cb (GtkStatusIcon *icon,
 			   guint button,
 			   guint time,
-                           DownloaderView *dv)
+			   DownloaderView *dv)
 {
-        GtkWidget *menu, *item;
+	GtkWidget *menu, *item;
 
 	menu = gtk_menu_new ();
 
@@ -444,11 +444,11 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 		g_free (downloaded);
 #endif
 #ifdef HAVE_LIBCANBERRA_GTK
-        ca_context_play (ca_gtk_context_get (), 0,
-                         CA_PROP_APPLICATION_NAME, _("GNOME Web Browser"),
-                         CA_PROP_EVENT_ID, "complete-download",
-                         CA_PROP_EVENT_DESCRIPTION, _("Download completed"),
-                         NULL);
+	ca_context_play (ca_gtk_context_get (), 0,
+			CA_PROP_APPLICATION_NAME, _("GNOME Web Browser"),
+			CA_PROP_EVENT_ID, "complete-download",
+			CA_PROP_EVENT_DESCRIPTION, _("Download completed"),
+			NULL);
 #endif
 
 		return;
