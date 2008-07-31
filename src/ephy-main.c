@@ -236,8 +236,8 @@ unref_proxy_reply_cb (DBusGProxy *proxy,
 {
 	if (error != NULL)
 	{
-		g_warning ("An error occured while calling remote method: %s", error->message);
-		g_error_free (error);/* FIXME??? */
+		g_warning ("An error occurred while calling remote method: %s", error->message);
+		g_error_free (error);
 	}
 
 	g_object_unref (proxy);
