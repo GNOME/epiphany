@@ -547,6 +547,9 @@ pdm_dialog_remove_button_clicked_cb (GtkWidget *button,
 				     PdmActionInfo *action)
 {
 	pdm_cmd_delete_selection (action);
+
+	/* Restore the focus to the button */
+	gtk_widget_grab_focus (button);
 }
 
 static void
