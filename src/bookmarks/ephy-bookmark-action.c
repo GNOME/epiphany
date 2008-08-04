@@ -89,8 +89,6 @@ clipboard_text_received_cb (GtkClipboard *clipboard,
 		if (strcmp (text, gtk_entry_get_text (GTK_ENTRY (ctx->entry))) != 0)
 		{
 			gtk_entry_set_text (GTK_ENTRY (ctx->entry), text);
-			ephy_bookmark_action_activate (EPHY_BOOKMARK_ACTION (ctx->weak_ptr),
-						       ctx->entry, ctx->flags);
 		}
 	}
 
