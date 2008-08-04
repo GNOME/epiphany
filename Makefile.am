@@ -1,4 +1,4 @@
-SUBDIRS = lib embed src data po help doc
+SUBDIRS = lib embed src data po help doc tests
 
 ACLOCAL_AMFLAGS = -I m4
 
