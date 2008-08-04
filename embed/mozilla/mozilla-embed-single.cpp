@@ -925,14 +925,18 @@ impl_list_passwords (EphyPasswordManager *manager)
 
 #ifdef HAVE_GECKO_1_9
 	nsILoginInfo **logins = nsnull;
-	PRUint32 count,i;
+	PRUint32 count = 0,i;
 	nsresult rv;
 
 	nsCOMPtr<nsILoginManager> loginManager =
 			do_GetService (NS_LOGINMANAGER_CONTRACTID);
 	NS_ENSURE_TRUE (loginManager, NULL);
 
-	loginManager -> GetAllLogins(&count, &logins);
+	rv = loginManager -> GetAllLogins(&count, &logins);
+	if (NS_FAILED (rv))
+		return NULL;
+	if (count <= 0 || !logins)
+		return NULL;
 
 	for (i=0; i < count; i++) {
 		nsString transfer;
