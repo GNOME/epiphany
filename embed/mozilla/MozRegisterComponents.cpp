@@ -152,7 +152,7 @@ static const nsModuleComponentInfo sAppComps[] = {
 		NS_CLIENTAUTHDIALOGS_CONTRACTID,
 		GtkNSSClientAuthDialogsConstructor
 	},
-#ifndef HAVE_GECKO_1_9
+#ifndef HAVE_NSIBADCERTLISTENER_H 
 	{
 		GTK_NSSDIALOGS_CLASSNAME,
 		GTK_NSSDIALOGS_CID,
