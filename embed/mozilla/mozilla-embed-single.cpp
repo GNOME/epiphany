@@ -935,8 +935,7 @@ impl_list_passwords (EphyPasswordManager *manager)
 	rv = loginManager -> GetAllLogins(&count, &logins);
 	if (NS_FAILED (rv))
 		return NULL;
-	if (count <= 0 || !logins)
-		return NULL;
+	NS_ENSURE_TRUE (logins, NULL);
 
 	for (i=0; i < count; i++) {
 		nsString transfer;
