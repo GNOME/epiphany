@@ -138,11 +138,6 @@ downloader_view_class_init (DownloaderViewClass *klass)
 	object_class->finalize = downloader_view_finalize;
 
 	g_type_class_add_private (object_class, sizeof(DownloaderViewPrivate));
-
-#ifdef HAVE_LIBNOTIFY
-	notify_init (PACKAGE);
-#endif
-
 }
 
 static void
@@ -283,13 +278,6 @@ downloader_view_finalize (GObject *object)
 	g_hash_table_destroy (dv->priv->downloads_hash);
 
 	G_OBJECT_CLASS (downloader_view_parent_class)->finalize (object);
-
-#ifdef HAVE_LIBNOTIFY	
-	if (notify_is_initted ())
-	{
-		notify_uninit ();
-	}
-#endif
 
 	if (idle_unref)
 	{
