@@ -50,6 +50,10 @@
 #include <errno.h>
 #include <string.h>
 
+#ifdef HAVE_LIBNOTIFY
+#include <libnotify/notify.h>
+#endif
+
 static GQuark startup_error_quark = 0;
 #define STARTUP_ERROR_QUARK	(startup_error_quark)
 
@@ -737,9 +741,18 @@ main (int argc,
 	g_object_weak_ref (G_OBJECT (ephy_shell), shell_weak_notify, NULL);
 	ephy_object_idle_unref (ephy_shell);
 
+#ifdef HAVE_LIBNOTIFY	
+	/* Init notifications for the download manager */
+	notify_init (PACKAGE);
+#endif
+
 	gtk_main ();
 
 	/* Shutdown */
+#ifdef HAVE_LIBNOTIFY	
+	if (notify_is_initted ())
+		notify_uninit ();
+#endif
 	eel_gconf_monitor_remove ("/apps/epiphany/general");
 	gnome_accelerators_sync ();
 	ephy_state_save ();
