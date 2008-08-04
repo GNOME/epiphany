@@ -16,6 +16,8 @@ EXTRA_DIST = 			\
 	ChangeLog-20050828	\
 	ChangeLog-20061106	\
 	ChangeLog-20070912	\
+	po/ChangeLog.pre-2-23	\
+	help/ChangeLog.pre-2-23	\
 	$(NULL)
 
 DISTCLEANFILES = 		\
