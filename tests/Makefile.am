@@ -1,11 +1,6 @@
 noinst_PROGRAMS = \
-	testephysearchentry
-
-testephysearchentry_SOURCES = \
-	testephysearchentry.c
-testephysearchentry_LDADD = \
-    $(top_builddir)/lib/widgets/libephywidgets.la \
-    $(DEPENDENCIES_LIBS) 
+	testephysearchentry \
+	testephyiconentry
 
 INCLUDES = \
 	-I$(top_builddir)/lib/widgets
@@ -16,3 +11,16 @@ CFLAGS = \
 
 LDADD = \
     $(DEPENDENCIES_LIBS) 
+
+testephysearchentry_SOURCES = \
+	testephysearchentry.c
+testephysearchentry_LDADD = \
+    $(top_builddir)/lib/widgets/libephywidgets.la \
+    $(DEPENDENCIES_LIBS) 
+
+testephyiconentry_SOURCES = \
+	testephyiconentry.c
+testephyiconentry_LDADD = \
+    $(top_builddir)/lib/widgets/libephywidgets.la \
+    $(DEPENDENCIES_LIBS) 
+
