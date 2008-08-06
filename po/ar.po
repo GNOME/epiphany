@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.ar\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-07-29 02:22+0100\n"
+"POT-Creation-Date: 2008-08-06 09:15+0100\n"
 "PO-Revision-Date: 2008-02-02 02:00+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -44,8 +44,8 @@ msgid "Epiphany Web Browser"
 msgstr "متصفّح الوِب إبِفَني"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:535
-#: ../src/ephy-main.c:635
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:539
+#: ../src/ephy-main.c:639
 msgid "Web Browser"
 msgstr "متصفّح وِب"
 
@@ -885,49 +885,49 @@ msgid "_Page address"
 msgstr "مسار ال_صفحة"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:177
+#: ../embed/downloader-view.c:172
 msgid "_Show Downloads"
 msgstr "أ_ظهر التنزيلات"
 
-#: ../embed/downloader-view.c:332
+#: ../embed/downloader-view.c:320
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:336
+#: ../embed/downloader-view.c:324
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:397
+#: ../embed/downloader-view.c:385
 msgid "_Pause"
 msgstr "_قف مؤقتًا"
 
-#: ../embed/downloader-view.c:397
+#: ../embed/downloader-view.c:385
 msgid "_Resume"
 msgstr "ا_كمل"
 
-#: ../embed/downloader-view.c:435
+#: ../embed/downloader-view.c:423
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "تم تنزيل الملف “%s”."
 
-#: ../embed/downloader-view.c:438
+#: ../embed/downloader-view.c:426
 msgid "Download finished"
 msgstr "تم التنزيل"
 
-#: ../embed/downloader-view.c:448 ../src/ephy-main.c:513
+#: ../embed/downloader-view.c:436 ../src/ephy-main.c:517
 #: ../src/window-commands.c:869
 msgid "GNOME Web Browser"
 msgstr "متصفّح وِب جنوم"
 
-#: ../embed/downloader-view.c:450
+#: ../embed/downloader-view.c:438
 #, fuzzy
 msgid "Download completed"
 msgstr "بدأ التنزيل"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:470
+#: ../embed/downloader-view.c:458
 #, c-format
 msgid ""
 "%s\n"
@@ -937,13 +937,13 @@ msgstr ""
 "%s من %s"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:480 ../embed/downloader-view.c:485
+#: ../embed/downloader-view.c:468 ../embed/downloader-view.c:473
 #: ../embed/ephy-download.c:99 ../lib/ephy-time-helpers.c:279
 #: ../src/ephy-window.c:1683
 msgid "Unknown"
 msgstr "مجهول"
 
-#: ../embed/downloader-view.c:517
+#: ../embed/downloader-view.c:505
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -954,36 +954,36 @@ msgstr[3] "%Id تنزيلات"
 msgstr[4] "%Id تنزيلًا"
 msgstr[5] "%Id تنزيل"
 
-#: ../embed/downloader-view.c:622
+#: ../embed/downloader-view.c:610
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "أُضيف الملف “%s” إلى طابور التنزيلات."
 
-#: ../embed/downloader-view.c:625
+#: ../embed/downloader-view.c:613
 msgid "Download started"
 msgstr "بدأ التنزيل"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:699 ../embed/downloader-view.c:712
+#: ../embed/downloader-view.c:687 ../embed/downloader-view.c:700
 msgid "download status|Unknown"
 msgstr "مجهول"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:704
+#: ../embed/downloader-view.c:692
 msgid "download status|Failed"
 msgstr "فشل"
 
-#: ../embed/downloader-view.c:771 ../src/bookmarks/ephy-bookmarks-editor.c:988
+#: ../embed/downloader-view.c:759 ../src/bookmarks/ephy-bookmarks-editor.c:988
 msgid "File"
 msgstr "ملف"
 
-#: ../embed/downloader-view.c:794
+#: ../embed/downloader-view.c:782
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:805
+#: ../embed/downloader-view.c:793
 msgid "Remaining"
 msgstr "متبقّ"
 
@@ -2723,12 +2723,12 @@ msgstr "ملحق ملف سطح المكتب لإبِفني"
 msgid "This plugin handles “.desktop” and “.url” files containing web links."
 msgstr "هذا الملحق يقرأ ملفات “.desktop” و “.url” المحتوية على وصلات وِب."
 
-#: ../src/bookmarks/ephy-bookmark-action.c:321
+#: ../src/bookmarks/ephy-bookmark-action.c:319
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:498
+#: ../src/bookmarks/ephy-bookmark-action.c:496
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "يشغل المخطوط “%s”"
@@ -3431,59 +3431,59 @@ msgstr "المواقع"
 msgid "Date"
 msgstr "التاريخ"
 
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:78
 msgid "Open a new tab in an existing browser window"
 msgstr "افتح لسان جديد في نافذة متصفح موجودة"
 
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:80
 msgid "Open a new browser window"
 msgstr "افتح نافذة متصفّح جديدة"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:82
 msgid "Launch the bookmarks editor"
 msgstr "أطلق محرّر العلامات"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:84
 msgid "Import bookmarks from the given file"
 msgstr "استورد العلامات من الملف المحدّد"
 
-#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
+#: ../src/ephy-main.c:84 ../src/ephy-main.c:86
 msgid "FILE"
 msgstr "ملف"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:86
 msgid "Load the given session file"
 msgstr "حمّل ملف الجلسة المعطى"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:88
 msgid "Add a bookmark"
 msgstr "أضِف علامة موقع"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:88
 msgid "URL"
 msgstr "مسار"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:90
 msgid "Start a private instance"
 msgstr "ابدأ نموذج خاص"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:92
 msgid "Profile directory to use in the private instance"
 msgstr "الدليل المستعمل في النموذج الخاص"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:92
 msgid "DIR"
 msgstr "دليل"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:94
 msgid "URL …"
 msgstr "مسار..."
 
-#: ../src/ephy-main.c:405
+#: ../src/ephy-main.c:409
 msgid "Could not start GNOME Web Browser"
 msgstr "تعذّر بدأ متصفح وِب جنوم"
 
-#: ../src/ephy-main.c:408
+#: ../src/ephy-main.c:412
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -3492,7 +3492,7 @@ msgstr ""
 "فشل بدأ التشغيل للخطأ التالي:\n"
 "%s"
 
-#: ../src/ephy-main.c:514
+#: ../src/ephy-main.c:518
 msgid "GNOME Web Browser options"
 msgstr "خيارات متصفّح وِب جنوم"
 
@@ -4295,55 +4295,55 @@ msgstr ""
 "<small><i><b>ملاحظة:</b> لا يمكن الاسترجاع بعد هذه العملية. ستمحى البيانات "
 "نهائيا.</i></small>"
 
-#: ../src/pdm-dialog.c:592
+#: ../src/pdm-dialog.c:595
 msgid "Cookie Properties"
 msgstr "خصائص السكاكر"
 
-#: ../src/pdm-dialog.c:609
+#: ../src/pdm-dialog.c:612
 msgid "Content:"
 msgstr "المحتويات:"
 
-#: ../src/pdm-dialog.c:625
+#: ../src/pdm-dialog.c:628
 msgid "Path:"
 msgstr "المسار:"
 
-#: ../src/pdm-dialog.c:641
+#: ../src/pdm-dialog.c:644
 msgid "Send for:"
 msgstr "أرسل إلى:"
 
-#: ../src/pdm-dialog.c:650
+#: ../src/pdm-dialog.c:653
 msgid "Encrypted connections only"
 msgstr "الاتّصالات المعمّاة فقط"
 
-#: ../src/pdm-dialog.c:650
+#: ../src/pdm-dialog.c:653
 msgid "Any type of connection"
 msgstr "أيّ أنواع الاتّصالات"
 
-#: ../src/pdm-dialog.c:656
+#: ../src/pdm-dialog.c:659
 msgid "Expires:"
 msgstr "ينقضي:"
 
-#: ../src/pdm-dialog.c:667
+#: ../src/pdm-dialog.c:670
 msgid "End of current session"
 msgstr "نهاية الجلسة الحالية"
 
-#: ../src/pdm-dialog.c:801
+#: ../src/pdm-dialog.c:804
 msgid "Domain"
 msgstr "النطاق"
 
-#: ../src/pdm-dialog.c:813
+#: ../src/pdm-dialog.c:816
 msgid "Name"
 msgstr "الاسم"
 
-#: ../src/pdm-dialog.c:1212
+#: ../src/pdm-dialog.c:1215
 msgid "Host"
 msgstr "مستضيف"
 
-#: ../src/pdm-dialog.c:1224
+#: ../src/pdm-dialog.c:1227
 msgid "User Name"
 msgstr "اسم المستخدم"
 
-#: ../src/pdm-dialog.c:1236
+#: ../src/pdm-dialog.c:1239
 msgid "User Password"
 msgstr "كلمة سر المستخدم"
 
