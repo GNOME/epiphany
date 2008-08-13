@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-02-15 10:34+0000\n"
+"POT-Creation-Date: 2008-07-24 21:11+0000\n"
 "PO-Revision-Date: 2008-02-11 03:50+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -42,8 +42,8 @@ msgid "Epiphany Web Browser"
 msgstr "ಜಾಲ"
 
 #. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:537
-#: ../src/ephy-main.c:632
+#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:535
+#: ../src/ephy-main.c:635
 #, fuzzy
 msgid "Web Browser"
 msgstr "ಜಾಲ"
@@ -573,7 +573,7 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5 ಫಿಂಗರ್-ಪ್ರಿಂಟ್‍ಗಳು:"
 
 #: ../data/glade/certificate-dialogs.glade.h:14
-#: ../embed/mozilla/GtkNSSDialogs.cpp:937
+#: ../embed/mozilla/GtkNSSDialogs.cpp:925
 msgid "Organization:"
 msgstr "ಸಂಸ್ಥೆ:"
 
@@ -598,31 +598,35 @@ msgid "<b>_Use a different encoding:</b>"
 msgstr "<b>ಬೇರೊಂದು ಎನ್ಕೋಡಿಂಗನ್ನು ಬಳಸಿ(_U):</b>"
 
 #: ../data/glade/epiphany.glade.h:3
+msgid "Clear _All..."
+msgstr ""
+
+#: ../data/glade/epiphany.glade.h:4
 msgid "Cookies"
 msgstr "ಕುಕಿಗಳು"
 
 #. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:4 ../lib/ephy-file-helpers.c:111
+#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:111
 msgid "Downloads"
 msgstr "ಡೌನ್‍ಲೋಡುಗಳು"
 
-#: ../data/glade/epiphany.glade.h:5
+#: ../data/glade/epiphany.glade.h:6
 msgid "Passwords"
 msgstr "ಗುಪ್ತಪದಗಳು"
 
-#: ../data/glade/epiphany.glade.h:6
+#: ../data/glade/epiphany.glade.h:7
 msgid "Personal Data"
 msgstr "ವೈಯಕ್ತಿಕ ದತ್ತಾಂಶ"
 
-#: ../data/glade/epiphany.glade.h:7
+#: ../data/glade/epiphany.glade.h:8
 msgid "Text Encoding"
 msgstr "ಪಠ್ಯ ಎನ್ಕೋಡಿಂಗ್"
 
-#: ../data/glade/epiphany.glade.h:8 ../src/ephy-encoding-menu.c:334
+#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:331
 msgid "Use the encoding specified by the document"
 msgstr "ದಸ್ತಾವೇಜಿನಲ್ಲಿ ಸೂಚಿಸಲಾದ ಎನ್ಕೋಡಿಂಗನ್ನು ಬಳಸು"
 
-#: ../data/glade/epiphany.glade.h:9
+#: ../data/glade/epiphany.glade.h:10
 msgid "_Show passwords"
 msgstr "ಗುಪ್ತಪದಗಳನ್ನು ತೋರಿಸು(_S)"
 
@@ -642,9 +646,9 @@ msgid "_Certificate:"
 msgstr "ಪ್ರಮಾಣಪತ್ರ(_C):"
 
 #: ../data/glade/form-signing-dialog.glade.h:4
-#: ../embed/mozilla/EphyPromptService.cpp:808
-#: ../embed/mozilla/EphyPromptService.cpp:835
-#: ../lib/ephy-password-dialog.c:429 ../lib/ephy-password-dialog.c:445
+#: ../embed/mozilla/EphyPromptService.cpp:823
+#: ../embed/mozilla/EphyPromptService.cpp:850
+#: ../lib/ephy-password-dialog.c:424 ../lib/ephy-password-dialog.c:438
 msgid "_Password:"
 msgstr "ಗುಪ್ತಪದ(_P):"
 
@@ -715,7 +719,7 @@ msgstr "ಒಂದು ಭಾಷೆಯನ್ನು ಆರಿಸು(_a):"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:584 ../src/ephy-history-window.c:269
+#: ../lib/widgets/ephy-location-entry.c:567 ../src/ephy-history-window.c:249
 msgid "Cl_ear"
 msgstr "ತೆರವುಗೊಳಿಸು(_e)"
 
@@ -744,7 +748,7 @@ msgstr "ಅಕ್ಷರ ಶೈಲಿಗಳು"
 msgid "For l_anguage:"
 msgstr "ಭಾಷೆಗಾಗಿ(_a):"
 
-#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1278
+#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:1261
 msgid "Language"
 msgstr "ಭಾಷೆ"
 
@@ -888,39 +892,49 @@ msgid "_Page address"
 msgstr "ಪುಟದ ವಿಳಾಸ(_P)"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:219
+#: ../embed/downloader-view.c:177
 msgid "_Show Downloads"
 msgstr "ಡೌನ್‍ಲೋಡುಗಳನ್ನು ತೋರಿಸು(_S)"
 
-#: ../embed/downloader-view.c:374
+#: ../embed/downloader-view.c:332
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: ../embed/downloader-view.c:378
+#: ../embed/downloader-view.c:336
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:439
+#: ../embed/downloader-view.c:397
 msgid "_Pause"
 msgstr "ತಾತ್ಕಾಲಿಕವಾಗಿ ನಿಲ್ಲಿಸು(_P)"
 
-#: ../embed/downloader-view.c:439
+#: ../embed/downloader-view.c:397
 msgid "_Resume"
 msgstr "ಪುನಃ ಆರಂಭಿಸು(_R)"
 
-#: ../embed/downloader-view.c:477
+#: ../embed/downloader-view.c:435
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "“%s” ಕಡತವು ಡೌನ್‍ಲೋಡ್ ಮಾಡಲ್ಪಟ್ಟಿದೆ."
 
-#: ../embed/downloader-view.c:480
+#: ../embed/downloader-view.c:438
 msgid "Download finished"
 msgstr "ಡೌನ್‍ಲೋಡ್ ಮುಗಿದಿದೆ"
 
+#: ../embed/downloader-view.c:448 ../src/ephy-main.c:513
+#: ../src/window-commands.c:869
+msgid "GNOME Web Browser"
+msgstr "GNOME ಜಾಲ ವೀಕ್ಷಕ"
+
+#: ../embed/downloader-view.c:450
+#, fuzzy
+msgid "Download completed"
+msgstr "ಡೌನ್‍ಲೋಡ್ ಆರಂಭಗೊಂಡಿದೆ"
+
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:505
+#: ../embed/downloader-view.c:470
 #, c-format
 msgid ""
 "%s\n"
@@ -930,57 +944,56 @@ msgstr ""
 "%s, %s ನಲ್ಲಿ"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:515 ../embed/downloader-view.c:520
-#: ../embed/ephy-download.c:129 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1689
+#: ../embed/downloader-view.c:480 ../embed/downloader-view.c:485
+#: ../embed/ephy-download.c:99 ../lib/ephy-time-helpers.c:279
+#: ../src/ephy-window.c:1683
 msgid "Unknown"
 msgstr "ಗೊತ್ತಿರದ"
 
-#: ../embed/downloader-view.c:552
+#: ../embed/downloader-view.c:517
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d ಡೌನ್‍ಲೋಡ್"
 msgstr[1] "%d ಡೌನ್‍ಲೋಡ್‍ಗಳು"
 
-#: ../embed/downloader-view.c:652
+#: ../embed/downloader-view.c:622
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "“%s” ಕಡತವು ಡೌನ್‍ಲೋಡ್‍ಗಳ ಸರತಿಗೆ ಸೇರಿಸಲ್ಪಟ್ಟಿದೆ."
 
-#: ../embed/downloader-view.c:655
+#: ../embed/downloader-view.c:625
 msgid "Download started"
 msgstr "ಡೌನ್‍ಲೋಡ್ ಆರಂಭಗೊಂಡಿದೆ"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:729 ../embed/downloader-view.c:742
+#: ../embed/downloader-view.c:699 ../embed/downloader-view.c:712
 msgid "download status|Unknown"
 msgstr "ತಿಳಿದಿಲ್ಲ"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:734
+#: ../embed/downloader-view.c:704
 msgid "download status|Failed"
 msgstr "ವಿಫಲಗೊಂಡಿದೆ"
 
-#: ../embed/downloader-view.c:801
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1007
+#: ../embed/downloader-view.c:771 ../src/bookmarks/ephy-bookmarks-editor.c:988
 msgid "File"
 msgstr "ಕಡತ"
 
-#: ../embed/downloader-view.c:824
+#: ../embed/downloader-view.c:794
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:835
+#: ../embed/downloader-view.c:805
 msgid "Remaining"
 msgstr "ಮಿಕ್ಕುಳಿದಿರುವ"
 
 #. characters
 #. ms
 #. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-base-embed.c:49 ../embed/ephy-embed-utils.c:107
+#: ../embed/ephy-base-embed.c:49 ../embed/ephy-embed-utils.c:111
 msgid "Blank page"
 msgstr "ಖಾಲಿ ಪುಟ"
 
@@ -1009,7 +1022,7 @@ msgstr "“%s” ಅನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿ�
 msgid "Loading…"
 msgstr "ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ..."
 
-#: ../embed/ephy-embed-shell.c:272
+#: ../embed/ephy-embed-shell.c:243
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "ಎಫಿಫಾನಿಯನ್ನು ಈಗ ಬಳಸಲಾಗುವುದಿಲ್ಲ. ಮೋಝಿಲ್ಲಾ ಆರಂಭಿಸುವಿಕೆಯು ವಿಫಲಗೊಂಡಿದೆ."
 
@@ -1396,41 +1409,41 @@ msgstr "ಉಕ್ರೇನಿಯನ್"
 #. translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
-#: ../embed/ephy-encodings.c:359
+#: ../embed/ephy-encodings.c:329
 #, c-format
 msgid "Unknown (%s)"
 msgstr "ಅಜ್ಞಾತ (%s)"
 
-#: ../embed/ephy-history.c:517
+#: ../embed/ephy-history.c:487
 msgid "All"
 msgstr "ಎಲ್ಲಾ"
 
-#: ../embed/ephy-history.c:685
+#: ../embed/ephy-history.c:655
 msgid "Others"
 msgstr "ಇತರೆ"
 
-#: ../embed/ephy-history.c:691
+#: ../embed/ephy-history.c:661
 msgid "Local files"
 msgstr "ಸ್ಥಳೀಯ ಕಡತಗಳು"
 
-#: ../embed/mozilla/ContentHandler.cpp:158
+#: ../embed/mozilla/ContentHandler.cpp:163
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:410
 msgid "Save"
 msgstr "ಉಳಿಸು"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:271
+#: ../embed/mozilla/ContentHandler.cpp:276
 msgid "File Type:|Unknown"
 msgstr "ಗೊತ್ತಿಲ್ಲದ"
 
-#: ../embed/mozilla/ContentHandler.cpp:287
+#: ../embed/mozilla/ContentHandler.cpp:292
 msgid "Download this potentially unsafe file?"
 msgstr ""
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:293
+#: ../embed/mozilla/ContentHandler.cpp:298
 #, fuzzy, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1439,14 +1452,14 @@ msgid ""
 "invade your privacy. You can download it instead."
 msgstr "ಕಡತ ಬಗೆ n  ."
 
-#: ../embed/mozilla/ContentHandler.cpp:303
+#: ../embed/mozilla/ContentHandler.cpp:308
 msgid "Open this file?"
 msgstr "ಈ ಕಡತವನ್ನು ತೆರೆಯ ಬೇಕೆ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:310
+#: ../embed/mozilla/ContentHandler.cpp:315
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1457,13 +1470,13 @@ msgstr ""
 "\n"
 "“%s” ಅನ್ನು “%s” ಬಳಸಿಕೊಂಡು ನೀವು ತೆಗೆಯಬಹುದಾಗಿದೆ ಅಥವ ಉಳಿಸಬಹುದಾಗಿದೆ."
 
-#: ../embed/mozilla/ContentHandler.cpp:318
+#: ../embed/mozilla/ContentHandler.cpp:323
 msgid "Download this file?"
 msgstr "ಈ ಕಡತವನ್ನು ಡೌನ್‍ಲೋಡ್ ಮಾಡಬೇಕೆ?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:324
+#: ../embed/mozilla/ContentHandler.cpp:329
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1475,7 +1488,7 @@ msgstr ""
 "“%s” ಅನ್ನು ತೆರೆಯಲು ನಿಮ್ಮಲ್ಲಿ ಯಾವುದೆ ಅಗತ್ಯ ಅನ್ವಯವಿಲ್ಲ. ಬದಲಿಗೆ ನೀವದನ್ನು ಡೌನ್‍ಲೋಡ್ "
 "ಮಾಡಬಹುದು."
 
-#: ../embed/mozilla/ContentHandler.cpp:331
+#: ../embed/mozilla/ContentHandler.cpp:336
 msgid "_Save As..."
 msgstr "ಹೀಗೆ ಉಳಿಸು(_S)..."
 
@@ -1712,19 +1725,20 @@ msgid ""
 "than Web browsing."
 msgstr "ಜಾಲಬಂಧ   ಗೆ ಜಾಲ."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:457
+#. Translators: this means that the request to load the URL has been cancelled
+#: ../embed/mozilla/EphyAboutModule.cpp:458
 msgid "The request has been cancelled for your protection."
 msgstr "ನಿಮ್ಮ ಸುರಕ್ಷತೆಗಾಗಿ ನಿಮ್ಮ ಮನವಿಯನ್ನು ರದ್ದು ಮಾಡಲಾಗಿದೆ."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:462
+#: ../embed/mozilla/EphyAboutModule.cpp:463
 msgid "Could not Connect to Proxy Server"
 msgstr "ಪ್ರಾಕ್ಸಿ ಪರಿಚಾರಕಕ್ಕೆ ಸಂಪರ್ಕ ಕಲ್ಪಿಸಲಾಗಿಲ್ಲ"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:463
+#: ../embed/mozilla/EphyAboutModule.cpp:464
 msgid "Could not connect to proxy server."
 msgstr "ಪ್ರಾಕ್ಸಿ ಪರಿಚಾರಕಕ್ಕೆ ಸಂಪರ್ಕ ಕಲ್ಪಿಸಲಾಗಿಲ್ಲ."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:464
+#: ../embed/mozilla/EphyAboutModule.cpp:465
 msgid ""
 "Check your proxy server settings. If the connection still fails, there may "
 "be a problem with your proxy server or your network connection."
@@ -1732,21 +1746,21 @@ msgstr ""
 "ನಿಮ್ಮ ಪ್ರಾಕ್ಸಿ ಪರಿಚಾರಕದೊಂದಿಗಿನ ಸಂಪರ್ಕವನ್ನು ಪರೀಕ್ಷಿಸಿ. ಆದರೂ ಸಂಪರ್ಕವು ವಿಫಲಗೊಂಡರೆ, "
 "ನಿಮ್ಮ ಪ್ರಾಕ್ಸಿ ಪರಿಚಾರಕದಲ್ಲಿ ಅಥವ ನಿಮ್ಮ ಜಾಲಬಂಧ ಸಂಪರ್ಕದಲ್ಲಿ ತೊಂದರೆ ಇರಬಹುದು."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:472
+#: ../embed/mozilla/EphyAboutModule.cpp:473
 msgid "Could not Display Content"
 msgstr "ವಿಷಯವನ್ನು ತೋರಿಸಲಾಗಿಲ್ಲ"
 
-#: ../embed/mozilla/EphyAboutModule.cpp:473
+#: ../embed/mozilla/EphyAboutModule.cpp:474
 msgid "Could not display content."
 msgstr "ವಿಷಯವನ್ನು ತೋರಿಸಲಾಗಿಲ್ಲ."
 
-#: ../embed/mozilla/EphyAboutModule.cpp:474
+#: ../embed/mozilla/EphyAboutModule.cpp:475
 #, fuzzy
 msgid "The page uses an unsupported or invalid form of compression."
 msgstr "ಪುಟ ಅಮಾನ್ಯ ಫಾರ್ಮ್."
 
 #. Translators: %s refers to the LSB distributor ID, for instance MandrivaLinux
-#: ../embed/mozilla/EphyAboutModule.cpp:565
+#: ../embed/mozilla/EphyAboutModule.cpp:566
 #, c-format
 msgid ""
 "This page was loading when the web browser closed unexpectedly. This might "
@@ -1756,121 +1770,121 @@ msgstr ""
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:695
+#: ../embed/mozilla/EphyAboutModule.cpp:696
 msgid "You may find an old version:|in the Google Cache"
 msgstr "ಗೂಗಲ್ ಕ್ಯಾಶೆಯಲ್ಲಿ"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/EphyAboutModule.cpp:703
+#: ../embed/mozilla/EphyAboutModule.cpp:704
 msgid "You may find an old version:|in the Internet Archive"
 msgstr "ಅಂತರ್ಜಾಲ ಆರ್ಕೈವ್‍ನಲ್ಲಿ"
 
 #: ../embed/mozilla/EphyHeaderSniffer.cpp:367
-#: ../src/bookmarks/ephy-bookmarks.c:1502
-#: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1314
+#: ../src/bookmarks/ephy-bookmarks.c:1480
+#: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1306
 msgid "Untitled"
 msgstr "ಶೀರ್ಷಿಕೆಯಿಲ್ಲದ"
 
-#: ../embed/mozilla/EphyPromptService.cpp:184
+#: ../embed/mozilla/EphyPromptService.cpp:195
 #, fuzzy
 msgid "_Abort Script"
 msgstr "ಸ್ಕ್ರಿಪ್ಟ್"
 
-#: ../embed/mozilla/EphyPromptService.cpp:252
+#: ../embed/mozilla/EphyPromptService.cpp:263
 msgid "Don't Save"
 msgstr "ಉಳಿಸಬೇಡ"
 
-#: ../embed/mozilla/EphyPromptService.cpp:807
-#: ../lib/ephy-password-dialog.c:401
+#: ../embed/mozilla/EphyPromptService.cpp:822
+#: ../lib/ephy-password-dialog.c:396
 msgid "_Username:"
 msgstr "ಬಳಕೆದಾರ ಹೆಸರು(_U):"
 
-#: ../embed/mozilla/FilePicker.cpp:147 ../embed/mozilla/FilePicker.cpp:413
-#: ../lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:786
+#: ../embed/mozilla/FilePicker.cpp:146 ../embed/mozilla/FilePicker.cpp:417
+#: ../lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:767
 msgid "All files"
 msgstr "ಎಲ್ಲಾ ಕಡತಗಳು"
 
-#: ../embed/mozilla/FilePicker.cpp:152 ../lib/ephy-file-chooser.c:423
+#: ../embed/mozilla/FilePicker.cpp:151 ../lib/ephy-file-chooser.c:423
 msgid "Web pages"
 msgstr "ಜಾಲ ಪುಟಗಳು"
 
-#: ../embed/mozilla/FilePicker.cpp:160
+#: ../embed/mozilla/FilePicker.cpp:159
 msgid "Text files"
 msgstr "ಪಠ್ಯ ಕಡತಗಳು"
 
-#: ../embed/mozilla/FilePicker.cpp:165 ../lib/ephy-file-chooser.c:431
+#: ../embed/mozilla/FilePicker.cpp:164 ../lib/ephy-file-chooser.c:431
 msgid "Images"
 msgstr "ಚಿತ್ರಗಳು"
 
-#: ../embed/mozilla/FilePicker.cpp:173
+#: ../embed/mozilla/FilePicker.cpp:172
 msgid "XML files"
 msgstr "XML ಕಡತಗಳು"
 
-#: ../embed/mozilla/FilePicker.cpp:178
+#: ../embed/mozilla/FilePicker.cpp:177
 msgid "XUL files"
 msgstr "XUL ಕಡತಗಳು"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:94
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:91
 #, c-format
 msgid "Accept cookie from %s?"
 msgstr "%s ನಿಂದ ಕುಕಿಯನ್ನು ಅನುಮತಿಸಬೇಕೆ?"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:101
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:98
 msgid "Accept Cookie?"
 msgstr "ಕುಕಿಯನ್ನು ಅನುಮತಿಸಬೇಕೆ?"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:106
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:103
 msgid "The site wants to modify an existing cookie."
 msgstr "ಈ ತಾಣಕ್ಕಾಗಿ ಈಗಿರುವ ಕುಕಿಯನ್ನು ಬದಲಾಯಿಸುವುದು ಅಗತ್ಯವಾಗುತ್ತದೆ."
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:110
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:107
 msgid "The site wants to set a cookie."
 msgstr "ಈ ತಾಣಕ್ಕಾಗಿ ಒಂದು ಕುಕಿಯನ್ನು ಹೊಂದಿಸಬೇಕಾಗುತ್ತದೆ."
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:114
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:111
 msgid "The site wants to set a second cookie."
 msgstr "ಈ ತಾಣಕ್ಕಾಗಿ ಎರಡನೆಯ ಕುಕಿಯನ್ನು ಹೊಂದಿಸಬೇಕಾಗುತ್ತದೆ."
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:117
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:114
 #, c-format
 msgid "You already have %d cookie from this site."
 msgid_plural "You already have %d cookies from this site."
 msgstr[0] "ಈ ತಾಣದಿಂದ ಈಗಾಗಲೆ %d ಕುಕಿಯನ್ನು ಹೊಂದಿದ್ದೀರಿ."
 msgstr[1] "ಈ ತಾಣದಿಂದ ಈಗಾಗಲೆ %d ಕುಕಿಗಳನ್ನು ಹೊಂದಿದ್ದೀರಿ."
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:131
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:128
 msgid "Apply this _decision to all cookies from this site"
 msgstr "ಈ ತಾಣದ ಎಲ್ಲಾ ಕುಕಿಗಳಿಗೂ ಈ ನಿರ್ಣಯವನ್ನು ಅನ್ವಯಿಸು(_d)"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:139
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1699
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:136
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1709
 msgid "_Reject"
 msgstr "ತಿರಸ್ಕರಿಸು(_R)"
 
-#: ../embed/mozilla/GeckoCookiePromptService.cpp:141
-#: ../embed/mozilla/GtkNSSDialogs.cpp:280
+#: ../embed/mozilla/GeckoCookiePromptService.cpp:138
+#: ../embed/mozilla/GtkNSSDialogs.cpp:277
 msgid "_Accept"
 msgstr "ಅಂಗೀಕರಿಸು(_A)"
 
-#: ../embed/mozilla/GeckoFormSigningDialog.cpp:108
+#: ../embed/mozilla/GeckoFormSigningDialog.cpp:106
 #, c-format
 msgid "The web site “%s” requests that you sign the following text:"
 msgstr "ನೀವು ಈ ಕೆಳಗಿನ ಪಠ್ಯವನ್ನು ಸೈನ್ ಮಾಡುವಂತೆ ಜಾಲ ತಾಣ “%s” ವು ಬಯಸುತ್ತದೆ:"
 
-#: ../embed/mozilla/GeckoFormSigningDialog.cpp:137
+#: ../embed/mozilla/GeckoFormSigningDialog.cpp:135
 msgid "_Sign text"
 msgstr "ಪಠ್ಯವನ್ನು ಸೈನ್ ಮಾಡು(_S)"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:197
+#: ../embed/mozilla/GeckoPrintService.cpp:192
 msgid "Options"
 msgstr "ಆಯ್ಕೆಗಳು"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:461
+#: ../embed/mozilla/GeckoPrintService.cpp:456
 msgid "Print this page?"
 msgstr "ಈ ಪುಟವನ್ನು ಮುದ್ರಿಸಬೇಕೆ?"
 
-#: ../embed/mozilla/GeckoPrintService.cpp:469
+#: ../embed/mozilla/GeckoPrintService.cpp:464
 msgid "Preparing to print"
 msgstr "ಮುದ್ರಿಸಲು ತಯಾರಾಗುತ್ತಿದೆ"
 
@@ -1915,12 +1929,12 @@ msgid "Certificate _Details"
 msgstr "ಪ್ರಮಾಣಪತ್ರದ ವಿವರಗಳು(_D)"
 
 #. Add the buttons
-#: ../embed/mozilla/GtkNSSDialogs.cpp:272
-#: ../embed/mozilla/GtkNSSDialogs.cpp:647
+#: ../embed/mozilla/GtkNSSDialogs.cpp:269
+#: ../embed/mozilla/GtkNSSDialogs.cpp:633
 msgid "_View Certificate"
 msgstr "ಪ್ರಮಾಣಪತ್ರವನ್ನು ವೀಕ್ಷಿಸು(_V)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:424
+#: ../embed/mozilla/GtkNSSDialogs.cpp:409
 #, fuzzy, c-format
 msgid ""
 "The site “%s” returned security information for “%s”. It is possible that "
@@ -1928,61 +1942,61 @@ msgid ""
 "information."
 msgstr "ಗೆ    ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:430
+#: ../embed/mozilla/GtkNSSDialogs.cpp:415
 #, c-format
 msgid ""
 "You should only accept the security information if you trust “%s” and “%s”."
 msgstr ""
 "“%s” ಹಾಗು “%s” ಅನ್ನು ನೀವು ನಂಬುತ್ತಿದ್ದಲ್ಲಿ ಮಾತ್ರ ಸುರಕ್ಷತಾ ಮಾಹಿತಿಯನ್ನು ಅಂಗೀಕರಿಸಬೇಕು."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:435
+#: ../embed/mozilla/GtkNSSDialogs.cpp:420
 msgid "Accept incorrect security information?"
 msgstr "ಸರಿ ಇರದ ಸುರಕ್ಷತಾ ಮಾಹಿತಿಯನ್ನು ಅಂಗೀಕರಿಸಬೇಕೆ?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:464
+#: ../embed/mozilla/GtkNSSDialogs.cpp:449
 #, fuzzy, c-format
 msgid ""
 "It was not possible to automatically trust “%s”. It is possible that someone "
 "is intercepting your communication to obtain your confidential information."
 msgstr "   ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:470
+#: ../embed/mozilla/GtkNSSDialogs.cpp:455
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to "
 "“%s”."
 msgstr ""
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:475
+#: ../embed/mozilla/GtkNSSDialogs.cpp:460
 msgid "Connect to untrusted site?"
 msgstr "ನಂಬಿಕೆ ಇಲ್ಲದ ತಾಣಗಳಿಗೆ ಸಂಪರ್ಕ ಕಲ್ಪಿಸಬೇಕೆ?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:479
+#: ../embed/mozilla/GtkNSSDialogs.cpp:464
 #, fuzzy
 msgid "_Trust this security information from now on"
 msgstr "ಈಗ ನಲ್ಲಿ"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:480
+#: ../embed/mozilla/GtkNSSDialogs.cpp:465
 msgid "Co_nnect"
 msgstr "ಸಂಪರ್ಕ ಕಲ್ಪಿಸು(_n)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:539
+#: ../embed/mozilla/GtkNSSDialogs.cpp:524
 msgid "Accept expired security information?"
 msgstr "ಕಾಲಾವಧಿ ಮುಗಿದ ಸುರಕ್ಷತಾ ಮಾಹಿತಿಯನ್ನು ಅಂಗೀಕರಿಸಬೇಕೆ?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:541
+#: ../embed/mozilla/GtkNSSDialogs.cpp:526
 #, c-format
 msgid "The security information for “%s” expired on %s."
 msgstr "“%s” ಗಾಗಿನ ಸುರಕ್ಷತಾ ಮಾಹಿತಿಯ ಕಾಲಾವಧಿ %s ಯಂದು ತೀರಿಹೋಗಿದೆ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:547
+#: ../embed/mozilla/GtkNSSDialogs.cpp:532
 #, fuzzy
 msgid "Accept not yet valid security information?"
 msgstr "ಅಂಗೀಕರಿಸು?"
 
 #. Translators: first %s is a hostname, second %s is a time/date
-#: ../embed/mozilla/GtkNSSDialogs.cpp:549
+#: ../embed/mozilla/GtkNSSDialogs.cpp:534
 #, fuzzy, c-format
 msgid "The security information for “%s” isn't valid until %s."
 msgstr "ಗೆ ವರೆಗೆ."
@@ -1990,20 +2004,20 @@ msgstr "ಗೆ ವರೆಗೆ."
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: ../embed/mozilla/GtkNSSDialogs.cpp:563
+#: ../embed/mozilla/GtkNSSDialogs.cpp:548
 msgid "%a %d %b %Y"
 msgstr "%a %d %b %Y"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:572
+#: ../embed/mozilla/GtkNSSDialogs.cpp:557
 msgid "You should ensure that your computer's time is correct."
 msgstr "ನಿಮ್ಮ ಗಣಕದ ಸಮಯದ ಸರಿ ಇದೆಯಂದು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಬೇಕು ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:606
+#: ../embed/mozilla/GtkNSSDialogs.cpp:591
 #, c-format
 msgid "Cannot establish connection to “%s”"
 msgstr "“%s” ನೊಂದಿಗೆ ಸಂಪರ್ಕ ಸಾಧಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:611
+#: ../embed/mozilla/GtkNSSDialogs.cpp:596
 #, fuzzy, c-format
 msgid ""
 "The certificate revocation list (CRL) from “%s” needs to be updated.\n"
@@ -2011,126 +2025,128 @@ msgid ""
 "Please ask your system administrator for assistance."
 msgstr "ಪಟ್ಟಿ n ಗೆ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:645
+#: ../embed/mozilla/GtkNSSDialogs.cpp:631
 msgid "Trust new Certificate Authority?"
 msgstr "ಹೊಸ ಪ್ರಮಾಣಪತ್ರ ಅಥಾರಿಟಿಯನ್ನು ನಂಬಬೇಕೆ?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:650
+#: ../embed/mozilla/GtkNSSDialogs.cpp:636
 msgid "_Trust CA"
 msgstr "CA ಅನ್ನು ನಂಬು(_T)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:670
+#: ../embed/mozilla/GtkNSSDialogs.cpp:656
 #, fuzzy, c-format
 msgid "Trust new Certificate Authority “%s” to identify web sites?"
 msgstr "ಪ್ರಮಾಣಪತ್ರ?"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:675
+#: ../embed/mozilla/GtkNSSDialogs.cpp:661
 #, fuzzy
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
 msgstr "ಪ್ರಮಾಣಪತ್ರ  ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:745
+#: ../embed/mozilla/GtkNSSDialogs.cpp:731
 msgid "Certificate already exists."
 msgstr "ಪ್ರಮಾಣಪತ್ರವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:746
+#: ../embed/mozilla/GtkNSSDialogs.cpp:732
 msgid "The certificate has already been imported."
 msgstr "ಪ್ರಮಾಣಪತ್ರವು ಈಗಾಗಲೆ ಆಮದು ಮಾಡಿಕೊಳ್ಳಲ್ಪಟ್ಟಿದೆ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:778
+#: ../embed/mozilla/GtkNSSDialogs.cpp:765
 msgid "Select Password"
 msgstr "ಗುಪ್ತಪದವನ್ನು ಆರಿಸು"
 
 #. FIXME: set accept button text to (_("_Back Up Certificate") ?
 #. * That's not actually correct, since this function is also called from other places!
 #.
-#: ../embed/mozilla/GtkNSSDialogs.cpp:788
+#: ../embed/mozilla/GtkNSSDialogs.cpp:775
+#, c-format
 msgid "Select a password to protect this certificate"
 msgstr "ಈ ಪ್ರಮಾಣಪತ್ರವನ್ನು ಸಂರಕ್ಷಿಸಲು ಒಂದು ಗುಪ್ತಪದವನ್ನು ಆರಿಸು"
 
 #. FIXME: mozilla sucks, no way to get the name of the certificate / cert file!
-#: ../embed/mozilla/GtkNSSDialogs.cpp:837
+#: ../embed/mozilla/GtkNSSDialogs.cpp:825
+#, c-format
 msgid "Enter the password for this certificate"
 msgstr "ಈ ಪ್ರಮಾಣಪತ್ರಕ್ಕಾಗಿ ಗುಪ್ತಪದವನ್ನು ನಮೂದಿಸಿ"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:908
+#: ../embed/mozilla/GtkNSSDialogs.cpp:896
 msgid "Certificate Revocation List Imported"
 msgstr "ಸ್ಪ್ರಮಾಣಪತ್ರ ಪಟ್ಟಿ"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:918
+#: ../embed/mozilla/GtkNSSDialogs.cpp:906
 #, fuzzy
 msgid "Certificate Revocation List (CRL) successfully imported"
 msgstr "ಪ್ರಮಾಣಪತ್ರ ಪಟ್ಟಿ"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:939
+#: ../embed/mozilla/GtkNSSDialogs.cpp:927
 msgid "Unit:"
 msgstr "ಘಟಕ:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:941
+#: ../embed/mozilla/GtkNSSDialogs.cpp:929
 msgid "Next Update:"
 msgstr "ಮುಂದಿನ ಅಪ್ಡೇಟ್:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:968
+#: ../embed/mozilla/GtkNSSDialogs.cpp:956
 msgid "Not part of certificate"
 msgstr "ಪ್ರಮಾಣಪತ್ರದ ಒಂದು ಭಾಗವಾಗಿಲ್ಲ"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1256
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1242
 msgid "Certificate Properties"
 msgstr "ಪ್ರಮಾಣಪತ್ರದಗುಣಲಕ್ಷಣಗಳು"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1278
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1265
 msgid "This certificate has been verified for the following uses:"
 msgstr "ಈ ಪ್ರಮಾಣ ಪತ್ರವು ಈ ಕೆಳಗಿನ ಬಳಕೆಗಾಗಿ ಪರಿಶೀಲಿಸಲ್ಪಟ್ಟಿದೆ:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1281
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1268
 msgid "Could not verify this certificate because it has been revoked."
 msgstr ""
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1284
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1271
 msgid "Could not verify this certificate because it has expired."
 msgstr "ಈ ಪ್ರಮಾಣಪತ್ರದ ಕಾಲಾವಧಿ ಮುಗಿದಿದ್ದರಿಂದ ಇದನ್ನು ಪರಿಶೀಲಿಸಲಾಗಿಲ್ಲ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1287
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1274
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "ಈ ಪ್ರಮಾಣಪತ್ರದ ನಂಬಲಾಗಿಲ್ಲದುದರಿಂದ ಇದನ್ನು ಪರಿಶೀಲಿಸಲಾಗಿಲ್ಲ ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1290
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1277
 #, fuzzy
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr " ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1293
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1280
 #, fuzzy
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "  ಗೊತ್ತಿರದ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1296
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1283
 #, fuzzy
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr "  ಅಮಾನ್ಯ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1301
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1288
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "ಅಜ್ಞಾತ ಕಾರಣಗಳಿಂದಾಗಿ ಈ ಪ್ರಮಾಣಪತ್ರವನ್ನು ಪರಿಶೀಲಿಸಲಾಗಿಲ್ಲ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1440
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1433
 msgid "Change Token Password"
 msgstr "ಟೋಕನ್ ಗುಪ್ತಪದವನ್ನು ಬದಲಾಯಿಸು"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1446
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1439
 #, c-format
 msgid "Choose a password for the “%s” token"
 msgstr "“%s” ಟೋಕನ್‍ಗಾಗಿ ಒಂದು ಗುಪ್ತಪದವನ್ನು ಆರಿಸಿ"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1449
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1442
 #, c-format
 msgid "Change the password for the “%s” token"
 msgstr "“%s” ಟೋಕನ್‍ಗಾಗಿ ಗುಪ್ತಪದವನ್ನು ಬದಲಾಯಿಸಿ"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1533
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1528
 msgid "Get Token Password"
 msgstr "ಟೋಕನ್ ಗುಪ್ತಪದವನ್ನು ಪಡೆದುಕೊಳ್ಳಿ"
 
@@ -2138,24 +2154,24 @@ msgstr "ಟೋಕನ್ ಗುಪ್ತಪದವನ್ನು ಪಡೆದುಕ�
 #. * prove his credentials. This can be either a hardware device (e.g. a smart-card), or
 #. * a data file (e.g. a cryptographic certificate).
 #.
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1541
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1536
 #, c-format
 msgid "Please enter the password for the “%s” token"
 msgstr "ದಯವಿಟ್ಟು “%s” ಟೋಕನ್‍ಗಾಗಿ ಗುಪ್ತಪದವನ್ನು ನಮೂದಿಸಿ"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1607
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1602
 msgid "Please select a token:"
 msgstr "ದಯವಿಟ್ಟು ಒಂದು ಟೋಕನ್ ಅನ್ನು ಆರಿಸಿ:"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1626
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1621
 msgid "_Select"
 msgstr "ಆರಿಸು(_S)"
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1679
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1689
 msgid "Escrow the secret key?"
 msgstr ""
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1688
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1698
 #, fuzzy, c-format
 msgid ""
 "The certificate authority “%s” requests that you give it a copy of the newly "
@@ -2167,30 +2183,30 @@ msgid ""
 "It is strongly recommended not to allow it."
 msgstr "ಮನವಿಗಳು n ನೊಂದಿಗೆ n  ."
 
-#: ../embed/mozilla/GtkNSSDialogs.cpp:1702
+#: ../embed/mozilla/GtkNSSDialogs.cpp:1712
 msgid "_Allow"
 msgstr "ಅನುಮತಿಸು(_A)"
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:181
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:176
 msgid "Generating Private Key."
 msgstr "ಖಾಸಗಿ ಕೀಲಿಯನ್ನು ರಚಿಸಲಾಗುತ್ತಿದೆ."
 
-#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:182
+#: ../embed/mozilla/GtkNSSKeyPairDialogs.cpp:177
 #, fuzzy
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
 msgstr "ಒಂದು ಖಾಸಗಿ ಕೀಲಿಯು ದಯವಿಟ್ಟು   ನಿಮಿಷಗಳು."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
 msgid "Security Notice"
 msgstr "ಸುರಕ್ಷತಾ ಸೂಚನೆ"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:96
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
 msgid "This page is loaded over a secure connection"
 msgstr "ಈ ಪುಟವು ಒಂದು ಸುರಕ್ಷತಾ ಸಂಪರ್ಕದ ಮೂಲಕ ಲೋಡ್‌ ಆಗಿದೆ"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:97
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:95
 msgid ""
 "For secure pages, the address entry has a distinct color and a locked "
 "padlock icon is displayed.\n"
@@ -2198,18 +2214,18 @@ msgid ""
 "The padlock icon in the statusbar also indicates whether a page is secure."
 msgstr ""
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:116
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:144
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:114
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:142
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:161
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:181
 msgid "Security Warning"
 msgstr "ಸುರಕ್ಷತೆ ಎಚ್ಚರಿಕಾ ಸೂಚನೆ"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:117
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:115
 msgid "This page is loaded over a low security connection"
 msgstr "ಈ ಪುಟವು ಒಂದು ಕೆಳಮಟ್ಟದ ಸುರಕ್ಷತಾ ಸಂಪರ್ಕದ ಮೂಲಕ ಲೋಡ್‌ ಆಗಿದೆ"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:118
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:116
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
@@ -2217,11 +2233,11 @@ msgstr ""
 "ಈ ಪುಟದಲ್ಲಿ ನೀವು ನೋಡುವ ಅಥವ ನಮೂದಿಸುವ ಯಾವುದೆ ಮಾಹಿತಿಯು ಮೂರನೆಯವರಿಂದ ಸುಲಭವಾಗಿ "
 "ನೋಡಲ್ಪಡಬಹುದು."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:145
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:143
 msgid "Some parts of this page are loaded over an insecure connection"
 msgstr "ಈ ಪುಟದ ಕೆಲವು ಭಾಗಗಳು ಒಂದು ಸುರಕ್ಷತಾ ಸಂಪರ್ಕದ ಮೂಲಕ ಲೋಡ್‌ ಆಗಿದೆ"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:146
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:144
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -2229,12 +2245,12 @@ msgstr ""
 "ಈ ಪುಟದಲ್ಲಿ ನೀವು ನೋಡುವ ಅಥವ ನಮೂದಿಸುವ ಮಾಹಿತಿಯು ಒಂದು ಅಸುರಕ್ಷಿತ ಸಂಪರ್ಕದ ಮೂಲಕ "
 "ಕಳುಹಿಸಲ್ಪಡುತ್ತದೆ, ಹಾಗು ಅದು ಮೂರನೆಯವರಿಂದ ಸುಲಭವಾಗಿ ನೋಡಲ್ಪಡಬಹುದು."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:164
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:162
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:182
 msgid "Send this information over an insecure connection?"
 msgstr "ಈ ಮಾಹಿತಿಯನ್ನು ಒಂದು ಅಸುರಕ್ಷಿತ ಸಂಪರ್ಕದ ಮೂಲಕ ಕಳುಹಿಸಲ್ಪಡಬೇಕೆ?"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:165
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
@@ -2242,12 +2258,12 @@ msgstr ""
 "ಈ ಪುಟದಲ್ಲಿ ನೀವು ನಮೂದಿಸಿದ ಮಾಹಿತಿಯು ಒಂದು ಅಸುರಕ್ಷಿತ ಸಂಪರ್ಕದ ಮೂಲಕ ಕಳುಹಿಸಲ್ಪಡುತ್ತದೆ, "
 "ಹಾಗು ಅದು ಮೂರನೆಯವರಿಂದ ಸುಲಭವಾಗಿ ನೋಡಲ್ಪಡಬಹುದು."
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:168
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:189
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:166
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:187
 msgid "_Send"
 msgstr "ಕಳುಹಿಸು(_S)"
 
-#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:185
+#: ../embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:183
 msgid ""
 "Although this page was loaded over a secure connection, the information you "
 "have entered will be sent over an insecure connection, and could easily be "
@@ -2258,7 +2274,7 @@ msgstr ""
 "ನೋಡಲ್ಪಡಬಹುದು."
 
 #. translators: this is the directory name to store auxilary files when saving html files
-#: ../embed/mozilla/MozDownload.cpp:692
+#: ../embed/mozilla/MozDownload.cpp:706
 #, c-format
 msgid "%s Files"
 msgstr "%s ಕಡತಗಳು"
@@ -2273,7 +2289,7 @@ msgstr "%s ಕಡತಗಳು"
 #. * in url-escaped UTF-8; that means that if you're choosing google,
 #. * the 'q=' part needs to come last.
 #.
-#: ../embed/mozilla/mozilla-embed-single.cpp:203
+#: ../embed/mozilla/mozilla-embed-single.cpp:184
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
@@ -2286,12 +2302,12 @@ msgstr ""
 "GConf ದೋಷ:\n"
 "  %s"
 
-#: ../lib/egg/eel-app-launch-context.c:403
+#: ../lib/egg/eel-app-launch-context.c:402
 #, c-format
 msgid "Opening %s"
 msgstr "%s ಅನ್ನು ತೆರೆಯಲಾಗುತ್ತಿದೆ"
 
-#: ../lib/egg/eel-app-launch-context.c:406
+#: ../lib/egg/eel-app-launch-context.c:405
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -2305,38 +2321,38 @@ msgstr[1] "%d ಅಂಶಗಳನ್ನ್ನು ತೆರೆಯಲಾಗುತ�
 #. * produce duplicates, but don't worry about it. If your language
 #. * normally has a mnemonic at the start, please use the _. If not,
 #. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:942
+#: ../lib/egg/egg-editable-toolbar.c:923
 #, c-format
 msgid "Show “_%s”"
 msgstr "“_%s” ಅನ್ನು ತೋರಿಸು"
 
-#: ../lib/egg/egg-editable-toolbar.c:1405
+#: ../lib/egg/egg-editable-toolbar.c:1386
 #, fuzzy
 msgid "_Move on Toolbar"
 msgstr "ವರ್ಗಾಯಿಸು ನಲ್ಲಿ"
 
-#: ../lib/egg/egg-editable-toolbar.c:1406
+#: ../lib/egg/egg-editable-toolbar.c:1387
 #, fuzzy
 msgid "Move the selected item on the toolbar"
 msgstr "ವರ್ಗಾಯಿಸು ಆರಿಸಲಾದ ಅಂಶ ನಲ್ಲಿ"
 
-#: ../lib/egg/egg-editable-toolbar.c:1407
+#: ../lib/egg/egg-editable-toolbar.c:1388
 msgid "_Remove from Toolbar"
 msgstr "ಉಪಕರಣ ಪಟ್ಟಿ ಇಂದ ತೆಗೆದು ಹಾಕು(_R)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1408
+#: ../lib/egg/egg-editable-toolbar.c:1389
 msgid "Remove the selected item from the toolbar"
 msgstr "ಆರಿಸಲಾದ ಅಂಶವನ್ನು ಉಪಕರಣ ಪಟ್ಟಿ ಇಂದ ತೆಗೆದು ಹಾಕು"
 
-#: ../lib/egg/egg-editable-toolbar.c:1409
+#: ../lib/egg/egg-editable-toolbar.c:1390
 msgid "_Delete Toolbar"
 msgstr "ಉಪಕರಣಪಟ್ಟಿಯನ್ನು ಅಳಿಸಿಹಾಕು(_D)"
 
-#: ../lib/egg/egg-editable-toolbar.c:1410
+#: ../lib/egg/egg-editable-toolbar.c:1391
 msgid "Remove the selected toolbar"
 msgstr "ಆರಿಸಲಾದ ಉಪಕರಣ ಪಟ್ಟಿಯನ್ನು ತೆಗೆದು ಹಾಕು"
 
-#: ../lib/egg/egg-toolbar-editor.c:491
+#: ../lib/egg/egg-toolbar-editor.c:485
 msgid "Separator"
 msgstr "ವಿಭಜಕ"
 
@@ -2359,35 +2375,35 @@ msgstr "“%s” ಕಡತವು ಈಗಾಗಲೆ ಇದೆ. ದಯವಿಟ�
 msgid "Failed to create directory “%s”."
 msgstr "“%s” ಕೋಶವನ್ನು ಸೃಜಿಸಲು ವಿಫಲಗೊಂಡಿದೆ."
 
-#: ../lib/ephy-gui.c:293
+#: ../lib/ephy-gui.c:285
 #, c-format
 msgid "Directory “%s” is not writable"
 msgstr "“%s” ಕೋಶದಲ್ಲಿ ಬರೆಯಲಾಗುವುದಿಲ್ಲ"
 
-#: ../lib/ephy-gui.c:297
+#: ../lib/ephy-gui.c:289
 msgid "You do not have permission to create files in this directory."
 msgstr "ನಿಮಗೆ ಈ ಕೋಶದಲ್ಲಿ ಕಡತಗಳನ್ನು ಸೃಜಿಸಲು ಅನುಮತಿಗಳಿಲ್ಲ."
 
-#: ../lib/ephy-gui.c:300
+#: ../lib/ephy-gui.c:292
 msgid "Directory not Writable"
 msgstr "ಬರೆಯಲಾಗದ ಕೋಶ"
 
-#: ../lib/ephy-gui.c:330
+#: ../lib/ephy-gui.c:322
 #, c-format
 msgid "Cannot overwrite existing file “%s”"
 msgstr "ಈಗಿರುವ “%s” ಕಡತವನ್ನು ತಿದ್ದಿ ಬರೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ"
 
-#: ../lib/ephy-gui.c:334
+#: ../lib/ephy-gui.c:326
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
 msgstr "ಈ ಹೆಸರಿನ ಕಡತವು ಈಗಾಗಲೆ ಇದೆ ಹಾಗು ನಿಮಗೆ ಅದನ್ನು ತಿದ್ದಿ ಬರೆಯಲು ಅನುಮತಿಗಳಿಲ್ಲ."
 
-#: ../lib/ephy-gui.c:337
+#: ../lib/ephy-gui.c:329
 msgid "Cannot Overwrite File"
 msgstr "ಕಡತವನ್ನು ತಿದ್ದಿಬರೆಯಲಾಗುವುದಿಲ್ಲ"
 
-#: ../lib/ephy-gui.c:376
+#: ../lib/ephy-gui.c:368
 #, c-format
 msgid "Could not display help: %s"
 msgstr "ಸಹಾಯವನ್ನು ತೋರಿಸಲಾಗಲಿಲ್ಲ: %s"
@@ -2549,31 +2565,31 @@ msgstr "ವೆಸ್ಟರ್ನಿಗಾಗಿ"
 msgid "select fonts for|Other Scripts"
 msgstr "ಇತರೆ ಭಾಷೆಗಳಿಗಾಗಿ"
 
-#: ../lib/ephy-password-dialog.c:415
+#: ../lib/ephy-password-dialog.c:410
 msgid "_Domain:"
 msgstr "ಕ್ಷೇತ್ರ(_D):"
 
-#: ../lib/ephy-password-dialog.c:444
+#: ../lib/ephy-password-dialog.c:437
 msgid "_New password:"
 msgstr "ಹೊಸ ಗುಪ್ತಪದ(_N):"
 
-#: ../lib/ephy-password-dialog.c:454
+#: ../lib/ephy-password-dialog.c:447
 msgid "Con_firm password:"
 msgstr "ಗುಪ್ತಪದವನ್ನು ಖಚಿತಪಡಿಸು(_f):"
 
-#: ../lib/ephy-password-dialog.c:482
+#: ../lib/ephy-password-dialog.c:473
 msgid "Password quality:"
 msgstr "ಗುಪ್ತಪದದ ದರ್ಜೆ:"
 
-#: ../lib/ephy-password-dialog.c:499
+#: ../lib/ephy-password-dialog.c:491
 msgid "Do not remember this password"
 msgstr "ಈ ಗುಪ್ತಪದವನ್ನು ನೆನಪಿಟ್ಟುಕೊಳ್ಳಬೇಡ"
 
-#: ../lib/ephy-password-dialog.c:503
+#: ../lib/ephy-password-dialog.c:495
 msgid "_Remember password for this session"
 msgstr "ಗುಪ್ತಪದವನ್ನು ಈ ಅಧಿವೇಶನಕ್ಕೆ ನೆನಪಿಟ್ಟುಕೊ(_R)"
 
-#: ../lib/ephy-password-dialog.c:507
+#: ../lib/ephy-password-dialog.c:499
 msgid "Save password in _keyring"
 msgstr "ಗುಪ್ತಪದವನ್ನು ಕೀರಿಂಗ್‍ನಲ್ಲಿ ಉಳಿಸು(_k)"
 
@@ -2581,23 +2597,23 @@ msgstr "ಗುಪ್ತಪದವನ್ನು ಕೀರಿಂಗ್‍ನಲ್�
 msgid "Popup Windows"
 msgstr "ಪುಟಿಕೆ ವಿಂಡೋಗಳು"
 
-#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1297
+#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1277
 msgid "History"
 msgstr "ಇತಿಹಾಸ"
 
 #: ../lib/ephy-stock-icons.c:54
 #: ../src/bookmarks/ephy-bookmark-factory-action.c:301
-#: ../src/ephy-window.c:1484
+#: ../src/ephy-window.c:1478
 msgid "Bookmark"
 msgstr "ಬುಕ್‍ಮಾರ್ಕ್"
 
-#: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:917
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1792
-#: ../src/bookmarks/ephy-topic-action.c:454 ../src/ephy-window.c:1488
+#: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:898
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1778
+#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1482
 msgid "Bookmarks"
 msgstr "ಬುಕ್‍ಮಾರ್ಕುಗಳು"
 
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:291
+#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:286
 msgid "Address Entry"
 msgstr "ವಿಳಾಸದ ನಮೂದು"
 
@@ -2674,89 +2690,89 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:869
+#: ../lib/widgets/ephy-location-entry.c:852
 #, fuzzy
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "ಚಿಹ್ನೆ ಕೊಂಡಿ ಪುಟ"
 
-#: ../plugins/desktop-file/plugin.cpp:379
+#: ../plugins/desktop-file/plugin.cpp:377
 msgid "Unsafe protocol."
 msgstr "ಅಸುರಕ್ಷಿತ ಪ್ರೊಟೊಕಾಲ್."
 
-#: ../plugins/desktop-file/plugin.cpp:380
+#: ../plugins/desktop-file/plugin.cpp:378
 msgid ""
 "The address has not been loaded, because it refers to an unsafe protocol and "
 "thereby presents a security risk to your system."
 msgstr ""
 
-#: ../plugins/desktop-file/plugin.cpp:408
+#: ../plugins/desktop-file/plugin.cpp:406
 msgid "No address found."
 msgstr "ಯಾವುದೆ ವಿಳಾಸವು ಕಂಡು ಬಂದಿಲ್ಲ."
 
-#: ../plugins/desktop-file/plugin.cpp:409
+#: ../plugins/desktop-file/plugin.cpp:407
 msgid "No web address could be found in this file."
 msgstr "ಈ ಕಡತದಲ್ಲಿ ಯಾವುದೆ ಜಾಲ ವಿಳಾಸವು ಕಂಡು ಬಂದಿಲ್ಲ."
 
 #. Translators: "Desktop File" refers to .desktop files containing a link
-#: ../plugins/desktop-file/plugin.cpp:444
+#: ../plugins/desktop-file/plugin.cpp:442
 msgid "Epiphany Desktop File Plugin"
 msgstr "ಎಪಿಫ್ಯಾನಿ ಗಣಕತೆರೆ ಕಡತ ಪ್ಲಗ್ಇನ್"
 
-#: ../plugins/desktop-file/plugin.cpp:448
+#: ../plugins/desktop-file/plugin.cpp:446
 msgid "This plugin handles “.desktop” and “.url” files containing web links."
 msgstr ""
 
-#: ../src/bookmarks/ephy-bookmark-action.c:332
+#: ../src/bookmarks/ephy-bookmark-action.c:321
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:509
+#: ../src/bookmarks/ephy-bookmark-action.c:498
 #, c-format
 msgid "Executes the script “%s”"
 msgstr "“%s” ಸ್ಕ್ರಿಪ್ಟನ್ನು ಕಾರ್ಯಗತಗೊಳಿಸು"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:97
-#: ../src/bookmarks/ephy-bookmark-properties.c:623
+#: ../src/bookmarks/ephy-bookmark-properties.c:87
+#: ../src/bookmarks/ephy-bookmark-properties.c:613
 #, c-format
 msgid "%d _Similar"
 msgid_plural "%d _Similar"
 msgstr[0] "ಒಂದೇ ರೀತಿಯ %d (_S)"
 msgstr[1] "ಒಂದೇ ರೀತಿಯ %d (_S)"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:270
+#: ../src/bookmarks/ephy-bookmark-properties.c:260
 #, fuzzy, c-format
 msgid "_Unify With %d Identical Bookmark"
 msgid_plural "_Unify With %d Identical Bookmarks"
 msgstr[0] "ಬುಕ್-ಮಾರ್ಕ್"
 msgstr[1] "ಬುಕ್-ಮಾರ್ಕ್"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:290
-#: ../src/bookmarks/ephy-bookmark-properties.c:312
+#: ../src/bookmarks/ephy-bookmark-properties.c:280
+#: ../src/bookmarks/ephy-bookmark-properties.c:302
 #, c-format
 msgid "Show “%s”"
 msgstr "“%s” ಅನ್ನು ತೋರಿಸು"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:438
+#: ../src/bookmarks/ephy-bookmark-properties.c:428
 #, c-format
 msgid "“%s” Properties"
 msgstr "“%s” ಗುಣಲಕ್ಷಣಗಳು"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:562
+#: ../src/bookmarks/ephy-bookmark-properties.c:552
 msgid "_Title:"
 msgstr "ಶೀರ್ಷಿಕೆ(_T):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:578
+#: ../src/bookmarks/ephy-bookmark-properties.c:568
 msgid "A_ddress:"
 msgstr "ವಿಳಾಸ(_d):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:589
+#: ../src/bookmarks/ephy-bookmark-properties.c:579
 msgid "T_opics:"
 msgstr "ವಿಷಯಗಳು(_o):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:611
+#: ../src/bookmarks/ephy-bookmark-properties.c:601
 msgid "Sho_w all topics"
 msgstr "ಎಲ್ಲಾ ವಿಷಯಗಳನ್ನು ತೋರಿಸು(_w)"
 
@@ -2764,60 +2780,60 @@ msgstr "ಎಲ್ಲಾ ವಿಷಯಗಳನ್ನು ತೋರಿಸು(_w)"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: ../src/bookmarks/ephy-bookmarks.c:111
+#: ../src/bookmarks/ephy-bookmarks.c:110
 msgid "Search the web"
 msgstr "ಜಾಲದಲ್ಲಿ ಹುಡುಕು"
 
-#: ../src/bookmarks/ephy-bookmarks.c:111
+#: ../src/bookmarks/ephy-bookmarks.c:110
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: ../src/bookmarks/ephy-bookmarks.c:116
+#: ../src/bookmarks/ephy-bookmarks.c:115
 msgid "Entertainment"
 msgstr "ಮನರಂಜನೆ"
 
-#: ../src/bookmarks/ephy-bookmarks.c:117
+#: ../src/bookmarks/ephy-bookmarks.c:116
 msgid "News"
 msgstr "ಸಮಾಚಾರ"
 
-#: ../src/bookmarks/ephy-bookmarks.c:118
+#: ../src/bookmarks/ephy-bookmarks.c:117
 msgid "Shopping"
 msgstr "ಶಾಪಿಂಗ್"
 
-#: ../src/bookmarks/ephy-bookmarks.c:119
+#: ../src/bookmarks/ephy-bookmarks.c:118
 msgid "Sports"
 msgstr "ಕ್ರೀಡೆಗಳು"
 
-#: ../src/bookmarks/ephy-bookmarks.c:120
+#: ../src/bookmarks/ephy-bookmarks.c:119
 msgid "Travel"
 msgstr "ಪ್ರಯಾಣ"
 
-#: ../src/bookmarks/ephy-bookmarks.c:121
+#: ../src/bookmarks/ephy-bookmarks.c:120
 msgid "Work"
 msgstr "ಕೆಲಸ"
 
 #. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:493
+#: ../src/bookmarks/ephy-bookmarks.c:462
 #, c-format
 msgid "Update bookmark “%s”?"
 msgstr "“%s” ಬುಕ್‍ಮಾರ್ಕನ್ನು ಅಪ್ಡೇಟ್ ಮಾಡಬೇಕೆ?"
 
 #. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:498
+#: ../src/bookmarks/ephy-bookmarks.c:467
 #, c-format
 msgid "The bookmarked page has moved to “%s”."
 msgstr "ಬುಕ್‍ಮಾರ್ಕ್ ಮಾಡಲಾದ ಪುಟವು “%s” ಕ್ಕೆ ಸ್ಥಳಾಂತರಿಸಲ್ಪಟ್ಟಿದೆ."
 
-#: ../src/bookmarks/ephy-bookmarks.c:502
+#: ../src/bookmarks/ephy-bookmarks.c:471
 msgid "_Don't Update"
 msgstr "ಅಪ್ಡೇಟ್ ಮಾಡಬೇಡ(_D)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:504
+#: ../src/bookmarks/ephy-bookmarks.c:473
 msgid "_Update"
 msgstr "ಅಪ್ಡೇಟ್ ಮಾಡು(_U)"
 
-#: ../src/bookmarks/ephy-bookmarks.c:507
+#: ../src/bookmarks/ephy-bookmarks.c:476
 msgid "Update Bookmark?"
 msgstr "ಬುಕ್‍ಮಾರ್ಕನ್ನು ಅಪ್ಡೇಟ್ ಮಾಡಬೇಕೆ?"
 
@@ -2825,7 +2841,7 @@ msgstr "ಬುಕ್‍ಮಾರ್ಕನ್ನು ಅಪ್ಡೇಟ್ ಮಾ�
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1246
+#: ../src/bookmarks/ephy-bookmarks.c:1224
 msgid "bookmarks|All"
 msgstr "ಎಲ್ಲವನ್ನೂ"
 
@@ -2833,7 +2849,7 @@ msgstr "ಎಲ್ಲವನ್ನೂ"
 #. * decide on the correct translation. You MUST OMIT it in the
 #. * translated string.
 #. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1252
+#: ../src/bookmarks/ephy-bookmarks.c:1230
 msgid "bookmarks|Most Visited"
 msgstr "ಹೆಚ್ಚಾಗಿ ಭೇಟಿ ನೀಡಲಾದ"
 
@@ -2842,7 +2858,7 @@ msgstr "ಹೆಚ್ಚಾಗಿ ಭೇಟಿ ನೀಡಲಾದ"
 #. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1259
+#: ../src/bookmarks/ephy-bookmarks.c:1237
 msgid "bookmarks|Not Categorized"
 msgstr "ವರ್ಗೀಕರಣಗೊಳ್ಳದ"
 
@@ -2851,364 +2867,364 @@ msgstr "ವರ್ಗೀಕರಣಗೊಳ್ಳದ"
 #. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1267
+#: ../src/bookmarks/ephy-bookmarks.c:1245
 msgid "bookmarks|Nearby Sites"
 msgstr "ಹತ್ತಿರದ ತಾಣಗಳನ್ನು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:99
+#: ../src/bookmarks/ephy-bookmarks-editor.c:80
 msgid "Epiphany (RDF)"
 msgstr "ಎಪಿಫ್ಯಾನಿ (RDF)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:100
+#: ../src/bookmarks/ephy-bookmarks-editor.c:81
 msgid "Mozilla (HTML)"
 msgstr "ಮೋಝಿಲ್ಲಾ (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:152
+#: ../src/bookmarks/ephy-bookmarks-editor.c:133
 msgid "Remove from this topic"
 msgstr "ಈ ವಿಷಯದಿಂದ ತೆಗೆದು ಹಾಕು"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:179
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:119
+#: ../src/bookmarks/ephy-bookmarks-editor.c:160
+#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:113
 msgid "_File"
 msgstr "ಕಡತ(_F)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180
-#: ../src/ephy-history-window.c:170 ../src/ephy-window.c:120
+#: ../src/bookmarks/ephy-bookmarks-editor.c:161
+#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:114
 msgid "_Edit"
 msgstr "ಸಂಪಾದಿಸು(_E)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
-#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:121
+#: ../src/bookmarks/ephy-bookmarks-editor.c:162
+#: ../src/ephy-history-window.c:151 ../src/ephy-window.c:115
 msgid "_View"
 msgstr "ನೋಟ(_V)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:182
-#: ../src/ephy-history-window.c:172 ../src/ephy-window.c:126
+#: ../src/bookmarks/ephy-bookmarks-editor.c:163
+#: ../src/ephy-history-window.c:152 ../src/ephy-window.c:120
 msgid "_Help"
 msgstr "ಸಹಾಯ(_H)"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:186
+#: ../src/bookmarks/ephy-bookmarks-editor.c:167
 msgid "_New Topic"
 msgstr "ಹೊಸ ವಿಷಯ(_N)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:168
 msgid "Create a new topic"
 msgstr "ಒಂದು ಹೊಸ ವಿಷಯವನ್ನು ಸೃಜಿಸು"
 
 #. FIXME ngettext
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1370
-#: ../src/bookmarks/ephy-bookmarks-ui.c:324 ../src/ephy-history-window.c:176
-#: ../src/ephy-history-window.c:727
+#: ../src/bookmarks/ephy-bookmarks-editor.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1351
+#: ../src/bookmarks/ephy-bookmarks-ui.c:323 ../src/ephy-history-window.c:156
+#: ../src/ephy-history-window.c:707
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "ಹೊಸ ವಿಂಡೊದಲ್ಲಿ ತೆಗೆ(_W)"
 msgstr[1] "ಹೊಸ ವಿಂಡೊಗಳಲ್ಲಿ ತೆಗೆ(_W)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:190
+#: ../src/bookmarks/ephy-bookmarks-editor.c:171
 msgid "Open the selected bookmark in a new window"
 msgstr "ಆರಿಸಲಾದ ಬುಕ್‍ಮಾರ್ಕನ್ನು ಹೊಸ ವಿಂಡೊದಲ್ಲಿ ತೆಗೆ"
 
 #. FIXME ngettext
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1373
-#: ../src/bookmarks/ephy-bookmarks-ui.c:312 ../src/ephy-history-window.c:179
-#: ../src/ephy-history-window.c:730
+#: ../src/bookmarks/ephy-bookmarks-editor.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1354
+#: ../src/bookmarks/ephy-bookmarks-ui.c:311 ../src/ephy-history-window.c:159
+#: ../src/ephy-history-window.c:710
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "ಹೊಸ ಹಾಳೆಯಲ್ಲಿ ತೆಗೆ(_T)"
 msgstr[1] "ಹೊಸ ಹಾಳೆಗಳಲ್ಲಿ ತೆಗೆ(_T)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/bookmarks/ephy-bookmarks-editor.c:174
 msgid "Open the selected bookmark in a new tab"
 msgstr "ಆರಿಸಲಾದ ಬುಕ್‍ಮಾರ್ಕನ್ನು ಹೊಸ ಹಾಳೆಯಲ್ಲಿ ತೆಗೆ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "_Rename…"
 msgstr "ಪುನಃ ಹೆಸರಿಸು(_R)..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:196
+#: ../src/bookmarks/ephy-bookmarks-editor.c:177
 msgid "Rename the selected bookmark or topic"
 msgstr "ಆರಿಸಲಾದ ಬುಕ್‍ಮಾರ್ಕನ್ನು ಅಥವ ವಿಷಯವನ್ನು ಪುನಃ ಹೆಸರಿಸು"
 
 #. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-editor.c:197
-#: ../src/bookmarks/ephy-bookmarks-ui.c:300
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178
+#: ../src/bookmarks/ephy-bookmarks-ui.c:299
 msgid "_Properties"
 msgstr "ಗುಣಲಕ್ಷಣಗಳು(_P)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "View or modify the properties of the selected bookmark"
 msgstr "ಆರಿಸಲಾದ ಬುಕ್‍ಮಾರ್ಕಿನ ಗುಣಲಕ್ಷಣಗಳನ್ನು ನೋಡು ಅಥವ ಮಾರ್ಪಡಿಸು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
 msgid "_Import Bookmarks…"
 msgstr "ಬುಕ್‍ಮಾರ್ಕುಗಳನ್ನು ಆಮದು ಮಾಡಿಕೋ(_I)…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "ಬುಕ್‍ಮಾರ್ಕುಗಳನ್ನು ಇನ್ನೊಂದು ವೀಕ್ಷಕ ಅಥವ ಬುಕ್‍ಮಾರ್ಕುಗಳ ಕಡತದಿಂದ ಆಮದು ಮಾಡಿಕೋ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:203
+#: ../src/bookmarks/ephy-bookmarks-editor.c:184
 msgid "_Export Bookmarks…"
 msgstr "ಬುಕ್‍ಮಾರ್ಕುಗಳನ್ನು ರಫ್ತು ಮಾಡು(_E)…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/bookmarks/ephy-bookmarks-editor.c:185
 msgid "Export bookmarks to a file"
 msgstr "ಬುಕ್‍ಮಾರ್ಕುಗಳನ್ನು ಒಂದು ಕಡತಕ್ಕೆ ರಫ್ತು ಮಾಡು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:206
-#: ../src/ephy-history-window.c:185 ../src/ephy-window.c:151
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/ephy-history-window.c:165 ../src/ephy-window.c:145
 msgid "_Close"
 msgstr "ಮುಚ್ಚು(_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:207
+#: ../src/bookmarks/ephy-bookmarks-editor.c:188
 msgid "Close the bookmarks window"
 msgstr "ಬುಕ್‍ಮಾರ್ಕುಗಳ ವಿಂಡೋವನ್ನು ಮುಚ್ಚು"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:163
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/ephy-history-window.c:170 ../src/ephy-window.c:157
 msgid "Cu_t"
 msgstr "ಕತ್ತರಿಸು(_t)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:191 ../src/ephy-window.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/ephy-history-window.c:171 ../src/ephy-window.c:158
 msgid "Cut the selection"
 msgstr "ಆಯ್ದದ್ದನ್ನು ಕತ್ತರಿಸು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:214
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1383
-#: ../src/ephy-history-window.c:193 ../src/ephy-history-window.c:740
-#: ../src/ephy-window.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1364
+#: ../src/ephy-history-window.c:173 ../src/ephy-history-window.c:720
+#: ../src/ephy-window.c:160
 msgid "_Copy"
 msgstr "ನಕಲಿಸು(_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:215
-#: ../src/ephy-history-window.c:194 ../src/ephy-window.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
+#: ../src/ephy-history-window.c:174 ../src/ephy-window.c:161
 msgid "Copy the selection"
 msgstr "ಆಯ್ದದ್ದನ್ನು ನಕಲಿಸು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:217
-#: ../src/ephy-history-window.c:196 ../src/ephy-window.c:169
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/ephy-history-window.c:176 ../src/ephy-window.c:163
 msgid "_Paste"
 msgstr "ಅಂಟಿಸು(_P)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:218
-#: ../src/ephy-history-window.c:197
+#: ../src/bookmarks/ephy-bookmarks-editor.c:199
+#: ../src/ephy-history-window.c:177
 msgid "Paste the clipboard"
 msgstr "ಕ್ಲಿಪ್‍ಬೋರ್ಡನ್ನು ಅಂಟಿಸು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:220
-#: ../src/ephy-history-window.c:199
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
+#: ../src/ephy-history-window.c:179
 msgid "_Delete"
 msgstr "ಅಳಿಸಿ ಹಾಕು(_D)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:221
+#: ../src/bookmarks/ephy-bookmarks-editor.c:202
 msgid "Delete the selected bookmark or topic"
 msgstr "ಆರಿಸಲಾದ ಬುಕ್‍ಮಾರ್ಕನ್ನು ಅಥವ ವಿಷಯವನ್ನು ಅಳಿಸಿಹಾಕು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:223
-#: ../src/ephy-history-window.c:202 ../src/ephy-window.c:175
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/ephy-history-window.c:182 ../src/ephy-window.c:169
 msgid "Select _All"
 msgstr "ಎಲ್ಲವನ್ನೂ ಆರಿಸು(_A)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:224
+#: ../src/bookmarks/ephy-bookmarks-editor.c:205
 msgid "Select all bookmarks or text"
 msgstr "ಎಲ್ಲಾ ಬುಕ್‍ಮಾರ್ಕ್ ಅಥವ ಪಠ್ಯವನ್ನು ಆರಿಸು"
 
 #. Help Menu
 #. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:228
-#: ../src/ephy-history-window.c:210 ../src/ephy-window.c:266
+#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/ephy-history-window.c:190 ../src/ephy-window.c:260
 msgid "_Contents"
 msgstr "ವಿಷಯಗಳು(_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:229
+#: ../src/bookmarks/ephy-bookmarks-editor.c:210
 msgid "Display bookmarks help"
 msgstr "ಬುಕ್‍ಮಾರ್ಕಿನ ಸಹಾಯವನ್ನು ತೋರಿಸು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:231
-#: ../src/ephy-history-window.c:213 ../src/ephy-window.c:269
+#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:263
 msgid "_About"
 msgstr "ಇದರ ಬಗ್ಗೆ(_A)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:232
-#: ../src/ephy-history-window.c:214 ../src/ephy-window.c:270
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/ephy-history-window.c:194 ../src/ephy-window.c:264
 #, fuzzy
 msgid "Display credits for the web browser creators"
 msgstr "ಪ್ರದರ್ಶಕ ಗೆ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:237
+#: ../src/bookmarks/ephy-bookmarks-editor.c:218
 msgid "_Show on Toolbar"
 msgstr "ಉಪಕರಣ ಪಟ್ಟಿಯಲ್ಲಿ ತೋರಿಸು(_S)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:238
+#: ../src/bookmarks/ephy-bookmarks-editor.c:219
 msgid "Show the selected bookmark on a toolbar"
 msgstr "ಆರಿಸಲಾದ ಬುಕ್‍ಮಾರ್ಕನ್ನು ಉಪಕರಣ ಪಟ್ಟಿಯಲ್ಲಿ ತೋರಿಸು"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:251
-#: ../src/ephy-history-window.c:228
+#: ../src/bookmarks/ephy-bookmarks-editor.c:232
+#: ../src/ephy-history-window.c:208
 msgid "_Title"
 msgstr "ಶೀರ್ಷಿಕೆ(_T)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:252
+#: ../src/bookmarks/ephy-bookmarks-editor.c:233
 msgid "Show only the title column"
 msgstr "ಕೇವಲ ಶೀರ್ಷಿಕೆಯ ಕಾಲಂ ಅನ್ನು ಮಾತ್ರ ತೋರಿಸು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:253
+#: ../src/bookmarks/ephy-bookmarks-editor.c:234
 msgid "T_itle and Address"
 msgstr "ಶೀರ್ಷಿಕೆ ಹಾಗು ವಿಳಾಸ(_i)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:254
+#: ../src/bookmarks/ephy-bookmarks-editor.c:235
 msgid "Show both the title and address columns"
 msgstr "ಶೀರ್ಷಿಕೆ ಹಾಗು ವಿಳಾಸದ ಕಾಲಂ ಎರಡನ್ನೂ ತೋರಿಸು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:297
+#: ../src/bookmarks/ephy-bookmarks-editor.c:278
 msgid "Type a topic"
 msgstr "ಒಂದು ವಿಷಯವನ್ನು ನಮೂದಿಸು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:415
+#: ../src/bookmarks/ephy-bookmarks-editor.c:396
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "“%s” ವಿಷಯವನ್ನು ಅಳಿಸಿಹಾಕಬೇಕೆ?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:418
+#: ../src/bookmarks/ephy-bookmarks-editor.c:399
 msgid "Delete this topic?"
 msgstr "ಈ ವಿಷಯವನ್ನು ಅಳಿಸಿಹಾಕಬೇಕೆ?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:420
+#: ../src/bookmarks/ephy-bookmarks-editor.c:401
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
 msgstr ""
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:423
+#: ../src/bookmarks/ephy-bookmarks-editor.c:404
 msgid "_Delete Topic"
 msgstr "ವಿಷಯವನ್ನು ಅಳಿಸಿಹಾಕು(_D)"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:644
-#: ../src/bookmarks/ephy-bookmarks-editor.c:648
+#: ../src/bookmarks/ephy-bookmarks-editor.c:625
+#: ../src/bookmarks/ephy-bookmarks-editor.c:629
 msgid "Firefox"
 msgstr "ಫೈರ್ಫಾಕ್ಸ್‍"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:653
-#: ../src/bookmarks/ephy-bookmarks-editor.c:657
+#: ../src/bookmarks/ephy-bookmarks-editor.c:634
+#: ../src/bookmarks/ephy-bookmarks-editor.c:638
 msgid "Firebird"
 msgstr "ಫೈರ್ಬರ್ಡ್"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:662
+#: ../src/bookmarks/ephy-bookmarks-editor.c:643
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr ""
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:666
+#: ../src/bookmarks/ephy-bookmarks-editor.c:647
 msgid "Galeon"
 msgstr ""
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:670
+#: ../src/bookmarks/ephy-bookmarks-editor.c:651
 msgid "Konqueror"
 msgstr "ಕಾನ್ಕೆರರ್"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:699
+#: ../src/bookmarks/ephy-bookmarks-editor.c:680
 #, fuzzy
 msgid "Import failed"
 msgstr "ಆಮದು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:701
+#: ../src/bookmarks/ephy-bookmarks-editor.c:682
 msgid "Import Failed"
 msgstr "ಆಮದು ವಿಫಲಗೊಂಡಿದೆ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:704
+#: ../src/bookmarks/ephy-bookmarks-editor.c:685
 #, fuzzy, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
 msgstr " ."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:767
+#: ../src/bookmarks/ephy-bookmarks-editor.c:748
 #, fuzzy
 msgid "Import Bookmarks from File"
 msgstr "ಆಮದು ಕಡತ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:774
+#: ../src/bookmarks/ephy-bookmarks-editor.c:755
 msgid "Firefox/Mozilla bookmarks"
 msgstr "ಫೈರ್ಫಾಕ್ಸ್‍/ಮೋಝಿಲ್ಲಾ ಬುಕ್‍ಮಾರ್ಕುಗಳು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:778
+#: ../src/bookmarks/ephy-bookmarks-editor.c:759
 #, fuzzy
 msgid "Galeon/Konqueror bookmarks"
 msgstr "ಬುಕ್‍ಮಾರ್ಕುಗಳು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:782
+#: ../src/bookmarks/ephy-bookmarks-editor.c:763
 msgid "Epiphany bookmarks"
 msgstr "ಎಪಿಫ್ಯಾನಿ ಬುಕ್‍ಮಾರ್ಕುಗಳು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:906
+#: ../src/bookmarks/ephy-bookmarks-editor.c:887
 msgid "Export Bookmarks"
 msgstr "ಬುಕ್‍ಮಾರ್ಕುಗಳನ್ನು ರಫ್ತುಮಾಡು"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:923
+#: ../src/bookmarks/ephy-bookmarks-editor.c:904
 msgid "File f_ormat:"
 msgstr "ಕಡತದ ನಮೂನೆ(_o):"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:967
+#: ../src/bookmarks/ephy-bookmarks-editor.c:948
 msgid "Import Bookmarks"
 msgstr "ಬುಕ್‍ಮಾರ್ಕುಗಳನ್ನು ಆಮದು ಮಾಡಿಕೊ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:973
+#: ../src/bookmarks/ephy-bookmarks-editor.c:954
 msgid "I_mport"
 msgstr "ಆಮದು ಮಾಡಿಕೊ(_m)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:987
+#: ../src/bookmarks/ephy-bookmarks-editor.c:968
 msgid "Import bookmarks from:"
 msgstr "ಇಲ್ಲಿಂದ ಬುಕ್‍ಮಾರ್ಕುಗಳನ್ನು ಆಮದು ಮಾಡಿಕೊ:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1379
-#: ../src/ephy-history-window.c:736
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1360
+#: ../src/ephy-history-window.c:716
 msgid "_Copy Address"
 msgstr "ವಿಳಾಸವನ್ನು ನಕಲಿಸು(_C)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1644
-#: ../src/ephy-history-window.c:1089
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1630
+#: ../src/ephy-history-window.c:1069
 msgid "Clear"
 msgstr "ತೆರವುಗೊಳಿಸು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1658
-#: ../src/ephy-history-window.c:1097
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1644
+#: ../src/ephy-history-window.c:1077
 msgid "_Search:"
 msgstr "ಹುಡುಕು(_S):"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1856
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1842
 msgid "Topics"
 msgstr "ವಿಷಯಗಳು"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1926
-#: ../src/ephy-history-window.c:1420
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1912
+#: ../src/ephy-history-window.c:1400
 msgid "Title"
 msgstr "ಶೀರ್ಷಿಕೆ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1937
-#: ../src/ephy-history-window.c:1429
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1923
+#: ../src/ephy-history-window.c:1409
 msgid "Address"
 msgstr "ವಿಳಾಸ"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:301
+#: ../src/bookmarks/ephy-bookmarks-ui.c:300
 msgid "Show properties for this bookmark"
 msgstr "ಈ ಬುಕ್‍ಮಾರ್ಕಿನ ಗುಣಲಕ್ಷಣಗಳನ್ನು ತೋರಿಸು"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:313
+#: ../src/bookmarks/ephy-bookmarks-ui.c:312
 msgid "Open this bookmark in a new tab"
 msgstr "ಈ ಬುಕ್‍ಮಾರ್ಕನ್ನು ಹೊಸ ಹಾಳೆಯಲ್ಲಿ ತೆರೆ"
 
-#: ../src/bookmarks/ephy-bookmarks-ui.c:325
+#: ../src/bookmarks/ephy-bookmarks-ui.c:324
 msgid "Open this bookmark in a new window"
 msgstr "ಈ ಬುಕ್‍ಮಾರ್ಕನ್ನು ಹೊಸ ವಿಂಡೋನಲ್ಲಿ ತೆರೆ"
 
@@ -3222,7 +3238,7 @@ msgstr "ಹೊಸ ಹಾಳೆಗಳಲ್ಲಿ ತೆರೆ(_T)"
 msgid "Open the bookmarks in this topic in new tabs"
 msgstr "ತೆಗೆ"
 
-#: ../src/bookmarks/ephy-related-action.c:155
+#: ../src/bookmarks/ephy-related-action.c:153
 msgid "Related"
 msgstr "ಸಂಬಂಧಿತ"
 
@@ -3230,239 +3246,239 @@ msgstr "ಸಂಬಂಧಿತ"
 msgid "Topic"
 msgstr "ವಿಷಯ"
 
-#: ../src/bookmarks/ephy-topics-entry.c:331
+#: ../src/bookmarks/ephy-topics-entry.c:329
 #, c-format
 msgid "Create topic “%s”"
 msgstr "“%s” ವಿಷಯವನ್ನು ಸೃಜಿಸು"
 
-#: ../src/ephy-encoding-dialog.c:317
+#: ../src/ephy-encoding-dialog.c:312
 msgid "Encodings"
 msgstr "ಎನ್‍ಕೋಂಡಿಂಗ್‍ಗಳು"
 
-#: ../src/ephy-encoding-menu.c:326
+#: ../src/ephy-encoding-menu.c:323
 msgid "_Other…"
 msgstr "ಇತರೆ(_O)..."
 
-#: ../src/ephy-encoding-menu.c:327
+#: ../src/ephy-encoding-menu.c:324
 msgid "Other encodings"
 msgstr "ಇತರೆ ಎನ್‍ಕೋಡಿಂಗ್‍ಗಳು"
 
-#: ../src/ephy-encoding-menu.c:333
+#: ../src/ephy-encoding-menu.c:330
 msgid "_Automatic"
 msgstr "ಸ್ವಯಂಚಾಲಿತ(_A)"
 
-#: ../src/ephy-find-toolbar.c:139
+#: ../src/ephy-find-toolbar.c:128
 msgid "Not found"
 msgstr "ಕಂಡುಬಂದಿಲ್ಲ"
 
-#: ../src/ephy-find-toolbar.c:151
+#: ../src/ephy-find-toolbar.c:140
 msgid "Wrapped"
 msgstr ""
 
-#: ../src/ephy-find-toolbar.c:171
+#: ../src/ephy-find-toolbar.c:160
 msgid "Find links:"
 msgstr "ಕೊಂಡಿಗಳನ್ನು ಪತ್ತೆ ಹಚ್ಚು:"
 
-#: ../src/ephy-find-toolbar.c:171
+#: ../src/ephy-find-toolbar.c:160
 msgid "Find:"
 msgstr "ಪತ್ತೆ ಹಚ್ಚು:"
 
 #. Create a menu item, and sync it
 #. Case sensitivity
-#: ../src/ephy-find-toolbar.c:363 ../src/ephy-find-toolbar.c:485
+#: ../src/ephy-find-toolbar.c:352 ../src/ephy-find-toolbar.c:474
 msgid "_Case sensitive"
 msgstr "ಕೇಸ್ ಸಂವೇದಿ(_C)"
 
-#: ../src/ephy-find-toolbar.c:468
+#: ../src/ephy-find-toolbar.c:457
 msgid "Find Previous"
 msgstr "ಹಿಂದಿನದನ್ನು ಹುಡುಕು"
 
-#: ../src/ephy-find-toolbar.c:471
+#: ../src/ephy-find-toolbar.c:460
 #, fuzzy
 msgid "Find previous occurrence of the search string"
 msgstr "ಪತ್ತೆ ಹಚ್ಚು ವಾಕ್ಯ"
 
-#: ../src/ephy-find-toolbar.c:477
+#: ../src/ephy-find-toolbar.c:466
 msgid "Find Next"
 msgstr "ಮುಂದಿನದನ್ನು ಹುಡುಕು"
 
-#: ../src/ephy-find-toolbar.c:480
+#: ../src/ephy-find-toolbar.c:469
 #, fuzzy
 msgid "Find next occurrence of the search string"
 msgstr "ಪತ್ತೆ ಹಚ್ಚು ವಾಕ್ಯ"
 
 #. exit button
-#: ../src/ephy-fullscreen-popup.c:272 ../src/ephy-toolbar.c:600
+#: ../src/ephy-fullscreen-popup.c:264 ../src/ephy-toolbar.c:595
 msgid "Leave Fullscreen"
 msgstr ""
 
-#: ../src/ephy-go-action.c:43 ../src/ephy-toolbar.c:321
+#: ../src/ephy-go-action.c:42 ../src/ephy-toolbar.c:316
 msgid "Go"
 msgstr "ತೆರಳು"
 
-#: ../src/ephy-history-window.c:177
+#: ../src/ephy-history-window.c:157
 #, fuzzy
 msgid "Open the selected history link in a new window"
 msgstr "ತೆಗೆ ಆರಿಸಲಾದ ಕೊಂಡಿ ವಿಂಡೊ"
 
-#: ../src/ephy-history-window.c:180
+#: ../src/ephy-history-window.c:160
 #, fuzzy
 msgid "Open the selected history link in a new tab"
 msgstr "ತೆಗೆ ಆರಿಸಲಾದ ಕೊಂಡಿ ಟ್ಯಾಬ್"
 
-#: ../src/ephy-history-window.c:182
+#: ../src/ephy-history-window.c:162
 msgid "Add _Bookmark…"
 msgstr "ಬುಕ್‍ಮಾರ್ಕನ್ನು ಸೇರಿಸು(_B)..."
 
-#: ../src/ephy-history-window.c:183
+#: ../src/ephy-history-window.c:163
 #, fuzzy
 msgid "Bookmark the selected history link"
 msgstr "ಬುಕ್-ಮಾರ್ಕ್ ಆರಿಸಲಾದ ಕೊಂಡಿ"
 
-#: ../src/ephy-history-window.c:186
+#: ../src/ephy-history-window.c:166
 #, fuzzy
 msgid "Close the history window"
 msgstr "ಮುಚ್ಚು ವಿಂಡೊ"
 
-#: ../src/ephy-history-window.c:200
+#: ../src/ephy-history-window.c:180
 #, fuzzy
 msgid "Delete the selected history link"
 msgstr "ಅಳಿಸಿಹಾಕು ಆರಿಸಲಾದ ಕೊಂಡಿ"
 
-#: ../src/ephy-history-window.c:203
+#: ../src/ephy-history-window.c:183
 #, fuzzy
 msgid "Select all history links or text"
 msgstr "ಆರಿಸು ಪಠ್ಯ"
 
-#: ../src/ephy-history-window.c:205
+#: ../src/ephy-history-window.c:185
 msgid "Clear _History"
 msgstr "ಇತಿಹಾಸವನ್ನು ಅಳಿಸಿಹಾಕು(_H)"
 
-#: ../src/ephy-history-window.c:206
+#: ../src/ephy-history-window.c:186
 msgid "Clear your browsing history"
 msgstr "ನಿಮ್ಮ ವೀಕ್ಷಣೆಯ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಿಹಾಕಿ"
 
-#: ../src/ephy-history-window.c:211
+#: ../src/ephy-history-window.c:191
 msgid "Display history help"
 msgstr "ಇತಿಹಾಸದ ಸಹಾಯವನ್ನು ತೋರಿಸು"
 
-#: ../src/ephy-history-window.c:229
+#: ../src/ephy-history-window.c:209
 msgid "Show the title column"
 msgstr "ಶೀರ್ಷಿಕೆಯ ಕಾಲಂ ಅನ್ನು ತೋರಿಸು"
 
-#: ../src/ephy-history-window.c:230
+#: ../src/ephy-history-window.c:210
 msgid "_Address"
 msgstr "ವಿಳಾಸ(_A)"
 
-#: ../src/ephy-history-window.c:231
+#: ../src/ephy-history-window.c:211
 msgid "Show the address column"
 msgstr "ವಿಳಾಸದ ಕಾಲಂ ಅನ್ನು ತೋರಿಸು"
 
-#: ../src/ephy-history-window.c:232
+#: ../src/ephy-history-window.c:212
 msgid "_Date and Time"
 msgstr "ದಿನಾಂಕ ಹಾಗು ಸಮಯ(_D)"
 
-#: ../src/ephy-history-window.c:233
+#: ../src/ephy-history-window.c:213
 msgid "Show the date and time column"
 msgstr "ದಿನಾಂಕ ಹಾಗು ಸಮಯದ ಕಾಲಂ ಅನ್ನು ತೋರಿಸು"
 
-#: ../src/ephy-history-window.c:259
+#: ../src/ephy-history-window.c:239
 msgid "Clear browsing history?"
 msgstr "ವೀಕ್ಷಣೆಯ ಇತಿಹಾಸವನ್ನು ಅಳಿಸುವುದೆ?"
 
-#: ../src/ephy-history-window.c:263
+#: ../src/ephy-history-window.c:243
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr ""
 
-#: ../src/ephy-history-window.c:278
+#: ../src/ephy-history-window.c:258
 msgid "Clear History"
 msgstr "ಇತಿಹಾಸವನ್ನು ಅಳಿಸಿಹಾಕು"
 
-#: ../src/ephy-history-window.c:1106
+#: ../src/ephy-history-window.c:1086
 msgid "Last 30 minutes"
 msgstr "ಕೊನೆಯ 30 ನಿಮಿಷಗಳದ್ದು"
 
-#: ../src/ephy-history-window.c:1107
+#: ../src/ephy-history-window.c:1087
 msgid "Today"
 msgstr "ಇಂದಿನದು"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1108 ../src/ephy-history-window.c:1111
-#: ../src/ephy-history-window.c:1115
+#: ../src/ephy-history-window.c:1088 ../src/ephy-history-window.c:1091
+#: ../src/ephy-history-window.c:1095
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "ಕೊನೆಯ %d ದಿನದ್ದು"
 msgstr[1] "ಕೊನೆಯ %d ದಿನಗಳದು"
 
-#: ../src/ephy-history-window.c:1357
+#: ../src/ephy-history-window.c:1337
 msgid "Sites"
 msgstr "ತಾಣಗಳು"
 
-#: ../src/ephy-history-window.c:1437
+#: ../src/ephy-history-window.c:1417
 msgid "Date"
 msgstr "ದಿನಾಂಕ"
 
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:74
 #, fuzzy
 msgid "Open a new tab in an existing browser window"
 msgstr "ತೆಗೆ ಟ್ಯಾಬ್ ವಿಂಡೊ"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:76
 #, fuzzy
 msgid "Open a new browser window"
 msgstr "ತೆಗೆ ವಿಂಡೊ"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:78
 #, fuzzy
 msgid "Launch the bookmarks editor"
 msgstr "ಆರಂಭಿಸು"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:80
 msgid "Import bookmarks from the given file"
 msgstr "ಒದಗಿಸಲಾದ ಕಡತದಿಂದ ಬುಕ್‍ಮಾರ್ಕುಗಳನ್ನು ಆಮದು ಮಾಡಿಕೊ"
 
-#: ../src/ephy-main.c:82 ../src/ephy-main.c:84
+#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
 msgid "FILE"
 msgstr "FILE"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:82
 msgid "Load the given session file"
 msgstr "ಒದಗಿಸಲಾದ ಅಧಿವೇಶನ ಕಡತವನ್ನು ಲೋಡ್ ಮಾಡು"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:84
 msgid "Add a bookmark"
 msgstr "ಒಂದು ಬುಕ್‍ಮಾರ್ಕನ್ನು ಸೇರಿಸು"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:84
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:86
 #, fuzzy
 msgid "Start a private instance"
 msgstr "ಆರಂಭ"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:88
 #, fuzzy
 msgid "Profile directory to use in the private instance"
 msgstr "ಪರಿಚಯ ಚಿತ್ರಣ"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:88
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:90
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:407
+#: ../src/ephy-main.c:405
 msgid "Could not start GNOME Web Browser"
 msgstr "GNOME ಜಾಲ ವೀಕ್ಷಕನನ್ನು ಆರಂಭಿಸಲಾಗಿಲ್ಲ"
 
-#: ../src/ephy-main.c:410
+#: ../src/ephy-main.c:408
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -3471,65 +3487,61 @@ msgstr ""
 "ಈ ಕೆಳಗಿನ ದೋಷದಿಂದಾಗಿ ಆರಂಭವು ವಿಫಲಗೊಂಡಿದೆ:\n"
 "%s"
 
-#: ../src/ephy-main.c:515 ../src/window-commands.c:883
-msgid "GNOME Web Browser"
-msgstr "GNOME ಜಾಲ ವೀಕ್ಷಕ"
-
-#: ../src/ephy-main.c:516
+#: ../src/ephy-main.c:514
 msgid "GNOME Web Browser options"
 msgstr "GNOME ಜಾಲ ವೀಕ್ಷಕದ ಆಯ್ಕೆಗಳು"
 
-#: ../src/ephy-notebook.c:620
+#: ../src/ephy-notebook.c:612
 msgid "Close tab"
 msgstr "ಹಾಳೆಯನ್ನು ಮುಚ್ಚು"
 
-#: ../src/ephy-session.c:122
+#: ../src/ephy-session.c:114
 #, fuzzy, c-format
 msgid "Downloads will be aborted and logout proceed in %d second."
 msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
 msgstr[0] "ಡೌನ್-ಲೋಡುಗಳು ಎರಡನೆಯ."
 msgstr[1] "ಡೌನ್-ಲೋಡುಗಳು ಎರಡನೆಯ."
 
-#: ../src/ephy-session.c:238
+#: ../src/ephy-session.c:230
 msgid "Abort pending downloads?"
 msgstr ""
 
-#: ../src/ephy-session.c:242
+#: ../src/ephy-session.c:234
 msgid ""
 "There are still downloads pending. If you log out, they will be aborted and "
 "lost."
 msgstr ""
 
-#: ../src/ephy-session.c:246
+#: ../src/ephy-session.c:238
 #, fuzzy
 msgid "_Cancel Logout"
 msgstr "ರದ್ದು ಮಾಡು"
 
-#: ../src/ephy-session.c:248
+#: ../src/ephy-session.c:240
 #, fuzzy
 msgid "_Abort Downloads"
 msgstr "ಡೌನ್-ಲೋಡುಗಳು"
 
-#: ../src/ephy-session.c:581
+#: ../src/ephy-session.c:573
 msgid "Recover previous browser windows and tabs?"
 msgstr "ಹಿಂದಿನ ವೀಕ್ಷಕ ವಿಂಡೋಗಳನ್ನು ಹಾಗು ಹಾಳೆಗಳನ್ನು ಮರಳಿ ಪಡೆಯಬೇಕೆ?"
 
-#: ../src/ephy-session.c:585
+#: ../src/ephy-session.c:577
 #, fuzzy
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
 msgstr "ಕೊನೆಯ."
 
-#: ../src/ephy-session.c:589
+#: ../src/ephy-session.c:581
 msgid "_Don't Recover"
 msgstr "ಮರಳಿ ಪಡೆಯಬೇಡ(_D)"
 
-#: ../src/ephy-session.c:591
+#: ../src/ephy-session.c:583
 msgid "_Recover"
 msgstr "ಮರಳಿ ಪಡೆ(_R)"
 
-#: ../src/ephy-session.c:593
+#: ../src/ephy-session.c:585
 msgid "Crash Recovery"
 msgstr "ಕುಸಿತದಿಂದ ಮರಳಿ ಪಡೆಯುವಿಕೆ"
 
@@ -3548,720 +3560,720 @@ msgstr "ಬದಿಯಪಟ್ಟಿ"
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "ಕೊಂಡಿ."
 
-#: ../src/ephy-statusbar.c:91
+#: ../src/ephy-statusbar.c:85
 msgid "Caret"
 msgstr "ಕ್ಯಾರಟ್(Caret)"
 
 #. Translators: this is the tooltip on the "Caret" icon
 #. * in the statusbar.
 #.
-#: ../src/ephy-statusbar.c:98
+#: ../src/ephy-statusbar.c:92
 #, fuzzy
 msgid "In keyboard selection mode, press F7 to exit"
 msgstr "ಕೀಲಿಮಣೆ F7"
 
-#: ../src/ephy-tabs-menu.c:208
+#: ../src/ephy-tabs-menu.c:202
 msgid "Switch to this tab"
 msgstr "ಈ ಹಾಳೆಗೆ ಬದಲಾಯಿಸು"
 
-#: ../src/ephy-toolbar.c:230
+#: ../src/ephy-toolbar.c:225
 msgid "_Back"
 msgstr "ಹಿಂದಕ್ಕೆ(_B)"
 
-#: ../src/ephy-toolbar.c:232
+#: ../src/ephy-toolbar.c:227
 msgid "Go to the previous visited page"
 msgstr "ಈ ಪುಟಕ್ಕೂ ಹಿಂದೆ ಭೇಟಿ ನೀಡಲಾದ ಪುಟಕ್ಕೆ ತೆರಳು"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: ../src/ephy-toolbar.c:236
+#: ../src/ephy-toolbar.c:231
 msgid "Back history"
 msgstr "ಹಿಂದಿನ ಇತಿಹಾಸ"
 
-#: ../src/ephy-toolbar.c:250
+#: ../src/ephy-toolbar.c:245
 msgid "_Forward"
 msgstr "ಮುಂದಕ್ಕೆ(_F)"
 
-#: ../src/ephy-toolbar.c:252
+#: ../src/ephy-toolbar.c:247
 msgid "Go to the next visited page"
 msgstr "ಈ ಪುಟದ ನಂತರ ಭೇಟಿ ನೀಡಲಾದ ಪುಟಕ್ಕೆ ತೆರಳು"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: ../src/ephy-toolbar.c:256
+#: ../src/ephy-toolbar.c:251
 msgid "Forward history"
 msgstr "ಮುಂದಿನ ಇತಿಹಾಸ"
 
-#: ../src/ephy-toolbar.c:269
+#: ../src/ephy-toolbar.c:264
 msgid "_Up"
 msgstr "ಮೇಲೆ(_U)"
 
-#: ../src/ephy-toolbar.c:271
+#: ../src/ephy-toolbar.c:266
 msgid "Go up one level"
 msgstr "ಒಂದು ಹಂತ ಮೇಲಕ್ಕೆ ಹೋಗು"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: ../src/ephy-toolbar.c:275
+#: ../src/ephy-toolbar.c:270
 msgid "List of upper levels"
 msgstr "ಮೇಲಿನ ಹಂತಗಳ ಪಟ್ಟಿ"
 
-#: ../src/ephy-toolbar.c:293
+#: ../src/ephy-toolbar.c:288
 #, fuzzy
 msgid "Enter a web address to open, or a phrase to search for"
 msgstr "ಗೆ"
 
-#: ../src/ephy-toolbar.c:309
+#: ../src/ephy-toolbar.c:304
 msgid "Zoom"
 msgstr "ಗಾತ್ರಬದಲಿಸು"
 
-#: ../src/ephy-toolbar.c:311
+#: ../src/ephy-toolbar.c:306
 msgid "Adjust the text size"
 msgstr "ಪಠ್ಯದ ಗಾತ್ರವನ್ನು ಹೊಂದಿಸು"
 
-#: ../src/ephy-toolbar.c:323
+#: ../src/ephy-toolbar.c:318
 msgid "Go to the address entered in the address entry"
 msgstr "ವಿಳಾಸದ ಜಾಗದಲ್ಲಿ ನಮೂದಿಸಲಾದ ವಿಳಾಸಕ್ಕೆ ತೆರಳು"
 
-#: ../src/ephy-toolbar.c:332
+#: ../src/ephy-toolbar.c:327
 msgid "_Home"
 msgstr "ನೆಲೆ(_H)"
 
-#: ../src/ephy-toolbar.c:334
+#: ../src/ephy-toolbar.c:329
 msgid "Go to the home page"
 msgstr "ನೆಲೆ ಪುಟಕ್ಕೆ ತೆರಳು"
 
-#: ../src/ephy-toolbar.c:344
+#: ../src/ephy-toolbar.c:339
 msgid "New _Tab"
 msgstr "ಹೊಸ ಹಾಳೆ(_T)"
 
-#: ../src/ephy-toolbar.c:346
+#: ../src/ephy-toolbar.c:341
 msgid "Open a new tab"
 msgstr "ಹೊಸ ಹಾಳೆಯನ್ನು ತೆರೆ"
 
-#: ../src/ephy-toolbar.c:355
+#: ../src/ephy-toolbar.c:350
 msgid "_New Window"
 msgstr "ಹೊಸ ವಿಂಡೊ(_N)"
 
-#: ../src/ephy-toolbar.c:357
+#: ../src/ephy-toolbar.c:352
 msgid "Open a new window"
 msgstr "ಹೊಸ ವಿಂಡೊವನ್ನು ತೆರೆ"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/ephy-toolbar-editor.c:82
+#: ../src/ephy-toolbar-editor.c:74
 msgid "toolbar style|Default"
 msgstr "ಪೂರ್ವನಿಯೋಜಿತವಾದ"
 
 #. separator row
-#: ../src/ephy-toolbar-editor.c:84
+#: ../src/ephy-toolbar-editor.c:76
 msgid "Text below icons"
 msgstr "ಲಾಂಛನಗಳ ಕೆಳಗೆ ಪಠ್ಯ"
 
-#: ../src/ephy-toolbar-editor.c:85
+#: ../src/ephy-toolbar-editor.c:77
 msgid "Text beside icons"
 msgstr "ಲಾಂಛನಗಳ ಪಕ್ಕದಲ್ಲಿ ಪಠ್ಯ"
 
-#: ../src/ephy-toolbar-editor.c:86
+#: ../src/ephy-toolbar-editor.c:78
 msgid "Icons only"
 msgstr "ಕೇವಲ ಲಾಂಛನಗಳು ಮಾತ್ರ"
 
-#: ../src/ephy-toolbar-editor.c:87
+#: ../src/ephy-toolbar-editor.c:79
 msgid "Text only"
 msgstr "ಕೇವಲ ಪಠ್ಯ ಮಾತ್ರ"
 
-#: ../src/ephy-toolbar-editor.c:196
+#: ../src/ephy-toolbar-editor.c:188
 msgid "Toolbar Editor"
 msgstr "ಉಪಕರಣ ಪಟ್ಟಿ ಸಂಪಾದಕ"
 
 #. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:215
+#: ../src/ephy-toolbar-editor.c:207
 msgid "Toolbar _button labels:"
 msgstr "ಉಪಕರಣಪಟ್ಟಿಯ ಗುಂಡಿಯ ಲೇಬಲ್‍ಗಳು(_b):"
 
-#: ../src/ephy-toolbar-editor.c:279
+#: ../src/ephy-toolbar-editor.c:271
 msgid "_Add a New Toolbar"
 msgstr "ಹೊಸ ಉಪಕರಣಪಟ್ಟಿಯನ್ನು ಸೇರಿಸು(_A)"
 
-#: ../src/ephy-window.c:122
+#: ../src/ephy-window.c:116
 msgid "_Bookmarks"
 msgstr "ಬುಕ್‍ಮಾರ್ಕುಗಳು(_B)"
 
-#: ../src/ephy-window.c:123
+#: ../src/ephy-window.c:117
 msgid "_Go"
 msgstr "ತೆರಳು(_G)"
 
-#: ../src/ephy-window.c:124
+#: ../src/ephy-window.c:118
 msgid "T_ools"
 msgstr "ಉಪಕರಣಗಳು(_o)"
 
-#: ../src/ephy-window.c:125
+#: ../src/ephy-window.c:119
 msgid "_Tabs"
 msgstr "ಹಾಳೆಗಳು(_T)"
 
-#: ../src/ephy-window.c:127
+#: ../src/ephy-window.c:121
 msgid "_Toolbars"
 msgstr "ಉಪಕರಣಪಟ್ಟಿಗಳು(_T)"
 
 #. File menu
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:127
 msgid "_Open…"
 msgstr "ತೆಗೆ(_O)..."
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:128
 msgid "Open a file"
 msgstr "ಒಂದು ಕಡತವನ್ನು ತೆರೆ"
 
-#: ../src/ephy-window.c:136
+#: ../src/ephy-window.c:130
 msgid "Save _As…"
 msgstr "ಹೀಗೆ ಉಳಿಸು(_A)..."
 
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:131
 msgid "Save the current page"
 msgstr "ಈಗಿನ ಪುಟವನ್ನು ಉಳಿಸು"
 
-#: ../src/ephy-window.c:139
+#: ../src/ephy-window.c:133
 msgid "Page Set_up"
 msgstr "ಪುಟದ ಸಂಯೋಜನೆಗಳು(_u)"
 
-#: ../src/ephy-window.c:140
+#: ../src/ephy-window.c:134
 #, fuzzy
 msgid "Setup the page settings for printing"
 msgstr "ಪುಟ ಗೆ"
 
-#: ../src/ephy-window.c:142
+#: ../src/ephy-window.c:136
 msgid "Print Pre_view"
 msgstr "ಮುದ್ರಣ ಮುನ್ನೋಟ(_v)"
 
-#: ../src/ephy-window.c:143
+#: ../src/ephy-window.c:137
 msgid "Print preview"
 msgstr "ಮುದ್ರಣದ ಮುನ್ನೋಟ"
 
-#: ../src/ephy-window.c:145
+#: ../src/ephy-window.c:139
 msgid "_Print…"
 msgstr "ಮುದ್ರಿಸು(_P)..."
 
-#: ../src/ephy-window.c:146
+#: ../src/ephy-window.c:140
 msgid "Print the current page"
 msgstr "ಈ ಪುಟವನ್ನು ಮುದ್ರಿಸು"
 
-#: ../src/ephy-window.c:148
+#: ../src/ephy-window.c:142
 msgid "S_end Link by Email…"
 msgstr "ಕೊಂಡಿಯನ್ನು ಇಮೇಲ್ ಮೂಲಕ ಕಳುಹಿಸು(_e)..."
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:143
 msgid "Send a link of the current page"
 msgstr "ಈ ಪುಟದ ಕೊಂಡಿಯನ್ನು ಕಳುಹಿಸು"
 
-#: ../src/ephy-window.c:152
+#: ../src/ephy-window.c:146
 msgid "Close this tab"
 msgstr "ಈ ಹಾಳೆಯನ್ನು ಮುಚ್ಚು"
 
 #. Edit menu
-#: ../src/ephy-window.c:157
+#: ../src/ephy-window.c:151
 msgid "_Undo"
 msgstr "ರದ್ದುಗೊಳಿಸು(_U)"
 
-#: ../src/ephy-window.c:158
+#: ../src/ephy-window.c:152
 msgid "Undo the last action"
 msgstr "ಕೊನೆಯ ಕ್ರಿಯೆಯನ್ನು ರದ್ದುಗೊಳಿಸು"
 
-#: ../src/ephy-window.c:160
+#: ../src/ephy-window.c:154
 msgid "Re_do"
 msgstr "ಪುನಃ ಮಾಡು(_d)"
 
-#: ../src/ephy-window.c:161
+#: ../src/ephy-window.c:155
 msgid "Redo the last undone action"
 msgstr "ಈ ಮೊದಲು ರದ್ದು ಮಾಡಿದ ಕ್ರಿಯೆಯನ್ನು ಪುನಃ ಮಾಡು"
 
-#: ../src/ephy-window.c:170
+#: ../src/ephy-window.c:164
 msgid "Paste clipboard"
 msgstr "ಕ್ಲಿಪ್‍ಬೋರ್ಡನ್ನು ಅಂಟಿಸು"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:167
 msgid "Delete text"
 msgstr "ಪಠ್ಯವನ್ನು ಅಳಿಸಿಹಾಕು"
 
-#: ../src/ephy-window.c:176
+#: ../src/ephy-window.c:170
 msgid "Select the entire page"
 msgstr "ಸಂಪೂರ್ಣ ಪುಟವನ್ನು ಆರಿಸು"
 
-#: ../src/ephy-window.c:178
+#: ../src/ephy-window.c:172
 msgid "_Find…"
 msgstr "ಪತ್ತೆ ಹಚ್ಚು(_F)..."
 
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:173
 #, fuzzy
 msgid "Find a word or phrase in the page"
 msgstr "ಪತ್ತೆ ಹಚ್ಚು ಪುಟ"
 
-#: ../src/ephy-window.c:181
+#: ../src/ephy-window.c:175
 #, fuzzy
 msgid "Find Ne_xt"
 msgstr "ಪತ್ತೆ ಹಚ್ಚು"
 
-#: ../src/ephy-window.c:182
+#: ../src/ephy-window.c:176
 #, fuzzy
 msgid "Find next occurrence of the word or phrase"
 msgstr "ಪತ್ತೆ ಹಚ್ಚು"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:178
 #, fuzzy
 msgid "Find Pre_vious"
 msgstr "ಪತ್ತೆ ಹಚ್ಚು"
 
-#: ../src/ephy-window.c:185
+#: ../src/ephy-window.c:179
 #, fuzzy
 msgid "Find previous occurrence of the word or phrase"
 msgstr "ಪತ್ತೆ ಹಚ್ಚು"
 
-#: ../src/ephy-window.c:187
+#: ../src/ephy-window.c:181
 msgid "P_ersonal Data"
 msgstr "ಖಾಸಗಿ ದತ್ತಾಂಶ(_e)"
 
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:182
 #, fuzzy
 msgid "View and remove cookies and passwords"
 msgstr "ನೋಟ"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:185
 msgid "Certificate_s"
 msgstr "ಪ್ರಮಾಣಪತ್ರಗಳು(_s)"
 
-#: ../src/ephy-window.c:192
+#: ../src/ephy-window.c:186
 msgid "Manage Certificates"
 msgstr "ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ವ್ಯವಸ್ಥಾಪಿಸು"
 
-#: ../src/ephy-window.c:195
+#: ../src/ephy-window.c:189
 msgid "P_references"
 msgstr "ಆದ್ಯತೆಗಳು(_r)"
 
-#: ../src/ephy-window.c:196
+#: ../src/ephy-window.c:190
 msgid "Configure the web browser"
 msgstr "ಜಾಲ ವೀಕ್ಷಕವನ್ನು ಸಂರಚಿಸು"
 
 #. View menu
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:195
 msgid "_Customize Toolbars…"
 msgstr "ಉಪಕರಣಪಟ್ಟಿಕೆಗಳನ್ನು ಕಸ್ಟಮೈಸ್ ಮಾಡು(_C)..."
 
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:196
 msgid "Customize toolbars"
 msgstr "ಉಪಕರಣಪಟ್ಟಿಕೆಗಳನ್ನು ಕಸ್ಟಮೈಸ್ ಮಾಡು"
 
-#: ../src/ephy-window.c:204 ../src/ephy-window.c:207
+#: ../src/ephy-window.c:198 ../src/ephy-window.c:201
 msgid "_Stop"
 msgstr "ನಿಲ್ಲಿಸು(_S)"
 
-#: ../src/ephy-window.c:205
+#: ../src/ephy-window.c:199
 msgid "Stop current data transfer"
 msgstr "ಈ ದತ್ತಾಂಶ ವರ್ಗಾವಣೆಯನ್ನು ನಿಲ್ಲಿಸು"
 
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:203
 msgid "_Reload"
 msgstr "ಪುನಃ ಲೋಡ್ ಮಾಡು(_R)"
 
-#: ../src/ephy-window.c:210
+#: ../src/ephy-window.c:204
 #, fuzzy
 msgid "Display the latest content of the current page"
 msgstr "ಪ್ರದರ್ಶಕ ಪುಟ"
 
-#: ../src/ephy-window.c:212
+#: ../src/ephy-window.c:206
 #, fuzzy
 msgid "_Larger Text"
 msgstr "ಪಠ್ಯ"
 
-#: ../src/ephy-window.c:213
+#: ../src/ephy-window.c:207
 msgid "Increase the text size"
 msgstr "ಪಠ್ಯದ ಗಾತ್ರವನ್ನು ಹೆಚ್ಚಿಸು"
 
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:209
 #, fuzzy
 msgid "S_maller Text"
 msgstr "S ಪಠ್ಯ"
 
-#: ../src/ephy-window.c:216
+#: ../src/ephy-window.c:210
 msgid "Decrease the text size"
 msgstr "ಪಠ್ಯದ ಗಾತ್ರವನ್ನು ಕುಗ್ಗಿಸು"
 
-#: ../src/ephy-window.c:218
+#: ../src/ephy-window.c:212
 msgid "_Normal Size"
 msgstr "ಸಾಮಾನ್ಯ ಗಾತ್ರ(_N)"
 
-#: ../src/ephy-window.c:219
+#: ../src/ephy-window.c:213
 msgid "Use the normal text size"
 msgstr "ಸಾಮಾನ್ಯ ಪಠ್ಯ ಗಾತ್ರವನ್ನು ಬಳಸು"
 
-#: ../src/ephy-window.c:221
+#: ../src/ephy-window.c:215
 msgid "Text _Encoding"
 msgstr "ಪಠ್ಯ ಎನ್‍ಕೋಡಿಂಗ್(_E)"
 
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:216
 msgid "Change the text encoding"
 msgstr "ಪಠ್ಯ ಎನ್‍ಕೋಡಿಂಗನ್ನು ಬದಲಾಯಿಸು"
 
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:218
 msgid "_Page Source"
 msgstr "ಪುಟದ ಆಕರ(_P)"
 
-#: ../src/ephy-window.c:225
+#: ../src/ephy-window.c:219
 msgid "View the source code of the page"
 msgstr " ಪುದ ಆಕರಸಂಕೇತಗಳನ್ನು ನೋಡುಟ"
 
-#: ../src/ephy-window.c:227
+#: ../src/ephy-window.c:221
 msgid "Page _Security Information"
 msgstr "ಪುಟದ ಸುರಕ್ಷತೆಯ ಮಾಹಿತಿ(_S)"
 
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:222
 msgid "Display security information for the web page"
 msgstr "ಪುಟದ ಸುರಕ್ಷತಾ ಮಾಹಿತಿಯನ್ನು ತೋರಿಸು"
 
 #. Bookmarks menu
-#: ../src/ephy-window.c:233
+#: ../src/ephy-window.c:227
 msgid "_Add Bookmark…"
 msgstr "ಸೇರಿಸು ಬುಕ್-ಮಾರ್ಕ್(_A)..."
 
-#: ../src/ephy-window.c:234 ../src/ephy-window.c:305
+#: ../src/ephy-window.c:228 ../src/ephy-window.c:299
 msgid "Add a bookmark for the current page"
 msgstr "ಈ  ಪುಕ್ಕೆ ಒಂದು ಬುಕ್‍ಮಾರ್ಕನ್ನು ಸೇರಿಸುಟ"
 
-#: ../src/ephy-window.c:236
+#: ../src/ephy-window.c:230
 msgid "_Edit Bookmarks"
 msgstr "ಬುಕ್‍ಮಾರ್ಕನ್ನು ಸಂಪಾದಿಸು(_E)"
 
-#: ../src/ephy-window.c:237
+#: ../src/ephy-window.c:231
 #, fuzzy
 msgid "Open the bookmarks window"
 msgstr "ತೆಗೆ ವಿಂಡೊ"
 
 #. Go menu
-#: ../src/ephy-window.c:242
+#: ../src/ephy-window.c:236
 msgid "_Location…"
 msgstr "ಸ್ಥಳ(_L)..."
 
-#: ../src/ephy-window.c:243
+#: ../src/ephy-window.c:237
 msgid "Go to a specified location"
 msgstr "ಒಂದು ನಿಗದಿತ ಸ್ಥಳಕ್ಕೆ ತೆರಳು"
 
-#: ../src/ephy-window.c:245
+#: ../src/ephy-window.c:239
 msgid "Hi_story"
 msgstr "ಇತಿಹಾಸ(_s)"
 
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:240
 #, fuzzy
 msgid "Open the history window"
 msgstr "ತೆಗೆ ವಿಂಡೊ"
 
 #. Tabs menu
-#: ../src/ephy-window.c:251
+#: ../src/ephy-window.c:245
 msgid "_Previous Tab"
 msgstr "ಹಿಂದಿನ ಹಾಳೆ(_P)"
 
-#: ../src/ephy-window.c:252
+#: ../src/ephy-window.c:246
 msgid "Activate previous tab"
 msgstr "ಹಿಂದಿನ ಹಾಳೆಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸು"
 
-#: ../src/ephy-window.c:254
+#: ../src/ephy-window.c:248
 msgid "_Next Tab"
 msgstr "ಮುಂದಿನ ಹಾಳೆ(_N)"
 
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:249
 msgid "Activate next tab"
 msgstr "ಮುಂದಿನ ಹಾಳೆಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸು"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:251
 #, fuzzy
 msgid "Move Tab _Left"
 msgstr "ವರ್ಗಾಯಿಸು ಲೆಫ್ಟ್‍"
 
-#: ../src/ephy-window.c:258
+#: ../src/ephy-window.c:252
 #, fuzzy
 msgid "Move current tab to left"
 msgstr "ವರ್ಗಾಯಿಸು ಟ್ಯಾಬ್ ಲೆಫ್ಟ್‍"
 
-#: ../src/ephy-window.c:260
+#: ../src/ephy-window.c:254
 #, fuzzy
 msgid "Move Tab _Right"
 msgstr "ವರ್ಗಾಯಿಸು ರೈಟ್"
 
-#: ../src/ephy-window.c:261
+#: ../src/ephy-window.c:255
 #, fuzzy
 msgid "Move current tab to right"
 msgstr "ವರ್ಗಾಯಿಸು ಟ್ಯಾಬ್ ರೈಟ್"
 
-#: ../src/ephy-window.c:267
+#: ../src/ephy-window.c:261
 msgid "Display web browser help"
 msgstr "ಜಾಲ ವೀಕ್ಷಕದ ಸಹಾಯವನ್ನು ತೋರಿಸು"
 
 #. File Menu
-#: ../src/ephy-window.c:278
+#: ../src/ephy-window.c:272
 msgid "_Work Offline"
 msgstr "ಜಾಲದ ಹೊರಗೆ ಕೆಲಸ ಮಾಡು(_W)"
 
-#: ../src/ephy-window.c:279
+#: ../src/ephy-window.c:273
 msgid "Switch to offline mode"
 msgstr ""
 
 #. View Menu
-#: ../src/ephy-window.c:284
+#: ../src/ephy-window.c:278
 msgid "_Hide Toolbars"
 msgstr "ಉಪಕರಣಪಟ್ಟಿಗಳನ್ನು ಅಡಗಿಸು(_H)"
 
-#: ../src/ephy-window.c:285
+#: ../src/ephy-window.c:279
 msgid "Show or hide toolbar"
 msgstr "ಉಪಕರಣಪಟ್ಟಿಗಳನ್ನು ತೋರಿಸು ಅಥವ ಅಡಗಿಸು"
 
-#: ../src/ephy-window.c:287
+#: ../src/ephy-window.c:281
 msgid "St_atusbar"
 msgstr "ಸ್ಥಿತಿ ಪಟ್ಟಿ(_a)"
 
-#: ../src/ephy-window.c:288
+#: ../src/ephy-window.c:282
 msgid "Show or hide statusbar"
 msgstr "ಸ್ಥಿತಿಪಟ್ಟಿಯನ್ನು ತೋರಿಸು ಅಥವ ಅಡಗಿಸು"
 
-#: ../src/ephy-window.c:290
+#: ../src/ephy-window.c:284
 msgid "_Fullscreen"
 msgstr "ಪೂರ್ಣತೆರೆ(_F)"
 
-#: ../src/ephy-window.c:291
+#: ../src/ephy-window.c:285
 msgid "Browse at full screen"
 msgstr "ಪೂರ್ಣತೆರೆಯಲ್ಲಿ ವೀಕ್ಷಿಸು"
 
-#: ../src/ephy-window.c:293
+#: ../src/ephy-window.c:287
 msgid "Popup _Windows"
 msgstr "ಪುಟಿಕೆ ವಿಂಡೋಗಳು(_W)"
 
-#: ../src/ephy-window.c:294
+#: ../src/ephy-window.c:288
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "ಈ ತಾಣದ ಅನಪೇಕ್ಷಿತ ಪುಟಿಕೆ(ಪಾಪ್ಅಪ್) ವಿಂಡೋಗಳನ್ನು ತೋರಿಸು ಅಥವ ಅಡಗಿಸು"
 
-#: ../src/ephy-window.c:296
+#: ../src/ephy-window.c:290
 msgid "Selection Caret"
 msgstr ""
 
 #. Document
-#: ../src/ephy-window.c:304
+#: ../src/ephy-window.c:298
 msgid "Add Boo_kmark…"
 msgstr "ಬುಕ್‍ಮಾರ್ಕನ್ನು ಸೇರಿಸು..."
 
 #. Framed document
-#: ../src/ephy-window.c:310
+#: ../src/ephy-window.c:304
 msgid "Show Only _This Frame"
 msgstr "ಕೇವಲ ಈ ಚೌಕಟ್ಟನ್ನು ಮಾತ್ರ ತೋರಿಸು(_T)"
 
-#: ../src/ephy-window.c:311
+#: ../src/ephy-window.c:305
 #, fuzzy
 msgid "Show only this frame in this window"
 msgstr "ಪ್ರದರ್ಶನ ಚೌಕಟ್ಟು ವಿಂಡೊ"
 
 #. Links
-#: ../src/ephy-window.c:316
+#: ../src/ephy-window.c:310
 #, fuzzy
 msgid "_Open Link"
 msgstr "ತೆಗೆ ಕೊಂಡಿ"
 
-#: ../src/ephy-window.c:317
+#: ../src/ephy-window.c:311
 #, fuzzy
 msgid "Open link in this window"
 msgstr "ತೆಗೆ ಕೊಂಡಿ ವಿಂಡೊ"
 
-#: ../src/ephy-window.c:319
+#: ../src/ephy-window.c:313
 #, fuzzy
 msgid "Open Link in New _Window"
 msgstr "ತೆಗೆ ಕೊಂಡಿ ಹೊಸ ವಿಂಡೊ"
 
-#: ../src/ephy-window.c:320
+#: ../src/ephy-window.c:314
 #, fuzzy
 msgid "Open link in a new window"
 msgstr "ತೆಗೆ ಕೊಂಡಿ ವಿಂಡೊ"
 
-#: ../src/ephy-window.c:322
+#: ../src/ephy-window.c:316
 #, fuzzy
 msgid "Open Link in New _Tab"
 msgstr "ತೆಗೆ ಕೊಂಡಿ ಹೊಸ"
 
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:317
 #, fuzzy
 msgid "Open link in a new tab"
 msgstr "ತೆಗೆ ಕೊಂಡಿ ಟ್ಯಾಬ್"
 
-#: ../src/ephy-window.c:325
+#: ../src/ephy-window.c:319
 msgid "_Download Link"
 msgstr "ಡೌನ್‍ಲೋಡ್ ಕೊಂಡಿ (_D)"
 
-#: ../src/ephy-window.c:327
+#: ../src/ephy-window.c:321
 msgid "_Save Link As…"
 msgstr "ಕೊಂಡಿಯನ್ನು ಹೀಗೆ ಉಳಿಸು(_S)..."
 
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:322
 msgid "Save link with a different name"
 msgstr "ಕೊಂಡಿಯನ್ನು ಬೇರೊಂದು ಹೆಸರಿನೊಂದಿಗೆ ಉಳಿಸು"
 
-#: ../src/ephy-window.c:330
+#: ../src/ephy-window.c:324
 msgid "_Bookmark Link…"
 msgstr "ಬುಕ್-ಮಾರ್ಕ್ ಕೊಂಡಿ(_B)..."
 
-#: ../src/ephy-window.c:332
+#: ../src/ephy-window.c:326
 msgid "_Copy Link Address"
 msgstr "ಕೊಂಡಿ ವಿಳಾಸವನ್ನು ನಕಲಿಸು(_C)"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:338
+#: ../src/ephy-window.c:332
 msgid "_Send Email…"
 msgstr "ಇಮೇಲ್ ಅನ್ನು ಕಳುಹಿಸು(_S)..."
 
-#: ../src/ephy-window.c:340
+#: ../src/ephy-window.c:334
 msgid "_Copy Email Address"
 msgstr "ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ನಕಲಿಸು(_C)"
 
 #. Images
-#: ../src/ephy-window.c:345
+#: ../src/ephy-window.c:339
 msgid "Open _Image"
 msgstr "ಚಿತ್ರವನ್ನು ತೆರೆ(_I)"
 
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:341
 msgid "_Save Image As…"
 msgstr "ಚಿತ್ರವನ್ನು ಹೀಗೆ ಉಳಿಸು(_S)..."
 
-#: ../src/ephy-window.c:349
+#: ../src/ephy-window.c:343
 msgid "_Use Image As Background"
 msgstr "ಚಿತ್ರವನ್ನು ಹಿನ್ನಲೆಯಾಗಿ ಬಳಸು(_U)"
 
-#: ../src/ephy-window.c:351
+#: ../src/ephy-window.c:345
 msgid "Copy I_mage Address"
 msgstr "ಚಿತ್ರದ ವಿಳಾಸವನ್ನು ನಕಲಿಸು(_m)"
 
-#: ../src/ephy-window.c:353
+#: ../src/ephy-window.c:347
 msgid "St_art Animation"
 msgstr "ಅನಿಮೇಶನ್ ಅನ್ನು ಆರಂಭಿಸು(_a)"
 
-#: ../src/ephy-window.c:355
+#: ../src/ephy-window.c:349
 msgid "St_op Animation"
 msgstr "ಅನಿಮೇಶನ್ ಅನ್ನು ನಿಲ್ಲಿಸು(_o)"
 
-#: ../src/ephy-window.c:528
+#: ../src/ephy-window.c:522
 #, fuzzy
 msgid "There are unsubmitted changes to form elements"
 msgstr "ಫಾರ್ಮ್"
 
-#: ../src/ephy-window.c:532
+#: ../src/ephy-window.c:526
 #, fuzzy
 msgid "If you close the document anyway, you will lose that information."
 msgstr "ದಸ್ತಾವೇಜು."
 
-#: ../src/ephy-window.c:536
+#: ../src/ephy-window.c:530
 msgid "Close _Document"
 msgstr "ದಸ್ತಾವೇಜನ್ನು ಮುಚ್ಚು(_D)"
 
-#: ../src/ephy-window.c:1478 ../src/window-commands.c:280
+#: ../src/ephy-window.c:1472 ../src/window-commands.c:275
 msgid "Open"
 msgstr "ತೆಗೆ"
 
-#: ../src/ephy-window.c:1480 ../src/window-commands.c:306
+#: ../src/ephy-window.c:1474 ../src/window-commands.c:301
 msgid "Save As"
 msgstr "ಹೀಗೆ ಉಳಿಸು"
 
-#: ../src/ephy-window.c:1482
+#: ../src/ephy-window.c:1476
 msgid "Print"
 msgstr "ಮುದ್ರಿಸು"
 
-#: ../src/ephy-window.c:1486
+#: ../src/ephy-window.c:1480
 msgid "Find"
 msgstr "ಪತ್ತೆ ಹಚ್ಚು"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1499
+#: ../src/ephy-window.c:1493
 msgid "Larger"
 msgstr "ದೊಡ್ಡದಾದ"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1502
+#: ../src/ephy-window.c:1496
 msgid "Smaller"
 msgstr "ಚಿಕ್ಕದಾದ"
 
-#: ../src/ephy-window.c:1692
+#: ../src/ephy-window.c:1686
 msgid "Insecure"
 msgstr "ಅಸುರಕ್ಷಿತ"
 
-#: ../src/ephy-window.c:1697
+#: ../src/ephy-window.c:1691
 msgid "Broken"
 msgstr "ಭಿನ್ನಗೊಂಡ"
 
-#: ../src/ephy-window.c:1709
+#: ../src/ephy-window.c:1703
 msgid "Low"
 msgstr "ಕೆಳ ಮಟ್ಟದ"
 
-#: ../src/ephy-window.c:1716
+#: ../src/ephy-window.c:1710
 msgid "High"
 msgstr "ಉತ್ತಮ"
 
-#: ../src/ephy-window.c:1726
+#: ../src/ephy-window.c:1720
 #, c-format
 msgid "Security level: %s"
 msgstr "ಸುರಕ್ಷತೆ ಮಟ್ಟ: %s"
 
-#: ../src/ephy-window.c:1769
+#: ../src/ephy-window.c:1763
 #, fuzzy, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "ಪುಟಿಕೆ(ಪಾಪ್ಅಪ್) ವಿಂಡೊ"
 msgstr[1] "ಪುಟಿಕೆ(ಪಾಪ್ಅಪ್) ವಿಂಡೊ"
 
-#: ../src/ephy-window.c:2030
+#: ../src/ephy-window.c:2024
 #, c-format
 msgid "Open image “%s”"
 msgstr "“%s” ಚಿತ್ರವನ್ನು ತೆಗೆ"
 
-#: ../src/ephy-window.c:2035
+#: ../src/ephy-window.c:2029
 #, c-format
 msgid "Use as desktop background “%s”"
 msgstr "“%s” ಗಣಕತೆರೆಯ ಹಿನ್ನಲೆಯಾಗಿ ಬಳಸು"
 
-#: ../src/ephy-window.c:2040
+#: ../src/ephy-window.c:2034
 #, c-format
 msgid "Save image “%s”"
 msgstr "“%s” ಚಿತ್ರವನ್ನು ಉಳಿಸು"
 
-#: ../src/ephy-window.c:2045
+#: ../src/ephy-window.c:2039
 #, fuzzy, c-format
 msgid "Copy image address “%s”"
 msgstr "ನಕಲಿಸು ಚಿತ್ರ"
 
-#: ../src/ephy-window.c:2058
+#: ../src/ephy-window.c:2052
 #, fuzzy, c-format
 msgid "Send email to address “%s”"
 msgstr "ಕಳುಹಿಸು"
 
-#: ../src/ephy-window.c:2064
+#: ../src/ephy-window.c:2058
 #, fuzzy, c-format
 msgid "Copy email address “%s”"
 msgstr "ನಕಲಿಸು"
 
-#: ../src/ephy-window.c:2076
+#: ../src/ephy-window.c:2070
 #, fuzzy, c-format
 msgid "Save link “%s”"
 msgstr "ಉಳಿಸು ಕೊಂಡಿ"
 
-#: ../src/ephy-window.c:2082
+#: ../src/ephy-window.c:2076
 #, fuzzy, c-format
 msgid "Bookmark link “%s”"
 msgstr "ಬುಕ್-ಮಾರ್ಕ್ ಕೊಂಡಿ"
 
-#: ../src/ephy-window.c:2088
+#: ../src/ephy-window.c:2082
 #, fuzzy, c-format
 msgid "Copy link's address “%s”"
 msgstr "ನಕಲಿಸು ಕೊಂಡಿ"
 
-#: ../src/pdm-dialog.c:330
+#: ../src/pdm-dialog.c:316
 #, fuzzy
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b> ಆರಿಸು</b>"
 
-#: ../src/pdm-dialog.c:333
+#: ../src/pdm-dialog.c:319
 #, fuzzy
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
@@ -4269,157 +4281,157 @@ msgid ""
 "want to remove:"
 msgstr " :"
 
-#: ../src/pdm-dialog.c:338
+#: ../src/pdm-dialog.c:324
 #, fuzzy
 msgid "Clear All Personal Data"
 msgstr "ತೆರವುಗೊಳಿಸು ಎಲ್ಲಾ ವೈಯಕ್ತಿಕ ದತ್ತಾಂಶ"
 
 #. Cookies
-#: ../src/pdm-dialog.c:361
+#: ../src/pdm-dialog.c:347
 #, fuzzy
 msgid "C_ookies"
 msgstr "C"
 
 #. Passwords
-#: ../src/pdm-dialog.c:373
+#: ../src/pdm-dialog.c:359
 msgid "Saved _passwords"
 msgstr ""
 
 #. History
-#: ../src/pdm-dialog.c:385
+#: ../src/pdm-dialog.c:371
 #, fuzzy
 msgid "_History"
 msgstr "ಚರಿತ್ರೆ(_H)"
 
 #. Cache
-#: ../src/pdm-dialog.c:397
+#: ../src/pdm-dialog.c:383
 msgid "_Temporary files"
 msgstr ""
 
-#: ../src/pdm-dialog.c:413
+#: ../src/pdm-dialog.c:399
 #, fuzzy
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
 msgstr "<small><i><b> ಟಿಪ್ಪಣಿ</b> ಪ್ರತಿ</i></small>"
 
-#: ../src/pdm-dialog.c:606
+#: ../src/pdm-dialog.c:592
 #, fuzzy
 msgid "Cookie Properties"
 msgstr "ಗುಣಲಕ್ಷಣಗಳು"
 
-#: ../src/pdm-dialog.c:623
+#: ../src/pdm-dialog.c:609
 msgid "Content:"
 msgstr ""
 
-#: ../src/pdm-dialog.c:639
+#: ../src/pdm-dialog.c:625
 msgid "Path:"
 msgstr "ಪಥ:"
 
-#: ../src/pdm-dialog.c:655
+#: ../src/pdm-dialog.c:641
 #, fuzzy
 msgid "Send for:"
 msgstr "ಕಳುಹಿಸು ಗೆ:"
 
-#: ../src/pdm-dialog.c:664
+#: ../src/pdm-dialog.c:650
 #, fuzzy
 msgid "Encrypted connections only"
 msgstr "ಗೂಢಲಿಪೀಕರಣಗೊಂಡ"
 
-#: ../src/pdm-dialog.c:664
+#: ../src/pdm-dialog.c:650
 msgid "Any type of connection"
 msgstr ""
 
-#: ../src/pdm-dialog.c:670
+#: ../src/pdm-dialog.c:656
 msgid "Expires:"
 msgstr "ಕೊನೆಯ ದಿನಾಂಕ:"
 
-#: ../src/pdm-dialog.c:681
+#: ../src/pdm-dialog.c:667
 #, fuzzy
 msgid "End of current session"
 msgstr "ಕೊನೆ"
 
-#: ../src/pdm-dialog.c:814
+#: ../src/pdm-dialog.c:801
 msgid "Domain"
 msgstr "ಕ್ಷೇತ್ರ"
 
-#: ../src/pdm-dialog.c:826
+#: ../src/pdm-dialog.c:813
 msgid "Name"
 msgstr "ಹೆಸರು"
 
-#: ../src/pdm-dialog.c:1225
+#: ../src/pdm-dialog.c:1212
 msgid "Host"
 msgstr "ಅತಿಥೇಯ"
 
-#: ../src/pdm-dialog.c:1237
+#: ../src/pdm-dialog.c:1224
 msgid "User Name"
 msgstr "ಬಳಕೆದಾರ ಹೆಸರು"
 
-#: ../src/pdm-dialog.c:1249
+#: ../src/pdm-dialog.c:1236
 msgid "User Password"
 msgstr "ಬಳಕೆದಾರ ಗುಪ್ತಪದ"
 
-#: ../src/popup-commands.c:261
+#: ../src/popup-commands.c:260
 #, fuzzy
 msgid "Download Link"
 msgstr "ಕೊಂಡಿ"
 
-#: ../src/popup-commands.c:269
+#: ../src/popup-commands.c:268
 #, fuzzy
 msgid "Save Link As"
 msgstr "ಉಳಿಸು ಕೊಂಡಿ"
 
-#: ../src/popup-commands.c:276
+#: ../src/popup-commands.c:275
 #, fuzzy
 msgid "Save Image As"
 msgstr "ಉಳಿಸು ಚಿತ್ರ"
 
-#: ../src/ppview-toolbar.c:90
+#: ../src/ppview-toolbar.c:86
 msgid "First"
 msgstr "ಮೊದಲ"
 
-#: ../src/ppview-toolbar.c:91
+#: ../src/ppview-toolbar.c:87
 #, fuzzy
 msgid "Go to the first page"
 msgstr "ಮೊದಲ ಪುಟ"
 
-#: ../src/ppview-toolbar.c:94
+#: ../src/ppview-toolbar.c:90
 msgid "Last"
 msgstr "ಕೊನೆಯ"
 
-#: ../src/ppview-toolbar.c:95
+#: ../src/ppview-toolbar.c:91
 #, fuzzy
 msgid "Go to the last page"
 msgstr "ಕೊನೆಯ ಪುಟ"
 
-#: ../src/ppview-toolbar.c:98
+#: ../src/ppview-toolbar.c:94
 msgid "Previous"
 msgstr "ಹಿಂದಿನ"
 
-#: ../src/ppview-toolbar.c:99
+#: ../src/ppview-toolbar.c:95
 #, fuzzy
 msgid "Go to the previous page"
 msgstr "ಪುಟ"
 
-#: ../src/ppview-toolbar.c:102
+#: ../src/ppview-toolbar.c:98
 msgid "Next"
 msgstr "ಮುಂದಿನ"
 
-#: ../src/ppview-toolbar.c:103
+#: ../src/ppview-toolbar.c:99
 #, fuzzy
 msgid "Go to next page"
 msgstr "ಪುಟ"
 
-#: ../src/ppview-toolbar.c:106
+#: ../src/ppview-toolbar.c:102
 msgid "Close"
 msgstr "ಮುಚ್ಚು"
 
-#: ../src/ppview-toolbar.c:107 ../src/ppview-toolbar.c:223
+#: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
 #, fuzzy
 msgid "Close print preview"
 msgstr "ಮುಚ್ಚು ಮುನ್ನೋಟ"
 
-#: ../src/prefs-dialog.c:388
+#: ../src/prefs-dialog.c:371
 msgid "Default"
 msgstr "ಪೂರ್ವನಿಯೋಜಿತ"
 
@@ -4431,7 +4443,7 @@ msgstr "ಪೂರ್ವನಿಯೋಜಿತ"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:966 ../src/prefs-dialog.c:974
+#: ../src/prefs-dialog.c:949 ../src/prefs-dialog.c:957
 #, c-format
 msgid "language|%s (%s)"
 msgstr "%s (%s)"
@@ -4441,24 +4453,24 @@ msgstr "%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:985
+#: ../src/prefs-dialog.c:968
 #, fuzzy, c-format
 msgid "language|User defined (%s)"
 msgstr "ಬಳಕೆದಾರ"
 
-#: ../src/prefs-dialog.c:1007
+#: ../src/prefs-dialog.c:990
 #, fuzzy, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "ಗಣಕ"
 msgstr[1] "ಗಣಕ"
 
-#: ../src/prefs-dialog.c:1399
+#: ../src/prefs-dialog.c:1382
 #, fuzzy
 msgid "Select a Directory"
 msgstr "ಆರಿಸು ಕೋಶ"
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:764
 #, fuzzy
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
@@ -4467,7 +4479,7 @@ msgid ""
 "option) any later version."
 msgstr "ಜಾಲ   ಸಾಮಾನ್ಯ ಸಾರ್ವಜನಿಕ ಲೈಸನ್ಸ್‍ ಬಿಡುವು ತಂತ್ರಾಂಶ ಲೈಸನ್ಸ್‍ ಆಯ್ಕೆ."
 
-#: ../src/window-commands.c:782
+#: ../src/window-commands.c:768
 #, fuzzy
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
@@ -4476,7 +4488,7 @@ msgid ""
 "more details."
 msgstr "ಜಾಲ   A ಸಾಮಾನ್ಯ ಸಾರ್ವಜನಿಕ ಲೈಸನ್ಸ್‍ ಗೆ."
 
-#: ../src/window-commands.c:786
+#: ../src/window-commands.c:772
 #, fuzzy
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
@@ -4484,21 +4496,21 @@ msgid ""
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr "ಸಾಮಾನ್ಯ ಸಾರ್ವಜನಿಕ ಲೈಸನ್ಸ್‍ ನೊಂದಿಗೆ ಜಾಲ ಬಿಡುವು ತಂತ್ರಾಂಶ ಫ್ರಾಂಕ್ಲಿನ್ ಬೋಸ್ಟನ್ USA"
 
-#: ../src/window-commands.c:834 ../src/window-commands.c:850
-#: ../src/window-commands.c:861
+#: ../src/window-commands.c:820 ../src/window-commands.c:836
+#: ../src/window-commands.c:847
 #, fuzzy
 msgid "Contact us at:"
 msgstr "ಸಂಪರ್ಕಿಸು:"
 
-#: ../src/window-commands.c:837
+#: ../src/window-commands.c:823
 msgid "Contributors:"
 msgstr ""
 
-#: ../src/window-commands.c:840
+#: ../src/window-commands.c:826
 msgid "Past developers:"
 msgstr ""
 
-#: ../src/window-commands.c:873
+#: ../src/window-commands.c:859
 #, fuzzy, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4513,11 +4525,11 @@ msgstr "ನಲ್ಲಿ"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:899
+#: ../src/window-commands.c:885
 msgid "translator-credits"
 msgstr "ಶಂಕರ್ ಪ್ರಸಾದ್ ಎಂ. ವಿ."
 
-#: ../src/window-commands.c:902
+#: ../src/window-commands.c:888
 #, fuzzy
 msgid "GNOME Web Browser Website"
 msgstr "ಜಾಲ"
