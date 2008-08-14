@@ -267,13 +267,36 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
+#ifdef HAVE_NSICLIENTAUTHUSERDECISION
+        GtkWidget *rememberButton;
+        nsCOMPtr<nsIClientAuthUserDecision> userDecision (do_QueryInterface (ctx));
+
+        if (userDecision)
+        {
+                PRBool remember = PR_FALSE;
+                userDecision->GetRememberClientAuthCertificate (&remember);
+
+                rememberButton = gtk_check_button_new_with_mnemonic ("_Remember this choice"); /* FIXME i18n */
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (rememberButton), remember != PR_FALSE);
+                gtk_box_pack_start (GTK_BOX(GTK_DIALOG(dialog)->vbox), rememberButton, FALSE, FALSE, 0);
+                gtk_widget_show (rememberButton);
+        }
+#endif /* HAVE_NSICLIENTAUTHUSERDECISION */
+
 	/* run the dialog */
 	int res = modalDialog.Run (GTK_DIALOG (dialog));
 	if (res == GTK_RESPONSE_OK)
 	{
 		*canceled = PR_FALSE;
 		*selectedIndex = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
-	} 
+	
+#ifdef HAVE_NSICLIENTAUTHUSERDECISION
+                if (userDecision)
+                {
+                        userDecision->SetRememberClientAuthCertificate (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (rememberButton)) != FALSE);
+                }
+#endif /* HAVE_NSICLIENTAUTHUSERDECISION */
+        }
 	else
 	{
 		*canceled = PR_TRUE;

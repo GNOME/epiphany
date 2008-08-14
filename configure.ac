@@ -390,6 +390,17 @@ GECKO_CHECK_HEADERS([spellchecker],[mozISpellCheckingEngine.h],
 
 GECKO_CHECK_HEADERS([],[nsIBadCertListener.h],[have_nsibadcertlistener=yes],[have_nsibadcertlistener=no])
 
+# Check for nsIClientAuthUserDecision in nsIClientAuthDialogs.h
+
+GECKO_COMPILE_IFELSE([],
+  [GECKO_XPCOM_PROGRAM([[#include <nsIClientAuthDialogs.h>]],
+                       [[nsIClientAuthUserDecision *decision;]])],
+  [have_nsIClientAuthUserDecision=yes],[have_nsIClientAuthUserDecision=no])
+
+if test "$have_nsIClientAuthUserDecision" = "yes"; then
+  AC_DEFINE([HAVE_NSICLIENTAUTHUSERDECISION],[1],[Define if nsIClientAuthUserDecision exists])
+fi
+
 # Check for some contractIDs that we need but are provided by extensions
 # which may or may not have been built.
 
