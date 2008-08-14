@@ -54,6 +54,7 @@ struct _EphyLocationEntryPrivate
 	GdkColor secure_fg_colour;
 
 	GtkCellRenderer *extracell;
+	GRegex *regex;
 
 	char *before_completion;
 	char *saved_text;
@@ -214,6 +215,12 @@ ephy_location_entry_finalize (GObject *object)
 	{
 		g_object_unref (priv->favicon);
 	}
+	
+	if (priv->regex)
+	{
+		g_regex_unref (priv->regex);
+		priv->regex = NULL;
+	}
 
 	parent_class->finalize (object);
 }
@@ -328,6 +335,8 @@ editable_changed_cb (GtkEditable *editable,
 		     EphyLocationEntry *entry)
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
+	const char *text;
+	char *pattern;
 
 	update_address_state (entry);
 
@@ -338,6 +347,25 @@ editable_changed_cb (GtkEditable *editable,
 		priv->user_changed = TRUE;
 		priv->can_redo = FALSE;
 	}	
+	
+	if (priv->regex)
+	{
+		g_regex_unref (priv->regex);
+		priv->regex = NULL;
+	}
+	
+	text = gtk_entry_get_text (GTK_ENTRY (editable));
+
+	if (g_str_has_prefix (text, "re:"))
+		pattern = g_strdup (text+3);
+	else
+		pattern = g_regex_escape_string (text, -1);
+
+	priv->regex = g_regex_new (pattern, 
+				G_REGEX_CASELESS | G_REGEX_OPTIMIZE, 
+				G_REGEX_MATCH_NOTEMPTY, NULL);
+
+	g_free (pattern);
 
 	update_favicon (entry);
 
@@ -499,7 +527,7 @@ entry_drag_motion_cb (GtkWidget        *widget,
 	{
 		g_signal_stop_emission_by_name (widget, "drag_motion");
 	}
-    
+
 	return FALSE;
 }
 
@@ -908,7 +936,8 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	p->user_changed = FALSE;
 	p->block_update = FALSE;
 	p->saved_text = NULL;
-
+	p->regex = NULL;
+	
 	ephy_location_entry_construct_contents (le);
 
 	gtk_tool_item_set_expand (GTK_TOOL_ITEM (le), TRUE);
@@ -932,8 +961,8 @@ cursor_on_match_cb  (GtkEntryCompletion *completion,
 	gtk_tree_model_get (model, iter,
 			    le->priv->url_col,
 			    &item, -1);
-	
 	entry = gtk_entry_completion_get_entry (completion);
+
 	gtk_entry_set_text (GTK_ENTRY (entry), item);
 	gtk_editable_set_position (GTK_EDITABLE (entry), -1);
 
@@ -972,15 +1001,16 @@ extracell_data_func (GtkCellLayout *cell_layout,
 }
 
 void
-ephy_location_entry_set_completion_func (EphyLocationEntry *le, 
-					GtkEntryCompletionMatchFunc completion_func,
-					gpointer user_data)
+ephy_location_entry_set_match_func (EphyLocationEntry *le, 
+				GtkEntryCompletionMatchFunc match_func,
+				gpointer user_data,
+				GDestroyNotify notify)
 {
 	EphyLocationEntryPrivate *priv = le->priv;
 	GtkEntryCompletion *completion;
 	
 	completion = gtk_entry_get_completion (GTK_ENTRY (priv->icon_entry->entry));
-	gtk_entry_completion_set_match_func (completion, completion_func, user_data, NULL);
+	gtk_entry_completion_set_match_func (completion, match_func, user_data, notify);
 }
 
 void
@@ -1297,4 +1327,12 @@ ephy_location_entry_set_lock_tooltip (EphyLocationEntry *entry,
 	EphyLocationEntryPrivate *priv = entry->priv;
 
 	gtk_widget_set_tooltip_text (priv->lock_ebox, tooltip);
+}
+
+GRegex *
+ephy_location_entry_get_regex (EphyLocationEntry *entry)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+	
+	return priv->regex;
 }
