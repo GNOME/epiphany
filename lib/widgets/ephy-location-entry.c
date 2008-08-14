@@ -62,9 +62,9 @@ struct _EphyLocationEntryPrivate
 	guint action_col;
 	guint keywords_col;
 	guint relevance_col;
+	guint url_col;
 	guint extra_col;
 	guint favicon_col;
-	guint url_col;
 
 	guint hash;
 
@@ -1007,9 +1007,9 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 				    guint action_col,
 				    guint keywords_col,
 				    guint relevance_col,
+				    guint url_col,
 				    guint extra_col,
-				    guint favicon_col,
-				    guint url_col)
+				    guint favicon_col)
 {
 	EphyLocationEntryPrivate *priv = le->priv;
 	GtkTreeModel *sort_model;
@@ -1020,9 +1020,9 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 	le->priv->action_col = action_col;
 	le->priv->keywords_col = keywords_col;
 	le->priv->relevance_col = relevance_col;
+	le->priv->url_col = url_col;
 	le->priv->extra_col = extra_col;
 	le->priv->favicon_col = favicon_col;
-	le->priv->url_col = url_col;
 
 	sort_model = gtk_tree_model_sort_new_with_model (model);
 	g_object_unref (model);
