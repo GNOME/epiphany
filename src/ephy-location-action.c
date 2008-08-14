@@ -86,73 +86,35 @@ static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (EphyLocationAction, ephy_location_action, EPHY_TYPE_LINK_ACTION)
 
-static const struct
+typedef struct
 {
-	const char *prefix;
-	int len;
-}
-web_prefixes [] =
+	EphyLocationEntry *entry;
+	EphyLocationAction *action;
+} LocationEntryAction;
+
+static void
+destroy_match_func (gpointer data)
 {
-	{ "http://www.", 11 },
-	{ "http://ftp.", 11 },
-	{ "http://", 7 },
-	{ "https://www.", 12 },
-	{ "https://", 8 },
-	{ "ftp://", 6},
-	{ "ftp://ftp.", 10},
-	{ "www.", 4 },
-	{ "ftp.", 4}
-};
-
-
-static gboolean
-keyword_match (const char *list,
-	       const char *keyword)
-{
-	const char *p;
-	gsize keyword_len;
-
-	p = list;
-	keyword_len = strlen (keyword);
-
-	while (*p)
-	{
-		int i;
-
-		for (i = 0; i < keyword_len; i++)
-		{
-			if (p[i] != keyword[i])
-			{
-				goto next_token;
-			}
-		}
-	  
-		return TRUE;
-	  
-		next_token:
-
-		while (*p && !g_ascii_ispunct(*p) && !g_ascii_isspace(*p)) p++;
-		while (*p && (g_ascii_ispunct(*p) || g_ascii_isspace(*p))) p++;
-	}
-
-	return FALSE;
+	g_slice_free (LocationEntryAction, data);
 }
 
 static gboolean
-completion_func (GtkEntryCompletion *completion,
-		 const char *key,
-		 GtkTreeIter *iter,
-		 gpointer data)
+match_func (GtkEntryCompletion *completion,
+		const char *key,
+		GtkTreeIter *iter,
+		gpointer data)
 {
-	int i, len_key, len_prefix;
 	char *item = NULL;
 	char *url = NULL;
 	char *keywords = NULL;
+	char *extra = NULL;
+
 	gboolean ret = FALSE;
-	GtkTreeModel *model;
 	EphyLocationActionPrivate *priv;
-	
-	priv = EPHY_LOCATION_ACTION (data)->priv;
+	GtkTreeModel *model;
+	GRegex *regex;
+
+	priv = EPHY_LOCATION_ACTION (((LocationEntryAction *) data)->action)->priv;
 
 	model = gtk_entry_completion_get_model (completion);
 
@@ -160,45 +122,24 @@ completion_func (GtkEntryCompletion *completion,
 			    EPHY_COMPLETION_TEXT_COL, &item,
 			    EPHY_COMPLETION_URL_COL, &url,
 			    EPHY_COMPLETION_KEYWORDS_COL, &keywords,
+			    EPHY_COMPLETION_EXTRA_COL, &extra,
 			    -1);
-
-	len_key = strlen (key);
-	if (!strncasecmp (key, item, len_key))
-	{
-		ret = TRUE;
-	}
-	else if (keyword_match (keywords, key))
-	{
-		ret = TRUE;
-	}
-	else if (!strncasecmp (key, url, len_key))
-	{
-		ret = TRUE;
-	}
-	else
-	{
-		for (i = 0; i < G_N_ELEMENTS (web_prefixes); i++)
-		{
-			len_prefix = web_prefixes[i].len;
-			if (!strncmp (web_prefixes[i].prefix, item, len_prefix) &&
-			    !strncasecmp (key, item + len_prefix, len_key))
-			{
-				ret = TRUE;
-				break;
-			}
-			else if (!strncmp (web_prefixes[i].prefix, url, len_prefix) &&
-			        !strncasecmp (key, url + len_prefix, len_key))
-			{
-				ret = TRUE;
-				break;
-			}
-
-		}
-	}
 	
+	if (!key)
+		return FALSE;
+	
+	regex = ephy_location_entry_get_regex (((LocationEntryAction *) data)->entry);
+	
+	ret = (g_regex_match (regex, item, G_REGEX_MATCH_NOTEMPTY, NULL)
+		|| g_regex_match (regex, url, G_REGEX_MATCH_NOTEMPTY, NULL)
+		|| g_regex_match (regex, keywords, G_REGEX_MATCH_NOTEMPTY, NULL)
+		|| (extra && g_regex_match (regex, extra, G_REGEX_MATCH_NOTEMPTY, NULL))
+		);
+
 	g_free (item);
 	g_free (url);
 	g_free (keywords);
+	g_free (extra);
 
 	return ret;
 }
@@ -496,6 +437,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
 		EphyCompletionModel *model;
 		GtkWidget *entry;
+		LocationEntryAction *lea;
 
 		model = ephy_completion_model_new ();
 		ephy_location_entry_set_completion (EPHY_LOCATION_ENTRY (proxy),
@@ -507,10 +449,15 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 						    EPHY_COMPLETION_URL_COL,
 						    EPHY_COMPLETION_EXTRA_COL,
 						    EPHY_COMPLETION_FAVICON_COL);
-
-		ephy_location_entry_set_completion_func (EPHY_LOCATION_ENTRY (proxy), 
-							completion_func, 
-							EPHY_LOCATION_ACTION (action));
+		
+		lea = g_slice_new (LocationEntryAction);
+		lea->entry = EPHY_LOCATION_ENTRY (proxy);
+		lea->action = EPHY_LOCATION_ACTION (action);
+		
+		ephy_location_entry_set_match_func (EPHY_LOCATION_ENTRY (proxy), 
+							match_func, 
+							lea,
+							destroy_match_func);
 
 		add_completion_actions (action, proxy);
 
