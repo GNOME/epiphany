@@ -969,8 +969,11 @@ extracell_data_func (GtkCellLayout *cell_layout,
 	char *cdata;
 	GValue visible = { 0, };
 	GValue text = { 0, };
-	
-	gtk_tree_model_get (tree_model, iter, GPOINTER_TO_UINT(data), &cdata, -1);
+	EphyLocationEntryPrivate *priv;
+
+	priv = EPHY_LOCATION_ENTRY (data)->priv;
+
+	gtk_tree_model_get (tree_model, iter, priv->extra_col, &cdata, -1);
 
 	g_value_init (&text, G_TYPE_STRING);
 	g_value_init (&visible, G_TYPE_BOOLEAN);
@@ -1064,7 +1067,7 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 	
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
 					le->priv->extracell, extracell_data_func, 
-					GUINT_TO_POINTER (extra_col),
+					le,
 					NULL);
 
 	g_object_set (completion, "inline-selection", TRUE, NULL);
