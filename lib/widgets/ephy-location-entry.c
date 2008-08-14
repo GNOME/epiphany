@@ -920,23 +920,6 @@ ephy_location_entry_new (void)
 	return GTK_WIDGET (g_object_new (EPHY_TYPE_LOCATION_ENTRY, NULL));
 }
 
-static gint
-sort_func (GtkTreeModel *model,
-	   GtkTreeIter *a,
-	   GtkTreeIter *b,
-	   gpointer data)
-{
-	gint valuea, valueb;
-	EphyLocationEntry *le = EPHY_LOCATION_ENTRY (data);
-
-	gtk_tree_model_get (model, a,
-			    le->priv->relevance_col, &valuea, -1);
-	gtk_tree_model_get (model, b,
-			    le->priv->relevance_col, &valueb, -1);
-
-	return valueb - valuea;
-}
-
 static gboolean
 cursor_on_match_cb  (GtkEntryCompletion *completion,
 		     GtkTreeModel *model,
@@ -1025,10 +1008,12 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 	le->priv->favicon_col = favicon_col;
 
 	sort_model = gtk_tree_model_sort_new_with_model (model);
+
 	g_object_unref (model);
-	gtk_tree_sortable_set_default_sort_func
-		(GTK_TREE_SORTABLE (sort_model),
-		 sort_func, le, NULL);
+	gtk_tree_sortable_set_sort_column_id 
+			(GTK_TREE_SORTABLE (sort_model),
+			 le->priv->relevance_col,
+			 GTK_SORT_DESCENDING);
 
 	completion = gtk_entry_completion_new ();
 	gtk_entry_completion_set_model (completion, sort_model);
