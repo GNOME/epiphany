@@ -11,9 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany Web Browser 2.24\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2008-07-22 20:06+0000\n"
-"PO-Revision-Date: 2008-03-04 05:32+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=epiphany\n"
+"POT-Creation-Date: 2008-07-29 03:53+0000\n"
+"PO-Revision-Date: 2008-08-16 09:25+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -903,39 +904,48 @@ msgid "_Page address"
 msgstr "Lehe aa_dress"
 
 #. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:174
+#: ../embed/downloader-view.c:177
 msgid "_Show Downloads"
 msgstr "_Näita allalaadimisi"
 
-#: ../embed/downloader-view.c:329
+#: ../embed/downloader-view.c:332
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u: %02u.%02u"
 
-#: ../embed/downloader-view.c:333
+#: ../embed/downloader-view.c:336
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: ../embed/downloader-view.c:394
+#: ../embed/downloader-view.c:397
 msgid "_Pause"
 msgstr "_Paus"
 
-#: ../embed/downloader-view.c:394
+#: ../embed/downloader-view.c:397
 msgid "_Resume"
 msgstr "_Jätka"
 
-#: ../embed/downloader-view.c:432
+#: ../embed/downloader-view.c:435
 #, c-format
 msgid "The file “%s” has been downloaded."
 msgstr "Fail „%s“ on alla laaditud."
 
-#: ../embed/downloader-view.c:435
+#: ../embed/downloader-view.c:438
 msgid "Download finished"
 msgstr "Allalaadimine on lõppenud"
 
+#: ../embed/downloader-view.c:448 ../src/ephy-main.c:513
+#: ../src/window-commands.c:869
+msgid "GNOME Web Browser"
+msgstr "GNOME Veebisirvija"
+
+#: ../embed/downloader-view.c:450
+msgid "Download completed"
+msgstr "Allalaadimine sai valmis"
+
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:460
+#: ../embed/downloader-view.c:470
 #, c-format
 msgid ""
 "%s\n"
@@ -945,49 +955,49 @@ msgstr ""
 "%s %s-st"
 
 #. impossible time or broken locale settings
-#: ../embed/downloader-view.c:470 ../embed/downloader-view.c:475
+#: ../embed/downloader-view.c:480 ../embed/downloader-view.c:485
 #: ../embed/ephy-download.c:99 ../lib/ephy-time-helpers.c:279
 #: ../src/ephy-window.c:1683
 msgid "Unknown"
 msgstr "Tundmatu"
 
-#: ../embed/downloader-view.c:507
+#: ../embed/downloader-view.c:517
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d allalaadimine"
 msgstr[1] "%d allalaadimist"
 
-#: ../embed/downloader-view.c:612
+#: ../embed/downloader-view.c:622
 #, c-format
 msgid "The file “%s” has been added to the downloads queue."
 msgstr "Fail „%s” lisati allalaaditavate failide järjekorda."
 
-#: ../embed/downloader-view.c:615
+#: ../embed/downloader-view.c:625
 msgid "Download started"
 msgstr "Allalaadimine käivitatud"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:689 ../embed/downloader-view.c:702
+#: ../embed/downloader-view.c:699 ../embed/downloader-view.c:712
 msgid "download status|Unknown"
 msgstr "Teadmata"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:694
+#: ../embed/downloader-view.c:704
 msgid "download status|Failed"
 msgstr "Nurjunud"
 
-#: ../embed/downloader-view.c:761 ../src/bookmarks/ephy-bookmarks-editor.c:988
+#: ../embed/downloader-view.c:771 ../src/bookmarks/ephy-bookmarks-editor.c:988
 msgid "File"
 msgstr "Fail"
 
-#: ../embed/downloader-view.c:784
+#: ../embed/downloader-view.c:794
 msgid "%"
 msgstr "%"
 
-#: ../embed/downloader-view.c:795
+#: ../embed/downloader-view.c:805
 msgid "Remaining"
 msgstr "Aega jäänud"
 
@@ -3502,10 +3512,6 @@ msgid ""
 msgstr ""
 "Tõrge käivitamisel järgneva veat tõttu:\n"
 "%s"
-
-#: ../src/ephy-main.c:513 ../src/window-commands.c:869
-msgid "GNOME Web Browser"
-msgstr "GNOME Veebisirvija"
 
 #: ../src/ephy-main.c:514
 msgid "GNOME Web Browser options"
