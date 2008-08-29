@@ -1,26 +1,40 @@
+NULL =
+
 noinst_PROGRAMS = \
 	testephysearchentry \
-	testephyiconentry
+	testephyiconentry \
+	$(NULL)
 
-INCLUDES = \
-	-I$(top_builddir)/lib/widgets
+testephysearchentry_SOURCES = \
+	testephysearchentry.c \
+	$(NULL)
 
-CFLAGS = \
+testephysearchentry_CPPFLAGS = \
+	-I$(top_srcdir)/lib/widgets \
+	-I$(top_builddir)/lib/widgets \
+	$(AM_CPPFLAGS)
+
+testephysearchentry_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) \
 	$(AM_CFLAGS)
 
-LDADD = \
-    $(DEPENDENCIES_LIBS) 
-
-testephysearchentry_SOURCES = \
-	testephysearchentry.c
 testephysearchentry_LDADD = \
     $(top_builddir)/lib/widgets/libephywidgets.la \
-    $(DEPENDENCIES_LIBS) 
+    $(DEPENDENCIES_LIBS)
 
 testephyiconentry_SOURCES = \
-	testephyiconentry.c
+	testephyiconentry.c \
+	$(NULL)
+
+testephyiconentry_CPPFLAGS = \
+	-I$(top_srcdir)/lib/widgets \
+	-I$(top_builddir)/lib/widgets \
+	$(AM_CPPFLAGS)
+
+testephyiconentry_CFLAGS = \
+	$(DEPENDENCIES_CFLAGS) \
+	$(AM_CFLAGS)
+
 testephyiconentry_LDADD = \
     $(top_builddir)/lib/widgets/libephywidgets.la \
-    $(DEPENDENCIES_LIBS) 
-
+    $(DEPENDENCIES_LIBS)
