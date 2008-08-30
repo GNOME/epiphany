@@ -165,7 +165,11 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 					CONF_STATE_SAVE_DIR,
 					EPHY_FILE_FILTER_ALL);
 	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), defaultFile.get());
+	/* Remove leading dots */
+	const char *fname = defaultFile.get();
+	while (*fname == '.') fname++;
+
+	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), fname);
 
 	if (parentWindow)
 	{

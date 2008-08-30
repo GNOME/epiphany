@@ -414,8 +414,12 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 						EPHY_FILE_FILTER_ALL_SUPPORTED);
 		gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
+		/* Remove leading dots */
+		char *fname = filename;
+		while (*fname == '.') fname++;
+
 		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
-                                                   filename);
+                                                   fname);
 
 		g_signal_connect (dialog, "response",
 				  G_CALLBACK (filechooser_response_cb), this);
