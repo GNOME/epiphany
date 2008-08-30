@@ -88,7 +88,7 @@ GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
 		       nsISupports *aContext,
 		       PRUint32 aReason)
 {
-        nsRefPtr<GContentHandler> kungFuDeathGrip(this);
+	nsRefPtr<GContentHandler> kungFuDeathGrip(this);
 
 	nsresult rv;
 	EphyEmbedSingle *single;
@@ -131,7 +131,7 @@ GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
 
 /* nsILocalFile promptForSaveToFile (in nsISupports aWindowContext, in wstring aDefaultFile, in wstring aSuggestedFileExtension); */
 NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
-				    nsIHelperAppLauncher *aLauncher,			    
+				    nsIHelperAppLauncher *aLauncher,
 				    nsISupports *aWindowContext,
 				    const PRUnichar *aDefaultFile,
 				    const PRUnichar *aSuggestedFileExtension,
@@ -154,9 +154,9 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	}
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow (do_GetInterface (aWindowContext));
 
-        AutoModalDialog modalDialog (parentDOMWindow, PR_FALSE);
-        if (!modalDialog.ShouldShow ())
-          return NS_ERROR_FAILURE;
+	AutoModalDialog modalDialog (parentDOMWindow, PR_FALSE);
+	if (!modalDialog.ShouldShow ())
+		return NS_ERROR_FAILURE;
 
 	GtkWindow *parentWindow = modalDialog.GetParent ();
 
@@ -465,7 +465,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	}
 #endif /* HAVE_GECKO_1_9 */
 
-        nsRefPtr<GContentHandler> kungFuDeathGrip(this);
+	nsRefPtr<GContentHandler> kungFuDeathGrip(this);
 
 	if (mAction == CONTENT_ACTION_OPEN)
 	{
@@ -485,18 +485,19 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	}
 
 #ifdef HAVE_GECKO_1_9
-        /* We have to do this work down here because the external helper app modifies the
-         * value after calling SaveToDisk.
-         */
+	/* We have to do this work down here because the external helper app 
+	 * modifies the value after calling SaveToDisk.
+	 */
 	nsHandlerInfoAction action;
 	if (mAction == CONTENT_ACTION_DOWNLOAD) {
 		action = EPHY_ACTION_BROWSE_TO_FILE;
 
-                /* This won't be able to transport the activation time so we cannot
-                * do startup notification, but it's the best that was available
-                */
-                mimeInfo->SetPreferredAction (action);
-        }
+		/* This won't be able to transport the activation time so we 
+		 * cannot do startup notification, but it's the best that was 
+		 * available
+		 */
+		mimeInfo->SetPreferredAction (action);
+	}
 #endif
 
 	return NS_OK;
