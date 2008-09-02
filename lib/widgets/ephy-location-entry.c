@@ -373,18 +373,6 @@ editable_changed_cb (GtkEditable *editable,
 }
 
 static gboolean
-entry_button_press_cb (GtkWidget *entry, GdkEventButton *event, EphyLocationEntry *le)
-{
-	if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
-	{
-		ephy_location_entry_activate (le);
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-static gboolean
 entry_key_press_cb (GtkEntry *entry,
 		    GdkEventKey *event,
 		    EphyLocationEntry *lentry)
@@ -911,8 +899,6 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 				G_CALLBACK (entry_key_press_after_cb), entry);
 	g_signal_connect_after (priv->icon_entry->entry, "activate",
 				G_CALLBACK (entry_activate_after_cb), entry);
-	g_signal_connect (priv->icon_entry->entry, "button-press-event",
-			  G_CALLBACK (entry_button_press_cb), entry);
 	g_signal_connect (priv->icon_entry->entry, "changed",
 			  G_CALLBACK (editable_changed_cb), entry);
 	g_signal_connect (priv->icon_entry->entry, "drag-motion",
