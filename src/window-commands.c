@@ -51,7 +51,6 @@
 #include "ephy-link.h"
 #include "ephy-stock-icons.h"
 #include "ephy-string.h"
-#include "eel-app-launch-context.h"
 #include "pdm-dialog.h"
 
 #include <string.h>
