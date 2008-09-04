@@ -27,7 +27,6 @@
 
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
-#include "eel-app-launch-context.h"
 #include "ephy-debug.h"
 #include "ephy-string.h"
 
@@ -35,6 +34,7 @@
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <gio/gdesktopappinfo.h>
+#include <gdk/gdk.h>
 #include <libgnome/gnome-init.h>
 #include <libxml/xmlreader.h>
 
@@ -600,11 +600,12 @@ ephy_file_launch_application (GAppInfo *app,
 			      guint32 user_time,
 			      GtkWidget *widget)
 {
-	GAppLaunchContext *context;
+	GdkAppLaunchContext *context;
 	GdkDisplay *display;
 	GdkScreen *screen;
+	gboolean res;
 
-	context = G_APP_LAUNCH_CONTEXT (eel_app_launch_context_new ());
+	context = gdk_app_launch_context_new ();
 	if (widget)
 	{
 		display = gtk_widget_get_display (widget);
@@ -616,14 +617,15 @@ ephy_file_launch_application (GAppInfo *app,
 		screen = gdk_screen_get_default ();
 	}
 	
-	eel_app_launch_context_set_display (EEL_APP_LAUNCH_CONTEXT (context),
-					    display);
-	eel_app_launch_context_set_screen (EEL_APP_LAUNCH_CONTEXT (context),
-					   screen);
-	eel_app_launch_context_set_timestamp (EEL_APP_LAUNCH_CONTEXT (context),
-					      user_time);
-	
-	return g_app_info_launch (app, files, context, NULL);
+	gdk_app_launch_context_set_display (context, display);
+	gdk_app_launch_context_set_screen (context, screen);
+	gdk_app_launch_context_set_timestamp (context, user_time);
+
+	res = g_app_info_launch (app, files,
+				 G_APP_LAUNCH_CONTEXT (context), NULL);
+	g_object_unref (context);
+
+	return res;
 }
 
 gboolean
