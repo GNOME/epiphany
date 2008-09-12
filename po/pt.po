@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 2.24\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-08-10 10:29+0100\n"
-"PO-Revision-Date: 2008-08-10 10:30+0000\n"
+"POT-Creation-Date: 2008-09-12 01:18+0100\n"
+"PO-Revision-Date: 2008-09-12 01:20+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -727,7 +727,7 @@ msgstr "Seleccione um idiom_a:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:567 ../src/ephy-history-window.c:249
+#: ../lib/widgets/ephy-location-entry.c:583 ../src/ephy-history-window.c:249
 msgid "Cl_ear"
 msgstr "_Limpar"
 
@@ -1411,18 +1411,6 @@ msgstr ""
 "Erro GConf:\n"
 "  %s"
 
-#: ../lib/egg/eel-app-launch-context.c:402
-#, c-format
-msgid "Opening %s"
-msgstr "A abrir %s"
-
-#: ../lib/egg/eel-app-launch-context.c:405
-#, c-format
-msgid "Opening %d Item"
-msgid_plural "Opening %d Items"
-msgstr[0] "A Abrir %d Item"
-msgstr[1] "A Abrir %d Itens"
-
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
 #. * on the toolbar, and is placed at the %s. Note the _ before the %s
@@ -1813,7 +1801,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:852
+#: ../lib/widgets/ephy-location-entry.c:868
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Arrastar e largar este ícone para criar um link para esta página"
 
@@ -2576,7 +2564,7 @@ msgstr ""
 "Falha na iniciação devido ao seguinte erro:\n"
 "%s"
 
-#: ../src/ephy-main.c:515 ../src/window-commands.c:875
+#: ../src/ephy-main.c:515 ../src/window-commands.c:874
 msgid "GNOME Web Browser"
 msgstr "Navegador Web do GNOME"
 
@@ -3246,11 +3234,11 @@ msgstr "Se ainda assim fechar o documento, essa informação será perdida."
 msgid "Close _Document"
 msgstr "Fechar o _Documento"
 
-#: ../src/ephy-window.c:1478 ../src/window-commands.c:281
+#: ../src/ephy-window.c:1478 ../src/window-commands.c:280
 msgid "Open"
 msgstr "Abrir"
 
-#: ../src/ephy-window.c:1480 ../src/window-commands.c:307
+#: ../src/ephy-window.c:1480 ../src/window-commands.c:306
 msgid "Save As"
 msgstr "Gravar Como"
 
@@ -3529,7 +3517,7 @@ msgstr[1] "Idiomas do sistema (%s)"
 msgid "Select a Directory"
 msgstr "Seleccione um Directório"
 
-#: ../src/window-commands.c:770
+#: ../src/window-commands.c:769
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -3541,7 +3529,7 @@ msgstr ""
 "publicada pela Free Software Foundation; ou a versão 2 da Licença ou (à sua "
 "escolha) qualquer versão posterior."
 
-#: ../src/window-commands.c:774
+#: ../src/window-commands.c:773
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -3553,7 +3541,7 @@ msgstr ""
 "ou ADEQUAÇÃO A UM PROPÓSITO ESPECÍFICO.  Consulte a Licença Geral Pública "
 "GNU para mais detalhes."
 
-#: ../src/window-commands.c:778
+#: ../src/window-commands.c:777
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -3564,20 +3552,20 @@ msgstr ""
 "Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
 "02111-1307  USA"
 
-#: ../src/window-commands.c:826 ../src/window-commands.c:842
-#: ../src/window-commands.c:853
+#: ../src/window-commands.c:825 ../src/window-commands.c:841
+#: ../src/window-commands.c:852
 msgid "Contact us at:"
 msgstr "Contacte-nos em:"
 
-#: ../src/window-commands.c:829
+#: ../src/window-commands.c:828
 msgid "Contributors:"
 msgstr "Contribuições:"
 
-#: ../src/window-commands.c:832
+#: ../src/window-commands.c:831
 msgid "Past developers:"
 msgstr "Programadores anteriores:"
 
-#: ../src/window-commands.c:865
+#: ../src/window-commands.c:864
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -3594,13 +3582,21 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:891
+#: ../src/window-commands.c:890
 msgid "translator-credits"
 msgstr "Duarte Loreto <happyguy_pt@hotmail.com>"
 
-#: ../src/window-commands.c:894
+#: ../src/window-commands.c:893
 msgid "GNOME Web Browser Website"
 msgstr "Página do Navegador Web do GNOME"
+
+#~ msgid "Opening %s"
+#~ msgstr "A abrir %s"
+
+#~ msgid "Opening %d Item"
+#~ msgid_plural "Opening %d Items"
+#~ msgstr[0] "A Abrir %d Item"
+#~ msgstr[1] "A Abrir %d Itens"
 
 #~ msgid "Fonts"
 #~ msgstr "Fontes"
@@ -5075,7 +5071,7 @@ msgstr "Página do Navegador Web do GNOME"
 #~ msgstr "Sair de Ecrã Completo"
 
 #~ msgid "Medium"
-#~ msgstr "Média"
+#~ msgstr "Media"
 
 #~ msgid ""
 #~ "Security level: %s\n"
