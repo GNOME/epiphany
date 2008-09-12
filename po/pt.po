@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 2.24\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-08-10 10:24+0100\n"
-"PO-Revision-Date: 2008-08-10 10:30+0000\n"
+"POT-Creation-Date: 2008-09-12 01:21+0100\n"
+"PO-Revision-Date: 2008-09-12 01:22+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -730,7 +730,7 @@ msgstr "Seleccione um idiom_a:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:567 ../src/ephy-history-window.c:249
+#: ../lib/widgets/ephy-location-entry.c:583 ../src/ephy-history-window.c:249
 msgid "Cl_ear"
 msgstr "_Limpar"
 
@@ -931,7 +931,7 @@ msgid "Download finished"
 msgstr "O download terminou"
 
 #: ../embed/downloader-view.c:436 ../src/ephy-main.c:517
-#: ../src/window-commands.c:869
+#: ../src/window-commands.c:868
 msgid "GNOME Web Browser"
 msgstr "Navegador Web do GNOME"
 
@@ -1441,17 +1441,17 @@ msgstr "Gravar"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:276
+#: ../embed/mozilla/ContentHandler.cpp:280
 msgid "File Type:|Unknown"
 msgstr "Desconhecido"
 
-#: ../embed/mozilla/ContentHandler.cpp:292
+#: ../embed/mozilla/ContentHandler.cpp:296
 msgid "Download this potentially unsafe file?"
 msgstr "Efectuar download do ficheiro potencialmente inseguro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:298
+#: ../embed/mozilla/ContentHandler.cpp:302
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1465,14 +1465,14 @@ msgstr ""
 "documentos ou invadir a sua privacidade. Pode em vez disso efectuar download "
 "do mesmo."
 
-#: ../embed/mozilla/ContentHandler.cpp:308
+#: ../embed/mozilla/ContentHandler.cpp:312
 msgid "Open this file?"
 msgstr "Abrir este ficheiro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:315
+#: ../embed/mozilla/ContentHandler.cpp:319
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1483,13 +1483,13 @@ msgstr ""
 "\n"
 "Pode abrir “%s” utilizando “%s” ou gravá-lo."
 
-#: ../embed/mozilla/ContentHandler.cpp:323
+#: ../embed/mozilla/ContentHandler.cpp:327
 msgid "Download this file?"
 msgstr "Efectuar download deste ficheiro?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:329
+#: ../embed/mozilla/ContentHandler.cpp:333
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1501,7 +1501,7 @@ msgstr ""
 "Não possui nenhuma aplicação capaz de abrir “%s”. Pode alternativamente "
 "efectuar o seu download."
 
-#: ../embed/mozilla/ContentHandler.cpp:336
+#: ../embed/mozilla/ContentHandler.cpp:340
 msgid "_Save As..."
 msgstr "Gravar _Como..."
 
@@ -2092,11 +2092,13 @@ msgstr "Seleccionar a Senha"
 #. * That's not actually correct, since this function is also called from other places!
 #.
 #: ../embed/mozilla/GtkNSSDialogs.cpp:775
+#, c-format
 msgid "Select a password to protect this certificate"
 msgstr "Seleccione uma senha para proteger este certificado"
 
 #. FIXME: mozilla sucks, no way to get the name of the certificate / cert file!
 #: ../embed/mozilla/GtkNSSDialogs.cpp:825
+#, c-format
 msgid "Enter the password for this certificate"
 msgstr "Introduza a senha para este certificado"
 
@@ -2340,18 +2342,6 @@ msgid ""
 msgstr ""
 "Erro GConf:\n"
 "  %s"
-
-#: ../lib/egg/eel-app-launch-context.c:402
-#, c-format
-msgid "Opening %s"
-msgstr "A abrir %s"
-
-#: ../lib/egg/eel-app-launch-context.c:405
-#, c-format
-msgid "Opening %d Item"
-msgid_plural "Opening %d Items"
-msgstr[0] "A Abrir %d Item"
-msgstr[1] "A Abrir %d Itens"
 
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
@@ -2727,7 +2717,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:852
+#: ../lib/widgets/ephy-location-entry.c:868
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Arrastar e largar este ícone para criar um link para esta página"
 
@@ -4173,11 +4163,11 @@ msgstr "Se ainda assim fechar o documento, essa informação será perdida."
 msgid "Close _Document"
 msgstr "Fechar o _Documento"
 
-#: ../src/ephy-window.c:1472 ../src/window-commands.c:275
+#: ../src/ephy-window.c:1472 ../src/window-commands.c:274
 msgid "Open"
 msgstr "Abrir"
 
-#: ../src/ephy-window.c:1474 ../src/window-commands.c:301
+#: ../src/ephy-window.c:1474 ../src/window-commands.c:300
 msgid "Save As"
 msgstr "Gravar Como"
 
@@ -4460,7 +4450,7 @@ msgstr[1] "Idiomas do sistema (%s)"
 msgid "Select a Directory"
 msgstr "Seleccione um Directório"
 
-#: ../src/window-commands.c:764
+#: ../src/window-commands.c:763
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4472,7 +4462,7 @@ msgstr ""
 "publicada pela Free Software Foundation; ou a versão 2 da Licença ou (à sua "
 "escolha) qualquer versão posterior."
 
-#: ../src/window-commands.c:768
+#: ../src/window-commands.c:767
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4484,7 +4474,7 @@ msgstr ""
 "ou ADEQUAÇÃO A UM PROPÓSITO ESPECÍFICO.  Consulte a Licença Geral Pública "
 "GNU para mais detalhes."
 
-#: ../src/window-commands.c:772
+#: ../src/window-commands.c:771
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4495,20 +4485,20 @@ msgstr ""
 "Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
 "02111-1307  USA"
 
-#: ../src/window-commands.c:820 ../src/window-commands.c:836
-#: ../src/window-commands.c:847
+#: ../src/window-commands.c:819 ../src/window-commands.c:835
+#: ../src/window-commands.c:846
 msgid "Contact us at:"
 msgstr "Contacte-nos em:"
 
-#: ../src/window-commands.c:823
+#: ../src/window-commands.c:822
 msgid "Contributors:"
 msgstr "Contribuições:"
 
-#: ../src/window-commands.c:826
+#: ../src/window-commands.c:825
 msgid "Past developers:"
 msgstr "Programadores anteriores:"
 
-#: ../src/window-commands.c:859
+#: ../src/window-commands.c:858
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4525,13 +4515,21 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:885
+#: ../src/window-commands.c:884
 msgid "translator-credits"
 msgstr "Duarte Loreto <happyguy_pt@hotmail.com>"
 
-#: ../src/window-commands.c:888
+#: ../src/window-commands.c:887
 msgid "GNOME Web Browser Website"
 msgstr "Página do Navegador Web do GNOME"
+
+#~ msgid "Opening %s"
+#~ msgstr "A abrir %s"
+
+#~ msgid "Opening %d Item"
+#~ msgid_plural "Opening %d Items"
+#~ msgstr[0] "A Abrir %d Item"
+#~ msgstr[1] "A Abrir %d Itens"
 
 #~ msgid ""
 #~ "The page “%s” in this tab was not fully loaded yet when the web browser "
@@ -5346,7 +5344,7 @@ msgstr "Página do Navegador Web do GNOME"
 #~ msgstr "Sair de Ecrã Completo"
 
 #~ msgid "Medium"
-#~ msgstr "Média"
+#~ msgstr "Media"
 
 #~ msgid ""
 #~ "Security level: %s\n"
