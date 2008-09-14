@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.ar\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-08-18 15:01+0100\n"
+"POT-Creation-Date: 2008-09-14 11:08+0100\n"
 "PO-Revision-Date: 2008-02-02 02:00+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -107,7 +107,7 @@ msgstr "عطّل تحرير شريط الأدوات"
 
 #: ../data/epiphany-lockdown.schemas.in.h:13
 msgid "Disable unsafe protocols"
-msgstr "عطّل البروتوكولات الغير آمنة"
+msgstr "عطّل البروتوكولات غير الآمنة"
 
 #: ../data/epiphany-lockdown.schemas.in.h:14
 msgid ""
@@ -716,7 +716,7 @@ msgstr "اختر _لغة:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:595 ../src/ephy-history-window.c:249
+#: ../lib/widgets/ephy-location-entry.c:583 ../src/ephy-history-window.c:249
 msgid "Cl_ear"
 msgstr "ا_مسح"
 
@@ -917,7 +917,7 @@ msgid "Download finished"
 msgstr "تم التنزيل"
 
 #: ../embed/downloader-view.c:436 ../src/ephy-main.c:517
-#: ../src/window-commands.c:869
+#: ../src/window-commands.c:868
 msgid "GNOME Web Browser"
 msgstr "متصفّح وِب جنوم"
 
@@ -1430,17 +1430,17 @@ msgstr "احفظ"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:276
+#: ../embed/mozilla/ContentHandler.cpp:280
 msgid "File Type:|Unknown"
 msgstr "غير معروف"
 
-#: ../embed/mozilla/ContentHandler.cpp:292
+#: ../embed/mozilla/ContentHandler.cpp:296
 msgid "Download this potentially unsafe file?"
 msgstr "تنزيل هذا الملف المحتمل خطره؟"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:298
+#: ../embed/mozilla/ContentHandler.cpp:302
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1453,14 +1453,14 @@ msgstr ""
 "من الخطر فتح  “%s” حيث يمكن أن يتلف مستنداتك أو أن يتطفل على خصوياتك. فتحه "
 "مباشرة عير آمن. يمكنك حفظه عوضا عن ذلك."
 
-#: ../embed/mozilla/ContentHandler.cpp:308
+#: ../embed/mozilla/ContentHandler.cpp:312
 msgid "Open this file?"
 msgstr "فتح الملف؟"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:315
+#: ../embed/mozilla/ContentHandler.cpp:319
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1471,13 +1471,13 @@ msgstr ""
 "\n"
 "يمكن فتح “%s” ب “%s” أو حفظه."
 
-#: ../embed/mozilla/ContentHandler.cpp:323
+#: ../embed/mozilla/ContentHandler.cpp:327
 msgid "Download this file?"
 msgstr "تنزيل الملف؟"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:329
+#: ../embed/mozilla/ContentHandler.cpp:333
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1488,7 +1488,7 @@ msgstr ""
 "\n"
 "لا يوجد تطبيق لفتح “%s”. يمكنك حفظه."
 
-#: ../embed/mozilla/ContentHandler.cpp:336
+#: ../embed/mozilla/ContentHandler.cpp:340
 msgid "_Save As..."
 msgstr "ا_حفظ كـ..."
 
@@ -1963,7 +1963,7 @@ msgstr "يفترض أن تتصل بالموقع فقط اذا كنت متأكد�
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:460
 msgid "Connect to untrusted site?"
-msgstr "اتصل بالموقع الغير موثوق؟"
+msgstr "اتصل بالموقع غير الموثوق؟"
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:464
 msgid "_Trust this security information from now on"
@@ -1985,7 +1985,7 @@ msgstr "انقضت المعلومة الأمنية لـ “%s” في %s."
 
 #: ../embed/mozilla/GtkNSSDialogs.cpp:532
 msgid "Accept not yet valid security information?"
-msgstr "هل نتقبل المعلومة الأمنية الغير صحيحة حتى الآن؟"
+msgstr "هل نتقبل المعلومة الأمنية غير الصحيحة حتى الآن؟"
 
 #. Translators: first %s is a hostname, second %s is a time/date
 #: ../embed/mozilla/GtkNSSDialogs.cpp:534
@@ -2299,22 +2299,6 @@ msgid ""
 msgstr ""
 "خطأ ‪GConf‬‏:\n"
 "  %s"
-
-#: ../lib/egg/eel-app-launch-context.c:402
-#, c-format
-msgid "Opening %s"
-msgstr "يتم فتح %s"
-
-#: ../lib/egg/eel-app-launch-context.c:405
-#, c-format
-msgid "Opening %d Item"
-msgid_plural "Opening %d Items"
-msgstr[0] "لا عنصر للفتح"
-msgstr[1] "فتح عنصر واحد"
-msgstr[2] "فتح عنصرين"
-msgstr[3] "فتح %d عنصرا"
-msgstr[4] "فتح %d عناصر"
-msgstr[5] "فتح %d عنصر"
 
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
@@ -2690,7 +2674,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:880
+#: ../lib/widgets/ephy-location-entry.c:868
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "انقر و انقل هذه الأيقونة لإنشاء وصلة إلى هذه الصفحة"
 
@@ -4035,7 +4019,7 @@ msgstr "_نوافذ منبثقة"
 
 #: ../src/ephy-window.c:288
 msgid "Show or hide unrequested popup windows from this site"
-msgstr "أظهر أو اخفِ النّوافذ المنبثقة الغير مطلوبة من هذا الموقع"
+msgstr "أظهر أو اخفِ النّوافذ المنبثقة غير المطلوبة من هذا الموقع"
 
 #: ../src/ephy-window.c:290
 msgid "Selection Caret"
@@ -4147,11 +4131,11 @@ msgstr "ستخسر تلك المعلومات إذا أغلقت المستند."
 msgid "Close _Document"
 msgstr "أغلق ال_مستند"
 
-#: ../src/ephy-window.c:1472 ../src/window-commands.c:275
+#: ../src/ephy-window.c:1472 ../src/window-commands.c:274
 msgid "Open"
 msgstr "افتح"
 
-#: ../src/ephy-window.c:1474 ../src/window-commands.c:301
+#: ../src/ephy-window.c:1474 ../src/window-commands.c:300
 msgid "Save As"
 msgstr "احفظ كـ"
 
@@ -4441,7 +4425,7 @@ msgstr[5] "لغات النظام  (%s)"
 msgid "Select a Directory"
 msgstr "اختر دليلا"
 
-#: ../src/window-commands.c:764
+#: ../src/window-commands.c:763
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4452,7 +4436,7 @@ msgstr ""
 "العمومية العامة لجنو والتي نشرتها منظمة البرمجيات الحرة؛ سواء الإصدارة 2 من "
 "الرخصة أو أي إصدارة بعدها حسب رغبتك."
 
-#: ../src/window-commands.c:768
+#: ../src/window-commands.c:767
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4463,7 +4447,7 @@ msgstr ""
 "حتى أي ضمان يضمن صلاحية العرض في السوق أو توافقه مع أي استخدام محدد. يمكنك "
 "مراجعة الرخصة العمومية العامة لجنو لمزيد من التفاصيل."
 
-#: ../src/window-commands.c:772
+#: ../src/window-commands.c:771
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
@@ -4474,20 +4458,20 @@ msgstr ""
 "Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
 "02110-1301  USA."
 
-#: ../src/window-commands.c:820 ../src/window-commands.c:836
-#: ../src/window-commands.c:847
+#: ../src/window-commands.c:819 ../src/window-commands.c:835
+#: ../src/window-commands.c:846
 msgid "Contact us at:"
 msgstr "اتصل بنا على:"
 
-#: ../src/window-commands.c:823
+#: ../src/window-commands.c:822
 msgid "Contributors:"
 msgstr "المساهمون:"
 
-#: ../src/window-commands.c:826
+#: ../src/window-commands.c:825
 msgid "Past developers:"
 msgstr "المطورون السابقون:"
 
-#: ../src/window-commands.c:859
+#: ../src/window-commands.c:858
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4504,7 +4488,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:885
+#: ../src/window-commands.c:884
 msgid "translator-credits"
 msgstr ""
 "فريق عربآيز للترجمة http://www.arabeyes.org:\n"
@@ -4513,9 +4497,21 @@ msgstr ""
 "محمد مجدي\t<alnokta@yahoo.com>\n"
 "خالد حسني\t<khaledhosny@eglug.org>"
 
-#: ../src/window-commands.c:888
+#: ../src/window-commands.c:887
 msgid "GNOME Web Browser Website"
 msgstr "موقع متصفح وِب جنوم"
+
+#~ msgid "Opening %s"
+#~ msgstr "يتم فتح %s"
+
+#~ msgid "Opening %d Item"
+#~ msgid_plural "Opening %d Items"
+#~ msgstr[0] "لا عنصر للفتح"
+#~ msgstr[1] "فتح عنصر واحد"
+#~ msgstr[2] "فتح عنصرين"
+#~ msgstr[3] "فتح %d عنصرا"
+#~ msgstr[4] "فتح %d عناصر"
+#~ msgstr[5] "فتح %d عنصر"
 
 #, fuzzy
 #~ msgid "_Detach Tab"
