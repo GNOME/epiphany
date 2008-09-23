@@ -18,7 +18,7 @@
 m4_define([epiphany_version_major],[2])
 m4_define([epiphany_version_minor],[24])
 m4_define([epiphany_version_micro],[0])
-m4_define([epiphany_version_extra],[.1])
+m4_define([epiphany_version_extra],[-svn])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro()epiphany_version_extra])
 m4_define([epiphany_build_id],[20080528]) # The date of the 2.22.2 release
 
