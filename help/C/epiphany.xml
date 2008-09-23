@@ -2,9 +2,9 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY legal SYSTEM "legal.xml">
-  <!ENTITY appversion "2.20">
-  <!ENTITY manrevision "1.8">
-  <!ENTITY date "August 2007">
+  <!ENTITY appversion "2.24">
+  <!ENTITY manrevision "2.0">
+  <!ENTITY date "September 2008">
   <!ENTITY fr "<application>Epiphany</application>">
   <!ENTITY plainfr "Epiphany">
   <!-- Information about the entities
@@ -27,7 +27,12 @@
 <!-- appropriate code -->
   <articleinfo> 
 	<abstract role="description">
-	  <para>Epiphany is the GNOME web browser.</para>
+	  <para>
+		Epiphany is a simple web browser for GNOME with most standard 
+		features such as pop-up blocking, tabbed browsing. 
+		It also has optional extensions and rather than using folder-based 
+		bookmarks, it has topic-based bookmarks.
+	  </para>
 	</abstract>
 	<title>Epiphany Manual</title>       
 
@@ -44,12 +49,28 @@
 	  <holder>Piers Cornwell</holder>
 	</copyright>
 	<copyright>
-	  <year>2006</year>
+	  <year>2006,2008</year>
 	  <holder>Reinout van Schouwen</holder>
 	</copyright>
 	<copyright>
 	  <year>2006</year>
 	  <holder>Victor Osadci</holder>
+	</copyright>
+	<copyright>
+	  <year>2007</year>
+	  <holder>Cosimo Cecchi</holder>
+	</copyright>
+	<copyright>
+	  <year>2008</year>
+	  <holder>Diana Horqque</holder>
+	</copyright>
+	<copyright>
+	  <year>2008</year>
+	  <holder>Diego Escalante Urrelo</holder>
+	</copyright>
+	<copyright>
+	  <year>2008</year>
+	  <holder>Loic Froidmont</holder>
 	</copyright>
 
 <!-- translators: uncomment this:
@@ -96,7 +117,7 @@
 	  <address><email>piers@gnome.org</email></address> 
 	</affiliation> 
 	  </author>
-			<author> 
+	<author> 
 	<firstname>Reinout</firstname> 
 	<surname>van Schouwen</surname> 
 	<affiliation> 
@@ -459,17 +480,30 @@
 			 </guibutton>.
 		  </para>
 		</sect2>
-		<sect2 id="using-print-setup">
-		  <title>Using Print Setup</title>
+		<sect2 id="using-page-setup">
+		  <title>Using Page Setup</title>
 		  <para>
-			Print setup allows you to configure how web pages are printed.
+			To set up the paper size, print layout, and printer margins, choose <menuchoice> 
+			<guimenu>File</guimenu> <guimenuitem>Page Setup</guimenuitem> 
+			</menuchoice>.
 		  </para>
 		  <variablelist>
 			<varlistentry>
+			  <term>Format for</term>
+			  <listitem>
+				<para>
+				  You can select the printer you are setting up the page size for
+				  here. This is useful when your printer model has specific margins
+				  that should not be exceeded.
+				</para>
+			  </listitem>
+			</varlistentry>
+		    <varlistentry>
 			  <term>Paper Size</term>
 			  <listitem>
 				<para>
-				  The paper size.
+				  Size of the sheets in your printer. Two often used sizes are 
+				  <guilabel>A4</guilabel> and <guilabel>Letter</guilabel>.
 				</para>
 			  </listitem>
 			</varlistentry>
@@ -1123,7 +1157,7 @@ GNOME -> GNOME developers home page</programlisting>
 			</listitem>
 			<listitem>
 			  <para>
-				Choose <menuchoice><guimenu>File</guimenu><guimenuitem>
+				Choose <menuchoice><guimenu>Edit</guimenu><guimenuitem>
 				Delete</guimenuitem></menuchoice>. Alternatively, choose
 				<guimenuitem>Delete</guimenuitem> from context menu of the
 				bookmark or topic.
@@ -1235,7 +1269,7 @@ GNOME -> GNOME developers home page</programlisting>
 			  <listitem>
 				<para>
 				  You can remove bookmarks and topics from the toolbar 
-		  using the toolbar editor as described in the 
+		  using the toolbar editor as described in  
 		  <xref linkend="to-edit-toolbars"/>.
 				</para>
 			  </listitem>
@@ -1475,7 +1509,7 @@ GNOME -> GNOME developers home page</programlisting>
 			</listitem>
 			<listitem>
 			  <para>
-				Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Delete</guimenuitem>
+				Choose <menuchoice><guimenu>Edit</guimenu><guimenuitem>Delete</guimenuitem>
 				</menuchoice>. Alternatively, choose <guimenuitem>Delete
 				</guimenuitem> from the context menu of the history link.
 			  </para>
@@ -1773,6 +1807,9 @@ GNOME -> GNOME developers home page</programlisting>
 	  <title>Using Certificate Viewer</title>
 	  <para>
 		The certificate viewer presents the details held within the certificate. 
+		Open the certificate viewer by clicking one of the two padlock icons,
+		or by choosing <menuchoice> <guimenu>View</guimenu> 
+		<guimenuitem>Page Security Infomation</guimenuitem></menuchoice>. 
 		The <guilabel>General</guilabel> tab provides the following details:
 	  </para>
 	  <variablelist>
@@ -1954,6 +1991,10 @@ GNOME -> GNOME developers home page</programlisting>
 			  Edit Stylesheet</guibutton> button will open your default text editor so that 
 			  you can edit the stylesheet.
 			</para>
+			<para>
+			  You can make &fr; use a smooth scrolling effect by selecting the
+			  <guilabel>Use smooth scrolling</guilabel> option.
+			</para>
 		  </sect3>
 		  <sect3 id="privacy-preferences">
 			<title>Privacy Preferences</title>
@@ -2025,6 +2066,10 @@ GNOME -> GNOME developers home page</programlisting>
 			  &fr; can use for these files. Setting this value to zero will cause &fr; to 
 			  never store temporary files. These temporary files can be removed by pressing 
 			  the <guibutton>Clear</guibutton> button.
+			</para>
+			<para>
+			  Select the <guilabel>Remember passwords</guilabel> if you want 
+			  &fr; to offer to remember passwords when you log in to websites.
 			</para>
 		  </sect3>
 		  <sect3 id="language-preferences">
