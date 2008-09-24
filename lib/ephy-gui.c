@@ -31,7 +31,6 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
-#include <libgnome/gnome-help.h>
 
 #include <unistd.h>
 
@@ -347,18 +346,65 @@ ephy_gui_check_location_writable (GtkWidget *parent,
 	return TRUE;
 }
 
-void
-ephy_gui_help_with_doc_id (GtkWindow *parent,
-			   const char *doc_id,
-			   const char *file_name,
-			   const char *link_id)
+static gboolean
+open_url (GtkWindow *parent,
+          const char *uri,
+          guint32 user_time,
+          GError **error)
 {
-	GError *error = NULL;
+  GdkScreen *screen;
 
-	gnome_help_display_with_doc_id (NULL, doc_id, file_name, link_id, &error);
+  if (parent)
+    screen = gtk_widget_get_screen (GTK_WIDGET (parent));
+  else
+    screen = gdk_screen_get_default ();
 
-	if (error != NULL)
-	{
+  return gtk_show_uri (screen, uri, user_time, error);
+}
+
+void
+ephy_gui_help (GtkWindow *parent,
+	       const char *file_name,
+               const char *link_id)
+{
+        GError *error = NULL;
+        const char *lang;
+        char *uri = NULL, *url;
+        guint i;
+
+        const char * const * langs = g_get_language_names ();
+        for (i = 0; langs[i]; i++) {
+                lang = langs[i];
+                if (strchr (lang, '.'))
+                        continue;
+
+                uri = g_build_filename (DATADIR,
+                                        "gnome", "help", PACKAGE,
+                                        lang,
+                                        file_name,
+                                        NULL);
+                                                    
+                if (g_file_test (uri, G_FILE_TEST_EXISTS))
+                        break;
+
+                g_free (uri);
+                uri = NULL;
+        }
+
+        if (!uri)
+                return;
+
+        if (link_id)
+        {
+                url = g_strdup_printf ("ghelp://%s?%s", uri, link_id);
+        }
+        else
+        {
+                url = g_strdup_printf ("ghelp://%s", uri);
+        }
+
+        if (!open_url (parent, url, gtk_get_current_event_time (), &error))
+        {
 		GtkWidget *dialog;
 
 		dialog = gtk_message_dialog_new (parent,
@@ -372,15 +418,9 @@ ephy_gui_help_with_doc_id (GtkWindow *parent,
 		g_signal_connect (dialog, "response",
 				  G_CALLBACK (gtk_widget_destroy), NULL);
 		gtk_widget_show (dialog);
-	}
-}
+        }
 
-void
-ephy_gui_help (GtkWindow *parent,
-	       const char *file_name,
-               const char *link_id)
-{
-	ephy_gui_help_with_doc_id (parent, NULL, file_name, link_id);
+        g_free (url);
 }
 
 void

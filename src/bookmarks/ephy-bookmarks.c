@@ -128,7 +128,7 @@ enum
 	LAST_SIGNAL
 };
 
-static guint ephy_bookmarks_signals[LAST_SIGNAL] = { 0 };
+static guint ephy_bookmarks_signals[LAST_SIGNAL];
 
 static void ephy_bookmarks_class_init	(EphyBookmarksClass *klass);
 static void ephy_bookmarks_init		(EphyBookmarks *tab);

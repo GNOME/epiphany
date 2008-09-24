@@ -53,7 +53,10 @@ AC_SUBST([BUILDID])
 
 AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip tar-ustar])
 
-AM_MAINTAINER_MODE
+if test -z "$enable_maintainer_mode"; then
+  enable_maintainer_mode=yes
+fi
+AM_MAINTAINER_MODE([enable])
 
 AC_ENABLE_SHARED([yes])
 AC_ENABLE_STATIC([no])
@@ -99,7 +102,7 @@ if test "$enable_maintainer_mode" = "yes"; then
 fi
 
 GLIB_REQUIRED=2.16.0
-GTK_REQUIRED=2.13.0
+GTK_REQUIRED=2.13.5
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
 LIBGLADE_REQUIRED=2.3.1
@@ -124,13 +127,11 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  gio-unix-2.0 >= $GLIB_REQUIRED
 		  gtk+-2.0 >= $GTK_REQUIRED
 		  gtk+-unix-print-2.0 >= $GTK_REQUIRED
+		  sm
 		  libxml-2.0 >= $LIBXML_REQUIRED
 		  libxslt >= $LIBXSLT_REQUIRED
-		  libgnome-2.0 >= $LIBGNOME_REQUIRED
-		  libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED
 		  libglade-2.0 >= $LIBGLADE_REQUIRED \
 		  gconf-2.0
-		  gnome-desktop-2.0 >= $GNOME_DESKTOP_REQUIRED
 		  libstartup-notification-1.0 >= $LIBSTARTUP_NOTIFICATION_REQUIRED
 		  $LIBNOTIFY_PACKAGE
 		  ])

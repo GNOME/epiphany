@@ -20,7 +20,10 @@
 
 #include "config.h"
 
-#include "ephy-open-tabs-action.h"
+#include <string.h>
+
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
 #include "ephy-bookmarks.h"
 #include "ephy-bookmarks-ui.h"
@@ -28,12 +31,7 @@
 #include "ephy-link-action.h"
 #include "ephy-link.h"
 
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
-
-#include <libgnomevfs/gnome-vfs-uri.h>
-
-#include <string.h>
+#include "ephy-open-tabs-action.h"
 
 static void
 activate_cb (GtkAction *action,

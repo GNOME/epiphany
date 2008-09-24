@@ -26,7 +26,6 @@
 #define EPHY_PASSWORD_DIALOG_H
 
 #include <gtk/gtk.h>
-#include <libgnomeui/gnome-password-dialog.h>
 
 G_BEGIN_DECLS
 
@@ -54,6 +53,12 @@ struct _EphyPasswordDialogClass
 	GtkMessageDialogClass parent_class;
 };
 
+typedef enum {
+        EPHY_PASSWORD_DIALOG_REMEMBER_NOTHING,
+        EPHY_PASSWORD_DIALOG_REMEMBER_SESSION,
+        EPHY_PASSWORD_DIALOG_REMEMBER_FOREVER
+} EphyPasswordDialogRemember;
+
 typedef enum
 {
 	EPHY_PASSWORD_DIALOG_FLAGS_SHOW_USERNAME	= 1 << 0,
@@ -75,9 +80,9 @@ GtkWidget      *ephy_password_dialog_new	(GtkWidget *parent,
 						 EphyPasswordDialogFlags flags);
 
 void		ephy_password_dialog_set_remember	(EphyPasswordDialog *dialog,
-							 GnomePasswordDialogRemember remember);
+							 EphyPasswordDialogRemember remember);
 
-GnomePasswordDialogRemember ephy_password_dialog_get_remember (EphyPasswordDialog *dialog);
+EphyPasswordDialogRemember ephy_password_dialog_get_remember (EphyPasswordDialog *dialog);
 
 void		ephy_password_dialog_set_label	(EphyPasswordDialog *dialog,
 						 const char *markup);

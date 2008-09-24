@@ -95,6 +95,7 @@ impl_scroll_pages (WebKitWebView *web_view,
         /* FIXME: implement! */
 }
 
+#if 0
 static void
 impl_scroll_pixels (WebKitWebView *web_view,
                     int dx,
@@ -112,6 +113,7 @@ impl_scroll_pixels (WebKitWebView *web_view,
   gtk_adjustment_set_value (hadj, CLAMP (hadj->value + dx, hadj->lower, hadj->upper - hadj->page_size));
   gtk_adjustment_set_value (vadj, CLAMP (vadj->value + dy, vadj->lower, vadj->upper - vadj->page_size));
 }
+#endif
 
 static gboolean
 set_status_notfound_cb (EphyFindToolbar *toolbar)

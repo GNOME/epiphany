@@ -31,6 +31,9 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
+/* From libgnome */
+#define GNOME_DOT_GNOME ".gnome2"
+
 extern GQuark ephy_file_helpers_error_quark;
 #define EPHY_FILE_HELPERS_ERROR_QUARK	(ephy_file_helpers_error_quark)
 

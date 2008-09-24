@@ -1,14 +1,24 @@
+NULL =
+
 EGGSOURCES = \
 	eggtreemultidnd.c \
+        eggdesktopfile.c \
+        eggsmclient.c \
+	eggsmclient-xsmp.c \
 	egg-editable-toolbar.c \
 	egg-toolbars-model.c \
-	egg-toolbar-editor.c
+	egg-toolbar-editor.c \
+        $(NULL)
 
 EGGHEADERS = \
 	eggtreemultidnd.h \
+        eggdesktopfile.h \
+        eggsmclient.h \
+        eggsmclient-private.h \
 	egg-editable-toolbar.h \
 	egg-toolbars-model.h \
-	egg-toolbar-editor.h
+	egg-toolbar-editor.h \
+        $(NULL)
 
 noinst_HEADERS = \
 	$(EGGHEADERS) \
@@ -26,11 +36,15 @@ nodist_libegg_la_SOURCES = \
 libegg_la_CPPFLAGS = \
 	-I$(top_builddir)/lib/egg		\
 	-DCURSOR_DIR=\"$(pkgdatadir)/art\"	\
+        -DG_LOG_DOMAIN=\""Egg"\"		\
+	-DEGG_SM_CLIENT_BACKEND_XSMP=1		\
 	$(AM_CPPFLAGS)
 
 libegg_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS)		\
 	$(AM_CFLAGS)
+
+libegg_la_LIBADD =
 
 BUILT_SOURCES = \
 	eggmarshalers.c \

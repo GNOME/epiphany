@@ -150,6 +150,7 @@ window_cmd_file_send_to	(GtkAction *action,
 	g_free (command);
 }
 
+#if 0
 static gboolean
 event_with_shift (void)
 {
@@ -176,6 +177,7 @@ event_with_shift (void)
 
 	return (state & GDK_SHIFT_MASK) != 0;
 }
+#endif
 
 void
 window_cmd_go_location (GtkAction *action,

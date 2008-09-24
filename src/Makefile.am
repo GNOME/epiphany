@@ -188,6 +188,7 @@ epiphany_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
 	-I$(top_srcdir)/embed 		\
 	-I$(top_srcdir)/lib   		\
+	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/src/bookmarks   \
 	-DDATADIR=\""$(datadir)"\" 	\
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\

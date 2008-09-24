@@ -1,6 +1,6 @@
 /*
  *  Copyright © 2000-2002 Marco Pesenti Gritti
- *  Copyright © 2006 Christian Persch
+ *  Copyright © 2006, 2008 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@
 #include "ephy-shell.h"
 #include "ephy-prefs.h"
 #include "ephy-debug.h"
+#include "eggsmclient.h"
 
 #include <libxml/xmlversion.h>
 
@@ -41,11 +42,6 @@
 
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
-
-#include <libgnome/gnome-program.h>
-#include <libgnomeui/gnome-ui-init.h>
-
-#include <libgnomeui/gnome-app-helper.h>
 
 #include <errno.h>
 #include <string.h>
@@ -417,19 +413,52 @@ show_error_message (GError **error)
 	gtk_dialog_run (GTK_DIALOG (dialog));
 }
 
+static gchar *
+get_accels_filename (void)
+{
+        const char *home;
+
+        home = g_get_home_dir();
+        if (!home)
+                return NULL;
+        return g_build_filename (home, GNOME_DOT_GNOME, "accels", PACKAGE, NULL);
+}
+
+static void
+load_accels (void)
+{
+        char *filename;
+
+        filename = get_accels_filename ();
+        if (!filename)
+                return;
+
+        gtk_accel_map_load (filename);
+        g_free (filename);
+}
+
+static void
+save_accels (void)
+{
+        char *filename;
+
+        filename = get_accels_filename ();
+        if (!filename)
+                return;
+
+        gtk_accel_map_save (filename);
+        g_free (filename);
+}
+
 int
 main (int argc,
       char *argv[])
 {
-	GnomeProgram *program;
 	GOptionContext *option_context;
 	GOptionGroup *option_group;
 	DBusGProxy *proxy;
 	GError *error = NULL;
 	guint32 user_time;
-#ifndef GNOME_PARAM_GOPTION_CONTEXT
-	GPtrArray *fake_argv_array;
-#endif
 
 #ifdef ENABLE_NLS
 	/* Initialize the i18n stuff */
@@ -522,6 +551,9 @@ main (int argc,
 
 	g_option_context_set_main_group (option_context, option_group);
 
+        g_option_context_add_group (option_context, gtk_get_option_group (TRUE));
+        g_option_context_add_group (option_context, egg_sm_client_get_option_group ());
+
 #ifdef GNOME_ENABLE_DEBUG
 	option_group = g_option_group_new ("debug",
 					   "Epiphany debug options",
@@ -531,17 +563,15 @@ main (int argc,
 	g_option_context_add_group (option_context, option_group);
 #endif /* GNOME_ENABLE_DEBUG */
 
-	program = gnome_program_init (PACKAGE, VERSION,
-				      LIBGNOMEUI_MODULE, argc, argv,
-				      GNOME_PARAM_GOPTION_CONTEXT, option_context,
-				      GNOME_PARAM_HUMAN_READABLE_NAME, _("Web Browser"),
-				      GNOME_PARAM_APP_DATADIR, DATADIR,
-				      NULL);
-
-	/* libgnome keeps a reference to the global program, so drop
-	 * our reference here, to simplify cleanup on the many exit paths.
-	 */
-	g_object_unref (program);
+        if (!g_option_context_parse (option_context, &argc, &argv, &error))
+        {
+                g_print ("Failed to parse arguments: %s\n", error->message);
+                g_error_free (error);
+                g_option_context_free (option_context);
+                exit (1);
+        }
+        
+        g_option_context_free (option_context);
 
 	/* Some argument sanity checks*/
 	if (arguments != NULL && (session_filename != NULL || open_as_bookmarks_editor))
@@ -701,6 +731,7 @@ main (int argc,
 
 	eel_gconf_monitor_add ("/apps/epiphany/general");
 	ephy_stock_icons_init ();
+        load_accels ();
 
 	/* Extensions may want these, so don't initialize in window-cmds */
 	gtk_about_dialog_set_url_hook (handle_url, NULL, NULL);
@@ -731,7 +762,7 @@ main (int argc,
 		notify_uninit ();
 #endif
 	eel_gconf_monitor_remove ("/apps/epiphany/general");
-	gnome_accelerators_sync ();
+	save_accels ();
 	ephy_state_save ();
 	ephy_file_helpers_shutdown ();
 	xmlCleanupParser ();

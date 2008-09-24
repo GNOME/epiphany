@@ -15,13 +15,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- *  $Id$
  */
 
-#ifndef DONT_HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include <string.h>
 
@@ -637,13 +633,13 @@ ephy_password_dialog_new (GtkWidget *parent,
 
 void
 ephy_password_dialog_set_remember (EphyPasswordDialog *dialog,
-				   GnomePasswordDialogRemember remember)
+				   EphyPasswordDialogRemember remember)
 {
 	EphyPasswordDialogPrivate *priv;
 
 	g_return_if_fail (EPHY_IS_PASSWORD_DIALOG (dialog));
-	g_return_if_fail (remember < GNOME_PASSWORD_DIALOG_REMEMBER_NOTHING ||
-			  remember > GNOME_PASSWORD_DIALOG_REMEMBER_FOREVER);
+	g_return_if_fail (remember < EPHY_PASSWORD_DIALOG_REMEMBER_NOTHING ||
+			  remember > EPHY_PASSWORD_DIALOG_REMEMBER_FOREVER);
 
 	priv = dialog->priv;
 	g_return_if_fail (priv->flags & EPHY_PASSWORD_DIALOG_FLAGS_SHOW_REMEMBER);
@@ -651,11 +647,11 @@ ephy_password_dialog_set_remember (EphyPasswordDialog *dialog,
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->remember_button[remember]), TRUE);
 }
 
-GnomePasswordDialogRemember
+EphyPasswordDialogRemember
 ephy_password_dialog_get_remember (EphyPasswordDialog *dialog)
 {
 	EphyPasswordDialogPrivate *priv;
-	GnomePasswordDialogRemember remember = GNOME_PASSWORD_DIALOG_REMEMBER_NOTHING;
+	EphyPasswordDialogRemember remember = EPHY_PASSWORD_DIALOG_REMEMBER_NOTHING;
 
 	g_return_val_if_fail (EPHY_IS_PASSWORD_DIALOG (dialog), remember);
 
@@ -663,11 +659,11 @@ ephy_password_dialog_get_remember (EphyPasswordDialog *dialog)
 	g_return_val_if_fail (priv->flags & EPHY_PASSWORD_DIALOG_FLAGS_SHOW_REMEMBER, remember);
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->remember_button[0])))
-		remember = GNOME_PASSWORD_DIALOG_REMEMBER_NOTHING;
+		remember = EPHY_PASSWORD_DIALOG_REMEMBER_NOTHING;
 	else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->remember_button[1])))
-		remember = GNOME_PASSWORD_DIALOG_REMEMBER_SESSION;
+		remember = EPHY_PASSWORD_DIALOG_REMEMBER_SESSION;
 	else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->remember_button[2])))
-		remember = GNOME_PASSWORD_DIALOG_REMEMBER_FOREVER;
+		remember = EPHY_PASSWORD_DIALOG_REMEMBER_FOREVER;
 
 	return remember;
 }

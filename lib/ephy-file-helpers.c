@@ -35,12 +35,7 @@
 #include <gio/gio.h>
 #include <gio/gdesktopappinfo.h>
 #include <gdk/gdk.h>
-#include <libgnome/gnome-init.h>
 #include <libxml/xmlreader.h>
-
-/* bug http://bugzilla.gnome.org/show_bug.cgi?id=156687 */
-#undef GNOME_DISABLE_DEPRECATED
-#include <libgnome/gnome-desktop-item.h>
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>

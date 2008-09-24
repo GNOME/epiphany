@@ -23,7 +23,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
-#include <libgnomeui/gnome-stock-icons.h>
 #include <string.h>
 
 #include "ephy-bookmarks-editor.h"

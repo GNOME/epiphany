@@ -33,7 +33,6 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <libgnomeui/gnome-icon-lookup.h>
 
 
 #ifdef HAVE_LIBNOTIFY
@@ -550,11 +549,13 @@ downloader_view_add_download (DownloaderView *dv,
 	GtkTreeIter iter;
 	GtkTreeSelection *selection;
 	GtkTreePath *path;
+#if 0
 	GtkIconTheme *theme;
 	GtkIconInfo *icon_info;
 	GdkPixbuf *pixbuf;
 	char *mime, *icon_name;
 	int width = 16, height = 16;
+#endif
 	GValue visible = {0, };
 
 #ifdef HAVE_LIBNOTIFY
@@ -615,7 +616,9 @@ downloader_view_add_download (DownloaderView *dv,
 	}
 	
 	g_value_unset (&visible);
-	
+
+#if 0
+        // FIXMEchpe port this to use GIcon when webkit gets download support
 	mime =  ephy_download_get_mime (download);
 
 	theme = gtk_icon_theme_get_default ();
@@ -641,7 +644,8 @@ downloader_view_add_download (DownloaderView *dv,
 	{
 		g_object_unref (pixbuf);
 	}
-	
+#endif
+
 	dv->priv->source_id = g_timeout_add (100, (GSourceFunc) update_buttons_timeout_cb, dv);
 }
 
