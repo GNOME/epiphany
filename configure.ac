@@ -59,7 +59,10 @@ AC_DEFINE([EPHY_BUILD_ID],["epiphany_build_id"],[The build date])
 
 AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip tar-ustar])
 
-AM_MAINTAINER_MODE
+if test -z "$enable_maintainer_mode"; then
+  enable_maintainer_mode=yes
+fi
+AM_MAINTAINER_MODE([enable])
 
 AC_ENABLE_SHARED([yes])
 AC_ENABLE_STATIC([no])
