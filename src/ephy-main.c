@@ -74,7 +74,7 @@ option_version_cb (const gchar *option_name,
                    gpointer     data,
                    GError     **error)
 {
-  g_printerr ("%s %s\n", _("GNOME Web Browser"), VERSION);
+  g_print ("%s %s\n", _("GNOME Web Browser"), VERSION);
 
   exit (EXIT_SUCCESS);
  return FALSE;
