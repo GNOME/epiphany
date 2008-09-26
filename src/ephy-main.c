@@ -68,6 +68,18 @@ static gboolean private_instance = FALSE;
 static gboolean keep_temp_directory = FALSE;
 static char *profile_directory = NULL;
 
+static gboolean
+option_version_cb (const gchar *option_name,
+                   const gchar *value,
+                   gpointer     data,
+                   GError     **error)
+{
+  g_printerr ("%s %s\n", _("GNOME Web Browser"), VERSION);
+
+  exit (EXIT_SUCCESS);
+ return FALSE;
+}
+ 
 static const GOptionEntry option_entries[] =
 {
 	{ "new-tab", 'n', 0, G_OPTION_ARG_NONE, &open_in_new_tab,
@@ -88,6 +100,8 @@ static const GOptionEntry option_entries[] =
 	  N_("Profile directory to use in the private instance"), N_("DIR") },
 	{ G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &arguments,
 	  "", N_("URL …")},
+	{ "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, 
+	  G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
 	{ NULL }
 };
 
@@ -99,7 +113,7 @@ static GOptionEntry debug_option_entries[] =
 	{ NULL }
 };
 #endif /* GNOME_ENABLE_DEBUG */
-
+ 
 /* adapted from gtk+/gdk/x11/gdkdisplay-x11.c */
 static guint32
 get_startup_id (void)
