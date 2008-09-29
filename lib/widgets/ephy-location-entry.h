@@ -66,7 +66,7 @@ GType		ephy_location_entry_get_type		(void);
 
 GtkWidget      *ephy_location_entry_new			(void);
 
-void		ephy_location_entry_set_completion	(EphyLocationEntry *le,
+void		ephy_location_entry_set_completion	(EphyLocationEntry *entry,
 							 GtkTreeModel *model,
 							 guint text_col,
 							 guint action_col,
@@ -76,18 +76,18 @@ void		ephy_location_entry_set_completion	(EphyLocationEntry *le,
 							 guint extra_col,
 							 guint favicon_col);
 
-void		ephy_location_entry_set_location	(EphyLocationEntry *le,
+void		ephy_location_entry_set_location	(EphyLocationEntry *entry,
 							 const char *address,
 							 const char *typed_address);
 
-void		ephy_location_entry_set_match_func	(EphyLocationEntry *le, 
+void		ephy_location_entry_set_match_func	(EphyLocationEntry *entry, 
 							 GtkEntryCompletionMatchFunc match_func,
 							 gpointer user_data,
 							 GDestroyNotify notify);
 					
-const char     *ephy_location_entry_get_location	(EphyLocationEntry *le);
+const char     *ephy_location_entry_get_location	(EphyLocationEntry *entry);
 
-gboolean	ephy_location_entry_get_can_undo	(EphyLocationEntry *le);
+gboolean	ephy_location_entry_get_can_undo	(EphyLocationEntry *entry);
 
 gboolean	ephy_location_entry_get_can_redo	(EphyLocationEntry *entry);
 
@@ -97,7 +97,7 @@ gboolean	ephy_location_entry_reset		(EphyLocationEntry *entry);
 
 void		ephy_location_entry_undo_reset		(EphyLocationEntry *entry);
 
-void		ephy_location_entry_activate		(EphyLocationEntry *le);
+void		ephy_location_entry_activate		(EphyLocationEntry *entry);
 
 GtkWidget      *ephy_location_entry_get_entry		(EphyLocationEntry *entry);
 

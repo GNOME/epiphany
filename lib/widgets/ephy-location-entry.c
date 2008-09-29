@@ -986,21 +986,50 @@ extracell_data_func (GtkCellLayout *cell_layout,
 	g_value_unset (&visible);
 }
 
+/**
+ * ephy_location_entry_set_match_func:
+ * @entry: an #EphyLocationEntry widget
+ * @match_func: a #GtkEntryCompletionMatchFunc
+ * @user_data: user_data to pass to the @match_func
+ * @notify: a #GDestroyNotify, like the one given to
+ * gtk_entry_completion_set_match_func
+ *
+ * Sets the match_func for the internal #GtkEntryCompletion to @match_func.
+ *
+ **/
 void
-ephy_location_entry_set_match_func (EphyLocationEntry *le, 
+ephy_location_entry_set_match_func (EphyLocationEntry *entry, 
 				GtkEntryCompletionMatchFunc match_func,
 				gpointer user_data,
 				GDestroyNotify notify)
 {
-	EphyLocationEntryPrivate *priv = le->priv;
+	EphyLocationEntryPrivate *priv = entry->priv;
 	GtkEntryCompletion *completion;
 	
 	completion = gtk_entry_get_completion (GTK_ENTRY (priv->icon_entry->entry));
 	gtk_entry_completion_set_match_func (completion, match_func, user_data, notify);
 }
 
+/**
+ * ephy_location_entry_set_completion:
+ * @entry: an #EphyLocationEntry widget
+ * @model: the #GtkModel for the completion
+ * @text_col: column id to access #GtkModel relevant data
+ * @action_col: column id to access #GtkModel relevant data
+ * @keywords_col: column id to access #GtkModel relevant data
+ * @relevance_col: column id to access #GtkModel relevant data
+ * @url_col: column id to access #GtkModel relevant data
+ * @extra_col: column id to access #GtkModel relevant data
+ * @favicon_col: column id to access #GtkModel relevant data
+ *
+ * Initializes @entry to have a #GtkEntryCompletion using @model as the
+ * internal #GtkModel. The *_col arguments are for internal data retrieval from
+ * @model, like when setting the text property of one of the #GtkCellRenderer
+ * of the completion.
+ *
+ **/
 void
-ephy_location_entry_set_completion (EphyLocationEntry *le,
+ephy_location_entry_set_completion (EphyLocationEntry *entry,
 				    GtkTreeModel *model,
 				    guint text_col,
 				    guint action_col,
@@ -1010,34 +1039,34 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 				    guint extra_col,
 				    guint favicon_col)
 {
-	EphyLocationEntryPrivate *priv = le->priv;
+	EphyLocationEntryPrivate *priv = entry->priv;
 	GtkTreeModel *sort_model;
 	GtkEntryCompletion *completion;
 	GtkCellRenderer *cell, *iconcell;
 
-	le->priv->text_col = text_col;
-	le->priv->action_col = action_col;
-	le->priv->keywords_col = keywords_col;
-	le->priv->relevance_col = relevance_col;
-	le->priv->url_col = url_col;
-	le->priv->extra_col = extra_col;
-	le->priv->favicon_col = favicon_col;
+	entry->priv->text_col = text_col;
+	entry->priv->action_col = action_col;
+	entry->priv->keywords_col = keywords_col;
+	entry->priv->relevance_col = relevance_col;
+	entry->priv->url_col = url_col;
+	entry->priv->extra_col = extra_col;
+	entry->priv->favicon_col = favicon_col;
 
 	sort_model = gtk_tree_model_sort_new_with_model (model);
 
 	g_object_unref (model);
 	gtk_tree_sortable_set_sort_column_id 
 			(GTK_TREE_SORTABLE (sort_model),
-			 le->priv->relevance_col,
+			 entry->priv->relevance_col,
 			 GTK_SORT_DESCENDING);
 
 	completion = gtk_entry_completion_new ();
 	gtk_entry_completion_set_model (completion, sort_model);
 	g_object_unref (sort_model);
 	g_signal_connect (completion, "match-selected",
-			  G_CALLBACK (match_selected_cb), le);
+			  G_CALLBACK (match_selected_cb), entry);
 	g_signal_connect_after (completion, "action-activated",
-				G_CALLBACK (action_activated_after_cb), le);
+				G_CALLBACK (action_activated_after_cb), entry);
 
 	iconcell = gtk_cell_renderer_pixbuf_new ();
 
@@ -1047,7 +1076,7 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 				       iconcell, "pixbuf", favicon_col);
 
 	cell = gtk_cell_renderer_text_new ();
-	g_object_set (cell, 
+	g_object_set (cell,
 			"ellipsize", PANGO_ELLIPSIZE_END,
 			"ellipsize-set", TRUE,
 			NULL);
@@ -1056,24 +1085,24 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
 				       cell, "text", text_col);
 
-	le->priv->extracell = gtk_cell_renderer_text_new ();
-	g_object_set (le->priv->extracell, 
+	entry->priv->extracell = gtk_cell_renderer_text_new ();
+	g_object_set (entry->priv->extracell,
 			"ellipsize", PANGO_ELLIPSIZE_END,
 			"ellipsize-set", TRUE,
 			"alignment", PANGO_ALIGN_LEFT,
 			NULL);
 
 	gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (completion),
-				  le->priv->extracell, TRUE);
+				  entry->priv->extracell, TRUE);
 	
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
-					le->priv->extracell, extracell_data_func, 
-					le,
+					entry->priv->extracell, extracell_data_func, 
+					entry,
 					NULL);
 
 	g_object_set (completion, "inline-selection", TRUE, NULL);
 	g_signal_connect (completion, "cursor-on-match",
-			  G_CALLBACK (cursor_on_match_cb), le);
+			  G_CALLBACK (cursor_on_match_cb), entry);
 
 	gtk_entry_set_completion (GTK_ENTRY (priv->icon_entry->entry), completion);
 	g_object_unref (completion);
