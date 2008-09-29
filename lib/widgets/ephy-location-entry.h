@@ -27,8 +27,6 @@
 #ifndef EPHY_LOCATION_ENTRY_H
 #define EPHY_LOCATION_ENTRY_H
 
-#include "ephy-node.h"
-
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
