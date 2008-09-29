@@ -1079,6 +1079,17 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 	g_object_unref (completion);
 }
 
+/**
+ * ephy_location_entry_set_location:
+ * @entry: an #EphyLocationEntry widget
+ * @address: the address to be set as the current location
+ * @typed_address: the address to be shown in the location entry or NULL
+ *
+ * Sets the current address of @entry to @address, alternatively a
+ * @typed_address can be used to determine the text to be displayed in the
+ * location entry.
+ *
+ **/
 void
 ephy_location_entry_set_location (EphyLocationEntry *entry,
 				  const char *address,
@@ -1150,6 +1161,16 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 	}
 }
 
+/**
+ * ephy_location_entry_get_can_undo:
+ * @entry: an #EphyLocationEntry widget
+ *
+ * Wheter @entry can restore the displayed user modified text to the unmodified 
+ * previous text.
+ *
+ * Return value: TRUE or FALSE indicating if the text can be restored
+ *
+ **/
 gboolean
 ephy_location_entry_get_can_undo (EphyLocationEntry *entry)
 {
@@ -1158,6 +1179,16 @@ ephy_location_entry_get_can_undo (EphyLocationEntry *entry)
 	return priv->user_changed;
 }
 
+/**
+ * ephy_location_entry_get_can_redo:
+ * @entry: an #EphyLocationEntry widget
+ *
+ * Wheter @entry can restore the displayed text to the user modified version
+ * before the undo.
+ *
+ * Return value: TRUE or FALSE indicating if the text can be restored
+ *
+ **/
 gboolean
 ephy_location_entry_get_can_redo (EphyLocationEntry *entry)
 {
@@ -1166,6 +1197,16 @@ ephy_location_entry_get_can_redo (EphyLocationEntry *entry)
 	return priv->can_redo;
 }
 
+/**
+ * ephy_location_entry_get_location:
+ * @entry: an #EphyLocationEntry widget
+ *
+ * Retrieves the text displayed by the internal #GtkEntry of @entry. This is
+ * the currently displayed text, like in any #GtkEntry.
+ *
+ * Return value: the text inside the inner #GtkEntry of @entry, owned by GTK+
+ *
+ **/
 const char *
 ephy_location_entry_get_location (EphyLocationEntry *entry)
 {
@@ -1207,6 +1248,13 @@ ephy_location_entry_reset_internal (EphyLocationEntry *entry,
 	return retval;
 }
 
+/**
+ * ephy_location_entry_undo_reset:
+ * @entry: an #EphyLocationEntry widget
+ *
+ * Undo a previous ephy_location_entry_reset.
+ *
+ **/
 void
 ephy_location_entry_undo_reset (EphyLocationEntry *entry)
 {
@@ -1217,12 +1265,31 @@ ephy_location_entry_undo_reset (EphyLocationEntry *entry)
 	priv->user_changed = TRUE;
 }
 
+/**
+ * ephy_location_entry_reset:
+ * @entry: an #EphyLocationEntry widget
+ *
+ * Restore the @entry to the text corresponding to the current location, this
+ * does not fire the user_changed signal. This is called each time the user
+ * presses Escape while the location entry is selected.
+ *
+ * Return value: TRUE on success, FALSE otherwise
+ *
+ **/
 gboolean
 ephy_location_entry_reset (EphyLocationEntry *entry)
 {
 	return ephy_location_entry_reset_internal (entry, FALSE);
 }
 
+/**
+ * ephy_location_entry_activate:
+ * @entry: an #EphyLocationEntry widget
+ *
+ * Set focus on @entry and select the text whithin. This is called when the
+ * user hits Control+L.
+ *
+ **/
 void
 ephy_location_entry_activate (EphyLocationEntry *entry)
 {
@@ -1237,6 +1304,15 @@ ephy_location_entry_activate (EphyLocationEntry *entry)
 			      priv->icon_entry->entry);
 }
 
+/**
+ * ephy_location_entry_get_entry:
+ * @entry: an #EphyLocationEntry widget
+ *
+ * Retrieve the internal #GtkEntry of the #EphyIconEntry inside @entry.
+ *
+ * Return value: a pointer to the internal #GtkEntry of @entry
+ *
+ **/
 GtkWidget *
 ephy_location_entry_get_entry (EphyLocationEntry *entry)
 {
@@ -1245,6 +1321,14 @@ ephy_location_entry_get_entry (EphyLocationEntry *entry)
 	return priv->icon_entry->entry;
 }
 
+/**
+ * ephy_location_entry_set_favicon:
+ * @entry: an #EphyLocationEntry widget
+ * @pixbuf: a #GdkPixbuf to be set as the icon of the entry
+ *
+ * Sets the icon in the internal #EphyIconEntry of @entry
+ *
+ **/
 void
 ephy_location_entry_set_favicon (EphyLocationEntry *entry,
 				 GdkPixbuf *pixbuf)
@@ -1261,6 +1345,17 @@ ephy_location_entry_set_favicon (EphyLocationEntry *entry,
 	update_favicon (entry);
 }
 
+/**
+ * ephy_location_entry_set_secure:
+ * @entry: an #EphyLocationEntry widget
+ * @secure: whether the page is secure and thus the location bar should reflect
+ * that
+ *
+ * Set @entry to give visual feedback if the page is @secure. If it is, the
+ * location bar will have its background painted differently (yellow by
+ * default).
+ *
+ **/
 void
 ephy_location_entry_set_secure (EphyLocationEntry *entry,
 				gboolean secure)
@@ -1286,6 +1381,18 @@ ephy_location_entry_set_secure (EphyLocationEntry *entry,
 	gtk_widget_queue_draw (widget);
 }
 
+/**
+ * ephy_location_entry_set_show_lock:
+ * @entry: an #EphyLocationEntry widget
+ * @show_lock: if @entry should show a lock icon indicating the security level
+ * of the page
+ *
+ * If @show_lock is TRUE, the location bar will show an icon reflecting the
+ * security level of the page, by default it's shown only in secure and
+ * insecure pages (insecure meaning secure pages with something broken in such
+ * security)
+ *
+ **/
 void
 ephy_location_entry_set_show_lock (EphyLocationEntry *entry,
 				   gboolean show_lock)
@@ -1295,6 +1402,15 @@ ephy_location_entry_set_show_lock (EphyLocationEntry *entry,
 	g_object_set (priv->lock_ebox, "visible", show_lock, NULL);
 }
 
+/**
+ * ephy_location_entry_set_lock_stock:
+ * @entry: an #EphyLocationEntry widget
+ * @stock_id: a stock_id from GTK+ stock icons
+ *
+ * Set the lock icon to be displayed, to actually show the icon see 
+ * ephy_location_entry_set_show_lock.
+ *
+ **/
 void
 ephy_location_entry_set_lock_stock (EphyLocationEntry *entry,
 				    const char *stock_id)
@@ -1306,6 +1422,14 @@ ephy_location_entry_set_lock_stock (EphyLocationEntry *entry,
 				  GTK_ICON_SIZE_MENU);
 }
 
+/**
+ * ephy_location_entry_set_lock_tooltip:
+ * @entry: an #EphyLocationEntry widget
+ * @tooltip: the text to be set in the tooltip for the lock icon
+ *
+ * Set the text to be displayed when hovering the lock icon of @entry.
+ *
+ **/
 void
 ephy_location_entry_set_lock_tooltip (EphyLocationEntry *entry,
 				      const char *tooltip)
@@ -1315,6 +1439,15 @@ ephy_location_entry_set_lock_tooltip (EphyLocationEntry *entry,
 	gtk_widget_set_tooltip_text (priv->lock_ebox, tooltip);
 }
 
+/**
+ * ephy_location_entry_get_regex:
+ * @entry: an #EphyLocationEntry widget
+ *
+ * Return the internal #GRegex formed in @entry on user changes.
+ *
+ * Return value: the internal #GRegex
+ *
+ **/
 GRegex *
 ephy_location_entry_get_regex (EphyLocationEntry *entry)
 {
