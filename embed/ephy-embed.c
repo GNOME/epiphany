@@ -632,7 +632,10 @@ ephy_embed_set_encoding (EphyEmbed *embed,
  * ephy_embed_get_encoding:
  * @embed: an #EphyEmbed
  *
- * Returns the @embed's document's encoding
+ * Returns the @embed's document encoding.
+ *
+ * Returns: the @embed's document encoding
+ *
  **/
 char *
 ephy_embed_get_encoding (EphyEmbed *embed)
@@ -645,7 +648,10 @@ ephy_embed_get_encoding (EphyEmbed *embed)
  * ephy_embed_has_automatic_encoding:
  * @embed: an #EphyEmbed
  *
- * Returns whether the @embed's document's was determined by the document itself
+ * Returns whether the @embed's document encoding was determined by the 
+ * document itself.
+ *
+ * Returns: if the @embed's document encoding was determined by itself
  **/
 gboolean
 ephy_embed_has_automatic_encoding (EphyEmbed *embed)
