@@ -77,12 +77,20 @@ test_entry_get_entry (void)
 int
 main (int argc, char *argv[])
 {
-    gtk_test_init (&argc, &argv);
-    
-    entry = ephy_icon_entry_new ();
-    
-    g_test_add_func ("/lib/widgets/ephy-icon-entry/pack_widget", test_entry_pack_widget);
-    g_test_add_func ("/lib/widgets/ephy-icon-entry/get_entry", test_entry_get_entry);
-    
-    return g_test_run ();
+  gtk_test_init (&argc, &argv);
+
+  g_test_add_func (
+    "/lib/widgets/ephy-icon-entry/new",
+    test_entry_new);
+  /* FIXME: If we invert this two add_funcs, it will NOT segfault, weird!
+   * memory leak anyone?
+   */
+  g_test_add_func (
+    "/lib/widgets/ephy-icon-entry/pack_widget",
+    test_entry_pack_widget);
+  g_test_add_func (
+    "/lib/widgets/ephy-icon-entry/get_entry",
+    test_entry_get_entry);
+
+  return g_test_run ();
 }
