@@ -155,13 +155,13 @@ ephy_search_entry_init (EphySearchEntry *entry)
 			  entry);
 }
 
-/*
+/**
  * ephy_search_entry_new:
  *
  * Creates a new #EphySearchEntry.
  *
  * Returns: a new #EphySearchEntry, as a #GtkWidget
- */
+ **/
 GtkWidget *
 ephy_search_entry_new (void)
 {
@@ -173,13 +173,13 @@ ephy_search_entry_new (void)
 	return entry;
 }
 
-/*
+/**
  * ephy_search_entry_clear:
  * @entry: an #EphySearchEntry
  *
  * Clears the text of the internal #GtkEntry of @entry.
  *
- */
+ **/
 void
 ephy_search_entry_clear (EphySearchEntry *entry)
 {
