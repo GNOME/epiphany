@@ -36,9 +36,16 @@ G_BEGIN_DECLS
 #define EPHY_IS_SEARCH_ENTRY_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SEARCH_ENTRY))
 #define EPHY_SEARCH_ENTRY_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SEARCH_ENTRY, EphySearchEntryClass))
 
+typedef struct _EphySearchEntryClass	EphySearchEntryClass;
 typedef struct _EphySearchEntry		EphySearchEntry;
 typedef struct _EphySearchEntryPrivate	EphySearchEntryPrivate;
-typedef struct _EphySearchEntryClass	EphySearchEntryClass;
+
+struct _EphySearchEntryClass
+{
+	EphyIconEntryClass parent;
+
+	void (*search) (EphySearchEntry *view, const char *text);
+};
 
 struct _EphySearchEntry
 {
@@ -46,13 +53,6 @@ struct _EphySearchEntry
 
 	/*< private >*/
 	EphySearchEntryPrivate *priv;
-};
-
-struct _EphySearchEntryClass
-{
-	EphyIconEntryClass parent;
-
-	void (*search) (EphySearchEntry *view, const char *text);
 };
 
 GType            ephy_search_entry_get_type (void);

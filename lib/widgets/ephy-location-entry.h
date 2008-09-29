@@ -38,8 +38,8 @@ G_BEGIN_DECLS
 #define EPHY_IS_LOCATION_ENTRY_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE((klass), EPHY_TYPE_LOCATION_ENTRY))
 #define EPHY_LOCATION_ENTRY_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_LOCATION_ENTRY, EphyLocationEntryClass))
 
-typedef struct _EphyLocationEntry		EphyLocationEntry;
 typedef struct _EphyLocationEntryClass		EphyLocationEntryClass;
+typedef struct _EphyLocationEntry		EphyLocationEntry;
 typedef struct _EphyLocationEntryPrivate	EphyLocationEntryPrivate;
 
 struct _EphyLocationEntryClass
