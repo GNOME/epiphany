@@ -1,3 +1,27 @@
+<!-- ##### SECTION ./tmpl/EphySingle.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/EphySingle.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/EphySingle.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/EphySingle.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/EphySingle.sgml:Title ##### -->
+EphySingle
+
+
 <!-- ##### SECTION ./tmpl/ephy-tab.sgml:Long_Description ##### -->
 <para>
 Each #EphyWindow contains a #GtkNotebook which holds one or more #EphyTab:s.
@@ -49,6 +73,13 @@ EphyTab
 <!-- ##### SECTION ./tmpl/mozilla-embed-event.sgml:Title ##### -->
 mozilla-embed-event
 
+
+<!-- ##### FUNCTION Detach ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 <!-- ##### MACRO EPHY_EMBED_SINGLE_IFACE ##### -->
 <para>
@@ -197,6 +228,15 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @aSubject: 
 @Returns: 
 
+<!-- ##### FUNCTION EmitPermissionNotification ##### -->
+<para>
+
+</para>
+
+@name: 
+@aSubject: 
+@Returns: 
+
 <!-- ##### ENUM EphyCookieP3PPolicy ##### -->
 <para>
 
@@ -246,6 +286,14 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @arg2: 
 
 <!-- ##### SIGNAL EphyEmbed::ge-security-change ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-zoom-change ##### -->
 <para>
 
 </para>
@@ -469,12 +517,36 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 </para>
 
 
+<!-- ##### FUNCTION Init ##### -->
+<para>
+
+</para>
+
+@aOwner: 
+@Returns: 
+
 <!-- ##### FUNCTION ephy_embed_activate ##### -->
 <para>
 
 </para>
 
 @embed: 
+
+<!-- ##### FUNCTION ephy_embed_can_go_back ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_embed_can_go_forward ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
 
 <!-- ##### FUNCTION ephy_embed_find_next ##### -->
 <para>
@@ -484,6 +556,15 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @embed: 
 @backwards: 
 @Returns: 
+
+<!-- ##### FUNCTION ephy_embed_find_set_properties ##### -->
+<para>
+
+</para>
+
+@find: 
+@search_string: 
+@case_sensitive: 
 
 <!-- ##### FUNCTION ephy_embed_get_encoding_info ##### -->
 <para>
@@ -500,12 +581,57 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 
 @Returns: 
 
+<!-- ##### FUNCTION ephy_embed_get_zoom ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_embed_go_back ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+<!-- ##### FUNCTION ephy_embed_go_forward ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+<!-- ##### FUNCTION ephy_embed_print ##### -->
+<para>
+
+</para>
+
+@embed: 
+
 <!-- ##### FUNCTION ephy_embed_print_preview_close ##### -->
 <para>
 
 </para>
 
 @embed: 
+
+<!-- ##### FUNCTION ephy_embed_reload ##### -->
+<para>
+
+</para>
+
+@embed: 
+@force: 
+
+<!-- ##### FUNCTION ephy_embed_set_zoom ##### -->
+<para>
+
+</para>
+
+@embed: 
+@zoom: 
 
 <!-- ##### FUNCTION ephy_embed_shistory_get_nth ##### -->
 <para>
@@ -559,6 +685,13 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @single: 
 @offline: 
 @shell: 
+
+<!-- ##### FUNCTION ephy_embed_stop_load ##### -->
+<para>
+
+</para>
+
+@embed: 
 
 <!-- ##### FUNCTION ephy_extensions_manager_add ##### -->
 <para>
@@ -910,6 +1043,14 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @window: 
 @enabled: 
 
+<!-- ##### FUNCTION mozilla_cookie_to_ephy_cookie ##### -->
+<para>
+
+</para>
+
+@cookie: 
+@Returns: 
+
 <!-- ##### FUNCTION mozilla_embed_event_new ##### -->
 <para>
 
@@ -926,4 +1067,12 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @event: 
 @name: 
 @value: 
+
+<!-- ##### FUNCTION mozilla_permission_to_ephy_permission ##### -->
+<para>
+
+</para>
+
+@perm: 
+@Returns: 
 

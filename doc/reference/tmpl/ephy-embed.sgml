@@ -174,22 +174,12 @@ be done by casting).
 @arg2: 
 @arg3: 
 
-<!-- ##### SIGNAL EphyEmbed::ge-zoom-change ##### -->
-<para>
-
-</para>
-
-@ephyembed: the object which received the signal.
-@arg1: 
-
 <!-- ##### SIGNAL EphyEmbed::new-document-now ##### -->
 <para>
 
 </para>
 
 @ephyembed: the object which received the signal.
-@: 
-@: 
 @: 
 @: 
 @: 
@@ -251,7 +241,6 @@ be done by casting).
 @dom_mouse_down: 
 @dom_content_loaded: 
 @popup_blocked: 
-@zoom_change: 
 @content_blocked: 
 @modal_alert: 
 @modal_alert_closed: 
@@ -262,14 +251,8 @@ be done by casting).
 @new_document_now: 
 @load_url: 
 @load: 
-@stop_load: 
-@reload: 
-@can_go_back: 
-@can_go_forward: 
 @can_go_up: 
 @get_go_up_list: 
-@go_back: 
-@go_forward: 
 @go_up: 
 @get_title: 
 @get_location: 
@@ -278,20 +261,16 @@ be done by casting).
 @shistory_copy: 
 @get_security_level: 
 @show_page_certificate: 
-@set_zoom: 
-@get_zoom: 
 @scroll_lines: 
 @scroll_pages: 
 @scroll_pixels: 
 @get_encoding: 
 @has_automatic_encoding: 
 @set_encoding: 
-@print: 
 @set_print_preview_mode: 
 @print_preview_n_pages: 
 @print_preview_navigate: 
 @has_modified_forms: 
-@close: 
 @get_document_type: 
 @get_load_percent: 
 @get_load_status: 
@@ -305,11 +284,6 @@ be done by casting).
 @get_is_blank: 
 @get_loading_title: 
 @get_visibility: 
-@get_backward_history: 
-@get_forward_history: 
-@get_next_history_item: 
-@get_previous_history_item: 
-@go_to_history_item: 
 
 <!-- ##### ENUM EphyEmbedChrome ##### -->
 <para>
@@ -333,23 +307,6 @@ windows opened with JavaScript often use a nonstandard chrome.
 
 @embed: 
 @url: 
-
-
-<!-- ##### FUNCTION ephy_embed_stop_load ##### -->
-<para>
-
-</para>
-
-@embed: 
-
-
-<!-- ##### FUNCTION ephy_embed_reload ##### -->
-<para>
-
-</para>
-
-@embed: 
-@force: 
 
 
 <!-- ##### FUNCTION ephy_embed_get_title ##### -->
@@ -389,24 +346,6 @@ windows opened with JavaScript often use a nonstandard chrome.
 @Returns: 
 
 
-<!-- ##### FUNCTION ephy_embed_can_go_back ##### -->
-<para>
-
-</para>
-
-@embed: 
-@Returns: 
-
-
-<!-- ##### FUNCTION ephy_embed_can_go_forward ##### -->
-<para>
-
-</para>
-
-@embed: 
-@Returns: 
-
-
 <!-- ##### FUNCTION ephy_embed_can_go_up ##### -->
 <para>
 
@@ -423,22 +362,6 @@ windows opened with JavaScript often use a nonstandard chrome.
 
 @embed: 
 @Returns: 
-
-
-<!-- ##### FUNCTION ephy_embed_go_back ##### -->
-<para>
-
-</para>
-
-@embed: 
-
-
-<!-- ##### FUNCTION ephy_embed_go_forward ##### -->
-<para>
-
-</para>
-
-@embed: 
 
 
 <!-- ##### FUNCTION ephy_embed_go_up ##### -->
@@ -459,34 +382,6 @@ windows opened with JavaScript often use a nonstandard chrome.
 @description: 
 
 
-<!-- ##### FUNCTION ephy_embed_set_zoom ##### -->
-<para>
-
-</para>
-
-@embed: 
-@zoom: 
-
-
-<!-- ##### FUNCTION ephy_embed_get_zoom ##### -->
-<para>
-
-</para>
-
-@embed: 
-@Returns: 
-
-
-<!-- ##### FUNCTION ephy_embed_find_set_properties ##### -->
-<para>
-
-</para>
-
-@find: 
-@search_string: 
-@case_sensitive: 
-
-
 <!-- ##### FUNCTION ephy_embed_set_encoding ##### -->
 <para>
 
@@ -494,14 +389,6 @@ windows opened with JavaScript often use a nonstandard chrome.
 
 @embed: 
 @encoding: 
-
-
-<!-- ##### FUNCTION ephy_embed_print ##### -->
-<para>
-
-</para>
-
-@embed: 
 
 
 <!-- ##### FUNCTION ephy_embed_print_preview_n_pages ##### -->
