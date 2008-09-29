@@ -105,6 +105,41 @@ test_entry_get_location_empty (void)
   g_assert_cmpstr ("", ==, get);
 }
 
+static void
+test_entry_can_undo (void)
+{
+  const char *test = "test";
+
+  EphyLocationEntry *entry;
+  entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+
+  g_assert_cmpint (ephy_location_entry_get_can_undo (entry), ==, FALSE);
+
+  /* Use gtk_* function or otherwise user_changed won't be correctly handled
+   * internally by the location entry (see editable_changed_cb and
+   * block_update) */
+  gtk_entry_set_text (GTK_ENTRY (ephy_location_entry_get_entry (entry)), test);
+  g_assert_cmpint (ephy_location_entry_get_can_undo (entry), ==, TRUE);
+}
+
+static void
+test_entry_can_redo (void)
+{
+  const char *test = "test";
+
+  EphyLocationEntry *entry;
+  entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+  g_assert_cmpint (ephy_location_entry_get_can_redo (entry), ==, FALSE);
+
+  /* Can't redo, in this point we can UNdo */
+  ephy_location_entry_set_location (entry, test, NULL);
+  g_assert_cmpint (ephy_location_entry_get_can_redo (entry), ==, FALSE);
+
+  /* Reset should set redo to TRUE */
+  ephy_location_entry_reset (entry);
+  g_assert_cmpint (ephy_location_entry_get_can_redo (entry), ==, TRUE);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -130,6 +165,12 @@ main (int argc, char *argv[])
   g_test_add_func (
     "/lib/widgets/ephy-location-entry/get_location_empty",
     test_entry_get_location_empty);
+  g_test_add_func (
+    "/lib/widgets/ephy-location-entry/can_undo",
+    test_entry_can_undo);
+  g_test_add_func (
+    "/lib/widgets/ephy-location-entry/can_redo",
+    test_entry_can_redo);
 
   return g_test_run ();
 }
