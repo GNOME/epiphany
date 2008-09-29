@@ -1,3 +1,4 @@
+/* vim: set sw=2 ts=2 sts=2 et: */
 /*
  * testephylocationentry.c
  * This file is part of Epiphany
@@ -26,38 +27,37 @@
 static void
 test_entry_new (void)
 {
-	GtkWidget *entry;
-	entry = ephy_location_entry_new ();
+  GtkWidget *entry;
+  entry = ephy_location_entry_new ();
 
-	g_assert (GTK_IS_WIDGET (entry));
-	g_assert (EPHY_IS_LOCATION_ENTRY (entry));
+  g_assert (GTK_IS_WIDGET (entry));
+  g_assert (EPHY_IS_LOCATION_ENTRY (entry));
 }
 
 static void
 test_entry_get_entry (void)
 {
-	EphyLocationEntry *entry;
-	entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+  EphyLocationEntry *entry;
+  entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
 
-	g_assert (GTK_IS_ENTRY (
-				ephy_location_entry_get_entry (entry)));
+  g_assert (GTK_IS_ENTRY (ephy_location_entry_get_entry (entry)));
 }
 
 static void
 test_entry_set_location (void)
 {
-	const char *set = "test";
-	const char *null;
-	const char *get;
+  const char *set = "test";
+  const char *null;
+  const char *get;
 
-	EphyLocationEntry *entry;
-	entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+  EphyLocationEntry *entry;
+  entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
 
-	null = ephy_location_entry_get_location (entry);
+  null = ephy_location_entry_get_location (entry);
 
-	ephy_location_entry_set_location (entry, set, NULL);
-	get = ephy_location_entry_get_location (entry);
-	g_assert_cmpstr (set, ==, get);
+  ephy_location_entry_set_location (entry, set, NULL);
+  get = ephy_location_entry_get_location (entry);
+  g_assert_cmpstr (set, ==, get);
 }
 
 /*
@@ -67,69 +67,69 @@ test_entry_set_location (void)
 static void
 test_entry_set_location_null (void)
 {
-	const char *set = "test";
-	const char *get;
+  const char *set = "test";
+  const char *get;
 
-	EphyLocationEntry *entry;
-	entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+  EphyLocationEntry *entry;
+  entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
 
-	ephy_location_entry_set_location (entry, NULL, NULL);
-	get = ephy_location_entry_get_location (entry);
-	g_assert_cmpstr (set, ==, get);
+  ephy_location_entry_set_location (entry, NULL, NULL);
+  get = ephy_location_entry_get_location (entry);
+  g_assert_cmpstr (set, ==, get);
 }
 */
 
 static void
 test_entry_get_location (void)
 {
-	const char *set = "test";
-	const char *get;
+  const char *set = "test";
+  const char *get;
 
-	EphyLocationEntry *entry;
-	entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+  EphyLocationEntry *entry;
+  entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
 
-	ephy_location_entry_set_location (entry, set, NULL);
-	get = ephy_location_entry_get_location (entry);
-	g_assert_cmpstr (set, ==, get);
+  ephy_location_entry_set_location (entry, set, NULL);
+  get = ephy_location_entry_get_location (entry);
+  g_assert_cmpstr (set, ==, get);
 }
 
 static void
 test_entry_get_location_empty (void)
 {
-	const char *get;
+  const char *get;
 
-	EphyLocationEntry *entry;
-	entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+  EphyLocationEntry *entry;
+  entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
 
-	get = ephy_location_entry_get_location (entry);
-	g_assert_cmpstr ("", ==, get);
+  get = ephy_location_entry_get_location (entry);
+  g_assert_cmpstr ("", ==, get);
 }
 
 int
 main (int argc, char *argv[])
 {
-	gtk_test_init (&argc, &argv);
+  gtk_test_init (&argc, &argv);
 
-	g_test_add_func (
-		"/lib/widgets/ephy-location-entry/new",
-		test_entry_new);
-	g_test_add_func (
-		"/lib/widgets/ephy-location-entry/get_entry",
-		test_entry_get_entry);
-	g_test_add_func (
-		"/lib/widgets/ephy-location-entry/set_location",
-		test_entry_set_location);
-	g_test_add_func (
-		"/lib/widgets/ephy-location-entry/get_location",
-		test_entry_get_location);
-	/*
-	g_test_add_func (
-		"/lib/widgets/ephy-location-entry/set_location_null",
-		test_entry_set_location_null);
-	*/
-	g_test_add_func (
-		"/lib/widgets/ephy-location-entry/get_location_empty",
-		test_entry_get_location_empty);
+  g_test_add_func (
+    "/lib/widgets/ephy-location-entry/new",
+    test_entry_new);
+  g_test_add_func (
+    "/lib/widgets/ephy-location-entry/get_entry",
+    test_entry_get_entry);
+  g_test_add_func (
+    "/lib/widgets/ephy-location-entry/set_location",
+    test_entry_set_location);
+  g_test_add_func (
+    "/lib/widgets/ephy-location-entry/get_location",
+    test_entry_get_location);
+  /*
+  g_test_add_func (
+    "/lib/widgets/ephy-location-entry/set_location_null",
+    test_entry_set_location_null);
+  */
+  g_test_add_func (
+    "/lib/widgets/ephy-location-entry/get_location_empty",
+    test_entry_get_location_empty);
 
-	return g_test_run ();
+  return g_test_run ();
 }

@@ -1,3 +1,4 @@
+/* vim: set sw=2 ts=2 sts=2 et: */
 /*
  * testephyiconentry.c
  * This file is part of Epiphany
@@ -24,54 +25,74 @@
 #include "ephy-icon-entry.h"
 #include <gtk/gtk.h>
 
-GtkWidget *entry;
+static void
+test_entry_new (void)
+{
+  GtkWidget *entry;
+
+  entry = ephy_icon_entry_new ();
+
+  g_assert (GTK_IS_WIDGET (entry));
+  g_assert (EPHY_IS_ICON_ENTRY (entry));
+}
 
 static void
 test_entry_pack_widget (void)
 {
-    GtkWidget *first;
-    GtkWidget *last;
-    GList *hbox = NULL;
-    GList *list = NULL;
-    GList *l = NULL;
+  GtkWidget *entry;
 
-    first = gtk_button_new ();
-    last = gtk_entry_new ();
+  GtkWidget *first;
+  GtkWidget *last;
 
-    /* Add a widget to the start */
-    ephy_icon_entry_pack_widget (EPHY_ICON_ENTRY (entry), first, TRUE);
-    /* Add a widget to the end */
-    ephy_icon_entry_pack_widget (EPHY_ICON_ENTRY (entry), last, FALSE);
+  GList *hbox = NULL;
+  GList *list = NULL;
+  GList *l = NULL;
 
-    /* The first children is an hbox */
-    hbox = gtk_container_get_children (GTK_CONTAINER (entry));
-    list = gtk_container_get_children (GTK_CONTAINER (hbox->data));
-    g_list_free (hbox);
+  entry = ephy_icon_entry_new ();
 
-    g_assert (list);
+  first = gtk_button_new ();
+  last = gtk_entry_new ();
 
-    /* Remember inside the hbox there's a GtkEntry + our widgets */
-    g_assert_cmpuint (g_list_length (list), ==, 3);
+  /* Add a widget to the start */
+  ephy_icon_entry_pack_widget (EPHY_ICON_ENTRY (entry), first, TRUE);
+  /* Add a widget to the end */
+  ephy_icon_entry_pack_widget (EPHY_ICON_ENTRY (entry), last, FALSE);
 
-    /* Get the first one */
-    l = g_list_nth (list, 0);
-    g_assert (l);
-    g_assert (GTK_IS_BUTTON (l->data));
+  /* The first children is an hbox */
+  hbox = gtk_container_get_children (GTK_CONTAINER (entry));
+  list = gtk_container_get_children (GTK_CONTAINER (hbox->data));
+  g_list_free (hbox);
 
-    /* Get the last one */
-    l = g_list_nth (list, 2);
-    g_assert (l);
-    g_assert (GTK_IS_ENTRY (l->data));
+  g_assert (list);
 
-    g_list_free (list);
-    g_list_free (l);
+  /* Remember inside the hbox there's a GtkEntry + our widgets */
+  g_assert_cmpuint (g_list_length (list), ==, 3);
+
+  /* Get the first one */
+  l = g_list_nth (list, 0);
+  g_assert (l);
+  g_assert (GTK_IS_BUTTON (l->data));
+
+  /* Get the last one */
+  l = g_list_nth (list, 2);
+  g_assert (l);
+  g_assert (GTK_IS_ENTRY (l->data));
+
+  g_list_free (list);
+  g_list_free (l);
 }
 
 static void
 test_entry_get_entry (void)
 {
-    g_assert (GTK_IS_ENTRY (
-                ephy_icon_entry_get_entry (EPHY_ICON_ENTRY (entry))));
+  GtkWidget *internal;
+
+  GtkWidget *entry;
+
+  entry = ephy_icon_entry_new ();
+  internal = ephy_icon_entry_get_entry (EPHY_ICON_ENTRY (entry));
+
+  g_assert (GTK_IS_ENTRY (internal));
 }
 
 int
