@@ -614,7 +614,7 @@ ns_get_bookmark_item (FILE *f, GString *name, GString *url)
 		return ret;
 }
 
-/**
+/*
  * This function replaces some weird elements
  * like &amp; &le;, etc..
  * More info : http://www.w3.org/TR/html4/charset.html#h-5.3.2

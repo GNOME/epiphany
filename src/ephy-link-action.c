@@ -51,7 +51,7 @@ proxy_button_release_event_cb (GtkButton *button,
 			       GdkEventButton *event,
 			       EphyLinkAction *action)
 {
-	/**
+	/*
 	 * We do not use ephy_gui_is_middle_click() here because
 	 * that also catches ctrl + left_click which already
 	 * triggers an activate event for all proxies.
@@ -69,7 +69,7 @@ get_event_widget (GtkWidget *proxy)
 {
 	GtkWidget *widget;
 
-	/**
+	/*
 	 * Finding the interesting widget requires internal knowledge of
 	 * the widgets in question. This can't be helped, but by keeping
 	 * the sneaky code in one place, it can easily be updated.
@@ -81,7 +81,7 @@ get_event_widget (GtkWidget *proxy)
 	}
 	else if (GTK_IS_MENU_TOOL_BUTTON (proxy))
 	{
-		/**
+		/*
 		 * The menu tool button's button is the first child
 		 * of the child hbox.
 		 */

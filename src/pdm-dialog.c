@@ -1446,7 +1446,7 @@ pdm_dialog_init (PdmDialog *dialog)
 
 	g_signal_connect (window, "response",
 			  G_CALLBACK (pdm_dialog_response_cb), dialog);
-	/**
+	/*
 	 * Group all Properties and Remove buttons in the same size group to
 	 * avoid the little jerk you get otherwise when switching pages because
 	 * one set of buttons is wider than another.

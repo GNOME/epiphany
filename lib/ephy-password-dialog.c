@@ -86,7 +86,7 @@ enum
 
 G_DEFINE_TYPE (EphyPasswordDialog, ephy_password_dialog, GTK_TYPE_MESSAGE_DIALOG)
 
-/**
+/*
  *  Calculate the quality of a password. The algorithm used is taken
  *  directly from mozilla:
  *  mozilla/security/manager/pki/resources/content/password.js

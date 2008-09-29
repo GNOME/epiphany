@@ -43,7 +43,7 @@ struct _EphyEncodingsPrivate
 	GSList *recent;
 };
 
-/**
+/*
  * translatable encodings titles
  * NOTE: if you add/remove/change encodings, please also update the schema in
  * epiphany.schemas.in
