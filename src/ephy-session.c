@@ -1510,7 +1510,7 @@ ephy_session_load (EphySession *session,
 
 /**
  * ephy_session_get_windows:
- * @ephy_session: the #EphySession
+ * @session: the #EphySession
  *
  * Returns: the list of open #EphyWindow:s.
  **/
@@ -1524,7 +1524,7 @@ ephy_session_get_windows (EphySession *session)
 
 /**
  * ephy_session_add_window:
- * @ephy_session: a #EphySession
+ * @session: a #EphySession
  * @window: a #EphyWindow
  *
  * Add a tool window to the session. #EphyWindow take care of adding

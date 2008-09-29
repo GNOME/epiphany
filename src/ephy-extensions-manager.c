@@ -140,9 +140,9 @@ G_DEFINE_TYPE_WITH_CODE (EphyExtensionsManager, ephy_extensions_manager, G_TYPE_
 /**
  * ephy_extensions_manager_load:
  * @manager: an #EphyExtensionsManager
- * @name: identifier of the extension to load
+ * @identifier: identifier of the extension to load
  *
- * Loads the @name extension.
+ * Loads the extension corresponding to @identifier.
  **/
 void
 ephy_extensions_manager_load (EphyExtensionsManager *manager,
@@ -171,9 +171,9 @@ ephy_extensions_manager_load (EphyExtensionsManager *manager,
 /**
  * ephy_extensions_manager_unload:
  * @manager: an #EphyExtensionsManager
- * @name: filename of extension to unload, minus "lib" and "extension.so"
+ * @identifier: filename of extension to unload, minus "lib" and "extension.so"
  *
- * Unloads the extension specified by @name.
+ * Unloads the extension specified by @identifier.
  *
  * The extension with the same filename can afterwards be reloaded. However,
  * if any GTypes within the extension have changed parent types, Epiphany must
