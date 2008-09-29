@@ -313,13 +313,21 @@ ephy_icon_entry_get_type (void)
 
 /* public functions */
 
+/**
+ * ephy_icon_entry_new:
+ *
+ * Creates a new #EphyIconEntry.
+ *
+ * Return value: the new #GtkWidget
+ *
+ **/
 GtkWidget *
 ephy_icon_entry_new (void)
 {
 	return GTK_WIDGET (g_object_new (EPHY_TYPE_ICON_ENTRY, NULL));
 }
 
-/*
+/**
  * ephy_icon_entry_pack_widget:
  * @entry: an #EphyIconEntry
  * @widget: a #GtkWidget to pack into the entry
@@ -328,7 +336,7 @@ ephy_icon_entry_new (void)
  * Packs a widget into an #EphyIconEntry, the @start parameter determines if
  * it's packed at the start or end of it.
  *
- */
+ **/
 void
 ephy_icon_entry_pack_widget (EphyIconEntry *entry,
 			     GtkWidget *widget,
@@ -351,7 +359,7 @@ ephy_icon_entry_pack_widget (EphyIconEntry *entry,
 	}
 }
 
-/*
+/**
  * ephy_icon_entry_get_entry:
  * @entry: an #EphyIconEntry
  *
@@ -359,7 +367,7 @@ ephy_icon_entry_pack_widget (EphyIconEntry *entry,
  *
  * Return value: the embedded #GtkEntry
  *
- */
+ **/
 GtkWidget *
 ephy_icon_entry_get_entry (EphyIconEntry *entry)
 {
