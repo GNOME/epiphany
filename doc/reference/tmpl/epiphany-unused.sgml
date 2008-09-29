@@ -1,25 +1,25 @@
-<!-- ##### SECTION ./tmpl/EphySingle.sgml:Long_Description ##### -->
+<!-- ##### SECTION ./tmpl/ephy-icon-entry.sgml:Long_Description ##### -->
 <para>
 
 </para>
 
 
-<!-- ##### SECTION ./tmpl/EphySingle.sgml:See_Also ##### -->
+<!-- ##### SECTION ./tmpl/ephy-icon-entry.sgml:See_Also ##### -->
 <para>
 
 </para>
 
 
-<!-- ##### SECTION ./tmpl/EphySingle.sgml:Short_Description ##### -->
+<!-- ##### SECTION ./tmpl/ephy-icon-entry.sgml:Short_Description ##### -->
 
 
 
-<!-- ##### SECTION ./tmpl/EphySingle.sgml:Stability_Level ##### -->
+<!-- ##### SECTION ./tmpl/ephy-icon-entry.sgml:Stability_Level ##### -->
 
 
 
-<!-- ##### SECTION ./tmpl/EphySingle.sgml:Title ##### -->
-EphySingle
+<!-- ##### SECTION ./tmpl/ephy-icon-entry.sgml:Title ##### -->
+EphyIconEntry
 
 
 <!-- ##### SECTION ./tmpl/ephy-tab.sgml:Long_Description ##### -->
@@ -74,37 +74,33 @@ EphyTab
 mozilla-embed-event
 
 
-<!-- ##### FUNCTION Detach ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-<!-- ##### MACRO EPHY_CONTENT_POLICY_CID ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### MACRO EPHY_CONTENT_POLICY_CLASSNAME ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### MACRO EPHY_CONTENT_POLICY_CONTRACTID ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### MACRO EPHY_EMBED_SINGLE_IFACE ##### -->
 <para>
 
 </para>
 
 @k: 
+
+<!-- ##### MACRO EPHY_ICON_ENTRY ##### -->
+<para>
+
+</para>
+
+@object: 
+
+<!-- ##### MACRO EPHY_ICON_ENTRY_CLASS ##### -->
+<para>
+
+</para>
+
+@klass: 
+
+<!-- ##### MACRO EPHY_ICON_ENTRY_GET_CLASS ##### -->
+<para>
+
+</para>
+
+@obj: 
 
 <!-- ##### MACRO EPHY_IS_EMBED_SINGLE_IFACE ##### -->
 <para>
@@ -113,6 +109,20 @@ mozilla-embed-event
 
 @k: 
 
+<!-- ##### MACRO EPHY_IS_ICON_ENTRY ##### -->
+<para>
+
+</para>
+
+@object: 
+
+<!-- ##### MACRO EPHY_IS_ICON_ENTRY_CLASS ##### -->
+<para>
+
+</para>
+
+@klass: 
+
 <!-- ##### MACRO EPHY_SHELL_ERROR ##### -->
 <para>
 
@@ -120,6 +130,12 @@ mozilla-embed-event
 
 
 <!-- ##### MACRO EPHY_SHELL_TYPE_DEF ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO EPHY_TYPE_ICON_ENTRY ##### -->
 <para>
 
 </para>
@@ -197,15 +213,6 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @EMBED_STATE_IS_WINDOW: 
 
 <!-- ##### FUNCTION EmitCookieNotification ##### -->
-<para>
-
-</para>
-
-@name: 
-@aSubject: 
-@Returns: 
-
-<!-- ##### FUNCTION EmitPermissionNotification ##### -->
 <para>
 
 </para>
@@ -486,14 +493,6 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 </para>
 
 
-<!-- ##### FUNCTION Init ##### -->
-<para>
-
-</para>
-
-@aHistory: 
-@Returns: 
-
 <!-- ##### FUNCTION ephy_embed_activate ##### -->
 <para>
 
@@ -620,6 +619,23 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @data: 
 @domain: 
 @Returns: 
+
+<!-- ##### FUNCTION ephy_icon_entry_get_entry ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_icon_entry_pack_widget ##### -->
+<para>
+
+</para>
+
+@entry: 
+@widget: 
+@start: 
 
 <!-- ##### FUNCTION ephy_node_db_get_by_name ##### -->
 <para>
@@ -935,14 +951,6 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @window: 
 @enabled: 
 
-<!-- ##### FUNCTION mozilla_cookie_to_ephy_cookie ##### -->
-<para>
-
-</para>
-
-@cookie: 
-@Returns: 
-
 <!-- ##### FUNCTION mozilla_embed_event_new ##### -->
 <para>
 
@@ -959,12 +967,4 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @event: 
 @name: 
 @value: 
-
-<!-- ##### FUNCTION mozilla_permission_to_ephy_permission ##### -->
-<para>
-
-</para>
-
-@perm: 
-@Returns: 
 
