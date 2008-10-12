@@ -307,6 +307,7 @@ pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
 	GtkWidget *dialog, *vbox;
 	GtkWidget *check, *label;
 	PdmClearAllDialogButtons *checkbuttons;
+	GtkWidget *button, *icon;
 
 	dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (parent),
 						     GTK_DIALOG_DESTROY_WITH_PARENT |
@@ -322,14 +323,22 @@ pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
 						    "check the types of information that you "
 						    "want to remove:"));
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Clear All Personal Data"));
+
 	gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 				GTK_STOCK_HELP,
 				GTK_RESPONSE_HELP,
 				GTK_STOCK_CANCEL,
 				GTK_RESPONSE_CANCEL,
-				GTK_STOCK_CLEAR,
-				GTK_RESPONSE_OK,
 				NULL);
+
+	/* Clear button */
+	button = gtk_dialog_add_button (GTK_DIALOG (dialog),
+					_("Cl_ear"),
+					GTK_RESPONSE_OK);
+	icon = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_image (GTK_BUTTON (button), icon);
+	gtk_widget_show (button);
+
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog),
 					 GTK_RESPONSE_CANCEL);
 	gtk_label_set_selectable (GTK_LABEL (GTK_MESSAGE_DIALOG (dialog)->label),
@@ -368,7 +377,7 @@ pdm_dialog_show_clear_all_dialog (EphyDialog *edialog,
 	}
 
 	/* History */
-	check = gtk_check_button_new_with_mnemonic (_("_History"));
+	check = gtk_check_button_new_with_mnemonic (_("Hi_story"));
 	checkbuttons->checkbutton_history = check;
 	gtk_box_pack_start (GTK_BOX (vbox), check,
 			    FALSE, FALSE, 0);
