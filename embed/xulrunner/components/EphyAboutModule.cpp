@@ -404,8 +404,8 @@ EphyAboutModule::GetErrorMessage(nsIURI *aURI,
 		/* Error is a bit too strong here */
 		*aStockIcon = GTK_STOCK_DIALOG_INFO;
 
-		*aTitle = g_strdup (_("Cannot Load Document Whilst Working Offline"));
-		*aPrimary = g_strdup (_("Cannot load document whilst working offline."));
+		*aTitle = g_strdup (_("Cannot Load Document While Working Offline"));
+		*aPrimary = g_strdup (_("Cannot load document while working offline."));
 		*aSecondary = g_strdup (_("To view this document, disable “Work Offline” and try again."));
 	}
 	else if (strcmp (aError, "deniedPortAccess") == 0)
