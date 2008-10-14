@@ -4,8 +4,8 @@ noinst_PROGRAMS = \
 	testephyiconentry
 
 INCLUDES = \
-	-I$(top_builddir)/lib		 \
-	-I$(top_builddir)/lib/widgets
+	-I$(top_srcdir)/lib		 \
+	-I$(top_srcdir)/lib/widgets
 
 CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) \
