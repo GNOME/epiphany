@@ -62,11 +62,10 @@ typedef enum
   XSMP_STATE_INTERACT,
   XSMP_STATE_SAVE_YOURSELF_DONE,
   XSMP_STATE_SHUTDOWN_CANCELLED,
-  XSMP_STATE_CONNECTION_CLOSED,
+  XSMP_STATE_CONNECTION_CLOSED
 } EggSMClientXSMPState;
 
 static const char *state_names[] = {
-  "start",
   "idle",
   "save-yourself",
   "interact-request",
@@ -227,19 +226,14 @@ sm_client_xsmp_set_initial_properties (gpointer user_data)
   desktop_file = egg_get_desktop_file ();
   if (desktop_file)
     {
-      GKeyFile *key_file;
       GError *err = NULL;
       char *cmdline, **argv;
       int argc;
 
-      key_file = egg_desktop_file_get_key_file (desktop_file);
-
       if (xsmp->restart_style == SmRestartIfRunning)
 	{
-	  if (g_key_file_has_key (key_file, EGG_DESKTOP_FILE_GROUP,
-				  "X-GNOME-AutoRestart", NULL) &&
-	      g_key_file_get_boolean (key_file, EGG_DESKTOP_FILE_GROUP,
-				      "X-GNOME-AutoRestart", NULL))
+	  if (egg_desktop_file_get_boolean (desktop_file, 
+					    "X-GNOME-AutoRestart", NULL))
 	    xsmp->restart_style = SmRestartImmediately;
 	}
 
@@ -422,8 +416,6 @@ sm_client_xsmp_set_discard_command (EggSMClient  *client,
 {
   EggSMClientXSMP *xsmp = (EggSMClientXSMP *)client;
   int i;
-
-  g_return_if_fail (xsmp->set_restart_command);
 
   g_strfreev (xsmp->discard_command);
 
@@ -798,30 +790,6 @@ do_save_yourself (EggSMClientXSMP *xsmp)
 }
 
 static void
-merge_keyfiles (GKeyFile *dest, GKeyFile *source)
-{
-  int g, k;
-  char **groups, **keys, *value;
-
-  groups = g_key_file_get_groups (source, NULL);
-  for (g = 0; groups[g]; g++)
-    {
-      keys = g_key_file_get_keys (source, groups[g], NULL, NULL);
-      for (k = 0; keys[k]; k++)
-	{
-	  value = g_key_file_get_value (source, groups[g], keys[k], NULL);
-	  if (value)
-	    {
-	      g_key_file_set_value (dest, groups[g], keys[k], value);
-	      g_free (value);
-	    }
-	}
-      g_strfreev (keys);
-    }
-  g_strfreev (groups);
-}
-
-static void
 save_state (EggSMClientXSMP *xsmp)
 {
   GKeyFile *state_file;
@@ -862,30 +830,54 @@ save_state (EggSMClientXSMP *xsmp)
   if (desktop_file)
     {
       GKeyFile *merged_file;
-      char *exec;
-      int i;
 
       merged_file = g_key_file_new ();
-      merge_keyfiles (merged_file, egg_desktop_file_get_key_file (desktop_file));
-      merge_keyfiles (merged_file, state_file);
+      if (g_key_file_load_from_file (merged_file,
+				     egg_desktop_file_get_source (desktop_file),
+				     G_KEY_FILE_KEEP_COMMENTS |
+				     G_KEY_FILE_KEEP_TRANSLATIONS, NULL))
+	{
+	  guint g, k, i;
+	  char **groups, **keys, *value, *exec;
 
-      g_key_file_free (state_file);
-      state_file = merged_file;
+	  groups = g_key_file_get_groups (state_file, NULL);
+	  for (g = 0; groups[g]; g++)
+	    {
+	      keys = g_key_file_get_keys (state_file, groups[g], NULL, NULL);
+	      for (k = 0; keys[k]; k++)
+		{
+		  value = g_key_file_get_value (state_file, groups[g],
+						keys[k], NULL);
+		  if (value)
+		    {
+		      g_key_file_set_value (merged_file, groups[g],
+					    keys[k], value);
+		      g_free (value);
+		    }
+		}
+	      g_strfreev (keys);
+	    }
+	  g_strfreev (groups);
 
-      /* Update Exec key using "--sm-client-state-file %k" */
-      restart = generate_command (xsmp->restart_command,
-				  NULL, "%k");
-      for (i = 0; i < restart->len; i++)
-	restart->pdata[i] = g_shell_quote (restart->pdata[i]);
-      g_ptr_array_add (restart, NULL);
-      exec = g_strjoinv (" ", (char **)restart->pdata);
-      g_strfreev ((char **)restart->pdata);
-      g_ptr_array_free (restart, FALSE);
+	  g_key_file_free (state_file);
+	  state_file = merged_file;
 
-      g_key_file_set_string (state_file, EGG_DESKTOP_FILE_GROUP,
-			     EGG_DESKTOP_FILE_KEY_EXEC,
-			     exec);
-      g_free (exec);
+	  /* Update Exec key using "--sm-client-state-file %k" */
+	  restart = generate_command (xsmp->restart_command,
+				      NULL, "%k");
+	  for (i = 0; i < restart->len; i++)
+	    restart->pdata[i] = g_shell_quote (restart->pdata[i]);
+	  g_ptr_array_add (restart, NULL);
+	  exec = g_strjoinv (" ", (char **)restart->pdata);
+	  g_strfreev ((char **)restart->pdata);
+	  g_ptr_array_free (restart, FALSE);
+
+	  g_key_file_set_string (state_file, EGG_DESKTOP_FILE_GROUP,
+				 EGG_DESKTOP_FILE_KEY_EXEC,
+				 exec);
+	  g_free (exec);
+
+	}
     }
 
   /* Now write state_file to disk. (We can't use mktemp(), because
@@ -1114,7 +1106,7 @@ set_properties (EggSMClientXSMP *xsmp, ...)
   GPtrArray *props;
   SmProp *prop;
   va_list ap;
-  int i;
+  guint i;
 
   props = g_ptr_array_new ();
 
@@ -1207,7 +1199,7 @@ ptrarray_prop (const char *name, GPtrArray *values)
   SmProp *prop;
   SmPropValue pv;
   GArray *vals;
-  int i;
+  guint i;
 
   prop = g_new (SmProp, 1);
   prop->name = (char *)name;

@@ -187,6 +187,20 @@ sm_client_post_parse_func (GOptionContext  *context,
 {
   EggSMClient *client = egg_sm_client_get ();
 
+  if (sm_client_id == NULL)
+    {
+      const gchar *desktop_autostart_id;
+
+      desktop_autostart_id = g_getenv ("DESKTOP_AUTOSTART_ID");
+
+      if (desktop_autostart_id != NULL)
+        sm_client_id = g_strdup (desktop_autostart_id);
+    }
+
+  /* Unset DESKTOP_AUTOSTART_ID in order to avoid child processes to
+   * use the same client id. */
+  g_unsetenv ("DESKTOP_AUTOSTART_ID");
+
   if (EGG_SM_CLIENT_GET_CLASS (client)->startup)
     EGG_SM_CLIENT_GET_CLASS (client)->startup (client, sm_client_id);
   return TRUE;
@@ -303,16 +317,16 @@ egg_sm_client_get (void)
 #elif defined (GDK_WINDOWING_QUARTZ)
 	  global_client = egg_sm_client_osx_new ();
 #else
-	  /* If both D-Bus and XSMP are compiled in, try D-Bus first
-	   * and fall back to XSMP if D-Bus session management isn't
-	   * available.
+	  /* If both D-Bus and XSMP are compiled in, try XSMP first
+	   * (since it supports state saving) and fall back to D-Bus
+	   * if XSMP isn't available.
 	   */
-# ifdef EGG_SM_CLIENT_BACKEND_DBUS
-	  global_client = egg_sm_client_dbus_new ();
-# endif
 # ifdef EGG_SM_CLIENT_BACKEND_XSMP
+	  global_client = egg_sm_client_xsmp_new ();
+# endif
+# ifdef EGG_SM_CLIENT_BACKEND_DBUS
 	  if (!global_client)
-	    global_client = egg_sm_client_xsmp_new ();
+	    global_client = egg_sm_client_dbus_new ();
 # endif
 #endif
 	}
