@@ -45,6 +45,7 @@
 #ifdef HAVE_GECKO_1_9
 #include <nsIClassInfoImpl.h>
 #include <nsXULAppAPI.h>
+#include <nsToolkitCompsCID.h>
 #endif
 
 #ifdef HAVE_MOZILLA_PSM
@@ -215,6 +216,50 @@ static const nsModuleComponentInfo sAppComps[] = {
 		NS_GLOBALHISTORY2_CONTRACTID,
 		MozGlobalHistoryConstructor
 	},
+#ifdef HAVE_GECKO_1_9
+        /* Somehow, somewhere, nsNavHistory is getting instantiated.
+         * Try to prevent this by registering for all the contracts it does
+         * implement, even those we don't implement. GetService/QI will
+         * simply fail then.
+         */
+	{
+		EPHY_GLOBALHISTORY_CLASSNAME,
+		EPHY_GLOBALHISTORY_CID,
+		NS_NAVHISTORYSERVICE_CONTRACTID,
+		MozGlobalHistoryConstructor
+	},
+	{
+		EPHY_GLOBALHISTORY_CLASSNAME,
+		EPHY_GLOBALHISTORY_CID,
+		"@mozilla.org/autocomplete/search;1?name=history",
+		MozGlobalHistoryConstructor
+	},
+	{
+		EPHY_GLOBALHISTORY_CLASSNAME,
+		EPHY_GLOBALHISTORY_CID,
+		NS_ANNOTATIONSERVICE_CONTRACTID,
+		MozGlobalHistoryConstructor
+	},
+	{
+		EPHY_GLOBALHISTORY_CLASSNAME,
+		EPHY_GLOBALHISTORY_CID,
+		NS_GLOBALHISTORY2_CONTRACTID,
+		MozGlobalHistoryConstructor
+	},
+	{
+		EPHY_GLOBALHISTORY_CLASSNAME,
+		EPHY_GLOBALHISTORY_CID,
+		NS_NAVBOOKMARKSSERVICE_CONTRACTID,
+		MozGlobalHistoryConstructor
+	},
+	{
+		EPHY_GLOBALHISTORY_CLASSNAME,
+		EPHY_GLOBALHISTORY_CID,
+		"@mozilla.org/embeddor.implemented/bookmark-charset-resolver;1",
+		MozGlobalHistoryConstructor
+	},
+
+#endif
 #ifdef HAVE_GECKO_1_9
         {
 		EPHY_GLOBALHISTORY_CLASSNAME,

@@ -23,6 +23,7 @@
 #define EPHY_GLOBAL_HISTORY_H
 
 #ifdef HAVE_GECKO_1_9
+#include <nsToolkitCompsCID.h>
 #include <nsIDownloadHistory.h>
 #endif
 #ifdef HAVE_NSIGLOBALHISTORY3_H
@@ -40,12 +41,17 @@
 
 #define EPHY_GLOBALHISTORY_CLASSNAME	"Epiphany Global History Implementation"
 
+#ifdef HAVE_GECKO_1_9
+/* Just in case anyone gets the service by CID */
+#define EPHY_GLOBALHISTORY_CID NS_NAVHISTORYSERVICE_CID
+#else
 #define EPHY_GLOBALHISTORY_CID					\
 {	0xbe0c42c1,						\
 	0x39d4,							\
 	0x4271,							\
 	{ 0xb7, 0x9e, 0xf7, 0xaa, 0x49, 0xeb, 0x6a, 0x15}	\
 }
+#endif
 
 #ifdef HAVE_NSIGLOBALHISTORY3_H
 class MozGlobalHistory: public nsIGlobalHistory3
