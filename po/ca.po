@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: epiphany 1.10\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2008-08-11 01:07+0200\n"
-"PO-Revision-Date: 2008-08-11 01:08+0200\n"
+"POT-Creation-Date: 2008-10-19 12:03+0200\n"
+"PO-Revision-Date: 2008-10-19 12:04+0200\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: ../data/bme.desktop.in.in.h:1
 msgid "Browse and organize your bookmarks"
-msgstr "Navegueu per les vostres adreces d'interès i organitzeu-les"
+msgstr "Navegueu per les adreces d'interès i organitzeu-les"
 
 #: ../data/bme.desktop.in.in.h:2
 msgid "Epiphany Web Bookmarks"
@@ -71,13 +71,13 @@ msgid ""
 "Disable all historical information by disabling back and forward navigation, "
 "not allowing the history dialog and hiding the most used bookmarks list."
 msgstr ""
-"Inhabilita la informació d'historial inhabilitant la navegació endarrere i "
-"endavant, per no permetre el diàleg d'història i ocultar la llista amb les "
-"adreces d'interès més utilitzades."
+"Inhabilita la informació d'historial: inhabilita la navegació endarrere i "
+"endavant, prohibeix el diàleg d'historial i oculta la llista de les adreces "
+"d'interès més utilitzades."
 
 #: ../data/epiphany-lockdown.schemas.in.h:6
 msgid "Disable arbitrary URLs"
-msgstr "Inhabilita les URL arbitràries"
+msgstr "Inhabilita els URL arbitraris"
 
 #: ../data/epiphany-lockdown.schemas.in.h:7
 msgid "Disable bookmark editing"
@@ -250,7 +250,7 @@ msgstr ""
 
 #: ../data/epiphany.schemas.in.h:18
 msgid "History pages time range"
-msgstr "Intèrval de temps de les pàgines de la història"
+msgstr "Interval de temps de les pàgines de la història"
 
 #: ../data/epiphany.schemas.in.h:19
 msgid "Home page"
@@ -332,8 +332,9 @@ msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
 msgstr ""
-"Mostra les pàgines d'història visitades sempre («ever»), els darrers dos dies "
-"(«last_two_days»), els darrers tres dies («last_three_days»), avui («today»)."
+"Mostra les pàgines de l'historial visitades sempre («ever»), els darrers dos "
+"dies («last_two_days»), els darrers tres dies («last_three_days»), avui "
+"(«today»)."
 
 #: ../data/epiphany.schemas.in.h:35
 msgid "Show the tab bar also when there is only one tab open."
@@ -586,7 +587,7 @@ msgstr "Organització:"
 
 #: ../data/glade/certificate-dialogs.glade.h:15
 msgid "Organizational Unit:"
-msgstr "Unitat organitzacional:"
+msgstr "Unitat organitzativa:"
 
 #: ../data/glade/certificate-dialogs.glade.h:16
 msgid "SHA1 Fingerprint:"
@@ -726,7 +727,8 @@ msgstr "Escolliu un idiom_a:"
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
 #: ../data/glade/prefs-dialog.glade.h:16
-#: ../lib/widgets/ephy-location-entry.c:567 ../src/ephy-history-window.c:249
+#: ../lib/widgets/ephy-location-entry.c:583 ../src/ephy-history-window.c:249
+#: ../src/pdm-dialog.c:336
 msgid "Cl_ear"
 msgstr "N_eteja"
 
@@ -813,7 +815,7 @@ msgstr "_Paràmetres detallats per als tipus de lletra..."
 
 #: ../data/glade/prefs-dialog.glade.h:38
 msgid "_Disk space:"
-msgstr "Espai en _disc:"
+msgstr "Espai al _disc:"
 
 #: ../data/glade/prefs-dialog.glade.h:39
 msgid "_Download folder:"
@@ -889,7 +891,7 @@ msgstr "_Data"
 
 #: ../data/glade/print.glade.h:12
 msgid "_Each frame separately"
-msgstr "_Cada marc separadament"
+msgstr "_Cada marc per separat"
 
 #: ../data/glade/print.glade.h:13
 msgid "_Page address"
@@ -928,7 +930,7 @@ msgid "Download finished"
 msgstr "S'ha finalitzat la baixada"
 
 #: ../embed/downloader-view.c:436 ../src/ephy-main.c:517
-#: ../src/window-commands.c:869
+#: ../src/window-commands.c:868
 msgid "GNOME Web Browser"
 msgstr "Navegador web del GNOME"
 
@@ -1109,7 +1111,7 @@ msgstr "Xinès simplificat (_ISO-2022-CN)"
 
 #: ../embed/ephy-encodings.c:79
 msgid "Chinese Traditional (Big_5)"
-msgstr "Xinès tradicionsl (Big_5)"
+msgstr "Xinès tradicional (Big_5)"
 
 #: ../embed/ephy-encodings.c:80
 msgid "Chinese Traditional (Big5-HK_SCS)"
@@ -1437,17 +1439,17 @@ msgstr "Desa"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/mozilla/ContentHandler.cpp:276
+#: ../embed/mozilla/ContentHandler.cpp:280
 msgid "File Type:|Unknown"
 msgstr "Desconegut"
 
-#: ../embed/mozilla/ContentHandler.cpp:292
+#: ../embed/mozilla/ContentHandler.cpp:296
 msgid "Download this potentially unsafe file?"
 msgstr "Voleu baixar aquest fitxer potencialment insegur?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:298
+#: ../embed/mozilla/ContentHandler.cpp:302
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1460,14 +1462,14 @@ msgstr ""
 "No és segur obrir el fitxer «%s» ja que podria fer malbé els vostres "
 "documents o envair la vostra privadesa. En canvi, el podeu baixar."
 
-#: ../embed/mozilla/ContentHandler.cpp:308
+#: ../embed/mozilla/ContentHandler.cpp:312
 msgid "Open this file?"
 msgstr "Voleu obrir aquest fitxer?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name,
 #. Third %s is the application used to open the file
-#: ../embed/mozilla/ContentHandler.cpp:315
+#: ../embed/mozilla/ContentHandler.cpp:319
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1478,13 +1480,13 @@ msgstr ""
 "\n"
 "Podeu obrir «%s» fent servir «%s» o bé desar-lo."
 
-#: ../embed/mozilla/ContentHandler.cpp:323
+#: ../embed/mozilla/ContentHandler.cpp:327
 msgid "Download this file?"
 msgstr "Voleu baixar el fitxer?"
 
 #. translators: First %s is the file type description,
 #. Second %s is the file name
-#: ../embed/mozilla/ContentHandler.cpp:329
+#: ../embed/mozilla/ContentHandler.cpp:333
 #, c-format
 msgid ""
 "File Type: “%s”.\n"
@@ -1495,7 +1497,7 @@ msgstr ""
 "\n"
 "No teniu cap aplicació per a obrir «%s». En canvi, podeu baixar-lo."
 
-#: ../embed/mozilla/ContentHandler.cpp:336
+#: ../embed/mozilla/ContentHandler.cpp:340
 msgid "_Save As..."
 msgstr "Anomena i de_sa..."
 
@@ -2341,18 +2343,6 @@ msgstr ""
 "S'ha produït un error del Gconf:\n"
 "  %s"
 
-#: ../lib/egg/eel-app-launch-context.c:402
-#, c-format
-msgid "Opening %s"
-msgstr "S'està obrint %s"
-
-#: ../lib/egg/eel-app-launch-context.c:405
-#, c-format
-msgid "Opening %d Item"
-msgid_plural "Opening %d Items"
-msgstr[0] "S'està obrint %d element"
-msgstr[1] "S'estan obrint %d elements"
-
 #. Translaters: This string is for a toggle to display a toolbar.
 #. * The name of the toolbar is automatically computed from the widgets
 #. * on the toolbar, and is placed at the %s. Note the _ before the %s
@@ -2728,7 +2718,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:852
+#: ../lib/widgets/ephy-location-entry.c:868
 msgid "Drag and drop this icon to create a link to this page"
 msgstr ""
 "Arrossegueu i deixeu anar aquesta icona per a crear un enllaç a aquesta "
@@ -3342,7 +3332,7 @@ msgstr "Cerca l'anterior"
 
 #: ../src/ephy-find-toolbar.c:460
 msgid "Find previous occurrence of the search string"
-msgstr "Troba l'anterior aparició de la cadena a cercar"
+msgstr "Troba l'anterior aparició de la cadena que s'ha de cercar"
 
 #: ../src/ephy-find-toolbar.c:466
 msgid "Find Next"
@@ -3350,7 +3340,7 @@ msgstr "Cerca la següent"
 
 #: ../src/ephy-find-toolbar.c:469
 msgid "Find next occurrence of the search string"
-msgstr "Troba la següent aparició de la cadena a cercar"
+msgstr "Troba la següent aparició de la cadena que s'ha de cercar"
 
 #. exit button
 #: ../src/ephy-fullscreen-popup.c:264 ../src/ephy-toolbar.c:595
@@ -3500,7 +3490,7 @@ msgstr "Inicia una instància privada"
 
 #: ../src/ephy-main.c:92
 msgid "Profile directory to use in the private instance"
-msgstr "Perfil de directori a utilitzar en la instància privada"
+msgstr "Directori de perfil que s'ha d'utilitzar en la instància privada"
 
 #: ../src/ephy-main.c:92
 msgid "DIR"
@@ -3520,7 +3510,7 @@ msgid ""
 "Startup failed because of the following error:\n"
 "%s"
 msgstr ""
-"No s'ha pogut iniciar degut al següent error:\n"
+"No s'ha pogut iniciar degut a l'error següent:\n"
 "%s"
 
 #: ../src/ephy-main.c:518
@@ -3980,7 +3970,8 @@ msgstr "_Ubicació..."
 msgid "Go to a specified location"
 msgstr "Vés a una ubicació especificada"
 
-#: ../src/ephy-window.c:239
+#. History
+#: ../src/ephy-window.c:239 ../src/pdm-dialog.c:380
 msgid "Hi_story"
 msgstr "Hi_storial"
 
@@ -4177,11 +4168,11 @@ msgstr "Si de totes maneres tanqueu el document, perdreu aquesta informació."
 msgid "Close _Document"
 msgstr "Tanca el _document"
 
-#: ../src/ephy-window.c:1472 ../src/window-commands.c:275
+#: ../src/ephy-window.c:1472 ../src/window-commands.c:274
 msgid "Open"
 msgstr "Obre"
 
-#: ../src/ephy-window.c:1474 ../src/window-commands.c:301
+#: ../src/ephy-window.c:1474 ../src/window-commands.c:300
 msgid "Save As"
 msgstr "Anomena i desa"
 
@@ -4276,101 +4267,96 @@ msgstr "Afegeix l'enllaç «%s» a les adreces d'interès"
 msgid "Copy link's address “%s”"
 msgstr "Copia l'adreça de l'enllaç «%s»"
 
-#: ../src/pdm-dialog.c:316
+#: ../src/pdm-dialog.c:317
 msgid "<b>Select the personal data you want to clear</b>"
 msgstr "<b>Seleccioneu les dades personals que voleu netejar</b>"
 
-#: ../src/pdm-dialog.c:319
+#: ../src/pdm-dialog.c:320
 msgid ""
 "You are about to clear personal data that is stored about the web pages you "
 "have visited. Before proceeding, check the types of information that you "
 "want to remove:"
 msgstr ""
-"Esteu apunt de netejar les dades personals emmagatzemades sobre les pàgines "
+"Esteu a punt de netejar les dades personals emmagatzemades sobre les pàgines "
 "web que heu visitat. Abans de continuar, marqueu els tipus d'informació que "
 "voleu suprimir:"
 
-#: ../src/pdm-dialog.c:324
+#: ../src/pdm-dialog.c:325
 msgid "Clear All Personal Data"
 msgstr "Neteja totes les dades personals"
 
 #. Cookies
-#: ../src/pdm-dialog.c:347
+#: ../src/pdm-dialog.c:356
 msgid "C_ookies"
 msgstr "_Galetes"
 
 #. Passwords
-#: ../src/pdm-dialog.c:359
+#: ../src/pdm-dialog.c:368
 msgid "Saved _passwords"
 msgstr "_Contrasenyes desades"
 
-#. History
-#: ../src/pdm-dialog.c:371
-msgid "_History"
-msgstr "_Historial"
-
 #. Cache
-#: ../src/pdm-dialog.c:383
+#: ../src/pdm-dialog.c:392
 msgid "_Temporary files"
 msgstr "_Fitxers temporals"
 
-#: ../src/pdm-dialog.c:399
+#: ../src/pdm-dialog.c:408
 msgid ""
 "<small><i><b>Note:</b> You cannot undo this action. The data you are "
 "choosing to clear will be deleted forever.</i></small>"
 msgstr ""
 "<small><i><b>Nota:</b> No podeu desfer aquesta acció. Les dades que heu "
-"escollit seràn suprimides per sempre.</i></small>"
+"escollit se suprimiran per sempre.</i></small>"
 
-#: ../src/pdm-dialog.c:595
+#: ../src/pdm-dialog.c:604
 msgid "Cookie Properties"
 msgstr "Propietats de la galeta"
 
-#: ../src/pdm-dialog.c:612
+#: ../src/pdm-dialog.c:621
 msgid "Content:"
 msgstr "Contingut:"
 
-#: ../src/pdm-dialog.c:628
+#: ../src/pdm-dialog.c:637
 msgid "Path:"
 msgstr "Camí:"
 
-#: ../src/pdm-dialog.c:644
+#: ../src/pdm-dialog.c:653
 msgid "Send for:"
 msgstr "Envia a:"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:662
 msgid "Encrypted connections only"
 msgstr "Només connexions xifrades"
 
-#: ../src/pdm-dialog.c:653
+#: ../src/pdm-dialog.c:662
 msgid "Any type of connection"
 msgstr "Qualsevol tipus de connexió"
 
-#: ../src/pdm-dialog.c:659
+#: ../src/pdm-dialog.c:668
 msgid "Expires:"
 msgstr "Caduca:"
 
-#: ../src/pdm-dialog.c:670
+#: ../src/pdm-dialog.c:679
 msgid "End of current session"
 msgstr "Fi de la sessió actual"
 
-#: ../src/pdm-dialog.c:804
+#: ../src/pdm-dialog.c:813
 msgid "Domain"
 msgstr "Domini"
 
-#: ../src/pdm-dialog.c:816
+#: ../src/pdm-dialog.c:825
 msgid "Name"
 msgstr "Nom"
 
-#: ../src/pdm-dialog.c:1215
+#: ../src/pdm-dialog.c:1224
 msgid "Host"
 msgstr "Ordinador"
 
-#: ../src/pdm-dialog.c:1227
+#: ../src/pdm-dialog.c:1236
 msgid "User Name"
 msgstr "Nom d'usuari"
 
-#: ../src/pdm-dialog.c:1239
+#: ../src/pdm-dialog.c:1248
 msgid "User Password"
 msgstr "Contrasenya de l'usuari"
 
@@ -4464,7 +4450,7 @@ msgstr[1] "Llengües del sistema (%s)"
 msgid "Select a Directory"
 msgstr "Seleccioneu un directori"
 
-#: ../src/window-commands.c:764
+#: ../src/window-commands.c:763
 msgid ""
 "The GNOME Web Browser is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU General Public License as published by "
@@ -4472,11 +4458,11 @@ msgid ""
 "option) any later version."
 msgstr ""
 "El navegador web del GNOME és programari lliure; podeu redistribuir-lo i/o "
-"modificar-lo sota els termes de la Llicència Pública General GNU tal i com "
-"ha estat publicada per la Free Software Foundation; ja sigui la versió 2 de "
-"la Llicència o bé (si ho preferiu) qualsevol altra versió posterior."
+"modificar-lo sota els termes de la Llicència Pública General GNU tal com ha "
+"estat publicada per la Free Software Foundation, ja sigui la versió 2 de la "
+"Llicència o bé (si ho preferiu) qualsevol altra versió posterior."
 
-#: ../src/window-commands.c:768
+#: ../src/window-commands.c:767
 msgid ""
 "The GNOME Web Browser is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -4485,34 +4471,34 @@ msgid ""
 msgstr ""
 "El navegador web del GNOME es distribueix amb l'expectativa que serà útil, "
 "però SENSE CAP GARANTIA; ni tan sols la garantia implícita de "
-"COMERCIABILITAT o ADEQUACIÓ PER UN PROPÒSIT PARTICULAR. Vegeu la Llicència "
+"COMERCIABILITAT o ADEQUACIÓ PER A UN PROPÒSIT PARTICULAR. Vegeu la Llicència "
 "Pública General GNU per obtenir-ne més detalls."
 
-#: ../src/window-commands.c:772
+#: ../src/window-commands.c:771
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
 "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 msgstr ""
-"Hauríeu d'haver rebut una còpia de la Llicència Pública General GNU untament "
-"amb el navegador del GNOME; en cas contrari, escriviu a la Free "
+"Hauríeu d'haver rebut una còpia de la Llicència Pública General GNU "
+"juntament amb el navegador del GNOME; en cas contrari, escriviu a la Free "
 "SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-"
 "1301 USA"
 
-#: ../src/window-commands.c:820 ../src/window-commands.c:836
-#: ../src/window-commands.c:847
+#: ../src/window-commands.c:819 ../src/window-commands.c:835
+#: ../src/window-commands.c:846
 msgid "Contact us at:"
 msgstr "Contacteu-nos a:"
 
-#: ../src/window-commands.c:823
+#: ../src/window-commands.c:822
 msgid "Contributors:"
 msgstr "Col·laboradors:"
 
-#: ../src/window-commands.c:826
+#: ../src/window-commands.c:825
 msgid "Past developers:"
 msgstr "Antics desenvolupadors:"
 
-#: ../src/window-commands.c:859
+#: ../src/window-commands.c:858
 #, c-format
 msgid ""
 "Lets you view web pages and find information on the internet.\n"
@@ -4529,7 +4515,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:885
+#: ../src/window-commands.c:884
 msgid "translator-credits"
 msgstr ""
 "Francesc Dorca <f.dorca@filnet.es>\n"
@@ -4537,9 +4523,26 @@ msgstr ""
 "Xavier Conde Rueda <xavi.conde@gmail.com>\n"
 "Gil Forcada <gilforcada@guifi.net>"
 
-#: ../src/window-commands.c:888
+#: ../src/window-commands.c:887
 msgid "GNOME Web Browser Website"
 msgstr "Pàgina web del navegador web del GNOME"
+
+#~ msgid "_Detach Tab"
+#~ msgstr "_Separa la pestanya"
+
+#~ msgid "Detach current tab"
+#~ msgstr "Separa la pestanya actual"
+
+#~ msgid "Opening %s"
+#~ msgstr "S'està obrint %s"
+
+#~ msgid "Opening %d Item"
+#~ msgid_plural "Opening %d Items"
+#~ msgstr[0] "S'està obrint %d element"
+#~ msgstr[1] "S'estan obrint %d elements"
+
+#~ msgid "_History"
+#~ msgstr "_Historial"
 
 #~ msgid ""
 #~ "The page “%s” in this tab was not fully loaded yet when the web browser "
@@ -4665,12 +4668,6 @@ msgstr "Pàgina web del navegador web del GNOME"
 
 #~ msgid "Pages"
 #~ msgstr "Pàgines"
-
-#~ msgid "_Detach Tab"
-#~ msgstr "_Separa la pestanya"
-
-#~ msgid "Detach current tab"
-#~ msgstr "Separa la pestanya actual"
 
 #~ msgid "Using “%s” backend"
 #~ msgstr "S'està fent servir \"%s\""
