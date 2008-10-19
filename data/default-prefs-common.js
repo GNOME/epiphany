@@ -171,3 +171,27 @@ pref("dom.disable_window_flip", true);
 // set to true for parity with gtk entries
 pref("bidi.edit.delete_immediately", true);
 
+// FUCK YOU, nsNavHistory
+pref("places.frecency.updateIdleTime", 0);
+pref("places.frecency.numVisits", 0);
+pref("places.frecency.numCalcOnIdle", 0);
+pref("places.frecency.numCalcOnMigrate", 0);
+pref("places.frecency.firstBucketCutoff", 0);
+pref("places.frecency.secondBucketCutoff", 0);
+pref("places.frecency.thirdBucketCutoff", 0);
+pref("places.frecency.fourthBucketCutoff", 0);
+pref("places.frecency.firstBucketWeight", 0);
+pref("places.frecency.secondBucketWeight", 0);
+pref("places.frecency.thirdBucketWeight", 0);
+pref("places.frecency.fourthBucketWeight", 0);
+pref("places.frecency.defaultBucketWeight", 0);
+pref("places.frecency.embedVisitBonus", 0);
+pref("places.frecency.linkVisitBonus", 0);
+pref("places.frecency.typedVisitBonus", 0);
+pref("places.frecency.bookmarkVisitBonus", 0);
+pref("places.frecency.downloadVisitBonus", 0);
+pref("places.frecency.permRedirectVisitBonus", 0);
+pref("places.frecency.tempRedirectVisitBonus", 0);
+pref("places.frecency.defaultVisitBonus", 0);
+pref("places.frecency.unvisitedBookmarkBonus", 0);
+pref("places.frecency.unvisitedTypedBonus", 0);
