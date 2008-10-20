@@ -208,6 +208,7 @@ public:
 	nsCOMPtr<nsIWebBrowser> mWebBrowser;
 private:
 	GtkWidget *mEmbed;
+	float mZoom;
 
 	nsCOMPtr<nsIWebBrowserFocus> mWebBrowserFocus;
 	nsCOMPtr<nsIDOMDocument> mTargetDocument;

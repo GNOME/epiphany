@@ -830,6 +830,7 @@ EphyBrowser::EphyBrowser ()
 #endif
 , mContextMenuListener(nsnull)
 , mInitialized(PR_FALSE)
+, mZoom(0.0)
 {
 	LOG ("EphyBrowser ctor (%p)", this);
 }
@@ -1192,7 +1193,9 @@ nsresult EphyBrowser::SetZoom (float aZoom)
 	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
 	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
 
-	return mdv->SetTextZoom (aZoom);
+	nsresult rv = mdv->SetTextZoom (aZoom);
+	mZoom = aZoom;
+	return rv;
 }
 
 nsresult EphyBrowser::GetContentViewer (nsIContentViewer **aViewer)
@@ -1207,6 +1210,10 @@ nsresult EphyBrowser::GetContentViewer (nsIContentViewer **aViewer)
 
 nsresult EphyBrowser::GetZoom (float *aZoom)
 {
+	if (mZoom != 0) {
+		*aZoom = mZoom;
+		return NS_OK;
+	}
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIContentViewer> contentViewer;	
@@ -1216,7 +1223,9 @@ nsresult EphyBrowser::GetZoom (float *aZoom)
 	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
 	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
 
-	return mdv->GetTextZoom (aZoom);
+	nsresult rv = mdv->GetTextZoom (aZoom);
+	mZoom = *aZoom;
+	return rv;
 }
 
 nsresult
