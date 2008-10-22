@@ -62,7 +62,11 @@
 #define CONF_PRINT_PAGE_TITLE           "/apps/epiphany/dialogs/print_page_title"
 #define CONF_PRINT_PAGE_URL             "/apps/epiphany/dialogs/print_page_url"
 
+#ifdef HAVE_GECKO_1_9
+#define LITERAL(s) NS_ConvertUTF8toUTF16(s).get()
+#else
 #define LITERAL(s) reinterpret_cast<const nsAString::char_type*>(NS_L(s))
+#endif
 
 /* From nsIDeviceContext.h */
 #define NS_ERROR_GFX_PRINTER_BASE (1) /* adjustable :-) */
