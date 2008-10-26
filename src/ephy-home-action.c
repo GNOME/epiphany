@@ -233,11 +233,11 @@ static void
 connect_proxy (GtkAction *action,
 	       GtkWidget *proxy)
 {      
-	gchar *action_name;
+	const gchar *action_name;
 	
 	GTK_ACTION_CLASS (ephy_home_action_parent_class)->connect_proxy (action, proxy);
 	
-	 g_object_get (action, "name", &action_name, NULL);
+	action_name = gtk_action_get_name (action);
 
 	if (GTK_IS_TOOL_ITEM (proxy) && (strcmp (action_name, "GoHome") != 0))
 	{
