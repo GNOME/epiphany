@@ -17,8 +17,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
+
 #include <string.h>
 #include <gtk/gtk.h>
+
 #include "eggtreemultidnd.h"
 
 #define EGG_TREE_MULTI_DND_STRING "EggTreeMultiDndString"
@@ -56,7 +59,7 @@ egg_tree_multi_drag_source_get_type (void)
 
   if (!our_type)
     {
-      const GTypeInfo our_info =
+      static const GTypeInfo our_info =
       {
         sizeof (EggTreeMultiDragSourceIface), /* class_size */
 	NULL,		/* base_init */
@@ -315,7 +318,11 @@ egg_tree_multi_drag_motion_event (GtkWidget      *widget,
 	{
 
 	  context = gtk_drag_begin (widget,
+#if GTK_CHECK_VERSION (2, 14, 0)
+                                    gtk_drag_source_get_target_list (widget),
+#else
 				    di->source_target_list,
+#endif
 				    di->source_actions,
 				    priv_data->pressed_button,
 				    (GdkEvent*)event);
