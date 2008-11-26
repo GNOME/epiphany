@@ -22,8 +22,7 @@
 #define EGG_TOOLBARS_MODEL_H
 
 #include <glib.h>
-#include <glib-object.h>
-#include <gdk/gdktypes.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 

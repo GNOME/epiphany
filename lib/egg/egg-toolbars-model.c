@@ -28,7 +28,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <libxml/tree.h>
-#include <gdk/gdkproperty.h>
+#include <gdk/gdk.h>
 
 static void egg_toolbars_model_finalize   (GObject               *object);
 
