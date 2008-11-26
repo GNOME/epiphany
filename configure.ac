@@ -18,7 +18,7 @@
 m4_define([epiphany_version_major],[2])
 m4_define([epiphany_version_minor],[24])
 m4_define([epiphany_version_micro],[2])
-m4_define([epiphany_version_extra],[])
+m4_define([epiphany_version_extra],[.1])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro()epiphany_version_extra])
 m4_define([epiphany_build_id],[20080528]) # The date of the 2.22.2 release
 
@@ -505,31 +505,6 @@ if test "$have_python" != "no"; then
 	AC_SUBST([PYTHON_LIB_LOC])
 	AC_SUBST([PYTHON_CFLAGS])
 	AC_SUBST([PYTHON_EXTRA_LIBS])
-
-	# FIXME: do we really need this test?
-	AC_MSG_CHECKING([whether we can build a shared library depending on libpython])
-	rm -rf testpython
-	mkdir testpython
-	cd testpython
-	cat > testpython.c <<EOF
-#include <Python.h>
-int testpython (void)
-{
-Py_Exit (0);
-}
-EOF
-
-	if /bin/sh ../libtool --mode=compile ${CC} $PYTHON_CFLAGS -c testpython.c >/dev/null 2>&1 && \
-		/bin/sh ../libtool --mode=link ${CC} -o testpython.la -rpath `pwd` -module -avoid-version $PYTHON_LIB_LOC testpython.lo $PYTHON_LIBS $PYTHON_EXTRA_LIBS >/dev/null 2>&1 && \
-		grep 'dlname.*testpython' testpython.la >/dev/null 2>&1; then
-		result=yes
-	else
-		result=no
-		have_python=no
-	fi
-	cd ..
-	rm -rf testpython
-	AC_MSG_RESULT([$result])
 fi
 
 if test "$have_python" != "no"; then
