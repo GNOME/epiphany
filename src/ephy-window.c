@@ -2407,6 +2407,46 @@ ephy_window_visibility_cb (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *wind
 		gtk_widget_hide (GTK_WIDGET (window));
 }
 
+static gboolean
+web_view_ready_cb (WebKitWebView *web_view,
+		   EphyEmbed *embed)
+{
+	WebKitWebWindowFeatures *features;
+	GtkWidget *window;
+	int width, height;
+
+	window = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
+	features = webkit_web_view_get_window_features (web_view);
+	/* FIXME: apply all features when appropriate */
+	g_object_get (features,
+		      "width", &width,
+		      "height", &height,
+		      NULL);
+
+	gtk_window_set_default_size (GTK_WINDOW (window), width, height);
+	gtk_widget_show (window);
+
+	return TRUE;
+}
+
+static WebKitWebView*
+create_web_view_cb (WebKitWebView *web_view,
+		    WebKitWebFrame *frame,
+		    EphyWindow *window)
+{
+	EphyEmbed *embed;
+
+	embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
+					 NULL, NULL, NULL,
+					 EPHY_NEW_TAB_IN_NEW_WINDOW |
+					 EPHY_NEW_TAB_DONT_SHOW_WINDOW, 
+					 EPHY_EMBED_CHROME_ALL,
+					 FALSE,
+					 0);
+
+	return EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+}
+
 static void
 ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 {
@@ -2433,6 +2473,12 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		g_signal_handlers_disconnect_by_func (web_view,
 						      G_CALLBACK (scroll_event_cb),
 						      window);
+		g_signal_handlers_disconnect_by_func (web_view,
+						      G_CALLBACK (create_web_view_cb),
+						      window);
+		g_signal_handlers_disconnect_by_func (web_view,
+						      G_CALLBACK (web_view_ready_cb),
+						      NULL);
 
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (sync_tab_popup_windows),
@@ -2514,6 +2560,12 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		g_signal_connect_object (web_view, "scroll-event",
 					 G_CALLBACK (scroll_event_cb),
 					 window, 0);
+		g_signal_connect_object (web_view, "create-web-view",
+					 G_CALLBACK (create_web_view_cb),
+					 window, 0);
+		g_signal_connect_object (web_view, "web-view-ready",
+					 G_CALLBACK (web_view_ready_cb),
+					 NULL, 0);
 
 		g_signal_connect_object (embed, "notify::hidden-popup-count",
 					 G_CALLBACK (sync_tab_popup_windows),
