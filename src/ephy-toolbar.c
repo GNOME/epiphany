@@ -500,18 +500,6 @@ ephy_toolbar_set_zoom (EphyToolbar *toolbar,
 /* Class implementation */
 
 static void
-ephy_toolbar_realize (GtkWidget *widget)
-{
-	GTK_WIDGET_CLASS (ephy_toolbar_parent_class)->realize (widget);
-}
-
-static void
-ephy_toolbar_unrealize (GtkWidget *widget)
-{
-	GTK_WIDGET_CLASS (ephy_toolbar_parent_class)->unrealize (widget);
-}
-
-static void
 ephy_toolbar_init (EphyToolbar *toolbar)
 {
 	EphyToolbarPrivate *priv;
@@ -599,15 +587,11 @@ static void
 ephy_toolbar_class_init (EphyToolbarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	object_class->constructor = ephy_toolbar_constructor;
 	object_class->finalize = ephy_toolbar_finalize;
 	object_class->set_property = ephy_toolbar_set_property;
 	object_class->get_property = ephy_toolbar_get_property;
-
-	widget_class->realize = ephy_toolbar_realize;
-	widget_class->unrealize = ephy_toolbar_unrealize;
 
 	signals[ACTIVATION_FINISHED] =
 		g_signal_new ("activation-finished",
