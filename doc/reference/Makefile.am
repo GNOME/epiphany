@@ -47,7 +47,6 @@ IGNORE_HFILES = \
 	ephy-tree-model-node.h \
 	ephy-tree-model-sort.h \
 	ephy-zoom-action.h \
-	ephy-zoom-control.h \
 	downloader-view.h \
 	ephy-download.h \
 	ephy-embed-dialog.h \

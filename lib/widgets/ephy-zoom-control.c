@@ -242,6 +242,14 @@ ephy_zoom_control_finalize (GObject *o)
 	G_OBJECT_CLASS (parent_class)->finalize (o);
 }
 
+/**
+ * ephy_zoom_control_set_zoom_level:
+ * @control: an #EphyZoomControl
+ * @zoom: the new value for the zoom level
+ *
+ * Sets the zoom level of @control.
+ *
+ **/
 void
 ephy_zoom_control_set_zoom_level (EphyZoomControl *control, float zoom)
 {
@@ -253,6 +261,15 @@ ephy_zoom_control_set_zoom_level (EphyZoomControl *control, float zoom)
 	g_object_notify (G_OBJECT (control), "zoom");
 }
 
+/**
+ * ephy_zoom_control_get_zoom_level:
+ * @control: an #EphyZoomControl
+ *
+ * Get the current zoom level of @control.
+ *
+ * Returns: the zoom level as a float
+ *
+ **/
 float
 ephy_zoom_control_get_zoom_level (EphyZoomControl *control)
 {
