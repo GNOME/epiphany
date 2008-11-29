@@ -1,7 +1,8 @@
 noinst_PROGRAMS = \
 	testephysearchentry \
 	testephylocationentry \
-	testephyiconentry
+	testephyiconentry \
+	testephyzoomcontrol
 
 INCLUDES = \
 	-I$(top_srcdir)/lib		 \
@@ -34,3 +35,10 @@ testephylocationentry_LDADD = \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(top_builddir)/lib/libephymisc.la \
 	$(DEPENDENCIES_LIBS) 
+
+testephyzoomcontrol_SOURCES = \
+	testephyzoomcontrol.c
+testephyzoomcontrol_LDADD = \
+	$(top_builddir)/lib/widgets/libephywidgets.la \
+	$(top_builddir)/lib/libephymisc.la \
+	$(DEPENDENCIES_LIBS)
