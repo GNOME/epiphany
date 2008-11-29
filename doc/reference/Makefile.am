@@ -43,7 +43,6 @@ IGNORE_HFILES = \
 	ephy-string.h \
 	ephy-zoom.h \
 	ephy-node-view.h \
-	ephy-spinner.h \
 	ephy-tree-model-node.h \
 	ephy-tree-model-sort.h \
 	ephy-zoom-action.h \
