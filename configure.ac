@@ -102,7 +102,7 @@ if test "$enable_maintainer_mode" = "yes"; then
 fi
 
 GLIB_REQUIRED=2.16.0
-GTK_REQUIRED=2.13.5
+GTK_REQUIRED=2.14.0
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
 LIBGLADE_REQUIRED=2.3.1
@@ -120,6 +120,16 @@ if test "$have_libnotify" = "yes"; then
   LIBNOTIFY_PACKAGE="libnotify >= $LIBNOTIFY_REQUIRED"
   AC_DEFINE([HAVE_LIBNOTIFY],[1],[Define if libnotify is available])
 fi
+
+# Tests
+
+AC_MSG_CHECKING([whether to build tests])
+AC_ARG_ENABLE([tests],
+	AS_HELP_STRING([--enable-tests],[Wheter to build tests (default: yes)]),
+	[], [enable_tests=yes])
+AC_MSG_RESULT([$enable_tests])
+
+AM_CONDITIONAL([ENABLE_TESTS],[test "$enable_tests" = "yes"])
 
 PKG_CHECK_MODULES([DEPENDENCIES], [
 		  glib-2.0 >= $GLIB_REQUIRED
@@ -554,4 +564,5 @@ Epiphany was configured with the following options:
  	Zeroconf bookmarks support : $enable_zeroconf
  	NetworkManager support     : $enable_network_manager
  	Python support             : $enable_python
+ 	Build tests                : $enable_tests
 "
