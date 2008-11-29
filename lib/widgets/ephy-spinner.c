@@ -700,35 +700,6 @@ bump_spinner_frame_cb (EphySpinner *spinner)
 	return TRUE;
 }
 
-/**
- * ephy_spinner_start:
- * @spinner: a #EphySpinner
- *
- * Start the spinner animation.
- **/
-void
-ephy_spinner_start (EphySpinner *spinner)
-{
-	EphySpinnerDetails *details = spinner->details;
-
-	details->spinning = TRUE;
-
-	if (GTK_WIDGET_MAPPED (GTK_WIDGET (spinner)) &&
-	    details->timer_task == 0 &&
-	    ephy_spinner_load_images (spinner))
-	{
-		/* the 0th frame is the 'rest' icon */
-		details->current_image = MIN (1, details->images->n_animation_pixbufs);
-
-		details->timer_task =
-			g_timeout_add_full (G_PRIORITY_LOW,
-			                    details->timeout,
-				            (GSourceFunc) bump_spinner_frame_cb,
-				            spinner,
-				            NULL);
-	}
-}
-
 static void
 ephy_spinner_remove_update_callback (EphySpinner *spinner)
 {
@@ -738,57 +709,6 @@ ephy_spinner_remove_update_callback (EphySpinner *spinner)
 	{
 		g_source_remove (details->timer_task);
 		details->timer_task = 0;
-	}
-}
-
-/**
- * ephy_spinner_stop:
- * @spinner: a #EphySpinner
- *
- * Stop the spinner animation.
- **/
-void
-ephy_spinner_stop (EphySpinner *spinner)
-{
-	EphySpinnerDetails *details = spinner->details;
-
-	details->spinning = FALSE;
-	details->current_image = 0;
-
-	if (details->timer_task != 0)
-	{
-		ephy_spinner_remove_update_callback (spinner);
-
-		if (GTK_WIDGET_MAPPED (GTK_WIDGET (spinner)))
-		{
-			gtk_widget_queue_draw (GTK_WIDGET (spinner));
-		}
-	}
-}
-
-/*
- * ephy_spinner_set_size:
- * @spinner: a #EphySpinner
- * @size: the size of type %GtkIconSize
- *
- * Set the size of the spinner.
- **/
-void
-ephy_spinner_set_size (EphySpinner *spinner,
-		       GtkIconSize size)
-{
-	if (size == GTK_ICON_SIZE_INVALID)
-	{
-		size = GTK_ICON_SIZE_DIALOG;
-	}
-
-	if (size != spinner->details->size)
-	{
-		ephy_spinner_unload_images (spinner);
-
-		spinner->details->size = size;
-
-		gtk_widget_queue_resize (GTK_WIDGET (spinner));
 	}
 }
 
@@ -957,14 +877,97 @@ ephy_spinner_class_init (EphySpinnerClass *class)
 	g_type_class_add_private (object_class, sizeof (EphySpinnerDetails));
 }
 
-/*
+/**
+ * ephy_spinner_start:
+ * @spinner: an #EphySpinner
+ *
+ * Starts the spinner animation.
+ **/
+void
+ephy_spinner_start (EphySpinner *spinner)
+{
+	EphySpinnerDetails *details = spinner->details;
+
+	details->spinning = TRUE;
+
+	if (GTK_WIDGET_MAPPED (GTK_WIDGET (spinner)) &&
+	    details->timer_task == 0 &&
+	    ephy_spinner_load_images (spinner))
+	{
+		/* the 0th frame is the 'rest' icon */
+		details->current_image = MIN (1, details->images->n_animation_pixbufs);
+
+		details->timer_task =
+			g_timeout_add_full (G_PRIORITY_LOW,
+			                    details->timeout,
+				            (GSourceFunc) bump_spinner_frame_cb,
+				            spinner,
+				            NULL);
+	}
+}
+
+/**
+ * ephy_spinner_stop:
+ * @spinner: an #EphySpinner
+ *
+ * Stops the spinner animation.
+ *
+ **/
+void
+ephy_spinner_stop (EphySpinner *spinner)
+{
+	EphySpinnerDetails *details = spinner->details;
+
+	details->spinning = FALSE;
+	details->current_image = 0;
+
+	if (details->timer_task != 0)
+	{
+		ephy_spinner_remove_update_callback (spinner);
+
+		if (GTK_WIDGET_MAPPED (GTK_WIDGET (spinner)))
+		{
+			gtk_widget_queue_draw (GTK_WIDGET (spinner));
+		}
+	}
+}
+
+/**
+ * ephy_spinner_set_size:
+ * @spinner: an #EphySpinner
+ * @size: a new size for the spinner, as a #GtkIconSize
+ *
+ * Set the size of the spinner to @size.
+ *
+ **/
+void
+ephy_spinner_set_size (EphySpinner *spinner,
+		       GtkIconSize size)
+{
+	if (size == GTK_ICON_SIZE_INVALID)
+	{
+		size = GTK_ICON_SIZE_DIALOG;
+	}
+
+	if (size != spinner->details->size)
+	{
+		ephy_spinner_unload_images (spinner);
+
+		spinner->details->size = size;
+
+		gtk_widget_queue_resize (GTK_WIDGET (spinner));
+	}
+}
+
+/**
  * ephy_spinner_new:
  *
- * Create a new #EphySpinner. The spinner is a widget
+ * Creates a new #EphySpinner. The spinner is a widget
  * that gives the user feedback about network status with
  * an animated image.
  *
- * Return Value: the spinner #GtkWidget
+ * Returns: the spinner #GtkWidget
+ *
  **/
 GtkWidget *
 ephy_spinner_new (void)
