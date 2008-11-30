@@ -2435,6 +2435,7 @@ create_web_view_cb (WebKitWebView *web_view,
 		    EphyWindow *window)
 {
 	EphyEmbed *embed;
+	WebKitWebView *new_web_view;
 
 	embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
 					 NULL, NULL, NULL,
@@ -2444,7 +2445,12 @@ create_web_view_cb (WebKitWebView *web_view,
 					 FALSE,
 					 0);
 
-	return EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	new_web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	g_signal_connect_object (new_web_view, "web-view-ready",
+				 G_CALLBACK (web_view_ready_cb),
+				 NULL, 0);
+
+	return new_web_view;
 }
 
 static void
@@ -2476,9 +2482,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		g_signal_handlers_disconnect_by_func (web_view,
 						      G_CALLBACK (create_web_view_cb),
 						      window);
-		g_signal_handlers_disconnect_by_func (web_view,
-						      G_CALLBACK (web_view_ready_cb),
-						      NULL);
 
 		g_signal_handlers_disconnect_by_func (embed,
 						      G_CALLBACK (sync_tab_popup_windows),
@@ -2563,9 +2566,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		g_signal_connect_object (web_view, "create-web-view",
 					 G_CALLBACK (create_web_view_cb),
 					 window, 0);
-		g_signal_connect_object (web_view, "web-view-ready",
-					 G_CALLBACK (web_view_ready_cb),
-					 NULL, 0);
 
 		g_signal_connect_object (embed, "notify::hidden-popup-count",
 					 G_CALLBACK (sync_tab_popup_windows),
