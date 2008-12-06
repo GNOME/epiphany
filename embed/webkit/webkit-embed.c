@@ -176,12 +176,12 @@ restore_zoom_level (WebKitEmbed *embed,
 
     web_view = priv->web_view;
 
-    g_object_get (G_OBJECT (web_view), "zoom-level", &current_zoom,
+    g_object_get (web_view, "zoom-level", &current_zoom,
                   NULL);
 
     if (zoom != current_zoom) {
       priv->is_setting_zoom = TRUE;
-      g_object_set (G_OBJECT (web_view), "zoom-level", zoom, NULL);
+      g_object_set (web_view, "zoom-level", zoom, NULL);
       priv->is_setting_zoom = FALSE;
     }
   }
@@ -255,7 +255,7 @@ webkit_web_view_zoom_change_cb (WebKitWebView *web_view,
   char *address;
   float zoom;
 
-  g_object_get (G_OBJECT (web_view),
+  g_object_get (web_view,
                 "zoom-level", &zoom,
                 NULL);
 
@@ -322,7 +322,7 @@ webkit_embed_init (WebKitEmbed *embed)
 
   gtk_container_add (GTK_CONTAINER (embed), sw);
 
-  g_object_connect (G_OBJECT (web_view),
+  g_object_connect (web_view,
                     "signal::load-committed", G_CALLBACK (webkit_embed_load_committed_cb), embed,
                     "signal::load-started", G_CALLBACK (webkit_embed_load_started_cb), embed,
                     "signal::load_finished", G_CALLBACK (webkit_embed_load_finished_cb), embed,
@@ -331,8 +331,8 @@ webkit_embed_init (WebKitEmbed *embed)
                     "signal::hovering-over-link", G_CALLBACK (webkit_embed_hovering_over_link_cb), embed,
                     NULL);
 
-  g_signal_connect (G_OBJECT (web_view),
-                    "notify::zoom-level", G_CALLBACK (webkit_web_view_zoom_change_cb), embed);
+  g_signal_connect (web_view, "notify::zoom-level",
+                    G_CALLBACK (webkit_web_view_zoom_change_cb), embed);
 
   webkit_embed_prefs_add_embed (embed);
 
