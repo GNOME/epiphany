@@ -116,15 +116,10 @@ window_cmd_file_send_to	(GtkAction *action,
 			 EphyWindow *window)
 {
 	EphyEmbed *embed;
-	char *handler, *command;
+	char *command, *subject, *body;
 	const char *location, *title;
-	GAppInfo *appinfo;
-	
-	if (eel_gconf_get_boolean ("/desktop/gnome/url-handlers/mailto/enabled") == FALSE)
-	{
-		/* FIXME: add some UI to inform the user? */
-		return;
-	}
+	GdkScreen *screen;
+	GError *error = NULL;
 
 	embed = ephy_embed_container_get_active_child 
           (EPHY_EMBED_CONTAINER (window));
@@ -133,20 +128,31 @@ window_cmd_file_send_to	(GtkAction *action,
 	location = ephy_embed_get_address (embed);
 	title = ephy_embed_get_title (embed);
 
-	/* FIXME: better use g_app_info_get_default_for_uri_scheme () when it is
-	 * implemented.
-	 */
-	handler = eel_gconf_get_string ("/desktop/gnome/url-handlers/mailto/command");
-	command = g_strconcat (handler, "mailto:",
-			       "?Subject=\"", title,
-			       "\"&Body=\"", location, "\"", NULL);
-	
-	appinfo = g_app_info_create_from_commandline (command, NULL, 0, NULL);
-	ephy_file_launch_application (appinfo, NULL,
-				      gtk_get_current_event_time (),
-				      GTK_WIDGET (window));
+	subject = g_uri_escape_string (title, NULL, TRUE);
+	body = g_uri_escape_string (location, NULL, TRUE);
 
-	g_free (handler);
+	command = g_strconcat ("mailto:",
+			       "?Subject=", subject,
+			       "&Body=", body, NULL);
+
+	g_free (subject);
+	g_free (body);
+
+	if (window)
+	{
+		screen = gtk_widget_get_screen (GTK_WIDGET (window));
+	}
+	else
+	{
+		screen = gdk_screen_get_default ();
+	}
+	
+	if (!gtk_show_uri (screen, command, gtk_get_current_event_time(), &error)) 
+	{
+    		g_warning ("Unable to send link by email: %s\n", error->message);
+    		g_error_free (error);
+  	}
+
 	g_free (command);
 }
 
