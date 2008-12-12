@@ -111,7 +111,10 @@ static const PrefData webkit_pref_entries[] =
       webkit_pref_callback_boolean },
     { CONF_LANGUAGE_DEFAULT_ENCODING,
       "default-encoding",
-      webkit_pref_callback_string }
+      webkit_pref_callback_string },
+    { CONF_WEB_INSPECTOR_ENABLED,
+      "enable-developer-extras",
+      webkit_pref_callback_boolean }
   };
 
 static void

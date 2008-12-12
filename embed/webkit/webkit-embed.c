@@ -1,4 +1,5 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
+/* vim: set sw=2 ts=2 sts=2 et: */
 /*
  *  Copyright © 2007 Xan Lopez
  *  Copyright © 2008 Jan Alonzo
@@ -32,6 +33,7 @@
 
 #include <webkit/webkit.h>
 #include <string.h>
+#include <glib/gi18n.h>
 
 #include "webkit-embed.h"
 #include "webkit-embed-prefs.h"
@@ -59,6 +61,7 @@ struct WebKitEmbedPrivate
   WebKitEmbedLoadState load_state;
   char *loading_uri;
   EphyHistory *history;
+  GtkWidget *inspector_window;
   guint is_setting_zoom : 1;
 };
 
@@ -301,11 +304,45 @@ webkit_embed_class_init (WebKitEmbedClass *klass)
   g_type_class_add_private (object_class, sizeof(WebKitEmbedPrivate));
 }
 
+static WebKitWebView *
+webkit_embed_inspect_web_view_cb (WebKitWebInspector *inspector,
+                                  WebKitWebView *web_view,
+                                  gpointer data)
+{
+  GtkWidget *inspector_sw = GTK_WIDGET (data);
+  GtkWidget *inspector_web_view;
+
+  inspector_web_view = webkit_web_view_new ();
+  gtk_container_add (GTK_CONTAINER (inspector_sw), inspector_web_view);
+
+  gtk_widget_show_all (gtk_widget_get_toplevel (inspector_sw));
+
+  return WEBKIT_WEB_VIEW (inspector_web_view);
+}
+
+static gboolean
+webkit_embed_inspect_show_cb (WebKitWebInspector *inspector,
+                              GtkWidget *widget)
+{
+  gtk_widget_show (widget);
+  return TRUE;
+}
+
+static gboolean
+webkit_embed_inspect_close_cb (WebKitWebInspector *inspector,
+                               GtkWidget *widget)
+{
+  gtk_widget_hide (widget);
+  return TRUE;
+}
+
 static void
 webkit_embed_init (WebKitEmbed *embed)
 {
   WebKitWebView *web_view;
+  WebKitWebInspector *inspector;
   GtkWidget *sw;
+  GtkWidget *inspector_sw;
 
   embed->priv = WEBKIT_EMBED_GET_PRIVATE (embed);
 
@@ -333,6 +370,33 @@ webkit_embed_init (WebKitEmbed *embed)
 
   g_signal_connect (web_view, "notify::zoom-level",
                     G_CALLBACK (webkit_web_view_zoom_change_cb), embed);
+
+  embed->priv->inspector_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  inspector = webkit_web_view_get_inspector (web_view);
+
+  inspector_sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (inspector_sw),
+                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_container_add (GTK_CONTAINER (embed->priv->inspector_window),
+                     inspector_sw);
+
+  gtk_window_set_title (GTK_WINDOW (embed->priv->inspector_window),
+                        _("Web Inspector"));
+  gtk_window_set_default_size (GTK_WINDOW (embed->priv->inspector_window),
+                               400, 300);
+
+  g_signal_connect (embed->priv->inspector_window,
+                    "delete-event", G_CALLBACK (gtk_widget_hide_on_delete),
+                    NULL);
+
+  g_object_connect (inspector,
+                    "signal::inspect-web-view", G_CALLBACK (webkit_embed_inspect_web_view_cb),
+                    inspector_sw,
+                    "signal::show-window", G_CALLBACK (webkit_embed_inspect_show_cb),
+                    embed->priv->inspector_window,
+                    "signal::close-window", G_CALLBACK (webkit_embed_inspect_close_cb),
+                    embed->priv->inspector_window,
+                    NULL);
 
   webkit_embed_prefs_add_embed (embed);
 

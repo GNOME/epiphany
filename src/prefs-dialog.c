@@ -110,12 +110,13 @@ EphyDialogProperty properties [] =
 	{ "prefs_notebook",	NULL, PT_NORMAL, 0},
 
 	/* General */
-	{ "homepage_entry",			CONF_GENERAL_HOMEPAGE,	  PT_AUTOAPPLY,	G_TYPE_STRING },
-	{ "homepage_current_button",		NULL,			  PT_NORMAL,	0 },
-	{ "homepage_blank_button",		NULL,			  PT_NORMAL,	0 },
-	{ "automatic_downloads_checkbutton",	CONF_AUTO_DOWNLOADS,      PT_AUTOAPPLY,	0 },
-	{ "download_button_hbox",		NULL,			  PT_NORMAL,	0 },
-	{ "download_button_label",		NULL,			  PT_NORMAL,	0 },
+	{ "homepage_entry",			CONF_GENERAL_HOMEPAGE,	    PT_AUTOAPPLY,  G_TYPE_STRING },
+	{ "homepage_current_button",		NULL,			    PT_NORMAL,	   0 },
+	{ "homepage_blank_button",		NULL,			    PT_NORMAL,	   0 },
+	{ "automatic_downloads_checkbutton",	CONF_AUTO_DOWNLOADS,        PT_AUTOAPPLY,  0 },
+	{ "download_button_hbox",		NULL,			    PT_NORMAL,	   0 },
+	{ "download_button_label",		NULL,			    PT_NORMAL,	   0 },
+	{ "web_inspector_checkbutton",	        CONF_WEB_INSPECTOR_ENABLED, PT_AUTOAPPLY,  0 },
 
 	/* Fonts and Colors */
 	{ "use_fonts_checkbutton",	CONF_RENDERING_USE_OWN_FONTS,	PT_AUTOAPPLY | PT_INVERTED,	0 },
