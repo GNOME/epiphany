@@ -332,7 +332,6 @@ if ENABLE_PYTHON
 
 BINDING_HEADERS_SRCDIR_IN = \
 	embed/ephy-command-manager.h			\
-	embed/ephy-cookie-manager.h			\
 	embed/ephy-embed-event.h			\
 	embed/ephy-embed-factory.h			\
 	embed/ephy-embed.h				\
