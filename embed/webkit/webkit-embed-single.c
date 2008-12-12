@@ -24,6 +24,7 @@
 #include "webkit-embed-single.h"
 #include "webkit-embed-prefs.h"
 #include "ephy-embed-single.h"
+#include "ephy-cookie-manager.h"
 #include "ephy-password-manager.h"
 #include "ephy-permission-manager.h"
 
@@ -45,6 +46,7 @@ enum {
 static void webkit_embed_single_class_init     (WebKitEmbedSingleClass *klass);
 static void webkit_embed_single_init           (WebKitEmbedSingle *wes);
 static void ephy_embed_single_iface_init       (EphyEmbedSingleIface *iface);
+static void ephy_cookie_manager_iface_init     (EphyCookieManagerIface *iface);
 static void ephy_password_manager_iface_init   (EphyPasswordManagerIface *iface);
 static void ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface);
 
@@ -59,6 +61,8 @@ static void ephy_certificate_manager_iface_init (EphyCertificateManagerIface *if
 G_DEFINE_TYPE_WITH_CODE (WebKitEmbedSingle, webkit_embed_single, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_SINGLE,
                                                 ephy_embed_single_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_COOKIE_MANAGER,
+                                                ephy_cookie_manager_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_PASSWORD_MANAGER,
                                                 ephy_password_manager_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_CERTIFICATE_MANAGER,
@@ -69,6 +73,8 @@ G_DEFINE_TYPE_WITH_CODE (WebKitEmbedSingle, webkit_embed_single, G_TYPE_OBJECT,
 G_DEFINE_TYPE_WITH_CODE (WebKitEmbedSingle, webkit_embed_single, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_SINGLE,
                                                 ephy_embed_single_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_COOKIE_MANAGER,
+                                                ephy_cookie_manager_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_PASSWORD_MANAGER,
                                                 ephy_password_manager_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_PERMISSION_MANAGER,
@@ -138,6 +144,23 @@ impl_get_font_list (EphyEmbedSingle *shell,
                     const char *langGroup)
 {
   return NULL;
+}
+
+static GList *
+impl_list_cookies (EphyCookieManager *manager)
+{
+  return NULL;
+}
+
+static void
+impl_remove_cookie (EphyCookieManager *manager,
+                    const EphyCookie *cookie)
+{
+}
+
+static void
+impl_clear_cookies (EphyCookieManager *manager)
+{
 }
 
 static GList *
@@ -306,6 +329,14 @@ ephy_embed_single_iface_init (EphyEmbedSingleIface *iface)
   iface->get_font_list = impl_get_font_list;
   iface->open_window = impl_open_window;
   iface->get_backend_name = impl_get_backend_name;
+}
+
+static void
+ephy_cookie_manager_iface_init (EphyCookieManagerIface *iface)
+{
+  iface->list = impl_list_cookies;
+  iface->remove = impl_remove_cookie;
+  iface->clear = impl_clear_cookies;
 }
 
 static void

@@ -21,6 +21,7 @@ INST_H_FILES = \
 	ephy-adblock-manager.h		\
 	ephy-base-embed.h               \
 	ephy-command-manager.h		\
+	ephy-cookie-manager.h		\
 	ephy-embed.h			\
 	ephy-embed-container.h          \
 	ephy-embed-event.h		\
@@ -44,6 +45,7 @@ libephyembed_la_SOURCES = \
 	ephy-base-embed.c               \
 	downloader-view.c		\
 	ephy-command-manager.c		\
+	ephy-cookie-manager.c		\
 	ephy-download.c			\
 	ephy-embed.c			\
 	ephy-embed-container.c          \

@@ -28,6 +28,7 @@ headers
 #include "ephy-bookmarks.h"
 #include "ephy-bookmarks-type-builtins.h"
 #include "ephy-command-manager.h"
+#include "ephy-cookie-manager.h"
 #include "ephy-dialog.h"
 #include "ephy-embed-event.h"
 #include "ephy-embed-factory.h"
@@ -359,6 +360,18 @@ _wrap_ephy_password_manager_list_passwords (PyGObject *self)
 
     return _helper_wrap_boxed_glist (EPHY_TYPE_PASSWORD_INFO, list);
 }
+%%
+override ephy_cookie_manager_list_cookies noargs
+static PyObject *
+_wrap_ephy_cookie_manager_list_cookies(PyGObject *self)
+{
+    GList *list;
+
+    list = ephy_cookie_manager_list_cookies(EPHY_COOKIE_MANAGER (self->obj));
+
+    return _helper_wrap_boxed_glist (EPHY_TYPE_COOKIE, list);
+}
+%%
 //override ephy_permission_manager_list_permissions kwargs
 // static PyObject *
 // _wrap_ephy_permission_manager_list_permissions (PyGObject *self,
