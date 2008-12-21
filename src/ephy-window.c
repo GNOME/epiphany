@@ -2481,6 +2481,42 @@ create_web_view_cb (WebKitWebView *web_view,
 	return new_web_view;
 }
 
+static gboolean
+navigation_policy_decision_required_cb (WebKitWebView *web_view,
+					WebKitWebFrame *web_frame,
+					WebKitNetworkRequest *request,
+					WebKitWebNavigationAction *action,
+					WebKitWebPolicyDecision *decision,
+					EphyWindow *window)
+{
+	WebKitWebNavigationReason reason;
+	gint button;
+
+	reason = webkit_web_navigation_action_get_reason (action);
+	button = webkit_web_navigation_action_get_button (action);
+
+	if (reason == WEBKIT_WEB_NAVIGATION_REASON_LINK_CLICKED &&
+	    button == 2 /* middle button */) {
+		const char *uri;
+		EphyEmbed *embed;
+
+		uri = webkit_network_request_get_uri (request);
+		embed = ephy_embed_container_get_active_child
+			(EPHY_EMBED_CONTAINER (window));
+
+		ephy_shell_new_tab (ephy_shell_get_default (),
+				    window,
+				    embed,
+				    uri,
+				    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+				    EPHY_NEW_TAB_OPEN_PAGE);
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 static void
 ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 {
@@ -2509,6 +2545,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 						      window);
 		g_signal_handlers_disconnect_by_func (web_view,
 						      G_CALLBACK (create_web_view_cb),
+						      window);
+		g_signal_handlers_disconnect_by_func (web_view,
+						      G_CALLBACK (navigation_policy_decision_required_cb),
 						      window);
 
 		g_signal_handlers_disconnect_by_func (embed,
@@ -2593,6 +2632,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 					 window, 0);
 		g_signal_connect_object (web_view, "create-web-view",
 					 G_CALLBACK (create_web_view_cb),
+					 window, 0);
+		g_signal_connect_object (web_view, "navigation-policy-decision-requested",
+					 G_CALLBACK (navigation_policy_decision_required_cb),
 					 window, 0);
 
 		g_signal_connect_object (embed, "notify::hidden-popup-count",
