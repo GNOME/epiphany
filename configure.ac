@@ -393,6 +393,10 @@ GECKO_CHECK_HEADERS([spellchecker],[mozISpellCheckingEngine.h],
 
 GECKO_CHECK_HEADERS([],[nsIBadCertListener.h],[have_nsibadcertlistener=yes],[have_nsibadcertlistener=no])
 
+# Check for nsIDOMNSLocation (removed in 1.9.1)
+
+GECKO_CHECK_HEADERS([],[nsIDOMNSLocation.h])
+
 # Check for nsIClientAuthUserDecision in nsIClientAuthDialogs.h
 
 GECKO_COMPILE_IFELSE([],

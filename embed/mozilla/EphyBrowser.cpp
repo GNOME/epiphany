@@ -66,7 +66,6 @@
 #include <nsIDOMWindow2.h>
 #include <nsIDOMXMLDocument.h>
 #include <nsIDOMLocation.h>
-#include <nsIDOMNSLocation.h>
 #include <nsIHistoryEntry.h>
 #include <nsIInterfaceRequestor.h>
 #include <nsIInterfaceRequestorUtils.h>
@@ -85,6 +84,10 @@
 #include <nsMemory.h>
 #include <nsServiceManagerUtils.h>
 #include <nsCDefaultURIFixup.h>
+
+#ifdef HAVE_NSIDOMNSLOCATION_H
+#include <nsIDOMNSLocation.h>
+#endif
 
 #ifdef HAVE_MOZILLA_PSM
 #include <nsICertificateDialogs.h>
@@ -700,8 +703,10 @@ EphyCommandEventListener::HandleEvent (nsIDOMEvent *aDOMEvent)
         if (NS_FAILED (rv))
             return NS_OK;
 
+#ifdef HAVE_NSIDOMNSLOCATION_H
         nsCOMPtr<nsIDOMNSLocation> domNSLocation (do_QueryInterface (domLocation));
         NS_ENSURE_TRUE (domNSLocation, NS_OK);
+#endif
 
         nsString locationHref;
         domLocation->GetHref (locationHref);
@@ -735,9 +740,14 @@ EphyCommandEventListener::HandleEvent (nsIDOMEvent *aDOMEvent)
         PRBool exceptionAdded;
         params->GetExceptionAdded (&exceptionAdded);
         g_print ("exceptionAdded %d\n", exceptionAdded);
-        if (exceptionAdded)
-                return domNSLocation->Reload ();
 
+        if (exceptionAdded)
+#ifdef HAVE_NSIDOMNSLOCATION_H
+                return domNSLocation->Reload ();
+#else
+                /* Gecko >= 1.9.1 */
+                return domLocation->Reload (PR_TRUE);
+#endif
 
         return NS_OK;
 }
