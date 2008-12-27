@@ -676,7 +676,11 @@ nsresult EventContext::GetTargetCoords (nsIDOMEventTarget *aTarget, PRInt32 *aX,
 #endif
 
 	PRInt32 x = 0, y = 0;
+#ifdef HAVE_GECKO_1_9_1
+	while (elem && htmlElem)
+#else
 	while (htmlElem)
+#endif
 	{
 		PRInt32 val;
 #ifdef HAVE_GECKO_1_9_1
