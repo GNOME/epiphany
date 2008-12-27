@@ -795,20 +795,8 @@ impl_load (EphyEmbed *embed,
            EphyEmbed *preview_embed)
 {
   WebKitEmbed *wembed = WEBKIT_EMBED (embed);
-  char *effective_url = NULL;
 
-  /* WebKit cannot handle URLs without a protocol */
-  if (ephy_embed_utils_address_has_web_scheme (url) == FALSE)
-    effective_url = g_strconcat ("http://", url, NULL);
-  else
-    effective_url = g_strdup (url);
-
-  g_free (wembed->priv->loading_uri);
-  wembed->priv->loading_uri = g_strdup (effective_url);
-
-  webkit_web_view_open (wembed->priv->web_view, effective_url);
-
-  g_free (effective_url);
+  webkit_web_view_open (wembed->priv->web_view, url);
 }
 
 static gboolean

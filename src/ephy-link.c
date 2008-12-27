@@ -21,6 +21,7 @@
 
 #include "ephy-link.h"
 
+#include "ephy-embed-utils.h"
 #include "ephy-type-builtins.h"
 #include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
@@ -88,12 +89,28 @@ ephy_link_open (EphyLink *link,
 		EphyLinkFlags flags)
 {
 	EphyEmbed *new_embed = NULL;
+	char *effective_url = NULL;
+
+	/*
+	 * WebKit does not normalize URI's by itself, so we need to
+	 * handle this ourselves
+	 */
+	if (ephy_embed_utils_address_has_web_scheme (address) == FALSE)
+	{
+		effective_url = g_strconcat ("http://", address, NULL);
+	}
+	else
+	{
+		effective_url = g_strdup (address);
+	}
 
 	LOG ("ephy_link_open address \"%s\" parent-embed %p flags %u", address, embed, flags);
 
 	g_signal_emit (link, signals[OPEN_LINK], 0,
-		       address, embed, flags,
+		       effective_url, embed, flags,
 		       &new_embed);
+
+	g_free (effective_url);
 
 	return new_embed;
 }
