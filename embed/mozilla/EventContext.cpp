@@ -67,11 +67,14 @@
 
 #ifdef ALLOW_PRIVATE_API
 #include <nsIDOMNSEvent.h>
-#include <nsIDOMNSHTMLElement.h>
 #include <nsIDOMViewCSS.h>
 #include <nsIDOMViewCSS.h>
 #include <nsIDOMXULDocument.h>
 #include <nsITextToSubURI.h>
+#include <nsIDOMNSHTMLElement.h>
+#ifdef HAVE_GECKO_1_9_1
+#include <nsIDOMNSElement.h>
+#endif
 #endif
 
 #include "ephy-debug.h"
@@ -666,20 +669,34 @@ nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAString& url)
 nsresult EventContext::GetTargetCoords (nsIDOMEventTarget *aTarget, PRInt32 *aX, PRInt32 *aY)
 {
 	/* Calculate the node coordinates relative to the widget origin */
-	nsCOMPtr<nsIDOMNSHTMLElement> elem (do_QueryInterface(aTarget));
+
+	nsCOMPtr<nsIDOMNSHTMLElement> htmlElem (do_QueryInterface(aTarget));
+#ifdef HAVE_GECKO_1_9_1
+	nsCOMPtr<nsIDOMNSElement> elem (do_QueryInterface(htmlElem));
+#endif
 
 	PRInt32 x = 0, y = 0;
-	while (elem)
+	while (htmlElem)
 	{
 		PRInt32 val;
+#ifdef HAVE_GECKO_1_9_1
 		elem->GetOffsetTop(&val);	y += val;
 		elem->GetScrollTop(&val);	y -= val;
 		elem->GetOffsetLeft(&val);	x += val;
 		elem->GetScrollLeft(&val);	x -= val;
+#else
+		htmlElem->GetOffsetTop(&val);	y += val;
+		htmlElem->GetScrollTop(&val);	y -= val;
+		htmlElem->GetOffsetLeft(&val);	x += val;
+		htmlElem->GetScrollLeft(&val);	x -= val;
+#endif
 
 		nsCOMPtr<nsIDOMElement> parent;
-		elem->GetOffsetParent (getter_AddRefs (parent));
-		elem = do_QueryInterface(parent);
+		htmlElem->GetOffsetParent (getter_AddRefs (parent));
+		htmlElem = do_QueryInterface(parent);
+#ifdef HAVE_GECKO_1_9_1
+                elem = do_QueryInterface (parent);
+#endif
 	}
 
 	*aX = x;
