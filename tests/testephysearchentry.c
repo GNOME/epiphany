@@ -23,7 +23,6 @@
  
 #include "config.h"
 #include "ephy-search-entry.h"
-#include "ephy-icon-entry.h"
 #include <gtk/gtk.h>
 
 static void
@@ -34,7 +33,7 @@ test_entry_new (void)
   entry = EPHY_SEARCH_ENTRY (ephy_search_entry_new ());
 
   g_assert (GTK_IS_WIDGET (entry));
-  g_assert (EPHY_IS_ICON_ENTRY (entry));
+  g_assert (GTK_IS_ENTRY (entry));
 }
 
 static void
@@ -42,15 +41,12 @@ test_entry_clear (void)
 {
   const char *set = "test";
   const char *get = NULL;
-  GtkWidget *internal_entry;
 
   EphySearchEntry *entry;
   entry = EPHY_SEARCH_ENTRY (ephy_search_entry_new ());
 
-  internal_entry = ephy_icon_entry_get_entry (EPHY_ICON_ENTRY (entry));
-
-  gtk_entry_set_text (GTK_ENTRY (internal_entry), set);
-  get = gtk_entry_get_text (GTK_ENTRY (internal_entry));
+  gtk_entry_set_text (GTK_ENTRY (entry), set);
+  get = gtk_entry_get_text (GTK_ENTRY (entry));
 
   g_assert_cmpstr (set, ==, get);
 
@@ -58,7 +54,7 @@ test_entry_clear (void)
    * contents of 'set' char*
    */
   ephy_search_entry_clear (EPHY_SEARCH_ENTRY (entry));
-  get = gtk_entry_get_text (GTK_ENTRY (internal_entry));
+  get = gtk_entry_get_text (GTK_ENTRY (entry));
 
   g_assert_cmpstr ("", ==, get);
 }
