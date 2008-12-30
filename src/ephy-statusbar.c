@@ -41,7 +41,6 @@ struct _EphyStatusbarPrivate
 
 	GtkWidget *caret_indicator;
 	GtkWidget *security_icon;
-	GtkWidget *progressbar;
 	GtkWidget *security_evbox;
 	GtkWidget *popups_manager_icon;
 	GtkWidget *popups_manager_evbox;
@@ -140,30 +139,6 @@ create_icon_frame (EphyStatusbar *statusbar,
 }
 
 static void
-create_statusbar_progress (EphyStatusbar *s)
-{
-	EphyStatusbarPrivate *priv = s->priv;
-	GtkWidget *vbox;
-
-	vbox = gtk_vbox_new (FALSE, 0);
-	gtk_box_pack_end (GTK_BOX (priv->hbox), vbox, FALSE, FALSE, 0);
-
-	priv->progressbar = gtk_progress_bar_new ();
-	gtk_box_pack_start (GTK_BOX (vbox),
-			    GTK_WIDGET (priv->progressbar),
-		 	    TRUE, TRUE, 1);
-
-        /* We need to set the vertical size request to a small value here,
-         * because the progressbar's default size request is taller than the whole
-         * statusbar. Packing it with expand&fill in the vbox above will nevertheless
-         * make it use the greatest available height.
-         */
-	gtk_widget_set_size_request (priv->progressbar, -1, 10);
-
-	gtk_widget_show_all (vbox);
-}
-
-static void
 ephy_statusbar_init (EphyStatusbar *t)
 {
 	GtkStatusbar *gstatusbar = GTK_STATUSBAR (t);
@@ -205,7 +180,6 @@ ephy_statusbar_init (EphyStatusbar *t)
 	/* don't show priv->popups_manager_evbox yet */
 
 	create_caret_indicator (t);
-	create_statusbar_progress (t);
 }
 
 /**
@@ -284,30 +258,6 @@ ephy_statusbar_set_popups_state (EphyStatusbar *statusbar,
 		gtk_widget_set_tooltip_text (priv->popups_manager_icon, tooltip);
 
 		gtk_widget_show (priv->popups_manager_evbox);
-	}
-}
-
-/**
- * ephy_statusbar_set_progress:
- * @statusbar: a #EphyStatusbar
- * @progress: the progress as an integer between 0 and 100 per cent.
- * 
- * Sets the statusbar's progress.
- **/
-void
-ephy_statusbar_set_progress (EphyStatusbar *statusbar,
-			     int progress)
-{
-	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (statusbar->priv->progressbar),
-				       (float) (progress) / 100.0);
-
-	if (progress < 100)
-	{
-		gtk_widget_show (statusbar->priv->progressbar);
-	}
-	else
-	{
-		gtk_widget_hide (statusbar->priv->progressbar);
 	}
 }
 

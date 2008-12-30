@@ -75,9 +75,6 @@ void          ephy_statusbar_set_popups_state		(EphyStatusbar *statusbar,
 							 gboolean hidden,
 							 const char *tooltip);
 
-void          ephy_statusbar_set_progress		(EphyStatusbar *statusbar,
-							 int progress);
-
 void	      ephy_statusbar_add_widget			(EphyStatusbar *statusbar,
 							 GtkWidget *widget);
 

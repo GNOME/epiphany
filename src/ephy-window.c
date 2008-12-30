@@ -1634,9 +1634,6 @@ sync_tab_load_progress (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 	}
 
 	gtk_entry_set_progress_fraction (GTK_ENTRY (window->priv->entry), progress);
-					 
-	ephy_statusbar_set_progress (EPHY_STATUSBAR (window->priv->statusbar),
-				     ephy_embed_get_load_percent (embed));
 }
 
 static void
