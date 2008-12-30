@@ -446,9 +446,11 @@ struct _EphyWindowPrivate
 	GHashTable *tabs_to_remove;
 	EphyEmbedEvent *context_event;
 	guint idle_worker;
+	GtkWidget *entry;
 
 	guint browse_with_caret_notifier_id;
 	guint allow_popups_notifier_id;
+	guint clear_progress_timeout_id;
 
 	guint menubar_accel_keyval;
 	guint menubar_accel_modifier;
@@ -1600,11 +1602,39 @@ sync_tab_icon (EphyEmbed *embed,
 	ephy_toolbar_set_favicon (priv->toolbar, icon);
 }
 
+static gboolean
+clear_progress_cb (EphyWindow *window)
+{
+	gtk_entry_set_progress_fraction (GTK_ENTRY (window->priv->entry), 0.0);
+	window->priv->clear_progress_timeout_id = 0;
+
+	return FALSE;
+}
+
 static void
 sync_tab_load_progress (EphyEmbed *embed, GParamSpec *pspec, EphyWindow *window)
 {
+	gdouble progress;
+
 	if (window->priv->closing) return;
 
+	if (window->priv->clear_progress_timeout_id)
+	{
+		g_source_remove (window->priv->clear_progress_timeout_id);
+		window->priv->clear_progress_timeout_id = 0;
+	}
+
+	progress = ephy_embed_get_load_percent (embed)/100.0;
+	if (progress == 1.0)
+	{
+		window->priv->clear_progress_timeout_id =
+			g_timeout_add (500,
+				       (GSourceFunc)clear_progress_cb,
+				       window);
+	}
+
+	gtk_entry_set_progress_fraction (GTK_ENTRY (window->priv->entry), progress);
+					 
 	ephy_statusbar_set_progress (EPHY_STATUSBAR (window->priv->statusbar),
 				     ephy_embed_get_load_percent (embed));
 }
@@ -3496,6 +3526,8 @@ ephy_window_constructor (GType type,
 	GtkActionGroup *toolbar_action_group;
 	GError *error = NULL;
 	guint settings_connection;
+	GSList *proxies;
+	GtkWidget *proxy;
 
 	object = G_OBJECT_CLASS (ephy_window_parent_class)->constructor
 		(type, n_construct_properties, construct_params);
@@ -3651,6 +3683,13 @@ ephy_window_constructor (GType type,
 
 	sync_chromes_visibility (window);
 
+	/* Cache GtkEntry inside EphyLocationEntry */
+	action = gtk_action_group_get_action (toolbar_action_group,
+					      "Location");
+	proxies = gtk_action_get_proxies (action);
+	proxy = GTK_WIDGET (proxies->data);
+	priv->entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (proxy));
+	
 	return object;
 }
 
@@ -3665,6 +3704,9 @@ ephy_window_finalize (GObject *object)
 	G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
 	LOG ("EphyWindow finalised %p", object);
+
+	if (priv->clear_progress_timeout_id)
+		g_source_remove (priv->clear_progress_timeout_id);
 
 #ifdef ENABLE_PYTHON
 	ephy_python_schedule_gc ();
