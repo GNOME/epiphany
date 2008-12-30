@@ -98,8 +98,6 @@ static void extracell_data_func (GtkCellLayout *cell_layout,
 				GtkTreeIter *iter,
 				gpointer data);
 
-static GObjectClass *parent_class = NULL;
-
 enum signalsEnum
 {
 	USER_CHANGED,
@@ -114,33 +112,7 @@ static gint signals[LAST_SIGNAL] = { 0 };
 #define EPHY_LOC_HISTORY_XML_ROOT "ephy_location_history"
 #define EPHY_LOC_HISTORY_XML_VERSION "0.1"
 
-GType
-ephy_location_entry_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyLocationEntryClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_location_entry_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyLocationEntry),
-			0,
-			(GInstanceInitFunc) ephy_location_entry_init
-		};
-
-		type = g_type_register_static (GTK_TYPE_TOOL_ITEM,
-					       "EphyLocationEntry",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_TOOL_ITEM)
 
 static void
 ephy_location_entry_style_set (GtkWidget *widget,
@@ -154,9 +126,9 @@ ephy_location_entry_style_set (GtkWidget *widget,
 	char *theme;
 	gboolean is_a11y_theme;
 
-	if (GTK_WIDGET_CLASS (parent_class)->style_set)
+	if (GTK_WIDGET_CLASS (ephy_location_entry_parent_class)->style_set)
 	{
-		GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
+		GTK_WIDGET_CLASS (ephy_location_entry_parent_class)->style_set (widget, previous_style);
 	}
 
 	title_fg_colour = widget->style->text[GTK_STATE_INSENSITIVE];
@@ -222,7 +194,7 @@ ephy_location_entry_finalize (GObject *object)
 		priv->regex = NULL;
 	}
 
-	parent_class->finalize (object);
+	G_OBJECT_CLASS (ephy_location_entry_parent_class)->finalize (object);
 }
 
 static void
@@ -230,8 +202,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_location_entry_finalize;
 
