@@ -34,7 +34,6 @@ static void ephy_search_entry_init (EphySearchEntry *entry);
 struct _EphySearchEntryPrivate
 {
 	gboolean clearing;
-
 	guint timeout;
 };
 
@@ -44,44 +43,14 @@ enum
 	LAST_SIGNAL
 };
 
-static GObjectClass *parent_class = NULL;
-
 static guint ephy_search_entry_signals[LAST_SIGNAL] = { 0 };
 
-GType
-ephy_search_entry_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphySearchEntryClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_search_entry_class_init,
-			NULL,
-			NULL,
-			sizeof (EphySearchEntry),
-			0,
-			(GInstanceInitFunc) ephy_search_entry_init
-		};
-
-		type = g_type_register_static (EPHY_TYPE_ICON_ENTRY,
-					       "EphySearchEntry",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphySearchEntry, ephy_search_entry, EPHY_TYPE_ICON_ENTRY)
 
 static void
 ephy_search_entry_class_init (EphySearchEntryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	ephy_search_entry_signals[SEARCH] =
 		g_signal_new ("search",
